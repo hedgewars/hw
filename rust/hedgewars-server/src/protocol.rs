@@ -1,15 +1,11 @@
 use netbuf;
-use std::{
-    io::{Read, Result}
-};
-use nom::{
-    IResult, Err
-};
+use nom::{Err, IResult};
+use std::io::{Read, Result};
 
 pub mod messages;
+mod parser;
 #[cfg(test)]
 pub mod test;
-mod parser;
 
 pub struct ProtocolDecoder {
     buf: netbuf::Buf,
@@ -34,7 +30,7 @@ impl ProtocolDecoder {
             Ok((tail, msgs)) => {
                 self.consumed = self.buf.len() - self.consumed - tail.len();
                 msgs
-            },
+            }
             Err(Err::Incomplete(_)) => unreachable!(),
             Err(Err::Error(_)) | Err(Err::Failure(_)) => unreachable!(),
         }

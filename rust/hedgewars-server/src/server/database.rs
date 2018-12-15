@@ -1,5 +1,5 @@
 use mysql;
-use mysql::{params, error::Error, error::DriverError};
+use mysql::{error::DriverError, error::Error, params};
 
 struct AccountInfo {
     is_registered: bool,
@@ -46,17 +46,24 @@ impl Database {
 
     fn store_stats(&mut self, stats: &ServerStatistics) -> Result<(), Error> {
         if let Some(pool) = &self.pool {
-        for mut stmt in pool.prepare(r"INSERT INTO gameserver_stats (players, rooms, last_update) VALUES (:players, :rooms, UNIX_TIMESTAMP())").into_iter() {
-                stmt.execute(params!{
-                "players" => stats.players,
-                "rooms" => stats.rooms,
-            })?;
-        }
+            for mut stmt in pool
+                .prepare(
+                    r"INSERT INTO gameserver_stats
+            (players, rooms, last_update)
+            VALUES
+            (:players, :rooms, UNIX_TIMESTAMP())",
+                )
+                .into_iter()
+            {
+                stmt.execute(params! {
+                    "players" => stats.players,
+                    "rooms" => stats.rooms,
+                })?;
+            }
             Ok(())
         } else {
             Err(DriverError::SetupError.into())
         }
-
     }
 
     fn store_achievements(&mut self, achievements: &Achievements) -> Result<(), ()> {

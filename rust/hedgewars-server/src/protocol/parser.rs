@@ -6,23 +6,15 @@
  * For example, a nullary command like PING will be actually sent as `PING\n\n`.
  * A unary command, such as `START_GAME nick` will be actually sent as `START_GAME\nnick\n\n`.
  */
-
 use nom::*;
 
-use std::{
-    str, str::FromStr,
-    ops::Range
-};
-use super::{
-    messages::{HWProtocolMessage, HWProtocolMessage::*}
-};
+use super::messages::{HWProtocolMessage, HWProtocolMessage::*};
+use crate::server::coretypes::{GameCfg, HedgehogInfo, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM};
+use std::{ops::Range, str, str::FromStr};
 #[cfg(test)]
 use {
     super::test::gen_proto_msg,
-    proptest::{proptest, proptest_helper}
-};
-use crate::server::coretypes::{
-    HedgehogInfo, TeamInfo, GameCfg, VoteType, MAX_HEDGEHOGS_PER_TEAM
+    proptest::{proptest, proptest_helper},
 };
 
 named!(end_of_message, tag!("\n\n"));
@@ -257,17 +249,32 @@ proptest! {
 
 #[test]
 fn parse_test() {
-    assert_eq!(message(b"PING\n\n"),          Ok((&b""[..], Ping)));
-    assert_eq!(message(b"START_GAME\n\n"),    Ok((&b""[..], StartGame)));
-    assert_eq!(message(b"NICK\nit's me\n\n"), Ok((&b""[..], Nick("it's me".to_string()))));
-    assert_eq!(message(b"PROTO\n51\n\n"),     Ok((&b""[..], Proto(51))));
-    assert_eq!(message(b"QUIT\nbye-bye\n\n"), Ok((&b""[..], Quit(Some("bye-bye".to_string())))));
-    assert_eq!(message(b"QUIT\n\n"),          Ok((&b""[..], Quit(None))));
-    assert_eq!(message(b"CMD\nwatch demo\n\n"), Ok((&b""[..], Watch("demo".to_string()))));
-    assert_eq!(message(b"BAN\nme\nbad\n77\n\n"), Ok((&b""[..], Ban("me".to_string(), "bad".to_string(), 77))));
+    assert_eq!(message(b"PING\n\n"), Ok((&b""[..], Ping)));
+    assert_eq!(message(b"START_GAME\n\n"), Ok((&b""[..], StartGame)));
+    assert_eq!(
+        message(b"NICK\nit's me\n\n"),
+        Ok((&b""[..], Nick("it's me".to_string())))
+    );
+    assert_eq!(message(b"PROTO\n51\n\n"), Ok((&b""[..], Proto(51))));
+    assert_eq!(
+        message(b"QUIT\nbye-bye\n\n"),
+        Ok((&b""[..], Quit(Some("bye-bye".to_string()))))
+    );
+    assert_eq!(message(b"QUIT\n\n"), Ok((&b""[..], Quit(None))));
+    assert_eq!(
+        message(b"CMD\nwatch demo\n\n"),
+        Ok((&b""[..], Watch("demo".to_string())))
+    );
+    assert_eq!(
+        message(b"BAN\nme\nbad\n77\n\n"),
+        Ok((&b""[..], Ban("me".to_string(), "bad".to_string(), 77)))
+    );
 
-    assert_eq!(message(b"CMD\nPART\n\n"),      Ok((&b""[..], Part(None))));
-    assert_eq!(message(b"CMD\nPART _msg_\n\n"), Ok((&b""[..], Part(Some("_msg_".to_string())))));
+    assert_eq!(message(b"CMD\nPART\n\n"), Ok((&b""[..], Part(None))));
+    assert_eq!(
+        message(b"CMD\nPART _msg_\n\n"),
+        Ok((&b""[..], Part(Some("_msg_".to_string()))))
+    );
 
     assert_eq!(message(b"CMD\nRND\n\n"), Ok((&b""[..], Rnd(vec![]))));
     assert_eq!(
@@ -275,10 +282,25 @@ fn parse_test() {
         Ok((&b""[..], Rnd(vec![String::from("A"), String::from("B")])))
     );
 
-    assert_eq!(extract_messages(b"QUIT\n1\n2\n\n"),    Ok((&b""[..], vec![Malformed])));
+    assert_eq!(
+        extract_messages(b"QUIT\n1\n2\n\n"),
+        Ok((&b""[..], vec![Malformed]))
+    );
 
-    assert_eq!(extract_messages(b"PING\n\nPING\n\nP"), Ok((&b"P"[..], vec![Ping, Ping])));
-    assert_eq!(extract_messages(b"SING\n\nPING\n\n"),  Ok((&b""[..],  vec![Malformed, Ping])));
-    assert_eq!(extract_messages(b"\n\n\n\nPING\n\n"),  Ok((&b""[..],  vec![Empty, Empty, Ping])));
-    assert_eq!(extract_messages(b"\n\n\nPING\n\n"),    Ok((&b""[..],  vec![Empty, Empty, Ping])));
+    assert_eq!(
+        extract_messages(b"PING\n\nPING\n\nP"),
+        Ok((&b"P"[..], vec![Ping, Ping]))
+    );
+    assert_eq!(
+        extract_messages(b"SING\n\nPING\n\n"),
+        Ok((&b""[..], vec![Malformed, Ping]))
+    );
+    assert_eq!(
+        extract_messages(b"\n\n\n\nPING\n\n"),
+        Ok((&b""[..], vec![Empty, Empty, Ping]))
+    );
+    assert_eq!(
+        extract_messages(b"\n\n\nPING\n\n"),
+        Ok((&b""[..], vec![Empty, Empty, Ping]))
+    );
 }

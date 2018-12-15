@@ -4,13 +4,13 @@
 //use std::io::*;
 //use rand::Rng;
 //use std::cmp::Ordering;
+use log::*;
 use mio::net::*;
 use mio::*;
-use log::*;
 
-mod utils;
-mod server;
 mod protocol;
+mod server;
+mod utils;
 
 use crate::server::network::NetworkLayer;
 use std::time::Duration;
@@ -18,7 +18,10 @@ use std::time::Duration;
 fn main() {
     env_logger::init();
 
-    info!("Hedgewars game server, protocol {}", utils::PROTOCOL_VERSION);
+    info!(
+        "Hedgewars game server, protocol {}",
+        utils::PROTOCOL_VERSION
+    );
 
     let address = "0.0.0.0:46631".parse().unwrap();
     let listener = TcpListener::bind(&address).unwrap();
@@ -50,12 +53,12 @@ fn main() {
                     Token(tok) => hw_network.client_writable(&poll, tok).unwrap(),
                 }
             }
-//            if event.kind().is_hup() || event.kind().is_error() {
-//                match event.token() {
-//                    utils::SERVER => unreachable!(),
-//                    Token(tok) => server.client_error(&poll, tok).unwrap(),
-//                }
-//            }
+            //            if event.kind().is_hup() || event.kind().is_error() {
+            //                match event.token() {
+            //                    utils::SERVER => unreachable!(),
+            //                    Token(tok) => server.client_error(&poll, tok).unwrap(),
+            //                }
+            //            }
         }
         hw_network.on_idle(&poll).unwrap();
     }

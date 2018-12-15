@@ -1,36 +1,27 @@
 use mio;
 
-use crate::{
-    server::{
-        coretypes::{
-            ClientId, RoomId, Voting, VoteType, GameCfg,
-            MAX_HEDGEHOGS_PER_TEAM
-        },
-        core::HWServer,
-        room::{HWRoom, RoomFlags},
-        actions::{Action, Action::*}
-    },
-    protocol::messages::{
-        HWProtocolMessage,
-        HWServerMessage::*,
-        server_chat
-    },
-    utils::is_name_illegal
-};
-use std::{
-    mem::swap
-};
-use base64::{encode, decode};
 use super::common::rnd_reply;
+use crate::{
+    protocol::messages::{server_chat, HWProtocolMessage, HWServerMessage::*},
+    server::{
+        actions::{Action, Action::*},
+        core::HWServer,
+        coretypes::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
+        room::{HWRoom, RoomFlags},
+    },
+    utils::is_name_illegal,
+};
+use base64::{decode, encode};
 use log::*;
+use std::mem::swap;
 
 #[derive(Clone)]
 struct ByMsg<'a> {
-    messages: &'a[u8]
+    messages: &'a [u8],
 }
 
-impl <'a> Iterator for ByMsg<'a> {
-    type Item = &'a[u8];
+impl<'a> Iterator for ByMsg<'a> {
+    type Item = &'a [u8];
 
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
         if let Some(size) = self.messages.get(0) {
@@ -44,7 +35,7 @@ impl <'a> Iterator for ByMsg<'a> {
 }
 
 fn by_msg(source: &[u8]) -> ByMsg {
-    ByMsg {messages: source}
+    ByMsg { messages: source }
 }
 
 const VALID_MESSAGES: &[u8] =
@@ -54,13 +45,16 @@ const NON_TIMED_MESSAGES: &[u8] = b"M#hb";
 #[cfg(canhazslicepatterns)]
 fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
     match msg {
-        [size, typ, body..] => VALID_MESSAGES.contains(typ)
-            && match body {
-                [1...MAX_HEDGEHOGS_PER_TEAM, team, ..] if *typ == b'h' =>
-                    team_indices.contains(team),
-                _ => *typ != b'h'
-            },
-        _ => false
+        [size, typ, body..] => {
+            VALID_MESSAGES.contains(typ)
+                && match body {
+                    [1...MAX_HEDGEHOGS_PER_TEAM, team, ..] if *typ == b'h' => {
+                        team_indices.contains(team)
+                    }
+                    _ => *typ != b'h',
+                }
+        }
+        _ => false,
     }
 }
 
@@ -77,17 +71,22 @@ fn is_msg_empty(msg: &[u8]) -> bool {
 }
 
 fn is_msg_timed(msg: &[u8]) -> bool {
-    msg.get(1).filter(|t| !NON_TIMED_MESSAGES.contains(t)).is_some()
+    msg.get(1)
+        .filter(|t| !NON_TIMED_MESSAGES.contains(t))
+        .is_some()
 }
 
 fn voting_description(kind: &VoteType) -> String {
-    format!("New voting started: {}", match kind {
-        VoteType::Kick(nick) => format!("kick {}", nick),
-        VoteType::Map(name) => format!("map {}", name.as_ref().unwrap()),
-        VoteType::Pause => "pause".to_string(),
-        VoteType::NewSeed => "new seed".to_string(),
-        VoteType::HedgehogsPerTeam(number) => format!("hedgehogs per team: {}", number)
-    })
+    format!(
+        "New voting started: {}",
+        match kind {
+            VoteType::Kick(nick) => format!("kick {}", nick),
+            VoteType::Map(name) => format!("map {}", name.as_ref().unwrap()),
+            VoteType::Pause => "pause".to_string(),
+            VoteType::NewSeed => "new seed".to_string(),
+            VoteType::HedgehogsPerTeam(number) => format!("hedgehogs per team: {}", number),
+        }
+    )
 }
 
 fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
@@ -96,11 +95,16 @@ fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
         ToggleRestrictJoin => RoomFlags::RESTRICTED_JOIN,
         ToggleRestrictTeams => RoomFlags::RESTRICTED_TEAM_ADD,
         ToggleRegisteredOnly => RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS,
-        _ => RoomFlags::empty()
+        _ => RoomFlags::empty(),
     }
 }
 
-pub fn handle(server: &mut HWServer, client_id: ClientId, room_id: RoomId, message: HWProtocolMessage) {
+pub fn handle(
+    server: &mut HWServer,
+    client_id: ClientId,
+    room_id: RoomId,
+    message: HWProtocolMessage,
+) {
     use crate::protocol::messages::HWProtocolMessage::*;
     match message {
         Part(None) => server.react(client_id, vec![

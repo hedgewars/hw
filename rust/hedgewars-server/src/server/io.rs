@@ -1,6 +1,6 @@
 use std::{
     fs::{File, OpenOptions},
-    io::{Read, Write, Result, Error, ErrorKind}
+    io::{Error, ErrorKind, Read, Result, Write},
 };
 
 pub trait HWServerIO {

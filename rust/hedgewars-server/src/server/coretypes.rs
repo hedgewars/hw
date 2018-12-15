@@ -23,7 +23,7 @@ pub enum GameCfg {
     Scheme(String, Vec<String>),
     Script(String),
     Theme(String),
-    DrawnMap(String)
+    DrawnMap(String),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -51,7 +51,7 @@ pub enum VoteType {
     Map(Option<String>),
     Pause,
     NewSeed,
-    HedgehogsPerTeam(u8)
+    HedgehogsPerTeam(u8),
 }
 
 #[derive(Clone, Debug)]
@@ -59,14 +59,16 @@ pub struct Voting {
     pub ttl: u32,
     pub voters: Vec<ClientId>,
     pub votes: Vec<(ClientId, bool)>,
-    pub kind: VoteType
+    pub kind: VoteType,
 }
 
 impl Voting {
     pub fn new(kind: VoteType, voters: Vec<ClientId>) -> Voting {
         Voting {
-            kind, voters, ttl: 2,
-            votes: Vec::new()
+            kind,
+            voters,
+            ttl: 2,
+            votes: Vec::new(),
         }
     }
 }

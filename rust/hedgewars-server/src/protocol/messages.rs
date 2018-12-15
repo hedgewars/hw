@@ -1,8 +1,5 @@
-use crate::server::coretypes::{
-    ServerVar, GameCfg, TeamInfo,
-    HedgehogInfo, VoteType
-};
-use std::{ops, convert::From, iter::once};
+use crate::server::coretypes::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType};
+use std::{convert::From, iter::once, ops};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum HWProtocolMessage {
@@ -80,7 +77,7 @@ pub enum HWServerMessage {
     ServerAuth(String),
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
-    ChatMsg {nick: String, msg: String},
+    ChatMsg { nick: String, msg: String },
     ClientFlags(String, Vec<String>),
     Rooms(Vec<String>),
     RoomAdd(Vec<String>),
@@ -107,11 +104,14 @@ pub enum HWServerMessage {
     Unreachable,
 
     //Deprecated messages
-    LegacyReady(bool, Vec<String>)
+    LegacyReady(bool, Vec<String>),
 }
 
-pub fn server_chat(msg: String) -> HWServerMessage  {
-    HWServerMessage::ChatMsg{ nick: "[server]".to_string(), msg }
+pub fn server_chat(msg: String) -> HWServerMessage {
+    HWServerMessage::ChatMsg {
+        nick: "[server]".to_string(),
+        msg,
+    }
 }
 
 impl GameCfg {
@@ -135,7 +135,7 @@ impl GameCfg {
             }),
             Script(s) => ("SCRIPT".to_string(), vec![s.to_string()]),
             Theme(t) => ("THEME".to_string(), vec![t.to_string()]),
-            DrawnMap(m) => ("DRAWNMAP".to_string(), vec![m.to_string()])
+            DrawnMap(m) => ("DRAWNMAP".to_string(), vec![m.to_string()]),
         }
     }
 
@@ -147,7 +147,9 @@ impl GameCfg {
 }
 
 macro_rules! const_braces {
-    ($e: expr) => { "{}\n" }
+    ($e: expr) => {
+        "{}\n"
+    };
 }
 
 macro_rules! msg {
@@ -178,7 +180,7 @@ impl HWProtocolMessage {
             Global(msg) => msg!["CMD", format!("GLOBAL {}", msg)],
             Watch(name) => msg!["CMD", format!("WATCH {}", name)],
             ToggleServerRegisteredOnly => msg!["CMD", "REGISTERED_ONLY"],
-            SuperPower =>  msg!["CMD", "SUPER_POWER"],
+            SuperPower => msg!["CMD", "SUPER_POWER"],
             Info(info) => msg!["CMD", format!("INFO {}", info)],
             Nick(nick) => msg!("NICK", nick),
             Proto(version) => msg!["PROTO", version],
@@ -187,22 +189,21 @@ impl HWProtocolMessage {
             List => msg!["LIST"],
             Chat(msg) => msg!["CHAT", msg],
             CreateRoom(name, None) => msg!["CREATE_ROOM", name],
-            CreateRoom(name, Some(password)) =>
-                msg!["CREATE_ROOM", name, password],
+            CreateRoom(name, Some(password)) => msg!["CREATE_ROOM", name, password],
             JoinRoom(name, None) => msg!["JOIN_ROOM", name],
-            JoinRoom(name, Some(password)) =>
-                msg!["JOIN_ROOM", name, password],
+            JoinRoom(name, Some(password)) => msg!["JOIN_ROOM", name, password],
             Follow(name) => msg!["FOLLOW", name],
-            Rnd(args) => if args.is_empty() {
-                msg!["CMD", "RND"]
-            } else {
-                msg!["CMD", format!("RND {}", args.join(" "))]
-            },
+            Rnd(args) => {
+                if args.is_empty() {
+                    msg!["CMD", "RND"]
+                } else {
+                    msg!["CMD", format!("RND {}", args.join(" "))]
+                }
+            }
             Kick(name) => msg!["KICK", name],
             Ban(name, reason, time) => msg!["BAN", name, reason, time],
             BanIP(ip, reason, time) => msg!["BAN_IP", ip, reason, time],
-            BanNick(nick, reason, time) =>
-                msg!("BAN_NICK", nick, reason, time),
+            BanNick(nick, reason, time) => msg!("BAN_NICK", nick, reason, time),
             BanList => msg!["BANLIST"],
             Unban(name) => msg!["UNBAN", name],
             //SetServerVar(ServerVar), ???
@@ -214,13 +215,22 @@ impl HWProtocolMessage {
             Cfg(config) => {
                 let (name, args) = config.to_protocol();
                 msg!["CFG", name, args.join("\n")]
-            },
-            AddTeam(info) =>
-                msg!["ADD_TEAM", info.name, info.color, info.grave, info.fort,
-                     info.voice_pack, info.flag, info.difficulty,
-                     info.hedgehogs.iter()
-                        .flat_map(|h| several![&h.name[..], &h.hat[..]])
-                        .collect::<Vec<_>>().join("\n")],
+            }
+            AddTeam(info) => msg![
+                "ADD_TEAM",
+                info.name,
+                info.color,
+                info.grave,
+                info.fort,
+                info.voice_pack,
+                info.flag,
+                info.difficulty,
+                info.hedgehogs
+                    .iter()
+                    .flat_map(|h| several![&h.name[..], &h.hat[..]])
+                    .collect::<Vec<_>>()
+                    .join("\n")
+            ],
             RemoveTeam(name) => msg!["REMOVE_TEAM", name],
             SetHedgehogsNumber(team, number) => msg!["HH_NUM", team, number],
             SetTeamColor(team, color) => msg!["TEAM_COLOR", team, color],
@@ -234,20 +244,20 @@ impl HWProtocolMessage {
             RoomName(name) => msg!["ROOM_NAME", name],
             Delegate(name) => msg!["CMD", format!("DELEGATE {}", name)],
             TeamChat(msg) => msg!["TEAMCHAT", msg],
-            MaxTeams(count) => msg!["CMD", format!("MAXTEAMS {}", count)] ,
+            MaxTeams(count) => msg!["CMD", format!("MAXTEAMS {}", count)],
             Fix => msg!["CMD", "FIX"],
             Unfix => msg!["CMD", "UNFIX"],
             Greeting(msg) => msg!["CMD", format!("GREETING {}", msg)],
             //CallVote(Option<(String, Option<String>)>) =>, ??
-            Vote(msg) => msg!["CMD", format!("VOTE {}", if *msg {"YES"} else {"NO"})],
-            ForceVote(msg) => msg!["CMD", format!("FORCE {}", if *msg {"YES"} else {"NO"})],
+            Vote(msg) => msg!["CMD", format!("VOTE {}", if *msg { "YES" } else { "NO" })],
+            ForceVote(msg) => msg!["CMD", format!("FORCE {}", if *msg { "YES" } else { "NO" })],
             Save(name, location) => msg!["CMD", format!("SAVE {} {}", name, location)],
             Delete(name) => msg!["CMD", format!("DELETE {}", name)],
             SaveRoom(name) => msg!["CMD", format!("SAVEROOM {}", name)],
             LoadRoom(name) => msg!["CMD", format!("LOADROOM {}", name)],
             Malformed => msg!["A", "QUICK", "BROWN", "HOG", "JUMPS", "OVER", "THE", "LAZY", "DOG"],
             Empty => msg![""],
-            _ => panic!("Protocol message not yet implemented")
+            _ => panic!("Protocol message not yet implemented"),
         }
     }
 }
@@ -268,47 +278,40 @@ impl HWServerMessage {
             Connected(protocol_version) => msg![
                 "CONNECTED",
                 "Hedgewars server https://www.hedgewars.org/",
-                protocol_version],
+                protocol_version
+            ],
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],
             Proto(proto) => msg!["PROTO", proto],
             ServerAuth(hash) => msg!["SERVER_AUTH", hash],
             LobbyLeft(nick, msg) => msg!["LOBBY:LEFT", nick, msg],
-            LobbyJoined(nicks) =>
-                construct_message(&["LOBBY:JOINED"], &nicks),
-            ClientFlags(flags, nicks) =>
-                construct_message(&["CLIENT_FLAGS", flags], &nicks),
-            Rooms(info) =>
-                construct_message(&["ROOMS"], &info),
-            RoomAdd(info) =>
-                construct_message(&["ROOM", "ADD"], &info),
-            RoomJoined(nicks) =>
-                construct_message(&["JOINED"], &nicks),
+            LobbyJoined(nicks) => construct_message(&["LOBBY:JOINED"], &nicks),
+            ClientFlags(flags, nicks) => construct_message(&["CLIENT_FLAGS", flags], &nicks),
+            Rooms(info) => construct_message(&["ROOMS"], &info),
+            RoomAdd(info) => construct_message(&["ROOM", "ADD"], &info),
+            RoomJoined(nicks) => construct_message(&["JOINED"], &nicks),
             RoomLeft(nick, msg) => msg!["LEFT", nick, msg],
             RoomRemove(name) => msg!["ROOM", "DEL", name],
-            RoomUpdated(name, info) =>
-                construct_message(&["ROOM", "UPD", name], &info),
-            TeamAdd(info) =>
-                construct_message(&["ADD_TEAM"], &info),
+            RoomUpdated(name, info) => construct_message(&["ROOM", "UPD", name], &info),
+            TeamAdd(info) => construct_message(&["ADD_TEAM"], &info),
             TeamRemove(name) => msg!["REMOVE_TEAM", name],
             TeamAccepted(name) => msg!["TEAM_ACCEPTED", name],
             TeamColor(name, color) => msg!["TEAM_COLOR", name, color],
             HedgehogsNumber(name, number) => msg!["HH_NUM", name, number],
-            ConfigEntry(name, values) =>
-                construct_message(&["CFG", name], &values),
+            ConfigEntry(name, values) => construct_message(&["CFG", name], &values),
             Kicked => msg!["KICKED"],
             RunGame => msg!["RUN_GAME"],
-            ForwardEngineMessage(em) =>
-                construct_message(&["EM"], &em),
+            ForwardEngineMessage(em) => construct_message(&["EM"], &em),
             RoundFinished => msg!["ROUND_FINISHED"],
-            ChatMsg {nick, msg} => msg!["CHAT", nick, msg],
+            ChatMsg { nick, msg } => msg!["CHAT", nick, msg],
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
             Notice(msg) => msg!["NOTICE", msg],
             Warning(msg) => msg!["WARNING", msg],
             Error(msg) => msg!["ERROR", msg],
 
-            LegacyReady(is_ready, nicks) =>
-                construct_message(&[if *is_ready {"READY"} else {"NOT_READY"}], &nicks),
+            LegacyReady(is_ready, nicks) => {
+                construct_message(&[if *is_ready { "READY" } else { "NOT_READY" }], &nicks)
+            }
 
             _ => msg!["ERROR", "UNIMPLEMENTED"],
         }

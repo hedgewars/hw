@@ -1,10 +1,11 @@
 use crate::{
-    server::{actions::Action, core::HWServer},
     protocol::messages::{
-        HWProtocolMessage::{self, Rnd}, HWServerMessage::{self, ChatMsg},
-    }
+        HWProtocolMessage::{self, Rnd},
+        HWServerMessage::{self, ChatMsg},
+    },
+    server::{actions::Action, core::HWServer},
 };
-use rand::{self, Rng, thread_rng};
+use rand::{self, thread_rng, Rng};
 
 pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     let mut rng = thread_rng();
@@ -25,7 +26,8 @@ mod tests {
     use super::*;
     use crate::protocol::messages::HWServerMessage::ChatMsg;
     use crate::server::actions::{
-        Action::{self, Send}, PendingMessage,
+        Action::{self, Send},
+        PendingMessage,
     };
 
     fn reply2string(r: HWServerMessage) -> String {

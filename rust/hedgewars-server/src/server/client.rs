@@ -1,7 +1,7 @@
 use super::coretypes::ClientId;
 use bitflags::*;
 
-bitflags!{
+bitflags! {
     pub struct ClientFlags: u8 {
         const IS_ADMIN = 0b0000_0001;
         const IS_MASTER = 0b0000_0010;
@@ -25,7 +25,7 @@ pub struct HWClient {
     pub flags: ClientFlags,
     pub teams_in_game: u8,
     pub team_indices: Vec<u8>,
-    pub clan: Option<u8>
+    pub clan: Option<u8>,
 }
 
 impl HWClient {
@@ -44,7 +44,7 @@ impl HWClient {
         }
     }
 
-    fn contains(& self, mask: ClientFlags) -> bool {
+    fn contains(&self, mask: ClientFlags) -> bool {
         self.flags.contains(mask)
     }
 
@@ -52,17 +52,41 @@ impl HWClient {
         self.flags.set(mask, value);
     }
 
-    pub fn is_admin(&self)-> bool { self.contains(ClientFlags::IS_ADMIN) }
-    pub fn is_master(&self)-> bool { self.contains(ClientFlags::IS_MASTER) }
-    pub fn is_ready(&self)-> bool { self.contains(ClientFlags::IS_READY) }
-    pub fn is_in_game(&self)-> bool { self.contains(ClientFlags::IS_IN_GAME) }
-    pub fn is_joined_mid_game(&self)-> bool { self.contains(ClientFlags::IS_JOINED_MID_GAME) }
-    pub fn is_checker(&self)-> bool { self.contains(ClientFlags::IS_CHECKER) }
+    pub fn is_admin(&self) -> bool {
+        self.contains(ClientFlags::IS_ADMIN)
+    }
+    pub fn is_master(&self) -> bool {
+        self.contains(ClientFlags::IS_MASTER)
+    }
+    pub fn is_ready(&self) -> bool {
+        self.contains(ClientFlags::IS_READY)
+    }
+    pub fn is_in_game(&self) -> bool {
+        self.contains(ClientFlags::IS_IN_GAME)
+    }
+    pub fn is_joined_mid_game(&self) -> bool {
+        self.contains(ClientFlags::IS_JOINED_MID_GAME)
+    }
+    pub fn is_checker(&self) -> bool {
+        self.contains(ClientFlags::IS_CHECKER)
+    }
 
-    pub fn set_is_admin(&mut self, value: bool) { self.set(ClientFlags::IS_ADMIN, value) }
-    pub fn set_is_master(&mut self, value: bool) { self.set(ClientFlags::IS_MASTER, value) }
-    pub fn set_is_ready(&mut self, value: bool) { self.set(ClientFlags::IS_READY, value) }
-    pub fn set_is_in_game(&mut self, value: bool) { self.set(ClientFlags::IS_IN_GAME, value) }
-    pub fn set_is_joined_mid_game(&mut self, value: bool) { self.set(ClientFlags::IS_JOINED_MID_GAME, value) }
-    pub fn set_is_checker(&mut self, value: bool) { self.set(ClientFlags::IS_CHECKER, value) }
+    pub fn set_is_admin(&mut self, value: bool) {
+        self.set(ClientFlags::IS_ADMIN, value)
+    }
+    pub fn set_is_master(&mut self, value: bool) {
+        self.set(ClientFlags::IS_MASTER, value)
+    }
+    pub fn set_is_ready(&mut self, value: bool) {
+        self.set(ClientFlags::IS_READY, value)
+    }
+    pub fn set_is_in_game(&mut self, value: bool) {
+        self.set(ClientFlags::IS_IN_GAME, value)
+    }
+    pub fn set_is_joined_mid_game(&mut self, value: bool) {
+        self.set(ClientFlags::IS_JOINED_MID_GAME, value)
+    }
+    pub fn set_is_checker(&mut self, value: bool) {
+        self.set(ClientFlags::IS_CHECKER, value)
+    }
 }

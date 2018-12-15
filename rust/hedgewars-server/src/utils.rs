@@ -1,20 +1,21 @@
-use std::iter::Iterator;
+use base64::encode;
 use mio;
-use base64::{encode};
+use std::iter::Iterator;
 
-pub const PROTOCOL_VERSION : u32 = 3;
+pub const PROTOCOL_VERSION: u32 = 3;
 pub const SERVER: mio::Token = mio::Token(1_000_000_000);
 
-pub fn is_name_illegal(name: &str ) -> bool{
-    name.len() > 40 ||
-        name.trim().is_empty() ||
-        name.chars().any(|c|
-            "$()*+?[]^{|}\x7F".contains(c) ||
-                '\x00' <= c && c <= '\x1F')
+pub fn is_name_illegal(name: &str) -> bool {
+    name.len() > 40
+        || name.trim().is_empty()
+        || name
+            .chars()
+            .any(|c| "$()*+?[]^{|}\x7F".contains(c) || '\x00' <= c && c <= '\x1F')
 }
 
 pub fn to_engine_msg<T>(msg: T) -> String
-    where T: Iterator<Item = u8> + Clone
+where
+    T: Iterator<Item = u8> + Clone,
 {
     let mut tmp = Vec::new();
     tmp.push(msg.clone().count() as u8);
@@ -64,6 +65,6 @@ pub fn protocol_version_string(protocol_number: u16) -> &'static str {
         56 => "0.9.25-dev",
         57 => "0.9.25",
         58 => "1.0.0-dev",
-        _ => "Unknown"
+        _ => "Unknown",
     }
 }

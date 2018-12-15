@@ -1,17 +1,12 @@
-use mio;
 use log::*;
+use mio;
 
 use crate::{
-    server::{
-        core::HWServer,
-        coretypes::ClientId,
-    },
-    protocol::messages::{
-        HWProtocolMessage
-    },
+    protocol::messages::HWProtocolMessage,
+    server::{core::HWServer, coretypes::ClientId},
 };
 
-pub fn handle(server: & mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
+pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
     match message {
         _ => warn!("Unknown command"),
     }

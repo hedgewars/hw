@@ -1,32 +1,26 @@
-use std::{
-    iter, collections::HashMap
-};
 use crate::server::{
-    coretypes::{
-        ClientId, RoomId, TeamInfo, GameCfg, GameCfg::*, Voting,
-        MAX_HEDGEHOGS_PER_TEAM
-    },
-    client::{HWClient}
+    client::HWClient,
+    coretypes::{ClientId, GameCfg, GameCfg::*, RoomId, TeamInfo, Voting, MAX_HEDGEHOGS_PER_TEAM},
 };
 use bitflags::*;
-use serde::{Serialize, Deserialize};
-use serde_derive::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use serde_derive::{Deserialize, Serialize};
 use serde_yaml;
+use std::{collections::HashMap, iter};
 
 const MAX_TEAMS_IN_ROOM: u8 = 8;
-const MAX_HEDGEHOGS_IN_ROOM: u8 =
-    MAX_HEDGEHOGS_PER_TEAM * MAX_HEDGEHOGS_PER_TEAM;
+const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_HEDGEHOGS_PER_TEAM * MAX_HEDGEHOGS_PER_TEAM;
 
 #[derive(Clone, Serialize, Deserialize)]
 struct Ammo {
     name: String,
-    settings: Option<String>
+    settings: Option<String>,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
 struct Scheme {
     name: String,
-    settings: Vec<String>
+    settings: Vec<String>,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -42,7 +36,7 @@ struct RoomConfig {
     scheme: Scheme,
     script: String,
     theme: String,
-    drawn_map: Option<String>
+    drawn_map: Option<String>,
 }
 
 impl RoomConfig {
@@ -55,25 +49,40 @@ impl RoomConfig {
             seed: "seed".to_string(),
             template: 0,
 
-            ammo: Ammo {name: "Default".to_string(), settings: None },
-            scheme: Scheme {name: "Default".to_string(), settings: Vec::new() },
+            ammo: Ammo {
+                name: "Default".to_string(),
+                settings: None,
+            },
+            scheme: Scheme {
+                name: "Default".to_string(),
+                settings: Vec::new(),
+            },
             script: "Normal".to_string(),
             theme: "\u{1f994}".to_string(),
-            drawn_map: None
+            drawn_map: None,
         }
     }
 }
 
-fn client_teams_impl(teams: &[(ClientId, TeamInfo)], client_id: ClientId)
-    -> impl Iterator<Item = &TeamInfo> + Clone
-{
-    teams.iter().filter(move |(id, _)| *id == client_id).map(|(_, t)| t)
+fn client_teams_impl(
+    teams: &[(ClientId, TeamInfo)],
+    client_id: ClientId,
+) -> impl Iterator<Item = &TeamInfo> + Clone {
+    teams
+        .iter()
+        .filter(move |(id, _)| *id == client_id)
+        .map(|(_, t)| t)
 }
 
 fn map_config_from(c: &RoomConfig) -> Vec<String> {
-    vec![c.feature_size.to_string(), c.map_type.to_string(),
-         c.map_generator.to_string(), c.maze_size.to_string(),
-         c.seed.to_string(), c.template.to_string()]
+    vec![
+        c.feature_size.to_string(),
+        c.map_type.to_string(),
+        c.map_generator.to_string(),
+        c.maze_size.to_string(),
+        c.seed.to_string(),
+        c.template.to_string(),
+    ]
 }
 
 fn game_config_from(c: &RoomConfig) -> Vec<GameCfg> {
@@ -82,7 +91,8 @@ fn game_config_from(c: &RoomConfig) -> Vec<GameCfg> {
         Ammo(c.ammo.name.to_string(), c.ammo.settings.clone()),
         Scheme(c.scheme.name.to_string(), c.scheme.settings.clone()),
         Script(c.script.to_string()),
-        Theme(c.theme.to_string())];
+        Theme(c.theme.to_string()),
+    ];
     if let Some(ref m) = c.drawn_map {
         v.push(DrawnMap(m.to_string()))
     }
@@ -96,7 +106,7 @@ pub struct GameInfo {
     pub msg_log: Vec<String>,
     pub sync_msg: Option<String>,
     pub is_paused: bool,
-    config: RoomConfig
+    config: RoomConfig,
 }
 
 impl GameInfo {
@@ -108,7 +118,7 @@ impl GameInfo {
             is_paused: false,
             teams_in_game: teams.len() as u8,
             teams_at_start: teams,
-            config
+            config,
         }
     }
 
@@ -120,10 +130,10 @@ impl GameInfo {
 #[derive(Serialize, Deserialize)]
 pub struct RoomSave {
     pub location: String,
-    config: RoomConfig
+    config: RoomConfig,
 }
 
-bitflags!{
+bitflags! {
     pub struct RoomFlags: u8 {
         const FIXED = 0b0000_0001;
         const RESTRICTED_JOIN = 0b0000_0010;
@@ -149,7 +159,7 @@ pub struct HWRoom {
     config: RoomConfig,
     pub voting: Option<Voting>,
     pub saves: HashMap<String, RoomSave>,
-    pub game_info: Option<GameInfo>
+    pub game_info: Option<GameInfo>,
 }
 
 impl HWRoom {
@@ -170,7 +180,7 @@ impl HWRoom {
             config: RoomConfig::new(),
             voting: None,
             saves: HashMap::new(),
-            game_info: None
+            game_info: None,
         }
     }
 
@@ -182,17 +192,27 @@ impl HWRoom {
         MAX_HEDGEHOGS_IN_ROOM - self.hedgehogs_number()
     }
 
-    pub fn add_team(&mut self, owner_id: ClientId, mut team: TeamInfo, preserve_color: bool) -> &TeamInfo {
+    pub fn add_team(
+        &mut self,
+        owner_id: ClientId,
+        mut team: TeamInfo,
+        preserve_color: bool,
+    ) -> &TeamInfo {
         if !preserve_color {
-            team.color = iter::repeat(()).enumerate()
-                .map(|(i, _)| i as u8).take(u8::max_value() as usize + 1)
+            team.color = iter::repeat(())
+                .enumerate()
+                .map(|(i, _)| i as u8)
+                .take(u8::max_value() as usize + 1)
                 .find(|i| self.teams.iter().all(|(_, t)| t.color != *i))
                 .unwrap_or(0u8)
         };
         team.hedgehogs_number = if self.teams.is_empty() {
             self.default_hedgehog_number
         } else {
-            self.teams[0].1.hedgehogs_number.min(self.addable_hedgehogs())
+            self.teams[0]
+                .1
+                .hedgehogs_number
+                .min(self.addable_hedgehogs())
         };
         self.teams.push((owner_id, team));
         &self.teams.last().unwrap().1
@@ -208,27 +228,36 @@ impl HWRoom {
         let mut names = Vec::new();
         let teams = match self.game_info {
             Some(ref mut info) => &mut info.teams_at_start,
-            None => &mut self.teams
+            None => &mut self.teams,
         };
 
         if teams.len() as u8 * n <= MAX_HEDGEHOGS_IN_ROOM {
             for (_, team) in teams.iter_mut() {
                 team.hedgehogs_number = n;
                 names.push(team.name.clone())
-            };
+            }
             self.default_hedgehog_number = n;
         }
         names
     }
 
     pub fn find_team_and_owner_mut<F>(&mut self, f: F) -> Option<(ClientId, &mut TeamInfo)>
-        where F: Fn(&TeamInfo) -> bool {
-        self.teams.iter_mut().find(|(_, t)| f(t)).map(|(id, t)| (*id, t))
+    where
+        F: Fn(&TeamInfo) -> bool,
+    {
+        self.teams
+            .iter_mut()
+            .find(|(_, t)| f(t))
+            .map(|(id, t)| (*id, t))
     }
 
     pub fn find_team<F>(&self, f: F) -> Option<&TeamInfo>
-        where F: Fn(&TeamInfo) -> bool {
-        self.teams.iter().find_map(|(_, t)| Some(t).filter(|t| f(&t)))
+    where
+        F: Fn(&TeamInfo) -> bool,
+    {
+        self.teams
+            .iter()
+            .find_map(|(_, t)| Some(t).filter(|t| f(&t)))
     }
 
     pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> {
@@ -236,13 +265,18 @@ impl HWRoom {
     }
 
     pub fn client_team_indices(&self, client_id: ClientId) -> Vec<u8> {
-        self.teams.iter().enumerate()
+        self.teams
+            .iter()
+            .enumerate()
             .filter(move |(_, (id, _))| *id == client_id)
-            .map(|(i, _)| i as u8).collect()
+            .map(|(i, _)| i as u8)
+            .collect()
     }
 
     pub fn find_team_owner(&self, team_name: &str) -> Option<(ClientId, &str)> {
-        self.teams.iter().find(|(_, t)| t.name == team_name)
+        self.teams
+            .iter()
+            .find(|(_, t)| t.name == team_name)
             .map(|(id, t)| (*id, &t.name[..]))
     }
 
@@ -251,8 +285,8 @@ impl HWRoom {
     }
 
     pub fn has_multiple_clans(&self) -> bool {
-        self.teams.iter().min_by_key(|(_, t)| t.color) !=
-            self.teams.iter().max_by_key(|(_, t)| t.color)
+        self.teams.iter().min_by_key(|(_, t)| t.color)
+            != self.teams.iter().max_by_key(|(_, t)| t.color)
     }
 
     pub fn set_config(&mut self, cfg: GameCfg) {
@@ -265,18 +299,27 @@ impl HWRoom {
             Seed(s) => c.seed = s,
             Template(t) => c.template = t,
 
-            Ammo(n, s) => c.ammo = Ammo {name: n, settings: s},
-            Scheme(n, s) => c.scheme = Scheme {name: n, settings: s},
+            Ammo(n, s) => {
+                c.ammo = Ammo {
+                    name: n,
+                    settings: s,
+                }
+            }
+            Scheme(n, s) => {
+                c.scheme = Scheme {
+                    name: n,
+                    settings: s,
+                }
+            }
             Script(s) => c.script = s,
             Theme(t) => c.theme = t,
-            DrawnMap(m) => c.drawn_map = Some(m)
+            DrawnMap(m) => c.drawn_map = Some(m),
         };
     }
 
     pub fn start_round(&mut self) {
         if self.game_info.is_none() {
-            self.game_info = Some(GameInfo::new(
-                self.teams.clone(), self.config.clone()));
+            self.game_info = Some(GameInfo::new(self.teams.clone(), self.config.clone()));
         }
     }
 
@@ -290,7 +333,8 @@ impl HWRoom {
         self.flags.contains(RoomFlags::RESTRICTED_TEAM_ADD)
     }
     pub fn are_unregistered_players_restricted(&self) -> bool {
-        self.flags.contains(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS)
+        self.flags
+            .contains(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS)
     }
 
     pub fn set_is_fixed(&mut self, value: bool) {
@@ -303,14 +347,21 @@ impl HWRoom {
         self.flags.set(RoomFlags::RESTRICTED_TEAM_ADD, value)
     }
     pub fn set_unregistered_players_restriction(&mut self, value: bool) {
-        self.flags.set(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS, value)
+        self.flags
+            .set(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS, value)
     }
 
     fn flags_string(&self) -> String {
         let mut result = "-".to_string();
-        if self.game_info.is_some()  { result += "g" }
-        if self.password.is_some()   { result += "p" }
-        if self.is_join_restricted() { result += "j" }
+        if self.game_info.is_some() {
+            result += "g"
+        }
+        if self.password.is_some() {
+            result += "p"
+        }
+        if self.is_join_restricted() {
+            result += "j"
+        }
         if self.are_unregistered_players_restricted() {
             result += "r"
         }
@@ -328,26 +379,32 @@ impl HWRoom {
             c.map_type.to_string(),
             c.script.to_string(),
             c.scheme.name.to_string(),
-            c.ammo.name.to_string()
+            c.ammo.name.to_string(),
         ]
     }
 
     pub fn map_config(&self) -> Vec<String> {
         match self.game_info {
             Some(ref info) => map_config_from(&info.config),
-            None => map_config_from(&self.config)
+            None => map_config_from(&self.config),
         }
     }
 
     pub fn game_config(&self) -> Vec<GameCfg> {
         match self.game_info {
             Some(ref info) => game_config_from(&info.config),
-            None => game_config_from(&self.config)
+            None => game_config_from(&self.config),
         }
     }
 
     pub fn save_config(&mut self, name: String, location: String) {
-        self.saves.insert(name, RoomSave { location, config: self.config.clone() });
+        self.saves.insert(
+            name,
+            RoomSave {
+                location,
+                config: self.config.clone(),
+            },
+        );
     }
 
     pub fn load_config(&mut self, name: &str) -> Option<&str> {
@@ -368,10 +425,12 @@ impl HWRoom {
     }
 
     pub fn set_saves(&mut self, text: &str) -> Result<(), serde_yaml::Error> {
-        serde_yaml::from_str::<(String, HashMap<String, RoomSave>)>(text).map(|(greeting, saves)| {
-            self.greeting = greeting;
-            self.saves = saves;
-        })
+        serde_yaml::from_str::<(String, HashMap<String, RoomSave>)>(text).map(
+            |(greeting, saves)| {
+                self.greeting = greeting;
+                self.saves = saves;
+            },
+        )
     }
 
     pub fn team_info(owner: &HWClient, team: &TeamInfo) -> Vec<String> {
@@ -382,9 +441,12 @@ impl HWRoom {
             team.voice_pack.clone(),
             team.flag.clone(),
             owner.nick.clone(),
-            team.difficulty.to_string()];
-        let hogs = team.hedgehogs.iter().flat_map(|h|
-            iter::once(h.name.clone()).chain(iter::once(h.hat.clone())));
+            team.difficulty.to_string(),
+        ];
+        let hogs = team
+            .hedgehogs
+            .iter()
+            .flat_map(|h| iter::once(h.name.clone()).chain(iter::once(h.hat.clone())));
         info.extend(hogs);
         info
     }
