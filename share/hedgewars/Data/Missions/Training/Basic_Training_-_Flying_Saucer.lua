@@ -50,12 +50,15 @@ local StartPos = { X = 742, Y = 290 }
 List of all targets (or "objectives"). The player has to complete them one-by-one and must always land safely afterwards.
 Some target numbers have names for easier reference.
 ]]
+-- Intro
 TargetPos[1] =  {
 	Targets = {{ X = 1027, Y = 217 }},
 	Ammo = { },
 	Message = loc("Here you will learn how to fly the flying saucer|and get so learn some cool tricks.") .. "|" ..
 	loc("Collect the first crate to begin!"),
 	MessageIcon = -amJetpack, }
+
+-- First flight, infinite fuel
 TargetPos[2] = {
 	Targets = {{ X = 1369, Y = 265 }},
 	Ammo = { [amJetpack] = 100 },
@@ -64,6 +67,8 @@ TargetPos[2] = {
 	Message = loc("Get to the crate using your flying saucer!") .. "|" ..
 	loc("Press [Attack] (space bar by default) to start,|repeatedly tap the up, left and right movement keys to accelerate.") .. "|" ..
 	loc("Try to land softly, as you can still take fall damage!"), }
+
+-- First flight, limited fuel
 TargetPos[3] = {
 	Targets = {{ X = 689, Y = 58 }},
 	Ammo = { [amJetpack] = 100 },
@@ -72,19 +77,23 @@ TargetPos[3] = {
 	loc("Tip: If you get stuck in this training, use \"Skip turn\" to restart the current objective.") }
 
 -- The Double Target
-local DoubleTarget = 4
 TargetPos[4] = {
-	Targets = { { X = 84, Y = -20 }, { X = 1980 , Y = -20 } },
+	Targets = { { X = 178, Y = -20 }, { X = 1962 , Y = -20 } },
 	Ammo = { [amJetpack] = 2 },
+	CratesContainAmmo = true,
 	MessageTime = 9000,
 	Message = loc("Now collect the 2 crates to the far left and right.") .. "|" ..
 	loc("You only have 2 flying saucers this time.") .. "|" ..
 	loc("Tip: You can change your flying saucer|in mid-flight by hitting the [Attack] key twice."), }
+
+-- Intermission
 TargetPos[5] = {
 	Targets = {{ X = 47, Y = 804 }},
 	Ammo = { [amJetpack] = 100 },
 	MessageTime = 5000,
 	Message = loc("Time for a more interesting stunt, but first just collect the next crate!"), }
+
+-- First Dive
 TargetPos[6] = {
 	Targets = {{ X = 604, Y = 871}},
 	MessageTime = 15000,
@@ -93,16 +102,18 @@ TargetPos[6] = {
 	loc("You only have one flying saucer this time.") .. "|" ..
 	loc("Beware, though, you will only be able to move slowly through the water.") .. "|" ..
 	loc("Warning: Never ever leave the flying saucer while in water!"),
-	Ammo = { [amJetpack] = 1 }, }
+	Ammo = { [amJetpack] = 1 },
+	Respawn = { X = 758, Y = 847, FaceLeft = false }, }
 
+-- Second Dive
 TargetPos[7] = { 
 	Targets = {{ X = 1884, Y = 704 }},
 	MessageTime = 6500,
 	Message = loc("Now dive just one more time and collect the next crate.") .. "|" ..
 		loc("Tip: Don't remain for too long in the water, or you won't make it."),
-	Ammo = { [amJetpack] = 1}, }
+	Ammo = { [amJetpack] = 2 }, }
 
--- The Boom Target
+-- The Grenade Drop Target
 local BoomTarget = 8
 TargetPos[8] = {
 	Modifier = true, Func = function()
@@ -128,7 +139,7 @@ TargetPos[8] = {
 
 	end,
 	Ammo = { [amJetpack] = 100 },
-	Respawn = { X = 2000, Y = 742 }, }
+	Respawn = { X = 2000, Y = 742, FaceLeft = true }, }
 
 -- The Launch Target
 local LaunchTarget = 9
@@ -143,9 +154,8 @@ TargetPos[9] = {
 		loc("You can even change your aiming direction in mid-flight if you first hold [Precise] and then press [Up] or [Down].") .. "|" ..
 		loc("Tip: Changing your aim while flying is very difficult, so adjust it before you take off."),
 	Ammo = { [amJetpack] = 1, },
-	Respawn = { X = 1764, Y = 916 },
+	Respawn = { X = 1760, Y = 754, FaceLeft = true },
 	ExtraFunc = function()
-		HogTurnLeft(Player, true)
 		if SaucerGear ~= nil then
 			AddAmmo(Player, amBazooka, 2)
 		else
@@ -165,7 +175,7 @@ TargetPos[10] = {
 	loc("Based on what you've learned, destroy the target on the girder and as always, land safely!"), 
 	Targets = {{ X = 1200, Y = 930, Type = gtTarget }},
 	Ammo = { [amJetpack] = 1, },
-	Respawn = { X = 1027, Y = 217 },
+	Respawn = { X = 1027, Y = 217, FaceLeft = true },
 	ExtraFunc = function()
 		if SaucerGear ~= nil then
 			AddAmmo(Player, amBazooka, 1)
@@ -174,6 +184,7 @@ TargetPos[10] = {
 		end
 		BazookasLeft = 1
 	end }
+-- Final target / Sandbox
 TargetPos[11] = {
 	Targets = {{ X = 742, Y = 290 }},
 	MessageTime = 5000,
@@ -182,6 +193,7 @@ TargetPos[11] = {
 	loc("Collect or destroy the final crate to finish the training."),
 	Ammo = { [amJetpack] = 100, [amGrenade] = 100, [amBazooka] = 100 },
 	InfFuel = true, }
+-- Outro
 TargetPos[12] = { Modifier = true, Func = function()
 	Objective = true
 	AddCaption(loc("Training complete!"), capcolDefault, capgrpGameState)
@@ -234,18 +246,22 @@ function SpawnTargets()
 	for i=1,#TargetPos[TargetNumber].Targets do
 		if TargetGears[i] == nil then
 			SpawnTarget(TargetPos[TargetNumber].Targets[i].X, TargetPos[TargetNumber].Targets[i].Y,
-				TargetPos[TargetNumber].Targets[i].Type, i)
+				TargetPos[TargetNumber].Targets[i].Type, i, TargetPos[TargetNumber].CratesContainAmmo )
 		end
 	end
 end
 
-function SpawnTarget( PosX, PosY, Type, ID )
+function SpawnTarget( PosX, PosY, Type, ID, ContainsAmmo )
 	if Type ~= nil and Type ~= gtCase then
 		if Type == gtTarget then
 			TargetGears[ID] = AddGear(PosX, PosY, gtTarget, 0, 0, 0, 0)
 		end
 	else
-		TargetGears[ID] = SpawnFakeUtilityCrate(PosX, PosY, false, false)
+		if ContainsAmmo == true then
+			TargetGears[ID] = SpawnSupplyCrate(PosX, PosY, amJetpack)
+		else
+			TargetGears[ID] = SpawnFakeUtilityCrate(PosX, PosY, false, false)
+		end
 	end
 	TargetsRemaining = TargetsRemaining + 1
 end
@@ -328,12 +344,13 @@ function ResetCurrentTarget()
 
 	CleanUpGears()
 
-	local X, Y
+	local X, Y, FaceLeft
 	if TargetNumber == 1 then
 		X, Y = StartPos.X, StartPos.Y
 	else
 		if TargetPos[TargetNumber-1].Modifier or TargetPos[TargetNumber-1].Respawn ~= nil then
 			X, Y = TargetPos[TargetNumber-1].Respawn.X, TargetPos[TargetNumber-1].Respawn.Y
+			FaceLeft = TargetPos[TargetNumber-1].Respawn.FaceLeft
 		else
 			X, Y = TargetPos[TargetNumber-1].Targets[1].X, TargetPos[TargetNumber-1].Targets[1].Y
 		end
@@ -360,6 +377,9 @@ function ResetCurrentTarget()
 	UpdateInfFuel()
 
 	SetGearPosition(Player, X, Y)
+	if FaceLeft ~= nil then
+		HogTurnLeft(Player, FaceLeft)
+	end
 end
 
 function onGameInit()
@@ -392,8 +412,9 @@ function onGameStart()
 	PlaceGirder(1257, 204, 6)
 
 	-- The upper girders
-	PlaceGirder(84, 16, 0)
-	PlaceGirder(1980, 16, 0)
+	PlaceGirder(84, 16, 4)
+	PlaceGirder(243, 16, 4)
+	PlaceGirder(1967, 16, 4)
 
 	-- The lower girder platform at the water pit
 	PlaceGirder(509, 896, 4)
@@ -415,9 +436,9 @@ function onGameStart()
 end
 
 function onAmmoStoreInit()
-	SetAmmo(amJetpack, 0, 0, 0, 0)
-	SetAmmo(amGrenade, 0, 0, 0, 0)
-	SetAmmo(amBazooka, 0, 0, 0, 0)
+	SetAmmo(amJetpack, 0, 0, 0, 1)
+	SetAmmo(amGrenade, 0, 0, 0, 1)
+	SetAmmo(amBazooka, 0, 0, 0, 1)
 
 	-- Added for resetting current target/objective when player is stuck somehow
 	SetAmmo(amSkip, 9, 0, 0, 0)
@@ -482,7 +503,8 @@ function onGearDelete(Gear)
 			AddAmmo(Player, amBazooka, 0)
 		end
 	end
-	if GetGearType(Gear) == gtCase and GetGearType(Player) ~= nil then
+	-- Fake crate collected
+	if GetGearType(Gear) == gtCase and band(GetGearMessage(Gear), gmDestroy) ~= 0 and band(GetGearPos(Gear), 0x8) ~= 0 then
 		PlaySound(sndShotgunReload)
 	end
 	if Gear == Barrels[1] then
