@@ -32,7 +32,6 @@ configure_file(${CMAKE_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINAR
 
 #get the list of pas files that are going to be converted and compiled
 file(GLOB engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/*.pas")
-list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/uVideoRec.pas")
 list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/uTouch.pas")
 list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/PNGh.pas")
 list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas")
@@ -73,6 +72,12 @@ if(GL2)
     set(pas2c_args ${pas2c_args} -d GL2)
 endif()
 
+if(LIBAV_FOUND)
+    add_subdirectory(${CMAKE_SOURCE_DIR}/hedgewars/avwrapper ${CMAKE_CURRENT_BINARY_DIR}/avwrapper)
+    list(APPEND HW_LINK_LIBS avwrapper)
+    set(pas2c_args ${pas2c_args} -d USE_VIDEO_RECORDING)
+endif()
+
 #invoke pas2c on main module, it will call all the others
 add_custom_command(OUTPUT ${engine_sources}
                    COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
@@ -111,6 +116,7 @@ target_link_libraries(hwengine  fpcrtl
                                 physfs
                                 physlayer
                                 m
+                                ${HW_LINK_LIBS}
                                 #TODO: add other libraries
                             )
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_binary_install_dir})
