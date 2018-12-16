@@ -426,7 +426,7 @@ void HWMapContainer::askForGeneratedPreview()
                    getDrawnMapData(),
                    m_script,
                    m_scriptparam,
-		           m_mapFeatureSize
+                   m_mapFeatureSize
                   );
 
     setHHLimit(0);
@@ -1077,8 +1077,8 @@ void HWMapContainer::setFeatureSize(int val)
     //if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 4)
     {
         m_prevMapFeatureSize = m_mapFeatureSize;
-		if(m_mapInfo.type!= MapModel::HandDrawnMap)
-			updatePreview();
+        if(m_mapInfo.type!= MapModel::HandDrawnMap || m_script.length() > 0)
+            updatePreview();
     }
 }
 
