@@ -219,6 +219,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     previousTeamName = "";
     UpdateTeamsLists();
     InitCampaignPage();
+    RestoreSingleplayerTeamSelection();
     UpdateCampaignPage(0);
     UpdateCampaignPageTeam(0);
     UpdateCampaignPageMission(0);
@@ -927,6 +928,11 @@ void HWForm::GoBack()
             stopAnim = true;
             GoBack();
         }
+
+    if (curid == ID_PAGE_CAMPAIGN)
+        config->setValue("frontend/lastSingleplayerTeam", ui.pageCampaign->CBTeam->currentText());
+    if (curid == ID_PAGE_TRAINING)
+        config->setValue("frontend/lastSingleplayerTeam", ui.pageTraining->CBTeam->currentText());
 
     if (curid == ID_PAGE_ROOMSLIST || curid == ID_PAGE_CONNECTING) NetDisconnect();
     if (curid == ID_PAGE_NETGAME && hwnet && hwnet->isInRoom()) hwnet->partRoom();
@@ -2053,6 +2059,21 @@ void HWForm::InitCampaignPage()
         const QString & campaignName = entries[i];
         QString tName = team.name();
         ui.pageCampaign->CBCampaign->addItem(getRealCampName(campaignName), campaignName);
+    }
+
+}
+
+void HWForm::RestoreSingleplayerTeamSelection()
+{
+    QString lastTeam = config->value("frontend/lastSingleplayerTeam", QString()).toString();
+    if (!lastTeam.isNull() && !lastTeam.isEmpty())
+    {
+        int index = ui.pageCampaign->CBTeam->findData(lastTeam, Qt::DisplayRole);
+        if(index != -1)
+            ui.pageCampaign->CBTeam->setCurrentIndex(index);
+        index = ui.pageTraining->CBTeam->findData(lastTeam, Qt::DisplayRole);
+        if(index != -1)
+            ui.pageTraining->CBTeam->setCurrentIndex(index);
     }
 }
 

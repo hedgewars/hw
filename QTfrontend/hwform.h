@@ -137,6 +137,7 @@ class HWForm : public QMainWindow
         void UpdateCampaignPageMission(int index);
         void UpdateTrainingPageTeam(int index);
         void InitCampaignPage();
+        void RestoreSingleplayerTeamSelection();
         void showFeedbackDialog();
         void showFeedbackDialogNetChecked();
 
