@@ -2023,13 +2023,12 @@ void HWForm::UpdateTrainingPageTeam(int index)
 
         for(unsigned int i = 0; i < n; i++)
         {
-            QListWidgetItem* item = listWidget->takeItem(i);
+            QListWidgetItem* item = listWidget->item(i);
             QString missionName = QString(item->data(Qt::UserRole).toString()).replace(QString(" "),QString("_"));
             if(isMissionWon(missionName, tName))
                 item->setIcon(finishedIcon);
             else
                 item->setIcon(notFinishedIcon);
-            listWidget->insertItem(i, item);
         }
     }
 }
