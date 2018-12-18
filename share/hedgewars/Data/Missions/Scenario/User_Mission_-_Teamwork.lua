@@ -4,6 +4,7 @@ local player = nil -- This variable will point to the hog's gear
 local p2 = nil
 local enemy = nil
 local bCrate = nil
+local playerTeamName = loc("Feeble Resistance")
 
 local GameOver = false
 
@@ -23,7 +24,7 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Feeble Resistance"), -1, "Statue", "Island", "Default", "cm_kiwi")
+	AddTeam(playerTeamName, -1, "Statue", "Island", "Default", "cm_kiwi")
 	player = AddHog(loc("Greg"), 0, 50, "NoHat")
 	p2 = AddHog(loc("Mark"), 0, 20, "NoHat")
 
@@ -98,10 +99,11 @@ function onGearDelete(gear)
 		SetHealth(p2,0)
 		SetHealth(player,0)
 	end
-	if (gear == enemy) and not (GameOver) then
-		SaveMissionVar("Won", "true")
-		GameOver = true
-	end
 
 end
 
+function onGameResult(winningClan)
+	if winningClan == GetTeamClan(playerTeamName) then
+		SaveMissionVar("Won", "true")
+	end
+end

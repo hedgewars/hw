@@ -202,3 +202,8 @@ function onGearDelete(gear)
 	end
 end
 
+function onGameResult(winningClan)
+	if winningClan == GetHogClan(player) then
+		SaveMissionVar("Won", "true")
+	end
+end

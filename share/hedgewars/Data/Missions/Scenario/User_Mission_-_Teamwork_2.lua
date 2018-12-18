@@ -9,7 +9,7 @@ local enemy = nil
 local Pack = nil
 local help = false
 local GameOver = false
-local missionWon = false
+local playerTeamName = loc("Feeble Resistance")
 
 function onGameInit()
 	Seed = 0
@@ -26,7 +26,7 @@ function onGameInit()
 	Map = "CrazyMission"
 	Theme = "CrazyMission"
 
-	AddTeam(loc("Feeble Resistance"), -1, "Statue", "Island", "Default", "cm_kiwi")
+	AddTeam(playerTeamName, -1, "Statue", "Island", "Default", "cm_kiwi")
 	player = AddHog(loc("Greg"), 0, 30, "NoHat")
 	hlayer = AddHog(loc("Mark"), 0, 40, "NoHat")
 
@@ -106,9 +106,10 @@ function onGearDelete(gear)
 		SetHealth(hlayer, 0)
 		SetHealth(player, 0)
 	end
-	if (gear == enemy) and (not GameOver) then
-		GameOver = true
+end
+
+function onGameResult(winningClan)
+	if winningClan == GetTeamClan(playerTeamName) then
 		SaveMissionVar("Won", "true")
 	end
 end
-
