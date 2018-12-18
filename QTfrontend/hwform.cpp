@@ -332,6 +332,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageCampaign->CBCampaign, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
     connect(ui.pageCampaign->CBMission, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageMission(int)));
     connect(ui.pageTraining->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateTrainingPageTeam(int)));
+    connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), ui.pageTraining->CBTeam, SLOT(setCurrentIndex(int)));
+    connect(ui.pageTraining->CBTeam, SIGNAL(currentIndexChanged(int)), ui.pageCampaign->CBTeam, SLOT(setCurrentIndex(int)));
 
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted(QString)),
              this, SLOT(DeleteWeapons(QString)));
