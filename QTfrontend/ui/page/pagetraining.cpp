@@ -37,29 +37,32 @@ QLayout * PageTraining::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
 
-// left column
-
     // declare start button, caption and description
     btnPreview = formattedButton(":/res/Trainings.png", true);
 
-    // make both rows equal height
+    // tweak widget spacing
     pageLayout->setRowStretch(0, 1);
     pageLayout->setRowStretch(1, 1);
+    pageLayout->setRowStretch(2, 1);
+    pageLayout->setColumnStretch(0, 5);
+    pageLayout->setColumnStretch(1, 1);
+    pageLayout->setColumnStretch(2, 9);
+    pageLayout->setColumnStretch(3, 5);
 
-    // add start button, caption and description to 3 different rows
-    pageLayout->addWidget(btnPreview, 0, 0);
+    QWidget * infoWidget = new QWidget();
+    QHBoxLayout * infoLayout = new QHBoxLayout();
+    // add preview, caption and description
+    infoWidget->setLayout(infoLayout);
+    infoLayout->addWidget(btnPreview);
 
     // center preview
-    pageLayout->setAlignment(btnPreview, Qt::AlignRight | Qt::AlignVCenter);
-
-
-// right column
+    infoLayout->setAlignment(btnPreview, Qt::AlignRight | Qt::AlignVCenter);
 
     // info area (caption on top, description below)
-    QWidget * infoWidget = new QWidget();
-    QVBoxLayout * infoLayout = new QVBoxLayout();
-    infoWidget->setObjectName("trainingInfo");
-    infoWidget->setLayout(infoLayout);
+    QWidget * infoTextWidget = new QWidget();
+    QVBoxLayout * infoTextLayout = new QVBoxLayout();
+    infoTextWidget->setObjectName("trainingInfo");
+    infoTextWidget->setLayout(infoTextLayout);
 
     lblCaption = new QLabel();
     lblCaption->setMinimumWidth(360);
@@ -70,16 +73,18 @@ QLayout * PageTraining::bodyLayoutDefinition()
     lblDescription->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     lblDescription->setWordWrap(true);
 
-    infoLayout->addWidget(lblCaption);
-    infoLayout->addWidget(lblDescription);
+    infoTextLayout->addWidget(lblCaption);
+    infoTextLayout->addWidget(lblDescription);
 
-    pageLayout->addWidget(infoWidget, 0, 1);
-    pageLayout->setAlignment(infoWidget, Qt::AlignLeft);
+    infoLayout->addWidget(infoTextWidget);
+
+    pageLayout->addWidget(infoWidget, 0, 1, 1, 2); // span 2 columns
+    pageLayout->setAlignment(infoTextWidget, Qt::AlignLeft);
 
 
     // tab widget containing all lists
     tbw = new QTabWidget(this);
-    pageLayout->addWidget(tbw, 1, 0, 1, 2); // span 2 columns
+    pageLayout->addWidget(tbw, 1, 0, 1, 4); // span 4 columns
     // let's not make the tab widget use more space than needed
     tbw->setFixedWidth(400);
     pageLayout->setAlignment(tbw, Qt::AlignHCenter);
@@ -104,8 +109,8 @@ QLayout * PageTraining::bodyLayoutDefinition()
     QLabel* lblteam = new QLabel(tr("Team"));
     CBTeam = new QComboBox(this);
     CBTeam->setMaxVisibleItems(30);
-    pageLayout->addWidget(lblteam, 2, 0);
-    pageLayout->addWidget(CBTeam, 2, 1);
+    pageLayout->addWidget(lblteam, 2, 1);
+    pageLayout->addWidget(CBTeam, 2, 2);
 
     return pageLayout;
 }
