@@ -553,13 +553,17 @@ if SendHealthStatsOn then
     // now to console
     if winnersClan <> nil then
         begin
+        ScriptCall('onGameResult', winnersClan^.ClanIndex);
         WriteLnToConsole('WINNERS');
         WriteLnToConsole(inttostr(winnersClan^.TeamsNumber));
         for t:= 0 to winnersClan^.TeamsNumber - 1 do
             WriteLnToConsole(winnersClan^.Teams[t]^.TeamName);
         end
     else
+        begin
+        ScriptCall('onGameResult', -1);
         WriteLnToConsole('DRAW');
+        end;
 
     ScriptCall('onAchievementsDeclaration');
 end;

@@ -20,6 +20,7 @@ Lua API:
  + New call: GetMissionVar(varname): Get value of mission variable
  + New call: SetTurnTimePaused(isPaused): Call with true to pause turn time, false to unpause
  + New call: GetTurnTimePaused(): Returns true if turn time is paused due to Lua
+ + New callback: onGameResult(winningClan): Called when the game ends normally. winningClan = index of winning clan or -1 on draw
  + Params explode, poison in the SpawnFake*Crate functions now optional and default to false
 
 ====================== 0.9.25 ======================
