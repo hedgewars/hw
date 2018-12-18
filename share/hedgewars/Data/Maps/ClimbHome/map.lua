@@ -428,6 +428,7 @@ function onGameTick20()
             end
             -- FIXME: Hog is also in winning box if it just walks into the chair from the left, touching it. Intentional?
             if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
+                SaveMissionVar("Won", "true")
                 AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
                 ShowMission(loc("Climb Home"),
                             loc("Made it!"),

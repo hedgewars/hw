@@ -328,6 +328,7 @@ function onGearDelete(gear)
 			SetHealth(hog, initHogHealthFinal)
 			isInFinalChallenge = true
 		elseif currentTarget == 7 then
+			SaveMissionVar("Won", "true")
 			ShowMission(loc("Basic Rope Training"), loc("Training complete!"),
 			loc("Congratulations!"), 0, 0)
 			PlaySound(sndVictory, hog)

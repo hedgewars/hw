@@ -189,6 +189,7 @@ function newGamePhase()
 		2, 7000)
 		spawnTargets()
 	elseif gamePhase == 6 then
+		SaveMissionVar("Won", "true")
 		ShowMission(loc("Basic Grenade Training"), loc("Training complete!"), loc("Congratulations!"), 0, 0)
 		SetInputMask(0)
 		AddAmmo(CurrentHedgehog, amGrenade, 0)

@@ -148,6 +148,7 @@ function onGearDelete(gear)
 
 	if (gear == enemy) and (GameOver == false) then
 		ShowMission(loc("Spooky Tree"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0);
+		SaveMissionVar("Won", "true")
 	elseif gear == player then
 		ShowMission(loc("Spooky Tree"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 		GameOver = true

@@ -384,6 +384,7 @@ function onGearDelete(gear)
 		else
 			if not game_lost then
 			-- Victory!
+			SaveMissionVar("Won", "true")
 			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
 			ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Congratulations! You've eliminated all targets|within the allowed time frame."), 0, 0)
 			-- Also let the hogs shout "victory!"

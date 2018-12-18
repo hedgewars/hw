@@ -205,6 +205,7 @@ TargetPos[12] = { Modifier = true, Func = function()
 	SetState(Player, band(GetState(Player), bnot(gstHHDriven)))
 	SetState(Player, bor(GetState(Player), gstWinner))
 	PlaySound(sndVictory, Player)
+	SaveMissionVar("Won", "true")
 
 	SendStat(siGameResult, loc("You have finished the Flying Saucer Training!"))
 	SendStat(siCustomAchievement, loc("Good job!"))

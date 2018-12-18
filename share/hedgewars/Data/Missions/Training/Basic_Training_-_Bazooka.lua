@@ -211,6 +211,7 @@ function newGamePhase()
 		SetWind(75)
 		spawnTargets()
 	elseif gamePhase == 7 then
+		SaveMissionVar("Won", "true")
 		ShowMission(loc("Basic Bazooka Training"), loc("Training complete!"), loc("Congratulations!"), 0, 0)
 		SetInputMask(0)
 		AddAmmo(CurrentHedgehog, amBazooka, 0)

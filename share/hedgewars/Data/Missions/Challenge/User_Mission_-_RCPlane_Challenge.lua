@@ -407,6 +407,7 @@ function onGearDelete(gear)
 				SendStat(siGameResult, loc("You have finished the challenge!"))
 				SendStat(siCustomAchievement, string.format(loc("You have used %d RC planes."), planesUsed))
 			end
+			SaveMissionVar("Won", "true")
 		
 			if(totalMissiles > 1) then
 				SendStat(siCustomAchievement, string.format(loc("You have dropped %d missiles."), totalMissiles))

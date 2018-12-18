@@ -98,5 +98,10 @@ function onGearDelete(gear)
 		SetHealth(p2,0)
 		SetHealth(player,0)
 	end
+	if (gear == enemy) and not (GameOver) then
+		SaveMissionVar("Won", "true")
+		GameOver = true
+	end
 
 end
+

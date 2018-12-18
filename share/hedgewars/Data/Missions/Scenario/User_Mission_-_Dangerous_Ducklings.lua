@@ -139,9 +139,11 @@ function onGearDelete(gear)
 			awardAchievement(loc("Naughty Ninja"))
 			DismissTeam(loc("Blue Team"))
 			gameWon = true
+			SaveMissionVar("Won", "true")
 		elseif gear == enemy then
 			HogSay(player, loc("Enjoy the swim..."), SAY_THINK)
 			gameWon = true
+			SaveMissionVar("Won", "true")
 			Retreat(3000)
 		end
 

@@ -249,6 +249,7 @@ local function LoadGearData()
 end
 
 local function victory()
+	SaveMissionVar("Won", "true")
 	ShowMission(loc("Basic Movement Training"), loc("Training complete!"),loc("Congratulations! You have completed the obstacle course!"), 0, 0)
 	SendStat(siGameResult, loc("You have completed the Basic Movement Training!"))
 	SendStat(siCustomAchievement, loc("Congratulations!"))

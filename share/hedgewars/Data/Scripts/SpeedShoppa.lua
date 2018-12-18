@@ -164,6 +164,7 @@ function SpeedShoppaMission(params)
 	_G.finalize = function()
 		if not gameEnded then
 			if cratesCollected == #crates then
+				SaveMissionVar("Won", "true")
 				PlaySound(sndVictory, playerHog)
 				SetEffect(playerHog, heInvulnerable, 1)
 				SetState(playerHog, bor(GetState(playerHog), gstWinner))

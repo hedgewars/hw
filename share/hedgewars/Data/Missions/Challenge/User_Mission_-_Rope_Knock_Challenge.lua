@@ -2,6 +2,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local hhs = {}
 local missionWon = nil
+local missionEndHandled = false
 local endTimer = 1000
 local hogsKilled = 0
 local finishTime
@@ -234,10 +235,14 @@ function onGameTick()
 			EndGame()
 		end
 
-		if missionWon == true then
-			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
-		else
-			AddCaption(loc("Challenge over!"), capcolDefault, capgrpGameState)
+		if not missionEndHandled then
+			if missionWon == true then
+				SaveMissionVar("Won", "true")
+				AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
+			else
+				AddCaption(loc("Challenge over!"), capcolDefault, capgrpGameState)
+			end
+			missionEndHandled = true
 		end
 
 	end

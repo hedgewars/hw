@@ -9,6 +9,7 @@ local enemy = nil
 local Pack = nil
 local help = false
 local GameOver = false
+local missionWon = false
 
 function onGameInit()
 	Seed = 0
@@ -105,4 +106,9 @@ function onGearDelete(gear)
 		SetHealth(hlayer, 0)
 		SetHealth(player, 0)
 	end
+	if (gear == enemy) and (not GameOver) then
+		GameOver = true
+		SaveMissionVar("Won", "true")
+	end
 end
+

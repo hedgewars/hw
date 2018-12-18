@@ -79,6 +79,7 @@ function onGearDelete(gear)
 
 	if (gear == enemy) then
 		
+		SaveMissionVar("Won", "true")
 		ShowMission(loc("Bamboo Thicket"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 		
 		if (turnNumber < 6) and (firedShell == false) then

@@ -264,6 +264,8 @@ function SimpleMission(params)
 
 	_G.sm.playerClan = 0
 
+	_G.sm.wonVarWritten = false
+
 	_G.sm.makeStats = function(winningClan, customAchievements)
 		for t=0, TeamsCount-1 do
 			local team = GetTeamName(t)
@@ -502,6 +504,10 @@ function SimpleMission(params)
 		end
 		if victory then
 			_G.sm.gameEnded = true
+			if not _G.sm.wonVarWritten then
+				SaveMissionVar("Won", "true")
+				_G.sm.wonVarWritten = true
+			end
 		end
 	end
 
@@ -524,6 +530,10 @@ function SimpleMission(params)
 	_G.sm.win = function()
 		if not _G.sm.gameEnded then
 			_G.sm.gameEnded = true
+			if not _G.sm.wonVarWritten then
+				SaveMissionVar("Won", "true")
+				_G.sm.wonVarWritten = true
+			end
 			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
 			SendStat(siGameResult, loc("You win!"))
 			if GetHogLevel(CurrentHedgehog) == 0 then
@@ -693,7 +703,9 @@ function SimpleMission(params)
 	_G.onNewTurn = function()
 		_G.sm.gameStarted = true
 
-		if params.customGoalCheck == "turnStart" then
+		if params.customGoals == nil then
+			_G.sm.checkRegularVictory()
+		elseif params.customGoalCheck == "turnStart" then
 			_G.sm.checkRegularVictory()
 			_G.sm.checkWinOrFail()
 		end
@@ -702,7 +714,9 @@ function SimpleMission(params)
 	_G.onEndTurn = function()
 		_G.sm.gameTurns = _G.sm.gameTurns + 1
 
-		if params.customGoalCheck == "turnEnd" then
+		if params.customGoals == nil then
+			_G.sm.checkRegularVictory()
+		elseif params.customGoalCheck == "turnEnd" then
 			_G.sm.checkRegularVictory()
 			_G.sm.checkWinOrFail()
 		end

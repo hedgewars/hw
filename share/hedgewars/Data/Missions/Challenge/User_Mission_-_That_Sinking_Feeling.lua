@@ -242,6 +242,7 @@ function onGameTick()
 				SendStat(siCustomAchievement, string.format(loc("You saved %d of 8 Hapless Hogs."), hhLeft))
 
 				if hhLeft == 8 then
+					SaveMissionVar("Won", "true")
 					awardAchievement(loc("Lively Lifeguard"))
 				end
 				EndGame()
