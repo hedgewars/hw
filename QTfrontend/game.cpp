@@ -548,7 +548,11 @@ void HWGame::SetGameState(GameState state)
     emit GameStateChanged(state);
     if (gameType == gtCampaign)
     {
-      emit CampStateChanged(1);
+        emit CampStateChanged(1);
+    }
+    else if (gameType == gtTraining)
+    {
+        emit TrainingStateChanged(1);
     }
 }
 
