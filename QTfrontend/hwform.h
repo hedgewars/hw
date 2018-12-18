@@ -135,6 +135,7 @@ class HWForm : public QMainWindow
         void UpdateCampaignPageTeam(int index);
         void UpdateCampaignPageProgress(int index);
         void UpdateCampaignPageMission(int index);
+        void UpdateTrainingPageTeam(int index);
         void InitCampaignPage();
         void showFeedbackDialog();
         void showFeedbackDialogNetChecked();

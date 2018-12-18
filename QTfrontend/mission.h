@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2018 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef CAMPAIGN_H
-#define CAMPAIGN_H
+#ifndef MISSION_H
+#define MISSION_H
 
 #include <QString>
 #include <QSettings>
 
-class MissionInfo
-{
-    public:
-        QString name;
-        QString realName;
-        QString description;
-        QString script;
-        QString image;
-};
-
-
-QSettings* getCampTeamFile(QString & campaignName, QString & teamName);
-QSettings* getCampMetaInfo();
-bool isCampWon(QString & campaignName, QString & teamName);
-bool isCampMissionWon(QString & campaignName, int missionInList, QString & teamName);
-QString getRealCampName(const QString & campaignName);
-QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName);
+QSettings* getMissionTeamFile(QString & missionName, QString & teamName);
+bool isMissionWon(QString & missionName, QString & teamName);
 
 #endif

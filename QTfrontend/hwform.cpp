@@ -57,6 +57,7 @@
 #include "hwform.h"
 #include "game.h"
 #include "team.h"
+#include "mission.h"
 #include "campaign.h"
 #include "teamselect.h"
 #include "selectWeapon.h"
@@ -330,6 +331,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageTeam(int)));
     connect(ui.pageCampaign->CBCampaign, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
     connect(ui.pageCampaign->CBMission, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageMission(int)));
+    connect(ui.pageTraining->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateTrainingPageTeam(int)));
 
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted(QString)),
              this, SLOT(DeleteWeapons(QString)));
@@ -572,7 +574,8 @@ void HWForm::UpdateTeamsLists()
     ui.pageOptions->CBTeamName->clear();
     ui.pageOptions->CBTeamName->addItems(teamslist);
     ui.pageCampaign->CBTeam->clear();
-    /* Only show human teams in campaign page */
+    ui.pageTraining->CBTeam->clear();
+    /* Only show human teams in campaign/training page */
     for(int i=0; i<teamslist.length(); i++)
     {
         HWTeam testTeam = HWTeam(teamslist[i]);
@@ -580,8 +583,10 @@ void HWForm::UpdateTeamsLists()
         if(testTeam.difficulty() == 0)
         {
             ui.pageCampaign->CBTeam->addItem(teamslist[i]);
+            ui.pageTraining->CBTeam->addItem(teamslist[i]);
         }
     }
+    UpdateTrainingPageTeam(0);
 }
 
 void HWForm::GoToNewWeapons()
@@ -1842,7 +1847,8 @@ void HWForm::startTraining(const QString & scriptName, const QString & subFolder
 {
     CreateGame(0, 0, 0);
 
-    game->StartTraining(scriptName, subFolder);
+    QString trainTeam = ui.pageTraining->CBTeam->currentText();
+    game->StartTraining(scriptName, subFolder, trainTeam);
 }
 
 void HWForm::StartCampaign()
@@ -1997,6 +2003,36 @@ void HWForm::resizeEvent(QResizeEvent * event)
     }
 }
 
+void HWForm::UpdateTrainingPageTeam(int index)
+{
+    Q_UNUSED(index);
+    HWTeam team(ui.pageTraining->CBTeam->currentText());
+    QString tName = team.name();
+
+    QListWidget* listWidget;
+    for(int w = 0; w < 3; w++)
+    {
+        switch(w) {
+            case 0: listWidget = ui.pageTraining->lstTrainings; break;
+            case 1: listWidget = ui.pageTraining->lstChallenges; break;
+            case 2: listWidget = ui.pageTraining->lstScenarios; break;
+            default: listWidget = ui.pageTraining->lstTrainings; break;
+        }
+        unsigned int n = listWidget->count();
+
+        for(unsigned int i = 0; i < n; i++)
+        {
+            QListWidgetItem* item = listWidget->takeItem(i);
+            QString missionName = QString(item->data(Qt::UserRole).toString()).replace(QString(" "),QString("_"));
+            if(isMissionWon(missionName, tName))
+                item->setIcon(finishedIcon);
+            else
+                item->setIcon(notFinishedIcon);
+            listWidget->insertItem(i, item);
+        }
+    }
+}
+
 void HWForm::InitCampaignPage()
 {
     ui.pageCampaign->CBCampaign->clear();
@@ -2031,7 +2067,7 @@ void HWForm::UpdateCampaignPage(int index)
     for(int i=0;i<campaignMissionInfo.size();i++)
     {
         ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].realName), QString(campaignMissionInfo[i].name));
-        if(isMissionWon(campaignName, i, tName))
+        if(isCampMissionWon(campaignName, i, tName))
             ui.pageCampaign->CBMission->setItemIcon(i, finishedIcon);
         else
             ui.pageCampaign->CBMission->setItemIcon(i, notFinishedIcon);
@@ -2235,7 +2271,7 @@ void HWForm::restartGame()
 
     switch(lastGameType) {
     case gtTraining:
-        game->StartTraining(lastGameStartArgs.at(0).toString(), lastTrainingSubFolder);
+        game->StartTraining(lastGameStartArgs.at(0).toString(), lastGameStartArgs.at(1).toString(), lastGameStartArgs.at(2).toString());
         break;
     case gtQLocal:
         game->StartQuick();

@@ -115,6 +115,7 @@ list(APPEND hwfr_src
     main.cpp
     team.cpp
     campaign.cpp
+    mission.cpp
     ui_hwform.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sdlkeys.cpp
@@ -160,7 +161,9 @@ set(hwfr_hdrs
     hwconsts.h
     sdlkeys.h
     campaign.h
+    mission.h
     ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h
+    ${CMAKE_CURRENT_BINARY_DIR}/creditsmessages.h
     )
 
 set(hwfr_rez hedgewars.qrc)

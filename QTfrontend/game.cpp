@@ -44,12 +44,11 @@
 // last game info
 QList<QVariant> lastGameStartArgs = QList<QVariant>();
 GameType lastGameType = gtNone;
-QString lastTrainingSubFolder = NULL;
 GameCFGWidget * lastGameCfg = NULL;
 QString lastGameAmmo = NULL;
 TeamSelWidget * lastGameTeamSel = NULL;
 
-QString training, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
+QString training, trainingTeam, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
     TCPBase(true, 0),
@@ -307,6 +306,14 @@ void HWGame::ParseMessage(const QByteArray & msg)
                 writeCampaignVar(msg.right(msg.size() - 3));
             break;
         }
+        case 'v':
+        {
+            if (msg.at(2) == '?')
+                sendMissionVar(msg.right(msg.size() - 3));
+            else if (msg.at(2) == '!')
+                writeMissionVar(msg.right(msg.size() - 3));
+            break;
+        }
         case 'W':
         {
             // fetch new window resolution via IPC and save it in the settings
@@ -500,16 +507,18 @@ void HWGame::StartQuick()
     SetGameState(gsStarted);
 }
 
-void HWGame::StartTraining(const QString & file, const QString & subFolder)
+void HWGame::StartTraining(const QString & file, const QString & subFolder, const QString & trainTeam)
 {
     lastGameStartArgs.clear();
     lastGameStartArgs.append(file);
+    lastGameStartArgs.append(subFolder);
+    lastGameStartArgs.append(trainTeam);
     lastGameType = gtTraining;
-    lastTrainingSubFolder = subFolder;
 
     gameType = gtTraining;
 
     training = "Missions/" + subFolder + "/" + file + ".lua";
+    trainingTeam = trainTeam;
     demo.clear();
     Start(false);
     SetGameState(gsStarted);
@@ -572,5 +581,30 @@ void HWGame::writeCampaignVar(const QByteArray & varVal)
     QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Campaign " + campaign + "/" + varToWrite, varValue);
+}
+
+void HWGame::sendMissionVar(const QByteArray &varToSend)
+{
+    QString varToFind = QString::fromUtf8(varToSend);
+    QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(trainingTeam), QSettings::IniFormat, 0);
+    teamfile.setIniCodec("UTF-8");
+    QString varValue = teamfile.value("Mission " + training + "/" + varToFind, "").toString();
+    QByteArray command;
+    HWProto::addStringToBuffer(command, "v." + varValue);
+    RawSendIPC(command);
+}
+
+void HWGame::writeMissionVar(const QByteArray & varVal)
+{
+    int i = varVal.indexOf(" ");
+    if(i < 0)
+        return;
+
+    QString varToWrite = QString::fromUtf8(varVal.left(i));
+    QString varValue = QString::fromUtf8(varVal.mid(i + 1));
+
+    QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(trainingTeam), QSettings::IniFormat, 0);
+    teamfile.setIniCodec("UTF-8");
+    teamfile.setValue("Mission " + training + "/" + varToWrite, varValue);
 }
 

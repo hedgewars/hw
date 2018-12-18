@@ -52,7 +52,7 @@ QSettings* getCampTeamFile(QString & campaignName, QString & teamName)
     missionInList: QComboBox index of the mission as selected in the mission widget
     teamName: Name of the playing team
 */
-bool isMissionWon(QString & campaignName, int missionInList, QString & teamName)
+bool isCampMissionWon(QString & campaignName, int missionInList, QString & teamName)
 {
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
     int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();

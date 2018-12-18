@@ -27,7 +27,10 @@ class PageTraining : public AbstractPage
 
     public:
         PageTraining(QWidget* parent = 0);
-
+        QListWidget * lstTrainings;
+        QListWidget * lstChallenges;
+        QListWidget * lstScenarios;
+        QComboBox * CBTeam;
 
     signals:
         void startMission(const QString & scriptName, const QString & subFolder);
@@ -45,9 +48,6 @@ class PageTraining : public AbstractPage
         QLabel * lblCaption;
         QLabel * lblDescription;
         QTabWidget * tbw;
-        QListWidget * lstTrainings;
-        QListWidget * lstChallenges;
-        QListWidget * lstScenarios;
         QSettings * m_info;
         QString getSubFolderOfSelected();
 

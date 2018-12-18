@@ -101,6 +101,12 @@ QLayout * PageTraining::bodyLayoutDefinition()
     tbw->addTab(lstScenarios, tr("Scenarios"));
     tbw->setCurrentWidget(lstTrainings);
 
+    QLabel* lblteam = new QLabel(tr("Team"));
+    CBTeam = new QComboBox(this);
+    CBTeam->setMaxVisibleItems(30);
+    pageLayout->addWidget(lblteam, 2, 0);
+    pageLayout->addWidget(CBTeam, 2, 1);
+
     return pageLayout;
 }
 
@@ -200,6 +206,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
         // first, load scripts in order specified in order.cfg (if present)
         QFile orderFile(QString("physfs://Missions/%1/order.cfg").arg(subFolder));
         QStringList orderedMissions;
+
         if (orderFile.open(QFile::ReadOnly))
         {
             QString m_id;
