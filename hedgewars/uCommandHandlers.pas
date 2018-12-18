@@ -853,6 +853,11 @@ begin
   CampaignVariable := s;
 end;
 
+procedure chMissVar(var s:shortstring);
+begin
+  MissionVariable := s;
+end;
+
 procedure chWorldEdge(var s: shortstring);
 begin
 WorldEdge:= TWorldEdge(StrToInt(s))
@@ -963,6 +968,7 @@ begin
     RegisterVariable('+cur_r'  , @chCurR_p       , true );
     RegisterVariable('-cur_r'  , @chCurR_m       , true );
     RegisterVariable('campvar' , @chCampVar      , true );
+    RegisterVariable('missvar' , @chMissVar      , true );
     RegisterVariable('record'  , @chRecord       , true );
     RegisterVariable('worldedge',@chWorldEdge    , false);
     RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);

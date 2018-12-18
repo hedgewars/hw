@@ -171,6 +171,10 @@ case s[1] of
               if s[2] = '.' then
                   ParseCommand('campvar ' + copy(s, 3, length(s) - 2), true);
           end;
+     'v': begin
+              if s[2] = '.' then
+                  ParseCommand('missvar ' + copy(s, 3, length(s) - 2), true);
+          end;
      'I': ParseCommand('pause server', true);
      's': if gameType = gmtNet then
              ParseChatCommand('chatmsg ', s, 2)

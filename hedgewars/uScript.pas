@@ -3007,6 +3007,21 @@ begin
     lc_getcampaignvar := 1;
 end;
 
+function lc_savemissionvar(L : Plua_State): LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 2, 'SaveMissionVar', 'varname, value') then
+        SendIPC('v!' + lua_tostring(L, 1) + ' ' + lua_tostring(L, 2) + #0);
+    lc_savemissionvar := 0;
+end;
+
+function lc_getmissionvar(L : Plua_State): LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 1, 'GetMissionVar', 'varname') then
+        SendIPCAndWaitReply('v?' + lua_tostring(L, 1) + #0);
+    lua_pushstring(L, str2pchar(MissionVariable));
+    lc_getmissionvar := 1;
+end;
+
 function lc_hidehog(L: Plua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
@@ -4208,6 +4223,8 @@ lua_register(luaState, _P'RestoreHog', @lc_restorehog);
 lua_register(luaState, _P'IsHogHidden', @lc_ishoghidden);
 lua_register(luaState, _P'SaveCampaignVar', @lc_savecampaignvar);
 lua_register(luaState, _P'GetCampaignVar', @lc_getcampaignvar);
+lua_register(luaState, _P'SaveMissionVar', @lc_savemissionvar);
+lua_register(luaState, _P'GetMissionVar', @lc_getmissionvar);
 lua_register(luaState, _P'band', @lc_band);
 lua_register(luaState, _P'bor', @lc_bor);
 lua_register(luaState, _P'bnot', @lc_bnot);

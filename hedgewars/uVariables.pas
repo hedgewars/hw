@@ -88,6 +88,7 @@ var
 
     CheckSum        : LongWord;
     CampaignVariable: shortstring;
+    MissionVariable : shortstring;
     GameTicks       : LongWord;
     OuchTauntTimer  : LongWord; // Timer which blocks sndOuch from being played too often and fast
     GameState       : TGameState;

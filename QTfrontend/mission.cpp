@@ -27,20 +27,16 @@ QSettings* getMissionTeamFile(QString & missionName, QString & teamName)
 {
     QSettings* teamfile = new QSettings(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
     teamfile->setIniCodec("UTF-8");
-    // if entry not found check if there is written without _
-    // if then is found rename it to use _
-    QString cleanedMissionName = missionName;
-    cleanedMissionName = cleanedMissionName.replace(QString("_"),QString(" "));
-    if (!teamfile->childGroups().contains("Mission " + cleanedMissionName) &&
-            teamfile->childGroups().contains("Mission " + cleanedMissionName)){
-        teamfile->beginGroup("Mission " + cleanedMissionName);
+    if (!teamfile->childGroups().contains("Mission " + missionName) &&
+            teamfile->childGroups().contains("Mission " + missionName)){
+        teamfile->beginGroup("Mission " + missionName);
         QStringList keys = teamfile->childKeys();
         teamfile->endGroup();
         for (int i=0;i<keys.size();i++) {
-            QVariant value = teamfile->value("Mission " + cleanedMissionName + "/" + keys[i]);
+            QVariant value = teamfile->value("Mission " + missionName + "/" + keys[i]);
             teamfile->setValue("Mission " + missionName + "/" + keys[i], value);
         }
-        teamfile->remove("Mission " + cleanedMissionName);
+        teamfile->remove("Mission " + missionName);
     }
 
     return teamfile;

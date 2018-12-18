@@ -16,6 +16,8 @@
  * Don't show "F1", "F2", etc. in ammo menu if these aren't the actual slot keys
 
 Lua API:
+ + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)
+ + New call: GetMissionVar(varname): Get value of mission variable
  + New call: SetTurnTimePaused(isPaused): Call with true to pause turn time, false to unpause
  + New call: GetTurnTimePaused(): Returns true if turn time is paused due to Lua
  + Params explode, poison in the SpawnFake*Crate functions now optional and default to false

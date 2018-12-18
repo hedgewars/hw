@@ -48,7 +48,7 @@ GameCFGWidget * lastGameCfg = NULL;
 QString lastGameAmmo = NULL;
 TeamSelWidget * lastGameTeamSel = NULL;
 
-QString training, trainingTeam, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
+QString trainingName, trainingScript, trainingTeam, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
     TCPBase(true, 0),
@@ -184,7 +184,7 @@ void HWGame::SendTrainingConfig()
     QByteArray traincfg;
     HWProto::addStringToBuffer(traincfg, "TL");
     HWProto::addStringToBuffer(traincfg, "eseed " + QUuid::createUuid().toString());
-    HWProto::addStringToBuffer(traincfg, "escript " + training);
+    HWProto::addStringToBuffer(traincfg, "escript " + trainingScript);
 
     RawSendIPC(traincfg);
 }
@@ -517,7 +517,8 @@ void HWGame::StartTraining(const QString & file, const QString & subFolder, cons
 
     gameType = gtTraining;
 
-    training = "Missions/" + subFolder + "/" + file + ".lua";
+    trainingScript  = "Missions/" + subFolder + "/" + file + ".lua";
+    trainingName = file;
     trainingTeam = trainTeam;
     demo.clear();
     Start(false);
@@ -588,7 +589,7 @@ void HWGame::sendMissionVar(const QByteArray &varToSend)
     QString varToFind = QString::fromUtf8(varToSend);
     QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(trainingTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
-    QString varValue = teamfile.value("Mission " + training + "/" + varToFind, "").toString();
+    QString varValue = teamfile.value("Mission " + trainingName + "/" + varToFind, "").toString();
     QByteArray command;
     HWProto::addStringToBuffer(command, "v." + varValue);
     RawSendIPC(command);
@@ -605,6 +606,6 @@ void HWGame::writeMissionVar(const QByteArray & varVal)
 
     QSettings teamfile(QString(cfgdir->absolutePath() + "/Teams/%1.hwt").arg(trainingTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
-    teamfile.setValue("Mission " + training + "/" + varToWrite, varValue);
+    teamfile.setValue("Mission " + trainingName + "/" + varToWrite, varValue);
 }
 
