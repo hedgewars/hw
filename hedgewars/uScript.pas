@@ -2307,6 +2307,43 @@ begin
     lc_addteam:= 0;//1;
 end;
 
+function lc_addmissionteam(L : Plua_State) : LongInt; Cdecl;
+var colorArg: Int64;
+    colorStr: shortstring;
+begin
+    if CheckLuaParamCount(L, 1, 'AddMissionTeam', 'color') then
+        begin
+        if(MissionTeam = nil) then
+            begin
+            OutError('Lua error: AddMissionTeam: Could not add team. Note: This function only works in singleplayer missions!', true);
+            lc_addmissionteam:= 0;
+            exit;
+            end;
+
+        colorArg:= Trunc(lua_tonumber(L, 1));
+        if (colorArg < 0) and (abs(colorArg) <= cClanColors) then
+            // Pick clan color from settings (recommended)
+            colorStr:= IntToStr(ClanColorArray[Pred(abs(colorArg))])
+        else if (colorArg >= 0) and (colorArg <= $ffffffff) then
+            // Specify color directly
+            colorStr:= IntToStr(colorArg)
+        else
+            begin
+            OutError('Lua error: AddMissionTeam: Invalid ''color'' argument, must be between '+IntToStr(-cClanColors)+' and 0xffffffff!', true);
+            lc_addmissionteam:= 0;
+            exit;
+            end;
+
+        ParseCommand('addteam x ' + colorStr + ' ' + MissionTeam^.TeamName, true, true);
+        ParseCommand('grave ' + MissionTeam^.GraveName, true, true);
+        ParseCommand('fort ' + MissionTeam^.FortName, true, true);
+        ParseCommand('voicepack ' + MissionTeam^.Voicepack^.name, true, true);
+        ParseCommand('flag ' + MissionTeam^.Flag, true, true);
+        CurrentTeam^.Binds:= DefaultBinds
+        end;
+    lc_addmissionteam:= 0;
+end;
+
 function lc_setteamlabel(L : Plua_State) : LongInt; Cdecl;
 var teamValue: ansistring;
     i, n: LongInt;
@@ -2499,18 +2536,43 @@ end;
 
 
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
-var temp: ShortString;
+var hatName: ShortString;
 begin
     if CheckLuaParamCount(L, 4, 'AddHog', 'hogname, botlevel, health, hat') then
         begin
-        temp:= lua_tostring(L, 4);
+        hatName:= lua_tostring(L, 4);
         ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true, true);
-        ParseCommand('hat ' + temp, true, true);
+        ParseCommand('hat ' + hatName, true, true);
         lua_pushnumber(L, CurrentHedgehog^.Gear^.uid);
         end
     else
         lua_pushnil(L);
     lc_addhog:= 1;
+end;
+
+function lc_addmissionhog(L : Plua_State) : LongInt; Cdecl;
+var hatName: ShortString;
+begin
+    if CheckLuaParamCount(L, 1, 'AddMissionHog', 'health') then
+        begin
+        if(MissionTeam = nil) then
+            begin
+            OutError('Lua error: AddMissionHog: Could not add hog. Mission team is not set!', true);
+            lua_pushnil(L);
+            lc_addmissionhog:= 1;
+            exit;
+            end;
+        with MissionTeam^.Hedgehogs[CurrentTeam^.HedgehogsNumber] do
+            begin
+            hatName:= Hat;
+            ParseCommand('addhh ' + IntToStr(BotLevel) + ' ' + lua_tostring(L, 1) + ' ' + Name, true, true);
+            ParseCommand('hat ' + hatName, true, true);
+            end;
+        lua_pushnumber(L, CurrentHedgehog^.Gear^.uid);
+        end
+    else
+        lua_pushnil(L);
+    lc_addmissionhog:= 1;
 end;
 
 function lc_hogturnleft(L : Plua_State) : LongInt; Cdecl;
@@ -4289,8 +4351,10 @@ lua_register(luaState, _P'GetTeamName', @lc_getteamname);
 lua_register(luaState, _P'GetTeamIndex', @lc_getteamindex);
 lua_register(luaState, _P'GetTeamClan', @lc_getteamclan);
 lua_register(luaState, _P'AddTeam', @lc_addteam);
+lua_register(luaState, _P'AddMissionTeam', @lc_addmissionteam);
 lua_register(luaState, _P'SetTeamLabel', @lc_setteamlabel);
 lua_register(luaState, _P'AddHog', @lc_addhog);
+lua_register(luaState, _P'AddMissionHog', @lc_addmissionhog);
 lua_register(luaState, _P'AddAmmo', @lc_addammo);
 lua_register(luaState, _P'GetAmmoCount', @lc_getammocount);
 lua_register(luaState, _P'HealHog', @lc_healhog);

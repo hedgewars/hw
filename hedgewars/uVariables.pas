@@ -2488,6 +2488,7 @@ var
 
     CurrentTeam: PTeam;
     PreviousTeam: PTeam;
+    MissionTeam: PTeam;
     CurrentHedgehog: PHedgehog;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
     TeamsCount: Longword; // number of teams on game start
@@ -2941,6 +2942,7 @@ begin
     GearsList:= nil;
     CurrentTeam:= nil;
     PreviousTeam:= nil;
+    MissionTeam:= nil;
     CurrentHedgehog:= nil;
     FollowGear:= nil;
     lastVisualGearByUID:= nil;

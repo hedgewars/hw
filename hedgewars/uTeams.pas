@@ -29,6 +29,7 @@ procedure initModule;
 procedure freeModule;
 
 function  AddTeam(TeamColor: Longword): PTeam;
+function  SetMissionTeam(TeamColor: Longword): PTeam;
 procedure SwitchHedgehog;
 procedure AfterSwitchHedgehog;
 procedure InitTeams;
@@ -476,6 +477,19 @@ else
     end;
 end;
 
+function SetMissionTeam(TeamColor: Longword): PTeam;
+var team: PTeam;
+begin
+New(team);
+if checkFails(team <> nil, 'AddTeam: team = nil', true) then exit(nil);
+FillChar(team^, sizeof(TTeam), 0);
+team^.HedgehogsNumber:= 0;
+
+CurrentTeam:= team;
+MissionTeam:= team;
+SetMissionTeam:= team;
+end;
+
 function AddTeam(TeamColor: Longword): PTeam;
 var team: PTeam;
     c: LongInt;
@@ -679,6 +693,30 @@ begin
                     end
 end;
 
+procedure chAddMissionHH(var id: shortstring);
+var s: shortstring;
+    Health: LongInt;
+begin
+s:= '';
+if (not isDeveloperMode) then
+    exit;
+if checkFails((CurrentTeam <> nil), 'Can''t add hedgehogs yet, add a team first!', true) then exit;
+with CurrentTeam^ do
+    begin
+    if checkFails(HedgehogsNumber<=cMaxHHIndex, 'Can''t add hedgehog to "' + TeamName + '"! (already ' + intToStr(HedgehogsNumber) + ' hogs)', true) then exit;
+    SplitBySpace(id, s);
+    CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
+    CurrentHedgehog^.BotLevel:= StrToInt(id);
+    CurrentHedgehog^.Team:= CurrentTeam;
+    SplitBySpace(s, id);
+    Health:= StrToInt(s);
+    if checkFails((Health > 0) and (Health <= cMaxHogHealth), 'Invalid hedgehog health (must be between 1 and '+IntToStr(cMaxHogHealth)+')', true) then exit;
+    CurrentHedgehog^.Name:= id;
+    CurrentHedgehog^.InitialHealth:= Health;
+    inc(HedgehogsNumber)
+    end
+end;
+
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;
@@ -744,7 +782,7 @@ if isDeveloperMode then
     // color is always little endian so the mask must be constant also in big endian archs
     Color:= Color or $FF000000;
     AddTeam(Color);
-    
+
     if CurrentTeam <> nil then
         begin
         CurrentTeam^.TeamName:= ts;
@@ -754,6 +792,31 @@ if isDeveloperMode then
         if GameType in [gmtDemo, gmtSave, gmtRecord] then
             CurrentTeam^.ExtDriven:= true;
 
+        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        end
+    end
+end;
+
+procedure chSetMissionTeam(var s: shortstring);
+var Color: Longword;
+    ts, cs: shortstring;
+begin
+cs:= '';
+ts:= '';
+if isDeveloperMode then
+    begin
+    SplitBySpace(s, cs);
+    SplitBySpace(cs, ts);
+    Color:= StrToInt(cs);
+
+    // color is always little endian so the mask must be constant also in big endian archs
+    Color:= Color or $FF000000;
+    SetMissionTeam(Color);
+
+    if CurrentTeam <> nil then
+        begin
+        CurrentTeam^.TeamName:= ts;
+        CurrentTeam^.PlayerHash:= s;
         CurrentTeam^.voicepack:= AskForVoicepack('Default')
         end
     end
@@ -941,7 +1004,9 @@ end;
 procedure initModule;
 begin
 RegisterVariable('addhh', @chAddHH, false);
+RegisterVariable('addmisshh', @chAddMissionHH, false);
 RegisterVariable('addteam', @chAddTeam, false);
+RegisterVariable('setmissteam', @chSetMissionTeam, false);
 RegisterVariable('hhcoords', @chSetHHCoords, false);
 RegisterVariable('bind', @chBind, true );
 RegisterVariable('teamgone', @chTeamGone, true );

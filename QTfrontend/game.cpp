@@ -29,6 +29,8 @@
 
 #include "hwform.h"
 #include "ui/page/pageoptions.h"
+#include "ui/page/pagetraining.h"
+#include "ui/page/pagecampaign.h"
 #include "game.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
@@ -183,6 +185,14 @@ void HWGame::SendTrainingConfig()
 {
     QByteArray traincfg;
     HWProto::addStringToBuffer(traincfg, "TL");
+
+    HWTeam missionTeam = HWTeam();
+    missionTeam.setName(config->Form->ui.pageTraining->CBTeam->currentText());
+    missionTeam.loadFromFile();
+    missionTeam.setNumHedgehogs(HEDGEHOGS_PER_TEAM);
+    missionTeam.setMissionTeam(true);
+    HWProto::addStringListToBuffer(traincfg, missionTeam.teamGameConfig(100));
+
     HWProto::addStringToBuffer(traincfg, "eseed " + QUuid::createUuid().toString());
     HWProto::addStringToBuffer(traincfg, "escript " + trainingScript);
 
@@ -193,8 +203,15 @@ void HWGame::SendCampaignConfig()
 {
     QByteArray campaigncfg;
     HWProto::addStringToBuffer(campaigncfg, "TL");
-    HWProto::addStringToBuffer(campaigncfg, "eseed " + QUuid::createUuid().toString());
 
+    HWTeam missionTeam = HWTeam();
+    missionTeam.setName(config->Form->ui.pageCampaign->CBTeam->currentText());
+    missionTeam.loadFromFile();
+    missionTeam.setNumHedgehogs(HEDGEHOGS_PER_TEAM);
+    missionTeam.setMissionTeam(true);
+    HWProto::addStringListToBuffer(campaigncfg, missionTeam.teamGameConfig(100));
+
+    HWProto::addStringToBuffer(campaigncfg, "eseed " + QUuid::createUuid().toString());
     HWProto::addStringToBuffer(campaigncfg, "escript " + campaignScript);
 
     RawSendIPC(campaigncfg);

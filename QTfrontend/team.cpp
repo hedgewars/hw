@@ -35,6 +35,7 @@ HWTeam::HWTeam(const QString & teamname) :
     , m_difficulty(0)
     , m_numHedgehogs(4)
     , m_isNetTeam(false)
+    , m_isMissionTeam(false)
 {
     m_name = teamname;
     OldTeamName = m_name;
@@ -61,6 +62,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
     QObject(0)
     , m_numHedgehogs(4)
     , m_isNetTeam(true)
+    , m_isMissionTeam(false)
 {
     // net teams are configured from QStringList
     if(strLst.size() != 23) throw HWTeamConstructException();
@@ -88,6 +90,7 @@ HWTeam::HWTeam() :
     , m_difficulty(0)
     , m_numHedgehogs(4)
     , m_isNetTeam(false)
+    , m_isMissionTeam(false)
 {
     m_name = QString("Team");
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
@@ -125,6 +128,7 @@ HWTeam::HWTeam(const HWTeam & other) :
     , m_numHedgehogs(other.m_numHedgehogs)
     , m_color(other.m_color)
     , m_isNetTeam(other.m_isNetTeam)
+    , m_isMissionTeam(other.m_isMissionTeam)
     , m_owner(other.m_owner)
 //      , AchievementProgress(other.AchievementProgress)
 {
@@ -149,6 +153,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
         m_isNetTeam = other.m_isNetTeam;
         m_owner = other.m_owner;
         m_color = other.m_color;
+        m_isMissionTeam = other.m_isMissionTeam;
     }
 
     return *this;
@@ -243,12 +248,25 @@ bool HWTeam::saveToFile()
 QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
 {
     QStringList sl;
+    QString cmdAddHog = "eaddhh";
+
     if (m_isNetTeam)
     {
         sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toUtf8(), QCryptographicHash::Md5).toHex())));
         sl.push_back("erdriven");
     }
-    else sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
+    else
+    {
+        if (m_isMissionTeam)
+        {
+            sl.push_back(QString("esetmissteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
+            cmdAddHog = "eaddmisshh";
+        }
+        else
+        {
+            sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
+        }
+    }
 
     sl.push_back(QString("egrave " + m_grave));
     sl.push_back(QString("efort " + m_fort));
@@ -260,7 +278,7 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
 
     for (int t = 0; t < m_numHedgehogs; t++)
     {
-        sl.push_back(QString("eaddhh %1 %2 %3")
+        sl.push_back(QString(cmdAddHog + " %1 %2 %3")
                      .arg(QString::number(m_difficulty),
                           QString::number(InitHealth),
                           m_hedgehogs[t].Name));
@@ -281,6 +299,15 @@ bool HWTeam::isNetTeam() const
     return m_isNetTeam;
 }
 
+void HWTeam::setMissionTeam(bool isMissionTeam)
+{
+    m_isMissionTeam = isMissionTeam;
+}
+
+bool HWTeam::isMissionTeam() const
+{
+    return m_isMissionTeam;
+}
 
 bool HWTeam::operator==(const HWTeam& t1) const
 {
