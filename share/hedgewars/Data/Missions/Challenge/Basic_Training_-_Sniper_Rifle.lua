@@ -13,6 +13,7 @@
 -- about translations.
 -- We can use the function loc(text) to localize a string.
 
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 -- This variable will hold the number of destroyed targets.
@@ -147,13 +148,16 @@ function onGameStart()
 	-- Spawn the first target.
 	spawnTarget(860,1020)
 
+	local highscore = getReadableChallengeRecord("Highscore")
 	-- Show some nice mission goals.
 	-- Parameters are: caption, sub caption, description,
 	-- extra text, icon and time to show.
 	-- A negative icon parameter (-n) represents the n-th weapon icon
 	-- A positive icon paramter (n) represents the (n+1)-th mission icon
 	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."), -amSniperRifle, 0)
+	ShowMission(loc("Sniper Training"), loc("Aiming Practice"),
+	loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.")
+	.. "|" .. highscore, -amSniperRifle, 0)
 
 	-- Displayed initial player score
 	SetTeamLabel(playerTeamName, "0")
@@ -433,5 +437,6 @@ function generateStats()
 	end
 	SendStat(siPointType, loc("points"))
 	SendStat(siPlayerKills, tostring(end_score_overall), playerTeamName)
+	updateChallengeRecord("Highscore", end_score_overall)
 end
 

@@ -1,6 +1,7 @@
 
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player
@@ -15,6 +16,17 @@ local frig = 0
 local watGear = nil
 local cinematic = false
 
+function printMission()
+	local highscore = tonumber(GetMissionVar("Highscore"))
+	local show = (type(highscore) == "number") and (highscore > 0)
+	local recordInfo = ""
+	if show then
+		recordInfo = getReadableChallengeRecord("Highscore")
+	end
+	ShowMission(loc("That Sinking Feeling"), loc("Challenge"), loc("Save as many hapless hogs as possible!")
+	.. "|" .. recordInfo, 4, 0)
+end
+
 -- allow skipping of the intro via hitting precise key
 function onPrecise()
 	if introStage < 100 then
@@ -22,7 +34,7 @@ function onPrecise()
 		genCounter = 0
 		FollowGear(CurrentHedgehog)
 		AddCaption(loc("Good luck out there!"))
-		ShowMission(loc("That Sinking Feeling"), loc("Challenge"), loc("Save as many hapless hogs as possible!"), 4, 0)
+		printMission()
 		SetInputMask(0xFFFFFFFF)
 	end
 end
@@ -70,11 +82,12 @@ end
 
 
 function onGameStart()
-    cinematic = true
-    SetCinematicMode(true)
+	cinematic = true
+	SetCinematicMode(true)
 	SendHealthStatsOff()
 
-	ShowMission(loc("That Sinking Feeling"), loc("Challenge"), loc("Save as many hapless hogs as possible!"), 4, 1)
+	printMission()
+	HideMission()
 
 	HogTurnLeft(hh[0], false)
 	HogTurnLeft(hh[1], true)
@@ -241,6 +254,9 @@ function onGameTick()
 
 				SendStat(siCustomAchievement, string.format(loc("You saved %d of 8 Hapless Hogs."), hhLeft))
 
+				-- Update highscore
+				updateChallengeRecord("Highscore", hhLeft)
+
 				if hhLeft == 8 then
 					SaveMissionVar("Won", "true")
 					awardAchievement(loc("Lively Lifeguard"))
@@ -293,6 +309,9 @@ function onGearDelete(gear)
 		end
 		SendStat(siPointType, loc("points"))
 		SendStat(siPlayerKills, "0", loc("Nameless Heroes"))
+		local highscore = tonumber(GetMissionVar("Highscore"))
+		show = (type(highscore) == "number") and (highscore > 0)
+		updateChallengeRecord("Highscore", 0, show)
 
 		SendStat(siGameResult, loc("Disqualified!"))
 		GameOver = true

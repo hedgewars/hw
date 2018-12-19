@@ -1,3 +1,4 @@
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
@@ -46,13 +47,14 @@ function onGameStart()
 
 	SendHealthStatsOff()
 
+	local recordInfo = getReadableChallengeRecord("Lowscore")
 	ShowMission     (
                                 loc("RC Plane Challenge"),
                                 loc("Challenge"),
 
                                 loc("Collect or destroy all the health crates.") .. "|" ..
                                 loc("Compete to use as few planes as possible!") .. "|" ..
-								"", -amRCPlane, 4000
+                                recordInfo, -amRCPlane, 4000
                                 )
 	SetTeamLabel(loc("Wannabe Flyboys"), "0")
 
@@ -408,6 +410,7 @@ function onGearDelete(gear)
 				SendStat(siCustomAchievement, string.format(loc("You have used %d RC planes."), planesUsed))
 			end
 			SaveMissionVar("Won", "true")
+			updateChallengeRecord("Lowscore", planesUsed)
 		
 			if(totalMissiles > 1) then
 				SendStat(siCustomAchievement, string.format(loc("You have dropped %d missiles."), totalMissiles))

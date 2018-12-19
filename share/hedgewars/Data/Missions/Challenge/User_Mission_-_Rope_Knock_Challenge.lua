@@ -1,3 +1,4 @@
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local hhs = {}
@@ -98,6 +99,10 @@ function GameOverMan()
 	SendStat(siPointType, loc("points"))
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
 	PlaySound(sndHellish)
+
+	-- Update highscore
+	updateChallengeRecord("Highscore", score)
+
 	EndGame()
 end
 
@@ -116,6 +121,9 @@ function GG()
 	SendStat(siPointType, loc("points"))
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
 	SetTeamLabel(playerTeamName, tostring(score))
+
+	-- Update highscore
+	updateChallengeRecord("Highscore", score)
 
 	if hhs[0] and GetHealth(hhs[0]) then
 		SetEffect(hhs[0], heInvulnerable, 1)
@@ -188,11 +196,17 @@ end
 function onGameStart()
 	SendHealthStatsOff()
 
+	local recordInfo = getReadableChallengeRecord("Highscore")
+	if recordInfo == nil then
+		recordInfo = ""
+	else
+		recordInfo = "|" .. recordInfo
+	end
 	ShowMission     (
                         loc("Rope-knocking Challenge"),
                         loc("Challenge"),
                         loc("Use the rope to knock your enemies to their doom.") .. "|" ..
-                        loc("Finish this challenge as fast as possible to earn bonus points."),
+                        loc("Finish this challenge as fast as possible to earn bonus points.").. recordInfo,
                         -amRope, 4000)
 	SetTeamLabel(playerTeamName, "0")
 

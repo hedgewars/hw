@@ -128,9 +128,14 @@ end
 function onGameStart()
     --SetClanColor(ClansCount-1, 0x0000ffff) appears to be broken
     SendHealthStatsOff()
+    local recordInfo = ""
+    if isSinglePlayer then
+        recordInfo = getReadableChallengeRecord("Highscore")
+    end
     ShowMission(loc("Climb Home"),
                 loc("Challenge"),
-                loc("You are far from home, and the water is rising, climb up as high as you can!|Your score will be based on your height."),
+                loc("You are far from home, and the water is rising, climb up as high as you can!|Your score will be based on your height.")
+                .. "|" .. recordInfo,
                 -amRope, 0)
     local x = 1818
     for h,i in pairs(HH) do
@@ -419,7 +424,8 @@ function onGameTick20()
             end
         end
 
-        local finishTime = (GameTime-startTime)/1000
+        local rawFinishTime = GameTime-startTime
+        local finishTime = rawFinishTime/1000
         local roundedFinishTime = math.ceil(math.floor(finishTime+0.5))
         if isSinglePlayer then
             if distanceFromWater < 0 and not YouLost and not YouWon then
@@ -439,7 +445,9 @@ function onGameTick20()
                 SendStat(siGameResult, loc("You have beaten the challenge!"))
                 SendStat(siGraphTitle, loc("Your height over time"))
                 SendStat(siCustomAchievement, string.format(loc("%s reached home in %.3f seconds. Congratulations!"), GetHogName(CurrentHedgehog), finishTime))
+                updateChallengeRecord("TimeRecord", rawFinishTime, false)
                 SendStat(siCustomAchievement, string.format(loc("%s bravely climbed up to a dizzy height of %d to reach home."), GetHogName(CurrentHedgehog), getActualHeight(RecordHeight)))
+                updateChallengeRecord("Highscore", getActualHeight(RecordHeight))
                 SendStat(siPointType, loc("seconds"))
                 SendStat(siPlayerKills, tostring(roundedFinishTime), GetHogTeamName(CurrentHedgehog))
 
@@ -683,6 +691,8 @@ function makeSinglePlayerLoserStats()
     else
         SendStat(siCustomAchievement, string.format(text, RecordHeightHogName))
     end
+
+    updateChallengeRecord("Highscore", actualHeight)
     SendStat(siPointType, loc("points"))
     SendStat(siPlayerKills, actualHeight, GetHogTeamName(CurrentHedgehog))
     EndGame()

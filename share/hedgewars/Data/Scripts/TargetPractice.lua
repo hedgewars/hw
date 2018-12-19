@@ -55,6 +55,7 @@ TargetPracticeMission(params)
 ----- snip -----
 ]=]
 
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local player = nil
@@ -167,7 +168,8 @@ function TargetPracticeMission(params)
 
 	_G.onGameStart = function()
 		SendHealthStatsOff()
-		ShowMission(params.missionTitle, loc("Aiming practice"), params.goalText, -params.ammoType, 5000)
+		local recordInfo = getReadableChallengeRecord("Highscore")
+		ShowMission(params.missionTitle, loc("Aiming practice"), params.goalText .. "|" .. recordInfo, -params.ammoType, 5000)
 		SetTeamLabel(params.teamName, "0")
 		spawnTarget()
 	end
@@ -317,5 +319,7 @@ function TargetPracticeMission(params)
 		end
 		SendStat(siPointType, loc("point(s)"))
 		SendStat(siPlayerKills, tostring(end_score_overall), loc(params.teamName))
+		-- Update highscore
+		updateChallengeRecord("Highscore", end_score_overall)
 	end
 end

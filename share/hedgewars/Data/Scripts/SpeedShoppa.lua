@@ -21,6 +21,7 @@ See the comment of SpeedShoppaMission for a specification of all parameters.
 
 ]=]
 
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 --[[
@@ -115,7 +116,8 @@ function SpeedShoppaMission(params)
 
 	_G.onGameStart = function()
 		SendHealthStatsOff()
-		ShowMission(params.missionTitle, loc("Challenge"), params.goalText, -amRope, 5000) 
+		local append = getReadableChallengeRecord("TimeRecord")
+		ShowMission(params.missionTitle, loc("Challenge"), params.goalText .. "|" .. append, -amRope, 5000)
 		-- <crates collected>/<total number of crates>
 		SetTeamLabel(params.teamName, string.format(loc("%d/%d"), cratesCollected, #crates))
 		for i=1,#crates do
@@ -176,6 +178,7 @@ function SpeedShoppaMission(params)
 				SendStat(siPlayerKills, tostring(time), params.teamName)
 				SendStat(siCustomAchievement, string.format(loc("You have finished the challenge in %.3f s."), (time/1000)))
 				SetTurnTimeLeft(0)
+				updateChallengeRecord("TimeRecord", time)
 			else
 				SendStat(siGameResult, loc("Challenge failed!"))
 				SendStat(siPointType, loc("crate(s)"))

@@ -1,5 +1,7 @@
 -- Library for miscellaneous utilitiy functions and global helper variables
 
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+
 --[[ FUNCTIONS ]]
 -- Check if a gear is inside a box
 function gearIsInBox(gear, x, y, w, h)
@@ -30,6 +32,59 @@ local function drawFullMap(erase, flush)
 	end
 	if flush ~= false then
 		FlushPoints()
+	end
+end
+
+local function challengeRecordToString(recordType, value)
+	if recordType == "TimeRecord" or recordType == "TimeRecordHigh" then
+		return string.format(loc("Team record: %.3fs"), value/1000)
+	elseif recordType == "Highscore" then
+		return string.format(loc("Team high score: %d"), value)
+	else
+		return string.format(loc("Team record: %d"), value)
+	end
+end
+
+function getReadableChallengeRecord(recordType)
+	local record = tonumber(GetMissionVar(recordType))
+	if type(record) ~= "number" then
+		return ""
+	else
+		return challengeRecordToString(recordType, record)
+	end
+end
+
+function updateChallengeRecord(recordType, value, stat)
+	local oldRecord = tonumber(GetMissionVar(recordType))
+	local newRecord = false
+	if stat == nil then
+		stat = true
+	end
+	if type(oldRecord) ~= "number" then
+		newRecord = true
+	else
+		local recordBeaten = false
+		if recordType == "Lowscore" or recordType == "TimeRecord" then
+			if value < oldRecord then
+				recordBeaten = true
+				newRecord = true
+			end
+		else
+			if value > oldRecord then
+				recordBeaten = true
+				newRecord = true
+			end
+		end
+		if stat then
+			if recordBeaten then
+				SendStat(siCustomAchievement, loc("You have beaten the team record, congratulations!"))
+			else
+				SendStat(siCustomAchievement, challengeRecordToString(recordType, oldRecord))
+			end
+		end
+	end
+	if newRecord then
+		SaveMissionVar(recordType, value)
 	end
 end
 
