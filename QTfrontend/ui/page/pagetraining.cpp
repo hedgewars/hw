@@ -323,6 +323,9 @@ void PageTraining::updateInfo()
                 btnPreview->setIcon(QIcon(thumbFile));
             else if (tbw->currentWidget() == lstChallenges)
                 btnPreview->setIcon(QIcon(":/res/Challenges.png"));
+            else if (tbw->currentWidget() == lstScenarios)
+                // TODO: Prettier scenario fallback image
+                btnPreview->setIcon(QIcon(":/res/Scenarios.png"));
             else
                 btnPreview->setIcon(QIcon(":/res/Trainings.png"));
 
