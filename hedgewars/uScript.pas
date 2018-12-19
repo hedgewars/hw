@@ -2298,13 +2298,13 @@ begin
         ParseCommand('fort ' + lua_tostring(L, 4), true, true);
         ParseCommand('voicepack ' + lua_tostring(L, 5), true, true);
         if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true, true);
-        CurrentTeam^.Binds:= DefaultBinds
-        // fails on x64
-        //lua_pushnumber(L, LongInt(CurrentTeam));
-        end;
-    //else
-        //lua_pushnil(L)
-    lc_addteam:= 0;//1;
+        CurrentTeam^.Binds:= DefaultBinds;
+        // push team index
+        lua_pushnumber(L, TeamsCount - 1);
+        end
+    else
+        lua_pushnil(L);
+    lc_addteam:= 1;
 end;
 
 function lc_addmissionteam(L : Plua_State) : LongInt; Cdecl;
@@ -2339,9 +2339,13 @@ begin
         ParseCommand('fort ' + MissionTeam^.FortName, true, true);
         ParseCommand('voicepack ' + MissionTeam^.Voicepack^.name, true, true);
         ParseCommand('flag ' + MissionTeam^.Flag, true, true);
-        CurrentTeam^.Binds:= DefaultBinds
-        end;
-    lc_addmissionteam:= 0;
+        CurrentTeam^.Binds:= DefaultBinds;
+        // push team index
+        lua_pushnumber(L, TeamsCount - 1);
+        end
+    else
+        lua_pushnil(L);
+    lc_addmissionteam:= 1;
 end;
 
 function lc_setteamlabel(L : Plua_State) : LongInt; Cdecl;
