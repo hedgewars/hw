@@ -43,10 +43,6 @@ params = {
 	wind = ,
 	solidLand = ,
 	artillery = ,
-	hogHat = ,
-	hogName = ,
-	teamName = ,
-	teamGrave = ,
 	clanColor = ,
 	goalText = ,
 	shootText =
@@ -96,11 +92,6 @@ The argument “params” is a table containing fields which describe the traini
 	- wind:		the initial wind (-100 to 100) (default: 0 (no wind))
 	- solidLand:	weather the terrain is indestructible (default: false)
 	- artillery:	if true, the hog can’t move (default: false)
-	- hogHat:	hat of the hedgehog (default: "NoHat")
-	- hogName:	name of the hedgehog (default: "Trainee")
-	- teamName:	name of the hedgehog’s team (default: "Training Team")
-	- teamGrave:	name of the hedgehog’s grave
-	- teamFlag:	name of the team’s flag (default: "cm_crosshair")
 	- secGearType:	cluster of projectile gear (if present) (used to re-center camera)
 	- clanColor:	color of the (only) clan (default: -1, default first clan color)
 	- goalText:	A short string explaining the goal of the mission
@@ -115,14 +106,9 @@ local getTargetsScore = function()
 end
 
 function TargetPracticeMission(params)
-	if params.hogHat == nil then params.hogHat = "NoHat" end
-	if params.hogName == nil then params.hogName = loc("Trainee") end
-	if params.teamName == nil then params.teamName = loc("Training Team") end
 	if params.goalText == nil then params.goalText = loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.") end
 	if params.shootText == nil then params.shootText = loc("You have shot %d times.") end
 	if params.clanColor == nil then params.clanColor = -1 end
-	if params.teamGrave == nil then params.teamGrave= "Statue" end
-	if params.teamFlag == nil then params.teamFlag = "cm_crosshair" end
 	if params.wind == nil then params.wind = 0 end
 
 	local solid, artillery
@@ -160,9 +146,9 @@ function TargetPracticeMission(params)
 
 		SetWind(params.wind)
 
-		AddTeam(loc(params.teamName), params.clanColor, params.teamGrave, "Flowerhog", "Default", params.teamFlag)
+		AddMissionTeam(params.clanColor)
 
-		player = AddHog(loc(params.hogName), 0, 1, params.hogHat)
+		player = AddMissionHog(1)
 		SetGearPosition(player, params.hog_x, params.hog_y)
 	end
 
@@ -170,7 +156,7 @@ function TargetPracticeMission(params)
 		SendHealthStatsOff()
 		local recordInfo = getReadableChallengeRecord("Highscore")
 		ShowMission(params.missionTitle, loc("Aiming practice"), params.goalText .. "|" .. recordInfo, -params.ammoType, 5000)
-		SetTeamLabel(params.teamName, "0")
+		SetTeamLabel(GetHogTeamName(player), "0")
 		spawnTarget()
 	end
 
@@ -240,7 +226,7 @@ function TargetPracticeMission(params)
 	_G.onGearDamage = function(gear, damage)
 		if GetGearType(gear) == gtTarget then
 			scored = scored + 1
-			SetTeamLabel(params.teamName, tostring(getTargetsScore()))
+			SetTeamLabel(GetHogTeamName(player), tostring(getTargetsScore()))
 			if scored < total_targets then
 				AddCaption(string.format(loc("Targets left: %d"), (total_targets-scored)), capcolDefault, capgrpMessage)
 				spawnTarget()
@@ -299,7 +285,7 @@ function TargetPracticeMission(params)
 			local end_score_time = math.ceil(time_goal/(params.time/6000))
 			local end_score_accuracy = math.ceil(accuracy * 60)
 			end_score_overall = end_score_time + end_score_targets + end_score_accuracy
-			SetTeamLabel(params.teamName, tostring(end_score_overall))
+			SetTeamLabel(GetHogTeamName(player), tostring(end_score_overall))
 
 			SendStat(siGameResult, loc("You have finished the target practice!"))
 
@@ -318,7 +304,7 @@ function TargetPracticeMission(params)
 			end_score_overall = end_score_targets
 		end
 		SendStat(siPointType, loc("point(s)"))
-		SendStat(siPlayerKills, tostring(end_score_overall), loc(params.teamName))
+		SendStat(siPlayerKills, tostring(end_score_overall), GetHogTeamName(player))
 		-- Update highscore
 		updateChallengeRecord("Highscore", end_score_overall)
 	end

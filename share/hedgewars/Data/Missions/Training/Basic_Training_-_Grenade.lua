@@ -39,8 +39,8 @@ function onGameInit()
 
 	------ TEAM LIST ------
 
-	AddTeam(loc("Grenade Team"), -1, "Flower", "Earth", "Default", "cm_grenade")
-	hog = AddHog(loc("Greenhorn"), 0, 1, "NoHat")
+	AddMissionTeam(-1)
+	hog = AddMissionHog(1)
 	SetGearPosition(hog, 570, 157)
 	SetEffect(hog, heResurrectable, 1)
 
@@ -203,7 +203,7 @@ function newGamePhase()
 		end
 		SendStat(siCustomAchievement, loc("Good job!"))
 		SendStat(siGameResult, loc("You have completed the Basic Grenade Training!"))
-		SendStat(siPlayerKills, "0", loc("Grenade Team"))
+		SendStat(siPlayerKills, "0", GetHogTeamName(hog))
 		EndGame()
 		gameOver = true
 	end

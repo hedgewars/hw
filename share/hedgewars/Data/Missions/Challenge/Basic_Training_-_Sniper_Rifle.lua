@@ -53,7 +53,7 @@ local dynamiteGears = {}
 local delayedTargetTargetX, delayedTargetY
 
 -- Team name of the player's team
-local playerTeamName = loc("Sniperz")
+local playerTeamName
 
 -- This is a custom function to make it easier to
 -- spawn more targets with just one line of code
@@ -133,9 +133,10 @@ function onGameInit()
 	HealthDecrease = 0
 
 	-- Create the player team
-	AddTeam(playerTeamName, -1, "Simple", "Island", "Default", "cm_crosshair")
+	AddMissionTeam(-1)
+	playerTeamName = GetTeamName(0)
 	-- And add a hog to it
-	player = AddHog(loc("Hunter"), 0, 1, "Sniper")
+	player = AddMissionHog(1)
 	SetGearPosition(player, 602, 1465)
 end
 

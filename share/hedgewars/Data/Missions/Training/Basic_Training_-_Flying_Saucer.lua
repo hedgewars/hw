@@ -209,7 +209,7 @@ TargetPos[12] = { Modifier = true, Func = function()
 
 	SendStat(siGameResult, loc("You have finished the Flying Saucer Training!"))
 	SendStat(siCustomAchievement, loc("Good job!"))
-	SendStat(siPlayerKills, "0", loc("Hogonauts"))
+	SendStat(siPlayerKills, "0", GetHogTeamName(Player))
 
 	EndTurn(true)
 	EndGame()
@@ -397,11 +397,9 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Team name is a pun on “hedgehog” and “astronauts”
-	AddTeam( loc( "Hogonauts" ), -9, "earth", "Earth", "Default", "cm_galaxy" )
+	AddMissionTeam(-9)
 
-	-- Hedgehog name is a pun on “Neil Armstrong”
-	Player = AddHog( loc( "Neil Hogstrong" ), 0, 1, "NoHat" )
+	Player = AddMissionHog(1)
 	SetGearPosition( Player, StartPos.X, StartPos.Y)
 	SetEffect( Player, heResurrectable, 1 )
 end

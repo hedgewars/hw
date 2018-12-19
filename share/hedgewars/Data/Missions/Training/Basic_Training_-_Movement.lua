@@ -115,18 +115,18 @@ function onGameInit()
 	drawMap()
 
 	------ HOG LIST ------
-	AddTeam(loc("Training Team"), -1, "deadhog", "SteelTower", "Default", "hedgewars")
+	AddMissionTeam(-1)
 	
-	hhs[1] = AddHog(loc("Greenhorn"), 0, 100, "NoHat")
+	hhs[1] = AddMissionHog(100)
 	SetGearPosition(hhs[1], 404, 1714)
 	SetEffect(hhs[1], heResurrectable, 1)
 
-	hhs[2] = AddHog(loc("Rhombus"), 0, 100, "NoHat")
+	hhs[2] = AddMissionHog(100)
 	SetGearPosition(hhs[2], 620, 1538)
 	SetEffect(hhs[2], heResurrectable, 1)
 	HogTurnLeft(hhs[2], true)
 
-	hhs[3] = AddHog(loc("Trapped"), 0, 100, "NoHat")
+	hhs[3] = AddMissionHog(100)
 	SetGearPosition(hhs[3], 1573, 1824)
 	SetEffect(hhs[3], heResurrectable, 1)
 	
@@ -135,12 +135,23 @@ function onGameInit()
 	SetEffect(hhs[4], heResurrectable, 1)
 	HogTurnLeft(hhs[4], true)
 	
-	hhs[5] = AddHog(loc("Ice"), 0, 100, "NoHat")
+	hhs[5] = AddMissionHog(100)
 	SetGearPosition(hhs[5], 1813, 1285)
 	SetEffect(hhs[5], heResurrectable, 1)
 
 	hog_greenhorn = hhs[1]
 	hog_cappy = hhs[4]
+
+	for i=1,#hhs do
+		if hhs[i] ~= hog_cappy then
+			if GetHogName(hhs[i]) == loc("Cappy") then
+				SetHogName(hhs[i], loc("Greenhorn"))
+			end
+			if GetHogHat(hhs[i]) == "cap_red" then
+				SetHogHat(hhs[i], "NoHat")
+			end
+		end
+	end
 	
 	SendHealthStatsOff()
 end
@@ -254,7 +265,7 @@ local function victory()
 	SendStat(siGameResult, loc("You have completed the Basic Movement Training!"))
 	SendStat(siCustomAchievement, loc("Congratulations!"))
 	SendStat(siCustomAchievement, loc("Return to the training menu by pressing the “Go back” button."))
-	SendStat(siPlayerKills, "0", loc("Training Team"))
+	SendStat(siPlayerKills, "0", GetHogTeamName(hog_greenhorn))
 	PlaySound(sndVictory, CurrentHedgehog)
 	-- Disable controls, end game
 	SetInputMask(0)

@@ -47,8 +47,8 @@ function onGameInit()
 
 	------ TEAM LIST ------
 
-	AddTeam(loc("Bazooka Team"), -1, "Flower", "Earth", "Default", "hedgewars")
-	hog = AddHog(loc("Greenhorn"), 0, 100, "NoHat")
+	AddMissionTeam(-1)
+	hog = AddMissionHog(100)
 	SetGearPosition(hog, 1485, 2001)
 	SetEffect(hog, heResurrectable, 1)
 
@@ -228,7 +228,7 @@ function newGamePhase()
 		end
 		SendStat(siCustomAchievement, loc("Good job!"))
 		SendStat(siGameResult, loc("You have completed the Basic Bazooka Training!"))
-		SendStat(siPlayerKills, "0", loc("Bazooka Team"))
+		SendStat(siPlayerKills, "0", GetHogTeamName(hog))
 		EndGame()
 		gameOver = true
 	end

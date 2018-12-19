@@ -96,8 +96,8 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	AddTeam(teamName, -1, "Plinko", "Snail", "Default", "cm_yinyang")
-	hog = AddHog(loc("Roper"), 0, initHogHealth, "StrawHat")
+	AddMissionTeam(-1)
+	hog = AddMissionHog(initHogHealth)
 	SetGearPosition(hog, cpX, cpY)
 	SetEffect(hog, heResurrectable, 1)
 

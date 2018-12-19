@@ -45,11 +45,6 @@ The argument “params” is a table containing fields which describe the traini
 
 	optional fields:
 	- missionTitle:		the name of the mission (optional but highly recommended) (default: "Speed Shoppa")
-	- hogHat:		hat of the hedgehog (default: "NoHat")
-	- hogName:		name of the hedgehog (default: "Roper")
-	- teamName:		name of the hedgehog’s team (default: "Shoppers")
-	- teamGrave:		name of the hedgehog’s grave (default: "Statue")
-	- teamFlag:		name of the team’s flag (default: "cm_shoppa")
 	- clanColor:		color of the (only) clan (default: -1, default first clan color)
 	- goalText:		A short string explaining the goal of the mission
 				(default: "Use your rope to collect all crates as fast as possible.")
@@ -74,14 +69,9 @@ local startTime, endTime
 local crates
 
 function SpeedShoppaMission(params)
-	if params.hogHat == nil then params.hogHat = "NoHat" end
-	if params.hogName == nil then params.hogName = loc("Roper") end
-	if params.teamName == nil then params.teamName = loc("Shoppers") end
 	if params.goalText == nil then params.goalText = loc("Use your rope to collect all crates as fast as possible.") end
 	if params.missionTitle == nil then params.missionTitle = loc("Speed Shoppa") end
 	if params.clanColor == nil then params.clanColor = -1 end
-	if params.teamGrave == nil then params.teamGrave = "Statue" end
-	if params.teamFlag == nil then params.teamFlag = "cm_shoppa" end
 	if params.extra_onGameInit == nil then params.extra_onGameInit = function() end end
 	if params.extra_onGameStart == nil then params.extra_onGameStart = function() end end
 	if params.faceLeft == nil then params.faceLeft = false end
@@ -101,8 +91,8 @@ function SpeedShoppaMission(params)
 		WaterRise = 0
 		HealthDecrease = 0
 	
-		AddTeam(params.teamName, params.clanColor, params.teamGrave, "Castle", "Default", params.teamFlag)
-		playerHog = AddHog(params.hogName, 0, 1, params.hogHat)
+		AddMissionTeam(params.clanColor)
+		playerHog = AddMissionHog(1)
 		HogTurnLeft(playerHog, params.faceLeft)
 		
 		SetGearPosition(playerHog, params.hog_x, params.hog_y)
@@ -119,7 +109,7 @@ function SpeedShoppaMission(params)
 		local append = getReadableChallengeRecord("TimeRecord")
 		ShowMission(params.missionTitle, loc("Challenge"), params.goalText .. "|" .. append, -amRope, 5000)
 		-- <crates collected>/<total number of crates>
-		SetTeamLabel(params.teamName, string.format(loc("%d/%d"), cratesCollected, #crates))
+		SetTeamLabel(GetHogTeamName(playerHog), string.format(loc("%d/%d"), cratesCollected, #crates))
 		for i=1,#crates do
 			spawnCrate(crates[i].x, crates[i].y)
 		end
@@ -134,7 +124,7 @@ function SpeedShoppaMission(params)
 		if GetGearType(gear) == gtCase and not hogHurt and not timeOut then
 			cratesCollected = cratesCollected + 1
 			-- <crates collected>/<total number of crates>
-			SetTeamLabel(params.teamName, string.format(loc("%d/%d"), cratesCollected, #crates))
+			SetTeamLabel(GetHogTeamName(playerHog), string.format(loc("%d/%d"), cratesCollected, #crates))
 			PlaySound(sndShotgunReload)
 			if cratesCollected == #crates then
 				endTime = TurnTimeLeft
@@ -175,14 +165,14 @@ function SpeedShoppaMission(params)
 				SendStat(siGameResult, loc("Challenge completed!"))
 				SendStat(siPointType, loc("milliseconds"))
 				local time = startTime - endTime
-				SendStat(siPlayerKills, tostring(time), params.teamName)
+				SendStat(siPlayerKills, tostring(time), GetHogTeamName(playerHog))
 				SendStat(siCustomAchievement, string.format(loc("You have finished the challenge in %.3f s."), (time/1000)))
 				SetTurnTimeLeft(0)
 				updateChallengeRecord("TimeRecord", time)
 			else
 				SendStat(siGameResult, loc("Challenge failed!"))
 				SendStat(siPointType, loc("crate(s)"))
-				SendStat(siPlayerKills, tostring(cratesCollected), params.teamName)
+				SendStat(siPlayerKills, tostring(cratesCollected), GetHogTeamName(playerHog))
 				SendStat(siCustomAchievement, string.format(loc("You have collected %d out of %d crate(s)."), cratesCollected, #crates))
 			end
 			gameEnded = true
