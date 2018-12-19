@@ -1082,79 +1082,91 @@ end;}
 
 
 function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content, cnt: Longword): PGear;
+var gear: PGear;
 begin
-    FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    gear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    if(FinishedTurnsTotal > -1) then
+        FollowGear:= gear;
     cCaseFactor := 0;
 
     if (crate <> HealthCrate) and (content > ord(High(TAmmoType))) then
         content := ord(High(TAmmoType));
 
-    FollowGear^.Power:= cnt;
+    gear^.Power:= cnt;
 
     case crate of
         HealthCrate:
             begin
-            FollowGear^.Pos := posCaseHealth;
+            gear^.Pos := posCaseHealth;
             // health crate is smaller than the other crates
-            FollowGear^.Radius := cCaseHealthRadius;
-            FollowGear^.Health := content;
-            AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
+            gear^.Radius := cCaseHealthRadius;
+            gear^.Health := content;
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
             end;
         AmmoCrate:
             begin
-            FollowGear^.Pos := posCaseAmmo;
-            FollowGear^.AmmoType := TAmmoType(content);
-            AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
+            gear^.Pos := posCaseAmmo;
+            gear^.AmmoType := TAmmoType(content);
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
             end;
         UtilityCrate:
             begin
-            FollowGear^.Pos := posCaseUtility;
-            FollowGear^.AmmoType := TAmmoType(content);
-            AddCaption(GetEventString(eidNewUtilityPack), capColDefault, capgrpAmmoInfo);
+            gear^.Pos := posCaseUtility;
+            gear^.AmmoType := TAmmoType(content);
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewUtilityPack), capColDefault, capgrpAmmoInfo);
             end;
     end;
 
     if ( (x = 0) and (y = 0) ) then
-        FindPlace(FollowGear, true, 0, LAND_WIDTH);
+        FindPlace(gear, true, 0, LAND_WIDTH);
 
-    SpawnCustomCrateAt := FollowGear;
+    SpawnCustomCrateAt := gear;
 end;
 
 function SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean): PGear;
+var gear: PGear;
 begin
-    FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    gear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    if(FinishedTurnsTotal > -1) then
+        FollowGear:= gear;
     cCaseFactor := 0;
-    FollowGear^.Pos := posCaseDummy;
+    gear^.Pos := posCaseDummy;
 
     if explode then
-        FollowGear^.Pos := FollowGear^.Pos + posCaseExplode;
+        gear^.Pos := gear^.Pos + posCaseExplode;
     if poison then
-        FollowGear^.Pos := FollowGear^.Pos + posCasePoison;
+        gear^.Pos := gear^.Pos + posCasePoison;
 
     case crate of
         HealthCrate:
             begin
-            FollowGear^.Pos := FollowGear^.Pos + posCaseHealth;
+            gear^.Pos := gear^.Pos + posCaseHealth;
             // health crate is smaller than the other crates
-            FollowGear^.Radius := cCaseHealthRadius;
-            AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
+            gear^.Radius := cCaseHealthRadius;
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
             end;
         AmmoCrate:
             begin
-            FollowGear^.Pos := FollowGear^.Pos + posCaseAmmo;
-            AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
+            gear^.Pos := gear^.Pos + posCaseAmmo;
+            if(FinishedTurnstotal > -1) then
+                AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
             end;
         UtilityCrate:
             begin
-            FollowGear^.Pos := FollowGear^.Pos + posCaseUtility;
-            AddCaption(GetEventString(eidNewUtilityPack), capcolDefault, capgrpAmmoInfo);
+            gear^.Pos := gear^.Pos + posCaseUtility;
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewUtilityPack), capcolDefault, capgrpAmmoInfo);
             end;
     end;
 
     if ( (x = 0) and (y = 0) ) then
-        FindPlace(FollowGear, true, 0, LAND_WIDTH);
+        FindPlace(gear, true, 0, LAND_WIDTH);
 
-    SpawnFakeCrateAt := FollowGear;
+    SpawnFakeCrateAt := gear;
 end;
 
 procedure StartSuddenDeath();
