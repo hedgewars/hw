@@ -29,7 +29,7 @@ procedure initModule;
 procedure freeModule;
 
 function  AddTeam(TeamColor: Longword): PTeam;
-function  SetMissionTeam(TeamColor: Longword): PTeam;
+function  SetMissionTeam(): PTeam;
 procedure SwitchHedgehog;
 procedure AfterSwitchHedgehog;
 procedure InitTeams;
@@ -477,7 +477,7 @@ else
     end;
 end;
 
-function SetMissionTeam(TeamColor: Longword): PTeam;
+function SetMissionTeam(): PTeam;
 var team: PTeam;
 begin
 New(team);
@@ -798,8 +798,7 @@ if isDeveloperMode then
 end;
 
 procedure chSetMissionTeam(var s: shortstring);
-var Color: Longword;
-    ts, cs: shortstring;
+var ts, cs: shortstring;
 begin
 cs:= '';
 ts:= '';
@@ -807,11 +806,8 @@ if isDeveloperMode then
     begin
     SplitBySpace(s, cs);
     SplitBySpace(cs, ts);
-    Color:= StrToInt(cs);
 
-    // color is always little endian so the mask must be constant also in big endian archs
-    Color:= Color or $FF000000;
-    SetMissionTeam(Color);
+    SetMissionTeam();
 
     if CurrentTeam <> nil then
         begin
