@@ -321,6 +321,8 @@ void PageTraining::updateInfo()
 
             if (QFile::exists(thumbFile))
                 btnPreview->setIcon(QIcon(thumbFile));
+            else if (tbw->currentWidget() == lstChallenges)
+                btnPreview->setIcon(QIcon(":/res/Challenges.png"));
             else
                 btnPreview->setIcon(QIcon(":/res/Trainings.png"));
 
