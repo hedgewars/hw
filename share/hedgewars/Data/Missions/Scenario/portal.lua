@@ -19,8 +19,8 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Subjects"), -9, "Simple", "Island", "Default", "cm_test")
-	player = AddHog(loc("Subject 1"), 0, 10, "Terminator_Glasses")
+	AddMissionTeam(-9)
+	player = AddMissionHog(10)
 
 	AddTeam(loc("Hell Army"), -1, "skull", "Island", "Default", "cm_hellish")
 	enemy1 = AddHog(loc("Lucifer"), 1, 200, "InfernalHorns")

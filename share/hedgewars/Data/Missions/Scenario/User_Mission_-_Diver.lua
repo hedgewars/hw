@@ -26,8 +26,8 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Bloody Rookies"), -1, "deadhog", "Island", "Default", "cm_eyes")
-	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
+	AddMissionTeam(-1)
+	player = AddMissionHog(1)
 			
 	AddTeam(loc("Toxic Team"), -6, "skull", "Island", "Default", "cm_magicskull")
 	enemy = AddHog(loc("Poison"), 1, 100, "Skull")

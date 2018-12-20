@@ -9,7 +9,7 @@ local enemy = nil
 local Pack = nil
 local help = false
 local GameOver = false
-local playerTeamName = loc("Feeble Resistance")
+local playerTeamName
 
 function onGameInit()
 	Seed = 0
@@ -26,9 +26,10 @@ function onGameInit()
 	Map = "CrazyMission"
 	Theme = "CrazyMission"
 
-	AddTeam(playerTeamName, -1, "Statue", "Island", "Default", "cm_kiwi")
-	player = AddHog(loc("Greg"), 0, 30, "NoHat")
-	hlayer = AddHog(loc("Mark"), 0, 40, "NoHat")
+	local idx = AddMissionTeam(-1)
+	playerTeamName = GetTeamName(idx)
+	player = AddMissionHog(30)
+	hlayer = AddMissionHog(40)
 
 	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot", "cm_binary")
 	enemy = AddHog(loc("WatchBot 4000"), 5, 50, "cyborg1")

@@ -30,8 +30,8 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Bloody Rookies"), -1, "Rubberduck", "Island", "Default", "cm_duckhead")
-	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
+	AddMissionTeam(-1)
+	player = AddMissionHog(1)
 	instructor = AddHog(loc("Instructor"), 0, 100, "sf_vega")
 
 	AddTeam(loc("Blue Team"), -2, "bubble", "Island", "Default", "somalia")
@@ -54,7 +54,7 @@ function onGameStart()
 
 	FollowGear(player)
 
-	ShowMission(loc("Dangerous Ducklings"), loc("Scenario"), loc("Eliminate the Blue Team before the time runs out."), -amRope, 5000);
+	ShowMission(loc("Dangerous Ducklings"), loc("Scenario"), loc("Eliminate the enemy before the time runs out."), -amRope, 5000);
 
 end
 
@@ -114,7 +114,7 @@ function onGameTick()
 			if endTimer >= 3000 then
 				--SetHealth(instructor,0)
 				SetTurnTimeLeft(1)
-				DismissTeam(loc("Bloody Rookies"))
+				DismissTeam(GetHogTeamName(player))
 			end
 			ShowMission(loc("Dangerous Ducklings"), loc("MISSION FAILED"), loc("You've failed. Try again."), -amRope, 5000);
 		end
@@ -137,7 +137,7 @@ function onGearDelete(gear)
 			HogSay(player, loc("See ya!"), SAY_THINK)
 			Retreat(3000)
 			awardAchievement(loc("Naughty Ninja"))
-			DismissTeam(loc("Blue Team"))
+			DismissTeam(GetHogTeamName(enemy))
 			gameWon = true
 			SaveMissionVar("Won", "true")
 		elseif gear == enemy then

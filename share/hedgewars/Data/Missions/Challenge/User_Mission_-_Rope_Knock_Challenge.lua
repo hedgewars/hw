@@ -73,7 +73,7 @@ local HogData =	{
 
 				}
 
-local playerTeamName = loc("Wannabe Shoppsta")
+local playerTeam, playerTeamName
 
 function GetKillScore()
 	return math.ceil((hogsKilled / 16)*6000)
@@ -174,8 +174,9 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(playerTeamName, -1, "money", "Island", "Default", "cm_shoppa")
-	hhs[0] = AddHog(loc("Ace"), 0, 1, "Gasmask")
+	playerTeam = AddMissionTeam(-1)
+	playerTeamName = GetTeamName(playerName)
+	hhs[0] = AddMissionHog(1)
 	SetGearPosition(player, 1380, 1500)
 
 	AddTeam(loc("Unsuspecting Louts"), -2, "Simple", "Island", "Default", "cm_face")

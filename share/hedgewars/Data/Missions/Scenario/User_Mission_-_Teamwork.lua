@@ -24,9 +24,10 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(playerTeamName, -1, "Statue", "Island", "Default", "cm_kiwi")
-	player = AddHog(loc("Greg"), 0, 50, "NoHat")
-	p2 = AddHog(loc("Mark"), 0, 20, "NoHat")
+	local idx = AddMissionTeam(-1)
+	playerTeamName = GetTeamName(idx)
+	player = AddMissionHog(50)
+	p2 = AddMissionHog(20)
 
 	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot", "cm_cyborg")
 	enemy = AddHog(loc("Unit 3378"), 5, 30, "cyborg1")
