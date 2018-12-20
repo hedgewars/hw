@@ -53,27 +53,30 @@ The argument “params” is a table containing fields which describe the missio
 	- probability		probability in crates (default: 0)
 
 	TEAM DATA
+	- isMissionTeam		if true, this is the player's chosen team for this mission (default: false)
 	- hogs			table of hedgehogs in this team (must contain at least 1 hog)
-	- name			team name
 	- clanID		ID of the clan to which this team belongs to. Counting starts at 0.
 				By default, each team goes into its own clan.
 				Important: The clan of the player and allies MUST be 0.
 				Important: You MUST either set the clan ID explicitly for all teams or none of them.
+	These arguments will be ignored if this is a mission team:
+	- name			team name
 	- flag			flag name (default: hedgewars)
 	- grave			grave name (has default grave for each team)
 	- fort			fort name (default: Castle)
 
 	HEDGEHOG DATA:
 	- id			optional identifier for goals
-	- name			hog name
-	- x, y			hog position (default: spawns randomly on land)
-	- botLevel		1-5: Bot level (lower=stronger). 0=human player (default: 0)
-	- hat			hat name (default: NoHat)
 	- health		hog health (default: 100)
+	- ammo			table of ammo types
+	- x, y			hog position (default: spawns randomly on land)
 	- poisoned		if true, hedgehog starts poisoned with 5 poison damage. Set to a number for other poison damage (default: false)
 	- frozen		if true, hedgehogs starts frozen (default: false)
 	- faceLeft		initial facing direction. true=left, false=false (default: false)
-	- ammo			table of ammo types
+	These arguments will be ignored if the hog is in a mission team:
+	- name			hog name
+	- botLevel		1-5: Bot level (lower=stronger). 0=human player (default: 0)
+	- hat			hat name (default: NoHat)
 
 	GEAR TYPES:
 	- type			gear type
@@ -656,12 +659,35 @@ function SimpleMission(params)
 			else
 				clanID = teamData.clanID
 			end
-			grave = def(teamData.grave, defaultGraves[math.min(teamID, 8)])
-			fort = def(teamData.fort, "Castle")
-			voice = def(teamData.voice, "Default")
-			flag = def(teamData.flag, defaultFlags[math.min(teamID, 8)])
 
-			AddTeam(name, -(clanID+1), grave, fort, voice, flag)
+			local idx
+			if teamData.isMissionTeam then
+				idx = AddMissionTeam(-(clanID+1))
+				_G.sm.playerClan = clanID
+			else
+				grave = def(teamData.grave, defaultGraves[math.min(teamID, 8)])
+				fort = def(teamData.fort, "Castle")
+				voice = def(teamData.voice, "Default")
+				flag = def(teamData.flag, defaultFlags[math.min(teamID, 8)])
+
+				idx = AddTeam(name, -(clanID+1), grave, fort, voice, flag)
+				local realName = GetTeamName(idx)
+				-- Update all teamDefeat goals if the real team name differs from the
+				-- team configuration.
+				-- (AddTeam might change the name due to naming collisions)
+				if name ~= realName then
+					local checks = { params.customGoals, params.customNonGoals }
+					for c=1, 2 do
+						if checks[c] then
+							for k,goal in pairs(checks[c]) do
+								if goal.type == "teamDefeat" and goal.teamName == name then
+									goal.teamName = realName
+								end
+							end
+						end
+					end
+				end
+			end
 
 			for hogID, hogData in pairs(teamData.hogs) do
 				local name, botLevel, health, hat
@@ -669,7 +695,12 @@ function SimpleMission(params)
 				botLevel = def(hogData.botLevel, 0)
 				health = def(hogData.health, 100)
 				hat = def(hogData.hat, "NoHat")
-				local hog = AddHog(name, botLevel, health, hat)
+				local hog
+				if teamData.isMissionTeam then
+					hog = AddMissionHog(health)
+				else
+					hog = AddHog(name, botLevel, health, hat)
+				end
 				if hogData.x ~= nil and hogData.y ~= nil then
 					SetGearPosition(hog, hogData.x, hogData.y)
 				end

@@ -19,10 +19,10 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddMissionTeam(-9)
+	AddMissionTeam(-1)
 	player = AddMissionHog(10)
 
-	AddTeam(loc("Hell Army"), -1, "skull", "Island", "Default", "cm_hellish")
+	AddTeam(loc("Hell Army"), -9, "skull", "Island", "Default", "cm_hellish")
 	enemy1 = AddHog(loc("Lucifer"), 1, 200, "InfernalHorns")
 	enemy2 = AddHog(loc("Voldemort"), 1, 150, "WizardHat")
 	enemy3 = AddHog(loc("Zombi"), 1, 100, "Zombi")
@@ -32,7 +32,7 @@ function onGameInit()
 	enemy7 = AddHog(loc("C-2"), 1, 50, "cyborg1")
 	enemy8 = AddHog(loc("Rider"), 1, 50, "scif_SparkssHelmet")
 
-	AddTeam(loc("Badmad"), -1, "skull", "Island", "Default", "cm_pentagram")
+	AddTeam(loc("Badmad"), -9, "skull", "Island", "Default", "cm_pentagram")
 	enemy9 = AddHog(loc("C-1"), 1, 50, "cyborg2")
 	enemy10 = AddHog(loc("Hidden"), 1, 40, "bushhider")
 	enemy11 = AddHog(loc("Ronald"), 1, 70, "clown")

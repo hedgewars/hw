@@ -13,12 +13,10 @@ SimpleMission({
 		MapFeatureSize = 12,
 	},
 	teams = {
-		{ name = loc("Pathetic Resistance"),
+		{ isMissionTeam = true,
 		clanID = 0,
-		flag = "cm_yinyang",
-		grave = "Plinko",
 		hogs = {
-			{name = loc("Ikeda"), health = 48, x = 397, y = 865, hat = "StrawHat"}
+			{health = 48, x = 397, y = 865}
 		}, },
 
 		{ name = loc("Cybernetic Empire"),

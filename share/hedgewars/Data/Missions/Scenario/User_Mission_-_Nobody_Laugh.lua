@@ -24,26 +24,17 @@ SimpleMission({
 		[amSwitch] = { count = 9 },
 	},
 	teams = {
-		{ name = loc("Nameless Heroes"),
-		flag = "cm_crossedswords",
-		grave = "eyecross",
-		voice = "HillBilly",
+		{ isMissionTeam = true,
 		clanID = 0,
 		hogs = {
 			{
-			name = loc("Hunter"),
 			health = 1,
 			x = 1267, y = 451,
-			hat = "Skull",
-			botLevel = 0,
 			ammo = { [amParachute] = 1, [amHammer] = 1 },
 			},
 			{
-			name = loc("Drowner"),
 			health = 31,
 			x = 1332, y = 451,
-			hat = "mp3",
-			botLevel = 0,
 			ammo = { [amWhip] = 1 },
 			},
 		}},

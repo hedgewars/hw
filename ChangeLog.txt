@@ -28,6 +28,7 @@ Lua API:
  + New return value: AddTeam and AddMissionTeam return team index of new team
  + Utils library: New calls: getReadableChallengeRecord, updateChallengeRecord
  + New callback: onGameResult(winningClan): Called when the game ends normally. winningClan = index of winning clan or -1 on draw
+ + SimpleMission: Add isMissionTeam attribute for teams
  + SpeedShoppa/TargetPractice libraries: Remove custom hog and team info settings
  + Params explode, poison in the SpawnFake*Crate functions now optional and default to false
 

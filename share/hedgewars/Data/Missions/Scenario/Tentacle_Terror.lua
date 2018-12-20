@@ -16,16 +16,12 @@ SimpleMission({
 	},
 	wind = -50,
 	teams = {
-		{ name = loc("Hell Army"),
-		flag = "cm_hellish",
-		grave = "Simple_reversed",
+		{ isMissionTeam = true,
 		hogs = { {
-			name = loc("Lord Evil"),
 			faceLeft = true,
 			health = 30,
 			x = 1210, y = 1446,
-			hat = "Evil",
-			botLevel = 0 } }
+			} }
 		},
 		{ name = loc("Heavenly Defense"),
 		flag = "cm_fcw",

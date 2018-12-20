@@ -19,10 +19,8 @@ SimpleMission({
 		[amFirePunch] = { ammoInCrate = 3 },
 	},
 	teams = {
-		{ name = loc("Hero Team"),
-		flag = "cm_swordshield",
-		grave = "star",
-		hogs = {{ name = loc("Good Dude"), health = 1, x = 1050, y = 534 }},
+		{ isMissionTeam = true,
+		hogs = {{ health = 1, x = 1050, y = 534 }},
 		},
 		{ name = loc("Bad Team"),
 		flag = "cm_dragonrb",

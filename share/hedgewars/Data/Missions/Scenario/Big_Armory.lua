@@ -28,16 +28,12 @@ SimpleMission({
 		* relevant GameFlag: gfDisableLandObjects ]]
 	},
 	teams = {
-		{ name = loc("Pro Killers"),
+		{ isMissionTeam = true,
 		clanID = 0,
-		flag = "cm_scout",
-		grave = "Bone",
 		hogs = {
 			{
-			name = loc("Ultrasoldier"),
 			health = 100,
 			x = 543, y = 1167,
-			hat = "Terminator_Glasses",
 			ammo = heroAmmo,
 			}
 		}, },
