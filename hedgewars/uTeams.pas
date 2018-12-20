@@ -767,6 +767,58 @@ begin
     loadBinds('bind', s);
 end;
 
+// Make sure the team name of chTeam is unique.
+// If it isn't, the name is changed to be unique.
+procedure makeTeamNameUnique(chTeam: PTeam);
+var tail: shortstring;
+    t, numLen, numTail: LongInt;
+    valOK: Word;
+    nameDupeCheck: boolean;
+    chChar: char;
+begin
+    nameDupeCheck:= false;
+    while(nameDupeCheck = false) do
+        begin
+        nameDupeCheck:= true;
+        for t:=0 to TeamsCount - 1 do
+            begin
+            // Name collision?
+            if (chTeam <> teamsArray[t]) and (TeamsArray[t]^.TeamName = chTeam^.TeamName) then
+                begin
+                // Change the name by appending a sequence number, starting from 2
+                numLen:= 0;
+                chChar:= chTeam^.TeamName[Length(chTeam^.TeamName) - numLen];
+                // Parse number at end of team name (if any)
+                while (chChar >= '0') and (chChar <= '9') and (numLen < Length(chTeam^.TeamName)) do
+                    begin
+                    inc(numLen);
+                    chChar:= chTeam^.TeamName[Length(chTeam^.TeamName) - numLen];
+                    end;
+
+                if numLen > 0 then
+                    // Number found: Increment it by 1
+                    begin
+                    tail:= Copy(chTeam^.TeamName, Length(chTeam^.TeamName) - numLen + 1, numLen);
+                    valOK:= 1;
+                    Val(tail, numTail, valOK);
+                    Inc(numTail);
+                    if valOK = 0 then
+                        tail:= IntToStr(numTail)
+                    else
+                        // This should not happen
+                        tail:= 'X';
+                    chTeam^.TeamName:= Copy(chTeam^.TeamName, 0, Length(chTeam^.TeamName) - numLen) + tail;
+                    end
+                else
+                    // No number at team end: Just append a '2'
+                    chTeam^.TeamName:= chTeam^.TeamName + ' 2';
+                nameDupeCheck:= false;
+                break;
+                end;
+            end;
+        end;
+end;
+
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
     ts, cs: shortstring;
@@ -786,6 +838,8 @@ if isDeveloperMode then
     if CurrentTeam <> nil then
         begin
         CurrentTeam^.TeamName:= ts;
+        makeTeamNameUnique(CurrentTeam);
+
         CurrentTeam^.PlayerHash:= s;
         loadTeamBinds(ts);
 
