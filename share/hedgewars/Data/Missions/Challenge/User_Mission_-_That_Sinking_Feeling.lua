@@ -54,8 +54,7 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	local idx = AddTeam(loc("Hapless Hogs"), -1, "Simple", "Island", "Default")
-	haplessTeamName = GetTeamName(idx)
+	haplessTeamName = AddTeam(loc("Hapless Hogs"), -1, "Simple", "Island", "Default")
 	hh[0] = AddHog(loc("Sinky"), 1, 100, "fr_lemon")
 	hh[1] = AddHog(loc("Drowner"), 1, 100, "fr_orange")
 	hh[2] = AddHog(loc("Heavy"), 1, 100, "dish_Teapot")
@@ -65,8 +64,7 @@ function onGameInit()
 	hh[6] = AddHog(loc("Sponge"), 1, 100, "sf_chunli")
 	hh[7] = AddHog(loc("Deadweight"), 1, 100, "dish_Teacup")
 
-	idx = AddMissionTeam(-1)
-	playerTeamName = GetTeamName(idx)
+	playerTeamname = AddMissionTeam(-1)
 	player = AddMissionHog(1)
 
 	SetGearPosition(player, 3992, 733)

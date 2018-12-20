@@ -2290,7 +2290,9 @@ begin
         else
             begin
             OutError('Lua error: AddTeam: Invalid ''color'' argument, must be between '+IntToStr(-cClanColors)+' and 0xffffffff!', true);
-            lc_addteam:= 0;
+            lua_pushnil(L);
+            lua_pushnil(L);
+            lc_addteam:= 2;
             exit;
             end;
         ParseCommand('addteam x ' + colorStr + ' ' + lua_tostring(L, 1), true, true);
@@ -2299,12 +2301,16 @@ begin
         ParseCommand('voicepack ' + lua_tostring(L, 5), true, true);
         if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true, true);
         CurrentTeam^.Binds:= DefaultBinds;
-        // push team index
+        // push team name and index
+        lua_pushstring(L, str2pchar(CurrentTeam^.TeamName));
         lua_pushnumber(L, TeamsCount - 1);
         end
     else
+        begin
         lua_pushnil(L);
-    lc_addteam:= 1;
+        lua_pushnil(L);
+        end;
+    lc_addteam:= 2;
 end;
 
 function lc_addmissionteam(L : Plua_State) : LongInt; Cdecl;
@@ -2330,7 +2336,9 @@ begin
         else
             begin
             OutError('Lua error: AddMissionTeam: Invalid ''color'' argument, must be between '+IntToStr(-cClanColors)+' and 0xffffffff!', true);
-            lc_addmissionteam:= 0;
+            lua_pushnil(L);
+            lua_pushnil(L);
+            lc_addmissionteam:= 2;
             exit;
             end;
 
@@ -2340,12 +2348,16 @@ begin
         ParseCommand('voicepack ' + MissionTeam^.Voicepack^.name, true, true);
         ParseCommand('flag ' + MissionTeam^.Flag, true, true);
         CurrentTeam^.Binds:= DefaultBinds;
-        // push team index
+        // push real team name and team index
+        lua_pushstring(L, str2pchar(CurrentTeam^.TeamName));
         lua_pushnumber(L, TeamsCount - 1);
         end
     else
+        begin
         lua_pushnil(L);
-    lc_addmissionteam:= 1;
+        lua_pushnil(L);
+        end;
+    lc_addmissionteam:= 2;
 end;
 
 function lc_setteamlabel(L : Plua_State) : LongInt; Cdecl;

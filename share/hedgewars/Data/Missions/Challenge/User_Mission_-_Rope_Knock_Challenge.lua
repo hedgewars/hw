@@ -73,7 +73,7 @@ local HogData =	{
 
 				}
 
-local playerTeam, playerTeamName
+local playerTeamName
 
 function GetKillScore()
 	return math.ceil((hogsKilled / 16)*6000)
@@ -174,8 +174,7 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	playerTeam = AddMissionTeam(-1)
-	playerTeamName = GetTeamName(playerName)
+	playerTeamName = AddMissionTeam(-1)
 	hhs[0] = AddMissionHog(1)
 	SetGearPosition(player, 1380, 1500)
 

@@ -25,7 +25,7 @@ Lua API:
  + New call: GetTurnTimePaused(): Returns true if turn time is paused due to Lua
  + New call: AddMissionTeam(color): Add mission team, i.e. the team selected by player in campaign/mission page
  + New call: AddMissionHog(health): Add a hedgehog for the mission team
- + New return value: AddTeam and AddMissionTeam return team index of new team
+ + New return value: AddTeam/AddMissionTeam return <real team name>, <team index>
  + Utils library: New calls: getReadableChallengeRecord, updateChallengeRecord
  + New callback: onGameResult(winningClan): Called when the game ends normally. winningClan = index of winning clan or -1 on draw
  + SimpleMission: Add isMissionTeam attribute for teams

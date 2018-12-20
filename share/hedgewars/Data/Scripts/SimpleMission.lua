@@ -660,9 +660,9 @@ function SimpleMission(params)
 				clanID = teamData.clanID
 			end
 
-			local idx
+			local realName
 			if teamData.isMissionTeam then
-				idx = AddMissionTeam(-(clanID+1))
+				realName = AddMissionTeam(-(clanID+1))
 				_G.sm.playerClan = clanID
 			else
 				grave = def(teamData.grave, defaultGraves[math.min(teamID, 8)])
@@ -670,19 +670,19 @@ function SimpleMission(params)
 				voice = def(teamData.voice, "Default")
 				flag = def(teamData.flag, defaultFlags[math.min(teamID, 8)])
 
-				idx = AddTeam(name, -(clanID+1), grave, fort, voice, flag)
-				local realName = GetTeamName(idx)
-				-- Update all teamDefeat goals if the real team name differs from the
-				-- team configuration.
-				-- (AddTeam might change the name due to naming collisions)
-				if name ~= realName then
-					local checks = { params.customGoals, params.customNonGoals }
-					for c=1, 2 do
-						if checks[c] then
-							for k,goal in pairs(checks[c]) do
-								if goal.type == "teamDefeat" and goal.teamName == name then
-									goal.teamName = realName
-								end
+				realName = AddTeam(name, -(clanID+1), grave, fort, voice, flag)
+			end
+
+			-- Update all teamDefeat goals if the real team name differs from the
+			-- team configuration.
+			-- (AddTeam might change the name due to naming collisions)
+			if name ~= realName then
+				local checks = { params.customGoals, params.customNonGoals }
+				for c=1, 2 do
+					if checks[c] then
+						for k,goal in pairs(checks[c]) do
+							if goal.type == "teamDefeat" and goal.teamName == name then
+								goal.teamName = realName
 							end
 						end
 					end
