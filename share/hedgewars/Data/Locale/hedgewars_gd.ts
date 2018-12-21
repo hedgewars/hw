@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="gd" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="gd">
 <context>
     <name>About</name>
     <message>
@@ -7,7 +9,7 @@
     </message>
     <message>
         <source>Hedgewars %1</source>
-        <extracomment>%1 contains Hedgewars' version number</extracomment>
+        <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
         <translation>Hedgewars %1</translation>
     </message>
     <message>
@@ -29,7 +31,7 @@
     </message>
     <message>
         <source>Dependency versions:</source>
-        <extracomment>For the version numbers of Hedgewars' software dependencies</extracomment>
+        <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
         <translation>Tionndaidhean na eisimeileachdan:</translation>
     </message>
     <message>
@@ -75,6 +77,49 @@
     <message>
         <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
         <translation>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>Credits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other people</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (alias %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 &amp;lt;%2&amp;gt;</source>
+        <extracomment>Part of credits. %1: Contributor name. %2: E-mail address</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: %2</source>
+        <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: %2 &amp;lt;%3&amp;gt;</source>
+        <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extended Credits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An extended credits list can be found in the CREDITS text file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown Compiler: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -201,7 +246,12 @@
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation><numerusform>Gach %1d cuairt</numerusform><numerusform>Gach %1a cuairt</numerusform><numerusform>Gach %1mh cuairt</numerusform><numerusform>Gach %1mh cuairt</numerusform></translation>
+        <translation>
+            <numerusform>Gach %1d cuairt</numerusform>
+            <numerusform>Gach %1a cuairt</numerusform>
+            <numerusform>Gach %1mh cuairt</numerusform>
+            <numerusform>Gach %1mh cuairt</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -230,10 +280,6 @@
 <context>
     <name>GameSchemeModel</name>
     <message>
-        <source>new</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>New</source>
         <translation>Ùr</translation>
     </message>
@@ -261,23 +307,48 @@
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
-        <translation><numerusform>%1 mhionaid</numerusform><numerusform>%1 mhionaid</numerusform><numerusform>%1 mionaidean</numerusform><numerusform>%1 mionaid</numerusform></translation>
+        <translation>
+            <numerusform>%1 mhionaid</numerusform>
+            <numerusform>%1 mhionaid</numerusform>
+            <numerusform>%1 mionaidean</numerusform>
+            <numerusform>%1 mionaid</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%1 hour</source>
-        <translation><numerusform>%1 uair</numerusform><numerusform>%1 uair</numerusform><numerusform>%1 uairean</numerusform><numerusform>%1 uair</numerusform></translation>
+        <translation>
+            <numerusform>%1 uair</numerusform>
+            <numerusform>%1 uair</numerusform>
+            <numerusform>%1 uairean</numerusform>
+            <numerusform>%1 uair</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%1 hours</source>
-        <translation><numerusform>%1 uair</numerusform><numerusform>%1 uair</numerusform><numerusform>%1 uairean</numerusform><numerusform>%1 uair</numerusform></translation>
+        <translation>
+            <numerusform>%1 uair</numerusform>
+            <numerusform>%1 uair</numerusform>
+            <numerusform>%1 uairean</numerusform>
+            <numerusform>%1 uair</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%1 day</source>
-        <translation><numerusform>%1 latha</numerusform><numerusform>%1 latha</numerusform><numerusform>%1 làithean</numerusform><numerusform>%1 latha</numerusform></translation>
+        <translation>
+            <numerusform>%1 latha</numerusform>
+            <numerusform>%1 latha</numerusform>
+            <numerusform>%1 làithean</numerusform>
+            <numerusform>%1 latha</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%1 days</source>
-        <translation><numerusform>%1 latha</numerusform><numerusform>%1 latha</numerusform><numerusform>%1 làithean</numerusform><numerusform>%1 latha</numerusform></translation>
+        <translation>
+            <numerusform>%1 latha</numerusform>
+            <numerusform>%1 latha</numerusform>
+            <numerusform>%1 làithean</numerusform>
+            <numerusform>%1 latha</numerusform>
+        </translation>
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
@@ -300,21 +371,25 @@ Feuch an dearbhaich thu an stàladh agad!</translation>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
+        <extracomment>“Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line</extracomment>
         <translation>Cleachdadh</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
+        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”</extracomment>
         <translation>ROGHAINN</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
+        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
         <translation>TEACSACEANGLAIDH</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
+        <extracomment>“Options” as in “command-line options”</extracomment>
         <translation>Roghainnean</translation>
     </message>
     <message>
@@ -481,7 +556,7 @@ Feuch an tagh thu far-ainm eile:</translation>
         <translation>Hedgewars – Far-ainm clàraichte</translation>
     </message>
     <message>
-        <source>This nick is registered, and you haven't specified a password.
+        <source>This nick is registered, and you haven&apos;t specified a password.
 
 If this nick isn’t yours, please register your own nick at www.hedgewars.org
 
@@ -562,9 +637,9 @@ Cuir a-steach am facal-faire:</translation>
         <translation>Sgioba %1</translation>
     </message>
     <message>
-        <source>This nick is registered, and you haven't specified a password.
+        <source>This nick is registered, and you haven&apos;t specified a password.
 
-If this nick isn't yours, please register your own nick at www.hedgewars.org
+If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
         <translation>Tha am far-ainm seo clàraichte ’s cha chuir thu facal-faire a-steach.
@@ -607,7 +682,7 @@ Facal-faire:</translation>
 
 We are very sorry for the inconvenience :(
 
-If this keeps happening, please click the '%1' button in the main menu!
+If this keeps happening, please click the &apos;%1&apos; button in the main menu!
 
 Last two engine messages:
 %2</source>
@@ -625,7 +700,7 @@ An dà theachdaireachd mu dheireadh aig an einnsean:
 
 We are very sorry for the inconvenience. :-(
 
-If this keeps happening, please click the 'Feedback' button in the main menu!
+If this keeps happening, please click the &apos;Feedback&apos; button in the main menu!
 
 Last engine message:
 %1</source>
@@ -829,6 +904,10 @@ An teachdaireachd mu dheireadh an einnsein:
         <source>Click to edit</source>
         <translation>Briog gus a dheasachadh</translation>
     </message>
+    <message>
+        <source>Scale size of the drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -872,10 +951,6 @@ An teachdaireachd mu dheireadh an einnsein:
     <message>
         <source>%1 *** %2 has joined the room</source>
         <translation>Thàinig %1 *** %2 a-steach dhan t-seòmar</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -937,7 +1012,7 @@ Thoir sùil air roghainnean ainm is port an fhrithealaiche agus/no feuch ris a-r
     <message>
         <source>To connect to the server, please log in.
 
-If you don't have an account on www.hedgewars.org,
+If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
         <translation>Clàraich a-steach gus ceangal ris an fhrithealaiche.
 
@@ -992,13 +1067,6 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     <message>
         <source>Choose a hat</source>
         <translation>Tagh ad</translation>
-    </message>
-</context>
-<context>
-    <name>KB</name>
-    <message>
-        <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1073,7 +1141,12 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     </message>
     <message numerus="yes">
         <source>%1 seconds</source>
-        <translation><numerusform>%1 diog</numerusform><numerusform>%1 dhiog</numerusform><numerusform>%1 diogan</numerusform><numerusform>%1 diog</numerusform></translation>
+        <translation>
+            <numerusform>%1 diog</numerusform>
+            <numerusform>%1 dhiog</numerusform>
+            <numerusform>%1 diogan</numerusform>
+            <numerusform>%1 diog</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1360,32 +1433,67 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation><numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform><numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; puing.</numerusform></translation>
+        <translation>
+            <numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform>
+            <numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; puing.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation><numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; mharbhadh ann an cuairt.</numerusform><numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; mharbhadh ann an cuairt.</numerusform><numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; marbhaidhean ann an cuairt.</numerusform><numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; marbhadh ann an cuairt.</numerusform></translation>
+        <translation>
+            <numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; mharbhadh ann an cuairt.</numerusform>
+            <numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; mharbhadh ann an cuairt.</numerusform>
+            <numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; marbhaidhean ann an cuairt.</numerusform>
+            <numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; marbhadh ann an cuairt.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation><numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; ghràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform><numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; ghràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform><numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; gràineagan a mharbhadh uile gu lèir sa chuairt seo.</numerusform><numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; gràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform></translation>
+        <translation>
+            <numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; ghràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform>
+            <numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; ghràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform>
+            <numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; gràineagan a mharbhadh uile gu lèir sa chuairt seo.</numerusform>
+            <numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; gràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
         <extracomment>Number of kills in stats screen, written after the team name</extracomment>
-        <translation><numerusform>(%1 mharbhadh)</numerusform><numerusform>(%1 mharbhadh)</numerusform><numerusform>(%1 marbhaidhean)</numerusform><numerusform>(%1 marbhadh)</numerusform></translation>
+        <translation>
+            <numerusform>(%1 mharbhadh)</numerusform>
+            <numerusform>(%1 mharbhadh)</numerusform>
+            <numerusform>(%1 marbhaidhean)</numerusform>
+            <numerusform>(%1 marbhadh)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="vanished"><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; puing.</numerusform></translation>
+        <translation type="vanished">
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; puing.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="vanished"><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform></translation>
+        <translation type="vanished">
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation><numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; turas.</numerusform><numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; thuras.</numerusform><numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; tursan.</numerusform><numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; turas.</numerusform></translation>
+        <translation>
+            <numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; turas.</numerusform>
+            <numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; thuras.</numerusform>
+            <numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; tursan.</numerusform>
+            <numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; turas.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Play again</source>
@@ -1398,15 +1506,30 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     <message numerus="yes">
         <source>(%1 %2)</source>
         <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
-        <translation><numerusform>(%1 %2)</numerusform><numerusform>(%1 %2)</numerusform><numerusform>(%1 %2)</numerusform><numerusform>(%1 %2)</numerusform></translation>
+        <translation>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puing.</numerusform></translation>
+        <translation>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puing.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform></translation>
+        <translation>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+        </translation>
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
@@ -1506,11 +1629,26 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     </message>
 </context>
 <context>
-    <name>PageNetGame</name>
+    <name>PageNet</name>
     <message>
-        <source>Control</source>
-        <translation type="unfinished"/>
+        <source>Connect to the selected server</source>
+        <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Update the list of servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specify the address and port number of a known server and connect to it directly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start private server</source>
+        <translation type="unfinished">Tòisich frithealaiche prìobhaideach</translation>
+    </message>
+</context>
+<context>
+    <name>PageNetGame</name>
     <message>
         <source>Edit game preferences</source>
         <translation>Deasaich roghainnean a’ gheama</translation>
@@ -1727,6 +1865,7 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     </message>
     <message>
         <source>MISSING LANGUAGE NAME [%1]</source>
+        <extracomment>In the case of an error, this is shown in the language selection for a language with unknown name. %1 = language code</extracomment>
         <translation>THA AINM CÀNAIN A DHÌTH [%1]</translation>
     </message>
     <message>
@@ -1777,24 +1916,17 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
 <context>
     <name>PageRoomsList</name>
     <message>
-        <source>Create</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Join</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>Rianachd</translation>
     </message>
-    <message>
-        <source>Room Name:</source>
-        <translation type="unfinished"/>
-    </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation><numerusform>%1 chluicheadair air loidhne</numerusform><numerusform>%1 chluicheadair air loidhne</numerusform><numerusform>%1 cluicheadairean air loidhne</numerusform><numerusform>%1 cluicheadair air loidhne</numerusform></translation>
+        <translation>
+            <numerusform>%1 chluicheadair air loidhne</numerusform>
+            <numerusform>%1 chluicheadair air loidhne</numerusform>
+            <numerusform>%1 cluicheadairean air loidhne</numerusform>
+            <numerusform>%1 cluicheadair air loidhne</numerusform>
+        </translation>
     </message>
     <message>
         <source>Search for a room:</source>
@@ -1819,14 +1951,6 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
 </context>
 <context>
     <name>PageScheme</name>
-    <message>
-        <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Land can not be destroyed!</source>
         <translation type="vanished">Cha ghabh an talamh a mhilleadh!</translation>
@@ -1953,6 +2077,7 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
+        <extracomment>Description of the game scheme setting “Damage Modifier”. “Knockback” means how much hedgehogs and objects get pushed by explosions and other forces</extracomment>
         <translation>Dochainn coitcheann agus bualadh air ais ann an ceudad</translation>
     </message>
     <message>
@@ -2075,7 +2200,7 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     </message>
     <message>
         <source>Practice your skills in a range of training missions</source>
-        <translation>Cuir gleus air na sgilean agad le miseanan trèanaidh</translation>
+        <translation type="vanished">Cuir gleus air na sgilean agad le miseanan trèanaidh</translation>
     </message>
     <message>
         <source>Watch recorded demos</source>
@@ -2084,6 +2209,10 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     <message>
         <source>Load a previously saved game</source>
         <translation>Luchdaich geama air a shàbhaladh</translation>
+    </message>
+    <message>
+        <source>Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2124,6 +2253,10 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
         <source>Scenarios</source>
         <translation>Cnàmh-sgeulan</translation>
     </message>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished">Sgioba</translation>
+    </message>
 </context>
 <context>
     <name>PageVideos</name>
@@ -2137,7 +2270,12 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
-        <translation><numerusform>%1 bhaidht</numerusform><numerusform>%1 bhaidht</numerusform><numerusform>%1 baidhtichean</numerusform><numerusform>%1 baidht</numerusform></translation>
+        <translation>
+            <numerusform>%1 bhaidht</numerusform>
+            <numerusform>%1 bhaidht</numerusform>
+            <numerusform>%1 baidhtichean</numerusform>
+            <numerusform>%1 baidht</numerusform>
+        </translation>
     </message>
     <message>
         <source>(in progress...)</source>
@@ -2216,10 +2354,6 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     <message>
         <source>Remove friend</source>
         <translation>Thoir air falbh o na caraidean</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
@@ -2377,10 +2511,6 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
         <translation>Daonna</translation>
     </message>
     <message>
-        <source>Level</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>(System default)</source>
         <translation>(Bun-roghainn an t-siostaim)</translation>
     </message>
@@ -2527,10 +2657,6 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
         <translation>Mèinnean</translation>
     </message>
     <message>
-        <source>Version</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Weapons</source>
         <translation>Airm</translation>
     </message>
@@ -2595,10 +2721,6 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
         <translation>Ainm</translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Grave</source>
         <translation>Uaigh</translation>
     </message>
@@ -2613,10 +2735,6 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
     <message>
         <source>Locale</source>
         <translation>Cànan</translation>
-    </message>
-    <message>
-        <source>Explosives</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Quality</source>
@@ -2772,6 +2890,7 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>% Retreat Time</source>
+        <extracomment>Label of game scheme setting for the time you get after an attack</extracomment>
         <translation>% ùine cùlachaidh</translation>
     </message>
     <message>
@@ -2881,14 +3000,6 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
         <translation>Chaidh gach co-cheangal faidhle a shuidheachadh</translation>
     </message>
     <message>
-        <source>Cannot create directory %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Video upload - Error</source>
         <translation type="vanished">Luchdadh suas video – Mearachd</translation>
     </message>
@@ -2960,7 +3071,12 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
-        <translation><numerusform>A bheil thu airson %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform><numerusform>A bheil thu airson an %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform><numerusform>A bheil thu airson na %1 faidhlichean a thoirt air falbh dha-rìribh?</numerusform><numerusform>A bheil thu airson am %1 faidhle a thoirt air falbh dha-rìribh?</numerusform></translation>
+        <translation>
+            <numerusform>A bheil thu airson %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson an %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson na %1 faidhlichean a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson am %1 faidhle a thoirt air falbh dha-rìribh?</numerusform>
+        </translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
@@ -3041,7 +3157,7 @@ Not all players are ready.</source>
 Chan eil a h-uile cluicheadair ullamh.</translation>
     </message>
     <message>
-        <source>Sorry, Hedgewars can't be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
+        <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
 
 Current number of hedgehogs: %1</source>
         <translation type="vanished">Tha sinn duilich ach chan urrainn dhut Hedgewars a chluiche le corr is 48 gràineag. Feuch ris a-rithist le nas lugha a grhàineagan.
@@ -3136,15 +3252,11 @@ Tha coltas nach eil thu ’nad sheann-ghaisgeach fhathast. Am bu toigh leat mise
     </message>
     <message>
         <source>Specify</source>
-        <translation>Sònraich</translation>
+        <translation type="vanished">Sònraich</translation>
     </message>
     <message>
         <source>Start</source>
         <translation>Tòisich</translation>
-    </message>
-    <message>
-        <source>Go!</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Play demo</source>
@@ -3233,6 +3345,10 @@ Tha coltas nach eil thu ’nad sheann-ghaisgeach fhathast. Am bu toigh leat mise
     <message>
         <source>Upload this video to your YouTube account</source>
         <translation type="vanished">Luchdaich suas a’ video seo dhan chunntas YouTube agad</translation>
+    </message>
+    <message>
+        <source>Specify address</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3365,10 +3481,6 @@ Tha coltas nach eil thu ’nad sheann-ghaisgeach fhathast. Am bu toigh leat mise
         <translation>Dàlaichean</translation>
     </message>
     <message>
-        <source>new</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>New</source>
         <translation>Ùr</translation>
     </message>
@@ -3471,10 +3583,6 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>switch</source>
         <translation>dèan suids</translation>
-    </message>
-    <message>
-        <source>find hedgehog</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>ammo menu</source>
@@ -3690,10 +3798,6 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
         <translation>Suidhich an tìmear air boma no arm eile le tìmear:</translation>
-    </message>
-    <message>
-        <source>Move the camera to the active hog:</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -4091,6 +4195,469 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
 </context>
 <context>
+    <name>credits</name>
+    <message>
+        <source>Programming</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Many engine improvements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamepad and Lua integration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme customization improvements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Some Pas2C and GLES2 work</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other improvements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Map generation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Core map generators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Perlin maps and other improvements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maze maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation type="unfinished">Airm</translation>
+    </message>
+    <message>
+        <source>Most core weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Air mine, rubber, others</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drill rocket, ballgun, RC plane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Freezer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mine number and time game settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend / main menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Many frontend improvements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keybinds, feedback, maps and hats interfaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login dialogs, other improvements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missions and styles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A Classic Fairytale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A Space Adventure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Some styles and missions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Battalion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continental supplies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teamwork 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Climb Home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Portal Mind Challenge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>macOS/iPhone port, OpenGL-ES conversion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Android port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Android netplay, portability abstraction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WebGL port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>iPhone/iPad ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished">Grafaigeachd</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">Coitcheann</translation>
+    </message>
+    <message>
+        <source>Themes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nature, Snow, City, Castle, Halloween, Island</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bamboo, EarthRise, BambooPlinko</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Golf, Hoggywood, Stage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hoggywood</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cave, Olympics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fruit, Cake</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Art</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beach</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hell</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Jungle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sheep</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Castle, PirateFlag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ShoppaKing, TrophyRace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Battlefield</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CTF_Blizzard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cheese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ClimbHome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lonely_Island</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Octorama</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>portal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ruler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sticks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forts</source>
+        <translation type="unfinished">Dùin</translation>
+    </message>
+    <message>
+        <source>EvilChicken</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Olympic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SteelTower</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hats, graves, other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>See CREDITS text file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sounds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgehogs voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default_pl, Russian_pl voices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Various authors from www.freesound.org (see CREDITS text file)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished">Ceòl</translation>
+    </message>
+    <message>
+        <source>City, Rock, others</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compost</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EarthRise, oriental, Pirate, snow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fruit, Jungle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>olympics_sd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sdmusic (Hitman [sheepluva edit])</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brazilian Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bulgarian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Finnish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Japanese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Korean</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lithuanian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scottish Gaelic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slovak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ukrainian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Special thanks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Project founder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>server</name>
     <message>
         <source>Restricted</source>
@@ -4286,7 +4853,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
-        <translation>Àitheantan callvote a tha ri am faighinn: kick &lt;far-ainm&gt;, map &lt;ainm&gt;, pause, newseed, hedgehogs</translation>
+        <translation type="vanished">Àitheantan callvote a tha ri am faighinn: kick &lt;far-ainm&gt;, map &lt;ainm&gt;, pause, newseed, hedgehogs</translation>
     </message>
     <message>
         <source>callvote kick: specify nickname</source>
@@ -4630,7 +5197,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>&apos;Registered only&apos; state toggled.</source>
-        <translation>Chaidh an staid “Buill clàraichte a-mhàin” a thoglachadh.</translation>
+        <translation type="vanished">Chaidh an staid “Buill clàraichte a-mhàin” a thoglachadh.</translation>
     </message>
     <message>
         <source>Super power activated.</source>
@@ -4695,6 +5262,22 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>This command is only available in rooms.</source>
         <translation>Chan eil an àithne seo ri fhaighinn ach ann an seòmar.</translation>
+    </message>
+    <message>
+        <source>This server no longer allows unregistered players to join.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This server now allows unregistered players to join.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
