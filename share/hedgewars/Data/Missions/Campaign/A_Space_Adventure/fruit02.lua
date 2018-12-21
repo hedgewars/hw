@@ -249,8 +249,12 @@ end
 function onNewTurn()
 	if not inBattle and CurrentHedgehog == green1.gear then
 		EndTurn(true)
-	elseif CurrentHedgehog == green2.gear or CurrentHedgehog == green3.gear then
-		EndTurn(true)
+	elseif (not inBattle) and GetHogTeamName(CurrentHedgehog) == teamA.name then
+		if CurrentHedgehog ~= hero.gear then
+			SwitchHog(hero.gear)
+		end
+		SetTurnTimeLeft(MAX_TURN_TIME)
+		wind()
 	elseif inBattle then
 		if CurrentHedgehog == green1.gear and previousHog ~= hero.gear then
 			EndTurn(true)
@@ -263,9 +267,6 @@ function onNewTurn()
 			end
 		end
 		SetTurnTimeLeft(20000)
-		wind()
-	elseif not inBattle and CurrentHedgehog == hero.gear then
-		SetTurnTimeLeft(MAX_TURN_TIME)
 		wind()
 	else
 		EndTurn(true)
