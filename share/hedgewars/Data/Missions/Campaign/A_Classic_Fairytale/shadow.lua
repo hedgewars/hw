@@ -147,18 +147,6 @@ hogNr = {}
 cannibalDead = {}
 isHidden = {}
 
-local grenadeHint = loc("Grenade hint: Set timer with the [Timer] controls, aim with [Up]/[Down].") .. "|" ..
-                    loc("Hold [Attack] pressed to throw with more power.")
-if INTERFACE == "touch" then
-  grenadeHint = grenadeHint .. "|" ..
-                loc("Change detonation timer: Tap the [Clock]") .. "|" ..
-                loc("Attack: Tap the [Bomb]")
-else
-  grenadeHint = grenadeHint .. "|" ..
-                loc("Set detonation timer: [1]-[5]") .. "|" ..
-                loc("Attack: [Space]")
-end
-
 --------------------------Anim skip functions--------------------------
 function AfterRefusedAnim()
   if stage == loseStage then
@@ -330,7 +318,7 @@ function AfterAttackedAnim()
     return
   end
   stage = aloneStage
-  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!") .. "|" .. grenadeHint, 1, 12000)
+  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!"), 1, 12000)
   AddAmmo(cannibals[6], amGrenade, 1)
   AddAmmo(cannibals[6], amFirePunch, 0)
   AddAmmo(cannibals[6], amBaseballBat, 0)
@@ -895,7 +883,7 @@ function DoReadyForStronglings()
     return
   end
 
-  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Defeat the cannibals!") .."|".. loc("Leaks A Lot must survive!") .. "|" .. grenadeHint, 1, 12000)
+  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Defeat the cannibals!") .."|".. loc("Leaks A Lot must survive!"), 1, 12000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
   AddAmmo(leaks, amSkip, 100)

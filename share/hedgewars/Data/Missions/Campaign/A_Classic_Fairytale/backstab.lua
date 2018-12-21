@@ -593,7 +593,7 @@ function AfterAfterChoiceAnim()
   SetGearMessage(speakerHog, 0)
   SetState(speakerHog, 0)
   SetTurnTimeLeft(MAX_TURN_TIME)
-  ShowMission(loc("Backstab"), loc("The food bites back"), loc("Defeat the cannibals"), 1, 4000)
+  ShowMission(loc("Backstab"), loc("The food bites back"), loc("Defeat the cannibals!"), 1, 4000)
   SpawnCrates()
 end
 

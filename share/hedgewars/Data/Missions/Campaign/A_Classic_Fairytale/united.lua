@@ -74,10 +74,10 @@ function AfterHogDeadAnim()
 end
 
 function AfterStartAnim()
-  local goal = loc("Defeat the cannibals!|")
+  local goal = loc("Defeat the cannibals!")
   local chiefgoal = loc("Try to protect the chief! You won't lose if he dies, but it is advised that he survives.")
   SetTurnTimeLeft(TurnTime)
-  ShowMission(loc("United We Stand"), loc("Invasion"), goal .. chiefgoal, 1, 6000)
+  ShowMission(loc("United We Stand"), loc("Invasion"), goal .. "|" .. chiefgoal, 1, 6000)
 end
 
 function SkipStartAnim()

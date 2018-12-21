@@ -474,7 +474,7 @@ function redTeamDeath(gear)
 	saveCompletedStatus(3)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You retrieved the lost part."))
-	SendStat(siCustomAchievement, loc("You defended yourself against the Fruit Assassins."))
+	SendStat(siCustomAchievement, string.format(loc("You defended yourself against %s."), teamC.name))
 	sendSimpleTeamRankings({teamA.name, teamC.name})
 	EndGame()
 end
