@@ -747,7 +747,7 @@ function onGameInit()
 	Theme = "Nature"
 
 
-  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddMissionTeam(-2)
   youngh = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   elderh = AddHog(loc("Righteous Beard"), 0, 99, "IndianChief")
   princess = AddHog(loc("Fell From Heaven"), 0, 300, "tiara")

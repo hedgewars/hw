@@ -19,10 +19,10 @@ A_Classic_Fairytale-dragon.name="6. Mission: Die Höhle des Löwen"
 A_Classic_Fairytale-dragon.desc="Unser Held muss auf die andere Seite des Sees kommen. Werd zum Seilprofi und vermeide es, von feindlichen Schüssen getroffen zu werden."
 
 A_Classic_Fairytale-family.name="7. Mission: Familientreffen"
-A_Classic_Fairytale-family.desc="Unser Held muss erneut die Eingeborenen retten. Eliminiere die feindlichen Igel und befreie deine Kameraden. Benutze deine Ressourcen vorsichtig, weil sie begrenzt sind. Bohr ein paar Löcher an den richtigen Stellen und nähere dich der Prinzessin."
+A_Classic_Fairytale-family.desc="Unser Held muss erneut den Stamm retten. Eliminiere die feindlichen Igel und befreie deine Kameraden. Benutze deine Ressourcen vorsichtig, weil sie begrenzt sind. Bohr ein paar Löcher an den richtigen Stellen und nähere dich der Prinzessin."
 
 A_Classic_Fairytale-queen.name="8. Mission: Lang lebe die Königin"
-A_Classic_Fairytale-queen.desc="Die Eingeborenen müssen noch einmal kämpfen. Um zu gewinnen, müssen sie den Verräter bekämpfen und alle verfügbaren Ressourcen benutzen. Besieg den Feind!"
+A_Classic_Fairytale-queen.desc="Der Stamm muss noch einmal kämpfen. Um zu gewinnen, müssen die Igel den Verräter bekämpfen und alle verfügbaren Ressourcen benutzen. Besieg den Feind!"
 
 A_Classic_Fairytale-enemy.name="9. Mission: Der Feind meines Feindes"
 A_Classic_Fairytale-enemy.desc="Was für eine umwerfende Wendung! Undichte Stelle muss mit den … »Kannibalen« gegen den gemeinsamen Feind – die bösen Cyborgs – kämpfen!"

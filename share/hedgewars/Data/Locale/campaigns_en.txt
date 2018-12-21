@@ -19,10 +19,10 @@ A_Classic_Fairytale-dragon.name="Mission 6: Dragon's Lair"
 A_Classic_Fairytale-dragon.desc="Our hero has to get to the other side of the lake. Become a rope master and avoid getting hit by the enemy shots."
 
 A_Classic_Fairytale-family.name="Mission 7: Family Reunion"
-A_Classic_Fairytale-family.desc="Our hero has to save the natives once more. Eliminate the enemy hogs and free your comrades. Use your resources carefully as they are limited. Drill some holes in the right spot and get close to the princess."
+A_Classic_Fairytale-family.desc="Our hero has to save the tribe once more. Eliminate the enemy hogs and free your comrades. Use your resources carefully as they are limited. Drill some holes in the right spot and get close to the princess."
 
 A_Classic_Fairytale-queen.name="Mission 8: Long Live The Queen"
-A_Classic_Fairytale-queen.desc="The natives have to fight once again. In order to win, they'll have to fight the traitor and use all the resources available. Defeat the enemy!"
+A_Classic_Fairytale-queen.desc="The tribe has to fight once again. In order to win, they'll have to fight the traitor and use all the resources available. Defeat the enemy!"
 
 A_Classic_Fairytale-enemy.name="Mission 9: The Enemy Of My Enemy"
 A_Classic_Fairytale-enemy.desc="What a great twist! Leaks a Lot has to fight side by side with the … “cannibals” against the common enemy: The evil cyborgs!"

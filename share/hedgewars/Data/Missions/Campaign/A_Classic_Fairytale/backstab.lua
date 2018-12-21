@@ -966,7 +966,7 @@ function AddHogs()
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddMissionTeam(-2)
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end

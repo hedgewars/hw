@@ -311,12 +311,13 @@ function GetVariables()
 end
 
 function AddHogs()
-  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  local nativesTeamName = AddMissionTeam(-2)
   for i = 1, 5 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-	AddTeam(loc("More Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  local grave, voice, flag = GetHogGrave(natives[1]), GetHogVoicepack(natives[1]), GetHogFlag(natives[1])
+  AddTeam(string.format(loc("%s (contd.)"), nativesTeamName), -2, grave, "Island", voice, flag)
   for i = 6, 10 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
@@ -327,7 +328,7 @@ function AddHogs()
   end
 
   if m8Scene == denseScene or m8Scene == waterScene then
-    AddTeam(loc("Traitors"), -2, "Bone", "Island", "HillBilly", "cm_bloodyblade")
+    AddTeam(loc("Traitors"), -2, grave, "Island", voice, "cm_bloodyblade")
     if m8Scene == denseScene then
       DeleteGear(natives[2])
       natives[2] = AddHog(nativeNames[2], 0, 100, nativeHats[2])

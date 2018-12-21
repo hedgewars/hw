@@ -729,7 +729,7 @@ leaderbotTeamName = nil
 cyborgTeamName = nil
 
 function AddHogs()
-  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddMissionTeam(-2)
   for i = 7, 9 do
     natives[i-6] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
     origNatives[i-6] = natives[i-6]

@@ -627,7 +627,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddMissionTeam(-2)
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 200, nativeHats[i])
     gearDead[natives[i]] = false

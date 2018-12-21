@@ -528,7 +528,7 @@ function AddHogs()
   cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
-  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddMissionTeam(-2)
   -- There are 3-4 natives in this mission
   natives[1] = AddHog(nativeNames[leaksNum], 0, 100, nativeHats[leaksNum])
   if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0 then
