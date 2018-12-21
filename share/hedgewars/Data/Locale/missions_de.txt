@@ -17,7 +17,7 @@ Basic_Training_-_Flying_Saucer.name=Grundausbildung: Fliegende Untertasse
 Basic_Training_-_Flying_Saucer.desc="Mit einer fliegenden Untertasse erreicht man so ziemlich jeden Punkt, wenn man denn fliegen kann. Lern, wie man fliegt, wie man von einer fliegenden Untertasse aus angreift und probier ein paar coole Stunts aus."
 
 User_Mission_-_Dangerous_Ducklings.name=Gefährliche Entchen
-User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das in der Grundausbildung Gelernte in die Tag umsetzt!"
+User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das in der Grundausbildung Gelernte in die Tat umsetzt!"
 
 User_Mission_-_Diver.name=Taucher
 User_Mission_-_Diver.desc="Diese amphibische Angriffsstrategie ist schwieriger, als sie aussieht."
