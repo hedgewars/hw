@@ -1095,7 +1095,7 @@ function onGameInit()
   leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
 
-  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_female")
   princess = AddHog(loc("Fell From Heaven"), 0, 200, "tiara")
 
   cannibalsTeamName = AddTeam(loc("Cannibal Sentry"), -1, "skull", "Island", "Pirate","cm_vampire")

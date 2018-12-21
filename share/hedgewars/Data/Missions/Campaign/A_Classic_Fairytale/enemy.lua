@@ -546,7 +546,7 @@ function AddHogs()
     table.insert(players, natives[i])
   end
 
-  cannibalsTeamName = AddTeam(loc("Cannibals"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  cannibalsTeamName = AddTeam(loc("Cannibals"), -2, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, cannibalsNum do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, "Zombi")
     table.insert(players, cannibals[i])

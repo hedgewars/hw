@@ -524,7 +524,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_female")
   princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
   SetGearAIHints(princess, aihDoesntMatter)
   gearDead[princess] = false

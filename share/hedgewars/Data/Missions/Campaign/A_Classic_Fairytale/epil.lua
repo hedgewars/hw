@@ -322,7 +322,7 @@ function AddHogs()
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-	AddTeam(loc("Cannibals"), -2, "skull", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Cannibals"), -2, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 5 do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, cannibalHats[i])
   end
