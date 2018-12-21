@@ -64,7 +64,7 @@ function onGameInit()
 	hh[6] = AddHog(loc("Sponge"), 1, 100, "sf_chunli")
 	hh[7] = AddHog(loc("Deadweight"), 1, 100, "dish_Teacup")
 
-	playerTeamname = AddMissionTeam(-1)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(1)
 
 	SetGearPosition(player, 3992, 733)

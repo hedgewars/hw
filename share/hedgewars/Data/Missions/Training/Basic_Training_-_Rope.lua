@@ -47,7 +47,7 @@ local cpX, cpY = 208, 1384	-- hog checkpoint, initialized with start coords
 -- "Constants"
 local initHogHealth = 50
 local initHogHealthFinal = 1
-local teamName = loc("Wannabe Ropers")
+local teamName
 
 local girderData = {
 	{2012, 1366, 6}, -- water gate
@@ -96,7 +96,7 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	AddMissionTeam(-1)
+	teamName = AddMissionTeam(-1)
 	hog = AddMissionHog(initHogHealth)
 	SetGearPosition(hog, cpX, cpY)
 	SetEffect(hog, heResurrectable, 1)
