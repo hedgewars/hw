@@ -43,6 +43,7 @@ local thugs = { thug1, thug2, thug3, thug4, thug5, thug6, thug7 }
 local teamA = {}
 local teamB = {}
 local teamC = {}
+local teamD = {}
 -- hedgehogs values
 hero.name = loc("Hog Solo")
 hero.x = 520
@@ -82,8 +83,10 @@ teamA.name = loc("Hog Solo")
 teamA.color = -6
 teamB.name = loc("PAotH")
 teamB.color = teamA.color
-teamC.name = loc("Professor")
+teamC.name = loc("Professor's Team")
 teamC.color = -2
+teamD.name = loc("Professor")
+teamD.color = -2
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -109,7 +112,7 @@ function onGameInit()
 	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 
-	-- PAotH
+	-- PAotH (passive team)
 	teamB.name = AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
@@ -120,7 +123,7 @@ function onGameInit()
 	HogTurnLeft(paoth2.gear, true)
 	SetGearAIHints(paoth2.gear, aihDoesntMatter)
 
-	-- Professor and Thugs
+	-- Professor's Team (computer enemy)
 	teamC.name = AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default", "cm_sine")
 	professor.bot = AddHog(professor.name, 1, 300, "tophats")
 	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
@@ -132,8 +135,10 @@ function onGameInit()
 		HogTurnLeft(thugs[i].gear, not thugs[i].turnLeft)
 	end
 
-	teamC.name = AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
+	-- Professor (special team for cut sequence only)
+	teamD.name = AddTeam(teamD.name, teamD.color, "star", "Island", "Default", "cm_sine")
 	professor.human = AddHog(professor.name, 0, 300, "tophats")
+	-- hog will be removed and replaced by professor.bot after cut sequence
 	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
 	HogTurnLeft(professor.human, true)
 
