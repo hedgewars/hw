@@ -97,6 +97,8 @@ function onGameInit()
 	WaterRise = 0
 	Map = "desert01_map"
 	Theme = "Desert"
+	-- To prevent victory when smugglers have been defeated
+	GameFlags = gfOneClanMode
 
 	-- get hero health
 	local heroHealth = 100
