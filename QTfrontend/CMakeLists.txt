@@ -49,7 +49,15 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h ${locsout})
 # Credits localization
 file(GLOB CreditsCSV ${CMAKE_SOURCE_DIR}/QTfrontend/res/credits.csv)
 foreach(csvfile ${CreditsCSV})
+    # Load credits.csv
     file(READ ${csvfile} csv)
+
+    # Match first line of CSV file
+    string(REGEX MATCH "(E|S|U),\"[^\n\"]+\"" loc_top ${csv})
+    string(REGEX REPLACE "(E|S|U),\"([^\n\"]+)\"" "\nQT_TRANSLATE_NOOP(\"credits\", \"\\2\")" s ${loc_top})
+    list(APPEND csvlocs ${s})
+
+    # Match remaining lines of CSV file
     string(REGEX MATCHALL "\n(E|S|U),\"[^\n\"]+\"" locs ${csv})
     foreach(str ${locs})
         string(REGEX REPLACE "(E|S|U),\"([^\n\"]+)\"" "QT_TRANSLATE_NOOP(\"credits\", \"\\2\")" s ${str})
