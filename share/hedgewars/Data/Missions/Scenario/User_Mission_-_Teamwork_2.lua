@@ -26,8 +26,7 @@ function onGameInit()
 	Map = "CrazyMission"
 	Theme = "CrazyMission"
 
-	local idx = AddMissionTeam(-1)
-	playerTeamName = GetTeamName(idx)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(30)
 	hlayer = AddMissionHog(40)
 

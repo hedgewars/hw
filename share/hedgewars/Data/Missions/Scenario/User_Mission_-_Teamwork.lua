@@ -24,8 +24,7 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	local idx = AddMissionTeam(-1)
-	playerTeamName = GetTeamName(idx)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(50)
 	p2 = AddMissionHog(20)
 

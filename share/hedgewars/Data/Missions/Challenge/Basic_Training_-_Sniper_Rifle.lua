@@ -133,8 +133,7 @@ function onGameInit()
 	HealthDecrease = 0
 
 	-- Create the player team
-	AddMissionTeam(-1)
-	playerTeamName = GetTeamName(0)
+	playerTeamName = AddMissionTeam(-1)
 	-- And add a hog to it
 	player = AddMissionHog(1)
 	SetGearPosition(player, 602, 1465)
