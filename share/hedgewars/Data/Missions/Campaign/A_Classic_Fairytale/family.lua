@@ -104,6 +104,11 @@ cyborgsPos = {{2243, 1043}, {3588, 1227}, {2781, 1388},
               {3749, 1040}, {2475, 1338}, {3853, 881}}
 cyborgsDir = {"Left", "Left", "Left", "Left", "Left", "Right"}
 
+princessTeamName = nil
+nativesTeamName = nil
+biomechanicTeamName = nil
+cyborgTeamName = nil
+
 princessPos = {3737, 1181}
 crateConsts = {}
 reactions = {}
@@ -379,7 +384,7 @@ function Victory()
       SaveCampaignVar("Progress", "7")
     end
     princessFreed = true
-    DismissTeam(loc("011101001"))
+    DismissTeam(cyborgTeamName)
     EndTurn(true)
   end
 end
@@ -435,8 +440,8 @@ function EndMission()
     RemoveEventFunc(CheckCloseToPrincess)
     RemoveEventFunc(CheckPrincessFreed)
     AddCaption(loc("So the princess was never heard of again ..."))
-    DismissTeam(loc("Natives"))
-    DismissTeam(loc("Princess"))
+    DismissTeam(nativesTeamName)
+    DismissTeam(princessTeamName)
     EndTurn(true)
   end
 end
@@ -519,22 +524,22 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
   SetGearAIHints(princess, aihDoesntMatter)
   gearDead[princess] = false
 
-  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 7, 9 do
     natives[i-6] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
     gearDead[natives[i-6]] = false
   end
 
-  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   gearDead[cyborg] = false
 
-  AddTeam(loc("Biomechanic Team"), -1, "ring", "UFO", "Robot", "cm_cyborg")
+  biomechanicTeamName = AddTeam(loc("Biomechanic Team"), -1, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
     gearDead[cyborgs[i]] = false
@@ -613,7 +618,7 @@ end
 function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("Biomechanic Team") then
+    if GetHogTeamName(gear) == biomechanicTeamName then
       cyborgsLeft = cyborgsLeft - 1
     end
   end

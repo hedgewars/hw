@@ -94,6 +94,9 @@ choiceAttack = 3
 
 HogNames = {loc("Brainiac"), loc("Corpsemonger"), loc("Femur Lover"), loc("Glark"), loc("Bonely"), loc("Rot Molester"), loc("Bloodrocutor"), loc("Muscle Dissolver"), loc("Bloodsucker")}
 
+nativesTeamName = nil
+weaklingsTeamName = nil
+
 ---POSITIONS---
 
 cannibalPos = {{3108, 1127}, 
@@ -614,13 +617,13 @@ function RefusedStart()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   ramon = AddHog(loc("Ramon"), 0, 100, "rasta")
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   spiky = AddHog(loc("Spiky Cheese"), 0, 100, "hair_yellow")
 
-  AddTeam(loc("Weaklings"), -1, "skull", "Island", "Pirate","cm_vampire")
+  weaklingsTeamName = AddTeam(loc("Weaklings"), -1, "skull", "Island", "Pirate","cm_vampire")
   cannibals = {}
   cannibals[1] = AddHog(loc("Brainiac"), 5, 20, "Zombi")
 
@@ -794,7 +797,7 @@ function DoWeaklingsKilled()
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
   stage = interWeakStage
-  DismissTeam(loc("Weaklings"))
+  DismissTeam(weaklingsTeamName)
 end
 
 function CheckRefuse()
@@ -1003,7 +1006,7 @@ function DoDead()
   end
   AddCaption(loc("...and so the cyborgs took over the world..."))
   stage = loseStage
-  DismissTeam(loc("Natives"))
+  DismissTeam(nativesTeamName)
 end
 
 function CheckDenseDead()
@@ -1088,9 +1091,9 @@ function onGearDelete(gear)
 end
 
 function onGearAdd(gear)
-  if GetGearType(gear) == gtGrenade and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+  if GetGearType(gear) == gtGrenade and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
     grenadeUsed = true
-  elseif GetGearType(gear) == gtShotgunShot and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+  elseif GetGearType(gear) == gtShotgunShot and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
     shotgunUsed = true
   end
 end

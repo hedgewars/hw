@@ -135,6 +135,11 @@ m2SpikyDead = 0
 TurnsLeft = 0
 stage = 0
 
+nativesTeamName = nil
+princessTeamName = nil
+cannibalsTeamName = nil
+cyborgTeamName = nil
+
 startAnimStarted = false
 blowTaken = false
 fireTaken = false
@@ -179,8 +184,8 @@ winAnimAD = {}
 
 --/////////////////////////Animation Functions///////////////////////
 function AfterMidFailAnim()
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("Princess"))
+  DismissTeam(nativesTeamName)
+  DismissTeam(princessTeamName)
   EndTurn(true)
 end
 
@@ -910,8 +915,8 @@ function DoLeaksDead()
   if not princessDead then
     EndTurn(true)
     AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
-    DismissTeam(loc("Natives"))
-    DismissTeam(loc("Princess"))
+    DismissTeam(nativesTeamName)
+    DismissTeam(princessTeamName)
   end
 end
 
@@ -923,8 +928,8 @@ function DoDenseDead()
   if not princessDead then
     EndTurn(true)
     AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
-    DismissTeam(loc("Natives"))
-    DismissTeam(loc("Princess"))
+    DismissTeam(nativesTeamName)
+    DismissTeam(princessTeamName)
   end
 end
 
@@ -1012,8 +1017,8 @@ function DoLost()
   if not (leaksDead or denseDead) then
     AddAnim(endFailAnim)
   end
-  AddFunction({func = DismissTeam, args = {loc("Natives")}})
-  AddFunction({func = DismissTeam, args = {loc("Princess")}})
+  AddFunction({func = DismissTeam, args = {nativesTeamName}})
+  AddFunction({func = DismissTeam, args = {princessTeamName}})
   AddFunction({func = EndTurn, args = {true}})
 end
 
@@ -1032,8 +1037,8 @@ end
 
 function FinishWon()
   SwitchHog(leaks)
-  DismissTeam(loc("Cannibal Sentry"))
-  DismissTeam(loc("011101001"))
+  DismissTeam(cannibalsTeamName)
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 
@@ -1086,14 +1091,14 @@ function onGameInit()
 
   AnimInit(true)
 
-  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
 
-  AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   princess = AddHog(loc("Fell From Heaven"), 0, 200, "tiara")
 
-  AddTeam(loc("Cannibal Sentry"), -1, "skull", "Island", "Pirate","cm_vampire")
+  cannibalsTeamName = AddTeam(loc("Cannibal Sentry"), -1, "skull", "Island", "Pirate","cm_vampire")
   cannibals = {}
   for i = 1, 4 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
@@ -1107,7 +1112,7 @@ function onGameInit()
     SetEffect(cannibals[i], heArtillery, 1)
   end
 
-  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Y3K1337"), 0, 200, "cyborg1")
 
   AnimSetGearPosition(dense, 0, 0)
@@ -1196,7 +1201,7 @@ function onNewTurn()
     AnimSwitchHog(leaks)
     SetGearMessage(leaks, 0)
     SetTurnTimeLeft(MAX_TURN_TIME)
-  elseif GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
+  elseif GetHogTeamName(CurrentHedgehog) ~= nativesTeamName then
     SetTurnTimeLeft(20000)
   else
     TurnsLeft = TurnsLeft - 1

@@ -747,8 +747,8 @@ function onGameInit()
 	Theme = "Nature"
 
 
-	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
-	youngh = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
+  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  youngh = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   elderh = AddHog(loc("Righteous Beard"), 0, 99, "IndianChief")
   princess = AddHog(loc("Fell From Heaven"), 0, 300, "tiara")
   AnimSetGearPosition(princess, 1911, 1361)

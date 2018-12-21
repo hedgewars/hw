@@ -78,6 +78,12 @@ cyborgsDir = {"Right", "Right", "Left", "Right", "Right", "Left"}
 leaderPos = {3474, 151}
 leaderDir = "Left"
 
+cyborgTeamName = nil
+nativesTeamName = nil
+cannibalsTeamName = nil
+hedgecogsTeamName = nil
+leaderTeamName = nil
+
 -----------------------------Variables---------------------------------
 natives = {}
 origNatives = {}
@@ -419,9 +425,9 @@ function FailedMission()
 end
 
 function LoseMission()
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("Cannibals"))
-  DismissTeam(loc("011101001"))
+  DismissTeam(nativesTeamName)
+  DismissTeam(cannibalsTeamName)
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 
@@ -437,7 +443,7 @@ function WinMission()
   if progress and progress<9 then
     SaveCampaignVar("Progress", "9")
   end
-  DismissTeam(loc("011101001"))
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 -----------------------------Misc--------------------------------------
@@ -519,10 +525,10 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
-  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   -- There are 3-4 natives in this mission
   natives[1] = AddHog(nativeNames[leaksNum], 0, 100, nativeHats[leaksNum])
   if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0 then
@@ -540,7 +546,7 @@ function AddHogs()
     table.insert(players, natives[i])
   end
 
-  AddTeam(loc("Cannibals"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  cannibalsTeamName = AddTeam(loc("Cannibals"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, cannibalsNum do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, "Zombi")
     table.insert(players, cannibals[i])
@@ -548,13 +554,13 @@ function AddHogs()
   playersNum = #players
   playersLeft = playersNum
 
-  AddTeam(loc("Hedge-cogs"), -9, "ring", "UFO", "Robot", "cm_cyborg")
+  hedgecogsTeamName = AddTeam(loc("Hedge-cogs"), -9, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 80, "cyborg2")
   end
 
   if m8EnemyFled == 1 then
-    AddTeam(loc("Leader"), -9, "ring", "UFO", "Robot", "cm_cyborg")
+    leaderTeamName = AddTeam(loc("Leader"), -9, "ring", "UFO", "Robot", "cm_cyborg")
     if m8Scene == denseScene then
       leader = AddHog(loc("Dense Cloud"), 2, 200, nativeHats[denseNum])
     elseif m8Scene == waterScene then
@@ -628,7 +634,7 @@ end
 function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("Natives") then
+    if GetHogTeamName(gear) == nativesTeamName then
       for i = 1, nativesLeft do
         if natives[i] == gear then
           table.remove(natives, i)
@@ -637,7 +643,7 @@ function onGearDelete(gear)
           playersLeft = playersLeft - 1
         end
       end
-    elseif GetHogTeamName(gear) == loc("Cannibals") then
+    elseif GetHogTeamName(gear) == cannibalsTeamName then
       for i = 1, cannibalsLeft do
         if cannibals[i] == gear then
           table.remove(cannibals, i)
@@ -646,7 +652,7 @@ function onGearDelete(gear)
           playersLeft = playersLeft - 1
         end
       end
-    elseif GetHogTeamName(gear) == loc("Hedge-cogs") then
+    elseif GetHogTeamName(gear) == hedgecogsTeamName then
       for i = 1, cyborgsLeft do
         if cyborgs[i] == gear then
           table.remove(cyborgs, i)
@@ -684,11 +690,11 @@ function onNewTurn()
   elseif cyborgsDeadFresh then
     cyborgsDeadFresh = false
     WonMission()
-  elseif nativesDeadFresh and GetHogTeamName(CurrentHedgehog) == loc("Cannibals") then
-    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, Natives!"), SAY_SHOUT, 0)
+  elseif nativesDeadFresh and GetHogTeamName(CurrentHedgehog) == cannibalsTeamName then
+    AnimSay(CurrentHedgehog, string.format(loc("Your deaths will be avenged, %s!"), nativesTeamName), SAY_SHOUT, 0)
     nativesDeadFresh = false
-  elseif cannibalsDeadFresh and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
-    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, Cannibals!"), SAY_SHOUT, 0)
+  elseif cannibalsDeadFresh and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
+    AnimSay(CurrentHedgehog, string.format(loc("Your deaths will be avenged, %s!"), cannibalsTeamName), SAY_SHOUT, 0)
     cannibalsDeadFresh = false
   end
 end

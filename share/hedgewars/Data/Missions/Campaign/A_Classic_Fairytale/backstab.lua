@@ -143,6 +143,11 @@ choice = 0
 highJumped = false
 TurnsLeft = 0
 startNativesNum = 0
+nativesTeamName = nil
+tribeTeamName = nil
+cyborgTeamName = nil
+cannibalsTeamName1 = nil
+cannibalsTeamName2 = nil
 
 startAnim = {}
 afterChoiceAnim = {}
@@ -680,9 +685,9 @@ end
 
 function DoDeployedDead()
   ShowMission(loc("Backstab"), loc("Brutus"), loc("You have failed to save the tribe!"), 0, 6000)
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("Tribe"))
-  DismissTeam(loc("011101001"))
+  DismissTeam(nativesTeamName)
+  DismissTeam(tribeTeamName)
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 
@@ -725,8 +730,8 @@ end
 
 function DoKilledOther()
   ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), 0, 6000)
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("Tribe"))
+  DismissTeam(nativesTeamName)
+  DismissTeam(tribeTeamName)
   EndTurn(true)
 end
 
@@ -833,10 +838,10 @@ function AfterWave3DeadAnim()
     end
   end
 
-  DismissTeam(loc("Tribe"))
-  DismissTeam(loc("Assault Team"))
-  DismissTeam(loc("Reinforcements"))
-  DismissTeam(loc("011101001"))
+  DismissTeam(tribeTeamName)
+  DismissTeam(cannibalsTeamName1)
+  DismissTeam(cannibalsTeamName2)
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 
@@ -956,28 +961,28 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("Tribe"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  tribeTeamName = AddTeam(loc("Tribe"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 8, 9 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
   nativesNum = 7
 
-  AddTeam(loc("Assault Team"), -1, "skull", "Island", "Pirate", "cm_vampire")
+  cannibalsTeamName1 = AddTeam(loc("Assault Team"), -1, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 6 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 50, "vampirichog")
   end
 
-  AddTeam(loc("Reinforcements"), -1, "skull", "Island", "Pirate", "cm_vampire")
+  cannibalsTeamName2 = AddTeam(loc("Reinforcements"), -1, "skull", "Island", "Pirate", "cm_vampire")
   for i = 7, 9 do
     cannibals[i] = AddHog(cannibalNames[i], 2, 50, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   for i = 1, 9 do
@@ -1118,13 +1123,13 @@ function onNewTurn()
     AddCaption(string.format(loc("Turns until arrival: %d"), TurnsLeft))
   end
   if deployedHog then
-    if GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+    if GetHogTeamName(CurrentHedgehog) == nativesTeamName then
       AnimSwitchHog(deployedHog)
     end
   end
 
   if stage == spyKillStage then
-    if GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
+    if GetHogTeamName(CurrentHedgehog) ~= nativesTeamName then
       EndTurn(true)
     else
       if CurrentHedgehog == spyHog then
@@ -1134,7 +1139,7 @@ function onNewTurn()
       SetTurnTimeLeft(MAX_TURN_TIME)
     end
   else
-    if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+    if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
       SetupHogDeadAnim(freshDead)
       AddAnim(hogDeadAnim)
       AddFunction({func = AfterHogDeadAnim, args = {}})

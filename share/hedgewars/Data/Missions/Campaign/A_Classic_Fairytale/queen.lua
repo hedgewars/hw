@@ -499,7 +499,7 @@ function SkipAnim(anim)
   if anim == startAnim then
     SetGearPosition(enemy, unpack(enemyPos))
   end
-  if GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
+  if GetHogTeamName(CurrentHedgehog) ~= nativesTeamName then
     EndTurn(true)
   end
   AnimWait(enemy, 1)
@@ -555,9 +555,9 @@ end
 
 function KillEnemy()
   if enemyFled == "1" then
-    DismissTeam(loc("Leaderbot"))
+    DismissTeam(leaderbotTeamName)
   end
-  DismissTeam(loc("011101001"))
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 
@@ -722,8 +722,14 @@ function SetupAmmo()
   AddAmmo(natives[1], amMolotov, 0)
 end
 
+nativesTeamName = nil
+beepTeamName = nil
+corpTeamName = nil
+leaderbotTeamName = nil
+cyborgTeamName = nil
+
 function AddHogs()
-	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 7, 9 do
     natives[i-6] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
     origNatives[i-6] = natives[i-6]
@@ -732,21 +738,21 @@ function AddHogs()
   origNatives[4] = natives[4]
   nativesLeft = nativesNum
 
-  AddTeam(loc("Beep Loopers"), -1, "ring", "UFO", "Robot", "cm_cyborg")
+  beepTeamName = AddTeam(loc("Beep Loopers"), -1, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsTeamNum[1] do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
   end
 
-  AddTeam(loc("Corporationals"), -1, "ring", "UFO", "Robot", "cm_cyborg")
+  corpTeamName = AddTeam(loc("Corporationals"), -1, "ring", "UFO", "Robot", "cm_cyborg")
   for i = cyborgsTeamNum[1] + 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
   end
   cyborgsLeft = cyborgsTeamNum[1] + cyborgsTeamNum[2]
 
-  AddTeam(loc("Leaderbot"), -1, "ring", "UFO", "Robot", "cm_cyborg")
+  leaderbotTeamName = AddTeam(loc("Leaderbot"), -1, "ring", "UFO", "Robot", "cm_cyborg")
   enemy = AddHog(loc("Name"), 2, 200, "cyborg1")
 
-  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   SetGearPosition(cyborg, unpack(cyborgHidePos))
 
@@ -823,7 +829,7 @@ function onGearDelete(gear)
   local toRemove = nil
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("Beep Loopers") or GetHogTeamName(gear) == loc("Corporationals") then
+    if GetHogTeamName(gear) == beepTeamName or GetHogTeamName(gear) == corpTeamName then
       cyborgsLeft = cyborgsLeft - 1
     elseif GetHogTeamName(gear) == loc("Natives") then
       for i = 1, nativesLeft do
@@ -859,7 +865,7 @@ function onNewTurn()
     SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
-  if GetHogTeamName(CurrentHedgehog) == loc("011101001") then
+  if GetHogTeamName(CurrentHedgehog) == cyborgTeamName then
     EndTurn(true)
   end
 end

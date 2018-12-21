@@ -170,6 +170,8 @@ cyborgPos = {745, 1847}
 cyborgsPos = {{2937, 831}, {2945, 1264}, {2335, 1701}, {448, 484}}
 cyborgsDir = {"Left", "Left", "Left", "Right"}
 
+cyborgTeamName, fighterTeamName = nil, nil
+
 cratePos = {
             {{788, 1919, amGirder, 2}, true}, {{412, 1615, amGirder, 1}, true},
             {{209, 1474, amSniperRifle, 1}}, {{1178, 637, amDEagle, 1}},
@@ -631,11 +633,11 @@ function AddHogs()
     gearDead[natives[i]] = false
   end
 
-  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   gearDead[cyborg] = false
 
-  AddTeam(loc("011101000"), -9, "ring", "UFO", "Robot", "cm_binary")
+  fighterTeamName = AddTeam(loc("011101000"), -9, "ring", "UFO", "Robot", "cm_binary")
   for i = 1, 4 do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 100, "cyborg2")
     gearDead[cyborgs[i]] = false
@@ -710,7 +712,7 @@ end
 function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("011101000") then
+    if GetHogTeamName(gear) == fighterTeamName then
       freshDead = GetHogName(gear)
       cyborgsLeft = cyborgsLeft - 1
     end
@@ -740,13 +742,13 @@ function onNewTurn()
     AddFunction({func = AfterStartAnim, args = {}})
     firstTurn = false
   end
-  if GetHogTeamName(CurrentHedgehog) == loc("011101000") then
+  if GetHogTeamName(CurrentHedgehog) == fighterTeamName then
     if TotalRounds % 6 == 0 then
       AddAmmo(CurrentHedgehog, amSniperRifle, 1)
       AddAmmo(CurrentHedgehog, amDEagle, 1)
     end
     SetTurnTimeLeft(30000)
-  elseif GetHogTeamName(CurrentHedgehog) == loc("011101001") then
+  elseif GetHogTeamName(CurrentHedgehog) == cyborgTeamName then
     EndTurn(true)
   end
 end

@@ -63,6 +63,10 @@ m2DenseDead = 0
 startAnim = {}
 wave2Anim = {}
 finalAnim = {}
+
+nativesTeamName = nil
+cyborgTeamName = nil
+
 --------------------------Anim skip functions--------------------------
 function AfterHogDeadAnim()
   freshDead = nil
@@ -136,7 +140,7 @@ function AfterFinalAnim()
   if progress and progress<4 then
     SaveCampaignVar("Progress", "4")
   end
-  DismissTeam(loc("011101001"))
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 -----------------------------Animations--------------------------------
@@ -323,8 +327,8 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
-	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
+  nativesTeamName = AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   water = AddHog(loc("Fiery Water"), 0, 100, "pirate_jack")
   buffalo = AddHog(loc("Raging Buffalo"), 0, 100, "zoo_Bunny")
@@ -342,7 +346,7 @@ function AddHogs()
     cannibals[i] = AddHog(HogNames[i], 2, 55, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   AnimSetGearPosition(leaks,   unpack(leaksPos))
@@ -534,7 +538,7 @@ function onNewTurn()
     SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
-  if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+  if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
     SetupHogDeadAnim(freshDead)
     AddAnim(hogDeadAnim)
     AddFunction({func = AfterHogDeadAnim, args = {}})

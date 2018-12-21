@@ -311,7 +311,7 @@ function GetVariables()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Natives"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, 5 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
