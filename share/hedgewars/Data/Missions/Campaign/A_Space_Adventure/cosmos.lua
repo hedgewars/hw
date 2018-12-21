@@ -600,9 +600,9 @@ function setFoundDeviceVisual()
 		end
 	end
 	if status.desert01 then
-		vgear = AddVisualGear(4015, 316, vgtBeeTrace, 0, false)
+		vgear = AddVisualGear(3759, 28, vgtBeeTrace, 0, false)
 		if status.desert02 and status.desert03 then
-			vgear = AddVisualGear(4015, 296, vgtBeeTrace, 0, false)
+			vgear = AddVisualGear(3759, 8, vgtBeeTrace, 0, false)
 		end
 	end
 	if status.fruit01 and status.fruit02 then
