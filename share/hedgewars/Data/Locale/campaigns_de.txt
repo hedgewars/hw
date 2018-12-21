@@ -33,43 +33,43 @@ A_Classic_Fairytale-epil.desc="Gratulation! Undichte Stelle kann endlich in Frie
 A_Space_Adventure.name="Ein Weltraumabenteuer"
 
 A_Space_Adventure-cosmos.name="Menü: Weltraumreise"
-A_Space_Adventure-cosmos.desc="Hogera, der Igelplanet, wird bald von einem riesigen Meteorit getroffen. In diesem Wettlauf ums Überleben musst du PAdIs besten Piloten, Igel Einsam, in einer Weltraumreise um die Nachbarplaneten führen, um alle 4 Teile des lang verschollenem Antigravitationsgeräts zu finden!"
+A_Space_Adventure-cosmos.desc="Hogera, der Igelplanet, wird bald von einem riesigen Meteorit getroffen. In diesem Wettlauf ums Überleben musst du einen mutigen Igel, der von der Planetaren Assoziation der Igel (PAdI) beauftragt wurde, in einer Weltraumreise um die Nachbarplaneten führen, um alle 4 Teile des lang verschollenem Antigravitationsgeräts zu finden."
 
 A_Space_Adventure-moon01.name="Hauptmission: Der erste Halt"
-A_Space_Adventure-moon01.desc="Igel Einsam ist auf dem Mond gelandet, um seine fliegende Untertasse aufzutanken, aber Prof. Bösigel war zuerst da und hat einen Hinterhalt aufgestellt! Rette die gefangenen PAdI-Forscher und verscheuche Prof. Bösigel!"
+A_Space_Adventure-moon01.desc="Unser Held ist auf dem Mond gelandet, um die fliegende Untertasse aufzutanken, aber Prof. Bösigel war zuerst da und hat einen Hinterhalt aufgestellt! Rette die gefangenen PAdI-Forscher und verscheuche Prof. Bösigel!"
 
 A_Space_Adventure-moon02.name="Nebenmission: Jag den blauen Igel"
-A_Space_Adventure-moon02.desc="Igel Einsam besucht einen Eremiten, einen alten PAdI-Veteran, der im Mond lebt, um Prof. Bösigel auszuspionieren. Allerdings muss er den Eremiten, Verrückter Renner, zuerst in einem Wettlauf besiegen!"
+A_Space_Adventure-moon02.desc="Unser Held besucht einen Eremiten, einen alten PAdI-Veteranen, der im Mond lebt, um Prof. Bösigel auszuspionieren. Allerdings musst du den Eremiten, Verrückter Renner, zuerst in einem Wettlauf besiegen!"
 
 A_Space_Adventure-ice01.name="Hauptmission: Ein frostiges Abenteuer"
-A_Space_Adventure-ice01.desc="Willkommen auf dem Planeten des Eises. Hier ist es so kalt, dass die meisten Waffen von Igel Einsam nicht funktionieren werden. Du musst dir das verlorene Teil von dem Banditenanführer Thanta ergattern, indem du die Waffen, die du hier findest, verwendest!"
+A_Space_Adventure-ice01.desc="Willkommen auf dem Planeten des Eises. Hier ist es so kalt, dass die meisten Waffen nicht funktionieren werden. Du musst dir das verlorene Teil von dem Banditenanführer Thanta ergattern, indem du die Waffen, die du hier findest, verwendest!"
 
 A_Space_Adventure-ice02.name="Nebenmission: Schwerer Flug"
-A_Space_Adventure-ice02.desc="Igel Einsam konnte nicht einfach nur den Eisplaneten besuchen, ohne das Olympiastadion des Untertassenfliegens zu besuchen! In dieser Mission kannst du deine Flugkünste unter Beweis stellen und deinen Platz unter den Besten einnehmen!"
+A_Space_Adventure-ice02.desc="Unser Held konnte nicht einfach nur den Eisplaneten besuchen, ohne das Olympiastadion des Untertassenfliegens zu besuchen! In dieser Mission kannst du deine Flugkünste unter Beweis stellen und deinen Platz unter den Besten einnehmen!"
 
 A_Space_Adventure-desert01.name="Hauptmission: Suche im Staub"
-A_Space_Adventure-desert01.desc="Du bist auf dem Planeten aus Sand gelandet! Igel Einsam muss das fehlende Teil in den Bergwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
+A_Space_Adventure-desert01.desc="Du bist auf dem Planeten aus Sand gelandet! Unser Held muss das fehlende Teil in den Bergwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
 
 A_Space_Adventure-desert02.name="Nebenmission: Lauf um dein Leben"
-A_Space_Adventure-desert02.desc="Igel Einsam suchte nach dem Teil in diesem Tunnel, als er unerwarteterweise anfing, geflutet zu werden! Komm so schnell wie möglich zur Oberfläche und pass auf, keine Mine auszulösen."
+A_Space_Adventure-desert02.desc="Unser Held suchte nach dem Teil in diesem Tunnel, als er unerwarteterweise anfing, geflutet zu werden! Komm so schnell wie möglich zur Oberfläche und pass auf, keine Mine auszulösen."
 
 A_Space_Adventure-desert03.name="Nebenmission: Präzisionsfliegen"
-A_Space_Adventure-desert03.desc="Igel Einsam hat etwas Zeit, um sein Funkflugzeug zu fliegen und etwas Spaß zu haben. Flieg das Funkflugzeug und triff alle Ziele!"
+A_Space_Adventure-desert03.desc="Unser Held hat etwas Zeit, um mit Funkflugzeugen zu spielen und etwas Spaß zu haben. Flieg das Funkflugzeug und triff alle Ziele!"
 
 A_Space_Adventure-fruit01.name="Hauptmission: Schlechtes Timing"
 A_Space_Adventure-fruit01.desc="Auf dem Obstplaneten laufen die Dinge nicht so gut. Igel sammeln kein Obst, sondern sie bereiten sich auf den Kampf vor. Du musst dich entscheiden, ob du kämpfen oder fliehen wirst."
 
 A_Space_Adventure-fruit02.name="Hauptmission: Zum Greifen nah"
-A_Space_Adventure-fruit02.desc="Igel Einsam nähert sich dem verlorenen Teil des Obstplaneten. Wird ihn Leutnant Limone dabei helfen, das Teil zu besorgen? Oder nicht?"
+A_Space_Adventure-fruit02.desc="Unser Held nähert sich dem verlorenen Teil des Obstplaneten. Wird ihn Leutnant Limone dabei helfen, das Teil zu besorgen? Oder nicht?"
 
 A_Space_Adventure-fruit03.name="Nebenmission: Präzisionsschießen"
-A_Space_Adventure-fruit03.desc="Igel Einsam hat sich verlaufen und ist in dem Hinterhalt der Roten Erdbeeren geraten. Hilf ihm, sie zu eliminieren, um etwas zusätzliche Munition für die Mission »Zum Greifen nah« zu gewinnen."
+A_Space_Adventure-fruit03.desc="Unser Held hat sich verlaufen und ist in dem Hinterhalt der Roten Erdbeeren geraten. Hilf ihm, sie zu eliminieren, um etwas zusätzliche Munition für die Mission »Zum Greifen nah« zu gewinnen."
 
 A_Space_Adventure-death01.name="Hauptmission: Das letzte Gefecht" 
-A_Space_Adventure-death01.desc="Auf dem Todesplaneten, dem sterilsten Planeten in der Gegend, ist Igel Einsam ganz kurz davor, das letzte Teil des Geräts zu holen! Allerdings erwartet ihn eine unangenehme Überraschung."
+A_Space_Adventure-death01.desc="Auf dem Todesplaneten, dem sterilsten Planeten in der Gegend, ist unser Held ganz kurz davor, das letzte Teil des Geräts zu holen! Allerdings erwartet ihn eine unangenehme Überraschung."
 
 A_Space_Adventure-death02.name="Nebenmission: Die Spezialisten töten"
-A_Space_Adventure-death02.desc="Igel Einsam ist wieder in eine schwierige Situation geraten. Hilf ihm, die »5 tödlichen Igel« in ihrem eigenem Spiel zu besiegen!"
+A_Space_Adventure-death02.desc="Unser Held ist wieder in eine schwierige Situation geraten. Besiege die »5 tödlichen Igel« in ihrem eigenem Spiel!"
 
 A_Space_Adventure-final.name="Hauptmission: Der große Knall"
-A_Space_Adventure-final.desc="Igel Einsam muss ein paar Sprengkörper, die auf dem Meteoriten platziert wurden, detonieren. Hilf ihm, diese Mission zu beenden, ohne verletzt zu werden!"
+A_Space_Adventure-final.desc="Unser Held muss ein paar Sprengkörper, die auf dem Meteoriten platziert wurden, detonieren. Beende diese Mission, ohne verletzt zu werden!"

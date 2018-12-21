@@ -81,12 +81,13 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Ally
-	AddTeam(teamB.name, teamB.color, "heart", "Island", "Default", "cm_face")
+	teamB.name = AddTeam(teamB.name, teamB.color, "heart", "Island", "Default", "cm_face")
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	HogTurnLeft(ally.gear, true)

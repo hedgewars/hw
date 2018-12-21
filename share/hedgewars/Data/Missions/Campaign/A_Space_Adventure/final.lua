@@ -50,9 +50,10 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(1)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 
 	initCheckpoint("final")
@@ -151,7 +152,7 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have to destroy all the explosives without dying!"))
 	SendStat(siCustomAchievement, loc("Areas surrounded by a security border are indestructible."))
 	SendStat(siCustomAchievement, loc("Areas surrounded by a green dashed outline are portal-proof and repel portals."))

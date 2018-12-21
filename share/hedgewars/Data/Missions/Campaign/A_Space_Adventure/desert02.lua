@@ -75,9 +75,10 @@ function onGameInit()
 	Map = "desert02_map"
 	Theme = "Desert"
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 
@@ -172,7 +173,7 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("To win the game you have to go to the surface."))
 	SendStat(siCustomAchievement, loc("Most mines are not active."))
 	SendStat(siCustomAchievement, loc("From the second turn and beyond the water rises."))

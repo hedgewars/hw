@@ -1,6 +1,6 @@
 ------------------- ABOUT ----------------------
 --
--- In the desert planet Hero will have to explore
+-- In the desert planet, the hero will have to explore
 -- the dunes below the surface and find the hidden
 -- crates. It is told that one crate contains the
 -- lost part.
@@ -101,17 +101,18 @@ function onGameInit()
 	-- get hero health
 	local heroHealth = 100
 
-	-- Hog Solo
-	AddTeam(teamC.name, teamC.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
+	-- Hero
+	teamC.name = AddMissionTeam(teamC.color)
+	hero.gear = AddMissionHog(heroHealth)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- PAotH undercover scientist and chief Sandologist
-	AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
 	ally.gear = AddHog(ally.name, 0, 100, "Cowboy")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Smugglers
-	AddTeam(teamB.name, teamB.color, "chest", "Island", "Default", "cm_bloodyblade")
+	teamB.name = AddTeam(teamB.name, teamB.color, "chest", "Island", "Default", "cm_bloodyblade")
 	smuggler1.gear = AddHog(smuggler1.name, 1, 100, "hair_orange")
 	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y)
 	smuggler2.gear = AddHog(smuggler2.name, 1, 100, "lambda")
@@ -540,7 +541,7 @@ function checkForWin()
 end
 
 function lose()
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("To win the game you have to find the right crate."))
 	SendStat(siCustomAchievement, loc("You can avoid some battles."))
 	SendStat(siCustomAchievement, loc("Use your ammo wisely."))

@@ -32,7 +32,7 @@ local dialog08 = {}
 local dialog09 = {}
 -- mission objectives
 local goals = {
-	["init"] = {missionName, loc("Getting ready"), loc("Help Hog Solo to find all the parts of the anti-gravity device.")..
+	["init"] = {missionName, loc("Getting ready"), loc("Find all the parts of the anti-gravity device.")..
 	"|"..loc("Travel to all the neighbor planets and collect all the pieces"), 1, 0},
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
 	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Travel carefully as your fuel is limited"), 1, 4500},
@@ -118,19 +118,20 @@ function onGameInit()
 		Map = "cosmos_map" -- custom map included in file
 	end
 	Theme = "Nature"
-	-- I had originally hero in PAotH team and changed it, may reconsider though
-	-- PAotH
-	AddTeam(teamC.name, teamC.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamC.name = AddMissionTeam(teamC.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
-	AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	-- PAotH
+	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
 	director.gear = AddHog(director.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(director.gear, director.x, director.y)
 	doctor.gear = AddHog(doctor.name, 0, 100, "Glasses")
 	AnimSetGearPosition(doctor.gear, doctor.x, doctor.y)
 	-- Guards
-	AddTeam(teamB.name, teamB.color, "Statue", "Island", "Default", "cm_swordshield2")
+	teamB.name = AddTeam(teamB.name, teamB.color, "Statue", "Island", "Default", "cm_swordshield2")
 	guard1.gear = AddHog(guard1.name, 1, 100, "policecap")
 	AnimSetGearPosition(guard1.gear, guard1.x, guard1.y)
 	guard2.gear = AddHog(guard2.name, 1, 100, "policecap")
@@ -474,7 +475,7 @@ function moonLanding(gear)
 		SaveCampaignVar("Mission1", "2")
 		SaveCampaignVar("Mission2", "13")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("Hog Solo arrived at the moon!"))
+		sendStats(string.format(loc("%s arrived at the moon!"), hero.name))
 	end
 end
 
@@ -507,7 +508,7 @@ function fruitPlanetLanding(gear)
 			SaveCampaignVar("Mission2", "10")
 			SaveCampaignVar("Mission3", "1")
 		end
-		sendStats(loc("Hog Solo arrived at the Fruit Planet!"))
+		sendStats(string.format(loc("%s arrived at the Fruit Planet!"), hero.name))
 	end
 end
 
@@ -522,7 +523,7 @@ function desertPlanetLanding(gear)
 		SaveCampaignVar("Mission2", "7")
 		SaveCampaignVar("Mission3", "12")
 		SaveCampaignVar("Mission4", "1")
-		sendStats(loc("Hog Solo arrived at the Desert Planet!"))
+		sendStats(string.format(loc("%s arrived at the Desert Planet!"), hero.name))
 	end
 end
 
@@ -536,7 +537,7 @@ function icePlanetLanding(gear)
 		SaveCampaignVar("Mission1", "5")
 		SaveCampaignVar("Mission2", "6")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("Hog Solo arrived at the Ice Planet!"))
+		sendStats(string.format(loc("%s arrived at the Ice Planet!"), hero.name))
 	end
 end
 
@@ -552,7 +553,7 @@ function deathPlanetLanding(gear)
 		SaveCampaignVar("Mission1", "9")
 		SaveCampaignVar("Mission2", "11")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("Hog Solo arrived at the Planet of Death!"))
+		sendStats(string.format(loc("%s arrived at the Planet of Death!"), hero.name))
 	end
 end
 
@@ -568,7 +569,7 @@ function meteoriteLanding(gear)
 		SaveCampaignVar("UnlockedMissions", "2")
 		SaveCampaignVar("Mission1", "14")
 		SaveCampaignVar("Mission2", "1")
-		sendStats(loc("Hog Solo arrived at the meteorite!"))
+		sendStats(string.format(loc("%s arrived at the meteorite!"), hero.name))
 	end
 end
 
@@ -649,7 +650,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {doctor.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near Secret Base 17 of PAotH in the rural Hogland ..."),  4000}})
-	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("So Hog Solo, here we are ..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {director.gear, string.format(loc("So, %s, here we are ..."), hero.name), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Behind these trees on the east side there is Secret Base 17."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("You have to continue alone from now on."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Be careful, the future of Hogera is in your hands!"), SAY_SAY, 7200}})
@@ -705,7 +706,7 @@ function AnimationSetup()
 	-- DIALOG 08 - Hero wins death01
 	AddSkipFunction(dialog08, Skipanim, {dialog08})
 	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorite’s shadow ..."),  4000}})
-	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("You did great, Hog Solo! However, we aren't out of danger yet!"), SAY_SHOUT, 4500}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, string.format(loc("You did great, %s! However, we aren't out of danger yet!"), hero.name), SAY_SHOUT, 4500}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to stop it now."), SAY_SHOUT, 5000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need it to get split into at least two parts."), SAY_SHOUT, 3000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("PAotH has sent explosives but unfortunately the trigger mechanism seems to be faulty!"), SAY_SHOUT, 5000}})

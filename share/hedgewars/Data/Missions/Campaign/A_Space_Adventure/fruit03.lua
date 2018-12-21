@@ -88,19 +88,20 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	local hats = { "Bandit", "fr_apple", "fr_banana", "fr_lemon", "fr_orange",
 					"fr_pumpkin", "Gasmask", "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_bars")
+	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_bars")
 	for i=1,table.getn(enemiesEven) do
 		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesEven[i].gear, enemiesEven[i].x, enemiesEven[i].y)
 	end
-	AddTeam(teamB.name, teamB.color, "bp2", "Island", "Default", "cm_bars")
+	teamB.name = AddTeam(teamB.name, teamB.color, "bp2", "Island", "Default", "cm_bars")
 	for i=1,table.getn(enemiesOdd) do
 		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesOdd[i].gear, enemiesOdd[i].x, enemiesOdd[i].y)
@@ -260,7 +261,7 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
 	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})

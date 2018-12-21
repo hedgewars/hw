@@ -111,16 +111,17 @@ function onGameInit()
 	WaterRise = 0
 	Map = "moon01_map"
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)
-	-- Hog Solo
-	AddTeam(teamD.name, teamD.color, "Simple", "Island", "Default", "hedgewars")
+	-- Hero
+	teamD.name = AddMissionTeam(teamD.color)
 	if tonumber(GetCampaignVar("HeroHealth")) then
-		hero.gear = AddHog(hero.name, 0, tonumber(GetCampaignVar("HeroHealth")), "war_desertgrenadier1")
+		hero.gear = AddMissionHog(tonumber(GetCampaignVar("HeroHealth")))
 	else
-		hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+		hero.gear = AddMissionHog(100)
 	end
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAotH
-	AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "scif_2001O")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -134,12 +135,12 @@ function onGameInit()
 	AnimSetGearPosition(paoth4.gear, paoth4.x, paoth4.y)
 	HogTurnLeft(paoth4.gear, true)
 	-- Professor
-	AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
+	teamC.name = AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
 	professor.gear = AddHog(professor.name, 0, professor.health, "tophats")
 	AnimSetGearPosition(professor.gear, professor.x, professor.y)
 	HogTurnLeft(professor.gear, true)
 	-- Minions
-	AddTeam(teamB.name, teamB.color, "eyecross", "Island", "Default", "cm_sine")
+	teamB.name = AddTeam(teamB.name, teamB.color, "eyecross", "Island", "Default", "cm_sine")
 	minion1.gear = AddHog(minion1.name, 1, 50, "Gasmask")
 	AnimSetGearPosition(minion1.gear, minion1.x, minion1.y)
 	HogTurnLeft(minion1.gear, true)
@@ -172,7 +173,7 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
-	ShowMission(campaignName, missionName, loc("Hog Solo has to refuel his saucer.")..
+	ShowMission(campaignName, missionName, string.format(loc("%s has to refuel the saucer."), hero.name)..
 	"|"..loc("Rescue the imprisoned PAotH team and get the fuel!"), -amSkip, 0)
 
 	AddAmmo(minion1.gear, amDEagle, 10)
@@ -361,7 +362,7 @@ function weaponsPlatform(gear)
 end
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have to get the weapons and rescue the PAotH researchers."))
 	sendSimpleTeamRankings({teamC.name, teamB.name, teamD.name, teamA.name})
 	EndGame()
@@ -387,7 +388,7 @@ end
 function victory()
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	saveCompletedStatus(1)
-	SendStat(siGameResult, loc("Hog Solo wins, congratulations!"))
+	SendStat(siGameResult, string.format(loc("%s wins, congratulations!"), hero.name))
 	sendSimpleTeamRankings({teamD.name, teamA.name, teamC.name, teamB.name})
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
 	resetCheckpoint() -- reset this mission
@@ -473,7 +474,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near a PAotH base on the moon ..."),  4000}})
-	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Hey, Hog Solo! Finally you have come!"), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, string.format(loc("Hey, %s! Finally you have come!"), hero.name), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("It seems that Professor Hogevil has prepared for your arrival!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("He has captured the rest of the PAotH team and awaits to capture you!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("We have to hurry! Are you armed?"), SAY_SAY, 4300}})

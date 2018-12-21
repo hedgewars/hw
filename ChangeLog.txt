@@ -11,6 +11,7 @@
  + Restructure credits
  + Credits screen in main menu is now translatable
  + Don't show crate spawn message for initial crates in missions
+ * Use player-chosen team identity in campaigns and singleplayer missions
  * Fix last 2 characters in demo chat being missing
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive

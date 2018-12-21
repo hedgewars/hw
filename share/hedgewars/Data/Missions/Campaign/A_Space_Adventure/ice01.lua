@@ -110,17 +110,18 @@ function onGameInit()
 		SaveCampaignVar("HeroHealth", heroHealth)
 	end
 
-	-- Hog Solo
-	AddTeam(teamC.name, teamC.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
+	-- Hero
+	teamC.name = AddMissionTeam(teamC.color)
+	hero.gear = AddMissionHog(heroHealth)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- Ally
-	AddTeam(teamA.name, teamA.color, "heart", "Island", "Default", "cm_face")
+	teamA.name = AddTeam(teamA.name, teamA.color, "heart", "Island", "Default", "cm_face")
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Frozen Bandits
-	AddTeam(teamB.name, teamB.color, "plant2", "Island", "Default", "cm_pirate")
+	teamB.name = AddTeam(teamB.name, teamB.color, "plant2", "Island", "Default", "cm_pirate")
 	bandit1.gear = AddHog(bandit1.name, 1, 120, "Santa")
 	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)
 	HogTurnLeft(bandit1.gear, true)
@@ -439,7 +440,7 @@ function nonAntiFlyArea(gear)
 end
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("To win the game you have to stand next to Thanta."))
 	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
 	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
@@ -469,7 +470,7 @@ function heroAtIceGun(gear)
 end
 
 function thantaDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("Noo, Thanta has to stay alive!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to go next to Thanta."))
 	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))

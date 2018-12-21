@@ -70,13 +70,14 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	shuffleHogs(enemies)
-	AddTeam(teamB.name, teamB.color, "skull", "Island", "Default", "cm_skull")
+	teamB.name = AddTeam(teamB.name, teamB.color, "skull", "Island", "Default", "cm_skull")
 	for i=1,table.getn(enemies) do
 		enemies[i].gear = AddHog(enemies[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)
@@ -208,7 +209,7 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
 	sendSimpleTeamRankings({teamB.name, teamA.name})

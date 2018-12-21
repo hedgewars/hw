@@ -3,7 +3,7 @@
 -- This is the mission to acquire the last part.
 -- This mission is the cameo of Professor Hogevil
 -- who has took hostages H and Dr. Cornelius.
--- Hog Solo has to defeat him and his thugs.
+-- The hero has to defeat him and his thugs.
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -103,13 +103,14 @@ function onGameInit()
 	Map = "death01_map"
 	Theme = "Hell"
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 
 	-- PAotH
-	AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
+	teamB.name = AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -120,7 +121,7 @@ function onGameInit()
 	SetGearAIHints(paoth2.gear, aihDoesntMatter)
 
 	-- Professor and Thugs
-	AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default", "cm_sine")
+	teamC.name = AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default", "cm_sine")
 	professor.bot = AddHog(professor.name, 1, 300, "tophats")
 	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
 	HogTurnLeft(professor.bot, true)
@@ -131,7 +132,7 @@ function onGameInit()
 		HogTurnLeft(thugs[i].gear, not thugs[i].turnLeft)
 	end
 
-	AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
+	teamC.name = AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
 	professor.human = AddHog(professor.name, 0, 300, "tophats")
 	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
 	HogTurnLeft(professor.human, true)
@@ -274,7 +275,7 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("To win the game you have to eliminate Professor Hogevil."))
 	sendSimpleTeamRankings({teamC.name, teamA.name, teamB.name})
 	EndGame()
@@ -303,7 +304,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the uninhabitable Death Planet ..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome Hog Solo, surprised to see me?"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, string.format(loc("Welcome, %s, surprised to see me?"), hero.name), SAY_SAY, 4000}})
 	if profDiedOnMoon then
 		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("After you left the moon, my other loyal minions came and resurrected me so I could complete my master plan."), SAY_SAY, 6000}})
 	else

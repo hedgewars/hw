@@ -1,6 +1,6 @@
 ------------------- ABOUT ----------------------
 --
--- Hog Solo has to catch the other hog in order
+-- The hero has to catch the other hog in order
 -- to get informations about the origin of Pr. Hogevil
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
@@ -63,12 +63,13 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(1)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Crazy Runner
-	AddTeam(teamB.name, teamB.color, "ring", "Island", "Default", "cm_sonic")
+	teamB.name = AddTeam(teamB.name, teamB.color, "ring", "Island", "Default", "cm_sonic")
 	runner.gear = AddHog(runner.name, 0, 100, "sth_Sonic")
 	AnimSetGearPosition(runner.gear, runner.places[1].x, runner.places[1].y)
 	HogTurnLeft(runner.gear, true)
@@ -181,7 +182,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("Let's go!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = moveRunner, args = {}})
-	-- DIALOG 02 - Hog Solo story
+	-- DIALOG 02 - Professor Hogevil story
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3200}})
 	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("The truth about Professor Hogevil"), 5000}})
