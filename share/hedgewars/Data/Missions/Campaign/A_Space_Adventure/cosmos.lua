@@ -745,7 +745,9 @@ end
 
 function sendStatsOnRetry()
 	SendStat(siGameResult, loc("You have to travel again"))
-	SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel."))
+	if checkPointReached < 4 then
+		SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel."))
+	end
 	SendStat(siCustomAchievement, loc("You have to be careful and must not die!"))
 	sendSimpleTeamRankings({teamC.name})
 	EndGame()
