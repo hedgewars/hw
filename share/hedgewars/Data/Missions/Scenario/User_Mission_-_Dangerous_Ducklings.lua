@@ -3,6 +3,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player = nil -- This variable will point to the hog's gear
+local playerTeamName, enemyTeamName = nil, nil
 local instructor = nil
 local enemy = nil
 
@@ -30,11 +31,11 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddMissionTeam(-1)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(1)
 	instructor = AddHog(loc("Instructor"), 0, 100, "sf_vega")
 
-	AddTeam(loc("Blue Team"), -2, "bubble", "Island", "Default", "somalia")
+	enemyTeamName = AddTeam(loc("Blue Team"), -2, "bubble", "Island", "Default", "somalia")
 	enemy = AddHog(loc("Filthy Blue"), 1, 100, "Skull")
 
 	SetGearPosition(player,146,902)
@@ -112,9 +113,8 @@ function onGameTick()
 		endTimer = endTimer + 1
 		if (CurrentHedgehog ~= nil) and (CurrentHedgehog == instructor) then
 			if endTimer >= 3000 then
-				--SetHealth(instructor,0)
 				SetTurnTimeLeft(1)
-				DismissTeam(GetHogTeamName(player))
+				DismissTeam(playerTeamName)
 			end
 			ShowMission(loc("Dangerous Ducklings"), loc("MISSION FAILED"), loc("You've failed. Try again."), -amRope, 5000);
 		end
@@ -137,7 +137,7 @@ function onGearDelete(gear)
 			HogSay(player, loc("See ya!"), SAY_THINK)
 			Retreat(3000)
 			awardAchievement(loc("Naughty Ninja"))
-			DismissTeam(GetHogTeamName(enemy))
+			DismissTeam(enemyTeamName)
 			gameWon = true
 			SaveMissionVar("Won", "true")
 		elseif gear == enemy then

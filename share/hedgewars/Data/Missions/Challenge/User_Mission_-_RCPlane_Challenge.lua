@@ -3,6 +3,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player = nil
+local playerTeamName = nil
 local RCGear = nil
 local planesUsed = 0
 local planeTimer = 0
@@ -35,7 +36,7 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddMissionTeam(-1)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(80)
 	SetGearPosition(player, 1380, 1500)
 
@@ -56,7 +57,7 @@ function onGameStart()
                                 loc("Compete to use as few planes as possible!") .. "|" ..
                                 recordInfo, -amRCPlane, 4000
                                 )
-	SetTeamLabel(loc("Wannabe Flyboys"), "0")
+	SetTeamLabel(playerTeamName, "0")
 
 	PlaceGirder(2192, 508, 6)
 	PlaceGirder(2192, 670, 6)
@@ -289,7 +290,7 @@ function onGearAdd(gear)
 	if GetGearType(gear) == gtRCPlane then
 		RCGear = gear
 		planesUsed = planesUsed + 1
-		SetTeamLabel(loc("Wannabe Flyboys"), tostring(planesUsed))
+		SetTeamLabel(playerTeamName, tostring(planesUsed))
 		planeTimer = 0
 		missiles = 0
 	end
@@ -442,7 +443,7 @@ function onGearDelete(gear)
 			PlaySound(sound, player)
 
 
-			DismissTeam(loc("Wannabe Flyboys"))
+			DismissTeam(playerTeamName)
 			EndGame()
 		end
 
