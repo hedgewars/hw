@@ -1,0 +1,8 @@
+[package]
+name = "chat_sanitizer"
+version = "0.1.0"
+authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+edition = "2018"
+
+[dependencies]
+unicode_skeleton = "0.1"
