@@ -6,3 +6,4 @@ edition = "2018"
 
 [dependencies]
 unicode_skeleton = "0.1"
+itertools = "0.8.0"

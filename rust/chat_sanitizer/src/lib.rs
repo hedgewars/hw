@@ -1,4 +1,5 @@
 pub mod bad_words;
+pub mod letter_repeat;
 
 use unicode_skeleton::UnicodeSkeleton;
 

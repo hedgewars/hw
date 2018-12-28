@@ -19,13 +19,17 @@ impl<T> BadWordsChecker<T> {
 }
 
 impl<T> MessageChecker<T> for BadWordsChecker<T> {
-    fn check(&self, player_id: T, message: &str) -> Severity {
+    fn check(&self, _player_id: T, message: &str) -> Severity {
         let msg = normalized_message(message);
 
         // silly implementation, allows bad messages with a single good word
-        for badword in &self.blacklist {
-            if msg.contains(badword) {
-                if !self.whitelist.iter().any(|goodword| msg.contains(goodword)) {
+        for bad_word in &self.blacklist {
+            if msg.contains(bad_word) {
+                if !self
+                    .whitelist
+                    .iter()
+                    .any(|good_word| msg.contains(good_word))
+                {
                     return Severity::Warn;
                 }
             }
@@ -48,7 +52,7 @@ mod tests {
         // this one fails
         //assert_eq!(checker.check(0, "poop 'fsck -y' poop"), Severity::Warn);
 
-        // ideally this one shouldn't fail
+        // ideally this one shouldn't fail, need a better confusables check
         // assert_eq!(checker.check(0, "P00P"), Severity::Warn);
     }
 }
