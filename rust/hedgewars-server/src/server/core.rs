@@ -13,6 +13,7 @@ use base64::encode;
 use log::*;
 use rand::{thread_rng, RngCore};
 use slab;
+use std::borrow::BorrowMut;
 
 type Slab<T> = slab::Slab<T>;
 
@@ -37,7 +38,7 @@ impl HWServer {
             removed_clients: vec![],
             io,
         };
-        server.lobby_id = server.add_room();
+        server.lobby_id = server.add_room().id;
         server
     }
 
@@ -68,12 +69,8 @@ impl HWServer {
         );
     }
 
-    pub fn add_room(&mut self) -> RoomId {
-        let entry = self.rooms.vacant_entry();
-        let key = entry.key();
-        let room = HWRoom::new(entry.key());
-        entry.insert(room);
-        key
+    pub fn add_room(&mut self) -> &mut HWRoom {
+        allocate_room(&mut self.rooms)
     }
 
     pub fn handle_msg(&mut self, client_id: ClientId, msg: HWProtocolMessage) {
@@ -81,6 +78,21 @@ impl HWServer {
         if self.clients.contains(client_id) {
             handlers::handle(self, client_id, msg);
         }
+    }
+
+    #[inline]
+    pub fn create_room(
+        &mut self,
+        creator_id: ClientId,
+        name: String,
+        password: Option<String>,
+    ) -> RoomId {
+        create_room(
+            &mut self.clients[creator_id],
+            &mut self.rooms,
+            name,
+            password,
+        )
     }
 
     fn get_recipients(&self, client_id: ClientId, destination: &Destination) -> Vec<ClientId> {
@@ -186,5 +198,64 @@ impl HWServer {
 
     pub fn room(&mut self, client_id: ClientId) -> Option<&mut HWRoom> {
         self.client_and_room(client_id).1
+    }
+}
+
+fn allocate_room(rooms: &mut Slab<HWRoom>) -> &mut HWRoom {
+    let entry = rooms.vacant_entry();
+    let key = entry.key();
+    let room = HWRoom::new(entry.key());
+    entry.insert(room)
+}
+
+fn create_room(
+    client: &mut HWClient,
+    rooms: &mut Slab<HWRoom>,
+    name: String,
+    password: Option<String>,
+) -> RoomId {
+    let room = allocate_room(rooms);
+
+    room.master_id = Some(client.id);
+    room.name = name;
+    room.password = password;
+    room.protocol_number = client.protocol_number;
+
+    room.players_number = 1;
+    room.ready_players_number = 1;
+
+    client.room_id = Some(room.id);
+    client.set_is_master(true);
+    client.set_is_ready(true);
+    client.set_is_joined_mid_game(false);
+
+    room.id
+}
+
+fn move_to_room(client: &mut HWClient, room: &mut HWRoom) {
+    debug_assert!(client.room_id != Some(room.id));
+
+    room.players_number += 1;
+
+    client.room_id = Some(room.id);
+    client.set_is_joined_mid_game(room.game_info.is_some());
+    client.set_is_in_game(room.game_info.is_some());
+
+    if let Some(ref mut info) = room.game_info {
+        let teams = info.client_teams(client.id);
+        client.teams_in_game = teams.clone().count() as u8;
+        client.clan = teams.clone().next().map(|t| t.color);
+        let team_names: Vec<_> = teams.map(|t| t.name.clone()).collect();
+
+        if !team_names.is_empty() {
+            info.left_teams.retain(|name| !team_names.contains(&name));
+            info.teams_in_game += team_names.len() as u8;
+            room.teams = info
+                .teams_at_start
+                .iter()
+                .filter(|(_, t)| !team_names.contains(&t.name))
+                .cloned()
+                .collect();
+        }
     }
 }

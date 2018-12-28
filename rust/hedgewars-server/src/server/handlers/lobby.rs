@@ -27,9 +27,20 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     "+hr".to_string(),
                     vec![server.clients[client_id].nick.clone()],
                 );
-                vec![AddRoom(name, password), flags_msg.send_self().action()]
+
+                let room_id = server.create_room(client_id, name, password);
+                let room = &server.rooms[room_id];
+                let client = &server.clients[client_id];
+
+                vec![
+                    RoomAdd(room.info(Some(&client)))
+                        .send_all()
+                        .with_protocol(room.protocol_number)
+                        .action(),
+                    flags_msg.send_self().action(),
+                ]
             };
-            server.react(client_id, actions);
+            server.react(client_id, actions)
         }
         Chat(msg) => {
             let actions = vec![ChatMsg {

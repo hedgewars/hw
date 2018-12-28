@@ -118,7 +118,6 @@ pub enum Action {
     ReactProtocolMessage(HWProtocolMessage),
     CheckRegistered,
     JoinLobby,
-    AddRoom(String, Option<String>),
     RemoveRoom(RoomId),
     MoveToRoom(RoomId),
     MoveToLobby(String),
@@ -239,26 +238,6 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     rooms_msg.send_self().action(),
                 ],
             );
-        }
-        AddRoom(name, password) => {
-            let room_id = server.add_room();;
-
-            let r = &mut server.rooms[room_id];
-            let c = &mut server.clients[client_id];
-            r.master_id = Some(c.id);
-            r.name = name;
-            r.password = password;
-            r.protocol_number = c.protocol_number;
-
-            let actions = vec![
-                RoomAdd(r.info(Some(&c)))
-                    .send_all()
-                    .with_protocol(r.protocol_number)
-                    .action(),
-                MoveToRoom(room_id),
-            ];
-
-            server.react(client_id, actions);
         }
         RemoveRoom(room_id) => {
             let r = &mut server.rooms[room_id];
