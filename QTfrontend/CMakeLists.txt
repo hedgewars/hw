@@ -214,7 +214,7 @@ if(WIN32 AND NOT UNIX)
 endif()
 
 if(CMAKE_CXX_COMPILER MATCHES "clang*")
-    list(APPEND HW_LINK_LIBS stdc++ m)
+    list(APPEND HW_LINK_LIBS stdc++ m atomic)
 endif()
 
 if(WIN32 AND VCPKG_TOOLCHAIN)
