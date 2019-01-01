@@ -544,7 +544,7 @@ if Targets.Count = 0 then
     exit
     end;
 
-FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot));
+FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot) and ((GameFlags and gfInfAttack) = 0));
 
 SDL_LockMutex(ThreadLock);
 ThinkThread:= SDL_CreateThread(@Think, PChar('think'), Me);
@@ -561,7 +561,7 @@ begin
 with CurrentHedgehog^ do
     if (Gear <> nil)
     and ((Gear^.State and gstHHDriven) <> 0)
-    and (TurnTimeLeft < cHedgehogTurnTime - 50) then
+    and ((TurnTimeLeft < cHedgehogTurnTime - 50) or (TurnTimeLeft > cHedgehogTurnTime)) then
         if ((Gear^.State and gstHHThinking) = 0) then
             if (BestActions.Pos >= BestActions.Count)
             and (TurnTimeLeft > cStopThinkTime) then
