@@ -66,7 +66,6 @@ end;
 
 const cBranchStackSize = 12;
 type TStackEntry = record
-                   WastedTicks: Longword;
                    MadeActions: TActions;
                    Hedgehog: TGear;
                    end;
@@ -76,14 +75,13 @@ var Stack: record
            States: array[0..Pred(cBranchStackSize)] of TStackEntry;
            end;
 
-function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
+function Push(const Actions: TActions; const Me: TGear; Dir: integer): boolean;
 var bRes: boolean;
 begin
     bRes:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
     if bRes then
         with Stack.States[Stack.Count] do
             begin
-            WastedTicks:= Ticks;
             MadeActions:= Actions;
             Hedgehog:= Me;
             Hedgehog.Message:= Dir;
@@ -92,12 +90,11 @@ begin
     Push:= bRes
 end;
 
-procedure Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear);
+procedure Pop(var Actions: TActions; var Me: TGear);
 begin
     dec(Stack.Count);
     with Stack.States[Stack.Count] do
         begin
-        Ticks:= WastedTicks;
         Actions:= MadeActions;
         Me:= Hedgehog
         end
@@ -253,15 +250,16 @@ end;
 procedure Walk(Me: PGear; var Actions: TActions);
 const FallPixForBranching = cHHRadius;
 var
-    ticks, maxticks, oldticks, steps, tmp: Longword;
+    maxticks, oldticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: LongInt;
     GoInfo: TGoInfo;
     CanGo: boolean;
     AltMe: TGear;
     BotLevel: Byte;
     a: TAmmoType;
+    isAfterAttack: boolean;
 begin
-ticks:= 0;
+Actions.ticks:= 0;
 oldticks:= 0; // avoid compiler hint
 Stack.Count:= 0;
 
@@ -272,12 +270,13 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 
 BotLevel:= Me^.Hedgehog^.BotLevel;
 
-if (Me^.State and gstAttacked) = 0 then
-    maxticks:= Max(0, TurnTimeLeft - 5000 - LongWord(4000 * BotLevel))
+isAfterAttack:= ((Me^.State and gstAttacked) <> 0) and ((GameFlags and gfInfAttack) = 0);
+if isAfterAttack then
+    maxticks:= Max(0, TurnTimeLeft - 500)
 else
-    maxticks:= TurnTimeLeft;
+    maxticks:= Max(0, TurnTimeLeft - 5000 - LongWord(4000 * BotLevel));
 
-if (Me^.State and gstAttacked) = 0 then
+if not isAfterAttack then
     TestAmmos(Actions, Me, false);
 
 BestRate:= RatePlace(Me);
@@ -291,12 +290,12 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
     and (CurrentHedgehog^.Effects[heArtillery] = 0) and (cGravityf <> 0) then
     begin
     tmp:= random(2) + 1;
-    Push(0, Actions, Me^, tmp);
-    Push(0, Actions, Me^, tmp xor 3);
+    Push(Actions, Me^, tmp);
+    Push(Actions, Me^, tmp xor 3);
 
     while (Stack.Count > 0) and (not StopThinking) do
         begin
-        Pop(ticks, Actions, Me^);
+        Pop(Actions, Me^);
 
         AddAction(Actions, Me^.Message, aim_push, 250, 0, 0);
         if (Me^.Message and gmLeft) <> 0 then
@@ -311,10 +310,25 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
     {$HINTS OFF}
             CanGo:= HHGo(Me, @AltMe, GoInfo);
     {$HINTS ON}
-            oldticks:= ticks;
-            inc(ticks, GoInfo.Ticks);
-            if ticks > maxticks then
+            oldticks:= Actions.ticks;
+            inc(Actions.ticks, GoInfo.Ticks);
+            if (Actions.ticks > maxticks) or (TurnTimeLeft < BestActions.ticks + 5000) then
+            begin
+                if (BotLevel < 5)
+                        and (not isAfterAttack)
+                        and (BestActions.Score > 0) // we have a good move
+                        and (TurnTimeLeft < BestActions.ticks + 5000) // we won't have a lot of time after attack
+                        and (HHHasAmmo(Me^.Hedgehog^, amExtraTime) > 0) // but can use extra time
+                then
+                begin
+                    BestActions.Count:= 0;
+                    AddAction(BestActions, aia_Weapon, Longword(amExtraTime), 80, 0, 0);
+                    AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                    AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                end;
+
                 break;
+            end;
 
             if (BotLevel < 5)
                 and (GoInfo.JumpType = jmpHJump)
@@ -323,7 +337,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 begin
                 // check if we could go backwards and maybe ljump over a gap after this hjump
                 addMark(hwRound(Me^.X), hwRound(Me^.Y), markHJumped);
-                if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
+                if Push(Actions, AltMe, Me^.Message xor 3) then
                     begin
                     with Stack.States[Pred(Stack.Count)] do
                         begin
@@ -336,7 +350,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                         AddAction(MadeActions, aia_HJump, 0, 350, 0, 0);
                         end;
                     // but first check walking forward
-                    Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
+                    Push(Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
                     end;
                 end;
             if (BotLevel < 3)
@@ -346,7 +360,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 begin
                 addMark(hwRound(Me^.X), hwRound(Me^.Y), markLJumped);
                 // at final check where we go after jump walking backward
-                if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
+                if Push(Actions, AltMe, Me^.Message xor 3) then
                     with Stack.States[Pred(Stack.Count)] do
                         begin
                         if (Me^.Message and gmLeft) <> 0 then
@@ -358,12 +372,13 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                         end;
 
                 // push current position so we proceed from it after checking jump+forward walk opportunities
-                if CanGo then Push(ticks, Actions, Me^, Me^.Message);
+                if CanGo then Push(Actions, Me^, Me^.Message);
 
                 // first check where we go after jump walking forward
-                if Push(ticks, Actions, AltMe, Me^.Message) then
+                if Push(Actions, AltMe, Me^.Message) then
                     with Stack.States[Pred(Stack.Count)] do
                         AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
+
                 break
                 end;
 
@@ -379,27 +394,22 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 BestActions:= Actions;
                 BestActions.isWalkingToABetterPlace:= true;
                 BestRate:= Rate;
-                Me^.State:= Me^.State or gstAttacked // we have better place, go there and do not use ammo
+                isAfterAttack:= true // we have better place, go there and do not use ammo
                 end
             else if Rate < BestRate then
                 break;
 
-            if ((Me^.State and gstAttacked) = 0) and ((steps mod 4) = 0) then
+            if (not isAfterAttack) and ((steps mod 4) = 0) then
                 begin
                 if (steps > 4) and checkMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere) then
                     break;
                 addMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere);
 
-                TestAmmos(Actions, Me, ticks shr 12 = oldticks shr 12);
-
+                TestAmmos(Actions, Me, Actions.ticks shr 12 = oldticks shr 12);
                 end;
 
             if GoInfo.FallPix >= FallPixForBranching then
-                Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
-
-            if (StartTicks > GameTicks - 1500) and (not StopThinking) then
-                SDL_Delay(1000);
-
+                Push(Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
             end {while};
 
         if BestRate > BaseRate then
@@ -463,8 +473,8 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
             or (itHedgehog = currHedgehogIndex)
             or BestActions.isWalkingToABetterPlace;
 
-            if (StartTicks > GameTicks - 1500) and (not StopThinking) then
-                SDL_Delay(700);
+        if (StartTicks > GameTicks - 1500) and (not StopThinking) then
+            SDL_Delay(700);
 
         if (BestActions.Score < -1023) and (not BestActions.isWalkingToABetterPlace) then
             begin

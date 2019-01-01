@@ -229,6 +229,7 @@ while Gear <> nil do
             , gtAirBomb
             , gtCluster
             , gtMelonPiece
+            , gtBee
             , gtMolotov: bonuses.activity:= true;
             gtCase:
                 if (Gear^.AIHints and aihDoesntMatter) = 0 then
