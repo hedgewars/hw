@@ -167,7 +167,6 @@ function onGameTick20()
 				end
 			end
 			SendStat(siCustomAchievement, string.format(loc("You have used %d flying saucers."), saucersUsed))
-			SendStat(siCustomAchievement, string.format(loc("You had %d additional flying saucers left."), saucersLeft))
 
 			local leastSaucersRecord = tonumber(GetCampaignVar("IceStadiumLeastSaucersUsed"))
 			if leastSaucersRecord == nil or saucersUsed < leastSaucersRecord then
