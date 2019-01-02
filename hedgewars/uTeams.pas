@@ -799,6 +799,7 @@ begin
                     // Number found: Increment it by 1
                     begin
                     tail:= Copy(chTeam^.TeamName, Length(chTeam^.TeamName) - numLen + 1, numLen);
+(* FIXME - pas2c missing 3rd param for val
                     valOK:= 1;
                     Val(tail, numTail, valOK);
                     Inc(numTail);
@@ -806,7 +807,11 @@ begin
                         tail:= IntToStr(numTail)
                     else
                         // This should not happen
-                        tail:= 'X';
+                        tail:= shortstring('X');
+*)
+                    Val(tail, numTail);
+                    Inc(numTail);
+                    tail:= IntToStr(numTail)
                     chTeam^.TeamName:= Copy(chTeam^.TeamName, 0, Length(chTeam^.TeamName) - numLen) + tail;
                     end
                 else
