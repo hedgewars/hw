@@ -811,7 +811,7 @@ begin
 *)
                     Val(tail, numTail);
                     Inc(numTail);
-                    tail:= IntToStr(numTail)
+                    tail:= IntToStr(numTail);
                     chTeam^.TeamName:= Copy(chTeam^.TeamName, 0, Length(chTeam^.TeamName) - numLen) + tail;
                     end
                 else
