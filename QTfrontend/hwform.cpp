@@ -2070,10 +2070,16 @@ void HWForm::RestoreSingleplayerTeamSelection()
     {
         int index = ui.pageCampaign->CBTeam->findData(lastTeam, Qt::DisplayRole);
         if(index != -1)
+        {
             ui.pageCampaign->CBTeam->setCurrentIndex(index);
+            UpdateCampaignPageTeam(index);
+        }
         index = ui.pageTraining->CBTeam->findData(lastTeam, Qt::DisplayRole);
         if(index != -1)
+        {
             ui.pageTraining->CBTeam->setCurrentIndex(index);
+            UpdateTrainingPageTeam(index);
+        }
     }
 }
 
