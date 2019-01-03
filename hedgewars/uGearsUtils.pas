@@ -64,6 +64,7 @@ function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
 
 function WorldWrap(var Gear: PGear): boolean;
+function HomingWrap(var Gear: PGear): boolean;
 
 function IsHogLocal(HH: PHedgehog): boolean;
 
@@ -1809,6 +1810,47 @@ This one would be really easy to freeze game unless it was flagged unfortunately
     end;
 end;
 
+(*
+Applies wrap-around logic for the target of homing gears.
+
+In wrap-around world edge, the shortest way may to the target might
+be across the border, so the X value of the target would lead the
+gear to the wrong direction across the whole map. This procedure
+changes the target X in this case.
+This function must be called after the gear passed through
+the wrap-around world edge (WorldWrap returned true).
+
+No-op for other world edges.
+
+Returns true if target has been changed.
+*)
+function HomingWrap(var Gear: PGear): boolean;
+var dist_center, dist_right, dist_left: hwFloat;
+begin
+    if WorldEdge = weWrap then
+        begin
+        HomingWrap:= false;
+        // We just check the same target 3 times:
+        // 1) in current section (no change)
+        // 2) clone in the right section
+        // 3) clone in the left section
+        // The gear will go for the target with the shortest distance to the gear.
+        // For simplicity, we only check distance on the X axis.
+        dist_center:= hwAbs(Gear^.X - int2hwFloat(Gear^.Target.X));
+        dist_right:= hwAbs(Gear^.X - int2hwFloat(Gear^.Target.X + (RightX-LeftX)));
+        dist_left:= hwAbs(Gear^.X - int2hwFloat(Gear^.Target.X - (RightX-LeftX)));
+        if (dist_left < dist_right) and (dist_left < dist_center) then
+            begin
+            dec(Gear^.Target.X, RightX-LeftX);
+            HomingWrap:= true;
+            end
+        else if (dist_right < dist_left) and (dist_right < dist_center) then
+            begin
+            inc(Gear^.Target.X, RightX-LeftX);
+            HomingWrap:= true;
+            end;
+        end;
+end;
 
 // Add an audiovisual bounce effect for gear after it bounced from bouncy material.
 // Graphical effect is based on speed.

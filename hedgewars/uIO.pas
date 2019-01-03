@@ -527,13 +527,14 @@ with CurrentHedgehog^.Gear^,
                 TargetPoint.X:= CursorPoint.X - WorldDx;
                 TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
                 end;
-            if (WorldEdge <> weBounce) then
+            if (WorldEdge <> weBounce) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoWrapTarget) = 0) then
                 TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
             end
         else
             begin
-            TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
+            if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoWrapTarget) = 0 then
+                TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             TargetPoint.X:= putX;
             TargetPoint.Y:= putY
             end;

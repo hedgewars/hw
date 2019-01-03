@@ -951,6 +951,7 @@ const
             Ammo: (Propz: ammoprop_Power or
                           ammoprop_NeedTarget or
                           ammoprop_NoTargetAfter or
+                          ammoprop_NoWrapTarget or
                           ammoprop_DontHold or
                           ammoprop_NeedUpDown;
                 Count: 2;
