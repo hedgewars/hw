@@ -127,6 +127,12 @@ function onGameStart()
 	AddAnim(dialog01)
 end
 
+function onEndTurn()
+	if not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
+		heroLost()
+	end
+end
+
 function onNewTurn()
 	if not hero.dead and CurrentHedgehog == ally.gear and challengeStarted then
 		heroLost()
@@ -185,6 +191,13 @@ function onGameTick20()
 		local time = totalTime - TurnTimeLeft
 		local timePrinted  = time / 1000
 		SetTeamLabel(teamA.name, string.format(loc("%.1fs"), timePrinted))
+		if TurnTimeLeft <= 0 then
+			local wp = waypoints[currentWaypoint-1]
+			if wp ~= nil then
+				DeleteVisualGear(wp.gear)
+				DeleteVisualGear(wp.gear2)
+			end
+		end
 	end
 end
 
@@ -251,6 +264,9 @@ function startFlying()
 end
 
 function placeNextWaypoint()
+	if gameEnded then
+		return
+	end
 	if currentWaypoint > 1 then
 		local wp = waypoints[currentWaypoint-1]
 		DeleteVisualGear(wp.gear)
@@ -308,7 +324,7 @@ function placeNextWaypoint()
 end
 
 function checkIfHeroInWaypoint()
-	if not hero.dead then
+	if (not hero.dead) and (TurnTimeLeft > 0) then
 		local wp = waypoints[currentWaypoint-1]
 		if gearIsInCircle(hero.gear, wp.x, wp.y, radius+4, false) then
 			SetWind(GetRandom(201)-100)
@@ -325,5 +341,6 @@ function heroLost()
 	SendStat(siCustomAchievement, loc("Green double rings also give you a new flying saucer."))
 	SendStat(siCustomAchievement, loc("Use the attack key twice to change the flying saucer while being in air."))
 	sendSimpleTeamRankings({teamA.name})
+	gameEnded = true
 	EndGame()
 end
