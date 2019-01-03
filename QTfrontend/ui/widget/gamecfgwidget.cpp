@@ -545,6 +545,60 @@ void GameCFGWidget::ammoChanged(int index)
     }
 }
 
+void GameCFGWidget::updateSchemeEnabledStates(int scriptIndex)
+{
+    QString scheme;
+    QString weapons;
+    if(scriptIndex > 0)
+    {
+        scheme = Scripts->itemData(scriptIndex, GameStyleModel::SchemeRole).toString();
+        weapons = Scripts->itemData(scriptIndex, GameStyleModel::WeaponsRole).toString();
+    }
+    else
+    {
+        scheme = pMapContainer->getCurrentScheme();
+        weapons = pMapContainer->getCurrentWeapons();
+    }
+    if (scheme == "locked")
+    {
+        GameSchemes->setEnabled(false);
+        goToSchemePage->setEnabled(false);
+        lblScheme->setEnabled(false);
+        GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
+    }
+    else if(m_master)
+    {
+        GameSchemes->setEnabled(true);
+        goToSchemePage->setEnabled(true);
+        lblScheme->setEnabled(true);
+        int num = GameSchemes->findText(scheme);
+        if (num != -1)
+            GameSchemes->setCurrentIndex(num);
+    }
+
+    if (weapons == "locked")
+    {
+        WeaponsName->setEnabled(false);
+        goToWeaponPage->setEnabled(false);
+        lblWeapons->setEnabled(false);
+        WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
+    }
+    else if(m_master)
+    {
+        WeaponsName->setEnabled(true);
+        goToWeaponPage->setEnabled(true);
+        lblWeapons->setEnabled(true);
+        int num = WeaponsName->findText(weapons);
+        if (num != -1)
+            WeaponsName->setCurrentIndex(num);
+    }
+
+    if (scheme != "locked" && weapons != "locked")
+        bindEntries->setEnabled(true);
+    else
+        bindEntries->setEnabled(false);
+}
+
 void GameCFGWidget::mapChanged(const QString & value)
 {
     if(isEnabled() && pMapContainer->getCurrentIsMission())
@@ -552,49 +606,7 @@ void GameCFGWidget::mapChanged(const QString & value)
         Scripts->setEnabled(false);
         lblScript->setEnabled(false);
         Scripts->setCurrentIndex(0);
-
-        if (pMapContainer->getCurrentScheme() == "locked")
-        {
-            GameSchemes->setEnabled(false);
-            goToSchemePage->setEnabled(false);
-            lblScheme->setEnabled(false);
-            GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
-        }
-        else
-        {
-            GameSchemes->setEnabled(true);
-            goToSchemePage->setEnabled(true);
-            lblScheme->setEnabled(true);
-            int num = GameSchemes->findText(pMapContainer->getCurrentScheme());
-            if (num != -1)
-                GameSchemes->setCurrentIndex(num);
-            //else
-            //    GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
-        }
-
-        if (pMapContainer->getCurrentWeapons() == "locked")
-        {
-            WeaponsName->setEnabled(false);
-            goToWeaponPage->setEnabled(false);
-            lblWeapons->setEnabled(false);
-            WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
-        }
-        else
-        {
-            WeaponsName->setEnabled(true);
-            goToWeaponPage->setEnabled(true);
-            lblWeapons->setEnabled(true);
-            int num = WeaponsName->findText(pMapContainer->getCurrentWeapons());
-            if (num != -1)
-                WeaponsName->setCurrentIndex(num);
-            //else
-            //    WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
-        }
-
-        if (pMapContainer->getCurrentScheme() != "locked" && pMapContainer->getCurrentWeapons() != "locked")
-            bindEntries->setEnabled(true);
-        else
-            bindEntries->setEnabled(false);
+        updateSchemeEnabledStates(0);
     }
     else
     {
@@ -671,51 +683,7 @@ void GameCFGWidget::scriptChanged(int index)
 
     if(isEnabled() && index > 0)
     {
-        QString scheme = Scripts->itemData(index, GameStyleModel::SchemeRole).toString();
-        QString weapons = Scripts->itemData(index, GameStyleModel::WeaponsRole).toString();
-
-        if (scheme == "locked")
-        {
-            GameSchemes->setEnabled(false);
-            goToSchemePage->setEnabled(false);
-            lblScheme->setEnabled(false);
-            GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
-        }
-        else if (m_master)
-        {
-            GameSchemes->setEnabled(true);
-            goToSchemePage->setEnabled(true);
-            lblScheme->setEnabled(true);
-            int num = GameSchemes->findText(scheme);
-            if (num != -1)
-                GameSchemes->setCurrentIndex(num);
-            //else
-            //    GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
-        }
-
-        if (weapons == "locked")
-        {
-            WeaponsName->setEnabled(false);
-            goToWeaponPage->setEnabled(false);
-            lblWeapons->setEnabled(false);
-            WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
-        }
-        else if (m_master)
-        {
-            WeaponsName->setEnabled(true);
-            goToWeaponPage->setEnabled(true);
-            lblWeapons->setEnabled(true);
-            int num = WeaponsName->findText(weapons);
-            if (num != -1)
-                WeaponsName->setCurrentIndex(num);
-            //else
-            //    WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
-        }
-
-        if (scheme != "locked" && weapons != "locked")
-            bindEntries->setEnabled(true);
-        else
-            bindEntries->setEnabled(false);
+        updateSchemeEnabledStates(index);
     }
     else
     {
@@ -744,6 +712,8 @@ void GameCFGWidget::scriptChanged(int index)
 
 void GameCFGWidget::mapgenChanged(MapGenerator m)
 {
+    int scriptIndex = Scripts->currentIndex();
+    updateSchemeEnabledStates(scriptIndex);
     emit paramChanged("MAPGEN", QStringList(QString::number(m)));
 }
 
