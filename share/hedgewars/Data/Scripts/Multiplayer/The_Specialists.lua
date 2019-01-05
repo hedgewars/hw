@@ -216,9 +216,16 @@ function CreateTeam()
 end
 
 function onGameInit()
-	ClearGameFlags()
-	EnableGameFlags(gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo, gfSwitchHog)
+	-- Force-disable harmful game flags
+	DisableGameFlags(gfSharedAmmo, gfKing)
+	-- Force-enable game-critical game flags
+	EnableGameFlags(gfPerHogAmmo, gfResetWeps)
+	-- NOTE: For your game scheme, these game flags are recommended: gfResetWeps, gfPlaceHog, gfSwitchHog, gfInfAttack
+
+	-- No weapon crates
 	HealthCaseProb = 100
+
+	-- Instructions
 	Goals = loc("The Specialists: Each hedgehog starts with its own weapon set")
 end
 
