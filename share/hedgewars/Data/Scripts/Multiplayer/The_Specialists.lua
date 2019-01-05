@@ -54,46 +54,77 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
+
+-- S=(S)oldier D=(D)emo E=(E)ngineer N=(N)inja P=(P)yro C=(C)lown H=(H)olyman[saint] X=Sniper [running out of letters, but X-out or X-hair or something]
+-- default team values
+local currTeamIdx = 0;
+local teamRoles = 
+        {
+            {'S','E','N','D','X','H','P','C'},
+            {'S','E','N','D','X','H','P','C'},
+            {'S','E','N','D','X','H','P','C'},
+            {'S','E','N','D','X','H','P','C'},
+            {'S','E','N','D','X','H','P','C'},
+            {'S','E','N','D','X','H','P','C'},
+            {'S','E','N','D','X','H','P','C'},
+            {'S','E','N','D','X','H','P','C'}
+        };
 
 local numhhs = 0
 local hhs = {}
 
 local started = false
 
+function onParameters()
+	parseParams()
+	for i = 1, 8 do
+        if params['t'..i] ~= nil then
+            for j = 1, 8 do
+                if string.len(params['t'..i]) >= j  then
+                    teamRoles[i][j] = string.upper(string.sub(params['t'..i],j,j));
+                end
+            end
+        end
+    end
+end
+
 function onNewAmmoStore(groupIndex, hogIndex)
 
 	SetAmmo(amSkip, 9, 0, 0, 0)
+    groupIndex = groupIndex + 1
+    hogIndex = hogIndex + 1
 
-	if hogIndex == 0 then
+    if teamRoles[groupIndex][hogIndex] == 'S' then
 		SetAmmo(amBazooka, 1, 0, 0, 0)
 		SetAmmo(amGrenade, 1, 0, 0, 0)
 		SetAmmo(amShotgun, 1, 0, 0, 0)
-	elseif hogIndex == 1 then
+    elseif teamRoles[groupIndex][hogIndex] == 'E' then
 		SetAmmo(amGirder, 2, 0, 0, 0)
 		SetAmmo(amBlowTorch, 1, 0, 0, 0)
 		SetAmmo(amPickHammer, 1, 0, 0, 0)
-	elseif hogIndex == 2 then
+    elseif teamRoles[groupIndex][hogIndex] == 'N' then
 		SetAmmo(amRope, 9, 0, 0, 0)
 		SetAmmo(amParachute, 9, 0, 0, 0)
 		SetAmmo(amFirePunch, 1, 0, 0, 0)
-	elseif hogIndex == 3 then
+    elseif teamRoles[groupIndex][hogIndex] == 'D' then
 		SetAmmo(amDynamite, 1, 0, 0, 0)
 		SetAmmo(amMine, 1, 0, 0, 0)
 		SetAmmo(amDrill, 1, 0, 0, 0)
-	elseif hogIndex == 4 then
+    elseif teamRoles[groupIndex][hogIndex] == 'X' then
 		SetAmmo(amSniperRifle, 1, 0, 0, 0)
 		SetAmmo(amDEagle, 1, 0, 0, 0)
 		SetAmmo(amPortalGun, 2, 0, 0, 0)
-	elseif hogIndex == 5 then
+    elseif teamRoles[groupIndex][hogIndex] == 'H' then
 		SetAmmo(amSeduction, 9, 0, 0, 0)
 		SetAmmo(amResurrector, 1, 0, 0, 0)
 		SetAmmo(amInvulnerable, 1, 0, 0, 0)
         SetAmmo(amLowGravity, 1, 0, 0, 0)
-	elseif hogIndex == 6 then
+    elseif teamRoles[groupIndex][hogIndex] == 'P' then
 		SetAmmo(amFlamethrower, 1, 0, 0, 0)
 		SetAmmo(amMolotov, 1, 0, 0, 0)
 		SetAmmo(amNapalm, 1, 0, 0, 0)
-	elseif hogIndex == 7 then
+    elseif teamRoles[groupIndex][hogIndex] == 'C' then
 		SetAmmo(amBaseballBat, 1, 0, 0, 0)
 		SetAmmo(amGasBomb, 1, 0, 0, 0)
 		SetAmmo(amKamikaze, 1, 0, 0, 0)
@@ -115,50 +146,51 @@ function CreateTeam()
 					z = z + 1
 			else
 					z = 1
+                    currTeamIdx = currTeamIdx + 1;
 			end
 
-			if z == 1 then
+			if teamRoles[currTeamIdx][z] == 'S' then
 
 					SetHogName(hhs[i],loc("Soldier"))
 					SetHogHat(hhs[i], "sf_vega")
 					SetHealth(hhs[i],200)
 
-			elseif z == 2 then
+			elseif teamRoles[currTeamIdx][z] == 'E' then
 
 					SetHogHat(hhs[i], "Glasses")
 					SetHogName(hhs[i],loc("Engineer"))
 
-			elseif z == 3 then
+			elseif teamRoles[currTeamIdx][z] == 'N' then
 
 					SetHogName(hhs[i],loc("Ninja"))
 					SetHogHat(hhs[i], "NinjaFull")
 					SetHealth(hhs[i],80)
 
-			elseif z == 4 then
+			elseif teamRoles[currTeamIdx][z] == 'D' then
 
 					SetHogName(hhs[i],loc("Demo"))
 					SetHogHat(hhs[i], "Skull")
 					SetHealth(hhs[i],200)
 
-			elseif z == 5 then
+			elseif teamRoles[currTeamIdx][z] == 'X' then
 
 					SetHogName(hhs[i],loc("Sniper"))
 					SetHogHat(hhs[i], "Sniper")
 					SetHealth(hhs[i],120)
 
-			elseif z == 6 then
+			elseif teamRoles[currTeamIdx][z] == 'H' then
 
 					SetHogName(hhs[i],loc("Saint"))
 					SetHogHat(hhs[i], "angel")
 					SetHealth(hhs[i],300)
 
-			elseif z == 7 then
+			elseif teamRoles[currTeamIdx][z] == 'P' then
 
 					SetHogName(hhs[i],loc("Pyro"))
 					SetHogHat(hhs[i], "Gasmask")
 					SetHealth(hhs[i],150)
 
-			elseif z == 8 then
+			elseif teamRoles[currTeamIdx][z] == 'C' then
 
 					SetHogName(hhs[i],loc("Loon"))
 					SetHogHat(hhs[i], "clown")
@@ -174,7 +206,7 @@ end
 
 function onGameInit()
 	ClearGameFlags()
-	EnableGameFlags(gfRandomOrder, gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo, gfSwitchHog)
+	EnableGameFlags(gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo, gfSwitchHog)
 	HealthCaseProb = 100
 end
 
