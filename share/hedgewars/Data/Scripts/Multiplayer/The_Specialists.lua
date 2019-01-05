@@ -3,6 +3,42 @@
 -- original style by mikade
 ----------------------------------
 
+-- SCRIPT PARAMETER SYNTAX
+--[[
+With the script parameter, you can change the order of specialists per team.
+
+Valid keys: t1, t2, ... t8
+  One per team (team 1, team 2, ... team 8)
+
+The value is a sequence of “specialist letters”.
+Each letter stands for a hedgehog.
+
+Specialist letters:
+
+  S = Soldier
+  E = Engineer
+  N = Ninja
+  D = Demo
+  I = Sniper
+  A = Saint
+  P = Pyro
+  L = Loon
+
+Example 1:
+
+    t1=SENDIAPL,t2=SENDIAPL
+
+Team 1 and team 2 have the standard specialists.
+
+Example 2:
+
+    t1=SSSSPPPP
+
+4 soldiers and 4 pyros for team 1.
+
+
+]]
+
 --------------------
 -- TODO
 --------------------
@@ -13,29 +49,17 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 
---[[
-Specialist letters:
-
-  S=[S]oldier
-  E=[E]ngineer
-  N=[N]inja
-  D=[D]emo
-  X=Sniper
-  H=Saint ([H]oly)
-  P=[P]yro
-  C=Loon ([C]lown)
-]]
 -- default team values
 local currTeamIdx = 0;
 local teamRoles = {
-	{'S','E','N','D','X','H','P','C'},
-	{'S','E','N','D','X','H','P','C'},
-	{'S','E','N','D','X','H','P','C'},
-	{'S','E','N','D','X','H','P','C'},
-	{'S','E','N','D','X','H','P','C'},
-	{'S','E','N','D','X','H','P','C'},
-	{'S','E','N','D','X','H','P','C'},
-	{'S','E','N','D','X','H','P','C'}
+	{'S','E','N','D','I','A','P','L'},
+	{'S','E','N','D','I','A','P','L'},
+	{'S','E','N','D','I','A','P','L'},
+	{'S','E','N','D','I','A','P','L'},
+	{'S','E','N','D','I','A','P','L'},
+	{'S','E','N','D','I','A','P','L'},
+	{'S','E','N','D','I','A','P','L'},
+	{'S','E','N','D','I','A','P','L'}
 };
 
 local numhhs = 0
@@ -78,11 +102,11 @@ function onNewAmmoStore(groupIndex, hogIndex)
 		SetAmmo(amDynamite, 1, 0, 0, 0)
 		SetAmmo(amMine, 1, 0, 0, 0)
 		SetAmmo(amDrill, 1, 0, 0, 0)
-	elseif teamRoles[groupIndex][hogIndex] == 'X' then
+	elseif teamRoles[groupIndex][hogIndex] == 'I' then
 		SetAmmo(amSniperRifle, 1, 0, 0, 0)
 		SetAmmo(amDEagle, 1, 0, 0, 0)
 		SetAmmo(amPortalGun, 2, 0, 0, 0)
-	elseif teamRoles[groupIndex][hogIndex] == 'H' then
+	elseif teamRoles[groupIndex][hogIndex] == 'A' then
 		SetAmmo(amSeduction, 9, 0, 0, 0)
 		SetAmmo(amResurrector, 1, 0, 0, 0)
 		SetAmmo(amInvulnerable, 1, 0, 0, 0)
@@ -91,7 +115,7 @@ function onNewAmmoStore(groupIndex, hogIndex)
 		SetAmmo(amFlamethrower, 1, 0, 0, 0)
 		SetAmmo(amMolotov, 1, 0, 0, 0)
 		SetAmmo(amNapalm, 1, 0, 0, 0)
-	elseif teamRoles[groupIndex][hogIndex] == 'C' then
+	elseif teamRoles[groupIndex][hogIndex] == 'L' then
 		SetAmmo(amBaseballBat, 1, 0, 0, 0)
 		SetAmmo(amGasBomb, 1, 0, 0, 0)
 		SetAmmo(amKamikaze, 1, 0, 0, 0)
@@ -139,13 +163,13 @@ function CreateTeam()
 			SetHogHat(hhs[i], "Skull")
 			SetHealth(hhs[i],200)
 
-		elseif teamRoles[currTeamIdx][z] == 'X' then
+		elseif teamRoles[currTeamIdx][z] == 'I' then
 
 			SetHogName(hhs[i],loc("Sniper"))
 			SetHogHat(hhs[i], "Sniper")
 			SetHealth(hhs[i],120)
 
-		elseif teamRoles[currTeamIdx][z] == 'H' then
+		elseif teamRoles[currTeamIdx][z] == 'A' then
 
 			SetHogName(hhs[i],loc("Saint"))
 			SetHogHat(hhs[i], "angel")
@@ -157,7 +181,7 @@ function CreateTeam()
 			SetHogHat(hhs[i], "Gasmask")
 			SetHealth(hhs[i],150)
 
-		elseif teamRoles[currTeamIdx][z] == 'C' then
+		elseif teamRoles[currTeamIdx][z] == 'L' then
 
 			SetHogName(hhs[i],loc("Loon"))
 			SetHogHat(hhs[i], "clown")
