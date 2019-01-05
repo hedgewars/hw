@@ -160,52 +160,66 @@ function CreateTeam()
 			currTeamIdx = currTeamIdx + 1;
 		end
 
+		-- Scale health of each hog with “initial health” setting from game scheme.
+		-- 100 = default health
+		-- 200 = double health for all hogs
+		-- 50 = half health for all hogs
+		local function scaleHealth(health)
+			local newHealth = div(health * InitHealth, 100)
+			-- At least 1 health
+			if newHealth <= 0 then
+				newHealth = 1
+			end
+			return newHealth
+		end
+
 		if teamRoles[currTeamIdx][z] == 'S' then
 
 			SetHogName(hhs[i],loc("Soldier"))
 			SetHogHat(hhs[i], "sf_vega")
-			SetHealth(hhs[i],200)
+			SetHealth(hhs[i], scaleHealth(200))
 
 		elseif teamRoles[currTeamIdx][z] == 'E' then
 
 			SetHogHat(hhs[i], "Glasses")
 			SetHogName(hhs[i],loc("Engineer"))
+			SetHealth(hhs[i], scaleHealth(100))
 
 		elseif teamRoles[currTeamIdx][z] == 'N' then
 
 			SetHogName(hhs[i],loc("Ninja"))
 			SetHogHat(hhs[i], "NinjaFull")
-			SetHealth(hhs[i],80)
+			SetHealth(hhs[i], scaleHealth(80))
 
 		elseif teamRoles[currTeamIdx][z] == 'D' then
 
 			SetHogName(hhs[i],loc("Demo"))
 			SetHogHat(hhs[i], "Skull")
-			SetHealth(hhs[i],200)
+			SetHealth(hhs[i], scaleHealth(200))
 
 		elseif teamRoles[currTeamIdx][z] == 'I' then
 
 			SetHogName(hhs[i],loc("Sniper"))
 			SetHogHat(hhs[i], "Sniper")
-			SetHealth(hhs[i],120)
+			SetHealth(hhs[i], scaleHealth(120))
 
 		elseif teamRoles[currTeamIdx][z] == 'A' then
 
 			SetHogName(hhs[i],loc("Saint"))
 			SetHogHat(hhs[i], "angel")
-			SetHealth(hhs[i],300)
+			SetHealth(hhs[i], scaleHealth(300))
 
 		elseif teamRoles[currTeamIdx][z] == 'P' then
 
 			SetHogName(hhs[i],loc("Pyro"))
 			SetHogHat(hhs[i], "Gasmask")
-			SetHealth(hhs[i],150)
+			SetHealth(hhs[i], scaleHealth(150))
 
 		elseif teamRoles[currTeamIdx][z] == 'L' then
 
 			SetHogName(hhs[i],loc("Loon"))
 			SetHogHat(hhs[i], "clown")
-			SetHealth(hhs[i],100)
+			SetHealth(hhs[i], scaleHealth(100))
 
 		end
 
