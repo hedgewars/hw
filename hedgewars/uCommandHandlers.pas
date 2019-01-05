@@ -785,6 +785,11 @@ begin
 cHealthDecrease:= StrToInt(s)
 end;
 
+procedure chInitHealth(var s: shortstring);
+begin
+cInitHealth:= StrToInt(s)
+end;
+
 procedure chDamagePercent(var s: shortstring);
 begin
 cDamagePercent:= StrToInt(s)
@@ -926,6 +931,7 @@ begin
     RegisterVariable('sd_turns', @chSuddenDTurns  , false);
     RegisterVariable('waterrise', @chWaterRise    , false);
     RegisterVariable('healthdec', @chHealthDecrease, false);
+    RegisterVariable('inithealth',@chInitHealth, false);
     RegisterVariable('damagepct',@chDamagePercent , false);
     RegisterVariable('ropepct' , @chRopePercent   , false);
     RegisterVariable('getawaytime' , @chGetAwayTime , false);

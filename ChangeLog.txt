@@ -36,6 +36,7 @@ Lua API:
  + SimpleMission: Add isMissionTeam attribute for teams
  + SpeedShoppa/TargetPractice libraries: Remove custom hog and team info settings
  + Params explode, poison in the SpawnFake*Crate functions now optional and default to false
+ + New global: InitHealth: Initial hog health value from game scheme (read-only)
 
 ====================== 0.9.25 ======================
 HIGHLIGHTS:

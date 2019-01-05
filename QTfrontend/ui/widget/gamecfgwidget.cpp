@@ -336,6 +336,7 @@ QByteArray GameCFGWidget::getFullConfig() const
     bcfg << QString("e$gmflags %1").arg(getGameFlags()).toUtf8();
     bcfg << QString("e$damagepct %1").arg(schemeData(26).toInt()).toUtf8();
     bcfg << QString("e$turntime %1").arg(schemeData(27).toInt() * 1000).toUtf8();
+    bcfg << QString("e$inithealth %1").arg(schemeData(28).toInt()).toUtf8();
     bcfg << QString("e$sd_turns %1").arg(schemeData(29).toInt()).toUtf8();
     bcfg << QString("e$casefreq %1").arg(schemeData(30).toInt()).toUtf8();
     bcfg << QString("e$minestime %1").arg(schemeData(31).toInt() * 1000).toUtf8();

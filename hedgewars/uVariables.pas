@@ -106,6 +106,8 @@ var
     GameOver        : boolean;
     cSuddenDTurns   : LongInt;
     LastSuddenDWarn : LongInt; // last round in which the last SD warning appeared. -2 = no warning so far
+    cInitHealth     : LongInt; // initial hedgehog health (from game scheme. note the real hog health is sent directly
+                               // from frontend, this is only used to inform Lua scripts)
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
     cTemplateFilter : LongInt;
@@ -2806,6 +2808,7 @@ begin
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
     LastSuddenDWarn     := -2;
+    cInitHealth         := 100;
     cDamagePercent      := 100;
     cRopePercent        := 100;
     cGetAwayTime        := 100;
