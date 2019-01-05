@@ -219,24 +219,12 @@ function onGameInit()
 	ClearGameFlags()
 	EnableGameFlags(gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo, gfSwitchHog)
 	HealthCaseProb = 100
+	Goals = loc("The Specialists: Each hedgehog starts with its own weapon set")
 end
 
 function onGameStart()
 
 	CreateTeam()
-
-	ShowMission(
-		loc("THE SPECIALISTS"),
-		loc("a Hedgewars mini-game"),
-		loc("Eliminate the enemy specialists.") .. "|" ..
-		" " .. "|" ..
-		loc("Game Modifiers: ") .. "|" ..
-		loc("Per-Hog Ammo") .. "|" ..
-		loc("Weapons Reset") .. "|" ..
-		loc("Unlimited Attacks") .. "|" ..
-		"", 4, 4000
-	)
-
 	trackTeams()
 
 end
@@ -245,7 +233,7 @@ end
 function onNewTurn()
 
 	started = true
-	AddCaption(loc("Prepare yourself") .. ", " .. GetHogName(CurrentHedgehog).. "!")
+	AddCaption(string.format(loc("Prepare yourself, %s!"), GetHogName(CurrentHedgehog)))
 
 end
 
