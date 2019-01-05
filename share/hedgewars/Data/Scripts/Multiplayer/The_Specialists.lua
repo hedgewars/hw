@@ -7,13 +7,20 @@
 --[[
 With the script parameter, you can change the order of specialists per team.
 
-Valid keys: t1, t2, ... t8
-  One per team (team 1, team 2, ... team 8)
+== Changing the specialists for all teams ==
+In the script parameter, put:
 
-The value is a sequence of “specialist letters”.
-Each letter stands for a hedgehog.
+    t=XXXXXXXX
 
-Specialist letters:
+Where 'X' is a “specialist letter” (see below). Each letter stands for
+the role of a hedgehog in the team (in that order).
+If you leave out a letter, that hedgehog will be the default.
+
+== Changing the specialists for on a per-team basis ==
+Same as above, but instead of “t”, you use “t1”, “t2”, ... “t8” for
+each of the teams (team 1 to team 8).
+
+== Specialist letters ==
 
   S = Soldier
   E = Engineer
@@ -24,18 +31,20 @@ Specialist letters:
   P = Pyro
   L = Loon
 
+== Examples ==
 Example 1:
 
-    t1=SENDIAPL,t2=SENDIAPL
+    t=SSSSPPPP
 
-Team 1 and team 2 have the standard specialists.
+4 soldiers and 4 pyros for all teams.
 
 Example 2:
 
-    t1=SSSSPPPP
+    t1=LPAIDNES,t2=NNNNNNNN
 
-4 soldiers and 4 pyros for team 1.
-
+Team 1: Loon, Pyro, Saint, Sniper, Demo, Ninja, Engineer, Soldier.
+Team 2: All-ninja team.
+All other teams use the default settings.
 
 ]]
 
@@ -69,6 +78,17 @@ local started = false
 
 function onParameters()
 	parseParams()
+	-- All teams
+	if params['t'] ~= nil then
+		for i = 1, 8 do
+			for j = 1, 8 do
+				if string.len(params['t']) >= j  then
+					teamRoles[i][j] = string.upper(string.sub(params['t'],j,j));
+				end
+			end
+		end
+	end
+	-- Specific team
 	for i = 1, 8 do
 		if params['t'..i] ~= nil then
 			for j = 1, 8 do
