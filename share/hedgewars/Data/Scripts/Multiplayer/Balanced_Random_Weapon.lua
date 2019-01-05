@@ -264,6 +264,14 @@ function onGearAdd(gear)
     end
 end
 
+function onHogHide(gear)
+    trackHiding(gear)
+end
+
+function onHogRestore(gear)
+    trackRestoring(gear)
+end
+
 function onGearDelete(gear)
     trackDeletion(gear)
 end

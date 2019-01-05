@@ -18,6 +18,7 @@
  * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
+ * Balanced Random Weapon: Fix Lua errors after using Time Box
  * Fix poison damage not working in first round
  * Hide most HUD elements in cinematic mode
  * Don't show "F1", "F2", etc. in ammo menu if these aren't the actual slot keys
