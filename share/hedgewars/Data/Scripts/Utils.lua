@@ -36,12 +36,14 @@ local function drawFullMap(erase, flush)
 end
 
 local function challengeRecordToString(recordType, value)
-	if recordType == "TimeRecord" or recordType == "TimeRecordHigh" then
-		return string.format(loc("Team record: %.3fs"), value/1000)
+	if recordType == "TimeRecord" then
+		return string.format(loc("Team's best time: %.3fs"), value/1000)
+	elseif recordType == "TimeRecordHigh" then
+		return string.format(loc("Team's longest time: %.3fs"), value/1000)
 	elseif recordType == "Highscore" then
-		return string.format(loc("Team high score: %d"), value)
-	else
-		return string.format(loc("Team record: %d"), value)
+		return string.format(loc("Team highscore: %d"), value)
+	elseif recordType == "Lowscore" then
+		return string.format(loc("Team lowscore: %d"), value)
 	end
 end
 

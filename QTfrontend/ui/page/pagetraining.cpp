@@ -28,6 +28,7 @@
 #include <QLocale>
 #include <QSettings>
 
+#include "mission.h"
 #include "hwconsts.h"
 #include "DataManager.h"
 
@@ -72,9 +73,13 @@ QLayout * PageTraining::bodyLayoutDefinition()
     lblDescription->setMinimumWidth(360);
     lblDescription->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     lblDescription->setWordWrap(true);
+    lblHighscores = new QLabel();
+    lblHighscores->setMinimumWidth(360);
+    lblHighscores->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
     infoTextLayout->addWidget(lblCaption);
     infoTextLayout->addWidget(lblDescription);
+    infoTextLayout->addWidget(lblHighscores);
 
     infoLayout->addWidget(infoTextWidget);
 
@@ -88,7 +93,7 @@ QLayout * PageTraining::bodyLayoutDefinition()
     // let's not make the tab widget use more space than needed
     tbw->setFixedWidth(400);
     pageLayout->setAlignment(tbw, Qt::AlignHCenter);
-    
+ 
     tbw->setStyleSheet("QListWidget { border-style: none; padding-top: 6px; }");
 
     // training/challenge/scenario lists
@@ -314,9 +319,10 @@ void PageTraining::updateInfo()
         list = (QListWidget*) tbw->currentWidget();
         if (list->currentItem())
         {
+            QString missionName = list->currentItem()->data(Qt::UserRole).toString();
             QString thumbFile =     "physfs://Graphics/Missions/" +
                                     subFolder + "/" +
-                                    list->currentItem()->data(Qt::UserRole).toString() +
+                                    missionName +
                                     "@2x.png";
 
             if (QFile::exists(thumbFile))
@@ -331,24 +337,43 @@ void PageTraining::updateInfo()
 
             btnPreview->setWhatsThis(tr("Start fighting"));
 
-            QString realName = list->currentItem()->data(
-                                    Qt::UserRole).toString();
-
-            QString caption = m_info->value(realName + ".name",
+            QString caption = m_info->value(missionName + ".name",
                                             list->currentItem()->text()).toString();
 
-            QString description = m_info->value(realName + ".desc",
+            QString description = m_info->value(missionName + ".desc",
                                                 tr("No description available")).toString();
 
             lblCaption->setText("<h2>" + caption +"</h2>");
             lblDescription->setText(description);
+
+            // Challenge highscores
+            QString highscoreText = QString("");
+            QString teamName = CBTeam->currentText();
+            if (missionValueExists(missionName, teamName, "Highscore"))
+                //: Highest score of a team
+                highscoreText = highscoreText + tr("Team highscore: %1").arg(getMissionValue(missionName, teamName, "Highscore").toString()) + "\n";
+            if (missionValueExists(missionName, teamName, "Lowscore"))
+                //: Lowest score of a team
+                highscoreText = highscoreText + tr("Team lowscore: %1").arg(getMissionValue(missionName, teamName, "Lowscore").toString()) + "\n";
+            if (missionValueExists(missionName, teamName, "TimeRecord"))
+            {
+                double time = ((double) getMissionValue(missionName, teamName, "TimeRecord").toInt()) / 1000.0;
+                highscoreText = highscoreText + tr("Team's best time: %L1 s").arg(time, 0, 'f', 3) + "\n";
+            }
+            if (missionValueExists(missionName, teamName, "TimeRecordHigh"))
+            {
+                double time = ((double) getMissionValue(missionName, teamName, "TimeRecordHigh").toInt()) / 1000.0;
+                highscoreText = highscoreText + tr("Team's longest time: %L1 s").arg(time, 0, 'f', 3) + "\n";
+            }
+
+            lblHighscores->setText(highscoreText);
         }
         else
         {
             btnPreview->setIcon(QIcon(":/res/Trainings.png"));
             lblCaption->setText(tr("Select a mission!"));
-            // TODO better text and tr()
             lblDescription->setText("");
+            lblHighscores->setText("");
         }
     }
 }

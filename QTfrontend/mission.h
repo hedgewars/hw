@@ -24,5 +24,7 @@
 
 QSettings* getMissionTeamFile(QString & missionName, QString & teamName);
 bool isMissionWon(QString & missionName, QString & teamName);
+bool missionValueExists(QString & missionName, QString & teamName, QString key);
+QVariant getMissionValue(QString & missionName, QString & teamName, QString key);
 
 #endif

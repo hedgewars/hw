@@ -53,3 +53,27 @@ bool isMissionWon(QString & missionName, QString & teamName)
     bool won = teamfile->value("Mission " + missionName + "/Won", false).toBool();
     return won;
 }
+
+/**
+    Returns true if the mission value adressed with the provided
+    missionName: Name of the mission in question
+    teamName: Name of the playing team
+    key: name of key to check
+*/
+bool missionValueExists(QString & missionName, QString & teamName, QString key)
+{
+    QSettings* teamfile = getMissionTeamFile(missionName, teamName);
+    return teamfile->contains("Mission " + missionName + "/" + key);
+}
+/**
+    Returns a mission value.
+    NOTE: Check whether the mission value exists first, using missionValueExists.
+    missionName: Name of the mission in question
+    teamName: Name of the playing team
+    key: name of key to read its value from
+*/
+QVariant getMissionValue(QString & missionName, QString & teamName, QString key)
+{
+    QSettings* teamfile = getMissionTeamFile(missionName, teamName);
+    return teamfile->value("Mission " + missionName + "/" + key);
+}

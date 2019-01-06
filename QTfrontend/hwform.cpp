@@ -2039,6 +2039,7 @@ void HWForm::UpdateTrainingPageTeam(int index)
                 item->setIcon(notFinishedIcon);
         }
     }
+    ui.pageTraining->updateInfo();
 }
 
 void HWForm::InitCampaignPage()
