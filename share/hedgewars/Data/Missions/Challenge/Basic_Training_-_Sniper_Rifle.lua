@@ -193,12 +193,8 @@ function onGameTick20()
 			-- ... end the game ...
 			generateStats()
 			EndGame()
-		else
-			-- ... or just lower the timer by 1.
-			-- Reset the time left to stop the timer
-			SetTurnTimeLeft(time_goal)
 		end
-        end_timer = end_timer - 20
+        	end_timer = end_timer - 20
 	end
 end
 
@@ -385,8 +381,7 @@ function onGearDelete(gear)
 				AddCaption(loc("Last Target!"));
 				spawnTarget(3480,1200)
 			end
-		else
-			if not game_lost then
+		elseif not game_lost then
 			-- Victory!
 			SaveMissionVar("Won", "true")
 			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
@@ -402,7 +397,9 @@ function onGearDelete(gear)
 
 			-- Save the time left so we may keep it.
 			time_goal = TurnTimeLeft
-			end
+
+			-- Freeze the clock because the challenge has been completed
+			SetTurnTimePaused(true)
 		end
 		SetTeamLabel(playerTeamName, getTargetScore())
 	end

@@ -195,10 +195,8 @@ function TargetPracticeMission(params)
 			if end_timer == 0 then
 				generateStats()
 				EndGame()
-			else
-				SetTurnTimeLeft(time_goal)
 			end
-	   	     end_timer = end_timer - 20
+			end_timer = end_timer - 20
 		end
 
 		for gear, _ in pairs(gearsInGame) do
@@ -242,6 +240,7 @@ function TargetPracticeMission(params)
 					-- Disable control
 					SetInputMask(0)
 					AddAmmo(player, params.ammoType, 0)
+					SetTurnTimePaused(true)
 				end
 			end
 		end
