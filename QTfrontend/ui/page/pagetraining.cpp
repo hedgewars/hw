@@ -350,11 +350,15 @@ void PageTraining::updateInfo()
             QString highscoreText = QString("");
             QString teamName = CBTeam->currentText();
             if (missionValueExists(missionName, teamName, "Highscore"))
-                //: Highest score of a team
-                highscoreText = highscoreText + tr("Team highscore: %1").arg(getMissionValue(missionName, teamName, "Highscore").toString()) + "\n";
+                highscoreText = highscoreText +
+                    //: Highest score of a team
+                    tr("Team highscore: %1")
+                    .arg(getMissionValue(missionName, teamName, "Highscore").toString()) + "\n";
             if (missionValueExists(missionName, teamName, "Lowscore"))
-                //: Lowest score of a team
-                highscoreText = highscoreText + tr("Team lowscore: %1").arg(getMissionValue(missionName, teamName, "Lowscore").toString()) + "\n";
+                highscoreText = highscoreText +
+                    //: Lowest score of a team
+                    tr("Team lowscore: %1")
+                    .arg(getMissionValue(missionName, teamName, "Lowscore").toString()) + "\n";
             if (missionValueExists(missionName, teamName, "TimeRecord"))
             {
                 double time = ((double) getMissionValue(missionName, teamName, "TimeRecord").toInt()) / 1000.0;
