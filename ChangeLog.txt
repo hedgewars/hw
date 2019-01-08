@@ -23,6 +23,7 @@
  * Hide most HUD elements in cinematic mode
  * Don't show "F1", "F2", etc. in ammo menu if these aren't the actual slot keys
  * Fix force-locked schemes getting unlocked when changing map types
+ * Suppress “<team> is gone.” message at end of game
 
 Lua API:
  + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)

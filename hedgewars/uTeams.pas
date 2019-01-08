@@ -922,7 +922,8 @@ begin
                 begin
                 if (not hasGone) and isGoneFlagPendingToBeSet then
                     begin
-                    AddChatString(#7 + Format('* '+shortstring(trmsg[sidTeamGone]), TeamName));
+                    if (not TeamsGameOver) then
+                        AddChatString(#7 + Format('* '+shortstring(trmsg[sidTeamGone]), TeamName));
                     if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                     hasGone:= true;
                     skippedTurns:= 0;
