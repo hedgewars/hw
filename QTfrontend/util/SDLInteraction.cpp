@@ -52,6 +52,13 @@ SDLInteraction::SDLInteraction()
     lastchannel = 0;
     if(SDL_NumJoysticks())
         addGameControllerKeys();
+
+    int i = 0;
+    while(i < 1024 && sdlkeys[i][1][0] != '\0')
+        i++;
+    sprintf(sdlkeys[i][0], "none");
+    sprintf(sdlkeys[i++][1], "%s", HWApplication::translate("binds (keys)", unboundcontrol).toUtf8().constData());
+
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
 
     m_soundMap = new QMap<QString,Mix_Chunk*>();

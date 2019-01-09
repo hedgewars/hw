@@ -159,7 +159,9 @@ QStandardItemModel * DataManager::bindsModel()
         for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
         {
             QStandardItem * item = new QStandardItem();
-            item->setData(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), Qt::DisplayRole);
+            QString keyId = QString(sdlkeys[j][0]);
+            QString keyTr = HWApplication::translate("binds (keys)", sdlkeys[j][1]);
+            item->setData((keyId == "none" || keyTr.contains(": ")) ? keyTr : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + keyTr, Qt::DisplayRole);
             item->setData(sdlkeys[j][0], Qt::UserRole + 1);
             m_bindsModel->appendRow(item);
         }

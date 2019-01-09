@@ -30,5 +30,6 @@ extern char controllerup[128];
 extern char controllerdown[128];
 extern char controllerleft[128];
 extern char controllerright[128];
+extern char unboundcontrol[128];
 
 #endif
