@@ -757,7 +757,7 @@ begin
                 end
             else // submersible
                 begin
-                // drown submersible grears if far below map
+                // drown submersible gears if far below map
                 if (Y > cWaterLine + cVisibleWater*4) then
                     begin
                     DrownGear(Gear);
@@ -796,7 +796,8 @@ begin
 
         // splash sound animation and droplets
         if isImpact or isSkip then
-            addSplashForGear(Gear, isSkip);
+            if (not (((dist2Water + Gear^.Radius div 2) < 0) or (abs(dist2Water + Gear^.Radius) >= Gear^.Radius))) then
+                addSplashForGear(Gear, isSkip);
 
         if isSkip then
             ScriptCall('onGearWaterSkip', Gear^.uid);
