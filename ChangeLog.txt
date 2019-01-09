@@ -14,6 +14,7 @@
  + The Specialists: Unlock game scheme
  + The Specialists: Add script parameter support to set custom specialists order
  + Display player name of own teams in online games
+ + Add control to unselect current weapon (default: X)
  * Use player-chosen team identity in campaigns and singleplayer missions
  * Fix last 2 characters in demo chat being missing
  * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it

@@ -168,6 +168,8 @@ type
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
             amResurrector, amDrillStrike, amSnowball, amTardis, amLandGun, // 53
             amIceGun, amKnife, amRubber, amAirMine, amCreeper, amMinigun); // 59
+    // NOTE: If we ever reach 126 ammo types, make sure to skip ammo type number 126 because it's
+    // reserved as synonym for amNothing. See also chSetWeapon.
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);

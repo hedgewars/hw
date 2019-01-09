@@ -385,6 +385,7 @@ begin
     RegisterBind(DefaultBinds, 'f12', 'fullscr');
 
     for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
+    RegisterBind(DefaultBinds, 'x', 'setweap ~');
     for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
     RegisterBind(DefaultBinds, _S'n', 'timer_u');
 

@@ -478,6 +478,11 @@ begin
     if CheckNoTeamOrHH then
         exit;
 
+    (* Use "~" (ASCII character 126) as synonym for NUL byte (=amNothing).
+    This is done to allow to add "setweap ~" in QTfrontend/binds.cpp because
+    the NUL byte would terminate the strings in C++ otherwise. *)
+    if (s[1] = '~') then
+        s[1]:= #0;
     if checkFails((s[0] = #1) and (s[1] <= char(High(TAmmoType))), 'Malformed /setweap', true) then exit;
 
     if not isExternalSource then
