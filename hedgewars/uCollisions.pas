@@ -501,7 +501,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
             begin
             if Land[y, x] and Gear^.CollisionMask <> 0 then
                 begin
-                if ((Land[y, x] and Gear^.CollisionMask) and lfNotObjMask) <> 0 then
+                if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                     exit(Land[y, x] and Gear^.CollisionMask)
                 else
                     pixel:= Land[y, x] and Gear^.CollisionMask;
@@ -567,7 +567,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
             begin
-            if ((Land[y, x] and Gear^.CollisionMask) and lfNotObjMask) <> 0 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask)
             else // if Land[y, x] <> 0 then
                 pixel:= Land[y, x] and Gear^.CollisionMask;
@@ -642,7 +642,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
     i:= y + Gear^.Radius * 2 - 2;
     repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
-            if ((Land[y, x] and Gear^.CollisionMask) and lfNotObjMask) <> 0 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask);
     inc(y)
     until (y > i);
@@ -665,7 +665,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     i:= x + Gear^.Radius * 2 - 2;
     repeat
         if (x and LAND_WIDTH_MASK) = 0 then
-            if ((Land[y, x] and Gear^.CollisionMask) and lfNotObjMask) <> 0 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask);
     inc(x)
     until (x > i);
@@ -981,7 +981,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     i:= x + Gear^.Radius * 2 - 2;
     repeat
     if (x and LAND_WIDTH_MASK) = 0 then
-        if (Land[y, x] and lfNotObjMask) <> 0 then
+        if (Land[y, x] and lfLandMask) <> 0 then
             if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
                 begin
                 isColl:= true;
