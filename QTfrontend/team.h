@@ -77,6 +77,7 @@ class HWTeam : public QObject
         QString name() const;
         unsigned char numHedgehogs() const;
         QString owner() const;
+        void setOwner(const QString & owner);
         QString voicepack() const;
 
         // attribute setters

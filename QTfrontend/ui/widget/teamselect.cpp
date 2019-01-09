@@ -215,8 +215,9 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
         // dont playing team => playing
         itDontPlay->setColor(framePlaying->getNextColor());
         team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
-        curPlayingTeams.push_back(*itDontPlay);
-        if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
+        team.setOwner(m_curUser);
+        curPlayingTeams.push_back(team);
+        if(!m_acceptOuter) emit teamWillPlay(team);
         m_curNotPlayingTeams.erase(itDontPlay);
 
         // Hide team notice if at least two teams.

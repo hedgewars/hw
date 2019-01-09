@@ -349,6 +349,10 @@ QString HWTeam::owner() const
     return m_owner;
 }
 
+void HWTeam::setOwner(const QString & owner)
+{
+    m_owner = owner;
+}
 
 
 // difficulty
