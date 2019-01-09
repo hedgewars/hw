@@ -1,31 +1,46 @@
 + features
 * bugfixes
 ============== 1.0.0-dev (unreleased) ==============
+Gameplay:
  + Hand-drawn maps can now be scaled with slider
- + Show check mark for completed scenarios, challenges and trainings
+ + Slightly longer delays between turns to make it easier to follow the game
  + Track high scores in singleplayer challenges
- + New chat command: “/help room” (shows room chat commands within the game)
- + Colorize switching arrows, pointing arrow and target cross in clan color
- + Longer delays between turns so its easier to see damage and messages
- + Skip ammo menu animation when playing with turn time of 10s or less
- + Restructure credits
- + Credits screen in main menu is now translatable
- + Don't show crate spawn message for initial crates in missions
+ + Show check mark for completed scenarios, challenges and trainings
+ * Fix various minor bugs in campaigns and missions
+ * Fix hedgehogs being pushed around (and other collision bugs) when they overlap
+ * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
+ * Fix poison damage not working in first round
+ * Use player-chosen team identity in campaigns and singleplayer missions
+
+Styles and schemes:
  + The Specialists: Unlock game scheme
  + The Specialists: Add script parameter support to set custom specialists order
- + Display player name of own teams in online games
- + Add control to unselect current weapon (no key chosen by default)
- * Use player-chosen team identity in campaigns and singleplayer missions
- * Fix last 2 characters in demo chat being missing
- * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
+ * Balanced Random Weapon: Fix Lua errors after using Time Box
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
- * Balanced Random Weapon: Fix Lua errors after using Time Box
- * Fix poison damage not working in first round
+
+Controls:
+ + Add control to unselect current weapon (no key chosen by default)
+ + Allow to leave a control unused
+ + New chat command: “/help room” (shows room chat commands within the game)
+
+Graphics:
+ * Fix double water splash when flying saucer drowns
+
+Game HUD:
+ + Colorize switching arrows, pointing arrow and target cross in clan color
+ + Skip ammo menu animation when playing with turn time of 10s or less
+ + Don't show crate spawn message for initial crates in missions
+ + Display player name of own teams in online games
+ * Fix last 2 characters in demo chat being missing
  * Hide most HUD elements in cinematic mode
  * Don't show "F1", "F2", etc. in ammo menu if these aren't the actual slot keys
- * Fix force-locked schemes getting unlocked when changing map types
  * Suppress “<team> is gone.” message at end of game
+
+Frontend:
+ + Restructure credits
+ + Credits screen in main menu is now translatable
+ * Fix force-locked schemes getting unlocked when changing map types
 
 Lua API:
  + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)
