@@ -39,7 +39,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"slot 8",    "f8",         QT_TRANSLATE_NOOP("binds", "slot 8"),          NULL, NULL},
     {"slot 9",    "f9",         QT_TRANSLATE_NOOP("binds", "slot 9"),          NULL, NULL},
     {"slot :",    "f10",        QT_TRANSLATE_NOOP("binds", "slot 10"),         NULL, NULL},
-    {"setweap ~", "x",          QT_TRANSLATE_NOOP("binds", "unselect weapon"), NULL, NULL},
+    {"setweap ~", "none",       QT_TRANSLATE_NOOP("binds", "unselect weapon"), NULL, NULL},
     {"timer 1",   "1",          QT_TRANSLATE_NOOP("binds", "timer 1 sec"),     NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Set the timer on bombs and timed weapons:")},
     {"timer 2",   "2",          QT_TRANSLATE_NOOP("binds", "timer 2 sec"),     NULL, NULL},
     {"timer 3",   "3",          QT_TRANSLATE_NOOP("binds", "timer 3 sec"),     NULL, NULL},
