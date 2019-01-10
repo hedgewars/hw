@@ -2300,7 +2300,13 @@ begin
         ParseCommand('fort ' + lua_tostring(L, 4), true, true);
         ParseCommand('voicepack ' + lua_tostring(L, 5), true, true);
         if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true, true);
-        CurrentTeam^.Binds:= DefaultBinds;
+        // If there's a mission team, copy it's control scheme.
+        // So in singleplayer missions, all teams use the player team's controls.
+        if MissionTeam <> nil then
+            CurrentTeam^.Binds:= MissionTeam^.Binds
+        // Default keys otherwise
+        else
+            CurrentTeam^.Binds:= DefaultBinds;
         // push team name and index
         lua_pushstring(L, str2pchar(CurrentTeam^.TeamName));
         lua_pushnumber(L, TeamsCount - 1);

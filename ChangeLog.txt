@@ -6,11 +6,13 @@ Gameplay:
  + Slightly longer delays between turns to make it easier to follow the game
  + Track high scores in singleplayer challenges
  + Show check mark for completed scenarios, challenges and trainings
+ + Training/challenge/scenario menu now supports team selection
  * Fix various minor bugs in campaigns and missions
  * Fix hedgehogs being pushed around (and other collision bugs) when they overlap
  * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
  * Fix poison damage not working in first round
  * Use player-chosen team identity in campaigns and singleplayer missions
+ * Fix player-chosen teams ignoring custom team controls in campaigns
 
 Styles and schemes:
  + The Specialists: Unlock game scheme
