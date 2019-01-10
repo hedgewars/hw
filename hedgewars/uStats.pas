@@ -255,7 +255,7 @@ if FinishedTurnsTotal <> 0 then
         killsCheck:= 0;
 
     // First blood (first damage, poison or kill)
-    if (not FirstBlood) and ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
+    if (not FirstBlood) and (ClansCount > 1) and ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
         begin
         FirstBlood:= true;
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack);
