@@ -42,6 +42,7 @@ procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
 procedure MoveCamera;
 procedure onFocusStateChanged;
 procedure updateCursorVisibility;
+procedure updateTouchWidgets(ammoType: TAmmoType);
 
 implementation
 uses
@@ -781,23 +782,7 @@ c:= -1;
                 SetWeapon(Ammo^[Slot, Pos].AmmoType);
                 bSelected:= false;
                 FreeAndNilTexture(WeaponTooltipTex);
-{$IFDEF USE_TOUCH_INTERFACE}//show the aiming buttons + animation
-                if (Ammo^[Slot, Pos].Propz and ammoprop_NeedUpDown) <> 0 then
-                    begin
-                    if (not arrowUp.show) then
-                        begin
-                        animateWidget(@arrowUp, true, true);
-                        animateWidget(@arrowDown, true, true);
-                        end;
-                    end
-                else
-                    if arrowUp.show then
-                        begin
-                        animateWidget(@arrowUp, true, false);
-                        animateWidget(@arrowDown, true, false);
-                        end;
-                SetUtilityWidgetState(Ammo^[Slot, Pos].AmmoType);
-{$ENDIF}
+                updateTouchWidgets(Ammo^[Slot, Pos].AmmoType);
                 exit
                 end;
             end
@@ -2127,6 +2112,30 @@ begin
         SDL_ShowCursor(1)
     else
         SDL_ShowCursor(ord(GameState = gsConfirm))
+end;
+
+procedure updateTouchWidgets(ammoType: TAmmoType);
+begin
+{$IFDEF USE_TOUCH_INTERFACE}
+//show the aiming buttons + animation
+if (Ammoz[ammoType].Ammo.Propz and ammoprop_NeedUpDown) <> 0 then
+    begin
+    if (not arrowUp.show) then
+        begin
+        animateWidget(@arrowUp, true, true);
+        animateWidget(@arrowDown, true, true);
+        end;
+    end
+else
+    if arrowUp.show then
+        begin
+        animateWidget(@arrowUp, true, false);
+        animateWidget(@arrowDown, true, false);
+        end;
+SetUtilityWidgetState(ammoType);
+{$ELSE}
+ammoType:= ammoType; // avoid hint
+{$ENDIF}
 end;
 
 procedure SetUtilityWidgetState(ammoType: TAmmoType);
