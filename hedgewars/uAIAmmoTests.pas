@@ -1135,7 +1135,7 @@ begin
     if d < 10 then
         begin
         dx:= 0;
-        dy:= 8;
+        dy:= step;
         ap.Angle:= 2048
         end
     else
