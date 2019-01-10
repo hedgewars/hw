@@ -900,6 +900,7 @@ var
     currwindbar: PVisualGear = nil;
 
 procedure doStepSmoothWindBarWork(Gear: PVisualGear; Steps: Longword);
+const maxWindBarWidth = 73;
 begin
     if currwindbar = Gear then
     begin
@@ -912,6 +913,11 @@ begin
             inc(WindBarWidth)
         else if WindBarWidth > Gear^.Tag then
             dec(WindBarWidth);
+        // Prevent wind bar from overflowing
+        if WindBarWidth > maxWindBarWidth then
+            WindBarWidth:= maxWindBarWidth;
+        if WindBarWidth < - maxWindBarWidth then
+            WindBarWidth:= - maxWindBarWidth;
         end;
     if cWindspeedf > Gear^.dAngle then
         begin
@@ -925,7 +931,7 @@ begin
         end;
     end;
 
-    if ((WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)) or (currwindbar <> Gear) then
+    if (((WindBarWidth = Gear^.Tag) or (Abs(WindBarWidth) >= maxWindBarWidth)) and (cWindspeedf = Gear^.dAngle)) or (currwindbar <> Gear) then
     begin
         if currwindbar = Gear then currwindbar:= nil;
         DeleteVisualGear(Gear)
