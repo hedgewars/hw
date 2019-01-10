@@ -2347,7 +2347,7 @@ begin
         ParseCommand('fort ' + MissionTeam^.FortName, true, true);
         ParseCommand('voicepack ' + MissionTeam^.Voicepack^.name, true, true);
         ParseCommand('flag ' + MissionTeam^.Flag, true, true);
-        CurrentTeam^.Binds:= DefaultBinds;
+        CurrentTeam^.Binds:= MissionTeam^.Binds;
         // push real team name and team index
         lua_pushstring(L, str2pchar(CurrentTeam^.TeamName));
         lua_pushnumber(L, TeamsCount - 1);

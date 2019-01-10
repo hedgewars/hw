@@ -484,6 +484,7 @@ New(team);
 if checkFails(team <> nil, 'AddTeam: team = nil', true) then exit(nil);
 FillChar(team^, sizeof(TTeam), 0);
 team^.HedgehogsNumber:= 0;
+team^.Binds:= DefaultBinds;
 
 CurrentTeam:= team;
 MissionTeam:= team;
@@ -872,6 +873,7 @@ if isDeveloperMode then
         begin
         CurrentTeam^.TeamName:= ts;
         CurrentTeam^.PlayerHash:= s;
+        loadTeamBinds(ts);
         CurrentTeam^.voicepack:= AskForVoicepack('Default')
         end
     end
