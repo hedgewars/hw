@@ -396,6 +396,28 @@ with utilityWidget do
         source.y:= frame.y;
         end;
     end;
+
+with utilityWidget2 do
+    begin
+    show:= false;
+    sprite:= sprBounceButton;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= utilityWidget.frame.x + Round(frame.w * 1.25);
+    frame.y:= arrowLeft.frame.y - Round(frame.h * 1.25);
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
+    with moveAnim do
+        begin
+        target.x:= frame.x;
+        target.y:= frame.y;
+        source.x:= frame.x;
+        source.y:= frame.y;
+        end;
+    end;
+
 {$ENDIF}
 end;
 
@@ -1621,6 +1643,7 @@ DrawScreenWidget(@fireButton);
 DrawScreenWidget(@jumpWidget);
 DrawScreenWidget(@AMWidget);
 DrawScreenWidget(@utilityWidget);
+DrawScreenWidget(@utilityWidget2);
 DrawScreenWidget(@pauseButton);
 {$ENDIF}
 
@@ -2130,6 +2153,14 @@ if(CurrentHedgehog <> nil)then
         end
     else if utilityWidget.show then
         animateWidget(@utilityWidget, true, false);
+
+    if ((Ammoz[ammoType].Ammo.Propz and ammoprop_SetBounce) <> 0) then
+        begin
+        utilityWidget2.sprite:= sprBounceButton;
+        animateWidget(@utilityWidget2, true, true);
+        end
+    else if utilityWidget2.show then
+        animateWidget(@utilityWidget2, true, false);
 {$ELSE}
 ammoType:= ammoType; // avoid hint
 {$ENDIF}

@@ -61,7 +61,7 @@ type
 {$IFDEF USE_TOUCH_INTERFACE}
             sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,
             sprJumpWidget, sprAMWidget, sprPauseButton, sprTimerButton, sprTargetButton,
-            sprSwitchButton,
+            sprSwitchButton, sprBounceButton,
 {$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
             sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,

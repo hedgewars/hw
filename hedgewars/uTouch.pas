@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses SysUtils, uUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uAmmos, uWorld;
+uses SysUtils, uUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uWorld, uGearsHedgehog;
 
 
 procedure initModule;
@@ -89,7 +89,7 @@ var
 procedure onTouchDown(x, y: Single; pointerId: TSDL_FingerId);
 var
     finger: PTouch_Data;
-    xr, yr: LongWord;
+    xr, yr, tmp: LongWord;
 begin
 xr:= round(x * cScreenWidth);
 yr:= round(y * cScreenHeight);
@@ -159,10 +159,35 @@ if isOnWidget(utilityWidget, finger^) then
     if(CurrentHedgehog <> nil) then
         begin
         if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Timerable <> 0 then
-            ParseTeamCommand('/timer ' + inttostr((GetCurAmmoEntry(CurrentHedgeHog^)^.Timer div 1000) mod 5 + 1));
+            begin
+            tmp:= HHGetTimerMsg(CurrentHedgehog^.Gear);
+            if tmp <> MSGPARAM_INVALID then
+                ParseTeamCommand('/timer ' + inttostr(tmp mod 5 + 1));
+            end;
         end;
     exit;
     end;
+
+if isOnWidget(utilityWidget2, finger^) then
+    begin
+    finger^.pressedWidget:= @utilityWidget2;
+    moveCursor:= false;
+    if(CurrentHedgehog <> nil) then
+        begin
+        if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_SetBounce <> 0 then
+            begin
+            tmp := HHGetBouncinessMsg(CurrentHedgehog^.Gear);
+            if tmp <> MSGPARAM_INVALID then
+                begin
+                ParseTeamCommand('+precise');
+                ParseTeamCommand('timer ' + inttostr(tmp mod 5 + 1));
+                bounceButtonPressed:= true;
+                end;
+            end;
+        end;
+    exit;
+    end;
+
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
     begin
@@ -496,6 +521,12 @@ if aimingCrosshair then
             aimingDown:= false;
             end;
         end;
+
+if bounceButtonPressed then
+    begin
+    ParseTeamCommand('-precise');
+    bounceButtonPressed:= false;
+    end;
 end;
 
 function findFinger(id: TSDL_FingerId): PTouch_Data;
@@ -627,6 +658,7 @@ var
 begin
     buttonsDown:= 0;
     pointerCount:= 0;
+    bounceButtonPressed:= false;
 
     setLength(fingers, 4);
     for index := 0 to (Length(fingers)-1) do

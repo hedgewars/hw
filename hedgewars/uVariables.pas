@@ -283,10 +283,12 @@ var
 //Buttons
 {$IFDEF USE_TOUCH_INTERFACE}
     buttonScale: GLFloat;
+    bounceButtonPressed: boolean;
 
     arrowUp, arrowDown, arrowLeft, arrowRight : TOnScreenWidget;
     firebutton, jumpWidget, AMWidget          : TOnScreenWidget;
     pauseButton, utilityWidget                : TOnScreenWidget;
+    utilityWidget2                            : TOnScreenWidget;
 {$ENDIF}
 
 
@@ -487,6 +489,8 @@ const
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTargetButton
             (FileName: 'switchbutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprSwitchButton
+            (FileName: 'bouncebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprBounceButton
 {$ENDIF}
             (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprFlake
