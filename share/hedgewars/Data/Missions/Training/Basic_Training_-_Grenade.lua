@@ -83,7 +83,7 @@ end
 local function spawnTargets()
 	-- Warm-up
 	if gamePhase == 0 then
-		AddGear(882, 39, gtTarget, 0, 0, 0, 0)
+		AddGear(945, 498, gtTarget, 0, 0, 0, 0)
 	-- Timer
 	elseif gamePhase == 2 then
 		AddGear(233, 97, gtTarget, 0, 0, 0, 0)
@@ -93,7 +93,7 @@ local function spawnTargets()
 	elseif gamePhase == 3 then
 		AddGear(15, 240, gtTarget, 0, 0, 0, 0)
 		AddGear(61, 9, gtTarget, 0, 0, 0, 0)
-		AddGear(945, 498, gtTarget, 0, 0, 0, 0)
+		AddGear(882, 39, gtTarget, 0, 0, 0, 0)
 	-- Bounciness
 	elseif gamePhase == 4 then
 		AddGear(1318, 208, gtTarget, 0, 0, 0, 0)
