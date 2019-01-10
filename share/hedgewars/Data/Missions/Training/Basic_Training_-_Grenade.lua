@@ -98,12 +98,8 @@ local function spawnTargets()
 	elseif gamePhase == 4 then
 		AddGear(1318, 208, gtTarget, 0, 0, 0, 0)
 		AddGear(1697, 250, gtTarget, 0, 0, 0, 0)
-		if INTERFACE ~= "touch" then
-			-- These targets may be too hard in touch interface because you cannot set bounciness yet
-			-- FIXME: Allow these targets in touch when bounciness can be set
-			AddGear(323, 960, gtTarget, 0, 0, 0, 0)
-			AddGear(1852, 100, gtTarget, 0, 0, 0, 0)
-		end
+		AddGear(323, 960, gtTarget, 0, 0, 0, 0)
+		AddGear(1852, 100, gtTarget, 0, 0, 0, 0)
 	-- Grand Final
 	elseif gamePhase == 5 then
 		AddGear(186, 473, gtTarget, 0, 0, 0, 0)
@@ -165,16 +161,14 @@ function newGamePhase()
 		spawnTargets()
 	elseif gamePhase == 4 then
 		local caption = loc("Bounciness")
+		ctrl = loc("You can set the bounciness of grenades (and grenade-like weapons).").."|"..
+		loc("Grenades with high bounciness bounce a lot and behave chaotic.").."|"..
+		loc("With low bounciness, it barely bounces at all, but it is much more predictable.").."|"..
+		loc("Try out different bounciness levels to reach difficult targets.").."|"
 		if INTERFACE == "desktop" then
-			ctrl = loc("You can set the bounciness of grenades (and grenade-like weapons).").."|"..
-			loc("Grenades with high bounciness bounce a lot and behave chaotic.").."|"..
-			loc("With low bounciness, it barely bounces at all, but it is much more predictable.").."|"..
-			loc("Try out different bounciness levels to reach difficult targets.").."|"..
-			loc("Set bounciness: [Left Shift] + [1]-[5]")
+			ctrl = ctrl .. loc("Set bounciness: [Left Shift] + [1]-[5]")
 		elseif INTERFACE == "touch" then
-			-- FIXME: Bounciness can't be set in touch yet. :(
-			caption = loc("Well done.")
-			ctrl = loc("You're doing well! Here are more targets for you.")
+			ctrl = ctrl .. loc("Change bounciness: Tap [B]")
 		end
 
 		ShowMission(loc("Basic Grenade Training"), caption, ctrl, 2, 20000)
