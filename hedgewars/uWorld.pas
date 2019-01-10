@@ -1556,7 +1556,7 @@ if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
     if WindBarWidth > 0 then
         begin
         {$WARNINGS OFF}
-        r.x:= 8 - (RealTicks shr 6) mod 8;
+        r.x:= 8 - (RealTicks shr 6) mod 9;
         {$WARNINGS ON}
         r.y:= 0;
         r.w:= WindBarWidth;
@@ -1567,7 +1567,7 @@ if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
         if WindBarWidth < 0 then
         begin
         {$WARNINGS OFF}
-        r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 8;
+        r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 9;
         {$WARNINGS ON}
         r.y:= 0;
         r.w:= - WindBarWidth;

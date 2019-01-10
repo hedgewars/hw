@@ -37,6 +37,7 @@ Game HUD:
  * Fix last 2 characters in demo chat being missing
  * Hide most HUD elements in cinematic mode
  * Don't show "F1", "F2", etc. in ammo menu if these aren't the actual slot keys
+ * Fix wind bar animation not looping properly
  * Suppress “<team> is gone.” message at end of game
 
 Frontend:
