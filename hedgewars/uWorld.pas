@@ -2148,17 +2148,20 @@ if(CurrentHedgehog <> nil)then
     if ((Ammoz[ammoType].Ammo.Propz and ammoprop_Timerable) <> 0) and (ammoType <> amDrillStrike) then
         begin
         utilityWidget.sprite:= sprTimerButton;
-        animateWidget(@utilityWidget, true, true);
+        if (not utilityWidget.show) then
+            animateWidget(@utilityWidget, true, true);
         end
     else if (Ammoz[ammoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
         begin
         utilityWidget.sprite:= sprTargetButton;
-        animateWidget(@utilityWidget, true, true);
+        if (not utilityWidget.show) then
+            animateWidget(@utilityWidget, true, true);
         end
     else if ammoType = amSwitch then
         begin
         utilityWidget.sprite:= sprSwitchButton;
-        animateWidget(@utilityWidget, true, true);
+        if (not utilityWidget.show) then
+            animateWidget(@utilityWidget, true, true);
         end
     else if utilityWidget.show then
         animateWidget(@utilityWidget, true, false);
@@ -2166,7 +2169,8 @@ if(CurrentHedgehog <> nil)then
     if ((Ammoz[ammoType].Ammo.Propz and ammoprop_SetBounce) <> 0) then
         begin
         utilityWidget2.sprite:= sprBounceButton;
-        animateWidget(@utilityWidget2, true, true);
+        if (not utilityWidget2.show) then
+            animateWidget(@utilityWidget2, true, true);
         end
     else if utilityWidget2.show then
         animateWidget(@utilityWidget2, true, false);
