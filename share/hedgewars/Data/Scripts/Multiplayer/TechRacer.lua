@@ -695,6 +695,7 @@ function onGameInit()
 	else
 		MapGen = mgDrawn
 	end
+	MapFeatureSize = 12
 
 	if mapID == nil then
 		mapID = 2 + GetRandom(7)
