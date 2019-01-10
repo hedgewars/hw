@@ -90,3 +90,5 @@ rust/*/target
 *.user
 *.iml
 build-qmlfrontend*
+.cabal-sandbox
+cabal.sandbox.config
