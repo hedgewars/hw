@@ -7,9 +7,12 @@ end
 function onGameInit()
     MapGen = mgDrawn
     TemplateFilter = 0
+    local mapComplexity = MapFeatureSize
+    -- reset feature size after use, to disable scaling
+    MapFeatureSize = 12
     fillMap(false)
     side = 0
-    for i = 0,1+MapFeatureSize*2 do
+    for i = 0,1+mapComplexity*2 do
         if side > 3 then 
             size = GetRandom(4)+4
         else
