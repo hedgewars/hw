@@ -834,6 +834,7 @@ function onNewTurn()
         trackTime = 0
 
         currCount = 0 -- hopefully this solves problem
+        fastIndex = 0
         AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
 

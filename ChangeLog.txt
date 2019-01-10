@@ -18,6 +18,7 @@ Styles and schemes:
  + The Specialists: Unlock game scheme
  + The Specialists: Add script parameter support to set custom specialists order
  * Balanced Random Weapon: Fix Lua errors after using Time Box
+ * Racer: Fix racer ghost not getting reset after a skip
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
 
