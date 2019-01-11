@@ -1191,7 +1191,7 @@ begin
             end
         end
     else
-		DeleteGear(Gear);
+        DeleteGear(Gear);
 end;
 
 procedure CreateShellForGear(Gear: PGear; startFrame: Longword);
@@ -2040,7 +2040,7 @@ begin
                     begin
                     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
                     DeleteGear(Gear);
-					exit   // redundant but we've had too many delete gear bugs
+                    exit   // redundant but we've had too many delete gear bugs
                     end
                 else
                     begin
@@ -2084,7 +2084,7 @@ begin
                     hwRound(Gear^.Y) - SpritesData[sprFrozenAirMine].Height div 2,
                     sprFrozenAirMine, 0, 0, false, false, false, false);
             DeleteGear(Gear);
-			exit
+            exit
             end;
         doStepFallingGear(Gear);
         exit
@@ -2473,18 +2473,18 @@ begin
         else if k = gtTarget then
             uStats.TargetHit()
         else if k = gtExplosives then
-			begin
-			doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
-			for i:= 0 to 31 do
-				begin
-				dX := AngleCos(i * 64) * _0_5 * (getrandomf + _1);
-				dY := AngleSin(i * 64) * _0_5 * (getrandomf + _1);
-				AddGear(x, y, gtFlame, 0, dX, dY, 0);
-				AddGear(x, y, gtFlame, gstTmpFlag, -dX, -dY, 0);
-				end
-			end;
+            begin
+            doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
+            for i:= 0 to 31 do
+                begin
+                dX := AngleCos(i * 64) * _0_5 * (getrandomf + _1);
+                dY := AngleSin(i * 64) * _0_5 * (getrandomf + _1);
+                AddGear(x, y, gtFlame, 0, dX, dY, 0);
+                AddGear(x, y, gtFlame, gstTmpFlag, -dX, -dY, 0);
+                end
+            end;
         DeleteGear(Gear);
-		exit
+        exit
         end;
 
     if k = gtExplosives then
@@ -3176,7 +3176,7 @@ begin
         begin
         DeleteGear(Gear);
         AfterAttack;
-		exit
+        exit
         end;
     inc(Gear^.Timer);
     if Gear^.Timer = 65 then
@@ -6485,19 +6485,19 @@ begin
                                     (hwRound(iter^.Y) > topY+16) and (hwRound(iter^.Y) < LAND_HEIGHT-16) then
                                     begin
                                     AddCI(iter);
-									iter^.X:= int2hwFloat(min(RightX-16,max(hwRound(iter^.X), LeftX+16)));
-									iter^.Y:= int2hwFloat(min(LAND_HEIGHT-16,max(hwRound(iter^.Y),TopY+16)));
+                                    iter^.X:= int2hwFloat(min(RightX-16,max(hwRound(iter^.X), LeftX+16)));
+                                    iter^.Y:= int2hwFloat(min(LAND_HEIGHT-16,max(hwRound(iter^.Y),TopY+16)));
                                     ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);    
                                     iter^.State:= iter^.State or gstInvisible
                                     end
                                 else
-									begin
-									updateTarget(Gear, ndX, ndY);
-									FlightTime := 0;
-									Timer := iceWaitCollision;
-									Power := GameTicks;
+                                    begin
+                                    updateTarget(Gear, ndX, ndY);
+                                    FlightTime := 0;
+                                    Timer := iceWaitCollision;
+                                    Power := GameTicks;
                                     iter^.State:= iter^.State and (not gstNoGravity)
-									end
+                                    end
                                 end
                             else // gtExplosives
                                 begin
