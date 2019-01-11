@@ -279,6 +279,11 @@ begin
         begin
         case CurAmmoGear^.Kind of
             gtJetpack:      begin
+                            // render jetpack contour if underwater
+                            if (((not SuddenDeathDmg) and (WaterOpacity > 179)) or (SuddenDeathDmg and (SDWaterOpacity > 179))) and
+                                    ((cWaterLine < (hwRound(Gear^.Y) + Gear^.Radius - 16)) or
+                                    ((WorldEdge = weSea) and ((hwRound(Gear^.X) < LeftX) or (hwRound(Gear^.X) > RightX)))) then
+                                DrawSprite(sprJetpack, sx-32, sy-32, 4);
                             if CurAmmoGear^.Tex <> nil then
                                 DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
                             DrawAltWeapon(Gear, sx, sy);

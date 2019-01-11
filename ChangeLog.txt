@@ -28,6 +28,7 @@ Controls:
  + New chat command: “/help room” (shows room chat commands within the game)
 
 Graphics:
+ + Show contour of flying saucer when in highly opaque water
  * Fix double water splash when flying saucer drowns
 
 Game HUD:
