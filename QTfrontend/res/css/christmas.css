@@ -441,7 +441,7 @@ background-color: #150A61;
 background-color: #150A61;
 }
 
-QDialogButtonBox QPushButton {
+QPushButton {
 padding: 3px 5px;
 }
 

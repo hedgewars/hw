@@ -150,6 +150,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     goToSchemePage->setIconSize(pmEdit.size());
     goToSchemePage->setIcon(iconEdit);
     goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
+    goToSchemePage->setStyleSheet("padding: 0px;");
     SchemeWidgetLayout->addWidget(goToSchemePage, 0, 3);
     connect(goToSchemePage, SIGNAL(clicked()), this, SLOT(jumpToSchemes()));
 
@@ -172,6 +173,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
     goToWeaponPage->setIconSize(pmEdit.size());
     goToWeaponPage->setIcon(pmEdit);
     goToWeaponPage->setMaximumWidth(pmEdit.width() + 6);
+    goToWeaponPage->setStyleSheet("padding: 0px;");
     SchemeWidgetLayout->addWidget(goToWeaponPage, 1, 3);
     connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
 

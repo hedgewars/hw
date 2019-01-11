@@ -142,6 +142,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnNewTeam->setIconSize(pmNew.size());
             BtnNewTeam->setIcon(pmNew);
             BtnNewTeam->setMaximumWidth(pmNew.width() + 6);
+            BtnNewTeam->setStyleSheet("padding: 0px;");
             connect(BtnNewTeam, SIGNAL(clicked()), this, SIGNAL(newTeamRequested()));
             groupTeams->layout()->addWidget(BtnNewTeam, 0, 1);
 
@@ -150,6 +151,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnEditTeam->setIconSize(pmEdit.size());
             BtnEditTeam->setIcon(pmEdit);
             BtnEditTeam->setMaximumWidth(pmEdit.width() + 6);
+            BtnEditTeam->setStyleSheet("padding: 0px;");
             connect(BtnEditTeam, SIGNAL(clicked()), this, SLOT(requestEditSelectedTeam()));
             groupTeams->layout()->addWidget(BtnEditTeam, 0, 2);
 
@@ -158,6 +160,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnDeleteTeam->setIconSize(pmDelete.size());
             BtnDeleteTeam->setIcon(pmDelete);
             BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
+            BtnDeleteTeam->setStyleSheet("padding: 0px;");
             connect(BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(requestDeleteSelectedTeam()));
             groupTeams->layout()->addWidget(BtnDeleteTeam, 0, 3);
 
@@ -184,6 +187,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             SchemeNew->setIconSize(pmNew.size());
             SchemeNew->setIcon(pmNew);
             SchemeNew->setMaximumWidth(pmNew.width() + 6);
+            SchemeNew->setStyleSheet("padding: 0px;");
             groupSchemes->layout()->addWidget(SchemeNew, 0, 1);
 
             SchemeEdit = new QPushButton(groupSchemes);
@@ -191,6 +195,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             SchemeEdit->setIconSize(pmEdit.size());
             SchemeEdit->setIcon(pmEdit);
             SchemeEdit->setMaximumWidth(pmEdit.width() + 6);
+            SchemeEdit->setStyleSheet("padding: 0px;");
             groupSchemes->layout()->addWidget(SchemeEdit, 0, 2);
 
             SchemeDelete = new QPushButton(groupSchemes);
@@ -198,6 +203,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             SchemeDelete->setIconSize(pmDelete.size());
             SchemeDelete->setIcon(pmDelete);
             SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
+            SchemeDelete->setStyleSheet("padding: 0px;");
             groupSchemes->layout()->addWidget(SchemeDelete, 0, 3);
         }
 
@@ -217,6 +223,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponNew->setIconSize(pmNew.size());
             WeaponNew->setIcon(pmNew);
             WeaponNew->setMaximumWidth(pmNew.width() + 6);
+            WeaponNew->setStyleSheet("padding: 0px;");
             groupWeapons->layout()->addWidget(WeaponNew, 0, 1);
 
             WeaponEdit = new QPushButton(groupWeapons);
@@ -224,6 +231,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponEdit->setIconSize(pmEdit.size());
             WeaponEdit->setIcon(pmEdit);
             WeaponEdit->setMaximumWidth(pmEdit.width() + 6);
+            WeaponEdit->setStyleSheet("padding: 0px;");
             groupWeapons->layout()->addWidget(WeaponEdit, 0, 2);
 
             WeaponDelete = new QPushButton(groupWeapons);
@@ -231,6 +239,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponDelete->setIconSize(pmDelete.size());
             WeaponDelete->setIcon(pmDelete);
             WeaponDelete->setMaximumWidth(pmDelete.width() + 6);
+            WeaponDelete->setStyleSheet("padding: 0px;");
             groupWeapons->layout()->addWidget(WeaponDelete, 0, 3);
         }
 
