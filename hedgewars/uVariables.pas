@@ -186,6 +186,7 @@ var
 
     CrosshairX      : LongInt;
     CrosshairY      : LongInt;
+    CrosshairGear   : PGear;
     CursorMovementX : LongInt;
     CursorMovementY : LongInt;
     cWaveHeight     : LongInt;

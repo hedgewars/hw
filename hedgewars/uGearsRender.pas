@@ -263,7 +263,7 @@ end;
 // Render some informational GUI next to hedgehog, like fuel and alternate weapon
 procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
 var HH: PHedgehog;
-    sx, sy: LongInt;
+    sx, sy, sign, m: LongInt;
 begin
     HH:= Gear^.Hedgehog;
     sx:= ox + 1; // this offset is very common
@@ -275,6 +275,23 @@ begin
     if (Gear^.State and gstHHGone) <> 0 then
         exit;
 
+    // render crosshair
+    if (Gear = CrosshairGear) then
+        begin
+        sign:= hwSign(Gear^.dX);
+        m:= 1;
+        if ((Gear^.State and gstHHHJump) <> 0) and (HH^.Effects[heArtillery] = 0) then
+            m:= -1;
+        setTintAdd(true);
+        Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
+        DrawTextureRotated(CrosshairTexture,
+                12, 12, CrosshairX + WorldDx, CrosshairY + WorldDy, 0,
+                sign * m * (Gear^.Angle * 180.0) / cMaxAngle);
+        untint;
+        setTintAdd(false);
+        end;
+
+    // render gear-related extras: alt weapon, fuel, other
     if ((Gear^.State and gstHHDriven) <> 0) and (CurAmmoGear <> nil) then
         begin
         case CurAmmoGear^.Kind of
@@ -496,17 +513,11 @@ begin
 
                 DrawLineWrapped(hx, hy, tx, ty, 1.0, (sign*m) < 0, wraps, $FF, $00, $00, $C0);
                 end;
-            // draw crosshair
+            // calculate crosshair position
             CrosshairX := Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle));
             CrosshairY := Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
-
-            setTintAdd(true);
-            Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
-            DrawTextureRotated(CrosshairTexture,
-                    12, 12, CrosshairX + WorldDx, CrosshairY + WorldDy, 0,
-                    sign * m * (Gear^.Angle * 180.0) / cMaxAngle);
-            untint;
-            setTintAdd(false);
+            // crosshair will be rendered in RenderHHGuiExtras
+            CrosshairGear := Gear;
             end;
 
         hx:= ox + 8 * sign;
@@ -922,6 +933,7 @@ begin
 
     end else // not gstHHDriven
         begin
+        CrosshairGear:= nil;
         // check if hedgehog is sliding/rolling
         if (Gear^.Damage > 0) and (HH^.Effects[heFrozen] = 0)
         and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
