@@ -533,8 +533,11 @@ QLayout * PageScheme::footerLayoutDefinition()
 
     bottomLayout->addWidget(selectScheme, 0);
     BtnCopy = addButton(tr("Copy"), bottomLayout, 1);
+    BtnCopy->setStyleSheet("padding: 5px;");
     BtnNew = addButton(tr("New"), bottomLayout, 2);
+    BtnNew->setStyleSheet("padding: 5px;");
     BtnDelete = addButton(tr("Delete"), bottomLayout, 3);
+    BtnDelete->setStyleSheet("padding: 5px;");
 
     bottomLayout->setStretch(1,1);
     bottomLayout->setStretch(2,1);
