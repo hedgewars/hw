@@ -6377,7 +6377,11 @@ begin
             Timer := iceWaitCollision;
             FlightTime := 0;
             end
-        else
+        // Extend ice beam, unless it is far outside he map boundaries
+        else if (not ((hwRound(X + dX) > max(LAND_WIDTH,4096)*2) or
+            (hwRound(X + dX) < -max(LAND_WIDTH,4096)*2) or
+            (hwRound(Y + dY) < -max(LAND_HEIGHT,4096)*2) or
+            (hwRound(Y + dY) > max(LAND_HEIGHT,4096)+512))) then
             begin
             X:= X + dX;
             Y:= Y + dY;
@@ -6582,16 +6586,6 @@ begin
                     Y:= HHGear^.Y
                     end 
                 end;
-            if (gX > max(LAND_WIDTH,4096)*2) or
-                    (gX < -max(LAND_WIDTH,4096)) or
-                    (gY < -max(LAND_HEIGHT,4096)) or
-                    (gY > max(LAND_HEIGHT,4096)+512) then
-                begin
-                //X:= HHGear^.X;
-                //Y:= HHGear^.Y
-                Target.X:= gX;
-                Target.Y:= gY;
-                end
         end
     end;
 end;
