@@ -26,8 +26,8 @@ each of the teams (team 1 to team 8).
   E = Engineer
   N = Ninja
   D = Demo
-  I = Sniper
-  A = Saint
+  X = Sniper
+  H = Saint
   P = Pyro
   L = Loon
 
@@ -40,7 +40,7 @@ Example 1:
 
 Example 2:
 
-    t1=LPAIDNES,t2=NNNNNNNN
+    t1=LPHXDNES,t2=NNNNNNNN
 
 Team 1: Loon, Pyro, Saint, Sniper, Demo, Ninja, Engineer, Soldier.
 Team 2: All-ninja team.
@@ -61,14 +61,14 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 -- default team values
 local currTeamIdx = 0;
 local teamRoles = {
-	{'S','E','N','D','I','A','P','L'},
-	{'S','E','N','D','I','A','P','L'},
-	{'S','E','N','D','I','A','P','L'},
-	{'S','E','N','D','I','A','P','L'},
-	{'S','E','N','D','I','A','P','L'},
-	{'S','E','N','D','I','A','P','L'},
-	{'S','E','N','D','I','A','P','L'},
-	{'S','E','N','D','I','A','P','L'}
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'}
 };
 
 local numhhs = 0
@@ -122,11 +122,11 @@ function onNewAmmoStore(groupIndex, hogIndex)
 		SetAmmo(amDynamite, 1, 0, 0, 0)
 		SetAmmo(amMine, 1, 0, 0, 0)
 		SetAmmo(amDrill, 1, 0, 0, 0)
-	elseif teamRoles[groupIndex][hogIndex] == 'I' then
+	elseif teamRoles[groupIndex][hogIndex] == 'X' then
 		SetAmmo(amSniperRifle, 1, 0, 0, 0)
 		SetAmmo(amDEagle, 1, 0, 0, 0)
 		SetAmmo(amPortalGun, 2, 0, 0, 0)
-	elseif teamRoles[groupIndex][hogIndex] == 'A' then
+	elseif teamRoles[groupIndex][hogIndex] == 'H' then
 		SetAmmo(amSeduction, 9, 0, 0, 0)
 		SetAmmo(amResurrector, 1, 0, 0, 0)
 		SetAmmo(amInvulnerable, 1, 0, 0, 0)
@@ -197,13 +197,13 @@ function CreateTeam()
 			SetHogHat(hhs[i], "Skull")
 			SetHealth(hhs[i], scaleHealth(200))
 
-		elseif teamRoles[currTeamIdx][z] == 'I' then
+		elseif teamRoles[currTeamIdx][z] == 'X' then
 
 			SetHogName(hhs[i],loc("Sniper"))
 			SetHogHat(hhs[i], "Sniper")
 			SetHealth(hhs[i], scaleHealth(120))
 
-		elseif teamRoles[currTeamIdx][z] == 'A' then
+		elseif teamRoles[currTeamIdx][z] == 'H' then
 
 			SetHogName(hhs[i],loc("Saint"))
 			SetHogHat(hhs[i], "angel")

@@ -718,7 +718,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(100)           // get away time  41
             << QVariant(0)             // world edge     42
             // NOTE: If you change this, also change the defaults in the The Specialists script
-            << QVariant("t=SENDIAPL")  // scriptparam    43
+            << QVariant("t=SENDXHPL")  // scriptparam    43
             ;
 
     QList<QVariant> spaceinvasion;
