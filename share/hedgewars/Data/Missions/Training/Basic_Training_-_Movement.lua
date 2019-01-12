@@ -397,9 +397,12 @@ function onGearDelete(gear)
 		loc("Now try to get out of this bounce house|and take the next crate."), 2, 8000)
 	elseif gear == crates[9] then
 		if INTERFACE == "desktop" then
-			ctrl = loc("Look around: [Mouse movement]")
+			ctrl = loc("Look around: [Mouse movement]") .. "|" ..
+			loc("Zoom: [Rotate mouse wheel]")
 		elseif INTERFACE == "touch" then
-			ctrl = loc("Look around: [Tap or swipe on the screen]")
+			ctrl = loc("Look around: [Tap or swipe on the screen]") .. "|" ..
+			-- multi-touch gesture
+			loc("Zoom: [Pinch] with 2 fingers")
 		end
 		ShowMission(loc("Basic Movement Training"), loc("Health"), loc("You just got yourself some extra health.|The more health your hedgehogs have, the better!").."|"..
 		loc("Now go to the next crate.").."|"..
