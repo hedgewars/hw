@@ -3047,18 +3047,16 @@ end;
 procedure doStepAirAttack(Gear: PGear);
 var valid: boolean;
     HHGear: PGear;
-    planeY: LongInt;
 begin
     AllInactive := false;
 
-    planeY:= topY - 300;
     valid:= true;
     if (WorldEdge = weBounce) then
         if (Gear^.X.QWordValue = 0) and (Gear^.Target.X > rightX) then
             valid:= false
         else if (Gear^.X.QWordValue <> 0) and (Gear^.Target.X < leftX) then
             valid:= false
-        else if (Gear^.Target.Y < planeY) then
+        else if (Gear^.Target.Y < (topY - 50)) then
             valid:= false;
 
     if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
@@ -3092,7 +3090,7 @@ begin
         Gear^.X := int2hwFloat(max(LAND_WIDTH,4096) + 2048);
         end;
 
-    Gear^.Y := int2hwFloat(planeY);
+    Gear^.Y := int2hwFloat(topY - 300);
     Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * (Gear^.Health-1) * Gear^.Damage) / 2;
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
