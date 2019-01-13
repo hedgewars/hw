@@ -3044,8 +3044,41 @@ begin
 end;
 
 procedure doStepAirAttack(Gear: PGear);
+var valid: boolean;
+    HHGear: PGear;
+    planeY: LongInt;
 begin
     AllInactive := false;
+
+    planeY:= topY - 300;
+    valid:= true;
+    if (WorldEdge = weBounce) then
+        if (Gear^.X.QWordValue = 0) and (Gear^.Target.X > rightX) then
+            valid:= false
+        else if (Gear^.X.QWordValue <> 0) and (Gear^.Target.X < leftX) then
+            valid:= false
+        else if (Gear^.Target.Y < planeY) then
+            valid:= false;
+
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        HHGear:= Gear^.Hedgehog^.Gear;
+
+    if (not valid) then
+        begin
+        if (HHGear <> nil) then
+            begin
+            HHGear^.Message := HHGear^.Message and (not gmAttack);
+            HHGear^.State := HHGear^.State and (not gstAttacking);
+            HHGear^.State := HHGear^.State or gstChooseTarget;
+            isCursorVisible := true;
+            end;
+        DeleteGear(Gear);
+        PlaySound(sndDenied);
+        exit;
+        end;
+
+    if (HHGear <> nil) then
+        PlaySoundV(sndIncoming, Gear^.Hedgehog^.Team^.voicepack);
 
     if Gear^.X.QWordValue = 0 then
         begin
@@ -3058,7 +3091,7 @@ begin
         Gear^.X := int2hwFloat(max(LAND_WIDTH,4096) + 2048);
         end;
 
-    Gear^.Y := int2hwFloat(topY-300);
+    Gear^.Y := int2hwFloat(planeY);
     Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * (Gear^.Health-1) * Gear^.Damage) / 2;
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)

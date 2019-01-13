@@ -1290,7 +1290,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amAirAttack;
-                AttackVoice: sndIncoming;
+                AttackVoice: sndNone; // handled in doStepAirAttack
                 Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
@@ -1318,7 +1318,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amMineStrike;
-                AttackVoice: sndIncoming;
+                AttackVoice: sndNone; // handled in doStepAirAttack
                 Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
@@ -1615,7 +1615,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amNapalm;
-                AttackVoice: sndIncoming;
+                AttackVoice: sndNone; // handled in doStepAirAttack
                 Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
@@ -2222,7 +2222,7 @@ const
                 Timer: 5000;
                 Pos: 0;
                 AmmoType: amDrillStrike;
-                AttackVoice: sndIncoming;
+                AttackVoice: sndNone; // handled in doStepAirAttack
                 Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
