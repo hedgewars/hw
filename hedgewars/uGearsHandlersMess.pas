@@ -3019,6 +3019,15 @@ begin
     if (Gear^.Health > 0) and (not (Gear^.X < Gear^.dX)) and (Gear^.X < Gear^.dX + cAirPlaneSpeed) then
         begin
         dec(Gear^.Health);
+        if (WorldEdge = weBounce) and (((Gear^.Tag = 1) and (hwRound(Gear^.X) > rightX)) or ((Gear^.Tag = -1) and (hwRound(Gear^.X) < leftX))) then
+            begin
+            // Don't spawn missile if it would end up inside bounce world edge of the opposite side
+            PlaySound(sndVaporize);
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmoke);
+            end
+        else
+            begin
+            // Spawn missile
             case Gear^.State of
                 0: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
                 1: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, cBombsSpeed * Gear^.Tag, _0, 0);
@@ -3027,9 +3036,10 @@ begin
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
             //                 Gear^.Tag, _0, 5000);
             end;
-        Gear^.dX := Gear^.dX + int2hwFloat(Gear^.Damage * Gear^.Tag);
-        if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
-            FollowGear^.State:= FollowGear^.State or gstSubmersible;
+            Gear^.dX := Gear^.dX + int2hwFloat(Gear^.Damage * Gear^.Tag);
+            if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
+                FollowGear^.State:= FollowGear^.State or gstSubmersible;
+            end;
         StopSoundChan(Gear^.SoundChannel, 4000);
         end;
 
@@ -3051,11 +3061,16 @@ begin
     AllInactive := false;
 
     valid:= true;
+    // Bounce world edge restrictions ...
     if (WorldEdge = weBounce) then
+        // If plane flies right, deny placement inside the right bounce side
         if (Gear^.X.QWordValue = 0) and (Gear^.Target.X > rightX) then
             valid:= false
+        // If plane flies left, deny placement inside the left bounce side
         else if (Gear^.X.QWordValue <> 0) and (Gear^.Target.X < leftX) then
             valid:= false
+        // Deny placement of high targets. This serves as a buffer to further
+        // reduce potentially weird bouncy gear behaviour
         else if (Gear^.Target.Y < (topY - 50)) then
             valid:= false;
 
