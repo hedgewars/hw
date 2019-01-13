@@ -767,16 +767,14 @@ if cAirMines > 0 then
     while (i < cAirMines) and (j < 1000*cAirMines) do
         begin
         p:= 0;
-        if hasBorder then
-            begin
-            rx:= leftX+GetRandom(rightX-leftX-16)+8;
-            ry:= topY+GetRandom(LAND_HEIGHT-topY-16)+8
-            end
+        if (hasBorder) or (WorldEdge = weBounce) then
+            rx:= leftX+GetRandom(rightX-leftX-16)+8
         else
-            begin
             rx:= leftX+GetRandom(rightX-leftX+400)-200;
-            ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200
-            end;
+        if hasBorder then
+            ry:= topY+GetRandom(LAND_HEIGHT-topY-16)+8
+        else
+            ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200;
         Gear^.X:= int2hwFloat(CalcWorldWrap(rx,Gear^.Radius));
         Gear^.Y:= int2hwFloat(ry);
         if CheckLandValue(rx, ry, $FFFF) and
