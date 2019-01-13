@@ -44,6 +44,7 @@ Game HUD:
  * Hide most HUD elements in cinematic mode
  * Don't show "F1", "F2", etc. in ammo menu if these aren't the actual slot keys
  * Fix wind bar animation not looping properly
+ * Fix airplane line being drawn above many HUD elements
  * Suppress “<team> is gone.” message at end of game
 
 Frontend:
