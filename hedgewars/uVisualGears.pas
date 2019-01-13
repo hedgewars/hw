@@ -74,7 +74,7 @@ if Steps = 0 then
 
 for i:= 0 to 6 do
     begin
-    t:= VisualGearLayers[i];
+    t:= VisualGearLayersStart[i];
     while t <> nil do
         begin
         Gear:= t;
@@ -93,7 +93,7 @@ if (vobCount = 0) or (vobCount > 200) then
 for i:= 2 to 6 do
     if i <> 3 then
         begin
-        t:= VisualGearLayers[i];
+        t:= VisualGearLayersStart[i];
         while t <> nil do
             begin
             Gear:= t;
@@ -154,7 +154,7 @@ else
 case Layer of
     // this layer is very distant in the background when stereo
     0: begin
-        Gear:= VisualGearLayers[0];
+        Gear:= VisualGearLayersStart[0];
         while Gear <> nil do
             begin
             if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
@@ -189,7 +189,7 @@ case Layer of
        end;
     // this layer is on the land level (which is close but behind the screen plane) when stereo
     1: begin
-       Gear:= VisualGearLayers[1];
+       Gear:= VisualGearLayersStart[1];
        while Gear <> nil do
           begin
           if Gear^.Tint <> $FFFFFFFF then
@@ -248,7 +248,7 @@ case Layer of
        end;
     // this layer is on the screen plane (depth = 0) when stereo
     3: begin
-       Gear:= VisualGearLayers[3];
+       Gear:= VisualGearLayersStart[3];
        while Gear <> nil do
            begin
            tinted:= false;
@@ -307,7 +307,7 @@ case Layer of
        end;
     // this layer is outside the screen when stereo
     2: begin
-       Gear:= VisualGearLayers[2];
+       Gear:= VisualGearLayersStart[2];
        while Gear <> nil do
            begin
            tinted:= false;
@@ -382,7 +382,7 @@ case Layer of
        end;
      // this layer is half-way between the screen plane (depth = 0) when in stereo, and the land
      4: begin
-        Gear:= VisualGearLayers[4];
+        Gear:= VisualGearLayersStart[4];
         while Gear <> nil do
             begin
             if Gear^.Tint <> $FFFFFFFF then
@@ -408,7 +408,7 @@ case Layer of
         end;
      // this layer is on the screen plane (depth = 0) when stereo, but just behind the land
      5: begin
-        Gear:= VisualGearLayers[5];
+        Gear:= VisualGearLayersStart[5];
         while Gear <> nil do
             begin
             if Gear^.Tint <> $FFFFFFFF then
@@ -434,7 +434,7 @@ case Layer of
         end;
      // this layer is on the screen plane (depth = 0) when stereo, but just in front of the land
     6: begin
-        Gear:= VisualGearLayers[6];
+        Gear:= VisualGearLayersStart[6];
         while Gear <> nil do
             begin
             if Gear^.Tint <> $FFFFFFFF then
@@ -474,7 +474,7 @@ if cCloudsNumber = cSDCloudsNumber then
     exit;
 for i:= 0 to 6 do
     begin
-    vg:= VisualGearLayers[i];
+    vg:= VisualGearLayersStart[i];
     while vg <> nil do
         if vg^.Kind = vgtCloud then
             begin
@@ -514,7 +514,7 @@ if (vobCount = vobSDCount) and (vobFrameTicks = vobSDFrameTicks) and
     exit;
 for i:= 0 to 6 do
     begin
-    vg:= VisualGearLayers[i];
+    vg:= VisualGearLayersStart[i];
     while vg <> nil do
         if vg^.Kind = vgtFlake then
             begin
@@ -537,7 +537,10 @@ var i: LongWord;
 begin
 VGCounter:= 0;
 for i:= 0 to 6 do
-    VisualGearLayers[i]:= nil;
+    begin
+    VisualGearLayersStart[i]:= nil;
+    VisualGearLayersEnd[i]:= nil;
+    end;
 end;
 
 procedure freeModule;
@@ -545,7 +548,7 @@ var i: LongWord;
 begin
 VGCounter:= 0;
 for i:= 0 to 6 do
-    while VisualGearLayers[i] <> nil do DeleteVisualGear(VisualGearLayers[i]);
+    while VisualGearLayersStart[i] <> nil do DeleteVisualGear(VisualGearLayersStart[i]);
 end;
 
 end.
