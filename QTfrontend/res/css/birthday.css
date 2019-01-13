@@ -446,7 +446,7 @@ background-color: #150A61;
 background-color: #150A61;
 }
 
-.QPushButton {
+.QPushButton, .QPushButtonWithSound {
 padding: 3px 5px;
 }
 
