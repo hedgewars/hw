@@ -487,14 +487,7 @@ with Gear^,
                                  PlaySoundV(sndOw1, Team^.voicepack);
                                  cVampiric:= true;
                                  end;
-                        amPiano: begin
-                                 // Tuck the hedgehog away until the piano attack is completed
-                                 Unplaced:= true;
-                                 X:= _0;
-                                 Y:= _0;
-                                 newGear:= AddGear(TargetPoint.X, -1024, gtPiano, 0, _0, _0, 0);
-                                 PauseMusic
-                                 end;
+                        amPiano: newGear:= AddGear(TargetPoint.X, -1024, gtPiano, 0, _0, _0, 0);
                  amFlamethrower: newGear:= AddGear(hwRound(X), hwRound(Y), gtFlamethrower,  0, xx * _0_5, yy * _0_5, 0);
                       amLandGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtLandGun,  0, xx * _0_5, yy * _0_5, 0);
                   amResurrector: begin

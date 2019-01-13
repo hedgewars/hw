@@ -2027,7 +2027,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
                             ammoprop_NeedTarget or
-                            ammoprop_NoTargetAfter or
+                            // NoTargetAfter is handled manually in doStepPiano
                             ammoprop_AttackingPut or
                             ammoprop_DontHold or
                             ammoprop_NotBorder or
@@ -2037,7 +2037,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amPiano;
-                AttackVoice: sndIncoming;
+                AttackVoice: sndNone; // handled in doStepPiano
                 Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;

@@ -13,6 +13,9 @@ Gameplay:
  * Fix poison damage not working in first round
  * Use player-chosen team identity in campaigns and singleplayer missions
  * Fix player-chosen teams ignoring custom team controls in campaigns
+ * Fix broken behaviour of airborne attacks when placed near bounce world edge
+ * Deny placement of airborne attack in “impossible” places in maps with bounce world edge
+ * Deny placement of piano beyond bounce world edge
 
 Styles and schemes:
  + The Specialists: Unlock game scheme

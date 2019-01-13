@@ -115,6 +115,7 @@ procedure doStepMovingPortal_real(Gear: PGear);
 procedure doStepMovingPortal(Gear: PGear);
 procedure doStepPortalShot(newPortal: PGear);
 procedure doStepPiano(Gear: PGear);
+procedure doStepPianoWork(Gear: PGear);
 procedure doStepSineGunShotWork(Gear: PGear);
 procedure doStepSineGunShot(Gear: PGear);
 procedure doStepFlamethrowerWork(Gear: PGear);
@@ -5330,8 +5331,51 @@ begin
     newPortal^.doStep := @doStepMovingPortal;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepPiano(Gear: PGear);
+var valid: boolean;
+    HHGear: PGear;
+begin
+    AllInactive := false;
+    valid := true;
+
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+        HHGear := Gear^.Hedgehog^.Gear;
+
+    if (WorldEdge = weBounce) then
+        if (hwRound(Gear^.X) - Gear^.Radius < leftX) then
+            valid := false
+        else if (hwRound(Gear^.X) - Gear^.Radius > rightX) then
+            valid := false;
+
+    if (not valid) then
+        begin
+        if (HHGear <> nil) then
+            begin
+            HHGear^.Message := HHGear^.Message and (not gmAttack);
+            HHGear^.State := HHGear^.State and (not gstAttacking);
+            HHGear^.State := HHGear^.State or gstChooseTarget;
+            isCursorVisible := true;
+            end;
+        DeleteGear(Gear);
+        PlaySound(sndDenied);
+        exit;
+        end;
+
+    isCursorVisible := false;
+    if (HHGear <> nil) then
+        begin
+        PlaySoundV(sndIncoming, Gear^.Hedgehog^.Team^.voicepack);
+        // Tuck the hedgehog away until the piano attack is completed
+        Gear^.Hedgehog^.Unplaced:= true;
+        HHGear^.X:= _0;
+        HHGear^.Y:= _0;
+        end;
+
+    PauseMusic;
+    Gear^.doStep:= @doStepPianoWork;
+end;
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepPianoWork(Gear: PGear);
 var
     r0, r1: LongInt;
     odY: hwFloat;
