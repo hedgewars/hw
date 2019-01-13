@@ -1746,7 +1746,7 @@ Intended to check Gear X/Y against the map left/right edges and apply one of the
 Trying to make the checks a little broader than on first pass to catch things that don't move normally.
 *)
 function WorldWrap(var Gear: PGear): boolean;
-//var tdx: hwFloat;
+var bounced: boolean;
 begin
 WorldWrap:= false;
 if WorldEdge = weNone then exit(false);
@@ -1763,19 +1763,22 @@ if (hwRound(Gear^.X) < leftX) or
         end
     else if WorldEdge = weBounce then
         begin
-        if (hwRound(Gear^.X) - Gear^.Radius < leftX) then
+        bounced:= false;
+        if (hwRound(Gear^.X) - Gear^.Radius < leftX) and (hwSign(Gear^.dX) = -1) and (not isZero(Gear^.dX)) then
             begin
             LeftImpactTimer:= 333;
             Gear^.dX.isNegative:= false;
-            Gear^.X:= int2hwfloat(leftX + Gear^.Radius)
+            Gear^.X:= int2hwfloat(leftX + Gear^.Radius);
+            bounced:= true;
             end
-        else
+        else if (hwRound(Gear^.X) - Gear^.Radius > rightX) and (hwSign(Gear^.dX) = 1) and (not isZero(Gear^.dX)) then
             begin
             RightImpactTimer:= 333;
             Gear^.dX.isNegative:= true;
-            Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
+            Gear^.X:= int2hwfloat(rightX-Gear^.Radius);
+            bounced:= true;
             end;
-        if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
+        if (bounced) and (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
             AddBounceEffectForGear(Gear);
         end{
     else if WorldEdge = weSea then
