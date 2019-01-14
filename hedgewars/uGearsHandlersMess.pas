@@ -540,7 +540,7 @@ begin
     if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_15.QWordValue) and (Gear^.dY.QWordValue < _0_15.QWordValue) then
         Gear^.State := Gear^.State or gstCollision;
 
-    if ((xland or land) and lfBouncy <> 0) and (Gear^.Radius >= 3) and
+    if ((xland or land) and lfBouncy <> 0) and
        ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)) then
         begin
         AddBounceEffectForGear(Gear);
@@ -3714,7 +3714,7 @@ begin
         Gear^.Angle := (LongInt(Gear^.Angle) + 2) and 3;
 
         // Bounce effect
-        if (Gear^.Karma = 2) and (Gear^.Radius > 2) then
+        if (Gear^.Karma = 2) then
             AddBounceEffectForGear(Gear, 0.55);
 
         Gear^.Tag:= 0;

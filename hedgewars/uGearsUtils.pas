@@ -1765,7 +1765,7 @@ if (hwRound(Gear^.X) < leftX) or
         if (bounced) then
             begin
             WorldWrap:= true;
-            if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
+            if (Gear^.dX.QWordValue > _0_001.QWordValue) then
                AddBounceEffectForGear(Gear);
             end;
         end
@@ -1827,7 +1827,7 @@ end;
 procedure AddBounceEffectForGear(Gear: PGear; imageScale: Single);
 var boing: PVisualGear;
 begin
-    if Gear^.Density < _0_01 then
+    if (Gear^.Density < _0_01) or (Gear^.Radius < 2) then
         exit;
     boing:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot, 0, false, 1);
     if boing <> nil then
