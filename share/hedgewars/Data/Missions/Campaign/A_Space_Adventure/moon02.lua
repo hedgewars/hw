@@ -13,12 +13,16 @@ local missionName = loc("Chasing the blue hog")
 local challengeObjectives = loc("Use the rope in order to catch the blue hedgehog").."|"..
 	loc("You have to stand very close to him")
 local currentPosition = 1
+local raceSectionStarted = false
+local runnerCaught = false
 local previousTimeLeft = 0
 local startChallenge = false
 local winningTime = nil
 local currentTime = 0
 local runnerTime = 0
 local record
+local lostGame = false
+local heroHurt = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -125,14 +129,27 @@ function onNewTurn()
 			runnerTime = runnerTime + runner.places[currentPosition].turnTime
 			SetTeamLabel(teamB.name, string.format(loc("%.1fs"), runnerTime/1000))
 		else
-			if GetAmmoCount(hero.gear, amRope) == 0  then
-				lose()
-			end
 			SetWeapon(amRope)
 			SetTurnTimeLeft(runner.places[currentPosition].turnTime + previousTimeLeft)
 			previousTimeLeft = 0
+			if currentPosition > 1 then
+				raceSectionStarted = true
+			end
+			runnerCaught = false
 		end
 	end
+end
+
+function onEndTurn()
+	if raceSectionStarted and currentPosition > 1 and currentPosition < 5 then
+		if CurrentHedgehog == hero.gear and (not runnerCaught) and (not heroHurt) then
+			-- sndBoring played manually because lose calls EndGame, which suppresses
+			-- the taunt.
+			PlaySound(sndBoring, hero.gear)
+			lose()
+		end
+	end
+	raceSectionStarted = false
 end
 
 function onGameTick()
@@ -159,6 +176,12 @@ end
 function onPrecise()
 	if GameTime > 3000 then
 		SetAnimSkip(true)
+	end
+end
+
+function onGearDamage(gear)
+	if gear == hero.gear then
+		heroHurt = true
 	end
 end
 
@@ -258,11 +281,11 @@ function moveRunner()
 		end
 		AddAmmo(hero.gear, amRope, 1)
 		if currentPosition ~= 1 then
-			PlaySound(sndVictory)
 			if currentPosition > 1 and currentPosition < 4 then
 				AnimCaption(hero.gear, loc("Go, get him again!"), 3000)
 				AnimSay(runner.gear, loc("You got me!"), SAY_SAY, 3000)
 			end
+			runnerCaught = true
 			previousTimeLeft = TurnTimeLeft
 		end
 		currentPosition = currentPosition + 1
@@ -273,6 +296,10 @@ function moveRunner()
 end
 
 function lose()
+	if lostGame then
+		return
+	end
+	lostGame = true
 	SendStat(siGameResult, loc("Too slow! Try again ..."))
 	SendStat(siCustomAchievement, loc("You have to catch the other hog 3 times."))
 	SendStat(siCustomAchievement, loc("The time that you have left when you reach the blue hedgehog will be added to the next turn."))
