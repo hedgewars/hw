@@ -197,6 +197,6 @@ char controllerdown[128] = QT_TRANSLATE_NOOP("binds (keys)", "Down");
 char controllerleft[128] = QT_TRANSLATE_NOOP("binds (keys)", "Left");
 char controllerright[128] = QT_TRANSLATE_NOOP("binds (keys)", "Right");
 
-//: When a control has no key binding
-char unboundcontrol[128] = QT_TRANSLATE_NOOP("binds (keys)", "(Unused)");
+//: Special entry in key selection when an action has no control assigned
+char unboundcontrol[128] = QT_TRANSLATE_NOOP("binds (keys)", "(Don't use)");
 
