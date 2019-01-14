@@ -22,6 +22,7 @@ local goals = {
 local cratesCollected = 0
 local totalCrates = 0
 local damageTaken = false
+local record
 -- health crates
 healthX = 565
 health1Y = 1400
@@ -82,6 +83,7 @@ function onGameInit()
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 
+ 	record = tonumber(GetCampaignVar("FastestMineEscape"))
 	initCheckpoint("desert02")
 
 	AnimInit(true)
@@ -97,6 +99,9 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
+	if record ~= nil then
+		goals[dialog01][3] = goals[dialog01][3] .. "|" .. string.format(loc("Fastest escape: %d turns"), record)
+	end
 	ShowMission(unpack(goals[dialog01]))
 	HideMission()
 
@@ -112,6 +117,9 @@ end
 
 function onNewTurn()
 	SetWeapon(amRope)
+	if TotalRounds >= 0 and record ~= nil then
+		SetTeamLabel(teamA.name, tostring(TotalRounds))
+	end
 end
 
 function onGameTick()
@@ -185,7 +193,6 @@ function heroSafe(gear)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You have escaped successfully."))
 	SendStat(siCustomAchievement, string.format(loc("Your escape took you %d turns."), TotalRounds))
-	local record = tonumber(GetCampaignVar("FastestMineEscape"))
 	if record ~= nil and TotalRounds >= record then
 		SendStat(siCustomAchievement, string.format(loc("Your fastest escape so far: %d turns"), record))
 	end
@@ -231,4 +238,7 @@ end
 function challengeStart()
 	startChallenge = true
 	EndTurn(true)
+	if record ~= nil then
+		SetTeamLabel(teamA.name, "0")
+	end
 end
