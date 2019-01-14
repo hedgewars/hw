@@ -1188,7 +1188,9 @@ begin
             end
         end
     else
+        begin
         DeleteGear(Gear);
+        end
 end;
 
 procedure CreateShellForGear(Gear: PGear; startFrame: Longword);
@@ -2036,8 +2038,7 @@ begin
                 or (getRandom(100) > cMineDudPercent) then
                     begin
                     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
-                    DeleteGear(Gear);
-                    exit   // redundant but we've had too many delete gear bugs
+                    DeleteGear(Gear)
                     end
                 else
                     begin
@@ -2080,8 +2081,7 @@ begin
                     hwRound(Gear^.X) - SpritesData[sprFrozenAirMine].Width div 2,
                     hwRound(Gear^.Y) - SpritesData[sprFrozenAirMine].Height div 2,
                     sprFrozenAirMine, 0, 0, false, false, false, false);
-            DeleteGear(Gear);
-            exit
+            DeleteGear(Gear)
             end;
         doStepFallingGear(Gear);
         exit
@@ -2461,6 +2461,9 @@ begin
         y := hwRound(Gear^.Y);
         hog:= Gear^.Hedgehog;
 
+        DeleteGear(Gear);
+        // <-- delete gear!
+
         if k = gtCase then
             begin
             doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
@@ -2470,18 +2473,17 @@ begin
         else if k = gtTarget then
             uStats.TargetHit()
         else if k = gtExplosives then
-            begin
-            doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
-            for i:= 0 to 31 do
                 begin
-                dX := AngleCos(i * 64) * _0_5 * (getrandomf + _1);
-                dY := AngleSin(i * 64) * _0_5 * (getrandomf + _1);
-                AddGear(x, y, gtFlame, 0, dX, dY, 0);
-                AddGear(x, y, gtFlame, gstTmpFlag, -dX, -dY, 0);
-                end
-            end;
-        DeleteGear(Gear);
-        exit
+                doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
+                for i:= 0 to 31 do
+                    begin
+                    dX := AngleCos(i * 64) * _0_5 * (getrandomf + _1);
+                    dY := AngleSin(i * 64) * _0_5 * (getrandomf + _1);
+                    AddGear(x, y, gtFlame, 0, dX, dY, 0);
+                    AddGear(x, y, gtFlame, gstTmpFlag, -dX, -dY, 0);
+                    end
+                end;
+            exit
         end;
 
     if k = gtExplosives then
@@ -2860,7 +2862,7 @@ begin
                 AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
 
         DeleteGear(Gear)
-        end
+        end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2953,11 +2955,11 @@ begin
             dY := _0;
             State := State or gstMoving;
             end;
+        DeleteGear(Gear);
         if (GetAmmoEntry(HHGear^.Hedgehog^, amParachute)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
             HHGear^.Hedgehog^.CurAmmoType:= amParachute;
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
-        DeleteGear(Gear);
         exit
         end;
 
@@ -3037,7 +3039,7 @@ begin
         // avoid to play forever (is this necessary?)
         StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear)
-        end
+        end;
 end;
 
 procedure doStepAirAttack(Gear: PGear);
@@ -3080,12 +3082,12 @@ begin
     if (Gear^.State and gstCollision) <> 0 then
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+        DeleteGear(Gear);
         {$IFNDEF PAS2C}
         with mobileRecord do
             if (performRumble <> nil) and (not fastUntilLag) then
                 performRumble(kSystemSoundID_Vibrate);
         {$ENDIF}
-        DeleteGear(Gear);
         exit
         end;
     if (GameTicks and $3F) = 0 then
@@ -3141,7 +3143,7 @@ begin
         begin
         PlaySound(sndPlaced);
         DeleteGear(Gear);
-        AfterAttack
+        AfterAttack;
         end;
 
     HHGear^.State := HHGear^.State and (not (gstAttacking or gstAttacked));
@@ -3173,7 +3175,6 @@ begin
         begin
         DeleteGear(Gear);
         AfterAttack;
-        exit
         end;
     inc(Gear^.Timer);
     if Gear^.Timer = 65 then
@@ -3277,12 +3278,12 @@ begin
         begin
         hedgehog := Gear^.Hedgehog;
         //Msg := Gear^.Message and (not gmSwitch);
+        DeleteGear(Gear);
         ApplyAmmoChanges(hedgehog^);
 
         HHGear := CurrentHedgehog^.Gear;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
         //HHGear^.Message := Msg;
-        DeleteGear(Gear);
         exit
         end;
 
@@ -4486,6 +4487,7 @@ begin
                 Active := true;
                 State := State or gstMoving
                 end;
+            DeleteGear(Gear);
             if (GetAmmoEntry(HHGear^.Hedgehog^, amJetpack)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
                 HHGear^.Hedgehog^.CurAmmoType:= amJetpack;
             isCursorVisible := false;
@@ -4495,7 +4497,6 @@ begin
 //    Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
 
 //AddCaption(trmsg[sidFuel]+': '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
-            DeleteGear(Gear);
             end
 end;
 
@@ -4533,7 +4534,9 @@ begin
     if Gear^.Timer < 2000 then
         inc(Gear^.Timer, 1)
     else
-        DeleteGear(Gear)
+        begin
+        DeleteGear(Gear);
+        end;
 end;
 
 procedure doStepBirdyFly(Gear: PGear);
