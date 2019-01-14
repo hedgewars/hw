@@ -273,7 +273,7 @@ begin
         exit;
 
     // render crosshair
-    if (Gear = CrosshairGear) then
+    if (CrosshairGear <> nil) and (Gear = CrosshairGear) then
         begin
         sign:= hwSign(Gear^.dX);
         m:= 1;
@@ -328,6 +328,7 @@ var i, t: LongInt;
     curhat: PTexture;
 begin
     HH:= Gear^.Hedgehog;
+    CrosshairGear:= nil;
     if HH^.Unplaced then
         exit;
     if (HH^.CurAmmoType = amKnife) and (HH = CurrentHedgehog) then
@@ -510,6 +511,7 @@ begin
 
                 DrawLineWrapped(hx, hy, tx, ty, 1.0, (sign*m) < 0, wraps, $FF, $00, $00, $C0);
                 end;
+
             // calculate crosshair position
             CrosshairX := Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle));
             CrosshairY := Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
@@ -916,7 +918,6 @@ begin
 
     end else // not gstHHDriven
         begin
-        CrosshairGear:= nil;
         // check if hedgehog is sliding/rolling
         if (Gear^.Damage > 0) and (HH^.Effects[heFrozen] = 0)
         and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
