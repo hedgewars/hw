@@ -44,6 +44,8 @@ local function challengeRecordToString(recordType, value)
 		return string.format(loc("Team highscore: %d"), value)
 	elseif recordType == "Lowscore" then
 		return string.format(loc("Team lowscore: %d"), value)
+	elseif recordType == "AccuracyRecord" then
+		return string.format(loc("Team's top accuracy: %d%"), value)
 	end
 end
 
@@ -60,7 +62,7 @@ function updateChallengeRecord(recordType, value, stat)
 	local oldRecord = tonumber(GetMissionVar(recordType))
 	local newRecord = false
 	if stat == nil then
-		stat = true
+		stat = recordType ~= "AccuracyRecord"
 	end
 	if type(oldRecord) ~= "number" then
 		newRecord = true

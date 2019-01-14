@@ -272,12 +272,19 @@ function TargetPracticeMission(params)
 	end
 
 	_G.generateStats = function()
-		local accuracy = (scored/shots)*100
+		local accuracy, accuracy_int
+		if(shots > 0) then
+			accuracy = (scored/shots)*100
+			accuracy_int = div(scored*100, shots)
+		end
 		local end_score_targets = getTargetsScore()
 		local end_score_overall
 		if not game_lost then
 			local end_score_time = math.ceil(time_goal/(params.time/6000))
-			local end_score_accuracy = math.ceil(accuracy * 60)
+			local end_score_accuracy = 0
+			if(shots > 0) then
+				end_score_accuracy = math.ceil(accuracy * 60)
+			end
 			end_score_overall = end_score_time + end_score_targets + end_score_accuracy
 			SetTeamLabel(GetHogTeamName(player), tostring(end_score_overall))
 
@@ -285,8 +292,14 @@ function TargetPracticeMission(params)
 
 			SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), scored, total_targets, end_score_targets))
 			SendStat(siCustomAchievement, string.format(params.shootText, shots))
-			SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%% (+%d points)."), accuracy, end_score_accuracy))
+			if(shots > 0) then
+				SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%% (+%d points)."), accuracy, end_score_accuracy))
+			end
 			SendStat(siCustomAchievement, string.format(loc("You had %.1fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
+
+			if(shots > 0) then
+				updateChallengeRecord("AccuracyRecord", accuracy_int)
+			end
 		else
 			SendStat(siGameResult, loc("Challenge over!"))
 

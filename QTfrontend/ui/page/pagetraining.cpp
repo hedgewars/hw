@@ -359,6 +359,11 @@ void PageTraining::updateInfo()
                     //: Lowest score of a team
                     tr("Team lowscore: %1")
                     .arg(getMissionValue(missionName, teamName, "Lowscore").toString()) + "\n";
+            if (missionValueExists(missionName, teamName, "AccuracyRecord"))
+                highscoreText = highscoreText +
+                    //: Best accuracy of a team (in a challenge)
+                    tr("Team's top accuracy: %1%")
+                    .arg(getMissionValue(missionName, teamName, "AccuracyRecord").toString()) + "\n";
             if (missionValueExists(missionName, teamName, "TimeRecord"))
             {
                 double time = ((double) getMissionValue(missionName, teamName, "TimeRecord").toInt()) / 1000.0;

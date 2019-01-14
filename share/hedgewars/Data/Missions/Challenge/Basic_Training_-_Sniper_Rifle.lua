@@ -405,23 +405,34 @@ end
 -- This function calculates the final score of the player and provides some texts and
 -- data for the final stats screen
 function generateStats()
-	local accuracy = 0
+	local accuracy
+	local accuracy_int
 	if shots > 0 then
 		accuracy = (score/shots)*100
+		accuracy_int = div(score*100, shots)
 	end
 	local end_score_targets = getTargetScore()
 	local end_score_overall
 	if not game_lost then
 		local end_score_time = math.ceil(time_goal/5)
-		local end_score_accuracy = math.ceil(accuracy * 100)
+		local end_score_accuracy = 0
+		if shots > 0 then
+			end_score_accuracy = math.ceil(accuracy * 100)
+		end
 		end_score_overall = end_score_time + end_score_targets + end_score_accuracy
 		SetTeamLabel(playerTeamName, tostring(end_score_overall))
 
 		SendStat(siGameResult, loc("You have successfully finished the sniper rifle training!"))
 		SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), score, score_goal, end_score_targets))
 		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))
-		SendStat(siCustomAchievement, string.format(loc("Accuracy bonus: +%d points"), end_score_accuracy))
+		if end_score_accuracy > 0 then
+			SendStat(siCustomAchievement, string.format(loc("Accuracy bonus: +%d points"), end_score_accuracy))
+		end
 		SendStat(siCustomAchievement, string.format(loc("You had %.2fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
+
+		if(shots > 0) then
+			updateChallengeRecord("AccuracyRecord", accuracy_int)
+		end
 	else
 		SendStat(siGameResult, loc("Challenge over!"))
 
