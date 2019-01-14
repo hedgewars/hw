@@ -92,13 +92,11 @@ function GameOverMan()
 	valkyriesTimer = -1
 	missionWon = false
 	ProtectEnemies()
-	ShowMission(loc("Rope-knocking Challenge"), loc("Challenge over!"), loc("Oh no! Just try again!"), -amSkip, 0)
 	SendStat(siGameResult, loc("Challenge over!"))
 	local score = GetKillScore()
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, score))
 	SendStat(siPointType, "!POINTS")
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
-	PlaySound(sndHellish)
 
 	-- Update highscore
 	updateChallengeRecord("Highscore", score)
@@ -253,8 +251,6 @@ function onGameTick()
 			if missionWon == true then
 				SaveMissionVar("Won", "true")
 				AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
-			else
-				AddCaption(loc("Challenge over!"), capcolDefault, capgrpGameState)
 			end
 			missionEndHandled = true
 		end

@@ -176,9 +176,6 @@ function onGameTick20()
 	-- will be at "0 ms" right at the start of the game.
 	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and score < score_goal and game_lost == false then
 		game_lost = true
-		-- ... and show a short message.
-		AddCaption(loc("Time's up!"))
-		ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
 		-- and generate the stats and go to the stats screen
 		generateStats()
 		EndGame()
@@ -426,7 +423,7 @@ function generateStats()
 		SendStat(siCustomAchievement, string.format(loc("Accuracy bonus: +%d points"), end_score_accuracy))
 		SendStat(siCustomAchievement, string.format(loc("You had %.2fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
 	else
-		SendStat(siGameResult, loc("You lose!"))
+		SendStat(siGameResult, loc("Challenge over!"))
 
 		SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), score, score_goal, end_score_targets))
 		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))

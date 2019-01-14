@@ -301,7 +301,7 @@ function onGearDelete(gear)
 
 	if ((gear == player) or (hhCount == 0)) and (GameOver == false) then
 		SetHealth(player, 0)
-		AddCaption(loc("Disqualified!"))
+		AddCaption(loc("Challenge failed!"))
 		if gear == player then
 			SendStat(siCustomAchievement, loc("Your hedgehog died!"))
 			SendStat(siCustomAchievement, loc("You must survive the flood in order to score."))
@@ -314,7 +314,7 @@ function onGearDelete(gear)
 		show = (type(highscore) == "number") and (highscore > 0)
 		updateChallengeRecord("Highscore", 0, show)
 
-		SendStat(siGameResult, loc("Disqualified!"))
+		SendStat(siGameResult, loc("Challenge failed!"))
 		GameOver = true
 		EndGame()
 	end

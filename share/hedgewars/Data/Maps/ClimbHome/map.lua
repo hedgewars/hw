@@ -672,7 +672,7 @@ end
 
 function makeSinglePlayerLoserStats()
     local actualHeight = getActualHeight(RecordHeight)
-    SendStat(siGameResult, loc("You lose!"))
+    SendStat(siGameResult, loc("Challenge over!"))
     SendStat(siGraphTitle, loc("Your height over time"))
     local text
     if actualHeight > 30000 then text = loc("%s was damn close to home.")

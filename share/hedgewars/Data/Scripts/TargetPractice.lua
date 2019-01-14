@@ -179,7 +179,6 @@ function TargetPracticeMission(params)
 		if TurnTimeLeft < 40 and TurnTimeLeft > 0 and scored < total_targets and game_lost == false then
 			game_lost = true
 			AddCaption(loc("Time’s up!"), capcolDefault, capgrpGameState)
-			ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
 			SetHealth(player, 0)
 			time_goal = 1
 		end
@@ -187,8 +186,6 @@ function TargetPracticeMission(params)
 		if band(GetState(player), gstDrowning) == gstDrowning and game_lost == false and scored < total_targets then
 			game_lost = true
 			time_goal = 1
-			AddCaption(loc("You lose!"), capcolDefault, capgrpGameState)
-			ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 		end
 
 		if scored == total_targets  or game_lost then
@@ -248,8 +245,6 @@ function TargetPracticeMission(params)
 		if GetGearType(gear) == gtHedgehog then
 			if not game_lost then
 				game_lost = true
-				AddCaption(loc("You lose!"), capcolDefault, capgrpGameState)
-				ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 
 				SetHealth(player, 0)
 				time_goal = 1
@@ -293,7 +288,7 @@ function TargetPracticeMission(params)
 			SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%% (+%d points)."), accuracy, end_score_accuracy))
 			SendStat(siCustomAchievement, string.format(loc("You had %.1fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
 		else
-			SendStat(siGameResult, loc("You lose!"))
+			SendStat(siGameResult, loc("Challenge over!"))
 
 			SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), scored, total_targets, end_score_targets))
 			SendStat(siCustomAchievement, string.format(params.shootText, shots))
