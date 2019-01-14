@@ -2081,7 +2081,8 @@ begin
                     hwRound(Gear^.X) - SpritesData[sprFrozenAirMine].Width div 2,
                     hwRound(Gear^.Y) - SpritesData[sprFrozenAirMine].Height div 2,
                     sprFrozenAirMine, 0, 0, false, false, false, false);
-            DeleteGear(Gear)
+            DeleteGear(Gear);
+            exit
             end;
         doStepFallingGear(Gear);
         exit
@@ -2435,6 +2436,7 @@ end;
 procedure doStepCase(Gear: PGear);
 var
     i, x, y: LongInt;
+    Boom: LongWord;
     k: TGearType;
     dX, dY: HWFloat;
     hog: PHedgehog;
@@ -2460,13 +2462,13 @@ begin
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
         hog:= Gear^.Hedgehog;
-
+        Boom:= Gear^.Boom;
         DeleteGear(Gear);
         // <-- delete gear!
 
         if k = gtCase then
             begin
-            doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
+            doMakeExplosion(x, y, Boom, hog, EXPLAutoSound);
             for i:= 0 to 63 do
                 AddGear(x, y, gtFlame, 0, _0, _0, 0);
             end
@@ -2474,7 +2476,7 @@ begin
             uStats.TargetHit()
         else if k = gtExplosives then
                 begin
-                doMakeExplosion(x, y, Gear^.Boom, hog, EXPLAutoSound);
+                doMakeExplosion(x, y, Boom, hog, EXPLAutoSound);
                 for i:= 0 to 31 do
                     begin
                     dX := AngleCos(i * 64) * _0_5 * (getrandomf + _1);
