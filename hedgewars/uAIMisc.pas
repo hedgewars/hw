@@ -229,6 +229,7 @@ while Gear <> nil do
             , gtAirBomb
             , gtCluster
             , gtMelonPiece
+            , gtBee
             , gtMolotov: bonuses.activity:= true;
             gtCase:
                 if (Gear^.AIHints and aihDoesntMatter) = 0 then
@@ -246,6 +247,7 @@ while Gear <> nil do
                 else if (Gear^.State and gstAttacking) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
                 end;
+            gtAirMine: if ((Gear^.State and gstFrozen) = 0) then AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), gear^.Angle+5, -30);
 
             gtExplosives:
                 begin

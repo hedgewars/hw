@@ -1135,7 +1135,7 @@ begin
     if d < 10 then
         begin
         dx:= 0;
-        dy:= 8;
+        dy:= step;
         ap.Angle:= 2048
         end
     else
@@ -1149,17 +1149,18 @@ begin
 
     if dx >= 0 then cx:= 0.45 else cx:= -0.45;
 
-    for i:= 0 to 512 div step - 2 do
+    for i:= 1 to 512 div step - 2 do
         begin
+        x:= x + dx;
+        y:= y + dy;
+
         valueResult:= valueResult +
             RateShove(Me, trunc(x), trunc(y)
                 , 30, 30, 25
                 , cx, -0.9, trackFall or afSetSkip);
-
-        x:= x + dx;
-        y:= y + dy;
         end;
-    if dx = 0 then
+
+    if (d < 10) and (dx = 0) then
         begin
         x:= hwFloat2Float(Me^.X);
         y:= hwFloat2Float(Me^.Y);
@@ -1176,8 +1177,10 @@ begin
                     , -cx, -0.9, trackFall or afSetSkip);
             end
         end;
+
     if v > valueResult then
-        begin
+    begin
+        cx:= -cx;
         ap.Angle:= -2048;
         valueResult:= v
         end;
