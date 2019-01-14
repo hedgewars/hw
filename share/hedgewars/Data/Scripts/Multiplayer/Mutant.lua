@@ -438,7 +438,7 @@ function createEndGameStats()
     local showScore = ""
     table.sort(teamsSorted, function(team1, team2) return getTeamValue(team1, "Score") > getTeamValue(team2, "Score") end)
     for i=1, TeamsCount do
-        SendStat(siPointType, loc("point(s)"))
+        SendStat(siPointType, "!POINTS")
         local score = getTeamValue(teamsSorted[i], "Score")
         local deaths = getTeamValue(teamsSorted[i], "DeadHogs")
         SendStat(siPlayerKills, score, teamsSorted[i])

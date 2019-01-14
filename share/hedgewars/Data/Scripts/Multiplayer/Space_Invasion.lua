@@ -587,7 +587,7 @@ function CommentOnScore()
 		SendStat(siGameResult, string.format(loc("%s wins!"), winnerTeam))
 
 		for i = 1, TeamsCount do
-			SendStat(siPointType, loc("points"))
+			SendStat(siPointType, "!POINTS")
 			SendStat(siPlayerKills, tostring(teamStats[i].score), teamStats[i].name)
 		end
 

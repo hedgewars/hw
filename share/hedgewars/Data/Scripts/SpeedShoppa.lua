@@ -163,7 +163,7 @@ function SpeedShoppaMission(params)
 				SetState(playerHog, band(GetState(playerHog), bnot(gstHHDriven)))
 				AddCaption(loc("Challenge completed!"))
 				SendStat(siGameResult, loc("Challenge completed!"))
-				SendStat(siPointType, loc("milliseconds"))
+				SendStat(siPointType, "!TIME")
 				local time = startTime - endTime
 				SendStat(siPlayerKills, tostring(time), GetHogTeamName(playerHog))
 				SendStat(siCustomAchievement, string.format(loc("You have finished the challenge in %.3f s."), (time/1000)))
@@ -171,7 +171,7 @@ function SpeedShoppaMission(params)
 				updateChallengeRecord("TimeRecord", time)
 			else
 				SendStat(siGameResult, loc("Challenge failed!"))
-				SendStat(siPointType, loc("crate(s)"))
+				SendStat(siPointType, "!CRATES")
 				SendStat(siPlayerKills, tostring(cratesCollected), GetHogTeamName(playerHog))
 				SendStat(siCustomAchievement, string.format(loc("You have collected %d out of %d crate(s)."), cratesCollected, #crates))
 			end

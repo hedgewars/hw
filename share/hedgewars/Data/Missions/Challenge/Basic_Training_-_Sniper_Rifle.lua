@@ -432,7 +432,7 @@ function generateStats()
 		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))
 		end_score_overall = end_score_targets
 	end
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
 	SendStat(siPlayerKills, tostring(end_score_overall), playerTeamName)
 	updateChallengeRecord("Highscore", end_score_overall)
 end

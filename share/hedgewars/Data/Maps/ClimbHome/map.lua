@@ -448,8 +448,8 @@ function onGameTick20()
                 updateChallengeRecord("TimeRecord", rawFinishTime, false)
                 SendStat(siCustomAchievement, string.format(loc("%s bravely climbed up to a dizzy height of %d to reach home."), GetHogName(CurrentHedgehog), getActualHeight(RecordHeight)))
                 updateChallengeRecord("Highscore", getActualHeight(RecordHeight))
-                SendStat(siPointType, loc("seconds"))
-                SendStat(siPlayerKills, tostring(roundedFinishTime), GetHogTeamName(CurrentHedgehog))
+                SendStat(siPointType, "!TIME")
+                SendStat(siPlayerKills, tostring(rawFinishTime), GetHogTeamName(CurrentHedgehog))
 
                 EndGame()
                 onAchievementsDeclaration()
@@ -693,7 +693,7 @@ function makeSinglePlayerLoserStats()
     end
 
     updateChallengeRecord("Highscore", actualHeight)
-    SendStat(siPointType, loc("points"))
+    SendStat(siPointType, "!POINTS")
     SendStat(siPlayerKills, actualHeight, GetHogTeamName(CurrentHedgehog))
     EndGame()
     onAchievementsDeclaration()
@@ -749,7 +749,7 @@ function makeFinalMultiPlayerStats()
     end
     checkAwards()
     for i = #ranking, 1, -1 do
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
         SendStat(siPlayerKills, tostring(ranking[i].score), ranking[i].name)
     end
 end

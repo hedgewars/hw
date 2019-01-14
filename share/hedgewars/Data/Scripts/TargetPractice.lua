@@ -302,7 +302,7 @@ function TargetPracticeMission(params)
 			end
 			end_score_overall = end_score_targets
 		end
-		SendStat(siPointType, loc("point(s)"))
+		SendStat(siPointType, "!POINTS")
 		SendStat(siPlayerKills, tostring(end_score_overall), GetHogTeamName(player))
 		-- Update highscore
 		updateChallengeRecord("Highscore", end_score_overall)

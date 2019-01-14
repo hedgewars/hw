@@ -96,7 +96,7 @@ function GameOverMan()
 	SendStat(siGameResult, loc("Challenge over!"))
 	local score = GetKillScore()
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, score))
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
 	PlaySound(sndHellish)
 
@@ -118,7 +118,7 @@ function GG()
 
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, hogScore))
 	SendStat(siCustomAchievement, string.format(loc("You have completed this challenge in %.2f s (+%d points)."), completeTime, timeScore))
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
 	SetTeamLabel(playerTeamName, tostring(score))
 

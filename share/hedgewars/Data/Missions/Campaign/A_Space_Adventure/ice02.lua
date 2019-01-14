@@ -179,7 +179,7 @@ function onGameTick20()
 				SaveCampaignVar("IceStadiumLeastSaucersUsed", tostring(saucersUsed))
 			end
 
-			SendStat(siPointType, loc("milliseconds"))
+			SendStat(siPointType, "!TIME")
 			SendStat(siPlayerKills, totalTime, GetHogTeamName(hero.gear))
 			SaveCampaignVar("Mission6Won", "true")
 			checkAllMissionsCompleted()

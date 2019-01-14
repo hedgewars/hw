@@ -171,7 +171,7 @@ function CheckScore(clanID)
 		table.sort(teamList, teamRank)
 
 		for i=1, #teamList do
-			SendStat(siPointType, loc("point(s)"))
+			SendStat(siPointType, "!POINTS")
 			SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
 		end
 

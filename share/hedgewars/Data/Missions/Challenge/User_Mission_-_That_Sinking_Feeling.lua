@@ -241,7 +241,7 @@ function onGameTick()
 				GameOver = true
 				AddCaption(loc("The flood has stopped! Challenge over."))
 				SendStat(siGameResult, loc("Challenge completed!"))
-				SendStat(siPointType, loc("rescues"))
+				SendStat(siPointType, "!POINTS")
 				SendStat(siPlayerKills, tostring(hhCount), playerTeamName)
 
 				-- Do not count drowning hedgehogs
@@ -308,7 +308,7 @@ function onGearDelete(gear)
 		else
 			SendStat(siCustomAchievement, loc("You haven't rescued anyone."))
 		end
-		SendStat(siPointType, loc("points"))
+		SendStat(siPointType, "!POINTS")
 		SendStat(siPlayerKills, "0", playerTeamName)
 		local highscore = tonumber(GetMissionVar("Highscore"))
 		show = (type(highscore) == "number") and (highscore > 0)

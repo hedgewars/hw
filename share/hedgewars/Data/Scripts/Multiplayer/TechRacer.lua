@@ -456,7 +456,7 @@ function onNewRound()
 
 		-- Write all the stats!
 		for i = 1, #sortedTeams do
-			SendStat(siPointType, loc("milliseconds"))
+			SendStat(siPointType, "!TIME")
 			SendStat(siTeamRank, tostring(clanRanks[GetTeamClan(sortedTeams[i].name)]))
 			SendStat(siPlayerKills, sortedTeams[i].score, sortedTeams[i].name)
 		end

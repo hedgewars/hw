@@ -320,7 +320,8 @@ void PageGameStats::GameStats(char type, const QString & info)
 
             i = playerinfo.indexOf(' ');
 
-            int kills = playerinfo.left(i).toInt();
+            QString killsString = playerinfo.left(i);
+            int kills = killsString.toInt();
             QString playername = playerinfo.mid(i + 1);
             QString image;
 
@@ -351,14 +352,30 @@ void PageGameStats::GameStats(char type, const QString & info)
 
             QString message;
             QString killstring;
-            if(kindOfPoints.compare("") == 0) {
+            if(kindOfPoints.isEmpty()) {
                 //: Number of kills in stats screen, written after the team name
                 killstring = PageGameStats::tr("(%1 kill)", "", kills).arg(kills);
+            } else if (kindOfPoints == "!POINTS") {
+                //: Number of points in stats screen, written after the team name
+                killstring = PageGameStats::tr("(%1 point(s))", "", kills).arg(kills);
+            } else if (kindOfPoints == "!TIME") {
+                //: Time in seconds
+                killstring = PageGameStats::tr("(%L1 second(s))", "", kills).arg((double) kills/1000, 0, 'g', 3);
+            } else if (kindOfPoints.startsWith("!TIME") && kindOfPoints.length() == 6) {
+                int len = kindOfPoints.at(6).digitValue();
+                if(len != -1)
+                    killstring = PageGameStats::tr("(%L1 second(s))", "", kills).arg((double) kills/1000, 0, 'g', len);
+                else
+                    qWarning("SendStat: siPointType received with !TIME and invalid number length!");
+            } else if (kindOfPoints == "!CRATES") {
+                killstring = PageGameStats::tr("(%1 crate(s))", "", kills).arg(kills);
+            } else if (kindOfPoints == "!EMPTY") {
+                killstring = QString("");
             } else {
                 //: For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”
                 killstring = PageGameStats::tr("(%1 %2)", "", kills).arg(kills).arg(kindOfPoints);
-                kindOfPoints = QString("");
             }
+            kindOfPoints = QString("");
 
             message = QString("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(realPlayerPosition), playername, clanColor.name()) + killstring + "</h2></p>";
 
