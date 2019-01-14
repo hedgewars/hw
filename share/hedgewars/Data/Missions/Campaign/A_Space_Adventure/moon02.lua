@@ -16,6 +16,9 @@ local currentPosition = 1
 local previousTimeLeft = 0
 local startChallenge = false
 local winningTime = nil
+local currentTime = 0
+local runnerTime = 0
+local record
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -74,6 +77,7 @@ function onGameInit()
 	AnimSetGearPosition(runner.gear, runner.places[1].x, runner.places[1].y)
 	HogTurnLeft(runner.gear, true)
 
+	record = tonumber(GetCampaignVar("FastestBlueHogCatch"))
 	initCheckpoint("moon02")
 
 	AnimInit(true)
@@ -86,6 +90,9 @@ function onGameStart()
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
+	if record ~= nil then
+		goals[dialog01][3] = goals[dialog01][3] .. "|" .. string.format(loc("Personal best: %.3f seconds"), record/1000)
+	end
 	AddAmmo(hero.gear, amRope, 1)
 
 	SendHealthStatsOff()
@@ -111,6 +118,8 @@ function onNewTurn()
 	if startChallenge and currentPosition < 5 then
 		if CurrentHedgehog ~= hero.gear then
 			EndTurn(true)
+			runnerTime = runnerTime + runner.places[currentPosition].turnTime
+			SetTeamLabel(teamB.name, string.format(loc("%.1fs"), runnerTime/1000))
 		else
 			if GetAmmoCount(hero.gear, amRope) == 0  then
 				lose()
@@ -129,9 +138,15 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
+	if GetHealth(hero.gear) and CurrentHedgehog == hero.gear and startChallenge and currentPosition < 5 and currentPosition > 1 and ReadyTimeLeft == 0 and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+		currentTime = currentTime + 1
+	end
 end
 
 function onGameTick20()
+	if startChallenge and currentPosition < 5 and currentPosition > 1 and CurrentHedgehog == hero.gear and ReadyTimeLeft == 0 and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+		SetTeamLabel(teamA.name, string.format(loc("%.1fs"), currentTime/1000))
+	end
 	if GetHealth(hero.gear) and startChallenge and isHeroNextToRunner() and currentPosition < 5 then
 		moveRunner()
 	end
@@ -224,8 +239,8 @@ function moveRunner()
 			baseTime = baseTime + runner.places[i].turnTime
 		end
 		winningTime = baseTime - TurnTimeLeft
+		SetTeamLabel(teamA.name, string.format(loc("%.3fs"), winningTime/1000))
 		SendStat(siCustomAchievement, string.format(loc("You have managed to catch the blue hedgehog in %.3f seconds."), winningTime/1000))
-		local record = tonumber(GetCampaignVar("FastestBlueHogCatch"))
 		if record ~= nil and winningTime >= record then
 			SendStat(siCustomAchievement, string.format(loc("Your personal best time so far: %.3f seconds"), record/1000))
 		end
