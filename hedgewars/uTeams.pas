@@ -773,7 +773,7 @@ end;
 procedure makeTeamNameUnique(chTeam: PTeam);
 var tail: shortstring;
     t, numLen, numTail: LongInt;
-    valOK: Word;
+//    valOK: Word;    -- see pas2c-related FIXME below
     nameDupeCheck: boolean;
     chChar: char;
 begin
