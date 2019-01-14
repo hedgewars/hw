@@ -7,7 +7,6 @@ Gameplay:
  + Track high scores in singleplayer challenges
  + Show check mark for completed scenarios, challenges and trainings
  + Training/challenge/scenario menu now supports team selection
- * Fix various minor bugs in campaigns and missions
  * Fix hedgehogs being pushed around (and other collision bugs) when they overlap
  * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
  * Fix poison damage not working in first round
@@ -24,6 +23,17 @@ Styles and schemes:
  * Racer: Fix racer ghost not getting reset after a skip
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
+
+A Classic Fairytale:
+ * First blood: Fix Lua error when hitting Attack after failing the rope challenge
+
+A Space Adventure:
+ + Show your current records at mission start when re-playing one of the challenges
+ + Spacetrip: Move flowers of desert planet above cactus
+ * Searching in the dust: Fix mission ending when all smugglers are dead
+ * Chasing the blue hog: Fix player not losing the race when timing out while still having the rope
+ * Chasing the blue hog: Fix player winning if Crazy Runner died
+ * Various minor tweaks and bugfixes
 
 Controls:
  + Add control to unselect current weapon (no key chosen by default)
