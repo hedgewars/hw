@@ -97,6 +97,7 @@ function onGameStart()
 	FollowGear(hero.gear)
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onRunnerDeath, {runner.gear}, runnerDeath, {runner.gear}, 0)
 
 	if record ~= nil then
 		goals[dialog01][3] = goals[dialog01][3] .. "|" .. string.format(loc("Personal best: %.3f seconds"), record/1000)
@@ -194,10 +195,21 @@ function onHeroDeath(gear)
 	return false
 end
 
+function onRunnerDeath(gear)
+	if not GetHealth(runner.gear) then
+		return true
+	end
+	return false
+end
+
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
 	lose()
+end
+
+function runnerDeath(gear)
+	loseRunnerDeath()
 end
 
 -------------- ANIMATIONS ------------------
@@ -309,6 +321,21 @@ function lose()
 	SendStat(siPlayerKills, tostring(runnerTimeTotal), teamB.name)
 	SendStat(siPointType, "!EMPTY")
 	SendStat(siPlayerKills, "0", teamA.name)
+	EndGame()
+end
+
+function loseRunnerDeath()
+	if lostGame then
+		return
+	end
+	lostGame = true
+	SendStat(siGameResult, loc("Race failed!"))
+	SendStat(siCustomAchievement, loc("The other hog has died, he should have survived!"))
+	SendStat(siCustomAchievement, loc("You have to catch the other hog 3 times."))
+	SendStat(siTeamRank, "1")
+	SendStat(siPlayerKills, tostring(GetTeamStats(teamB.name).Kills), teamB.name)
+	SendStat(siTeamRank, "1")
+	SendStat(siPlayerKills, tostring(GetTeamStats(teamA.name).Kills), teamA.name)
 	EndGame()
 end
 
