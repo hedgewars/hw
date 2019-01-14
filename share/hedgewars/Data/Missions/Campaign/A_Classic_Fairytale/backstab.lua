@@ -378,6 +378,12 @@ function PutCircles()
   circlesPut = true
 end
 
+function DeleteCircles()
+  for i=1, #vCircs do
+    DeleteVisualGear(vCircs[i])
+  end
+end
+
 function SetupWave2DeadAnim()
   for i = 7, 1, -1 do
     if nativeDead[i] ~= true then
@@ -642,6 +648,7 @@ end
 function DoTurnsOver()
   stage = wave3Stage
   RestoreWave(3)
+  DeleteCircles()
 end
 
 function SkipWave2Anim()
