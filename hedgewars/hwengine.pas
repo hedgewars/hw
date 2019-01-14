@@ -264,7 +264,6 @@ game to freeze if one online player minimizes Hedgewars. *)
                 SDL_MOUSEWHEEL:
                     begin
                     wheelEvent:= true;
-                    //ProcessMouseWheel(event.wheel.x, event.wheel.y);
                     ProcessMouseWheel(event.wheel.y);
                     end;
 {$ENDIF}
@@ -354,7 +353,6 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 procedure GameRoutine;
-//var p: TPathType;
 var s: shortstring;
     i: LongInt;
 begin
@@ -380,7 +378,6 @@ begin
         end;
 
     if not allOK then exit;
-    //SDL_StartTextInput();
     SDL_ShowCursor(0);
 
 
@@ -450,7 +447,6 @@ begin
 
     isDeveloperMode:= false;
     if checkFails(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true) then exit;
-    //ParseCommand('rotmask', true);
     if not allOK then exit;
 
 {$IFDEF USE_VIDEO_RECORDING}

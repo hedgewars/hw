@@ -67,7 +67,6 @@ var delay: LongWord;
     stChKing, stSuddenDeath, stDelay3, stHealth, stSpawn, stDelay4,
     stNTurn);
     NewTurnTick: LongWord;
-    //SDMusic: shortstring;
 
 const delaySDStart = 1600;
       delaySDWarning = 1000;
@@ -281,8 +280,6 @@ while t <> nil do
                 curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(curHandledGear^.Timer div 1000)), cWhiteColor, fntSmall);
                 end;
             curHandledGear^.doStep(curHandledGear);
-            // might be useful later
-            //ScriptCall('onGearStep', Gear^.uid);
             end
         end
     end;
@@ -540,7 +537,6 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 
 if TurnTimeLeft > 0 then
     if IsClockRunning() then
-        //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
         begin
         if (cHedgehogTurnTime > TurnTimeLeft)
         and (CurrentHedgehog^.Gear <> nil)
@@ -628,13 +624,6 @@ begin
             for i:= 0 to cMaxHHIndex do
                 with Hedgehogs[i] do
                     begin
-(*
-                    if (SpeechGear <> nil) then
-                        begin
-                        DeleteVisualGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
-                        SpeechGear:= nil
-                        end;
-*)
 
                     if (Gear <> nil) then
                         begin
@@ -798,9 +787,6 @@ if cAirMines > 0 then
                                 ((rdx.Round+rdy.Round < Gear^.Angle) and
                                 (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
                                 begin
-    // Debug line. Remove later
-    // AddFileLog('Too Close to Hog @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
-
                                 p:= 1
                                 end
                             end;
@@ -850,7 +836,7 @@ for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
     rdx:= _90-(GetRandomf*_360);
     rdy:= _90-(GetRandomf*_360);
     Gear:= AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
-    // Tag=1: This allows this generic faller to be displaced randomly by events
+    // This allows this generic faller to be displaced randomly by events
     Gear^.Tag:= 1;
     end;
 
@@ -983,7 +969,6 @@ if sectionDivide then
                                     FindPlace(Gear, false, t, t + playWidth div ClansCount, true);// could make Gear == nil;
                                 if Gear <> nil then
                                     begin
-                                    //AddCI(Gear);  uncomment if new hogs should be able to spawn on top of old ones.
                                     Gear^.Pos:= GetRandom(49);
                                     // unless the world is wrapping, make outter teams face to map center
                                     if (WorldEdge <> weWrap) and ((p = 0) or (p = ClansCount - 1)) then
@@ -1018,7 +1003,6 @@ else // mix hedgehogs
             FindPlace(ar[i]^.Gear, false, leftX, rightX, true);
         if ar[i]^.Gear <> nil then
             begin
-            //AddCI(ar[i]^.Gear); uncomment if new hogs should be able to spawn on top of old ones
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
             ar[i]^.Gear^.Pos:= GetRandom(19)
             end;
@@ -1278,14 +1262,6 @@ begin
 
     if text = '' then text:= '...';
 
-    (*
-    if CheckNoTeamOrHH then
-        begin
-        ParseCommand('say ' + text, true);
-        exit
-        end;
-    *)
-
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
             // if team matches current hedgehog team, default to current hedgehog
@@ -1422,7 +1398,6 @@ begin
     step:= stDelay1;
     upd:= 0;
 
-    //SDMusic:= 'hell.ogg';
     NewTurnTick:= $FFFFFFFF;
 end;
 

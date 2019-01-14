@@ -246,7 +246,6 @@ s:= min(Steps, cExplFrameTicks);
 
 Gear^.X:= Gear^.X + Gear^.dX * s;
 Gear^.Y:= Gear^.Y + Gear^.dY * s;
-//Gear^.dY:= Gear^.dY + cGravityf;
 
 if Gear^.FrameTicks <= Steps then
     if Gear^.Frame = 0 then
@@ -317,7 +316,7 @@ var vgt: PVisualGear;
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
-Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravityf * (Steps * Steps);
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
 if (Gear^.State and gstTmpFlag) = 0 then
     begin
     Gear^.dY:= Gear^.dY + cGravityf * Steps;
@@ -421,7 +420,6 @@ Gear^.X:= Gear^.X + (cWindSpeedf + Gear^.dX) * Steps;
 Gear^.Y:= Gear^.Y - (cDrownSpeedf + Gear^.dY) * Steps;
 
 Gear^.dX := Gear^.dX + (cWindSpeedf * 0.3 * Steps);
-//Gear^.dY := Gear^.dY - (cDrownSpeedf * 0.995);
 
 if Gear^.FrameTicks <= Steps then
     if Gear^.Frame = 0 then
@@ -624,7 +622,6 @@ for i:= 0 to Pred(TeamsCount) do
 Gear^.Timer:= cSorterWorkTime;
 Gear^.doStep:= @doStepTeamHealthSorterWork;
 currsorter:= Gear;
-//doStepTeamHealthSorterWork(Gear, Steps)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -231,9 +231,6 @@ with gear^ do
                 end;
     vgtDroplet:
                 begin
-                // old dx & dy calcs
-                // dx:= 0.001 * (random(180) - 90);
-                // dy:= -0.001 * (random(160) + 40);
                 // => min speed ~ 0.098, max speed ~ 0.218, speed range ~ 0.120
                 // => min angle(4096) ~ 129, max angle ~ 1919, angle range ~ 1790
                 dx:= 0.001 * (98 + random(121)); // speed
@@ -279,7 +276,6 @@ with gear^ do
                 Timer:= 1500;
                 dY:= -0.08;
                 dX:= 0;
-                //gear^.Z:= 2002;
                 end;
   vgtSmokeTrace,
   vgtEvilTrace:
@@ -287,7 +283,6 @@ with gear^ do
                 gear^.X:= gear^.X - 16;
                 gear^.Y:= gear^.Y - 16;
                 gear^.State:= 8;
-                //gear^.Z:= cSmokeZ
                 end;
 vgtBigExplosion:
                 begin

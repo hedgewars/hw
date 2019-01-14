@@ -69,8 +69,6 @@ with RopePoints do
 if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
     begin
     EnableTexture(false);
-    //glEnable(GL_LINE_SMOOTH);
-
     
     Tint(Gear^.Tint shr 24 div 3, Gear^.Tint shr 16 and $FF div 3, Gear^.Tint shr 8 and $FF div 3, Gear^.Tint and $FF);
 
@@ -92,7 +90,6 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
     openglPopMatrix();
 
     EnableTexture(true);
-    //glDisable(GL_LINE_SMOOTH)
     end
 end;
 
@@ -426,7 +423,7 @@ begin
         begin
         if ((Gear^.State and (gstHHThinking or gstAnimation)) = 0) and
 /// If current ammo is active, and current ammo has alt attack and uses a crosshair  (rope, basically, right now, with no crosshair for parachute/saucer
-            (((CurAmmoGear <> nil) and //((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) and
+            (((CurAmmoGear <> nil) and
             // don't render crosshair/laser during kamikaze
             ((CurAmmoGear^.AmmoType <> amKamikaze) or ((Gear^.State and gstAttacking) = 0)) and
              ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0)) or
@@ -816,9 +813,6 @@ begin
                 amSeduction: begin
                              DrawSpriteRotated(sprHandSeduction, hx, hy, sign, aangle);
                              DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA);
-                             //Tint($FF, $0, $0, $AA);
-                             //DrawTexture(ox - 240, oy - 240, SpritesData[sprVampiric].Texture, 10);
-                             //untint;
                              end;
                 amVampiric: DrawSpriteRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amRCPlane: begin
@@ -915,17 +909,6 @@ begin
                     0);
 
                 HatVisible:= true;
-                (* with HH^ do
-                    if (HatTex <> nil)
-                    and (HatVisibility > 0) then
-                        DrawTextureF(HatTex,
-                            HatVisibility,
-                            sx,
-                            sy - 5,
-                            0,
-                            sign,
-                            32,
-                            32); *)
             end;
 
             defaultPos:= false
@@ -1099,13 +1082,6 @@ begin
 
     if (Gear^.State and gstHHDriven) <> 0 then
         begin
-    (*    if (CurAmmoGear = nil) then
-            begin
-            amt:= CurrentHedgehog^.CurAmmoType;
-            case amt of
-                amJetpack: DrawSprite(sprJetpack, sx-32, sy-32, 0);
-                end
-            end; *)
         if (CurAmmoGear = nil) then
             begin
                 if ((Gear^.State and (gstAttacked or gstAnimation or gstHHJumping)) = 0)
@@ -1189,11 +1165,9 @@ begin
                 tx := ox;
 
                 // don't go offscreen
-                //tx := round(max(((-cScreenWidth + 16) / cScaleFactor) + SpritesData[sprFinger].Width div 2, min(((cScreenWidth - 16) / cScaleFactor) - SpritesData[sprFinger].Width div 2, tx)));
-                //ty := round(max(cScreenHeight div 2 - ((cScreenHeight - 16) / cScaleFactor) + SpritesData[sprFinger].Height div 2, min(cScreenHeight div 2 - ((-cScreenHeight + SpritesData[sprFinger].Height) / (cScaleFactor)) - SpritesData[sprFinger].Width div 2 - 96, ty)));
-                t:= 32;//trunc((SpritesData[sprFinger].Width + t) / cScaleFactor);
+                t:= 32;
                 tx := min(max(tx, ViewLeftX + t), ViewRightX  - t);
-                t:= 32;//trunc((SpritesData[sprFinger].Height + t) / cScaleFactor);
+                t:= 32;
                 ty := min(ty, ViewBottomY - 96);
                 // don't overlap with HH or HH tags
                 if ty < ViewTopY + t then
@@ -1272,15 +1246,12 @@ var
     aAngle: real;
     startX, endX, startY, endY: LongInt;
 begin
-	// airmine has its own sprite
+    // airmine has its own sprite
     if (Gear^.State and gstFrozen <> 0) and (Gear^.Kind <> gtAirMine) then Tint($A0, $A0, $FF, $FF);
-    //if Gear^.State and gstFrozen <> 0 then Tint(IceColor or $FF);
     if Gear^.Target.X <> NoPointX then
         if Gear^.AmmoType = amBee then
             DrawSpriteRotatedF(sprTargetBee, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
     else if Gear^.AmmoType = amIceGun then
-        //DrawSprite(sprSnowDust, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 2) mod 8)
-        //DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1, 0, 0, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 2) mod 8, 1, 22, 22, (RealTicks shr 3) mod 360)
         DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1/(1+(RealTicks shr 8) mod 5), 0, 0, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 2) mod 8, 1, 22, 22, (RealTicks shr 3) mod 360)
     else
         begin
@@ -1343,9 +1314,7 @@ begin
                     DrawTextureF(Gear^.Hedgehog^.Team^.GraveTex, 1, x, y, (RealTicks shr 7+Gear^.uid) and 15, 1, 32, 32);
                     if Gear^.Health > 0 then
                         begin
-                        //Tint($33, $33, $FF, max($40, round($FF * abs(1 - (GameTicks mod (6000 div Gear^.Health)) / 750))));
                         Tint($f5, $db, $35, max($40, round($FF * abs(1 - (RealTicks mod 1500) / (750 + Gear^.Health)))));
-                        //Tint($FF, $FF, $FF, max($40, round($FF * abs(1 - (RealTicks mod 1500) / 750))));
                         DrawSprite(sprVampiric, x - 24, y - 24, 0);
                         untint
                         end
@@ -1582,8 +1551,6 @@ begin
                         Tint(Gear^.Tint);
                         // Needs a nicer white texture to tint
                         DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle);
-                        //DrawSpriteRotated(sprSnowDust, x, y, 0, Gear^.DirAngle);
-                        //DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
                         untint;
                         end
                     else //if not isInLag then
@@ -1598,8 +1565,6 @@ begin
                             DrawSprite(sprFlake, x, y, Gear^.Timer)
                         else
                             DrawSpriteRotatedF(sprFlake, x, y, Gear^.Timer, 1, Gear^.DirAngle);
-//DrawSprite(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer)
-//DrawSpriteRotatedF(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer, 1, Gear^.DirAngle);
                         if Gear^.FlightTime > 0 then
                             untint;
                         end;
@@ -1617,11 +1582,6 @@ begin
                         DrawSprite(sprTardis, x-25, y-64,1);
                         if Gear^.Pos <> 2 then
                             untint
-(*
-                        Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or max($00, round(Gear^.Power * abs(1 - (RealTicks mod 500) / 250))));
-                        DrawTexture(x-6, y-70, SpritesData[sprVampiric].Texture, 0.25);
-                        untint
-*)
                         end;
             gtIceGun: begin
                       HHGear := Gear^.Hedgehog^.Gear;

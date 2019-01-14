@@ -118,11 +118,6 @@ if ((Mask and EXPLNoGfx) = 0) then
     end;
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion);
 
-(*if (Mask and EXPLAllDamageInRadius) = 0 then
-    dmgRadius:= Radius shl 1
-else
-    dmgRadius:= Radius;
-dmgBase:= dmgRadius + cHHRadius div 2;*)
 dmgBase:= Radius shl 1 + cHHRadius div 2;
 
 // we might have to run twice if weWrap is enabled
@@ -136,8 +131,6 @@ Gear:= GearsList;
 while Gear <> nil do
     begin
     dmg:= 0;
-    //dmg:= dmgRadius  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
-    //if (dmg > 1) and
     if (Gear^.State and gstNoDamage) = 0 then
         begin
         case Gear^.Kind of
@@ -147,7 +140,6 @@ while Gear <> nil do
                 gtMelonPiece,
                 gtGrenade,
                 gtClusterBomb,
-            //    gtCluster, too game breaking I think
                 gtSMine,
                 gtAirMine,
                 gtCase,
@@ -326,11 +318,8 @@ begin
 			tdy:= -cGravityf;
 			if random(2) = 0 then
 			    dx := -dx;
-			//if random(2) = 0 then
-			//    dy := -dy;
 			FrameTicks:= random(500) + 1000;
 			State:= ord(sprBubbles);
-			//Tint:= $bd2f03ff
 			Tint:= $ff0000ff
 			end
 	end
@@ -469,11 +458,6 @@ if _0_4 < Gear^.dY then
     if ((Gear^.Hedgehog^.Effects[heInvulnerable] <> 0)) then
         exit;
 
-    //if _0_6 < Gear^.dY then
-    //    PlaySound(sndOw4, Gear^.Hedgehog^.Team^.voicepack)
-    //else
-    //    PlaySound(sndOw1, Gear^.Hedgehog^.Team^.voicepack);
-
     if Gear^.LastDamage <> nil then
         ApplyDamage(Gear, Gear^.LastDamage, dmg, dsFall)
     else
@@ -487,7 +471,6 @@ var
     dAngle: real;
 begin
     // Frac/Round to be kind to JS as of 2012-08-27 where there is yet no int64/uint64
-    //dAngle := (Gear^.dX.QWordValue + Gear^.dY.QWordValue) / $80000000;
     dAngle := (Gear^.dX.Round + Gear^.dY.Round) / 2 + (Gear^.dX.Frac/$100000000+Gear^.dY.Frac/$100000000);
     if not Gear^.dX.isNegative then
         Gear^.DirAngle := Gear^.DirAngle + dAngle
@@ -1788,37 +1771,6 @@ if (hwRound(Gear^.X) < leftX) or
         end
     else
         WorldWrap:= true;
-{  else if WorldEdge = weSea then
-        begin
-        if (hwRound(Gear^.Y) > cWaterLine) and (Gear^.State and gstSubmersible <> 0) then
-            Gear^.State:= Gear^.State and (not gstSubmersible)
-        else
-            begin
-            Gear^.State:= Gear^.State or gstSubmersible;
-            Gear^.X:= int2hwFloat(PlayWidth)*int2hwFloat(min(max(0,hwRound(Gear^.Y)),PlayHeight))/PlayHeight;
-            Gear^.Y:= int2hwFloat(cWaterLine+cVisibleWater+Gear^.Radius*2);
-            tdx:= Gear^.dX;
-            Gear^.dX:= -Gear^.dY;
-            Gear^.dY:= tdx;
-            Gear^.dY.isNegative:= true
-            end
-        end;
-
----
-
-* Window in the sky (Gear moved high into the sky, Y is used to determine X) [unfortunately, not a safe thing to do. shame, I thought aerial bombardment would be kinda neat
-This one would be really easy to freeze game unless it was flagged unfortunately.
-
-    else
-        begin
-        Gear^.X:= int2hwFloat(PlayWidth)*int2hwFloat(min(max(0,hwRound(Gear^.Y)),PlayHeight))/PlayHeight;
-        Gear^.Y:= -_2048-_256-_256;
-        tdx:= Gear^.dX;
-        Gear^.dX:= Gear^.dY;
-        Gear^.dY:= tdx;
-        Gear^.dY.isNegative:= false
-        end
-}
     end;
 end;
 

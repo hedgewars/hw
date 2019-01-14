@@ -192,7 +192,6 @@ case Layer of
        Gear:= VisualGearLayers[1];
        while Gear <> nil do
           begin
-          //tinted:= false;
           if Gear^.Tint <> $FFFFFFFF then
               Tint(Gear^.Tint);
           case Gear^.Kind of
@@ -227,14 +226,13 @@ case Layer of
                              if Gear^.Angle <> 0 then
                                 DrawTextureRotatedF(spriteData^.Texture, Gear^.scale, 0, 0, round(Gear^.X + WorldDx + (((spriteData^.Height+8)*Gear^.Scale)/2) * (Gear^.Angle / abs(Gear^.Angle))), round(Gear^.Y + WorldDy), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, spriteData^.Width, spriteData^.Height, Gear^.Angle)
                              else
-                                //DrawSprite(sprite, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
                                 DrawTextureF(spriteData^.Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((spriteData^.Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, spriteData^.Width, spriteData^.Height);
                              end;
                   vgtDroplet: begin
                               sprite:= GetSprite(sprDroplet, sprSDDroplet);
                               DrawSprite(sprite, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                               end;
-                  vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
+                  vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                vgtStraightShot: begin
                                 if Gear^.dX < 0 then
                                     i:= -1
@@ -243,7 +241,6 @@ case Layer of
                                 DrawTextureRotatedF(SpritesData[TSprite(Gear^.State)].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, i, SpritesData[TSprite(Gear^.State)].Width, SpritesData[TSprite(Gear^.State)].Height, Gear^.Angle);
                                 end;
               end;
-          //if (Gear^.Tint <> $FFFFFFFF) or tinted then untint;
           if (Gear^.Tint <> $FFFFFFFF) then
               untint;
           Gear:= Gear^.NextGear
@@ -258,14 +255,6 @@ case Layer of
            if Gear^.Tint <> $FFFFFFFF then
                Tint(Gear^.Tint);
            case Gear^.Kind of
-(*
-              vgtFlake: begin
-                        sprite:= GetSprite(sprFlake, sprSDFlake);
-                        if speedlessFlakes then
-                            DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                        else
-                            DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
-                        end;*)
                vgtSpeechBubble: if (Gear^.Angle <> 0) then
                                 // ^ Before this gear renders, Angle must be set to mark it ready (e.g. coordinates properly initialized)
                                     if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
