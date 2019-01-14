@@ -6449,9 +6449,10 @@ begin
         exit
         end;
     updateFuel(Gear);
-    if WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.Target.X = NoPointX) then
-        // Use FlightTime to count number of times the gear has world-wrapped
-        inc(Gear^.FlightTime);
+    if (WorldEdge <> weBounce) then
+        if WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.Target.X = NoPointX) then
+            // Use FlightTime to count number of times the gear has world-wrapped
+            inc(Gear^.FlightTime);
 
     with Gear^ do
         begin
@@ -6461,7 +6462,8 @@ begin
         if (ndX <> dX) or (ndY <> dY) or (Gear^.Message and (gmUp or gmDown) <> 0) or
            (((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
              (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0)) and
-             (not CheckCoordInWater(Target.X, Target.Y))) and (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*3, Gear^.Radius*3) = nil)) then
+             (not CheckCoordInWater(Target.X, Target.Y))) and (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*3, Gear^.Radius*3) = nil) and
+             (not ((WorldEdge = weBounce) and ((Target.X > rightX) or (Target.X < leftX))))) then
             begin
             updateTarget(Gear, ndX, ndY);
             Timer := iceWaitCollision;
@@ -6659,6 +6661,13 @@ begin
             else if (t > 400) and (CheckCoordInWater(gX, gY) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
                         and (Land[gY, gX] <> 0))) then
+                begin
+                Target.X:= gX;
+                Target.Y:= gY;
+                X:= HHGear^.X;
+                Y:= HHGear^.Y
+                end
+            else if (WorldEdge = weBounce) and ((gX > rightX) or (gX < leftX)) then
                 begin
                 Target.X:= gX;
                 Target.Y:= gY;
