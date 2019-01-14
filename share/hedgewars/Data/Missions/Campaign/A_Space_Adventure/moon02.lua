@@ -41,6 +41,10 @@ local runner = {
 		{x = 3850,y = 1940, turnTime = 20000},
 	}
 }
+local runnerTimeTotal = 0
+for i=1, #runner.places do
+	runnerTimeTotal = runnerTimeTotal + runner.places[i].turnTime
+end
 -- teams
 local teamA = {
 	name = loc("Hog Solo"),
@@ -234,11 +238,7 @@ function moveRunner()
 		AddAnim(dialog02)
 
 		-- Update time record
-		local baseTime = 0
-		for i=1, #runner.places do
-			baseTime = baseTime + runner.places[i].turnTime
-		end
-		winningTime = baseTime - TurnTimeLeft
+		winningTime = runnerTimeTotal - TurnTimeLeft
 		SetTeamLabel(teamA.name, string.format(loc("%.3fs"), winningTime/1000))
 		SendStat(siCustomAchievement, string.format(loc("You have managed to catch the blue hedgehog in %.3f seconds."), winningTime/1000))
 		if record ~= nil and winningTime >= record then
@@ -278,14 +278,19 @@ function lose()
 	SendStat(siCustomAchievement, loc("The time that you have left when you reach the blue hedgehog will be added to the next turn."))
 	SendStat(siCustomAchievement, loc("Each turn you'll have only one rope to use."))
 	SendStat(siCustomAchievement, loc("You'll lose if you die or if your time is up."))
-	sendSimpleTeamRankings({teamB.name, teamA.name})
+	SendStat(siPointType, loc("milliseconds"))
+	SendStat(siPlayerKills, tostring(runnerTimeTotal), teamB.name)
+	SendStat(siPlayerKills, tostring(GetTeamStats(teamA.name).Kills), teamA.name)
 	EndGame()
 end
 
 function win()
 	SendStat(siGameResult, loc("Congratulations, you are the fastest!"))
 	-- siCustomAchievements were added earlier
-	sendSimpleTeamRankings({teamA.name, teamB.name})
+	SendStat(siPointType, loc("milliseconds"))
+	SendStat(siPlayerKills, tostring(winningTime), teamA.name)
+	SendStat(siPointType, loc("milliseconds"))
+	SendStat(siPlayerKills, tostring(runnerTimeTotal), teamB.name)
 	SaveCampaignVar("Mission13Won", "true")
 	checkAllMissionsCompleted()
 	EndGame()
