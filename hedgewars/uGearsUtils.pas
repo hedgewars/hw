@@ -1759,7 +1759,8 @@ if (hwRound(Gear^.X) < leftX) or
              Gear^.X:= Gear^.X + int2hwfloat(rightX - leftX)
         else Gear^.X:= Gear^.X - int2hwfloat(rightX - leftX);
         LeftImpactTimer:= 150;
-        RightImpactTimer:= 150
+        RightImpactTimer:= 150;
+        WorldWrap:= true;
         end
     else if WorldEdge = weBounce then
         begin
@@ -1778,10 +1779,16 @@ if (hwRound(Gear^.X) < leftX) or
             Gear^.X:= int2hwfloat(rightX-Gear^.Radius);
             bounced:= true;
             end;
-        if (bounced) and (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
-            AddBounceEffectForGear(Gear);
-        end{
-    else if WorldEdge = weSea then
+        if (bounced) then
+            begin
+            WorldWrap:= true;
+            if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
+               AddBounceEffectForGear(Gear);
+            end;
+        end
+    else
+        WorldWrap:= true;
+{  else if WorldEdge = weSea then
         begin
         if (hwRound(Gear^.Y) > cWaterLine) and (Gear^.State and gstSubmersible <> 0) then
             Gear^.State:= Gear^.State and (not gstSubmersible)
@@ -1795,8 +1802,10 @@ if (hwRound(Gear^.X) < leftX) or
             Gear^.dY:= tdx;
             Gear^.dY.isNegative:= true
             end
-        end};
-(*
+        end;
+
+---
+
 * Window in the sky (Gear moved high into the sky, Y is used to determine X) [unfortunately, not a safe thing to do. shame, I thought aerial bombardment would be kinda neat
 This one would be really easy to freeze game unless it was flagged unfortunately.
 
@@ -1809,8 +1818,7 @@ This one would be really easy to freeze game unless it was flagged unfortunately
         Gear^.dY:= tdx;
         Gear^.dY.isNegative:= false
         end
-*)
-    WorldWrap:= true
+}
     end;
 end;
 
