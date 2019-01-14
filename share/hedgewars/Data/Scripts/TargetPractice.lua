@@ -62,6 +62,8 @@ local game_lost = false
 local time_goal = 0
 local total_targets
 local targets
+local target_radar = false
+local next_target_circle = nil
 local gearsInGameCount = 0
 local gearsInGame = {}
 
@@ -98,6 +100,10 @@ The argument “params” is a table containing fields which describe the traini
 			(default: "Destroy all targets within the time!")
 	- shootText:	A string which says how many times the player shot, “%d” is replaced
 			by the number of shots. (default: "You have shot %d times.")
+	- useRadar	Whether to use target radar (small circles that mark the position
+			of the next target). (default: true). Note: Still needs to be unlocked.
+	- radarTint:	RGBA color of the target radar  (default: 0x8080FFFF). Use this field
+			if the target radar would be hard to see against the background.
 ]]
 
 
@@ -110,6 +116,8 @@ function TargetPracticeMission(params)
 	if params.shootText == nil then params.shootText = loc("You have shot %d times.") end
 	if params.clanColor == nil then params.clanColor = -1 end
 	if params.wind == nil then params.wind = 0 end
+	if params.radarTint == nil then params.radarTint = 0x8080FFFF end
+	if params.useRadar == nil then params.useRadar = true end
 
 	local solid, artillery
 	if params.solidLand == true then solid = gfSolidLand else solid = 0 end
@@ -150,6 +158,15 @@ function TargetPracticeMission(params)
 
 		player = AddMissionHog(1)
 		SetGearPosition(player, params.hog_x, params.hog_y)
+
+		local won = GetMissionVar("Won")
+		-- Unlock the target radar when the player has completed
+		-- the target practice before (any score).
+		-- Target radar might be disabled by config, however.
+		if won == "true" and params.useRadar == true then
+			target_radar = true
+		end
+
 	end
 
 	_G.onGameStart = function()
@@ -165,12 +182,27 @@ function TargetPracticeMission(params)
 	end
 
 	_G.spawnTarget = function()
+		-- Spawn next target
 		local gear = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
 
 		local x = targets[scored+1].x
 		local y = targets[scored+1].y
 
 		SetGearPosition(gear, x, y)
+
+		-- Target radar: Highlight position of the upcoming target.
+		-- This must be unlocked by the player first.
+		if target_radar then
+			if (not next_target_circle) and targets[scored+2] then
+				next_target_circle = AddVisualGear(0,0,vgtCircle,90,true)
+			end
+			if targets[scored+2] then
+				SetVisualGearValues(next_target_circle, targets[scored+2].x, targets[scored+2].y, 205, 255, 1, 20, nil, nil, 3, params.radarTint)
+			elseif next_target_circle then
+				DeleteVisualGear(next_target_circle)
+				next_target_circle = nil
+			end
+		end
 
 		return gear
 	end
@@ -296,6 +328,9 @@ function TargetPracticeMission(params)
 				SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%% (+%d points)."), accuracy, end_score_accuracy))
 			end
 			SendStat(siCustomAchievement, string.format(loc("You had %.1fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
+			if (not target_radar) and (#targets > 1) and (params.useRadar == true) then
+				SendStat(siCustomAchievement, loc("You have unlocked the target radar!"))
+			end
 
 			if(shots > 0) then
 				updateChallengeRecord("AccuracyRecord", accuracy_int)
