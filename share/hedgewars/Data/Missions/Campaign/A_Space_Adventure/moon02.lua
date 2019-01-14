@@ -34,12 +34,12 @@ local goals = {
 local hero = {
 	name = loc("Hog Solo"),
 	x = 1300,
-	y = 850
+	y = 948
 }
 local runner = {
 	name = loc("Crazy Runner"),
 	places = {
-		{x = 1400,y = 850, turnTime = 0},
+		{x = 1400,y = 904, turnTime = 0},
 		{x = 3880,y = 33, turnTime = 30000},
 		{x = 250,y = 1780, turnTime = 25000},
 		{x = 3850,y = 1940, turnTime = 20000},

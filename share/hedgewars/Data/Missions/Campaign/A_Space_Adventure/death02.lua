@@ -26,7 +26,7 @@ local goals = {
 local hero = {
 	name = loc("Hog Solo"),
 	x = 850,
-	y = 460,
+	y = 469,
 	mortarAmmo = 2,
 	firepunchAmmo = 1,
 	deagleAmmo = 4,
@@ -35,11 +35,11 @@ local hero = {
 }
 local heroTurns = 0
 local enemies = {
-	{ name = GetAmmoName(amMortar), x = 1890, y = 520, weapon = amMortar, additionalWeapons = {}},
-	{ name = GetAmmoName(amDEagle), x = 1390, y = 790, weapon = amDEagle, additionalWeapons = {}},
-	{ name = GetAmmoName(amGrenade), x = 186, y = 48, weapon = amGrenade, additionalWeapons = {}},
-	{ name = GetAmmoName(amFirePunch), x = 330, y = 270, weapon = amFirePunch, additionalWeapons = {}},
-	{ name = GetAmmoName(amBazooka), x = 1950, y = 150, weapon = amBazooka, additionalWeapons = {}},
+	{ name = GetAmmoName(amMortar), x = 1890, y = 535, weapon = amMortar, additionalWeapons = {}},
+	{ name = GetAmmoName(amDEagle), x = 1390, y = 815, weapon = amDEagle, additionalWeapons = {}},
+	{ name = GetAmmoName(amGrenade), x = 186, y = 62, weapon = amGrenade, additionalWeapons = {}},
+	{ name = GetAmmoName(amFirePunch), x = 330, y = 285, weapon = amFirePunch, additionalWeapons = {}},
+	{ name = GetAmmoName(amBazooka), x = 1950, y = 152, weapon = amBazooka, additionalWeapons = {}},
 }
 -- teams
 local teamA = {
@@ -74,13 +74,16 @@ function onGameInit()
 	teamA.name = AddMissionTeam(teamA.color)
 	hero.gear = AddMissionHog(100)
 	hero.name = GetHogName(hero.gear)
-	AnimSetGearPosition(hero.gear, hero.x, hero.y)
+	SetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	shuffleHogs(enemies)
 	teamB.name = AddTeam(teamB.name, teamB.color, "skull", "Island", "Default", "cm_skull")
 	for i=1,table.getn(enemies) do
 		enemies[i].gear = AddHog(enemies[i].name, 1, 100, "war_desertgrenadier1")
-		AnimSetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)
+		SetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)
+		if enemies[i].x > hero.x then
+			HogTurnLeft(enemies[i].gear, true)
+		end
 	end
 
 	initCheckpoint("death02")
