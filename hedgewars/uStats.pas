@@ -64,7 +64,8 @@ var DamageClan  : Longword = 0;         // Damage of own clan in turn
     PoisonTotal : Longword = 0;         // Poisoned hogs in whole round
     KillsClan   : LongWord = 0;         // Own clan members killed in turn
     KillsTeam   : LongWord = 0;         // Own team members killed in turn
-    Kills       : LongWord = 0;         // Killed hedgehogs in turn
+    KillsSD     : LongWord = 0;         // Killed hedgehogs in turn that died by Sudden Death water rise
+    Kills       : LongWord = 0;         // Killed hedgehogs in turn (including those that died by Sudden Death water rise)
     KillsTotal  : LongWord = 0;         // Total killed hedgehogs in game
     HitTargets  : LongWord = 0;         // Target (gtTarget) hits in turn
     AmmoUsedCount : Longword = 0;       // Number of times an ammo has been used this turn
@@ -138,20 +139,27 @@ if killed then
     Gear^.Hedgehog^.stats.StepDied:= true;
     inc(Attacker^.stats.StepKills);
     inc(Kills);
+
     inc(KillsTotal);
-    inc(Attacker^.Team^.stats.Kills);
-    if (Attacker^.Team^.TeamName = Gear^.Hedgehog^.Team^.TeamName) then
+
+    if bDuringWaterRise then
+        inc(KillsSD)
+    else
         begin
-        inc(Attacker^.Team^.stats.TeamKills);
-        inc(Attacker^.Team^.stats.TeamDamage, Gear^.Damage);
-    end;
-    if Gear = Attacker^.Gear then
-        inc(Attacker^.Team^.stats.Suicides);
-    if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
-        begin
-        inc(KillsClan);
-        if Attacker^.Team = Gear^.Hedgehog^.Team then
-            inc(KillsTeam);
+        inc(Attacker^.Team^.stats.Kills);
+        if (Attacker^.Team^.TeamName = Gear^.Hedgehog^.Team^.TeamName) then
+            begin
+            inc(Attacker^.Team^.stats.TeamKills);
+            inc(Attacker^.Team^.stats.TeamDamage, Gear^.Damage);
+        end;
+        if Gear = Attacker^.Gear then
+            inc(Attacker^.Team^.stats.Suicides);
+        if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
+            begin
+            inc(KillsClan);
+            if Attacker^.Team = Gear^.Hedgehog^.Team then
+                inc(KillsTeam);
+            end;
         end;
     end;
 
@@ -250,11 +258,13 @@ if FinishedTurnsTotal <> 0 then
     begin
     s:= ansistring(CurrentHedgehog^.Name);
     inc(CurrentHedgehog^.stats.FinishedTurns);
-    // If the hog sacrificed (=kamikaze/piano) itself, this needs to be taken into accounts for the reactions later
+
+    // killsCheck is used to take deaths into account that were not a traditional "kill"
+    // Hogs that died during SD water rise do not count as "kills" for taunts
+    killsCheck:= KillsSD;
+    // If the hog sacrificed (=kamikaze/piano) itself, this needs to be taken into account for the reactions later
     if (CurrentHedgehog^.stats.Sacrificed) then
-        killsCheck:= 1
-    else
-        killsCheck:= 0;
+        inc(killsCheck);
 
     // First blood (first damage, poison or kill)
     if (not FirstBlood) and (ClansCount > 1) and ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
@@ -283,7 +293,7 @@ if FinishedTurnsTotal <> 0 then
 
     // Hog hurts, poisons or kills own team/clan member. Sacrifice is taken into account
     else if (DamageClan <> 0) or (KillsClan > killsCheck) or (PoisonClan <> 0) then
-        if (DamageTurn > DamageClan) or (Kills > KillsClan) then
+        if (DamageTurn > DamageClan) or ((Kills-KillsSD) > KillsClan) then
             if random(2) = 0 then
                 AddVoice(sndNutter, CurrentTeam^.voicepack)
             else
@@ -385,6 +395,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 end;
 
 Kills:= 0;
+KillsSD:= 0;
 KillsClan:= 0;
 KillsTeam:= 0;
 DamageClan:= 0;
@@ -603,6 +614,7 @@ begin
     PoisonTurn  := 0;
     KillsClan   := 0;
     KillsTeam   := 0;
+    KillsSD     := 0;
     Kills       := 0;
     KillsTotal  := 0;
     HitTargets  := 0;
