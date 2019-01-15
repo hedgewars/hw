@@ -695,7 +695,7 @@ begin
                                 0);
                         // sprCensored contains English text, so only show it for English locales
                         // TODO: Make text translatable. But how?
-                        if Copy(cLocale, 1, 2) = 'en' then
+                        if Copy(cLanguage, 1, 2) = 'en' then
                             DrawSprite(sprCensored, ox - 32, oy - 20, 0);
                         end;
                     defaultPos:= false

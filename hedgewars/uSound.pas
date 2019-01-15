@@ -335,24 +335,24 @@ var cInitVolume: LongInt;
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
-    locName, path: shortstring;
+    langName, path: shortstring;
 begin
     i:= 0;
 
     // Adjust voicepack name if there's a localised version version of the voice
-    if cLocale <> 'en' then
+    if cLanguage <> 'en' then
         begin
-        locName:= name+'_'+cLocale;
-        path:= cPathz[ptVoices] + '/' + locName;
+        langName:= name+'_'+cLanguage;
+        path:= cPathz[ptVoices] + '/' + langName;
         if pfsExists(path) then
-            name:= locName
+            name:= langName
         else
-            if Length(cLocale) > 3 then
+            if Length(cLanguage) > 3 then
                 begin
-                locName:= name+'_'+Copy(cLocale,1,2);
-                path:= cPathz[ptVoices] + '/' + locName;
+                langName:= name+'_'+Copy(cLanguage,1,2);
+                path:= cPathz[ptVoices] + '/' + langName;
                 if pfsExists(path) then
-                    name:= locName
+                    name:= langName
                 end
         end;
 

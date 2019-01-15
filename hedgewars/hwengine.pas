@@ -399,16 +399,16 @@ begin
     if not allOK then exit;
 
     LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
-    if cLocaleFName <> 'en.txt' then
+    if cLanguageFName <> 'en.txt' then
         begin
         // Try two letter locale first before trying specific locale overrides
-        if (Length(cLocale) > 3) and (Copy(cLocale, 1, 2) <> 'en') then
+        if (Length(cLanguage) > 3) and (Copy(cLanguage, 1, 2) <> 'en') then
             begin
-            LoadLocale(cPathz[ptLocale] + '/' + Copy(cLocale, 1, 2) + '.txt')
+            LoadLocale(cPathz[ptLocale] + '/' + Copy(cLanguage, 1, 2) + '.txt')
             end;
-        LoadLocale(cPathz[ptLocale] + '/' + cLocaleFName)
+        LoadLocale(cPathz[ptLocale] + '/' + cLanguageFName)
         end
-    else cLocale := 'en';
+    else cLanguage := 'en';
 
     if not allOK then exit;
     WriteLnToConsole(msgGettingConfig);

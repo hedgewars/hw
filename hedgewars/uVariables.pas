@@ -41,8 +41,8 @@ var
     ipcPort            : Word;
     AprilOne           : boolean;
     cFullScreen        : boolean;
-    cLocaleFName       : shortstring;
-    cLocale            : shortstring;
+    cLanguageFName     : shortstring;
+    cLanguage          : shortstring;
     cTimerInterval     : LongInt;
     PathPrefix         : ansistring;
     UserPathPrefix     : ansistring;
@@ -2606,7 +2606,7 @@ begin
     cAltDamage      := false;
     cTimerInterval  := 8;
     cReducedQuality := rqNone;
-    cLocaleFName    := 'en.txt';
+    cLanguageFName  := 'en.txt';
     cFullScreen     := false;
 
     UserPathPrefix  := '';
@@ -2661,8 +2661,8 @@ begin
     Move(AmmozInit, Ammoz, sizeof(Ammoz));
 
 
-    cLocale:= cLocaleFName;
-    SplitByChar(cLocale, s, '.');
+    cLanguage:= cLanguageFName;
+    SplitByChar(cLanguage, s, '.');
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;

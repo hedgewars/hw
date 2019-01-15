@@ -258,7 +258,7 @@ begin
     case cmdIndex of
         {--prefix}               0 : PathPrefix        := getstringParameter (arg, paramIndex, parseParameter);
         {--user-prefix}          1 : UserPathPrefix    := getstringParameter (arg, paramIndex, parseParameter);
-        {--locale}               2 : cLocaleFName      := getstringParameter (arg, paramIndex, parseParameter);
+        {--locale}               2 : cLanguageFName    := getstringParameter (arg, paramIndex, parseParameter);
         {--fullscreen-width}     3 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
         {--fullscreen-height}    4 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
         {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);

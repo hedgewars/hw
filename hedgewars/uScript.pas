@@ -4145,7 +4145,7 @@ luaopen_math(luaState);
 luaopen_table(luaState);
 
 // import some variables
-ScriptSetString(_S'LOCALE', cLocale);
+ScriptSetString(_S'LOCALE', cLanguage);
 
 {$IFDEF USE_TOUCH_INTERFACE}
 ScriptSetString(_S'INTERFACE', 'touch');
