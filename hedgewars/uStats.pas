@@ -25,10 +25,12 @@ uses uConsts, uTypes;
 var TotalRoundsPre: LongInt; // Helper variable for calculating start of Sudden Death and more. Starts at -1 and is incremented on the turn BEFORE the turn which marks the start of the next round. Always -1 while in hog placing phase
     TotalRoundsReal: LongInt; // Total number of rounds played (-1 if not started or in hog placing phase). Exported to Lua as 'TotalRounds'
     FinishedTurnsTotal: LongInt;
+    // Variables to disable certain portions of game stats (set by Lua)
     SendGameResultOn : boolean = true;
     SendRankingStatsOn : boolean = true;
     SendAchievementsStatsOn : boolean = true;
     SendHealthStatsOn : boolean = true;
+    // Clan death log, used for game stats
     ClanDeathLog : PClanDeathLogEntry;
 
 procedure initModule;
@@ -52,27 +54,27 @@ procedure dumpPoint(x, y: LongInt);
 implementation
 uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uMisc, uConsole, uScript;
 
-var DamageClan  : Longword = 0;
-    DamageTeam  : Longword = 0;
-    DamageTotal : Longword = 0;
-    DamageTurn  : Longword = 0;
-    PoisonTurn  : Longword = 0; // Poisoned enemies per turn
-    PoisonClan  : Longword = 0; // Poisoned own clan members in turn
-    PoisonTeam  : Longword = 0; // Poisoned own team members in turn
-    PoisonTotal : Longword = 0; // Poisoned hogs in whole round
-    KillsClan   : LongWord = 0;
-    KillsTeam   : LongWord = 0;
-    Kills       : LongWord = 0;
-    KillsTotal  : LongWord = 0;
-    HitTargets  : LongWord = 0; // Target (gtTarget) hits per turn
-    AmmoUsedCount : Longword = 0;
-    AmmoDamagingUsed : boolean = false;
-    FirstBlood  : boolean = false;
-    LeaveMeAlone : boolean = false;
-    SkippedTurns: LongWord = 0;
-    isTurnSkipped: boolean = false;
-    vpHurtSameClan: PVoicepack = nil;
-    vpHurtEnemy: PVoicepack = nil;
+var DamageClan  : Longword = 0;         // Damage of own clan in turn
+    DamageTeam  : Longword = 0;         // Damage of own team tin turn
+    DamageTotal : Longword = 0;         // Total damage dealt in game
+    DamageTurn  : Longword = 0;         // Damage in turn
+    PoisonTurn  : Longword = 0;         // Poisoned enemies in turn
+    PoisonClan  : Longword = 0;         // Poisoned own clan members in turn
+    PoisonTeam  : Longword = 0;         // Poisoned own team members in turn
+    PoisonTotal : Longword = 0;         // Poisoned hogs in whole round
+    KillsClan   : LongWord = 0;         // Own clan members killed in turn
+    KillsTeam   : LongWord = 0;         // Own team members killed in turn
+    Kills       : LongWord = 0;         // Killed hedgehogs in turn
+    KillsTotal  : LongWord = 0;         // Total killed hedgehogs in game
+    HitTargets  : LongWord = 0;         // Target (gtTarget) hits in turn
+    AmmoUsedCount : Longword = 0;       // Number of times an ammo has been used this turn
+    AmmoDamagingUsed : boolean = false; // true if damaging ammo was used in turn
+    FirstBlood  : boolean = false;      // true if the “First blood” taunt has been used in this game
+    LeaveMeAlone : boolean = false;     // true if the “Leave me alone” taunt is to be used this turn
+    SkippedTurns: LongWord = 0;         // number of skipped turns in game
+    isTurnSkipped: boolean = false;     // true if this turn was skipped
+    vpHurtSameClan: PVoicepack = nil;   // voicepack of current clan (used for taunts)
+    vpHurtEnemy: PVoicepack = nil;      // voicepack of enemy (used for taunts)
 
 procedure HedgehogPoisoned(Gear: PGear; Attacker: PHedgehog);
 begin
