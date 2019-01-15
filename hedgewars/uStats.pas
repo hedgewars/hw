@@ -107,7 +107,7 @@ if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
 else
     begin
     vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
-    if (not killed) then
+    if (not killed) and (not bDuringWaterRise) then
         begin
         // Check if victim got attacked by RevengeHog again
         if (Gear^.Hedgehog^.RevengeHog <> nil) and (Gear^.Hedgehog^.RevengeHog = Attacker) then
@@ -128,8 +128,11 @@ else
 
 //////////////////////////
 
-inc(Attacker^.stats.StepDamageGiven, Damage);
-inc(Gear^.Hedgehog^.stats.StepDamageRecv, Damage);
+if (not bDuringWaterRise) then
+    begin
+    inc(Attacker^.stats.StepDamageGiven, Damage);
+    inc(Gear^.Hedgehog^.stats.StepDamageRecv, Damage);
+    end;
 
 if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan, Damage);
 if CurrentHedgehog^.Team = Gear^.Hedgehog^.Team then inc(DamageTeam, Damage);
@@ -137,7 +140,6 @@ if CurrentHedgehog^.Team = Gear^.Hedgehog^.Team then inc(DamageTeam, Damage);
 if killed then
     begin
     Gear^.Hedgehog^.stats.StepDied:= true;
-    inc(Attacker^.stats.StepKills);
     inc(Kills);
 
     inc(KillsTotal);
@@ -146,6 +148,7 @@ if killed then
         inc(KillsSD)
     else
         begin
+        inc(Attacker^.stats.StepKills);
         inc(Attacker^.Team^.stats.Kills);
         if (Attacker^.Team^.TeamName = Gear^.Hedgehog^.Team^.TeamName) then
             begin
