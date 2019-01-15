@@ -102,7 +102,7 @@ The argument “params” is a table containing fields which describe the traini
 			by the number of shots. (default: "You have shot %d times.")
 	- useRadar	Whether to use target radar (small circles that mark the position
 			of the next target). (default: true). Note: Still needs to be unlocked.
-	- radarTint:	RGBA color of the target radar  (default: 0x8080FFFF). Use this field
+	- radarTint:	RGBA color of the target radar  (default: 0xFF3030FF). Use this field
 			if the target radar would be hard to see against the background.
 ]]
 
@@ -116,7 +116,7 @@ function TargetPracticeMission(params)
 	if params.shootText == nil then params.shootText = loc("You have shot %d times.") end
 	if params.clanColor == nil then params.clanColor = -1 end
 	if params.wind == nil then params.wind = 0 end
-	if params.radarTint == nil then params.radarTint = 0x8080FFFF end
+	if params.radarTint == nil then params.radarTint = 0xFF3030FF end
 	if params.useRadar == nil then params.useRadar = true end
 
 	local solid, artillery
