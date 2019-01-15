@@ -33,7 +33,7 @@ static int numRecorders = 0;
 static QList<HWRecorder*> queue;
 
 HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
-    TCPBase(false)
+    TCPBase(false, !config->language().isEmpty())
 {
     this->config = config;
     this->prefix = prefix;

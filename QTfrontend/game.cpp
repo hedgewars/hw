@@ -53,7 +53,7 @@ TeamSelWidget * lastGameTeamSel = NULL;
 QString trainingName, trainingScript, trainingTeam, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
-    TCPBase(true, 0),
+    TCPBase(true, !config->language().isEmpty(), 0),
     ammostr(ammo),
     m_pTeamSelWidget(pTeamSelWidget)
 {

@@ -41,7 +41,7 @@ class TCPBase : public QObject
         Q_OBJECT
 
     public:
-        TCPBase(bool demoMode, QObject * parent = 0);
+        TCPBase(bool demoMode, bool usesCustomLanguage, QObject * parent = 0);
         virtual ~TCPBase();
 
         virtual bool couldBeRemoved();
@@ -80,6 +80,7 @@ class TCPBase : public QObject
 #endif
         bool m_isDemoMode;
         bool m_connected;
+        bool m_usesCustomLanguage;
         void RealStart();
         QPointer<QTcpSocket> IPCSocket;
 

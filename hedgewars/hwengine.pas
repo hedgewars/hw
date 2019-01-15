@@ -36,6 +36,7 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
+     {$IFDEF UNIX}, clocale{$ENDIF}
      {$IFDEF WINDOWS}, dynlibs{$ENDIF}
      ;
 

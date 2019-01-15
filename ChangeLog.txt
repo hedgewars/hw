@@ -58,6 +58,7 @@ Game HUD:
  * Fix wind bar animation not looping properly
  * Fix airplane line being drawn above many HUD elements
  * Suppress “<team> is gone.” message at end of game
+ * Fix game engine ignoring appropriate number formatting of user language
 
 Frontend:
  + Restructure credits
