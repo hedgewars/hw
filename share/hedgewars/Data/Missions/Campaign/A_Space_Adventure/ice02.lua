@@ -12,6 +12,7 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("Hard flying")
 local challengeStarted = false
+local challengeStartRequested = false
 local currentWaypoint = 1
 local radius = 75 -- Ring radius. Will become smaller and smaller
 local totalTime = 15000 -- Total available time. Initial value is start time; is added to later when player wins extra time
@@ -88,6 +89,7 @@ function onGameInit()
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Ally
 	teamB.name = AddTeam(teamB.name, teamB.color, "heart", "Island", "Default", "cm_face")
+	SetTeamPassive(teamB.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	HogTurnLeft(ally.gear, true)
@@ -134,9 +136,10 @@ function onEndTurn()
 end
 
 function onNewTurn()
-	if not hero.dead and CurrentHedgehog == ally.gear and challengeStarted then
-		heroLost()
-	elseif not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
+	if challengeStartRequested then
+		challengeStarted = true
+	end
+	if not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
 		SetWeapon(amJetpack)
 	end
 	heroTurn = CurrentHedgehog == hero.gear
@@ -258,9 +261,8 @@ end
 ------------------ Other Functions -------------------
 
 function startFlying()
-	AnimSwitchHog(ally.gear)
+	challengeStartRequested = true
 	EndTurn(true)
-	challengeStarted = true
 end
 
 function placeNextWaypoint()

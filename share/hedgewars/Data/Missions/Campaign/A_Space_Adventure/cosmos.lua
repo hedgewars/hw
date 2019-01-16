@@ -98,7 +98,7 @@ function onGameInit()
 
 	Seed = 35
 	ClearGameFlags()
-	EnableGameFlags(gfSolidLand, gfDisableWind, gfTagTeam)
+	EnableGameFlags(gfSolidLand, gfDisableWind)
 	if checkPointReached == 4 then
 		-- Disable walking as long we're stuck on the moon
 		EnableGameFlags(gfArtillery)
@@ -126,6 +126,7 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- PAotH
 	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	SetTeamPassive(teamA.name, true)
 	director.gear = AddHog(director.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(director.gear, director.x, director.y)
 	doctor.gear = AddHog(doctor.name, 0, 100, "Glasses")

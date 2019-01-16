@@ -525,6 +525,7 @@ end
 
 function AddHogs()
   princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_female")
+  SetTeamPassive(princessTeamName, true)
   princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
   SetGearAIHints(princess, aihDoesntMatter)
   gearDead[princess] = false
@@ -578,8 +579,7 @@ end
 
 function onGameInit()
 	Seed = 0
-	-- Using gfTagTeam makes it far easier to skip the Princess team
-	GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableGirders + gfTagTeam
+	GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableGirders
 	TurnTime = 60000 
 	CaseFreq = 0
 	MinesNum = 0
@@ -651,9 +651,6 @@ function onNewTurn()
         end
       end
     end
-    EndTurn(true)
-  elseif CurrentHedgehog == princess then
-    -- Princess is passive
     EndTurn(true)
   else
     for i = 1, 3 do

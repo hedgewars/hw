@@ -122,6 +122,7 @@ function onGameInit()
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAotH
 	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	SetTeamPassive(teamA.name, true)
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "scif_2001O")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -136,6 +137,7 @@ function onGameInit()
 	HogTurnLeft(paoth4.gear, true)
 	-- Professor
 	teamC.name = AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
+	SetTeamPassive(teamC.name, true)
 	professor.gear = AddHog(professor.name, 0, professor.health, "tophats")
 	AnimSetGearPosition(professor.gear, professor.x, professor.y)
 	HogTurnLeft(professor.gear, true)
@@ -253,9 +255,6 @@ function onNewTurn()
 		elseif weaponsAcquired and not battleZoneReached and afterDialog02 then
 			battleZone(hero.gear)
 		end
-	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
-		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear then
-		EndTurn(true)
 	elseif CurrentHedgehog == professor.gear then
 		if weaponsAcquired and not battleZoneReached and afterDialog02 then
 			battleZone(hero.gear)

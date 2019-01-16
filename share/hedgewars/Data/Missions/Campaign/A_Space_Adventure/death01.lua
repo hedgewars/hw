@@ -114,6 +114,7 @@ function onGameInit()
 
 	-- PAotH (passive team)
 	teamB.name = AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
+	SetTeamPassive(teamB.name, true)
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -211,13 +212,6 @@ function onGameStart()
 	AddAnim(dialog01)
 
 	SendHealthStatsOff()
-end
-
-function onNewTurn()
-	-- Team PAotH is passive and does not play
-	if CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear then
-		EndTurn(true)
-	end
 end
 
 function onGameTick()

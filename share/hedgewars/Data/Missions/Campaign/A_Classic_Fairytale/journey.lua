@@ -234,7 +234,7 @@ end
 
 function AfterEndAnimAlone()
   stage = endStage
-  SwitchHog(leaks)
+  AnimSwitchHog(leaks)
   SetGearMessage(leaks, 0)
   SetTurnTimeLeft(MAX_TURN_TIME)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
@@ -245,7 +245,7 @@ end
 
 function AfterEndAnimDuo()
   stage = endStage
-  SwitchHog(leaks)
+  AnimSwitchHog(leaks)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
   SetTurnTimeLeft(MAX_TURN_TIME)
@@ -323,7 +323,7 @@ function AfterPastFlowerAnim()
   AddEvent(CheckDensePit, {}, DoDensePit, {}, 0)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
-  EndTurn(0)
+  EndTurn(true)
   ShowMission(loc("The Journey Back"), loc("The Savior"), 
     loc("Get Dense Cloud out of the pit!") .. "|" ..
     loc("Your hogs must survive!") .. "|" ..
@@ -883,7 +883,7 @@ function CheckDensePit()
 end
 
 function DoDensePit()
-  EndTurn(0)
+  EndTurn(true)
   RestoreHedge(cyborg)
   AnimWait(cyborg, 1)
   AddFunction({func = AddAnim, args = {outPitAnim}})
@@ -1096,6 +1096,7 @@ function onGameInit()
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
 
   princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_female")
+  SetTeamPassive(princessTeamName, true)
   princess = AddHog(loc("Fell From Heaven"), 0, 200, "tiara")
 
   cannibalsTeamName = AddTeam(loc("Cannibal Sentry"), -1, "skull", "Island", "Pirate","cm_vampire")
@@ -1197,10 +1198,13 @@ function onNewTurn()
     SetTurnTimeLeft(MAX_TURN_TIME)
   elseif victory then
     EndTurn(true)
-  elseif stage == endStage and CurrentHedgehog ~= leaks then
-    AnimSwitchHog(leaks)
-    SetGearMessage(leaks, 0)
-    SetTurnTimeLeft(MAX_TURN_TIME)
+  elseif stage == endStage then
+    if GetHogTeamName(CurrentHedgehog) == nativesTeamName and CurrentHedgehog ~= leaks then
+      AnimSwitchHog(leaks)
+      SetTurnTimeLeft(MAX_TURN_TIME)
+    else
+      SkipTurn()
+    end
   elseif GetHogTeamName(CurrentHedgehog) ~= nativesTeamName then
     SetTurnTimeLeft(20000)
   else

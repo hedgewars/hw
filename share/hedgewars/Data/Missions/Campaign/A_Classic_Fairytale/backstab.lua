@@ -969,6 +969,7 @@ end
 
 function AddHogs()
   tribeTeamName = AddTeam(loc("Tribe"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  SetTeamPassive(tribeTeamName, true)
   for i = 8, 9 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
@@ -1020,8 +1021,7 @@ end
 
 function onGameInit()
 	Seed = 2
-	-- gfTagTeam makes it easier to skip the Tribe team
-	GameFlags = gfSolidLand + gfTagTeam
+	GameFlags = gfSolidLand
 	TurnTime = 60000 
 	CaseFreq = 0
 	MinesNum = 0
@@ -1120,10 +1120,6 @@ function onNewTurn()
     return
   end
 
-  if GetHogTeamName(CurrentHedgehog) == loc("Tribe") then
-    EndTurn(true)
-    return
-  end
   TurnsLeft = TurnsLeft - 1
   
   if stage == platformStage then

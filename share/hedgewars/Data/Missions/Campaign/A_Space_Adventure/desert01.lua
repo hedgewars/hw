@@ -111,10 +111,12 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- PAotH undercover scientist and chief Sandologist
 	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	SetTeamPassive(teamA.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "Cowboy")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Smugglers
 	teamB.name = AddTeam(teamB.name, teamB.color, "chest", "Island", "Default", "cm_bloodyblade")
+	SetTeamPassive(teamB.name, true)
 	smuggler1.gear = AddHog(smuggler1.name, 1, 100, "hair_orange")
 	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y)
 	smuggler2.gear = AddHog(smuggler2.name, 1, 100, "lambda")
@@ -205,31 +207,14 @@ function onGameStart()
 end
 
 function onNewTurn()
-	local function getReady(hog)
-		-- This clears the "Get ready, Hog!" caption from the engine, because it will name the
-		-- false hog because we immediately switch the hog after the turn start.
-		-- TODO: Find a better method for this and show the real hog name (preferably using an engine string)
-		AddCaption("")
-	end
-
-	if CurrentHedgehog ~= hero.gear and not heroIsInBattle then
-		AnimSwitchHog(hero.gear)
-		getReady(hero.gear)
-		SetTurnTimeLeft(MAX_TURN_TIME)
-	elseif CurrentHedgehog == hero.gear and not heroIsInBattle then
+	if CurrentHedgehog == hero.gear and not heroIsInBattle then
 		SetTurnTimeLeft(MAX_TURN_TIME)
 	elseif (CurrentHedgehog == smuggler2.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 1 then
 		AnimSwitchHog(smuggler1.gear)
-		getReady(smuggler1.gear)
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 2 then
 		AnimSwitchHog(smuggler2.gear)
-		getReady(smuggler2.gear)
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler2.gear) and ongoingBattle == 3 then
 		AnimSwitchHog(smuggler3.gear)
-		getReady(smuggler3.gear)
-	elseif CurrentHedgehog == ally.gear then
-		AnimSwitchHog(hero.gear)
-		getReady(hero.gear)
 	end
 end
 
@@ -291,6 +276,7 @@ function onGearDelete(gear)
 		hero.dead = true
 	elseif (gear == smuggler1.gear or gear == smuggler2.gear or gear == smuggler3.gear) and heroIsInBattle then
 		heroIsInBattle = false
+		SetTeamPassive(teamB.name, true)
 		AddAmmo(hero.gear, amSkip, 0)
 		ongoingBattle = 0
 	end
@@ -397,8 +383,9 @@ function heroAtFirstBattle(gear)
 		dy = div(dy, 3)
 	end
 	SetGearMessage(hero.gear, 0)
-	EndTurn(true)
+	SetTeamPassive(teamB.name, false)
 	heroIsInBattle = true
+	EndTurn(true)
 	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 1
 	AnimSwitchHog(smuggler1.gear)
@@ -408,8 +395,9 @@ end
 
 function heroFleeFirstBattle(gear)
 	AnimSay(smuggler1.gear, loc("Run away, you coward!"), SAY_SHOUT, 4000)
-	EndTurn(true)
+	SetTeamPassive(teamB.name, true)
 	heroIsInBattle = false
+	EndTurn(true)
 	AddAmmo(hero.gear, amSkip, 0)
 	ongoingBattle = 0
 end
@@ -424,6 +412,7 @@ end
 
 function heroAtThirdBattle(gear)
 	heroIsInBattle = true
+	SetTeamPassive(teamB.name, false)
 	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 3
 	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you!"), SAY_SHOUT, 5000)
@@ -521,6 +510,7 @@ function secondBattle()
 	end
 	SetGearMessage(hero.gear, 0)
 	heroIsInBattle = true
+	SetTeamPassive(teamB.name, false)
 	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 2
 	AnimSay(smuggler2.gear, loc("This seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)

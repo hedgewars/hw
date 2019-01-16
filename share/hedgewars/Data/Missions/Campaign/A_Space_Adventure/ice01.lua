@@ -118,6 +118,7 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- Ally
 	teamA.name = AddTeam(teamA.name, teamA.color, "heart", "Island", "Default", "cm_face")
+	SetTeamPassive(teamA.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Frozen Bandits
@@ -234,29 +235,48 @@ function onGameStart()
 	SendHealthStatsOff()
 end
 
+function getNextBandit(hog)
+	local continue = true
+	local startHog = hog
+	while true do
+		if (GetHealth(hog) and GetEffect(hog, heFrozen) < 256) and
+		( (heroAtFinalStep and (hog == bandit1.gear or hog == bandit4.gear or hog == bandit5.gear)) or
+		((not heroAtFinalStep) and (hog == bandit2.gear or hog == bandit3.gear)) ) then
+			return hog
+		end
+		if hog == bandit1.gear then
+			hog = bandit2.gear
+		elseif hog == bandit2.gear then
+			hog = bandit3.gear
+		elseif hog == bandit3.gear then
+			hog = bandit4.gear
+		elseif hog == bandit4.gear then
+			hog = bandit5.gear
+		elseif hog == bandit5.gear then
+			hog = bandit1.gear
+		end
+		if startHog == hog then
+			return nil
+		end
+	end
+end
+
 function onNewTurn()
 	heroDamageAtCurrentTurn = 0
 	-- round has to start if hero goes near the column
 	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
-		EndTurn(true)
+		SkipTurn()
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
 		SetTurnTimeLeft(MAX_TURN_TIME)
-	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then
-		AnimSwitchHog(hero.gear)
-		EndTurn(true)
-	elseif heroAtFinalStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
-		if (GetHealth(bandit1.gear) and GetEffect(bandit1.gear,heFrozen) > 256) and
-			((GetHealth(bandit4.gear) and GetEffect(bandit4.gear,heFrozen) > 256) or not GetHealth(bandit4.gear)) and
-			((GetHealth(bandit5.gear) and GetEffect(bandit5.gear,heFrozen) > 256) or not GetHealth(bandit5.gear)) then
-			EndTurn(true)
+	elseif (GetHogTeamName(CurrentHedgehog) == teamB.name) then
+		local nextBandit = getNextBandit(CurrentHedgehog)
+		if nextBandit ~= nil then
+			if CurrentHedgehog ~= nextBandit then
+				AnimSwitchHog(nextBandit)
+			end
 		else
-			AnimSwitchHog(hero.gear)
-			EndTurn(true)
+			SkipTurn()
 		end
-	elseif CurrentHedgehog == ally.gear then
-		-- This switches back to hero (indirectly)
-		SwitchHog(bandit1.gear)
-		EndTurn(true)
 	end
 	-- frozen hogs accounting
 	if CurrentHedgehog == hero.gear and heroAtFinalStep and TurnTimeLeft > 0 then

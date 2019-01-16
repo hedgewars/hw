@@ -113,6 +113,8 @@ startAnim = {}
 
 gearDead = {}
 hogDead = {}
+
+local traitorTeamName = loc("Traitors")
 --------------------------Anim skip functions--------------------------
 function SkipStartAnim()
   SetGearMessage(CurrentHedgehog, 0)
@@ -328,7 +330,8 @@ function AddHogs()
   end
 
   if m8Scene == denseScene or m8Scene == waterScene then
-    AddTeam(loc("Traitors"), -2, grave, "Island", voice, "cm_bloodyblade")
+    traitorTeamName = AddTeam(traitorTeamName, -2, grave, "Island", voice, "cm_bloodyblade")
+    SetTeamPassive(traitorTeamName, true)
     if m8Scene == denseScene then
       DeleteGear(natives[2])
       natives[2] = AddHog(nativeNames[2], 0, 100, nativeHats[2])
@@ -434,6 +437,9 @@ function onGearDelete(gear)
   if GetGearType(gear) == gtHedgehog then
     hogDead[gear] = true
   end
+  if IsEveryoneExceptTraitorDead() then
+    SetTeamPassive(traitorTeamName, false)
+  end
 end
 
 function onAmmoStoreInit()
@@ -483,16 +489,7 @@ function IsEveryoneExceptTraitorDead()
 end
 
 function onNewTurn()
-  if AnimInProgress() then
-    SetTurnTimeLeft(MAX_TURN_TIME)
-    return
-  end
-  -- Don't allow player to play with traitor, except when it is the final hog left
-  if CurrentHedgehog == traitor and not IsEveryoneExceptTraitorDead() then
-    EndTurn(true)
-  else
-    SetTurnTimeLeft(MAX_TURN_TIME)
-  end
+  SetTurnTimeLeft(MAX_TURN_TIME)
 end
 
 function onPrecise()
