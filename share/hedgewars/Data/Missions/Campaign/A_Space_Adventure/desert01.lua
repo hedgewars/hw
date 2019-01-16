@@ -395,6 +395,7 @@ function heroAtFirstBattle(gear)
 		dx = div(dx, 3)
 		dy = div(dy, 3)
 	end
+	SetGearMessage(hero.gear, 0)
 	EndTurn(true)
 	heroIsInBattle = true
 	AddAmmo(hero.gear, amSkip, 100)
@@ -433,6 +434,7 @@ function heroAtThirdBattle(gear)
 		dx = div(dx, 3)
 		dy = div(dy, 3)
 	end
+	SetGearMessage(hero.gear, 0)
 	AnimSwitchHog(smuggler3.gear)
 	EndTurn(true)
 	SetGearVelocity(hero.gear, dx, dy)
@@ -516,6 +518,7 @@ function secondBattle()
 		dx = div(dx, 3)
 		dy = div(dy, 3)
 	end
+	SetGearMessage(hero.gear, 0)
 	heroIsInBattle = true
 	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 2
