@@ -2145,11 +2145,11 @@ void HWForm::UpdateCampaignPageProgress(int index)
 {
     Q_UNUSED(index);
 
-    QString missionTitle = ui.pageCampaign->CBMission->currentText();
+    QString missionTitle = ui.pageCampaign->CBMission->currentData().toString();
     UpdateCampaignPage(0);
     for(int i=0;i<ui.pageCampaign->CBMission->count();i++)
     {
-        if (ui.pageCampaign->CBMission->itemData(i)==missionTitle)
+        if (ui.pageCampaign->CBMission->itemData(i).toString() == missionTitle)
         {
             ui.pageCampaign->CBMission->setCurrentIndex(i);
             break;
