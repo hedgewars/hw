@@ -154,7 +154,7 @@ function onGameInit()
 		startSequence = true
 		AnimSetGearPosition(hero.gear, 1110, 850)
 	elseif checkPointReached == 5 then
-		startSequence = false
+		startSequence = status.death01 and not status.final
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
 		if GetCampaignVar("Planet") == "moon" then
 			AnimSetGearPosition(hero.gear, 1110, 850)
@@ -191,6 +191,8 @@ function onGameStart()
 		else
 			ShowMission(unpack(goals["open_side_missions"]))
 		end
+	elseif status.death01 and not status.final then
+		HideMission()
 	else
 		ShowMission(unpack(goals["init"]))
 	end
