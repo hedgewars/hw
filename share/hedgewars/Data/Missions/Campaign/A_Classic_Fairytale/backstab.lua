@@ -600,6 +600,11 @@ function AfterAfterChoiceAnim()
   SetState(speakerHog, 0)
   SetTurnTimeLeft(MAX_TURN_TIME)
   ShowMission(loc("Backstab"), loc("The food bites back"), loc("Defeat the cannibals!"), 1, 4000)
+  SetAmmoDelay(amBlowTorch, 0)
+  SetAmmoDelay(amGirder, 0)
+  SetAmmoDelay(amLandGun, 0)
+  SetAmmoDelay(amRope, 0)
+  SetAmmoDelay(amParachute, 0)
   SpawnCrates()
 end
 
@@ -1042,6 +1047,11 @@ function onGameStart()
   AnimationSetup()
   AddAnim(startAnim)
   AddFunction({func = AfterStartAnim, args = {}})
+  SetAmmoDelay(amBlowTorch, 9999)
+  SetAmmoDelay(amGirder, 9999)
+  SetAmmoDelay(amLandGun, 9999)
+  SetAmmoDelay(amRope, 9999)
+  SetAmmoDelay(amParachute, 9999)
 end
 
 function onGameTick()
