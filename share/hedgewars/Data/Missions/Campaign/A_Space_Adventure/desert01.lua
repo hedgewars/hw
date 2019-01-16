@@ -199,7 +199,6 @@ function onGameStart()
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
 	AddAmmo(hero.gear, amRCPlane, tonumber(getBonus(1)))
-	AddAmmo(hero.gear, amSkip, 0)
 
 	AddAnim(dialog01)
 
@@ -232,6 +231,9 @@ function onAmmoStoreInit()
 	SetAmmo(amRope, 0, 0, 0, 1)
 	SetAmmo(amPortalGun, 0, 0, 0, 1)
 	SetAmmo(amGirder, 0, 0, 0, 3)
+	-- Give skip to all.
+	-- Skip intentionally kept for player so they can wait for
+	-- better wind conditions.
 	SetAmmo(amSkip, 9, 0, 0, 1)
 end
 
@@ -277,7 +279,6 @@ function onGearDelete(gear)
 	elseif (gear == smuggler1.gear or gear == smuggler2.gear or gear == smuggler3.gear) and heroIsInBattle then
 		heroIsInBattle = false
 		SetTeamPassive(teamB.name, true)
-		AddAmmo(hero.gear, amSkip, 0)
 		ongoingBattle = 0
 	end
 end
@@ -386,7 +387,6 @@ function heroAtFirstBattle(gear)
 	SetTeamPassive(teamB.name, false)
 	heroIsInBattle = true
 	EndTurn(true)
-	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 1
 	AnimSwitchHog(smuggler1.gear)
 	EndTurn(true)
@@ -398,7 +398,6 @@ function heroFleeFirstBattle(gear)
 	SetTeamPassive(teamB.name, true)
 	heroIsInBattle = false
 	EndTurn(true)
-	AddAmmo(hero.gear, amSkip, 0)
 	ongoingBattle = 0
 end
 
@@ -413,7 +412,6 @@ end
 function heroAtThirdBattle(gear)
 	heroIsInBattle = true
 	SetTeamPassive(teamB.name, false)
-	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 3
 	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you!"), SAY_SHOUT, 5000)
 	local dx, dy = GetGearVelocity(hero.gear)
@@ -511,7 +509,6 @@ function secondBattle()
 	SetGearMessage(hero.gear, 0)
 	heroIsInBattle = true
 	SetTeamPassive(teamB.name, false)
-	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 2
 	AnimSay(smuggler2.gear, loc("This seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
 	AnimSwitchHog(smuggler2.gear)
