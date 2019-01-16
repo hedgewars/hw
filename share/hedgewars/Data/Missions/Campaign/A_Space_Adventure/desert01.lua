@@ -322,7 +322,8 @@ function onHeroAtFirstBattle(gear)
 end
 
 function onHeroFleeFirstBattle(gear)
-	if GetHealth(hero.gear) and GetHealth(smuggler1.gear) and heroIsInBattle
+	if GetHealth(hero.gear) and GetHealth(smuggler1.gear)
+			and heroIsInBattle and ongoingBattle == 1
 			and not gearIsInCircle(smuggler1.gear, GetX(hero.gear), GetY(hero.gear), 1400, false)
 			and StoppedGear(hero.gear) then
 		return true
