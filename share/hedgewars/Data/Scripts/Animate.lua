@@ -102,8 +102,7 @@ function AnimInit(startAnimating)
 end
 
 function AnimSwitchHog(gear)
-  --SetGearMessage(gear, 0)
-  --SetState(gear, 0)
+  SetGearMessage(gear, band(GetGearMessage(gear), bnot(gmAllStoppable)))
   SwitchHog(gear)
   FollowGear(gear)
   return true
