@@ -109,7 +109,7 @@ var luaState : Plua_State;
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
 procedure ScriptSetAmmo(ammo : TAmmoType; count, probability, delay, reinforcement: Byte); forward;
-procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
+procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: LongWord); forward;
 
 var LuaDebugInfo: lua_Debug;
 
@@ -4097,17 +4097,22 @@ ScriptSetAmmoDelay(ammo, delay);
 ScriptAmmoReinforcement[ord(ammo)]:= inttostr(reinforcement)[1];
 end;
 
-procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte);
+procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: LongWord);
 begin
 // change loadout string if ammo store has not been initialized yet
 if (StoreCnt = 0) then
-begin
+    begin
     if (delay <= 9) then
         ScriptAmmoDelay[ord(ammo)]:= inttostr(delay)[1];
-end
+    end
 // change 'live' delay values
 else if (CurrentTeam <> nil) then
-        ammoz[ammo].SkipTurns:= CurrentTeam^.Clan^.TurnNumber + delay;
+    begin
+    ammoz[ammo].SkipTurns:= CurrentTeam^.Clan^.TurnNumber + delay;
+    if ammoz[ammo].SkipTurns > 0 then
+        dec(ammoz[ammo].SkipTurns);
+    AmmoMenuInvalidated:= true;
+    end;
 end;
 
 procedure ScriptApplyAmmoStore;
