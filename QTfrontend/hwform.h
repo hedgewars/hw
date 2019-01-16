@@ -215,6 +215,8 @@ class HWForm : public QMainWindow
         QPropertyAnimation *animationNewOpacity;
         QPropertyAnimation *animationOldOpacity;
 
+        bool campaignMissionWon = false;
+
 #ifdef __APPLE__
         InstallController * panel;
 #endif

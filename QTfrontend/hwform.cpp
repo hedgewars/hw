@@ -2143,26 +2143,74 @@ void HWForm::UpdateCampaignPageMission(int index)
 
 void HWForm::UpdateCampaignPageProgress(int index)
 {
-    Q_UNUSED(index);
-
     QString missionTitle = ui.pageCampaign->CBMission->currentData().toString();
     UpdateCampaignPage(0);
+    int missionIndex = 0;
+    // Restore selected mission (because UpdateCampaignPage repopulated the list)
     for(int i=0;i<ui.pageCampaign->CBMission->count();i++)
     {
         if (ui.pageCampaign->CBMission->itemData(i).toString() == missionTitle)
         {
-            ui.pageCampaign->CBMission->setCurrentIndex(i);
+            missionIndex = i;
             break;
         }
     }
-    int i = ui.pageCampaign->CBCampaign->currentIndex();
-    QString campaignName = ui.pageCampaign->CBCampaign->itemData(i).toString();
+
+    // Get metadata
+    int c = ui.pageCampaign->CBCampaign->currentIndex();
+    QString campaignName = ui.pageCampaign->CBCampaign->itemData(c).toString();
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     QString tName = team.name();
+
+    if(index == gsFinished)
+    {
+        // Select new mission when current mission went from
+        // unfinished to finished.
+        if(ui.pageCampaign->currentMissionWon == false &&
+           isCampMissionWon(campaignName, missionIndex, tName))
+        {
+            // Traverse all missions and pick first mission that
+            // has not been won.
+            bool selected = false;
+            // start from mission that comes after the selected one
+            for(int m = missionIndex-1; m >= 0;m--)
+            {
+                if(!isCampMissionWon(campaignName, m, tName))
+                {
+                    missionIndex = m;
+                    selected = true;
+                    break;
+                }
+            }
+            // No mission selected? Let's try again from the end of the list
+            if(!selected)
+            {
+                for(int m = ui.pageCampaign->CBMission->count()-1; m > missionIndex-1; m--)
+                {
+                    if(!isCampMissionWon(campaignName, m, tName))
+                    {
+                        missionIndex = m;
+                        break;
+                    }
+                }
+            }
+            // If no mission was selected, the old selection remains unchanged.
+        }
+    }
+    else if(index == gsStarted)
+    {
+        // Remember the "won" state of current mission before we start it.
+        // We'll need it when the game has finished.
+        ui.pageCampaign->currentMissionWon = isCampMissionWon(campaignName, missionIndex, tName);
+    }
+
+    ui.pageCampaign->CBMission->setCurrentIndex(missionIndex);
+
+    // Update campaign victory status
     if(isCampWon(campaignName, tName))
-        ui.pageCampaign->CBCampaign->setItemIcon(i, finishedIcon);
+        ui.pageCampaign->CBCampaign->setItemIcon(c, finishedIcon);
     else
-        ui.pageCampaign->CBCampaign->setItemIcon(i, notFinishedIcon);
+        ui.pageCampaign->CBCampaign->setItemIcon(c, notFinishedIcon);
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]

@@ -63,6 +63,7 @@ Game HUD:
 Frontend:
  + Restructure credits
  + Credits screen in main menu is now translatable
+ + More intelligent automatic mission selection in campaign screen
  * Fix force-locked schemes getting unlocked when changing map types
 
 Lua API:
