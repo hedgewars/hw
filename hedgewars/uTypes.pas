@@ -446,6 +446,8 @@ type
             voicepack: PVoicepack;
             PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
             stats: TTeamStats;
+            Passive: boolean; // if true, team will not participate in game. It is treated as if all its hedgehogs are frozen.
+                              // updating this value requires updating Passive in TClan as well!
             hasKing: boolean; // true if team has a living king
             hasGone: boolean;
             skippedTurns: Longword;
@@ -467,6 +469,7 @@ type
             DeathLogged: boolean; // true if clan is dead and its latest death has been logged in the clan death log
             StatsHandled : boolean; // true if clan's rank has been handled for stats screen
             Flawless: boolean;
+            Passive: boolean; // informational. Must be set to true if all of the teams are passive
             end;
 
      cdeclPtr = procedure; cdecl;

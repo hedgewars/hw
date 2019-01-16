@@ -58,19 +58,21 @@ function CheckForWin: boolean;
 var AliveClan: PClan;
     s, cap: ansistring;
     ts: array[0..(cMaxTeams - 1)] of ansistring;
-    t, AliveCount, i, j: LongInt;
+    t, ActiveAliveCount, i, j: LongInt;
     allWin, winCamera: boolean;
 begin
 CheckForWin:= false;
-AliveCount:= 0;
+ActiveAliveCount:= 0;
+// Victory if there is 1 living and non-passive clan left
 for t:= 0 to Pred(ClansCount) do
-    if ClansArray[t]^.ClanHealth > 0 then
+    if (ClansArray[t]^.ClanHealth > 0) and (not ClansArray[t]^.Passive) then
         begin
-        inc(AliveCount);
+        inc(ActiveAliveCount);
         AliveClan:= ClansArray[t]
         end;
 
-if (AliveCount > 1) or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then
+// Exception: gfOneClanMode, then there is no winner
+if (ActiveAliveCount > 1) or ((ActiveAliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then
     exit;
 CheckForWin:= true;
 
@@ -89,7 +91,7 @@ if ((not bBetweenTurns) and isInMultiShoot) or (bDuringWaterRise) then
 
 if not TeamsGameOver then
     begin
-    if AliveCount = 0 then
+    if ActiveAliveCount = 0 then
         begin // draw
         AddCaption(GetEventString(eidRoundDraw), capcolDefault, capgrpGameState);
         if SendGameResultOn then
@@ -278,15 +280,16 @@ repeat
             CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
             CurrentTeam:= Teams[CurrTeam];
             with CurrentTeam^ do
-                begin
-                PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn)
-                repeat
-                    CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
-                until ((Hedgehogs[CurrHedgehog].Gear <> nil) and (Hedgehogs[CurrHedgehog].Effects[heFrozen] < 256)) or (CurrHedgehog = PrevHH)
-                end
-        until ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256)) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0))
+                if (not Passive) then
+                    begin
+                    PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn)
+                    repeat
+                        CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
+                    until ((Hedgehogs[CurrHedgehog].Gear <> nil) and (Hedgehogs[CurrHedgehog].Effects[heFrozen] < 256)) or (CurrHedgehog = PrevHH)
+                    end
+        until ((not CurrentTeam^.Passive) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256)) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0))
         end;
-        if (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
+        if (CurrentTeam^.Passive) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
             begin
             with CurrentTeam^.Clan^ do
                 for t:= 0 to Pred(TeamsNumber) do
@@ -298,10 +301,10 @@ repeat
                                 if (Gear <> nil) and (Effects[heFrozen] < 256) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
                                     CurrHedgehog:= i
                                 end;
-            if (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
+            if (not CurrentTeam^.Passive) and ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255)) then
                 inc(CurrentTeam^.Clan^.TurnNumber);
-            end
-until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256);
+            end;
+until (not CurrentTeam^.Passive) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256);
 
 SwitchCurrentHedgehog(@(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]));
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -508,6 +511,7 @@ inc(TeamsCount);
 inc(VisibleTeamsCount);
 
 team^.Binds:= DefaultBinds;
+team^.Passive:= false;
 
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
@@ -535,6 +539,7 @@ else
 with team^.Clan^ do
     begin
     Teams[TeamsNumber]:= team;
+    Passive:= false;
     inc(TeamsNumber)
     end;
 

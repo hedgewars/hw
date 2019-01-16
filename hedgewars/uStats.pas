@@ -480,7 +480,7 @@ if SendHealthStatsOn then
 
             { Send player stats for winner clans/teams.
             The clan that survived is ranked 1st. }
-            if Clan^.ClanHealth > 0 then
+            if (Clan^.ClanHealth > 0) and (not Clan^.Passive) then
                 begin
                 winnersClan:= Clan;
                 if SendRankingStatsOn then
@@ -532,7 +532,7 @@ if SendHealthStatsOn then
                 if ((deathEntry^.KilledClans[c]^.ClanHealth) = 0) and (not deathEntry^.KilledClans[c]^.StatsHandled) then
                     begin
                     for t:= 0 to Pred(TeamsCount) do
-                        if TeamsArray[t]^.Clan^.ClanIndex = deathEntry^.KilledClans[c]^.ClanIndex then
+                        if (TeamsArray[t]^.Clan^.ClanIndex = deathEntry^.KilledClans[c]^.ClanIndex) and (not TeamsArray[t]^.Passive) then
                             begin
                             SendStat(siTeamRank, IntToStr(currentRank));
                             SendStat(siPlayerKills, IntToStr(deathEntry^.killedClans[c]^.Color) + ' ' +

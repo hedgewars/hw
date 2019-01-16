@@ -2409,6 +2409,46 @@ begin
     lc_setteamlabel:= 1;
 end;
 
+function lc_setteampassive(L : Plua_State) : LongInt; Cdecl;
+var i, j: LongInt;
+    success, passive, passiveClan: boolean;
+begin
+	success:= false;
+    if CheckLuaParamCount(L, 2, 'SetTeamPassive', 'teamname, isPassive') then
+        begin
+        success:= false;
+        // fetch team
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                if TeamsArray[i]^.TeamName = lua_tostring(L, 1) then
+                    begin
+                    passive:= lua_toboolean(L, 2);
+                    TeamsArray[i]^.Passive:= passive;
+                    // also update clan state
+                    if passive then
+                        begin
+                        passiveClan:= true;
+                        for j:= 0 to Pred(TeamsCount) do
+                            if (not TeamsArray[j]^.Passive) then
+                                begin
+                                passiveClan:= false;
+                                break;
+                                end;
+                        end
+                    else
+                        passiveClan:= false;
+                    TeamsArray[i]^.Clan^.Passive:= passiveClan;
+
+                    success:= true;
+                    // don't change more than one team
+                    break;
+                    end;
+        end;
+    // return true if operation was successful, false otherwise
+    lua_pushboolean(L, success);
+    lc_setteampassive:= 1;
+end;
+
 function lc_getteamname(L : Plua_State) : LongInt; Cdecl;
 var t: LongInt;
 begin
@@ -4377,6 +4417,7 @@ lua_register(luaState, _P'GetTeamClan', @lc_getteamclan);
 lua_register(luaState, _P'AddTeam', @lc_addteam);
 lua_register(luaState, _P'AddMissionTeam', @lc_addmissionteam);
 lua_register(luaState, _P'SetTeamLabel', @lc_setteamlabel);
+lua_register(luaState, _P'SetTeamPassive', @lc_setteampassive);
 lua_register(luaState, _P'AddHog', @lc_addhog);
 lua_register(luaState, _P'AddMissionHog', @lc_addmissionhog);
 lua_register(luaState, _P'AddAmmo', @lc_addammo);
