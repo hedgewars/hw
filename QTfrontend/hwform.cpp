@@ -2088,12 +2088,13 @@ void HWForm::UpdateCampaignPage(int index)
 {
     Q_UNUSED(index);
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
-    QString campaignName = ui.pageCampaign->CBCampaign->itemData(ui.pageCampaign->CBCampaign->currentIndex()).toString();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentData().toString();
     QString tName = team.name();
 
     campaignMissionInfo = getCampMissionList(campaignName,tName);
     ui.pageCampaign->CBMission->clear();
 
+    // Populate mission list
     for(int i=0;i<campaignMissionInfo.size();i++)
     {
         ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].realName), QString(campaignMissionInfo[i].name));
@@ -2101,6 +2102,20 @@ void HWForm::UpdateCampaignPage(int index)
             ui.pageCampaign->CBMission->setItemIcon(i, finishedIcon);
         else
             ui.pageCampaign->CBMission->setItemIcon(i, notFinishedIcon);
+    }
+
+    // Select first open mission
+    int missionIndex = ui.pageCampaign->CBMission->currentIndex();
+    if(isCampMissionWon(campaignName, missionIndex, tName))
+    {
+        for(int m = 0; m < ui.pageCampaign->CBMission->count(); m++)
+        {
+            if(!isCampMissionWon(campaignName, m, tName))
+            {
+                ui.pageCampaign->CBMission->setCurrentIndex(m);
+                break;
+            }
+        }
     }
 }
 
@@ -2118,6 +2133,7 @@ void HWForm::UpdateCampaignPageTeam(int index)
 
     unsigned int n = entries.count();
 
+    // Update campaign status
     for(unsigned int i = 0; i < n; i++)
     {
         QString campaignName = QString(entries[i]).replace(QString(" "),QString("_"));
@@ -2131,7 +2147,7 @@ void HWForm::UpdateCampaignPageTeam(int index)
 void HWForm::UpdateCampaignPageMission(int index)
 {
     // update thumbnail and description
-    QString campaignName = ui.pageCampaign->CBCampaign->itemData(ui.pageCampaign->CBCampaign->currentIndex()).toString();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentData().toString();
     // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
     // this will cause segfault. This check prevents illegal memory reads
     if(index > -1 && index < campaignMissionInfo.count()) {
