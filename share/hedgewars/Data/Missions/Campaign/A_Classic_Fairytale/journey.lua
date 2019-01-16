@@ -201,7 +201,7 @@ function AfterMidAnimAlone()
   AddEvent(CheckOnFirstGirder, {}, DoOnFirstGirder, {}, 0)
   AddEvent(CheckTookSniper, {}, DoTookSniper, {}, 0)
   AddEvent(CheckFailedCourse, {}, DoFailedCourse, {}, 0)
-  SetGearMessage(leaks, 0)
+  SetGearMessage(leaks, band(GetGearMessage(leaks), bnot(gmAllStoppable)))
   TurnsLeft = 12
   SetTurnTimeLeft(TurnTime)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage"),
@@ -234,8 +234,8 @@ end
 
 function AfterEndAnimAlone()
   stage = endStage
+  SetGearMessage(dense, band(GetGearMessage(dense), bnot(gmAllStoppable)))
   AnimSwitchHog(leaks)
-  SetGearMessage(leaks, 0)
   SetTurnTimeLeft(MAX_TURN_TIME)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
   AddEvent(CheckLost, {}, DoLost, {}, 0)
@@ -245,9 +245,8 @@ end
 
 function AfterEndAnimDuo()
   stage = endStage
+  SetGearMessage(dense, band(GetGearMessage(dense), bnot(gmAllStoppable)))
   AnimSwitchHog(leaks)
-  SetGearMessage(leaks, 0)
-  SetGearMessage(dense, 0)
   SetTurnTimeLeft(MAX_TURN_TIME)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
   AddEvent(CheckLost, {}, DoLost, {}, 0)
@@ -263,7 +262,7 @@ function SkipMidAnimAlone()
 end
 
 function AfterStartAnim()
-  SetGearMessage(leaks, 0)
+  SetGearMessage(leaks, band(GetGearMessage(leaks), bnot(gmAllStoppable)))
   SetTurnTimeLeft(TurnTime)
   local goal = loc("Get the crate on the other side of the island.")
   local hint = loc("Hint: You might want to stay out of sight and take all the crates ...")
@@ -321,8 +320,8 @@ end
 function AfterPastFlowerAnim()
   PlaceMinesDuo()
   AddEvent(CheckDensePit, {}, DoDensePit, {}, 0)
-  SetGearMessage(leaks, 0)
-  SetGearMessage(dense, 0)
+  SetGearMessage(dense, band(GetGearMessage(dense), bnot(gmAllStoppable)))
+  SetGearMessage(leaks, band(GetGearMessage(leaks), bnot(gmAllStoppable)))
   EndTurn(true)
   ShowMission(loc("The Journey Back"), loc("The Savior"), 
     loc("Get Dense Cloud out of the pit!") .. "|" ..
@@ -343,8 +342,8 @@ function AfterOutPitAnim()
   AddAmmo(cannibals[5], amDEagle, 0)
   HideHedge(cannibals[5])
   AddEvent(CheckTookFire, {}, DoTookFire, {}, 0)
-  SetGearMessage(leaks, 0)
-  SetGearMessage(dense, 0)
+  SetGearMessage(dense, band(GetGearMessage(dense), bnot(gmAllStoppable)))
+  SetGearMessage(leaks, band(GetGearMessage(leaks), bnot(gmAllStoppable)))
   EndTurn(true)
   ShowMission(loc("The Journey Back"), loc("They never learn"),
     loc("Free Dense Cloud and continue the mission!") .. "|" ..
