@@ -439,6 +439,7 @@ function antiFlyArea(gear)
 	if not heroVisitedAntiFlyArea then
 		EndTurn(true)
 		FollowGear(hero.gear)
+		SetGearMessage(hero.gear, band(GetGearMessage(hero.gear), bnot(gmAllStoppable)))
 		AnimSwitchHog(bandit1.gear)
 		FollowGear(hero.gear)
 		HogSay(hero.gear, loc("My flying saucer stopped working!"), SAY_THINK)
