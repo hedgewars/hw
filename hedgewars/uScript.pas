@@ -2541,6 +2541,8 @@ begin
                             AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
                             end;
                         HHGear^.Message:= HHGear^.Message or gmDestroy;
+                        HHGear^.Active:= true;
+                        AllInactive:= false;
                         end;
                     end;
                 // can't dismiss more than one team
