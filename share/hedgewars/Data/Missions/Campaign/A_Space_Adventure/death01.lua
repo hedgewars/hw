@@ -333,7 +333,7 @@ end
 
 function startBattle()
 	ShowMission(unpack(goals[dialog01]))
-	DeleteGear(professor.human)
+	HideHog(professor.human)
 	RestoreHog(professor.bot)
 	SetGearMessage(hero.gear, 0)
 	AnimSwitchHog(professor.gear)
