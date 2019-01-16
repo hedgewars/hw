@@ -26,12 +26,16 @@ Styles and schemes:
  * King Mode: Kill resurrected minions if king is not alive
 
 A Classic Fairytale:
+ + Backstab: Disable utilities before traitor has been dealt with
  * First blood: Fix Lua error when hitting Attack after failing the rope challenge
+ * Various minor tweaks and bugfixes
 
 A Space Adventure:
  + Show your current records at mission start when re-playing one of the challenges
  + Spacetrip: Move flowers of desert planet above cactus
+ + Searching in the dust: Enable skip in entire mission
  * Searching in the dust: Fix mission ending when all smugglers are dead
+ * Searching in the dust: Fix a lot of broken/stupid smuggler behaviours
  * Chasing the blue hog: Fix player not losing the race when timing out while still having the rope
  * Chasing the blue hog: Fix player winning if Crazy Runner died
  * Various minor tweaks and bugfixes
@@ -83,6 +87,7 @@ Lua API:
  + Params explode, poison in the SpawnFake*Crate functions now optional and default to false
  + New global: InitHealth: Initial hog health value from game scheme (read-only)
  * Fix SetAmmoDelay not working properly when called after onGameStart
+ * Fix DismissTeam not clearing team properly
 
 ====================== 0.9.25 ======================
 HIGHLIGHTS:
