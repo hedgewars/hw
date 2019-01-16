@@ -866,6 +866,25 @@ else if Gear^.Kind = gtHedgehog then
                             Hedgehogs[t].GearHidden^.Health:= 0  // hog is still hidden. if tardis should return though, lua, eh...
             end;
 
+        // Update passive status of clan
+        if (not Gear^.Hedgehog^.Team^.Clan^.Passive) then
+            begin
+            Gear^.Hedgehog^.Team^.Clan^.Passive:= true;
+            for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
+                begin
+                with team^.Clan^.Teams[i]^ do
+                    if (not Passive) then
+                        for t:= 0 to cMaxHHIndex do
+                            if (Hedgehogs[t].Gear <> nil) or (Hedgehogs[t].GearHidden <> nil) then
+                                begin
+                                Gear^.Hedgehog^.Team^.Clan^.Passive:= false;
+                                break;
+                                end;
+                if (not Gear^.Hedgehog^.Team^.Clan^.Passive) then
+                    break;
+                end;
+            end;
+
         // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
         // same stand for CheckHHDamage
         if (Gear^.LastDamage <> nil) and (CurrentHedgehog <> nil) then
