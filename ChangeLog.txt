@@ -86,6 +86,7 @@ Lua API:
  + SpeedShoppa/TargetPractice libraries: Remove custom hog and team info settings
  + Params explode, poison in the SpawnFake*Crate functions now optional and default to false
  + New global: InitHealth: Initial hog health value from game scheme (read-only)
+ + Animate library: AnimOutOfNowhere: destX and destY are now optional (default: current position)
  * Fix SetAmmoDelay not working properly when called after onGameStart
  * Fix DismissTeam not clearing team properly
 

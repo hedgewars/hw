@@ -235,6 +235,10 @@ function AnimDisappear(gear, destX, destY)
 end
 
 function AnimOutOfNowhere(gear, destX, destY)
+  if (not destX) or (not destY) then
+    destX = GetX(gear)
+    destY = GetY(gear)
+  end
   AnimSetGearPosition(gear, destX, destY)
   AddVisualGear(destX, destY, vgtBigExplosion, 0, false)
   PlaySound(sndExplosion)
