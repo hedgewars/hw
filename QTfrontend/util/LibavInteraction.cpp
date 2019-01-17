@@ -57,14 +57,14 @@ struct Codec
     bool isAudio;
     QString shortName; // used for identification
     QString longName; // used for displaying to user
-    bool isRecomended;
+    bool isRecommended;
 };
 
 struct Format
 {
     QString shortName;
     QString longName;
-    bool isRecomended;
+    bool isRecommended;
     QString extension;
     QVector<Codec*> codecs;
 };
@@ -151,30 +151,27 @@ LibavInteraction::LibavInteraction() : QObject()
         codec.shortName = pCodec->name;
         codec.longName = pCodec->long_name;
 
-        codec.isRecomended = false;
+        codec.isRecommended = false;
         if (strcmp(pCodec->name, "libx264") == 0)
         {
             codec.longName = "H.264/MPEG-4 Part 10 AVC (x264)";
-            codec.isRecomended = true;
+            codec.isRecommended = true;
         }
         else if (strcmp(pCodec->name, "libxvid") == 0)
         {
             codec.longName = "MPEG-4 Part 2 (Xvid)";
-            codec.isRecomended = true;
+            codec.isRecommended = true;
         }
         else if (strcmp(pCodec->name, "libmp3lame") == 0)
         {
             codec.longName = "MP3 (MPEG audio layer 3) (LAME)";
-            codec.isRecomended = true;
+            codec.isRecommended = true;
         }
         else
             codec.longName = pCodec->long_name;
 
         if (strcmp(pCodec->name, "mpeg4") == 0 || strcmp(pCodec->name, "ac3_fixed") == 0)
-            codec.isRecomended = true;
-
-        // FIXME: remove next line
-        //codec.longName += QString(" (%1)").arg(codec.shortName);
+            codec.isRecommended = true;
     }
 
     // get list of all formats
@@ -207,10 +204,7 @@ LibavInteraction::LibavInteraction() : QObject()
         format.shortName = pFormat->name;
         format.longName = QString("%1 (*.%2)").arg(pFormat->long_name).arg(ext);
 
-        // FIXME: remove next line
-        //format.longName += QString(" (%1)").arg(format.shortName);
-
-        format.isRecomended = strcmp(pFormat->name, "mp4") == 0 || strcmp(pFormat->name, "avi") == 0;
+        format.isRecommended = strcmp(pFormat->name, "mp4") == 0 || strcmp(pFormat->name, "avi") == 0;
 
         formats[pFormat->name] = format;
     }
@@ -220,7 +214,7 @@ void LibavInteraction::fillFormats(QComboBox * pFormats)
 {
     // first insert recomended formats
     foreach(const Format & format, formats)
-        if (format.isRecomended)
+        if (format.isRecommended)
             pFormats->addItem(format.longName, format.shortName);
 
     // remember where to place separator between recomended and other formats
@@ -228,7 +222,7 @@ void LibavInteraction::fillFormats(QComboBox * pFormats)
 
     // insert remaining formats
     foreach(const Format & format, formats)
-        if (!format.isRecomended)
+        if (!format.isRecommended)
             pFormats->addItem(format.longName, format.shortName);
 
     // insert separator if necessary
@@ -243,7 +237,7 @@ void LibavInteraction::fillCodecs(const QString & fmt, QComboBox * pVCodecs, QCo
     // first insert recomended codecs
     foreach(Codec * codec, format.codecs)
     {
-        if (codec->isRecomended)
+        if (codec->isRecommended)
         {
             if (codec->isAudio)
                 pACodecs->addItem(codec->longName, codec->shortName);
@@ -259,7 +253,7 @@ void LibavInteraction::fillCodecs(const QString & fmt, QComboBox * pVCodecs, QCo
     // insert remaining codecs
     foreach(Codec * codec, format.codecs)
     {
-        if (!codec->isRecomended)
+        if (!codec->isRecommended)
         {
             if (codec->isAudio)
                 pACodecs->addItem(codec->longName, codec->shortName);
