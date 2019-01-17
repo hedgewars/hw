@@ -47,37 +47,37 @@ local teamD = {}
 -- hedgehogs values
 hero.name = loc("Hog Solo")
 hero.x = 520
-hero.y = 845
+hero.y = 871
 hero.dead = false
 paoth1.name = loc("H")
 paoth1.x = 3730
-paoth1.y = 1480
+paoth1.y = 1538
 paoth2.name = loc("Dr. Cornelius")
 paoth2.x = 3800
-paoth2.y = 1480
+paoth2.y = 1538
 professor.name = loc("Prof. Hogevil")
 professor.dead = false
 thug1.x = 1265
-thug1.y = 1400
+thug1.y = 1465
 thug1.health = 70
 thug2.x = 2035
-thug2.y = 1320
+thug2.y = 1380
 thug2.health = 95
 thug3.x = 1980
-thug3.y = 815
+thug3.y = 863
 thug3.health = 35
 thug3.turnLeft = true
 thug4.x = 2830
-thug4.y = 1960
+thug4.y = 2007
 thug4.health = 80
 thug5.x = 2890
-thug5.y = 1960
+thug5.y = 2007
 thug5.health = 80
 thug6.x = 2940
-thug6.y = 1960
+thug6.y = 2007
 thug6.health = 80
 thug7.x = 2990
-thug7.y = 1960
+thug7.y = 2007
 thug7.health = 80
 teamA.name = loc("Hog Solo")
 teamA.color = -6
@@ -327,9 +327,13 @@ end
 
 function startBattle()
 	ShowMission(unpack(goals[dialog01]))
+	AddVisualGear(GetX(professor.human), GetY(professor.human), vgtExplosion, 0, false)
 	HideHog(professor.human)
 	RestoreHog(professor.bot)
+	AddVisualGear(GetX(professor.bot), GetY(professor.bot), vgtExplosion, 0, false)
+	PlaySound(sndWarp)
 	SetGearMessage(hero.gear, 0)
 	AnimSwitchHog(professor.gear)
+	FollowGear(professor.gear)
 	EndTurn(true)
 end
