@@ -504,6 +504,7 @@ function getNextWave()
 		if not chooseToBattle and not GetHealth(yellow1.gear) then
 			SetGearPosition(yellowArmy[3].gear, yellow1.x, yellow1.y)
 		end
+		AnimOutOfNowhere(yellowArmy[3].gear)
 	elseif TotalRounds == 7 then
 		RestoreHog(yellowArmy[4].gear)
 		RestoreHog(yellowArmy[5].gear)
@@ -511,6 +512,8 @@ function getNextWave()
 		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear) then
 			SetGearPosition(yellowArmy[4].gear, yellow1.x, yellow1.y)
 		end
+		AnimOutOfNowhere(yellowArmy[4].gear)
+		AnimOutOfNowhere(yellowArmy[5].gear)
 	elseif TotalRounds == 10 then
 		RestoreHog(yellowArmy[6].gear)
 		RestoreHog(yellowArmy[7].gear)
@@ -519,6 +522,8 @@ function getNextWave()
 				and not GetHealth(yellowArmy[4].gear) then
 			SetGearPosition(yellowArmy[6].gear, yellow1.x, yellow1.y)
 		end
+		AnimOutOfNowhere(yellowArmy[6].gear)
+		AnimOutOfNowhere(yellowArmy[7].gear)
 	end
 end
 
