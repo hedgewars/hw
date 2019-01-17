@@ -94,9 +94,9 @@ function onGameInit()
 	Seed = 1
 	TurnTime = 25000
 	CaseFreq = 0
-	MinesNum = 3
+	MinesNum = 0
 	MinesTime = 1500
-	Explosives = 2
+	Explosives = 0
 	HealthCaseAmount = 50
 	-- gfTagTeam makes it easier to skip the PAotH team
 	GameFlags = gfTagTeam
@@ -174,6 +174,8 @@ function onGameStart()
 	AddGear(1900, 800, gtExplosives, 0, 0, 0, 0)
 	AddGear(1900, 750, gtExplosives, 0, 0, 0, 0)
 	AddGear(1900, 710, gtExplosives, 0, 0, 0, 0)
+
+	AddGear(698, 1544, gtExplosives, 0, 0, 0, 0)
 	-- add mines
 	AddGear(3520, 1650, gtMine, 0, 0, 0, 0)
 	AddGear(3480, 1680, gtMine, 0, 0, 0, 0)
@@ -182,6 +184,8 @@ function onGameStart()
 	AddGear(2100, 1730, gtMine, 0, 0, 0, 0)
 	AddGear(2150, 1730, gtMine, 0, 0, 0, 0)
 	AddGear(2200, 1750, gtMine, 0, 0, 0, 0)
+
+	AddGear(1891, 1468, gtMine, 0, 0, 0, 0)
 	-- add girders
 	PlaceGirder(3770, 1370, 4)
 	PlaceGirder(3700, 1460, 6)
