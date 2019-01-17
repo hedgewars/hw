@@ -1,4 +1,4 @@
-use fpnum::{distance, FPNum, FPPoint, fp};
+use fpnum::{distance, fp, FPNum, FPPoint};
 use std::{
     cmp::{max, min},
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign},
@@ -11,19 +11,16 @@ pub struct Point {
 }
 
 impl Point {
+    pub const ZERO: Self = Self::new(0, 0);
+
     #[inline]
-    pub fn new(x: i32, y: i32) -> Self {
+    pub const fn new(x: i32, y: i32) -> Self {
         Self { x, y }
     }
 
     #[inline]
-    pub fn diag(v: i32) -> Self {
+    pub const fn diag(v: i32) -> Self {
         Self::new(v, v)
-    }
-
-    #[inline]
-    pub fn zero() -> Self {
-        Self::new(0, 0)
     }
 
     #[inline]
@@ -37,7 +34,7 @@ impl Point {
     }
 
     #[inline]
-    pub fn dot(self, other: Point) -> i32 {
+    pub const fn dot(self, other: Point) -> i32 {
         self.x * other.x + self.y * other.y
     }
 
@@ -52,7 +49,7 @@ impl Point {
     }
 
     #[inline]
-    pub fn transform(self, matrix: &[i32; 4]) -> Self {
+    pub const fn transform(self, matrix: &[i32; 4]) -> Self {
         Point::new(
             matrix[0] * self.x + matrix[1] * self.y,
             matrix[2] * self.x + matrix[3] * self.y,
@@ -60,12 +57,12 @@ impl Point {
     }
 
     #[inline]
-    pub fn rotate90(self) -> Self {
+    pub const fn rotate90(self) -> Self {
         Point::new(self.y, -self.x)
     }
 
     #[inline]
-    pub fn cross(self, other: Point) -> i32 {
+    pub const fn cross(self, other: Point) -> i32 {
         self.dot(other.rotate90())
     }
 
@@ -75,22 +72,22 @@ impl Point {
     }
 
     #[inline]
-    pub fn line_to(self, end: Point) -> Line {
+    pub const fn line_to(self, end: Point) -> Line {
         Line::new(self, end)
     }
 
     #[inline]
-    pub fn ray_with_dir(self, direction: Point) -> Ray {
+    pub const fn ray_with_dir(self, direction: Point) -> Ray {
         Ray::new(self, direction)
     }
 
     #[inline]
-    pub fn tangent_mul(self, x: i32) -> i32 {
+    pub const fn tangent_mul(self, x: i32) -> i32 {
         x * self.y / self.x
     }
 
     #[inline]
-    pub fn cotangent_mul(self, y: i32) -> i32 {
+    pub const fn cotangent_mul(self, y: i32) -> i32 {
         y * self.x / self.y
     }
 
@@ -113,25 +110,25 @@ pub struct Size {
 
 impl Size {
     #[inline]
-    pub fn new(width: usize, height: usize) -> Self {
-        Size { width, height }
+    pub const fn new(width: usize, height: usize) -> Self {
+        Self { width, height }
     }
 
     #[inline]
-    pub fn square(size: usize) -> Self {
-        Size {
+    pub const fn square(size: usize) -> Self {
+        Self {
             width: size,
             height: size,
         }
     }
 
     #[inline]
-    pub fn area(&self) -> usize {
+    pub const fn area(&self) -> usize {
         self.width * self.height
     }
 
     #[inline]
-    pub fn linear_index(&self, x: usize, y: usize) -> usize {
+    pub const fn linear_index(&self, x: usize, y: usize) -> usize {
         y * self.width + x
     }
 
@@ -149,7 +146,7 @@ impl Size {
     }
 
     #[inline]
-    pub fn transpose(&self) -> Self {
+    pub const fn transpose(&self) -> Self {
         Self::new(self.height, self.width)
     }
 
@@ -159,8 +156,8 @@ impl Size {
     }
 
     #[inline]
-    pub fn to_square(&self) -> Size {
-        Size::square(max(self.width, self.height))
+    pub fn to_square(&self) -> Self {
+        Self::square(max(self.width, self.height))
     }
 
     pub fn to_grid_index(&self) -> GridIndex {
@@ -176,7 +173,7 @@ pub struct SizeMask {
 impl SizeMask {
     #[inline]
     pub fn new(size: Size) -> Self {
-        assert!(size.is_power_of_two());
+        debug_assert!(size.is_power_of_two());
         let size = Size {
             width: !(size.width - 1),
             height: !(size.height - 1),
@@ -307,8 +304,8 @@ pub struct Rect {
 impl Rect {
     #[inline]
     pub fn new(top_left: Point, bottom_right: Point) -> Self {
-        assert!(top_left.x <= bottom_right.x + 1);
-        assert!(top_left.y <= bottom_right.y + 1);
+        debug_assert!(top_left.x <= bottom_right.x + 1);
+        debug_assert!(top_left.y <= bottom_right.y + 1);
         Self {
             top_left,
             bottom_right,
@@ -331,56 +328,56 @@ impl Rect {
     }
 
     pub fn at_origin(size: Size) -> Self {
-        Self::from_size(Point::zero(), size)
+        Self::from_size(Point::ZERO, size)
     }
 
     #[inline]
-    pub fn width(&self) -> usize {
+    pub const fn width(&self) -> usize {
         (self.right() - self.left() + 1) as usize
     }
 
     #[inline]
-    pub fn height(&self) -> usize {
+    pub const fn height(&self) -> usize {
         (self.bottom() - self.top() + 1) as usize
     }
 
     #[inline]
-    pub fn size(&self) -> Size {
+    pub const fn size(&self) -> Size {
         Size::new(self.width(), self.height())
     }
 
     #[inline]
-    pub fn area(&self) -> usize {
+    pub const fn area(&self) -> usize {
         self.size().area()
     }
 
     #[inline]
-    pub fn left(&self) -> i32 {
+    pub const fn left(&self) -> i32 {
         self.top_left().x
     }
 
     #[inline]
-    pub fn top(&self) -> i32 {
+    pub const fn top(&self) -> i32 {
         self.top_left().y
     }
 
     #[inline]
-    pub fn right(&self) -> i32 {
+    pub const fn right(&self) -> i32 {
         self.bottom_right().x
     }
 
     #[inline]
-    pub fn bottom(&self) -> i32 {
+    pub const fn bottom(&self) -> i32 {
         self.bottom_right().y
     }
 
     #[inline]
-    pub fn top_left(&self) -> Point {
+    pub const fn top_left(&self) -> Point {
         self.top_left
     }
 
     #[inline]
-    pub fn bottom_right(&self) -> Point {
+    pub const fn bottom_right(&self) -> Point {
         self.bottom_right
     }
 
@@ -629,17 +626,17 @@ pub struct Ray {
 
 impl Ray {
     #[inline]
-    pub fn new(start: Point, direction: Point) -> Ray {
+    pub const fn new(start: Point, direction: Point) -> Ray {
         Self { start, direction }
     }
 
     #[inline]
-    pub fn tangent_mul(&self, x: i32) -> i32 {
+    pub const fn tangent_mul(&self, x: i32) -> i32 {
         self.direction.tangent_mul(x)
     }
 
     #[inline]
-    pub fn cotangent_mul(&self, y: i32) -> i32 {
+    pub const fn cotangent_mul(&self, y: i32) -> i32 {
         self.direction.cotangent_mul(y)
     }
 
@@ -656,14 +653,11 @@ pub struct Line {
 }
 
 impl Line {
-    #[inline]
-    pub fn new(start: Point, end: Point) -> Self {
-        Self { start, end }
-    }
+    pub const ZERO: Self = Self::new(Point::ZERO, Point::ZERO);
 
     #[inline]
-    pub fn zero() -> Self {
-        Self::new(Point::zero(), Point::zero())
+    pub const fn new(start: Point, end: Point) -> Self {
+        Self { start, end }
     }
 
     #[inline]
@@ -710,7 +704,7 @@ impl LinePoints {
         let dir = line.end - line.start;
 
         Self {
-            accumulator: Point::zero(),
+            accumulator: Point::ZERO,
             direction: dir.abs(),
             sign: dir.signum(),
             current: line.start,
@@ -751,7 +745,7 @@ pub struct ArcPoints {
 }
 
 impl ArcPoints {
-    pub fn new(radius: i32) -> Self {
+    pub const fn new(radius: i32) -> Self {
         Self {
             point: Point::new(0, radius),
             step: 3 - 2 * radius,

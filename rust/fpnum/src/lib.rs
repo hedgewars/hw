@@ -1,8 +1,4 @@
-use std::{
-    cmp,
-    ops,
-    ops::Shl
-};
+use std::{cmp, ops, ops::Shl};
 
 #[derive(Clone, Debug, Copy)]
 pub struct FPNum {
@@ -26,22 +22,22 @@ impl FPNum {
     }
 
     #[inline]
-    pub fn is_negative(&self) -> bool {
+    pub const fn is_negative(&self) -> bool {
         self.is_negative
     }
 
     #[inline]
-    pub fn is_positive(&self) -> bool {
+    pub const fn is_positive(&self) -> bool {
         !self.is_negative
     }
 
     #[inline]
-    pub fn is_zero(&self) -> bool {
+    pub const fn is_zero(&self) -> bool {
         self.value == 0
     }
 
     #[inline]
-    pub fn abs(&self) -> Self {
+    pub const fn abs(&self) -> Self {
         Self {
             is_negative: false,
             value: self.value,
@@ -58,7 +54,7 @@ impl FPNum {
     }
 
     #[inline]
-    pub fn abs_round(&self) -> u32 {
+    pub const fn abs_round(&self) -> u32 {
         (self.value >> 32) as u32
     }
 
@@ -95,7 +91,7 @@ impl FPNum {
     }
 
     #[inline]
-    pub fn with_sign(&self, is_negative: bool) -> FPNum {
+    pub const fn with_sign(&self, is_negative: bool) -> FPNum {
         FPNum {
             is_negative,
             ..*self
@@ -103,12 +99,12 @@ impl FPNum {
     }
 
     #[inline]
-    pub fn with_sign_as(self, other: FPNum) -> FPNum {
+    pub const fn with_sign_as(self, other: FPNum) -> FPNum {
         self.with_sign(other.is_negative)
     }
 
     #[inline]
-    pub fn point(self) -> FPPoint {
+    pub const fn point(self) -> FPPoint {
         FPPoint::new(self, self)
     }
 }
@@ -325,7 +321,7 @@ pub struct FPPoint {
 
 impl FPPoint {
     #[inline]
-    pub fn new(x: FPNum, y: FPNum) -> Self {
+    pub const fn new(x: FPNum, y: FPNum) -> Self {
         Self {
             x_is_negative: x.is_negative,
             y_is_negative: y.is_negative,
@@ -350,7 +346,7 @@ impl FPPoint {
     }
 
     #[inline]
-    pub fn x(&self) -> FPNum {
+    pub const fn x(&self) -> FPNum {
         FPNum {
             is_negative: self.x_is_negative,
             value: self.x_value,
@@ -358,7 +354,7 @@ impl FPPoint {
     }
 
     #[inline]
-    pub fn y(&self) -> FPNum {
+    pub const fn y(&self) -> FPNum {
         FPNum {
             is_negative: self.y_is_negative,
             value: self.y_value,
