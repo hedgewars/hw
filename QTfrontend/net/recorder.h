@@ -51,6 +51,7 @@ class HWRecorder : public TCPBase
     signals:
         void onProgress(float progress); // 0 < progress < 1
         void encodingFinished(bool success);
+        void ErrorMessage(const QString &);
 
     private:
         bool finished;

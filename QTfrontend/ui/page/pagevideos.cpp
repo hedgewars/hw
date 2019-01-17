@@ -48,6 +48,7 @@
 #include "gameuiconfig.h"
 #include "recorder.h"
 #include "ask_quit.h"
+#include "util/MessageDialog.h"
 
 static const QSize ThumbnailSize(350, 350*3/5);
 
@@ -315,6 +316,7 @@ void PageVideos::addRecorder(HWRecorder* pRecorder)
     progressBar->setValue(0);
     connect(pRecorder, SIGNAL(onProgress(float)), this, SLOT(updateProgress(float)));
     connect(pRecorder, SIGNAL(encodingFinished(bool)), this, SLOT(encodingFinished(bool)));
+    connect(pRecorder, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowFatalErrorMessage(const QString &)), Qt::QueuedConnection);
     filesTable->setCellWidget(row, vcProgress, progressBar);
 
     numRecorders++;
@@ -740,5 +742,10 @@ void PageVideos::startEncoding(const QByteArray & record)
         }
         addRecorder(pRecorder);
     }
+}
+
+void PageVideos::ShowFatalErrorMessage(const QString & msg)
+{
+    MessageDialog::ShowFatalMessage(msg, this);
 }
 
