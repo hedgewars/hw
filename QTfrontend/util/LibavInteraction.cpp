@@ -103,6 +103,10 @@ LibavInteraction::LibavInteraction() : QObject()
         if (strcmp(pCodec->name, "rv10") == 0 || strcmp(pCodec->name, "rv20") == 0)
             continue;
 
+        // this encoder is experimental (as of Jan 17, 2019)
+        if (strcmp(pCodec->name, "libaom-av1") == 0)
+            continue;
+
         // doesn't support stereo sound
         if (strcmp(pCodec->name, "real_144") == 0)
             continue;
