@@ -327,6 +327,9 @@ begin
     DoTimer(0); // gsLandGen -> gsStart
     DoTimer(0); // gsStart -> gsGame
 
+    newGameTicks:= 0;
+    newRealTicks:= 0;
+
     if not LoadNextCameraPosition(newRealTicks, newGameTicks) then
         exit;
     fastScrolling:= true;
