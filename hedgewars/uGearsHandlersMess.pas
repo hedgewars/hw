@@ -5681,7 +5681,12 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and (not (gmUp or gmDown or gmLeft or gmRight));
     HHGear^.State := HHGear^.State or gstNotKickable;
-    Gear^.SoundChannel := LoopSound(sndFlamethrower);
+    (* NOTE: Flamethrower sound is supposed to start instantly (no fade in),
+    but this would cause the game volume to screw up because of a bug in SDL_mixer:
+    https://bugzilla.libsdl.org/show_bug.cgi?id=4205
+    As workaround, a tiny fade-in delay was added.
+    FIXME: Remove the fade-in delay argument when the SDL bug has been fixed. *)
+    Gear^.SoundChannel := LoopSound(sndFlamethrower, 20);
     Gear^.doStep := @doStepFlamethrowerWork
 end;
 
