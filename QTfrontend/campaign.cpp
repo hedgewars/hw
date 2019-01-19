@@ -57,7 +57,15 @@ bool isCampMissionWon(QString & campaignName, int missionInList, QString & teamN
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
     int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
     int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
-    if(progress>0 && unlockedMissions==0)
+    // The CowardMode cheat unlocks all campaign missions,
+    // but as "punishment", none of them will be marked as completed.
+    // Added to make it easier to test campaigns.
+    bool cheat = teamfile->value("Team/CowardMode", false).toBool();
+    if(cheat)
+    {
+        return false;
+    }
+    else if(progress>0 && unlockedMissions==0)
     {
         QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
         campfile.setIniCodec("UTF-8");
@@ -79,7 +87,8 @@ bool isCampWon(QString & campaignName, QString & teamName)
 {
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
     bool won = teamfile->value("Campaign " + campaignName + "/Won", false).toBool();
-    return won;
+    bool cheat = teamfile->value("Team/CowardMode", false).toBool();
+    return won && !cheat;
 }
 
 QSettings* getCampMetaInfo()
@@ -118,13 +127,18 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
 
     int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
     int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
+    bool cheat = teamfile->value("Team/CowardMode", false).toBool();
 
     QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
     campfile.setIniCodec("UTF-8");
 
     QSettings* m_info = getCampMetaInfo();
 
-    if(progress >= 0 && unlockedMissions == 0)
+    if(cheat)
+    {
+        progress = campfile.value("MissionNum", 1).toInt();
+    }
+    if((progress >= 0 && unlockedMissions == 0) || cheat)
     {
         for(unsigned int i = progress + 1; i > 0; i--)
         {
