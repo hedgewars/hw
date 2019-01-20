@@ -1029,6 +1029,20 @@ just enter your nickname.</translation>
     </message>
 </context>
 <context>
+    <name>HWRecorder</name>
+    <message>
+        <source>A fatal ERROR occured while processing the video recording! The video could not be saved.
+
+As a workaround, you could try to reset the Hedgewars video recorder settings to the defaults.
+
+To report this error, please click the &apos;Feedback&apos; button in the main menu!
+
+Last engine message:
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
@@ -1515,6 +1529,29 @@ just enter your nickname.</translation>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
         <translation>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 point(s))</source>
+        <extracomment>Number of points in stats screen, written after the team name</extracomment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%L1 second(s))</source>
+        <extracomment>Time in seconds</extracomment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 crate(s))</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -2259,6 +2296,29 @@ just enter your nickname.</translation>
     <message>
         <source>Team</source>
         <translation type="unfinished">Team</translation>
+    </message>
+    <message>
+        <source>Team highscore: %1</source>
+        <extracomment>Highest score of a team</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Team lowscore: %1</source>
+        <extracomment>Lowest score of a team</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Team&apos;s top accuracy: %1%</source>
+        <extracomment>Best accuracy of a team (in a challenge)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Team&apos;s best time: %L1 s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Team&apos;s longest time: %L1 s</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3792,6 +3852,10 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
         <source>clan chat</source>
         <translation>clan chat</translation>
     </message>
+    <message>
+        <source>unselect weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -4235,6 +4299,11 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
         <source>D-pad %1 %2</source>
         <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
         <translation>D-pad %1 %2</translation>
+    </message>
+    <message>
+        <source>(Don&apos;t use)</source>
+        <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
