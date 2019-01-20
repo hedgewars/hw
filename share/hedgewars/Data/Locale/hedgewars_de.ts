@@ -1068,7 +1068,14 @@ To report this error, please click the &apos;Feedback&apos; button in the main m
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein kritischer FEHLER ist bei der Verarbeitung der Videoaufzeichnung aufgetreten! Das Video konnte nicht gespeichert werden.
+
+Als Notlösung könntest du versuchen, die Hedgewars-Videoaufzeichnungseinstellungen auf die Standardeinstellungen zurückzusetzen.
+
+Um diesen Fehler zu melden, klicke auf den Knopf »Feedback« im Hauptmenü!
+
+Die letzte Meldung der Engine lautet:
+%1</translation>
     </message>
 </context>
 <context>
@@ -1617,24 +1624,24 @@ Last engine message:
     <message numerus="yes">
         <source>(%1 point(s))</source>
         <extracomment>Number of points in stats screen, written after the team name</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 Punkt)</numerusform>
+            <numerusform>(%1 Punkte)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%L1 second(s))</source>
         <extracomment>Time in seconds</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%L1 Sekunde)</numerusform>
+            <numerusform>(%L1 Sekunden)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 crate(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 Kiste)</numerusform>
+            <numerusform>(%1 Kisten)</numerusform>
         </translation>
     </message>
 </context>
@@ -2412,25 +2419,25 @@ Last engine message:
     <message>
         <source>Team highscore: %1</source>
         <extracomment>Highest score of a team</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Team-Punkterekord: %1</translation>
     </message>
     <message>
         <source>Team lowscore: %1</source>
         <extracomment>Lowest score of a team</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Niedrigste Team-Punktzahl: %1</translation>
     </message>
     <message>
         <source>Team&apos;s top accuracy: %1%</source>
         <extracomment>Best accuracy of a team (in a challenge)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Beste Treffgenauigkeit des Teams: %1%</translation>
     </message>
     <message>
         <source>Team&apos;s best time: %L1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>Team-Bestzeit: %L1 s</translation>
     </message>
     <message>
         <source>Team&apos;s longest time: %L1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>Längste Zeit des Teams: %L1 s</translation>
     </message>
 </context>
 <context>
@@ -4062,7 +4069,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>unselect weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffe abwählen</translation>
     </message>
 </context>
 <context>
@@ -4511,7 +4518,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     <message>
         <source>(Don&apos;t use)</source>
         <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(Nicht benutzen)</translation>
     </message>
 </context>
 <context>
