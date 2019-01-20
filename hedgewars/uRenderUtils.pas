@@ -46,7 +46,7 @@ var r: TSDL_Rect;
 begin
     r:= rect^;
     if Clear then
-        SDL_FillRect(Surface, @r, SDL_MapRGB(Surface^.format, 0, 0, 0));
+        SDL_FillRect(Surface, @r, SDL_MapRGBA(Surface^.format, 0, 0, 0, 0));
 
     BorderColor:= SDL_MapRGB(Surface^.format, BorderColor shr 16, BorderColor shr 8, BorderColor and $FF);
     FillColor:= SDL_MapRGB(Surface^.format, FillColor shr 16, FillColor shr 8, FillColor and $FF);
