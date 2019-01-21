@@ -90,7 +90,7 @@ nativeUnNames = {loc("Zork"), loc("Steve"), loc("Jack"),
 nativeHats = {"Rambo", "RobinHood", "pirate_jack", "zoo_Bunny", "IndianChief",
               "tiara", "AkuAku", "rasta", "hair_yellow"}
 
-nativePos = {{1474, 1188}, {923, 986}, {564, 1120}, {128, 1315}}
+nativePos = {{1474, 1209}, {923, 990}, {564, 1120}, {128, 1315}}
 nativesNum = 4
 nativesLeft = 4
 
@@ -102,8 +102,8 @@ cyborgsHealth = {100, 100, 100, 100, 100, 100, 100, 100}
 cyborgHidePos = {1665, 1800}
 cyborgsTeamNum = {4, 3}
 cyborgsNum = 7
-cyborgsPos = {{2893, 1717}, {2958, 1701}, {3027, 1696}, {3096, 1698},
-              {2584, 655},  {2047, 1534}, {115, 179}, {2162, 1916}}
+cyborgsPos = {{2893, 1723}, {2958, 1717}, {3027, 1710}, {3096, 1704},
+              {2584, 665},  {2047, 1562}, {115, 179}, {2162, 1916}}
 cyborgsDir = {"Left", "Left", "Left", "Left", "Left", "Left", "Right", "Left"}
 
 crateConsts = {}

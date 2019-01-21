@@ -44,7 +44,7 @@ local GrenadeTimer = 0 -- Time after a grenade has been thrown
 
 local TargetPos = {} -- Table of targets
 
-local StartPos = { X = 742, Y = 290 }
+local StartPos = { X = 742, Y = 316 }
 
 --[[
 List of all targets (or "objectives"). The player has to complete them one-by-one and must always land safely afterwards.

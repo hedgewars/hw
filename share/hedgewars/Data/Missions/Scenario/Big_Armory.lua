@@ -33,7 +33,7 @@ SimpleMission({
 		hogs = {
 			{
 			health = 100,
-			x = 543, y = 1167,
+			x = 543, y = 1198,
 			ammo = heroAmmo,
 			}
 		}, },
@@ -43,14 +43,14 @@ SimpleMission({
 		flag = "cm_galaxy",
 		grave = "Earth",
 		hogs = {
-			{name=loc("Rocket"), x=796, y=1184, faceLeft=true},
-			{name=loc("Star"), x=733, y=1525, faceLeft=true},
-			{name=loc("Asteroid"), x=738, y=1855, faceLeft=true},
-			{name=loc("Comet"), x=937, y=1318, faceLeft=true},
-			{name=loc("Sunflame"), x=3424, y=1536},
-			{name=loc("Eclipse"), x=3417, y=1081},
-			{name=loc("Jetpack"), x=2256, y=1246},
-			{name=loc("Void"), x=1587, y=1231, faceLeft=true},
+			{name=loc("Rocket"), x=796, y=1208, faceLeft=true},
+			{name=loc("Star"), x=733, y=1546, faceLeft=true},
+			{name=loc("Asteroid"), x=738, y=1887, faceLeft=true},
+			{name=loc("Comet"), x=937, y=1344, faceLeft=true},
+			{name=loc("Sunflame"), x=3424, y=1555},
+			{name=loc("Eclipse"), x=3417, y=1119},
+			{name=loc("Jetpack"), x=2256, y=1280},
+			{name=loc("Void"), x=1587, y=1265, faceLeft=true},
 		}, },
 	},
 	customNonGoals = {
