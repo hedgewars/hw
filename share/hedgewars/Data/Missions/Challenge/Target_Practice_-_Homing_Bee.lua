@@ -9,9 +9,6 @@ local params = {
 	theme = "Nature",
 	hog_x = 1990,
 	hog_y = 533,
-	hogHat = "NoHat",
-	teamGrave = "bp2",
-	teamFlag = "cm_flower",
 	targets = {
 		{ x = 1949, y = 273 },
 		{ x = 1734, y = 322 },

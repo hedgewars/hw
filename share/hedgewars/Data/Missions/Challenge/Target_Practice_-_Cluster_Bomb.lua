@@ -10,10 +10,7 @@ local params = {
 	theme = "Golf",
 	hog_x = 756,
 	hog_y = 403,
-	hogName = loc("Private Nolak"),
-	hogHat = "war_desertgrenadier1",
 	faceLeft = true,
-	teamName = loc("The Hogies"),
 	targets = {
 		{ x = 628, y = 0 },
 		{ x = 891, y = 0 },

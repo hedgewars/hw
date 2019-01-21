@@ -9,9 +9,6 @@ local params = {
 	theme = "Halloween",
 	hog_x = 320,
 	hog_y = 347,
-	hogHat = "NoHat",
-	hogGrave = "Bones",
-	teamFlag = "cm_crosshair",
 	targets = {
 		{ x = 495, y = 501 },
 		{ x = 227, y = 530 },

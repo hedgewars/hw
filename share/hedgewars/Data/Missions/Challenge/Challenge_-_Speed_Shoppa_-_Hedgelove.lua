@@ -2,11 +2,6 @@ HedgewarsScriptLoad("/Scripts/SpeedShoppa.lua")
 
 local params = {}
 params.missionTitle = loc("Shoppa Love")
-params.teamName = loc("Team of Hearts")
-params.hogName = loc("Heartful")
-params.teamFlag = "cm_heart"
-params.teamGrave = "heart"
-params.hogHat = "pinksunhat"
 params.crateType = "health"
 params.faceLeft = true
 
