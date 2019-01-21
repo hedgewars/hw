@@ -67,13 +67,12 @@ local redHedgehogs = {
 -- Hog Solo and Green Bananas
 teamA.name = loc("Hog Solo and GB")
 teamA.color = -6
--- Captain Lime will use a color which is almost the same as the color of teamA.
--- It works, but it's a hack.
--- Technically, this makes Captain Lime an enemy team in the mission but for the player
--- it looks like an ally. This is because Camptain Lime starts friendly (story-wise),
--- but might become your enemy during the course of this mission.
--- TODO: For teamB, use same color of teamA when friendly, change color when evil
+-- Captain Lime can use one of 2 clan colors:
+-- One when being friendly (same as hero), and a different one when he turns evil.
+-- Captain Lime be in his own clan.
 teamB.name = loc("Captain Lime")
+teamB.colorNice = teamA.color
+teamB.colorEvil = -5
 teamC.name = loc("Fruit Assassins")
 teamC.color = -1
 
@@ -132,28 +131,12 @@ function onGameInit()
 	HogTurnLeft(green3.gear, true)
 
 	-- Captain Lime
-	-- Returns a color that is as close as possible to the color argument
-	-- but does not equal color and otherCollision.
-	local getSimilarColor = function(color, otherCollision)
-		local goingUp = false
-		local collision1 = color
-		while(color == collision1 or color == otherCollision) do
-			-- Try out colors by varying the blue color component until
-			-- we don't collide with any of the 2 colors.
-			if ((color % 0x100) > 0) and (not goingUp) then
-				color = color - 0x1
-			else
-				goingUp = true
-				color = color + 0x1
-			end
-		end
-		return color
-	end
-	-- Captain Lime gets a fake color clore to hero's clan color.
-	-- This is a hack, but it works. See explanation at top of file
-	local cptnColor = getSimilarColor(heroColor, assassinsColor)
-	AddTeam(teamB.name, cptnColor, "Cherry", "Island", "Default", "congo-brazzaville")
-	green1.gear= AddHog(green1.name, 0, 100, green1.hat)
+        -- Spawn with his "true" evil color so a new clan is created for Captain Lime ...
+	AddTeam(teamB.name, teamB.colorEvil, "Cherry", "Island", "Default", "congo-brazzaville")
+	green1.gear = AddHog(green1.name, 0, 100, green1.hat)
+	-- ... however, we immediately change the color to "nice mode".
+	-- Captain Lime starts as (seemingly) friendly in this mission.
+	SetClanColor(GetHogClan(green1.gear), teamB.colorNice)
 	SetGearPosition(green1.gear, green1.x, green1.y)
 
 	-- Populate goals table
@@ -573,6 +556,8 @@ end
 function makeCptLimeEvil()
 	-- Turn Captain Lime evil
 	SetHogLevel(green1.gear, 1)
+	-- ... and reveal his "true" evil color. Muhahaha!
+	SetClanColor(GetHogClan(green1.gear), teamB.colorEvil)
 	EndTurn(true)
 end
 
