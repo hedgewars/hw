@@ -2,7 +2,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 local MineArray = {}
-local player
+local player, playerTeamName
 local adviceGiven0 = false
 local adviceGiven1 = false
 local adviceGiven2 = false
@@ -20,7 +20,7 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddMissionTeam(-1)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(10)
 
 	AddTeam(loc("Hell Army"), -9, "skull", "Island", "Default", "cm_hellish")
@@ -81,6 +81,12 @@ function onAmmoStoreInit()
 	SetAmmo(amPickHammer, 0, 0, 0, 1)
 	SetAmmo(amSnowball, 0, 0, 0, 1)
 
+end
+
+function onGearAdd(gear)
+	if (GetGearType(gear) == gtHedgehog) and (GetHogTeamName(gear) ~= playerTeamName) then
+		SetEffect(gear, heArtillery, 1)
+	end
 end
 
 function onGameStart()
