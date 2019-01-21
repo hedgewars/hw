@@ -87,6 +87,7 @@ Lua API:
  + SendStat extension: Option to use predefined modes with siPointType, like "!POINTS" or "!TIME"
  + SimpleMission: Add isMissionTeam attribute for teams
  + SpeedShoppa/TargetPractice libraries: Remove custom hog and team info settings
+ + TargetPractice library: Add faceLeft parameter
  + Params explode, poison in the SpawnFake*Crate functions now optional and default to false
  + New global: InitHealth: Initial hog health value from game scheme (read-only)
  + Animate library: AnimOutOfNowhere: destX and destY are now optional (default: current position)

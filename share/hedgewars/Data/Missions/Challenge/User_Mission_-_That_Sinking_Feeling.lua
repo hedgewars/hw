@@ -66,6 +66,7 @@ function onGameInit()
 
 	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(1)
+	HogTurnLeft(player, false)
 
 	SetGearPosition(player, 3992, 733)
 	SetGearPosition(hh[0], 938, 1369)

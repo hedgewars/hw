@@ -174,7 +174,6 @@ function onGameInit()
 
 	playerTeamName = AddMissionTeam(-1)
 	hhs[0] = AddMissionHog(1)
-	SetGearPosition(player, 1380, 1500)
 
 	AddTeam(loc("Unsuspecting Louts"), -2, "Simple", "Island", "Default", "cm_face")
 	for i = 1, 8 do
@@ -227,6 +226,7 @@ function onGameStart()
 	SetGearPosition(hhs[14], 3360, 659)
 	SetGearPosition(hhs[15], 3885, 285)
 	SetGearPosition(hhs[16], 935, 1160)
+	HogTurnLeft(hhs[0], true)
 
 	for i = 1, 16 do
 		AssignCharacter(i)

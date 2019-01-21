@@ -6,13 +6,14 @@ params.teamName = loc("Shoppa Union")
 params.hogName = loc("Hook")
 params.teamFlag = "cm_shoppa"
 params.hogHat = "NoHat"
+params.faceLeft = true
 
 params.time = 115000
 params.map = "Ropes"
 params.theme = "City"
 
 params.hog_x = 3754
-params.hog_y = 1742
+params.hog_y = 1779
 params.crates = {
 	{ x = 3533, y = 1404 },
 	{ x = 3884, y = 1048 },

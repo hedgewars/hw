@@ -96,6 +96,7 @@ The argument “params” is a table containing fields which describe the traini
 	- artillery:	if true, the hog can’t move (default: false)
 	- secGearType:	cluster of projectile gear (if present) (used to re-center camera)
 	- clanColor:	color of the (only) clan (default: -1, default first clan color)
+	- faceLeft:	if true, hog starts facing left, otherwise right (default: false)
 	- goalText:	A short string explaining the goal of the mission
 			(default: "Destroy all targets within the time!")
 	- shootText:	A string which says how many times the player shot, “%d” is replaced
@@ -115,6 +116,7 @@ function TargetPracticeMission(params)
 	if params.goalText == nil then params.goalText = loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.") end
 	if params.shootText == nil then params.shootText = loc("You have shot %d times.") end
 	if params.clanColor == nil then params.clanColor = -1 end
+	if params.faceLeft == nil then params.faceLeft = false end
 	if params.wind == nil then params.wind = 0 end
 	if params.radarTint == nil then params.radarTint = 0xFF3030FF end
 	if params.useRadar == nil then params.useRadar = true end
@@ -158,6 +160,7 @@ function TargetPracticeMission(params)
 
 		player = AddMissionHog(1)
 		SetGearPosition(player, params.hog_x, params.hog_y)
+		HogTurnLeft(player, params.faceLeft)
 
 		local won = GetMissionVar("Won")
 		-- Unlock the target radar when the player has completed

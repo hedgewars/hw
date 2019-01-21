@@ -136,7 +136,7 @@ function onGameInit()
 	playerTeamName = AddMissionTeam(-1)
 	-- And add a hog to it
 	player = AddMissionHog(1)
-	SetGearPosition(player, 602, 1465)
+	SetGearPosition(player, 602, 1488)
 end
 
 -- This function is called when the round starts

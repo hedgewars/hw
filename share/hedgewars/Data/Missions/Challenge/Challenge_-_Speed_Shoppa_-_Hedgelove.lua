@@ -15,7 +15,7 @@ params.map = "Hedgelove"
 params.theme = "Nature"
 
 params.hog_x = 410
-params.hog_y = 934
+params.hog_y = 983
 params.crates = {
 	{ x = 183, y = 710 },
 	{ x = 202, y = 519 },
