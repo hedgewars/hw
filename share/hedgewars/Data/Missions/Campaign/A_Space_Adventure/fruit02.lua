@@ -95,7 +95,7 @@ function onGameInit()
 
 	-- Fruit Assassins
 	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_scout")
+	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_scout")
 	for i=1,table.getn(redHedgehogs) do
 		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
 		SetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
@@ -132,7 +132,8 @@ function onGameInit()
 
 	-- Captain Lime
         -- Spawn with his "true" evil color so a new clan is created for Captain Lime ...
-	AddTeam(teamB.name, teamB.colorEvil, "Cherry", "Island", "Default", "congo-brazzaville")
+	teamB.name = AddTeam(teamB.name, teamB.colorEvil, "Cherry", "Island", "Default", "congo-brazzaville")
+	SetTeamPassive(teamB.name, true)
 	green1.gear = AddHog(green1.name, 0, 100, green1.hat)
 	-- ... however, we immediately change the color to "nice mode".
 	-- Captain Lime starts as (seemingly) friendly in this mission.
@@ -231,21 +232,21 @@ end
 
 function onNewTurn()
 	if not inBattle and CurrentHedgehog == green1.gear then
-		EndTurn(true)
+		SkipTurn()
 	elseif (not inBattle) and GetHogTeamName(CurrentHedgehog) == teamA.name then
 		if CurrentHedgehog ~= hero.gear then
-			SwitchHog(hero.gear)
+			AnimSwitchHog(hero.gear)
 		end
 		SetTurnTimeLeft(MAX_TURN_TIME)
 		wind()
 	elseif inBattle then
 		if CurrentHedgehog == green1.gear and previousHog ~= hero.gear then
-			EndTurn(true)
+			SkipTurn()
 			return
 		end
 		for i=1,table.getn(redHedgehogs) do
 			if CurrentHedgehog == redHedgehogs[i].gear and previousHog ~= hero.gear then
-				EndTurn(true)
+				SkipTurn()
 				return
 			end
 		end
@@ -288,8 +289,6 @@ function onGearDelete(gear)
 			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
 			deviceCrate.collected = true
 			deviceCrate.collector = CurrentHedgehog
-			-- Spawn rope crate
-			SpawnSupplyCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 		end
 	end
 end
@@ -468,6 +467,9 @@ function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
 	end
+	if anim == dialog03 or anim == dialog04 then
+		spawnRopeCrate()
+	end
 	if anim == dialog03 then
 		makeCptLimeEvil()
 	elseif anim == dialog05 then
@@ -513,6 +515,7 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, string.format(loc("This %s is so naive! I'm going to shoot this fool so I can keep that device for myself!"), hero.name), SAY_THINK, 4000}})
 	table.insert(dialog03, {func = ShowMission, args = goals[dialog03]})
+	table.insert(dialog03, {func = spawnRopeCrate, args = {hero.gear}})
 	table.insert(dialog03, {func = makeCptLimeEvil, args = {hero.gear}})
 	-- DIALOG04 - At crates, hero learns about the Assassins ambush
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
@@ -522,6 +525,7 @@ function AnimationSetup()
 	table.insert(dialog04, {func = AnimWait, args = {redHedgehogs[1].gear, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {redHedgehogs[1].gear, loc("We have spotted the enemy! We'll attack when the enemies start gathering!"), SAY_THINK, 4000}})
 	table.insert(dialog04, {func = ShowMission, args = goals[dialog04]})
+	table.insert(dialog04, {func = spawnRopeCrate, args = {hero.gear}})
 	table.insert(dialog04, {func = goToThesurface, args = {hero.gear}})
 end
 
@@ -556,9 +560,15 @@ end
 function makeCptLimeEvil()
 	-- Turn Captain Lime evil
 	SetHogLevel(green1.gear, 1)
+	SetTeamPassive(teamB.name, false)
 	-- ... and reveal his "true" evil color. Muhahaha!
 	SetClanColor(GetHogClan(green1.gear), teamB.colorEvil)
 	EndTurn(true)
+end
+
+function spawnRopeCrate()
+	-- should be spawned after the device part was gotten and the cut scene finished.
+	SpawnSupplyCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 end
 
 function goToThesurface()
