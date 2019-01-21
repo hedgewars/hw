@@ -554,7 +554,7 @@ if TurnTimeLeft > 0 then
                 PlaySound(sndCountdown1);
         if ReadyTimeLeft > 0 then
             begin
-            if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) and (not PlacingHogs) then
+            if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) and (not PlacingHogs) and (not CinematicScript) then
                 AddVoice(sndComeonthen, CurrentTeam^.voicepack);
             dec(ReadyTimeLeft)
             end

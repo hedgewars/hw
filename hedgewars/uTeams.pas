@@ -457,14 +457,11 @@ IsGetAwayTime:= false;
 // turn start taunt: sndYesSir for own team, sndHmm for enemy or computer team
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
-    if CurrentTeam^.ExtDriven then
-        begin
-        AddVoice(sndHmm, CurrentTeam^.voicepack)
-        end
-    else
-        begin
-        AddVoice(sndYesSir, CurrentTeam^.voicepack);
-        end;
+    if (not CinematicScript) then
+        if CurrentTeam^.ExtDriven then
+            AddVoice(sndHmm, CurrentTeam^.voicepack)
+        else
+            AddVoice(sndYesSir, CurrentTeam^.voicepack);
     if cHedgehogTurnTime < 1000000 then
         ReadyTimeLeft:= cReadyDelay;
     s:= ansistring(CurrentTeam^.TeamName);
@@ -472,11 +469,9 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     end
 else
     begin
-    if TurnTimeLeft > 0 then
-        begin
-        AddVoice(sndHmm, CurrentTeam^.voicepack)
-        end;
-    ReadyTimeLeft:= 0
+    if (TurnTimeLeft > 0) and (not CinematicScript) then
+        AddVoice(sndHmm, CurrentTeam^.voicepack);
+    ReadyTimeLeft:= 0;
     end;
 end;
 

@@ -272,6 +272,8 @@ begin
         exit;
     if (Gear^.State and gstHHGone) <> 0 then
         exit;
+    if (CinematicScript) then
+        exit;
 
     // render finger (pointing arrow)
     if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
