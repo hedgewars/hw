@@ -417,9 +417,9 @@ begin
     if (Gear^.State and gstAttacked) = 0 then
         begin
         OnUsedAmmo(HHGear^.Hedgehog^);
-        Gear^.State := Gear^.State or gstAttacked
+        Gear^.State := Gear^.State or gstAttacked;
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         end;
-    ApplyAmmoChanges(HHGear^.Hedgehog^)
 end;
 
 procedure doStepRopeAttach(Gear: PGear);
