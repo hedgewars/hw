@@ -260,7 +260,8 @@ end;
 // Render some informational GUI next to hedgehog, like fuel and alternate weapon
 procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
 var HH: PHedgehog;
-    sx, sy, sign, m: LongInt;
+    sx, sy, tx, ty, t, sign, m: LongInt;
+    dAngle: real;
 begin
     HH:= Gear^.Hedgehog;
     sx:= ox + 1; // this offset is very common
@@ -271,6 +272,39 @@ begin
         exit;
     if (Gear^.State and gstHHGone) <> 0 then
         exit;
+
+    // render finger (pointing arrow)
+    if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
+        begin
+        ty := oy - 32;
+        // move finger higher up if tags are above hog
+        if (cTagsMask and htTeamName) <> 0 then
+            ty := ty - HH^.Team^.NameTagTex^.h - 2;
+        if (cTagsMask and htName) <> 0 then
+            ty := ty - HH^.NameTagTex^.h - 2;
+        if (cTagsMask and htHealth) <> 0 then
+            ty := ty - HH^.HealthTagTex^.h - 2;
+        tx := ox;
+
+        // don't go offscreen
+        t:= 32;
+        tx := min(max(tx, ViewLeftX + t), ViewRightX - t);
+        ty := min(ty, ViewBottomY - 96);
+        // don't overlap with HH or HH tags
+        if ty < ViewTopY + t then
+            begin
+            if abs(tx - ox) < abs(ty - oy)  then
+                ty:= max(ViewTopY + t, oy + t)
+            else
+                ty:= max(ViewTopY + t, ty);
+            end;
+
+        dAngle := DxDy2Angle(int2hwfloat(ty - oy), int2hwfloat(tx - ox)) + 90;
+
+        Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
+        DrawSpriteRotatedF(sprFinger, tx, ty, RealTicks div 32 mod 16, 1, dAngle);
+        untint;
+        end;
 
     // render crosshair
     if (CrosshairGear <> nil) and (Gear = CrosshairGear) then
@@ -1152,40 +1186,6 @@ begin
             begin
             if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtResurrector) then
                 DrawTextureCentered(ox, sy - cHHRadius - 7 - HealthTagTex^.h, HealthTagTex);
-
-            if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
-                begin
-                ty := oy - 32;
-                // move finger higher up if tags are above hog
-                if (cTagsMask and htTeamName) <> 0 then
-                    ty := ty - Team^.NameTagTex^.h - 2;
-                if (cTagsMask and htName) <> 0 then
-                    ty := ty - NameTagTex^.h - 2;
-                if (cTagsMask and htHealth) <> 0 then
-                    ty := ty - HealthTagTex^.h - 2;
-                tx := ox;
-
-                // don't go offscreen
-                t:= 32;
-                tx := min(max(tx, ViewLeftX + t), ViewRightX  - t);
-                t:= 32;
-                ty := min(ty, ViewBottomY - 96);
-                // don't overlap with HH or HH tags
-                if ty < ViewTopY + t then
-                    begin
-                    if abs(tx - ox) < abs(ty - oy)  then
-                        ty:= max(ViewTopY + t, oy + t)
-                    else
-                        ty:= max(ViewTopY + t, ty);
-                    end;
-
-                dAngle := DxDy2Angle(int2hwfloat(ty - oy), int2hwfloat(tx - ox)) + 90;
-
-                Tint(Team^.Clan^.Color shl 8 or $FF);
-                DrawSpriteRotatedF(sprFinger, tx, ty, RealTicks div 32 mod 16, 1, dAngle);
-                untint;
-                end;
-
 
             if (Gear^.State and gstDrowning) = 0 then
                 if (Gear^.State and gstHHThinking) <> 0 then
