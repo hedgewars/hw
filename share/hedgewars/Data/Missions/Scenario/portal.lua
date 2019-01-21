@@ -3,7 +3,8 @@ HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 local MineArray = {}
 local player
-local adviceGiven = false
+local adviceGiven0 = false
+local adviceGiven1 = false
 local adviceGiven2 = false
 
 function onGameInit()
@@ -166,15 +167,20 @@ function onGameStart()
 		loc("In this mission you have infinite time.") .. "|" ..
 		loc("Mines time: 0 seconds"),
 		-amPortalGun, 5000)
-	HogSay(player, loc("I should get myself a portal device, maybe this crate has one."), SAY_THINK)
+end
 
+function onNewTurn()
+	if (adviceGiven0 == false) then
+		adviceGiven0 = true
+		HogSay(player, loc("I should get myself a portal device, maybe this crate has one."), SAY_THINK)
+	end
 end
 
 function onGameTick()
 
 	if (player ~= nil)  then
-		if (gearIsInBox(player, 1650, 1907, 200, 60) and (adviceGiven == false)) then
-			adviceGiven = true
+		if (gearIsInBox(player, 1650, 1907, 200, 60) and (adviceGiven1 == false)) then
+			adviceGiven1 = true
 			HogSay(player, loc("Hmmm, I’ll have to find some way of moving him off this anti-portal surface."), SAY_THINK)
 		elseif (gearIsInBox(player, 2960, 790, 200, 60) and (adviceGiven2 == false)) then
 			adviceGiven2 = true
