@@ -300,6 +300,9 @@ function onGearDelete(gear)
 			elseif score == 9 then
 				spawnTarget(2930,1500)
 			elseif score == 10 then
+				-- The "tricky" target.
+				-- It spawns behind a wall
+				-- and needs at least 2 shots.
 				AddCaption(loc("This one's tricky."));
 				spawnTarget(700,720)
 			elseif score == 11 then
@@ -383,8 +386,16 @@ function onGearDelete(gear)
 			SaveMissionVar("Won", "true")
 			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
 			ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Congratulations! You've eliminated all targets|within the allowed time frame."), 0, 0)
-			-- Also let the hogs shout "victory!"
-			PlaySound(sndVictory, CurrentHedgehog)
+			-- Play voice
+			if shots-1 <= score then
+				-- Flawless victory condition: Only 1 shot more than targets
+				-- (1 shot per "normal" target + 2 shots for the "tricky" target)
+				PlaySound(sndFlawless, CurrentHedgehog)
+			else
+				-- "Normal" victory
+				PlaySound(sndVictory, CurrentHedgehog)
+			end
+
 			FollowGear(CurrentHedgehog)
 
 			-- Unselect sniper rifle and disable hog controls
@@ -408,6 +419,7 @@ function generateStats()
 	local accuracy
 	local accuracy_int
 	if shots > 0 then
+		-- NOTE: 100% accuracy is not possible due to the "tricky" target.
 		accuracy = (score/shots)*100
 		accuracy_int = div(score*100, shots)
 	end
