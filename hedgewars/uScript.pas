@@ -2859,7 +2859,7 @@ end;
 
 
 function lc_setammodelay(L : Plua_State) : LongInt; Cdecl;
-var at: LongInt;
+var at, delay: LongInt;
 const
     call = 'SetAmmoDelay';
     params = 'ammoType, delay';
@@ -2867,8 +2867,14 @@ begin
     if CheckLuaParamCount(L, 2, call, params) then
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);
-        if at >= 0 then
-            ScriptSetAmmoDelay(TAmmoType(at), Trunc(lua_tonumber(L, 2)));
+        delay:= Trunc(lua_tonumber(L, 2));
+        if (at >= 0) and (TAmmoType(at) <> amNothing) then
+            begin
+            ScriptSetAmmoDelay(TAmmoType(at), delay);
+            // Unselect weapon if neccessary
+            if (delay > 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.CurAmmoType = TAmmoType(at)) then
+                ParseCommand('setweap ' + char(0), true, true);
+            end;
         end;
     lc_setammodelay:= 0
 end;
