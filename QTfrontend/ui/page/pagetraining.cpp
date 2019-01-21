@@ -304,7 +304,7 @@ void PageTraining::startSelected()
     list = (QListWidget*) tbw->currentWidget();
     QListWidgetItem * curItem = list->currentItem();
 
-    if (curItem != NULL)
+    if ((curItem != NULL) && (CBTeam->currentIndex() != -1))
         emit startMission(curItem->data(Qt::UserRole).toString(), getSubFolderOfSelected());
 }
 

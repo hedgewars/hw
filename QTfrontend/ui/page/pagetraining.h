@@ -30,6 +30,8 @@ class PageTraining : public AbstractPage
         QListWidget * lstTrainings;
         QListWidget * lstChallenges;
         QListWidget * lstScenarios;
+        QPushButton * btnPreview;
+        QPushButton * btnStart;
         QComboBox * CBTeam;
 
     public slots:
@@ -46,8 +48,6 @@ class PageTraining : public AbstractPage
 
 
     private:
-        QPushButton * btnPreview;
-        QPushButton * btnStart;
         QLabel * lblCaption;
         QLabel * lblDescription;
         QLabel * lblHighscores;

@@ -579,6 +579,7 @@ void HWForm::UpdateTeamsLists()
     ui.pageCampaign->CBTeam->clear();
     ui.pageTraining->CBTeam->clear();
     /* Only show human teams in campaign/training page */
+    bool playable = false;
     for(int i=0; i<teamslist.length(); i++)
     {
         HWTeam testTeam = HWTeam(teamslist[i]);
@@ -587,8 +588,13 @@ void HWForm::UpdateTeamsLists()
         {
             ui.pageCampaign->CBTeam->addItem(teamslist[i]);
             ui.pageTraining->CBTeam->addItem(teamslist[i]);
+            playable = true;
         }
     }
+    ui.pageCampaign->BtnStartCampaign->setEnabled(playable);
+    ui.pageCampaign->btnPreview->setEnabled(playable);
+    ui.pageTraining->btnStart->setEnabled(playable);
+    ui.pageTraining->btnPreview->setEnabled(playable);
     UpdateTrainingPageTeam(0);
 }
 
