@@ -1361,13 +1361,29 @@ var clan : PClan;
     hht  : THedgehog;
     hhp  : PHedgehog;
     i, j : LongInt;
+    colorArg: Int64;
+    color: LongWord;
 begin
     if CheckLuaParamCount(L, 2, 'SetClanColor', 'clan, color') then
         begin
         i:= Trunc(lua_tonumber(L,1));
         if i >= ClansCount then exit(0);
         clan := ClansArray[i];
-        clan^.Color:= Trunc(lua_tonumber(L, 2)) shr 8;
+        colorArg:= Trunc(lua_tonumber(L, 2));
+        if (colorArg < 0) and (abs(colorArg) <= cClanColors) then
+            // Pick clan color from settings (recommended)
+            color:= ClanColorArray[Pred(abs(colorArg))]
+        else if (colorArg >= 0) and (colorArg <= $ffffffff) then
+            // Specify color directly
+            color:= colorArg shr 8
+        else
+            begin
+            OutError('Lua error: SetClanColor: Invalid ''color'' argument, must be between '+IntToStr(-cClanColors)+' and 0xffffffff!', true);
+            lc_setclancolor:= 0;
+            exit;
+            end;
+
+        clan^.Color:= color;
 
         for i:= 0 to Pred(clan^.TeamsNumber) do
             begin
