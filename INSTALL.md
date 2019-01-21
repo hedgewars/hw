@@ -26,6 +26,8 @@ To compile and install Hedgewars, you need at least:
 - SDL\_ttf >= 2.0
 - PhysFS >= 3.0.0
 
+On FreeBSD, you also need the package “fpc-rtl-extra”.
+
 ### Recommended optional dependencies
 
 These are not strictly required to build Hedgewars, but it's
