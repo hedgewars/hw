@@ -619,8 +619,13 @@ end;
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
-s:= IntToStr(Hedgehog.Gear^.Health);
 FreeAndNilTexture(Hedgehog.HealthTagTex);
+if Hedgehog.Gear <> nil then
+    s:= IntToStr(Hedgehog.Gear^.Health)
+else if Hedgehog.GearHidden <> nil then
+    s:= IntToStr(Hedgehog.GearHidden^.Health)
+else
+    exit;
 Hedgehog.HealthTagTex:= RenderStringTex(ansistring(s), Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 

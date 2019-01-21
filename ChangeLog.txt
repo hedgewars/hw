@@ -88,6 +88,7 @@ Lua API:
  + Params explode, poison in the SpawnFake*Crate functions now optional and default to false
  + New global: InitHealth: Initial hog health value from game scheme (read-only)
  + Animate library: AnimOutOfNowhere: destX and destY are now optional (default: current position)
+ * Fix SetClanColor causing crashes and severe rendering bugs
  * Fix SetAmmoDelay not working properly when called after onGameStart
  * Fix DismissTeam not clearing team properly
 
