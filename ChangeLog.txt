@@ -27,6 +27,7 @@ Styles and schemes:
 
 A Classic Fairytale:
  + Backstab: Disable utilities before traitor has been dealt with
+ * Backstab: Prevent attacking the cannibals before making the choice
  * First blood: Fix Lua error when hitting Attack after failing the rope challenge
  * Various minor tweaks and bugfixes
 

@@ -14,7 +14,7 @@ After this, the natives must defeat 3 waves of cannibals.
 - Player is instructed to decide what to do with the traitor
 | Player kills traitor
     - Cut scene: afterChoiceAnim
-| Player spares traitor
+| Player spares traitor (skips turn or moves too far away)
     - Cut scene: afterChoiceAnim (different)
 | Player kills any other hog or own hog
     > Game over
@@ -148,6 +148,7 @@ tribeTeamName = nil
 cyborgTeamName = nil
 cannibalsTeamName1 = nil
 cannibalsTeamName2 = nil
+runawayX, runawayY = 1932, 829
 
 startAnim = {}
 afterChoiceAnim = {}
@@ -680,6 +681,7 @@ function AfterStartAnim()
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
   AddEvent(CheckChoiceRefuse, {}, DoChoiceRefuse, {}, 0)
+  AddEvent(CheckChoiceRunaway, {}, DoChoiceRefuse, {}, 0)
   ShowMission(loc("Backstab"), loc("Judas"),
     string.format(loc("Kill the traitor, %s, or spare his life!"), GetHogName(spyHog)) .. "|" ..
     loc("Kill him or skip your turn."),
@@ -718,6 +720,7 @@ end
 
 function DoChoice()
   RemoveEventFunc(CheckChoiceRefuse)
+  RemoveEventFunc(CheckChoiceRunaway)
   SetGearMessage(CurrentHedgehog, 0)
   SetupAfterChoiceAnim()
   AddAnim(afterChoiceAnim)
@@ -726,6 +729,20 @@ end
 
 function CheckChoiceRefuse()
   return highJumped == true and StoppedGear(CurrentHedgehog)
+end
+
+function CheckChoiceRunaway()
+  return CurrentHedgehog and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 and GetHogTeamName(CurrentHedgehog) == nativesTeamName and GetX(CurrentHedgehog) >= runawayX and GetY(CurrentHedgehog) >= runawayY and StoppedGear(CurrentHedgehog)
+end
+
+function CheckChoiceRunawayAll()
+  for i= 1, 7 do
+    local hog = natives[i]
+    if hog ~= spyHog and GetX(hog) >= runawayX and GetY(hog) >= runawayY and StoppedGear(hog) then
+      return true
+    end
+  end
+  return false
 end
 
 function DoChoiceRefuse()
@@ -1150,6 +1167,9 @@ function onNewTurn()
       end
       SetGearMessage(CurrentHedgehog, 0)
       SetTurnTimeLeft(MAX_TURN_TIME)
+      if CheckChoiceRunawayAll() then
+        highJumped = true
+      end
     end
   else
     if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
