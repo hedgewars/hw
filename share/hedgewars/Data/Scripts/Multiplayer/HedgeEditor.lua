@@ -3487,6 +3487,7 @@ function onGameInit()
 
 	Explosives = 0
 	MinesNum = 0
+	AirMinesNum = 0
 
 	EnableGameFlags(gfInfAttack, gfDisableWind)
 
