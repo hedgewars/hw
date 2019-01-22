@@ -128,7 +128,6 @@ cyborgHidden = false
 needToAct = 0
 
 m2Choice = 0
-m2DenseDead = 0
 m4DenseDead = 0
 m4BuffaloDead = 0
 m4WaterDead = 0
@@ -914,13 +913,12 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
-  m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
-  m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead"))
-  m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
-  m4WaterDead = tonumber(GetCampaignVar("M4WaterDead"))
-  m4BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead"))
+  m4DenseDead = tonumber(GetCampaignVar("M4DenseDead")) or 0
+  m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead")) or 0
+  m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead")) or 0
+  m4WaterDead = tonumber(GetCampaignVar("M4WaterDead")) or 0
+  m4BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead")) or 0
 end
 
 function HideCyborg()

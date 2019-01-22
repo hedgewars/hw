@@ -615,30 +615,11 @@ function GetVariables()
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
   m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
   m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
-  m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
-  m5DenseDead = tonumber(GetCampaignVar("M5DenseDead"))
-  m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead"))
-  m5LeaksDead = tonumber(GetCampaignVar("M5LeaksDead"))
-  m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
-  m5ChiefDead = tonumber(GetCampaignVar("M5ChiefDead"))
-  m4WaterDead = tonumber(GetCampaignVar("M4WaterDead"))
-  m5WaterDead = tonumber(GetCampaignVar("M5WaterDead"))
-  m4BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead"))
-  m5BuffaloDead = tonumber(GetCampaignVar("M5BuffaloDead"))
-  m5WiseDead = tonumber(GetCampaignVar("M5WiseDead"))
-  m5GirlDead = tonumber(GetCampaignVar("M5GirlDead"))
+  m5LeaksDead = tonumber(GetCampaignVar("M5LeaksDead")) or 0
+  m5ChiefDead = tonumber(GetCampaignVar("M5ChiefDead")) or 0
 end
 
 function SaveCampaignVariables()
-  for i = 1, 4 do
-    if gearDead[origNatives[i]] ~= true then
-      SaveCampaignVar(nativeSaveNames[i], "0")
-    else
-      SaveCampaignVar(nativeSaveNames[i], "1")
-    end
-  end
-
   SaveCampaignVar("M8DeployedLeader", deployedLeader)
   SaveCampaignVar("M8PrincessLeader", princessLeader)
   SaveCampaignVar("M8EnemyFled", enemyFled)

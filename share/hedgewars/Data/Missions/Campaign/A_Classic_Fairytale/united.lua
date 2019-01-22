@@ -289,7 +289,7 @@ function RestoreWave(index)
 end
 
 function GetVariables()
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
+  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead")) or 0
   if m2DenseDead == 1 then
     denseDead = true
   end

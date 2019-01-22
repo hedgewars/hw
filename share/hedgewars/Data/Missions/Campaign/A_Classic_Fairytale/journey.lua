@@ -129,8 +129,6 @@ midCyborgPosDuo = {1264, 1390}
 
 m2Choice = 0
 m2DenseDead = 0
-m2RamonDead = 0
-m2SpikyDead = 0
 
 TurnsLeft = 0
 stage = 0
@@ -1065,9 +1063,7 @@ end
 function onGameInit()
   progress = tonumber(GetCampaignVar("Progress"))
   m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
-  m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))
-  m2SpikyDead = tonumber(GetCampaignVar("M2SpikyDead"))
+  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead")) or 0
 
 	Seed = 0
 	GameFlags = gfSolidLand + gfDisableWind
