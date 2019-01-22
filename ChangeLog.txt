@@ -24,6 +24,7 @@ Styles and schemes:
  * Racer: Fix racer ghost not getting reset after a skip
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
+ * HedgeEditor: Fix major FPS drop when there are a lot of objects
 
 A Classic Fairytale:
  + Backstab: Disable utilities before traitor has been dealt with

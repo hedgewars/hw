@@ -3108,16 +3108,16 @@ function HandleHedgeEditor()
 	updateCursorCoords()
 
 	-- Barrel health tags, mine timer tags and health crate health tags
-	do
+	if GameTime % 20 == 0 then
 		local actualValue	-- internal value
 		local printedValue	-- value exposed to HUD
 		for g, v in pairs(tagGears) do
 			local gt = GetGearType(g)
 			if v == -1 then
 				if gt == gtCase then
-					if(band(GetGearPos(g), 0x2) ~= 0) then
+					if(band(GetGearPos(g), 0x2) ~= 0) and (band(GetState(g), gstFrozen) == 0) then
 						v = AddVisualGear(0, 0, vgtHealthTag, GetHealth(g), true)
-						SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, 0x808080FF)
+						SetVisualGearValues(v, nil, nil, 0, 0, nil, 0, 1, nil, 240000, 0x808080FF)
 						tagGears[g] = v
 					else
 						tagGears[g] = nil
@@ -3128,7 +3128,7 @@ function HandleHedgeEditor()
 						_, _, _, _, _, _, _, _, _, _, _, damage = GetGearValues(g)
 						health = 36 - damage
 						v = AddVisualGear(0, 0, vgtHealthTag, health, true)
-						SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, 0x808080FF)
+						SetVisualGearValues(v, nil, nil, 0, 0, nil, 0, 1, nil, 240000, 0x808080FF)
 						tagGears[g] = v
 					end
 				end
@@ -3137,8 +3137,8 @@ function HandleHedgeEditor()
 			if(band(GetState(g), gstDrowning) ~= 0) then
 				DeleteVisualGear(v)
 				tagGears[g] = nil
-			-- Delete tag for frozen mines and air mines
-			elseif(band(GetState(g), gstFrozen) ~= 0 and (gt == gtAirMine or gt == gtSMine)) then
+			-- Delete tag for frozen sticky mines, air mines and crates
+			elseif(band(GetState(g), gstFrozen) ~= 0 and (gt == gtAirMine or gt == gtSMine or gt == gtCase)) then
 				DeleteVisualGear(v)
 				tagGears[g] = nil
 			elseif(tagGears[g] ~= nil and tagGears[g] ~= -1) then
@@ -3186,12 +3186,6 @@ function HandleHedgeEditor()
 					offset_y = 28
 					offset_x = 16
 				end
-				--[[ The timer tag normally disappears near the water line, this is a really
-				ugly hack to adjust the position of the tag so it is always displayed.
-				FIXME: Find a better solution to fix this. ]]
-				if (GetY(g) + offset_y) > WaterLine and (GetY(g) + offset_y) < WaterLine + 30 then
-					offset_y = (WaterLine - GetY(g))
-				end
 				local tint
 				if(not showGearTags) then
 					-- Hide the tags
@@ -3214,11 +3208,11 @@ function HandleHedgeEditor()
 					Changing the visual gear state does not have any effect, so we need this hack ]]
 					DeleteVisualGear(v)
 					v = AddVisualGear(GetX(g)+offset_x, GetY(g)+offset_y, vgtHealthTag, printedValue, true)
-					SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tint)
+					SetVisualGearValues(v, nil, nil, 0, 0, nil, 0, 1, nil, 240000, tint)
 					tagGears[g] = v
 				else
 					-- Just update position if the health did not change
-					SetVisualGearValues(v, GetX(g)+offset_x, GetY(g)+offset_y, 0, 0, nil, nil, nil, nil, 240000, tint)
+					SetVisualGearValues(v, GetX(g)+offset_x, GetY(g)+offset_y, 0, 0, nil, 0, 1, nil, 240000, tint)
 				end
 			end
 		end
@@ -3852,25 +3846,25 @@ function onGearAdd(gear)
 	end
 	if ((GetGearType(gear) == gtMine and GetHealth(gear) ~= 0) or (GetGearType(gear) == gtSMine and band(GetState(gear), gstFrozen) == 0)) then
 		local v = AddVisualGear(0, 0, vgtHealthTag, GetTimer(gear), true)
-		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
+		SetVisualGearValues(v, nil, nil, 0, 0, nil, 0, 1, nil, 240000, tagTint)
 		tagGears[gear] = v
 	elseif ((GetGearType(gear) == gtMine and GetHealth(gear) == 0)) then
 		local _, dmg
 		_, _, _, _, _, _, _, _, _, _, dmg = GetGearValues(gear)
 		local v = AddVisualGear(0, 0, vgtHealthTag, 36 - dmg, true)
-		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
+		SetVisualGearValues(v, nil, nil, 0, 0, nil, 0, 1, nil, 240000, tagTint)
 		tagGears[gear] = v
 	elseif (GetGearType(gear) == gtAirMine and band(GetState(gear), gstFrozen) == 0) then
 		local _, wdTimer
 		_, _, wdTimer = GetGearValues(gear)
 		local v = AddVisualGear(0, 0, vgtHealthTag, wdTimer, true)
-		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
+		SetVisualGearValues(v, nil, nil, 0, 0, nil, 0, 1, nil, 240000, tagTint)
 		tagGears[gear] = v
 	elseif (GetGearType(gear) == gtCase) then
 		tagGears[gear] = -1
 	elseif (GetGearType(gear) == gtExplosives) then 
 		local v = AddVisualGear(0, 0, vgtHealthTag, GetHealth(gear), true)
-		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
+		SetVisualGearValues(v, nil, nil, 0, 0, nil, 0, 1, nil, 240000, tagTint)
 		tagGears[gear] = v
 	end
 
