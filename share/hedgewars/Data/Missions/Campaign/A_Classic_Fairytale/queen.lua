@@ -498,6 +498,7 @@ end
 function SkipAnim(anim)
   if anim == startAnim then
     SetGearPosition(enemy, unpack(enemyPos))
+    HogTurnLeft(enemy, true)
   end
   if GetHogTeamName(CurrentHedgehog) ~= nativesTeamName then
     EndTurn(true)
