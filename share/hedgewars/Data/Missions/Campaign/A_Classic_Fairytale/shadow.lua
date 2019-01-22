@@ -80,6 +80,8 @@ refusedReturnStage = 11
 attackedReturnStage = 12
 loseStage = 13
 
+wave1EnemyTurn = false
+
 ourTeam = 0
 weakTeam = 1
 strongTeam = 2
@@ -222,10 +224,9 @@ function AfterWeaklingsAnim()
   SetHealth(SpawnHealthCrate(2757, 1030), 50)
   SetHealth(SpawnHealthCrate(2899, 1009), 50)
   stage = wave1Stage
-  SwitchHog(dense)
   SetGearMessage(dense, 0)
   SetGearMessage(leaks, 0)
-  SetTurnTimeLeft(TurnTime)
+  EndTurn(true)
   ShowMission(loc("The Shadow Falls"), loc("Why do you not like me?"), loc("Obliterate them!|Hint: You might want to take cover...").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
 end
 
@@ -352,7 +353,6 @@ function SkipAttackedAnim()
   SpawnSupplyCrate(3192, 1101, amShotgun)
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
-  AnimSwitchHog(leaks)
 end
 
   
@@ -1107,6 +1107,11 @@ end
 function onNewTurn()
   if AnimInProgress() then
     SetTurnTimeLeft(MAX_TURN_TIME)
+  elseif stage == wave1Stage then
+    if GetHogClan(CurrentHedgehog) == GetTeamClan(weaklingsTeamName) and (not wave1EnemyTurn) then
+      EndTurn(true)
+      wave1EnemyTurn = true
+    end
   elseif stage == cyborgStage then
     if CurrentHedgehog ~= dense then
       EndTurn(true)
