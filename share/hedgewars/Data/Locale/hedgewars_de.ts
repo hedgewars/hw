@@ -817,13 +817,11 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation>Gezeichnete
-Karte laden</translation>
+        <translation>Gezeichnete Karte laden</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Gezeichnete
-Karte bearbeiten</translation>
+        <translation>Gezeichnete Karte bearbeiten</translation>
     </message>
     <message>
         <source>Small islands</source>

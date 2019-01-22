@@ -229,14 +229,34 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     drawnControls->addStretch(1);
 
-    btnLoadMap = new QPushButton(tr("Load map drawing"));
-    btnLoadMap->setStyleSheet("padding: 20px;");
+    QPixmap pmLoad(":/res/Load.png");
+    QIcon iconLoad = QIcon(pmLoad);
+    sz = iconLoad.actualSize(QSize(48, 48));
+
+    btnLoadMap = new QPushButton(tr("Load"));
+    btnLoadMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    btnLoadMap->setWhatsThis(tr("Load map drawing"));
+    btnLoadMap->setStyleSheet("padding: 5px;");
+    btnLoadMap->setFixedHeight(50);
+    btnLoadMap->setIcon(iconLoad);
+    btnLoadMap->setIconSize(sz);
+    btnLoadMap->setFlat(true);
     drawnControls->addWidget(btnLoadMap, 0);
     m_childWidgets << btnLoadMap;
     connect(btnLoadMap, SIGNAL(clicked()), this, SLOT(loadDrawing()));
 
-    btnEditMap = new QPushButton(tr("Edit map drawing"));
-    btnEditMap->setStyleSheet("padding: 20px;");
+    QPixmap pmEdit(":/res/edit.png");
+    QIcon iconEdit = QIcon(pmEdit);
+    sz = iconEdit.actualSize(QSize(48, 48));
+
+    btnEditMap = new QPushButton(tr("Edit"));
+    btnEditMap->setWhatsThis(tr("Edit map drawing"));
+    btnEditMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    btnEditMap->setStyleSheet("padding: 5px;");
+    btnEditMap->setFixedHeight(50);
+    btnEditMap->setIcon(iconEdit);
+    btnEditMap->setIconSize(sz);
+    btnEditMap->setFlat(true);
     drawnControls->addWidget(btnEditMap, 0);
     m_childWidgets << btnEditMap;
     connect(btnEditMap, SIGNAL(clicked()), this, SIGNAL(drawMapRequested()));
