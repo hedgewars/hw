@@ -295,14 +295,8 @@ impl ops::Div<u32> for FPNum {
 
 #[macro_export]
 macro_rules! fp {
-    (-$n: literal / $d: literal) => {
-        FPNum::new(-$n, $d)
-    };
     ($n: literal / $d: literal) => {
         FPNum::new($n, $d)
-    };
-    (-$n: literal) => {
-        FPNum::from(-$n)
     };
     ($n: literal) => {
         FPNum::from($n)
