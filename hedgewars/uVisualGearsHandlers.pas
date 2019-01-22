@@ -706,8 +706,10 @@ begin
 if round(Gear^.Y) - 10 < cWaterLine then
     DeleteVisualGear(Gear)
 else
-    Gear^.Y:= Gear^.Y - 0.08 * Steps;
-
+    begin
+    Gear^.X:= Gear^.X + Gear^.dX * Steps;
+    Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+    end;
 end;
 
 procedure doStepHealthTag(Gear: PVisualGear; Steps: Longword);
@@ -722,7 +724,7 @@ else
 
 Gear^.doStep:= @doStepHealthTagWork;
 
-if (round(Gear^.Y) > cWaterLine) and (Gear^.Frame = 0)  then
+if (round(Gear^.Y) > cWaterLine) and (Gear^.Frame = 0) and (Gear^.FrameTicks = 0) then
     Gear^.doStep:= @doStepHealthTagWorkUnderWater;
 
 Gear^.Y:= Gear^.Y - Gear^.Tex^.h;

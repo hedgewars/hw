@@ -274,6 +274,7 @@ with gear^ do
   vgtHealthTag:
                 begin
                 Frame:= 0;
+                FrameTicks:= 0;
                 Timer:= 1500;
                 dY:= -0.08;
                 dX:= 0;
