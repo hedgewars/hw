@@ -812,7 +812,7 @@ function onGearDelete(gear)
   if GetGearType(gear) == gtHedgehog then
     if GetHogTeamName(gear) == beepTeamName or GetHogTeamName(gear) == corpTeamName then
       cyborgsLeft = cyborgsLeft - 1
-    elseif GetHogTeamName(gear) == loc("Natives") then
+    elseif GetHogTeamName(gear) == nativesTeamName then
       for i = 1, nativesLeft do
         if natives[i] == gear then
           toRemove = i
