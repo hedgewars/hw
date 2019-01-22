@@ -1190,7 +1190,7 @@ begin
                 DrawTextureCentered(ox, sy - cHHRadius - 7 - HealthTagTex^.h, HealthTagTex);
 
             if (Gear^.State and gstDrowning) = 0 then
-                if (Gear^.State and gstHHThinking) <> 0 then
+                if ((Gear^.State and gstHHThinking) <> 0) and (not CinematicScript) then
                     DrawSprite(sprQuestion, ox - 10, oy - cHHRadius - 34, (RealTicks shr 9) mod 8)
             end
         end;
