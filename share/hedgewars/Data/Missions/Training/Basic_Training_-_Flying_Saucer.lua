@@ -27,6 +27,7 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 local Player = nil -- Pointer to hog created in: onGameInit
 local Target = nil -- Pointer to target hog
 local Objective = false -- Get to the target
+local Flawless = true -- Track flawless victory
 
 local TargetNumber = 0 -- The current target number
 local GrenadeThrown = false -- Used for the Boom Target
@@ -204,7 +205,11 @@ TargetPos[12] = { Modifier = true, Func = function()
 	end
 	SetState(Player, band(GetState(Player), bnot(gstHHDriven)))
 	SetState(Player, bor(GetState(Player), gstWinner))
-	PlaySound(sndVictory, Player)
+	if Flawless then
+		PlaySound(sndFlawless, Player)
+	else
+		PlaySound(sndVictory, Player)
+	end
 	SaveMissionVar("Won", "true")
 
 	SendStat(siGameResult, loc("You have finished the Flying Saucer Training!"))
@@ -564,6 +569,7 @@ end
 
 function onGearDamage(Gear)
 	if Gear == Player then
+		Flawless = false
 		CleanUpGears()
 		GrenadeThrown = false
 		Check = false
@@ -572,6 +578,7 @@ end
 
 function onGearResurrect(Gear, VGear)
 	if Gear == Player then
+		Flawless = false
 		AddCaption(loc("Oh no! You have died. Try again!"), capcolDefault, capgrpMessage2)
 		ResetCurrentTarget()
 		if VGear then
@@ -581,6 +588,7 @@ function onGearResurrect(Gear, VGear)
 end
 
 function onSkipTurn()
+	Flawless = false
 	AddCaption(loc("Try again!"), capcolDefault, capgrpMessage2)
 	ResetCurrentTarget()
 end

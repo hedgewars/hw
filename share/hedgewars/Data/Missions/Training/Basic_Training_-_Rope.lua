@@ -41,6 +41,7 @@ local barrelsBoom = false	-- barrels exploded
 local wasFirstTurn = false	-- first turn msg was displayed
 local gameOver = false		-- game over (only victory possible)
 local currentTarget = 0		-- current target ID. First target = 1
+local flawless = true		-- flawless if no damage taken and no mistake made
 
 local cpX, cpY = 208, 1384	-- hog checkpoint, initialized with start coords
 
@@ -233,6 +234,7 @@ function onGameTick()
 				GetFlightTime(CurrentHedgehog) == 0 and (not ropeGear) and
 				math.abs(dX) < 5 and math.abs(dY) < 5 and
 				(x < 3417 or y > 471) then
+			flawless = false
 			AddCaption(loc("Your rope is gone! Try again!"))
 			resetFinalChallenge()
 			PlaySound(sndWarp)
@@ -262,6 +264,7 @@ end
 function onGearResurrect(gear, vGear)
 	-- Teleport hog to previous checkpoint
 	if gear == hog then
+		flawless = false
 		SetGearPosition(hog, cpX, cpY)
 		if vGear then
 			SetVisualGearValues(vGear, GetX(hog), GetY(hog))
@@ -271,6 +274,12 @@ function onGearResurrect(gear, vGear)
 		if isInFinalChallenge then
 			resetFinalChallenge(false)
 		end
+	end
+end
+
+function onGearDamage(gear)
+	if gear == hog then
+		flawless = false
 	end
 end
 
@@ -331,7 +340,11 @@ function onGearDelete(gear)
 			SaveMissionVar("Won", "true")
 			ShowMission(loc("Basic Rope Training"), loc("Training complete!"),
 			loc("Congratulations!"), 0, 0)
-			PlaySound(sndVictory, hog)
+			if flawless then
+				PlaySound(sndFlawless, hog)
+			else
+				PlaySound(sndVictory, hog)
+			end
 			AddAmmo(hog, amBaseballBat, 0)
 			AddAmmo(hog, amGrenade, 0)
 			AddAmmo(hog, amRope, 0)
