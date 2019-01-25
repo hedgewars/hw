@@ -278,19 +278,23 @@ for t:= 0 to Pred(TeamsCount) do
                     if ExtDriven then
                          NameTagTex:= RenderStringTexLim(ansistring(Name), Clan^.Color, fnt16, cTeamHealthWidth)
                     else NameTagTex:= RenderStringTex(ansistring(Name), Clan^.Color, fnt16);
-                    if Hat = 'NoHat' then
+                    if cHolidaySilliness then
                         begin
-                        if (month = 4) and (md = 20) then
-                            Hat := 'eastertop'   // Easter
-                        else if (month = 12) and ((md = 24) or (md = 25) or (md = 26)) then
-                            Hat := 'Santa'       // Christmas Eve/Christmas/Boxing Day
-                        else if (month = 10) and (md = 31) then
-                            Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
-                        end;
-                    if (month = 4) and (md = 1) then
-                        begin
-                        AprilOne:= true;
-                        Hat := 'fr_tomato'; // avoid promoting violence to hedgehogs. see https://hedgewars.org/node/5818
+                        // Special hats on special days
+                        if Hat = 'NoHat' then
+                            begin
+                            if (month = 4) and (md = 20) then
+                                Hat := 'eastertop'   // Easter
+                            else if (month = 12) and ((md = 24) or (md = 25) or (md = 26)) then
+                                Hat := 'Santa'       // Christmas Eve/Christmas/Boxing Day
+                            else if (month = 10) and (md = 31) then
+                                Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
+                            end;
+                        if (month = 4) and (md = 1) then
+                            begin
+                            AprilOne:= true;
+                            Hat := 'fr_tomato'; // avoid promoting violence to hedgehogs. see https://hedgewars.org/node/5818
+                            end;
                         end;
 
                     if Hat <> 'NoHat' then

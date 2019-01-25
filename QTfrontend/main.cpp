@@ -395,10 +395,9 @@ int main(int argc, char *argv[]) {
 
     QTranslator TranslatorHedgewars;
     QTranslator TranslatorQt;
+    QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
     {
-        QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
-        settings.setIniCodec("UTF-8");
-
         QString cc = settings.value("misc/locale", QString()).toString();
         if (cc.isEmpty())
         {
@@ -494,11 +493,16 @@ int main(int argc, char *argv[]) {
     QString style = "";
     QString fname;
 
-    checkSeason();
-    //For each season, there is an extra stylesheet
-    //Todo: change background for easter and birthday
-    //(simply replace res/BackgroundBirthday.png and res/BackgroundEaster.png
-    //with an appropriate background
+    bool holidaySilliness = settings.value("misc/holidaySilliness", true).toBool();
+    if(holidaySilliness)
+        checkSeason();
+    else
+        season = SEASON_NONE;
+
+    // For each season, there is an extra stylesheet.
+    // TODO: change background for easter
+    // (simply replace res/BackgroundEaster.png
+    // with an appropriate background).
     switch (season)
     {
         case SEASON_CHRISTMAS :

@@ -55,6 +55,7 @@ var
 
     cAltDamage         : boolean;
     cReducedQuality    : LongWord;
+    cHolidaySilliness  : boolean;
     UserNick           : shortstring;
     recordFileName     : shortstring;
     cReadyDelay        : Longword;
@@ -2604,6 +2605,7 @@ begin
 
     cShowFPS        := false;
     cAltDamage      := false;
+    cHolidaySilliness := true;
     cTimerInterval  := 8;
     cReducedQuality := rqNone;
     cLanguageFName  := 'en.txt';

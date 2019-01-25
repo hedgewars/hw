@@ -66,6 +66,7 @@ class GameUIConfig : public QSettings
         bool isReducedQuality() const;
         bool isFrontendEffects() const;
         bool isFrontendFullscreen() const;
+        bool isHolidaySillinessEnabled() const;
         void resizeToConfigValues();
         quint32 stereoMode() const;
         void setValue(const QString & key, const QVariant & value);

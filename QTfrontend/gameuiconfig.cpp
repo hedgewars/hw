@@ -441,6 +441,11 @@ bool GameUIConfig::isFrontendFullscreen() const
     return Form->ui.pageOptions->CBFrontendFullscreen->isChecked();
 }
 
+bool GameUIConfig::isHolidaySillinessEnabled() const
+{
+    return value("misc/holidaySilliness", true).toBool();
+}
+
 bool GameUIConfig::isSoundEnabled()
 {
     return Form->ui.pageOptions->CBSound->isChecked();

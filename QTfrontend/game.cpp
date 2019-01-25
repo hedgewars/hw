@@ -467,6 +467,8 @@ QStringList HWGame::getArguments()
         arguments << "--no-healthtag";
     if (config->Form->ui.pageOptions->CBTagOpacity->isChecked())
         arguments << "--translucent-tags";
+    if (!config->isHolidaySillinessEnabled())
+        arguments << "--no-holiday-silliness";
 
     return arguments;
 }
