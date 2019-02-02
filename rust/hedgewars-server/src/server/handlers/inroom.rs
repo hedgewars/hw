@@ -102,6 +102,7 @@ fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
 pub fn handle(
     server: &mut HWServer,
     client_id: ClientId,
+    response: &mut super::Response,
     room_id: RoomId,
     message: HWProtocolMessage,
 ) {

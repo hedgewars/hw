@@ -16,7 +16,7 @@ use mio::{
 use netbuf;
 use slab::Slab;
 
-use super::{core::HWServer, coretypes::ClientId, io::FileServerIO};
+use super::{core::HWServer, coretypes::ClientId, handlers, io::FileServerIO};
 use crate::{
     protocol::{messages::*, ProtocolDecoder},
     utils,
@@ -178,7 +178,7 @@ impl NetworkClient {
         let result = loop {
             match buf_out.write_to(destination) {
                 Ok(bytes) if buf_out.is_empty() || bytes == 0 => {
-                    break Ok(((), NetworkClientState::Idle))
+                    break Ok(((), NetworkClientState::Idle));
                 }
                 Ok(_) => (),
                 Err(ref error)
@@ -406,10 +406,15 @@ impl NetworkLayer {
             Ok((Vec::new(), NetworkClientState::Idle))
         };
 
+        let mut response = handlers::Response::new(client_id);
+
         match messages {
             Ok((messages, state)) => {
                 for message in messages {
-                    self.server.handle_msg(client_id, message);
+                    debug!("Handling message {:?} for client {}", message, client_id);
+                    if self.server.clients.contains(client_id) {
+                        handlers::handle(&mut self.server, client_id, &mut response, message);
+                    }
                 }
                 match state {
                     NetworkClientState::NeedsRead => {

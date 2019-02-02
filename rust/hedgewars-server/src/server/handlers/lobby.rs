@@ -12,7 +12,12 @@ use crate::{
 };
 use log::*;
 
-pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
+pub fn handle(
+    server: &mut HWServer,
+    client_id: ClientId,
+    response: &mut super::Response,
+    message: HWProtocolMessage,
+) {
     use crate::protocol::messages::HWProtocolMessage::*;
     match message {
         CreateRoom(name, password) => {
@@ -32,15 +37,17 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                 let room = &server.rooms[room_id];
                 let client = &server.clients[client_id];
 
-                vec![
+                response.add(
                     RoomAdd(room.info(Some(&client)))
                         .send_all()
-                        .with_protocol(room.protocol_number)
-                        .action(),
-                    flags_msg.send_self().action(),
-                ]
+                        .with_protocol(room.protocol_number),
+                );
+                response.add(flags_msg.send_self());
+
+                response.add(ClientFlags("+i".to_string(), vec![client.nick.clone()]).send_self());
+                vec![]
             };
-            server.react(client_id, actions)
+            server.react(client_id, actions);
         }
         Chat(msg) => {
             let actions = vec![ChatMsg {
@@ -75,8 +82,29 @@ pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMes
                     )]
                 } else if r.players_number == u8::max_value() {
                     vec![Warn("This room is already full".to_string())]
+                } else if let Some(room_id) = room_id {
+                    let nick = c.nick.clone();
+                    server.move_to_room(client_id, room_id);
+
+                    response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room_id));
+                    response.add(ClientFlags("+i".to_string(), vec![nick]).send_all());
+                    response.add(RoomJoined(nicks).send_self());
+
+                    let room = &server.rooms[room_id];
+
+                    if !room.greeting.is_empty() {
+                        response.add(
+                            ChatMsg {
+                                nick: "[greeting]".to_string(),
+                                msg: room.greeting.clone(),
+                            }
+                            .send_self(),
+                        );
+                    }
+
+                    vec![]
                 } else {
-                    vec![MoveToRoom(r.id), RoomJoined(nicks).send_self().action()]
+                    vec![]
                 }
             } else {
                 vec![Warn("No such room.".to_string())]

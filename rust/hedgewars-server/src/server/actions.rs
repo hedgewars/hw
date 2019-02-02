@@ -115,7 +115,6 @@ pub enum Action {
     Send(PendingMessage),
     RemoveClient,
     ByeClient(String),
-    ReactProtocolMessage(HWProtocolMessage),
     CheckRegistered,
     JoinLobby,
     RemoveRoom(RoomId),
@@ -176,7 +175,6 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 server.clients.remove(client_id);
             }
         }
-        ReactProtocolMessage(msg) => handlers::handle(server, client_id, msg),
         CheckRegistered => {
             let client = &server.clients[client_id];
             if client.protocol_number > 0 && client.nick != "" {

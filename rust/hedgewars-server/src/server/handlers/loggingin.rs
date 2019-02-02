@@ -36,7 +36,12 @@ fn get_hash(client: &HWClient, salt1: &str, salt2: &str) -> Sha1Digest {
     Sha1Digest(sha1(s.as_bytes()))
 }
 
-pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
+pub fn handle(
+    server: &mut HWServer,
+    client_id: ClientId,
+    response: &mut super::Response,
+    message: HWProtocolMessage,
+) {
     match message {
         HWProtocolMessage::Nick(nick) => {
             let client = &mut server.clients[client_id];

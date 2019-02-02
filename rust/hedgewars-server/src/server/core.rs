@@ -73,13 +73,6 @@ impl HWServer {
         allocate_room(&mut self.rooms)
     }
 
-    pub fn handle_msg(&mut self, client_id: ClientId, msg: HWProtocolMessage) {
-        debug!("Handling message {:?} for client {}", msg, client_id);
-        if self.clients.contains(client_id) {
-            handlers::handle(self, client_id, msg);
-        }
-    }
-
     #[inline]
     pub fn create_room(
         &mut self,
@@ -93,6 +86,11 @@ impl HWServer {
             name,
             password,
         )
+    }
+
+    #[inline]
+    pub fn move_to_room(&mut self, client_id: ClientId, room_id: RoomId) {
+        move_to_room(&mut self.clients[client_id], &mut self.rooms[room_id])
     }
 
     fn get_recipients(&self, client_id: ClientId, destination: &Destination) -> Vec<ClientId> {
@@ -127,6 +125,10 @@ impl HWServer {
     ) {
         let ids = self.get_recipients(client_id, &destination);
         self.output.push((ids, message));
+    }
+
+    pub fn send_msg(&mut self, client_id: ClientId, message: PendingMessage) {
+        self.send(client_id, &message.destination, message.message)
     }
 
     pub fn react(&mut self, client_id: ClientId, actions: Vec<actions::Action>) {
