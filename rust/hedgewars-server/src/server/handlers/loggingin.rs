@@ -46,30 +46,17 @@ pub fn handle(
         HWProtocolMessage::Nick(nick) => {
             let client = &mut server.clients[client_id];
             debug!("{} {}", nick, is_name_illegal(&nick));
-            let actions = if client.room_id != None {
+            if client.room_id != None {
                 unreachable!()
             } else if !client.nick.is_empty() {
-                vec![ProtocolError("Nickname already provided.".to_string())]
+                response.add(Error("Nickname already provided.".to_string()).send_self());
             } else if is_name_illegal(&nick) {
-                vec![ByeClient("Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())]
+                // ByeClient("Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())
             } else {
                 client.nick = nick.clone();
-                vec![Nick(nick).send_self().action(), CheckRegistered]
-            };
-
-            server.react(client_id, actions);
-        }
-        HWProtocolMessage::Proto(proto) => {
-            let client = &mut server.clients[client_id];
-            let actions = if client.protocol_number != 0 {
-                vec![ProtocolError("Protocol already known.".to_string())]
-            } else if proto == 0 {
-                vec![ProtocolError("Bad number.".to_string())]
-            } else {
-                client.protocol_number = proto;
-                vec![Proto(proto).send_self().action(), CheckRegistered]
-            };
-            server.react(client_id, actions);
+                response.add(Nick(nick).send_self());
+                //CheckRegistered
+            }
         }
         #[cfg(feature = "official-server")]
         HWProtocolMessage::Password(hash, salt) => {
@@ -77,17 +64,24 @@ pub fn handle(
 
             let client_hash = get_hash(c, &salt, &c.server_salt);
             let server_hash = get_hash(c, &c.server_salt, &salt);
-            let actions = if client_hash == server_hash {
-                vec![
-                    ServerAuth(format!("{:x}", server_hash))
-                        .send_self()
-                        .action(),
-                    JoinLobby,
-                ]
+            if client_hash == server_hash {
+                response.add(ServerAuth(format!("{:x}", server_hash)).send_self());
+            //JoinLobby
             } else {
-                vec![ByeClient("Authentication failed".to_string())]
+                //ByeClient("Authentication failed".to_string())
             };
-            server.react(client_id, actions);
+        }
+        HWProtocolMessage::Proto(proto) => {
+            let client = &mut server.clients[client_id];
+            if client.protocol_number != 0 {
+                response.add(Error("Protocol already known.".to_string()).send_self());
+            } else if proto == 0 {
+                response.add(Error("Bad number.".to_string()).send_self());
+            } else {
+                client.protocol_number = proto;
+                response.add(Proto(proto).send_self());
+                // CheckRegistered
+            }
         }
         #[cfg(feature = "official-server")]
         HWProtocolMessage::Checker(protocol, nick, password) => {

@@ -327,9 +327,10 @@ impl NetworkLayer {
         entry.insert(client);
     }
 
-    fn flush_server_messages(&mut self) {
-        debug!("{} pending server messages", self.server.output.len());
-        for (clients, message) in self.server.output.drain(..) {
+    fn flush_server_messages(&mut self, mut response: handlers::Response) {
+        debug!("{} pending server messages", response.len());
+        let output = response.extract_messages(&mut self.server);
+        for (clients, message) in output {
             debug!("Message {:?} to {:?}", message, clients);
             let msg_string = message.to_raw_protocol();
             for client_id in clients {
@@ -377,7 +378,7 @@ impl NetworkLayer {
             self.create_client_socket(client_socket)?,
             addr,
         );
-        self.flush_server_messages();
+        //TODO: create response for initial messages
 
         Ok(())
     }
@@ -432,7 +433,9 @@ impl NetworkLayer {
             )?,
         }
 
-        self.flush_server_messages();
+        if !response.is_empty() {
+            self.flush_server_messages(response);
+        }
 
         if !self.server.removed_clients.is_empty() {
             let ids: Vec<_> = self.server.removed_clients.drain(..).collect();

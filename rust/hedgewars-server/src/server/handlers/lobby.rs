@@ -21,12 +21,12 @@ pub fn handle(
     use crate::protocol::messages::HWProtocolMessage::*;
     match message {
         CreateRoom(name, password) => {
-            let actions = if is_name_illegal(&name) {
-                vec![Warn("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())]
+            if is_name_illegal(&name) {
+                response.add(Warning("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string()).send_self());
             } else if server.has_room(&name) {
-                vec![Warn(
-                    "A room with the same name already exists.".to_string(),
-                )]
+                response.add(
+                    Warning("A room with the same name already exists.".to_string()).send_self(),
+                );
             } else {
                 let flags_msg = ClientFlags(
                     "+hr".to_string(),
@@ -45,20 +45,18 @@ pub fn handle(
                 response.add(flags_msg.send_self());
 
                 response.add(ClientFlags("+i".to_string(), vec![client.nick.clone()]).send_self());
-                vec![]
             };
-            server.react(client_id, actions);
         }
         Chat(msg) => {
-            let actions = vec![ChatMsg {
-                nick: server.clients[client_id].nick.clone(),
-                msg,
-            }
-            .send_all()
-            .in_room(server.lobby_id)
-            .but_self()
-            .action()];
-            server.react(client_id, actions);
+            response.add(
+                ChatMsg {
+                    nick: server.clients[client_id].nick.clone(),
+                    msg,
+                }
+                .send_all()
+                .in_room(server.lobby_id)
+                .but_self(),
+            );
         }
         JoinRoom(name, _password) => {
             let room = server.rooms.iter().find(|(_, r)| r.name == name);
@@ -71,17 +69,21 @@ pub fn handle(
                 .collect();
             let c = &mut server.clients[client_id];
 
-            let actions = if let Some((_, r)) = room {
+            if let Some((_, r)) = room {
                 if c.protocol_number != r.protocol_number {
-                    vec![Warn(
-                        "Room version incompatible to your Hedgewars version!".to_string(),
-                    )]
+                    response.add(
+                        Warning("Room version incompatible to your Hedgewars version!".to_string())
+                            .send_self(),
+                    );
                 } else if r.is_join_restricted() {
-                    vec![Warn(
-                        "Access denied. This room currently doesn't allow joining.".to_string(),
-                    )]
+                    response.add(
+                        Warning(
+                            "Access denied. This room currently doesn't allow joining.".to_string(),
+                        )
+                        .send_self(),
+                    );
                 } else if r.players_number == u8::max_value() {
-                    vec![Warn("This room is already full".to_string())]
+                    response.add(Warning("This room is already full".to_string()).send_self());
                 } else if let Some(room_id) = room_id {
                     let nick = c.nick.clone();
                     server.move_to_room(client_id, room_id);
@@ -101,18 +103,13 @@ pub fn handle(
                             .send_self(),
                         );
                     }
-
-                    vec![]
-                } else {
-                    vec![]
                 }
             } else {
-                vec![Warn("No such room.".to_string())]
-            };
-            server.react(client_id, actions);
+                response.add(Warning("No such room.".to_string()).send_self());
+            }
         }
         Rnd(v) => {
-            server.react(client_id, vec![rnd_reply(&v).send_self().action()]);
+            response.add(rnd_reply(&v).send_self());
         }
         List => warn!("Deprecated LIST message received"),
         _ => warn!("Incorrect command in lobby state"),

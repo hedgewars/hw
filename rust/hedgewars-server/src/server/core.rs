@@ -93,38 +93,13 @@ impl HWServer {
         move_to_room(&mut self.clients[client_id], &mut self.rooms[room_id])
     }
 
-    fn get_recipients(&self, client_id: ClientId, destination: &Destination) -> Vec<ClientId> {
-        let mut ids = match *destination {
-            Destination::ToSelf => vec![client_id],
-            Destination::ToId(id) => vec![id],
-            Destination::ToAll {
-                room_id: Some(id), ..
-            } => self.room_clients(id),
-            Destination::ToAll {
-                protocol: Some(proto),
-                ..
-            } => self.protocol_clients(proto),
-            Destination::ToAll { .. } => self.clients.iter().map(|(id, _)| id).collect::<Vec<_>>(),
-        };
-        if let Destination::ToAll {
-            skip_self: true, ..
-        } = destination
-        {
-            if let Some(index) = ids.iter().position(|id| *id == client_id) {
-                ids.remove(index);
-            }
-        }
-        ids
-    }
-
     pub fn send(
         &mut self,
         client_id: ClientId,
         destination: &Destination,
         message: HWServerMessage,
     ) {
-        let ids = self.get_recipients(client_id, &destination);
-        self.output.push((ids, message));
+
     }
 
     pub fn send_msg(&mut self, client_id: ClientId, message: PendingMessage) {

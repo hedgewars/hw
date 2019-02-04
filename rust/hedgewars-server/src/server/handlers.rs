@@ -2,12 +2,12 @@ use mio;
 use std::{io, io::Write};
 
 use super::{
-    actions::{Action, Action::*},
+    actions::{Action, Action::*, Destination},
     core::HWServer,
     coretypes::ClientId,
 };
 use crate::{
-    protocol::messages::{HWProtocolMessage, HWServerMessage::*},
+    protocol::messages::{HWProtocolMessage, HWServerMessage, HWServerMessage::*},
     server::actions::PendingMessage,
 };
 use log::*;
@@ -31,13 +31,64 @@ impl Response {
         }
     }
 
+    #[inline]
+    pub fn is_empty(&self) -> bool {
+        self.messages.is_empty()
+    }
+
+    #[inline]
+    pub fn len(&self) -> usize {
+        self.messages.len()
+    }
+
+    #[inline]
     pub fn client_id(&self) -> ClientId {
         self.client_id
     }
 
+    #[inline]
     pub fn add(&mut self, message: PendingMessage) {
         self.messages.push(message)
     }
+
+    pub fn extract_messages<'a, 'b: 'a>(
+        &'b mut self,
+        server: &'a HWServer,
+    ) -> impl Iterator<Item = (Vec<ClientId>, HWServerMessage)> + 'a {
+        let client_id = self.client_id;
+        self.messages.drain(..).map(move |m| {
+            let ids = get_recipients(server, client_id, &m.destination);
+            (ids, m.message)
+        })
+    }
+}
+
+fn get_recipients(
+    server: &HWServer,
+    client_id: ClientId,
+    destination: &Destination,
+) -> Vec<ClientId> {
+    let mut ids = match *destination {
+        Destination::ToSelf => vec![client_id],
+        Destination::ToId(id) => vec![id],
+        Destination::ToAll {
+            room_id: Some(id), ..
+        } => server.room_clients(id),
+        Destination::ToAll {
+            protocol: Some(proto),
+            ..
+        } => server.protocol_clients(proto),
+        Destination::ToAll { .. } => server.clients.iter().map(|(id, _)| id).collect::<Vec<_>>(),
+    };
+    if let Destination::ToAll {
+        skip_self: true, ..
+    } = destination
+    {
+        if let Some(index) = ids.iter().position(|id| *id == client_id) {
+            ids.remove(index);
+        }
+    }
+    ids
 }
 
 pub fn handle(
@@ -49,13 +100,12 @@ pub fn handle(
     match message {
         HWProtocolMessage::Ping => {
             response.add(Pong.send_self());
-            server.react(client_id, vec![Pong.send_self().action()])
         }
         HWProtocolMessage::Quit(Some(msg)) => {
-            server.react(client_id, vec![ByeClient("User quit: ".to_string() + &msg)])
+            //ByeClient("User quit: ".to_string() + &msg)
         }
         HWProtocolMessage::Quit(None) => {
-            server.react(client_id, vec![ByeClient("User quit".to_string())])
+            //ByeClient("User quit".to_string())
         }
         HWProtocolMessage::Malformed => warn!("Malformed/unknown message"),
         HWProtocolMessage::Empty => warn!("Empty message"),
