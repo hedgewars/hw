@@ -470,7 +470,9 @@ impl NetworkLayer {
 
     pub fn client_error(&mut self, poll: &Poll, client_id: ClientId) -> io::Result<()> {
         self.deregister_client(poll, client_id);
-        self.server.client_lost(client_id);
+        let mut response = handlers::Response::new(client_id);
+        handlers::handle_client_loss(&mut self.server, client_id, &mut response);
+        self.flush_server_messages(response);
 
         Ok(())
     }

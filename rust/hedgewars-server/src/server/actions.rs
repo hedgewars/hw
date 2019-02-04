@@ -113,8 +113,6 @@ impl HWServerMessage {
 
 pub enum Action {
     Send(PendingMessage),
-    RemoveClient,
-    ByeClient(String),
     CheckRegistered,
     JoinLobby,
     RemoveRoom(RoomId),
@@ -147,34 +145,6 @@ use self::Action::*;
 pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
     match action {
         Send(msg) => server.send(client_id, &msg.destination, msg.message),
-        ByeClient(msg) => {
-            let c = &server.clients[client_id];
-            let nick = c.nick.clone();
-
-            if let Some(id) = c.room_id {
-                if id != server.lobby_id {
-                    server.react(
-                        client_id,
-                        vec![MoveToLobby(format!("quit: {}", msg.clone()))],
-                    );
-                }
-            }
-
-            server.react(
-                client_id,
-                vec![
-                    LobbyLeft(nick, msg.clone()).send_all().action(),
-                    Bye(msg).send_self().action(),
-                    RemoveClient,
-                ],
-            );
-        }
-        RemoveClient => {
-            server.removed_clients.push(client_id);
-            if server.clients.contains(client_id) {
-                server.clients.remove(client_id);
-            }
-        }
         CheckRegistered => {
             let client = &server.clients[client_id];
             if client.protocol_number > 0 && client.nick != "" {
@@ -185,7 +155,8 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
 
                 let actions = if !client.is_checker() && has_nick_clash {
                     if client.protocol_number < 38 {
-                        vec![ByeClient("Nickname is already in use".to_string())]
+                        //ByeClient("Nickname is already in use".to_string())
+                        vec![]
                     } else {
                         server.clients[client_id].nick.clear();
                         vec![Notice("NickAlreadyInUse".to_string()).send_self().action()]

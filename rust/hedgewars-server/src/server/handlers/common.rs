@@ -21,6 +21,15 @@ pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     }
 }
 
+pub fn remove_client(server: &mut HWServer, response: &mut super::Response, msg: String) {
+    use HWServerMessage::*;
+    let nick = server.clients[response.client_id()].nick.clone();
+    response.add(LobbyLeft(nick, msg.to_string()).send_all());
+    response.add(Bye("User quit: ".to_string() + &msg).send_self());
+
+    server.remove_client(response.client_id());
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

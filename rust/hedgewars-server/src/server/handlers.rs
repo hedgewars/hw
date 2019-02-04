@@ -102,10 +102,10 @@ pub fn handle(
             response.add(Pong.send_self());
         }
         HWProtocolMessage::Quit(Some(msg)) => {
-            //ByeClient("User quit: ".to_string() + &msg)
+            common::remove_client(server, response, "User quit: ".to_string() + &msg);
         }
         HWProtocolMessage::Quit(None) => {
-            //ByeClient("User quit".to_string())
+            common::remove_client(server, response, "User quit".to_string());
         }
         HWProtocolMessage::Malformed => warn!("Malformed/unknown message"),
         HWProtocolMessage::Empty => warn!("Empty message"),
@@ -117,4 +117,8 @@ pub fn handle(
             Some(id) => inroom::handle(server, client_id, response, id, message),
         },
     }
+}
+
+pub fn handle_client_loss(server: &mut HWServer, client_id: ClientId, response: &mut Response) {
+    common::remove_client(server, response, "Connection reset".to_string());
 }

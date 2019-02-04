@@ -51,11 +51,29 @@ pub fn handle(
             } else if !client.nick.is_empty() {
                 response.add(Error("Nickname already provided.".to_string()).send_self());
             } else if is_name_illegal(&nick) {
-                // ByeClient("Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())
+                super::common::remove_client(server, response, "Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())
             } else {
                 client.nick = nick.clone();
                 response.add(Nick(nick).send_self());
-                //CheckRegistered
+
+                if client.protocol_number > 0 {
+                    //CheckRegistered
+                }
+            }
+        }
+        HWProtocolMessage::Proto(proto) => {
+            let client = &mut server.clients[client_id];
+            if client.protocol_number != 0 {
+                response.add(Error("Protocol already known.".to_string()).send_self());
+            } else if proto == 0 {
+                response.add(Error("Bad number.".to_string()).send_self());
+            } else {
+                client.protocol_number = proto;
+                response.add(Proto(proto).send_self());
+
+                if client.nick != "" {
+                    // CheckRegistered
+                }
             }
         }
         #[cfg(feature = "official-server")]
@@ -68,20 +86,8 @@ pub fn handle(
                 response.add(ServerAuth(format!("{:x}", server_hash)).send_self());
             //JoinLobby
             } else {
-                //ByeClient("Authentication failed".to_string())
+                super::common::remove_client(server, response, "Authentication failed".to_string())
             };
-        }
-        HWProtocolMessage::Proto(proto) => {
-            let client = &mut server.clients[client_id];
-            if client.protocol_number != 0 {
-                response.add(Error("Protocol already known.".to_string()).send_self());
-            } else if proto == 0 {
-                response.add(Error("Bad number.".to_string()).send_self());
-            } else {
-                client.protocol_number = proto;
-                response.add(Proto(proto).send_self());
-                // CheckRegistered
-            }
         }
         #[cfg(feature = "official-server")]
         HWProtocolMessage::Checker(protocol, nick, password) => {
