@@ -225,61 +225,50 @@ pub fn handle(
             }
         },
         SetHedgehogsNumber(team_name, number) => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                let addable_hedgehogs = r.addable_hedgehogs();
-                let actions = if let Some((_, team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
-                    if !c.is_master() {
-                        vec![ProtocolError("You're not the room master!".to_string())]
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                let addable_hedgehogs = room.addable_hedgehogs();
+                if let Some((_, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
+                    if !client.is_master() {
+                        response.add(Error("You're not the room master!".to_string()).send_self());
                     } else if number < 1 || number > MAX_HEDGEHOGS_PER_TEAM
                            || number > addable_hedgehogs + team.hedgehogs_number {
-                        vec![HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
-                            .send_self().action()]
+                        response.add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send_self());
                     } else {
                         team.hedgehogs_number = number;
-                        vec![HedgehogsNumber(team.name.clone(), number)
-                            .send_all().in_room(room_id).but_self().action()]
+                        response.add(HedgehogsNumber(team.name.clone(), number)
+                            .send_all().in_room(room_id).but_self());
                     }
                 } else {
-                    vec![(Warn("No such team.".to_string()))]
-                };
-                server.react(client_id, actions);
+                    response.add(Warning("No such team.".to_string()).send_self());
+                }
             }
         },
         SetTeamColor(team_name, color) => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                let mut owner_id = None;
-                let actions = if let Some((owner, team)) = r.find_team_and_owner_mut(|t| t.name == team_name) {
-                    if !c.is_master() {
-                        vec![ProtocolError("You're not the room master!".to_string())]
-                    } else if false  {
-                        Vec::new()
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                if let Some((owner, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
+                    if !client.is_master() {
+                        response.add(Error("You're not the room master!".to_string()).send_self());
                     } else {
-                        owner_id = Some(owner);
                         team.color = color;
-                        vec![TeamColor(team.name.clone(), color)
-                            .send_all().in_room(room_id).but_self().action()]
+                        response.add(TeamColor(team.name.clone(), color)
+                            .send_all().in_room(room_id).but_self());
+                        server.clients[owner].clan = Some(color);
                     }
                 } else {
-                    vec![(Warn("No such team.".to_string()))]
-                };
-
-                if let Some(id) = owner_id {
-                    server.clients[id].clan = Some(color);
+                    response.add(Warning("No such team.".to_string()).send_self());
                 }
-
-                server.react(client_id, actions);
-            };
+            }
         },
         Cfg(cfg) => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                let actions = if r.is_fixed() {
-                    vec![Warn("Access denied.".to_string())]
-                } else if !c.is_master() {
-                    vec![ProtocolError("You're not the room master!".to_string())]
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                if room.is_fixed() {
+                    response.add(Warning("Access denied.".to_string()).send_self());
+                } else if !client.is_master() {
+                    response.add(Error("You're not the room master!".to_string()).send_self());
                 } else {
                     let cfg = match cfg {
                         GameCfg::Scheme(name, mut values) => {
-                            if c.protocol_number == 49 && values.len() >= 2 {
+                            if client.protocol_number == 49 && values.len() >= 2 {
                                 let mut s = "X".repeat(50);
                                 s.push_str(&values.pop().unwrap());
                                 values.push(s);
@@ -289,71 +278,64 @@ pub fn handle(
                         cfg => cfg
                     };
 
-                    let v = vec![cfg.to_server_msg()
-                        .send_all().in_room(r.id).but_self().action()];
-                    r.set_config(cfg);
-                    v
-                };
-                server.react(client_id, actions);
+                    response.add(cfg.to_server_msg()
+                        .send_all().in_room(room.id).but_self());
+                    room.set_config(cfg);
+                }
             }
         }
         Save(name, location) => {
-            let actions = vec![server_chat(format!("Room config saved as {}", name))
-                .send_all().in_room(room_id).action()];
+            response.add(server_chat(format!("Room config saved as {}", name))
+                .send_all().in_room(room_id));
             server.rooms[room_id].save_config(name, location);
-            server.react(client_id, actions);
         }
         SaveRoom(filename) => {
             if server.clients[client_id].is_admin() {
-                let actions = match server.rooms[room_id].get_saves() {
+                match server.rooms[room_id].get_saves() {
                     Ok(text) => match server.io.write_file(&filename, &text) {
-                        Ok(_) => vec![server_chat("Room configs saved successfully.".to_string())
-                            .send_self().action()],
+                        Ok(_) => response.add(server_chat("Room configs saved successfully.".to_string())
+                            .send_self()),
                         Err(e) => {
                             warn!("Error while writing the config file \"{}\": {}", filename, e);
-                            vec![Warn("Unable to save the room configs.".to_string())]
+                            response.add(Warning("Unable to save the room configs.".to_string()).send_self());
                         }
                     }
                     Err(e) => {
                         warn!("Error while serializing the room configs: {}", e);
-                        vec![Warn("Unable to serialize the room configs.".to_string())]
+                        response.add(Warning("Unable to serialize the room configs.".to_string()).send_self())
                     }
-                };
-                server.react(client_id, actions);
+                }
             }
         }
         LoadRoom(filename) => {
             if server.clients[client_id].is_admin() {
-                let actions = match server.io.read_file(&filename) {
+                match server.io.read_file(&filename) {
                     Ok(text) => match server.rooms[room_id].set_saves(&text) {
-                        Ok(_) => vec![server_chat("Room configs loaded successfully.".to_string())
-                            .send_self().action()],
+                        Ok(_) => response.add(server_chat("Room configs loaded successfully.".to_string())
+                            .send_self()),
                         Err(e) => {
                             warn!("Error while deserializing the room configs: {}", e);
-                            vec![Warn("Unable to deserialize the room configs.".to_string())]
+                            response.add(Warning("Unable to deserialize the room configs.".to_string()).send_self());
                         }
                     }
                     Err(e) => {
                         warn!("Error while reading the config file \"{}\": {}", filename, e);
-                        vec![Warn("Unable to load the room configs.".to_string())]
+                        response.add(Warning("Unable to load the room configs.".to_string()).send_self());
                     }
-                };
-                server.react(client_id, actions);
+                }
             }
         }
         Delete(name) => {
-            let actions = if !server.rooms[room_id].delete_config(&name) {
-                vec![Warn(format!("Save doesn't exist: {}", name))]
+            if !server.rooms[room_id].delete_config(&name) {
+                response.add(Warning(format!("Save doesn't exist: {}", name)).send_self());
             } else {
-                vec![server_chat(format!("Room config {} has been deleted", name))
-                    .send_all().in_room(room_id).action()]
-            };
-            server.react(client_id, actions);
+                response.add(server_chat(format!("Room config {} has been deleted", name))
+                    .send_all().in_room(room_id));
+            }
         }
         CallVote(None) => {
-            server.react(client_id, vec![
-                server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
-                    .send_self().action()])
+            response.add(server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
+                .send_self());
         }
         CallVote(Some(kind)) => {
             let is_in_game = server.rooms[room_id].game_info.is_some();
@@ -402,13 +384,11 @@ pub fn handle(
                     let msg = voting_description(&kind);
                     let voting = Voting::new(kind, server.room_clients(client_id));
                     server.rooms[room_id].voting = Some(voting);
-                    server.react(client_id, vec![
-                        server_chat(msg).send_all().in_room(room_id).action(),
-                        AddVote{ vote: true, is_forced: false}]);
+                    response.add(server_chat(msg).send_all().in_room(room_id));
+                    //AddVote{ vote: true, is_forced: false}
                 }
                 Some(msg) => {
-                    server.react(client_id, vec![
-                        server_chat(msg).send_self().action()])
+                    response.add(server_chat(msg).send_self());
                 }
             }
         }
@@ -481,9 +461,8 @@ pub fn handle(
                 nick: server.clients[client_id].nick.clone(),
                 msg: echo.join(" ")
             };
-            server.react(client_id, vec![
-                chat_msg.send_all().in_room(room_id).action(),
-                result.send_all().in_room(room_id).action()])
+            response.add(chat_msg.send_all().in_room(room_id));
+            response.add(result.send_all().in_room(room_id));
         },
         _ => warn!("Unimplemented!")
     }
