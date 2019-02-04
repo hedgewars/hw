@@ -28,17 +28,17 @@ pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     }
 }
 
-pub fn remove_teams(room: &mut HWRoom, client: &HWClient, response: &mut super::Response) {
-    let team_names: Vec<_> = room
-        .client_teams(client.id)
-        .map(|t| t.name.clone())
-        .collect();
-
+pub fn remove_teams(
+    room: &mut HWRoom,
+    team_names: Vec<String>,
+    is_in_game: bool,
+    response: &mut super::Response,
+) {
     if let Some(ref mut info) = room.game_info {
         for team_name in &team_names {
             info.left_teams.push(team_name.clone());
 
-            if client.is_in_game() {
+            if is_in_game {
                 let msg = once(b'F').chain(team_name.bytes());
                 response.add(
                     ForwardEngineMessage(vec![to_engine_msg(msg)])
@@ -75,6 +75,41 @@ pub fn remove_teams(room: &mut HWRoom, client: &HWClient, response: &mut super::
     }
 }
 
+pub fn exit_room(client: &HWClient, room: &mut HWRoom, response: &mut super::Response, msg: &str) {
+    if room.players_number > 1 || room.is_fixed() {
+        room.players_number -= 1;
+        if client.is_ready() && room.ready_players_number > 0 {
+            room.ready_players_number -= 1;
+        }
+
+        let team_names: Vec<_> = room
+            .client_teams(client.id)
+            .map(|t| t.name.clone())
+            .collect();
+        remove_teams(room, team_names, client.is_in_game(), response);
+
+        if room.players_number > 0 {
+            response.add(
+                RoomLeft(client.nick.clone(), msg.to_string())
+                    .send_all()
+                    .in_room(room.id)
+                    .but_self(),
+            );
+        }
+
+        //ChangeMaster(room.id, None));
+    }
+
+    let update_msg = if room.players_number == 0 && !room.is_fixed() {
+        RoomRemove(room.name.clone())
+    } else {
+        RoomUpdated(room.name.clone(), room.info(Some(&client)))
+    };
+    response.add(update_msg.send_all().with_protocol(room.protocol_number));
+
+    response.add(ClientFlags("-i".to_string(), vec![client.nick.clone()]).send_all());
+}
+
 pub fn remove_client(server: &mut HWServer, response: &mut super::Response, msg: String) {
     let client_id = response.client_id();
     let lobby_id = server.lobby_id;
@@ -83,35 +118,7 @@ pub fn remove_client(server: &mut HWServer, response: &mut super::Response, msg:
 
     if let Some(room_id) = room_id {
         let room = &mut server.rooms[room_id];
-
-        if room.players_number > 1 || room.is_fixed() {
-            room.players_number -= 1;
-            if client.is_ready() && room.ready_players_number > 0 {
-                room.ready_players_number -= 1;
-            }
-
-            remove_teams(room, client, response);
-
-            if room.players_number > 1 {
-                response.add(
-                    RoomLeft(client.nick.clone(), msg.clone())
-                        .send_all()
-                        .in_room(room.id)
-                        .but_self(),
-                );
-            }
-
-            //ChangeMaster(room.id, None));
-        }
-
-        let update_msg = if room.players_number == 0 && !room.is_fixed() {
-            RoomRemove(room.name.clone())
-        } else {
-            RoomUpdated(room.name.clone(), room.info(Some(&client)))
-        };
-        response.add(update_msg.send_all().with_protocol(room.protocol_number));
-
-        response.add(ClientFlags("-i".to_string(), vec![nick.clone()]).send_all());
+        exit_room(client, room, response, &msg);
         client.room_id = Some(lobby_id);
     }
 

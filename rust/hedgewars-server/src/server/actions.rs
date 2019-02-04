@@ -117,10 +117,7 @@ pub enum Action {
     JoinLobby,
     RemoveRoom(RoomId),
     MoveToRoom(RoomId),
-    MoveToLobby(String),
     ChangeMaster(RoomId, Option<ClientId>),
-    RemoveTeam(String),
-    RemoveClientTeams,
     SendRoomUpdate(Option<String>),
     StartRoomGame(RoomId),
     SendTeamRemovalMessage(String),
@@ -450,7 +447,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         if c.room_id == Some(room_id) {
                             id = c.id;
                             actions.push(Kicked.send_self().action());
-                            actions.push(MoveToLobby("kicked".to_string()));
+                            //actions.push(MoveToLobby("kicked".to_string()));
                         }
                     }
                 }
@@ -512,44 +509,6 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             }
             server.react(id, actions);
         }
-        MoveToLobby(msg) => {
-            let mut actions = Vec::new();
-            let lobby_id = server.lobby_id;
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                r.players_number -= 1;
-                if c.is_ready() && r.ready_players_number > 0 {
-                    r.ready_players_number -= 1;
-                }
-                if c.is_master() && (r.players_number > 0 || r.is_fixed()) {
-                    actions.push(ChangeMaster(r.id, None));
-                }
-                actions.push(
-                    ClientFlags("-i".to_string(), vec![c.nick.clone()])
-                        .send_all()
-                        .action(),
-                );
-            }
-            server.react(client_id, actions);
-            actions = Vec::new();
-
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                c.room_id = Some(lobby_id);
-                if r.players_number == 0 && !r.is_fixed() {
-                    actions.push(RemoveRoom(r.id));
-                } else {
-                    actions.push(RemoveClientTeams);
-                    actions.push(
-                        RoomLeft(c.nick.clone(), msg)
-                            .send_all()
-                            .in_room(r.id)
-                            .but_self()
-                            .action(),
-                    );
-                    actions.push(SendRoomUpdate(Some(r.name.clone())));
-                }
-            }
-            server.react(client_id, actions)
-        }
         ChangeMaster(room_id, new_id) => {
             let mut actions = Vec::new();
             let room_client_ids = server.room_clients(room_id);
@@ -601,30 +560,6 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 server.clients[id].set_is_master(true)
             }
             server.react(client_id, actions);
-        }
-        RemoveTeam(name) => {
-            let mut actions = Vec::new();
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                r.remove_team(&name);
-                if let Some(ref mut info) = r.game_info {
-                    info.left_teams.push(name.clone());
-                }
-                actions.push(TeamRemove(name.clone()).send_all().in_room(r.id).action());
-                actions.push(SendRoomUpdate(None));
-                if r.game_info.is_some() && c.is_in_game() {
-                    actions.push(SendTeamRemovalMessage(name));
-                }
-            }
-            server.react(client_id, actions);
-        }
-        RemoveClientTeams => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                let actions = r
-                    .client_teams(c.id)
-                    .map(|t| RemoveTeam(t.name.clone()))
-                    .collect();
-                server.react(client_id, actions);
-            }
         }
         SendRoomUpdate(old_name) => {
             if let (c, Some(r)) = server.client_and_room(client_id) {

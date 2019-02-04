@@ -108,122 +108,121 @@ pub fn handle(
 ) {
     use crate::protocol::messages::HWProtocolMessage::*;
     match message {
-        Part(None) => server.react(client_id, vec![
-            MoveToLobby("part".to_string())]),
-        Part(Some(msg)) => server.react(client_id, vec![
-            MoveToLobby(format!("part: {}", msg))]),
+        Part(msg) => {
+            let lobby_id = server.lobby_id;
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                let msg = match msg {
+                    Some(s) => format!("part: {}", s),
+                    None => "part".to_string()
+                };
+                super::common::exit_room(client, room, response, &msg);
+                client.room_id = Some(lobby_id);
+            }
+        },
         Chat(msg) => {
-            let actions = {
-                let c = &mut server.clients[client_id];
-                let chat_msg = ChatMsg {nick: c.nick.clone(), msg};
-                vec![chat_msg.send_all().in_room(room_id).but_self().action()]
-            };
-            server.react(client_id, actions);
+            let client = &mut server.clients[client_id];
+            response.add(ChatMsg {nick: client.nick.clone(), msg}.send_all().in_room(room_id));
         },
         Fix => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin() { r.set_is_fixed(true) }
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                if client.is_admin() { room.set_is_fixed(true) }
             }
         }
         Unfix => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin() { r.set_is_fixed(false) }
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                if client.is_admin() { room.set_is_fixed(false) }
             }
         }
         Greeting(text) => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_admin() || c.is_master() && !r.is_fixed() {
-                    r.greeting = text
+            if let (clienr, Some(room)) = server.client_and_room(client_id) {
+                if clienr.is_admin() || clienr.is_master() && !room.is_fixed() {
+                    room.greeting = text
                 }
             }
         }
         RoomName(new_name) => {
-            let actions =
-                if is_name_illegal(&new_name) {
-                    vec![Warn("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string())]
-                } else if server.rooms[room_id].is_fixed() {
-                    vec![Warn("Access denied.".to_string())]
-                } else if server.has_room(&new_name) {
-                    vec![Warn("A room with the same name already exists.".to_string())]
-                } else {
-                    let mut old_name = new_name.clone();
-                    swap(&mut server.rooms[room_id].name, &mut old_name);
-                    vec![SendRoomUpdate(Some(old_name))]
-                };
-            server.react(client_id, actions);
+            if is_name_illegal(&new_name) {
+                response.add(Warning("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string()).send_self());
+            } else if server.rooms[room_id].is_fixed() {
+                response.add(Warning("Access denied.".to_string()).send_self());
+            } else if server.has_room(&new_name) {
+                response.add(Warning("A room with the same name already exists.".to_string()).send_self());
+            } else {
+                let mut old_name = new_name.clone();
+                let client = &server.clients[client_id];
+                let room = &mut server.rooms[room_id];
+                swap(&mut room.name, &mut old_name);
+                let update_msg = RoomUpdated(old_name, room.info(Some(client)));
+                response.add(update_msg.send_all().with_protocol(room.protocol_number));
+            };
         },
         ToggleReady => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                let flags = if c.is_ready() {
-                    r.ready_players_number -= 1;
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                let flags = if client.is_ready() {
+                    room.ready_players_number -= 1;
                     "-r"
                 } else {
-                    r.ready_players_number += 1;
+                    room.ready_players_number += 1;
                     "+r"
                 };
 
-                let msg = if c.protocol_number < 38 {
-                    LegacyReady(c.is_ready(), vec![c.nick.clone()])
+                let msg = if client.protocol_number < 38 {
+                    LegacyReady(client.is_ready(), vec![client.nick.clone()])
                 } else {
-                    ClientFlags(flags.to_string(), vec![c.nick.clone()])
+                    ClientFlags(flags.to_string(), vec![client.nick.clone()])
                 };
-
-                let mut v = vec![msg.send_all().in_room(r.id).action()];
-
-                if r.is_fixed() && r.ready_players_number == r.players_number {
-                    v.push(StartRoomGame(r.id))
+                response.add(msg.send_all().in_room(room.id));
+                if room.is_fixed() && room.ready_players_number == room.players_number {
+                    //StartRoomGame(r.id)
                 }
 
-                c.set_is_ready(!c.is_ready());
-                server.react(client_id, v);
+                client.set_is_ready(!client.is_ready());
             }
         }
         AddTeam(info) => {
-            let mut actions = Vec::new();
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                if r.teams.len() >= r.team_limit as usize {
-                    actions.push(Warn("Too many teams!".to_string()))
-                } else if r.addable_hedgehogs() == 0 {
-                    actions.push(Warn("Too many hedgehogs!".to_string()))
-                } else if r.find_team(|t| t.name == info.name) != None {
-                    actions.push(Warn("There's already a team with same name in the list.".to_string()))
-                } else if r.game_info.is_some() {
-                    actions.push(Warn("Joining not possible: Round is in progress.".to_string()))
-                } else if r.is_team_add_restricted() {
-                    actions.push(Warn("This room currently does not allow adding new teams.".to_string()));
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                if room.teams.len() >= room.team_limit as usize {
+                    response.add(Warning("Too many teams!".to_string()).send_self());
+                } else if room.addable_hedgehogs() == 0 {
+                    response.add(Warning("Too many hedgehogs!".to_string()).send_self());
+                } else if room.find_team(|t| t.name == info.name) != None {
+                    response.add(Warning("There's already a team with same name in the list.".to_string()).send_self());
+                } else if room.game_info.is_some() {
+                    response.add(Warning("Joining not possible: Round is in progress.".to_string()).send_self());
+                } else if room.is_team_add_restricted() {
+                    response.add(Warning("This room currently does not allow adding new teams.".to_string()).send_self());
                 } else {
-                    let team = r.add_team(c.id, *info, c.protocol_number < 42);
-                    c.teams_in_game += 1;
-                    c.clan = Some(team.color);
-                    actions.push(TeamAccepted(team.name.clone())
-                        .send_self().action());
-                    actions.push(TeamAdd(HWRoom::team_info(&c, team))
-                        .send_all().in_room(room_id).but_self().action());
-                    actions.push(TeamColor(team.name.clone(), team.color)
-                        .send_all().in_room(room_id).action());
-                    actions.push(HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
-                        .send_all().in_room(room_id).action());
-                    actions.push(SendRoomUpdate(None));
+                    let team = room.add_team(client.id, *info, client.protocol_number < 42);
+                    client.teams_in_game += 1;
+                    client.clan = Some(team.color);
+                    response.add(TeamAccepted(team.name.clone())
+                        .send_self());
+                    response.add(TeamAdd(HWRoom::team_info(&client, team))
+                        .send_all().in_room(room_id).but_self());
+                    response.add(TeamColor(team.name.clone(), team.color)
+                        .send_all().in_room(room_id));
+                    response.add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
+                        .send_all().in_room(room_id));
+
+                    let update_msg = RoomUpdated(room.name.clone(), room.info(Some(client)));
+                    response.add(update_msg.send_all().with_protocol(room.protocol_number));
                 }
             }
-            server.react(client_id, actions);
         },
         RemoveTeam(name) => {
-            let mut actions = Vec::new();
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                match r.find_team_owner(&name) {
+            if let (client, Some(room)) = server.client_and_room(client_id) {
+                match room.find_team_owner(&name) {
                     None =>
-                        actions.push(Warn("Error: The team you tried to remove does not exist.".to_string())),
+                        response.add(Warning("Error: The team you tried to remove does not exist.".to_string()).send_self()),
                     Some((id, _)) if id != client_id =>
-                        actions.push(Warn("You can't remove a team you don't own.".to_string())),
+                        response.add(Warning("You can't remove a team you don't own.".to_string()).send_self()),
                     Some((_, name)) => {
-                        c.teams_in_game -= 1;
-                        c.clan = r.find_team_color(c.id);
-                        actions.push(Action::RemoveTeam(name.to_string()));
+                        client.teams_in_game -= 1;
+                        client.clan = room.find_team_color(client.id);
+                        super::common::remove_teams(room, vec![name.to_string()], client.is_in_game(), response);
                     }
                 }
-            };
-            server.react(client_id, actions);
+            }
         },
         SetHedgehogsNumber(team_name, number) => {
             if let (c, Some(r)) = server.client_and_room(client_id) {
