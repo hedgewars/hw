@@ -62,15 +62,6 @@ impl HWServer {
     }
 
     pub fn remove_client(&mut self, client_id: ClientId) {
-        let client = &self.clients[client_id];
-        let nick = client.nick.clone();
-
-        if let Some(id) = client.room_id {
-            if id != self.lobby_id {
-                //MoveToLobby(format!("quit: {}", msg.clone()))
-            }
-        }
-
         self.removed_clients.push(client_id);
         if self.clients.contains(client_id) {
             self.clients.remove(client_id);
