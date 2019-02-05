@@ -105,12 +105,6 @@ impl HWServer {
         self.send(client_id, &message.destination, message.message)
     }
 
-    pub fn react(&mut self, client_id: ClientId, actions: Vec<actions::Action>) {
-        for action in actions {
-            actions::run_action(self, client_id, action);
-        }
-    }
-
     pub fn lobby(&self) -> &HWRoom {
         &self.rooms[self.lobby_id]
     }

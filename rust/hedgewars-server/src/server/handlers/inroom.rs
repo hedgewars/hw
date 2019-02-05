@@ -165,8 +165,7 @@ pub fn handle(
                 let client = &server.clients[client_id];
                 let room = &mut server.rooms[room_id];
                 swap(&mut room.name, &mut old_name);
-                let update_msg = RoomUpdated(old_name, room.info(Some(client)));
-                response.add(update_msg.send_all().with_protocol(room.protocol_number));
+                super::common::get_room_update(Some(old_name), room, Some(&client), response);
             };
         }
         ToggleReady => {
@@ -235,8 +234,7 @@ pub fn handle(
                             .in_room(room_id),
                     );
 
-                    let update_msg = RoomUpdated(room.name.clone(), room.info(Some(client)));
-                    response.add(update_msg.send_all().with_protocol(room.protocol_number));
+                    super::common::get_room_update(None, room, Some(&client), response);
                 }
             }
         }
@@ -458,9 +456,10 @@ pub fn handle(
                 None => {
                     let msg = voting_description(&kind);
                     let voting = Voting::new(kind, server.room_clients(client_id));
-                    server.rooms[room_id].voting = Some(voting);
+                    let room = &mut server.rooms[room_id];
+                    room.voting = Some(voting);
                     response.add(server_chat(msg).send_all().in_room(room_id));
-                    //AddVote{ vote: true, is_forced: false}
+                    super::common::add_vote(room, response, true, false);
                 }
                 Some(msg) => {
                     response.add(server_chat(msg).send_self());
@@ -468,31 +467,24 @@ pub fn handle(
             }
         }
         Vote(vote) => {
-            server.react(
-                client_id,
-                vec![AddVote {
-                    vote,
-                    is_forced: false,
-                }],
-            );
+            super::common::add_vote(&mut server.rooms[room_id], response, vote, false);
         }
         ForceVote(vote) => {
             let is_forced = server.clients[client_id].is_admin();
-            server.react(client_id, vec![AddVote { vote, is_forced }]);
+            super::common::add_vote(&mut server.rooms[room_id], response, vote, false);
         }
         ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly => {
-            if server.clients[client_id].is_master() {
-                server.rooms[room_id]
-                    .flags
-                    .toggle(room_message_flag(&message));
+            let client = &server.clients[client_id];
+            let room = &mut server.rooms[room_id];
+            if client.is_master() {
+                room.flags.toggle(room_message_flag(&message));
+                super::common::get_room_update(None, room, Some(&client), response);
             }
-            server.react(client_id, vec![SendRoomUpdate(None)]);
         }
         StartGame => {
-            server.react(client_id, vec![StartRoomGame(room_id)]);
+            // StartRoomGame(room_id);
         }
         EngineMessage(em) => {
-            let mut actions = Vec::new();
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 if c.teams_in_game > 0 {
                     let decoding = decode(&em[..]).unwrap();
@@ -529,10 +521,8 @@ pub fn handle(
                     }
                 }
             }
-            server.react(client_id, actions)
         }
         RoundFinished => {
-            let mut actions = Vec::new();
             if let (c, Some(r)) = server.client_and_room(client_id) {
                 if c.is_in_game() {
                     c.set_is_in_game(false);
@@ -543,12 +533,11 @@ pub fn handle(
                     );
                     if r.game_info.is_some() {
                         for team in r.client_teams(c.id) {
-                            actions.push(SendTeamRemovalMessage(team.name.clone()));
+                            //SendTeamRemovalMessage(team.name.clone());
                         }
                     }
                 }
             }
-            server.react(client_id, actions)
         }
         Rnd(v) => {
             let result = rnd_reply(&v);

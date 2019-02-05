@@ -87,7 +87,7 @@ pub fn handle(
             //TODO enter lobby
             } else {
                 super::common::remove_client(server, response, "Authentication failed".to_string())
-            };
+            }
         }
         #[cfg(feature = "official-server")]
         HWProtocolMessage::Checker(protocol, nick, password) => {

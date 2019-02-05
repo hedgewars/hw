@@ -67,25 +67,25 @@ pub fn handle(
                 .filter(|(_, c)| c.room_id == room_id)
                 .map(|(_, c)| c.nick.clone())
                 .collect();
-            let c = &mut server.clients[client_id];
+            let client = &mut server.clients[client_id];
 
-            if let Some((_, r)) = room {
-                if c.protocol_number != r.protocol_number {
+            if let Some((_, room)) = room {
+                if client.protocol_number != room.protocol_number {
                     response.add(
                         Warning("Room version incompatible to your Hedgewars version!".to_string())
                             .send_self(),
                     );
-                } else if r.is_join_restricted() {
+                } else if room.is_join_restricted() {
                     response.add(
                         Warning(
                             "Access denied. This room currently doesn't allow joining.".to_string(),
                         )
                         .send_self(),
                     );
-                } else if r.players_number == u8::max_value() {
+                } else if room.players_number == u8::max_value() {
                     response.add(Warning("This room is already full".to_string()).send_self());
                 } else if let Some(room_id) = room_id {
-                    let nick = c.nick.clone();
+                    let nick = client.nick.clone();
                     server.move_to_room(client_id, room_id);
 
                     response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room_id));

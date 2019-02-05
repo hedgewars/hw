@@ -1,3 +1,4 @@
+use crate::protocol::messages::server_chat;
 use crate::server::client::HWClient;
 use crate::server::coretypes::ClientId;
 use crate::server::room::HWRoom;
@@ -14,6 +15,7 @@ use crate::{
 };
 use rand::{self, thread_rng, Rng};
 use std::iter::once;
+use std::mem::replace;
 
 pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     let mut rng = thread_rng();
@@ -184,6 +186,52 @@ pub fn remove_client(server: &mut HWServer, response: &mut super::Response, msg:
 
     response.add(LobbyLeft(nick, msg.to_string()).send_all());
     response.add(Bye("User quit: ".to_string() + &msg).send_self());
+}
+
+pub fn get_room_update(
+    room_name: Option<String>,
+    room: &HWRoom,
+    client: Option<&HWClient>,
+    response: &mut super::Response,
+) {
+    let update_msg = RoomUpdated(room_name.unwrap_or(room.name.clone()), room.info(client));
+    response.add(update_msg.send_all().with_protocol(room.protocol_number));
+}
+
+pub fn add_vote(room: &mut HWRoom, response: &mut super::Response, vote: bool, is_forced: bool) {
+    let client_id = response.client_id;
+    let mut result = None;
+    if let Some(ref mut voting) = room.voting {
+        if is_forced || voting.votes.iter().all(|(id, _)| client_id != *id) {
+            response.add(server_chat("Your vote has been counted.".to_string()).send_self());
+            voting.votes.push((client_id, vote));
+            let i = voting.votes.iter();
+            let pro = i.clone().filter(|(_, v)| *v).count();
+            let contra = i.filter(|(_, v)| !*v).count();
+            let success_quota = voting.voters.len() / 2 + 1;
+            if is_forced && vote || pro >= success_quota {
+                result = Some(true);
+            } else if is_forced && !vote || contra > voting.voters.len() - success_quota {
+                result = Some(false);
+            }
+        } else {
+            response.add(server_chat("You already have voted.".to_string()).send_self());
+        }
+    } else {
+        response.add(server_chat("There's no voting going on.".to_string()).send_self());
+    }
+
+    if let Some(res) = result {
+        response.add(
+            server_chat("Voting closed.".to_string())
+                .send_all()
+                .in_room(room.id),
+        );
+        let voting = replace(&mut room.voting, None).unwrap();
+        if res {
+            //ApplyVoting(voting.kind, room.id));
+        }
+    }
 }
 
 #[cfg(test)]
