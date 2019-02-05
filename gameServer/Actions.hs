@@ -668,10 +668,7 @@ processAction (CheckBanned byIP) = do
         checkBan False _ n (BanByNick bn _ _) = isMatch bn n
         checkBan _ _ _ _ = False
         isMatch :: B.ByteString -> B.ByteString -> Bool
-        isMatch rexp src = case B.uncons rexp of 
-            Nothing -> False
-            Just ('^', rexp') -> (==) (Just True) $ mrexp rexp' >>= flip matchM src
-            Just _ -> rexp == src
+        isMatch rexp src = (==) (Just True) $ mrexp rexp >>= flip matchM src
         mrexp :: B.ByteString -> Maybe TDFAB.Regex
         mrexp = makeRegexOptsM TDFA.defaultCompOpt{TDFA.caseSensitive = False} TDFA.defaultExecOpt
         getBanReason (BanByIP _ msg _) = msg
