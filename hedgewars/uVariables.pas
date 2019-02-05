@@ -214,6 +214,7 @@ var
     cMaxZoomLevel   : real;
     cMinZoomLevel   : real;
     cZoomDelta      : real;
+    cZoomDeltaSmall : real;
     cMinMaxZoomLevelDelta : real;
 
 
@@ -2631,13 +2632,15 @@ begin
     ZoomValue       := cDefaultZoomLevel;
 
 {$IFDEF MOBILE}
-    cMaxZoomLevel:= 0.5;
-    cMinZoomLevel:= 3.5;
-    cZoomDelta:=    0.20;
+    cMaxZoomLevel   := 0.5;
+    cMinZoomLevel   := 3.5;
+    cZoomDelta      := 0.20;
+    cZoomDeltaSmall := 0.10;
 {$ELSE}
-    cMaxZoomLevel:= 1.0;
-    cMinZoomLevel:= 3.0;
-    cZoomDelta:=    0.25;
+    cMaxZoomLevel   := 1.0;
+    cMinZoomLevel   := 3.0;
+    cZoomDelta      := 0.25;
+    cZoomDeltaSmall := 0.125;
 {$ENDIF}
 
 {$IFDEF USE_VIDEO_RECORDING}

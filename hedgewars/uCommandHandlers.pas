@@ -285,6 +285,10 @@ bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmPrecise and InputMask);
     ScriptCall('onPrecise');
+if cVolumeDelta > 0 then
+    cVolumeDelta:= 1;
+if cVolumeDelta < 0 then
+    cVolumeDelta:= -1;
 end;
 
 procedure chPrecise_m(var s: shortstring);
@@ -297,6 +301,10 @@ if not isExternalSource then
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmPrecise and InputMask));
     ScriptCall('onPreciseUp');
+if cVolumeDelta > 0 then
+    cVolumeDelta:= 3;
+if cVolumeDelta < 0 then
+    cVolumeDelta:= -3;
 end;
 
 procedure chLJump(var s: shortstring);
@@ -595,13 +603,19 @@ end;
 procedure chVol_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-inc(cVolumeDelta, 3)
+if (LocalMessage and gmPrecise) <> 0 then
+    inc(cVolumeDelta, 1)
+else
+    inc(cVolumeDelta, 3);
 end;
 
 procedure chVol_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-dec(cVolumeDelta, 3)
+if (LocalMessage and gmPrecise) <> 0 then
+    dec(cVolumeDelta, 1)
+else
+    dec(cVolumeDelta, 3);
 end;
 
 procedure chMute(var s: shortstring);
@@ -719,14 +733,20 @@ procedure chZoomIn(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     if ZoomValue < cMinZoomLevel then
-        ZoomValue:= ZoomValue + cZoomDelta;
+        if (LocalMessage and gmPrecise <> 0) then
+            ZoomValue:= ZoomValue + cZoomDeltaSmall
+        else
+            ZoomValue:= ZoomValue + cZoomDelta;
 end;
 
 procedure chZoomOut(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     if ZoomValue > cMaxZoomLevel then
-        ZoomValue:= ZoomValue - cZoomDelta;
+        if (LocalMessage and gmPrecise <> 0) then
+            ZoomValue:= ZoomValue - cZoomDeltaSmall
+        else
+            ZoomValue:= ZoomValue - cZoomDelta;
 end;
 
 procedure chZoomReset(var s: shortstring);
