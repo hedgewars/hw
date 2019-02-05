@@ -63,6 +63,14 @@ impl Response {
     }
 }
 
+impl Extend<PendingMessage> for Response {
+    fn extend<T: IntoIterator<Item = PendingMessage>>(&mut self, iter: T) {
+        for msg in iter {
+            self.add(msg)
+        }
+    }
+}
+
 fn get_recipients(
     server: &HWServer,
     client_id: ClientId,

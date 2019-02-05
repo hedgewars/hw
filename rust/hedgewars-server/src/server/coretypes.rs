@@ -54,6 +54,11 @@ pub enum VoteType {
     HedgehogsPerTeam(u8),
 }
 
+pub struct Vote {
+    pub is_pro: bool,
+    pub is_forced: bool,
+}
+
 #[derive(Clone, Debug)]
 pub struct Voting {
     pub ttl: u32,

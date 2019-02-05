@@ -6,6 +6,7 @@ use crate::{
     server::{
         actions::{Action, Action::*},
         core::HWServer,
+        coretypes,
         coretypes::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
         room::{HWRoom, RoomFlags},
     },
@@ -459,7 +460,14 @@ pub fn handle(
                     let room = &mut server.rooms[room_id];
                     room.voting = Some(voting);
                     response.add(server_chat(msg).send_all().in_room(room_id));
-                    super::common::add_vote(room, response, true, false);
+                    super::common::submit_vote(
+                        server,
+                        coretypes::Vote {
+                            is_pro: true,
+                            is_forced: false,
+                        },
+                        response,
+                    );
                 }
                 Some(msg) => {
                     response.add(server_chat(msg).send_self());
@@ -467,11 +475,25 @@ pub fn handle(
             }
         }
         Vote(vote) => {
-            super::common::add_vote(&mut server.rooms[room_id], response, vote, false);
+            super::common::submit_vote(
+                server,
+                coretypes::Vote {
+                    is_pro: vote,
+                    is_forced: false,
+                },
+                response,
+            );
         }
         ForceVote(vote) => {
             let is_forced = server.clients[client_id].is_admin();
-            super::common::add_vote(&mut server.rooms[room_id], response, vote, false);
+            super::common::submit_vote(
+                server,
+                coretypes::Vote {
+                    is_pro: vote,
+                    is_forced,
+                },
+                response,
+            );
         }
         ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly => {
             let client = &server.clients[client_id];

@@ -112,7 +112,6 @@ pub enum Action {
         config: bool,
         flags: bool,
     },
-    ApplyVoting(VoteType, RoomId),
 }
 
 use self::Action::*;
@@ -177,76 +176,6 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                         /*actions.push(ClientFlags("+r".to_string(), nicks).send(to).action())*/
 ;
                     }
-                }
-            }
-        }
-        ApplyVoting(kind, room_id) => {
-            let mut actions = Vec::new();
-            let mut id = client_id;
-            match kind {
-                VoteType::Kick(nick) => {
-                    if let Some(c) = server.find_client(&nick) {
-                        if c.room_id == Some(room_id) {
-                            id = c.id;
-                            //actions.push(Kicked.send_self().action());
-                            //actions.push(MoveToLobby("kicked".to_string()));
-                        }
-                    }
-                }
-                VoteType::Map(None) => (),
-                VoteType::Map(Some(name)) => {
-                    if let Some(location) = server.rooms[room_id].load_config(&name) {
-                        /*actions.push(
-                            server_chat(location.to_string())
-                                .send_all()
-                                .in_room(room_id)
-                                .action(),
-                        );*/
-                        //actions.push(SendRoomUpdate(None));
-                        for (_, c) in server.clients.iter() {
-                            if c.room_id == Some(room_id) {
-                                actions.push(SendRoomData {
-                                    to: c.id,
-                                    teams: false,
-                                    config: true,
-                                    flags: false,
-                                })
-                            }
-                        }
-                    }
-                }
-                VoteType::Pause => {
-                    if let Some(ref mut info) = server.rooms[room_id].game_info {
-                        info.is_paused = !info.is_paused;
-                        /*actions.push(
-                            server_chat("Pause toggled.".to_string())
-                                .send_all()
-                                .in_room(room_id)
-                                .action(),
-                        );*/
-                        /*actions.push(
-                            ForwardEngineMessage(vec![to_engine_msg(once(b'I'))])
-                                .send_all()
-                                .in_room(room_id)
-                                .action(),
-                        );*/
-                    }
-                }
-                VoteType::NewSeed => {
-                    let seed = thread_rng().gen_range(0, 1_000_000_000).to_string();
-                    let cfg = GameCfg::Seed(seed);
-                    /*actions.push(cfg.to_server_msg().send_all().in_room(room_id).action());*/
-                    server.rooms[room_id].set_config(cfg);
-                }
-                VoteType::HedgehogsPerTeam(number) => {
-                    let r = &mut server.rooms[room_id];
-                    let nicks = r.set_hedgehogs_number(number);
-                    /*actions.extend(nicks.into_iter().map(|n| {
-                        HedgehogsNumber(n, number)
-                            .send_all()
-                            .in_room(room_id)
-                            .action()
-                    }));*/
                 }
             }
         }
