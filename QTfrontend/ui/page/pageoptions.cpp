@@ -321,11 +321,23 @@ QLayout * PageOptions::bodyLayoutDefinition()
             SLQuality->setFixedWidth(150);
             groupGame->layout()->addWidget(SLQuality, 3, 1, Qt::AlignLeft);
 
+            // Zoom
+            QLabel * lblZoom = new QLabel(groupGame);
+            lblZoom->setText(QLabel::tr("Zoom (%)"));
+            lblZoom->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            groupGame->layout()->addWidget(lblZoom, 4, 0);
+
+            SLZoom = new QSpinBox(groupGame);
+            SLZoom->setSingleStep(5);
+            SLZoom->setMaximum(150);
+            SLZoom->setMinimum(50);
+            groupGame->layout()->addWidget(SLZoom, 4, 1, Qt::AlignLeft);
+
             // Stereo spacing
 
             QLabel * lblStereo = new QLabel(groupGame);
             lblStereo->setText(QLabel::tr("Stereoscopy"));
-            groupGame->layout()->addWidget(lblStereo, 4, 0);
+            groupGame->layout()->addWidget(lblStereo, 5, 0);
 
             CBStereoMode = new QComboBox(groupGame);
             CBStereoMode->setWhatsThis(QComboBox::tr("Stereoscopy creates an illusion of depth when you wear 3D glasses."));
@@ -346,16 +358,16 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBStereoMode->addItem(QComboBox::tr("Side-by-side"));
             CBStereoMode->addItem(QComboBox::tr("Top-Bottom"));
             CBStereoMode->setFixedWidth(CBResolution->width());
-            groupGame->layout()->addWidget(CBStereoMode, 4, 1);
+            groupGame->layout()->addWidget(CBStereoMode, 5, 1);
 
             // Divider
 
-            groupGame->addDivider(); // row 5
+            groupGame->addDivider(); // row 6
 
             // FPS limit
 
             QHBoxLayout * fpsLayout = new QHBoxLayout();
-            groupGame->layout()->addLayout(fpsLayout, 6, 0, 1, 2);
+            groupGame->layout()->addLayout(fpsLayout, 7, 0, 1, 2);
             QLabel * maxfps = new QLabel(groupGame);
             maxfps->setText(QLabel::tr("FPS limit"));
             fpsLayout->addWidget(maxfps);
@@ -372,30 +384,30 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             // Divider
 
-            groupGame->addDivider(); // row 7
+            groupGame->addDivider(); // row 8
 
             // Alternative damage show
 
             CBAltDamage = new QCheckBox(groupGame);
             CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-            groupGame->layout()->addWidget(CBAltDamage, 8, 0, 1, 2);
+            groupGame->layout()->addWidget(CBAltDamage, 9, 0, 1, 2);
 
             // Show ammo menu tooltips
 
             WeaponTooltip = new QCheckBox(groupGame);
             WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
-            groupGame->layout()->addWidget(WeaponTooltip, 9, 0, 1, 2);
+            groupGame->layout()->addWidget(WeaponTooltip, 10, 0, 1, 2);
 
             groupGame->addDivider();
 
             lblTags = new QLabel(groupGame);
             lblTags->setText(QLabel::tr("Displayed tags above hogs and translucent tags"));
-            groupGame->layout()->addWidget(lblTags, 11, 0, 1, 2);
+            groupGame->layout()->addWidget(lblTags, 12, 0, 1, 2);
 
             tagsContainer = new QWidget();
             QHBoxLayout * tagsLayout = new QHBoxLayout(tagsContainer);
             tagsLayout->setSpacing(0);
-            groupGame->layout()->addWidget(tagsContainer, 12, 0, 1, 2);
+            groupGame->layout()->addWidget(tagsContainer, 13, 0, 1, 2);
 
             CBTeamTag = new QCheckBox(groupGame);
             CBTeamTag->setText(QCheckBox::tr("Team"));

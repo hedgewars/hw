@@ -438,6 +438,10 @@ QStringList HWGame::getArguments()
     arguments << QString::number(resolutions.second.width());
     arguments << "--height";
     arguments << QString::number(resolutions.second.height());
+    if (config->zoom() != 100) {
+        arguments << "--zoom";
+        arguments << QString::number(config->zoom());
+    }
     arguments << "--raw-quality";
     arguments << QString::number(config->translateQuality());
     arguments << "--stereo";

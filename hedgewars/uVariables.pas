@@ -133,8 +133,9 @@ var
 
     cTagsMask        : byte;
     cPrevTagsMask    : byte;
-    zoom             : GLfloat;
-    ZoomValue        : GLfloat;
+    zoom             : GLfloat; // current zoom
+    ZoomValue        : GLfloat; // aimed zoom
+    UserZoom         : GLfloat; // user-chosen initial and default zoom
 
     cWaterLine       : LongInt;
     cGearScrEdgesDist: LongInt;
@@ -168,6 +169,7 @@ var
 
     cCaseFactor     : Longword;
     cMaxCaseDrops   : Longword; // Max. number of crates which can be in the game when dropping
+
     cLandMines      : Longword;
     cAirMines       : Longword;
     cExplosives     : Longword;
@@ -2624,6 +2626,20 @@ begin
     cScriptParam    := '';
     cTestLua        := False;
 
+    UserZoom        := cDefaultZoomLevel;
+    zoom            := cDefaultZoomLevel;
+    ZoomValue       := cDefaultZoomLevel;
+
+{$IFDEF MOBILE}
+    cMaxZoomLevel:= 0.5;
+    cMinZoomLevel:= 3.5;
+    cZoomDelta:=    0.20;
+{$ELSE}
+    cMaxZoomLevel:= 1.0;
+    cMinZoomLevel:= 3.0;
+    cZoomDelta:=    0.25;
+{$ENDIF}
+
 {$IFDEF USE_VIDEO_RECORDING}
     RecPrefix          := '';
     cAVFormat          := '';
@@ -2777,16 +2793,6 @@ begin
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
 
-{$IFDEF MOBILE}
-    cMaxZoomLevel:= 0.5;
-    cMinZoomLevel:= 3.5;
-    cZoomDelta:= 0.20;
-{$ELSE}
-    cMaxZoomLevel:= 1.0;
-    cMinZoomLevel:= 3.0;
-    cZoomDelta:= 0.25;
-    {$ENDIF}
-
     aVertex:= 0;
     aTexCoord:= 1;
     aColor:= 2;
@@ -2844,8 +2850,6 @@ begin
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
-    zoom            := cDefaultZoomLevel;
-    ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
     cLaserSighting  := false;
     cLaserSightingSniper := false;

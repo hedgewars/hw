@@ -216,7 +216,7 @@ const
     ExtraTime = 30000; // amount of time (ms) given for using Extra Time
 
     // do not change this value
-    cDefaultZoomLevel = 2.0;
+    cDefaultZoomLevel = 2.0; // 100% zoom
 
     // game flags
     gfAny                = $FFFFFFFF; // mask for all possible gameflags

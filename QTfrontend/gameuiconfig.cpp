@@ -105,6 +105,7 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBFrontendFullscreen->setChecked(ffscr);
 
     Form->ui.pageOptions->SLQuality->setValue(value("video/quality", 5).toUInt());
+    Form->ui.pageOptions->SLZoom->setValue(value("video/zoom", 100).toUInt());
     Form->ui.pageOptions->CBStereoMode->setCurrentIndex(value("video/stereo", 0).toUInt());
     Form->ui.pageOptions->CBFrontendEffects->setChecked(value("frontend/effects", true).toBool());
     Form->ui.pageOptions->CBSound->setChecked(value("audio/sound", true).toBool());
@@ -245,6 +246,7 @@ void GameUIConfig::SaveOptions()
     setValue("video/fullscreen", vid_Fullscreen());
 
     setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
+    setValue("video/zoom", Form->ui.pageOptions->SLZoom->value());
     setValue("video/stereo", stereoMode());
 
     setValue("frontend/effects", isFrontendEffects());
@@ -439,6 +441,11 @@ bool GameUIConfig::isFrontendEffects() const
 bool GameUIConfig::isFrontendFullscreen() const
 {
     return Form->ui.pageOptions->CBFrontendFullscreen->isChecked();
+}
+
+quint16 GameUIConfig::zoom()
+{
+    return Form->ui.pageOptions->SLZoom->value();
 }
 
 bool GameUIConfig::isHolidaySillinessEnabled() const
