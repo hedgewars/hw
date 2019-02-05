@@ -116,7 +116,7 @@ procedure SetVolume(vol: LongInt);
 // Modifies the sound volume of the game by voldelta and returns the new volume level.
 function  ChangeVolume(voldelta: LongInt): LongInt;
 
-// Returns the current volume in percent
+// Returns the current volume in percent. Intended for display on UI.
 function  GetVolumePercent(): LongInt;
 
 // Returns a pointer to the voicepack with the given name.
@@ -867,6 +867,12 @@ end;
 function GetVolumePercent(): LongInt;
 begin
     GetVolumePercent:= Volume * 100 div MIX_MAX_VOLUME;
+    // 0 and 100 will only be displayed when at min/max values
+    // to avoid confusion.
+    if ((GetVolumePercent = 0) and (Volume > 0)) then
+        GetVolumePercent:= 1
+    else if ((GetVolumePercent = 100) and (Volume < MIX_MAX_VOLUME)) then
+        GetVolumePercent:= 99;
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
