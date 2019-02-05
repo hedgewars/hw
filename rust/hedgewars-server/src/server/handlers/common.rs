@@ -1,12 +1,13 @@
 use crate::server::client::HWClient;
+use crate::server::coretypes::ClientId;
 use crate::server::room::HWRoom;
 use crate::utils::to_engine_msg;
 use crate::{
     protocol::messages::{
         HWProtocolMessage::{self, Rnd},
         HWServerMessage::{
-            self, Bye, ChatMsg, ClientFlags, ForwardEngineMessage, LobbyLeft, RoomLeft, RoomRemove,
-            RoomUpdated, TeamRemove,
+            self, Bye, ChatMsg, ClientFlags, ForwardEngineMessage, LobbyJoined, LobbyLeft, Notice,
+            RoomLeft, RoomRemove, RoomUpdated, Rooms, ServerMessage, TeamRemove,
         },
     },
     server::{actions::Action, core::HWServer},
@@ -25,6 +26,63 @@ pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     ChatMsg {
         nick: "[random]".to_owned(),
         msg: reply.clone(),
+    }
+}
+
+pub fn process_login(server: &mut HWServer, response: &mut super::Response) {
+    let client_id = response.client_id();
+    let nick = server.clients[client_id].nick.clone();
+
+    let has_nick_clash = server
+        .clients
+        .iter()
+        .any(|(id, c)| id != client_id && c.nick == nick);
+
+    let client = &mut server.clients[client_id];
+
+    if !client.is_checker() && has_nick_clash {
+        if client.protocol_number < 38 {
+            remove_client(server, response, "Nickname is already in use".to_string());
+        } else {
+            client.nick.clear();
+            response.add(Notice("NickAlreadyInUse".to_string()).send_self());
+        }
+    } else {
+        server.clients[client_id].room_id = Some(server.lobby_id);
+
+        let lobby_nicks: Vec<_> = server
+            .clients
+            .iter()
+            .filter_map(|(_, c)| c.room_id.and(Some(c.nick.clone())))
+            .collect();
+        let joined_msg = LobbyJoined(lobby_nicks);
+
+        let everyone_msg = LobbyJoined(vec![server.clients[client_id].nick.clone()]);
+        let flags_msg = ClientFlags(
+            "+i".to_string(),
+            server
+                .clients
+                .iter()
+                .filter(|(_, c)| c.room_id.is_some())
+                .map(|(_, c)| c.nick.clone())
+                .collect(),
+        );
+        let server_msg = ServerMessage("\u{1f994} is watching".to_string());
+
+        let rooms_msg = Rooms(
+            server
+                .rooms
+                .iter()
+                .filter(|(id, _)| *id != server.lobby_id)
+                .flat_map(|(_, r)| r.info(r.master_id.map(|id| &server.clients[id])))
+                .collect(),
+        );
+
+        response.add(everyone_msg.send_all().but_self());
+        response.add(joined_msg.send_self());
+        response.add(flags_msg.send_self());
+        response.add(server_msg.send_self());
+        response.add(rooms_msg.send_self());
     }
 }
 
@@ -132,10 +190,7 @@ pub fn remove_client(server: &mut HWServer, response: &mut super::Response, msg:
 mod tests {
     use super::*;
     use crate::protocol::messages::HWServerMessage::ChatMsg;
-    use crate::server::actions::{
-        Action::{self, Send},
-        PendingMessage,
-    };
+    use crate::server::actions::PendingMessage;
 
     fn reply2string(r: HWServerMessage) -> String {
         match r {

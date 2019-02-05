@@ -57,7 +57,7 @@ pub fn handle(
                 response.add(Nick(nick).send_self());
 
                 if client.protocol_number > 0 {
-                    //CheckRegistered
+                    super::common::process_login(server, response);
                 }
             }
         }
@@ -72,7 +72,7 @@ pub fn handle(
                 response.add(Proto(proto).send_self());
 
                 if client.nick != "" {
-                    // CheckRegistered
+                    super::common::process_login(server, response);
                 }
             }
         }
@@ -84,7 +84,7 @@ pub fn handle(
             let server_hash = get_hash(c, &c.server_salt, &salt);
             if client_hash == server_hash {
                 response.add(ServerAuth(format!("{:x}", server_hash)).send_self());
-            //JoinLobby
+            //TODO enter lobby
             } else {
                 super::common::remove_client(server, response, "Authentication failed".to_string())
             };
