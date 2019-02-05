@@ -732,7 +732,10 @@ end;
 procedure chZoomReset(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    ZoomValue:= UserZoom;
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= cDefaultZoomLevel
+    else
+        ZoomValue:= UserZoom;
 end;
 
 procedure chMapGen(var s: shortstring);

@@ -100,6 +100,7 @@ configured controls:
 * Switch  + Toggle hedgehog tags: Toggle hedgehog tag translucency
 * Precise + Toggle team bars + Switch: Toggle HUD
 * Precise + Capture (screenshot key): Save current map + mask into Screenshot directory
+* Precise + Reset zoom: Set zoom to 100% (instead of the zoom level in the settings)
 
 System requirements
 -------------------
