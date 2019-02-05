@@ -33,6 +33,23 @@ uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh,
 var cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 0, 4, 5, 6, 15, 8, 8, 8, 8, 12, 13, 14);
     cTagsMasksNoHealth: array[0..15] of byte = (3, 0, 1, 2, 0, 0, 0, 0, 11, 8, 9, 10, 8, 8, 8, 8);
 
+// helper function for volume
+procedure updateVolumeDelta(precise: boolean);
+begin
+if cVolumeUpKey and (not cVolumeDownKey) then
+    if precise then
+        cVolumeDelta:= 1
+    else
+        cVolumeDelta:= 3
+else if cVolumeDownKey and (not cVolumeUpKey) then
+    if precise then
+        cVolumeDelta:= -1
+    else
+        cVolumeDelta:= -3
+else
+    cVolumeDelta:= 0;
+end;
+
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
@@ -277,6 +294,7 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+updateVolumeDelta(true);
 if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
@@ -285,15 +303,12 @@ bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmPrecise and InputMask);
     ScriptCall('onPrecise');
-if cVolumeDelta > 0 then
-    cVolumeDelta:= 1;
-if cVolumeDelta < 0 then
-    cVolumeDelta:= -1;
 end;
 
 procedure chPrecise_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+updateVolumeDelta(false);
 if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
@@ -301,10 +316,6 @@ if not isExternalSource then
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmPrecise and InputMask));
     ScriptCall('onPreciseUp');
-if cVolumeDelta > 0 then
-    cVolumeDelta:= 3;
-if cVolumeDelta < 0 then
-    cVolumeDelta:= -3;
 end;
 
 procedure chLJump(var s: shortstring);
@@ -600,22 +611,32 @@ else
     end
 end;
 
-procedure chVol_p(var s: shortstring);
+procedure chVolUp_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if (LocalMessage and gmPrecise) <> 0 then
-    inc(cVolumeDelta, 1)
-else
-    inc(cVolumeDelta, 3);
+cVolumeUpKey:= true;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
 end;
 
-procedure chVol_m(var s: shortstring);
+procedure chVolUp_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if (LocalMessage and gmPrecise) <> 0 then
-    dec(cVolumeDelta, 1)
-else
-    dec(cVolumeDelta, 3);
+cVolumeUpKey:= false;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
+end;
+
+procedure chVolDown_p(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cVolumeDownKey:= true;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
+end;
+
+procedure chVolDown_m(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cVolumeDownKey:= false;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
 end;
 
 procedure chMute(var s: shortstring);
@@ -988,10 +1009,10 @@ begin
     RegisterVariable('timer'   , @chTimer        , false, true);
     RegisterVariable('taunt'   , @chTaunt        , false);
     RegisterVariable('put'     , @chPut          , false);
-    RegisterVariable('+volup'  , @chVol_p        , true );
-    RegisterVariable('-volup'  , @chVol_m        , true );
-    RegisterVariable('+voldown', @chVol_m        , true );
-    RegisterVariable('-voldown', @chVol_p        , true );
+    RegisterVariable('+volup'  , @chVolUp_p      , true );
+    RegisterVariable('-volup'  , @chVolUp_m      , true );
+    RegisterVariable('+voldown', @chVolDown_p    , true );
+    RegisterVariable('-voldown', @chVolDown_m    , true );
     RegisterVariable('mute'    , @chMute         , true );
     RegisterVariable('findhh'  , @chFindhh       , true );
     RegisterVariable('pause'   , @chPause        , true );

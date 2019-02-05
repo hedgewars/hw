@@ -179,6 +179,8 @@ var
     cSeed           : shortstring;
     cIsSoundEnabled : boolean; // If the sound system is enabled
     cVolumeDelta    : LongInt;
+    cVolumeUpKey    : boolean;
+    cVolumeDownKey  : boolean;
     cMuteToggle     : boolean; // Mute toggle requested
     cHasFocus       : boolean;
     cInactDelay     : Longword;
@@ -2877,6 +2879,8 @@ begin
     cSeed           := '';
     cIsSoundEnabled := false;
     cVolumeDelta    := 0;
+    cVolumeUpKey    := false;
+    cVolumeDownKey  := false;
     cMuteToggle     := false;
     cHasFocus       := true;
     cInactDelay     := 100;
