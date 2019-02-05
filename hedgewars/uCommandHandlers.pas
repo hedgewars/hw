@@ -732,21 +732,23 @@ end;
 procedure chZoomIn(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    if ZoomValue < cMinZoomLevel then
-        if (LocalMessage and gmPrecise <> 0) then
-            ZoomValue:= ZoomValue + cZoomDeltaSmall
-        else
-            ZoomValue:= ZoomValue + cZoomDelta;
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= ZoomValue + cZoomDeltaSmall
+    else
+        ZoomValue:= ZoomValue + cZoomDelta;
+    if ZoomValue > cMinZoomLevel then
+        ZoomValue:= cMinZoomLevel;
 end;
 
 procedure chZoomOut(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    if ZoomValue > cMaxZoomLevel then
-        if (LocalMessage and gmPrecise <> 0) then
-            ZoomValue:= ZoomValue - cZoomDeltaSmall
-        else
-            ZoomValue:= ZoomValue - cZoomDelta;
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= ZoomValue - cZoomDeltaSmall
+    else
+        ZoomValue:= ZoomValue - cZoomDelta;
+    if ZoomValue < cMaxZoomLevel then
+        ZoomValue:= cMaxZoomLevel;
 end;
 
 procedure chZoomReset(var s: shortstring);
