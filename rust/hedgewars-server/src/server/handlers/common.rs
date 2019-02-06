@@ -5,7 +5,6 @@ use crate::{
         HWServerMessage::{self, *},
     },
     server::{
-        actions::Action,
         client::HWClient,
         core::HWServer,
         coretypes::{ClientId, GameCfg, RoomId, Vote, VoteType},
@@ -137,7 +136,12 @@ pub fn remove_teams(
     }
 }
 
-pub fn exit_room(client: &HWClient, room: &mut HWRoom, response: &mut Response, msg: &str) {
+fn remove_client_from_room(
+    client: &mut HWClient,
+    room: &mut HWRoom,
+    response: &mut Response,
+    msg: &str,
+) {
     if room.players_number > 1 || room.is_fixed() {
         room.players_number -= 1;
         if client.is_ready() && room.ready_players_number > 0 {
@@ -159,7 +163,15 @@ pub fn exit_room(client: &HWClient, room: &mut HWRoom, response: &mut Response, 
             );
         }
 
-        //ChangeMaster(room.id, None));
+        if client.is_master() && !room.is_fixed() {
+            client.set_is_master(false);
+            response.add(
+                ClientFlags("-h".to_string(), vec![client.nick.clone()])
+                    .send_all()
+                    .in_room(room.id),
+            );
+            room.master_id = None;
+        }
     }
 
     let update_msg = if room.players_number == 0 && !room.is_fixed() {
@@ -172,17 +184,49 @@ pub fn exit_room(client: &HWClient, room: &mut HWRoom, response: &mut Response, 
     response.add(ClientFlags("-i".to_string(), vec![client.nick.clone()]).send_all());
 }
 
+pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Response, msg: &str) {
+    let client = &mut server.clients[client_id];
+
+    if let Some(room_id) = client.room_id {
+        if room_id != server.lobby_id {
+            let room = &mut server.rooms[room_id];
+
+            remove_client_from_room(client, room, response, msg);
+            client.room_id = Some(server.lobby_id);
+
+            if !room.is_fixed() && room.master_id == None {
+                if let Some(new_master_id) = server.room_clients(room_id).first().cloned() {
+                    let new_master_nick = server.clients[new_master_id].nick.clone();
+                    let room = &mut server.rooms[room_id];
+                    room.master_id = Some(new_master_id);
+                    server.clients[new_master_id].set_is_master(true);
+
+                    if room.protocol_number < 42 {
+                        room.name = new_master_nick.clone();
+                    }
+
+                    room.set_join_restriction(false);
+                    room.set_team_add_restriction(false);
+                    room.set_unregistered_players_restriction(true);
+
+                    response.add(
+                        ClientFlags("+h".to_string(), vec![new_master_nick])
+                            .send_all()
+                            .in_room(room.id),
+                    );
+                }
+            }
+        }
+    }
+}
+
 pub fn remove_client(server: &mut HWServer, response: &mut Response, msg: String) {
     let client_id = response.client_id();
     let lobby_id = server.lobby_id;
     let client = &mut server.clients[client_id];
     let (nick, room_id) = (client.nick.clone(), client.room_id);
 
-    if let Some(room_id) = room_id {
-        let room = &mut server.rooms[room_id];
-        exit_room(client, room, response, &msg);
-        client.room_id = Some(lobby_id);
-    }
+    exit_room(server, client_id, response, &msg);
 
     server.remove_client(client_id);
 
@@ -262,13 +306,8 @@ pub fn apply_voting_result(
             if let Some(client) = server.find_client(&nick) {
                 if client.room_id == Some(room_id) {
                     let id = client.id;
-                    response.add(Kicked.send_self());
-                    exit_room(
-                        &mut server.clients[client_id],
-                        &mut server.rooms[room_id],
-                        response,
-                        "kicked",
-                    );
+                    response.add(Kicked.send(id));
+                    exit_room(server, id, response, "kicked");
                 }
             }
         }

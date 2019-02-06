@@ -5,7 +5,6 @@ use crate::utils::to_engine_msg;
 use crate::{
     protocol::messages::{server_chat, HWProtocolMessage, HWServerMessage::*},
     server::{
-        actions::{Action, Action::*},
         core::HWServer,
         coretypes,
         coretypes::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
@@ -118,8 +117,7 @@ pub fn handle(
                     Some(s) => format!("part: {}", s),
                     None => "part".to_string(),
                 };
-                super::common::exit_room(client, room, response, &msg);
-                client.room_id = Some(lobby_id);
+                super::common::exit_room(server, client_id, response, &msg);
             }
         }
         Chat(msg) => {
@@ -136,7 +134,10 @@ pub fn handle(
         Fix => {
             if let (client, Some(room)) = server.client_and_room(client_id) {
                 if client.is_admin() {
-                    room.set_is_fixed(true)
+                    room.set_is_fixed(true);
+                    room.set_join_restriction(false);
+                    room.set_team_add_restriction(false);
+                    room.set_unregistered_players_restriction(true);
                 }
             }
         }

@@ -1,11 +1,7 @@
 use mio;
 use std::{io, io::Write};
 
-use super::{
-    actions::{Action, Action::*, Destination},
-    core::HWServer,
-    coretypes::ClientId,
-};
+use super::{actions::Destination, core::HWServer, coretypes::ClientId};
 use crate::{
     protocol::messages::{HWProtocolMessage, HWServerMessage, HWServerMessage::*},
     server::actions::PendingMessage,

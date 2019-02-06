@@ -3,11 +3,7 @@ use mio;
 use super::common::rnd_reply;
 use crate::{
     protocol::messages::{HWProtocolMessage, HWServerMessage::*},
-    server::{
-        actions::{Action, Action::*},
-        core::HWServer,
-        coretypes::ClientId,
-    },
+    server::{core::HWServer, coretypes::ClientId},
     utils::is_name_illegal,
 };
 use log::*;

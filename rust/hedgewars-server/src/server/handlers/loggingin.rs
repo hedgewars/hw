@@ -2,12 +2,7 @@ use mio;
 
 use crate::{
     protocol::messages::{HWProtocolMessage, HWServerMessage::*},
-    server::{
-        actions::{Action, Action::*},
-        client::HWClient,
-        core::HWServer,
-        coretypes::ClientId,
-    },
+    server::{client::HWClient, core::HWServer, coretypes::ClientId},
     utils::is_name_illegal,
 };
 use log::*;
