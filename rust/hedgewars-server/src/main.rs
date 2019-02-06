@@ -1,9 +1,6 @@
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
 
-//use std::io::*;
-//use rand::Rng;
-//use std::cmp::Ordering;
 use log::*;
 use mio::net::*;
 use mio::*;

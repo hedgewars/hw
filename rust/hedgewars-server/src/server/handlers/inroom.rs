@@ -190,11 +190,11 @@ pub fn handle(
                     ClientFlags(flags.to_string(), vec![client.nick.clone()])
                 };
                 response.add(msg.send_all().in_room(room.id));
-                if room.is_fixed() && room.ready_players_number == room.players_number {
-                    //StartRoomGame(r.id)
-                }
-
                 client.set_is_ready(!client.is_ready());
+
+                if room.is_fixed() && room.ready_players_number == room.players_number {
+                    super::common::start_game(server, room_id, response);
+                }
             }
         }
         AddTeam(info) => {
@@ -249,24 +249,30 @@ pub fn handle(
             }
         }
         RemoveTeam(name) => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                match room.find_team_owner(&name) {
-                    None => response.add(
-                        Warning("Error: The team you tried to remove does not exist.".to_string())
-                            .send_self(),
-                    ),
-                    Some((id, _)) if id != client_id => response.add(
-                        Warning("You can't remove a team you don't own.".to_string()).send_self(),
-                    ),
-                    Some((_, name)) => {
-                        client.teams_in_game -= 1;
-                        client.clan = room.find_team_color(client.id);
-                        super::common::remove_teams(
-                            room,
-                            vec![name.to_string()],
-                            client.is_in_game(),
-                            response,
-                        );
+            let client = &mut server.clients[client_id];
+            let room = &mut server.rooms[room_id];
+            match room.find_team_owner(&name) {
+                None => response.add(
+                    Warning("Error: The team you tried to remove does not exist.".to_string())
+                        .send_self(),
+                ),
+                Some((id, _)) if id != client_id => response
+                    .add(Warning("You can't remove a team you don't own.".to_string()).send_self()),
+                Some((_, name)) => {
+                    client.teams_in_game -= 1;
+                    client.clan = room.find_team_color(client.id);
+                    super::common::remove_teams(
+                        room,
+                        vec![name.to_string()],
+                        client.is_in_game(),
+                        response,
+                    );
+
+                    match room.game_info {
+                        Some(ref info) if info.teams_in_game == 0 => {
+                            super::common::end_game(server, room_id, response)
+                        }
+                        _ => (),
                     }
                 }
             }
@@ -513,7 +519,7 @@ pub fn handle(
             }
         }
         StartGame => {
-            // StartRoomGame(room_id);
+            super::common::start_game(server, room_id, response);
         }
         EngineMessage(em) => {
             if let (c, Some(r)) = server.client_and_room(client_id) {

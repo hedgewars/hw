@@ -95,6 +95,7 @@ pub fn remove_teams(
     is_in_game: bool,
     response: &mut Response,
 ) {
+    let mut game_ended = false;
     if let Some(ref mut info) = room.game_info {
         for team_name in &team_names {
             info.left_teams.push(team_name.clone());
@@ -109,9 +110,6 @@ pub fn remove_teams(
                 );
 
                 info.teams_in_game -= 1;
-                if info.teams_in_game == 0 {
-                    //FinishRoomGame(room.id)
-                }
 
                 let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
                 if let Some(m) = &info.sync_msg {
