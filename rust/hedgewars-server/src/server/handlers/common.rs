@@ -200,6 +200,55 @@ pub fn get_room_update(
     response.add(update_msg.send_all().with_protocol(room.protocol_number));
 }
 
+pub fn get_room_config(room: &HWRoom, to_client: ClientId, response: &mut Response) {
+    response.add(ConfigEntry("FULLMAPCONFIG".to_string(), room.map_config()).send(to_client));
+    for cfg in room.game_config() {
+        response.add(cfg.to_server_msg().send(to_client));
+    }
+}
+
+pub fn get_room_teams(
+    server: &HWServer,
+    room_id: RoomId,
+    to_client: ClientId,
+    response: &mut Response,
+) {
+    let room = &server.rooms[room_id];
+    let current_teams = match room.game_info {
+        Some(ref info) => &info.teams_at_start,
+        None => &room.teams,
+    };
+
+    for (owner_id, team) in current_teams.iter() {
+        response.add(TeamAdd(HWRoom::team_info(&server.clients[*owner_id], &team)).send(to_client));
+        response.add(TeamColor(team.name.clone(), team.color).send(to_client));
+        response.add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send(to_client));
+    }
+}
+
+pub fn get_room_flags(
+    server: &HWServer,
+    room_id: RoomId,
+    to_client: ClientId,
+    response: &mut Response,
+) {
+    let room = &server.rooms[room_id];
+    if let Some(id) = room.master_id {
+        response.add(
+            ClientFlags("+h".to_string(), vec![server.clients[id].nick.clone()]).send(to_client),
+        );
+    }
+    let nicks: Vec<_> = server
+        .clients
+        .iter()
+        .filter(|(_, c)| c.room_id == Some(room_id) && c.is_ready())
+        .map(|(_, c)| c.nick.clone())
+        .collect();
+    if !nicks.is_empty() {
+        response.add(ClientFlags("+r".to_string(), nicks).send(to_client));
+    }
+}
+
 pub fn apply_voting_result(
     server: &mut HWServer,
     room_id: RoomId,
@@ -239,14 +288,9 @@ pub fn apply_voting_result(
                 };
                 get_room_update(None, room, room_master, response);
 
-                for (_, c) in server.clients.iter() {
-                    if c.room_id == Some(room_id) {
-                        /*SendRoomData {
-                            to: c.id,
-                            teams: false,
-                            config: true,
-                            flags: false,
-                        }*/
+                for (_, client) in server.clients.iter() {
+                    if client.room_id == Some(room_id) {
+                        super::common::get_room_config(&server.rooms[room_id], client.id, response);
                     }
                 }
             }
@@ -387,8 +431,7 @@ pub fn end_game(server: &mut HWServer, room_id: RoomId, response: &mut Response)
     if let Some(info) = replace(&mut room.game_info, None) {
         for (_, client) in server.clients.iter() {
             if client.room_id == Some(room_id) && client.is_joined_mid_game() {
-                //SendRoomData { to: client.id, teams: false, config: true, flags: false}
-
+                super::common::get_room_config(room, client.id, response);
                 response.extend(
                     info.left_teams
                         .iter()

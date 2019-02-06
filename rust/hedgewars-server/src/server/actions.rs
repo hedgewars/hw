@@ -103,80 +103,12 @@ impl HWServerMessage {
 
 pub enum Action {
     ChangeMaster(RoomId, Option<ClientId>),
-    SendTeamRemovalMessage(String),
-    SendRoomData {
-        to: ClientId,
-        teams: bool,
-        config: bool,
-        flags: bool,
-    },
 }
 
 use self::Action::*;
 
 pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
     match action {
-        SendRoomData {
-            to,
-            teams,
-            config,
-            flags,
-        } => {
-            let room_id = server.clients[client_id].room_id;
-            if let Some(r) = room_id.and_then(|id| server.rooms.get(id)) {
-                if config {
-                    /*                    actions.push(
-                        ConfigEntry("FULLMAPCONFIG".to_string(), r.map_config())
-                            .send(to)
-                            .action(),
-                    )*/
-;
-                    for cfg in r.game_config() {
-                        //actions.push(cfg.to_server_msg().send(to).action());
-                    }
-                }
-                if teams {
-                    let current_teams = match r.game_info {
-                        Some(ref info) => &info.teams_at_start,
-                        None => &r.teams,
-                    };
-                    for (owner_id, team) in current_teams.iter() {
-                        /*actions.push(
-                            TeamAdd(HWRoom::team_info(&server.clients[*owner_id], &team))
-                                .send(to)
-                                .action(),
-                        );
-                        actions.push(TeamColor(team.name.clone(), team.color).send(to).action());
-                        actions.push(
-                            HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
-                                .send(to)
-                                .action(),
-                        );*/
-                    }
-                }
-                if flags {
-                    if let Some(id) = r.master_id {
-                        /*
-                                                actions.push(
-                                                    ClientFlags("+h".to_string(), vec![server.clients[id].nick.clone()])
-                                                        .send(to)
-                                                        .action(),
-                                                );
-                        */
-                    }
-                    let nicks: Vec<_> = server
-                        .clients
-                        .iter()
-                        .filter(|(_, c)| c.room_id == Some(r.id) && c.is_ready())
-                        .map(|(_, c)| c.nick.clone())
-                        .collect();
-                    if !nicks.is_empty() {
-                        /*actions.push(ClientFlags("+r".to_string(), nicks).send(to).action())*/
-;
-                    }
-                }
-            }
-        }
         ChangeMaster(room_id, new_id) => {
             let room_client_ids = server.room_clients(room_id);
             let new_id = if server
@@ -225,39 +157,6 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
             }
             if let Some(id) = new_id {
                 server.clients[id].set_is_master(true)
-            }
-        }
-        SendTeamRemovalMessage(team_name) => {
-            if let Some(r) = server.room(client_id) {
-                if let Some(ref mut info) = r.game_info {
-                    let msg = once(b'F').chain(team_name.bytes());
-                    /*actions.push(
-                        ForwardEngineMessage(vec![to_engine_msg(msg)])
-                            .send_all()
-                            .in_room(r.id)
-                            .but_self()
-                            .action(),
-                    );*/
-                    info.teams_in_game -= 1;
-                    if info.teams_in_game == 0 {
-                        //actions.push(FinishRoomGame(r.id));
-                    }
-                    let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
-                    if let Some(m) = &info.sync_msg {
-                        info.msg_log.push(m.clone());
-                    }
-                    if info.sync_msg.is_some() {
-                        info.sync_msg = None
-                    }
-                    info.msg_log.push(remove_msg.clone());
-                    /*actions.push(
-                        ForwardEngineMessage(vec![remove_msg])
-                            .send_all()
-                            .in_room(r.id)
-                            .but_self()
-                            .action(),
-                    );*/
-                }
             }
         }
     }

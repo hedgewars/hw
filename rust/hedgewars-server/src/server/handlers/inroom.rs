@@ -1,6 +1,7 @@
 use mio;
 
 use super::common::rnd_reply;
+use crate::utils::to_engine_msg;
 use crate::{
     protocol::messages::{server_chat, HWProtocolMessage, HWServerMessage::*},
     server::{
@@ -14,6 +15,7 @@ use crate::{
 };
 use base64::{decode, encode};
 use log::*;
+use std::iter::once;
 use std::mem::swap;
 
 #[derive(Clone)]
@@ -551,20 +553,56 @@ pub fn handle(
             }
         }
         RoundFinished => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.is_in_game() {
-                    c.set_is_in_game(false);
-                    response.add(
-                        ClientFlags("-g".to_string(), vec![c.nick.clone()])
-                            .send_all()
-                            .in_room(r.id),
-                    );
-                    if r.game_info.is_some() {
-                        for team in r.client_teams(c.id) {
-                            //SendTeamRemovalMessage(team.name.clone());
+            let mut game_ended = false;
+            let client = &mut server.clients[client_id];
+            if client.is_in_game() {
+                let room = &mut server.rooms[room_id];
+
+                client.set_is_in_game(false);
+                response.add(
+                    ClientFlags("-g".to_string(), vec![client.nick.clone()])
+                        .send_all()
+                        .in_room(room.id),
+                );
+                let team_names: Vec<_> = room
+                    .client_teams(client_id)
+                    .map(|t| t.name.clone())
+                    .collect();
+
+                if let Some(ref mut info) = room.game_info {
+                    info.teams_in_game -= team_names.len() as u8;
+                    if info.teams_in_game == 0 {
+                        game_ended = true;
+                    }
+
+                    for team_name in team_names {
+                        let msg = once(b'F').chain(team_name.bytes());
+                        response.add(
+                            ForwardEngineMessage(vec![to_engine_msg(msg)])
+                                .send_all()
+                                .in_room(room_id)
+                                .but_self(),
+                        );
+
+                        let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
+                        if let Some(m) = &info.sync_msg {
+                            info.msg_log.push(m.clone());
                         }
+                        if info.sync_msg.is_some() {
+                            info.sync_msg = None
+                        }
+                        info.msg_log.push(remove_msg.clone());
+                        response.add(
+                            ForwardEngineMessage(vec![remove_msg])
+                                .send_all()
+                                .in_room(room_id)
+                                .but_self(),
+                        );
                     }
                 }
+            }
+            if game_ended {
+                super::common::end_game(server, room_id, response)
             }
         }
         Rnd(v) => {
