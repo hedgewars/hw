@@ -103,9 +103,7 @@ impl HWServerMessage {
 
 pub enum Action {
     ChangeMaster(RoomId, Option<ClientId>),
-    StartRoomGame(RoomId),
     SendTeamRemovalMessage(String),
-    FinishRoomGame(RoomId),
     SendRoomData {
         to: ClientId,
         teams: bool,
@@ -229,40 +227,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                 server.clients[id].set_is_master(true)
             }
         }
-        StartRoomGame(room_id) => {
-            let (room_clients, room_nicks): (Vec<_>, Vec<_>) = server
-                .clients
-                .iter()
-                .map(|(id, c)| (id, c.nick.clone()))
-                .unzip();
-            let room = &mut server.rooms[room_id];
-
-            if !room.has_multiple_clans() {
-                /*Warn(
-                    "The game can't be started with less than two clans!".to_string(),
-                )*/
-            } else if room.protocol_number <= 43 && room.players_number != room.ready_players_number
-            {
-                /*Warn("Not all players are ready".to_string())*/
-            } else if room.game_info.is_some() {
-                /*Warn("The game is already in progress".to_string())*/
-            } else {
-                room.start_round();
-                for id in room_clients {
-                    let c = &mut server.clients[id];
-                    c.set_is_in_game(false);
-                    c.team_indices = room.client_team_indices(c.id);
-                }
-                /*RunGame.send_all().in_room(room.id).action(),*/
-                //SendRoomUpdate(None),
-                /*ClientFlags("+g".to_string(), room_nicks)
-                .send_all()
-                .in_room(room.id)
-                .action(),*/
-            }
-        }
         SendTeamRemovalMessage(team_name) => {
-            let mut actions = Vec::new();
             if let Some(r) = server.room(client_id) {
                 if let Some(ref mut info) = r.game_info {
                     let msg = once(b'F').chain(team_name.bytes());
@@ -275,7 +240,7 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                     );*/
                     info.teams_in_game -= 1;
                     if info.teams_in_game == 0 {
-                        actions.push(FinishRoomGame(r.id));
+                        //actions.push(FinishRoomGame(r.id));
                     }
                     let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
                     if let Some(m) = &info.sync_msg {
@@ -293,57 +258,6 @@ pub fn run_action(server: &mut HWServer, client_id: usize, action: Action) {
                             .action(),
                     );*/
                 }
-            }
-        }
-        FinishRoomGame(room_id) => {
-            let mut actions = Vec::new();
-
-            let r = &mut server.rooms[room_id];
-            r.ready_players_number = 1;
-            //actions.push(SendRoomUpdate(None));
-            //actions.push(RoundFinished.send_all().in_room(r.id).action());
-
-            if let Some(info) = replace(&mut r.game_info, None) {
-                for (_, c) in server.clients.iter() {
-                    if c.room_id == Some(room_id) && c.is_joined_mid_game() {
-                        actions.push(SendRoomData {
-                            to: c.id,
-                            teams: false,
-                            config: true,
-                            flags: false,
-                        });
-                        for name in &info.left_teams {
-                            //actions.push(TeamRemove(name.clone()).send(c.id).action());
-                        }
-                    }
-                }
-            }
-
-            let nicks: Vec<_> = server
-                .clients
-                .iter_mut()
-                .filter(|(_, c)| c.room_id == Some(room_id))
-                .map(|(_, c)| {
-                    c.set_is_ready(c.is_master());
-                    c.set_is_joined_mid_game(false);
-                    c
-                })
-                .filter_map(|c| {
-                    if !c.is_master() {
-                        Some(c.nick.clone())
-                    } else {
-                        None
-                    }
-                })
-                .collect();
-
-            if !nicks.is_empty() {
-                let msg = if r.protocol_number < 38 {
-                    LegacyReady(false, nicks)
-                } else {
-                    ClientFlags("-r".to_string(), nicks)
-                };
-                //actions.push(msg.send_all().in_room(room_id).action());
             }
         }
     }

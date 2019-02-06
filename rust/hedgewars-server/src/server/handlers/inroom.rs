@@ -155,19 +155,21 @@ pub fn handle(
         RoomName(new_name) => {
             if is_name_illegal(&new_name) {
                 response.add(Warning("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string()).send_self());
-            } else if server.rooms[room_id].is_fixed() {
-                response.add(Warning("Access denied.".to_string()).send_self());
             } else if server.has_room(&new_name) {
                 response.add(
                     Warning("A room with the same name already exists.".to_string()).send_self(),
                 );
             } else {
-                let mut old_name = new_name.clone();
-                let client = &server.clients[client_id];
                 let room = &mut server.rooms[room_id];
-                swap(&mut room.name, &mut old_name);
-                super::common::get_room_update(Some(old_name), room, Some(&client), response);
-            };
+                if room.is_fixed() || room.master_id != Some(client_id) {
+                    response.add(Warning("Access denied.".to_string()).send_self());
+                } else {
+                    let mut old_name = new_name.clone();
+                    let client = &server.clients[client_id];
+                    swap(&mut room.name, &mut old_name);
+                    super::common::get_room_update(Some(old_name), room, Some(&client), response);
+                }
+            }
         }
         ToggleReady => {
             if let (client, Some(room)) = server.client_and_room(client_id) {
@@ -193,50 +195,54 @@ pub fn handle(
             }
         }
         AddTeam(info) => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                if room.teams.len() >= room.team_limit as usize {
-                    response.add(Warning("Too many teams!".to_string()).send_self());
-                } else if room.addable_hedgehogs() == 0 {
-                    response.add(Warning("Too many hedgehogs!".to_string()).send_self());
-                } else if room.find_team(|t| t.name == info.name) != None {
-                    response.add(
-                        Warning("There's already a team with same name in the list.".to_string())
-                            .send_self(),
-                    );
-                } else if room.game_info.is_some() {
-                    response.add(
-                        Warning("Joining not possible: Round is in progress.".to_string())
-                            .send_self(),
-                    );
-                } else if room.is_team_add_restricted() {
-                    response.add(
-                        Warning("This room currently does not allow adding new teams.".to_string())
-                            .send_self(),
-                    );
-                } else {
-                    let team = room.add_team(client.id, *info, client.protocol_number < 42);
-                    client.teams_in_game += 1;
-                    client.clan = Some(team.color);
-                    response.add(TeamAccepted(team.name.clone()).send_self());
-                    response.add(
-                        TeamAdd(HWRoom::team_info(&client, team))
-                            .send_all()
-                            .in_room(room_id)
-                            .but_self(),
-                    );
-                    response.add(
-                        TeamColor(team.name.clone(), team.color)
-                            .send_all()
-                            .in_room(room_id),
-                    );
-                    response.add(
-                        HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
-                            .send_all()
-                            .in_room(room_id),
-                    );
+            let client = &mut server.clients[client_id];
+            let room = &mut server.rooms[room_id];
+            if room.teams.len() >= room.team_limit as usize {
+                response.add(Warning("Too many teams!".to_string()).send_self());
+            } else if room.addable_hedgehogs() == 0 {
+                response.add(Warning("Too many hedgehogs!".to_string()).send_self());
+            } else if room.find_team(|t| t.name == info.name) != None {
+                response.add(
+                    Warning("There's already a team with same name in the list.".to_string())
+                        .send_self(),
+                );
+            } else if room.game_info.is_some() {
+                response.add(
+                    Warning("Joining not possible: Round is in progress.".to_string()).send_self(),
+                );
+            } else if room.is_team_add_restricted() {
+                response.add(
+                    Warning("This room currently does not allow adding new teams.".to_string())
+                        .send_self(),
+                );
+            } else {
+                let team = room.add_team(client.id, *info, client.protocol_number < 42);
+                client.teams_in_game += 1;
+                client.clan = Some(team.color);
+                response.add(TeamAccepted(team.name.clone()).send_self());
+                response.add(
+                    TeamAdd(HWRoom::team_info(&client, team))
+                        .send_all()
+                        .in_room(room_id)
+                        .but_self(),
+                );
+                response.add(
+                    TeamColor(team.name.clone(), team.color)
+                        .send_all()
+                        .in_room(room_id),
+                );
+                response.add(
+                    HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
+                        .send_all()
+                        .in_room(room_id),
+                );
 
-                    super::common::get_room_update(None, room, Some(&client), response);
-                }
+                let room_master = if let Some(id) = room.master_id {
+                    Some(&server.clients[id])
+                } else {
+                    None
+                };
+                super::common::get_room_update(None, room, room_master, response);
             }
         }
         RemoveTeam(name) => {
