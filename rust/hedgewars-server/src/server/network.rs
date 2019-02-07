@@ -309,22 +309,25 @@ impl NetworkLayer {
     fn register_client(
         &mut self,
         poll: &Poll,
-        id: ClientId,
         client_socket: ClientSocket,
         addr: SocketAddr,
-    ) {
+    ) -> ClientId {
+        let entry = self.clients.vacant_entry();
+        let client_id = entry.key();
+
         poll.register(
             client_socket.inner(),
-            Token(id),
+            Token(client_id),
             Ready::readable() | Ready::writable(),
             PollOpt::edge(),
         )
         .expect("could not register socket with event loop");
 
-        let entry = self.clients.vacant_entry();
-        let client = NetworkClient::new(id, client_socket, addr);
+        let client = NetworkClient::new(client_id, client_socket, addr);
         info!("client {} ({}) added", client.id, client.peer_addr);
         entry.insert(client);
+
+        client_id
     }
 
     fn flush_server_messages(&mut self, mut response: handlers::Response) {
@@ -371,14 +374,15 @@ impl NetworkLayer {
         let (client_socket, addr) = self.listener.accept()?;
         info!("Connected: {}", addr);
 
-        let client_id = self.server.add_client();
-        self.register_client(
-            poll,
-            client_id,
-            self.create_client_socket(client_socket)?,
-            addr,
-        );
-        //TODO: create response for initial messages
+        let client_id = self.register_client(poll, self.create_client_socket(client_socket)?, addr);
+
+        let mut response = handlers::Response::new(client_id);
+
+        handlers::handle_client_accept(&mut self.server, client_id, &mut response);
+
+        if !response.is_empty() {
+            self.flush_server_messages(response);
+        }
 
         Ok(())
     }

@@ -5,14 +5,19 @@ use super::{actions::Destination, core::HWServer, coretypes::ClientId};
 use crate::{
     protocol::messages::{HWProtocolMessage, HWServerMessage, HWServerMessage::*},
     server::actions::PendingMessage,
+    utils,
 };
+use base64::encode;
 use log::*;
+use rand::{thread_rng, RngCore};
 
 mod checker;
 mod common;
 mod inroom;
 mod lobby;
 mod loggingin;
+
+use self::loggingin::LoginResult;
 
 pub struct Response {
     client_id: ClientId,
@@ -102,25 +107,49 @@ pub fn handle(
     message: HWProtocolMessage,
 ) {
     match message {
-        HWProtocolMessage::Ping => {
-            response.add(Pong.send_self());
-        }
-        HWProtocolMessage::Quit(Some(msg)) => {
-            common::remove_client(server, response, "User quit: ".to_string() + &msg);
-        }
-        HWProtocolMessage::Quit(None) => {
-            common::remove_client(server, response, "User quit".to_string());
-        }
+        HWProtocolMessage::Ping => response.add(Pong.send_self()),
         HWProtocolMessage::Malformed => warn!("Malformed/unknown message"),
         HWProtocolMessage::Empty => warn!("Empty message"),
-        _ => match server.clients[client_id].room_id {
-            None => loggingin::handle(server, client_id, response, message),
-            Some(id) if id == server.lobby_id => {
-                lobby::handle(server, client_id, response, message)
+        _ => {
+            if server.anteroom.clients.contains(client_id) {
+                match loggingin::handle(&mut server.anteroom, client_id, response, message) {
+                    LoginResult::Unchanged => (),
+                    LoginResult::Complete => {
+                        if let Some(client) = server.anteroom.remove_client(client_id) {
+                            server.add_client(client_id, client);
+                        }
+                    }
+                    LoginResult::Exit => {
+                        server.anteroom.remove_client(client_id);
+                    }
+                }
+            } else {
+                match message {
+                    HWProtocolMessage::Quit(Some(msg)) => {
+                        common::remove_client(server, response, "User quit: ".to_string() + &msg);
+                    }
+                    HWProtocolMessage::Quit(None) => {
+                        common::remove_client(server, response, "User quit".to_string());
+                    }
+                    _ => match server.clients[client_id].room_id {
+                        None => lobby::handle(server, client_id, response, message),
+                        Some(room_id) => {
+                            inroom::handle(server, client_id, response, room_id, message)
+                        }
+                    },
+                }
             }
-            Some(id) => inroom::handle(server, client_id, response, id, message),
-        },
+        }
     }
+}
+
+pub fn handle_client_accept(server: &mut HWServer, client_id: ClientId, response: &mut Response) {
+    let mut salt = [0u8; 18];
+    thread_rng().fill_bytes(&mut salt);
+
+    server.anteroom.add_client(client_id, encode(&salt));
+
+    response.add(HWServerMessage::Connected(utils::PROTOCOL_VERSION).send_self());
 }
 
 pub fn handle_client_loss(server: &mut HWServer, client_id: ClientId, response: &mut Response) {

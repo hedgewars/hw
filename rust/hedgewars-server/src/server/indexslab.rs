@@ -1,5 +1,6 @@
 use std::{
     iter,
+    mem::replace,
     ops::{Index, IndexMut},
 };
 
@@ -32,9 +33,11 @@ impl<T> IndexSlab<T> {
         self.data.get(index).and_then(|x| x.as_ref()).is_some()
     }
 
-    pub fn remove(&mut self, index: usize) {
+    pub fn remove(&mut self, index: usize) -> Option<T> {
         if let Some(x) = self.data.get_mut(index) {
-            *x = None
+            replace(x, None)
+        } else {
+            None
         }
     }
 

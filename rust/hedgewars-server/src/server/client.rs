@@ -19,8 +19,6 @@ pub struct HWClient {
     pub id: ClientId,
     pub room_id: Option<usize>,
     pub nick: String,
-    pub web_password: String,
-    pub server_salt: String,
     pub protocol_number: u16,
     pub flags: ClientFlags,
     pub teams_in_game: u8,
@@ -29,14 +27,12 @@ pub struct HWClient {
 }
 
 impl HWClient {
-    pub fn new(id: ClientId, salt: String) -> HWClient {
+    pub fn new(id: ClientId, protocol_number: u16, nick: String) -> HWClient {
         HWClient {
             id,
+            nick,
+            protocol_number,
             room_id: None,
-            nick: String::new(),
-            web_password: String::new(),
-            server_salt: salt,
-            protocol_number: 0,
             flags: ClientFlags::DEFAULT,
             teams_in_game: 0,
             team_indices: Vec::new(),

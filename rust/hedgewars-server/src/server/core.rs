@@ -4,61 +4,88 @@ use super::{
     client::HWClient,
     coretypes::{ClientId, RoomId},
     handlers,
+    indexslab::IndexSlab,
     io::HWServerIO,
     room::HWRoom,
 };
-use crate::protocol::messages::*;
-use crate::utils;
-use base64::encode;
+use crate::{protocol::messages::*, utils};
+
 use log::*;
-use rand::{thread_rng, RngCore};
 use slab;
-use std::borrow::BorrowMut;
+use std::{borrow::BorrowMut, iter, num::NonZeroU16};
 
 type Slab<T> = slab::Slab<T>;
 
+pub struct HWAnteClient {
+    pub nick: Option<String>,
+    pub protocol_number: Option<NonZeroU16>,
+    pub server_salt: String,
+    pub web_password: String,
+}
+
+pub struct HWAnteroom {
+    pub clients: IndexSlab<HWAnteClient>,
+}
+
+impl HWAnteroom {
+    pub fn new(clients_limit: usize) -> Self {
+        let clients = IndexSlab::with_capacity(clients_limit);
+        HWAnteroom { clients }
+    }
+
+    pub fn add_client(&mut self, client_id: ClientId, salt: String) {
+        let client = HWAnteClient {
+            nick: None,
+            protocol_number: None,
+            server_salt: salt,
+            web_password: "".to_string(),
+        };
+        self.clients.insert(client_id, client);
+    }
+
+    pub fn remove_client(&mut self, client_id: ClientId) -> Option<HWAnteClient> {
+        let mut client = self.clients.remove(client_id);
+        if let Some(ref mut client) = client {
+            client
+                .web_password
+                .replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
+        }
+        client
+    }
+}
+
 pub struct HWServer {
-    pub clients: Slab<HWClient>,
+    pub clients: IndexSlab<HWClient>,
     pub rooms: Slab<HWRoom>,
     pub lobby_id: RoomId,
     pub output: Vec<(Vec<ClientId>, HWServerMessage)>,
     pub removed_clients: Vec<ClientId>,
     pub io: Box<dyn HWServerIO>,
+    pub anteroom: HWAnteroom,
 }
 
 impl HWServer {
-    pub fn new(clients_limit: usize, rooms_limit: usize, io: Box<dyn HWServerIO>) -> HWServer {
+    pub fn new(clients_limit: usize, rooms_limit: usize, io: Box<dyn HWServerIO>) -> Self {
         let rooms = Slab::with_capacity(rooms_limit);
-        let clients = Slab::with_capacity(clients_limit);
-        let mut server = HWServer {
+        let clients = IndexSlab::with_capacity(clients_limit);
+        let mut server = Self {
             clients,
             rooms,
             lobby_id: 0,
             output: vec![],
             removed_clients: vec![],
             io,
+            anteroom: HWAnteroom::new(clients_limit),
         };
         server.lobby_id = server.add_room().id;
         server
     }
 
-    pub fn add_client(&mut self) -> ClientId {
-        let key: ClientId;
-        {
-            let entry = self.clients.vacant_entry();
-            key = entry.key();
-            let mut salt = [0u8; 18];
-            thread_rng().fill_bytes(&mut salt);
-
-            let client = HWClient::new(entry.key(), encode(&salt));
-            entry.insert(client);
+    pub fn add_client(&mut self, client_id: ClientId, data: HWAnteClient) {
+        if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
+            let client = HWClient::new(client_id, protocol.get(), nick);
+            self.clients.insert(client_id, client);
         }
-        self.send(
-            key,
-            &Destination::ToSelf,
-            HWServerMessage::Connected(utils::PROTOCOL_VERSION),
-        );
-        key
     }
 
     pub fn remove_client(&mut self, client_id: ClientId) {
@@ -90,19 +117,6 @@ impl HWServer {
     #[inline]
     pub fn move_to_room(&mut self, client_id: ClientId, room_id: RoomId) {
         move_to_room(&mut self.clients[client_id], &mut self.rooms[room_id])
-    }
-
-    pub fn send(
-        &mut self,
-        client_id: ClientId,
-        destination: &Destination,
-        message: HWServerMessage,
-    ) {
-
-    }
-
-    pub fn send_msg(&mut self, client_id: ClientId, message: PendingMessage) {
-        self.send(client_id, &message.destination, message.message)
     }
 
     pub fn lobby(&self) -> &HWRoom {
