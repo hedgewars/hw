@@ -57,7 +57,6 @@ impl HWAnteroom {
 pub struct HWServer {
     pub clients: IndexSlab<HWClient>,
     pub rooms: Slab<HWRoom>,
-    pub lobby_id: RoomId,
     pub output: Vec<(Vec<ClientId>, HWServerMessage)>,
     pub removed_clients: Vec<ClientId>,
     pub io: Box<dyn HWServerIO>,
@@ -68,17 +67,14 @@ impl HWServer {
     pub fn new(clients_limit: usize, rooms_limit: usize, io: Box<dyn HWServerIO>) -> Self {
         let rooms = Slab::with_capacity(rooms_limit);
         let clients = IndexSlab::with_capacity(clients_limit);
-        let mut server = Self {
+        Self {
             clients,
             rooms,
-            lobby_id: 0,
             output: vec![],
             removed_clients: vec![],
             io,
             anteroom: HWAnteroom::new(clients_limit),
-        };
-        server.lobby_id = server.add_room().id;
-        server
+        }
     }
 
     pub fn add_client(&mut self, client_id: ClientId, data: HWAnteClient) {
@@ -119,10 +115,6 @@ impl HWServer {
         move_to_room(&mut self.clients[client_id], &mut self.rooms[room_id])
     }
 
-    pub fn lobby(&self) -> &HWRoom {
-        &self.rooms[self.lobby_id]
-    }
-
     pub fn has_room(&self, name: &str) -> bool {
         self.rooms.iter().any(|(_, r)| r.name == name)
     }
@@ -156,6 +148,10 @@ impl HWServer {
         F: Fn(&(usize, &HWClient)) -> bool,
     {
         self.clients.iter().filter(f).map(|(_, c)| c.id).collect()
+    }
+
+    pub fn lobby_clients(&self) -> Vec<ClientId> {
+        self.select_clients(|(_, c)| c.room_id == None)
     }
 
     pub fn room_clients(&self, room_id: RoomId) -> Vec<ClientId> {

@@ -51,7 +51,7 @@ pub fn process_login(server: &mut HWServer, response: &mut Response) {
             response.add(Notice("NickAlreadyInUse".to_string()).send_self());
         }
     } else {
-        server.clients[client_id].room_id = Some(server.lobby_id);
+        server.clients[client_id].room_id = None;
 
         let lobby_nicks: Vec<_> = server
             .clients
@@ -76,7 +76,6 @@ pub fn process_login(server: &mut HWServer, response: &mut Response) {
             server
                 .rooms
                 .iter()
-                .filter(|(id, _)| *id != server.lobby_id)
                 .flat_map(|(_, r)| r.info(r.master_id.map(|id| &server.clients[id])))
                 .collect(),
         );
@@ -95,7 +94,6 @@ pub fn remove_teams(
     is_in_game: bool,
     response: &mut Response,
 ) {
-    let mut game_ended = false;
     if let Some(ref mut info) = room.game_info {
         for team_name in &team_names {
             info.left_teams.push(team_name.clone());
@@ -172,6 +170,8 @@ fn remove_client_from_room(
         }
     }
 
+    client.room_id = None;
+
     let update_msg = if room.players_number == 0 && !room.is_fixed() {
         RoomRemove(room.name.clone())
     } else {
@@ -186,33 +186,30 @@ pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Resp
     let client = &mut server.clients[client_id];
 
     if let Some(room_id) = client.room_id {
-        if room_id != server.lobby_id {
-            let room = &mut server.rooms[room_id];
+        let room = &mut server.rooms[room_id];
 
-            remove_client_from_room(client, room, response, msg);
-            client.room_id = Some(server.lobby_id);
+        remove_client_from_room(client, room, response, msg);
 
-            if !room.is_fixed() && room.master_id == None {
-                if let Some(new_master_id) = server.room_clients(room_id).first().cloned() {
-                    let new_master_nick = server.clients[new_master_id].nick.clone();
-                    let room = &mut server.rooms[room_id];
-                    room.master_id = Some(new_master_id);
-                    server.clients[new_master_id].set_is_master(true);
+        if !room.is_fixed() && room.master_id == None {
+            if let Some(new_master_id) = server.room_clients(room_id).first().cloned() {
+                let new_master_nick = server.clients[new_master_id].nick.clone();
+                let room = &mut server.rooms[room_id];
+                room.master_id = Some(new_master_id);
+                server.clients[new_master_id].set_is_master(true);
 
-                    if room.protocol_number < 42 {
-                        room.name = new_master_nick.clone();
-                    }
-
-                    room.set_join_restriction(false);
-                    room.set_team_add_restriction(false);
-                    room.set_unregistered_players_restriction(true);
-
-                    response.add(
-                        ClientFlags("+h".to_string(), vec![new_master_nick])
-                            .send_all()
-                            .in_room(room.id),
-                    );
+                if room.protocol_number < 42 {
+                    room.name = new_master_nick.clone();
                 }
+
+                room.set_join_restriction(false);
+                room.set_team_add_restriction(false);
+                room.set_unregistered_players_restriction(true);
+
+                response.add(
+                    ClientFlags("+h".to_string(), vec![new_master_nick])
+                        .send_all()
+                        .in_room(room.id),
+                );
             }
         }
     }
@@ -220,7 +217,6 @@ pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Resp
 
 pub fn remove_client(server: &mut HWServer, response: &mut Response, msg: String) {
     let client_id = response.client_id();
-    let lobby_id = server.lobby_id;
     let client = &mut server.clients[client_id];
     let (nick, room_id) = (client.nick.clone(), client.room_id);
 

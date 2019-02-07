@@ -111,7 +111,6 @@ pub fn handle(
     use crate::protocol::messages::HWProtocolMessage::*;
     match message {
         Part(msg) => {
-            let lobby_id = server.lobby_id;
             if let (client, Some(room)) = server.client_and_room(client_id) {
                 let msg = match msg {
                     Some(s) => format!("part: {}", s),

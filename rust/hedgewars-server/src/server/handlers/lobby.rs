@@ -50,7 +50,7 @@ pub fn handle(
                     msg,
                 }
                 .send_all()
-                .in_room(server.lobby_id)
+                .in_lobby()
                 .but_self(),
             );
         }

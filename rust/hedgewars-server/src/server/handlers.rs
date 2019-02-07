@@ -1,7 +1,11 @@
 use mio;
 use std::{io, io::Write};
 
-use super::{actions::Destination, core::HWServer, coretypes::ClientId};
+use super::{
+    actions::{Destination, DestinationRoom},
+    core::HWServer,
+    coretypes::ClientId,
+};
 use crate::{
     protocol::messages::{HWProtocolMessage, HWServerMessage, HWServerMessage::*},
     server::actions::PendingMessage,
@@ -81,7 +85,12 @@ fn get_recipients(
         Destination::ToSelf => vec![client_id],
         Destination::ToId(id) => vec![id],
         Destination::ToAll {
-            room_id: Some(id), ..
+            room_id: DestinationRoom::Lobby,
+            ..
+        } => server.lobby_clients(),
+        Destination::ToAll {
+            room_id: DestinationRoom::Room(id),
+            ..
         } => server.room_clients(id),
         Destination::ToAll {
             protocol: Some(proto),

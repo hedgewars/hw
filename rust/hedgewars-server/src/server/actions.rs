@@ -16,11 +16,17 @@ use std::{io, io::Write, iter::once, mem::replace};
 #[cfg(feature = "official-server")]
 use super::database;
 
+pub enum DestinationRoom {
+    All,
+    Lobby,
+    Room(RoomId),
+}
+
 pub enum Destination {
     ToId(ClientId),
     ToSelf,
     ToAll {
-        room_id: Option<RoomId>,
+        room_id: DestinationRoom,
         protocol: Option<u16>,
         skip_self: bool,
     },
@@ -48,7 +54,7 @@ impl PendingMessage {
 
     pub fn send_all(message: HWServerMessage) -> PendingMessage {
         let destination = Destination::ToAll {
-            room_id: None,
+            room_id: DestinationRoom::All,
             protocol: None,
             skip_self: false,
         };
@@ -63,7 +69,17 @@ impl PendingMessage {
             ref mut room_id, ..
         } = self.destination
         {
-            *room_id = Some(clients_room_id)
+            *room_id = DestinationRoom::Room(clients_room_id)
+        }
+        self
+    }
+
+    pub fn in_lobby(mut self) -> PendingMessage {
+        if let Destination::ToAll {
+            ref mut room_id, ..
+        } = self.destination
+        {
+            *room_id = DestinationRoom::Lobby
         }
         self
     }
