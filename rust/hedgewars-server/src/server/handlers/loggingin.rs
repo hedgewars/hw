@@ -97,7 +97,9 @@ pub fn handle(
         HWProtocolMessage::Password(hash, salt) => {
             let client = &anteroom.clients[client_id];
 
-            if let (Some(protocol), Some(password)) = (client.protocol_number, client.web_password.as_ref()) {
+            if let (Some(protocol), Some(password)) =
+                (client.protocol_number, client.web_password.as_ref())
+            {
                 let client_hash = get_hash(protocol.get(), &password, &salt, &client.server_salt);
                 let server_hash = get_hash(protocol.get(), &password, &client.server_salt, &salt);
                 if client_hash == server_hash {

@@ -330,7 +330,7 @@ impl NetworkLayer {
         client_id
     }
 
-    fn flush_server_messages(&mut self, mut response: handlers::Response) {
+    fn flush_server_messages(&mut self, mut response: handlers::Response, poll: &Poll) {
         debug!("{} pending server messages", response.len());
         let output = response.extract_messages(&mut self.server);
         for (clients, message) in output {
@@ -343,6 +343,10 @@ impl NetworkLayer {
                         .insert((client_id, NetworkClientState::NeedsWrite));
                 }
             }
+        }
+
+        for client_id in response.extract_removed_clients() {
+            self.deregister_client(poll, client_id);
         }
     }
 
@@ -381,7 +385,7 @@ impl NetworkLayer {
         handlers::handle_client_accept(&mut self.server, client_id, &mut response);
 
         if !response.is_empty() {
-            self.flush_server_messages(response);
+            self.flush_server_messages(response, poll);
         }
 
         Ok(())
@@ -438,14 +442,7 @@ impl NetworkLayer {
         }
 
         if !response.is_empty() {
-            self.flush_server_messages(response);
-        }
-
-        if !self.server.removed_clients.is_empty() {
-            let ids: Vec<_> = self.server.removed_clients.drain(..).collect();
-            for client_id in ids {
-                self.deregister_client(poll, client_id);
-            }
+            self.flush_server_messages(response, poll);
         }
 
         Ok(())
@@ -476,7 +473,7 @@ impl NetworkLayer {
         self.deregister_client(poll, client_id);
         let mut response = handlers::Response::new(client_id);
         handlers::handle_client_loss(&mut self.server, client_id, &mut response);
-        self.flush_server_messages(response);
+        self.flush_server_messages(response, poll);
 
         Ok(())
     }

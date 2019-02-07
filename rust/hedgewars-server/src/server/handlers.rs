@@ -26,6 +26,7 @@ use self::loggingin::LoginResult;
 pub struct Response {
     client_id: ClientId,
     messages: Vec<PendingMessage>,
+    removed_clients: Vec<ClientId>,
 }
 
 impl Response {
@@ -33,12 +34,13 @@ impl Response {
         Self {
             client_id,
             messages: vec![],
+            removed_clients: vec![],
         }
     }
 
     #[inline]
     pub fn is_empty(&self) -> bool {
-        self.messages.is_empty()
+        self.messages.is_empty() && self.removed_clients.is_empty()
     }
 
     #[inline]
@@ -65,6 +67,14 @@ impl Response {
             let ids = get_recipients(server, client_id, &m.destination);
             (ids, m.message)
         })
+    }
+
+    pub fn remove_client(&mut self, client_id: ClientId) {
+        self.removed_clients.push(client_id);
+    }
+
+    pub fn extract_removed_clients(&mut self) -> impl Iterator<Item = ClientId> + '_ {
+        self.removed_clients.drain(..)
     }
 }
 
@@ -130,6 +140,7 @@ pub fn handle(
                     }
                     LoginResult::Exit => {
                         server.anteroom.remove_client(client_id);
+                        response.remove_client(client_id);
                     }
                 }
             } else {
@@ -162,5 +173,7 @@ pub fn handle_client_accept(server: &mut HWServer, client_id: ClientId, response
 }
 
 pub fn handle_client_loss(server: &mut HWServer, client_id: ClientId, response: &mut Response) {
-    common::remove_client(server, response, "Connection reset".to_string());
+    if server.anteroom.remove_client(client_id).is_none() {
+        common::remove_client(server, response, "Connection reset".to_string());
+    }
 }

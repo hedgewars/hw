@@ -1,14 +1,11 @@
 use super::{
-    actions,
-    actions::{Destination, PendingMessage},
     client::HWClient,
     coretypes::{ClientId, RoomId},
-    handlers,
     indexslab::IndexSlab,
     io::HWServerIO,
     room::HWRoom,
 };
-use crate::{protocol::messages::*, utils};
+use crate::utils;
 
 use log::*;
 use slab;
@@ -45,7 +42,11 @@ impl HWAnteroom {
 
     pub fn remove_client(&mut self, client_id: ClientId) -> Option<HWAnteClient> {
         let mut client = self.clients.remove(client_id);
-        if let Some(HWAnteClient { web_password: Some(ref mut password), ..}) = client {
+        if let Some(HWAnteClient {
+            web_password: Some(ref mut password),
+            ..
+        }) = client
+        {
             password.replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
         }
         client
@@ -55,8 +56,6 @@ impl HWAnteroom {
 pub struct HWServer {
     pub clients: IndexSlab<HWClient>,
     pub rooms: Slab<HWRoom>,
-    pub output: Vec<(Vec<ClientId>, HWServerMessage)>,
-    pub removed_clients: Vec<ClientId>,
     pub io: Box<dyn HWServerIO>,
     pub anteroom: HWAnteroom,
 }
@@ -68,8 +67,6 @@ impl HWServer {
         Self {
             clients,
             rooms,
-            output: vec![],
-            removed_clients: vec![],
             io,
             anteroom: HWAnteroom::new(clients_limit),
         }
@@ -83,10 +80,7 @@ impl HWServer {
     }
 
     pub fn remove_client(&mut self, client_id: ClientId) {
-        self.removed_clients.push(client_id);
-        if self.clients.contains(client_id) {
-            self.clients.remove(client_id);
-        }
+        self.clients.remove(client_id);
     }
 
     pub fn add_room(&mut self) -> &mut HWRoom {

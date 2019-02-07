@@ -226,6 +226,7 @@ pub fn remove_client(server: &mut HWServer, response: &mut Response, msg: String
 
     response.add(LobbyLeft(nick, msg.to_string()).send_all());
     response.add(Bye("User quit: ".to_string() + &msg).send_self());
+    response.remove_client(client_id);
 }
 
 pub fn get_room_update(
