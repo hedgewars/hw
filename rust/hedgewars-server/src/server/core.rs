@@ -19,8 +19,8 @@ type Slab<T> = slab::Slab<T>;
 pub struct HWAnteClient {
     pub nick: Option<String>,
     pub protocol_number: Option<NonZeroU16>,
+    pub web_password: Option<String>,
     pub server_salt: String,
-    pub web_password: String,
 }
 
 pub struct HWAnteroom {
@@ -38,17 +38,15 @@ impl HWAnteroom {
             nick: None,
             protocol_number: None,
             server_salt: salt,
-            web_password: "".to_string(),
+            web_password: None,
         };
         self.clients.insert(client_id, client);
     }
 
     pub fn remove_client(&mut self, client_id: ClientId) -> Option<HWAnteClient> {
         let mut client = self.clients.remove(client_id);
-        if let Some(ref mut client) = client {
-            client
-                .web_password
-                .replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
+        if let Some(HWAnteClient { web_password: Some(ref mut password), ..}) = client {
+            password.replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
         }
         client
     }

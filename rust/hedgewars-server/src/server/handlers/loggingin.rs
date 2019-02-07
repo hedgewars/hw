@@ -29,10 +29,10 @@ impl LowerHex for Sha1Digest {
 }
 
 #[cfg(feature = "official-server")]
-fn get_hash(client: &HWAnteClient, salt1: &str, salt2: &str) -> Sha1Digest {
+fn get_hash(protocol_number: u16, web_password: &str, salt1: &str, salt2: &str) -> Sha1Digest {
     let s = format!(
         "{}{}{}{}{}",
-        salt1, salt2, client.web_password, client.protocol_number, "!hedgewars"
+        salt1, salt2, web_password, protocol_number, "!hedgewars"
     );
     Sha1Digest(sha1(s.as_bytes()))
 }
@@ -97,22 +97,27 @@ pub fn handle(
         HWProtocolMessage::Password(hash, salt) => {
             let client = &anteroom.clients[client_id];
 
-            let client_hash = get_hash(client, &salt, &client.server_salt);
-            let server_hash = get_hash(client, &client.server_salt, &salt);
-            if client_hash == server_hash {
-                response.add(ServerAuth(format!("{:x}", server_hash)).send_self());
-                LoginResult::Complete
+            if let (Some(protocol), Some(password)) = (client.protocol_number, client.web_password.as_ref()) {
+                let client_hash = get_hash(protocol.get(), &password, &salt, &client.server_salt);
+                let server_hash = get_hash(protocol.get(), &password, &client.server_salt, &salt);
+                if client_hash == server_hash {
+                    response.add(ServerAuth(format!("{:x}", server_hash)).send_self());
+                    LoginResult::Complete
+                } else {
+                    response.add(Bye("No protocol provided.".to_string()).send_self());
+                    LoginResult::Unchanged
+                }
             } else {
-                response.add(Bye("Authentication failed".to_string()).send_self());
+                response.add(Bye("Authentication failed.".to_string()).send_self());
                 LoginResult::Exit
             }
         }
         #[cfg(feature = "official-server")]
         HWProtocolMessage::Checker(protocol, nick, password) => {
             let client = &mut anteroom.clients[client_id];
-            client.protocol_number = Some(protocol);
+            client.protocol_number = NonZeroU16::new(protocol);
             client.nick = Some(nick);
-            client.web_password = password;
+            client.web_password = Some(password);
             //client.set_is_checker(true);
             LoginResult::Complete
         }
