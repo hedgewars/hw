@@ -15,20 +15,21 @@ use crate::{
 
 use super::Response;
 
-use rand::{self, thread_rng, Rng};
+use rand::{self, seq::SliceRandom, thread_rng, Rng};
 use std::{iter::once, mem::replace};
 
 pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     let mut rng = thread_rng();
+
     let reply = if options.is_empty() {
-        (*rng.choose(&["heads", "tails"]).unwrap()).to_owned()
+        (*&["heads", "tails"].choose(&mut rng).unwrap()).to_string()
     } else {
-        rng.choose(&options).unwrap().clone()
+        options.choose(&mut rng).unwrap().clone()
     };
 
     ChatMsg {
-        nick: "[random]".to_owned(),
-        msg: reply.clone(),
+        nick: "[random]".to_string(),
+        msg: reply,
     }
 }
 
@@ -218,7 +219,7 @@ pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Resp
 pub fn remove_client(server: &mut HWServer, response: &mut Response, msg: String) {
     let client_id = response.client_id();
     let client = &mut server.clients[client_id];
-    let (nick, room_id) = (client.nick.clone(), client.room_id);
+    let nick = client.nick.clone();
 
     exit_room(server, client_id, response, &msg);
 
@@ -294,8 +295,6 @@ pub fn apply_voting_result(
     response: &mut Response,
     kind: VoteType,
 ) {
-    let client_id = response.client_id;
-
     match kind {
         VoteType::Kick(nick) => {
             if let Some(client) = server.find_client(&nick) {

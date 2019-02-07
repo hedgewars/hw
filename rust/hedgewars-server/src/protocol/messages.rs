@@ -3,22 +3,21 @@ use std::{convert::From, iter::once, ops};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum HWProtocolMessage {
-    // core
+    // common messages
     Ping,
     Pong,
     Quit(Option<String>),
-    //Cmd(String, Vec<String>),
     Global(String),
     Watch(String),
     ToggleServerRegisteredOnly,
     SuperPower,
     Info(String),
-    // not entered state
+    // anteroom messages
     Nick(String),
     Proto(u16),
     Password(String, String),
     Checker(u16, String, String),
-    // lobby
+    // lobby messages
     List,
     Chat(String),
     CreateRoom(String, Option<String>),
@@ -35,7 +34,7 @@ pub enum HWProtocolMessage {
     GetServerVar,
     RestartServer,
     Stats,
-    // in room
+    // room messages
     Part(Option<String>),
     Cfg(GameCfg),
     AddTeam(Box<TeamInfo>),

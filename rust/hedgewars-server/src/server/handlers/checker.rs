@@ -6,7 +6,7 @@ use crate::{
     server::{core::HWServer, coretypes::ClientId},
 };
 
-pub fn handle(server: &mut HWServer, client_id: ClientId, message: HWProtocolMessage) {
+pub fn handle(_server: &mut HWServer, _client_id: ClientId, message: HWProtocolMessage) {
     match message {
         _ => warn!("Unknown command"),
     }

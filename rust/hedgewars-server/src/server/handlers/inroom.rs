@@ -108,19 +108,19 @@ pub fn handle(
     room_id: RoomId,
     message: HWProtocolMessage,
 ) {
+    let client = &mut server.clients[client_id];
+    let room = &mut server.rooms[room_id];
+
     use crate::protocol::messages::HWProtocolMessage::*;
     match message {
         Part(msg) => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                let msg = match msg {
-                    Some(s) => format!("part: {}", s),
-                    None => "part".to_string(),
-                };
-                super::common::exit_room(server, client_id, response, &msg);
-            }
+            let msg = match msg {
+                Some(s) => format!("part: {}", s),
+                None => "part".to_string(),
+            };
+            super::common::exit_room(server, client_id, response, &msg);
         }
         Chat(msg) => {
-            let client = &mut server.clients[client_id];
             response.add(
                 ChatMsg {
                     nick: client.nick.clone(),
@@ -131,27 +131,21 @@ pub fn handle(
             );
         }
         Fix => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                if client.is_admin() {
-                    room.set_is_fixed(true);
-                    room.set_join_restriction(false);
-                    room.set_team_add_restriction(false);
-                    room.set_unregistered_players_restriction(true);
-                }
+            if client.is_admin() {
+                room.set_is_fixed(true);
+                room.set_join_restriction(false);
+                room.set_team_add_restriction(false);
+                room.set_unregistered_players_restriction(true);
             }
         }
         Unfix => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                if client.is_admin() {
-                    room.set_is_fixed(false)
-                }
+            if client.is_admin() {
+                room.set_is_fixed(false);
             }
         }
         Greeting(text) => {
-            if let (clienr, Some(room)) = server.client_and_room(client_id) {
-                if clienr.is_admin() || clienr.is_master() && !room.is_fixed() {
-                    room.greeting = text
-                }
+            if client.is_admin() || client.is_master() && !room.is_fixed() {
+                room.greeting = text;
             }
         }
         RoomName(new_name) => {
@@ -174,31 +168,27 @@ pub fn handle(
             }
         }
         ToggleReady => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                let flags = if client.is_ready() {
-                    room.ready_players_number -= 1;
-                    "-r"
-                } else {
-                    room.ready_players_number += 1;
-                    "+r"
-                };
+            let flags = if client.is_ready() {
+                room.ready_players_number -= 1;
+                "-r"
+            } else {
+                room.ready_players_number += 1;
+                "+r"
+            };
 
-                let msg = if client.protocol_number < 38 {
-                    LegacyReady(client.is_ready(), vec![client.nick.clone()])
-                } else {
-                    ClientFlags(flags.to_string(), vec![client.nick.clone()])
-                };
-                response.add(msg.send_all().in_room(room.id));
-                client.set_is_ready(!client.is_ready());
+            let msg = if client.protocol_number < 38 {
+                LegacyReady(client.is_ready(), vec![client.nick.clone()])
+            } else {
+                ClientFlags(flags.to_string(), vec![client.nick.clone()])
+            };
+            response.add(msg.send_all().in_room(room.id));
+            client.set_is_ready(!client.is_ready());
 
-                if room.is_fixed() && room.ready_players_number == room.players_number {
-                    super::common::start_game(server, room_id, response);
-                }
+            if room.is_fixed() && room.ready_players_number == room.players_number {
+                super::common::start_game(server, room_id, response);
             }
         }
         AddTeam(info) => {
-            let client = &mut server.clients[client_id];
-            let room = &mut server.rooms[room_id];
             if room.teams.len() >= room.team_limit as usize {
                 response.add(Warning("Too many teams!".to_string()).send_self());
             } else if room.addable_hedgehogs() == 0 {
@@ -247,104 +237,93 @@ pub fn handle(
                 super::common::get_room_update(None, room, room_master, response);
             }
         }
-        RemoveTeam(name) => {
-            let client = &mut server.clients[client_id];
-            let room = &mut server.rooms[room_id];
-            match room.find_team_owner(&name) {
-                None => response.add(
-                    Warning("Error: The team you tried to remove does not exist.".to_string())
-                        .send_self(),
-                ),
-                Some((id, _)) if id != client_id => response
-                    .add(Warning("You can't remove a team you don't own.".to_string()).send_self()),
-                Some((_, name)) => {
-                    client.teams_in_game -= 1;
-                    client.clan = room.find_team_color(client.id);
-                    super::common::remove_teams(
-                        room,
-                        vec![name.to_string()],
-                        client.is_in_game(),
-                        response,
-                    );
+        RemoveTeam(name) => match room.find_team_owner(&name) {
+            None => response.add(
+                Warning("Error: The team you tried to remove does not exist.".to_string())
+                    .send_self(),
+            ),
+            Some((id, _)) if id != client_id => response
+                .add(Warning("You can't remove a team you don't own.".to_string()).send_self()),
+            Some((_, name)) => {
+                client.teams_in_game -= 1;
+                client.clan = room.find_team_color(client.id);
+                super::common::remove_teams(
+                    room,
+                    vec![name.to_string()],
+                    client.is_in_game(),
+                    response,
+                );
 
-                    match room.game_info {
-                        Some(ref info) if info.teams_in_game == 0 => {
-                            super::common::end_game(server, room_id, response)
-                        }
-                        _ => (),
+                match room.game_info {
+                    Some(ref info) if info.teams_in_game == 0 => {
+                        super::common::end_game(server, room_id, response)
                     }
+                    _ => (),
                 }
             }
-        }
+        },
         SetHedgehogsNumber(team_name, number) => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                let addable_hedgehogs = room.addable_hedgehogs();
-                if let Some((_, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
-                    if !client.is_master() {
-                        response.add(Error("You're not the room master!".to_string()).send_self());
-                    } else if number < 1
-                        || number > MAX_HEDGEHOGS_PER_TEAM
-                        || number > addable_hedgehogs + team.hedgehogs_number
-                    {
-                        response.add(
-                            HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send_self(),
-                        );
-                    } else {
-                        team.hedgehogs_number = number;
-                        response.add(
-                            HedgehogsNumber(team.name.clone(), number)
-                                .send_all()
-                                .in_room(room_id)
-                                .but_self(),
-                        );
-                    }
+            let addable_hedgehogs = room.addable_hedgehogs();
+            if let Some((_, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
+                if !client.is_master() {
+                    response.add(Error("You're not the room master!".to_string()).send_self());
+                } else if number < 1
+                    || number > MAX_HEDGEHOGS_PER_TEAM
+                    || number > addable_hedgehogs + team.hedgehogs_number
+                {
+                    response
+                        .add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send_self());
                 } else {
-                    response.add(Warning("No such team.".to_string()).send_self());
+                    team.hedgehogs_number = number;
+                    response.add(
+                        HedgehogsNumber(team.name.clone(), number)
+                            .send_all()
+                            .in_room(room_id)
+                            .but_self(),
+                    );
                 }
+            } else {
+                response.add(Warning("No such team.".to_string()).send_self());
             }
         }
         SetTeamColor(team_name, color) => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                if let Some((owner, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
-                    if !client.is_master() {
-                        response.add(Error("You're not the room master!".to_string()).send_self());
-                    } else {
-                        team.color = color;
-                        response.add(
-                            TeamColor(team.name.clone(), color)
-                                .send_all()
-                                .in_room(room_id)
-                                .but_self(),
-                        );
-                        server.clients[owner].clan = Some(color);
-                    }
+            if let Some((owner, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
+                if !client.is_master() {
+                    response.add(Error("You're not the room master!".to_string()).send_self());
                 } else {
-                    response.add(Warning("No such team.".to_string()).send_self());
+                    team.color = color;
+                    response.add(
+                        TeamColor(team.name.clone(), color)
+                            .send_all()
+                            .in_room(room_id)
+                            .but_self(),
+                    );
+                    server.clients[owner].clan = Some(color);
                 }
+            } else {
+                response.add(Warning("No such team.".to_string()).send_self());
             }
         }
         Cfg(cfg) => {
-            if let (client, Some(room)) = server.client_and_room(client_id) {
-                if room.is_fixed() {
-                    response.add(Warning("Access denied.".to_string()).send_self());
-                } else if !client.is_master() {
-                    response.add(Error("You're not the room master!".to_string()).send_self());
-                } else {
-                    let cfg = match cfg {
-                        GameCfg::Scheme(name, mut values) => {
-                            if client.protocol_number == 49 && values.len() >= 2 {
-                                let mut s = "X".repeat(50);
-                                s.push_str(&values.pop().unwrap());
-                                values.push(s);
-                            }
-                            GameCfg::Scheme(name, values)
+            if room.is_fixed() {
+                response.add(Warning("Access denied.".to_string()).send_self());
+            } else if !client.is_master() {
+                response.add(Error("You're not the room master!".to_string()).send_self());
+            } else {
+                let cfg = match cfg {
+                    GameCfg::Scheme(name, mut values) => {
+                        if client.protocol_number == 49 && values.len() >= 2 {
+                            let mut s = "X".repeat(50);
+                            s.push_str(&values.pop().unwrap());
+                            values.push(s);
                         }
-                        cfg => cfg,
-                    };
+                        GameCfg::Scheme(name, values)
+                    }
+                    cfg => cfg,
+                };
 
-                    response.add(cfg.to_server_msg().send_all().in_room(room.id).but_self());
-                    room.set_config(cfg);
-                }
+                response.add(cfg.to_server_msg().send_all().in_room(room.id).but_self());
+                room.set_config(cfg);
             }
         }
         Save(name, location) => {
@@ -353,11 +332,11 @@ pub fn handle(
                     .send_all()
                     .in_room(room_id),
             );
-            server.rooms[room_id].save_config(name, location);
+            room.save_config(name, location);
         }
         SaveRoom(filename) => {
-            if server.clients[client_id].is_admin() {
-                match server.rooms[room_id].get_saves() {
+            if client.is_admin() {
+                match room.get_saves() {
                     Ok(text) => match server.io.write_file(&filename, &text) {
                         Ok(_) => response.add(
                             server_chat("Room configs saved successfully.".to_string()).send_self(),
@@ -383,9 +362,9 @@ pub fn handle(
             }
         }
         LoadRoom(filename) => {
-            if server.clients[client_id].is_admin() {
+            if client.is_admin() {
                 match server.io.read_file(&filename) {
-                    Ok(text) => match server.rooms[room_id].set_saves(&text) {
+                    Ok(text) => match room.set_saves(&text) {
                         Ok(_) => response.add(
                             server_chat("Room configs loaded successfully.".to_string())
                                 .send_self(),
@@ -411,7 +390,7 @@ pub fn handle(
             }
         }
         Delete(name) => {
-            if !server.rooms[room_id].delete_config(&name) {
+            if !room.delete_config(&name) {
                 response.add(Warning(format!("Save doesn't exist: {}", name)).send_self());
             } else {
                 response.add(
@@ -426,7 +405,7 @@ pub fn handle(
                 .send_self());
         }
         CallVote(Some(kind)) => {
-            let is_in_game = server.rooms[room_id].game_info.is_some();
+            let is_in_game = room.game_info.is_some();
             let error = match &kind {
                 VoteType::Kick(nick) => {
                     if server
@@ -448,7 +427,7 @@ pub fn handle(
                     }
                 }
                 VoteType::Map(Some(name)) => {
-                    if server.rooms[room_id].saves.get(&name[..]).is_some() {
+                    if room.saves.get(&name[..]).is_some() {
                         None
                     } else {
                         Some("/callvote map: No such map!".to_string())
@@ -467,6 +446,7 @@ pub fn handle(
                     _ => Some("/callvote hedgehogs: Specify number from 1 to 8.".to_string()),
                 },
             };
+
             match error {
                 None => {
                     let msg = voting_description(&kind);
@@ -499,7 +479,7 @@ pub fn handle(
             );
         }
         ForceVote(vote) => {
-            let is_forced = server.clients[client_id].is_admin();
+            let is_forced = client.is_admin();
             super::common::submit_vote(
                 server,
                 coretypes::Vote {
@@ -510,8 +490,6 @@ pub fn handle(
             );
         }
         ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly => {
-            let client = &server.clients[client_id];
-            let room = &mut server.rooms[room_id];
             if client.is_master() {
                 room.flags.toggle(room_message_flag(&message));
                 super::common::get_room_update(None, room, Some(&client), response);
@@ -521,49 +499,42 @@ pub fn handle(
             super::common::start_game(server, room_id, response);
         }
         EngineMessage(em) => {
-            if let (c, Some(r)) = server.client_and_room(client_id) {
-                if c.teams_in_game > 0 {
-                    let decoding = decode(&em[..]).unwrap();
-                    let messages = by_msg(&decoding);
-                    let valid = messages.filter(|m| is_msg_valid(m, &c.team_indices));
-                    let non_empty = valid.clone().filter(|m| !is_msg_empty(m));
-                    let sync_msg = valid.clone().filter(|m| is_msg_timed(m)).last().map(|m| {
-                        if is_msg_empty(m) {
-                            Some(encode(m))
-                        } else {
-                            None
-                        }
-                    });
-
-                    let em_response =
-                        encode(&valid.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
-                    if !em_response.is_empty() {
-                        response.add(
-                            ForwardEngineMessage(vec![em_response])
-                                .send_all()
-                                .in_room(r.id)
-                                .but_self(),
-                        );
+            if client.teams_in_game > 0 {
+                let decoding = decode(&em[..]).unwrap();
+                let messages = by_msg(&decoding);
+                let valid = messages.filter(|m| is_msg_valid(m, &client.team_indices));
+                let non_empty = valid.clone().filter(|m| !is_msg_empty(m));
+                let sync_msg = valid.clone().filter(|m| is_msg_timed(m)).last().map(|m| {
+                    if is_msg_empty(m) {
+                        Some(encode(m))
+                    } else {
+                        None
                     }
-                    let em_log =
-                        encode(&non_empty.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
-                    if let Some(ref mut info) = r.game_info {
-                        if !em_log.is_empty() {
-                            info.msg_log.push(em_log);
-                        }
-                        if let Some(msg) = sync_msg {
-                            info.sync_msg = msg;
-                        }
+                });
+
+                let em_response = encode(&valid.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
+                if !em_response.is_empty() {
+                    response.add(
+                        ForwardEngineMessage(vec![em_response])
+                            .send_all()
+                            .in_room(room.id)
+                            .but_self(),
+                    );
+                }
+                let em_log = encode(&non_empty.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
+                if let Some(ref mut info) = room.game_info {
+                    if !em_log.is_empty() {
+                        info.msg_log.push(em_log);
+                    }
+                    if let Some(msg) = sync_msg {
+                        info.sync_msg = msg;
                     }
                 }
             }
         }
         RoundFinished => {
             let mut game_ended = false;
-            let client = &mut server.clients[client_id];
             if client.is_in_game() {
-                let room = &mut server.rooms[room_id];
-
                 client.set_is_in_game(false);
                 response.add(
                     ClientFlags("-g".to_string(), vec![client.nick.clone()])

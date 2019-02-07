@@ -83,10 +83,6 @@ impl HWServer {
         self.clients.remove(client_id);
     }
 
-    pub fn add_room(&mut self) -> &mut HWRoom {
-        allocate_room(&mut self.rooms)
-    }
-
     #[inline]
     pub fn create_room(
         &mut self,
@@ -108,7 +104,7 @@ impl HWServer {
     }
 
     pub fn has_room(&self, name: &str) -> bool {
-        self.rooms.iter().any(|(_, r)| r.name == name)
+        self.find_room(name).is_some()
     }
 
     pub fn find_room(&self, name: &str) -> Option<&HWRoom> {
@@ -158,24 +154,10 @@ impl HWServer {
         let room_id = self.clients[self_id].room_id;
         self.select_clients(|(id, c)| *id != self_id && c.room_id == room_id)
     }
-
-    pub fn client_and_room(&mut self, client_id: ClientId) -> (&mut HWClient, Option<&mut HWRoom>) {
-        let c = &mut self.clients[client_id];
-        if let Some(room_id) = c.room_id {
-            (c, Some(&mut self.rooms[room_id]))
-        } else {
-            (c, None)
-        }
-    }
-
-    pub fn room(&mut self, client_id: ClientId) -> Option<&mut HWRoom> {
-        self.client_and_room(client_id).1
-    }
 }
 
 fn allocate_room(rooms: &mut Slab<HWRoom>) -> &mut HWRoom {
     let entry = rooms.vacant_entry();
-    let key = entry.key();
     let room = HWRoom::new(entry.key());
     entry.insert(room)
 }

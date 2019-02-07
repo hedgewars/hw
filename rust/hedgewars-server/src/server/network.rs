@@ -227,10 +227,6 @@ impl NetworkClient {
     pub fn send_string(&mut self, msg: &str) {
         self.send_raw_msg(&msg.as_bytes());
     }
-
-    pub fn send_msg(&mut self, msg: &HWServerMessage) {
-        self.send_string(&msg.to_raw_protocol());
-    }
 }
 
 #[cfg(feature = "tls-connections")]
