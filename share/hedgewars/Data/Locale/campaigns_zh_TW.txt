@@ -1,0 +1,61 @@
+A_Classic_Fairytale.name="經典故事"
+
+A_Classic_Fairytale-first_blood.name="任務 1: 第一滴血"
+A_Classic_Fairytale-first_blood.desc="幫助Leaks A Lot完成他的訓練，成為一位合格的刺猬戰士。你將接受繩索，降落傘，昇龍拳和沙漠之鷹的訓練。"
+
+A_Classic_Fairytale-shadow.name="任務 2: 黑暗降臨"
+A_Classic_Fairytale-shadow.desc="Leaks a Lot和Dense Cloud要去打獵。準備迎接等待在森林中的危險。請記住，明智地做出你的選擇。"
+
+A_Classic_Fairytale-journey.name="任務 3: 歸途"
+A_Classic_Fairytale-journey.desc="Leaks a Lot必須去島的另一邊。要快且小心。"
+
+A_Classic_Fairytale-united.name="任務 4: 團結則存"
+A_Classic_Fairytale-united.desc="經過長途跋涉Leaks a Lot最終回到了村莊。然而，沒有時間休息了。你必須在食人族的肆虐下保衛村莊。"
+
+A_Classic_Fairytale-backstab.name="任務 5: 暗算"
+A_Classic_Fairytale-backstab.desc="可怕的食人族正在尋找Leaks a Lot和他的朋友們。再次擊敗他們並保護你的盟友。使用你的資源來打敗進入的敵軍！"
+
+A_Classic_Fairytale-dragon.name="任務 6: 龍之巢"
+A_Classic_Fairytale-dragon.desc="我們的英雄必須到達湖的另一邊。成為繩索大師，並且避免被敵人擊中。"
+
+A_Classic_Fairytale-family.name="任務 7: 家人團聚"
+A_Classic_Fairytale-family.desc="我們的英雄必須再次拯救部落。消滅敵方的刺蝟並釋放你的戰友。由於資源有限，請謹慎使用。在正確的位置鑽一些洞並靠近公主。"
+
+A_Classic_Fairytale-queen.name="任務 8: 女王萬歲"
+A_Classic_Fairytale-queen.desc="部落必須再次戰鬥。為了獲勝，他們必須與叛徒戰鬥並使用所有可用資源擊敗敵人！"
+
+A_Classic_Fairytale-enemy.name="任務 9: 敵人的敵人"
+A_Classic_Fairytale-enemy.desc="真是太棒了！Leaks a Lot必須與“食人族”並肩作戰對抗共同的敵人：邪惡的改造人！"
+
+A_Classic_Fairytale-epil.name="任務 10: 尾聲"
+A_Classic_Fairytale-epil.desc="恭喜！Leaks a Lot終於可以平靜地離開，並得到他的新朋友和部落的讚揚。為你的成功感到自豪！你可以重玩以前的任務，並查看其他可能的結局。"
+
+A_Space_Adventure.name="太空探險"
+A_Space_Adventure-cosmos.name="選單: 太空旅行"
+A_Space_Adventure-cosmos.desc="刺蝟的星球，Hogera，即將被巨大的隕石撞擊。在這場生存的競賽中，你必須帶領被刺猬行星協會（PAotH）所委託的一隻勇敢刺猬，在鄰近的行星周圍進行太空旅行，以收集反重力裝置長期丟失的4個構件。"
+A_Space_Adventure-moon01.name="主任務: 第一站"
+A_Space_Adventure-moon01.desc="為了替飛碟加油，我們的英雄降落在月球上，但Hogevil教授已經先去了那裡埋伏！拯救被抓的PAotH研究人員並驅趕Hogevil教授！"
+A_Space_Adventure-moon02.name="旁枝任務: 追逐藍色刺蝟"
+A_Space_Adventure-moon02.desc="為了收集Hogevil教授的情報，我們的英雄拜訪了一位隱居在月球上PAotH的老退伍軍人，Crazy Runner。但是，要獲得情報，你必須先在追逐戰中擊敗他！"
+A_Space_Adventure-ice01.name="主任務: 一場冰凍冒險"
+A_Space_Adventure-ice01.desc="歡迎來到冰之行星。這裡太冷了，使得大多數武器都不能使用。你必須使用在那裡找到的武器從強盜首領Thanta手中得到丟失的構件！"
+A_Space_Adventure-ice02.name="旁枝任務: 艱難的飛行"
+A_Space_Adventure-ice02.desc="來到冰之行星，我們的英雄不能沒有來過飛碟的奧林匹克競賽場！在這個任務中，你可以證明你的飛行技術，並宣稱你是最棒的！"
+A_Space_Adventure-desert01.name="主任務: 在塵土中尋找"
+A_Space_Adventure-desert01.desc="你已經降落到沙之行星！我們的英雄必須在地下隧道中找到丟失的構件。請小心，惡毒的走私者正等待著你！"
+A_Space_Adventure-desert02.name="旁枝任務: 為生存而奔跑"
+A_Space_Adventure-desert02.desc="我們的英雄正在隧道中尋找時,意外地開始被淹水！盡快回到地表，要小心不要觸動地雷。"
+A_Space_Adventure-desert03.name="旁枝任務: 精確飛行"
+A_Space_Adventure-desert03.desc="我們的英雄有一些時間開心地的玩遙控飛機。操控遙控飛機，擊中所有目標！"
+A_Space_Adventure-fruit01.name="主任務: 糟糕的時機"
+A_Space_Adventure-fruit01.desc="在水果行星上，事情並不順利。刺蝟們不採集水果，而是正在為戰鬥做準備。你必須選擇要打架或者逃跑。"
+A_Space_Adventure-fruit02.name="主任務: 到達裝置
+A_Space_Adventure-fruit02.desc="在水果行星上，我們的英雄靠近了丟失的構件。Lime船長會幫助你獲得這個構件嗎？"
+A_Space_Adventure-fruit03.name="主任務: 精確射擊
+A_Space_Adventure-fruit03.desc="我們的英雄迷路了，並被紅色草莓伏擊了。消滅它們並為“到達裝置”任務贏得一些額外的彈藥。"
+A_Space_Adventure-death01.name="主任務: 最後的遭遇戰"
+A_Space_Adventure-death01.desc="死亡行星，周圍最貧瘠的行星，我們的英雄非常接近裝置的最後一構件！然而，不愉快的驚喜等待著..."
+A_Space_Adventure-death02.name="旁枝任務: 殺死專家"
+A_Space_Adventure-death02.desc="我們的英雄再次陷入困境。擊敗“5隻致命的刺蝟”！"
+A_Space_Adventure-final.name="主任務: 大爆炸"
+A_Space_Adventure-final.desc="我們的英雄必須引爆一些放在隕石上的爆炸物。不要受傷完成這項任務！"
