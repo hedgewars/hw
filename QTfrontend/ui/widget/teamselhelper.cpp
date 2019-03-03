@@ -57,15 +57,6 @@ TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams *
     butt->setFlat(true);
     butt->setToolTip(team.owner());
     mainLayout.addWidget(butt);
-    butt->setStyleSheet("QPushButton{"
-                        "icon-size: 48px;"
-                        "text-align: left;"
-                        "background-color: #0d0544;"
-                        "color: orange;"
-                        "font: bold;"
-                        "border-width: 2px;"
-                        "margin: 6px 0px 6px 0px;"
-                        "}");
 
     if(m_isPlaying)
     {

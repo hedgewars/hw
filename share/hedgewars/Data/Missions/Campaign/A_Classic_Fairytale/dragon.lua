@@ -1,3 +1,36 @@
+--[[
+A Classic Fairytale: Dragon's Lair
+
+= SUMMARY =
+Hero must collect an utility crate on the other side of the river.
+To accomplish that, hero must first collect a series of crates with
+the rope and wipe out the cyborgs.
+The hero is one survivor of the previous missions.
+
+= GOALS =
+- Mission goal (leads to immediate victory): Collect utility crate at the right side of the river
+- First sub-goal: Collect (or destroy) a series of crates (all other utility crates)
+- Second sub-goal: Wipe out the cyborgs
+
+= FLOW CHART =
+- Choose hog to be hero (read from m5DeployedNum)
+- Cut scene: Intro
+- TBS
+| Player accomplishes first sub-goal first:
+    - Cut scene: Cyborg reveals second goal
+    - A ton of weapon crates and some rope crates spawn on the long platform
+| Player accomplshed second sub-goal first:
+    - Hero reminds player to collect/destroy remaining crates
+- Player accomplished both goals
+- Cut scene: Cyborg teleports hero to the long platform and congrats hero
+- Hero's ammo is cleared, all crates, mines, sticky mines and barrels are removed from platform
+- Spawn a portal gun crate on the long platform and also a teleportation crate further to the right
+- (These utilities can be used to finish the mission)
+- Player takes final crate at the very right
+> Victory
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
@@ -137,17 +170,19 @@ cyborgPos = {745, 1847}
 cyborgsPos = {{2937, 831}, {2945, 1264}, {2335, 1701}, {448, 484}}
 cyborgsDir = {"Left", "Left", "Left", "Right"}
 
+cyborgTeamName, fighterTeamName = nil, nil
+
 cratePos = {
-            {788, 1919, amGirder, 2}, {412, 1615, amGirder, 1},
-            {209, 1474, amSniperRifle, 1}, {1178, 637, amDEagle, 1},
-            {633, 268, amDEagle, 1}, {3016, 1545, amDEagle, 1},
-            {249, 1377, amRope, 3}, {330, 1018, amGirder, 1},
-            {888, 647, amRope, 3}, {2116, 337, amRope, 3},
-            {1779, 948, amRope, 3}, {3090, 1066, amRope, 3},
-            {947, 480, amBazooka, 3}, {1097, 480, amMortar, 3},
-            {1139, 451, amSnowball, 3}, {1207, 468, amShotgun, 3},
-            {1024, 393, amSniperRifle, 2}, {998, 391, amDynamite, 2},
-            {1024, 343, amRope, 2}, {998, 341, amRope, 2}
+            {{788, 1919, amGirder, 2}, true}, {{412, 1615, amGirder, 1}, true},
+            {{209, 1474, amSniperRifle, 1}}, {{1178, 637, amDEagle, 1}},
+            {{633, 268, amDEagle, 1}}, {{3016, 1545, amDEagle, 1}},
+            {{249, 1377, amRope, 3}, true}, {{330, 1018, amGirder, 1}, true},
+            {{888, 647, amRope, 3}, true}, {{2116, 337, amRope, 3}, true},
+            {{1779, 948, amRope, 3}, true}, {{3090, 1066, amRope, 3}, true},
+            {{947, 480, amBazooka, 3}}, {{1097, 480, amMortar, 3}},
+            {{1139, 451, amSnowball, 3}}, {{1207, 468, amShotgun, 3}},
+            {{1024, 393, amSniperRifle, 2}}, {{998, 391, amDynamite, 2}},
+            {{1024, 343, amRope, 2}, true}, {{998, 341, amRope, 2}, true},
            }
 reactions = {loc("Yeah, take that!"), loc("Bullseye"), loc("Die, die, die!")}
 
@@ -171,6 +206,13 @@ freshDead = nil
 crates = {}
 cratesNum = 0
 jetCrate = nil
+
+firstTurn = true
+cyborgsKilledBeforeCrates = false
+cratesTaken = false
+doneCyborgsDead = false
+
+annoyingGearsForPortalScene = {}
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
   local dif
@@ -193,7 +235,7 @@ function AnimationSetup()
   startAnim = {}
   local m = m5DeployedNum
   table.insert(startAnim, {func = AnimWait, args = {native, 3000}})
-  table.insert(startAnim, {func = AnimCaption, args = {native, loc("With the rest of the tribe gone, it was up to ") .. nativeNames[m5DeployedNum] .. loc(" to save the village."), 5000}})
+  table.insert(startAnim, {func = AnimCaption, args = {native, string.format(loc("With the rest of the tribe gone, it was up to %s to save the village."), nativeNames[m5DeployedNum]), 5000}})
   table.insert(startAnim, {func = AnimCaption, args = {native, loc("But it proved to be no easy task!"), 2000}})
   for i = 1, 4 do
     table.insert(startAnim, {func = FollowGear, swh = false, args = {cyborgs[i]}})
@@ -241,9 +283,9 @@ function AnimationSetup()
   table.insert(startAnim, {func = AnimCustomFunction, args = {native, RestoreHedge, {cyborg, unpack(cyborgPos)}}})
   table.insert(startAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(cyborgPos)}})
   table.insert(startAnim, {func = AnimTurn, args = {cyborg, "Left"}})
-  table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("Greetings, ") .. nativeUnNames[m] .. "!", SAY_SAY, 2500}})
+  table.insert(startAnim, {func = AnimSay, args = {cyborg, string.format(loc("Greetings, %s!"), nativeUnNames[m]), SAY_SAY, 2500}})
   table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("As you can see, there is no way to get on the other side!"), SAY_SAY, 7000}})
-  table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("I wish to help you, ") .. nativeUnNames[m] .. "!", SAY_SAY, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {cyborg, string.format(loc("I wish to help you, %s!"), nativeUnNames[m]), SAY_SAY, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("Beware, though! If you are slow, you die!"), SAY_SAY, 7000}})
   table.insert(startAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(startAnim, {func = AnimSwitchHog, args = {native}})
@@ -257,13 +299,28 @@ function SetupKillAnim()
   table.insert(killAnim, {func = AnimCustomFunction, args = {native, RestoreHedge, {cyborg, unpack(cyborgPos)}}})
   table.insert(killAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(cyborgPos)}})
   table.insert(killAnim, {func = AnimCustomFunction, args = {cyborg, CondNeedToTurn, {cyborg, native}}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("You bear impressive skills, ") .. nativeUnNames[m5DeployedNum] .. "!", SAY_SHOUT, 4000}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("However, my mates don't agree with me on letting you go..."), SAY_SHOUT, 7000}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("I guess you'll have to kill them."), SAY_SHOUT, 4000}})
+  table.insert(killAnim, {func = AnimSay, args = {cyborg, string.format(loc("You bear impressive skills, %s!"), nativeUnNames[m5DeployedNum]), SAY_SHOUT, 4000}})
+  if CheckCyborgsDead() then
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("I see you already took care of your enemies."), SAY_SHOUT, 7000}})
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("Those were scheduled for disposal anyway."), SAY_SHOUT, 4000}})
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("So you basically did the dirty work for us."), SAY_SHOUT, 4000}})
+    cyborgsKilledBeforeCrates = true
+  else
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("However, my mates don't agree with me on letting you go..."), SAY_SHOUT, 7000}})
+    table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("I guess you'll have to kill them."), SAY_SHOUT, 4000}})
+  end
   table.insert(killAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(killAnim, {func = AnimSwitchHog, args = {native}})
   table.insert(killAnim, {func = AnimWait, args = {native, 1}})
   table.insert(killAnim, {func = AnimCustomFunction, args = {native, HideHedge, {cyborg}}})
+
+  local function checkCyborgsAgain()
+     if CheckCyborgsDead() then
+        DoCyborgsDead()
+     end
+  end
+  table.insert(killAnim, {func = AnimCustomFunction, args = {native, checkCyborgsAgain, {}}})
+
   AddSkipFunction(killAnim, SkipKillAnim, {})
 end
 
@@ -272,7 +329,9 @@ function SetupKilledAnim()
   table.insert(killedAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(secondPos[2])}})
   table.insert(killedAnim, {func = AnimOutOfNowhere, args = {native, unpack(secondPos[1])}})
   table.insert(killedAnim, {func = AnimCustomFunction, args = {cyborg, CondNeedToTurn, {cyborg, native}}})
-  table.insert(killedAnim, {func = AnimSay, args = {cyborg, loc("Nice work, ") .. nativeUnNames[m5DeployedNum] .. "!", SAY_SHOUT, 4000}})
+  if not cyborgsKilledBeforeCrates then
+    table.insert(killedAnim, {func = AnimSay, args = {cyborg, string.format(loc("Nice work, %s!"), nativeUnNames[m5DeployedNum]), SAY_SHOUT, 4000}})
+  end
   table.insert(killedAnim, {func = AnimSay, args = {cyborg, loc("As a reward for your performance, here's some new technology!"), SAY_SHOUT, 8000}})
   table.insert(killedAnim, {func = AnimSay, args = {cyborg, loc("Use it wisely!"), SAY_SHOUT, 3000}})
   table.insert(killedAnim, {func = AnimDisappear, args = {cyborg, unpack(secondPos[2])}})
@@ -281,39 +340,53 @@ function SetupKilledAnim()
 end
 --------------------------Anim skip functions--------------------------
 function SkipStartAnim()
+  AnimSetGearPosition(native, 457, 1955)
   AnimSwitchHog(native)
   AnimWait(native, 1)
   AddFunction({func = HideHedge, args = {cyborg}})
+end
+
+function SpawnCrateByID(id)
+    if cratePos[id][2] == true then
+       crates[id] = SpawnSupplyCrate(unpack(cratePos[id][1]))
+    else
+       crates[id] = SpawnSupplyCrate(unpack(cratePos[id][1]))
+    end
+    return crates[id]
 end
 
 function AfterStartAnim()
   SetGearMessage(native, 0)
   cratesNum = 0
   for i = 1, 6 do
-    crates[i] = SpawnAmmoCrate(unpack(cratePos[i]))
+    SpawnCrateByID(i)
     cratesNum = cratesNum + 1
   end
   FollowGear(native)
   AddNewEvent(CheckGearsDead, {{crates[1], crates[2]}}, PutCrates, {2}, 0) 
-  TurnTimeLeft = TurnTime
-  ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to collect the crates first.|") ..
-                                                  loc("As the ammo is sparse, you might want to reuse ropes while mid-air.|") ..
-                                                  loc("If you wish to restart the course, hold [Precise] while your turn ends (e.g with Skip)!|") ..
-                                                  loc("The enemy can't move but it might be a good idea to stay out of sight!|") ..
-                                                  loc("You have ") .. SuddenDeathTurns .. loc(" turns until Sudden Death! Better hurry!"), 1, 0)
+  SetTurnTimeLeft(TurnTime)
+  ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to get rid of the crates first.") .. "|" ..
+                                                  loc("As the ammo is sparse, you might want to reuse ropes while mid-air.") .. "|" ..
+                                                  loc("The enemy can't move but it might be a good idea to stay out of sight!") .. "|" ..
+                                                  loc("Mines time: 5 seconds"), 1, 0)
 end
 
 function SkipKillAnim()
   AnimSwitchHog(native)
   AnimWait(native, 1)
   AddFunction({func = HideHedge, args = {cyborg}})
+  if CheckCyborgsDead() then
+    DoCyborgsDead()
+  end
 end
 
 function AfterKillAnim()
-  PutWeaponCrates()
-  TurnTimeLeft = TurnTime
-  AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
-  ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!"), 1, 2000)
+  if not cyborgsKilledBeforeCrates then
+    PutWeaponCrates()
+    SetTurnTimeLeft(TurnTime)
+    AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
+    ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!").."|"..loc("Mines time: 5 seconds"), 1, 2000)
+  end
 end
 
 function SkipKilledAnim()
@@ -323,15 +396,17 @@ function SkipKilledAnim()
 end
 
 function AfterKilledAnim()
+  -- Final mission segment with the portal gun
   HideHedge(cyborg)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   SetGearMessage(native, 0)
-  AddAmmo(native, amPortalGun, 100)
-  SpawnUtilityCrate(2259, 755, amTeleport, 2)
-  SpawnHealthCrate(secondPos[1][1] + 30, secondPos[1][2])
+  SpawnSupplyCrate(1184, 399, amPortalGun, 100)
+  SpawnSupplyCrate(2259, 755, amTeleport, 2)
+  SpawnHealthCrate(secondPos[1][1] + 50, secondPos[1][2] - 20)
   ShowMission(loc("Dragon's Lair"), loc("The what?!"), loc("Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|")..
-                                             loc("Portal hint: one goes to the destination, and one is the entrance.|")..
-                                             loc("Teleport hint: just use the mouse to select the destination!"), 1, 0)
+                                             loc("Portal hint: One goes to the destination, the other one is the entrance.|")..
+                                             loc("Teleport hint: Just use the mouse to select the destination!").."|"..
+                                             loc("Mines time: 5 seconds"), 1, 8000)
 end
 -----------------------------Events------------------------------------
 
@@ -340,6 +415,7 @@ function CheckCyborgsDead()
 end
 
 function NullifyAmmo()
+  -- Clear the ammo and delete all inappropirate gears on the long platform for the portal scene
   AddAmmo(native, amRope, 0)
   AddAmmo(native, amGirder, 0)
   AddAmmo(native, amLowGravity, 0)
@@ -352,41 +428,60 @@ function NullifyAmmo()
   AddAmmo(native, amMortar, 0)
   AddAmmo(native, amSnowball, 0)
   AddAmmo(native, amShotgun, 0)
+
+  for i=1, #annoyingGearsForPortalScene do
+    local gear = annoyingGearsForPortalScene[i]
+    if not gearDead[gear] and GetY(gear) > 100 and GetY(gear) < 571 and GetX(gear) > 840 and GetX(gear) < 1550 then
+      DeleteGear(annoyingGearsForPortalScene[i])
+    end
+  end
 end
 
 function DoCyborgsDead()
-  NullifyAmmo()
-  RestoreHedge(cyborg)
-  SetupKilledAnim()
-  SetGearMessage(CurrentHedgehog, 0)
-  AddAnim(killedAnim)
-  AddFunction({func = AfterKilledAnim, args = {}})
+  if cratesTaken and not doneCyborgsDead then
+    NullifyAmmo()
+    RestoreHedge(cyborg)
+    SetupKilledAnim()
+    SetGearMessage(CurrentHedgehog, 0)
+    AddAnim(killedAnim)
+    AddFunction({func = AfterKilledAnim, args = {}})
+    doneCyborgsDead = true
+  end
 end
 
 
 function PutWeaponCrates()
   for i = 1, 8 do
     cratesNum = cratesNum + 1
-    crates[cratesNum] = SpawnAmmoCrate(unpack(cratePos[cratesNum]))
+    SpawnCrateByID(cratesNum)
   end
   FollowGear(native)
 end
 
 function DoCratesTaken()
+  cratesTaken = true
   SetupKillAnim()
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(killAnim)
   AddFunction({func = AfterKillAnim, args = {}})
 end
 
+function CheckPutCrates(gear)
+  if gear and GetHealth(gear) then
+    return StoppedGear(gear)
+  else
+    return false
+  end
+end
+
 function PutCrates(index)
   if index <= 7 then
     cratesNum = cratesNum + 1
-    crates[cratesNum] = SpawnUtilityCrate(unpack(cratePos[cratesNum]))
+    SpawnCrateByID(cratesNum)
     AddNewEvent(CheckGearDead, {crates[cratesNum]}, PutCrates, {index + 1}, 0)
     FollowGear(native)
   else
-    AddEvent(StoppedGear, {native}, DoCratesTaken, {}, 0)
+    AddEvent(CheckPutCrates, {native}, DoCratesTaken, {}, 0)
   end
   if index == 4 then
     AnimSay(native, loc("I'm a ninja."), SAY_THINK, 0)
@@ -404,7 +499,7 @@ function DoMissionFinished()
   end
   RestoreHedge(cyborg)
   DeleteGear(cyborg)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckGearsDead(gearList)
@@ -424,7 +519,7 @@ end
 function EndMission()
   RestoreHedge(cyborg)
   DeleteGear(cyborg)
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckFreshDead()
@@ -434,6 +529,9 @@ end
 function CyborgDeadReact()
   freshDead = nil
   if cyborgsLeft == 0 then
+    if not cratesTaken then
+       AnimSay(native, loc("I still have to get rid of the crates."), SAY_THINK, 8000)
+    end
     return
   end
   AnimSay(native, reactions[cyborgsLeft])
@@ -455,7 +553,7 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
 end
 
 function SetupPlace()
@@ -467,32 +565,53 @@ function SetupPlace()
     end
   end
   HideHedge(cyborg)
-  jetCrate = SpawnUtilityCrate(3915, 1723, amJetpack)
+  jetCrate = SpawnSupplyCrate(3915, 1723, amJetpack)
 
-  SetTimer(AddGear(1071, 1913, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1098, 1919, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1136, 1923, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1170, 1930, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1203, 1924, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1228, 1939, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1264, 1931, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1309, 1938, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1352, 1936, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1386, 1939, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1432, 1942, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1483, 1950, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1530, 1954, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1579, 1959, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(1000, 1903, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(957, 1903, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(909, 1910, gtMine, 0, 0, 0, 0), 5000)
-  SetTimer(AddGear(889, 1917, gtMine, 0, 0, 0, 0), 5000)
+  --[[ Block the left entrance.
+       Otherwise the player could rope out of the map and
+       go all the way around to the final crate. ]]
+  PlaceGirder(90, 1709, 6)
+  PlaceGirder(90, 1875, 6)
+
+  -- Place mines on the ground floor
+  AddGear(1071, 1913, gtMine, 0, 0, 0, 0)
+  AddGear(1098, 1919, gtMine, 0, 0, 0, 0)
+  AddGear(1136, 1923, gtMine, 0, 0, 0, 0)
+  AddGear(1170, 1930, gtMine, 0, 0, 0, 0)
+  AddGear(1203, 1924, gtMine, 0, 0, 0, 0)
+  AddGear(1228, 1939, gtMine, 0, 0, 0, 0)
+  AddGear(1264, 1931, gtMine, 0, 0, 0, 0)
+  AddGear(1309, 1938, gtMine, 0, 0, 0, 0)
+  AddGear(1352, 1936, gtMine, 0, 0, 0, 0)
+  AddGear(1386, 1939, gtMine, 0, 0, 0, 0)
+  AddGear(1432, 1942, gtMine, 0, 0, 0, 0)
+  AddGear(1483, 1950, gtMine, 0, 0, 0, 0)
+  AddGear(1530, 1954, gtMine, 0, 0, 0, 0)
+  AddGear(1579, 1959, gtMine, 0, 0, 0, 0)
+  AddGear(1000, 1903, gtMine, 0, 0, 0, 0)
+  AddGear(957, 1903, gtMine, 0, 0, 0, 0)
+  AddGear(909, 1910, gtMine, 0, 0, 0, 0)
+  AddGear(889, 1917, gtMine, 0, 0, 0, 0)
+
+  -- Place misc. mines
+  AddGear(759, 878, gtMine, 0, 0, 0, 0)
+  AddGear(2388, 759, gtMine, 0, 0, 0, 0)
+  AddGear(2498, 696, gtMine, 0, 0, 0, 0)
+  AddGear(2936, 1705, gtMine, 0, 0, 0, 0)
+  AddGear(3119, 1366, gtMine, 0, 0, 0, 0)
+  AddGear(2001, 832, gtMine, 0, 0, 0, 0)
+  AddGear(2008, 586, gtMine, 0, 0, 0, 0)
+  AddGear(511, 1245, gtMine, 0, 0, 0, 0)
+
+  -- And one barrel for fun
+  AddGear(719, 276, gtExplosives, 0, 0, 0, 0)
+
   ------ STICKY MINE LIST ------
-  tempG = AddGear(1199, 733, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(1195, 793, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(1201, 861, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(682, 878, gtSMine, 0, 0, 0, 0)
-  tempG = AddGear(789, 876, gtSMine, 0, 0, 0, 0)
+  AddGear(1199, 733, gtSMine, 0, 0, 0, 0)
+  AddGear(1195, 793, gtSMine, 0, 0, 0, 0)
+  AddGear(1201, 861, gtSMine, 0, 0, 0, 0)
+  AddGear(682, 878, gtSMine, 0, 0, 0, 0)
+  AddGear(789, 876, gtSMine, 0, 0, 0, 0)
 end
 
 function SetupEvents()
@@ -503,26 +622,26 @@ end
 
 function SetupAmmo()
   AddAmmo(cyborgs[1], amBazooka, 100)
---  AddAmmo(cyborgs[1], amSniperRifle, 100)
   AddAmmo(cyborgs[1], amShotgun, 100)
   AddAmmo(cyborgs[1], amSwitch, 100)
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  AddMissionTeam(-2)
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 200, nativeHats[i])
     gearDead[natives[i]] = false
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   gearDead[cyborg] = false
 
-  AddTeam(loc("011101000"), 14483455, "ring", "UFO", "Robot", "cm_star")
+  fighterTeamName = AddTeam(loc("011101000"), -9, "ring", "UFO", "Robot", "cm_binary")
   for i = 1, 4 do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 100, "cyborg2")
     gearDead[cyborgs[i]] = false
+    SetEffect(cyborgs[i], heArtillery, 1)
   end
   cyborgsLeft = 4
 
@@ -553,24 +672,23 @@ end
 -----------------------------Main Functions----------------------------
 
 function onGameInit()
-	Seed = 0
-	GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableWind + gfDisableGirders
-	TurnTime = 60000 
-	CaseFreq = 0
-	MinesNum = 20
-	MinesTime = 3000
-	Explosives = 6
-	Delay = 10 
+  Seed = 0
+  GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableWind + gfDisableGirders
+  TurnTime = 60000 
+  CaseFreq = 0
+  MinesNum = 0
+  MinesTime = 5000
+  Explosives = 0
   MapGen = mgDrawn
-	Theme = "City"
+  Theme = "City"
   SuddenDeathTurns = 25
 
-	for i = 1, #map do
-		ParseCommand('draw ' .. map[i])
-	end
+  for i = 1, #map do
+     ParseCommand('draw ' .. map[i])
+  end
 
   AddHogs()
-  AnimInit()
+  AnimInit(true)
 end
 
 function onGameStart()
@@ -579,8 +697,6 @@ function onGameStart()
   SetupPlace()
   AnimationSetup()
   SetupEvents()
-  AddAnim(startAnim)
-  AddFunction({func = AfterStartAnim, args = {}})
   ShowMission(loc("Dragon's Lair"), loc("Y Chwiliad"), loc("Find your tribe!|Cross the lake!"), 1, 0)
 end
 
@@ -596,10 +712,18 @@ end
 function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("011101000") then
+    if GetHogTeamName(gear) == fighterTeamName then
       freshDead = GetHogName(gear)
       cyborgsLeft = cyborgsLeft - 1
     end
+  end
+end
+
+function onGearAdd(gear)
+  -- Track gears for removal when reaching the portal segment
+  local gt = GetGearType(gear)
+  if gt == gtMine or gt == gtSMine or gt == gtCase or gt == gtExplosives then
+    table.insert(annoyingGearsForPortalScene, gear)
   end
 end
 
@@ -608,35 +732,24 @@ function onAmmoStoreInit()
   SetAmmo(amBaseballBat, 2, 0, 0, 0)
   SetAmmo(amGirder, 0, 0, 0, 2)
   SetAmmo(amLowGravity, 0, 0, 0, 1)
+  SetAmmo(amJetpack, 0, 0, 0, 1)
   SetAmmo(amSkip, 9, 0, 0, 0)
 end
 
 function onNewTurn()
-  if AnimInProgress() then
-    TurnTimeLeft = -1
-    return
+  if firstTurn then
+    AddAnim(startAnim)
+    AddFunction({func = AfterStartAnim, args = {}})
+    firstTurn = false
   end
-  if GetHogTeamName(CurrentHedgehog) == loc("011101000") then
-    SetInputMask(band(0xFFFFFFFF, bnot(gmLeft + gmRight + gmLJump + gmHJump)))
-    for i = 1, 4 do
-      if gearDead[CurrentHedgehog] ~= true and gearDead[native] ~= true then
-        if gearDead[cyborgs[i]] ~= true and GetX(cyborgs[i]) < GetX(native) then
-          HogTurnLeft(cyborgs[i], false)
-        else
-          HogTurnLeft(cyborgs[i], true)
-        end
-      end
-    end
+  if GetHogTeamName(CurrentHedgehog) == fighterTeamName then
     if TotalRounds % 6 == 0 then
       AddAmmo(CurrentHedgehog, amSniperRifle, 1)
       AddAmmo(CurrentHedgehog, amDEagle, 1)
     end
-    TurnTimeLeft = 30000
-  elseif GetHogTeamName(CurrentHedgehog) == loc("011101001") then
-    TurnTimeLeft = 0
-  else
-    SetInputMask(0xFFFFFFFF)
-    AddCaption(loc("Turns until Sudden Death: ") .. SuddenDeathTurns - TotalRounds)
+    SetTurnTimeLeft(30000)
+  elseif GetHogTeamName(CurrentHedgehog) == cyborgTeamName then
+    EndTurn(true)
   end
 end
 
@@ -644,9 +757,4 @@ function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
   end
-  if AnimInProgress() == false then
-  end
-end
-
-function onPreciseUp()
 end

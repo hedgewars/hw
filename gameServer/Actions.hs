@@ -40,9 +40,13 @@ import System.Process
 import Network.Socket
 import System.Random
 import qualified Data.Traversable as DT
+import Text.Regex.TDFA
+import qualified Text.Regex.TDFA as TDFA
+import qualified Text.Regex.TDFA.ByteString as TDFAB
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
+import qualified Data.Yaml as YAML
 #endif
 import CoreTypes
 import Utils
@@ -113,7 +117,7 @@ processAction (ByeClient msg) = do
     loggedIn <- client's isVisible
 
     when (ri /= lobbyId) $ do
-        processAction $ MoveToLobby ("quit: " `B.append` msg)
+        processAction $ (MoveToLobby msg)
         return ()
 
     clientsChans <- liftM (Prelude.map sendChan . Prelude.filter isVisible) $! allClientsS
@@ -262,6 +266,8 @@ processAction (ChangeMaster delegateId)= do
           ModifyClient2 (fromJust newMasterId) (\c -> c{isMaster = True})
         , AnswerClients [sendChan $ fromJust newMaster] ["ROOM_CONTROL_ACCESS", "1"]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick $ fromJust newMaster]
+        -- TODO: Send message to other clients, too (requires proper localization, however)
+        , AnswerClients [sendChan $ fromJust newMaster] ["CHAT", nickServer, loc "You're the new room master!"]
         ]
 
     processAction $
@@ -473,7 +479,7 @@ processAction (ProcessAccountInfo info) = do
             c <- client's isChecker
             when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin isContr
         Guest | isRegisteredUsersOnly si -> do
-            processAction $ ByeClient "Registered users only"
+            processAction $ ByeClient $ loc "This server only allows registered users to join."
             | otherwise -> do
             b <- isBanned
             c <- client's isChecker
@@ -512,12 +518,12 @@ processAction JoinLobby = do
     rnc <- gets roomsClients
     clientNick <- client's nick
     clProto <- client's clientProto
-    isAuthenticated <- liftM (not . B.null) $ client's webPassword
+    isAuthenticated <- client's isRegistered
     isAdmin <- client's isAdministrator
     isContr <- client's isContributor
     loggedInClients <- liftM (Prelude.filter isVisible) $! allClientsS
     let (lobbyNicks, clientsChans) = unzip . L.map (nick &&& sendChan) $ loggedInClients
-    let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
+    let authenticatedNicks = L.map nick . L.filter isRegistered $ loggedInClients
     let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
     let contrNicks = L.map nick . L.filter isContributor $ loggedInClients
     inRoomNicks <- io $
@@ -528,8 +534,8 @@ processAction JoinLobby = do
 
     roomsInfoList <- io $ do
         rooms <- roomsM rnc
-        mapM (\r -> (if isNothing $ masterID r then return "" else client'sM rnc nick (fromJust $ masterID r))
-            >>= \cn -> return $ roomInfo clProto cn r)
+        mapM (\r -> (mapM (client'sM rnc id) $ masterID r)
+            >>= \cn -> return $ roomInfo clProto (maybeNick cn) r)
             $ filter (\r -> (roomProto r == clProto)) rooms
 
     mapM_ processAction . concat $ [
@@ -553,7 +559,7 @@ processAction (KickClient kickId) = do
     mapM_ processAction [
         AddIP2Bans clHost (loc "60 seconds cooldown after kick") (addUTCTime 60 currentTime)
         , ModifyClient (\c -> c{isKickedFromServer = True})
-        , ByeClient "Kicked"
+        , ByeClient $ loc "Kicked"
         ]
 
 
@@ -630,7 +636,7 @@ processAction (AddClient cl) = do
         mapM_ processAction
             [
                 CheckBanned True
-                , AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
+                , AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server https://www.hedgewars.org/", serverVersion]
             ]
         else
         processAction $ ByeClient $ loc "Reconnected too fast"
@@ -658,9 +664,13 @@ processAction (CheckBanned byIP) = do
     where
         checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
         checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
-        checkBan True ip _ (BanByIP bip _ _) = bip `B.isPrefixOf` ip
-        checkBan False _ n (BanByNick bn _ _) = caseInsensitiveCompare bn n
+        checkBan True ip _ (BanByIP bip _ _) = isMatch bip ip
+        checkBan False _ n (BanByNick bn _ _) = isMatch bn n
         checkBan _ _ _ _ = False
+        isMatch :: B.ByteString -> B.ByteString -> Bool
+        isMatch rexp src = (==) (Just True) $ mrexp rexp >>= flip matchM src
+        mrexp :: B.ByteString -> Maybe TDFAB.Regex
+        mrexp = makeRegexOptsM TDFA.defaultCompOpt{TDFA.caseSensitive = False} TDFA.defaultExecOpt
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
 
@@ -723,11 +733,36 @@ processAction Stats = do
 
 
 processAction (Random chans items) = do
-    let i = if null items then ["heads", "tails"] else items
+    let i = if null items then [loc "heads", loc "tails"] else items
     n <- io $ randomRIO (0, length i - 1)
-    processAction $ AnswerClients chans ["CHAT", "[random]", i !! n]
+    processAction $ AnswerClients chans ["CHAT", if null items then nickRandomCoin else nickRandomCustom, i !! n]
 
 
+processAction (LoadGhost location) = do
+    ri <- clientRoomA
+    rnc <- gets roomsClients
+    thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
+#if defined(OFFICIAL_SERVER)
+    rm <- io $ room'sM rnc id ri
+    points <- io $ loadFile (B.unpack $ "ghosts/" `B.append` sanitizeName location)
+    when (roomProto rm > 51) $ do
+        processAction $ ModifyRoom $ \r -> r{params = Map.insert "DRAWNMAP" [prependGhostPoints (toP points) $ head $ (params r) Map.! "DRAWNMAP"] (params r)}
+#endif
+    cl <- client's id
+    rm <- io $ room'sM rnc id ri
+    mapM_ processAction $ map (replaceChans thisRoomChans) $ answerFullConfigParams cl (mapParams rm) (params rm)
+    where
+    loadFile :: String -> IO [Int]
+    loadFile fileName = E.handle (\(e :: SomeException) -> return []) $ do
+        points <- liftM read $ readFile fileName
+        return (points `deepseq` points)
+    replaceChans chans (AnswerClients _ msg) = AnswerClients chans msg
+    replaceChans _ a = a
+    toP [] = []
+    toP (p1:p2:ps) = (fromIntegral p1, fromIntegral p2) : toP ps
+{-
+        let a = map (replaceChans chans) $ answerFullConfigParams cl mp p
+-}
 #if defined(OFFICIAL_SERVER)
 processAction SaveReplay = do
     ri <- clientRoomA
@@ -785,14 +820,6 @@ processAction (QueryReplay rname) = do
     uid <- client's clUID
     io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) rname
 
-#else
-processAction SaveReplay = return ()
-processAction CheckRecord = return ()
-processAction (CheckFailed _) = return ()
-processAction (CheckSuccess _) = return ()
-processAction (QueryReplay _) = return ()
-#endif
-
 processAction (ShowReplay rname) = do
     c <- client's sendChan
     cl <- client's id
@@ -820,11 +847,22 @@ processAction (SaveRoom rname) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     rm <- io $ room'sM rnc id ri
-    liftIO $ writeFile (B.unpack rname) $ show (greeting rm, roomSaves rm)
+    liftIO $ YAML.encodeFile (B.unpack rname) (greeting rm, roomSaves rm)
 
 processAction (LoadRoom rname) = do
-    (g, rs) <- liftIO $ liftM read $ readFile (B.unpack rname)
+    Right (g, rs) <- io $ YAML.decodeFileEither (B.unpack rname)
     processAction $ ModifyRoom $ \r -> r{greeting = g, roomSaves = rs}
+
+#else
+processAction SaveReplay = return ()
+processAction CheckRecord = return ()
+processAction (CheckFailed _) = return ()
+processAction (CheckSuccess _) = return ()
+processAction (QueryReplay _) = processAction $ Warning $ loc "This server does not support replays!"
+processAction (ShowReplay rname) = return ()
+processAction (SaveRoom rname) = return ()
+processAction (LoadRoom rname) = return ()
+#endif
 
 processAction Cleanup = do
     jm <- gets joinsMonitor
@@ -847,3 +885,13 @@ processAction (ReactCmd cmd) = do
 
 processAction CheckVotes =
     checkVotes >>= mapM_ processAction
+
+processAction (ShowRegisteredOnlyState chans) = do
+    si <- gets serverInfo
+    processAction $ AnswerClients chans
+        ["CHAT", nickServer,
+        if isRegisteredUsersOnly si then
+            loc "This server no longer allows unregistered players to join."
+        else
+            loc "This server now allows unregistered players to join."
+        ]

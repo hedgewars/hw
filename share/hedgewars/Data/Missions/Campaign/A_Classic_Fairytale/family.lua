@@ -1,3 +1,30 @@
+--[[
+A Classic Fairytale: Family Reunion
+
+= GOALS =
+Kill all visible cyborgs (not the princess).
+Then move hero to princess and Ramon and Spike Cheese to the surface.
+
+= FLOW CHART =
+== Linear events ==
+
+- Cut scene: Intro
+- First goal: Kill all visible cyborgs (princess is not a cyborg)
+- First goal completed
+- Cut scene: Cyborg reveals second goal
+- A ton of 5s mines spawn on the surface
+- Second goal: Hero must reach princess; Ramon and Spiky Cheese must reach the surface
+- Second goal completed
+> Victory
+
+== Non-linear events ==
+| Princess dead:
+    > Game over
+| Ramon, Spiky Cheese or hero dead:
+    > Game over
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
@@ -77,6 +104,11 @@ cyborgsPos = {{2243, 1043}, {3588, 1227}, {2781, 1388},
               {3749, 1040}, {2475, 1338}, {3853, 881}}
 cyborgsDir = {"Left", "Left", "Left", "Left", "Left", "Right"}
 
+princessTeamName = nil
+nativesTeamName = nil
+biomechanicTeamName = nil
+cyborgTeamName = nil
+
 princessPos = {3737, 1181}
 crateConsts = {}
 reactions = {}
@@ -96,10 +128,15 @@ hedgeHidden = {}
 
 startAnim = {}
 midAnim = {}
+princessFreedAnim = {}
 
 freshDead = nil
 crates = {}
 cratesNum = 0
+
+princessFreed = false
+closeToPrincess = false
+friendsEscaped = false
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
   local dif
@@ -146,7 +183,7 @@ function AnimationSetup()
   table.insert(startAnim, {func = AnimTurn, args = {cyborg, "Left"}})
   table.insert(startAnim, {func = AnimTurn, args = {natives[2], "Left"}})
   table.insert(startAnim, {func = AnimTurn, args = {natives[3], "Left"}})
-  table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("Hello again, ") .. nativeUnNames[m5DeployedNum] .. "!", SAY_SAY, 2500}})
+  table.insert(startAnim, {func = AnimSay, args = {cyborg, string.format(loc("Hello again, %s!"), nativeUnNames[m5DeployedNum]), SAY_SAY, 2500}})
   table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("I just found out that they have captured your princess!"), SAY_SAY, 7000}})
   if m5DeployedNum == girlNum then
     table.insert(startAnim, {func = AnimSay, args = {natives[1], loc("Of course I have to save her. What did I expect?!"), SAY_SAY, 7000}})
@@ -177,6 +214,10 @@ function AnimationSetup()
   table.insert(midAnim, {func = AnimTeleportGear, args = {natives[1], unpack(nativeMidPos2)}})
   table.insert(midAnim, {func = AnimSay, args = {natives[1], loc("Why can't he just let her go?!"), SAY_THINK, 5000}})
   AddSkipFunction(midAnim, SkipMidAnim, {})
+
+  table.insert(princessFreedAnim, {func = AnimSay, args = {princess, loc("Thank you, my hero!"), SAY_SAY, 4000}})
+  table.insert(princessFreedAnim, {func = Victory, args = {}})
+  AddSkipFunction(princessFreedAnim, SkipPrincessFreedAnim, {})
 end
 
 --------------------------Anim skip functions--------------------------
@@ -185,25 +226,38 @@ function AfterMidAnim()
   SetupPlace3()
   SetGearMessage(natives[1], 0)
   AddNewEvent(CheckPrincessFreed, {}, DoPrincessFreed, {}, 0)
-  TurnTimeLeft = 0
-  ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!"), 1, 7000)
-  vCirc = AddVisualGear(0,0,vgtCircle,0,true)
+  AddNewEvent(CheckCloseToPrincess, {}, DoCloseToPrincess, {}, 0)
+  AddNewEvent(CheckFriendsEscaped, {}, DoFriendsEscaped, {}, 0)
+  EndTurn(true)
+  ShowMission(loc("Family Reunion"), loc("Salvation"),
+     loc("Get your teammates out of their natural prison and save the princess!") .."|"..
+     loc("All your hedgehogs must be above the marked height!") .."|"..
+     loc("Hint: Drilling holes should solve everything.").."|"..
+     loc("Hint: It might be a good idea to place a girder before starting to drill. Just saying.").."|"..
+     string.format(loc("Hint: %s needs to get really close to the princess!"), nativeNames[m5DeployedNum]).."|"..
+     loc("Mines time: 5 seconds"), 1, 7000)
+  local vCirc = AddVisualGear(0,0,vgtCircle,0,true)
   SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
 end
-  
+
+function SkipPrincessFreedAnim()
+  Victory()
+end
+
 function SkipMidAnim()
   AnimTeleportGear(natives[1], unpack(nativeMidPos2))
-  SkipStartAnim()
+  AnimSwitchHog(natives[1])
+  AnimWait(natives[1], 1)
 end
 
 function SetupPlace3()
-  SpawnUtilityCrate(2086, 1887, amRope, 1)
-  SpawnUtilityCrate(2147, 728, amBlowTorch, 2)
-  SpawnUtilityCrate(2778, 1372, amPickHammer, 3)
-  SpawnUtilityCrate(2579, 1886, amPickHammer, 3)
-  SpawnUtilityCrate(2622, 1893, amGirder, 1)
-  SpawnUtilityCrate(2671, 1883, amPortalGun, 3)
-  SpawnUtilityCrate(2831, 1384, amGirder, 3)
+  SpawnSupplyCrate(2086, 1887, amRope, 1)
+  SpawnSupplyCrate(2147, 728, amBlowTorch, 2)
+  SpawnSupplyCrate(2778, 1372, amPickHammer, 4)
+  SpawnSupplyCrate(2579, 1886, amPickHammer, 3)
+  SpawnSupplyCrate(2622, 1893, amGirder, 1)
+  SpawnSupplyCrate(2671, 1883, amPortalGun, 3)
+  SpawnSupplyCrate(2831, 1384, amGirder, 3)
 
   SetTimer(AddGear(2725, 1387, gtMine, 0, 0, 0, 0), 5000)
   SetTimer(AddGear(2760, 1351, gtMine, 0, 0, 0, 0), 5000)
@@ -226,6 +280,7 @@ function SetupPlace3()
 end
 
 function SkipStartAnim()
+  AnimSetGearPosition(natives[1], unpack(nativePos2))
   AnimSwitchHog(natives[1])
   AnimWait(natives[1], 1)
 end
@@ -245,7 +300,7 @@ function AfterStartAnim()
   AddNewEvent(CheckOutOfCluster, {}, DoOutOfCluster, {}, 1)
   AddNewEvent(CheckOutOfGrenade, {}, DoOutOfGrenade, {}, 1)
 --  AddNewEvent(CheckNeedToHide, {}, DoNeedToHide, {}, 1)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   ShowMission(loc("Family Reunion"), loc("Hostage Situation"), loc("Save the princess! All your hogs must survive!|Hint: Kill the cyborgs first! Use the ammo very carefully!|Hint: You might want to spare a girder for cover!"), 1, 7000)
 end
 
@@ -260,35 +315,78 @@ function SetupPlace2()
 	PlaceGirder(648, 1427, 5)
   PlaceGirder(2110, 980, 0)
 
-	SpawnAmmoCrate(814, 407, amBazooka, 4)
-	clusterCrate = SpawnAmmoCrate(862, 494, amClusterBomb, 4)
-	SpawnAmmoCrate(855, 486, amBee, 3)
-	grenadeCrate1 = SpawnAmmoCrate(849, 459, amGrenade, 4)
-	SpawnAmmoCrate(2077, 847, amWatermelon, 3)
-	grenadeCrate2 = SpawnAmmoCrate(2122, 847, amGrenade, 3)
+	SpawnSupplyCrate(814, 407, amBazooka, 4)
+	clusterCrate = SpawnSupplyCrate(862, 494, amClusterBomb, 4)
+	SpawnSupplyCrate(855, 486, amBee, 3)
+	grenadeCrate1 = SpawnSupplyCrate(849, 459, amGrenade, 4)
+	SpawnSupplyCrate(2077, 847, amWatermelon, 3)
+	grenadeCrate2 = SpawnSupplyCrate(2122, 847, amGrenade, 3)
 
-	SpawnUtilityCrate(747, 1577, amPickHammer, 1)
-	SpawnUtilityCrate(496, 1757, amGirder, 2)
-  SpawnUtilityCrate(1809, 1880, amGirder, 1)
-	SpawnUtilityCrate(530, 1747, amPortalGun, 1)
+	SpawnSupplyCrate(747, 1577, amPickHammer, 1)
+	SpawnSupplyCrate(496, 1757, amGirder, 2)
+	SpawnSupplyCrate(1809, 1880, amGirder, 1)
+	SpawnSupplyCrate(530, 1747, amPortalGun, 1)
 end
 
 -----------------------------Events------------------------------------
-function CheckPrincessFreed()
-  if GetX(natives[1]) == nil or GetX(natives[2]) == nil or GetX(natives[3]) == nil or GetX(princess) == nil then
+function CheckCloseToPrincess()
+  if GetX(natives[1]) == nil or GetX(princess) == nil then
     return false
   end
-  return math.abs(GetX(natives[1]) - GetX(princess)) <= 15 and math.abs(GetY(natives[1]) - GetY(princess)) <= 15 and StoppedGear(natives[1]) 
-        and GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
+  return math.abs(GetX(natives[1]) - GetX(princess)) <= 20 and math.abs(GetY(natives[1]) - GetY(princess)) <= 17 and StoppedGear(natives[1])
+end
+
+function CheckFriendsEscaped()
+  if GetX(natives[2]) == nil or GetX(natives[3]) == nil then
+    return false
+  end
+  return GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
+end
+
+function CheckPrincessFreed()
+  return CheckCloseToPrincess() and CheckFriendsEscaped()
 end
 
 function DoPrincessFreed()
-  AnimSay(princess, loc("Thank you, my hero!"), SAY_SAY, 0)
-  if progress and progress<7 then
-    SaveCampaignVar("Progress", "7")
+  AddAnim(princessFreedAnim)
+end
+
+function DoFriendsEscaped()
+  if friendsEscaped then
+    return
   end
-  DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  if not CheckCloseToPrincess() then
+    if GetX(natives[2]) == nil and GetX(natives[1]) == nil then
+      return
+    end
+    HogSay(natives[2], string.format(loc("Finally! We're out of this hellhole. Now go save the princess, %s!"), nativeNames[m5DeployedNum]), SAY_SAY)
+  end
+  friendsEscaped = true
+end
+
+function DoCloseToPrincess()
+  if closeToPrincess then
+    return
+  end
+  if not CheckFriendsEscaped() then
+    if GetX(natives[2]) == nil then
+      return
+    end
+    HogSay(natives[2], loc("Hey, don't forget us! We still need to climb up!"), SAY_SHOUT)
+    FollowGear(natives[2])
+  end
+  closeToPrincess = true
+end
+
+function Victory()
+  if not princessFreed then
+    if progress and progress<7 then
+      SaveCampaignVar("Progress", "7")
+    end
+    princessFreed = true
+    DismissTeam(cyborgTeamName)
+    EndTurn(true)
+  end
 end
 
 function CheckCyborgsDead()
@@ -308,17 +406,17 @@ function DoCyborgDead(index)
     return
   end
   if index == 1 then
-    SpawnAmmoCrate(1700, 407, amBazooka, 3)
+    SpawnSupplyCrate(1700, 407, amBazooka, 3)
   elseif index == 2 then
-    SpawnAmmoCrate(1862, 494, amClusterBomb, 3)
+    SpawnSupplyCrate(1862, 494, amClusterBomb, 3)
   elseif index == 3 then
-  	SpawnAmmoCrate(1855, 486, amBee, 1)
+    SpawnSupplyCrate(1855, 486, amBee, 1)
   elseif index == 4 then
-    SpawnAmmoCrate(1849, 459, amGrenade, 3)
+    SpawnSupplyCrate(1849, 459, amGrenade, 3)
   elseif index == 5 then
-    SpawnAmmoCrate(2122, 847, amGrenade, 3)
+    SpawnSupplyCrate(2122, 847, amGrenade, 3)
   elseif index == 6 then
-    SpawnAmmoCrate(2077, 847, amWatermelon, 1)
+    SpawnSupplyCrate(2077, 847, amWatermelon, 1)
   end
 end
 
@@ -337,11 +435,15 @@ function CheckGearDead(gear)
 end
 
 function EndMission()
-  RemoveEventFunc(CheckPrincessFreed)
-  AddCaption("So the princess was never heard of again...")
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  if not princessFreed then
+    RemoveEventFunc(CheckFriendsEscaped)
+    RemoveEventFunc(CheckCloseToPrincess)
+    RemoveEventFunc(CheckPrincessFreed)
+    AddCaption(loc("So the princess was never heard of again ..."))
+    DismissTeam(nativesTeamName)
+    DismissTeam(princessTeamName)
+    EndTurn(true)
+  end
 end
 
 function CheckOutOfCluster()
@@ -356,14 +458,14 @@ function DoOutOfCluster()
   if (GetX(natives[1]) == nil) then
     return
   end
-  clusterCrate = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amClusterBomb, 3)
+  clusterCrate = SpawnSupplyCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amClusterBomb, 3)
 end
 
 function DoOutOfGrenade()
   if (GetX(natives[1]) == nil) then
     return
   end
-  grenadeCrate2 = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amGrenade, 3)
+  grenadeCrate2 = SpawnSupplyCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amGrenade, 3)
 end
 
 function CheckNeedToHide()
@@ -393,9 +495,9 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m5Choice = tonumber(GetCampaignVar("M5Choice"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
+  m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
 end
 
 function SetupPlace()
@@ -422,19 +524,23 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_female")
+  SetTeamPassive(princessTeamName, true)
+  princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
+  SetGearAIHints(princess, aihDoesntMatter)
+  gearDead[princess] = false
+
+  nativesTeamName = AddMissionTeam(-2)
   for i = 7, 9 do
     natives[i-6] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
     gearDead[natives[i-6]] = false
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
-  princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
   gearDead[cyborg] = false
-  gearDead[princess] = false
 
-  AddTeam(loc("Biomechanic Team"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  biomechanicTeamName = AddTeam(loc("Biomechanic Team"), -1, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
     gearDead[cyborgs[i]] = false
@@ -479,7 +585,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
   MapGen = mgDrawn
 	Theme = "Hell"
   SuddenDeathTurns = 35
@@ -513,7 +618,7 @@ end
 function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("Biomechanic Team") then
+    if GetHogTeamName(gear) == biomechanicTeamName then
       cyborgsLeft = cyborgsLeft - 1
     end
   end
@@ -535,10 +640,10 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
-  if GetHogTeamName(CurrentHedgehog) == loc("011101001") then
+  if CurrentHedgehog == cyborg then
     if CheckCyborgsDead() ~= true then
       for i = 1, 3 do
         if gearDead[natives[i]] ~= true then
@@ -546,7 +651,7 @@ function onNewTurn()
         end
       end
     end
-    TurnTimeLeft = 0
+    EndTurn(true)
   else
     for i = 1, 3 do
       if gearDead[natives[i]] ~= true then

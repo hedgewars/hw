@@ -28,7 +28,8 @@
 #include "DataManager.h"
 
 FrameTeams::FrameTeams(QWidget* parent) :
-    QFrame(parent), mainLayout(this), nonInteractive(false)
+    QFrame(parent), mainLayout(this), nonInteractive(false),
+    hasDecoFrame(false)
 {
     QPalette newPalette = palette();
     newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
@@ -72,6 +73,7 @@ void FrameTeams::addTeam(HWTeam team, bool willPlay)
     mainLayout.addWidget(pTeamShowWidget);
     teamToWidget.insert(team, pTeamShowWidget);
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    updateDecoFrame();
     QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
@@ -83,6 +85,7 @@ void FrameTeams::removeTeam(HWTeam team)
     it.value()->deleteLater();
     teamToWidget.erase(it);
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    updateDecoFrame();
     QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
@@ -95,6 +98,7 @@ void FrameTeams::resetTeams()
         teamToWidget.erase(it++);
     }
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    updateDecoFrame();
     QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
@@ -122,7 +126,7 @@ QWidget* FrameTeams::getTeamWidget(HWTeam team)
 
 bool FrameTeams::isFullTeams() const
 {
-    return teamToWidget.size() >= 8;
+    return teamToWidget.size() >= cMaxTeams;
 }
 
 void FrameTeams::emitTeamColorChanged(const HWTeam& team)
@@ -133,4 +137,29 @@ void FrameTeams::emitTeamColorChanged(const HWTeam& team)
 QSize FrameTeams::sizeHint() const
 {
     return QSize(-1, teamToWidget.size() * 39 + 9);
+}
+
+void FrameTeams::setDecoFrameEnabled(bool enabled)
+{
+    hasDecoFrame = enabled;
+    updateDecoFrame();
+}
+
+void FrameTeams::updateDecoFrame()
+{
+    if (hasDecoFrame && teamToWidget.size() >= 1)
+    {
+        setStyleSheet(
+            "FrameTeams{"
+            "border: solid;"
+            "border-width: 1px;"
+            "border-radius: 16px;"
+            "border-color: #ffcc00;"
+            "}"
+        );
+    }
+    else
+    {
+        setStyleSheet("FrameTeams{ border: transparent }");
+    }
 }

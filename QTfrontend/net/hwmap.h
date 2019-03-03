@@ -32,7 +32,8 @@ enum MapGenerator
     MAPGEN_MAZE = 1,
     MAPGEN_PERLIN = 2,
     MAPGEN_DRAWN = 3,
-    MAPGEN_MAP = 4
+    MAPGEN_FORTS = 4,
+    MAPGEN_MAP = 5
 };
 
 class HWMap : public TCPBase

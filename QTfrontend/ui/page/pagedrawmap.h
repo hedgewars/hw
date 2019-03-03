@@ -35,6 +35,7 @@ class PageDrawMap : public AbstractPage
 
     protected:
         QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
         void connectSignals();
 
     private:
@@ -47,6 +48,10 @@ class PageDrawMap : public AbstractPage
         QRadioButton * rbPolyline;
         QRadioButton * rbRectangle;
         QRadioButton * rbEllipse;
+        QSpinBox * sbBrushSize;
+
+    public slots:
+        void brushSizeChanged(int brushSize);
 
     private slots:
         void load();

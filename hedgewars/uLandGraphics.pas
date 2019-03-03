@@ -23,7 +23,7 @@ interface
 uses uFloat, uConsts, uTypes, Math, uRenderUtils;
 
 type
-    fillType = (nullPixel, backgroundPixel, ebcPixel, icePixel, setNotCurrentMask, changePixelSetNotCurrent, setCurrentHog, changePixelNotSetNotCurrent);
+    fillType = (nullPixel, backgroundPixel, ebcPixel, icePixel, addNotHHObj, removeNotHHObj, addHH, removeHH, setCurrentHog, removeCurrentHog);
 
 type TRangeArray = array[0..31] of record
                                    Left, Right: LongInt;
@@ -41,7 +41,7 @@ procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt;
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 function FillRoundInLand(X, Y, Radius: LongInt; Value: Longword): Longword;
 function FillRoundInLandFT(X, Y, Radius: LongInt; fill: fillType): Longword;
-procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent, isHH: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 function  DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword): Longword;
@@ -209,27 +209,39 @@ begin
             calculatePixelsCoordinates(i, y, px, py);
             DrawPixelIce(i, y, px, py);
             end;
-    setNotCurrentMask:
+    addNotHHObj:
         for i:= fromPix to toPix do
             begin
-            Land[y, i]:= Land[y, i] and lfNotCurrentMask;
+            if Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift < lfNotHHObjSize then
+                Land[y, i]:= (Land[y, i] and (not lfNotHHObjMask)) or ((Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift + 1) shl lfNotHHObjShift);
             end;
-    changePixelSetNotCurrent:
+    removeNotHHObj:
         for i:= fromPix to toPix do
             begin
-            if Land[y, i] and lfObjMask > 0 then
+            if Land[y, i] and lfNotHHObjMask <> 0 then
+                Land[y, i]:= (Land[y, i] and (not lfNotHHObjMask)) or ((Land[y, i] and lfNotHHObjMask shr lfNotHHObjShift - 1) shl lfNotHHObjShift);
+            end;
+    addHH:
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfHHMask < lfHHMask then
+                Land[y, i]:= Land[y, i] + 1
+            end;
+    removeHH:
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfHHMask > 0 then
                 Land[y, i]:= Land[y, i] - 1;
             end;
     setCurrentHog:
         for i:= fromPix to toPix do
             begin
-            Land[y, i]:= Land[y, i] or lfCurrentHog
+            Land[y, i]:= Land[y, i] or lfCurHogCrate
             end;
-    changePixelNotSetNotCurrent:
+    removeCurrentHog:
         for i:= fromPix to toPix do
             begin
-            if Land[y, i] and lfObjMask < lfObjMask then
-                Land[y, i]:= Land[y, i] + 1
+            Land[y, i]:= Land[y, i] and lfNotCurHogCrate;
             end;
     end;
 end;
@@ -360,16 +372,20 @@ if (dx = dy) then
     inc(FillRoundInLand, FillCircleLines(x, y, dx, dy, Value));
 end;
 
-procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent, isHH: boolean);
 begin
 if not doSet and isCurrent then
-    FillRoundInLandFT(X, Y, Radius, setNotCurrentMask)
-else if not doSet and (not IsCurrent) then
-    FillRoundInLandFT(X, Y, Radius, changePixelSetNotCurrent)
+    FillRoundInLandFT(X, Y, Radius, removeCurrentHog)
+else if (not doSet) and (not IsCurrent) and isHH then
+    FillRoundInLandFT(X, Y, Radius, removeHH)
+else if (not doSet) and (not IsCurrent) and (not isHH) then
+    FillRoundInLandFT(X, Y, Radius, removeNotHHObj)
 else if doSet and IsCurrent then
     FillRoundInLandFT(X, Y, Radius, setCurrentHog)
-else if doSet and (not IsCurrent) then
-    FillRoundInLandFT(X, Y, Radius, changePixelNotSetNotCurrent);
+else if doSet and (not IsCurrent) and isHH then
+    FillRoundInLandFT(X, Y, Radius, addHH)
+else if doSet and (not IsCurrent) and (not isHH) then
+    FillRoundInLandFT(X, Y, Radius, addNotHHObj);
 end;
 
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
@@ -406,7 +422,7 @@ else {if WorldEdge = weSea then}
     if x <= leftX then
         iceR:= min(leftX + iceHeight, iceR)
     else {if x >= rightX then}
-        iceL:= max(LongInt(rightX) - iceHeight, iceL);
+        iceL:= max(rightX - iceHeight, iceL);
     end;
 
 // don't continue if all ice is outside land array
@@ -457,8 +473,8 @@ var tx, ty, by, bx,  i: LongInt;
 begin
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
-        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, TopY) do
+        for tx:= Max(LeftX, ar^[i].Left - Radius) to Min(RightX, ar^[i].Right + Radius) do
             begin
             if (Land[ty, tx] and lfIndestructible) = 0 then
                 begin
@@ -484,8 +500,8 @@ dec(y, Count * dY);
 
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
-        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, TopY) do
+        for tx:= Max(LeftX, ar^[i].Left - Radius) to Min(RightX, ar^[i].Right + Radius) do
             if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
                  if (cReducedQuality and rqBlurryLand) = 0 then
@@ -693,7 +709,6 @@ function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandF
 begin
     ForcePlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, true, false, true, behind, flipHoriz, flipVert, LandFlags, Tint)
 end;
-
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force, behind, flipHoriz, flipVert: boolean; LandFlags: Word; Tint: LongWord): boolean;
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
@@ -738,8 +753,8 @@ case bpp of
                    ((not force) and (Land[cpY + y, cpX + x] <> 0))) or
 
                    (not outOfMap and
-                       (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-                       ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or
+                       (((cpY + y) <= topY) or ((cpY + y) >= LAND_HEIGHT) or
+                       ((cpX + x) <= leftX) or ((cpX + x) >= rightX) or
                        ((not force) and (Land[cpY + y, cpX + x] <> 0)))) then
                    begin
                    if SDL_MustLock(Image) then
@@ -765,7 +780,7 @@ case bpp of
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
-                   begin
+                begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
                     gX:= cpX + x;
@@ -776,15 +791,17 @@ case bpp of
                     gX:= (cpX + x) div 2;
                     gY:= (cpY + y) div 2;
                     end;
-		if not behind or (Land[cpY + y, cpX + x] and lfLandMask = 0) then
+                if (not behind) or (Land[cpY + y, cpX + x] and lfLandMask = 0) then
                     begin
                     if (LandFlags and lfBasic <> 0) or 
-                       (((LandPixels[gY, gX] and AMask) shr AShift = 255) and  // This test assumes lfBasic and lfObject differ only graphically
-                         (LandFlags or lfObject = 0)) then
+                       ((LandPixels[gY, gX] and AMask shr AShift > 128) and  // This test assumes lfBasic and lfObject differ only graphically
+                         (LandFlags and (lfObject or lfIce) = 0)) then
                          Land[cpY + y, cpX + x]:= lfBasic or LandFlags
-                    else Land[cpY + y, cpX + x]:= lfObject or LandFlags
+                    else if (LandFlags and lfIce = 0) then
+						 Land[cpY + y, cpX + x]:= lfObject or LandFlags
+					else Land[cpY + y, cpX + x]:= LandFlags
                     end;
-		if not behind or (LandPixels[gY, gX] = 0) then
+                if (not behind) or (LandPixels[gY, gX] = 0) then
                     begin
                     if tint = $FFFFFFFF then
                         LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
@@ -856,8 +873,8 @@ p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
-                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) then
+                if ((cpY + y) <= topY) or ((cpY + y) >= LAND_HEIGHT) or
+                   ((cpX + x) <= leftX) or ((cpX + x) >= rightX) then
                    begin
                    if SDL_MustLock(Image) then
                        SDL_UnlockSurface(Image);
@@ -959,8 +976,8 @@ for y:= 0 to Pred(h) do
     begin
     for x:= 0 to Pred(w) do
         if ((p^[x] and AMask) <> 0)
-            and (((cpY + y) < Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-            ((cpX + x) < Longint(leftX)) or ((cpX + x) > Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0)) then
+            and (((cpY + y) < topY) or ((cpY + y) >= LAND_HEIGHT) or
+            ((cpX + x) < leftX) or ((cpX + x) > rightX) or (Land[cpY + y, cpX + x] <> 0)) then
                 pt^[x]:= cWhiteColor
         else
             (pt^[x]):= cWhiteColor and (not AMask);
@@ -998,7 +1015,7 @@ begin
         yy:= Y div 2;
     end;
 
-    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and ((LandPixels[yy, xx] and AMASK) <> 0);
+    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and ((LandPixels[yy, xx] and AMask) <> 0);
     if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
         c:= 0;
@@ -1057,8 +1074,8 @@ if (Land[Y, X] and lfDamaged) = 0 then
     exit;
 
 // check location
-if (Y <= LongInt(topY) + 1) or (Y >= LAND_HEIGHT-2)
-or (X <= LongInt(leftX) + 1) or (X >= LongInt(rightX) - 1) then
+if (Y <= topY + 1) or (Y >= LAND_HEIGHT-2)
+or (X <= leftX + 1) or (X >= rightX - 1) then
     exit;
 
 // counter for neighbor pixels that are not known to be undamaged
@@ -1109,8 +1126,8 @@ end;
 procedure Smooth_oldImpl(X, Y: LongInt);
 begin
 // a bit of AA for explosions
-if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
-    (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
+if (Land[Y, X] = 0) and (Y > topY + 1) and
+    (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX - 1) then
     begin
     if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))
     or (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then
@@ -1168,7 +1185,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
     end
 else if ((cReducedQuality and rqBlurryLand) = 0) and ((LandPixels[Y, X] and AMask) = AMask)
 and (Land[Y, X] and (lfDamaged or lfBasic) = lfBasic)
-and (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
+and (Y > topY + 1) and (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX - 1) then
     begin
     if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))
     or (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then

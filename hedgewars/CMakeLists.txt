@@ -1,17 +1,17 @@
 enable_language(Pascal)
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_net REQUIRED)
-find_package(SDL2_ttf REQUIRED)
-find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_image 2 REQUIRED)
+find_package(SDL2_net 2 REQUIRED)
+find_package(SDL2_ttf 2 REQUIRED)
+find_package(SDL2_mixer 2 REQUIRED)
 
 include(CheckLibraryExists)
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 
 enable_language(Pascal)
-add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000 -B")
 add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-gv")
 add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Xs")
 if(UNIX)
@@ -164,17 +164,10 @@ else()
     add_flag_append(CMAKE_Pascal_FLAGS "-XLAlua=${lua_output_name}")
 endif()
 
-if(PHYSFS_SYSTEM)
-    get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
-else()
-    add_definitions(-dPHYSFS_INTERNAL)
-    list(APPEND HW_LINK_LIBS physfs)
-    #-XLA is a beta fpc flag that renames libraries before passing them to the linker
-    #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
-    #(should be harmless on other platforms)
-    add_flag_append(CMAKE_Pascal_FLAGS "-XLAphysfs=${physfs_output_name}")
-endif()
+# PhysFS
+get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
+add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
+
 list(APPEND HW_LINK_LIBS physlayer)
 
 
@@ -192,6 +185,10 @@ set(sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/options.inc" "${CMAKE_CURRENT
 foreach(loop_var ${engine_sources})
     list(APPEND sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/${loop_var}")
 endforeach(loop_var)
+
+if (WIN32 AND VCPKG_TOOLCHAIN)
+    add_definitions(-dWIN32_VCPKG)
+endif()
 
 
 #SOURCE AND PROGRAMS SECTION

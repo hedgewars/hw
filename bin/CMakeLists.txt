@@ -1,9 +1,6 @@
 if(WIN32 AND NOT UNIX)
-    file(GLOB DLLs *.dll)
-    file(GLOB ICOs *.ico)
-
-    install(FILES
-        ${DLLs}
-        ${ICOs}
-        DESTINATION ${target_library_install_dir})
+    install(DIRECTORY .
+        DESTINATION ${target_library_install_dir}
+		FILES_MATCHING PATTERN "*.dll" PATTERN "*.ico" 
+		)
 endif(WIN32 AND NOT UNIX)

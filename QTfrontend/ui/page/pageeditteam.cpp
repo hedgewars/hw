@@ -32,6 +32,7 @@
 #include "HWApplication.h"
 #include "keybinder.h"
 
+#include "physfs.h"
 #include "DataManager.h"
 #include "hatbutton.h"
 
@@ -76,21 +77,33 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
         HHNameEdit[i]->setMinimumWidth(120);
         HHNameEdit[i]->setFixedHeight(36);
         HHNameEdit[i]->setWhatsThis(tr("This hedgehog's name"));
-        HHNameEdit[i]->setStyleSheet("padding: 6px;");
-        GBHLayout->addWidget(HHNameEdit[i], i + 1, 1);
+        HHNameEdit[i]->setStyleSheet("QLineEdit { padding: 6px; }");
+        GBHLayout->addWidget(HHNameEdit[i], i + 1, 1, 1, 2);
 
-        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i + 1, 3, 1, 1, true);
+        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i + 1, 5, 1, 1, true);
         btnRandomHogName[i]->setFixedHeight(HHNameEdit[i]->height());
         btnRandomHogName[i]->setWhatsThis(tr("Randomize this hedgehog's name"));
     }
 
+    btnRandomHats = new QPushButton();
+    btnRandomHats->setText(tr("Random Hats"));
+    btnRandomHats->setStyleSheet("padding: 6px 10px;");
+    GBHLayout->addWidget(btnRandomHats, 9, 1, 1, 1, Qt::AlignCenter);
+    btnRandomHats->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    btnRandomNames = new QPushButton();
+    btnRandomNames->setText(tr("Random Names"));
+    btnRandomNames->setStyleSheet("padding: 6px 10px;");
+    GBHLayout->addWidget(btnRandomNames, 9, 2, 1, 1, Qt::AlignCenter);
+    btnRandomNames->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+    vbox1->addWidget(GBoxHedgehogs);
+
     btnRandomTeam = new QPushButton();
     btnRandomTeam->setText(tr("Random Team"));
     btnRandomTeam->setStyleSheet("padding: 6px 10px;");
-    GBHLayout->addWidget(btnRandomTeam, 9, 0, 1, 4, Qt::AlignCenter);
     btnRandomTeam->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    vbox1->addWidget(GBoxHedgehogs);
+    vbox1->addWidget(btnRandomTeam, 0, Qt::AlignCenter);
 
     GBoxTeam = new QGroupBox(this);
     GBoxTeam->setTitle(QGroupBox::tr("Team Settings"));
@@ -100,7 +113,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     tmpLabel->setText(QLabel::tr("Name"));
     GBTLayout->addWidget(tmpLabel, 0, 0);
     tmpLabel = new QLabel(GBoxTeam);
-    tmpLabel->setText(QLabel::tr("Type"));
+    tmpLabel->setText(QLabel::tr("Player"));
     GBTLayout->addWidget(tmpLabel, 1, 0);
     tmpLabel = new QLabel(GBoxTeam);
     tmpLabel->setText(QLabel::tr("Grave"));
@@ -114,51 +127,112 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
 
     TeamNameEdit = new QLineEdit(GBoxTeam);
     TeamNameEdit->setMaxLength(64);
-    GBTLayout->addWidget(TeamNameEdit, 0, 1);
+    TeamNameEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    TeamNameEdit->setStyleSheet("QLineEdit { padding: 6px; }");
+    GBTLayout->addWidget(TeamNameEdit, 0, 1, 1, 2);
     vbox2->addWidget(GBoxTeam);
 
     CBTeamLvl = new QComboBox(GBoxTeam);
-    CBTeamLvl->setIconSize(QSize(48, 48));
-    CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
+    CBTeamLvl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    CBTeamLvl->setIconSize(QSize(32, 32));
+    CBTeamLvl->addItem(QIcon(":/res/botlevels/small0.png"), QComboBox::tr("Human"));
     for(int i = 5; i > 0; i--)
         CBTeamLvl->addItem(
-            QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
-            QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
+            QIcon(QString(":/res/botlevels/small%1.png").arg(6 - i)),
+            QComboBox::tr("Computer (Level %1)").arg(i)
         );
-    GBTLayout->addWidget(CBTeamLvl, 1, 1);
+    CBTeamLvl->setFixedHeight(38);
+    GBTLayout->addWidget(CBTeamLvl, 1, 1, 1, 2);
 
     CBGrave = new QComboBox(GBoxTeam);
+    CBGrave->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     CBGrave->setMaxCount(65535);
+    CBGrave->setMaxVisibleItems(20);
     CBGrave->setIconSize(QSize(32, 32));
-    GBTLayout->addWidget(CBGrave, 2, 1);
+    CBGrave->setFixedHeight(44);
+    GBTLayout->addWidget(CBGrave, 2, 1, 1, 2);
 
+    // Player flags, combobox to select flag
     CBFlag = new QComboBox(GBoxTeam);
     CBFlag->setMaxCount(65535);
+    CBFlag->setMaxVisibleItems(50);
     CBFlag->setIconSize(QSize(22, 15));
-    GBTLayout->addWidget(CBFlag, 3, 1);
+    CBFlag->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    GBTLayout->addWidget(CBFlag, 3, 1, 1, 2);
 
-    QHBoxLayout * hbox = new QHBoxLayout();
+    // CPU level flag. Static image, only displayed when computer player is selected
+    QImage imgBotlevels = QImage("physfs://Graphics/botlevels.png");
+
+    int botlevelOffsets[5]= { 19, 14, 10, 6, 0 };   
+
+    for(int i=0; i<5; i++) {
+        QImage imgCPU = QImage("physfs://Graphics/Flags/cpu.png");
+        QPainter painter(&imgCPU);
+        painter.drawImage(botlevelOffsets[i], 0, imgBotlevels, botlevelOffsets[i]);
+
+        pixCPU[i] = QPixmap::fromImage(imgCPU);
+    }
+
+    QHBoxLayout* hboxCPU = new QHBoxLayout();
+    hboxCPU->setContentsMargins(0, 0, 0, 0);
+
+    hboxCPUWidget = new QWidget();
+    hboxCPUWidget->setLayout(hboxCPU);
+
+    CPUFlag = new QLabel();
+    CPUFlag->setPixmap(pixCPU[0]);
+    CPUFlag->setFixedHeight(38);
+
+    hboxCPU->addWidget(CPUFlag);
+
+    CPUFlagLabel = new QLabel("CPU");
+    CPUFlagLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    hboxCPU->addWidget(CPUFlagLabel);
+
+    hboxCPUWidget->setHidden(true);
+    GBTLayout->addWidget(hboxCPUWidget, 3, 1, 1, 1);
+
+    btnRandomTeamName = addButton(":/res/dice.png", GBTLayout, 0, 3, 1, 1, true);
+    btnRandomTeamName->setWhatsThis(tr("Randomize the team name"));
+
+    btnRandomGrave = addButton(":/res/dice.png", GBTLayout, 2, 3, 1, 1, true);
+    btnRandomGrave->setWhatsThis(tr("Randomize the grave"));
+
+    btnRandomFlag = addButton(":/res/dice.png", GBTLayout, 3, 3, 1, 1, true);
+    btnRandomFlag->setWhatsThis(tr("Randomize the flag"));
+
     CBVoicepack = new QComboBox(GBoxTeam);
+    CBVoicepack->setMaxVisibleItems(50);
+    CBVoicepack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-    hbox->addWidget(CBVoicepack, 100);
-    btnTestSound = addSoundlessButton(":/res/PlaySound.png", hbox, 1, true);
-    hbox->setStretchFactor(btnTestSound, 1);
+    GBTLayout->addWidget(CBVoicepack, 4, 1, 1, 1);
 
-    GBTLayout->addLayout(hbox, 4, 1);
+    btnTestSound = addSoundlessButton(":/res/PlaySound.png", GBTLayout, 4, 2, 1, 1, true);
+    btnTestSound->setWhatsThis(tr("Play a random example of this voice"));
+
+    btnRandomVoice = addButton(":/res/dice.png", GBTLayout, 4, 3, 1, 1, true);
+    btnRandomVoice->setWhatsThis(tr("Randomize the voice"));
 
     GBoxFort = new QGroupBox(this);
     GBoxFort->setTitle(QGroupBox::tr("Fort"));
     QGridLayout * GBFLayout = new QGridLayout(GBoxFort);
     CBFort = new QComboBox(GBoxFort);
+    CBFort->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    CBFort->setMaxVisibleItems(25);
     CBFort->setMaxCount(65535);
+
     GBFLayout->addWidget(CBFort, 0, 0);
+
+    btnRandomFort = addButton(":/res/dice.png", GBFLayout, 0, 2, 1, 1, true);
+    btnRandomFort->setWhatsThis(tr("Randomize the fort"));
+
     FortPreview = new SquareLabel(GBoxFort);
     FortPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     FortPreview->setMinimumSize(128, 128);
     FortPreview->setPixmap(QPixmap());
     // perhaps due to handling its own paintevents, SquareLabel doesn't play nice with the stars
     //FortPreview->setAttribute(Qt::WA_PaintOnScreen, true);
-    GBFLayout->addWidget(FortPreview, 1, 0);
+    GBFLayout->addWidget(FortPreview, 1, 0, 1, 2);
     vbox2->addWidget(GBoxFort);
 
     vbox1->addStretch();
@@ -180,7 +254,7 @@ void PageEditTeam::connectSignals()
     signalMapper2 = new QSignalMapper(this);
 
     connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(fixHHname(int)));
-    connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(setRandomName(int)));
+    connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(setRandomHogName(int)));
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
@@ -191,11 +265,21 @@ void PageEditTeam::connectSignals()
         signalMapper2->setMapping(btnRandomHogName[i], i);
     }
 
-    connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomNames()));
+    connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomTeam()));
+    connect(btnRandomNames, SIGNAL(clicked()), this, SLOT(setRandomHogNames()));
+    connect(btnRandomHats, SIGNAL(clicked()), this, SLOT(setRandomHats()));
+
+    connect(CBTeamLvl, SIGNAL(currentIndexChanged(const int)), this, SLOT(CBTeamLvl_activated(const int)));
+
+    connect(btnRandomTeamName, SIGNAL(clicked()), this, SLOT(setRandomTeamName()));
+    connect(btnRandomGrave, SIGNAL(clicked()), this, SLOT(setRandomGrave()));
+    connect(btnRandomFlag, SIGNAL(clicked()), this, SLOT(setRandomFlag()));
+    connect(btnRandomVoice, SIGNAL(clicked()), this, SLOT(setRandomVoice()));
+    connect(btnRandomFort, SIGNAL(clicked()), this, SLOT(setRandomFort()));
 
     connect(btnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 
-    connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
+    connect(CBFort, SIGNAL(currentIndexChanged(const int)), this, SLOT(CBFort_activated(const int)));
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :
@@ -229,11 +313,32 @@ void PageEditTeam::lazyLoad()
 
     CBVoicepack->addItems(list);
 
+    QIcon dlcIcon;
+    dlcIcon.addFile(":/res/dlcMarker.png", QSize(), QIcon::Normal, QIcon::On);
+    dlcIcon.addFile(":/res/dlcMarkerSelected.png", QSize(), QIcon::Selected, QIcon::On);
+    QPixmap emptySpace = QPixmap(7, 15);
+    emptySpace.fill(QColor(0, 0, 0, 0));
+    QIcon notDlcIcon = QIcon(emptySpace);
 
     // forts
     list = dataMgr.entryList("Forts", QDir::Files, QStringList("*L.png"));
-    list.replaceInStrings(QRegExp("L\\.png$"), "");
-    CBFort->addItems(list);
+    foreach (QString file, list)
+    {
+        QString fortPath = PHYSFS_getRealDir(QString("Forts/%1").arg(file).toLocal8Bit().data());
+
+        QString fort = file.replace(QRegExp("L\\.png$"), "");
+
+        bool isDLC = !fortPath.startsWith(datadir->absolutePath());
+        if (isDLC)
+        {
+            CBFort->addItem(dlcIcon, fort, fort);
+        }
+        else
+        {
+            CBFort->addItem(notDlcIcon, fort, fort);
+        }
+
+    }
 
 
     // graves
@@ -307,10 +412,26 @@ void PageEditTeam::fixHHname(int idx)
         HHNameEdit[idx]->setText(QLineEdit::tr("hedgehog %1").arg(idx+1));
 }
 
-void PageEditTeam::CBFort_activated(const QString & fortname)
+void PageEditTeam::CBFort_activated(const int index)
 {
-    QPixmap pix("physfs://Forts/" + fortname + "L.png");
+    QString fortName = CBFort->itemData(index).toString();
+    QPixmap pix("physfs://Forts/" + fortName + "L.png");
     FortPreview->setPixmap(pix);
+}
+
+void PageEditTeam::CBTeamLvl_activated(const int index)
+{
+    CBFlag->setHidden(index != 0);
+    btnRandomFlag->setHidden(index != 0);
+
+    if(index > 0) 
+    {
+        int cpuLevel = 6 - index;
+        CPUFlag->setPixmap(pixCPU[cpuLevel - 1]);
+        //: Name of a flag for computer-controlled enemies. %1 is replaced with the computer level
+        CPUFlagLabel->setText(tr("CPU %1").arg(cpuLevel));
+    }
+    hboxCPUWidget->setHidden(index == 0);
 }
 
 void PageEditTeam::testSound()
@@ -339,8 +460,16 @@ void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
 {
     m_playerHash = playerHash;
     lazyLoad();
+    OldTeamName = name;
 
+    // Mostly create a default team, with 2 important exceptions:
     HWTeam newTeam(name);
+    // Randomize grave to make it less likely that default teams have equal graves (important for resurrector)
+    HWNamegen::teamRandomGrave(newTeam, false);
+    // Randomize fort for greater variety in fort mode with default teams
+    HWNamegen::teamRandomFort(newTeam, false);
+    // DLC forts and graves intentionally filtered out to prevent desyncs and missing grave error
+    // TODO: Remove DLC filter as soon it is not needed anymore
     loadTeam(newTeam);
 }
 
@@ -348,6 +477,7 @@ void PageEditTeam::editTeam(const QString & name, const QString & playerHash)
 {
     m_playerHash = playerHash;
     lazyLoad();
+    OldTeamName = name;
 
     HWTeam team(name);
     team.loadFromFile();
@@ -367,17 +497,66 @@ void PageEditTeam::deleteTeam(const QString & name)
         HWTeam(name).deleteFile();
 }
 
-void PageEditTeam::setRandomNames()
+void PageEditTeam::setRandomTeam()
 {
     HWTeam team = data();
-    HWNamegen::teamRandomNames(team, true);
+    HWNamegen::teamRandomEverything(team);
     loadTeam(team);
 }
 
-void PageEditTeam::setRandomName(int hh_index)
+void PageEditTeam::setRandomHogNames()
 {
     HWTeam team = data();
-    HWNamegen::teamRandomName(team,hh_index);
+    HWNamegen::teamRandomHogNames(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomHats()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomHats(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomHogName(int hh_index)
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomHogName(team,hh_index);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomTeamName()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomTeamName(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomGrave()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomGrave(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomFlag()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomFlag(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomVoice()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomVoice(team);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomFort()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomFort(team);
     loadTeam(team);
 }
 
@@ -404,7 +583,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
     CBGrave->setCurrentIndex(CBGrave->findText(team.grave()));
     CBFlag->setCurrentIndex(CBFlag->findData(team.flag()));
 
-    CBFort->setCurrentIndex(CBFort->findText(team.fort()));
+    CBFort->setCurrentIndex(CBFort->findData(team.fort()));
     CBVoicepack->setCurrentIndex(CBVoicepack->findText(team.voicepack()));
 
     QStandardItemModel * binds = DataManager::instance().bindsModel();
@@ -423,7 +602,8 @@ void PageEditTeam::loadTeam(const HWTeam & team)
 
 HWTeam PageEditTeam::data()
 {
-    HWTeam team(TeamNameEdit->text());
+    HWTeam team(OldTeamName);
+    team.setName(TeamNameEdit->text());
     team.setDifficulty(CBTeamLvl->currentIndex());
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
@@ -439,7 +619,7 @@ HWTeam PageEditTeam::data()
     }
 
     team.setGrave(CBGrave->currentText());
-    team.setFort(CBFort->currentText());
+    team.setFort(CBFort->itemData(CBFort->currentIndex()).toString());
     team.setVoicepack(CBVoicepack->currentText());
     team.setFlag(CBFlag->itemData(CBFlag->currentIndex()).toString());
 
@@ -454,7 +634,35 @@ HWTeam PageEditTeam::data()
 
 void PageEditTeam::saveTeam()
 {
-    data().saveToFile();
+    HWTeam team = data();
+    if(!team.wouldOverwriteOtherFile())
+    {
+        team.saveToFile();
+    }
+    else
+    {
+        // Name already used -> look for an appropriate name:
+        int i=2;
+        QString origName = team.name();
+        QString newName;
+        while(team.wouldOverwriteOtherFile())
+        {
+            newName = tr("%1 (%2)").arg(origName).arg(i++);
+            team.setName(newName);
+            if(i > 1000)
+                break;
+        }
+
+        QMessageBox teamNameFixedMsg(this);
+        teamNameFixedMsg.setIcon(QMessageBox::Warning);
+        teamNameFixedMsg.setWindowTitle(QMessageBox::tr("Teams - Name already taken"));
+        teamNameFixedMsg.setText(QMessageBox::tr("The team name '%1' is already taken, so your team has been renamed to '%2'.").arg(origName).arg(team.name()));
+        teamNameFixedMsg.setWindowModality(Qt::WindowModal);
+        teamNameFixedMsg.setStandardButtons(QMessageBox::Ok);
+        teamNameFixedMsg.exec();
+
+        team.saveToFile();
+    }
 }
 
 // When the "Use default for all binds" is pressed...

@@ -6,13 +6,13 @@
     <tip>Elige el mismo color que tus amigos para hacer una alianza con ellos. Cada uno de vosotros controlará sus propios erizos, pero la victoria o derrota será compartida por vuestra facción.</tip>
     <tip>Puede que algunas armas hagan poco daño, pero pueden ser realmente devastadoras si son usadas en el momento correcto. Prueba a usar la Desert eagle para empujar erizos enemigos al agua, por ejemplo.</tip>
     <tip>Si no tienes claro qué vas a hacer y prefieres no desperdiciar munición puedes pasar un turno. ¡Pero ten cuidado, si dejas pasar muchos turnos puede que empiece la muerte súbita!</tip>
-    <tip>Si prefieres que nadie más use tu nick en el servidor oficial puedes registrarlo en http://www.hedgewars.org/.</tip>
+    <tip>Si prefieres que nadie más use tu nick en el servidor oficial puedes registrarlo en https://www.hedgewars.org/.</tip>
     <tip>¿Estás cansado del modo de juego de siempre? Prueba alguna de las misiones, encontrarás en ellas nuevos tipos de juego dependiendo de la que elijas.</tip>
     <tip>El juego intentará guardar la última partida como una demo de forma predeterminada. Más tarde puedes ir a "Juego local" y visitar la sección de "Demos" en la esquina inferior derecha para reproducirlas o gestionarlas.</tip>
     <tip>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. Si tienes algún problema estaremos encantados de ayudarte en nuestros foros o canal de IRC, pero ¡no esperes que estemos allí las 24 horas del día!</tip>
     <tip>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. ¡Si te gusta podrías considerar el ayudarnos con una pequeña donación o contribuyendo con tu propio trabajo!</tip>
     <tip>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. ¡Compártelo con tu família y amigos tanto como quieras!</tip>
-    <tip>De cuando en cuando celebramos torneos oficiales. Puedes mantenerte al día sobre los próximos eventos en http://www.hedgewars.org.</tip>
+    <tip>De cuando en cuando celebramos torneos oficiales. Puedes mantenerte al día sobre los próximos eventos en https://www.hedgewars.org.</tip>
     <tip>Hedgewars está disponible en varios idiomas. Si no encuentras traducción a tu idioma o piensas que la actual es de baja calidad o está desactualizada estaremos encantados de aceptar tu colaboración para mejorarla.</tip>
     <tip>Hedgewars es un juego multiplataforma que puede ser ejecutado en diversos sistemas operativos, incluyendo Windows, Mac OS X y Linux.</tip>
     <tip>Recuerda: puedes crear tus propias partidas multijugador tanto en local como por red, no estás limitado a jugar contra la máquina.</tip>
@@ -51,7 +51,4 @@
     <tip>Puedes encontrar los archivos de configuración del juego en la carpeta ".hedgewars" dentro de tu directorio personal. Puedes hacer copias de seguridad de los mismos o copiarlos a otro ordenador si lo deseas, pero no intentes editarlos a mano para evitar posibles pérdidas de datos.</tip>
     <tip>Puedes usar el cóctel molotov o el lanzallamas para evitar que erizos enemigos crucen túneles angostos o puentes.</tip>
     <tip>El abejorro puede ser complicado de usar. Su maniobrabilidad depende de su velocidad, así que intenta no lanzarlo a máxima potencia.</tip>
-    <windows-only>
-        <tip>La versión de Hedgewars para Windows soporta Xfire. Recuerda agregar Hedgewars a tu lista de juegos para que tus amigos puedan saber cuándo estás jugando.</tip>
-    </windows-only>
 </tips>

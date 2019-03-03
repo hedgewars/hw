@@ -28,12 +28,26 @@ class HWTeam;
 class HWNamegen
 {
     public:
-
-        static void teamRandomName(HWTeam & team, const int HedgehogNumber);
-        static void teamRandomNames(HWTeam & team, const bool changeteamname);
+        static void teamRandomTeamName(HWTeam & team);
+        static void teamRandomGrave(HWTeam & team, bool withDLC = true);
+        static void teamRandomFort(HWTeam & team, bool withDLC = true);
+        static void teamRandomFlag(HWTeam & team, bool withDLC = true);
+        static void teamRandomVoice(HWTeam & team, bool withDLC = true);
+        static void teamRandomHats(HWTeam & team, bool withDLC = true);
+        static void teamRandomHat(HWTeam & team, const int HedgehogNumber, bool withDLC = true);
+        static void teamRandomHogNames(HWTeam & team);
+        static void teamRandomHogName(HWTeam & team, const int HedgehogNumber);
+        static void teamRandomEverything(HWTeam & team);
 
     private:
         HWNamegen();
+
+        static QString getRandomTeamName(int kind);
+        static QString getRandomHat(bool withDLC = true);
+        static QString getRandomGrave(bool withDLC = true);
+        static QString getRandomFort(bool withDLC = true);
+        static QString getRandomFlag(bool withDLC = true);
+        static QString getRandomVoice(bool withDLC = true);
 
         static QList<QStringList> TypesTeamnames;
         static QList<QStringList> TypesHatnames;
@@ -43,9 +57,8 @@ class HWNamegen
         static QStringList dictContents(const QString filename);
         static QStringList dictsForHat(const QString hatname);
 
-        static QString getRandomGrave();
-        static QString getRandomFort();
-        static void teamRandomName(HWTeam & team, const int HedgehogNumber, const QStringList & dict);
+        static void teamRandomHat(HWTeam & team, const int HedgehogNumber, const QStringList & dict);
+        static void teamRandomHogName(HWTeam & team, const int HedgehogNumber, const QStringList & dict);
 };
 
 

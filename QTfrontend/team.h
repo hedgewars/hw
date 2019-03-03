@@ -38,9 +38,8 @@ struct HWHog
 {
     QString Name;
     QString Hat;
-    int Rounds, Kills, Deaths, Suicides;
 
-    HWHog() : Rounds(0), Kills(0), Deaths(0), Suicides(0){}
+    HWHog(){}
 };
 
 // class representing a team
@@ -62,9 +61,9 @@ class HWTeam : public QObject
         bool deleteFile();
         bool saveToFile();
         bool fileExists();
+        bool wouldOverwriteOtherFile();
 
         // attribute getters
-        unsigned int campaignProgress() const;
         int color() const;
         QColor qcolor() const;
         unsigned int difficulty() const;
@@ -73,10 +72,12 @@ class HWTeam : public QObject
         QString grave() const;
         const HWHog & hedgehog(unsigned int idx) const;
         bool isNetTeam() const;
+        bool isMissionTeam() const;
         QString keyBind(unsigned int idx) const;
         QString name() const;
         unsigned char numHedgehogs() const;
         QString owner() const;
+        void setOwner(const QString & owner);
         QString voicepack() const;
 
         // attribute setters
@@ -90,10 +91,7 @@ class HWTeam : public QObject
         void setNumHedgehogs(unsigned char num);
         void setVoicepack(const QString & voicepack);
         void setNetTeam(bool isNetTeam);
-
-        // increments for statistical info
-        void incRounds();
-        void incWins();
+        void setMissionTeam(bool isMissionTeam);
 
         // convert team info into strings for further computation
         QStringList teamGameConfig(quint32 InitHealth) const;
@@ -124,12 +122,10 @@ public slots:
         quint8 m_numHedgehogs;
         int m_color;
         bool m_isNetTeam;
+        bool m_isMissionTeam;
         QString m_owner;
 
         // class members that contain statistics, etc.
-        unsigned int m_campaignProgress;
-        unsigned int m_rounds;
-        unsigned int m_wins;
         unsigned int AchievementProgress[MAX_ACHIEVEMENTS];
 };
 

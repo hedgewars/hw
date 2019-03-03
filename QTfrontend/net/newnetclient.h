@@ -84,6 +84,7 @@ class HWNewNet : public QObject
 
         QStringList cmdbuf;
 
+        int  ByteLength(const QString & str);
         void RawSendNet(const QString & buf);
         void RawSendNet(const QByteArray & buf);
         void ParseCmd(const QStringList & lst);
@@ -167,6 +168,7 @@ class HWNewNet : public QObject
         void gameFinished(bool correcly);
         void banPlayer(const QString &);
         void kickPlayer(const QString &);
+        void delegateToPlayer(const QString &);
         void infoPlayer(const QString &);
         void followPlayer(const QString &);
         void consoleCommand(const QString &);

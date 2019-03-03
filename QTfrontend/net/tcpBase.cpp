@@ -21,10 +21,12 @@
 #include <QImage>
 #include <QThread>
 #include <QApplication>
+#include <QProcessEnvironment>
 
 #include "tcpBase.h"
 #include "hwconsts.h"
 #include "MessageDialog.h"
+#include "gameuiconfig.h"
 
 #ifdef HWLIBRARY
 extern "C" {
@@ -104,11 +106,12 @@ TCPBase::~TCPBase()
 
 }
 
-TCPBase::TCPBase(bool demoMode, QObject *parent) :
+TCPBase::TCPBase(bool demoMode, bool usesCustomLanguage, QObject *parent) :
     QObject(parent),
     m_hasStarted(false),
     m_isDemoMode(demoMode),
     m_connected(false),
+    m_usesCustomLanguage(usesCustomLanguage),
     IPCSocket(0)
 {
     process = 0;
@@ -183,6 +186,18 @@ void TCPBase::RealStart()
     process->setProcessChannelMode(QProcess::ForwardedChannels);
 #endif
 
+    // If game config uses non-system locale, we set the environment
+    // of the engine first
+    if(m_usesCustomLanguage)
+    {
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        QString hwengineLang = QLocale().name() + ".UTF8";
+        qDebug("Setting hwengine environment: LANG=%s", qPrintable(hwengineLang));
+        // TODO: Check if this is correct and works on all systems
+        env.insert("LANG", QLocale().name() + ".UTF8");
+        process->setProcessEnvironment(env);
+    }
+    qDebug("Starting hwengine ...");
     process->start(bindir->absolutePath() + "/hwengine", arguments);
 #endif
     m_hasStarted = true;
@@ -190,7 +205,6 @@ void TCPBase::RealStart()
 
 void TCPBase::ClientDisconnect()
 {
-    disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     onClientDisconnect();
 
     if(!simultaneousRun())
@@ -202,8 +216,11 @@ void TCPBase::ClientDisconnect()
         emit isReadyNow();
     }
 
-    IPCSocket->deleteLater();
-    IPCSocket = NULL;
+    if(IPCSocket) {
+      disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+      IPCSocket->deleteLater();
+      IPCSocket = NULL;
+    }
 
     deleteLater();
 }
@@ -226,11 +243,14 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitStatus);
 
-    ClientDisconnect();
+    if(!m_connected) { // yes, it is intended to be like this
+      ClientDisconnect(); // need to do cleanup in case no connection occured,
+      //if m_connected is true, it is done automatically in socket disconnect handler
+    }
 
     // show error message if there was an error that was not an engine's
     // fatal error - because that one already sent a info via IPC
-    if ((exitCode != 0) && (exitCode != 2))
+    if ((exitCode != HWENGINE_EXITCODE_OK) && (exitCode != HWENGINE_EXITCODE_FATAL))
     {
         // inform user that something bad happened
         MessageDialog::ShowFatalMessage(
@@ -242,23 +262,19 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
             .arg("Feedback"));
 
     }
-
-    // cleanup up
-    if (IPCSocket)
-    {
-        IPCSocket->close();
-        IPCSocket->deleteLater();
-    }
-
-    // plot suicide
-    deleteLater();
 }
 
 void TCPBase::tcpServerReady()
 {
-    disconnect(srvsList.first(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
-
-    RealStart();
+    if (!srvsList.isEmpty())
+    {
+        disconnect(srvsList.first(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+        RealStart();
+    }
+    else
+    {
+        qDebug("tcpServerReady() called while srvsList was empty. Not starting TCP server");
+    }
 }
 
 void TCPBase::Start(bool couldCancelPreviousRequest)

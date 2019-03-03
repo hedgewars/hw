@@ -22,9 +22,10 @@ local heroDamageAtCurrentTurn = 0
 local dialog01 = {}
 local dialog02 = {}
 -- mission objectives
+local goToThantaString = loc("Go to Thanta and get the device part!")
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the icegun and get the device part from Thanta"), 1, 4500},
-	[dialog02] = {missionName, loc("Win"), loc("Congratulations, you collected the device part!"), 1, 3500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the freezer and get the device part from Thanta.") .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
+	["checkpoint"] = {missionName, loc("Objectives"), goToThantaString .. "|" .. loc("Mines time: 0 seconds"), 1, 4500},
 }
 -- crates
 local icegunY = 1950
@@ -72,11 +73,11 @@ bandit5.y = 600
 bandit5.frozen = false
 bandit5.roundsToUnfreeze = 0
 teamA.name = loc("Allies")
-teamA.color = tonumber("FF0000",16) -- red
+teamA.color = -6
 teamB.name = loc("Frozen Bandits")
-teamB.color = tonumber("0033FF",16) -- blues
+teamB.color = -2
 teamC.name = loc("Hog Solo")
-teamC.color = tonumber("38D61C",16) -- green
+teamC.color = -6
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -87,9 +88,11 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	Delay = 3
 	Map = "ice01_map"
 	Theme = "Snow"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
 	-- get the check point
 	checkPointReached = initCheckpoint("ice01")
@@ -107,17 +110,19 @@ function onGameInit()
 		SaveCampaignVar("HeroHealth", heroHealth)
 	end
 
-	-- Hog Solo
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
+	-- Hero
+	teamC.name = AddMissionTeam(teamC.color)
+	hero.gear = AddMissionHog(heroHealth)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- Ally
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	teamA.name = AddTeam(teamA.name, teamA.color, "heart", "Island", "Default", "cm_face")
+	SetTeamPassive(teamA.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Frozen Bandits
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	teamB.name = AddTeam(teamB.name, teamB.color, "plant2", "Island", "Default", "cm_pirate")
 	bandit1.gear = AddHog(bandit1.name, 1, 120, "Santa")
 	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)
 	HogTurnLeft(bandit1.gear, true)
@@ -144,7 +149,7 @@ function onGameInit()
 		AnimSetGearPosition(hero.gear, 1450, 910)
 	end
 
-	AnimInit()
+	AnimInit(checkPointReached == 1)
 	AnimationSetup()
 end
 
@@ -206,46 +211,72 @@ function onGameStart()
 	AddAmmo(bandit4.gear, amBazooka, 5)
 	AddAmmo(bandit5.gear, amBazooka, 5)
 
-	goToThantaString = loc("Go to Thanta and get the device part!")
-
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amBazooka, 1)
-		SpawnAmmoCrate(icegunX, icegunY, amIceGun)
+		SpawnSupplyCrate(icegunX, icegunY, amIceGun)
 		AddEvent(onColumnCheckPoint, {hero.gear}, columnCheckPoint, {hero.gear}, 0)
 		AddEvent(onHeroAtIceGun, {hero.gear}, heroAtIceGun, {hero.gear}, 0)
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 then
+		local baz = tonumber(GetCampaignVar("HeroAmmoIce01Bazooka")) or 1
+		AddAmmo(hero.gear, amBazooka, baz)
 		AddAmmo(hero.gear, amIceGun, 8)
 		AnimCaption(hero.gear, goToThantaString, 5000)
+		ShowMission(unpack(goals["checkpoint"]))
 	elseif checkPointReached == 3 then
-		AddAmmo(hero.gear, amIceGun, 6)
+		local baz = tonumber(GetCampaignVar("HeroAmmoIce01Bazooka")) or 0
+		local ice = math.max(6, tonumber(GetCampaignVar("HeroAmmoIce01IceGun")) or 6)
+		AddAmmo(hero.gear, amBazooka, baz)
+		AddAmmo(hero.gear, amIceGun, ice)
 		AnimCaption(hero.gear, goToThantaString, 5000)
+		ShowMission(unpack(goals["checkpoint"]))
 	end
 
 	SendHealthStatsOff()
+end
+
+function getNextBandit(hog)
+	local continue = true
+	local startHog = hog
+	while true do
+		if (GetHealth(hog) and GetEffect(hog, heFrozen) < 256) and
+		( (heroAtFinalStep and (hog == bandit1.gear or hog == bandit4.gear or hog == bandit5.gear)) or
+		((not heroAtFinalStep) and (hog == bandit2.gear or hog == bandit3.gear)) ) then
+			return hog
+		end
+		if hog == bandit1.gear then
+			hog = bandit2.gear
+		elseif hog == bandit2.gear then
+			hog = bandit3.gear
+		elseif hog == bandit3.gear then
+			hog = bandit4.gear
+		elseif hog == bandit4.gear then
+			hog = bandit5.gear
+		elseif hog == bandit5.gear then
+			hog = bandit1.gear
+		end
+		if startHog == hog then
+			return nil
+		end
+	end
 end
 
 function onNewTurn()
 	heroDamageAtCurrentTurn = 0
 	-- round has to start if hero goes near the column
 	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
-		TurnTimeLeft = 0
+		SkipTurn()
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
-		TurnTimeLeft = -1
-	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then
-		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
-	elseif heroAtFinalStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
-		if (GetHealth(bandit1.gear) and GetEffect(bandit1.gear,heFrozen) > 256) and
-			((GetHealth(bandit4.gear) and GetEffect(bandit4.gear,heFrozen) > 256) or not GetHealth(bandit4.gear)) and
-			((GetHealth(bandit5.gear) and GetEffect(bandit5.gear,heFrozen) > 256) or not GetHealth(bandit5.gear)) then
-			TurnTimeLeft = 0
+		SetTurnTimeLeft(MAX_TURN_TIME)
+	elseif (GetHogTeamName(CurrentHedgehog) == teamB.name) then
+		local nextBandit = getNextBandit(CurrentHedgehog)
+		if nextBandit ~= nil then
+			if CurrentHedgehog ~= nextBandit then
+				AnimSwitchHog(nextBandit)
+			end
 		else
-			AnimSwitchHog(hero.gear)
-			TurnTimeLeft = 0
+			SkipTurn()
 		end
-	elseif CurrentHedgehog == ally.gear then
-		TurnTimeLeft = 0
 	end
 	-- frozen hogs accounting
 	if CurrentHedgehog == hero.gear and heroAtFinalStep and TurnTimeLeft > 0 then
@@ -406,13 +437,16 @@ end
 function antiFlyArea(gear)
 	heroAtAntiFlyArea = true
 	if not heroVisitedAntiFlyArea then
-		TurnTimeLeft = 0
+		EndTurn(true)
 		FollowGear(hero.gear)
+		SetGearMessage(hero.gear, band(GetGearMessage(hero.gear), bnot(gmAllStoppable)))
 		AnimSwitchHog(bandit1.gear)
 		FollowGear(hero.gear)
-		TurnTimeLeft = 0
+		HogSay(hero.gear, loc("My flying saucer stopped working!"), SAY_THINK)
+		EndTurn(true)
 	end
 	AddAmmo(hero.gear, amJetpack, 0)
+	AddAmmo(hero.gear, amSkip, 100)
 	heroVisitedAntiFlyArea = true
 end
 
@@ -427,12 +461,11 @@ function nonAntiFlyArea(gear)
 end
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to go next to Thanta"))
-	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use only the icegun"))
-	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the icegun"))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+	SendStat(siCustomAchievement, loc("To win the game you have to stand next to Thanta."))
+	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
+	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
+	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})
 	EndGame()
 end
 
@@ -440,12 +473,17 @@ function heroFinalStep(gear)
 	heroAtFinalStep = true
 	saveCheckpoint("3")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
+	SaveCampaignVar("HeroAmmoIce01IceGun", GetAmmoCount(hero.gear, amIceGun))
+	SaveCampaignVar("HeroAmmoIce01Bazooka", GetAmmoCount(hero.gear, amBazooka))
+	AddCaption(loc("Checkpoint reached!"), capcolDefault, capgrpMessage2)
 end
 
 function columnCheckPoint(gear)
 	saveCheckpoint("2")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
+	AddCaption(loc("Checkpoint reached!"), capcolDefault, capgrpMessage2)
+	SaveCampaignVar("HeroAmmoIce01IceGun", GetAmmoCount(hero.gear, amIceGun))
+	SaveCampaignVar("HeroAmmoIce01Bazooka", GetAmmoCount(hero.gear, amBazooka))
 end
 
 function heroAtIceGun(gear)
@@ -453,18 +491,17 @@ function heroAtIceGun(gear)
 end
 
 function thantaDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("Noooo, Thanta has to stay alive!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to go next to Thanta"))
-	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use only the icegun"))
-	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the icegun"))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+	SendStat(siCustomAchievement, loc("Noo, Thanta has to stay alive!"))
+	SendStat(siCustomAchievement, loc("To win the game you have to go next to Thanta."))
+	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
+	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
+	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})
 	EndGame()
 end
 
 function heroWin(gear)
-	TurnTimeLeft=0
+	SetGearMessage(gear, 0)
 	if GetX(hero.gear) < GetX(bandit1.gear) then
 		HogTurnLeft(bandit1.gear, true)
 	else
@@ -478,8 +515,8 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    if anim == dialog02 then
+	end
+	if anim == dialog02 then
 		actionsOnWin()
 	else
 		AnimSwitchHog(hero.gear)
@@ -490,40 +527,45 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, welcome to moon
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Ice Planet, where ice rules..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finally you are here..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Ice Planet, where ice rules ..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finally you are here!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Hi! Nice to meet you"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Hi! Nice to meet you."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Listen carefully! The bandit leader, Thanta, has recently found a very strange device"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("He doesn't know it but this device is a part of the anti-gravity device"), SAY_SAY, 2500}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Listen carefully! The bandit leader, Thanta, has recently found a very strange device."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("He doesn't know it but this device is a part of the anti-gravity device."), SAY_SAY, 2500}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 8000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Nice, then I should get the part as soon as possible!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Be careful, your gadgets won't work in the bandit area. You should get an ice gun"), SAY_SAY, 7000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Be careful, your gadgets won't work in the bandit area. You should get an ice gun."), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("There is one below us!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
-	-- DIALOG 02 - Hero got to Thant2
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
+	-- DIALOG 02 - Hero got to Thanta
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Congratulations, now you can take Thanta's device part..."), 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Oh! Please spare me. You can take all my treasures!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I just want the strange device you found!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {bandit1.gear, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Here! Take it..."), SAY_SAY, 3000}})
+	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Here! Take it!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = actionsOnWin, args = {}})
 end
 
 -------------- Other Functions -------------------
 
 function actionsOnWin()
+	AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(hero.gear)), capgrpAmmoinfo)
+	PlaySound(sndShotgunReload)
+
+	ShowMission(missionName, loc("Win"), loc("Congratulations, you collected the device part!"), 1, 3500)
+
 	saveCompletedStatus(4)
 	SendStat(siGameResult, loc("Congratulations, you acquired the device part!"))
-	SendStat(siCustomAchievement, loc("At the end of the game your health was ")..GetHealth(hero.gear))
+	SendStat(siCustomAchievement, string.format(loc("At the end of the game your health was %d."), GetHealth(hero.gear)))
 	-- maybe add number of tries for each part?
-	SendStat(siPlayerKills,'1',teamC.name)
-	SendStat(siPlayerKills,'0',teamB.name)
+	sendSimpleTeamRankings({teamC.name, teamA.name, teamB.name})
+	resetCheckpoint() -- reset this mission
 	EndGame()
 end

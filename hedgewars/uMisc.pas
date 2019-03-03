@@ -33,7 +33,7 @@ function  GetTeamStatString(p: PTeam): shortstring;
 function  SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
 
 implementation
-uses SysUtils, uVariables, uUtils
+uses uVariables, uUtils
      {$IFDEF PNG_SCREENSHOTS}, PNGh, png {$ENDIF};
 
 type PScreenshot = ^TScreenshot;
@@ -164,6 +164,7 @@ Assign(f, image^.filename);
 Rewrite(f, 1);
 if IOResult = 0 then
     begin
+    writeResult:= 0; // suppress fpc hint
     BlockWrite(f, head, sizeof(head), writeResult);
     BlockWrite(f, image^.buffer^, size, writeResult);
     Close(f);

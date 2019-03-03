@@ -27,15 +27,16 @@
     NSInteger port;
 }
 
-@property (nonatomic,retain) UIView *blackView;
-@property (nonatomic,retain) NSString *savePath;
+@property (nonatomic, strong) UIView *blackView;
+@property (nonatomic, strong) NSString *savePath;
 @property (assign) NSInteger port;
 
-+(void) startLocalGame:(NSDictionary *)withOptions;
-+(void) startSaveGame:(NSString *)atPath;
-+(void) startMissionGame:(NSString *)withScript;
-+(void) startSimpleGame;
++ (void)startLocalGame:(NSDictionary *)withOptions;
++ (void)startSaveGame:(NSString *)atPath;
++ (void)startMissionGame:(NSString *)withScript;
++ (void)startCampaignMissionGameWithScript:(NSString *)missionScriptName forCampaign:(NSString *)campaignName;
++ (void)startSimpleGame;
 
-+(void) registerCallingController:(UIViewController *)controller;
++ (void)registerCallingController:(UIViewController *)controller;
 
 @end

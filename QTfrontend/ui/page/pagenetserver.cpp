@@ -83,7 +83,7 @@ QLayout * PageNetServer::bodyLayoutDefinition()
     labelURL->setText(
               "<style type=\"text/css\"> a { color: #ffcc00; } </style>"
               "<div align=\"center\">"
-              "<a href=\"hedgewars.org/kb/HWPlaySchemeSyntax\">" +
+              "<a href=\"https://hedgewars.org/kb/HWPlaySchemeSyntax\">" +
               tr("Click here for details") +
               "</a></div>");
     labelURL->setOpenExternalLinks(true);
@@ -98,10 +98,10 @@ QLayout * PageNetServer::footerLayoutDefinition()
 
     BtnStart = formattedButton(QPushButton::tr("Start"));
     BtnStart->setWhatsThis(QPushButton::tr("Start private server"));
-    BtnStart->setMinimumWidth(180);
+    BtnStart->setMinimumSize(180, 50);
 
     bottomLayout->addStretch();
-    bottomLayout->addWidget(BtnStart);
+    bottomLayout->addWidget(BtnStart, 0, Qt::AlignBottom);
 
     return bottomLayout;
 }

@@ -35,7 +35,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure ProcessVisualGears(Steps: Longword);
-procedure DrawVisualGears(Layer: LongWord);
+procedure DrawVisualGears(Layer: LongWord; worldIsShifted: boolean);
 
 procedure AddClouds;
 procedure AddFlakes;
@@ -74,7 +74,7 @@ if Steps = 0 then
 
 for i:= 0 to 6 do
     begin
-    t:= VisualGearLayers[i];
+    t:= VisualGearLayersStart[i];
     while t <> nil do
         begin
         Gear:= t;
@@ -93,7 +93,7 @@ if (vobCount = 0) or (vobCount > 200) then
 for i:= 2 to 6 do
     if i <> 3 then
         begin
-        t:= VisualGearLayers[i];
+        t:= VisualGearLayersStart[i];
         while t <> nil do
             begin
             Gear:= t;
@@ -125,12 +125,20 @@ begin
         exit(sprite);
 end;
 
+function GetSpriteByWind(sprite, Lsprite: TSprite): TSprite; inline;
+begin
+    if (SpritesData[Lsprite].Texture <> nil) and (cWindSpeedf<0) then
+        exit(Lsprite)
+    else
+        exit(sprite);
+end;
+
 function GetSpriteData(sprite, SDsprite: TSprite): PSpriteData; inline;
 begin
     exit(@SpritesData[GetSprite(sprite, SDsprite)]);
 end;
 
-procedure DrawVisualGears(Layer: LongWord);
+procedure DrawVisualGears(Layer: LongWord; worldIsShifted: boolean);
 var Gear: PVisualGear;
     tinted, speedlessFlakes: boolean;
     tmp: real;
@@ -146,32 +154,33 @@ else
 case Layer of
     // this layer is very distant in the background when stereo
     0: begin
-        Gear:= VisualGearLayers[0];
+        Gear:= VisualGearLayersStart[0];
         while Gear <> nil do
             begin
             if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
             case Gear^.Kind of
               vgtCloud: begin
-                        spriteData:= GetSpriteData(sprCloud, sprSDCloud);
+                        spriteData:= GetSpriteData(GetSpriteByWind(sprCloud, sprCloudL), GetSpriteByWind(sprSDCloud, sprSDCloudL));
                         DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
                         end;
-               vgtFlake: begin
-                         sprite:= GetSprite(sprFlake, sprSDFlake);
-                         if cFlattenFlakes then
+               vgtFlake: if (not worldIsShifted) then
                              begin
-                             if speedlessFlakes then
-                                 DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                             if cFlattenFlakes then
+                                 begin
+                                 if speedlessFlakes then
+                                     DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                                 else
+                                     DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                                 end
                              else
-                                 DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-                             end
-                         else
-                             begin
-                             if speedlessFlakes then
-                                 DrawTextureF(SpritesData[sprite].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                             else
-                                 DrawTextureRotatedF(SpritesData[sprite].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+                                 begin
+                                 if speedlessFlakes then
+                                     DrawTextureF(SpritesData[sprite].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                                 else
+                                     DrawTextureRotatedF(SpritesData[sprite].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+                                 end;
                              end;
-                         end;
                end;
            if Gear^.Tint <> $FFFFFFFF then
                untint;
@@ -180,25 +189,25 @@ case Layer of
        end;
     // this layer is on the land level (which is close but behind the screen plane) when stereo
     1: begin
-       Gear:= VisualGearLayers[1];
+       Gear:= VisualGearLayersStart[1];
        while Gear <> nil do
           begin
-          //tinted:= false;
           if Gear^.Tint <> $FFFFFFFF then
               Tint(Gear^.Tint);
           case Gear^.Kind of
-              vgtFlake: begin
-                         sprite:= GetSprite(sprFlake, sprSDFlake);
-                         if speedlessFlakes then
-                             DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                         else
-                             DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-                        end;
+              vgtFlake: if (not worldIsShifted) then
+                            begin
+                            sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                            if speedlessFlakes then
+                                DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                            else
+                                DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                            end;
               vgtSmokeTrace: if Gear^.State < 8 then
                   DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
               vgtEvilTrace: if Gear^.State < 8 then
                   DrawSprite(sprEvilTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
-              vgtLineTrail: DrawLine(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 1.0, $FF, min(Gear^.Timer, $C0), min(Gear^.Timer, $80), min(Gear^.Timer, $FF));
+              vgtLineTrail: DrawLine(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 1.0, $FF, min(Gear^.Timer, $C0), min(Gear^.Timer, $80), min(Gear^.Timer, (Gear^.Tint and $FF)));
           end;
           if (cReducedQuality and rqAntiBoom) = 0 then
               case Gear^.Kind of
@@ -217,14 +226,13 @@ case Layer of
                              if Gear^.Angle <> 0 then
                                 DrawTextureRotatedF(spriteData^.Texture, Gear^.scale, 0, 0, round(Gear^.X + WorldDx + (((spriteData^.Height+8)*Gear^.Scale)/2) * (Gear^.Angle / abs(Gear^.Angle))), round(Gear^.Y + WorldDy), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, spriteData^.Width, spriteData^.Height, Gear^.Angle)
                              else
-                                //DrawSprite(sprite, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
                                 DrawTextureF(spriteData^.Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((spriteData^.Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, spriteData^.Width, spriteData^.Height);
                              end;
                   vgtDroplet: begin
                               sprite:= GetSprite(sprDroplet, sprSDDroplet);
                               DrawSprite(sprite, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                               end;
-                  vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
+                  vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                vgtStraightShot: begin
                                 if Gear^.dX < 0 then
                                     i:= -1
@@ -233,7 +241,6 @@ case Layer of
                                 DrawTextureRotatedF(SpritesData[TSprite(Gear^.State)].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, i, SpritesData[TSprite(Gear^.State)].Width, SpritesData[TSprite(Gear^.State)].Height, Gear^.Angle);
                                 end;
               end;
-          //if (Gear^.Tint <> $FFFFFFFF) or tinted then untint;
           if (Gear^.Tint <> $FFFFFFFF) then
               untint;
           Gear:= Gear^.NextGear
@@ -241,31 +248,23 @@ case Layer of
        end;
     // this layer is on the screen plane (depth = 0) when stereo
     3: begin
-       Gear:= VisualGearLayers[3];
+       Gear:= VisualGearLayersStart[3];
        while Gear <> nil do
            begin
            tinted:= false;
            if Gear^.Tint <> $FFFFFFFF then
                Tint(Gear^.Tint);
            case Gear^.Kind of
-(*
-              vgtFlake: begin
-                        sprite:= GetSprite(sprFlake, sprSDFlake);
-                        if speedlessFlakes then
-                            DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                        else
-                            DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
-                        end;*)
-               vgtSpeechBubble: begin
-                                if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
-                                    begin
-                                    tinted:= true;
-                                    Tint($FF, $FF, $FF,  $66);
-                                    DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
-                                    end
-                                else if (Gear^.Tex <> nil) and (((Gear^.State = 0) and ((Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Team = CurrentTeam))) or (Gear^.State = 2)) then
-                                    DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-                                end;
+               vgtSpeechBubble: if (Gear^.Angle <> 0) then
+                                // ^ Before this gear renders, Angle must be set to mark it ready (e.g. coordinates properly initialized)
+                                    if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
+                                        begin
+                                        tinted:= true;
+                                        Tint($FF, $FF, $FF,  $66);
+                                        DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
+                                        end
+                                    else if (Gear^.Tex <> nil) and (((Gear^.State = 0) and ((Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Team = CurrentTeam))) or (Gear^.State = 2)) then
+                                        DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
                vgtSmallDamageTag: DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
                vgtHealthTag: if Gear^.Tex <> nil then
                                begin
@@ -308,7 +307,7 @@ case Layer of
        end;
     // this layer is outside the screen when stereo
     2: begin
-       Gear:= VisualGearLayers[2];
+       Gear:= VisualGearLayersStart[2];
        while Gear <> nil do
            begin
            tinted:= false;
@@ -331,7 +330,8 @@ case Layer of
                             tinted:= true;
                             Tint($FF, $FF, $FF, round(Gear^.alpha * $FF));
                             DrawTextureF(ropeIconTex, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 32, 32);
-                            DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
+                            if Gear^.Frame <> ord(amNothing) then
+                                DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
                             end;
                    vgtShell: begin
                              if Gear^.FrameTicks < $FF then
@@ -359,13 +359,14 @@ case Layer of
                    vgtBulletHit: DrawSpriteRotatedF(sprBulletHit, round(Gear^.X) + WorldDx - 0, round(Gear^.Y) + WorldDy - 0, 7 - (Gear^.FrameTicks div 50), 1, Gear^.Angle);
                end;
            case Gear^.Kind of
-               vgtFlake: begin
-                         spriteData:= GetSpriteData(sprFlake, sprSDFlake);
-                         if speedlessFlakes then
-                             DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
-                         else
-                             DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
-                         end;
+               vgtFlake: if (not worldIsShifted) then
+                         begin
+                             spriteData:= GetSpriteData(GetSpriteByWind(sprFlake, sprFlakeL), GetSpriteByWind(sprSDFlake, sprSDFlakeL));
+                             if speedlessFlakes then
+                                 DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
+                             else
+                                 DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
+                             end;
                vgtCircle: if gear^.Angle = 1 then
                               begin
                               tmp:= Gear^.State / 100;
@@ -381,23 +382,24 @@ case Layer of
        end;
      // this layer is half-way between the screen plane (depth = 0) when in stereo, and the land
      4: begin
-        Gear:= VisualGearLayers[4];
+        Gear:= VisualGearLayersStart[4];
         while Gear <> nil do
             begin
             if Gear^.Tint <> $FFFFFFFF then
                 Tint(Gear^.Tint);
             case Gear^.Kind of
                vgtCloud: begin
-                         spriteData:= GetSpriteData(sprCloud, sprSDCloud);
+                         spriteData:= GetSpriteData(GetSpriteByWind(sprCloud, sprCloudL), GetSpriteByWind(sprSDCloud, sprSDCloudL));
                          DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height);
                          end;
-              vgtFlake: begin
-                        spriteData:= GetSpriteData(sprFlake, sprSDFlake);
-                        if speedlessFlakes then
-                            DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
-                        else
-                            DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
-                        end;
+              vgtFlake: if (not worldIsShifted) then
+                            begin
+                            spriteData:= GetSpriteData(GetSpriteByWind(sprFlake, sprFlakeL), GetSpriteByWind(sprSDFlake, sprSDFlakeL));
+                            if speedlessFlakes then
+                                DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
+                            else
+                                DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
+                            end;
             end;
             if (Gear^.Tint <> $FFFFFFFF) then
                 untint;
@@ -406,23 +408,24 @@ case Layer of
         end;
      // this layer is on the screen plane (depth = 0) when stereo, but just behind the land
      5: begin
-        Gear:= VisualGearLayers[5];
+        Gear:= VisualGearLayersStart[5];
         while Gear <> nil do
             begin
             if Gear^.Tint <> $FFFFFFFF then
                 Tint(Gear^.Tint);
             case Gear^.Kind of
                 vgtCloud: begin
-                          sprite:= GetSprite(sprCloud, sprSDCloud);
+                        sprite:= GetSpriteByWind(GetSprite(sprCloud, sprSDCloud), GetSprite(sprCloudL, sprSDCloudL));
                           DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
                           end;
-              vgtFlake: begin
-                        sprite:= GetSprite(sprFlake, sprSDFlake);
-                        if speedlessFlakes then
-                            DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                        else
-                            DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-                        end;
+              vgtFlake: if not (worldIsShifted) then
+                            begin
+                            sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                            if speedlessFlakes then
+                                DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                            else
+                                DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                            end;
                 end;
             if (Gear^.Tint <> $FFFFFFFF) then
                 untint;
@@ -431,19 +434,20 @@ case Layer of
         end;
      // this layer is on the screen plane (depth = 0) when stereo, but just in front of the land
     6: begin
-        Gear:= VisualGearLayers[6];
+        Gear:= VisualGearLayersStart[6];
         while Gear <> nil do
             begin
             if Gear^.Tint <> $FFFFFFFF then
                 Tint(Gear^.Tint);
             case Gear^.Kind of
-                vgtFlake: begin
-                          sprite:= GetSprite(sprFlake, sprSDFlake);
-                          if speedlessFlakes then
-                              DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                          else
-                              DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
-                          end;
+                vgtFlake: if (not worldIsShifted) then
+                              begin
+                              sprite:= GetSpriteByWind(GetSprite(sprFlake, sprSDFlake), GetSprite(sprFlakeL, sprSDFlakeL));
+                              if speedlessFlakes then
+                                  DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                              else
+                                  DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                              end;
                 vgtNoPlaceWarn:
                             DrawTexture(round(Gear^.X) + WorldDx - round(Gear^.Tex^.w * Gear^.Scale) div 2, round(Gear^.Y) + WorldDy - round(Gear^.Tex^.h * Gear^.Scale) div 2, Gear^.Tex, Gear^.Scale);
                 end;
@@ -459,26 +463,29 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud, 0, true)
 end;
 
 procedure ChangeToSDClouds;
-var       i: LongInt;
+var       i, j: LongInt;
     vg, tmp: PVisualGear;
 begin
 if cCloudsNumber = cSDCloudsNumber then
     exit;
-vg:= VisualGearLayers[0];
-while vg <> nil do
-    if vg^.Kind = vgtCloud then
-        begin
-        tmp:= vg^.NextGear;
-        DeleteVisualGear(vg);
-        vg:= tmp
-        end
-    else vg:= vg^.NextGear;
-for i:= 0 to cSDCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+for i:= 0 to 6 do
+    begin
+    vg:= VisualGearLayersStart[i];
+    while vg <> nil do
+        if vg^.Kind = vgtCloud then
+            begin
+            tmp:= vg^.NextGear;
+            DeleteVisualGear(vg);
+            vg:= tmp
+            end
+        else vg:= vg^.NextGear;
+    for j:= 0 to cSDCloudsNumber - 1 do
+        AddVisualGear(cLeftScreenBorder + j * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud, 0, true)
+    end;
 end;
 
 procedure AddFlakes;
@@ -501,11 +508,13 @@ var       i: LongInt;
 begin
 if (cReducedQuality and rqKillFlakes) <> 0 then
     exit;
-if vobCount = vobSDCount then
+if (vobCount = vobSDCount) and (vobFrameTicks = vobSDFrameTicks) and
+        (vobFramesCount = vobSDFramesCount) and (vobVelocity = vobSDVelocity) and
+        (vobFallSpeed = vobSDFallSpeed) then
     exit;
 for i:= 0 to 6 do
     begin
-    vg:= VisualGearLayers[i];
+    vg:= VisualGearLayersStart[i];
     while vg <> nil do
         if vg^.Kind = vgtFlake then
             begin
@@ -528,7 +537,10 @@ var i: LongWord;
 begin
 VGCounter:= 0;
 for i:= 0 to 6 do
-    VisualGearLayers[i]:= nil;
+    begin
+    VisualGearLayersStart[i]:= nil;
+    VisualGearLayersEnd[i]:= nil;
+    end;
 end;
 
 procedure freeModule;
@@ -536,7 +548,7 @@ var i: LongWord;
 begin
 VGCounter:= 0;
 for i:= 0 to 6 do
-    while VisualGearLayers[i] <> nil do DeleteVisualGear(VisualGearLayers[i]);
+    while VisualGearLayersStart[i] <> nil do DeleteVisualGear(VisualGearLayersStart[i]);
 end;
 
 end.

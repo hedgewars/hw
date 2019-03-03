@@ -1,0 +1,98 @@
+Basic_Training_-_Movement.name=Trèanadh gluasaid bunasach
+Basic_Training_-_Movement.desc="Seo far an tòisich na glas-laoich! Ionnsaich mar a ghluaiseas tu air cruthan-tìre eadar-dhealaichte agus mar a ghearras tu leum o ghràineag gu gràineag."
+
+Basic_Training_-_Bazooka.name=Trèanadh bazooka bunasach
+Basic_Training_-_Bazooka.desc="Ionnsaich mar a chleachdas tu am bazooka is mun ghaoth agus mill a h-uile amas."
+
+Basic_Training_-_Grenade.name=Trèanadh durcain-spreadhaidh bunasach
+Basic_Training_-_Grenade.desc="Ionnsaich a h-uile càil a dh’fheumas tu a thaobh durcain-spreadhaidh is mill a h-uile amas. Cuimhnich gun tilg thu e às dèid a’ phrìne a thoirt às!"
+
+Basic_Training_-_Rope.name=Trèanadh ròpa bunasach
+Basic_Training_-_Rope.desc="’S e fear dhe na h-acainnean as iol-chomasach a tha san ròpa ach feumaidh tu torr chleachdadh a dhèanamh leis. Ionnsaichidh tu sgilean bunasach an ròpa an-seo."
+
+Basic_Training_-_Flying_Saucer.name=Trèanadh soithich-itealaich bunasach
+Basic_Training_-_Flying_Saucer.desc="Ruigidh tu cha mhòr àite sam bith le soitheach-itealaich ma tha thu eòlach air a stiùireadh. Ionnsaich mar a nì thu itealadh, mar a bheir thu ionnsaigh o shoitheach-itealaich agus fiù cleas smodaig no dhà."
+
+User_Mission_-_Dangerous_Ducklings.name=Lachagan cunnartach
+User_Mission_-_Dangerous_Ducklings.desc="Nise, a’ ghlas-laoich! Thàinig an t-àm gus na dh’ionnsaich thu san trèanadh bhunasach a chur gu feum!"
+
+User_Mission_-_Diver.name=Tumadh
+User_Mission_-_Diver.desc="Tha an ionnsaigh “muir-thìreach” seo nas doirbhe na bhiodh tu ’n dùil."
+
+User_Mission_-_Teamwork.name=Obair còmhla
+User_Mission_-_Teamwork.desc="Tha cyborg briste a’ dìon rùn-dìomhair airm luachmhor. Feumaidh tu sgioba sònraichte dhe dhithis ghràineag a stiùireadh leis an amas gum mill sibh an nàmhaid ach an tog sibh an rùn-dìomhair! Tha e deatamach dhan àm ri teachd gum mair an dithis ghràineag agad beò."
+
+User_Mission_-_Teamwork_2.name=Obair còmhla 2
+User_Mission_-_Teamwork_2.desc="Lorg sinn gearastan dìomhair na h-Ìmpireachd Sìobarnaiteach agus chan eil ach bot-fàire mialach ’ga dhìon. Stiùirich an sgioba sònraichte agad ach am mill iad am bot-fàire ach an gabh sinn a’ bhunait. Mar a bh’ againn roimhe, feumaidh an dithis ghràineag a mhairsinn beò!"
+
+User_Mission_-_Spooky_Tree.name=Craobh rògach
+User_Mission_-_Spooky_Tree.desc="Tha iomadh creat ann a sheo. Tha mi ’n dòchas nach eil an t-acras air an eun ud."
+
+User_Mission_-_Bamboo_Thicket.name=Badan bambù
+User_Mission_-_Bamboo_Thicket.desc="Tha cyborg a’ maoimeadh am badan bambù agus a’ toirt ionnsaigh air gach rud a chì e gu h-uabhasach pongail. Dèan plana, gluais gu luath is mill an nàmhaid gu luath!"
+
+User_Mission_-_That_Sinking_Feeling.name=A’ dol fodha
+User_Mission_-_That_Sinking_Feeling.desc="Tha an t-uisge ag èirigh gu luath agus chan eil mòran ùine ann. Dh’fheuch mòran ris ’s nach deach leotha. An sàbhail thu iad uile?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Newton ’s an leabaidh-chrochte
+User_Mission_-_Newton_and_the_Hammock.desc="Cuimhnichibh a ghràineagaibh: Mairidh luaths oibseict mar a tha e gus an doir forsa on taobh a-muigh buaidh air!"
+
+User_Mission_-_The_Great_Escape.name=An Teicheadh Mòr
+User_Mission_-_The_Great_Escape.desc="Teich on phrìosan is gabh dìoghaltas!"
+
+User_Mission_-_Rope_Knock_Challenge.name=Putadh ròpa
+User_Mission_-_Rope_Knock_Challenge.desc="Cleachd an ròpa agad airson na nàimhdean a phutadh ach an tuit iad."
+
+User_Mission_-_Nobody_Laugh.name=Na dèanaibh magadh orm
+User_Mission_-_Nobody_Laugh.desc="Tha na h-amadain ud dhen bheachd gu bheil iad èibhinn! ’S dòcha gu bheil torr diubh ann ach tha ùine cuairte mhòr againn. Mill na droch-chleasaichean ud aon is aon gus nach dèan iad gàireachdainn tuilleadh."
+
+User_Mission_-_RCPlane_Challenge.name=Dùbhlan an itealain
+User_Mission_-_RCPlane_Challenge.desc="Cleachd itealain le smachd chèin airson a h-uile creat a thogail. Feuch gun cleachd thu cho beag de dh’itealain ’s a ghabhas airson an rang agad àrdachadh. Saoil an dèid thu ’nad shàr-phaidhleat?"
+
+Big_Armory.name=Arm-lann mòr
+Big_Armory.desc="Tha thu ’nad aonar, tha an arm-lann agad làn agus feumaidh tu ruaig a chur air 8 gràineagan mus fhalbh an ùine ort."
+
+Bazooka_Battlefield.name=Blàr a’ bhazooka
+Bazooka_Battlefield.desc="Rinn na ridirean dìleas agad fàth-feitheamh air an nàmhaid. Mill iad le bazookathan a-mhàin! Ach nach doir cus ùine on a dh’èireas an t-uisge a dh’aithghearr."
+
+Tentacle_Terror.name=Maoimeadh nan greimichean
+Tentacle_Terror.desc="Tha do nàmhaid ghealtach ’na fhalach fo uilebheist uabhasach agus bheir e ort le ionnsaighean-adhair cho luath ’s a dh’fhàgas tu am fasgadh. Seall dha cò fìor-cheannard na h-ifrinne! Feumaidh tu a bhith uabhasach eòlach air an ròpa ach am bi teans agad."
+
+ClimbHome.name=Sreap dhachaigh
+ClimbHome.desc="Tha thu fad air falbh on taigh agus an t-uisge ag èirigh. Sreap cho àird ’s a ghabhas!"
+
+portal.name=Dùbhlan nan doras
+portal.desc="Cleachd an tele-phortadh sgiobalta a ghluasad luath ’s farsaing, cleachd e a chum marbhaidh, cleachd e gu cùramach!"
+
+Target_Practice_-_Bazooka_easy.name=Cleachdadh amais: Bazooka (furasta)
+Target_Practice_-_Bazooka_easy.desc="Nise, a ghaisgich, mill na h-amasan ud cho luath ’s a ghabhas!"
+
+Target_Practice_-_Bazooka_hard.name=Cleachdadh amais: Bazooka (doirbh)
+Target_Practice_-_Bazooka_hard.desc="Am buail thu na h-amasan nuair a bhios iad fad air falbh?"
+
+Target_Practice_-_Cluster_Bomb.name=Cleachdadh amais: Boma sgapaidh
+Target_Practice_-_Cluster_Bomb.desc="Tha cuideigin feumach air fras theth! De bhomaichean sgapaidh!"
+
+Target_Practice_-_Shotgun.name=Cleachdadh amais: Gunna-froise
+Target_Practice_-_Shotgun.desc="Loisg an toiseach, ceasnaich an uairsin!"
+
+Basic_Training_-_Sniper_Rifle.name=Trèanadh isneach fàtha
+Basic_Training_-_Sniper_Rifle.desc="Seo sàr-rainse isnichean! Mill na h-amasan uile cho luath ’s pongail ’s a ghabhas ach an dèid thu nad ghaisgeach fionn-sgeulach!"
+
+Target_Practice_-_Homing_Bee.name=Cleachdadh amais: Seillean-amasaidh
+Target_Practice_-_Homing_Bee.desc="Tha cleachdadh an t-seillein-amasaidh nas duilghe na shaoileadh tu."
+
+Target_Practice_-_Grenade_easy.name=Cleachdadh amais: Durcan-spreadhaidh (furasta)
+Target_Practice_-_Grenade_easy.desc="Ciad trèanadh air an durcan-spreadhaidh do ghlas-laoich."
+
+Target_Practice_-_Grenade_hard.name=Cleachdadh amais: Durcan-spreadhaidh (doirbh)
+Target_Practice_-_Grenade_hard.desc="Cha dèan thu a’ chùis air ach le beagan eòlais agad! Cuiridh sinn na h-amasan air àitichean a tha doirbh a ruigsinn."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Dùbhlan ùine: Togail nan creat
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Seall dhuinn dè cho deidheil ’s a tha thu air creataichean a thogail le ròpa air mapa beag."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Dùbhlan ùine: Ròpannan is creataichean
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Cleachd an ròpa agad ’s tog a h-uile creat on mhapa mheadhanach seo."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Dùbhlan ùine: Greim dòigheil air an ròpa
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Seall dè cho math ’s a tha thu air creataichean a thogail gu luath air a’ mhapa mhòr seo."

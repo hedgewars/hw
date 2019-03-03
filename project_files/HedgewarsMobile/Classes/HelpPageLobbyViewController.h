@@ -24,8 +24,8 @@
     UIScrollView *scrollView;
 }
 
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 
--(IBAction) dismiss;
+- (IBAction)dismiss;
 
 @end

@@ -9,7 +9,7 @@ procedure DivideEdges(fillPointsCount: LongWord; var pa: TPixAr);
 var minDistance, dabDiv: LongInt; // different details size
 
 implementation
-uses uVariables, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
+uses {$IFDEF IPHONEOS}uTypes, {$ENDIF} uVariables, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
 
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
@@ -82,21 +82,6 @@ begin
     end
 end;
 
-
-procedure Distort1(var Template: TEdgeTemplate; var pa: TPixAr);
-var i: Longword;
-begin
-    for i:= 1 to Template.BezierizeCount do
-        begin
-        BezierizeEdge(pa, _0_5);
-        RandomizePoints(pa);
-        RandomizePoints(pa)
-        end;
-    for i:= 1 to Template.RandPassesCount do
-        RandomizePoints(pa);
-    BezierizeEdge(pa, _0_1);
-end;
-
 procedure FindPoint(si: LongInt; fillPointsCount: LongWord; var newPoint: TPoint; var pa: TPixAr);
 const mapBorderMargin = 40;
 var p1, p2, p4, fp, mp: TPoint;
@@ -129,9 +114,9 @@ begin
     // don't process too short segments or those which are too close to map borders
     if (p1.x = NTPX)
             or (dab < minDistance * 3)
-            or (mp.x < LongInt(leftX) + mapBorderMargin)
-            or (mp.x > LongInt(rightX) - mapBorderMargin)
-            or (mp.y < LongInt(topY) + mapBorderMargin)
+            or (mp.x < leftX + mapBorderMargin)
+            or (mp.x > rightX - mapBorderMargin)
+            or (mp.y < topY + mapBorderMargin)
             or (mp.y > LongInt(LAND_HEIGHT) - mapBorderMargin)
     then
     begin
@@ -143,13 +128,13 @@ begin
     if a <> 0 then
     begin
         // left border
-        iy:= (LongInt(leftX) + mapBorderMargin - mp.x) * b div a + mp.y;
+        iy:= (leftX + mapBorderMargin - mp.x) * b div a + mp.y;
         d:= DistanceI(mp.x - leftX - mapBorderMargin, mp.y - iy).Round;
         t1:= a * (mp.x - mapBorderMargin) + b * (mp.y - iy);
         if t1 > 0 then distL:= d else distR:= d;
 
         // right border
-        iy:= (LongInt(rightX) - mapBorderMargin - mp.x) * b div a + mp.y;
+        iy:= (rightX - mapBorderMargin - mp.x) * b div a + mp.y;
         d:= DistanceI(mp.x - rightX + mapBorderMargin, mp.y - iy).Round;
         if t1 > 0 then distR:= d else distL:= d;
     end else
@@ -161,7 +146,7 @@ begin
     if b <> 0 then
     begin
         // top border
-        ix:= (LongInt(topY) + mapBorderMargin - mp.y) * a div b + mp.x;
+        ix:= (topY + mapBorderMargin - mp.y) * a div b + mp.x;
         d:= DistanceI(mp.y - topY - mapBorderMargin, mp.x - ix).Round;
         t2:= b * (mp.y - mapBorderMargin) + a * (mp.x - ix);
         if t2 > 0 then distL:= min(d, distL) else distR:= min(d, distR);
@@ -179,9 +164,9 @@ begin
             fp:= pa.ar[i + 1]
         else if (i <> si) then
         begin
-        p4:= pa.ar[i + 1];
-        if p4.x = NTPX then
-            p4:= fp;
+            p4:= pa.ar[i + 1];
+            if p4.x = NTPX then
+                p4:= fp;
 
             // check if it intersects
             t1:= (mp.x - pa.ar[i].x) * b - a * (mp.y - pa.ar[i].y);
@@ -382,7 +367,7 @@ begin
         hasBorder:= true;
         for y:= 0 to LAND_HEIGHT - 1 do
             for x:= 0 to LAND_WIDTH - 1 do
-                if (y < topY) or (x < leftX) or (x > rightX) then
+                if (y < LongWord(topY)) or (x < LongWord(leftX)) or (x > LongWord(rightX)) then
                     Land[y, x]:= 0
                 else
                     begin

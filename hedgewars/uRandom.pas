@@ -49,16 +49,14 @@ n:= (n + 1) and $3F;
 end;
 
 function GetNext: Longword; inline;
-var s : string;
 begin
-n:= (n + 1) and $3F;
-cirbuf[n]:=
+    n:= (n + 1) and $3F;
+    cirbuf[n]:=
            (cirbuf[(n + 40) and $3F] +           {n - 24 mod 64}
             cirbuf[(n +  9) and $3F])            {n - 55 mod 64}
             and $7FFFFFFF;                       {mod 2^31}
 
-   GetNext:= cirbuf[n];
-   str(GetNext, s);
+    GetNext:= cirbuf[n];
 end;
 
 procedure SetRandomSeed(Seed: shortstring; dropAdditionalPart: boolean);
@@ -81,7 +79,7 @@ while (t < l) and ((not dropAdditionalPart) or (Seed[t + 1] <> '|')) do
 for i:= t to 54 do
     cirbuf[i]:= $A98765 + 68; // odd number
 
-for i:= 0 to 1023 do
+for i:= 0 to 2047 do
    GetNext;
 end;
 

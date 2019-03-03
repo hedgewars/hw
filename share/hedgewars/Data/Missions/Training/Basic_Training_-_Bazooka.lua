@@ -1,242 +1,325 @@
--- Hedgewars Bazooka Training
--- Scripting Example
+--[[
+	Basic Bazooka Training
 
--- Lines such as this one are comments - they are ignored
--- by the game, no matter what kind of text is in there.
--- It's also possible to place a comment after some real
--- instruction as you see below. In short, everything
--- following "--" is ignored.
-
----------------------------------------------------------------
--- At first we implement the localization library using loadfile.
--- This allows us to localize strings without needing to think
--- about translations.
--- We can use the function loc(text) to localize a string.
+	This training missions teaches players how to use the bazooka.
+	Lesson plan:
+	- Selecting bazooka
+	- Aiming and shooting
+	- Wind
+	- Limited ammo
+	- “Bouncing bomb” / water skip
+	- Precise aiming
+]]
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
--- This variable will hold the number of destroyed targets.
-local score = 0
--- This variable represents the number of targets to destroy.
-local score_goal = 5
--- This variable controls how many milliseconds/ticks we'd
--- like to wait before we end the round once all targets
--- have been destroyed.
-local end_timer = 1000 -- 1000 ms = 1 s
--- This variable is set to true if the game is lost (i.e.
--- time runs out).
-local game_lost = false
--- This variable will point to the hog's gear
-local player = nil
--- This variable will grab the time left at the end of the round
-local time_goal = 0
--- This variable stores the number of bazooka shots
-local shots = 0
+local hog			-- Hog gear
+local weaponSelected = false	-- Player has selected the weapon
+local gamePhase = 0		-- Used to track progress
+local targetsLeft = 0		-- # of targets left in this round
+local targetGears = {}		-- list of target gears
+local bazookasInGame = 0	-- # of bazookas currently flying
+local bazookaGears = {}		-- list of bazooka gears
+local limitedAmmo = 10		-- amount of ammo for the limited ammo challenge
+local limitedAmmoReset = -1	-- Timer for resetting ammo if player fails in
+				-- limited ammo challenge. -1 = no-op
+local gameOver = false		-- If true, game has ended
+local shotsFired = 0		-- Total # of bazookas fired
+local maxTargets = 0		-- Target counter, used together with flawless
+local flawless = true		-- track flawless victory (100% accuracy, no hurt, no death)
+local missedTauntTimer = -1	-- Wait timer for playing sndMissed. -1 = no-op
 
--- This is a custom function to make it easier to
--- spawn more targets with just one line of code
--- You may define as many custom functions as you
--- like.
-function spawnTarget()
-	-- add a new target gear
-	gear = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
-	
-	-- move it to a random position within 0 and
-	-- LAND_WIDTH - the width of the map
-	FindPlace(gear, true, 0, LAND_WIDTH)
-	
-	-- move the target to a higher vertical position
-	-- to ensure it's not somewhere down below
-	x, y = GetGearPosition(gear)
-	SetGearPosition(gear, x, 0)
-end
-
--- This function is called before the game loads its
--- resources.
--- It's one of the predefined function names that will
--- be called by the game. They give you entry points
--- where you're able to call your own code using either
--- provided instructions or custom functions.
 function onGameInit()
-	-- At first we have to overwrite/set some global variables
-	-- that define the map, the game has to load, as well as
-	-- other things such as the game rules to use, etc.
-	-- Things we don't modify here will use their default values.
 
-	-- The base number for the random number generator
-	Seed = 1
-	-- Game settings and rules
-    EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfSolidLand)
-    -- Uncommenting this wouldn't do anything
-    --EnableGameFlags(gfMultiWeapon, gfOneClanMode, gfSolidLand)
-    -- Neither this
-    --DisableGameFlags(gfArtillery)
-    -- Uncommenting this would make the terrain damageable
-    --DisableGameFlags(gfSolidLand)
-    -- Uncommenting this would remove all flags set previously
-    --ClearGameFlags()
-	-- The time the player has to move each round (in ms)
-	TurnTime = 60000
-	-- The frequency of crate drops
-	CaseFreq = 0
-	-- The number of mines being placed
-	MinesNum = 0
-	-- The number of explosives being placed
+	ClearGameFlags()
+	EnableGameFlags(gfDisableWind, gfOneClanMode, gfInfAttack, gfSolidLand)
+	Map = ""
+	Seed = 0
+	Theme = "Nature"
+	MapGen = mgDrawn
+	TurnTime = MAX_TURN_TIME
 	Explosives = 0
-	-- The delay between each round
-	Delay = 0
-	-- The map to be played
-	Map = "Bamboo"
-	-- The theme to be used
-	Theme = "Bamboo"
+	MinesNum = 0
+	CaseFreq = 0
+	WaterRise = 0
+	HealthDecrease = 0
 
-	-- Create the player team
-	AddTeam(loc("'Zooka Team"), 14483456, "Simple", "Island", "Default")
-	-- And add a hog to it
-	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
-	SetGearPosition(player, 936, 136)
+	------ TEAM LIST ------
+
+	AddMissionTeam(-1)
+	hog = AddMissionHog(100)
+	SetGearPosition(hog, 1485, 2001)
+	SetEffect(hog, heResurrectable, 1)
+
+	SendHealthStatsOff()
 end
 
--- This function is called when the round starts
--- it spawns the first target that has to be destroyed.
--- In addition it shows the scenario goal(s).
+function onGearResurrect(gear, vGear)
+	if gear == hog then
+		flawless = false
+		SetGearPosition(hog, 1485, 2001)
+		if vGear then
+			SetVisualGearValues(vGear, GetX(hog), GetY(hog))
+		end
+		AddCaption(loc("Your hedgehog has been revived!"))
+	end
+end
+
+function placeGirders()
+	PlaceGirder(1520, 2018, 4)
+	PlaceGirder(1449, 1927, 6)
+	PlaceGirder(1341, 1989, 0)
+	PlaceGirder(1141, 1990, 0)
+	PlaceGirder(2031, 1907, 6)
+	PlaceGirder(2031, 1745, 6)
+	PlaceGirder(2398, 1985, 4)
+	PlaceGirder(2542, 1921, 7)
+	PlaceGirder(2617, 1954, 6)
+	PlaceGirder(2565, 2028, 0)
+	PlaceGirder(2082, 1979, 0)
+	PlaceGirder(2082, 1673, 0)
+	PlaceGirder(1980, 1836, 0)
+	PlaceGirder(1716, 1674, 0)
+	PlaceGirder(1812, 1832, 0)
+	PlaceGirder(1665, 1744, 6)
+	PlaceGirder(2326, 1895, 6)
+	PlaceGirder(2326, 1734, 6)
+	PlaceGirder(2326, 1572, 6)
+	PlaceGirder(2275, 1582, 0)
+	PlaceGirder(1738, 1714, 7)
+	PlaceGirder(1818, 1703, 0)
+	PlaceGirder(1939, 1703, 4)
+	PlaceGirder(2805, 1781, 3)
+	PlaceGirder(2905, 1621, 3)
+	PlaceGirder(3005, 1441, 3)
+	PlaceGirder(945, 1340, 5)
+end
+
+function spawnTargets(phase)
+	if not phase then
+		phase = gamePhase
+	end
+	if phase == 0 then
+		AddGear(1734, 1656, gtTarget, 0, 0, 0, 0)
+		AddGear(1812, 1814, gtTarget, 0, 0, 0, 0)
+		AddGear(1974, 1818, gtTarget, 0, 0, 0, 0)
+	elseif phase == 2 then
+		AddGear(2102, 1655, gtTarget, 0, 0, 0, 0)
+		AddGear(2278, 1564, gtTarget, 0, 0, 0, 0)
+		AddGear(2080, 1961, gtTarget, 0, 0, 0, 0)
+	elseif phase == 3 then
+		AddGear(1141, 1972, gtTarget, 0, 0, 0, 0)
+		AddGear(1345, 1971, gtTarget, 0, 0, 0, 0)
+		AddGear(1892, 1680, gtTarget, 0, 0, 0, 0)
+	elseif phase == 4 then
+		AddGear(2584, 2010, gtTarget, 0, 0, 0, 0)
+	elseif phase == 5 then
+		AddGear(955, 1320, gtTarget, 0, 0, 0, 0)
+	elseif phase == 6 then
+		AddGear(2794, 1759, gtTarget, 0, 0, 0, 0)
+		AddGear(2894, 1599, gtTarget, 0, 0, 0, 0)
+		AddGear(2994, 1419, gtTarget, 0, 0, 0, 0)
+	end
+end
+
 function onGameStart()
-	-- Disable the graph in the stats screen, we don't need it
-	SendHealthStatsOff()
-	-- Spawn the first target.
-	spawnTarget()
-	
-	-- Show some nice mission goals.
-	-- Parameters are: caption, sub caption, description,
-	-- extra text, icon and time to show.
-	-- A negative icon parameter (-n) represents the n-th weapon icon
-	-- A positive icon paramter (n) represents the (n+1)-th mission icon
-	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."), -amBazooka, 0)
+	placeGirders()
+	spawnTargets()
+	ShowMission(loc("Basic Bazooka Training"), loc("Basic Training"), loc("Destroy all the targets!"), -amBazooka, 0)
+end
+
+function newGamePhase()
+	local ctrl = ""
+	-- Spawn targets, update wind and ammo, show instructions
+	if gamePhase == 0 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Open ammo menu: [Right click]").."|"..
+			loc("Select weapon: [Left click]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]")
+		end
+		ShowMission(loc("Basic Bazooka Training"), loc("Select Weapon"), loc("To begin with the training, select the bazooka from the ammo menu!").."|"..
+		ctrl, 2, 5000)
+	elseif gamePhase == 1 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Attack: [Space]").."|"..
+			loc("Aim: [Up]/[Down]").."|"..
+			loc("Walk: [Left]/[Right]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Attack: Tap the [Bomb]").."|"..
+			loc("Aim: [Up]/[Down]").."|"..
+			loc("Walk: [Left]/[Right]")
+		end
+		ShowMission(loc("Basic Bazooka Training"), loc("My First Bazooka"),
+		loc("Let's get started!").."|"..
+		loc("Launch some bazookas to destroy the targets!").."|"..
+		loc("Hold the Attack key pressed for more power.").."|"..
+		loc("Don't hit yourself!").."|"..
+		ctrl, 2, 10000)
+		spawnTargets()
+	elseif gamePhase == 2 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("You see the wind strength at the bottom right corner.")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("You see the wind strength at the top.")
+		end
+		ShowMission(loc("Basic Bazooka Training"), loc("Wind"), loc("Bazookas are influenced by wind.").."|"..
+		ctrl.."|"..
+		loc("Destroy the targets!"), 2, 5000)
+		SetWind(50)
+		spawnTargets()
+	elseif gamePhase == 3 then
+		-- Vaporize any bazookas still in the air
+		for gear, _ in pairs(bazookaGears) do
+			AddVisualGear(GetX(gear), GetY(gear), vgtSteam, 0, false)
+			DeleteGear(gear)
+			PlaySound(sndVaporize)
+		end
+		ShowMission(loc("Basic Bazooka Training"), loc("Limited Ammo"), loc("Your ammo is limited this time.").."|"..
+		loc("Destroy all targets with no more than 10 bazookas."),
+		2, 8000)
+		SetWind(-20)
+		AddAmmo(hog, amBazooka, limitedAmmo)
+		spawnTargets()
+	elseif gamePhase == 4 then
+		ShowMission(loc("Basic Bazooka Training"), loc("Bouncing Bomb"), loc("The next target can only be reached by something called “bouncing bomb”.").."|"..
+		loc("Hint: Launch the bazooka horizontally at full power."),
+		2, 8000)
+		SetWind(90)
+		spawnTargets()
+		AddAmmo(hog, amBazooka, 100)
+		if GetCurAmmoType() ~= amBazooka then
+			SetWeapon(amBazooka)
+		end
+	elseif gamePhase == 5 then
+		ShowMission(loc("Basic Bazooka Training"), loc("High Target"),
+		loc("By the way, not only bazookas will bounce on water, but also grenades and many other things.").."|"..
+		loc("The next target is high in the sky."),
+		2, 8000)
+		SetWind(-33)
+		spawnTargets()
+	elseif gamePhase == 6 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Precise Aim: [Left Shift] + [Up]/[Down]").."|"
+		end
+		ShowMission(loc("Basic Bazooka Training"), loc("Final Targets"),
+		loc("The final targets are quite tricky. You need to aim well.").."|"..
+		ctrl..
+		loc("Hint: It might be easier if you vary the angle only slightly."),
+		2, 12000)
+		SetWind(75)
+		spawnTargets()
+	elseif gamePhase == 7 then
+		SaveMissionVar("Won", "true")
+		ShowMission(loc("Basic Bazooka Training"), loc("Training complete!"), loc("Congratulations!"), 0, 0)
+		SetInputMask(0)
+		AddAmmo(CurrentHedgehog, amBazooka, 0)
+		if shotsFired > maxTargets then
+			flawless = false
+		else
+			-- For 100% accuracy
+			awardAchievement(loc("Bazooka Master"))
+		end
+		if flawless then
+			PlaySound(sndFlawless, hog)
+		else
+			PlaySound(sndVictory, hog)
+		end
+		SendStat(siCustomAchievement, loc("Good job!"))
+		SendStat(siGameResult, loc("You have completed the Basic Bazooka Training!"))
+		SendStat(siPlayerKills, "0", GetHogTeamName(hog))
+		EndGame()
+		gameOver = true
+	end
+	gamePhase = gamePhase + 1
 end
 
 function onNewTurn()
-	SetWeapon(amBazooka)
-end
-
--- This function is called every game tick.
--- Note that there are 1000 ticks within one second.
--- You shouldn't try to calculate too complicated
--- code here as this might slow down your game.
-function onGameTick20()
-	-- If time's up, set the game to be lost.
-	-- We actually check the time to be "1 ms" as it
-	-- will be at "0 ms" right at the start of the game.
-	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and score < score_goal and not game_lost then
-		game_lost = true
-		-- ... and show a short message.
-		ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
-		-- How about killing our poor hog due to his poor performance?
-		SetHealth(player, 0)
-		-- Just to be sure set the goal time to 1 ms
-		time_goal = 1
-	end
-
-	if band(GetState(player), gstDrowning) == gstDrowning and game_lost == false and score < score_goal then
-		game_lost = true
-		time_goal = 1
-		AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
-		ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
-	end
-
-	-- If the goal is reached or we've lost ...
-	if score == score_goal or game_lost then
-		-- ... check to see if the time we'd like to
-		-- wait has passed and then ...
-		if end_timer == 0 then
-			-- Let’s create some stats for the stats screen!
-			-- We will expose the number of hit targets hit, launched bazooka and the accuracy
-
-			SendStat(siPointType, loc("hits"))
-			SendStat(siPlayerKills, tostring(score), loc("'Zooka Team"))
-			SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets."), score, score_goal))
-			SendStat(siCustomAchievement, string.format(loc("You have launched %d bazookas."), shots))
-
-			-- We must avoid a division by zero
-			if(shots > 0) then
-				SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%%."), (score/shots)*100))
-			end
-			if score == score_goal then
-				SendStat(siGameResult, loc("You have finished the bazooka training!"))
-				SendStat(siCustomAchievement, string.format(loc("%.1f seconds were remaining."), (time_goal/1000), math.ceil(time_goal/12)))
-			end
-			if game_lost then
-				SendStat(siGameResult, loc("You lose!"))
-			end
-
-			-- Finally we end the game ...
-			EndGame()
-		else
-			-- ... or just lower the timer by 20ms.
-			-- Reset the time left to stop the timer
-			TurnTimeLeft = time_goal
-		end
-        end_timer = end_timer - 20
+	if gamePhase == 0 then
+		newGamePhase()
 	end
 end
 
--- This function is called when the game is initialized
--- to request the available ammo and probabilities
-function onAmmoStoreInit()
-	-- add an unlimited supply of bazooka ammo
-	SetAmmo(amBazooka, 9, 0, 0, 0)
-end
-
--- This function is called when a new gear is added.
--- We don't need it for this training, so we can
--- keep it empty.
--- function onGearAdd(gear)
--- end
-
--- This function is called before a gear is destroyed.
--- We use it to count the number of targets destroyed.
-function onGearDelete(gear)
-	-- We're only interested in target gears.
-	if GetGearType(gear) == gtTarget then
-		-- Add one point to our score/counter
-		score = score + 1
-		-- If we haven't reached the goal ...
-		if score < score_goal then
-			-- ... spawn another target.
-			spawnTarget()
-		else
-			if not game_lost then
-			-- Otherwise show that the goal was accomplished
-			ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Congratulations! You've eliminated all targets|within the allowed time frame."), 0, 0)
-			-- Also let the hogs shout "victory!"
-			PlaySound(sndVictory)
-			-- Save the time left so we may keep it.
-			time_goal = TurnTimeLeft
-			end
-		end
+function onHogAttack(ammoType)
+	if ammoType == amBazooka then
+		HideMission()
 	end
 end
 
--- This function is called when a gear has been damaged.
--- We only use it to determine wheather our hog took damage in order to abort the mission.
-function onGearDamage(gear, damage)
-	if GetGearType(gear) == gtHedgehog then
-		if not game_lost then
-			game_lost = true
-			AddCaption(loc("You lose!", 0xFFFFFFFF, capgrpGameState))
-			ShowMission(loc("Bazooka Training") , loc("Aiming Practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
-
-			time_goal = 1
-		end
+function onAttack()
+	if GetCurAmmoType() == amBazooka then
+		HideMission()
 	end
 end
 
-
--- This function is called after a gear is added.
--- We use it to count the number of bazooka shots.
 function onGearAdd(gear)
-	-- Count the number of bazooka shots for our stats
-	if GetGearType(gear) == gtShell then
-		shots = shots + 1
+	if GetGearType(gear) == gtTarget then
+		targetsLeft = targetsLeft + 1
+		maxTargets = maxTargets + 1
+		targetGears[gear] = true
+	elseif GetGearType(gear) == gtShell then
+		bazookasInGame = bazookasInGame + 1
+		bazookaGears[gear] = true
+		shotsFired = shotsFired + 1
 	end
+end
+
+function onGearDelete(gear)
+	if GetGearType(gear) == gtTarget then
+		targetsLeft = targetsLeft - 1
+		targetGears[gear] = nil
+		if targetsLeft <= 0 then
+			newGamePhase()
+		end
+	elseif GetGearType(gear) == gtShell then
+		bazookasInGame = bazookasInGame - 1
+		bazookaGears[gear] = nil
+		if bazookasInGame == 0 and GetAmmoCount(hog, amBazooka) == 0 then
+			limitedAmmoReset = 20
+			flawless = false
+		end
+	end
+end
+
+function onGearDamage(gear)
+	if gear == hog then
+		flawless = false
+	end
+end
+
+function onGameTick20()
+	-- Reset targets and ammo if ammo depleted
+	if limitedAmmoReset > 0 then
+		limitedAmmoReset = limitedAmmoReset - 20
+	end
+	if limitedAmmoReset == 0 then
+		if not gameOver and bazookasInGame == 0 and GetAmmoCount(hog, amBazooka) == 0 then
+			for gear, _ in pairs(targetGears) do
+				DeleteGear(gear)
+			end
+			spawnTargets(3)
+			AddCaption(loc("Out of ammo! Try again!"))
+			AddAmmo(hog, amBazooka, limitedAmmo)
+			SetWeapon(amBazooka)
+			missedTauntTimer = 1000
+		end
+		limitedAmmoReset = -1
+	end
+	if missedTauntTimer > 0 then
+		missedTauntTimer = missedTauntTimer - 20
+	end
+	if missedTauntTimer == 0 then
+		PlaySound(sndMissed, hog)
+		missedTauntTimer = -1
+	end
+
+	if not weaponSelected and gamePhase == 1 and GetCurAmmoType() == amBazooka then
+		newGamePhase()
+		weaponSelected = true
+	end
+end
+
+function onAmmoStoreInit()
+	SetAmmo(amBazooka, 9, 0, 0, 0)
 end

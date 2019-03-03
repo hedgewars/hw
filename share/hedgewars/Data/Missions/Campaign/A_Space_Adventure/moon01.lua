@@ -19,11 +19,14 @@ local weaponsAcquired = false
 local battleZoneReached = false
 local checkPointReached = 1 -- 1 is start of the game
 local afterDialog02 = false
+local gameOver = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
 local dialog04 = {}
+local dialog05 = {}
+local dialog06 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go to the upper platform and get the weapons in the crates!"), 1, 4500},
@@ -74,7 +77,7 @@ professor.name = loc("Prof. Hogevil")
 professor.x = 3800
 professor.y = 1600
 professor.dead = false
-professor.health = 100
+professor.health = 120
 minion1.name = loc("Minion")
 minion1.x = 2460
 minion1.y = 1450
@@ -84,14 +87,15 @@ minion2.y = 1900
 minion3.name = loc("Minion")
 minion3.x = 3500
 minion3.y = 1750
+
 teamA.name = loc("PAotH")
-teamA.color = tonumber("FF0000",16) -- red
+teamA.color = -6
 teamB.name = loc("Minions")
-teamB.color = tonumber("0033FF",16) -- blue
+teamB.color = -2
 teamC.name = loc("Professor")
-teamC.color = tonumber("0033FF",16) -- blue
+teamC.color = -2
 teamD.name = loc("Hog Solo")
-teamD.color = tonumber("38D61C",16) -- green
+teamD.color = -6
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -103,19 +107,22 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 5
+	HealthDecrease = 0
+	WaterRise = 0
 	Map = "moon01_map"
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)
-	-- Hog Solo
-	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	-- Hero
+	teamD.name = AddMissionTeam(teamD.color)
 	if tonumber(GetCampaignVar("HeroHealth")) then
-		hero.gear = AddHog(hero.name, 0, tonumber(GetCampaignVar("HeroHealth")), "war_desertgrenadier1")
+		hero.gear = AddMissionHog(tonumber(GetCampaignVar("HeroHealth")))
 	else
-		hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+		hero.gear = AddMissionHog(100)
 	end
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAotH
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	SetTeamPassive(teamA.name, true)
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "scif_2001O")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -129,12 +136,13 @@ function onGameInit()
 	AnimSetGearPosition(paoth4.gear, paoth4.x, paoth4.y)
 	HogTurnLeft(paoth4.gear, true)
 	-- Professor
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	professor.gear = AddHog(professor.name, 0, 120, "tophats")
+	teamC.name = AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
+	SetTeamPassive(teamC.name, true)
+	professor.gear = AddHog(professor.name, 0, professor.health, "tophats")
 	AnimSetGearPosition(professor.gear, professor.x, professor.y)
 	HogTurnLeft(professor.gear, true)
 	-- Minions
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	teamB.name = AddTeam(teamB.name, teamB.color, "eyecross", "Island", "Default", "cm_sine")
 	minion1.gear = AddHog(minion1.name, 1, 50, "Gasmask")
 	AnimSetGearPosition(minion1.gear, minion1.x, minion1.y)
 	HogTurnLeft(minion1.gear, true)
@@ -158,7 +166,7 @@ function onGameInit()
 		end
 	end
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
 end
 
@@ -167,7 +175,7 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
-	ShowMission(campaignName, missionName, loc("Hog Solo has to refuel his saucer.")..
+	ShowMission(campaignName, missionName, string.format(loc("%s has to refuel the saucer."), hero.name)..
 	"|"..loc("Rescue the imprisoned PAotH team and get the fuel!"), -amSkip, 0)
 
 	AddAmmo(minion1.gear, amDEagle, 10)
@@ -184,16 +192,18 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onProfessorDeath, {professor.gear}, professorDeath, {professor.gear}, 0)
 	AddEvent(onMinionsDeath, {professor.gear}, minionsDeath, {professor.gear}, 0)
+	AddEvent(onProfessorAndMinionsDeath, {professor.gear}, professorAndMinionsDeath, {professor.gear}, 0)
 	AddEvent(onProfessorHit, {professor.gear}, professorHit, {professor.gear}, 1)
 
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amRope, 2)
-		SpawnAmmoCrate(bazookaX, weaponsY, amBazooka)
-		SpawnAmmoCrate(parachuteX, weaponsY, amParachute)
-		SpawnAmmoCrate(grenadeX, weaponsY, amGrenade)
-		SpawnAmmoCrate(deserteagleX, weaponsY, amDEagle)
+		AddAmmo(hero.gear, amSkip, 0)
+		SpawnSupplyCrate(bazookaX, weaponsY, amBazooka)
+		SpawnSupplyCrate(parachuteX, weaponsY, amParachute)
+		SpawnSupplyCrate(grenadeX, weaponsY, amGrenade)
+		SpawnSupplyCrate(deserteagleX, weaponsY, amDEagle)
 		AddEvent(onWeaponsPlatform, {hero.gear}, weaponsPlatform, {hero.gear}, 0)
-		TurnTimeLeft = 0
+		EndTurn(true)
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 then
 		AddAmmo(hero.gear, amBazooka, 3)
@@ -204,7 +214,7 @@ function onGameStart()
 		GameFlags = bor(GameFlags,gfDisableWind)
 		weaponsAcquired = true
 		afterDialog02 = true
-		TurnTimeLeft = 0
+		EndTurn(true)
 		AddAnim(dialog02)
 	end
 	-- this event check goes here to be executed after the onWeaponsPlatform check
@@ -218,6 +228,7 @@ function onAmmoStoreInit()
 	SetAmmo(amParachute, 0, 0, 0, 1)
 	SetAmmo(amGrenade, 0, 0, 0, 6)
 	SetAmmo(amDEagle, 0, 0, 0, 4)
+	SetAmmo(amSkip, 9, 0, 0, 1)
 end
 
 function onGameTick()
@@ -228,24 +239,28 @@ function onGameTick()
 	ExecuteAfterAnimations()
 	CheckEvents()
 	if CurrentHedgehog ~= hero.gear and not battleZone then
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 end
 
 function onNewTurn()
 	-- rounds start if hero got his weapons or got near the enemies
-	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
-		TurnTimeLeft = 0
-	elseif weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear and afterDialog02 then
-		battleZone(hero.gear)
-	elseif not weaponsAcquired and not battleZoneReached and CurrentHedgehog == hero.gear then
-		TurnTimeLeft = -1
-	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
-		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear then
-		TurnTimeLeft = 0
+	if CurrentHedgehog == hero.gear then
+		if not weaponsAcquired and not battleZoneReached then
+			SetTurnTimeLeft(MAX_TURN_TIME)
+		end
+	elseif CurrentHedgehog == minion1.gear or CurrentHedgehog == minion2.gear or CurrentHedgehog == minion3.gear then
+		if not battleZoneReached then
+			EndTurn(true)
+		elseif weaponsAcquired and not battleZoneReached and afterDialog02 then
+			battleZone(hero.gear)
+		end
 	elseif CurrentHedgehog == professor.gear then
-		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+		if weaponsAcquired and not battleZoneReached and afterDialog02 then
+			battleZone(hero.gear)
+		else
+			EndTurn(true)
+		end
 	end
 end
 
@@ -281,7 +296,8 @@ function onHeroDeath(gear)
 end
 
 function onBattleZone(gear)
-	if not battleZoneReached and not hero.dead and GetX(gear) > 1900 and StoppedGear(gear) then
+	if not battleZoneReached and not hero.dead and StoppedGear(gear) and
+			(GetX(gear) > 1900 or (weaponsAcquired and GetY(gear) > 1200)) then
 		return true
 	end
 	return false
@@ -313,32 +329,48 @@ function onMinionsDeath(gear)
 	return false
 end
 
+function onProfessorAndMinionsDeath(gear)
+	if professor.dead and (not (GetHealth(minion1.gear) or GetHealth(minion2.gear) or GetHealth(minion3.gear))) then
+		return true
+	end
+	return false
+end
+
 -------------- ACTIONS ------------------
 
 function weaponsPlatform(gear)
-	saveCheckpoint("2")
-	SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
-	TurnTimeLeft = 0
-	weaponsAcquired = true
-	SetWind(60)
-	GameFlags = bor(GameFlags,gfDisableWind)
-	AddAmmo(hero.gear, amRope, 0)
-	if GetX(hero.gear) < 1900 then
-		AddAnim(dialog02)
+	if not battleZoneReached then
+		-- Player entered weapons platform before entering battle zone.
+		-- Checkpoint and dialog!
+		saveCheckpoint("2")
+		SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
+		EndTurn(true)
+		weaponsAcquired = true
+		SetWind(60)
+		GameFlags = bor(GameFlags,gfDisableWind)
+		AddAmmo(hero.gear, amRope, 0)
+		AddAmmo(hero.gear, amSkip, 100)
+		if GetX(hero.gear) < 1900 then
+			AddAnim(dialog02)
+		end
 	end
+	-- The player may screw up by going into the battle zone too early (dialog03).
+	-- In that case, the player is punished for this stupid move (no checkpoint),
+	-- but it is still theoretically possible to win by going for the weapons
+	-- very fast.
 end
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("You have to get the weapons and rescue the PAotH researchers"))
-	SendStat(siPlayerKills,'1',teamC.name)
-	SendStat(siPlayerKills,'0',teamD.name)
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+	SendStat(siCustomAchievement, loc("You have to get the weapons and rescue the PAotH researchers."))
+	sendSimpleTeamRankings({teamC.name, teamB.name, teamD.name, teamA.name})
 	EndGame()
 end
 
 function battleZone(gear)
-	TurnTimeLeft = 0
 	battleZoneReached = true
+	AddAmmo(hero.gear, amSkip, 100)
+	EndTurn(true)
 	if weaponsAcquired then
 		AddAnim(dialog04)
 	else
@@ -348,47 +380,68 @@ end
 
 function professorHit(gear)
 	if currentHedgehog ~= hero.gear then
-		AnimSay(professor.gear,loc("Don't hit me you fools!"), SAY_SHOUT, 2000)
+		AnimSay(professor.gear,loc("Don't hit me, you fools!"), SAY_SHOUT, 2000)
 	end
+end
+
+function victory()
+	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
+	saveCompletedStatus(1)
+	SendStat(siGameResult, string.format(loc("%s wins, congratulations!"), hero.name))
+	sendSimpleTeamRankings({teamD.name, teamA.name, teamC.name, teamB.name})
+	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
+	resetCheckpoint() -- reset this mission
+	gameOver = true
+	EndGame()
+end
+
+function professorAndMinionsDeath(gear)
+	if gameOver then return end
+	SendStat(siCustomAchievement, loc("You have eliminated the whole evil team. You're pretty tough!"))
+
+	SaveCampaignVar("ProfDiedOnMoon", "1")
+	victory()
 end
 
 function professorDeath(gear)
-	if GetHealth(minion1.gear) then
-		AnimSay(minion1.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
-	elseif GetHealth(minion2.gear) then
-		AnimSay(minion2.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
-	elseif GetHealth(minion3.gear) then
-		AnimSay(minion3.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
-	end
-	DismissTeam(teamB.name)
-	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
-	AnimWait(hero.gear,5000)
+	if gameOver then return end
+	local m1h = GetHealth(minion1.gear)
+	local m2h = GetHealth(minion2.gear)
+	local m3h = GetHealth(minion3.gear)
+	if m1h == 0 or m2h == 0 or m3h == 0 then return end
 
-	saveCompletedStatus(1)
-	SendStat(siGameResult, loc("Hog Solo wins, congratulations!"))
-	SendStat(siCustomAchievement, loc("Eliminated the Professor Hogevil"))
-	SendStat(siCustomAchievement, loc("Drove the minions away"))
-	SendStat(siPlayerKills,'1',teamD.name)
-	SendStat(siPlayerKills,'0',teamC.name)
-	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
-	EndGame()
+	if m1h and m1h > 0 and StoppedGear(minion1.gear) then
+		Dialog06Setup(minion1.gear)
+	elseif m2h and m2h > 0 and StoppedGear(minion2.gear) then
+		Dialog06ASetup(minion2.gear)
+	elseif m3h and m3h > 0 and StoppedGear(minion3.gear) then
+		Dialog06Setup(minion3.gear)
+	end
+	AddAnim(dialog06)
+end
+
+function afterDialog06()
+	EndTurn(true)
+	SendStat(siCustomAchievement, loc("You have eliminated Professor Hogevil."))
+	SendStat(siCustomAchievement, loc("You drove the minions away."))
+	SaveCampaignVar("ProfDiedOnMoon", "1")
+	victory()
+end
+
+function afterDialog05()
+	EndTurn(true)
+	HideHog(professor.gear)
+	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
+	SendStat(siCustomAchievement, loc("You drove Professor Hogevil away."))
+
+	SaveCampaignVar("ProfDiedOnMoon", "0")
+	victory()
 end
 
 function minionsDeath(gear)
-	-- do staffs here
-	AnimSay(professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 6000)
-	DismissTeam(teamC.name)
-	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
-	AnimWait(hero.gear,5000)
-
-	saveCompletedStatus(1)
-	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("Eliminated the evil minions"))
-	SendStat(siCustomAchievement, loc("Drove the Professor away"))
-	SendStat(siPlayerKills,'1',teamD.name)
-	SendStat(siPlayerKills,'0',teamC.name)
-	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
-	EndGame()
+	if professor.dead or GetHealth(professor.gear) == nil or GetHealth(professor.gear) == 0 then return end
+	if gameOver then return end
+	AddAnim(dialog05)
 end
 
 -------------- ANIMATIONS ------------------
@@ -396,13 +449,22 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    if anim == dialog02 then
-		setAfterDialog02()
-    elseif anim == dialog03 then
-		startCombat()
-	else
+	end
+	if anim == dialog01 then
 		AnimSwitchHog(hero.gear)
+	elseif anim == dialog02 then
+		setAfterDialog02()
+		AnimSwitchHog(hero.gear)
+	elseif anim == dialog03 or anim == dialog04 then
+		startCombat()
+	elseif anim == dialog05 then
+		runaway(professor.gear)
+		afterDialog05()
+	elseif anim == dialog06 then
+		runaway(minion1.gear)
+		runaway(minion2.gear)
+		runaway(minion3.gear)
+		afterDialog06()
 	end
 end
 
@@ -410,39 +472,71 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, welcome to moon
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near PAotH base at moon..."),  4000}})
-	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Hey Hog Solo! Finally you have come..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near a PAotH base on the moon ..."),  4000}})
+	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, string.format(loc("Hey, %s! Finally you have come!"), hero.name), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("It seems that Professor Hogevil has prepared for your arrival!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("He has captured the rest of the PAotH team and awaits to capture you!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("We have to hurry! Are you armed?"), SAY_SAY, 4300}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 450}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("No, I am afraid I had to travel light"), SAY_SAY, 2500}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("No, I am afraid I had to travel light."), SAY_SAY, 2500}})
 	table.insert(dialog01, {func = AnimWait, args = {paoth1.gear, 3200}})
-	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Ok, then you have to go and take some of the weapons we have hidden in case of an emergency!"), SAY_SAY, 7000}})
+	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Okay, then you have to go and take some of the weapons we have hidden in case of an emergency!"), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("They are up there! Take this rope and hurry!"), SAY_SAY, 7000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Ehm... ok..."), SAY_SAY, 2500}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Ehm, okay ..."), SAY_SAY, 2500}})
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 02 - To the weapons platform
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Checkpoint reached!"),  4000}})
-	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I've made it! YEAAAAAH!"), SAY_SHOUT, 4000}})
+	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 100}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Checkpoint reached!"), 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I've made it! Yeah!"), SAY_SHOUT, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {paoth1.gear, loc("Nice! Now hurry and get down! You have to rescue my friends!"), SAY_SHOUT, 7000}})
 	table.insert(dialog02, {func = setAfterDialog02, args = {}})
+	table.insert(dialog02, {func = ShowMission, args = goals[dialog02]})
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 03 - Hero spotted and has no weapons
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
 	table.insert(dialog03, {func = AnimCaption, args = {hero.gear, loc("Get ready to fight!"), 4000}})
-	table.insert(dialog03, {func = AnimSay, args = {minion1.gear, loc("Look boss! There is the target!"), SAY_SHOUT, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {minion1.gear, loc("Look, boss! There is the target!"), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {professor.gear, loc("Prepare for battle!"), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Oops, I've been spotted and I have no weapons! I am doomed!"), SAY_THINK, 4000}})
+	table.insert(dialog03, {func = ShowMission, args = goals[dialog03]})
 	table.insert(dialog03, {func = startCombat, args = {hero.gear}})
 	-- DIALOG 04 - Hero spotted and *HAS* weapons
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
 	table.insert(dialog04, {func = AnimCaption, args = {hero.gear, loc("Get ready to fight!"), 4000}})
-	table.insert(dialog04, {func = AnimSay, args = {minion1.gear, loc("Look boss! There is the target!"), SAY_SHOUT, 4000}})
+	table.insert(dialog04, {func = AnimSay, args = {minion1.gear, loc("Look, boss! There is the target!"), SAY_SHOUT, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {professor.gear, loc("Prepare for battle!"), SAY_SHOUT, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Here we go!"), SAY_THINK, 4000}})
+	table.insert(dialog04, {func = ShowMission, args = goals[dialog04]})
 	table.insert(dialog04, {func = startCombat, args = {hero.gear}})
+	-- DIALOG 05 - All minions dead
+	AddSkipFunction(dialog05, Skipanim, {dialog05})
+	table.insert(dialog05, {func = AnimWait, args = {professor.gear, 1500}})
+	table.insert(dialog05, {func = AnimSay, args = {professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 5000}})
+	table.insert(dialog05, {func = runaway, args = {professor.gear}})
+	table.insert(dialog05, {func = afterDialog05, args = {professor.gear}})
+end
+
+function Dialog06Setup(livingMinion)
+	-- DIALOG 06 - Professor dead
+	AddSkipFunction(dialog06, Skipanim, {dialog06})
+	table.insert(dialog06, {func = AnimWait, args = {livingMinion, 1500}})
+	table.insert(dialog06, {func = AnimSay, args = {livingMinion, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 3000}})
+	table.insert(dialog06, {func = runaway, args = {minion1.gear}})
+	table.insert(dialog06, {func = runaway, args = {minion2.gear}})
+	table.insert(dialog06, {func = runaway, args = {minion3.gear}})
+	table.insert(dialog06, {func = afterDialog06, args = {livingMinion}})
+end
+
+function runaway(gear)
+	if GetHealth(gear) then
+		AddVisualGear(GetX(gear)-5, GetY(gear)-5, vgtSmoke, 0, false)
+		AddVisualGear(GetX(gear)+5, GetY(gear)+5, vgtSmoke, 0, false)
+		AddVisualGear(GetX(gear)-5, GetY(gear)+5, vgtSmoke, 0, false)
+		AddVisualGear(GetX(gear)+5, GetY(gear)-5, vgtSmoke, 0, false)
+		SetState(gear, bor(GetState(gear), gstInvisible))
+	end
 end
 
 ------------------- custom "animation" functions --------------------------
@@ -450,7 +544,7 @@ end
 function startCombat()
 	-- use this so minion3 will gain control
 	AnimSwitchHog(minion3.gear)
-	TurnTimeLeft = 0
+	EndTurn(true)
 end
 
 function setAfterDialog02()

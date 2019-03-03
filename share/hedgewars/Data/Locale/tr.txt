@@ -54,20 +54,19 @@
 00:51=Çamur Topu
 00:52=Silah Seçilmedi
 00:53=Zaman Kutusu
-; 00:54=Yapı
 00:54=Zemin Spreyi
 00:55=Dondurucu
 00:56=Satır
 
-01:00=Savaş başlasın!
+; 01:00=Loading …
 01:01=Beraberlik
 01:02=%1 kazandı!
 01:03=Bölüm %%1
 01:04=Duraklatıldı
-01:05=Çıkılsın mı (Y/Esc)?
+01:05=Çıkılsın mı (%1/%2)?
 01:06=Ani ölüm!
 01:07=%1 Kaldı
-01:08=Yakıt
+01:08=Yakıt: %1%
 01:09=Eşzamanlanıyor...
 01:10=Bu yardımcıyı kullanmak sıranı bitirmeyecek!
 01:11=Bu silah veya yardımcı henüz kullanılamıyor!
@@ -248,11 +247,11 @@
 02:02=Asla korkma!
 02:02=Cesur ol ve fethet
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 kazandı!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Beraberlik
 
 ; New health crate
 02:05=Yardım geliyor!
@@ -451,7 +450,6 @@
 03:51=Zeminde bulunan
 03:52=KULLANILMIYOR
 03:53=Tür 40
-; 03:54=Bir şey inşa et
 03:54=Yardımcı
 03:55=Bundan daha iyi olamazdı!
 03:56=Lütfen yanlış veya doğru, kullanın
@@ -518,12 +516,12 @@
 ; Game goal strings
 05:00=Oyun Kipleri
 05:01=Aşağıdaki kurallar uygulanır
-05:02=Kaleler: Kaleni savun; düşmanlarını alt et!
+05:02=Kralı Yerleştir: Kralın için korunaklı bir başlangıç noktası seç
 05:03=Düşük Yer Çekimi: Adımına dikkat et
 05:04=Dayanıklılık: Kirpiler (neredeyse) zarar görmezler
 05:05=Vampirleşme: Verilen hasar kirpileri iyileştirir
 05:06=Karma: Verilen hasar kirpilere zarar verir
-05:07=Kralı Koru: Kralın ölmesine izin verme!|Kralı Yerleştir: Kralın için korunaklı bir başlangıç noktası seç
+05:07=Kralı Koru: Kralın ölmesine izin verme!
 05:08=Kirpileri Yerleştir: Kirpilerini oyun başlamadan önce yerleştir
 05:09=Ağır Sınıf: Kirpiler hareket etmek için yer değiştiremezler
 05:10=Yıkılmaz Zemin: Çoğu silah zemine zarar veremez

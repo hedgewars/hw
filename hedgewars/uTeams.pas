@@ -29,6 +29,7 @@ procedure initModule;
 procedure freeModule;
 
 function  AddTeam(TeamColor: Longword): PTeam;
+function  SetMissionTeam(): PTeam;
 procedure SwitchHedgehog;
 procedure AfterSwitchHedgehog;
 procedure InitTeams;
@@ -49,68 +50,137 @@ uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDeb
     uGearsUtils, uGearsList, uVisualGearsList, uTextures
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
-var GameOver: boolean;
+var TeamsGameOver: boolean;
     NextClan: boolean;
+    SwapClanPre, SwapClanReal: LongInt;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
-    s, ts: ansistring;
-    t, AliveCount, i, j: LongInt;
+    s, cap: ansistring;
+    ts: array[0..(cMaxTeams - 1)] of ansistring;
+    t, ActiveAliveCount, i, j: LongInt;
+    allWin, winCamera: boolean;
 begin
 CheckForWin:= false;
-AliveCount:= 0;
+ActiveAliveCount:= 0;
+// Victory if there is 1 living and non-passive clan left
 for t:= 0 to Pred(ClansCount) do
-    if ClansArray[t]^.ClanHealth > 0 then
+    if (ClansArray[t]^.ClanHealth > 0) and (not ClansArray[t]^.Passive) then
         begin
-        inc(AliveCount);
+        inc(ActiveAliveCount);
         AliveClan:= ClansArray[t]
         end;
 
-if (AliveCount > 1) or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then
+// Exception: gfOneClanMode, then there is no winner
+if (ActiveAliveCount > 1) or ((ActiveAliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then
     exit;
 CheckForWin:= true;
 
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
 
-// if the game ends during a multishot, do last TurnReaction
-if (not bBetweenTurns) and isInMultiShoot then
-    TurnReaction();
-
-if not GameOver then
+// If the game ends during a multishot, or after the Sudden Death
+// water has risen, do last turn stats / reaction.
+if ((not bBetweenTurns) and isInMultiShoot) or (bDuringWaterRise) then
     begin
-    if AliveCount = 0 then
+    TurnStats();
+    if (not bDuringWaterRise) then
+        TurnReaction();
+    TurnStatsReset();
+    end;
+
+if not TeamsGameOver then
+    begin
+    if ActiveAliveCount = 0 then
         begin // draw
-        AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
-        SendStat(siGameResult, shortstring(trmsg[sidDraw]));
-        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+        AddCaption(GetEventString(eidRoundDraw), capcolDefault, capgrpGameState);
+        if SendGameResultOn then
+            SendStat(siGameResult, shortstring(trmsg[sidDraw]));
+        if PreviousTeam <> nil then
+            AddVoice(sndStupid, PreviousTeam^.voicepack)
+        else
+            AddVoice(sndStupid, TeamsArray[0]^.voicepack);
+        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
         end
     else // win
+        begin
+        allWin:= false;
         with AliveClan^ do
             begin
-            ts:= ansistring(Teams[0]^.TeamName);
-            if TeamsNumber = 1 then
-                s:= FormatA(trmsg[sidWinner], ts)  // team wins
-            else
-                s:= FormatA(trmsg[sidWinner], ts); // clan wins
+            if TeamsNumber = 1 then // single team wins
+                begin
+                s:= ansistring(Teams[0]^.TeamName);
+                // Victory caption is randomly selected
+                cap:= FormatA(GetEventString(eidRoundWin), s);
+                AddCaption(cap, capcolDefault, capgrpGameState);
+                s:= FormatA(trmsg[sidWinner], s);
+                end
+            else // clan with at least 2 teams wins
+                begin
+                s:= '';
+                for j:= 0 to Pred(TeamsNumber) do
+                    begin
+                    ts[j] := Teams[j]^.TeamName;
+                    end;
 
+                // Write victory message for caption and stats page
+                if (TeamsNumber = cMaxTeams) or (TeamsCount = TeamsNumber) then
+                    begin
+                    // No enemies for some reason ... Everyone wins!!1!
+                    s:= trmsg[sidWinnerAll];
+                    allWin:= true;
+                    end
+                else if (TeamsNumber >= 2) and (TeamsNumber < cMaxTeams) then
+                    // List all winning teams in a list
+                    if (TeamsNumber = 2) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner2)], ts[0], ts[1])
+                    else if (TeamsNumber = 3) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner3)], ts[0], ts[1], ts[2])
+                    else if (TeamsNumber = 4) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner4)], ts[0], ts[1], ts[2], ts[3])
+                    else if (TeamsNumber = 5) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner5)], ts[0], ts[1], ts[2], ts[3], ts[4])
+                    else if (TeamsNumber = 6) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner6)], ts[0], ts[1], ts[2], ts[3], ts[4], ts[5])
+                    else if (TeamsNumber = 7) then
+                        s:= FormatA(trmsg[TMsgStrId(sidWinner7)], ts[0], ts[1], ts[2], ts[3], ts[4], ts[5], ts[6]);
+
+                // The winner caption is the same as the stats message and not randomized
+                cap:= s;
+                AddCaption(cap, capcolDefault, capgrpGameState);
+                // TODO (maybe): Show victory animation/captions per-team instead of all winners at once?
+                end;
+
+            // Enable winner state for winning hogs and move camera to a winning hedgehog
+            winCamera:= false;
             for j:= 0 to Pred(TeamsNumber) do
                 with Teams[j]^ do
                     for i:= 0 to cMaxHHIndex do
                         with Hedgehogs[i] do
                             if (Gear <> nil) then
+                                begin
+                                if (not winCamera) then
+                                    begin
+                                    FollowGear:= Gear;
+                                    winCamera:= true;
+                                    end;
                                 Gear^.State:= gstWinner;
+                                end;
             if Flawless then
                 AddVoice(sndFlawless, Teams[0]^.voicepack)
             else
                 AddVoice(sndVictory, Teams[0]^.voicepack);
-
-            AddCaption(s, cWhiteColor, capgrpGameState);
-            SendStat(siGameResult, shortstring(s));
-            AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
             end;
+
+        if SendGameResultOn then
+            SendStat(siGameResult, shortstring(s));
+        if allWin and SendAchievementsStatsOn then
+            SendStat(siEverAfter, '');
+        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+        end;
     SendStats;
     end;
+TeamsGameOver:= true;
 GameOver:= true
 end;
 
@@ -119,7 +189,7 @@ var c, i, t: LongWord;
     PrevHH, PrevTeam : LongWord;
 begin
 TargetPoint.X:= NoPointX;
-if checkFails(CurrentTeam <> nil, 'nil Team', true) then exit;
+if checkFails(CurrentTeam <> nil, 'Team is nil!', true) then exit;
 with CurrentHedgehog^ do
     if (PreviousTeam <> nil) and PlacingHogs and Unplaced then
         begin
@@ -163,23 +233,44 @@ with CurrentTeam^ do
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
-    with ClansArray[c]^ do
-        if (CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0) then
+    if (GameFlags and gfTagTeam) <> 0 then
+        begin
+        with ClansArray[c]^ do
             begin
-            TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
-            CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
-            inc(c);
-            NextClan:= true;
+            if (CurrTeam = TagTeamIndex) then
+                begin
+                TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
+                CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
+                inc(c);
+                if c = ClansCount then
+                    c:= 0;
+                if c = SwapClanReal then
+                    inc(TotalRoundsReal);
+                NextClan:= true;
+                end;
             end;
 
-    if (GameFlags and gfTagTeam) = 0 then
-        inc(c);
-
-    if c = ClansCount then
+        with ClansArray[c]^ do
+            begin
+            if (not PlacingHogs) and ((Succ(CurrTeam) mod TeamsNumber) = TagTeamIndex) then
+                begin
+                if c = SwapClanPre then
+                    inc(TotalRoundsPre);
+                end;
+            end;
+        end
+    else
         begin
-        if not PlacingHogs then
-            inc(TotalRounds);
-        c:= 0
+        inc(c);
+        if c = ClansCount then
+            c:= 0;
+        if (not PlacingHogs) then
+            begin
+            if c = SwapClanPre then
+                inc(TotalRoundsPre);
+            if c = SwapClanReal then
+                inc(TotalRoundsReal);
+            end;
         end;
 
     with ClansArray[c]^ do
@@ -189,15 +280,16 @@ repeat
             CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
             CurrentTeam:= Teams[CurrTeam];
             with CurrentTeam^ do
-                begin
-                PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn)
-                repeat
-                    CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
-                until ((Hedgehogs[CurrHedgehog].Gear <> nil) and (Hedgehogs[CurrHedgehog].Effects[heFrozen] < 256)) or (CurrHedgehog = PrevHH)
-                end
-        until ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256)) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0))
+                if (not Passive) then
+                    begin
+                    PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn)
+                    repeat
+                        CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
+                    until ((Hedgehogs[CurrHedgehog].Gear <> nil) and (Hedgehogs[CurrHedgehog].Effects[heFrozen] < 256)) or (CurrHedgehog = PrevHH)
+                    end
+        until ((not CurrentTeam^.Passive) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256)) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0))
         end;
-        if (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
+        if (CurrentTeam^.Passive) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
             begin
             with CurrentTeam^.Clan^ do
                 for t:= 0 to Pred(TeamsNumber) do
@@ -209,10 +301,10 @@ repeat
                                 if (Gear <> nil) and (Effects[heFrozen] < 256) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
                                     CurrHedgehog:= i
                                 end;
-            if (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
+            if (not CurrentTeam^.Passive) and ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255)) then
                 inc(CurrentTeam^.Clan^.TurnNumber);
-            end
-until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256);
+            end;
+until (not CurrentTeam^.Passive) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256);
 
 SwitchCurrentHedgehog(@(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]));
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -239,6 +331,7 @@ var i, t: LongInt;
     CurWeapon: PAmmo;
     w: real;
     vg: PVisualGear;
+    g: PGear;
     s: ansistring;
 begin
 if PlacingHogs then
@@ -253,9 +346,34 @@ if PlacingHogs then
         begin
         for i:= 0 to ClansCount do
             if ClansArray[i] <> nil then
+                begin
                 ClansArray[i]^.TurnNumber:= 0;
+                end;
         ResetWeapons
-        end
+        end;
+
+    end;
+
+if not PlacingHogs then
+    begin
+    if (TotalRoundsReal = -1) then
+        TotalRoundsReal:= 0;
+    if (TotalRoundsPre = -1) and (ClansCount = 1) then
+        TotalRoundsPre:= 0;
+    end;
+
+// Determine clan ID to check to determine whether to increase TotalRoundsPre/TotalRoundsReal
+if (not PlacingHogs) then
+    begin
+    if SwapClanPre = -1 then
+        begin
+        if (GameFlags and gfRandomOrder) <> 0 then
+            SwapClanPre:= 0
+        else
+            SwapClanPre:= ClansCount - 1;
+        end;
+    if SwapClanReal = -1 then
+        SwapClanReal:= CurrentTeam^.Clan^.ClanIndex;
     end;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
@@ -300,60 +418,80 @@ ApplyAmmoChanges(CurrentHedgehog^);
 if (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
     SetBinds(CurrentTeam^.Binds);
 
-bShowFinger:= true;
-
 if PlacingHogs then
     begin
     if CurrentHedgehog^.Unplaced then
         TurnTimeLeft:= 15000
     else TurnTimeLeft:= 0
     end
-else if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then
-    begin
-    if TagTurnTimeLeft <> 0 then
-        TurnTimeLeft:= TagTurnTimeLeft;
-    TagTurnTimeLeft:= 0;
-    end
 else
     begin
-    TurnTimeLeft:= cHedgehogTurnTime;
-    TagTurnTimeLeft:= 0;
-    NextClan:= false;
-    end;
-
-if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
-    begin
-    if CurrentTeam^.ExtDriven then
+    if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then
         begin
-        if GetRandom(2) = 0 then
-             AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
-        else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
+        if TagTurnTimeLeft <> 0 then
+            TurnTimeLeft:= TagTurnTimeLeft;
+        TagTurnTimeLeft:= 0;
         end
     else
         begin
-        GetRandom(2); // needed to avoid extdriven desync
-        AddVoice(sndYesSir, CurrentTeam^.voicepack);
+        TurnTimeLeft:= cHedgehogTurnTime;
+        TagTurnTimeLeft:= 0;
+        NextClan:= false;
         end;
+
+    // Enable switching mode when gfSwitchHog is active
+    if ((GameFlags and gfSwitchHog) <> 0) and (not CurrentTeam^.hasGone) and
+            // Exception: During the special "Place your King" round in King Mode;
+            // you're not supposed to switch away from your king in this round.
+            (not (((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (TotalRoundsReal <= 0))) then
+        begin
+        g:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
+        CurAmmoGear:= g;
+        lastGearByUID:= g;
+        end
+    else
+        bShowFinger:= true;
+    end;
+IsGetAwayTime:= false;
+
+// turn start taunt: sndYesSir for own team, sndHmm for enemy or computer team
+if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
+    begin
+    if (not CinematicScript) then
+        if CurrentTeam^.ExtDriven then
+            AddVoice(sndHmm, CurrentTeam^.voicepack)
+        else
+            AddVoice(sndYesSir, CurrentTeam^.voicepack);
     if cHedgehogTurnTime < 1000000 then
         ReadyTimeLeft:= cReadyDelay;
     s:= ansistring(CurrentTeam^.TeamName);
-    AddCaption(FormatA(trmsg[sidReady], s), cWhiteColor, capgrpGameState)
+    AddCaption(FormatA(trmsg[sidReady], s), capcolDefault, capgrpGameState)
     end
 else
     begin
-    if TurnTimeLeft > 0 then
-        begin
-        if GetRandom(2) = 0 then
-             AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
-        else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
-        end;
-    ReadyTimeLeft:= 0
+    if (TurnTimeLeft > 0) and (not CinematicScript) then
+        AddVoice(sndHmm, CurrentTeam^.voicepack);
+    ReadyTimeLeft:= 0;
     end;
+end;
+
+function SetMissionTeam(): PTeam;
+var team: PTeam;
+begin
+New(team);
+if checkFails(team <> nil, 'AddTeam: team = nil', true) then exit(nil);
+FillChar(team^, sizeof(TTeam), 0);
+team^.HedgehogsNumber:= 0;
+team^.Binds:= DefaultBinds;
+
+CurrentTeam:= team;
+MissionTeam:= team;
+SetMissionTeam:= team;
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;
 var team: PTeam;
-    c, t: LongInt;
+    c: LongInt;
 begin
 if checkFails(TeamsCount < cMaxTeams, 'Too many teams', true) then exit(nil);
 New(team);
@@ -365,9 +503,10 @@ team^.Flag:= 'hedgewars';
 
 TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);
+inc(VisibleTeamsCount);
 
-for t:= 0 to cKbdMaxIndex do
-    team^.Binds[t]:= DefaultBinds[t];
+team^.Binds:= DefaultBinds;
+team^.Passive:= false;
 
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
@@ -382,7 +521,9 @@ if c < 0 then
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
         TagTeamIndex:= 0;
-        Flawless:= true
+        Flawless:= true;
+        DeathLogged:= false;
+        StatsHandled:= false;
         end
     end
 else
@@ -393,8 +534,12 @@ else
 with team^.Clan^ do
     begin
     Teams[TeamsNumber]:= team;
+    Passive:= false;
     inc(TeamsNumber)
     end;
+
+// mirror changes into array for clans to spawn
+SpawnClansArray:= ClansArray;
 
 CurrentTeam:= team;
 AddTeam:= team;
@@ -430,6 +575,7 @@ for t:= 0 to Pred(TeamsCount) do
         // Some initial King buffs
         if (GameFlags and gfKing) <> 0 then
             begin
+            hasKing:= true;
             Hedgehogs[0].King:= true;
             Hedgehogs[0].Hat:= 'crown';
             Hedgehogs[0].Effects[hePoisoned] := 0;
@@ -444,6 +590,9 @@ for t:= 0 to Pred(TeamsCount) do
                 end
             else
                 Hedgehogs[0].Gear^.Health:= h;
+            // Prevent overflow
+            if (Hedgehogs[0].Gear^.Health < 0) or (Hedgehogs[0].Gear^.Health > cMaxHogHealth) then
+                Hedgehogs[0].Gear^.Health:= cMaxHogHealth;
             Hedgehogs[0].InitialHealth:= Hedgehogs[0].Gear^.Health
             end;
         end;
@@ -504,7 +653,8 @@ begin
     HH^.Gear^.State:= (HH^.Gear^.State and (not (gstHHDriven or gstInvisible or gstAttacking))) or gstAttacked;
     AddCI(HH^.Gear);
     HH^.Gear^.Active:= true;
-    ScriptCall('onHogRestore', HH^.Gear^.Uid)
+    ScriptCall('onHogRestore', HH^.Gear^.Uid);
+    AddVisualGear(0, 0, vgtTeamHealthSorter);
 end;
 
 procedure RestoreTeamsFromSave;
@@ -544,6 +694,30 @@ begin
                     end
 end;
 
+procedure chAddMissionHH(var id: shortstring);
+var s: shortstring;
+    Health: LongInt;
+begin
+s:= '';
+if (not isDeveloperMode) then
+    exit;
+if checkFails((CurrentTeam <> nil), 'Can''t add hedgehogs yet, add a team first!', true) then exit;
+with CurrentTeam^ do
+    begin
+    if checkFails(HedgehogsNumber<=cMaxHHIndex, 'Can''t add hedgehog to "' + TeamName + '"! (already ' + intToStr(HedgehogsNumber) + ' hogs)', true) then exit;
+    SplitBySpace(id, s);
+    CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
+    CurrentHedgehog^.BotLevel:= StrToInt(id);
+    CurrentHedgehog^.Team:= CurrentTeam;
+    SplitBySpace(s, id);
+    Health:= StrToInt(s);
+    if checkFails((Health > 0) and (Health <= cMaxHogHealth), 'Invalid hedgehog health (must be between 1 and '+IntToStr(cMaxHogHealth)+')', true) then exit;
+    CurrentHedgehog^.Name:= id;
+    CurrentHedgehog^.InitialHealth:= Health;
+    inc(HedgehogsNumber)
+    end
+end;
+
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;
@@ -562,7 +736,7 @@ with CurrentTeam^ do
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
     Gear^.Health:= StrToInt(s);
-    if checkFails(Gear^.Health > 0, 'Invalid hedgehog health', true) then exit;
+    if checkFails((Gear^.Health > 0) and (Gear^.Health <= cMaxHogHealth), 'Invalid hedgehog health (must be between 1 and '+IntToStr(cMaxHogHealth)+')', true) then exit;
     if (GameFlags and gfSharedAmmo) <> 0 then
         CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
     else if (GameFlags and gfPerHogAmmo) <> 0 then
@@ -574,6 +748,7 @@ with CurrentTeam^ do
     CurrentHedgehog^.Gear:= Gear;
     CurrentHedgehog^.Name:= id;
     CurrentHedgehog^.InitialHealth:= Gear^.Health;
+    CurrentHedgehog^.RevengeHog:= nil;
     CurrHedgehog:= HedgehogsNumber;
     inc(HedgehogsNumber)
     end
@@ -593,6 +768,63 @@ begin
     loadBinds('bind', s);
 end;
 
+// Make sure the team name of chTeam is unique.
+// If it isn't, the name is changed to be unique.
+procedure makeTeamNameUnique(chTeam: PTeam);
+var tail: shortstring;
+    t, numLen, numTail: LongInt;
+//    valOK: Word;    -- see pas2c-related FIXME below
+    nameDupeCheck: boolean;
+    chChar: char;
+begin
+    nameDupeCheck:= false;
+    while(nameDupeCheck = false) do
+        begin
+        nameDupeCheck:= true;
+        for t:=0 to TeamsCount - 1 do
+            begin
+            // Name collision?
+            if (chTeam <> teamsArray[t]) and (TeamsArray[t]^.TeamName = chTeam^.TeamName) then
+                begin
+                // Change the name by appending a sequence number, starting from 2
+                numLen:= 0;
+                chChar:= chTeam^.TeamName[Length(chTeam^.TeamName) - numLen];
+                // Parse number at end of team name (if any)
+                while (chChar >= '0') and (chChar <= '9') and (numLen < Length(chTeam^.TeamName)) do
+                    begin
+                    inc(numLen);
+                    chChar:= chTeam^.TeamName[Length(chTeam^.TeamName) - numLen];
+                    end;
+
+                if numLen > 0 then
+                    // Number found: Increment it by 1
+                    begin
+                    tail:= Copy(chTeam^.TeamName, Length(chTeam^.TeamName) - numLen + 1, numLen);
+(* FIXME - pas2c missing 3rd param for val
+                    valOK:= 1;
+                    Val(tail, numTail, valOK);
+                    Inc(numTail);
+                    if valOK = 0 then
+                        tail:= IntToStr(numTail)
+                    else
+                        // This should not happen
+                        tail:= shortstring('X');
+*)
+                    Val(tail, numTail);
+                    Inc(numTail);
+                    tail:= IntToStr(numTail);
+                    chTeam^.TeamName:= Copy(chTeam^.TeamName, 0, Length(chTeam^.TeamName) - numLen) + tail;
+                    end
+                else
+                    // No number at team end: Just append a '2'
+                    chTeam^.TeamName:= chTeam^.TeamName + ' 2';
+                nameDupeCheck:= false;
+                break;
+                end;
+            end;
+        end;
+end;
+
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
     ts, cs: shortstring;
@@ -608,14 +840,42 @@ if isDeveloperMode then
     // color is always little endian so the mask must be constant also in big endian archs
     Color:= Color or $FF000000;
     AddTeam(Color);
-    CurrentTeam^.TeamName:= ts;
-    CurrentTeam^.PlayerHash:= s;
-    loadTeamBinds(ts);
 
-    if GameType in [gmtDemo, gmtSave, gmtRecord] then
-        CurrentTeam^.ExtDriven:= true;
+    if CurrentTeam <> nil then
+        begin
+        CurrentTeam^.TeamName:= ts;
+        makeTeamNameUnique(CurrentTeam);
 
-    CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        CurrentTeam^.PlayerHash:= s;
+        loadTeamBinds(ts);
+
+        if GameType in [gmtDemo, gmtSave, gmtRecord] then
+            CurrentTeam^.ExtDriven:= true;
+
+        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        end
+    end
+end;
+
+procedure chSetMissionTeam(var s: shortstring);
+var ts, cs: shortstring;
+begin
+cs:= '';
+ts:= '';
+if isDeveloperMode then
+    begin
+    SplitBySpace(s, cs);
+    SplitBySpace(cs, ts);
+
+    SetMissionTeam();
+
+    if CurrentTeam <> nil then
+        begin
+        CurrentTeam^.TeamName:= ts;
+        CurrentTeam^.PlayerHash:= s;
+        loadTeamBinds(ts);
+        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        end
     end
 end;
 
@@ -664,7 +924,8 @@ begin
                 begin
                 if (not hasGone) and isGoneFlagPendingToBeSet then
                     begin
-                    AddChatString(#7 + '* '+ TeamName + ' is gone'); // TODO: localize
+                    if (not TeamsGameOver) then
+                        AddChatString(#7 + Format('* '+shortstring(trmsg[sidTeamGone]), TeamName));
                     if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                     hasGone:= true;
                     skippedTurns:= 0;
@@ -703,7 +964,7 @@ begin
         with TeamsArray[t]^ do
             if hasGone then
                 begin
-                AddChatString(#8 + '* '+ TeamName + ' is back');
+                AddChatString(#8 + Format('* '+shortstring(trmsg[sidTeamBack]), TeamName));
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
 
@@ -724,25 +985,6 @@ begin
         end;
 end;
 
-
-procedure chFinish(var s:shortstring);
-var t: LongInt;
-begin
-// avoid compiler hint
-s:= s;
-
-isPaused:= false;
-
-t:= 0;
-while t < TeamsCount do
-    begin
-    TeamsArray[t]^.hasGone:= true;
-    inc(t)
-    end;
-
-AddChatString(#7 + '* Good-bye!');
-RecountAllTeamsHealth();
-end;
 
 procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 var oldCI, newCI: boolean;
@@ -820,12 +1062,13 @@ end;
 procedure initModule;
 begin
 RegisterVariable('addhh', @chAddHH, false);
+RegisterVariable('addmisshh', @chAddMissionHH, false);
 RegisterVariable('addteam', @chAddTeam, false);
+RegisterVariable('setmissteam', @chSetMissionTeam, false);
 RegisterVariable('hhcoords', @chSetHHCoords, false);
 RegisterVariable('bind', @chBind, true );
 RegisterVariable('teamgone', @chTeamGone, true );
 RegisterVariable('teamback', @chTeamBack, true );
-RegisterVariable('finish', @chFinish, true ); // all teams gone
 RegisterVariable('fort'    , @chFort         , false);
 RegisterVariable('grave'   , @chGrave        , false);
 RegisterVariable('hat'     , @chSetHat       , false);
@@ -840,8 +1083,10 @@ ClansCount:= 0;
 LocalClan:= -1;
 LocalTeam:= -1;
 LocalAmmo:= -1;
-GameOver:= false;
+TeamsGameOver:= false;
 NextClan:= true;
+SwapClanPre:= -1;
+SwapClanReal:= -1;
 MaxTeamHealth:= 0;
 end;
 
@@ -873,6 +1118,7 @@ if TeamsCount > 0 then
             FreeAndNilTexture(OwnerTex);
             FreeAndNilTexture(GraveTex);
             FreeAndNilTexture(AIKillsTex);
+            FreeAndNilTexture(LuaTeamValueTex);
             FreeAndNilTexture(FlagTex);
             end;
 
@@ -886,6 +1132,8 @@ if TeamsCount > 0 then
     end;
 TeamsCount:= 0;
 ClansCount:= 0;
+SwapClanPre:= -1;
+SwapClanReal:= -1;
 end;
 
 end.

@@ -50,13 +50,12 @@ function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 var StoreCnt: LongInt;
 
 implementation
-uses uVariables, uCommands, uUtils, uCaptions, uDebug;
+uses uVariables, uCommands, uUtils, uCaptions, uDebug, uScript;
 
-type TAmmoCounts = array[TAmmoType] of Longword;
-     TAmmoArray = array[TAmmoType] of TAmmo;
+type TAmmoArray = array[TAmmoType] of TAmmo;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     ammoLoadout, ammoProbability, ammoDelay, ammoReinforcement: shortstring;
-    InitialCounts: array[0..Pred(cMaxHHs)] of TAmmoCounts;
+    InitialCountsLocal: array[0..Pred(cMaxHHs)] of TAmmoCounts;
 
 procedure FillAmmoStore(Ammo: PHHAmmo; var newAmmo: TAmmoArray);
 var mi: array[0..cMaxSlotIndex] of byte;
@@ -79,7 +78,6 @@ AmmoMenuInvalidated:= true;
 end;
 
 procedure AddAmmoStore;
-const probability: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
@@ -99,7 +97,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
     if a <> amNothing then
         begin
-        Ammoz[a].Probability:= probability[byte(ammoProbability[ord(a)]) - byte('0')];
+        Ammoz[a].Probability:= probabilityLevels[byte(ammoProbability[ord(a)]) - byte('0')];
         Ammoz[a].SkipTurns:= (byte(ammoDelay[ord(a)]) - byte('0'));
         Ammoz[a].NumberInCase:= (byte(ammoReinforcement[ord(a)]) - byte('0'));
         cnt:= byte(ammoLoadout[ord(a)]) - byte('0');
@@ -118,7 +116,10 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         or ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0))
         or ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0))
         or ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0))
-        or ((a = amExtraTime) and (cHedgehogTurnTime >= 1000000)) then
+        or ((a = amExtraTime) and (cHedgehogTurnTime >= 1000000))
+        // Always remove creeper because it's unfinished.
+        // TODO: Re-enable creeper when creeper is done
+        or (a = amCreeper) then
             begin
             cnt:= 0;
             Ammoz[a].Probability:= 0
@@ -140,9 +141,15 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     else
         ammos[a]:= AMMO_INFINITE;
     if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
-        InitialCounts[Pred(StoreCnt)][a]:= cnt
+        begin
+        InitialCountsLocal[Pred(StoreCnt)][a]:= cnt;
+        InitialAmmoCounts[a]:= cnt;
+        end
     else
-        InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
+        begin
+        InitialCountsLocal[Pred(StoreCnt)][a]:= ammos[a];
+        InitialAmmoCounts[a]:= ammos[a];
+        end
     end;
 
     for a:= Low(TAmmoType) to High(TAmmoType) do
@@ -156,7 +163,7 @@ end;
 
 function GetAmmoByNum(num: LongInt): PHHAmmo;
 begin
-    if checkFails(num < StoreCnt, 'Invalid store number', true) then
+    if checkFails(num < StoreCnt, 'Invalid ammo store number', true) then
         GetAmmoByNum:= nil
     else
         GetAmmoByNum:= StoresList[num]
@@ -210,11 +217,11 @@ if (a^.AmmoType <> amNothing) then
     cnt:= a^.Count
 else
     cnt:= 0;
-if (cnt <> AMMO_INFINITE) then
-    begin
-    inc(cnt, amt);
-    SetAmmo(Hedgehog, ammo, cnt)
-    end
+if (cnt >= AMMO_INFINITE) or (amt >= AMMO_INFINITE) then
+    cnt:= AMMO_INFINITE
+else
+    cnt:= min(AMMO_FINITE_MAX, cnt + amt);
+SetAmmo(Hedgehog, ammo, cnt);
 end;
 
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
@@ -287,6 +294,8 @@ begin
 CurWeapon:= GetCurAmmoEntry(Hedgehog);
 with Hedgehog do
     begin
+    if CurAmmoType <> amNothing then
+        ScriptCall('onUsedAmmo', ord(CurAmmoType));
 
     MultiShootAttacks:= 0;
     with CurWeapon^ do
@@ -329,11 +338,19 @@ if Hedgehog.Gear <> nil then
         begin
         if (AmmoType <> amNothing) then
             begin
-            CurMinAngle:= Ammoz[AmmoType].minAngle;
-            if Ammoz[AmmoType].maxAngle <> 0 then
-                CurMaxAngle:= Ammoz[AmmoType].maxAngle
+            if ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amRope)) then
+                begin
+                CurMaxAngle:= Ammoz[amRope].maxAngle;
+                CurMinAngle:= Ammoz[amRope].minAngle;
+                end
             else
-                CurMaxAngle:= cMaxAngle;
+                begin
+                CurMinAngle:= Ammoz[AmmoType].minAngle;
+                if Ammoz[AmmoType].maxAngle <> 0 then
+                    CurMaxAngle:= Ammoz[AmmoType].maxAngle
+                else
+                    CurMaxAngle:= cMaxAngle;
+                end;
 
             with Hedgehog.Gear^ do
                 begin
@@ -376,15 +393,14 @@ end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: ansistring;
-    CurWeapon: PAmmo;
+    OldWeapon, CurWeapon: PAmmo;
 begin
 TargetPoint.X:= NoPointX;
 
 with Hedgehog do
     begin
-    Timer:= 10;
-
     CurWeapon:= GetCurAmmoEntry(Hedgehog);
+    OldWeapon:= GetCurAmmoEntry(Hedgehog);
 
     if (CurWeapon^.Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog)
@@ -393,11 +409,18 @@ with Hedgehog do
 
     CurWeapon:= GetCurAmmoEntry(Hedgehog);
 
+    // Weapon selection animation (if new ammo type)
+    if CurWeapon^.AmmoType <> OldWeapon^.AmmoType then
+        Timer:= 10;
+
     ApplyAngleBounds(Hedgehog, CurWeapon^.AmmoType);
 
     with CurWeapon^ do
         begin
-        s:= trammo[Ammoz[AmmoType].NameId];
+        if length(trluaammo[Ammoz[AmmoType].NameId]) > 0 then
+            s:= trluaammo[Ammoz[AmmoType].NameId]
+        else
+            s:= trammo[Ammoz[AmmoType].NameId];
         if (Count <> AMMO_INFINITE) and (not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0))) then
             s:= s + ansistring(' (' + IntToStr(Count) + ')');
         if (Propz and ammoprop_Timerable) <> 0 then
@@ -442,7 +465,7 @@ for i:= 0 to Pred(StoreCnt) do
                 if (Propz and ammoprop_NotBorder) <> 0 then
                     begin
                     Count:= 0;
-                    InitialCounts[i][AmmoType]:= 0
+                    InitialCountsLocal[i][AmmoType]:= 0
                     end;
 
         PackAmmo(StoresList[i], slot)
@@ -490,7 +513,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 for i:= 0 to Pred(StoreCnt) do
     begin
     for a:= Low(TAmmoType) to High(TAmmoType) do
-        newAmmos[a].Count:= InitialCounts[i][a];
+        newAmmos[a].Count:= InitialCountsLocal[i][a];
     FillAmmoStore(StoresList[i], newAmmos);
     end;
 
@@ -530,7 +553,7 @@ begin
         ammoDelay:= ammoDelay + '0';
         ammoReinforcement:= ammoReinforcement + '0'
         end;
-    FillChar(InitialCounts, sizeof(InitialCounts), 0)
+    FillChar(InitialCountsLocal, sizeof(InitialCountsLocal), 0)
 end;
 
 procedure freeModule;

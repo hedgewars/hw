@@ -6,7 +6,7 @@ local sqrttwo = math.sqrt(2)
 
 -- creates round test area
 function AddTestArea(testarea)
-	step = 100
+	step = 90
 	xstep = step * testarea["xdir"]
 	ystep = step * testarea["ydir"]
 	x = testarea["x"]

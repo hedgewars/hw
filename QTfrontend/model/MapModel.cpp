@@ -32,12 +32,26 @@ MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", ""
 MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", "", false};
 MapModel::MapInfo MapModel::MapInfoPerlin = {MapModel::GeneratedMaze, "+perlin+", "", 0, "", "", "", false};
 MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "", 0, "", "", "", false};
-
+MapModel::MapInfo MapModel::MapInfoForts = {MapModel::FortsMap, "+forts+", "", 0, "", "", "", false};
 
 MapModel::MapModel(MapType maptype, QObject *parent) : QStandardItemModel(parent)
 {
     m_maptype = maptype;
     m_loaded = false;
+    m_filteredNoDLC = NULL;
+}
+
+QSortFilterProxyModel * MapModel::withoutDLC()
+{
+    if (m_filteredNoDLC == NULL)
+    {
+        m_filteredNoDLC = new QSortFilterProxyModel(this);
+        m_filteredNoDLC->setSourceModel(this);
+        // filtering based on IsDlcRole would be nicer
+        // but seems this model can only do string-based filtering :|
+        m_filteredNoDLC->setFilterRegExp(QRegExp("^[^*]"));
+    }
+    return m_filteredNoDLC;
 }
 
 bool MapModel::loadMaps()
@@ -65,6 +79,14 @@ bool MapModel::loadMaps()
     //QList<QStandardItem *> staticMaps;
     //QList<QStandardItem *> missionMaps;
     QList<QStandardItem *> mapList;
+
+
+    QIcon dlcIcon;
+    dlcIcon.addFile(":/res/dlcMarker.png", QSize(), QIcon::Normal, QIcon::On);
+    dlcIcon.addFile(":/res/dlcMarkerSelected.png", QSize(), QIcon::Selected, QIcon::On);
+    QPixmap emptySpace = QPixmap(7, 15);
+    emptySpace.fill(QColor(0, 0, 0, 0));
+    QIcon notDlcIcon = QIcon(emptySpace);
 
     // add mission/static maps to lists
     foreach (QString map, maps)
@@ -105,10 +127,23 @@ bool MapModel::loadMaps()
             // load description (if applicable)
             if (isMission)
             {
-                QString locale = HWApplication::keyboardInputLocale().name();
+                // get locale
+                QSettings settings(datamgr.settingsFileName(), QSettings::IniFormat);
+                QString locale = QLocale().name();
 
                 QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
-                desc = descSettings.value(locale, QString()).toString().replace("|", "\n").replace("\\,", ",");
+                descSettings.setIniCodec("UTF-8");
+                desc = descSettings.value(locale, QString()).toString();
+                // If not found, try with language-only code
+                if (desc.isEmpty())
+                {
+                    QString localeSimple = locale.remove(QRegExp("_.*$"));
+                    desc = descSettings.value(localeSimple, QString()).toString();
+                    // If still not found, use English
+                    if (desc.isEmpty())
+                        desc = descSettings.value("en", QString()).toString();
+                }
+                desc = desc.replace("_n", "\n").replace("_c", ",").replace("__", "_");
             }
 
             // detect if map is dlc
@@ -137,9 +172,15 @@ bool MapModel::loadMaps()
             // caption
             caption = map;
 
+            QIcon icon;
+            if (dlc)
+                icon = dlcIcon;
+            else
+                icon = notDlcIcon;
+
             // we know everything there is about the map, let's get am item for it
             QStandardItem * item = MapModel::infoToItem(
-                QIcon(), caption, type, map, theme, limit, scheme, weapons, desc, dlc);
+                icon, caption, type, map, theme, limit, scheme, weapons, desc, dlc);
 
             // append item to the list
             mapList.append(item);
@@ -199,7 +240,7 @@ QStandardItem * MapModel::infoToItem(
     QString desc,
     bool dlc)
 {
-    QStandardItem * item = new QStandardItem(icon, (dlc ? "*" : "") + caption);
+    QStandardItem * item = new QStandardItem(icon, caption);
     MapInfo mapInfo;
     QVariant qvar(QVariant::UserType);
 

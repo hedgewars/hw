@@ -47,6 +47,7 @@ class GameUIConfig : public QSettings
         QString language();
         bool isMusicEnabled();
         bool isFrontendMusicEnabled();
+        bool isAudioDampenEnabled();
         bool isShowFPSEnabled();
         bool isAltDamageEnabled();
         bool appendDateTimeToRecordName();
@@ -65,6 +66,8 @@ class GameUIConfig : public QSettings
         bool isReducedQuality() const;
         bool isFrontendEffects() const;
         bool isFrontendFullscreen() const;
+        quint16 zoom();
+        bool isHolidaySillinessEnabled() const;
         void resizeToConfigValues();
         quint32 stereoMode() const;
         void setValue(const QString & key, const QVariant & value);

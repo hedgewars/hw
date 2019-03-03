@@ -54,26 +54,25 @@
 00:51=Bola de Lama
 00:52=Nenhuma arma selecionada
 00:53=Caixote do Tempo
-; 00:54=Estrutura
 00:54=Terreno-instantâneo
 00:55=Congelador
 00:56=Cutelo
 
-01:00=Vamos lutar!
+; 01:00=Loading …
 01:01=Ronda empatada
 01:02=%1 venceu!
 01:03=Volume %1%
 01:04=Pausado
-01:05=Deseja realmente sair (Y/Esc)?
+01:05=Deseja realmente sair (%1/%2)?
 01:06=Morte Súbita!
 01:07=%1 restante
-01:08=Combustível
+01:08=Combustível: %1%
 01:09=A sincronizar...
 01:10=Usar este utilitário não termina o turno!
 01:11=Esta arma ou utilitário ainda não está disponível!
 01:12=Último turno até Morte Súbita!
 01:13=%1 turnos até Morte Súbita!
-01:14=Prepara-te!
+; 01:14=Get ready, %1!
 01:15=Ligeiro
 01:16=Pouco
 01:17=Normal
@@ -246,11 +245,11 @@
 02:02=Não temas!
 02:02=Sê corajoso e conquista
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 venceu!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Ronda empatada
 
 ; New health crate
 02:05=Auxílio iminente!
@@ -449,7 +448,6 @@
 03:51=Encontrado no chão
 03:52=UNUSED
 03:53=Modelo 40
-;03:54=Constroi qualquer coisa
 03:54=Utilitário
 
 ; Weapon Descriptions (use | as line breaks)
@@ -507,18 +505,17 @@
 04:51=Empurra um ouriço sem perder o turno|criando uma bola de lama tu mesmo!
 04:52=UNUSED
 04:53=Parte numa aventura pelo tempo e espaço,|deixando os teus colegas para se defenderem sozinhos.|Está preparado para regressar a qualquer altura,|para Morte Súbita ou se todos forem derrotados.|Atenção: Não funciona em Morte Súbita,|se estiveres sozinho, ou se fores o Rei.
-;04:54=INCOMPLETO
 04:54=Aplica estas particulas de terreno em spray onde quiseres.|Constroi pontes, enterra inimigos ou fecha túneis.|Tem apenas cuidado, não o uses em ti proprio!
 
 ; Game goal strings
 05:00=Modos de Jogo
 05:01=Aplicam-se as seguintes regras
-05:02=Fortes: Defende a tua fortaleza; derrota os teus inimigos!
+05:02=Posiciona o Rei: Escolhe um local seguro para o Rei começar
 05:03=Baixa Gravidade: Cuidado onde pões os pés
 05:04=Invulnerabilidade: Os ouriços são (quase) invulneráveis
 05:05=Vampirismo: Os ouriços são curados em proporção ao dano causado
 05:06=Karma: Os ouriços recebem o dano que causam
-05:07=Protege o Rei: Não deixes o teu Rei morrer!|Posiciona o Rei: Escolhe um local seguro para o Rei começar
+05:07=Protege o Rei: Não deixes o teu Rei morrer!
 05:08=Posicionar Ouriços: Posiciona os teus ouriços antes do jogo começar
 05:09=Artilharia: Os ouriços não podem andar ou mudar de posição
 05:10=Terreno Indestrutível: A maioria das armas não destrói o terreno

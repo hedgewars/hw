@@ -33,10 +33,11 @@ const
     cExplFrameTicks = 110;
 
 var VGCounter: LongWord;
-    VisualGearLayers: array[0..6] of PVisualGear;
+    VisualGearLayersStart: array[0..6] of PVisualGear;
+    VisualGearLayersEnd: array[0..6] of PVisualGear;
 
 implementation
-uses uCollisions, uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers;
+uses uCollisions, uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers, uScript;
 
 function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
 begin
@@ -63,8 +64,9 @@ var gear: PVisualGear;
     sp: real;
 begin
 AddVisualGear:= nil;
-if ((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) or fastScrolling) and // we are scrolling now
-   ((Kind <> vgtCloud) and (not Critical)) then
+if (GameType <> gmtRecord) and
+   (((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) or fastScrolling) and // we are scrolling now
+   (not Critical)) then
        exit;
 
 if ((cReducedQuality and rqAntiBoom) <> 0) and
@@ -230,8 +232,13 @@ with gear^ do
                 end;
     vgtDroplet:
                 begin
-                dx:= 0.001 * (random(180) - 90);
-                dy:= -0.001 * (random(160) + 40);
+                // => min speed ~ 0.098, max speed ~ 0.218, speed range ~ 0.120
+                // => min angle(4096) ~ 129, max angle ~ 1919, angle range ~ 1790
+                dx:= 0.001 * (98 + random(121)); // speed
+                Frame:= 129 + random(1791); // angle
+                dy:= -dx * hwFloat2Float(AngleSin(Frame));
+                // divide by 2 to create an eliptic shape
+                dx:=  dx * hwFloat2Float(AngleCos(Frame)) / 2;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(3)
                 end;
@@ -267,10 +274,10 @@ with gear^ do
   vgtHealthTag:
                 begin
                 Frame:= 0;
+                FrameTicks:= 0;
                 Timer:= 1500;
                 dY:= -0.08;
                 dX:= 0;
-                //gear^.Z:= 2002;
                 end;
   vgtSmokeTrace,
   vgtEvilTrace:
@@ -278,7 +285,6 @@ with gear^ do
                 gear^.X:= gear^.X - 16;
                 gear^.Y:= gear^.Y - 16;
                 gear^.State:= 8;
-                //gear^.Z:= cSmokeZ
                 end;
 vgtBigExplosion:
                 begin
@@ -341,9 +347,8 @@ if State <> 0 then
     gear^.State:= State;
 
 case Gear^.Kind of
-    vgtFlake: if cFlattenFlakes then
-        gear^.Layer:= 0
-              else if random(3) = 0 then
+    vgtFlake: 
+              if random(3) = 0 then
                   begin
                   gear^.Scale:= 0.5;
                   gear^.Layer:= 0   // 33% - far back
@@ -355,13 +360,17 @@ case Gear^.Kind of
                   end
               else if random(3) <> 0 then
                   gear^.Layer:= 5  // 30% - just behind land
-              else if random(2) = 0 then
+              else if (not cFlattenFlakes) and (random(2) = 0) then
                   gear^.Layer:= 6   // 7% - just in front of land
-              else
+              else if not cFlattenFlakes then
                   begin
                   gear^.Scale:= 1.5;
-                  gear^.Layer:= 2;  // 7% - close up
-                  end;
+                  gear^.Layer:= 2  // 7% - close up
+                  end
+              else begin 
+                   gear^.Layer:= 0;
+                   gear^.Scale:= 0.5
+                   end;
 
     vgtCloud: if cFlattenClouds then gear^.Layer:= 5
               else if random(3) = 0 then
@@ -421,26 +430,38 @@ end;
 
 if Layer <> -1 then gear^.Layer:= Layer;
 
-if VisualGearLayers[gear^.Layer] <> nil then
+if VisualGearLayersStart[gear^.Layer] = nil then
+    VisualGearLayersStart[gear^.Layer]:= gear;
+
+if VisualGearLayersEnd[gear^.Layer] <> nil then
     begin
-    VisualGearLayers[gear^.Layer]^.PrevGear:= gear;
-    gear^.NextGear:= VisualGearLayers[gear^.Layer]
+    VisualGearLayersEnd[gear^.Layer]^.NextGear:= gear;
+    gear^.PrevGear:= VisualGearLayersEnd[gear^.Layer]
     end;
-VisualGearLayers[gear^.Layer]:= gear;
+VisualGearLayersEnd[gear^.Layer]:= gear;
 
 AddVisualGear:= gear;
+ScriptCall('onVisualGearAdd', gear^.uid);
 end;
 
 procedure DeleteVisualGear(Gear: PVisualGear);
 begin
+    ScriptCall('onVisualGearDelete', Gear^.uid);
     FreeAndNilTexture(Gear^.Tex);
 
-    if Gear^.NextGear <> nil then
-        Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
+    if (Gear^.NextGear = nil) and (Gear^.PrevGear = nil) then
+        begin
+        VisualGearLayersStart[Gear^.Layer]:= nil;
+        VisualGearLayersEnd[Gear^.Layer]:= nil;
+        end;
     if Gear^.PrevGear <> nil then
         Gear^.PrevGear^.NextGear:= Gear^.NextGear
-    else
-        VisualGearLayers[Gear^.Layer]:= Gear^.NextGear;
+    else if Gear^.NextGear <> nil then
+        VisualGearLayersStart[Gear^.Layer]:= Gear^.NextGear;
+    if Gear^.NextGear <> nil then
+        Gear^.NextGear^.PrevGear:= Gear^.PrevGear
+    else if Gear^.PrevGear <> nil then
+        VisualGearLayersEnd[Gear^.Layer]:= Gear^.PrevGear;
 
     if lastVisualGearByUID = Gear then
         lastVisualGearByUID:= nil;
@@ -463,7 +484,7 @@ if (lastVisualGearByUID <> nil) and (lastVisualGearByUID^.uid = uid) then
 // search in an order that is more likely to return layers they actually use.  Could perhaps track statistically AddVisualGear in uScript, since that is most likely the ones they want
 for i:= 2 to 5 do
     begin
-    vg:= VisualGearLayers[i mod 4];
+    vg:= VisualGearLayersStart[i mod 4];
     while vg <> nil do
         begin
         if vg^.uid = uid then

@@ -27,6 +27,7 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 local Player = nil -- Pointer to hog created in: onGameInit
 local Target = nil -- Pointer to target hog
 local Objective = false -- Get to the target
+local Flawless = true -- Track flawless victory
 
 local TargetNumber = 0 -- The current target number
 local GrenadeThrown = false -- Used for the Boom Target
@@ -44,26 +45,31 @@ local GrenadeTimer = 0 -- Time after a grenade has been thrown
 
 local TargetPos = {} -- Table of targets
 
-local StartPos = { X = 742, Y = 290 }
+local StartPos = { X = 742, Y = 316 }
 
 --[[
 List of all targets (or "objectives"). The player has to complete them one-by-one and must always land safely afterwards.
 Some target numbers have names for easier reference.
 ]]
+-- Intro
 TargetPos[1] =  {
 	Targets = {{ X = 1027, Y = 217 }},
 	Ammo = { },
 	Message = loc("Here you will learn how to fly the flying saucer|and get so learn some cool tricks.") .. "|" ..
 	loc("Collect the first crate to begin!"),
 	MessageIcon = -amJetpack, }
+
+-- First flight, infinite fuel
 TargetPos[2] = {
 	Targets = {{ X = 1369, Y = 265 }},
 	Ammo = { [amJetpack] = 100 },
 	InfFuel = true,
 	MessageTime = 10000,
 	Message = loc("Get to the crate using your flying saucer!") .. "|" ..
-	loc("Press [Attack] (space bar by default) to start,|repeadedly tap the up, left and right movement keys to accelerate.") .. "|" ..
+	loc("Press [Attack] (space bar by default) to start,|repeatedly tap the up, left and right movement keys to accelerate.") .. "|" ..
 	loc("Try to land softly, as you can still take fall damage!"), }
+
+-- First flight, limited fuel
 TargetPos[3] = {
 	Targets = {{ X = 689, Y = 58 }},
 	Ammo = { [amJetpack] = 100 },
@@ -72,19 +78,23 @@ TargetPos[3] = {
 	loc("Tip: If you get stuck in this training, use \"Skip turn\" to restart the current objective.") }
 
 -- The Double Target
-local DoubleTarget = 4
 TargetPos[4] = {
-	Targets = { { X = 84, Y = -20 }, { X = 1980 , Y = -20 } },
+	Targets = { { X = 178, Y = -20 }, { X = 1962 , Y = -20 } },
 	Ammo = { [amJetpack] = 2 },
+	CratesContainAmmo = true,
 	MessageTime = 9000,
 	Message = loc("Now collect the 2 crates to the far left and right.") .. "|" ..
 	loc("You only have 2 flying saucers this time.") .. "|" ..
 	loc("Tip: You can change your flying saucer|in mid-flight by hitting the [Attack] key twice."), }
+
+-- Intermission
 TargetPos[5] = {
 	Targets = {{ X = 47, Y = 804 }},
 	Ammo = { [amJetpack] = 100 },
 	MessageTime = 5000,
 	Message = loc("Time for a more interesting stunt, but first just collect the next crate!"), }
+
+-- First Dive
 TargetPos[6] = {
 	Targets = {{ X = 604, Y = 871}},
 	MessageTime = 15000,
@@ -93,16 +103,18 @@ TargetPos[6] = {
 	loc("You only have one flying saucer this time.") .. "|" ..
 	loc("Beware, though, you will only be able to move slowly through the water.") .. "|" ..
 	loc("Warning: Never ever leave the flying saucer while in water!"),
-	Ammo = { [amJetpack] = 1 }, }
+	Ammo = { [amJetpack] = 1 },
+	Respawn = { X = 758, Y = 847, FaceLeft = false }, }
 
+-- Second Dive
 TargetPos[7] = { 
 	Targets = {{ X = 1884, Y = 704 }},
 	MessageTime = 6500,
-	Message = loc("Now dive just one more time and collect the next crate." .. "|" ..
-		loc("Tip: Don't remain for too long in the water, or you won't make it.")),
-	Ammo = { [amJetpack] = 1}, }
+	Message = loc("Now dive just one more time and collect the next crate.") .. "|" ..
+		loc("Tip: Don't remain for too long in the water, or you won't make it."),
+	Ammo = { [amJetpack] = 2 }, }
 
--- The Boom Target
+-- The Grenade Drop Target
 local BoomTarget = 8
 TargetPos[8] = {
 	Modifier = true, Func = function()
@@ -114,8 +126,8 @@ TargetPos[8] = {
 		loc("Step 2: Select your grenade.") .. "|" ..
 		loc("Step 3: Start flying and get yourself right above the target.") .. "|" ..
 		loc("Step 4: Drop your grenade by pressing the [Long jump] key.") .. "|" ..
-		loc("Step 5: Get away quickly and land safely anywhere." .. "| |" ..
-		loc("Note: We only give you grenades if you stay in your flying saucer.")), nil, 20000)
+		loc("Step 5: Get away quickly and land safely anywhere.") .. "| |" ..
+		loc("Note: We only give you grenades if you stay in your flying saucer."), nil, 20000)
 
 		SpawnBoomTarget()
 
@@ -128,7 +140,7 @@ TargetPos[8] = {
 
 	end,
 	Ammo = { [amJetpack] = 100 },
-	Respawn = { X = 2000, Y = 742 }, }
+	Respawn = { X = 2000, Y = 742, FaceLeft = true }, }
 
 -- The Launch Target
 local LaunchTarget = 9
@@ -140,12 +152,11 @@ TargetPos[9] = {
 		loc("You have to destroy two targets, but the previous technique would be very difficult or dangerous to use.") .. "|" ..
 		loc("So you are able to launch projectiles into your aiming direction, always at full power.") .."|"..
 		loc("To launch a projectile in mid-flight, hold [Precise] and press [Long jump].") .. "|" ..
-		loc("You can even change your aiming direction in mid-flight if you first hold [Precice] and then press [Up] or [Down].") .. "|" ..
+		loc("You can even change your aiming direction in mid-flight if you first hold [Precise] and then press [Up] or [Down].") .. "|" ..
 		loc("Tip: Changing your aim while flying is very difficult, so adjust it before you take off."),
 	Ammo = { [amJetpack] = 1, },
-	Respawn = { X = 1764, Y = 916 },
+	Respawn = { X = 1760, Y = 754, FaceLeft = true },
 	ExtraFunc = function()
-		HogTurnLeft(Player, true)
 		if SaucerGear ~= nil then
 			AddAmmo(Player, amBazooka, 2)
 		else
@@ -165,7 +176,7 @@ TargetPos[10] = {
 	loc("Based on what you've learned, destroy the target on the girder and as always, land safely!"), 
 	Targets = {{ X = 1200, Y = 930, Type = gtTarget }},
 	Ammo = { [amJetpack] = 1, },
-	Respawn = { X = 1027, Y = 217 },
+	Respawn = { X = 1027, Y = 217, FaceLeft = true },
 	ExtraFunc = function()
 		if SaucerGear ~= nil then
 			AddAmmo(Player, amBazooka, 1)
@@ -174,6 +185,7 @@ TargetPos[10] = {
 		end
 		BazookasLeft = 1
 	end }
+-- Final target / Sandbox
 TargetPos[11] = {
 	Targets = {{ X = 742, Y = 290 }},
 	MessageTime = 5000,
@@ -182,9 +194,10 @@ TargetPos[11] = {
 	loc("Collect or destroy the final crate to finish the training."),
 	Ammo = { [amJetpack] = 100, [amGrenade] = 100, [amBazooka] = 100 },
 	InfFuel = true, }
+-- Outro
 TargetPos[12] = { Modifier = true, Func = function()
 	Objective = true
-	AddCaption(loc("Training complete!"), 0xFFFFFFFF, capgrpGameState)
+	AddCaption(loc("Training complete!"), capcolDefault, capgrpGameState)
 	Info(loc("Training complete!"), loc("Good bye!"), 4, 5000)
 
 	if SaucerGear ~= nil then
@@ -192,13 +205,18 @@ TargetPos[12] = { Modifier = true, Func = function()
 	end
 	SetState(Player, band(GetState(Player), bnot(gstHHDriven)))
 	SetState(Player, bor(GetState(Player), gstWinner))
-	PlaySound(sndVictory, Player)
+	if Flawless then
+		PlaySound(sndFlawless, Player)
+	else
+		PlaySound(sndVictory, Player)
+	end
+	SaveMissionVar("Won", "true")
 
 	SendStat(siGameResult, loc("You have finished the Flying Saucer Training!"))
 	SendStat(siCustomAchievement, loc("Good job!"))
-	SendStat(siPlayerKills, "0", loc("Hogonauts"))
+	SendStat(siPlayerKills, "0", GetHogTeamName(Player))
 
-	TurnTimeLeft = 0
+	EndTurn(true)
 	EndGame()
 end,
 }
@@ -234,18 +252,22 @@ function SpawnTargets()
 	for i=1,#TargetPos[TargetNumber].Targets do
 		if TargetGears[i] == nil then
 			SpawnTarget(TargetPos[TargetNumber].Targets[i].X, TargetPos[TargetNumber].Targets[i].Y,
-				TargetPos[TargetNumber].Targets[i].Type, i)
+				TargetPos[TargetNumber].Targets[i].Type, i, TargetPos[TargetNumber].CratesContainAmmo )
 		end
 	end
 end
 
-function SpawnTarget( PosX, PosY, Type, ID )
+function SpawnTarget( PosX, PosY, Type, ID, ContainsAmmo )
 	if Type ~= nil and Type ~= gtCase then
 		if Type == gtTarget then
 			TargetGears[ID] = AddGear(PosX, PosY, gtTarget, 0, 0, 0, 0)
 		end
 	else
-		TargetGears[ID] = SpawnFakeUtilityCrate(PosX, PosY, false, false)
+		if ContainsAmmo == true then
+			TargetGears[ID] = SpawnSupplyCrate(PosX, PosY, amJetpack)
+		else
+			TargetGears[ID] = SpawnFakeUtilityCrate(PosX, PosY, false, false)
+		end
 	end
 	TargetsRemaining = TargetsRemaining + 1
 end
@@ -267,6 +289,7 @@ function AutoSpawn() -- Auto-spawn the next target after you've obtained the cur
 	else
 		InfFuel = false
 	end
+	UpdateInfFuel()
 
 	-- Func (if present) will be run instead of the ordinary spawning handling
 	if TargetPos[TargetNumber].Modifier then -- If there is a modifier, run the function
@@ -291,7 +314,7 @@ function AutoSpawn() -- Auto-spawn the next target after you've obtained the cur
 	SpawnTargets()
 
 	if TargetNumber > 1 then
-		AddCaption(loc("Next target is ready!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Next target is ready!"), capcolDefault, capgrpMessage2)
 	end
 end
 
@@ -327,12 +350,13 @@ function ResetCurrentTarget()
 
 	CleanUpGears()
 
-	local X, Y
+	local X, Y, FaceLeft
 	if TargetNumber == 1 then
 		X, Y = StartPos.X, StartPos.Y
 	else
 		if TargetPos[TargetNumber-1].Modifier or TargetPos[TargetNumber-1].Respawn ~= nil then
 			X, Y = TargetPos[TargetNumber-1].Respawn.X, TargetPos[TargetNumber-1].Respawn.Y
+			FaceLeft = TargetPos[TargetNumber-1].Respawn.FaceLeft
 		else
 			X, Y = TargetPos[TargetNumber-1].Targets[1].X, TargetPos[TargetNumber-1].Targets[1].Y
 		end
@@ -356,15 +380,19 @@ function ResetCurrentTarget()
 	else
 		InfFuel = false
 	end
+	UpdateInfFuel()
 
 	SetGearPosition(Player, X, Y)
+	if FaceLeft ~= nil then
+		HogTurnLeft(Player, FaceLeft)
+	end
 end
 
 function onGameInit()
 	Seed = 1
 	GameFlags = gfInfAttack + gfOneClanMode + gfSolidLand + gfDisableWind
-	TurnTime = 2000000 --[[ This rffectively hides the turn time; a turn time above 1000s is not displayed.
-				We will also ensure this timer always stays above 999s later ]]
+	TurnTime = MAX_TURN_TIME --[[ This effectively hides the turn time; a turn time above 1000s is not displayed.
+			   	     We will also ensure this timer always stays above 999s later ]]
 	CaseFreq = 0
 	MinesNum = 0
 	Explosives = 0
@@ -374,11 +402,9 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Team name is a pun on “hedgehog” and “astronauts”
-	AddTeam( loc( "Hogonauts" ), 0xDDDD00, "earth", "Earth", "Default", "cm_galaxy" )
+	AddMissionTeam(-9)
 
-	-- Hedgehog name is a pun on “Neil Armstrong”
-	Player = AddHog( loc( "Neil Hogstrong" ), 0, 1, "NoHat" )
+	Player = AddMissionHog(1)
 	SetGearPosition( Player, StartPos.X, StartPos.Y)
 	SetEffect( Player, heResurrectable, 1 )
 end
@@ -390,8 +416,9 @@ function onGameStart()
 	PlaceGirder(1257, 204, 6)
 
 	-- The upper girders
-	PlaceGirder(84, 16, 0)
-	PlaceGirder(1980, 16, 0)
+	PlaceGirder(84, 16, 4)
+	PlaceGirder(243, 16, 4)
+	PlaceGirder(1967, 16, 4)
 
 	-- The lower girder platform at the water pit
 	PlaceGirder(509, 896, 4)
@@ -413,9 +440,9 @@ function onGameStart()
 end
 
 function onAmmoStoreInit()
-	SetAmmo(amJetpack, 0, 0, 0, 0)
-	SetAmmo(amGrenade, 0, 0, 0, 0)
-	SetAmmo(amBazooka, 0, 0, 0, 0)
+	SetAmmo(amJetpack, 0, 0, 0, 1)
+	SetAmmo(amGrenade, 0, 0, 0, 1)
+	SetAmmo(amBazooka, 0, 0, 0, 1)
 
 	-- Added for resetting current target/objective when player is stuck somehow
 	SetAmmo(amSkip, 9, 0, 0, 0)
@@ -430,6 +457,10 @@ function onGearAdd(Gear)
 		if (TargetNumber == LaunchTarget or TargetNumber == UnderwaterAttackTarget) and BazookasLeft > 0 then
 			AddAmmo(Player, amBazooka, BazookasLeft)
 		end
+		UpdateInfFuel()
+		-- If player starts using saucer, the player probably finished reading and the mission panel
+		-- would just get in the way. So we hide it!
+		HideMission()
 	end
 	if GetGearType(Gear) == gtGrenade then
 		GrenadeThrown = true
@@ -454,7 +485,7 @@ function onGearDelete(Gear)
 		if TargetsRemaining <= 0 then
 			if TargetNumber == BoomTarget or not HasHedgehogLandedYet() then
 				if SaucerGear then
-					AddCaption(loc("Objective completed! Now land safely."), 0xFFFFFFFF, capgrpMessage2)
+					AddCaption(loc("Objective completed! Now land safely."), capcolDefault, capgrpMessage2)
 				end
 				Check = true
 				CheckTimer = 500
@@ -476,7 +507,8 @@ function onGearDelete(Gear)
 			AddAmmo(Player, amBazooka, 0)
 		end
 	end
-	if GetGearType(Gear) == gtCase and GetGearType(Player) ~= nil then
+	-- Fake crate collected
+	if GetGearType(Gear) == gtCase and band(GetGearMessage(Gear), gmDestroy) ~= 0 and band(GetGearPos(Gear), 0x8) ~= 0 then
 		PlaySound(sndShotgunReload)
 	end
 	if Gear == Barrels[1] then
@@ -484,19 +516,21 @@ function onGearDelete(Gear)
 	end
 	if Gear == Barrels[2] then
 		Barrels[2] = nil
-		AddCaption(loc("Kaboom!"), 0xFFFFFFFF, capgrpMessage)
+		AddCaption(loc("Kaboom!"), capcolDefault, capgrpMessage)
 	end
 end
 
 
 
 function onNewTurn()
-	SetWeapon(amJetpack)
+	if GetAmmoCount(CurrentHedgehog, amJetpack) > 0 then
+		SetWeapon(amJetpack)
+	end
 end
 
 function onGameTick20()
 	if (TurnTimeLeft < 1500000 and not Objective) then
-		TurnTimeLeft = TurnTime
+		SetTurnTimeLeft(TurnTime)
 	end
 	if Check then
 		CheckTimer = CheckTimer - 20
@@ -508,7 +542,7 @@ function onGameTick20()
 			end
 		end
 	end
-	if GrenadeExploded and TargetNumber == BoomTarget then
+	if GrenadeExploded and TargetNumber == BoomTarget and GetHealth(Player) then
 		GrenadeTimer = GrenadeTimer + 20
 		if GrenadeTimer > 1500 then
 			GrenadeTimer = 0
@@ -516,43 +550,45 @@ function onGameTick20()
 			GrenadeExploded = false
 			if SaucerGear and TargetNumber == BoomTarget and TargetsRemaining > 0 then
 				PlaySound(sndShotgunReload)
-				AddCaption(loc("+1 Grenade"), 0xDDDD00FF, capgrpAmmoinfo)
+				AddCaption(loc("+1 Grenade"), GetClanColor(GetHogClan(Player)), capgrpAmmoinfo)
 				AddAmmo(Player, amGrenade, 1)
 			end
 		end
 	end
-	ResetFuel()
 end
 
--- Used to ensure infinite fuel
-function ResetFuel()
-	if SaucerGear and InfFuel then
-		SetHealth(SaucerGear, 2000)
+function UpdateInfFuel()
+	if SaucerGear then
+		if InfFuel then
+			SetHealth(SaucerGear, JETPACK_FUEL_INFINITE)
+		elseif GetHealth(SaucerGear == JETPACK_FUEL_INFINITE) then
+			SetHealth(SaucerGear, 2000)
+		end
 	end
 end
 
-onUp = ResetFuel
-onLeft = ResetFuel
-onRight = ResetFuel
-
 function onGearDamage(Gear)
 	if Gear == Player then
+		Flawless = false
 		CleanUpGears()
 		GrenadeThrown = false
 		Check = false
 	end
 end
 
-function onGearResurrect(Gear)
+function onGearResurrect(Gear, VGear)
 	if Gear == Player then
-		AddCaption(loc("Oh no! You have died. Try again!"), 0xFFFFFFFF, capgrpMessage2)
+		Flawless = false
+		AddCaption(loc("Oh no! You have died. Try again!"), capcolDefault, capgrpMessage2)
 		ResetCurrentTarget()
+		if VGear then
+			SetVisualGearValues(VGear, GetX(Gear), GetY(Gear))
+		end
 	end
 end
 
-function onHogAttack(ammoType)
-	if ammoType == amSkip then
-		AddCaption(loc("Try again!"), 0xFFFFFFFF, capgrpMessage2)
-		ResetCurrentTarget()
-	end
+function onSkipTurn()
+	Flawless = false
+	AddCaption(loc("Try again!"), capcolDefault, capgrpMessage2)
+	ResetCurrentTarget()
 end

@@ -4,44 +4,87 @@
      Do not escape characters or use the CDATA tag. -->
 <tips>
     <tip>Valitse sama väri kaverisi kanssa pelataksesi samassa joukkueessa. Kumpikin ohjaa omia siilejään, mutta voitatte ja häviätte yhdessä.</tip>
-    <tip>Jotkut aseet tekevät vain vähän vahinkoa, mutta voivat olla tuhoisampia oikeassa tilanteessa. Kokeile ampua useampi siili veteen Desert Eaglella.</tip>
-    <tip>Jos et tiedä mitä tehdä etkä halua tuhlata ammuksia, jätä vuoro väliin. Mutta älä anna ajan kulua liikaa koska Äkkikuolema koittaa ennemmin tai myöhemmin!</tip>
-    <tip>Jos haluat estää muita käyttämästä nimimerkkiäsi virallisella palvelimella, rekisteröi tunnus osoitteessa http://www.hedgewars.org/.</tip>
-    <tip>Kyllästyttääkö normaali peli? Kokeila tehtäviä - Ne tarjoaa erilaisia pelitapoja riippuen valinnasta.</tip>
-    <tip>Oletuksena viimeisin peli nauhoitetaan demoksi. Valitse 'Demot' vasemmasta alakulmasta katsoaksesi ja hallitaksesi niitä.</tip>
-    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma jota me luomme vapaa-aikanamme. Jos sinulla on ongelmia, kysy keskustelualueilta apua, mutta älä odota 24/7-tukea!</tip>
-    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma jota me luomme vapaa-aikanamme. Jos pidät siitä, voit auttaa meitä pienellä lahjoituksella tai omaa työllä!</tip>
-    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma jota me luomme vapaa-aikanamme. Jaa sitä perheesi ja ystäviesi kesken miten haluat!</tip>
-    <tip>Toisinaan järjestetään virallisia turnauksia. Tulevista tapahtumista tiedotetaan osoitteessa http://www.hedgewars.org/ muutama päivä etukäteen.</tip>
+    <tip>Jotkut aseet tekevät vain vähän vahinkoa, mutta voivat olla tehokkaita sopivassa tilanteessa. Kokeile ampua useampi siili veteen Desert Eaglella.</tip>
+    <tip>Jos et tiedä mitä tehdä, etkä halua tuhlata ammuksia, jätä vuoro väliin. Mutta älä viivyttele liikaa koska Äkkikuolema koittaa ennemmin tai myöhemmin!</tip>
+    <tip>Jos haluat estää muita käyttämästä nimimerkkiäsi virallisella palvelimella, rekisteröi tunnus osoitteessa <a href="https://www.hedgewars.org/">www.hedgewars.org</a></tip>
+    <tip>Kyllästyttääkö normaali peli? Kokeile operaatioita - Ne tarjoaa erilaisia pelitilanteita.</tip>
+    <tip>Oletuksena viimeisin peli nauhoitetaan muistiin. Klikkaa filmikameran kuvaa nähdäksesi tallennetut pelit. Filmikela-kuvakkeesta aukeaa nauhoitetut videoklipit.</tip>
+    <tip>Hedgewars on avointa lähdekoodia ja ilmainen peli, jota me kehitämme vapaa-aikanamme. Jos sinulla on ongelmia, kysy keskustelualueilta apua, mutta älä vaadi 24/7-tukea!</tip>
+    <tip>Hedgewars on avointa lähdekoodia ja ilmainen peli, jota me kehitämme vapaa-aikanamme. Jos pidät siitä, voit auttaa meitä pienellä lahjoituksella tai omaa työllä!</tip>
+    <tip>Hedgewars on avointa lähdekoodia ja ilmainen peli, jota me kehitämme vapaa-aikanamme. Pelaa sitä ystäviesi kanssa miten paljon haluat!</tip>
+    <tip>Toisinaan järjestetään virallisia turnauksia. Tulevista tapahtumista tiedotetaan osoitteessa <a href="https://www.hedgewars.org/">www.hedgewars.org</a> muutama päivä etukäteen.</tip>
     <tip>Hedgewars on saatavilla monilla kielillä. Jos oman kielinen käännös puuttuu tai on vanhentunut, ota yhteyttä!</tip>
     <tip>Hedgewars toimii useilla eri käyttöjärjestelmillä, kuten Microsoft Windowsissa, Mac OS X:ssä ja Linuxissa.</tip>
-    <tip>Muista että voit aina luoda oman pelisi paikallisesti ja verkkopelissä. Et ole rajoitettu yksinkertaiseen peliin.</tip>
+    <tip>Voit aina luoda oman pelisi paikallisesti ja verkkopelissä. Et ole rajoitettu yksinkertaiseen peliin.</tip>
     <tip>Pelatessa sinun pitäisi pitää lyhyt tauko vähintään kerran tunnissa.</tip>
-    <tip>Jos näytönohjaimesi ei tarjoa laitteistokiihdytettä OpenGL:ää, kokeile heikennetyn laadun tilaa parantaaksesi suorituskykyä.</tip>
+    <tip>Jos näytönohjaimesi ei tarjoa laitteistokiihdytettyä OpenGL:ää, kokeile pudottaa grafiikan laatua parantaaksesi suorituskykyä.</tip>
     <tip>Me olemme avoimia ehdotuksille ja rakentavalle palautteelle. Jos et pidä jostain tai sinulla on loistava idea, kerro meille!</tip>
     <tip>Erityisesti verkossa pelattaessa ole kohtelias ja muista että alaikäisiä saattaa myös olla pelaamassa.</tip>
-    <tip>Erityispelimoodit kuten 'Vampyrismi' ja 'Karma' mahdollistavat kokonaan uusien taktiikoiden kehittämisen. Kokeile niitä muokatussa pelissä!</tip>
-    <tip>Sinun ei ikinä tulisi asentaa Hedgewarsia tietokoneille joita et omista (koulu, yliopisto, työpaikka jne.). Ole hvä ja pyydä vastuuhenkilöä tekemään se!</tip>
-    <tip>Hedgewars voi olla täydellinen peli tauoille. Mutta varmista ettet lisää liian montaa siiltä ta käytä liian suurta karttaa. Ajan ja terveyden vähentäminen voi myös auttaa.</tip>
+    <tip>Erityispelimoodit kuten 'Vampirismi' ja 'Karma' mahdollistavat kokonaan uusien taktiikoiden kehittämisen. Kokeile niitä muokatussa pelissä!</tip>
+    <tip>Sinun ei ikinä tulisi asentaa Hedgewarsia tietokoneille joita et omista (koulu, yliopisto, työpaikka jne.). Ole hyvä ja pyydä vastuuhenkilöä tekemään se!</tip>
+    <tip>Hedgewars voi olla täydellinen peli tauoille. Varmista, ettet pelaa liian monella siilillä tai liian suurella kartalla. Kierrosajan tai terveyden vähentäminen auttaa myös.</tip>
     <tip>Yhtään siiliä ei vahingoitettu tämän pelin tekemisen aikana.</tip>
-    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma jota me luomme vapaa-aikanamme. Jos joku myi sinulle tämän pelin, koita saada rahasi takaisin!</tip>
+    <tip>Hedgewars on avointa lähdekoodia ja ilmainen ohjelma, jota me luomme vapaa-aikanamme. Jos joku myi sinulle tämän pelin, koita saada rahasi takaisin!</tip>
     <tip>Yhdistä yksi tai useampi peliohjain ennen pelin käynnistämistä liittääksesi niiden kontrollit omaan joukkueeseesi.</tip>
-    <tip>Luo käyttäjätili osoitteessa %1 estääksesi muita käyttämästä suosikkinimimerkkiäsi pelatessasi virallisella palvelimella.</tip>
     <tip>Jos näytönohjaimesi ei tue laitteistokiihdytettyä OpenGL:ää, kokeile päivittää ajurit.</tip>
-    <tip>Hyppyjä on saatavilla kolmea erilaista. Napauta [korkea hyppy]-nappai kahdesti tehdäksesi todella korkean/taaksepäin hypyn.</tip>
+    <tip>Hyppyjä on saatavilla kolmea erilaista. Napsauta [korkea hyppy]-nappia kahdesti tehdäksesi korkean takaperinhypyn.</tip>
     <tip>Pelkäätkö että putoat kielekkeeltä? Pidä [tarkkuus]-näppäintä pohjassa kääntyäksesi [vasemmalle] ja [oikealle] liikkumatta.</tip>
-    <tip>Jotkut aseet vaativat erityisstrategiaa tai todella paljon harjoittelua, joten älä anna periksi vaikka et kerran osuisikaan.</tip>
-    <tip></tip>
+    <tip>Jotkut aseet vaativat erityisstrategiaa tai todella paljon harjoittelua, joten älä anna periksi, vaikka et ensikerralla osuisikaan.</tip>
     <tip>Vanha Limburger-juusto aiheuttaa vain pienen räjähdyksen, mutta tuulen vaikuttama hajupilvi voi myrkyttää suuren määrän siiliä kerralla.</tip>
-    <tip>Pianoisku on vahingollisin ilmaisku. Menetät siilen joka sen esittää, joten sillä on myös suuri huono puoli.</tip>
-    <tip>Tarttuvat miinat ovat täydellinen työkalu luomaan pieniä ketjureaktioita jotka vie vihollissiilit kauheisiin tilanteisiin...tai veteen.</tip>
-    <tip>Vasara on tehokkaimmillaan silloilla ja palkeilla. Lyödyt siilit iskeytyvät maan läpi.</tip>
-    <tip>Jos olet jumissa vihollissiilin takana, käytä vasaraa vapauttaaksesi itsesi ilman että vahingoidut räjädyksen voimasta.</tip>
-    <tip>Kakun pisin mahdollinen kulkumatka riippuu maastosta. Käytä [hyökkäystä] räjäyttääksesi sen aikaisemmin.</tip>
-    <tip>Liekinheitin on ase mutta sitä voi käyttää myös tunneleiden kaivamiseen.</tip>
+    <tip>Pianoisku on vahingollisin ilmaisku. Menetät siilin joka sen esittää, joten käytä sitä harkiten.</tip>
+    <tip>Tarttuvat miinat ovat täydellinen työkalu luomaan pieniä ketjureaktioita jotka vie vihollissiilit kauheisiin tilanteisiin... tai veteen.</tip>
+    <tip>Vasara on tehokkaimmillaan silloilla ja palkeilla. Lyödyt siilit iskeytyvät ohuen maan läpi.</tip>
+    <tip>Jos olet jumissa vihollissiilin takana, käytä vasaraa vapauttaaksesi itsesi ilman että vahingoitut räjähdyksen voimasta.</tip>
+    <tip>Kakun pisin mahdollinen kulkumatka riippuu maastosta. Paina [hyökkäys]-nappia räjäyttääksesi sen aikaisemmin.</tip>
+    <tip>Liekinheitin on tavallinen ase, mutta sitä voi käyttää myös tunneleiden kaivamiseen.</tip>
     <tip>Haluatko tietää ketkä ovat pelin takana? Klikkaa Hedgewars-logoa päävalikossa nähdäksesi tekijäluettelon.</tip>
-    <tip>Piirrä vapaasti omia hautoja, hattuja, lippuja ja jopa karttoja ja teemoja! Mutta huomaa että sinun pitää jakaa ne jossain käyttääksesi niitä verkossa.</tip>
+    <tip>Piirrä vapaasti omia hattuja, lippuja ja jopa karttoja ja teemoja! Huomaa kuitenkin, että ne pitää jakaa etukäteen jotta ne toimivat verkkopelissä.</tip>
     <tip>Haluatko todella pitää tiettyä hattua? Lahjoita meille niin saat yksinoikeudella vapaavalintaisen hatun!</tip>
-    <tip>Pidä näytönohjaimesi ajurit ajantasall välttääksesi ongelmat pelin pelaamisessa.</tip>
+    <tip>Pidä näytönohjaimesi ajurit ajantasalla jotta peli pyörii sulavasti ja ongelmitta.</tip>
     <tip>Löydät Hedgewars-asetustiedostot hakemistosta "Omat tiedostot\Hedgewars". Ota varmuuskopio tai ota ne mukaasi, mutta älä muokkaa niitä käsin.</tip>
+    <tip>Seuraa Hedgewarsia <a href="https://www.facebook.com/Hedgewars">Facebookissa</a> ja <a href="https://twitter.com/hedgewars">Twitterissä</a>.</tip>
+    <tip>Kruunu vai klaava? Kirjoita "/rnd" aulassa ja ota selvää. Myös "/rnd kivi paperi sakset" toimii! </tip>
+    <tip>Pelitiedostot (tallennukset ja demot) voidaan assosioida pelin kanssa, jolloin ne aukeavat suoraan verkko- ja tiedostoselaimesta.</tip>
+    <tip>Suutarit miinat eivät ole harmittomia: ne räjähtävät kovasta iskusta!</tip>
+    <tip>Rakkaus polttaa! Viehätys sulattaa jäätyneet siilit kantaman sisällä.</tip>
+    <tip>Tynnyristä tuleva savu kertoo sen olevan räjähtämäisillään. Mitä tummempi savu, sitä pienempi kipinä laukaisee sen.</tip>
+    <tip>Tynnyreillä on pelin alussa 60 terveyspistettä, ja ottavat vahinkoa samoin kuin siilet. Ne räjähtävät, kun terveys menee nollaan.</tip>
+    <tip>Tarvitsetko lisää kimpoamisvoimaa? Kimpoamisen voimakkuutta voi säätää numeronäppäimillä 1-5 kun pitää [tarkkuus]-näppäintä pohjassa.</tip>
+    <tip>Unohditko millä säännöillä peliä pelataan? Paina tauko- tai poistumisnäppäintä niin näet ne uudestaan.</tip>
+    <tip>Muitakin asioita kuin siiliä voi lyödä, piiskata ja vasaroida.</tip>
+    <tip>Miinojen ajastin on kolme sekuntia ellei toisin mainita.</tip>
+    <tip>Kuningaspelissä, kuningas aloittaa vahvempana kuin muut sekä kestää enemmän vahinkoa.</tip>
+    <tip>Kuningaspelissä kuningas ottaa vahinkoa joka vuorolla kun alaisia ei enää ole.</tip>
+    <tip>Piiskalla pystyy lyömään siiliä ja esineitä ohuen seinän läpi.</tip>
+    <tip>Veitsi tuottaa sitä enemmän vahinkoa, mitä nopeammin se liikkuu.</tip>
+    <tip>Kakun voi pudottaa alas jyrkänteeltä, mutta sillon täytyy olla todella lähellä reunaa, joten ole varovainen sen kanssa.</tip>
+    <tip>Köyden avulla voi liikuttaa muita siiliä heittäytymällä niitä kohti.</tip>
+    <tip>Älä pysähdy jäiseen ylämäkeen tai liukastut ja putoat. Voit pitää [tarkkuus]-nappia pohjassa sen estämiseksi.</tip>
+    <tip>Lumikartoissa lunta sataa tasaiseen tahtiin muodostaen kekoja mitkä saattaa tukkia ohuet käytävät.</tip>
+    <tip>Ole tarkkana lumi- ja joulukartoissa, koska sillat ovat jäisen liukkaita.</tip>
+    <tip>Riippuu aseesta, paljonko ampumisen jälkeen saa aikaa siirtymiseen tai piiloutumiseen. Joillain aseilla tätä aikaa ei ole, joten vuorosi loppuu heti ampumisen jälkeen.</tip>
+    <tip>Polttopullo räjäyttää tynnyrin välittömästi kosketuksesta.</tip>
+    <tip>Pienellä taidolla voit kumota päälläsi olevan siilen loikkaamalla sen alta.</tip>
+    <tip>Sopivasti ajoitetun karatepotkun, katuporan tai siniaaltoaseen käyttö voi kumota korkean pudotuksen aiheuttaman vahingon.</tip>
+    <tip>Siili ei ilmassa ollessaan osu ammuksiin.</tip>
+    <tip>Poraraketin, pistoolin ja kiväärin jättämistä rei'istä voi ampua läpi portaaliaseella jos tähtää riittävän tarkasti.</tip>
+    <tip>Terveyspakkaus parantaa siilen saamat taudit.</tip>
+    <tip>Laatikoita voi kerätä myös radio-ohjattavalla lentokoneella, ninjapotkulla, katuporalla sekä kamikazella.</tip>
+    <tip>Laatikot räjähtävät puhalluslampusta, joten ole tarkkana niiden luona!</tip>
+    <tip>Leijuvat miinat pysyvät paikallaan kierroksen ensimmäiset viisi sekuntia.</tip>
+    <tip>Pysy turvallisella etäisyydellä leijuvista miinoista! Kun ne alkavat seurata, niistä on vaikea päästä eroon ilman sopivia työkaluja.</tip>
+    <tip>Leijuvat miinat räjähtävät neljäsosan siitä ajasta mitä tavalliset miinat.</tip>
+    <tip>Kun veitsi saa yli 30 vahinkopistettä, on mahdollista että se putoaa pois. Tämä todennäköisyys kasvaa, mitä enemmän vahinkopisteitä se saa.</tip>
+    <tip>Tarkista aina tuuli, koska liekit sekä jotkin aseet lentävät sen ohjaamina.</tip>
+    <tip>Puhalluslampulla voi siirtää siiliä sekä pitkällä ajastimella varustettuja miinoja.</tip>
+    <tip>Tynnyri ja puhalluslamppu ovat yhdistelmä varmaan tuhoon!</tip>
+    <windows-only>
+        <tip>Hedgewars-asetustiedostot ovat kansiossa "Tiedostot\Hedgewars". Varmuuskopioi ja siirrä tiedostot mukanasi, mutta älä muokkaa niitä käsin.</tip>
+    </windows-only>
+    <mac-only>
+        <tip>You can find your Hedgewars configuration files under “Library/Application Support/Hedgewars” in your home directory. Create backups or take the files with you, but don’t edit them by hand.</tip>
+    </mac-only>
+    <linux-only>
+        <tip>You can find your Hedgewars configuration files under “.hedgewars” in your home directory. Create backups or take the files with you, but don’t edit them by hand.</tip>
+    </linux-only>
 </tips>

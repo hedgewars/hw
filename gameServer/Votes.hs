@@ -28,6 +28,7 @@ import qualified Data.Map as Map
 import Data.Maybe
 import Control.Applicative
 -------------------
+import Consts
 import Utils
 import CoreTypes
 import HandlerUtils
@@ -42,16 +43,16 @@ voted forced vote = do
 
     case voting rm of
         Nothing -> 
-            return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "There's no voting going on"]]
+            return [Warning $ loc "There's no voting going on."]
         Just voting ->
             if (not forced) && (uid `L.notElem` entitledToVote voting) then
                 return []
             else if (not forced) && (uid `L.elem` map fst (votes voting)) then
-                return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted"]]
+                return [Warning $ loc "You already have voted."]
             else if forced && (not $ isAdministrator cl) then
                 return []
             else
-                ((:) (AnswerClients [sendChan cl] ["CHAT", "[server]", loc "Your vote counted"]))
+                ((:) (AnswerClients [sendChan cl] ["CHAT", nickServer, loc "Your vote has been counted."]))
                 <$> (actOnVoting $ voting{votes = (uid, vote):votes voting})
 
     where
@@ -73,7 +74,7 @@ voted forced vote = do
     closeVoting = do
         chans <- roomClientsChans
         return [
-            AnswerClients chans ["CHAT", "[server]", loc "Voting closed"]
+            AnswerClients chans ["CHAT", nickServer, loc "Voting closed."]
             , ModifyRoom (\r -> r{voting = Nothing})
             ]
 
@@ -95,23 +96,20 @@ voted forced vote = do
         let rs = Map.lookup roomSave (roomSaves rm)
         case rs of
              Nothing -> return []
-             Just (mp, p) -> do
+             Just (location, mp, p) -> do
                  cl <- thisClient
                  chans <- roomClientsChans
-                 let a = map (replaceChans chans) $ answerFullConfigParams cl mp p
-                 return $ 
-                    (ModifyRoom $ \r -> r{params = p, mapParams = mp})
-                    : SendUpdateOnThisRoom
-                    : a
-        where
-            replaceChans chans (AnswerClients _ msg) = AnswerClients chans msg
-            replaceChans _ a = a
+                 return $
+                    [ModifyRoom $ \r -> r{params = p, mapParams = mp}
+                    , AnswerClients chans ["CHAT", nickServer, location]
+                    , SendUpdateOnThisRoom
+                    , LoadGhost location]
     act (VotePause) = do
         rm <- thisRoom
         chans <- roomClientsChans
         let modifyGameInfo f room  = room{gameInfo = fmap f $ gameInfo room}
         return [ModifyRoom (modifyGameInfo $ \g -> g{isPaused = not $ isPaused g}),
-                AnswerClients chans ["CHAT", "[server]", loc "Pause toggled"],
+                AnswerClients chans ["CHAT", nickServer, loc "Pause toggled."],
                 AnswerClients chans ["EM", toEngineMsg "I"]]
     act (VoteNewSeed) =
         return [SetRandomSeed]
@@ -121,7 +119,7 @@ voted forced vote = do
         let answers = concatMap (\t -> 
                 [ModifyRoom $ modifyTeam t{hhnum = h}
                 , AnswerClients chans ["HH_NUM", teamname t, showB h]]
-                ) $ if length curteams * h > 48 then [] else curteams
+                ) $ if length curteams * h > cMaxHHs then [] else curteams
             ;
             curteams =
                 if isJust $ gameInfo rm then
@@ -146,7 +144,7 @@ startVote vt = do
     else
         return [
             ModifyRoom (\r -> r{voting = Just (newVoting vt){entitledToVote = uids}})
-            , AnswerClients chans ["CHAT", "[server]", B.concat [loc "New voting started", ": ", voteInfo vt]]
+            , AnswerClients chans ["CHAT", nickServer, B.concat [loc "New voting started", ": ", voteInfo vt]]
             , ReactCmd ["VOTE", "YES"]
         ]
 
@@ -165,7 +163,7 @@ checkVotes = do
                      modifyRoom rnc (\r -> r{voting = if voteTTL rv == 0 then Nothing else Just rv{voteTTL = voteTTL rv - 1}}) ri
                      if voteTTL rv == 0 then do
                         chans <- liftM (map sendChan) $ roomClientsM rnc ri
-                        return [AnswerClients chans ["CHAT", "[server]", loc "Voting expired"]]
+                        return [AnswerClients chans ["CHAT", nickServer, loc "Voting expired."]]
                         else
                         return []
                  Nothing -> return []
@@ -176,4 +174,4 @@ voteInfo (VoteKick n) = B.concat [loc "kick", " ", n]
 voteInfo (VoteMap n) = B.concat [loc "map", " ", n]
 voteInfo (VotePause) = B.concat [loc "pause"]
 voteInfo (VoteNewSeed) = B.concat [loc "new seed"]
-voteInfo (VoteHedgehogsPerTeam i) = B.concat [loc "number of hedgehogs in team", " ", showB i]
+voteInfo (VoteHedgehogsPerTeam i) = B.concat [loc "hedgehogs per team: ", " ", showB i]

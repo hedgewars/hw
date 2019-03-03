@@ -14,9 +14,14 @@ interface
 uses uConsts;
 {.$DEFINE LUA_GETHOOK}
 
-const LuaLibName = {$IFDEF LUA_INTERNAL}'libhwlua'{$ELSE}'liblua'{$ENDIF};
+const LuaLibName =
+{$IFDEF LUA_INTERNAL}
+    {$IFDEF WIN32_VCPKG}'hwlua'{$ELSE}'libhwlua'{$ENDIF}
+{$ELSE}
+    {$IFDEF WIN32_VCPKG}'lua'{$ELSE}'liblua'{$ENDIF}
+{$ENDIF};
 
-{$IFNDEF WIN32}
+{$IFNDEF WINDOWS}
     {$linklib lua}
 {$ENDIF}
 
@@ -114,7 +119,7 @@ const
 (*
 ** $Id: lua.h,v 1.216 2006/01/10 12:50:13 roberto Exp $
 ** Lua - An Extensible Extension Language
-** Lua.org, PUC-Rio, Brazil (http://www.lua.org)
+** Lua.org, PUC-Rio, Brazil (https://www.lua.org)
 ** See Copyright Notice at the end of this file
 *)
 
@@ -805,7 +810,7 @@ procedure lua_getref(L : Plua_State; ref : LongInt);
 implementation
 
 uses
-  SysUtils;
+  uUtils;
 
 (*****************************************************************************)
 (*                            luaconfig.h                                    *)

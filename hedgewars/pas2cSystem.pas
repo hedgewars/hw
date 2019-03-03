@@ -7,6 +7,7 @@ type
     LongWord = uinteger;
     Cardinal = uinteger;
     PtrInt = integer;
+    SizeInt = PtrInt;
     Word = uinteger;
     Byte = integer;
     SmallInt = integer;
@@ -14,6 +15,7 @@ type
     Int64 = integer;
     QWord = uinteger;
     GLint = integer;
+    GLsizei = integer;
     GLuint = integer;
     GLenum = integer;
 
@@ -119,7 +121,7 @@ var
 
     _strconcat, _strappend, _strprepend, _chrconcat : function : string;
     _strcompare, _strncompare, _strcomparec, _strncompareA : function : boolean;
-    _strconcatA, _strappendA : function : ansistring;
+    _strconcatA, _strappendA, _strprependA: function : ansistring;
 
     png_structp, png_set_write_fn, png_get_io_ptr,
     png_get_libpng_ver, png_create_write_struct,
@@ -130,10 +132,12 @@ var
     clear_filelist_hook, add_file_hook, idb_loader_hook, mainloop_hook, drawworld_hook : procedure;
     SDL_InitPatch : procedure;
 
-    PHYSFS_init, PHYSFS_deinit, PHYSFS_mount, PHYSFS_readBytes, PHYSFS_read : function : LongInt;
-    PHYSFSRWOPS_openRead, PHYSFSRWOPS_openWrite, PHYSFS_openRead : function : pointer;
-    PHYSFS_eof, PHYSFS_close, PHYSFS_exists : function : boolean;
+    PHYSFS_init, PHYSFS_deinit, PHYSFS_mount, PHYSFS_readBytes, PHYSFS_writeBytes, PHYSFS_read : function : LongInt;
+    PHYSFSRWOPS_openRead, PHYSFSRWOPS_openWrite, PHYSFS_openRead, PHYSFS_openWrite : function : pointer;
+    PHYSFS_eof, PHYSFS_close, PHYSFS_exists, PHYSFS_mkdir, PHYSFS_flush, PHYSFS_setWriteDir, PHYSFS_setBuffer : function : boolean;
     PHYSFS_getLastError : function : PChar;
+    PHYSFS_enumerateFiles : function : PPChar;
+    PHYSFS_freeList : procedure;
 
     hedgewarsMountPackages, physfsReaderSetBuffer, hedgewarsMountPackage : procedure;
     physfsReader : function : pointer;

@@ -26,9 +26,11 @@ import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Utils
+import Consts
 import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
+import CommandHelp
 
 
 handleCmd_lobby :: CmdHandler
@@ -49,12 +51,12 @@ handleCmd_lobby ["CHAT", msg] = do
     return [AnswerClients s ["CHAT", n, msg], RegisterEvent LobbyChatMessage]
 
 handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
-    | illegalName rName = return [Warning $ loc "Illegal room name"]
+    | illegalName rName = return [Warning $ loc "Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}"]
     | otherwise = do
         rs <- allRoomInfos
         cl <- thisClient
         return $ if isJust $ find (\r -> rName == name r) rs then
-            [Warning "Room exists"]
+            [Warning $ loc "A room with the same name already exists."]
             else
             [
                 AddRoom rName roomPassword
@@ -83,22 +85,22 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let chans = map sendChan (cl : jRoomClients)
     let isBanned = host cl `elem` roomBansList jRoom
     let clTeams =
-            if (clientProto cl >= 48) && (isJust $ gameInfo jRoom) then
+            if (clientProto cl >= 48) && (isJust $ gameInfo jRoom) && isRegistered cl then
                 filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
                 else
                 []
     let clTeamsNames = map teamname clTeams
     return $
         if isNothing maybeRI then
-            [Warning $ loc "No such room"]
+            [Warning $ loc "No such room."]
             else if (not sameProto) && (not $ isAdministrator cl) then
-            [Warning $ loc "Room version incompatible to your hedgewars version"]
+            [Warning $ loc "Room version incompatible to your Hedgewars version!"]
             else if isRestrictedJoins jRoom && not (hasSuperPower cl) then
-            [Warning $ loc "Joining restricted"]
-            else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) && not (isAdministrator cl) then
-            [Warning $ loc "Registered users only"]
+            [Warning $ loc "Access denied. This room currently doesn't allow joining."]
+            else if isRegisteredOnly jRoom && (not $ isRegistered cl) && not (isAdministrator cl) then
+            [Warning $ loc "Access denied. This room is for registered users only."]
             else if isBanned then
-            [Warning $ loc "You are banned in this room"]
+            [Warning $ loc "You are banned from this room."]
             else if roomPassword /= password jRoom  && not (hasSuperPower cl) then
             [NoticeMessage WrongPassword]
             else
@@ -116,7 +118,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ answerFullConfig cl jRoom
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
-            ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
+            ++ [AnswerClients [sendChan cl] ["CHAT", nickGreeting, greeting jRoom] | greeting jRoom /= ""]
             ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeamsNames
             ++ [AnswerClients [sendChan cl] ["EM", toEngineMsg "I"] | isPaused `fmap` gameInfo jRoom == Just True]
 
@@ -166,6 +168,13 @@ handleCmd_lobby ("RND":rs) = do
     c <- liftM sendChan thisClient
     return [Random [c] rs]
 
+handleCmd_lobby ["HELP"] = do
+    cl <- thisClient
+    if isAdministrator cl then
+        return (cmdHelpActionList [sendChan cl] cmdHelpLobbyAdmin)
+    else
+        return (cmdHelpActionList [sendChan cl] cmdHelpLobbyPlayer)
+
     ---------------------------
     -- Administrator's stuff --
 
@@ -211,10 +220,18 @@ handleCmd_lobby ["GET_SERVER_VAR"] = serverAdminOnly $
 handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = serverAdminOnly $
     return [ClearAccountsCache]
 
-handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
+handleCmd_lobby ["RESTART_SERVER", "YES"] = serverAdminOnly $
     return [RestartServer]
+
+handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
+    return [Warning $ loc "Please confirm server restart with '/restart_server yes'."]
+
+handleCmd_lobby ["RESTART_SERVER", _] = handleCmd_lobby ["RESTART_SERVER"]
+
 
 handleCmd_lobby ["STATS"] = serverAdminOnly $
     return [Stats]
 
-handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]
+handleCmd_lobby (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: in lobby)"]
+
+handleCmd_lobby [] = return [ProtocolError "Empty command (state: in lobby)"]

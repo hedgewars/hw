@@ -7,14 +7,14 @@
     <tip>Alcune armi potrebbero fare pochi danni ma possono essere devastanti se usate al momento giusto. Prova ad esempio ad utilizzare la Desert Eagle per spingere più ricci in acqua.</tip>
     <tip>Se non sai cosa fare e non vuoi sprecare munizioni, salta il turno. Ma non farlo troppe volte perché c'è il Sudden Death!</tip>
     <tip>Vuoi utilizzare più a lungo la corda? Rilascia la corda a mezz'aria e spara di nuovo. Finché non tocchi il terreno potrai riusare la corda senza sprecare munizioni!</tip>
-    <tip>Se vuoi evitare che altri possano impersonarti, utilizzando il tuo nickname, sul server ufficiale, registrati su http://www.hedgewars.org/.</tip>
+    <tip>Se vuoi evitare che altri possano impersonarti, utilizzando il tuo nickname, sul server ufficiale, registrati su https://www.hedgewars.org/.</tip>
     <tip>Sei stanco delle partite preimpostate? Prova una missione - le missioni offrono interessanti modalità differenti di partite in base alle tue scelte.</tip>
     <tip>Il gioco salverà sempre l'ultima partita giocata come demo. Seleziona 'Gioco locale' e clicca il bottone 'Demos' nell'angolo in basso a destra per gestirle.</tip>
     <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Se hai problemi, chiedi nei nostri forum oppure visita il nostro canale IRC!</tip>
     <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Se ti piace, aiutaci con una piccola donazione o contribuisci con il tuo lavoro!</tip>
     <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Condividilo con tutta la famiglia e con gli amici come più ti piace!</tip>
     <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Incontra gli sviluppatori sul canale <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
-    <tip>Di tanto in tanto ci saranno tornei ufficiali. Gli eventi saranno annunciati su <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a> con qualche giorno di anticipo.</tip>
+    <tip>Di tanto in tanto ci saranno tornei ufficiali. Gli eventi saranno annunciati su <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> con qualche giorno di anticipo.</tip>
     <tip>Hedgewars è disponibile in molte lingue. Se la traduzione nella tua lingua sembra mancante o non aggiornata, sentiti libero di contattaci!</tip>
     <tip>Hedgewars può essere usato su molti sistemi operativi differenti come Microsoft Windows, Mac OS X e GNU/Linux.</tip>
     <tip>Ricordati che sei sempre in grado di configurare partire personalizzate in locale e online. Non devi sentirti limitato alle opzioni predefinite!</tip>
@@ -42,7 +42,7 @@
     <tip>Il Lanciafiamme è un'arma che può essere usata anche per scavare gallerie.</tip>
     <tip>Usa la Bomba Molotov o il Lanciafiamme per impedire temporaneamente ai ricci di attraversare terreni pianeggianti, tunnel o collinette.</tip>
     <tip>Vuoi sapere chi c'è dietro il gioco? Clicca sul logo Hedgewars nel menu principale per vederne gli autori e sviluppatori.</tip>
-    <tip>Ti piace Hedgewars? Diventa fan su <a href="http://www.facebook.com/Hedgewars">Facebook</a> oppure seguici su <a href="http://twitter.com/hedgewars">Twitter</a></tip>
+    <tip>Ti piace Hedgewars? Diventa fan su <a href="https://www.facebook.com/Hedgewars">Facebook</a> oppure seguici su <a href="https://twitter.com/hedgewars">Twitter</a></tip>
     <tip>Sentiti libero di disegnare tombe, cappelli, bandiere o anche mappe e temi personalizzati! Ma nota che dovrai condividerli in qualche modo per usarli online.</tip>
     <tip>Mantieni aggiornati i driver della tua scheda video, per evitare problemi durante il gioco.</tip>
     <tip>Testa o croce? Scrivi “/rnd” nella schermata LOBBY e lo scoprirai. Funziona anche “/rnd carta sasso forbice”!</tip>
@@ -66,7 +66,6 @@
     <tip>Fai attenzione nelle terre innevate e Natalizie, perché le travi sono fatte di ghiaccio scivoloso.</tip>
     <tip>Il tempo di fuga dipende dall'arma che hai usato. Fai attenzione, alcune armi non hanno un tempo di fuga e finiscono subito il tuo turno!</tip>
     <windows-only>
-        <tip>Questa versione di Hedgewars supporta <a href="http://www.xfire.com">Xfire</a>. Assicurati di aggiungere Hedgewars alla sua lista giochi, cosi i tuoi amici potranno vederti giocare.</tip>
         <tip>Puoi trovare i file di configurazione di Hedgewars in “My Documents\Hedgewars”. Crea una copia di sicurezza o porta i file con te, ma non modificarli mai manualmente.</tip>
     </windows-only>
     <mac-only>

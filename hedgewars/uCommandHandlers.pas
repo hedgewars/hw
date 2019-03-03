@@ -27,19 +27,35 @@ procedure freeModule;
 
 implementation
 uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
-    , uVisualGearsList
+    , uVisualGearsList, uGearsHedgehog
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
-var prevGState: TGameState = gsConfirm;
-    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
-    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
+var cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 0, 4, 5, 6, 15, 8, 8, 8, 8, 12, 13, 14);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 0, 1, 2, 0, 0, 0, 0, 11, 8, 9, 10, 8, 8, 8, 8);
+
+// helper function for volume
+procedure updateVolumeDelta(precise: boolean);
+begin
+if cVolumeUpKey and (not cVolumeDownKey) then
+    if precise then
+        cVolumeDelta:= 1
+    else
+        cVolumeDelta:= 3
+else if cVolumeDownKey and (not cVolumeUpKey) then
+    if precise then
+        cVolumeDelta:= -1
+    else
+        cVolumeDelta:= -3
+else
+    cVolumeDelta:= 0;
+end;
 
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
-    'R': if ReadyTimeLeft > 1 then
+    'R': if ReadyTimeLeft > 0 then
         begin
-        ReadyTimeLeft:= 1;
+        ReadyTimeLeft:= 0;
         if not isExternalSource then
             SendIPC('c'+s);
         end
@@ -49,14 +65,15 @@ end;
 procedure chQuit(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    if (GameState = gsGame) or (GameState = gsChat) then
-        begin
-        prevGState:= GameState;
+    if (GameState = gsGame) then
+    begin
+        isInChatMode:= false;
         GameState:= gsConfirm;
-        end
-    else
+    end
+    else begin
         if GameState = gsConfirm then
-            GameState:= prevGState;
+            GameState:= gsGame;
+    end;
 
     updateCursorVisibility;
 end;
@@ -76,8 +93,6 @@ begin
         SendIPC(_S'Q');
         GameState:= gsExit
         end
-    else
-        ParseCommand('chat team', true);
 end;
 
 procedure chHalt (var s: shortstring);
@@ -115,7 +130,7 @@ if s[1]='"' then
 if s[byte(s[0])]='"' then
     Delete(s, byte(s[0]), 1);
 cScriptName:= s;
-ScriptLoad(s)
+ScriptLoad(s, true)
 end;
 
 procedure chScriptParam(var s: shortstring);
@@ -133,7 +148,8 @@ end;
 procedure chCurU_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= 0;
+if CursorMovementY < 0 then
+    CursorMovementY:= 0;
 end;
 
 procedure chCurD_p(var s: shortstring);
@@ -145,7 +161,8 @@ end;
 procedure chCurD_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= 0;
+if CursorMovementY > 0 then
+    CursorMovementY:= 0;
 end;
 
 procedure chCurL_p(var s: shortstring);
@@ -157,7 +174,8 @@ end;
 procedure chCurL_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= 0;
+if CursorMovementX < 0 then
+    CursorMovementX:= 0;
 end;
 
 procedure chCurR_p(var s: shortstring);
@@ -169,7 +187,8 @@ end;
 procedure chCurR_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= 0;
+if CursorMovementX > 0 then
+    CursorMovementX:= 0;
 end;
 
 procedure chLeft_p(var s: shortstring);
@@ -275,6 +294,7 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+updateVolumeDelta(true);
 if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
@@ -288,6 +308,7 @@ end;
 procedure chPrecise_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+updateVolumeDelta(false);
 if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
@@ -421,6 +442,32 @@ with CurrentHedgehog^.Gear^ do
     end
 end;
 
+// Increment timer or bounciness
+procedure chTimerU(var s: shortstring);
+var t: LongWord;
+    tb: Byte;
+begin
+s:= s; // avoid compiler hint
+if CheckNoTeamOrHH then
+    exit;
+// We grab the current timer first so we can increment it
+if (CurrentHedgehog^.Gear^.Message and gmPrecise) = 0 then
+    t:= HHGetTimerMsg(CurrentHedgehog^.Gear)
+else
+    // Use bounciness if Precise is pressed
+    t:= HHGetBouncinessMsg(CurrentHedgehog^.Gear);
+if t <> MSGPARAM_INVALID then
+    begin
+    // Calculate new timer
+    Inc(t);
+    if t > 5 then
+        t:= 1;
+    tb:= t mod 255;
+    // Delegate the actual change to /timer
+    ParseCommand('timer ' + Char(tb + Ord('0')), true);
+    end;
+end;
+
 procedure chSlot(var s: shortstring);
 var slot: LongWord;
     ss: shortstring;
@@ -450,6 +497,11 @@ begin
     if CheckNoTeamOrHH then
         exit;
 
+    (* Use "~" (ASCII character 126) as synonym for NUL byte (=amNothing).
+    This is done to allow to add "setweap ~" in QTfrontend/binds.cpp because
+    the NUL byte would terminate the strings in C++ otherwise. *)
+    if (s[1] = '~') then
+        s[1]:= #0;
     if checkFails((s[0] = #1) and (s[1] <= char(High(TAmmoType))), 'Malformed /setweap', true) then exit;
 
     if not isExternalSource then
@@ -474,12 +526,7 @@ if TWave(s[1]) > High(TWave) then
 if not isExternalSource then
     SendIPC('t' + s);
 
-with CurrentHedgehog^.Gear^ do
-    begin
-    Message:= Message or (gmAnimate and InputMask);
-    MsgParam:= byte(s[1]) ;
-    ScriptCall('onTaunt', MsgParam);
-    end
+PlayTaunt(byte(s[1]))
 end;
 
 procedure chPut(var s: shortstring);
@@ -517,7 +564,7 @@ if isDeveloperMode then
     InitStepsFlags:= InitStepsFlags or cifMap
     end;
 cMapName:= s;
-ScriptLoad('Maps/' + s + '/map.lua')
+ScriptLoad('Maps/' + s + '/map.lua', false)
 end;
 
 procedure chSetTheme(var s: shortstring);
@@ -538,7 +585,7 @@ if isDeveloperMode then
     cSeed:= s;
     InitStepsFlags:= InitStepsFlags or cifRandomize
     end
-    end;
+end;
 
 procedure chAmmoMenu(var s: shortstring);
 begin
@@ -554,7 +601,7 @@ else
 
             if bShowAmmoMenu then
                 bShowAmmoMenu:= false
-            else if not(CurrentTeam^.Extdriven) and (((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
+            else if not(CurrentTeam^.Extdriven) and ((Gear = nil) or ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
             or ((Gear^.State and gstHHDriven) = 0)) then
                 begin
                 end
@@ -564,16 +611,38 @@ else
     end
 end;
 
-procedure chVol_p(var s: shortstring);
+procedure chVolUp_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-inc(cVolumeDelta, 3)
+cVolumeUpKey:= true;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
 end;
 
-procedure chVol_m(var s: shortstring);
+procedure chVolUp_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-dec(cVolumeDelta, 3)
+cVolumeUpKey:= false;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
+end;
+
+procedure chVolDown_p(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cVolumeDownKey:= true;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
+end;
+
+procedure chVolDown_m(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cVolumeDownKey:= false;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
+end;
+
+procedure chMute(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cMuteToggle:= true;
 end;
 
 procedure chFindhh(var s: shortstring);
@@ -585,12 +654,12 @@ if CheckNoTeamOrHH then
 if autoCameraOn then
     begin
     FollowGear:= nil;
-    AddCaption(trmsg[sidAutoCameraOff], $CCCCCC, capgrpVolume);
+    AddCaption(trmsg[sidAutoCameraOff], capcolSetting, capgrpVolume);
     autoCameraOn:= false
     end
 else
     begin
-    AddCaption(trmsg[sidAutoCameraOn], $CCCCCC, capgrpVolume);
+    AddCaption(trmsg[sidAutoCameraOn], capcolSetting, capgrpVolume);
     bShowFinger:= true;
     if not CurrentHedgehog^.Unplaced then
         FollowGear:= CurrentHedgehog^.Gear;
@@ -621,19 +690,51 @@ if LocalMessage and (gmPrecise or gmSwitch) = (gmPrecise or gmSwitch) then
          UIDisplay:= uiNone
     else UIDisplay:= uiAll
     end
-else if LocalMessage and gmPrecise = gmPrecise then
-    begin
-    if ((GameFlags and gfInvulnerable) = 0) then
-        cTagsMask:= cTagsMasks[cTagsMask]
-    else
-        cTagsMask:= cTagsMasksNoHealth[cTagsMask]
-    end
 else
     begin
     if UIDisplay <> uiNoTeams then
          UIDisplay:= uiNoTeams
     else UIDisplay:= uiAll
     end
+end;
+
+procedure chRotateTags(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+// Rotate Tags key + Switch: Toggle translucency only
+if LocalMessage and gmSwitch = gmSwitch then
+    if ((cTagsMask and htTransparent) = 0) then
+        begin
+        cTagsMask:= cTagsMask or htTransparent;
+        cPrevTagsMask:= cPrevTagsMask or htTransparent
+        end
+    else
+        begin
+        cTagsMask:= cTagsMask and (not htTransparent);
+        cPrevTagsMask:= cPrevTagsMask and (not htTransparent)
+        end
+// Rotate Tags key + Precise: Cycle through hog tags (keeping translucency)
+else if LocalMessage and gmPrecise = gmPrecise then
+    begin
+    cPrevTagsMask:= cTagsMask;
+    if ((GameFlags and gfInvulnerable) = 0) then
+        cTagsMask:= cTagsMasks[cTagsMask]
+    else
+        cTagsMask:= cTagsMasksNoHealth[cTagsMask]
+    end
+// Rotate Tags key only: Toggle all hog tags on and off
+else
+    if ((cTagsMask and (htTeamName or htName or htHealth)) = 0) then
+        begin
+        cTagsMask:= cPrevTagsMask;
+        if ((GameFlags and gfInvulnerable) <> 0) then
+            cTagsMask:= cTagsMask and (not htHealth);
+        end
+    else
+        begin
+        cPrevTagsMask:= cTagsMask;
+        cTagsMask:= cTagsMask and (not (htTeamName or htName or htHealth))
+        end;
 end;
 
 procedure chSpeedup_p(var s: shortstring);
@@ -652,21 +753,32 @@ end;
 procedure chZoomIn(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    if ZoomValue < cMinZoomLevel then
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= ZoomValue + cZoomDeltaSmall
+    else
         ZoomValue:= ZoomValue + cZoomDelta;
+    if ZoomValue > cMinZoomLevel then
+        ZoomValue:= cMinZoomLevel;
 end;
 
 procedure chZoomOut(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    if ZoomValue > cMaxZoomLevel then
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= ZoomValue - cZoomDeltaSmall
+    else
         ZoomValue:= ZoomValue - cZoomDelta;
+    if ZoomValue < cMaxZoomLevel then
+        ZoomValue:= cMaxZoomLevel;
 end;
 
 procedure chZoomReset(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    ZoomValue:= cDefaultZoomLevel;
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= cDefaultZoomLevel
+    else
+        ZoomValue:= UserZoom;
 end;
 
 procedure chMapGen(var s: shortstring);
@@ -722,6 +834,11 @@ end;
 procedure chHealthDecrease(var s: shortstring);
 begin
 cHealthDecrease:= StrToInt(s)
+end;
+
+procedure chInitHealth(var s: shortstring);
+begin
+cInitHealth:= StrToInt(s)
 end;
 
 procedure chDamagePercent(var s: shortstring);
@@ -792,6 +909,11 @@ begin
   CampaignVariable := s;
 end;
 
+procedure chMissVar(var s:shortstring);
+begin
+  MissionVariable := s;
+end;
+
 procedure chWorldEdge(var s: shortstring);
 begin
 WorldEdge:= TWorldEdge(StrToInt(s))
@@ -801,6 +923,20 @@ procedure chAdvancedMapGenMode(var s:shortstring);
 begin
   s:= s; // avoid compiler hint
   cAdvancedMapGenMode:= true;
+end;
+
+procedure chShowMission_p(var s: shortstring);
+begin
+  s:= s; // avoid compiler hint
+  isShowMission:= true;
+end;
+
+procedure chShowMission_m(var s: shortstring);
+begin
+  s:= s; // avoid compiler hint
+  isShowMission:= false;
+  if (not isForceMission) then
+    HideMission();
 end;
 
 procedure initModule;
@@ -829,6 +965,7 @@ begin
     RegisterVariable('spectate', @chFastUntilLag   , false);
     RegisterVariable('capture' , @chCapture      , true );
     RegisterVariable('rotmask' , @chRotateMask   , true );
+    RegisterVariable('rottags' , @chRotateTags   , true );
     RegisterVariable('rdriven' , @chTeamLocal    , false);
     RegisterVariable('map'     , @chSetMap       , false);
     RegisterVariable('theme'   , @chSetTheme     , false);
@@ -845,6 +982,7 @@ begin
     RegisterVariable('sd_turns', @chSuddenDTurns  , false);
     RegisterVariable('waterrise', @chWaterRise    , false);
     RegisterVariable('healthdec', @chHealthDecrease, false);
+    RegisterVariable('inithealth',@chInitHealth, false);
     RegisterVariable('damagepct',@chDamagePercent , false);
     RegisterVariable('ropepct' , @chRopePercent   , false);
     RegisterVariable('getawaytime' , @chGetAwayTime , false);
@@ -871,10 +1009,11 @@ begin
     RegisterVariable('timer'   , @chTimer        , false, true);
     RegisterVariable('taunt'   , @chTaunt        , false);
     RegisterVariable('put'     , @chPut          , false);
-    RegisterVariable('+volup'  , @chVol_p        , true );
-    RegisterVariable('-volup'  , @chVol_m        , true );
-    RegisterVariable('+voldown', @chVol_m        , true );
-    RegisterVariable('-voldown', @chVol_p        , true );
+    RegisterVariable('+volup'  , @chVolUp_p      , true );
+    RegisterVariable('-volup'  , @chVolUp_m      , true );
+    RegisterVariable('+voldown', @chVolDown_p    , true );
+    RegisterVariable('-voldown', @chVolDown_m    , true );
+    RegisterVariable('mute'    , @chMute         , true );
     RegisterVariable('findhh'  , @chFindhh       , true );
     RegisterVariable('pause'   , @chPause        , true );
     RegisterVariable('+cur_u'  , @chCurU_p       , true );
@@ -886,9 +1025,13 @@ begin
     RegisterVariable('+cur_r'  , @chCurR_p       , true );
     RegisterVariable('-cur_r'  , @chCurR_m       , true );
     RegisterVariable('campvar' , @chCampVar      , true );
+    RegisterVariable('missvar' , @chMissVar      , true );
     RegisterVariable('record'  , @chRecord       , true );
     RegisterVariable('worldedge',@chWorldEdge    , false);
     RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);
+    RegisterVariable('+mission', @chShowMission_p, true);
+    RegisterVariable('-mission', @chShowMission_m, true);
+    RegisterVariable('timer_u' , @chTimerU       , true );
 end;
 
 procedure freeModule;

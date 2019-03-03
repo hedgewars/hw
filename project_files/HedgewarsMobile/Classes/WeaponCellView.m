@@ -24,7 +24,7 @@
 @synthesize delegate, weaponName, weaponIcon, initialSli, probabilitySli, delaySli, crateSli, helpLabel,
             initialImg, probabilityImg, delayImg, crateImg, initialLab, probabilityLab, delayLab, crateLab;
 
--(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
         delegate = nil;
 
@@ -67,41 +67,37 @@
 
         NSString *imgAmmoStr = [[NSString alloc] initWithFormat:@"%@/ammopic.png",ICONS_DIRECTORY()];
         initialImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgAmmoStr]];
-        [imgAmmoStr release];
         NSString *imgDamageStr = [[NSString alloc] initWithFormat:@"%@/iconDamage.png",ICONS_DIRECTORY()];
         probabilityImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgDamageStr]];
-        [imgDamageStr release];
         NSString *imgTimeStr = [[NSString alloc] initWithFormat:@"%@/iconTime.png",ICONS_DIRECTORY()];
         delayImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgTimeStr]];
-        [imgTimeStr release];
         NSString *imgBoxStr = [[NSString alloc] initWithFormat:@"%@/iconBox.png",ICONS_DIRECTORY()];
         crateImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgBoxStr]];
-        [imgBoxStr release];
 
         initialLab = [[UILabel alloc] init];
         initialLab.backgroundColor = [UIColor clearColor];
         initialLab.textColor = [UIColor grayColor];
-        initialLab.textAlignment = UITextAlignmentCenter;
+        initialLab.textAlignment = NSTextAlignmentCenter;
 
         probabilityLab = [[UILabel alloc] init];
         probabilityLab.backgroundColor = [UIColor clearColor];
         probabilityLab.textColor = [UIColor grayColor];
-        probabilityLab.textAlignment = UITextAlignmentCenter;
+        probabilityLab.textAlignment = NSTextAlignmentCenter;
 
         delayLab = [[UILabel alloc] init];
         delayLab.backgroundColor = [UIColor clearColor];
         delayLab.textColor = [UIColor grayColor];
-        delayLab.textAlignment = UITextAlignmentCenter;
+        delayLab.textAlignment = NSTextAlignmentCenter;
 
         crateLab = [[UILabel alloc] init];
         crateLab.backgroundColor = [UIColor clearColor];
         crateLab.textColor = [UIColor grayColor];
-        crateLab.textAlignment = UITextAlignmentCenter;
+        crateLab.textAlignment = NSTextAlignmentCenter;
 
         helpLabel = [[UILabel alloc] init];
         helpLabel.backgroundColor = [UIColor clearColor];
         helpLabel.textColor = [UIColor darkGrayColor];
-        helpLabel.textAlignment = UITextAlignmentRight;
+        helpLabel.textAlignment = NSTextAlignmentRight;
         helpLabel.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
         helpLabel.adjustsFontSizeToFitWidth = YES;
 
@@ -128,7 +124,7 @@
     return self;
 }
 
--(void) layoutSubviews {
+- (void)layoutSubviews {
     [super layoutSubviews];
 
     CGFloat hOffset = 80;
@@ -186,13 +182,13 @@
 }
 
 /*
--(void) setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     // Configure the view for the selected state
 }
 */
 
--(void) valueChanged:(id) sender {
+- (void)valueChanged:(id)sender {
     if (self.delegate != nil) {
         initialLab.text = ((int)initialSli.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)initialSli.value];
         probabilityLab.text = ((int)probabilitySli.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)probabilitySli.value];
@@ -209,7 +205,7 @@
         DLog(@"error - delegate = nil!");
 }
 
--(void) startDragging:(id) sender {
+- (void)startDragging:(id)sender {
     UISlider *slider = (UISlider *)sender;
     NSString *str = nil;
 
@@ -242,28 +238,8 @@
     self.helpLabel.text = str;
 }
 
--(void) stopDragging:(id) sender {
+- (void)stopDragging:(id)sender {
     self.helpLabel.text = @"";
-}
-
--(void) dealloc {
-    self.delegate = nil;
-    releaseAndNil(weaponName);
-    releaseAndNil(weaponIcon);
-    releaseAndNil(initialSli);
-    releaseAndNil(probabilitySli);
-    releaseAndNil(delaySli);
-    releaseAndNil(crateSli);
-    releaseAndNil(initialImg);
-    releaseAndNil(probabilityImg);
-    releaseAndNil(delayImg);
-    releaseAndNil(crateImg);
-    releaseAndNil(initialLab);
-    releaseAndNil(probabilityLab);
-    releaseAndNil(delayLab);
-    releaseAndNil(crateLab);
-    releaseAndNil(helpLabel);
-    [super dealloc];
 }
 
 @end

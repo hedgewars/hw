@@ -47,7 +47,10 @@ class TeamSelWidget : public QGroupBox
         bool isPlaying(const HWTeam &team) const;
         QList<HWTeam> getPlayingTeams() const;
         QList<HWTeam> getNotPlayingTeams() const;
+	unsigned short getNumHedgehogs() const;
         void setInteractivity(bool interactive);
+        void setUser(const QString& nickname);
+        void cleanupFakeNetTeams();
 
     public slots:
         void addTeam(HWTeam team);
@@ -69,7 +72,7 @@ class TeamSelWidget : public QGroupBox
         void proxyTeamColorChanged(const HWTeam& team);
 
     private:
-        void addScrArea(FrameTeams* pfteams, QColor color, int maxHeight);
+        void addScrArea(FrameTeams* pfteams, QColor color, int minHeight, int maxHeight, bool setFrame);
         FrameTeams* frameDontPlaying;
         FrameTeams* framePlaying;
 
@@ -77,6 +80,7 @@ class TeamSelWidget : public QGroupBox
         QLabel *numTeamNotice;
         bool m_acceptOuter;
         void repaint();
+        QString m_curUser;
 
         QList<HWTeam> curPlayingTeams;
         QList<HWTeam> m_curNotPlayingTeams;

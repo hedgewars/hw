@@ -29,12 +29,13 @@
 #include <QMenu>
 #include <QDebug>
 #include <QSplitter>
+#include <QSettings>
 
 #include <QSortFilterProxyModel>
 
 #include "roomslistmodel.h"
 
-#include "ammoSchemeModel.h"
+#include "gameSchemeModel.h"
 #include "hwconsts.h"
 #include "chatwidget.h"
 #include "roomnameprompt.h"
@@ -154,7 +155,8 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     roomsList = new RoomTableView(this);
     roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
     roomsList->verticalHeader()->setVisible(false);
-    roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    roomsList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+	roomsList->horizontalHeader()->stretchLastSection();
     roomsList->setAlternatingRowColors(true);
     roomsList->setShowGrid(false);
     roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -174,8 +176,9 @@ QLayout * PageRoomsList::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
 
-    BtnAdmin = addButton(tr("Admin features"), bottomLayout, 0);
-    BtnAdmin->setStyleSheet("padding: 4px auto;");
+    BtnAdmin = addButton(tr("Admin features"), bottomLayout, 0, false, Qt::AlignBottom);
+    BtnAdmin->setMinimumSize(180, 50);
+    BtnAdmin->setStyleSheet("padding: 5px 10px");
     BtnAdmin->setWhatsThis(tr("Open server administration page"));
 
     return bottomLayout;
@@ -586,26 +589,17 @@ void PageRoomsList::setModel(RoomsListModel * model)
 
     h->setSortIndicatorShown(true);
     h->setSortIndicator(RoomsListModel::StateColumn, Qt::AscendingOrder);
-    h->setResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
+    h->setSectionResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
 
-    if (!restoreHeaderState())
-    {
-        h->resizeSection(RoomsListModel::PlayerCountColumn, 32);
-        h->resizeSection(RoomsListModel::TeamCountColumn, 32);
-        h->resizeSection(RoomsListModel::OwnerColumn, 100);
-        h->resizeSection(RoomsListModel::MapColumn, 100);
-        h->resizeSection(RoomsListModel::SchemeColumn, 100);
-        h->resizeSection(RoomsListModel::WeaponsColumn, 100);
-    }
+	h->resizeSection(RoomsListModel::PlayerCountColumn, 32);
+	h->resizeSection(RoomsListModel::TeamCountColumn, 32);
+	h->resizeSection(RoomsListModel::OwnerColumn, 100);
+	h->resizeSection(RoomsListModel::MapColumn, 100);
+	h->resizeSection(RoomsListModel::SchemeColumn, 100);
+	h->resizeSection(RoomsListModel::WeaponsColumn, 100);
 
     // hide column used for filtering
     roomsList->hideColumn(RoomsListModel::StateColumn);
-
-    // save header state on change
-    connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-            this, SLOT(saveHeaderState()));
-    connect(roomsList->horizontalHeader(), SIGNAL(sectionResized(int, int, int)),
-            this, SLOT(saveHeaderState()));
 
     roomsList->repaint();
 }
@@ -668,28 +662,4 @@ void PageRoomsList::onFilterChanged()
 void PageRoomsList::setSettings(QSettings *settings)
 {
     m_gameSettings = settings;
-}
-
-bool PageRoomsList::restoreHeaderState()
-{
-    if (m_gameSettings->contains("frontend/roomslist_splitter"))
-    {
-        m_splitter->restoreState(QByteArray::fromBase64(
-            (m_gameSettings->value("frontend/roomslist_splitter").toByteArray())));
-    }
-
-    if (m_gameSettings->contains("frontend/roomslist_header"))
-    {
-        return roomsList->horizontalHeader()->restoreState(QByteArray::fromBase64(
-            (m_gameSettings->value("frontend/roomslist_header").toByteArray())));
-    } else return false;
-}
-
-void PageRoomsList::saveHeaderState()
-{
-    m_gameSettings->setValue("frontend/roomslist_header",
-        QString(roomsList->horizontalHeader()->saveState().toBase64()));
-
-    m_gameSettings->setValue("frontend/roomslist_splitter",
-        QString(m_splitter->saveState().toBase64()));
 }

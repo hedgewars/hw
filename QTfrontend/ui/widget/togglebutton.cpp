@@ -24,20 +24,32 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
 {
     setCheckable(true);
 
-    QPixmap pm(":/res/btnDisabled.png");
+    QPixmap pixOffOverlay(":/res/btnDisabled.png");
     QPainter * painter = new QPainter();
 
-    pmChecked.load(img);
-    pmDisabled.load(img);
+    QPixmap pixOn = QPixmap(img);
+    QPixmap pixOff = QPixmap(img);
 
-    setMaximumWidth(pmChecked.width() + 6);
+    // Use the same image for disabled (i.e. non-clickable) button.
+    // The default would be gray which is a little bit hard on the eye.
+    // The disabled state is communicated to the user by the button
+    // border, which turns gray.
+    icoChecked.addPixmap(pixOn, QIcon::Normal);
+    icoChecked.addPixmap(pixOn, QIcon::Disabled);
 
-    painter->begin(&pmDisabled);
-    painter->drawPixmap(pmDisabled.rect(), pm);
+    pixOff.setDevicePixelRatio(pixOffOverlay.devicePixelRatio());
+
+    setMaximumWidth(pixOn.width() + 6);
+
+    painter->begin(&pixOff);
+    painter->drawPixmap(pixOff.rect(), pixOffOverlay);
     painter->end();
 
-    setIconSize(pmDisabled.size());
-    setIcon(pmDisabled);
+    icoUnchecked.addPixmap(pixOff, QIcon::Normal);
+    icoUnchecked.addPixmap(pixOff, QIcon::Disabled);
+
+    setIconSize(pixOff.size());
+    setIcon(icoUnchecked);
 
     connect(this, SIGNAL(toggled(bool)), this, SLOT(eventToggled(bool)));
 }
@@ -48,5 +60,5 @@ ToggleButtonWidget::~ToggleButtonWidget()
 
 void ToggleButtonWidget::eventToggled(bool checked)
 {
-    setIcon(checked ? pmChecked : pmDisabled);
+    setIcon(checked ? icoChecked : icoUnchecked);
 }

@@ -29,52 +29,47 @@
 @implementation SingleSchemeViewController
 @synthesize schemeName, schemeDictionary, basicSettingList, gameModifierArray;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     // title, description, image name (+btn)
     NSArray *mods = [[NSArray alloc] initWithContentsOfFile:GAMEMODS_FILE()];
     self.gameModifierArray = mods;
-    [mods release];
 
     // title, image name (+icon), default value, max value, min value
     NSArray *basicSettings = [[NSArray alloc] initWithContentsOfFile:BASICFLAGS_FILE()];
     self.basicSettingList = basicSettings;
-    [basicSettings release];
 
     self.title = NSLocalizedString(@"Edit scheme preferences",@"");
 }
 
 // load from file
--(void) viewWillAppear:(BOOL) animated {
+- (void)viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
 
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName];
     NSMutableDictionary *scheme = [[NSMutableDictionary alloc] initWithContentsOfFile:schemeFile];
-    [schemeFile release];
     self.schemeDictionary = scheme;
-    [scheme release];
 
     [self.tableView reloadData];
 }
 
 // save to file
--(void) viewWillDisappear:(BOOL) animated {
+- (void)viewWillDisappear:(BOOL) animated {
     [super viewWillDisappear:animated];
 
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName];
     [self.schemeDictionary writeToFile:schemeFile atomically:YES];
-    [schemeFile release];
 }
 
 // force a redraw of the game mod section to reposition the slider
--(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     if (IS_IPAD() == NO)
         return;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
@@ -83,7 +78,7 @@
 #pragma mark -
 #pragma mark editableCellView delegate
 // set the new value
--(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
+- (void)saveTextFieldValue:(NSString *)textString withTag:(NSInteger)tagValue {
     if (tagValue == 0) {
         // delete old file
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] error:NULL];
@@ -98,11 +93,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:
             return 2;
@@ -128,11 +123,11 @@
     NSInteger row = [indexPath row];
 
     switch ([indexPath section]) {
-        case 0:
+        case 0: {
             editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
             if (editableCell == nil) {
-                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:CellIdentifier0] autorelease];
+                editableCell = [[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
+                                                        reuseIdentifier:CellIdentifier0];
                 editableCell.delegate = self;
             }
             editableCell.tag = row;
@@ -151,31 +146,29 @@
             }
             cell = editableCell;
             break;
-        case 1:
+        }
+        case 1: {
             cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
             NSDictionary *detail = [self.basicSettingList objectAtIndex:row];
             // need to offset this section (see format in CommodityFunctions.m and above)
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
-                                               reuseIdentifier:CellIdentifier1] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
+                                               reuseIdentifier:CellIdentifier1];
 
                 UISlider *slider = [[UISlider alloc] init];
                 [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
                 [cell.contentView addSubview:slider];
-                [slider release];
 
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(50, 7, 200, 30)];
                 label.tag = LABEL_TAG;
                 label.backgroundColor = [UIColor clearColor];
                 label.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
                 [cell.contentView addSubview:label];
-                [label release];
             }
 
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/icon%@.png",ICONS_DIRECTORY(),
                                                                     [[self.basicSettingList objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = img;
-            [img release];
 
             UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
             NSString *basicSettingTitleKey = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
@@ -218,15 +211,15 @@
 
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             break;
-        case 2:
+        }
+        case 2: {
             cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier2];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                               reuseIdentifier:CellIdentifier2] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                               reuseIdentifier:CellIdentifier2];
                 UISwitch *onOff = [[UISwitch alloc] init];
                 [onOff addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
                 cell.accessoryView = onOff;
-                [onOff release];
             }
 
             UISwitch *switcher = (UISwitch *)cell.accessoryView;
@@ -236,7 +229,6 @@
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/btn%@.png",ICONS_DIRECTORY(),
                                                                       [[self.gameModifierArray objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = image;
-            [image release];
             cell.imageView.layer.cornerRadius = 6.0f;
             cell.imageView.layer.masksToBounds = YES;
             NSString *gameModTitleKey = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
@@ -248,17 +240,18 @@
 
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
+    }
 
     return cell;
 }
 
--(void) toggleSwitch:(id) sender {
+- (void)toggleSwitch:(id)sender {
     UISwitch *theSwitch = (UISwitch *)sender;
     NSMutableArray *array = [self.schemeDictionary objectForKey:@"gamemod"];
     [array replaceObjectAtIndex:theSwitch.tag-SWITCH_TAG withObject:[NSNumber numberWithBool:theSwitch.on]];
 }
 
--(void) sliderChanged:(id) sender {
+- (void)sliderChanged:(id)sender {
     // the slider that changed is sent as object
     UISlider *theSlider = (UISlider *)sender;
     // create the indexPath of the row of the slider
@@ -279,7 +272,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
     EditableCellView *editableCell = nil;
     UISlider *cellSlider = nil;
@@ -307,7 +300,7 @@
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
--(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:
@@ -326,7 +319,7 @@
     return sectionTitle;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == 0)
         return aTableView.rowHeight;
     else if ([indexPath section] == 1)
@@ -373,27 +366,11 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     self.basicSettingList = nil;
     self.gameModifierArray = nil;
-}
-
--(void) viewDidUnload {
-    self.schemeName = nil;
-    self.schemeDictionary = nil;
-    self.basicSettingList = nil;
-    self.gameModifierArray = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(schemeName);
-    releaseAndNil(schemeDictionary);
-    releaseAndNil(basicSettingList);
-    releaseAndNil(gameModifierArray);
-    [super dealloc];
 }
 
 @end

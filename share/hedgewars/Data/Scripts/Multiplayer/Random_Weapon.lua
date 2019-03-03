@@ -12,7 +12,8 @@ local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun,
             amBaseballBat, amTeleport, amMortar, amCake, amSeduction,
             amWatermelon, amHellishBomb, amDrill, amBallgun, amRCPlane,
             amSniperRifle, amMolotov, amBirdy, amBlowTorch, amGasBomb,
-            amFlamethrower, amSMine, amHammer }
+            amFlamethrower, amSMine, amHammer, amMinigun, amSineGun,
+            amKnife, amAirMine }
 
 -- List of weapons that attack from the air
 local airweapons = { amAirAttack, amMineStrike, amNapalm, amDrillStrike }
@@ -29,7 +30,7 @@ function assignAmmo(hog)
         local ammo = getTeamValue(name, "ammo")
         -- If there is no ammo, get a random one from the list and store it
         if ammo == nil then
-            ammo = weapons[GetRandom(table.maxn(weapons)) + 1]
+            ammo = weapons[GetRandom(#weapons) + 1]
             setTeamValue(name, "ammo", ammo)
         end
         -- Add the ammo for the hog
@@ -46,7 +47,7 @@ end
 
 function onGameInit()
     -- Limit flags that can be set, but allow game schemes to be used
-    DisableGameFlags(gfInfAttack)
+    DisableGameFlags(gfInfAttack, gfPerHogAmmo, gfSharedAmmo)
     EnableGameFlags(gfResetWeps)
     -- Set a custom game goal that will show together with the scheme ones
     Goals = loc("Each turn you get one random weapon")

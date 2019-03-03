@@ -34,6 +34,11 @@ find_library( GLEW_LIBRARY
             $ENV{PROGRAMFILES}/GLEW/lib
             DOC "The GLEW library")
 
+if(BUILD_ENGINE_JS)
+    set(GLEW_INCLUDE_DIR "${EMSCRIPTEN_ROOT_PATH}/system/include")
+    SET(GLEW_LIBRARY "glew_emscripten_internal")
+endif()
+
 find_package_handle_standard_args(GLEW DEFAULT_MSG GLEW_LIBRARY GLEW_INCLUDE_DIR)
 mark_as_advanced(GLEW_LIBRARY GLEW_INCLUDE_DIR)
 

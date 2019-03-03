@@ -24,7 +24,7 @@
  * and language of choice.
  *
  * See also: C declarations on Wikipedia
- *           http://en.wikipedia.org/wiki/X86_calling_conventions#cdecl
+ *           https://en.wikipedia.org/wiki/X86_calling_conventions#cdecl
  *)
 
 Library hwLibrary;

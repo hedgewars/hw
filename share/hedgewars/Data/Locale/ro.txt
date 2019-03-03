@@ -54,18 +54,17 @@
 00:51=Bila de noroi
 00:52=Nici o armă selectată
 00:53=Cutia timpului
-; 00:54=Structură
 00:54=Spray de teren
 
-01:00=Hai să ne batem!
+; 01:00=Loading …
 01:01=Remizăr
 01:02=%1 a câștigat!
 01:03=Volumul %1%
 01:04=Pauză
-01:05=Sigur ieșiți (Y/Esc)?
+01:05=Sigur ieșiți (%1/%2)?
 01:06=Moarte subita!
 01:07=%1 rămas
-01:08=combustibil
+01:08=combustibil: %1%
 01:09=Sincronizare...
 01:10=Folosind această utilitate tura nu se va termina!
 01:11=Această armă sau utilitate nu sunt valabile momentan!
@@ -243,11 +242,11 @@
 02:02=Have no fear!
 02:02=Be brave and conquer
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 a câștigat!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Remizăr
 
 ; New health crate
 02:05=Incoming aid!
@@ -446,7 +445,6 @@
 03:51=Found on the ground
 03:52=UNUSED
 03:53=Type 40
-;03:54=Build something
 03:54=Utility
 
 ; Weapon Descriptions (use | as line breaks)
@@ -504,18 +502,17 @@
 04:51=Get in a free shot by hurling a ball of mud.|Stings a bit, and knocks hogs back.
 04:52=UNUSED
 04:53=Go on an adventure through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.
-;04:54=INCOMPLETE
 04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!
 
 ; Game goal strings
 05:00=Game Modes
 05:01=The following rules apply
-05:02=Forts: Defend your fortress; vanquish your enemies!
+05:02=Place the King: Pick a protected starting point for your King
 05:03=Low Gravity: Watch your step
 05:04=Invulnerability: Hogs are (almost) invulnerable
 05:05=Vampirism: Hogs will be healed for the damage dealt
 05:06=Karma: Hogs will be damaged for the damage dealt
-05:07=Protect the King: Don't let your king die!|Place the King: Pick a protected starting point for your King
+05:07=Protect the King: Don't let your king die!
 05:08=Place Hedgehogs: Place your hogs before the game starts
 05:09=Artillery: Hogs can't walk to change position
 05:10=Indestructible Terrain: Most weapons won't destroy terrain

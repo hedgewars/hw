@@ -22,7 +22,7 @@
 
 @implementation UIImage (extra)
 
--(UIImage *)scaleToSize:(CGSize) size {
+- (UIImage *)scaleToSize:(CGSize)size {
     // Create a bitmap graphics context; this will also set it as the current context
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL, size.width, size.height, 8, 4 * size.width, colorSpace, kCGImageAlphaPremultipliedFirst);
@@ -49,7 +49,7 @@
     return resultImage;
 }
 
--(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint {
+- (UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint)secondImagePoint {
     if (secondImage == nil) {
         DLog(@"Warning, secondImage == nil");
         return self;
@@ -90,7 +90,7 @@
     return resultImage;
 }
 
--(id) initWithContentsOfFile:(NSString *)path andCutAt:(CGRect) rect {
+- (id)initWithContentsOfFile:(NSString *)path andCutAt:(CGRect)rect {
     // load image from path
     UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
 
@@ -99,7 +99,6 @@
         CGImageRef cgImage = CGImageCreateWithImageInRect([image CGImage], rect);
 
         // clean memory
-        [image release];
 
         // create a UIImage from the CGImage (memory must be allocated already)
         UIImage *sprite = [self initWithCGImage:cgImage];
@@ -115,7 +114,7 @@
     }
 }
 
--(UIImage *)cutAt:(CGRect) rect {
+- (UIImage *)cutAt:(CGRect)rect {
     CGImageRef cgImage = CGImageCreateWithImageInRect([self CGImage], rect);
 
     UIImage *res = [UIImage imageWithCGImage:cgImage];
@@ -124,7 +123,7 @@
     return res;
 }
 
--(UIImage *)convertToGrayScale {
+- (UIImage *)convertToGrayScale {
     // Create image rectangle with current image width/height
     CGRect imageRect = CGRectMake(0, 0, self.size.width, self.size.height);
 
@@ -197,7 +196,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
     CGContextRestoreGState(context);
 }
 
--(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh {
+- (UIImage *)makeRoundCornersOfSize:(CGSize)sizewh {
     CGFloat cornerWidth = sizewh.width;
     CGFloat cornerHeight = sizewh.height;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
@@ -230,7 +229,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
 }
 
 // by http://www.sixtemia.com/journal/2010/06/23/uiimage-negative-color-effect/
--(UIImage *)convertToNegative {
+- (UIImage *)convertToNegative {
     UIGraphicsBeginImageContext(self.size);
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeCopy);
     [self drawInRect:CGRectMake(0, 0, self.size.width, self.size.height)];
@@ -243,7 +242,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
     return result;
 }
 
-+(UIImage *)whiteImage:(CGSize) ofSize {
++ (UIImage *)whiteImage:(CGSize)ofSize {
     CGFloat w = ofSize.width;
     CGFloat h = ofSize.height;
     DLog(@"w: %f, h: %f", w, h);
@@ -264,10 +263,9 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
     return bkgImg;
 }
 
-+(UIImage *)drawHogsRepeated:(NSInteger) manyTimes {
++ (UIImage *)drawHogsRepeated:(NSInteger)manyTimes {
     NSString *imgString = [[NSString alloc] initWithFormat:@"%@/hedgehog.png",[[NSBundle mainBundle] resourcePath]];
     UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:imgString];
-    [imgString release];
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     int w = hogSprite.size.width * screenScale;
     int h = hogSprite.size.height * screenScale;
@@ -277,7 +275,6 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
     // draw the two images in the current context
     for (int i = 0; i < manyTimes; i++)
         CGContextDrawImage(context, CGRectMake(i*8*screenScale, 0, w, h), [hogSprite CGImage]);
-    [hogSprite release];
 
     // Create bitmap image info from pixel data in current context
     CGImageRef imageRef = CGBitmapContextCreateImage(context);
@@ -299,7 +296,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
 
 // this routine checks for the PNG size without loading it in memory
 // https://github.com/steipete/PSFramework/blob/master/PSFramework%20Version%200.3/PhotoshopFramework/PSMetaDataFunctions.m
-+(CGSize) imageSizeFromMetadataOf:(NSString *)aFileName {
++ (CGSize)imageSizeFromMetadataOf:(NSString *)aFileName {
     // File Name to C String.
     const char *fileName = [aFileName UTF8String];
     // source file

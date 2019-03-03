@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include "pmath.h"
 
 #ifndef M_PI
 // some math.h do not have M_PI macros
@@ -73,7 +74,7 @@ astring fpcrtl_copyA(astring s, Integer index, Integer count) {
     return result;
 }
 
-void fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index) {
+void __attribute__((overloadable)) fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index) {
     int num_insert;
     int num_shift;
     int num_preshift;
@@ -89,6 +90,7 @@ void fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index) {
 
     // don't overflow on insert
     if (num_preshift > 255) {
+        num_preshift = 255;
         num_insert = 255 - (index - 1);
         num_shift = 0;
     }
@@ -101,6 +103,47 @@ void fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index) {
             // don't overflow when shifting
             if (num_shift + num_preshift > 255)
                 num_shift = 255 - num_preshift;
+
+            // time to move some bytes!
+            memmove(dst->str + num_preshift, dst->str + index - 1, num_shift);
+        }
+    }
+
+    // actual byte insertion
+    memmove(dst->str + index - 1, src->str, num_insert);
+    // store new length
+    dst->len = num_shift + num_preshift;
+}
+
+void __attribute__((overloadable)) fpcrtl_insert__vars(astring *src, astring *dst, SizeInt index) {
+    int num_insert;
+    int num_shift;
+    int num_preshift;
+
+    // nothing to do if empty string is inserted or index invalid
+    if ((src->len == 0) || (index < 1) || (index > MAX_ANSISTRING_LENGTH)) {
+        return;
+    }
+
+    num_insert = src->len;
+    // number of chars from start of destination string to end of insertion
+    num_preshift = index - 1 + num_insert;
+
+    // don't overflow on insert
+    if (num_preshift > MAX_ANSISTRING_LENGTH) {
+        num_preshift = MAX_ANSISTRING_LENGTH;
+        num_insert = MAX_ANSISTRING_LENGTH - (index - 1);
+        num_shift = 0;
+    }
+    // shift trailing chars
+    else {
+        // number of bytes to be shifted
+        num_shift = dst->len - (index - 1);
+
+        if (num_shift > 0) {
+            // don't overflow when shifting
+            if (num_shift + num_preshift > MAX_ANSISTRING_LENGTH)
+                num_shift = MAX_ANSISTRING_LENGTH - num_preshift;
 
             // time to move some bytes!
             memmove(dst->str + num_preshift, dst->str + index - 1, num_shift);
@@ -232,7 +275,9 @@ Integer __attribute__((overloadable)) fpcrtl_pos(Char c, astring str) {
         return 0;
     }
 
-    p = strchr(str.s + 1, c);
+    FIX_STRINGA(str);
+
+    p = strchr(str.str, c);
 
     if (p == NULL) {
         return 0;
@@ -255,9 +300,9 @@ Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, astring str) 
     }
 
     FIX_STRING(substr);
-    str.s[str.len] = 0;
+    FIX_STRINGA(str);
 
-    p = strstr(str.s + 1, substr.str);
+    p = strstr(str.str, substr.str);
 
     if (p == NULL) {
         return 0;
@@ -296,12 +341,12 @@ void fpcrtl_new__vars(void **p, int size) {
     *p = malloc(size);
 }
 
-Integer fpcrtl_trunc(extended n) {
-    return (int) n;
+Int64 fpcrtl_trunc(extended n) {
+    return (Int64) n;
 }
 
 Integer fpcrtl_ceil(extended n) {
-    return (int) (ceil(n));
+    return (Integer) (ceil(n));
 }
 
 LongInt str_to_int(char *src)

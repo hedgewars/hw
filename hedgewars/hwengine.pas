@@ -18,7 +18,7 @@
 
 {$INCLUDE "options.inc"}
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 {$R res/hwengine.rc}
 {$ENDIF}
 
@@ -36,20 +36,34 @@ uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLan
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
+     {$IFDEF UNIX}, clocale{$ENDIF}
+     {$IFDEF WINDOWS}, dynlibs{$ENDIF}
      ;
 
 {$IFDEF HWLIBRARY}
-procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
+{$IFNDEF PAS2C}
+procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer);
+{$ENDIF}
 
 implementation
 {$ELSE}
 procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
+{$IFNDEF PAS2C}
+procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer); forward;
+{$ENDIF}
+{$ENDIF}
+
+{$IFDEF WINDOWS}
+type TSetProcessDpiAwareness = function(value: Integer): Integer; stdcall;
+var SetProcessDpiAwareness: TSetProcessDpiAwareness;
+var ShcoreLibHandle: TLibHandle;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,7 +81,6 @@ begin
             SetLandTexture;
             UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
             setAILandMarks;
-            ParseCommand('sendlanddigest', true);
             GameState:= gsStart;
             end;
         gsStart:
@@ -81,6 +94,7 @@ begin
             AddFlakes;
             SetRandomSeed(cSeed, false);
             StoreLoad(false);
+            ParseCommand('sendlanddigest', true); // extending land digest to all synced pixels (anything that could modify land)
             if not allOK then exit;
             AssignHHCoords;
             AddMiscGears;
@@ -98,7 +112,7 @@ begin
             RecountAllTeamsHealth;
             GameState:= gsGame;
             end;
-        gsConfirm, gsGame, gsChat:
+        gsConfirm, gsGame:
             begin
             // disable screenshot flash effect when about to make another screenshot
             if flagMakeCapture and (ScreenFade = sfFromWhite) then
@@ -161,6 +175,7 @@ var event: TSDL_Event;
     previousGameState: TGameState;
     wheelEvent: boolean;
 begin
+    previousGameState:= gsStart;
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
     while (not isTerminated) and allOK do
@@ -172,7 +187,7 @@ begin
         begin
             case event.type_ of
                 SDL_KEYDOWN:
-                    if GameState = gsChat then
+                    if isInChatMode then
                         begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                         KeyPressChat(event.key.keysym);
@@ -180,25 +195,10 @@ begin
                     else
                         if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
-                    if (GameState <> gsChat) and (GameState >= gsGame) then
+                    if (not isInChatMode) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
-                SDL_MOUSEBUTTONDOWN:
-                    if GameState = gsConfirm then
-                        ParseCommand('quit', true)
-                    else
-                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
-
-                SDL_MOUSEBUTTONUP:
-                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
-
-                SDL_MOUSEWHEEL:
-                    begin
-                    wheelEvent:= true;
-                    ProcessMouseWheel(event.wheel.x, event.wheel.y);
-                    end;
-
-                SDL_TEXTINPUT: if GameState = gsChat then uChat.TextInput(event.text);
+                SDL_TEXTINPUT: if isInChatMode then uChat.TextInput(event.text);
 
                 SDL_WINDOWEVENT:
                     begin
@@ -213,14 +213,22 @@ begin
                                 cHasFocus:= false;
                                 onFocusStateChanged();
                                 end;
+{$IFDEF MOBILE}
+(* Suspend game if minimized on mobile.
+NOTE: Mobile doesn't support online multiplayer yet, so it's not a problem.
+BUT: This section WILL become a bug when online multiplayer is added to
+Hedgewars and needs to be rethought. This is because it will cause the
+game to freeze if one online player minimizes Hedgewars. *)
                         SDL_WINDOWEVENT_MINIMIZED:
                                 begin
                                 previousGameState:= GameState;
                                 GameState:= gsSuspend;
                                 end;
+{$ENDIF}
                         SDL_WINDOWEVENT_RESTORED:
                                 begin
-                                GameState:= previousGameState;
+                                if GameState = gsSuspend then
+                                    GameState:= previousGameState;
 {$IFDEF ANDROID}
                                 //This call is used to reinitialize the glcontext and reload the textures
                                 ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
@@ -244,7 +252,23 @@ begin
 
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
+{$ELSE}
+                SDL_MOUSEBUTTONDOWN:
+                    if GameState = gsConfirm then
+                        ParseCommand('quit', true)
+                    else
+                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
+
+                SDL_MOUSEBUTTONUP:
+                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
+
+                SDL_MOUSEWHEEL:
+                    begin
+                    wheelEvent:= true;
+                    ProcessMouseWheel(event.wheel.y);
+                    end;
 {$ENDIF}
+
                 SDL_JOYAXISMOTION:
                     ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
                 SDL_JOYHATMOTION:
@@ -303,6 +327,9 @@ begin
     DoTimer(0); // gsLandGen -> gsStart
     DoTimer(0); // gsStart -> gsGame
 
+    newGameTicks:= 0;
+    newRealTicks:= 0;
+
     if not LoadNextCameraPosition(newRealTicks, newGameTicks) then
         exit;
     fastScrolling:= true;
@@ -314,6 +341,7 @@ begin
     while LoadNextCameraPosition(newRealTicks, newGameTicks) do
     begin
         IPCCheckSock();
+        RealTicks:= newRealTicks;
         DoGameTick(newGameTicks - oldGameTicks);
         if GameState = gsExit then
             break;
@@ -329,10 +357,12 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 procedure GameRoutine;
-//var p: TPathType;
 var s: shortstring;
     i: LongInt;
 begin
+{$IFDEF PAS2C}
+    AddFileLog('Generated using pas2c');
+{$ENDIF}
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
     AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');
@@ -352,7 +382,6 @@ begin
         end;
 
     if not allOK then exit;
-    //SDL_StartTextInput();
     SDL_ShowCursor(0);
 
 
@@ -371,23 +400,26 @@ begin
 
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
-    AddProgress();
     if not allOK then exit;
 
     LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
-    if cLocaleFName <> 'en.txt' then
+    if cLanguageFName <> 'en.txt' then
         begin
         // Try two letter locale first before trying specific locale overrides
-        if (Length(cLocale) > 3) and (Copy(cLocale, 1, 2) <> 'en') then
+        if (Length(cLanguage) > 3) and (Copy(cLanguage, 1, 2) <> 'en') then
             begin
-            LoadLocale(cPathz[ptLocale] + '/' + Copy(cLocale, 1, 2) + '.txt')
+            LoadLocale(cPathz[ptLocale] + '/' + Copy(cLanguage, 1, 2) + '.txt')
             end;
-        LoadLocale(cPathz[ptLocale] + '/' + cLocaleFName)
+        LoadLocale(cPathz[ptLocale] + '/' + cLanguageFName)
         end
-    else cLocale := 'en';
+    else cLanguage := 'en';
 
     if not allOK then exit;
     WriteLnToConsole(msgGettingConfig);
+
+    LoadFonts();
+    AddProgress();
+    LoadDefaultClanColors(cPathz[ptConfig] + '/settings.ini');
 
     if cTestLua then
         begin
@@ -419,14 +451,12 @@ begin
 
     isDeveloperMode:= false;
     if checkFails(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true) then exit;
-    //ParseCommand('rotmask', true);
     if not allOK then exit;
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
     begin
         RecorderMainLoop();
-        freeEverything(true);
         exit;
     end;
 {$ENDIF}
@@ -456,6 +486,12 @@ end;
 
 procedure initEverything (complete:boolean);
 begin
+    PathPrefix:= PathPrefix + #0;
+    UserPathPrefix:= UserPathPrefix + #0;
+    uPhysFSLayer.initModule(@PathPrefix[1], @UserPathPrefix[1]);
+    PathPrefix:= copy(PathPrefix, 1, length(PathPrefix) - 1);
+    UserPathPrefix:= copy(UserPathPrefix, 1, length(UserPathPrefix) - 1);
+
     uUtils.initModule(complete);    // opens the debug file, must be the first
     uVariables.initModule;          // inits all global variables
     uCommands.initModule;           // helps below
@@ -464,7 +500,7 @@ begin
     uLand.initModule;               // computes land
     uLandPainted.initModule;        // computes drawn land
     uIO.initModule;                 // sets up sockets
-    uPhysFSLayer.initModule;
+
     uScript.initModule;
 
     if complete then
@@ -523,6 +559,9 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
         uTextures.freeModule;
+        SDL_GL_DeleteContext(SDLGLcontext);
+        SDL_DestroyWindow(SDLwindow);
+        SDL_Quit()
         end;
 
     uIO.freeModule;
@@ -568,13 +607,48 @@ begin
     freeEverything(false);
 end;
 
+{$IFNDEF PAS2C}
+// Write backtrace to console and log when an unhandled exception occurred
+procedure catchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer);
+var
+  Message: string;
+  i: LongInt;
+begin
+  WriteLnToConsole('An unhandled exception occurred at $' + HexStr(Addr) + ':');
+  if Obj is exception then
+   begin
+     Message := Exception(Obj).ClassName + ': ' + Exception(Obj).Message;
+     WriteLnToConsole(Message);
+   end
+  else
+    WriteLnToConsole('Exception object ' + Obj.ClassName + ' is not of class Exception.');
+  WriteLnToConsole(BackTraceStrFunc(Addr));
+  if (FrameCount > 0) then
+    begin
+      for i := 0 to FrameCount - 1 do
+        WriteLnToConsole(BackTraceStrFunc(Frames[i]));
+    end;
+end;
+{$ENDIF}
+
 {$IFDEF HWLIBRARY}
-procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+function RunEngine(argc: LongInt; argv: PPChar): LongInt; cdecl; export;
 begin
     operatingsystem_parameter_argc:= argc;
     operatingsystem_parameter_argv:= argv;
 {$ELSE}
 begin
+{$ENDIF}
+
+{$IFDEF WINDOWS}
+    ShcoreLibHandle := LoadLibrary('Shcore.dll');
+    if (ShcoreLibHandle <> 0) then
+    begin
+        SetProcessDpiAwareness :=
+            TSetProcessDpiAwareness(GetProcedureAddress(ShcoreLibHandle, 'SetProcessDpiAwareness'));
+        if (SetProcessDpiAwareness <> nil) then
+            SetProcessDpiAwareness(1);
+    end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -584,17 +658,22 @@ begin
     // workaround for pascal's ParamStr and ParamCount
     init(argc, argv);
 {$ENDIF}
+{$IFNDEF PAS2C}
+    // Custom procedure for unhandled exceptions; ExceptProc is used by sysutils module
+    ExceptProc:= @catchUnhandledException;
+{$ENDIF}
+
     preInitEverything();
 
     GetParams();
 
     if GameType = gmtLandPreview then
         GenLandPreview()
-    else if GameType <> gmtSyntax then
+    else if (GameType <> gmtBadSyntax) and (GameType <> gmtSyntaxHelp) then
         Game();
 
-    // return 1 when engine is not called correctly
-    if GameType = gmtSyntax then
+    // return error when engine is not called correctly
+    if GameType = gmtBadSyntax then
         {$IFDEF PAS2C}
         exit(HaltUsageError);
         {$ELSE}
@@ -615,7 +694,7 @@ begin
         exit(HaltNoError);
     {$ELSE}
         {$IFDEF IPHONEOS}
-            exit;
+            exit(HaltNoError);
         {$ELSE}
             halt(HaltNoError);
         {$ENDIF}

@@ -75,7 +75,7 @@ QLayout * PageMain::bodyLayoutDefinition()
 
     // button order matters for overlapping (what's on top and what isn't)
     BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
-    BtnInfo->setStyleSheet("border: transparent;background: transparent;");
+	BtnInfo->setObjectName("infoButton");
     BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
@@ -109,11 +109,14 @@ QLayout * PageMain::footerLayoutDefinition()
     btnBack->setWhatsThis(tr("Exit game"));
 
 #ifdef VIDEOREC
-    BtnVideos = addButton(":/res/Videos.png", bottomLayout, 1, true);
+    BtnVideos = addButton(":/res/Videos.png", bottomLayout, 1, true, Qt::AlignBottom);
     BtnVideos->setWhatsThis(tr("Manage videos recorded from game"));
 #endif
 
-    BtnSetup = addButton(":/res/Settings.png", bottomLayout, 2, true);
+    BtnHelp = addButton(":/res/Help.png", bottomLayout, 2, true, Qt::AlignBottom);
+    BtnHelp->setWhatsThis(tr("Open the Hedgewars online game manual in your web browser"));
+
+    BtnSetup = addButton(":/res/Settings.png", bottomLayout, 3, true, Qt::AlignBottom);
     BtnSetup->setWhatsThis(tr("Edit game preferences"));
 
     return bottomLayout;
@@ -166,9 +169,7 @@ QString PageMain::randomTip()
         QSettings settings(dataMgr.settingsFileName(),
                            QSettings::IniFormat);
 
-        QString loc = settings.value("misc/locale", "").toString();
-        if (loc.isEmpty())
-            loc = QLocale::system().name();
+        QString loc = QLocale().name();
 
         QString tipFile = QString("physfs://Locale/tips_" + loc + ".xml");
 

@@ -30,15 +30,13 @@ static UIViewController *callingController;
 #pragma mark -
 #pragma mark Instance methods for engine interaction
 // prepares the controllers for hosting a game
--(void) earlyEngineLaunch:(NSDictionary *)optionsOrNil {
-    [self retain];
+- (void)earlyEngineLaunch:(NSDictionary *)optionsOrNil {
     [[AudioManagerController mainManager] fadeOutBackgroundMusic];
 
     EngineProtocolNetwork *engineProtocol = [[EngineProtocolNetwork alloc] init];
     self.port = engineProtocol.enginePort;
     engineProtocol.delegate = self;
     [engineProtocol spawnThread:self.savePath withOptions:optionsOrNil];
-    [engineProtocol release];
 
     // add a black view hiding the background
     UIWindow *thisWindow = [[HedgewarsAppDelegate sharedAppDelegate] uiwindow];
@@ -52,7 +50,6 @@ static UIViewController *callingController;
     self.blackView.alpha = 1;
     [UIView commitAnimations];
     [thisWindow addSubview:self.blackView];
-    [self.blackView release];
 
     // keep the point of return for games that completed loading
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -65,7 +62,7 @@ static UIViewController *callingController;
 }
 
 // cleans up everything
--(void) lateEngineLaunch {
+- (void)lateEngineLaunch {
     // notify views below that they are getting the spotlight again
     [[[HedgewarsAppDelegate sharedAppDelegate] uiwindow] makeKeyAndVisible];
     [callingController viewWillAppear:YES];
@@ -91,11 +88,10 @@ static UIViewController *callingController;
     [[AudioManagerController mainManager] fadeInBackgroundMusic];
     [HWUtils setGameStatus:gsNone];
     [HWUtils setGameType:gtNone];
-    [self release];
 }
 
 // main routine for calling the actual game engine
--(void) engineLaunch {
+- (void)engineLaunch {
     CGFloat width, height;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",self.port];
@@ -141,11 +137,6 @@ static UIViewController *callingController;
                                       @"--prefix", resourcePath,
                                       @"--user-prefix", documentsDirectory,
                                       nil];
-    [verticalSize release];
-    [horizontalSize release];
-    [resourcePath release];
-    [localeString release];
-    [ipcString release];
 
     NSString *username = [settings objectForKey:@"username"];
     if ([username length] > 0) {
@@ -175,7 +166,6 @@ static UIViewController *callingController;
     const char **argv = (const char **)malloc(sizeof(const char*)*argc);
     for (int i = 0; i < argc; i++)
         argv[i] = strdup([[gameParameters objectAtIndex:i] UTF8String]);
-    [gameParameters release];
 
     // this is the pascal function that starts the game
     RunEngine(argc, argv);
@@ -189,82 +179,84 @@ static UIViewController *callingController;
     [self lateEngineLaunch];
 }
 
--(void) dealloc {
-    releaseAndNil(blackView);
-    releaseAndNil(savePath);
-    [super dealloc];
-}
 
 #pragma mark -
 #pragma mark EngineProtocolDelegate methods
--(void) gameEndedWithStatistics:(NSArray *)stats {
+- (void)gameEndedWithStatistics:(NSArray *)stats {
+    [self performSelectorOnMainThread:@selector(presentStats:) withObject:stats waitUntilDone:NO];
+}
+
+- (void)presentStats:(NSArray *)stats {
     if (stats != nil) {
         StatsPageViewController *statsPage = [[StatsPageViewController alloc] init];
         statsPage.statsArray = stats;
         statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 
         [callingController presentViewController:statsPage animated:YES completion:nil];
-        [statsPage release];
     }
 }
 
 #pragma mark -
 #pragma mark Class methods for setting up the engine from outsite
-+(void) registerCallingController:(UIViewController *)controller {
++ (void)registerCallingController:(UIViewController *)controller {
     callingController = controller;
 }
 
-+(void) startGame:(TGameType) type atPath:(NSString *)path withOptions:(NSDictionary *)config {
++ (void)startGame:(TGameType)type atPath:(NSString *)path withOptions:(NSDictionary *)config {
     [HWUtils setGameType:type];
     id bridge = [[self alloc] init];
     [bridge setSavePath:path];
     [bridge earlyEngineLaunch:config];
-    [bridge release];
 }
 
-+(void) startLocalGame:(NSDictionary *)withOptions {
++ (void)startLocalGame:(NSDictionary *)withOptions {
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
     NSString *savePath = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
-    [outputFormatter release];
 
     // in the rare case in which a savefile with the same name exists the older one must be removed (otherwise it gets corrupted)
     if ([[NSFileManager defaultManager] fileExistsAtPath:savePath])
         [[NSFileManager defaultManager] removeItemAtPath:savePath error:nil];
 
     [self startGame:gtLocal atPath:savePath withOptions:withOptions];
-    [savePath release];
 }
 
-+(void) startSaveGame:(NSString *)atPath {
++ (void)startSaveGame:(NSString *)atPath {
     [self startGame:gtSave atPath:atPath withOptions:nil];
 }
 
-+(void) startMissionGame:(NSString *)withScript {
-    NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
-    NSDictionary *missionLine = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath,@"mission_command",nil];
-    [missionPath release];
++ (void)startMissionGame:(NSString *)withSubPath {
+    NSString *seedCmd = [self seedCommand];
+    NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/%@.lua", withSubPath];
+    NSDictionary *missionDict = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath, @"mission_command", seedCmd, @"seed_command", nil];
 
-    [self startGame:gtMission atPath:nil withOptions:missionLine];
-    [missionLine release];
+    [self startGame:gtMission atPath:nil withOptions:missionDict];
 }
 
-+(void) startSimpleGame {
++ (NSString *)seedCommand {
     // generate a seed
-    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
-    NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
-    CFRelease(uuid);
+    NSString *seed = [HWUtils seed];
     NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
-    [seed release];
+    return seedCmd;
+}
+
++ (void)startCampaignMissionGameWithScript:(NSString *)missionScriptName forCampaign:(NSString *)campaignName {
+    NSString *seedCmd = [self seedCommand];
+    NSString *campaignMissionPath = [[NSString alloc] initWithFormat:@"escript Missions/Campaign/%@/%@", campaignName, missionScriptName];
+    NSDictionary *campaignMissionDict = [[NSDictionary alloc] initWithObjectsAndKeys:campaignMissionPath, @"mission_command", seedCmd, @"seed_command", nil];
+    
+    [self startGame:gtCampaign atPath:nil withOptions:campaignMissionDict];
+}
+
++ (void)startSimpleGame {
+    NSString *seedCmd = [self seedCommand];
 
     // pick a random static map
     NSArray *listOfMaps = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
     NSString *mapName = [listOfMaps objectAtIndex:arc4random_uniform((int)[listOfMaps count])];
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg",MAPS_DIRECTORY(),mapName];
     NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
-    [fileCfg release];
     NSArray *split = [contents componentsSeparatedByString:@"\n"];
-    [contents release];
     NSString *themeCommand = [[NSString alloc] initWithFormat:@"etheme %@", [split objectAtIndex:0]];
     NSString *staticMapCommand = [[NSString alloc] initWithFormat:@"emap %@", mapName];
 
@@ -285,8 +277,6 @@ static UIViewController *callingController;
                                                                             [NSNumber numberWithUnsignedInt:secondColor],@"color",
                                                                             @"Robots.plist",@"team",nil];
     NSArray *listOfTeams = [[NSArray alloc] initWithObjects:firstTeam,secondTeam,nil];
-    [firstTeam release];
-    [secondTeam release];
 
     // create the configuration
     NSDictionary *gameDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -301,14 +291,9 @@ static UIViewController *callingController;
                                     @"Default.plist",@"weapon",
                                     @"",@"mission_command",
                                     nil];
-    [listOfTeams release];
-    [staticMapCommand release];
-    [themeCommand release];
-    [seedCmd release];
 
     // launch game
     [GameInterfaceBridge startLocalGame:gameDictionary];
-    [gameDictionary release];
 }
 
 @end

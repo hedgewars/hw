@@ -33,6 +33,7 @@ params = {
 	time = ,
 	ammoType = ,
 	gearType = ,
+	secondaryGearType = ,
 	targets = {
 		{ x = , y = },
 		{ x = , y = },
@@ -42,10 +43,6 @@ params = {
 	wind = ,
 	solidLand = ,
 	artillery = ,
-	hogHat = ,
-	hogName = ,
-	teamName = ,
-	teamGrave = ,
 	clanColor = ,
 	goalText = ,
 	shootText =
@@ -54,6 +51,7 @@ TargetPracticeMission(params)
 ----- snip -----
 ]=]
 
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local player = nil
@@ -64,6 +62,10 @@ local game_lost = false
 local time_goal = 0
 local total_targets
 local targets
+local target_radar = false
+local next_target_circle = nil
+local gearsInGameCount = 0
+local gearsInGame = {}
 
 --[[
 TrainingMission(params)
@@ -76,7 +78,7 @@ The argument “params” is a table containing fields which describe the traini
 	- theme:	the name of the theme (does not need to be a standalone theme)
 	- time:		the time limit in milliseconds
 	- ammoType:	the ammo type of the weapon to be used
-	- gearType:	the gear type of the gear which is fired (used to count shots)
+	- gearType:	the gear type of the gear which is fired (used to count shots and re-center camera)
 	- targets:	The coordinates of where the targets will be spawned.
 			It is a table containing tables containing coordinates of format
 			{ x=value, y=value }. The targets will be spawned in the same
@@ -92,25 +94,32 @@ The argument “params” is a table containing fields which describe the traini
 	- wind:		the initial wind (-100 to 100) (default: 0 (no wind))
 	- solidLand:	weather the terrain is indestructible (default: false)
 	- artillery:	if true, the hog can’t move (default: false)
-	- hogHat:	hat of the hedgehog (default: "NoHat")
-	- hogName:	name of the hedgehog (default: "Trainee")
-	- teamName:	name of the hedgehog’s team (default: "Training Team")
-	- teamGrave:	name of the hedgehog’s grave
-	- clanColor:	color of the (only) clan (default: 0xFF0204, which is a red tone)
+	- secGearType:	cluster of projectile gear (if present) (used to re-center camera)
+	- clanColor:	color of the (only) clan (default: -1, default first clan color)
+	- faceLeft:	if true, hog starts facing left, otherwise right (default: false)
 	- goalText:	A short string explaining the goal of the mission
 			(default: "Destroy all targets within the time!")
 	- shootText:	A string which says how many times the player shot, “%d” is replaced
 			by the number of shots. (default: "You have shot %d times.")
+	- useRadar	Whether to use target radar (small circles that mark the position
+			of the next target). (default: true). Note: Still needs to be unlocked.
+	- radarTint:	RGBA color of the target radar  (default: 0xFF3030FF). Use this field
+			if the target radar would be hard to see against the background.
 ]]
+
+
+local getTargetsScore = function()
+	return scored * math.ceil(6000/#targets)
+end
+
 function TargetPracticeMission(params)
-	if params.hogHat == nil then params.hogHat = "NoHat" end
-	if params.hogName == nil then params.hogName = loc("Trainee") end
-	if params.teamName == nil then params.teamName = loc("Training Team") end
 	if params.goalText == nil then params.goalText = loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.") end
 	if params.shootText == nil then params.shootText = loc("You have shot %d times.") end
-	if params.clanColor == nil then params.clanColor = 0xFF0204 end
-	if params.teamGrave == nil then params.teamGrave= "Statue" end
+	if params.clanColor == nil then params.clanColor = -1 end
+	if params.faceLeft == nil then params.faceLeft = false end
 	if params.wind == nil then params.wind = 0 end
+	if params.radarTint == nil then params.radarTint = 0xFF3030FF end
+	if params.useRadar == nil then params.useRadar = true end
 
 	local solid, artillery
 	if params.solidLand == true then solid = gfSolidLand else solid = 0 end
@@ -126,7 +135,14 @@ function TargetPracticeMission(params)
 
 	_G.onGameInit = function()
 		Seed = 1
-		GameFlags = gfDisableWind + gfInfAttack + gfOneClanMode + solid + artillery
+		ClearGameFlags()
+		local attackMode
+		if (params.ammoType == amBee) then
+			attackMode = gfInfAttack
+		else
+			attackMode = gfMultiWeapon
+		end
+		EnableGameFlags(gfDisableWind, attackMode, gfOneClanMode, solid, artillery)
 		TurnTime = params.time
 		Map = params.map
 		Theme = params.theme
@@ -134,44 +150,70 @@ function TargetPracticeMission(params)
 		CaseFreq = 0
 		MinesNum = 0
 		Explosives = 0
+		-- Disable Sudden Death
+		WaterRise = 0
+		HealthDecrease = 0
 
 		SetWind(params.wind)
 
-		AddTeam(loc(params.teamName), params.clanColor, params.teamGrave, "Island", "Default", "Flowerhog")
+		AddMissionTeam(params.clanColor)
 
-		player = AddHog(loc(params.hogName), 0, 1, params.hogHat)
+		player = AddMissionHog(1)
 		SetGearPosition(player, params.hog_x, params.hog_y)
+		HogTurnLeft(player, params.faceLeft)
+
+		local won = GetMissionVar("Won")
+		-- Unlock the target radar when the player has completed
+		-- the target practice before (any score).
+		-- Target radar might be disabled by config, however.
+		if won == "true" and params.useRadar == true then
+			target_radar = true
+		end
+
 	end
 
 	_G.onGameStart = function()
 		SendHealthStatsOff()
-		ShowMission(params.missionTitle, loc("Aiming practice"), params.goalText, -params.ammoType, 5000)
+		local recordInfo = getReadableChallengeRecord("Highscore")
+		ShowMission(params.missionTitle, loc("Aiming practice"), params.goalText .. "|" .. recordInfo, -params.ammoType, 5000)
+		SetTeamLabel(GetHogTeamName(player), "0")
 		spawnTarget()
 	end
 
 	_G.onNewTurn = function()
-		-- TODO: Remove the else branch when 0.9.21 has been released
-		if SetWeapon ~= nil then
-			SetWeapon(params.ammoType)
-		else
-			ParseCommand("/setweap "..string.char(params.ammoType))
-		end
+		SetWeapon(params.ammoType)
 	end
 
 	_G.spawnTarget = function()
-		gear = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
+		-- Spawn next target
+		local gear = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
 
-		x = targets[scored+1].x
-		y = targets[scored+1].y
+		local x = targets[scored+1].x
+		local y = targets[scored+1].y
 
 		SetGearPosition(gear, x, y)
+
+		-- Target radar: Highlight position of the upcoming target.
+		-- This must be unlocked by the player first.
+		if target_radar then
+			if (not next_target_circle) and targets[scored+2] then
+				next_target_circle = AddVisualGear(0,0,vgtCircle,90,true)
+			end
+			if targets[scored+2] then
+				SetVisualGearValues(next_target_circle, targets[scored+2].x, targets[scored+2].y, 205, 255, 1, 20, nil, nil, 3, params.radarTint)
+			elseif next_target_circle then
+				DeleteVisualGear(next_target_circle)
+				next_target_circle = nil
+			end
+		end
+
+		return gear
 	end
 
 	_G.onGameTick20 = function()
 		if TurnTimeLeft < 40 and TurnTimeLeft > 0 and scored < total_targets and game_lost == false then
 			game_lost = true
-			AddCaption(loc("Time’s up!"), 0xFFFFFFFF, capgrpGameState)
-			ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
+			AddCaption(loc("Time’s up!"), capcolDefault, capgrpGameState)
 			SetHealth(player, 0)
 			time_goal = 1
 		end
@@ -179,18 +221,25 @@ function TargetPracticeMission(params)
 		if band(GetState(player), gstDrowning) == gstDrowning and game_lost == false and scored < total_targets then
 			game_lost = true
 			time_goal = 1
-			AddCaption(loc("You lose!"), 0xFFFFFFFF, capgrpGameState)
-			ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 		end
 
 		if scored == total_targets  or game_lost then
 			if end_timer == 0 then
 				generateStats()
 				EndGame()
-			else
-				TurnTimeLeft = time_goal
 			end
-	        end_timer = end_timer - 20
+			end_timer = end_timer - 20
+		end
+
+		for gear, _ in pairs(gearsInGame) do
+			if band(GetState(gear), gstDrowning) ~= 0 then
+				-- Re-center camera on hog if projectile gears drown
+				gearsInGame[gear] = nil
+				gearsInGameCount = gearsInGameCount - 1
+				if gearsInGameCount == 0 and GetHealth(CurrentHedgehog) then
+					FollowGear(CurrentHedgehog)
+				end
+			end
 		end
 	end
 
@@ -198,21 +247,37 @@ function TargetPracticeMission(params)
 		if GetGearType(gear) == params.gearType then
 			shots = shots + 1
 		end
+		if GetGearType(gear) == params.gearType or (params.secGearType and GetGearType(gear) == params.secGearType) then
+			gearsInGameCount = gearsInGameCount + 1
+			gearsInGame[gear] = true
+		end
 	end
 
 	_G.onGearDamage = function(gear, damage)
 		if GetGearType(gear) == gtTarget then
 			scored = scored + 1
+			SetTeamLabel(GetHogTeamName(player), tostring(getTargetsScore()))
 			if scored < total_targets then
-				AddCaption(string.format(loc("Targets left: %d"), (total_targets-scored)), 0xFFFFFFFF, capgrpMessage)
+				AddCaption(string.format(loc("Targets left: %d"), (total_targets-scored)), capcolDefault, capgrpMessage)
 				spawnTarget()
 			else
 				if not game_lost then
-					AddCaption(loc("You have destroyed all targets!"), 0xFFFFFFFF, capgrpGameState)
+					SaveMissionVar("Won", "true")
+					AddCaption(loc("You have destroyed all targets!"), capcolDefault, capgrpGameState)
 					ShowMission(params.missionTitle, loc("Aiming practice"), loc("Congratulations! You have destroyed all targets within the time."), 0, 0)
-					PlaySound(sndVictory, player)
+					if shots <= scored then
+						-- No misses!
+						PlaySound(sndFlawless, player)
+					else
+						PlaySound(sndVictory, player)
+					end
+					SetEffect(player, heInvulnerable, 1)
 					SetState(player, bor(GetState(player), gstWinner))
 					time_goal = TurnTimeLeft
+					-- Disable control
+					SetInputMask(0)
+					AddAmmo(player, params.ammoType, 0)
+					SetTurnTimePaused(true)
 				end
 			end
 		end
@@ -220,8 +285,6 @@ function TargetPracticeMission(params)
 		if GetGearType(gear) == gtHedgehog then
 			if not game_lost then
 				game_lost = true
-				AddCaption(loc("You lose!", 0xFFFFFFFF, capgrpGameState))
-				ShowMission(params.missionTitle, loc("Aiming practice"), loc("Oh no! You failed! Just try again."), -amSkip, 0)
 
 				SetHealth(player, 0)
 				time_goal = 1
@@ -229,23 +292,59 @@ function TargetPracticeMission(params)
 		end
 	end
 
+	_G.onGearDelete = function(gear)
+		if GetGearType(gear) == gtTarget and band(GetState(gear), gstDrowning) ~= 0 then
+			AddCaption(loc("You lost your target, try again!"), capcolDefault, capgrpGameState)
+			local newTarget = spawnTarget()
+			local x, y = GetGearPosition(newTarget)
+			local success = PlaceSprite(x, y + 24, sprAmGirder, 0, 0xFFFFFFFF, false, false, false)
+			if not success then
+				WriteLnToConsole("ERROR: Failed to spawn girder under respawned target!")
+			end
+		elseif gearsInGame[gear] then
+			gearsInGame[gear] = nil
+			gearsInGameCount = gearsInGameCount - 1
+			if gearsInGameCount == 0 and GetHealth(CurrentHedgehog) then
+				-- Re-center camera to hog after all projectile gears were destroyed
+				FollowGear(CurrentHedgehog)
+			end
+		end
+	end
+
 	_G.generateStats = function()
-		local accuracy = (scored/shots)*100
-		local end_score_targets = scored * math.ceil(6000/#targets)
+		local accuracy, accuracy_int
+		if(shots > 0) then
+			accuracy = (scored/shots)*100
+			accuracy_int = div(scored*100, shots)
+		end
+		local end_score_targets = getTargetsScore()
 		local end_score_overall
 		if not game_lost then
 			local end_score_time = math.ceil(time_goal/(params.time/6000))
-			local end_score_accuracy = math.ceil(accuracy * 60)
+			local end_score_accuracy = 0
+			if(shots > 0) then
+				end_score_accuracy = math.ceil(accuracy * 60)
+			end
 			end_score_overall = end_score_time + end_score_targets + end_score_accuracy
+			SetTeamLabel(GetHogTeamName(player), tostring(end_score_overall))
 
 			SendStat(siGameResult, loc("You have finished the target practice!"))
 
 			SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), scored, total_targets, end_score_targets))
 			SendStat(siCustomAchievement, string.format(params.shootText, shots))
-			SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%% (+%d points)."), accuracy, end_score_accuracy))
+			if(shots > 0) then
+				SendStat(siCustomAchievement, string.format(loc("Your accuracy was %.1f%% (+%d points)."), accuracy, end_score_accuracy))
+			end
 			SendStat(siCustomAchievement, string.format(loc("You had %.1fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
+			if (not target_radar) and (#targets > 1) and (params.useRadar == true) then
+				SendStat(siCustomAchievement, loc("You have unlocked the target radar!"))
+			end
+
+			if(shots > 0) then
+				updateChallengeRecord("AccuracyRecord", accuracy_int)
+			end
 		else
-			SendStat(siGameResult, loc("You lose!"))
+			SendStat(siGameResult, loc("Challenge over!"))
 
 			SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), scored, total_targets, end_score_targets))
 			SendStat(siCustomAchievement, string.format(params.shootText, shots))
@@ -254,7 +353,9 @@ function TargetPracticeMission(params)
 			end
 			end_score_overall = end_score_targets
 		end
-		SendStat(siPlayerKills, tostring(end_score_overall), loc(params.teamName))
-		SendStat(siPointType, loc("points"))
+		SendStat(siPointType, "!POINTS")
+		SendStat(siPlayerKills, tostring(end_score_overall), GetHogTeamName(player))
+		-- Update highscore
+		updateChallengeRecord("Highscore", end_score_overall)
 	end
 end

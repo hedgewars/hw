@@ -47,6 +47,7 @@ QLayout * PageNet::bodyLayoutDefinition()
     BtnNetConnect = new QPushButton(ConnGroupBox);
     BtnNetConnect->setFont(*font14);
     BtnNetConnect->setText(QPushButton::tr("Connect"));
+    BtnNetConnect->setWhatsThis(tr("Connect to the selected server"));
     GBClayout->addWidget(BtnNetConnect, 2, 2);
 
     tvServersList = new QTableView(ConnGroupBox);
@@ -56,11 +57,13 @@ QLayout * PageNet::bodyLayoutDefinition()
     BtnUpdateSList = new QPushButton(ConnGroupBox);
     BtnUpdateSList->setFont(*font14);
     BtnUpdateSList->setText(QPushButton::tr("Update"));
+    BtnUpdateSList->setWhatsThis(tr("Update the list of servers"));
     GBClayout->addWidget(BtnUpdateSList, 2, 0);
 
     BtnSpecifyServer = new QPushButton(ConnGroupBox);
     BtnSpecifyServer->setFont(*font14);
-    BtnSpecifyServer->setText(QPushButton::tr("Specify"));
+    BtnSpecifyServer->setText(QPushButton::tr("Specify address"));
+    BtnSpecifyServer->setWhatsThis(tr("Specify the address and port number of a known server and connect to it directly"));
     GBClayout->addWidget(BtnSpecifyServer, 2, 1);
 
     return pageLayout;
@@ -71,7 +74,8 @@ QLayout * PageNet::footerLayoutDefinition()
     QHBoxLayout * footerLayout = new QHBoxLayout();
 
     BtnNetSvrStart = formattedButton(QPushButton::tr("Start server"));
-    BtnNetSvrStart->setMinimumWidth(180);
+    BtnNetSvrStart->setWhatsThis(tr("Start private server"));
+    BtnNetSvrStart->setMinimumSize(180, 50);
     QString serverPath = bindir->absolutePath() + "/hedgewars-server";
 #ifdef Q_OS_WIN
     serverPath += + ".exe";
@@ -80,7 +84,7 @@ QLayout * PageNet::footerLayoutDefinition()
     BtnNetSvrStart->setVisible(server.exists());
 
     footerLayout->addStretch();
-    footerLayout->addWidget(BtnNetSvrStart);
+    footerLayout->addWidget(BtnNetSvrStart, 0, Qt::AlignBottom);
 
     return footerLayout;
 }
@@ -99,7 +103,7 @@ void PageNet::updateServersList()
 {
     tvServersList->setModel(new HWNetUdpModel(tvServersList));
 
-    tvServersList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    tvServersList->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
     static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
 

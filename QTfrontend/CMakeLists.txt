@@ -1,29 +1,22 @@
-# Configure for Qt4
-set(QT_MIN_VERSION "4.7.0")
-include(CheckLibraryExists)
-
-set(QT_USE_QTCORE TRUE)
-set(QT_USE_QTGUI TRUE)
-set(QT_USE_QTNETWORK TRUE)
-set(QT_USE_QTSVG FALSE)
-set(QT_USE_QTXML FALSE)
-set(QT_USE_QTOPENGL FALSE)
-set(QT_USE_QTMAIN TRUE)
-
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
-
-# https://bugreports.qt-project.org/browse/QTBUG-17333
-if(APPLE AND
-   ${QTVERSION} VERSION_GREATER "4.7.0" AND
-   ${QTVERSION} VERSION_LESS "4.7.4")
-   message(FATAL_ERROR "This version of Qt is known *not* to work, please update or use a lower version")
+if(APPLE AND EXISTS /usr/local/opt/qt5)
+	# Special treatment for OS X users who
+	# install Qt5 via Homebrew.
+	# Homebrew installs Qt5 (up to at least 5.9.1) in
+	# /usr/local/qt5, ensure it can be found by CMake since
+	# it is not in the default /usr/local prefix.
+	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
 endif()
 
+find_package(Qt5 COMPONENTS Core Widgets Gui Network)
+
+include_directories(${Qt5Core_PRIVATE_INCLUDE_DIRS})
+
+include(CheckLibraryExists)
+
 find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer REQUIRED) #audio in SDLInteraction
+find_package(SDL2_mixer 2 REQUIRED) #audio in SDLInteraction
 include_directories(${SDL2_INCLUDE_DIR})
-include_directories(${SDL2MIXER_INCLUDE_DIR})
+include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 
 if(LIBAV_FOUND)
     add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
@@ -51,6 +44,37 @@ foreach(l ${serverlocs})
 endforeach(l)
 list(APPEND locsout ${firstline} "\n}\\;\n")
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h ${locsout})
+
+
+# Credits localization
+file(GLOB CreditsCSV ${CMAKE_SOURCE_DIR}/QTfrontend/res/credits.csv)
+foreach(csvfile ${CreditsCSV})
+    # Load credits.csv
+    file(READ ${csvfile} csv)
+
+    # Match first line of CSV file
+    string(REGEX MATCH "(E|S|U),\"[^\n\"]+\"" loc_top ${csv})
+    string(REGEX REPLACE "(E|S|U),\"([^\n\"]+)\"" "\nQT_TRANSLATE_NOOP(\"credits\", \"\\2\")" s ${loc_top})
+    list(APPEND csvlocs ${s})
+
+    # Match remaining lines of CSV file
+    string(REGEX MATCHALL "\n(E|S|U),\"[^\n\"]+\"" locs ${csv})
+    foreach(str ${locs})
+        string(REGEX REPLACE "(E|S|U),\"([^\n\"]+)\"" "QT_TRANSLATE_NOOP(\"credits\", \"\\2\")" s ${str})
+        list(APPEND csvlocs ${s})
+    endforeach(str)
+endforeach(csvfile)
+
+list(REMOVE_DUPLICATES csvlocs)
+list(GET csvlocs 0 firstline)
+list(REMOVE_AT csvlocs 0)
+set(locsout "const char * creditsMessages[] = {")
+foreach(l ${csvlocs})
+    list(APPEND locsout ${l} ",")
+endforeach(l)
+list(APPEND locsout ${firstline} "\n}\\;\n")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/creditsmessages.h ${locsout})
+
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -99,14 +123,11 @@ list(APPEND hwfr_src
     main.cpp
     team.cpp
     campaign.cpp
+    mission.cpp
     ui_hwform.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sdlkeys.cpp
     )
-
-#xfire integration
-if(WIN32)
-    list(APPEND hwfr_src util/platform/xfire.cpp util/platform/xfiregameclient.cpp)
-endif(WIN32)
 
 if(MINGW)
     # resource compilation for mingw
@@ -148,7 +169,9 @@ set(hwfr_hdrs
     hwconsts.h
     sdlkeys.h
     campaign.h
+    mission.h
     ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h
+    ${CMAKE_CURRENT_BINARY_DIR}/creditsmessages.h
     )
 
 set(hwfr_rez hedgewars.qrc)
@@ -164,9 +187,9 @@ if(BUILD_ENGINE_LIBRARY)
     endif()
 endif()
 
-qt4_add_resources(hwfr_rez_src ${hwfr_rez})
+qt5_add_resources(hwfr_rez_src ${hwfr_rez})
 
-qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
+qt5_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 
 if(APPLE)
@@ -203,14 +226,14 @@ add_executable(hedgewars ${console_access}
 
 list(APPEND HW_LINK_LIBS
     physfs physlayer
-    ${QT_LIBRARIES}
+    Qt5::Core Qt5::Widgets Qt5::Gui Qt5::Network
     )
 
 list(APPEND HW_LINK_LIBS
     ${SDL2_LIBRARY}
-    ${SDL2MIXER_LIBRARY}
+    ${SDL2_MIXER_LIBRARIES}
     )
-    
+
 if(WIN32 AND NOT UNIX)
     if(NOT SDL2_LIBRARY)
         list(APPEND HW_LINK_LIBS SDL2)
@@ -225,7 +248,11 @@ if(WIN32 AND NOT UNIX)
 endif()
 
 if(CMAKE_CXX_COMPILER MATCHES "clang*")
-    list(APPEND HW_LINK_LIBS stdc++ m)
+    list(APPEND HW_LINK_LIBS stdc++ m atomic)
+endif()
+
+if(WIN32 AND VCPKG_TOOLCHAIN)
+    list(APPEND HW_LINK_LIBS Qt5::WinMain)
 endif()
 
 target_link_libraries(hedgewars ${HW_LINK_LIBS})

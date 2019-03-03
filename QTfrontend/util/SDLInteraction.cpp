@@ -25,18 +25,13 @@
 #include "SDL_mixer.h"
 
 #include "HWApplication.h"
+#include "sdlkeys.h"
 #include "hwform.h" /* you know, we could just put a config singleton lookup function in gameuiconfig or something... */
 #include "gameuiconfig.h"
 
 #include "SDLInteraction.h"
 
 #include "physfsrwops.h"
-
-extern char sdlkeys[1024][2][128];
-extern char xb360buttons[][128];
-extern char xb360dpad[128];
-extern char xbox360axes[][128];
-
 
 SDLInteraction & SDLInteraction::instance()
 {
@@ -57,6 +52,13 @@ SDLInteraction::SDLInteraction()
     lastchannel = 0;
     if(SDL_NumJoysticks())
         addGameControllerKeys();
+
+    int i = 0;
+    while(i < 1024 && sdlkeys[i][1][0] != '\0')
+        i++;
+    sprintf(sdlkeys[i][0], "none");
+    sprintf(sdlkeys[i++][1], "%s", HWApplication::translate("binds (keys)", unboundcontrol).toUtf8().constData());
+
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
 
     m_soundMap = new QMap<QString,Mix_Chunk*>();
@@ -105,19 +107,23 @@ void SDLInteraction::addGameControllerKeys() const
     QStringList result;
 
 #if SDL_VERSION_ATLEAST(2, 0, 0)
-// TODO or not TODO?
-#else
     int i = 0;
     while(i < 1024 && sdlkeys[i][1][0] != '\0')
         i++;
 
     // Iterate through all game controllers
+    qDebug("Detecting controllers ...");
     for(int jid = 0; jid < SDL_NumJoysticks(); jid++)
     {
         SDL_Joystick* joy = SDL_JoystickOpen(jid);
 
-        // Retrieve the game controller's name and strip "Controller (...)" that's added by some drivers (English only)
-        QString joyname = QString(SDL_JoystickName(jid)).replace(QRegExp("^Controller \\((.*)\\)$"), "\\1");
+        // Retrieve the game controller's name
+        QString joyname = QString(SDL_JoystickNameForIndex(jid));
+
+        // Strip "Controller (...)" that's added by some drivers (English only)
+        joyname.replace(QRegExp("^Controller \\((.*)\\)$"), "\\1");
+
+        qDebug("- Controller no. %d: %s", jid, qPrintable(joyname));
 
         // Connected Xbox 360 controller? Use specific button names then
         // Might be interesting to add 'named' buttons for the most often used gamepads
@@ -129,39 +135,38 @@ void SDLInteraction::addGameControllerKeys() const
         // Register entries for missing axes not assigned to sticks of this joystick/gamepad
         for(int aid = 0; aid < SDL_JoystickNumAxes(joy) && i < 1021; aid++)
         {
-            // Again store the part of the string not changing for multiple uses
-            QString axis = prefix + HWApplication::translate("binds (keys)", "Axis") + QString(" %1 ").arg(aid + 1);
+            QString axis = prefix + HWApplication::translate("binds (keys)", controlleraxis).arg(aid + 1);
 
             // Entry for "Axis Up"
             sprintf(sdlkeys[i][0], "j%da%du", jid, aid);
-            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2])) : axis + HWApplication::translate("binds (keys)", "(Up)")).toUtf8().constData());
+            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2])) : (axis.arg(HWApplication::translate("binds (keys)", controllerup)))).toUtf8().constData());
 
             // Entry for "Axis Down"
             sprintf(sdlkeys[i][0], "j%da%dd", jid, aid);
-            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2 + 1])) : axis + HWApplication::translate("binds (keys)", "(Down)")).toUtf8().constData());
+            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2 + 1])) : (axis.arg(HWApplication::translate("binds (keys)", controllerdown)))).toUtf8().constData());
         }
 
         // Register entries for all coolie hats of this joystick/gamepad
         for(int hid = 0; hid < SDL_JoystickNumHats(joy) && i < 1019; hid++)
         {
             // Again store the part of the string not changing for multiple uses
-            QString hat = prefix + (isxb ? (HWApplication::translate("binds (keys)", xb360dpad) + QString(" ")) : HWApplication::translate("binds (keys)", "Hat") + QString(" %1 ").arg(hid + 1));
+            QString hat = prefix + (isxb ? (HWApplication::translate("binds (keys)", xb360dpad) + QString(" ")) : HWApplication::translate("binds (keys)", controllerhat).arg(hid + 1));
 
             // Entry for "Hat Up"
             sprintf(sdlkeys[i][0], "j%dh%du", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Up)")).toUtf8().constData());
+            sprintf(sdlkeys[i++][1], "%s", hat.arg(HWApplication::translate("binds (keys)", controllerup)).toUtf8().constData());
 
             // Entry for "Hat Down"
             sprintf(sdlkeys[i][0], "j%dh%dd", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Down)")).toUtf8().constData());
+            sprintf(sdlkeys[i++][1], "%s", hat.arg(HWApplication::translate("binds (keys)", controllerdown)).toUtf8().constData());
 
             // Entry for "Hat Left"
             sprintf(sdlkeys[i][0], "j%dh%dl", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Left)")).toUtf8().constData());
+            sprintf(sdlkeys[i++][1], "%s", hat.arg(HWApplication::translate("binds (keys)", controllerleft)).toUtf8().constData());
 
             // Entry for "Hat Right"
             sprintf(sdlkeys[i][0], "j%dh%dr", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Right)")).toUtf8().constData());
+            sprintf(sdlkeys[i++][1], "%s", hat.arg(HWApplication::translate("binds (keys)", controllerright)).toUtf8().constData());
         }
 
         // Register entries for all buttons of this joystick/gamepad
@@ -169,7 +174,7 @@ void SDLInteraction::addGameControllerKeys() const
         {
             // Buttons
             sprintf(sdlkeys[i][0], "j%db%d", jid, bid);
-            sprintf(sdlkeys[i++][1], "%s", (prefix + ((isxb && bid < 10) ? (HWApplication::translate("binds (keys)", xb360buttons[bid]) + QString(" ")) : HWApplication::translate("binds (keys)", "Button") + QString(" %1").arg(bid + 1))).toUtf8().constData());
+            sprintf(sdlkeys[i++][1], "%s", (prefix + ((isxb && bid < 10) ? (HWApplication::translate("binds (keys)", xb360buttons[bid]) + QString(" ")) : HWApplication::translate("binds (keys)", controllerbutton).arg(bid + 1))).toUtf8().constData());
         }
         // Close the game controller as we no longer need it
         SDL_JoystickClose(joy);

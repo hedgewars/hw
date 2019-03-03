@@ -6,13 +6,13 @@
     <tip>Jednoduše zvol stejnou barvu jako spoluhráč, abys hrál ve stejném týmu. Každý z vás bude mít kontrolu nad svými vlastními ježky, ale vyhraje nebo prohraje společně.</tip>
     <tip>Některé zbraně mohou způsobovat jen malé poškození, ale mohou být devastující v pravé chvíli. Zkus použít pistoli Desert Eagle ke sražení několika nepřátelských ježků do vody.</tip>
     <tip>Pokud si nejsi jistý, co dělat a nechceš plýtvat municí, přeskoč tah. Ale nenech uběhnout moc času, protože pak přijde Náhlá smrt!</tip>
-    <tip>Pokud chceš zabránit ostatním, aby používali tvoji oblíbenou přezdívku na oficiálním serveru, zaregistruj se na http://www.hedgewars.org/.</tip>
+    <tip>Pokud chceš zabránit ostatním, aby používali tvoji oblíbenou přezdívku na oficiálním serveru, zaregistruj se na https://www.hedgewars.org/.</tip>
     <tip>Jsi znuděn standardní hrou? Vyzkoušej některou misi - nabídnou jiný herní zážitek v závislosti na tom, kterou si vybereš.</tip>
     <tip>Standardně hra vždycky nahrává poslední odehraný zápas jako ukázku. Vyber si 'Místní hru' a zvol tlačítko 'Ukázky' v pravém spodním rohu k jejich přehrávání a správě.</tip>
     <tip>Hedgewars je Open Source a Freeware, který jsme vytvořili v našem volném čase. Pokud máš problémy, zeptej se na našem fóru, ale neočekávej prosím nonstop podporu!</tip>
     <tip>Hedgewars je Open Source a Freeware, který jsme vytvořili v našem volném čase. Pokud se ti líbí, pomož nám malým příspěvkem, nebo se podílej na práci!</tip>
     <tip>Hedgewars je Open Source a Freeware, který jsme vytvořili v našem volném čase. Sdílej ho se svoji rodinou a přáteli dle libosti!</tip>
-    <tip>Čas od času se konají oficiální turnaje. Nadcházející události budou publikovány na http://www.hedgewars.org/ s několika denním předstihem.</tip>
+    <tip>Čas od času se konají oficiální turnaje. Nadcházející události budou publikovány na https://www.hedgewars.org/ s několika denním předstihem.</tip>
     <tip>Hedgewars je k dispozici v mnoha jazycích. Pokud překlad do tvého jazyka vypadá zastaralý nebo chybí, neváhej nás kontaktovat!</tip>
     <tip>Hedgewars může být spuštěno na mnoha různých operačních systémech včetně Microsoft Windows, Mac OS X a Linuxu.</tip>
     <tip>Vždycky si pamatuj, že můžeš vytvořit vlastní hru na místní síti i internetu. Nejsi odkázán jen na možnost 'Prostá hra'.</tip>
@@ -45,7 +45,4 @@
     <tip>Můžeš si asociovat Hedgewars soubory (uložené hry a nahrávky) tak, abys je mohl ihned spouštět z internetového prohlížeče nebo prúzkumníka souborů.</tip>
     <tip>Chceš ušetřit lana? Uvolni ho ve vzduchu a vystřel znovu. Dokud se nedotkneš země, využíváš ho bez plýtvání munice!</tip>
     <tip>Použij Molotov nebo plamenomet, abys dočasně zamezil ježkům v přechodu terénu jako jsou tunely nebo plošiny.</tip>
-    <windows-only>
-        <tip>Windows verze Hedgewars podporuje Xfire. Přidej si Hedgewars do jeho seznamu her, abys viděl přátele, kteří ho hrají.</tip>
-    </windows-only>
 </tips>

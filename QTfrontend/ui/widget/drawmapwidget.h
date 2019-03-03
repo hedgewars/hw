@@ -24,6 +24,7 @@
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QLabel>
+#include <QSizePolicy>
 
 #include "drawmapscene.h"
 
@@ -59,14 +60,19 @@ namespace Ui
             {
                 QVBoxLayout * vbox = new QVBoxLayout(drawMapWidget);
                 vbox->setMargin(0);
-                lblPoints = new QLabel("0", drawMapWidget);
                 QLayout * arLayout = new QVBoxLayout();
                 arLayout->setAlignment(Qt::AlignCenter);
                 vbox->addLayout(arLayout);
 
+                lblPoints = new QLabel("0", drawMapWidget);
+                lblPoints->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+                arLayout->addWidget(lblPoints);
+
                 graphicsView = new DrawMapView(drawMapWidget);
                 graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                graphicsView->setRenderHint(QPainter::Antialiasing, true);
+                graphicsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
                 arLayout->addWidget(graphicsView);
 
                 retranslateUi(drawMapWidget);
@@ -102,6 +108,10 @@ class DrawMapWidget : public QWidget
         void save(const QString & fileName);
         void load(const QString & fileName);
         void setPathType(DrawMapScene::PathType pathType);
+        void setBrushSize(int brushSize);
+
+    signals:
+        void brushSizeChanged(int brushSize);
 
     protected:
         void changeEvent(QEvent *e);
@@ -115,6 +125,7 @@ class DrawMapWidget : public QWidget
 
     private slots:
         void pathChanged();
+        void brushSizeChanged_slot(int brushSize);
 };
 
 #endif // DRAWMAPWIDGET_H

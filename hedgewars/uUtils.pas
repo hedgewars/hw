@@ -23,9 +23,18 @@ unit uUtils;
 interface
 uses uTypes, uFloat;
 
+// returns s with whitespaces (chars <= #32) removed form both ends
+function Trim(s: shortstring) : shortstring;
+
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByCharA(var a, b: ansistring; c: char);
+
+procedure EscapeCharA(var a: ansistring; e: char);
+procedure UnEscapeCharA(var a: ansistring; e: char);
+
+function ExtractFileDir(s: shortstring) : shortstring;
+function ExtractFileName(s: shortstring) : shortstring;
 
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
@@ -36,6 +45,7 @@ function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
 function  EnumToStr(const en : TSprite) : shortstring; overload;
 function  EnumToStr(const en : TMapGen) : shortstring; overload;
+function  EnumToStr(const en : TWorldEdge) : shortstring; overload;
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  MinD(a, b: double) : double; inline;
@@ -43,6 +53,7 @@ function  Max(a, b: LongInt): LongInt; inline;
 
 function  IntToStr(n: LongInt): shortstring;
 function  StrToInt(s: shortstring): LongInt;
+//function  StrToInt(s: shortstring; var success: boolean): LongInt;
 function  FloatToStr(n: hwFloat): shortstring;
 
 function  DxDy2Angle(const _dY, _dX: hwFloat): real; inline;
@@ -70,6 +81,11 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
+function CalcWorldWrap(X, radius: LongInt): LongInt;
+
+function read1stLn(filePath: shortstring): shortstring;
+function readValueFromINI(key, filePath: shortstring): shortstring;
+
 {$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
@@ -95,31 +111,121 @@ procedure freeModule;
 
 
 implementation
-uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, uPhysFSLayer, uDebug;
 
 {$IFDEF DEBUGFILE}
-var logFile: textfile;
+var logFile: PFSFile;
 {$IFDEF USE_VIDEO_RECORDING}
     logMutex: TRTLCriticalSection; // mutex for debug file
 {$ENDIF}
 {$ENDIF}
 var CharArray: array[0..255] of Char;
 
+// All leading/tailing characters with ordinal values less than or equal to 32 (a space) are stripped.
+function Trim(s: shortstring) : shortstring;
+var len, left, right: integer;
+begin
+
+len:= Length(s);
+
+if len = 0 then
+    exit(s);
+
+// find first non-whitespace
+left:= 1;
+while left <= len do
+    begin
+    if s[left] > #32 then
+        break;
+    inc(left);
+    end;
+
+// find last non-whitespace
+right:= len;
+while right >= 1 do
+    begin
+    if s[right] > #32 then
+        break;
+    dec(right);
+    end;
+
+// string is whitespace only
+if left > right then
+    exit('');
+
+// get string without surrounding whitespace
+len:= right - left + 1;
+
+Trim:= copy(s, left, len);
+
+end;
+
+function GetLastSlashPos(var s: shortString) : integer;
+var lslash: integer;
+    c: char;
+begin
+
+// find last slash
+lslash:= Length(s);
+while lslash >= 1 do
+    begin
+    c:= s[lslash];
+    if (c = #47) or (c = #92) then
+        break;
+    dec(lslash); end;
+
+GetLastSlashPos:= lslash;
+end;
+
+function ExtractFileDir(s: shortstring) : shortstring;
+var lslash: byte;
+begin
+
+if Length(s) = 0 then
+    exit(s);
+
+lslash:= GetLastSlashPos(s);
+
+if lslash <= 1 then
+    exit('');
+
+s[0]:= char(lslash - 1);
+
+ExtractFileDir:= s;
+end;
+
+function ExtractFileName(s: shortstring) : shortstring;
+var lslash, len: byte;
+begin
+
+len:= Length(s);
+
+if len = 0 then
+    exit(s);
+
+lslash:= GetLastSlashPos(s);
+
+if lslash < 1 then
+    exit(s);
+
+if lslash = len then
+    exit('');
+
+len:= len - lslash;
+ExtractFilename:= copy(s, lslash + 1, len);
+end;
+
 procedure SplitBySpace(var a,b: shortstring);
 begin
 SplitByChar(a,b,' ');
 end;
 
-// should this include "strtolower()" for the split string?
 procedure SplitByChar(var a, b: shortstring; c : char);
-var i, t: LongInt;
+var i: LongInt;
 begin
 i:= Pos(c, a);
 if i > 0 then
     begin
-    for t:= 1 to Pred(i) do
-        if (a[t] >= 'A')and(a[t] <= 'Z') then
-            Inc(a[t], 32);
     b:= copy(a, i + 1, Length(a) - i);
     a[0]:= char(Pred(i))
     {$IFDEF PAS2C}
@@ -147,6 +253,40 @@ if i > 0 then
     SetLengthA(a, Pred(i));
     end else b:= '';
 end; { SplitByCharA }
+
+// In the ansistring a, escapes all instances of
+// '\e' with an ASCII ESC character, where e is
+// a char chosen by you.
+procedure EscapeCharA(var a: ansistring; e: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(e, a);
+    if (i > 1) and (a[i - 1] = '\') then
+        begin
+        a[i]:= Char($1B); // ASCII ESC
+        Delete(a, i - 1, 1);
+        end
+    else
+        break;
+until (i <= 0);
+end; { EscapeCharA }
+
+// Unescapes a previously escaped string and inserts
+// e back into the string. e is a char chosen by you.
+procedure UnEscapeCharA(var a: ansistring; e: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(Char($1B), a); // ASCII ESC
+    if (i > 0) then
+        begin
+        a[i]:= e;
+        end
+    else
+        break;
+until (i <= 0);
+end; { UnEscapeCharA }
 
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
@@ -193,6 +333,11 @@ begin
 EnumToStr := GetEnumName(TypeInfo(TMapGen), ord(en))
 end;
 
+function EnumToStr(const en: TWorldEdge) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TWorldEdge), ord(en))
+end;
+
 
 function Min(a, b: LongInt): LongInt;
 begin
@@ -224,18 +369,20 @@ begin
 str(n, IntToStr)
 end;
 
+// Convert string to longint, with error checking.
+// Success will be set to false when conversion failed.
+// See documentation on Val procedure for syntax of s
+//function StrToInt(s: shortstring; var success: boolean): LongInt;
+//var Code: Word;
+//begin
+//val(s, StrToInt, Code);
+//success:= Code = 0;
+//end;
+
+// Convert string to longint, without error checking
 function StrToInt(s: shortstring): LongInt;
-var c: LongInt;
 begin
-{$IFDEF PAS2C}
 val(s, StrToInt);
-{$ELSE}
-val(s, StrToInt, c);
-{$IFDEF DEBUGFILE}
-if c <> 0 then
-    writeln(logFile, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
-{$ENDIF}
-{$ENDIF}
 end;
 
 function FloatToStr(n: hwFloat): shortstring;
@@ -361,8 +508,10 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-writeln(logFile, inttostr(GameTicks)  + ': ' + s);
-flush(logFile);
+if logFile <> nil then
+    pfsWriteLn(logFile, inttostr(GameTicks)  + ': ' + s)
+else
+    WriteLn(stdout, inttostr(GameTicks)  + ': ' + s);
 
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
@@ -379,8 +528,9 @@ s:= s;
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-write(logFile, s);
-flush(logFile);
+// TODO: uncomment next two lines
+// write(logFile, s);
+// flush(logFile);
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
 {$ENDIF}
@@ -417,7 +567,7 @@ while i < l do
        ((#$AC00  <= u) and (u <= #$D7AF))  or // Hangul Syllables
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F))  or // CJK Compatibility Forms
-       ((#$FF66  <= u) and (u <= #$FF9D)))    // halfwidth katakana
+       ((#$FF00  <= u) and (u <= #$FFEF)))    // half- and fullwidth characters
        then
         begin
             CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
@@ -433,6 +583,7 @@ end;
 
 function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 begin
+at:= at; dir:= dir; angle:= angle; // parameter hint suppression because code below is currently disabled
 GetLaunchX:= 0
 (*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
@@ -443,12 +594,38 @@ end;
 
 function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 begin
+at:= at; angle:= angle; // parameter hint suppression because code below is currently disabled
 GetLaunchY:= 0
 (*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
         GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2
     else
         GetLaunchY:= 0*)
+end;
+
+// Takes an X coordinate and corrects if according to the world edge rules
+// Wrap-around: X will be wrapped
+// Bouncy: X will be kept inside the legal land (taking radius into account)
+// Other world edges: Just returns X
+// radius is a radius (gear radius) tolerance for an appropriate distance from bouncy world edges.
+// Set radius to 0 if you don't care.
+function CalcWorldWrap(X, radius: LongInt): LongInt;
+begin
+    if WorldEdge = weWrap then
+        begin
+        if X < leftX then
+             X:= X + (rightX - leftX)
+        else if X > rightX then
+             X:= X - (rightX - leftX);
+        end
+    else if WorldEdge = weBounce then
+        begin
+        if (X + radius) < leftX then
+            X:= leftX + radius
+        else if (X - radius) > rightX then
+            X:= rightX - radius;
+        end;
+    CalcWorldWrap:= X;
 end;
 
 function CheckNoTeamOrHH: boolean;
@@ -517,11 +694,55 @@ begin
     sanitizeCharForLog:= r
 end;
 
+function read1stLn(filePath: shortstring): shortstring;
+var f: pfsFile;
+begin
+    read1stLn:= '';
+    if pfsExists(filePath) then
+        begin
+        f:= pfsOpenRead(filePath);
+        if (not pfsEOF(f)) and allOK then
+            pfsReadLn(f, read1stLn);
+        pfsClose(f);
+        f:= nil;
+        end;
+end;
+
+function readValueFromINI(key, filePath: shortstring): shortstring;
+var f: pfsFile;
+	s: shortstring;
+	i: LongInt;
+begin
+    s:= '';
+	readValueFromINI:= '';
+
+    if pfsExists(filePath) then
+        begin
+        f:= pfsOpenRead(filePath);
+
+        while (not pfsEOF(f)) and allOK do
+			begin pfsReadLn(f, s);
+			if Length(s) = 0 then
+				continue;
+			if s[1] = ';' then
+				continue;
+
+			i:= Pos('=', s);
+			if Trim(Copy(s, 1, Pred(i))) = key then
+				begin
+				Delete(s, 1, i);
+				readValueFromINI:= s;
+				end;
+			end;
+        pfsClose(f);
+        f:= nil;
+        end;
+end;
+
 procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
     i: LongInt;
-    rwfailed: boolean;
 {$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
@@ -545,35 +766,20 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
 {$ENDIF}
-{$I-}
-    rwfailed:= false;
-    if (length(UserPathPrefix) > 0) then
-        begin
-        {$IFNDEF PAS2C}
-        // create directory if it doesn't exist
-        if not FileExists(UserPathPrefix + '/Logs/') then
-            CreateDir(UserPathPrefix + '/Logs/');
-        {$ENDIF}
-        // if log is locked, write to the next one
-        i:= 0;
-        while(i < 7) do
-            begin
-            assign(logFile, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
-            Rewrite(logFile);
-            // note: IOResult is a function in pascal and a variable in pas2c
-            rwfailed:= (IOResult <> 0);
-            if (not rwfailed) then
-                break;
-            inc(i)
-            end;
-        end;
+    if not pfsExists('/Logs') then
+        pfsMakeDir('/Logs');
+    // if log is locked, write to the next one
+    i:= 0;
+    while(i < 7) do
+    begin
+        logFile:= pfsOpenWrite('/Logs/' + logfileBase + inttostr(i) + '.log');
+        if logFile <> nil then
+            break;
+        inc(i)
+    end;
 
-{$IFNDEF PAS2C}
-    // if everything fails, write to stderr
-    if (length(UserPathPrefix) = 0) or (rwfailed) then
-        logFile:= stderr;
-{$ENDIF}
-{$I+}
+    if logFile = nil then
+        WriteLn(stdout, '[WARNING] Could not open log file for writing. Log will be written to stdout!');
 {$ENDIF}
 
     //mobile stuff
@@ -594,9 +800,14 @@ end;
 procedure freeModule;
 begin
 {$IFDEF DEBUGFILE}
-    writeln(logFile, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
-    flush(logFile);
-    close(logFile);
+if logFile <> nil then
+    begin
+    pfsWriteLn(logFile, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
+    pfsFlush(logFile);
+    pfsClose(logFile);
+    end
+else
+    WriteLn(stdout, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
 {$IFDEF USE_VIDEO_RECORDING}
     DoneCriticalSection(logMutex);
 {$ENDIF}

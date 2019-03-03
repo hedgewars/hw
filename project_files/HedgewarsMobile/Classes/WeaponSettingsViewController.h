@@ -24,6 +24,6 @@
     NSMutableArray *listOfWeapons;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfWeapons;
+@property (nonatomic, strong) NSMutableArray *listOfWeapons;
 
 @end

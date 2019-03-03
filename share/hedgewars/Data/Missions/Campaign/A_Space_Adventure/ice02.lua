@@ -12,23 +12,22 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("Hard flying")
 local challengeStarted = false
+local challengeStartRequested = false
 local currentWaypoint = 1
-local radius = 75
-local totalTime = 15000
+local radius = 75 -- Ring radius. Will become smaller and smaller
+local totalTime = 15000 -- Total available time. Initial value is start time; is added to later when player wins extra time
 local totalSaucers = 3
 local gameEnded = false
+local heroTurn = false
 local RED = 0xff0000ff
-local GREEN = 0x38d61cff
-local challengeObjectives = loc("To win the game you have to pass into the rings in time")..
-	"|"..loc("You'll get extra time in case you need it when you pass a ring").."|"..
-	loc("Every 2 rings, the ring color will be green and you'll get an extra flying saucer").."|"..
-	loc("Use space button twice to change flying saucer while floating in mid-air")
+local GREEN = 0x00ff00ff
+local challengeObjectives = loc("To win the game you have to pass into the rings in time.")..
+	"|"..loc("You'll get extra time in case you need it when you pass a ring.").."|"..
+	loc("Green double rings also give you a new flying saucer.").."|"..
+	loc("Use the attack key twice to change the flying saucer while floating in mid-air.")
+local timeRecord
 -- dialogs
 local dialog01 = {}
--- mission objectives
-local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), challengeObjectives, 1, 4500},
-}
 -- hogs
 local hero = {}
 local ally = {}
@@ -44,11 +43,10 @@ ally.name = loc("Paul McHoggy")
 ally.x = 860
 ally.y = 130
 teamA.name = loc("Hog Solo")
-teamA.color = tonumber("38D61C",16) -- green
+teamA.color = -6
 teamB.name = loc("Allies")
-teamB.color = tonumber("FF0000",16) -- red
+teamB.color = -6
 -- way points
-local current waypoint = 1
 local waypoints = {
 	[1] = {x=1450, y=140},
 	[2] = {x=990, y=580},
@@ -70,36 +68,55 @@ local waypoints = {
 -------------- LuaAPI EVENT HANDLERS ------------------
 
 function onGameInit()
-	GameFlags = gfInvulnerable
+	GameFlags = gfInvulnerable + gfOneClanMode
 	Seed = 1
-	TurnTime = 15000
+	TurnTime = totalTime
+	Ready = 25000
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
 	Map = "ice02_map"
 	Theme = "Snow"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Ally
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	teamB.name = AddTeam(teamB.name, teamB.color, "heart", "Island", "Default", "cm_face")
+	SetTeamPassive(teamB.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	HogTurnLeft(ally.gear, true)
 
+	timeRecord = tonumber(GetCampaignVar("IceStadiumBestTime"))
+
 	initCheckpoint("ice02")
 
-	AnimInit()
+	AnimInit(true)
 	AnimationSetup()
+end
+
+function ShowGoals()
+	-- mission objectives
+	local goalStr = challengeObjectives
+	if timeRecord ~= nil then
+		local personalBestStr = string.format(loc("Personal best: %.3f seconds"), timeRecord/1000)
+		goalStr = goalStr .. "|" .. personalBestStr
+	end
+	ShowMission(missionName, loc("Getting ready"), goalStr, 1, 25000)
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
+	ShowGoals()
+	HideMission()
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
@@ -112,12 +129,20 @@ function onGameStart()
 	AddAnim(dialog01)
 end
 
-function onNewTurn()
-	if not hero.dead and CurrentHedgehog == ally.gear and challengeStarted then
+function onEndTurn()
+	if not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
 		heroLost()
-	elseif not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
+	end
+end
+
+function onNewTurn()
+	if challengeStartRequested then
+		challengeStarted = true
+	end
+	if not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
 		SetWeapon(amJetpack)
 	end
+	heroTurn = CurrentHedgehog == hero.gear
 end
 
 function onGameTick()
@@ -135,15 +160,46 @@ function onGameTick20()
 			gameEnded = true
 			-- GAME OVER, WIN!
 			totalTime = totalTime - TurnTimeLeft
-			totalTime = totalTime / 1000
+			local totalTimePrinted  = totalTime / 1000
 			local saucersLeft = GetAmmoCount(hero.gear, amJetpack)
 			local saucersUsed = totalSaucers - saucersLeft
-			SendStat(siGameResult, loc("Hoorah! You are a champion!"))
-			SendStat(siCustomAchievement, loc("You completed the mission in "..totalTime.." seconds"))
-			SendStat(siCustomAchievement, loc("You have used "..saucersUsed.." flying saucers"))
-			SendStat(siCustomAchievement, loc("You had "..saucersLeft.." more flying saucers left"))
-			SendStat(siPlayerKills,'1',teamA.name)
+			SetTeamLabel(teamA.name, string.format(loc("%.3fs"), totalTimePrinted))
+			SendStat(siGameResult, loc("Hooray! You are a champion!"))
+			SendStat(siCustomAchievement, string.format(loc("You completed the mission in %.3f seconds."), totalTimePrinted))
+			if timeRecord ~= nil and totalTime >= timeRecord then
+				SendStat(siCustomAchievement, string.format(loc("Your personal best time so far: %.3f seconds"), timeRecord/1000))
+			end
+			if timeRecord == nil or totalTime < timeRecord then
+				SaveCampaignVar("IceStadiumBestTime", tostring(totalTime))
+				if timeRecord ~= nil then
+					SendStat(siCustomAchievement, loc("This is a new personal best time, congratulations!"))
+				end
+			end
+			SendStat(siCustomAchievement, string.format(loc("You have used %d flying saucers."), saucersUsed))
+
+			local leastSaucersRecord = tonumber(GetCampaignVar("IceStadiumLeastSaucersUsed"))
+			if leastSaucersRecord == nil or saucersUsed < leastSaucersRecord then
+				SaveCampaignVar("IceStadiumLeastSaucersUsed", tostring(saucersUsed))
+			end
+
+			SendStat(siPointType, "!TIME")
+			SendStat(siPlayerKills, totalTime, GetHogTeamName(hero.gear))
+			SaveCampaignVar("Mission6Won", "true")
+			checkAllMissionsCompleted()
+			SetTurnTimeLeft(MAX_TURN_TIME)
 			EndGame()
+		end
+	end
+	if heroTurn and challengeStarted and not gameEnded and not hero.dead and ReadyTimeLeft == 0 then
+		local time = totalTime - TurnTimeLeft
+		local timePrinted  = time / 1000
+		SetTeamLabel(teamA.name, string.format(loc("%.1fs"), timePrinted))
+		if TurnTimeLeft <= 0 then
+			local wp = waypoints[currentWaypoint-1]
+			if wp ~= nil then
+				DeleteVisualGear(wp.gear)
+				DeleteVisualGear(wp.gear2)
+			end
 		end
 	end
 end
@@ -151,6 +207,12 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+	end
+end
+
+function onGearAdd(gear)
+	if GetGearType(gear) == gtJetpack then
+		HideMission()
 	end
 end
 
@@ -178,62 +240,77 @@ end
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startFlying()
+	ShowGoals()
+	startFlying()
 end
 
 function AnimationSetup()
 	-- DIALOG 01 - Start, some story telling
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Ice Planet flying saucer stadium..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the Olympic stadium of saucer flying..."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the stadium, where the best pilots compete ..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the Olympic Stadium of Saucer Flying."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("All the saucer pilots dream to come here one day in order to compete with the best!"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and claim the place that you deserve among the best..."), SAY_SAY, 6000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use the saucer and pass through the rings..."), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Pause the game by pressing the pause key (default \"P\") for more details"), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("... can you do it?"), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and claim the place that you deserve among the best."), SAY_SAY, 6000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Can you do it?"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = ShowGoals, args = {}})
 	table.insert(dialog01, {func = startFlying, args = {hero.gear}})
 end
 
 ------------------ Other Functions -------------------
 
 function startFlying()
-	AnimSwitchHog(ally.gear)
-	TurnTimeLeft = 0
-	challengeStarted = true
+	challengeStartRequested = true
+	EndTurn(true)
 end
 
 function placeNextWaypoint()
+	if gameEnded then
+		return
+	end
 	if currentWaypoint > 1 then
 		local wp = waypoints[currentWaypoint-1]
 		DeleteVisualGear(wp.gear)
+		DeleteVisualGear(wp.gear2)
 	end
 	if currentWaypoint < 16 then
 		local wp = waypoints[currentWaypoint]
 		wp.gear = AddVisualGear(1,1,vgtCircle,1,true)
-		-- add bonus time and "fuel"
+		-- 1st, 3rd, 5th, 7th, 9th, ... ring
 		if currentWaypoint % 2 == 0 then
-			PlaySound(sndBump) -- what's the crate sound?
+			-- Render single red ring
 			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, RED)
+			-- Give 1 flying saucer and, if needed, extra time
 			AddAmmo(hero.gear, amJetpack, GetAmmoCount(hero.gear, amJetpack)+1)
+			PlaySound(sndShotgunReload)
 			totalSaucers = totalSaucers + 1
-			local message = loc("Got 1 more saucer")
+			local vgear = AddVisualGear(GetX(hero.gear), GetY(hero.gear), vgtAmmo, 0, true)
+			if vgear ~= nil then
+				SetVisualGearValues(vgear,nil,nil,nil,nil,nil,amJetpack)
+			end
+			local message 
 			if TurnTimeLeft <= 22000 then
-				TurnTimeLeft = TurnTimeLeft + 8000
+				SetTurnTimeLeft(TurnTimeLeft + 8000)
 				totalTime = totalTime + 8000
-				message = message..loc(" and 8 more seconds added to the clock")
+				PlaySound(sndExtraTime)
+				message = loc("Got 1 more saucer and 8 more seconds added to the clock")
+			else
+				message = loc("Got 1 more saucer")
 			end
 			AnimCaption(hero.gear, message, 4000)
+		-- 2nd, 4th, 6th, 8th, 10th, ... ring
 		else
+			-- Render double green ring
 			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, GREEN)
+			wp.gear2 = AddVisualGear(1,1,vgtCircle,1,true)
+			SetVisualGearValues(wp.gear2, wp.x,wp.y, 20, 200, 0, 0, 100, radius - 6, 2, GREEN)
+			-- Give extra time, if needed
 			if TurnTimeLeft <= 16000 then
-				TurnTimeLeft = TurnTimeLeft + 6000
-				totalTime = totalTime + 6000
 				if currentWaypoint ~= 1 then
+					SetTurnTimeLeft(TurnTimeLeft + 6000)
+					totalTime = totalTime + 6000
+					PlaySound(sndExtraTime)
 					AnimCaption(hero.gear, loc("6 more seconds added to the clock"), 4000)
 				end
 			end
@@ -243,12 +320,13 @@ function placeNextWaypoint()
 		return true
 	else
 		AnimCaption(hero.gear, loc("Congratulations, you won!"), 4000)
+		PlaySound(sndVictory, hero.gear)
 	end
 	return false
 end
 
 function checkIfHeroInWaypoint()
-	if not hero.dead then
+	if (not hero.dead) and (TurnTimeLeft > 0) then
 		local wp = waypoints[currentWaypoint-1]
 		if gearIsInCircle(hero.gear, wp.x, wp.y, radius+4, false) then
 			SetWind(GetRandom(201)-100)
@@ -260,10 +338,11 @@ end
 
 function heroLost()
 	SendStat(siGameResult, loc("Oh man! Learn how to fly!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to pass into the rings in time"))
-	SendStat(siCustomAchievement, loc("You'll get extra time in case you need it when you pass a ring"))
-	SendStat(siCustomAchievement, loc("Every 2 rings you'll get extra flying saucers"))
-	SendStat(siCustomAchievement, loc("Use space button twice to change flying saucer while being on air"))
-	SendStat(siPlayerKills,'0',teamA.name)
+	SendStat(siCustomAchievement, loc("To win the game you have to pass into the rings in time."))
+	SendStat(siCustomAchievement, loc("You'll get extra time in case you need it when you pass a ring."))
+	SendStat(siCustomAchievement, loc("Green double rings also give you a new flying saucer."))
+	SendStat(siCustomAchievement, loc("Use the attack key twice to change the flying saucer while being in air."))
+	sendSimpleTeamRankings({teamA.name})
+	gameEnded = true
 	EndGame()
 end

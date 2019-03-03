@@ -31,6 +31,7 @@
 #include "hwconsts.h"
 #include "HWApplication.h"
 #include "sdlkeys.h"
+#include "physfs.h"
 
 #include "DataManager.h"
 
@@ -61,7 +62,8 @@ DataManager & DataManager::instance()
 QStringList DataManager::entryList(
     const QString & subDirectory,
     QDir::Filters filters,
-    const QStringList & nameFilters
+    const QStringList & nameFilters,
+    bool withDLC
 ) const
 {
     QDir tmpDir(QString("physfs://%1").arg(subDirectory));
@@ -69,9 +71,13 @@ QStringList DataManager::entryList(
 
     // sort case-insensitive
     QMap<QString, QString> sortedFileNames;
+    QString absolutePath = datadir->absolutePath().toLocal8Bit().data();
     foreach ( QString fn, result)
     {
-        sortedFileNames.insert(fn.toLower(), fn);
+        // Filter out DLC entries if desired
+        QString realDir = PHYSFS_getRealDir(QString(subDirectory + "/" + fn).toLocal8Bit().data());
+        if(withDLC || realDir == absolutePath)
+            sortedFileNames.insert(fn.toLower(), fn);
     }
     result = sortedFileNames.values();
 
@@ -153,7 +159,9 @@ QStandardItemModel * DataManager::bindsModel()
         for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
         {
             QStandardItem * item = new QStandardItem();
-            item->setData(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), Qt::DisplayRole);
+            QString keyId = QString(sdlkeys[j][0]);
+            QString keyTr = HWApplication::translate("binds (keys)", sdlkeys[j][1]);
+            item->setData((keyId == "none" || keyTr.contains(": ")) ? keyTr : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + keyTr, Qt::DisplayRole);
             item->setData(sdlkeys[j][0], Qt::UserRole + 1);
             m_bindsModel->appendRow(item);
         }
@@ -166,11 +174,11 @@ QString DataManager::settingsFileName()
 {
     if(m_settingsFileName.isEmpty())
     {
-        QFile settingsFile("physfs://settings.ini");
+        QFile settingsFile(cfgdir->absoluteFilePath("settings.ini"));
 
         if(!settingsFile.exists())
         {
-            QFile oldSettingsFile("physfs://hedgewars.ini");
+            QFile oldSettingsFile(cfgdir->absoluteFilePath("hedgewars.ini"));
 
             settingsFile.open(QFile::WriteOnly);
             settingsFile.close();

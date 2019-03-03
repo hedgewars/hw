@@ -23,13 +23,13 @@
 @implementation SupportViewController
 @synthesize waysToSupport;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     NSArray *array = [[NSArray alloc] initWithObjects:
@@ -40,7 +40,6 @@
                       NSLocalizedString(@"Chat with the devs in IRC",@""),
                       nil];
     self.waysToSupport = array;
-    [array release];
 
     self.navigationItem.title = @"♥";
     self.tableView.rowHeight = 50;
@@ -67,17 +66,17 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 
     NSString *rowString = [self.waysToSupport objectAtIndex:(row + section)];
     cell.textLabel.text = rowString;
 
     if (section == 0) {
         imgName = @"star";
-        cell.textLabel.textAlignment = UITextAlignmentCenter;
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
         cell.imageView.image = nil;
     } else {
-        cell.textLabel.textAlignment = UITextAlignmentLeft;
+        cell.textLabel.textAlignment = NSTextAlignmentLeft;
         switch (row) {
             case 0:
                 imgName = @"fb";
@@ -100,21 +99,18 @@
 
     NSString *imgString = [[NSString alloc] initWithFormat:@"%@/%@.png",[[NSBundle mainBundle] resourcePath],imgName];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgString];
-    [imgString release];
     cell.imageView.image = img;
     if (section == 0) {
         UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
         cell.accessoryView = imgView;
-        [imgView release];
     }
-    [img release];
 
     return cell;
 }
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath section] == 0)
     {
@@ -126,16 +122,16 @@
         switch ([indexPath row])
         {
             case 0:
-                urlString = @"http://www.facebook.com/Hedgewars";
+                urlString = @"https://www.facebook.com/Hedgewars";
                 break;
             case 1:
-                urlString = @"http://twitter.com/hedgewars";
+                urlString = @"https://twitter.com/hedgewars";
                 break;
             case 2:
-                urlString = @"http://www.hedgewars.org";
+                urlString = @"https://www.hedgewars.org";
                 break;
             case 3:
-                urlString = @"http://webchat.freenode.net/?channels=hedgewars";
+                urlString = @"https://webchat.freenode.net/?channels=hedgewars";
                 break;
             default:
                 DLog(@"No way");
@@ -145,53 +141,41 @@
     }
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (section == 1) {
         UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 240)];
         footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
         UIImage *img = [[UIImage alloc] initWithContentsOfFile:@"surprise.png"];
         UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
-        [img release];
         imgView.center = CGPointMake(self.tableView.frame.size.width/2, 120);
         imgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [footer addSubview:imgView];
-        [imgView release];
 
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        label.textAlignment = UITextAlignmentCenter;
+        label.textAlignment = NSTextAlignmentCenter;
         label.text = NSLocalizedString(@" ♥ THANK YOU ♥ ", nil);
         label.backgroundColor = [UIColor clearColor];
         label.center = CGPointMake(self.tableView.frame.size.width/2, 250);
         [footer addSubview:label];
-        [label release];
 
-        return [footer autorelease];
+        return footer;
     } else
         return nil;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     // image height + label height
     return (section == 1) ? 265 : 20;
 }
 
 #pragma mark -
 #pragma mark Memory management
+
 -(void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-}
-
--(void) viewDidUnload {
-    self.waysToSupport = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(waysToSupport);
-    [super dealloc];
+    MSG_MEMCLEAN();
 }
 
 @end

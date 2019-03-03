@@ -45,7 +45,7 @@ void AbstractPage::initPage()
 
     // stretch grid space for body and footer
     pageLayout->setColumnStretch(0,1);
-    pageLayout->setColumnStretch(1,2);
+    pageLayout->setColumnStretch(1,8);
     pageLayout->setColumnStretch(2,1);
     pageLayout->setRowStretch(0,1);
     pageLayout->setRowStretch(1,0);
@@ -127,24 +127,31 @@ QPushButton* AbstractPage::formattedSoundlessButton(const QString & name, bool h
     return btn;
 }
 
-QPushButtonWithSound * AbstractPage::addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan, int columnSpan, bool hasIcon)
+QPushButtonWithSound * AbstractPage::addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan, int columnSpan, bool hasIcon, Qt::Alignment alignment)
 {
     QPushButtonWithSound * btn = formattedButton(name, hasIcon);
-    grid->addWidget(btn, row, column, rowSpan, columnSpan);
+    grid->addWidget(btn, row, column, rowSpan, columnSpan, alignment);
     return btn;
 }
 
-QPushButtonWithSound * AbstractPage::addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon)
+QPushButtonWithSound * AbstractPage::addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon, Qt::Alignment alignment)
 {
     QPushButtonWithSound * btn = formattedButton(name, hasIcon);
-    box->addWidget(btn, where);
+    box->addWidget(btn, where, alignment);
     return btn;
 }
 
-QPushButton* AbstractPage::addSoundlessButton(const QString & name, QBoxLayout * box, int where, bool hasIcon)
+QPushButton* AbstractPage::addSoundlessButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan, int columnSpan, bool hasIcon, Qt::Alignment alignment)
+{
+    QPushButton * btn = formattedSoundlessButton(name, hasIcon);
+    grid->addWidget(btn, row, column, rowSpan, columnSpan, alignment);
+    return btn;
+}
+
+QPushButton* AbstractPage::addSoundlessButton(const QString & name, QBoxLayout * box, int where, bool hasIcon, Qt::Alignment alignment)
 {
     QPushButton* btn = formattedSoundlessButton(name, hasIcon);
-    box->addWidget(btn, where);
+    box->addWidget(btn, where, alignment);
     return btn;
 }
 

@@ -31,8 +31,8 @@
     int lastChannel;
 }
 
-@property (nonatomic,retain) NSMutableDictionary *teamDictionary;
-@property (nonatomic,retain) NSArray *voiceArray;
-@property (nonatomic,retain) NSIndexPath *lastIndexPath;
+@property (nonatomic, strong) NSMutableDictionary *teamDictionary;
+@property (nonatomic, strong) NSArray *voiceArray;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
 @end

@@ -20,7 +20,6 @@
 
 #include <QTranslator>
 #include <QLocale>
-#include <QPlastiqueStyle>
 #include <QRegExp>
 #include <QMap>
 #include <QSettings>
@@ -29,6 +28,8 @@
 #include <QDesktopWidget>
 #include <QLabel>
 #include <QLibraryInfo>
+#include <QStyle>
+#include <QStyleFactory>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -44,7 +45,14 @@
 #include <Shlobj.h>
 #elif defined __APPLE__
 #include "CocoaInitializer.h"
+
 #endif
+
+#ifdef Q_OS_WIN
+#include <QSplashScreen>
+#endif
+
+#include <QMessageBox>
 
 // Program resources
 #ifdef __APPLE__
@@ -88,6 +96,10 @@ void checkSeason()
         season = SEASON_HWBDAY;
         years_since_foundation = date.year() - 2004;
     }
+    else if (date.month() == 4 && date.day() == 1)
+    {
+        season = SEASON_APRIL1;
+    }
     //Easter?
     else if (calculateEaster(date.year()) == date)
         season = SEASON_EASTER;
@@ -126,6 +138,23 @@ void closeResources(void)
     }
 }
 
+// Simple Message handler that suppresses Qt debug and info messages (qDebug, qInfo).
+// Used when printing command line help (--help) or related error to keep console clean.
+void restrictedMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    Q_UNUSED(context)
+    QByteArray localMsg = msg.toLocal8Bit();
+    switch (type) {
+    case QtWarningMsg:
+    case QtCriticalMsg:
+    case QtFatalMsg:
+        fprintf(stderr, "%s\n", localMsg.constData());
+        break;
+    default:
+        break;
+    }
+}
+
 QString getUsage()
 {
     return QString(
@@ -138,18 +167,26 @@ QString getUsage()
 "\n"
 "%8"
 "\n"
-).arg(HWApplication::tr("Usage", "command-line"))
-.arg(HWApplication::tr("OPTION", "command-line"))
-.arg(HWApplication::tr("CONNECTSTRING", "command-line"))
-.arg(HWApplication::tr("Options", "command-line"))
-.arg(HWApplication::tr("Display this help", "command-line"))
+).arg(
+//: “Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line
+HWApplication::tr("Usage", "command-line")
+).arg(
+//: Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”
+HWApplication::tr("OPTION", "command-line")
+).arg(
+//: Name of a command-line argument, shown when running “hedgewars --help” in command-line
+HWApplication::tr("CONNECTSTRING", "command-line")
+).arg(
+//: “Options” as in “command-line options”
+HWApplication::tr("Options", "command-line")
+).arg(HWApplication::tr("Display this help", "command-line"))
 .arg(HWApplication::tr("Custom path for configuration data and user data", "command-line"))
 .arg(HWApplication::tr("Custom path to the game data folder", "command-line"))
 .arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg(HWApplication::tr("CONNECTSTRING", "command-line")).arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+
     // Since we're calling this first, closeResources() will be the last thing called after main() returns.
     atexit(closeResources);
 
@@ -157,17 +194,27 @@ int main(int argc, char *argv[])
     cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
 #endif
 
-    SDLInteraction::instance();
-
     HWApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
-    // file engine and splash. to be initialized later
+    // file engine, to be initialized later
     engine = NULL;
-    QLabel *splash = NULL;
+
+    /*
+    This is for messages frelated to translatable command-line arguments.
+    If it is non-zero, will print out a message after loading locale
+    and exit.
+    */
+    enum cmdMsgStateEnum {
+        cmdMsgNone,
+        cmdMsgHelp,
+        cmdMsgMalformedArg,
+        cmdMsgUnknownArg,
+    };
+    enum cmdMsgStateEnum cmdMsgState = cmdMsgNone;
+    QString cmdMsgStateStr;
 
     // parse arguments
-
     QStringList arguments = app.arguments();
     QMap<QString, QString> parsedArgs;
     {
@@ -188,14 +235,17 @@ int main(int argc, char *argv[])
                 if(arg.startsWith("--")) {
                     if(arg == "--help")
                     {
-                        printf("%s", getUsage().toUtf8().constData());
-                        return 0;
+                        cmdMsgState = cmdMsgHelp;
+                        qInstallMessageHandler(restrictedMessageHandler);
                     }
-                    // argument is something wrong
-                    fprintf(stderr, "%s\n\n%s",
-                        HWApplication::tr("Malformed option argument: %1", "command-line").arg(arg).toUtf8().constData(),
-                        getUsage().toUtf8().constData());
-                    return 1;
+                    else
+                    {
+                        // argument is something wrong
+                        cmdMsgState = cmdMsgMalformedArg;
+                        cmdMsgStateStr = arg;
+                        qInstallMessageHandler(restrictedMessageHandler);
+                        break;
+                    }
                 }
 
                 // if not starting with --, then always skip
@@ -205,54 +255,75 @@ int main(int argc, char *argv[])
         }
     }
 
-    if(parsedArgs.contains("data-dir"))
+    if(cmdMsgState == cmdMsgNone)
     {
-        QFileInfo f(parsedArgs["data-dir"]);
-        parsedArgs.remove("data-dir");
-        if(!f.exists())
+        if(parsedArgs.contains("data-dir"))
         {
-            qWarning() << "WARNING: Cannot open DATA_PATH=" << f.absoluteFilePath();
+            QFileInfo f(parsedArgs["data-dir"]);
+            parsedArgs.remove("data-dir");
+            if(!f.exists())
+            {
+                qWarning() << "WARNING: Cannot open data-dir=" << f.absoluteFilePath();
+            }
+            *cDataDir = f.absoluteFilePath();
+            custom_data = true;
         }
-        *cDataDir = f.absoluteFilePath();
-        custom_data = true;
-    }
 
-    if(parsedArgs.contains("config-dir"))
-    {
-        QFileInfo f(parsedArgs["config-dir"]);
-        parsedArgs.remove("config-dir");
-        cfgdir->setPath(f.absoluteFilePath());
-        custom_config = true;
-    }
-    else
-    {
-        cfgdir->setPath(QDir::homePath());
-        custom_config = false;
-    }
-
-    if (!parsedArgs.isEmpty()) {
-        foreach (const QString & key, parsedArgs.keys())
+        if(parsedArgs.contains("config-dir"))
         {
-            fprintf(stderr, "%s\n", HWApplication::tr("Unknown option argument: %1", "command-line").arg(QString("--") + key).toUtf8().constData());
+            QFileInfo f(parsedArgs["config-dir"]);
+            parsedArgs.remove("config-dir");
+            cfgdir->setPath(f.absoluteFilePath());
+            custom_config = true;
         }
-        fprintf(stderr, "\n%s", getUsage().toUtf8().constData());
-        return 1;
+        else
+        {
+            cfgdir->setPath(QDir::homePath());
+            custom_config = false;
+        }
+
+        if (!parsedArgs.isEmpty())
+        {
+            cmdMsgState = cmdMsgUnknownArg;
+            qInstallMessageHandler(restrictedMessageHandler);
+        }
+
+        // end of parameter parsing
+
+        // Select Qt style
+        /* Qt5 Base removed Motif, Plastique. These are now in the Qt style plugins
+        (Ubuntu: qt5-style-plugins, which was NOT backported by Debian/Ubuntu to stable/LTS).
+        Windows appears to render best of the remaining options but still isn't quite right. */
+
+        // Try setting Plastique if available
+        QStyle* coreStyle;
+        coreStyle = QStyleFactory::create("Plastique");
+        if(coreStyle != 0) {
+            QApplication::setStyle(coreStyle);
+            qDebug("Qt style set: Plastique");
+        } else {
+            // Use Windows as fallback.
+            // FIXME: Under Windows style, some widgets like scrollbars don't render as nicely
+            coreStyle = QStyleFactory::create("Windows");
+            if(coreStyle != 0) {
+                QApplication::setStyle(coreStyle);
+                qDebug("Qt style set: Windows");
+            } else {
+                // Windows style should not be missing in Qt5 Base. If it does, something went terribly wrong!
+                qWarning("No Qt style could be set! Using the default one.");
+            }
+        }
     }
 
-    // end of parameter parsing
-
-#if defined Q_OS_WIN
-    QPixmap pixmap(":res/splash.png");
-    splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-    splash->setAttribute(Qt::WA_TranslucentBackground);
-    const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
-    QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
-                                  (deskSize.height() - pixmap.height())/2 );
-    splash->move(splashCenter);
-    splash->setPixmap(pixmap);
-    splash->show();
+#ifdef Q_OS_WIN
+    // Splash screen for Windows
+    QPixmap pixmap(":/res/splash.png");
+    QSplashScreen splash(pixmap);
+    if(cmdMsgState == cmdMsgNone)
+    {
+        splash.show();
+    }
 #endif
-    app.setStyle(new QPlastiqueStyle());
 
     QDateTime now = QDateTime::currentDateTime();
     srand(now.toTime_t());
@@ -295,6 +366,7 @@ int main(int argc, char *argv[])
 
         // config/save paths
         checkForDir(cfgdir->absolutePath() + "/Demos");
+        checkForDir(cfgdir->absolutePath() + "/DrawnMaps");
         checkForDir(cfgdir->absolutePath() + "/Saves");
         checkForDir(cfgdir->absolutePath() + "/Screenshots");
         checkForDir(cfgdir->absolutePath() + "/Teams");
@@ -311,6 +383,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    bool isProbablyNewPlayer = false;
+
     // setup PhysFS
     engine = new FileEngineHandler(argv[0]);
     engine->mount(datadir->absolutePath());
@@ -321,32 +395,91 @@ int main(int argc, char *argv[])
 
     QTranslator TranslatorHedgewars;
     QTranslator TranslatorQt;
+    QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
     {
-        QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
-        settings.setIniCodec("UTF-8");
-
         QString cc = settings.value("misc/locale", QString()).toString();
         if (cc.isEmpty())
         {
             cc = QLocale::system().name();
+            qDebug("Detected system locale: %s", qPrintable(cc));
 
             // Fallback to current input locale if "C" locale is returned
             if(cc == "C")
-                cc = HWApplication::keyboardInputLocale().name();
+                cc = HWApplication::inputMethod()->locale().name();
+        }
+        else
+        {
+            qDebug("Configured frontend locale: %s", qPrintable(cc));
+        }
+        QLocale::setDefault(cc);
+        QString defaultLocaleName = QLocale().name();
+        qDebug("Frontend uses locale: %s", qPrintable(defaultLocaleName));
+
+        if (defaultLocaleName != "C")
+        {
+            // Load locale files into translators
+            if (!TranslatorHedgewars.load(QLocale(), "hedgewars", "_", QString("physfs://Locale")))
+                qWarning("Failed to install Hedgewars translation (%s)", qPrintable(defaultLocaleName));
+            if (!TranslatorQt.load(QLocale(), "qt", "_", QString(QLibraryInfo::location(QLibraryInfo::TranslationsPath))))
+                qWarning("Failed to install Qt translation (%s)", qPrintable(defaultLocaleName));
+            app.installTranslator(&TranslatorHedgewars);
+            app.installTranslator(&TranslatorQt);
+        }
+        app.setLayoutDirection(QLocale().textDirection());
+
+        // Handle command line messages
+        switch(cmdMsgState)
+        {
+            case cmdMsgHelp:
+            {
+                printf("%s", getUsage().toUtf8().constData());
+                return 0;
+            }
+            case cmdMsgMalformedArg:
+            {
+                fprintf(stderr, "%s\n\n%s",
+                    HWApplication::tr("Malformed option argument: %1", "command-line").arg(cmdMsgStateStr).toUtf8().constData(),
+                    getUsage().toUtf8().constData());
+                return 1;
+            }
+            case cmdMsgUnknownArg:
+            {
+                foreach (const QString & key, parsedArgs.keys())
+                {
+                    fprintf(stderr, "%s\n",
+                        HWApplication::tr("Unknown option argument: %1", "command-line").arg(QString("--") + key).toUtf8().constData());
+                }
+                fprintf(stderr, "\n%s", getUsage().toUtf8().constData());
+                return 1;
+            }
+            default:
+            {
+                break;
+            }
         }
 
-        // Load locale files into translators
-        if (!TranslatorHedgewars.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
-            qWarning("Failed to install Hedgewars translation (%s)", qPrintable(cc));
-        if (!TranslatorQt.load(QString("%1/qt_%2").arg(QLibraryInfo::location(QLibraryInfo::TranslationsPath), cc)))
-            qWarning("Failed to install Qt translation (%s)", qPrintable(cc));
-        app.installTranslator(&TranslatorHedgewars);
-        app.installTranslator(&TranslatorQt);
-        app.setLayoutDirection(QLocale(cc).textDirection());
+        // Heuristic to figure out if the user is (probably) a first-time player.
+        // If nickname is not set, then probably yes.
+        // The hidden setting firstLaunch is, if present, used to force HW to
+        // treat iself as if it were launched the first time.
+        QString nick = settings.value("net/nick", QString()).toString();
+        if (settings.contains("frontend/firstLaunch"))
+        {
+            isProbablyNewPlayer = settings.value("frontend/firstLaunch").toBool();
+        }
+        else
+        {
+            isProbablyNewPlayer = nick.isNull();
+        }
+
+        // Set firstLaunch to false to make sure we remember we have been launched before.
+        settings.setValue("frontend/firstLaunch", false);
     }
 
 #ifdef _WIN32
-    // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
+    // Win32 registry setup (used for external software detection etc.
+    // don't set it if running in "portable" mode with a custom config dir)
     if(!custom_config)
     {
         QSettings registry_hklm("HKEY_LOCAL_MACHINE", QSettings::NativeFormat);
@@ -355,18 +488,28 @@ int main(int argc, char *argv[])
     }
 #endif
 
+    SDLInteraction::instance();
+
     QString style = "";
     QString fname;
 
-    checkSeason();
-    //For each season, there is an extra stylesheet
-    //Todo: change background for easter and birthday
-    //(simply replace res/BackgroundBirthday.png and res/BackgroundEaster.png
-    //with an appropriate background
+    bool holidaySilliness = settings.value("misc/holidaySilliness", true).toBool();
+    if(holidaySilliness)
+        checkSeason();
+    else
+        season = SEASON_NONE;
+
+    // For each season, there is an extra stylesheet.
+    // TODO: change background for easter
+    // (simply replace res/BackgroundEaster.png
+    // with an appropriate background).
     switch (season)
     {
         case SEASON_CHRISTMAS :
             fname = "christmas.css";
+            break;
+        case SEASON_APRIL1 :
+            fname = "april1.css";
             break;
         case SEASON_EASTER :
             fname = "easter.css";
@@ -392,9 +535,29 @@ int main(int argc, char *argv[])
     qWarning("Starting Hedgewars %s-r%d (%s)", qPrintable(*cVersionString), cRevisionString->toInt(), qPrintable(*cHashString));
 
     app.form = new HWForm(NULL, style);
+#ifdef Q_OS_WIN
+    if(cmdMsgState == cmdMsgNone)
+        splash.finish(app.form);
+#endif
     app.form->show();
-    if(splash)
-        splash->close();
+
+    // Show welcome message for (suspected) first-time player and
+    // point towards the Training menu.
+    if(isProbablyNewPlayer) {
+        QMessageBox questionTutorialMsg(app.form);
+        questionTutorialMsg.setIcon(QMessageBox::Question);
+        questionTutorialMsg.setWindowTitle(QMessageBox::tr("Welcome to Hedgewars"));
+        questionTutorialMsg.setText(QMessageBox::tr("Welcome to Hedgewars!\n\nYou seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?"));
+        questionTutorialMsg.setWindowModality(Qt::WindowModal);
+        questionTutorialMsg.addButton(QMessageBox::Yes);
+        questionTutorialMsg.addButton(QMessageBox::No);
+
+        int answer = questionTutorialMsg.exec();
+        if (answer == QMessageBox::Yes) {
+            app.form->GoToTraining();
+        }
+    }
+
     if (app.urlString)
         app.fakeEvent();
     return app.exec();

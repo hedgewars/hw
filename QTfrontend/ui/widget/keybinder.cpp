@@ -60,6 +60,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     {
         QPushButton * btnResetAll = new QPushButton(resetButtonText);
         catListContainer->addWidget(btnResetAll);
+        btnResetAll->setStyleSheet("padding: 5px 10px");
         btnResetAll->setFixedHeight(40);
         catListContainer->setStretch(1, 0);
         catListContainer->setSpacing(10);
@@ -153,7 +154,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
             curTable = new QTableWidget(0, 2);
             curTable->verticalHeader()->setVisible(false);
             curTable->horizontalHeader()->setVisible(false);
-            curTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+            curTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
             curTable->verticalHeader()->setDefaultSectionSize(rowHeight);
             curTable->setShowGrid(false);
             curTable->setStyleSheet("QTableWidget { border: none; } ");
@@ -169,7 +170,8 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         QComboBox * comboBox = CBBind[i] = new QComboBox(curTable);
         comboBox->setModel((QAbstractItemModel*)DataManager::instance().bindsModel());
         comboBox->setVisible(false);
-        comboBox->setFixedWidth(200);
+        comboBox->setMinimumWidth(400);
+        comboBox->setMaxVisibleItems(50);
 
         // Table row
         int row = curTable->rowCount();
@@ -178,6 +180,12 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         curTable->insertRow(row);
         curTable->setItem(row, 0, nameCell);
         QTableWidgetItem * bindCell = new QTableWidgetItem(comboBox->currentText());
+        QIcon dropDownIcon = QIcon();
+        QPixmap dd1 = QPixmap(":/res/dropdown.png");
+        QPixmap dd2 = QPixmap(":/res/dropdown_selected.png");
+        dropDownIcon.addPixmap(dd1, QIcon::Normal);
+        dropDownIcon.addPixmap(dd2, QIcon::Selected);
+        bindCell->setIcon(dropDownIcon);
         bindCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         curTable->setItem(row, 1, bindCell);
         curTable->resizeColumnsToContents();
@@ -240,13 +248,12 @@ void KeyBinder::bindCellClicked(QTableWidgetItem * item)
 {
     QComboBox * box = bindCellComboBoxMappings->value(item);
     QTableWidget * table = item->tableWidget();
-    QFrame * frame = box->findChild<QFrame*>();
 
-    box->showPopup();
-    frame->move(
-        frame->x() + table->horizontalHeader()->sectionSize(0),
-        frame->y() + (table->verticalHeader()->defaultSectionSize() * item->row())
+    box->move(
+        table->horizontalHeader()->sectionSize(0),
+        (table->verticalHeader()->defaultSectionSize() * (item->row() + 1)) - (box->height()) + 1
     );
+    box->showPopup();
 }
 
 // When a new row in a bind table is *selected*, this clears selection in any other table

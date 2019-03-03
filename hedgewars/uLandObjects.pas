@@ -28,27 +28,40 @@ procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word); inline;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word; Flip: boolean);
+procedure BlitOverlayAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
 procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
-     , uTypes, uVariables, uUtils, uDebug, SysUtils
-     , uPhysFSLayer;
+     , uTypes, uVariables, uDebug, uUtils
+     , uPhysFSLayer, adler32, uRenderUtils;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
       cThemeCFGFilename = 'theme.cfg';
 
-type TRectsArray = array[0..MaxRects] of TSDL_Rect;
+type PLongWord = ^LongWord;
+     TRectsArray = array[0..MaxRects] of TSDL_Rect;
      PRectArray = ^TRectsArray;
+     TThemeObjectOverlay = record
+                           Position: TPoint;
+                           Surf: PSDL_Surface;
+                           Width, Height: LongWord;
+                           end;
      TThemeObject = record
+                     Name: ShortString;
                      Surf, Mask: PSDL_Surface;
-                     inland: TSDL_Rect;
+                     inland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
                      outland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
-                     rectcnt: Longword;
+                     anchors: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
+                     overlays: array[0..Pred(MAXOBJECTRECTS)] of TThemeObjectOverlay;
+                     inrectcnt: LongInt;
+                     outrectcnt: LongInt;
+                     anchorcnt: LongInt;
+                     overlaycnt: LongInt;
                      Width, Height: Longword;
                      Maxcnt: Longword;
                      end;
@@ -122,6 +135,7 @@ if Width = 0 then
     Width:= Image^.w;
 
 p:= Image^.pixels;
+
 for y:= 0 to Pred(Image^.h) do
     begin
     for x:= 0 to Pred(Width) do
@@ -137,15 +151,72 @@ for y:= 0 to Pred(Image^.h) do
             if (cReducedQuality and rqBlurryLand) = 0 then
                 begin
                 if (LandPixels[cpY + y, cpX + x] = 0)
-                or (((p^[px] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
+                or (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255) then
                     LandPixels[cpY + y, cpX + x]:= p^[px];
                 end
             else
                 if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[px];
 
-            if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[px] and AMask) <> 0) then
+            if Land[cpY + y, cpX + x] <= lfAllObjMask then
                 Land[cpY + y, cpX + x]:= lfObject or LandFlags
+            end;
+        end;
+    p:= PLongwordArray(@(p^[Image^.pitch shr 2]))
+    end;
+
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+WriteLnToConsole(msgOK)
+end;
+
+function LerpByte(src, dst: Byte; l: LongWord): LongWord; inline;
+begin
+    LerpByte:= ((255 - l) * src + l * dst) div 255;
+end;
+
+procedure BlitOverlayAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
+var p: PLongwordArray;
+    pLandColor: PLongWord;
+    x, y, alpha, color, landColor: LongWord;
+begin
+WriteToConsole('Generating overlay collision info... ');
+
+if SDL_MustLock(Image) then
+    if SDLCheck(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true) then exit;
+
+if checkFails(Image^.format^.BytesPerPixel = 4, 'Land object overlay should be 32bit', true)
+   and SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+
+p:= Image^.pixels;
+
+for y:= 0 to Pred(Image^.h) do
+    begin
+    for x:= 0 to Pred(Image^.w) do
+        begin
+        color:= p^[x];
+        if (color and AMask) <> 0 then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                pLandColor:= @LandPixels[cpY + y, cpX + x]
+            else
+                pLandColor:= @LandPixels[(cpY + y) div 2, (cpX + x) div 2];
+
+            alpha:= (color and AMask) shr AShift;
+            if ((alpha <> $FF) and ((pLandColor^) <> 0)) then
+                begin
+                landColor:= pLandColor^;
+                color:=
+                    (LerpByte((landColor and RMask) shr RShift, (color and RMask) shr RShift, alpha) shl RShift)
+                 or (LerpByte((landColor and GMask) shr GShift, (color and GMask) shr GShift, alpha) shl GShift)
+                 or (LerpByte((landColor and BMask) shr BShift, (color and BMask) shr BShift, alpha) shl BShift)
+                 or (LerpByte(alpha, 255, (landColor and AMask) shr AShift) shl AShift)
+                end;
+            pLandColor^:= color;
+
+            if Land[cpY + y, cpX + x] <= lfAllObjMask then
+                Land[cpY + y, cpX + x]:= lfObject
             end;
         end;
     p:= PLongwordArray(@(p^[Image^.pitch shr 2]))
@@ -252,13 +323,37 @@ begin
     CountNonZeroz:= lRes;
 end;
 
+procedure ChecksumLandObjectImage(Image: PSDL_Surface);
+var y: LongInt;
+begin
+    if Image = nil then exit;
+
+    if SDL_MustLock(Image) then
+        SDL_LockSurface(Image);
+
+    if checkFails(Image^.format^.BytesPerPixel = 4, 'Land object image should be 32bit', true) then
+    begin
+        if SDL_MustLock(Image) then
+            SDL_UnlockSurface(Image);
+        exit
+    end;
+
+    for y := 0 to Image^.h-1 do
+        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Image^.pixels)^[y*Image^.pitch], Image^.w*4);
+
+    if SDL_MustLock(Image) then
+        SDL_UnlockSurface(Image);
+end;
+
 function AddGirder(gX: LongInt; var girSurf: PSDL_Surface): boolean;
 var x1, x2, y, k, i, girderHeight: LongInt;
     rr: TSDL_Rect;
     bRes: boolean;
 begin
 if girSurf = nil then
-    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
+    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
+
+ChecksumLandObjectImage(girsurf);
 
 girderHeight:= girSurf^.h;
 
@@ -268,27 +363,27 @@ repeat
     x1:= gX;
     x2:= gX;
 
-    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y, girderHeight) = 0) do
+    while (x1 > leftX+150) and (CountNonZeroz(x1, y, girderHeight) = 0) do
         dec(x1, 2);
 
     i:= x1 - 12;
     repeat
         k:= CountNonZeroz(x1, y, girderHeight);
         dec(x1, 2)
-    until (x1 < Longint(leftX) + 100) or (k = 0) or (k = girderHeight) or (x1 < i);
+    until (x1 < leftX + 100) or (k = 0) or (k = girderHeight) or (x1 < i);
 
     inc(x1, 2);
     if k = girderHeight then
         begin
-        while (x2 < (LongInt(rightX) - 100)) and (CountNonZeroz(x2, y, girderHeight) = 0) do
+        while (x2 < (rightX - 100)) and (CountNonZeroz(x2, y, girderHeight) = 0) do
             inc(x2, 2);
         i:= x2 + 12;
         repeat
         inc(x2, 2);
         k:= CountNonZeroz(x2, y, girderHeight)
-        until (x2 >= (LongInt(rightX)-150)) or (k = 0) or (k = girderHeight) or (x2 > i) or (x2 - x1 >= 900);
+        until (x2 >= (rightX-150)) or (k = 0) or (k = girderHeight) or (x2 > i) or (x2 - x1 >= 900);
 
-        if (x2 < (LongInt(rightX) - 100)) and (k = girderHeight) and (x2 - x1 > 200) and (x2 - x1 < 900)
+        if (x2 < (rightX - 100)) and (k = girderHeight) and (x2 - x1 > 200) and (x2 - x1 < 900)
         and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then
                 break;
         end;
@@ -351,33 +446,94 @@ while (tmpy <= by - rect.h div 2 - 1) and bRes do
 CheckLand:= bRes;
 end;
 
+function CheckLandAny(rect: TSDL_Rect; dX, dY, LandType: Longword): boolean;
+var tmpx, tmpy, bx, by: LongInt;
+begin
+    inc(rect.x, dX);
+    inc(rect.y, dY);
+    bx:= rect.x + rect.w - 1;
+    by:= rect.y + rect.h - 1;
+    CheckLandAny:= false;
+
+    if (((rect.x and LAND_WIDTH_MASK) or (bx and LAND_WIDTH_MASK) or
+         (rect.y and LAND_HEIGHT_MASK) or (by and LAND_HEIGHT_MASK)) = 0) then
+    begin
+        for tmpx := rect.x to bx do
+        begin
+            if (((Land[rect.y, tmpx] and LandType) or (Land[by, tmpx] and LandType)) <> 0) then
+            begin
+                CheckLandAny := true;
+                exit;
+            end
+        end;
+        for tmpy := rect.y to by do
+        begin
+            if (((Land[tmpy, rect.x] and LandType) or (Land[tmpy, bx] and LandType)) <> 0) then
+            begin
+                CheckLandAny := true;
+                exit;
+            end
+        end;
+    end;
+end;
+
 function CheckCanPlace(x, y: Longword; var Obj: TThemeObject): boolean;
 var i: Longword;
-    bRes: boolean;
+    bRes, anchored: boolean;
+    overlayP1, overlayP2: TPoint;
 begin
-with Obj do
-    if CheckLand(inland, x, y, lfBasic) then
-        begin
+    with Obj do begin
         bRes:= true;
-        i:= 1;
-        while bRes and (i <= rectcnt) do
+        i:= 0;
+        while bRes and (i < overlaycnt) do
+            begin
+            overlayP1.x:= overlays[i].Position.x + x;
+            overlayP1.y:= overlays[i].Position.y + y;
+            overlayP2.x:= overlayP1.x + overlays[i].Width - 1;
+            overlayP2.y:= overlayP1.y + overlays[i].Height - 1;
+            bRes:= (((LAND_WIDTH_MASK and overlayP1.x) or (LAND_HEIGHT_MASK and overlayP1.y) or
+                     (LAND_WIDTH_MASK and overlayP2.x) or (LAND_HEIGHT_MASK and overlayP2.y)) = 0)
+                   and (not CheckIntersect(overlayP1.x, overlayP1.y, overlays[i].Width, overlays[i].Height));
+            inc(i)
+            end;
+
+        i:= 0;
+        while bRes and (i < inrectcnt) do
+            begin
+            bRes:= CheckLand(inland[i], x, y, lfBasic);
+            inc(i)
+            end;
+
+        i:= 0;
+        while bRes and (i < outrectcnt) do
             begin
             bRes:= CheckLand(outland[i], x, y, 0);
             inc(i)
             end;
+
         if bRes then
-            bRes:= not CheckIntersect(x, y, Width, Height)
-        end
-    else
-        bRes:= false;
-CheckCanPlace:= bRes;
+            begin
+            anchored:= anchorcnt = 0;
+            for i:= 1 to anchorcnt do
+                begin
+                    anchored := CheckLandAny(anchors[i], x, y, lfLandMask);
+                    if anchored then break;
+                end;
+            bRes:= anchored;
+            end;
+
+        if bRes then
+            bRes:= not CheckIntersect(x, y, Width, Height);
+
+        CheckCanPlace:= bRes;
+    end
 end;
 
 function TryPut(var Obj: TThemeObject): boolean;
 const MaxPointsIndex = 2047;
 var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
-    cnt, i: Longword;
+    cnt, i, ii: Longword;
     bRes: boolean;
 begin
 TryPut:= false;
@@ -390,6 +546,10 @@ with Obj do
     repeat
         y:= topY+32; // leave room for a hedgie to teleport in
         repeat
+
+            if (inrectcnt > 0) and (inland[0].x = 0) and (inland[0].y = 0) and (inland[0].w = 0) and (inland[0].h = 0) then
+                y := LAND_HEIGHT - Height;
+
             if CheckCanPlace(x, y, Obj) then
                 begin
                 ar[cnt].x:= x;
@@ -413,6 +573,18 @@ with Obj do
              BlitImageUsingMask(ar[i].x, ar[i].y, Obj.Surf, Obj.Mask)
         else BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, 0, Obj.Surf);
         AddRect(ar[i].x, ar[i].y, Width, Height);
+
+        ii:= 0;
+        while ii < overlaycnt do
+            begin
+            BlitOverlayAndGenerateCollisionInfo(
+                ar[i].x + overlays[ii].Position.X,
+                ar[i].y + overlays[ii].Position.Y, overlays[ii].Surf);
+            AddRect(ar[i].x + overlays[ii].Position.X,
+                    ar[i].y + overlays[ii].Position.Y,
+                    Width, Height);
+            inc(ii);
+            end;
         dec(Maxcnt)
         end
     else Maxcnt:= 0
@@ -459,15 +631,10 @@ with Obj do
         inc(x, getrandom(12) + 12)
     until x >= LAND_WIDTH - Width;
     bRes:= cnt <> 0;
-AddFileLog('CHECKPOINT 004');
     if bRes then
         begin
         i:= getrandom(cnt);
-        r.x:= ar[i].X;
-        r.y:= ar[i].Y;
-        r.w:= Width;
-        r.h:= Height;
-        SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
+        copyToXY(Obj.Surf, Surface, ar[i].X, ar[i].Y);
         AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
         dec(Maxcnt)
         end
@@ -480,13 +647,57 @@ end;
 procedure CheckRect(Width, Height, x, y, w, h: LongWord);
 begin
     if (x + w > Width) then
-        OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
+        OutError('Broken theme. Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
     if (y + h > Height) then
-        OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
+        OutError('Broken theme. Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
+end;
+
+procedure ReadRect(var rect: TSDL_Rect; var s: ShortString);
+var i: LongInt;
+begin
+with rect do
+    begin
+    i:= Pos(',', s);
+    x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+    Delete(s, 1, i);
+    i:= Pos(',', s);
+    y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+    Delete(s, 1, i);
+    i:= Pos(',', s);
+    w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+    Delete(s, 1, i);
+    i:= Pos(',', s);
+    if i = 0 then i:= Succ(Length(S));
+    h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+    Delete(s, 1, i);
+    end;
+end;
+
+
+
+procedure ReadOverlay(var overlay: TThemeObjectOverlay; var s: ShortString);
+var i: LongInt;
+begin
+with overlay do
+    begin
+    i:= Pos(',', s);
+    Position.X:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+    Delete(s, 1, i);
+    i:= Pos(',', s);
+    Position.Y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+    Delete(s, 1, i);
+    i:= Pos(',', s);
+    if i = 0 then i:= Succ(Length(S));
+    Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps or ifCritical);
+    Width:= Surf^.w;
+    Height:= Surf^.h;
+    Delete(s, 1, i);
+    ChecksumLandObjectImage(Surf);
+    end;
 end;
 
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
-var s, key: shortstring;
+var s, key, nameRef: shortstring;
     f: PFSFile;
     i: LongInt;
     ii, t: Longword;
@@ -520,12 +731,13 @@ if GrayScale then
 s:= cPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 f:= pfsOpenRead(s);
-if checkFails(f <> nil, 'Bad data or cannot access file ' + s, true) then exit;
+if (f = nil) then
+    OutError('Error loading theme. File could not be opened: ' + s, true);
 
 ThemeObjects.Count:= 0;
 SprayObjects.Count:= 0;
 
-while not pfsEOF(f) do
+while (not pfsEOF(f)) and allOK do
     begin
     pfsReadLn(f, s);
     if Length(s) = 0 then
@@ -560,6 +772,29 @@ while not pfsEOF(f) do
         SDSkyColor.r:= SkyColor.r;
         SDSkyColor.g:= SkyColor.g;
         SDSkyColor.b:= SkyColor.b;
+        end
+    else if key = 'sd-tint' then
+        begin
+        i:= Pos(',', s);
+        SDTint.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDTint.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDTint.b:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        SDTint.a:= StrToInt(Trim(s));
+        if GrayScale
+            then
+            begin
+            t:= round(SDTint.r * RGB_LUMINANCE_RED + SDTint.g * RGB_LUMINANCE_GREEN + SDTint.b * RGB_LUMINANCE_BLUE);
+            if t > 255 then
+                t:= 255;
+            SDTint.r:= t;
+            SDTint.g:= t;
+            SDTint.b:= t
+            end;
         end
     else if key = 'border' then
         begin
@@ -641,6 +876,10 @@ while not pfsEOF(f) do
         MusicFN:= Trim(s)
     else if key = 'sd-music' then
         SDMusicFN:= Trim(s)
+    else if key = 'fallback-music' then
+        FallbackMusicFN:= Trim(s)
+    else if key = 'fallback-sd-music' then
+        FallbackSDMusicFN:= Trim(s)
     else if key = 'clouds' then
         begin
         cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div 4096;
@@ -652,57 +891,89 @@ while not pfsEOF(f) do
         with ThemeObjects.objs[Pred(ThemeObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps or ifCritical);
+            Name:= Trim(Copy(s, 1, Pred(i)));
+            Surf:= LoadDataImage(ptCurrTheme, Name, ifColorKey or ifIgnoreCaps or ifCritical);
             Width:= Surf^.w;
             Height:= Surf^.h;
-            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifTransparent or ifIgnoreCaps);
+            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifColorKey or ifIgnoreCaps);
             Delete(s, 1, i);
             i:= Pos(',', s);
             Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
-                OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-            with inland do
-                begin
-                i:= Pos(',', s);
-                x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                i:= Pos(',', s);
-                h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                Delete(s, 1, i);
-                CheckRect(Width, Height, x, y, w, h)
-                end;
+                OutError('Broken theme. Object''s max. count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
+            ChecksumLandObjectImage(Surf);
+            ChecksumLandObjectImage(Mask);
+
+            inrectcnt := 0;
+
+            for ii := 1 to Length(S) do
+              if S[ii] = ',' then
+                inc(inrectcnt);
+
+            if inrectcnt mod 2 = 0 then
+              inrectcnt := 1
+            else begin
+              i:= Pos(',', s);
+              inrectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+              Delete(s, 1, i);
+            end;
+
+            if inrectcnt > MAXOBJECTRECTS then
+                OutError('Broken theme. Object''s inland rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(inrectcnt) +').', true);
+
+            for ii:= 0 to Pred(inrectcnt) do
+                ReadRect(inland[ii], s);
+
             i:= Pos(',', s);
-            rectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            outrectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
-            for ii:= 1 to rectcnt do
-                with outland[ii] do
-                    begin
-                    i:= Pos(',', s);
-                    x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                    Delete(s, 1, i);
-                    i:= Pos(',', s);
-                    y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                    Delete(s, 1, i);
-                    i:= Pos(',', s);
-                    w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                    Delete(s, 1, i);
-                    if ii = rectcnt then
-                        h:= StrToInt(Trim(s))
-                    else
-                        begin
-                        i:= Pos(',', s);
-                        h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-                        Delete(s, 1, i)
-                        end;
-                    CheckRect(Width, Height, x, y, w, h)
-                    end;
+
+            if outrectcnt > MAXOBJECTRECTS then
+                OutError('Broken theme. Object''s outland rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(outrectcnt) +').', true);
+
+            for ii:= 0 to Pred(outrectcnt) do
+                ReadRect(outland[ii], s);
+            end;
+        end
+    else if key = 'anchors' then
+        begin
+        i:= Pos(',', s);
+        nameRef:= Trim(Copy(s, 1, Pred(i)));
+        for ii:= 0 to Pred(ThemeObjects.Count) do
+            if ThemeObjects.objs[ii].Name = nameRef then with ThemeObjects.objs[ii] do
+                begin
+                if anchorcnt <> 0 then
+                    OutError('Broken theme. Duplicate anchors declaration for object ' + nameRef, true);
+                Delete(s, 1, i);
+                i:= Pos(',', s);
+                anchorcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                Delete(s, 1, i);
+                if anchorcnt > MAXOBJECTRECTS then
+                    OutError('Broken theme. Object''s anchor rectangle count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(anchorcnt) +').', true);
+                for t:= 0 to Pred(anchorcnt) do
+                    ReadRect(anchors[t], s);
+                break
+                end;
+        end
+    else if key = 'overlays' then
+        begin
+        i:= Pos(',', s);
+        nameRef:= Trim(Copy(s, 1, Pred(i)));
+        for ii:= 0 to Pred(ThemeObjects.Count) do
+            if ThemeObjects.objs[ii].Name = nameRef then with ThemeObjects.objs[ii] do
+            begin
+                if overlaycnt <> 0 then
+                    OutError('Broken theme. Duplicate overlays declaration for object ' + nameRef, true);
+                Delete(s, 1, i);
+                i:= Pos(',', s);
+                overlaycnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+                Delete(s, 1, i);
+                if overlaycnt > MAXOBJECTRECTS then
+                    OutError('Broken theme. Object''s overlay count should be no more than '+ inttostr(MAXOBJECTRECTS) +' (it was '+ inttostr(overlaycnt) +').', true);
+                for t:= 0 to Pred(overlaycnt) do
+                    ReadOverlay(overlays[t], s);
+                break
             end;
         end
     else if key = 'spray' then
@@ -711,12 +982,32 @@ while not pfsEOF(f) do
         with SprayObjects.objs[Pred(SprayObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
+            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifAlpha or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);
             Maxcnt:= StrToInt(Trim(s));
             end;
+        end
+    else if key = 'water-animation' then
+        begin
+        i:= Pos(',', s);
+        watFrames:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        watFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        watMove:= StrToInt(Trim(s));
+        end
+    else if key = 'sd-water-animation' then
+        begin
+        i:= Pos(',', s);
+        watSDFrames:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        watSDFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        watSDMove:= StrToInt(Trim(s));
         end
     else if key = 'flakes' then
         begin
@@ -934,7 +1225,7 @@ begin
 end;
 
 procedure FreeLandObjects();
-var i: Longword;
+var i, ii: Longword;
 begin
     for i:= 0 to Pred(MAXTHEMEOBJECTS) do
     begin
@@ -944,6 +1235,17 @@ begin
             SDL_FreeSurface(SprayObjects.objs[i].Surf);
         ThemeObjects.objs[i].Surf:= nil;
         SprayObjects.objs[i].Surf:= nil;
+
+        ii:= 0;
+        while ii < ThemeObjects.objs[i].overlaycnt do
+            begin
+            if ThemeObjects.objs[i].overlays[ii].Surf <> nil then
+                begin
+                    SDL_FreeSurface(ThemeObjects.objs[i].overlays[ii].Surf);
+                    ThemeObjects.objs[i].overlays[ii].Surf:= nil;
+                end;
+            inc(ii);
+            end;
     end;
 end;
 

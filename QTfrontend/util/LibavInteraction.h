@@ -24,7 +24,7 @@
 /**
  * @brief Class for interacting with ffmpeg/libav libraries
  *
- * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
  */
 class LibavInteraction : public QObject
 {

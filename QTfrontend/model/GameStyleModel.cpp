@@ -32,11 +32,18 @@ void GameStyleModel::loadGameStyles()
 {
     beginResetModel();
 
+    QIcon dlcIcon;
+    dlcIcon.addFile(":/res/dlcMarker.png", QSize(), QIcon::Normal, QIcon::On);
+    dlcIcon.addFile(":/res/dlcMarkerSelected.png", QSize(), QIcon::Selected, QIcon::On);
+    QPixmap emptySpace = QPixmap(7, 15);
+    emptySpace.fill(QColor(0, 0, 0, 0));
+    QIcon notDlcIcon = QIcon(emptySpace);
+
     // empty list, so that we can (re)fill it
     QStandardItemModel::clear();
 
     QList<QStandardItem * > items;
-    items.append(new QStandardItem("Normal"));
+    items.append(new QStandardItem(notDlcIcon, "Normal"));
 
     // define a separator item
     QStandardItem * separator = new QStandardItem("---");
@@ -82,7 +89,11 @@ void GameStyleModel::loadGameStyles()
         QString scriptPath = PHYSFS_getRealDir(QString("Scripts/Multiplayer/%1.lua").arg(script).toLocal8Bit().data());
         bool isDLC = !scriptPath.startsWith(datadir->absolutePath());
 
-        QStandardItem * item = new QStandardItem((isDLC ? "*" : "") + name);
+        QStandardItem * item;
+        if (isDLC)
+            item = new QStandardItem(dlcIcon, name);
+        else
+            item = new QStandardItem(notDlcIcon, name);
 
         item->setData(script, ScriptRole);
         item->setData(scheme, SchemeRole);

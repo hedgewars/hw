@@ -1,0 +1,72 @@
+HedgewarsScriptLoad("/Scripts/SimpleMission.lua")
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+
+SimpleMission({
+	missionTitle = loc("Bazooka Battlefield"),
+	initVars = {
+		TurnTime = 15000,
+		Map = "Battlefield",
+		Theme = "Castle",
+		SuddenDeathTurns = 15,
+		WaterRise = 33,
+	},
+	ammoConfig = {
+		[amBazooka] = { count = 9 },
+	},
+	teams = {
+		{ isMissionTeam = true,
+		hogs = {
+			{
+			health = 100,
+			x = 276, y = 825,
+			ammo = { [amSwitch] = 100 },
+			},
+			{
+			health = 100,
+			x = 1794, y = 716,
+			faceLeft = true,
+			},
+		}, },
+		{ name = loc("Hill Guard"),
+		flag = "cm_balrog",
+		grave = "Rip",
+		hogs = {
+			{ name = loc("Bushes"),
+			faceLeft = true,
+			health = 30,
+			x = 706, y = 698,
+			hat = "Viking",
+			botLevel = 3,
+			faceLeft = true,
+			ammo = { [amGrenade] = 100, [amFirePunch] = 100, [amWhip] = 100 },
+			},
+			{ name = loc("Skulls"),
+			faceLeft = true,
+			health = 30,
+			x = 1033, y = 518,
+			hat = "Viking",
+			botLevel = 3,
+			},
+			{ name = loc("Swords"),
+			health = 30,
+			x = 606, y = 348,
+			hat = "Viking",
+			botLevel = 3,
+			},
+			{ name = loc("Sneaks"),
+			faceLeft = true,
+			health = 30,
+			x = 1330, y = 509,
+			hat = "Viking",
+			botLevel = 3,
+			},
+			{ name = loc("Axes"),
+			faceLeft = true,
+			health = 30,
+			x = 1424, y = 374,
+			hat = "Viking",
+			botLevel = 3,
+			}
+		}, },
+	},
+})

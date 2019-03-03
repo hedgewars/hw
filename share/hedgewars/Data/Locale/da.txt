@@ -54,18 +54,17 @@
 00:51=Mudderklat
 00:52=Intet våben valgt
 00:53=Tidsboks
-; 00:54=Struktur
 00:54=Jordspray
 
-01:00=Kæmp!
+; 01:00=Loading …
 01:01=Runde uafgjort
 01:02=%1 vinder!
 01:03=Lydstyrke %1%
 01:04=Sat på pause
-01:05=Vil du virkelig forlade spillet (Y/Esc)?
+01:05=Vil du virkelig forlade spillet (%1/%2)?
 01:06=Pludselig Død!
 01:07=%1 tilbage
-01:08=Brændstof
+01:08=Brændstof: %1%
 01:09=Synkroniserer...
 01:10=Brug af dette værktøj afslutter ikke din tur!
 01:11=Dette våben eller værktøj er ikke tilgængeligt endnu!
@@ -243,11 +242,11 @@
 02:02=Frygt intet!
 02:02=Vær modig og tapper
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 vinder!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Runde uafgjort
 
 ; New health crate
 02:05=Så er der hjælp at hente!
@@ -446,7 +445,6 @@
 03:51=Lige til at samle op
 03:52=UBRUGT
 03:53=Årgang 40
-;03:54=Byg noget
 03:54=Værktøj
 
 ; Weapon Descriptions (use |as line breaks)
@@ -504,18 +502,17 @@
 04:51=Få et skud lige ind med en Mudderklat.|Bider en smule og slår fjender omkuld.
 04:52=UBRUGT
 04:53=Tag på et eventyr gennem tid og rum,|mens du efterlader kampen til dine kammerater.|Vær klar til at vende tilbage når som helst,|eller hvis Pludselig Død indtræder|eller alle dine andre pindsvin dør.|Advarsel! Virker ikke under Pludselig Død,|hvis du er alene eller er Konge.
-;04:54=UFÆRDIG
 04:54=Sprøjt rundt med klistrende flammer.|Byg broer, begrav fjender, luk tunneler af.|Pas på ikke selv at få noget på dig.
 
 ; Game goal strings
 05:00=Spilsystemer
 05:01=De følgende regler gælder
-05:02=Forter: Forsvar din fæstning; knus dine modstandere!
+05:02=Placer din Konge: Vælg et beskyttet sted din konge kan starte
 05:03=Svag Tyngdekraft: Gå forsigtigt
 05:04=Udødelighed: Pindsvin er (næsten) udødelige
 05:05=Vampyr: Pindsvin bliver helbredt når de giver skade
 05:06=Karma: Pindsvin tager skade når de giver skade
-05:07=Forsvar Kongen: Undgå at gå skakmat!|Placer din Konge: Vælg et beskyttet sted din konge kan starte
+05:07=Forsvar Kongen: Undgå at gå skakmat!
 05:08=Placer Pindsvin: Placer dine pindsvin før spillet starter
 05:09=Artilleri: Pindsvin kan ikke gå for at flytte sig rundt
 05:10=Uforgængeligt Terræn: De fleste våben kan ikke ændre på banen

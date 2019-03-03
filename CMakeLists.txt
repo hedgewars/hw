@@ -1,5 +1,6 @@
 project(hedgewars)
 
+
 #initialise cmake environment
 cmake_minimum_required(VERSION 2.6.4)
 foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
@@ -8,7 +9,7 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
     endif()
 endforeach()
 
-foreach(hwpolicy CMP0026)
+foreach(hwpolicy CMP0026 CMP0068)
     if(POLICY ${hwpolicy})
         cmake_policy(SET ${hwpolicy} OLD)
     endif()
@@ -26,10 +27,8 @@ option(NOVIDEOREC "Disable video recording (off)" OFF)
 option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
 
 if(WIN32 OR APPLE)
-    option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
     option(LUA_SYSTEM "Use system lua (off)" OFF)
 else()
-    option(PHYSFS_SYSTEM "Use system physfs (on)" ON)
     option(LUA_SYSTEM "Use system lua (on)" ON)
 endif()
 
@@ -41,6 +40,7 @@ option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 option(SKIPBUNDLE "Do not create relocate bundle (off)" OFF)
 
 option(BUILD_ENGINE_C "Compile hwengine as native C (off)" OFF)
+option(BUILD_ENGINE_JS "Compile hwengine as javascript (off)" OFF)
 option(GL2 "Enable OpenGL 2 rendering !!!EXPERIMENTAL - DO NOT USE!!! [default: off)" OFF)
 
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
@@ -50,17 +50,44 @@ endif()
 
 option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if source is in a git/repo that is NOT the hedgewars repo" OFF)
 
+
+if(BUILD_ENGINE_JS)
+    if(NOT CMAKE_TOOLCHAIN_FILE)
+        message(FATAL_ERROR "Missing emscripten toolchain file\nClean your cache and rerun cmake with -DCMAKE_TOOLCHAIN_FILE=${CMAKE_SOURCE_DIR}/cmake_modules/Platform/Emscripten.cmake")
+    endif()
+
+    set(BUILD_ENGINE_C ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(BUILD_ENGINE_LIBRARY ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(NOAUTOUPDATE ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(LUA_SYSTEM OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(NOVIDEOREC ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(NOSERVER ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(GL2 ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+    set(BUILD_SHARED_LIBS OFF CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
+
+    set(target_binary_install_dir "bin" CACHE PATH "install dest for binaries")
+    set(target_library_install_dir "lib" CACHE PATH "install dest for libs")
+endif()
+
+if("${CMAKE_SIZEOF_VOID_P}" EQUAL "4" AND UNIX AND NOT APPLE)
+    set(BUILD_ENGINE_C ON CACHE STRING "PAS2C force-enabled due to a freepascal 32 bit alignment bug" FORCE)
+endif()
+
 #system paths for finding required fonts (see share/hedgewars/Data/fonts)
 #subdirectories will NOT be searched.
 #all fonts that can't be found will be bundled with hedgewars
 set(FONTS_DIRS "" CACHE STRING "Additional paths to folders where required fonts can be found ( ; is separator)")
 
 #versioning
-set(CPACK_PACKAGE_VERSION_MAJOR 0)
-set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 23)
-set(HEDGEWARS_PROTO_VER 52)
-set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+set(CPACK_PACKAGE_VERSION_MAJOR 1)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(HEDGEWARS_PROTO_VER 58)
+if((CMAKE_BUILD_TYPE MATCHES "RELEASE") OR (CMAKE_BUILD_TYPE MATCHES "RELWITHDEBUGINFO"))
+    set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+else()
+    set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-dev")
+endif()
 include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
@@ -69,8 +96,6 @@ message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWAR
 include(${CMAKE_MODULE_PATH}/paths.cmake)
 #general utilities
 include(${CMAKE_MODULE_PATH}/utils.cmake)
-#paths initialization
-include(${CMAKE_MODULE_PATH}/paths.cmake)
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
 
@@ -90,15 +115,27 @@ endif(CMAKE_BUILD_TYPE)
 
 
 #perform safe check that enable/disable compilation features
-include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
+#skip when crosscompiling to javascript
+if(NOT BUILD_ENGINE_JS)
+    include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
+endif()
 
 #set default compiler flags
-add_flag_append(CMAKE_C_FLAGS "-Wall -pipe")
-add_flag_append(CMAKE_C_FLAGS_RELEASE "-O2")
-add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wextra -O0")
-add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe")
-add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-O2")
-add_flag_append(CMAKE_CXX_FLAGS_DEBUG "-Wextra -O0")
+if(WIN32 AND VCPKG_TOOLCHAIN)
+    add_flag_append(CMAKE_C_FLAGS "/DWIN32_VCPKG /Wall")
+    add_flag_append(CMAKE_C_FLAGS_RELEASE "/Ox")
+    add_flag_append(CMAKE_C_FLAGS_DEBUG "/Od")
+    add_flag_append(CMAKE_CXX_FLAGS "/DWIN32_VCPKG /Wall")
+    add_flag_append(CMAKE_CXX_FLAGS_RELEASE "/Ox")
+    add_flag_append(CMAKE_CXX_FLAGS_DEBUG "/Od")    
+else()
+    add_flag_append(CMAKE_C_FLAGS "-Wall -pipe")
+    add_flag_append(CMAKE_C_FLAGS_RELEASE "-O2")
+    add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wextra -O0")
+    add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe")
+    add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-O2")
+    add_flag_append(CMAKE_CXX_FLAGS_DEBUG "-Wextra -O0")    
+endif()       
 
 #CMake adds a lot of additional configuration flags, so let's clear them up
 if(MINIMAL_FLAGS)
@@ -135,7 +172,7 @@ endif()
 
 
 #build engine without freepascal
-if(BUILD_ENGINE_C)
+if(BUILD_ENGINE_C AND NOT BUILD_ENGINE_JS)
     find_package(Clang REQUIRED)
 
     if(${CLANG_VERSION} VERSION_LESS "3.0")
@@ -176,40 +213,32 @@ endif()
 
 
 #physfs discovery
-if(PHYSFS_SYSTEM)
-    if(NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
-        find_package(PhysFS)
-    endif()
+if(NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+    find_package(PhysFS)
+endif()
 
-    find_file(physfs_h physfs.h ${PHYSFS_INCLUDE_DIR})
-    if(physfs_h)
-        file(STRINGS ${physfs_h} physfs_majorversion REGEX "PHYSFS_VER_MAJOR[\t' ']+[0-9]+")
-        file(STRINGS ${physfs_h} physfs_minorversion REGEX "PHYSFS_VER_MINOR[\t' ']+[0-9]+")
-        file(STRINGS ${physfs_h} physfs_patchversion REGEX "PHYSFS_VER_PATCH[\t' ']+[0-9]+")
-        string(REGEX MATCH "([0-9]+)" physfs_majorversion "${physfs_majorversion}")
-        string(REGEX MATCH "([0-9]+)" physfs_minorversion "${physfs_minorversion}")
-        string(REGEX MATCH "([0-9]+)" physfs_patchversion "${physfs_patchversion}")
-        set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
+find_file(physfs_h physfs.h ${PHYSFS_INCLUDE_DIR})
+if(physfs_h)
+    file(STRINGS ${physfs_h} physfs_majorversion REGEX "PHYSFS_VER_MAJOR[\t' ']+[0-9]+")
+    file(STRINGS ${physfs_h} physfs_minorversion REGEX "PHYSFS_VER_MINOR[\t' ']+[0-9]+")
+    file(STRINGS ${physfs_h} physfs_patchversion REGEX "PHYSFS_VER_PATCH[\t' ']+[0-9]+")
+    string(REGEX MATCH "([0-9]+)" physfs_majorversion "${physfs_majorversion}")
+    string(REGEX MATCH "([0-9]+)" physfs_minorversion "${physfs_minorversion}")
+    string(REGEX MATCH "([0-9]+)" physfs_patchversion "${physfs_patchversion}")
+    set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
 
-        if(${physfs_detected_ver} VERSION_LESS 2.0.0)
-            message(FATAL_ERROR "PhysFS version is too old (detected ${physfs_detected_ver}, required 2.0.0)\n"
-                                "Perform an update or rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
-        endif()
+    if(${physfs_detected_ver} VERSION_LESS 3.0.0)
+        message(FATAL_ERROR "PhysFS version is too old (detected ${physfs_detected_ver}, required 3.0.0)\n"
+                            "Perform an update of PhysFS to fix this.")
     endif()
+endif()
 
-    if(PHYSFS_LIBRARY AND PHYSFS_INCLUDE_DIR)
-        #use an IMPORTED tharget so that we can just use 'physfs' to link
-        add_library(physfs UNKNOWN IMPORTED)
-        set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY})
-    else()
-        message(FATAL_ERROR "Missing PhysFS! Rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
-    endif()
+if(PHYSFS_LIBRARY AND PHYSFS_INCLUDE_DIR)
+    #use an IMPORTED tharget so that we can just use 'physfs' to link
+    add_library(physfs UNKNOWN IMPORTED)
+    set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY})
 else()
-    if(NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
-        message(STATUS "PhysFS will be provided by the bundled sources")
-    endif()
-    set(physfs_output_name "hwphysfs")
-    add_subdirectory(misc/libphysfs)
+    message(FATAL_ERROR "Missing PhysFS! Install PhysFS to fix this.")
 endif()
 
 find_package_or_disable_msg(LIBAV NOVIDEOREC "Video recording will not be built")
@@ -232,9 +261,13 @@ endif()
 if(ANDROID)
     add_subdirectory(project_files/Android-build)
 else(ANDROID)
+    #skip frontend for javascript
+    if(NOT BUILD_ENGINE_JS)
+        add_subdirectory(QTfrontend)
+        add_subdirectory(share)
+    endif()
+
     add_subdirectory(bin)
-    add_subdirectory(QTfrontend)
-    add_subdirectory(share)
     add_subdirectory(tools)
 endif(ANDROID)
 

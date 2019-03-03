@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE FlexibleContexts #-}
 module Pas2C where
 
+import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ
 import Data.Maybe
 import Data.Char
@@ -186,6 +186,7 @@ toCFiles _ _ (_, System _) = return ()
 toCFiles _ _ (_, Redo _) = return ()
 toCFiles outputPath ns pu@(fileName, _) = do
     hPutStrLn stdout $ "Rendering '" ++ fileName ++ "'..."
+    --let (fn, p) = pu in writeFile (outputPath ++ fn ++ ".dump") $ show p
     toCFiles' pu
     where
     toCFiles' (fn, p@(Program {})) = writeFile (outputPath ++ fn ++ ".c") $ "#include \"fpcrtl.h\"\n" ++ (render2C initialState . pascal2C) p
@@ -238,7 +239,7 @@ pascal2C (Unit _ interface implementation _ _) =
 
 pascal2C (Program _ implementation mainFunction) = do
     impl <- implementation2C implementation
-    [main] <- tvar2C True False True True 
+    main <- liftM head $ tvar2C True False True True
         (FunctionDeclaration (Identifier "main" (BTInt True)) False False False (SimpleType $ Identifier "int" (BTInt True)) 
             [VarDeclaration False False ([Identifier "argc" (BTInt True)], SimpleType (Identifier "Integer" (BTInt True))) Nothing
             , VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] 
@@ -298,6 +299,7 @@ uses2C uses@(Uses unitIds) = do
     mapM_ (id2C IOInsert . setBaseType BTUnit) unitIds
     return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
     where
+    injectNamespace :: Identifier -> State RenderState ()
     injectNamespace (Identifier i _) = do
         getNS <- gets (flip Map.lookup . namespaces)
         modify (\s -> s{currentScope = Map.unionWith (++) (fromMaybe Map.empty (getNS i)) $ currentScope s})
@@ -697,12 +699,16 @@ initExpr2C' (BuiltInFunction "low" [InitReference e]) = return $
          (Identifier "LongInt" _) -> int (-2^31)
          (Identifier "SmallInt" _) -> int (-2^15)
          _ -> error $ "BuiltInFunction 'low': " ++ show e
-initExpr2C' (BuiltInFunction "high" [e]) = do
+initExpr2C' hi@(BuiltInFunction "high" [e@(InitReference e')]) = do
     void $ initExpr2C e
     t <- gets lastType
     case t of
          (BTArray i _ _) -> initExpr2C' $ BuiltInFunction "pred" [InitRange i]
-         a -> error $ "BuiltInFunction 'high': " ++ show a
+         BTInt _ -> case e' of
+                  (Identifier "LongInt" _) -> return $ int (2147483647)
+                  (Identifier "LongWord" _) -> return $ text "4294967295"
+                  _ -> error $ "BuiltInFunction 'high' in initExpr: " ++ show e'
+         a -> error $ "BuiltInFunction 'high' in initExpr: " ++ show a ++ ": " ++ show hi
 initExpr2C' (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C' e
@@ -768,6 +774,12 @@ type2C t = do
         where
             bt = BTEnum $ map (\(Identifier i _) -> map toLower i) ids
     type2C' (ArrayDecl Nothing t) = type2C (PointerTo t)
+    type2C' (ArrayDecl (Just r1) (ArrayDecl (Just r2) t)) = do
+        t' <- type2C t
+        lt <- gets lastType
+        r1' <- initExpr2C (InitRange r1)
+        r2' <- initExpr2C (InitRange r2)
+        return $ \i -> t' i <> brackets r1' <> brackets r2'
     type2C' (ArrayDecl (Just r) t) = do
         t' <- type2C t
         lt <- gets lastType
@@ -958,6 +970,7 @@ expr2C bop@(BinOp op expr1 expr2) = do
     case (op2C op, t1, t2) of
         ("+", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcatA" (fff t1 t2 BTString))
         ("+", BTAString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappendA" (fff t1 t2  BTAString))
+        ("+", BTChar, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprependA" (fff t1 t2  BTAString))
         ("!=", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompareA" (fff t1 t2  BTBool))
         (_, BTAString, _) -> error $ "unhandled bin op with ansistring on the left side: " ++ show bop
         (_, _, BTAString) -> error $ "unhandled bin op with ansistring on the right side: " ++ show bop
@@ -1098,7 +1111,7 @@ expr2C (BuiltInFunCall [e, e1, e2] (SimpleReference (Identifier "copy" _))) = do
          BTString -> f "fpcrtl_copy"
          BTAString -> f "fpcrtl_copyA"
          _ -> error $ "copy() called on " ++ show lt
-     
+
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref
     t <- gets lastType
@@ -1106,7 +1119,7 @@ expr2C (BuiltInFunCall params ref) = do
     case t of
         BTFunction _ _ _ t' -> do
             modify (\s -> s{lastType = t'})
-        _ -> error $ "BuiltInFunCall lastType: " ++ show t
+        _ -> error $ "BuiltInFunCall `" ++ show ref ++ "`, lastType: " ++ show t
     return $
         r <> parens (hsep . punctuate (char ',') $ ps)
 expr2C a = error $ "Don't know how to render " ++ show a

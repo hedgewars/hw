@@ -20,14 +20,36 @@
 
 unit uCollisions;
 interface
-uses uFloat, uTypes;
+uses uFloat, uTypes, uUtils;
 
 const cMaxGearArrayInd = 1023;
+const cMaxGearHitOrderInd = 1023;
+const cMaxGearProximityCacheInd = 1023;
 
 type PGearArray = ^TGearArray;
     TGearArray = record
         ar: array[0..cMaxGearArrayInd] of PGear;
+        cX: array[0..cMaxGearArrayInd] of LongInt;
+        cY: array[0..cMaxGearArrayInd] of LongInt;
         Count: Longword
+        end;
+
+type PGearHitOrder = ^TGearHitOrder;
+    TGearHitOrder = record
+        ar: array[0..cMaxGearHitOrderInd] of PGear;
+        order: array[0..cMaxGearHitOrderInd] of LongInt;
+        Count: Longword
+        end;
+
+type PGearProximityCache = ^TGearProximityCache;
+    TGearProximityCache = record
+        ar: array[0..cMaxGearProximityCacheInd] of PGear;
+        Count: Longword
+        end;
+
+type TLineCollision = record
+        hasCollision: Boolean;
+        cX, cY: LongInt; //for visual effects only
         end;
 
 procedure initModule;
@@ -37,6 +59,19 @@ procedure AddCI(Gear: PGear);
 procedure DeleteCI(Gear: PGear);
 
 function  CheckGearsCollision(Gear: PGear): PGearArray;
+function  CheckAllGearsCollision(SourceGear: PGear): PGearArray;
+function  CheckCacheCollision(SourceGear: PGear): PGearArray;
+
+function  CheckGearsLineCollision(Gear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
+function  CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
+
+function  UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
+procedure ClearHitOrderLeq(MinOrder: LongInt);
+procedure ClearHitOrder();
+
+procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
+procedure RemoveFromProximityCache(Gear: PGear);
+procedure ClearProximityCache();
 
 function  TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
 function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
@@ -73,6 +108,8 @@ const MAXRECTSINDEX = 1023;
 var Count: Longword;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
     ga: TGearArray;
+    ordera: TGearHitOrder;
+    proximitya: TGearProximityCache;
 
 procedure AddCI(Gear: PGear);
 begin
@@ -85,7 +122,7 @@ with cinfos[Count] do
     X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
     Radius:= Gear^.Radius;
-    ChangeRoundInLand(X, Y, Radius - 1, true, (Gear = CurrentHedgehog^.Gear) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)));
+    ChangeRoundInLand(X, Y, Radius - 1, true,  ((CurrentHedgehog <> nil) and (Gear = CurrentHedgehog^.Gear)) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)), Gear^.Kind = gtHedgehog);
     cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
@@ -97,7 +134,7 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false, ((CurrentHedgehog <> nil) and (Gear = CurrentHedgehog^.Gear)) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)));
+        ChangeRoundInLand(X, Y, Radius - 1, false, ((CurrentHedgehog <> nil) and (Gear = CurrentHedgehog^.Gear)) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)), Gear^.Kind = gtHedgehog);
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;
@@ -108,7 +145,7 @@ end;
 function CheckCoordInWater(X, Y: LongInt): boolean; inline;
 begin
     CheckCoordInWater:= (Y > cWaterLine)
-        or ((WorldEdge = weSea) and ((X < LongInt(leftX)) or (X > LongInt(rightX))));
+        or ((WorldEdge = weSea) and ((X < leftX) or (X > rightX)));
 end;
 
 function CheckGearsCollision(Gear: PGear): PGearArray;
@@ -130,18 +167,268 @@ for i:= 0 to Pred(Count) do
             (sqr(mx - x) + sqr(my - y) <= sqr(Radius + tr)) then
                 begin
                 ga.ar[ga.Count]:= cinfos[i].cGear;
+                ga.cX[ga.Count]:= hwround(Gear^.X);
+                ga.cY[ga.Count]:= hwround(Gear^.Y);
                 inc(ga.Count)
                 end
+end;
+
+function CheckAllGearsCollision(SourceGear: PGear): PGearArray;
+var mx, my, tr: LongInt;
+    Gear: PGear;
+begin
+    CheckAllGearsCollision:= @ga;
+    ga.Count:= 0;
+
+    mx:= hwRound(SourceGear^.X);
+    my:= hwRound(SourceGear^.Y);
+
+    tr:= SourceGear^.Radius + 2;
+
+    Gear:= GearsList;
+
+    while Gear <> nil do
+        begin
+            if (Gear <> SourceGear) and
+               (sqr(mx - hwRound(Gear^.x)) + sqr(my - hwRound(Gear^.y)) <= sqr(Gear^.Radius + tr))then
+            begin
+                ga.ar[ga.Count]:= Gear;
+                ga.cX[ga.Count]:= mx;
+                ga.cY[ga.Count]:= my;
+                inc(ga.Count)
+            end;
+
+            Gear := Gear^.NextGear
+        end;
+end;
+
+function LineCollisionTest(oX, oY, dirX, dirY, dirNormSqr, dirNormBound: hwFloat;
+        width: LongInt; Gear: PGear):
+    TLineCollision; inline;
+var toCenterX, toCenterY, r,
+    b, bSqr, c, desc, t: hwFloat;
+    realT: extended;
+begin
+    LineCollisionTest.hasCollision:= false;
+    toCenterX:= (oX - Gear^.X);
+    toCenterY:= (oY - Gear^.Y);
+    r:= int2hwFloat(Gear^.Radius + width + 2);
+    // Early cull to avoid multiplying large numbers
+    if hwAbs(toCenterX) + hwAbs(toCenterY) > dirNormBound + r then
+        exit;
+    b:= dirX * toCenterX + dirY * toCenterY;
+    c:= hwSqr(toCenterX) + hwSqr(toCenterY) - hwSqr(r);
+    if (b > _0) and (c > _0) then
+        exit;
+    bSqr:= hwSqr(b);
+    desc:= bSqr - dirNormSqr * c;
+    if desc.isNegative then exit;
+
+    t:= -b - hwSqrt(desc);
+    if t.isNegative then t:= _0;
+    if t < dirNormSqr then
+        with LineCollisionTest do
+            begin
+            hasCollision:= true;
+            realT := hwFloat2Float(t) / hwFloat2Float(dirNormSqr);
+            cX:= round(hwFloat2Float(oX) + realT * hwFloat2Float(dirX));
+            cY:= round(hwFloat2Float(oY) + realT * hwFloat2Float(dirY));
+            end;
+end;
+
+function CheckGearsLineCollision(Gear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
+var dirX, dirY, dirNormSqr, dirNormBound: hwFloat;
+    test: TLineCollision;
+    i: Longword;
+begin
+    CheckGearsLineCollision:= @ga;
+    ga.Count:= 0;
+    if Count = 0 then
+        exit;
+    dirX:= (tX - oX);
+    dirY:= (tY - oY);
+    dirNormBound:= _1_5 * (hwAbs(dirX) + hwAbs(dirY));
+    dirNormSqr:= hwSqr(dirX) + hwSqr(dirY);
+    if dirNormSqr.isNegative then
+        exit;
+
+    for i:= 0 to Pred(Count) do
+        with cinfos[i] do if Gear <> cGear then
+            begin
+            test:= LineCollisionTest(
+                oX, oY, dirX, dirY, dirNormSqr, dirNormBound, Gear^.Radius, cGear);
+            if test.hasCollision then
+                begin
+                ga.ar[ga.Count] := cGear;
+                ga.cX[ga.Count] := test.cX;
+                ga.cY[ga.Count] := test.cY;
+                inc(ga.Count)
+                end
+            end
+end;
+
+function CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
+var dirX, dirY, dirNormSqr, dirNormBound: hwFloat;
+    test: TLineCollision;
+    Gear: PGear;
+begin
+    CheckAllGearsLineCollision:= @ga;
+    ga.Count:= 0;
+    dirX:= (tX - oX);
+    dirY:= (tY - oY);
+    dirNormBound:= _1_5 * (hwAbs(dirX) + hwAbs(dirY));
+    dirNormSqr:= hwSqr(dirX) + hwSqr(dirY);
+    if dirNormSqr.isNegative then
+        exit;
+
+    Gear:= GearsList;
+    while Gear <> nil do
+    begin
+        if SourceGear <> Gear then
+            begin
+            test:= LineCollisionTest(
+                oX, oY, dirX, dirY, dirNormSqr, dirNormBound, SourceGear^.Radius, Gear);
+            if test.hasCollision then
+                begin
+                ga.ar[ga.Count] := Gear;
+                ga.cX[ga.Count] := test.cX;
+                ga.cY[ga.Count] := test.cY;
+                inc(ga.Count)
+                end
+            end;
+        Gear := Gear^.NextGear
+    end;
+end;
+
+function CheckCacheCollision(SourceGear: PGear): PGearArray;
+var mx, my, tr, i: LongInt;
+    Gear: PGear;
+begin
+    CheckCacheCollision:= @ga;
+    ga.Count:= 0;
+
+    mx:= hwRound(SourceGear^.X);
+    my:= hwRound(SourceGear^.Y);
+
+    tr:= SourceGear^.Radius + 2;
+
+    for i:= 0 to proximitya.Count - 1 do
+    begin
+        Gear:= proximitya.ar[i];
+        // Assuming the cache has been filled correctly, it will not contain SourceGear
+        // and other gears won't be far enough for sqr overflow
+        if (sqr(mx - hwRound(Gear^.X)) + sqr(my - hwRound(Gear^.Y)) <= sqr(Gear^.Radius + tr)) then
+        begin
+            ga.ar[ga.Count]:= Gear;
+            ga.cX[ga.Count]:= mx;
+            ga.cY[ga.Count]:= my;
+            inc(ga.Count)
+        end;
+    end;
+end;
+
+function UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
+var i: LongInt;
+begin
+UpdateHitOrder:= true;
+for i:= 0 to ordera.Count - 1 do
+    if ordera.ar[i] = Gear then
+        begin
+        if Order <= ordera.order[i] then UpdateHitOrder:= false;
+        ordera.order[i]:= Max(ordera.order[i], order);
+        exit;
+        end;
+
+if ordera.Count > cMaxGearHitOrderInd then
+    UpdateHitOrder:= false
+else
+    begin
+    ordera.ar[ordera.Count]:= Gear;
+    ordera.order[ordera.Count]:= Order;
+    Inc(ordera.Count);
+    end
+end;
+
+procedure ClearHitOrderLeq(MinOrder: LongInt);
+var i, freeIndex: LongInt;
+begin;
+freeIndex:= 0;
+i:= 0;
+
+while i < ordera.Count do
+    begin
+        if ordera.order[i] <= MinOrder then
+            Dec(ordera.Count)
+        else
+            begin
+                if freeIndex < i then
+                begin
+                ordera.ar[freeIndex]:= ordera.ar[i];
+                ordera.order[freeIndex]:= ordera.order[i];
+                end;
+            Inc(freeIndex);
+            end;
+        Inc(i)
+    end
+end;
+
+procedure ClearHitOrder();
+begin
+    ordera.Count:= 0;
+end;
+
+procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
+var cx, cy, dx, dy, r: LongInt;
+    Gear: PGear;
+begin
+    proximitya.Count:= 0;
+    cx:= hwRound(SourceGear^.X);
+    cy:= hwRound(SourceGear^.Y);
+    Gear:= GearsList;
+
+    while (Gear <> nil) and (proximitya.Count <= cMaxGearProximityCacheInd) do
+    begin
+        dx:= abs(hwRound(Gear^.X) - cx);
+        dy:= abs(hwRound(Gear^.Y) - cy);
+        r:= radius + Gear^.radius + 2;
+        if (Gear <> SourceGear) and (max(dx, dy) <= r) and (sqr(dx) + sqr(dy) <= sqr(r)) then
+        begin
+            proximitya.ar[proximitya.Count]:= Gear;
+            inc(proximitya.Count)
+        end;
+        Gear := Gear^.NextGear
+    end;
+end;
+
+procedure RemoveFromProximityCache(Gear: PGear);
+var i: LongInt;
+begin
+    i := 0;
+    while i < proximitya.Count do
+        begin
+        if proximitya.ar[i] = Gear then
+            begin
+                proximitya.ar[i]:= proximitya.ar[proximitya.Count - 1];
+                dec(proximitya.Count);
+            end
+        else
+            inc(i);
+        end;
+end;
+
+procedure ClearProximityCache();
+begin
+    proximitya.Count:= 0;
 end;
 
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
-if (Gear^.CollisionMask = lfNotCurrentMask) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+if (Gear^.CollisionMask = lfNotCurHogCrate) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
     ((hwRound(Gear^.Hedgehog^.Gear^.X) + Gear^.Hedgehog^.Gear^.Radius + 16 < hwRound(Gear^.X) - Gear^.Radius) or
      (hwRound(Gear^.Hedgehog^.Gear^.X) - Gear^.Hedgehog^.Gear^.Radius - 16 > hwRound(Gear^.X) + Gear^.Radius)) then
-    Gear^.CollisionMask:= $FFFF;
+    Gear^.CollisionMask:= lfAll;
 
 x:= hwRound(Gear^.X);
 if Dir < 0 then
@@ -167,10 +454,10 @@ function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
-if (Gear^.CollisionMask = lfNotCurrentMask) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+if (Gear^.CollisionMask = lfNotCurHogCrate) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
     ((hwRound(Gear^.Hedgehog^.Gear^.Y) + Gear^.Hedgehog^.Gear^.Radius + 16 < hwRound(Gear^.Y) - Gear^.Radius) or
      (hwRound(Gear^.Hedgehog^.Gear^.Y) - Gear^.Hedgehog^.Gear^.Radius - 16 > hwRound(Gear^.Y) + Gear^.Radius)) then
-    Gear^.CollisionMask:= $FFFF;
+    Gear^.CollisionMask:= lfAll;
 
 y:= hwRound(Gear^.Y);
 if Dir < 0 then
@@ -214,7 +501,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
             begin
             if Land[y, x] and Gear^.CollisionMask <> 0 then
                 begin
-                if Land[y, x] and Gear^.CollisionMask > 255 then
+                if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                     exit(Land[y, x] and Gear^.CollisionMask)
                 else
                     pixel:= Land[y, x] and Gear^.CollisionMask;
@@ -280,7 +567,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
             begin
-            if Land[y, x] and Gear^.CollisionMask > 255 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask)
             else // if Land[y, x] <> 0 then
                 pixel:= Land[y, x] and Gear^.CollisionMask;
@@ -355,7 +642,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
     i:= y + Gear^.Radius * 2 - 2;
     repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
-            if Land[y, x] and Gear^.CollisionMask > 255 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask);
     inc(y)
     until (y > i);
@@ -378,7 +665,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     i:= x + Gear^.Radius * 2 - 2;
     repeat
         if (x and LAND_WIDTH_MASK) = 0 then
-            if Land[y, x] and Gear^.CollisionMask > 255 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask);
     inc(x)
     until (x > i);
@@ -694,7 +981,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     i:= x + Gear^.Radius * 2 - 2;
     repeat
     if (x and LAND_WIDTH_MASK) = 0 then
-        if Land[y, x] > 255 then
+        if (Land[y, x] and lfLandMask) <> 0 then
             if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
                 begin
                 isColl:= true;

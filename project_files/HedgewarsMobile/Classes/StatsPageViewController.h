@@ -24,6 +24,6 @@
     NSArray *statsArray;
 }
 
-@property (nonatomic,retain) NSArray *statsArray;
+@property (nonatomic, strong) NSArray *statsArray;
 
 @end

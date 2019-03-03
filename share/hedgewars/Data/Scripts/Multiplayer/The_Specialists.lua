@@ -1,107 +1,141 @@
 ----------------------------------
--- THE SPECIALISTS MODE 0.7
--- by mikade
+-- THE SPECIALISTS
+-- original style by mikade
 ----------------------------------
 
--- version history
------------------
--- version 0.1
------------------
--- concept test
+-- SCRIPT PARAMETER SYNTAX
+--[[
+With the script parameter, you can change the order of specialists per team.
 
-----------------
--- version 0.2
-----------------
--- added gfRandomOrder to gameflags
--- removed some deprecated variables/methods
--- fixed lack of portal reset
+== Changing the specialists for all teams ==
+In the script parameter, put:
 
-----------------
--- version 0.3
-----------------
--- added switching on start
--- removed switch from engineer weaponset
+    t=XXXXXXXX
 
-----------------
--- version 0.4
-----------------
--- Attempted to:
--- fix potential switch explit
--- improve user feedback on start
+Where 'X' is a “specialist letter” (see below). Each letter stands for
+the role of a hedgehog in the team (in that order).
+If you leave out a letter, that hedgehog will be the default.
 
-----------------
--- version 0.5
-----------------
--- provision for variable minetimer / demo mines set to 5000ms
--- don't autoswitch if player only has 1 hog on his team
+== Changing the specialists for on a per-team basis ==
+Same as above, but instead of “t”, you use “t1”, “t2”, ... “t8” for
+each of the teams (team 1 to team 8).
 
-----------------
--- version 0.6
-----------------
--- for the meanwhile, don't drop any crates except health crates
+== Specialist letters ==
 
-----------------
--- version 0.7
-----------------
--- perhogadmsdf :D :D :D :D
+  S = Soldier
+  E = Engineer
+  N = Ninja
+  D = Demo
+  X = Sniper
+  H = Saint
+  P = Pyro
+  L = Loon
+
+== Examples ==
+Example 1:
+
+    t=SSSSPPPP
+
+4 soldiers and 4 pyros for all teams.
+
+Example 2:
+
+    t1=LPHXDNES,t2=NNNNNNNN
+
+Team 1: Loon, Pyro, Saint, Sniper, Demo, Ninja, Engineer, Soldier.
+Team 2: All-ninja team.
+All other teams use the default settings.
+
+]]
 
 --------------------
---TO DO
+-- TODO
 --------------------
-
--- balance hog health, maybe
 -- add proper gameflag checking, maybe (so that we can throw in a .cfg and let the users break everything)
+
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
+
+-- default team values
+local currTeamIdx = 0;
+local teamRoles = {
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'},
+	{'S','E','N','D','X','H','P','L'}
+};
 
 local numhhs = 0
 local hhs = {}
 
-local currName
-local lastName
 local started = false
-local switchStage = 0
 
-local hogCounter
-
-function CountHog(gear)
-	hogCounter = hogCounter +1
+function onParameters()
+	parseParams()
+	-- All teams
+	if params['t'] ~= nil then
+		for i = 1, 8 do
+			for j = 1, 8 do
+				if string.len(params['t']) >= j  then
+					teamRoles[i][j] = string.upper(string.sub(params['t'],j,j));
+				end
+			end
+		end
+	end
+	-- Specific team
+	for i = 1, 8 do
+		if params['t'..i] ~= nil then
+			for j = 1, 8 do
+				if string.len(params['t'..i]) >= j  then
+					teamRoles[i][j] = string.upper(string.sub(params['t'..i],j,j));
+				end
+			end
+		end
+	end
 end
 
 function onNewAmmoStore(groupIndex, hogIndex)
 
 	SetAmmo(amSkip, 9, 0, 0, 0)
+	groupIndex = groupIndex + 1
+	hogIndex = hogIndex + 1
 
-	if hogIndex == 0 then
+	if teamRoles[groupIndex][hogIndex] == 'S' then
 		SetAmmo(amBazooka, 1, 0, 0, 0)
 		SetAmmo(amGrenade, 1, 0, 0, 0)
 		SetAmmo(amShotgun, 1, 0, 0, 0)
-	elseif hogIndex == 1 then
+	elseif teamRoles[groupIndex][hogIndex] == 'E' then
 		SetAmmo(amGirder, 2, 0, 0, 0)
 		SetAmmo(amBlowTorch, 1, 0, 0, 0)
 		SetAmmo(amPickHammer, 1, 0, 0, 0)
-	elseif hogIndex == 2 then
+	elseif teamRoles[groupIndex][hogIndex] == 'N' then
 		SetAmmo(amRope, 9, 0, 0, 0)
 		SetAmmo(amParachute, 9, 0, 0, 0)
 		SetAmmo(amFirePunch, 1, 0, 0, 0)
-	elseif hogIndex == 3 then
+	elseif teamRoles[groupIndex][hogIndex] == 'D' then
 		SetAmmo(amDynamite, 1, 0, 0, 0)
 		SetAmmo(amMine, 1, 0, 0, 0)
 		SetAmmo(amDrill, 1, 0, 0, 0)
-	elseif hogIndex == 4 then
+	elseif teamRoles[groupIndex][hogIndex] == 'X' then
 		SetAmmo(amSniperRifle, 1, 0, 0, 0)
 		SetAmmo(amDEagle, 1, 0, 0, 0)
 		SetAmmo(amPortalGun, 2, 0, 0, 0)
-	elseif hogIndex == 5 then
+	elseif teamRoles[groupIndex][hogIndex] == 'H' then
 		SetAmmo(amSeduction, 9, 0, 0, 0)
 		SetAmmo(amResurrector, 1, 0, 0, 0)
 		SetAmmo(amInvulnerable, 1, 0, 0, 0)
-	elseif hogIndex == 6 then
+		SetAmmo(amLowGravity, 1, 0, 0, 0)
+	elseif teamRoles[groupIndex][hogIndex] == 'P' then
 		SetAmmo(amFlamethrower, 1, 0, 0, 0)
 		SetAmmo(amMolotov, 1, 0, 0, 0)
 		SetAmmo(amNapalm, 1, 0, 0, 0)
-	elseif hogIndex == 7 then
+	elseif teamRoles[groupIndex][hogIndex] == 'L' then
 		SetAmmo(amBaseballBat, 1, 0, 0, 0)
 		SetAmmo(amGasBomb, 1, 0, 0, 0)
 		SetAmmo(amKamikaze, 1, 0, 0, 0)
@@ -117,156 +151,116 @@ function CreateTeam()
 
 	for i = 0, (numhhs-1) do
 
-			currTeam = GetHogTeamName(hhs[i])
+		currTeam = GetHogTeamName(hhs[i])
 
-			if currTeam == lastTeam then
-					z = z + 1
-			else
-					z = 1
+		if currTeam == lastTeam then
+			z = z + 1
+		else
+			z = 1
+			currTeamIdx = currTeamIdx + 1;
+		end
+
+		-- Scale health of each hog with “initial health” setting from game scheme.
+		-- 100 = default health
+		-- 200 = double health for all hogs
+		-- 50 = half health for all hogs
+		local function scaleHealth(health)
+			local newHealth = div(health * InitHealth, 100)
+			-- At least 1 health
+			if newHealth <= 0 then
+				newHealth = 1
 			end
+			return newHealth
+		end
 
-			if z == 1 then
+		if teamRoles[currTeamIdx][z] == 'S' then
 
-					SetHogName(hhs[i],loc("Soldier"))
-					SetHogHat(hhs[i], "sf_vega")
-					SetHealth(hhs[i],200)
+			SetHogName(hhs[i],loc("Soldier"))
+			SetHogHat(hhs[i], "sf_vega")
+			SetHealth(hhs[i], scaleHealth(200))
 
-			elseif z == 2 then
+		elseif teamRoles[currTeamIdx][z] == 'E' then
 
-					SetHogHat(hhs[i], "Glasses")
-					SetHogName(hhs[i],loc("Engineer"))
+			SetHogHat(hhs[i], "Glasses")
+			SetHogName(hhs[i],loc("Engineer"))
+			SetHealth(hhs[i], scaleHealth(100))
 
-			elseif z == 3 then
+		elseif teamRoles[currTeamIdx][z] == 'N' then
 
-					SetHogName(hhs[i],loc("Ninja"))
-					SetHogHat(hhs[i], "NinjaFull")
-					SetHealth(hhs[i],80)
+			SetHogName(hhs[i],loc("Ninja"))
+			SetHogHat(hhs[i], "NinjaFull")
+			SetHealth(hhs[i], scaleHealth(80))
 
-			elseif z == 4 then
+		elseif teamRoles[currTeamIdx][z] == 'D' then
 
-					SetHogName(hhs[i],loc("Demo"))
-					SetHogHat(hhs[i], "Skull")
-					SetHealth(hhs[i],200)
+			SetHogName(hhs[i],loc("Demo"))
+			SetHogHat(hhs[i], "Skull")
+			SetHealth(hhs[i], scaleHealth(200))
 
-			elseif z == 5 then
+		elseif teamRoles[currTeamIdx][z] == 'X' then
 
-					SetHogName(hhs[i],loc("Sniper"))
-					SetHogHat(hhs[i], "Sniper")
-					SetHealth(hhs[i],120)
+			SetHogName(hhs[i],loc("Sniper"))
+			SetHogHat(hhs[i], "Sniper")
+			SetHealth(hhs[i], scaleHealth(120))
 
-			elseif z == 6 then
+		elseif teamRoles[currTeamIdx][z] == 'H' then
 
-					SetHogName(hhs[i],loc("Saint"))
-					SetHogHat(hhs[i], "angel")
-					SetHealth(hhs[i],300)
+			SetHogName(hhs[i],loc("Saint"))
+			SetHogHat(hhs[i], "angel")
+			SetHealth(hhs[i], scaleHealth(300))
 
-			elseif z == 7 then
+		elseif teamRoles[currTeamIdx][z] == 'P' then
 
-					SetHogName(hhs[i],loc("Pyro"))
-					SetHogHat(hhs[i], "Gasmask")
-					SetHealth(hhs[i],150)
+			SetHogName(hhs[i],loc("Pyro"))
+			SetHogHat(hhs[i], "Gasmask")
+			SetHealth(hhs[i], scaleHealth(150))
 
-			elseif z == 8 then
+		elseif teamRoles[currTeamIdx][z] == 'L' then
 
-					SetHogName(hhs[i],loc("Loon"))
-					SetHogHat(hhs[i], "clown")
-					SetHealth(hhs[i],100)
+			SetHogName(hhs[i],loc("Loon"))
+			SetHogHat(hhs[i], "clown")
+			SetHealth(hhs[i], scaleHealth(100))
 
-			end
+		end
 
-			lastTeam = GetHogTeamName(hhs[i])
+		lastTeam = GetHogTeamName(hhs[i])
 
 	end
 
 end
 
 function onGameInit()
-	ClearGameFlags()
-	EnableGameFlags(gfRandomOrder, gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo)
-	Delay = 10
+	-- Force-disable harmful game flags
+	DisableGameFlags(gfSharedAmmo, gfKing)
+	-- Force-enable game-critical game flags
+	EnableGameFlags(gfPerHogAmmo, gfResetWeps)
+	-- NOTE: For your game scheme, these game flags are recommended: gfResetWeps, gfPlaceHog, gfSwitchHog, gfInfAttack
+
+	-- No weapon crates
 	HealthCaseProb = 100
+
+	-- Instructions
+	Goals = loc("The Specialists: Each hedgehog starts with its own weapon set")
 end
 
 function onGameStart()
 
 	CreateTeam()
-
-	ShowMission     (
-                                loc("THE SPECIALISTS"),
-                                loc("a Hedgewars mini-game"),
-
-                                loc("Eliminate the enemy specialists.") .. "|" ..
-                                " " .. "|" ..
-
-                                loc("Game Modifiers: ") .. "|" ..
-                                loc("Per-Hog Ammo") .. "|" ..
-                                loc("Weapons Reset") .. "|" ..
-                                loc("Unlimited Attacks") .. "|" ..
-
-                                "", 4, 4000
-                                )
-
 	trackTeams()
 
 end
 
 
 function onNewTurn()
-	currName = GetHogName(CurrentHedgehog)
-	lastName = GetHogName(CurrentHedgehog)
+
 	started = true
-	switchStage = 0
-end
-
-function onGameTick20()
-
-	if (CurrentHedgehog ~= nil) then
-
-		currName = GetHogName(CurrentHedgehog)
-
-		if (currName ~= lastName) and (switchStage > 5) then
-			AddCaption(loc("Switched to ") .. currName .. "!")
-		end
-
-		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and (switchStage < 5) then
-
-			AddCaption(loc("Prepare yourself") .. ", " .. currName .. "!")
-
-			hogCounter = 0
-			runOnHogsInTeam(CountHog, GetHogTeamName(CurrentHedgehog) )
-
-			if hogCounter > 1 then
-
-				switchStage = switchStage + 1
-
-				if switchStage == 1 then
-					AddAmmo(CurrentHedgehog, amSwitch, 1)
-
-				elseif switchStage == 2 then
-					SetWeapon(amSwitch)
-				elseif switchStage == 3 then
-					SetGearMessage(CurrentHedgehog,gmAttack)
-				elseif switchStage == 4 then
-					switchStage = 6
-					AddAmmo(CurrentHedgehog, amSwitch, 0)
-				end
-
-			else
-				switchStage = 6
-			end
-
-
-		end
-
-		lastName = currName
-
-	end
+	AddCaption(string.format(loc("Prepare yourself, %s!"), GetHogName(CurrentHedgehog)))
 
 end
 
 function onGearAdd(gear)
 
-    if GetGearType(gear) == gtHedgehog then
+	if GetGearType(gear) == gtHedgehog then
 		hhs[numhhs] = gear
 		numhhs = numhhs + 1
 	elseif (GetGearType(gear) == gtMine) and (started == true) then
@@ -277,16 +271,11 @@ function onGearAdd(gear)
 		trackGear(gear)
 	end
 
-
 end
 
 function onGearDelete(gear)
 	if (GetGearType(gear) == gtHedgehog) or (GetGearType(gear) == gtResurrector) then
 		trackDeletion(gear)
 	end
-end
-
-function onAmmoStoreInit()
---
 end
 

@@ -25,14 +25,14 @@
 #pragma mark -
 @implementation UIScreen (safe)
 
--(CGFloat) safeScale {
+- (CGFloat)safeScale {
     CGFloat theScale = 1.0f;
 //    if ([self respondsToSelector:@selector(scale)])
 //         theScale = [self scale];
     return theScale;
 }
 
--(CGRect) safeBounds {
+- (CGRect)safeBounds {
     return [self bounds];
 //    CGRect original = [self bounds];
 //    if (IS_ON_PORTRAIT())
@@ -47,12 +47,11 @@
 #pragma mark -
 @implementation UITableView (backgroundColor)
 
--(void) setBackgroundColorForAnyTable:(UIColor *) color {
+- (void)setBackgroundColorForAnyTable:(UIColor *) color {
     if ([self respondsToSelector:@selector(backgroundView)]) {
         UIView *backView = [[UIView alloc] initWithFrame:self.frame];
         backView.backgroundColor = color;
         self.backgroundView = backView;
-        [backView release];
         self.backgroundColor = [UIColor clearColor];
     } else
         self.backgroundColor = color;
@@ -64,27 +63,27 @@
 #pragma mark -
 @implementation UIColor (HWColors)
 
-+(UIColor *)darkYellowColor {
++ (UIColor *)darkYellowColor {
     return [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xC0/255 blue:0 alpha:1];
 }
 
-+(UIColor *)lightYellowColor {
++ (UIColor *)lightYellowColor {
     return [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1];
 }
 
-+(UIColor *)darkBlueColor {
++ (UIColor *)darkBlueColor {
     return [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1];
 }
 
 // older devices don't get any transparency for performance reasons
-+(UIColor *)darkBlueColorTransparent {
++ (UIColor *)darkBlueColorTransparent {
     return [UIColor colorWithRed:(CGFloat)0x0F/255
                            green:0
                             blue:(CGFloat)0x55/255
                            alpha:IS_NOT_POWERFUL([HWUtils modelType]) ? 1 : 0.6f];
 }
 
-+(UIColor *)blackColorTransparent {
++ (UIColor *)blackColorTransparent {
     return [UIColor colorWithRed:0
                            green:0
                             blue:0
@@ -97,8 +96,8 @@
 #pragma mark -
 @implementation UIButton (quickStyle)
 
--(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title {
-    [self initWithFrame:frame];
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title {
+    if (!(self = [self initWithFrame:frame])) return nil;
     [self setTitle:title forState:UIControlStateNormal];
     [self applyBlackQuickStyle];
 
@@ -137,7 +136,7 @@
 #pragma mark -
 @implementation UILabel (quickStyle)
 
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title {
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title {
     return [self initWithFrame:frame
                       andTitle:title
                withBorderWidth:1.5f
@@ -145,7 +144,7 @@
            withBackgroundColor:[UIColor darkBlueColor]];
 }
 
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth {
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat)borderWidth {
     return [self initWithFrame:frame
                       andTitle:title
                withBorderWidth:borderWidth
@@ -153,7 +152,7 @@
            withBackgroundColor:[UIColor darkBlueColorTransparent]];
 }
 
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat)borderWidth
           withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor {
     UILabel *theLabel = [self initWithFrame:frame];
     theLabel.backgroundColor = backColor;
@@ -161,7 +160,7 @@
     if (title != nil) {
         theLabel.text = title;
         theLabel.textColor = [UIColor lightYellowColor];
-        theLabel.textAlignment = UITextAlignmentCenter;
+        theLabel.textAlignment = NSTextAlignmentCenter;
         theLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]*80/100];
     }
 
@@ -179,7 +178,7 @@
 #pragma mark -
 @implementation NSString (MD5)
 
--(NSString *)MD5hash {
+- (NSString *)MD5hash {
     const char *cStr = [self UTF8String];
     unsigned char result[16];
     CC_MD5( cStr, strlen(cStr), result );
@@ -188,6 +187,22 @@
             result[0], result[1], result[2], result[3], result[4], result[5],
             result[6], result[7], result[8], result[9], result[10], result[11],
             result[12], result[13], result[14], result[15]];
+}
+
+@end
+
+
+#pragma mark -
+@implementation NSUserDefaults (setNonExisting)
+
+- (void)setDefaultValue:(nullable id)value forNonExistingKey:(NSString *_Nonnull)key {
+    if ([self objectForKey:key] == nil) {
+        [self setObject:value forKey:key];
+    }
+}
+
+- (void)setDefaultBool:(BOOL)boolValue forNonExistingKey:(NSString *_Nonnull)key {
+    [self setDefaultValue:[NSNumber numberWithBool:boolValue] forNonExistingKey:key];
 }
 
 @end

@@ -4,22 +4,22 @@
 # Do not escape characters or use the CDATA tag.
 <tips>
     <tip>Wähl einfach die selbe Farbe wie die eines Freundes aus, um gemeinsam als ein Klan zu spielen. Jeder von euch wird immer noch Kontrolle über seine eigenen Igel haben, aber sie werden gemeinsam siegen oder verlieren.</tip>
-    <tip>Einige Waffen mögen zwar nur geringfügigen Schaden anrichten, aber sie können in der passenden Sitation verheerend sein. Versuche, die Desert Eagle zu benutzen, um mehrere Igel ins Wasser zu schubsen.</tip>
+    <tip>Einige Waffen mögen zwar nur geringfügigen Schaden anrichten, aber sie können in der passenden Situation verheerend sein. Versuche, die Desert Eagle zu benutzen, um mehrere Igel ins Wasser zu schubsen.</tip>
     <tip>Falls du dir unsicher darüber bist, was du tun sollst und du keine Munition verschwenden willst, überspring die Runde. Aber lass nicht zu viel Zeit verstreichen, weil irgendwann der Sudden Death kommt.</tip>
     <tip>Willst du Seile sparen? Lass das Seil im Flug los und schieß erneut. Solange du den Boden nicht berührst und kein Schuss daneben geht, wirst du dein Seil wiederverwenden, ohne Vorräte zu vergeuden.</tip>
-    <tip>Wenn du Andere davon abhalten willst, deinen Lieblingsspitznamen auf dem offiziellen Server zu benutzen, registiere ein Benutzerkonto auf <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a>.</tip>
+    <tip>Wenn du Andere davon abhalten willst, deinen Lieblingsspitznamen auf dem offiziellen Server zu benutzen, registriere ein Benutzerkonto auf <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a>.</tip>
     <tip>Bist du vom Standardspiel gelangweilt? Dann probier eine der Missionen aus – sie spielen sich anders, je nach dem, welche Mission du ausgewählt hast.</tip>
     <tip>Standardmäßig wird das Programm immer vom letzten Spiel eine Wiederholung abspeichern. Wähle »Auf einen einzelnen Computer spielen« und dann den »Aufgezeichnete Wiederholungen ansehen«-Knopf auf der rechten unteren Ecke, um sie abzuspielen oder zu verwalten.</tip>
     <tip>Hedgewars ist freie Open-Source-Software, die wir in unserer Freizeit erstellen. Falls du Probleme hast, frag uns in unseren Foren oder besuch unseren IRC-Channel!</tip>
     <tip>Hedgewars ist freie Open-Source-Software, die wir in unserer Freizeit erstellen. Wenn es dir gefällt, hilf uns mit einer kleinen Spende oder steuere deine eigenen Werke bei!</tip>
-    <tip>Hedgewars ist freie Open-Source-Software, die wir in unserer Freizeit erstellen. Teile es mit deiner Famlie und deinen Freunden, wie es dir gefällt!</tip>
+    <tip>Hedgewars ist freie Open-Source-Software, die wir in unserer Freizeit erstellen. Teile es mit deiner Familie und deinen Freunden, wie es dir gefällt!</tip>
     <tip>Hedgewars ist freie Open-Source-Software, die wir in unserer Freizeit nur so zum Spaß erstellen. Triff die Entwickler auf <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
-    <tip>Von Zeit zu Zeit wird es offizielle Turniere geben. Bevorstehende Ereignisse werden auf <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a> ein paar Tage im Voraus angekündigt.</tip>
+    <tip>Von Zeit zu Zeit wird es offizielle Turniere geben. Bevorstehende Ereignisse werden auf <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> ein paar Tage im Voraus angekündigt.</tip>
     <tip>Hedgewars ist in vielen Sprachen verfügbar. Wenn die Übersetzung deiner Sprache zu fehlen oder veraltet zu sein scheint, nimm ruhig mit uns Kontakt auf!</tip>
-    <tip>Hedgewars läuft auf vielen verschiedenen Betriebssystemem, unter anderen Microsoft Windows, Mac OS X und GNU/Linux.</tip>
+    <tip>Hedgewars läuft auf vielen verschiedenen Betriebssystemen, unter anderem Microsoft Windows, Mac OS X und GNU/Linux.</tip>
     <tip>Denk immer daran, dass du in der Lage bist, deine eigenen Spiele in lokalen Spielen und Netzwerkspielen aufzusetzen. Du musst nicht zwangsläufig nur einfache Spiele spielen.</tip>
     <tip>Verbinde einen oder mehr Gamepads, bevor du das Spiel startest, damit du ihre Belegung deinen Teams zuweisen kannst.</tip>
-    <tip>Erstelle ein Benutzerkonto auf <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a>, um andere davon abzuhalten, deinen Lieblingsspitznamen beim Spielen auf dem offiziellen Server zu benutzen.</tip>
+    <tip>Erstelle ein Benutzerkonto auf <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a>, um andere davon abzuhalten, deinen Lieblingsspitznamen beim Spielen auf dem offiziellen Server zu benutzen.</tip>
     <tip>Wenn du spielst, solltest du dir wenigstens ein mal pro Stunde eine kurze Pause gönnen.</tip>
     <tip>Wenn deine Grafikkarte nicht in der Lage ist, hardwarebeschleunigtes OpenGL zur Verfügung zu stellen, versuche es mit einer niedrigen Qualitätsstufe (in den Grafikeinstellungen), um die Geschwindigkeit zu erhöhen.</tip>
     <tip>Wenn deine Grafikkarte nicht in der Lage ist, hardwarebeschleunigtes OpenGL zur Verfügung zu stellen, versuche, die benötigten Treiber zu updaten.</tip>
@@ -36,14 +36,14 @@
     <tip>Der alte Limburger verursacht nur eine kleine Explosion. Allerdings kann die vom Wind beeinflusste Stinkewolke viele Igel auf einmal vergiften.</tip>
     <tip>Der Pianoangriff ist der zerstörerischste Luftangriff. Du verlierst den Igel, der ihn vornimmt, also gibt es hier eben auch einen riesigen Nachteil.</tip>
     <tip>Die zielsuchende Biene kann knifflig zu verwenden sein. Ihr Drehradius hängt von ihrer Geschwindigkeit hab, also versuche, nicht mit voller Kraft zu schießen.</tip>
-    <tip>Haftminen sind ein perfektes Werkzeug, um kleine Kettenreaktionen, die feindliche Igel in fatale Situationen – oder Wasser - befördern.</tip>
+    <tip>Haftminen sind perfekt, um kleine Kettenreaktionen auszulösen, die feindliche Igel in fatale Situationen – oder Wasser – befördern.</tip>
     <tip>Der Hammer ist am effektivsten, wenn er auf Brücken oder Bauträgern verwendet wird. Getroffene Igel werden einfach durch den Boden fallen.</tip>
     <tip>Wenn du hinter einem feindlichen Igel feststeckst, benutze den Hammer, um dich selbst, ohne selbst durch eine Explosion verletzt zu werden, zu befreien.</tip>
     <tip>Des Kuchens maximale Laufentfernung hängt von dem Boden, den er überqueren muss, ab. Benutze [Angriff], um ihn vorzeitig zu detonieren.</tip>
     <tip>Der Flammenwerfer ist eine Waffe, aber sie kann auch zum Tunnelgraben verwendet werden.</tip>
     <tip>Benutze den Molotowcocktail oder Flammenwerfer, um kurzzeitig Igel daran zu hindern, Gelände wie Tunnel oder Bauträger zu überqueren.</tip>
     <tip>Willst du wissen, wer hinter dem Spiel steckt? Klick auf das Hedgewars-Logo im Hauptmenü, um die Liste der Mitwirkenden (derzeit nur auf Englisch, Anm. eines Übersetzers) zu sehen.</tip>
-    <tip>Magst du Hedgewars? Werd zum Fan auf <a href="http://www.facebook.com/Hedgewars">Facebook</a> oder folg uns auf <a href="http://twitter.com/hedgewars">Twitter</a>!</tip>
+    <tip>Magst du Hedgewars? Werd zum Fan auf <a href="https://www.facebook.com/Hedgewars">Facebook</a> oder folg uns auf <a href="https://twitter.com/hedgewars">Twitter</a>!</tip>
     <tip>Tu dir keinen Zwang an, dir deine eigenen Grabsteine, Hüte, Flaggen oder sogar Karten und Szenerien zu malen! Aber beachte, dass du sie irgendwo online teilen musst, um sie online benutzen zu können.</tip>
     <tip>Halte deine Grafikkartentreiber auf dem neuesten Stand, um Probleme beim Spielen des Spiels zu vermeiden.</tip>
     <tip>Kopf oder Zahl? Gib »/rnd« in der Lobby ein und finde es heraus. »/rnd Schere Stein Papier« funktioniert auch!</tip>
@@ -66,8 +66,22 @@
     <tip>In den Ländern des Schnees und der Weihnacht wird der Schnee langsam und allmählich die Landschaft bedecken, es sei denn, das Land ist unzerstörbar.</tip>
     <tip>Sei vorsichtig in den Ländern des Schnees und der Weihnacht, weil die Träger aus rutschigem Eis bestehen.</tip>
     <tip>Die Rückzugszeit hängt ab von der Waffe, die du benutzt hast. Sei vorsichtig, einige Waffen haben keine Rückzugszeit und beenden deinen Zug sofort!</tip>
+    <tip>Mit etwas Können kann man einen Igel wegschubsen, indem man direkt unter ihm wegspringt.</tip>
+    <tip>Ein rechtzeitiger Angriff mit Shoryuken, dem Presslufthammer oder der Sinuskanone verhindert Fallschaden.</tip>
+    <tip>Dein Igel wird nicht mit Projektilen kollidieren, solange er in der Luft ist.</tip>
+    <tip>Löcher von Bohrkopfraketen, Scharfschützengewehren und der Desert Eagle sind groß genug, dass Portale durchpassen – wenn du gut genug zielst.</tip>
+    <tip>Sammle einen Erste-Hilfe-Koffer ein, um eine Vergiftung zu kurieren.</tip>
+    <tip>Kisten können auch mit Funkflugzeug, Shoryuken, Presslufthammer und Kamikaze aufgesammelt werden.</tip>
+    <tip>Pass auf, dass du dich nicht selbst in die Luft jagst, wenn du dich mit dem Schweißbrenner einer Kiste annäherst.</tip>
+    <tip>Luftminen bleiben während der ersten 5 Sekunden des Zuges passiv, bevor sie anfangen, nach Igeln zu suchen.</tip>
+    <tip>Halte einen Sicherheitsabstand von Luftminen! Sobald dich eine Luftmine verfolgt, ist es schwer, ohne Werkzeuge zu fliehen.</tip>
+    <tip>Luftminen explodieren nach einem Viertel der Zeit, nach der reguläre Minen explodieren.</tip>
+    <tip>Wenn ein Hackebeil in der Landschaft 30 oder mehr Schaden auf einmal erhält, fällt er vielleicht ins Meer. Diese Chance erhöht sich mit dem Schaden.</tip>
+    <tip>Denk an den Wind, denn Flammen und einige Waffen werden von ihm beeinflusst.</tip>
+    <tip>Benutze einen Schweißbrenner, um Igel und Minen mit einem langen Zeitzünder zu schubsen.</tip>
+    <tip>Wenn du mit einem Schweißbrenner in ein Pulverfass rennst, wirst du eine explosive Überraschung erleben.</tip>
+    <tip>Gib »/help« im Chat für eine Liste von Chatbefehlen ein. Chatbefehle bieten Zugriff auf ein paar besondere Funktionen wie Spott oder Abstimmungen.</tip>
     <windows-only>
-        <tip>Diese Hedgewars-Version unterstützt <a href="http://www.xfire.com/">Xfire</a>. Stell sicher, Hedgewars dessen Spielliste hinzuzufügen, damit deine Freunde dich beim Spielen sehen können.</tip>
         <tip>Du kannst deine Hedgewars-Einstellungsdateien unter »Eigene Dokumente\Hedgewars« finden. Erstelle Backups oder nimm die Dateien mit, aber bitte bearbeite sie nicht von Hand.</tip>
     </windows-only>
     <mac-only>

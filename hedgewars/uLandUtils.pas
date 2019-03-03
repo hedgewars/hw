@@ -30,6 +30,7 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     if (width div 4096 >= 2) or (height div 2048 >= 2) then cMaxZoomLevel:= cMaxZoomLevel/2;
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel
     end;
+initScreenSpaceVars();
 end;
 
 procedure InitWorldEdges();
@@ -41,11 +42,19 @@ topY:= 0;
 
 lx:= LongInt(LAND_WIDTH) - 1;
 
+// use maximum available map width if there is no special world edge
 if WorldEdge = weNone then
     begin
     playWidth:= LAND_WIDTH;
     leftX := 0;
     rightX:= lx;
+    EXIT;
+    end;
+
+// keep fort distance consistent if we're in wrap mode on fort map
+if (cMapGen = mgForts) and (WorldEdge = weWrap) then
+    begin
+    // edges were adjusted already in MakeFortsMap() in uLand
     EXIT;
     end;
 

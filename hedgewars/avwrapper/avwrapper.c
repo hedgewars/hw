@@ -35,6 +35,8 @@
 #define AVWRAP_DECL
 #endif
 
+#define UNUSED(x) (void)(x)
+
 static AVFormatContext* g_pContainer;
 static AVOutputFormat* g_pFormat;
 static AVStream* g_pAStream;
@@ -63,9 +65,19 @@ static uint8_t g_OutBuffer[OUTBUFFER_SIZE];
 #define avcodec_open2(x, y, z)              avcodec_open(x, y)
 #endif
 
+#if LIBAVCODEC_VERSION_MAJOR < 55
+#define avcodec_default_get_buffer2(x, y ,z) avcodec_default_get_buffer(x, y)
+#endif
+
 #if LIBAVCODEC_VERSION_MAJOR < 56
-#define av_frame_alloc                      avcodec_alloc_frame
+#if LIBAVCODEC_VERSION_MAJOR < 55
 #define av_frame_free                       av_freep
+#else
+#define av_frame_free                       avcodec_free_frame
+#endif
+
+#define av_frame_alloc                      avcodec_alloc_frame
+#define av_frame_unref                      avcodec_get_frame_defaults
 #define av_packet_rescale_ts                rescale_ts
 
 static void rescale_ts(AVPacket *pkt, AVRational ctb, AVRational stb)
@@ -128,6 +140,9 @@ static int FatalError(const char* pFmt, ...)
 // (there is mutex in AddFileLogRaw).
 static void LogCallback(void* p, int Level, const char* pFmt, va_list VaArgs)
 {
+    UNUSED(p);
+    UNUSED(Level);
+
     char Buffer[1024];
 
     vsnprintf(Buffer, 1024, pFmt, VaArgs);
@@ -333,15 +348,13 @@ static int AddVideoStream()
     g_pVFrame = av_frame_alloc();
     if (!g_pVFrame)
         return FatalError("Could not allocate frame");
+    av_frame_unref(g_pVFrame);
 
     g_pVFrame->width = g_Width;
     g_pVFrame->height = g_Height;
     g_pVFrame->format = AV_PIX_FMT_YUV420P;
-    g_pVFrame->linesize[0] = g_Width;
-    g_pVFrame->linesize[1] = g_Width/2;
-    g_pVFrame->linesize[2] = g_Width/2;
-    g_pVFrame->linesize[3] = 0;
-    return 0;
+
+    return avcodec_default_get_buffer2(g_pVideo, g_pVFrame, 0);
 }
 
 static int WriteFrame(AVFrame* pFrame)
@@ -418,11 +431,47 @@ static int WriteFrame(AVFrame* pFrame)
     }
 }
 
-AVWRAP_DECL int AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
+AVWRAP_DECL int AVWrapper_WriteFrame(uint8_t *buf)
 {
-    g_pVFrame->data[0] = pY;
-    g_pVFrame->data[1] = pCb;
-    g_pVFrame->data[2] = pCr;
+    int x, y, stride = g_Width * 4;
+    uint8_t *data[3];
+
+    // copy pointers, prepare source
+    memcpy(data, g_pVFrame->data, sizeof(data));
+    buf += (g_Height - 1) * stride;
+
+    // convert to YUV 4:2:0
+    for (y = 0; y < g_Height; y++) {
+        for (x = 0; x < g_Width; x++) {
+            int r = buf[x * 4 + 0];
+            int g = buf[x * 4 + 1];
+            int b = buf[x * 4 + 2];
+
+            int luma = (int)(0.299f * r +  0.587f * g + 0.114f * b);
+            data[0][x] = av_clip_uint8(luma);
+
+            if (!(x & 1) && !(y & 1)) {
+                int r = (buf[x * 4 + 0]          + buf[(x + 1) * 4 + 0] +
+                         buf[x * 4 + 0 - stride] + buf[(x + 1) * 4 + 0 - stride]) / 4;
+                int g = (buf[x * 4 + 1]          + buf[(x + 1) * 4 + 1] +
+                         buf[x * 4 + 1 - stride] + buf[(x + 1) * 4 + 1 - stride]) / 4;
+                int b = (buf[x * 4 + 2]          + buf[(x + 1) * 4 + 2] +
+                         buf[x * 4 + 2 - stride] + buf[(x + 1) * 4 + 2 - stride]) / 4;
+
+                int cr = (int)(-0.14713f * r - 0.28886f * g + 0.436f   * b);
+                int cb = (int)( 0.615f   * r - 0.51499f * g - 0.10001f * b);
+                data[1][x / 2] = av_clip_uint8(128 + cr);
+                data[2][x / 2] = av_clip_uint8(128 + cb);
+            }
+        }
+        buf += -stride;
+        data[0] += g_pVFrame->linesize[0];
+        if (y & 1) {
+            data[1] += g_pVFrame->linesize[1];
+            data[2] += g_pVFrame->linesize[2];
+        }
+    }
+
     return WriteFrame(g_pVFrame);
 }
 
@@ -518,11 +567,10 @@ AVWRAP_DECL int AVWrapper_Init(
             return FatalError("Could not open output file (%s)", g_pContainer->filename);
     }
 
-    // write the stream header, if any
-    avformat_write_header(g_pContainer, NULL);
-
     g_pVFrame->pts = -1;
-    return 0;
+
+    // write the stream header, if any
+    return avformat_write_header(g_pContainer, NULL);
 }
 
 AVWRAP_DECL int AVWrapper_Close()

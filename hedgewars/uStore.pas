@@ -26,6 +26,7 @@ uses SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 procedure initModule;
 procedure freeModule;
 
+procedure LoadFonts();
 procedure StoreLoad(reload: boolean);
 procedure StoreRelease(reload: boolean);
 procedure RenderHealth(var Hedgehog: THedgehog);
@@ -44,6 +45,8 @@ function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: s
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 procedure LoadHedgehogHat2(var HH: THedgehog; newHat: shortstring; allowSurfReuse: boolean);
 
+procedure LoadDefaultClanColors(s: shortstring);
+
 procedure InitZoom(zoom: real);
 
 procedure SetupOpenGL;
@@ -61,17 +64,16 @@ procedure SetSkyColor(r, g, b: real);
 
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
-     uCommands, uPhysFSLayer, uDebug
+     uCommands, uPhysFSLayer, uDebug, uLocale, uInputHandler, adler32
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var 
-    SDLwindow: PSDL_Window;
-    SDLGLcontext: PSDL_GLContext;
     squaresize : LongInt;
     numsquares : LongInt;
     ProgrTex: PTexture;
+    LoadingText: PTexture;
 
     prevHat: shortstring;
     tmpHatSurf: PSDL_Surface;
@@ -150,7 +152,7 @@ begin
 
     texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
     if not checkFails(texsurf <> nil, errmsgCreateSurface, true) then
-        checkFails(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        checkFails(SDL_SetColorKey(texsurf, SDL_TRUE, 0) = 0, errmsgTransparentSet, true);
 
     if not allOK then exit(nil);
 
@@ -189,9 +191,13 @@ md:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
-        NameTagTex:= RenderStringTexLim(ansistring(TeamName), Clan^.Color, Font, cTeamHealthWidth);
+        if ExtDriven then
+             NameTagTex:= RenderStringTexLim(ansistring(TeamName), Clan^.Color, Font, cTeamHealthWidth)
+        else NameTagTex:= RenderStringTex(ansistring(TeamName), Clan^.Color, Font);
         if length(Owner) > 0 then
-            OwnerTex:= RenderStringTexLim(ansistring(Owner), Clan^.Color, Font, cTeamHealthWidth);
+            if ExtDriven then
+                 OwnerTex:= RenderStringTexLim(ansistring(Owner), Clan^.Color, Font, cTeamHealthWidth)
+            else OwnerTex:= RenderStringTex(ansistring(Owner), Clan^.Color, Font);
 
         r.x:= 0;
         r.y:= 0;
@@ -199,7 +205,7 @@ for t:= 0 to Pred(TeamsCount) do
         r.h:= 32;
         texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
         if not checkFails(texsurf <> nil, errmsgCreateSurface, true) then
-            checkFails(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+            checkFails(SDL_SetColorKey(texsurf, SDL_TRUE, 0) = 0, errmsgTransparentSet, true);
         if not allOK then exit;
 
         r.w:= 26;
@@ -261,6 +267,7 @@ for t:= 0 to Pred(TeamsCount) do
         if not allOK then exit;
 
         AIKillsTex := RenderStringTex(ansistring(inttostr(stats.AIKills)), Clan^.Color, fnt16);
+        LuaTeamValueTex := RenderStringTex(LuaTeamValue, Clan^.Color, fnt16);
 
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
@@ -268,20 +275,26 @@ for t:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
-                    NameTagTex:= RenderStringTexLim(ansistring(Name), Clan^.Color, fnt16, cTeamHealthWidth);
-                    if Hat = 'NoHat' then
+                    if ExtDriven then
+                         NameTagTex:= RenderStringTexLim(ansistring(Name), Clan^.Color, fnt16, cTeamHealthWidth)
+                    else NameTagTex:= RenderStringTex(ansistring(Name), Clan^.Color, fnt16);
+                    if cHolidaySilliness then
                         begin
-                        if (month = 4) and (md = 20) then
-                            Hat := 'eastertop'   // Easter
-                        else if (month = 12) and ((md = 24) or (md = 25) or (md = 26)) then
-                            Hat := 'Santa'       // Christmas Eve/Christmas/Boxing Day
-                        else if (month = 10) and (md = 31) then
-                            Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
-                        end;
-                    if (month = 4) and (md = 1) then
-                        begin
-                        AprilOne:= true;
-                        Hat := 'fr_tomato'; // avoid promoting violence to hedgehogs. see http://hedgewars.org/node/5818
+                        // Special hats on special days
+                        if Hat = 'NoHat' then
+                            begin
+                            if (month = 4) and (md = 20) then
+                                Hat := 'eastertop'   // Easter
+                            else if (month = 12) and ((md = 24) or (md = 25) or (md = 26)) then
+                                Hat := 'Santa'       // Christmas Eve/Christmas/Boxing Day
+                            else if (month = 10) and (md = 31) then
+                                Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
+                            end;
+                        if (month = 4) and (md = 1) then
+                            begin
+                            AprilOne:= true;
+                            Hat := 'fr_tomato'; // avoid promoting violence to hedgehogs. see https://hedgewars.org/node/5818
+                            end;
                         end;
 
                     if Hat <> 'NoHat' then
@@ -342,23 +355,19 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             if GraveName = '' then
                 GraveName:= 'Statue';
-            texsurf:= LoadDataImageAltFile(ptGraves, GraveName, 'Statue', ifCritical or ifTransparent);
+            texsurf:= LoadDataImageAltFile(ptGraves, GraveName, 'Statue', ifCritical or ifColorKey);
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
             end
 end;
 
-procedure StoreLoad(reload: boolean);
+procedure LoadFonts();
 var s: shortstring;
-    ii: TSprite;
     fi: THWFont;
-    ai: TAmmoType;
-    tmpsurf: PSDL_Surface;
-    i, imflags: LongInt;
 begin
-AddFileLog('StoreLoad()');
+AddFileLog('LoadFonts();');
 
-if (not reload) and (not cOnlyStats) then
+if (not cOnlyStats) then
     for fi:= Low(THWFont) to High(THWFont) do
         with Fontz[fi] do
             begin
@@ -369,6 +378,16 @@ if (not reload) and (not cOnlyStats) then
             TTF_SetFontStyle(Handle, style);
             WriteLnToConsole(msgOK)
             end;
+end;
+
+procedure StoreLoad(reload: boolean);
+var ii: TSprite;
+    ai: TAmmoType;
+    tmpsurf, tmpoverlay: PSDL_Surface;
+    i, y, imflags: LongInt;
+    keyConfirm, keyQuit: shortstring;
+begin
+AddFileLog('StoreLoad()');
 
 if not cOnlyStats then
     begin
@@ -396,20 +415,24 @@ for ii:= Low(TSprite) to High(TSprite) do
            and ((cCloudsNumber > 0) or (ii <> sprCloud))
            and ((vobCount > 0) or (ii <> sprFlake))
            and (savesurf or (not cOnlyStats)) // in stats-only only load those which are needed later
+           and allOK
             then
             begin
             if reload then
                 tmpsurf:= Surface
             else
                 begin
-                imflags := (ifAlpha or ifTransparent);
+                imflags := (ifAlpha or ifColorKey);
 
                 // these sprites are optional
-                if not (ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk]) then // FIXME: hack
+                if critical then 
                     imflags := (imflags or ifCritical);
 
                 // load the image
-                tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags)
+                tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags);
+                if (tmpsurf <> nil) and checkSum then
+                    for y := 0 to tmpsurf^.h-1 do
+                        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w*4)
                 end;
 
             if tmpsurf <> nil then
@@ -420,9 +443,29 @@ for ii:= Low(TSprite) to High(TSprite) do
                     imageHeight:= tmpsurf^.h
                     end;
                 if getDimensions then
+                    if Height = -1 then //BlueWater
+                        begin
+                        Width:= tmpsurf^.w;
+                        Height:= tmpsurf^.h div watFrames;
+                        end
+                    else if Height = -2 then //SDWater
+                        begin
+                        Width:= tmpsurf^.w;
+                        Height:= tmpsurf^.h div watSDFrames;
+                        end
+                    else
+                        begin
+                        Width:= tmpsurf^.w;
+                        Height:= tmpsurf^.h
+                        end;
+                if (ii in [sprAMAmmos, sprAMAmmosBW]) then
                     begin
-                    Width:= tmpsurf^.w;
-                    Height:= tmpsurf^.h
+                    tmpoverlay := LoadDataImage(Path, copy(FileName, 1, length(FileName)-5), (imflags and (not ifCritical)));
+                    if tmpoverlay <> nil then
+                        begin
+                        copyToXY(tmpoverlay, tmpsurf, 0, 0);
+                        SDL_FreeSurface(tmpoverlay)
+                        end
                     end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
                     begin
@@ -454,24 +497,26 @@ for ii:= Low(TSprite) to High(TSprite) do
                 Surface:= nil
         end;
 
-if not cOnlyStats then
+if (not cOnlyStats) and allOK then
     begin
     WriteNames(fnt16);
 
     if not reload then
         AddProgress;
 
-    tmpsurf:= LoadDataImage(ptGraphics, cHHFileName, ifAlpha or ifCritical or ifTransparent);
+    tmpsurf:= LoadDataImage(ptGraphics, cHHFileName, ifAlpha or ifCritical or ifColorKey);
 
     HHTexture:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf);
 
     InitHealth;
 
-    PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
-    AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
-    ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
-    SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
+    PauseTexture:= RenderStringTex(trmsg[sidPaused], cCentralMessageColor, fntBig);
+    AFKTexture:= RenderStringTex(trmsg[sidAFK], cCentralMessageColor, fntBig);
+    keyConfirm:= KeyBindToName('confirm');
+    keyQuit:= KeyBindToName('quit');
+    ConfirmTexture:= RenderStringTex(FormatA(trmsg[sidConfirm], ansistring(keyConfirm), ansistring(keyQuit)), cCentralMessageColor, fntBig);
+    SyncTexture:= RenderStringTex(trmsg[sidSync], cCentralMessageColor, fntBig);
 
     if not reload then
         AddProgress;
@@ -492,7 +537,8 @@ if not cOnlyStats then
     // number of weapons in ammo menu
     for i:= Low(CountTexz) to High(CountTexz) do
         begin
-        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trmsg[sidAmmoCount],fnt16)].Handle, Str2PChar(Format(shortstring(trmsg[sidAmmoCount]), IntToStr(i))), cWhiteColorChannels);
+        if checkFails(tmpsurf <> nil,'Number texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true) then exit;
         tmpsurf:= doSurfaceConversion(tmpsurf);
         FreeAndNilTexture(CountTexz[i]);
         CountTexz[i]:= Surface2Tex(tmpsurf, false);
@@ -577,18 +623,24 @@ end;
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
-str(Hedgehog.Gear^.Health, s);
 FreeAndNilTexture(Hedgehog.HealthTagTex);
+if Hedgehog.Gear <> nil then
+    s:= IntToStr(Hedgehog.Gear^.Health)
+else if Hedgehog.GearHidden <> nil then
+    s:= IntToStr(Hedgehog.GearHidden^.Health)
+else
+    exit;
 Hedgehog.HealthTagTex:= RenderStringTex(ansistring(s), Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
 function LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
+    logMsg: shortstring;
     rwops: PSDL_RWops;
 begin
     LoadImage:= nil;
-    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
+    logMsg:= msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + ']';
 
     s:= filename + '.png';
 
@@ -612,20 +664,22 @@ begin
         if rwops <> nil then
             begin
             // anounce that loading failed
-            OutError(msgFailed, false);
+            OutError(logMsg + ' ' + msgFailed, false);
 
-            if SDLCheck(false, 'LoadImage', (imageFlags and ifCritical) <> 0) then exit;
+            if SDLCheck(false, 'LoadImage: ' + logMsg + ' ' + msgFailed, (imageFlags and ifCritical) <> 0) then
+                exit;
             // rwops was already freed by IMG_Load_RW
             rwops:= nil;
-            end else
-            OutError(msgFailed, (imageFlags and ifCritical) <> 0);
+            end
+        else
+            OutError(logMsg + ' ' + msgFailed, (imageFlags and ifCritical) <> 0);
         exit;
         end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
         begin
         SDL_FreeSurface(tmpsurf);
-        OutError(msgFailedSize, ((not cOnlyStats) and ((imageFlags and ifCritical) <> 0)));
+        OutError(logMsg + ' ' + msgFailedSize, ((not cOnlyStats) and ((imageFlags and ifCritical) <> 0)));
         // dummy surface to replace non-critical textures that failed to load due to their size
         LoadImage:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask);
         exit;
@@ -633,10 +687,11 @@ begin
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
 
-    if (imageFlags and ifTransparent) <> 0 then
-        if checkFails(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true) then exit;
+    if (imageFlags and ifColorKey) <> 0 then
+        if checkFails(SDL_SetColorKey(tmpsurf, SDL_TRUE, 0) = 0, errmsgTransparentSet, true) then exit;
 
-    WriteLnToConsole(msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
+    // log success
+    WriteLnToConsole(logMsg + ' ' + msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
 
     LoadImage:= tmpsurf //Result
 end;
@@ -722,6 +777,72 @@ AddFileLog('Got Hat');
         end;
 end;
 
+// Load default clan colors from config fiile
+procedure LoadDefaultClanColors(s: shortstring);
+var i: LongInt;
+    f: PFSFile;
+    key, value, l, temp: shortstring;
+    color, tempColor: Longword;
+    clanID, tempClanID: byte;
+begin
+    if cOnlyStats then exit;
+
+    WriteLnToConsole('Loading default clan colors from: ' + s);
+
+    l:= '';
+    if pfsExists(s) then
+        begin
+        f:= pfsOpenRead(s);
+        while (not pfsEOF(f)) and (l <> '[colors]') do
+            pfsReadLn(f, l);
+
+        while (not pfsEOF(f)) and (l <> '') do
+            begin
+            pfsReadLn(f, l);
+
+            key:= '';
+            i:= 1;
+            while (i <= length(l)) and (l[i] <> '=') do
+                begin
+                key:= key + l[i];
+                inc(i)
+                end;
+            temp:= copy(key, 1, 5);
+            if temp = 'color' then
+                begin
+                temp:= copy(key, 6, length(key) - 5);
+                tempClanID:= StrToInt(temp);
+                clanID:= tempClanID
+                end
+            else
+                continue;
+
+            if i < length(l) then
+                begin
+                value:= copy(l, i + 1, length(l) - i);
+                if (length(value) = 2) and (value[1] = '\') then
+                    value:= value[1] + ''
+                else if (value[1] = '"') and (value[length(value)] = '"') then
+                    value:= copy(value, 2, length(value) - 2);
+                if value[1] <> '#' then
+                    continue;
+                temp:= copy(value, 2, length(value) - 1);
+                tempColor:= StrToInt('$'+temp);
+                color:= tempColor
+                end;
+
+            if clanID <= cClanColors then
+                ClanColorArray[clanID]:= color;
+
+            end;
+
+        pfsClose(f)
+        end
+        else
+            WriteLnToConsole('Settings file not found');
+end;
+
+
 procedure SetupOpenGLAttributes;
 begin
 {$IFDEF IPHONEOS}
@@ -769,13 +890,16 @@ begin
     if Step = 0 then
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
-        texsurf:= LoadDataImage(ptGraphics, 'Progress', ifCritical or ifTransparent);
+        texsurf:= LoadDataImage(ptGraphics, 'Progress', ifCritical or ifColorKey);
 
         ProgrTex:= Surface2Tex(texsurf, false);
+
+        LoadingText:= RenderStringTex(trmsg[sidLoading], $FFF39EE8, fntBig);
 
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
+
         {$IFNDEF PAS2C}
         with mobileRecord do
             if GameLoading <> nil then
@@ -783,7 +907,7 @@ begin
         {$ENDIF}
         end;
 
-    if checkFails(ProgrTex <> nil, 'Error - Progress Texure is nil!', true) then exit;
+    if checkFails((ProgrTex <> nil) and (LoadingText <> nil), 'Error - Progress or Loading texture is nil!', true) then exit;
 
     RenderClear();
     if Step < numsquares then
@@ -796,6 +920,7 @@ begin
     r.h:= squaresize;
 
     DrawTextureFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
+    DrawTexture( -LoadingText^.w div 2, (cScreenHeight - LoadingText^.h) shr 1 - (squaresize div 2) - (LoadingText^.h div 2) - 8, LoadingText);
 
     SwapBuffers;
 
@@ -809,8 +934,9 @@ begin
         if GameLoaded <> nil then
             GameLoaded();
     {$ENDIF}
-    WriteLnToConsole('Freeing progress surface... ');
+    WriteLnToConsole('Freeing progress textures... ');
     FreeAndNilTexture(ProgrTex);
+    FreeAndNilTexture(LoadingText);
     Step:= 0
 end;
 
@@ -820,7 +946,7 @@ var tmpsurf: PSDL_SURFACE;
     font: THWFont;
     r, r2: TSDL_Rect;
     wa, ha: LongInt;
-    tmpline, tmpline2, tmpdesc: ansistring;
+    tmpline, tmpline2, tmpline3, tmpdesc: ansistring;
 begin
 // make sure there is a caption as well as a sub caption - description is optional
 if length(caption) = 0 then
@@ -860,7 +986,9 @@ tmpdesc:= description;
 while length(tmpdesc) > 0 do
     begin
     tmpline:= tmpdesc;
+    EscapeCharA(tmpline, '|');
     SplitByCharA(tmpline, tmpdesc, '|');
+    UnEscapeCharA(tmpline, '|');
     if length(tmpline) > 0 then
         begin
         TTF_SizeUTF8(Fontz[font].Handle, PChar(tmpline), @i, @j);
@@ -903,21 +1031,38 @@ tmpdesc:= description;
 while length(tmpdesc) > 0 do
     begin
     tmpline:= tmpdesc;
+    EscapeCharA(tmpline, '|');
     SplitByCharA(tmpline, tmpdesc, '|');
+    UnEscapeCharA(tmpline, '|');
     r2:= r;
     if length(tmpline) > 0 then
         begin
-        r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline));
 
-        // render highlighted caption (if there is a ':')
+        // Render highlighted caption if there is a ':',
+        // from the beginning of the line to (and including) the ':'.
+        // With '::', the colons will be suppressed in the final text.
+        EscapeCharA(tmpline, ':');
         tmpline2:= _S'';
         SplitByCharA(tmpline, tmpline2, ':');
         if length(tmpline2) > 0 then
             begin
-            tmpline:= tmpline + ':';
+            if (tmpline2[1] <> ':') then
+                begin
+                tmpline:= tmpline + ':';
+                tmpline3:= tmpline + tmpline2;
+                end
+            else
+                tmpline3:= tmpline + Copy(tmpline2, 2, Length(tmpline2)-1);
+            UnEscapeCharA(tmpline3, ':');
+            r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline3));
             WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, PChar(tmpline));
-            end;
-        end
+            end
+        else
+            begin
+            UnEscapeCharA(tmpline, ':');
+            r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline));
+            end
+        end;
     end;
 
 if length(extra) > 0 then
@@ -927,7 +1072,7 @@ r.x:= cFontBorder + 6;
 r.y:= cFontBorder + 4;
 r.w:= 32;
 r.h:= 32;
-SDL_FillRect(tmpsurf, @r, $ffffffff);
+SDL_FillRect(tmpsurf, @r, SDL_MapRGB(tmpsurf^.format, 0, 0, 0));
 SDL_UpperBlit(iconsurf, iconrect, tmpsurf, @r);
 
 RenderHelpWindow:=  Surface2Tex(tmpsurf, true);
@@ -937,6 +1082,9 @@ end;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 var r: TSDL_Rect;
     i: LongInt;
+    ammoname: ansistring;
+    ammocap: ansistring;
+    ammodesc: ansistring;
     extra: ansistring;
     extracolor: LongInt;
 begin
@@ -961,24 +1109,42 @@ r.h:= 32;
 extra:= _S'';
 extracolor:= 0;
 
-if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
-    begin
-    extra:= trmsg[sidNotYetAvailable];
-    extracolor:= LongInt($ffc77070);
-    end
-else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility will not end your turn
-    begin
-    extra:= trmsg[sidNoEndTurn];
-    extracolor:= LongInt($ff70c770);
-    end
+if (trluaammoe[Ammoz[atype].NameId] = true) then
+    if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
+        begin
+        if (atype = amTardis) and (SuddenDeathActive) then
+            extra:= trmsg[sidNotAvailableInSD]
+        else
+            extra:= trmsg[sidNotYetAvailable];
+        extracolor:= LongInt($ffc77070);
+        end
+    else if ((((GameFlags and gfInfAttack) <> 0) and ((Ammoz[atype].Ammo.Propz and ammoprop_ForceTurnEnd) = 0)) or ((Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0)) and (not (PlacingHogs and (atype = amTeleport))) then
+        // weapon or utility will not end your turn
+        begin
+        extra:= trmsg[sidNoEndTurn];
+        extracolor:= LongInt($ff70c770);
+        end;
+
+if length(trluaammo[Ammoz[atype].NameId]) > 0  then
+    ammoname := trluaammo[Ammoz[atype].NameId]
 else
-    begin
-    extra:= _S'';
-    extracolor:= 0;
-    end;
+    ammoname := trammo[Ammoz[atype].NameId];
+
+if length(trluaammoc[Ammoz[atype].NameId]) > 0 then
+    ammocap := trluaammoc[Ammoz[atype].NameId]
+else
+    ammocap := trammoc[Ammoz[atype].NameId];
+
+if length(trluaammod[Ammoz[atype].NameId]) > 0 then
+    ammodesc := trluaammod[Ammoz[atype].NameId]
+else
+    ammodesc := trammod[Ammoz[atype].NameId];
+
+if length(trluaammoa[Ammoz[atype].NameId]) > 0 then
+    ammodesc := ammodesc + '|' + trluaammoa[Ammoz[atype].NameId];
 
 // render window and return the texture
-WeaponTooltipTex:= RenderHelpWindow(trammo[Ammoz[atype].NameId], trammoc[Ammoz[atype].NameId], trammod[Ammoz[atype].NameId], extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
+WeaponTooltipTex:= RenderHelpWindow(ammoname, ammocap, ammodesc, extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
 end;
 
 procedure ShowWeaponTooltip(x, y: LongInt);
@@ -1062,7 +1228,7 @@ begin
         end;
 
     // these attributes must be set up before creating the sdl window
-{$IFNDEF WIN32}
+{$IFNDEF WINDOWS}
 (* On a large number of testers machines, SDL default to software rendering
    when opengl attributes were set. These attributes were "set" after
    CreateWindow in .15, which probably did nothing.
@@ -1130,7 +1296,7 @@ begin
         // clean the window from any previous content
         RenderClear();
         if SuddenDeathDmg then
-            SetSkyColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255)
+            SetSkyColor(SDSkyColor.r * (SDTint.r/255) / 255, SDSkyColor.g * (SDTint.g/255) / 255, SDSkyColor.b * (SDTint.b/255) / 255)
         else if ((cReducedQuality and rqNoBackground) = 0) then
             SetSkyColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255)
         else

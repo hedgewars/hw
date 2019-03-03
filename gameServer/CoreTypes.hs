@@ -93,6 +93,7 @@ data Action =
     | CheckFailed B.ByteString
     | CheckSuccess [B.ByteString]
     | Random [ClientChan] [B.ByteString]
+    | LoadGhost B.ByteString
     | QueryReplay B.ByteString
     | ShowReplay B.ByteString
     | Cleanup
@@ -102,6 +103,7 @@ data Action =
     | ReactCmd [B.ByteString]
     | CheckVotes
     | SetRandomSeed
+    | ShowRegisteredOnlyState [ClientChan]
 
 
 data Event = LobbyChatMessage
@@ -154,6 +156,7 @@ data ClientInfo =
         eiEM,
         eiJoin :: !EventsInfo,
         teamsInGame :: !Word,
+        teamIndexes :: ![Word8],
         pendingActions :: ![Action]
     }
 
@@ -236,7 +239,7 @@ data RoomInfo =
         roomBansList :: ![B.ByteString],
         mapParams :: !(Map.Map B.ByteString B.ByteString),
         params :: !(Map.Map B.ByteString [B.ByteString]),
-        roomSaves :: !(Map.Map B.ByteString (Map.Map B.ByteString B.ByteString, Map.Map B.ByteString [B.ByteString]))
+        roomSaves :: !(Map.Map B.ByteString (B.ByteString, Map.Map B.ByteString B.ByteString, Map.Map B.ByteString [B.ByteString]))
     }
 
 newRoom :: RoomInfo
@@ -308,9 +311,9 @@ newServerInfo =
     ServerInfo
         True
         False
-        "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-        "<font color=yellow><h3 align=center>Hedgewars 0.9.22 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        51 -- latestReleaseVersion
+        "<h2><p align=center><a href=\"https://www.hedgewars.org/\">https://www.hedgewars.org/</a></p></h2>"
+        "<font color=yellow><h3 align=center>Hedgewars 0.9.25 is out! Please update.</h3><p align=center><a href=https://hedgewars.org/download.html>Download page here</a></font>"
+        57 -- latestReleaseVersion
         41 -- earliestCompatibleVersion
         46631
         ""

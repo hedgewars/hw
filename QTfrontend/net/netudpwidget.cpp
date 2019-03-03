@@ -33,15 +33,19 @@ HWNetUdpModel::HWNetUdpModel(QObject* parent) :
 
 void HWNetUdpModel::updateList()
 {
-    games.clear();
+  beginResetModel();
 
-    reset();
+  games.clear();
 
-    pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, NETGAME_DEFAULT_PORT);
+  endResetModel();
+
+  pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, NETGAME_DEFAULT_PORT);
 }
 
 void HWNetUdpModel::onClientRead()
 {
+    beginResetModel();
+
     while (pUdpSocket->hasPendingDatagrams())
     {
         QByteArray datagram;
@@ -60,7 +64,7 @@ void HWNetUdpModel::onClientRead()
         }
     }
 
-    reset();
+    endResetModel();
 }
 
 QVariant HWNetUdpModel::data(const QModelIndex &index,

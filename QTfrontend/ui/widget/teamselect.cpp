@@ -43,6 +43,12 @@ void TeamSelWidget::addTeam(HWTeam team)
         blockSignals(false);
         connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
                 this, SLOT(proxyTeamColorChanged(const HWTeam&)));
+
+        // Hide team notice if at least two teams.
+        if (curPlayingTeams.size() >= 2)
+        {
+            numTeamNotice->hide();
+        }
     }
     else
     {
@@ -66,6 +72,11 @@ void TeamSelWidget::addTeam(HWTeam team)
 void TeamSelWidget::setInteractivity(bool interactive)
 {
     framePlaying->setInteractivity(interactive);
+}
+
+void TeamSelWidget::setUser(const QString& nickname)
+{
+    m_curUser = nickname;
 }
 
 void TeamSelWidget::hhNumChanged(const HWTeam& team)
@@ -133,10 +144,46 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
         QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
         framePlaying->removeTeam(team);
         curPlayingTeams.erase(itPlay);
+        // Show team notice if less than two teams.
+        if (curPlayingTeams.size() < 2)
+        {
+            numTeamNotice->show();
+        }
     }
     else
     {
         qWarning() << QString("removeNetTeam: team '%1' was actually a local team!").arg(team.name());
+    }
+    emit setEnabledGameStart(curPlayingTeams.size()>1);
+}
+
+// Removes teams classified as net teams but which are owned by the local user.
+// Those teams don't make sense and might be leftovers from a finished game
+// after rejoining. See also: Bugzilla bug 597.
+void TeamSelWidget::cleanupFakeNetTeams()
+{
+    // m_curUser is not set for offline games. No cleanup is needed when offline.
+    if(m_curUser.isNull())
+        return;
+
+    QList<HWTeam>::iterator itPlay = curPlayingTeams.begin();
+    while(itPlay != curPlayingTeams.end())
+    {
+        if(itPlay->isNetTeam() && itPlay->owner() == m_curUser)
+        {
+            qDebug() << QString("cleanupFakeNetTeams: team '%1' removed").arg(itPlay->name());
+            QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
+            framePlaying->removeTeam(*itPlay);
+            itPlay = curPlayingTeams.erase(itPlay);
+        }
+        else
+            itPlay++;
+    }
+
+    // Show team notice if less than two teams.
+    if (curPlayingTeams.size() < 2)
+    {
+        numTeamNotice->show();
     }
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
@@ -168,8 +215,9 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
         // dont playing team => playing
         itDontPlay->setColor(framePlaying->getNextColor());
         team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
-        curPlayingTeams.push_back(*itDontPlay);
-        if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
+        team.setOwner(m_curUser);
+        curPlayingTeams.push_back(team);
+        if(!m_acceptOuter) emit teamWillPlay(team);
         m_curNotPlayingTeams.erase(itDontPlay);
 
         // Hide team notice if at least two teams.
@@ -229,24 +277,17 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
-void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int fixedHeight)
+void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int minHeight, int maxHeight, bool setFrame)
 {
     VertScrArea* area = new VertScrArea(color);
     area->setWidget(pfteams);
-    mainLayout.addWidget(area, 30);
-    if (fixedHeight > 0)
-    {
-        area->setMinimumHeight(fixedHeight);
-        area->setMaximumHeight(fixedHeight);
-        area->setStyleSheet(
-            "FrameTeams{"
-            "border: solid;"
-            "border-width: 1px;"
-            "border-radius: 16px;"
-            "border-color: #ffcc00;"
-            "}"
-        );
-    }
+    mainLayout.addWidget(area);
+    if (minHeight > 0)
+        area->setMinimumHeight(minHeight);
+    if (maxHeight > 0)
+        area->setMaximumHeight(maxHeight);
+    if (setFrame)
+        pfteams->setDecoFrameEnabled(true);
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
@@ -263,8 +304,8 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 
     QPalette p;
     p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
-    addScrArea(framePlaying, p.color(QPalette::Window).light(105), 150);
-    addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
+    addScrArea(framePlaying, p.color(QPalette::Window).light(105), 161, 325, true);
+    addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 80, 0, false);
 
     this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     this->setMinimumWidth(200);
@@ -292,6 +333,8 @@ void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
     foreach(HWTeam team, teamslist)
         addTeam(team);
 
+    numTeamNotice->show();
+
     repaint();
 }
 
@@ -308,6 +351,17 @@ QList<HWTeam> TeamSelWidget::getPlayingTeams() const
 QList<HWTeam> TeamSelWidget::getNotPlayingTeams() const
 {
     return m_curNotPlayingTeams;
+}
+
+unsigned short TeamSelWidget::getNumHedgehogs() const
+{
+    unsigned short numHogs = 0;
+    QList<HWTeam>::const_iterator team;
+    for(team = curPlayingTeams.begin(); team != curPlayingTeams.end(); ++team)
+    {
+        numHogs += (*team).numHedgehogs();
+    }
+    return numHogs;
 }
 
 void TeamSelWidget::pre_changeTeamStatus(const HWTeam & team)

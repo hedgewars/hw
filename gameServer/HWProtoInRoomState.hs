@@ -27,11 +27,13 @@ import Control.Monad
 import Control.Monad.Reader
 --------------------------------------
 import CoreTypes
+import Consts
 import Utils
 import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
 import Votes
+import CommandHelp
 
 startGame :: Reader (ClientIndex, IRnC) [Action]
 startGame = do
@@ -54,10 +56,10 @@ startGame = do
                 , AnswerClients chans ["RUN_GAME"]
                 , SendUpdateOnThisRoom
                 , AnswerClients chans $ "CLIENT_FLAGS" : "+g" : nicks
-                , ModifyRoomClients (\c -> c{isInGame = True})
+                , ModifyRoomClients (\c -> c{isInGame = True, teamIndexes = map snd . filter (\(t, _) -> teamowner t == nick c) $ zip (teams rm) [0..]})
                 ]
             else
-            return [Warning $ loc "Less than two clans!"]
+            return [Warning $ loc "The game can't be started with less than two clans!"]
         else
         return []
     where
@@ -72,25 +74,26 @@ handleCmd_inRoom ["CHAT", msg] = do
     s <- roomOthersChans
     return [AnswerClients s ["CHAT", n, msg]]
 
-handleCmd_inRoom ["PART"] = return [MoveToLobby "part"]
-handleCmd_inRoom ["PART", msg] = return [MoveToLobby $ "part: " `B.append` msg]
+-- Leave room normally
+handleCmd_inRoom ["PART"] = return [MoveToLobby ""]
+handleCmd_inRoom ["PART", _] = return [MoveToLobby ""]
 
 
 handleCmd_inRoom ("CFG" : paramName : paramStrs)
-    | null paramStrs = return [ProtocolError $ loc "Empty config entry"]
+    | null paramStrs = return [ProtocolError $ loc "Empty config entry."]
     | otherwise = do
         chans <- roomOthersChans
         cl <- thisClient
         rm <- thisRoom
 
         if isSpecial rm then
-            return [Warning $ loc "Restricted"]
+            return [Warning $ loc "Access denied."]
         else if isMaster cl then
            return [
                 ModifyRoom $ f (clientProto cl),
                 AnswerClients chans ("CFG" : paramName : paramStrs)]
             else
-            return [ProtocolError $ loc "Not room master"]
+            return [ProtocolError $ loc "You're not the room master!"]
     where
         f clproto r = if paramName `Map.member` (mapParams r) then
                 r{mapParams = Map.insert paramName (head paramStrs) (mapParams r)}
@@ -103,7 +106,7 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
 
 
 handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag : difStr : hhsInfo)
-    | length hhsInfo /= 16 = return [ProtocolError $ loc "Corrupted hedgehogs info"]
+    | length hhsInfo /= 16 = return [ProtocolError $ loc "Corrupted hedgehogs info!"]
     | otherwise = do
         rm <- thisRoom
         cl <- thisClient
@@ -111,7 +114,6 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         clChan <- thisClientChans
         othChans <- roomOthersChans
         roomChans <- roomClientsChans
-        let isRegistered = (<) 0 . B.length . webPassword $ cl
         teamColor <-
             if clientProto cl < 42 then
                 return color
@@ -123,18 +125,18 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                     minimum [hhnum $ head roomTeams, canAddNumber roomTeams]
                 else
                     defaultHedgehogsNumber rm
-        let newTeam = clNick `seq` TeamInfo clNick tName teamColor grave fort voicepack flag isRegistered dif hhNum (hhsList hhsInfo)
+        let newTeam = clNick `seq` TeamInfo clNick tName teamColor grave fort voicepack flag (isRegistered cl) dif hhNum (hhsList hhsInfo)
         return $
             if not . null . drop (teamsNumberLimit rm - 1) $ roomTeams then
-                [Warning $ loc "too many teams"]
+                [Warning $ loc "Too many teams!"]
             else if canAddNumber roomTeams <= 0 then
-                [Warning $ loc "too many hedgehogs"]
+                [Warning $ loc "Too many hedgehogs!"]
             else if isJust $ findTeam rm then
-                [Warning $ loc "There's already a team with same name in the list"]
+                [Warning $ loc "There's already a team with same name in the list."]
             else if isJust $ gameInfo rm then
-                [Warning $ loc "round in progress"]
+                [Warning $ loc "Joining not possible: Round is in progress."]
             else if isRestrictedTeams rm then
-                [Warning $ loc "restricted"]
+                [Warning $ loc "This room currently does not allow adding new teams."]
             else
                 [ModifyRoom (\r -> r{teams = teams r ++ [newTeam]}),
                 SendUpdateOnThisRoom,
@@ -145,7 +147,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 AnswerClients roomChans ["HH_NUM", tName, showB $ hhnum newTeam]
                 ]
         where
-        canAddNumber rt = (48::Int) - (sum $ map hhnum rt)
+        canAddNumber rt = (cMaxHHs) - (sum $ map hhnum rt)
         findTeam = find (\t -> tName == teamname t) . teams
         dif = readInt_ difStr
         hhsList [] = []
@@ -154,7 +156,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         newTeamHHNum rt p = min p (canAddNumber rt)
         maxTeams r
             | roomProto r < 38 = 6
-            | otherwise = 8
+            | otherwise = cMaxTeams
 
 
 handleCmd_inRoom ["REMOVE_TEAM", tName] = do
@@ -167,9 +169,9 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
 
         return $
             if isNothing $ maybeTeam then
-                [Warning $ loc "REMOVE_TEAM: no such team"]
+                [Warning $ loc "Error: The team you tried to remove does not exist."]
             else if clNick /= teamowner team then
-                [ProtocolError $ loc "Not team owner!"]
+                [ProtocolError $ loc "You can't remove a team you don't own."]
             else
                 [RemoveTeam tName,
                 ModifyClient
@@ -194,10 +196,10 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
 
     return $
         if not $ isMaster cl then
-            [ProtocolError $ loc "Not room master"]
+            [ProtocolError $ loc "You're not the room master!"]
         else if isNothing maybeTeam then
             []
-        else if hhNumber < 1 || hhNumber > 8 || hhNumber > canAddNumber r + hhnum team then
+        else if hhNumber < 1 || hhNumber > cHogsPerTeam || hhNumber > canAddNumber r + hhnum team then
             [AnswerClients clChan ["HH_NUM", teamName, showB $ hhnum team]]
         else
             [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
@@ -205,7 +207,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     where
         hhNumber = readInt_ numberStr
         findTeam = find (\t -> teamName == teamname t) . teams
-        canAddNumber = (-) 48 . sum . map hhnum . teams
+        canAddNumber = (-) cMaxHHs . sum . map hhnum . teams
 
 
 
@@ -221,7 +223,7 @@ handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
 
     return $
         if not $ isMaster cl then
-            [ProtocolError $ loc "Not room master"]
+            [ProtocolError $ loc "You're not the room master!"]
         else if isNothing maybeTeam || isNothing maybeClientId then
             []
         else
@@ -260,6 +262,8 @@ handleCmd_inRoom ["EM", msg] = do
     rm <- thisRoom
     chans <- roomOthersChans
 
+    let (legalMsgs, nonEmptyMsgs, lastFTMsg) = checkNetCmd (teamIndexes cl) msg
+
     if teamsInGame cl > 0 && (isJust $ gameInfo rm) && (not $ B.null legalMsgs) then
         return $ AnswerClients chans ["EM", legalMsgs]
             : [ModifyRoom (\r -> r{gameInfo = liftM
@@ -269,8 +273,6 @@ handleCmd_inRoom ["EM", msg] = do
                 $ gameInfo r}), RegisterEvent EngineMessage]
         else
         return []
-    where
-        (legalMsgs, nonEmptyMsgs, lastFTMsg) = checkNetCmd msg
 
 
 handleCmd_inRoom ["ROUNDFINISHED", _] = do
@@ -315,13 +317,13 @@ handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do
 
     return $
         if illegalName newName then
-            [Warning $ loc "Illegal room name"]
+            [Warning $ loc "Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}"]
         else
         if isSpecial rm then
-            [Warning $ loc "Restricted"]
+            [Warning $ loc "Access denied."]
         else
         if isJust $ find (\r -> newName == name r) rs then
-            [Warning $ loc "Room with such name already exists"]
+            [Warning $ loc "A room with the same name already exists."]
         else
             [ModifyRoom roomUpdate,
             AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (clientProto cl) (nick cl) (roomUpdate rm))]
@@ -331,21 +333,27 @@ handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do
 
 handleCmd_inRoom ["KICK", kickNick] = roomAdminOnly $ do
     (thisClientId, rnc) <- ask
-    maybeClientId <- clientByNick kickNick
+    maybeKickId <- clientByNick kickNick
     rm <- thisRoom
-    let kickId = fromJust maybeClientId
+    let kickId = fromJust maybeKickId
     let kickCl = rnc `client` kickId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
     let notOnly2Players = (length . group . sort . map teamowner . teams $ rm) > 2
-    return
-        [KickRoomClient kickId |
-            isJust maybeClientId
-            && (kickId /= thisClientId)
-            && sameRoom
-            && (not $ hasSuperPower kickCl)
-            && ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)
-        ]
-
+    return $
+        -- Catch some error conditions
+        if (isNothing maybeKickId) then
+            [Warning $ loc "Player is not online."]
+        else if (kickId == thisClientId) then
+            [Warning $ loc "You can't kick yourself!"]
+        else if (not ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)) then
+            [Warning $ loc "You can't kick the only other player!"]
+        else if (not sameRoom) then
+            [Warning $ loc "The player is not in your room."]
+        else if (hasSuperPower kickCl) then
+            [Warning $ loc "This player is protected from being kicked."]
+        else
+            -- Kick!
+            [KickRoomClient kickId]
 
 handleCmd_inRoom ["DELEGATE", newAdmin] = do
     (thisClientId, rnc) <- ask
@@ -355,20 +363,26 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
     thisRoomMasterId <- liftM masterID thisRoom
     let newAdminId = fromJust maybeClientId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
-    return
-        [ChangeMaster (Just newAdminId) |
-            (master || serverAdmin)
-                && isJust maybeClientId
-                && (Just newAdminId /= thisRoomMasterId)
-                && sameRoom]
-
+    return $
+        if (not (master || serverAdmin)) then
+            [Warning $ loc "You're not the room master or a server admin!"]
+        else if (isNothing maybeClientId) then
+            [Warning $ loc "Player is not online."]
+        else if (Just newAdminId == thisRoomMasterId) then
+            [Warning $ loc "You're already the room master."]
+        else if (not sameRoom) then
+            [Warning $ loc "The player is not in your room."]
+        else
+            [ChangeMaster (Just newAdminId)]
 
 handleCmd_inRoom ["TEAMCHAT", msg] = do
     cl <- thisClient
     chans <- roomSameClanChans
     return [AnswerClients chans ["EM", engineMsg cl]]
     where
-        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, " (team): ", msg, "\x20\x20"]
+        -- This is formatted in a way so it can parsed by engine to make it translatable
+        -- Format: b<PLAYER NAME>]<MESSAGE>
+        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "]", msg, "\x20\x20"]
 
 
 handleCmd_inRoom ["BAN", banNick] = do
@@ -391,35 +405,66 @@ handleCmd_inRoom ("RND":rs) = do
     return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
 
 
-handleCmd_inRoom ["MAXTEAMS", n] = roomAdminOnly $ do
+handleCmd_inRoom ["MAXTEAMS", n] = do
     cl <- thisClient
     let m = readInt_ n
-    if m < 2 || m > 8 then
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/maxteams: specify number from 2 to 8"]]
+    if not $ isMaster cl then
+        return [Warning $ loc "You're not the room master!"]
+    else if m < 2 || m > cMaxTeams then
+        return [Warning $ loc "/maxteams: specify number from 2 to 8"]
     else
         return [ModifyRoom (\r -> r{teamsNumberLimit = m})]
+
+handleCmd_inRoom ["MAXTEAMS"] = handleCmd_inRoom ["MAXTEAMS", ""]
 
 handleCmd_inRoom ["FIX"] = serverAdminOnly $
     return [ModifyRoom (\r -> r{isSpecial = True})]
 
-handleCmd_inRoom ["UNFIX"] = serverAdminOnly $
-    return [ModifyRoom (\r -> r{isSpecial = False})]
+handleCmd_inRoom ["UNFIX"] = serverAdminOnly $ do
+    cl <- thisClient
+    return $ if not $ isMaster cl then
+                 [Warning $ loc "You're not the room master!"]
+             else
+                 [ModifyRoom (\r -> r{isSpecial = False})]
+
+handleCmd_inRoom ["HELP"] = do
+    cl <- thisClient
+    if isAdministrator cl then
+        return (cmdHelpActionList [sendChan cl] cmdHelpRoomAdmin)
+    else
+        return (cmdHelpActionList [sendChan cl] cmdHelpRoomPlayer)
 
 handleCmd_inRoom ["GREETING", msg] = do
     cl <- thisClient
     rm <- thisRoom
-    return [ModifyRoom (\r -> r{greeting = msg}) | isAdministrator cl || (isMaster cl && (not $ isSpecial rm))]
-
+    return $ if (not (isAdministrator cl || (isMaster cl && (not $ isSpecial rm)))) then
+                 [Warning $ loc "You're not the room master or a server admin!"]
+             else
+                 [ModifyRoom (\r -> r{greeting = msg}),
+                  AnswerClients [sendChan cl]
+                      ["CHAT", nickServer,
+                          if B.null msg then
+                              loc "Greeting message cleared."
+                          else
+                              loc "Greeting message set."
+                      ]]
 
 handleCmd_inRoom ["CALLVOTE"] = do
     cl <- thisClient
     return [AnswerClients [sendChan cl]
-        ["CHAT", "[server]", loc "Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs"]
+        ["CHAT", nickServer, loc "Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>"]
         ]
 
 handleCmd_inRoom ["CALLVOTE", "KICK"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote kick: specify nickname"]]
+    rm <- thisRoom
+    return
+        [Warning $
+        if isJust $ masterID rm then
+            loc "/callvote kick: This is only allowed in rooms without a room master."
+        else
+            loc "/callvote kick: You need to specify a nickname."
+        ]
 
 handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     (thisClientId, rnc) <- ask
@@ -430,18 +475,25 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
 
     if isJust $ masterID rm then
-        return []
+        return [Warning $ loc "/callvote kick: This is only allowed in rooms without a room master."]
         else
         if isJust maybeClientId && sameRoom then
             startVote $ VoteKick nickname
             else
-            return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote kick: no such user"]]
+            return [Warning $ loc "/callvote kick: No such user!"]
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP"] = do
+    -- Display list of available maps for voting
     cl <- thisClient
     s <- liftM (Map.keys . roomSaves) thisRoom
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", B.concat ["callvote map: ", B.intercalate ", " s]]]
+    return [AnswerClients [sendChan cl]
+        ["CHAT", nickServer,
+            if (not $ null s) then
+                (B.concat ["/callvote map: ", B.intercalate ", " s])
+            else
+                loc "/callvote map: No maps available."
+        ]]
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
@@ -451,7 +503,7 @@ handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
     if Map.member roomSave $ roomSaves rm then
         startVote $ VoteMap roomSave
         else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote map: no such map"]]
+        return [Warning $ loc "/callvote map: No such map!"]
 
 
 handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
@@ -461,39 +513,48 @@ handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
     if isJust $ gameInfo rm then
         startVote VotePause
         else 
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote pause: no game in progress"]]
+        return [Warning $ loc "/callvote pause: No game in progress!"]
 
+handleCmd_inRoom ["CALLVOTE", "PAUSE", _] = handleCmd_inRoom ["CALLVOTE", "PAUSE"]
 
 handleCmd_inRoom ["CALLVOTE", "NEWSEED"] = do
     startVote VoteNewSeed
 
+handleCmd_inRoom ["CALLVOTE", "NEWSEED", _] = handleCmd_inRoom ["CALLVOTE", "NEWSEED"]
 
 handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote hedgehogs: specify number from 1 to 8"]]
+    return [Warning $ loc "/callvote hedgehogs: Specify number from 1 to 8."]
 
 
 handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
     cl <- thisClient
     let h = readInt_ hhs
 
-    if h > 0 && h <= 8 then
+    if h > 0 && h <= cHogsPerTeam then
         startVote $ VoteHedgehogsPerTeam h
         else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote hedgehogs: specify number from 1 to 8"]]
+        return [Warning $ loc "/callvote hedgehogs: Specify number from 1 to 8."]
 
+handleCmd_inRoom ["CALLVOTE", _] = handleCmd_inRoom ["CALLVOTE"]
+handleCmd_inRoom ["CALLVOTE", _, _] = handleCmd_inRoom ["CALLVOTE"]
 
 handleCmd_inRoom ("VOTE" : m : p) = do
     cl <- thisClient
     let b = if m == "YES" then Just True else if m == "NO" then Just False else Nothing
     if isJust b then
         voted (p == ["FORCE"]) (fromJust b)
-        else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "vote: 'yes' or 'no'"]]
+    else
+        return [Warning $
+            if (p == ["FORCE"]) then
+                loc "/force: Please use 'yes' or 'no'."
+            else
+                loc "/vote: Please use 'yes' or 'no'."
+        ]
 
 
-handleCmd_inRoom ["SAVE", stateName] = serverAdminOnly $ do
-    return [ModifyRoom $ \r -> r{roomSaves = Map.insert stateName (mapParams r, params r) (roomSaves r)}]
+handleCmd_inRoom ["SAVE", stateName, location] = serverAdminOnly $ do
+    return [ModifyRoom $ \r -> r{roomSaves = Map.insert stateName (location, mapParams r, params r) (roomSaves r)}]
 
 handleCmd_inRoom ["DELETE", stateName] = serverAdminOnly $ do
     return [ModifyRoom $ \r -> r{roomSaves = Map.delete stateName (roomSaves r)}]

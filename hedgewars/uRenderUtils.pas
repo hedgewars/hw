@@ -39,35 +39,35 @@ function  RenderStringTexLim(s: ansistring; Color: Longword; font: THWFont; maxL
 function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 
 implementation
-uses uUtils, uVariables, uConsts, uTextures, SysUtils, uDebug;
+uses uVariables, uConsts, uTextures, SysUtils, uUtils, uDebug;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;
 begin
     r:= rect^;
     if Clear then
-        SDL_FillRect(Surface, @r, 0);
+        SDL_FillRect(Surface, @r, SDL_MapRGBA(Surface^.format, 0, 0, 0, 0));
 
     BorderColor:= SDL_MapRGB(Surface^.format, BorderColor shr 16, BorderColor shr 8, BorderColor and $FF);
     FillColor:= SDL_MapRGB(Surface^.format, FillColor shr 16, FillColor shr 8, FillColor and $FF);
 
-    r.y:= rect^.y + 1;
-    r.h:= rect^.h - 2;
+    r.y:= rect^.y + cFontBorder div 2;
+    r.h:= rect^.h - cFontBorder;
     SDL_FillRect(Surface, @r, BorderColor);
-    r.x:= rect^.x + 1;
-    r.w:= rect^.w - 2;
+    r.x:= rect^.x + cFontBorder div 2;
+    r.w:= rect^.w - cFontBorder;
     r.y:= rect^.y;
     r.h:= rect^.h;
     SDL_FillRect(Surface, @r, BorderColor);
-    r.x:= rect^.x + 2;
-    r.y:= rect^.y + 1;
-    r.w:= rect^.w - 4;
-    r.h:= rect^.h - 2;
+    r.x:= rect^.x + cFontBorder;
+    r.y:= rect^.y + cFontBorder div 2;
+    r.w:= rect^.w - cFontBorder * 2;
+    r.h:= rect^.h - cFontBorder;
     SDL_FillRect(Surface, @r, FillColor);
-    r.x:= rect^.x + 1;
-    r.y:= rect^.y + 2;
-    r.w:= rect^.w - 2;
-    r.h:= rect^.h - 4;
+    r.x:= rect^.x + cFontBorder div 2;
+    r.y:= rect^.y + cFontBorder;
+    r.w:= rect^.w - cFontBorder;
+    r.h:= rect^.h - cFontBorder * 2;
     SDL_FillRect(Surface, @r, FillColor);
 end;
 (*
@@ -83,10 +83,10 @@ var w, h: Longword;
     finalRect, textRect: TSDL_Rect;
 begin
     TTF_SizeUTF8(Fontz[Font].Handle, PChar(s), @w, @h);
-    if (maxLength > 0) and (w > maxLength) then w := maxLength;
+    if (maxLength > 0) and (w > maxLength * HDPIScaleFactor) then w := maxLength * HDPIScaleFactor;
     finalRect.x:= X;
     finalRect.y:= Y;
-    finalRect.w:= w + cFontBorder * 2 + 4;
+    finalRect.w:= w + cFontBorder * 2 + cFontPadding * 2;
     finalRect.h:= h + cFontBorder * 2;
     textRect.x:= X;
     textRect.y:= Y;
@@ -97,7 +97,7 @@ begin
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
-    finalRect.x:= X + cFontBorder + 2;
+    finalRect.x:= X + cFontBorder + cFontPadding;
     finalRect.y:= Y + cFontBorder;
     if SDLCheck(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true) then
         exit;
@@ -105,7 +105,7 @@ begin
     SDL_FreeSurface(tmpsurf);
     finalRect.x:= X;
     finalRect.y:= Y;
-    finalRect.w:= w + cFontBorder * 2 + 4;
+    finalRect.w:= w + cFontBorder * 2 + cFontPadding * 2;
     finalRect.h:= h + cFontBorder * 2;
     WriteInRoundRect:= finalRect;
 end;
@@ -144,38 +144,74 @@ end;
 
 procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); inline;
 begin
+    // copy from complete src
     copyToXYFromRect(src, dest, 0, 0, src^.w, src^.h, destX, destY);
 end;
 
 procedure copyToXYFromRect(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
-var i, j, maxDest, maxSrc, iX, iY: LongInt;
+var spi, dpi, iX, iY, dX, dY, lX, lY, aT: LongInt;
     srcPixels, destPixels: PLongWordArray;
-    r0, g0, b0, a0, r1, g1, b1, a1: Byte;
+    rD, gD, bD, aD, rT, gT, bT: Byte;
 begin
-    maxDest:= (dest^.pitch div 4) * dest^.h;
-    maxSrc:= (src^.pitch div 4) * src^.h;
-
     SDL_LockSurface(src);
     SDL_LockSurface(dest);
 
     srcPixels:= src^.pixels;
     destPixels:= dest^.pixels;
 
-    for iX:= 0 to srcW - 1 do
-    for iY:= 0 to srcH - 1 do
+    // what's the offset between src and dest coords?
+    dX:= destX - srcX;
+    dY:= destY - srcY;
+
+    // let's figure out where the rectangle we can actually copy ends
+    lX:= min(srcX + srcW, src^.w) - 1;
+    if lX + dx >= dest^.w then lX:= dest^.w - dx - 1;
+    lY:= min(srcY + srcH, src^.h) - 1;
+    if lY + dy >= dest^.h then lY:= dest^.h - dy - 1;
+
+    for iX:= srcX to lX do
+    for iY:= srcY to lY do
         begin
-        i:= (destY + iY) * (dest^.pitch div 4) + (destX + iX);
-        j:= (srcY  + iY) * (src^.pitch  div 4) + (srcX  + iX);
-        if (i < maxDest) and (j < maxSrc) and (srcPixels^[j] and AMask <> 0) then
+        // src pixel index
+        spi:= iY * src^.w  + iX;
+        // dest pixel index
+        dpi:= (iY + dY) * dest^.w + (iX + dX);
+
+        // get src alpha (and set it as target alpha for now)
+        aT:= (srcPixels^[spi] and AMask) shr AShift;
+
+        // src pixel opaque?
+        if aT = 255 then
             begin
-            SDL_GetRGBA(destPixels^[i], dest^.format, @r0, @g0, @b0, @a0);
-            SDL_GetRGBA(srcPixels^[j], src^.format, @r1, @g1, @b1, @a1);
-            r0:= (r0 * (255 - LongInt(a1)) + r1 * LongInt(a1)) div 255;
-            g0:= (g0 * (255 - LongInt(a1)) + g1 * LongInt(a1)) div 255;
-            b0:= (b0 * (255 - LongInt(a1)) + b1 * LongInt(a1)) div 255;
-            a0:= a0 + ((255 - LongInt(a0)) * a1 div 255);
-            destPixels^[i]:= SDL_MapRGBA(dest^.format, r0, g0, b0, a0);
+            // just copy full pixel
+            destPixels^[dpi]:= srcPixels^[spi];
+            continue;
             end;
+
+        // get dst alpha (without shift for now)
+        aD:= (destPixels^[dpi] and AMask) shr AShift;
+
+        // dest completely transparent?
+        if aD = 0 then
+            begin
+            // just copy src pixel
+            destPixels^[dpi]:= srcPixels^[spi];
+            continue;
+            end;
+
+        // looks like some blending is necessary
+
+        // set color of target RGB to src for now
+        SDL_GetRGB(srcPixels^[spi],  src^.format,  @rT, @gT, @bT);
+        SDL_GetRGB(destPixels^[dpi], dest^.format, @rD, @gD, @bD);
+        // note: this is not how to correctly blend RGB, just sayin' (R,G,B are not linear...)
+        rT:= (rD * (255 - aT) + rT * aT) div 255;
+        gT:= (gD * (255 - aT) + gT * aT) div 255;
+        bT:= (bD * (255 - aT) + bT * aT) div 255;
+        aT:= aD + ((255 - LongInt(aD)) * aT div 255);
+
+        destPixels^[dpi]:= SDL_MapRGBA(dest^.format, rT, gT, bT, Byte(aT));
+
         end;
 
     SDL_UnlockSurface(src);
@@ -184,7 +220,7 @@ end;
 
 procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); inline;
 begin
-    DrawSpriteFrame2Surf(sprite, dest, x, y, 0);
+   DrawSpriteFrame2Surf(sprite, dest, x, y, 0);
 end;
 
 procedure DrawSpriteFrame2Surf(sprite: TSprite; dest: PSDL_Surface; x,y,frame: LongInt);
@@ -290,9 +326,9 @@ begin
         font:= CheckCJKFont(s, font);
         w:= 0; h:= 0; // avoid compiler hints
         TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
-        if (maxLength > 0) and (w > maxLength) then w := maxLength;
+        if (maxLength > 0) and (w > maxLength * HDPIScaleFactor) then w := maxLength * HDPIScaleFactor;
 
-        finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
+        finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder*2 + cFontPadding*2, h + cFontBorder * 2,
                 32, RMask, GMask, BMask, AMask);
 
         if checkFails(finalSurface <> nil, 'RenderString: fail to create surface', true) then
@@ -300,7 +336,7 @@ begin
 
         WriteInRoundRect(finalSurface, 0, 0, Color, font, s, maxLength);
 
-        checkFails(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, false);
+        checkFails(SDL_SetColorKey(finalSurface, SDL_TRUE, 0) = 0, errmsgTransparentSet, false);
 
         RenderStringTexLim:= Surface2Tex(finalSurface, false);
 
@@ -518,7 +554,7 @@ begin
     rect.h:= textHeight + cornerHeight * 2 - edgeHeight * 2;
     i:= rect.w;
     j:= rect.h;
-    SDL_FillRect(finalSurface, @rect, cWhiteColor);
+    SDL_FillRect(finalSurface, @rect, SDL_MapRGB(finalSurface^.format, cWhiteColor shr 16, cWhiteColor shr 8, cWhiteColor and $FF));
 
     pos:= 1; line:= 0;
     while GetNextSpeechLine(s, #1, pos, substr) do

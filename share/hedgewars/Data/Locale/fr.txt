@@ -58,15 +58,15 @@
 00:55=Congélateur
 00:56=Hachoir
 
-01:00=C'est parti !
+; 01:00=Loading …
 01:01=Round ex-aequo
 01:02=%1 gagne !
 01:03=Volume %1%
 01:04=Pause
-01:05=Quitter? (Y/Esc) (Cliquer pour reprendre)
+01:05=Quitter? (%1/%2) (Cliquer pour reprendre)
 01:06=Mort subite !
 01:07=%1 Restantes
-01:08=Carburant
+01:08=Carburant: %1%
 
 ; Event messages
 ; Hog (%1) died
@@ -217,11 +217,11 @@
 02:02=Combattez jusqu'à la fin !
 02:02=Que la force soit avec vous !
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 gagne !
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Round ex-aequo
 
 ; New health crate
 02:05=Pharmacie !
@@ -494,12 +494,12 @@
 ; Game goal strings
 05:00=Modes de jeu
 05:01=Les règles suivantes s'appliquent
-05:02=Forts : Défendez votre forteresse ; exterminez vos ennemis !
+05:02=Placez le roi : Choisissez un point de départ sécurisé pour le roi
 05:03=Faible gravité : Attention à vos mouvements
 05:04=Invulnérabilité : Les hérissons sont (presque) invulnérables
 05:05=Vampirisme : Les hérissons récupèrent des points de vie par les dégâts qu'ils infligent
 05:06=Karma: Les hérissons sont victimes des blessures qu'ils infligent
-05:07=Protégez le roi : Ne laissez pas mourir le roi !|Placez le roi : Choisissez un point de départ sécurisé pour le roi
+05:07=Protégez le roi : Ne laissez pas mourir le roi !
 05:08=Placez les hérissons : Placez vos hérissons avant le début de la partie
 05:09=Artillerie : Les hérissons ne peuvent pas se déplacer pour changer de place
 05:10=Terrain indestructible : La plupart des armes sont incapables de modifier le terrain

@@ -4,44 +4,46 @@
 -------------------------------------------
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
-HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
 local cTimer = 0
 local cn = 0
 
-function initialSetup(gear)
-	SetHealth(gear, 75) -- official is 80, but that assumes bazookas/grenades that do 50 damage
-end
+local frenzyAmmos = {
+	amBazooka,
+	amGrenade,
+	amMolotov,
+	amShotgun,
+	amFirePunch,
+	amMine,
+	amJetpack,
+	amBlowTorch,
+	amTeleport,
+	amLowGravity
+}
 
 function showStartingInfo()
 
 	ruleSet = "" ..
-	loc("RULES") .. ": " .. "|" ..
+	loc("RULES:") .. " |" ..
 	loc("Each turn is only ONE SECOND!") .. "|" ..
-	loc("Use your ready time to think.") .. "|" ..
-	loc("Slot keys save time! (F1-F10 by default)") .. "|" ..
-	" |" ..
-	loc("SLOTS") .. ": " .. "|" ..
-	loc("Slot") .. " 1 - " .. loc("Bazooka") .. "|" ..
-	loc("Slot") .. " 2 - " .. loc("Grenade") .. "|" ..
-	loc("Slot") .. " 3 - " .. loc("Shotgun") .. "|" ..
-	loc("Slot") .. " 4 - " .. loc("Shoryuken") .. "|" ..
-	loc("Slot") .. " 5 - " .. loc("Mine") .. "|" ..
-	loc("Slot") .. " 6 - " .. loc("Teleport") .. "|" ..
-	loc("Slot") .. " 7 - " .. loc("Blowtorch") .. "|" ..
-	loc("Slot") .. " 8 - " .. loc("Flying Saucer") .. "|" ..
-	loc("Slot") .. " 9 - " .. loc("Molotov") .. "|" ..
-	loc("Slot") .. " 10 - " .. loc("Low Gravity")
+	loc("Use your ready time to think.")
+	if INTERFACE ~= "touch" then
+		ruleSet = ruleSet .. "|" ..
+		loc("Slot keys save time! (F1-F10 by default)") .. "| |"
+		for i=1, #frenzyAmmos do
+			ruleSet = ruleSet .. string.format(loc("Slot %d: %s"), i, GetAmmoName(frenzyAmmos[i])) .. "|"
+		end
+	end
 
 	ShowMission(loc("FRENZY"),
-                loc("a frenetic Hedgewars mini-game"),
+                loc("A frenetic Hedgewars mini-game"),
                 ruleSet, 0, 4000)
 
 end
 
 function onGameInit()
 
-	if TurnTime > 10001 then
+	if TurnTime > 8000 then
 		Ready = 8000
 	else
 		Ready = TurnTime
@@ -68,7 +70,6 @@ end
 
 function onGameStart()
 	showStartingInfo()
-	runOnHogs(initialSetup)
 end
 
 function onSlot(sln)
@@ -87,56 +88,19 @@ function onGameTick()
 	end
 end
 
+-- Keyboard slot shortcuts
 function ChangeWep(s)
 
-	if s == 0 then
-		SetWeapon(amBazooka)
-	elseif s == 1 then
-		SetWeapon(amGrenade)
-	elseif s == 2 then
-		SetWeapon(amShotgun)
-	elseif s == 3 then
-		SetWeapon(amFirePunch)
-	elseif s == 4 then
-		SetWeapon(amMine)
-	elseif s == 5 then
-		SetWeapon(amTeleport)
-	elseif s == 6 then
-		SetWeapon(amBlowTorch)
-	elseif s == 7 then
-		SetWeapon(amJetpack)
-	elseif s == 8 then
-		SetWeapon(amMolotov)
-	elseif s == 9 then
-		SetWeapon(amLowGravity)
+	if s >= 0 and s <= 9 then
+		SetWeapon(frenzyAmmos[s+1])
 	end
 
-end
-
-function onGearAdd(gear)
-	if GetGearType(gear) == gtHedgehog then
-		trackGear(gear)
-	end
-end
-
-function onGearDelete(gear)
-	if GetGearType(gear) == gtHedgehog then
-		trackDeletion(gear)
-	end
 end
 
 function onAmmoStoreInit()
-	SetAmmo(amBazooka, 9, 0, 0, 0)
-	SetAmmo(amGrenade, 9, 0, 0, 0)
-	SetAmmo(amMolotov, 9, 0, 0, 0)
-	SetAmmo(amShotgun, 9, 0, 0, 0)
-	--SetAmmo(amFlamethrower, 9, 0, 0, 0) -- this was suggested on hw.org but it's not present on base
-	SetAmmo(amFirePunch, 9, 0, 0, 0)
-	SetAmmo(amMine, 9, 0, 0, 0)
-	--SetAmmo(amCake, 1, 0, 2, 0) -- maybe it's beefcake?
-	SetAmmo(amJetpack, 9, 0, 0, 0)
-	SetAmmo(amBlowTorch, 9, 0, 0, 0)
-	SetAmmo(amTeleport, 9, 0, 0, 0)
-	SetAmmo(amLowGravity, 9, 0, 0, 0)
-	--SetAmmo(amSkipGo, 9, 0, 0, 0) -- not needed with 1s turn time
+	-- Add frenzy ammos
+	for i=1, #frenzyAmmos do
+		SetAmmo(frenzyAmmos[i], 9, 0, 0, 0)
+	end
+	SetAmmo(amSkip, 9, 0, 0, 0)
 end

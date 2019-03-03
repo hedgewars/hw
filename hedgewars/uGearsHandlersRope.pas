@@ -50,7 +50,7 @@ begin
        ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
         begin
         HHGear^.X:= tX;
-        HHGear^.dX.isNegative:= hwRound(tX) > LongInt(leftX) + HHGear^.Radius * 2
+        HHGear^.dX.isNegative:= hwRound(tX) > leftX + HHGear^.Radius * 2
         end;
 
     if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
@@ -66,6 +66,8 @@ begin
     or (TestCollisionYwithGear(HHGear, 1) <> 0) then
         begin
         DeleteGear(Gear);
+        if (TestCollisionYwithGear(HHGear, 1) <> 0) and (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
+            HHGear^.Hedgehog^.CurAmmoType:= amRope;
         isCursorVisible := false;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit
@@ -158,7 +160,7 @@ begin
         PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
         HHGear^.X:= tX;
-        HHGear^.dX.isNegative:= hwRound(tX) > LongInt(leftX) + HHGear^.Radius * 2;
+        HHGear^.dX.isNegative:= hwRound(tX) > leftX + HHGear^.Radius * 2;
         exit
         end;
 
@@ -212,12 +214,12 @@ begin
 
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
         if not ((TestCollisionXwithXYShift(HHGear, _2*hwSign(ropeDx), 0, hwSign(ropeDx), true) <> 0)
-        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, 1*hwSign(ropeDy), hwSign(ropeDy)) <> 0))) then
+        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, hwSign(ropeDy), hwSign(ropeDy)) <> 0))) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
         if not ((TestCollisionXwithXYShift(HHGear, -_2*hwSign(ropeDx), 0, -hwSign(ropeDx), true) <> 0)
-        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, 1*-hwSign(ropeDy), -hwSign(ropeDy)) <> 0))) then
+        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, -hwSign(ropeDy), -hwSign(ropeDy)) <> 0))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
@@ -225,8 +227,6 @@ begin
 
     HHGear^.dX := HHGear^.X - tx;
     HHGear^.dY := HHGear^.Y - ty;
-    ////
-
 
     haveDivided := false;
     // check whether rope needs dividing
@@ -417,9 +417,9 @@ begin
     if (Gear^.State and gstAttacked) = 0 then
         begin
         OnUsedAmmo(HHGear^.Hedgehog^);
-        Gear^.State := Gear^.State or gstAttacked
+        Gear^.State := Gear^.State or gstAttacked;
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         end;
-    ApplyAmmoChanges(HHGear^.Hedgehog^)
 end;
 
 procedure doStepRopeAttach(Gear: PGear);
@@ -427,7 +427,6 @@ var
     HHGear: PGear;
     tx, ty, tt: hwFloat;
 begin
-    
     Gear^.X := Gear^.X - Gear^.dX;
     Gear^.Y := Gear^.Y - Gear^.dY;
     Gear^.Elasticity := Gear^.Elasticity + _1;
@@ -441,32 +440,34 @@ begin
         end
     else if not CurrentTeam^.ExtDriven and (FollowGear <> nil) then FollowGear := HHGear;
 
+    // Destroy rope if it touched bouncy or world wrap world edge.
+    // TODO: Allow to shoot rope through the world wrap edge and rope normally.
+    if (WorldWrap(Gear) and (WorldEdge = weWrap)) or
+       ((WorldEdge = weBounce) and ((hwRound(Gear^.X) <= LeftX) or (hwRound(Gear^.X) >= RightX))) then
+        begin
+        HHGear^.State := HHGear^.State and (not (gstAttacking or gstHHJumping or gstHHHJump));
+        HHGear^.Message := HHGear^.Message and (not gmAttack);
+        DeleteGear(Gear);
+        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
+            HHGear^.Hedgehog^.CurAmmoType:= amRope;
+        isCursorVisible := false;
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
+        exit()
+        end;
+
     DeleteCI(HHGear);
 
     if (HHGear^.State and gstMoving) <> 0 then
         begin
-        if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0 then
-            SetLittle(HHGear^.dX);
-        if HHGear^.dY.isNegative and (TestCollisionYwithGear(HHGear, -1) <> 0) then
-            HHGear^.dY := _0;
-
-        HHGear^.X := HHGear^.X + HHGear^.dX;
+        doStepHedgehogMoving(HHGear);
         Gear^.X := Gear^.X + HHGear^.dX;
+        Gear^.Y := Gear^.Y + HHGear^.dY;
 
-        if TestCollisionYwithGear(HHGear, 1) <> 0 then
-            begin
-            CheckHHDamage(HHGear);
-            HHGear^.dY := _0
-            //HHGear^.State:= HHGear^.State and (not (gstHHJumping or gstHHHJump));
-            end
-        else
-            begin
-            HHGear^.Y := HHGear^.Y + HHGear^.dY;
-            Gear^.Y := Gear^.Y + HHGear^.dY;
-            HHGear^.dY := HHGear^.dY + cGravity;
-            if (GameFlags and gfMoreWind) <> 0 then
-                HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density
-            end;
+        // hedgehog can teleport up to 5 pixels upwards when sliding,
+        // so we have to give up the maintained rope length
+        // after doStepHedgehogMoving() call and recalculate
+        // it based on the gear and current hedgehog positions
+        Gear^.Elasticity:= int2hwFloat(hwRound(Distance(Gear^.X - HHGear^.X, Gear^.Y - HHGear^.Y) + _0_001));
 
         tt := Gear^.Elasticity;
         tx := _0;
@@ -479,6 +480,7 @@ begin
                 Gear^.Y := Gear^.Y + ty;
                 Gear^.Elasticity := tt;
                 Gear^.doStep := @doStepRopeWork;
+
                 PlaySound(sndRopeAttach);
                 with HHGear^ do
                     begin
@@ -487,8 +489,6 @@ begin
                     end;
 
                 RopeRemoveFromAmmo(Gear, HHGear);
-
-                tt := _0;
                 exit
                 end;
             tx := tx + Gear^.dX + Gear^.dX;
@@ -498,7 +498,7 @@ begin
         end;
 
     if Gear^.Elasticity < _20 then Gear^.CollisionMask:= lfLandMask
-    else Gear^.CollisionMask:= lfNotCurrentMask;
+    else Gear^.CollisionMask:= lfNotCurHogCrate; //lfNotObjMask or lfNotHHObjMask;
     CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then
@@ -530,6 +530,10 @@ begin
                 Message := Message and (not gmAttack)
                 end;
         DeleteGear(Gear);
+        if (GetAmmoEntry(HHGear^.Hedgehog^, amRope)^.Count >= 1) and ((Ammoz[HHGear^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and (HHGear^.Hedgehog^.MultiShootAttacks = 0) then
+            HHGear^.Hedgehog^.CurAmmoType:= amRope;
+        isCursorVisible := false;
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit;
         end;
     if CheckGearDrowning(HHGear) then DeleteGear(Gear)

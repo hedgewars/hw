@@ -54,21 +54,19 @@
 00:51=Bola de Lama
 00:52=Arma não selecionada
 00:53=Máquina do tempo
-; 00:54=Estrutura
 00:54=Spray de terra
 00:55=Freezer
 00:56=Machadinha
 
-
-01:00=Hora de lutar!
+; 01:00=Loading …
 01:01=Partida empatou
 01:02=%1 ganhou!
 01:03=Volume %1%
 01:04=Pausado
-01:05=Realmente sair (Y/Esc)?
+01:05=Realmente sair (%1/%2)?
 01:06=Morte Súbita!
 01:07=%1 Remanescente
-01:08=Combustível
+01:08=Combustível: %1%
 01:09=Sincronizando...
 01:10=Usar esta utilidade não encerrará o turno
 01:11=Esta arma ou utilidade ainda não está disponível
@@ -154,11 +152,11 @@
 02:02=Apiiiita o árbitro!
 02:02=Ao vencedor as batatas!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 ganhou!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Partida empatou
 
 ; New health crate
 02:05=Socorro a caminho!
@@ -328,7 +326,6 @@
 03:51=Encontrei no chão
 03:52=Sem uso
 03:53=Tipo 40
-;03:54=Constrói algo
 03:54=Utilidade
 
 
@@ -392,18 +389,17 @@
 04:51=Ganhe um tiro de graça, atirando uma bola de barro.|Fará com que o inimigo saia voando|e arde a vista.
 04:52=Sem Uso
 04:53=Viage através do tempo e espaço,|deixando seus camaradas na mão.|Esteja preparado para retornar a qualquer momento,|ou para a Morte Súbita se todos os aliados foram mortos.|Aviso. Não funciona na Morte Súbita,|se você estiversozinho, ou se você for o Rei.
-;04:54=INCOMPLETO
 04:54=Atira um jorro de barro pegajoso.|Constrói pontes, enterra inimigos, sela túneis.|Cuidado para que não pegue em você!
 
 ; Game goal strings
 05:00=Modos de Jogo
 05:01=As seguintes regras aplicam
-05:02=Fortes: Proteja o seu forte, destrua seus inimigos!
+05:02=Colocar o Rei: Escolha um lugar protegido para posicionar o seu Rei
 05:03=Baixa Gravidade: Olhe seus passos
 05:04=Invulnerabilidade: Ouriços são (quase) invulneráveis
 05:05=Vampirismo: Ouriços serão curados pelos danos causados
 05:06=Carma: Ouriços serão machucados pelos danos causados
-05:07=Proteja o rei: Não deixe o seu Rei morrer!|Colocar o Rei: Escolha um lugar protegido para posicionar o seu Rei
+05:07=Proteja o rei: Não deixe o seu Rei morrer!
 05:08=Colocar Ouriços: Permite posicionar os ouriços antes da partida começar
 05:09=Artilharia: Ouriços não podem andar para mudar de lugar
 05:10=Terreno Indestrutível: Maioria das armas não destrói o terreno

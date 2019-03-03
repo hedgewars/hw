@@ -22,7 +22,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
-
+#include <QObject>
 
 class HWProto : public QObject
 {

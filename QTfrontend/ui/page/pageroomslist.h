@@ -23,7 +23,7 @@
 #include "AbstractPage.h"
 
 class HWChatWidget;
-class AmmoSchemeModel;
+class GameSchemeModel;
 class QTableView;
 class RoomsListModel;
 class QSortFilterProxyModel;
@@ -84,7 +84,6 @@ class PageRoomsList : public AbstractPage
         void onJoinConfirmation(const QString &);
         void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
         void onFilterChanged();
-        void saveHeaderState();
         void onRoomNameChosen(const QString &, const QString &password);
         void roomSelectionChanged(const QModelIndex &, const QModelIndex &);
         void moveSelectionUp();
@@ -100,7 +99,7 @@ class PageRoomsList : public AbstractPage
         QAction * showJoinRestricted;
         QSplitter * m_splitter;
 
-        AmmoSchemeModel * ammoSchemeModel;
+        GameSchemeModel * gameSchemeModel;
 
         bool restoreHeaderState();
 };

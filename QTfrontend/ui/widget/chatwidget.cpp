@@ -32,6 +32,7 @@
 #include <QSortFilterProxyModel>
 #include <QMenu>
 #include <QScrollBar>
+#include <QMimeData>
 
 #include "DataManager.h"
 #include "hwconsts.h"
@@ -210,6 +211,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     // Chat view
 
     chatText = new QTextBrowser(this);
+    chatText->setWhatsThis(tr("Chat log"));
     chatText->document()->setDefaultStyleSheet(styleSheet());
     chatText->setMinimumHeight(20);
     chatText->setMinimumWidth(10);
@@ -226,6 +228,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     // Hover:   rgb(13, 5, 68)
 
     chatEditLine = new SmartLineEdit();
+    chatEditLine->setWhatsThis(tr("Enter chat messages here and send them with [Enter]"));
     chatEditLine->setMaxLength(300);
     chatEditLine->setStyleSheet("SmartLineEdit { background-color: rgb(23, 11, 54); padding: 2px 8px; border-width: 0px; border-radius: 7px; } SmartLineEdit:hover, SmartLineEdit:focus { background-color: rgb(13, 5, 68); }");
     chatEditLine->setFixedHeight(24);
@@ -237,6 +240,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     // Nickname list
 
     chatNicks = new QListView(this);
+    chatNicks->setWhatsThis(tr("List of players"));
     chatNicks->setIconSize(QSize(24, 16));
     chatNicks->setSelectionMode(QAbstractItemView::SingleSelection);
     chatNicks->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -267,6 +271,10 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     acBan->setIcon(QIcon(":/res/ban.png"));
     acBan->setData(QVariant(true));
     connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onBan()));
+    acDelegate = new QAction(QAction::tr("Delegate room control"), chatNicks);
+    acDelegate->setIcon(QIcon(":/res/chat/roomadmin.png"));
+    acDelegate->setData(QVariant(true));
+    connect(acDelegate, SIGNAL(triggered(bool)), this, SLOT(onDelegate()));
     acFollow = new QAction(QAction::tr("Follow"), chatNicks);
     acFollow->setIcon(QIcon(":/res/follow.png"));
     acFollow->setData(QVariant(false));
@@ -300,12 +308,12 @@ void HWChatWidget::setSettings(QSettings * settings)
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
-    if ((link.scheme() == "http") or (link.scheme() == "https"))
+    if ((link.scheme() == "http") || (link.scheme() == "https"))
         QDesktopServices::openUrl(link);
     else if (link.scheme() == "hwnick")
     {
         // decode nick
-        QString nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
+        QString nick = QString::fromUtf8(QByteArray::fromBase64(link.query(QUrl::FullyDecoded).toLatin1()));
         QModelIndexList mil = chatNicks->model()->match(chatNicks->model()->index(0, 0), Qt::DisplayRole, nick);
 
         bool isOffline = (mil.size() < 1);
@@ -365,15 +373,20 @@ void HWChatWidget::returnPressed()
 // it as host would convert it to it's lower case variant
 QString HWChatWidget::linkedNick(const QString & nickname)
 {
-    if (nickname != m_userNick)
+    // '[' and '(' are reserved characters used for fake player names in special server messages
+    if ((nickname != m_userNick) && (!nickname.startsWith('[')) && (!nickname.startsWith('(')))
+        // linked nick
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
-                   QString(nickname.toUtf8().toBase64())).arg(Qt::escape(nickname));
+                   QString(nickname.toUtf8().toBase64())).arg(nickname.toHtmlEscaped());
 
-    // unlinked nick (if own one)
-    return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
+    // unlinked nick (if own one or fake player name)
+    return QString("<span class=\"nick\">%1</span>").arg(nickname.toHtmlEscaped());
 }
 
-const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((([^/:?&#]+\\.)?hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
+// Regex to make some URLs clickable for selected domains:
+// - hedgewars.org (official website)
+// - hh.unit22.org (community addon server)
+const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((([^/:?&#]+\\.)?hedgewars\\.org|hh\\.unit22\\.org)(/[^ ]*)?)");
 
 bool HWChatWidget::containsHighlight(const QString & sender, const QString & message)
 {
@@ -392,8 +405,8 @@ bool HWChatWidget::containsHighlight(const QString & sender, const QString & mes
 
 QString HWChatWidget::messageToHTML(const QString & message)
 {
-    QString formattedStr = Qt::escape(message);
-    // link some urls
+    QString formattedStr = message.toHtmlEscaped();
+    // link some URLs
     formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http\\2://\\4\">\\4</a>");
     return formattedStr;
 }
@@ -526,10 +539,16 @@ void HWChatWidget::nickRemoved(const QString& nick, const QString & message)
 
     emit nickCountUpdate(chatNicks->model()->rowCount());
 
-    if (message.isEmpty())
+    // Normal quit
+    if (message.isEmpty() || message == "bye")
+    {
         printChatString(nick, QString("*** ") + tr("%1 has left").arg(linkedNick(nick)), "Leave", false);
+    }
+    // Quit with additional server message (i.e. ping timeout)
     else
-        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(messageToHTML(message)), "Leave", false);
+    {
+        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(HWApplication::translate("server", message.toLatin1().constData()).toHtmlEscaped()), "Leave", false);
+    }
 }
 
 void HWChatWidget::clear()
@@ -538,7 +557,8 @@ void HWChatWidget::clear()
 
     // add default commands
     QStringList cmds;
-    cmds << "/me" << "/discardStyleSheet" << "/saveStyleSheet";
+    // /saveStyleSheet is(/was?) broken because of Physfs or something
+    cmds << "/clear" << "/help" << "/info" << "/me" << "/quit" << "/rnd";
     chatEditLine->addCommands(cmds);
 
     chatText->clear();
@@ -597,9 +617,9 @@ void HWChatWidget::onPlayerInfo(
 {
     addLine("msg_PlayerInfo", QString(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
         .arg(linkedNick(nick))
-        .arg(Qt::escape(ip == "[]"?"":ip))
-        .arg(Qt::escape(version))
-        .arg(Qt::escape(roomInfo))
+        .arg(QString(ip == "[]"?"":ip).toHtmlEscaped())
+        .arg(version.toHtmlEscaped())
+        .arg(roomInfo.toHtmlEscaped())
     );
 }
 
@@ -617,6 +637,14 @@ void HWChatWidget::onBan()
 
     if(mil.size())
         emit ban(mil[0].data().toString());
+}
+
+void HWChatWidget::onDelegate()
+{
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit delegate(mil[0].data().toString());
 }
 
 void HWChatWidget::onInfo()
@@ -727,6 +755,7 @@ void HWChatWidget::adminAccess(bool b)
 {
     chatNicks->removeAction(acKick);
     //chatNicks->removeAction(acBan);
+    chatNicks->removeAction(acDelegate);
 
     m_isAdmin = b;
 
@@ -734,6 +763,7 @@ void HWChatWidget::adminAccess(bool b)
     {
         chatNicks->insertAction(0, acKick);
         //chatNicks->insertAction(0, acBan);
+        chatNicks->insertAction(acFriend, acDelegate);
     }
 }
 
@@ -826,9 +856,18 @@ bool HWChatWidget::parseCommand(const QString & line)
     if (line[0] == '/')
     {
         QString tline = line.trimmed();
+        if (tline.length() <= 1)
+        {
+            // Empty chat command
+            displayWarning(QCoreApplication::translate("server", "Unknown command or invalid parameters. Say '/help' in chat for a list of commands."));
+            return true;
+        }
         if (tline.startsWith("/me"))
             return false; // not a real command
-
+        else if (tline == "/clear") {
+            chatStrings.clear();
+            chatText->clear();
+        }
         else if (tline == "/discardStyleSheet")
             discardStyleSheet();
         else if (tline == "/saveStyleSheet")
@@ -871,7 +910,9 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
 
     QString nick;
 
-    if(mil.size())
+    if(mil.size() == 0)
+        return;
+    else if(mil.size() == 1)
         nick = mil[0].data().toString();
     else
         nick = m_clickedNick;
@@ -923,6 +964,7 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
     {
         acKick->setVisible(!isSelf && isOnline);
         acBan->setVisible(!isSelf);
+        acDelegate->setVisible(!isSelf && players->isFlagSet(m_userNick, PlayersListModel::InRoom));
     }
 
     m_nicksMenu->clear();

@@ -48,7 +48,8 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
     // Input box
     leRoomName = new QLineEdit(this);
     leRoomName->setText(roomName);
-    leRoomName->setMaxLength(59); // It didn't like 60 :(
+    //leRoomName->setMaxLength(59); // It didn't like 60 :(
+    leRoomName->setMaxLength(40);
     leRoomName->setStyleSheet("QLineEdit { padding: 3px; }");
     leRoomName->selectAll();
     dialogLayout->addWidget(leRoomName);

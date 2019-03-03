@@ -54,20 +54,19 @@
 00:51=Palla di fango
 00:52=Nessuna arma selezionata
 00:53=Macchina Spazio-temporale
-; 00:54=Attrezzi da costruzione
 00:54=Terreno spray
 00:55=Raggio congelatore
 00:56=Mannarino
 
-01:00=Combattiamo!
+; 01:00=Loading …
 01:01=Round in parità
 01:02=%1 vince!
 01:03=Volume %1%
 01:04=In pausa
-01:05=Vuoi davvero uscire (Y/Esc)?
+01:05=Vuoi davvero uscire (%1/%2)?
 01:06=Morte improvvisa!
 01:07=%1 rimanenti
-01:08=Carburante
+01:08=Carburante: %1%
 01:09=Sincronizzazione...
 01:10=L'utilizzo di questa utilità non farà finire il turno!
 01:11=Questa arma o utilità non è ancora disponibile!
@@ -234,11 +233,11 @@
 02:02=Preparatevi alla gloria!
 02:02=Forza e coraggio, che la vita è un passaggio!
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 vince!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Round in parità
 
 ; New health crate
 02:05=Pronto soccorso in arrivo!
@@ -451,7 +450,6 @@
 03:51=Terreno al 100%
 03:52=NON USATO
 03:53=TARDIS modello 40
-;03:54=(Arma in sviluppo)
 03:54=Utilità di costruzione
 03:55=Arma di ibernazione di massa
 03:56=Ecco il grande chef!
@@ -511,7 +509,6 @@
 04:51=Spingete i nemici in acqua o sopra le mine!|Questa semplice arma non farà molti danni ma|spingerà con forza i nemici che colpisce!|Nei temi Snow e Christmas è una palla di neve!|Attacco: Tieni premuto per lanciare con più forza
 04:52=NON USATO
 04:53=Parti per un'avventura unica attraverso spazio e tempo,|lasciando i tuoi compagni da soli a combattere.|Preparati a ritornare in qualsiasi momento,|o per il Sudden Death o se sei l'ultimo sopravvissuto.|Attenzione! Non è utilizzabile durante il Sudden Death,|se sei rimasto da solo, o se sei il Re.|Attacco: Inzia la tua avventura nello spazio-tempo!
-;04:54=DESCRIZIONE NON DISPONIBILE (arma ancora in sviluppo)
 04:54=Con questo terreno spray non ti mancherà mai la terra |sotto ai piedi. Utilissimo per costruire ponti, |seppellire nemici e sigillare tunnel.|Ma fai attenzione a non usarlo a tuo svantaggio!|Attacco: Attiva|Su/Giù: Continua a mirare|Sinistra/Destra: Modifica la potenza di fuoriuscita del terreno
 04:55=L'era glaciale non è mai stata così imminente!|Con questo potente raggio potrai congelare i ricci nemici,|rendere il terreno scivoloso e salvarti dalle cadute|in acqua trasformando il mare in una distesa di ghiaccio!|Attacco: Attiva|Su/Giù: Continua a mirare
 04:56=Lancia due mannarini da cucina verso i tuoi nemici, se |lanciati con potenza possono rappresentare una... tagliente sorpresa!|Ricorda che rimarranno sul terreno dopo averli lanciati!|Attacco: Tieni premuto per lanciare con più forza
@@ -519,12 +516,12 @@
 ; Game goal strings
 05:00=Modalità di Gioco
 05:01=Si applicano le seguenti regole
-05:02=Fortino: Difendi la tua fortezza; annienta i nemici!
+05:02=Piazza il Re: Scegli un punto di partenza protetto per il tuo Re
 05:03=Bassa Gravità: Guarda dove metti i piedi
 05:04=Invulnerabilità: I ricci sono (quasi) invulnerabili
 05:05=Vampirismo: I ricci verranno curati dell'equivalente del danno che provocano
 05:06=Karma: I ricci verranno danneggiati dell'equivalente del danno provocato
-05:07=Proteggi il Re: Non lasciar morire il tuo Re!|Piazza il Re: Scegli un punto di partenza protetto per il tuo Re
+05:07=Proteggi il Re: Non lasciar morire il tuo Re!
 05:08=Piazza Ricci: Piazza i tuoi ricci prima dell'inizio del gioco
 05:09=Artiglieria: I ricci non possono camminare per cambiare posizione
 05:10=Terreno Indistruttibile: La maggior parte delle armi non distruggono il terreno

@@ -78,8 +78,8 @@ astring fpcrtl_strappendA(astring s, char c)
 {
     if(s.len < MAX_ANSISTRING_LENGTH)
     {
-        s.s[s.len] = c;
         ++s.len;
+        s.s[s.len] = c;
     }
 
     return s;
@@ -127,7 +127,7 @@ bool fpcrtl_strncompare(string255 a, string255 b)
 
 bool fpcrtl_strncompareA(astring a, astring b)
 {
-    return (a.len != b.len) || (memcmp(a.s, b.s, a.len) != 0);
+    return (a.len != b.len) || (memcmp(a.str, b.str, a.len) != 0);
 }
 
 
@@ -162,14 +162,21 @@ string255 fpcrtl_make_string(const char* s) {
 astring fpcrtl_pchar2astr(const char *s)
 {
     astring result;
-    int rlen = strlen(s);
 
-    if(rlen > MAX_ANSISTRING_LENGTH){
-        rlen = MAX_ANSISTRING_LENGTH;
+    if(!s) 
+    {
+        result.len = 0;
+    } else
+    {
+        int rlen = strlen(s);
+
+        if(rlen > MAX_ANSISTRING_LENGTH){
+            rlen = MAX_ANSISTRING_LENGTH;
+        }
+
+        result.len = rlen;
+        memcpy(result.str, s, rlen);
     }
-
-    result.len = rlen;
-    memcpy(result.s + 1, s, rlen);
 
     return result;
 }

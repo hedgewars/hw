@@ -20,16 +20,24 @@
 #define CAMPAIGN_H
 
 #include <QString>
+#include <QSettings>
 
 class MissionInfo
 {
     public:
         QString name;
+        QString realName;
         QString description;
         QString script;
         QString image;
 };
 
+
+QSettings* getCampTeamFile(QString & campaignName, QString & teamName);
+QSettings* getCampMetaInfo();
+bool isCampWon(QString & campaignName, QString & teamName);
+bool isCampMissionWon(QString & campaignName, int missionInList, QString & teamName);
+QString getRealCampName(const QString & campaignName);
 QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName);
 
 #endif

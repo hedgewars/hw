@@ -20,7 +20,8 @@
 
 //#define     FPCRTL_DEBUG
 
-#define     FIX_STRING(s)                           (s.str[s.len == 255 ? 254 : s.len] = 0)
+#define     FIX_STRING(s)                           do { s.str[s.len == 255 ? 254 : s.len] = 0; } while (0)
+#define     FIX_STRINGA(s)                          do { s.str[s.len == MAX_ANSISTRING_LENGTH ? MAX_ANSISTRING_LENGTH - 1 : s.len] = 0; } while (0)
 //#define fpcrtl_check_string(s)     do{ if(strlen((s).str) != (s).len){ \
 //                                        printf("String %s internal inconsistency error. Length should be %d but actually is %d.\n", (s).str, strlen((s).str), (s).len); \
 //                                        assert(0);\

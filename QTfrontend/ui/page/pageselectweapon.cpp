@@ -30,6 +30,7 @@ QLayout * PageSelectWeapon::bodyLayoutDefinition()
     QGridLayout * pageLayout = new QGridLayout();
 
     pWeapons = new SelWeaponWidget(cAmmoNumber, this);
+    pWeapons->init();
     pageLayout->addWidget(pWeapons);
 
     return pageLayout;
@@ -40,15 +41,20 @@ QLayout * PageSelectWeapon::footerLayoutDefinition()
     QGridLayout * bottomLayout = new QGridLayout();
 
     selectWeaponSet = new QComboBox(this);
+    selectWeaponSet->setMaxVisibleItems(50);
     bottomLayout->addWidget(selectWeaponSet, 0, 0, 2, 1);
 
     // first row
     BtnNew = addButton(tr("New"), bottomLayout, 0, 1);
+    BtnNew->setStyleSheet("padding: 3px;");
     BtnDefault = addButton(tr("Default"), bottomLayout, 0, 2);
+    BtnDefault->setStyleSheet("padding: 3px;");
 
     // second row
     BtnCopy = addButton(tr("Copy"), bottomLayout, 1, 1);
+    BtnCopy->setStyleSheet("padding: 3px;");
     BtnDelete = addButton(tr("Delete"), bottomLayout, 1, 2);
+    BtnDelete->setStyleSheet("padding: 3px;");
 
     bottomLayout->setColumnStretch(1,1);
     bottomLayout->setColumnStretch(2,1);
@@ -58,11 +64,12 @@ QLayout * PageSelectWeapon::footerLayoutDefinition()
 
 void PageSelectWeapon::connectSignals()
 {
+    connect(selectWeaponSet, SIGNAL(currentIndexChanged(const QString&)), pWeapons, SLOT(switchWeapons(const QString&)));
     connect(BtnDefault, SIGNAL(clicked()), pWeapons, SLOT(setDefault()));
     connect(this, SIGNAL(goBack()), pWeapons, SLOT(save()));
     connect(BtnNew, SIGNAL(clicked()), pWeapons, SLOT(newWeaponsName()));
     connect(BtnCopy, SIGNAL(clicked()), pWeapons, SLOT(copy()));
-    connect(selectWeaponSet, SIGNAL(currentIndexChanged(const QString&)), pWeapons, SLOT(setWeaponsName(const QString&)));
+    connect(BtnDelete, SIGNAL(clicked()), pWeapons, SLOT(deleteWeaponsName()));
 }
 
 PageSelectWeapon::PageSelectWeapon(QWidget* parent) :  AbstractPage(parent)

@@ -1,35 +1,98 @@
+Basic_Training_-_Movement.name=Podstawy poruszania się
+Basic_Training_-_Movement.desc="Żółtodzioby zaczynają tutaj! Naucz się poruszania po różnych formach terenu oraz jak zmieniać jeże."
+
 Basic_Training_-_Bazooka.name=Podstawy korzystania z bazooki
-Basic_Training_-_Bazooka.desc="Pamiętaj o tym, że wiatr może działać na twoją korzyść!"
+Basic_Training_-_Bazooka.desc="Naucz się jak używać bazooki, dowiedz się o wietrze i zniszcz wszystkie cele."
 
 Basic_Training_-_Grenade.name=Podstawy rzucania granatami
-Basic_Training_-_Grenade.desc="Najpierw wyciągasz zawleczkę, POTEM rzucasz!"
+Basic_Training_-_Grenade.desc="Dowiedz się wszystkiego, co musisz wiedzieć o granatach i zniszcz wszystkie cele. Pamiętaj: Najpierw wyciągasz zawleczkę, POTEM rzucasz!"
 
-Basic_Training_-_Cluster_Bomb.name=Podstawy rzucania bomb kasetowych
-Basic_Training_-_Cluster_Bomb.desc="Ktoś tutaj czeka na gorący prysznic..."
+Basic_Training_-_Rope.name=Podstawy korzystania z liny
+Basic_Training_-_Rope.desc="Lina jest jednym z najbardziej wszechstronnych narzędzi, jakie możesz zdobyć, ale wymaga dużo praktyki. Tutaj poznasz podstawy używania liny."
 
-Basic_Training_-_Shotgun.name=Podstawy strzelania ze strzelby
-Basic_Training_-_Shotgun.desc="Wpierw strzelaj. Pytania zadasz później."
+Basic_Training_-_Flying_Saucer.name=Podstawy korzystania z latającego talerza
+Basic_Training_-_Flying_Saucer.desc="Z latającym spodkiem, możesz dostać się prawie że w każdy punk, jeśli wiesz jak nim sterować. Naucz się latać, jak atakować ze spodka i naucz się nawet jak wykonać jakieś odjazdowe wyczyny."
 
-Basic_Training_-_Sniper_Rifle.name=Podstawy strzelania ze snajperki
+User_Mission_-_Dangerous_Ducklings.name=Niebezpieczne kaczątka
+User_Mission_-_Dangerous_Ducklings.desc="Dobra rekrucie! Zobaczymy czego się nauczyłeś na treningu!"
+
+User_Mission_-_Diver.name=Nurek
+User_Mission_-_Diver.desc="To będzie kolejna \"mokra robota\"..."
+
+User_Mission_-_Teamwork.name=Praca zespołowa
+User_Mission_-_Teamwork.desc="Uszkodzony cyborg pilnuje cennego sekretu wojskowego. Musisz poprowadzić dwujeżową drużynę do zadań specjalnych z zadaniem zniszczenia wroga, żeby uzyskać ten sekret! To absolutnie krytyczne dla naszej przyszłości, by oba twoje jeże przeżyły."
+
+User_Mission_-_Teamwork_2.name=Praca zespołowa 2
+User_Mission_-_Teamwork_2.desc="Zlokalizowaliśmy ukryty posterunek Cybernetycznego Imperium i jest on pilnowany jednie przez niegroźnego robota obserwującego. Poprowadź swoją drużynę do zadań specjalnych, by zniszczyć robota, żebyśmy mogli przejąć bazę. Jak wcześniej, potrzebujemy by oba jeże przeżyły!"
+
+User_Mission_-_Spooky_Tree.name=Straszne drzewo
+User_Mission_-_Spooky_Tree.desc="Na tym drzewie jest dużo skrzynek. Mam tylko nadzieję, że ten ptak nie jest głodny"
+
+User_Mission_-_Bamboo_Thicket.name=Bambusowy bór
+User_Mission_-_Bamboo_Thicket.desc="Cyborg terroryzuje bambusowy bór i atakuje każdego w zasięgu wzroku z praktycznie perfekcyjną celnością. Planuj naprzód, poruszaj się szybko i zdejmij wroga szybko!"
+
+User_Mission_-_That_Sinking_Feeling.name=Cisza na morzu
+User_Mission_-_That_Sinking_Feeling.desc="Woda podnosi się, a czas upływa. Wielu próbowało i ponieśli porażkę. Potrafisz wszystkich uratować?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Newton i jego hamak
+User_Mission_-_Newton_and_the_Hammock.desc="Zapamiętajcie jeżyki: Prędkość ciała nie zmienia się, chyba że działa na nie inna siła!"
+
+User_Mission_-_The_Great_Escape.name=Wielka ucieczka
+User_Mission_-_The_Great_Escape.desc="Ucieknij z więzienia i dokonaj zemsty!"
+
+User_Mission_-_Rope_Knock_Challenge.name=Spychanie liną
+User_Mission_-_Rope_Knock_Challenge.desc="Użyj swojej liny, by zepchnąć wszystkich wrogów do ich zguby."
+
+User_Mission_-_Nobody_Laugh.name=Nikt się nie śmieje
+User_Mission_-_Nobody_Laugh.desc="Och, te klauny myślą, że są śmieszne! Przewyższają nas liczebnie, ale mamy mnóstwo czasu na turę. Zdejmij wszystkich tych niedoszłych komediantów jednego za drugim, aż nie zostanie nikt, kto by się śmiał."
+
+User_Mission_-_RCPlane_Challenge.name=Wyzwanie: Radiowy samolocik
+User_Mission_-_RCPlane_Challenge.desc="Użyj radiowych samolocików, by zdobyć wszystkie skrzynie. Spróbuj użyć jak najmniej samolocików, by zwiększyć swoją rangę. Masz to, czego potrzeba, by zostać elitarnym pilotem najwyższej klasy?"
+
+Big_Armory.name=Wielka zbrojownia
+Big_Armory.desc="Jesteś sam, masz pełną zbrojownię i musisz pokonać 8 jeży, zanim skończy się czas."
+
+Bazooka_Battlefield.name=Bazookowe pole bitwy
+Bazooka_Battlefield.desc="Twoi lojalni rycerze wprowadzili wroga w zasadzkę. Zniszcz ich tylko bazookami! Ale nie rób tego za długo, woda niedługo zacznie się podwyższać."
+
+Tentacle_Terror.name=Mackowy terror
+Tentacle_Terror.desc="Pod okropnym potworem, twój wróg chowa się jak tchórz i zaatakuje cię nalotami jak tylko stracisz osłonę. Pokaż mu kto jest prawdziwym szefem w Piekle! Ale potrzebujesz diabelsko dobrych zdolności z liną, by w ogóle mieć szanse."
+
+ClimbHome.name=Wspinaczka do domu
+ClimbHome.desc="Jesteś daleko od domu, a woda się podwyższa. Wspinaj się najwyżej jak potrafisz!"
+
+portal.name=Łamigłówka z portalami
+portal.desc="Wykorzystaj portrale dojść daleko w krótkim czasie. Naucz się zabijać z ich pomocą, ale zachowaj ostrożność!"
+
+Target_Practice_-_Bazooka_easy.name=Ćwiczenia z celem: Bazooka (łatwy)
+Target_Practice_-_Bazooka_easy.desc="W porządku żołnierzu, zniszcz cele najszybciej jak potrafisz!"
+
+Target_Practice_-_Bazooka_hard.name=Ćwiczenia z celem: Bazooka (trudny)
+Target_Practice_-_Bazooka_hard.desc="Czy potrafisz nie chybić nawet jeśli cel znajduje się daleko?"
+
+Target_Practice_-_Cluster_Bomb.name=Ćwiczenia z celem: Granat odłamkowy
+Target_Practice_-_Cluster_Bomb.desc="Komuś przydałby się gorący prysznic! Granatami odłamkowymi!"
+
+Target_Practice_-_Shotgun.name=Ćwiczenia z celem: Strzelba
+Target_Practice_-_Shotgun.desc="Najpierw strzelaj, potem pytaj!"
+
+Basic_Training_-_Sniper_Rifle.name=Ćwiczenia z celem: Karabin snajperski
 Basic_Training_-_Sniper_Rifle.desc="Jeden strzał i kolejny jeż pójdzie do piachu."
 
-User_Mission_-_Dangerous_Ducklings.name=Kryptonim: Niebezpieczne Kaczki
-User_Mission_-_Dangerous_Ducklings.desc="Dobra Żółtodziobie! Zobaczymy czego się nauczyłeś na treningu!!!"
+Target_Practice_-_Homing_Bee.name=Ćwiczenia z celem: Pszczoła
+Target_Practice_-_Homing_Bee.desc="Korzystanie z pszczoły jest bardziej złożone niż się wydaje."
 
-User_Mission_-_Diver.name=Kryptonim: Nurek
-User_Mission_-_Diver.desc="To będzie kolejna "mokra robota"..."
+Target_Practice_-_Grenade_easy.name=Ćwiczenia z celem: Granat (łatwy)
+Target_Practice_-_Grenade_easy.desc="Rozgrzewka dla ambitnego grenadiera."
 
-User_Mission_-_Teamwork.name=Kryptonim: Praca zespołowa
-User_Mission_-_Teamwork.desc="Miłość potrafi czasem zranić."
+Target_Practice_-_Grenade_hard.name=Ćwiczenia z celem: Granat (trudny)
+Target_Practice_-_Grenade_hard.desc="Z pewnością nie dla żółtodziobów! Umieścimy cele w kilku naprawdę trudnych miejscach."
 
-User_Mission_-_Spooky_Tree.name=Kryptonim: Straszne drzewo
-User_Mission_-_Spooky_Tree.desc="Na tym drzewie rośnie bardzo dużo skrzynek. Mam tylko nadzieję, że ten ptak nie jest głodny"
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Wyzwanie: Kochamy Shoppa!
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Pokaż, że uwielbiasz linę i zbierz kilka skrzynek na niewielkiej mapie."
 
-User_Mission_-_Bamboo_Thicket.name=Kryptonim: Bambusowy bór
-User_Mission_-_Bamboo_Thicket.desc="Śmierć nadchodzi z góry."
+Challenge_-_Speed_Shoppa_-_Ropes.name=Wyzwanie: Liny i skrzynki
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Bierz linę i zbierz wszystkie skrzynki na średniej wielkości mapie."
 
-User_Mission_-_That_Sinking_Feeling.name=Kryptonim: Cisza na morzu
-User_Mission_-_That_Sinking_Feeling.desc="Morze jest wzburzone, a czas szybko upływa. Wielu próbowało, ale nikomu nie udało się wszystkich uratować. Czy ty będziesz pierwszy?"
-
-User_Mission_-_Newton_and_the_Hammock.name=Kryptonim: Newton i jego hamak
-User_Mission_-_Newton_and_the_Hammock.desc="Zapamiętajcie jeżyki: Prędkość ciała nie zmienia się, chyba że działa na nie inna siła!"
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Wyzwanie: Klient nasz Pan
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Pokaż, że to ty tu rządzisz! Zbierz wszystkie skrzynki najszybciej jak potrafisz na tej rozległej mapie."

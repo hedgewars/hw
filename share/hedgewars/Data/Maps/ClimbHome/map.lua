@@ -19,23 +19,24 @@ local currTeam = ''
 local teams = {}
 local teamScoreStats = {}
 local teamBests = {}
+local teamTimes = {}
 local MrMine -- in honour of sparkle's first arrival in the cabin
 local YouWon = false
 local YouLost = false
 local HogsAreInvulnerable = false
 local WaterRise = nil
 local Cake = nil
+local CakeWarning = false
+local CakeFireWarning = false
 local CakeTries = 0
 local addCake = true
+local takeASeat = false
 local Stars = {}
 local tauntNoo = false
 local jokeAwardNavy = nil
 local jokeAwardSpeed = nil
 local jokeAwardDamage = nil
 local recordBroken = false
-local ready = false
-local showWaterStats = false -- uses the AI team to draw water height.
-local scaleGraph = false
 local dummyHog = nil
 local dummySkip = 0
 local baseWaterSpeed = 2
@@ -47,6 +48,22 @@ local airMineX = {}
 local airMineY = {}
 local airMine = {}
 local init = true
+local multiplayerVictoryDelay = -1
+local multiplayerWinningHogs = {}
+local multiplayerWins = 0
+local racing = false
+
+-- Placement positions of winning hogs
+local victoryPosses = { }
+do
+    local m = 0
+    for y=108, 39, -32 do
+        for x=1820+m, 1972-m, 22 do
+            table.insert(victoryPosses, {x=x, y=y})
+        end
+        m = m + 32
+    end
+end
 
 function onParameters()
     parseParams()
@@ -61,7 +78,7 @@ function onParameters()
     if params["delaytime"] ~= nil then
         delayTime = params["delaytime"]
     end
-    if params["delaytime"] ~= nil then
+    if params["delayheight"] ~= nil then
         delayHeight = 32768-params["delayheight"]
     end
     if params["nocake"] ~= nil then addCake = false end
@@ -69,7 +86,7 @@ end
 
 function onGameInit()
     -- Ensure people get same map for same theme
-    TurnTime = 999999999
+    TurnTime = MAX_TURN_TIME
     CaseFreq = 0
     Explosives = 0
     MineDudPercent = 0
@@ -79,18 +96,9 @@ function onGameInit()
     --EnableGameFlags(gfDisableLandObjects) 
     -- force seed instead.  Some themes will still be easier, but at least you won't luck out on the same theme
     Seed = ClimbHome
-    if showWaterStats then
-        AddTeam(" ", 0x545C9D, "Simple", "Island", "Default")
-    elseif scaleGraph then
-        AddTeam(" ", 0x050505, "Simple", "Island", "Default")
-    end
-    if showWaterStats or scaleGraph then
-        dummyHog = AddHog(" ", 0, 1, "NoHat")
-        HH[dummyHog] = nil
-        totalHedgehogs = totalHedgehogs - 1
-        teams[GetHogTeamName(dummyHog)] = nil
-        SendStat(siClanHealth, tostring(32640), " ")
-    end
+    -- Disable Sudden Death
+    WaterRise = 0
+    HealthDecrease = 0
 end
 
 function onGearAdd(gear)
@@ -105,10 +113,11 @@ end
 
 function onGearDelete(gear)
     if gear == MrMine then
-        AddCaption("Once you set off the proximity trigger, Mr. Mine is not your friend",0xffffff,0)
+        AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), capcolDefault, capgrpMessage2)
         MrMine = nil
-    elseif gear == Cake then
+    elseif GetGearType(gear) == gtCake then
         Cake = nil
+        CakeWarning = false
     elseif GetGearType(gear) == gtHedgehog then
 	onGameTick20()
 	onGearDamage(gear, 0)
@@ -117,14 +126,16 @@ function onGearDelete(gear)
 end
 
 function onGameStart()
-    if showWaterStats or scaleGraph then
-        DeleteGear(dummyHog)
-    end
     --SetClanColor(ClansCount-1, 0x0000ffff) appears to be broken
     SendHealthStatsOff()
+    local recordInfo = ""
+    if isSinglePlayer then
+        recordInfo = getReadableChallengeRecord("Highscore")
+    end
     ShowMission(loc("Climb Home"),
-                loc("Rope to safety"),
-                loc("You are far from home, and the water is rising, climb up as high as you can!|Your score will be based on your height."),
+                loc("Challenge"),
+                loc("You are far from home, and the water is rising, climb up as high as you can!|Your score will be based on your height.")
+                .. "|" .. recordInfo,
                 -amRope, 0)
     local x = 1818
     for h,i in pairs(HH) do
@@ -143,6 +154,9 @@ function onGameStart()
     end
 -- 1925,263 - Mr. Mine position
     MrMine = AddGear(1925,263,gtMine,0,0,0,0)
+    for i=0, TeamsCount-1 do
+        SetTeamLabel(GetTeamName(i), "0")
+    end
 end
 
 function onAmmoStoreInit()
@@ -167,7 +181,6 @@ function onNewTurn()
         end
     end
         
-    ready = false
     startTime = GameTime
     --disable to preserve highest over multiple turns
     --will need to change water check too ofc
@@ -177,19 +190,23 @@ function onNewTurn()
     YouWon = false
     YouLost = false
     tauntNoo = false
+    takeASeat = false
     recordBroken = false
     currTeam = GetHogTeamName(CurrentHedgehog)
     if CurrentHedgehog ~= nil then
-        if CurrentHedgehog ~= dummyHog then
+        if CurrentHedgehog ~= dummyHog or multiplayerWinningHogs[CurrentHedgehog] == true then
             SetGearPosition(CurrentHedgehog, 1951,32640)
+            HogTurnLeft(CurrentHedgehog, true)
             if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
             AddVisualGear(1951,32640,vgtExplosion,0,false)
             SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
             SetWeapon(amRope)
-            ready = true
         else
             dummySkip = GameTime+1
         end
+    end
+    for hog, _ in pairs(multiplayerWinningHogs) do
+        SetEffect(hog, heInvulnerable, 1)
     end
     for f,i in pairs(Fire) do
         DeleteGear(f)
@@ -217,6 +234,7 @@ end
 --end
 
 function FireBoom(x,y,d) -- going to add for rockets too
+    PlaySound(sndExplosion)
     AddVisualGear(x,y,vgtExplosion,0,false)
     -- should approximate circle by removing corners
     --if BoomFire == nil then BoomFire = {} end
@@ -244,9 +262,10 @@ end
 
 function onGameTick20()
     local x,y
+
     if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
     if CurrentHedgehog == dummyHog and dummySkip ~= 0 and dummySkip < GameTime then
-        ParseCommand("/skip")
+        SkipTurn()
         dummySkip = 0
     end
 
@@ -258,36 +277,83 @@ function onGameTick20()
     --end
 
     for s,i in pairs(Stars) do
-        g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(s)
-        if g1 > WaterLine + 500 then
+        local _, Y = GetVisualGearValues(s)
+        if Y ~= nil and Y > WaterLine + 500 then
             DeleteVisualGear(s)
             Stars[s] = nil
-        end
-        --else  wasn't really visible, pointless.
-        --    g5 = g5+1
-        --    if g5 > 360 then g5 = 0 end
-        --    SetVisualGearValues(s, g1, g2, g3, g4, g5, g6, g7, g8, g9, g10)
-        --end
-    end
-
-    if CurrentHedgehog ~= nil then x,y = GetGearPosition(CurrentHedgehog) end
-    if Cake ~= nil and CurrentHedgehog ~= nil then
-        local cx,cy = GetGearPosition(Cake)
-        if y < cy-1500 then
-            DeleteGear(Cake)
-            Cake = nil
-        end
-
-        if Cake ~= nil and GetHealth(Cake) < 999980 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
-            FireBoom(cx,cy,200) -- todo animate
-            DeleteGear(Cake)
-            Cake = nil
+        elseif Y == nil then
+            Stars[s] = nil
         end
     end
+
+    -- This will be executed if a player reached home in multiplayer
+    if multiplayerVictoryDelay > 0 then
+        multiplayerVictoryDelay = multiplayerVictoryDelay - 20
+        if multiplayerVictoryDelay <= 0 then
+            -- If delay's over, the game will continue with the next hog
+            if CurrentHedgehog then
+
+                multiplayerWinningHogs[CurrentHedgehog] = true
+                multiplayerWins = multiplayerWins + 1
+
+                local victoryX, victoryY
+                if multiplayerWins <= #victoryPosses then
+                    victoryX, victoryY = victoryPosses[multiplayerWins].x, victoryPosses[multiplayerWins].y
+                else
+                    victoryX, victoryY = victoryPosses[#victoryPosses].x, victoryPosses[#victoryPosses].y
+                end
+                SetGearPosition(CurrentHedgehog, victoryX, victoryY)
+                SetEffect(CurrentHedgehog, heInvulnerable, 1)
+                SetHealth(CurrentHedgehog, 1)
+
+                if (deadHedgehogs + multiplayerWins) >= totalHedgehogs then
+                    makeFinalMultiPlayerStats()
+                    EndGame()
+                    onAchievementsDeclaration()
+                else
+                    EndTurn(true)
+                    SetInputMask(0xFFFFFFFF)
+                end
+                return
+            end
+        end
+    end
+
+    if CurrentHedgehog ~= nil then
+        x,y = GetGearPosition(CurrentHedgehog)
+        if Cake ~= nil then
+            local cx,cy = GetGearPosition(Cake)
+            if y < cy-1500 then DeleteGear(Cake) end
+
+            if Cake ~= nil and GetHealth(Cake) < 999980 then
+                if not CakeWarning and gearIsInCircle(CurrentHedgehog,cx,cy,1350) then
+                    AddCaption(loc("Warning: Fire cake detected"))
+                    CakeWarning = true
+                end
+                if gearIsInCircle(CurrentHedgehog,cx,cy,450) then
+                    if not CakeFireWarning then
+                        AddCaption(loc("Don't touch the flames!"))
+                        CakeFireWarning = true
+                    end
+                    FireBoom(cx,cy,200) -- todo animate
+                    DeleteGear(Cake)
+                end
+            end
+        end
+        if band(GetState(CurrentHedgehog),gstHHDriven) == 0 then
+            for f,i in pairs(Fire) do -- takes too long to fall otherwise
+                DeleteGear(f)
+            end
+            if Cake ~= nil then
+                DeleteGear(Cake)
+            end
+        end
+     end
+    
 
     if CurrentHedgehog ~= nil and TurnTimeLeft > 0 and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then
         if MaxHeight < delayHeight and
-           TurnTimeLeft<(999999999-delayTime) and 
+           TurnTimeLeft<(MAX_TURN_TIME-delayTime) and
             MaxHeight > 286 and WaterLine > 286 then
             if waterAccel ~= 0 then
                 SetWaterLine(WaterLine-(baseWaterSpeed+div(getActualHeight(MaxHeight)*100,waterAccel)))
@@ -296,35 +362,25 @@ function onGameTick20()
             end
         end
         if y > 0 and y < 30000 and MaxHeight > 286 and math.random(y) < 500 then
-            local s = AddVisualGear(0, 0, vgtStraightShot, 0, true)
-            local c = div(250000,y)
-            if c > 255 then c = 255 end
-            c = c * 0x10000 + 0xFF0000FF
-            SetVisualGearValues(s,
-                math.random(2048), -5000, 0, -1-(1/y*1000), 
-                math.random(360),
-                0,
-                999999999, -- frameticks
-                171, -- star
-                0, c)
-                --,  0xFFCC00FF) -- could be fun to make colour shift as you rise...
-            Stars[s] = 1
-        end    
-    end
-    
-    if CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog),gstHHDriven) == 0 then
-        for f,i in pairs(Fire) do -- takes too long to fall otherwise
-            DeleteGear(f)
+            local s = AddVisualGear(0, 0, vgtStraightShot, 0, false)
+            if s then
+                local c = div(250000,y)
+                if c > 255 then c = 255 end
+                c = c * 0x10000 + 0xFF0000FF
+                SetVisualGearValues(s,
+                    math.random(2048), -5000, 0, -1-(1/y*1000),
+                    math.random(360),
+                    0,
+                    999999999, -- frameticks
+                    sprStar, -- star
+                    0, c)
+                    --,  0xFFCC00FF) -- could be fun to make colour shift as you rise...
+                Stars[s] = 1
+            end
         end
-        if Cake ~= nil then
-            DeleteGear(Cake)
-            Cake = nil
-        end
-    end
 
-    if CurrentHedgehog ~= nil and TurnTimeLeft > 0 then
         local vx, vy = GetGearVelocity(CurrentHedgehog)
-	local distanceFromWater = WaterLine - y
+        local distanceFromWater = WaterLine - y
 	
         --[[ check joke awards ]]
         -- navy award: when distance from main map is over 1000
@@ -367,54 +423,84 @@ function onGameTick20()
                 }
             end
         end
-            if isSinglePlayer then
-                if distanceFromWater < 0 and not YouLost and not YouWon then
-                    makeSinglePlayerLoserStats()
-                    YouLost = true
-                end
-                if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
-                    local finishTime = (GameTime-startTime)/1000
-                    local roundedFinishTime = math.ceil(math.floor(finishTime+0.5))
-                    AddCaption(loc("Victory!"))
-                    ShowMission(loc("Climb Home"),
-                                loc("Made it!"),
-                                string.format(loc("Ahhh, home, sweet home. Made it in %d seconds."), roundedFinishTime),
-                                -amRope, 0)
-                    PlaySound(sndVictory,CurrentHedgehog)
-                    SetState(CurrentHedgehog, gstWinner)
-                    SendStat(siGameResult, loc("You have beaten the challenge!"))
-                    SendStat(siGraphTitle, loc("Your height over time"))
-                    SendStat(siCustomAchievement, string.format(loc("%s reached home in %.3f seconds. Congratulations!"), loc(GetHogName(CurrentHedgehog)), finishTime))
-                    SendStat(siCustomAchievement, string.format(loc("%s bravely climbed up to a dizzy height of %d to reach home."),loc(GetHogName(CurrentHedgehog)), getActualHeight(RecordHeight)))
-                    SendStat(siPointType, loc("seconds"))
-                    SendStat(siPlayerKills, tostring(roundedFinishTime), loc(GetHogTeamName(CurrentHedgehog)))
 
-                    EndGame()
-                    YouWon = true
-                end
-            elseif distanceFromWater < 0 and not YouLost then
+        local rawFinishTime = GameTime-startTime
+        local finishTime = rawFinishTime/1000
+        local roundedFinishTime = math.ceil(math.floor(finishTime+0.5))
+        if isSinglePlayer then
+            if distanceFromWater < 0 and not YouLost and not YouWon then
+                makeSinglePlayerLoserStats()
+                YouLost = true
+            end
+            -- FIXME: Hog is also in winning box if it just walks into the chair from the left, touching it. Intentional?
+            if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
+                SaveMissionVar("Won", "true")
+                AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
+                ShowMission(loc("Climb Home"),
+                            loc("Made it!"),
+                            string.format(loc("Ahhh, home, sweet home. Made it in %d seconds."), roundedFinishTime),
+                            -amRope, 0)
+                PlaySound(sndVictory,CurrentHedgehog)
+                SetState(CurrentHedgehog, gstWinner)
+                SendStat(siGameResult, loc("You have beaten the challenge!"))
+                SendStat(siGraphTitle, loc("Your height over time"))
+                SendStat(siCustomAchievement, string.format(loc("%s reached home in %.3f seconds. Congratulations!"), GetHogName(CurrentHedgehog), finishTime))
+                updateChallengeRecord("TimeRecord", rawFinishTime, false)
+                SendStat(siCustomAchievement, string.format(loc("%s bravely climbed up to a dizzy height of %d to reach home."), GetHogName(CurrentHedgehog), getActualHeight(RecordHeight)))
+                updateChallengeRecord("Highscore", getActualHeight(RecordHeight))
+                SendStat(siPointType, "!TIME")
+                SendStat(siPlayerKills, tostring(rawFinishTime), GetHogTeamName(CurrentHedgehog))
+
+                EndGame()
+                onAchievementsDeclaration()
+                YouWon = true
+            end
+        else
+            if distanceFromWater < 0 and not YouLost and not YouWon then
                 makeMultiPlayerLoserStat(CurrentHedgehog)
                 deadHedgehogs = deadHedgehogs + 1
                 YouLost = true
                 if deadHedgehogs >= totalHedgehogs then
                     makeFinalMultiPlayerStats()
                     EndGame()
+                    onAchievementsDeclaration()
                 end
             end
+            -- Check victory
+            if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) and
+                    -- Delay victory if MrMine is triggered
+                    (not MrMine or (MrMine and band(GetState(MrMine), gstAttacking) == 0)) then
+                -- Player managed to reach home in multiplayer.
+                -- Stop hog, disable controls, celebrate victory and continue the game after 4 seconds.
+                AddCaption(string.format(loc("%s climbed home in %d seconds!"), GetHogName(CurrentHedgehog), roundedFinishTime), capcolDefault, capgrpGameState)
+                SendStat(siCustomAchievement, string.format(loc("%s (%s) reached home in %.3f seconds."), GetHogName(CurrentHedgehog), GetHogTeamName(CurrentHedgehog), finishTime))
+                makeMultiPlayerWinnerStat(CurrentHedgehog)
+                PlaySound(sndVictory, CurrentHedgehog)
+		SetWeapon(amNothing)
+                SetGearMessage(CurrentHedgehog, band(GetGearMessage(CurrentHedgehog), bnot(gmLeft+gmRight+gmUp+gmDown+gmHJump+gmLJump+gmPrecise)))
+                SetInputMask(0x00)
+                -- TODO: Add stupid winner grin.
+                multiplayerVictoryDelay = 4000
+                YouWon = true
+            end
+        end
 
         if GameTime % 500 == 0 then
-            --if isSinglePlayer and MaxHeight < 32000 and WaterRise == nil then
-            --    WaterRise = AddGear(0,0,gtWaterUp, 0, 0, 0, 0)
-            --end
-            if showWaterStats == true then
-	        SendStat(siClanHealth, tostring(getActualHeight(WaterLine)), " ")
-            end
-	    for t,i in pairs(teams) do
-                if currTeam == t then
-                    SendStat(siClanHealth, tostring(getActualHeight(y)), t)
-                else
-                    SendStat(siClanHealth, '0', t)
+            if not isSinglePlayer then
+	        for t,i in pairs(teams) do
+                    if currTeam == t then
+                        SendStat(siClanHealth, tostring(getActualHeight(y)), t)
+                    else
+                        SendStat(siClanHealth, '0', t)
+                    end
                 end
+            else
+                SendStat(siClanHealth, tostring(getActualHeight(y)), GetHogTeamName(CurrentHedgehog))
+            end
+            -- If player is inside home, tell player to take a seat.
+            if not takeASeat and gearIsInBox(CurrentHedgehog, 1765, 131, 244, 189) then
+                AddCaption(loc("Welcome home! Please take a seat"))
+                takeASeat = true
             end
     
             -- play taunts
@@ -428,7 +514,7 @@ function onGameTick20()
                 end
             end
 
-            if addCake and CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then 
+            if addCake and CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil then 
                 -- doing this just after the start the first time to take advantage of randomness sources
                 -- Pick a clear y to start with
                 if y > 31000 then cy = 24585 elseif
@@ -445,13 +531,21 @@ function onGameTick20()
             end
 
             if (y > 286) or (y < 286 and MaxHeight > 286) then
+                if MaxHeight > 286 and y <= 286 then
+                    -- wow, reached top
+                    local teamName = GetHogTeamName(CurrentHedgehog)
+                    if teamTimes[teamName] == nil or teamTimes[teamName] > GameTime - startTime then 
+                        teamTimes[teamName] = GameTime - startTime 
+                    end
+                    MaxHeight = 286
+                end
                 if y < MaxHeight and y > 286 then MaxHeight = y end
-                if y < 286 then MaxHeight = 286 end
+                -- New maximum height of this turn?
                 if MaxHeight < hTagHeight then
                     hTagHeight = MaxHeight
                     if hTag ~= nil then DeleteVisualGear(hTag) end
                     hTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                    local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
+                    local score = 32640-hTagHeight
                     -- snagged from space invasion
                     SetVisualGearValues (
                             hTag,        --id
@@ -461,15 +555,18 @@ function onGameTick20()
                             0,          --dy
                             1.1,        --zoom
                             1,          --~= 0 means align to screen
-                            g7,         --frameticks
+                            nil,        --frameticks
             -- 116px off bottom for lowest rock, 286 or so off top for position of chair
             -- 32650 is "0"
-                            32640-hTagHeight,    --value
+                            score,    --value
                             99999999999,--timer
                             GetClanColor(GetHogClan(CurrentHedgehog))
                             )
+                    local team = GetHogTeamName(CurrentHedgehog)
+                    SetTeamLabel(team, math.max(score, teamBests[team] or 0))
                 end
 
+                -- New record height?
                 if MaxHeight < RecordHeight then
                     RecordHeight = MaxHeight
                     local oldName = RecordHeightHogName
@@ -482,7 +579,6 @@ function onGameTick20()
                     if not isSinglePlayer then
                         if rTag ~= nil then DeleteVisualGear(rTag) end
                         rTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                        local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
                         -- snagged from space invasion
                         SetVisualGearValues (
                             rTag,        --id
@@ -492,7 +588,7 @@ function onGameTick20()
                             0,          --dy
                             1.1,        --zoom
                             1,          --~= 0 means align to screen
-                            g7,         --frameticks
+                            nil,        --frameticks
             -- 116px off bottom for lowest rock, 286 or so off top for position of chair
             -- 32650 is "0"
                             getActualHeight(RecordHeight),    --value
@@ -505,7 +601,6 @@ function onGameTick20()
             if MaxHeight > 286 then
                 if tTag ~= nil then DeleteVisualGear(tTag) end
                 tTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tTag)
                 -- snagged from space invasion
                 SetVisualGearValues (
                     tTag,        --id
@@ -515,7 +610,7 @@ function onGameTick20()
                     0,          --dy
                     1.1,        --zoom
                     1,          --~= 0 means align to screen
-                    g7,         --frameticks
+                    nil,        --frameticks
                     (GameTime-startTime)/1000,    --value
                     99999999999,--timer
                     0xffffffff
@@ -547,11 +642,12 @@ function onGearDamage(gear, damage)
             makeSinglePlayerLoserStats()
         else
             deadHedgehogs = deadHedgehogs + 1
-            if deadHedgehogs >= totalHedgehogs then
+            makeMultiPlayerLoserStat(gear)
+            if (deadHedgehogs + multiplayerWins) >= totalHedgehogs then
                 makeFinalMultiPlayerStats()
                 EndGame()
+                onAchievementsDeclaration()
             end
-            makeMultiPlayerLoserStat(gear)
         end
         YouLost = true
     end
@@ -576,7 +672,7 @@ end
 
 function makeSinglePlayerLoserStats()
     local actualHeight = getActualHeight(RecordHeight)
-    SendStat(siGameResult, loc("You lose!"))
+    SendStat(siGameResult, loc("Challenge over!"))
     SendStat(siGraphTitle, loc("Your height over time"))
     local text
     if actualHeight > 30000 then text = loc("%s was damn close to home.")
@@ -595,9 +691,12 @@ function makeSinglePlayerLoserStats()
     else
         SendStat(siCustomAchievement, string.format(text, RecordHeightHogName))
     end
-    SendStat(siPointType, loc("points"))
-    SendStat(siPlayerKills, actualHeight, loc(GetHogTeamName(CurrentHedgehog)))
+
+    updateChallengeRecord("Highscore", actualHeight)
+    SendStat(siPointType, "!POINTS")
+    SendStat(siPlayerKills, actualHeight, GetHogTeamName(CurrentHedgehog))
     EndGame()
+    onAchievementsDeclaration()
 end
 
 function makeMultiPlayerLoserStat(gear)
@@ -608,6 +707,10 @@ function makeMultiPlayerLoserStat(gear)
     if teamScoreStats[teamName] == nil then teamScoreStats[teamName] = {} end
     table.insert(teamScoreStats[teamName], actualHeight)
     --SendStat(siClanHealth, tostring(teamBests[teamName]), teamName)
+end
+
+function makeMultiPlayerWinnerStat(gear)
+    return makeMultiPlayerLoserStat(gear)
 end
 
 function makeFinalMultiPlayerStats()
@@ -627,7 +730,7 @@ function makeFinalMultiPlayerStats()
     local winner = ranking[#ranking]
     local loser = ranking[1]
     SendStat(siGameResult, string.format(loc("%s wins!"), winner.name))
-    SendStat(siGraphTitle, string.format(loc("Team’s best heights per round")))
+    SendStat(siGraphTitle, string.format(loc("Height over time")))
     
     if winner.score < 1500 then
         SendStat(siCustomAchievement, string.format(loc("This round’s award for ultimate disappointment goes to: Everyone!")))
@@ -646,7 +749,7 @@ function makeFinalMultiPlayerStats()
     end
     checkAwards()
     for i = #ranking, 1, -1 do
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
         SendStat(siPlayerKills, tostring(ranking[i].score), ranking[i].name)
     end
 end
@@ -677,4 +780,13 @@ end
 
 function getActualHeight(height)
     return 32640-height
+end
+
+function onAchievementsDeclaration()
+    for teamname, score in pairs(teamBests) do
+        DeclareAchievement("height reached", teamname, "ClimbHome", -score)
+    end
+    for teamname, score in pairs(teamTimes) do
+        DeclareAchievement("rope race", teamname, "ClimbHome", score)
+    end
 end

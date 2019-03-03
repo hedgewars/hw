@@ -7,7 +7,7 @@
 #include <math.h>
 
 #define MAX_PARAMS 64
-#define MAX_ANSISTRING_LENGTH 16383
+#define MAX_ANSISTRING_LENGTH 16382
 
 typedef union string255_
     {
@@ -24,6 +24,7 @@ typedef union astring_
     {
         struct {
             uint16_t len;
+            unsigned char str[MAX_ANSISTRING_LENGTH];
         };
         struct {
             unsigned char _dummy2;
@@ -48,8 +49,8 @@ typedef int64_t Int64;
 typedef LongWord Cardinal;
 
 typedef LongInt Integer;
-typedef float extended;
-typedef float real;
+typedef long double extended;
+typedef double real;
 typedef float single;
 
 typedef bool boolean;
@@ -65,7 +66,7 @@ typedef ptrdiff_t PtrInt;
 typedef wchar_t widechar;
 typedef wchar_t* PWideChar;
 typedef char Char;
-typedef LongInt SizeInt;
+typedef PtrInt SizeInt;
 typedef char ** PPChar;
 typedef Word* PWord;
 

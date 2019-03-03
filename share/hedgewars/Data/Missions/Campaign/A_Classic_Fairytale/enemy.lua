@@ -1,3 +1,24 @@
+--[[
+A Classic Fairytale: The enemy of my enemy
+
+= SUMMARY =
+Simple deathmatch on the Islands map.
+
+= GOAL =
+Wipe out the Hedge-cogs and Leader teams
+
+= FLOW CHART =
+- Cut scene: startAnim
+- Player starts with 3-4 natives and 4 cannibals
+- Player plays with 4 natives if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0
+- Enemy starts with 5 cyborgs
+- TBS
+- Goal completed
+- Cut scene: finalAnim
+> Victory
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
@@ -56,6 +77,12 @@ cyborgsDir = {"Right", "Right", "Left", "Right", "Right", "Left"}
 
 leaderPos = {3474, 151}
 leaderDir = "Left"
+
+cyborgTeamName = nil
+nativesTeamName = nil
+cannibalsTeamName = nil
+hedgecogsTeamName = nil
+leaderTeamName = nil
 
 -----------------------------Variables---------------------------------
 natives = {}
@@ -176,27 +203,34 @@ function SetupPeopleStartAnim()
   if m5LeaksDead == 1 then
     table.insert(startAnim, {func = AnimSay, args = {players[1], loc("And how am I alive?!"), SAY_SAY, 3000}})
   end
+  local playerTalker
+  -- There are 3 or 4 natives in this mission. The last one takes part in the dialog
+  if nativesNum >= 4 then
+     playerTalker = players[4]
+  else
+     playerTalker = players[3]
+  end
   table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[1], players[2]}}})
   table.insert(startAnim, {func = AnimSay, args = {players[2], loc("It must be the cyborgs again!"), SAY_SAY, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {players[3], loc("Looks like the whole world is falling apart!"), SAY_SAY, 6000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Look out! We're surrounded by cannibals!"), SAY_SHOUT, 6000}})
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[4], CondNeedToTurn, {players[4], cannibals[1]}}})
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[4], CondNeedToTurn, {players[1], cannibals[1]}}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Cannibals?! You're the cannibals!"), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimCustomFunction, args = {playerTalker, CondNeedToTurn, {playerTalker, cannibals[1]}}})
+  table.insert(startAnim, {func = AnimCustomFunction, args = {playerTalker, CondNeedToTurn, {players[1], cannibals[1]}}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Cannibals?! You're the cannibals!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("WHAT?! You're the ones attacking us!"), SAY_SHOUT, 5000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("You have kidnapped our whole tribe!"), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("You have kidnapped our whole tribe!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("You've been assaulting us, we have been just defending ourselves!"), SAY_SHOUT, 8000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("I can't believe this!"), SAY_SHOUT, 3000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Have we ever attacked you first?"), SAY_SHOUT, 5000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Yes!"), SAY_SHOUT, 2000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Yes!"), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("When?"), SAY_SHOUT, 2000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Uhmm...ok no."), SAY_SHOUT, 2000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Uhmm...ok no."), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("But you're cannibals. It's what you do."), SAY_SHOUT, 5000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Again with the 'cannibals' thing!"), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Where do you get that?!"), SAY_SHOUT, 3000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Everyone knows this."), SAY_SHOUT, 2500}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Everyone knows this."), SAY_SHOUT, 2500}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("I didn't until about a month ago."), SAY_SHOUT, 4000}})
-  table.insert(startAnim, {func = AnimSay, args = {players[4], loc("Hmmm...actually...I didn't either."), SAY_SHOUT, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {playerTalker, loc("Hmmm...actually...I didn't either."), SAY_SHOUT, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("About a month ago, a cyborg came and told us that you're the cannibals!"), SAY_SHOUT, 8000}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("A cy-what?"), SAY_SHOUT, 2000}})
   table.insert(startAnim, {func = AnimSay, args = {cannibals[1], loc("Cyborg. It's what the aliens call themselves."), SAY_SHOUT, 5000}})
@@ -230,7 +264,13 @@ function SetupEnemyStartAnim()
   else
     gear = cyborgs[2]
   end
-  table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[4], gear}}})
+  local turnPlayer
+  if nativesNum >= 4 then
+    turnPlayer = players[4]
+  else
+    turnPlayer = players[3]
+  end
+  table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {turnPlayer, gear}}})
   table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[1], gear}}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("You have finally figured it out!"), SAY_SHOUT, 4500}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("You meatbags are pretty slow, you know!"), SAY_SHOUT, 5500}})
@@ -286,7 +326,7 @@ function AfterStartAnim()
   ShowMission(loc("The Enemy Of My Enemy"), loc("The Union"), loc("Defeat the cyborgs!"), 1, 0)
   PutWeaponCrates()
   PutHealthCrates()
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function PutHealthCrates()
@@ -296,21 +336,21 @@ function PutHealthCrates()
 end
 
 function PutWeaponCrates()
-  SpawnAmmoCrate(2399, 622, amNapalm, 2)
-  SpawnAmmoCrate(2199, -18, amBee, 2)
-  SpawnAmmoCrate(2088, 430, amBee, 2)
-  SpawnAmmoCrate(237, 20, amMortar, 4)
-  SpawnAmmoCrate(312, 1107, amMolotov, 3)
-  SpawnAmmoCrate(531, 1123, amWatermelon, 2)
-  SpawnAmmoCrate(1253, 1444, amFlamethrower, 5)
-  SpawnAmmoCrate(994, 1364, amBaseballBat, 3)
-  SpawnAmmoCrate(1104, 1553, amMine, 6)
-  SpawnAmmoCrate(2277, 803, amDynamite, 2)
-  SpawnAmmoCrate(1106, 184, amRCPlane, 3)
-  SpawnAmmoCrate(1333, 28, amSMine, 4)
-  SpawnAmmoCrate(90, 279, amAirAttack, 2)
-  SpawnAmmoCrate(288, 269, amBee, 2)
-  SpawnAmmoCrate(818, 1633, amBaseballBat, 2)
+  SpawnSupplyCrate(2399, 622, amNapalm, 2)
+  SpawnSupplyCrate(2199, -18, amBee, 2)
+  SpawnSupplyCrate(2088, 430, amBee, 2)
+  SpawnSupplyCrate(237, 20, amMortar, 4)
+  SpawnSupplyCrate(312, 1107, amMolotov, 3)
+  SpawnSupplyCrate(531, 1123, amWatermelon, 2)
+  SpawnSupplyCrate(1253, 1444, amFlamethrower, 5)
+  SpawnSupplyCrate(994, 1364, amBaseballBat, 3)
+  SpawnSupplyCrate(1104, 1553, amMine, 6)
+  SpawnSupplyCrate(2277, 803, amDynamite, 2)
+  SpawnSupplyCrate(1106, 184, amRCPlane, 3)
+  SpawnSupplyCrate(1333, 28, amSMine, 4)
+  SpawnSupplyCrate(90, 279, amAirAttack, 2)
+  SpawnSupplyCrate(288, 269, amBee, 2)
+  SpawnSupplyCrate(818, 1633, amBaseballBat, 2)
 end
 -----------------------------Events------------------------------------
 function CheckNativesDead()
@@ -331,12 +371,12 @@ end
 
 function DoNativesDead()
   nativesDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoCannibalsDead()
   cannibalsDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoPlayersDead()
@@ -344,14 +384,14 @@ function DoPlayersDead()
   RemoveEventFunc(CheckCannibalsDead)
   RemoveEventFunc(CheckCyborgsDead)
   playersDeadFresh = true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function DoCyborgsDead()
 --  RemoveEventFunc(CheckNativesDead)
 --  RemoveEventFunc(CheckCannibalsDead)
   cyborgsDeadFresh= true
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function CheckGearsDead(gearList)
@@ -385,10 +425,10 @@ function FailedMission()
 end
 
 function LoseMission()
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("Cannibals"))
-  DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  DismissTeam(nativesTeamName)
+  DismissTeam(cannibalsTeamName)
+  DismissTeam(cyborgTeamName)
+  EndTurn(true)
 end
 
 function WonMission()
@@ -403,8 +443,8 @@ function WinMission()
   if progress and progress<9 then
     SaveCampaignVar("Progress", "9")
   end
-  DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  DismissTeam(cyborgTeamName)
+  EndTurn(true)
 end
 -----------------------------Misc--------------------------------------
 function HideHedge(hedge)
@@ -423,30 +463,14 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m5Choice = tonumber(GetCampaignVar("M5Choice"))
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
-  m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
-  m5DenseDead = tonumber(GetCampaignVar("M5DenseDead"))
-  m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead"))
-  m5LeaksDead = tonumber(GetCampaignVar("M5LeaksDead"))
-  m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
-  m5ChiefDead = tonumber(GetCampaignVar("M5ChiefDead"))
-  m4WaterDead = tonumber(GetCampaignVar("M4WaterDead"))
-  m5WaterDead = tonumber(GetCampaignVar("M5WaterDead"))
-  m4BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead"))
-  m5BuffaloDead = tonumber(GetCampaignVar("M5BuffaloDead"))
-  m5WiseDead = tonumber(GetCampaignVar("M5WiseDead"))
-  m5GirlDead = tonumber(GetCampaignVar("M5GirlDead"))
-  m8DeployedDead = tonumber(GetCampaignVar("M8DeployedDead"))
-  m8PrincessDead = tonumber(GetCampaignVar("M8PrincessDead"))
-  m8RamonDead = tonumber(GetCampaignVar("M8RamonDead"))
-  m8SpikyDead = tonumber(GetCampaignVar("M8SpikyDead"))
-  m8DeployedLeader = tonumber(GetCampaignVar("M8DeployedLeader"))
-  m8PrincessLeader = tonumber(GetCampaignVar("M8PrincessLeader"))
-  m8EnemyFled = tonumber(GetCampaignVar("M8EnemyFled"))
-  m8Scene = tonumber(GetCampaignVar("M8Scene"))
+  m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
+  m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
+  m5LeaksDead = tonumber(GetCampaignVar("M5LeaksDead")) or 0
+  m8DeployedLeader = tonumber(GetCampaignVar("M8DeployedLeader")) or 0
+  m8PrincessLeader = tonumber(GetCampaignVar("M8PrincessLeader")) or 1
+  m8EnemyFled = tonumber(GetCampaignVar("M8EnemyFled")) or 0
+  m8Scene = tonumber(GetCampaignVar("M8Scene")) or princessScene
 end
 
 function SetupPlace()
@@ -485,10 +509,11 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddMissionTeam(-2)
+  -- There are 3-4 natives in this mission
   natives[1] = AddHog(nativeNames[leaksNum], 0, 100, nativeHats[leaksNum])
   if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0 then
     natives[2] = AddHog(nativeNames[m5DeployedNum], 0, 100, nativeHats[m5DeployedNum])
@@ -505,7 +530,7 @@ function AddHogs()
     table.insert(players, natives[i])
   end
 
-	AddTeam(loc("Cannibals"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  cannibalsTeamName = AddTeam(loc("Cannibals"), -2, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, cannibalsNum do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, "Zombi")
     table.insert(players, cannibals[i])
@@ -513,13 +538,13 @@ function AddHogs()
   playersNum = #players
   playersLeft = playersNum
 
-  AddTeam(loc("Hedge-cogs"), 14483455, "ring", "UFO", "Robot", "cm_star")
+  hedgecogsTeamName = AddTeam(loc("Hedge-cogs"), -9, "ring", "UFO", "Robot", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 80, "cyborg2")
   end
 
   if m8EnemyFled == 1 then
-    AddTeam(loc("Leader"), 14483455, "ring", "UFO", "Robot", "cm_star")
+    leaderTeamName = AddTeam(loc("Leader"), -9, "ring", "UFO", "Robot", "cm_cyborg")
     if m8Scene == denseScene then
       leader = AddHog(loc("Dense Cloud"), 2, 200, nativeHats[denseNum])
     elseif m8Scene == waterScene then
@@ -563,7 +588,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
   Map = "Islands"
 	Theme = "EarthRise"
   SuddenDeathTurns = 20
@@ -594,7 +618,7 @@ end
 function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("Natives") then
+    if GetHogTeamName(gear) == nativesTeamName then
       for i = 1, nativesLeft do
         if natives[i] == gear then
           table.remove(natives, i)
@@ -603,7 +627,7 @@ function onGearDelete(gear)
           playersLeft = playersLeft - 1
         end
       end
-    elseif GetHogTeamName(gear) == loc("Cannibals") then
+    elseif GetHogTeamName(gear) == cannibalsTeamName then
       for i = 1, cannibalsLeft do
         if cannibals[i] == gear then
           table.remove(cannibals, i)
@@ -612,7 +636,7 @@ function onGearDelete(gear)
           playersLeft = playersLeft - 1
         end
       end
-    elseif GetHogTeamName(gear) == loc("Hedge-cogs") then
+    elseif GetHogTeamName(gear) == hedgecogsTeamName then
       for i = 1, cyborgsLeft do
         if cyborgs[i] == gear then
           table.remove(cyborgs, i)
@@ -641,7 +665,7 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
   if playersDeadFresh then
@@ -650,11 +674,11 @@ function onNewTurn()
   elseif cyborgsDeadFresh then
     cyborgsDeadFresh = false
     WonMission()
-  elseif nativesDeadFresh and GetHogTeamName(CurrentHedgehog) == loc("Cannibals") then
-    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, cannibals!"), SAY_SHOUT, 0)
+  elseif nativesDeadFresh and GetHogTeamName(CurrentHedgehog) == cannibalsTeamName then
+    AnimSay(CurrentHedgehog, string.format(loc("Your deaths will be avenged, %s!"), nativesTeamName), SAY_SHOUT, 0)
     nativesDeadFresh = false
-  elseif cannibalsDeadFresh and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
-    AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, cannibals!"), SAY_SHOUT, 0)
+  elseif cannibalsDeadFresh and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
+    AnimSay(CurrentHedgehog, string.format(loc("Your deaths will be avenged, %s!"), cannibalsTeamName), SAY_SHOUT, 0)
     cannibalsDeadFresh = false
   end
 end

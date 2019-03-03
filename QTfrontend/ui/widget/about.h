@@ -35,7 +35,8 @@ class About : public QWidget
         virtual void dropEvent(QDropEvent * event);
 
     private:
-        QTextBrowser * lbl2;
+        QString getCreditsHtml();
+        QTextBrowser * creditsBrowser;
 };
 
 #endif // _ABOUT_H

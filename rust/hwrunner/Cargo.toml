@@ -1,0 +1,12 @@
+[package]
+name = "hwrunner"
+version = "0.1.0"
+authors = ["Hedgewars Project"]
+edition = "2018"
+
+[dependencies]
+gfx = "0.17"
+glutin = "0.18"
+gfx_window_glutin = "0.26"
+
+lib-hedgewars-engine = { path = "../lib-hedgewars-engine" }

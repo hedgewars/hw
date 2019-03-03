@@ -1,9 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos.png</file>
+        <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos_base.png</file>
         <file>res/css/qt.css</file>
         <file>res/css/chat.css</file>
         <file>res/css/christmas.css</file>
+        <file>res/css/april1.css</file>
         <file>res/css/easter.css</file>
         <file>res/css/birthday.css</file>
         <file>res/hh25x25.png</file>
@@ -22,36 +23,18 @@
         <file>res/botlevels/3.png</file>
         <file>res/botlevels/4.png</file>
         <file>res/botlevels/5.png</file>
+        <file>res/botlevels/small0.png</file>
+        <file>res/botlevels/small1.png</file>
+        <file>res/botlevels/small2.png</file>
+        <file>res/botlevels/small3.png</file>
+        <file>res/botlevels/small4.png</file>
+        <file>res/botlevels/small5.png</file>
         <file>res/botlevels/net0.png</file>
         <file>res/botlevels/net1.png</file>
         <file>res/botlevels/net2.png</file>
         <file>res/botlevels/net3.png</file>
         <file>res/botlevels/net4.png</file>
         <file>res/botlevels/net5.png</file>
-        <file>res/campaign/A_Classic_Fairytale/first_blood.png</file>
-        <file>res/campaign/A_Classic_Fairytale/shadow.png</file>
-        <file>res/campaign/A_Classic_Fairytale/journey.png</file>
-        <file>res/campaign/A_Classic_Fairytale/united.png</file>
-        <file>res/campaign/A_Classic_Fairytale/backstab.png</file>
-        <file>res/campaign/A_Classic_Fairytale/dragon.png</file>
-        <file>res/campaign/A_Classic_Fairytale/family.png</file>
-        <file>res/campaign/A_Classic_Fairytale/queen.png</file>
-        <file>res/campaign/A_Classic_Fairytale/enemy.png</file>
-        <file>res/campaign/A_Classic_Fairytale/epil.png</file>
-        <file>res/campaign/A_Space_Adventure/cosmos.png</file>
-        <file>res/campaign/A_Space_Adventure/moon01.png</file>
-        <file>res/campaign/A_Space_Adventure/moon02.png</file>
-        <file>res/campaign/A_Space_Adventure/ice01.png</file>
-        <file>res/campaign/A_Space_Adventure/ice02.png</file>
-        <file>res/campaign/A_Space_Adventure/desert01.png</file>
-        <file>res/campaign/A_Space_Adventure/desert02.png</file>
-        <file>res/campaign/A_Space_Adventure/desert03.png</file>
-        <file>res/campaign/A_Space_Adventure/fruit01.png</file>
-        <file>res/campaign/A_Space_Adventure/fruit02.png</file>
-        <file>res/campaign/A_Space_Adventure/fruit03.png</file>
-        <file>res/campaign/A_Space_Adventure/death01.png</file>
-        <file>res/campaign/A_Space_Adventure/death02.png</file>
-        <file>res/campaign/A_Space_Adventure/final.png</file>
         <file>res/bonus.png</file>
         <file>res/Hedgehog.png</file>
         <file>res/net.png</file>
@@ -61,42 +44,72 @@
         <file>res/CampaignDefault.png</file>
         <file>res/Multiplayer.png</file>
         <file>res/Trainings.png</file>
+        <file>res/Challenges.png</file>
+        <file>res/Scenarios.png</file>
         <file>res/Background.png</file>
         <file>res/BackgroundChristmas.png</file>
         <file>res/BackgroundEaster.png</file>
         <file>res/BackgroundBirthday.png</file>
         <file>res/Exit.png</file>
         <file>res/HedgewarsTitle.png</file>
+        <file>res/TomatowarsTitle.png</file>
         <file>res/LocalPlay.png</file>
         <file>res/NetworkPlay.png</file>
         <file>res/NetworkPlayDisabled.png</file>
         <file>res/audio.png</file>
         <file>res/camera.png</file>
         <file>res/Settings.png</file>
+        <file>res/Help.png</file>
         <file>res/dropdown.png</file>
+        <file>res/dropdown_disabled.png</file>
+        <file>res/dropdown_selected.png</file>
         <file>res/new.png</file>
         <file>res/edit.png</file>
         <file>res/delete.png</file>
         <file>res/checked.png</file>
+        <file>res/checkedHover.png</file>
+        <file>res/checkedPressed.png</file>
         <file>res/unchecked.png</file>
+        <file>res/uncheckedHover.png</file>
+        <file>res/uncheckedPressed.png</file>
+        <file>res/radioButtonChecked.png</file>
+        <file>res/radioButtonCheckedHover.png</file>
+        <file>res/radioButtonCheckedPressed.png</file>
+        <file>res/radioButtonUnchecked.png</file>
+        <file>res/radioButtonUncheckedHover.png</file>
+        <file>res/radioButtonUncheckedPressed.png</file>
+        <file>res/missionFinished.png</file>
+        <file>res/missionFinishedSelected.png</file>
+        <file>res/missingMap.png</file>
+        <file>res/missingTheme@2x.png</file>
+        <file>res/dlcMarker.png</file>
+        <file>res/dlcMarkerSelected.png</file>
         <file>res/graphicsicon.png</file>
+        <file>res/frontendicon.png</file>
+        <file>res/folder.png</file>
         <file>res/miscicon.png</file>
         <file>res/Load.png</file>
         <file>res/Save.png</file>
         <file>res/Record.png</file>
         <file>res/Videos.png</file>
+        <file>res/Palette.png</file>
+        <file>res/schemeicon.png</file>
         <file>res/weaponsicon.png</file>
         <file>res/teamicon.png</file>
         <file>res/panelbg.png</file>
         <file>res/lightbulb_on.png</file>
         <file>res/lightbulb_off.png</file>
         <file>res/spin_up.png</file>
+        <file>res/spin_up_disabled.png</file>
         <file>res/spin_down.png</file>
+        <file>res/spin_down_disabled.png</file>
+        <file>res/sort_up.png</file>
+        <file>res/sort_down.png</file>
         <file>res/PlaySound.png</file>
         <file>res/hh_small.png</file>
         <file>res/btnDisabled.png</file>
-        <file>res/btnForts@2x.png</file>
         <file>res/btnBorder@2x.png</file>
+        <file>res/btnSwitchHog@2x.png</file>
         <file>res/btnInvulnerable@2x.png</file>
         <file>res/btnLaserSight@2x.png</file>
         <file>res/btnLowGravity@2x.png</file>
@@ -121,8 +134,12 @@
         <file>res/btnTagTeam@2x.png</file>
         <file>res/btnBottomBorder@2x.png</file>
         <file>res/iconBox.png</file>
+        <file>res/iconInitHealth.png</file>
         <file>res/iconHealth.png</file>
+        <file>res/iconHealthPercent.png</file>
         <file>res/iconSuddenDeath.png</file>
+        <file>res/iconSuddenDeathTime.png</file>
+        <file>res/iconSuddenDeathWater.png</file>
         <file>res/iconDamage.png</file>
         <file>res/iconDamageLockG.png</file>
         <file>res/iconDamageLockR.png</file>
@@ -130,11 +147,16 @@
         <file>res/iconTimeLockG.png</file>
         <file>res/iconTimeLockR.png</file>
         <file>res/iconMine.png</file>
+        <file>res/iconMineTime.png</file>
         <file>res/iconDud.png</file>
+        <file>res/iconExplosive.png</file>
+        <file>res/iconAirMine.png</file>
         <file>res/iconRope.png</file>
         <file>res/iconEarth.png</file>
+        <file>res/iconScript.png</file>
         <file>res/dice.png</file>
         <file>res/Star.png</file>
+        <file>res/home.png</file>
         <file>res/inverse-corner-bl.png</file>
         <file>res/Flake.png</file>
         <file>res/Egg.png</file>
@@ -149,7 +171,10 @@
         <file>res/info.png</file>
         <file>res/kick.png</file>
         <file>res/lock.png</file>
+        <file>res/lock_disabled.png</file>
         <file>res/unlock.png</file>
+        <file>res/unlock_disabled.png</file>
+        <file>res/splitter.png</file>
         <file>res/StatsMedal1.png</file>
         <file>res/StatsMedal2.png</file>
         <file>res/StatsMedal3.png</file>
@@ -163,6 +188,7 @@
         <file>res/StatsMostSelfDamage.png</file>
         <file>res/StatsSelfKilled.png</file>
         <file>res/StatsSkipped.png</file>
+        <file>res/StatsEverAfter.png</file>
         <file>res/StatsCustomAchievement.png</file>
         <file>res/Start.png</file>
         <file>res/mapRandom.png</file>
@@ -182,10 +208,13 @@
         <file>res/chat/lamp_off.png</file>
         <file>res/chat/ingame.png</file>
         <file>res/splash.png</file>
-        <file>res/html/about.html</file>
+        <file>res/credits.csv</file>
         <file>res/chat/hedgehogcontributor.png</file>
         <file>res/chat/hedgehogcontributor_gray.png</file>
         <file>res/chat/roomadmincontributor.png</file>
         <file>res/chat/roomadmincontributor_gray.png</file>
+    </qresource>
+    <qresource lang="en">
+        <file alias="res/Trainings.png">res/Trainings_en.png</file>
     </qresource>
 </RCC>

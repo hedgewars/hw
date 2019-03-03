@@ -119,12 +119,13 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amDrillStrike
             (proc: nil;              flags: 0), // amSnowball
             (proc: nil;              flags: 0), // amTardis
-            //(proc: nil;              flags: 0), // amStructure
             (proc: nil;              flags: 0), // amLandGun
             (proc: nil;              flags: 0), // amIceGun
             (proc: nil;              flags: 0), // amKnife
             (proc: nil;              flags: 0), // amRubber
-            (proc: nil;              flags: 0)  // amAirMine
+            (proc: nil;              flags: 0), // amAirMine
+            (proc: nil;              flags: 0), // amCreeper
+            (proc: @TestShotgun;     flags: 0)  // amMinigun
             );
 
 implementation
@@ -136,11 +137,12 @@ Metric:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
 function TestBazooka(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+const cExtraTime = 300;
 var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
     EX, EY: LongInt;
     valueResult: LongInt;
-    x, y, dX, dY: real;
+    targXWrap, x, y, dX, dY: real;
     t: LongInt;
     value: LongInt;
 begin
@@ -149,10 +151,16 @@ mY:= hwFloat2Float(Me^.Y);
 ap.Time:= 0;
 rTime:= 350;
 ap.ExplR:= 0;
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < mX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(300);
-    Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime
+    else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - mY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -163,24 +171,34 @@ repeat
         dY:= -Vy;
         t:= rTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + dX;
+
             y:= y + dY;
             dX:= dX + windSpeed;
+            //dX:= CheckBounce(x,dX);
             dY:= dY + cGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t <= 0);
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t < -cExtraTime);
 
         EX:= trunc(x);
         EY:= trunc(y);
-        if Level = 1 then
-            value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
-        else value:= RateExplosion(Me, EX, EY, 101);
+        if t >= -cExtraTime then
+            begin
+                if Level = 1 then
+                    value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
+                else
+                    value:= RateExplosion(Me, EX, EY, 101);
+            end else
+                value:= BadTurn;
+
         if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             if GameFlags and gfSolidLand = 0 then
                  value := 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64
             else value := BadTurn;
-        if valueResult <= value then
+
+        if (valueResult < value) or ((valueResult = value) and (Level < 3)) then
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
             ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
@@ -190,7 +208,6 @@ repeat
             valueResult:= value
             end;
         end
-//until (value > 204800) or (rTime > 4250); not so useful since adding score to the drowning
 until rTime > 5050 - Level * 800;
 TestBazooka:= valueResult
 end;
@@ -253,7 +270,7 @@ end;
 function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var i, j: LongInt;
     valueResult, v, a, p: LongInt;
-    mX, mY, dX: real;
+    mX, mY: real;
     eX, eY: LongInt;
 begin
     if Level > 1 then
@@ -308,7 +325,7 @@ var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
     EX, EY: LongInt;
     valueResult: LongInt;
-    x, y, dX, dY: real;
+    targXWrap, x, y, dX, dY: real;
     t: LongInt;
     value: LongInt;
     t2: real;
@@ -322,10 +339,16 @@ begin
     rTime:= 350;
     ap.ExplR:= 0;
     valueResult:= BadTurn;
+    if (WorldEdge = weWrap) then
+        if (Targ.Point.X < mX) then
+             targXWrap:= Targ.Point.X + (RightX-LeftX)
+        else targXWrap:= Targ.Point.X - (RightX-LeftX);
     timer:= 0;
     repeat
         rTime:= rTime + 300 + Level * 50 + random(300);
-        Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
+        if (WorldEdge = weWrap) and (random(2)=0) then
+             Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime
+        else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
         Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y - 35 - mY) / rTime;
         r:= sqr(Vx) + sqr(Vy);
         if not (r > 1) then
@@ -336,6 +359,7 @@ begin
             dY:= -Vy;
             t:= rTime;
             repeat
+                x:= CheckWrap(x);
                 x:= x + dX;
                 y:= y + dY;
                 dX:= dX + windSpeed;
@@ -389,7 +413,7 @@ var Vx, Vy, r: real;
     rTime: LongInt;
     EX, EY: LongInt;
     valueResult: LongInt;
-    x, y, dX, dY, meX, meY: real;
+    targXWrap, x, y, dX, dY, meX, meY: real;
     t: LongInt;
     value: LongInt;
 
@@ -400,9 +424,15 @@ ap.Time:= 0;
 rTime:= 350;
 ap.ExplR:= 0;
 valueResult:= BadTurn;
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
     rTime:= rTime + 300 + Level * 50 + random(1000);
-    Vx:= - windSpeed * rTime * 0.5 + ((Targ.Point.X + AIrndSign(2)) - meX) / rTime;
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= - windSpeed * rTime * 0.5 + ((targXWrap + AIrndSign(2)) - meX) / rTime
+    else Vx:= - windSpeed * rTime * 0.5 + ((Targ.Point.X + AIrndSign(2)) - meX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -413,6 +443,7 @@ repeat
         dY:= -Vy;
         t:= rTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + dX;
             y:= y + dY;
             dX:= dX + windSpeed;
@@ -446,7 +477,7 @@ function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPa
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: LongInt;
-    x, y, dY, meX, meY: real;
+    targXWrap, x, y, dY, meX, meY: real;
     t: LongInt;
 begin
 meX:= hwFloat2Float(Me^.X);
@@ -454,9 +485,15 @@ meY:= hwFloat2Float(Me^.Y);
 valueResult:= BadTurn;
 TestTime:= 0;
 ap.ExplR:= 0;
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
     inc(TestTime, 300);
-    Vx:= (Targ.Point.X - meX) / TestTime;
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= (targXWrap - meX) / TestTime
+    else Vx:= (Targ.Point.X - meX) / TestTime;
     Vy:= cGravityf * (TestTime div 2) - Targ.Point.Y - meY / TestTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -466,6 +503,7 @@ repeat
         dY:= -Vy;
         t:= TestTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + Vx;
             y:= y + dY;
             dY:= dY + cGravityf;
@@ -498,7 +536,7 @@ const tDelta = 24;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: LongInt;
-    x, y, meX, meY, dY: real;
+    targXWrap, x, y, meX, meY, dY: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
@@ -506,9 +544,15 @@ TestTime:= 0;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
     inc(TestTime, 1000);
-    Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= (targXWrap + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta)
+    else Vx:= (Targ.Point.X + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta);
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - (Targ.Point.Y - meY) / (TestTime + tDelta);
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -518,6 +562,7 @@ repeat
         dY:= -Vy;
         t:= TestTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + Vx;
             y:= y + dY;
             dY:= dY + cGravityf;
@@ -611,7 +656,7 @@ const tDelta = 24;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
-    x, y, dY, meX, meY: real;
+    targXWrap, x, y, dY, meX, meY: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
@@ -619,9 +664,15 @@ TestTime:= 500;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
     inc(TestTime, 900);
-    Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
+    if (WorldEdge = weWrap) and (random(2)=0) then
+		 Vx:= (targXWrap - meX) / (TestTime + tDelta)
+    else Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Point.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
     if not (r > 1) then
@@ -631,6 +682,7 @@ repeat
         dY:= -Vy;
         t:= TestTime;
         repeat
+            x:= CheckWrap(x);
             x:= x + Vx;
             y:= y + dY;
             dY:= dY + cGravityf;
@@ -1083,7 +1135,7 @@ begin
     if d < 10 then
         begin
         dx:= 0;
-        dy:= 8;
+        dy:= step;
         ap.Angle:= 2048
         end
     else
@@ -1097,17 +1149,18 @@ begin
 
     if dx >= 0 then cx:= 0.45 else cx:= -0.45;
 
-    for i:= 0 to 512 div step - 2 do
+    for i:= 1 to 512 div step - 2 do
         begin
+        x:= x + dx;
+        y:= y + dy;
+
         valueResult:= valueResult +
             RateShove(Me, trunc(x), trunc(y)
                 , 30, 30, 25
                 , cx, -0.9, trackFall or afSetSkip);
-
-        x:= x + dx;
-        y:= y + dy;
         end;
-    if dx = 0 then
+
+    if (d < 10) and (dx = 0) then
         begin
         x:= hwFloat2Float(Me^.X);
         y:= hwFloat2Float(Me^.Y);
@@ -1124,8 +1177,10 @@ begin
                     , -cx, -0.9, trackFall or afSetSkip);
             end
         end;
+
     if v > valueResult then
-        begin
+    begin
+        cx:= -cx;
         ap.Angle:= -2048;
         valueResult:= v
         end;
@@ -1207,20 +1262,23 @@ repeat
             end;
 until fexit or (Y > cWaterLine);
 
-for i:= 0 to 5 do inc(valueResult, dmg[i]);
+for i:= 0 to 5 do
+    if dmg[i] <> BadTurn then
+        inc(valueResult, dmg[i]);
 t:= valueResult;
 ap.AttackPutX:= Targ.Point.X - 60;
 
 for i:= 0 to 3 do
-    begin
-    dec(t, dmg[i]);
-    inc(t, dmg[i + 6]);
-    if t > valueResult then
+    if dmg[i] <> BadTurn then
         begin
-        valueResult:= t;
-        ap.AttackPutX:= Targ.Point.X - 30 - cShift + i * 30
-        end
-    end;
+        dec(t, dmg[i]);
+        inc(t, dmg[i + 6]);
+        if t > valueResult then
+            begin
+            valueResult:= t;
+            ap.AttackPutX:= Targ.Point.X - 30 - cShift + i * 30
+            end
+        end;
 
 if valueResult <= 0 then
     valueResult:= BadTurn;
@@ -1307,7 +1365,7 @@ begin
 
     //FillChar(cake, sizeof(cake), 0);
     cake.Radius:= 7;
-    cake.CollisionMask:= lfNotCurrentMask;
+    cake.CollisionMask:= lfNotCurHogCrate;
     cake.Hedgehog:= Me^.Hedgehog;
 
     // check left direction

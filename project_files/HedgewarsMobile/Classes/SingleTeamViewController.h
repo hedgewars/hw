@@ -36,7 +36,7 @@
 @property (nonatomic,retain) NSArray *secondaryItems;
 @property (nonatomic,retain) NSArray *moreSecondaryItems;
 
--(void) writeFile;
--(void) setWriteNeeded;
+- (void)writeFile;
+- (void)setWriteNeeded;
 
 @end

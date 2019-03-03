@@ -49,12 +49,7 @@
   </mime-type>
   <mime-type type="x-scheme-handler/hwplay">
     <icon name="hedgewars" />
-    <!--<generic-icon name="applications-games"/>-->
     <comment>Hedgewars ServerAccess Scheme</comment>
-    <magic priority="50">
-      <match required="yes" type="byte" offset="0" value="2"/>
-      <match required="yes" type="big16" offset="1" value="21587"/>
-    </magic>
     <glob weight="60" pattern="hwplay://*"/>
   </mime-type>
 </mime-info>

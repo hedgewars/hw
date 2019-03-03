@@ -8,9 +8,11 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 io_result_t IOResult;
 int FileMode;
+char cwd[1024];
 
 static void init(File f) {
     f->fp = NULL;
@@ -184,7 +186,8 @@ void fpcrtl_blockRead__vars(File f, void *buf, Integer count, Integer *result) {
  */
 void fpcrtl_blockWrite__vars(File f, const void *buf, Integer count,
         Integer *result) {
-    assert(0);
+    assert(f->record_len > 0);
+    *result = fwrite(buf, f->record_len, count, f->fp);
 }
 
 bool fpcrtl_directoryExists(string255 dir) {
@@ -217,6 +220,17 @@ bool fpcrtl_fileExists(string255 filename) {
         return true;
     }
     return false;
+}
+
+char * fpcrtl_getCurrentDir(void) {
+
+    IOResult = IO_NO_ERROR;
+
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
+        return cwd;
+
+    IOResult = IO_ERROR_DUMMY;
+    return "";
 }
 
 void __attribute__((overloadable)) fpcrtl_flush(Text f) {

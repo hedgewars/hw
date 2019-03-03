@@ -34,9 +34,9 @@ handleCmd_NotEntered :: CmdHandler
 handleCmd_NotEntered ["NICK", newNick] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
-    if not . B.null $ nick cl then return [ProtocolError $ loc "Nickname already chosen"]
+    if not . B.null $ nick cl then return [ProtocolError $ loc "Nickname already provided."]
         else
-        if illegalName newNick then return [ByeClient $ loc "Illegal nickname"]
+        if illegalName newNick then return [ByeClient $ loc "Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}"]
             else
             return $
                 ModifyClient (\c -> c{nick = newNick}) :
@@ -46,9 +46,9 @@ handleCmd_NotEntered ["NICK", newNick] = do
 handleCmd_NotEntered ["PROTO", protoNum] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
-    if clientProto cl > 0 then return [ProtocolError $ loc "Protocol already known"]
+    if clientProto cl > 0 then return [ProtocolError $ loc "Protocol already known."]
         else
-        if parsedProto == 0 then return [ProtocolError $ loc "Bad number"]
+        if parsedProto == 0 then return [ProtocolError $ loc "Bad number."]
             else
             return $
                 ModifyClient (\c -> c{clientProto = parsedProto}) :
@@ -65,6 +65,7 @@ handleCmd_NotEntered ["PASSWORD", passwd] = do
     if clientProto cl < 48 && passwd == webPassword cl then
         return $ JoinLobby : [AnswerClients [sendChan cl] ["ADMIN_ACCESS"] | isAdministrator cl]
         else
+        -- String is parsed by frontend, do not localize!
         return [ByeClient "Authentication failed"]
 
 
@@ -81,6 +82,7 @@ handleCmd_NotEntered ["PASSWORD", passwd, clientSalt] = do
             , JoinLobby
             ]
         else
+        -- String is parsed by frontend, do not localize!
         return [ByeClient "Authentication failed"]
     where
         h = B.pack . showDigest . sha1 . BL.fromChunks
@@ -90,7 +92,7 @@ handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
 
-    if parsedProto == 0 then return [ProtocolError $ loc "Bad number"]
+    if parsedProto == 0 then return [ProtocolError $ loc "Bad number."]
         else
         return $ [
             ModifyClient (\c -> c{clientProto = parsedProto, nick = newNick, webPassword = password, isChecker = True})
@@ -99,4 +101,6 @@ handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do
         parsedProto = readInt_ protoNum
 #endif
 
-handleCmd_NotEntered _ = return [ProtocolError "Incorrect command (state: not entered)"]
+handleCmd_NotEntered (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: not entered)"]
+
+handleCmd_NotEntered [] = return [ProtocolError "Empty command (state: not entered)"]

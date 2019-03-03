@@ -36,20 +36,20 @@ type
         end;
 
     // Possible states of the game
-    TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit, gsSuspend);
+    TGameState = (gsLandGen, gsStart, gsGame, gsConfirm, gsExit, gsSuspend);
 
     // Game types that help determining what the engine is actually supposed to do
-    TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax, gmtRecord);
+    TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtBadSyntax, gmtRecord, gmtSyntaxHelp);
 
     // Different files are stored in different folders, this enumeration is used to tell which folder to use
-    TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
+    TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptConfig, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts, ptLocale,
             ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps,
             ptSuddenDeath, ptButtons, ptShaders);
 
     // Available sprites for displaying stuff
-    TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
-            sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
+    TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprBigDigitGray, sprBigDigitGreen,
+            sprBigDigitRed, sprFrame, sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
             sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
             sprClusterBomb, sprClusterParticle, sprFlame,
@@ -61,7 +61,7 @@ type
 {$IFDEF USE_TOUCH_INTERFACE}
             sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,
             sprJumpWidget, sprAMWidget, sprPauseButton, sprTimerButton, sprTargetButton,
-            sprSwitchButton,
+            sprSwitchButton, sprBounceButton,
 {$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
             sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
@@ -89,7 +89,9 @@ type
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
             sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
-            sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprAirMine, sprHandAirMine
+            sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprCustom3, sprCustom4,
+            sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprFrozenAirMine, sprAirMine, sprHandAirMine,
+            sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprCreeper, sprHandCreeper, sprMinigun
             );
 
     // Gears that interact with other Gears and/or Land
@@ -106,8 +108,8 @@ type
             gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
-            gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife); // 65
+            gtNapalmBomb, gtSnowball, gtFlake, gtLandGun, gtTardis, // 61
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtCreeper, gtMinigun, gtMinigunBullet); // 68
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -119,7 +121,7 @@ type
             vgtSmoothWindBar, vgtStraightShot, vgtNoPlaceWarn);
 
     // Damage can be caused by different sources
-    TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
+    TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison, dsHammer);
 
     // Available sounds
     TSound = (sndNone,
@@ -145,8 +147,15 @@ type
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7,
             sndPiano8, sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
             sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact,
-            sndIceBeam, sndHogFreeze
-            );
+            sndIceBeam, sndHogFreeze, sndAirMineImpact, sndKnifeImpact, sndExtraTime, sndLaserSight,
+            sndInvulnerable, sndJetpackLaunch, sndJetpackBoost, sndPortalShot, sndPortalSwitch,
+            sndPortalOpen, sndBlowTorch, sndCountdown1, sndCountdown2, sndCountdown3, sndCountdown4,
+            sndCreeperDrop, sndCreeperWater, sndCreeperDie, sndCustom1, sndCustom2, sndCustom3, sndCustom4,
+            sndCustom5, sndCustom6, sndCustom7, sndCustom8, sndMinigun, sndFlamethrower, sndIceBeamIdle,
+            sndLandGun, sndCaseImpact, sndExtraDamage, sndFirePunchHit, sndGrenade, sndThisOneIsMine,
+            sndWhatThe, sndSoLong, sndOhDear, sndGonnaGetYou, sndDrat, sndBugger, sndAmazing,
+            sndBrilliant, sndExcellent, sndFire, sndWatchThis, sndRunAway, sndRevenge, sndCutItOut,
+            sndLeaveMeAlone, sndOuch, sndHmm);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
@@ -157,8 +166,10 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
-            amIceGun, amKnife, amRubber, amAirMine); // 57
+            amResurrector, amDrillStrike, amSnowball, amTardis, amLandGun, // 53
+            amIceGun, amKnife, amRubber, amAirMine, amCreeper, amMinigun); // 59
+    // NOTE: If we ever reach 126 ammo types, make sure to skip ammo type number 126 because it's
+    // reserved as synonym for amNothing. See also chSetWeapon.
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -171,7 +182,7 @@ type
     TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
             siClanHealth, siTeamStats, siPlayerKills, siMaxTeamDamage,
             siMaxTeamKills, siMaxTurnSkips, siCustomAchievement, siGraphTitle,
-            siPointType);
+            siPointType, siTeamRank, siEverAfter);
 
     // Various 'emote' animations a hedgehog can do
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
@@ -180,7 +191,7 @@ type
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
     TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
     TUIDisplay = (uiAll, uiNoTeams, uiNone);
-    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn);
+    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn, mgForts);
 
 
     THHFont = record
@@ -224,7 +235,7 @@ type
             PrevTexture, NextTexture: PTexture;
             end;
 
-    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen);
+    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen, heArtillery);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 
@@ -263,6 +274,7 @@ type
             Radius: LongInt;     // Radius. If not using uCollisions, is usually used to indicate area of effect
             CollisionMask: Word; // Masking off Land impact  FF7F for example ignores current hog and crates
             AdvBounce: Longword; // Triggers 45 bounces. Is a counter to avoid edge cases
+            Sticky: Boolean;     // True if gear is *normally* able to stick to landscape on impact
             Elasticity: hwFloat;
             Friction  : hwFloat;
             Density   : hwFloat; // Density is kind of a mix of size and density. Impacts distance thrown, wind.
@@ -273,7 +285,7 @@ type
 // DirAngle is a 'real' - if you do not need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
             DirAngle: real;
 // These are frequently overridden to serve some other purpose
-	    Boom: Longword;          // amount of damage caused by the gear
+            Boom: Longword;          // amount of damage caused by the gear
             Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
             Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
             Timer, WDTimer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
@@ -321,14 +333,19 @@ type
         end;
 
     TStatistics = record
-        DamageRecv,
-        DamageGiven: Longword;
-        StepDamageRecv,
-        StepDamageGiven,
-        StepKills: Longword;
-        MaxStepDamageRecv,
-        MaxStepDamageGiven,
-        MaxStepKills: Longword;
+        DamageRecv,              // total damage received
+        DamageGiven: Longword;   // total damage dealt
+        StepDamageRecvInRow,     // number of enemy turns in row this hog received any damage
+        StepDamageRecv,          // damage received in this turn
+        StepDamageGiven,         // damage dealt in this turn
+        StepKills: Longword;     // kills in this turn
+        StepPoisoned,            // whether hog got poisoned this turn
+        StepDied,                // whether hog died this turn
+        Sacrificed,              // whether hog was sacrificed in suicide attack (kamikaze, piano)
+        GotRevenge: boolean;     // whether hog got revenge in this turn
+        MaxStepDamageRecv,       // most damage received in one turn
+        MaxStepDamageGiven,      // most damage dealt in one turn
+        MaxStepKills: Longword;  // most kills in one turn
         FinishedTurns: Longword;
         end;
 
@@ -341,7 +358,23 @@ type
         TeamDamage : Longword;
         end;
 
-    TBinds = array[0..cKbdMaxIndex] of shortstring;
+    PClanDeathLogEntry = ^TClanDeathLogEntry;
+
+    TClanDeathLogEntry = record
+        Turn : Longword; // turn in which the clans were killed
+        KilledClans : array[0..Pred(cMaxTeams)] of PClan; // array of clans that have died
+        KilledClansCount: Longword; // number of clans that died
+        NextEntry : PClanDeathLogEntry; // linked list
+        end;
+
+
+    TBinds = record
+                 indices: array[0..cKbdMaxIndex] of byte;
+                 // zeroth element is reserved, indices[i] == 0 means no binding
+                 binds: array[0..255] of shortstring;
+                 lastIndex: byte;
+             end;
+
     TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
     PVoicepack = ^TVoicepack;
@@ -353,6 +386,7 @@ type
     TVoice = record
         snd: TSound;
         voicepack: PVoicePack;
+        isFallback: boolean;
         end;
 
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
@@ -384,6 +418,7 @@ type
             Timer: Longword;
             HealthBarHealth: LongInt;
             Effects: array[THogEffect] of LongInt;
+            RevengeHog: PHedgehog;   // For which hog this hog wants revenge most. For sndRevenge taunt
             end;
 
     TTeam = record
@@ -397,6 +432,7 @@ type
             OwnerTex,
             GraveTex,
             AIKillsTex,
+            LuaTeamValueTex,
             FlagTex: PTexture;
             Flag: shortstring;
             GraveName: shortstring;
@@ -410,9 +446,14 @@ type
             voicepack: PVoicepack;
             PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
             stats: TTeamStats;
+            Passive: boolean; // if true, team will not participate in game. It is treated as if all its hedgehogs are frozen.
+                              // updating this value requires updating Passive in TClan as well!
+            hasKing: boolean; // true if team has a living king
             hasGone: boolean;
             skippedTurns: Longword;
             isGoneFlagPendingToBeSet, isGoneFlagPendingToBeUnset: boolean;
+            luaTeamValue: ansistring;
+            hasLuaTeamValue: boolean;
             end;
 
     TClan = record
@@ -425,7 +466,10 @@ type
             ClanHealth: LongInt;
             ClanIndex: LongInt;
             TurnNumber: LongWord;
+            DeathLogged: boolean; // true if clan is dead and its latest death has been logged in the clan death log
+            StatsHandled : boolean; // true if clan's rank has been handled for stats screen
             Flawless: boolean;
+            Passive: boolean; // informational. Must be set to true if all of the teams are passive
             end;
 
      cdeclPtr = procedure; cdecl;
@@ -451,24 +495,42 @@ type
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
-            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine);
+            sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine,
+            sidCreeper, sidMinigun);
 
-    TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
+    TMsgStrId = (sidLoading, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady,
             sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
-            sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn, sidPressTarget);
+            sidMute, sidAFK, sidAutoCameraOff, sidAutoCameraOn, sidPressTarget,
+            sidNotAvailableInSD, sidHealthGain, sidEmptyCrate, sidUnknownKey,
+            sidWinner2, sidWinner3, sidWinner4, sidWinner5, sidWinner6,
+            sidWinner7, sidWinnerAll, sidTeamGone, sidTeamBack, sidAutoSkip,
+            sidFPS, sidLuaParsingOff, sidLuaParsingOn, sidLuaParsingDenied,
+            sidAmmoCount, sidChat, sidChatTeam, sidChatHog);
+
+    TCmdHelpStrId = (
+            sidCmdHeaderBasic, sidCmdTogglechat, sidCmdTeam, sidCmdMe,
+            sidCmdPause, sidCmdPauseNet, sidCmdFullscreen, sidCmdQuit,
+            sidCmdHelp, sidCmdHelpTaunts, sidCmdHistory, sidLua,
+
+            sidCmdHeaderTaunts, sidCmdSpeech, sidCmdThink, sidCmdYell,
+            sidCmdSpeechNumberHint, sidCmdHsa, sidCmdHta, sidCmdHya,
+            sidCmdHurrah, sidCmdIlovelotsoflemonade, sidCmdJuggle,
+            sidCmdRollup, sidCmdShrug, sidCmdWave, sidCmdUnknown,
+            sidCmdHelpRoom, sidCmdHelpRoomFail);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
             eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped,
-            eidHurtSelf, eidHomerun, eidGone);
+            eidHurtSelf, eidHomerun, eidGone, eidPoisoned, eidResurrected,
+            eidKamikaze, eidTimeTravelEnd, eidTimeout, eidKingDied);
 
-    TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
+    TGoalStrId = (gidCaption, gidSubCaption, gidPlaceKing, gidLowGravity, gidInvulnerable,
             gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
             gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer,
             gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival,
-            gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
+            gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam, gidMoreWind);
 
 
     TLandArray = packed array of array of LongWord;
@@ -515,6 +577,8 @@ type
             Surface: PSDL_Surface;
             Width, Height, imageWidth, imageHeight: LongInt;
             saveSurf: boolean;
+            critical: boolean;
+            checkSum: boolean; // use for images where if they are missing a desync can occur.
             priority: GLfloat;
             getDimensions, getImageDimensions: boolean;
             end;
@@ -531,6 +595,8 @@ type
     end;
 
     PCakeData = ^TCakeData;
+
+    TClansArray = array[0..Pred(cMaxTeams)] of PClan;
 
 implementation
 

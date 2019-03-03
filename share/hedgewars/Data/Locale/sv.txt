@@ -54,18 +54,17 @@
 00:51=Jordboll
 00:52=Inget vapen valt
 00:53=Tidslåda
-; 00:54=Struktur
 00:54=Markspruta
 
-01:00=Nu kör vi!
+; 01:00=Loading …
 01:01=Oavgjort
 01:02=%1 vinner!
 01:03=Volym %1%
 01:04=Pausat
-01:05=Vill du verkligen avsluta (Y/Esc)?
+01:05=Vill du verkligen avsluta (%1/%2)?
 01:06=Sudden death!
 01:07=%1 kvar
-01:08=Bränsle
+01:08=Bränsle: %1%
 01:09=Synkroniserar...
 01:10=Detta verktyg avslutar inte din tur!
 01:11=Detta vapen eller verktyg är inte tillgängligt än!
@@ -256,11 +255,11 @@
 02:02=Ooh, det börjar!
 02:02=Inga mesar tillåtna
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends (team/clan %1 wins)
+02:03=%1 vinner!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends (draw)
+02:04=Oavgjort
 
 ; New health crate
 02:05=Inkommande bistånd!
@@ -476,7 +475,6 @@
 03:51=Upphittad på marken
 03:52=UNUSED
 03:53=Typ 40
-;03:54=Bygg något
 03:54=Verktyg
 
 ; Weapon Descriptions (use | as line breaks)
@@ -534,18 +532,17 @@
 04:51=Få till en gratisträff genom att kasta en boll med|jord. Känns lite gran, och knuffar tillbaka|igelkottar.
 04:52=UNUSED
 04:53=Åk på ett äventyr genom tid och rymd, medan dina|kamrater blir kvar själva att slåss. Var beredd|att komma tillbaka när som helst, eller till|Sudden Death eller om de andra blir besegrade.|Varning. Fungerar inte under Sudden Death, om du|är ensam, eller om du är en kung.
-;04:54=INCOMPLETE
 04:54=Spruta en ström av fästande jord.|Bygg broar, gräv ner fienden, stäng igen tunnlar.|Var försiktig så att du inte får något på dig!
 
 ; Game goal strings
 05:00=Spellägen
 05:01=Följande regler gäller
-05:02=Fort: Försvara din fästning; besegra dina fiender!
+05:02=Placera kungen: Välj en skyddad startpunkt till kungen
 05:03=Låg gravitation: Var försiktig
 05:04=Osårbarhet: Igelkottar är (nästan) osårbara
 05:05=Vampyrism: Igelkottar helas med den mängd de skadar andra
 05:06=Karma: Igelkottar skadas med den mängd de skadar andra
-05:07=Skydda kungen: Låt inte kungen dö!|Placera kungen: Välj en skyddad startpunkt till kungen
+05:07=Skydda kungen: Låt inte kungen dö!
 05:08=Placera igelkottar: Placera igelkottarna innan spelet startar
 05:09=Artilleri: Igelkottar kan inte ändra position genom att gå
 05:10=Oförstörbar terräng: De flesta vapnen förstör inte terrängen

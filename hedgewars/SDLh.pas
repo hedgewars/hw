@@ -27,6 +27,9 @@ interface
 {$IFDEF FREEBSD}
     {$DEFINE UNIX}
 {$ENDIF}
+{$IFDEF OPENBSD}
+    {$DEFINE UNIX}
+{$ENDIF}
 {$IFDEF DARWIN}
     {$DEFINE UNIX}
 {$ENDIF}
@@ -56,7 +59,7 @@ interface
 
 (*  SDL  *)
 const
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
     SDLLibName = 'SDL2.dll';
     SDL_TTFLibName = 'SDL2_ttf.dll';
     SDL_MixerLibName = 'SDL2_mixer.dll';
@@ -73,6 +76,9 @@ const
 /////////////////////////////////////////////////////////////////
 /////////////////////  CONSTANT DEFINITIONS /////////////////////
 /////////////////////////////////////////////////////////////////
+
+    SDL_FALSE = 0;
+    SDL_TRUE = 1;
 
     // SDL_Init() flags
     SDL_INIT_TIMER          = $00000001;
@@ -94,7 +100,8 @@ const
     AUDIO_S16SYS         = {$IFDEF ENDIAN_LITTLE}AUDIO_S16LSB{$ELSE}AUDIO_S16MSB{$ENDIF};
 
     // default audio format from SDL_mixer.h
-    MIX_DEFAULT_FORMAT   = AUDIO_S16SYS;
+    //MIX_DEFAULT_FORMAT   = AUDIO_S16SYS;
+    MIX_DEFAULT_FORMAT   = {$IFDEF ENDIAN_LITTLE}AUDIO_S16LSB{$ELSE}AUDIO_S16MSB{$ENDIF};
 
     SDL_BUTTON_LEFT      = 1;
     SDL_BUTTON_MIDDLE    = 2;
@@ -534,8 +541,8 @@ const
 /////////////////////////////////////////////////////////////////
 
 // two important reference points for the wanderers of this area
-// http://www.freepascal.org/docs-html/ref/refsu5.html
-// http://www.freepascal.org/docs-html/prog/progsu144.html
+// https://www.freepascal.org/docs-html/ref/refsu5.html
+// https://www.freepascal.org/docs-html/prog/progsu144.html
 
 type
     PSDL_Window   = Pointer;
@@ -546,6 +553,7 @@ type
     TSDL_FingerId = Int64;
     TSDL_Keycode = LongInt;
     TSDL_Scancode = LongInt;
+    TSDL_JoystickID = LongInt;
 
     TSDL_eventaction = (SDL_ADDEVENT, SDL_PEEPEVENT, SDL_GETEVENT);
 
@@ -649,7 +657,7 @@ type
         fd: LongInt;
         end;
 {$ELSE}
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
     TWinbuffer = record
         data: Pointer;
         size, left: LongInt;
@@ -673,7 +681,7 @@ type
 {$IFDEF ANDROID}
             0: (androidio: TAndroidio);
 {$ELSE}
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
             0: (windowsio: TWindowsio);
 {$ENDIF}
 {$ENDIF}
@@ -758,7 +766,7 @@ type
     TSDL_ControllerAxisEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongInt;
+        which: TSDL_JoystickID;
         axis, padding1, padding2, padding3: Byte;
         value: SmallInt;
         padding4: Word;
@@ -767,14 +775,14 @@ type
     TSDL_ControllerButtonEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongInt;
+        which: TSDL_JoystickID;
         button, states, padding1, padding2: Byte;
         end;
 
     TSDL_ControllerDeviceEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: SmallInt;
+        which: LongInt;
         end;
 
     TSDL_JoyDeviceEvent = TSDL_ControllerDeviceEvent;
@@ -822,17 +830,17 @@ type
     TSDL_JoyAxisEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         axis: Byte;
         padding1, padding2, padding3: Byte;
-        value: LongInt;
+        value: SmallInt;
         padding4: Word;
         end;
 
     TSDL_JoyBallEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         ball: Byte;
         padding1, padding2, padding3: Byte;
         xrel, yrel: SmallInt;
@@ -841,7 +849,7 @@ type
     TSDL_JoyHatEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         hat: Byte;
         value: Byte;
         padding1, padding2: Byte;
@@ -850,10 +858,11 @@ type
     TSDL_JoyButtonEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: Byte;
+        which: TSDL_JoystickID;
         button: Byte;
         state: Byte;
         padding1: Byte;
+        padding2: Byte;
         end;
 
     TSDL_QuitEvent = record
@@ -1014,7 +1023,7 @@ type
                         sockets: PTCPSocket;
                         end;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
      TThreadFunction = function (p: pointer): Longword; stdcall;
      pfnSDL_CurrentBeginThread = function (
         _Security: pointer; 
@@ -1047,13 +1056,12 @@ procedure SDL_UnlockSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 
 function  SDL_GetError: PChar; cdecl; external SDLLibName;
 
-function  SDL_SetVideoMode(width, height, bpp: LongInt; flags: LongWord): PSDL_Surface; cdecl; external SDLLibName;
 function  SDL_CreateRGBSurface(flags: LongWord; Width, Height, Depth: LongInt; RMask, GMask, BMask, AMask: LongWord): PSDL_Surface; cdecl; external SDLLibName;
 function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch: LongInt; RMask, GMask, BMask, AMask: LongWord): PSDL_Surface; cdecl; external SDLLibName;
 procedure SDL_FreeSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: LongWord): LongInt; cdecl; external SDLLibName;
 function  SDL_SetAlpha(surface: PSDL_Surface; flag, key: LongWord): LongInt; cdecl; external SDLLibName;
-function  SDL_ConvertSurface(src: PSDL_Surface; fmt: PSDL_PixelFormat; flags: LongInt): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_ConvertSurface(src: PSDL_Surface; fmt: PSDL_PixelFormat; flags: LongWord): PSDL_Surface; cdecl; external SDLLibName;
 
 function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: LongWord): LongInt; cdecl; external SDLLibName;
@@ -1106,6 +1114,7 @@ procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; exte
 function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
 procedure SDL_StopTextInput; cdecl; external SDLLibName;
+procedure SDL_FlushEvent(eventType: LongWord); cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
 
@@ -1136,7 +1145,7 @@ function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; extern
 
 (* remember to mark the threaded functions as 'cdecl; export;'
    (or have fun debugging nil arguments) *)
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 // SDL uses wrapper in windows
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer; bt: pfnSDL_CurrentBeginThread; et: pfnSDL_CurrentEndThread): PSDL_Thread; cdecl; external SDLLibName;
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; overload;
@@ -1158,7 +1167,7 @@ procedure SDL_LockAudio; cdecl; external SDLLibName;
 procedure SDL_UnlockAudio; cdecl; external SDLLibName;
 
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
-function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
+function  SDL_JoystickNameForIndex(idx: LongInt): PChar; cdecl; external SDLLibName;
 function  SDL_JoystickOpen(idx: LongInt): PSDL_Joystick; cdecl; external SDLLibName;
 function  SDL_JoystickOpened(idx: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_JoystickIndex(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
@@ -1174,7 +1183,7 @@ function  SDL_JoystickGetHat(joy: PSDL_Joystick; hat: LongInt): Byte; cdecl; ext
 function  SDL_JoystickGetButton(joy: PSDL_Joystick; button: LongInt): Byte; cdecl; external SDLLibName;
 procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
 function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
 {$ENDIF}
@@ -1312,7 +1321,7 @@ begin
                   (PByteArray(buf)^[0] shl 24)
 end;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl;
 begin
     SDL_CreateThread:= SDL_CreateThread(fn, name, data, nil, nil)

@@ -21,17 +21,17 @@
 #import "GameInterfaceBridge.h"
 
 @interface RestoreViewController ()
-@property (retain, nonatomic) IBOutlet UIButton *restoreButton;
-@property (retain, nonatomic) IBOutlet UIButton *dismissButton;
+@property (strong, nonatomic) IBOutlet UIButton *restoreButton;
+@property (strong, nonatomic) IBOutlet UIButton *dismissButton;
 @end
 
 @implementation RestoreViewController
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(IBAction) buttonReleased:(id) sender {
+- (IBAction)buttonReleased:(id)sender {
     UIButton *theButton = (UIButton *)sender;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
@@ -54,7 +54,7 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.restoreButton setTitle:NSLocalizedString(@"Restore", nil) forState:UIControlStateNormal];
@@ -64,19 +64,12 @@
     [self.dismissButton applyDarkBlueQuickStyle];
 }
 
--(void) didReceiveMemoryWarning {
+#pragma mark -
+#pragma mark Memory Management
+
+- (void)didReceiveMemoryWarning {
+    MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
-
--(void) viewDidUnload {
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    [_restoreButton release];
-    [_dismissButton release];
-    [super dealloc];
-}
-
 
 @end

@@ -1,0 +1,14 @@
+[package]
+name = "land_dump"
+version = "0.1.0"
+authors = ["Andrei Korotaev <andrey.korotaev@aptomar.com>"]
+edition = "2018"
+
+[dependencies]
+land2d = { path = "../land2d" }
+landgen = { path = "../landgen" }
+mapgen = { path = "../mapgen" }
+lfprng = { path = "../lfprng" }
+integral-geometry = { path = "../integral-geometry" }
+png = "0.13"
+structopt ="0.2.13"

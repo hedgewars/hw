@@ -35,9 +35,13 @@ class PageCampaign : public AbstractPage
         QComboBox   *CBMission;
         QComboBox   *CBCampaign;
         QComboBox   *CBTeam;
+        bool currentMissionWon = false;
 
     protected:
         QLayout * bodyLayoutDefinition();
+
+    private:
+        QLayout * footerLayoutDefinition();
 };
 
 #endif

@@ -11,21 +11,23 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local missionName = loc("Precise shooting")
-local timeLeft = 10000
-local lastWeaponUsed = amSniperRifle
-local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies").."|"..
-	loc("You can only use the Sniper Rifle or the Watermelon bomb").."|"..
-	loc("You'll have only 2 watermelon bombs during the game").."|"..
-	loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 4 rifles").."|"..
-	loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports").."|"..
-	loc("The first turn will last 25 sec and every other turn 15 sec").."|"..
-	loc("If you skip a turn then the turn time left will be added to your next turn").."|"..
-	loc("Some parts of the land are indestructible")
+local timeLeft = 0
+local lastWeaponUsed = amNothing
+local firstTurn = true
+local battleStarted = false
+local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies.").."|"..
+	loc("You can only use the sniper rifle or the watermelon bomb.").."|"..
+	loc("You'll have only 2 watermelon bombs during the game.").."|"..
+	loc("You'll get an extra sniper rifle every time you kill an enemy hog with a limit of max 4 rifles.").."|"..
+	loc("You'll get an extra teleport every time you kill an enemy hog with a limit of max 2 teleports.").."|"..
+	loc("The first turn will last 25 sec and every other turn 15 sec.").."|"..
+	loc("If you skip a turn then the turn time left will be added to your next turn.").."|"..
+	loc("Some parts of the land are indestructible.")
 -- dialogs
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Challenge Objectives"), challengeObjectives, 1, 4500},
+	["init"] = {missionName, loc("Challenge objectives"), challengeObjectives, 1, 35000},
 }
 -- hogs
 local hero = {
@@ -33,6 +35,7 @@ local hero = {
 	x = 1100,
 	y = 560
 }
+local heroTurns = 0
 local enemiesOdd = {
 	{name = loc("Hog 1"), x = 2000 , y = 175},
 	{name = loc("Hog III"), x = 1950 , y = 1110},
@@ -56,15 +59,17 @@ local enemiesEven = {
 -- teams
 local teamA = {
 	name = loc("Hog Solo"),
-	color = tonumber("38D61C",16) -- green
+	color = -6
 }
 local teamB = {
+	-- Red Strawberries 1
 	name = loc("RS1"),
-	color = tonumber("FF0000",16) -- red
+	color = -1
 }
 local teamC = {
+	-- Red Strawberries 2
 	name = loc("RS2"),
-	color = tonumber("FF0000",16) -- red
+	color = -1
 }
 
 -------------- LuaAPI EVENT HANDLERS ------------------
@@ -79,20 +84,24 @@ function onGameInit()
 	Explosives = 0
 	Map = "fruit03_map"
 	Theme = "Fruit"
+	-- Disable Sudden Death
+	WaterRise = 0
+	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	local hats = { "Bandit", "fr_apple", "fr_banana", "fr_lemon", "fr_orange",
 					"fr_pumpkin", "Gasmask", "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_bars")
 	for i=1,table.getn(enemiesEven) do
 		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesEven[i].gear, enemiesEven[i].x, enemiesEven[i].y)
 	end
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	teamB.name = AddTeam(teamB.name, teamB.color, "bp2", "Island", "Default", "cm_bars")
 	for i=1,table.getn(enemiesOdd) do
 		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesOdd[i].gear, enemiesOdd[i].x, enemiesOdd[i].y)
@@ -101,13 +110,11 @@ function onGameInit()
 	initCheckpoint("fruit03")
 
 	AnimInit()
-	AnimationSetup()
 end
 
 function onGameStart()
-	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(unpack(goals["init"]))
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
@@ -116,6 +123,10 @@ function onGameStart()
 	AddAmmo(hero.gear, amTeleport, 2)
 	AddAmmo(hero.gear, amSniperRifle, 2)
 	AddAmmo(hero.gear, amWatermelon, 2)
+
+	AddAmmo(hero.gear, amSkip, 100)
+	timeLeft = 0
+
 	--enemies ammo
 	AddAmmo(enemiesOdd[1].gear, amDEagle, 100)
 	AddAmmo(enemiesOdd[1].gear, amSniperRifle, 100)
@@ -126,19 +137,27 @@ function onGameStart()
 	AddAmmo(enemiesEven[1].gear, amWatermelon, 1)
 	AddAmmo(enemiesEven[1].gear, amGrenade, 5)
 
+	turnHogs()
+
 	SendHealthStatsOff()
-	AddAnim(dialog01)
 end
 
 function onNewTurn()
 	if CurrentHedgehog == hero.gear then
-		if GetAmmoCount(hero.gear, amSkip) == 0 then
-			TurnTimeLeft = TurnTime + timeLeft
-			AddAmmo(hero.gear, amSkip, 1)
+		if firstTurn then
+			-- Unique game rule in this mission: First turn has more time
+			SetTurnTimeLeft(25000)
+			-- Generous ready time on first turn to give more time to read
+			SetReadyTimeLeft(35000)
+			battleStarted = true
+			firstTurn = false
+		end
+		if lastWeaponUsed == amSkip then
+			SetTurnTimeLeft(TurnTime + timeLeft)
 		end
 		timeLeft = 0
+		heroTurns = heroTurns + 1
 	end
-	turnHogs()
 end
 
 function onGameTick()
@@ -156,22 +175,62 @@ function onGameTick20()
 	end
 end
 
+-- Display ammo icon above gear. i = offset (start at 1)
+local function displayAmmoIcon(gear, ammoType, i)
+	if not GetHealth(gear) then
+		return
+	end
+	local x = GetX(gear) + 2
+	local y = GetY(gear) + 32 * i
+	local vgear = AddVisualGear(x, y, vgtAmmo, 0, true)
+	if vgear ~= nil then
+		local vgtFrame = ammoType
+		SetVisualGearValues(vgear,nil,nil,nil,nil,nil,vgtFrame)
+	end
+end
+
 function onGearDelete(gear)
-	if (isHog(gear)) then
+	if (isEnemyHog(gear) and GetHealth(hero.gear)) then
 		local availableTeleports = GetAmmoCount(hero.gear,amTeleport)
 		local availableSniper = GetAmmoCount(hero.gear,amSniperRifle)
+		local ammolist = ""
+		local tele = false
 		if availableTeleports < 2 then
 			AddAmmo(hero.gear, amTeleport, availableTeleports + 1 )
+			displayAmmoIcon(hero.gear, amTeleport, 1)
+			tele = true
+			ammolist = ammolist .. string.format(loc("%s (+1)"), GetAmmoName(amTeleport))
 		end
 		if availableSniper < 4 then
 			AddAmmo(hero.gear, amSniperRifle, availableSniper + 1 )
+			displayAmmoIcon(hero.gear, amSniperRifle, 2)
+			if tele then
+				ammolist = ammolist .. " • "
+			end
+			ammolist = ammolist .. string.format(loc("%s (+1)"), GetAmmoName(amSniperRifle))
+		end
+		-- Show collected ammo
+		if ammolist ~= "" then
+			PlaySound(sndShotgunReload)
+			AddCaption(ammolist, GetClanColor(GetHogClan(hero.gear)), capgrpAmmoinfo)
 		end
 	end
 end
 
-function onPrecise()
-	if GameTime > 3000 then
-		SetAnimSkip(true)
+-- Hide mission panel when player does anything
+function hideMissionOnAction()
+	if battleStarted then
+		HideMission()
+	end
+end
+
+onSlot = hideMissionOnAction
+onSetWeapon = hideMissionOnAction
+onAttack = hideMissionOnAction
+function onHogAttack(ammoType)
+	hideMissionOnAction()
+	if CurrentHedgehog == hero.gear then
+		lastWeaponUsed = ammoType
 	end
 end
 
@@ -202,48 +261,32 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies"))
-	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamA.name)
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
+	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
+	sendSimpleTeamRankings({teamB.name, teamC.name, teamA.name})
 	EndGame()
 end
 
 function heroWin(gear)
 	saveBonus(2, 1)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You complete the mission in "..TotalRounds.." rounds"))
-	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission"))
-	SendStat(siPlayerKills,'1',teamA.name)
+	SendStat(siCustomAchievement, string.format(loc("You completed the mission in %d rounds."), heroTurns))
+	local record = tonumber(GetCampaignVar("FastestPreciseShooting"))
+	if record ~= nil and heroTurns >= record then
+		SendStat(siCustomAchievement, string.format(loc("Your fastest victory so far: %d rounds"), record))
+	end
+	if record == nil or heroTurns < record then
+		SaveCampaignVar("FastestPreciseShooting", tostring(heroTurns))
+		if record ~= nil then
+			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
+		end
+	end
+	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission."))
+	sendSimpleTeamRankings({teamA.name, teamB.name, teamC.name})
+	SaveCampaignVar("Mission10Won", "true")
+	checkAllMissionsCompleted()
 	EndGame()
-end
-
--------------- ANIMATIONS ------------------
-
-function Skipanim(anim)
-	if goals[anim] ~= nil then
-		ShowMission(unpack(goals[anim]))
-    end
-    startBattle()
-end
-
-function AnimationSetup()
-	-- DIALOG 01 - Start, game instructions
-	AddSkipFunction(dialog01, Skipanim, {dialog01})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Fruit Planet Hog Solo got lost..."), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("...and got ambushed by the Red Strawberries"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use your available weapons in order to eliminate the enemies"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You can only use the Sniper Rifle or the Watermelon bomb"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only 2 watermelon bombs during the game"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 4 rifles"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("The first turn will last 25 sec and every other turn 15 sec"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you skip the game your time left will be added to your next turn"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Some parts of the land are indestructible"), 5000}})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = startBattle, args = {hero.gear}})
 end
 
 ------------------ Other Functions -------------------
@@ -271,29 +314,16 @@ function turnHogs()
 	end
 end
 
-function startBattle()
-	AnimSwitchHog(enemiesOdd[table.getn(enemiesOdd)].gear)
-	TurnTimeLeft = 0
-	-- these 2 are needed in order hero has 10 sec more in the first turn
-	timeLeft = 10000
-	AddAmmo(hero.gear, amSkip, 0)
-end
-
-function isHog(gear)
-	local hog = false
-	for i=1,table.getn(enemiesOdd) do
+function isEnemyHog(gear)
+	for i=1, table.getn(enemiesOdd) do
 		if gear == enemiesOdd[i].gear then
-			hog = true
-			break
+			return true
 		end
 	end
-	if not hog then
-		for i=1,table.getn(enemiesEven) do
-			if gear == enemiesEven then
-				hog = true
-				break
-			end
+	for i=1, table.getn(enemiesEven) do
+		if gear == enemiesEven then
+			return true
 		end
 	end
-	return hog
+	return false
 end

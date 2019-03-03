@@ -1,18 +1,18 @@
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 function onPreviewInit()
-onGameInit()
+    onGameInit()
 end
 
 function onGameInit()
     MapGen = mgDrawn
     TemplateFilter = 0
-    for i = 200,2000,600 do
-        AddPoint(1,i,63)
-        AddPoint(4000,i)
-    end
-
+    local mapComplexity = MapFeatureSize
+    -- reset feature size after use, to disable scaling
+    MapFeatureSize = 12
+    fillMap(false)
     side = 0
-    for i = 0,1+MapFeatureSize*2 do
+    for i = 0,1+mapComplexity*2 do
         if side > 3 then 
             size = GetRandom(4)+4
         else

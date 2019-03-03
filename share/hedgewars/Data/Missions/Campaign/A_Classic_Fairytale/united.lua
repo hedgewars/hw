@@ -1,10 +1,34 @@
+--[[
+A Classic Fairytale: United we stand
+
+= SUMMARY =
+Simple Deathmatch against cannibals in two waves.
+
+= GOAL =
+Kill both Cannfantery (cannibal) teams.
+
+= FLOW CHART =
+
+- Light Cannfantery and player hogs spawn
+- Cut scene: startAnim
+- TBS
+- Light Cannfantery defeated
+- Cut scene: wave2Anim
+- Heavy Cannfantery spawns
+- TBS
+- Heavy Cannfantery defeated
+- Cut scene: finalAnim
+> Victory
+
+]]
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 -----------------------------Constants---------------------------------
-choiceAccept = 1
-choiceRefuse = 2
-choiceAttack = 3
+choiceAccepted = 1
+choiceRefused = 2
+choiceAttacked = 3
 
 leaksPos = {2067, 509}
 densePos = {1882, 503}
@@ -39,17 +63,21 @@ m2DenseDead = 0
 startAnim = {}
 wave2Anim = {}
 finalAnim = {}
+
+nativesTeamName = nil
+cyborgTeamName = nil
+
 --------------------------Anim skip functions--------------------------
 function AfterHogDeadAnim()
   freshDead = nil
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function AfterStartAnim()
-  local goal = loc("Defeat the cannibals!|")
+  local goal = loc("Defeat the cannibals!")
   local chiefgoal = loc("Try to protect the chief! You won't lose if he dies, but it is advised that he survives.")
-  TurnTimeLeft = TurnTime
-  ShowMission(loc("United We Stand"), loc("Invasion"), goal .. chiefgoal, 1, 6000)
+  SetTurnTimeLeft(TurnTime)
+  ShowMission(loc("United We Stand"), loc("Invasion"), goal .. "|" .. chiefgoal, 1, 6000)
 end
 
 function SkipStartAnim()
@@ -80,7 +108,7 @@ function SkipWave2Anim()
 end
 
 function AfterWave2Anim()
-  TurnTimeLeft = 0
+  EndTurn(true)
 end
 
 function AfterFinalAnim()
@@ -112,8 +140,8 @@ function AfterFinalAnim()
   if progress and progress<4 then
     SaveCampaignVar("Progress", "4")
   end
-  DismissTeam(loc("011101001"))
-  TurnTimeLeft = 0
+  DismissTeam(cyborgTeamName)
+  EndTurn(true)
 end
 -----------------------------Animations--------------------------------
 function Wave2Reaction()
@@ -193,7 +221,7 @@ function AnimationSetup()
     table.insert(startAnim, {func = AnimOutOfNowhere, args = {cannibals[i], unpack(cannibalPos[i])}})
   end
   table.insert(startAnim, {func = AnimWait, args = {chief, 1500}})
-  table.insert(startAnim, {func = AnimSay, args = {leaks, loc("HOW DO THEY KNOW WHERE WE ARE???"), SAY_SHOUT, 5000}})
+  table.insert(startAnim, {func = AnimSay, args = {leaks, loc("HOW DO THEY KNOW WHERE WE ARE?"), SAY_SHOUT, 5000}})
   table.insert(startAnim, {func = AnimSay, args = {chief, loc("We have to protect the village!"), SAY_SAY, 5000}})
   table.insert(startAnim, {func = AnimSwitchHog, args = {leaks}})
   AddSkipFunction(startAnim, SkipStartAnim, {})
@@ -214,10 +242,10 @@ function SetupHogDeadAnim(gear)
   if nativesNum == 0 then
     return
   end
-  local hogDeadStrings = {loc("They killed ") .. gear ..loc("! You bastards!"), 
-                          gear .. loc("! Why?!"), 
+  local hogDeadStrings = {string.format(loc("They killed %s! You bastards!"), gear), 
+                          string.format(loc("%s! Why?!"), gear), 
                           loc("That was just mean!"), 
-                          loc("Oh no, not ") .. gear .. "!"}
+                          string.format(loc("Oh no, not %s!"), gear)}
   table.insert(hogDeadAnim, {func = AnimSay, args = {CurrentHedgehog, hogDeadStrings[nativesNum], SAY_SHOUT, 4000}})
 end
 
@@ -261,11 +289,11 @@ function RestoreWave(index)
 end
 
 function GetVariables()
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
+  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead")) or 0
   if m2DenseDead == 1 then
     denseDead = true
   end
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
+  m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
 end
 
 function SetupPlace()
@@ -299,8 +327,8 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
-	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
+  nativesTeamName = AddMissionTeam(-2)
+  leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   water = AddHog(loc("Fiery Water"), 0, 100, "pirate_jack")
   buffalo = AddHog(loc("Raging Buffalo"), 0, 100, "zoo_Bunny")
@@ -308,17 +336,17 @@ function AddHogs()
   natives = {leaks, dense, water, buffalo, chief}
   nativesNum = 5
 
-  AddTeam(loc("Light Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Light Cannfantry"), -1, "skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 4 do
     cannibals[i] = AddHog(HogNames[i], 2, 40, "Zombi")
   end
 
-  AddTeam(loc("Heavy Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Heavy Cannfantry"), -1, "skull", "Island", "Pirate", "cm_vampire")
   for i = 5, 8 do
     cannibals[i] = AddHog(HogNames[i], 2, 55, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   AnimSetGearPosition(leaks,   unpack(leaksPos))
@@ -355,20 +383,20 @@ end
 
 function SpawnCrates(index)
   if index == 1 then
-    SpawnAmmoCrate(1943, 408, amBazooka)
-    SpawnAmmoCrate(1981, 464, amGrenade)
-    SpawnAmmoCrate(1957, 459, amShotgun)
-    SpawnAmmoCrate(1902, 450, amDynamite)
-    SpawnUtilityCrate(1982, 405, amPickHammer)
-    SpawnUtilityCrate(2028, 455, amRope)
-    SpawnUtilityCrate(2025, 464, amTeleport)
+    SpawnSupplyCrate(1943, 408, amBazooka)
+    SpawnSupplyCrate(1981, 464, amGrenade)
+    SpawnSupplyCrate(1957, 459, amShotgun)
+    SpawnSupplyCrate(1902, 450, amDynamite)
+    SpawnSupplyCrate(1982, 405, amPickHammer)
+    SpawnSupplyCrate(2028, 455, amRope)
+    SpawnSupplyCrate(2025, 464, amTeleport)
   else
-    SpawnUtilityCrate(1982, 405, amBlowTorch)
-    SpawnAmmoCrate(2171, 428, amMolotov)
-    SpawnAmmoCrate(2364, 346, amFlamethrower)
-    SpawnAmmoCrate(2521, 303, amBazooka)
-    SpawnAmmoCrate(2223, 967, amGrenade)
-    SpawnAmmoCrate(1437, 371, amShotgun)
+    SpawnSupplyCrate(1982, 405, amBlowTorch)
+    SpawnSupplyCrate(2171, 428, amMolotov)
+    SpawnSupplyCrate(2364, 346, amFlamethrower)
+    SpawnSupplyCrate(2521, 303, amBazooka)
+    SpawnSupplyCrate(2223, 967, amGrenade)
+    SpawnSupplyCrate(1437, 371, amShotgun)
  end
   cratesSpawned[index] = true
 end
@@ -408,10 +436,11 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 2
-	Delay = 10 
   Map = "Hogville"
 	Theme = "Nature"
-  SuddenDeathTurns = 3000
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 
   AddHogs()
   AnimInit()
@@ -488,7 +517,7 @@ function onAmmoStoreInit()
   SetAmmo(amGirder, 4, 0, 0, 2)
   SetAmmo(amParachute, 4, 0, 0, 2)
   SetAmmo(amSwitch, 8, 0, 0, 2)
-  SetAmmo(amSkip, 8, 0, 0, 0)
+  SetAmmo(amSkip, 9, 0, 0, 0)
   SetAmmo(amRope, 5, 0, 0, 3)
   SetAmmo(amBlowTorch, 3, 0, 0, 3)
   SetAmmo(amPickHammer, 0, 0, 0, 3)
@@ -506,10 +535,10 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
-  if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+  if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
     SetupHogDeadAnim(freshDead)
     AddAnim(hogDeadAnim)
     AddFunction({func = AfterHogDeadAnim, args = {}})

@@ -23,9 +23,9 @@ interface
 
 procedure GetParams;
 {$IFDEF HWLIBRARY}
-var operatingsystem_parameter_argc: LongInt = 0; export;
-    operatingsystem_parameter_argv: pointer = nil; export;
-    operatingsystem_parameter_envp: pointer = nil; export;
+var operatingsystem_parameter_argc: LongInt = 0; {$IFNDEF PAS2C}{$IFNDEF IPHONEOS}cdecl;{$ENDIF} export;{$ENDIF}
+    operatingsystem_parameter_argv: pointer = nil; {$IFNDEF PAS2C}{$IFNDEF IPHONEOS}cdecl;{$ENDIF} export;{$ENDIF}
+    operatingsystem_parameter_envp: pointer = nil; {$IFNDEF PAS2C}{$IFNDEF IPHONEOS}cdecl;{$ENDIF} export;{$ENDIF}
 
 function ParamCount: LongInt;
 function ParamStr(i: LongInt): shortstring;
@@ -34,6 +34,7 @@ function ParamStr(i: LongInt): shortstring;
 implementation
 uses uVariables, uTypes, uUtils, uSound, uConsts;
 var isInternal: Boolean;
+    helpCommandUsed: Boolean;
 
 {$IFDEF HWLIBRARY}
 
@@ -71,43 +72,67 @@ end;
 
 procedure DisplayUsage;
 begin
-    WriteLn(stdout, 'Usage: hwengine <path to replay file> [options]');
+    WriteLn(stdout, 'This is the Hedgewars Engine (hwengine), used to play Hedgewars games and demos.');
+    WriteLn(stdout, 'Use the command-line arguments to play a demo.');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Usage: hwengine <path to demo file> [options]');
     WriteLn(stdout, '');
     WriteLn(stdout, 'where [options] can be any of the following:');
-    WriteLn(stdout, ' --prefix [path to folder]');
-    WriteLn(stdout, ' --user-prefix [path to folder]');
-    WriteLn(stdout, ' --locale [name of language file]');
-    WriteLn(stdout, ' --nick [string]');
-    WriteLn(stdout, ' --fullscreen-width [fullscreen width in pixels]');
-    WriteLn(stdout, ' --fullscreen-height [fullscreen height in pixels]');
-    WriteLn(stdout, ' --width [window width in pixels]');
-    WriteLn(stdout, ' --height [window height in pixels]');
-    WriteLn(stdout, ' --volume [sound level]');
-    WriteLn(stdout, ' --frame-interval [milliseconds]');
-    Writeln(stdout, ' --stereo [value]');
-    WriteLn(stdout, ' --raw-quality [flags]');
-    WriteLn(stdout, ' --low-quality');
-    WriteLn(stdout, ' --nomusic');
-    WriteLn(stdout, ' --nosound');
-    WriteLn(stdout, ' --fullscreen');
-    WriteLn(stdout, ' --showfps');
-    WriteLn(stdout, ' --altdmg');
-    WriteLn(stdout, ' --no-teamtag');
-    WriteLn(stdout, ' --no-hogtag');
-    WriteLn(stdout, ' --no-healthtag');
-    WriteLn(stdout, ' --translucent-tags');
-    WriteLn(stdout, ' --stats-only');
-    WriteLn(stdout, ' --help');
     WriteLn(stdout, '');
-    WriteLn(stdout, 'For more detailed help and examples go to:');
-    WriteLn(stdout, 'http://hedgewars.org/kb/CommandLineOptions');
-    GameType:= gmtSyntax;
+    WriteLn(stdout, 'File locations:');
+    WriteLn(stdout, '  --prefix <path to folder>: Set the path to the system game data folder');
+    WriteLn(stdout, '  --user-prefix <path to folder>: Set the path to the custom data folder to find game content');
+    WriteLn(stdout, '  --locale <name of file>: Set the game language (en.txt for example)');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Graphics:');
+    WriteLn(stdout, '  --width <width in pixels>: Set game window width');
+    WriteLn(stdout, '  --height <height in pixels>: Set game window height');
+    WriteLn(stdout, '  --fullscreen: Start in fullscreen');
+    WriteLn(stdout, '  --fullscreen-width <width in pixels>: Set fullscreen width');
+    WriteLn(stdout, '  --fullscreen-height <height in pixels>: Set fullscreen height');
+    WriteLn(stdout, '  --low-quality: Lowers the game quality');
+    WriteLn(stdout, '  --zoom <percent>: Start with custom zoom level');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Audio:');
+    WriteLn(stdout, '  --volume <sound level>: Set volume between 0 and 100');
+    WriteLn(stdout, '  --nomusic: Disable music');
+    WriteLn(stdout, '  --nosound: Disable sound effects');
+    WriteLn(stdout, '  --nodampen: Don''t dampen sound volume when game application loses focus');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'HUD:');
+    WriteLn(stdout, '  --altdmg: Show alternative damage');
+    WriteLn(stdout, '  --no-teamtag: Disable team name tags');
+    WriteLn(stdout, '  --no-hogtag: Disable hedgehog name tags');
+    WriteLn(stdout, '  --no-healthtag: Disable hedgehog health tags');
+    WriteLn(stdout, '  --translucent-tags: Enable translucent name and health tags');
+    WriteLn(stdout, '  --showfps: Show frames per second');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Miscellaneous:');
+    WriteLn(stdout, '  --nick <name>: Set user nickname');
+    WriteLn(stdout, '  --help: Show a list of command-line options and exit');
+    WriteLn(stdout, '  --protocol: Display protocol number and exit');
+    WriteLn(stdout, '');
+    Writeln(stdout, 'Advanced options:');
+    Writeln(stdout, '  --stereo <value>: Set stereoscopic rendering (1 to 14)');
+    WriteLn(stdout, '  --frame-interval <milliseconds>: Set minimum interval (in ms) between each frame. Eg, 40 would make the game run at most 25 fps');
+    WriteLn(stdout, '  --raw-quality <flags>: Manually specify the reduced quality flags');
+    WriteLn(stdout, '  --stats-only: Write the round information to console without launching the game, useful for statistics only');
+    WriteLn(stdout, '  --lua-test <path to script>: Run a Lua test script');
+    GameType:= gmtSyntaxHelp;
+    helpCommandUsed:= true;
+end;
+
+procedure DisplayProtocol;
+begin
+    WriteLn(stdout, IntToStr(cNetProtoVersion));
+    GameType:= gmtSyntaxHelp;
+    helpCommandUsed:= true;
 end;
 
 procedure setDepth(var paramIndex: LongInt);
 begin
     WriteLn(stdout, 'WARNING: --depth is a deprecated command, which could be removed in a future version!');
-    WriteLn(stdout, '         This option no longer does anything, please consider removing it');
+    WriteLn(stdout, '         This option no longer does anything, please consider removing it.');
     WriteLn(stdout, '');
    inc(ParamIndex);
 end;
@@ -127,7 +152,7 @@ begin
         ipcPort := port
     else
         begin
-        WriteLn(stderr, 'ERROR: use of --port is not allowed');
+        WriteLn(stderr, 'ERROR: use of --port is not allowed!');
         wrongParameter := true;
         end
 end;
@@ -191,7 +216,7 @@ begin
     val(str, tmpInt, c);
     wrongParameter:= c <> 0;
     if wrongParameter then
-        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a number, you passed "'+str+'"');
+        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a number, you passed "'+str+'"!');
 {$ENDIF}
     getLongIntParameter:= tmpInt;
 end;
@@ -202,9 +227,26 @@ begin
     wrongParameter:= (str='') or (Copy(str,1,2) = '--');
     {$IFNDEF HWLIBRARY}
     if wrongParameter then
-        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
+        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"!');
     {$ENDIF}
     getstringParameter:= str;
+end;
+
+procedure setZoom(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean);
+var param: LongInt;
+begin
+    param:= getLongIntParameter(str, paramIndex, wrongParameter);
+
+    if param = 100 then
+        exit;
+    UserZoom:= (param/100.0) * cDefaultZoomLevel;
+
+    if UserZoom < cMaxZoomLevel then
+        UserZoom:= cMaxZoomLevel;
+    if UserZoom > cMinZoomLevel then
+        UserZoom:= cMinZoomLevel;
+    zoom:= UserZoom;
+    ZoomValue:= UserZoom;
 end;
 
 procedure parseClassicParameter(cmdarray: array of string; size:LongInt; var paramIndex:LongInt); forward;
@@ -214,14 +256,15 @@ const videoarray: array [0..4] of string = ('--fullscreen-width','--fullscreen-h
       audioarray: array [0..2] of string = ('--volume','--nomusic','--nosound');
       otherarray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
       mediaarray: array [0..9] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allarray: array [0..17] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..35] of shortstring = (
+      allarray: array [0..18] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--nodampen','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
+      reallyAll: array[0..39] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
-                '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
+                '--height', '--frame-interval', '--volume','--nomusic', '--nosound', '--nodampen',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
+                '--zoom',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
-  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test');
+  {misc}        '--stats-only', '--gci', '--help','--protocol', '--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test','--no-holiday-silliness');
 var cmdIndex: byte;
 begin
     parseParameter:= false;
@@ -234,7 +277,7 @@ begin
     case cmdIndex of
         {--prefix}               0 : PathPrefix        := getstringParameter (arg, paramIndex, parseParameter);
         {--user-prefix}          1 : UserPathPrefix    := getstringParameter (arg, paramIndex, parseParameter);
-        {--locale}               2 : cLocaleFName      := getstringParameter (arg, paramIndex, parseParameter);
+        {--locale}               2 : cLanguageFName    := getstringParameter (arg, paramIndex, parseParameter);
         {--fullscreen-width}     3 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
         {--fullscreen-height}    4 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
         {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
@@ -243,42 +286,46 @@ begin
         {--volume}               8 : SetVolume          ( max(getLongIntParameter(arg, paramIndex, parseParameter), 0) );
         {--nomusic}              9 : SetMusic           ( false );
         {--nosound}             10 : SetSound           ( false );
-        {--fullscreen}          11 : cFullScreen       := true;
-        {--showfps}             12 : cShowFPS          := true;
-        {--altdmg}              13 : cAltDamage        := true;
-        {--low-quality}         14 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
-        {--raw-quality}         15 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--stereo}              16 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nick}                17 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
+        {--nodampen}            11 : SetAudioDampen     ( false );
+        {--fullscreen}          12 : cFullScreen       := true;
+        {--showfps}             13 : cShowFPS          := true;
+        {--altdmg}              14 : cAltDamage        := true;
+        {--low-quality}         15 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
+        {--raw-quality}         16 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--stereo}              17 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--nick}                18 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
+        {--zoom}                19 : setZoom(arg, paramIndex, parseParameter);
         {deprecated options}
-        {--depth}               18 : setDepth(paramIndex);
-        {--set-video}           19 : parseClassicParameter(videoarray,5,paramIndex);
-        {--set-audio}           20 : parseClassicParameter(audioarray,3,paramIndex);
-        {--set-other}           21 : parseClassicParameter(otherarray,3,paramIndex);
-        {--set-multimedia}      22 : parseClassicParameter(mediaarray,10,paramIndex);
-        {--set-everything}      23 : parseClassicParameter(allarray,14,paramIndex);
+        {--depth}               20 : setDepth(paramIndex);
+        {--set-video}           21 : parseClassicParameter(videoarray,5,paramIndex);
+        {--set-audio}           22 : parseClassicParameter(audioarray,3,paramIndex);
+        {--set-other}           23 : parseClassicParameter(otherarray,3,paramIndex);
+        {--set-multimedia}      24 : parseClassicParameter(mediaarray,10,paramIndex);
+        {--set-everything}      25 : parseClassicParameter(allarray,14,paramIndex);
         {"internal" options}
-        {--internal}            24 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
-        {--port}                25 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
-        {--recorder}            26 : startVideoRecording(paramIndex);
-        {--landpreview}         27 : GameType := gmtLandPreview;
+        {--internal}            26 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
+        {--port}                27 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
+        {--recorder}            28 : startVideoRecording(paramIndex);
+        {--landpreview}         29 : GameType := gmtLandPreview;
         {anything else}
-        {--stats-only}          28 : statsOnlyGame();
-        {--gci}                 29 : GciEasterEgg();
-        {--help}                30 : DisplayUsage();
-        {--no-teamtag}          31 : cTagsMask := cTagsMask and (not htTeamName);
-        {--no-hogtag}           32 : cTagsMask := cTagsMask and (not htName);
-        {--no-healthtag}        33 : cTagsMask := cTagsMask and (not htHealth);
-        {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent;
-        {--lua-test}            35 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--stats-only}          30 : statsOnlyGame();
+        {--gci}                 31 : GciEasterEgg();
+        {--help}                32 : DisplayUsage();
+        {--protocol}            33 : DisplayProtocol();
+        {--no-teamtag}          34 : cTagsMask := cTagsMask and (not htTeamName);
+        {--no-hogtag}           35 : cTagsMask := cTagsMask and (not htName);
+        {--no-healthtag}        36 : cTagsMask := cTagsMask and (not htHealth);
+        {--translucent-tags}    37 : cTagsMask := cTagsMask or htTransparent;
+        {--lua-test}            38 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--no-holiday-silliness} 39 : cHolidaySilliness:= false;
     else
         begin
-        //Assume the first "non parameter" is the replay file, anything else is invalid
+        //Assume the first "non parameter" is the demo file, anything else is invalid
         if (recordFileName = '') and (Copy(cmd,1,2) <> '--') then
             recordFileName := cmd
         else
             begin
-            WriteLn(stderr, '"'+cmd+'" is not a valid option');
+            WriteLn(stderr, '"'+cmd+'" is not a valid option.');
             parseParameter:= true;
             end;
         end;
@@ -290,9 +337,9 @@ var index, tmpInt: LongInt;
     isBool, isValid: Boolean;
     cmd, arg, newSyntax: string;
 begin
-    WriteLn(stdout, 'WARNING: you are using a deprecated command, which could be removed in a future version!');
+    WriteLn(stdout, 'WARNING: You are using a deprecated command, which could be removed in a future version!');
     WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');
-    WriteLn(stdout, '         Run `hwegine --help` to learn it!');
+    WriteLn(stdout, '         Run "hwegine --help" to learn it!');
     WriteLn(stdout, '');
 
     index:= 0;
@@ -306,10 +353,10 @@ begin
         isValid:= (cmd<>'--depth');
 
         // check if the parameter is a boolean one
-        isBool:= (cmd = '--nomusic') or (cmd = '--nosound') or (cmd = '--fullscreen') or (cmd = '--showfps') or (cmd = '--altdmg') or (cmd = '--no-teamtag') or (cmd = '--no-hogtag') or (cmd = '--no-healthtag') or (cmd = '--translucent-tags');
+        isBool:= (cmd = '--nomusic') or (cmd = '--nosound') or (cmd = '--nodampen') or (cmd = '--fullscreen') or (cmd = '--showfps') or (cmd = '--altdmg') or (cmd = '--no-teamtag') or (cmd = '--no-hogtag') or (cmd = '--no-healthtag') or (cmd = '--translucent-tags');
         if isBool and (arg='0') then
             isValid:= false;
-        if (cmd='--nomusic') or (cmd='--nosound') then
+        if (cmd='--nomusic') or (cmd='--nosound') or (cmd='--nodampen') then
             isValid:= not isValid;
 
         if isValid then
@@ -357,12 +404,13 @@ begin
         inc(paramIndex);
         end;
     if wrongParameter = true then
-        GameType:= gmtSyntax;
+        GameType:= gmtBadSyntax;
 end;
 
 procedure GetParams;
 begin
     isInternal:= (ParamStr(1) = '--internal');
+    helpCommandUsed:= false;
 
     UserPathPrefix := _S'.';
     PathPrefix     := cDefaultPathPrefix;
@@ -371,20 +419,21 @@ begin
 
     if (isInternal) and (ParamCount<=1) then
         begin
-        WriteLn(stderr, '--internal should not be manually used');
-        GameType := gmtSyntax;
+        WriteLn(stderr, 'The "--internal" option should not be manually used!');
+        GameType := gmtBadSyntax;
         end;
 
-    if (not cTestLua) and (not isInternal) and (recordFileName = '') then
-        begin
-        WriteLn(stderr, 'You must specify a replay file');
-        GameType := gmtSyntax;
-        end
-    else if (recordFileName <> '') then
-        WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '"');
+    if (not helpCommandUsed) then
+        if (not cTestLua) and (not isInternal) and (recordFileName = '') then
+            begin
+            WriteLn(stderr, 'You must specify a demo file.');
+            GameType := gmtBadSyntax;
+            end
+        else if (recordFileName <> '') then
+            WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '".');
 
-    if (GameType = gmtSyntax) then
-        WriteLn(stderr, 'Please use --help to see possible arguments and their usage');
+    if (GameType = gmtBadSyntax) then
+        WriteLn(stderr, 'Please use --help to see possible arguments and their usage.');
 
     (*
     WriteLn(stdout,'PathPrefix:     ' + PathPrefix);

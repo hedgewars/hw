@@ -23,3 +23,40 @@ import qualified Data.ByteString.Char8 as B
 
 serverVersion :: B.ByteString
 serverVersion = "3"
+
+-- Maximum hedgehogs per team
+cHogsPerTeam :: Int
+cHogsPerTeam = 8
+
+-- Maximum teams count
+cMaxTeams :: Int
+cMaxTeams = 8
+
+-- Maximum total number of hedgehogs
+cMaxHHs :: Int
+cMaxHHs = cHogsPerTeam * cMaxTeams
+
+{- "Fake" nick names used for special server messages in chat.
+They are enclosed in brackets; these characters not allowed in real nick names.
+The brackets are required as they are parsed by the frontend.
+Names enclosed in square brackets send messages that are supposed to be translated by the frontend.
+Names enclosed in parenthesis send messages that are not supposed to be translated. -}
+
+-- For most server messages, usually response to a command
+nickServer :: B.ByteString
+nickServer = "[server]"
+
+-- For /rnd command
+nickRandomCoin :: B.ByteString
+nickRandomCoin = "[random]"
+
+nickRandomCustom :: B.ByteString
+nickRandomCustom = "(random)"
+
+-- For /global command
+nickGlobal :: B.ByteString
+nickGlobal = "(global notice)"
+
+-- For greeting message added with /greeting command
+nickGreeting :: B.ByteString
+nickGreeting = "(greeting)"

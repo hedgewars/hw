@@ -75,14 +75,22 @@ function isSorterActive: boolean; inline;
 procedure initModule;
 
 implementation
-uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld;
+uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld, uUtils;
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
-    moved: boolean;
+    moved, rising, outside: boolean;
     vfc, vft: LongWord;
+    spawnMargin: LongInt;
+const
+    randMargin = 50;
 begin
-if vobCount = 0 then exit;
+if SuddenDeathDmg then
+    begin
+    if (vobSDCount = 0) then exit;
+    end
+else
+    if (vobCount = 0) then exit;
 
 sign:= 1;
 with Gear^ do
@@ -157,28 +165,34 @@ with Gear^ do
             X:= X - cScreenSpace;
             moved:= true
             end;
-            // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
-        if (Gear^.Layer = 2) and (round(Y) - 400 > LAND_HEIGHT) and (cGravityf >= 0) then
+
+        // it's possible for flakes to move upwards
+        if SuddenDeathDmg then
+            rising:= (cGravityf * vobSDFallSpeed) < 0
+        else
+            rising:= (cGravityf * vobFallSpeed) < 0;
+
+        if gear^.layer = 2 then
+            spawnMargin:= 400
+        else
+            spawnMargin:= 200;
+
+        // flake fell far below map?
+        outside:= (not rising) and (round(Y) - spawnMargin + randMargin > LAND_HEIGHT);
+        // if not, did it rise far above map?
+        outside:= outside or (rising and (round(Y) < LAND_HEIGHT - 1024 - spawnMargin - randMargin));
+
+        // if flake left acceptable vertical area, respawn it opposite side
+        if outside then
             begin
             X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y-(1024 + 400 + random(50)); // TODO - configure in theme (jellies for example could use limited range)
-            moved:= true
-            end
-        else if (Gear^.Layer <> 2) and (round(Y) - 150 > LAND_HEIGHT) and (cGravityf >= 0) then
-            begin
-            X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y-(1024 + 200 + random(50));
-            moved:= true
-            end
-        else if (round(Y) < LAND_HEIGHT-1200) and (cGravityf < 0) then // gravity can make flakes move upwards
-            begin
-            X:= cLeftScreenBorder + random(cScreenSpace);
-            if Gear^.Layer = 2 then
-                Y:= Y+(1024 + 150 + random(100))
+            if rising then
+                Y:= Y + (1024 + spawnMargin + random(50))
             else
-                Y:= Y+(1024 + random(50));
-            moved:= true
+                Y:= Y - (1024 + spawnMargin + random(50));
+            moved:= true;
             end;
+
         if moved then
             begin
             Angle:= random(360);
@@ -232,7 +246,6 @@ s:= min(Steps, cExplFrameTicks);
 
 Gear^.X:= Gear^.X + Gear^.dX * s;
 Gear^.Y:= Gear^.Y + Gear^.dY * s;
-//Gear^.dY:= Gear^.dY + cGravityf;
 
 if Gear^.FrameTicks <= Steps then
     if Gear^.Frame = 0 then
@@ -303,7 +316,7 @@ var vgt: PVisualGear;
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
-Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravityf * (Steps * Steps);
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
 if (Gear^.State and gstTmpFlag) = 0 then
     begin
     Gear^.dY:= Gear^.dY + cGravityf * Steps;
@@ -407,7 +420,6 @@ Gear^.X:= Gear^.X + (cWindSpeedf + Gear^.dX) * Steps;
 Gear^.Y:= Gear^.Y - (cDrownSpeedf + Gear^.dY) * Steps;
 
 Gear^.dX := Gear^.dX + (cWindSpeedf * 0.3 * Steps);
-//Gear^.dY := Gear^.dY - (cDrownSpeedf * 0.995);
 
 if Gear^.FrameTicks <= Steps then
     if Gear^.Frame = 0 then
@@ -547,7 +559,7 @@ end;
 
 procedure doStepTeamHealthSorter(Gear: PVisualGear; Steps: Longword);
 var i: Longword;
-    b: boolean;
+    b, noHogs: boolean;
     t, h: LongInt;
 begin
 {$IFNDEF PAS2C}
@@ -592,17 +604,24 @@ if TeamsCount > 1 then
 t:= - 4;
 for i:= 0 to Pred(TeamsCount) do
         with thexchar[i] do
-          if team^.TeamHealth > 0 then
+          begin
+          noHogs:= true;
+          for h:= 0 to cMaxHHIndex do
+              // Check if all hogs are hidden
+              if team^.Hedgehogs[h].Gear <> nil then
+                  noHogs:= false;
+          // Skip team bar if all hogs are dead or hidden
+          if (team^.TeamHealth > 0) and (noHogs = false) then
             begin
             dec(t, team^.Clan^.HealthTex^.h + 2);
             ny:= t;
             dy:= dy - ny
             end;
+          end;
 
 Gear^.Timer:= cSorterWorkTime;
 Gear^.doStep:= @doStepTeamHealthSorterWork;
 currsorter:= Gear;
-//doStepTeamHealthSorterWork(Gear, Steps)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -618,12 +637,14 @@ if Gear^.Frame <> 0 then  // use a non-hedgehog gear - a lua trick that hopefull
         begin
         Gear^.X:= hwFloat2Float(realgear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
         Gear^.Y:= hwFloat2Float(realgear^.Y) - (realgear^.Radius + Gear^.Tex^.h);
+        Gear^.Angle:= 1; // Mark speech bubble as ready for rendering
         end
     end
 else if Gear^.Hedgehog^.Gear <> nil then
     begin
     Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
     Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (cHHRadius + Gear^.Tex^.h);
+    Gear^.Angle:= 1; // Mark speech bubble as ready for rendering
     end;
 
 if (Gear^.Timer = 0) or ((realgear = nil) and (Gear^.Frame <> 0))  then
@@ -685,16 +706,17 @@ begin
 if round(Gear^.Y) - 10 < cWaterLine then
     DeleteVisualGear(Gear)
 else
-    Gear^.Y:= Gear^.Y - 0.08 * Steps;
-
+    begin
+    Gear^.X:= Gear^.X + Gear^.dX * Steps;
+    Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+    end;
 end;
 
 procedure doStepHealthTag(Gear: PVisualGear; Steps: Longword);
 var s: shortstring;
 begin
-s:= '';
+s:= IntToStr(Gear^.State);
 
-str(Gear^.State, s);
 if Gear^.Hedgehog <> nil then
     Gear^.Tex:= RenderStringTex(ansistring(s), Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
 else
@@ -702,7 +724,7 @@ else
 
 Gear^.doStep:= @doStepHealthTagWork;
 
-if (round(Gear^.Y) > cWaterLine) and (Gear^.Frame = 0)  then
+if (round(Gear^.Y) > cWaterLine) and (Gear^.Frame = 0) and (Gear^.FrameTicks = 0) then
     Gear^.doStep:= @doStepHealthTagWorkUnderWater;
 
 Gear^.Y:= Gear^.Y - Gear^.Tex^.h;
@@ -877,6 +899,7 @@ var
     currwindbar: PVisualGear = nil;
 
 procedure doStepSmoothWindBarWork(Gear: PVisualGear; Steps: Longword);
+const maxWindBarWidth = 73;
 begin
     if currwindbar = Gear then
     begin
@@ -889,6 +912,11 @@ begin
             inc(WindBarWidth)
         else if WindBarWidth > Gear^.Tag then
             dec(WindBarWidth);
+        // Prevent wind bar from overflowing
+        if WindBarWidth > maxWindBarWidth then
+            WindBarWidth:= maxWindBarWidth;
+        if WindBarWidth < - maxWindBarWidth then
+            WindBarWidth:= - maxWindBarWidth;
         end;
     if cWindspeedf > Gear^.dAngle then
         begin
@@ -902,7 +930,7 @@ begin
         end;
     end;
 
-    if ((WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)) or (currwindbar <> Gear) then
+    if (((WindBarWidth = Gear^.Tag) or (Abs(WindBarWidth) >= maxWindBarWidth)) and (cWindspeedf = Gear^.dAngle)) or (currwindbar <> Gear) then
     begin
         if currwindbar = Gear then currwindbar:= nil;
         DeleteVisualGear(Gear)

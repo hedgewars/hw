@@ -25,7 +25,7 @@
 @implementation EngineProtocolNetwork
 @synthesize delegate, stream, csd, enginePort;
 
--(id) initWithPort:(NSInteger) port {
+- (id)initWithPort:(NSInteger)port {
     if ((self = [super init])) {
         self.delegate = nil;
         self.csd = NULL;
@@ -35,19 +35,13 @@
     return self;
 }
 
--(id) init {
+- (id)init {
     return [self initWithPort:[HWUtils randomPort]];
-}
-
--(void) dealloc {
-    self.delegate = nil;
-    releaseAndNil(stream);
-    [super dealloc];
 }
 
 #pragma mark -
 #pragma mark Spawner functions
--(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
+- (void)spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
     self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
     [self.stream open];
 
@@ -60,7 +54,7 @@
 #pragma mark -
 #pragma mark Provider functions
 // unpacks team data from the selected team.plist to a sequence of engine commands
--(void) provideTeamData:(NSString *)teamName forHogs:(NSInteger) numberOfPlayingHogs withHealth:(NSInteger) initialHealth ofColor:(NSNumber *)teamColor {
+- (void)provideTeamData:(NSString *)teamName forHogs:(NSInteger)numberOfPlayingHogs withHealth:(NSInteger)initialHealth ofColor:(NSNumber *)teamColor {
     /*
      addteam <32charsMD5hash> <color> <team name>
      addhh <level> <health> <hedgehog name>
@@ -69,28 +63,22 @@
 
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@", TEAMS_DIRECTORY(), teamName];
     NSDictionary *teamData = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
-    [teamFile release];
 
     NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@",
                                       [teamData objectForKey:@"hash"], [teamColor stringValue], [teamName stringByDeletingPathExtension]];
     [self sendToEngine: teamHashColorAndName];
-    [teamHashColorAndName release];
 
     NSString *grave = [[NSString alloc] initWithFormat:@"egrave %@", [teamData objectForKey:@"grave"]];
     [self sendToEngine: grave];
-    [grave release];
 
     NSString *fort = [[NSString alloc] initWithFormat:@"efort %@", [teamData objectForKey:@"fort"]];
     [self sendToEngine: fort];
-    [fort release];
 
     NSString *voicepack = [[NSString alloc] initWithFormat:@"evoicepack %@", [teamData objectForKey:@"voicepack"]];
     [self sendToEngine: voicepack];
-    [voicepack release];
 
     NSString *flag = [[NSString alloc] initWithFormat:@"eflag %@", [teamData objectForKey:@"flag"]];
     [self sendToEngine: flag];
-    [flag release];
 
     NSArray *hogs = [teamData objectForKey:@"hedgehogs"];
     for (int i = 0; i < numberOfPlayingHogs; i++) {
@@ -99,21 +87,16 @@
         NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %ld %@",
                                            [hog objectForKey:@"level"], (long)initialHealth, [hog objectForKey:@"hogname"]];
         [self sendToEngine: hogLevelHealthAndName];
-        [hogLevelHealthAndName release];
 
         NSString *hogHat = [[NSString alloc] initWithFormat:@"ehat %@", [hog objectForKey:@"hat"]];
         [self sendToEngine: hogHat];
-        [hogHat release];
     }
-
-    [teamData release];
 }
 
 // unpacks ammostore data from the selected ammo.plist to a sequence of engine commands
--(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams {
+- (void)provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger)numberOfTeams {
     NSString *weaponPath = [[NSString alloc] initWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),ammostoreName];
     NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:weaponPath];
-    [weaponPath release];
 
     // if we're loading an older version of ammos fill the engine message with 0s
     int diff = HW_getNumberOfWeapons() - [[ammoData objectForKey:@"ammostore_initialqt"] length];
@@ -123,34 +106,28 @@
 
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@%@", [ammoData objectForKey:@"ammostore_initialqt"], update];
     [self sendToEngine: ammloadt];
-    [ammloadt release];
 
     NSString *ammprob = [[NSString alloc] initWithFormat:@"eammprob %@%@", [ammoData objectForKey:@"ammostore_probability"], update];
     [self sendToEngine: ammprob];
-    [ammprob release];
 
     NSString *ammdelay = [[NSString alloc] initWithFormat:@"eammdelay %@%@", [ammoData objectForKey:@"ammostore_delay"], update];
     [self sendToEngine: ammdelay];
-    [ammdelay release];
 
     NSString *ammreinf = [[NSString alloc] initWithFormat:@"eammreinf %@%@", [ammoData objectForKey:@"ammostore_crate"], update];
     [self sendToEngine: ammreinf];
-    [ammreinf release];
 
     // send this for each team so it applies the same ammostore to all teams
     NSString *ammstore = [[NSString alloc] initWithString:@"eammstore"];
-    for (int i = 0; i < numberOfTeams; i++)
+    for (int i = 0; i < numberOfTeams; i++) {
         [self sendToEngine: ammstore];
-    [ammstore release];
-
-    [ammoData release];
+    }
 }
 
 // unpacks scheme data from the selected scheme.plist to a sequence of engine commands
--(NSInteger) provideScheme:(NSString *)schemeName {
+- (NSInteger)provideScheme:(NSString *)schemeName {
     NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),schemeName];
     NSDictionary *schemeDictionary = [[NSDictionary alloc] initWithContentsOfFile:schemePath];
-    [schemePath release];
+
     NSArray *basicArray = [schemeDictionary objectForKey:@"basic"];
     NSArray *gamemodArray = [schemeDictionary objectForKey:@"gamemod"];
     int result = 0;
@@ -164,7 +141,6 @@
     }
     NSString *flags = [[NSString alloc] initWithFormat:@"e$gmflags %d",result];
     [self sendToEngine:flags];
-    [flags release];
 
     // basic game flags
     result = [[basicArray objectAtIndex:0] intValue];
@@ -180,17 +156,14 @@
             value = value * 1000;
         NSString *strToSend = [[NSString alloc] initWithFormat:@"%@ %d",command,value];
         [self sendToEngine:strToSend];
-        [strToSend release];
     }
-    [basic release];
 
-    [schemeDictionary release];
     return result;
 }
 
 #pragma mark -
 #pragma mark Network relevant code
--(void) dumpRawData:(const char *)buffer ofSize:(uint8_t) length {
+- (void)dumpRawData:(const char *)buffer ofSize:(uint8_t) length {
     [self.stream write:&length maxLength:1];
     [self.stream write:(const uint8_t *)buffer maxLength:length];
 }
@@ -213,7 +186,7 @@
 }
 
 // this is launched as thread and handles all IPC with engine
--(void) engineProtocol:(id) object {
+- (void)engineProtocol:(id)object {
     @autoreleasepool {
     
     NSDictionary *gameConfig = (NSDictionary *)object;
@@ -259,7 +232,7 @@
             break;
 
         switch (buffer[0]) {
-            case 'C':
+            case 'C': {
                 DLog(@"Sending game config...\n%@", gameConfig);
 
                 /*if (isNetGame == YES)
@@ -273,13 +246,15 @@
                 NSString *script = [gameConfig objectForKey:@"mission_command"];
                 if ([script length] != 0)
                     [self sendToEngine:script];
-                // missions/tranings only need the script configuration set
-                if ([gameConfig count] == 1)
-                    break;
-
+                
                 // seed info
                 [self sendToEngine:[gameConfig objectForKey:@"seed_command"]];
 
+                // missions/tranings/campaign only need the script configuration set and seed
+                TGameType currentGameType = [HWUtils gameType];
+                if (currentGameType == gtMission || currentGameType == gtCampaign)
+                    break;
+                
                 // dimension of the map
                 [self sendToEngine:[gameConfig objectForKey:@"templatefilter_command"]];
                 [self sendToEngine:[gameConfig objectForKey:@"mapgen_command"]];
@@ -308,15 +283,18 @@
                                   ofColor:[teamData objectForKey:@"color"]];
                 }
                 break;
-            case '?':
+            }
+            case '?': {
                 DLog(@"Ping? Pong!");
                 [self sendToEngine:@"!"];
                 break;
-            case 'E':
+            }
+            case 'E': {
                 DLog(@"ERROR - last console line: [%s]", &buffer[1]);
                 clientQuit = YES;
                 break;
-            case 'e':
+            }
+            case 'e': {
                 [self dumpRawData:buffer ofSize:msgSize];
 
                 sscanf((char *)buffer, "%*s %d", &eProto);
@@ -331,21 +309,22 @@
                     clientQuit = YES;
                 }
                 break;
-            case 'i':
+            }
+            case 'i': {
                 if (statsArray == nil) {
                     statsArray = [[NSMutableArray alloc] initWithCapacity:10 - 2];
                     NSMutableArray *ranking = [[NSMutableArray alloc] initWithCapacity:4];
                     [statsArray insertObject:ranking atIndex:0];
-                    [ranking release];
                 }
                 NSString *tempStr = [NSString stringWithUTF8String:&buffer[2]];
                 NSArray *info = [tempStr componentsSeparatedByString:@" "];
                 NSString *arg = [info objectAtIndex:0];
                 int index = [arg lengthOfBytesUsingEncoding:NSUTF8StringEncoding] + 3;
                 switch (buffer[1]) {
-                    case 'r':           // winning team
+                    case 'r': {           // winning team
                         [statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
                         break;
+                    }
                     case 'D':           // best shot
                     {
                         NSString *hogName = [NSString stringWithUTF8String:&buffer[index]];
@@ -392,19 +371,21 @@
                         break;
                 }
                 break;
-            case 'q':
+            }
+            case 'q': {
                 // game ended and match finished, statsArray is full of delicious statistics
                 if (self.delegate != nil && [self.delegate respondsToSelector:@selector(gameEndedWithStatistics:)])
                     [self.delegate gameEndedWithStatistics:statsArray];
-                [statsArray release];
                 [HWUtils setGameStatus:gsEnded];
                 // closing connection here would trigger a "IPC connection lost" error, so we have to wait until recv fails
                 break;
-            case 'Q':
+            }
+            case 'Q': {
                 // game exited but not completed, skip this message in the savefile
                 [HWUtils setGameStatus:gsInterrupted];
                 // same here, don't set clientQuit to YES
                 break;
+            }
             default:
                 [self dumpRawData:buffer ofSize:msgSize];
                 break;
@@ -413,7 +394,6 @@
     DLog(@"Engine exited, ending thread");
 
     [self.stream close];
-    [self.stream release];
 
     // Close the client socket
     [HWUtils freePort:self.enginePort];

@@ -21,26 +21,25 @@
 #import "GameInterfaceBridge.h"
 
 @interface SavedGamesViewController ()
-@property (retain, nonatomic) IBOutlet UIBarButtonItem *clearAllButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *clearAllButton;
 @end
 
 @implementation SavedGamesViewController
 @synthesize tableView, listOfSavegames;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(void) updateTable {
+- (void)updateTable {
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SAVES_DIRECTORY() error:NULL];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
     self.listOfSavegames = array;
-    [array release];
 
     [self.tableView reloadData];
 }
 
--(void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     
@@ -49,11 +48,9 @@
     NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
     UIImageView *background = [[UIImageView alloc] initWithImage:img];
-    [img release];
     background.frame = self.view.frame;
     background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view insertSubview:background atIndex:0];
-    [background release];
     
     [self.clearAllButton setTitle:NSLocalizedString(@"Clear All", nil)];
     
@@ -61,14 +58,14 @@
         [self updateTable];
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [self updateTable];
     [super viewWillAppear:animated];
 }
 
 #pragma mark -
 #pragma mark button functions
--(IBAction) buttonPressed:(id) sender {
+- (IBAction)buttonPressed:(id)sender {
     UIButton *button = (UIButton *)sender;
 
     if (button.tag == 0) {
@@ -91,11 +88,10 @@
             [actionSheet showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
         else
             [actionSheet showInView:self.view];
-        [actionSheet release];
     }
 }
 
--(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if ([actionSheet cancelButtonIndex] != buttonIndex) {
         // remove all files and recreate the directory
         [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
@@ -108,17 +104,16 @@
         [self.listOfSavegames removeAllObjects];
         
         [self.tableView deleteRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationTop];
-        [array release];
     }
 }
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.listOfSavegames count];
 }
 
@@ -127,7 +122,7 @@
 
     EditableCellView *editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (editableCell == nil) {
-        editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        editableCell = [[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         editableCell.delegate = nil;
         editableCell.textField.userInteractionEnabled = NO;
     }
@@ -138,13 +133,13 @@
     return (UITableViewCell *)editableCell;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 60)];
     footer.backgroundColor = [UIColor clearColor];
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*60/100, 60)];
     label.center = CGPointMake(self.tableView.frame.size.width/2, 30);
-    label.textAlignment = UITextAlignmentCenter;
+    label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont italicSystemFontOfSize:16];
     label.textColor = [UIColor lightGrayColor];
     label.numberOfLines = 5;
@@ -152,15 +147,14 @@
 
     label.backgroundColor = [UIColor clearColor];
     [footer addSubview:label];
-    [label release];
-    return [footer autorelease];
+    return footer;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 60;
 }
 
--(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     [(EditableCellView *)[self.tableView cellForRowAtIndexPath:indexPath] save:nil];
     [self fixTagsForStartTag:[indexPath row]];
 
@@ -189,7 +183,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.listOfSavegames == nil)
         [self updateTable];
@@ -203,21 +197,18 @@
     NSString *newFilePath = [[NSString alloc] initWithFormat:@"%@/%@",SAVES_DIRECTORY(),newSaveName];
 
     [self.listOfSavegames addObject:newSaveName];
-    [newSaveName release];
     [[NSFileManager defaultManager] copyItemAtPath:currentFilePath toPath:newFilePath error:nil];
-    [newFilePath release];
 
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
     [GameInterfaceBridge registerCallingController:self];
     [GameInterfaceBridge startSaveGame:currentFilePath];
-    [currentFilePath release];
 }
 
 #pragma mark -
 #pragma mark editableCellView delegate
 // rename old file if names differ
--(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
+- (void)saveTextFieldValue:(NSString *)textString withTag:(NSInteger)tagValue {
     if (self.listOfSavegames == nil)
         [self updateTable];
     NSString *oldFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:tagValue]];
@@ -232,24 +223,11 @@
 
 #pragma mark -
 #pragma mark Memory Management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     self.listOfSavegames = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
-}
-
--(void) viewDidUnload {
-    self.tableView = nil;
-    self.listOfSavegames = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(tableView);
-    releaseAndNil(listOfSavegames);
-    releaseAndNil(_clearAllButton);
-    [super dealloc];
 }
 
 @end

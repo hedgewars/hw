@@ -128,6 +128,7 @@ class HWChatWidget : public QWidget
         void chatLine(const QString& str);
         void kick(const QString & str);
         void ban(const QString & str);
+        void delegate(const QString & str);
         void info(const QString & str);
         void follow(const QString &);
         void nickCountUpdate(int cnt);
@@ -144,6 +145,7 @@ class HWChatWidget : public QWidget
         QAction * acInfo;
         QAction * acKick;
         QAction * acBan;
+        QAction * acDelegate;
         QAction * acFollow;
         QAction * acIgnore;
         QAction * acFriend;
@@ -163,6 +165,7 @@ class HWChatWidget : public QWidget
         void returnPressed();
         void onBan();
         void onKick();
+        void onDelegate();
         void onInfo();
         void onFollow();
         void onIgnore();

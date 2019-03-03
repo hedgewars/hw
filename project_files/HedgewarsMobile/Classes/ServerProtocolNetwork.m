@@ -29,7 +29,7 @@ static ServerProtocolNetwork *serverConnection;
 
 #pragma mark -
 #pragma mark init and class methods
--(id) init:(NSInteger) onPort withAddress:(NSString *)address {
+- (id)init:(NSInteger)onPort withAddress:(NSString *)address {
     if ((self = [super init])) {
         self.serverPort = onPort;
         self.serverAddress = address;
@@ -38,22 +38,20 @@ static ServerProtocolNetwork *serverConnection;
     return self;
 }
 
--(id) init {
+- (id)init {
     return [self init:NETGAME_DEFAULT_PORT withAddress:@"netserver.hedgewars.org"];
 }
 
--(id) initOnPort:(NSInteger) port {
+- (id)initOnPort:(NSInteger)port {
     return [self init:port withAddress:@"netserver.hedgewars.org"];
 }
 
--(id) initToAddress:(NSString *)address {
+- (id)initToAddress:(NSString *)address {
     return [self init:NETGAME_DEFAULT_PORT withAddress:address];
 }
 
--(void) dealloc {
-    releaseAndNil(serverAddress);
+- (void)dealloc {
     serverConnection = nil;
-    [super dealloc];
 }
 
 +(id) openServerConnection {
@@ -61,7 +59,7 @@ static ServerProtocolNetwork *serverConnection;
     [NSThread detachNewThreadSelector:@selector(serverProtocol)
                              toTarget:connection
                            withObject:nil];
-    [connection retain];    // retain count here is +2
+        // retain count here is +2
     return connection;
 }
 
@@ -70,18 +68,16 @@ static ServerProtocolNetwork *serverConnection;
 -(int) sendToServer:(NSString *)command {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n\n",command];
     int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-    [message release];
     return result;
 }
 
 -(int) sendToServer:(NSString *)command withArgument:(NSString *)argument {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n%@\n\n",command,argument];
     int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-    [message release];
     return result;
 }
 
--(void) serverProtocol {
+- (void)serverProtocol {
     @autoreleasepool {
     
     IPaddress ip;
@@ -143,7 +139,6 @@ static ServerProtocolNetwork *serverConnection;
 
         NSString *bufferedMessage = [[NSString alloc] initWithBytes:buffer length:index-2 encoding:NSASCIIStringEncoding];
         NSArray *listOfCommands = [bufferedMessage componentsSeparatedByString:@"\n"];
-        [bufferedMessage release];
         NSString *command = [listOfCommands objectAtIndex:0];
         DLog(@"size = %d, %@", index-2, listOfCommands);
         if ([command isEqualToString:@"PING"]) {

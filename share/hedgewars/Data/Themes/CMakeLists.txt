@@ -2,6 +2,7 @@ foreach(dir
     Art
     Bamboo
     Bath
+    Beach
     Blox
     Brick
     Cake

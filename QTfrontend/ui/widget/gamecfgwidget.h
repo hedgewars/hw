@@ -40,13 +40,18 @@ class GameCFGWidget : public QGroupBox
         Q_PROPERTY(bool master READ isMaster WRITE setMaster)
 
     public:
-        GameCFGWidget(QWidget* parent);
+        GameCFGWidget(QWidget* parent, bool randomWithoutDLC = false);
         quint32 getGameFlags() const;
         quint32 getInitHealth() const;
         QByteArray getFullConfig() const;
         QComboBox * Scripts;
         QComboBox * GameSchemes;
         QComboBox * WeaponsName;
+        QPushButton * goToSchemePage;
+        QPushButton * goToWeaponPage;
+        QLabel * ScriptsLabel;
+        QLabel * GameSchemesLabel;
+        QLabel * WeaponsNameLabel;
         HWMapContainer* pMapContainer;
         QVariant schemeData(int column) const;
         bool isMaster();
@@ -55,6 +60,7 @@ class GameCFGWidget : public QGroupBox
         void setParam(const QString & param, const QStringList & value);
         void fullNetConfig();
         void resendSchemeData();
+        void resendAmmoData();
         void setMaster(bool master);
         void setTabbed(bool tabbed);
 
@@ -75,6 +81,7 @@ class GameCFGWidget : public QGroupBox
         void jumpToSchemes();
         void jumpToWeapons();
         void mapgenChanged(MapGenerator m);
+        void updateSchemeEnabledStates(int scriptIndex);
         void maze_sizeChanged(int s);
         void slMapFeatureSizeChanged(int s);
         void onDrawnMapChanged(const QByteArray & data);
@@ -92,6 +99,9 @@ class GameCFGWidget : public QGroupBox
         QGridLayout * GBoxOptionsLayout;
         QWidget * OptionsInnerContainer;
         QWidget * StackContainer;
+        QLabel * lblScript;
+        QLabel * lblScheme;
+        QLabel * lblWeapons;
 
         QWidget * mapContainerFree;
         QWidget * mapContainerTabbed;

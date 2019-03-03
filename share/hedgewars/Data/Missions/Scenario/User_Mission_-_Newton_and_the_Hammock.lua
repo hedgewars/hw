@@ -1,0 +1,81 @@
+HedgewarsScriptLoad("/Scripts/SimpleMission.lua")
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+
+SimpleMission({
+	missionTitle = loc("Newton and the Hammock"),
+	missionIcon = -amJetpack,
+	initVars = {
+		TurnTime = 60000,
+		MinesTime = 1000,
+		Map = "Hammock",
+		Theme = "Nature",
+		MapGen = mgRandom,
+		MapFeatureSize = 12,
+	},
+	teams = {
+		{ isMissionTeam = true,
+		clanID = 0,
+		hogs = {
+			{health = 48, x = 397, y = 865}
+		}, },
+
+		{ name = loc("Cybernetic Empire"),
+		clanID = 5,
+		flag = "cm_cyborg",
+		grave = "ring",
+		voice = "Robot",
+		hogs = {
+			{name=loc("Unit 881"), x=561, y=1365, health=100, hat="cyborg1", botLevel=1,
+			ammo = {
+				[amShotgun] = 100,
+				[amFirePunch] = 100,
+			},},
+		},
+		}
+	},
+	girders = {
+		{ x=1073, y=2009, frameIdx=0, },
+		{ x=524, y=1487, frameIdx=3, },
+		{ x=638, y=1453, frameIdx=4, },
+		{ x=761, y=1453, frameIdx=0, },
+		{ x=840, y=1421, frameIdx=3, },
+		{ x=302, y=1388, frameIdx=6, },
+		{ x=327, y=1506, frameIdx=1, },
+		{ x=1669, y=1832, frameIdx=3, },
+	},
+	gears = {
+		{ type = gtMine, x = 1056, y = 1987 },
+		{ type = gtMine, x = 1086, y = 1988 },
+		{ type = gtSMine, x = 1089, y =965 },
+		{ type = gtSMine, x = 1133, y =945 },
+		{ type = gtSMine, x = 1010, y =1081 },
+		{ type = gtSMine, x = 1036, y =1049 },
+		{ type = gtSMine, x = 1057, y =1004 },
+		{ type = gtSMine, x = 784, y =1252 },
+		{ type = gtSMine, x = 841, y =1257 },
+		{ type = gtSMine, x = 902, y =1263 },
+		{ type = gtSMine, x = 952, y =1281 },
+		{ type = gtSMine, x = 517, y =1546 },
+		{ type = gtSMine, x = 559, y =1597 },
+		{ type = gtSMine, x = 613, y =1650 },
+		{ type = gtSMine, x = 674, y =1705 },
+		{ type = gtSMine, x = 746, y =1692 },
+		{ type = gtSMine, x = 810, y =1692 },
+		{ type = gtSMine, x = 872, y =1673 },
+		{ type = gtSMine, x = 933, y =1666 },
+		{ type = gtSMine, x = 981, y =1662 },
+		{ type = gtSMine, x = 1016, y =1634 },
+		{ type = gtSMine, x = 1063, y =1595 },
+		{ type = gtSMine, x = 1100, y =1574 },
+		{ type = gtSMine, x = 1002, y =1461 },
+		{ type = gtSMine, x = 1052, y =1438 },
+		{ type = gtSMine, x = 1102, y =1464 },
+		{ type = gtCase, x = 1565, y = 642, crateType="supply", ammoType = amSineGun },
+		{ type = gtCase, x = 548, y = 858, crateType="supply", ammoType = amBazooka },
+		{ type = gtCase, x = 479, y = 847, crateType="supply", ammoType = amJetpack },
+		{ type = gtCase, x = 1550, y = 1715, crateType="supply", ammoType = amBlowTorch },
+		{ type = gtCase, x = 1227, y = 1941, crateType="supply", ammoType = amJetpack },
+		{ type = gtCase, x = 1070, y = 1964, crateType="supply", ammoType = amInvulnerable },
+		{ type = gtCase, x = 1070, y = 1875, crateType="supply", ammoType = amTeleport },
+	},
+})

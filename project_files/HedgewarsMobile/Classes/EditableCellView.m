@@ -23,7 +23,7 @@
 @implementation EditableCellView
 @synthesize delegate, textField, titleLabel, minimumCharacters, maximumCharacters, respectEditing, oldValue;
 
--(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
         delegate = nil;
 
@@ -40,14 +40,12 @@
         [textField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
 
         [self.contentView addSubview:textField];
-        //[textField release];
 
         titleLabel = [[UILabel alloc] init];
-        titleLabel.textAlignment = UITextAlignmentLeft;
+        titleLabel.textAlignment = NSTextAlignmentLeft;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         [self.contentView addSubview:titleLabel];
-        //[titleLabel release];
 
         minimumCharacters = 1;
         maximumCharacters = 64;
@@ -57,7 +55,7 @@
     return self;
 }
 
--(void) layoutSubviews {
+- (void)layoutSubviews {
     [super layoutSubviews];
 
     CGRect contentRect = self.contentView.bounds;
@@ -79,35 +77,27 @@
     textField.frame = CGRectMake(boundsX+offset+10, skew+10, 300, [UIFont labelFontSize] + 4);
 }
 
--(void) setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     // Configure the view for the selected state
-}
-
--(void) dealloc {
-    self.delegate = nil;
-    releaseAndNil(oldValue);
-    releaseAndNil(titleLabel);
-    releaseAndNil(textField);
-    [super dealloc];
 }
 
 #pragma mark -
 #pragma mark textField delegate
 // limit the size of the field to 64 characters like in original frontend
--(BOOL) textField:(UITextField *)aTextField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+- (BOOL)textField:(UITextField *)aTextField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     return !([aTextField.text length] > self.maximumCharacters && [string length] > range.length);
 }
 
 // allow editing only if delegate is set and conformant to protocol, and if editableOnlyWhileEditing
--(BOOL) textFieldShouldBeginEditing:(UITextField *)aTextField {
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)aTextField {
     return (delegate != nil) &&
            [delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)] &&
            (respectEditing) ? [self findTable].editing : YES;
 }
 
 // the textfield is being modified, update the navigation controller
--(void) textFieldDidBeginEditing:(UITextField *)aTextField{
+- (void)textFieldDidBeginEditing:(UITextField *)aTextField{
     // don't interact with table below
     [self findTable].scrollEnabled = NO;
 
@@ -118,30 +108,28 @@
                                                                     target:self
                                                                     action:@selector(cancel:)];
     [(UITableViewController *)delegate navigationItem].leftBarButtonItem = cancelButton;
-    [cancelButton release];
 
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save",@"")
                                                                      style:UIBarButtonItemStyleDone
                                                                     target:self
                                                                     action:@selector(save:)];
     [(UITableViewController *)delegate navigationItem].rightBarButtonItem = saveButton;
-    [saveButton release];
 }
 
 /* with this a field might remain in editing status even if the view moved;
    use method below instead that allows some more interaction
 // don't accept 0-length strings
--(BOOL) textFieldShouldEndEditing:(UITextField *)aTextField {
+- (BOOL)textFieldShouldEndEditing:(UITextField *)aTextField {
     return ([aTextField.text length] > 0);
 }
 */
 
--(BOOL) textFieldShouldReturn:(UITextField *)aTextField {
+- (BOOL)textFieldShouldReturn:(UITextField *)aTextField {
     return ([aTextField.text length] >= self.minimumCharacters);
 }
 
 // the textfield has been modified, tell the delegate to do something
--(void) textFieldDidEndEditing:(UITextField *)aTextField {
+- (void)textFieldDidEndEditing:(UITextField *)aTextField {
     // this forces a save when user selects a new field
     if ([self.textField.text isEqualToString:self.oldValue] == NO)
         [self save:aTextField];
@@ -155,19 +143,19 @@
 #pragma mark -
 #pragma mark instance methods
 // the user wants to show the keyboard
--(void) replyKeyboard {
+- (void)replyKeyboard {
     [self.textField becomeFirstResponder];
 }
 
 // the user pressed cancel so hide keyboard
--(void) cancel:(id) sender {
+- (void)cancel:(id)sender {
     // reverts any changes and performs a fake save for removing the keyboard
     self.textField.text = self.oldValue;
     [self save:sender];
 }
 
 // send the value to the delegate (called before textFieldDidEndEditing)
--(void) save:(id) sender {
+- (void)save:(id)sender {
     if (delegate == nil || [delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)] == NO)
         return;
 
@@ -181,7 +169,7 @@
 }
 
 // when field is editable only when the tableview is editable, resign responder when exiting editing mode
--(void) willTransitionToState:(UITableViewCellStateMask)state {
+- (void)willTransitionToState:(UITableViewCellStateMask)state {
     if (respectEditing && state == UITableViewCellStateDefaultMask)
         [self save:nil];
 

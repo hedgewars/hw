@@ -13,25 +13,24 @@ local missionName = loc("Getting to the device")
 local inBattle = false
 local tookPartInBattle = false
 local previousHog = -1
-local checkPointReached = 1 -- 1 is normal spawn
 local permitCaptainLimeDeath = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
 local dialog04 = {}
+local dialog05 = {}
 -- mission objectives
-local goals = {
-	[dialog01] = {missionName, loc("Exploring the tunnel"), loc("Search for the device with the help of the other hedgehogs ").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
-	[dialog02] = {missionName, loc("Exploring the tunnel"), loc("Explore the tunnel with the other hedgehogs and search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
-	[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back"), 1, 4000},
-	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assassins before they attack back"), 1, 4000},
-}
+local minesTimeText = loc("Mines time: 0 seconds")
+local goals
 -- crates
+local girderCrate = {name = amGirder, x = 1680, y = 1160}
+
 local eagleCrate = {name = amDEagle, x = 1680, y = 1650}
-local girderCrate =	{name = amGirder, x = 1680, y = 1160}
+
+local weaponCrate = { x = 1320, y = 1870}
+local deviceCrate = { gear = nil, x = 1360, y = 1870}
 local ropeCrate = {name = amRope, x = 1400, y = 1870}
-local weaponCrate = { x = 1360, y = 1870}
 -- hogs
 local hero = {}
 local green1 = {}
@@ -47,13 +46,16 @@ hero.x = 1200
 hero.y = 820
 hero.dead = false
 green1.name = loc("Captain Lime")
+green1.hat = "war_desertofficer"
 green1.x = 1050
 green1.y = 820
 green1.dead = false
 green2.name = loc("Mister Pear")
+green2.hat = "war_britmedic"
 green2.x = 1350
 green2.y = 820
 green3.name = loc("Lady Mango")
+green3.hat = "hair_red"
 green3.x = 1450
 green3.y = 820
 local redHedgehogs = {
@@ -62,12 +64,17 @@ local redHedgehogs = {
 	{ name = loc("Watermelon Heart") },
 	{ name = loc("Deadly Grape") }
 }
+-- Hog Solo and Green Bananas
 teamA.name = loc("Hog Solo and GB")
-teamA.color = tonumber("38D61C",16) -- green
+teamA.color = -6
+-- Captain Lime can use one of 2 clan colors:
+-- One when being friendly (same as hero), and a different one when he turns evil.
+-- Captain Lime be in his own clan.
 teamB.name = loc("Captain Lime")
-teamB.color = tonumber("38D61D",16) -- greenish
+teamB.colorNice = teamA.color
+teamB.colorEvil = -5
 teamC.name = loc("Fruit Assassins")
-teamC.color = tonumber("FF0000",16) -- red
+teamC.color = -1
 
 function onGameInit()
 	GameFlags = gfDisableWind
@@ -77,46 +84,71 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	Delay = 3
-	SuddenDeathTurns = 200
+	-- Disable Sudden Death
+	HealthDecrease = 0
+	WaterRise = 0
 	Map = "fruit02_map"
 	Theme = "Fruit"
 
-	-- load checkpoints, problem getting the campaign variable
 	local health = 100
-	checkPointReached = initCheckpoint("fruit02")
-	if checkPointReached ~= 1 then
-		loadHogsPositions()
-		health = tonumber(GetCampaignVar("HeroHealth"))
-	end
 
-	-- Hog Solo and Green Bananas
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	hero.gear = AddHog(hero.name, 0, health, "war_desertgrenadier1")
-	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	HogTurnLeft(hero.gear, true)
-	green2.gear = AddHog(green2.name, 0, 100, "war_britmedic")
-	AnimSetGearPosition(green2.gear, green2.x, green2.y)
-	HogTurnLeft(green2.gear, true)
-	green3.gear = AddHog(green3.name, 0, 100, "hair_red")
-	AnimSetGearPosition(green3.gear, green3.x, green3.y)
-	HogTurnLeft(green3.gear, true)
-	-- Captain Lime
-	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	green1.human = AddHog(green1.name, 0, 100, "war_desertofficer")
-	AnimSetGearPosition(green1.human, green1.x, green1.y)
-	green1.bot = AddHog(green1.name, 1, 100, "war_desertofficer")
-	AnimSetGearPosition(green1.bot, green1.x, green1.y)
-	green1.gear = green1.human
+
 	-- Fruit Assassins
 	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_scout")
 	for i=1,table.getn(redHedgehogs) do
 		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
-		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
+		SetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
 	end
+	local assassinsColor = div(GetClanColor(GetHogClan(redHedgehogs[1].gear)), 0x100)
 
-	AnimInit()
+	-- Hero and Green Bananas
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(health)
+	hero.name = GetHogName(hero.gear)
+	SetHogTeamName(hero.gear, string.format(loc("%s and GB"), teamA.name))
+	teamA.name = GetHogTeamName(hero.gear)
+	SetGearPosition(hero.gear, hero.x, hero.y)
+	HogTurnLeft(hero.gear, true)
+	local heroColor = div(GetClanColor(GetHogClan(hero.gear)), 0x100)
+
+	-- companions
+	-- Change companion identity if they have same name as hero
+	-- to avoid confusion.
+	if green2.name == hero.name then
+		green2.name = loc("Green Hog Grape")
+		green2.hat = "war_desertsapper1"
+	elseif green3.name == hero.name then
+		green3.name = loc("Green Hog Grape")
+		green3.hat = "war_desertsapper1"
+	end
+	green2.gear = AddHog(green2.name, 0, 100, green2.hat)
+	SetGearPosition(green2.gear, green2.x, green2.y)
+	HogTurnLeft(green2.gear, true)
+
+	green3.gear = AddHog(green3.name, 0, 100, green3.hat)
+	SetGearPosition(green3.gear, green3.x, green3.y)
+	HogTurnLeft(green3.gear, true)
+
+	-- Captain Lime
+        -- Spawn with his "true" evil color so a new clan is created for Captain Lime ...
+	teamB.name = AddTeam(teamB.name, teamB.colorEvil, "Cherry", "Island", "Default", "congo-brazzaville")
+	SetTeamPassive(teamB.name, true)
+	green1.gear = AddHog(green1.name, 0, 100, green1.hat)
+	-- ... however, we immediately change the color to "nice mode".
+	-- Captain Lime starts as (seemingly) friendly in this mission.
+	SetClanColor(GetHogClan(green1.gear), teamB.colorNice)
+	SetGearPosition(green1.gear, green1.x, green1.y)
+
+	-- Populate goals table
+	goals = {
+		[dialog01] = {missionName, loc("Exploring the tunnel"), loc("Search for the device with the help of the other hedgehogs.").."|"..string.format(loc("%s must collect the final crates."), hero.name) .. "|" .. minesTimeText, 1, 4000},
+		[dialog02] = {missionName, loc("Exploring the tunnel"), loc("Explore the tunnel with the other hedgehogs and search for the device.").."|"..string.format(loc("%s must collect the final crates."), hero.name) .. "|" .. minesTimeText, 1, 4000},
+		[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back.").."|"..minesTimeText, 1, 4000},
+		[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assassins before they attack back.").."|"..minesTimeText, 1, 4000},
+	}
+
+	AnimInit(true)
 	AnimationSetup()
 end
 
@@ -129,15 +161,10 @@ function onGameStart()
 	end
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
-	AddEvent(onDeviceCrates, {hero.gear}, deviceCrates, {hero.gear}, 0)
+	AddEvent(onDeviceCrates, {hero.gear}, deviceCrateEvent, {hero.gear}, 0)
 
-	-- Hog Solo and GB weapons
+	-- Hero and Green Bananas weapons
 	AddAmmo(hero.gear, amSwitch, 100)
-	-- Captain Lime weapons
-	AddAmmo(green1.bot, amBazooka, 6)
-	AddAmmo(green1.bot, amGrenade, 6)
-	AddAmmo(green1.bot, amDEagle, 2)
-	HideHog(green1.bot)
 	-- Assassins weapons
 	AddAmmo(redHedgehogs[1].gear, amBazooka, 6)
 	AddAmmo(redHedgehogs[1].gear, amGrenade, 6)
@@ -179,53 +206,25 @@ function onGameStart()
 	AddGear(3085, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3075, 1680, gtMine, 0, 0, 0, 0)
 
-	if checkPointReached == 1 then
-		AddAmmo(hero.gear, amFirePunch, 3)
-		AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
-		AddEvent(onCheckPoint2, {hero.gear}, checkPoint2, {hero.gear}, 0)
-		AddEvent(onCheckPoint3, {hero.gear}, checkPoint3, {hero.gear}, 0)
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
-		if tookPartInBattle then
-			AddAnim(dialog01)
-		else
-			AddAnim(dialog02)
-		end
-	elseif checkPointReached == 2 then
-		AddEvent(onCheckPoint2, {hero.gear}, checkPoint2, {hero.gear}, 0)
-		AddEvent(onCheckPoint3, {hero.gear}, checkPoint3, {hero.gear}, 0)
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
-	elseif checkPointReached == 3 then
-		AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
-		AddEvent(onCheckPoint3, {hero.gear}, checkPoint3, {hero.gear}, 0)
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
-	elseif checkPointReached == 4 then
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
-	elseif checkPointReached == 5 then
-		-- EMPTY
-	end
-	if checkPointReached ~= 1 then
-		loadWeapons()
-	end
-
-	-- girders
-	if checkPointReached > 1 then
-		PlaceGirder(1580, 875, 4)
-		PlaceGirder(1800, 875, 4)
+	AddAmmo(hero.gear, amFirePunch, 3)
+	if tookPartInBattle then
+		AddAnim(dialog01)
+	else
+		AddAnim(dialog02)
 	end
 
 	-- place crates
-	if checkPointReached < 2 then
-		SpawnAmmoCrate(girderCrate.x, girderCrate.y, girderCrate.name)
-	end
-	if checkPointReached < 5 then
-		SpawnAmmoCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)
-	end
-	SpawnAmmoCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
+	SpawnSupplyCrate(girderCrate.x, girderCrate.y, girderCrate.name)
+	SpawnSupplyCrate(eagleCrate.x, eagleCrate.y, eagleCrate.name)
+	deviceCrate.gear = SpawnFakeUtilityCrate(deviceCrate.x, deviceCrate.y, false, false) -- anti-gravity device
+	-- Rope crate is placed after device crate has been collected.
+	-- This is done so it is impossible the player can rope before getting
+	-- the device part.
 
 	if tookPartInBattle then
-		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amWatermelon)
+		SpawnSupplyCrate(weaponCrate.x, weaponCrate.y, amWatermelon)
 	else
-		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amSniperRifle)
+		SpawnSupplyCrate(weaponCrate.x, weaponCrate.y, amSniperRifle)
 	end
 
 	SendHealthStatsOff()
@@ -233,27 +232,28 @@ end
 
 function onNewTurn()
 	if not inBattle and CurrentHedgehog == green1.gear then
-		TurnTimeLeft = 0
-	elseif CurrentHedgehog == green2.gear or CurrentHedgehog == green3.gear then
-		TurnTimeLeft = 0
+		SkipTurn()
+	elseif (not inBattle) and GetHogTeamName(CurrentHedgehog) == teamA.name then
+		if CurrentHedgehog ~= hero.gear then
+			AnimSwitchHog(hero.gear)
+		end
+		SetTurnTimeLeft(MAX_TURN_TIME)
+		wind()
 	elseif inBattle then
 		if CurrentHedgehog == green1.gear and previousHog ~= hero.gear then
-			TurnTimeLeft = 0
+			SkipTurn()
 			return
 		end
 		for i=1,table.getn(redHedgehogs) do
 			if CurrentHedgehog == redHedgehogs[i].gear and previousHog ~= hero.gear then
-				TurnTimeLeft = 0
+				SkipTurn()
 				return
 			end
 		end
-		TurnTimeLeft = 20000
-		wind()
-	elseif not inBattle and CurrentHedgehog == hero.gear then
-		TurnTimeLeft = -1
+		SetTurnTimeLeft(20000)
 		wind()
 	else
-		TurnTimeLeft = 0
+		EndTurn(true)
 	end
 	previousHog = CurrentHedgehog
 end
@@ -281,8 +281,15 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
-	elseif gear == green1.bot then
+	elseif gear == green1.gear then
 		green1.dead = true
+	elseif gear == deviceCrate.gear then
+		if band(GetGearMessage(gear), gmDestroy) ~= 0 then
+			PlaySound(sndShotgunReload)
+			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
+			deviceCrate.collected = true
+			deviceCrate.collector = CurrentHedgehog
+		end
 	end
 end
 
@@ -298,6 +305,7 @@ function onAmmoStoreInit()
 	SetAmmo(amDEagle, 0, 0, 0, 6)
 	SetAmmo(amGirder, 0, 0, 0, 2)
 	SetAmmo(amRope, 0, 0, 0, 1)
+	SetAmmo(amSkip, 9, 0, 0, 1)
 	if tonumber(getBonus(2)) == 1 then
 		SetAmmo(amWatermelon, 0, 0, 0, 2)
 		SetAmmo(amSniperRifle, 0, 0, 0, 2)
@@ -323,7 +331,7 @@ function onHeroDeath(gear)
 end
 
 function onDeviceCrates(gear)
-	if not hero.dead and GetY(hero.gear)>1850 and GetX(hero.gear)>1340 and GetX(hero.gear)<1640 then
+	if not hero.dead and deviceCrate.collected and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -354,100 +362,82 @@ function onRedTeamDeath(gear)
 	return redDead
 end
 
-function onCheckPoint1(gear)
-	-- before barrel jump
-	if not hero.dead and GetX(hero.gear) > 2850 and GetX(hero.gear) < 2945
-			and GetY(hero.gear) > 808 and GetY(hero.gear) < 852 and	not isHeroAtWrongPlace() then
-		return true
-	end
-	return false
-end
-
-function onCheckPoint2(gear)
-	-- before barrel jump
-	if ((GetHealth(green2.gear) and GetX(green2.gear) > 2850 and GetX(green2.gear) < 2945 and GetY(green2.gear) > 808 and GetY(green2.gear) < 852)
-			or (GetHealth(green3.gear) and GetX(green3.gear) > 2850 and GetX(green3.gear) < 2945 and GetY(green3.gear) > 808 and GetY(green3.gear) < 852))
-			and not isHeroAtWrongPlace() then
-		return true
-	end
-	return false
-end
-
-function onCheckPoint3(gear)
-	-- after barrel jump
-	if ((GetHealth(green2.gear) and GetY(green2.gear) > 1550 and GetX(green2.gear) < 3000 and StoppedGear(green2.gear))
-			or (GetHealth(green3.gear) and GetY(green3.gear) > 1550 and GetX(green3.gear) < 3000 and StoppedGear(green2.gear)))
-			and not isHeroAtWrongPlace() then
-		return true
-	end
-	return false
-end
-
-function onCheckPoint4(gear)
-	-- hero at crates
-	if not hero.dead and GetX(hero.gear) > 1288 and GetX(hero.gear) < 1420
-			and GetY(hero.gear) > 1840 and	not isHeroAtWrongPlace() then
-		return true
-	end
-	return false
-end
-
 -------------- ACTIONS ------------------
 ended = false
 
 function heroDeath(gear)
 	if not ended then
-		SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-		SendStat(siCustomAchievement, loc("To win the game, Hog Solo has to get the bottom crates and come back to the surface"))
-		SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you"))
-		SendStat(siCustomAchievement, loc("Do not destroy the crates"))
+		SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+		SendStat(siCustomAchievement, string.format(loc("To win the game, %s has to get the bottom crates and come back to the surface."), hero.name))
+		SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you."))
+		SendStat(siCustomAchievement, loc("Do not destroy the crates!"))
 		if tookPartInBattle then
-			SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assassins at the end"))
+			if permitCaptainLimeDeath then
+				SendStat(siCustomAchievement, string.format(loc("You'll have to eliminate %s at the end."), teamC.name))
+				sendSimpleTeamRankings({teamC.name, teamA.name})
+			else
+				sendSimpleTeamRankings({teamA.name})
+			end
 		else
-			SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end"))
-		SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
+			if permitCaptainLimeDeath then
+				SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end."))
+				sendSimpleTeamRankings({teamB.name, teamA.name})
+			else
+				SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
+				sendSimpleTeamRankings({teamA.name})
+			end
 		end
-		SendStat(siPlayerKills,'0',teamA.name)
 		EndGame()
 		ended = true
 	end
 end
 
-function deviceCrates(gear)
-	TurnTimeLeft = 0
-	if not tookPartInBattle then
-		AddAnim(dialog03)
-	else
-		for i=1,table.getn(redHedgehogs) do
-			RestoreHog(redHedgehogs[i].gear)
+-- Device crate got taken
+function deviceCrateEvent(gear)
+	-- Stop hedgehog
+	SetGearMessage(deviceCrate.collector, 0)
+	if deviceCrate.collector == hero.gear then
+		-- Hero collected the device crate
+
+		if not tookPartInBattle then
+			-- Captain Lime turns evil
+			AddAnim(dialog03)
+		else
+			-- Fruit Assassins attack
+			for i=1,table.getn(redHedgehogs) do
+				RestoreHog(redHedgehogs[i].gear)
+			end
+			AddAnim(dialog04)
 		end
-		AddAnim(dialog04)
+		-- needs to be set to true for both plots
+		permitCaptainLimeDeath = true
+		AddAmmo(hero.gear, amSwitch, 0)
+		AddEvent(onSurface, {hero.gear}, surface, {hero.gear}, 0)
+	else
+		-- Player let the Green Bananas collect the crate.
+		-- How dumb!
+		-- Player will lose for this.
+		AnimationSetup05(deviceCrate.collector)
+		AddAnim(dialog05)
 	end
-	-- needs to be set to true for both plots
-	permitCaptainLimeDeath = true
-	AddAmmo(hero.gear, amSwitch, 0)
-	AddEvent(onSurface, {hero.gear}, surface, {hero.gear}, 0)
 end
 
 function surface(gear)
 	previousHog = -1
 	if tookPartInBattle then
-		if GetHealth(green1.gear) then
-			HideHog(green1.gear)
-		end
+		escapeHog(green1.gear)
 		AddEvent(onRedTeamDeath, {green1.gear}, redTeamDeath, {green1.gear}, 0)
 	else
-		DeleteGear(green1.human)
-		RestoreHog(green1.bot)
-		green1.gear = green1.bot
+		SetHogLevel(green1.gear, 1)
+		-- Equip Captain Lime with weapons
+		AddAmmo(green1.gear, amBazooka, 6)
+		AddAmmo(green1.gear, amGrenade, 6)
+		AddAmmo(green1.gear, amDEagle, 2)
 		AddEvent(onGaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
 	end
-	if GetHealth(green2.gear) then
-		HideHog(green2.gear)
-	end
-	if GetHealth(green3.gear) then
-		HideHog(green3.gear)
-	end
+	EndTurn(true)
+	escapeHog(green2.gear)
+	escapeHog(green3.gear)
 	inBattle = true
 end
 
@@ -455,10 +445,9 @@ function captainLimeDeath(gear)
 	-- hero win in scenario of escape in 1st part
 	saveCompletedStatus(3)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You retrieved the lost part"))
-	SendStat(siCustomAchievement, loc("You defended yourself against Captain Lime"))
-	SendStat(siPlayerKills,'1',teamA.name)
-	SendStat(siPlayerKills,'0',teamB.name)
+	SendStat(siCustomAchievement, loc("You retrieved the lost part."))
+	SendStat(siCustomAchievement, loc("You defended yourself against Captain Lime."))
+	sendSimpleTeamRankings({teamA.name, teamB.name})
 	EndGame()
 end
 
@@ -466,27 +455,10 @@ function redTeamDeath(gear)
 	-- hero win in battle scenario
 	saveCompletedStatus(3)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You retrieved the lost part"))
-	SendStat(siCustomAchievement, loc("You defended yourself against Strawberry Assassins"))
-	SendStat(siPlayerKills,'1',teamA.name)
-	SendStat(siPlayerKills,'0',teamC.name)
+	SendStat(siCustomAchievement, loc("You retrieved the lost part."))
+	SendStat(siCustomAchievement, string.format(loc("You defended yourself against %s."), teamC.name))
+	sendSimpleTeamRankings({teamA.name, teamC.name})
 	EndGame()
-end
-
-function checkPoint1(gear)
-	saveCheckPointLocal(2)
-end
-
-function checkPoint2(gear)
-	saveCheckPointLocal(3)
-end
-
-function checkPoint3(gear)
-	saveCheckPointLocal(4)
-end
-
-function checkPoint4(gear)
-	saveCheckPointLocal(5)
 end
 
 -------------- ANIMATIONS ------------------
@@ -494,128 +466,130 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
-    TurnTimeLeft = 0
+	end
+	if anim == dialog03 or anim == dialog04 then
+		spawnRopeCrate()
+	end
+	if anim == dialog03 then
+		makeCptLimeEvil()
+	elseif anim == dialog05 then
+		heroIsAStupidFool()
+	else
+		EndTurn(true)
+	end
 end
 
 function AnimationSetup()
-	-- DIALOG 01 - Start, Captain Lime helps Hog Solo because he took part in the battle
+	-- DIALOG 01 - Start, Captain Lime helps the hero because he took part in the battle
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere else on the planet of fruits Captain Lime helps Hog Solo..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, string.format(loc("Somewhere else on the planet of fruits, Captain Lime helps %s"), hero.name), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You fought bravely and you helped us win this battle!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("So, as promised I have brought you where I think that the device you are looking for is hidden."), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I know that your resources are low due to the battle but I'll send two of my best hogs to assist you."), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Good luck!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
-	-- DIALOG02 - Start, Hog Solo escaped from the previous battle
+	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
+	-- DIALOG02 - Start, hero escaped from the previous battle
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Somewhere else on the planet of fruits Hog Solo gets closer to the device..."), 5000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You are the one who fled! So, you are alive..."), SAY_SAY, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I'm still low on hogs. If you are not afraid I could use a set of extra hands"), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, string.format(loc("Somewhere else on the planet of fruits, %s gets closer to the device"), hero.name), 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You are the one who fled! So, you are alive."), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I'm still low on hogs. If you are not afraid I could use a set of extra hands."), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 8000}})
-	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I am sorry but I was looking for a device that may be hidden somewhere around here"), SAY_SAY, 4500}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I am sorry but I was looking for a device that may be hidden somewhere around here."), SAY_SAY, 4500}})
 	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 12500}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Many long forgotten things can be found in the same tunnels that we are about to explore!"), SAY_SAY, 7000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("If you help us you can keep the device if you find it but we'll keep everything else"), SAY_SAY, 7000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("If you help us you can keep the device if you find it but we'll keep everything else."), SAY_SAY, 7000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("What do you say? Are you in?"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 1800}})
-	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("Ok then!"), SAY_SAY, 2000}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("Okay then!"), SAY_SAY, 2000}})
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
+	table.insert(dialog02, {func = ShowMission, args = goals[dialog02]})
 	-- DIALOG03 - At crates, hero learns that Captain Lime is bad
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
-	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 4000}})
+	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 2000}})
 	table.insert(dialog03, {func = FollowGear, args = {hero.gear}})
-	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hoorah! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hooray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! When he returns I'll shoot him and keep that device for myself!"), SAY_THINK, 4000}})
-	table.insert(dialog03, {func = goToThesurface, args = {hero.gear}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, string.format(loc("This %s is so naive! I'm going to shoot this fool so I can keep that device for myself!"), hero.name), SAY_THINK, 4000}})
+	table.insert(dialog03, {func = ShowMission, args = goals[dialog03]})
+	table.insert(dialog03, {func = spawnRopeCrate, args = {hero.gear}})
+	table.insert(dialog03, {func = makeCptLimeEvil, args = {hero.gear}})
 	-- DIALOG04 - At crates, hero learns about the Assassins ambush
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
-	table.insert(dialog04, {func = AnimWait, args = {hero.gear, 4000}})
+	table.insert(dialog04, {func = AnimWait, args = {hero.gear, 2000}})
 	table.insert(dialog04, {func = FollowGear, args = {hero.gear}})
-	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Hoorah! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
+	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Hooray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog04, {func = AnimWait, args = {redHedgehogs[1].gear, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {redHedgehogs[1].gear, loc("We have spotted the enemy! We'll attack when the enemies start gathering!"), SAY_THINK, 4000}})
+	table.insert(dialog04, {func = ShowMission, args = goals[dialog04]})
+	table.insert(dialog04, {func = spawnRopeCrate, args = {hero.gear}})
 	table.insert(dialog04, {func = goToThesurface, args = {hero.gear}})
+end
+
+function AnimationSetup05(collector)
+	-- DIALOG05 - A member or the green bananas collected the target crate and steals it. Player loses
+	AddSkipFunction(dialog05, Skipanim, {dialog05})
+	table.insert(dialog05, {func = AnimWait, args = {collector, 2000}})
+	table.insert(dialog05, {func = FollowGear, args = {collector}})
+	table.insert(dialog05, {func = AnimSay, args = {collector, loc("Oh yes! I got the device part! Now it belongs to me alone."), SAY_SAY, 4000}})
+	table.insert(dialog05, {func = AnimWait, args = {collector, 3000}})
+	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("Hey! I was supposed to collect it!"), SAY_SHOUT, 3000}})
+	table.insert(dialog05, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog05, {func = AnimSay, args = {collector, loc("I don't care. It's worth a fortune! Good bye, you idiot!"), SAY_SAY, 5000}})
+	table.insert(dialog05, {func = heroIsAStupidFool, args = {collector}})
+
 end
 
 ------------- OTHER FUNCTIONS ---------------
 
+-- Hide hog and create a simple escaping effect, if hog exists.
+-- No-op is hog does not exist
+function escapeHog(gear)
+	if GetHealth(gear) then
+		AddVisualGear(GetX(gear), GetY(gear), vgtSmokeWhite, 0, false)
+		for i=1, 4 do
+			AddVisualGear(GetX(gear)-16+math.random(32), GetY(gear)-16+math.random(32), vgtSmokeWhite, 0, false)
+		end
+		HideHog(gear)
+	end
+end
+
+function makeCptLimeEvil()
+	-- Turn Captain Lime evil
+	SetHogLevel(green1.gear, 1)
+	SetTeamPassive(teamB.name, false)
+	-- ... and reveal his "true" evil color. Muhahaha!
+	SetClanColor(GetHogClan(green1.gear), teamB.colorEvil)
+	EndTurn(true)
+end
+
+function spawnRopeCrate()
+	-- should be spawned after the device part was gotten and the cut scene finished.
+	SpawnSupplyCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
+end
+
 function goToThesurface()
-	TurnTimeLeft = 0
+	EndTurn(true)
+end
+
+-- Player let wrong hog collect crate
+function heroIsAStupidFool()
+	if not ended then
+		escapeHog(deviceCrate.collector)
+		AddCaption(loc("The device part has been stolen!"))
+		sendSimpleTeamRankings({teamA.name})
+		SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+		SendStat(siCustomAchievement, string.format(loc("Oh no, the companions have betrayed %s and stole the anti-gravity device part!"), hero.name))
+		SendStat(siCustomAchievement, string.format(loc("Only %s can be trusted with the crate."), hero.name))
+		EndGame()
+		ended = true
+	end
 end
 
 function wind()
 	SetWind(GetRandom(201)-100)
 end
 
-function saveHogsPositions()
-	local positions;
-	positions = GetX(hero.gear)..","..GetY(hero.gear)
-	if GetHealth(green2.gear) then
-		positions = positions..","..GetX(green2.gear)..","..GetY(green2.gear)
-	else
-		positions = positions..",1,1"
-	end
-	if GetHealth(green3.gear) then
-		positions = positions..","..GetX(green3.gear)..","..GetY(green3.gear)
-	else
-		positions = positions..",1,1"
-	end
-	SaveCampaignVar("HogsPosition", positions)
-end
-
-function loadHogsPositions()
-	local positions;
-	if GetCampaignVar("HogsPosition") then
-		positions = GetCampaignVar("HogsPosition")
-	else
-		return
-	end
-	positions = split(positions,",")
-	if positions[1] then
-		hero.x = positions[1]
-		hero.y = positions[2]
-	end
-	if positions[3] then
-		green2.x = tonumber(positions[3])
-		green2.y = tonumber(positions[4])
-	end
-	if positions[5] then
-		green3.x = tonumber(positions[5])
-		green3.y = tonumber(positions[6])
-	end
-end
-
-function saveWeapons()
-	-- firepunch - gilder - deagle - watermelon - sniper
-	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amFirePunch)..GetAmmoCount(hero.gear, amGirder)..
-			GetAmmoCount(hero.gear, amDEagle)..GetAmmoCount(hero.gear, amWatermelon)..GetAmmoCount(hero.gear, amSniperRifle))
-end
-
-function loadWeapons()
-	local ammo = GetCampaignVar("HeroAmmo")
-	AddAmmo(hero.gear, amFirePunch, tonumber(ammo:sub(1,1)))
-	AddAmmo(hero.gear, amGirder, tonumber(ammo:sub(2,2)))
-	AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(3,3)))
-	AddAmmo(hero.gear, amWatermelon, tonumber(ammo:sub(4,4)))
-	AddAmmo(hero.gear, amSniperRifle, tonumber(ammo:sub(5,5)))
-end
-
-function isHeroAtWrongPlace()
-	if GetX(hero.gear) > 1480 and GetX(hero.gear) < 1892 and GetY(hero.gear) > 1000 and GetY(hero.gear) < 1220 then
-		return true
-	end
-	return false
-end
-
-function saveCheckPointLocal(cpoint)
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 3000)
-	saveCheckpoint(cpoint)
-	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	saveHogsPositions()
-	saveWeapons()
-end

@@ -35,7 +35,7 @@ procedure CopyToClipboard(var newContent: shortstring);
 procedure TextInput(var event: TSDL_TextInputEvent);
 
 implementation
-uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
+uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uLocale;
 
 const MaxStrIndex = 27;
       MaxInputStrLen = 200;
@@ -47,7 +47,7 @@ type TChatLine = record
     s: shortstring;
     Color: TSDL_Color;
     end;
-    TChatCmd = (ccQuit, ccPause, ccFinish, ccShowHistory, ccFullScreen);
+    TChatCmd = (ccQuit, ccPause, ccShowHistory, ccFullScreen);
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -71,7 +71,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 
 const
     colors: array[#0..#9] of TSDL_Color = (
-            (r:$FF; g:$FF; b:$FF; a:$FF), // #0 unused, feel free to take it for anything
+            (r:$FF; g:$FF; b:$00; a:$FF), // #0 warning message [Yellow]
             (r:$FF; g:$FF; b:$FF; a:$FF), // #1 chat message [White]
             (r:$FF; g:$00; b:$FF; a:$FF), // #2 action message [Purple]
             (r:$90; g:$FF; b:$90; a:$FF), // #3 join/leave message [Lime]
@@ -88,7 +88,6 @@ const
             end = (
             (ChatCmd: '/quit'; ProcedureCallChatCmd: 'halt'),
             (ChatCmd: '/pause'; ProcedureCallChatCmd: 'pause'),
-            (ChatCmd: '/finish'; ProcedureCallChatCmd: 'finish'),
             (ChatCmd: '/history'; ProcedureCallChatCmd: 'history'),
             (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
             );
@@ -161,7 +160,7 @@ end;
  * It will use the color stored in cl and update width
  *)
 procedure RenderChatLineTex(var cl: TChatLine; var str: shortstring);
-var strSurface,
+var strSurface, tmpSurface,
     resSurface: PSDL_Surface;
     dstrect   : TSDL_Rect; // destination rectangle for blitting
     font      : THWFont;
@@ -194,10 +193,14 @@ dstrect.h:= ClHeight;
 SDL_FillRect(resSurface, @dstrect, shadowint);
 
 // create and blit text
+tmpSurface:= nil;
 strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), cl.color);
-//SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
-if strSurface <> nil then copyToXY(strSurface, resSurface, Padding, Padding);
+// fix format
+if strSurface <> nil then tmpSurface:= SDL_ConvertSurface(strSurface, resSurface^.format, 0);
 SDL_FreeSurface(strSurface);
+//SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
+if tmpSurface <> nil then copyToXY(tmpSurface, resSurface, Padding, Padding);
+SDL_FreeSurface(tmpSurface);
 
 cl.Tex:= Surface2Tex(resSurface, false);
 
@@ -296,11 +299,16 @@ if ChatHidden and (not showAll) then
     visibleCount:= 0;
 
 // draw chat lines with some distance from screen border
+{$IFDEF USE_TOUCH_INTERFACE}
+left:= 4 - cScreenWidth div 2;
+top := 55 + visibleCount * ClHeight; // we start with input line (if any)
+{$ELSE}
 left:= 4 - cScreenWidth div 2;
 top := 10 + visibleCount * ClHeight; // we start with input line (if any)
+{$ENDIF}
 
 // draw chat input line first and under all other lines
-if (GameState = gsChat) and (InputStr.Tex <> nil) then
+if isInChatMode and (InputStr.Tex <> nil) then
     begin
 
     if InputLinePrefix.Tex = nil then
@@ -434,12 +442,15 @@ if s <> LocalStrs[localLastStr] then
 
 t:= LocalTeam;
 x:= 0;
+// speech bubble
 if (s[1] = '"') and (s[Length(s)] = '"')
     then x:= 1
 
+// thinking bubble
 else if (s[1] = '''') and (s[Length(s)] = '''') then
     x:= 2
 
+// yelling bubble
 else if (s[1] = '-') and (s[Length(s)] = '-') then
     x:= 3;
 
@@ -459,7 +470,22 @@ if x <> 0 then
 
 if (s[1] = '/') then
     begin
-    // These 3 are same as above, only are to make the hedgehog say it on next attack
+    if (Length(s) <= 1) then
+        begin
+        // empty chat command
+        AddChatString(#0 + shortstring(trcmd[sidCmdUnknown]));
+        exit;
+        end;
+
+    // Ignore message-type commands with empty argument list
+    if (copy(s, 2, 2) = 'me') and (Length(s) = 3) then
+        exit;
+    if ((copy(s, 2, 3) = 'hsa') or (copy(s, 2, 3) = 'hta') or (copy(s, 2, 3) = 'hya')) and (Length(s) = 4) then
+        exit;
+    if ((copy(s, 2, 4) = 'team') or (copy(s, 2, 4) = 'clan')) and (Length(s) = 5) then
+        exit;
+
+    // Speech bubble, but on next attack
     if (copy(s, 2, 4) = 'hsa ') then
         begin
         if CurrentTeam^.ExtDriven then
@@ -469,6 +495,7 @@ if (s[1] = '/') then
         exit
         end;
 
+    // Thinking bubble, but on next attack
     if (copy(s, 2, 4) = 'hta ') then
         begin
         if CurrentTeam^.ExtDriven then
@@ -478,6 +505,7 @@ if (s[1] = '/') then
         exit
         end;
 
+    // Yelling bubble, but on next attack
     if (copy(s, 2, 4) = 'hya ') then
         begin
         if CurrentTeam^.ExtDriven then
@@ -487,9 +515,11 @@ if (s[1] = '/') then
         exit
         end;
 
-    if (copy(s, 2, 5) = 'team ') and (length(s) > 6) then
+    // "/clan" or "/team" ("/team" is an alias for "/clan")
+    if ((copy(s, 2, 5) = 'clan ') or (copy(s, 2, 5) = 'team ')) then
         begin
-        ParseCommand(s, true);
+        if (Length(s) > 6) then
+            ParseCommand('team ' + copy(s, 7, Length(s) - 6), true);
         exit
         end;
 
@@ -509,6 +539,7 @@ if (s[1] = '/') then
 
     // debugging commands
     if (copy(s, 2, 7) = 'debugvl') then
+        // This command intentionally not documented in /help
         begin
         cViewLimitsDebug:= (not cViewLimitsDebug);
         UpdateViewLimits();
@@ -524,15 +555,70 @@ if (s[1] = '/') then
             if liveLua then
                 begin
                 AddFileLog('[Lua] chat input string parsing enabled');
-                AddChatString(#3 + 'Lua parsing: ON');
+                AddChatString(#3 + shortstring(trmsg[sidLuaParsingOn]));
                 end
             else
                 begin
                 AddFileLog('[Lua] chat input string parsing disabled');
-                AddChatString(#3 + 'Lua parsing: OFF');
+                AddChatString(#3 + shortstring(trmsg[sidLuaParsingOff]));
                 end;
             UpdateInputLinePrefix();
-            end;
+            end
+        else
+            AddChatString(#5 + shortstring(trmsg[sidLuaParsingDenied]));
+        exit
+        end;
+
+    // Help commands
+    if (copy(s, 2, 11) = 'help taunts') then
+        begin
+        AddChatString(#3 + shortstring(trcmd[sidCmdHeaderTaunts]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdSpeech]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdThink]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdYell]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdSpeechNumberHint]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHsa]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHta]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHya]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHurrah]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdIlovelotsoflemonade]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdJuggle]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdRollup]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdShrug]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdWave]));
+        exit
+        end;
+
+    if (copy(s, 2, 9) = 'help room') then
+        begin
+        if (gameType = gmtNet) then
+            SendConsoleCommand('/help')
+        else
+            AddChatString(#0 + shortstring(trcmd[sidCmdHelpRoomFail]));
+        exit;
+        end;
+
+    if (copy(s, 2, 4) = 'help') then
+        begin
+        AddChatString(#3 + shortstring(trcmd[sidCmdHeaderBasic]));
+        if gameType = gmtNet then
+            AddChatString(#3 + shortstring(trcmd[sidCmdPauseNet]))
+        else
+            AddChatString(#3 + shortstring(trcmd[sidCmdPause]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdFullscreen]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdQuit]));
+        if gameType <> gmtNet then
+            AddChatString(#3 + shortstring(trcmd[sidLua]));
+        // history and help commands needs to be close to the end because they are always visible
+        // with a short chat history length.
+        AddChatString(#3 + shortstring(trcmd[sidCmdTeam]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdMe]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdTogglechat]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHistory]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHelp]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHelpTaunts]));
+        if gameType = gmtNet then
+            AddChatString(#3 + shortstring(trcmd[sidCmdHelpRoom]));
         exit
         end;
 
@@ -556,6 +642,8 @@ if (s[1] = '/') then
 
     if (gameType = gmtNet) then
         SendConsoleCommand(s)
+    else
+        AddChatString(#0 + shortstring(trcmd[sidCmdUnknown]));
     end
 else
     begin
@@ -572,7 +660,7 @@ begin
     history:= 0;
     SDL_StopTextInput();
     //SDL_EnableKeyRepeat(0,0);
-    GameState:= gsGame;
+    isInChatMode:= false;
     ResetKbd;
 end;
 
@@ -1011,10 +1099,12 @@ end;
 procedure TextInput(var event: TSDL_TextInputEvent);
 var s: shortstring;
     l: byte;
+    isl: integer;
 begin
     DeleteSelected();
 
     l:= 0;
+    // fetch all bytes of character/input
     while event.text[l] <> #0 do
         begin
         s[l + 1]:= event.text[l];
@@ -1023,9 +1113,30 @@ begin
 
     if l > 0 then
         begin
-        if byte(InputStr.s[0]) + l > 240 then exit;
-        s[0]:= char(l);
-        InsertIntoInputStr(s);
+        isl:= Length(InputStr.s);
+        // check if user is typing a redundant closing hog-speech quotation mark
+        if (l = 1) and (isl >= 2) and (cursorPos = isl - 1) and charIsForHogSpeech(s[1])
+          and (s[1] = InputStr.s[1]) and (s[1] = InputStr.s[isl]) then
+            begin
+            MoveCursorToNextChar();
+            UpdateCursorCoords();
+            end
+        else
+            begin
+            // don't add input that doesn't fit
+            if isl + l > MaxInputStrLen then exit;
+            s[0]:= char(l);
+            InsertIntoInputStr(s);
+
+            // add closing hog speech quotation marks automagically
+            if (l = 1) and (Length(InputStr.s) = 1) and charIsForHogSpeech(s[1]) then
+                begin
+                InsertIntoInputStr(s);
+                MoveCursorToPreviousChar();
+                UpdateCursorCoords();
+                end;
+            end;
+
         end
 end;
 
@@ -1042,7 +1153,7 @@ begin
     if copy(s, 1, 4) = '/me ' then
         s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
-        s:= #1 + UserNick + ': ' + s;
+        s:= #1 + Format(shortstring(trmsg[sidChat]), UserNick, s);
 
     AddChatString(s)
 end;
@@ -1051,7 +1162,7 @@ procedure chTeamSay(var s: shortstring);
 begin
     SendIPC('b' + s);
 
-    s:= #4 + '[Team] ' + UserNick + ': ' + s;
+    s:= #4 + Format(shortstring(trmsg[sidChatTeam]), UserNick, s);
 
     AddChatString(s)
 end;
@@ -1072,17 +1183,24 @@ begin
 end;
 
 procedure chChat(var s: shortstring);
+var i: Integer;
 begin
     s:= s; // avoid compiler hint
-    GameState:= gsChat;
+    isInChatMode:= true;
     SDL_StopTextInput();
     SDL_StartTextInput();
+    //Make REALLY sure unexpected events are flushed (1 time is insufficient as of SDL 2.0.7)
+    for i := 1 to 2 do
+    begin
+        SDL_PumpEvents();
+        SDL_FlushEvent(SDL_TEXTINPUT);
+    end;
     //SDL_EnableKeyRepeat(200,45);
     if length(s) = 0 then
         SetLine(InputStr, '', true)
     else
         begin
-        SetLine(InputStr, '/team ', true);
+        SetLine(InputStr, '/clan ', true);
         cursorPos:= 6;
         UpdateCursorCoords();
         end;

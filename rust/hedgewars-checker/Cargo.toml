@@ -1,0 +1,15 @@
+[package]
+name = "hedgewars-checker"
+version = "1.0.0"
+authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+edition = "2018"
+
+[dependencies]
+rust-ini = "0.13"
+dirs = "1.0"
+argparse = "0.2.2"
+log = "0.4"
+stderrlog = "0.4"
+netbuf = "0.4"
+tempfile = "3.0"
+base64 = "0.9.3"

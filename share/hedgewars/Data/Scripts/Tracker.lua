@@ -32,12 +32,12 @@ function trackDeletion(gear)
         end
     end
     if trackingTeams and GetGearType(gear) == gtHedgehog then
-    	hogs = teams[GetHogTeamName(gear)]
+        local hogs = teams[GetHogTeamName(gear)]
         if hogs ~= nil then
-            if table.maxn(hogs) == 1 then
+            if #hogs == 1 then
                 hogs = nil
             else
-				for k, hog in ipairs(hogs) do
+                for k, hog in ipairs(hogs) do
                     if hog == gear then
                         table.remove(hogs, k)
                         break
@@ -47,7 +47,7 @@ function trackDeletion(gear)
         end
     elseif resurrecting and GetGearType(gear) == gtResurrector then
         for k, gear in ipairs(resurrectedHogs) do
-            team = GetHogTeamName(gear)
+            local team = GetHogTeamName(gear)
             if teams[team] == nil then
                 teams[team] = {}
             end
@@ -64,7 +64,7 @@ function trackTeams()
         trackingTeams = true
         for k, gear in ipairs(gears) do
             if GetGearType(gear) == gtHedgehog then
-                team = GetHogTeamName(gear)
+                local team = GetHogTeamName(gear)
                 if teams[team] == nil then
                     teams[team] = { gear }
                     clans[team] = GetHogClan(gear)
@@ -84,12 +84,12 @@ function trackHiding(gear)
             break
         end
     end
-	
+
     if trackingTeams then
-    	hogs = teams[GetHogTeamName(gear)]
-    	
+        local hogs = teams[GetHogTeamName(gear)]
+
         if hogs ~= nil then
-            if table.maxn(hogs) == 1 then
+            if #hogs == 1 then
                 hogs = nil
             else
                 for k, hog in ipairs(hogs) do
@@ -105,10 +105,10 @@ end
 
 -- Registers when a hog is restored
 function trackRestoring(gear)
-	table.insert(gears, gear)
+    table.insert(gears, gear)
 
     if trackingTeams then
-        team = GetHogTeamName(gear)
+        local team = GetHogTeamName(gear)
         if teams[team] == nil then
             teams[team] = {}
         end
@@ -126,7 +126,7 @@ end
 
 -- Set a value for a specific gear
 function setGearValue(gear, key, value)
-    found = false
+    local found = false
     for id, values in pairs(gearValues) do
         if id == gear then
             values[key] = value
@@ -166,7 +166,7 @@ end
 
 -- Set a value for a specific team
 function setTeamValue(team, key, value)
-    found = false
+    local found = false
     for name, values in pairs(teamValues) do
         if name == team then
             values[key] = value
@@ -206,7 +206,7 @@ end
 
 -- Set a value for a specific clan
 function setClanValue(clan, key, value)
-    found = false
+    local found = false
     for num, values in ipairs(clanValues) do
         if num == clan then
             values[key] = value
@@ -243,6 +243,18 @@ function runOnGears(func)
     end
 end
 
+-- Returns the first hog (alive or not) in the given clan
+function getFirstHogOfClan(clan)
+    for k, hogs in pairs(teams) do
+        for m, hog in ipairs(hogs) do
+            if GetHogClan(hog) == clan then
+                return hog
+            end
+        end
+    end
+    return nil
+end
+
 -- Run a function on all tracked hogs
 function runOnHogs(func)
     for k, hogs in pairs(teams) do
@@ -274,7 +286,7 @@ end
 
 -- Run a function on hogs in a clan
 function runOnHogsInClan(func, clan)
-    for i = 1, table.maxn(clans) do
+    for i = 1, ClansCount do
         if clans[i] == clan then
             for k, hog in ipairs(teams[i]) do
                 func(hog)
@@ -285,7 +297,7 @@ end
 
 -- Run a function on hogs in other clans
 function runOnHogsInOtherClans(func, clan)
-    for i = 1, table.maxn(clans) do
+    for i = 1, ClansCount do
         if clans[i] ~= clan then
             for k, hog in ipairs(teams[i]) do
                 func(hog)

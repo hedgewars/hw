@@ -76,6 +76,7 @@ procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
 
 function  RatePlace(Gear: PGear): LongInt;
+function  CheckWrap(x: real): real; inline;
 function  TestColl(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
@@ -88,7 +89,8 @@ function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 function  RateHammer(Me: PGear): LongInt;
 
 function  HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-function  AIrndSign(num: LongInt): LongInt;
+function  AIrndSign(num: LongInt): LongInt; inline;
+function  AIrndOffset(targ: TTarget; Level: LongWord): LongInt; inline;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -227,9 +229,11 @@ while Gear <> nil do
             , gtAirBomb
             , gtCluster
             , gtMelonPiece
+            , gtBee
             , gtMolotov: bonuses.activity:= true;
             gtCase:
-                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
+                if (Gear^.AIHints and aihDoesntMatter) = 0 then
+                    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
             gtFlame:
                 if (Gear^.State and gsttmpFlag) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
@@ -243,6 +247,7 @@ while Gear <> nil do
                 else if (Gear^.State and gstAttacking) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
                 end;
+            gtAirMine: if ((Gear^.State and gstFrozen) = 0) then AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), gear^.Angle+5, -30);
 
             gtExplosives:
                 begin
@@ -330,6 +335,16 @@ for i:= 0 to Pred(bonuses.Count) do
     RatePlace:= rate;
 end;
 
+function CheckWrap(x: real): real; inline;
+begin
+    if WorldEdge = weWrap then
+        if (x < leftX) then
+             x:= x + (rightX - leftX)
+        else if x > rightX then    
+             x:= x - (rightX - leftX);
+    CheckWrap:= x;
+end;
+
 function CheckBounds(x, y, r: Longint): boolean; inline;
 begin
     CheckBounds := (((x-r) and LAND_WIDTH_MASK) = 0) and
@@ -372,10 +387,10 @@ begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x-r] and lfNotCurrentMask <> 0) or
-       (Land[y+r, x-r] and lfNotCurrentMask <> 0) or
-       (Land[y+r, x-r] and lfNotCurrentMask <> 0) or
-       (Land[y+r, x+r] and lfNotCurrentMask <> 0) then
+    if (Land[y-r, x-r] and lfNotCurHogCrate <> 0) or
+       (Land[y+r, x-r] and lfNotCurHogCrate <> 0) or
+       (Land[y+r, x-r] and lfNotCurHogCrate <> 0) or
+       (Land[y+r, x+r] and lfNotCurHogCrate <> 0) then
        exit(true);
 
     TestColl:= false;
@@ -412,6 +427,7 @@ begin
     rCorner:= r * 0.75;
     while true do
         begin
+        x:= CheckWrap(x);
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
@@ -458,6 +474,7 @@ begin
 //v:= random($FFFFFFFF);
     while true do
         begin
+        x:= CheckWrap(x);
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
@@ -519,6 +536,7 @@ var i, fallDmg, dmg, dmgBase, rate, subrate, erasure: LongInt;
     pX, pY, dX, dY: real;
     hadSkips: boolean;
 begin
+x:= round(CheckWrap(real(x)));
 fallDmg:= 0;
 rate:= 0;
 // add our virtual position
@@ -615,20 +633,22 @@ for i:= 0 to Targets.Count do
                 end
             end;
 
-if hadSkips and (rate = 0) then
+if hadSkips and (rate <= 0) then
     RealRateExplosion:= BadTurn
-    else
+else
     RealRateExplosion:= rate;
 end;
 
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, rate, subrate: LongInt;
     dX, dY, pX, pY: real;
+    hadSkips: boolean;
 begin
 fallDmg:= 0;
 dX:= gdX * 0.01 * kick;
 dY:= gdY * 0.01 * kick;
 rate:= 0;
+hadSkips:= false;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
         if skip then
@@ -695,8 +715,14 @@ for i:= 0 to Pred(Targets.Count) do
                     if abs(subrate) > 2000 then inc(Rate,subrate div 1024);
                     end
                 end
-            end;
-RateShove:= rate * 1024;
+            end
+        else
+            hadSkips:= true;
+
+if hadSkips and (rate <= 0) then
+    RateShove:= BadTurn
+else
+    RateShove:= rate * 1024;
 ResetTargets
 end;
 
@@ -799,25 +825,28 @@ for i:= 0 to Targets.Count do
                 end
             end;
 
-if hadSkips and (rate = 0) then
+if hadSkips and (rate <= 0) then
     RateShotgun:= BadTurn
-    else
+else
     RateShotgun:= rate * 1024;
-    ResetTargets;
+ResetTargets;
 end;
 
 function RateHammer(Me: PGear): LongInt;
 var x, y, i, r, rate: LongInt;
+    hadSkips: boolean;
 begin
 // hammer hit shift against attecker hog is 10
 x:= hwRound(Me^.X) + hwSign(Me^.dX) * 10;
 y:= hwRound(Me^.Y);
 rate:= 0;
-
+hadSkips:= false;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
          // hammer hit radius is 8, shift is 10
-      if matters and (Kind = gtHedgehog) and (abs(Point.x - x) + abs(Point.y - y) < 18) then
+      if (not matters) then
+          hadSkips:= true
+      else if matters and (Kind = gtHedgehog) and (abs(Point.x - x) + abs(Point.y - y) < 18) then
             begin
             r:= trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
 
@@ -827,7 +856,11 @@ for i:= 0 to Pred(Targets.Count) do
                 else
                     inc(rate, Score div 3 * friendlyfactor div 100)
             end;
-RateHammer:= rate * 1024;
+
+if hadSkips and (rate <= 0) then
+    RateHammer:= BadTurn
+else
+    RateHammer:= rate * 1024;
 end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;
@@ -927,7 +960,7 @@ function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 var pX, pY, tY: LongInt;
 begin
 HHGo:= false;
-Gear^.CollisionMask:= lfNotCurrentMask;
+Gear^.CollisionMask:= lfNotCurHogCrate;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
@@ -999,12 +1032,20 @@ until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and 
 HHJump(AltGear, jmpHJump, GoInfo);
 end;
 
-function AIrndSign(num: LongInt): LongInt;
+function AIrndSign(num: LongInt): LongInt; inline;
 begin
 if random(2) = 0 then
     AIrndSign:=   num
 else
     AIrndSign:= - num
+end;
+
+function AIrndOffset(targ: TTarget; Level: LongWord): LongInt; inline;
+begin
+if Level <> 1 then exit(0);
+// at present level 2 doesn't track falls on most things
+//if Level = 2 then exit(round(targ.Radius*(random(5)-2)/2));
+AIrndOffset := targ.Radius*(random(7)-3)*2
 end;
 
 procedure initModule;

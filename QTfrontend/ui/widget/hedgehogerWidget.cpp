@@ -63,6 +63,7 @@ CHedgehogerWidget::~CHedgehogerWidget()
 void CHedgehogerWidget::setNonInteractive()
 {
     nonInteractive=true;
+    repaint();
 }
 
 void CHedgehogerWidget::setHHNum(unsigned int num)
@@ -83,7 +84,7 @@ void CHedgehogerWidget::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    if (this->width() >= 11 * numItems + 26)
+    if ((this->width() >= 11 * numItems + 26) || (numItems == 1))
         ItemNum::paintEvent(event);
     else
     {
@@ -105,6 +106,8 @@ void CHedgehogerWidget::paintEvent(QPaintEvent* event)
     }
 
     QPainter painter(this);
+    if(nonInteractive)
+        painter.setPen(QPen(QColor("#FFA0A0A0")));
     painter.setFont(QFont("MS Shell Dlg", 10, QFont::Bold));
     painter.drawText(this->width() - 12, 23, QString::number(numItems));
 

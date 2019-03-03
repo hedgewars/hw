@@ -1,10 +1,57 @@
 ------------------------------------
 -- TUMBLER
--- v.0.7.1
+-- v.0.8.0
 ------------------------------------
+
+--[[
+SCRIPT PARAMETER
+The script is configured with the script parameter.
+
+Additional configuration in the game scheme is permitted.
+
+The script parameter is a comma-separated list of key=value pairs.
+
+The values are always whole numbers, the keys are listed below.
+
+Key			Default	Description
+----------------------------------------------------------------------
+spawnbarrels		2	Number of barrels that spawn per turn
+spawnmines		4	Number of mines that spawn per turn
+ammoflamer		50	Initial fuel/ammo of Flamer
+ammobarrel		2	Initial ammo of Barrel Launcher
+ammomine		1	Initial ammo of Mine Deployer
+minetimerplaced		1000	Mine timer of mines dropped from Mine Deployer (!) in milliseconds
+bonustime		25	Bonus time in utility crates, in seconds
+bonusflames		800	Flamer fuel bonus in ammo crates
+chanceammo		30	Chance (in %) that an ammo crate will drop before a turn
+chancetime		50	Chance (in %) that an utility crate (extra time) will drop before a turn
+
+
+EXAMPLES:
+
+ammoflamer=800, ammomine=5
+--> Starts the game with 800 Flamer fuel and 5 Mine Deployer mines.
+
+chancetime=0
+--> No clock crates.
+
+
+GAME SCHEME CONFIGURATION
+The script recognizes most game modifiers and settings, but changing the following game modifiers
+will have no effect:
+- Artillery
+- Tag Team
+- Shared ammo
+- Per-hog ammo
+- Place hogs
+- Invulnerable
+- Reset weapons
+]]
+
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 local fMod = 1000000 -- use this for dev and .16+ games
 
@@ -25,8 +72,6 @@ local mineSpawn
 local barrelSpawn
 
 local roundKills = 0
-local barrelsEaten = 0
-local minesEaten = 0
 
 local moveTimer = 0
 local fireTimer = 0
@@ -36,6 +81,18 @@ local stopMovement = false
 local tumbleStarted = false
 
 local vTag = {}
+
+local barrelSpawn = 2
+local mineSpawn = 4
+local initAmmoFlamer = 50
+local initAmmoBarrel = 2
+local initAmmoMine = 1
+local placedMineTime = 1000
+local bonusTime = 25
+local bonusFlames = 800
+local chanceAmmo = 30
+local chanceTime = 50
+
 
 ------------------------
 -- version 0.4
@@ -116,15 +173,31 @@ local vTag = {}
 
 -- redraw HUD on screen resolution change
 
+------------------------
+-- version 0.8.0
+------------------------
+-- Allow detailed configuration with script parameter (see above)
+-- Alternative weapon selection with slot keys
+--- Slot 1: Barrel Launcher
+--- Slot 2: Mine Deployer
+--- Slot 3: Flamer
+-- Add mine/barrel launch sounds
+-- Improved ammo display
+-- Denied sound + message when trying to fire empty ammo weapon
+-- Slightly better mission description
+--- The old hacks by (ab)using MinesNum, Explosives and HealthCaseAmount have been removed
+-- Permanently disable some gameflags which currently won't work together with this script (see above)
+-- Show flamer ammo as fuel everywhere (no more percentage confusion)
+
 ---------------------------
 -- some other ideas/things
 ---------------------------
 --[[
--- add better gameflag handling
--- fix flamer "shots remaining" message on start or choose a standard versus %
--- add more sounds
+-- allow invulnerability mode (currently broken, thus disabled)
 -- better barrel/minespawn effects
 -- separate grab distance for mines/barrels
+-- bug: message color for remaining ammo does not change if two times the same message
+   (but in different desired color) is shown in quick succession (i.e. "Out of ammo!" for all weapons)
 -- [probably not] make barrels always explode?
 -- [probably not] persistent ammo?
 -- [probably not] dont hurt tumblers and restore their health at turn end?
@@ -208,36 +281,57 @@ end
 
 function DrawTag(i)
 
-	zoomL = 1.3
+	local zoomL = 1.3
 
-	xOffset = 40
+	local xOffset, yOffset, tValue, tCol
 
 	if i == 0 then
-		yOffset = 40
-		tCol = 0xffba00ff --0xffed09ff --0xffba00ff
+		if INTERFACE == "touch" then
+			xOffset = 60
+			yOffset = ScreenHeight - 35
+		else
+			xOffset = 40
+			yOffset = 40
+		end
+		tCol = 0xffee00ff
 		tValue = TimeLeft
 	elseif i == 1 then
 		zoomL = 1.1
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40
+			yOffset = 70
+		end
 		tCol = wepCol[0]
 		tValue = wepAmmo[0]
 	elseif i == 2 then
 		zoomL = 1.1
-		xOffset = 40 + 35
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126 + 35
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40 + 35
+			yOffset = 70
+		end
 		tCol = wepCol[1]
 		tValue = wepAmmo[1]
 	elseif i == 3 then
 		zoomL = 1.1
-		xOffset = 40 + 70
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126 + 70
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40 + 70
+			yOffset = 70
+		end
 		tCol = wepCol[2]
 		tValue = wepAmmo[2]
 	end
 
 	DeleteVisualGear(vTag[i])
 	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
 	SetVisualGearValues	(
 				vTag[i], 		--id
 				-(ScreenWidth/2) + xOffset,	--xoffset
@@ -246,7 +340,7 @@ function DrawTag(i)
 				0, 			--dy
 				zoomL, 			--zoom
 				1, 			--~= 0 means align to screen
-				g7, 			--frameticks
+				nil, 			--frameticks
 				tValue, 		--value
 				240000, 		--timer
 				tCol		--GetClanColor( GetHogClan(CurrentHedgehog) )
@@ -276,30 +370,18 @@ function CheckProximityToExplosives(gear)
 			wepAmmo[0] = wepAmmo[0] + 1
 			PlaySound(sndShotgunReload)
 			DeleteGear(gear)
-			AddCaption(wep[0] .. " " .. loc("ammo extended!"), wepCol[0], capgrpAmmoinfo )
+			AddCaption(loc("+1 barrel!"), wepCol[0], capgrpAmmoinfo )
 			DrawTag(1)
-
-			barrelsEaten = barrelsEaten + 1
-			if barrelsEaten == 5 then
-				AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Barrel Eater!"),0xffba00ff,capgrpMessage2)
-			end
 
 		elseif (GetGearType(gear) == gtMine) then
 			wepAmmo[1] = wepAmmo[1] + 1
 			PlaySound(sndShotgunReload)
 			DeleteGear(gear)
-			AddCaption(wep[1] .. " " .. loc("ammo extended!"), wepCol[1], capgrpAmmoinfo )
+			AddCaption(loc("+1 mine!"), wepCol[1], capgrpAmmoinfo )
 			DrawTag(2)
-
-			minesEaten = minesEaten + 1
-			if minesEaten == 5 then
-				AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Mine Eater!"),0xffba00ff,capgrpMessage2)
-			end
 
 		end
 
-	else
-		--AddCaption("There is nothing here...")
 	end
 
 end
@@ -311,17 +393,17 @@ function CheckProximity(gear)
 
 	if (dist < 1600) and (GetGearType(gear) == gtCase) then
 
-		if GetHealth(gear) > 0 then
+		if band(GetGearPos(gear), 0x4) ~= 0 then
 
-			AddCaption(loc("Tumbling Time Extended!"), 0xffba00ff, capgrpMessage2 )
+			AddCaption(string.format(loc("+%d seconds!"), bonusTime), 0xffee00ff, capgrpMessage2 )
 
-			TimeLeft = TimeLeft + HealthCaseAmount  --5 --5s
+			TimeLeft = TimeLeft + bonusTime
 			DrawTag(0)
-			--PlaySound(sndShotgunReload)
-		else
-			wepAmmo[2] = wepAmmo[2] + 800
+			PlaySound(sndExtraTime)
+		elseif band(GetGearPos(gear), 0x1) ~= 0 then
+			wepAmmo[2] = wepAmmo[2] + bonusFlames
 			PlaySound(sndShotgunReload)
-			AddCaption(wep[2] .. " " .. loc("fuel extended!"), wepCol[2], capgrpAmmoinfo )
+			AddCaption(string.format(loc("+%d flamer fuel!"), bonusFlames), wepCol[2], capgrpAmmoinfo )
 			DrawTag(3)
 		end
 
@@ -331,16 +413,83 @@ function CheckProximity(gear)
 
 end
 
-function ChangeWeapon()
+function shotsRemainingMessage()
+	local shotsMsg
+	if wepAmmo[wepIndex] <= 0 then
+		shotsMsg = loc("Out of ammo!")
+	else
+		if wepIndex == 2 then
+			shotsMsg = loc("Fuel: %d")
+		else
+			shotsMsg = loc("Ammo: %d")
+		end
+	end
+	AddCaption(string.format(shotsMsg, wepAmmo[wepIndex]), wepCol[wepIndex],capgrpAmmostate)
+end
 
-	wepIndex = wepIndex + 1
-	if wepIndex == wepCount then
-		wepIndex = 0
+function ChangeWeapon(newIndex)
+	if newIndex == nil then
+		wepIndex = wepIndex + 1
+		if wepIndex == wepCount then
+			wepIndex = 0
+		end
+	else
+		wepIndex = newIndex
 	end
 
-	AddCaption(wep[wepIndex] .. " " .. loc("selected!"), wepCol[wepIndex],capgrpAmmoinfo )
-	AddCaption(wepAmmo[wepIndex] .. " " .. loc("shots remaining."), wepCol[wepIndex],capgrpMessage2)
+	local selText
+	if wepIndex == 0 then
+		selText = loc("Barrel Launcher")
+	elseif wepIndex == 1 then
+		selText = loc("Mine Deployer")
+	else
+		selText = loc("Flamer")
+	end
+	AddCaption(selText, wepCol[wepIndex],capgrpAmmoinfo )
 
+	shotsRemainingMessage()
+end
+
+---------------
+-- Parse parameters
+---------------
+
+function parseNum(key, default, min, max)
+	local num = tonumber(params[key])
+	if type(num) ~= "number" then 
+		if default ~= nil then
+			return default
+		else
+			return nil
+		end
+	end
+
+	if min ~= nil then
+		num = math.max(min, num)
+	end
+	if max ~= nil then
+		num = math.min(max, num)
+	end
+	return num
+end
+
+function onParameters()
+	parseParams()
+
+	barrelSpawn = parseNum("spawnbarrels", barrelSpawn, 0)
+	mineSpawn = parseNum("spawnmines", mineSpawn, 0)
+
+	initAmmoFlamer = parseNum("ammoflamer", initAmmoFlamer, 0)
+	initAmmoBarrel = parseNum("ammobarrel", initAmmoBarrel, 0)
+	initAmmoMine = parseNum("ammomine", initAmmoMine, 0)
+
+	placedMineTime = parseNum("minetimeplaced", placedMineTime, 0, 5000)
+
+	bonusTime = parseNum("bonustime", bonusTime, 0)
+	bonusFlames = parseNum("bonusflames", bonusFlames, 0)
+
+	chanceAmmo = parseNum("chanceammo", chanceAmmo, 0, 100)
+	chanceTime = parseNum("chancetime", chanceTime, 0, 100)
 end
 
 ---------------
@@ -349,24 +498,33 @@ end
 
 function onPrecise()
 
-	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) and (wepAmmo[wepIndex] > 0) then
+	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
 
-		wepAmmo[wepIndex] = wepAmmo[wepIndex] - 1
-		AddCaption(wepAmmo[wepIndex] .. " " .. loc("shots remaining."), wepCol[wepIndex],capgrpMessage2)
+		if wepAmmo[wepIndex] <= 0 then
+			PlaySound(sndDenied)
+			shotsRemainingMessage()
+		else
 
-		if wep[wepIndex] == loc("Barrel Launcher") then
-			morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtExplosives, 0, 0, 0, 1)
-			CopyPV(CurrentHedgehog, morte) -- new addition
-			x,y = GetGearVelocity(morte)
-			x = x*2
-			y = y*2
-			SetGearVelocity(morte, x, y)
-			DrawTag(1)
+			wepAmmo[wepIndex] = wepAmmo[wepIndex] - 1
+			shotsRemainingMessage()
 
-		elseif wep[wepIndex] == loc("Mine Deployer") then
-			morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtMine, 0, 0, 0, 0)
-			SetTimer(morte, 1000)
-			DrawTag(2)
+			if wep[wepIndex] == loc("Barrel Launcher") then
+				morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtExplosives, 0, 0, 0, 1)
+				CopyPV(CurrentHedgehog, morte) -- new addition
+				x,y = GetGearVelocity(morte)
+				x = x*2
+				y = y*2
+				SetGearVelocity(morte, x, y)
+				DrawTag(1)
+				PlaySound(sndThrowRelease)
+
+			elseif wep[wepIndex] == loc("Mine Deployer") then
+				morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtMine, 0, 0, 0, 0)
+				SetTimer(morte, placedMineTime)
+				DrawTag(2)
+				PlaySound(sndThrowRelease)
+
+			end
 		end
 
 	end
@@ -379,6 +537,9 @@ function onPreciseUp()
 	preciseOn = false
 end
 
+onAttack = onPrecise
+onAttackUp = onPreciseUp
+
 function onHJump()
 	-- pick up explosives/mines if nearby them
 	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
@@ -386,8 +547,22 @@ function onHJump()
 	end
 end
 
+-------------------
+-- Weapon selection
+-------------------
+
 function onLJump()
-	ChangeWeapon()
+	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
+		ChangeWeapon()
+	end
+end
+
+function onSlot(slot)
+	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
+		if slot >= 0 and slot <= 2 then
+			ChangeWeapon(slot)
+		end
+	end
 end
 
 -----------------
@@ -440,21 +615,8 @@ function onGameInit()
 	HealthCaseProb = 0
 	Delay = 1000
 
-	mineSpawn = MinesNum
-	if mineSpawn > 4 then
-		mineSpawn = 4
-	end
-
-	barrelSpawn = Explosives
-	if barrelSpawn > 4 then
-		barrelSpawn = 4
-	end
-
-	--MinesNum = 0
-	--Explosives = 0
-
 	for i = 0, 3 do
-		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
+		vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	end
 
 	HideTags()
@@ -469,29 +631,43 @@ function onGameInit()
 
 	wepCount = 3
 
+	DisableGameFlags(gfArtillery + gfSharedAmmo + gfPerHogAmmo + gfTagTeam + gfPlaceHog + gfInvulnerable)
+
 end
 
 function onGameStart()
 
+	local clockStr
+	local timeStr
+
+	if chanceTime > 0 then
+		clockStr = loc("Utility crates extend your time.") .. "|"
+		timeStr = string.format(loc("Time extension: %ds"), bonusTime) .. "|"
+	else
+		clockStr = ""
+		timeStr = ""
+	end
+
 	ShowMission	(
-			"TUMBLER",
-			loc("a Hedgewars mini-game"),
+			loc("Tumbler"),
+			loc("A Hedgewars mini-game"),
+			loc("Fly around and hurl explosives to your enemies.") .."|"..
 			loc("Eliminate the enemy hogs to win.") .. "|" ..
 			" " .. "|" ..
 
-			loc("New Mines Per Turn") .. ": " .. (mineSpawn) .. "|" ..
-			loc("New Barrels Per Turn") .. ": " .. (barrelSpawn) .. "|" ..
-			loc("Time Extension") .. ": " .. (HealthCaseAmount) .. loc("sec") .. "|" ..
+			string.format(loc("New mines per turn: %d"), mineSpawn) .. "|" ..
+			string.format(loc("New barrels per turn: %d"), barrelSpawn) .. "|" ..
+			timeStr ..
 			" " .. "|" ..
 
 			loc("Movement: [Up], [Down], [Left], [Right]") .. "|" ..
-			loc("Fire") .. ": " .. loc("[Left Shift]") .. "|" ..
-			loc("Change Weapon") .. ": " .. loc("[Enter]") .. "|" ..
-			loc("Grab Mines/Explosives") .. ": " .. loc("[Backspace]") .. "|" ..
+			loc("Fire: [Precise]") .. "|" ..
+			loc("Change weapon: [Long jump] or [Slot 1]-[Slot 3]") .. "|" ..
+			loc("Grab mines/barrels: [High jump]") .. "|" ..
 
 			" " .. "|" ..
 
-			loc("Health crates extend your time.") .. "|" ..
+			clockStr ..
 			loc("Ammo is reset at the end of your turn.") .. "|" ..
 
 			"", 4, 4000
@@ -510,6 +686,13 @@ function onScreenResize()
 
 end
 
+function onAmmoStoreInit()
+	-- Remove all conventional weapons
+	for a=0, 56 do
+		SetAmmo(a, 0, 0, 0, 0)
+	end
+end
+
 function onNewTurn()
 
 	stopMovement = false
@@ -520,24 +703,24 @@ function onNewTurn()
 		gear = AddGear(100, 100, gtExplosives, 0, 0, 0, 0)
 		SetHealth(gear, 100)
 		if FindPlace(gear, false, 0, LAND_WIDTH, false) ~= nil then
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		end
 	end
 	for i = 0, mineSpawn-1 do
 		gear = AddGear(100, 100, gtMine, 0, 0, 0, 0)
 		if FindPlace(gear, false, 0, LAND_WIDTH, false) ~= nil then
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		end
 	end
 
 	-- randomly spawn time extension crates / flamer fuel on the map
 	r = GetRandom(100)
-	if r > 50 then
-		gear = SpawnHealthCrate(0, 0)
+	if r > 100-chanceTime then
+		gear = SpawnFakeUtilityCrate(0, 0, false, false)
 	end
 	r = GetRandom(100)
-	if r > 70 then
-		gear = SpawnAmmoCrate(0, 0, amSkip)
+	if r > 100-chanceAmmo then
+		gear = SpawnFakeAmmoCrate(0, 0, false, false)
 	end
 
 	HideTags()
@@ -550,8 +733,6 @@ function onNewTurn()
 	ChangeWeapon()
 
 	roundKills = 0
-	barrelsEaten = 0
-	minesEaten = 0
 
 	FollowGear(CurrentHedgehog)
 
@@ -572,7 +753,6 @@ function onGameTick()
 	-- start the player tumbling with a boom once their turn has actually begun
 	if tumbleStarted == false then
 		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
-			--AddCaption(loc("Good to go!"))
 			tumbleStarted = true
 			TimeLeft = (TurnTime/1000)
 			AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
@@ -592,6 +772,13 @@ function onGameTick()
 		if TimeLeftCounter == 1000 then
 			TimeLeftCounter = 0
 			TimeLeft = TimeLeft - 1
+
+			-- Countdown sounds
+			if TimeLeft == 5 then
+				PlaySound(sndHurry, CurrentHedgehog)
+			elseif TimeLeft <= 4 and TimeLeft >= 1 then
+				PlaySound(_G["sndCountdown"..TimeLeft])
+			end
 
 			if TimeLeft >= 0 then
 				DrawTag(0)
@@ -615,9 +802,8 @@ function onGameTick()
 			---------------
 			-- the trail lets you know you have 5s left to pilot, akin to birdy feathers
 			if (TimeLeft <= 5) and (TimeLeft > 0) then
-				tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(GetHogClan(CurrentHedgehog)) )
+				local tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurrentHedgehog)) )
 			end
 			--------------
 
@@ -668,12 +854,7 @@ function onGameTick()
 			if (wep[wepIndex] == loc("Flamer") ) and (preciseOn == true) and (wepAmmo[wepIndex] > 0) and (stopMovement == false) and (tumbleStarted == true) then
 
 				wepAmmo[wepIndex] = wepAmmo[wepIndex] - 1
-				AddCaption(
-						loc("Flamer") .. ": " ..
-						(wepAmmo[wepIndex]/800*100) - (wepAmmo[wepIndex]/800*100)%2 .. "%",
-						wepCol[2],
-						capgrpMessage2
-						)
+				shotsRemainingMessage()
 				DrawTag(3)
 
 				dx, dy = GetGearVelocity(CurrentHedgehog)
@@ -719,12 +900,6 @@ function isATrackedGear(gear)
 	end
 end
 
---[[function onGearDamage(gear, damage)
-	if gear == CurrentHedgehog then
-		-- You are now tumbling
-	end
-end]]
-
 function onGearAdd(gear)
 
 	if GetGearType(gear) == gtFlame then
@@ -761,18 +936,18 @@ function onGearDelete(gear)
 
 			roundKills = roundKills + 1
 			if roundKills == 2 then
-				AddCaption(loc("Double Kill!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Double Kill!"),capcolDefault,capgrpMessage2)
 			elseif roundKills == 3 then
-				AddCaption(loc("Killing spree!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Killing spree!"),capcolDefault,capgrpMessage2)
 			elseif roundKills >= 4 then
-				AddCaption(loc("Unstoppable!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Unstoppable!"),capcolDefault,capgrpMessage2)
 			end
 
 		elseif gear == CurrentHedgehog then
 			DisableTumbler()
 
 		elseif gear ~= CurrentHedgehog then
-			AddCaption(loc("Friendly Fire!"),0xffba00ff,capgrpMessage2)
+			AddCaption(loc("Friendly Fire!"),capcolDefault,capgrpMessage2)
 		end
 
 	end

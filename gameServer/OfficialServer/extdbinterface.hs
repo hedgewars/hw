@@ -23,6 +23,7 @@ module Main where
 import Prelude hiding (catch)
 import Control.Monad
 import Control.Exception
+import Control.Monad.State
 import System.IO
 import Data.Maybe
 import Database.MySQL.Simple
@@ -36,6 +37,7 @@ import Data.Int
 import CoreTypes
 import Utils
 
+io = liftIO
 
 dbQueryAccount =
     "SELECT CASE WHEN users.status = 1 THEN users.pass ELSE '' END, \
@@ -62,6 +64,7 @@ dbQueryGamesHistoryPlaces = "INSERT INTO rating_players (userid, gameid, place) 
 
 dbQueryReplayFilename = "SELECT filename FROM achievements WHERE id = ?"
 
+dbQueryBestTime = "SELECT MIN(value) FROM achievements WHERE location = ? AND id <> (SELECT MAX(id) FROM achievements)"
 
 dbInteractionLoop dbConn = forever $ do
     q <- liftM read getLine
@@ -94,7 +97,7 @@ dbInteractionLoop dbConn = forever $ do
         SendStats clients rooms ->
                 void $ execute dbConn dbQueryStats (clients, rooms)
         StoreAchievements p fileName teams g info ->
-            sequence_ $ parseStats dbConn p fileName teams g info
+            parseStats dbConn p fileName teams g info
 
 
 --readTime = read . B.unpack . B.take 19 . B.drop 8
@@ -107,28 +110,47 @@ parseStats ::
     -> [(B.ByteString, B.ByteString)] 
     -> GameDetails
     -> [B.ByteString]
-    -> [IO Int64]
-parseStats dbConn p fileName teams (GameDetails script infRopes vamp infAttacks) = ps
+    -> IO ()
+parseStats dbConn p fileName teams (GameDetails script infRopes vamp infAttacks) d = evalStateT (ps d) ("", maxBound)
     where
     time = readTime fileName
-    ps :: [B.ByteString] -> [IO Int64]
-    ps [] = []
-    ps ("DRAW" : bs) = execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time, vamp, infRopes, infAttacks)
-        : places (map drawParams teams)
-        : ps bs
-    ps ("WINNERS" : n : bs) = let winNum = readInt_ n in execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time, vamp, infRopes, infAttacks)
-        : places (map (placeParams (take winNum bs)) teams)
-        : ps (drop winNum bs)
-    ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) = execute dbConn dbQueryAchievement
-        ( time
-        , typ
-        , fromMaybe "" (lookup teamname teams)
-        , (readInt_ value) :: Int
-        , fileName
-        , location
-        , (fromIntegral p) :: Int
-        ) : ps bs
+    ps :: [B.ByteString] -> StateT (B.ByteString, Int) IO ()
+    ps [] = return ()
+    ps ("DRAW" : bs) = do
+        io $ execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time, vamp, infRopes, infAttacks)
+        io $ places (map drawParams teams)
+        ps bs
+    ps ("WINNERS" : n : bs) = do
+        let winNum = readInt_ n
+        io $ execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time, vamp, infRopes, infAttacks)
+        io $ places (map (placeParams (take winNum bs)) teams)
+        ps (drop winNum bs)
+    ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) = do
+        let result = readInt_ value
+        io $ execute dbConn dbQueryAchievement
+            ( time
+            , typ
+            , fromMaybe "" (lookup teamname teams)
+            , result
+            , fileName
+            , location
+            , (fromIntegral p) :: Int
+            )
+        modify $ \st@(l, s) -> if result < s then (location, result) else st
+        ps bs
+    ps ("GHOST_POINTS" : n : bs) = do
+        let pointsNum = readInt_ n
+        (location, time) <- get
+        res <- io $ query dbConn dbQueryBestTime $ Only location
+        let bestTime = case res of
+                [Only a] -> a
+                _ -> maxBound :: Int
+        when (time < bestTime) $ do
+            io $ writeFile (B.unpack $ "ghosts/" `B.append` sanitizeName location) $ show (map readInt_ $ take (2 * pointsNum) bs)
+            return ()
+        ps (drop (2 * pointsNum) bs)
     ps (b:bs) = ps bs
+
     drawParams t = (snd t, 0 :: Int)
     placeParams winners t = (snd t, if (fst t) `elem` winners then 1 else 2 :: Int)
     places :: [(B.ByteString, Int)] -> IO Int64

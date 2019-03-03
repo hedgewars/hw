@@ -32,11 +32,11 @@
     NSArray *cachedContentsOfDir;
 }
 
-@property (nonatomic,retain) UITableView *tableView;
-@property (nonatomic,assign) NSInteger selectedTeamsCount;
-@property (nonatomic,assign) NSInteger allTeamsCount;
-@property (nonatomic,retain) NSMutableArray *listOfAllTeams;
-@property (nonatomic,retain) NSMutableArray *listOfSelectedTeams;
-@property (nonatomic,retain) NSArray *cachedContentsOfDir;
+@property (nonatomic, strong) UITableView *tableView;
+@property (assign) NSInteger selectedTeamsCount;
+@property (assign) NSInteger allTeamsCount;
+@property (nonatomic, strong) NSMutableArray *listOfAllTeams;
+@property (nonatomic, strong) NSMutableArray *listOfSelectedTeams;
+@property (nonatomic, strong) NSArray *cachedContentsOfDir;
 
 @end

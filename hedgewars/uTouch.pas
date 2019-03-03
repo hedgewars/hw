@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uAmmos, uWorld;
+uses SysUtils, uUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uWorld, uGearsHedgehog;
 
 
 procedure initModule;
@@ -74,9 +74,6 @@ var
     moveCursor : boolean;
     invertCursor : boolean;
 
-    xTouchClick,yTouchClick : LongInt;
-    timeSinceClick : Longword;
-
     //Pinch to zoom
     pinchSize : LongInt;
     baseZoomValue: GLFloat;
@@ -92,7 +89,7 @@ var
 procedure onTouchDown(x, y: Single; pointerId: TSDL_FingerId);
 var
     finger: PTouch_Data;
-    xr, yr: LongWord;
+    xr, yr, tmp: LongWord;
 begin
 xr:= round(x * cScreenWidth);
 yr:= round(y * cScreenHeight);
@@ -149,7 +146,7 @@ if isOnWidget(arrowDown, finger^) then
 
 if isOnWidget(pauseButton, finger^) then
     begin
-    isPaused:= not isPaused;
+    ParseTeamCommand('pause');
     moveCursor:= false;
     finger^.pressedWidget:= @pauseButton;
     exit;
@@ -162,10 +159,35 @@ if isOnWidget(utilityWidget, finger^) then
     if(CurrentHedgehog <> nil) then
         begin
         if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Timerable <> 0 then
-            ParseTeamCommand('/timer ' + inttostr((GetCurAmmoEntry(CurrentHedgeHog^)^.Timer div 1000) mod 5 + 1));
+            begin
+            tmp:= HHGetTimerMsg(CurrentHedgehog^.Gear);
+            if tmp <> MSGPARAM_INVALID then
+                ParseTeamCommand('/timer ' + inttostr(tmp mod 5 + 1));
+            end;
         end;
     exit;
     end;
+
+if isOnWidget(utilityWidget2, finger^) then
+    begin
+    finger^.pressedWidget:= @utilityWidget2;
+    moveCursor:= false;
+    if(CurrentHedgehog <> nil) then
+        begin
+        if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_SetBounce <> 0 then
+            begin
+            tmp := HHGetBouncinessMsg(CurrentHedgehog^.Gear);
+            if tmp <> MSGPARAM_INVALID then
+                begin
+                ParseTeamCommand('+precise');
+                ParseTeamCommand('timer ' + inttostr(tmp mod 5 + 1));
+                bounceButtonPressed:= true;
+                end;
+            end;
+        end;
+    exit;
+    end;
+
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
     begin
@@ -296,7 +318,7 @@ if (buttonsDown > 0) and (widget <> nil) then
     end;
 
 if targetting then
-    AddCaption(trmsg[sidPressTarget], cWhiteColor, capgrpAmmoInfo);
+    AddCaption(trmsg[sidPressTarget], capcolDefault, capgrpAmmoInfo);
 
 deleteFinger(pointerId);
 end;
@@ -317,16 +339,6 @@ end;
 
 procedure onTouchClick(finger: TTouch_Data);
 begin
-//if (RealTicks - timeSinceClick < 300) and (sqrt(sqr(finger.X-xTouchClick) + sqr(finger.Y-yTouchClick)) < 30) then
-//    begin
-//    onTouchDoubleClick(finger);
-//    timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds)
-//    exit;
-//    end;
-
-xTouchClick:= finger.x;
-yTouchClick:= finger.y;
-timeSinceClick:= RealTicks;
 
 if bShowAmmoMenu then
     begin
@@ -358,48 +370,50 @@ function addFinger(x,y: Longword; id: TSDL_FingerId): PTouch_Data;
 var
     xCursor, yCursor, index : LongInt;
 begin
-    //Check array sizes
-    if length(fingers) < pointerCount then
+// check array size
+// note: pointerCount will be incremented later,
+// so at this point it's the index of the new entry
+if Length(fingers) <= pointerCount then
     begin
-        setLength(fingers, length(fingers)*2);
-        for index := length(fingers) div 2 to length(fingers) do
-            fingers[index].id := nilFingerId;
+    setLength(fingers, Length(fingers)*2);
+    for index := Length(fingers) div 2 to (Length(fingers)-1) do
+        fingers[index].id := nilFingerId;
     end;
 
-    xCursor := convertToCursorX(x);
-    yCursor := convertToCursorY(y);
+xCursor := convertToCursorX(x);
+yCursor := convertToCursorY(y);
 
-    //on removing fingers, all fingers are moved to the left
-    //with dynamic arrays being zero based, the new position of the finger is the old pointerCount
-    fingers[pointerCount].id := id;
-    fingers[pointerCount].historicalX := xCursor;
-    fingers[pointerCount].historicalY := yCursor;
-    fingers[pointerCount].x := xCursor;
-    fingers[pointerCount].y := yCursor;
-    fingers[pointerCount].dx := 0;
-    fingers[pointerCount].dy := 0;
-    fingers[pointerCount].timeSinceDown:= RealTicks;
-    fingers[pointerCount].pressedWidget:= nil;
+//on removing fingers, all fingers are moved to the left
+//with dynamic arrays being zero based, the new position of the finger is the old pointerCount
+fingers[pointerCount].id := id;
+fingers[pointerCount].historicalX := xCursor;
+fingers[pointerCount].historicalY := yCursor;
+fingers[pointerCount].x := xCursor;
+fingers[pointerCount].y := yCursor;
+fingers[pointerCount].dx := 0;
+fingers[pointerCount].dy := 0;
+fingers[pointerCount].timeSinceDown:= RealTicks;
+fingers[pointerCount].pressedWidget:= nil;
 
-    addFinger:= @fingers[pointerCount];
-    inc(pointerCount);
+addFinger:= @fingers[pointerCount];
+inc(pointerCount);
 end;
 
 function updateFinger(x, y, dx, dy: Longword; id: TSDL_FingerId): PTouch_Data;
 var finger : PTouch_Data;
 begin
-    finger:= findFinger(id);
+finger:= findFinger(id);
 
-    if finger <> nil then
-        begin
-        finger^.x:= convertToCursorX(x);
-        finger^.y:= convertToCursorY(y);
-        finger^.dx:= dx;
-        finger^.dy:= dy;
-        end
-    else
-        WriteLnToConsole('finger ' + inttostr(id) + ' not found');
-    updateFinger:= finger
+if finger <> nil then
+    begin
+    finger^.x:= convertToCursorX(x);
+    finger^.y:= convertToCursorY(y);
+    finger^.dx:= dx;
+    finger^.dy:= dy;
+    end
+else
+    WriteLnToConsole('finger ' + inttostr(id) + ' not found');
+updateFinger:= finger
 end;
 
 procedure deleteFinger(id: TSDL_FingerId);
@@ -407,27 +421,28 @@ var
     index : Longword;
 begin
 
-    dec(pointerCount);
-    for index := 0 to pointerCount do
+dec(pointerCount);
+for index := 0 to pointerCount do
     begin
-        if fingers[index].id = id then
+    if fingers[index].id = id then
         begin
+        //put the last finger into the spot of the finger to be removed,
+        //so that all fingers are packed to the far left
+        if pointerCount <> index then
+            begin
+            fingers[index].id := fingers[pointerCount].id;
+            fingers[index].x := fingers[pointerCount].x;
+            fingers[index].y := fingers[pointerCount].y;
+            fingers[index].historicalX := fingers[pointerCount].historicalX;
+            fingers[index].historicalY := fingers[pointerCount].historicalY;
+            fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
+            fingers[index].pressedWidget := fingers[pointerCount].pressedWidget;
 
-            //put the last finger into the spot of the finger to be removed,
-            //so that all fingers are packed to the far left
-            if  pointerCount <> index then
-                begin
-                fingers[index].id := fingers[pointerCount].id;
-                fingers[index].x := fingers[pointerCount].x;
-                fingers[index].y := fingers[pointerCount].y;
-                fingers[index].historicalX := fingers[pointerCount].historicalX;
-                fingers[index].historicalY := fingers[pointerCount].historicalY;
-                fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
-
-                fingers[pointerCount].id := 0;
+            fingers[pointerCount].id := nilFingerId;
             end
-        else fingers[index].id := 0;
-            break;
+        else
+            fingers[index].id := nilFingerId;
+        break;
         end;
     end;
 
@@ -506,13 +521,19 @@ if aimingCrosshair then
             aimingDown:= false;
             end;
         end;
+
+if bounceButtonPressed then
+    begin
+    ParseTeamCommand('-precise');
+    bounceButtonPressed:= false;
+    end;
 end;
 
 function findFinger(id: TSDL_FingerId): PTouch_Data;
 var
     index: LongWord;
 begin
-    for index:= 0 to length(fingers) do
+    for index:= 0 to (Length(fingers)-1) do
         if fingers[index].id = id then
             begin
             findFinger:= @fingers[index];
@@ -634,14 +655,14 @@ end;
 procedure initModule;
 var
     index: Longword;
-    //uRenderCoordScaleX, uRenderCoordScaleY: Longword;
 begin
     buttonsDown:= 0;
     pointerCount:= 0;
+    bounceButtonPressed:= false;
 
     setLength(fingers, 4);
-    for index := 0 to length(fingers) do
-        fingers[index].id := 0;
+    for index := 0 to (Length(fingers)-1) do
+        fingers[index].id := nilFingerId;
 
     rectSize:= baseRectSize;
     halfRectSize:= baseRectSize shr 1;

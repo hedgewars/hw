@@ -54,18 +54,17 @@
 00:51=Hrouda bláta
 00:52=Není vybrána žádná zbraň
 00:53=TimeBox
-; 00:54=Struktura
 00:54=Pozemek s rozprašovačem
 
-01:00=Do boje!
+; 01:00=Loading …
 01:01=Kolo nerozhodně
 01:02=%1 vyhráli!
 01:03=Hlasitost %1%
 01:04=Pauza
-01:05=Opravdu ukončit (Y/Esc)?
+01:05=Opravdu ukončit (%1/%2)?
 01:06=Náhlá smrt!
 01:07=%1 zbývá
-01:08=Palivo
+01:08=Palivo: %1%
 01:09=Synchronizuji...
 01:10=Použití tohoto nástroje neukončí tvůj tah!
 01:11=Tato zbraň nebo nástroj není dosud povolena!
@@ -243,11 +242,11 @@
 02:02=Neměj strach!
 02:02=Buď statečný a dobývej
 
-; Round ends (win; unused atm)
-02:03=...
+; Round ends and team/clan (%1) wins
+02:03=%1 vyhráli!
 
-; Round ends (draw; unused atm)
-02:04=...
+; Round ends in a draw
+02:04=Kolo nerozhodně
 
 ; New health crate
 02:05=Přichází pomoc!
@@ -446,7 +445,6 @@
 03:51=Nalezeno na zemi
 03:52=NEPOUŽITO
 03:53=Typ 40
-;03:54=Vytvořit něco
 03:54=Užitečnost
 
 ; Weapon Descriptions (use | as line breaks)
@@ -505,18 +503,17 @@
 04:51=Získat ve volném záběru vrhá kouli bláta.|Žihadla bit, a srazí prasata zpět.
 04:52=NEPOUŽITO
 04:53=Vydejte se na dobrodružství v čase a prostoru,|přičemž vaši kamarádi bojovat dál sám.|Být připraven vrátit kdykoliv,|nebo náhlé smrti nebo pokud jsou všichni poraženi.|Prohlášení. Nefunguje v náhlé smrti,|Pokud jste sami, nebo jste-li král.
-;04:54=NEÚPLNÝ
 04:54=Sprej proud lepkavými vločkami.|Stavět mosty, pohřbít nepřátele, utěsnění tunely.|Buďte opatrní, nechcete dostat každý z vás!
 
 ; Game goal strings
 05:00=Herní módy
 05:01=Platí následující pravidla
-05:02=Pevnosti: Braň svou pevnost; znič nepřátele!
+05:02=Umísti krále: Umísti chráněný bod pro svého krále
 05:03=Nízká gravitace: Koukej, kam šlapeš
 05:04=Nesmrtelnost: Ježci jsou (skoro) nesmrtelní
 05:05=Vampyrismus: Ježci budou oživeni poškozením, které způsobí
 05:06=Karma: Ježci trpí stejně jako jejich oběť
-05:07=Chraň krále: Nenech svého krále zemřít.|Umísti krále: Umísti chráněný bod pro svého krále
+05:07=Chraň krále: Nenech svého krále zemřít.
 05:08=Umísti ježky: Umísti ježky před začátkem hry
 05:09=Dělostřelectvo: Ježci nemohou změnit polohu chůzí
 05:10=Nezničitelný terén: Většina zbraní neničí terén

@@ -2,10 +2,10 @@ Name:                hedgewars-server
 Version:             0.1
 Synopsis:            hedgewars server
 Description:         hedgewars server
-Homepage:            http://www.hedgewars.org/
+Homepage:            https://www.hedgewars.org/
 License:             GPL-2
 Author:              unC0Rr
-Maintainer:          unC0Rr@hedgewars.org
+Maintainer:          a.korotaev@hedgewars.org
 Category:            Game
 Build-type:          Simple
 Cabal-version:       >=1.10
@@ -16,26 +16,59 @@ Executable hedgewars-server
 
   default-language:    Haskell2010
 
+-- Don't forget to update INSTALL.md and .travis.yml when you change these dependencies!
   Build-depends:
-    base >= 4.3,
+    base >= 4.8,
     containers,
     vector,
     bytestring,
-    bytestring-show,
     network >= 2.3,
     random,
     time,
     mtl >= 2,
-    dataenc,
+    sandi,
     hslogger,
     process,
     deepseq,
     utf8-string,
     SHA,
     entropy,
-    zlib >= 0.5.3 && < 0.6
+    zlib >= 0.5.3 && < 0.7,
+    regex-tdfa,
+    binary >= 0.8.5.1,
+
+-- These dependencies are for OFFICIAL_SERVER only and do not need to be mentioned in docs
+    yaml >= 0.8.30,
+    aeson,
+    text >= 1.2
 
   if !os(windows)
     build-depends: unix
 
   ghc-options: -O2
+
+Executable checker
+  main-is: OfficialServer/checker.hs
+
+  default-language:    Haskell2010
+
+  Build-depends:
+    base >= 4.8,
+    containers,
+    vector,
+    bytestring,
+    network >= 2.3,
+    mtl >= 2,
+    sandi,
+    hslogger,
+    process,
+    ConfigFile,
+    directory
+
+  if !os(windows)
+    build-depends: unix
+
+  ghc-options: -O2
+
+
+

@@ -23,32 +23,32 @@
 
 @protocol EngineProtocolDelegate <NSObject>
 
--(void) gameEndedWithStatistics:(NSArray *)stats;
+- (void)gameEndedWithStatistics:(NSArray *)stats;
 
 @end
 
 
 @interface EngineProtocolNetwork : NSObject {
-    id<EngineProtocolDelegate> delegate;
+    id<EngineProtocolDelegate> __weak delegate;
     NSOutputStream *stream;
     TCPsocket csd;
     NSInteger enginePort;
 }
 
-@property (nonatomic,assign) id<EngineProtocolDelegate> delegate;
-@property (nonatomic,retain) NSOutputStream *stream;
+@property (nonatomic, weak) id<EngineProtocolDelegate> delegate;
+@property (nonatomic, strong) NSOutputStream *stream;
 @property (assign) TCPsocket csd;
 @property (assign) NSInteger enginePort;
 
--(id)   init;
--(id)   initWithPort:(NSInteger) port;
--(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary;
--(void) engineProtocol:(id) object;
+- (id)  init;
+- (id)  initWithPort:(NSInteger)port;
+- (void)spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary;
+- (void)engineProtocol:(id)object;
 
 -(int)  sendToEngine:(NSString *)string;
 -(int)  sendToEngineNoSave:(NSString *)string;
--(void) provideTeamData:(NSString *)teamName forHogs:(NSInteger) numberOfPlayingHogs withHealth:(NSInteger) initialHealth ofColor:(NSNumber *)teamColor;
--(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams;
--(NSInteger) provideScheme:(NSString *)schemeName;
+- (void)provideTeamData:(NSString *)teamName forHogs:(NSInteger)numberOfPlayingHogs withHealth:(NSInteger)initialHealth ofColor:(NSNumber *)teamColor;
+- (void)provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger)numberOfTeams;
+- (NSInteger)provideScheme:(NSString *)schemeName;
 
 @end

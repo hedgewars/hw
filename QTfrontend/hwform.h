@@ -47,7 +47,7 @@ class HWNewNet;
 class GameUIConfig;
 class HWNetRegisterServer;
 class QCloseEvent;
-class AmmoSchemeModel;
+class GameSchemeModel;
 class QSettings;
 class QSignalMapper;
 
@@ -62,11 +62,11 @@ class HWForm : public QMainWindow
         HWForm(QWidget *parent = 0, QString styleSheet = "");
         Ui_HWForm ui;
         static GameUIConfig * config;
-        void updateXfire();
         void exit();
         void setButtonDescription(QString desc);
         void backDescription();
         void GoToVideos();
+        void GoToTraining();
 
         void NetConnectQuick(const QString & host, quint16 port);
         void PlayDemoQuick(const QString & demofilename);
@@ -75,9 +75,10 @@ class HWForm : public QMainWindow
         void GoToSaves();
         void GoToDemos();
         void GoToNet();
-        void GoToSelectWeapon();
-        void GoToSelectWeaponSet(int index);
-        void GoToSelectNewWeapon();
+        void GoToHelp();
+        void GoToEditWeapons();
+        void GoToNewWeapons();
+        void GoToWeapons(int index);
         void GoToScheme(int index);
         void GoToEditScheme();
         void GoToNewScheme();
@@ -96,7 +97,7 @@ class HWForm : public QMainWindow
         void DeleteWeaponSet();
         void SimpleGame();
         void PlayDemo();
-        void startTraining(const QString&);
+        void startTraining(const QString&, const QString&);
         void StartCampaign();
         void NetConnect();
         void NetConnectServer(const QString & host, quint16 port);
@@ -124,13 +125,19 @@ class HWForm : public QMainWindow
         void GetRecord(RecordType type, const QByteArray & record);
         void CreateNetGame();
         void UpdateWeapons();
+        void DeleteWeapons(QString weaponsName);
+        void AddWeapons(QString weaponsName, QString ammo);
+        void EditWeapons(QString oldWeaponsName, QString newWeaponsName, QString ammo);
         void onFrontendFullscreen(bool value);
         void onFrontendEffects(bool value);
         void Music(bool checked);
         void UpdateCampaignPage(int index);
+        void UpdateCampaignPageTeam(int index);
         void UpdateCampaignPageProgress(int index);
         void UpdateCampaignPageMission(int index);
+        void UpdateTrainingPageTeam(int index);
         void InitCampaignPage();
+        void RestoreSingleplayerTeamSelection();
         void showFeedbackDialog();
         void showFeedbackDialogNetChecked();
 
@@ -193,7 +200,7 @@ class HWForm : public QMainWindow
         QPointer<HWTeam> editedTeam;
         QPointer<HWNewNet> hwnet;
         HWNamegen * namegen;
-        AmmoSchemeModel * ammoSchemeModel;
+        GameSchemeModel * gameSchemeModel;
         QStack<int> PagesStack;
         QString previousCampaignName;
         QString previousTeamName;

@@ -54,32 +54,32 @@
 @property (nonatomic,assign) NSInteger oldPage;
 @property (nonatomic,assign) BOOL busy;
 @property (nonatomic,assign) NSInteger maxHogs;
-@property (nonatomic,retain) NSString *seedCommand;
-@property (nonatomic,retain) NSString *templateFilterCommand;
-@property (nonatomic,retain) NSString *mapGenCommand;
-@property (nonatomic,retain) NSString *mazeSizeCommand;
-@property (nonatomic,retain) NSString *themeCommand;
-@property (nonatomic,retain) NSString *staticMapCommand;
-@property (nonatomic,retain) NSString *missionCommand;
+@property (nonatomic, strong) NSString *seedCommand;
+@property (nonatomic, strong) NSString *templateFilterCommand;
+@property (nonatomic, strong) NSString *mapGenCommand;
+@property (nonatomic, strong) NSString *mazeSizeCommand;
+@property (nonatomic, strong) NSString *themeCommand;
+@property (nonatomic, strong) NSString *staticMapCommand;
+@property (nonatomic, strong) NSString *missionCommand;
 
-@property (nonatomic,retain) IBOutlet MapPreviewButtonView *previewButton;
-@property (nonatomic,retain) IBOutlet UITableView *tableView;
-@property (nonatomic,retain) IBOutlet UILabel *maxLabel;
-@property (nonatomic,retain) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic,retain) IBOutlet MNEValueTrackingSlider *slider;
+@property (nonatomic, strong) IBOutlet MapPreviewButtonView *previewButton;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UILabel *maxLabel;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) IBOutlet MNEValueTrackingSlider *slider;
 
-@property (nonatomic,retain) NSIndexPath *lastIndexPath;
-@property (nonatomic,retain) NSArray *dataSourceArray;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;
+@property (nonatomic, strong) NSArray *dataSourceArray;
 
 
--(IBAction) mapButtonPressed:(id) sender;
--(IBAction) sliderChanged:(id) sender;
--(IBAction) sliderEndedChanging:(id) sender;
--(IBAction) segmentedControlChanged:(id) sender;
+- (IBAction)mapButtonPressed:(id)sender;
+- (IBAction)sliderChanged:(id)sender;
+- (IBAction)sliderEndedChanging:(id)sender;
+- (IBAction)segmentedControlChanged:(id)sender;
 
--(void) turnOnWidgets;
--(void) turnOffWidgets;
--(void) setMaxLabelText:(NSString *)str;
--(void) updatePreview;
+- (void)turnOnWidgets;
+- (void)turnOffWidgets;
+- (void)setMaxLabelText:(NSString *)str;
+- (void)updatePreview;
 
 @end

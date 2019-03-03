@@ -54,6 +54,7 @@ class ThemePrompt : public QDialog
 
     private slots:
         void onAccepted();
+        void onRejected();
         void themeChosen(const QModelIndex & index);
         void filterChanged(const QString & text);
         void moveUp();

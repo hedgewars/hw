@@ -24,13 +24,13 @@
 @synthesize teamDictionary, voiceArray, lastIndexPath;
 
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     voiceBeingPlayed = NULL;
@@ -43,19 +43,19 @@
     self.title = NSLocalizedString(@"Set hedgehog voices",@"");
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
 
--(void) viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     Mix_OpenAudio(44100, 0x8010, 1, 1024);
 }
 
--(void) viewDidDisappear:(BOOL)animated {
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if(voiceBeingPlayed != NULL) {
         Mix_HaltChannel(lastChannel);
@@ -68,11 +68,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.voiceArray count];
 }
 
@@ -83,7 +83,7 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
 
     NSString *voice = [[voiceArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
@@ -102,7 +102,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger newRow = [indexPath row];
     NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
@@ -131,14 +131,14 @@
     int index = arc4random_uniform((int)[array count]);
 
     voiceBeingPlayed = Mix_LoadWAV([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
-    [voiceDir release];
     lastChannel = Mix_PlayChannel(-1, voiceBeingPlayed, 0);
 }
 
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     if (voiceBeingPlayed != NULL) {
         Mix_HaltChannel(lastChannel);
         Mix_FreeChunk(voiceBeingPlayed);
@@ -149,26 +149,13 @@
     [super didReceiveMemoryWarning];
 }
 
--(void) viewDidUnload {
+- (void)dealloc {
     if (voiceBeingPlayed != NULL) {
         Mix_HaltChannel(lastChannel);
         Mix_FreeChunk(voiceBeingPlayed);
         voiceBeingPlayed = NULL;
     }
-    self.lastIndexPath = nil;
-    self.teamDictionary = nil;
-    self.voiceArray = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
 }
-
--(void) dealloc {
-    releaseAndNil(voiceArray);
-    releaseAndNil(teamDictionary);
-    releaseAndNil(lastIndexPath);
-    [super dealloc];
-}
-
 
 @end
 
