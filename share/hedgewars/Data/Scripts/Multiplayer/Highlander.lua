@@ -239,7 +239,7 @@ function TransferWeps(gear)
 end
 
 function onGameInit()
-	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
+	EnableGameFlags(gfInfAttack, gfPerHogAmmo)
 	DisableGameFlags(gfResetWeps, gfSharedAmmo)
 	HealthCaseProb = 100
 	if loyal then
