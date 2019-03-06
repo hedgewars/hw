@@ -67,7 +67,7 @@ procedure RenderClear           ();
 procedure RenderClear           (mode: TRenderMode);
 {$ENDIF}
 procedure RenderSetClearColor   (r, g, b, a: real);
-procedure Tint                  (r, g, b, a: Byte); inline;
+procedure Tint                  (r, g, b, a: Byte);
 procedure Tint                  (c: Longword); inline;
 procedure untint(); inline;
 procedure setTintAdd            (enable: boolean); inline;
@@ -2044,7 +2044,7 @@ begin
     {$ENDIF}
 end;
 
-procedure Tint(r, g, b, a: Byte); inline;
+procedure Tint(r, g, b, a: Byte);
 var
     nc, tw: Longword;
 begin
