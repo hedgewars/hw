@@ -41,11 +41,13 @@ EngineInstance::EngineInstance(const QString& libraryPath, QObject* parent)
       reinterpret_cast<Engine::render_frame_t*>(hwlib.resolve("render_frame"));
   advance_simulation = reinterpret_cast<Engine::advance_simulation_t*>(
       hwlib.resolve("advance_simulation"));
+  move_camera =
+      reinterpret_cast<Engine::move_camera_t*>(hwlib.resolve("move_camera"));
 
   m_isValid = hedgewars_engine_protocol_version && start_engine &&
               generate_preview && dispose_preview && cleanup && send_ipc &&
               read_ipc && setup_current_gl_context && render_frame &&
-              advance_simulation;
+              advance_simulation && move_camera;
   emit isValidChanged(m_isValid);
 
   if (isValid()) {
@@ -53,6 +55,8 @@ EngineInstance::EngineInstance(const QString& libraryPath, QObject* parent)
              << hedgewars_engine_protocol_version();
 
     m_instance = start_engine();
+  } else {
+    qDebug("Engine library load failed");
   }
 }
 
@@ -69,6 +73,10 @@ void EngineInstance::sendConfig(const GameConfig& config) {
 
 void EngineInstance::advance(quint32 ticks) {
   advance_simulation(m_instance, ticks);
+}
+
+void EngineInstance::moveCamera(const QPoint& delta) {
+  move_camera(m_instance, delta.x(), delta.y());
 }
 
 void EngineInstance::renderFrame() { render_frame(m_instance); }

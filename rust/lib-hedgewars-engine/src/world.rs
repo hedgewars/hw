@@ -49,7 +49,7 @@ impl World {
 
         if let Some(ref state) = self.game_state {
             self.camera.position = state.land.play_box().center();
-            
+
             let theme =
                 Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
             let texture = MapGenerator::new().make_texture(&state.land, &theme);

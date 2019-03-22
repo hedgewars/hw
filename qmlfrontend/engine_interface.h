@@ -37,6 +37,9 @@ typedef void render_frame_t(EngineInstance* engine_state);
 
 typedef bool advance_simulation_t(EngineInstance* engine_state, uint32_t ticks);
 
+typedef void move_camera_t(EngineInstance* engine_state, int32_t delta_x,
+                           int32_t delta_y);
+
 #ifdef __cplusplus
 }
 };

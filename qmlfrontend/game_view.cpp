@@ -65,12 +65,14 @@ void GameView::sync() {
       m_engineInstance->setOpenGLContext(window()->openglContext());
 
     m_viewportSize = window()->size();
+    m_centerPoint = QPoint(m_viewportSize.width(), m_viewportSize.height()) / 2;
   }
 
-  // QPoint mousePos = mapFromGlobal(QCursor::pos()).toPoint();
-  // if (flibUpdateMousePosition(m_centerX, m_centerY, mousePos.x(),
-  // mousePos.y()))
-  //  QCursor::setPos(mapToGlobal(QPointF(m_centerX, m_centerY)).toPoint());
+  if (m_engineInstance) {
+    QPoint mousePos = mapFromGlobal(QCursor::pos()).toPoint();
+    m_engineInstance->moveCamera(mousePos - m_centerPoint);
+    QCursor::setPos(mapToGlobal(m_centerPoint).toPoint());
+  }
 
   if (m_renderer) m_renderer->tick(m_delta);
 }

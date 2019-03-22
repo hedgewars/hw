@@ -58,6 +58,7 @@ class GameView : public QQuickItem {
   bool m_windowChanged;
   QPointer<EngineInstance> m_engineInstance;
   QSize m_viewportSize;
+  QPoint m_centerPoint;
 };
 
 #endif  // GAMEVIEW_H

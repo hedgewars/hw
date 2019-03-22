@@ -10,6 +10,8 @@ use std::{
     os::raw::{c_char, c_void},
 };
 
+use integral_geometry::Point;
+
 use self::instance::EngineInstance;
 
 #[repr(C)]
@@ -101,6 +103,14 @@ pub extern "C" fn advance_simulation(engine_state: &mut EngineInstance, ticks: u
     engine_state.world.step();
     true
 }
+
+#[no_mangle]
+pub extern "C" fn move_camera(engine_state: &mut EngineInstance, delta_x: i32, delta_y: i32) {
+    engine_state
+        .world
+        .move_camera(Point::new(delta_x, delta_y), 0.0);
+}
+
 #[no_mangle]
 pub extern "C" fn cleanup(engine_state: *mut EngineInstance) {
     unsafe {
