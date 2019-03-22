@@ -1,19 +1,14 @@
-use fpnum::{FPNum, fp};
+use fpnum::{fp, FPNum};
+use hwphysics as hwp;
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
 use landgen::{
-    outline_template::OutlineTemplate,
-    template_based::TemplatedLandGenerator,
-    LandGenerationParameters,
-    LandGenerator,
+    outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
+    LandGenerationParameters, LandGenerator,
 };
 use lfprng::LaggedFibonacciPRNG;
-use hwphysics as hwp;
 
-use crate::render::{
-    MapRenderer,
-    camera::Camera
-};
+use crate::render::{camera::Camera, MapRenderer};
 
 struct GameState {
     land: Land2D<u32>,
@@ -22,10 +17,7 @@ struct GameState {
 
 impl GameState {
     fn new(land: Land2D<u32>, physics: hwp::World) -> Self {
-        Self {
-            land,
-            physics,
-        }
+        Self { land, physics }
     }
 }
 
@@ -33,8 +25,8 @@ pub struct World {
     random_numbers_gen: LaggedFibonacciPRNG,
     preview: Option<Land2D<u8>>,
     game_state: Option<GameState>,
-    renderer: MapRenderer,
-    camera: Camera
+    renderer: Option<MapRenderer>,
+    camera: Camera,
 }
 
 impl World {
@@ -43,9 +35,14 @@ impl World {
             random_numbers_gen: LaggedFibonacciPRNG::new(&[]),
             preview: None,
             game_state: None,
-            renderer: MapRenderer::new(512, 512),
-            camera: Camera::new()
+            renderer: None,
+            camera: Camera::new(),
         }
+    }
+
+    pub fn create_renderer(&mut self, width: u16, height: u16) {
+        self.renderer = Some(MapRenderer::new(512, 512));
+        self.camera = Camera::with_size(Size::new(width as usize, height as usize));
     }
 
     pub fn set_seed(&mut self, seed: &[u8]) {
@@ -87,16 +84,17 @@ impl World {
         let land = landgen.generate_land(&params, &mut self.random_numbers_gen);
 
         use mapgen::{
+            theme::{slice_u32_to_u8, Theme},
             MapGenerator,
-            theme::{Theme, slice_u32_to_u8}
         };
 
         use std::path::Path;
-        
+
         let theme = Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
         let texture = MapGenerator::new().make_texture32(&land, &theme);
-        self.renderer.init(&texture);
-        
+        if let Some(ref mut renderer) = self.renderer {
+            renderer.init(&texture);
+        }
         self.game_state = Some(GameState::new(land, physics));
     }
 
@@ -106,13 +104,14 @@ impl World {
     }
 
     pub fn render(&mut self) {
+        if let Some(ref mut renderer) = self.renderer {
+            unsafe {
+                gl::ClearColor(0.4f32, 0f32, 0.2f32, 1f32);
+                gl::Clear(gl::COLOR_BUFFER_BIT);
+            }
 
-        unsafe {
-            gl::ClearColor(0.4f32, 0f32, 0.2f32, 1f32);
-            gl::Clear(gl::COLOR_BUFFER_BIT);
+            renderer.render(self.camera.viewport());
         }
-
-        self.renderer.render(self.camera.viewport());
     }
 
     pub fn step(&mut self) {
@@ -121,6 +120,3 @@ impl World {
         }
     }
 }
-
-
-

@@ -3,8 +3,8 @@ use hedgewars_engine_messages::messages::{
     UnorderedEngineMessage::*, UnsyncedEngineMessage::*, *,
 };
 
-use landgen::outline_template::OutlineTemplate;
 use integral_geometry::{Point, Rect, Size};
+use landgen::outline_template::OutlineTemplate;
 
 use super::{ipc::IPC, world::World};
 
@@ -18,7 +18,7 @@ impl EngineInstance {
         let mut world = World::new();
 
         fn template() -> OutlineTemplate {
-            let mut template = OutlineTemplate::new(Size::new(4096*1, 2048*1));
+            let mut template = OutlineTemplate::new(Size::new(4096 * 1, 2048 * 1));
             template.islands = vec![vec![
                 Rect::from_size_coords(100, 2050, 1, 1),
                 Rect::from_size_coords(100, 500, 400, 1200),
@@ -29,9 +29,9 @@ impl EngineInstance {
 
             template
         }
-        
+
         world.init(template());
-        
+
         Self {
             world,
             ipc: IPC::new(),

@@ -10,7 +10,7 @@ use std::{
     os::raw::{c_char, c_void},
 };
 
-use self::instance::{EngineInstance};
+use self::instance::EngineInstance;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -81,6 +81,7 @@ pub extern "C" fn setup_current_gl_context(
     height: u16,
     gl_loader: extern "C" fn(*const c_char) -> *const c_void,
 ) {
+    engine_state.world.create_renderer(width, height);
 }
 
 #[no_mangle]

@@ -1,15 +1,9 @@
 use integral_geometry::{Point, Rect, Size};
-use land2d::{Land2D};
-use vec2d::{Vec2D};
+use land2d::Land2D;
+use vec2d::Vec2D;
 
 use super::gl::{
-    Texture2D,
-    Buffer,
-    Shader,
-    InputLayout,
-    VariableBinding,
-    InputElement,
-    InputFormat,
+    Buffer, InputElement, InputFormat, InputLayout, Shader, Texture2D, VariableBinding,
 };
 
 // TODO: temp
@@ -80,7 +74,7 @@ pub struct MapRenderer {
     index_offset: u16,
     tile_shader: Shader,
     tile_layout: InputLayout,
-    
+
     tile_width: u32,
     tile_height: u32,
     num_tile_x: i32,
@@ -95,8 +89,9 @@ impl MapRenderer {
                 VariableBinding::Attribute("Position", 0),
                 VariableBinding::Attribute("Uv", 1),
                 VariableBinding::Sampler("Texture", 0),
-            ]
-        ).unwrap();
+            ],
+        )
+        .unwrap();
 
         let tile_layout = InputLayout::new(vec![
             // position
@@ -106,7 +101,7 @@ impl MapRenderer {
                 format: InputFormat::Float(gl::FLOAT, false),
                 components: 2,
                 stride: 20,
-                offset: 0
+                offset: 0,
             },
             // uv
             InputElement {
@@ -115,14 +110,14 @@ impl MapRenderer {
                 format: InputFormat::Float(gl::FLOAT, false),
                 components: 3,
                 stride: 20,
-                offset: 8
+                offset: 8,
             },
         ]);
-        
+
         MapRenderer {
             tiles: Vec::new(),
             textures: Vec::new(),
-            
+
             tile_vertex_buffer: Buffer::empty(gl::ARRAY_BUFFER, gl::DYNAMIC_DRAW),
             tile_index_buffer: Buffer::empty(gl::ELEMENT_ARRAY_BUFFER, gl::DYNAMIC_DRAW),
             tile_vertices: Vec::new(),
@@ -166,7 +161,7 @@ impl MapRenderer {
 
                     (data, stride as u32)
                 };
-                
+
                 let texture_index = if idx >= self.textures.len() {
                     let texture = Texture2D::with_data(
                         data,
@@ -176,7 +171,7 @@ impl MapRenderer {
                         gl::RGBA8,
                         gl::RGBA,
                         gl::UNSIGNED_BYTE,
-                        gl::NEAREST
+                        gl::NEAREST,
                     );
 
                     let texture_index = self.textures.len();
@@ -186,16 +181,22 @@ impl MapRenderer {
                 } else {
                     let texture_region = Rect::new(
                         Point::new(0, 0),
-                        Point::new(self.tile_width as i32, self.tile_height as i32)
+                        Point::new(self.tile_width as i32, self.tile_height as i32),
                     );
 
-                    self.textures[idx].update(texture_region, data, stride, gl::RGBA, gl::UNSIGNED_BYTE);
+                    self.textures[idx].update(
+                        texture_region,
+                        data,
+                        stride,
+                        gl::RGBA,
+                        gl::UNSIGNED_BYTE,
+                    );
                     idx
                 };
 
                 let tile = MapTile {
                     texture_index: texture_index as u32,
-                    
+
                     // TODO: are there ever non-power of two textures?
                     width: self.tile_width,
                     height: self.tile_height,
@@ -205,16 +206,14 @@ impl MapRenderer {
         }
     }
 
-    pub fn update(&mut self, land: &Land2D<u32>, region: Rect) {
-
-    }
+    pub fn update(&mut self, land: &Land2D<u32>, region: Rect) {}
 
     pub fn render(&mut self, viewport: Rect) {
         self.tile_vertices.clear();
         self.tile_indices.clear();
         self.tile_draw_calls.clear();
         self.index_offset = 0;
-        
+
         for (idx, tile) in self.tiles.iter().enumerate() {
             let tile_x = idx as i32 % self.num_tile_x;
             let tile_y = idx as i32 / self.num_tile_x;
@@ -234,23 +233,33 @@ impl MapRenderer {
                 let uv_depth = tile.texture_index as f32;
 
                 //dbg!(tile_x);
-                let tl = TileVertex { pos: [tile_x, tile_y], uv: [0f32, 0f32, uv_depth] };
-                let bl = TileVertex { pos: [tile_x, tile_h], uv: [0f32, 1f32, uv_depth] };
-                let br = TileVertex { pos: [tile_w, tile_h], uv: [1f32, 1f32, uv_depth] };
-                let tr = TileVertex { pos: [tile_w, tile_y], uv: [1f32, 0f32, uv_depth] };
+                let tl = TileVertex {
+                    pos: [tile_x, tile_y],
+                    uv: [0f32, 0f32, uv_depth],
+                };
+                let bl = TileVertex {
+                    pos: [tile_x, tile_h],
+                    uv: [0f32, 1f32, uv_depth],
+                };
+                let br = TileVertex {
+                    pos: [tile_w, tile_h],
+                    uv: [1f32, 1f32, uv_depth],
+                };
+                let tr = TileVertex {
+                    pos: [tile_w, tile_y],
+                    uv: [1f32, 0f32, uv_depth],
+                };
 
                 self.tile_vertices.extend(&[tl, bl, br, tr]);
 
                 let i = self.index_offset;
-                self.tile_indices.extend(&[
-                    i + 0, i + 1, i + 2,
-                    i + 2, i + 3, i + 0,
-                ]);
+                self.tile_indices
+                    .extend(&[i + 0, i + 1, i + 2, i + 2, i + 3, i + 0]);
                 self.index_offset += 4;
 
                 self.tile_draw_calls.push(DrawTile {
                     texture_index: tile.texture_index,
-                    index_len: 6
+                    index_len: 6,
                 });
             }
         }
@@ -258,9 +267,10 @@ impl MapRenderer {
         self.tile_vertex_buffer.write_typed(&self.tile_vertices);
         self.tile_index_buffer.write_typed(&self.tile_indices);
 
-        let _g = self.tile_layout.bind(&[
-            (0, &self.tile_vertex_buffer)
-        ], Some(&self.tile_index_buffer));
+        let _g = self.tile_layout.bind(
+            &[(0, &self.tile_vertex_buffer)],
+            Some(&self.tile_index_buffer),
+        );
 
         let ortho = {
             let l = viewport.left() as f32;
@@ -269,26 +279,39 @@ impl MapRenderer {
             let t = viewport.top() as f32;
 
             [
-                2f32 / (r - l),    0f32,              0f32,   0f32,
-                0f32,              2f32 / (t - b),    0f32,   0f32,
-                0f32,              0f32,              0.5f32, 0f32,
-                (r + l) / (l - r), (t + b) / (b - t), 0.5f32, 1f32,
+                2f32 / (r - l),
+                0f32,
+                0f32,
+                0f32,
+                0f32,
+                2f32 / (t - b),
+                0f32,
+                0f32,
+                0f32,
+                0f32,
+                0.5f32,
+                0f32,
+                (r + l) / (l - r),
+                (t + b) / (b - t),
+                0.5f32,
+                1f32,
             ]
         };
 
         self.tile_shader.bind();
         self.tile_shader.set_matrix("Projection", ortho.as_ptr());
-        
+
         let mut draw_offset = 0;
         for draw_call in &self.tile_draw_calls {
             unsafe {
-                self.tile_shader.bind_texture_2d(0, &self.textures[draw_call.texture_index as usize]);
-                
+                self.tile_shader
+                    .bind_texture_2d(0, &self.textures[draw_call.texture_index as usize]);
+
                 gl::DrawElements(
                     gl::TRIANGLES,
                     draw_call.index_len as i32,
                     gl::UNSIGNED_SHORT,
-                    draw_offset as *const _
+                    draw_offset as *const _,
                 );
             }
 
@@ -296,5 +319,3 @@ impl MapRenderer {
         }
     }
 }
-
-

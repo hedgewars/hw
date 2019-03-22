@@ -1,7 +1,6 @@
-mod map;
-mod gl;
 pub mod camera;
+mod gl;
+mod map;
 
-pub use self::map::*;
 use self::gl::*;
-
+pub use self::map::*;

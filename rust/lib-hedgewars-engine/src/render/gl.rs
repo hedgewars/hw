@@ -1,12 +1,7 @@
- use integral_geometry::Rect;
 
-use std::{
-    mem,
-    slice,
-    ptr,
-    ffi,
-    ffi::CString,
-};
+use integral_geometry::Rect;
+
+use std::{ffi, ffi::CString, mem, ptr, slice};
 
 #[derive(Debug)]
 pub struct Texture2D {
@@ -32,13 +27,13 @@ impl Texture2D {
         internal_format: u32,
         format: u32,
         ty: u32,
-        filter: u32
+        filter: u32,
     ) -> Self {
         let mut handle = 0;
-        
+
         unsafe {
             gl::GenTextures(1, &mut handle);
-            
+
             gl::BindTexture(gl::TEXTURE_2D, handle);
             gl::PixelStorei(gl::UNPACK_ROW_LENGTH, data_stride as i32);
             gl::TexImage2D(
@@ -50,7 +45,7 @@ impl Texture2D {
                 0,
                 format as u32,
                 ty,
-                data.as_ptr() as *const _
+                data.as_ptr() as *const _,
             );
 
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::CLAMP_TO_EDGE as i32);
@@ -59,9 +54,7 @@ impl Texture2D {
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, filter as i32);
         }
 
-        Texture2D {
-            handle
-        }
+        Texture2D { handle }
     }
 
     pub fn update(&self, region: Rect, data: &[u8], data_stride: u32, format: u32, ty: u32) {
@@ -70,13 +63,13 @@ impl Texture2D {
             gl::PixelStorei(gl::UNPACK_ROW_LENGTH, data_stride as i32);
             gl::TexSubImage2D(
                 gl::TEXTURE_2D,
-                0, // texture level
+                0,             // texture level
                 region.left(), // texture region
                 region.top(),
                 region.width() as i32 - 1,
                 region.height() as i32 - 1,
-                format, // data format
-                ty, // data type
+                format,                    // data format
+                ty,                        // data type
                 data.as_ptr() as *const _, // data ptr
             );
         }
@@ -110,12 +103,8 @@ impl Buffer {
             usage,
         }
     }
-    
-    fn with_data(
-        ty: u32,
-        usage: u32,
-        data: &[u8]
-    ) -> Buffer {
+
+    fn with_data(ty: u32, usage: u32, data: &[u8]) -> Buffer {
         let mut buffer = 0;
 
         unsafe {
@@ -127,7 +116,7 @@ impl Buffer {
         Buffer {
             handle: buffer,
             ty,
-            usage
+            usage,
         }
     }
 
@@ -141,20 +130,28 @@ impl Buffer {
 
     pub fn write_typed<T>(&self, data: &[T]) {
         unsafe {
-            let data = slice::from_raw_parts(
-                data.as_ptr() as *const u8,
-                data.len() * mem::size_of::<T>(),
-            );
-            
+            let data =
+                slice::from_raw_parts(data.as_ptr() as *const u8, data.len() * mem::size_of::<T>());
+
             gl::BindBuffer(self.ty, self.handle);
-            gl::BufferData(self.ty, data.len() as isize, data.as_ptr() as *const _ as *const _, self.usage);
+            gl::BufferData(
+                self.ty,
+                data.len() as isize,
+                data.as_ptr() as *const _ as *const _,
+                self.usage,
+            );
         }
     }
-    
-    pub fn write(&self, data: &[u8]) {        
+
+    pub fn write(&self, data: &[u8]) {
         unsafe {
             gl::BindBuffer(self.ty, self.handle);
-            gl::BufferData(self.ty, data.len() as isize, data.as_ptr() as *const _ as *const _, self.usage);
+            gl::BufferData(
+                self.ty,
+                data.len() as isize,
+                data.as_ptr() as *const _ as *const _,
+                self.usage,
+            );
         }
     }
 }
@@ -192,7 +189,7 @@ impl Shader {
     pub fn new<'a>(
         vs: &str,
         ps: Option<&str>,
-        bindings: &[VariableBinding<'a>]
+        bindings: &[VariableBinding<'a>],
     ) -> Result<Self, String> {
         unsafe fn compile_shader(ty: u32, shdr: &str) -> Result<u32, String> {
             let shader = gl::CreateShader(ty);
@@ -217,7 +214,7 @@ impl Shader {
                 Ok(shader)
             }
         }
-        
+
         let vs = unsafe { compile_shader(gl::VERTEX_SHADER, vs)? };
         let ps = if let Some(ps) = ps {
             Some(unsafe { compile_shader(gl::FRAGMENT_SHADER, ps)? })
@@ -227,7 +224,7 @@ impl Shader {
 
         unsafe {
             let program = gl::CreateProgram();
-            
+
             gl::AttachShader(program, vs);
             if let Some(ps) = ps {
                 gl::AttachShader(program, ps);
@@ -237,8 +234,12 @@ impl Shader {
                 match bind {
                     &VariableBinding::Attribute(ref name, id) => {
                         let c_str = CString::new(name.as_bytes()).unwrap();
-                        gl::BindAttribLocation(program, id, c_str.to_bytes_with_nul().as_ptr() as *const _);     
-                    },
+                        gl::BindAttribLocation(
+                            program,
+                            id,
+                            c_str.to_bytes_with_nul().as_ptr() as *const _,
+                        );
+                    }
                     _ => {}
                 }
             }
@@ -270,29 +271,36 @@ impl Shader {
                 match bind {
                     VariableBinding::Uniform(name, id) => {
                         let c_str = CString::new(name.as_bytes()).unwrap();
-                        let index = gl::GetUniformLocation(program, c_str.to_bytes_with_nul().as_ptr() as *const _);
+                        let index = gl::GetUniformLocation(
+                            program,
+                            c_str.to_bytes_with_nul().as_ptr() as *const _,
+                        );
 
                         // TODO: impl for block?
-                    },
+                    }
                     VariableBinding::UniformBlock(name, id) => {
                         let c_str = CString::new(name.as_bytes()).unwrap();
-                        let index = gl::GetUniformBlockIndex(program, c_str.to_bytes_with_nul().as_ptr() as *const _);
+                        let index = gl::GetUniformBlockIndex(
+                            program,
+                            c_str.to_bytes_with_nul().as_ptr() as *const _,
+                        );
 
                         gl::UniformBlockBinding(program, index, *id);
                     }
                     VariableBinding::Sampler(name, id) => {
                         let c_str = CString::new(name.as_bytes()).unwrap();
-                        let index = gl::GetUniformLocation(program, c_str.to_bytes_with_nul().as_ptr() as *const _);
-                        
+                        let index = gl::GetUniformLocation(
+                            program,
+                            c_str.to_bytes_with_nul().as_ptr() as *const _,
+                        );
+
                         gl::Uniform1i(index, *id as i32);
-                    },
+                    }
                     _ => {}
                 }
             }
 
-            Ok(Shader {
-                program
-            })
+            Ok(Shader { program })
         }
     }
 
@@ -305,15 +313,18 @@ impl Shader {
     pub fn set_matrix(&self, name: &str, matrix: *const f32) {
         unsafe {
             let c_str = CString::new(name).unwrap();
-            let index = gl::GetUniformLocation(self.program, c_str.to_bytes_with_nul().as_ptr() as *const _);
-            
+            let index = gl::GetUniformLocation(
+                self.program,
+                c_str.to_bytes_with_nul().as_ptr() as *const _,
+            );
+
             gl::UniformMatrix4fv(index, 1, gl::FALSE, matrix);
         }
     }
 
     pub fn bind_texture_2d(&self, index: u32, texture: &Texture2D) {
         self.bind();
-        
+
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0 + index);
             gl::BindTexture(gl::TEXTURE_2D, texture.handle);
@@ -335,13 +346,13 @@ pub struct InputElement {
     pub offset: u32,
 }
 
-// TODO: 
+// TODO:
 pub struct InputLayout {
     pub elements: Vec<InputElement>,
 }
 
 pub struct LayoutGuard {
-    vao: u32
+    vao: u32,
 }
 
 impl Drop for LayoutGuard {
@@ -355,24 +366,26 @@ impl Drop for LayoutGuard {
 
 impl InputLayout {
     pub fn new(elements: Vec<InputElement>) -> Self {
-        InputLayout {
-            elements,
-        }
+        InputLayout { elements }
     }
 
-    pub fn bind(&mut self, buffers: &[(u32, &Buffer)], index_buffer: Option<&Buffer>) -> LayoutGuard {
+    pub fn bind(
+        &mut self,
+        buffers: &[(u32, &Buffer)],
+        index_buffer: Option<&Buffer>,
+    ) -> LayoutGuard {
         let mut vao = 0;
-        
+
         unsafe {
             gl::GenVertexArrays(1, &mut vao);
             gl::BindVertexArray(vao);
         }
-        
+
         for &(slot, ref buffer) in buffers {
             unsafe {
                 gl::BindBuffer(buffer.ty(), buffer.handle());
             }
-            
+
             for attr in self.elements.iter().filter(|a| a.buffer_slot == slot) {
                 unsafe {
                     gl::EnableVertexAttribArray(attr.shader_slot);
@@ -382,13 +395,9 @@ impl InputLayout {
                                 attr.shader_slot,
                                 attr.components as i32,
                                 fmt,
-                                if normalized {
-                                    gl::TRUE
-                                } else {
-                                    gl::FALSE
-                                },
+                                if normalized { gl::TRUE } else { gl::FALSE },
                                 attr.stride as i32,
-                                attr.offset as *const _
+                                attr.offset as *const _,
                             );
                         }
                         InputFormat::Integer(fmt) => {
@@ -397,11 +406,10 @@ impl InputLayout {
                                 attr.components as i32,
                                 fmt,
                                 attr.stride as i32,
-                                attr.offset as *const _
+                                attr.offset as *const _,
                             );
                         }
                     }
-
                 }
             }
         }
@@ -412,8 +420,6 @@ impl InputLayout {
             }
         }
 
-        LayoutGuard {
-            vao
-        }
+        LayoutGuard { vao }
     }
 }
