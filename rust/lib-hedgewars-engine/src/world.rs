@@ -50,7 +50,7 @@ impl World {
         if let Some(ref state) = self.game_state {
             let theme =
                 Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
-            let texture = MapGenerator::new().make_texture32(&state.land, &theme);
+            let texture = MapGenerator::new().make_texture(&state.land, &theme);
             if let Some(ref mut renderer) = self.renderer {
                 renderer.init(&texture);
             }

@@ -1,24 +1,17 @@
+use png::{ColorType, Decoder, DecodingError};
 use std::{
-    slice::{
-        from_raw_parts,
-        from_raw_parts_mut
-    },
+    fs::{read_dir, File},
     io,
     io::BufReader,
-    fs::{File, read_dir},
-    path::Path
-};
-use png::{
-    ColorType,
-    Decoder,
-    DecodingError
+    path::Path,
+    slice::{from_raw_parts, from_raw_parts_mut},
 };
 
 use integral_geometry::Size;
 use vec2d::Vec2D;
 
 pub struct ThemeSprite {
-    pixels: Vec2D<u32>
+    pixels: Vec2D<u32>,
 }
 
 impl ThemeSprite {
@@ -75,7 +68,11 @@ impl ThemeSprite {
             }
         }
 
-        TiledSprite { tile_width_shift, size, pixels }
+        TiledSprite {
+            tile_width_shift,
+            size,
+            pixels,
+        }
     }
 }
 
@@ -87,7 +84,7 @@ fn get_tiled_index(x: usize, y: usize, tile_width_shift: usize) -> usize {
 pub struct TiledSprite {
     tile_width_shift: usize,
     size: Size,
-    pixels: Vec<u32>
+    pixels: Vec<u32>,
 }
 
 impl TiledSprite {
@@ -114,7 +111,7 @@ impl TiledSprite {
 
 pub struct Theme {
     land_texture: Option<ThemeSprite>,
-    border_texture: Option<ThemeSprite>
+    border_texture: Option<ThemeSprite>,
 }
 
 impl Theme {
@@ -131,7 +128,7 @@ impl Theme {
 pub enum ThemeLoadError {
     File(io::Error),
     Decoding(DecodingError),
-    Format(String)
+    Format(String),
 }
 
 impl From<io::Error> for ThemeLoadError {
@@ -171,13 +168,14 @@ impl Theme {
 }
 
 fn load_sprite(path: &Path) -> Result<ThemeSprite, ThemeLoadError> {
-    let decoder = Decoder::new(
-        BufReader::new(File::open(path)?));
+    let decoder = Decoder::new(BufReader::new(File::open(path)?));
     let (info, mut reader) = decoder.read_info()?;
 
     if info.color_type != ColorType::RGBA {
-        return Err(ThemeLoadError::Format(
-            format!("Unexpected format: {:?}", info.color_type)));
+        return Err(ThemeLoadError::Format(format!(
+            "Unexpected format: {:?}",
+            info.color_type
+        )));
     }
     let size = Size::new(info.width as usize, info.height as usize);
 
@@ -188,20 +186,9 @@ fn load_sprite(path: &Path) -> Result<ThemeSprite, ThemeLoadError> {
 }
 
 pub fn slice_u32_to_u8(slice_u32: &[u32]) -> &[u8] {
-    unsafe {
-        from_raw_parts::<u8>(
-            slice_u32.as_ptr() as *const u8,
-            slice_u32.len() * 4
-        )
-    }
+    unsafe { from_raw_parts::<u8>(slice_u32.as_ptr() as *const u8, slice_u32.len() * 4) }
 }
 
 pub fn slice_u32_to_u8_mut(slice_u32: &mut [u32]) -> &mut [u8] {
-    unsafe {
-        from_raw_parts_mut::<u8>(
-            slice_u32.as_mut_ptr() as *mut u8,
-            slice_u32.len() * 4
-        )
-    }
+    unsafe { from_raw_parts_mut::<u8>(slice_u32.as_mut_ptr() as *mut u8, slice_u32.len() * 4) }
 }
-
