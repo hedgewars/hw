@@ -96,7 +96,6 @@ fn main() {
         unsafe { window.make_current().unwrap() };
 
         engine.render();
-
         window.swap_buffers().unwrap();
     }
 }

@@ -41,7 +41,8 @@ impl World {
     }
 
     pub fn create_renderer(&mut self, width: u16, height: u16) {
-        self.renderer = Some(MapRenderer::new(512, 512));
+        let land_tile_size = Size::square(512);
+        self.renderer = Some(MapRenderer::new(land_tile_size));
         self.camera = Camera::with_size(Size::new(width as usize, height as usize));
 
         use mapgen::{theme::Theme, MapGenerator};
@@ -49,7 +50,7 @@ impl World {
 
         if let Some(ref state) = self.game_state {
             self.camera.position = state.land.play_box().center();
-            
+
             let theme =
                 Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
             let texture = MapGenerator::new().make_texture(&state.land, &theme);

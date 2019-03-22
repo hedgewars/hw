@@ -1,4 +1,4 @@
-use integral_geometry::{Point, Rect, Size};
+use integral_geometry::{GridIndex, Point, Rect, Size};
 use land2d::Land2D;
 use vec2d::Vec2D;
 
@@ -75,13 +75,14 @@ pub struct MapRenderer {
     tile_shader: Shader,
     tile_layout: InputLayout,
 
-    tile_width: u32,
-    tile_height: u32,
-    num_tile_x: i32,
+    tile_size: Size,
+    num_tile_x: usize,
 }
 
 impl MapRenderer {
-    pub fn new(tile_width: u32, tile_height: u32) -> Self {
+    pub fn new(tile_size: Size) -> Self {
+        debug_assert!(tile_size.is_power_of_two());
+
         let tile_shader = Shader::new(
             VERTEX_SHADER,
             Some(PIXEL_SHADER),
@@ -93,6 +94,7 @@ impl MapRenderer {
         )
         .unwrap();
 
+        let vertex_size = std::mem::size_of::<TileVertex>() as u32;
         let tile_layout = InputLayout::new(vec![
             // position
             InputElement {
@@ -100,7 +102,7 @@ impl MapRenderer {
                 buffer_slot: 0,
                 format: InputFormat::Float(gl::FLOAT, false),
                 components: 2,
-                stride: 20,
+                stride: vertex_size,
                 offset: 0,
             },
             // uv
@@ -109,7 +111,7 @@ impl MapRenderer {
                 buffer_slot: 0,
                 format: InputFormat::Float(gl::FLOAT, false),
                 components: 3,
-                stride: 20,
+                stride: vertex_size,
                 offset: 8,
             },
         ]);
@@ -128,8 +130,7 @@ impl MapRenderer {
             tile_shader,
             tile_layout,
 
-            tile_width,
-            tile_height,
+            tile_size,
             num_tile_x: 0,
         }
     }
@@ -138,14 +139,14 @@ impl MapRenderer {
         // clear tiles, but keep our textures for potential re-use
         self.tiles.clear();
 
-        let tw = self.tile_width as usize;
-        let th = self.tile_height as usize;
+        let tw = self.tile_size.width;
+        let th = self.tile_size.height;
         let lw = land.width();
         let lh = land.height();
-        let num_tile_x = lw / tw + if lw % tw != 0 { 1 } else { 0 };
-        let num_tile_y = lh / th + if lh % th != 0 { 1 } else { 0 };
+        let num_tile_x = lw / tw;
+        let num_tile_y = lh / th;
 
-        self.num_tile_x = num_tile_x as i32;
+        self.num_tile_x = num_tile_x;
 
         for y in 0..num_tile_y {
             for x in 0..num_tile_x {
@@ -166,8 +167,8 @@ impl MapRenderer {
                     let texture = Texture2D::with_data(
                         data,
                         stride,
-                        self.tile_width,
-                        self.tile_height,
+                        self.tile_size.width as u32,
+                        self.tile_size.height as u32,
                         gl::RGBA8,
                         gl::RGBA,
                         gl::UNSIGNED_BYTE,
@@ -179,10 +180,7 @@ impl MapRenderer {
 
                     texture_index
                 } else {
-                    let texture_region = Rect::new(
-                        Point::new(0, 0),
-                        Point::new(self.tile_width as i32, self.tile_height as i32),
-                    );
+                    let texture_region = Rect::at_origin(self.tile_size);
 
                     self.textures[idx].update(
                         texture_region,
@@ -198,8 +196,8 @@ impl MapRenderer {
                     texture_index: texture_index as u32,
 
                     // TODO: are there ever non-power of two textures?
-                    width: self.tile_width,
-                    height: self.tile_height,
+                    width: self.tile_size.width as u32,
+                    height: self.tile_size.height as u32,
                 };
                 self.tiles.push(tile);
             }
@@ -215,13 +213,13 @@ impl MapRenderer {
         self.index_offset = 0;
 
         for (idx, tile) in self.tiles.iter().enumerate() {
-            let tile_x = idx as i32 % self.num_tile_x;
-            let tile_y = idx as i32 / self.num_tile_x;
-            let tile_w = self.tile_width as i32;
-            let tile_h = self.tile_height as i32;
+            let tile_x = idx % self.num_tile_x;
+            let tile_y = idx / self.num_tile_x;
+            let tile_w = self.tile_size.width;
+            let tile_h = self.tile_size.width;
 
-            let origin = Point::new(tile_x * tile_w, tile_y * tile_h);
-            let tile_rect = Rect::new(origin, origin + Point::new(tile_w, tile_h));
+            let origin = Point::new((tile_x * tile_w) as i32, (tile_y * tile_h) as i32);
+            let tile_rect = Rect::from_size(origin, self.tile_size);
 
             if viewport.intersects(&tile_rect) {
                 // lazy
@@ -274,25 +272,25 @@ impl MapRenderer {
 
         let ortho = {
             let l = viewport.left() as f32;
-            let r = viewport.right() as f32;
-            let b = viewport.bottom() as f32;
+            let w = viewport.width() as f32;
+            let h = viewport.height() as f32;
             let t = viewport.top() as f32;
 
             [
-                2f32 / (r - l),
+                2f32 / w,
                 0f32,
                 0f32,
                 0f32,
                 0f32,
-                2f32 / (t - b),
+                2f32 / -h,
                 0f32,
                 0f32,
                 0f32,
                 0f32,
                 0.5f32,
                 0f32,
-                (r + l) / (l - r),
-                (t + b) / (b - t),
+                -(2.0 * l + w) / w,
+                (2.0 * t + h) / h,
                 0.5f32,
                 1f32,
             ]
