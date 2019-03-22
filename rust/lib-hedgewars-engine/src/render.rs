@@ -1,17 +1,6 @@
-use gfx::{
-    format,
-    ConstantBuffer,
-    DepthTarget,
-    RenderTarget,
-    TextureSampler,
-    VertexBuffer,
-};
+mod map;
+mod gl;
 
-struct Camera {
-    pos: [f32; 2]
-}
-
-fn render() {
-
-}
+pub use self::map::*;
+use self::gl::*;
 
