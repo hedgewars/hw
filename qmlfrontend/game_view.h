@@ -13,15 +13,15 @@
 class GameViewRenderer : public QObject, protected QOpenGLFunctions {
   Q_OBJECT
  public:
-  GameViewRenderer();
-  ~GameViewRenderer();
+  explicit GameViewRenderer();
+  ~GameViewRenderer() override;
 
   void tick(quint32 delta);
-  void setViewportSize(const QSize& size);
   void setEngineInstance(EngineInstance* engineInstance);
 
  public slots:
   void paint();
+  void onViewportSizeChanged(QQuickWindow* window);
 
  private:
   quint32 m_delta;
@@ -35,7 +35,7 @@ class GameView : public QQuickItem {
                  setEngineInstance NOTIFY engineInstanceChanged)
 
  public:
-  GameView();
+  explicit GameView();
 
   Q_INVOKABLE void tick(quint32 delta);
 
@@ -56,9 +56,9 @@ class GameView : public QQuickItem {
   quint32 m_delta;
   QScopedPointer<GameViewRenderer> m_renderer;
   bool m_windowChanged;
-  qint32 m_centerX;
-  qint32 m_centerY;
   QPointer<EngineInstance> m_engineInstance;
+  QSize m_viewportSize;
+  QPoint m_centerPoint;
 };
 
 #endif  // GAMEVIEW_H

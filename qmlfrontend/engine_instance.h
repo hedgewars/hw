@@ -19,6 +19,7 @@ class EngineInstance : public QObject {
 
   void sendConfig(const GameConfig& config);
   void advance(quint32 ticks);
+  void moveCamera(const QPoint& delta);
   void renderFrame();
   void setOpenGLContext(QOpenGLContext* context);
   QImage generatePreview();
@@ -44,6 +45,7 @@ class EngineInstance : public QObject {
   Engine::setup_current_gl_context_t* setup_current_gl_context;
   Engine::render_frame_t* render_frame;
   Engine::advance_simulation_t* advance_simulation;
+  Engine::move_camera_t* move_camera;
   bool m_isValid;
 };
 

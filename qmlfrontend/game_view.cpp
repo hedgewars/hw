@@ -58,17 +58,21 @@ void GameView::sync() {
             &GameViewRenderer::paint, Qt::DirectConnection);
   }
 
-  if (m_windowChanged) {
-    QSize windowSize = window()->size();
-    m_renderer->setViewportSize(windowSize * window()->devicePixelRatio());
-    m_centerX = windowSize.width() / 2;
-    m_centerY = windowSize.height() / 2;
+  if (m_windowChanged || (m_viewportSize != window()->size())) {
+    m_windowChanged = false;
+
+    if (m_engineInstance)
+      m_engineInstance->setOpenGLContext(window()->openglContext());
+
+    m_viewportSize = window()->size();
+    m_centerPoint = QPoint(m_viewportSize.width(), m_viewportSize.height()) / 2;
   }
 
-  // QPoint mousePos = mapFromGlobal(QCursor::pos()).toPoint();
-  // if (flibUpdateMousePosition(m_centerX, m_centerY, mousePos.x(),
-  // mousePos.y()))
-  //  QCursor::setPos(mapToGlobal(QPointF(m_centerX, m_centerY)).toPoint());
+  if (m_engineInstance) {
+    QPoint mousePos = mapFromGlobal(QCursor::pos()).toPoint();
+    m_engineInstance->moveCamera(mousePos - m_centerPoint);
+    QCursor::setPos(mapToGlobal(m_centerPoint).toPoint());
+  }
 
   if (m_renderer) m_renderer->tick(m_delta);
 }
@@ -79,10 +83,6 @@ GameViewRenderer::GameViewRenderer()
 GameViewRenderer::~GameViewRenderer() {}
 
 void GameViewRenderer::tick(quint32 delta) { m_delta = delta; }
-
-void GameViewRenderer::setViewportSize(const QSize& size) {
-  // flibResizeWindow(size.width(), size.height());
-}
 
 void GameViewRenderer::setEngineInstance(EngineInstance* engineInstance) {
   m_engineInstance = engineInstance;
@@ -97,4 +97,9 @@ void GameViewRenderer::paint() {
   }
 
   // m_window->resetOpenGLState();
+}
+
+void GameViewRenderer::onViewportSizeChanged(QQuickWindow* window) {
+  if (m_engineInstance)
+    m_engineInstance->setOpenGLContext(window->openglContext());
 }
