@@ -1,10 +1,6 @@
-use crate::{
-    common::{GearId, GearData, GearDataProcessor}
-};
+use crate::common::{GearData, GearDataProcessor, GearId};
 use fpnum::*;
-use integral_geometry::{
-    Point, Size, GridIndex
-};
+use integral_geometry::{GridIndex, Point, Size};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct PhysicsData {
@@ -13,6 +9,12 @@ pub struct PhysicsData {
 }
 
 impl GearData for PhysicsData {}
+
+impl PhysicsData {
+    pub fn new(position: FPPoint, velocity: FPPoint) -> Self {
+        Self { position, velocity }
+    }
+}
 
 pub struct DynamicPhysicsCollection {
     gear_ids: Vec<GearId>,
@@ -25,7 +27,7 @@ impl DynamicPhysicsCollection {
         Self {
             gear_ids: Vec::new(),
             positions: Vec::new(),
-            velocities: Vec::new()
+            velocities: Vec::new(),
         }
     }
 
@@ -40,22 +42,23 @@ impl DynamicPhysicsCollection {
     }
 
     fn iter_pos_update(&mut self) -> impl Iterator<Item = (GearId, (&mut FPPoint, &FPPoint))> {
-        self.gear_ids.iter().cloned()
-            .zip(self.positions.iter_mut()
-                .zip(self.velocities.iter()))
+        self.gear_ids
+            .iter()
+            .cloned()
+            .zip(self.positions.iter_mut().zip(self.velocities.iter()))
     }
 }
 
 pub struct StaticPhysicsCollection {
     gear_ids: Vec<GearId>,
-    positions: Vec<FPPoint>
+    positions: Vec<FPPoint>,
 }
 
 impl StaticPhysicsCollection {
     fn new() -> Self {
         Self {
             gear_ids: Vec::new(),
-            positions: Vec::new()
+            positions: Vec::new(),
         }
     }
 
@@ -70,12 +73,12 @@ pub struct PhysicsProcessor {
     static_physics: StaticPhysicsCollection,
 
     physics_cleanup: Vec<GearId>,
-    position_updates: PositionUpdates
+    position_updates: PositionUpdates,
 }
 
 pub struct PositionUpdates {
     pub gear_ids: Vec<GearId>,
-    pub positions: Vec<FPPoint>
+    pub positions: Vec<FPPoint>,
 }
 
 impl PositionUpdates {
@@ -98,7 +101,7 @@ impl PhysicsProcessor {
             dynamic_physics: DynamicPhysicsCollection::new(),
             static_physics: StaticPhysicsCollection::new(),
             physics_cleanup: Vec::new(),
-            position_updates: PositionUpdates::new(0)
+            position_updates: PositionUpdates::new(0),
         }
     }
 

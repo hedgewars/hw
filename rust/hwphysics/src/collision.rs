@@ -1,17 +1,13 @@
-use std::{
-    ops::RangeInclusive
-};
+use std::ops::RangeInclusive;
 
 use crate::{
-    common::{GearId, GearData, GearDataProcessor},
+    common::{GearData, GearDataProcessor, GearId},
+    grid::Grid,
     physics::PhysicsData,
-    grid::Grid
 };
 
 use fpnum::*;
-use integral_geometry::{
-    Point, Size, GridIndex
-};
+use integral_geometry::{GridIndex, Point, Size};
 use land2d::Land2D;
 
 pub fn fppoint_round(point: &FPPoint) -> Point {
@@ -21,7 +17,7 @@ pub fn fppoint_round(point: &FPPoint) -> Point {
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct CircleBounds {
     pub center: FPPoint,
-    pub radius: FPNum
+    pub radius: FPNum,
 }
 
 impl CircleBounds {
@@ -39,7 +35,7 @@ impl CircleBounds {
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct CollisionData {
-    pub bounds: CircleBounds
+    pub bounds: CircleBounds,
 }
 
 impl GearData for CollisionData {}
@@ -47,21 +43,21 @@ impl GearData for CollisionData {}
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct ContactData {
     pub elasticity: FPNum,
-    pub friction: FPNum
+    pub friction: FPNum,
 }
 
 impl GearData for ContactData {}
 
 struct EnabledCollisionsCollection {
     gear_ids: Vec<GearId>,
-    collisions: Vec<CollisionData>
+    collisions: Vec<CollisionData>,
 }
 
 impl EnabledCollisionsCollection {
     fn new() -> Self {
         Self {
             gear_ids: Vec::new(),
-            collisions: Vec::new()
+            collisions: Vec::new(),
         }
     }
 
@@ -84,7 +80,7 @@ pub struct CollisionProcessor {
 
 pub struct DetectedCollisions {
     pub pairs: Vec<(GearId, GearId)>,
-    pub positions: Vec<Point>
+    pub positions: Vec<Point>,
 }
 
 impl DetectedCollisions {
@@ -106,7 +102,7 @@ impl CollisionProcessor {
         Self {
             grid: Grid::new(size),
             enabled_collisions: EnabledCollisionsCollection::new(),
-            detected_collisions: DetectedCollisions::new(0)
+            detected_collisions: DetectedCollisions::new(0),
         }
     }
 
@@ -114,8 +110,13 @@ impl CollisionProcessor {
         self.grid.check_collisions(&mut self.detected_collisions);
 
         for (gear_id, collision) in self.enabled_collisions.iter() {
-            if collision.bounds.rows().any(|(y, r)| (&land[y][r]).iter().any(|v| *v != 0)) {
-                self.detected_collisions.push(gear_id, 0, &collision.bounds.center)
+            if collision
+                .bounds
+                .rows()
+                .any(|(y, r)| (&land[y][r]).iter().any(|v| *v != 0))
+            {
+                self.detected_collisions
+                    .push(gear_id, 0, &collision.bounds.center)
             }
         }
     }

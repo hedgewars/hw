@@ -1,35 +1,23 @@
-mod common;
-mod physics;
+pub mod collision;
+pub mod common;
 mod grid;
-mod collision;
+pub mod physics;
 
 use fpnum::FPNum;
 use integral_geometry::Size;
 use land2d::Land2D;
 
 use crate::{
-    common::{
-        GearId,
-        GearData,
-        GearDataAggregator,
-        GearDataProcessor
-    },
-    physics::{
-        PhysicsProcessor,
-        PhysicsData
-    },
-    collision::{
-        CollisionProcessor,
-        CollisionData,
-        ContactData
-    }
+    collision::{CollisionData, CollisionProcessor, ContactData},
+    common::{GearData, GearDataAggregator, GearDataProcessor, GearId},
+    physics::{PhysicsData, PhysicsProcessor},
 };
 
 pub struct JoinedData {
     gear_id: GearId,
     physics: PhysicsData,
     collision: CollisionData,
-    contact: ContactData
+    contact: ContactData,
 }
 
 pub struct World {
@@ -44,7 +32,7 @@ macro_rules! processor_map {
                 &mut self.$field
             }
         }
-    }
+    };
 }
 
 processor_map!(PhysicsData => physics);
@@ -54,7 +42,7 @@ impl World {
     pub fn new(world_size: Size) -> Self {
         Self {
             physics: PhysicsProcessor::new(),
-            collision: CollisionProcessor::new(world_size)
+            collision: CollisionProcessor::new(world_size),
         }
     }
 
@@ -64,8 +52,9 @@ impl World {
     }
 
     pub fn add_gear_data<T>(&mut self, gear_id: GearId, data: T)
-        where T: GearData,
-              Self: GearDataAggregator<T>
+    where
+        T: GearData,
+        Self: GearDataAggregator<T>,
     {
         self.find_processor().add(gear_id, data);
     }
@@ -74,11 +63,11 @@ impl World {
 #[cfg(test)]
 mod tests {
     use crate::{
-        World,
+        collision::{CircleBounds, CollisionData},
         physics::PhysicsData,
-        collision::{CollisionData, CircleBounds}
+        World,
     };
-    use fpnum::{FPNum, FPPoint, fp};
+    use fpnum::{fp, FPNum, FPPoint};
     use integral_geometry::Size;
     use land2d::Land2D;
 
@@ -89,17 +78,23 @@ mod tests {
         let mut world = World::new(world_size);
         let gear_id = 46631;
 
-        world.add_gear_data(gear_id, PhysicsData {
-            position: FPPoint::zero(),
-            velocity: FPPoint::unit_y()
-        });
+        world.add_gear_data(
+            gear_id,
+            PhysicsData {
+                position: FPPoint::zero(),
+                velocity: FPPoint::unit_y(),
+            },
+        );
 
-        world.add_gear_data(gear_id, CollisionData {
-            bounds: CircleBounds {
-                center: FPPoint::zero(),
-                radius: fp!(10)
-            }
-        });
+        world.add_gear_data(
+            gear_id,
+            CollisionData {
+                bounds: CircleBounds {
+                    center: FPPoint::zero(),
+                    radius: fp!(10),
+                },
+            },
+        );
 
         let land = Land2D::new(Size::new(world_size.width - 2, world_size.height - 2), 0);
 

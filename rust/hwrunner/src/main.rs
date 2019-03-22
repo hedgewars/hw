@@ -6,6 +6,7 @@ use glutin::{
 use hedgewars_engine::instance::EngineInstance;
 
 use integral_geometry::Point;
+use std::time::Duration;
 
 fn init(event_loop: &EventsLoop, size: dpi::LogicalSize) -> WindowedContext {
     use glutin::{ContextBuilder, WindowBuilder};
@@ -48,6 +49,7 @@ fn main() {
     use std::time::Instant;
 
     let mut now = Instant::now();
+    let mut update = Instant::now();
 
     let mut is_running = true;
     while is_running {
@@ -56,6 +58,11 @@ fn main() {
         now = curr;
         let ms = delta.as_secs() as f64 * 1000.0 + delta.subsec_millis() as f64;
         window.set_title(&format!("hwengine {:.3}ms", ms));
+
+        if update.elapsed() > Duration::from_millis(10) {
+            update = curr;
+            engine.world.step()
+        }
 
         event_loop.poll_events(|event| match event {
             Event::WindowEvent { event, .. } => match event {

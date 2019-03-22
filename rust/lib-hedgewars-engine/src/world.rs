@@ -1,5 +1,5 @@
-use fpnum::{fp, FPNum};
-use hwphysics as hwp;
+use fpnum::{fp, FPNum, FPPoint};
+use hwphysics::{self as hwp, common::GearId};
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
 use landgen::{
@@ -27,6 +27,7 @@ pub struct World {
     game_state: Option<GameState>,
     renderer: Option<MapRenderer>,
     camera: Camera,
+    last_gear_id: GearId,
 }
 
 impl World {
@@ -37,6 +38,7 @@ impl World {
             game_state: None,
             renderer: None,
             camera: Camera::new(),
+            last_gear_id: GearId::default(),
         }
     }
 
@@ -120,7 +122,35 @@ impl World {
         }
     }
 
+    fn get_unused_gear_id(&mut self) -> GearId {
+        let id = self.last_gear_id;
+        self.last_gear_id += 1;
+        id
+    }
+
+    fn create_gear(&mut self, position: Point) {
+        let id = self.get_unused_gear_id();
+        if let Some(ref mut state) = self.game_state {
+            let fp_position = FPPoint::new(position.x.into(), position.y.into());
+            state.physics.add_gear_data(
+                id,
+                hwp::physics::PhysicsData::new(fp_position, FPPoint::zero()),
+            )
+        }
+    }
+
     pub fn step(&mut self) {
+        if let Some(ref mut state) = self.game_state {
+            let next = self.random_numbers_gen.next().unwrap();
+            if next % 32 == 0 {
+                let position = Point::new(
+                    (self.random_numbers_gen.next().unwrap() % state.land.width() as u32) as i32,
+                    0,
+                );
+                self.create_gear(position);
+            }
+        }
+
         if let Some(ref mut state) = self.game_state {
             state.physics.step(fp!(1), &state.land);
         }
