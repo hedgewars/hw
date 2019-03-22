@@ -10,7 +10,10 @@ use landgen::{
 use lfprng::LaggedFibonacciPRNG;
 use hwphysics as hwp;
 
-use crate::render::MapRenderer;
+use crate::render::{
+    MapRenderer,
+    camera::Camera
+};
 
 struct GameState {
     land: Land2D<u32>,
@@ -31,6 +34,7 @@ pub struct World {
     preview: Option<Land2D<u8>>,
     game_state: Option<GameState>,
     renderer: MapRenderer,
+    camera: Camera
 }
 
 impl World {
@@ -40,6 +44,7 @@ impl World {
             preview: None,
             game_state: None,
             renderer: MapRenderer::new(512, 512),
+            camera: Camera::new()
         }
     }
 
@@ -95,16 +100,19 @@ impl World {
         self.game_state = Some(GameState::new(land, physics));
     }
 
-    pub fn render(&mut self, x: f32, y: f32, w: f32, h: f32) {
+    pub fn move_camera(&mut self, position_shift: Point, zoom_shift: f32) {
+        self.camera.position += position_shift;
+        self.camera.zoom += zoom_shift;
+    }
+
+    pub fn render(&mut self) {
+
         unsafe {
             gl::ClearColor(0.4f32, 0f32, 0.2f32, 1f32);
             gl::Clear(gl::COLOR_BUFFER_BIT);
         }
 
-        self.renderer.render(Rect::new(
-            Point::new(x as _, y as _),
-            Point::new((x + w) as _, (y + h) as _),
-        ));
+        self.renderer.render(self.camera.viewport());
     }
 
     pub fn step(&mut self) {

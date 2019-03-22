@@ -38,8 +38,8 @@ impl EngineInstance {
         }
     }
 
-    pub fn render(&mut self, x: f32, y: f32, w: f32, h: f32) {
-        self.world.render(x, y, w, h);
+    pub fn render(&mut self) {
+        self.world.render();
     }
 
     fn process_unordered_message(&mut self, message: &UnorderedEngineMessage) {

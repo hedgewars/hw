@@ -1,5 +1,5 @@
 pub mod instance;
-mod ipc;
+pub mod ipc;
 mod render;
 mod world;
 

@@ -13,7 +13,11 @@ use glutin::{
     ContextTrait,
 };
 
-use hedgewars_engine::instance::EngineInstance;
+use hedgewars_engine::{
+    instance::EngineInstance,
+};
+
+use integral_geometry::Point;
 
 fn init(event_loop: &EventsLoop, size: dpi::LogicalSize) -> WindowedContext {
     use glutin::{
@@ -51,11 +55,7 @@ fn main() {
 
     let mut engine = EngineInstance::new();
 
-    // dirty dirty code follows; DO NOT USE
-    let mut zoom = 1f32;
     let mut dragging = false;
-    let mut x = 0f32;
-    let mut y = 0f32;
 
     use std::time::Instant;
 
@@ -85,23 +85,25 @@ fn main() {
                         }
                     }
                     WindowEvent::MouseWheel { delta, .. } => {
-                        match delta {
+                        let zoom_change = match delta {
                             MouseScrollDelta::LineDelta(x, y) => {
-                                zoom += y as f32 * 0.1f32;
+                                y as f32 * 0.1f32
                             }
                             MouseScrollDelta::PixelDelta(delta) => {
                                 let physical = delta.to_physical(window.get_hidpi_factor());
-                                zoom += physical.y as f32 * 0.1f32;
+                                physical.y as f32 * 0.1f32
                             }
-                        }
+                        };
+                        engine.world.move_camera(Point::ZERO, zoom_change);
                     }
                     _ => ()
                 },
                 Event::DeviceEvent { event, .. } => match event {
                     DeviceEvent::MouseMotion { delta } => {
                         if dragging {
-                            x -= delta.0 as f32;
-                            y -= delta.1 as f32;
+                            engine.world.move_camera(
+                                Point::new(delta.0 as i32, delta.1 as i32), 0.0
+                            )
                         }
                     }
                     _ => {}
@@ -112,8 +114,7 @@ fn main() {
 
         unsafe { window.make_current().unwrap() };
 
-        // temporary params.. dont actually handle input here
-        engine.render(x, y, w as f32 * zoom, h as f32 * zoom);
+        engine.render();
 
         window.swap_buffers().unwrap();
     }
