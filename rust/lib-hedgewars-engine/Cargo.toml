@@ -6,8 +6,6 @@ edition = "2018"
 
 [dependencies]
 gl = "0.11"
-#gfx = "0.17"
-#gfx_device_gl = "0.15"
 netbuf = "0.4"
 
 fpnum = { path = "../fpnum" }

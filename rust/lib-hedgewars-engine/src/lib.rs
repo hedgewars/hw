@@ -81,6 +81,11 @@ pub extern "C" fn setup_current_gl_context(
     height: u16,
     gl_loader: extern "C" fn(*const c_char) -> *const c_void,
 ) {
+    gl::load_with(|name| {
+        let c_name = CString::new(name).unwrap();
+        gl_loader(c_name.as_ptr())
+    });
+    unsafe { gl::Viewport(0, 0, width as i32, height as i32); }
     engine_state.world.create_renderer(width, height);
 }
 
