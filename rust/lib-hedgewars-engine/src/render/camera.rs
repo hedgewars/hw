@@ -15,7 +15,7 @@ impl Camera {
     pub fn with_size(size: Size) -> Self {
         Self {
             position: Point::ZERO,
-            zoom: 0.0,
+            zoom: 1.0,
             size,
         }
     }

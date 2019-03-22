@@ -43,6 +43,18 @@ impl World {
     pub fn create_renderer(&mut self, width: u16, height: u16) {
         self.renderer = Some(MapRenderer::new(512, 512));
         self.camera = Camera::with_size(Size::new(width as usize, height as usize));
+
+        use mapgen::{theme::Theme, MapGenerator};
+        use std::path::Path;
+
+        if let Some(ref state) = self.game_state {
+            let theme =
+                Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
+            let texture = MapGenerator::new().make_texture32(&state.land, &theme);
+            if let Some(ref mut renderer) = self.renderer {
+                renderer.init(&texture);
+            }
+        }
     }
 
     pub fn set_seed(&mut self, seed: &[u8]) {
@@ -83,18 +95,6 @@ impl World {
         let landgen = TemplatedLandGenerator::new(template);
         let land = landgen.generate_land(&params, &mut self.random_numbers_gen);
 
-        use mapgen::{
-            theme::{slice_u32_to_u8, Theme},
-            MapGenerator,
-        };
-
-        use std::path::Path;
-
-        let theme = Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
-        let texture = MapGenerator::new().make_texture32(&land, &theme);
-        if let Some(ref mut renderer) = self.renderer {
-            renderer.init(&texture);
-        }
         self.game_state = Some(GameState::new(land, physics));
     }
 
