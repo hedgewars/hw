@@ -1,4 +1,3 @@
-
 use integral_geometry::Rect;
 
 use std::{ffi, ffi::CString, mem, ptr, slice};

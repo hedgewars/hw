@@ -85,13 +85,15 @@ pub extern "C" fn setup_current_gl_context(
         let c_name = CString::new(name).unwrap();
         gl_loader(c_name.as_ptr())
     });
-    unsafe { gl::Viewport(0, 0, width as i32, height as i32); }
+    unsafe {
+        gl::Viewport(0, 0, width as i32, height as i32);
+    }
     engine_state.world.create_renderer(width, height);
 }
 
 #[no_mangle]
 pub extern "C" fn render_frame(engine_state: &mut EngineInstance) {
-    //engine_state.render()
+    engine_state.render()
 }
 
 #[no_mangle]
