@@ -99,8 +99,11 @@ impl World {
     }
 
     pub fn move_camera(&mut self, position_shift: Point, zoom_shift: f32) {
-        self.camera.position += position_shift;
         self.camera.zoom += zoom_shift;
+        self.camera.position += Point::new(
+            (position_shift.x as f32 / self.camera.zoom) as i32,
+            (position_shift.y as f32 / self.camera.zoom) as i32,
+        );
     }
 
     pub fn render(&mut self) {

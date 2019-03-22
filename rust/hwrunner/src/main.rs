@@ -64,13 +64,10 @@ fn main() {
                 }
                 WindowEvent::MouseInput { button, state, .. } => {
                     if let MouseButton::Right = button {
-                        if let ElementState::Pressed = state {
-                            dragging = true;
-                        } else {
-                            dragging = false;
-                        }
+                        dragging = state == ElementState::Pressed;
                     }
                 }
+
                 WindowEvent::MouseWheel { delta, .. } => {
                     let zoom_change = match delta {
                         MouseScrollDelta::LineDelta(x, y) => y as f32 * 0.1f32,

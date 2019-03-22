@@ -21,6 +21,17 @@ impl Camera {
     }
 
     pub fn viewport(&self) -> Rect {
-        Rect::from_size(self.position, self.size)
+        #[inline]
+        fn scale(value: usize, zoom: f32) -> i32 {
+            (value as f32 / zoom / 2.0) as i32
+        }
+        let half_width = scale(self.size.width, self.zoom);
+        let half_height = scale(self.size.height, self.zoom);
+        Rect::from_box(
+            self.position.x - half_width,
+            self.position.x + half_width,
+            self.position.y - half_height,
+            self.position.y + half_height,
+        )
     }
 }
