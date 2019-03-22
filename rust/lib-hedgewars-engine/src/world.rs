@@ -10,6 +10,8 @@ use landgen::{
 use lfprng::LaggedFibonacciPRNG;
 use hwphysics as hwp;
 
+use crate::render::MapRenderer;
+
 struct GameState {
     land: Land2D<u32>,
     physics: hwp::World,
@@ -28,6 +30,7 @@ pub struct World {
     random_numbers_gen: LaggedFibonacciPRNG,
     preview: Option<Land2D<u8>>,
     game_state: Option<GameState>,
+    renderer: MapRenderer,
 }
 
 impl World {
@@ -36,6 +39,7 @@ impl World {
             random_numbers_gen: LaggedFibonacciPRNG::new(&[]),
             preview: None,
             game_state: None,
+            renderer: MapRenderer::new(512, 512),
         }
     }
 
@@ -77,7 +81,30 @@ impl World {
         let landgen = TemplatedLandGenerator::new(template);
         let land = landgen.generate_land(&params, &mut self.random_numbers_gen);
 
+        use mapgen::{
+            MapGenerator,
+            theme::{Theme, slice_u32_to_u8}
+        };
+
+        use std::path::Path;
+        
+        let theme = Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
+        let texture = MapGenerator::new().make_texture32(&land, &theme);
+        self.renderer.init(&texture);
+        
         self.game_state = Some(GameState::new(land, physics));
+    }
+
+    pub fn render(&mut self, x: f32, y: f32, w: f32, h: f32) {
+        unsafe {
+            gl::ClearColor(0.4f32, 0f32, 0.2f32, 1f32);
+            gl::Clear(gl::COLOR_BUFFER_BIT);
+        }
+
+        self.renderer.render(Rect::new(
+            Point::new(x as _, y as _),
+            Point::new((x + w) as _, (y + h) as _),
+        ));
     }
 
     pub fn step(&mut self) {
@@ -86,3 +113,6 @@ impl World {
         }
     }
 }
+
+
+

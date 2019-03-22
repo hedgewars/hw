@@ -95,6 +95,19 @@ impl<T: Copy> Vec2D<T> {
         let width = self.width();
         self.data.chunks_exact_mut(width)
     }
+
+    #[inline]
+    pub unsafe fn as_bytes(&self) -> &[u8] {
+        use std::{
+            slice,
+            mem
+        };
+        
+        slice::from_raw_parts(
+            self.data.as_ptr() as *const u8,
+            self.data.len() * mem::size_of::<T>(),
+        )
+    }
 }
 
 impl<T: Copy> AsRef<[T]> for Vec2D<T> {

@@ -3,45 +3,43 @@ use hedgewars_engine_messages::messages::{
     UnorderedEngineMessage::*, UnsyncedEngineMessage::*, *,
 };
 
-use self::gfx_gl::{CommandBuffer, Resources};
-use gfx::format::{Unorm, D24, R8_G8_B8_A8};
-use gfx_device_gl as gfx_gl;
+use landgen::outline_template::OutlineTemplate;
+use integral_geometry::{Point, Rect, Size};
 
 use super::{ipc::IPC, world::World};
-
-pub struct EngineGlContext {
-    pub device: gfx_gl::Device,
-    pub factory: gfx_gl::Factory,
-    pub render_target: gfx::handle::RenderTargetView<Resources, (R8_G8_B8_A8, Unorm)>,
-    pub depth_buffer: gfx::handle::DepthStencilView<Resources, (D24, Unorm)>,
-    pub command_buffer: gfx::Encoder<Resources, CommandBuffer>,
-}
 
 pub struct EngineInstance {
     pub world: World,
     pub ipc: IPC,
-    pub gl_context: Option<EngineGlContext>,
 }
 
 impl EngineInstance {
     pub fn new() -> Self {
-        let world = World::new();
+        let mut world = World::new();
+
+        fn template() -> OutlineTemplate {
+            let mut template = OutlineTemplate::new(Size::new(4096*1, 2048*1));
+            template.islands = vec![vec![
+                Rect::from_size_coords(100, 2050, 1, 1),
+                Rect::from_size_coords(100, 500, 400, 1200),
+                Rect::from_size_coords(3600, 500, 400, 1200),
+                Rect::from_size_coords(3900, 2050, 1, 1),
+            ]];
+            template.fill_points = vec![Point::new(1, 0)];
+
+            template
+        }
+        
+        world.init(template());
+        
         Self {
             world,
             ipc: IPC::new(),
-            gl_context: None,
         }
     }
 
-    pub fn render<R, C>(
-        &self,
-        command_buffer: &mut gfx::Encoder<R, C>,
-        render_target: &gfx::handle::RenderTargetView<R, gfx::format::Rgba8>,
-    ) where
-        R: gfx::Resources,
-        C: gfx::CommandBuffer<R>,
-    {
-        command_buffer.clear(render_target, [0.0, 0.5, 0.0, 1.0]);
+    pub fn render(&mut self, x: f32, y: f32, w: f32, h: f32) {
+        self.world.render(x, y, w, h);
     }
 
     fn process_unordered_message(&mut self, message: &UnorderedEngineMessage) {

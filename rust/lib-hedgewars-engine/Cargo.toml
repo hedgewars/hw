@@ -5,8 +5,9 @@ authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 edition = "2018"
 
 [dependencies]
-gfx = "0.17"
-gfx_device_gl = "0.15"
+gl = "0.11"
+#gfx = "0.17"
+#gfx_device_gl = "0.15"
 netbuf = "0.4"
 
 fpnum = { path = "../fpnum" }
@@ -16,6 +17,8 @@ integral-geometry = { path = "../integral-geometry" }
 landgen = { path = "../landgen" }
 hedgewars-engine-messages = { path = "../hedgewars-engine-messages" }
 hwphysics = { path = "../hwphysics" }
+mapgen = { path = "../mapgen" }
+vec2d = { path = "../vec2d" }
 
 [lib]
 name = "hedgewars_engine"

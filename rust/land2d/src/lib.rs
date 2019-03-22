@@ -30,6 +30,12 @@ impl<T: Copy + PartialEq> Land2D<T> {
         &self.pixels.as_slice()
     }
 
+    pub fn raw_pixel_bytes(&self) -> &[u8] {
+        unsafe {
+            self.pixels.as_bytes()
+        }
+    }
+
     #[inline]
     pub fn width(&self) -> usize {
         self.pixels.width()

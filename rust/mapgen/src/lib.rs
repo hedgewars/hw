@@ -170,6 +170,72 @@ impl MapGenerator {
 
         texture
     }
+
+    // TODO: no way to pass both u8 & u32?
+    pub fn make_texture32(&self, land: &Land2D<u32>, theme: &Theme) -> Vec2D<u32> {
+        let mut texture = Vec2D::new(land.size(), 0);
+
+        if let Some(land_sprite) = theme.land_texture() {
+            for (row_index, (land_row, tex_row)) in land.rows()
+                .zip(texture.rows_mut())
+                .enumerate()
+            {
+                let sprite_row = land_sprite.get_row(row_index % land_sprite.height());
+                let mut x_offset = 0;
+                while sprite_row.len() < land.width() - x_offset {
+                    let copy_range = x_offset..x_offset + sprite_row.len();
+                    tex_row_copy32(
+                        &land_row[copy_range.clone()],
+                        &mut tex_row[copy_range],
+                        sprite_row
+                    );
+
+                    x_offset += land_sprite.width()
+                }
+
+                if x_offset < land.width() {
+                    let final_range = x_offset..land.width();
+                    tex_row_copy32(
+                        &land_row[final_range.clone()],
+                        &mut tex_row[final_range],
+                        &sprite_row[..land.width() - x_offset]
+                    );
+                }
+            }
+        }
+
+        if let Some(border_sprite) = theme.border_texture() {
+            assert!(border_sprite.height() <= 512);
+            let border_width = (border_sprite.height() / 2) as u8;
+            let border_sprite = border_sprite.to_tiled();
+
+            let mut offsets = vec![255u8; land.width()];
+
+            land_border_pass32(
+                land.rows().rev().zip(texture.rows_mut().rev()),
+                &mut offsets,
+                border_width,
+                |x, y| border_sprite.get_pixel(
+                    x % border_sprite.width(),
+                    border_sprite.height() - 1 - y,
+                )
+            );
+
+            offsets.iter_mut().for_each(|v| *v = 255);
+
+            land_border_pass32(
+                land.rows().zip(texture.rows_mut()),
+                &mut offsets,
+                border_width,
+                |x, y| border_sprite.get_pixel(
+                    x % border_sprite.width(),
+                    y,
+                )
+            );
+        }
+
+        texture
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -238,7 +304,44 @@ fn land_border_pass<'a, T, F>(rows: T, offsets: &mut [u8], border_width: u8, pix
     }
 }
 
+fn land_border_pass32<'a, T, F>(rows: T, offsets: &mut [u8], border_width: u8, pixel_getter: F)
+    where T: Iterator<Item = (&'a [u32], &'a mut [u32])>,
+          F: (Fn(usize, usize) -> u32)
+{
+    for (land_row, tex_row) in rows {
+        for (x, ((land_v, tex_v), offset_v)) in land_row.iter()
+            .zip(tex_row.iter_mut())
+            .zip(offsets.iter_mut())
+            .enumerate()
+        {
+            *offset_v = if *land_v == 0 {
+                if *offset_v < border_width {
+                    *tex_v = blend(
+                        pixel_getter(x, *offset_v as usize),
+                        *tex_v,
+                    )
+                }
+                offset_v.saturating_add(1)
+            } else {
+                0
+            }
+        }
+    }
+}
+
 fn tex_row_copy(land_row: &[u8], tex_row: &mut [u32], sprite_row: &[u32]) {
+    for ((land_v, tex_v), sprite_v) in
+        land_row.iter().zip(tex_row.iter_mut()).zip(sprite_row)
+    {
+        *tex_v = if *land_v == 0 {
+            *sprite_v
+        } else {
+            0
+        }
+    }
+}
+
+fn tex_row_copy32(land_row: &[u32], tex_row: &mut [u32], sprite_row: &[u32]) {
     for ((land_v, tex_v), sprite_v) in
         land_row.iter().zip(tex_row.iter_mut()).zip(sprite_row)
     {
