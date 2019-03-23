@@ -109,6 +109,8 @@ pub struct Size {
 }
 
 impl Size {
+    pub const EMPTY: Self = Self::square(0);
+
     #[inline]
     pub const fn new(width: usize, height: usize) -> Self {
         Self { width, height }
@@ -162,6 +164,11 @@ impl Size {
 
     pub fn to_grid_index(&self) -> GridIndex {
         GridIndex::new(*self)
+    }
+
+    #[inline]
+    pub fn contains(&self, other: Self) -> bool {
+        self.width >= other.width && self.height >= other.height
     }
 }
 
@@ -302,6 +309,11 @@ pub struct Rect {
 }
 
 impl Rect {
+    pub const EMPTY: Self = Self {
+        top_left: Point::ZERO,
+        bottom_right: Point::ZERO,
+    };
+
     #[inline]
     pub fn new(top_left: Point, bottom_right: Point) -> Self {
         debug_assert!(top_left.x <= bottom_right.x + 1);
@@ -416,6 +428,11 @@ impl Rect {
     }
 
     #[inline]
+    pub fn contains_rect(&self, other: &Self) -> bool {
+        self.contains(other.top_left()) && self.contains(other.bottom_right())
+    }
+
+    #[inline]
     pub fn intersects(&self, other: &Rect) -> bool {
         self.left() <= self.right()
             && self.right() >= other.left()
@@ -432,6 +449,16 @@ impl Rect {
             Self::from_box(point.x, self.right(), point.y, self.bottom()),
             Self::from_box(self.left(), point.x, point.y, self.bottom()),
         ]
+    }
+
+    #[inline]
+    pub fn with_margins(&self, left: i32, right: i32, top: i32, bottom: i32) -> Self {
+        Self::from_box(
+            self.left() + left,
+            self.right() + right,
+            self.top() + top,
+            self.bottom() + bottom,
+        )
     }
 
     #[inline]

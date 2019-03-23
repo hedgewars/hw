@@ -1,3 +1,4 @@
+pub mod atlas;
 pub mod camera;
 mod gl;
 mod map;
