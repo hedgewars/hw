@@ -5,8 +5,9 @@ use vec2d::Vec2D;
 use super::{
     camera::Camera,
     gl::{
-        Buffer, InputElement, InputFormat, InputLayout, Shader, Texture2D, VariableBinding,
-    }
+        Buffer, InputElement, InputFormat, InputLayout, PipelineState, Shader, Texture2D,
+        VariableBinding,
+    },
 };
 
 // TODO: temp
@@ -277,7 +278,10 @@ impl MapRenderer {
         let projection = camera.projection();
 
         self.tile_shader.bind();
-        self.tile_shader.set_matrix("Projection", projection.as_ptr());
+        self.tile_shader
+            .set_matrix("Projection", projection.as_ptr());
+
+        let _state = PipelineState::new().with_blend();
 
         let mut draw_offset = 0;
         for draw_call in &self.tile_draw_calls {

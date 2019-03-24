@@ -2,6 +2,34 @@ use integral_geometry::Rect;
 
 use std::{ffi, ffi::CString, mem, ptr, slice};
 
+#[derive(Default)]
+pub struct PipelineState {
+    blending: bool,
+}
+
+impl PipelineState {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn with_blend(mut self) -> Self {
+        unsafe {
+            gl::Enable(gl::BLEND);
+            gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
+        }
+        self.blending = true;
+        self
+    }
+}
+
+impl Drop for PipelineState {
+    fn drop(&mut self) {
+        if self.blending {
+            unsafe { gl::Disable(gl::BLEND) }
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct Texture2D {
     pub handle: u32,
