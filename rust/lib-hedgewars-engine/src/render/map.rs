@@ -2,8 +2,11 @@ use integral_geometry::{GridIndex, Point, Rect, Size};
 use land2d::Land2D;
 use vec2d::Vec2D;
 
-use super::gl::{
-    Buffer, InputElement, InputFormat, InputLayout, Shader, Texture2D, VariableBinding,
+use super::{
+    camera::Camera,
+    gl::{
+        Buffer, InputElement, InputFormat, InputLayout, Shader, Texture2D, VariableBinding,
+    }
 };
 
 // TODO: temp
@@ -206,7 +209,8 @@ impl MapRenderer {
 
     pub fn update(&mut self, land: &Land2D<u32>, region: Rect) {}
 
-    pub fn render(&mut self, viewport: Rect) {
+    pub fn render(&mut self, camera: &Camera) {
+        let viewport = camera.viewport();
         self.tile_vertices.clear();
         self.tile_indices.clear();
         self.tile_draw_calls.clear();
@@ -270,34 +274,10 @@ impl MapRenderer {
             Some(&self.tile_index_buffer),
         );
 
-        let ortho = {
-            let l = viewport.left() as f32;
-            let w = viewport.width() as f32;
-            let h = viewport.height() as f32;
-            let t = viewport.top() as f32;
-
-            [
-                2f32 / w,
-                0f32,
-                0f32,
-                0f32,
-                0f32,
-                2f32 / -h,
-                0f32,
-                0f32,
-                0f32,
-                0f32,
-                0.5f32,
-                0f32,
-                -(2.0 * l + w) / w,
-                (2.0 * t + h) / h,
-                0.5f32,
-                1f32,
-            ]
-        };
+        let projection = camera.projection();
 
         self.tile_shader.bind();
-        self.tile_shader.set_matrix("Projection", ortho.as_ptr());
+        self.tile_shader.set_matrix("Projection", projection.as_ptr());
 
         let mut draw_offset = 0;
         for draw_call in &self.tile_draw_calls {

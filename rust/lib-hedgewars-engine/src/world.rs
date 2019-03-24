@@ -118,7 +118,7 @@ impl World {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
             }
 
-            renderer.render(self.camera.viewport());
+            renderer.render(&self.camera);
         }
     }
 

@@ -34,4 +34,31 @@ impl Camera {
             self.position.y + half_height,
         )
     }
+
+    pub fn projection(&self) -> [f32; 16] {
+        let viewport = self.viewport();
+        let left = viewport.left() as f32;
+        let width = viewport.width() as f32;
+        let height = viewport.height() as f32;
+        let top = viewport.top() as f32;
+
+        [
+            2f32 / width,
+            0f32,
+            0f32,
+            0f32,
+            0f32,
+            2f32 / -height,
+            0f32,
+            0f32,
+            0f32,
+            0f32,
+            0.5f32,
+            0f32,
+            -(2.0 * left + width) / width,
+            (2.0 * top + height) / height,
+            0.5f32,
+            1f32,
+        ]
+    }
 }
