@@ -1,13 +1,7 @@
 use integral_geometry::{Rect, Size};
 use std::cmp::{max, min, Ordering};
 
-pub struct Atlas {
-    size: Size,
-    free_rects: Vec<Rect>,
-    used_rects: Vec<Rect>,
-}
-
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
 struct Fit {
     short_size: u32,
     long_size: u32,
@@ -35,27 +29,10 @@ impl Fit {
     }
 }
 
-fn split_rect(free_rect: Rect, rect: Rect) -> Vec<Rect> {
-    let mut result = vec![];
-    if free_rect.intersects(&rect) {
-        if rect.left() > free_rect.left() {
-            let trim = free_rect.right() - rect.left() + 1;
-            result.push(free_rect.with_margins(0, -trim, 0, 0))
-        }
-        if rect.right() < free_rect.right() {
-            let trim = rect.right() - free_rect.left() + 1;
-            result.push(free_rect.with_margins(-trim, 0, 0, 0))
-        }
-        if rect.top() > free_rect.top() {
-            let trim = free_rect.bottom() - rect.top() + 1;
-            result.push(free_rect.with_margins(0, 0, 0, -trim));
-        }
-        if rect.bottom() < free_rect.bottom() {
-            let trim = rect.bottom() - free_rect.top() + 1;
-            result.push(free_rect.with_margins(0, 0, -trim, 0));
-        }
-    }
-    result
+pub struct Atlas {
+    size: Size,
+    free_rects: Vec<Rect>,
+    used_rects: Vec<Rect>,
 }
 
 impl Atlas {
@@ -65,6 +42,10 @@ impl Atlas {
             free_rects: vec![Rect::at_origin(size)],
             used_rects: vec![],
         }
+    }
+
+    pub fn size(&self) -> Size {
+        self.size
     }
 
     fn find_position(&self, size: Size) -> Option<(Rect, Fit)> {
@@ -107,8 +88,8 @@ impl Atlas {
             .collect();
     }
 
-    pub fn insert_adaptive(&mut self, size: Size) -> Option<Rect> {
-        let (rect, fit) = self.find_position(size)?;
+    pub fn insert(&mut self, size: Size) -> Option<Rect> {
+        let (rect, _) = self.find_position(size)?;
 
         let mut rects_to_process = self.free_rects.len();
         let mut i = 0;
@@ -133,7 +114,24 @@ impl Atlas {
     where
         Iter: Iterator<Item = Size>,
     {
-        unimplemented!()
+        let mut sizes: Vec<_> = sizes.collect();
+        let mut result = vec![];
+
+        while let Some((index, (rect, _))) = sizes
+            .iter()
+            .enumerate()
+            .filter_map(|(i, s)| self.find_position(*s).map(|res| (i, res)))
+            .min_by_key(|(_, (_, fit))| fit.clone())
+        {
+            result.push(rect);
+            sizes.swap_remove(index);
+        }
+        if sizes.is_empty() {
+            self.used_rects.extend_from_slice(&result);
+            result
+        } else {
+            vec![]
+        }
     }
 
     pub fn reset(&mut self) {
@@ -141,6 +139,78 @@ impl Atlas {
         self.used_rects.clear();
         self.free_rects.push(Rect::at_origin(self.size));
     }
+}
+
+pub struct AtlasCollection {
+    texture_size: Size,
+    atlases: Vec<Atlas>,
+}
+
+impl AtlasCollection {
+    pub fn new(texture_size: Size) -> Self {
+        Self {
+            texture_size,
+            atlases: vec![],
+        }
+    }
+
+    fn repack(&mut self, size: Size) -> bool {
+        for atlas in &mut self.atlases {
+            let mut temp_atlas = Atlas::new(atlas.size());
+            let sizes = atlas
+                .used_rects
+                .iter()
+                .map(|r| r.size())
+                .chain(std::iter::once(size));
+            if !temp_atlas.insert_set(sizes).is_empty() {
+                std::mem::swap(atlas, &mut temp_atlas);
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn insert_sprite(&mut self, size: Size) -> bool {
+        if !self.texture_size.contains(size) {
+            false
+        } else {
+            if let Some(rect) = self
+                .atlases
+                .iter_mut()
+                .find_map(|a| a.insert(size))
+            {
+
+            } else if !self.repack(size) {
+                let mut atlas = Atlas::new(self.texture_size);
+                atlas.insert(size);
+                self.atlases.push(atlas);
+            }
+            true
+        }
+    }
+}
+
+fn split_rect(free_rect: Rect, rect: Rect) -> Vec<Rect> {
+    let mut result = vec![];
+    if free_rect.intersects(&rect) {
+        if rect.left() > free_rect.left() {
+            let trim = free_rect.right() - rect.left() + 1;
+            result.push(free_rect.with_margins(0, -trim, 0, 0))
+        }
+        if rect.right() < free_rect.right() {
+            let trim = rect.right() - free_rect.left() + 1;
+            result.push(free_rect.with_margins(-trim, 0, 0, 0))
+        }
+        if rect.top() > free_rect.top() {
+            let trim = free_rect.bottom() - rect.top() + 1;
+            result.push(free_rect.with_margins(0, 0, 0, -trim));
+        }
+        if rect.bottom() < free_rect.bottom() {
+            let trim = rect.bottom() - free_rect.top() + 1;
+            result.push(free_rect.with_margins(0, 0, -trim, 0));
+        }
+    }
+    result
 }
 
 #[cfg(test)]
@@ -153,10 +223,10 @@ mod tests {
         let atlas_size = Size::square(16);
         let mut atlas = Atlas::new(atlas_size);
 
-        assert_eq!(None, atlas.insert_adaptive(Size::square(20)));
+        assert_eq!(None, atlas.insert(Size::square(20)));
 
         let rect_size = Size::new(11, 3);
-        let rect = atlas.insert_adaptive(rect_size).unwrap();
+        let rect = atlas.insert(rect_size).unwrap();
         assert_eq!(rect, Rect::at_origin(rect_size));
         assert_eq!(2, atlas.free_rects.len());
     }
