@@ -174,11 +174,7 @@ impl AtlasCollection {
         if !self.texture_size.contains(size) {
             false
         } else {
-            if let Some(rect) = self
-                .atlases
-                .iter_mut()
-                .find_map(|a| a.insert(size))
-            {
+            if let Some(rect) = self.atlases.iter_mut().find_map(|a| a.insert(size)) {
 
             } else if !self.repack(size) {
                 let mut atlas = Atlas::new(self.texture_size);
@@ -217,6 +213,7 @@ fn split_rect(free_rect: Rect, rect: Rect) -> Vec<Rect> {
 mod tests {
     use super::Atlas;
     use integral_geometry::{Rect, Size};
+    use proptest::prelude::*;
 
     #[test]
     fn insert() {
@@ -227,7 +224,61 @@ mod tests {
 
         let rect_size = Size::new(11, 3);
         let rect = atlas.insert(rect_size).unwrap();
+        
         assert_eq!(rect, Rect::at_origin(rect_size));
         assert_eq!(2, atlas.free_rects.len());
+    }
+
+    #[derive(Debug, Clone)]
+    struct TestRect(Size);
+    struct TestRectParameters(Size);
+
+    impl Default for TestRectParameters {
+        fn default() -> Self {
+            Self(Size::square(64))
+        }
+    }
+
+    impl Arbitrary for TestRect {
+        type Parameters = TestRectParameters;
+
+        fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+            (1..=args.0.width, 1..=args.0.height)
+                .prop_map(|(w, h)| TestRect(Size::new(w, h)))
+                .boxed()
+        }
+
+        type Strategy = BoxedStrategy<TestRect>;
+    }
+
+    trait HasSize {
+        fn size(&self) -> Size;
+    }
+
+    impl HasSize for TestRect {
+        fn size(&self) -> Size {
+            self.0
+        }
+    }
+
+    impl HasSize for Rect {
+        fn size(&self) -> Size {
+            self.size()
+        }
+    }
+
+    fn sum_area<S: HasSize>(items: &[S]) -> usize {
+        items.iter().map(|s| s.size().area()).sum()
+    }
+
+    proptest! {
+        #[test]
+        fn prop_insert(rects in Vec::<TestRect>::arbitrary()) {
+            let mut atlas = Atlas::new(Size::square(2048));
+            let inserted: Vec<_> = rects.iter().take_while(|TestRect(size)| atlas.insert(*size).is_some()).cloned().collect();
+
+            assert_eq!(inserted.len(), atlas.used_rects.len());
+            assert_eq!(sum_area(&inserted), sum_area(&atlas.used_rects));
+        }
     }
 }

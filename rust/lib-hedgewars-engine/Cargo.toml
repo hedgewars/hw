@@ -18,6 +18,9 @@ hwphysics = { path = "../hwphysics" }
 mapgen = { path = "../mapgen" }
 vec2d = { path = "../vec2d" }
 
+[dev-dependencies]
+proptest = "0.9.2"
+
 [lib]
 name = "hedgewars_engine"
 crate-type = ["dylib"]
