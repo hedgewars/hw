@@ -224,7 +224,7 @@ mod tests {
 
         let rect_size = Size::new(11, 3);
         let rect = atlas.insert(rect_size).unwrap();
-        
+
         assert_eq!(rect, Rect::at_origin(rect_size));
         assert_eq!(2, atlas.free_rects.len());
     }
@@ -274,11 +274,14 @@ mod tests {
     proptest! {
         #[test]
         fn prop_insert(rects in Vec::<TestRect>::arbitrary()) {
-            let mut atlas = Atlas::new(Size::square(2048));
-            let inserted: Vec<_> = rects.iter().take_while(|TestRect(size)| atlas.insert(*size).is_some()).cloned().collect();
+            let container = Rect::at_origin(Size::square(2048));
+            let mut atlas = Atlas::new(container.size());
+            let inserted: Vec<_> = rects.iter().filter_map(|TestRect(size)| atlas.insert(*size)).collect();
 
-            assert_eq!(inserted.len(), atlas.used_rects.len());
-            assert_eq!(sum_area(&inserted), sum_area(&atlas.used_rects));
+            assert!(inserted.iter().all(|r| container.contains_rect(r)));
+
+            assert_eq!(inserted.len(), rects.len());
+            assert_eq!(sum_area(&inserted), sum_area(&rects));
         }
     }
 }
