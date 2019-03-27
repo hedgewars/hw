@@ -129,23 +129,17 @@ impl Atlas {
 
     pub fn insert(&mut self, size: Size) -> Option<Rect> {
         let (rect, _) = self.find_position(size)?;
+        let mut splits = vec![];
 
-        let mut rects_to_process = self.free_rects.len();
-        let mut i = 0;
-
-        while i < rects_to_process {
-            let rects = split_rect(self.free_rects[i], rect);
-            if !rects.is_empty() {
-                self.free_rects.remove(i);
-                self.free_rects.extend(rects);
-                rects_to_process -= 1
-            } else {
-                i += 1;
+        for i in (0..self.free_rects.len()).rev() {
+            if split_rect(self.free_rects[i], rect, &mut splits) {
+                self.free_rects.swap_remove(i as usize);
             }
         }
+        self.free_rects.extend(splits);
+        self.prune();
 
         self.used_rects.push(rect);
-        self.prune();
         Some(rect)
     }
 
@@ -225,27 +219,27 @@ impl AtlasCollection {
     }
 }
 
-fn split_rect(free_rect: Rect, rect: Rect) -> Vec<Rect> {
-    let mut result = vec![];
-    if free_rect.intersects(&rect) {
+fn split_rect(free_rect: Rect, rect: Rect, output: &mut Vec<Rect>) -> bool {
+    let split = free_rect.intersects(&rect);
+    if split {
         if rect.left() > free_rect.left() {
             let trim = free_rect.right() - rect.left() + 1;
-            result.push(free_rect.with_margins(0, -trim, 0, 0))
+            output.push(free_rect.with_margins(0, -trim, 0, 0))
         }
         if rect.right() < free_rect.right() {
             let trim = rect.right() - free_rect.left() + 1;
-            result.push(free_rect.with_margins(-trim, 0, 0, 0))
+            output.push(free_rect.with_margins(-trim, 0, 0, 0))
         }
         if rect.top() > free_rect.top() {
             let trim = free_rect.bottom() - rect.top() + 1;
-            result.push(free_rect.with_margins(0, 0, 0, -trim));
+            output.push(free_rect.with_margins(0, 0, 0, -trim));
         }
         if rect.bottom() < free_rect.bottom() {
             let trim = rect.bottom() - free_rect.top() + 1;
-            result.push(free_rect.with_margins(0, 0, -trim, 0));
+            output.push(free_rect.with_margins(0, 0, -trim, 0));
         }
     }
-    result
+    split
 }
 
 #[cfg(test)]
