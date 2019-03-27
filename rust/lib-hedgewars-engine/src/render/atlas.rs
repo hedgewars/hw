@@ -127,8 +127,7 @@ impl Atlas {
             .collect();
     }
 
-    pub fn insert(&mut self, size: Size) -> Option<Rect> {
-        let (rect, _) = self.find_position(size)?;
+    fn split_insert(&mut self, rect: Rect) {
         let mut splits = vec![];
 
         for i in (0..self.free_rects.len()).rev() {
@@ -136,10 +135,15 @@ impl Atlas {
                 self.free_rects.swap_remove(i as usize);
             }
         }
+
         self.free_rects.extend(splits);
         self.prune();
-
         self.used_rects.push(rect);
+    }
+
+    pub fn insert(&mut self, size: Size) -> Option<Rect> {
+        let (rect, _) = self.find_position(size)?;
+        self.split_insert(rect);
         Some(rect)
     }
 
@@ -156,15 +160,12 @@ impl Atlas {
             .filter_map(|(i, s)| self.find_position(*s).map(|res| (i, res)))
             .min_by_key(|(_, (_, fit))| fit.clone())
         {
+            self.split_insert(rect);
+
             result.push(rect);
             sizes.swap_remove(index);
         }
-        if sizes.is_empty() {
-            self.used_rects.extend_from_slice(&result);
-            result
-        } else {
-            vec![]
-        }
+        result
     }
 
     pub fn reset(&mut self) {
