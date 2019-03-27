@@ -29,6 +29,40 @@ impl Fit {
     }
 }
 
+#[derive(PartialEq, Eq)]
+pub struct UsedSpace {
+    used_area: usize,
+    total_area: usize,
+}
+
+impl UsedSpace {
+    const fn new(used_area: usize, total_area: usize) -> Self {
+        Self {
+            used_area,
+            total_area,
+        }
+    }
+
+    const fn used(&self) -> usize {
+        self.used_area
+    }
+
+    const fn total(&self) -> usize {
+        self.total_area
+    }
+}
+
+impl std::fmt::Debug for UsedSpace {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        write!(
+            f,
+            "{:.2}%",
+            self.used() as f32 / self.total() as f32 / 100.0
+        )?;
+        Ok(())
+    }
+}
+
 pub struct Atlas {
     size: Size,
     free_rects: Vec<Rect>,
@@ -46,6 +80,11 @@ impl Atlas {
 
     pub fn size(&self) -> Size {
         self.size
+    }
+
+    pub fn used_space(&self) -> UsedSpace {
+        let used = self.used_rects.iter().map(|r| r.size().area()).sum();
+        UsedSpace::new(used, self.size.area())
     }
 
     fn find_position(&self, size: Size) -> Option<(Rect, Fit)> {
@@ -213,6 +252,7 @@ fn split_rect(free_rect: Rect, rect: Rect) -> Vec<Rect> {
 mod tests {
     use super::Atlas;
     use integral_geometry::{Rect, Size};
+    use itertools::Itertools as _;
     use proptest::prelude::*;
 
     #[test]
@@ -278,13 +318,32 @@ mod tests {
             let mut atlas = Atlas::new(container.size());
             let inserted: Vec<_> = rects.iter().filter_map(|TestRect(size)| atlas.insert(*size)).collect();
 
-            let mut inserted_pairs = inserted.iter().zip(&inserted);
+            let mut inserted_pairs = inserted.iter().cartesian_product(inserted.iter());
 
             assert!(inserted.iter().all(|r| container.contains_rect(r)));
-            assert!(inserted_pairs.all(|(r1, r2)| r1 == r2 || r1 != r2 && r1.intersects(r2)));
+            assert!(inserted_pairs.all(|(r1, r2)| r1 == r2 || r1 != r2 && !r1.intersects(r2)));
 
-            assert(inserted.len(), rects.len());
+            assert_eq!(inserted.len(), rects.len());
             assert_eq!(sum_area(&inserted), sum_area(&rects));
+        }
+    }
+
+    proptest! {
+        #[test]
+        fn prop_insert_set(rects in Vec::<TestRect>::arbitrary()) {
+            let container = Rect::at_origin(Size::square(2048));
+            let mut atlas = Atlas::new(container.size());
+            let mut set_atlas = Atlas::new(container.size());
+
+            let inserted: Vec<_> = rects.iter().filter_map(|TestRect(size)| atlas.insert(*size)).collect();
+            let set_inserted: Vec<_> = set_atlas.insert_set(rects.iter().map(|TestRect(size)| *size));
+
+            let mut set_inserted_pairs = set_inserted.iter().cartesian_product(set_inserted.iter());
+
+            assert!(set_inserted_pairs.all(|(r1, r2)| r1 == r2 || r1 != r2 && !r1.intersects(r2)));
+            assert!(set_atlas.used_space().used() <= atlas.used_space().used());
+
+            assert_eq!(sum_area(&set_inserted), sum_area(&inserted));
         }
     }
 }

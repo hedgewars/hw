@@ -434,7 +434,7 @@ impl Rect {
 
     #[inline]
     pub fn intersects(&self, other: &Rect) -> bool {
-        self.left() <= self.right()
+        self.left() <= other.right()
             && self.right() >= other.left()
             && self.top() <= other.bottom()
             && self.bottom() >= other.top()
