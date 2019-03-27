@@ -3,15 +3,15 @@ use std::cmp::{max, min, Ordering};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
 struct Fit {
-    short_size: u32,
-    long_size: u32,
+    short_side: u32,
+    long_side: u32,
 }
 
 impl Fit {
     fn new() -> Self {
         Self {
-            short_size: u32::max_value(),
-            long_size: u32::max_value(),
+            short_side: u32::max_value(),
+            long_side: u32::max_value(),
         }
     }
 
@@ -20,8 +20,8 @@ impl Fit {
             let x_leftover = container.width - size.width;
             let y_leftover = container.height - size.height;
             Some(Self {
-                short_size: min(x_leftover, y_leftover) as u32,
-                long_size: max(x_leftover, y_leftover) as u32,
+                short_side: min(x_leftover, y_leftover) as u32,
+                long_side: max(x_leftover, y_leftover) as u32,
             })
         } else {
             None
@@ -278,9 +278,12 @@ mod tests {
             let mut atlas = Atlas::new(container.size());
             let inserted: Vec<_> = rects.iter().filter_map(|TestRect(size)| atlas.insert(*size)).collect();
 
-            assert!(inserted.iter().all(|r| container.contains_rect(r)));
+            let mut inserted_pairs = inserted.iter().zip(&inserted);
 
-            assert_eq!(inserted.len(), rects.len());
+            assert!(inserted.iter().all(|r| container.contains_rect(r)));
+            assert!(inserted_pairs.all(|(r1, r2)| r1 == r2 || r1 != r2 && r1.intersects(r2)));
+
+            assert(inserted.len(), rects.len());
             assert_eq!(sum_area(&inserted), sum_area(&rects));
         }
     }

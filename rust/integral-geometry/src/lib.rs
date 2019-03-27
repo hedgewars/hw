@@ -311,7 +311,7 @@ pub struct Rect {
 impl Rect {
     pub const EMPTY: Self = Self {
         top_left: Point::ZERO,
-        bottom_right: Point::ZERO,
+        bottom_right: Point::diag(-1),
     };
 
     #[inline]
@@ -454,9 +454,9 @@ impl Rect {
     #[inline]
     pub fn with_margins(&self, left: i32, right: i32, top: i32, bottom: i32) -> Self {
         Self::from_box(
-            self.left() + left,
+            self.left() - left,
             self.right() + right,
-            self.top() + top,
+            self.top() - top,
             self.bottom() + bottom,
         )
     }
