@@ -3046,6 +3046,8 @@ begin
 
     if (HHGear <> nil) then
         PlaySoundV(sndIncoming, Gear^.Hedgehog^.Team^.voicepack);
+    AfterAttack;
+    CurAmmoGear := nil;
 
     if Gear^.X.QWordValue = 0 then
         begin

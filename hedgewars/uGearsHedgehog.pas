@@ -530,6 +530,8 @@ with Gear^,
                 amFlamethrower, amLandGun,
                  amResurrector, amTardis,
                        amPiano, amIceGun,
+                   amAirAttack, amNapalm,
+                  amMineStrike, amDrillStrike,
                       amRubber, amMinigun: CurAmmoGear:= newGear;
             end;
             if CurAmmoType = amCake then FollowGear:= newGear;
