@@ -1100,7 +1100,7 @@ for t:= 0 to Pred(TeamsCount) do
         r.x:= 0;
         r.y:= 0;
         r.w:= 2 + TeamHealthBarWidth;
-        r.h:= htex^.h;
+        r.h:= htex^.h+1;
         DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
         // draw health bar's right border
