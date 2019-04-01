@@ -1096,25 +1096,29 @@ for t:= 0 to Pred(TeamsCount) do
 
         TeamHealthBarWidth:= cTeamHealthWidth * TeamHealthBarHealth div MaxTeamHealth;
 
-        // draw health bar
+        // draw team health bar
         r.x:= 0;
         r.y:= 0;
         r.w:= 2 + TeamHealthBarWidth;
         r.h:= htex^.h;
         DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
-        // draw health bars right border
+        // draw health bar's right border
         inc(r.x, cTeamHealthWidth + 2);
         r.w:= 3;
         DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
+        // draw hedgehog health separators in team health bar
         h:= 0;
         if not hasGone then
             for i:= 0 to cMaxHHIndex do
                 begin
                 inc(h, Hedgehogs[i].HealthBarHealth);
                 if (h < TeamHealthBarHealth) and (Hedgehogs[i].HealthBarHealth > 0) then
-                    DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                    if (IsTooDarkToRead(Clan^.Color)) then
+                        DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture)
+                    else
+                        DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSliderInverted].Texture);
                 end;
 
         // draw Lua value, if set
@@ -1170,6 +1174,10 @@ for t:= 0 to Pred(TeamsCount) do
             h:= -NameTagTex^.w - 24;
             if OwnerTex <> nil then
                 h:= h - OwnerTex^.w - 4;
+            if (IsTooDarkToRead(TeamsArray[t]^.Clan^.Color)) then
+                DrawSpriteRotatedF(sprFingerBackInv, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFingerBackInv].Width div 4, 0, 1, -90)
+            else
+                DrawSpriteRotatedF(sprFingerBack, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFingerBack].Width div 4, 0, 1, -90);
             Tint(TeamsArray[t]^.Clan^.Color shl 8 or $FF);
             DrawSpriteRotatedF(sprFinger, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFinger].Width div 4, 0, 1, -90);
             untint;

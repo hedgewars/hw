@@ -71,6 +71,7 @@ const
     // color constants
     cWhiteColorChannels : TSDL_Color = (r:$FF; g:$FF; b:$FF; a:$FF);
     cNearBlackColorChannels : TSDL_Color = (r:$00; g:$00; b:$10; a:$FF);
+    cInvertTextColorAt    : Byte = 64;
 
     cWhiteColor           : Longword = $FFFFFFFF; // white
     cNearBlackColor       : Longword = $FF000010; // nearly black

@@ -53,7 +53,7 @@ var RopePoints: record
                 end;
 
 implementation
-uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGearsList;
+uses uRender, uRenderUtils, uUtils, uVariables, uAmmos, Math, uVisualGearsList;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
 var n: LongInt;
@@ -303,6 +303,10 @@ begin
 
         dAngle := DxDy2Angle(int2hwfloat(ty - oy), int2hwfloat(tx - ox)) + 90;
 
+        if (IsTooDarkToRead(HH^.Team^.Clan^.Color)) then
+            DrawSpriteRotatedF(sprFingerBackInv, tx, ty, RealTicks div 32 mod 16, 1, dAngle)
+        else
+            DrawSpriteRotatedF(sprFingerBack, tx, ty, RealTicks div 32 mod 16, 1, dAngle);
         Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
         DrawSpriteRotatedF(sprFinger, tx, ty, RealTicks div 32 mod 16, 1, dAngle);
         untint;
@@ -1259,7 +1263,13 @@ begin
     else
         begin
         if CurrentHedgehog <> nil then
+            begin
+            if (IsTooDarkToRead(CurrentHedgehog^.Team^.Clan^.Color)) then
+                DrawSpriteRotatedF(sprTargetPBackInv, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            else
+                DrawSpriteRotatedF(sprTargetPBack, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
             Tint(CurrentHedgehog^.Team^.Clan^.Color shl 8 or $FF);
+            end;
         DrawSpriteRotatedF(sprTargetP, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
         if CurrentHedgehog <> nil then
             untint;
