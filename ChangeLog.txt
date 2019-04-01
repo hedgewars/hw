@@ -59,6 +59,7 @@ Graphics:
  * Fix speech bubbles overlapping in the wrong order
  * Fix wrong ice beam angle if it goes diagonally up out of map through world wrap
  * Fix double water splash when flying saucer drowns
+ * Black clan color is now properly supported
 
 Game HUD:
  + Colorize switching arrows, pointing arrow and target cross in clan color

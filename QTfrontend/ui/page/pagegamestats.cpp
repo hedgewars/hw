@@ -222,11 +222,25 @@ void PageGameStats::renderStats()
                 minValue = qMin(minValue, hps[t]);
             }
 
-            QPen pen(c);
+            // Draw clan health/score graph lines
+            QColor col = QColor(c);
+
+            // Special pen for very dark clan colors
+            if (!(col.red() >= cInvertTextColorAt || col.green() >= cInvertTextColorAt || col.blue() >= cInvertTextColorAt))
+            {
+                QPen pen_marker(QColor(255, 255, 255));
+                pen_marker.setWidth(3);
+                pen_marker.setStyle(Qt::DotLine);
+                pen_marker.setCosmetic(true);
+                m_scene->addPath(path, pen_marker);
+            }
+
+            // Regular pen
+            QPen pen(col);
             pen.setWidth(2);
             pen.setCosmetic(true);
-
             m_scene->addPath(path, pen);
+
             ++i;
         }
 

@@ -45,6 +45,7 @@ bool custom_data = false;
 int cMaxTeams = 8;
 int cMaxHHs = HEDGEHOGS_PER_TEAM * cMaxTeams;
 int cMinServerVersion = 3;
+unsigned char cInvertTextColorAt = 64;
 
 QString * cDefaultAmmoStore = new QString( AMMOLINE_DEFAULT_QT AMMOLINE_DEFAULT_PROB
                                            AMMOLINE_DEFAULT_DELAY AMMOLINE_DEFAULT_CRATE );

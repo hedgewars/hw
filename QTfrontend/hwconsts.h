@@ -39,6 +39,7 @@ extern bool custom_data;
 extern int cMaxTeams;
 extern int cMaxHHs;
 extern int cMinServerVersion;
+extern unsigned char cInvertTextColorAt;
 
 class QStandardItemModel;
 
