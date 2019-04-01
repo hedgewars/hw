@@ -1760,7 +1760,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             SDL_FreeSurface(tmpSurface)
             end;
         if fpsTexture <> nil then
-            DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
+            DrawTexture((cScreenWidth shr 1) - 20 - fpsTexture^.w - offsetY, offsetX, fpsTexture);
         end;
 end;
 
