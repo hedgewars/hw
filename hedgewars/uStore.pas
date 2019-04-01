@@ -326,9 +326,9 @@ for t:= 0 to Pred(TeamsCount) do
 
 for t:= 0 to Pred(ClansCount) do
     with ClansArray[t]^ do
-        HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, Teams[0]^.NameTagTex^.h+1, Color);
+        HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, 19 * HDPIScaleFactor, Color);
 
-GenericHealthTexture:= makeHealthBarTexture(cTeamHealthWidth + 5, TeamsArray[0]^.NameTagTex^.h+1, cWhiteColor)
+GenericHealthTexture:= makeHealthBarTexture(cTeamHealthWidth + 5, 19 * HDPIScaleFactor, cWhiteColor)
 end;
 
 
