@@ -115,7 +115,7 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBDampenAudio->setChecked(value("audio/dampen", true).toBool());
     Form->ui.pageOptions->SLVolume->setValue(value("audio/volume", 100).toUInt());
 
-    QString netNick = value("net/nick", tr("Guest")+QString("%1").arg(rand())).toString();
+    QString netNick = value("net/nick", getRandomNick()).toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
     bool savePwd = value("net/savepassword",true).toBool();
     Form->ui.pageOptions->CBSavePassword->setChecked(savePwd);
@@ -515,6 +515,16 @@ QString GameUIConfig::netNick()
 void GameUIConfig::updNetNick()
 {
     Form->ui.pageOptions->editNetNick->setText(value("net/nick", "").toString());
+}
+
+QString GameUIConfig::getRandomNick()
+{
+    // Generate random nick name or pick old one if one was already generated.
+    QString nick;
+    if (cachedRandomNick.isNull())
+        // "Guest" + number between 1 and 99999
+        cachedRandomNick = tr("Guest") + QString("%1").arg(rand() % 99999 + 1);
+    return cachedRandomNick;
 }
 
 QByteArray GameUIConfig::netPasswordHash()

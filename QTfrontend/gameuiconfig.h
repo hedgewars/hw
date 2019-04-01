@@ -54,6 +54,7 @@ class GameUIConfig : public QSettings
         quint8 volume();
         quint8 timerInterval();
         QString netNick();
+        QString getRandomNick();
         QByteArray netPasswordHash();
         int netPasswordLength();
         void clearPasswordHash();
@@ -104,6 +105,8 @@ class GameUIConfig : public QSettings
         QList<BindAction> m_binds;
 
         void applyProxySettings();
+
+        QString cachedRandomNick;
 };
 
 #endif
