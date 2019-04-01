@@ -5255,7 +5255,7 @@ begin
     if (WorldEdge = weBounce) then
         if (hwRound(Gear^.X) - Gear^.Radius < leftX) then
             valid := false
-        else if (hwRound(Gear^.X) - Gear^.Radius > rightX) then
+        else if (hwRound(Gear^.X) + Gear^.Radius > rightX) then
             valid := false;
 
     if (not valid) then
