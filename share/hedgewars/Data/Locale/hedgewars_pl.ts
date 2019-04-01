@@ -936,6 +936,14 @@ Ostatnia wiadomość silnika:
         <source>Scale size of the drawn map</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Wczytaj</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -3123,6 +3131,10 @@ Czy na pewno chcesz wyjść?</translation>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
         <translation>Ładowanie&lt;br&gt;CAPTCHA...</translation>
+    </message>
+    <message>
+        <source>Zoom (%)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

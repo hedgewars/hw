@@ -900,6 +900,14 @@ Last engine message:
         <source>Scale size of the drawn map</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Load</source>
+        <translation>Load</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -2986,6 +2994,10 @@ Do you really want to quit?</translation>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
         <translation>Loading&lt;br&gt;CAPTCHA …</translation>
+    </message>
+    <message>
+        <source>Zoom (%)</source>
+        <translation></translation>
     </message>
 </context>
 <context>

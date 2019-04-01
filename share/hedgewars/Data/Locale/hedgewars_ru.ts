@@ -866,6 +866,14 @@ Last engine message:
         <source>Scale size of the drawn map</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Загрузить</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -2939,6 +2947,10 @@ Do you really want to quit?</source>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
         <translation>Загружается&lt;br&gt;капча ...</translation>
+    </message>
+    <message>
+        <source>Zoom (%)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

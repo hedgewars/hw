@@ -886,6 +886,14 @@ Dernier message du moteur :
         <source>Scale size of the drawn map</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Charger</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -3034,6 +3042,10 @@ Voulez-vous vraiment quitter?</translation>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
         <translation>Chargement&lt;br&gt;CAPTCHA …</translation>
+    </message>
+    <message>
+        <source>Zoom (%)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -927,6 +927,14 @@ Die letzte Meldung der Engine lautet:
         <source>Scale size of the drawn map</source>
         <translation>Größe der gemalten Karte skalieren</translation>
     </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Laden</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -3153,6 +3161,10 @@ Willst du wirklich verlassen?</translation>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
         <translation>CAPTCHA&lt;br&gt;laden …</translation>
+    </message>
+    <message>
+        <source>Zoom (%)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

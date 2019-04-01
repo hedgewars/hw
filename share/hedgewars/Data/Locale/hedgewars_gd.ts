@@ -908,6 +908,14 @@ An teachdaireachd mu dheireadh an einnsein:
         <source>Scale size of the drawn map</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Luchdaich</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -2971,6 +2979,10 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
         <translation>A’ luchdadh&lt;br&gt;CAPTCHA …</translation>
+    </message>
+    <message>
+        <source>Zoom (%)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
