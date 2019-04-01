@@ -1004,7 +1004,6 @@ else // mix hedgehogs
         if ar[i]^.Gear <> nil then
             begin
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
-            ar[i]^.Gear^.Pos:= GetRandom(19)
             end;
         ar[i]:= ar[Count - 1];
         dec(Count)
