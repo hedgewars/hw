@@ -736,7 +736,6 @@ with CurrentTeam^ do
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
     Gear^.Health:= StrToInt(s);
-    Gear^.Pos:= GetRandom(19);
     if checkFails((Gear^.Health > 0) and (Gear^.Health <= cMaxHogHealth), 'Invalid hedgehog health (must be between 1 and '+IntToStr(cMaxHogHealth)+')', true) then exit;
     if (GameFlags and gfSharedAmmo) <> 0 then
         CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex

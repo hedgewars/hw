@@ -312,6 +312,7 @@ case Kind of
                 gear^.Angle:= cMaxAngle div 2;
                 gear^.Density:= _3;
                 gear^.Z:= cHHZ;
+                gear^.Pos:= GetRandom(19);
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
                         gear^.Hedgehog^.Effects[heResurrectable] := 1;
