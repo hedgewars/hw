@@ -929,11 +929,11 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Laden</translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
 </context>
 <context>
@@ -3164,7 +3164,7 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Zoom (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom (%)</translation>
     </message>
 </context>
 <context>
