@@ -2999,7 +2999,7 @@ begin
     if (GameTicks and $3F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
-    if (hwRound(Gear^.X) > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) < -2048) then
+    if (hwRound(Gear^.X) > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) < -2048) or ((Gear^.Message and gmDestroy) > 0) then
         begin
         // avoid to play forever (is this necessary?)
         StopSoundChan(Gear^.SoundChannel);

@@ -594,6 +594,7 @@ local crateSpriteBorer = nil
 local waypointPreviewSprite = nil
 
 local cGear = nil -- detects placement of girders and objects (using airattack)
+local cGearPlacementDone = false
 local curWep = amNothing
 local leftHeld = false
 local rightHeld = false
@@ -3092,14 +3093,15 @@ function HandleHedgeEditor()
 		x,y = GetGearTarget(cGear)
 
 		if GetGearType(cGear) == gtAirAttack and GetCurAmmoType() == amCMGearPlacementTool then
-			DeleteGear(cGear)
-			PlaceObject(x, y)
-		elseif GetGearType(cGear) == gtGirder then
-
+			SetGearMessage(cGear, bor(GetGearMessage(cGear), gmDestroy))
+			if not cGearPlacementDone then
+				PlaceObject(x, y)
+				cGearPlacementDone = true
+			end
+		elseif GetGearType(cGear) == gtGirder and not cGearPlacementDone then
 			CGR = GetState(cGear)
-
-			-- improve rectangle test based on CGR when you can be bothered
 			PlaceObject(x, y)
+			cGearPlacementDone = true
 		end
 
 	end
@@ -3837,6 +3839,7 @@ function onGearAdd(gear)
 
 	if (GetGearType(gear) == gtAirAttack and GetCurAmmoType() == amCMGearPlacementTool) or (GetGearType(gear) == gtGirder) then
 		cGear = gear
+		cGearPlacementDone = false
 	end
 
 	local tagTint

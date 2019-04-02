@@ -106,6 +106,7 @@ local curWep = amNothing -- current weapon, used to reduce # of calls to GetCurA
 local fortMode = false -- is using a fort map?
 local tempID_CheckProximity = nil -- temporary structure variable for CheckProximity
 local cGear = nil -- detects placement of girders and objects (using airattack)
+local cGearPlacementDone = false
 local uniqueStructureID = 0 -- Counter and ID for structures. Is incremented each time a structure spawns
 
 -- Colors
@@ -1385,17 +1386,19 @@ function HandleConstructionMode()
 		local x,y = GetGearTarget(cGear)
 
 		if GetGearType(cGear) == gtAirAttack then
-			DeleteGear(cGear)
-			PlaceObject(x, y)
+			SetGearMessage(cGear, bor(GetGearMessage(cGear), gmDestroy))
+			if not cGearPlacementDone then
+				PlaceObject(x, y)
+				cGearPlacementDone = true
+			end
 		elseif GetGearType(cGear) == gtTeleport then
-
-				CheckTeleport(cGear, x, y)
-				cGear = nil
+			CheckTeleport(cGear, x, y)
+			cGear = nil
+			cGearPlacementDone = true
 		elseif GetGearType(cGear) == gtGirder then
-
 			currentGirderRotation = GetState(cGear)
-
 			PlaceObject(x, y)
+			cGearPlacementDone = true
 		end
 
 	end
@@ -1877,6 +1880,7 @@ function onGearAdd(gear)
 	local gt = GetGearType(gear)
 	if (gt == gtAirAttack) or (gt == gtTeleport) or (gt == gtGirder) then
 		cGear = gear
+		cGearPlacementDone = false
 	end
 
 	if isATrackedGear(gear) then
