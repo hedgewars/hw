@@ -78,18 +78,13 @@ begin
     WriteInRoundRect:= WriteInRoundRect(Surface, X, Y, Color, Font, s, 0);
 end;*)
 
-function IsTooDarkToRead(TextColor: LongWord): boolean;
+function IsTooDarkToRead(TextColor: LongWord): boolean; inline;
 var clr: TSDL_Color;
 begin
     clr.r:= (TextColor shr 16) and $FF;
     clr.g:= (TextColor shr 8) and $FF;
     clr.b:= TextColor and $FF;
-    IsTooDarkToRead:= ((clr.r >= cInvertTextColorAt) or (clr.g >= cInvertTextColorAt) or (clr.b >= cInvertTextColorAt));
-end;
-
-function IsTooDarkToRead(TextColor: TSDL_COLOR): boolean;
-begin
-    IsTooDarkToRead:= (not ((TextColor.r >= cInvertTextColorAt) or (TextColor.g >= cInvertTextColorAt) or (TextColor.b >= cInvertTextColorAt)));
+    IsTooDarkToRead:= not ((clr.r >= cInvertTextColorAt) or (clr.g >= cInvertTextColorAt) or (clr.b >= cInvertTextColorAt));
 end;
 
 function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring; maxLength: LongWord): TSDL_Rect;
@@ -111,7 +106,7 @@ begin
     clr.r:= (Color shr 16) and $FF;
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;
-    if (not IsTooDarkToRead(clr)) then
+    if (not IsTooDarkToRead(Color)) then
         DrawRoundRect(@finalRect, cWhiteColor, cNearBlackColor, Surface, true)
     else
         DrawRoundRect(@finalRect, cNearBlackColor, cWhiteColor, Surface, true);
