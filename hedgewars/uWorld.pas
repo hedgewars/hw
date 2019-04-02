@@ -1440,24 +1440,49 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
         if CurAmmoType = amBee then
             spr:= sprTargetBee
         else
-            begin
             spr:= sprTargetP;
-            Tint(Team^.Clan^.Color shl 8 or $FF);
-            end;
         if replicateToLeft then
             begin
             ShiftWorld(-1);
+            if spr = sprTargetP then
+                begin
+                if IsTooDarkToRead(Team^.Clan^.Color) then
+                    DrawSpriteRotatedF(sprTargetPBackInv, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+                else
+                    DrawSpriteRotatedF(sprTargetPBack, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+                Tint(Team^.Clan^.Color shl 8 or $FF);
+                end;
             DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+            if spr = sprTargetP then
+                untint;
             UnshiftWorld();
             end;
 
         if replicateToRight then
             begin
             ShiftWorld(1);
+            if spr = sprTargetP then
+                begin
+                if IsTooDarkToRead(Team^.Clan^.Color) then
+                    DrawSpriteRotatedF(sprTargetPBackInv, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+                else
+                    DrawSpriteRotatedF(sprTargetPBack, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+                Tint(Team^.Clan^.Color shl 8 or $FF);
+                end;
             DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+            if spr = sprTargetP then
+                untint;
             UnshiftWorld();
             end;
 
+        if spr = sprTargetP then
+            begin
+            if IsTooDarkToRead(Team^.Clan^.Color) then
+                DrawSpriteRotatedF(sprTargetPBackInv, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            else
+                DrawSpriteRotatedF(sprTargetPBack, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+            Tint(Team^.Clan^.Color shl 8 or $FF);
+            end;
         DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
         if spr = sprTargetP then
             untint;
