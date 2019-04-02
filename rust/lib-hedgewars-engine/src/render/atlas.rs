@@ -67,6 +67,7 @@ pub struct Atlas {
     size: Size,
     free_rects: Vec<Rect>,
     used_rects: Vec<Rect>,
+    splits: Vec<Rect>,
 }
 
 impl Atlas {
@@ -75,6 +76,7 @@ impl Atlas {
             size,
             free_rects: vec![Rect::at_origin(size)],
             used_rects: vec![],
+            splits: vec![],
         }
     }
 
@@ -114,30 +116,23 @@ impl Atlas {
         }
     }
 
-    fn prune(&mut self) {
-        self.free_rects = self
-            .free_rects
-            .iter()
-            .filter(|inner| {
-                self.free_rects
-                    .iter()
-                    .all(|outer| outer == *inner || !outer.contains_rect(inner))
-            })
-            .cloned()
-            .collect();
-    }
-
     fn split_insert(&mut self, rect: Rect) {
-        let mut splits = vec![];
+        let mut splits = std::mem::replace(&mut self.splits, vec![]);
+        let mut buffer = [Rect::EMPTY; 4];
 
         for i in (0..self.free_rects.len()).rev() {
-            if split_rect(self.free_rects[i], rect, &mut splits) {
+            if let Some(count) = split_rect(self.free_rects[i], rect, &mut splits, &mut buffer) {
                 self.free_rects.swap_remove(i as usize);
+                splits.extend_from_slice(&buffer[0..count]);
             }
         }
 
-        self.free_rects.extend(splits);
-        self.prune();
+        filter_swap_remove(&mut splits, |s| {
+            self.free_rects.iter().any(|r| r.contains_rect(s))
+        });
+        self.free_rects.extend(splits.drain(..));
+        std::mem::replace(&mut self.splits, splits);
+
         self.used_rects.push(rect);
     }
 
@@ -220,27 +215,86 @@ impl AtlasCollection {
     }
 }
 
-fn split_rect(free_rect: Rect, rect: Rect, output: &mut Vec<Rect>) -> bool {
+#[inline]
+fn filter_swap_remove<T, F>(vec: &mut Vec<T>, predicate: F)
+where
+    F: Fn(&T) -> bool,
+{
+    let mut i = 0;
+    while i < vec.len() {
+        if predicate(&vec[i]) {
+            vec.swap_remove(i);
+        } else {
+            i += 1;
+        }
+    }
+}
+
+#[inline]
+fn prune_push(
+    previous_splits: &mut Vec<Rect>,
+    buffer: &mut [Rect; 4],
+    buffer_size: &mut usize,
+    rect: Rect,
+) {
+    if !previous_splits.iter().any(|r| r.contains_rect(&rect)) {
+        filter_swap_remove(previous_splits, |s| rect.contains_rect(s));
+        buffer[*buffer_size] = rect;
+        *buffer_size += 1;
+    }
+}
+
+fn split_rect(
+    free_rect: Rect,
+    rect: Rect,
+    previous_splits: &mut Vec<Rect>,
+    buffer: &mut [Rect; 4],
+) -> Option<usize> {
+    let mut buffer_size = 0usize;
     let split = free_rect.intersects(&rect);
     if split {
         if rect.left() > free_rect.left() {
             let trim = free_rect.right() - rect.left() + 1;
-            output.push(free_rect.with_margins(0, -trim, 0, 0))
+            prune_push(
+                previous_splits,
+                buffer,
+                &mut buffer_size,
+                free_rect.with_margins(0, -trim, 0, 0),
+            );
         }
         if rect.right() < free_rect.right() {
             let trim = rect.right() - free_rect.left() + 1;
-            output.push(free_rect.with_margins(-trim, 0, 0, 0))
+            prune_push(
+                previous_splits,
+                buffer,
+                &mut buffer_size,
+                free_rect.with_margins(-trim, 0, 0, 0),
+            );
         }
         if rect.top() > free_rect.top() {
             let trim = free_rect.bottom() - rect.top() + 1;
-            output.push(free_rect.with_margins(0, 0, 0, -trim));
+            prune_push(
+                previous_splits,
+                buffer,
+                &mut buffer_size,
+                free_rect.with_margins(0, 0, 0, -trim),
+            );;
         }
         if rect.bottom() < free_rect.bottom() {
             let trim = rect.bottom() - free_rect.top() + 1;
-            output.push(free_rect.with_margins(0, 0, -trim, 0));
+            prune_push(
+                previous_splits,
+                buffer,
+                &mut buffer_size,
+                free_rect.with_margins(0, 0, -trim, 0),
+            );;
         }
     }
-    split
+    if split {
+        Some(buffer_size)
+    } else {
+        None
+    }
 }
 
 #[cfg(test)]
