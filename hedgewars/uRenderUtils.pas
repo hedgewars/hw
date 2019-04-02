@@ -106,6 +106,7 @@ begin
     clr.r:= (Color shr 16) and $FF;
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;
+    clr.a:= $FF;
     if (not IsTooDarkToRead(Color)) then
         DrawRoundRect(@finalRect, cWhiteColor, cNearBlackColor, Surface, true)
     else

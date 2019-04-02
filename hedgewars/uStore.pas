@@ -113,6 +113,7 @@ finalRect.h:= h + cFontBorder * 2;
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
+clr.a:= $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, s, clr);
 if tmpsurf = nil then exit;
 tmpsurf:= doSurfaceConversion(tmpsurf);
