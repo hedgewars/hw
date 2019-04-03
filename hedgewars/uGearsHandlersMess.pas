@@ -2082,6 +2082,20 @@ begin
     if (TurnTimeLeft = 0) and ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
         AllInactive := false;
 
+    // Disable targeting if airmine is not active yet
+    if ((Gear^.State and gsttmpFlag) = 0) then
+        begin
+        if (TurnTimeLeft = 0)
+        or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
+        or (CurrentHedgehog^.Gear = nil) then
+        begin
+        Gear^.FlightTime:= GameTicks;
+        Gear^.State := Gear^.State or gsttmpFlag;
+        Gear^.Hedgehog := nil;
+        end;
+        exit;
+        end;
+
     //Disable targeting while the airmine is stunned
     if Gear^.Tag <> 0 then
         begin
@@ -2128,11 +2142,9 @@ begin
         end;
 
     // If in ready timer, or after turn, or in first 5 seconds of turn (really a window due to extra time utility)
-    // or mine is inactive due to lack of gsttmpflag or hunting is disabled due to seek radius of 0
-    // then we aren't hunting
+    // or hunting is disabled due to seek radius of 0 then we aren't hunting
     if (ReadyTimeLeft > 0) or (TurnTimeLeft = 0) or 
         ((TurnTimeLeft < cHedgehogTurnTime) and (cHedgehogTurnTime-TurnTimeLeft < 5000)) or
-        (Gear^.State and gsttmpFlag = 0) or
         (Gear^.Angle = 0) then
         gear^.State:= gear^.State and (not gstChooseTarget)
     else if
@@ -2193,68 +2205,57 @@ begin
         end
     else Gear^.Hedgehog:= nil;
 
-    if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
+    if ((Gear^.State and gstAttacking) = 0) then
         begin
-        if ((Gear^.State and gstAttacking) = 0) then
+        if ((GameTicks and $1F) = 0) then
             begin
-            if ((GameTicks and $1F) = 0) then
+            if targ <> nil then
                 begin
-                if targ <> nil then
-                    begin
-                    tX:=Gear^.X-targ^.X;
-                    tY:=Gear^.Y-targ^.Y;
-                    if (tX.Round+tY.Round < Gear^.Boom) and
-                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Boom)) then
-                    Gear^.State := Gear^.State or gstAttacking
-                    end
-                else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Boom, Gear^.Boom) <> nil) then
-                    Gear^.State := Gear^.State or gstAttacking
+                tX:=Gear^.X-targ^.X;
+                tY:=Gear^.Y-targ^.Y;
+                if (tX.Round+tY.Round < Gear^.Boom) and
+                   (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Boom)) then
+                Gear^.State := Gear^.State or gstAttacking
                 end
-            end
-        else // gstAttacking <> 0
-            begin
-            AllInactive := false;
-            if (Gear^.Timer and $FF) = 0 then
-                PlaySound(sndMineTick);
-            if Gear^.Timer = 0 then
-                begin
-                // recheck
-                if targ <> nil then
-                    begin
-                    tX:=Gear^.X-targ^.X;
-                    tY:=Gear^.Y-targ^.Y;
-                    if (tX.Round+tY.Round < Gear^.Boom) and
-                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Boom)) then
-                        begin
-                        Gear^.Hedgehog:= CurrentHedgehog;
-                        tmpG:= FollowGear;
-                        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
-                        FollowGear:= tmpG;
-                        DeleteGear(Gear);
-                        exit
-                        end
-                    end
-                else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Boom, Gear^.Boom) <> nil) then
-                    begin
-                    Gear^.Hedgehog:= CurrentHedgehog;
-                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
-                    DeleteGear(Gear);
-                    exit
-                    end;
-                Gear^.State:= Gear^.State and (not gstAttacking);
-                Gear^.Timer:= Gear^.WDTimer
-                end;
-            if Gear^.Timer > 0 then
-                dec(Gear^.Timer);
+            else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Boom, Gear^.Boom) <> nil) then
+                Gear^.State := Gear^.State or gstAttacking
             end
         end
-    else // gsttmpFlag = 0
-        if (TurnTimeLeft = 0)
-        or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
-        or (CurrentHedgehog^.Gear = nil) then
+    else // gstAttacking <> 0
         begin
-        Gear^.FlightTime:= GameTicks;
-        Gear^.State := Gear^.State or gsttmpFlag
+        AllInactive := false;
+        if (Gear^.Timer and $FF) = 0 then
+            PlaySound(sndMineTick);
+        if Gear^.Timer = 0 then
+            begin
+            // recheck
+            if targ <> nil then
+                begin
+                tX:=Gear^.X-targ^.X;
+                tY:=Gear^.Y-targ^.Y;
+                if (tX.Round+tY.Round < Gear^.Boom) and
+                   (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Boom)) then
+                    begin
+                    Gear^.Hedgehog:= CurrentHedgehog;
+                    tmpG:= FollowGear;
+                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+                    FollowGear:= tmpG;
+                    DeleteGear(Gear);
+                    exit
+                    end
+                end
+            else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Boom, Gear^.Boom) <> nil) then
+                begin
+                Gear^.Hedgehog:= CurrentHedgehog;
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+                DeleteGear(Gear);
+                exit
+                end;
+            Gear^.State:= Gear^.State and (not gstAttacking);
+            Gear^.Timer:= Gear^.WDTimer
+            end;
+        if Gear^.Timer > 0 then
+            dec(Gear^.Timer);
         end
 end;
 

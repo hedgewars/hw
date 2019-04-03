@@ -10,6 +10,7 @@ Gameplay:
  + Most target practices now highlight position of next target (must be unlocked first)
  * Fix hedgehogs being pushed around (and other collision bugs) when they overlap
  * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
+ * Fix air mine not colliding with crates initially
  * Fix poison damage not working in first round
  * Use player-chosen team identity in campaigns and singleplayer missions
  * Fix player-chosen teams ignoring custom team controls in campaigns
