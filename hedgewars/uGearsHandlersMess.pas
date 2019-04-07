@@ -2290,7 +2290,7 @@ begin
         CalcRotationDirAngle(Gear);
         end;
 
-    Gear^.RenderTimer:= ((Gear^.State and gstFrozen) = 0) and ((Gear^.State and gstAttacking) = 0);
+    Gear^.RenderTimer:= (Gear^.State and (gstFrozen or gstAttacking or gstDrowning) = 0);
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
         begin
         if ((Gear^.State and gstAttacking) = 0) and ((Gear^.State and gstFrozen) = 0) then
