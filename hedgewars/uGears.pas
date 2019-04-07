@@ -51,7 +51,7 @@ function  GearByUID(uid : Longword) : PGear;
 function  IsClockRunning() : boolean;
 
 implementation
-uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
+uses sysutils, uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
     {$IFDEF USE_TOUCH_INTERFACE}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions,
@@ -222,7 +222,7 @@ end;
 
 procedure ProcessGears;
 var t: PGear;
-    i, AliveCount: LongInt;
+    i, j, AliveCount: LongInt;
     s: ansistring;
     prevtime: LongWord;
     stirFallers: boolean;
@@ -276,23 +276,26 @@ while t <> nil do
             begin
             if curHandledGear^.RenderTimer then
                 begin
+                // Mine timer
                 if (curHandledGear^.Kind in [gtMine, gtSMine, gtAirMine]) then
-                    begin
                     if curHandledGear^.Tex = nil then
                         if (curHandledGear^.Karma = 1) and (not (GameType in [gmtDemo, gmtRecord])) then
+                            // Secret mine timer
                             curHandledGear^.Tex:= RenderStringTex(ansistring(trmsg[sidUnknownGearValue]), $ff808080, fntSmall)
                         else
                             begin
-                            i:= curHandledGear^.Timer;
-                            if (i > 0) and (i < 1000)  then
-                                i:= 1
+                            // Display mine timer with up to 1 decimal point of precision (rounded down)
+                            i:= curHandledGear^.Timer div 1000;
+                            j:= (curHandledGear^.Timer mod 1000) div 100;
+                            if j = 0 then
+                                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i)), $ff808080, fntSmall)
                             else
-                                i:= curHandledGear^.Timer div 1000;
-                            curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i)), $ff808080, fntSmall);
-                            end;
-                    end
+                                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i) + FormatSettings.DecimalSeparator + inttostr(j)), $ff808080, fntSmall);
+                            end
+                // Timer of other gears
                 else if ((curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0)) then
                     begin
+                    // Display time in seconds as whole number, rounded up
                     FreeAndNilTexture(curHandledGear^.Tex);
                     curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(curHandledGear^.Timer div 1000)), cWhiteColor, fntSmall);
                     end;
