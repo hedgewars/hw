@@ -1907,7 +1907,12 @@ begin
     if CheckLuaParamCount(L, 2, 'SetTimer', 'gearUid, timer') then
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
-        if gear <> nil then gear^.Timer:= Trunc(lua_tonumber(L, 2))
+        if gear <> nil then
+            begin
+            gear^.Timer:= Trunc(lua_tonumber(L, 2));
+            if gear^.RenderTimer and (gear^.Tex <> nil) then
+                FreeAndNilTexture(gear^.Tex);
+            end;
         end;
     lc_settimer:= 0
 end;

@@ -1951,6 +1951,7 @@ var vg: PVisualGear;
     dmg: LongWord;
 begin
     if Gear^.Health = 0 then dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
+    Gear^.RenderTimer:= ((Gear^.State and gstFrozen) = 0) and ((Gear^.State and gstAttacking) = 0) and (Gear^.Health <> 0);
     if (Gear^.State and gstMoving) <> 0 then
         begin
         DeleteCI(Gear);
@@ -2049,6 +2050,7 @@ var i,t,targDist,tmpDist: LongWord;
     sparkle: PVisualGear;
 begin
     targ:= nil;
+    Gear^.RenderTimer:= ((Gear^.State and gstFrozen) = 0) and ((Gear^.State and gstAttacking) = 0);
     if (Gear^.State and gstFrozen) <> 0 then
         begin
         if Gear^.Damage > 0 then
@@ -2288,6 +2290,7 @@ begin
         CalcRotationDirAngle(Gear);
         end;
 
+    Gear^.RenderTimer:= ((Gear^.State and gstFrozen) = 0) and ((Gear^.State and gstAttacking) = 0);
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
         begin
         if ((Gear^.State and gstAttacking) = 0) and ((Gear^.State and gstFrozen) = 0) then

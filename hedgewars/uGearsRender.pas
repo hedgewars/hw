@@ -1645,7 +1645,7 @@ end;
 
 procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
 begin
-if Gear^.RenderTimer and (Gear^.Tex <> nil) then
+if Gear^.RenderTimer and (Gear^.Tex <> nil) and (isShowGearInfo or (not (Gear^.Kind in [gtMine, gtSMine, gtAirMine]))) then
     DrawTextureCentered(x + 8, y + 8, Gear^.Tex);
 end;
 
