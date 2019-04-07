@@ -48,6 +48,7 @@ Controls:
  + Add control to unselect current weapon (no key chosen by default)
  + Allow to leave a control unused
  + Reset zoom resets zoom to zoom level set in options
+ + Add control to display mines time and health crate health (default: O)
  + Precise + Reset zoom resets zoom to 100% (instead of zoom in options)
  + Precise + zoom in/out changes zoom in smaller steps
  + Precise + volume up/down changes volume in smaller steps
@@ -60,13 +61,13 @@ Graphics:
  * Fix speech bubbles overlapping in the wrong order
  * Fix wrong ice beam angle if it goes diagonally up out of map through world wrap
  * Fix double water splash when flying saucer drowns
- * Black clan color is now properly supported
 
 Game HUD:
  + Colorize switching arrows, pointing arrow and target cross in clan color
  + Skip ammo menu animation when playing with turn time of 10s or less
  + Don't show crate spawn message for initial crates in missions
  + Display player name of own teams in online games
+ * Black clan color can now be used without visual problems
  * Fix last 2 characters in demo chat being missing
  * Hide most HUD elements in cinematic mode
  * Don't show "F1", "F2", etc. in ammo menu if these aren't the actual slot keys
