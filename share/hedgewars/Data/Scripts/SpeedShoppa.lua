@@ -186,7 +186,8 @@ function SpeedShoppaMission(params)
 		elseif params.crateType == "ammo" then
 			SpawnFakeAmmoCrate(x, y, false, false)
 		elseif params.crateType == "health" then
-			SpawnFakeHealthCrate(x, y, false, false)
+			local crate = SpawnFakeHealthCrate(x, y, false, false)
+			SetGearValues(crate, nil, nil, nil, nil, nil, 0) -- Karma
 		else
 			SpawnFakeAmmoCrate(x, y, false, false)
 		end
