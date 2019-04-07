@@ -939,6 +939,12 @@ begin
     HideMission();
 end;
 
+procedure chGearInfo(var s: shortstring);
+begin
+  s:= s; // avoid compiler hint
+  isShowGearInfo:= not isShowGearInfo;
+end;
+
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
@@ -1031,6 +1037,7 @@ begin
     RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);
     RegisterVariable('+mission', @chShowMission_p, true);
     RegisterVariable('-mission', @chShowMission_m, true);
+    RegisterVariable('gearinfo', @chGearInfo     , true );
     RegisterVariable('timer_u' , @chTimerU       , true );
 end;
 

@@ -487,6 +487,8 @@ case Kind of
                 end;
   gtExplosives: begin
                 gear^.AdvBounce:= 1;
+                if GameType in [gmtDemo, gmtSave, gmtRecord] then
+                    gear^.RenderHealth:= true;
                 gear^.ImpactSound:= sndGrenadeImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;

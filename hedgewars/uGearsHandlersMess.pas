@@ -2391,6 +2391,9 @@ begin
             AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke)
     else
         AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmokeWhite);
+    // health texture
+    FreeAndNilTexture(Gear^.Tex);
+    Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff808080, fnt16);
     dec(Gear^.Health, Gear^.Damage);
     Gear^.Damage := 0;
     if Gear^.Health <= 0 then
@@ -2465,9 +2468,19 @@ begin
                 AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmokeWhite);
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0;
+        // health texture
+        FreeAndNilTexture(Gear^.Tex);
+        Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff808080, fnt16);
         end
     else
         begin
+        // health texture for health crate
+        if (k = gtCase) and ((Gear^.Pos and $02) <> 0) then
+            begin
+            FreeAndNilTexture(Gear^.Tex);
+            if ((Gear^.State and gstFrozen) = 0) then
+                Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff80ff80, fnt16);
+            end;
         if Gear^.Timer = 500 then
             begin
 (* Can't make sparkles team coloured without working out what the next team is going to be. This should be solved, really, since it also screws up

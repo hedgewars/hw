@@ -686,6 +686,7 @@ while Gear <> nil do
     begin
     x:= hwRound(Gear^.X) + WorldDx;
     y:= hwRound(Gear^.Y) + WorldDy;
+    RenderGearHealth(Gear, x, y);
     RenderGearTimer(Gear, x, y);
     if Gear^.Kind = gtHedgehog then
         RenderHHGuiExtras(Gear, x, y);
@@ -1079,6 +1080,7 @@ begin
         HealthCrate:
             begin
             gear^.Pos := posCaseHealth;
+            gear^.RenderHealth:= true;
             // health crate is smaller than the other crates
             gear^.Radius := cCaseHealthRadius;
             gear^.Health := content;
@@ -1125,6 +1127,7 @@ begin
         HealthCrate:
             begin
             gear^.Pos := gear^.Pos + posCaseHealth;
+            gear^.RenderHealth:= true;
             // health crate is smaller than the other crates
             gear^.Radius := cCaseHealthRadius;
             if(FinishedTurnsTotal > -1) then

@@ -257,6 +257,7 @@ type
             doStep: TGearStepProcedure; // Code the gear is running
             AmmoType : TAmmoType;       // Ammo type associated with this kind of gear
             RenderTimer: Boolean;       // Will visually display Timer if true
+            RenderHealth: Boolean;      // Will visually display Health if true
             Target : TPoint;            // Gear target. Will render in uGearsRender unless a special case is added
             AIHints: LongWord;          // hints for ai.
             LastDamage: PHedgehog;      // Used to track damage source for stats

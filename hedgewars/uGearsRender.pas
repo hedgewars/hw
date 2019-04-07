@@ -37,6 +37,7 @@ type
          end;
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
+procedure RenderGearHealth(Gear: PGear; x, y: LongInt);
 procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
 procedure DrawHHOrder();
 
@@ -1646,6 +1647,17 @@ procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
 begin
 if Gear^.RenderTimer and (Gear^.Tex <> nil) then
     DrawTextureCentered(x + 8, y + 8, Gear^.Tex);
+end;
+
+procedure RenderGearHealth(Gear: PGear; x, y: LongInt);
+begin
+if isShowGearInfo and (Gear^.RenderHealth) and (Gear^.Tex <> nil) then
+    begin
+    if (Gear^.Kind = gtCase) and ((Gear^.Pos and $02) <> 0) then
+        DrawTextureCentered(x, y - 38, Gear^.Tex);
+    if (Gear^.Kind = gtExplosives) then
+        DrawTextureCentered(x, y - 38, Gear^.Tex);
+    end;
 end;
 
 end.

@@ -1591,6 +1591,7 @@ if (aTot+uTot) <> 0 then
 if t<h then
     begin
     FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
+    FollowGear^.RenderHealth:= true;
     FollowGear^.Health:= cHealthCaseAmount;
     FollowGear^.Pos:= posCaseHealth;
     // health crate is smaller than the other crates
