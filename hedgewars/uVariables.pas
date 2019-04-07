@@ -756,7 +756,7 @@ const
             (FileName:  'botlevels'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 22; Height: 15; imageWidth: 22; imageHeight: 15; saveSurf: true; critical: true; checkSum: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprBotlevels
             (FileName:  'amCleaver'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: false),// sprHandKnife
+            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandKnife
             (FileName:  'cleaver'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 64; Height: 64; imageWidth: 64; imageHeight: 128; saveSurf: false; critical: true; checkSum: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprKnife
             (FileName:  'star'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
