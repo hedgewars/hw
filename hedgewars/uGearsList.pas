@@ -430,9 +430,12 @@ case Kind of
                 if gear^.Timer = 0 then
                     begin
                     if cMinesTime < 0 then
-                        gear^.Timer:= getrandom(51)*100
+                        begin
+                        gear^.Timer:= getrandom(51)*100;
+                        gear^.Karma:= 1;
+                        end
                     else
-                        gear^.Timer:= cMinesTime
+                        gear^.Timer:= cMinesTime;
                     end;
                 gear^.RenderTimer:= true;
                 end;
@@ -450,14 +453,17 @@ case Kind of
                 gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
                 gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
                 gear^.Tag:= 0;
-                gear^.RenderTimer:= true;
                 if gear^.Timer = 0 then
                     begin
                     if cMinesTime < 0 then
-                        gear^.Timer:= getrandom(13)*100
+                        begin
+                        gear^.Timer:= getrandom(13)*100;
+                        gear^.Karma:= 1;
+                        end
                     else
-                        gear^.Timer:= cMinesTime div 4
+                        gear^.Timer:= cMinesTime div 4;
                     end;
+                gear^.RenderTimer:= true;
                 gear^.WDTimer:= gear^.Timer
                 end;
        gtSMine: begin

@@ -115,6 +115,8 @@
 01:46=[Clan] %1: %2
 ; Hedgehog chat. %1 = hog name, %2 = message
 01:47=[%1]: %2
+; Symbol for unknown mine timer
+01:48=?
 
 ; Event messages
 ; Normal hog (%1) died (0 health)

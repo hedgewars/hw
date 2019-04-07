@@ -279,14 +279,17 @@ while t <> nil do
                 if (curHandledGear^.Kind in [gtMine, gtSMine, gtAirMine]) then
                     begin
                     if curHandledGear^.Tex = nil then
-                        begin
-                        i:= curHandledGear^.Timer;
-                        if (i > 0) and (i < 1000)  then
-                            i:= 1
+                        if (curHandledGear^.Karma = 1) and (not (GameType in [gmtDemo, gmtRecord])) then
+                            curHandledGear^.Tex:= RenderStringTex(ansistring(trmsg[sidUnknownGearValue]), $ff808080, fntSmall)
                         else
-                            i:= curHandledGear^.Timer div 1000;
-                        curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i)), $ff808080, fntSmall);
-                        end;
+                            begin
+                            i:= curHandledGear^.Timer;
+                            if (i > 0) and (i < 1000)  then
+                                i:= 1
+                            else
+                                i:= curHandledGear^.Timer div 1000;
+                            curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i)), $ff808080, fntSmall);
+                            end;
                     end
                 else if ((curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0)) then
                     begin
