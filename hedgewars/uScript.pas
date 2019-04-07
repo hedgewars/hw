@@ -1865,9 +1865,9 @@ begin
                     gear^.Health:= 0;
                 RenderHealth(gear^.Hedgehog^);
                 RecountTeamHealth(gear^.Hedgehog^.Team)
-                end;
-            // Why did this do a "setalltoactive" ?
-            //SetAllToActive;
+                end
+            else if (gear^.RenderHealth) and (gear^.Tex <> nil) then
+                FreeAndNilTexture(gear^.Tex);
             Gear^.Active:= true;
             AllInactive:= false
             end
