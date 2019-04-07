@@ -2482,7 +2482,15 @@ begin
             begin
             FreeAndNilTexture(Gear^.Tex);
             if ((Gear^.State and gstFrozen) = 0) then
-                Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff80ff80, fnt16);
+                // Karma=2: Always hide health
+                if (Gear^.Karma = 2) then
+                    Gear^.Tex := RenderStringTex(ansistring(trmsg[sidUnknownGearValue]), $ff80ff80, fnt16)
+                // Karma=1: Hide health in game, but show in demo
+                else if (Gear^.Karma = 1) and (GameType in [gmtDemo, gmtRecord]) then
+                    Gear^.Tex := RenderStringTex(ansistring(trmsg[sidUnknownGearValue]), $ff80ff80, fnt16)
+                // Always show health (default)
+                else
+                    Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff80ff80, fnt16);
             end;
         if Gear^.Timer = 500 then
             begin

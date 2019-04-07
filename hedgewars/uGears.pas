@@ -1151,6 +1151,7 @@ begin
             begin
             gear^.Pos := gear^.Pos + posCaseHealth;
             gear^.RenderHealth:= true;
+            gear^.Karma:= 2;
             // health crate is smaller than the other crates
             gear^.Radius := cCaseHealthRadius;
             if(FinishedTurnsTotal > -1) then
