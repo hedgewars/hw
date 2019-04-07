@@ -278,6 +278,7 @@ while t <> nil do
                 begin
                 // Mine timer
                 if (curHandledGear^.Kind in [gtMine, gtSMine, gtAirMine]) then
+                    begin
                     if curHandledGear^.Tex = nil then
                         if (curHandledGear^.Karma = 1) and (not (GameType in [gmtDemo, gmtRecord])) then
                             // Secret mine timer
@@ -292,6 +293,7 @@ while t <> nil do
                             else
                                 curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i) + FormatSettings.DecimalSeparator + inttostr(j)), $ff808080, fntSmall);
                             end
+                    end
                 // Timer of other gears
                 else if ((curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0)) then
                     begin
