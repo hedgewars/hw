@@ -1255,7 +1255,7 @@
 04:40=Set some ground on fire using this bottle|filled with (soon to be) burning liquid.|Attack: Hold to shoot with more power
 04:41=The evidence nature might even top the flying|saucer. Birdy can carry your hog around and|drop eggs on your enemies to poison them!|Be quick, as using Birdy eats into your turn|time!|Attack: Activate and drop eggs|Up/Left/Right: Flap in one direction
 04:42=This portable portal device is capable|of instantly transporting you, your enemies,|or your weaponry between two points on the|terrain.|Use it wisely and your campaign will be a ...|HUGE SUCCESS!|Disclaimer\: Does not work on rubber bands.|Attack: Shoot a portal|Switch: Change portal colour
-04:43=Make your musical debut an explosive success!|Drop a mighty piano from the heavens,|stomping everything in its path, but beware:|Your hog must be sacrificed to play the piano.|Cursor: Select target region|F1-F9: Play the piano
+04:43=Make your musical debut an explosive success!|Drop a mighty piano from the heavens,|stomping everything in its path, but beware\:|Your hog must be sacrificed to play the piano.|Cursor: Select target region|F1-F9: Play the piano
 04:44=This isn't just cheese, it's biological warfare!|It won't cause an huge amount of damage once|the timer reaches zero but it will definitely|poison anyone unlucky to touch the smell!|1-5: Set timer|Precise + 1-5: Set bounce strength|Attack: Hold to throw with more power
 04:45=All those physics classes have finally paid off!|Launch a devastating sine wave which burns itself|through terrain.|Watch out, this weapon has a strong knockback.|Attack: Shoot
 04:46=Cover your foes with sizzling liquid flame.|Heartwarming!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
