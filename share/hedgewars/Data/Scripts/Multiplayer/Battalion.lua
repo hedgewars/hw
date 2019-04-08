@@ -923,18 +923,17 @@ function onPickupCrate(crate)
   end
 end
 
-function RandomTurnEvents()
+function onCaseDrop()
   if GetRandom(100) < weaponCrateChance then
     SpawnFakeAmmoCrate(0, 0, false, false)
-    return 5000
+    PlaySound(sndReinforce, CurrentHedgehog)
   elseif GetRandom(100) < utilCrateChance then
     SpawnFakeUtilityCrate(0, 0, false, false)
-    return 5000
+    PlaySound(sndReinforce, CurrentHedgehog)
   elseif GetRandom(100) < healthCrateChance then
     SpawnFakeHealthCrate(0, 0, false, false)
-    return 5000
+    PlaySound(sndReinforce, CurrentHedgehog)
   end
-  return 0
 end
 
 --[[
@@ -1352,9 +1351,6 @@ function onEndTurn()
   if mode == 'points' and GetHealth(CurHog) ~= nil then
     savePoints(CurHog)
   end
-
-  -- Run random turn events
-  RandomTurnEvents()
 end
 
 function savePoints(hog)
