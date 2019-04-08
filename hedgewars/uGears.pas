@@ -46,6 +46,7 @@ procedure DrawGearsGui;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
+procedure RandomizeHHAnim;
 procedure StartSuddenDeath;
 function  GearByUID(uid : Longword) : PGear;
 function  IsClockRunning() : boolean;
@@ -1064,6 +1065,18 @@ if divide and (not sectionDivide) then
     SortHHsByClan();
 end;
 
+// Set random pos for all hogs so their animations have different starting points
+procedure RandomizeHHAnim;
+var i, j, p: LongInt;
+begin
+    for p:= 0 to (ClansCount - 1) do
+        with SpawnClansArray[p]^ do
+            for j:= 0 to Pred(TeamsNumber) do
+                with Teams[j]^ do
+                    for i:= 0 to cMaxHHIndex do
+                        if (Hedgehogs[i].Gear <> nil) then
+                            Hedgehogs[i].Gear^.Pos:= GetRandom(19);
+end;
 
 {procedure AmmoFlameWork(Ammo: PGear);
 var t: PGear;

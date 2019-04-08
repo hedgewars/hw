@@ -106,6 +106,7 @@ begin
             PlayMusic;
             InitZoom(zoom);
             ScriptCall('onGameStart');
+            RandomizeHHAnim;
             for t:= 0 to Pred(TeamsCount) do
                 with TeamsArray[t]^ do
                     MaxTeamHealth:= TeamHealth;
