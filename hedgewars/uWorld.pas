@@ -166,6 +166,9 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
     CurrentTeam:= ClansArray[0]^.Teams[0];
     end;
 
+if (GameFlags and gfInvulnerable) <> 0 then
+    cTagsMask:= cTagsMask and (not htHealth);
+
 // if special game flags/settings are changed, add them to the game mode notice window and then show it
 g:= ''; // no text/things to note yet
 

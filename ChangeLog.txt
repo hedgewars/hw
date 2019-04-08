@@ -67,6 +67,7 @@ Game HUD:
  + Colorize switching arrows, pointing arrow and target cross in clan color
  + Skip ammo menu animation when playing with turn time of 10s or less
  + Don't show crate spawn message for initial crates in missions
+ + Don't show hedgehog health if “invulnerable” game modifier is active
  + Display player name of own teams in online games
  * Black clan color can now be used without visual problems
  * Fix last 2 characters in demo chat being missing
