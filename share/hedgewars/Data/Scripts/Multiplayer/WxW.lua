@@ -848,6 +848,13 @@ function UnfreezeCrates()
 
 end
 
+function onCaseDrop()
+	if roundN == 100 then
+		allowCrate = crateGearsInGame < maxCrates
+		CheckCrateConditions()
+	end
+end
+
 function CheckCrateConditions()
 
 	local crateSpawn = AreCratesUnlocked()
@@ -935,6 +942,9 @@ end
 
 function HandleBorderEffects()
 
+	if band(GetState(CurrentHedgehog), gstHHDriven) == 0 then
+		return
+	end
 	effectTimer = effectTimer + 1
 	if effectTimer > 15 then --25
 
@@ -1269,6 +1279,17 @@ function onGameStart()
 	end
 end
 
+function onEndTurn()
+	crateSpawned = false
+	crateCollected = false
+	wallsLeft = #wTouched
+	for i = 1, #wTouched do
+		wTouched[i] = false
+	end
+	hasSurfed = false
+	allWallsHit = false
+end
+
 function onNewTurn()
 	turnsCount = turnsCount + 1
 
@@ -1290,20 +1311,7 @@ function onNewTurn()
 		end
 	end
 
-	wallsLeft = #wTouched
-
-	for i = 1, #wTouched do
-		wTouched[i] = false
-	end
-
-	hasSurfed = false
-	allWallsHit = false
-	crateCollected = false
-
-	crateSpawned = false
-
 	if roundN == 100 then
-		allowCrate = crateGearsInGame < maxCrates
 
 		local teamName = GetHogTeamName(CurrentHedgehog)
 
@@ -1332,8 +1340,6 @@ function onNewTurn()
 			setTeamValue(teamName, "skipPenalty", false)
 		end
 
-	else
-		allowCrate = false
 	end
 
 	if roundN == 1 then
@@ -1574,7 +1580,9 @@ function onGameTick()
 
 			if roundN == 100 then
 				CheckForWallCollision()
-				CheckCrateConditions()
+				if band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+					CheckCrateConditions()
+				end
 
 				if (GetGearType(GetFollowGear()) == gtCase) then
 					FollowGear(CurrentHedgehog)
