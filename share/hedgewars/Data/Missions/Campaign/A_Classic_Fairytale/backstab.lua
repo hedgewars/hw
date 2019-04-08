@@ -410,9 +410,11 @@ function SetupWave2DeadAnim()
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], RestoreCyborg, {}}})
       table.insert(wave2DeadAnim, {func = AnimOutOfNowhere, swh = false, args = {cyborg, cyborgPos2[1], cyborgPos2[2]}})
       table.insert(wave2DeadAnim, {func = AnimTurn, args = {cyborg, "Left"}})
-      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, IsolateNatives, {}}})
-      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, PutCGI, {}}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I want to see how it handles this!"), SAY_SAY, 6000}})
+      if nativesNum > 1 then
+        table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, IsolateNatives, {}}})
+        table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, PutCGI, {}}})
+        table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I want to see how it handles this!"), SAY_SAY, 6000}})
+      end
       table.insert(wave2DeadAnim, {func = AnimSwitchHog, args = {deployedHog}})
       table.insert(wave2DeadAnim, {func = AnimDisappear, args = {cyborg, 0, 0}})
 --      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, DeployHog, {}}})
@@ -623,10 +625,12 @@ end
 
 function SkipWave2DeadAnim()
   TeleportNatives()
+  TurnNatives()
   PutCircles()
   DeployHog()
-  IsolateNatives()
-  HideCyborg()
+  if nativesNum > 1 then
+    IsolateNatives()
+  end
 end
 
 function SpawnPlatformCrates()
@@ -646,6 +650,7 @@ function AfterWave2DeadAnim()
   AddEvent(CheckTurnsOver, {}, DoTurnsOver, {3}, 0)
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
+  HideCyborg()
   EndTurn(true)
   ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: You might want to use some mines ..."), 1, 12000)
 end
