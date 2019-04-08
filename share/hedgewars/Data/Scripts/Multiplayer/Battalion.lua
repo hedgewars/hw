@@ -944,6 +944,9 @@ end
 ]]--
 
 function onSuddenDeathDamage(hog)
+  if GetEffect(hog, heInvulnerable) ~= 0 then
+    return
+  end
   local hp = GetHealth(hog)
   local maxHp = getHogInfo(hog, 'maxHp')
   local newHp = 0
@@ -975,8 +978,16 @@ function onSuddenDeathDamage(hog)
     hpDec = hp - newHp
 
     SetHealth(hog, newHp)
-    local effect = AddVisualGear(GetX(hog), GetY(hog) +cratePickupGap, vgtHealthTag, hpDec, false)
-    SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, msgColor)
+    if hpDec > 0 then
+      local r = math.random(1, 2)
+      if r == 1 then
+         PlaySound(sndPoisonCough, hog, true)
+      else
+         PlaySound(sndPoisonMoan, hog, true)
+      end
+      local effect = AddVisualGear(GetX(hog), GetY(hog) +cratePickupGap, vgtHealthTag, hpDec, false)
+      SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, msgColor)
+    end
   end
 end
 
@@ -1444,12 +1455,6 @@ function onNewTurn()
 
   if suddenDeath == true then
     onSuddenDeathTurn()
-  else
-    local RoundsTillSD = (SuddenDeathTurns+2) - (TotalRounds+1)
-    -- Show SD reminder every couple of turns, and in the first turn
-    if (not firstTurnOver) or (RoundsTillSD <= 6) or (RoundsTillSD <= 25 and RoundsTillSD % 5 == 0) or (RoundsTillSD % 10 == 0) then
-        AddCaption(string.format(loc("Rounds until Sudden Death: %d"), RoundsTillSD), capcolDefault, capgrpGameState)
-    end
   end
 
   -- Generate new weapons for last hog if it's still alive
