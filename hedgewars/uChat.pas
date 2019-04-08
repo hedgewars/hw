@@ -366,7 +366,7 @@ if isInChatMode and (InputStr.Tex <> nil) then
             // default to current hedgehog (if own) or first hedgehog
             if SpeechHogNumber = 0 then
                 begin
-                if not CurrentTeam^.ExtDriven then
+                if (not CurrentTeam^.ExtDriven) and (not CurrentHedgehog^.Unplaced) then
                     SpeechHogNumber:= CurrentTeam^.CurrHedgehog + 1
                 else
                     SpeechHogNumber:= 1;

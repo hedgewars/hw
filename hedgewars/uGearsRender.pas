@@ -241,7 +241,7 @@ if TeamsArray[t] <> nil then
         repeat
         hh:= @TeamsArray[t]^.Hedgehogs[i];
         inc(i);
-        if (hh <> nil) and (hh^.Gear <> nil) then
+        if (hh <> nil) and (hh^.Gear <> nil) and (not hh^.Unplaced) then
             begin
             inc(c);
             HHGear:= hh^.Gear;

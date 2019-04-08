@@ -1308,7 +1308,7 @@ begin
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
             // if team matches current hedgehog team, default to current hedgehog
-            if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) then
+            if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) and (not CurrentHedgehog^.Unplaced) then
                 hh:= CurrentHedgehog
             else
                 begin
@@ -1317,7 +1317,7 @@ begin
                 c:= 0;
                 while (j <= cMaxHHIndex) and (hh = nil) do
                     begin
-                    if (TeamsArray[t]^.Hedgehogs[j].Gear <> nil) then
+                    if (TeamsArray[t]^.Hedgehogs[j].Gear <> nil) and (not TeamsArray[t]^.Hedgehogs[j].Unplaced) then
                         begin
                         inc(c);
                         if (i=0) or (i=c) then
