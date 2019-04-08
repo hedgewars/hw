@@ -742,7 +742,7 @@ end
 function CheckChoiceRunawayAll()
   for i= 1, 7 do
     local hog = natives[i]
-    if hog ~= spyHog and GetX(hog) >= runawayX and GetY(hog) >= runawayY and StoppedGear(hog) then
+    if hog ~= nil and GetHealth(hog) and hog ~= spyHog and GetX(hog) >= runawayX and GetY(hog) >= runawayY and StoppedGear(hog) then
       return true
     end
   end
