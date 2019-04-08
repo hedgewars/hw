@@ -696,7 +696,11 @@ function DrawBlip(gear)
 	end
 
 	local baseColor, radius, alpha
-	if getGearValue(gear, "frozen") then
+	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then
+		radius = 40
+		baseColor = 0xFFFFFFFF
+		alpha = 255
+	elseif getGearValue(gear, "frozen") then
 		radius = 25
 		baseColor = 0xFFFFFFFF
 		alpha = math.min(255, rAlpha+127)
@@ -942,7 +946,7 @@ end
 
 function HandleBorderEffects()
 
-	if band(GetState(CurrentHedgehog), gstHHDriven) == 0 then
+	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then
 		return
 	end
 	effectTimer = effectTimer + 1
@@ -1317,6 +1321,9 @@ function onNewTurn()
 
 		-- Restore team's radar mode
 		radarMode = getTeamValue(teamName, "radarMode")
+		if radarMode == nil then
+			radarMode = 0
+		end
 
 		if not AreCratesUnlocked() then
 			FreezeCrates()
@@ -1628,10 +1635,11 @@ function onGameTick()
 
 		end
 
-		HandleBorderEffects()
-		HandleCircles()
 
 	end
+
+	HandleBorderEffects()
+	HandleCircles()
 
 end
 
@@ -1662,7 +1670,7 @@ function onGearAdd(gear)
 		if vg then
 			table.insert(rCirc, vg)
 			setGearValue(gear,"CIRC",vg)
-			SetVisualGearValues(vg, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0xff00ffff)
+			SetVisualGearValues(vg, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0x0)
 		end
 		setGearValue(gear,"RX",0)
 		setGearValue(gear,"RY",0)
