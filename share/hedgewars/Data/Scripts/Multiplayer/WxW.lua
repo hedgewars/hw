@@ -1586,8 +1586,8 @@ function onGameTick()
 			gTimer = 1
 
 			if roundN == 100 then
-				CheckForWallCollision()
 				if band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+					CheckForWallCollision()
 					CheckCrateConditions()
 				end
 

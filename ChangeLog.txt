@@ -23,6 +23,8 @@ Styles and schemes:
  + The Specialists: Add script parameter support to set custom specialists order
  * Balanced Random Weapon: Fix Lua errors after using Time Box
  * Racer: Fix racer ghost not getting reset after a skip
+ * Battalion, WxW: Crates drop between turns, when appropriate
+ * Battalion: Make Sudden Death effects with the base game
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
  * HedgeEditor: Fix major FPS drop when there are a lot of objects
