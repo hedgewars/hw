@@ -1,5 +1,5 @@
 use netbuf;
-use nom::{Err, IResult};
+use nom::{Err, ErrorKind, IResult};
 use std::io::{Read, Result};
 
 pub mod messages;
@@ -31,8 +31,7 @@ impl ProtocolDecoder {
                 self.consumed = self.buf.len() - self.consumed - tail.len();
                 msgs
             }
-            Err(Err::Incomplete(_)) => unreachable!(),
-            Err(Err::Error(_)) | Err(Err::Failure(_)) => unreachable!(),
+            _ => unreachable!(),
         }
     }
 

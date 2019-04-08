@@ -7,236 +7,545 @@
  * A unary command, such as `START_GAME nick` will be actually sent as `START_GAME\nnick\n\n`.
  */
 use nom::*;
+use std::{
+    num::ParseIntError,
+    ops::Range,
+    str,
+    str::{FromStr, Utf8Error},
+};
 
 use super::messages::{HWProtocolMessage, HWProtocolMessage::*};
 use crate::server::coretypes::{GameCfg, HedgehogInfo, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM};
-use std::{ops::Range, str, str::FromStr};
+
 #[cfg(test)]
 use {
     super::test::gen_proto_msg,
     proptest::{proptest, proptest_helper},
 };
 
-named!(end_of_message, tag!("\n\n"));
-named!(str_line<&[u8],   &str>, map_res!(not_line_ending, str::from_utf8));
-named!(  a_line<&[u8], String>, map!(str_line, String::from));
-named!(cmd_arg<&[u8], String>,
-    map!(map_res!(take_until_either!(" \n"), str::from_utf8), String::from));
-named!( u8_line<&[u8],     u8>, map_res!(str_line, FromStr::from_str));
-named!(u16_line<&[u8],    u16>, map_res!(str_line, FromStr::from_str));
-named!(u32_line<&[u8],    u32>, map_res!(str_line, FromStr::from_str));
-named!(yes_no_line<&[u8], bool>, alt!(
-      do_parse!(tag_no_case!("YES") >> (true))
-    | do_parse!(tag_no_case!("NO") >> (false))));
-named!(opt_param<&[u8], Option<String> >, alt!(
-      do_parse!(peek!(tag!("\n\n")) >> (None))
-    | do_parse!(tag!("\n") >> s: str_line >> (Some(s.to_string())))));
-named!(spaces<&[u8], &[u8]>, preceded!(tag!(" "), eat_separator!(" ")));
-named!(opt_space_param<&[u8], Option<String> >, alt!(
-      do_parse!(peek!(tag!("\n\n")) >> (None))
-    | do_parse!(spaces >> s: str_line >> (Some(s.to_string())))));
-named!(hog_line<&[u8], HedgehogInfo>,
-    do_parse!(name: str_line >> eol >> hat: str_line >>
-        (HedgehogInfo{name: name.to_string(), hat: hat.to_string()})));
-named!(_8_hogs<&[u8], [HedgehogInfo; MAX_HEDGEHOGS_PER_TEAM as usize]>,
-    do_parse!(h1: hog_line >> eol >> h2: hog_line >> eol >>
-              h3: hog_line >> eol >> h4: hog_line >> eol >>
-              h5: hog_line >> eol >> h6: hog_line >> eol >>
-              h7: hog_line >> eol >> h8: hog_line >>
-              ([h1, h2, h3, h4, h5, h6, h7, h8])));
-named!(voting<&[u8], VoteType>, alt!(
-      do_parse!(tag_no_case!("KICK") >> spaces >> n: a_line >>
-        (VoteType::Kick(n)))
-    | do_parse!(tag_no_case!("MAP") >>
-        n: opt!(preceded!(spaces, a_line)) >>
-        (VoteType::Map(n)))
-    | do_parse!(tag_no_case!("PAUSE") >>
-        (VoteType::Pause))
-    | do_parse!(tag_no_case!("NEWSEED") >>
-        (VoteType::NewSeed))
-    | do_parse!(tag_no_case!("HEDGEHOGS") >> spaces >> n: u8_line >>
-        (VoteType::HedgehogsPerTeam(n)))));
+#[derive(Debug, PartialEq)]
+pub struct HWProtocolError {}
 
-/** Recognizes messages which do not take any parameters */
-named!(basic_message<&[u8], HWProtocolMessage>, alt!(
-      do_parse!(tag!("PING") >> (Ping))
-    | do_parse!(tag!("PONG") >> (Pong))
-    | do_parse!(tag!("LIST") >> (List))
-    | do_parse!(tag!("BANLIST")        >> (BanList))
-    | do_parse!(tag!("GET_SERVER_VAR") >> (GetServerVar))
-    | do_parse!(tag!("TOGGLE_READY")   >> (ToggleReady))
-    | do_parse!(tag!("START_GAME")     >> (StartGame))
-    | do_parse!(tag!("ROUNDFINISHED")  >> _m: opt_param >> (RoundFinished))
-    | do_parse!(tag!("TOGGLE_RESTRICT_JOINS")  >> (ToggleRestrictJoin))
-    | do_parse!(tag!("TOGGLE_RESTRICT_TEAMS")  >> (ToggleRestrictTeams))
-    | do_parse!(tag!("TOGGLE_REGISTERED_ONLY") >> (ToggleRegisteredOnly))
-));
+impl HWProtocolError {
+    fn new() -> Self {
+        HWProtocolError {}
+    }
+}
 
-/** Recognizes messages which take exactly one parameter */
-named!(one_param_message<&[u8], HWProtocolMessage>, alt!(
-      do_parse!(tag!("NICK")    >> eol >> n: a_line >> (Nick(n)))
-    | do_parse!(tag!("INFO")    >> eol >> n: a_line >> (Info(n)))
-    | do_parse!(tag!("CHAT")    >> eol >> m: a_line >> (Chat(m)))
-    | do_parse!(tag!("PART")    >> msg: opt_param   >> (Part(msg)))
-    | do_parse!(tag!("FOLLOW")  >> eol >> n: a_line >> (Follow(n)))
-    | do_parse!(tag!("KICK")    >> eol >> n: a_line >> (Kick(n)))
-    | do_parse!(tag!("UNBAN")   >> eol >> n: a_line >> (Unban(n)))
-    | do_parse!(tag!("EM")      >> eol >> m: a_line >> (EngineMessage(m)))
-    | do_parse!(tag!("TEAMCHAT")    >> eol >> m: a_line >> (TeamChat(m)))
-    | do_parse!(tag!("ROOM_NAME")   >> eol >> n: a_line >> (RoomName(n)))
-    | do_parse!(tag!("REMOVE_TEAM") >> eol >> n: a_line >> (RemoveTeam(n)))
+impl<I> ParseError<I> for HWProtocolError {
+    fn from_error_kind(input: I, kind: ErrorKind) -> Self {
+        HWProtocolError::new()
+    }
 
-    | do_parse!(tag!("PROTO")   >> eol >> d: u16_line >> (Proto(d)))
+    fn append(input: I, kind: ErrorKind, other: Self) -> Self {
+        HWProtocolError::new()
+    }
+}
 
-    | do_parse!(tag!("QUIT")   >> msg: opt_param >> (Quit(msg)))
-));
+impl From<Utf8Error> for HWProtocolError {
+    fn from(_: Utf8Error) -> Self {
+        HWProtocolError::new()
+    }
+}
 
-/** Recognizes messages preceded with CMD */
-named!(cmd_message<&[u8], HWProtocolMessage>, preceded!(tag!("CMD\n"), alt!(
-      do_parse!(tag_no_case!("STATS") >> (Stats))
-    | do_parse!(tag_no_case!("FIX")   >> (Fix))
-    | do_parse!(tag_no_case!("UNFIX") >> (Unfix))
-    | do_parse!(tag_no_case!("RESTART_SERVER") >> spaces >> tag!("YES") >> (RestartServer))
-    | do_parse!(tag_no_case!("REGISTERED_ONLY") >> (ToggleServerRegisteredOnly))
-    | do_parse!(tag_no_case!("SUPER_POWER")     >> (SuperPower))
-    | do_parse!(tag_no_case!("PART")     >> m: opt_space_param >> (Part(m)))
-    | do_parse!(tag_no_case!("QUIT")     >> m: opt_space_param >> (Quit(m)))
-    | do_parse!(tag_no_case!("DELEGATE") >> spaces >> n: a_line  >> (Delegate(n)))
-    | do_parse!(tag_no_case!("SAVE")     >> spaces >> n: cmd_arg >> spaces >> l: cmd_arg >> (Save(n, l)))
-    | do_parse!(tag_no_case!("DELETE")   >> spaces >> n: a_line  >> (Delete(n)))
-    | do_parse!(tag_no_case!("SAVEROOM") >> spaces >> r: a_line  >> (SaveRoom(r)))
-    | do_parse!(tag_no_case!("LOADROOM") >> spaces >> r: a_line  >> (LoadRoom(r)))
-    | do_parse!(tag_no_case!("GLOBAL")   >> spaces >> m: a_line  >> (Global(m)))
-    | do_parse!(tag_no_case!("WATCH")    >> spaces >> i: a_line  >> (Watch(i)))
-    | do_parse!(tag_no_case!("GREETING") >> spaces >> m: a_line  >> (Greeting(m)))
-    | do_parse!(tag_no_case!("VOTE")     >> spaces >> m: yes_no_line >> (Vote(m)))
-    | do_parse!(tag_no_case!("FORCE")    >> spaces >> m: yes_no_line >> (ForceVote(m)))
-    | do_parse!(tag_no_case!("INFO")     >> spaces >> n: a_line  >> (Info(n)))
-    | do_parse!(tag_no_case!("MAXTEAMS") >> spaces >> n: u8_line >> (MaxTeams(n)))
-    | do_parse!(tag_no_case!("CALLVOTE") >>
-        v: opt!(preceded!(spaces, voting)) >> (CallVote(v)))
-    | do_parse!(
-        tag_no_case!("RND") >> alt!(spaces | peek!(end_of_message)) >>
-        v: str_line >>
-        (Rnd(v.split_whitespace().map(String::from).collect())))
-)));
+impl From<ParseIntError> for HWProtocolError {
+    fn from(_: ParseIntError) -> Self {
+        HWProtocolError::new()
+    }
+}
 
-named!(complex_message<&[u8], HWProtocolMessage>, alt!(
-      do_parse!(tag!("PASSWORD")  >> eol >>
-                    p: a_line     >> eol >>
-                    s: a_line     >>
-                    (Password(p, s)))
-    | do_parse!(tag!("CHECKER")   >> eol >>
-                    i: u16_line   >> eol >>
-                    n: a_line     >> eol >>
-                    p: a_line     >>
-                    (Checker(i, n, p)))
-    | do_parse!(tag!("CREATE_ROOM") >> eol >>
-                    n: a_line       >>
-                    p: opt_param    >>
-                    (CreateRoom(n, p)))
-    | do_parse!(tag!("JOIN_ROOM")   >> eol >>
-                    n: a_line       >>
-                    p: opt_param    >>
-                    (JoinRoom(n, p)))
-    | do_parse!(tag!("ADD_TEAM")    >> eol >>
-                    name: a_line    >> eol >>
-                    color: u8_line  >> eol >>
-                    grave: a_line   >> eol >>
-                    fort: a_line    >> eol >>
-                    voice_pack: a_line >> eol >>
-                    flag: a_line    >> eol >>
-                    difficulty: u8_line >> eol >>
-                    hedgehogs: _8_hogs >>
-                    (AddTeam(Box::new(TeamInfo{
-                        name, color, grave, fort,
-                        voice_pack, flag, difficulty,
-                        hedgehogs, hedgehogs_number: 0
-                     }))))
-    | do_parse!(tag!("HH_NUM")    >> eol >>
-                    n: a_line     >> eol >>
-                    c: u8_line    >>
-                    (SetHedgehogsNumber(n, c)))
-    | do_parse!(tag!("TEAM_COLOR")    >> eol >>
-                    n: a_line     >> eol >>
-                    c: u8_line    >>
-                    (SetTeamColor(n, c)))
-    | do_parse!(tag!("BAN")    >> eol >>
-                    n: a_line     >> eol >>
-                    r: a_line     >> eol >>
-                    t: u32_line   >>
-                    (Ban(n, r, t)))
-    | do_parse!(tag!("BAN_IP")    >> eol >>
-                    n: a_line     >> eol >>
-                    r: a_line     >> eol >>
-                    t: u32_line   >>
-                    (BanIP(n, r, t)))
-    | do_parse!(tag!("BAN_NICK")    >> eol >>
-                    n: a_line     >> eol >>
-                    r: a_line     >> eol >>
-                    t: u32_line   >>
-                    (BanNick(n, r, t)))
-));
+pub type HWResult<'a, O> = IResult<&'a [u8], O, HWProtocolError>;
 
-named!(cfg_message<&[u8], HWProtocolMessage>, preceded!(tag!("CFG\n"), map!(alt!(
-      do_parse!(tag!("THEME")    >> eol >>
-                name: a_line     >>
-                (GameCfg::Theme(name)))
-    | do_parse!(tag!("SCRIPT")   >> eol >>
-                name: a_line     >>
-                (GameCfg::Script(name)))
-    | do_parse!(tag!("AMMO")     >> eol >>
-                name: a_line     >>
-                value: opt_param >>
-                (GameCfg::Ammo(name, value)))
-    | do_parse!(tag!("SCHEME")   >> eol >>
-                name: a_line     >>
-                values: opt!(preceded!(eol, separated_list!(eol, a_line))) >>
-                (GameCfg::Scheme(name, values.unwrap_or_default())))
-    | do_parse!(tag!("FEATURE_SIZE") >> eol >>
-                value: u32_line    >>
-                (GameCfg::FeatureSize(value)))
-    | do_parse!(tag!("MAP")      >> eol >>
-                value: a_line    >>
-                (GameCfg::MapType(value)))
-    | do_parse!(tag!("MAPGEN")   >> eol >>
-                value: u32_line  >>
-                (GameCfg::MapGenerator(value)))
-    | do_parse!(tag!("MAZE_SIZE") >> eol >>
-                value: u32_line   >>
-                (GameCfg::MazeSize(value)))
-    | do_parse!(tag!("SEED")     >> eol >>
-                value: a_line    >>
-                (GameCfg::Seed(value)))
-    | do_parse!(tag!("TEMPLATE") >> eol >>
-                value: u32_line  >>
-                (GameCfg::Template(value)))
-    | do_parse!(tag!("DRAWNMAP") >> eol >>
-                value: a_line    >>
-                (GameCfg::DrawnMap(value)))
-), Cfg)));
+fn end_of_message(input: &[u8]) -> HWResult<&[u8]> {
+    tag("\n\n")(input)
+}
 
-named!(malformed_message<&[u8], HWProtocolMessage>,
-    do_parse!(separated_list!(eol, a_line) >> (Malformed)));
+fn convert_utf8(input: &[u8]) -> HWResult<&str> {
+    match str::from_utf8(input) {
+        Ok(str) => Ok((b"", str)),
+        Err(utf_err) => Result::Err(Err::Failure(utf_err.into())),
+    }
+}
 
-named!(empty_message<&[u8], HWProtocolMessage>,
-    do_parse!(alt!(end_of_message | eol) >> (Empty)));
+fn convert_from_str<T>(str: &str) -> HWResult<T>
+where
+    T: FromStr<Err = ParseIntError>,
+{
+    match T::from_str(str) {
+        Ok(x) => Ok((b"", x)),
+        Err(format_err) => Result::Err(Err::Failure(format_err.into())),
+    }
+}
 
-named!(message<&[u8], HWProtocolMessage>, alt!(terminated!(
-    alt!(
-          basic_message
-        | one_param_message
-        | cmd_message
-        | complex_message
-        | cfg_message
-        ), end_of_message
+fn str_line(input: &[u8]) -> HWResult<&str> {
+    let (i, text) = not_line_ending(input)?;
+    Ok((i, convert_utf8(text)?.1))
+}
+
+fn a_line(input: &[u8]) -> HWResult<String> {
+    let (i, str) = str_line(input)?;
+    Ok((i, str.to_string()))
+}
+
+fn hw_tag<'a>(tag_str: &'a str) -> impl Fn(&'a [u8]) -> HWResult<'a, ()> {
+    move |i| tag(tag_str)(i).map(|(i, _)| (i, ()))
+}
+
+fn hw_tag_no_case<'a>(tag_str: &'a str) -> impl Fn(&'a [u8]) -> HWResult<'a, ()> {
+    move |i| tag_no_case(tag_str)(i).map(|(i, _)| (i, ()))
+}
+
+fn cmd_arg(input: &[u8]) -> HWResult<String> {
+    let delimiters = b" \n";
+    let (i, str) = take_while(move |c| !delimiters.contains(&c))(input)?;
+    Ok((i, convert_utf8(str)?.1.to_string()))
+}
+
+fn u8_line(input: &[u8]) -> HWResult<u8> {
+    let (i, str) = str_line(input)?;
+    Ok((i, convert_from_str(str)?.1))
+}
+
+fn u16_line(input: &[u8]) -> HWResult<u16> {
+    let (i, str) = str_line(input)?;
+    Ok((i, convert_from_str(str)?.1))
+}
+
+fn u32_line(input: &[u8]) -> HWResult<u32> {
+    let (i, str) = str_line(input)?;
+    Ok((i, convert_from_str(str)?.1))
+}
+
+fn yes_no_line(input: &[u8]) -> HWResult<bool> {
+    alt((
+        |i| tag_no_case(b"YES")(i).map(|(i, _)| (i, true)),
+        |i| tag_no_case(b"NO")(i).map(|(i, _)| (i, false)),
+    ))(input)
+}
+
+fn opt_arg<'a>(input: &'a [u8]) -> HWResult<'a, Option<String>> {
+    alt((
+        |i: &'a [u8]| peek!(i, end_of_message).map(|(i, _)| (i, None)),
+        |i| precededc(i, hw_tag("\n"), a_line).map(|(i, v)| (i, Some(v))),
+    ))(input)
+}
+
+fn spaces(input: &[u8]) -> HWResult<&[u8]> {
+    precededc(input, hw_tag(" "), |i| take_while(|c| c == b' ')(i))
+}
+
+fn opt_space_arg<'a>(input: &'a [u8]) -> HWResult<'a, Option<String>> {
+    alt((
+        |i: &'a [u8]| peek!(i, end_of_message).map(|(i, _)| (i, None)),
+        |i| precededc(i, spaces, a_line).map(|(i, v)| (i, Some(v))),
+    ))(input)
+}
+
+fn hedgehog_array(input: &[u8]) -> HWResult<[HedgehogInfo; 8]> {
+    fn hedgehog_line(input: &[u8]) -> HWResult<HedgehogInfo> {
+        let (i, name) = terminatedc(input, a_line, eol)?;
+        let (i, hat) = a_line(i)?;
+        Ok((i, HedgehogInfo { name, hat }))
+    }
+
+    let (i, h1) = terminatedc(input, hedgehog_line, eol)?;
+    let (i, h2) = terminatedc(i, hedgehog_line, eol)?;
+    let (i, h3) = terminatedc(i, hedgehog_line, eol)?;
+    let (i, h4) = terminatedc(i, hedgehog_line, eol)?;
+    let (i, h5) = terminatedc(i, hedgehog_line, eol)?;
+    let (i, h6) = terminatedc(i, hedgehog_line, eol)?;
+    let (i, h7) = terminatedc(i, hedgehog_line, eol)?;
+    let (i, h8) = hedgehog_line(i)?;
+
+    Ok((i, [h1, h2, h3, h4, h5, h6, h7, h8]))
+}
+
+fn voting(input: &[u8]) -> HWResult<VoteType> {
+    alt((
+        |i| tag_no_case("PAUSE")(i).map(|(i, _)| (i, VoteType::Pause)),
+        |i| tag_no_case("NEWSEED")(i).map(|(i, _)| (i, VoteType::NewSeed)),
+        |i| {
+            precededc(i, |i| precededc(i, hw_tag_no_case("KICK"), spaces), a_line)
+                .map(|(i, s)| (i, VoteType::Kick(s)))
+        },
+        |i| {
+            precededc(
+                i,
+                |i| precededc(i, hw_tag_no_case("HEDGEHOGS"), spaces),
+                u8_line,
+            )
+            .map(|(i, n)| (i, VoteType::HedgehogsPerTeam(n)))
+        },
+        |i| precededc(i, hw_tag_no_case("MAP"), opt_space_arg).map(|(i, v)| (i, VoteType::Map(v))),
+    ))(input)
+}
+
+fn no_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    fn messagec<'a>(
+        input: &'a [u8],
+        name: &'a str,
+        msg: HWProtocolMessage,
+    ) -> HWResult<'a, HWProtocolMessage> {
+        tag(name)(input).map(|(i, _)| (i, msg.clone()))
+    }
+
+    alt((
+        |i| messagec(i, "PING", Ping),
+        |i| messagec(i, "PONG", Pong),
+        |i| messagec(i, "LIST", List),
+        |i| messagec(i, "BANLIST", BanList),
+        |i| messagec(i, "GET_SERVER_VAR", GetServerVar),
+        |i| messagec(i, "TOGGLE_READY", ToggleReady),
+        |i| messagec(i, "START_GAME", StartGame),
+        |i| messagec(i, "TOGGLE_RESTRICT_JOINS", ToggleRestrictJoin),
+        |i| messagec(i, "TOGGLE_RESTRICT_TEAMS", ToggleRestrictTeams),
+        |i| messagec(i, "TOGGLE_REGISTERED_ONLY", ToggleRegisteredOnly),
+    ))(input)
+}
+
+fn single_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    fn messagec<'a, T, F, G>(
+        input: &'a [u8],
+        name: &'a str,
+        parser: F,
+        constructor: G,
+    ) -> HWResult<'a, HWProtocolMessage>
+    where
+        F: Fn(&[u8]) -> HWResult<T>,
+        G: Fn(T) -> HWProtocolMessage,
+    {
+        precededc(input, hw_tag(name), parser).map(|(i, v)| (i, constructor(v)))
+    }
+
+    alt((
+        |i| messagec(i, "NICK\n", a_line, Nick),
+        |i| messagec(i, "INFO\n", a_line, Info),
+        |i| messagec(i, "CHAT\n", a_line, Chat),
+        |i| messagec(i, "PART", opt_arg, Part),
+        |i| messagec(i, "FOLLOW\n", a_line, Follow),
+        |i| messagec(i, "KICK\n", a_line, Kick),
+        |i| messagec(i, "UNBAN\n", a_line, Unban),
+        |i| messagec(i, "EM\n", a_line, EngineMessage),
+        |i| messagec(i, "TEAMCHAT\n", a_line, TeamChat),
+        |i| messagec(i, "ROOM_NAME\n", a_line, RoomName),
+        |i| messagec(i, "REMOVE_TEAM\n", a_line, RemoveTeam),
+        |i| messagec(i, "ROUNDFINISHED", opt_arg, |_| RoundFinished),
+        |i| messagec(i, "PROTO\n", u16_line, Proto),
+        |i| messagec(i, "QUIT", opt_arg, Quit),
+    ))(input)
+}
+
+fn cmd_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
+    fn cmdc_no_arg<'a>(
+        input: &'a [u8],
+        name: &'a str,
+        msg: HWProtocolMessage,
+    ) -> HWResult<'a, HWProtocolMessage> {
+        tag_no_case(name)(input).map(|(i, _)| (i, msg.clone()))
+    }
+
+    fn cmdc_single_arg<'a, T, F, G>(
+        input: &'a [u8],
+        name: &'a str,
+        parser: F,
+        constructor: G,
+    ) -> HWResult<'a, HWProtocolMessage>
+    where
+        F: Fn(&'a [u8]) -> HWResult<'a, T>,
+        G: Fn(T) -> HWProtocolMessage,
+    {
+        precededc(input, |i| pairc(i, hw_tag_no_case(name), spaces), parser)
+            .map(|(i, v)| (i, constructor(v)))
+    }
+
+    fn cmd_no_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+        alt((
+            |i| cmdc_no_arg(i, "STATS", Stats),
+            |i| cmdc_no_arg(i, "FIX", Fix),
+            |i| cmdc_no_arg(i, "UNFIX", Unfix),
+            |i| cmdc_no_arg(i, "REGISTERED_ONLY", ToggleServerRegisteredOnly),
+            |i| cmdc_no_arg(i, "SUPER_POWER", SuperPower),
+        ))(input)
+    }
+
+    fn cmd_single_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+        alt((
+            |i| cmdc_single_arg(i, "RESTART_SERVER", |i| tag("YES")(i), |_| RestartServer),
+            |i| cmdc_single_arg(i, "DELEGATE", a_line, Delegate),
+            |i| cmdc_single_arg(i, "DELETE", a_line, Delete),
+            |i| cmdc_single_arg(i, "SAVEROOM", a_line, SaveRoom),
+            |i| cmdc_single_arg(i, "LOADROOM", a_line, LoadRoom),
+            |i| cmdc_single_arg(i, "GLOBAL", a_line, Global),
+            |i| cmdc_single_arg(i, "WATCH", a_line, Watch),
+            |i| cmdc_single_arg(i, "GREETING", a_line, Greeting),
+            |i| cmdc_single_arg(i, "VOTE", yes_no_line, Vote),
+            |i| cmdc_single_arg(i, "FORCE", yes_no_line, ForceVote),
+            |i| cmdc_single_arg(i, "INFO", a_line, Info),
+            |i| cmdc_single_arg(i, "MAXTEAMS", u8_line, MaxTeams),
+            |i| cmdc_single_arg(i, "CALLVOTE", |i| opt!(i, voting), CallVote),
+        ))(input)
+    }
+
+    precededc(
+        input,
+        hw_tag("CMD\n"),
+        alt((
+            cmd_no_arg_message,
+            cmd_single_arg_message,
+            |i| precededc(i, hw_tag_no_case("PART"), opt_space_arg).map(|(i, s)| (i, Part(s))),
+            |i| precededc(i, hw_tag_no_case("QUIT"), opt_space_arg).map(|(i, s)| (i, Quit(s))),
+            |i| {
+                precededc(i, hw_tag_no_case("SAVE"), |i| {
+                    pairc(
+                        i,
+                        |i| precededc(i, spaces, cmd_arg),
+                        |i| precededc(i, spaces, cmd_arg),
+                    )
+                })
+                .map(|(i, (n, l))| (i, Save(n, l)))
+            },
+            |i| {
+                let (i, _) = tag_no_case("RND")(i)?;
+                let (i, _) = alt((spaces, |i: &'a [u8]| peek!(i, end_of_message)))(i)?;
+                let (i, v) = str_line(i)?;
+                Ok((i, Rnd(v.split_whitespace().map(String::from).collect())))
+            },
+        )),
     )
-    | terminated!(malformed_message, end_of_message)
-    | empty_message
-    )
-);
+}
 
-named!(pub extract_messages<&[u8], Vec<HWProtocolMessage> >, many0!(complete!(message)));
+fn config_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
+    fn cfgc_single_arg<'a, T, F, G>(
+        input: &'a [u8],
+        name: &'a str,
+        parser: F,
+        constructor: G,
+    ) -> HWResult<'a, GameCfg>
+    where
+        F: Fn(&[u8]) -> HWResult<T>,
+        G: Fn(T) -> GameCfg,
+    {
+        precededc(input, |i| terminatedc(i, hw_tag(name), eol), parser)
+            .map(|(i, v)| (i, constructor(v)))
+    }
+
+    let (i, cfg) = precededc(
+        input,
+        hw_tag("CFG\n"),
+        alt((
+            |i| cfgc_single_arg(i, "THEME", a_line, GameCfg::Theme),
+            |i| cfgc_single_arg(i, "SCRIPT", a_line, GameCfg::Script),
+            |i| cfgc_single_arg(i, "MAP", a_line, GameCfg::MapType),
+            |i| cfgc_single_arg(i, "MAPGEN", u32_line, GameCfg::MapGenerator),
+            |i| cfgc_single_arg(i, "MAZE_SIZE", u32_line, GameCfg::MazeSize),
+            |i| cfgc_single_arg(i, "TEMPLATE", u32_line, GameCfg::Template),
+            |i| cfgc_single_arg(i, "FEATURE_SIZE", u32_line, GameCfg::FeatureSize),
+            |i| cfgc_single_arg(i, "SEED", a_line, GameCfg::Seed),
+            |i| cfgc_single_arg(i, "DRAWNMAP", a_line, GameCfg::DrawnMap),
+            |i| {
+                precededc(
+                    i,
+                    |i| terminatedc(i, hw_tag("AMMO"), eol),
+                    |i| {
+                        let (i, name) = a_line(i)?;
+                        let (i, value) = opt_arg(i)?;
+                        Ok((i, GameCfg::Ammo(name, value)))
+                    },
+                )
+            },
+            |i| {
+                precededc(
+                    i,
+                    |i| terminatedc(i, hw_tag("SCHEME"), eol),
+                    |i| {
+                        let (i, name) = a_line(i)?;
+                        let (i, values) = alt((
+                            |i: &'a [u8]| peek!(i, end_of_message).map(|(i, _)| (i, None)),
+                            |i| {
+                                precededc(i, eol, |i| separated_list(eol, a_line)(i))
+                                    .map(|(i, v)| (i, Some(v)))
+                            },
+                        ))(i)?;
+                        Ok((i, GameCfg::Scheme(name, values.unwrap_or_default())))
+                    },
+                )
+            },
+        )),
+    )?;
+    Ok((i, Cfg(cfg)))
+}
+
+fn complex_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    alt((
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("PASSWORD"), eol),
+                |i| {
+                    let (i, pass) = terminatedc(i, a_line, eol)?;
+                    let (i, salt) = a_line(i)?;
+                    Ok((i, Password(pass, salt)))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("CHECKER"), eol),
+                |i| {
+                    let (i, protocol) = terminatedc(i, u16_line, eol)?;
+                    let (i, name) = terminatedc(i, a_line, eol)?;
+                    let (i, pass) = a_line(i)?;
+                    Ok((i, Checker(protocol, name, pass)))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("CREATE_ROOM"), eol),
+                |i| {
+                    let (i, name) = a_line(i)?;
+                    let (i, pass) = opt_arg(i)?;
+                    Ok((i, CreateRoom(name, pass)))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("JOIN_ROOM"), eol),
+                |i| {
+                    let (i, name) = a_line(i)?;
+                    let (i, pass) = opt_arg(i)?;
+                    Ok((i, JoinRoom(name, pass)))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("ADD_TEAM"), eol),
+                |i| {
+                    let (i, name) = terminatedc(i, a_line, eol)?;
+                    let (i, color) = terminatedc(i, u8_line, eol)?;
+                    let (i, grave) = terminatedc(i, a_line, eol)?;
+                    let (i, fort) = terminatedc(i, a_line, eol)?;
+                    let (i, voice_pack) = terminatedc(i, a_line, eol)?;
+                    let (i, flag) = terminatedc(i, a_line, eol)?;
+                    let (i, difficulty) = terminatedc(i, u8_line, eol)?;
+                    let (i, hedgehogs) = hedgehog_array(i)?;
+                    Ok((
+                        i,
+                        AddTeam(Box::new(TeamInfo {
+                            name,
+                            color,
+                            grave,
+                            fort,
+                            voice_pack,
+                            flag,
+                            difficulty,
+                            hedgehogs,
+                            hedgehogs_number: 0,
+                        })),
+                    ))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("HH_NUM"), eol),
+                |i| {
+                    let (i, name) = terminatedc(i, a_line, eol)?;
+                    let (i, count) = u8_line(i)?;
+                    Ok((i, SetHedgehogsNumber(name, count)))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("TEAM_COLOR"), eol),
+                |i| {
+                    let (i, name) = terminatedc(i, a_line, eol)?;
+                    let (i, color) = u8_line(i)?;
+                    Ok((i, SetTeamColor(name, color)))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("BAN"), eol),
+                |i| {
+                    let (i, n) = terminatedc(i, a_line, eol)?;
+                    let (i, r) = terminatedc(i, a_line, eol)?;
+                    let (i, t) = u32_line(i)?;
+                    Ok((i, Ban(n, r, t)))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("BAN_IP"), eol),
+                |i| {
+                    let (i, n) = terminatedc(i, a_line, eol)?;
+                    let (i, r) = terminatedc(i, a_line, eol)?;
+                    let (i, t) = u32_line(i)?;
+                    Ok((i, BanIP(n, r, t)))
+                },
+            )
+        },
+        |i| {
+            precededc(
+                i,
+                |i| terminatedc(i, hw_tag("BAN_NICK"), eol),
+                |i| {
+                    let (i, n) = terminatedc(i, a_line, eol)?;
+                    let (i, r) = terminatedc(i, a_line, eol)?;
+                    let (i, t) = u32_line(i)?;
+                    Ok((i, BanNick(n, r, t)))
+                },
+            )
+        },
+    ))(input)
+}
+
+fn empty_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    let (i, _) = alt((end_of_message, eol))(input)?;
+    Ok((i, Empty))
+}
+
+fn malformed_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    let (i, _) = separated_listc(input, eol, a_line)?;
+    Ok((i, Malformed))
+}
+
+fn message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    alt((
+        |i| {
+            terminatedc(
+                i,
+                alt((
+                    no_arg_message,
+                    single_arg_message,
+                    cmd_message,
+                    config_message,
+                    complex_message,
+                )),
+                end_of_message,
+            )
+        },
+        |i| terminatedc(i, malformed_message, end_of_message),
+        empty_message,
+    ))(input)
+}
+
+pub fn extract_messages<'a>(input: &'a [u8]) -> HWResult<Vec<HWProtocolMessage>> {
+    many0(|i: &'a [u8]| complete!(i, message))(input)
+}
 
 #[cfg(test)]
 proptest! {
