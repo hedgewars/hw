@@ -853,15 +853,20 @@ function UnfreezeCrates()
 end
 
 function onCaseDrop()
+	local crates
 	if roundN == 100 then
 		allowCrate = crateGearsInGame < maxCrates
-		CheckCrateConditions()
+		crates = CheckCrateConditions()
+	end
+	if type(crates) == "table" and #crates > 0 and CurrentHedgehog then
+		PlaySound(sndReinforce, CurrentHedgehog)
 	end
 end
 
 function CheckCrateConditions()
 
 	local crateSpawn = AreCratesUnlocked()
+	local crates = {}
 
 	if crateSpawn == true and crateSpawned == false then
 		UnfreezeCrates()
@@ -872,7 +877,7 @@ function CheckCrateConditions()
 				toSpawn = maxCrates - cratesInGame
 			end
 			for i=1,toSpawn do
-				SpawnSupplyCrate(0, 0, weapons[1+GetRandom(#weapons)] )
+				table.insert(crates, SpawnSupplyCrate(0, 0, weapons[1+GetRandom(#weapons)]))
 			end
 			rPingTimer = 0
 			rAlpha = 0
@@ -882,6 +887,7 @@ function CheckCrateConditions()
 		end
 	end
 
+	return crates
 end
 
 function onGearWaterSkip(gear)
