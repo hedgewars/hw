@@ -241,7 +241,7 @@ while Gear <> nil do
             gtMine: begin
                 if (Gear^.State and gstMoving) <> 0 then bonuses.activity:= true;
 
-                if ((Gear^.State and gstAttacking) = 0) and (((cMineDudPercent < 90) and (Gear^.Health <> 0))
+                if ((Gear^.State and gstAttacking) = 0) and (((cMineDudPercent < 90) or ((Gear^.State and gstWait) <> 0) and (Gear^.Health <> 0))
                 or (isAfterAttack and (Gear^.Health = 0) and (Gear^.Damage > 30))) then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
                 else if (Gear^.State and gstAttacking) <> 0 then
