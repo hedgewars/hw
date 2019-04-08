@@ -96,6 +96,7 @@ Lua API:
  + SetClanColor: Now accepts negative color argument for user clan color, like in AddTeam
  + Utils library: New calls: getReadableChallengeRecord, updateChallengeRecord
  + New callback: onGameResult(winningClan): Called when the game ends normally. winningClan = index of winning clan or -1 on draw
+ + New callback: onCaseDrop(gear): Called at the point where a crate MIGHT be dropped between turns. Gear is the crate gear or nil
  + SendStat extension: Option to use predefined modes with siPointType, like "!POINTS" or "!TIME"
  + SimpleMission: Add isMissionTeam attribute for teams
  + SpeedShoppa/TargetPractice libraries: Remove custom hog and team info settings

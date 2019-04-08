@@ -222,7 +222,7 @@ begin
 end;
 
 procedure ProcessGears;
-var t: PGear;
+var t, tmpGear: PGear;
     i, j, AliveCount: LongInt;
     s: ansistring;
     prevtime: LongWord;
@@ -477,7 +477,11 @@ case step of
         begin
         if (not isInMultiShoot) then
             begin
-            SpawnBoxOfSmth;
+            tmpGear:= SpawnBoxOfSmth;
+            if tmpGear <> nil then
+                ScriptCall('onCaseDrop', tmpGear^.uid)
+            else
+                ScriptCall('onCaseDrop');
             delay:= delayFinal;
             inc(step);
             end

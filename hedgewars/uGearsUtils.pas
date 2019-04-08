@@ -52,7 +52,8 @@ procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 procedure AmmoShoveCache(Ammo: PGear; Damage, Power: LongInt);
 procedure AmmoShoveLine(Ammo: PGear; Damage, Power: LongInt; oX, oY, tX, tY: hwFloat);
 function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
-procedure SpawnBoxOfSmth;
+function  SpawnBoxOfSmth: PGear;
+procedure PlayBoxSpawnTaunt(Gear: PGear);
 procedure ShotgunShot(Gear: PGear);
 function  CanUseTardis(HHGear: PGear): boolean;
 
@@ -1547,14 +1548,11 @@ begin
     GearsNear.ar:= @GearsNearArray
 end;
 
-procedure SpawnBoxOfSmth;
-const
-    // Max. distance between hog and crate for sndThisOneIsMine taunt
-    ThisOneIsMineDistance : LongInt = 130;
-var t, aTot, uTot, a, h, d, minD: LongInt;
+function SpawnBoxOfSmth: PGear;
+var t, aTot, uTot, a, h: LongInt;
     i: TAmmoType;
-    gi, closestHog: PGear;
 begin
+SpawnBoxOfSmth:= nil;
 if (PlacingHogs) or
     (cCaseFactor = 0)
     or (CountGears(gtCase) >= cMaxCaseDrops)
@@ -1629,9 +1627,20 @@ else
 if (FollowGear <> nil) then
     begin
     FindPlace(FollowGear, true, 0, LAND_WIDTH);
+    PlayBoxSpawnTaunt(FollowGear);
+    SpawnBoxOfSmth:= FollowGear;
+    end
+end;
 
+procedure PlayBoxSpawnTaunt(Gear: PGear);
+const
+    // Max. distance between hog and crate for sndThisOneIsMine taunt
+    ThisOneIsMineDistance : LongInt = 130;
+var d, minD: LongInt;
+    gi, closestHog: PGear;
+begin
     // Taunt
-    if (FollowGear <> nil) then
+    if (Gear <> nil) then
         begin
         // Look for hog closest to the crate (on the X axis)
         gi := GearsList;
@@ -1642,7 +1651,7 @@ if (FollowGear <> nil) then
             if (gi^.Kind = gtHedgehog) then
                 begin
                 // Y axis is ignored to simplify calculations
-                d := hwRound(hwAbs(gi^.X - FollowGear^.X));
+                d := hwRound(hwAbs(gi^.X - Gear^.X));
                 if d < minD then
                     begin
                     minD := d;
@@ -1663,7 +1672,6 @@ if (FollowGear <> nil) then
         // Default crate drop taunt
             AddVoice(sndReinforce, CurrentTeam^.voicepack);
         end;
-    end
 end;
 
 
