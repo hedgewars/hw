@@ -4,11 +4,11 @@ use std::{collections::HashMap, io, io::Write};
 use super::{
     actions::{Destination, DestinationRoom},
     core::HWServer,
-    coretypes::ClientId,
+    coretypes::{ClientId, RoomId},
     room::RoomSave,
 };
 use crate::{
-    protocol::messages::{HWProtocolMessage, HWServerMessage, HWServerMessage::*},
+    protocol::messages::{HWProtocolMessage, HWServerMessage, HWServerMessage::*, server_chat},
     server::actions::PendingMessage,
     utils,
 };
@@ -58,10 +58,21 @@ pub enum IoTask {
         client_salt: String,
         server_salt: String,
     },
+    SaveRoom {
+        room_id: RoomId,
+        filename: String,
+        contents: String,
+    },
+    LoadRoom {
+        room_id: RoomId,
+        filename: String
+    }
 }
 
 pub enum IoResult {
     Account(Option<AccountInfo>),
+    SaveRoom(RoomId, bool),
+    LoadRoom(RoomId, Option<String>)
 }
 
 pub struct Response {
@@ -249,6 +260,36 @@ pub fn handle_io_result(
         IoResult::Account(None) => {
             response.add(Error("Authentication failed.".to_string()).send_self());
             response.remove_client(client_id);
+        }
+        IoResult::SaveRoom(_, true) => {
+            response.add(server_chat("Room configs saved successfully.".to_string()).send_self());
+        }
+        IoResult::SaveRoom(_, false) => {
+            response.add(
+                Warning("Unable to save the room configs.".to_string()).send_self(),
+            );
+        }
+        IoResult::LoadRoom(room_id, Some(contents)) => {
+            if let Some(ref mut room) = server.rooms.get_mut(room_id) {
+                match room.set_saves(&contents) {
+                    Ok(_) => response.add(
+                        server_chat("Room configs loaded successfully.".to_string())
+                            .send_self(),
+                    ),
+                    Err(e) => {
+                        warn!("Error while deserializing the room configs: {}", e);
+                        response.add(
+                            Warning("Unable to deserialize the room configs.".to_string())
+                                .send_self(),
+                        );
+                    }
+                }
+            }
+        }
+        IoResult::LoadRoom(_,None) => {
+            response.add(
+                Warning("Unable to load the room configs.".to_string()).send_self(),
+            );
         }
     }
 }

@@ -337,20 +337,10 @@ pub fn handle(
         SaveRoom(filename) => {
             if client.is_admin() {
                 match room.get_saves() {
-                    Ok(text) => match server.io.write_file(&filename, &text) {
-                        Ok(_) => response.add(
-                            server_chat("Room configs saved successfully.".to_string()).send_self(),
-                        ),
-                        Err(e) => {
-                            warn!(
-                                "Error while writing the config file \"{}\": {}",
-                                filename, e
-                            );
-                            response.add(
-                                Warning("Unable to save the room configs.".to_string()).send_self(),
-                            );
-                        }
-                    },
+                    Ok(contents) =>
+                        response.request_io(super::IoTask::SaveRoom {
+                            room_id, filename, contents
+                        }),
                     Err(e) => {
                         warn!("Error while serializing the room configs: {}", e);
                         response.add(
@@ -363,30 +353,10 @@ pub fn handle(
         }
         LoadRoom(filename) => {
             if client.is_admin() {
-                match server.io.read_file(&filename) {
-                    Ok(text) => match room.set_saves(&text) {
-                        Ok(_) => response.add(
-                            server_chat("Room configs loaded successfully.".to_string())
-                                .send_self(),
-                        ),
-                        Err(e) => {
-                            warn!("Error while deserializing the room configs: {}", e);
-                            response.add(
-                                Warning("Unable to deserialize the room configs.".to_string())
-                                    .send_self(),
-                            );
-                        }
-                    },
-                    Err(e) => {
-                        warn!(
-                            "Error while reading the config file \"{}\": {}",
-                            filename, e
-                        );
-                        response.add(
-                            Warning("Unable to load the room configs.".to_string()).send_self(),
-                        );
-                    }
-                }
+                response.request_io(super::IoTask::LoadRoom {
+                    room_id,
+                    filename
+                });
             }
         }
         Delete(name) => {

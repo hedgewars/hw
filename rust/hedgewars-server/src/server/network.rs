@@ -16,7 +16,7 @@ use mio::{
 use netbuf;
 use slab::Slab;
 
-use super::{core::FileServerIO, core::HWServer, coretypes::ClientId, handlers};
+use super::{core::HWServer, coretypes::ClientId, handlers};
 use crate::{
     protocol::{messages::*, ProtocolDecoder},
     utils,
@@ -303,7 +303,7 @@ pub struct NetworkLayer {
 
 impl NetworkLayer {
     pub fn new(listener: TcpListener, clients_limit: usize, rooms_limit: usize) -> NetworkLayer {
-        let server = HWServer::new(clients_limit, rooms_limit, Box::new(FileServerIO::new()));
+        let server = HWServer::new(clients_limit, rooms_limit);
         let clients = Slab::with_capacity(clients_limit);
         let pending = HashSet::with_capacity(2 * clients_limit);
         let pending_cache = Vec::with_capacity(2 * clients_limit);

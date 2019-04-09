@@ -8,8 +8,6 @@ use crate::utils;
 
 use log::*;
 use slab;
-use std::fs::{File, OpenOptions};
-use std::io::{Read, Write};
 use std::{borrow::BorrowMut, iter, num::NonZeroU16};
 
 type Slab<T> = slab::Slab<T>;
@@ -48,18 +46,16 @@ impl HWAnteroom {
 pub struct HWServer {
     pub clients: IndexSlab<HWClient>,
     pub rooms: Slab<HWRoom>,
-    pub io: Box<dyn HWServerIO>,
     pub anteroom: HWAnteroom,
 }
 
 impl HWServer {
-    pub fn new(clients_limit: usize, rooms_limit: usize, io: Box<dyn HWServerIO>) -> Self {
+    pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
         let rooms = Slab::with_capacity(rooms_limit);
         let clients = IndexSlab::with_capacity(clients_limit);
         Self {
             clients,
             rooms,
-            io,
             anteroom: HWAnteroom::new(clients_limit),
         }
     }
@@ -203,50 +199,5 @@ fn move_to_room(client: &mut HWClient, room: &mut HWRoom) {
                 .cloned()
                 .collect();
         }
-    }
-}
-
-pub trait HWServerIO {
-    fn write_file(&mut self, name: &str, content: &str) -> std::io::Result<()>;
-    fn read_file(&mut self, name: &str) -> std::io::Result<String>;
-}
-
-pub struct EmptyServerIO {}
-
-impl EmptyServerIO {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
-impl HWServerIO for EmptyServerIO {
-    fn write_file(&mut self, _name: &str, _content: &str) -> std::io::Result<()> {
-        Ok(())
-    }
-
-    fn read_file(&mut self, _name: &str) -> std::io::Result<String> {
-        Ok("".to_string())
-    }
-}
-
-pub struct FileServerIO {}
-
-impl FileServerIO {
-    pub fn new() -> Self {
-        Self {}
-    }
-}
-
-impl HWServerIO for FileServerIO {
-    fn write_file(&mut self, name: &str, content: &str) -> std::io::Result<()> {
-        let mut writer = OpenOptions::new().create(true).write(true).open(name)?;
-        writer.write_all(content.as_bytes())
-    }
-
-    fn read_file(&mut self, name: &str) -> std::io::Result<String> {
-        let mut reader = File::open(name)?;
-        let mut result = String::new();
-        reader.read_to_string(&mut result)?;
-        Ok(result)
     }
 }

@@ -11,6 +11,7 @@ use crate::server::{
 };
 use mio::{Evented, Poll, PollOpt};
 use mio_extras::channel;
+use log::*;
 
 pub type RequestId = u32;
 
@@ -29,7 +30,7 @@ impl IOThread {
 
         thread::spawn(move || {
             while let Ok((request_id, task)) = io_rx.try_recv() {
-                match task {
+                let response = match task {
                     IoTask::GetAccount {
                         nick,
                         protocol,
@@ -37,17 +38,52 @@ impl IOThread {
                         client_salt,
                         server_salt,
                     } => {
-                        if let Ok(account) = db.get_account(
+                        match db.get_account(
                             &nick,
                             protocol,
                             &password_hash,
                             &client_salt,
                             &server_salt,
                         ) {
-                            io_tx.send((request_id, IoResult::Account(account)));
+                            Ok(account) => {
+                                IoResult::Account(account)
+                            }
+                            Err(..) => {
+                                warn!("Unable to get account data: {}", 0);
+                                IoResult::Account(None)
+                            }
                         }
+                    },
+
+                    IoTask::SaveRoom { room_id, filename, contents} => {
+                        let result = match save_file(&filename, &contents) {
+                            Ok(()) => true,
+                            Err(e) => {
+                                warn!(
+                                    "Error while writing the room config file \"{}\": {}",
+                                    filename, e
+                                );
+                                false
+                           }
+                        };
+                        IoResult::SaveRoom(room_id, result)
+                    },
+
+                    IoTask::LoadRoom {room_id, filename} => {
+                        let result = match load_file(&filename) {
+                            Ok(contents) => Some(contents),
+                            Err(e) => {
+                                warn!(
+                                    "Error while writing the room config file \"{}\": {}",
+                                    filename, e
+                                );
+                                None
+                            }
+                        };
+                        IoResult::LoadRoom(room_id, result)
                     }
-                }
+                };
+                io_tx.send((request_id, response));
             }
         });
 
@@ -70,4 +106,16 @@ impl IOThread {
         self.core_rx
             .register(poll, token, mio::Ready::readable(), PollOpt::edge())
     }
+}
+
+fn save_file(filename: &str, contents: &str) -> Result<()> {
+    let mut writer = OpenOptions::new().create(true).write(true).open(filename)?;
+    writer.write_all(contents.as_bytes())
+}
+
+fn load_file(filename: &str) -> Result<String> {
+    let mut reader = File::open(filename)?;
+    let mut result = String::new();
+    reader.read_to_string(&mut result)?;
+    Ok(result)
 }
