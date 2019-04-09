@@ -8,7 +8,7 @@ use super::{
     room::RoomSave,
 };
 use crate::{
-    protocol::messages::{HWProtocolMessage, HWServerMessage, HWServerMessage::*, server_chat},
+    protocol::messages::{server_chat, HWProtocolMessage, HWServerMessage, HWServerMessage::*},
     server::actions::PendingMessage,
     utils,
 };
@@ -65,14 +65,14 @@ pub enum IoTask {
     },
     LoadRoom {
         room_id: RoomId,
-        filename: String
-    }
+        filename: String,
+    },
 }
 
 pub enum IoResult {
     Account(Option<AccountInfo>),
     SaveRoom(RoomId, bool),
-    LoadRoom(RoomId, Option<String>)
+    LoadRoom(RoomId, Option<String>),
 }
 
 pub struct Response {
@@ -160,11 +160,11 @@ fn get_recipients(
         Destination::ToAll {
             room_id: DestinationRoom::Lobby,
             ..
-        } => server.lobby_clients(),
+        } => server.collect_lobby_clients(),
         Destination::ToAll {
             room_id: DestinationRoom::Room(id),
             ..
-        } => server.room_clients(id),
+        } => server.collect_room_clients(id),
         Destination::ToAll {
             protocol: Some(proto),
             ..
@@ -194,11 +194,12 @@ pub fn handle(
         HWProtocolMessage::Empty => warn!("Empty message"),
         _ => {
             if server.anteroom.clients.contains(client_id) {
-                match loggingin::handle(&mut server.anteroom, client_id, response, message) {
+                match loggingin::handle(server, client_id, response, message) {
                     LoginResult::Unchanged => (),
                     LoginResult::Complete => {
                         if let Some(client) = server.anteroom.remove_client(client_id) {
                             server.add_client(client_id, client);
+                            common::join_lobby(server, response);
                         }
                     }
                     LoginResult::Exit => {
@@ -265,16 +266,13 @@ pub fn handle_io_result(
             response.add(server_chat("Room configs saved successfully.".to_string()).send_self());
         }
         IoResult::SaveRoom(_, false) => {
-            response.add(
-                Warning("Unable to save the room configs.".to_string()).send_self(),
-            );
+            response.add(Warning("Unable to save the room configs.".to_string()).send_self());
         }
         IoResult::LoadRoom(room_id, Some(contents)) => {
             if let Some(ref mut room) = server.rooms.get_mut(room_id) {
                 match room.set_saves(&contents) {
                     Ok(_) => response.add(
-                        server_chat("Room configs loaded successfully.".to_string())
-                            .send_self(),
+                        server_chat("Room configs loaded successfully.".to_string()).send_self(),
                     ),
                     Err(e) => {
                         warn!("Error while deserializing the room configs: {}", e);
@@ -286,10 +284,8 @@ pub fn handle_io_result(
                 }
             }
         }
-        IoResult::LoadRoom(_,None) => {
-            response.add(
-                Warning("Unable to load the room configs.".to_string()).send_self(),
-            );
+        IoResult::LoadRoom(_, None) => {
+            response.add(Warning("Unable to load the room configs.".to_string()).send_self());
         }
     }
 }

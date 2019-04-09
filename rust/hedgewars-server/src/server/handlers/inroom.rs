@@ -337,10 +337,11 @@ pub fn handle(
         SaveRoom(filename) => {
             if client.is_admin() {
                 match room.get_saves() {
-                    Ok(contents) =>
-                        response.request_io(super::IoTask::SaveRoom {
-                            room_id, filename, contents
-                        }),
+                    Ok(contents) => response.request_io(super::IoTask::SaveRoom {
+                        room_id,
+                        filename,
+                        contents,
+                    }),
                     Err(e) => {
                         warn!("Error while serializing the room configs: {}", e);
                         response.add(
@@ -353,10 +354,7 @@ pub fn handle(
         }
         LoadRoom(filename) => {
             if client.is_admin() {
-                response.request_io(super::IoTask::LoadRoom {
-                    room_id,
-                    filename
-                });
+                response.request_io(super::IoTask::LoadRoom { room_id, filename });
             }
         }
         Delete(name) => {
@@ -420,7 +418,7 @@ pub fn handle(
             match error {
                 None => {
                     let msg = voting_description(&kind);
-                    let voting = Voting::new(kind, server.room_clients(client_id));
+                    let voting = Voting::new(kind, server.collect_room_clients(client_id));
                     let room = &mut server.rooms[room_id];
                     room.voting = Some(voting);
                     response.add(server_chat(msg).send_all().in_room(room_id));

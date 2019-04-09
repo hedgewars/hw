@@ -16,6 +16,7 @@ pub struct HWAnteClient {
     pub nick: Option<String>,
     pub protocol_number: Option<NonZeroU16>,
     pub server_salt: String,
+    pub is_checker: bool,
 }
 
 pub struct HWAnteroom {
@@ -33,6 +34,7 @@ impl HWAnteroom {
             nick: None,
             protocol_number: None,
             server_salt: salt,
+            is_checker: false,
         };
         self.clients.insert(client_id, client);
     }
@@ -62,7 +64,8 @@ impl HWServer {
 
     pub fn add_client(&mut self, client_id: ClientId, data: HWAnteClient) {
         if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
-            let client = HWClient::new(client_id, protocol.get(), nick);
+            let mut client = HWClient::new(client_id, protocol.get(), nick);
+            client.set_is_checker(data.is_checker);
             self.clients.insert(client_id, client);
         }
     }
@@ -119,28 +122,39 @@ impl HWServer {
             .find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
     }
 
-    pub fn select_clients<F>(&self, f: F) -> Vec<ClientId>
+    pub fn collect_clients<F>(&self, f: F) -> Vec<ClientId>
     where
         F: Fn(&(usize, &HWClient)) -> bool,
     {
         self.clients.iter().filter(f).map(|(_, c)| c.id).collect()
     }
 
-    pub fn lobby_clients(&self) -> Vec<ClientId> {
-        self.select_clients(|(_, c)| c.room_id == None)
+    pub fn collect_nicks<F>(&self, f: F) -> Vec<String>
+    where
+        F: Fn(&(usize, &HWClient)) -> bool,
+    {
+        self.clients
+            .iter()
+            .filter(f)
+            .map(|(_, c)| c.nick.clone())
+            .collect()
     }
 
-    pub fn room_clients(&self, room_id: RoomId) -> Vec<ClientId> {
-        self.select_clients(|(_, c)| c.room_id == Some(room_id))
+    pub fn collect_lobby_clients(&self) -> Vec<ClientId> {
+        self.collect_clients(|(_, c)| c.room_id == None)
+    }
+
+    pub fn collect_room_clients(&self, room_id: RoomId) -> Vec<ClientId> {
+        self.collect_clients(|(_, c)| c.room_id == Some(room_id))
     }
 
     pub fn protocol_clients(&self, protocol: u16) -> Vec<ClientId> {
-        self.select_clients(|(_, c)| c.protocol_number == protocol)
+        self.collect_clients(|(_, c)| c.protocol_number == protocol)
     }
 
     pub fn other_clients_in_room(&self, self_id: ClientId) -> Vec<ClientId> {
         let room_id = self.clients[self_id].room_id;
-        self.select_clients(|(id, c)| *id != self_id && c.room_id == room_id)
+        self.collect_clients(|(id, c)| *id != self_id && c.room_id == room_id)
     }
 }
 

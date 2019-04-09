@@ -9,6 +9,7 @@ pub const IO_TOKEN: mio::Token = mio::Token(1_000_000_001);
 pub fn is_name_illegal(name: &str) -> bool {
     name.len() > 40
         || name.trim().is_empty()
+        || name.trim() != name
         || name
             .chars()
             .any(|c| "$()*+?[]^{|}\x7F".contains(c) || '\x00' <= c && c <= '\x1F')

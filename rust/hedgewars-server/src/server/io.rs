@@ -9,9 +9,9 @@ use crate::server::{
     database::Database,
     handlers::{IoResult, IoTask},
 };
+use log::*;
 use mio::{Evented, Poll, PollOpt};
 use mio_extras::channel;
-use log::*;
 
 pub type RequestId = u32;
 
@@ -45,17 +45,19 @@ impl IOThread {
                             &client_salt,
                             &server_salt,
                         ) {
-                            Ok(account) => {
-                                IoResult::Account(account)
-                            }
+                            Ok(account) => IoResult::Account(account),
                             Err(..) => {
                                 warn!("Unable to get account data: {}", 0);
                                 IoResult::Account(None)
                             }
                         }
-                    },
+                    }
 
-                    IoTask::SaveRoom { room_id, filename, contents} => {
+                    IoTask::SaveRoom {
+                        room_id,
+                        filename,
+                        contents,
+                    } => {
                         let result = match save_file(&filename, &contents) {
                             Ok(()) => true,
                             Err(e) => {
@@ -64,12 +66,12 @@ impl IOThread {
                                     filename, e
                                 );
                                 false
-                           }
+                            }
                         };
                         IoResult::SaveRoom(room_id, result)
-                    },
+                    }
 
-                    IoTask::LoadRoom {room_id, filename} => {
+                    IoTask::LoadRoom { room_id, filename } => {
                         let result = match load_file(&filename) {
                             Ok(contents) => Some(contents),
                             Err(e) => {

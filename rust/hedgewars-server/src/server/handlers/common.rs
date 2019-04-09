@@ -33,60 +33,33 @@ pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     }
 }
 
-pub fn process_login(server: &mut HWServer, response: &mut Response) {
+pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
     let client_id = response.client_id();
-    let nick = server.clients[client_id].nick.clone();
 
-    let has_nick_clash = server
-        .clients
-        .iter()
-        .any(|(id, c)| id != client_id && c.nick == nick);
+    let lobby_nicks: Vec<_> = server.collect_nicks(|(_, c)| c.room_id.is_none());
 
-    let client = &mut server.clients[client_id];
+    let joined_msg = LobbyJoined(lobby_nicks);
 
-    if !client.is_checker() && has_nick_clash {
-        if client.protocol_number < 38 {
-            remove_client(server, response, "Nickname is already in use".to_string());
-        } else {
-            client.nick.clear();
-            response.add(Notice("NickAlreadyInUse".to_string()).send_self());
-        }
-    } else {
-        server.clients[client_id].room_id = None;
+    let everyone_msg = LobbyJoined(vec![server.clients[client_id].nick.clone()]);
+    let flags_msg = ClientFlags(
+        "+i".to_string(),
+        server.collect_nicks(|(_, c)| c.room_id.is_some()),
+    );
+    let server_msg = ServerMessage("\u{1f994} is watching".to_string());
 
-        let lobby_nicks: Vec<_> = server
-            .clients
+    let rooms_msg = Rooms(
+        server
+            .rooms
             .iter()
-            .filter_map(|(_, c)| c.room_id.and(Some(c.nick.clone())))
-            .collect();
-        let joined_msg = LobbyJoined(lobby_nicks);
+            .flat_map(|(_, r)| r.info(r.master_id.map(|id| &server.clients[id])))
+            .collect(),
+    );
 
-        let everyone_msg = LobbyJoined(vec![server.clients[client_id].nick.clone()]);
-        let flags_msg = ClientFlags(
-            "+i".to_string(),
-            server
-                .clients
-                .iter()
-                .filter(|(_, c)| c.room_id.is_some())
-                .map(|(_, c)| c.nick.clone())
-                .collect(),
-        );
-        let server_msg = ServerMessage("\u{1f994} is watching".to_string());
-
-        let rooms_msg = Rooms(
-            server
-                .rooms
-                .iter()
-                .flat_map(|(_, r)| r.info(r.master_id.map(|id| &server.clients[id])))
-                .collect(),
-        );
-
-        response.add(everyone_msg.send_all().but_self());
-        response.add(joined_msg.send_self());
-        response.add(flags_msg.send_self());
-        response.add(server_msg.send_self());
-        response.add(rooms_msg.send_self());
-    }
+    response.add(everyone_msg.send_all().but_self());
+    response.add(joined_msg.send_self());
+    response.add(flags_msg.send_self());
+    response.add(server_msg.send_self());
+    response.add(rooms_msg.send_self());
 }
 
 pub fn remove_teams(
@@ -192,7 +165,7 @@ pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Resp
         remove_client_from_room(client, room, response, msg);
 
         if !room.is_fixed() && room.master_id == None {
-            if let Some(new_master_id) = server.room_clients(room_id).first().cloned() {
+            if let Some(new_master_id) = server.collect_room_clients(room_id).first().cloned() {
                 let new_master_nick = server.clients[new_master_id].nick.clone();
                 let room = &mut server.rooms[room_id];
                 room.master_id = Some(new_master_id);

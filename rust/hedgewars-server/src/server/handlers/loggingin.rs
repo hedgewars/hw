@@ -1,6 +1,8 @@
 use mio;
 
 use crate::protocol::messages::HWProtocolMessage::LoadRoom;
+use crate::server::client::HWClient;
+use crate::server::core::HWServer;
 use crate::{
     protocol::messages::{HWProtocolMessage, HWServerMessage::*},
     server::{
@@ -23,21 +25,42 @@ pub enum LoginResult {
     Exit,
 }
 
-fn completion_result(client: &HWAnteClient, response: &mut super::Response) -> LoginResult {
-    #[cfg(feature = "official-server")]
-    {
-        response.add(AskPassword(client.server_salt.clone()).send_self());
-        LoginResult::Unchanged
-    }
+fn completion_result<'a, I>(
+    mut other_clients: I,
+    client: &mut HWAnteClient,
+    response: &mut super::Response,
+) -> LoginResult
+where
+    I: Iterator<Item = (ClientId, &'a HWClient)>,
+{
+    let has_nick_clash =
+        other_clients.any(|(_, c)| !c.is_checker() && c.nick == *client.nick.as_ref().unwrap());
 
-    #[cfg(not(feature = "official-server"))]
-    {
-        LoginResult::Complete
+    if has_nick_clash {
+        if client.protocol_number.unwrap().get() < 38 {
+            response.add(Bye("User quit: Nickname is already in use".to_string()).send_self());
+            LoginResult::Exit
+        } else {
+            client.nick = None;
+            response.add(Notice("NickAlreadyInUse".to_string()).send_self());
+            LoginResult::Unchanged
+        }
+    } else {
+        #[cfg(feature = "official-server")]
+        {
+            response.add(AskPassword(client.server_salt.clone()).send_self());
+            LoginResult::Unchanged
+        }
+
+        #[cfg(not(feature = "official-server"))]
+        {
+            LoginResult::Complete
+        }
     }
 }
 
 pub fn handle(
-    anteroom: &mut HWAnteroom,
+    server: &mut HWServer,
     client_id: ClientId,
     response: &mut super::Response,
     message: HWProtocolMessage,
@@ -48,9 +71,9 @@ pub fn handle(
             LoginResult::Exit
         }
         HWProtocolMessage::Nick(nick) => {
-            let client = &mut anteroom.clients[client_id];
+            let client = &mut server.anteroom.clients[client_id];
             debug!("{} {}", nick, is_name_illegal(&nick));
-            if !client.nick.is_some() {
+            if client.nick.is_some() {
                 response.add(Error("Nickname already provided.".to_string()).send_self());
                 LoginResult::Unchanged
             } else if is_name_illegal(&nick) {
@@ -61,14 +84,14 @@ pub fn handle(
                 response.add(Nick(nick).send_self());
 
                 if client.protocol_number.is_some() {
-                    completion_result(&client, response)
+                    completion_result(server.clients.iter(), client, response)
                 } else {
                     LoginResult::Unchanged
                 }
             }
         }
         HWProtocolMessage::Proto(proto) => {
-            let client = &mut anteroom.clients[client_id];
+            let client = &mut server.anteroom.clients[client_id];
             if client.protocol_number.is_some() {
                 response.add(Error("Protocol already known.".to_string()).send_self());
                 LoginResult::Unchanged
@@ -80,7 +103,7 @@ pub fn handle(
                 response.add(Proto(proto).send_self());
 
                 if client.nick.is_some() {
-                    completion_result(&client, response)
+                    completion_result(server.clients.iter(), client, response)
                 } else {
                     LoginResult::Unchanged
                 }
@@ -88,7 +111,7 @@ pub fn handle(
         }
         #[cfg(feature = "official-server")]
         HWProtocolMessage::Password(hash, salt) => {
-            let client = &anteroom.clients[client_id];
+            let client = &server.anteroom.clients[client_id];
 
             if let (Some(nick), Some(protocol)) = (client.nick.as_ref(), client.protocol_number) {
                 response.request_io(super::IoTask::GetAccount {
@@ -104,11 +127,16 @@ pub fn handle(
         }
         #[cfg(feature = "official-server")]
         HWProtocolMessage::Checker(protocol, nick, password) => {
-            let client = &mut anteroom.clients[client_id];
-            client.protocol_number = NonZeroU16::new(protocol);
-            client.nick = Some(nick);
-            //client.set_is_checker(true);
-            LoginResult::Complete
+            let client = &mut server.anteroom.clients[client_id];
+            if protocol == 0 {
+                response.add(Error("Bad number.".to_string()).send_self());
+                LoginResult::Unchanged
+            } else {
+                client.protocol_number = NonZeroU16::new(protocol);
+                client.nick = Some(nick);
+                client.is_checker = true;
+                LoginResult::Complete
+            }
         }
         _ => {
             warn!("Incorrect command in logging-in state");
