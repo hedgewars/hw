@@ -1,10 +1,11 @@
 use mio;
-use std::{io, io::Write};
+use std::{collections::HashMap, io, io::Write};
 
 use super::{
     actions::{Destination, DestinationRoom},
     core::HWServer,
     coretypes::ClientId,
+    room::RoomSave,
 };
 use crate::{
     protocol::messages::{HWProtocolMessage, HWServerMessage, HWServerMessage::*},
@@ -22,10 +23,51 @@ mod lobby;
 mod loggingin;
 
 use self::loggingin::LoginResult;
+use std::fmt::{Formatter, LowerHex};
+
+#[derive(PartialEq)]
+pub struct Sha1Digest([u8; 20]);
+
+impl Sha1Digest {
+    pub fn new(digest: [u8; 20]) -> Self {
+        Self(digest)
+    }
+}
+
+impl LowerHex for Sha1Digest {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), std::fmt::Error> {
+        for byte in &self.0 {
+            write!(f, "{:02x}", byte)?;
+        }
+        Ok(())
+    }
+}
+
+pub struct AccountInfo {
+    pub is_registered: bool,
+    pub is_admin: bool,
+    pub is_contributor: bool,
+    pub server_hash: Sha1Digest,
+}
+
+pub enum IoTask {
+    GetAccount {
+        nick: String,
+        protocol: u16,
+        password_hash: String,
+        client_salt: String,
+        server_salt: String,
+    },
+}
+
+pub enum IoResult {
+    Account(Option<AccountInfo>),
+}
 
 pub struct Response {
     client_id: ClientId,
     messages: Vec<PendingMessage>,
+    io_tasks: Vec<IoTask>,
     removed_clients: Vec<ClientId>,
 }
 
@@ -34,13 +76,14 @@ impl Response {
         Self {
             client_id,
             messages: vec![],
+            io_tasks: vec![],
             removed_clients: vec![],
         }
     }
 
     #[inline]
     pub fn is_empty(&self) -> bool {
-        self.messages.is_empty() && self.removed_clients.is_empty()
+        self.messages.is_empty() && self.removed_clients.is_empty() && self.io_tasks.is_empty()
     }
 
     #[inline]
@@ -56,6 +99,11 @@ impl Response {
     #[inline]
     pub fn add(&mut self, message: PendingMessage) {
         self.messages.push(message)
+    }
+
+    #[inline]
+    pub fn request_io(&mut self, task: IoTask) {
+        self.io_tasks.push(task)
     }
 
     pub fn extract_messages<'a, 'b: 'a>(
@@ -75,6 +123,10 @@ impl Response {
 
     pub fn extract_removed_clients(&mut self) -> impl Iterator<Item = ClientId> + '_ {
         self.removed_clients.drain(..)
+    }
+
+    pub fn extract_io_tasks(&mut self) -> impl Iterator<Item = IoTask> + '_ {
+        self.io_tasks.drain(..)
     }
 }
 
@@ -175,5 +227,28 @@ pub fn handle_client_accept(server: &mut HWServer, client_id: ClientId, response
 pub fn handle_client_loss(server: &mut HWServer, client_id: ClientId, response: &mut Response) {
     if server.anteroom.remove_client(client_id).is_none() {
         common::remove_client(server, response, "Connection reset".to_string());
+    }
+}
+
+pub fn handle_io_result(
+    server: &mut HWServer,
+    client_id: ClientId,
+    response: &mut Response,
+    io_result: IoResult,
+) {
+    match io_result {
+        IoResult::Account(Some(info)) => {
+            response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
+            if let Some(client) = server.anteroom.remove_client(client_id) {
+                server.add_client(client_id, client);
+                let client = &mut server.clients[client_id];
+                client.set_is_admin(info.is_admin);
+                client.set_is_contributor(info.is_admin)
+            }
+        }
+        IoResult::Account(None) => {
+            response.add(Error("Authentication failed.".to_string()).send_self());
+            response.remove_client(client_id);
+        }
     }
 }

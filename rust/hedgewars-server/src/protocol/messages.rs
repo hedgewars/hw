@@ -71,8 +71,11 @@ pub enum HWServerMessage {
     Ping,
     Pong,
     Bye(String),
+
     Nick(String),
     Proto(u16),
+    AskPassword(String),
+
     ServerAuth(String),
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
@@ -282,6 +285,7 @@ impl HWServerMessage {
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],
             Proto(proto) => msg!["PROTO", proto],
+            AskPassword(salt) => msg!["ASKPASSWORD", salt],
             ServerAuth(hash) => msg!["SERVER_AUTH", hash],
             LobbyLeft(nick, msg) => msg!["LOBBY:LEFT", nick, msg],
             LobbyJoined(nicks) => construct_message(&["LOBBY:JOINED"], &nicks),

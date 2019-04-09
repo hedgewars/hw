@@ -12,6 +12,7 @@ default = []
 [dependencies]
 rand = "0.6"
 mio = "0.6"
+mio-extras = "2.0.5"
 slab = "0.4"
 netbuf = "0.4"
 nom = { git = "https://github.com/Geal/nom", branch = "5.0" }

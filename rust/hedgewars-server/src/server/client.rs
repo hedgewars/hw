@@ -9,6 +9,7 @@ bitflags! {
         const IS_IN_GAME = 0b0000_1000;
         const IS_JOINED_MID_GAME = 0b0001_0000;
         const IS_CHECKER = 0b0010_0000;
+        const IS_CONTRIBUTOR = 0b0100_0000;
 
         const NONE = 0b0000_0000;
         const DEFAULT = Self::NONE.bits;
@@ -66,6 +67,9 @@ impl HWClient {
     pub fn is_checker(&self) -> bool {
         self.contains(ClientFlags::IS_CHECKER)
     }
+    pub fn is_contributor(&self) -> bool {
+        self.contains(ClientFlags::IS_CONTRIBUTOR)
+    }
 
     pub fn set_is_admin(&mut self, value: bool) {
         self.set(ClientFlags::IS_ADMIN, value)
@@ -84,5 +88,8 @@ impl HWClient {
     }
     pub fn set_is_checker(&mut self, value: bool) {
         self.set(ClientFlags::IS_CHECKER, value)
+    }
+    pub fn set_is_contributor(&mut self, value: bool) {
+        self.set(ClientFlags::IS_CONTRIBUTOR, value)
     }
 }

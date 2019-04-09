@@ -40,13 +40,16 @@ fn main() {
         for event in events.iter() {
             if event.readiness() & Ready::readable() == Ready::readable() {
                 match event.token() {
-                    utils::SERVER => hw_network.accept_client(&poll).unwrap(),
+                    utils::SERVER_TOKEN => hw_network.accept_client(&poll).unwrap(),
+                    #[cfg(feature = "official-server")]
+                    utils::IO_TOKEN => hw_network.handle_io_result(),
                     Token(tok) => hw_network.client_readable(&poll, tok).unwrap(),
                 }
             }
             if event.readiness() & Ready::writable() == Ready::writable() {
                 match event.token() {
-                    utils::SERVER => unreachable!(),
+                    utils::SERVER_TOKEN => unreachable!(),
+                    utils::IO_TOKEN => unreachable!(),
                     Token(tok) => hw_network.client_writable(&poll, tok).unwrap(),
                 }
             }

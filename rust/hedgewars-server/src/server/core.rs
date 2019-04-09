@@ -2,13 +2,14 @@ use super::{
     client::HWClient,
     coretypes::{ClientId, RoomId},
     indexslab::IndexSlab,
-    io::HWServerIO,
     room::HWRoom,
 };
 use crate::utils;
 
 use log::*;
 use slab;
+use std::fs::{File, OpenOptions};
+use std::io::{Read, Write};
 use std::{borrow::BorrowMut, iter, num::NonZeroU16};
 
 type Slab<T> = slab::Slab<T>;
@@ -16,7 +17,6 @@ type Slab<T> = slab::Slab<T>;
 pub struct HWAnteClient {
     pub nick: Option<String>,
     pub protocol_number: Option<NonZeroU16>,
-    pub web_password: Option<String>,
     pub server_salt: String,
 }
 
@@ -35,20 +35,12 @@ impl HWAnteroom {
             nick: None,
             protocol_number: None,
             server_salt: salt,
-            web_password: None,
         };
         self.clients.insert(client_id, client);
     }
 
     pub fn remove_client(&mut self, client_id: ClientId) -> Option<HWAnteClient> {
         let mut client = self.clients.remove(client_id);
-        if let Some(HWAnteClient {
-            web_password: Some(ref mut password),
-            ..
-        }) = client
-        {
-            password.replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
-        }
         client
     }
 }
@@ -211,5 +203,50 @@ fn move_to_room(client: &mut HWClient, room: &mut HWRoom) {
                 .cloned()
                 .collect();
         }
+    }
+}
+
+pub trait HWServerIO {
+    fn write_file(&mut self, name: &str, content: &str) -> std::io::Result<()>;
+    fn read_file(&mut self, name: &str) -> std::io::Result<String>;
+}
+
+pub struct EmptyServerIO {}
+
+impl EmptyServerIO {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
+impl HWServerIO for EmptyServerIO {
+    fn write_file(&mut self, _name: &str, _content: &str) -> std::io::Result<()> {
+        Ok(())
+    }
+
+    fn read_file(&mut self, _name: &str) -> std::io::Result<String> {
+        Ok("".to_string())
+    }
+}
+
+pub struct FileServerIO {}
+
+impl FileServerIO {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
+impl HWServerIO for FileServerIO {
+    fn write_file(&mut self, name: &str, content: &str) -> std::io::Result<()> {
+        let mut writer = OpenOptions::new().create(true).write(true).open(name)?;
+        writer.write_all(content.as_bytes())
+    }
+
+    fn read_file(&mut self, name: &str) -> std::io::Result<String> {
+        let mut reader = File::open(name)?;
+        let mut result = String::new();
+        reader.read_to_string(&mut result)?;
+        Ok(result)
     }
 }

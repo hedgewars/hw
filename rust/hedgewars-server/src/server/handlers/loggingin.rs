@@ -1,5 +1,6 @@
 use mio;
 
+use crate::protocol::messages::HWProtocolMessage::LoadRoom;
 use crate::{
     protocol::messages::{HWProtocolMessage, HWServerMessage::*},
     server::{
@@ -16,31 +17,23 @@ use std::{
     num::NonZeroU16,
 };
 
-#[derive(PartialEq)]
-struct Sha1Digest([u8; 20]);
-
-impl LowerHex for Sha1Digest {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), std::fmt::Error> {
-        for byte in &self.0 {
-            write!(f, "{:02x}", byte)?;
-        }
-        Ok(())
-    }
-}
-
-#[cfg(feature = "official-server")]
-fn get_hash(protocol_number: u16, web_password: &str, salt1: &str, salt2: &str) -> Sha1Digest {
-    let s = format!(
-        "{}{}{}{}{}",
-        salt1, salt2, web_password, protocol_number, "!hedgewars"
-    );
-    Sha1Digest(sha1(s.as_bytes()))
-}
-
 pub enum LoginResult {
     Unchanged,
     Complete,
     Exit,
+}
+
+fn completion_result(client: &HWAnteClient, response: &mut super::Response) -> LoginResult {
+    #[cfg(feature = "official-server")]
+    {
+        response.add(AskPassword(client.server_salt.clone()).send_self());
+        LoginResult::Unchanged
+    }
+
+    #[cfg(not(feature = "official-server"))]
+    {
+        LoginResult::Complete
+    }
 }
 
 pub fn handle(
@@ -68,7 +61,7 @@ pub fn handle(
                 response.add(Nick(nick).send_self());
 
                 if client.protocol_number.is_some() {
-                    LoginResult::Complete
+                    completion_result(&client, response)
                 } else {
                     LoginResult::Unchanged
                 }
@@ -87,7 +80,7 @@ pub fn handle(
                 response.add(Proto(proto).send_self());
 
                 if client.nick.is_some() {
-                    LoginResult::Complete
+                    completion_result(&client, response)
                 } else {
                     LoginResult::Unchanged
                 }
@@ -97,29 +90,23 @@ pub fn handle(
         HWProtocolMessage::Password(hash, salt) => {
             let client = &anteroom.clients[client_id];
 
-            if let (Some(protocol), Some(password)) =
-                (client.protocol_number, client.web_password.as_ref())
-            {
-                let client_hash = get_hash(protocol.get(), &password, &salt, &client.server_salt);
-                let server_hash = get_hash(protocol.get(), &password, &client.server_salt, &salt);
-                if client_hash == server_hash {
-                    response.add(ServerAuth(format!("{:x}", server_hash)).send_self());
-                    LoginResult::Complete
-                } else {
-                    response.add(Bye("No protocol provided.".to_string()).send_self());
-                    LoginResult::Unchanged
-                }
-            } else {
-                response.add(Bye("Authentication failed.".to_string()).send_self());
-                LoginResult::Exit
-            }
+            if let (Some(nick), Some(protocol)) = (client.nick.as_ref(), client.protocol_number) {
+                response.request_io(super::IoTask::GetAccount {
+                    nick: nick.clone(),
+                    protocol: protocol.get(),
+                    server_salt: client.server_salt.clone(),
+                    client_salt: salt,
+                    password_hash: hash,
+                });
+            };
+
+            LoginResult::Unchanged
         }
         #[cfg(feature = "official-server")]
         HWProtocolMessage::Checker(protocol, nick, password) => {
             let client = &mut anteroom.clients[client_id];
             client.protocol_number = NonZeroU16::new(protocol);
             client.nick = Some(nick);
-            client.web_password = Some(password);
             //client.set_is_checker(true);
             LoginResult::Complete
         }
