@@ -191,6 +191,33 @@ pub fn change_master(
     );
 }
 
+pub fn enter_room(
+    server: &mut HWServer,
+    client_id: ClientId,
+    room_id: RoomId,
+    response: &mut Response,
+) {
+    let nick = server.clients[client_id].nick.clone();
+    server.move_to_room(client_id, room_id);
+
+    response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room_id));
+    response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick]).send_all());
+    let nicks = server.collect_nicks(|(_, c)| c.room_id == Some(room_id));
+    response.add(RoomJoined(nicks).send_self());
+
+    let room = &server.rooms[room_id];
+
+    if !room.greeting.is_empty() {
+        response.add(
+            ChatMsg {
+                nick: "[greeting]".to_string(),
+                msg: room.greeting.clone(),
+            }
+            .send_self(),
+        );
+    }
+}
+
 pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Response, msg: &str) {
     let client = &mut server.clients[client_id];
 

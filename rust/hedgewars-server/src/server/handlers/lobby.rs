@@ -6,6 +6,7 @@ use crate::{
         add_flags, remove_flags, HWProtocolMessage, HWServerMessage::*, ProtocolFlags as Flags,
     },
     server::{
+        client::HWClient,
         core::HWServer,
         coretypes::{ClientId, ServerVar},
     },
@@ -83,28 +84,21 @@ pub fn handle(
                 } else if room.players_number == u8::max_value() {
                     response.add(Warning("This room is already full".to_string()).send_self());
                 } else if let Some(room_id) = room_id {
-                    let nick = client.nick.clone();
-                    server.move_to_room(client_id, room_id);
-
-                    response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room_id));
-                    response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick]).send_all());
-                    let nicks = server.collect_nicks(|(_, c)| c.room_id == Some(room_id));
-                    response.add(RoomJoined(nicks).send_self());
-
-                    let room = &server.rooms[room_id];
-
-                    if !room.greeting.is_empty() {
-                        response.add(
-                            ChatMsg {
-                                nick: "[greeting]".to_string(),
-                                msg: room.greeting.clone(),
-                            }
-                            .send_self(),
-                        );
-                    }
+                    super::common::enter_room(server, client_id, room_id, response);
                 }
             } else {
                 response.add(Warning("No such room.".to_string()).send_self());
+            }
+        }
+        Follow(nick) => {
+            if let Some(HWClient {
+                room_id: Some(room_id),
+                ..
+            }) = server.find_client(&nick)
+            {
+                let room = &server.rooms[*room_id];
+                response.add(Joining(room.name.clone()).send_self());
+                super::common::enter_room(server, client_id, *room_id, response);
             }
         }
         SetServerVar(var) => {
