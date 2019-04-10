@@ -141,6 +141,7 @@ pub enum HWServerMessage {
     ForwardEngineMessage(Vec<String>),
     RoundFinished,
 
+    Info(Vec<String>),
     ServerMessage(String),
     ServerVars(Vec<String>),
     Notice(String),
@@ -389,6 +390,7 @@ impl HWServerMessage {
             ForwardEngineMessage(em) => construct_message(&["EM"], &em),
             RoundFinished => msg!["ROUND_FINISHED"],
             ChatMsg { nick, msg } => msg!["CHAT", nick, msg],
+            Info(info) => construct_message(&["INFO"], &info),
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
             ServerVars(vars) => construct_message(&["SERVER_VARS"], &vars),
             Notice(msg) => msg!["NOTICE", msg],

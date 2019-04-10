@@ -222,11 +222,64 @@ pub fn handle(
                     HWProtocolMessage::Quit(None) => {
                         common::remove_client(server, response, "User quit".to_string());
                     }
+                    HWProtocolMessage::Info(nick) => {
+                        if let Some(client) = server.find_client(&nick) {
+                            let admin_sign = if client.is_admin() { "@" } else { "" };
+                            let master_sign = if client.is_master() { "+" } else { "" };
+                            let room_info = match client.room_id {
+                                Some(room_id) => {
+                                    let room = &server.rooms[room_id];
+                                    let status = match room.game_info {
+                                        Some(_) if client.teams_in_game == 0 => "(spectating)",
+                                        Some(_) => "(playing)",
+                                        None => "",
+                                    };
+                                    format!(
+                                        "[{}{}room {}]{}",
+                                        admin_sign, master_sign, room.name, status
+                                    )
+                                }
+                                None => format!("[{}lobby]", admin_sign),
+                            };
+
+                            let info = vec![
+                                client.nick.clone(),
+                                utils::protocol_version_string(client.protocol_number).to_string(),
+                                room_info,
+                            ];
+                            Info(info);
+                        } else {
+                            response
+                                .add(server_chat("Player is not online.".to_string()).send_self())
+                        }
+                    }
+                    HWProtocolMessage::ToggleServerRegisteredOnly => {
+                        if !server.clients[client_id].is_admin() {
+                            response.add(Warning("Access denied.".to_string()).send_self());
+                        } else {
+                            server.set_is_registered_only(server.is_registered_only());
+                            let msg = if server.is_registered_only() {
+                                "This server no longer allows unregistered players to join."
+                            } else {
+                                "This server now allows unregistered players to join."
+                            };
+                            response.add(server_chat(msg.to_string()).send_all());
+                        }
+                    }
                     HWProtocolMessage::Global(msg) => {
                         if !server.clients[client_id].is_admin() {
                             response.add(Warning("Access denied.".to_string()).send_self());
                         } else {
                             response.add(global_chat(msg).send_all())
+                        }
+                    }
+                    HWProtocolMessage::SuperPower => {
+                        if !server.clients[client_id].is_admin() {
+                            response.add(Warning("Access denied.".to_string()).send_self());
+                        } else {
+                            server.clients[client_id].set_has_super_power(true);
+                            response
+                                .add(server_chat("Super power activated.".to_string()).send_self())
                         }
                     }
                     HWProtocolMessage::Watch(id) => {
@@ -278,12 +331,20 @@ pub fn handle_io_result(
 ) {
     match io_result {
         IoResult::Account(Some(info)) => {
-            response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
-            if let Some(client) = server.anteroom.remove_client(client_id) {
-                server.add_client(client_id, client);
-                let client = &mut server.clients[client_id];
-                client.set_is_admin(info.is_admin);
-                client.set_is_contributor(info.is_admin)
+            if !info.is_registered && server.is_registered_only() {
+                response.add(
+                    Bye("This server only allows registered users to join.".to_string())
+                        .send_self(),
+                );
+                response.remove_client(client_id);
+            } else {
+                response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
+                if let Some(client) = server.anteroom.remove_client(client_id) {
+                    server.add_client(client_id, client);
+                    let client = &mut server.clients[client_id];
+                    client.set_is_admin(info.is_admin);
+                    client.set_is_contributor(info.is_admin)
+                }
             }
         }
         IoResult::Account(None) => {

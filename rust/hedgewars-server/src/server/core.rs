@@ -7,6 +7,7 @@ use super::{
 use crate::utils;
 
 use crate::protocol::messages::HWProtocolMessage::Greeting;
+use bitflags::*;
 use log::*;
 use slab;
 use std::{borrow::BorrowMut, iter, num::NonZeroU16};
@@ -60,11 +61,18 @@ impl ServerGreetings {
     }
 }
 
+bitflags! {
+    pub struct ServerFlags: u8 {
+        const REGISTERED_ONLY = 0b0000_1000;
+    }
+}
+
 pub struct HWServer {
     pub clients: IndexSlab<HWClient>,
     pub rooms: Slab<HWRoom>,
     pub anteroom: HWAnteroom,
     pub latest_protocol: u16,
+    pub flags: ServerFlags,
     pub greetings: ServerGreetings,
 }
 
@@ -78,6 +86,7 @@ impl HWServer {
             anteroom: HWAnteroom::new(clients_limit),
             greetings: ServerGreetings::new(),
             latest_protocol: 58,
+            flags: ServerFlags::empty(),
         }
     }
 
@@ -182,6 +191,14 @@ impl HWServer {
     pub fn other_clients_in_room(&self, self_id: ClientId) -> Vec<ClientId> {
         let room_id = self.clients[self_id].room_id;
         self.collect_clients(|(id, c)| *id != self_id && c.room_id == room_id)
+    }
+
+    pub fn is_registered_only(&self) -> bool {
+        self.flags.contains(ServerFlags::REGISTERED_ONLY)
+    }
+
+    pub fn set_is_registered_only(&mut self, value: bool) {
+        self.flags.set(ServerFlags::REGISTERED_ONLY, value)
     }
 }
 
