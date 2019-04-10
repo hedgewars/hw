@@ -23,6 +23,7 @@ mod lobby;
 mod loggingin;
 
 use self::loggingin::LoginResult;
+use crate::protocol::messages::global_chat;
 use std::fmt::{Formatter, LowerHex};
 
 #[derive(PartialEq)]
@@ -215,6 +216,7 @@ pub fn handle(
                     HWProtocolMessage::Quit(None) => {
                         common::remove_client(server, response, "User quit".to_string());
                     }
+                    HWProtocolMessage::Global(msg) => response.add(global_chat(msg).send_all()),
                     _ => match server.clients[client_id].room_id {
                         None => lobby::handle(server, client_id, response, message),
                         Some(room_id) => {

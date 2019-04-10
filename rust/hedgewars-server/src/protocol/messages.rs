@@ -153,11 +153,19 @@ pub enum HWServerMessage {
     LegacyReady(bool, Vec<String>),
 }
 
-pub fn server_chat(msg: String) -> HWServerMessage {
+fn special_chat(nick: &str, msg: String) -> HWServerMessage {
     HWServerMessage::ChatMsg {
-        nick: "[server]".to_string(),
+        nick: nick.to_string(),
         msg,
     }
+}
+
+pub fn server_chat(msg: String) -> HWServerMessage {
+    special_chat("[server]", msg)
+}
+
+pub fn global_chat(msg: String) -> HWServerMessage {
+    special_chat("(global notice)", msg)
 }
 
 impl ServerVar {

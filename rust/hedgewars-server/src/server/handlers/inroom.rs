@@ -564,6 +564,27 @@ pub fn handle(
             response.add(chat_msg.send_all().in_room(room_id));
             response.add(result.send_all().in_room(room_id));
         }
+        Delegate(nick) => {
+            let delegate_id = server.find_client(&nick).map(|c| (c.id, c.room_id));
+            let client = &server.clients[client_id];
+            if !(client.is_admin() || client.is_master()) {
+                response.add(
+                    Warning("You're not the room master or a server admin!".to_string())
+                        .send_self(),
+                )
+            } else {
+                match delegate_id {
+                    None => response.add(Warning("Player is not online.".to_string()).send_self()),
+                    Some((id, _)) if id == client_id => response
+                        .add(Warning("You're already the room master.".to_string()).send_self()),
+                    Some((_, id)) if id != Some(room_id) => response
+                        .add(Warning("The player is not in your room.".to_string()).send_self()),
+                    Some((id, _)) => {
+                        super::common::change_master(server, client_id, id, room_id, response);
+                    }
+                }
+            }
+        }
         _ => warn!("Unimplemented!"),
     }
 }
