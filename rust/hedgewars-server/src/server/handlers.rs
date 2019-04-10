@@ -4,7 +4,7 @@ use std::{collections::HashMap, io, io::Write};
 use super::{
     actions::{Destination, DestinationRoom},
     core::HWServer,
-    coretypes::{ClientId, RoomId},
+    coretypes::{ClientId, Replay, RoomId},
     room::RoomSave,
 };
 use crate::{
@@ -24,6 +24,8 @@ mod loggingin;
 
 use self::loggingin::LoginResult;
 use crate::protocol::messages::global_chat;
+use crate::protocol::messages::HWProtocolMessage::EngineMessage;
+use crate::server::coretypes::{GameCfg, TeamInfo};
 use std::fmt::{Formatter, LowerHex};
 
 #[derive(PartialEq)]
@@ -59,6 +61,9 @@ pub enum IoTask {
         client_salt: String,
         server_salt: String,
     },
+    GetReplay {
+        id: u32,
+    },
     SaveRoom {
         room_id: RoomId,
         filename: String,
@@ -72,6 +77,7 @@ pub enum IoTask {
 
 pub enum IoResult {
     Account(Option<AccountInfo>),
+    Replay(Option<Replay>),
     SaveRoom(RoomId, bool),
     LoadRoom(RoomId, Option<String>),
 }
@@ -216,7 +222,27 @@ pub fn handle(
                     HWProtocolMessage::Quit(None) => {
                         common::remove_client(server, response, "User quit".to_string());
                     }
-                    HWProtocolMessage::Global(msg) => response.add(global_chat(msg).send_all()),
+                    HWProtocolMessage::Global(msg) => {
+                        if !server.clients[client_id].is_admin() {
+                            response.add(Warning("Access denied.".to_string()).send_self());
+                        } else {
+                            response.add(global_chat(msg).send_all())
+                        }
+                    }
+                    HWProtocolMessage::Watch(id) => {
+                        #[cfg(feature = "official-server")]
+                        {
+                            response.request_io(IoTask::GetReplay { id })
+                        }
+
+                        #[cfg(not(feature = "official-server"))]
+                        {
+                            response.add(
+                                Warning("This server does not support replays!".to_string())
+                                    .send_self(),
+                            );
+                        }
+                    }
                     _ => match server.clients[client_id].room_id {
                         None => lobby::handle(server, client_id, response, message),
                         Some(room_id) => {
@@ -263,6 +289,17 @@ pub fn handle_io_result(
         IoResult::Account(None) => {
             response.add(Error("Authentication failed.".to_string()).send_self());
             response.remove_client(client_id);
+        }
+        IoResult::Replay(Some(replay)) => {
+            response.add(RoomJoined(vec![server.clients[client_id].nick.clone()]).send_self());
+            common::get_room_config_impl(&replay.config, client_id, response);
+            common::get_teams(replay.teams.iter(), client_id, response);
+            response.add(RunGame.send_self());
+            response.add(ForwardEngineMessage(replay.message_log).send_self());
+            response.add(Kicked.send_self());
+        }
+        IoResult::Replay(None) => {
+            response.add(Warning("Could't load the replay".to_string()).send_self())
         }
         IoResult::SaveRoom(_, true) => {
             response.add(server_chat("Room configs saved successfully.".to_string()).send_self());

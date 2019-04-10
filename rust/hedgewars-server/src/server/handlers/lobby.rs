@@ -64,12 +64,7 @@ pub fn handle(
         JoinRoom(name, _password) => {
             let room = server.rooms.iter().find(|(_, r)| r.name == name);
             let room_id = room.map(|(_, r)| r.id);
-            let nicks = server
-                .clients
-                .iter()
-                .filter(|(_, c)| c.room_id == room_id)
-                .map(|(_, c)| c.nick.clone())
-                .collect();
+
             let client = &mut server.clients[client_id];
 
             if let Some((_, room)) = room {
@@ -93,6 +88,7 @@ pub fn handle(
 
                     response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room_id));
                     response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick]).send_all());
+                    let nicks = server.collect_nicks(|(_, c)| c.room_id == Some(room_id));
                     response.add(RoomJoined(nicks).send_self());
 
                     let room = &server.rooms[room_id];

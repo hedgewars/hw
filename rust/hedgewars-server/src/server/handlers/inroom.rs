@@ -191,7 +191,7 @@ pub fn handle(
                 super::common::start_game(server, room_id, response);
             }
         }
-        AddTeam(info) => {
+        AddTeam(mut info) => {
             if room.teams.len() >= room.team_limit as usize {
                 response.add(Warning("Too many teams!".to_string()).send_self());
             } else if room.addable_hedgehogs() == 0 {
@@ -211,12 +211,13 @@ pub fn handle(
                         .send_self(),
                 );
             } else {
+                info.owner = client.nick.clone();
                 let team = room.add_team(client.id, *info, client.protocol_number < 42);
                 client.teams_in_game += 1;
                 client.clan = Some(team.color);
                 response.add(TeamAccepted(team.name.clone()).send_self());
                 response.add(
-                    TeamAdd(HWRoom::team_info(&client, team))
+                    TeamAdd(team.to_protocol())
                         .send_all()
                         .in_room(room_id)
                         .but_self(),
@@ -337,6 +338,7 @@ pub fn handle(
             );
             room.save_config(name, location);
         }
+        #[cfg(feature = "official-server")]
         SaveRoom(filename) => {
             if client.is_admin() {
                 match room.get_saves() {
@@ -355,6 +357,7 @@ pub fn handle(
                 }
             }
         }
+        #[cfg(feature = "official-server")]
         LoadRoom(filename) => {
             if client.is_admin() {
                 response.request_io(super::IoTask::LoadRoom { room_id, filename });

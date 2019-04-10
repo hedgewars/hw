@@ -46,11 +46,42 @@ impl IOThread {
                             &server_salt,
                         ) {
                             Ok(account) => IoResult::Account(account),
-                            Err(..) => {
-                                warn!("Unable to get account data: {}", 0);
+                            Err(e) => {
+                                warn!("Unable to get account data: {}", e);
                                 IoResult::Account(None)
                             }
                         }
+                    }
+
+                    IoTask::GetReplay { id } => {
+                        let result = match db.get_replay_name(id) {
+                            Ok(Some(filename)) => {
+                                let filename = format!(
+                                    "checked/{}",
+                                    if filename.starts_with("replays/") {
+                                        &filename[8..]
+                                    } else {
+                                        &filename
+                                    }
+                                );
+                                match load_file(&filename) {
+                                    Ok(contents) => Some(unimplemented!()),
+                                    Err(e) => {
+                                        warn!(
+                                            "Error while writing the room config file \"{}\": {}",
+                                            filename, e
+                                        );
+                                        None
+                                    }
+                                }
+                            }
+                            Ok(None) => None,
+                            Err(e) => {
+                                warn!("Unable to get replay name: {}", e);
+                                None
+                            }
+                        };
+                        IoResult::Replay(result)
                     }
 
                     IoTask::SaveRoom {

@@ -1,6 +1,8 @@
 use crate::server::{
     client::HWClient,
-    coretypes::{ClientId, GameCfg, GameCfg::*, RoomId, TeamInfo, Voting, MAX_HEDGEHOGS_PER_TEAM},
+    coretypes::{
+        ClientId, GameCfg, GameCfg::*, RoomConfig, RoomId, TeamInfo, Voting, MAX_HEDGEHOGS_PER_TEAM,
+    },
 };
 use bitflags::*;
 use serde::{Deserialize, Serialize};
@@ -11,59 +13,6 @@ use std::{collections::HashMap, iter};
 const MAX_TEAMS_IN_ROOM: u8 = 8;
 const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_HEDGEHOGS_PER_TEAM * MAX_HEDGEHOGS_PER_TEAM;
 
-#[derive(Clone, Serialize, Deserialize)]
-struct Ammo {
-    name: String,
-    settings: Option<String>,
-}
-
-#[derive(Clone, Serialize, Deserialize)]
-struct Scheme {
-    name: String,
-    settings: Vec<String>,
-}
-
-#[derive(Clone, Serialize, Deserialize)]
-struct RoomConfig {
-    feature_size: u32,
-    map_type: String,
-    map_generator: u32,
-    maze_size: u32,
-    seed: String,
-    template: u32,
-
-    ammo: Ammo,
-    scheme: Scheme,
-    script: String,
-    theme: String,
-    drawn_map: Option<String>,
-}
-
-impl RoomConfig {
-    fn new() -> RoomConfig {
-        RoomConfig {
-            feature_size: 12,
-            map_type: "+rnd+".to_string(),
-            map_generator: 0,
-            maze_size: 0,
-            seed: "seed".to_string(),
-            template: 0,
-
-            ammo: Ammo {
-                name: "Default".to_string(),
-                settings: None,
-            },
-            scheme: Scheme {
-                name: "Default".to_string(),
-                settings: Vec::new(),
-            },
-            script: "Normal".to_string(),
-            theme: "\u{1f994}".to_string(),
-            drawn_map: None,
-        }
-    }
-}
-
 fn client_teams_impl(
     teams: &[(ClientId, TeamInfo)],
     client_id: ClientId,
@@ -72,31 +21,6 @@ fn client_teams_impl(
         .iter()
         .filter(move |(id, _)| *id == client_id)
         .map(|(_, t)| t)
-}
-
-fn map_config_from(c: &RoomConfig) -> Vec<String> {
-    vec![
-        c.feature_size.to_string(),
-        c.map_type.to_string(),
-        c.map_generator.to_string(),
-        c.maze_size.to_string(),
-        c.seed.to_string(),
-        c.template.to_string(),
-    ]
-}
-
-fn game_config_from(c: &RoomConfig) -> Vec<GameCfg> {
-    use crate::server::coretypes::GameCfg::*;
-    let mut v = vec![
-        Ammo(c.ammo.name.to_string(), c.ammo.settings.clone()),
-        Scheme(c.scheme.name.to_string(), c.scheme.settings.clone()),
-        Script(c.script.to_string()),
-        Theme(c.theme.to_string()),
-    ];
-    if let Some(ref m) = c.drawn_map {
-        v.push(DrawnMap(m.to_string()))
-    }
-    v
 }
 
 pub struct GameInfo {
@@ -290,31 +214,7 @@ impl HWRoom {
     }
 
     pub fn set_config(&mut self, cfg: GameCfg) {
-        let c = &mut self.config;
-        match cfg {
-            FeatureSize(s) => c.feature_size = s,
-            MapType(t) => c.map_type = t,
-            MapGenerator(g) => c.map_generator = g,
-            MazeSize(s) => c.maze_size = s,
-            Seed(s) => c.seed = s,
-            Template(t) => c.template = t,
-
-            Ammo(n, s) => {
-                c.ammo = Ammo {
-                    name: n,
-                    settings: s,
-                }
-            }
-            Scheme(n, s) => {
-                c.scheme = Scheme {
-                    name: n,
-                    settings: s,
-                }
-            }
-            Script(s) => c.script = s,
-            Theme(t) => c.theme = t,
-            DrawnMap(m) => c.drawn_map = Some(m),
-        };
+        self.config.set_config(cfg);
     }
 
     pub fn start_round(&mut self) {
@@ -383,17 +283,24 @@ impl HWRoom {
         ]
     }
 
+    pub fn active_config(&self) -> &RoomConfig {
+        match self.game_info {
+            Some(ref info) => &info.config,
+            None => &self.config,
+        }
+    }
+
     pub fn map_config(&self) -> Vec<String> {
         match self.game_info {
-            Some(ref info) => map_config_from(&info.config),
-            None => map_config_from(&self.config),
+            Some(ref info) => info.config.to_map_config(),
+            None => self.config.to_map_config(),
         }
     }
 
     pub fn game_config(&self) -> Vec<GameCfg> {
         match self.game_info {
-            Some(ref info) => game_config_from(&info.config),
-            None => game_config_from(&self.config),
+            Some(ref info) => info.config.to_game_config(),
+            None => self.config.to_game_config(),
         }
     }
 
@@ -431,23 +338,5 @@ impl HWRoom {
                 self.saves = saves;
             },
         )
-    }
-
-    pub fn team_info(owner: &HWClient, team: &TeamInfo) -> Vec<String> {
-        let mut info = vec![
-            team.name.clone(),
-            team.grave.clone(),
-            team.fort.clone(),
-            team.voice_pack.clone(),
-            team.flag.clone(),
-            owner.nick.clone(),
-            team.difficulty.to_string(),
-        ];
-        let hogs = team
-            .hedgehogs
-            .iter()
-            .flat_map(|h| iter::once(h.name.clone()).chain(iter::once(h.hat.clone())));
-        info.extend(hogs);
-        info
     }
 }

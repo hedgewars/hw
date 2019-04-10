@@ -9,7 +9,7 @@ use crate::{
     server::{
         client::HWClient,
         core::HWServer,
-        coretypes::{ClientId, GameCfg, RoomId, Vote, VoteType},
+        coretypes::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
         room::HWRoom,
     },
     utils::to_engine_msg,
@@ -17,6 +17,7 @@ use crate::{
 
 use super::Response;
 
+use crate::server::coretypes::RoomConfig;
 use rand::{self, seq::SliceRandom, thread_rng, Rng};
 use std::{iter::once, mem::replace};
 
@@ -247,10 +248,25 @@ pub fn get_room_update(
     response.add(update_msg.send_all().with_protocol(room.protocol_number));
 }
 
-pub fn get_room_config(room: &HWRoom, to_client: ClientId, response: &mut Response) {
-    response.add(ConfigEntry("FULLMAPCONFIG".to_string(), room.map_config()).send(to_client));
-    for cfg in room.game_config() {
+pub fn get_room_config_impl(config: &RoomConfig, to_client: ClientId, response: &mut Response) {
+    response.add(ConfigEntry("FULLMAPCONFIG".to_string(), config.to_map_config()).send(to_client));
+    for cfg in config.to_game_config() {
         response.add(cfg.to_server_msg().send(to_client));
+    }
+}
+
+pub fn get_room_config(room: &HWRoom, to_client: ClientId, response: &mut Response) {
+    get_room_config_impl(room.active_config(), to_client, response);
+}
+
+pub fn get_teams<'a, I>(teams: I, to_client: ClientId, response: &mut Response)
+where
+    I: Iterator<Item = &'a TeamInfo>,
+{
+    for team in teams {
+        response.add(TeamAdd(team.to_protocol()).send(to_client));
+        response.add(TeamColor(team.name.clone(), team.color).send(to_client));
+        response.add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send(to_client));
     }
 }
 
@@ -266,11 +282,7 @@ pub fn get_room_teams(
         None => &room.teams,
     };
 
-    for (owner_id, team) in current_teams.iter() {
-        response.add(TeamAdd(HWRoom::team_info(&server.clients[*owner_id], &team)).send(to_client));
-        response.add(TeamColor(team.name.clone(), team.color).send(to_client));
-        response.add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send(to_client));
-    }
+    get_teams(current_teams.iter().map(|(_, t)| t), to_client, response);
 }
 
 pub fn get_room_flags(

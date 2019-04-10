@@ -8,7 +8,7 @@ pub enum HWProtocolMessage {
     Pong,
     Quit(Option<String>),
     Global(String),
-    Watch(String),
+    Watch(u32),
     ToggleServerRegisteredOnly,
     SuperPower,
     Info(String),
@@ -207,6 +207,26 @@ impl GameCfg {
         use self::HWServerMessage::ConfigEntry;
         let (name, args) = self.to_protocol();
         HWServerMessage::ConfigEntry(name, args)
+    }
+}
+
+impl TeamInfo {
+    pub fn to_protocol(&self) -> Vec<String> {
+        let mut info = vec![
+            self.name.clone(),
+            self.grave.clone(),
+            self.fort.clone(),
+            self.voice_pack.clone(),
+            self.flag.clone(),
+            self.owner.clone(),
+            self.difficulty.to_string(),
+        ];
+        let hogs = self
+            .hedgehogs
+            .iter()
+            .flat_map(|h| once(h.name.clone()).chain(once(h.hat.clone())));
+        info.extend(hogs);
+        info
     }
 }
 

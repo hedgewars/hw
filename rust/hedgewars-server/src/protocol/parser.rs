@@ -272,7 +272,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
             |i| cmdc_single_arg(i, "SAVEROOM", a_line, SaveRoom),
             |i| cmdc_single_arg(i, "LOADROOM", a_line, LoadRoom),
             |i| cmdc_single_arg(i, "GLOBAL", a_line, Global),
-            |i| cmdc_single_arg(i, "WATCH", a_line, Watch),
+            |i| cmdc_single_arg(i, "WATCH", u32_line, Watch),
             |i| cmdc_single_arg(i, "GREETING", a_line, Greeting),
             |i| cmdc_single_arg(i, "VOTE", yes_no_line, Vote),
             |i| cmdc_single_arg(i, "FORCE", yes_no_line, ForceVote),
@@ -455,6 +455,7 @@ fn complex_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
                     Ok((
                         i,
                         AddTeam(Box::new(TeamInfo {
+                            owner: String::new(),
                             name,
                             color,
                             grave,

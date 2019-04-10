@@ -16,6 +16,8 @@ const STORE_STATS_QUERY: &str = r"INSERT INTO gameserver_stats
             VALUES
             (:players, :rooms, UNIX_TIMESTAMP())";
 
+const GET_REPLAY_NAME_QUERY: &str = r"SELECT filename FROM achievements WHERE id = :id";
+
 struct ServerStatistics {
     rooms: u32,
     players: u32,
@@ -95,8 +97,19 @@ impl Database {
         Ok(())
     }
 
-    pub fn get_replay_name(&mut self, replay_id: u32) -> Result<String, ()> {
-        Err(())
+    pub fn get_replay_name(&mut self, replay_id: u32) -> Result<Option<String>, Error> {
+        if let Some(pool) = &self.pool {
+            if let Some(row) =
+                pool.first_exec(GET_REPLAY_NAME_QUERY, params! { "id" => replay_id })?
+            {
+                let (filename) = from_row_opt::<(String)>(row)?;
+                Ok(Some(filename))
+            } else {
+                Ok(None)
+            }
+        } else {
+            Err(DriverError::SetupError.into())
+        }
     }
 }
 
