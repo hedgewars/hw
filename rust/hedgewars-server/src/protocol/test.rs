@@ -4,7 +4,7 @@ use proptest::{
     test_runner::{Reason, TestRunner},
 };
 
-use crate::server::coretypes::{GameCfg, HedgehogInfo, TeamInfo};
+use crate::server::coretypes::{GameCfg, HedgehogInfo, ServerVar, ServerVar::*, TeamInfo};
 
 use super::messages::{HWProtocolMessage, HWProtocolMessage::*};
 
@@ -146,6 +146,25 @@ impl Arbitrary for TeamInfo {
     type Strategy = BoxedStrategy<TeamInfo>;
 }
 
+impl Arbitrary for ServerVar {
+    type Parameters = ();
+
+    fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+        (0..2)
+            .no_shrink()
+            .prop_flat_map(|i| {
+                proto_msg_match!(i, def = ServerVar::LatestProto(0),
+                    0 => MOTDNew(Ascii),
+                    1 => MOTDOld(Ascii),
+                    2 => LatestProto(u16)
+                )
+            })
+            .boxed()
+    }
+
+    type Strategy = BoxedStrategy<ServerVar>;
+}
+
 pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
     let res = (0..58).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Malformed,
@@ -174,7 +193,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
             22 => BanNick(Ascii, Ascii, u32),
             23 => BanList(),
             24 => Unban(Ascii),
-            //25 => SetServerVar(ServerVar),
+            25 => SetServerVar(ServerVar),
             26 => GetServerVar(),
             27 => RestartServer(),
             28 => Stats(),

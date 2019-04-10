@@ -118,8 +118,8 @@ pub enum HWServerMessage {
     Nick(String),
     Proto(u16),
     AskPassword(String),
-
     ServerAuth(String),
+
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
     ChatMsg { nick: String, msg: String },
@@ -142,6 +142,7 @@ pub enum HWServerMessage {
     RoundFinished,
 
     ServerMessage(String),
+    ServerVars(Vec<String>),
     Notice(String),
     Warning(String),
     Error(String),
@@ -156,6 +157,16 @@ pub fn server_chat(msg: String) -> HWServerMessage {
     HWServerMessage::ChatMsg {
         nick: "[server]".to_string(),
         msg,
+    }
+}
+
+impl ServerVar {
+    pub fn to_protocol(&self) -> Vec<String> {
+        match self {
+            ServerVar::MOTDNew(s) => vec!["MOTD_NEW".to_string(), s.clone()],
+            ServerVar::MOTDOld(s) => vec!["MOTD_OLD".to_string(), s.clone()],
+            ServerVar::LatestProto(n) => vec!["LATEST_PROTO".to_string(), n.to_string()],
+        }
     }
 }
 
@@ -251,7 +262,7 @@ impl HWProtocolMessage {
             BanNick(nick, reason, time) => msg!("BAN_NICK", nick, reason, time),
             BanList => msg!["BANLIST"],
             Unban(name) => msg!["UNBAN", name],
-            //SetServerVar(ServerVar), ???
+            SetServerVar(var) => construct_message(&["SET_SERVER_VAR"], &var.to_protocol()),
             GetServerVar => msg!["GET_SERVER_VAR"],
             RestartServer => msg!["CMD", "RESTART_SERVER YES"],
             Stats => msg!["CMD", "STATS"],
@@ -351,6 +362,7 @@ impl HWServerMessage {
             RoundFinished => msg!["ROUND_FINISHED"],
             ChatMsg { nick, msg } => msg!["CHAT", nick, msg],
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
+            ServerVars(vars) => construct_message(&["SERVER_VARS"], &vars),
             Notice(msg) => msg!["NOTICE", msg],
             Warning(msg) => msg!["WARNING", msg],
             Error(msg) => msg!["ERROR", msg],

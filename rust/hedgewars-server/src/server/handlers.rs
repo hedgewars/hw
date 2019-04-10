@@ -233,7 +233,7 @@ pub fn handle_client_accept(server: &mut HWServer, client_id: ClientId, response
 
     server.anteroom.add_client(client_id, encode(&salt));
 
-    response.add(HWServerMessage::Connected(utils::PROTOCOL_VERSION).send_self());
+    response.add(HWServerMessage::Connected(utils::SERVER_VERSION).send_self());
 }
 
 pub fn handle_client_loss(server: &mut HWServer, client_id: ClientId, response: &mut Response) {

@@ -47,7 +47,7 @@ pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
         add_flags(&[Flags::InRoom]),
         server.collect_nicks(|(_, c)| c.room_id.is_some()),
     );
-    let server_msg = ServerMessage("\u{1f994} is watching".to_string());
+    let server_msg = ServerMessage(server.get_greetings(client_id).to_string());
 
     let rooms_msg = Rooms(
         server
@@ -138,9 +138,12 @@ fn remove_client_from_room(
         if client.is_master() && !room.is_fixed() {
             client.set_is_master(false);
             response.add(
-                ClientFlags(remove_flags(&[Flags::RoomMaster]), vec![client.nick.clone()])
-                    .send_all()
-                    .in_room(room.id),
+                ClientFlags(
+                    remove_flags(&[Flags::RoomMaster]),
+                    vec![client.nick.clone()],
+                )
+                .send_all()
+                .in_room(room.id),
             );
             room.master_id = None;
         }

@@ -5,7 +5,10 @@ use crate::{
     protocol::messages::{
         add_flags, remove_flags, HWProtocolMessage, HWServerMessage::*, ProtocolFlags as Flags,
     },
-    server::{core::HWServer, coretypes::ClientId},
+    server::{
+        core::HWServer,
+        coretypes::{ClientId, ServerVar},
+    },
     utils::is_name_illegal,
 };
 use log::*;
@@ -106,6 +109,32 @@ pub fn handle(
                 }
             } else {
                 response.add(Warning("No such room.".to_string()).send_self());
+            }
+        }
+        SetServerVar(var) => {
+            if !server.clients[client_id].is_admin() {
+                response.add(Warning("Access denied.".to_string()).send_self());
+            } else {
+                match var {
+                    ServerVar::MOTDNew(msg) => server.greetings.for_latest_protocol = msg,
+                    ServerVar::MOTDOld(msg) => server.greetings.for_old_protocols = msg,
+                    ServerVar::LatestProto(n) => server.latest_protocol = n,
+                }
+            }
+        }
+        GetServerVar => {
+            if !server.clients[client_id].is_admin() {
+                response.add(Warning("Access denied.".to_string()).send_self());
+            } else {
+                let vars: Vec<_> = [
+                    ServerVar::MOTDNew(server.greetings.for_latest_protocol.clone()),
+                    ServerVar::MOTDOld(server.greetings.for_old_protocols.clone()),
+                    ServerVar::LatestProto(server.latest_protocol),
+                ]
+                .iter()
+                .flat_map(|v| v.to_protocol())
+                .collect();
+                response.add(ServerVars(vars).send_self());
             }
         }
         Rnd(v) => {

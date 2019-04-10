@@ -6,6 +6,7 @@ use super::{
 };
 use crate::utils;
 
+use crate::protocol::messages::HWProtocolMessage::Greeting;
 use log::*;
 use slab;
 use std::{borrow::BorrowMut, iter, num::NonZeroU16};
@@ -45,10 +46,26 @@ impl HWAnteroom {
     }
 }
 
+pub struct ServerGreetings {
+    pub for_latest_protocol: String,
+    pub for_old_protocols: String,
+}
+
+impl ServerGreetings {
+    fn new() -> Self {
+        Self {
+            for_latest_protocol: "\u{1f994} is watching".to_string(),
+            for_old_protocols: "\u{1f994} is watching".to_string(),
+        }
+    }
+}
+
 pub struct HWServer {
     pub clients: IndexSlab<HWClient>,
     pub rooms: Slab<HWRoom>,
     pub anteroom: HWAnteroom,
+    pub latest_protocol: u16,
+    pub greetings: ServerGreetings,
 }
 
 impl HWServer {
@@ -59,6 +76,8 @@ impl HWServer {
             clients,
             rooms,
             anteroom: HWAnteroom::new(clients_limit),
+            greetings: ServerGreetings::new(),
+            latest_protocol: 58,
         }
     }
 
@@ -72,6 +91,14 @@ impl HWServer {
 
     pub fn remove_client(&mut self, client_id: ClientId) {
         self.clients.remove(client_id);
+    }
+
+    pub fn get_greetings(&self, client_id: ClientId) -> &str {
+        if self.clients[client_id].protocol_number < self.latest_protocol {
+            &self.greetings.for_old_protocols
+        } else {
+            &self.greetings.for_latest_protocol
+        }
     }
 
     #[inline]

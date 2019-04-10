@@ -15,10 +15,7 @@ use std::time::Duration;
 fn main() {
     env_logger::init();
 
-    info!(
-        "Hedgewars game server, protocol {}",
-        utils::PROTOCOL_VERSION
-    );
+    info!("Hedgewars game server, protocol {}", utils::SERVER_VERSION);
 
     let address = "0.0.0.0:46631".parse().unwrap();
     let listener = TcpListener::bind(&address).unwrap();

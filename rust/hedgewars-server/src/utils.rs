@@ -2,7 +2,7 @@ use base64::encode;
 use mio;
 use std::iter::Iterator;
 
-pub const PROTOCOL_VERSION: u32 = 3;
+pub const SERVER_VERSION: u32 = 3;
 pub const SERVER_TOKEN: mio::Token = mio::Token(1_000_000_000);
 pub const IO_TOKEN: mio::Token = mio::Token(1_000_000_001);
 

@@ -15,7 +15,9 @@ use std::{
 };
 
 use super::messages::{HWProtocolMessage, HWProtocolMessage::*};
-use crate::server::coretypes::{GameCfg, HedgehogInfo, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM};
+use crate::server::coretypes::{
+    GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM,
+};
 
 #[derive(Debug, PartialEq)]
 pub struct HWProtocolError {}
@@ -369,6 +371,27 @@ fn config_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
     Ok((i, Cfg(cfg)))
 }
 
+fn server_var_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    precededc(
+        input,
+        hw_tag("SET_SERVER_VAR\n"),
+        alt((
+            |i| {
+                precededc(i, hw_tag("MOTD_NEW\n"), a_line)
+                    .map(|(i, s)| (i, SetServerVar(ServerVar::MOTDNew(s))))
+            },
+            |i| {
+                precededc(i, hw_tag("MOTD_OLD\n"), a_line)
+                    .map(|(i, s)| (i, SetServerVar(ServerVar::MOTDOld(s))))
+            },
+            |i| {
+                precededc(i, hw_tag("LATEST_PROTO\n"), u16_line)
+                    .map(|(i, n)| (i, SetServerVar(ServerVar::LatestProto(n))))
+            },
+        )),
+    )
+}
+
 fn complex_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
     alt((
         |i| {
@@ -527,6 +550,7 @@ fn message(input: &[u8]) -> HWResult<HWProtocolMessage> {
                     single_arg_message,
                     cmd_message,
                     config_message,
+                    server_var_message,
                     complex_message,
                 )),
                 end_of_message,

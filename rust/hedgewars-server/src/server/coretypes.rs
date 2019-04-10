@@ -7,7 +7,7 @@ pub const MAX_HEDGEHOGS_PER_TEAM: u8 = 8;
 pub enum ServerVar {
     MOTDNew(String),
     MOTDOld(String),
-    LatestProto(u32),
+    LatestProto(u16),
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
