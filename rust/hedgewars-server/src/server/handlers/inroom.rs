@@ -3,7 +3,10 @@ use mio;
 use super::common::rnd_reply;
 use crate::utils::to_engine_msg;
 use crate::{
-    protocol::messages::{server_chat, HWProtocolMessage, HWServerMessage::*},
+    protocol::messages::{
+        add_flags, remove_flags, server_chat, HWProtocolMessage, HWServerMessage::*,
+        ProtocolFlags as Flags,
+    },
     server::{
         core::HWServer,
         coretypes,
@@ -170,16 +173,16 @@ pub fn handle(
         ToggleReady => {
             let flags = if client.is_ready() {
                 room.ready_players_number -= 1;
-                "-r"
+                remove_flags(&[Flags::Ready])
             } else {
                 room.ready_players_number += 1;
-                "+r"
+                add_flags(&[Flags::Ready])
             };
 
             let msg = if client.protocol_number < 38 {
                 LegacyReady(client.is_ready(), vec![client.nick.clone()])
             } else {
-                ClientFlags(flags.to_string(), vec![client.nick.clone()])
+                ClientFlags(flags, vec![client.nick.clone()])
             };
             response.add(msg.send_all().in_room(room.id));
             client.set_is_ready(!client.is_ready());
@@ -505,7 +508,7 @@ pub fn handle(
             if client.is_in_game() {
                 client.set_is_in_game(false);
                 response.add(
-                    ClientFlags("-g".to_string(), vec![client.nick.clone()])
+                    ClientFlags(remove_flags(&[Flags::InGame]), vec![client.nick.clone()])
                         .send_all()
                         .in_room(room.id),
                 );

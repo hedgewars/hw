@@ -2,7 +2,9 @@ use mio;
 
 use super::common::rnd_reply;
 use crate::{
-    protocol::messages::{HWProtocolMessage, HWServerMessage::*},
+    protocol::messages::{
+        add_flags, remove_flags, HWProtocolMessage, HWServerMessage::*, ProtocolFlags as Flags,
+    },
     server::{core::HWServer, coretypes::ClientId},
     utils::is_name_illegal,
 };
@@ -25,7 +27,7 @@ pub fn handle(
                 );
             } else {
                 let flags_msg = ClientFlags(
-                    "+hr".to_string(),
+                    add_flags(&[Flags::RoomMaster, Flags::Ready]),
                     vec![server.clients[client_id].nick.clone()],
                 );
 
@@ -40,7 +42,9 @@ pub fn handle(
                 );
                 response.add(flags_msg.send_self());
 
-                response.add(ClientFlags("+i".to_string(), vec![client.nick.clone()]).send_self());
+                response.add(
+                    ClientFlags(add_flags(&[Flags::InRoom]), vec![client.nick.clone()]).send_self(),
+                );
             };
         }
         Chat(msg) => {
@@ -85,7 +89,7 @@ pub fn handle(
                     server.move_to_room(client_id, room_id);
 
                     response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room_id));
-                    response.add(ClientFlags("+i".to_string(), vec![nick]).send_all());
+                    response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick]).send_all());
                     response.add(RoomJoined(nicks).send_self());
 
                     let room = &server.rooms[room_id];

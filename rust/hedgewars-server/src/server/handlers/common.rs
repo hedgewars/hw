@@ -1,8 +1,10 @@
 use crate::{
     protocol::messages::server_chat,
     protocol::messages::{
+        add_flags, remove_flags,
         HWProtocolMessage::{self, Rnd},
         HWServerMessage::{self, *},
+        ProtocolFlags as Flags,
     },
     server::{
         client::HWClient,
@@ -42,7 +44,7 @@ pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
 
     let everyone_msg = LobbyJoined(vec![server.clients[client_id].nick.clone()]);
     let flags_msg = ClientFlags(
-        "+i".to_string(),
+        add_flags(&[Flags::InRoom]),
         server.collect_nicks(|(_, c)| c.room_id.is_some()),
     );
     let server_msg = ServerMessage("\u{1f994} is watching".to_string());
@@ -136,7 +138,7 @@ fn remove_client_from_room(
         if client.is_master() && !room.is_fixed() {
             client.set_is_master(false);
             response.add(
-                ClientFlags("-h".to_string(), vec![client.nick.clone()])
+                ClientFlags(remove_flags(&[Flags::RoomMaster]), vec![client.nick.clone()])
                     .send_all()
                     .in_room(room.id),
             );
@@ -153,7 +155,7 @@ fn remove_client_from_room(
     };
     response.add(update_msg.send_all().with_protocol(room.protocol_number));
 
-    response.add(ClientFlags("-i".to_string(), vec![client.nick.clone()]).send_all());
+    response.add(ClientFlags(remove_flags(&[Flags::InRoom]), vec![client.nick.clone()]).send_all());
 }
 
 pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Response, msg: &str) {
@@ -180,7 +182,7 @@ pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Resp
                 room.set_unregistered_players_restriction(true);
 
                 response.add(
-                    ClientFlags("+h".to_string(), vec![new_master_nick])
+                    ClientFlags(add_flags(&[Flags::RoomMaster]), vec![new_master_nick])
                         .send_all()
                         .in_room(room.id),
                 );
@@ -248,7 +250,11 @@ pub fn get_room_flags(
     let room = &server.rooms[room_id];
     if let Some(id) = room.master_id {
         response.add(
-            ClientFlags("+h".to_string(), vec![server.clients[id].nick.clone()]).send(to_client),
+            ClientFlags(
+                add_flags(&[Flags::RoomMaster]),
+                vec![server.clients[id].nick.clone()],
+            )
+            .send(to_client),
         );
     }
     let nicks: Vec<_> = server
@@ -258,7 +264,7 @@ pub fn get_room_flags(
         .map(|(_, c)| c.nick.clone())
         .collect();
     if !nicks.is_empty() {
-        response.add(ClientFlags("+r".to_string(), nicks).send(to_client));
+        response.add(ClientFlags(add_flags(&[Flags::Ready]), nicks).send(to_client));
     }
 }
 
@@ -409,7 +415,7 @@ pub fn start_game(server: &mut HWServer, room_id: RoomId, response: &mut Respons
         }
         response.add(RunGame.send_all().in_room(room.id));
         response.add(
-            ClientFlags("+g".to_string(), room_nicks)
+            ClientFlags(add_flags(&[Flags::InGame]), room_nicks)
                 .send_all()
                 .in_room(room.id),
         );
@@ -469,7 +475,7 @@ pub fn end_game(server: &mut HWServer, room_id: RoomId, response: &mut Response)
         let msg = if room.protocol_number < 38 {
             LegacyReady(false, nicks)
         } else {
-            ClientFlags("-r".to_string(), nicks)
+            ClientFlags(remove_flags(&[Flags::Ready]), nicks)
         };
         response.add(msg.send_all().in_room(room_id));
     }

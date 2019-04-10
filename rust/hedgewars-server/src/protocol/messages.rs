@@ -67,6 +67,49 @@ pub enum HWProtocolMessage {
 }
 
 #[derive(Debug)]
+pub enum ProtocolFlags {
+    InRoom,
+    RoomMaster,
+    Ready,
+    InGame,
+    Authenticated,
+    Admin,
+    Contributor,
+}
+
+impl ProtocolFlags {
+    #[inline]
+    fn flag_char(&self) -> char {
+        match self {
+            ProtocolFlags::InRoom => 'i',
+            ProtocolFlags::RoomMaster => 'h',
+            ProtocolFlags::Ready => 'r',
+            ProtocolFlags::InGame => 'g',
+            ProtocolFlags::Authenticated => 'u',
+            ProtocolFlags::Admin => 'a',
+            ProtocolFlags::Contributor => 'c',
+        }
+    }
+
+    #[inline]
+    fn format(prefix: char, flags: &[ProtocolFlags]) -> String {
+        once(prefix)
+            .chain(flags.iter().map(|f| f.flag_char()))
+            .collect()
+    }
+}
+
+#[inline]
+pub fn add_flags(flags: &[ProtocolFlags]) -> String {
+    ProtocolFlags::format('+', flags)
+}
+
+#[inline]
+pub fn remove_flags(flags: &[ProtocolFlags]) -> String {
+    ProtocolFlags::format('-', flags)
+}
+
+#[derive(Debug)]
 pub enum HWServerMessage {
     Ping,
     Pong,
