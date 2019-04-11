@@ -2,7 +2,7 @@ use super::coretypes::ClientId;
 use bitflags::*;
 
 bitflags! {
-    pub struct ClientFlags: u8 {
+    pub struct ClientFlags: u16 {
         const IS_ADMIN = 0b0000_0001;
         const IS_MASTER = 0b0000_0010;
         const IS_READY = 0b0000_0100;
@@ -11,6 +11,7 @@ bitflags! {
         const IS_CHECKER = 0b0010_0000;
         const IS_CONTRIBUTOR = 0b0100_0000;
         const HAS_SUPER_POWER = 0b1000_0000;
+        const IS_REGISTERED = 0b0001_0000_0000;
 
         const NONE = 0b0000_0000;
         const DEFAULT = Self::NONE.bits;
@@ -74,6 +75,9 @@ impl HWClient {
     pub fn has_super_power(&self) -> bool {
         self.contains(ClientFlags::HAS_SUPER_POWER)
     }
+    pub fn is_registered(&self) -> bool {
+        self.contains(ClientFlags::IS_REGISTERED)
+    }
 
     pub fn set_is_admin(&mut self, value: bool) {
         self.set(ClientFlags::IS_ADMIN, value)
@@ -98,5 +102,8 @@ impl HWClient {
     }
     pub fn set_has_super_power(&mut self, value: bool) {
         self.set(ClientFlags::HAS_SUPER_POWER, value)
+    }
+    pub fn set_is_registered(&mut self, value: bool) {
+        self.set(ClientFlags::IS_REGISTERED, value)
     }
 }

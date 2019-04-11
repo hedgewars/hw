@@ -337,6 +337,7 @@ pub fn handle_io_result(
                 if let Some(client) = server.anteroom.remove_client(client_id) {
                     server.add_client(client_id, client);
                     let client = &mut server.clients[client_id];
+                    client.set_is_registered(info.is_registered);
                     client.set_is_admin(info.is_admin);
                     client.set_is_contributor(info.is_admin)
                 }

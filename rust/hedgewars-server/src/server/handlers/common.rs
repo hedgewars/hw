@@ -39,15 +39,37 @@ pub fn rnd_reply(options: &[String]) -> HWServerMessage {
 pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
     let client_id = response.client_id();
 
-    let lobby_nicks: Vec<_> = server.collect_nicks(|(_, c)| c.room_id.is_none());
+    let client = &server.clients[client_id];
+    let nick = vec![client.nick.clone()];
+    let mut flags = vec![];
+    if client.is_registered() {
+        flags.push(Flags::Registered)
+    }
+    if client.is_admin() {
+        flags.push(Flags::Admin)
+    }
+    if client.is_contributor() {
+        flags.push(Flags::Contributor)
+    }
 
-    let joined_msg = LobbyJoined(lobby_nicks);
+    let all_nicks: Vec<_> = server.collect_nicks(|_| true);
 
-    let everyone_msg = LobbyJoined(vec![server.clients[client_id].nick.clone()]);
-    let flags_msg = ClientFlags(
-        add_flags(&[Flags::InRoom]),
-        server.collect_nicks(|(_, c)| c.room_id.is_some()),
-    );
+    let mut flag_selectors = [
+        (
+            Flags::Registered,
+            server.collect_nicks(|(_, c)| c.is_registered()),
+        ),
+        (Flags::Admin, server.collect_nicks(|(_, c)| c.is_admin())),
+        (
+            Flags::Contributor,
+            server.collect_nicks(|(_, c)| c.is_contributor()),
+        ),
+        (
+            Flags::InRoom,
+            server.collect_nicks(|(_, c)| c.room_id.is_some()),
+        ),
+    ];
+
     let server_msg = ServerMessage(server.get_greetings(client_id).to_string());
 
     let rooms_msg = Rooms(
@@ -58,9 +80,18 @@ pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
             .collect(),
     );
 
-    response.add(everyone_msg.send_all().but_self());
-    response.add(joined_msg.send_self());
-    response.add(flags_msg.send_self());
+    response.add(LobbyJoined(nick).send_all().but_self());
+    response.add(
+        ClientFlags(add_flags(&flags), all_nicks.clone())
+            .send_all()
+            .but_self(),
+    );
+
+    response.add(LobbyJoined(all_nicks).send_self());
+    for (flag, nicks) in &mut flag_selectors {
+        response.add(ClientFlags(add_flags(&[*flag]), replace(nicks, vec![])).send_self());
+    }
+
     response.add(server_msg.send_self());
     response.add(rooms_msg.send_self());
 }

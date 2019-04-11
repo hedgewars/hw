@@ -66,13 +66,13 @@ pub enum HWProtocolMessage {
     Empty,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub enum ProtocolFlags {
     InRoom,
     RoomMaster,
     Ready,
     InGame,
-    Authenticated,
+    Registered,
     Admin,
     Contributor,
 }
@@ -85,7 +85,7 @@ impl ProtocolFlags {
             ProtocolFlags::RoomMaster => 'h',
             ProtocolFlags::Ready => 'r',
             ProtocolFlags::InGame => 'g',
-            ProtocolFlags::Authenticated => 'u',
+            ProtocolFlags::Registered => 'u',
             ProtocolFlags::Admin => 'a',
             ProtocolFlags::Contributor => 'c',
         }
