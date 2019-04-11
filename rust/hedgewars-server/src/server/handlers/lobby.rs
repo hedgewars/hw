@@ -3,7 +3,8 @@ use mio;
 use super::common::rnd_reply;
 use crate::{
     protocol::messages::{
-        add_flags, remove_flags, HWProtocolMessage, HWServerMessage::*, ProtocolFlags as Flags,
+        add_flags, remove_flags, server_chat, HWProtocolMessage, HWServerMessage::*,
+        ProtocolFlags as Flags,
     },
     server::{
         client::HWClient,
@@ -13,6 +14,7 @@ use crate::{
     utils::is_name_illegal,
 };
 use log::*;
+use std::{collections::HashSet, convert::identity};
 
 pub fn handle(
     server: &mut HWServer,
@@ -129,6 +131,31 @@ pub fn handle(
         }
         Rnd(v) => {
             response.add(rnd_reply(&v).send_self());
+        }
+        Stats => {
+            let mut protocols: HashSet<_> = server
+                .clients
+                .iter()
+                .map(|(_, c)| c.protocol_number)
+                .chain(server.rooms.iter().map(|(_, r)| r.protocol_number))
+                .collect();
+            let mut protocols: Vec<_> = protocols.drain().collect();
+            protocols.sort();
+
+            let mut html = Vec::with_capacity(protocols.len() + 2);
+
+            html.push("<table>".to_string());
+            for protocol in protocols {
+                html.push(format!(
+                    "<tr><td>{}</td><td>{}</td><td>{}</td></tr>",
+                    super::utils::protocol_version_string(protocol),
+                    server.protocol_clients(protocol).count(),
+                    server.protocol_rooms(protocol).count()
+                ));
+            }
+            html.push("</table>".to_string());
+
+            response.add(Warning(html.join("")).send_self());
         }
         List => warn!("Deprecated LIST message received"),
         _ => warn!("Incorrect command in lobby state"),

@@ -166,11 +166,11 @@ fn get_recipients(
         Destination::ToId(id) => vec![id],
         Destination::ToIds(ids) => ids,
         Destination::ToAll { group, skip_self } => {
-            let mut ids = match group {
-                DestinationGroup::All => server.clients.iter().map(|(id, _)| id).collect(),
-                DestinationGroup::Lobby => server.collect_lobby_clients(),
-                DestinationGroup::Protocol(proto) => server.protocol_clients(proto),
-                DestinationGroup::Room(id) => server.collect_room_clients(id),
+            let mut ids: Vec<_> = match group {
+                DestinationGroup::All => server.all_clients().collect(),
+                DestinationGroup::Lobby => server.lobby_clients().collect(),
+                DestinationGroup::Protocol(proto) => server.protocol_clients(proto).collect(),
+                DestinationGroup::Room(id) => server.room_clients(id).collect(),
             };
 
             if skip_self {

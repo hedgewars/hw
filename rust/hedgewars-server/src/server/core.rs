@@ -158,11 +158,29 @@ impl HWServer {
             .find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
     }
 
+    pub fn all_clients(&self) -> impl Iterator<Item = ClientId> + '_ {
+        self.clients.iter().map(|(id, _)| id)
+    }
+
+    pub fn filter_clients<'a, F>(&'a self, f: F) -> impl Iterator<Item = ClientId> + 'a
+    where
+        F: Fn(&(usize, &HWClient)) -> bool + 'a,
+    {
+        self.clients.iter().filter(f).map(|(_, c)| c.id)
+    }
+
+    pub fn filter_rooms<'a, F>(&'a self, f: F) -> impl Iterator<Item = RoomId> + 'a
+    where
+        F: Fn(&(usize, &HWRoom)) -> bool + 'a,
+    {
+        self.rooms.iter().filter(f).map(|(_, c)| c.id)
+    }
+
     pub fn collect_clients<F>(&self, f: F) -> Vec<ClientId>
     where
         F: Fn(&(usize, &HWClient)) -> bool,
     {
-        self.clients.iter().filter(f).map(|(_, c)| c.id).collect()
+        self.filter_clients(f).collect()
     }
 
     pub fn collect_nicks<F>(&self, f: F) -> Vec<String>
@@ -176,16 +194,20 @@ impl HWServer {
             .collect()
     }
 
-    pub fn collect_lobby_clients(&self) -> Vec<ClientId> {
-        self.collect_clients(|(_, c)| c.room_id == None)
+    pub fn lobby_clients(&self) -> impl Iterator<Item = ClientId> + '_ {
+        self.filter_clients(|(_, c)| c.room_id == None)
     }
 
-    pub fn collect_room_clients(&self, room_id: RoomId) -> Vec<ClientId> {
-        self.collect_clients(|(_, c)| c.room_id == Some(room_id))
+    pub fn room_clients(&self, room_id: RoomId) -> impl Iterator<Item = ClientId> + '_ {
+        self.filter_clients(move |(_, c)| c.room_id == Some(room_id))
     }
 
-    pub fn protocol_clients(&self, protocol: u16) -> Vec<ClientId> {
-        self.collect_clients(|(_, c)| c.protocol_number == protocol)
+    pub fn protocol_clients(&self, protocol: u16) -> impl Iterator<Item = ClientId> + '_ {
+        self.filter_clients(move |(_, c)| c.protocol_number == protocol)
+    }
+
+    pub fn protocol_rooms(&self, protocol: u16) -> impl Iterator<Item = RoomId> + '_ {
+        self.filter_rooms(move |(_, r)| r.protocol_number == protocol)
     }
 
     pub fn other_clients_in_room(&self, self_id: ClientId) -> Vec<ClientId> {

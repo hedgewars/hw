@@ -227,7 +227,8 @@ pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Resp
         remove_client_from_room(client, room, response, msg);
 
         if !room.is_fixed() && room.master_id == None {
-            if let Some(new_master_id) = server.collect_room_clients(room_id).first().cloned() {
+            let new_master_id = server.room_clients(room_id).next();
+            if let Some(new_master_id) = new_master_id {
                 let new_master_nick = server.clients[new_master_id].nick.clone();
                 let room = &mut server.rooms[room_id];
                 room.master_id = Some(new_master_id);

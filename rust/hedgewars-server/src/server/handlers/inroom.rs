@@ -446,7 +446,7 @@ pub fn handle(
             match error {
                 None => {
                     let msg = voting_description(&kind);
-                    let voting = Voting::new(kind, server.collect_room_clients(client_id));
+                    let voting = Voting::new(kind, server.room_clients(client_id).collect());
                     let room = &mut server.rooms[room_id];
                     room.voting = Some(voting);
                     response.add(server_chat(msg).send_all().in_room(room_id));
