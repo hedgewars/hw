@@ -605,7 +605,7 @@ pub fn handle(
                     Some((_, id)) if id != Some(room_id) => response
                         .add(Warning("The player is not in your room.".to_string()).send_self()),
                     Some((id, _)) => {
-                        super::common::change_master(server, client_id, id, room_id, response);
+                        super::common::change_master(server, room_id, id, response);
                     }
                 }
             }

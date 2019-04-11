@@ -164,27 +164,30 @@ fn remove_client_from_room(
 
 pub fn change_master(
     server: &mut HWServer,
-    from_id: ClientId,
-    to_id: ClientId,
     room_id: RoomId,
+    new_master_id: ClientId,
     response: &mut Response,
 ) {
-    server.clients[from_id].set_is_master(false);
-    server.clients[to_id].set_is_master(true);
-    server.rooms[room_id].master_id = Some(to_id);
+    let room = &mut server.rooms[room_id];
+    if let Some(master_id) = room.master_id {
+        server.clients[master_id].set_is_master(false);
+        response.add(
+            ClientFlags(
+                remove_flags(&[Flags::RoomMaster]),
+                vec![server.clients[master_id].nick.clone()],
+            )
+            .send_all()
+            .in_room(room_id),
+        )
+    }
+
+    room.master_id = Some(new_master_id);
+    server.clients[new_master_id].set_is_master(true);
 
     response.add(
         ClientFlags(
             add_flags(&[Flags::RoomMaster]),
-            vec![server.clients[to_id].nick.clone()],
-        )
-        .send_all()
-        .in_room(room_id),
-    );
-    response.add(
-        ClientFlags(
-            remove_flags(&[Flags::RoomMaster]),
-            vec![server.clients[from_id].nick.clone()],
+            vec![server.clients[new_master_id].nick.clone()],
         )
         .send_all()
         .in_room(room_id),
