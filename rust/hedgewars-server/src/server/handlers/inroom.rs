@@ -11,7 +11,7 @@ use crate::{
         core::HWServer,
         coretypes,
         coretypes::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
-        room::{HWRoom, RoomFlags},
+        room::{HWRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
     },
     utils::is_name_illegal,
 };
@@ -133,6 +133,18 @@ pub fn handle(
                 .in_room(room_id),
             );
         }
+        TeamChat(msg) => {
+            let room = &server.rooms[room_id];
+            if let Some(ref info) = room.game_info {
+                if let Some(clan_color) = room.find_team_color(client_id) {
+                    let client = &server.clients[client_id];
+                    let engine_msg =
+                        to_engine_msg(format!("b{}]{}\x20\x20", client.nick, msg).bytes());
+                    let team = room.clan_team_owners(clan_color).collect();
+                    response.add(ForwardEngineMessage(vec![engine_msg]).send_many(team))
+                }
+            }
+        }
         Fix => {
             if client.is_admin() {
                 room.set_is_fixed(true);
@@ -149,6 +161,16 @@ pub fn handle(
         Greeting(text) => {
             if client.is_admin() || client.is_master() && !room.is_fixed() {
                 room.greeting = text;
+            }
+        }
+        MaxTeams(count) => {
+            if !client.is_master() {
+                response.add(Warning("You're not the room master!".to_string()).send_self());
+            } else if count < 2 || count > MAX_TEAMS_IN_ROOM {
+                response
+                    .add(Warning("/maxteams: specify number from 2 to 8".to_string()).send_self());
+            } else {
+                server.rooms[room_id].max_teams = count;
             }
         }
         RoomName(new_name) => {
@@ -192,7 +214,7 @@ pub fn handle(
             }
         }
         AddTeam(mut info) => {
-            if room.teams.len() >= room.team_limit as usize {
+            if room.teams.len() >= room.max_teams as usize {
                 response.add(Warning("Too many teams!".to_string()).send_self());
             } else if room.addable_hedgehogs() == 0 {
                 response.add(Warning("Too many hedgehogs!".to_string()).send_self());

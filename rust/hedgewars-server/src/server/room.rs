@@ -10,8 +10,8 @@ use serde_derive::{Deserialize, Serialize};
 use serde_yaml;
 use std::{collections::HashMap, iter};
 
-const MAX_TEAMS_IN_ROOM: u8 = 8;
-const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_HEDGEHOGS_PER_TEAM * MAX_HEDGEHOGS_PER_TEAM;
+pub const MAX_TEAMS_IN_ROOM: u8 = 8;
+pub const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_HEDGEHOGS_PER_TEAM * MAX_HEDGEHOGS_PER_TEAM;
 
 fn client_teams_impl(
     teams: &[(ClientId, TeamInfo)],
@@ -77,7 +77,7 @@ pub struct HWRoom {
 
     pub players_number: u8,
     pub default_hedgehog_number: u8,
-    pub team_limit: u8,
+    pub max_teams: u8,
     pub ready_players_number: u8,
     pub teams: Vec<(ClientId, TeamInfo)>,
     config: RoomConfig,
@@ -98,7 +98,7 @@ impl HWRoom {
             protocol_number: 0,
             players_number: 0,
             default_hedgehog_number: 4,
-            team_limit: MAX_TEAMS_IN_ROOM,
+            max_teams: MAX_TEAMS_IN_ROOM,
             ready_players_number: 0,
             teams: Vec::new(),
             config: RoomConfig::new(),
@@ -195,6 +195,13 @@ impl HWRoom {
             .filter(move |(_, (id, _))| *id == client_id)
             .map(|(i, _)| i as u8)
             .collect()
+    }
+
+    pub fn clan_team_owners(&self, color: u8) -> impl Iterator<Item = ClientId> + '_ {
+        self.teams
+            .iter()
+            .filter(move |(_, t)| t.color == color)
+            .map(|(id, _)| *id)
     }
 
     pub fn find_team_owner(&self, team_name: &str) -> Option<(ClientId, &str)> {

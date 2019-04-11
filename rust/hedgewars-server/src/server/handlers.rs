@@ -2,7 +2,7 @@ use mio;
 use std::{collections::HashMap, io, io::Write};
 
 use super::{
-    actions::{Destination, DestinationRoom},
+    actions::{Destination, DestinationGroup},
     core::HWServer,
     coretypes::{ClientId, Replay, RoomId},
     room::RoomSave,
@@ -130,7 +130,7 @@ impl Response {
     ) -> impl Iterator<Item = (Vec<ClientId>, HWServerMessage)> + 'a {
         let client_id = self.client_id;
         self.messages.drain(..).map(move |m| {
-            let ids = get_recipients(server, client_id, &m.destination);
+            let ids = get_recipients(server, client_id, m.destination);
             (ids, m.message)
         })
     }
@@ -159,34 +159,29 @@ impl Extend<PendingMessage> for Response {
 fn get_recipients(
     server: &HWServer,
     client_id: ClientId,
-    destination: &Destination,
+    destination: Destination,
 ) -> Vec<ClientId> {
-    let mut ids = match *destination {
+    match destination {
         Destination::ToSelf => vec![client_id],
         Destination::ToId(id) => vec![id],
-        Destination::ToAll {
-            room_id: DestinationRoom::Lobby,
-            ..
-        } => server.collect_lobby_clients(),
-        Destination::ToAll {
-            room_id: DestinationRoom::Room(id),
-            ..
-        } => server.collect_room_clients(id),
-        Destination::ToAll {
-            protocol: Some(proto),
-            ..
-        } => server.protocol_clients(proto),
-        Destination::ToAll { .. } => server.clients.iter().map(|(id, _)| id).collect::<Vec<_>>(),
-    };
-    if let Destination::ToAll {
-        skip_self: true, ..
-    } = destination
-    {
-        if let Some(index) = ids.iter().position(|id| *id == client_id) {
-            ids.remove(index);
+        Destination::ToIds(ids) => ids,
+        Destination::ToAll { group, skip_self } => {
+            let mut ids = match group {
+                DestinationGroup::All => server.clients.iter().map(|(id, _)| id).collect(),
+                DestinationGroup::Lobby => server.collect_lobby_clients(),
+                DestinationGroup::Protocol(proto) => server.protocol_clients(proto),
+                DestinationGroup::Room(id) => server.collect_room_clients(id),
+            };
+
+            if skip_self {
+                if let Some(index) = ids.iter().position(|id| *id == client_id) {
+                    ids.remove(index);
+                }
+            }
+
+            ids
         }
     }
-    ids
 }
 
 pub fn handle(
