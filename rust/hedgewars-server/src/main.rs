@@ -1,6 +1,10 @@
+#![feature(self_struct_ctor)] 
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
 
+extern crate getopts;
+use getopts::Options;
+use std::env;
 use log::*;
 use mio::net::*;
 use mio::*;
@@ -15,9 +19,32 @@ use std::time::Duration;
 fn main() {
     env_logger::init();
 
+    let args: Vec<String> = env::args().collect();
+    let mut opts = Options::new();
+
+    opts.optopt("p", "port", "port - defaults to 46631", "PORT");
+    opts.optflag("h", "help", "help");
+    let matches = match opts.parse(&args[1..]) {
+        Ok(m) => { m }
+        Err(f) => { panic!(f.to_string()) }
+    };
+    if matches.opt_present("h") {
+        println!("-p/--port - defaults to 46631");
+        return;
+    }
     info!("Hedgewars game server, protocol {}", utils::SERVER_VERSION);
 
-    let address = "0.0.0.0:46631".parse().unwrap();
+    let address;
+    if matches.opt_present("p") {
+        match matches.opt_str("p") {
+            Some(x) => address = format!("0.0.0.0:{}", x).parse().unwrap(),
+            None => address = "0.0.0.0:46631".parse().unwrap(),
+        }
+    }
+    else {
+        address = "0.0.0.0:46631".parse().unwrap();
+    }
+
     let listener = TcpListener::bind(&address).unwrap();
 
     let poll = Poll::new().unwrap();
