@@ -239,7 +239,23 @@ pub fn enter_room(
     let nicks = server.collect_nicks(|(_, c)| c.room_id == Some(room_id));
     response.add(RoomJoined(nicks).send_self());
 
+    get_room_teams(server, room_id, client_id, response);
+
     let room = &server.rooms[room_id];
+    get_room_config(room, client_id, response);
+
+    let mut flag_selectors = [
+        (
+            Flags::RoomMaster,
+            server.collect_nicks(|(_, c)| c.is_master()),
+        ),
+        (Flags::Ready, server.collect_nicks(|(_, c)| c.is_ready())),
+        (Flags::InGame, server.collect_nicks(|(_, c)| c.is_in_game())),
+    ];
+
+    for (flag, nicks) in &mut flag_selectors {
+        response.add(ClientFlags(add_flags(&[*flag]), replace(nicks, vec![])).send_self());
+    }
 
     if !room.greeting.is_empty() {
         response.add(
