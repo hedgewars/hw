@@ -146,8 +146,8 @@ fn remove_client_from_room(
     response: &mut Response,
     msg: &str,
 ) {
-    if room.players_number > 1 || room.is_fixed() {
-        room.players_number -= 1;
+    room.players_number -= 1;
+    if room.players_number > 0 || room.is_fixed() {
         if client.is_ready() && room.ready_players_number > 0 {
             room.ready_players_number -= 1;
         }
@@ -260,27 +260,31 @@ pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Resp
 
         remove_client_from_room(client, room, response, msg);
 
-        if !room.is_fixed() && room.master_id == None {
-            let new_master_id = server.room_clients(room_id).next();
-            if let Some(new_master_id) = new_master_id {
-                let new_master_nick = server.clients[new_master_id].nick.clone();
-                let room = &mut server.rooms[room_id];
-                room.master_id = Some(new_master_id);
-                server.clients[new_master_id].set_is_master(true);
+        if !room.is_fixed() {
+            if room.players_number == 0 {
+                server.rooms.remove(room_id);
+            } else if room.master_id == None {
+                let new_master_id = server.room_clients(room_id).next();
+                if let Some(new_master_id) = new_master_id {
+                    let new_master_nick = server.clients[new_master_id].nick.clone();
+                    let room = &mut server.rooms[room_id];
+                    room.master_id = Some(new_master_id);
+                    server.clients[new_master_id].set_is_master(true);
 
-                if room.protocol_number < 42 {
-                    room.name = new_master_nick.clone();
+                    if room.protocol_number < 42 {
+                        room.name = new_master_nick.clone();
+                    }
+
+                    room.set_join_restriction(false);
+                    room.set_team_add_restriction(false);
+                    room.set_unregistered_players_restriction(true);
+
+                    response.add(
+                        ClientFlags(add_flags(&[Flags::RoomMaster]), vec![new_master_nick])
+                            .send_all()
+                            .in_room(room.id),
+                    );
                 }
-
-                room.set_join_restriction(false);
-                room.set_team_add_restriction(false);
-                room.set_unregistered_players_restriction(true);
-
-                response.add(
-                    ClientFlags(add_flags(&[Flags::RoomMaster]), vec![new_master_nick])
-                        .send_all()
-                        .in_room(room.id),
-                );
             }
         }
     }
