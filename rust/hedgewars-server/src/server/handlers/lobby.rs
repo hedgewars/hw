@@ -46,6 +46,7 @@ pub fn handle(
                         .send_all()
                         .with_protocol(room.protocol_number),
                 );
+                response.add(RoomJoined(vec![client.nick.clone()]).send_self());
                 response.add(flags_msg.send_self());
 
                 response.add(
