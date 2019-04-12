@@ -1,4 +1,3 @@
-#![feature(self_struct_ctor)] 
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
 
