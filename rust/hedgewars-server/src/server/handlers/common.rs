@@ -76,6 +76,7 @@ pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
         server
             .rooms
             .iter()
+            .filter(|(_, r)| r.protocol_number == client.protocol_number)
             .flat_map(|(_, r)| r.info(r.master_id.map(|id| &server.clients[id])))
             .collect(),
     );
