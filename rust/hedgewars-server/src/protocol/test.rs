@@ -129,6 +129,7 @@ impl Arbitrary for TeamInfo {
                     hog(8),
                 ];
                 TeamInfo {
+                    owner: String::new(),
                     name,
                     color,
                     grave,
@@ -150,7 +151,7 @@ impl Arbitrary for ServerVar {
     type Parameters = ();
 
     fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
-        (0..2)
+        (0..=2)
             .no_shrink()
             .prop_flat_map(|i| {
                 proto_msg_match!(i, def = ServerVar::LatestProto(0),
@@ -166,14 +167,13 @@ impl Arbitrary for ServerVar {
 }
 
 pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
-    let res = (0..58).no_shrink().prop_flat_map(|i| {
-        proto_msg_match!(i, def = Malformed,
+    let res = (0..=55).no_shrink().prop_flat_map(|i| {
+        proto_msg_match!(i, def = Ping,
             0 => Ping(),
             1 => Pong(),
             2 => Quit(Option<Ascii>),
-            //3 => Cmd
             4 => Global(Ascii),
-            5 => Watch(Ascii),
+            5 => Watch(u32),
             6 => ToggleServerRegisteredOnly(),
             7 => SuperPower(),
             8 => Info(Ascii),
@@ -223,9 +223,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
             52 => Save(Ascii, Ascii),
             53 => Delete(Ascii),
             54 => SaveRoom(Ascii),
-            55 => LoadRoom(Ascii),
-            56 => Malformed(),
-            57 => Empty()
+            55 => LoadRoom(Ascii)
         )
     });
     res.boxed()

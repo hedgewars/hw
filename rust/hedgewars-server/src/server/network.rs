@@ -155,7 +155,6 @@ impl NetworkClient {
                 Err(error) => break Err(error),
             }
         };
-        decoder.sweep();
         result
     }
 

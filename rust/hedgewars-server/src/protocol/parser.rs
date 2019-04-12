@@ -531,18 +531,15 @@ fn complex_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
     ))(input)
 }
 
-fn empty_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
-    let (i, _) = alt((end_of_message, eol))(input)?;
-    Ok((i, Empty))
+pub fn malformed_message(input: &[u8]) -> HWResult<()> {
+    let (i, _) = terminatedc(input, |i| take_until(&b"\n\n"[..])(i), end_of_message)?;
+    Ok((i, ()))
 }
 
-fn malformed_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
-    let (i, _) = separated_listc(input, eol, a_line)?;
-    Ok((i, Malformed))
-}
-
-fn message(input: &[u8]) -> HWResult<HWProtocolMessage> {
-    alt((
+pub fn message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    precededc(
+        input,
+        |i| take_while(|c| c == b'\n')(i),
         |i| {
             terminatedc(
                 i,
@@ -557,18 +554,17 @@ fn message(input: &[u8]) -> HWResult<HWProtocolMessage> {
                 end_of_message,
             )
         },
-        |i| terminatedc(i, malformed_message, end_of_message),
-        empty_message,
-    ))(input)
+    )
 }
 
-pub fn extract_messages<'a>(input: &'a [u8]) -> HWResult<Vec<HWProtocolMessage>> {
-    many0(|i: &'a [u8]| complete!(i, message))(input)
+fn extract_messages(input: &[u8]) -> HWResult<Vec<HWProtocolMessage>> {
+    many0(message)(input)
 }
 
 #[cfg(test)]
 mod test {
     use super::{extract_messages, message};
+    use crate::protocol::parser::HWProtocolError;
     use crate::protocol::{messages::HWProtocolMessage::*, test::gen_proto_msg};
     use proptest::{proptest, proptest_helper};
 
@@ -596,8 +592,8 @@ mod test {
         );
         assert_eq!(message(b"QUIT\n\n"), Ok((&b""[..], Quit(None))));
         assert_eq!(
-            message(b"CMD\nwatch demo\n\n"),
-            Ok((&b""[..], Watch("demo".to_string())))
+            message(b"CMD\nwatch 49471\n\n"),
+            Ok((&b""[..], Watch(49471)))
         );
         assert_eq!(
             message(b"BAN\nme\nbad\n77\n\n"),
@@ -617,25 +613,17 @@ mod test {
         );
 
         assert_eq!(
-            extract_messages(b"QUIT\n1\n2\n\n"),
-            Ok((&b""[..], vec![Malformed]))
+            message(b"QUIT\n1\n2\n\n"),
+            Err(nom::Err::Error(HWProtocolError::new()))
         );
 
         assert_eq!(
-            extract_messages(b"PING\n\nPING\n\nP"),
-            Ok((&b"P"[..], vec![Ping, Ping]))
-        );
-        assert_eq!(
-            extract_messages(b"SING\n\nPING\n\n"),
-            Ok((&b""[..], vec![Malformed, Ping]))
-        );
-        assert_eq!(
             extract_messages(b"\n\n\n\nPING\n\n"),
-            Ok((&b""[..], vec![Empty, Empty, Ping]))
+            Ok((&b""[..], vec![Ping]))
         );
         assert_eq!(
             extract_messages(b"\n\n\nPING\n\n"),
-            Ok((&b""[..], vec![Empty, Empty, Ping]))
+            Ok((&b""[..], vec![Ping]))
         );
     }
 }

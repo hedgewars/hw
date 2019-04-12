@@ -62,8 +62,6 @@ pub enum HWProtocolMessage {
     Delete(String),
     SaveRoom(String),
     LoadRoom(String),
-    Malformed,
-    Empty,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -341,8 +339,6 @@ impl HWProtocolMessage {
             Delete(name) => msg!["CMD", format!("DELETE {}", name)],
             SaveRoom(name) => msg!["CMD", format!("SAVEROOM {}", name)],
             LoadRoom(name) => msg!["CMD", format!("LOADROOM {}", name)],
-            Malformed => msg!["A", "QUICK", "BROWN", "HOG", "JUMPS", "OVER", "THE", "LAZY", "DOG"],
-            Empty => msg![""],
             _ => panic!("Protocol message not yet implemented"),
         }
     }

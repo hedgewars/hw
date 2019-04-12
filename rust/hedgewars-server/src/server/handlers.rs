@@ -192,8 +192,6 @@ pub fn handle(
 ) {
     match message {
         HWProtocolMessage::Ping => response.add(Pong.send_self()),
-        HWProtocolMessage::Malformed => warn!("Malformed/unknown message"),
-        HWProtocolMessage::Empty => warn!("Empty message"),
         _ => {
             if server.anteroom.clients.contains(client_id) {
                 match loggingin::handle(server, client_id, response, message) {
