@@ -536,7 +536,7 @@ pub fn start_game(server: &mut HWServer, room_id: RoomId, response: &mut Respons
         room.start_round();
         for id in room_clients {
             let c = &mut server.clients[id];
-            c.set_is_in_game(false);
+            c.set_is_in_game(true);
             c.team_indices = room.client_team_indices(c.id);
         }
         response.add(RunGame.send_all().in_room(room.id));
