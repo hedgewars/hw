@@ -237,10 +237,11 @@ pub fn handle(
 
                             let info = vec![
                                 client.nick.clone(),
+                                "[]".to_string(),
                                 utils::protocol_version_string(client.protocol_number).to_string(),
                                 room_info,
                             ];
-                            Info(info);
+                            response.add(Info(info).send_self())
                         } else {
                             response
                                 .add(server_chat("Player is not online.".to_string()).send_self())
