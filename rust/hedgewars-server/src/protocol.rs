@@ -11,7 +11,6 @@ pub mod test;
 
 pub struct ProtocolDecoder {
     buf: netbuf::Buf,
-    consumed: usize,
     is_recovering: bool,
 }
 
@@ -19,7 +18,6 @@ impl ProtocolDecoder {
     pub fn new() -> ProtocolDecoder {
         ProtocolDecoder {
             buf: netbuf::Buf::new(),
-            consumed: 0,
             is_recovering: false,
         }
     }
@@ -48,19 +46,16 @@ impl ProtocolDecoder {
 
     pub fn extract_messages(&mut self) -> Vec<messages::HWProtocolMessage> {
         let mut messages = vec![];
-        let mut consumed = 0;
         if !self.is_recovering {
             loop {
-                match parser::message(&self.buf[consumed..]) {
+                match parser::message(&self.buf[..]) {
                     Ok((tail, message)) => {
                         messages.push(message);
-                        consumed += self.buf.len() - tail.len();
+                        self.buf.consume(self.buf.len() - tail.len());
                     }
                     Err(nom::Err::Incomplete(_)) => break,
                     Err(nom::Err::Failure(e)) | Err(nom::Err::Error(e)) => {
                         debug!("Invalid message: {:?}", e);
-                        self.buf.consume(consumed);
-                        consumed = 0;
                         if !self.recover() || self.buf.is_empty() {
                             break;
                         }
@@ -68,7 +63,6 @@ impl ProtocolDecoder {
                 }
             }
         }
-        self.buf.consume(consumed);
         messages
     }
 }

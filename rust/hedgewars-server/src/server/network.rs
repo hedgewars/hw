@@ -498,9 +498,7 @@ impl NetworkLayer {
             Ok((messages, state)) => {
                 for message in messages {
                     debug!("Handling message {:?} for client {}", message, client_id);
-                    if self.server.clients.contains(client_id) {
-                        handlers::handle(&mut self.server, client_id, &mut response, message);
-                    }
+                    handlers::handle(&mut self.server, client_id, &mut response, message);
                 }
                 match state {
                     NetworkClientState::NeedsRead => {
