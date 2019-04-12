@@ -3,10 +3,10 @@
 
 extern crate getopts;
 use getopts::Options;
-use std::env;
 use log::*;
 use mio::net::*;
 use mio::*;
+use std::env;
 
 mod protocol;
 mod server;
@@ -14,6 +14,8 @@ mod utils;
 
 use crate::server::network::NetworkLayer;
 use std::time::Duration;
+
+const PROGRAM_NAME: &'_ str = "Hedgewars Game Server";
 
 fn main() {
     env_logger::init();
@@ -24,11 +26,14 @@ fn main() {
     opts.optopt("p", "port", "port - defaults to 46631", "PORT");
     opts.optflag("h", "help", "help");
     let matches = match opts.parse(&args[1..]) {
-        Ok(m) => { m }
-        Err(f) => { panic!(f.to_string()) }
+        Ok(m) => m,
+        Err(e) => {
+            println!("{}\n{}", e, opts.short_usage(""));
+            return;
+        }
     };
     if matches.opt_present("h") {
-        println!("-p/--port - defaults to 46631");
+        println!("{}", opts.usage(PROGRAM_NAME));
         return;
     }
     info!("Hedgewars game server, protocol {}", utils::SERVER_VERSION);
@@ -39,8 +44,7 @@ fn main() {
             Some(x) => address = format!("0.0.0.0:{}", x).parse().unwrap(),
             None => address = "0.0.0.0:46631".parse().unwrap(),
         }
-    }
-    else {
+    } else {
         address = "0.0.0.0:46631".parse().unwrap();
     }
 
