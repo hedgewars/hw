@@ -13,6 +13,7 @@ use mio::{
     net::{TcpListener, TcpStream},
     Poll, PollOpt, Ready, Token,
 };
+use mio_extras::timer;
 use netbuf;
 use slab::Slab;
 
@@ -34,8 +35,11 @@ use openssl::{
         SslMethod, SslOptions, SslStream, SslStreamBuilder, SslVerifyMode,
     },
 };
+use std::time::Duration;
 
 const MAX_BYTES_PER_READ: usize = 2048;
+const SEND_PING_TIMEOUT: Duration = Duration::from_secs(30);
+const DROP_CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
 
 #[derive(Hash, Eq, PartialEq, Copy, Clone)]
 pub enum NetworkClientState {
@@ -80,16 +84,23 @@ pub struct NetworkClient {
     peer_addr: SocketAddr,
     decoder: ProtocolDecoder,
     buf_out: netbuf::Buf,
+    timeout: timer::Timeout,
 }
 
 impl NetworkClient {
-    pub fn new(id: ClientId, socket: ClientSocket, peer_addr: SocketAddr) -> NetworkClient {
+    pub fn new(
+        id: ClientId,
+        socket: ClientSocket,
+        peer_addr: SocketAddr,
+        timeout: timer::Timeout,
+    ) -> NetworkClient {
         NetworkClient {
             id,
             socket,
             peer_addr,
             decoder: ProtocolDecoder::new(),
             buf_out: netbuf::Buf::new(),
+            timeout,
         }
     }
 
@@ -231,6 +242,10 @@ impl NetworkClient {
     pub fn send_string(&mut self, msg: &str) {
         self.send_raw_msg(&msg.as_bytes());
     }
+
+    pub fn replace_timeout(&mut self, timeout: timer::Timeout) -> timer::Timeout {
+        replace(&mut self.timeout, timeout)
+    }
 }
 
 #[cfg(feature = "tls-connections")]
@@ -288,6 +303,13 @@ impl IoLayer {
     }
 }
 
+enum TimeoutEvent {
+    SendPing,
+    DropClient,
+}
+
+struct TimerData(TimeoutEvent, ClientId);
+
 pub struct NetworkLayer {
     listener: TcpListener,
     server: HWServer,
@@ -298,6 +320,21 @@ pub struct NetworkLayer {
     ssl: ServerSsl,
     #[cfg(feature = "official-server")]
     io: IoLayer,
+    timer: timer::Timer<TimerData>,
+}
+
+fn create_ping_timeout(timer: &mut timer::Timer<TimerData>, client_id: ClientId) -> timer::Timeout {
+    timer.set_timeout(
+        SEND_PING_TIMEOUT,
+        TimerData(TimeoutEvent::SendPing, client_id),
+    )
+}
+
+fn create_drop_timeout(timer: &mut timer::Timer<TimerData>, client_id: ClientId) -> timer::Timeout {
+    timer.set_timeout(
+        DROP_CLIENT_TIMEOUT,
+        TimerData(TimeoutEvent::DropClient, client_id),
+    )
 }
 
 impl NetworkLayer {
@@ -306,6 +343,7 @@ impl NetworkLayer {
         let clients = Slab::with_capacity(clients_limit);
         let pending = HashSet::with_capacity(2 * clients_limit);
         let pending_cache = Vec::with_capacity(2 * clients_limit);
+        let timer = timer::Builder::default().build();
 
         NetworkLayer {
             listener,
@@ -317,6 +355,7 @@ impl NetworkLayer {
             ssl: NetworkLayer::create_ssl_context(),
             #[cfg(feature = "official-server")]
             io: IoLayer::new(),
+            timer,
         }
     }
 
@@ -342,6 +381,13 @@ impl NetworkLayer {
         poll.register(
             &self.listener,
             utils::SERVER_TOKEN,
+            Ready::readable(),
+            PollOpt::edge(),
+        )?;
+
+        poll.register(
+            &self.timer,
+            utils::TIMER_TOKEN,
             Ready::readable(),
             PollOpt::edge(),
         )?;
@@ -384,7 +430,12 @@ impl NetworkLayer {
         )
         .expect("could not register socket with event loop");
 
-        let client = NetworkClient::new(client_id, client_socket, addr);
+        let client = NetworkClient::new(
+            client_id,
+            client_socket,
+            addr,
+            create_ping_timeout(&mut self.timer, client_id),
+        );
         info!("client {} ({}) added", client.id, client.peer_addr);
         entry.insert(client);
 
@@ -417,6 +468,29 @@ impl NetworkLayer {
                 self.io.send(client_id, task);
             }
         }
+    }
+
+    pub fn handle_timeout(&mut self, poll: &Poll) -> io::Result<()> {
+        while let Some(TimerData(event, client_id)) = self.timer.poll() {
+            match event {
+                TimeoutEvent::SendPing => {
+                    if let Some(ref mut client) = self.clients.get_mut(client_id) {
+                        client.send_string(&HWServerMessage::Ping.to_raw_protocol());
+                        client.write()?;
+                        client.replace_timeout(create_drop_timeout(&mut self.timer, client_id));
+                    }
+                }
+                TimeoutEvent::DropClient => {
+                    self.operation_failed(
+                        poll,
+                        client_id,
+                        &ErrorKind::TimedOut.into(),
+                        "No ping response",
+                    )?;
+                }
+            }
+        }
+        Ok(())
     }
 
     #[cfg(feature = "official-server")]
@@ -486,6 +560,8 @@ impl NetworkLayer {
 
     pub fn client_readable(&mut self, poll: &Poll, client_id: ClientId) -> io::Result<()> {
         let messages = if let Some(ref mut client) = self.clients.get_mut(client_id) {
+            let timeout = client.replace_timeout(create_ping_timeout(&mut self.timer, client_id));
+            self.timer.cancel_timeout(&timeout);
             client.read()
         } else {
             warn!("invalid readable client: {}", client_id);
