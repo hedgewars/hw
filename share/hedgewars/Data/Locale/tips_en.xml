@@ -8,20 +8,20 @@
     <tip>If you’re unsure what to do and don’t want to waste ammo, skip one round. But don’t let too much time pass as there will be Sudden Death!</tip>
     <tip>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don’t touch the ground or miss a shot you’ll reuse your rope without wasting ammo!</tip>
     <tip>If you’d like to keep others from using your preferred nickname on the official server, register an account at <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a>.</tip>
-    <tip>You're bored of default gameplay? Try one of the missions — they'll offer different gameplay depending on the one you picked.</tip>
+    <tip>You're bored of default gameplay? Try one of the missions—they'll offer different gameplay depending on the one you picked.</tip>
     <tip>By default the game will always record the last game played as a demo. Select “Local Game” and pick the “Demos” button on the lower right corner to play or manage them.</tip>
     <tip>Hedgewars is free software (Open Source) we create in our spare time. If you’ve got problems, ask on our forums or visit our IRC room!</tip>
     <tip>Hedgewars is free software (Open Source) we create in our spare time. If you like it, feel free to help us with a small donation or contribute your own work!</tip>
     <tip>Hedgewars is free software (Open Source) we create in our spare time. Share it with your family and friends as you like!</tip>
-    <tip>Hedgewars is free software (Open Source) we create in our spare time, just for fun! Meet the devs in <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
+    <tip>Hedgewars is free software (Open Source) we create in our spare time, just for fun! Meet the developers in <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
     <tip>From time to time there will be official tournaments. Upcoming events will be announced at <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> some days in advance.</tip>
     <tip>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</tip>
-    <tip>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and GNU/Linux.</tip>
+    <tip>Hedgewars can be run on lots of different operating systems including Microsoft Windows, macOS and GNU/Linux.</tip>
     <tip>Always remember you’re able to set up your own games in local and network/online play. You’re not restricted to the “Simple Game” option.</tip>
     <tip>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</tip>
     <tip>Consider giving yourself a short break at least once an hour to guard against strain from playing.</tip>
-    <tip>If your graphics card isn’t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</tip>
-    <tip>If your graphics card isn’t able to provide hardware accelerated OpenGL, try to update the associated drivers.</tip>
+    <tip>If your graphics card isn’t able to provide hardware-accelerated OpenGL, try to enable the low quality mode to improve performance.</tip>
+    <tip>If your graphics card isn’t able to provide hardware-accelerated OpenGL, try to update the associated drivers.</tip>
     <tip>We’re open to suggestions and constructive feedback. If you don’t like something or got a great idea, let us know!</tip>
     <tip>For your own benefit we'd like you to be polite and friendly while playing on our server. Also please keep in mind that some players are minors!</tip>
     <tip>Special game modes such as “Vampirism” or “Karma” allow you to develop completely new tactics. Try them in a custom game!</tip>
@@ -39,13 +39,13 @@
     <tip>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</tip>
     <tip>If you’re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</tip>
     <tip>The Cake’s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</tip>
-    <tip>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</tip>
-    <tip>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</tip>
-    <tip>Like Hedgewars? Become a fan on <a href="https://www.facebook.com/Hedgewars">Facebook</a> or follow us on <a href="https://twitter.com/hedgewars">Twitter</a></tip>
+    <tip>The Flamethrower is a weapon but it can be used for tunnel digging as well.</tip>
+    <tip>Use the Molotov Cocktail or Flamethrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</tip>
+    <tip>Like Hedgewars? Become a fan on <a href="https://www.facebook.com/Hedgewars">Facebook</a> or follow us on <a href="https://twitter.com/hedgewars">Twitter</a>.</tip>
     <tip>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you’ll have to share them somewhere to use them online.</tip>
     <tip>Keep your video card drivers up to date to avoid issues playing the game.</tip>
     <tip>Heads or tails? Type “/rnd” in the lobby and you’ll find out. Also “/rnd rock paper scissors” works!</tip>
-    <tip>You’re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or web browser.</tip>
+    <tip>You’re able to associate Hedgewars-related files (savegames and demo recordings) with the game to launch them right from your favorite file or web browser.</tip>
     <tip>Dud mines are not harmless: Although their timer is broken, they can still explode if they took too much abuse!</tip>
     <tip>Love is hot! Use Seduction to thaw frozen hedgehogs.</tip>
     <tip>Smoke coming from a barrel is an indicator that it is low on “health” and even small amounts of damage might cause it to burst.</tip>
@@ -59,7 +59,7 @@
     <tip>The whip also hits hedgehogs and objects behind a thin wall.</tip>
     <tip>A cleaver deals more damage the faster it’s moving.</tip>
     <tip>You can drop cakes from cliffs, but you have to stand very close to the edge, so be careful.</tip>
-    <tip>Use your rope to push away other hedgehogs i.e. by sliding on the ground. This technique is known as “rope-knocking”.</tip>
+    <tip>Use your rope to push away other hedgehogs, e.g. by sliding on the ground. This technique is known as “rope-knocking”.</tip>
     <tip>Don’t stand still on an icy slope, or you will slip away. Alternatively, you can hold down [precise].</tip>
     <tip>In the lands of Snow and Christmas, the snow piles up over time, unless the land is indestructible.</tip>
     <tip>Be aware in lands of Snow and Christmas, because girders are made of slippery ice.</tip>
