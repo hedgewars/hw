@@ -37,6 +37,7 @@ class PageMain : public AbstractPage
         QPushButton * BtnNetOfficial;
         QPushButton * BtnSetup;
         QPushButton * BtnFeedback;
+        QPushButton * BtnTitle;
         QPushButton * BtnInfo;
         QPushButton * BtnDataDownload;
         QPushButton * BtnVideos;

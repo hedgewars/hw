@@ -82,8 +82,9 @@ Game HUD:
  * Fix buggy behaviour when entering speech bubble command in hog placement phase
 
 Frontend:
+ + Add button in main menu at top left corner to open credits page
  + Restructure credits
- + Credits screen in main menu is now translatable
+ + Credits page is now translatable
  + More intelligent automatic mission selection in campaign screen
  * Fix force-locked schemes getting unlocked when changing map types
 

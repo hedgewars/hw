@@ -74,10 +74,14 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnNetOfficial->setVisible(false);
 
     // button order matters for overlapping (what's on top and what isn't)
-    BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
-	BtnInfo->setObjectName("infoButton");
+    BtnTitle = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
+    BtnTitle ->setObjectName("infoButton");
+    BtnTitle->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
+    pageLayout->setAlignment(BtnTitle, Qt::AlignHCenter);
+
+    BtnInfo = addButton(":/res/AboutIcon.png", pageLayout, 0, 0, 1, 1, true);
     BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
-    pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
+    pageLayout->setAlignment(BtnInfo, Qt::AlignLeft | Qt::AlignTop);
 
     BtnFeedback = addButton(tr("Feedback"), pageLayout, 4, 0, 1, 4, false);
     BtnFeedback->setStyleSheet("padding: 5px 10px");

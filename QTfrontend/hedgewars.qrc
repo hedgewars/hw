@@ -39,6 +39,7 @@
         <file>res/Hedgehog.png</file>
         <file>res/net.png</file>
         <file>res/About.png</file>
+        <file>res/AboutIcon.png</file>
         <file>res/SimpleGame.png</file>
         <file>res/Campaign.png</file>
         <file>res/CampaignDefault.png</file>

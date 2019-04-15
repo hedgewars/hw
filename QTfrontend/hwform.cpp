@@ -242,6 +242,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageMain->BtnFeedback, SIGNAL(clicked()), this, SLOT(showFeedbackDialog()));
 
+    connect(ui.pageMain->BtnTitle, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnTitle, ID_PAGE_INFO);
+
     connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_INFO);
 
