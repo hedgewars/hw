@@ -39,7 +39,8 @@ use std::time::Duration;
 
 const MAX_BYTES_PER_READ: usize = 2048;
 const SEND_PING_TIMEOUT: Duration = Duration::from_secs(30);
-const DROP_CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
+const DROP_CLIENT_TIMEOUT: Duration = Duration::from_secs(30);
+const PING_PROBES_COUNT: u8 = 2;
 
 #[derive(Hash, Eq, PartialEq, Copy, Clone)]
 pub enum NetworkClientState {
@@ -304,7 +305,7 @@ impl IoLayer {
 }
 
 enum TimeoutEvent {
-    SendPing,
+    SendPing { probes_count: u8 },
     DropClient,
 }
 
@@ -323,10 +324,14 @@ pub struct NetworkLayer {
     timer: timer::Timer<TimerData>,
 }
 
-fn create_ping_timeout(timer: &mut timer::Timer<TimerData>, client_id: ClientId) -> timer::Timeout {
+fn create_ping_timeout(
+    timer: &mut timer::Timer<TimerData>,
+    probes_count: u8,
+    client_id: ClientId,
+) -> timer::Timeout {
     timer.set_timeout(
         SEND_PING_TIMEOUT,
-        TimerData(TimeoutEvent::SendPing, client_id),
+        TimerData(TimeoutEvent::SendPing { probes_count }, client_id),
     )
 }
 
@@ -434,7 +439,7 @@ impl NetworkLayer {
             client_id,
             client_socket,
             addr,
-            create_ping_timeout(&mut self.timer, client_id),
+            create_ping_timeout(&mut self.timer, PING_PROBES_COUNT - 1, client_id),
         );
         info!("client {} ({}) added", client.id, client.peer_addr);
         entry.insert(client);
@@ -473,11 +478,16 @@ impl NetworkLayer {
     pub fn handle_timeout(&mut self, poll: &Poll) -> io::Result<()> {
         while let Some(TimerData(event, client_id)) = self.timer.poll() {
             match event {
-                TimeoutEvent::SendPing => {
+                TimeoutEvent::SendPing { probes_count } => {
                     if let Some(ref mut client) = self.clients.get_mut(client_id) {
                         client.send_string(&HWServerMessage::Ping.to_raw_protocol());
                         client.write()?;
-                        client.replace_timeout(create_drop_timeout(&mut self.timer, client_id));
+                        let timeout = if probes_count != 0 {
+                            create_ping_timeout(&mut self.timer, probes_count - 1, client_id)
+                        } else {
+                            create_drop_timeout(&mut self.timer, client_id)
+                        };
+                        client.replace_timeout(timeout);
                     }
                 }
                 TimeoutEvent::DropClient => {
@@ -560,7 +570,11 @@ impl NetworkLayer {
 
     pub fn client_readable(&mut self, poll: &Poll, client_id: ClientId) -> io::Result<()> {
         let messages = if let Some(ref mut client) = self.clients.get_mut(client_id) {
-            let timeout = client.replace_timeout(create_ping_timeout(&mut self.timer, client_id));
+            let timeout = client.replace_timeout(create_ping_timeout(
+                &mut self.timer,
+                PING_PROBES_COUNT - 1,
+                client_id,
+            ));
             self.timer.cancel_timeout(&timeout);
             client.read()
         } else {
