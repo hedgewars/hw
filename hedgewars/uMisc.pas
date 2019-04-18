@@ -26,7 +26,6 @@ uses SDLh, uConsts, GLunit, uTypes;
 procedure initModule;
 procedure freeModule;
 
-procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function MakeScreenshot(filename: shortstring; k: LongInt; dump: LongWord): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
@@ -45,17 +44,6 @@ type PScreenshot = ^TScreenshot;
          end;
 
 var conversionFormat : PSDL_PixelFormat;
-
-procedure movecursor(dx, dy: LongInt);
-var x, y: LongInt;
-begin
-if (dx = 0) and (dy = 0) then exit;
-
-SDL_GetMouseState(@x, @y);
-Inc(x, dx);
-Inc(y, dy);
-SDL_WarpMouse(x, y);
-end;
 
 {$IFDEF PNG_SCREENSHOTS}
 // this funtion will be executed in separate thread

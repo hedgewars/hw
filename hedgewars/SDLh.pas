@@ -109,6 +109,10 @@ const
     SDL_BUTTON_X1        = 4;
     SDL_BUTTON_X2        = 5;
 
+    // SDL_ShowCursor consts
+    SDL_QUERY = -1;
+    SDL_DISABLE = 0;
+    SDL_ENABLE = 1;
 
     SDL_TEXTEDITINGEVENT_TEXT_SIZE = 32;
     SDL_TEXTINPUTEVENT_TEXT_SIZE   = 32;
@@ -554,6 +558,7 @@ type
     TSDL_Keycode = LongInt;
     TSDL_Scancode = LongInt;
     TSDL_JoystickID = LongInt;
+    TSDL_bool = LongInt;
 
     TSDL_eventaction = (SDL_ADDEVENT, SDL_PEEPEVENT, SDL_GETEVENT);
 
@@ -1107,6 +1112,7 @@ procedure SDL_RenderPresent(renderer: PSDL_Renderer); cdecl; external SDLLibName
 function  SDL_RenderReadPixels(renderer: PSDL_Renderer; rect: PSDL_Rect; format: LongInt; pixels: Pointer; pitch: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_RenderSetViewport(window: PSDL_Window; rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 
+function  SDL_SetRelativeMouseMode(enabled: TSDL_bool): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): Boolean; cdecl; external SDLLibName;
 

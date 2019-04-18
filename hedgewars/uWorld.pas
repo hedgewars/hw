@@ -1974,7 +1974,6 @@ begin
     if CursorPoint.Y < cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5) then//check bottom
         CursorPoint.Y:= cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5);
     prevPoint:= CursorPoint;
-    //if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
     exit
 end;
 
@@ -2030,7 +2029,6 @@ else
 
 // this moves the camera according to CursorPoint X and Y
 prevPoint:= CursorPoint;
-//if cHasFocus then SDL_WarpMouse(CursorPoint.X + (cScreenWidth shr 1), cScreenHeight - CursorPoint.Y);
 if WorldDy > LAND_HEIGHT + 1024 then
     WorldDy:= LAND_HEIGHT + 1024;
 if WorldDy < wdy then
@@ -2148,10 +2146,21 @@ end;
 
 procedure updateCursorVisibility;
 begin
-    if isPaused or isAFK then
-        SDL_ShowCursor(1)
+    if isPaused or isAFK or (GameState = gsConfirm) then
+        begin
+        SDL_SetRelativeMouseMode(SDL_FALSE);
+        if SDL_ShowCursor(SDL_QUERY) = SDL_DISABLE then
+            begin
+            uCursor.resetPosition;
+            SDL_ShowCursor(SDL_ENABLE);
+            end;
+        end
     else
-        SDL_ShowCursor(ord(GameState = gsConfirm))
+        begin
+        uCursor.resetPositionDelta;
+        SDL_ShowCursor(SDL_DISABLE);
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+        end;
 end;
 
 procedure updateTouchWidgets(ammoType: TAmmoType);

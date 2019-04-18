@@ -254,14 +254,17 @@ game to freeze if one online player minimizes Hedgewars. *)
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
 {$ELSE}
+                SDL_MOUSEMOTION:
+                    ProcessMouseMotion(event.motion.xrel, event.motion.yrel);
+
                 SDL_MOUSEBUTTONDOWN:
                     if GameState = gsConfirm then
                         ParseCommand('quit', true)
                     else
-                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
+                        if (GameState >= gsGame) then ProcessMouseButton(event.button, true);
 
                 SDL_MOUSEBUTTONUP:
-                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
+                    if (GameState >= gsGame) then ProcessMouseButton(event.button, false);
 
                 SDL_MOUSEWHEEL:
                     begin
@@ -383,8 +386,8 @@ begin
         end;
 
     if not allOK then exit;
-    SDL_ShowCursor(0);
 
+    SDL_ShowCursor(SDL_DISABLE);
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then

@@ -32,7 +32,8 @@ function  KeyBindToCode(bind: shortstring): LongInt;
 function  KeyBindToName(bind: shortstring): shortstring;
 //procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
-procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
+procedure ProcessMouseButton(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
+procedure ProcessMouseMotion(xrel, yrel: LongInt);
 //procedure ProcessMouseWheel(x, y: LongInt);
 procedure ProcessMouseWheel(y: LongInt);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
@@ -59,7 +60,7 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
 implementation
-uses uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer;
+uses uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer, uCursor;
 
 const
     LSHIFT = $0200;
@@ -278,7 +279,7 @@ begin
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 
-procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
+procedure ProcessMouseButton(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 begin
     //writelntoconsole('[MOUSE] '+inttostr(event.button));
     case event.button of
@@ -289,6 +290,11 @@ begin
         SDL_BUTTON_RIGHT:
             ProcessKey(KeyNameToCode('mouser'), ButtonDown);
         end;
+end;
+
+procedure ProcessMouseMotion(xrel, yrel: LongInt);
+begin
+    uCursor.updatePositionDelta(xrel, yrel);
 end;
 
 var mwheelupCode, mwheeldownCode: Integer;

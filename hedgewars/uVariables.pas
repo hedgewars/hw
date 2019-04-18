@@ -234,6 +234,7 @@ var
 
     TargetCursorPoint     : TPoint;
     CursorPoint           : TPoint;
+    CursorPointDelta      : TPoint;
     TargetPoint           : TPoint;
 
     ScreenFade      : TScreenFade;
