@@ -2148,18 +2148,24 @@ procedure updateCursorVisibility;
 begin
     if isPaused or isAFK or (GameState = gsConfirm) then
         begin
+{$IFNDEF USE_TOUCH_INTERFACE}
         SDL_SetRelativeMouseMode(SDL_FALSE);
+{$ENDIF}
         if SDL_ShowCursor(SDL_QUERY) = SDL_DISABLE then
             begin
             uCursor.resetPosition;
+{$IFNDEF USE_TOUCH_INTERFACE}
             SDL_ShowCursor(SDL_ENABLE);
+{$ENDIF}
             end;
         end
     else
         begin
         uCursor.resetPositionDelta;
+{$IFNDEF USE_TOUCH_INTERFACE}
         SDL_ShowCursor(SDL_DISABLE);
         SDL_SetRelativeMouseMode(SDL_TRUE);
+{$ENDIF}
         end;
 end;
 

@@ -1,3 +1,5 @@
+{$INCLUDE "options.inc"}
+
 unit uCursor;
 
 interface
@@ -17,7 +19,9 @@ procedure init;
 begin
     SDL_ShowCursor(SDL_DISABLE);
     resetPosition();
+{$IFNDEF USE_TOUCH_INTERFACE}
     SDL_SetRelativeMouseMode(SDL_TRUE);
+{$ENDIF}
 end;
 
 procedure resetPosition;
