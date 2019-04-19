@@ -81,10 +81,14 @@ Game HUD:
  * Fix game engine ignoring appropriate number formatting of user language
  * Fix buggy behaviour when entering speech bubble command in hog placement phase
 
+Translations:
+ + Major update: Chinese
+ + Credits page is now translatable
+ * Remove Arabic translation from release
+
 Frontend:
  + Add button in main menu at top left corner to open credits page
- + Restructure credits
- + Credits page is now translatable
+ + Restructure credits page
  + More intelligent automatic mission selection in campaign screen
  * Fix force-locked schemes getting unlocked when changing map types
 
