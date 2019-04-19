@@ -324,7 +324,7 @@ function SimpleMission(params)
 			return (TotalRounds) >= goal.rounds
 		elseif goal.type == "inZone" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			local gX, gY = GetGearPosition(_G.sm.goalGears[goal.id])
 			-- 4 sub-goals, each optional
@@ -338,16 +338,16 @@ function SimpleMission(params)
 			if goal.type == "distGearPos" then
 				if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
 					-- Fail if gear was destroyed
-					return "fail", criticalGearFailText(goal.id)
+					return "fail", _G.sm.criticalGearFailText(goal.id)
 				end
 				gX, gY = GetGearPosition(_G.sm.goalGears[goal.id])
 				tX, tY = goal.x, goal.y
 			elseif goal.type == "distGearGear" then
 				-- Fail if one of the gears was destroyed
 				if getGearValue(_G.sm.goalGears[goal.id1], "sm_destroyed") then
-					return "fail", criticalGearFailText(goal.id1)
+					return "fail", _G.sm.criticalGearFailText(goal.id1)
 				elseif getGearValue(_G.sm.goalGears[goal.id2], "sm_destroyed") then
-					return "fail", criticalGearFailText(goal.id2)
+					return "fail", _G.sm.criticalGearFailText(goal.id2)
 				end
 				gX, gY = GetGearPosition(_G.sm.goalGears[goal.id1])
 				tX, tY = GetGearPosition(_G.sm.goalGears[goal.id2])
@@ -387,27 +387,27 @@ function SimpleMission(params)
 			local drowned = getGearValue(_G.sm.goalGears[goal.id], "sm_drowned")
 			-- Fail if gear was destroyed by something other than drowning
 			if not drowned and getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return drowned
 		elseif goal.type == "poison" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], hePoisoned) >= 1
 		elseif goal.type == "freeze" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], heFrozen) >= 256
 		elseif goal.type == "cure" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], hePoisoned) == 0
 		elseif goal.type == "melt" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], heFrozen) == 0
 		elseif goal.type == "waterSkip" then
@@ -415,7 +415,7 @@ function SimpleMission(params)
 			local hasEnoughSkips = getGearValue(_G.sm.goalGears[goal.id], "sm_waterSkips") >= skips
 			-- Fail if gear was destroyed before it got the required number of skips
 			if not hasEnoughSkips and getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return hasEnoughSkips
 		elseif goal.type == "teamDefeat" then

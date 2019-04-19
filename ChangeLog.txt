@@ -111,6 +111,7 @@ Lua API:
  * Fix SetClanColor causing crashes and severe rendering bugs
  * Fix SetAmmoDelay not working properly when called after onGameStart
  * Fix DismissTeam not clearing team properly
+ * SimpleMission: Fix Lua error spam when a custom goal fails
 
 ====================== 0.9.25 ======================
 HIGHLIGHTS:
