@@ -15,29 +15,6 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
---approximative version of square root. This function follows the babylonian method.
-function IntegerSqrt(num)
-	local temp=num
-	while(temp*temp-div(temp,2)>num)
-	do
-		temp=div((temp+div(num,temp)),2)
-	end
-
-	return math.abs(temp)
-end
-
--- sqrt(x^2,y^2), work without desyncs. is approximative
-function Norm(xx,yy)
-	--to fix overflows
-	if(((math.abs(xx)^2)+(math.abs(yy)^2))>2^26)
-	then
-		local bitr=2^13
-		return IntegerSqrt((div(math.abs(xx),bitr)^2)+(div(math.abs(yy),bitr)^2))*bitr
-	else
-		return IntegerSqrt((math.abs(xx)^2)+(math.abs(yy)^2))
-	end
-end
-
 -- returns 1 or -1 depending on where it is
 function GetIfNegative(num)
 	if(num<0)
@@ -67,9 +44,8 @@ function ShowDamageTag(hog,damage)
 	SetVisualGearValues(healthtag, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(hog)))
 end
 
---will use IntegerSqrt
 function FireGear(hedgehog,geartype,vx,vy,timer)
-	local hypo=Norm(vx,vy)
+	local hypo=integerHypotenuse(vx,vy)
 	return AddGear(div((GetGearRadius(hedgehog)*2*vx),hypo)+GetX(hedgehog), div((GetGearRadius(hedgehog)*2*vy),hypo)+GetY(hedgehog), geartype, 0, vx, vy, timer)
 end
 
@@ -861,7 +837,7 @@ function SouthAmericaSpecialCheeseExplosion(hog)
 				SetState(CurrentHedgehog, gstMoving)
 			end
 			SetGearPosition(hog, GetX(hog),GetY(hog)-3)
-			hypo=Norm(math.abs(GetX(hog)-GetX(CS.TEMP_VALUE)),math.abs(GetY(hog)-GetY(CS.TEMP_VALUE)))
+			hypo=integerHypotenuse(math.abs(GetX(hog)-GetX(CS.TEMP_VALUE)),math.abs(GetY(hog)-GetY(CS.TEMP_VALUE)))
 			SetGearVelocity(hog, div((power_radius_outer-hypo)*power_sa*GetIfNegative(GetX(hog)-GetX(CS.TEMP_VALUE)),power_radius_outer), div((power_radius_outer-hypo)*power_sa*GetIfNegative(GetY(hog)-GetY(CS.TEMP_VALUE)),power_radius_outer))
 		end
 	end

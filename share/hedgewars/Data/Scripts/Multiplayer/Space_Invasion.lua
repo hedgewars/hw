@@ -1571,13 +1571,14 @@ end
 ------------------------------------------------------------
 ------------------------------------------------------------
 
-function DoHorribleThings(cUID)
+function HandleRadarBlip(cUID)
 
 	-- work out the distance to the target
 	local g1X, g1Y = GetGearPosition(CurrentHedgehog)
 	local g2X, g2Y = SI.vCircX[cUID], SI.vCircY[cUID]
 	local q = g1X - g2X
 	local w = g1Y - g2Y
+	-- Floating point operations are safe, it's only for visuals
 	local r = math.sqrt( (q*q) + (w*w) )	--alternate
 
 	local opp = w
@@ -2253,7 +2254,7 @@ function HandleCircles()
 			SI.vCircY[i] = SI.vCircY[i] + SI.vCircDY[i]
 
 			if (CurrentHedgehog ~= nil) and (SI.rAlpha ~= 255) then
-				DoHorribleThings(i)
+				HandleRadarBlip(i)
 			end
 
 		end

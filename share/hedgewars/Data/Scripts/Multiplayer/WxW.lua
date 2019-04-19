@@ -724,6 +724,7 @@ function TrackRadarBlip(gear)
 	g2X, g2Y = GetX(gear), GetY(gear)
 	q = g1X - g2X
 	w = g1Y - g2Y
+	-- Floating point operations are safe, it's only for visuals
 	r = math.sqrt( (q*q) + (w*w) )	--alternate
 
 	RCX = getGearValue(gear,"RX")

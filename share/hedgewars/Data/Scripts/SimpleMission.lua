@@ -27,6 +27,7 @@ See the comment of SimpleMission for a specification of all parameters.
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 --[[
 SimpleMission(params)
@@ -221,20 +222,6 @@ local function def(value, default)
 	end
 end
 
--- Get hypotenuse of a triangle with legs x and y
-local function hypot(x, y)
-	local t
-	x = math.abs(x)
-	y = math.abs(y)
-	t = math.min(x, y)
-	x = math.max(x, y)
-	if x == 0 then
-		return 0
-	end
-	t = t / x
-	return x * math.sqrt(1 + t * t)
-end
-
 local errord = false
 
 -- This function generates the mission. See above for the meaning of params.
@@ -366,7 +353,7 @@ function SimpleMission(params)
 				tX, tY = GetGearPosition(_G.sm.goalGears[goal.id2])
 			end
 
-			local h = hypot(gX - tX, gY - tY)
+			local h = integerHypotenuse(gX - tX, gY - tY)
 			if goal.relationship == "smallerThan" then
 				return h < goal.distance
 			elseif goal.relationship == "greaterThan" then

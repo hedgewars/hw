@@ -104,6 +104,28 @@ function eraseMap(flush)
 	drawFullMap(true, flush)
 end
 
+-- Approximative but desync-safe version of square root. This function follows the Babylonian method.
+function integerSqrt(num)
+	local temp = num
+	while (temp*temp - div(temp, 2) > num)
+	do
+		temp = div((temp + div(num, temp)), 2)
+	end
+	return math.abs(temp)
+end
+
+-- Integer square root of (x^2, y^2), works without desyncs. Is approximative.
+-- This is the same as the length of the hypotenuse of a triangle with legs x, y.
+function integerHypotenuse(x, y)
+	-- To fix overflows
+	if(((math.abs(x)^2) + (math.abs(y)^2)) > 2^26)
+	then
+		local bitr = 2^13
+		return integerSqrt((div(math.abs(x), bitr)^2) + (div(math.abs(y), bitr)^2)) * bitr
+	else
+		return integerSqrt((math.abs(x)^2) + (math.abs(y) ^ 2))
+	end
+end
 
 --[[ GLOBAL VARIABLES ]]
 
