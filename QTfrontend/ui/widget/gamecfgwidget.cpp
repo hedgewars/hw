@@ -548,6 +548,11 @@ void GameCFGWidget::ammoChanged(int index)
     }
 }
 
+void GameCFGWidget::resetSchemeStates()
+{
+    updateSchemeEnabledStates(Scripts->currentIndex());
+}
+
 void GameCFGWidget::updateSchemeEnabledStates(int scriptIndex)
 {
     QString scheme;

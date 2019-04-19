@@ -1937,6 +1937,7 @@ void HWForm::NetGameMaster()
     ui.pageNetGame->pGameCFG->GameSchemes->setModel(gameSchemeModel);
     ui.pageNetGame->pGameCFG->setMaster(true);
     ui.pageNetGame->pNetTeamsWidget->setInteractivity(true);
+    ui.pageNetGame->pGameCFG->resetSchemeStates();
 
     if (hwnet)
     {

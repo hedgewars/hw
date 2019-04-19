@@ -61,6 +61,7 @@ class GameCFGWidget : public QGroupBox
         void fullNetConfig();
         void resendSchemeData();
         void resendAmmoData();
+        void resetSchemeStates();
         void setMaster(bool master);
         void setTabbed(bool tabbed);
 
@@ -77,11 +78,11 @@ class GameCFGWidget : public QGroupBox
         void seedChanged(const QString &);
         void themeChanged(const QString &);
         void schemeChanged(int);
+        void updateSchemeEnabledStates(int scriptIndex);
         void scriptChanged(int);
         void jumpToSchemes();
         void jumpToWeapons();
         void mapgenChanged(MapGenerator m);
-        void updateSchemeEnabledStates(int scriptIndex);
         void maze_sizeChanged(int s);
         void slMapFeatureSizeChanged(int s);
         void onDrawnMapChanged(const QByteArray & data);
