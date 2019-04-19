@@ -10,116 +10,116 @@
     <message>
         <source>Hedgewars %1</source>
         <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
-        <translation type="unfinished">刺蝟大作戰 %1</translation>
+        <translation>刺蝟大作戰 %1</translation>
     </message>
     <message>
         <source>Revision %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>版本 %1 (%2)</translation>
     </message>
     <message>
         <source>Visit our homepage: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>訪問我們的首頁: %1</translation>
     </message>
     <message>
         <source>This program is distributed under the %1.</source>
-        <translation type="unfinished">此程序使用%1.釋出</translation>
+        <translation>此程序使用%1.釋出</translation>
     </message>
     <message>
         <source>GNU GPL v2</source>
         <extracomment>Short for “GNU General Public License version 2”</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Dependency versions:</source>
         <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>相依的版本:</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>貢獻人員</translation>
     </message>
     <message>
         <source>Other people</source>
-        <translation type="unfinished"></translation>
+        <translation>其他人</translation>
     </message>
     <message>
         <source>%1 (alias %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (別名 %2)</translation>
     </message>
     <message>
         <source>%1 &amp;lt;%2&amp;gt;</source>
         <extracomment>Part of credits. %1: Contributor name. %2: E-mail address</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1: %2</source>
         <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1: %2 &amp;lt;%3&amp;gt;</source>
         <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Extended Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>補充貢獻人員</translation>
     </message>
     <message>
         <source>An extended credits list can be found in the CREDITS text file.</source>
-        <translation type="unfinished"></translation>
+        <translation>一個補充貢獻列表能夠被發現在CREDITS文字檔中</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Unknown Compiler: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>未知的編譯器: %1</translation>
     </message>
 </context>
 <context>
@@ -185,11 +185,11 @@
     </message>
     <message>
         <source>Please specify an IP address.</source>
-        <translation type="unfinished"></translation>
+        <translation>請指定一個IP位址</translation>
     </message>
     <message>
         <source>Please specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>請指定一個匿稱</translation>
     </message>
 </context>
 <context>
@@ -231,11 +231,11 @@
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished">信息反饋</translation>
+        <translation>信息反饋</translation>
     </message>
     <message>
         <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>這是選填的, 但這個資訊可能幫助我們除錯和解決技術上的問題</translation>
     </message>
 </context>
 <context>
@@ -255,15 +255,15 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation type="unfinished">修改武器</translation>
+        <translation>修改武器</translation>
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation type="unfinished">修改方案</translation>
+        <translation>修改方案</translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
-        <translation type="unfinished">遊戲方案將自動選擇武器</translation>
+        <translation>遊戲方案將自動選擇武器</translation>
     </message>
     <message>
         <source>Map</source>
@@ -286,19 +286,19 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">新增</translation>
+        <translation>新增</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1的拷貝</translation>
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>新增(%1)</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1的拷貝(%2)</translation>
     </message>
 </context>
 <context>
@@ -342,7 +342,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation type="unfinished">不支持遊戲方案“%1”</translation>
+        <translation>不支持遊戲方案“%1”</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -372,7 +372,7 @@ Please check your installation!</source>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
         <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
-        <translation type="unfinished">連接字串</translation>
+        <translation>連接字串</translation>
     </message>
     <message>
         <source>Options</source>
@@ -398,7 +398,7 @@ Please check your installation!</source>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation type="unfinished">啟動刺蝟大作戰能使用%1(例如 &quot;%2&quot;)來連線。</translation>
+        <translation>啟動刺蝟大作戰能使用%1(例如 &quot;%2&quot;)來連線。</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
@@ -474,15 +474,15 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Chat log</source>
-        <translation type="unfinished"></translation>
+        <translation>聊天記錄</translation>
     </message>
     <message>
         <source>Enter chat messages here and send them with [Enter]</source>
-        <translation type="unfinished"></translation>
+        <translation>在此輸入聊天訊息並按Enter發送</translation>
     </message>
     <message>
         <source>List of players</source>
-        <translation type="unfinished"></translation>
+        <translation>玩家名單</translation>
     </message>
 </context>
 <context>
@@ -498,12 +498,12 @@ Please check your installation!</source>
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation type="unfinished">刺蝟大作戰演示檔</translation>
+        <translation>刺蝟大作戰演示檔</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation type="unfinished">刺蝟大作戰存檔</translation>
+        <translation>刺蝟大作戰存檔</translation>
     </message>
     <message>
         <source>Demo name</source>
@@ -537,7 +537,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
-        <translation type="unfinished">刺蝟大作戰 - 暱稱註冊</translation>
+        <translation>刺蝟大作戰 - 暱稱已註冊</translation>
     </message>
     <message>
         <source>This nick is registered, and you haven&apos;t specified a password.
@@ -565,11 +565,11 @@ Your password wasn&apos;t saved either.</source>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
-        <translation type="unfinished">刺蝟大作戰 - 空的暱稱</translation>
+        <translation>刺蝟大作戰 - 空的暱稱</translation>
     </message>
     <message>
         <source>Hedgewars - Wrong password</source>
-        <translation type="unfinished">刺蝟大作戰 - 密碼錯誤</translation>
+        <translation>刺蝟大作戰 - 密碼錯誤</translation>
     </message>
     <message>
         <source>You entered a wrong password.</source>
@@ -609,29 +609,29 @@ Please, enter the password:</source>
     </message>
     <message>
         <source>Team 1</source>
-        <translation type="unfinished"></translation>
+        <translation>隊伍1</translation>
     </message>
     <message>
         <source>Team %1</source>
         <extracomment>Default team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>隊伍 %1</translation>
     </message>
     <message>
         <source>Computer %1</source>
         <extracomment>Default computer team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>電腦 %1</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>未知的網路錯誤(可能缺少SSL函式庫)</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>此功能需要連接網際網路,但你並沒有上線(錯誤碼: %1)</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>內部錯誤: 回覆的對象是無效的</translation>
     </message>
 </context>
 <context>
@@ -657,7 +657,7 @@ Last two engine messages:
         <translation type="vanished">一個致命的錯誤！ - 遊戲引擎不得不停止
 我們很抱歉給你帶來不便：（
 如果這一情況持續發生，請點擊主菜單中的“%1”按鈕
-上次兩款發動機的消息：
+最後兩條引擎訊息：
 %2</translation>
     </message>
     <message>
@@ -669,14 +669,21 @@ If this keeps happening, please click the &apos;Feedback&apos; button in the mai
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>一個嚴重錯誤發生! 遊戲引擎已經被停止.
+
+對於給您帶來的不便，我們深表歉意. :-(
+
+如果這種情況持續發生，請點擊在主選單中的&apos;反饋&apos;按鍵！
+
+最後的引擎訊息:
+%1</translation>
     </message>
 </context>
 <context>
     <name>HWHostPortDialog</name>
     <message>
         <source>Connect to server</source>
-        <translation type="unfinished">連線到伺服器</translation>
+        <translation>連線到伺服器</translation>
     </message>
 </context>
 <context>
@@ -740,7 +747,7 @@ Last engine message:
     </message>
     <message>
         <source>Random maze</source>
-        <translation>隨機迷宮</translation>
+        <translation>Maze隨機算法</translation>
     </message>
     <message>
         <source>Random</source>
@@ -752,11 +759,11 @@ Last engine message:
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation>加載地圖繪製</translation>
+        <translation>加載繪製地圖</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>編輯地圖繪製</translation>
+        <translation>編輯繪製地圖</translation>
     </message>
     <message>
         <source>Small islands</source>
@@ -808,7 +815,7 @@ Last engine message:
     </message>
     <message>
         <source>Random perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Perlin隨機算法</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -816,63 +823,55 @@ Last engine message:
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>堡壘</translation>
     </message>
     <message>
         <source>View and edit the seed, the source of randomness in the game</source>
-        <translation type="unfinished"></translation>
+        <translation>查看和編輯種子，這是遊戲中隨機性的來源</translation>
     </message>
     <message>
         <source>Randomize the theme</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇主題</translation>
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished">選擇一個主題</translation>
+        <translation>選擇一個主題</translation>
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇地圖、主題和種子</translation>
     </message>
     <message>
         <source>Randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇主題和種子</translation>
     </message>
     <message>
         <source>Randomize the seed</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇種子</translation>
     </message>
     <message>
         <source>Click to randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>點擊以隨機選擇地圖、主題和種子</translation>
     </message>
     <message>
         <source>Click to randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>點擊以隨機選擇主題和種子</translation>
     </message>
     <message>
         <source>Adjust the complexity of the generated map</source>
-        <translation type="unfinished"></translation>
+        <translation>調整生成地圖的複雜性</translation>
     </message>
     <message>
         <source>Adjust the distance between forts</source>
-        <translation type="unfinished"></translation>
+        <translation>調整堡壘之間的距離</translation>
     </message>
     <message>
         <source>Click to edit</source>
-        <translation type="unfinished"></translation>
+        <translation>點擊後編輯</translation>
     </message>
     <message>
         <source>Scale size of the drawn map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Load</source>
-        <translation type="unfinished">讀取</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>繪製地圖的比例尺寸</translation>
     </message>
 </context>
 <context>
@@ -948,11 +947,11 @@ Last engine message:
     </message>
     <message>
         <source>Reason:</source>
-        <translation type="unfinished"></translation>
+        <translation>原因:</translation>
     </message>
     <message>
         <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>連線超時或是被官方伺服器拒絕。目前官方伺服器似乎有些問題。這可能是一個暫時的問題。請稍後再試。</translation>
     </message>
     <message>
         <source>The connection was refused by the host or timed out. This might have one of the following reasons:
@@ -961,7 +960,12 @@ Last engine message:
 - There is a temporary network problem
 
 Please check the host name and port settings and/or try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>連線超時或是被主機拒絕。這可能是以下的原因：
+- 刺蝟大作戰伺服器程序目前不在主機上運行
+- 指定的端口號碼不正確
+- 網路暫時有問題
+
+請檢查主機名和端口設置, 稍後重試。</translation>
     </message>
 </context>
 <context>
@@ -1004,7 +1008,14 @@ To report this error, please click the &apos;Feedback&apos; button in the main m
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>一個嚴重錯誤發生在進行視頻錄製的時候! 視頻不能被保存
+
+您可以嘗試重置錄影設置作為一種解決方式
+
+為了回報這個錯誤，請點擊在主選單中的&apos;反饋&apos;按鍵！
+
+最後的引擎訊息:
+%1</translation>
     </message>
 </context>
 <context>
@@ -1022,7 +1033,7 @@ Last engine message:
     <name>HatButton</name>
     <message>
         <source>Change hat (%1)</source>
-        <translation type="unfinished">改變帽子(%1)</translation>
+        <translation>改變帽子(%1)</translation>
     </message>
 </context>
 <context>
@@ -1055,14 +1066,14 @@ Last engine message:
     <name>KeyBinder</name>
     <message>
         <source>Category</source>
-        <translation type="unfinished">分類</translation>
+        <translation>分類</translation>
     </message>
 </context>
 <context>
     <name>LibavInteraction</name>
     <message>
         <source>Audio: </source>
-        <translation type="unfinished"></translation>
+        <translation>聲音：</translation>
     </message>
     <message>
         <source>unknown</source>
@@ -1083,33 +1094,33 @@ Last engine message:
     <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>持續時間：%1分 %2秒</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3 FPS, %4</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>視頻: %1x%2, %3 FPS, %4</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>視頻: %1x%2, %3</translation>
     </message>
     <message>
         <source>Player: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>玩家：%1</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation type="unfinished">主題：%1</translation>
+        <translation>主題：%1</translation>
     </message>
     <message>
         <source>Map: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>地圖：%1</translation>
     </message>
     <message>
         <source>Record: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>紀錄：%1</translation>
     </message>
 </context>
 <context>
@@ -1123,12 +1134,12 @@ Last engine message:
     <name>MinesTimeSpinBox</name>
     <message>
         <source>Random</source>
-        <translation type="unfinished">隨機</translation>
+        <translation>隨機</translation>
     </message>
     <message numerus="yes">
         <source>%1 seconds</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 秒</numerusform>
         </translation>
     </message>
 </context>
@@ -1165,7 +1176,7 @@ Last engine message:
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">常規</translation>
+        <translation>常規</translation>
     </message>
     <message>
         <source>Bans</source>
@@ -1200,19 +1211,19 @@ Last engine message:
     <name>PageCampaign</name>
     <message>
         <source>Team</source>
-        <translation type="unfinished">隊伍</translation>
+        <translation>隊伍</translation>
     </message>
     <message>
         <source>Campaign</source>
-        <translation type="unfinished"></translation>
+        <translation>戰役</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation>任務</translation>
     </message>
     <message>
         <source>Start fighting</source>
-        <translation type="unfinished">開始戰鬥</translation>
+        <translation>開始戰鬥</translation>
     </message>
 </context>
 <context>
@@ -1234,23 +1245,23 @@ Last engine message:
     </message>
     <message>
         <source>Open packages directory</source>
-        <translation type="unfinished">打開組件目錄</translation>
+        <translation>打開組件目錄</translation>
     </message>
     <message>
         <source>Load the start page</source>
-        <translation type="unfinished"></translation>
+        <translation>載入起始頁</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>未知的網路錯誤(可能缺少SSL函式庫)</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>此功能需要連接網際網路,但你並沒有上線(錯誤碼: %1)</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>內部錯誤: 回覆的對象是無效的</translation>
     </message>
 </context>
 <context>
@@ -1309,14 +1320,14 @@ Last engine message:
     </message>
     <message>
         <source>Brush size</source>
-        <translation type="unfinished"></translation>
+        <translation>筆刷大小</translation>
     </message>
 </context>
 <context>
     <name>PageEditTeam</name>
     <message>
         <source>General</source>
-        <translation type="unfinished">常規</translation>
+        <translation>常規</translation>
     </message>
     <message>
         <source>Select an action to choose a custom key bind for this team</source>
@@ -1356,55 +1367,55 @@ Last engine message:
     </message>
     <message>
         <source>Play a random example of this voice</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機播放一個配音</translation>
     </message>
     <message>
         <source>Random Hats</source>
-        <translation type="unfinished"></translation>
+        <translation>帽子隨機分配</translation>
     </message>
     <message>
         <source>Random Names</source>
-        <translation type="unfinished"></translation>
+        <translation>名字隨機分配</translation>
     </message>
     <message>
         <source>Randomize the team name</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇隊伍名稱</translation>
     </message>
     <message>
         <source>Randomize the grave</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇墳墓</translation>
     </message>
     <message>
         <source>Randomize the flag</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇旗幟</translation>
     </message>
     <message>
         <source>Randomize the voice</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇配音</translation>
     </message>
     <message>
         <source>Randomize the fort</source>
-        <translation type="unfinished"></translation>
+        <translation>隨機選擇堡壘</translation>
     </message>
     <message>
         <source>CPU %1</source>
         <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>PageGameStats</name>
     <message>
         <source>Details</source>
-        <translation type="unfinished">細節</translation>
+        <translation>細節</translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished">生命走勢</translation>
+        <translation>生命走勢</translation>
     </message>
     <message>
         <source>Ranking</source>
@@ -1412,27 +1423,27 @@ Last engine message:
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt;的&lt;b&gt;%2&lt;/b&gt;傷害獲得最佳攻擊獎。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>最佳殺手為&lt;b&gt;%1&lt;/b&gt;在一回合&lt;b&gt;%2&lt;/b&gt;殺。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>這場總共&lt;b&gt;%1&lt;/b&gt;隻刺蝟死亡。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
         <extracomment>Number of kills in stats screen, written after the team name</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1殺)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1449,7 +1460,7 @@ Last engine message:
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt;很慌張，跳過&lt;b&gt;%2&lt;/b&gt;次。</numerusform>
         </translation>
     </message>
@@ -1464,44 +1475,44 @@ Last engine message:
     <message numerus="yes">
         <source>(%1 %2)</source>
         <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
-        <translation type="unfinished">
+        <translation>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;認為攻擊自己的刺猬&lt;b&gt;%2&lt;/b&gt;傷害是很好的。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;殺了&lt;b&gt;%2&lt;/b&gt;隻自己的刺蝟。</numerusform>
         </translation>
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation type="unfinished"></translation>
+        <translation>擁有相同戰隊顏色的刺蝟，沒有理由互相戰鬥。因此，刺猬一直幸福地生活在和平之中。</translation>
     </message>
     <message numerus="yes">
         <source>(%1 point(s))</source>
         <extracomment>Number of points in stats screen, written after the team name</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 點)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%L1 second(s))</source>
         <extracomment>Time in seconds</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 秒)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 crate(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 箱子)</numerusform>
         </translation>
     </message>
 </context>
@@ -1523,7 +1534,7 @@ Last engine message:
     <name>PageMain</name>
     <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished">可下載的內容</translation>
+        <translation>可下載的內容</translation>
     </message>
     <message>
         <source>Play a game on a single computer</source>
@@ -1579,7 +1590,7 @@ Last engine message:
     </message>
     <message>
         <source>Open the Hedgewars online game manual in your web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>在你的瀏覽器中開啟刺蝟大作戰的遊戲手冊</translation>
     </message>
 </context>
 <context>
@@ -1594,26 +1605,26 @@ Last engine message:
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>開始戰鬥(需要至少兩隻隊伍)</translation>
     </message>
 </context>
 <context>
     <name>PageNet</name>
     <message>
         <source>Connect to the selected server</source>
-        <translation type="unfinished"></translation>
+        <translation>連線到選擇的伺服器</translation>
     </message>
     <message>
         <source>Update the list of servers</source>
-        <translation type="unfinished"></translation>
+        <translation>更新伺服器列表</translation>
     </message>
     <message>
         <source>Specify the address and port number of a known server and connect to it directly</source>
-        <translation type="unfinished"></translation>
+        <translation>指定已知伺服器的IP位址與端口號碼,然後連接它</translation>
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished">啟動私人伺服器</translation>
+        <translation>啟動私人伺服器</translation>
     </message>
 </context>
 <context>
@@ -1640,19 +1651,19 @@ Last engine message:
     </message>
     <message>
         <source>Room name</source>
-        <translation type="unfinished"></translation>
+        <translation>房間名</translation>
     </message>
     <message>
         <source>Update the room name</source>
-        <translation type="unfinished"></translation>
+        <translation>更新房間名</translation>
     </message>
     <message>
         <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
-        <translation type="unfinished"></translation>
+        <translation>當你準備開戰,打開燈泡通知其他玩家</translation>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>開始戰鬥(需要至少兩隻隊伍)</translation>
     </message>
 </context>
 <context>
@@ -1686,27 +1697,27 @@ Last engine message:
     </message>
     <message>
         <source>New scheme</source>
-        <translation type="unfinished">新增方案</translation>
+        <translation>新增方案</translation>
     </message>
     <message>
         <source>Edit scheme</source>
-        <translation type="unfinished">修改方案</translation>
+        <translation>修改方案</translation>
     </message>
     <message>
         <source>Delete scheme</source>
-        <translation type="unfinished">刪除方案</translation>
+        <translation>刪除方案</translation>
     </message>
     <message>
         <source>New weapon set</source>
-        <translation type="unfinished">新增武器組合</translation>
+        <translation>新增武器組合</translation>
     </message>
     <message>
         <source>Edit weapon set</source>
-        <translation type="unfinished">修改武器組合</translation>
+        <translation>修改武器組合</translation>
     </message>
     <message>
         <source>Delete weapon set</source>
-        <translation type="unfinished">刪除武器組合</translation>
+        <translation>刪除武器組合</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1738,15 +1749,15 @@ Last engine message:
     </message>
     <message>
         <source>Socks5 proxy</source>
-        <translation type="unfinished">Socks5代理</translation>
+        <translation>Socks5代理</translation>
     </message>
     <message>
         <source>HTTP proxy</source>
-        <translation type="unfinished">HTTP代理</translation>
+        <translation>HTTP代理</translation>
     </message>
     <message>
         <source>System proxy settings</source>
-        <translation type="unfinished">系統代理設置</translation>
+        <translation>系統代理設置</translation>
     </message>
     <message>
         <source>Select an action to change what key controls it</source>
@@ -1790,7 +1801,7 @@ Last engine message:
     </message>
     <message>
         <source>Schemes</source>
-        <translation type="unfinished">方案</translation>
+        <translation>方案</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -1839,24 +1850,24 @@ Last engine message:
     <message>
         <source>x</source>
         <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>MISSING LANGUAGE NAME [%1]</source>
         <extracomment>In the case of an error, this is shown in the language selection for a language with unknown name. %1 = language code</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>缺少的語言名稱 [%1]</translation>
     </message>
     <message>
         <source>Check now</source>
-        <translation type="unfinished"></translation>
+        <translation>立刻檢查</translation>
     </message>
     <message>
         <source>Can&apos;t delete last team</source>
-        <translation type="unfinished"></translation>
+        <translation>不能刪除最後一隻隊伍</translation>
     </message>
     <message>
         <source>You can&apos;t delete the last team!</source>
-        <translation type="unfinished"></translation>
+        <translation>你不能刪除最後一隻隊伍!</translation>
     </message>
 </context>
 <context>
@@ -1871,15 +1882,15 @@ Last engine message:
     </message>
     <message>
         <source>Play demo</source>
-        <translation type="unfinished">播放演示</translation>
+        <translation>播放演示</translation>
     </message>
     <message>
         <source>Play the selected demo</source>
-        <translation type="unfinished"></translation>
+        <translation>播放選擇的演示</translation>
     </message>
     <message>
         <source>Load the selected game</source>
-        <translation type="unfinished"></translation>
+        <translation>讀取選擇的遊戲</translation>
     </message>
 </context>
 <context>
@@ -1906,8 +1917,8 @@ Last engine message:
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
-            <numerusform>%1%n 玩家在線</numerusform>
+        <translation>
+            <numerusform>%1 玩家在線</numerusform>
         </translation>
     </message>
     <message>
@@ -1935,7 +1946,7 @@ Last engine message:
     <name>PageScheme</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">新增</translation>
+        <translation>新增</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -1943,7 +1954,7 @@ Last engine message:
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation type="unfinished">傷害的80%成為自身生命</translation>
+        <translation>傷害的80%成為自身生命</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
@@ -2003,11 +2014,11 @@ Last engine message:
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished">生成隨機地圖時，禁用橋樑。</translation>
+        <translation>生成隨機地圖時，禁用橋樑。</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation type="unfinished">生成隨機地圖時，禁用地面物體。</translation>
+        <translation>生成隨機地圖時，禁用地面物體。</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
@@ -2019,7 +2030,7 @@ Last engine message:
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation type="unfinished">進攻後不會自動結束你的回合。</translation>
+        <translation>進攻後不會自動結束你的回合。</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
@@ -2031,7 +2042,7 @@ Last engine message:
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
-        <translation type="unfinished">禁風，你將不用擔心風了。</translation>
+        <translation>禁風，你將不用擔心風了。</translation>
     </message>
     <message>
         <source>Wind will affect almost everything.</source>
@@ -2043,7 +2054,7 @@ Last engine message:
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished">同樣顏色的任意一隊伍每回合都可動作,但回合時間需共享。</translation>
+        <translation>同樣顏色的任意一隊伍每回合都可動作,但回合時間需共享。</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -2071,96 +2082,96 @@ Last engine message:
     </message>
     <message>
         <source>Each clan starts in its own part of the terrain.</source>
-        <translation type="unfinished"></translation>
+        <translation>每個隊伍在自己的地形開始。</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
         <extracomment>Description of the game scheme setting “Damage Modifier”. “Knockback” means how much hedgehogs and objects get pushed by explosions and other forces</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>以百分比表示整體的傷害</translation>
     </message>
     <message>
         <source>Turn time in seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>回合時間以秒為單位</translation>
     </message>
     <message>
         <source>Initial health of hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>刺蝟開始的生命值</translation>
     </message>
     <message>
         <source>How many rounds have to be played before Sudden Death begins</source>
-        <translation type="unfinished"></translation>
+        <translation>意外死亡開始前有幾個回合</translation>
     </message>
     <message>
         <source>How much the water rises per turn while in Sudden Death. Set to 0 along with Sudden Death Health Decrease to disable Sudden Death.</source>
-        <translation type="unfinished"></translation>
+        <translation>意外死亡開始每回合水上升多少</translation>
     </message>
     <message>
         <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
-        <translation type="unfinished"></translation>
+        <translation>意外死亡開始每個回合失去多少生命，直到剩下一點生命為止。</translation>
     </message>
     <message>
         <source>Maximum rope length in percent</source>
-        <translation type="unfinished"></translation>
+        <translation>最大繩索長度百分比</translation>
     </message>
     <message>
         <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
-        <translation type="unfinished"></translation>
+        <translation>掉落的箱子是急救箱的機率。其他的箱子是武器或工具</translation>
     </message>
     <message>
         <source>Likelihood of a crate dropping before a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>每回合箱子掉落的機率</translation>
     </message>
     <message>
         <source>Health bonus for collecting a health crate</source>
-        <translation type="unfinished"></translation>
+        <translation>急救箱的生命獎勵點數</translation>
     </message>
     <message>
         <source>Detonation timer of mines. The random timer lies between 0 and 5 seconds. The timer of air mines will be a quarter of the mines timer.</source>
-        <translation type="unfinished"></translation>
+        <translation>地雷引爆計時器。隨機計時器在0到5秒之間。浮空雷的緩衝時間只有地雷的四分之一。</translation>
     </message>
     <message>
         <source>Average number of mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>地雷放置在中型島嶼地圖的平均數量。這個數字將等比縮放在其他大小的地圖上。</translation>
     </message>
     <message>
         <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
-        <translation type="unfinished"></translation>
+        <translation>地雷啞彈的機率。不影響刺蝟放置的地雷</translation>
     </message>
     <message>
         <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>炸藥桶放置在中型島嶼地圖的平均數量。這個數字將等比縮放在其他大小的地圖上。</translation>
     </message>
     <message>
         <source>Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>浮空雷放置在中型島嶼地圖的平均數量。這個數字將等比縮放在其他大小的地圖上。</translation>
     </message>
     <message>
         <source>Affects the left and right boundaries of the map</source>
-        <translation type="unfinished"></translation>
+        <translation>影響地圖的左右邊界</translation>
     </message>
     <message>
         <source>Time you get after an attack</source>
-        <translation type="unfinished"></translation>
+        <translation>你進行攻擊後剩下的活動時間。預設是3秒。</translation>
     </message>
     <message>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>額外的參數來配置遊戲風格。含義取決於使用的風格，請參閱文檔。如有疑問，請將其留空。</translation>
     </message>
     <message>
         <source>Name of this scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>這個方案的名稱</translation>
     </message>
     <message>
         <source>Select a hedgehog at the beginning of a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>每個回合開始時可選擇刺蝟</translation>
     </message>
     <message>
         <source>Land can not be destroyed by most weapons.</source>
-        <translation type="unfinished"></translation>
+        <translation>大部分武器不能破壞地形</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2186,11 +2197,11 @@ Last engine message:
     <name>PageSinglePlayer</name>
     <message>
         <source>Play a quick game against the computer with random settings</source>
-        <translation type="unfinished">使用隨機設置與電腦快速開始遊戲</translation>
+        <translation>使用隨機設置與電腦快速開始遊戲</translation>
     </message>
     <message>
         <source>Play a hotseat game against your friends, or AI teams</source>
-        <translation type="unfinished">與你的朋友或AI隊伍進行遊戲</translation>
+        <translation>與你的朋友或AI隊伍進行遊戲</translation>
     </message>
     <message>
         <source>Campaign Mode</source>
@@ -2210,7 +2221,7 @@ Last engine message:
     </message>
     <message>
         <source>Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios.</source>
-        <translation type="unfinished"></translation>
+        <translation>單人任務: 在訓練中學習如何玩, 在挑戰中練習你的技巧, 嘗試完成場景中的目標</translation>
     </message>
 </context>
 <context>
@@ -2233,54 +2244,54 @@ Last engine message:
     </message>
     <message>
         <source>Pick the training to play</source>
-        <translation type="unfinished"></translation>
+        <translation>挑一個訓練來玩</translation>
     </message>
     <message>
         <source>Pick the challenge to play</source>
-        <translation type="unfinished"></translation>
+        <translation>挑一個挑戰來玩</translation>
     </message>
     <message>
         <source>Pick the scenario to play</source>
-        <translation type="unfinished"></translation>
+        <translation>挑一個場景來玩</translation>
     </message>
     <message>
         <source>Trainings</source>
-        <translation type="unfinished"></translation>
+        <translation>訓練</translation>
     </message>
     <message>
         <source>Challenges</source>
-        <translation type="unfinished"></translation>
+        <translation>挑戰</translation>
     </message>
     <message>
         <source>Scenarios</source>
-        <translation type="unfinished"></translation>
+        <translation>場景</translation>
     </message>
     <message>
         <source>Team</source>
-        <translation type="unfinished">隊伍</translation>
+        <translation>隊伍</translation>
     </message>
     <message>
         <source>Team highscore: %1</source>
         <extracomment>Highest score of a team</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>隊伍高分: %1</translation>
     </message>
     <message>
         <source>Team lowscore: %1</source>
         <extracomment>Lowest score of a team</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>隊伍低分: %1</translation>
     </message>
     <message>
         <source>Team&apos;s top accuracy: %1%</source>
         <extracomment>Best accuracy of a team (in a challenge)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>隊伍最高準度: %1%</translation>
     </message>
     <message>
         <source>Team&apos;s best time: %L1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>隊伍最佳時間: %L1 s</translation>
     </message>
     <message>
         <source>Team&apos;s longest time: %L1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>隊伍最長時間: %L1 s</translation>
     </message>
 </context>
 <context>
@@ -2295,7 +2306,7 @@ Last engine message:
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -2313,21 +2324,21 @@ Last engine message:
     </message>
     <message>
         <source>Date: %1</source>
-        <translation type="unfinished">日期：%1</translation>
+        <translation>日期：%1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation type="unfinished">大小：%1</translation>
+        <translation>大小：%1</translation>
     </message>
     <message>
         <source>%1%</source>
         <extracomment>Video encoding progress. %1 = number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2378,7 +2389,7 @@ Last engine message:
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
-        <translation type="unfinished">限制未註冊的玩家加入</translation>
+        <translation>限制未註冊的玩家加入</translation>
     </message>
     <message>
         <source>Show games in lobby</source>
@@ -2398,7 +2409,7 @@ Last engine message:
     </message>
     <message>
         <source>Delegate room control</source>
-        <translation type="unfinished"></translation>
+        <translation>房間控制權下放</translation>
     </message>
 </context>
 <context>
@@ -2417,7 +2428,7 @@ Last engine message:
     </message>
     <message>
         <source>Append date and time to record file name</source>
-        <translation type="unfinished">記錄檔名中包含具體時間日期</translation>
+        <translation>記錄檔名中包含具體時間日期</translation>
     </message>
     <message>
         <source>Check for updates at startup</source>
@@ -2425,11 +2436,11 @@ Last engine message:
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished">顯示武器提示訊息</translation>
+        <translation>顯示武器提示訊息</translation>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished">保存密碼</translation>
+        <translation>保存密碼</translation>
     </message>
     <message>
         <source>Save account name and password</source>
@@ -2441,7 +2452,7 @@ Last engine message:
     </message>
     <message>
         <source>Record audio</source>
-        <translation type="unfinished">錄製音頻</translation>
+        <translation>錄製音頻</translation>
     </message>
     <message>
         <source>Use game resolution</source>
@@ -2485,7 +2496,7 @@ Last engine message:
     </message>
     <message>
         <source>Hog</source>
-        <translation type="unfinished">刺蝟</translation>
+        <translation>刺蝟</translation>
     </message>
     <message>
         <source>Enable hedgehog tags by default</source>
@@ -2493,11 +2504,11 @@ Last engine message:
     </message>
     <message>
         <source>Health</source>
-        <translation type="unfinished">生命</translation>
+        <translation>生命</translation>
     </message>
     <message>
         <source>Enable health tags by default</source>
-        <translation type="unfinished">預設顯示生命值標示</translation>
+        <translation>預設顯示生命值標示</translation>
     </message>
     <message>
         <source>Translucent</source>
@@ -2509,20 +2520,20 @@ Last engine message:
     </message>
     <message>
         <source>Enable visual effects such as animated menu transitions and falling stars</source>
-        <translation type="unfinished"></translation>
+        <translation>啟用視覺效果，例如菜單動畫過渡和背景的流星</translation>
     </message>
     <message>
         <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果啟用，對於自動建立的演示檔將以&quot;YYYY-MM-DD_hh-mm&quot;的形式命名。</translation>
     </message>
     <message>
         <source>Dampen when losing focus</source>
         <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>在失去焦點時降低音量</translation>
     </message>
     <message>
         <source>Reduce the game audio volume if the game window has lost its focus</source>
-        <translation type="unfinished"></translation>
+        <translation>如果遊戲視窗已經失去焦點，則降低遊戲音量</translation>
     </message>
 </context>
 <context>
@@ -2541,95 +2552,95 @@ Last engine message:
     </message>
     <message>
         <source>Community</source>
-        <translation type="unfinished"></translation>
+        <translation>社群</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished">關閉</translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished">紅色/青色</translation>
+        <translation>紅色/青色</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished">青色/紅</translation>
+        <translation>青色/紅</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished">紅/藍</translation>
+        <translation>紅/藍</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished">藍/紅</translation>
+        <translation>藍/紅</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished">紅/綠</translation>
+        <translation>紅/綠</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished">綠/紅</translation>
+        <translation>綠/紅</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished"></translation>
+        <translation>並排</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>上下</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished">紅/青色灰度</translation>
+        <translation>紅/青色灰度</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished">青色/紅灰度</translation>
+        <translation>青色/紅灰度</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished">紅/藍灰度</translation>
+        <translation>紅/藍灰度</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished">藍/紅灰度</translation>
+        <translation>藍/紅灰度</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished">紅/綠灰度</translation>
+        <translation>紅/綠灰度</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished">綠/紅灰度</translation>
+        <translation>綠/紅灰度</translation>
     </message>
     <message>
         <source>Computer (Level %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>電腦(等級 %1)</translation>
     </message>
     <message>
         <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
-        <translation type="unfinished"></translation>
+        <translation>當佩戴3D眼鏡時，會產生深度上的錯覺。</translation>
     </message>
     <message>
         <source>24 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>25 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>30 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>50 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>60 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2644,7 +2655,7 @@ Last engine message:
     </message>
     <message>
         <source>Playing teams</source>
-        <translation type="unfinished">玩家隊伍</translation>
+        <translation>玩家隊伍</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -2660,15 +2671,15 @@ Last engine message:
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished">隊伍設置</translation>
+        <translation>隊伍設置</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished">視頻</translation>
+        <translation>視頻</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">描述</translation>
+        <translation>描述</translation>
     </message>
 </context>
 <context>
@@ -2711,7 +2722,7 @@ Last engine message:
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation type="unfinished">傷害修正</translation>
+        <translation>傷害修正</translation>
     </message>
     <message>
         <source>Turn Time</source>
@@ -2723,11 +2734,11 @@ Last engine message:
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation type="unfinished">意外死亡倒數</translation>
+        <translation>意外死亡倒數</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
-        <translation type="unfinished">方案名稱：</translation>
+        <translation>方案名稱：</translation>
     </message>
     <message>
         <source>Crate Drops</source>
@@ -2735,7 +2746,7 @@ Last engine message:
     </message>
     <message>
         <source>Mines Time</source>
-        <translation type="unfinished">地雷爆炸緩衝</translation>
+        <translation>地雷爆炸緩衝</translation>
     </message>
     <message>
         <source>Mines</source>
@@ -2743,7 +2754,7 @@ Last engine message:
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished">地雷啞彈率(%)</translation>
+        <translation>地雷啞彈率(%)</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2763,7 +2774,7 @@ Last engine message:
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished">語音</translation>
+        <translation>配音</translation>
     </message>
     <message>
         <source>Locale</source>
@@ -2775,27 +2786,27 @@ Last engine message:
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished">品質</translation>
+        <translation>品質</translation>
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation type="unfinished">急救箱率(%)</translation>
+        <translation>急救箱率(%)</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation type="unfinished">急救箱生命</translation>
+        <translation>急救箱生命</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation type="unfinished">意外死亡水上升</translation>
+        <translation>意外死亡水上升</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation type="unfinished">意外死亡生命減少</translation>
+        <translation>意外死亡生命減少</translation>
     </message>
     <message>
         <source>% Rope Length</source>
-        <translation type="unfinished">繩長(%)</translation>
+        <translation>繩長(%)</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
@@ -2803,11 +2814,11 @@ Last engine message:
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">風格</translation>
+        <translation>風格</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished">方案</translation>
+        <translation>方案</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
@@ -2931,7 +2942,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Script parameter</source>
-        <translation type="unfinished">腳本參數</translation>
+        <translation>腳本參數</translation>
     </message>
     <message>
         <source>Air Mines</source>
@@ -2939,33 +2950,29 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Player</source>
-        <translation type="unfinished"></translation>
+        <translation>玩家</translation>
     </message>
     <message>
         <source>Barrels</source>
-        <translation type="unfinished"></translation>
+        <translation>炸藥桶</translation>
     </message>
     <message>
         <source>% Retreat Time</source>
         <extracomment>Label of game scheme setting for the time you get after an attack</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>撤退時間(%)</translation>
     </message>
     <message>
         <source>Stereoscopy</source>
-        <translation type="unfinished"></translation>
+        <translation>立體視覺</translation>
     </message>
     <message>
         <source>Bitrate (Kibit/s)</source>
         <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>比特率(Kibit/s)</translation>
     </message>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Zoom (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>載入中&lt;br&gt;驗證碼 ...</translation>
     </message>
 </context>
 <context>
@@ -2976,7 +2983,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>hedgehog %1</source>
-        <translation type="unfinished">刺蝟 %1</translation>
+        <translation>刺蝟 %1</translation>
     </message>
     <message>
         <source>anonymous</source>
@@ -2984,11 +2991,11 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>unnamed (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>無名 (%1)</translation>
     </message>
     <message>
         <source>Hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>刺蝟 %1</translation>
     </message>
 </context>
 <context>
@@ -3010,7 +3017,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished">檔案關聯失敗。</translation>
+        <translation>檔案關聯失敗。</translation>
     </message>
     <message>
         <source>Error while authenticating at google.com:
@@ -3028,35 +3035,35 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
-        <translation type="unfinished">隊伍 - 你確定嗎?</translation>
+        <translation>隊伍 - 你確定嗎?</translation>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
-        <translation type="unfinished">你確定要刪除隊伍&apos;%1&apos;?</translation>
+        <translation>你確定要刪除隊伍&apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished">不能刪除預設方案 &quot;%1&quot;!</translation>
+        <translation>不能刪除預設方案 &quot;%1&quot;!</translation>
     </message>
     <message>
         <source>Please select a record from the list</source>
-        <translation type="unfinished">請從列表中選擇一個紀錄</translation>
+        <translation>請從列表中選擇一個紀錄</translation>
     </message>
     <message>
         <source>Unable to start server</source>
-        <translation type="unfinished">無法開啟伺服器</translation>
+        <translation>無法開啟伺服器</translation>
     </message>
     <message>
         <source>Hedgewars - Error</source>
-        <translation type="unfinished">刺蝟大作戰 - 錯誤</translation>
+        <translation>刺蝟大作戰 - 錯誤</translation>
     </message>
     <message>
         <source>Hedgewars - Success</source>
-        <translation type="unfinished">刺蝟大作戰 - 成功</translation>
+        <translation>刺蝟大作戰 - 成功</translation>
     </message>
     <message>
         <source>All file associations have been set</source>
-        <translation type="unfinished">所有檔案關聯已經被設定</translation>
+        <translation>所有檔案關聯已經被設定</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -3072,15 +3079,15 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Netgame - Error</source>
-        <translation type="unfinished">網路遊戲 - 錯誤</translation>
+        <translation>網路遊戲 - 錯誤</translation>
     </message>
     <message>
         <source>Please select a server from the list</source>
-        <translation type="unfinished">請從列表中選擇一個伺服器</translation>
+        <translation>請從列表中選擇一個伺服器</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">請鍵入房間名</translation>
+        <translation>請鍵入房間名</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
@@ -3100,15 +3107,15 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Room Name - Error</source>
-        <translation type="unfinished">房間名 - 錯誤</translation>
+        <translation>房間名 - 錯誤</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
-        <translation type="unfinished">請從列表選中房間</translation>
+        <translation>請從列表中選擇房間</translation>
     </message>
     <message>
         <source>Room Name - Are you sure?</source>
-        <translation type="unfinished">房間名 - 你確定嗎?</translation>
+        <translation>房間名 - 你確定嗎?</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
@@ -3118,45 +3125,45 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Schemes - Warning</source>
-        <translation type="unfinished">方案 - 警告</translation>
+        <translation>方案 - 警告</translation>
     </message>
     <message>
         <source>Schemes - Are you sure?</source>
-        <translation type="unfinished">方案 - 你確定嗎?</translation>
+        <translation>方案 - 你確定嗎?</translation>
     </message>
     <message>
         <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
-        <translation type="unfinished">你真的確定要刪除遊戲方案 &apos;%1&apos;?</translation>
+        <translation>你真的確定要刪除遊戲方案 &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Videos - Are you sure?</source>
-        <translation type="unfinished">視頻 - 你確定嗎?</translation>
+        <translation>視頻 - 你確定嗎?</translation>
     </message>
     <message>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
-        <translation type="unfinished">你確定要刪除視頻 &apos;%1&apos;嗎?</translation>
+        <translation>你確定要刪除視頻 &apos;%1&apos;嗎?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
-        <translation type="unfinished">
-            <numerusform>你確定要移除檔案%1%n嗎?</numerusform>
+        <translation>
+            <numerusform>你確定要移除檔案 %1 嗎?</numerusform>
         </translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation type="obsolete">你確定要取消上傳%1嗎?</translation>
+        <translation type="obsolete">你確定要取消上傳 %1 嗎?</translation>
     </message>
     <message>
         <source>File error</source>
-        <translation type="unfinished">檔案 - 錯誤</translation>
+        <translation>檔案錯誤</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
-        <translation type="unfinished">不能開啟&apos;%1&apos;</translation>
+        <translation>不能開啟&apos;%1&apos; 為了寫入</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
-        <translation type="unfinished">不能開啟&apos;%1&apos;</translation>
+        <translation>不能開啟&apos;%1&apos; 為了讀取</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
@@ -3164,7 +3171,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons - Warning</source>
-        <translation type="unfinished">武器  - 警告</translation>
+        <translation>武器 - 警告</translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
@@ -3172,117 +3179,120 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished">不能刪除預設武器設定&apos;%1&apos;!</translation>
+        <translation>不能刪除預設武器設定&apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Weapons - Are you sure?</source>
-        <translation type="unfinished">武器  -  你確定嗎?</translation>
+        <translation>武器 - 你確定嗎?</translation>
     </message>
     <message>
         <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
-        <translation type="unfinished">你確定要刪除武器設定&apos;%1&apos;嗎?</translation>
+        <translation>你確定要刪除武器設定&apos;%1&apos;嗎?</translation>
     </message>
     <message>
         <source>Hedgewars - Nick not registered</source>
-        <translation type="unfinished">刺蝟大作戰 -  暱稱已經被註冊</translation>
+        <translation>刺蝟大作戰 - 暱稱未註冊</translation>
     </message>
     <message>
         <source>System Information Preview</source>
-        <translation type="unfinished">系統資訊預覽</translation>
+        <translation>系統資訊預覽</translation>
     </message>
     <message>
         <source>Failed to generate captcha</source>
-        <translation type="unfinished">產生驗證碼失敗</translation>
+        <translation>產生驗證碼失敗</translation>
     </message>
     <message>
         <source>Failed to download captcha</source>
-        <translation type="unfinished">下載驗證碼失敗</translation>
+        <translation>下載驗證碼失敗</translation>
     </message>
     <message>
         <source>Please fill out all fields. Email is optional.</source>
-        <translation type="unfinished">請填寫所有欄位. 電子郵件地址是選填的. </translation>
+        <translation>請填寫所有欄位. 電子郵件地址是選填的. </translation>
     </message>
     <message>
         <source>Hedgewars - Warning</source>
-        <translation type="unfinished">刺蝟大作戰 -  警告</translation>
+        <translation>刺蝟大作戰 -  警告</translation>
     </message>
     <message>
         <source>Hedgewars - Information</source>
-        <translation type="unfinished">刺蝟大作戰 -  資訊</translation>
+        <translation>刺蝟大作戰 -  資訊</translation>
     </message>
     <message>
         <source>Not all players are ready</source>
-        <translation type="unfinished">並不是所有的玩家都準備就緒</translation>
+        <translation>並不是所有的玩家都準備就緒</translation>
     </message>
     <message>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
-        <translation type="unfinished">你確定要啟動這個遊戲嗎？
+        <translation>你確定要啟動這個遊戲嗎？
 並不是所有的玩家都準備就緒。</translation>
     </message>
     <message>
         <source>Teams - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>隊伍 - 名字已經被用了</translation>
     </message>
     <message>
         <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>隊伍名稱 &apos;%1&apos; 已經被用了, 因此你的隊伍被重新命名為 &apos;%2&apos;</translation>
     </message>
     <message>
         <source>Please select a file from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>請從列表中選擇一個檔案</translation>
     </message>
     <message>
         <source>Cannot rename file to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>不能重新命名檔案 %1</translation>
     </message>
     <message>
         <source>Cannot delete file %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>不能刪除檔案 %1</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>歡迎來到刺蝟大作戰</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars!
 
 You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
-        <translation type="unfinished"></translation>
+        <translation>歡迎來到刺蝟大作戰!
+
+你似乎是新來的。 你想先玩一些訓練任務來學習刺蝟大作戰的基礎知識嗎？
+        </translation>
     </message>
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>不能使用武器方案 &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>The connection to the server is lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>伺服器連接丟失</translation>
     </message>
     <message>
         <source>Schemes - Name already taken</source>
-        <translation type="unfinished"></translation>
+        <translation>方案 - 名字已經被用了</translation>
     </message>
     <message>
         <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>名為&apos;%1&apos;的方案已經存在。你的方案已被重新命名為&apos;%2&apos;。</translation>
     </message>
     <message>
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
-        <translation type="unfinished"></translation>
+        <translation>名為&apos;%1&apos;的武器方案已經存在。對武器計劃所做的更改已被廢棄。</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>No description available</source>
-        <translation type="unfinished">沒有可用的描述</translation>
+        <translation>沒有可用的描述</translation>
     </message>
 </context>
 <context>
     <name>QPushButton</name>
     <message>
         <source>Play demo</source>
-        <translation type="unfinished">播放演示</translation>
+        <translation>播放演示</translation>
     </message>
     <message>
         <source>Connect</source>
@@ -3290,7 +3300,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Go!</source>
-        <translation type="obsolete">出場！</translation>
+        <translation>出場！</translation>
     </message>
     <message>
         <source>Start</source>
@@ -3298,7 +3308,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Start server</source>
-        <translation type="unfinished">啟動伺服器</translation>
+        <translation>啟動伺服器</translation>
     </message>
     <message>
         <source>Update</source>
@@ -3318,7 +3328,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Rename</source>
-        <translation type="unfinished">更名</translation>
+        <translation>更名</translation>
     </message>
     <message>
         <source>OK</source>
@@ -3342,11 +3352,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Set default options</source>
-        <translation type="unfinished">回到預設值</translation>
+        <translation>回到預設值</translation>
     </message>
     <message>
         <source>Open videos directory</source>
-        <translation type="unfinished">打開視頻目錄</translation>
+        <translation>打開視頻目錄</translation>
     </message>
     <message>
         <source>Play</source>
@@ -3362,19 +3372,19 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Restore default coding parameters</source>
-        <translation type="unfinished">恢復預設的編碼參數</translation>
+        <translation>恢復預設的編碼參數</translation>
     </message>
     <message>
         <source>Open the video directory in your system</source>
-        <translation type="unfinished">打開你系統上的視頻目錄</translation>
+        <translation>打開你系統上的視頻目錄</translation>
     </message>
     <message>
         <source>Play this video</source>
-        <translation type="unfinished">播放此視頻</translation>
+        <translation>播放此視頻</translation>
     </message>
     <message>
         <source>Delete this video</source>
-        <translation type="unfinished">刪除此視頻</translation>
+        <translation>刪除此視頻</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
@@ -3382,19 +3392,19 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">重置</translation>
+        <translation>重置</translation>
     </message>
     <message>
         <source>Set the default server port for Hedgewars</source>
-        <translation type="unfinished">設置為刺猬大作戰預設的伺服器端口</translation>
+        <translation>設置為刺猬大作戰預設的伺服器端口</translation>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
-        <translation type="unfinished">只要1個點擊就可以邀請你的朋友到你的伺服器！</translation>
+        <translation>只要1個點擊就可以邀請朋友到你的伺服器！</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation type="unfinished">點擊複製你獨特的伺服器URL到剪貼簿。將此鏈接發送給你的朋友，他們就可以加入你。</translation>
+        <translation>點擊複製你獨特的伺服器URL到剪貼簿。將此鏈接發送給你的朋友，他們就可以加入你。</translation>
     </message>
     <message>
         <source>Start private server</source>
@@ -3402,14 +3412,14 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Specify address</source>
-        <translation type="unfinished"></translation>
+        <translation>指定IP位址</translation>
     </message>
 </context>
 <context>
     <name>QSpinBox</name>
     <message>
         <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
-        <translation type="unfinished"></translation>
+        <translation>指定錄製的視頻其比特率為1Kb/s的倍數</translation>
     </message>
 </context>
 <context>
@@ -3435,68 +3445,68 @@ You seem to be new around here. Would you like to play some training missions fi
     <name>RoomsListModel</name>
     <message>
         <source>In progress</source>
-        <translation type="unfinished">進行中</translation>
+        <translation>進行中</translation>
     </message>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished">房間名</translation>
+        <translation>房間名</translation>
     </message>
     <message>
         <source>C</source>
         <extracomment>Caption of the column for the number of connected clients in the list of rooms</extracomment>
-        <translation type="unfinished">人數</translation>
+        <translation>人數</translation>
     </message>
     <message>
         <source>T</source>
         <extracomment>Caption of the column for the number of teams in the list of rooms</extracomment>
-        <translation type="unfinished">隊伍</translation>
+        <translation>隊伍</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished">創建者</translation>
+        <translation>創建者</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">地圖</translation>
+        <translation>地圖</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished">規則</translation>
+        <translation>規則</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">武器</translation>
+        <translation>武器</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished">隨機地圖</translation>
+        <translation>隨機地圖</translation>
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished">隨機迷宮</translation>
+        <translation>Maze隨機算法</translation>
     </message>
     <message>
         <source>Hand-drawn</source>
-        <translation type="unfinished">手繪</translation>
+        <translation>手繪</translation>
     </message>
     <message>
         <source>Script</source>
-        <translation type="unfinished">腳本</translation>
+        <translation>腳本</translation>
     </message>
     <message>
         <source>Random Perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Perlin隨機算法</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>堡壘</translation>
     </message>
 </context>
 <context>
     <name>SeedPrompt</name>
     <message>
         <source>The map seed is the basis for all random values generated by the game.</source>
-        <translation type="unfinished">地圖種子是基礎由遊戲生成的所有隨機值。</translation>
+        <translation>地圖種子是遊戲裡所有隨機值的基礎。</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -3504,7 +3514,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Set seed</source>
-        <translation type="unfinished">給定種子</translation>
+        <translation>給定種子</translation>
     </message>
     <message>
         <source>Close</source>
@@ -3513,14 +3523,14 @@ You seem to be new around here. Would you like to play some training missions fi
     <message>
         <source>Seed</source>
         <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
-        <translation type="unfinished">種子</translation>
+        <translation>種子</translation>
     </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished">武器組合</translation>
+        <translation>武器組合</translation>
     </message>
     <message>
         <source>Probabilities</source>
@@ -3540,35 +3550,35 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>copy of %1</source>
-        <translation type="obsolete">%1的拷貝</translation>
+        <translation>%1的拷貝</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">新增</translation>
+        <translation>新增</translation>
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>新增(%1)</translation>
     </message>
     <message>
         <source>Copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1的拷貝</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1的拷貝(%2)</translation>
     </message>
 </context>
 <context>
     <name>TCPBase</name>
     <message>
         <source>Unable to start server at %1.</source>
-        <translation type="unfinished">無法在%1，啟動伺服器。</translation>
+        <translation>無法在%1，啟動伺服器。</translation>
     </message>
     <message>
         <source>Unable to run engine at %1
 Error code: %2</source>
-        <translation type="unfinished">無法在%1，運行引擎
+        <translation>無法在%1，運行引擎
 錯誤代碼：%2</translation>
     </message>
     <message>
@@ -3578,12 +3588,12 @@ Error code: %2</source>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation type="unfinished">遊戲引擎意外死亡
+        <translation>遊戲引擎意外死亡
 （退出代碼為%1）
 
 我們很抱歉給你帶來不便！ :(
 
-如果這一情況持續發生，請點擊主菜單中的“%2”按鈕！</translation>
+如果這一情況持續發生，請點擊主選單中的“%2”按鈕！</translation>
     </message>
 </context>
 <context>
@@ -3601,15 +3611,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Search for a theme:</source>
-        <translation type="unfinished">搜索主題：</translation>
+        <translation>搜索主題：</translation>
     </message>
     <message>
         <source>Use selected theme</source>
-        <translation type="unfinished">使用選定的主題</translation>
+        <translation>使用選定的主題</translation>
     </message>
     <message>
         <source>Choose a theme</source>
-        <translation type="unfinished">選擇一個主題</translation>
+        <translation>選擇一個主題</translation>
     </message>
 </context>
 <context>
@@ -3644,35 +3654,35 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>slot 1</source>
-        <translation type="unfinished">第1類</translation>
+        <translation>第1類</translation>
     </message>
     <message>
         <source>slot 2</source>
-        <translation type="unfinished">第2類</translation>
+        <translation>第2類</translation>
     </message>
     <message>
         <source>slot 3</source>
-        <translation type="unfinished">第3類</translation>
+        <translation>第3類</translation>
     </message>
     <message>
         <source>slot 4</source>
-        <translation type="unfinished">第4類</translation>
+        <translation>第4類</translation>
     </message>
     <message>
         <source>slot 5</source>
-        <translation type="unfinished">第5類</translation>
+        <translation>第5類</translation>
     </message>
     <message>
         <source>slot 6</source>
-        <translation type="unfinished">第6類</translation>
+        <translation>第6類</translation>
     </message>
     <message>
         <source>slot 7</source>
-        <translation type="unfinished">第7類</translation>
+        <translation>第7類</translation>
     </message>
     <message>
         <source>slot 8</source>
-        <translation type="unfinished">第8類</translation>
+        <translation>第8類</translation>
     </message>
     <message>
         <source>timer 1 sec</source>
@@ -3728,7 +3738,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>slot 9</source>
-        <translation type="unfinished">第9類</translation>
+        <translation>第9類</translation>
     </message>
     <message>
         <source>precise aim</source>
@@ -3768,7 +3778,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>slot 10</source>
-        <translation type="unfinished">第10類</translation>
+        <translation>第10類</translation>
     </message>
     <message>
         <source>mute audio</source>
@@ -3776,7 +3786,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>record</source>
-        <translation type="unfinished">錄像切換</translation>
+        <translation>錄像切換</translation>
     </message>
     <message>
         <source>hedgehog info</source>
@@ -3793,31 +3803,31 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>toggle team bars</source>
         <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>切換隊伍資訊欄</translation>
     </message>
     <message>
         <source>pause / auto skip</source>
-        <translation type="unfinished"></translation>
+        <translation>暫停 / 自動跳過</translation>
     </message>
     <message>
         <source>toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>切換刺蝟標示</translation>
     </message>
     <message>
         <source>change timer</source>
-        <translation type="unfinished"></translation>
+        <translation>改變定時</translation>
     </message>
     <message>
         <source>show mission information</source>
-        <translation type="unfinished"></translation>
+        <translation>顯示任務資訊</translation>
     </message>
     <message>
         <source>clan chat</source>
-        <translation type="unfinished"></translation>
+        <translation>隊伍聊天</translation>
     </message>
     <message>
         <source>unselect weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>不選擇武器</translation>
     </message>
 </context>
 <context>
@@ -3832,7 +3842,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Camera</source>
-        <translation type="unfinished">鏡頭</translation>
+        <translation>鏡頭</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
@@ -3919,11 +3929,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Heads-up display:</source>
-        <translation type="unfinished"></translation>
+        <translation>抬頭顯示：</translation>
     </message>
     <message>
         <source>Talk to your clan or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>同隊友或全部參與者對話</translation>
     </message>
 </context>
 <context>
@@ -4078,7 +4088,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Up</source>
@@ -4162,83 +4172,83 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>A button</source>
-        <translation type="unfinished">A鈕</translation>
+        <translation>A鈕</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="unfinished">B鈕</translation>
+        <translation>B鈕</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="unfinished">X鈕</translation>
+        <translation>X鈕</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="unfinished">Y鈕</translation>
+        <translation>Y鈕</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation type="unfinished">LB鈕</translation>
+        <translation>LB鈕</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="unfinished">RB鈕</translation>
+        <translation>RB鈕</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="unfinished">Back鈕</translation>
+        <translation>Back鈕</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="unfinished">Start鈕</translation>
+        <translation>Start鈕</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished">左搖桿</translation>
+        <translation>左搖桿</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished">右搖桿</translation>
+        <translation>右搖桿</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished">左搖桿(右)</translation>
+        <translation>左搖桿(右)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished">左搖桿(左)</translation>
+        <translation>左搖桿(左)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished">左搖桿(下)</translation>
+        <translation>左搖桿(下)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished">左搖桿(上)</translation>
+        <translation>左搖桿(上)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished">LT鈕</translation>
+        <translation>LT鈕</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished">RT鈕</translation>
+        <translation>RT鈕</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished">右搖桿(下)</translation>
+        <translation>右搖桿(下)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished">右搖桿(上)</translation>
+        <translation>右搖桿(上)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished">右搖桿(右)</translation>
+        <translation>右搖桿(右)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished">右搖桿(左)</translation>
+        <translation>右搖桿(左)</translation>
     </message>
     <message>
         <source>DPad</source>
@@ -4246,490 +4256,490 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>D-pad</source>
-        <translation type="unfinished"></translation>
+        <translation>十字键</translation>
     </message>
     <message>
         <source>Axis %1 %2</source>
         <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>軸 %1 %2</translation>
     </message>
     <message>
         <source>Button %1</source>
         <extracomment>Game controller button. %1 = button number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>按鈕 %1</translation>
     </message>
     <message>
         <source>D-pad %1 %2</source>
         <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>十字键 %1 %2</translation>
     </message>
     <message>
         <source>(Don&apos;t use)</source>
         <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(不使用)</translation>
     </message>
 </context>
 <context>
     <name>credits</name>
     <message>
         <source>Programming</source>
-        <translation type="unfinished"></translation>
+        <translation>程序設計</translation>
     </message>
     <message>
         <source>Game engine</source>
-        <translation type="unfinished"></translation>
+        <translation>遊戲引擎</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>創造者</translation>
     </message>
     <message>
         <source>Many engine improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>許多引擎的改善</translation>
     </message>
     <message>
         <source>Gamepad and Lua integration</source>
-        <translation type="unfinished"></translation>
+        <translation>遊戲手柄與Lua整合</translation>
     </message>
     <message>
         <source>Campaign support</source>
-        <translation type="unfinished"></translation>
+        <translation>活動支持</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>主體客製化改善</translation>
     </message>
     <message>
         <source>Some Pas2C and GLES2 work</source>
-        <translation type="unfinished"></translation>
+        <translation>一些Pas2C和GLES2工作</translation>
     </message>
     <message>
         <source>Video recording</source>
-        <translation type="unfinished"></translation>
+        <translation>視頻錄製</translation>
     </message>
     <message>
         <source>Other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>其他改善</translation>
     </message>
     <message>
         <source>Map generation</source>
-        <translation type="unfinished"></translation>
+        <translation>地圖生成</translation>
     </message>
     <message>
         <source>Core map generators</source>
-        <translation type="unfinished"></translation>
+        <translation>核心地圖生成器</translation>
     </message>
     <message>
         <source>Perlin maps and other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Perlin地圖和其他改善</translation>
     </message>
     <message>
         <source>Maze maps</source>
-        <translation type="unfinished"></translation>
+        <translation>迷宮地圖</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">武器</translation>
+        <translation>武器</translation>
     </message>
     <message>
         <source>Most core weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>大部分核心武器</translation>
     </message>
     <message>
         <source>Air mine, rubber, others</source>
-        <translation type="unfinished"></translation>
+        <translation>浮空雷, 橡皮筋, 其他</translation>
     </message>
     <message>
         <source>Drill rocket, ballgun, RC plane</source>
-        <translation type="unfinished"></translation>
+        <translation>鑽地火箭, 彈珠槍, 遙控飛機</translation>
     </message>
     <message>
         <source>Freezer</source>
-        <translation type="unfinished"></translation>
+        <translation>急凍槍</translation>
     </message>
     <message>
         <source>Mine number and time game settings</source>
-        <translation type="unfinished"></translation>
+        <translation>地雷數量和時間的遊戲設定</translation>
     </message>
     <message>
         <source>Frontend / main menu</source>
-        <translation type="unfinished"></translation>
+        <translation>前端 / 主選單</translation>
     </message>
     <message>
         <source>Many frontend improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>許多前端的改善</translation>
     </message>
     <message>
         <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation type="unfinished"></translation>
+        <translation>鍵盤綁定，反饋，地圖和帽子界面</translation>
     </message>
     <message>
         <source>Login dialogs, other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>登錄對話框，以及其他改進</translation>
     </message>
     <message>
         <source>Missions and styles</source>
-        <translation type="unfinished"></translation>
+        <translation>任務和一些風格</translation>
     </message>
     <message>
         <source>A Classic Fairytale</source>
-        <translation type="unfinished"></translation>
+        <translation>經典故事</translation>
     </message>
     <message>
         <source>A Space Adventure</source>
-        <translation type="unfinished"></translation>
+        <translation>太空探險</translation>
     </message>
     <message>
         <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation type="unfinished"></translation>
+        <translation>創建奪旗，施工模式，控制，刺蝟編輯器，漢蘭達，賽車手，科技賽車手，專家，WxW</translation>
     </message>
     <message>
         <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation type="unfinished"></translation>
+        <translation>訓練，計時賽和目標練習挑戰，火箭筒戰場，恐怖觸手，大軍械庫，錯誤修正和維護</translation>
     </message>
     <message>
         <source>Some styles and missions</source>
-        <translation type="unfinished"></translation>
+        <translation>一些風格和任務</translation>
     </message>
     <message>
         <source>Battalion</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Continental supplies</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Teamwork 2</source>
-        <translation type="unfinished"></translation>
+        <translation>團隊合作2</translation>
     </message>
     <message>
         <source>Climb Home</source>
-        <translation type="unfinished"></translation>
+        <translation>爬上家裡</translation>
     </message>
     <message>
         <source>Portal Mind Challenge</source>
-        <translation type="unfinished"></translation>
+        <translation>傳送門挑戰</translation>
     </message>
     <message>
         <source>Game server</source>
-        <translation type="unfinished"></translation>
+        <translation>遊戲伺服器</translation>
     </message>
     <message>
         <source>Ports</source>
-        <translation type="unfinished"></translation>
+        <translation>部份</translation>
     </message>
     <message>
         <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>macOS/iPhone部份,OpenGL-ES轉換</translation>
     </message>
     <message>
         <source>Android port</source>
-        <translation type="unfinished"></translation>
+        <translation>Android部份</translation>
     </message>
     <message>
         <source>Android netplay, portability abstraction</source>
-        <translation type="unfinished"></translation>
+        <translation>Android網路遊戲,移植性的抽象層</translation>
     </message>
     <message>
         <source>WebGL port</source>
-        <translation type="unfinished"></translation>
+        <translation>WebGL部份</translation>
     </message>
     <message>
         <source>iPhone/iPad ports</source>
-        <translation type="unfinished"></translation>
+        <translation>iPhone/iPad部份</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished">圖像</translation>
+        <translation>圖像</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">常規</translation>
+        <translation>常規</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation type="unfinished"></translation>
+        <translation>主題</translation>
     </message>
     <message>
         <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Golf, Hoggywood, Stage</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Hoggywood</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Cave, Olympics</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Fruit, Cake</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Art</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Beach</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Brick</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Hell</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Sheep</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>地圖</translation>
     </message>
     <message>
         <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Castle, PirateFlag</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>ShoppaKing, TrophyRace</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Battlefield</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>CTF_Blizzard</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Cheese</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>ClimbHome</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Lonely_Island</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Octorama</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>portal</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Sticks</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished"></translation>
+        <translation>堡壘</translation>
     </message>
     <message>
         <source>EvilChicken</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Olympic</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Tank</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Snail</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>SteelTower</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Hats, graves, other</source>
-        <translation type="unfinished"></translation>
+        <translation>帽子, 墳墓, 其他</translation>
     </message>
     <message>
         <source>See CREDITS text file</source>
-        <translation type="unfinished"></translation>
+        <translation>看貢獻文字檔</translation>
     </message>
     <message>
         <source>Sounds</source>
-        <translation type="unfinished"></translation>
+        <translation>音效</translation>
     </message>
     <message>
         <source>Hedgehogs voice</source>
-        <translation type="unfinished"></translation>
+        <translation>刺蝟聲音</translation>
     </message>
     <message>
         <source>Default_pl, Russian_pl voices</source>
-        <translation type="unfinished"></translation>
+        <translation>預設聲音,俄羅斯聲音</translation>
     </message>
     <message>
         <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation type="unfinished"></translation>
+        <translation>多個作者來自www.freesound.org(看貢獻文字檔)</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished">音樂</translation>
+        <translation>音樂</translation>
     </message>
     <message>
         <source>City, Rock, others</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Compost</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>EarthRise, oriental, Pirate, snow</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Fruit, Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Nature</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>olympics_sd</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation type="unfinished"></translation>
+        <translation>翻譯</translation>
     </message>
     <message>
         <source>Brazilian Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>巴西葡萄牙文</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation type="unfinished"></translation>
+        <translation>保加利亞文</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>捷克文</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>中文</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation type="unfinished"></translation>
+        <translation>芬蘭文</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>法文</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>德文</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>希臘文</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>義大利文</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>日文</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>韓文</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation type="unfinished"></translation>
+        <translation>立陶宛文</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>波蘭文</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>葡萄牙文</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>俄羅斯文</translation>
     </message>
     <message>
         <source>Scottish Gaelic</source>
-        <translation type="unfinished"></translation>
+        <translation>蓋爾文</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>斯洛伐克文</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>西班牙文</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>瑞典文</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation type="unfinished"></translation>
+        <translation>烏克蘭文</translation>
     </message>
     <message>
         <source>Special thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>特別感謝</translation>
     </message>
     <message>
         <source>Project founder</source>
-        <translation type="unfinished"></translation>
+        <translation>項目創始人</translation>
     </message>
 </context>
 <context>
@@ -4804,27 +4814,27 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation type="unfinished">暱稱已經被使用</translation>
+        <translation>暱稱已經被使用</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation type="unfinished">沒有檢查權</translation>
+        <translation>沒有檢查權</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation type="unfinished">驗證失敗</translation>
+        <translation>驗證失敗</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished">被踢出後60秒冷卻時間</translation>
+        <translation>被踢出後60秒冷卻時間</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation type="unfinished">被踢出</translation>
+        <translation>被踢出</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation type="unfinished">Ping超時</translation>
+        <translation>Ping超時</translation>
     </message>
     <message>
         <source>bye</source>
@@ -4864,7 +4874,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>New voting started</source>
-        <translation type="unfinished">新的投票開始</translation>
+        <translation>新的投票開始</translation>
     </message>
     <message>
         <source>Voting expired</source>
@@ -4872,11 +4882,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>kick</source>
-        <translation type="unfinished">踢</translation>
+        <translation>踢</translation>
     </message>
     <message>
         <source>map</source>
-        <translation type="unfinished">地圖</translation>
+        <translation>地圖</translation>
     </message>
     <message>
         <source>pause</source>
@@ -4884,19 +4894,19 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation type="unfinished">太快重新連線</translation>
+        <translation>太快重新連線</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation type="unfinished">警告! 避免聊天氾濫的防護機制被啟動</translation>
+        <translation>警告! 避免聊天氾濫的防護機制被啟動</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation type="unfinished">超額洪水</translation>
+        <translation>超額洪水</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation type="unfinished">已經偵測到遊戲訊息氾濫 - 1</translation>
+        <translation>已經偵測到遊戲訊息氾濫 - 1</translation>
     </message>
     <message>
         <source>Game messages flood detected - 2</source>
@@ -4904,7 +4914,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation type="unfinished">警告! 避免加入氾濫的防護機制被啟動</translation>
+        <translation>警告! 避免加入氾濫的防護機制被啟動</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
@@ -4912,383 +4922,383 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>new seed</source>
-        <translation type="unfinished"></translation>
+        <translation>新的種子</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
-        <translation type="unfinished"></translation>
+        <translation>/最多隊伍數:指定從2到8</translation>
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation type="unfinished"></translation>
+        <translation>少於兩隊遊戲不能開始</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation type="unfinished"></translation>
+        <translation>空配置條目。</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>拒絕訪問。</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>你不是房間主人!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation type="unfinished"></translation>
+        <translation>毀損的刺蝟資訊!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation type="unfinished"></translation>
+        <translation>太多隊伍!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation type="unfinished"></translation>
+        <translation>太多刺蝟!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>已經有個相同的隊名在列表。</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation type="unfinished"></translation>
+        <translation>不能加入：遊戲正在進行中。</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個房間目前不允許添加新的隊伍。</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>錯誤：您嘗試刪除的隊伍不存在。</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation type="unfinished"></translation>
+        <translation>你無法刪除不屬於你的隊伍。</translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>非法的房間名稱！房間名稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>一個有相同名稱的房間已經存在。</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: 您需要指定一個暱稱。</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: 沒有這樣的用戶！</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map: 沒有這樣的地圖！</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote pause: 沒有遊戲在進行中！</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote hedgehogs: 指定1到8之間的數字。</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>非法的房間名稱！房間名稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation type="unfinished"></translation>
+        <translation>沒有這樣的房間。</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation type="unfinished"></translation>
+        <translation>房間的版本與你的刺蝟大作戰版本不兼容！</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation type="unfinished"></translation>
+        <translation>拒絕訪問。這個房間目前不允許加入。</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation type="unfinished"></translation>
+        <translation>拒絕訪問。這個房間僅供註冊用戶使用。</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation type="unfinished"></translation>
+        <translation>你被這個房間封鎖</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
-        <translation type="unfinished"></translation>
+        <translation>暱稱已經提供。</translation>
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>非法暱稱！暱稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
-        <translation type="unfinished"></translation>
+        <translation>協議已知。</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation type="unfinished"></translation>
+        <translation>不好的號碼。</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation type="unfinished"></translation>
+        <translation>沒有投票在進行。</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation type="unfinished"></translation>
+        <translation>你已經投過票了。</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation type="unfinished"></translation>
+        <translation>你的投票已被計算在內。</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation type="unfinished"></translation>
+        <translation>投票結束。</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation>暫停切換。</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>投票已過期。</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation type="unfinished"></translation>
+        <translation>每個隊伍的刺蝟:</translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation type="unfinished"></translation>
+        <translation>/info &lt;player&gt;: 顯示玩家資訊</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/me &lt;message&gt;: 聊天操作，例如:&apos;/me 吃披薩&apos;變成&apos;玩家暱稱 吃披薩&apos;</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd: 翻轉虛擬硬幣並回覆&apos;頭&apos;或&apos;尾&apos;</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation type="unfinished"></translation>
+        <translation>/rnd [A] [B] [C] [...]: 隨機回复給定列表中的一個單詞</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation type="unfinished"></translation>
+        <translation>/watch &lt;id&gt;: 觀看存儲在伺服器上指定ID的演示</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation type="unfinished"></translation>
+        <translation>/help: 顯示聊天命令提示</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote [arguments]: 開始一個投票</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote &lt;yes/no&gt;: 對進行中的投票,投&apos;是&apos;或&apos;不&apos;</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation type="unfinished"></translation>
+        <translation>/delegate &lt;player&gt;: 下放房間控製到某個玩家</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation type="unfinished"></translation>
+        <translation>/maxteams &lt;N&gt;: 將隊伍數上限設置為N</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/global &lt;message&gt;: 發送全域聊天訊息，伺服器上的每個人都可以看到</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation type="unfinished"></translation>
+        <translation>/registered_only: 切換&apos;註冊專用&apos;狀態。如果啟用，只有註冊的玩家才能加入伺服器</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation type="unfinished"></translation>
+        <translation>/super_power：激活你的超能力。有了它，你可以進入任何房間，並受到免踢保護。直到你離開伺服器</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation type="unfinished"></translation>
+        <translation>/stats: 查詢伺服器統計信息</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation type="unfinished"></translation>
+        <translation>/force &lt;yes/no&gt;: 強制決定進行中的投票</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>/fix: 迫使這個房間空著時保持打開狀態</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation type="unfinished"></translation>
+        <translation>撤消/fix命令</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>列出大廳聊天命令:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation type="unfinished"></translation>
+        <translation>列出房間聊天命令:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation type="unfinished"></translation>
+        <translation>伺服器管理員專用命令：</translation>
     </message>
     <message>
         <source>room</source>
-        <translation type="unfinished"></translation>
+        <translation>房間</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>大廳</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation type="unfinished"></translation>
+        <translation>(遊玩中)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation type="unfinished"></translation>
+        <translation>(觀看中)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation type="unfinished"></translation>
+        <translation>玩家不在線上</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/force: 請使用&apos;yes&apos;或&apos;no&apos;</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>/vote: 請使用&apos;yes&apos;或&apos;no&apos;</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>被踢</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>此伺服器僅允許註冊用戶加入。</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation type="unfinished"></translation>
+        <translation>頭</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation type="unfinished"></translation>
+        <translation>尾</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation type="unfinished"></translation>
+        <translation>此伺服器不支持重播！</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
+        <translation>/greeting [message]: 設置或清除要加入房間的玩家的歡迎訊息設定</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation type="unfinished"></translation>
+        <translation>/save &lt;config ID&gt; &lt;config name&gt;: 添加當前房間配置作為/callvote map的可表決選項</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>/delete &lt;config ID&gt;: 刪除一個可表決的房間配置</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/saveroom &lt;file name&gt;: 將此房間的所有可表決配置（和歡迎訊息）保存到文件中</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation type="unfinished"></translation>
+        <translation>/loadroom &lt;file name&gt;: 從文件加載可表決房間配置（和歡迎訊息）</translation>
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation type="unfinished"></translation>
+        <translation>超能力被激活。</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
-        <translation type="unfinished"></translation>
+        <translation>未知命令或無效參數。在聊天中輸入&apos;/help&apos;查找命令列表。</translation>
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation type="unfinished"></translation>
+        <translation>你不能踢掉你自己！</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation type="unfinished"></translation>
+        <translation>你不能踢掉剩下唯一的玩家！</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation type="unfinished"></translation>
+        <translation>玩家不在你的房間裡。</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation type="unfinished"></translation>
+        <translation>該玩家受到保護，不會被踢。</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation type="unfinished"></translation>
+        <translation>你不是房間主人或伺服器管理員</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>你已經是房間的主人</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>歡迎訊息清除</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation type="unfinished"></translation>
+        <translation>歡迎訊息設定</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: 這僅限於沒有主人的房間。</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map: 沒有可用的地圖。</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>你是新房間的主人！</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation type="unfinished"></translation>
+        <translation>/quit: 退出伺服器</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation type="unfinished"></translation>
+        <translation>此命令僅在大廳中可用。</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation type="unfinished"></translation>
+        <translation>此命令僅在房間中可用。</translation>
     </message>
     <message>
         <source>This server no longer allows unregistered players to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>此伺服器不再允許未註冊的玩家加入。</translation>
     </message>
     <message>
         <source>This server now allows unregistered players to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>此伺服器不允許未註冊的玩家加入。</translation>
     </message>
     <message>
         <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>可用的呼叫投票命令：刺蝟&lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</translation>
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>請用&apos;/restart_server yes&apos;確認服務器重啟</translation>
     </message>
 </context>
 </TS>
