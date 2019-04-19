@@ -161,14 +161,14 @@ The argument “params” is a table containing fields which describe the missio
 	- type="distGearPos"	Distance between a gear and a fixed position
 		FAIL CONDITION:	Gear destroyed
 		- distance	goal distance to compare to
-		- relationship	"greaterThan" or "lowerThan"
+		- relationship	"greaterThan" or "smallerThan"
 		- id		gear to watch
 		- x		x coordinate to reach
 		- y		y coordinate to reach
 	- type="distGearGear"	Distance between two gears
 		FAIL CONDITION:	Any of both gears destroyed
 		- distance	goal distance to compare to
-		- relationship	"greaterThan" or "lowerThan"
+		- relationship	"greaterThan" or "smallerThan"
 		- id1		first gear to compare
 		- id2		second gear to compare
 	- type="damage"		Gear took damage or was destroyed
