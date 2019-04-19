@@ -2,7 +2,7 @@ find_package(Qt5 COMPONENTS LinguistTools)
 
 file(GLOB txttrans2 ??.txt)
 file(GLOB txttrans5 ?????.txt)
-file(GLOB tsfiles *.ts)
+file(GLOB tsfiles hedgewars_*.ts)
 file(GLOB luafiles *.lua)
 file(GLOB missionfiles missions_*.txt)
 file(GLOB campaignfiles campaigns_*.txt)
