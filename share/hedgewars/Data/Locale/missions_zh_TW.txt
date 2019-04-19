@@ -1,0 +1,98 @@
+Basic_Training_-_Movement.name=基本移動訓練
+Basic_Training_-_Movement.desc="新手從這裡開始！學習如何在不同地形移動以及如何切換刺蝟。"
+
+Basic_Training_-_Bazooka.name=基本火箭筒訓練
+Basic_Training_-_Bazooka.desc="學習如何使用火箭筒，了解風並摧毀所有目標。"
+
+Basic_Training_-_Grenade.name=基本手榴彈訓練
+Basic_Training_-_Grenade.desc="了解所有你需要知道有關手榴彈的資訊並摧毀所有目標。記住：拔掉插銷然後扔出去！"
+
+Basic_Training_-_Rope.name=基本繩索訓練
+Basic_Training_-_Rope.desc="繩索是你可以獲得最通用的工具之一，但使用它需要大量的練習。在這裡，你將學習繩索的基本知識。"
+
+Basic_Training_-_Flying_Saucer.name=基本飛碟訓練
+Basic_Training_-_Flying_Saucer.desc="如果你知道如何操作飛碟，你幾乎可以達到任何位置。學習如何飛行，如何在飛碟上攻擊，甚至學習如何進行一些很酷的特技表演。"
+
+User_Mission_-_Dangerous_Ducklings.name=危險小鴨
+User_Mission_-_Dangerous_Ducklings.desc="好吧，菜鳥！把時間用在實踐我們在基本訓練所學的！"
+
+User_Mission_-_Diver.name=潛水員
+User_Mission_-_Diver.desc="這個兩棲突擊任務比想像中來的困難。"
+
+User_Mission_-_Teamwork.name=團隊合作
+User_Mission_-_Teamwork.desc="一個故障的改造人正在守衛一個重要的軍事秘密。你需要帶領一支由兩隻刺猬組成的特殊作戰團隊，其任務是摧毀敵人以獲取秘密！為了我們後續的行動，讓兩隻刺猬都存活下來，絕對是關鍵。"
+
+User_Mission_-_Teamwork_2.name=團隊合作2
+User_Mission_-_Teamwork_2.desc="我們找到了機械帝國的一個秘密前哨，而且這裡只有一個無害的監視機器人守衛。帶領你的特殊作戰團隊摧毀監視機器人，以便我們佔領這個基地。和上個任務一樣，我們需要兩隻刺猬都存活下來！"
+
+User_Mission_-_Spooky_Tree.name=幽靈樹
+User_Mission_-_Spooky_Tree.desc="這裡有很多箱子。我當然希望鳥不會感到飢餓。"
+
+User_Mission_-_Bamboo_Thicket.name=竹林
+User_Mission_-_Bamboo_Thicket.desc="一個改造人正在竹林裡進行恐攻，精準的攻擊視野中的任何人。提前計劃，快速移動，並快速殲滅敵人！"
+
+User_Mission_-_That_Sinking_Feeling.name=沉沒的感覺
+User_Mission_-_That_Sinking_Feeling.desc="水迅速上升，時間有限。許多人嘗試過但都失敗了。你能救他們嗎？"
+
+User_Mission_-_Newton_and_the_Hammock.name=牛頓與吊床
+User_Mission_-_Newton_and_the_Hammock.desc="記住刺蝟：身體的速度保持不變，除非身體受到外力的作用！"
+
+User_Mission_-_The_Great_Escape.name=大逃亡
+User_Mission_-_The_Great_Escape.desc="逃離你的監獄後復仇！"
+
+User_Mission_-_Rope_Knock_Challenge.name=繩索撞擊
+User_Mission_-_Rope_Knock_Challenge.desc="利用你的繩索將所有的敵人撞倒在地。"
+
+User_Mission_-_Nobody_Laugh.name=沒有人在笑
+User_Mission_-_Nobody_Laugh.desc="哦，這些小丑的想法太有趣了！他們的數量可能超過我們，但我們有足夠的回合時間。一個接著一個地摧毀這些喜劇演員，直到沒有人在笑。"
+
+User_Mission_-_RCPlane_Challenge.name=遙控飛機挑戰
+User_Mission_-_RCPlane_Challenge.desc="使用遙控飛機獲得所有箱子。嘗試使用盡可能少的遙控飛機來提高你的等級。你想知道如何成為一流的精英飛行員嗎？"
+
+Big_Armory.name=大武器庫
+Big_Armory.desc="你獨自一人，有著完整的武器庫，必須在時間用完之前擊敗8隻刺猬"
+
+Bazooka_Battlefield.name=火箭筒戰場
+Bazooka_Battlefield.desc="你的刺蝟已經埋伏好敵人。使用火箭筒殲滅對方！但不能花費太多時間，因為水位很快將上升。"
+
+Tentacle_Terror.name=恐怖觸手
+Tentacle_Terror.desc="在一個可怕的怪物之下，你的敵人像懦夫一樣躲藏起來，一旦你失去掩護就會用空襲攻擊你。告訴他誰才是地獄中真正的老大！但你需要一些如惡魔般的繩索技能才有機會。"
+
+ClimbHome.name=爬上家裡
+ClimbHome.desc="你離家很遠，水也在上升。盡可能往上爬！"
+
+portal.name=傳送門挑戰
+portal.desc="使用傳送門移動，使用傳送門擊敗敵人，小心地使用傳送門！"
+
+Target_Practice_-_Bazooka_easy.name=打靶: 火箭筒 (簡單)
+Target_Practice_-_Bazooka_easy.desc="好了，士兵，盡可能快地炸毀那些目標！"
+
+Target_Practice_-_Bazooka_hard.name=打靶: 火箭筒 (困難)
+Target_Practice_-_Bazooka_hard.desc="你能擊中那些很遠的目標嗎？"
+
+Target_Practice_-_Cluster_Bomb.name=打靶: 集束炸彈
+Target_Practice_-_Cluster_Bomb.desc="有人需要來點熱水淋浴！"
+
+Target_Practice_-_Shotgun.name=打靶: 霰彈槍
+Target_Practice_-_Shotgun.desc="先開槍再說！"
+
+Basic_Training_-_Sniper_Rifle.name=打靶: 狙擊槍
+Basic_Training_-_Sniper_Rifle.desc="這是狙擊手的完美射擊場！盡可能快速準確地摧毀所有目標並成為傳奇！"
+
+Target_Practice_-_Homing_Bee.name=打靶: 蜜蜂槍
+Target_Practice_-_Homing_Bee.desc="蜜蜂槍的使用比想像的棘手。"
+
+Target_Practice_-_Grenade_easy.name=打靶: 手榴彈 (簡單)
+Target_Practice_-_Grenade_easy.desc="一個熱血擲彈兵的熱身訓練。"
+
+Target_Practice_-_Grenade_hard.name=打靶: 手榴彈 (困難)
+Target_Practice_-_Grenade_hard.desc="對新手沒什麼好說的！我們將把靶子放在一些真正棘手的位置。"
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=搶時: 購物狂
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="展現你對繩索的熱愛並且收集小型地圖上的箱子。"
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=搶時: 繩索和箱子
+Challenge_-_Speed_Shoppa_-_Ropes.desc="抓好你的繩索並且收集中型地圖上所有的箱子。"
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=搶時: 顧客至上
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="展現出你王者的風範，盡快地收集完大型地圖上的箱子。"
