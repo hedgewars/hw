@@ -329,7 +329,8 @@ var cInitVolume: LongInt;
             (FileName:             'Cutitout.ogg'; Path: ptVoices; AltPath: ptNone),// sndCutItOut
             (FileName:         'Leavemealone.ogg'; Path: ptVoices; AltPath: ptNone),// sndLeaveMeAlone
             (FileName:                 'Ouch.ogg'; Path: ptVoices; AltPath: ptNone),// sndOuch
-            (FileName:                  'Hmm.ogg'; Path: ptVoices; AltPath: ptNone) // sndHmm
+            (FileName:                  'Hmm.ogg'; Path: ptVoices; AltPath: ptNone),// sndHmm
+            (FileName:                 'Kiss.ogg'; Path: ptSounds; AltPath: ptNone) // sndKiss
             );
 
 

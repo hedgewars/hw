@@ -3916,6 +3916,8 @@ begin
         inc(Gear^.Pos);
         if Gear^.Pos = 5 then
             PlaySound(sndYoohoo);
+        if Gear^.Pos = 14 then
+            PlaySound(sndKiss);
         end;
 
 
