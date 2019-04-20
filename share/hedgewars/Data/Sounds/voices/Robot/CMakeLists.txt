@@ -35,8 +35,6 @@ Ooff*.ogg
 Oops.ogg
 Ouch.ogg
 Ow*.ogg
-PoisonCough.ogg
-PoisonMoan.ogg
 Reinforcements.ogg
 Revenge.ogg
 Runaway.ogg

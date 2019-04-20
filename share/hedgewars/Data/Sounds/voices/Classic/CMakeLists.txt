@@ -35,8 +35,6 @@ Ooff*.ogg
 Oops.ogg
 Ouch.ogg
 Ow*.ogg
-PoisonCough.ogg
-PoisonMoan.ogg
 Reinforcements.ogg
 # FIXME: Revenge.ogg is "I'll get you back" but this taunt is meant for
 # successful reveng, not the announcement thereof.
