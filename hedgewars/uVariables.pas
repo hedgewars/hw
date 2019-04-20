@@ -330,7 +330,8 @@ const
         '/Missions/Maps',                // ptMissionMaps
         '/Graphics/SuddenDeath',         // ptSuddenDeath
         '/Graphics/Buttons',             // ptButton
-        '/Shaders'                       // ptShaders
+        '/Shaders',                      // ptShaders
+        '/Sounds/voices/Default'         // ptDefaultVoice
     );
 
 var

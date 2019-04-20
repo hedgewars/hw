@@ -45,7 +45,7 @@ type
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptConfig, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts, ptLocale,
             ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps,
-            ptSuddenDeath, ptButtons, ptShaders);
+            ptSuddenDeath, ptButtons, ptShaders, ptDefaultVoice);
 
     // Available sprites for displaying stuff
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprBigDigitGray, sprBigDigitGreen,

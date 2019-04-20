@@ -247,8 +247,8 @@ var cInitVolume: LongInt;
             (FileName:             'Droplet3.ogg'; Path: ptCurrTheme; AltPath: ptSounds),// sndDroplet3
             (FileName:                  'egg.ogg'; Path: ptSounds; AltPath: ptNone),// sndEggBreak
             (FileName:             'drillgun.ogg'; Path: ptSounds; AltPath: ptNone),// sndDrillRocket
-            (FileName:          'PoisonCough.ogg'; Path: ptVoices; AltPath: ptNone),// sndPoisonCough
-            (FileName:           'PoisonMoan.ogg'; Path: ptVoices; AltPath: ptNone),// sndPoisonMoan
+            (FileName:          'PoisonCough.ogg'; Path: ptVoices; AltPath: ptDefaultVoice),// sndPoisonCough
+            (FileName:           'PoisonMoan.ogg'; Path: ptVoices; AltPath: ptDefaultVoice),// sndPoisonMoan
             (FileName:             'BirdyLay.ogg'; Path: ptSounds; AltPath: ptNone),// sndBirdyLay
             (FileName:              'Whistle.ogg'; Path: ptSounds; AltPath: ptNone),// sndWhistle
             (FileName:             'beewater.ogg'; Path: ptSounds; AltPath: ptNone),// sndBeeWater
@@ -590,7 +590,7 @@ begin
 
             if rwops = nil then
                 begin
-                s:= cPathz[Soundz[snd].AltPath] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+                s:= cPathz[Soundz[snd].AltPath] + '/' + Soundz[snd].FileName;
                 WriteToConsole(msgLoading + s + ' ... ');
                 rwops := rwopsOpenRead(s);
                 end;
