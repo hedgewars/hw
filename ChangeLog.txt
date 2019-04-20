@@ -23,6 +23,7 @@ Styles and schemes:
  + The Specialists: Add script parameter support to set custom specialists order
  * Balanced Random Weapon: Fix Lua errors after using Time Box
  * Racer: Fix racer ghost not getting reset after a skip
+ * Space Invasion: No longer allow to set start shield above shield limit
  * Battalion, WxW: Crates drop between turns, when appropriate
  * Battalion: Make Sudden Death effects with the base game
  * King Mode: Fix team sometimes not being killed properly if king drowned

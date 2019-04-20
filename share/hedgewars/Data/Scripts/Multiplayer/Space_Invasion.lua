@@ -1049,7 +1049,7 @@ function onParameters()
 		SI.startRadShots = math.floor(tonumber(params["pings"]))
 	end
 	if params["shield"] ~= nil then
-		SI.startShield = math.floor(tonumber(params["shield"]))
+		SI.startShield = math.min(250-80, math.floor(tonumber(params["shield"])))
 	end
 
 	if params["barrelbonus"] ~= nil then
