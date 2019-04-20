@@ -966,7 +966,7 @@ function onLJump()
 			PlaySound(sndDenied)
 		elseif (SI.beam == false) and (SI.shieldHealth > 80) then
 			SI.beam = true
-			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 40, 255, 1, 10, 0, nil, 1, SI.colorShield-0x000000FF - -math.min(SI.shieldHealth))
+			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 40, 255, 1, 10, 0, nil, 1, SI.colorShield-0x000000FF - -math.min(SI.shieldHealth, 255))
 			AddCaption( string.format(loc("Shield ON: %d power remaining"), SI.shieldHealth - 80), SI.colorShield, capgrpAmmostate)
 			PlaySound(sndInvulnerable)
 		else
