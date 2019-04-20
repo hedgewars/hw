@@ -966,12 +966,12 @@ function onLJump()
 			PlaySound(sndDenied)
 		elseif (SI.beam == false) and (SI.shieldHealth > 80) then
 			SI.beam = true
-			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 40, 255, 1, 10, 0, 300, 1, SI.colorShield)
+			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 40, 255, 1, 10, 0, nil, 1, SI.colorShield-0x000000FF - -math.min(SI.shieldHealth))
 			AddCaption( string.format(loc("Shield ON: %d power remaining"), SI.shieldHealth - 80), SI.colorShield, capgrpAmmostate)
 			PlaySound(sndInvulnerable)
 		else
 			SI.beam = false
-			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), 0, 0, 1, 10, 0, 0, 0, SI.colorShield)
+			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, nil, nil, 0x0)
 			AddCaption( string.format(loc("Shield OFF: %d power remaining"), SI.shieldHealth - 80), SI.colorShield, capgrpAmmostate)
 		end
 	end
@@ -1687,7 +1687,7 @@ function CreateMeSomeCircles()
 
 	end
 
-	SI.pShield = AddVisualGear(0,0,vgtCircle,0,true)
+	SI.pShield = AddVisualGear(0,0,vgtCircle,200,true)
 
 end
 
@@ -2284,10 +2284,10 @@ function HandleCircles()
 
 	if (CurrentHedgehog ~= nil) then
 		if SI.beam == true then
-			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 200, nil, SI.colorShield-0x000000FF - -SI.shieldHealth )
+			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, nil, nil, SI.colorShield-0x000000FF - -math.min(SI.shieldHealth, 255))
 			DrawTag(SI.TAG_SHIELD)
 		else
-			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, 0)
+			SetVisualGearValues(SI.pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), nil, nil, nil, nil, nil, nil, nil, 0x0)
 		end
 
 	end
