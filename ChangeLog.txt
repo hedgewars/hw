@@ -92,6 +92,10 @@ Frontend:
  + More intelligent automatic mission selection in campaign screen
  * Fix force-locked schemes getting unlocked when changing map types
 
+Sounds and voicepacks:
+ + sndYoohoo has been split to sndYoohoo and sndKiss
+ + Voice files sndPoisonCough and sndPoisonMoan are now optional (fall back to Default voicepack)
+
 Lua API:
  + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)
  + New call: GetMissionVar(varname): Get value of mission variable
