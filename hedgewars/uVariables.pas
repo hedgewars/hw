@@ -311,7 +311,7 @@ const
         '//',                            // ptData
         '/Graphics',                     // ptGraphics
         '/Themes',                       // ptThemes
-        '/Themes/Bamboo',                // ptCurrTheme
+        '/Themes/Nature',                // ptCurrTheme
         '/Config',                       // ptConfig
         '/Config/Teams',                 // ptTeams
         '/Maps',                         // ptMaps
