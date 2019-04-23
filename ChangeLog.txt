@@ -92,6 +92,7 @@ Frontend:
  + Restructure credits page
  + More intelligent automatic mission selection in campaign screen
  * Fix force-locked schemes getting unlocked when changing map types
+ * Fix possible to select background-only or hidden themes indirectly by changing map type
 
 Sounds and voicepacks:
  + sndYoohoo has been split to sndYoohoo and sndKiss

@@ -37,6 +37,7 @@ class ThemeFilterProxyModel : public QSortFilterProxyModel
         ThemeFilterProxyModel(QObject *parent = 0);
         void setFilterDLC(bool enabled);
         void setFilterHidden(bool enabled);
+        void setFilterBackground(bool enabled);
 
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
@@ -44,6 +45,7 @@ class ThemeFilterProxyModel : public QSortFilterProxyModel
     private:
         bool isFilteringDLC;
         bool isFilteringHidden;
+        bool isFilteringBackground;
 };
 
 #endif // HEDGEWARS_THEMEFILTERPROXYMODEL_H

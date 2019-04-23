@@ -1215,6 +1215,15 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
     {
         if (!selectedTheme.isNull() && !selectedTheme.isEmpty())
         {
+            // Fall back to a default theme if current theme is a background theme or hidden
+            QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, m_theme);
+            if (mdl.size() > 0)
+            {
+                if ((mdl.at(0).data(ThemeModel::Roles::IsBackgroundThemeRole).toBool() == true) || (mdl.at(0).data(ThemeModel::Roles::IsHiddenRole).toBool() == true))
+                {
+                    selectedTheme = "Nature";
+                }
+            }
             setTheme(selectedTheme);
             emit themeChanged(selectedTheme);
         }

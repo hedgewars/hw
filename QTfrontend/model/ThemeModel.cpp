@@ -124,36 +124,46 @@ void ThemeModel::loadThemes() const
     {
         QMap<int, QVariant> dataset;
 
+        // Ignore directories without theme.cfg
+        QFile themeCfgFile(QString("physfs://Themes/%1/theme.cfg").arg(theme));
+        if (!themeCfgFile.open(QFile::ReadOnly))
+        {
+            continue;
+        }
+
         // themes without icon are supposed to be hidden
         QString iconpath = QString("physfs://Themes/%1/icon.png").arg(theme);
-
         if (!QFile::exists(iconpath))
         {
             dataset.insert(IsHiddenRole, true);
         }
         else
         {
-            // themes with the key “hidden” in theme.cfg are hidden, too
-            QFile themeCfgFile(QString("physfs://Themes/%1/theme.cfg").arg(theme));
-            if (themeCfgFile.open(QFile::ReadOnly))
+            QTextStream stream(&themeCfgFile);
+            QString line = stream.readLine();
+            QString key;
+            while (!line.isNull())
             {
-                QTextStream stream(&themeCfgFile);
-                QString line = stream.readLine();
-                QString key;
-                while (!line.isNull())
+                key = QString(line);
+                int equalsPos = line.indexOf('=');
+                key.truncate(equalsPos - 1);
+                key = key.simplified();
+                if (!line.startsWith(';') && key == "hidden")
                 {
-                    key = QString(line);
-                    int equalsPos = line.indexOf('=');
-                    key.truncate(equalsPos - 1);
-                    key = key.simplified();
-                    if (!line.startsWith(';') && key == "hidden")
-                    {
-                        dataset.insert(IsHiddenRole, true);
-                        break;
-                    }
-                    line = stream.readLine();
+                    dataset.insert(IsHiddenRole, true);
+                    break;
                 }
+                line = stream.readLine();
             }
+        }
+
+        // Themes without land textures are considered "background themes"
+        // since they cannot be used for generated maps, but they can be used
+        // for image maps.
+        QString landtexpath = QString("physfs://Themes/%1/LandTex.png").arg(theme);
+        if (!QFile::exists(landtexpath))
+        {
+            dataset.insert(IsBackgroundThemeRole, true);
         }
 
         // detect if theme is dlc
@@ -179,5 +189,6 @@ void ThemeModel::loadThemes() const
         }
 
         m_data.append(dataset);
+        themeCfgFile.close();
     }
 }
