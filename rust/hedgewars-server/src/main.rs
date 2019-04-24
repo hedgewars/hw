@@ -1,24 +1,23 @@
 #![allow(unused_imports)]
 #![deny(bare_trait_objects)]
 
-extern crate getopts;
 use getopts::Options;
 use log::*;
-use mio::net::*;
-use mio::*;
-use std::env;
+use mio::{net::*, *};
+use std::{env, str::FromStr as _, time::Duration};
 
 mod protocol;
 mod server;
 mod utils;
 
-use crate::server::network::NetworkLayer;
-use std::time::Duration;
+use crate::server::network::{NetworkLayer, NetworkLayerBuilder};
 
 const PROGRAM_NAME: &'_ str = "Hedgewars Game Server";
 
 fn main() {
     env_logger::init();
+
+    info!("Hedgewars game server, protocol {}", utils::SERVER_VERSION);
 
     let args: Vec<String> = env::args().collect();
     let mut opts = Options::new();
@@ -36,23 +35,26 @@ fn main() {
         println!("{}", opts.usage(PROGRAM_NAME));
         return;
     }
-    info!("Hedgewars game server, protocol {}", utils::SERVER_VERSION);
 
-    let address;
-    if matches.opt_present("p") {
-        match matches.opt_str("p") {
-            Some(x) => address = format!("0.0.0.0:{}", x).parse().unwrap(),
-            None => address = "0.0.0.0:46631".parse().unwrap(),
-        }
-    } else {
-        address = "0.0.0.0:46631".parse().unwrap();
-    }
+    let port = matches
+        .opt_str("p")
+        .and_then(|s| u16::from_str(&s).ok())
+        .unwrap_or(46631);
+    let address = format!("0.0.0.0:{}", port).parse().unwrap();
 
     let listener = TcpListener::bind(&address).unwrap();
 
     let poll = Poll::new().unwrap();
-    let mut hw_network = NetworkLayer::new(listener, 1024, 512);
-    hw_network.register_server(&poll).unwrap();
+    let mut hw_builder = NetworkLayerBuilder::default().with_listener(listener);
+
+    #[cfg(feature = "tls-connections")]
+    {
+        let address = format!("0.0.0.0:{}", port + 1).parse().unwrap();
+        hw_builder = hw_builder.with_secure_listener(TcpListener::bind(&address).unwrap());
+    }
+
+    let mut hw_network = hw_builder.build();
+    hw_network.register(&poll).unwrap();
 
     let mut events = Events::with_capacity(1024);
 
@@ -67,7 +69,9 @@ fn main() {
         for event in events.iter() {
             if event.readiness() & Ready::readable() == Ready::readable() {
                 match event.token() {
-                    utils::SERVER_TOKEN => hw_network.accept_client(&poll).unwrap(),
+                    token @ utils::SERVER_TOKEN | token @ utils::SECURE_SERVER_TOKEN => {
+                        hw_network.accept_client(&poll, token).unwrap()
+                    }
                     utils::TIMER_TOKEN => hw_network.handle_timeout(&poll).unwrap(),
                     #[cfg(feature = "official-server")]
                     utils::IO_TOKEN => hw_network.handle_io_result(),
