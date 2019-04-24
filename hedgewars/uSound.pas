@@ -409,7 +409,14 @@ begin
     end;
 
     WriteToConsole('Init SDL_mixer... ');
-    if SDLCheck(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true) then exit;
+
+    if (Mix_Init(MIX_INIT_OGG or MIX_INIT_OPUS) and MIX_INIT_OPUS) = 0 then
+    begin
+      WriteToConsole('Cannot init OPUS: ' + SDL_GetError());
+
+      if SDLCheck(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true) then exit;
+    end;
+
     WriteLnToConsole(msgOK);
 
     // from uVariables to be used by other modules
