@@ -103,6 +103,7 @@ class HWForm : public QMainWindow
         void NetConnectServer(const QString & host, quint16 port);
         void NetConnectOfficialServer();
         void NetStartServer();
+        void NetRedirected(quint16 port);
         void NetDisconnect();
         void NetConnected();
         void NetError(const QString & errmsg);

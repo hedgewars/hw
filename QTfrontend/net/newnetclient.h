@@ -98,6 +98,7 @@ class HWNewNet : public QObject
         void AskForRunGame();
         void connected();
         void disconnected(const QString & reason);
+        void redirected(quint16 port);
         void Error(const QString & errmsg);
         void Warning(const QString & wrnmsg);
         void NickRegistered(const QString & nick);

@@ -296,6 +296,26 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
+    if (lst[0] == "REDIRECT")
+    {        
+        if (lst.size() < 2 || lst[1].toInt() == 0)
+        {
+            qWarning("Net: Malformed REDIRECT message");
+            return;            
+        }
+
+        quint16 port = lst[1].toInt();
+        if (port == 0) 
+        {
+            qWarning() << "Invalid redirection port";            
+        }
+        else 
+        {
+            emit redirected(port);
+        }
+        return;
+    }
+
     if (lst[0] == "CONNECTED")
     {
         if(lst.size() < 3 || lst[2].toInt() < cMinServerVersion)
