@@ -28,6 +28,7 @@ extern QString * cVersionString;
 extern QString * cRevisionString;
 extern QString * cHashString;
 extern QString * cDataDir;
+extern QString * cSafeFileNameRegExp;
 
 extern QDir * bindir;
 extern QDir * cfgdir;

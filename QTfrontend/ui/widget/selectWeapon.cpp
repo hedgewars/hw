@@ -31,6 +31,9 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QTabWidget>
+#include <QRegExp>
+#include <QRegExpValidator>
+
 #include <math.h>
 
 QImage getAmmoImage(int num)
@@ -205,6 +208,9 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 
     //pLayout->setRowStretch(5, 100);
     m_name = new QLineEdit(this);
+    QRegExp rx(*cSafeFileNameRegExp);
+    QRegExpValidator* val = new QRegExpValidator(rx, m_name);
+    m_name->setValidator(val);
     pageLayout->addWidget(m_name, i, 0, 1, 5);
 }
 

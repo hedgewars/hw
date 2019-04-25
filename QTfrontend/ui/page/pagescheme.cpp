@@ -26,7 +26,10 @@
 #include <QMessageBox>
 #include <QDataWidgetMapper>
 #include <QSpinBox>
+#include <QRegExp>
+#include <QRegExpValidator>
 
+#include "hwconsts.h"
 #include "gameSchemeModel.h"
 #include "pagescheme.h"
 #include "FreqSpinBox.h"
@@ -517,6 +520,9 @@ QLayout * PageScheme::bodyLayoutDefinition()
     L_name->setText(QLabel::tr("Scheme Name:"));
 
     LE_name = new QLineEdit(this);
+    QRegExp rx(*cSafeFileNameRegExp);
+    QRegExpValidator * val = new QRegExpValidator(rx, LE_name);
+    LE_name->setValidator(val);
     LE_name->setWhatsThis(tr("Name of this scheme"));
 
     gl->addWidget(LE_name,15,1,1,5);

@@ -28,9 +28,12 @@
 #include <QMessageBox>
 #include <QStandardItemModel>
 #include <QDebug>
+#include <QRegExp>
+#include <QRegExpValidator>
 #include "SquareLabel.h"
 #include "HWApplication.h"
 #include "keybinder.h"
+#include "hwconsts.h"
 
 #include "physfs.h"
 #include "DataManager.h"
@@ -129,6 +132,9 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     TeamNameEdit->setMaxLength(64);
     TeamNameEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     TeamNameEdit->setStyleSheet("QLineEdit { padding: 6px; }");
+    QRegExp rx(*cSafeFileNameRegExp);
+    QRegExpValidator * val = new QRegExpValidator(rx, TeamNameEdit);
+    TeamNameEdit->setValidator(val);
     GBTLayout->addWidget(TeamNameEdit, 0, 1, 1, 2);
     vbox2->addWidget(GBoxTeam);
 

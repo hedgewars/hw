@@ -93,6 +93,7 @@ Frontend:
  + More intelligent automatic mission selection in campaign screen
  * Fix force-locked schemes getting unlocked when changing map types
  * Fix possible to select background-only or hidden themes indirectly by changing map type
+ * Disallow slash, backslash and colon characters in team and scheme names
 
 Sounds and voicepacks:
  + sndYoohoo has been split to sndYoohoo and sndKiss

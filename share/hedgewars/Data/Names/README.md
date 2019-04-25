@@ -42,7 +42,9 @@ For each team:
 * Each hog of this team gets a random hat of this list. Repeat a hat name to
   jack up its probability.
 
-Each team is again separated by a separator line.
+Each team is again separated by a separator line. The team name must not
+contain characters that would be forbidden in a file name (such as “/”,
+“\” or “:”).
 
 At the end of the final team, this line must be written (without the spaces):
 

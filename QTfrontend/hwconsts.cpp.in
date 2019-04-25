@@ -34,6 +34,8 @@ QString * cVersionString = new QString("${HEDGEWARS_VERSION}");
 QString * cRevisionString = new QString("${HEDGEWARS_REVISION}");
 QString * cHashString = new QString("${HEDGEWARS_HASH}");
 
+// For disallowing some characters that would screw up file name
+QString * cSafeFileNameRegExp = new QString("[^:/\\\\]*");
 
 QDir * bindir = new QDir();
 QDir * cfgdir = new QDir();
