@@ -305,6 +305,7 @@ void SelWeaponWidget::save()
             deniedMsg.setIcon(QMessageBox::Warning);
             deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
             deniedMsg.setText(QMessageBox::tr("A weapon scheme with the name '%1' already exists. Changes made to the weapon scheme have been discarded.").arg(compName));
+            deniedMsg.setTextFormat(Qt::PlainText);
             deniedMsg.setWindowModality(Qt::WindowModal);
             deniedMsg.exec();
             return;
@@ -350,6 +351,7 @@ void SelWeaponWidget::deleteWeaponsName()
             deniedMsg.setIcon(QMessageBox::Warning);
             deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
             deniedMsg.setText(QMessageBox::tr("Cannot delete default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            deniedMsg.setTextFormat(Qt::PlainText);
             deniedMsg.setWindowModality(Qt::WindowModal);
             deniedMsg.exec();
             return;
@@ -360,6 +362,7 @@ void SelWeaponWidget::deleteWeaponsName()
     reallyDeleteMsg.setIcon(QMessageBox::Question);
     reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Weapons - Are you sure?"));
     reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the weapon set '%1'?").arg(delWeaponsName));
+    reallyDeleteMsg.setTextFormat(Qt::PlainText);
     reallyDeleteMsg.setWindowModality(Qt::WindowModal);
     reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 

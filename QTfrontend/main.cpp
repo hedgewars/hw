@@ -548,6 +548,7 @@ int main(int argc, char *argv[]) {
         questionTutorialMsg.setIcon(QMessageBox::Question);
         questionTutorialMsg.setWindowTitle(QMessageBox::tr("Welcome to Hedgewars"));
         questionTutorialMsg.setText(QMessageBox::tr("Welcome to Hedgewars!\n\nYou seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?"));
+        questionTutorialMsg.setTextFormat(Qt::PlainText);
         questionTutorialMsg.setWindowModality(Qt::WindowModal);
         questionTutorialMsg.addButton(QMessageBox::Yes);
         questionTutorialMsg.addButton(QMessageBox::No);

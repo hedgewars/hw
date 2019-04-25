@@ -490,6 +490,7 @@ void PageEditTeam::deleteTeam(const QString & name)
     reallyDeleteMsg.setIcon(QMessageBox::Question);
     reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Teams - Are you sure?"));
     reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the team '%1'?").arg(name));
+    reallyDeleteMsg.setTextFormat(Qt::PlainText);
     reallyDeleteMsg.setWindowModality(Qt::WindowModal);
     reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
@@ -657,6 +658,7 @@ void PageEditTeam::saveTeam()
         teamNameFixedMsg.setIcon(QMessageBox::Warning);
         teamNameFixedMsg.setWindowTitle(QMessageBox::tr("Teams - Name already taken"));
         teamNameFixedMsg.setText(QMessageBox::tr("The team name '%1' is already taken, so your team has been renamed to '%2'.").arg(origName).arg(team.name()));
+        teamNameFixedMsg.setTextFormat(Qt::PlainText);
         teamNameFixedMsg.setWindowModality(Qt::WindowModal);
         teamNameFixedMsg.setStandardButtons(QMessageBox::Ok);
         teamNameFixedMsg.exec();

@@ -504,6 +504,7 @@ void PageRoomsList::onJoinClick()
         roomNameMsg.setIcon(QMessageBox::Warning);
         roomNameMsg.setWindowTitle(QMessageBox::tr("Room Name - Error"));
         roomNameMsg.setText(QMessageBox::tr("Please select room from the list"));
+        roomNameMsg.setTextFormat(Qt::PlainText);
         roomNameMsg.setWindowModality(Qt::WindowModal);
         roomNameMsg.exec();
         return;
@@ -530,6 +531,7 @@ void PageRoomsList::onJoinConfirmation(const QString & room)
     reallyJoinMsg.setIcon(QMessageBox::Question);
     reallyJoinMsg.setWindowTitle(QMessageBox::tr("Room Name - Are you sure?"));
     reallyJoinMsg.setText(QMessageBox::tr("The game you are trying to join has started.\nDo you still want to join the room?"));
+    reallyJoinMsg.setTextFormat(Qt::PlainText);
     reallyJoinMsg.setWindowModality(Qt::WindowModal);
     reallyJoinMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 

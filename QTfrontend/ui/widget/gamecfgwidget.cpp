@@ -403,6 +403,7 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
         illegalMsg.setIcon(QMessageBox::Warning);
         illegalMsg.setWindowTitle(QMessageBox::tr("Error"));
         illegalMsg.setText(QMessageBox::tr("Cannot use the weapon scheme '%1'!").arg(name));
+        illegalMsg.setTextFormat(Qt::PlainText);
         illegalMsg.setWindowModality(Qt::WindowModal);
         illegalMsg.exec();
     }

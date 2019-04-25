@@ -588,6 +588,7 @@ void PageVideos::deleteSelectedFiles()
     reallyDeleteMsg.setIcon(QMessageBox::Question);
     reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Videos - Are you sure?"));
     reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the video '%1'?").arg(item->name));
+    reallyDeleteMsg.setTextFormat(Qt::PlainText);
     reallyDeleteMsg.setWindowModality(Qt::WindowModal);
     reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 

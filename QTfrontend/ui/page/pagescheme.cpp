@@ -647,6 +647,7 @@ void PageScheme::deleteRow()
         deniedMsg.setIcon(QMessageBox::Warning);
         deniedMsg.setWindowTitle(QMessageBox::tr("Schemes - Warning"));
         deniedMsg.setText(QMessageBox::tr("Cannot delete default scheme '%1'!").arg(selectScheme->currentText()));
+        deniedMsg.setTextFormat(Qt::PlainText);
         deniedMsg.setWindowModality(Qt::WindowModal);
         deniedMsg.exec();
     }
@@ -656,6 +657,7 @@ void PageScheme::deleteRow()
         reallyDeleteMsg.setIcon(QMessageBox::Question);
         reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Schemes - Are you sure?"));
         reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the game scheme '%1'?").arg(selectScheme->currentText()));
+        reallyDeleteMsg.setTextFormat(Qt::PlainText);
         reallyDeleteMsg.setWindowModality(Qt::WindowModal);
         reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
@@ -716,6 +718,7 @@ void PageScheme::checkDupe()
         QMessageBox dupeMsg(this);
         dupeMsg.setIcon(QMessageBox::Warning);
         dupeMsg.setWindowTitle(QMessageBox::tr("Schemes - Name already taken"));
+        dupeMsg.setTextFormat(Qt::PlainText);
         dupeMsg.setText(QMessageBox::tr("A scheme with the name '%1' already exists. Your scheme has been renamed to '%2'.").arg(name).arg(newName));
         dupeMsg.setWindowModality(Qt::WindowModal);
         dupeMsg.exec();

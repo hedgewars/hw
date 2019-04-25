@@ -154,6 +154,7 @@ void DrawMapWidget::save(const QString & fileName)
             errorMsg.setIcon(QMessageBox::Warning);
             errorMsg.setWindowTitle(QMessageBox::tr("File error"));
             errorMsg.setText(QMessageBox::tr("Cannot open '%1' for writing").arg(fileName));
+            errorMsg.setTextFormat(Qt::PlainText);
             errorMsg.setWindowModality(Qt::WindowModal);
             errorMsg.exec();
         }
@@ -174,6 +175,7 @@ void DrawMapWidget::load(const QString & fileName)
             errorMsg.setIcon(QMessageBox::Warning);
             errorMsg.setWindowTitle(QMessageBox::tr("File error"));
             errorMsg.setText(QMessageBox::tr("Cannot open '%1' for reading").arg(fileName));
+            errorMsg.setTextFormat(Qt::PlainText);
             errorMsg.setWindowModality(Qt::WindowModal);
             errorMsg.exec();
         }

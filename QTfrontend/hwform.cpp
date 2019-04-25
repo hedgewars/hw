@@ -2327,6 +2327,7 @@ void HWForm::AssociateFiles()
         infoMsg.setIcon(QMessageBox::Information);
         infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
         infoMsg.setText(QMessageBox::tr("All file associations have been set"));
+        infoMsg.setTextFormat(Qt::PlainText);
         infoMsg.setWindowModality(Qt::WindowModal);
         infoMsg.exec();
     }
@@ -2440,6 +2441,7 @@ void HWForm::startGame()
     questionMsg.setIcon(QMessageBox::Question);
     questionMsg.setWindowTitle(QMessageBox::tr("Not all players are ready"));
     questionMsg.setText(QMessageBox::tr("Are you sure you want to start this game?\nNot all players are ready."));
+    questionMsg.setTextFormat(Qt::PlainText);
     questionMsg.setWindowModality(Qt::WindowModal);
     questionMsg.addButton(QMessageBox::Yes);
     questionMsg.addButton(QMessageBox::Cancel);

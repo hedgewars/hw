@@ -330,6 +330,7 @@ void FeedbackDialog::ShowErrorMessage(const QString & msg)
     msgMsg.setIcon(QMessageBox::Warning);
     msgMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Error"));
     msgMsg.setText(msg);
+    msgMsg.setTextFormat(Qt::PlainText);
     msgMsg.setWindowModality(Qt::WindowModal);
     msgMsg.exec();
 }
@@ -417,6 +418,7 @@ void FeedbackDialog::finishedSlot(QNetworkReply* reply)
             infoMsg.setIcon(QMessageBox::Information);
             infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
             infoMsg.setText(reply->readAll());
+            infoMsg.setTextFormat(Qt::PlainText);
             infoMsg.setWindowModality(Qt::WindowModal);
             infoMsg.exec();
 
