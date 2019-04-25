@@ -26,6 +26,7 @@ use crate::{
 #[cfg(feature = "official-server")]
 use super::io::{IOThread, RequestId};
 
+use crate::protocol::messages::HWServerMessage::Redirect;
 use crate::server::handlers::{IoResult, IoTask};
 #[cfg(feature = "tls-connections")]
 use openssl::{
@@ -335,29 +336,10 @@ fn create_drop_timeout(timer: &mut timer::Timer<TimerData>, client_id: ClientId)
 }
 
 impl NetworkLayer {
-    #[cfg(feature = "tls-connections")]
-    fn create_ssl_context(listener: TcpListener) -> ServerSsl {
-        let mut builder = SslContextBuilder::new(SslMethod::tls()).unwrap();
-        builder.set_verify(SslVerifyMode::NONE);
-        builder.set_read_ahead(true);
-        builder
-            .set_certificate_file("ssl/cert.pem", SslFiletype::PEM)
-            .unwrap();
-        builder
-            .set_private_key_file("ssl/key.pem", SslFiletype::PEM)
-            .unwrap();
-        builder.set_options(SslOptions::NO_COMPRESSION);
-        builder.set_cipher_list("DEFAULT:!LOW:!RC4:!EXP").unwrap();
-        ServerSsl {
-            listener,
-            context: builder.build(),
-        }
-    }
-
     pub fn register(&self, poll: &Poll) -> io::Result<()> {
         register_read(poll, &self.listener, utils::SERVER_TOKEN)?;
         #[cfg(feature = "tls-connections")]
-        register_read(poll, &self.listener, utils::SECURE_SERVER_TOKEN)?;
+        register_read(poll, &self.ssl.listener, utils::SECURE_SERVER_TOKEN)?;
         register_read(poll, &self.timer, utils::TIMER_TOKEN)?;
 
         #[cfg(feature = "official-server")]
@@ -497,6 +479,15 @@ impl NetworkLayer {
         }
     }
 
+    fn init_client(&mut self, poll: &Poll, client_id: ClientId) {
+        let mut response = handlers::Response::new(client_id);
+        #[cfg(feature = "tls-connections")]
+        response.add(Redirect(self.ssl.listener.local_addr().unwrap().port()).send_self());
+
+        handlers::handle_client_accept(&mut self.server, client_id, &mut response);
+        self.handle_response(response, poll);
+    }
+
     pub fn accept_client(&mut self, poll: &Poll, server_token: mio::Token) -> io::Result<()> {
         let (client_socket, addr) = self.listener.accept()?;
         info!("Connected: {}", addr);
@@ -505,9 +496,7 @@ impl NetworkLayer {
             utils::SERVER_TOKEN => {
                 let client_id =
                     self.register_client(poll, self.create_client_socket(client_socket)?, addr);
-                let mut response = handlers::Response::new(client_id);
-                handlers::handle_client_accept(&mut self.server, client_id, &mut response);
-                self.handle_response(response, poll);
+                self.init_client(poll, client_id);
             }
             #[cfg(feature = "tls-connections")]
             utils::SECURE_SERVER_TOKEN => {
@@ -563,11 +552,7 @@ impl NetworkLayer {
                     }
                     NetworkClientState::Closed => self.client_error(&poll, client_id)?,
                     #[cfg(feature = "tls-connections")]
-                    NetworkClientState::Connected => {
-                        let mut response = handlers::Response::new(client_id);
-                        handlers::handle_client_accept(&mut self.server, client_id, &mut response);
-                        self.handle_response(response, poll);
-                    }
+                    NetworkClientState::Connected => self.init_client(poll, client_id),
                     _ => {}
                 };
             }
@@ -668,6 +653,25 @@ impl NetworkLayerBuilder {
         }
     }
 
+    #[cfg(feature = "tls-connections")]
+    fn create_ssl_context(listener: TcpListener) -> ServerSsl {
+        let mut builder = SslContextBuilder::new(SslMethod::tls()).unwrap();
+        builder.set_verify(SslVerifyMode::NONE);
+        builder.set_read_ahead(true);
+        builder
+            .set_certificate_file("ssl/cert.pem", SslFiletype::PEM)
+            .expect("Cannot find certificate file");
+        builder
+            .set_private_key_file("ssl/key.pem", SslFiletype::PEM)
+            .expect("Cannot find private key file");
+        builder.set_options(SslOptions::NO_COMPRESSION);
+        builder.set_cipher_list("DEFAULT:!LOW:!RC4:!EXP").unwrap();
+        ServerSsl {
+            listener,
+            context: builder.build(),
+        }
+    }
+
     pub fn build(self) -> NetworkLayer {
         let server = HWServer::new(self.clients_capacity, self.rooms_capacity);
         let clients = Slab::with_capacity(self.clients_capacity);
@@ -682,7 +686,7 @@ impl NetworkLayerBuilder {
             pending,
             pending_cache,
             #[cfg(feature = "tls-connections")]
-            ssl: NetworkLayer::create_ssl_context(
+            ssl: Self::create_ssl_context(
                 self.secure_listener.expect("No secure listener provided"),
             ),
             #[cfg(feature = "official-server")]

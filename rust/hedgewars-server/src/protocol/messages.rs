@@ -109,6 +109,9 @@ pub fn remove_flags(flags: &[ProtocolFlags]) -> String {
 
 #[derive(Debug)]
 pub enum HWServerMessage {
+    Connected(u32),
+    Redirect(u16),
+
     Ping,
     Pong,
     Bye(String),
@@ -146,7 +149,6 @@ pub enum HWServerMessage {
     Notice(String),
     Warning(String),
     Error(String),
-    Connected(u32),
     Unreachable,
 
     //Deprecated messages
@@ -362,6 +364,7 @@ impl HWServerMessage {
                 "Hedgewars server https://www.hedgewars.org/",
                 protocol_version
             ],
+            Redirect(port) => msg!["REDIRECT", port],
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],
             Proto(proto) => msg!["PROTO", proto],
