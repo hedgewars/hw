@@ -60,7 +60,7 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
 implementation
-uses uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer, uCursor;
+uses uKeyNames, uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer, uCursor;
 
 const
     LSHIFT = $0200;
@@ -71,7 +71,7 @@ const
     RCTRL  = $4000;
 
 var tkbd: array[0..cKbdMaxIndex] of boolean;
-    KeyNames: array [0..cKeyMaxIndex] of string[15];
+    KeyNames: TKeyNames;
     CurrentBinds: TBinds;
     ControllerNumControllers: Integer;
     ControllerEnabled: Integer;
@@ -446,9 +446,9 @@ end;
 
 
 procedure InitKbdKeyTable;
-var i, j, k, t: LongInt;
-    s: string[15];
+var i, j, k: LongInt;
 begin
+    // Mouse buttons and mouse wheel
     KeyNames[cKeyMaxIndex    ]:= 'mousel';
     KeyNames[cKeyMaxIndex - 1]:= 'mousem';
     KeyNames[cKeyMaxIndex - 2]:= 'mouser';
@@ -457,16 +457,8 @@ begin
     mwheeldownCode:= cKeyMaxIndex - 4;
     KeyNames[mwheeldownCode]:= 'wheeldown';
 
-    for i:= 0 to cKeyMaxIndex - 5 do
-        begin
-        s:= shortstring(SDL_GetScancodeName(TSDL_Scancode(i)));
-
-        for t:= 1 to Length(s) do
-            if s[t] = ' ' then
-                s[t]:= '_';
-        KeyNames[i]:= LowerCase(s)
-        end;
-
+    // Keyboard keys
+    uKeyNames.populateKeyNames(KeyNames);
 
     // get the size of keyboard array
     SDL_GetKeyboardState(@k);
