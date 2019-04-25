@@ -251,6 +251,7 @@ const
     MIX_INIT_MP3        = $00000008;
     MIX_INIT_OGG        = $00000010;
     MIX_INIT_FLUIDSYNTH = $00000020;
+    MIX_INIT_OPUS       = $00000040;
 
     {* SDL_TTF *}
     TTF_STYLE_NORMAL = 0;
