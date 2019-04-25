@@ -1366,6 +1366,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     GoToPage(ID_PAGE_CONNECTING);
 
     connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(redirected(quint16)), this, SLOT(NetRedirected(quint16)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(connected()), this, SLOT(NetConnected()), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)), Qt::QueuedConnection);
@@ -1712,6 +1713,23 @@ void HWForm::ForcedDisconnect(const QString & reason)
         && ui.Pages->currentIndex() != ID_PAGE_MAIN)
     {
         GoBack();
+    }
+}
+
+void HWForm::NetRedirected(quint16 port)
+{
+    QMessageBox questionMsg(this);
+    questionMsg.setIcon(QMessageBox::Question);
+    questionMsg.setWindowTitle(QMessageBox::tr("Server redirection"));
+    questionMsg.setText(QMessageBox::tr("This server supports secure connections on port %1.\nWould you like to reconnect securely?").arg(port));
+    questionMsg.setTextFormat(Qt::PlainText);
+    questionMsg.setWindowModality(Qt::WindowModal);
+    questionMsg.addButton(QMessageBox::Yes);
+    questionMsg.addButton(QMessageBox::No);
+
+    if (questionMsg.exec() == QMessageBox::Yes)
+    {
+
     }
 }
 
