@@ -114,7 +114,6 @@ char sdlkeys[1024][2][128] =
     {"keypad_-", QT_TRANSLATE_NOOP("binds (keys)", "Numpad -")},
     {"keypad_+", QT_TRANSLATE_NOOP("binds (keys)", "Numpad +")},
     {"enter", QT_TRANSLATE_NOOP("binds (keys)", "Enter")},
-    {"equals", QT_TRANSLATE_NOOP("binds (keys)", "Equals")},
     {"up", QT_TRANSLATE_NOOP("binds (keys)", "Up")},
     {"down", QT_TRANSLATE_NOOP("binds (keys)", "Down")},
     {"right", QT_TRANSLATE_NOOP("binds (keys)", "Right")},
@@ -122,8 +121,8 @@ char sdlkeys[1024][2][128] =
     {"insert", QT_TRANSLATE_NOOP("binds (keys)", "Insert")},
     {"home", QT_TRANSLATE_NOOP("binds (keys)", "Home")},
     {"end", QT_TRANSLATE_NOOP("binds (keys)", "End")},
-    {"page_up", QT_TRANSLATE_NOOP("binds (keys)", "Page up")},
-    {"page_down", QT_TRANSLATE_NOOP("binds (keys)", "Page down")},
+    {"pageup", QT_TRANSLATE_NOOP("binds (keys)", "Page up")},
+    {"pagedown", QT_TRANSLATE_NOOP("binds (keys)", "Page down")},
     {"f1", "F1"},
     {"f2", "F2"},
     {"f3", "F3"},
@@ -140,16 +139,24 @@ char sdlkeys[1024][2][128] =
     {"f14", "F14"},
     {"f15", "F15"},
     {"numlock", QT_TRANSLATE_NOOP("binds (keys)", "Num lock")},
-    {"caps_lock", QT_TRANSLATE_NOOP("binds (keys)", "Caps lock")},
-    {"scroll_lock", QT_TRANSLATE_NOOP("binds (keys)", "Scroll lock")},
+    {"capslock", QT_TRANSLATE_NOOP("binds (keys)", "Caps lock")},
+    {"scrolllock", QT_TRANSLATE_NOOP("binds (keys)", "Scroll lock")},
     {"right_shift", QT_TRANSLATE_NOOP("binds (keys)", "Right shift")},
     {"left_shift", QT_TRANSLATE_NOOP("binds (keys)", "Left shift")},
     {"right_ctrl", QT_TRANSLATE_NOOP("binds (keys)", "Right ctrl")},
     {"left_ctrl", QT_TRANSLATE_NOOP("binds (keys)", "Left ctrl")},
     {"right_alt", QT_TRANSLATE_NOOP("binds (keys)", "Right alt")},
     {"left_alt", QT_TRANSLATE_NOOP("binds (keys)", "Left alt")},
-    {"right_meta", QT_TRANSLATE_NOOP("binds (keys)", "Right meta")},
-    {"left_meta", QT_TRANSLATE_NOOP("binds (keys)", "Left meta")}
+#if defined Q_OS_WIN
+    {"right_gui", QT_TRANSLATE_NOOP("binds (keys)", "Right Windows")},
+    {"left_gui", QT_TRANSLATE_NOOP("binds (keys)", "Left Windows")}
+#elif defined Q_OS_MACOS
+    {"right_gui", QT_TRANSLATE_NOOP("binds (keys)", "Right command")},
+    {"left_gui", QT_TRANSLATE_NOOP("binds (keys)", "Left command")}
+#else
+    {"right_gui", QT_TRANSLATE_NOOP("binds (keys)", "Right meta")},
+    {"left_gui", QT_TRANSLATE_NOOP("binds (keys)", "Left meta")}
+#endif
 };
 
 // button name definitions for Microsoft's XBox360 controller
