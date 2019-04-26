@@ -109,6 +109,7 @@ data Action =
 data Event = LobbyChatMessage
            | EngineMessage
            | RoomJoin
+           | RoomNameUpdate
 
 type EventsInfo = [(Int, UTCTime)]
 

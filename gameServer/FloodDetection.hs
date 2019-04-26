@@ -36,15 +36,19 @@ registerEvent e = do
     einfo LobbyChatMessage = eiLobbyChat
     einfo EngineMessage = eiEM
     einfo RoomJoin = eiJoin
+    einfo RoomNameUpdate = eiLobbyChat
 
     transformField LobbyChatMessage f = \c -> c{eiLobbyChat = f $ eiLobbyChat c}
     transformField EngineMessage f = \c -> c{eiEM = f $ eiEM c}
     transformField RoomJoin f = \c -> c{eiJoin = f $ eiJoin c}
+    transformField RoomNameUpdate f = transformField LobbyChatMessage f
+    
 
     boundaries :: Event -> (Int, (NominalDiffTime, Int), (NominalDiffTime, Int), ([Action], [Action]))
     boundaries LobbyChatMessage = (3, (10, 2), (30, 3), (chat1, chat2))
     boundaries EngineMessage = (8, (10, 4), (25, 5), (em1, em2))
     boundaries RoomJoin = (2, (10, 2), (35, 3), (join1, join2))
+    boundaries RoomNameUpdate = (\(a, b, c, _) -> (a, b, c, (roomName1, roomName2))) $ boundaries LobbyChatMessage
 
     chat1 = [Warning $ loc "Warning! Chat flood protection activated"]
     chat2 = [ByeClient $ loc "Excess flood"]
@@ -52,6 +56,8 @@ registerEvent e = do
     em2 = [ByeClient $ loc "Excess flood"]
     join1 = [Warning $ loc "Warning! Joins flood protection activated"]
     join2 = [ByeClient $ loc "Excess flood"]
+    roomName1 = [Warning $ loc "Warning! Room name change flood protection activated"]
+    roomName2 = [ByeClient $ loc "Excess flood"]
 
     doCheck ei = do
         curTime <- io getCurrentTime

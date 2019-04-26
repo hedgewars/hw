@@ -326,7 +326,8 @@ handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do
             [Warning $ loc "A room with the same name already exists."]
         else
             [ModifyRoom roomUpdate,
-            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (clientProto cl) (nick cl) (roomUpdate rm))]
+            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (clientProto cl) (nick cl) (roomUpdate rm)),
+            RegisterEvent RoomNameUpdate]
     where
         roomUpdate r = r{name = newName}
 
