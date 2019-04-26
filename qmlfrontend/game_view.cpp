@@ -6,7 +6,8 @@
 #include <QtGui/QOpenGLContext>
 #include <QtGui/QOpenGLShaderProgram>
 
-GameView::GameView() : m_delta(0), m_windowChanged(true) {
+GameView::GameView(QQuickItem* parent)
+    : QQuickItem(parent), m_delta(0), m_windowChanged(true) {
   connect(this, &QQuickItem::windowChanged, this,
           &GameView::handleWindowChanged);
 }

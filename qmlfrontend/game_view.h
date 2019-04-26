@@ -35,7 +35,7 @@ class GameView : public QQuickItem {
                  setEngineInstance NOTIFY engineInstanceChanged)
 
  public:
-  explicit GameView();
+  explicit GameView(QQuickItem* parent = nullptr);
 
   Q_INVOKABLE void tick(quint32 delta);
 

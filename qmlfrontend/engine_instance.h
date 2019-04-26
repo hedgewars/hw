@@ -18,8 +18,6 @@ class EngineInstance : public QObject {
   Q_PROPERTY(bool isValid READ isValid NOTIFY isValidChanged)
 
   void sendConfig(const GameConfig& config);
-  void advance(quint32 ticks);
-  void moveCamera(const QPoint& delta);
   void renderFrame();
   void setOpenGLContext(QOpenGLContext* context);
   QImage generatePreview();
@@ -30,6 +28,9 @@ class EngineInstance : public QObject {
   void isValidChanged(bool isValid);
 
  public slots:
+  void advance(quint32 ticks);
+  void moveCamera(const QPoint& delta);
+  void controlEvent(bool isStart, int type);
 
  private:
   Engine::EngineInstance* m_instance;
