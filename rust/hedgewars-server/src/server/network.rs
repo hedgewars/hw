@@ -481,8 +481,11 @@ impl NetworkLayer {
 
     fn init_client(&mut self, poll: &Poll, client_id: ClientId) {
         let mut response = handlers::Response::new(client_id);
-        #[cfg(feature = "tls-connections")]
-        response.add(Redirect(self.ssl.listener.local_addr().unwrap().port()).send_self());
+
+        if let ClientSocket::Plain(_) = self.clients[client_id].socket {
+            #[cfg(feature = "tls-connections")]
+            response.add(Redirect(self.ssl.listener.local_addr().unwrap().port()).send_self())
+        }
 
         handlers::handle_client_accept(&mut self.server, client_id, &mut response);
         self.handle_response(response, poll);
