@@ -23,6 +23,7 @@ uses uConsts;
 type TKeyNames = array [0..cKeyMaxIndex] of string[15];
 
 procedure populateKeyNames(var KeyArray: TKeyNames);
+// procedure generateKeyNames(); // DEBUG (see below)
 
 implementation
 
@@ -257,6 +258,7 @@ begin
     KeyArray[285] := 'audiorewind';
     KeyArray[286] := 'audiofastforwar';
 
+    // generateKeyNames(); // DEBUG (see below)
 end;
 
 (*
@@ -277,21 +279,30 @@ https://wiki.libsdl.org/SDL_Scancode
 
 NOTE: For compability reasons, existing identifiers should not be renamed.
 
-Old code snippet:
+*)
 
+(* DEBUG
+   Uncomment this to generate a list of key names in
+   CSV format (RFC 4180) and print it out on console.
+   Don't forget to fix duplicates! *)
+(*
+procedure generateKeyNames();
+var i, t: LongInt;
+s, s2: shortstring;
+begin
     for i := 0 to cKeyMaxIndex - 5 do
         begin
         s := shortstring(SDL_GetScancodeName(TSDL_Scancode(i)));
-
         for t := 1 to Length(s) do
             if s[t] = ' ' then
                 s[t] := '_';
-        KeyArray[i] := LowerCase(s);
-        if s = '''' then
-            WriteLnToConsole('    KeyArray['+IntToStr(i)+']'+' := '';')
-        else if s <> '' then
-            WriteLnToConsole('    KeyArray[SDL_SCANCODE_'+KeyArray[i]+']'+' := '''+KeyArray[i]+''';');
+        s2:= copy(s, 1, 15);
+        if s2 = '"' then
+            WriteLnToConsole(IntToStr(i)+',"\""')
+        else if s2 <> '' then
+            WriteLnToConsole(IntToStr(i)+',"'+LowerCase(s2)+'"');
         end;
+end;
 *)
 
 end.
