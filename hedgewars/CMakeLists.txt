@@ -52,6 +52,7 @@ set(engine_sources
     uConsole.pas
     uCommands.pas
     uDebug.pas
+    uKeyNames.pas
     uInputHandler.pas
     uTextures.pas
     uRenderUtils.pas

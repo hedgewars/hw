@@ -331,7 +331,8 @@ const
         '/Graphics/SuddenDeath',         // ptSuddenDeath
         '/Graphics/Buttons',             // ptButton
         '/Shaders',                      // ptShaders
-        '/Sounds/voices/Default'         // ptDefaultVoice
+        '/Sounds/voices/Default',        // ptDefaultVoice
+        '/misc'                          // ptMisc
     );
 
 var
