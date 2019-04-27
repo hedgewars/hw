@@ -117,6 +117,16 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     selectedBindTable = NULL;
     bindComboBoxCellMappings = new QHash<QObject *, QTableWidgetItem *>();
     bindCellComboBoxMappings = new QHash<QTableWidgetItem *, QComboBox *>();
+
+    QIcon dropDownIcon = QIcon();
+    QPixmap dd1 = QPixmap(":/res/dropdown.png");
+    QPixmap dd2 = QPixmap(":/res/dropdown_selected.png");
+    dropDownIcon.addPixmap(dd1, QIcon::Normal);
+    dropDownIcon.addPixmap(dd2, QIcon::Selected);
+    QPixmap emptySpace = QPixmap(16, 16);
+    emptySpace.fill(QColor(0, 0, 0, 0));
+    QIcon emptyIcon = QIcon(emptySpace);
+
     for (int i = 0; i < BINDS_NUMBER; i++)
     {
         if (cbinds[i].category != NULL)
@@ -167,37 +177,55 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         }
 
         // Hidden combo box
-        QComboBox * comboBox = CBBind[i] = new QComboBox(curTable);
-        comboBox->setModel((QAbstractItemModel*)DataManager::instance().bindsModel());
-        comboBox->setVisible(false);
-        comboBox->setMinimumWidth(400);
-        comboBox->setMaxVisibleItems(50);
+        QComboBox * comboBox;
+        if (cbinds[i].action != "!MULTI")
+        {
+            comboBox = CBBind[i] = new QComboBox(curTable);
+            comboBox->setModel((QAbstractItemModel*)DataManager::instance().bindsModel());
+            comboBox->setVisible(false);
+            comboBox->setMinimumWidth(400);
+            comboBox->setMaxVisibleItems(50);
+        }
+        else
+        {
+            comboBox = CBBind[i] = NULL;
+        }
 
         // Table row
         int row = curTable->rowCount();
         QTableWidgetItem * nameCell = new QTableWidgetItem(HWApplication::translate("binds", cbinds[i].name));
-        nameCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         curTable->insertRow(row);
         curTable->setItem(row, 0, nameCell);
-        QTableWidgetItem * bindCell = new QTableWidgetItem(comboBox->currentText());
-        QIcon dropDownIcon = QIcon();
-        QPixmap dd1 = QPixmap(":/res/dropdown.png");
-        QPixmap dd2 = QPixmap(":/res/dropdown_selected.png");
-        dropDownIcon.addPixmap(dd1, QIcon::Normal);
-        dropDownIcon.addPixmap(dd2, QIcon::Selected);
-        bindCell->setIcon(dropDownIcon);
-        bindCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        QTableWidgetItem * bindCell;
+        if (cbinds[i].action != "!MULTI")
+        {
+            bindCell = new QTableWidgetItem(comboBox->currentText());
+            nameCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+            bindCell->setIcon(dropDownIcon);
+            bindCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        }
+        else
+        {
+            bindCell = new QTableWidgetItem(HWApplication::translate("binds (combination)", cbinds[i].strbind.toUtf8().constData()));
+            nameCell->setFlags(Qt::NoItemFlags);
+            bindCell->setFlags(Qt::NoItemFlags);
+            bindCell->setIcon(emptyIcon);
+        }
         curTable->setItem(row, 1, bindCell);
         curTable->resizeColumnsToContents();
         curTable->setFixedHeight(curTable->verticalHeader()->length() + 10);
 
-        // Updates the text in the table cell
-        connect(comboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(bindChanged(const QString &)));
+        if (cbinds[i].action != "!MULTI")
+        {
+            // Updates the text in the table cell
+            connect(comboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(bindChanged(const QString &)));
 
-        // Map combo box and that row's cells to each other
-        bindComboBoxCellMappings->insert(comboBox, bindCell);
-        bindCellComboBoxMappings->insert(nameCell, comboBox);
-        bindCellComboBoxMappings->insert(bindCell, comboBox);
+            // Map combo box and that row's cells to each other
+            bindComboBoxCellMappings->insert(comboBox, bindCell);
+            bindCellComboBoxMappings->insert(nameCell, comboBox);
+            bindCellComboBoxMappings->insert(bindCell, comboBox);
+        }
+
     }
 
     // Add stretch at end of last layout
@@ -247,6 +275,8 @@ void KeyBinder::bindChanged(const QString & text)
 void KeyBinder::bindCellClicked(QTableWidgetItem * item)
 {
     QComboBox * box = bindCellComboBoxMappings->value(item);
+    if(box == NULL)
+        return;
     QTableWidget * table = item->tableWidget();
 
     box->move(
@@ -272,14 +302,18 @@ void KeyBinder::bindSelectionChanged()
 void KeyBinder::setBindIndex(int keyIndex, int bindIndex)
 {
     enableSignal = false;
-    CBBind[keyIndex]->setCurrentIndex(bindIndex);
+    if(CBBind[keyIndex] != NULL)
+        CBBind[keyIndex]->setCurrentIndex(bindIndex);
     enableSignal = true;
 }
 
 // Return a combobox's selected index
 int KeyBinder::bindIndex(int keyIndex)
 {
-    return CBBind[keyIndex]->currentIndex();
+    if(CBBind[keyIndex] != NULL)
+        return CBBind[keyIndex]->currentIndex();
+    else
+        return 0;
 }
 
 // Clears selection and goes to first category
@@ -299,9 +333,12 @@ void KeyBinder::resetInterface()
     DataManager::instance().bindsModel()->item(0)->setData(defaultText, Qt::DisplayRole);
     for (int i = 0; i < BINDS_NUMBER; i++)
     {
-        CBBind[i]->setModel(DataManager::instance().bindsModel());
-        CBBind[i]->setCurrentIndex(0);
-        bindComboBoxCellMappings->value(CBBind[i])->setText(defaultText);
+        if (CBBind[i] != NULL)
+        {
+            CBBind[i]->setModel(DataManager::instance().bindsModel());
+            CBBind[i]->setCurrentIndex(0);
+            bindComboBoxCellMappings->value(CBBind[i])->setText(defaultText);
+        }
     }
 
     enableSignal = true;
