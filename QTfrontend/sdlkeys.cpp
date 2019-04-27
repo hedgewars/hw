@@ -25,6 +25,8 @@ char sdlkeys[1024][2][128] =
     {"mousel", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Left button")},
     {"mousem", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Middle button")},
     {"mouser", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Right button")},
+    {"mousex1", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: X1 button ")},
+    {"mousex2", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: X2 button")},
     {"wheelup", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Wheel up")},
     {"wheeldown", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Wheel down")},
     {"backspace", QT_TRANSLATE_NOOP("binds (keys)", "Backspace")},

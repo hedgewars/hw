@@ -49,6 +49,7 @@ A Space Adventure:
 
 Controls:
  + Add control to unselect current weapon (no key chosen by default)
+ + Add support for 4th and 5th mouse buttons
  + Allow to leave a control unused
  + Reset zoom resets zoom to zoom level set in options
  + Add control to display mines time and health crate health (default: O)

@@ -289,6 +289,10 @@ begin
             ProcessKey(KeyNameToCode('mousem'), ButtonDown);
         SDL_BUTTON_RIGHT:
             ProcessKey(KeyNameToCode('mouser'), ButtonDown);
+        SDL_BUTTON_X1:
+            ProcessKey(KeyNameToCode('mousex1'), ButtonDown);
+        SDL_BUTTON_X2:
+            ProcessKey(KeyNameToCode('mousex2'), ButtonDown);
         end;
 end;
 
@@ -452,9 +456,11 @@ begin
     KeyNames[cKeyMaxIndex    ]:= 'mousel';
     KeyNames[cKeyMaxIndex - 1]:= 'mousem';
     KeyNames[cKeyMaxIndex - 2]:= 'mouser';
-    mwheelupCode:= cKeyMaxIndex - 3;
+    KeyNames[cKeyMaxIndex - 3]:= 'mousex1';
+    KeyNames[cKeyMaxIndex - 4]:= 'mousex2';
+    mwheelupCode:= cKeyMaxIndex - 5;
     KeyNames[mwheelupCode]:= 'wheelup';
-    mwheeldownCode:= cKeyMaxIndex - 4;
+    mwheeldownCode:= cKeyMaxIndex - 6;
     KeyNames[mwheeldownCode]:= 'wheeldown';
 
     // Keyboard keys
