@@ -1240,9 +1240,12 @@ void PageOptions::bindUpdated(int bindID)
 // Returns: The bind model index of the default.
 int PageOptions::resetBindToDefault(int bindID)
 {
+    if (QString(cbinds[bindID].action) == QString("!MULTI"))
+        return -1;
     QStandardItemModel * binds = DataManager::instance().bindsModel();
     QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, cbinds[bindID].strbind, 1, Qt::MatchExactly);
-    if(mdl.size() == 1) binder->setBindIndex(bindID, mdl[0].row());
+    if(mdl.size() == 1)
+        binder->setBindIndex(bindID, mdl[0].row());
     return mdl[0].row();
 }
 
@@ -1251,7 +1254,8 @@ void PageOptions::resetAllBinds()
 {
     for (int i = 0; i < BINDS_NUMBER; i++)
     {
-        resetBindToDefault(i);
-        bindUpdated(i);
+        int ret = resetBindToDefault(i);
+        if(ret != -1)
+            bindUpdated(i);
     }
 }
