@@ -23,6 +23,64 @@ pub struct PreviewInfo {
     land: *const u8,
 }
 
+#[repr(C)]
+#[derive(Debug, PartialEq, Clone)]
+pub enum SimpleEventType {
+    SwitchHedgehog,
+    Timer,
+    LongJump,
+    HighJump,
+    Accept,
+    Deny,
+}
+
+#[repr(C)]
+#[derive(Debug, PartialEq, Clone)]
+pub enum LongEventType {
+    ArrowUp,
+    ArrowDown,
+    ArrowLeft,
+    ArrowRight,
+    Precision,
+    Attack,
+}
+
+#[repr(C)]
+#[derive(Debug, PartialEq, Clone)]
+pub enum LongEventState {
+    Set,
+    Unset,
+}
+
+#[repr(C)]
+#[derive(Debug, PartialEq, Clone)]
+pub enum PositionedEventType {
+    CursorMove,
+    CursorClick,
+}
+
+#[no_mangle]
+pub extern "C" fn simple_event(engine_state: &mut EngineInstance, event_type: SimpleEventType) {}
+
+#[no_mangle]
+pub extern "C" fn long_event(
+    engine_state: &mut EngineInstance,
+    event_type: LongEventType,
+    state: LongEventState,
+) {
+    println!("{:?}: {:?}", event_type, state);
+}
+
+#[no_mangle]
+pub extern "C" fn positioned_event(
+    engine_state: &mut EngineInstance,
+    event_type: PositionedEventType,
+    x: i32,
+    y: i32,
+) {
+
+}
+
 #[no_mangle]
 pub extern "C" fn hedgewars_engine_protocol_version() -> u32 {
     58

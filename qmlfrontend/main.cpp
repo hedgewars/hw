@@ -8,8 +8,6 @@
 #include "hwengine.h"
 #include "preview_acceptor.h"
 
-namespace Engine {};  // namespace Engine
-
 static QObject* previewacceptor_singletontype_provider(
     QQmlEngine* engine, QJSEngine* scriptEngine) {
   Q_UNUSED(scriptEngine)
@@ -23,6 +21,11 @@ int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
+
+  qRegisterMetaType<EngineInstance::SimpleEventType>();
+  qRegisterMetaType<EngineInstance::LongEventType>();
+  qRegisterMetaType<EngineInstance::LongEventState>();
+  qRegisterMetaType<EngineInstance::PositionedEventType>();
 
   qmlRegisterSingletonType<PreviewAcceptor>(
       "Hedgewars.Engine", 1, 0, "PreviewAcceptor",

@@ -5,8 +5,11 @@
 #include <stdint.h>
 
 #ifdef __cplusplus
+#define ENUM_CLASS enum
 namespace Engine {
 extern "C" {
+#else
+#define ENUM_CLASS enum
 #endif
 
 typedef struct _EngineInstance EngineInstance;
@@ -40,6 +43,31 @@ typedef bool advance_simulation_t(EngineInstance* engine_state, uint32_t ticks);
 typedef void move_camera_t(EngineInstance* engine_state, int32_t delta_x,
                            int32_t delta_y);
 
+ENUM_CLASS SimpleEventType{
+    SwitchHedgehog, Timer, LongJump, HighJump, Accept, Deny,
+};
+
+ENUM_CLASS LongEventType{
+    ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Precision, Attack,
+};
+
+ENUM_CLASS LongEventState{
+    Set,
+    Unset,
+};
+
+ENUM_CLASS PositionedEventType{
+    CursorMove,
+    CursorClick,
+};
+
+typedef void simple_event_t(EngineInstance* engine_state,
+                            SimpleEventType event_type);
+typedef void long_event_t(EngineInstance* engine_state,
+                          LongEventType event_type, LongEventState state);
+typedef void positioned_event_t(EngineInstance* engine_state,
+                                PositionedEventType event_type, int32_t x,
+                                int32_t y);
 #ifdef __cplusplus
 }
 };

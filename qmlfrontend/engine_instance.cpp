@@ -43,11 +43,19 @@ EngineInstance::EngineInstance(const QString& libraryPath, QObject* parent)
       hwlib.resolve("advance_simulation"));
   move_camera =
       reinterpret_cast<Engine::move_camera_t*>(hwlib.resolve("move_camera"));
+  simple_event =
+      reinterpret_cast<Engine::simple_event_t*>(hwlib.resolve("simple_event"));
+  long_event =
+      reinterpret_cast<Engine::long_event_t*>(hwlib.resolve("long_event"));
+  positioned_event = reinterpret_cast<Engine::positioned_event_t*>(
+      hwlib.resolve("positioned_event"));
 
   m_isValid = hedgewars_engine_protocol_version && start_engine &&
               generate_preview && dispose_preview && cleanup && send_ipc &&
               read_ipc && setup_current_gl_context && render_frame &&
-              advance_simulation && move_camera;
+              advance_simulation && move_camera && simple_event && long_event &&
+              positioned_event;
+
   emit isValidChanged(m_isValid);
 
   if (isValid()) {
@@ -77,6 +85,19 @@ void EngineInstance::advance(quint32 ticks) {
 
 void EngineInstance::moveCamera(const QPoint& delta) {
   move_camera(m_instance, delta.x(), delta.y());
+}
+
+void EngineInstance::simpleEvent(SimpleEventType event_type) {
+  simple_event(m_instance, event_type);
+}
+
+void EngineInstance::longEvent(LongEventType event_type, LongEventState state) {
+  long_event(m_instance, event_type, state);
+}
+
+void EngineInstance::positionedEvent(PositionedEventType event_type, qint32 x,
+                                     qint32 y) {
+  positioned_event(m_instance, event_type, x, y);
 }
 
 void EngineInstance::renderFrame() { render_frame(m_instance); }
