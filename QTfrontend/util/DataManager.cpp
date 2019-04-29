@@ -175,8 +175,9 @@ QStandardItemModel * DataManager::bindsModel()
             bool kbFallback = keyDisplay.trimmed().isEmpty();
             if (kbFallback)
             {
-                // If SDL doesn't know a name, show fallback enclosed in brackets
-                keyDisplay = QString(sdlkeys[j][1]) + QString(" ") + HWApplication::translate("binds (keys)", "(unsupported)");
+                // If SDL doesn't know a name, show fallback name and a warning
+		//: Name of QWERTY US keyboard layout
+                keyDisplay = QString(sdlkeys[j][1]) + QString(" ") + HWApplication::translate("binds (keys)", "(QWERTY)");
             }
             if (isKeyboard)
             {
