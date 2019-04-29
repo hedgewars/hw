@@ -235,7 +235,10 @@ bool HWTeam::saveToFile()
         teamfile.setValue(hh + "Hat", m_hedgehogs[i].Hat);
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
-        teamfile.setValue(QString("Binds/%1").arg(m_binds[i].action), m_binds[i].strbind);
+    {
+        if(QString(m_binds[i].action) != QString("!MULTI"))
+            teamfile.setValue(QString("Binds/%1").arg(m_binds[i].action), m_binds[i].strbind);
+    }
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
             teamfile.setValue(QString("Achievements/%1").arg(achievements[i][0]), AchievementProgress[i]);
