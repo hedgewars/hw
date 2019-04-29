@@ -28,9 +28,12 @@
 #include <QSettings>
 #include <QColor>
 
+#include <SDL2/SDL.h>
+
 #include "hwconsts.h"
 #include "HWApplication.h"
 #include "sdlkeys.h"
+#include "KeyMap.h"
 #include "physfs.h"
 
 #include "DataManager.h"
@@ -147,6 +150,7 @@ QStandardItemModel * DataManager::colorsModel()
 
 QStandardItemModel * DataManager::bindsModel()
 {
+    KeyMap km = KeyMap::instance();
     if(m_bindsModel == NULL)
     {
         m_bindsModel = new QStandardItemModel();
@@ -160,8 +164,27 @@ QStandardItemModel * DataManager::bindsModel()
         {
             QStandardItem * item = new QStandardItem();
             QString keyId = QString(sdlkeys[j][0]);
-            QString keyTr = HWApplication::translate("binds (keys)", sdlkeys[j][1]);
-            item->setData((keyId == "none" || keyTr.contains(": ")) ? keyTr : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + keyTr, Qt::DisplayRole);
+            QString keyDisplay;
+            bool isKeyboard = !QString(sdlkeys[j][1]).contains(": ");
+            if (keyId == "none" || (!isKeyboard))
+                keyDisplay = HWApplication::translate("binds (keys)", sdlkeys[j][1]);
+            else
+                // Get key name with respect to keyboard layout
+                keyDisplay = QString(SDL_GetKeyName(SDL_GetKeyFromScancode(km.getScancodeFromKeyname(sdlkeys[j][0]))));
+
+            bool kbFallback = keyDisplay.trimmed().isEmpty();
+            if (kbFallback)
+            {
+                // If SDL doesn't know a name, show fallback enclosed in brackets
+                keyDisplay = QString(sdlkeys[j][1]) + QString(" ") + HWApplication::translate("binds (keys)", "(unsupported)");
+            }
+            if (isKeyboard)
+            {
+                if (!kbFallback)
+                    keyDisplay = HWApplication::translate("binds (keys)", keyDisplay.toUtf8().constData());
+                keyDisplay = HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + keyDisplay;
+            }
+            item->setData(keyDisplay, Qt::DisplayRole);
             item->setData(sdlkeys[j][0], Qt::UserRole + 1);
             m_bindsModel->appendRow(item);
         }

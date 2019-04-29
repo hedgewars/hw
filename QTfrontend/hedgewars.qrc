@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos_base.png</file>
+        <file alias="keys.csv">../share/hedgewars/Data/misc/keys.csv</file>
         <file>res/css/qt.css</file>
         <file>res/css/chat.css</file>
         <file>res/css/christmas.css</file>
