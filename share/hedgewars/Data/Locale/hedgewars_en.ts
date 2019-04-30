@@ -3318,12 +3318,12 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Server redirection</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This server supports secure connections on port %1.
 Would you like to reconnect securely?</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3880,47 +3880,47 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>stand still on slippery land</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>change direction without moving</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>switch backwards</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>change bounciness</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>reset zoom to start value</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>set zoom to 100%</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>save map as image</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>show object information</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>change hedgehog tag types</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>toggle hedgehog tag translucency</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>toggle HUD</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3946,39 +3946,39 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     <name>binds (combination)</name>
     <message>
         <source>hold down precise</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>precise + left/right</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>precise + switch</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>precise + timer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>precise + reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>precise + capture</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>precise + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -4412,134 +4412,134 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>Mouse: X1 button </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Mouse: X2 button</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 4</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 6</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 7</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 8</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad 9</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad .</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad /</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad *</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad -</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad +</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keypad Enter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>PageUp</source>
-        <translation type="unfinished"></translation>
+        <translation>Page Up</translation>
     </message>
     <message>
         <source>PageDown</source>
-        <translation type="unfinished"></translation>
+        <translation>Page Down</translation>
     </message>
     <message>
         <source>Numlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Numlock</translation>
     </message>
     <message>
         <source>CapsLock</source>
-        <translation type="unfinished"></translation>
+        <translation>Caps Lock</translation>
     </message>
     <message>
         <source>ScrollLock</source>
-        <translation type="unfinished"></translation>
+        <translation>Scroll Lock</translation>
     </message>
     <message>
         <source>Right Shift</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Left Shift</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Right Ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Left Ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Right Alt</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Left Alt</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Right GUI</source>
         <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Left GUI</source>
         <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -5629,7 +5629,7 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>Warning! Room name change flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>
