@@ -346,11 +346,11 @@
 02:02=Habt keine Angst!
 02:02=Seid mutig und siegreich!
 
-02:02=Gleich geht's rund …
-02:02=Hier geht's gleich zur Sache
+02:02=Gleich geht’s rund …
+02:02=Hier geht’s gleich zur Sache
 02:02=Lasst die Spiele beginnen!
-02:02=Jetzt geht's los!
-02:02=Auf geht's!
+02:02=Jetzt geht’s los!
+02:02=Auf geht’s!
 
 ; Round ends and team (%1) wins
 02:03=%1 gewinnt!
@@ -443,12 +443,12 @@
 02:05=Heilt die Kranken!
 02:05=Das ist gut für dich
 02:05=Irgendjemand scheint euch zu mögen
-02:05=Schnapp's dir, bevor es der Feind tut!
+02:05=Schnapp’s dir, bevor es der Feind tut!
 02:05=Hilfe für kranke Igel
 02:05=Braucht da unten jemand Hilfe?
 02:05=Alles, was ein verwundeter Igel braucht
 02:05=Schwer verletzt? Das kriegen wir hin
-02:05=Hol dir Erste Hilfe, bevor's zu spät ist
+02:05=Hol dir Erste Hilfe, bevor’s zu spät ist
 02:05=Brotrationen!
 02:05=Stell deine Gesundheit wieder her
 02:05=Das wird euch helfen
@@ -468,7 +468,7 @@
 02:05=Leb etwas länger
 02:05=Diese Kiste wird dir helfen
 02:05=Braucht jemand Hilfe?
-02:05=Hol sie dir, bevor's zu spät ist!
+02:05=Hol sie dir, bevor’s zu spät ist!
 02:05=Niedrige Gesundheit? Wir haben die Lösung!
 02:05=Von fast tot bis kerngesund in nur einem Augenblick!
 02:05=Die effizienteste Art der Heilung
@@ -585,7 +585,7 @@
 02:06=Keine Munition? Kein Problem?
 02:06=Zeit zum Nachladen!
 02:06=Die hier macht »Bumm!«
-02:06=Manche mögen's heiß
+02:06=Manche mögen’s heiß
 02:06=Ein paar unartige Igel brauchen Bestrafung
 02:06=Zerschmettert den Feind!
 02:06=Spaß! Explosionen! Zerstörung!
@@ -599,11 +599,11 @@
 02:06=Heroische Bewaffnung für heroische Igel
 02:06=Überraschungswaffe!
 02:06=Es regnet Kisten!
-02:06=Die ultimative Waffe? Oder nur so 'ne Langweilige?
+02:06=Die ultimative Waffe? Oder nur so ’ne Langweilige?
 02:06=Hol sie dir zuerst
 02:06=Das macht Igel zu Toast
 02:06=So eine wunderschöne … Waffe
-02:06=Was ist da drin? Finden wir's heraus!
+02:06=Was ist da drin? Finden wir’s heraus!
 02:06=Auspacken!
 02:06=Diese Kiste bringt Zerstörung
 02:06=Sie nennen mich »Terminator«
@@ -621,7 +621,7 @@
 02:06=Die Chaoskiste
 02:06=Wer zuerst kommt, mahlt zuerst!
 02:06=Hat jemand »Waffen« gesagt?
-02:06=Jetzt wird's ernst
+02:06=Jetzt wird’s ernst
 02:06=Die Schonfrist ist vorbei
 02:06=Lasst das Wettrüsten beginnen!
 02:06=Nimm dich in acht, wenn der Feind sich sie holt
@@ -700,7 +700,7 @@
 02:07=Hat jemand einen Werkzeugkasten bestellt?
 02:07=Nützliche Lieferung!
 02:07=Braucht jemand ein Werkzeug?
-02:07=Ich kann's kaum erwarten, diese Kiste zu öffnen!
+02:07=Ich kann’s kaum erwarten, diese Kiste zu öffnen!
 02:07=Ein schwerer Werkzeugkasten fällt vom Himmel!
 02:07=Ein kleines Helferlein für kleine Igelchen
 02:07=Erweitere deine Möglichkeiten
