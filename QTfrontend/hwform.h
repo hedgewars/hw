@@ -100,7 +100,7 @@ class HWForm : public QMainWindow
         void startTraining(const QString&, const QString&);
         void StartCampaign();
         void NetConnect();
-        void NetConnectServer(const QString & host, quint16 port);
+        void NetConnectServer(const QString & host, quint16 port, bool useTls);
         void NetConnectOfficialServer();
         void NetStartServer();
         void NetRedirected(quint16 port);
@@ -159,7 +159,7 @@ class HWForm : public QMainWindow
         void FromNetProxySlot(const QByteArray &);
 
     private:
-        void _NetConnect(const QString & hostName, quint16 port, QString nick);
+        void _NetConnect(const QString & hostName, quint16 port, bool useTls, QString nick);
         int  AskForNickAndPwd(void);
         void UpdateTeamsLists();
         void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);

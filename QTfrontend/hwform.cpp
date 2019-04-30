@@ -294,7 +294,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNet->BtnNetSvrStart, ID_PAGE_NETSERVER);
 
-    connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16)), this, SLOT(NetConnectServer(const QString &, quint16)));
+    connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16, bool)), this, SLOT(NetConnectServer(const QString &, quint16, bool)));
 
     connect(ui.pageNetServer->BtnStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
 
@@ -1155,18 +1155,18 @@ void HWForm::PlayDemoQuick(const QString & demofilename)
 void HWForm::NetConnectQuick(const QString & host, quint16 port)
 {
     GoToPage(ID_PAGE_MAIN);
-    NetConnectServer(host, port);
+    NetConnectServer(host, port, false);
 }
 
-void HWForm::NetConnectServer(const QString & host, quint16 port)
+void HWForm::NetConnectServer(const QString & host, quint16 port, bool useTls)
 {
     qDebug("connecting to %s:%d", qPrintable(host), port);
-    _NetConnect(host, port, ui.pageOptions->editNetNick->text().trimmed());
+    _NetConnect(host, port, useTls, ui.pageOptions->editNetNick->text().trimmed());
 }
 
 void HWForm::NetConnectOfficialServer()
 {
-    NetConnectServer(NETGAME_DEFAULT_SERVER, NETGAME_DEFAULT_PORT);
+    NetConnectServer(NETGAME_DEFAULT_SERVER, NETGAME_DEFAULT_PORT, false);
 }
 
 void HWForm::NetPassword(const QString & nick)
@@ -1261,7 +1261,7 @@ void HWForm::NetNickTaken(const QString & nick)
         if (retry && hwnet) {
             if (hwnet->m_private_game) {
                 QStringList list = hwnet->getHost().split(":");
-                NetConnectServer(list.at(0), list.at(1).toShort());
+                NetConnectServer(list.at(0), list.at(1).toShort(), false);
             } else
                 NetConnectOfficialServer();
         }
@@ -1350,7 +1350,7 @@ void HWForm::NetWarning(const QString & wrnmsg)
         ui.pageRoomsList->displayWarning(wrnmsg);
 }
 
-void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
+void HWForm::_NetConnect(const QString & hostName, quint16 port, bool useTls, QString nick)
 {
     Q_UNUSED(nick);
 
@@ -1531,7 +1531,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     ui.pageRoomsList->setUser(nickname);
     ui.pageNetGame->setUser(nickname);
 
-    hwnet->Connect(hostName, port, nickname);
+    hwnet->Connect(hostName, port, useTls, nickname);
 }
 
 int HWForm::AskForNickAndPwd(void)
@@ -1585,7 +1585,7 @@ int HWForm::AskForNickAndPwd(void)
                 if (retry) {
                     if (hwnet->m_private_game) {
                         QStringList list = hwnet->getHost().split(":");
-                        NetConnectServer(list.at(0), list.at(1).toShort());
+                        NetConnectServer(list.at(0), list.at(1).toShort(), false);
                     } else
                         NetConnectOfficialServer();
                 }
@@ -1631,7 +1631,7 @@ void HWForm::NetConnect()
         delete netHost;
         netHost = new QString(hpd->leHost->text());
         netPort = hpd->sbPort->value();
-        NetConnectServer(*netHost, netPort);
+        NetConnectServer(*netHost, netPort, false);
     }
     delete hpd;
 }
@@ -1659,7 +1659,7 @@ void HWForm::NetStartServer()
 
 void HWForm::AsyncNetServerStart()
 {
-    NetConnectServer("localhost", pnetserver->getRunningPort());
+    NetConnectServer("localhost", pnetserver->getRunningPort(), false);
 }
 
 void HWForm::NetDisconnect()
@@ -1688,7 +1688,7 @@ void HWForm::ForcedDisconnect(const QString & reason)
         if (retry) {
             if (hwnet->m_private_game) {
                 QStringList list = hwnet->getHost().split(":");
-                NetConnectServer(list.at(0), list.at(1).toUInt());
+                NetConnectServer(list.at(0), list.at(1).toUInt(), false);
             } else
                 NetConnectOfficialServer();
         }
@@ -1728,8 +1728,13 @@ void HWForm::NetRedirected(quint16 port)
     questionMsg.addButton(QMessageBox::No);
 
     if (questionMsg.exec() == QMessageBox::Yes)
+    {        
+        QString host = hwnet->getHost().split(":").at(0);
+        NetConnectServer(host, port, true);
+    }
+    else if (hwnet)
     {
-
+        hwnet->ContinueConnection();
     }
 }
 
