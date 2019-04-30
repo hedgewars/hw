@@ -165,7 +165,7 @@ QStandardItemModel * DataManager::bindsModel()
             QStandardItem * item = new QStandardItem();
             QString keyId = QString(sdlkeys[j][0]);
             QString keyDisplay;
-            bool isKeyboard = !QString(sdlkeys[j][1]).contains(": ");
+            bool isKeyboard = sdlkeys_iskeyboard[j] == true;
             if (keyId == "none" || (!isKeyboard))
                 keyDisplay = HWApplication::translate("binds (keys)", sdlkeys[j][1]);
             else

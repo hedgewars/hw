@@ -50,14 +50,25 @@ SDLInteraction::SDLInteraction()
     m_musicTrack = "";
     m_isPlayingMusic = false;
     lastchannel = 0;
+    int i;
+    // Initialize sdlkeys_iskeyboard
+    for (i=0; i<1024; i++) {
+        // First 7 entries are mouse buttons (see sdlkeys.cpp)
+        if ((i > 6) && (sdlkeys[i][0][0] != '\0'))
+            sdlkeys_iskeyboard[i] = true;
+        else
+            sdlkeys_iskeyboard[i] = false;
+    }
+
     if(SDL_NumJoysticks())
         addGameControllerKeys();
 
-    int i = 0;
+    // Add special "none" key at the end of list
+    i = 0;
     while(i < 1024 && sdlkeys[i][1][0] != '\0')
         i++;
     sprintf(sdlkeys[i][0], "none");
-    sprintf(sdlkeys[i++][1], "%s", HWApplication::translate("binds (keys)", unboundcontrol).toUtf8().constData());
+    sprintf(sdlkeys[i][1], "%s", HWApplication::translate("binds (keys)", unboundcontrol).toUtf8().constData());
 
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
 

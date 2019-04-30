@@ -22,6 +22,7 @@
 
 char sdlkeys[1024][2][128] =
 {
+    // Mouse
     {"mousel", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Left button")},
     {"mousem", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Middle button")},
     {"mouser", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Right button")},
@@ -29,6 +30,8 @@ char sdlkeys[1024][2][128] =
     {"mousex2", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: X2 button")},
     {"wheelup", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Wheel up")},
     {"wheeldown", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Wheel down")},
+
+    // Keyboard
     {"backspace", QT_TRANSLATE_NOOP("binds (keys)", "Backspace")},
     {"tab", QT_TRANSLATE_NOOP("binds (keys)", "Tab")},
     {"clear", QT_TRANSLATE_NOOP("binds (keys)", "Clear")},
@@ -138,6 +141,9 @@ char sdlkeys[1024][2][128] =
     //: Windows key / Command key / Meta key /Super key (left)
     {"left_gui", QT_TRANSLATE_NOOP("binds (keys)", "Left GUI")}
 };
+
+// helper list for sdlkeys. true for keyboard keys, false for other
+bool sdlkeys_iskeyboard[1024];
 
 // button name definitions for Microsoft's XBox360 controller
 // don't modify button order!

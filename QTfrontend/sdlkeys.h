@@ -20,6 +20,7 @@
 #define SDLKEYS_H
 
 extern char sdlkeys[1024][2][128];
+extern bool sdlkeys_iskeyboard[1024];
 extern char xb360buttons[10][128];
 extern char xbox360axes[10][128];
 extern char xb360dpad[128];
