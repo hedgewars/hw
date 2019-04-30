@@ -291,27 +291,14 @@ int main(int argc, char *argv[]) {
         // end of parameter parsing
 
         // Select Qt style
-        /* Qt5 Base removed Motif, Plastique. These are now in the Qt style plugins
-        (Ubuntu: qt5-style-plugins, which was NOT backported by Debian/Ubuntu to stable/LTS).
-        Windows appears to render best of the remaining options but still isn't quite right. */
-
-        // Try setting Plastique if available
         QStyle* coreStyle;
-        coreStyle = QStyleFactory::create("Plastique");
+        coreStyle = QStyleFactory::create("Windows");
         if(coreStyle != 0) {
             QApplication::setStyle(coreStyle);
-            qDebug("Qt style set: Plastique");
+            qDebug("Qt style set: Windows");
         } else {
-            // Use Windows as fallback.
-            // FIXME: Under Windows style, some widgets like scrollbars don't render as nicely
-            coreStyle = QStyleFactory::create("Windows");
-            if(coreStyle != 0) {
-                QApplication::setStyle(coreStyle);
-                qDebug("Qt style set: Windows");
-            } else {
-                // Windows style should not be missing in Qt5 Base. If it does, something went terribly wrong!
-                qWarning("No Qt style could be set! Using the default one.");
-            }
+            // Windows style should not be missing in Qt5 Base. If it does, something went terribly wrong!
+            qWarning("No Qt style could be set! Using the default one.");
         }
     }
 

@@ -34,7 +34,6 @@ These are not strictly required to build Hedgewars, but it's
 usually better to have them installed. Hedgewars has fallback mechanisms
 in if these are not found on your system.
 
-- qtstyleplugins (for Qt 5)
 - Lua = 5.1.0
 
 ### Optional dependencies
