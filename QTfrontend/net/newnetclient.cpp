@@ -85,7 +85,18 @@ void HWNewNet::Connect(const QString & hostName, quint16 port, bool useTls, cons
     netClientState = Connecting;
     mynick = nick;
     myhost = hostName + QString(":%1").arg(port);
-    NetSocket.connectToHost(hostName, port);
+    if (useTls)
+    {
+        NetSocket.connectToHostEncrypted(hostName, port);
+        if (!NetSocket.waitForEncrypted())
+        {
+            qWarning("Handshake failed");
+        }
+    }
+    else 
+    {
+        NetSocket.connectToHost(hostName, port);
+    }
 }
 
 void HWNewNet::Disconnect()

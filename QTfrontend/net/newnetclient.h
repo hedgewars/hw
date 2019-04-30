@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QString>
-#include <QTcpSocket>
+#include <QSslSocket>
 #include <QMap>
 
 #include "team.h"
@@ -69,7 +69,7 @@ class HWNewNet : public QObject
         QString mynick;
         QString myroom;
         QString myhost;
-        QTcpSocket NetSocket;
+        QSslSocket NetSocket;
         QString seed;
         bool m_game_connected;
         bool m_nick_registered;
