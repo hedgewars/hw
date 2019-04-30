@@ -599,7 +599,7 @@ Odota hetki ja yritä uudelleen.</translation>
     </message>
     <message>
         <source>Guest</source>
-        <translation>Vieras</translation>
+        <translation type="vanished">Vieras</translation>
     </message>
     <message>
         <source>Room password</source>
@@ -1105,6 +1105,7 @@ Last engine message:
     </message>
     <message>
         <source>Record: %1</source>
+        <extracomment>As in ‘recording’</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3217,6 +3218,15 @@ You seem to be new around here. Would you like to play some training missions fi
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Server redirection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This server supports secure connections on port %1.
+Would you like to reconnect securely?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -3687,7 +3697,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>reset zoom</source>
-        <translation>nollaa zoom</translation>
+        <translation type="vanished">nollaa zoom</translation>
     </message>
     <message>
         <source>long jump</source>
@@ -3750,6 +3760,50 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
         <source>unselect weapon</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>stand still on slippery land</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change direction without moving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>switch backwards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change bounciness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reset zoom to start value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set zoom to 100%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>save map as image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show object information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change hedgehog tag types</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tag translucency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle HUD</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -3768,6 +3822,45 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     <message>
         <source>Miscellaneous</source>
         <translation>Sekalaiset</translation>
+    </message>
+</context>
+<context>
+    <name>binds (combination)</name>
+    <message>
+        <source>hold down precise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + left/right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + reset zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3937,71 +4030,71 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation>Numeronäppäimistö 0</translation>
+        <translation type="vanished">Numeronäppäimistö 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation>Numeronäppäimistö 1</translation>
+        <translation type="vanished">Numeronäppäimistö 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation>Numeronäppäimistö 2</translation>
+        <translation type="vanished">Numeronäppäimistö 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation>Numeronäppäimistö 3</translation>
+        <translation type="vanished">Numeronäppäimistö 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation>Numeronäppäimistö 4</translation>
+        <translation type="vanished">Numeronäppäimistö 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation>Numeronäppäimistö 5</translation>
+        <translation type="vanished">Numeronäppäimistö 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation>Numeronäppäimistö 6</translation>
+        <translation type="vanished">Numeronäppäimistö 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation>Numeronäppäimistö 7</translation>
+        <translation type="vanished">Numeronäppäimistö 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation>Numeronäppäimistö 8</translation>
+        <translation type="vanished">Numeronäppäimistö 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation>Numeronäppäimistö 9</translation>
+        <translation type="vanished">Numeronäppäimistö 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation>Numeronäppäimistö .</translation>
+        <translation type="vanished">Numeronäppäimistö .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation>Numeronäppäimistö /</translation>
+        <translation type="vanished">Numeronäppäimistö /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation>Numeronäppäimistö *</translation>
+        <translation type="vanished">Numeronäppäimistö *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation>Numeronäppäimistö -</translation>
+        <translation type="vanished">Numeronäppäimistö -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation>Numeronäppäimistö +</translation>
+        <translation type="vanished">Numeronäppäimistö +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>Rivinvaihto</translation>
+        <translation type="vanished">Rivinvaihto</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation>=</translation>
+        <translation type="vanished">=</translation>
     </message>
     <message>
         <source>Up</source>
@@ -4033,55 +4126,55 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Page up</source>
-        <translation>Sivu ylös</translation>
+        <translation type="vanished">Sivu ylös</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation>Sivu alas</translation>
+        <translation type="vanished">Sivu alas</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation>Num lock</translation>
+        <translation type="vanished">Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation>Caps lock</translation>
+        <translation type="vanished">Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation>Scroll lock</translation>
+        <translation type="vanished">Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation>Oikea vaihtonäppäin</translation>
+        <translation type="vanished">Oikea vaihtonäppäin</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>Vasen vaihtonäppäin</translation>
+        <translation type="vanished">Vasen vaihtonäppäin</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>Oikea ctrl</translation>
+        <translation type="vanished">Oikea ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>Vasen ctrl</translation>
+        <translation type="vanished">Vasen ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>Oikea alt</translation>
+        <translation type="vanished">Oikea alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>Vasen alt</translation>
+        <translation type="vanished">Vasen alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation>Oikea meta</translation>
+        <translation type="vanished">Oikea meta</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation>Vasen meta</translation>
+        <translation type="vanished">Vasen meta</translation>
     </message>
     <message>
         <source>A button</source>
@@ -4193,6 +4286,137 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     <message>
         <source>(Don&apos;t use)</source>
         <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse: X1 button </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse: X2 button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad .</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad /</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad *</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad +</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PageUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PageDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Numlock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CapsLock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ScrollLock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Ctrl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Ctrl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(QWERTY)</source>
+        <extracomment>Name of QWERTY US keyboard layout</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5247,6 +5471,10 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Room name change flood protection activated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

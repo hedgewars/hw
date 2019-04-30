@@ -595,7 +595,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Guest</source>
-        <translation>遊客</translation>
+        <translation type="vanished">遊客</translation>
     </message>
     <message>
         <source>Room password</source>
@@ -873,6 +873,14 @@ Last engine message:
         <source>Scale size of the drawn map</source>
         <translation>繪製地圖的比例尺寸</translation>
     </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">讀取</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1120,6 +1128,7 @@ Last engine message:
     </message>
     <message>
         <source>Record: %1</source>
+        <extracomment>As in ‘recording’</extracomment>
         <translation>紀錄：%1</translation>
     </message>
 </context>
@@ -2974,6 +2983,10 @@ Do you really want to quit?</source>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
         <translation>載入中&lt;br&gt;驗證碼 ...</translation>
     </message>
+    <message>
+        <source>Zoom (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -3280,6 +3293,15 @@ You seem to be new around here. Would you like to play some training missions fi
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
         <translation>名為&apos;%1&apos;的武器方案已經存在。對武器計劃所做的更改已被廢棄。</translation>
     </message>
+    <message>
+        <source>Server redirection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This server supports secure connections on port %1.
+Would you like to reconnect securely?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -3300,7 +3322,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Go!</source>
-        <translation>出場！</translation>
+        <translation type="vanished">出場！</translation>
     </message>
     <message>
         <source>Start</source>
@@ -3550,7 +3572,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>copy of %1</source>
-        <translation>%1的拷貝</translation>
+        <translation type="vanished">%1的拷貝</translation>
     </message>
     <message>
         <source>New</source>
@@ -3766,7 +3788,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>reset zoom</source>
-        <translation>重置</translation>
+        <translation type="vanished">重置</translation>
     </message>
     <message>
         <source>long jump</source>
@@ -3829,6 +3851,50 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <source>unselect weapon</source>
         <translation>不選擇武器</translation>
     </message>
+    <message>
+        <source>stand still on slippery land</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change direction without moving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>switch backwards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change bounciness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reset zoom to start value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set zoom to 100%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>save map as image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show object information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change hedgehog tag types</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tag translucency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle HUD</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -3847,6 +3913,45 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Miscellaneous</source>
         <translation>雜項</translation>
+    </message>
+</context>
+<context>
+    <name>binds (combination)</name>
+    <message>
+        <source>hold down precise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + left/right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + reset zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4024,71 +4129,67 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation>小鍵盤0</translation>
+        <translation type="vanished">小鍵盤0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation>小鍵盤1</translation>
+        <translation type="vanished">小鍵盤1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation>小鍵盤2</translation>
+        <translation type="vanished">小鍵盤2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation>小鍵盤3</translation>
+        <translation type="vanished">小鍵盤3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation>小鍵盤4</translation>
+        <translation type="vanished">小鍵盤4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation>小鍵盤5</translation>
+        <translation type="vanished">小鍵盤5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation>小鍵盤6</translation>
+        <translation type="vanished">小鍵盤6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation>小鍵盤7</translation>
+        <translation type="vanished">小鍵盤7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation>小鍵盤8</translation>
+        <translation type="vanished">小鍵盤8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation>小鍵盤9</translation>
+        <translation type="vanished">小鍵盤9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation>小鍵盤.</translation>
+        <translation type="vanished">小鍵盤.</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation>小鍵盤/</translation>
+        <translation type="vanished">小鍵盤/</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation>小鍵盤*</translation>
+        <translation type="vanished">小鍵盤*</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation>小鍵盤-</translation>
+        <translation type="vanished">小鍵盤-</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation>小鍵盤+</translation>
+        <translation type="vanished">小鍵盤+</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>Enter</translation>
-    </message>
-    <message>
-        <source>Equals</source>
-        <translation></translation>
+        <translation type="vanished">Enter</translation>
     </message>
     <message>
         <source>Up</source>
@@ -4119,56 +4220,44 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation></translation>
     </message>
     <message>
-        <source>Page up</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Num lock</source>
-        <translation>小鍵盤數位鎖</translation>
+        <translation type="vanished">小鍵盤數位鎖</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation>大小寫切換鍵</translation>
-    </message>
-    <message>
-        <source>Scroll lock</source>
-        <translation></translation>
+        <translation type="vanished">大小寫切換鍵</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation>右Shift鍵</translation>
+        <translation type="vanished">右Shift鍵</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>左Shift鍵</translation>
+        <translation type="vanished">左Shift鍵</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>右Ctrl鍵</translation>
+        <translation type="vanished">右Ctrl鍵</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>左Ctrl鍵</translation>
+        <translation type="vanished">左Ctrl鍵</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>右Alt鍵</translation>
+        <translation type="vanished">右Alt鍵</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>左Alt鍵</translation>
+        <translation type="vanished">左Alt鍵</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation>右meta鍵</translation>
+        <translation type="vanished">右meta鍵</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation>左meta鍵</translation>
+        <translation type="vanished">左meta鍵</translation>
     </message>
     <message>
         <source>A button</source>
@@ -4277,6 +4366,137 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <source>(Don&apos;t use)</source>
         <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
         <translation>(不使用)</translation>
+    </message>
+    <message>
+        <source>Mouse: X1 button </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse: X2 button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad .</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad /</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad *</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad +</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PageUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PageDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Numlock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CapsLock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ScrollLock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Ctrl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Ctrl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(QWERTY)</source>
+        <extracomment>Name of QWERTY US keyboard layout</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5299,6 +5519,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
         <translation>請用&apos;/restart_server yes&apos;確認服務器重啟</translation>
+    </message>
+    <message>
+        <source>Warning! Room name change flood protection activated</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

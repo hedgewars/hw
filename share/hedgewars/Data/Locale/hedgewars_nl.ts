@@ -569,10 +569,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Guest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Room password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1019,6 +1015,7 @@ Last engine message:
     </message>
     <message>
         <source>Record: %1</source>
+        <extracomment>As in ‘recording’</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2993,6 +2990,15 @@ You seem to be new around here. Would you like to play some training missions fi
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Server redirection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This server supports secure connections on port %1.
+Would you like to reconnect securely?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -3436,10 +3442,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>reset zoom</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>long jump</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3496,6 +3498,50 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <source>unselect weapon</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>stand still on slippery land</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change direction without moving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>switch backwards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change bounciness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reset zoom to start value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set zoom to 100%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>save map as image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show object information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change hedgehog tag types</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tag translucency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle HUD</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -3513,6 +3559,45 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>binds (combination)</name>
+    <message>
+        <source>hold down precise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + left/right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + reset zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle hedgehog tags</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3650,74 +3735,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad .</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad /</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad *</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad -</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad +</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equals</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Up</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3743,58 +3760,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Num lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Caps lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right shift</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left shift</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right alt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left alt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right meta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left meta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3899,6 +3864,137 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>(Don&apos;t use)</source>
         <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse: X1 button </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse: X2 button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad .</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad /</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad *</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad +</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PageUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PageDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Numlock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CapsLock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ScrollLock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Ctrl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Ctrl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(QWERTY)</source>
+        <extracomment>Name of QWERTY US keyboard layout</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4805,6 +4901,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Room name change flood protection activated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

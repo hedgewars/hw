@@ -615,7 +615,7 @@ Fuirich diog no dhà mus feuch thu ris a-rithist.</translation>
     </message>
     <message>
         <source>Guest</source>
-        <translation>Aoigh</translation>
+        <translation type="vanished">Aoigh</translation>
     </message>
     <message>
         <source>Room password</source>
@@ -1135,6 +1135,7 @@ Last engine message:
     </message>
     <message>
         <source>Record: %1</source>
+        <extracomment>As in ‘recording’</extracomment>
         <translation>Clàradh: %1</translation>
     </message>
     <message>
@@ -3294,6 +3295,15 @@ Tha coltas nach eil thu ’nad sheann-ghaisgeach fhathast. Am bu toigh leat mise
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
         <translation>Tha sgeama airm air a bheil “%1” ann mu thràth. Chaidh na h-atharraichean air an sgeama airm a thilgeil air falbh.</translation>
     </message>
+    <message>
+        <source>Server redirection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This server supports secure connections on port %1.
+Would you like to reconnect securely?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -3768,7 +3778,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>reset zoom</source>
-        <translation>ath-shuidhich an sùm</translation>
+        <translation type="vanished">ath-shuidhich an sùm</translation>
     </message>
     <message>
         <source>long jump</source>
@@ -3835,6 +3845,50 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
         <source>unselect weapon</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>stand still on slippery land</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change direction without moving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>switch backwards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change bounciness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>reset zoom to start value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set zoom to 100%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>save map as image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show object information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>change hedgehog tag types</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tag translucency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toggle HUD</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -3853,6 +3907,45 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>Miscellaneous</source>
         <translation>Measgaichte</translation>
+    </message>
+</context>
+<context>
+    <name>binds (combination)</name>
+    <message>
+        <source>hold down precise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + left/right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + reset zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + capture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4026,71 +4119,71 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation>0 air pada nan àireamh</translation>
+        <translation type="vanished">0 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation>1 air pada nan àireamh</translation>
+        <translation type="vanished">1 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation>2 air pada nan àireamh</translation>
+        <translation type="vanished">2 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation>3 air pada nan àireamh</translation>
+        <translation type="vanished">3 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation>4 air pada nan àireamh</translation>
+        <translation type="vanished">4 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation>5 air pada nan àireamh</translation>
+        <translation type="vanished">5 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation>6 air pada nan àireamh</translation>
+        <translation type="vanished">6 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation>7 air pada nan àireamh</translation>
+        <translation type="vanished">7 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation>8 air pada nan àireamh</translation>
+        <translation type="vanished">8 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation>9 air pada nan àireamh</translation>
+        <translation type="vanished">9 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation>. air pada nan àireamh</translation>
+        <translation type="vanished">. air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation>/ air pada nan àireamh</translation>
+        <translation type="vanished">/ air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation>* air pada nan àireamh</translation>
+        <translation type="vanished">* air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation>- air pada nan àireamh</translation>
+        <translation type="vanished">- air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation>+ air pada nan àireamh</translation>
+        <translation type="vanished">+ air pada nan àireamh</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>Enter</translation>
+        <translation type="vanished">Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation>Co-ionnnannachd</translation>
+        <translation type="vanished">Co-ionnnannachd</translation>
     </message>
     <message>
         <source>Up</source>
@@ -4122,55 +4215,55 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>Page up</source>
-        <translation>Page up</translation>
+        <translation type="vanished">Page up</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation>Page down</translation>
+        <translation type="vanished">Page down</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation>Num lock</translation>
+        <translation type="vanished">Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation>Caps lock</translation>
+        <translation type="vanished">Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation>Scroll lock</translation>
+        <translation type="vanished">Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation>Shift deas</translation>
+        <translation type="vanished">Shift deas</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>Shift clì</translation>
+        <translation type="vanished">Shift clì</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>Ctrl deas</translation>
+        <translation type="vanished">Ctrl deas</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>Ctrl clì</translation>
+        <translation type="vanished">Ctrl clì</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>Alt deas</translation>
+        <translation type="vanished">Alt deas</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>Alt clì</translation>
+        <translation type="vanished">Alt clì</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation>Meta deas</translation>
+        <translation type="vanished">Meta deas</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation>Meta clì</translation>
+        <translation type="vanished">Meta clì</translation>
     </message>
     <message>
         <source>A button</source>
@@ -4278,6 +4371,137 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>(Don&apos;t use)</source>
         <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse: X1 button </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mouse: X2 button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad 9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad .</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad /</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad *</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad -</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad +</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keypad Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PageUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PageDown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Numlock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CapsLock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ScrollLock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Ctrl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Ctrl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right Alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left Alt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(QWERTY)</source>
+        <extracomment>Name of QWERTY US keyboard layout</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5364,6 +5588,10 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Room name change flood protection activated</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
