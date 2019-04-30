@@ -50,6 +50,12 @@ endif()
 
 option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if source is in a git/repo that is NOT the hedgewars repo" OFF)
 
+# FIXME: Pas2C Hedgewars cannot be built with video recording atm because the Pas2C parser has a problem parsing uVideoRec.pas.
+# See bug 722 <https://issues.hedgewars.org/show_bug.cgi?id=722>.
+# As a workaround, we simply force-disable video recording for now.
+if(BUILD_ENGINE_C)
+    set(NOVIDEOREC ON CACHE STRING "Required for BUILD_ENGINE_C" FORCE)
+endif()
 
 if(BUILD_ENGINE_JS)
     if(NOT CMAKE_TOOLCHAIN_FILE)
