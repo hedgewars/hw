@@ -101,6 +101,10 @@
         <file>res/panelbg.png</file>
         <file>res/lightbulb_on.png</file>
         <file>res/lightbulb_off.png</file>
+        <file>res/scroll_up.png</file>
+        <file>res/scroll_down.png</file>
+        <file>res/scroll_left.png</file>
+        <file>res/scroll_right.png</file>
         <file>res/spin_up.png</file>
         <file>res/spin_up_disabled.png</file>
         <file>res/spin_down.png</file>

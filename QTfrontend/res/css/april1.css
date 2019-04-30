@@ -410,10 +410,81 @@ text-align: left;
 border-color: #F6CB1C;
 }
 
-#hatList QScrollBar, #themeList QScrollBar {
-background-color: #130F2A;
-border-top-right-radius: 10px;
-border-bottom-right-radius: 10px;
+QScrollBar:vertical {
+border: 1px solid black;
+color: #FFD902;
+background: #00321c;
+width: 15px;
+margin: 16px 0 16px 0;
+}
+QScrollBar:horizontal {
+border: 1px solid black;
+color: #FFD902;
+background: #00321c;
+height: 15px;
+margin: 0 16px 0 16px;
+}
+QScrollBar::handle:vertical {
+background: #00321c;
+border-top: 1px solid black;
+border-bottom: 1px solid black;
+border-left: none;
+border-right: none;
+min-height: 20px;
+}
+QScrollBar::handle:horizontal {
+background: #00321c;
+border-top: none;
+border-bottom: none;
+border-left: 1px solid black;
+border-right: 1px solid black;
+min-width: 20px;
+}
+QScrollBar::handle:pressed {
+background: #005a33;
+}
+QScrollBar::add-line, QScrollBar::sub-line {
+border: 1px solid black;
+background: #00321c;
+subcontrol-origin: margin;
+}
+QScrollBar::add-line:vertical {
+height: 15px;
+subcontrol-position: bottom;
+}
+QScrollBar::sub-line:vertical {
+height: 15px;
+subcontrol-position: top;
+}
+QScrollBar::add-line:horizontal {
+width: 15px;
+subcontrol-position: right;
+}
+QScrollBar::sub-line:horizontal {
+width: 15px;
+subcontrol-position: left;
+}
+QScrollBar::add-line:pressed, QScrollBar::sub-line:pressed {
+background: #005a33;
+}
+
+QScrollBar::up-arrow {
+background-image: url(":/res/scroll_up.png");
+}
+QScrollBar::down-arrow {
+background-image: url(":/res/scroll_down.png");
+}
+QScrollBar::left-arrow {
+background-image: url(":/res/scroll_left.png");
+}
+QScrollBar::right-arrow {
+background-image: url(":/res/scroll_right.png");
+}
+QScrollBar::add-page, QScrollBar::sub-page {
+background: #00190F;
+}
+QScrollBar::add-page:pressed, QScrollBar::sub-page:pressed {
+background: #FFFCA1;
 }
 
 #hatList, #themeList {
