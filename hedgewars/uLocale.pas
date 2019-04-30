@@ -53,7 +53,7 @@ procedure LoadLocaleWrapper(path: pchar; userpath: pchar; filename: pchar); cdec
 {$ENDIF}
 
 implementation
-uses uRandom, uUtils, uVariables, uDebug, uPhysFSLayer;
+uses SysUtils, uRandom, uUtils, uVariables, uDebug, uPhysFSLayer;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
@@ -65,6 +65,11 @@ var s: ansistring;
     first: array[TEventId] of boolean;
     e: TEventId;
 begin
+{- TODO: Add support for localized decimal separator in Pas2C -}
+{$IFNDEF PAS2C}
+lDecimalSeparator:= FormatSettings.DecimalSeparator;
+{$ENDIF}
+
 for e:= Low(TEventId) to High(TEventId) do
     first[e]:= true;
 

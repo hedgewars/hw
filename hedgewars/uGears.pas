@@ -52,7 +52,7 @@ function  GearByUID(uid : Longword) : PGear;
 function  IsClockRunning() : boolean;
 
 implementation
-uses SysUtils, uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
+uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
     {$IFDEF USE_TOUCH_INTERFACE}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions,
@@ -292,7 +292,7 @@ while t <> nil do
                             if j = 0 then
                                 curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i)), $ff808080, fntSmall)
                             else
-                                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i) + FormatSettings.DecimalSeparator + inttostr(j)), $ff808080, fntSmall);
+                                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i) + lDecimalSeparator + inttostr(j)), $ff808080, fntSmall);
                             end
                     end
                 // Timer of other gears

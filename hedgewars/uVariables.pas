@@ -2593,6 +2593,8 @@ var
     aTexCoord: GLint;
     aColor: GLint;
 
+    lDecimalSeparator: Char;
+
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
     trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
@@ -2816,6 +2818,8 @@ begin
     aVertex:= 0;
     aTexCoord:= 1;
     aColor:= 2;
+
+    lDecimalSeparator       := '.';
 
 
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel;
