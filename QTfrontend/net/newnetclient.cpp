@@ -80,12 +80,23 @@ HWNewNet::~HWNewNet()
     NetSocket.flush();
 }
 
-void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
+void HWNewNet::Connect(const QString & hostName, quint16 port, bool useTls, const QString & nick)
 {
     netClientState = Connecting;
     mynick = nick;
     myhost = hostName + QString(":%1").arg(port);
-    NetSocket.connectToHost(hostName, port);
+    if (useTls)
+    {
+        NetSocket.connectToHostEncrypted(hostName, port);
+        if (!NetSocket.waitForEncrypted())
+        {
+            qWarning("Handshake failed");
+        }
+    }
+    else 
+    {
+        NetSocket.connectToHost(hostName, port);
+    }
 }
 
 void HWNewNet::Disconnect()
@@ -257,6 +268,17 @@ void HWNewNet::SendPasswordHash(const QString & hash)
     maybeSendPassword();
 }
 
+void HWNewNet::ContinueConnection()
+{
+    if (netClientState == Connected)    
+    {
+        RawSendNet(QString("NICK%1%2").arg(delimiter).arg(mynick));
+        RawSendNet(QString("PROTO%1%2").arg(delimiter).arg(*cProtoVer));    
+        m_game_connected = true;
+        emit adminAccess(false);
+    }
+}
+
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
     qDebug() << "Server: " << lst;
@@ -311,6 +333,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         }
         else 
         {
+            netClientState = Redirected;
             emit redirected(port);
         }
         return;
@@ -328,11 +351,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
 
-        RawSendNet(QString("NICK%1%2").arg(delimiter).arg(mynick));
-        RawSendNet(QString("PROTO%1%2").arg(delimiter).arg(*cProtoVer));
-        netClientState = Connected;
-        m_game_connected = true;
-        emit adminAccess(false);
+        ClientState lastState = netClientState;
+        netClientState = Connected;      
+        if (lastState != Redirected)
+        {
+            ContinueConnection();
+        }
         return;
     }
 

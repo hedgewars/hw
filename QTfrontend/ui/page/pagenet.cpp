@@ -128,5 +128,5 @@ void PageNet::slotConnect()
     QString host = model->index(mi.row(), 1).data().toString();
     quint16 port = model->index(mi.row(), 2).data().toUInt();
 
-    emit connectClicked(host, port);
+    emit connectClicked(host, port, false);
 }

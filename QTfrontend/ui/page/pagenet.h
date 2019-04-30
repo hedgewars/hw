@@ -38,7 +38,7 @@ class PageNet : public AbstractPage
         void updateServersList();
 
     signals:
-        void connectClicked(const QString & host, quint16 port);
+        void connectClicked(const QString & host, quint16 port, bool useTls);
 
     private:
         QLayout * bodyLayoutDefinition();

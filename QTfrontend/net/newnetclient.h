@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QString>
-#include <QTcpSocket>
+#include <QSslSocket>
 #include <QMap>
 
 #include "team.h"
@@ -43,11 +43,12 @@ class HWNewNet : public QObject
         Q_OBJECT
 
     public:
-        enum ClientState { Disconnected, Connecting, Connected, InLobby, InRoom, InGame };
+        enum ClientState { Disconnected, Connecting, Redirected, Connected, InLobby, InRoom, InGame };
 
         HWNewNet();
         ~HWNewNet();
-        void Connect(const QString & hostName, quint16 port, const QString & nick);
+        void Connect(const QString & hostName, quint16 port, bool useTls, const QString & nick);
+        void ContinueConnection();
         void Disconnect();
         void SendPasswordHash(const QString & hash);
         void NewNick(const QString & nick);
@@ -68,7 +69,7 @@ class HWNewNet : public QObject
         QString mynick;
         QString myroom;
         QString myhost;
-        QTcpSocket NetSocket;
+        QSslSocket NetSocket;
         QString seed;
         bool m_game_connected;
         bool m_nick_registered;
@@ -87,7 +88,7 @@ class HWNewNet : public QObject
         int  ByteLength(const QString & str);
         void RawSendNet(const QString & buf);
         void RawSendNet(const QByteArray & buf);
-        void ParseCmd(const QStringList & lst);
+        void ParseCmd(const QStringList & lst);        
         void handleNotice(int n);
 
         void maybeSendPassword();
