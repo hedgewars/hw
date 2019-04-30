@@ -52,7 +52,7 @@ function  GearByUID(uid : Longword) : PGear;
 function  IsClockRunning() : boolean;
 
 implementation
-uses sysutils, uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
+uses SysUtils, uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
     {$IFDEF USE_TOUCH_INTERFACE}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions,

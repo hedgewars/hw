@@ -663,7 +663,7 @@ begin
     init(argc, argv);
 {$ENDIF}
 {$IFNDEF PAS2C}
-    // Custom procedure for unhandled exceptions; ExceptProc is used by sysutils module
+    // Custom procedure for unhandled exceptions; ExceptProc is used by SysUtils module
     ExceptProc:= @catchUnhandledException;
 {$ENDIF}
 
