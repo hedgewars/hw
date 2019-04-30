@@ -235,6 +235,7 @@ QSpinBox::up-button{
 background: transparent;
 width: 16px;
 height: 10px;
+padding-top: 1px;
 }
 
 QSpinBox::up-arrow {
@@ -255,8 +256,13 @@ QSpinBox::down-button {
 background: transparent;
 width: 16px;
 height: 10px;
+padding-top: 1px;
 }
 
+QSpinBox, QLineEdit {
+padding: 3px;
+min-height: 18px;
+}
 QComboBox {
 border-radius: 10px;
 padding: 3px;
