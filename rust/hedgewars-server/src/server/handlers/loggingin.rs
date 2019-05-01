@@ -72,7 +72,7 @@ pub fn handle(
         }
         HWProtocolMessage::Nick(nick) => {
             let client = &mut server.anteroom.clients[client_id];
-            debug!("{} {}", nick, is_name_illegal(&nick));
+
             if client.nick.is_some() {
                 response.add(Error("Nickname already provided.".to_string()).send_self());
                 LoginResult::Unchanged

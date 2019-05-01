@@ -492,17 +492,20 @@ impl NetworkLayer {
     }
 
     pub fn accept_client(&mut self, poll: &Poll, server_token: mio::Token) -> io::Result<()> {
-        let (client_socket, addr) = self.listener.accept()?;
-        info!("Connected: {}", addr);
+
 
         match server_token {
             utils::SERVER_TOKEN => {
+                let (client_socket, addr) = self.listener.accept()?;
+                info!("Connected(plaintext): {}", addr);
                 let client_id =
                     self.register_client(poll, self.create_client_socket(client_socket)?, addr);
                 self.init_client(poll, client_id);
             }
             #[cfg(feature = "tls-connections")]
             utils::SECURE_SERVER_TOKEN => {
+                let (client_socket, addr) = self.ssl.listener.accept()?;
+                info!("Connected(TLS): {}", addr);
                 self.register_client(poll, self.create_client_secure_socket(client_socket)?, addr);
             }
             _ => unreachable!(),
