@@ -521,10 +521,18 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
     if (!isIgnored)
         printChatString(nick, QString("*** ") + tr("%1 has joined").arg(linkedNick(nick)), "Join", false);
 
-    if (notifyNick && notify && (m_helloSounds.size() > 0))
+    if (notifyNick && notify)
     {
-        SDLInteraction::instance().playSoundFile(
+        if (m_helloSounds.size() > 0)
+        {
+            SDLInteraction::instance().playSoundFile(
                             m_helloSounds.at(rand() % m_helloSounds.size()));
+        }        
+
+        if (!isInGame())
+        {
+            HWApplication::alert(this, 2000);
+        }
     }
 }
 
