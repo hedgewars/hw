@@ -328,10 +328,10 @@ int main(int argc, char *argv[]) {
         checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars");
         cfgdir->cd("Library/Application Support/Hedgewars");
 #elif defined _WIN32
-        char path[1024];
-        if(!SHGetFolderPathA(0, CSIDL_PERSONAL, NULL, 0, path))
+        wchar_t path[MAX_PATH];
+        if(SHGetFolderPathW(0, CSIDL_PERSONAL, NULL, 0, path) == S_OK)
         {
-            cfgdir->cd(path);
+            cfgdir->cd(QString::fromWCharArray(path));
             checkForDir(cfgdir->absolutePath() + "/Hedgewars");
             cfgdir->cd("Hedgewars");
         }
