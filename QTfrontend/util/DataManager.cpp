@@ -175,9 +175,13 @@ QStandardItemModel * DataManager::bindsModel()
             bool kbFallback = keyDisplay.trimmed().isEmpty();
             if (kbFallback)
             {
-                // If SDL doesn't know a name, show fallback name and a warning
-		//: Name of QWERTY US keyboard layout
-                keyDisplay = QString(sdlkeys[j][1]) + QString(" ") + HWApplication::translate("binds (keys)", "(QWERTY)");
+                keyDisplay = QString(sdlkeys[j][1]);
+                if ((QString(sdlkeys[j][0]) != "f13") && (QString(sdlkeys[j][0]) != "f14") && (QString(sdlkeys[j][0]) != "f15"))
+                {
+                    // If SDL doesn't know a name, show fallback name and a warning
+		    //: Name of QWERTY US keyboard layout
+                    keyDisplay = keyDisplay + QString(" ") + HWApplication::translate("binds (keys)", "(QWERTY)");
+                }
             }
             if (isKeyboard)
             {
