@@ -129,6 +129,7 @@ char sdlkeys[1024][2][128] =
     {"numlock", QT_TRANSLATE_NOOP("binds (keys)", "Numlock")},
     {"capslock", QT_TRANSLATE_NOOP("binds (keys)", "CapsLock")},
     {"scrolllock", QT_TRANSLATE_NOOP("binds (keys)", "ScrollLock")},
+    {"menu", QT_TRANSLATE_NOOP("binds (keys)", "Menu")},
     {"right_shift", QT_TRANSLATE_NOOP("binds (keys)", "Right Shift")},
     {"left_shift", QT_TRANSLATE_NOOP("binds (keys)", "Left Shift")},
     {"right_ctrl", QT_TRANSLATE_NOOP("binds (keys)", "Right Ctrl")},
