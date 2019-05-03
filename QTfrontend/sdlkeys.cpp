@@ -39,7 +39,6 @@ char sdlkeys[1024][2][128] =
     {"pause", QT_TRANSLATE_NOOP("binds (keys)", "Pause")},
     {"escape", QT_TRANSLATE_NOOP("binds (keys)", "Escape")},
     {"space", QT_TRANSLATE_NOOP("binds (keys)", "Space")},
-    {"#", "#"},
     {"'", "'"},
     {",", ","},
     {"-", "-"},
