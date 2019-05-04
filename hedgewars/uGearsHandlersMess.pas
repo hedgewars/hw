@@ -2498,7 +2498,7 @@ begin
                 if i = 1 then
                     Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff80ff80, fnt16)
                 else
-                    Gear^.Tex := RenderStringTex(ansistring(trmsg[sidUnknownGearValue]), $ff80ff80, fnt16)
+                    Gear^.Tex := RenderStringTex(trmsg[sidUnknownGearValue], $ff80ff80, fnt16)
                 end;
             end;
         if Gear^.Timer = 500 then

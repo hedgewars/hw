@@ -380,6 +380,7 @@ end;
 procedure InitSound;
 const channels: LongInt = 2;
 var success: boolean;
+    s: shortstring;
 begin
     if not (isSoundEnabled or isMusicEnabled) then
         begin
@@ -412,7 +413,8 @@ begin
 
     if (Mix_Init(MIX_INIT_OGG or MIX_INIT_OPUS) and MIX_INIT_OPUS) = 0 then
     begin
-      WriteToConsole('Cannot init OPUS: ' + SDL_GetError());
+      s:= SDL_GetError();
+      WriteToConsole('Cannot init OPUS: ' + s);
 
       if SDLCheck(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true) then exit;
     end;

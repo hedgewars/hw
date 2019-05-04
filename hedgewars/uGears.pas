@@ -283,7 +283,7 @@ while t <> nil do
                     if curHandledGear^.Tex = nil then
                         if (curHandledGear^.Karma = 1) and (not (GameType in [gmtDemo, gmtRecord])) then
                             // Secret mine timer
-                            curHandledGear^.Tex:= RenderStringTex(ansistring(trmsg[sidUnknownGearValue]), $ff808080, fntSmall)
+                            curHandledGear^.Tex:= RenderStringTex(trmsg[sidUnknownGearValue], $ff808080, fntSmall)
                         else
                             begin
                             // Display mine timer with up to 1 decimal point of precision (rounded down)
