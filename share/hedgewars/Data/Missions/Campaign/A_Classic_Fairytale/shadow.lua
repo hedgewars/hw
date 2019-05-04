@@ -127,6 +127,7 @@ lastOurHog = leaksNr
 lastEnemyHog = 0
 stage = 0
 choice = 0
+checkAcceptTimer = 0
 
 brainiacDead = false
 cyborgHidden = false
@@ -800,7 +801,17 @@ function DoRefuse()
 end
 
 function CheckAccept()
-  return GetX(dense) < 1300 and StoppedGear(dense)
+  if GetX(dense) < 1300 then
+    -- When close to cyborg, wait for a short time before accepting,
+    -- to allow player to attack with melee weapons.
+    checkAcceptTimer = checkAcceptTimer + 1
+    if checkAcceptTimer > 2000 and StoppedGear(dense) then
+      return true
+    end
+  else
+    checkAcceptTimer = 0
+  end
+  return false
 end
 
 function DoAccept()
