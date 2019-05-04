@@ -50,6 +50,7 @@ The traitor is chosen based on the past player decisions in the campaign.
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 -----------------------------Constants---------------------------------
 choiceAccepted = 1
@@ -156,6 +157,8 @@ wave2DeadAnim = {}
 wave3DeadAnim = {}
 
 vCircs = {}
+
+trackedMines = {}
 -----------------------------Animations--------------------------------
 function Wave2Reaction()
   local i = 1
@@ -937,6 +940,18 @@ function RestoreCyborg()
   if cyborgHidden == true then
     RestoreHog(cyborg)
     cyborgHidden = false
+    -- Clear mines around cyborg
+    local vaporized = 0
+    for mine, _ in pairs(trackedMines) do
+       if GetHealth(mine) and GetHealth(cyborg) and gearIsInBox(mine, GetX(cyborg) - 50, GetY(cyborg) - 50, 100, 100) == true then
+          AddVisualGear(GetX(mine), GetY(mine), vgtSmoke, 0, false)
+          DeleteGear(mine)
+          vaporized = vaporized + 1
+       end
+    end
+    if vaporized > 0 then
+       PlaySound(sndVaporize)
+    end
   end
 end
 
@@ -1083,7 +1098,19 @@ function onGameTick()
   CheckEvents()
 end
 
+function onGearAdd(gear)
+  local gt = GetGearType(gear)
+  if gt == gtMine or gt == gtSMine or gt == gtAirMine then
+    trackedMines[gear] = true
+  end
+end
+
 function onGearDelete(gear)
+  local gt = GetGearType(gear)
+  if gt == gtMine or gt == gtSMine or gt == gtAirMine then
+    trackedMines[gear] = nil
+  end
+
   for i = 1, 7 do
     if gear == natives[i] then
       if nativeDead[i] ~= true then

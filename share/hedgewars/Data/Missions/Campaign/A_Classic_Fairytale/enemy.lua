@@ -21,6 +21,7 @@ Wipe out the Hedge-cogs and Leader teams
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 
 --------------------------------------------Constants------------------------------------
@@ -97,6 +98,7 @@ leader = nil
 
 gearDead = {}
 hedgeHidden = {}
+trackedMines = {}
 
 startAnim = {}
 finalAnim = {}
@@ -410,6 +412,7 @@ end
 function FailedMission()
   RestoreHedge(cyborg)
   AnimOutOfNowhere(cyborg, unpack(cyborgPos[1]))
+  ClearMinesAroundCyborg()
   if CheckCyborgsDead() then
     AnimSay(cyborg, loc("Hmmm...it's a draw. How unfortunate!"), SAY_THINK, 6000)
   elseif leader ~= nil then
@@ -435,6 +438,7 @@ function WonMission()
   RestoreHedge(cyborg)
   CondNeedToTurn2(cyborg, players[1])
   SetupFinalAnim()
+  ClearMinesAroundCyborg()
   AddAnim(finalAnim)
   AddFunction({func = WinMission, args = {}})
 end
@@ -458,6 +462,22 @@ function RestoreHedge(hedge)
   if hedgeHidden[hedge] == true then
     RestoreHog(hedge)
     hedgeHidden[hedge] = false
+  end
+end
+
+function ClearMinesAroundCyborg()
+  if GetHealth(cyborg) then
+    local vaporized = 0
+    for mine, _ in pairs(trackedMines) do
+       if GetHealth(mine) and GetHealth(cyborg) and gearIsInBox(mine, GetX(cyborg) - 50, GetY(cyborg) - 50, 100, 100) == true then
+          AddVisualGear(GetX(mine), GetY(mine), vgtSmoke, 0, false)
+          DeleteGear(mine)
+          vaporized = vaporized + 1
+       end
+    end
+    if vaporized > 0 then
+       PlaySound(sndVaporize)
+    end
   end
 end
 
@@ -615,9 +635,20 @@ function onGameTick()
   CheckEvents()
 end
 
+function onGearAdd(gear)
+  local gt = GetGearType(gear)
+  if gt == gtMine or gt == gtSMine or gt == gtAirMine then
+    trackedMines[gear] = true
+  end
+end
+
 function onGearDelete(gear)
+  local gt = GetGearType(gear)
+  if gt == gtMine or gt == gtSMine or gt == gtAirMine then
+    trackedMines[gear] = nil
+  end
   gearDead[gear] = true
-  if GetGearType(gear) == gtHedgehog then
+  if gt == gtHedgehog then
     if GetHogTeamName(gear) == nativesTeamName then
       for i = 1, nativesLeft do
         if natives[i] == gear then
