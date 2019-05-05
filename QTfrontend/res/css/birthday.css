@@ -539,3 +539,15 @@ border-radius: 10px;
 PageMultiplayer TeamSelWidget {
 min-height: 500px;
 }
+
+QProgressBar {
+border: 3px solid #FFCC00;
+background-color: #150A61;
+border-radius: 5px;
+text-align: center;
+color: #FFFFFF;
+}
+QProgressBar::chunk {
+background-color: #FF9B00;
+margin: 2px;
+}
