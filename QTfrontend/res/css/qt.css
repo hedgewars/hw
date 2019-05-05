@@ -408,44 +408,37 @@ border-color: #F6CB1C;
 }
 
 QScrollBar:vertical {
-border: 1px solid black;
-border-radius: 2px;
+border: none;
 color: #FFD902;
 background: #00321c;
 width: 15px;
-margin: 16px 0 16px 0;
+margin: 17px 0 17px 0;
 }
 QScrollBar:horizontal {
-border: 1px solid black;
-border-radius: 2px;
+border: none;
 color: #FFD902;
 background: #00321c;
 height: 15px;
-margin: 0 16px 0 16px;
+margin: 0 17px 0 17px;
 }
 QScrollBar::handle:vertical {
 background: #00321c;
-border-top: 1px solid black;
-border-bottom: 1px solid black;
-border-left: none;
-border-right: none;
+border: 1px solid #005F35;
 border-radius: 2px;
 min-height: 20px;
 }
 QScrollBar::handle:horizontal {
 background: #00321c;
-border-top: none;
-border-bottom: none;
-border-left: 1px solid black;
-border-right: 1px solid black;
+border: 1px solid #005F35;
 border-radius: 2px;
 min-width: 20px;
 }
 QScrollBar::handle:pressed {
 background: #005a33;
+border-color: #FFFFFF;
 }
 QScrollBar::add-line, QScrollBar::sub-line {
-border: 1px solid black;
+border: 1px solid #005F35;
 border-radius: 2px;
 background: #00321c;
 subcontrol-origin: margin;
@@ -468,6 +461,7 @@ subcontrol-position: left;
 }
 QScrollBar::add-line:pressed, QScrollBar::sub-line:pressed {
 background: #005a33;
+border-color: #FFFFFF;
 }
 
 QScrollBar::up-arrow {
@@ -486,7 +480,7 @@ QScrollBar::add-page, QScrollBar::sub-page {
 background: #00190F;
 }
 QScrollBar::add-page:pressed, QScrollBar::sub-page:pressed {
-background: #FFFCA1;
+background: #008751;
 }
 
 #hatList, #themeList {
