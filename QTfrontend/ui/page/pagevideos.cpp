@@ -292,6 +292,7 @@ void PageVideos::updateFileList(const QString & path)
         VideoItem * item = nameItem(row);
         item->seen = true;
         item->desc = "";
+        setName(item, item->name);
         updateSize(row);
     }
 
@@ -426,8 +427,16 @@ void PageVideos::cellChanged(int row, int column)
         }
     }
     else
-    {
         newPrefix = newName;
+    for (int i = 0; i < filesTable->rowCount(); i++)
+    {
+        // don't allow rename if duplicate prefix
+        VideoItem * iterateItem = nameItem(i);
+        if ((i != row) && (newPrefix == iterateItem->prefix))
+        {
+            setName(item, oldName);
+            return;
+        }
     }
 #ifdef Q_OS_WIN
     // there is a bug in qt, QDir::rename() doesn't fail on such names but damages files
@@ -460,6 +469,15 @@ void PageVideos::setName(VideoItem * item, const QString & newName)
     item->setText(newName);
     nameChangedFromCode = false;
     item->name = newName;
+    // try to extract prefix
+    if (item->ready())
+        item->prefix = item->name;
+    else
+        item->prefix = item->pRecorder->name;
+    // remove extension
+    int pt = item->prefix.lastIndexOf('.');
+    if (pt != -1)
+        item->prefix.truncate(pt);
 }
 
 int PageVideos::appendRow(const QString & name)
@@ -546,7 +564,7 @@ void PageVideos::updateDescription()
         desc += item->desc + '\n';
     }
 
-    if (item->prefix.isEmpty())
+    if (item->prefix.isNull() || item->prefix.isEmpty())
     {
         // try to extract prefix from file name instead
         if (item->ready())
