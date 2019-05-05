@@ -345,6 +345,7 @@ type
         StepDied,                // whether hog died this turn
         Sacrificed,              // whether hog was sacrificed in suicide attack (kamikaze, piano)
         GotRevenge: boolean;     // whether hog got revenge in this turn
+        StepRevenge: boolean;    // whether hog's revenge mode was activated in this turn
         MaxStepDamageRecv,       // most damage received in one turn
         MaxStepDamageGiven,      // most damage dealt in one turn
         MaxStepKills: Longword;  // most kills in one turn

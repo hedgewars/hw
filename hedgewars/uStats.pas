@@ -110,7 +110,7 @@ else
     if (not killed) and (not bDuringWaterRise) then
         begin
         // Check if victim got attacked by RevengeHog again
-        if (Gear^.Hedgehog^.RevengeHog <> nil) and (Gear^.Hedgehog^.RevengeHog = Attacker) then
+        if (Gear^.Hedgehog^.RevengeHog <> nil) and (Gear^.Hedgehog^.RevengeHog = Attacker) and (Gear^.Hedgehog^.stats.StepRevenge = false) then
             LeaveMeAlone:= true;
         // Check if attacker got revenge
         if (Attacker^.RevengeHog <> nil) and (Attacker^.RevengeHog = Gear^.Hedgehog) then
@@ -122,7 +122,12 @@ else
             end
         // If not, victim remembers their attacker to plan *their* revenge
         else
+            begin
             Gear^.Hedgehog^.RevengeHog:= Attacker;
+            // To prevent "LeaveMeAlone" being activated if same hog is hit by attacker
+            // multiple times in the same turn.
+            Gear^.Hedgehog^.stats.StepRevenge:= true;
+            end;
         end
     end;
 
@@ -395,6 +400,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepPoisoned:= false;
                 StepDied:= false;
                 GotRevenge:= false;
+                StepRevenge:= false;
                 end;
 
 Kills:= 0;
