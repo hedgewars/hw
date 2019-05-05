@@ -52,6 +52,11 @@ QLayout * PageNet::bodyLayoutDefinition()
 
     tvServersList = new QTableView(ConnGroupBox);
     tvServersList->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tvServersList->setSelectionMode(QAbstractItemView::SingleSelection);
+    tvServersList->setShowGrid(false);
+    tvServersList->setAlternatingRowColors(true);
+    tvServersList->verticalHeader()->setVisible(false);
+
     GBClayout->addWidget(tvServersList, 1, 0, 1, 3);
 
     BtnUpdateSList = new QPushButton(ConnGroupBox);

@@ -123,6 +123,8 @@ QLayout * PageVideos::bodyLayoutDefinition()
         filesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
         filesTable->setSelectionMode(QAbstractItemView::SingleSelection);
         filesTable->setEditTriggers(QAbstractItemView::SelectedClicked);
+        filesTable->setShowGrid(false);
+        filesTable->setAlternatingRowColors(true);
         filesTable->verticalHeader()->hide();
         filesTable->setMinimumWidth(400);
 
