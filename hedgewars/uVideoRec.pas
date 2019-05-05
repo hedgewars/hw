@@ -68,7 +68,7 @@ type TFrame = record
               end;
 
 var RGB_Buffer: PByte;
-    cameraFile: File of TFrame;
+    cameraFile: File;
     audioFile: File;
     numPixels: LongWord;
     startTime, numFrames, curTime, progress, maxProgress: LongWord;
@@ -85,7 +85,7 @@ begin
     // open file with prerecorded camera positions
     filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtin';
     Assign(cameraFile, filename);
-    Reset(cameraFile);
+    Reset(cameraFile, SizeOf(TFrame));
     maxProgress:= FileSize(cameraFile);
     if IOResult <> 0 then
     begin
@@ -314,7 +314,7 @@ begin
     // create file with camera positions
     filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtout';
     Assign(cameraFile, filename);
-    Rewrite(cameraFile);
+    Rewrite(cameraFile, SizeOf(TFrame));
     if IOResult <> 0 then
         begin
         AddFileLog('Error: Could not write to ' + filename);
