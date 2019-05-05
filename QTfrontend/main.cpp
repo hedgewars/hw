@@ -360,6 +360,7 @@ int main(int argc, char *argv[]) {
         checkForDir(cfgdir->absolutePath() + "/Logs");
         checkForDir(cfgdir->absolutePath() + "/Videos");
         checkForDir(cfgdir->absolutePath() + "/VideoTemp");
+        checkForDir(cfgdir->absolutePath() + "/VideoThumbnails");
     }
 
     datadir->cd(bindir->absolutePath());

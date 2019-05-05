@@ -93,6 +93,8 @@ Frontend:
  + Add button in main menu at top left corner to open credits page
  + Restructure credits page
  + More intelligent automatic mission selection in campaign screen
+ + New data directory for video thumbnails: Data/VideoThumbnails
+ * Fix renaming a video leading to loss of thumbnail after restart
  * Fix controls list failing to display correct key names with regards to keyboard layout
  * Fix force-locked schemes getting unlocked when changing map types
  * Fix possible to select background-only or hidden themes indirectly by changing map type

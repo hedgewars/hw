@@ -218,6 +218,8 @@ PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
 {
     nameChangedFromCode = false;
     numRecorders = 0;
+    // Clear VideoTemp at launch in case some garbage remained in here after a crash
+    clearTemp();
     initPage();
 }
 
@@ -399,16 +401,33 @@ void PageVideos::cellChanged(int row, int column)
     // user has edited filename, so we should rename the file
     VideoItem * item = nameItem(row);
     QString oldName = item->name;
+    int pointPos = oldName.lastIndexOf('.');
+    QString oldPrefix = item->name;
+    oldPrefix.truncate(pointPos);
     QString newName = item->text();
     if (!newName.contains('.')) // user forgot an extension
     {
         // restore old extension
-        int pt = oldName.lastIndexOf('.');
-        if (pt != -1)
+        pointPos = oldName.lastIndexOf('.');
+        if (pointPos != -1)
         {
-            newName += oldName.right(oldName.length() - pt);
+            newName += oldName.right(oldName.length() - pointPos);
             setName(item, newName);
         }
+    }
+    QString newPrefix;
+    if (newName.contains('.'))
+    {
+        pointPos = newName.lastIndexOf('.');
+        if (pointPos != -1)
+        {
+            newPrefix = newName;
+            newPrefix.truncate(pointPos);
+        }
+    }
+    else
+    {
+        newPrefix = newName;
     }
 #ifdef Q_OS_WIN
     // there is a bug in qt, QDir::rename() doesn't fail on such names but damages files
@@ -425,7 +444,13 @@ void PageVideos::cellChanged(int row, int column)
         setName(item, oldName);
         return;
     }
+    if (item->ready())
+    {
+        cfgdir->rename("VideoThumbnails/" + oldPrefix + ".png", "VideoThumbnails/" + newPrefix + ".png");
+        cfgdir->rename("VideoThumbnails/" + oldPrefix + ".bmp", "VideoThumbnails/" + newPrefix + ".bmp");
+    }
     item->name = newName;
+    item->prefix = newPrefix;
     updateDescription();
 }
 
@@ -539,7 +564,7 @@ void PageVideos::updateDescription()
 
     if (!item->prefix.isEmpty())
     {
-        QString thumbName = cfgdir->absoluteFilePath("VideoTemp/" + item->prefix);
+        QString thumbName = cfgdir->absoluteFilePath("VideoThumbnails/" + item->prefix);
         QPixmap pic;
         if (pic.load(thumbName + ".png") || pic.load(thumbName + ".bmp"))
         {
@@ -604,8 +629,8 @@ void PageVideos::deleteSelectedFiles()
     {
         cfgdir->remove("Videos/" + item->name);
         // we have no idea whether screenshot is going to be bmp or png so let's delete both
-        cfgdir->remove("VideoTemp/" + item->prefix + ".png");
-        cfgdir->remove("VideoTemp/" + item->prefix + ".bmp");
+        cfgdir->remove("VideoThumbnails/" + item->prefix + ".png");
+        cfgdir->remove("VideoThumbnails/" + item->prefix + ".bmp");
     }
 
 // this code is for removing several files when multiple selection is enabled
@@ -664,14 +689,21 @@ void PageVideos::openVideosDirectory()
     QDesktopServices::openUrl(QUrl("file:///" + path));
 }
 
-// clear VideoTemp directory (except for thumbnails)
+// clear VideoTemp directory
 void PageVideos::clearTemp()
 {
+    qDebug("Clearing VideoTemp directory ...");
     QDir temp(cfgdir->absolutePath() + "/VideoTemp");
     QStringList files = temp.entryList(QDir::Files);
     foreach (const QString& file, files)
     {
-        if (!file.endsWith(".bmp") && !file.endsWith(".png"))
+        // Legacy support: Move thumbnails to correct dir
+        if (file.endsWith(".bmp") || file.endsWith(".png"))
+        {
+            qDebug("Moving video thumbnail '%s' to VideoThumbnails directory", qPrintable(file));
+            cfgdir->rename("VideoTemp/" + file, "VideoThumbnails/" + file);
+        }
+        else
             temp.remove(file);
     }
 }
