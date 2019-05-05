@@ -191,13 +191,14 @@ border-left-width: 1px;
 border-right-width: 1px;
 border-top-width: 0;
 border-bottom-width: 0px;
-border-color: #001d10;
+border-color: #005F35;
 border-style: solid;
 background-color: #00351d;
 padding: 4px;
 }
 QHeaderView::section:pressed {
-background-color: #00250d;
+background-color: #005A33;
+border-color: #FFFFFF;
 }
 QHeaderView::up-arrow {
 image: url(":/res/sort_up.png");
