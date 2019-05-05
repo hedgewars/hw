@@ -55,7 +55,7 @@ implementation
 uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uMisc, uConsole, uScript;
 
 var DamageClan  : Longword = 0;         // Damage of own clan in turn
-    DamageTeam  : Longword = 0;         // Damage of own team tin turn
+    DamageTeam  : Longword = 0;         // Damage of own team in turn
     DamageTotal : Longword = 0;         // Total damage dealt in game
     DamageTurn  : Longword = 0;         // Damage in turn
     PoisonTurn  : Longword = 0;         // Poisoned enemies in turn
@@ -71,6 +71,7 @@ var DamageClan  : Longword = 0;         // Damage of own clan in turn
     AmmoUsedCount : Longword = 0;       // Number of times an ammo has been used this turn
     AmmoDamagingUsed : boolean = false; // true if damaging ammo was used in turn
     FirstBlood  : boolean = false;      // true if the “First blood” taunt has been used in this game
+    StepFirstBlood : boolean = false;   // true if the “First blood” taunt is to be used this turn
     LeaveMeAlone : boolean = false;     // true if the “Leave me alone” taunt is to be used this turn
     SkippedTurns: LongWord = 0;         // number of skipped turns in game
     isTurnSkipped: boolean = false;     // true if this turn was skipped
@@ -88,6 +89,8 @@ begin
         end
     else
         begin
+        if not FirstBlood then
+            StepFirstBlood:= true;
         vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
         inc(PoisonTurn)
         end;
@@ -106,6 +109,8 @@ if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
     vpHurtSameClan:= Gear^.Hedgehog^.Team^.voicepack
 else
     begin
+    if not FirstBlood then
+        StepFirstBlood:= true;
     vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
     if (not killed) and (not bDuringWaterRise) then
         begin
@@ -274,8 +279,8 @@ if FinishedTurnsTotal <> 0 then
     if (CurrentHedgehog^.stats.Sacrificed) then
         inc(killsCheck);
 
-    // First blood (first damage, poison or kill)
-    if (not FirstBlood) and (ClansCount > 1) and ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) and ((CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (CurrentHedgehog^.stats.StepKills = KillsTotal) and (PoisonTotal = PoisonTurn + PoisonClan)) then
+    // First blood (first damage, poison or kill of enemy)
+    if (StepFirstBlood) and (not FirstBlood) and (ClansCount > 1) and ((DamageTotal > 0) or (KillsTotal > 0) or (PoisonTotal > 0)) then
         begin
         FirstBlood:= true;
         AddVoice(sndFirstBlood, CurrentTeam^.voicepack);
@@ -418,6 +423,7 @@ AmmoUsedCount:= 0;
 LeaveMeAlone:= false;
 AmmoDamagingUsed:= false;
 isTurnSkipped:= false;
+StepFirstBlood:= false;
 end;
 
 procedure AmmoUsed(am: TAmmoType);
@@ -630,6 +636,7 @@ begin
     AmmoUsedCount := 0;
     AmmoDamagingUsed := false;
     FirstBlood:= false;
+    StepFirstblood:= false;
     LeaveMeAlone := false;
     SkippedTurns:= 0;
     isTurnSkipped:= false;

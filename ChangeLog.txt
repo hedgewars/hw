@@ -101,6 +101,7 @@ Frontend:
 Sounds and voicepacks:
  + sndYoohoo has been split to sndYoohoo and sndKiss
  + Voice files sndPoisonCough and sndPoisonMoan are now optional (fall back to Default voicepack)
+ + Tweak some taunts: sndFirstBlood, sndLeaveMeAlone, sndCutItOut
 
 Lua API:
  + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)
