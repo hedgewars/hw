@@ -90,7 +90,9 @@ pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
 
     response.add(LobbyJoined(all_nicks).send_self());
     for (flag, nicks) in &mut flag_selectors {
-        response.add(ClientFlags(add_flags(&[*flag]), replace(nicks, vec![])).send_self());
+        if !nicks.is_empty() {
+            response.add(ClientFlags(add_flags(&[*flag]), replace(nicks, vec![])).send_self());
+        }
     }
 
     response.add(server_msg.send_self());
