@@ -111,12 +111,12 @@ procedure freeModule;
 
 
 implementation
-uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, uPhysFSLayer, uDebug;
+uses {$IFNDEF PAS2C}typinfo, SDLh, {$ENDIF}Math, uConsts, uVariables, uPhysFSLayer, uDebug;
 
 {$IFDEF DEBUGFILE}
 var logFile: PFSFile;
 {$IFDEF USE_VIDEO_RECORDING}
-    logMutex: TRTLCriticalSection; // mutex for debug file
+    logMutex: PSDL_mutex; // mutex for debug file
 {$ENDIF}
 {$ENDIF}
 var CharArray: array[0..255] of Char;
@@ -506,7 +506,8 @@ begin
 {$IFDEF DEBUGFILE}
 
 {$IFDEF USE_VIDEO_RECORDING}
-EnterCriticalSection(logMutex);
+if SDL_LockMutex(logMutex) <> 0 then
+    OutError('Logging mutex could not be locked!', true);
 {$ENDIF}
 if logFile <> nil then
     pfsWriteLn(logFile, inttostr(GameTicks)  + ': ' + s)
@@ -514,7 +515,8 @@ else
     WriteLn(stdout, inttostr(GameTicks)  + ': ' + s);
 
 {$IFDEF USE_VIDEO_RECORDING}
-LeaveCriticalSection(logMutex);
+if SDL_UnlockMutex(logMutex) <> 0 then
+    OutError('Logging mutex could not be unlocked!', true);
 {$ENDIF}
 
 {$ENDIF}
@@ -526,13 +528,15 @@ s:= s;
 {$IFNDEF PAS2C}
 {$IFDEF DEBUGFILE}
 {$IFDEF USE_VIDEO_RECORDING}
-EnterCriticalSection(logMutex);
+if SDL_LockMutex(logMutex) <> 0 then
+    OutError('Logging mutex could not be locked!', true);
 {$ENDIF}
 // TODO: uncomment next two lines
 // write(logFile, s);
 // flush(logFile);
 {$IFDEF USE_VIDEO_RECORDING}
-LeaveCriticalSection(logMutex);
+if SDL_UnlockMutex(logMutex) <> 0 then
+    OutError('Logging mutex could not be unlocked!', true);
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
@@ -764,7 +768,9 @@ begin
         logfileBase:= 'preview';
         {$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}
-    InitCriticalSection(logMutex);
+    logMutex:= SDL_CreateMutex();
+    if (logMutex = nil) then
+        OutError('Could not create mutex for logging', true);
 {$ENDIF}
     if not pfsExists('/Logs') then
         pfsMakeDir('/Logs');
@@ -809,7 +815,7 @@ if logFile <> nil then
 else
     WriteLn(stdout, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
 {$IFDEF USE_VIDEO_RECORDING}
-    DoneCriticalSection(logMutex);
+    SDL_DestroyMutex(logMutex);
 {$ENDIF}
 {$ENDIF}
 end;
