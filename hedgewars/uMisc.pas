@@ -173,7 +173,7 @@ end;
 
 {$IFDEF USE_VIDEO_RECORDING}
 // make image k times smaller (useful for saving thumbnails)
-procedure ReduceImage(img: PByte; width, height, k: LongInt);
+procedure ReduceImage(img: PByteArray; width, height, k: LongInt);
 var i, j, i0, j0, w, h, r, g, b: LongInt;
 begin
     w:= width  div k;
@@ -191,14 +191,14 @@ begin
                 for i0:= 0 to k-1 do
                     for j0:= 0 to k-1 do
                     begin
-                        inc(r, img[4*(width*(i*k+i0) + j*k+j0)+0]);
-                        inc(g, img[4*(width*(i*k+i0) + j*k+j0)+1]);
-                        inc(b, img[4*(width*(i*k+i0) + j*k+j0)+2]);
+                        inc(r, img^[4*(width*(i*k+i0) + j*k + j0)+0]);
+                        inc(g, img^[4*(width*(i*k+i0) + j*k + j0)+1]);
+                        inc(b, img^[4*(width*(i*k+i0) + j*k + j0)+2]);
                     end;
-                img[4*(w*i + j)+0]:= r div (k*k);
-                img[4*(w*i + j)+1]:= g div (k*k);
-                img[4*(w*i + j)+2]:= b div (k*k);
-                img[4*(w*i + j)+3]:= 255;
+                img^[4*(w*i + j)+0]:= r div (k*k);
+                img^[4*(w*i + j)+1]:= g div (k*k);
+                img^[4*(w*i + j)+2]:= b div (k*k);
+                img^[4*(w*i + j)+3]:= 255;
             end;
     end;
 end;
