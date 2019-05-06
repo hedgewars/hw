@@ -83,7 +83,7 @@ begin
 
 {$IOCHECKS OFF}
     // open file with prerecorded camera positions
-    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtin';
+    filename:= shortstring(UserPathPrefix) + '/VideoTemp/' + shortstring(RecPrefix) + '.txtin';
     Assign(cameraFile, filename);
     Reset(cameraFile, SizeOf(TFrame));
     maxProgress:= FileSize(cameraFile);
@@ -113,11 +113,11 @@ begin
         desc:= desc + 'Theme: ' + Theme + #10;
     desc:= desc + 'prefix[' + RecPrefix + ']prefix';
 
-    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix;
+    filename:= shortstring(UserPathPrefix) + '/VideoTemp/' + shortstring(RecPrefix);
 
     recordAudio:= (cAudioCodec <> 'no');
     if recordAudio then
-        soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw'
+        soundFilePath:= shortstring(UserPathPrefix) + '/VideoTemp/' + shortstring(RecPrefix) + '.sw'
     else
         soundFilePath:= '';
 
@@ -285,7 +285,7 @@ begin
     begin
         if GameType <> gmtDemo then // this is save and game demo is not recording, abort
             exit;
-        CopyFile(recordFileName, UserPathPrefix + '/VideoTemp/' + RecPrefix + '.hwd');
+        CopyFile(recordFileName, shortstring(UserPathPrefix) + '/VideoTemp/' + shortstring(RecPrefix) + '.hwd');
     end;
 
     if cIsSoundEnabled then
@@ -301,7 +301,7 @@ begin
 
 {$IOCHECKS OFF}
         // create sound file
-        filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
+        filename:= shortstring(UserPathPrefix) + '/VideoTemp/' + shortstring(RecPrefix) + '.sw';
         Assign(audioFile, filename);
         Rewrite(audioFile, 1);
         if IOResult <> 0 then
@@ -312,7 +312,7 @@ begin
         end;
 
     // create file with camera positions
-    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtout';
+    filename:= shortstring(UserPathPrefix) + '/VideoTemp/' + shortstring(RecPrefix) + '.txtout';
     Assign(cameraFile, filename);
     Rewrite(cameraFile, SizeOf(TFrame));
     if IOResult <> 0 then
