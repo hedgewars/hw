@@ -605,6 +605,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
         else
             qDebug() << "Binds: cannot find" << team.keyBind(i);
     }
+    binder->checkConflicts();
 }
 
 HWTeam PageEditTeam::data()
@@ -678,4 +679,5 @@ void PageEditTeam::resetAllBinds()
 {
     for (int i = 0; i < BINDS_NUMBER; i++)
         binder->setBindIndex(i, 0);
+    binder->checkConflicts();
 }

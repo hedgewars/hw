@@ -1218,6 +1218,7 @@ void PageOptions::tabIndexChanged(int index)
             QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, value, 1, Qt::MatchExactly);
             if(mdl.size() == 1) binder->setBindIndex(i, mdl[0].row());
         }
+        binder->checkConflicts();
     }
 
     currentTab = index;
@@ -1258,4 +1259,5 @@ void PageOptions::resetAllBinds()
         if(ret != -1)
             bindUpdated(i);
     }
+    binder->checkConflicts();
 }

@@ -38,6 +38,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
 {
     this->defaultText = defaultText;
     enableSignal = false;
+    p_hasConflicts = false;
 
     // Two-column tab layout
     QHBoxLayout * pageKeysLayout = new QHBoxLayout(this);
@@ -90,6 +91,12 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     helpLabel->setStyleSheet("color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-radius: 10px; padding: auto 20px;");
     helpLabel->setFixedHeight(24);
     rightLayout->addWidget(helpLabel, 0, Qt::AlignCenter);
+    conflictLabel = new QLabel();
+    conflictLabel->setText(tr("Warning: The same key is assigned multiple times!"));
+    conflictLabel->setStyleSheet("color: #FFFFFF; background: #E31A1A; border: solid 4px #E31A1A; border-radius: 10px; padding: auto 20px;");
+    conflictLabel->setFixedHeight(24);
+    conflictLabel->setHidden(true);
+    rightLayout->addWidget(conflictLabel, 0, Qt::AlignCenter);
 
     // Category list and bind table row heights
     const int rowHeight = 20;
@@ -265,6 +272,7 @@ void KeyBinder::bindChanged(const QString & text)
             if (CBBind[i] == sender())
             {
                 emit bindUpdate(i);
+                checkConflicts();
                 break;
             }
         }
@@ -296,6 +304,63 @@ void KeyBinder::bindSelectionChanged()
             selectedBindTable->clearSelection();
         selectedBindTable = theSender;
     }
+}
+
+// check if the given key is bound multiple times
+bool KeyBinder::checkConflictsWith(int compareTo, bool updateState)
+{
+    // TODO: Make conflict check more efficient
+    for(int i=0; i<BINDS_NUMBER; i++)
+    {
+        if(i == compareTo)
+            continue;
+        if(CBBind[i] == NULL || CBBind[compareTo] == NULL)
+            continue;
+        QString bind1 = CBBind[i]->currentData(Qt::UserRole + 1).toString();
+        QString bind2 = CBBind[compareTo]->currentData(Qt::UserRole + 1).toString();
+        if(bind1 == "none" || bind2 == "none" || bind1 == "default" || bind2 == "default")
+            continue;
+        // TODO: For team key binds, also check collisions with global key binds
+        if(bind1 == bind2)
+        {
+            if(updateState)
+            {
+                p_hasConflicts = true;
+                conflictLabel->setHidden(false);
+            }
+            return true;
+        }
+    }
+    if(updateState)
+    {
+        p_hasConflicts = false;
+        conflictLabel->setHidden(true);
+    }
+    return false;
+}
+
+// check if any key is bound multiple times and causing a conflict
+bool KeyBinder::checkConflicts()
+{
+    bool conflict = false;
+    for(int i=0; i<BINDS_NUMBER; i++)
+    {
+        conflict = checkConflictsWith(i, false);
+        if(conflict)
+        {
+            p_hasConflicts = true;
+            conflictLabel->setHidden(false);
+            return true;
+        }
+    }
+    p_hasConflicts = false;
+    conflictLabel->setHidden(true);
+    return false;
+}
+
+bool KeyBinder::hasConflicts()
+{
+    return p_hasConflicts;
 }
 
 // Set a combobox's index
