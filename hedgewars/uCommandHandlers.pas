@@ -33,23 +33,6 @@ uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh,
 var cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 0, 4, 5, 6, 15, 8, 8, 8, 8, 12, 13, 14);
     cTagsMasksNoHealth: array[0..15] of byte = (3, 0, 1, 2, 0, 0, 0, 0, 11, 8, 9, 10, 8, 8, 8, 8);
 
-// helper function for volume
-procedure updateVolumeDelta(precise: boolean);
-begin
-if cVolumeUpKey and (not cVolumeDownKey) then
-    if precise then
-        cVolumeDelta:= 1
-    else
-        cVolumeDelta:= 3
-else if cVolumeDownKey and (not cVolumeUpKey) then
-    if precise then
-        cVolumeDelta:= -1
-    else
-        cVolumeDelta:= -3
-else
-    cVolumeDelta:= 0;
-end;
-
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
@@ -294,7 +277,6 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-updateVolumeDelta(true);
 if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
@@ -308,7 +290,6 @@ end;
 procedure chPrecise_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-updateVolumeDelta(false);
 if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then

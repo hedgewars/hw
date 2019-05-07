@@ -83,6 +83,8 @@ function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
 function CalcWorldWrap(X, radius: LongInt): LongInt;
 
+procedure updateVolumeDelta(precise: boolean);
+
 function read1stLn(filePath: shortstring): shortstring;
 function readValueFromINI(key, filePath: shortstring): shortstring;
 
@@ -696,6 +698,23 @@ begin
         end;
 
     sanitizeCharForLog:= r
+end;
+
+// helper function for volume change controls
+procedure updateVolumeDelta(precise: boolean);
+begin
+if cVolumeUpKey and (not cVolumeDownKey) then
+    if precise then
+        cVolumeDelta:= 1
+    else
+        cVolumeDelta:= 3
+else if cVolumeDownKey and (not cVolumeUpKey) then
+    if precise then
+        cVolumeDelta:= -1
+    else
+        cVolumeDelta:= -3
+else
+    cVolumeDelta:= 0;
 end;
 
 function read1stLn(filePath: shortstring): shortstring;

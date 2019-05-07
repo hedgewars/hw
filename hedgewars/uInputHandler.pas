@@ -246,7 +246,10 @@ if CurrentBinds.indices[code] > 0 then
         if CurrentBinds.binds[CurrentBinds.indices[code]] = 'switch' then
             LocalMessage:= LocalMessage or gmSwitch
         else if CurrentBinds.binds[CurrentBinds.indices[code]] = '+precise' then
+            begin
             LocalMessage:= LocalMessage or gmPrecise;
+            updateVolumeDelta(true);
+            end;
 
         ParseCommand(CurrentBinds.binds[CurrentBinds.indices[code]], Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
@@ -255,7 +258,10 @@ if CurrentBinds.indices[code] > 0 then
     else if (CurrentBinds.binds[CurrentBinds.indices[code]][1] = '+') then
         begin
         if CurrentBinds.binds[CurrentBinds.indices[code]] = '+precise' then
+            begin
             LocalMessage:= LocalMessage and (not gmPrecise);
+            updateVolumeDelta(false);
+            end;
         s:= CurrentBinds.binds[CurrentBinds.indices[code]];
         s[1]:= '-';
         ParseCommand(s, Trusted);
