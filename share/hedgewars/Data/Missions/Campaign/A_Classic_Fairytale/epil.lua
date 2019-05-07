@@ -492,7 +492,7 @@ function onNewTurn()
   SetTurnTimeLeft(MAX_TURN_TIME)
 end
 
-function onPrecise()
+function onPreciseLocal()
   if GameTime > 2500 then
     SetAnimSkip(true)
   end

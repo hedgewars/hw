@@ -271,7 +271,7 @@ function onGameTick20()
 	setFoundDeviceVisual()
 end
 
-function onPrecise()
+function onPreciseLocal()
 	if GameTime > 3000 then
 		SetAnimSkip(true)
 	end
