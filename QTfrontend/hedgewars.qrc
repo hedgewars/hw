@@ -65,6 +65,8 @@
         <file>res/dropdown.png</file>
         <file>res/dropdown_disabled.png</file>
         <file>res/dropdown_selected.png</file>
+        <file>res/keyconflict.png</file>
+        <file>res/keyconflict_selected.png</file>
         <file>res/new.png</file>
         <file>res/edit.png</file>
         <file>res/delete.png</file>

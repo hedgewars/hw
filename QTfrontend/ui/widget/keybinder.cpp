@@ -93,7 +93,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     rightLayout->addWidget(helpLabel, 0, Qt::AlignCenter);
     conflictLabel = new QLabel();
     conflictLabel->setText(tr("Warning: The same key is assigned multiple times!"));
-    conflictLabel->setStyleSheet("color: #FFFFFF; background: #E31A1A; border: solid 4px #E31A1A; border-radius: 10px; padding: auto 20px;");
+    conflictLabel->setStyleSheet("color: white; background: #E31A1A; border: solid 4px #E31A1A; border-radius: 10px; padding: auto 20px;");
     conflictLabel->setFixedHeight(24);
     conflictLabel->setHidden(true);
     rightLayout->addWidget(conflictLabel, 0, Qt::AlignCenter);
@@ -125,11 +125,16 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     bindComboBoxCellMappings = new QHash<QObject *, QTableWidgetItem *>();
     bindCellComboBoxMappings = new QHash<QTableWidgetItem *, QComboBox *>();
 
-    QIcon dropDownIcon = QIcon();
+    dropDownIcon = new QIcon();
     QPixmap dd1 = QPixmap(":/res/dropdown.png");
     QPixmap dd2 = QPixmap(":/res/dropdown_selected.png");
-    dropDownIcon.addPixmap(dd1, QIcon::Normal);
-    dropDownIcon.addPixmap(dd2, QIcon::Selected);
+    dropDownIcon->addPixmap(dd1, QIcon::Normal);
+    dropDownIcon->addPixmap(dd2, QIcon::Selected);
+    conflictIcon = new QIcon();
+    QPixmap kc1 = QPixmap(":/res/keyconflict.png");
+    QPixmap kc2 = QPixmap(":/res/keyconflict_selected.png");
+    conflictIcon->addPixmap(kc1, QIcon::Normal);
+    conflictIcon->addPixmap(kc2, QIcon::Selected);
     QPixmap emptySpace = QPixmap(16, 16);
     emptySpace.fill(QColor(0, 0, 0, 0));
     QIcon emptyIcon = QIcon(emptySpace);
@@ -208,7 +213,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         {
             bindCell = new QTableWidgetItem(comboBox->currentText());
             nameCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-            bindCell->setIcon(dropDownIcon);
+            bindCell->setIcon(*dropDownIcon);
             bindCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         }
         else
@@ -318,17 +323,34 @@ bool KeyBinder::checkConflictsWith(int compareTo, bool updateState)
             continue;
         QString bind1 = CBBind[i]->currentData(Qt::UserRole + 1).toString();
         QString bind2 = CBBind[compareTo]->currentData(Qt::UserRole + 1).toString();
-        if(bind1 == "none" || bind2 == "none" || bind1 == "default" || bind2 == "default")
-            continue;
         // TODO: For team key binds, also check collisions with global key binds
-        if(bind1 == bind2)
+        if((!(bind1 == "none" || bind2 == "none" || bind1 == "default" || bind2 == "default")) && (bind1 == bind2))
         {
             if(updateState)
             {
                 p_hasConflicts = true;
                 conflictLabel->setHidden(false);
             }
+            QTableWidgetItem* item = bindComboBoxCellMappings->value(CBBind[i]);
+            item->setIcon(*conflictIcon);
+            item->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
+            item->setForeground(QBrush(Qt::white));
+            item = bindComboBoxCellMappings->value(CBBind[compareTo]);
+            item->setIcon(*conflictIcon);
+            item->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
+            item->setForeground(QBrush(Qt::white));
             return true;
+        }
+        else
+        {
+            QTableWidgetItem* item = bindComboBoxCellMappings->value(CBBind[i]);
+            item->setIcon(*dropDownIcon);
+            item->setBackground(QBrush(Qt::transparent));
+            item->setForeground(QBrush(QColor("#F6CB1C")));
+            item = bindComboBoxCellMappings->value(CBBind[compareTo]);
+            item->setIcon(*dropDownIcon);
+            item->setBackground(QBrush(Qt::transparent));
+            item->setForeground(QBrush(QColor("#F6CB1C")));
         }
     }
     if(updateState)

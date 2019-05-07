@@ -56,6 +56,8 @@ class KeyBinder : public QWidget
         QBoxLayout *bindingsPages;
         QComboBox * CBBind[BINDS_NUMBER];
         QLabel * conflictLabel;
+        QIcon * dropDownIcon;
+        QIcon * conflictIcon;
         QString defaultText;
         bool enableSignal;
         bool p_hasConflicts;
