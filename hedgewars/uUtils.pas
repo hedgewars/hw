@@ -84,6 +84,7 @@ function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 function CalcWorldWrap(X, radius: LongInt): LongInt;
 
 procedure updateVolumeDelta(precise: boolean);
+procedure updateCursorMovementDelta(precise: boolean; dir: LongInt; var cursorVar: LongInt);
 
 function read1stLn(filePath: shortstring): shortstring;
 function readValueFromINI(key, filePath: shortstring): shortstring;
@@ -715,6 +716,23 @@ else if cVolumeDownKey and (not cVolumeUpKey) then
         cVolumeDelta:= -3
 else
     cVolumeDelta:= 0;
+end;
+
+// helper function for cursor movement change controls
+procedure updateCursorMovementDelta(precise: boolean; dir: LongInt; var cursorVar: LongInt);
+begin
+if dir > 0 then
+    if precise then
+        cursorVar:= cameraKeyboardSpeedSlow
+    else
+        cursorVar:= cameraKeyboardSpeed
+else if dir < 0 then
+    if precise then
+        cursorVar:= - cameraKeyboardSpeedSlow
+    else
+        cursorVar:= - cameraKeyboardSpeed
+else
+    cursorVar:= 0;
 end;
 
 function read1stLn(filePath: shortstring): shortstring;

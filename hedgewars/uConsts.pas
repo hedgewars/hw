@@ -66,7 +66,8 @@ const
     msgGettingConfig     = 'Getting game config...';
 
     // camera movement multipliers
-    cameraKeyboardSpeed : ShortInt = 10;
+    cameraKeyboardSpeed     : LongInt = 10;
+    cameraKeyboardSpeedSlow : LongInt =  3;
 
     // color constants
     cWhiteColorChannels : TSDL_Color = (r:$FF; g:$FF; b:$FF; a:$FF);

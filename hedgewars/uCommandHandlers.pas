@@ -125,53 +125,53 @@ end;
 procedure chCurU_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= -1;
+updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, -1, CursorMovementY);
 end;
 
 procedure chCurU_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CursorMovementY < 0 then
-    CursorMovementY:= 0;
+    updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 0, CursorMovementY);
 end;
 
 procedure chCurD_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= 1;
+updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 1, CursorMovementY);
 end;
 
 procedure chCurD_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CursorMovementY > 0 then
-    CursorMovementY:= 0;
+    updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 0, CursorMovementY);
 end;
 
 procedure chCurL_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= -1;
+updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, -1, CursorMovementX);
 end;
 
 procedure chCurL_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CursorMovementX < 0 then
-    CursorMovementX:= 0;
+    updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 0, CursorMovementX);
 end;
 
 procedure chCurR_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= 1;
+updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 1, CursorMovementX);
 end;
 
 procedure chCurR_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CursorMovementX > 0 then
-    CursorMovementX:= 0;
+    updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 0, CursorMovementX);
 end;
 
 procedure chLeft_p(var s: shortstring);

@@ -249,6 +249,8 @@ if CurrentBinds.indices[code] > 0 then
             begin
             LocalMessage:= LocalMessage or gmPrecise;
             updateVolumeDelta(true);
+            updateCursorMovementDelta(true, CursorMovementX, CursorMovementX);
+            updateCursorMovementDelta(true, CursorMovementY, CursorMovementY);
             end;
 
         ParseCommand(CurrentBinds.binds[CurrentBinds.indices[code]], Trusted);
@@ -261,6 +263,8 @@ if CurrentBinds.indices[code] > 0 then
             begin
             LocalMessage:= LocalMessage and (not gmPrecise);
             updateVolumeDelta(false);
+            updateCursorMovementDelta(false, CursorMovementX, CursorMovementX);
+            updateCursorMovementDelta(false, CursorMovementY, CursorMovementY);
             end;
         s:= CurrentBinds.binds[CurrentBinds.indices[code]];
         s[1]:= '-';

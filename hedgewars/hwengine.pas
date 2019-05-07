@@ -290,7 +290,7 @@ game to freeze if one online player minimizes Hedgewars. *)
             ResetMouseWheel();
 
         if (CursorMovementX <> 0) or (CursorMovementY <> 0) then
-            handlePositionUpdate(CursorMovementX * cameraKeyboardSpeed, CursorMovementY * cameraKeyboardSpeed);
+            handlePositionUpdate(CursorMovementX, CursorMovementY);
 
         if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and
            ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then

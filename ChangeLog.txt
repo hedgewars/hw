@@ -57,6 +57,7 @@ Controls:
  + Precise + Reset zoom resets zoom to 100% (instead of zoom in options)
  + Precise + zoom in/out changes zoom in smaller steps
  + Precise + volume up/down changes volume in smaller steps
+ + Precise + cursor move keys move camera slower
  + New chat command: “/help room” (shows room chat commands within the game)
  * Fix broken default keyboard controls for team chat and camera movement
 
