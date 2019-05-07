@@ -835,12 +835,12 @@ processAction (ShowReplay rname) = do
 
     when (isJust cInfo) $ do
         mapM_ processAction $ concat [
-            [AnswerClients [c] ["JOINED", nick cl]]
+            [AnswerClients [c] [if clientProto cl < 58 then "JOINED" else "REPLAY_START", nick cl]]
             , answerFullConfigParams cl params1 params2
             , answerAllTeams cl teams'
             , [AnswerClients [c]  ["RUN_GAME"]]
             , [AnswerClients [c] $ "EM" : roundMsgs']
-            , [AnswerClients [c] ["KICKED"]]
+            , [AnswerClients [c] [if clientProto cl < 58 then "KICKED" else "REPLAY_END"]]
             ]
 
 processAction (SaveRoom rname) = do
