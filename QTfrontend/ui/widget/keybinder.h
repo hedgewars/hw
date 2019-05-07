@@ -60,6 +60,7 @@ class KeyBinder : public QWidget
         QIcon * conflictIcon;
         QString defaultText;
         bool enableSignal;
+        QList<QTableWidgetItem*> conflictItems;
         bool p_hasConflicts;
 
     signals:

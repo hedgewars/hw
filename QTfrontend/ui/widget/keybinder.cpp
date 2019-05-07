@@ -314,7 +314,6 @@ void KeyBinder::bindSelectionChanged()
 // check if the given key is bound multiple times
 bool KeyBinder::checkConflictsWith(int compareTo, bool updateState)
 {
-    // TODO: Make conflict check more efficient
     for(int i=0; i<BINDS_NUMBER; i++)
     {
         if(i == compareTo)
@@ -331,26 +330,17 @@ bool KeyBinder::checkConflictsWith(int compareTo, bool updateState)
                 p_hasConflicts = true;
                 conflictLabel->setHidden(false);
             }
-            QTableWidgetItem* item = bindComboBoxCellMappings->value(CBBind[i]);
-            item->setIcon(*conflictIcon);
-            item->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
-            item->setForeground(QBrush(Qt::white));
-            item = bindComboBoxCellMappings->value(CBBind[compareTo]);
-            item->setIcon(*conflictIcon);
-            item->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
-            item->setForeground(QBrush(Qt::white));
+            QTableWidgetItem* conflictItem = bindComboBoxCellMappings->value(CBBind[i]);
+            conflictItem->setIcon(*conflictIcon);
+            conflictItem->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
+            conflictItem->setForeground(QBrush(Qt::white));
+            conflictItems.append(conflictItem);
+            conflictItem = bindComboBoxCellMappings->value(CBBind[compareTo]);
+            conflictItem->setIcon(*conflictIcon);
+            conflictItem->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
+            conflictItem->setForeground(QBrush(Qt::white));
+            conflictItems.append(conflictItem);
             return true;
-        }
-        else
-        {
-            QTableWidgetItem* item = bindComboBoxCellMappings->value(CBBind[i]);
-            item->setIcon(*dropDownIcon);
-            item->setBackground(QBrush(Qt::transparent));
-            item->setForeground(QBrush(QColor("#F6CB1C")));
-            item = bindComboBoxCellMappings->value(CBBind[compareTo]);
-            item->setIcon(*dropDownIcon);
-            item->setBackground(QBrush(Qt::transparent));
-            item->setForeground(QBrush(QColor("#F6CB1C")));
         }
     }
     if(updateState)
@@ -358,6 +348,15 @@ bool KeyBinder::checkConflictsWith(int compareTo, bool updateState)
         p_hasConflicts = false;
         conflictLabel->setHidden(true);
     }
+    for (int c=0; c < conflictItems.size(); c++)
+    {
+        QTableWidgetItem* conflictItem = conflictItems[c];
+        conflictItem->setIcon(*dropDownIcon);
+        conflictItem->setBackground(QBrush(Qt::transparent));
+        conflictItem->setForeground(QBrush(QColor("#F6CB1C")));
+        conflictItem = NULL;
+    }
+    conflictItems.clear();
     return false;
 }
 
