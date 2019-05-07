@@ -375,8 +375,10 @@ begin
     RegisterBind(DefaultBinds, _S'o', 'gearinfo');
 
     //numpad
-    //DefaultBinds[265]:= '+volup';
-    //DefaultBinds[256]:= '+voldown';
+    RegisterBind(DefaultBinds, 'keypad_8', '+cur_u');
+    RegisterBind(DefaultBinds, 'keypad_6', '+cur_r');
+    RegisterBind(DefaultBinds, 'keypad_4', '+cur_l');
+    RegisterBind(DefaultBinds, 'keypad_2', '+cur_d');
 
     RegisterBind(DefaultBinds, _S'0', '+volup');
     RegisterBind(DefaultBinds, _S'9', '+voldown');
@@ -387,6 +389,7 @@ begin
     RegisterBind(DefaultBinds, _S'p', 'pause');
     RegisterBind(DefaultBinds, _S's', '+speedup');
     RegisterBind(DefaultBinds, _S't', 'chat');
+    RegisterBind(DefaultBinds, _S'u', 'chat team');
     RegisterBind(DefaultBinds, _S'y', 'confirm');
 
     RegisterBind(DefaultBinds, 'mousem', 'zoomreset');

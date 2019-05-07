@@ -58,6 +58,7 @@ Controls:
  + Precise + zoom in/out changes zoom in smaller steps
  + Precise + volume up/down changes volume in smaller steps
  + New chat command: “/help room” (shows room chat commands within the game)
+ * Fix broken default keyboard controls for team chat and camera movement
 
 Graphics:
  + Show contour of flying saucer when in highly opaque water
