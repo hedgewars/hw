@@ -834,13 +834,24 @@ processAction (ShowReplay rname) = do
     let (teams', params1, params2, roundMsgs') = fromJust cInfo
 
     when (isJust cInfo) $ do
-        mapM_ processAction $ concat [
-            [AnswerClients [c] [if clientProto cl < 58 then "JOINED" else "REPLAY_START", nick cl]]
-            , answerFullConfigParams cl params1 params2
-            , answerAllTeams cl teams'
-            , [AnswerClients [c]  ["RUN_GAME"]]
-            , [AnswerClients [c] $ "EM" : roundMsgs']
-            ]
+        mapM_ processAction $
+            if clientProto cl < 58 then
+                concat [
+                    [AnswerClients [c] ["JOINED", nick cl]]
+                    , answerFullConfigParams cl params1 params2
+                    , answerAllTeams cl teams'
+                    , [AnswerClients [c]  ["RUN_GAME"]]
+                    , [AnswerClients [c] $ "EM" : roundMsgs']
+                    , [AnswerClients [c] ["KICKED"]]
+                ]
+            else
+                concat [
+                    [AnswerClients [c] ["REPLAY_START"]]
+                    , answerFullConfigParams cl params1 params2
+                    , answerAllTeams cl teams'
+                    , [AnswerClients [c]  ["RUN_GAME"]]
+                    , [AnswerClients [c] $ "EM" : roundMsgs']
+                ]
 
 processAction (SaveRoom rname) = do
     rnc <- gets roomsClients
