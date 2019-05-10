@@ -398,7 +398,7 @@ begin
     RegisterBind(DefaultBinds, _S'r', 'record');
     RegisterBind(DefaultBinds, _S'h', 'findhh');
     RegisterBind(DefaultBinds, _S'p', 'pause');
-    RegisterBind(DefaultBinds, _S's', '+speedup');
+    RegisterBind(DefaultBinds, _S'f', '+speedup');
     RegisterBind(DefaultBinds, _S't', 'chat');
     RegisterBind(DefaultBinds, _S'u', 'chat team');
     RegisterBind(DefaultBinds, _S'y', 'confirm');
