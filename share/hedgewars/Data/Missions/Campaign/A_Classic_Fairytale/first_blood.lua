@@ -31,7 +31,7 @@ This is the expected course of events in chronological order.
 
 - Introduction; movement (left/right/jump) instructions
 - Player moves to mushroom
-- Double jump instructions, move to flower
+- Backjump instructions, move to flower
 - Collect first crate (rope)
 - Rope instructions
 - Parachute crate appears in the right pit
@@ -422,13 +422,13 @@ function CheckMovedUntilJump()
 end
 
 function DoMovedUntilJump()
-  local msg
+  local msg = loc("Look to the left and do a backwards jump towards the mushroom.") .. "| |"
   if INTERFACE == "touch" then
-     msg = loc("Hint: Double Jump - Tap the [Curvy Arrow] twice")
+     msg = msg .. loc("Backwards jump: Tap the [Curvy Arrow] twice")
   else
-     msg = loc("Hint: Double Jump - Press [Backspace] twice")
+     msg = msg .. loc("Backwards jump: Press [Backspace] twice")
   end
-  ShowMission(loc("First Blood"), loc("Step By Step"), msg, -amSkip, 0)
+  ShowMission(loc("First Blood"), loc("Step By Step"), msg, -amSkip, 10000)
   AddEvent(CheckOnShroom, {}, DoOnShroom, {}, 0)
 end
 
