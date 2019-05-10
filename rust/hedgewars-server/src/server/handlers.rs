@@ -347,12 +347,22 @@ pub fn handle_io_result(
             response.remove_client(client_id);
         }
         IoResult::Replay(Some(replay)) => {
-            response.add(RoomJoined(vec![server.clients[client_id].nick.clone()]).send_self());
+            let protocol = server.clients[client_id].protocol_number;
+            let start_msg = if protocol < 58 {
+                RoomJoined(vec![server.clients[client_id].nick.clone()])
+            } else {
+                ReplayStart
+            };
+            response.add(start_msg.send_self());
+
             common::get_room_config_impl(&replay.config, client_id, response);
             common::get_teams(replay.teams.iter(), client_id, response);
             response.add(RunGame.send_self());
             response.add(ForwardEngineMessage(replay.message_log).send_self());
-            response.add(Kicked.send_self());
+
+            if protocol < 58 {
+                response.add(Kicked.send_self());
+            }
         }
         IoResult::Replay(None) => {
             response.add(Warning("Could't load the replay".to_string()).send_self())

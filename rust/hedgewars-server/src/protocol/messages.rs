@@ -142,6 +142,7 @@ pub enum HWServerMessage {
     RunGame,
     ForwardEngineMessage(Vec<String>),
     RoundFinished,
+    ReplayStart,
 
     Info(Vec<String>),
     ServerMessage(String),
@@ -324,6 +325,7 @@ impl HWProtocolMessage {
             StartGame => msg!["START_GAME"],
             EngineMessage(msg) => msg!["EM", msg],
             RoundFinished => msg!["ROUNDFINISHED"],
+            ReplayStart => msg!["REPLAY_START"],
             ToggleRestrictJoin => msg!["TOGGLE_RESTRICT_JOINS"],
             ToggleRestrictTeams => msg!["TOGGLE_RESTRICT_TEAMS"],
             ToggleRegisteredOnly => msg!["TOGGLE_REGISTERED_ONLY"],

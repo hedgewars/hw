@@ -492,8 +492,6 @@ impl NetworkLayer {
     }
 
     pub fn accept_client(&mut self, poll: &Poll, server_token: mio::Token) -> io::Result<()> {
-
-
         match server_token {
             utils::SERVER_TOKEN => {
                 let (client_socket, addr) = self.listener.accept()?;
