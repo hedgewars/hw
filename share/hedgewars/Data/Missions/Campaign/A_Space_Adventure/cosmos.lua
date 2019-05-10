@@ -103,6 +103,11 @@ function onGameInit()
 		-- Disable walking as long we're stuck on the moon
 		EnableGameFlags(gfArtillery)
 	end
+	if checkPointReached <= 4 and INTERFACE ~= "touch" then
+		-- FIXME: Precise key is not available in Touch
+		goals["init"][3] = goals["init"][3] .. "|" .. loc("Hint: Cinematics can be skipped with the [Precise] key.")
+	end
+
 	TurnTime = 20000
 	CaseFreq = 0
 	MinesNum = 0
