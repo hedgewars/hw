@@ -125,6 +125,7 @@ class HWForm : public QMainWindow
         void ShowFatalErrorMessage(const QString &);
         void GetRecord(RecordType type, const QByteArray & record);
         void CreateNetGame();
+        void PlayOfficialServerDemo();
         void UpdateWeapons();
         void DeleteWeapons(QString weaponsName);
         void AddWeapons(QString weaponsName, QString ammo);

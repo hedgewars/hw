@@ -76,6 +76,7 @@ class HWGame : public TCPBase
         virtual ~HWGame();
         void AddTeam(const QString & team);
         void PlayDemo(const QString & demofilename, bool isSave);
+        void PlayOfficialServerDemo();
         void StartLocal();
         void StartQuick();
         void StartNet();

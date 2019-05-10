@@ -98,6 +98,7 @@ Frontend:
  + More intelligent automatic mission selection in campaign screen
  + New data directory for video thumbnails: Data/VideoThumbnails
  + Display a warning when the same key is used multiple times
+ * Fix broken handling of /watch chat command on official server
  * Fix renaming a video leading to loss of thumbnail after restart
  * Fix controls list failing to display correct key names with regards to keyboard layout
  * Fix force-locked schemes getting unlocked when changing map types

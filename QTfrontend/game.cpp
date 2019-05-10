@@ -497,6 +497,19 @@ void HWGame::PlayDemo(const QString & demofilename, bool isSave)
     SetGameState(gsStarted);
 }
 
+void HWGame::PlayOfficialServerDemo()
+{
+    // TODO: Use gtDemo so fast-forward is available.
+    // Needs engine support first.
+    lastGameStartArgs.clear();
+    lastGameType = gtLocal;
+
+    gameType = gtLocal;
+    demo.clear();
+    Start(false);
+    SetGameState(gsStarted);
+}
+
 void HWGame::StartNet()
 {
     lastGameStartArgs.clear();

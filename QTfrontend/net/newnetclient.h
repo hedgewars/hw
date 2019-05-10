@@ -43,7 +43,7 @@ class HWNewNet : public QObject
         Q_OBJECT
 
     public:
-        enum ClientState { Disconnected, Connecting, Redirected, Connected, InLobby, InRoom, InGame };
+        enum ClientState { Disconnected, Connecting, Redirected, Connected, InLobby, InRoom, InGame, InDemo };
 
         HWNewNet();
         ~HWNewNet();
@@ -73,6 +73,7 @@ class HWNewNet : public QObject
         QString seed;
         bool m_game_connected;
         bool m_nick_registered;
+        bool m_demo_data_pending;
         RoomsListModel * m_roomsListModel;
         PlayersListModel * m_playersModel;
         QSortFilterProxyModel * m_lobbyPlayersModel;
@@ -97,6 +98,7 @@ class HWNewNet : public QObject
 
     signals:
         void AskForRunGame();
+        void AskForOfficialServerDemo();
         void connected();
         void disconnected(const QString & reason);
         void redirected(quint16 port);

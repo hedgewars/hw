@@ -1366,6 +1366,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, bool useTls, QS
     GoToPage(ID_PAGE_CONNECTING);
 
     connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(AskForOfficialServerDemo()), this, SLOT(PlayOfficialServerDemo()), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(redirected(quint16)), this, SLOT(NetRedirected(quint16)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(connected()), this, SLOT(NetConnected()), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)), Qt::QueuedConnection);
@@ -1924,6 +1925,23 @@ void HWForm::CreateNetGame()
     connect(hwnet, SIGNAL(Error(const QString&)), game, SLOT(FromNetError(const QString&)), Qt::QueuedConnection);
 
     game->StartNet();
+}
+
+void HWForm::PlayOfficialServerDemo()
+{
+    // go back in pages to prevent user from being stuck on certain pages
+    if(ui.Pages->currentIndex() == ID_PAGE_GAMESTATS ||
+       ui.Pages->currentIndex() == ID_PAGE_INGAME)
+        GoBack();
+
+    QString ammo;
+    ammo = ui.pageNetGame->pGameCFG->WeaponsName->itemData(
+               ui.pageNetGame->pGameCFG->WeaponsName->currentIndex()
+           ).toString();
+
+    CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
+
+    game->PlayOfficialServerDemo();
 }
 
 void HWForm::closeEvent(QCloseEvent *event)

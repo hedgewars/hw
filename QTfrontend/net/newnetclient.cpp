@@ -41,6 +41,7 @@ HWNewNet::HWNewNet() :
 {
     m_private_game = false;
     m_nick_registered = false;
+    m_demo_data_pending = false;
 
     m_roomsListModel = new RoomsListModel(this);
 
@@ -798,13 +799,35 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if(netClientState == InRoom || netClientState == InGame)
+    if(netClientState == InLobby && lst[0] == "REPLAY_START")
+    {
+        if(lst.size() < 2 || lst[1] != mynick)
+        {
+            qWarning("Net: Bad REPLAY_START message");
+            return;
+        }
+
+        for(int i = 1; i < lst.size(); ++i)
+        {
+            if (lst[i] == mynick)
+            {
+                netClientState = InRoom;
+                m_demo_data_pending = true;
+                emit EnteredGame();
+                emit roomMaster(false);
+            }
+        }
+        return;
+    }
+
+    if(netClientState == InRoom || netClientState == InGame || netClientState == InDemo)
     {
         if (lst[0] == "EM")
         {
             if(lst.size() < 2)
             {
                 qWarning("Net: Bad EM message");
+                m_demo_data_pending = false;
                 return;
             }
             for(int i = 1; i < lst.size(); ++i)
@@ -812,9 +835,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 QByteArray em = QByteArray::fromBase64(lst[i].toLatin1());
                 emit FromNet(em);
             }
+            m_demo_data_pending = false;
             return;
         }
+    }
 
+    if(netClientState == InRoom || netClientState == InGame)
+    {
         if (lst[0] == "ROUND_FINISHED")
         {
             emit FromNet(QByteArray("\x01o"));
@@ -856,8 +883,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         if (lst[0] == "RUN_GAME")
         {
-            netClientState = InGame;
-            emit AskForRunGame();
+            if(m_demo_data_pending)
+            {
+                netClientState = InDemo;
+                emit AskForOfficialServerDemo();
+            }
+            else
+            {
+                netClientState = InGame;
+                emit AskForRunGame();
+            }
             return;
         }
 
@@ -1064,6 +1099,13 @@ void HWNewNet::gameFinished(bool correctly)
     {
         netClientState = InRoom;
         RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimiter).arg(correctly ? "1" : "0"));
+    }
+    else if (netClientState == InDemo)
+    {
+        netClientState = InLobby;
+        askRoomsList();
+        emit LeftRoom(QString());
+        m_playersModel->resetRoomFlags();
     }
 }
 
