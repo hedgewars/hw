@@ -801,22 +801,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if(netClientState == InLobby && lst[0] == "REPLAY_START")
     {
-        if(lst.size() < 2 || lst[1] != mynick)
-        {
-            qWarning("Net: Bad REPLAY_START message");
-            return;
-        }
-
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            if (lst[i] == mynick)
-            {
-                netClientState = InRoom;
-                m_demo_data_pending = true;
-                emit EnteredGame();
-                emit roomMaster(false);
-            }
-        }
+        netClientState = InRoom;
+        m_demo_data_pending = true;
+        emit EnteredGame();
+        emit roomMaster(false);
         return;
     }
 
