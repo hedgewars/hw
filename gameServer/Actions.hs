@@ -840,7 +840,6 @@ processAction (ShowReplay rname) = do
             , answerAllTeams cl teams'
             , [AnswerClients [c]  ["RUN_GAME"]]
             , [AnswerClients [c] $ "EM" : roundMsgs']
-            , [AnswerClients [c] [if clientProto cl < 58 then "KICKED" else "REPLAY_END"]]
             ]
 
 processAction (SaveRoom rname) = do
