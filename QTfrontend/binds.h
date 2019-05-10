@@ -22,9 +22,9 @@
 #include <QString>
 
 #ifdef VIDEOREC
-#define BINDS_NUMBER 62
+#define BINDS_NUMBER 63
 #else
-#define BINDS_NUMBER 61
+#define BINDS_NUMBER 62
 #endif
 
 struct BindAction
