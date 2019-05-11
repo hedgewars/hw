@@ -70,27 +70,43 @@ fn main() {
             if event.readiness() & Ready::readable() == Ready::readable() {
                 match event.token() {
                     token @ utils::SERVER_TOKEN | token @ utils::SECURE_SERVER_TOKEN => {
-                        hw_network.accept_client(&poll, token).unwrap()
+                        match hw_network.accept_client(&poll, token) {
+                            Ok(()) => (),
+                            Err(e) => debug!("Error accepting client: {}", e),
+                        }
                     }
-                    utils::TIMER_TOKEN => hw_network.handle_timeout(&poll).unwrap(),
+                    utils::TIMER_TOKEN => match hw_network.handle_timeout(&poll) {
+                        Ok(()) => (),
+                        Err(e) => debug!("Error in timer event: {}", e),
+                    },
                     #[cfg(feature = "official-server")]
-                    utils::IO_TOKEN => hw_network.handle_io_result(),
-                    Token(tok) => hw_network.client_readable(&poll, tok).unwrap(),
+                    utils::IO_TOKEN => match hw_network.handle_io_result() {
+                        Ok(()) => (),
+                        Err(e) => debug!("Error in IO task: {}", e),
+                    },
+                    Token(token) => match hw_network.client_readable(&poll, token) {
+                        Ok(()) => (),
+                        Err(e) => debug!("Error reading from client socket {}: {}", token, e),
+                    },
                 }
             }
             if event.readiness() & Ready::writable() == Ready::writable() {
                 match event.token() {
-                    utils::SERVER_TOKEN | utils::TIMER_TOKEN | utils::IO_TOKEN => unreachable!(),
-                    Token(tok) => hw_network.client_writable(&poll, tok).unwrap(),
+                    utils::SERVER_TOKEN
+                    | utils::SECURE_SERVER_TOKEN
+                    | utils::TIMER_TOKEN
+                    | utils::IO_TOKEN => unreachable!(),
+                    Token(token) => match hw_network.client_writable(&poll, token) {
+                        Ok(()) => (),
+                        Err(e) => debug!("Error writing to client socket {}: {}", token, e),
+                    },
                 }
             }
-            //            if event.kind().is_hup() || event.kind().is_error() {
-            //                match event.token() {
-            //                    utils::SERVER => unreachable!(),
-            //                    Token(tok) => server.client_error(&poll, tok).unwrap(),
-            //                }
-            //            }
         }
-        hw_network.on_idle(&poll).unwrap();
+
+        match hw_network.on_idle(&poll) {
+            Ok(()) => (),
+            Err(e) => debug!("Error in idle handler: {}", e),
+        };
     }
 }

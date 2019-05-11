@@ -368,7 +368,7 @@ impl NetworkLayer {
         poll: &Poll,
         client_socket: ClientSocket,
         addr: SocketAddr,
-    ) -> ClientId {
+    ) -> io::Result<ClientId> {
         let entry = self.clients.vacant_entry();
         let client_id = entry.key();
 
@@ -377,8 +377,7 @@ impl NetworkLayer {
             Token(client_id),
             Ready::readable() | Ready::writable(),
             PollOpt::edge(),
-        )
-        .expect("could not register socket with event loop");
+        )?;
 
         let client = NetworkClient::new(
             client_id,
@@ -389,7 +388,7 @@ impl NetworkLayer {
         info!("client {} ({}) added", client.id, client.peer_addr);
         entry.insert(client);
 
-        client_id
+        Ok(client_id)
     }
 
     fn handle_response(&mut self, mut response: handlers::Response, poll: &Poll) {
@@ -453,11 +452,12 @@ impl NetworkLayer {
     }
 
     #[cfg(feature = "official-server")]
-    pub fn handle_io_result(&mut self) {
+    pub fn handle_io_result(&mut self) -> io::Result<()> {
         if let Some((client_id, result)) = self.io.try_recv() {
             let mut response = handlers::Response::new(client_id);
             handlers::handle_io_result(&mut self.server, client_id, &mut response, result);
         }
+        Ok(())
     }
 
     fn create_client_socket(&self, socket: TcpStream) -> io::Result<ClientSocket> {
@@ -497,14 +497,14 @@ impl NetworkLayer {
                 let (client_socket, addr) = self.listener.accept()?;
                 info!("Connected(plaintext): {}", addr);
                 let client_id =
-                    self.register_client(poll, self.create_client_socket(client_socket)?, addr);
+                    self.register_client(poll, self.create_client_socket(client_socket)?, addr)?;
                 self.init_client(poll, client_id);
             }
             #[cfg(feature = "tls-connections")]
             utils::SECURE_SERVER_TOKEN => {
                 let (client_socket, addr) = self.ssl.listener.accept()?;
                 info!("Connected(TLS): {}", addr);
-                self.register_client(poll, self.create_client_secure_socket(client_socket)?, addr);
+                self.register_client(poll, self.create_client_secure_socket(client_socket)?, addr)?;
             }
             _ => unreachable!(),
         }
