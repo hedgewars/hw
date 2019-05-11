@@ -69,6 +69,7 @@ type TFrame = record
 
 var RGB_Buffer: PByte;
     cameraFile: File;
+    cameraFileName: shortstring;
     audioFile: File;
     numPixels: LongWord;
     startTime, numFrames, curTime, progress, maxProgress: LongWord;
@@ -78,18 +79,19 @@ var RGB_Buffer: PByte;
 
 function BeginVideoRecording: Boolean;
 var filename, desc: shortstring;
+    filenameA, descA, soundFilePathA, cAVFormatA, cVideoCodecA, cAudioCodecA: ansistring;
 begin
     AddFileLog('BeginVideoRecording');
 
 {$IOCHECKS OFF}
     // open file with prerecorded camera positions
-    filename:= shortstring(UserPathPrefix) + '/VideoTemp/' + shortstring(RecPrefix) + '.txtin';
-    Assign(cameraFile, filename);
+    cameraFileName:= shortstring(UserPathPrefix) + '/VideoTemp/' + shortstring(RecPrefix) + '.txtin';
+    Assign(cameraFile, cameraFileName);
     Reset(cameraFile, SizeOf(TFrame));
     maxProgress:= FileSize(cameraFile);
     if IOResult <> 0 then
     begin
-        AddFileLog('Error: Could not read from ' + filename);
+        AddFileLog('Error: Could not read from ' + cameraFileName);
         exit(false);
     end;
 {$IOCHECKS ON}
@@ -121,13 +123,19 @@ begin
     else
         soundFilePath:= '';
 
+    filenameA:= ansistring(filename);
+    descA:= ansistring(desc);
+    soundFilePathA:= ansistring(soundFilePath);
+    cAVFormatA:= ansistring(cAVFormat);
+    cVideoCodecA:= ansistring(cVideoCodec);
+    cAudioCodecA:= ansistring(cAudioCodec);
     if checkFails(AVWrapper_Init(@AddFileLogRaw
-        , PChar(ansistring(filename))
-        , PChar(ansistring(desc))
-        , PChar(ansistring(soundFilePath))
-        , PChar(ansistring(cAVFormat))
-        , PChar(ansistring(cVideoCodec))
-        , PChar(ansistring(cAudioCodec))
+        , PChar(filenameA)
+        , PChar(descA)
+        , PChar(soundFilePathA)
+        , PChar(cAVFormatA)
+        , PChar(cVideoCodecA)
+        , PChar(cAudioCodecA)
         , cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality) >= 0,
         'AVWrapper_Init failed',
         true) then exit(false);
@@ -158,10 +166,8 @@ begin
         halt(HaltVideoRec);
         end;
 {$IOCHECKS OFF}
-    // Provoke IOResult to be set
-    FileSize(cameraFile);
-    if IOResult = 0 then
-        Erase(cameraFile)
+    if FileExists(cameraFileName) then
+        DeleteFile(cameraFileName)
     else
         AddFileLog('Warning: Tried to delete the cameraFile but it was already deleted');
 {$IOCHECKS ON}
@@ -192,14 +198,16 @@ end;
 
 function LoadNextCameraPosition(var newRealTicks, newGameTicks: LongInt): Boolean;
 var frame: TFrame = (realTicks: 0; gameTicks: 0; CamX: 0; CamY: 0; zoom: 0);
+    res: LongInt;
 begin
     // we need to skip or duplicate frames to match target framerate
     while Int64(curTime)*cVideoFramerateNum <= Int64(numFrames)*cVideoFramerateDen*1000 do
     begin
+    res:= 0;
     {$IOCHECKS OFF}
         if eof(cameraFile) then
             exit(false);
-        BlockRead(cameraFile, frame, 1);
+        BlockRead(cameraFile, frame, 1, res);
     {$IOCHECKS ON}
         curTime:= frame.realTicks;
         WorldDx:= frame.CamX;
@@ -216,10 +224,12 @@ end;
 // Callback which records sound.
 // This procedure may be called from different thread.
 procedure RecordPostMix(udata: pointer; stream: PByte; len: LongInt); cdecl;
+var result: LongInt;
 begin
+    result:= 0; // avoid warning
     udata:= udata; // avoid warning
 {$IOCHECKS OFF}
-    BlockWrite(audioFile, stream^, len);
+    BlockWrite(audioFile, stream^, len, result);
 {$IOCHECKS ON}
 end;
 
@@ -238,11 +248,12 @@ end;
 procedure CopyFile(src, dest: shortstring);
 var inF, outF: file;
     buffer: array[0..1023] of byte;
-    result: LongInt;
+    result, result2: LongInt;
     i: integer;
 begin
 {$IOCHECKS OFF}
     result:= 0; // avoid compiler hint and warning
+    result2:= 0; // avoid compiler hint and warning
     for i:= 0 to 1023 do
         buffer[i]:= 0;
 
@@ -264,7 +275,7 @@ begin
 
     repeat
         BlockRead(inF, buffer, 1024, result);
-        BlockWrite(outF, buffer, result);
+        BlockWrite(outF, buffer, result, result2);
     until result < 1024;
 {$IOCHECKS ON}
 end;
@@ -273,11 +284,13 @@ procedure BeginPreRecording;
 var format: word;
     filename: shortstring;
     frequency, channels: LongInt;
+    result: LongInt;
 begin
+    result:= 0;
     AddFileLog('BeginPreRecording');
 
     thumbnailSaved:= false;
-    RecPrefix:= 'hw-' + FormatDateTime('YYYY-MM-DD_HH-mm-ss-z', Now());
+    RecPrefix:= 'hw-' + FormatDateTime('YYYY-MM-DD_HH-mm-ss-z', TDateTime(Now()));
 
     // If this video is recorded from demo executed directly (without frontend)
     // then we need to copy demo so that frontend will be able to find it later.
@@ -324,8 +337,8 @@ begin
     if cIsSoundEnabled then
         begin
         // save audio parameters in sound file
-        BlockWrite(audioFile, frequency, 4);
-        BlockWrite(audioFile, channels, 4);
+        BlockWrite(audioFile, frequency, 4, result);
+        BlockWrite(audioFile, channels, 4, result);
 {$IOCHECKS ON}
 
         // register callback for actual audio recording
@@ -360,7 +373,9 @@ end;
 
 procedure SaveCameraPosition;
 var frame: TFrame;
+    result: LongInt;
 begin
+    result:= 0;
     if (not thumbnailSaved) and (ScreenFade = sfNone) then
         SaveThumbnail();
 
@@ -369,7 +384,7 @@ begin
     frame.CamX:= WorldDx;
     frame.CamY:= WorldDy - cScreenHeight div 2;
     frame.zoom:= zoom/cScreenWidth;
-    BlockWrite(cameraFile, frame, 1);
+    BlockWrite(cameraFile, frame, 1, result);
 end;
 
 procedure initModule;

@@ -1841,7 +1841,8 @@ if flagPrerecording then
         end;
     DrawTexture( -(cScreenWidth shr 1) + 50, 20, recTexture);
 
-    a:= Byte(min(255, abs(-255 + ((RealTicks div 2) and 511))));
+    t:= -255 + ((RealTicks div 2) and 511);
+    a:= Byte(min(255, abs(t)));
 
     // draw red circle
     DrawCircleFilled(-(cScreenWidth shr 1) + 30, 35, 10, $FF, $00, $00, a);
