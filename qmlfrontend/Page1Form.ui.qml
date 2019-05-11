@@ -5,11 +5,13 @@ import QtQuick.Layouts 1.3
 import Hedgewars.Engine 1.0
 
 Item {
+  id: element
   property alias button1: button1
   property alias previewImage: previewImage
   property alias gameButton: gameButton
   width: 1024
   height: 800
+  property alias netButton: netButton
   property alias tickButton: tickButton
   property alias gameView: gameView
 
@@ -79,5 +81,14 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
     }
+  }
+
+  Button {
+    id: netButton
+    text: qsTr("Net")
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: 8
+    anchors.left: parent.left
+    anchors.leftMargin: 8
   }
 }

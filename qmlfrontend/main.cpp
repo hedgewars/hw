@@ -6,6 +6,7 @@
 #include "engine_interface.h"
 #include "game_view.h"
 #include "hwengine.h"
+#include "net_session.h"
 #include "preview_acceptor.h"
 
 static QObject* previewacceptor_singletontype_provider(
@@ -32,6 +33,7 @@ int main(int argc, char* argv[]) {
       previewacceptor_singletontype_provider);
   qmlRegisterType<HWEngine>("Hedgewars.Engine", 1, 0, "HWEngine");
   qmlRegisterType<GameView>("Hedgewars.Engine", 1, 0, "GameView");
+  qmlRegisterType<NetSession>("Hedgewars.Engine", 1, 0, "NetSession");
   qmlRegisterUncreatableType<EngineInstance>("Hedgewars.Engine", 1, 0,
                                              "EngineInstance",
                                              "Create by HWEngine run methods");

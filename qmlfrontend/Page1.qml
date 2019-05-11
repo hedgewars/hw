@@ -5,6 +5,7 @@ Page1Form {
   focus: true
 
   property HWEngine hwEngine
+  property NetSession netSession
 
   Component {
     id: hwEngineComponent
@@ -14,6 +15,15 @@ Page1Form {
       previewAcceptor: PreviewAcceptor
       onPreviewImageChanged: previewImage.source = "image://preview/image"
       onPreviewIsRendering: previewImage.source = "qrc:/res/iconTime.png"
+    }
+  }
+
+  Component {
+    id: netSessionComponent
+
+    NetSession {
+      nickname: "test0272"
+      url: "hwnet://gameserver.hedgewars.org:46632"
     }
   }
 
@@ -39,6 +49,10 @@ Page1Form {
     onClicked: {
       hwEngine.getPreview()
     }
+  }
+  netButton.onClicked: {
+    netSession = netSessionComponent.createObject()
+    netSession.open()
   }
 
   Keys.onPressed: {
