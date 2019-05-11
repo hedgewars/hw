@@ -61,6 +61,7 @@ Controls:
  + Precise + cursor move keys move camera slower
  + New chat command: “/help room” (shows room chat commands within the game)
  + Default demo fast-forward key changed from “S” to “F”
+ + Default fallback Sudden Death music of themes (fallback-sd-music) is now sdmusic.ogg
  * Fix broken default keyboard controls for team chat and camera movement
 
 Graphics:

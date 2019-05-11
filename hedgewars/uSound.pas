@@ -1022,6 +1022,8 @@ begin
 
     MusicFN:='';
     SDMusicFN:= 'sdmusic.ogg';
+    FallbackMusicFN:='';
+    FallbackSDMusicFN:= 'sdmusic.ogg';
     Mus:= nil;
     isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
