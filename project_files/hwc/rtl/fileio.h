@@ -78,4 +78,10 @@ bool        fpcrtl_fileExists(string255 filename);
 char *      fpcrtl_getCurrentDir(void);
 #define     fpcrtl_GetCurrentDir                        fpcrtl_getCurrentDir
 
+Int64       fpcrtl_fileSize(File f);
+#define     fpcrtl_FileSize                             fpcrtl_fileSize
+
+bool        fpcrtl_deleteFile(string255 filename);
+#define     fpcrtl_DeleteFile                           fpcrtl_deleteFile
+
 #endif /* FILEIO_H_ */

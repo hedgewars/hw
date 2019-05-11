@@ -48,6 +48,8 @@ type
 
     Handle = integer;
 
+    TDateTime = double;
+
 var
     write, writeLn, read, readLn, flush, CreateDir: procedure;
 
@@ -84,7 +86,8 @@ var
 
      min, max:function:integer;
     assign, rewrite, rewrite_2, reset, reset_2, flush, BlockWrite, BlockRead, close : procedure;
-    FileExists, DirectoryExists, eof : function : boolean;
+    FileSize : function: Int64;
+    FileExists, DirectoryExists, eof, DeleteFile : function : boolean;
 
     ParamCount : function : integer;
     ParamStr : function : string;

@@ -241,3 +241,35 @@ void __attribute__((overloadable)) fpcrtl_flush(FILE *f) {
     fflush(f);
 }
 
+Int64 fpcrtl_fileSize(File f)
+{
+    assert(f->record_len > 0);
+
+    IOResult = IO_NO_ERROR;
+    int i = fseek(f->fp, 0, SEEK_END);
+    if (i == -1) {
+        IOResult = IO_ERROR_DUMMY;
+        return -1;
+    }
+    long size = ftell(f->fp);
+    if (size == -1) {
+        IOResult = IO_ERROR_DUMMY;
+        return -1;
+    }
+    return size / f->record_len;
+}
+
+bool fpcrtl_deleteFile(string255 filename)
+{
+    FIX_STRING(filename);
+
+    int ret = remove(filename.str);
+    if(ret == 0) {
+       IOResult = IO_NO_ERROR;
+       return true;
+    } else {
+       IOResult = IO_ERROR_DUMMY;
+       return false;
+    }
+}
+
