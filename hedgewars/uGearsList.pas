@@ -666,7 +666,8 @@ case Kind of
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
                 gear^.Health := 2000;
-                gear^.FlightTime := 2
+                gear^.FlightTime := 2;
+                gear^.Z:= cCurrHHZ+1;
                 end;
          gtEgg: begin
                 gear^.AdvBounce:= 1;

@@ -73,6 +73,7 @@ Graphics:
  * Fix wrong ice beam angle if it goes diagonally up out of map through world wrap
  * Fix double water splash when flying saucer drowns
  * Fix odd floating pixels when wielding and rotating cleaver
+ * Fix birdy being drawn behind hedgehogs and objects
 
 Game HUD:
  + Colorize switching arrows, pointing arrow and target cross in clan color
