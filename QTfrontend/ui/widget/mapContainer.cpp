@@ -1219,7 +1219,7 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
             QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, m_theme);
             if (mdl.size() > 0)
             {
-                if ((mdl.at(0).data(ThemeModel::Roles::IsBackgroundThemeRole).toBool() == true) || (mdl.at(0).data(ThemeModel::Roles::IsHiddenRole).toBool() == true))
+                if ((mdl.at(0).data(ThemeModel::IsBackgroundThemeRole).toBool() == true) || (mdl.at(0).data(ThemeModel::IsHiddenRole).toBool() == true))
                 {
                     selectedTheme = "Nature";
                 }
