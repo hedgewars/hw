@@ -64,9 +64,9 @@ bool KeyMap::getKeyMap()
             keyname = "";
             continue;
         }
-        if (cell == 0 && currChar != "\"") {
+        if (cell == 0 && currChar != '\"') {
             scancode += currChar;
-        } else if (cell == 1 && currChar != "\"") {
+        } else if (cell == 1 && currChar != '\"') {
             keyname += currChar;
         }
         charInCell++;
@@ -87,7 +87,7 @@ SDL_Scancode KeyMap::getScancodeFromKeyname(QString keyname)
 QString KeyMap::getKeynameFromScancode(int scancode)
 {
     if (mapOfKeynames.contains((SDL_Scancode) scancode))
-        if (mapOfKeynames[(SDL_Scancode) scancode] == SDL_SCANCODE_UNKNOWN)
+        if ((SDL_Scancode) scancode == SDL_SCANCODE_UNKNOWN)
             return QString("none");
         else
             return mapOfKeynames[(SDL_Scancode) scancode];
