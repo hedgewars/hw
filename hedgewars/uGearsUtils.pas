@@ -173,7 +173,11 @@ while Gear <> nil do
                                 Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
                                 if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and (not gstCollision);
                                 if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) then
-                                    Gear^.State:= (Gear^.State or gstMoving) and (not (gstWinner or gstHHJumping or gstHHHJump));
+                                    begin
+                                    Gear^.State:= (Gear^.State or gstMoving) and (not (gstHHJumping or gstHHHJump));
+                                    if (not GameOver) then
+                                        Gear^.State:= (Gear^.State and (not gstWinner));
+                                    end;
                                 Gear^.Active:= true;
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear;
                                 if Gear^.Kind = gtAirMine then

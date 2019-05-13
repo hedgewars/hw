@@ -1219,7 +1219,8 @@ if (Gear^.State and gstMoving) <> 0 then
 if (not isFalling)
   and (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
     begin
-    Gear^.State:= Gear^.State and (not gstWinner);
+    if (not GameOver) then
+        Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
     cnt:= 0;
     while (cnt < 6) and (not CheckGearDrowning(Gear)) and (Gear <> nil) and (TestCollisionYWithGear(Gear,1) = 0) do
@@ -1511,7 +1512,9 @@ else
     begin
     if Gear^.Timer = 0 then
         begin
-        Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstChooseTarget));
+        Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstAttacked or gstNotKickable or gstChooseTarget));
+        if (not GameOver) then
+            Gear^.State:= Gear^.State and (not gstWinner);
         if Gear^.Hedgehog^.Effects[heFrozen] = 0 then Gear^.Active:= false;
         AddCI(Gear);
         exit
