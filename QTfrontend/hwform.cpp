@@ -547,6 +547,7 @@ void HWForm::UpdateTeamsLists()
         // TODO: Remove DLC filtering when it isn't neccessary anymore
         HWNamegen::teamRandomGrave(defaultTeam, false);
         HWNamegen::teamRandomFort(defaultTeam, false);
+        HWNamegen::teamLocalizedDefaultVoice(defaultTeam);
         defaultTeam.saveToFile();
         teamslist.push_back(teamName);
 
@@ -560,6 +561,7 @@ void HWForm::UpdateTeamsLists()
             HWTeam numberTeam(teamName);
             HWNamegen::teamRandomGrave(numberTeam, false);
             HWNamegen::teamRandomFort(numberTeam, false);
+            HWNamegen::teamLocalizedDefaultVoice(numberTeam);
             numberTeam.saveToFile();
             teamslist.push_back(teamName);
         }
@@ -571,6 +573,7 @@ void HWForm::UpdateTeamsLists()
             HWTeam numberTeam(teamName);
             HWNamegen::teamRandomGrave(numberTeam, false);
             HWNamegen::teamRandomFort(numberTeam, false);
+            HWNamegen::teamLocalizedDefaultVoice(numberTeam);
             numberTeam.setDifficulty(6-i);
             numberTeam.saveToFile();
             teamslist.push_back(teamName);

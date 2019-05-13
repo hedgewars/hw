@@ -38,6 +38,7 @@ class HWNamegen
         static void teamRandomHogNames(HWTeam & team);
         static void teamRandomHogName(HWTeam & team, const int HedgehogNumber);
         static void teamRandomEverything(HWTeam & team);
+        static void teamLocalizedDefaultVoice(HWTeam & team);
 
     private:
         HWNamegen();
@@ -48,6 +49,7 @@ class HWNamegen
         static QString getRandomFort(bool withDLC = true);
         static QString getRandomFlag(bool withDLC = true);
         static QString getRandomVoice(bool withDLC = true);
+        static QString getLocalizedDefaultVoice();
 
         static QList<QStringList> TypesTeamnames;
         static QList<QStringList> TypesHatnames;
