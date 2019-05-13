@@ -77,7 +77,7 @@ function onGameInit()
 	SetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	shuffleHogs(enemies)
-	teamB.name = AddTeam(teamB.name, teamB.color, "skull", "Island", "Default", "cm_skull")
+	teamB.name = AddTeam(teamB.name, teamB.color, "skull", "Island", "Default_qau", "cm_skull")
 	for i=1,table.getn(enemies) do
 		enemies[i].gear = AddHog(enemies[i].name, 1, 100, "war_desertgrenadier1")
 		SetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)

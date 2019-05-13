@@ -41,7 +41,7 @@ SimpleMission({
 		{ name = loc("Clowns"),
 		flag = "cm_face",
 		grave = "Duck2",
-		voice = "Mobster",
+		voice = "Mobster_qau",
 		clanID = 5,
 		hogs = {
 			{ name = loc("Poison"), health = 100, x = 1133, y = 446, hat = "WhySoSerious", botLevel = 1, ammo = enemyAmmo },

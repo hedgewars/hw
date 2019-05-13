@@ -524,7 +524,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_female")
+  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly_qau", "cm_female")
   SetTeamPassive(princessTeamName, true)
   princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
   SetGearAIHints(princess, aihDoesntMatter)
@@ -536,11 +536,11 @@ function AddHogs()
     gearDead[natives[i-6]] = false
   end
 
-  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   gearDead[cyborg] = false
 
-  biomechanicTeamName = AddTeam(loc("Biomechanic Team"), -1, "ring", "UFO", "Robot", "cm_cyborg")
+  biomechanicTeamName = AddTeam(loc("Biomechanic Team"), -1, "ring", "UFO", "Robot_qau", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
     gearDead[cyborgs[i]] = false

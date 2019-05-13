@@ -758,7 +758,7 @@ function onGameInit()
   AnimSetGearPosition(youngh, 1862, 1362)
   HogTurnLeft(youngh, false)
 
-  AddTeam(loc("Cannibals"), -1, "skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Cannibals"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   cannibal = AddHog(loc("Brainiac"), 0, 5, "Zombi")
   AnimSetGearPosition(cannibal, 525, 1256)
   HogTurnLeft(cannibal, false)

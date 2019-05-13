@@ -23,7 +23,7 @@ SimpleMission({
 		clanID = 5,
 		flag = "cm_cyborg",
 		grave = "ring",
-		voice = "Robot",
+		voice = "Robot_qau",
 		hogs = {
 			{name=loc("Unit 881"), x=561, y=1365, health=100, hat="cyborg1", botLevel=1,
 			ammo = {

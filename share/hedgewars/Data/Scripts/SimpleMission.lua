@@ -65,6 +65,7 @@ The argument “params” is a table containing fields which describe the missio
 	- flag			flag name (default: hedgewars)
 	- grave			grave name (has default grave for each team)
 	- fort			fort name (default: Castle)
+	- voice			voicepack (default: Default_qau)
 
 	HEDGEHOG DATA:
 	- id			optional identifier for goals

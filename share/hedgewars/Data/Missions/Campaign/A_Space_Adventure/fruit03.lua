@@ -96,12 +96,12 @@ function onGameInit()
 	-- enemies
 	local hats = { "Bandit", "fr_apple", "fr_banana", "fr_lemon", "fr_orange",
 					"fr_pumpkin", "Gasmask", "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_bars")
+	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default_qau", "cm_bars")
 	for i=1,table.getn(enemiesEven) do
 		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesEven[i].gear, enemiesEven[i].x, enemiesEven[i].y)
 	end
-	teamB.name = AddTeam(teamB.name, teamB.color, "bp2", "Island", "Default", "cm_bars")
+	teamB.name = AddTeam(teamB.name, teamB.color, "bp2", "Island", "Default_qau", "cm_bars")
 	for i=1,table.getn(enemiesOdd) do
 		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, hats[GetRandom(table.getn(hats))+1])
 		AnimSetGearPosition(enemiesOdd[i].gear, enemiesOdd[i].x, enemiesOdd[i].y)

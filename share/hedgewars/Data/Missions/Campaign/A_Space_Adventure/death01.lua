@@ -113,7 +113,7 @@ function onGameInit()
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 
 	-- PAotH (passive team)
-	teamB.name = AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
+	teamB.name = AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default_qau", "cm_galaxy")
 	SetTeamPassive(teamB.name, true)
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
@@ -125,7 +125,7 @@ function onGameInit()
 	SetGearAIHints(paoth2.gear, aihDoesntMatter)
 
 	-- Professor's Team (computer enemy)
-	teamC.name = AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default", "cm_sine")
+	teamC.name = AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default_qau", "cm_sine")
 	professor.bot = AddHog(professor.name, 1, 300, "tophats")
 	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
 	HogTurnLeft(professor.bot, true)
@@ -137,7 +137,7 @@ function onGameInit()
 	end
 
 	-- Professor (special team for cut sequence only)
-	teamD.name = AddTeam(teamD.name, teamD.color, "star", "Island", "Default", "cm_sine")
+	teamD.name = AddTeam(teamD.name, teamD.color, "star", "Island", "Default_qau", "cm_sine")
 	professor.human = AddHog(professor.name, 0, 300, "tophats")
 	-- hog will be removed and replaced by professor.bot after cut sequence
 	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)

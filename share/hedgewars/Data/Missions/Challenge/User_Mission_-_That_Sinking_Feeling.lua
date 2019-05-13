@@ -54,7 +54,7 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	haplessTeamName = AddTeam(loc("Hapless Hogs"), -1, "Simple", "Island", "Default")
+	haplessTeamName = AddTeam(loc("Hapless Hogs"), -1, "Simple", "Island", "Default_qau")
 	hh[0] = AddHog(loc("Sinky"), 1, 100, "fr_lemon")
 	hh[1] = AddHog(loc("Drowner"), 1, 100, "fr_orange")
 	hh[2] = AddHog(loc("Heavy"), 1, 100, "dish_Teapot")

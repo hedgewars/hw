@@ -31,7 +31,7 @@ function onGameInit()
 
 	AddMissionTeam(-1)
 	player = AddMissionHog(1)
-	AddTeam(loc("Toxic Team"), -6, "skull", "Island", "Default", "cm_magicskull")
+	AddTeam(loc("Toxic Team"), -6, "skull", "Island", "Default_qau", "cm_magicskull")
 	enemy = AddHog(loc("Poison"), 1, 10, "Skull")
 
 	SetGearPosition(player,970,23)

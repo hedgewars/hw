@@ -1090,11 +1090,11 @@ function onGameInit()
   leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
 
-  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly", "cm_female")
+  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly_qau", "cm_female")
   SetTeamPassive(princessTeamName, true)
   princess = AddHog(loc("Fell From Heaven"), 0, 200, "tiara")
 
-  cannibalsTeamName = AddTeam(loc("Cannibal Sentry"), -1, "skull", "Island", "Pirate","cm_vampire")
+  cannibalsTeamName = AddTeam(loc("Cannibal Sentry"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   cannibals = {}
   for i = 1, 4 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
@@ -1108,7 +1108,7 @@ function onGameInit()
     SetEffect(cannibals[i], heArtillery, 1)
   end
 
-  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Y3K1337"), 0, 200, "cyborg1")
 
   AnimSetGearPosition(dense, 0, 0)

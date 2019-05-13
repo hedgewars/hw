@@ -529,7 +529,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   nativesTeamName = AddMissionTeam(-2)
@@ -550,7 +550,7 @@ function AddHogs()
     table.insert(players, natives[i])
   end
 
-  cannibalsTeamName = AddTeam(loc("Cannibals"), -2, "skull", "Island", "Pirate", "cm_vampire")
+  cannibalsTeamName = AddTeam(loc("Cannibals"), -2, "skull", "Island", "Pirate_qau", "cm_vampire")
   for i = 1, cannibalsNum do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, "Zombi")
     table.insert(players, cannibals[i])
@@ -558,13 +558,13 @@ function AddHogs()
   playersNum = #players
   playersLeft = playersNum
 
-  hedgecogsTeamName = AddTeam(loc("Hedge-cogs"), -9, "ring", "UFO", "Robot", "cm_cyborg")
+  hedgecogsTeamName = AddTeam(loc("Hedge-cogs"), -9, "ring", "UFO", "Robot_qau", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 80, "cyborg2")
   end
 
   if m8EnemyFled == 1 then
-    leaderTeamName = AddTeam(loc("Leader"), -9, "ring", "UFO", "Robot", "cm_cyborg")
+    leaderTeamName = AddTeam(loc("Leader"), -9, "ring", "UFO", "Robot_qau", "cm_cyborg")
     if m8Scene == denseScene then
       leader = AddHog(loc("Dense Cloud"), 2, 200, nativeHats[denseNum])
     elseif m8Scene == waterScene then

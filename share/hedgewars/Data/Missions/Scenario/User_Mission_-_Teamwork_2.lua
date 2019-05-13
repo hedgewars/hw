@@ -30,7 +30,7 @@ function onGameInit()
 	player = AddMissionHog(30)
 	hlayer = AddMissionHog(40)
 
-	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot", "cm_binary")
+	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot_qau", "cm_binary")
 	enemy = AddHog(loc("WatchBot 4000"), 5, 50, "cyborg1")
 
 	SetGearPosition(player, 180, 555)

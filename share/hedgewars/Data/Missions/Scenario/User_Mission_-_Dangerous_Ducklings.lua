@@ -35,7 +35,7 @@ function onGameInit()
 	player = AddMissionHog(1)
 	instructor = AddHog(loc("Instructor"), 0, 100, "sf_vega")
 
-	enemyTeamName = AddTeam(loc("Blue Team"), -2, "bubble", "Island", "Default", "somalia")
+	enemyTeamName = AddTeam(loc("Blue Team"), -2, "bubble", "Island", "Default_qau", "somalia")
 	enemy = AddHog(loc("Filthy Blue"), 1, 100, "Skull")
 
 	SetGearPosition(player,146,902)

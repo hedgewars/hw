@@ -88,7 +88,7 @@ function onGameInit()
 	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Ally
-	teamB.name = AddTeam(teamB.name, teamB.color, "heart", "Island", "Default", "cm_face")
+	teamB.name = AddTeam(teamB.name, teamB.color, "heart", "Island", "Default_qau", "cm_face")
 	SetTeamPassive(teamB.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)

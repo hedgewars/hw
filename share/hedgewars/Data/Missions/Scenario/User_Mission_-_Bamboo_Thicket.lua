@@ -27,7 +27,7 @@ function onGameInit()
 	AddMissionTeam(-1)
 	player = AddMissionHog(10)
 			
-	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot", "cm_cyborg")
+	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot_qau", "cm_cyborg")
 	enemy = AddHog(loc("Unit 835"), 1, 10, "cyborg1")
 
 	SetGearPosition(player,142,656)

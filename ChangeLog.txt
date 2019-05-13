@@ -126,6 +126,7 @@ Lua API:
  + New call: SetTeamPassive(teamname, isPassive): Mark a team as passive. Passive teams do not play and are treated like frozen teams.
  + New return value: AddTeam/AddMissionTeam return <real team name>, <team index>
  + SetClanColor: Now accepts negative color argument for user clan color, like in AddTeam
+ + AddTeam: Append “_qau” to voicepack name to enable automatic selection of voicepack language
  + Utils library: New calls: getReadableChallengeRecord, updateChallengeRecord, integerSqrt, integerHypotenuse
  + New callback: onGameResult(winningClan): Called when the game ends normally. winningClan = index of winning clan or -1 on draw
  + New callback: onCaseDrop(gear): Called at the point where a crate MIGHT be dropped between turns. Gear is the crate gear or nil

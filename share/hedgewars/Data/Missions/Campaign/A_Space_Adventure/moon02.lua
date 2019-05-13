@@ -80,7 +80,7 @@ function onGameInit()
 	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Crazy Runner
-	teamB.name = AddTeam(teamB.name, teamB.color, "ring", "Island", "Default", "cm_sonic")
+	teamB.name = AddTeam(teamB.name, teamB.color, "ring", "Island", "Default_qau", "cm_sonic")
 	runner.gear = AddHog(runner.name, 0, 100, "sth_Sonic")
 	AnimSetGearPosition(runner.gear, runner.places[1].x, runner.places[1].y)
 	HogTurnLeft(runner.gear, true)

@@ -1008,7 +1008,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  tribeTeamName = AddTeam(loc("Tribe"), -2, "Bone", "Island", "HillBilly", "cm_birdy")
+  tribeTeamName = AddTeam(loc("Tribe"), -2, "Bone", "Island", "HillBilly_qau", "cm_birdy")
   SetTeamPassive(tribeTeamName, true)
   for i = 8, 9 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
@@ -1020,17 +1020,17 @@ function AddHogs()
   end
   nativesNum = 7
 
-  cannibalsTeamName1 = AddTeam(loc("Assault Team"), -1, "skull", "Island", "Pirate", "cm_vampire")
+  cannibalsTeamName1 = AddTeam(loc("Assault Team"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   for i = 1, 6 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 50, "vampirichog")
   end
 
-  cannibalsTeamName2 = AddTeam(loc("Reinforcements"), -1, "skull", "Island", "Pirate", "cm_vampire")
+  cannibalsTeamName2 = AddTeam(loc("Reinforcements"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   for i = 7, 9 do
     cannibals[i] = AddHog(cannibalNames[i], 2, 50, "vampirichog")
   end
 
-  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   for i = 1, 9 do

@@ -95,7 +95,7 @@ function onGameInit()
 
 	-- Fruit Assassins
 	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_scout")
+	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default_qau", "cm_scout")
 	for i=1,table.getn(redHedgehogs) do
 		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
 		SetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
@@ -132,7 +132,7 @@ function onGameInit()
 
 	-- Captain Lime
         -- Spawn with his "true" evil color so a new clan is created for Captain Lime ...
-	teamB.name = AddTeam(teamB.name, teamB.colorEvil, "Cherry", "Island", "Default", "congo-brazzaville")
+	teamB.name = AddTeam(teamB.name, teamB.colorEvil, "Cherry", "Island", "Default_qau", "congo-brazzaville")
 	SetTeamPassive(teamB.name, true)
 	green1.gear = AddHog(green1.name, 0, 100, green1.hat)
 	-- ... however, we immediately change the color to "nice mode".
