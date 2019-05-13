@@ -283,6 +283,16 @@ function onGearDamage(gear)
 	end
 end
 
+local function dropNadeText(time)
+	ShowMission(loc("Basic Rope Training"), loc("Rope Weapons"),
+	loc("Some weapons can be dropped from the rope.").."|"..
+	loc("Collect the weapon crate and drop|a grenade from rope to destroy the barrels.").."|"..
+	loc("Step 1: Start roping").."|"..
+	loc("Step 2: Select grenade").."|"..
+	loc("Step 3: Drop the grenade").."| |"..
+	loc("Drop weapon (while on rope): [Long Jump]"), 2, time)
+end
+
 function onGearDelete(gear)
 	if GetGearType(gear) == gtTarget then
 		-- Update checkpoint
@@ -312,13 +322,7 @@ function onGearDelete(gear)
 			eraseGirder(8)
 			eraseGirder(9)
 		elseif currentTarget == 5 then
-			ShowMission(loc("Basic Rope Training"), loc("Rope Weapons"),
-			loc("Some weapons can be dropped from the rope.").."|"..
-			loc("Collect the weapon crate and drop|a grenade from rope to destroy the barrels.").."|"..
-			loc("Step 1: Start roping").."|"..
-			loc("Step 2: Select grenade").."|"..
-			loc("Step 3: Drop the grenade").."| |"..
-			loc("Drop weapon (while on rope): [Long Jump]"), 2, 20000)
+			dropNadeText(20000)
 			AddAmmo(hog, amBaseballBat, 0)
 			SpawnAmmoCrate(1849, 920, amGrenade, AMMO_INFINITE)
 		elseif currentTarget == 6 then
@@ -405,6 +409,7 @@ end
 function onAttack()
 	if GetCurAmmoType() == amGrenade and not ropeGear then
 		AddCaption(loc("You have to drop the grenade from rope!"), 0xFF4000FF, capgrpMessage)
+		dropNadeText(5000)
 		PlaySound(sndDenied)
 	end
 end
