@@ -2037,6 +2037,7 @@ end;
 function lc_endgame(L : Plua_State) : LongInt; Cdecl;
 begin
     L:= L; // avoid compiler hint
+    GameOver:= true;
     AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
     lc_endgame:= 0
 end;
