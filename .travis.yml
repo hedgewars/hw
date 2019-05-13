@@ -1,5 +1,5 @@
 sudo: required
-dist: bionic
+dist: xenial
 language: c
 sudo: true
 os:
@@ -23,7 +23,7 @@ env:
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release"
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
   - BUILD_ARGS="-DNOSERVER=1 -DGL2=1 -DNOPNG=1"
-  - BUILD_ARGS="-DNOSERVER=1 -DLUA_SYSTEM=0 -DPHYSFS_SYSTEM=0"
+  - BUILD_ARGS="-DNOSERVER=1 -DLUA_SYSTEM=0"
 
 matrix:
   include:
@@ -54,7 +54,7 @@ before_install: |
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     sudo apt-get update -qq
   elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    brew update --all
+    brew update
   elif [ "$TRAVIS_OS_NAME" == "ios" ]; then
     hg clone http://hg.libsdl.org/SDL $SDL_LIB_PATH/SDL/
     hg clone http://hg.libsdl.org/SDL_image $SDL_LIB_PATH/SDL_image/
@@ -65,11 +65,22 @@ before_install: |
 
 install: |
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    sudo apt-get install -y debhelper cmake dpkg-dev qtbase5-dev qtbase5-private-dev qttools5-dev-tools qttools5-dev libphysfs-dev libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-net-dev bzip2 ghc libghc-mtl-dev libghc-vector-dev libghc-zlib-dev libghc-random-dev libghc-network-dev libghc-sandi-dev libghc-hslogger-dev libghc-utf8-string-dev libghc-sha-dev libghc-entropy-dev libghc-regex-tdfa-dev libghc-aeson-dev libghc-yaml-dev libghc-text-dev liblua5.1-0-dev fpc fp-compiler fp-units-misc libpng-dev fp-units-gfx libavcodec-dev libavformat-dev libglew1.6-dev
+    sudo apt-get install -y debhelper cmake dpkg-dev qtbase5-dev qtbase5-private-dev qttools5-dev-tools qttools5-dev libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-net-dev bzip2 ghc libghc-mtl-dev libghc-vector-dev libghc-zlib-dev libghc-random-dev libghc-network-dev libghc-sandi-dev libghc-hslogger-dev libghc-utf8-string-dev libghc-sha-dev libghc-entropy-dev libghc-regex-tdfa-dev libghc-aeson-dev libghc-yaml-dev libghc-text-dev liblua5.1-0-dev fpc fp-compiler fp-units-misc libpng-dev fp-units-gfx libavcodec-dev libavformat-dev libglew1.6-dev
+
+    # for xenial last availible version of libphysfs is 2.0.x, but we need >= 3.0
+    # so... building from sources!
+    wget https://icculus.org/physfs/downloads/physfs-3.0.1.tar.bz2
+    tar -xjf physfs-3.0.1.tar.bz2
+    mkdir physfs-3.0.1-build
+    pushd physfs-3.0.1-build
+    cmake ../physfs-3.0.1
+    make
+    sudo make install
+    popd
   elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew install qt5
     brew install fpc glew physfs lua51 sdl2 sdl2_image sdl2_net sdl2_ttf ffmpeg ghc cabal-install
-    brew install sdl2_mixer --with-libvorbis
+    brew install sdl2_mixer
     # use cabal install haskell deps, pas2c ones are covered by server
     if [[ "$BUILD_ARGS" != *"NOSERVER"* ]]; then
       cabal update
