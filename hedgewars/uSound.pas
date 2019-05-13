@@ -336,8 +336,9 @@ var cInitVolume: LongInt;
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
-    tmp, langName, path: shortstring;
+    tmp, nameStart, langName, path: shortstring;
 begin
+    nameStart:= name;
     i:= 0;
 
     { Adjust for language suffix: Voicepacks can have an optional language suffix.
@@ -368,13 +369,9 @@ begin
 
     path:= cPathz[ptVoices] + '/' + name;
 
-    // Fallback to Default if voicepack can't be found at all
-    if (name <> 'Default') and (not pfsExists(path)) then
-        begin
-        path:= cPathz[ptVoices] + '/Default';
-        if pfsExists(path) then
-            exit(AskForVoicepack('Default'));
-        end;
+    // Fallback to localized Default if voicepack can't be found at all
+    if (nameStart <> 'Default_qau') and (not pfsExists(path)) then
+        exit(AskForVoicepack('Default_qau'));
 
     while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') and (i < cMaxTeams) do
         begin
