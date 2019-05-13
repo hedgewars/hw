@@ -655,7 +655,7 @@ function SimpleMission(params)
 			else
 				grave = def(teamData.grave, defaultGraves[math.min(teamID, 8)])
 				fort = def(teamData.fort, "Castle")
-				voice = def(teamData.voice, "Default")
+				voice = def(teamData.voice, "Default_qau")
 				flag = def(teamData.flag, defaultFlags[math.min(teamID, 8)])
 
 				realName = AddTeam(name, -(clanID+1), grave, fort, voice, flag)

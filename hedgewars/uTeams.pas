@@ -852,7 +852,7 @@ if isDeveloperMode then
         if GameType in [gmtDemo, gmtSave, gmtRecord] then
             CurrentTeam^.ExtDriven:= true;
 
-        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        CurrentTeam^.voicepack:= AskForVoicepack('Default_qau')
         end
     end
 end;
@@ -874,7 +874,7 @@ if isDeveloperMode then
         CurrentTeam^.TeamName:= ts;
         CurrentTeam^.PlayerHash:= s;
         loadTeamBinds(ts);
-        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        CurrentTeam^.voicepack:= AskForVoicepack('Default_qau')
         end
     end
 end;

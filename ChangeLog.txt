@@ -114,6 +114,7 @@ Sounds and voicepacks:
  + sndYoohoo has been split to sndYoohoo and sndKiss
  + Voice files sndPoisonCough and sndPoisonMoan are now optional (fall back to Default voicepack)
  + Tweak some taunts: sndFirstBlood, sndLeaveMeAlone, sndCutItOut
+ * Fix English voicepack selection of team being overwritten when playing in non-English locale
 
 Lua API:
  + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)
