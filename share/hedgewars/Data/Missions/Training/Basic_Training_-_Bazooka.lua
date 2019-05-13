@@ -230,6 +230,7 @@ function newGamePhase()
 		SendStat(siGameResult, loc("You have completed the Basic Bazooka Training!"))
 		SendStat(siPlayerKills, "0", GetHogTeamName(hog))
 		EndGame()
+		SetState(hog, gstWinner)
 		gameOver = true
 	end
 	gamePhase = gamePhase + 1

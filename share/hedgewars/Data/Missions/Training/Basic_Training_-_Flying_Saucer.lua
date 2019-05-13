@@ -218,6 +218,7 @@ TargetPos[12] = { Modifier = true, Func = function()
 
 	EndTurn(true)
 	EndGame()
+	SetState(Player, gstWinner)
 end,
 }
 

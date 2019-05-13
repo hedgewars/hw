@@ -227,6 +227,9 @@ function TargetPracticeMission(params)
 			if end_timer == 0 then
 				generateStats()
 				EndGame()
+				if scored == total_targets then
+					SetState(player, gstWinner)
+				end
 			end
 			end_timer = end_timer - 20
 		end
@@ -272,7 +275,6 @@ function TargetPracticeMission(params)
 						PlaySound(sndVictory, player)
 					end
 					SetEffect(player, heInvulnerable, 1)
-					SetState(player, bor(GetState(player), gstWinner))
 					time_goal = TurnTimeLeft
 					-- Disable control
 					SetInputMask(0)

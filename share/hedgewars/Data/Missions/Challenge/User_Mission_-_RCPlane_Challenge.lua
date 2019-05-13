@@ -444,12 +444,10 @@ function onGearDelete(gear)
                                 string.format(loc("Planes used: %d"), planesUsed) .. "|" ..
                                 "", 0, 0
                                 )
-			SetState(player, gstWinner)
 			PlaySound(sound, player)
 
-
-			DismissTeam(playerTeamName)
 			EndGame()
+			SetState(player, gstWinner)
 		end
 
 		if RCGear ~= nil then

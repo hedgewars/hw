@@ -200,6 +200,7 @@ function newGamePhase()
 		SendStat(siPlayerKills, "0", GetHogTeamName(hog))
 		EndGame()
 		gameOver = true
+		SetState(hog, gstWinner)
 	end
 	gamePhase = gamePhase + 1
 end

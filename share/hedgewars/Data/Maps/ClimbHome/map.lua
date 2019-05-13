@@ -441,7 +441,6 @@ function onGameTick20()
                             string.format(loc("Ahhh, home, sweet home. Made it in %d seconds."), roundedFinishTime),
                             -amRope, 0)
                 PlaySound(sndVictory,CurrentHedgehog)
-                SetState(CurrentHedgehog, gstWinner)
                 SendStat(siGameResult, loc("You have beaten the challenge!"))
                 SendStat(siGraphTitle, loc("Your height over time"))
                 SendStat(siCustomAchievement, string.format(loc("%s reached home in %.3f seconds. Congratulations!"), GetHogName(CurrentHedgehog), finishTime))
@@ -452,6 +451,7 @@ function onGameTick20()
                 SendStat(siPlayerKills, tostring(rawFinishTime), GetHogTeamName(CurrentHedgehog))
 
                 EndGame()
+                SetState(CurrentHedgehog, gstWinner)
                 onAchievementsDeclaration()
                 YouWon = true
             end

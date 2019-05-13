@@ -190,6 +190,9 @@ function onGameTick20()
 			-- ... end the game ...
 			generateStats()
 			EndGame()
+			if score == score_goal then
+				SetState(CurrentHedgehog, gstWinner)
+			end
 		end
         	end_timer = end_timer - 20
 	end

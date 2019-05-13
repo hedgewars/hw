@@ -177,6 +177,9 @@ function SpeedShoppaMission(params)
 			end
 			gameEnded = true
 			EndGame()
+			if cratesCollected == #crates then
+				SetState(playerHog, gstWinner)
+			end
 		end
 	end
 

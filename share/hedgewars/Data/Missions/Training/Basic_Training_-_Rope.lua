@@ -352,6 +352,7 @@ function onGearDelete(gear)
 			SendStat(siGameResult, loc("You have finished the Basic Rope Training!"))
 			SendStat(siPlayerKills, "0", teamName)
 			EndGame()
+			SetState(hog, gstWinner)
 			gameOver = true
 			SetInputMask(0)
 		end

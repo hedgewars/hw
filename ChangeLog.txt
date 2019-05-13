@@ -19,6 +19,7 @@ Gameplay:
  * Deny placement of piano beyond bounce world edge
  * Fix cut scenes not being skipped when pressing precise in enemy turn
  * Fix laser sight not working properly when it starts out of map bounds
+ * Add missing winner animation in single missions
 
 Styles and schemes:
  + The Specialists: Unlock game scheme
@@ -139,6 +140,7 @@ Lua API:
  * Fix SetAmmoDelay not working properly when called after onGameStart
  * Fix DismissTeam not clearing team properly
  * SimpleMission: Fix Lua error spam when a custom goal fails
+ * gstWinner state is preserved after the game ended
 
 ====================== 0.9.25 ======================
 HIGHLIGHTS:

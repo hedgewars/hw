@@ -264,6 +264,9 @@ function onGameTick()
 					awardAchievement(loc("Lively Lifeguard"))
 				end
 				EndGame()
+				for _, hog in pairs(hh) do
+					SetState(hog, gstWinner)
+				end
 
 			end
 

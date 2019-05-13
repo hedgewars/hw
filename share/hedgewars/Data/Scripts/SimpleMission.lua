@@ -522,13 +522,14 @@ function SimpleMission(params)
 			end
 			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
 			SendStat(siGameResult, loc("You win!"))
-			if GetHogLevel(CurrentHedgehog) == 0 then
-				SetState(CurrentHedgehog, bor(GetState(CurrentHedgehog), gstWinner))
-				SetState(CurrentHedgehog, band(GetState(CurrentHedgehog), bnot(gstHHDriven)))
-				PlaySound(sndVictory, CurrentHedgehog)
-			end
 			_G.sm.makeStats(_G.sm.playerClan)
 			EndGame()
+			if GetHogLevel(CurrentHedgehog) == 0 then
+				for team, hog in pairs(teamHogs[GetHogTeamName(CurrentHedgehog)]) do
+					SetState(hog, gstWinner)
+					PlaySound(sndVictory, hog)
+				end
+			end
 		end
 	end
 

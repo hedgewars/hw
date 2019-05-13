@@ -272,6 +272,9 @@ local function victory()
 	SetWeapon(amNothing)
 	SetGearMessage(CurrentHedgehog, band(GetGearMessage(CurrentHedgehog), bnot(gmAllStoppable)))
 	EndGame()
+	for i=1,#hhs do
+		SetState(hhs[i], gstWinner)
+	end
 end
 
 local function switchHedgehogText()
