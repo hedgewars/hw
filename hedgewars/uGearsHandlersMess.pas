@@ -2564,6 +2564,8 @@ begin
                 PlaySound(Gear^.ImpactSound);
             end;
         CheckGearDrowning(Gear);
+        if ((Gear^.State and gstDrowning) <> 0) then
+            Gear^.RenderHealth:= false;
         end;
 
     if (Gear^.dY.QWordValue = 0) then
