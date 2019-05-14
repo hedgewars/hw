@@ -114,9 +114,15 @@ begin
     BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, LandFlags, false);
 end;
 
+function LerpByte(src, dst: Byte; l: LongWord): LongWord; inline;
+begin
+    LerpByte:= ((255 - l) * src + l * dst) div 255;
+end;
+
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word; Flip: boolean);
 var p: PLongwordArray;
-    px, x, y: Longword;
+    pLandColor: PLongWord;
+    alpha, color, landColor, x, y: LongWord;
     bpp: LongInt;
 begin
 WriteToConsole('Generating collision info... ');
@@ -142,21 +148,28 @@ for y:= 0 to Pred(Image^.h) do
         begin
         // map image pixels per line backwards if in flip mode
         if Flip then
-            px:= Pred(Image^.w) - x
+            color:= p^[Pred(Image^.w) - x]
         else
-            px:= x;
+            color:= p^[x];
 
-        if (p^[px] and AMask) <> 0 then
+        if (cReducedQuality and rqBlurryLand) = 0 then
+            pLandColor:= @LandPixels[cpY + y, cpX + x]
+        else
+            pLandColor:= @LandPixels[(cpY + y) div 2, (cpX + x) div 2];
+
+        landColor:= pLandColor^;
+        alpha:= (landColor and AMask) shr AShift;
+
+        if ((color and AMask) <> 0) and (alpha <> 255)  then
             begin
-            if (cReducedQuality and rqBlurryLand) = 0 then
-                begin
-                if (LandPixels[cpY + y, cpX + x] = 0)
-                or (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255) then
-                    LandPixels[cpY + y, cpX + x]:= p^[px];
-                end
+            if alpha = 0 then
+                pLandColor^:= color
             else
-                if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
-                    LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[px];
+                pLandColor^:=
+                   (LerpByte((color and RMask) shr RShift, (landColor and RMask) shr RShift, alpha) shl RShift)
+                    or (LerpByte((color and GMask) shr GShift, (landColor and GMask) shr GShift, alpha) shl GShift)
+                    or (LerpByte((color and BMask) shr BShift, (landColor and BMask) shr BShift, alpha) shl BShift)
+                    or (LerpByte(alpha, 255, (color and AMask) shr AShift) shl AShift);
 
             if Land[cpY + y, cpX + x] <= lfAllObjMask then
                 Land[cpY + y, cpX + x]:= lfObject or LandFlags
@@ -168,11 +181,6 @@ for y:= 0 to Pred(Image^.h) do
 if SDL_MustLock(Image) then
     SDL_UnlockSurface(Image);
 WriteLnToConsole(msgOK)
-end;
-
-function LerpByte(src, dst: Byte; l: LongWord): LongWord; inline;
-begin
-    LerpByte:= ((255 - l) * src + l * dst) div 255;
 end;
 
 procedure BlitOverlayAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
@@ -229,7 +237,8 @@ end;
 
 procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
 var p, mp: PLongwordArray;
-    x, y: Longword;
+    pLandColor: PLongWord;
+    alpha, color, landColor, x, y: Longword;
     bpp: LongInt;
 begin
 WriteToConsole('Generating collision info... ');
@@ -250,19 +259,32 @@ for y:= 0 to Pred(Image^.h) do
     begin
     for x:= 0 to Pred(Image^.w) do
         begin
+        color:= p^[x];
+
         if (cReducedQuality and rqBlurryLand) = 0 then
-            begin
-            if (LandPixels[cpY + y, cpX + x] = 0)
-            or (((p^[x] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
-                LandPixels[cpY + y, cpX + x]:= p^[x];
-            end
+            pLandColor:= @LandPixels[cpY + y, cpX + x]
         else
-            if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
-                LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
+            pLandColor:= @LandPixels[(cpY + y) div 2, (cpX + x) div 2];
+
+        landColor:= pLandColor^;
+        alpha:= (landColor and AMask) shr AShift;
+
+        if ((color and AMask) <> 0) and (alpha <> 255)  then
+        begin
+            if alpha = 0 then
+                pLandColor^:= color
+            else
+                pLandColor^:=
+                   (LerpByte((color and RMask) shr RShift, (landColor and RMask) shr RShift, alpha) shl RShift)
+                   or (LerpByte((color and GMask) shr GShift, (landColor and GMask) shr GShift, alpha) shl GShift)
+                   or (LerpByte((color and BMask) shr BShift, (landColor and BMask) shr BShift, alpha) shl BShift)
+                   or (LerpByte(alpha, 255, (color and AMask) shr AShift) shl AShift);
+        end;
 
         if (Land[cpY + y, cpX + x] <= lfAllObjMask) or (Land[cpY + y, cpX + x] and lfObject <> 0)  then
             SetLand(Land[cpY + y, cpX + x], mp^[x]);
         end;
+
     p:= PLongwordArray(@(p^[Image^.pitch shr 2]));
     mp:= PLongwordArray(@(mp^[Mask^.pitch shr 2]))
     end;
