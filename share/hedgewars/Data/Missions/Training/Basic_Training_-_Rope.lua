@@ -130,7 +130,31 @@ end
 local function eraseGirder(id)
 	EraseSprite(girderData[id][1], girderData[id][2], sprAmGirder, girderData[id][3], false, false, false, false)
 	PlaySound(sndVaporize)
-	AddVisualGear(girderData[id][1], girderData[id][2], vgtSteam, false, 0)
+	local dir = girderData[id][3]
+	if dir == 4 then
+		-- long horizontal
+		for i=-4,4 do
+			AddVisualGear(girderData[id][1] + i * 18, girderData[id][2], vgtSteam, false, 0)
+		end
+	elseif dir == 0 then
+		-- short horizontal
+		for i=-2,1 do
+			AddVisualGear(10 + girderData[id][1] + i * 20, girderData[id][2], vgtSteam, false, 0)
+		end
+	elseif dir == 6 then
+		-- long vertical
+		for i=-4,4 do
+			AddVisualGear(girderData[id][1], girderData[id][2] + i * 18, vgtSteam, false, 0)
+		end
+	elseif dir == 2 then
+		-- short vertical
+		for i=-2,1 do
+			AddVisualGear(girderData[id][1], 10 + girderData[id][2] + i * 20, vgtSteam, false, 0)
+		end
+	else
+		AddVisualGear(girderData[id][1], girderData[id][2], vgtSteam, false, 0)
+	end
+
 	AddCaption(loc("Barrier unlocked!"))
 end
 
