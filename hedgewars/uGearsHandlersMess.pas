@@ -2929,6 +2929,7 @@ end;
 procedure doStepParachuteWork(Gear: PGear);
 var
     HHGear: PGear;
+    deltaX: hwFloat;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
 
@@ -2954,13 +2955,14 @@ begin
         exit
         end;
 
-    HHGear^.X := HHGear^.X + cWindSpeed * 200;
+    deltaX:= _0;
+    deltaX:= deltaX + cWindSpeed * 200;
 
     if (Gear^.Message and gmLeft) <> 0 then
-        HHGear^.X := HHGear^.X - cMaxWindSpeed * 80
+        deltaX := deltaX - cMaxWindSpeed * 80
 
     else if (Gear^.Message and gmRight) <> 0 then
-        HHGear^.X := HHGear^.X + cMaxWindSpeed * 80;
+        deltaX := deltaX + cMaxWindSpeed * 80;
 
     if (Gear^.Message and gmUp) <> 0 then
         HHGear^.Y := HHGear^.Y - cGravity * 40
@@ -2968,9 +2970,10 @@ begin
     else if (Gear^.Message and gmDown) <> 0 then
         HHGear^.Y := HHGear^.Y + cGravity * 40;
 
+    HHGear^.X := HHGear^.X + deltaX;
     // don't drift into obstacles
-    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0 then
-        HHGear^.X := HHGear^.X - int2hwFloat(hwSign(HHGear^.dX));
+    if TestCollisionXwithGear(HHGear, hwSign(deltaX)) <> 0 then
+        HHGear^.X := HHGear^.X - int2hwFloat(hwSign(deltaX));
     HHGear^.Y := HHGear^.Y + cGravity * 100;
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y

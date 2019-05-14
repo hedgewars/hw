@@ -19,6 +19,7 @@ Gameplay:
  * Deny placement of piano beyond bounce world edge
  * Fix cut scenes not being skipped when pressing precise in enemy turn
  * Fix laser sight not working properly when it starts out of map bounds
+ * Fix parachute making hog stuck or fast when bumping into wall while looking other way
  * Add missing winner animation in single missions
 
 Styles and schemes:
