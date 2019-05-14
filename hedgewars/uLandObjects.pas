@@ -1036,6 +1036,8 @@ while (not pfsEOF(f)) and allOK do
         cIce:= true
     else if key = 'snow' then
         cSnow:= true
+    else if key = 'rope-step' then
+        cRopeNodeStep:= StrToInt(s)
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);

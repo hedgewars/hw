@@ -99,6 +99,7 @@ function DrawRopeLine(X1, Y1, X2, Y2, roplen: LongInt): LongInt;
 var  eX, eY, dX, dY: LongInt;
     i, sX, sY, x, y, d: LongInt;
     b: boolean;
+    angle: real;
 begin
     if (X1 = X2) and (Y1 = Y2) then
         begin
@@ -110,6 +111,7 @@ begin
     eY:= 0;
     dX:= X2 - X1;
     dY:= Y2 - Y1;
+    angle:= arctan2(dY, dX) * 180 / PI - 90;
 
     if (dX > 0) then
         sX:= 1
@@ -160,8 +162,8 @@ begin
         if b then
             begin
             inc(roplen);
-            if (roplen mod 4) = 0 then
-                DrawSprite(sprRopeNode, x - 2, y - 2, 0)
+            if (roplen mod cRopeNodeStep) = 0 then
+                DrawSpriteRotatedF(sprRopeNode, x, y, roplen mod cRopeNodeStep, 1, angle);
             end
     end;
     DrawRopeLine:= roplen;
