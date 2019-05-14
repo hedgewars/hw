@@ -156,7 +156,7 @@ type
             sndLandGun, sndCaseImpact, sndExtraDamage, sndFirePunchHit, sndGrenade, sndThisOneIsMine,
             sndWhatThe, sndSoLong, sndOhDear, sndGonnaGetYou, sndDrat, sndBugger, sndAmazing,
             sndBrilliant, sndExcellent, sndFire, sndWatchThis, sndRunAway, sndRevenge, sndCutItOut,
-            sndLeaveMeAlone, sndOuch, sndHmm, sndKiss);
+            sndLeaveMeAlone, sndOuch, sndHmm, sndKiss, sndFlyAway);
 
     // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
@@ -422,6 +422,7 @@ type
             HealthBarHealth: LongInt;
             Effects: array[THogEffect] of LongInt;
             RevengeHog: PHedgehog;   // For which hog this hog wants revenge most. For sndRevenge taunt
+            FlownOffMap: boolean; // When hedgehog has flown far away off the map left or right
             end;
 
     TTeam = record

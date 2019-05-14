@@ -32,7 +32,6 @@ local CakeTries = 0
 local addCake = true
 local takeASeat = false
 local Stars = {}
-local tauntNoo = false
 local jokeAwardNavy = nil
 local jokeAwardSpeed = nil
 local jokeAwardDamage = nil
@@ -189,7 +188,6 @@ function onNewTurn()
     SetWaterLine(32768)
     YouWon = false
     YouLost = false
-    tauntNoo = false
     takeASeat = false
     recordBroken = false
     currTeam = GetHogTeamName(CurrentHedgehog)
@@ -503,17 +501,6 @@ function onGameTick20()
                 takeASeat = true
             end
     
-            -- play taunts
-            if not YouWon and not YouLost then
-                local nooDistance = 500
-                if ((x < -nooDistance and vx < 0) or (x > LAND_WIDTH+nooDistance and vx > 0)) then
-                    if (tauntNoo == false and distanceFromWater > 80) then
-                        PlaySound(sndNooo, CurrentHedgehog)
-                        tauntNoo = true
-                    end
-                end
-            end
-
             if addCake and CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil then 
                 -- doing this just after the start the first time to take advantage of randomness sources
                 -- Pick a clear y to start with

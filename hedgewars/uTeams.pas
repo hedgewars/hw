@@ -714,6 +714,7 @@ with CurrentTeam^ do
     if checkFails((Health > 0) and (Health <= cMaxHogHealth), 'Invalid hedgehog health (must be between 1 and '+IntToStr(cMaxHogHealth)+')', true) then exit;
     CurrentHedgehog^.Name:= id;
     CurrentHedgehog^.InitialHealth:= Health;
+    CurrentHedgehog^.RevengeHog:= nil;
     inc(HedgehogsNumber)
     end
 end;
@@ -749,6 +750,7 @@ with CurrentTeam^ do
     CurrentHedgehog^.Name:= id;
     CurrentHedgehog^.InitialHealth:= Gear^.Health;
     CurrentHedgehog^.RevengeHog:= nil;
+    CurrentHedgehog^.FlownOffMap:= false;
     CurrHedgehog:= HedgehogsNumber;
     inc(HedgehogsNumber)
     end

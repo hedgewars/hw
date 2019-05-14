@@ -114,6 +114,7 @@ Frontend:
 Sounds and voicepacks:
  + sndYoohoo has been split to sndYoohoo and sndKiss
  + Voice files sndPoisonCough and sndPoisonMoan are now optional (fall back to Default voicepack)
+ + Add taunt: sndFlyAway / Flyaway.ogg: When hedgehog flies off the map
  + Tweak some taunts: sndFirstBlood, sndLeaveMeAlone, sndCutItOut
  * Fix English voicepack selection of team being overwritten when playing in non-English locale
 
