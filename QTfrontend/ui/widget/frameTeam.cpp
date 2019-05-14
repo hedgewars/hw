@@ -163,3 +163,11 @@ void FrameTeams::updateDecoFrame()
         setStyleSheet("FrameTeams{ border: transparent }");
     }
 }
+
+void FrameTeams::resizeEvent(QResizeEvent * event)
+{
+    Q_UNUSED(event);
+
+    QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    QCoreApplication::postEvent(parentWidget(), pevent);
+}
