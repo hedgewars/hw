@@ -35,6 +35,7 @@ function pfsClose(f: PFSFile): boolean;
 procedure pfsReadLn(f: PFSFile; var s: shortstring);
 procedure pfsReadLnA(f: PFSFile; var s: ansistring);
 procedure pfsWriteLn(f: PFSFile; s: shortstring);
+procedure pfsWriteRaw(f: PFSFile; s: PChar; len: QWord);
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 function pfsEOF(f: PFSFile): boolean;
 
@@ -177,6 +178,11 @@ begin
     c:= #10;
     PHYSFS_writeBytes(f, @s[1], byte(s[0]));
     PHYSFS_writeBytes(f, @c, 1);
+end;
+
+procedure pfsWriteRaw(f: PFSFile; s: PChar; len: QWord);
+begin
+    PHYSFS_writeBytes(f, s, len);
 end;
 
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;

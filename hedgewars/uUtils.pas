@@ -526,6 +526,7 @@ if SDL_UnlockMutex(logMutex) <> 0 then
 end;
 
 procedure AddFileLogRaw(s: pchar); cdecl;
+var tmp: shortstring;
 begin
 s:= s;
 {$IFNDEF PAS2C}
@@ -534,9 +535,17 @@ s:= s;
 if SDL_LockMutex(logMutex) <> 0 then
     OutError('Logging mutex could not be locked!', true);
 {$ENDIF}
-// TODO: uncomment next two lines
-// write(logFile, s);
-// flush(logFile);
+tmp:= IntToStr(GameTicks) + ': ';
+if (logFile <> nil) then
+    begin
+    pfsWriteRaw(logFile, Str2PChar(tmp), StrLen(Str2PChar(tmp)));
+    pfsWriteRaw(logFile, s, StrLen(s));
+    end
+else
+    begin
+    Write(stdout, Str2PChar(tmp));
+    Flush(stdout);
+    end;
 {$IFDEF USE_VIDEO_RECORDING}
 if SDL_UnlockMutex(logMutex) <> 0 then
     OutError('Logging mutex could not be unlocked!', true);
