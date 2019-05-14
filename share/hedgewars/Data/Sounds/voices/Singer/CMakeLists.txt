@@ -14,6 +14,7 @@ Firstblood.ogg
 Fire.ogg
 Firepunch*.ogg
 Flawless.ogg
+Flyaway.ogg
 Gonnagetyou.ogg
 Grenade.ogg
 Hello.ogg
