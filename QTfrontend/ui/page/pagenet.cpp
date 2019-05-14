@@ -109,6 +109,7 @@ void PageNet::updateServersList()
     tvServersList->setModel(new HWNetUdpModel(tvServersList));
 
     tvServersList->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    tvServersList->horizontalHeader()->setSectionsClickable(false);
 
     static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
 

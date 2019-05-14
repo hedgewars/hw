@@ -133,6 +133,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         header->setSectionResizeMode(vcSize, QHeaderView::Fixed);
         header->resizeSection(vcSize, 100);
         header->setStretchLastSection(true);
+        header->setSectionsClickable(false);
 
         btnOpenDir = new QPushButton(QPushButton::tr("Open videos directory"), pTableGroup);
         btnOpenDir->setWhatsThis(QPushButton::tr("Open the video directory in your system"));
