@@ -367,6 +367,8 @@ static int WriteFrame(AVFrame* pFrame)
         VideoTime = (double)g_pVFrame->pts * g_pVStream->time_base.num/g_pVStream->time_base.den;
         do
         {
+            if (!g_pAFrame)
+                return FatalError("Error while writing video frame: g_pAFrame does not exist");
             AudioTime = (double)g_pAFrame->pts * g_pAStream->time_base.num/g_pAStream->time_base.den;
             ret = WriteAudioFrame();
         }
