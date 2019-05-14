@@ -163,7 +163,7 @@ begin
             begin
             inc(roplen);
             if (roplen mod cRopeNodeStep) = 0 then
-                DrawSpriteRotatedF(sprRopeNode, x, y, roplen mod cRopeNodeStep, 1, angle);
+                DrawSpriteRotatedF(sprRopeNode, x, y, roplen div cRopeNodeStep, 1, angle);
             end
     end;
     DrawRopeLine:= roplen;
