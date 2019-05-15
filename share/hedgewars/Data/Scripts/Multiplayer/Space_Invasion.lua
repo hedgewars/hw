@@ -1103,6 +1103,8 @@ function onGameInit()
 
 	SI.wepCount = 3
 
+	SetSoundMask(sndFlyAway, true)
+
 end
 
 function onGameStart()

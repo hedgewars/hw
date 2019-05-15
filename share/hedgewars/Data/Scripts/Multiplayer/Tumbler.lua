@@ -632,6 +632,7 @@ function onGameInit()
 	wepCount = 3
 
 	DisableGameFlags(gfArtillery + gfSharedAmmo + gfPerHogAmmo + gfTagTeam + gfPlaceHog + gfInvulnerable)
+	SetSoundMask(sndFlyAway, true)
 
 end
 
