@@ -73,6 +73,11 @@ class PageGameStats : public AbstractPage
         bool defaultGraphTitle;
         QScopedPointer<QGraphicsScene> m_scene;
 
+        QLabel* labelDetails;
+        QGroupBox* gbDetails;
+        QGroupBox* gbRanks;
+        QGridLayout* pageLayout;
+
     protected:
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();

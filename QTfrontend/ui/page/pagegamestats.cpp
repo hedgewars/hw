@@ -42,38 +42,36 @@ QLayout * PageGameStats::bodyLayoutDefinition()
 {
     kindOfPoints = QString("");
     defaultGraphTitle = true;
-    QGridLayout * pageLayout = new QGridLayout();
-    pageLayout->setSpacing(20);
-    pageLayout->setColumnStretch(0, 1);
-    pageLayout->setColumnStretch(1, 1);
+    pageLayout = new QGridLayout();
     pageLayout->setRowStretch(0, 1);
     pageLayout->setRowStretch(1, 20);
-    //pageLayout->setRowStretch(1, -1); this should work but there is unnecessary empty space betwin lines if used
+    pageLayout->setVerticalSpacing(20);
     pageLayout->setContentsMargins(7, 7, 7, 0);
 
-    QGroupBox * gb = new QGroupBox(this);
+    gbDetails = new QGroupBox(this);
+    gbDetails->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     QVBoxLayout * gbl = new QVBoxLayout;
 
     // details
     labelGameStats = new QLabel(this);
-    QLabel * l = new QLabel(this);
-    l->setTextFormat(Qt::RichText);
-    l->setText("<h1><img src=\":/res/StatsD.png\"> " + PageGameStats::tr("Details").toHtmlEscaped() + "</h1>");
-    l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    labelDetails = new QLabel(this);
+    labelDetails->setTextFormat(Qt::RichText);
+    labelDetails->setText("<h1><img src=\":/res/StatsD.png\"> " + PageGameStats::tr("Details").toHtmlEscaped() + "</h1>");
+    labelDetails->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     labelGameStats->setTextFormat(Qt::RichText);
     labelGameStats->setAlignment(Qt::AlignTop);
     labelGameStats->setWordWrap(true);
-    gbl->addWidget(l);
+    gbl->addWidget(labelDetails);
     gbl->addWidget(labelGameStats);
-    gb->setLayout(gbl);
-    pageLayout->addWidget(gb, 1, 1);
+    gbDetails->setLayout(gbl);
+    pageLayout->addWidget(gbDetails, 1, 1);
 
     // graph
-    graphic = new FitGraphicsView(gb);
+    graphic = new FitGraphicsView(gbDetails);
     graphic->setObjectName("gameStatsView");
     labelGraphTitle = new QLabel(this);
     labelGraphTitle->setTextFormat(Qt::RichText);
-    labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph").toHtmlEscaped() + "</h1>");
+    labelGraphTitle->setText("<h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph").toHtmlEscaped() + "</h1>");
     labelGraphTitle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     gbl->addWidget(labelGraphTitle);
     gbl->addWidget(graphic);
@@ -86,20 +84,21 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     pageLayout->addWidget(labelGameWin, 0, 0, 1, 2);
 
     // ranking box
-    gb = new QGroupBox(this);
+    gbRanks = new QGroupBox(this);
+    gbRanks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     gbl = new QVBoxLayout;
-    labelGameRank = new QLabel(gb);
-    l = new QLabel(this);
+    labelGameRank = new QLabel(gbRanks);
+    QLabel* l = new QLabel(this);
     l->setTextFormat(Qt::RichText);
     l->setText("<h1><img src=\":/res/StatsR.png\"> " + PageGameStats::tr("Ranking").toHtmlEscaped() + "</h1>");
     l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     gbl->addWidget(l);
     gbl->addWidget(labelGameRank);
-    gb->setLayout(gbl);
+    gbRanks->setLayout(gbl);
 
     labelGameRank->setTextFormat(Qt::RichText);
     labelGameRank->setAlignment(Qt::AlignTop);
-    pageLayout->addWidget(gb, 1, 0);
+    pageLayout->addWidget(gbRanks, 1, 0);
 
     return pageLayout;
 }
@@ -143,6 +142,9 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
 void PageGameStats::AddStatText(const QString & msg)
 {
     labelGameStats->setText(labelGameStats->text() + msg);
+    labelDetails->show();
+    labelGameStats->show();
+    gbDetails->show();
 }
 
 void PageGameStats::clear()
@@ -154,6 +156,14 @@ void PageGameStats::clear()
     playerPosition = 0;
     scriptPlayerPosition = 0;
     lastColor = 0;
+    graphic->hide();
+    labelDetails->hide();
+    labelGameStats->hide();
+    gbDetails->hide();
+    gbRanks->hide();
+    pageLayout->setColumnStretch(0, 0);
+    pageLayout->setColumnStretch(1, 0);
+    pageLayout->setHorizontalSpacing(0);
 }
 
 void PageGameStats::restartBtnVisible(bool visible)
@@ -164,7 +174,7 @@ void PageGameStats::restartBtnVisible(bool visible)
 void PageGameStats::renderStats()
 {
     if(defaultGraphTitle) {
-        labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph").toHtmlEscaped() + "</h1>");
+        labelGraphTitle->setText("<h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph").toHtmlEscaped() + "</h1>");
     } else {
         defaultGraphTitle = true;
     }
@@ -174,6 +184,7 @@ void PageGameStats::renderStats()
         graphic->hide();
     } else {
         graphic->setScene(Q_NULLPTR);
+        gbDetails->show();
         m_scene.reset(new QGraphicsScene(this));
 
         // min and max value across the entire chart
@@ -262,6 +273,17 @@ void PageGameStats::renderStats()
 
         graphic->show();
         labelGraphTitle->show();
+        gbDetails->show();
+    }
+    if (!labelGameStats->isHidden())
+    {
+        labelGraphTitle->setText("<br>" + labelGraphTitle->text());
+    }
+    if ((!gbDetails->isHidden()) && (!gbRanks->isHidden()))
+    {
+        pageLayout->setColumnStretch(0, 1);
+        pageLayout->setColumnStretch(1, 1);
+        pageLayout->setHorizontalSpacing(20);
     }
 }
 
@@ -309,7 +331,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             // TODO: change default picture or add change pic capability
             defaultGraphTitle = false;
-            labelGraphTitle->setText("<br><h1><img src=\":/res/StatsR.png\"> " + info.toHtmlEscaped() + "</h1>");
+            labelGraphTitle->setText("<h1><img src=\":/res/StatsR.png\"> " + info.toHtmlEscaped() + "</h1>");
             break;
         }
         case 'T':   // local team stats
@@ -395,6 +417,7 @@ void PageGameStats::GameStats(char type, const QString & info)
 
             labelGameRank->setText(labelGameRank->text() + message);
             scriptPlayerPosition = 0;
+            gbRanks->show();
             break;
         }
         case 's' :
