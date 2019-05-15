@@ -140,6 +140,22 @@ void HWGame::SendConfig()
 
 void HWGame::SendQuickConfig()
 {
+    /* Load and increase Quick Game experience level.
+    Experience increases by 1 for each started game and maxes out
+    at 20. Low experience levels will introduce a "beginner's bias" to make
+    the first quick games easier and simpler. The max. possible difficulty
+    increases progressively the longer you play.
+    If experience is maxed out, the beginner's bias is gone and quick games
+    are completely random. */
+    int exp = config->quickGameExperience();
+    if(exp < 20)
+    {
+       config->setQuickGameExperience(exp + 1);
+    }
+    qDebug("Starting quick game ...");
+    qDebug("Quick Game experience level: %d", exp);
+
+    // Init stuff
     QByteArray teamscfg;
     QAbstractItemModel * themeModel = DataManager::instance().themeModel()->withoutHidden();
 
@@ -150,39 +166,53 @@ void HWGame::SendQuickConfig()
 
     int r, minhogs, maxhogs;
 
-    // Random map
+    // Random map type
     r = rand() % 10000;
     if(r < 3000) { // 30%
+        // Random
         r = 0;
     } else if(r < 5250) { // 22.5%
-        r = 1;
+        // Maze
+        if(exp <= 3)
+            r = 0;
+        else
+            r = 1;
     } else if(r < 7500) { // 22.5%
-        r = 2;
+        // Perlin
+        if(exp <= 7)
+            r = 1;
+        else
+            r = 2;
     } else if(r < 8750) { // 12.5%
+        // Image map
         r = 3;
     } else { // 12.5%
+        // Forts
         r = 4;
     }
     switch(r)
     {
-        // Random
+        // Random map
         default:
         case 0: {
             r = rand() % 3;
             if(r == 0)
             {
+                // small island
                 HWProto::addStringToBuffer(teamscfg, "e$template_filter 1");
                 minhogs = 3;
                 maxhogs = 4;
             }
-            else if(r == 1)
+            else if(r == 1 || exp <= 6)
             {
+                // medium island
                 HWProto::addStringToBuffer(teamscfg, "e$template_filter 2");
                 minhogs = 4;
                 maxhogs = 5;
             }
             else
             {
+                // cave (locked at low experience because these maps can be huge)
                 HWProto::addStringToBuffer(teamscfg, "e$template_filter 4");
                 minhogs = 4;
                 maxhogs = 6;
@@ -234,6 +264,11 @@ void HWGame::SendQuickConfig()
         .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount(), 0).data(ThemeModel::ActualNameRole).toString() : "Nature"));
 
     int hogs = minhogs + rand() % (maxhogs-minhogs+1);
+    // Cap hog count at low experience
+    if((exp <= 8) && (hogs > 5))
+        hogs = 5;
+    else if((exp <= 5) && (hogs > 4))
+        hogs = 4;
 
     // Teams
     // Player team
@@ -246,9 +281,18 @@ void HWGame::SendQuickConfig()
 
     // Computer team
     HWTeam team2;
-    // Random difficulty
-    // TODO: Select difficulty based on previous player successes/failures.
-    r = 1 + rand() % 5;
+    // Random difficulty.
+    // Max. possible difficulty is capped at low experience levels.
+    if(exp >= 15) // very easy to very hard (full range)
+        r = 5 - rand() % 5;
+    else if(exp >= 9) // very easy to hard
+        r = 5 - rand() % 4;
+    else if(exp >= 6) // very easy to medium
+        r = 5 - rand() % 3;
+    else if(exp >= 2) // very easy to easy
+        r = 5 - rand() % 2;
+    else // very easy
+        r = 5;
     team2.setDifficulty(r);
     team2.setColor(1);
     team2.setNumHedgehogs(hogs);
@@ -258,14 +302,14 @@ void HWGame::SendQuickConfig()
     while(!team2.name().compare(team1.name()) || !team2.hedgehog(0).Hat.compare(team1.hedgehog(0).Hat));
     team2.setVoicepack("Default_qau");
 
-    // Random team play order
+    // Team play order
     r = rand() % 2;
-    if(r == 0)
+    if(r == 0 || exp <= 4) // player plays first
     {
         HWProto::addStringListToBuffer(teamscfg, team1.teamGameConfig(100));
         HWProto::addStringListToBuffer(teamscfg, team2.teamGameConfig(100));
     }
-    else
+    else // computer plays first
     {
         HWProto::addStringListToBuffer(teamscfg, team2.teamGameConfig(100));
         HWProto::addStringListToBuffer(teamscfg, team1.teamGameConfig(100));
