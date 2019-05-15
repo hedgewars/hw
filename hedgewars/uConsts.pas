@@ -37,7 +37,6 @@ const
     HaltFatalError      =  52; // Fatal internal error. See logs for more. Also reports error to frontend
     HaltStartupError    =  53; // Failure loading critical resources
     HaltFatalErrorNoIPC =  54; // Fatal internal error, IPC socket is not available
-    HaltVideoRec        =  55; // Failure while video recording
 
     // for automatic tests
     HaltTestSuccess     =  0;  // Test result: success

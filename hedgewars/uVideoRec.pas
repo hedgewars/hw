@@ -48,7 +48,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uVariables, GLunit, SDLh, SysUtils, uUtils, uIO, uMisc, uConsts, uTypes, uDebug;
+uses uVariables, GLunit, SDLh, SysUtils, uUtils, uIO, uMisc, uTypes, uDebug;
 
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 const AvwrapperLibName = 'libavwrapper';
@@ -162,8 +162,7 @@ begin
     Close(cameraFile);
     if AVWrapper_Close() < 0 then
         begin
-        AddFileLog('AVWrapper_Close() has failed.');
-        halt(HaltVideoRec);
+        OutError('AVWrapper_Close() has failed.', true);
         end;
 {$IOCHECKS OFF}
     if FileExists(cameraFileName) then
@@ -184,8 +183,7 @@ begin
 
     if AVWrapper_WriteFrame(RGB_Buffer) < 0 then
         begin
-        AddFileLog('AVWrapper_WriteFrame(RGB_Buffer) has failed.');
-        halt(HaltVideoRec);
+        OutError('AVWrapper_WriteFrame(RGB_Buffer) has failed.', true);
         end;
 
     // inform frontend that we have encoded new frame
