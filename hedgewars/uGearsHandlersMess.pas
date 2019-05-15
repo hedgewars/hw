@@ -2394,13 +2394,19 @@ begin
             AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke)
     else
         AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmokeWhite);
-    // health texture
-    FreeAndNilTexture(Gear^.Tex);
-    Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff808080, fnt16);
+
     dec(Gear^.Health, Gear^.Damage);
     Gear^.Damage := 0;
     if Gear^.Health <= 0 then
-        doStepCase(Gear);
+        doStepCase(Gear)
+    else
+        // health texture (FlightTime = health when the last texture was generated)
+        if Gear^.Health <> Gear^.FlightTime then
+            begin
+            Gear^.FlightTime:= Gear^.Health;
+            FreeAndNilTexture(Gear^.Tex);
+            Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff808080, fnt16);
+            end;
 end;
 
 procedure doStepCase(Gear: PGear);
@@ -2469,18 +2475,22 @@ begin
                 AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke)
             else
                 AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmokeWhite);
+
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0;
-        // health texture
-        FreeAndNilTexture(Gear^.Tex);
-        Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff808080, fnt16);
+        // health texture (FlightTime = health when the last texture was generated)
+        if Gear^.Health <> Gear^.FlightTime then
+            begin
+            Gear^.FlightTime:= Gear^.Health;
+            FreeAndNilTexture(Gear^.Tex);
+            Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff808080, fnt16);
+            end;
         end
     else
         begin
         // health texture for health crate
-        if (k = gtCase) and ((Gear^.Pos and $02) <> 0) then
+        if (k = gtCase) and ((Gear^.Pos and posCaseHealth) <> 0) then
             begin
-            FreeAndNilTexture(Gear^.Tex);
             if ((Gear^.State and gstFrozen) = 0) then
                 begin
                 // Karma=2: Always hide health
@@ -2496,9 +2506,23 @@ begin
                 else
                     i:= 1;
                 if i = 1 then
-                    Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff80ff80, fnt16)
+                    begin
+                    if Gear^.Health <> Gear^.FlightTime then
+                        begin
+                        Gear^.FlightTime:= Gear^.Health;
+                        FreeAndNilTexture(Gear^.Tex);
+                        Gear^.Tex := RenderStringTex(ansistring(inttostr(Gear^.Health)), $ff80ff80, fnt16)
+                        end
+                    end
                 else
-                    Gear^.Tex := RenderStringTex(trmsg[sidUnknownGearValue], $ff80ff80, fnt16)
+                    begin
+                    if Gear^.FlightTime <> $ffffffff then
+                        begin
+                        Gear^.FlightTime:= $ffffffff;
+                        FreeAndNilTexture(Gear^.Tex);
+                        Gear^.Tex := RenderStringTex(trmsg[sidUnknownGearValue], $ff80ff80, fnt16)
+                        end
+                    end
                 end;
             end;
         if Gear^.Timer = 500 then
