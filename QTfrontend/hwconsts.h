@@ -48,6 +48,7 @@ extern QString * cDefaultAmmoStore;
 extern QString * cEmptyAmmoStore;
 extern int cAmmoNumber;
 extern QList< QPair<QString, QString> > cDefaultAmmos;
+extern QStringList cQuickGameMaps;
 
 extern unsigned int colors[];
 

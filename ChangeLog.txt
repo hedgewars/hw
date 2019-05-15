@@ -99,6 +99,7 @@ Translations:
  * Remove Arabic translation from release
 
 Frontend:
+ + Quick games are more random: More map types, random team size and difficulty
  + Add button in main menu at top left corner to open credits page
  + Restructure credits page
  + More intelligent automatic mission selection in campaign screen

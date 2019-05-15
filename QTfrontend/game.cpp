@@ -144,33 +144,135 @@ void HWGame::SendQuickConfig()
     QAbstractItemModel * themeModel = DataManager::instance().themeModel()->withoutHidden();
 
     HWProto::addStringToBuffer(teamscfg, "TL");
-    HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
-                               .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount(), 0).data(ThemeModel::ActualNameRole).toString() : "Nature"));
+
+    // Random seed
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
-    HWProto::addStringToBuffer(teamscfg, "e$template_filter 2");
-    HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%18+4));
+    int r, minhogs, maxhogs;
 
+    // Random map
+    r = rand() % 10000;
+    if(r < 3000) { // 30%
+        r = 0;
+    } else if(r < 5250) { // 22.5%
+        r = 1;
+    } else if(r < 7500) { // 22.5%
+        r = 2;
+    } else if(r < 8750) { // 12.5%
+        r = 3;
+    } else { // 12.5%
+        r = 4;
+    }
+    switch(r)
+    {
+        // Random
+        default:
+        case 0: {
+            r = rand() % 3;
+            if(r == 0)
+            {
+                HWProto::addStringToBuffer(teamscfg, "e$template_filter 1");
+                minhogs = 3;
+                maxhogs = 4;
+            }
+            else if(r == 1)
+            {
+                HWProto::addStringToBuffer(teamscfg, "e$template_filter 2");
+                minhogs = 4;
+                maxhogs = 5;
+            }
+            else
+            {
+                HWProto::addStringToBuffer(teamscfg, "e$template_filter 4");
+                minhogs = 4;
+                maxhogs = 6;
+            }
+            HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%18+4));
+            break;
+        }
+        // Maze
+        case 1: {
+            minhogs = 4;
+            maxhogs = 6;
+            HWProto::addStringToBuffer(teamscfg, "e$mapgen 1");
+            HWProto::addStringToBuffer(teamscfg, "e$template_filter "+QString::number(rand()%6));
+            HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%16+6));
+            break;
+        }
+        // Perlin
+        case 2: {
+            minhogs = 4;
+            maxhogs = 6;
+            HWProto::addStringToBuffer(teamscfg, "e$mapgen 2");
+            HWProto::addStringToBuffer(teamscfg, "e$template_filter "+QString::number(rand()%6));
+            HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%18+4));
+            break;
+        }
+        // Image map
+        case 3: {
+            minhogs = 4;
+            maxhogs = 6;
+            HWProto::addStringToBuffer(teamscfg, "e$mapgen 3");
+            // Select map from hardcoded list.
+            // TODO: find a more dynamic solution.
+            r = rand() % cQuickGameMaps.count();
+            HWProto::addStringToBuffer(teamscfg, "e$map " + cQuickGameMaps[r]);
+            break;
+        }
+        // Forts
+        case 4: {
+            minhogs = 4;
+            maxhogs = 6;
+            HWProto::addStringToBuffer(teamscfg, "e$mapgen 4");
+            HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%20+1));
+            break;
+        }
+    }
+
+    // Theme
+    HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
+        .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount(), 0).data(ThemeModel::ActualNameRole).toString() : "Nature"));
+
+    int hogs = minhogs + rand() % (maxhogs-minhogs+1);
+
+    // Teams
+    // Player team
     HWTeam team1;
     team1.setDifficulty(0);
     team1.setColor(0);
-    team1.setNumHedgehogs(4);
+    team1.setNumHedgehogs(hogs);
     HWNamegen::teamRandomEverything(team1);
     team1.setVoicepack("Default_qau");
-    HWProto::addStringListToBuffer(teamscfg,
-                                   team1.teamGameConfig(100));
 
+    // Computer team
     HWTeam team2;
-    team2.setDifficulty(4);
+    // Random difficulty
+    // TODO: Select difficulty based on previous player successes/failures.
+    r = 1 + rand() % 5;
+    team2.setDifficulty(r);
     team2.setColor(1);
-    team2.setNumHedgehogs(4);
+    team2.setNumHedgehogs(hogs);
+    // Make sure the team names are not equal
     do
         HWNamegen::teamRandomEverything(team2);
     while(!team2.name().compare(team1.name()) || !team2.hedgehog(0).Hat.compare(team1.hedgehog(0).Hat));
     team2.setVoicepack("Default_qau");
-    HWProto::addStringListToBuffer(teamscfg,
-                                   team2.teamGameConfig(100));
 
+    // Random team play order
+    r = rand() % 2;
+    if(r == 0)
+    {
+        HWProto::addStringListToBuffer(teamscfg, team1.teamGameConfig(100));
+        HWProto::addStringListToBuffer(teamscfg, team2.teamGameConfig(100));
+    }
+    else
+    {
+        HWProto::addStringListToBuffer(teamscfg, team2.teamGameConfig(100));
+        HWProto::addStringListToBuffer(teamscfg, team1.teamGameConfig(100));
+    }
+
+    // Ammo scheme "Default"
+    // TODO: Random schemes
     HWProto::addStringToBuffer(teamscfg, QString("eammloadt %1").arg(cDefaultAmmoStore->mid(0, cAmmoNumber)));
     HWProto::addStringToBuffer(teamscfg, QString("eammprob %1").arg(cDefaultAmmoStore->mid(cAmmoNumber, cAmmoNumber)));
     HWProto::addStringToBuffer(teamscfg, QString("eammdelay %1").arg(cDefaultAmmoStore->mid(2 * cAmmoNumber, cAmmoNumber)));

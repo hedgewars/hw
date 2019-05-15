@@ -96,6 +96,33 @@ QList< QPair<QString, QString> > cDefaultAmmos =
             AMMOLINE_HEDGEEDITOR_DELAY AMMOLINE_HEDGEEDITOR_CRATE ))
         ;
 
+QStringList cQuickGameMaps = QStringList()
+    << "Bamboo"
+    << "Bath"
+    << "Battlefield"
+    << "Blox"
+    << "Bubbleflow"
+    << "Cake"
+    << "Castle"
+    << "Cheese"
+    << "Cogs"
+    << "CrazyMission"
+    << "EarthRise"
+    << "Eyes"
+    << "Hammock"
+    << "HedgeFortress"
+    << "Hedgelove"
+    << "Hedgewars"
+    << "Hydrant"
+    << "Lonely_Island"
+    << "Mushrooms"
+    << "Octorama"
+    << "PirateFlag"
+    << "Plane"
+    << "Sheep"
+    << "Trash"
+    << "Tree";
+
 unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
 
 QString * netHost = new QString();
