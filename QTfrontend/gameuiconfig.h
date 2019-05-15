@@ -69,6 +69,8 @@ class GameUIConfig : public QSettings
         bool isFrontendFullscreen() const;
         quint16 zoom();
         bool isHolidaySillinessEnabled() const;
+        int quickGameExperience() const;
+        void setQuickGameExperience(int exp);
         void resizeToConfigValues();
         quint32 stereoMode() const;
         void setValue(const QString & key, const QVariant & value);

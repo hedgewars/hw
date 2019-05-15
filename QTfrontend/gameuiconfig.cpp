@@ -453,6 +453,16 @@ bool GameUIConfig::isHolidaySillinessEnabled() const
     return value("misc/holidaySilliness", true).toBool();
 }
 
+int GameUIConfig::quickGameExperience() const
+{
+    return value("misc/quickGameExperience", 0).toInt();
+}
+
+void GameUIConfig::setQuickGameExperience(int exp)
+{
+    setValue("misc/quickGameExperience", exp);
+}
+
 bool GameUIConfig::isSoundEnabled()
 {
     return Form->ui.pageOptions->CBSound->isChecked();
