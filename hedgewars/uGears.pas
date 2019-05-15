@@ -729,6 +729,7 @@ begin
     GearsList:= nil;
     while tt <> nil do
     begin
+        FreeAndNilTexture(tt^.Tex);
         t:= tt;
         tt:= tt^.NextGear;
         Dispose(t)
