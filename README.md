@@ -1,5 +1,6 @@
 Hedgewars - a turn-based strategy game
 ======================================
+[![Build Status](https://travis-ci.org/hedgewars/hw.svg)](https://travis-ci.org/hedgewars/hw)
 
 Description
 -----------
@@ -133,8 +134,6 @@ Source code
 Our main repository is located at <https://hg.hedgewars.org/hedgewars/> using
 Mercurial as DVCS. A Git repository is also available (mirrored daily)
 at <https://github.com/hedgewars/hw>.
-
-[![Build Status](https://travis-ci.org/hedgewars/hw.svg)](https://travis-ci.org/hedgewars/hw)
 
 Contribute
 ----------
