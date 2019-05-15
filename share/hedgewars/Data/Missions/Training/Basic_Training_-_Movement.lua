@@ -154,6 +154,7 @@ function onGameInit()
 	end
 	
 	SendHealthStatsOff()
+	SendRankingStatsOff()
 end
 
 local function LoadGearData()
@@ -265,7 +266,6 @@ local function victory()
 	SendStat(siGameResult, loc("You have completed the Basic Movement Training!"))
 	SendStat(siCustomAchievement, loc("Congratulations!"))
 	SendStat(siCustomAchievement, loc("Return to the training menu by pressing the “Go back” button."))
-	SendStat(siPlayerKills, "0", GetHogTeamName(hog_greenhorn))
 	PlaySound(sndVictory, CurrentHedgehog)
 	-- Disable controls, end game
 	SetInputMask(0)

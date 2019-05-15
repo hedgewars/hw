@@ -53,6 +53,7 @@ function onGameInit()
 	SetEffect(hog, heResurrectable, 1)
 
 	SendHealthStatsOff()
+	SendRankingStatsOff()
 end
 
 function onGearResurrect(gear, vGear)
@@ -228,7 +229,6 @@ function newGamePhase()
 		end
 		SendStat(siCustomAchievement, loc("Good job!"))
 		SendStat(siGameResult, loc("You have completed the Basic Bazooka Training!"))
-		SendStat(siPlayerKills, "0", GetHogTeamName(hog))
 		EndGame()
 		SetState(hog, gstWinner)
 		gameOver = true

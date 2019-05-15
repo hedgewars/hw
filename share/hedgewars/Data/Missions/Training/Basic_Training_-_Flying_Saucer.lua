@@ -215,7 +215,6 @@ TargetPos[12] = { Modifier = true, Func = function()
 
 	SendStat(siGameResult, loc("You have finished the Flying Saucer Training!"))
 	SendStat(siCustomAchievement, loc("Good job!"))
-	SendStat(siPlayerKills, "0", GetHogTeamName(Player))
 
 	EndTurn(true)
 	EndGame()
@@ -416,6 +415,7 @@ end
 
 function onGameStart()
 	SendHealthStatsOff()
+	SendRankingStatsOff()
 
 	-- Girder near first crate
 	PlaceGirder(1257, 204, 6)

@@ -105,6 +105,7 @@ function onGameInit()
 	drawMap()
 
 	SendHealthStatsOff()
+	SendRankingStatsOff()
 
 end
 
@@ -378,7 +379,6 @@ function onGearDelete(gear)
 			AddAmmo(hog, amRope, 0)
 			SendStat(siCustomAchievement, loc("Oh yeah! You sure know how to rope!"))
 			SendStat(siGameResult, loc("You have finished the Basic Rope Training!"))
-			SendStat(siPlayerKills, "0", teamName)
 			EndGame()
 			SetState(hog, gstWinner)
 			gameOver = true
