@@ -177,12 +177,15 @@ void HWGame::SendQuickConfig()
             r = 0;
         else
             r = 1;
-    } else if(r < 7500) { // 22.5%
+    } else if(r < 7490) { // 22.4%
         // Perlin
         if(exp <= 7)
             r = 1;
         else
             r = 2;
+    } else if(r < 7500 && exp >= 5) { // 0.1%
+        // Floating Flowers (just for fun)
+        r = 5;
     } else if(r < 8750) { // 12.5%
         // Image map
         r = 3;
@@ -255,6 +258,16 @@ void HWGame::SendQuickConfig()
             maxhogs = 6;
             HWProto::addStringToBuffer(teamscfg, "e$mapgen 4");
             HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%20+1));
+            break;
+        }
+        // Floating Flowers
+        // (actually empty map; this forces the engine to generate fallback structures to have
+        // something for hogs to stand on)
+        case 5: {
+            minhogs = 4;
+            maxhogs = 8;
+            HWProto::addStringToBuffer(teamscfg, "e$mapgen 3");
+            HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%4+3));
             break;
         }
     }
