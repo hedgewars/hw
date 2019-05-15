@@ -42,6 +42,7 @@ procedure HedgehogSacrificed(Hedgehog: PHedgehog);
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 procedure TargetHit;
 procedure Skipped;
+function  getIsTurnSkipped: boolean;
 procedure TurnStats;
 procedure TurnReaction;
 procedure TurnStatsReset;
@@ -189,6 +190,11 @@ procedure Skipped;
 begin
 inc(SkippedTurns);
 isTurnSkipped:= true
+end;
+
+function getIsTurnSkipped: boolean;
+begin
+getIsTurnSkipped:= isTurnSkipped;
 end;
 
 procedure TurnStats;
