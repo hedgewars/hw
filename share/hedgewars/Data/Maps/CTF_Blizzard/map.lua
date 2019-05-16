@@ -237,7 +237,8 @@ function CheckScore(teamID)
 				SetHealth(hhs[i],0)
 			end
 		end
-		ShowMission(loc("GAME OVER!"), loc("Victory for the ") .. GetHogTeamName(CurrentHedgehog), loc("Hooray!"), 0, 0)
+		local victoryMsg = string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog))
+		AddCaption(victoryMsg, capcolDefault, capgrpGameState)
 	end
 
 end
@@ -532,14 +533,13 @@ end
 function onGameStart()
 
 	ShowMission(loc("CTF_Blizzard"), loc("Capture The Flag"),
-		loc("- Place your clan flag at the end of your first turn") .. "|" ..
 		loc("- Return the enemy flag to your base to score") .."|"..
 		string.format(loc("- First clan to score %d captures wins"), 3) .. "|"..
 		loc("- You may only score when your flag is in your base") .."|"..
 		loc("- Hogs will drop the flag when killed") .."|"..
 		loc("- Dropped flags may be returned or recaptured").."|"..
 		loc("- Hogs will be revived") .."|"..
-		loc("- Enter the sparkling forcefield to teleport"), 0, 0)
+		loc("- Touch the sparkles near your base to teleport"), 0, 0)
 
 	-- initialize teleporters
 	leftTel = CreateZone(342,1316,42,449)	-- left teleporter (clan 0)
