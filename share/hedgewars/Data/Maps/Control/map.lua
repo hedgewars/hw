@@ -7,6 +7,7 @@
 
 -- Rules:
 -- * You generate points while standing on a pillar during your turn.
+-- * Hogs get revived.
 -- * Control more pillars for more points
 -- * If multiple clans compete for a pillar, no one generates points for this pillar.
 -- * If you skip turn, you win the same points as if you would have just waited out the turn
@@ -316,6 +317,7 @@ function onGameStart()
 	end
 
 	missionHelp = loc("Control pillars to score points.") .. "|" ..
+		loc("Hedgehogs will be revived after their death.") .. "|" ..
 		string.format(loc("Score goal: %d"), pointLimit)
 
 	-- reposition hogs if they are on control points until they are not or sanity limit kicks in
