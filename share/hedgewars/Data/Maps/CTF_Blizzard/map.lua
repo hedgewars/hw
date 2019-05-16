@@ -616,6 +616,11 @@ end
 function onNewTurn()
 
 	HandleRespawns()
+
+end
+
+function onCaseDrop()
+
 	HandleCrateDrops()
 
 end
