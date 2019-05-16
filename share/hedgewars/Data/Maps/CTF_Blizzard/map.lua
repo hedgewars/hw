@@ -105,6 +105,7 @@ local roundsCounter = 0	-- used to determine when to spawn more crates
 						-- currently every 6 TURNS, should this work
 						-- on ROUNDS instead?
 local effectTimer = 0
+local gameEnded = false
 
 local ropeGear = nil
 
@@ -119,6 +120,11 @@ local teamNameArr = {}	-- store the list of teams
 local teamSize = {}	-- store how many hogs per team
 local teamIndex = {} -- at what point in the hhs{} does each team begin
 local clanTeams = {} -- list of teams per clan
+
+local mostCapturesHogName = nil -- name of hog who holds the record of most flags captured
+local mostCapturesHogTeam = nil -- name of team who holds the record of most flags captured
+local mostCaptures = 0 -- number of most per-hog captures
+local capturesPerHog = {}
 
 -------------------
 -- flag variables
@@ -230,7 +236,8 @@ function CheckScore(teamID)
 		alt = 0
 	end
 
-	if fCaptures[teamID] == 3 then
+	if fCaptures[teamID] == 3 and not gameEnded then
+		gameEnded = true
 		for i = 0, (numhhs-1) do
 			if GetHogClan(hhs[i]) == alt then
 				SetEffect(hhs[i], heResurrectable, 0)
@@ -239,6 +246,28 @@ function CheckScore(teamID)
 		end
 		local victoryMsg = string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog))
 		AddCaption(victoryMsg, capcolDefault, capgrpGameState)
+
+		-- Calculate team rankings
+		local teamList = {}
+		for i=0, TeamsCount-1 do
+			local name = GetTeamName(i)
+			local clan = GetTeamClan(name)
+			if fCaptures[clan] ~= nil then
+				table.insert(teamList, { score = fCaptures[clan], name = name, clan = clan })
+			end
+		end
+		local teamRank = function(a, b)
+			return a.score > b.score
+		end
+		table.sort(teamList, teamRank)
+
+		for i=1, #teamList do
+			SendStat(siPointType, "!POINTS")
+			SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
+		end
+		if mostCaptures >= 2 then
+			SendStat(siCustomAchievement, string.format(loc("%s (%s) has captured the flag %d times."), mostCapturesHogName, mostCapturesHogTeam, mostCaptures))
+		end
 	end
 
 end
@@ -288,6 +317,13 @@ function FlagDeleted(gear)
 				AddCaption(string.format(loc("%s has scored!"), GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 				for i=1, #clanTeams[wtf] do
 					SetTeamLabel(clanTeams[wtf][i], fCaptures[wtf])
+				end
+
+				capturesPerHog[CurrentHedgehog] = capturesPerHog[CurrentHedgehog] + 1
+				if capturesPerHog[CurrentHedgehog] > mostCaptures then
+					mostCaptures = capturesPerHog[CurrentHedgehog]
+					mostCapturesHogName = GetHogName(CurrentHedgehog)
+					mostCapturesHogTeam = GetHogTeamName(CurrentHedgehog)
 				end
 
 				PlaySound(sndHomerun)
@@ -527,6 +563,9 @@ function onGameInit()
 	Map = "Blizzard" -- The map to be played
 	Theme = "Snow" -- The theme to be used
 
+	SendHealthStatsOff()
+	SendRankingStatsOff()
+
 end
 
 
@@ -713,6 +752,7 @@ function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
 
+		capturesPerHog[gear] = 0
 		if GetHogClan(gear) > 1 then
 			DeleteGear(gear)
 			if not excessHogsWarning then
