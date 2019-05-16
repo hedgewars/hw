@@ -827,7 +827,9 @@ const
             (FileName:    'HealthHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHealthHud
             (FileName:    'HealthPoisonHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprHealthPoisonHud
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHealthPoisonHud
+            (FileName:    'VampHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  24; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprVampHUD
             );
 
 
