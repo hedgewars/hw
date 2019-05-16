@@ -1,61 +1,25 @@
---------------------------------
--- CONTROL 0.6
---------------------------------
+-------------
+-- CONTROL --
+-------------
 
----------
--- 0.2
----------
--- fixed score display errrors
--- added missing resurrection effects
--- moved hogs off control points if thats where they started
--- added sanity limit for the above
--- added tint tags to display clan score on each point as it scors
--- added gameflags filter
--- changed scoring rate
--- hogs now only score point DURING THEIR TURN
--- map now accepts custom weaponsets and themes 
--- changed win limit
+-- Goal: Stand on pillars to score points over time.
+-- First clan to hit the score limit wins!
 
----------
--- 0.3
----------
-
--- added translation support
-
---------
--- 0.4
---------
-
--- added scaling scoring based on clans: 300 points to win - 25 per team in game
-
---------
--- 0.5
---------
-
--- removed user branding
--- fixed infinite attack time exploit
-
---------
--- 0.6
---------
-
--- timebox fix
--- support for more players
--- remove version numbers
--- enable limited sudden death
--- using skip go generates as many points as you would have gotten had you sat and waited
+-- Rules:
+-- * You generate points while standing on a pillar during your turn.
+-- * Control more pillars for more points
+-- * If multiple clans compete for a pillar, no one generates points for this pillar.
+-- * If you skip turn, you win the same points as if you would have just waited out the turn
 
 -----------------
---script begins
+-- script begins
 -----------------
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 ---------------------------------------------------------------
-----------lots of bad variables and things
-----------because someone is too lazy
-----------to read about tables properly
------------------- "Oh well, they probably have the memory"
+-- lots variables and things
+---------------------------------------------------------------
 
 local TimeCounter = 0
 
@@ -169,7 +133,7 @@ function CheckZones()
 		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)
 		cOwnerClan[i] = nil
 		for k = 0, (numhhs-1) do
-			if (hhs[k] ~= nil) then --and (GetGearType(hhs[k]) ~= nil) then
+			if (hhs[k] ~= nil) then
                 if (GearIsInZone(hhs[k],i)) == true then
 
                     if cOwnerClan[i] ~= nil then
@@ -177,19 +141,16 @@ function CheckZones()
                             --if the hog now being compared is different to one that is also here and was previously compared
                             
                             SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)						
-                            --SetVisualGearValues(vCirc[i], 2739, 1378, 20, 255, 1, 10, 0, 300, 5, 0xffffffff)
         
                             cOwnerClan[i] = 10 -- this means conflicted
                         end
                     elseif cOwnerClan[i] == nil then
                         cOwnerClan[i] = GetHogClan(hhs[k])
-                        --SetVisualGearValues(vCirc[i], 2739, 1378, 20, 255, 1, 10, 0, 300, 5, GetClanColor( GetHogClan(hhs[k])) )
                         SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], GetClanColor( GetHogClan(hhs[k])))
         
                     end
 
                 end
-           -- else hhs[k] = nil
 			end
 		end
 
@@ -201,9 +162,6 @@ function AwardPoints()
 		
 	for i = 0,(zCount-1) do
 		-- give score to all players controlling points		
-		--if (cOwnerClan[i] ~= nil) and (cOwnerClan[i] ~= 10) then
-		--	teamScore[cOwnerClan[i]] = teamScore[cOwnerClan[i]] + 1
-		--end
 		
 		-- only give score to the player currently in control		
 		if CurrentHedgehog ~= nil then		
@@ -303,7 +261,6 @@ function onAttack()
 	if CurrentHedgehog ~= nil then
 		if GetCurAmmoType() == amSkip then
 			z = (TurnTimeLeft / 2000) - (TurnTimeLeft / 2000)%2 
-			--AddCaption("scored: " .. z,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 			for i = 0, z do
 				AwardPoints()
 			end
@@ -355,10 +312,6 @@ function onGameStart()
 		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], vCircCol[i])
 	end
 
-	--zxc = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
-	--SetVisualGearValues(zxc, 1000,1000, 20, 255, 1,    10,                     0,         100,        1,      GetClanColor(0))
-					--minO,max0 -glowyornot	--pulsate timer	 -- fuckall      -- radius -- width  -- colour
-
 	--new improved placement schematics aw yeah
 	RebuildTeamInfo()
 
@@ -371,16 +324,12 @@ function onGameStart()
 	
 	-- reposition hogs if they are on control points until they are not or sanity limit kicks in
 	reN = 0
-	--zz = 0
 	while (reN < 10) do
 		if ZonesAreEmpty() == false then
 			reN = reN + 1	
-			--zz = zz + 1	
-			--SetGearPosition(hhs[0], 631, 82) -- put this in here to thwart attempts at repositioning and test sanity limit	
 		else
 			reN = 15		
 		end
-		--AddCaption(zz) -- number of times it took to work
 	end
 
 	for h=1, numhhs do
@@ -439,16 +388,6 @@ function onGameTick()
 		CheckZones()
 	end	
 
-	-- things we wanna check often
-	if (CurrentHedgehog ~= nil) then
-	--	AddCaption(GetX(CurrentHedgehog) .. "; " .. GetY(CurrentHedgehog))
-		--AddCaption(teamNameArr[0] .. " : " .. teamScore[0])
-		--AddCaption(GetHogTeamName(CurrentHedgehog) .. " : " .. teamScore[GetHogClan(CurrentHedgehog)]) -- this end up 1?
-		
-		-- huh? the first clan added seems to be clan 1, not 0 ??
-
-	end
-
 	-- set TimeCounter to starting time if it is uninitialised (from onNewTurn)	
 	if (TimeCounter == 0) and (TurnTimeLeft > 0) then
 		TimeCounter = TurnTimeLeft	
@@ -463,13 +402,6 @@ function onGameTick()
 		end	
 	end	
 	
-	--AddCaption(TimeCounter)	
-	--hGCount = hGCount + 1
-	--if (hGCount >= 2000) and (gameWon == false) then
-	--	hGCount = 0
-	--	AwardPoints()
-	--end
-
 end
 
 function InABetterPlaceNow(gear)
@@ -489,8 +421,6 @@ function onHogRestore(gear)
 	for i = 0, (numhhs-1) do
 		if (hhs[i] == nil) and (match == false) then
 			hhs[i] = gear
-			--AddCaption(GetHogName(gear) .. " has reappeared it seems!")
-			--FollowGear(gear)
 			match = true
 		end
 	end
