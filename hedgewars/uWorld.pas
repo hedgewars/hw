@@ -1601,6 +1601,8 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
         DrawSprite(sprHealthPoisonHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 36), i, 0)
     else
         DrawSprite(sprHealthHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 36), i, 0);
+    if cVampiric then
+        DrawSprite(sprVampHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 62), i, 0);
     inc(t, CurrentHedgehog^.HealthTagTex^.h);
     cDemoClockFPSOffsetY:= t;
     end
