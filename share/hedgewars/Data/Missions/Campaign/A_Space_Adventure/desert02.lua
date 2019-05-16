@@ -22,6 +22,7 @@ local goals = {
 local cratesCollected = 0
 local totalCrates = 0
 local damageTaken = false
+local animStarted = false
 local record
 -- health crates
 healthX = 565
@@ -112,10 +113,13 @@ function onGameStart()
 	SpawnHealthCrate(healthX, health2Y)
 
 	SendHealthStatsOff()
-	AddAnim(dialog01)
 end
 
 function onNewTurn()
+	if not animStarted then
+		AddAnim(dialog01)
+		animStarted = true
+	end
 	SetWeapon(amRope)
 	if TotalRounds >= 0 and record ~= nil then
 		SetTeamLabel(teamA.name, tostring(TotalRounds))
