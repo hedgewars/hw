@@ -829,7 +829,17 @@ const
             (FileName:    'HealthPoisonHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHealthPoisonHud
             (FileName:    'VampHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  24; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprVampHUD
+            Width:  24; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprVampHUD
+            (FileName:    'KarmaHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprKarmaHUD
+            (FileName:    'MedicHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMedicHud
+            (FileName:    'MedicPoisonHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMedicPoisonHud
+            (FileName:    'HaloHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  22; Height: 11; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHaloHUD
+            (FileName:    'InvulnHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprInvulnHUD
             );
 
 
