@@ -246,10 +246,9 @@ function HandleRespawns()
 
 		if fNeedsRespawn[i] == true then
 			fGear[i] = SpawnFakeAmmoCrate(fSpawnX[i],fSpawnY[i],false,false)
-			--fGear[i] = SpawnHealthCrate(fSpawnX[i],fSpawnY[i])
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
-			AddCaption(loc("Flag respawned!"))
+			AddCaption(loc("Flag respawned!"), capcolDefault, capgrpAmmoinfo)
 		end
 
 	end
@@ -259,7 +258,6 @@ end
 function FlagDeleted(gear)
 
 	local wtf, bbq
-	PlaySound(sndShotgunReload)
 	if (gear == fGear[0]) then
 		wtf = 0
 		bbq = 1
@@ -271,12 +269,13 @@ function FlagDeleted(gear)
 	if CurrentHedgehog ~= nil then
 
 		--if the player picks up the flag
-		if CheckDistance(CurrentHedgehog, fGear[wtf]) < 1600 then
+		if band(GetGearMessage(gear), gmDestroy) ~= 0 then
 
 			fGear[wtf] = nil -- the flag has now disappeared and we shouldnt be pointing to it
 
 			-- player has successfully captured the enemy flag
 			if (GetHogClan(CurrentHedgehog) == wtf) and (CurrentHedgehog == fThief[bbq]) and (fIsMissing[wtf] == false) then
+				PlaySound(sndShotgunReload)
 				fIsMissing[wtf] = false
 				fNeedsRespawn[wtf] = true
 				fIsMissing[bbq] = false
@@ -294,19 +293,20 @@ function FlagDeleted(gear)
 
 			--if the player is returning the flag
 			elseif GetHogClan(CurrentHedgehog) == wtf then
-
+				PlaySound(sndShotgunReload)
 				fNeedsRespawn[wtf] = true
 
 				-- NEW ADDIITON, does this work? Should make it possible to return your flag and then score in the same turn
 				if fIsMissing[wtf] == true then
 					HandleRespawns() -- this will set fIsMissing[wtf] to false :)
-					AddCaption(loc("Flag returned!"))
+					AddCaption(loc("Flag returned!"), capcolDefault, capgrpAmmoinfo)
 				elseif fIsMissing[wtf] == false then
 					AddCaption(loc("That was pointless. The flag will respawn next round."))
 				end
 
 			--if the player is taking the enemy flag
 			elseif GetHogClan(CurrentHedgehog) == bbq then
+				PlaySound(sndShotgunReload)
 				fIsMissing[wtf] = true
 				for i = 0,numhhs-1 do
 					if CurrentHedgehog == hhs[i] then
@@ -321,7 +321,7 @@ function FlagDeleted(gear)
 
 			end
 
-		-- if flag has been destroyed, probably
+		-- if flag has been destroyed
 		else
 
 			if GetY(fGear[wtf]) > 2025 then
@@ -368,6 +368,7 @@ function FlagThiefDead(gear)
 		else
 			fGear[wtf] = SpawnFakeAmmoCrate(fThiefX[wtf],(fThiefY[wtf]-50),false,false)
 		end
+		AddCaption(string.format(loc("%s has dropped the flag!"), GetHogName(gear)), capcolDefault, capgrpAmmoinfo)
 
 		AddVisualGear(fThiefX[wtf], fThiefY[wtf], vgtBigExplosion, 0, false)
 		fThief[wtf] = nil
@@ -398,19 +399,6 @@ end
 ------------------------
 -- general methods
 ------------------------
-
-function CheckDistance(gear1, gear2)
-
-	local g1X, g1Y = GetGearPosition(gear1)
-	local g2X, g2Y = GetGearPosition(gear2)
-
-	g1X = g1X - g2X
-	g1Y = g1Y - g2Y
-	local dist = (g1X*g1X) + (g1Y*g1Y)
-
-	return dist
-
-end
 
 function CheckTeleporters()
 
@@ -511,6 +499,7 @@ function HandleCrateDrops()
 		elseif r == 7 then
 			SpawnSupplyCrate(0,0,amPortalGun)
 		end
+		PlaySound(sndReinforce, CurrentHedgehog)
 
 	end
 
@@ -539,8 +528,15 @@ end
 
 function onGameStart()
 
-	ShowMission(loc("CTF_Blizzard"), loc("Capture The Flag"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
-
+	ShowMission(loc("CTF_Blizzard"), loc("Capture The Flag"),
+		loc("- Place your clan flag at the end of your first turn") .. "|" ..
+		loc("- Return the enemy flag to your base to score") .."|"..
+		string.format(loc("- First clan to score %d captures wins"), 3) .. "|"..
+		loc("- You may only score when your flag is in your base") .."|"..
+		loc("- Hogs will drop the flag when killed") .."|"..
+		loc("- Dropped flags may be returned or recaptured").."|"..
+		loc("- Hogs will be revived") .."|"..
+		loc("- Enter the sparkling forcefield to teleport"), 0, 0)
 
 	-- initialize teleporters
 	redTel = CreateZone(342,1316,42,449)	-- red teleporter
