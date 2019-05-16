@@ -1586,7 +1586,6 @@ if (UIDisplay = uiAll) and (isNotHiddenByCinematic) then
 
 // Current hedgehog health in top left corner
 if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic) and
-        ((GameFlags and gfInvulnerable) = 0) and
         (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and
         (CurrentHedgehog^.HealthTagTex <> nil) and
         ((CurrentHedgehog^.Gear^.State and gstHHDriven) <> 0) then
@@ -1596,6 +1595,11 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
 {$IFDEF USE_TOUCH_INTERFACE}
     i:= t + pauseButton.frame.y + pauseButton.frame.h;
 {$ENDIF}
+
+    // Hide health and healh icons in gfInvulnerable mode (except heResurrectable)
+    if ((GameFlags and gfInvulnerable) = 0) then
+    begin
+    // Health tag
     DrawTexture(cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 16, i, CurrentHedgehog^.HealthTagTex);
     inc(t, CurrentHedgehog^.HealthTagTex^.h);
     cDemoClockFPSOffsetY:= t;
@@ -1636,6 +1640,11 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
         inc(t, SpritesData[sprVampHud].Width + 2);
         DrawSprite(sprVampHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0);
         end;
+    end
+    // in gfInvulnerable mode ...
+    else if (CurrentHedgehog^.Effects[heResurrectable] <> 0) then
+        // show halo for resurrectable hog
+        DrawSprite(sprHaloHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t - 2), i, 0);
     end
 else
     cDemoClockFPSOffsetY:= 0;
