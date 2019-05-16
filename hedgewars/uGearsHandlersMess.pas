@@ -3338,6 +3338,7 @@ var
     hedgehog: PHedgehog;
     State: Longword;
     switchDir: Longword;
+    oldUid: Longword;
 begin
     AllInactive := false;
 
@@ -3355,6 +3356,7 @@ begin
     if (Gear^.Message and gmSwitch) <> 0 then
         begin
         HHGear := CurrentHedgehog^.Gear;
+        oldUid:= HHGear^.uid;
         HHGear^.Message := HHGear^.Message and (not gmSwitch);
         Gear^.Message := Gear^.Message and (not gmSwitch);
 
@@ -3387,6 +3389,7 @@ begin
         AmmoMenuInvalidated:= true;
 
         HHGear := CurrentHedgehog^.Gear;
+        ScriptCall('onHogSwitch', oldUid);
         HHGear^.State := State;
         HHGear^.Active := true;
         FollowGear := HHGear;
