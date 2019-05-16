@@ -536,10 +536,12 @@ begin
         if bRes then
             begin
             anchored:= anchorcnt = 0;
-            for i:= 1 to anchorcnt do
+            i:= 0;
+            while i < anchorcnt do
                 begin
                     anchored := CheckLandAny(anchors[i], x, y, lfLandMask);
                     if anchored then break;
+                    inc(i);
                 end;
             bRes:= anchored;
             end;
