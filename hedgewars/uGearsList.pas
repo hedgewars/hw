@@ -667,7 +667,7 @@ case Kind of
                 gear^.Radius:= 16; // todo: check
                 gear^.Health := 2000;
                 gear^.FlightTime := 2;
-                gear^.Z:= cCurrHHZ+1;
+                gear^.Z:= cCurrHHZ;
                 end;
          gtEgg: begin
                 gear^.AdvBounce:= 1;
