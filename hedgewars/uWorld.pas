@@ -1591,20 +1591,51 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
         (CurrentHedgehog^.HealthTagTex <> nil) and
         ((CurrentHedgehog^.Gear^.State and gstHHDriven) <> 0) then
     begin
-    t:= 10;
+    t:= 11;
     i:= t;
 {$IFDEF USE_TOUCH_INTERFACE}
     i:= t + pauseButton.frame.y + pauseButton.frame.h;
 {$ENDIF}
     DrawTexture(cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 16, i, CurrentHedgehog^.HealthTagTex);
-    if (CurrentHedgehog^.Effects[hePoisoned] > 0) then
-        DrawSprite(sprHealthPoisonHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 36), i, 0)
-    else
-        DrawSprite(sprHealthHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 36), i, 0);
-    if cVampiric then
-        DrawSprite(sprVampHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 62), i, 0);
     inc(t, CurrentHedgehog^.HealthTagTex^.h);
     cDemoClockFPSOffsetY:= t;
+
+    t:= SpritesData[sprHealthHud].Width + 18;
+    // Main health icon. Appearance depends on game mode and poisoning state
+    if ((GameFlags and gfResetHealth) = 0) then
+        if (CurrentHedgehog^.Effects[hePoisoned] <> 0) then
+            DrawSprite(sprHealthPoisonHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+        else
+            DrawSprite(sprHealthHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+    else
+        if (CurrentHedgehog^.Effects[hePoisoned] <> 0) then
+            DrawSprite(sprMedicPoisonHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+        else
+            DrawSprite(sprMedicHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0);
+    // Put halo above health icon for resurrectable hog
+    if (CurrentHedgehog^.Effects[heResurrectable] <> 0) then
+        DrawSprite(sprHaloHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t - 2), i - SpritesData[sprHaloHud].Height + 1, 0);
+
+    // Additional health-related states
+    inc(t, 2);
+    // Invulnerable
+    if (CurrentHedgehog^.Effects[heInvulnerable] <> 0) then
+        begin
+        inc(t, SpritesData[sprInvulnHud].Width + 2);
+        DrawSprite(sprInvulnHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+        end
+    // Karma
+    else if ((GameFlags and gfKarma) <> 0) then
+        begin
+        inc(t, SpritesData[sprKarmaHud].Width + 2);
+        DrawSprite(sprKarmaHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+        end;
+    // Vampirism
+    if cVampiric then
+        begin
+        inc(t, SpritesData[sprVampHud].Width + 2);
+        DrawSprite(sprVampHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0);
+        end;
     end
 else
     cDemoClockFPSOffsetY:= 0;

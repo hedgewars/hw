@@ -93,7 +93,8 @@ type
             sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprFrozenAirMine, sprAirMine, sprHandAirMine,
             sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprCreeper, sprHandCreeper, sprMinigun,
             sprSliderInverted, sprFingerBack, sprFingerBackInv, sprTargetPBack, sprTargetPBackInv,
-            sprHealthHud, sprHealthPoisonHud, sprVampHud
+            sprHealthHud, sprHealthPoisonHud, sprVampHud, sprKarmaHud, sprMedicHud, sprMedicPoisonHud,
+            sprHaloHud, sprInvulnHUD
             );
 
     // Gears that interact with other Gears and/or Land
