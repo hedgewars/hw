@@ -155,8 +155,8 @@ local vCircCol = {}
 --zone and teleporter variables
 --------------------------------
 
-local redTel
-local orangeTel
+local leftTel
+local rightTel
 
 local zXMin = {}
 local zWidth = {}
@@ -175,16 +175,18 @@ function ManageTeleporterEffects()
 	if effectTimer > 50 then
 		effectTimer = 0
 
-		for i = 0,1 do
-			local eX = 10 + zXMin[i] + GetRandom(zWidth[i]-10)
-			local eY = 50 + zYMin[i] + GetRandom(zHeight[i]-110)
-
-			-- steam and smoke and DUST look good, smokering looks trippy
-			-- smoketrace and eviltrace are not effected by wind?
-			-- chunk is a LR falling gear
-			local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
-			SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, nil, nil, fCol[i])
+		local i = GetHogClan(CurrentHedgehog)
+		if i ~= 0 and i ~= 1 then
+			return
 		end
+		local eX = 10 + zXMin[i] + GetRandom(zWidth[i]-10)
+		local eY = 50 + zYMin[i] + GetRandom(zHeight[i]-110)
+
+		-- steam and smoke and DUST look good, smokering looks trippy
+		-- smoketrace and eviltrace are not effected by wind?
+		-- chunk is a LR falling gear
+		local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
+		SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, nil, nil, fCol[i])
 	end
 end
 
@@ -404,11 +406,11 @@ function CheckTeleporters()
 
 	local teleportActive = false
 
-	if (GearIsInZone(CurrentHedgehog, redTel) == true) and (GetHogClan(CurrentHedgehog) == 0) then
+	if (GearIsInZone(CurrentHedgehog, leftTel) == true) and (GetHogClan(CurrentHedgehog) == 0) then
 		teleportActive = true
 		destinationX = 1402
 		destinationY = 321
-	elseif (GearIsInZone(CurrentHedgehog, orangeTel) == true) and (GetHogClan(CurrentHedgehog) == 1) then
+	elseif (GearIsInZone(CurrentHedgehog, rightTel) == true) and (GetHogClan(CurrentHedgehog) == 1) then
 		teleportActive = true
 		destinationX = 2692
 		destinationY = 321
@@ -539,8 +541,8 @@ function onGameStart()
 		loc("- Enter the sparkling forcefield to teleport"), 0, 0)
 
 	-- initialize teleporters
-	redTel = CreateZone(342,1316,42,449)	-- red teleporter
-	orangeTel = CreateZone(3719,1330,45,449)	-- orange teleporter
+	leftTel = CreateZone(342,1316,42,449)	-- left teleporter (clan 0)
+	rightTel = CreateZone(3719,1330,45,449)	-- right teleporter (clan 1)
 
 
 	--new improved placement schematics aw yeah
@@ -640,7 +642,9 @@ function onGameTick()
 	end
 
 	HandleCircles()
-	ManageTeleporterEffects()
+	if (CurrentHedgehog ~= nil) then
+		ManageTeleporterEffects()
+	end
 
 end
 
