@@ -6,11 +6,10 @@
 -- First clan to hit the score limit wins!
 
 -- Rules:
--- * You generate points while standing on a pillar during your turn.
--- * Hogs get revived.
--- * Control more pillars for more points
+-- * Each pillar you control generates 1 point every 2 seconds.
 -- * If multiple clans compete for a pillar, no one generates points for this pillar.
 -- * If you skip turn, you win the same points as if you would have just waited out the turn
+-- * Hogs get revived.
 
 -----------------
 -- script begins
@@ -258,14 +257,12 @@ end
 -- game methods
 ------------------------
 
-function onAttack()
+function onSkipTurn()
 
 	if CurrentHedgehog ~= nil then
-		if GetCurAmmoType() == amSkip then
-			z = (TurnTimeLeft / 2000) - (TurnTimeLeft / 2000)%2
-			for i = 0, z do
-				AwardPoints()
-			end
+		z = (TurnTimeLeft / 2000) - (TurnTimeLeft / 2000)%2
+		for i = 0, z do
+			AwardPoints()
 		end
 	end
 
