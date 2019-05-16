@@ -1584,6 +1584,26 @@ if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
 if (UIDisplay = uiAll) and (isNotHiddenByCinematic) then
     RenderTeamsHealth;
 
+// Current hedgehog health in top left corner
+if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic) and
+        ((GameFlags and gfInvulnerable) = 0) and
+        (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and
+        (CurrentHedgehog^.HealthTagTex <> nil) and
+        ((CurrentHedgehog^.Gear^.State and gstHHDriven) <> 0) then
+    begin
+    t:= 10;
+    i:= t;
+{$IFDEF USE_TOUCH_INTERFACE}
+    i:= t + pauseButton.frame.y + pauseButton.frame.h;
+{$ENDIF}
+    DrawTexture(cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 16, i, CurrentHedgehog^.HealthTagTex);
+    DrawSprite(sprHealthHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 36), i, 0);
+    inc(t, CurrentHedgehog^.HealthTagTex^.h);
+    cDemoClockFPSOffsetY:= t;
+    end
+else
+    cDemoClockFPSOffsetY:= 0;
+
 // Wind bar
 if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
     begin
@@ -1734,11 +1754,11 @@ if isCursorVisible and bShowAmmoMenu then
 
 // FPS and demo replay time
 {$IFDEF USE_TOUCH_INTERFACE}
-offsetX:= pauseButton.frame.y + pauseButton.frame.h + 12;
+offsetY:= cDemoClockFPSOffsetY + 10 + pauseButton.frame.y + pauseButton.frame.h;
 {$ELSE}
-offsetX:= 10;
+offsetY:= cDemoClockFPSOffsetY + 10;
 {$ENDIF}
-offsetY:= cOffsetY;
+offsetX:= cOffsetY;
 if (RM = rmDefault) or (RM = rmRightEye) then
     begin
     inc(Frames);
@@ -1769,11 +1789,11 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         SDL_FreeSurface(tmpSurface)
         end;
 
-    if timeTexture <> nil then
-        DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetY, offsetX + timeTexture^.h+5, timeTexture);
+    if (timeTexture <> nil) and (UIDisplay <> uiNone) then
+        DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetX, offsetY, timeTexture);
 
     // FPS counter
-    if cShowFPS then
+    if cShowFPS and (UIDisplay <> uiNone) then
         begin
         if CountTicks >= 1000 then
             begin
@@ -1788,7 +1808,13 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             SDL_FreeSurface(tmpSurface)
             end;
         if fpsTexture <> nil then
-            DrawTexture((cScreenWidth shr 1) - 20 - fpsTexture^.w - offsetY, offsetX, fpsTexture);
+            begin
+            if timeTexture <> nil then
+                i:= fpsTexture^.h + 5
+            else
+                i:= 0;
+            DrawTexture((cScreenWidth shr 1) - 60 - offsetX, offsetY + i, fpsTexture);
+            end;
         end;
 end;
 

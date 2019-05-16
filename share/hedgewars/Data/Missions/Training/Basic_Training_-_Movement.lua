@@ -408,8 +408,9 @@ function onGearDelete(gear)
 			loc("Zoom: [Pinch] with 2 fingers")
 		end
 		ShowMission(loc("Basic Movement Training"), loc("Health"), loc("You just got yourself some extra health.|The more health your hedgehogs have, the better!").."|"..
+		loc("The health of your current hedgehog|is shown at the top right corner.").."|"..
 		loc("Now go to the next crate.").."|"..
-		ctrl, 2, 10000)
+		ctrl, 2, 11500)
 	elseif gear == crates[10] then
 		-- FIXME: This crate is unused in touch atm
 		ShowMission(loc("Basic Movement Training"), loc("Turning Around"),

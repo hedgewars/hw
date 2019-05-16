@@ -92,7 +92,8 @@ type
             sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprCustom3, sprCustom4,
             sprCustom5, sprCustom6, sprCustom7, sprCustom8, sprFrozenAirMine, sprAirMine, sprHandAirMine,
             sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprCreeper, sprHandCreeper, sprMinigun,
-            sprSliderInverted, sprFingerBack, sprFingerBackInv, sprTargetPBack, sprTargetPBackInv
+            sprSliderInverted, sprFingerBack, sprFingerBackInv, sprTargetPBack, sprTargetPBackInv,
+            sprHealthHud
             );
 
     // Gears that interact with other Gears and/or Land

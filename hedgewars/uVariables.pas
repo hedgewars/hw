@@ -220,6 +220,7 @@ var
     cZoomDelta      : real;
     cZoomDeltaSmall : real;
     cMinMaxZoomLevelDelta : real;
+    cDemoClockFPSOffsetY : LongInt;
 
 
     flagMakeCapture : boolean;
@@ -822,7 +823,9 @@ const
             (FileName:    'TargetpBack'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetPBack
             (FileName:    'TargetpBackInv'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprTargetPBackInv
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetPBackInv
+            (FileName:    'HealthHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprHealthHud
             );
 
 
@@ -2824,6 +2827,8 @@ begin
 
 
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel;
+
+    cDemoClockFPSOffsetY := 0;
 
     // int, longint longword and byte
     CursorMovementX     := 0;

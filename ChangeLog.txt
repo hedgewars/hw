@@ -78,6 +78,7 @@ Graphics:
  * Fix birdy being drawn behind hedgehogs and objects
 
 Game HUD:
+ + Display current hog health at top right corner
  + Colorize switching arrows, pointing arrow and target cross in clan color
  + Skip ammo menu animation when playing with turn time of 10s or less
  + Don't show crate spawn message for initial crates in missions
