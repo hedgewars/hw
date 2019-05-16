@@ -428,6 +428,7 @@ function CheckTeleporters()
 		elseif actionReset == 20 then
 			AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
 			SetGearPosition(CurrentHedgehog,destinationX,destinationY)
+			PlaySound(sndWarp)
 			AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
 		end
 
