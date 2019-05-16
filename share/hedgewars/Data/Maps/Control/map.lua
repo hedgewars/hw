@@ -178,10 +178,15 @@ function AwardPoints()
 		end
 	end
 
-	-- Update team labels
+	-- Update team labels and graph
+	local clanGraphPointWritten = {}
 	for i = 0,(TeamsCount-1) do
 		if teamNameArr[i] ~= " " then
 			SetTeamLabel(teamNameArr[i], teamScore[teamClan[i]])
+			if not clanGraphPointWritten[teamClan[i]] then
+				SendStat(siClanHealth, teamScore[teamClan[i]], teamNameArr[i])
+				clanGraphPointWritten[teamClan[i]] = true
+			end
 		end
 	end
 
@@ -274,6 +279,9 @@ function onGameInit()
 	DisableGameFlags(gfKing, gfAISurvival)
 	WaterRise = 0
 	HealthDecrease = 0
+
+	SendHealthStatsOff()
+	SendRankingStatsOff()
 
 end
 
@@ -371,7 +379,26 @@ function onNewTurn()
 					end
 				end
 			end
-			SetTurnTimeLeft(1)
+			EndTurn(true)
+
+			-- Rankings
+			local teamList = {}
+			for i=0, TeamsCount-1 do
+				local name = GetTeamName(i)
+				local clan = GetTeamClan(name)
+				table.insert(teamList, { score = teamScore[teamClan[i]], name = name, clan = clan })
+			end
+			local teamRank = function(a, b)
+				return a.score > b.score
+			end
+			table.sort(teamList, teamRank)
+
+			for i=1, #teamList do
+				SendStat(siPointType, "!POINTS")
+				SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
+			end
+			SendStat(siGraphTitle, loc("Score graph"))
+
 		end
 
 	end
