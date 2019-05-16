@@ -1597,7 +1597,10 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
     i:= t + pauseButton.frame.y + pauseButton.frame.h;
 {$ENDIF}
     DrawTexture(cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 16, i, CurrentHedgehog^.HealthTagTex);
-    DrawSprite(sprHealthHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 36), i, 0);
+    if (CurrentHedgehog^.Effects[hePoisoned] > 0) then
+        DrawSprite(sprHealthPoisonHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 36), i, 0)
+    else
+        DrawSprite(sprHealthHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 36), i, 0);
     inc(t, CurrentHedgehog^.HealthTagTex^.h);
     cDemoClockFPSOffsetY:= t;
     end
