@@ -112,13 +112,13 @@ function ZonesAreEmpty()
 	okay = true
 
 	for i = 0,(zCount-1) do
-				
+
 		for k = 0, (numhhs-1) do
 			if (hhs[k] ~= nil) then
-			if (GearIsInZone(hhs[k],i)) == true then
-				FindPlace(hhs[k], false, 0, LAND_WIDTH, true)
-				okay = false
-			end
+				if (GearIsInZone(hhs[k],i)) == true then
+					FindPlace(hhs[k], false, 0, LAND_WIDTH, true)
+					okay = false
+				end
 			end
 		end
 	end
@@ -134,46 +134,42 @@ function CheckZones()
 		cOwnerClan[i] = nil
 		for k = 0, (numhhs-1) do
 			if (hhs[k] ~= nil) then
-                if (GearIsInZone(hhs[k],i)) == true then
+				if (GearIsInZone(hhs[k],i)) == true then
+					if cOwnerClan[i] ~= nil then
+						if cOwnerClan[i] ~= GetHogClan(hhs[k]) then
+							--if the hog now being compared is different to one that is also here and was previously compared
+							SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)
 
-                    if cOwnerClan[i] ~= nil then
-                        if cOwnerClan[i] ~= GetHogClan(hhs[k]) then 
-                            --if the hog now being compared is different to one that is also here and was previously compared
-                            
-                            SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)						
-        
-                            cOwnerClan[i] = 10 -- this means conflicted
-                        end
-                    elseif cOwnerClan[i] == nil then
-                        cOwnerClan[i] = GetHogClan(hhs[k])
-                        SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], GetClanColor( GetHogClan(hhs[k])))
-        
-                    end
+							cOwnerClan[i] = 10 -- this means conflicted
+						end
+					elseif cOwnerClan[i] == nil then
+						cOwnerClan[i] = GetHogClan(hhs[k])
+						SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], GetClanColor( GetHogClan(hhs[k])))
+					end
 
-                end
+				end
 			end
 		end
-
 	end
 
 end
 
 function AwardPoints()
-		
+
 	for i = 0,(zCount-1) do
-		-- give score to all players controlling points		
-		
-		-- only give score to the player currently in control		
-		if CurrentHedgehog ~= nil then		
+		-- give score to all players controlling points
+
+		-- only give score to the player currently in control
+		if CurrentHedgehog ~= nil then
 			if cOwnerClan[i] == GetHogClan(CurrentHedgehog) then
 				teamScore[cOwnerClan[i]] = teamScore[cOwnerClan[i]] + 1
 			end
 		end
 	end
 
-	-- i want to show all the tags at once as having the SAME score not 1,2,3,4 so alas, repeating the loop seems needed	
-	for i = 0,(zCount-1) do			
-		if CurrentHedgehog ~= nil then		
+	-- i want to show all the tags at once as having the SAME score not 1,2,3,4 so alas, repeating the loop seems needed
+	for i = 0,(zCount-1) do
+		if CurrentHedgehog ~= nil then
 			if cOwnerClan[i] == GetHogClan(CurrentHedgehog) then
 				local g = AddVisualGear(vCircX[i], vCircY[i]-100, vgtHealthTag, 100, false)
 				SetVisualGearValues(g, vCircX[i], vCircY[i]-100, 0, 0, 0, 0, 0, teamScore[cOwnerClan[i]], 1500, GetClanColor(cOwnerClan[i]))
@@ -239,7 +235,7 @@ function RebuildTeamInfo()
 		SetTeamLabel(GetTeamName(i), "0")
 		for z = 0, (numhhs-1) do
 			if GetHogTeamName(hhs[z]) == teamNameArr[i] then
-				teamClan[i] = GetHogClan(hhs[z])				
+				teamClan[i] = GetHogClan(hhs[z])
 				if teamSize[i] == 0 then
 					teamIndex[i] = z -- should give starting index
 				end
@@ -260,7 +256,7 @@ function onAttack()
 
 	if CurrentHedgehog ~= nil then
 		if GetCurAmmoType() == amSkip then
-			z = (TurnTimeLeft / 2000) - (TurnTimeLeft / 2000)%2 
+			z = (TurnTimeLeft / 2000) - (TurnTimeLeft / 2000)%2
 			for i = 0, z do
 				AwardPoints()
 			end
@@ -272,7 +268,7 @@ end
 function onGameInit()
 
 	-- Things we don't modify here will use their default values.
-	
+
 	EnableGameFlags(gfInfAttack, gfSolidLand)
 	DisableGameFlags(gfKing, gfAISurvival)
 	WaterRise = 0
@@ -297,8 +293,8 @@ function onGameStart()
 	vCircX[3], vCircY[3] = 1942, 77
 	vCircX[4], vCircY[4] = 3883, 89
 	vCircX[5], vCircY[5] = 2739, 1378
-	
-	for i = 0, 5 do	
+
+	for i = 0, 5 do
 		vCirc[i] = AddVisualGear(0,0,vgtCircle,0,true)
 		vCircMinA[i] = 20
 		vCircMaxA[i] = 255
@@ -321,14 +317,14 @@ function onGameStart()
 
 	missionHelp = loc("Control pillars to score points.") .. "|" ..
 		string.format(loc("Score goal: %d"), pointLimit)
-	
+
 	-- reposition hogs if they are on control points until they are not or sanity limit kicks in
 	reN = 0
 	while (reN < 10) do
 		if ZonesAreEmpty() == false then
-			reN = reN + 1	
+			reN = reN + 1
 		else
-			reN = 15		
+			reN = 15
 		end
 	end
 
@@ -348,30 +344,30 @@ end
 
 function onNewTurn()
 
-	-- reset the time counter so that it will get set to TurnTimeLeft in onGameTick	
+	-- reset the time counter so that it will get set to TurnTimeLeft in onGameTick
 	TimeCounter = 0
-		
+
 	if lastTeam ~= GetHogTeamName(CurrentHedgehog) then
 		lastTeam = GetHogTeamName(CurrentHedgehog)
 	end
 
 	if gameWon == false then
-	
+
 		for i = 0, (numTeams-1) do
 			if teamScore[i] >= pointLimit then --150
 				gameWon = true
-				winnerClan = i			
+				winnerClan = i
 			end
 		end
 
 		if gameWon == true then
 			for i = 0, (numhhs-1) do
-				if hhs[i] ~= nil then				
+				if hhs[i] ~= nil then
 					if GetHogClan(hhs[i]) ~= winnerClan then
 						SetEffect(hhs[i], heResurrectable, 0)
 						SetHealth(hhs[i],0)
 					end
-				end			
+				end
 			end
 			SetTurnTimeLeft(1)
 		end
@@ -386,22 +382,22 @@ function onGameTick()
 	if (vCircCount >= 500) and (gameWon == false) then
 		vCircCount = 0
 		CheckZones()
-	end	
+	end
 
-	-- set TimeCounter to starting time if it is uninitialised (from onNewTurn)	
+	-- set TimeCounter to starting time if it is uninitialised (from onNewTurn)
 	if (TimeCounter == 0) and (TurnTimeLeft > 0) then
-		TimeCounter = TurnTimeLeft	
-	end	
-	
-	-- has it ACTUALLY been 2 seconds since we last did this?	
+		TimeCounter = TurnTimeLeft
+	end
+
+	-- has it ACTUALLY been 2 seconds since we last did this?
 	if (TimeCounter - TurnTimeLeft) >= 2000 then
 		TimeCounter = TurnTimeLeft
-		
+
 		if (gameWon == false) then
-			AwardPoints()		
-		end	
-	end	
-	
+			AwardPoints()
+		end
+	end
+
 end
 
 function InABetterPlaceNow(gear)
