@@ -825,7 +825,9 @@ const
             (FileName:    'TargetpBackInv'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetPBackInv
             (FileName:    'HealthHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprHealthHud
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHealthHud
+            (FileName:    'HealthPoisonHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprHealthPoisonHud
             );
 
 
