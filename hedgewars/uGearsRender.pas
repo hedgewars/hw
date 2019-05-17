@@ -54,7 +54,7 @@ var RopePoints: record
                 end;
 
 implementation
-uses uRender, uRenderUtils, uUtils, uVariables, uAmmos, Math, uVisualGearsList;
+uses uRender, uRenderUtils, uGearsUtils, uUtils, uVariables, uAmmos, Math, uVisualGearsList;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
 var n: LongInt;
@@ -263,7 +263,7 @@ end;
 // Render some informational GUI next to hedgehog, like fuel and alternate weapon
 procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
 var HH: PHedgehog;
-    sx, sy, tx, ty, t, sign, m: LongInt;
+    sx, sy, tx, ty, t, hogLR: LongInt;
     dAngle: real;
 begin
     HH:= Gear^.Hedgehog;
@@ -318,15 +318,14 @@ begin
     // render crosshair
     if (CrosshairGear <> nil) and (Gear = CrosshairGear) then
         begin
-        sign:= hwSign(Gear^.dX);
-        m:= 1;
-        if ((Gear^.State and gstHHHJump) <> 0) and (HH^.Effects[heArtillery] = 0) then
-            m:= -1;
+        hogLR:= 1;
+        if IsHogFacingLeft(Gear) then
+            hogLR:= -1;
         setTintAdd(true);
         Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
         DrawTextureRotated(CrosshairTexture,
                 12, 12, CrosshairX + WorldDx, CrosshairY + WorldDy, 0,
-                sign * m * (Gear^.Angle * 180.0) / cMaxAngle);
+                hogLR * (Gear^.Angle * 180.0) / cMaxAngle);
         untint;
         setTintAdd(false);
         end;
@@ -360,7 +359,7 @@ end;
 procedure DrawHH(Gear: PGear; ox, oy: LongInt);
 var i, t: LongInt;
     amt: TAmmoType;
-    sign, hx, hy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
+    sign, hx, hy, tx, ty, sx, sy, hogLR: LongInt;  // hedgehog, crosshair, temp, sprite, direction
     dx, dy, ax, ay, aAngle, dAngle, hAngle, lx, ly: real;  // laser, change
     wraps: LongWord; // numbe of wraps for laser in world wrap
     defaultPos, HatVisible, inWorldBounds: boolean;
@@ -377,12 +376,13 @@ begin
     if (HH^.CurAmmoType = amKnife) and (HH = CurrentHedgehog) then
          curhat:= ChefHatTexture
     else curhat:= HH^.HatTex;
-    m:= 1;
-    if ((Gear^.State and gstHHHJump) <> 0) and (HH^.Effects[heArtillery] = 0) then
-        m:= -1;
     sx:= ox + 1; // this offset is very common
     sy:= oy - 3;
     sign:= hwSign(Gear^.dX);
+    if IsHogFacingLeft(Gear) then
+        hogLR:= -1
+    else
+        hogLR:= 1;
 
     if (Gear^.State and gstHHDeath) <> 0 then
         begin
@@ -480,11 +480,11 @@ begin
     3: I need to extend the beam beyond land.
     This routine perhaps should be pushed into uStore or somesuch instead of continuuing the increase in size of this function.
     *)
-            dx:= sign * m * Sin(Gear^.Angle * pi / cMaxAngle);
+            dx:= hogLR * Sin(Gear^.Angle * pi / cMaxAngle);
             dy:= -Cos(Gear^.Angle * pi / cMaxAngle);
             if cLaserSighting or cLaserSightingSniper then
                 begin
-                lx:= GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle);
+                lx:= GetLaunchX(HH^.CurAmmoType, hogLR, Gear^.Angle);
                 ly:= GetLaunchY(HH^.CurAmmoType, Gear^.Angle);
 
                 // ensure we start outside the hedgehog (he's solid after all)
@@ -525,11 +525,11 @@ begin
                         break;
                         end;
 
-                    if ((sign*m < 0) and (tx < LeftX)) or ((sign*m > 0) and (tx >= RightX)) then
+                    if ((hogLR < 0) and (tx < LeftX)) or ((hogLR > 0) and (tx >= RightX)) then
                         if (WorldEdge = weWrap) then
                             // wrap beam
                             begin
-                            if (sign*m) < 0 then
+                            if hogLR < 0 then
                                 lx:= RightX - (ax - (lx - LeftX))
                             else
                                 lx:= LeftX + (ax - (RightX - lx));
@@ -553,11 +553,11 @@ begin
                     inWorldBounds := ((ty and LAND_HEIGHT_MASK) or (tx and LAND_WIDTH_MASK)) = 0;
                     end;
 
-                DrawLineWrapped(hx, hy, tx, ty, 1.0, (sign*m) < 0, wraps, $FF, $00, $00, $C0);
+                DrawLineWrapped(hx, hy, tx, ty, 1.0, hogLR < 0, wraps, $FF, $00, $00, $C0);
                 end;
 
             // calculate crosshair position
-            CrosshairX := Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle));
+            CrosshairX := Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, hogLR, Gear^.Angle));
             CrosshairY := Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
             // crosshair will be rendered in RenderHHGuiExtras
             CrosshairGear := Gear;
@@ -770,7 +770,7 @@ begin
         if ((Gear^.State and gstHHJumping) <> 0) then
         begin
         DrawHedgehog(sx, sy,
-            sign*m,
+            hogLR,
             1,
             1,
             0);
@@ -998,7 +998,7 @@ begin
         if ((Gear^.State and gstHHJumping) <> 0) then
             begin
             DrawHedgehog(sx, sy,
-                sign*m,
+                hogLR,
                 1,
                 1,
                 0);
@@ -1102,7 +1102,7 @@ begin
                     sx,
                     sy - 5,
                     0,
-                    sign*m,
+                    hogLR,
                     32,
                     32);
                 if (curhat^.w > 64) or ((curhat^.w = 64) and (curhat^.h = 32)) then
@@ -1117,7 +1117,7 @@ begin
                         sx,
                         sy - 5,
                         tx,
-                        sign*m,
+                        hogLR,
                         32,
                         32);
                     untint
