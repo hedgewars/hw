@@ -69,7 +69,8 @@ var delay: LongWord;
     stNTurn);
     NewTurnTick: LongWord;
 
-const delaySDStart = 1600;
+const delayInit = 50;
+      delaySDStart = 1600;
       delaySDWarning = 1000;
       delayDamageTagFull = 1500;
       delayDamageTagShort = 500;
@@ -332,11 +333,14 @@ case step of
         begin
         if (not bBetweenTurns) and (not isInMultiShoot) then
             ScriptCall('onEndTurn');
+        delay:= delayInit;
         inc(step)
         end;
     stDelay1:
+        begin
         if DoDelay() then
             inc(step);
+        end;
     stChDmg:
     if CheckNoDamage then
         inc(step)
