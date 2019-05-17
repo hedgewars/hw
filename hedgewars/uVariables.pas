@@ -902,7 +902,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 9999;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -930,7 +930,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -958,7 +958,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -984,7 +984,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -6),
@@ -1039,7 +1039,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //26;
             ejectY: -6),
@@ -1067,7 +1067,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1094,7 +1094,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1124,7 +1124,7 @@ const
             maxAngle: cMaxAngle div 2;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1152,7 +1152,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1176,7 +1176,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //23;
             ejectY: -6),
@@ -1203,7 +1203,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1229,7 +1229,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1253,7 +1253,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1278,7 +1278,7 @@ const
             maxAngle: cMaxAngle div 2;
             isDamaging: true;
             SkipTurns: 2;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1310,7 +1310,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1392,7 +1392,7 @@ const
             maxAngle: 1327;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1478,7 +1478,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1502,7 +1502,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -6),
@@ -1530,7 +1530,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1557,7 +1557,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 4;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1583,7 +1583,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1610,7 +1610,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1636,7 +1636,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1690,7 +1690,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprDrill;
             ejectX: 0; //20;
             ejectY: -6),
@@ -1716,7 +1716,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -3),
@@ -1743,7 +1743,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 4;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1773,7 +1773,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1803,7 +1803,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1833,7 +1833,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1863,7 +1863,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1894,7 +1894,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1923,7 +1923,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1950,7 +1950,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //40;
             ejectY: -5),
@@ -1981,7 +1981,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2007,7 +2007,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2035,7 +2035,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2063,7 +2063,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: -5; //29;
             ejectY: -7),
@@ -2093,7 +2093,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 7;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2121,7 +2121,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2146,7 +2146,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2172,7 +2172,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -3),
@@ -2198,7 +2198,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2222,7 +2222,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2249,7 +2249,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2305,7 +2305,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2360,7 +2360,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -3),
@@ -2385,7 +2385,7 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -3),
@@ -2410,7 +2410,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2462,7 +2462,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2490,7 +2490,7 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 15;
             ejectY: -7),
@@ -2513,7 +2513,7 @@ const
             maxAngle: 5 * cMaxAngle div 6;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //23;
             ejectY: 0) //-6;
