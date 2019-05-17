@@ -760,7 +760,7 @@ begin
                     defaultPos:= false
                     end;
                 gtFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
-                gtLandGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                gtLandGun: DrawSpriteRotated(sprHandLandGun, hx, hy, sign, aangle);
                 gtIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
             end;
 
@@ -919,7 +919,7 @@ begin
                     end;
                 amBee: DrawSpriteRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
-                amLandGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                amLandGun: DrawSpriteRotated(sprHandLandGun, hx, hy, sign, aangle);
                 amIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                 amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
             end;

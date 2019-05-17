@@ -841,7 +841,9 @@ const
             (FileName:    'InvulnHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprInvulnHUD
             (FileName: 'amPiano'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  42; Height: 42; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprAmPiano
+            Width:  42; Height: 42; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAmPiano
+            (FileName:  'amLandGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprHandLandGun
             );
 
 
