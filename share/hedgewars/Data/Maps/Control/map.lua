@@ -434,21 +434,6 @@ function InABetterPlaceNow(gear)
 	end
 end
 
-function onHogHide(gear)
-	 InABetterPlaceNow(gear)
-end
-
-function onHogRestore(gear)
-	match = false
-	for i = 0, (numhhs-1) do
-		if (hhs[i] == nil) and (match == false) then
-			hhs[i] = gear
-			match = true
-		end
-	end
-end
-
-
 function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
