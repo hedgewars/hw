@@ -2711,14 +2711,19 @@ var
 begin
     WorldWrap(Gear);
     if Gear^.FlightTime > 0 then dec(Gear^.FlightTime);
+    // There are 2 flame types: normal and sticky
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
     if not sticky then AllInactive := false;
 
     landPixel:= TestCollisionYwithGear(Gear, 1);
+    // Flame is in mid-air
     if landPixel = 0 then
         begin
         AllInactive := false;
 
+        // Deals damage in mid-air if FlightTime = 0.
+        // Otherwise, flame is harmless in mid-air.
+        // Intended for use with scripts.
         if (GameTicks and $F = 0) and (Gear^.FlightTime = 0) then
             begin
             Gear^.Radius := 7;
@@ -2755,6 +2760,7 @@ begin
             Gear^.dY:= Gear^.dY * f;
         end
         else begin
+            // Gravity and wind
             if Gear^.dX.QWordValue > _0_01.QWordValue then
                     Gear^.dX := Gear^.dX * _0_995;
 
@@ -2770,6 +2776,7 @@ begin
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
 
+        // Extinguish in water
         if CheckCoordInWater(gX, gY) then
             begin
             for i:= 0 to 3 do
@@ -2779,11 +2786,13 @@ begin
             exit
             end
         end
+    // Flame is on terrain
     else
         begin
         if (Gear^.Timer = 1) and (GameTicks and $3 = 0) then
             begin
             Gear^.Y:= Gear^.Y+_6;
+            // Extinguish on ice
             if (landPixel and lfIce <> 0) or (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
                 begin
                 gX := hwRound(Gear^.X);
@@ -2796,6 +2805,7 @@ begin
                 end;
             Gear^.Y:= Gear^.Y-_6
             end;
+        // Sticky flame damage
         if sticky and (GameTicks and $F = 0) then
             begin
             Gear^.Radius := 7;
@@ -2816,12 +2826,14 @@ begin
             inc(Gear^.Damage)
             end
         else
+            // Flame burn-down handling
             begin
             gX := hwRound(Gear^.X);
             gY := hwRound(Gear^.Y);
-            // Standard fire
+            // Normal flame: Burns down quickly and must be destroyed before the turn ends
             if not sticky then
                 begin
+                // Deal damage
                 if ((GameTicks and $1) = 0) then
                     begin
                     Gear^.Radius := 7;
@@ -2843,13 +2855,17 @@ begin
                     for i:= Random(2) downto 0 do
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
 
+                // Flame burn-out due to time
                 if Gear^.Health > 0 then
                     dec(Gear^.Health);
+
+                // Calculate time for next flame update with a bit of random jitter
                 Gear^.Timer := 450 - Gear^.Tag * 8 + LongInt(GetRandom(2))
                 end
+            // Sticky flame: Burns down slowly and persists between turns
             else
                 begin
-                // Modified fire
+                // Destroy land very slowly (low chance this gets called)
                 if ((GameTicks and $7FF) = 0) and ((GameFlags and gfSolidLand) = 0) then
                     begin
                     doMakeExplosion(gX, gY, 4, Gear^.Hedgehog, EXPLNoDamage or EXPLDoNotTouchAny or EXPLNoGfx);
@@ -2858,13 +2874,16 @@ begin
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
                     end;
 
-// This one is interesting.  I think I understand the purpose, but I wonder if a bit more fuzzy of kicking could be done with getrandom.
+                // Calculate time for next flame update with a bit of random jitter
                 Gear^.Timer := 100 - Gear^.Tag * 3 + LongInt(GetRandom(2));
+
+                // Flame burn-out due to time
                 if (Gear^.Damage > 3000+Gear^.Tag*1500) then
                     Gear^.Health := 0
                 end
             end
         end;
+    // This kills the flame
     if Gear^.Health = 0 then
         begin
         gX := hwRound(Gear^.X);
