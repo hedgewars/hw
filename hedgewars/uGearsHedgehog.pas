@@ -857,19 +857,20 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         with Gear^.Hedgehog^ do
             with CurWeapon^ do
                 begin
-                if (Gear^.Message and gmLeft  ) <> 0 then
+                if Ammoz[AmmoType].PosCount < 2 then
+                    exit
+                else if (Gear^.Message and gmLeft  ) <> 0 then
                     Pos:= (Pos - 1 + Ammoz[AmmoType].PosCount) mod Ammoz[AmmoType].PosCount
+                else if (Gear^.Message and gmRight ) <> 0 then
+                    Pos:= (Pos + 1) mod Ammoz[AmmoType].PosCount
                 else
-                    if (Gear^.Message and gmRight ) <> 0 then
-                        Pos:= (Pos + 1) mod Ammoz[AmmoType].PosCount
-    else
-        exit;
-    GHStepTicks:= 200;
-    exit
-    end;
+                    exit;
+                GHStepTicks:= 200;
+                exit
+                end;
 
-if (Gear^.Hedgehog^.Unplaced) then
-    exit;
+    if (Gear^.Hedgehog^.Unplaced) then
+        exit;
 
     if ((Gear^.Message and gmAnimate) <> 0) then
         begin

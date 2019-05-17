@@ -1931,7 +1931,7 @@ if isCursorVisible and (not bShowAmmoMenu) then
             begin
         i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
         with Ammoz[CurAmmoType] do
-            if PosCount > 1 then
+            if PosCount > 0 then
                 begin
                 if (CurAmmoType = amGirder) or (CurAmmoType = amTeleport) then
                     begin
