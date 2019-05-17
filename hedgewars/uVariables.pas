@@ -1295,6 +1295,7 @@ const
                           ammoprop_DontHold or
                           ammoprop_Utility or
                           ammoprop_AltAttack or
+                          ammoprop_ShowSelIcon or
                           ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
@@ -1462,6 +1463,7 @@ const
                           ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_Utility or
+                          ammoprop_ShowSelIcon or
                           ammoprop_DontHold;
                     Count: 3;
                     NumPerTurn: 0;
@@ -1755,6 +1757,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
@@ -1784,6 +1787,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
@@ -1813,6 +1817,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
@@ -1842,6 +1847,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
@@ -1871,6 +1877,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_NeedUpDown or
                           ammoprop_Effect;
@@ -1959,6 +1966,7 @@ const
                           ammoprop_DontHold or
                           ammoprop_Utility or
                           ammoprop_NeedUpDown or
+                          ammoprop_ShowSelIcon or
                           ammoprop_AltAttack;
                 Count: 1;
                 NumPerTurn: 0;
@@ -2012,6 +2020,7 @@ const
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_NeedUpDown or
+                          ammoprop_ShowSelIcon or
                           ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
@@ -2309,6 +2318,7 @@ const
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_Utility or
+                          ammoprop_ShowSelIcon or
                           ammoprop_DontHold or
                           ammoprop_ForceTurnEnd;
                 Count: 2;

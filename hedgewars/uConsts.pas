@@ -338,6 +338,7 @@ const
     ammoprop_ForceTurnEnd = $00200000; // always ends turn after usage, ignoring inf. attack
     ammoprop_NoTargetAfter= $00400000; // disable target selection after attack
     ammoprop_NoWrapTarget = $00800000; // allow to select target beyond wrap world edge limits
+    ammoprop_ShowSelIcon  = $01000000; // show icon when selected
     ammoprop_NoRoundEnd   = $10000000; // ammo doesn't end turn
 
     AMMO_INFINITE = 100;               // internal representation of infinite ammo count
