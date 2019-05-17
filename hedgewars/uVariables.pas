@@ -839,7 +839,9 @@ const
             (FileName:    'HaloHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  22; Height: 11; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHaloHUD
             (FileName:    'InvulnHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprInvulnHUD
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprInvulnHUD
+            (FileName: 'amPiano'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  42; Height: 42; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true)// sprAmPiano
             );
 
 
@@ -2093,8 +2095,8 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 7;
-            PosCount: 0;
-            PosSprite: sprWater;
+            PosCount: 1;
+            PosSprite: sprAmPiano;
             ejectX: 0;
             ejectY: 0),
 
