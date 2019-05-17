@@ -53,7 +53,6 @@ local vCircCol = {}
 local numhhs = 0 -- store number of hedgehogs
 local hhs = {} -- store hedgehog gears
 
-local numTeams --  store the number of teams in the game
 local teamNameArr = {}	-- store the list of teams
 local teamClan = {}
 local teamSize = {}	-- store how many hogs per team
@@ -205,7 +204,7 @@ function RebuildTeamInfo()
 		teamIndex[i] = 0
 		teamScore[i] = 0
 	end
-	numTeams = 0
+	local numTeams = 0
 
 	for i = 0, (numhhs-1) do
 
@@ -236,7 +235,7 @@ function RebuildTeamInfo()
 	end
 
 	-- find out how many hogs per team, and the index of the first hog in hhs
-	for i = 0, (numTeams-1) do
+	for i = 0, TeamsCount-1 do
 		SetTeamLabel(GetTeamName(i), "0")
 		for z = 0, (numhhs-1) do
 			if GetHogTeamName(hhs[z]) == teamNameArr[i] then
@@ -317,7 +316,7 @@ function onGameStart()
 	--new improved placement schematics aw yeah
 	RebuildTeamInfo()
 
-	for i = 0, (numTeams-1) do
+	for i = 0, ClansCount - 1 do
 		pointLimit = pointLimit - 25
 	end
 
@@ -395,7 +394,7 @@ function onNewTurn()
 
 	if gameWon == false then
 
-		for i = 0, (numTeams-1) do
+		for i = 0, TeamsCount - 1 do
 			if teamScore[i] >= pointLimit then --150
 				gameWon = true
 				winnerClan = i
@@ -415,7 +414,7 @@ function onNewTurn()
 
 			-- Rankings
 			local teamList = {}
-			for i=0, TeamsCount-1 do
+			for i=0, TeamsCount - 1 do
 				local name = GetTeamName(i)
 				local clan = GetTeamClan(name)
 				table.insert(teamList, { score = teamScore[teamClan[i]], name = name, clan = clan })
