@@ -207,12 +207,23 @@ else
 end;
 
 
-procedure DrawAltWeapon(Gear: PGear; sx, sy: LongInt);
+procedure DrawSelectedWeapon(Gear: PGear; sx, sy: LongInt; isAltWeapon: boolean);
 begin
 with Gear^.Hedgehog^ do
     begin
-    if not (((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0)) then
+    if ((Gear^.State and gstAttacked) <> 0) then
         exit;
+    if (isAltWeapon and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) = 0)) then
+        exit;
+    if (not isAltWeapon) and (((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_ShowSelIcon) = 0) or (
+            (((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackInMove) = 0) and ((Gear^.State and gstMoving) <> 0)))) then
+        exit;
+    if (not isAltWeapon) then
+        begin
+        sy:= sy - 64;
+        if (IsHogFacingLeft(Gear)) then
+            sx:= sx - 61;
+        end;
     DrawTexture(sx + 16, sy + 16, ropeIconTex);
     DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, sx + 30, sy + 30, ord(CurAmmoType) - 1, 1, 32, 32);
     end;
@@ -342,10 +353,10 @@ begin
                                 DrawSprite(sprJetpack, sx-32, sy-32, 4);
                             if CurAmmoGear^.Tex <> nil then
                                 DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
-                            DrawAltWeapon(Gear, sx, sy);
+                            DrawSelectedWeapon(Gear, sx, sy, true);
                             end;
-            gtRope:         DrawAltWeapon(Gear, sx, sy);
-            gtParachute:    DrawAltWeapon(Gear, sx, sy);
+            gtRope:         DrawSelectedWeapon(Gear, sx, sy, true);
+            gtParachute:    DrawSelectedWeapon(Gear, sx, sy, true);
             gtLandGun:      if CurAmmoGear^.Tex <> nil then
                                 DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
             gtFlamethrower: if CurAmmoGear^.Tex <> nil then
@@ -353,7 +364,11 @@ begin
             gtIceGun:       if CurAmmoGear^.Tex <> nil then
                                 DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex);
         end;
-        end;
+        end
+    else if ((Gear^.State and gstHHDriven) <> 0) then
+        begin
+        DrawSelectedWeapon(Gear, sx, sy, false);
+        end
 end;
 
 procedure DrawHH(Gear: PGear; ox, oy: LongInt);
