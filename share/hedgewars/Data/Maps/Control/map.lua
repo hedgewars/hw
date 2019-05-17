@@ -426,6 +426,16 @@ function onGameTick()
 
 end
 
+function onHogAttack(ammoType)
+	-- Update TimeCounter after using extra time
+	if ammoTime == amExtraTime then
+		if (TimeCounter == 0) and (TurnTimeLeft > 0) then
+			TimeCounter = TurnTimeLeft
+		end
+		TimeCounter = TimeCounter + 30000
+	end
+end
+
 function InABetterPlaceNow(gear)
 	for i = 0, (numhhs-1) do
 		if gear == hhs[i] then
