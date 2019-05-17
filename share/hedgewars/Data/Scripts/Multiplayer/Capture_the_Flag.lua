@@ -138,6 +138,42 @@ local fGearTimer = 0
 --flag methods
 ------------------------
 
+local RankTeams = function(teamList)
+	local teamRank = function(a, b)
+		if a.score ~= b.score then
+			return a.score > b.score
+		else
+			return a.clan > b.clan
+		end
+	end
+	table.sort(teamList, teamRank)
+	local rank, plusRank, score, clan
+	for i=1, #teamList do
+		if i == 1 then
+			rank = 1
+			plusRank = 1
+			score = teamList[i].score
+			clan = teamList[i].clan
+		end
+		if (teamList[i].score < score) then
+			rank = rank + plusRank
+			plusRank = 1
+		end
+		if (teamList[i].score == score and teamList[i].clan ~= clan) then
+			plusRank = plusRank + 1
+		end
+		teamList[i].rank = rank
+		score = teamList[i].score
+		clan = teamList[i].clan
+	end
+
+	for i=1, #teamList do
+		SendStat(siPointType, "!POINTS")
+		SendStat(siTeamRank, tostring(teamList[i].rank))
+		SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
+	end
+end
+
 function CheckScore(clanID)
 
 	if fCaptures[clanID] == captureLimit then
@@ -165,15 +201,7 @@ function CheckScore(clanID)
 			local clan = GetTeamClan(name)
 			table.insert(teamList, { score = fCaptures[clan], name = name, clan = clan })
 		end
-		local teamRank = function(a, b)
-			return a.score > b.score
-		end
-		table.sort(teamList, teamRank)
-
-		for i=1, #teamList do
-			SendStat(siPointType, "!POINTS")
-			SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
-		end
+		RankTeams(teamList)
 
 		if mostCaptures >= 2 then
 			SendStat(siCustomAchievement, string.format(loc("%s (%s) has captured the flag %d times."), mostCapturesHogName, mostCapturesHogTeam, mostCaptures))
