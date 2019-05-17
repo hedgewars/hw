@@ -67,6 +67,7 @@ function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
 function WorldWrap(var Gear: PGear): boolean;
 function HomingWrap(var Gear: PGear): boolean;
 
+function IsHogFacingLeft(Gear: PGear): boolean;
 function IsHogLocal(HH: PHedgehog): boolean;
 
 
@@ -1854,6 +1855,16 @@ begin
             State:= ord(sprBoing)
             end;
     PlaySound(sndMelonImpact, true)
+end;
+
+function IsHogFacingLeft(Gear: PGear): boolean;
+var sign: LongInt;
+begin
+    sign:= hwSign(Gear^.dX);
+    if ((Gear^.State and gstHHHJump) <> 0) and (Gear^.Hedgehog^.Effects[heArtillery] = 0) then
+        IsHogFacingLeft:= sign > 0
+    else
+        IsHogFacingLeft:= sign < 0;
 end;
 
 function IsHogLocal(HH: PHedgehog): boolean;
