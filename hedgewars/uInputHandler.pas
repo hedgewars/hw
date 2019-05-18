@@ -188,6 +188,7 @@ procedure ProcessKey(code: LongInt; KeyDown: boolean);
 var
     Trusted: boolean;
     curBind, s: shortstring;
+    readyAborter: boolean;
 begin
 if not(tkbd[code] xor KeyDown) then exit;
 tkbd[code]:= KeyDown;
@@ -228,6 +229,12 @@ if(KeyDown and (code = SDLK_w)) then
 if CurrentBinds.indices[code] > 0 then
     begin
     curBind:= CurrentBinds.binds[CurrentBinds.indices[code]];
+
+    // Check if the keypress should end the ready phase.
+    // Camera movement keys are "safe" since its equivalent to moving the mouse,
+    // which also does not end the ready phase.
+    readyAborter:= (curBind <> '+cur_u') and (curBind <> '+cur_d') and (curBind <> '+cur_l') and (curBind <> '+cur_r');
+
     if (code < cKeyMaxIndex - 2) // means not mouse buttons
         and KeyDown
         and (not ((curBind = 'put')
@@ -255,7 +262,8 @@ if CurrentBinds.indices[code] > 0 then
             end;
 
         ParseCommand(curBind, Trusted);
-        if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+        // End ready phase
+        if (readyAborter) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
     else if (curBind[1] = '+') then
@@ -270,7 +278,8 @@ if CurrentBinds.indices[code] > 0 then
         s:= curBind;
         s[1]:= '-';
         ParseCommand(s, Trusted);
-        if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+        // End ready phase
+        if (readyAborter) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
     else
