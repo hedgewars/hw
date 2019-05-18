@@ -93,6 +93,9 @@ margin: 6px 0px 6px 0px;
 TeamShowWidget QPushButton:disabled {
 color: #a0a0a0;
 }
+TeamShowWidget QPushButton:pressed {
+background-color: #362c7a;
+}
 
 QToolButton {
 background-color: #11084A;
@@ -100,10 +103,6 @@ background-color: #11084A;
 
 QToolButton:hover {
 background-color: #150A61;
-}
-
-QToolButton:pressed {
-background-color: #100744;
 }
 
 QLineEdit, QListWidget, QListView, QTableView, QTableWidget, QTextBrowser,
@@ -171,6 +170,8 @@ background-color: rgba(18, 42, 5, 70%);
 
 QPushButton:pressed, QToolButton:pressed {
 border-color: white;
+background-color: #344b1e;
+color: white;
 }
 
 QPushButton:focus {

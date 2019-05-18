@@ -115,10 +115,6 @@ QToolButton:hover {
 background-color: #150A61;
 }
 
-QToolButton:pressed {
-background-color: #100744;
-}
-
 QLineEdit, QListWidget, QListView, QTableView, QTableWidget, QTextBrowser,
 QSpinBox, QToolBox, QPlainTextEdit, QToolButton, #mapPreview, #labelLikeLineEdit {
 border-radius: 10px;
@@ -184,6 +180,11 @@ background-color: rgba(20, 20, 20, 70%); /* CUSTOM */
 
 QPushButton:pressed, QToolButton:pressed {
 border-color: white;
+background-color: #344b1e;
+color: white;
+}
+TeamShowWidget QPushButton:pressed {
+background-color: #362c7a;
 }
 
 QPushButton:focus {
