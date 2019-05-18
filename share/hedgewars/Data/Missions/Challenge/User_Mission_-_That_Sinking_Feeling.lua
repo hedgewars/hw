@@ -29,7 +29,7 @@ function printMission()
 end
 
 -- allow skipping of the intro via hitting precise key
-function onPreciseLocal()
+function onPrecise()
 	if introStage < 100 then
 		introStage = 110
 		genCounter = 0

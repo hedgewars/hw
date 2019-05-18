@@ -893,7 +893,7 @@ function onGearDamage(gear, damage)
   end
 end
 
-function onPreciseLocal()
+function onPrecise()
   if GameTime > 2000 then
     SetAnimSkip(true)
   end

@@ -545,7 +545,7 @@ function onNewTurn()
   end
 end
 
-function onPreciseLocal()
+function onPrecise()
   if GameTime > 2500 then
     SetAnimSkip(true)
   end
