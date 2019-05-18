@@ -187,7 +187,7 @@ end;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 var
     Trusted: boolean;
-    s      : string;
+    curBind, s: shortstring;
 begin
 if not(tkbd[code] xor KeyDown) then exit;
 tkbd[code]:= KeyDown;
@@ -227,25 +227,26 @@ if(KeyDown and (code = SDLK_w)) then
 
 if CurrentBinds.indices[code] > 0 then
     begin
+    curBind:= CurrentBinds.binds[CurrentBinds.indices[code]];
     if (code < cKeyMaxIndex - 2) // means not mouse buttons
         and KeyDown
-        and (not ((CurrentBinds.binds[CurrentBinds.indices[code]] = 'put') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = 'ammomenu') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_u') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_d') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_l') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_r')))
-        and (CurrentTeam <> nil) 
-        and (not CurrentTeam^.ExtDriven) 
+        and (not ((curBind = 'put')
+                  or (curBind = 'ammomenu')
+                  or (curBind = '+cur_u')
+                  or (curBind = '+cur_d')
+                  or (curBind = '+cur_l')
+                  or (curBind = '+cur_r')))
+        and (CurrentTeam <> nil)
+        and (not CurrentTeam^.ExtDriven)
         then bShowAmmoMenu:= false;
 
     if KeyDown then
         begin
         Trusted:= Trusted and (not isPaused); //releasing keys during pause should be allowed on the other hand
 
-        if CurrentBinds.binds[CurrentBinds.indices[code]] = 'switch' then
+        if curBind = 'switch' then
             LocalMessage:= LocalMessage or gmSwitch
-        else if CurrentBinds.binds[CurrentBinds.indices[code]] = '+precise' then
+        else if curBind = '+precise' then
             begin
             LocalMessage:= LocalMessage or gmPrecise;
             updateVolumeDelta(true);
@@ -253,20 +254,20 @@ if CurrentBinds.indices[code] > 0 then
             updateCursorMovementDelta(true, CursorMovementY, CursorMovementY);
             end;
 
-        ParseCommand(CurrentBinds.binds[CurrentBinds.indices[code]], Trusted);
+        ParseCommand(curBind, Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
-    else if (CurrentBinds.binds[CurrentBinds.indices[code]][1] = '+') then
+    else if (curBind[1] = '+') then
         begin
-        if CurrentBinds.binds[CurrentBinds.indices[code]] = '+precise' then
+        if curBind = '+precise' then
             begin
             LocalMessage:= LocalMessage and (not gmPrecise);
             updateVolumeDelta(false);
             updateCursorMovementDelta(false, CursorMovementX, CursorMovementX);
             updateCursorMovementDelta(false, CursorMovementY, CursorMovementY);
             end;
-        s:= CurrentBinds.binds[CurrentBinds.indices[code]];
+        s:= curBind;
         s[1]:= '-';
         ParseCommand(s, Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
@@ -274,7 +275,7 @@ if CurrentBinds.indices[code] > 0 then
         end
     else
         begin
-        if CurrentBinds.binds[CurrentBinds.indices[code]] = 'switch' then
+        if curBind = 'switch' then
             LocalMessage:= LocalMessage and (not gmSwitch)
         end
     end
