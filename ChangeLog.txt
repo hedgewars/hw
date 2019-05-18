@@ -1,6 +1,17 @@
 + features
 * bugfixes
 ============== 1.0.0-dev (unreleased) ==============
+Highlights:
+ + Campaigns now respect your team identity instead of overwriting it
+ + Single missions now support team selection and track your progress
+ + Challenges track the team's highscores
+ + Hand-drawn maps can now be scaled with slider
+ + Quick games are more random
+ + Can change hedgehog order in The Specialists
+ + Turn transition is less hectic
+ + Various small HUD improvements
+ * Fix wrong key names being displayed in key selection
+
 Gameplay:
  + Hand-drawn maps can now be scaled with slider
  + Slightly longer delays between turns to make it easier to follow the game
@@ -24,6 +35,8 @@ Gameplay:
 Styles and schemes:
  + The Specialists: Unlock game scheme
  + The Specialists: Add script parameter support to set custom specialists order
+ + Control, CTF_Blizzard: Display scores in stats screen
+ + CTF_Blizzard: Various minor graphical and text improvements
  * Balanced Random Weapon: Fix Lua errors after using Time Box
  * Racer: Fix racer ghost not getting reset after a skip
  * Space Invasion: No longer allow to set start shield above shield limit
@@ -32,6 +45,7 @@ Styles and schemes:
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
  * HedgeEditor: Fix major FPS drop when there are a lot of objects
+ * Control: Fix score failure after using extra time
 
 A Classic Fairytale:
  + Backstab: Disable utilities before traitor has been dealt with
@@ -67,9 +81,6 @@ Controls:
  * Fix broken default keyboard controls for team chat and camera movement
 
 Graphics:
- + Show contour of flying saucer when in highly opaque water
- + Remove visual clutter in cut scenes
- + Add setting to set default/initial zoom
  * Fix speech bubbles overlapping in the wrong order
  * Fix wrong ice beam angle if it goes diagonally up out of map through world wrap
  * Fix double water splash when flying saucer drowns
@@ -77,12 +88,18 @@ Graphics:
  * Fix birdy being drawn behind hedgehogs and objects
 
 Game HUD:
- + Display current hog health at top right corner
+ + Display current hog health (and related status icons) at top right corner
+ + Display laser sight icon above wind bar when laser sight utility is active
+ + Display selected weapon above hedgehog for some weapons/tools
+ + Change cursor of piano strike
  + Colorize switching arrows, pointing arrow and target cross in clan color
  + Skip ammo menu animation when playing with turn time of 10s or less
  + Don't show crate spawn message for initial crates in missions
  + Don't show hedgehog health if “invulnerable” game modifier is active
  + Display player name of own teams in online games
+ + Show contour of flying saucer when in highly opaque water
+ + Remove visual clutter in cut scenes
+ + Add setting to set default/initial zoom
  * Black clan color can now be used without visual problems
  * Fix last 2 characters in demo chat being missing
  * Hide most HUD elements in cinematic mode
@@ -106,6 +123,8 @@ Frontend:
  + New data directory for video thumbnails: Data/VideoThumbnails
  + Display a warning when the same key is used multiple times
  + Stats screen now hides empty sections
+ + Visual notification when someone joins the room online
+ + Various minor style tweaks
  * Fix broken handling of /watch chat command on official server
  * Fix renaming a video leading to loss of thumbnail after restart
  * Fix controls list failing to display correct key names with regards to keyboard layout
@@ -119,6 +138,9 @@ Sounds and voicepacks:
  + Add taunt: sndFlyAway / Flyaway.ogg: When hedgehog flies off the map
  + Tweak some taunts: sndFirstBlood, sndLeaveMeAlone, sndCutItOut
  * Fix English voicepack selection of team being overwritten when playing in non-English locale
+
+Theme customization
+ + Make rope stylable by theme: Support for RopeNode.png and rope-step in theme.cfg
 
 Lua API:
  + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)
@@ -134,7 +156,7 @@ Lua API:
  + Utils library: New calls: getReadableChallengeRecord, updateChallengeRecord, integerSqrt, integerHypotenuse
  + New callback: onGameResult(winningClan): Called when the game ends normally. winningClan = index of winning clan or -1 on draw
  + New callback: onCaseDrop(gear): Called at the point where a crate MIGHT be dropped between turns. Gear is the crate gear or nil
- + New callback: ooHogSwitch(oldHog): Called when hogs was switched with the “switch hedgehog” utility
+ + New callback: onHogSwitch(oldHog): Called when hogs was switched with the “switch hedgehog” utility
  + SendStat extension: Option to use predefined modes with siPointType, like "!POINTS" or "!TIME"
  + SimpleMission: Add isMissionTeam attribute for teams
  + SpeedShoppa/TargetPractice libraries: Remove custom hog and team info settings
