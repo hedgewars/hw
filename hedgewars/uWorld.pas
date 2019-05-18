@@ -1708,6 +1708,16 @@ if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
         begin
             DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
             DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amLowGravity) - 1, 1, 32, 32);
+{$IFDEF USE_TOUCH_INTERFACE}
+            offsetX := offsetX - 33
+{$ELSE}
+            offsetX := offsetX + 33
+{$ENDIF}
+        end;
+    if cLaserSighting then
+        begin
+            DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
+            DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amLaserSight) - 1, 1, 32, 32);
         end;
     end;
 
