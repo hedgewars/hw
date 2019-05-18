@@ -135,7 +135,6 @@ Lua API:
  + New callback: onGameResult(winningClan): Called when the game ends normally. winningClan = index of winning clan or -1 on draw
  + New callback: onCaseDrop(gear): Called at the point where a crate MIGHT be dropped between turns. Gear is the crate gear or nil
  + New callback: ooHogSwitch(oldHog): Called when hogs was switched with the “switch hedgehog” utility
- + New callback: onPreciseLocal(): Called when precise key is pressed client-side
  + SendStat extension: Option to use predefined modes with siPointType, like "!POINTS" or "!TIME"
  + SimpleMission: Add isMissionTeam attribute for teams
  + SpeedShoppa/TargetPractice libraries: Remove custom hog and team info settings

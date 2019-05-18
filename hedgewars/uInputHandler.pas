@@ -60,7 +60,7 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
 implementation
-uses uKeyNames, uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer, uCursor, uScript;
+uses uKeyNames, uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer, uCursor;
 
 const
     LSHIFT = $0200;
@@ -251,7 +251,6 @@ if CurrentBinds.indices[code] > 0 then
             updateVolumeDelta(true);
             updateCursorMovementDelta(true, CursorMovementX, CursorMovementX);
             updateCursorMovementDelta(true, CursorMovementY, CursorMovementY);
-            ScriptCall('onPreciseLocal');
             end;
 
         ParseCommand(CurrentBinds.binds[CurrentBinds.indices[code]], Trusted);
