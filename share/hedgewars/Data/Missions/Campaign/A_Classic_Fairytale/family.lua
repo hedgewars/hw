@@ -661,9 +661,14 @@ function onNewTurn()
   end
 end
 
-function onPreciseLocal()
+function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
     return
   end
+--  HideHedge(princess)
+--  for i = 1, 5 do
+--    DeleteGear(cyborgs[i])
+--  end
+--  AddAmmo(natives[1], amTeleport, 100)
 end

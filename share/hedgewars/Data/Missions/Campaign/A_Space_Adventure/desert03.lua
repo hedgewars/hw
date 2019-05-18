@@ -120,7 +120,7 @@ function onAmmoStoreInit()
 	SetAmmo(amRCPlane, 0, 0, 0, 1)
 end
 
-function onPreciseLocal()
+function onPrecise()
 	if GameTime > 3000 then
 		SetAnimSkip(true)
 	end
