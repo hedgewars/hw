@@ -180,11 +180,11 @@ background-color: rgba(20, 20, 20, 70%); /* CUSTOM */
 
 QPushButton:pressed, QToolButton:pressed {
 border-color: white;
-background-color: #344b1e;
+background-color: rgba(40, 40, 40, 100%); /* CUSTOM */
 color: white;
 }
 TeamShowWidget QPushButton:pressed {
-background-color: #362c7a;
+background-color: #202020; /* CUSTOM */
 }
 
 QPushButton:focus {
@@ -425,37 +425,37 @@ border-color: #F6CB1C;
 QScrollBar:vertical {
 border: none;
 color: #FFD902;
-background: #00321c;
+background: black; /*CUSTOM */
 width: 15px;
 margin: 17px 0 17px 0;
 }
 QScrollBar:horizontal {
 border: none;
 color: #FFD902;
-background: #00321c;
+background: black; /* CUSTOM */
 height: 15px;
 margin: 0 17px 0 17px;
 }
 QScrollBar::handle:vertical {
-background: #00321c;
-border: 1px solid #005F35;
+background: #3d1b3f; /* CUSTOM */
+border: 1px solid #b465b8; /* CUSTOM */
 border-radius: 2px;
 min-height: 20px;
 }
 QScrollBar::handle:horizontal {
-background: #00321c;
-border: 1px solid #005F35;
+background: #3d1b3f; /* CUSTOM */
+border: 1px solid #b465b8; /* CUSTOM */
 border-radius: 2px;
 min-width: 20px;
 }
 QScrollBar::handle:pressed {
-background: #005a33;
+background: #622b66; /* CUSTOM */
 border-color: #FFFFFF;
 }
 QScrollBar::add-line, QScrollBar::sub-line {
-border: 1px solid #005F35;
+border: 1px solid #b465b8; /* CUSTOM */
 border-radius: 2px;
-background: #00321c;
+background: #3d1b3f; /* CUSTOM */
 subcontrol-origin: margin;
 }
 QScrollBar::add-line:vertical {
@@ -475,7 +475,7 @@ width: 15px;
 subcontrol-position: left;
 }
 QScrollBar::add-line:pressed, QScrollBar::sub-line:pressed {
-background: #005a33;
+background: #622b66; /* CUSTOM */
 border-color: #FFFFFF;
 }
 
@@ -492,10 +492,10 @@ QScrollBar::right-arrow {
 background-image: url(":/res/scroll_right.png");
 }
 QScrollBar::add-page, QScrollBar::sub-page {
-background: #00190F;
+background: black; /* CUSTOM */
 }
 QScrollBar::add-page:pressed, QScrollBar::sub-page:pressed {
-background: #008751;
+background: #808080; /* CUSTOM */
 }
 
 #hatList, #themeList {
@@ -543,7 +543,7 @@ min-height: 500px;
 
 QProgressBar {
 border: 3px solid #FFCC00;
-background-color: #150A61;
+background-color: black; /* CUSTOM */
 border-radius: 5px;
 text-align: center;
 color: #FFFFFF;
