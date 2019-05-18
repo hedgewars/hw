@@ -454,7 +454,7 @@ end
 
 function onHogAttack(ammoType)
 	-- Update TimeCounter after using extra time
-	if ammoTime == amExtraTime then
+	if ammoType == amExtraTime then
 		if (TimeCounter == 0) and (TurnTimeLeft > 0) then
 			TimeCounter = TurnTimeLeft
 		end
