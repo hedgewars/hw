@@ -135,6 +135,43 @@ begin
 
     df:= detail * (6 - param2 * 2);
 
+    // Calculate estimate for max. hedgehog count
+    // Tunnels
+    if param1 = 0 then
+        begin
+        // Small tunnels
+        if param2 = 0 then
+            // 12..24
+            MaxHedgehogs:= 12 + 1 * (cFeatureSize - 1)
+        // Medium tunnels
+        else if param2 = 1 then
+            // 14..24
+            MaxHedgehogs:= 14 + max(0, 1 * (cFeatureSize - 3))
+        // Large tunnels
+        else if param2 = 2 then
+            // 16..24
+            MaxHedgehogs:= 16 + max(0, 1 * (cFeatureSize - 5));
+        if MaxHedgehogs > 24 then
+            MaxHedgehogs:= 24;
+        end
+    // Islands
+    else if (param1 = 1) and (cFeatureSize <= 25) then
+        // Small islands
+        if param2 = 0 then
+            // 64..32
+            MaxHedgehogs:= 32 + ((((25 - (cFeatureSize-1))*1000000) div 24) * 32) div 1000000
+        // Medium islands
+        else if param2 = 1 then
+            // 56..28
+            MaxHedgehogs:= 28 + ((((25 - (cFeatureSize-1))*1000000) div 24) * 28) div 1000000
+        // Large islands
+        else if param2 = 2 then
+            // 48..24
+            MaxHedgehogs:= 24 + ((((25 - (cFeatureSize-1))*1000000) div 24) * 24) div 1000000;
+    // We only want even numbers
+    if (MaxHedgehogs > 0) and ((MaxHedgehogs mod 2) = 1) then
+        MaxHedgehogs:= MaxHedgehogs - 1;
+
     inoise_setup();
 
     for y:= minY to pred(height) do
