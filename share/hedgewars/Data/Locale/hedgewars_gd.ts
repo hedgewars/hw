@@ -1097,6 +1097,10 @@ Last engine message:
         <source>Category</source>
         <translation>Roinn-seòrsa</translation>
     </message>
+    <message>
+        <source>Warning: The same key is assigned multiple times!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LibavInteraction</name>
@@ -3762,7 +3766,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>capture</source>
-        <translation>glac</translation>
+        <translation type="vanished">glac</translation>
     </message>
     <message>
         <source>quit</source>
@@ -3889,6 +3893,14 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
         <source>toggle HUD</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>backwards jump</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -3932,10 +3944,6 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>precise + capture</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>precise + toggle hedgehog tags</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3945,6 +3953,14 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high jump (twice)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + screenshot</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4502,6 +4518,10 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

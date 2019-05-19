@@ -1053,6 +1053,10 @@ Last engine message:
         <source>Category</source>
         <translation>Kategoria</translation>
     </message>
+    <message>
+        <source>Warning: The same key is assigned multiple times!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LibavInteraction</name>
@@ -3681,7 +3685,7 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>capture</source>
-        <translation>kaappaa</translation>
+        <translation type="vanished">kaappaa</translation>
     </message>
     <message>
         <source>quit</source>
@@ -3804,6 +3808,14 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
         <source>toggle HUD</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>backwards jump</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -3847,10 +3859,6 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>precise + capture</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>precise + toggle hedgehog tags</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3860,6 +3868,14 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high jump (twice)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + screenshot</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4417,6 +4433,10 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

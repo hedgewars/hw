@@ -1077,6 +1077,10 @@ Last engine message:
         <source>Category</source>
         <translation>Catégorie</translation>
     </message>
+    <message>
+        <source>Warning: The same key is assigned multiple times!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LibavInteraction</name>
@@ -3810,7 +3814,7 @@ Si cela continue de se produire, veuillez cliquer sur le bouton &apos;%2&apos; d
     </message>
     <message>
         <source>capture</source>
-        <translation>capture</translation>
+        <translation type="vanished">capture</translation>
     </message>
     <message>
         <source>quit</source>
@@ -3982,6 +3986,14 @@ zoom</translation>
         <source>toggle HUD</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>backwards jump</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -4025,10 +4037,6 @@ zoom</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>precise + capture</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>precise + toggle hedgehog tags</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4038,6 +4046,14 @@ zoom</translation>
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high jump (twice)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + screenshot</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4599,6 +4615,10 @@ zoom</translation>
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
