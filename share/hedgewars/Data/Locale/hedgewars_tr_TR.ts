@@ -1058,6 +1058,10 @@ Last engine message:
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
+    <message>
+        <source>Warning: The same key is assigned multiple times!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LibavInteraction</name>
@@ -3811,7 +3815,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>capture</source>
-        <translation>yakala</translation>
+        <translation type="vanished">yakala</translation>
     </message>
     <message>
         <source>quit</source>
@@ -3934,6 +3938,14 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <source>toggle HUD</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>backwards jump</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -3977,10 +3989,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>precise + capture</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>precise + toggle hedgehog tags</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3990,6 +3998,14 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high jump (twice)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + screenshot</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4551,6 +4567,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
