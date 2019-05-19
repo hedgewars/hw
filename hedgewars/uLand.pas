@@ -285,10 +285,22 @@ end;
 
 procedure GenDrawnMap;
 begin
+    if (cFeatureSize <= 6) then
+        MaxHedgehogs:= 6 + (cFeatureSize-1) * 2
+    else if (cFeatureSize < 11) then
+        MaxHedgehogs:= 16 + (cFeatureSize-6) * 4
+    else if (cFeatureSize = 11) then
+        MaxHedgehogs:= 48
+    else if (cFeatureSize = 12) then
+        MaxHedgehogs:= 64
+    else
+        MaxHedgehogs:= cMaxHHs;
+
+    if GameType = gmtLandPreview then
+        cFeatureSize:= 3;
     ResizeLand((4096 * max(min(cFeatureSize,24),3)) div 12, (2048 * max(min(cFeatureSize,24),3)) div 12);
     uLandPainted.Draw;
 
-    MaxHedgehogs:= 64;
     hasGirders:= true;
     playHeight:= LAND_HEIGHT;
     playWidth:= LAND_WIDTH;
@@ -886,7 +898,7 @@ begin
         mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
-        mgDrawn: begin cFeatureSize:= 3;GenDrawnMap; end;
+        mgDrawn: begin GenDrawnMap; end;
         mgForts: MakeFortsPreview();
     else
         OutError('Unknown mapgen', true);
@@ -945,7 +957,7 @@ begin
         mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
-        mgDrawn: begin cFeatureSize:= 3;GenDrawnMap; end;
+        mgDrawn: begin GenDrawnMap; end;
         mgForts: MakeFortsPreview;
     else
         OutError('Unknown mapgen', true);
