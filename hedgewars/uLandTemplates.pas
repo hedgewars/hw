@@ -2229,7 +2229,7 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
         TemplateHeight: 4096; TemplateWidth: 4096;
         canMirror: true; canFlip: true; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgeHogs: 48;
+        MaxHedgeHogs: 64;
        ),
        (BasePoints: PPointArray(@Template44Points);
         BasePointsCount: Succ(High(Template44Points));
