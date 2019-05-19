@@ -124,6 +124,7 @@ Frontend:
  + Display a warning when the same key is used multiple times
  + Stats screen now hides empty sections
  + Visual notification when someone joins the room online
+ + Display recommended max. hedgehog count for Perlin maps
  + Various minor style tweaks
  * Fix broken handling of /watch chat command on official server
  * Fix renaming a video leading to loss of thumbnail after restart
