@@ -1136,7 +1136,7 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Warning: The same key is assigned multiple times!</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtung: Die gleiche Taste wurde mehrfach zugewiesen!</translation>
     </message>
 </context>
 <context>
@@ -1667,7 +1667,7 @@ Die letzte Meldung der Engine lautet:
     <name>PageInfo</name>
     <message>
         <source>Open the snapshot folder</source>
-        <translation>Screenshot-Verzeichnis öffnen</translation>
+        <translation>Bildschirmfoto-Verzeichnis öffnen</translation>
     </message>
 </context>
 <context>
@@ -2593,7 +2593,7 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Show FPS</source>
-        <translation>Bildwiederholrate anzeigen</translation>
+        <translation>Bildrate anzeigen</translation>
     </message>
     <message>
         <source>Alternative damage show</source>
@@ -2887,7 +2887,7 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>FPS limit</source>
-        <translation>Bildwiederholratenbegrenzung (Hz)</translation>
+        <translation>Maximale Bildrate</translation>
     </message>
     <message>
         <source>Server name:</source>
@@ -4122,7 +4122,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>save map as image</source>
-        <translation>Karte als Bild speichern</translation>
+        <translation>Landschaft als Bild speichern</translation>
     </message>
     <message>
         <source>show object information</source>
@@ -4142,11 +4142,11 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>backwards jump</source>
-        <translation type="unfinished"></translation>
+        <translation>Rückwärtssprung</translation>
     </message>
     <message>
         <source>screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Bildschirmfoto</translation>
     </message>
 </context>
 <context>
@@ -4208,11 +4208,11 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>high jump (twice)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochsprung (doppelt)</translation>
     </message>
     <message>
         <source>precise + screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Genaues Zielen + Bildschirmfoto</translation>
     </message>
 </context>
 <context>
@@ -4271,7 +4271,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation>Screenshot machen:</translation>
+        <translation>Bildschirmfoto machen:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
@@ -4694,7 +4694,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Keypad .</source>
-        <translation>Ziffernblock .</translation>
+        <translation>Ziffernblock ,</translation>
     </message>
     <message>
         <source>Keypad /</source>
@@ -4777,7 +4777,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menü</translation>
     </message>
 </context>
 <context>

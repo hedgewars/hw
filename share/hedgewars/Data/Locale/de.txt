@@ -975,8 +975,8 @@
 02:12=%1 wurde übel vergiftet
 02:12=%1 fühlt sich schwindelig
 02:12=%1 fiel der chemischen Kriegsführung zum Opfer
-02:12=Die Haut von %1 Haut nimmt eine sehr ungesunde Färbung an
-02:12=%1 sollte die Vitamine geschluckt haben
+02:12=%1 nimmt eine sehr ungesunde Färbung an
+02:12=%1 hätte die Vitamine einnehmen sollen
 02:12=%1 hat Bauchschmerzen
 02:12=%1 sieht nicht gerade gesund aus
 02:12=%1 braucht ein Lazarett
