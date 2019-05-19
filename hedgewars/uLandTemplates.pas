@@ -2262,13 +2262,12 @@ var EdgeTemplates: array[0..46] of TEdgeTemplate =
 const SmallTemplates: array[0..2] of Longword = ( 39, 40, 42 );
 const MediumTemplates: array[0..18] of Longword =
       ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 46 );
-const LargeTemplates: array[0..20] of Longword =
+const LargeTemplates: array[0..17] of Longword =
       (
         18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
-        28, 29, 30, 31, 32, 33, 34, 35, 37, 38, 43
+        28, 29, 30, 31, 32, 33, 34, 35
       );
 const CavernTemplates: array[0..5] of Longword = (36, 2, 3, 21, 29, 45);
-//const WackyTemplates: array[0..4] of Longword = (37, 38, 39, 40, 41);
 const WackyTemplates: array[0..4] of Longword = (37, 38, 41, 43, 44);
 const TemplateCounts: array[0..5] of Longword = (
           0
