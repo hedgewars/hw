@@ -1093,13 +1093,8 @@ void HWMapContainer::setFeatureSize(int val)
 {
     m_mapFeatureSize = val;
     intSetFeatureSize(val);
-    //m_mapFeatureSize = val>>2<<2;
-    //if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 4)
-    {
-        m_prevMapFeatureSize = m_mapFeatureSize;
-        if(m_mapInfo.type!= MapModel::HandDrawnMap || m_script.length() > 0)
-            updatePreview();
-    }
+    m_prevMapFeatureSize = m_mapFeatureSize;
+    updatePreview();
 }
 
 // unused because I needed the space for the slider
