@@ -2630,7 +2630,10 @@ begin
         hatName:= lua_tostring(L, 4);
         ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true, true);
         ParseCommand('hat ' + hatName, true, true);
-        lua_pushnumber(L, CurrentHedgehog^.Gear^.uid);
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
+            lua_pushnumber(L, CurrentHedgehog^.Gear^.uid)
+        else
+            OutError('Lua error: AddHog: Error adding hog. Maybe function was called outside of onGameInit.', true);
         end
     else
         lua_pushnil(L);
@@ -2655,7 +2658,10 @@ begin
             ParseCommand('addhh ' + IntToStr(BotLevel) + ' ' + lua_tostring(L, 1) + ' ' + Name, true, true);
             ParseCommand('hat ' + hatName, true, true);
             end;
-        lua_pushnumber(L, CurrentHedgehog^.Gear^.uid);
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
+            lua_pushnumber(L, CurrentHedgehog^.Gear^.uid)
+        else
+            OutError('Lua error: AddMissionHog: Error adding hog. Maybe function was called outside of onGameInit.', true);
         end
     else
         lua_pushnil(L);
