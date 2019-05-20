@@ -94,12 +94,13 @@ function onGearAdd(gear)
 
 end
 
-function onGearDelete(gear)
+function onGameResult(winner)
 
-	if (gear == enemy) and (GameOver == false) then
+	if winner == 0 then
 		ShowMission(loc("Diver"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 		SaveMissionVar("Won", "true")
-	elseif gear == player then
+		GameOver = true
+	else
 		ShowMission(loc("Diver"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)		
 		GameOver = true
 	end
