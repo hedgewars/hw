@@ -146,12 +146,15 @@ function onGearDelete(gear)
 		SetTurnTimeLeft(TurnTimeLeft + 5000)
 	end
 
-	if (gear == enemy) and (GameOver == false) then
+end
+
+function onGameResult(winner)
+	if winner == 0 then
 		ShowMission(loc("Spooky Tree"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0);
 		SaveMissionVar("Won", "true")
-	elseif gear == player then
+		GameOver = true
+	else
 		ShowMission(loc("Spooky Tree"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 		GameOver = true
 	end
-
 end

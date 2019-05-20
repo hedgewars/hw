@@ -75,9 +75,9 @@ function onGearAdd(gear)
 
 end
 
-function onGearDelete(gear)
+function onGameResult(winner)
 
-	if (gear == enemy) then
+	if (winner == 0) then
 		
 		SaveMissionVar("Won", "true")
 		ShowMission(loc("Bamboo Thicket"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
@@ -86,7 +86,7 @@ function onGearDelete(gear)
 			awardAchievement(loc("Energetic Engineer"))
 		end
 
-	elseif gear == player then
+	else
 		ShowMission(loc("Bamboo Thicket"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 	end
 
