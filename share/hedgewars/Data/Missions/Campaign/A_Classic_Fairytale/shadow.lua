@@ -790,7 +790,7 @@ function DoWeaklingsKilled()
 end
 
 function CheckRefuse()
-  return GetX(dense) > 1400 and StoppedGear(dense)
+  return GetHealth(dense) and GetX(dense) > 1400 and StoppedGear(dense)
 end
 
 function DoRefuse()
@@ -801,6 +801,9 @@ function DoRefuse()
 end
 
 function CheckAccept()
+  if not GetHealth(dense) then
+    return false
+  end
   if GetX(dense) < 1300 then
     -- When close to cyborg, wait for a short time before accepting,
     -- to allow player to attack with melee weapons.
@@ -822,7 +825,7 @@ function DoAccept()
 end
 
 function CheckConfront()
-  return cyborgAttacked and StoppedGear(dense)
+  return cyborgAttacked and GetHealth(dense) and StoppedGear(dense)
 end
 
 function DoConfront()
