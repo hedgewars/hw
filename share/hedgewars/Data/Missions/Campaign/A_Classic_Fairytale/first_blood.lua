@@ -747,6 +747,8 @@ function onGameInit()
 	Explosives = 0
 	Map = "A_Classic_Fairytale_first_blood"
 	Theme = "Nature"
+	WaterRise = 0
+	HealthDecrease = 0
 
 
   AddMissionTeam(-2)
