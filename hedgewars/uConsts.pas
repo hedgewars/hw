@@ -155,6 +155,7 @@ const
 
     MAXNAMELEN = 192;
     MAXROPEPOINTS = 3840;
+    MAXROPELAYERS = 16;
 
     {$IFNDEF PAS2C}
     // some opengl headers do not have these macros
