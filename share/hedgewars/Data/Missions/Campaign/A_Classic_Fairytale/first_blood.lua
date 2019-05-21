@@ -167,6 +167,7 @@ goals = {
   [onFlowerAnim] = {loc("First Blood"), loc("Hightime"), loc("Collect the crate on the right.") .. "|" .. loc("Hint: Select the rope, [Up] or [Down] to aim, [Attack] to fire, directional keys to move.") .. "|" .. loc("Ropes can be fired again in the air!") .. "| |" .. ctrlAttack, 1, 7000},
   [tookParaAnim] = {loc("First Blood"), loc("Omnivore"), loc("Get on the head of the mole."), 1, 4000},
   [onMoleHeadAnim] = {loc("First Blood"), loc("The Leap of Faith"), loc("Use the parachute to get the next crate.") .. "|" .. loc("Hint: Just select the parachute, it opens automatically when you fall."), 1, 4000},
+  [pastMoleHeadAnim] = {loc("First Blood"), loc("The Leap of Faith"), loc("Get that crate!"), 1, 4000},
   [tookRope2Anim] = {loc("First Blood"), loc("The Rising"), loc("Get that crate!"), 1, 4000},
   [tookPunchAnim] = {loc("First Blood"), loc("The Slaughter"), loc("Destroy the targets!") .. "|" .. loc("Hint: Select the Shoryuken and hit [Attack].|P.S.: You can use it mid-air.") .. "| |" .. ctrlAttack, 1, 5000},
   [challengeAnim] = {loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000},
@@ -264,6 +265,7 @@ function AnimationSetup()
   AddSkipFunction(pastMoleHeadAnim, Skipanim, {pastMoleHeadAnim})
   table.insert(pastMoleHeadAnim, {func = AnimSay, args = {elderh, loc("I see you have already taken the leap of faith."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = pastMoleHeadAnim})
   table.insert(pastMoleHeadAnim, {func = AnimSay, args = {elderh, loc("Get that crate!"), SAY_SAY, 4000}})
+  table.insert(pastMoleHeadAnim, {func = AnimShowMission, args = {youngh, unpack(goals[pastMoleHeadAnim])}})
   table.insert(pastMoleHeadAnim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(tookRope2Anim, Skipanim, {tookRope2Anim})
@@ -462,45 +464,42 @@ end
 function DoTookParaCrate()
   AddAmmo(youngh, amParachute, 100)
   SetGearMessage(CurrentHedgehog, 0)
-  AddAnim(tookParaAnim)
-  AddEvent(CheckOnMoleHead, {}, DoOnMoleHead, {}, 0)
-  AddEvent(CheckPastMoleHead, {}, DoPastMoleHead, {}, 0)
+  if CheckOnOrPastMoleHead() then
+    DoOnOrPastMoleHead()
+  else
+    AddAnim(tookParaAnim)
+    AddEvent(CheckOnOrPastMoleHead, {}, DoOnOrPastMoleHead, {}, 0)
+  end
 end
 
 function CheckOnMoleHead()
-  x = GetX(youngh)
+  local x = GetX(youngh)
   return x >= 3005 and x <= 3126 and StoppedGear(youngh)
 end
 
 function CheckPastMoleHead()
-  x = GetX(youngh)
-  y = GetY(youngh)
+  local x = GetX(youngh)
+  local y = GetY(youngh)
   return x < 3005 and y > 1500 and StoppedGear(youngh)
 end
 
-function DoPastMoleHead()
-  -- Initiate parachute challenge
-  RemoveEventFunc(CheckOnMoleHead)
-  ropeCrate2 = SpawnSupplyCrate(2782, 1720, amRope, 100)
-  rope2InProgress = true
-  AddAmmo(youngh, amRope, 0)
-  SetGearMessage(CurrentHedgehog, 0)
-  -- Block the way to the hole to the right, since the player loses the rope for this section
-  PlaceGirder(rope2GirderX, rope2GirderY, 6)
-  AddAnim(pastMoleHeadAnim)
-  AddEvent(CheckTookRope2, {}, DoTookRope2, {}, 0)
+function CheckOnOrPastMoleHead()
+  return CheckOnMoleHead() or CheckPastMoleHead()
 end
 
-function DoOnMoleHead()
+function DoOnOrPastMoleHead()
   -- Initiate parachute challenge
-  RemoveEventFunc(CheckPastMoleHead)
   ropeCrate2 = SpawnSupplyCrate(2782, 1720, amRope, 100)
   rope2InProgress = true
   AddAmmo(youngh, amRope, 0)
   SetGearMessage(CurrentHedgehog, 0)
   -- Block the way to the hole to the right, since the player loses the rope for this section
   PlaceGirder(rope2GirderX, rope2GirderY, 6)
-  AddAnim(onMoleHeadAnim)
+  if CheckPastMoleHead() then
+    AddAnim(pastMoleHeadAnim)
+  else
+    AddAnim(onMoleHeadAnim)
+  end
   AddEvent(CheckTookRope2, {}, DoTookRope2, {}, 0)
 end
 
