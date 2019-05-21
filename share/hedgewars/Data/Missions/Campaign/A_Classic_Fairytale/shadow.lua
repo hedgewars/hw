@@ -1125,6 +1125,8 @@ function onNewTurn()
     if GetHogClan(CurrentHedgehog) == GetTeamClan(weaklingsTeamName) and (not wave1EnemyTurn) then
       EndTurn(true)
       wave1EnemyTurn = true
+    else
+      SetWeapon(amNothing)
     end
   elseif stage == cyborgStage then
     if CurrentHedgehog ~= dense then
