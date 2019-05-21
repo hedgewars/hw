@@ -52,6 +52,7 @@ A Classic Fairytale:
  * Backstab: Prevent attacking the cannibals before making the choice
  * First blood: Fix Lua error when hitting Attack after failing the rope challenge
  * General: Clear hazards around cyborg when it appears in cut scenes
+ * General: Disable Sudden Death for all missions
  * Various minor tweaks and bugfixes
 
 A Space Adventure:

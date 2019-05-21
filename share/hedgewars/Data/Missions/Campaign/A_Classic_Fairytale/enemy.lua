@@ -610,7 +610,8 @@ function onGameInit()
 	Explosives = 0
   Map = "Islands"
 	Theme = "EarthRise"
-  SuddenDeathTurns = 20
+  WaterRise = 0
+  HealthDecrease = 0
 
   GetVariables()
   AnimInit()

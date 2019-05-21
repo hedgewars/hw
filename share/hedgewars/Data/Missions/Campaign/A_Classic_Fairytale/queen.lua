@@ -774,7 +774,8 @@ function onGameInit()
 	Explosives = 0
   MapGen = mgDrawn
 	Theme = "Hell"
-  SuddenDeathTurns = 20
+  HealthDecrease = 0
+  WaterRise = 0
 
 	for i = 1, #map do
 		ParseCommand('draw ' .. map[i])
