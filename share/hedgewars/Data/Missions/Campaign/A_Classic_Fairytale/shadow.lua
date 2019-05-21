@@ -243,6 +243,7 @@ function SkipWeaklingsAnim()
     AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
     SetState(cannibals[i], 0)
   end
+  AnimSwitchHog(cannibals[2])
 end
 
 function AfterStronglingsAnim()
@@ -469,7 +470,7 @@ function AnimationSetup()
   table.insert(weaklingsAnim, {func = AnimWait, args = {leaks, 400}})
   table.insert(weaklingsAnim, {func = AnimSay, args = {cannibals[3], loc("Are we there yet?"), SAY_SAY, 4000}}) 
   table.insert(weaklingsAnim, {func = AnimSay, args = {dense, loc("This must be some kind of sorcery!"), SAY_SHOUT, 3500}})
-  table.insert(weaklingsAnim, {func = AnimSwitchHog, args = {leaks}})
+  table.insert(weaklingsAnim, {func = AnimSwitchHog, args = {cannibals[2]}})
   AddSkipFunction(weaklingsAnim, SkipWeaklingsAnim, {})
 
   table.insert(stronglingsAnim, {func = AnimGearWait, args = {leaks, 1000}})
@@ -1125,8 +1126,6 @@ function onNewTurn()
     if GetHogClan(CurrentHedgehog) == GetTeamClan(weaklingsTeamName) and (not wave1EnemyTurn) then
       EndTurn(true)
       wave1EnemyTurn = true
-    else
-      SetWeapon(amNothing)
     end
   elseif stage == cyborgStage then
     if CurrentHedgehog ~= dense then
