@@ -905,7 +905,7 @@ const
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
-            SkipTurns: 9999;
+            SkipTurns: 0;
             PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
