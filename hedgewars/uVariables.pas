@@ -117,6 +117,7 @@ var
     cMapGen         : TMapGen;
     cRopePercent    : LongWord;
     cRopeNodeStep   : LongWord;
+    cRopeLayers     : LongInt;
     cGetAwayTime    : LongWord;
 
     cAdvancedMapGenMode: boolean;
@@ -2883,6 +2884,7 @@ begin
     cDamagePercent      := 100;
     cRopePercent        := 100;
     cRopeNodeStep       := 4;
+    cRopeLayers         := 1;
     cGetAwayTime        := 100;
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;

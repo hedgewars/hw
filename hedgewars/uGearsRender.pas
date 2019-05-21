@@ -95,7 +95,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 end;
 
 
-function DrawRopeLine(X1, Y1, X2, Y2, roplen: LongInt): LongInt;
+function DrawRopeLine(X1, Y1, X2, Y2, roplen: LongInt; LayerIndex: Longword): LongInt;
 var  eX, eY, dX, dY: LongInt;
     i, sX, sY, x, y, d: LongInt;
     b: boolean;
@@ -162,42 +162,46 @@ begin
         if b then
             begin
             inc(roplen);
-            if (roplen mod cRopeNodeStep) = 0 then
+            if (roplen mod (cRopeNodeStep * cRopeLayers)) = (cRopeNodeStep * LayerIndex) then
                 DrawSpriteRotatedF(sprRopeNode, x, y, roplen div cRopeNodeStep, 1, angle);
             end
     end;
     DrawRopeLine:= roplen;
 end;
 
-procedure DrawRope(Gear: PGear);
+procedure DrawRopeLayer(Gear: PGear; LayerIndex: LongWord);
 var roplen, i: LongInt;
+begin
+    roplen:= 0;
+    if RopePoints.Count > 0 then
+    begin
+        i:= 0;
+        while i < Pred(RopePoints.Count) do
+        begin
+            roplen:= DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
+                                  hwRound(RopePoints.ar[Succ(i)].X) + WorldDx, hwRound(RopePoints.ar[Succ(i)].Y) + WorldDy, roplen, LayerIndex);
+            inc(i)
+        end;
+        roplen:= DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
+                              hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, roplen, LayerIndex);
+        roplen:= DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+                              hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy, roplen, LayerIndex);
+    end
+    else
+        if Gear^.Elasticity.QWordValue > 0 then
+            roplen:= DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+                                  hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy, roplen, LayerIndex);
+end;
+
+procedure DrawRope(Gear: PGear);
+var i: LongInt;
 begin
     if Gear^.Hedgehog^.Gear = nil then exit;
     if (Gear^.Tag = 1) or ((cReducedQuality and rqSimpleRope) <> 0) then
         DrawRopeLinesRQ(Gear)
     else
-        begin
-        roplen:= 0;
-        if RopePoints.Count > 0 then
-            begin
-            i:= 0;
-            while i < Pred(RopePoints.Count) do
-                    begin
-                    roplen:= DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
-                                hwRound(RopePoints.ar[Succ(i)].X) + WorldDx, hwRound(RopePoints.ar[Succ(i)].Y) + WorldDy, roplen);
-                    inc(i)
-                    end;
-            roplen:= DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
-                        hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, roplen);
-            roplen:= DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-                        hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy, roplen);
-            end
-        else
-            if Gear^.Elasticity.QWordValue > 0 then
-            roplen:= DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-                        hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy, roplen);
-        end;
-
+        for i := 0 to cRopeLayers - 1 do
+            DrawRopeLayer(Gear, i);
 
 if RopePoints.Count > 0 then
     DrawSpriteRotated(sprRopeHook, hwRound(RopePoints.ar[0].X) + WorldDx, hwRound(RopePoints.ar[0].Y) + WorldDy, 1, RopePoints.HookAngle)
