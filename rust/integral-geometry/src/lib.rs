@@ -1,7 +1,7 @@
 use fpnum::{distance, fp, FPNum, FPPoint};
 use std::{
     cmp::{max, min},
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Range, RangeInclusive, Sub, SubAssign},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, RangeInclusive, Sub, SubAssign},
 };
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -416,7 +416,7 @@ impl Rect {
 
     #[inline]
     pub fn contains(&self, point: Point) -> bool {
-        self.x_range().contains(point.x) && self.y_range().contains(point.y)
+        self.x_range().contains(&point.x) && self.y_range().contains(&point.y)
     }
 
     #[inline]
@@ -464,22 +464,6 @@ impl Rect {
     #[inline]
     pub fn quotient(self, x: usize, y: usize) -> Point {
         self.top_left() + Point::new((x % self.width()) as i32, (y % self.height()) as i32)
-    }
-}
-
-trait RangeContains<T> {
-    fn contains(&self, value: T) -> bool;
-}
-
-impl<T: Ord> RangeContains<T> for Range<T> {
-    fn contains(&self, value: T) -> bool {
-        value >= self.start && value < self.end
-    }
-}
-
-impl<T: Ord> RangeContains<T> for RangeInclusive<T> {
-    fn contains(&self, value: T) -> bool {
-        value >= *self.start() && value <= *self.end()
     }
 }
 
