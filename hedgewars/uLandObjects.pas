@@ -1061,7 +1061,9 @@ while (not pfsEOF(f)) and allOK do
     else if key = 'snow' then
         cSnow:= true
     else if key = 'rope-step' then
-        cRopeNodeStep:= StrToInt(s)
+        cRopeNodeStep:= max(1, StrToInt(s))
+    else if key = 'rope-layers' then
+        cRopeLayers:= max(1, min(MAXROPELAYERS, StrToInt(s)))
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);

@@ -14,7 +14,7 @@ pub fn is_name_illegal(name: &str) -> bool {
         || name.trim() != name
         || name
             .chars()
-            .any(|c| "$()*+?[]^{|}\x7F".contains(c) || '\x00' <= c && c <= '\x1F')
+            .any(|c| "$()*+?[]^{|}\x7F".contains(c) || ('\x00'..='\x1F').contains(&c))
 }
 
 pub fn to_engine_msg<T>(msg: T) -> String

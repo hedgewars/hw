@@ -17,8 +17,7 @@ use crate::{
 };
 use base64::{decode, encode};
 use log::*;
-use std::iter::once;
-use std::mem::swap;
+use std::{cmp::min, iter::once, mem::swap};
 
 #[derive(Clone)]
 struct ByMsg<'a> {
@@ -166,7 +165,7 @@ pub fn handle(
         MaxTeams(count) => {
             if !client.is_master() {
                 response.add(Warning("You're not the room master!".to_string()).send_self());
-            } else if count < 2 || count > MAX_TEAMS_IN_ROOM {
+            } else if !(2..=MAX_TEAMS_IN_ROOM).contains(&count) {
                 response
                     .add(Warning("/maxteams: specify number from 2 to 8".to_string()).send_self());
             } else {
@@ -291,12 +290,13 @@ pub fn handle(
         SetHedgehogsNumber(team_name, number) => {
             let addable_hedgehogs = room.addable_hedgehogs();
             if let Some((_, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
+                let max_hedgehogs = min(
+                    MAX_HEDGEHOGS_PER_TEAM,
+                    addable_hedgehogs + team.hedgehogs_number,
+                );
                 if !client.is_master() {
                     response.add(Error("You're not the room master!".to_string()).send_self());
-                } else if number < 1
-                    || number > MAX_HEDGEHOGS_PER_TEAM
-                    || number > addable_hedgehogs + team.hedgehogs_number
-                {
+                } else if !(1..=max_hedgehogs).contains(&number) {
                     response
                         .add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send_self());
                 } else {
