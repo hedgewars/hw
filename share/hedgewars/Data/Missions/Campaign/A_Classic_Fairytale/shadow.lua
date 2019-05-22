@@ -756,10 +756,26 @@ function CheckBrainiacDead()
   return brainiacDead
 end
 
+function isHogAlive(hog)
+  if GetHealth(hog) == nil or GetHealth(hog) <= 0 then
+    return false
+  else
+    local _,_,_,_,_,_,_,_,_,_,_,damage = GetGearValues(hog)
+    if damage > GetHealth(hog)  then
+      return false
+    end
+  end
+  return true
+end
+
 function DoBrainiacDead()
   if stage == loseStage then
     return
   end
+  if (not isHogAlive(dense)) or (not isHogAlive(leaks)) then
+    return
+  end
+
   EndTurn(true)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(weaklingsAnim)
@@ -780,7 +796,7 @@ function DoWeaklingsKilled()
   if stage == loseStage then
     return
   end
-  if denseDead or GetHealth(dense) == 0 or leaksDead or GetHealth(leaks) == 0 then
+  if (not isHogAlive(dense)) or (not isHogAlive(leaks)) then
     return
   end
   SetGearMessage(CurrentHedgehog, 0)
@@ -924,7 +940,7 @@ function DoStronglingsDead()
   if stage == loseStage then
     return
   end
-  if leaksDead or GetHealth(leaks) == 0 then
+  if not isHogAlive(leaks) then
     return
   end
   SetGearMessage(CurrentHedgehog, 0)
