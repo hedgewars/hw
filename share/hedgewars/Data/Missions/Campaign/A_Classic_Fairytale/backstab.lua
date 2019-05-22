@@ -735,11 +735,11 @@ function DoChoice()
 end
 
 function CheckChoiceRefuse()
-  return highJumped == true and StoppedGear(CurrentHedgehog)
+  return GetHealth(CurrentHedgehog) and highJumped == true and StoppedGear(CurrentHedgehog)
 end
 
 function CheckChoiceRunaway()
-  return CurrentHedgehog and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 and GetHogTeamName(CurrentHedgehog) == nativesTeamName and GetX(CurrentHedgehog) >= runawayX and GetY(CurrentHedgehog) >= runawayY and StoppedGear(CurrentHedgehog)
+  return GetHealth(CurrentHedgehog) and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 and GetHogTeamName(CurrentHedgehog) == nativesTeamName and GetX(CurrentHedgehog) >= runawayX and GetY(CurrentHedgehog) >= runawayY and StoppedGear(CurrentHedgehog)
 end
 
 function CheckChoiceRunawayAll()

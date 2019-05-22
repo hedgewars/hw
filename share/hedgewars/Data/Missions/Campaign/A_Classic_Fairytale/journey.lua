@@ -991,7 +991,7 @@ function DoTookSniper()
 end
 
 function CheckTookSniper2()
-  return sniperTaken and StoppedGear(leaks) and StoppedGear(dense)
+  return sniperTaken and leaksDead == false and StoppedGear(leaks) and denseDead == false and StoppedGear(dense)
 end
 
 function DoTookSniper2()

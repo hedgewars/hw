@@ -420,7 +420,7 @@ function DoKilledOthers()
 end
 
 function CheckMovedUntilJump()
-   return GetX(youngh) >= 2343
+   return GetHealth(youngh) and GetX(youngh) >= 2343
 end
 
 function DoMovedUntilJump()
@@ -435,7 +435,7 @@ function DoMovedUntilJump()
 end
 
 function CheckOnShroom()
-  return GetX(youngh) >= 2461 and StoppedGear(youngh)
+  return GetHealth(youngh) and GetX(youngh) >= 2461 and StoppedGear(youngh)
 end
 
 function DoOnShroom()
@@ -473,11 +473,17 @@ function DoTookParaCrate()
 end
 
 function CheckOnMoleHead()
+  if not GetHealth(youngh) then
+    return false
+  end
   local x = GetX(youngh)
   return x >= 3005 and x <= 3126 and StoppedGear(youngh)
 end
 
 function CheckPastMoleHead()
+  if not GetHealth(youngh) then
+    return false
+  end
   local x = GetX(youngh)
   local y = GetY(youngh)
   return x < 3005 and y > 1500 and StoppedGear(youngh)

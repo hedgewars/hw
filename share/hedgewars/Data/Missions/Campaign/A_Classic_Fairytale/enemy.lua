@@ -104,7 +104,10 @@ startAnim = {}
 finalAnim = {}
 -----------------------------Animations--------------------------------
 function CondNeedToTurn(hog1, hog2)
-  xl, xd = GetX(hog1), GetX(hog2)
+  if (not GetHealth(hog1)) or (not GetHealth(hog2)) then
+    return
+  end
+  local xl, xd = GetX(hog1), GetX(hog2)
   if xl > xd then
     AnimInsertStepNext({func = AnimTurn, args = {hog1, "Left"}})
     AnimInsertStepNext({func = AnimTurn, args = {hog2, "Right"}})
@@ -115,7 +118,10 @@ function CondNeedToTurn(hog1, hog2)
 end
 
 function CondNeedToTurn2(hog1, hog2)
-  xl, xd = GetX(hog1), GetX(hog2)
+  if (not GetHealth(hog1)) or (not GetHealth(hog2)) then
+    return
+  end
+  local xl, xd = GetX(hog1), GetX(hog2)
   if xl > xd then
     AnimTurn(hog1, "Left")
     AnimTurn(hog2, "Right")
