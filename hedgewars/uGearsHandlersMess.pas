@@ -2401,7 +2401,7 @@ begin
         doStepCase(Gear)
     else
         // health texture (FlightTime = health when the last texture was generated)
-        if Gear^.Health <> Gear^.FlightTime then
+        if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
             begin
             Gear^.FlightTime:= Gear^.Health;
             FreeAndNilTexture(Gear^.Tex);
@@ -2479,7 +2479,7 @@ begin
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0;
         // health texture (FlightTime = health when the last texture was generated)
-        if Gear^.Health <> Gear^.FlightTime then
+        if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
             begin
             Gear^.FlightTime:= Gear^.Health;
             FreeAndNilTexture(Gear^.Tex);
@@ -2507,7 +2507,7 @@ begin
                     i:= 1;
                 if i = 1 then
                     begin
-                    if Gear^.Health <> Gear^.FlightTime then
+                    if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
                         begin
                         Gear^.FlightTime:= Gear^.Health;
                         FreeAndNilTexture(Gear^.Tex);
@@ -2516,7 +2516,7 @@ begin
                     end
                 else
                     begin
-                    if Gear^.FlightTime <> $ffffffff then
+                    if (Gear^.FlightTime <> $ffffffff) or (Gear^.Tex = nil) then
                         begin
                         Gear^.FlightTime:= $ffffffff;
                         FreeAndNilTexture(Gear^.Tex);
