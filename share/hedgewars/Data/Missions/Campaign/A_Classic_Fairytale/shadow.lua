@@ -809,7 +809,7 @@ function CheckAccept()
     -- When close to cyborg, wait for a short time before accepting,
     -- to allow player to attack with melee weapons.
     checkAcceptTimer = checkAcceptTimer + 1
-    if checkAcceptTimer > 2000 and StoppedGear(dense) then
+    if checkAcceptTimer > 2000 and denseDead == false and StoppedGear(dense) then
       return true
     end
   else
@@ -826,7 +826,7 @@ function DoAccept()
 end
 
 function CheckConfront()
-  return cyborgAttacked and GetHealth(dense) and StoppedGear(dense)
+  return cyborgAttacked and denseDead == false and StoppedGear(dense)
 end
 
 function DoConfront()
@@ -854,7 +854,7 @@ function CheckNeedGirder()
   if stage == loseStage then
     return false
   end
-  return GetX(dense) > 1640 and StoppedGear(dense)
+  return denseDead == false and GetX(dense) > 1640 and StoppedGear(dense)
 end
 
 function DoNeedGirder()
@@ -874,7 +874,7 @@ function CheckNeedWeapons()
   if stage == loseStage then
     return false
   end
-  return GetX(dense) > 2522 and StoppedGear(dense)
+  return denseDead == false and GetX(dense) > 2522 and StoppedGear(dense)
 end
 
 function DoNeedWeapons()
