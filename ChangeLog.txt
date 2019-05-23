@@ -51,7 +51,10 @@ A Classic Fairytale:
  + Backstab: Disable utilities before traitor has been dealt with
  * Backstab: Prevent attacking the cannibals before making the choice
  * First blood: Fix Lua error when hitting Attack after failing the rope challenge
+ * First blood: Fix a cut scene being played twice in row
  * The Shadow Falls: Fix Lua error when hog dies during choice phase
+ * The Shadow Falls: Fix mission getting stuck when hog dies after accepting offer, but before returning
+ * The Shadow Falls: Fix many other Lua errors when hogs die in certain situations
  * General: Clear hazards around cyborg when it appears in cut scenes
  * General: Disable Sudden Death for all missions
  * Various minor tweaks and bugfixes
