@@ -842,10 +842,6 @@ begin
                              DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA);
                              end;
                 amVampiric: DrawSpriteRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
-                amRCPlane: begin
-                    DrawSpriteRotated(sprHandPlane, hx, hy, sign, 0);
-                    defaultPos:= false
-                    end;
                 amRubber,
                 amGirder: begin
                     DrawSpriteRotated(sprHandConstruction, hx, hy, sign, aangle);
@@ -919,6 +915,11 @@ begin
                             0,
                             sign,
                             0);
+                amRCPlane:
+                    begin
+                    DrawSpriteRotated(sprHandPlane, hx, hy, sign, 0);
+                    defaultPos:= false
+                    end;
                 amBaseballBat, amMinigun:
                     begin
                     HatVisible:= true;
