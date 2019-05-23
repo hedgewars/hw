@@ -1724,6 +1724,7 @@ begin
 // should we allow this when there is no current hedgehog? might do some odd(er) things to turn sequence.
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (CurrentHedgehog <> nil) then
             begin
+            CurrentHedgehog^.MultiShootAttacks:= 0;
             prevgear := CurrentHedgehog^.Gear;
             if prevgear <> nil then
                 begin
