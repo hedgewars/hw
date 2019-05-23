@@ -23,20 +23,22 @@ Kill Weaklings and Stronglings.
 - The remaining Weaklings spawn
 - TBS
 - All Weaklings dead
-- Cut scene: stronglingsAnim: Stronglings spawn, hero walks to forest, meets cyborg, cyborg makes offer
+- Cut scene: stronglingsAnim: Stronglings spawn, Dense Cloud walks to forest, meets cyborg, cyborg makes offer
 - The cyborg offer is an IMPORTANT decision, it completely changes the next mission, and the rest of the story
 | Accept: Player walks to cyborg
     - Cut scene: acceptAnim
-    - Hero needs to walk all the way back (infinite turn time)
-    - Hero reached tree
-    - Turn time starts
-    - TBS
-    - Stronglings defeated
-    | Stronglings defeated with both hogs survived
-        - Cut scene: acceptedSurvivedFinalAnim
-    | Stronglings deafeated with Dense Cloud dead
-        - Cut scene: acceptedDiedFinalAnim
-    > Victory
+    - Dense Cloud needs to walk all the way back (infinite turn time)
+    | Dense Cloud reached tree
+        - Turn time starts
+        - TBS
+        - Stronglings defeated
+        | Stronglings defeated with both hogs survived
+            - Cut scene: acceptedSurvivedFinalAnim
+        | Stronglings defeated with Dense Cloud dead
+            - Cut scene: acceptedDiedFinalAnim
+        > Victory
+    | Dense Cloud dies before reaching the tree
+        > Game over
 | Reject: Player walks away
     - Cut scene: refusedAnim
     - Leaks a Lot teleports back to tree at the start (automatically)
@@ -48,7 +50,7 @@ Kill Weaklings and Stronglings.
     > Victory
 | Attack: Player attacks cyborg
     - Cut scene: attackAnim
-    - Cyborg kills hero
+    - Cyborg kills Dense Cloud
     - Other native's turn to defeat Stronglings
     - TBS
     - Stronglings defeated
@@ -301,7 +303,6 @@ function AfterAcceptedAnim()
   AddEvent(CheckReadyForStronglings, {}, DoReadyForStronglings, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
   AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
-  RemoveEventFunc(CheckDenseDead)
   SwitchHog(dense)
   AnimWait(dense, 1)
   AddFunction({func = HideHog, args = {cyborg}})
@@ -925,6 +926,7 @@ function DoReadyForStronglings()
   stage = duoStage
   RemoveEventFunc(CheckNeedGirder)
   RemoveEventFunc(CheckNeedWeapons)
+  RemoveEventFunc(CheckDenseDead)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDead, {}, 0)
   AddAmmo(cannibals[6], amGrenade, 2)
   AddAmmo(cannibals[6], amShotgun, 2)
