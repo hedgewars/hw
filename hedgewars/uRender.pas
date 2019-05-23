@@ -34,6 +34,7 @@ procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Po
 procedure DrawSpriteClipped     (Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 procedure DrawSpriteRotated     (Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawSpriteRotatedF    (Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
+procedure DrawSpriteRotatedFReal(Sprite: TSprite; X, Y: Real; Frame, Dir: LongInt; Angle: real);
 procedure DrawSpritePivotedF(Sprite: TSprite; X, Y, Frame, Dir, PivotX, PivotY: LongInt; Angle: real);
 
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); inline;
@@ -1152,7 +1153,7 @@ begin
 
 if Angle <> 0  then
     begin
-    // Check the bounding circle 
+    // Check the bounding circle
     if isCircleOffscreen(X, Y, (sqr(SpritesData[Sprite].Width) + sqr(SpritesData[Sprite].Height)) div 4) then
         exit;
     end
@@ -1183,6 +1184,45 @@ DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height
 openglPopMatrix;
 
 UpdateModelviewProjection;
+
+end;
+
+procedure DrawSpriteRotatedFReal(Sprite: TSprite; X, Y: Real; Frame, Dir: LongInt; Angle: real);
+begin
+
+    if Angle <> 0  then
+    begin
+        // Check the bounding circle
+        if isCircleOffscreen(round(X), round(Y), (sqr(SpritesData[Sprite].Width) + sqr(SpritesData[Sprite].Height)) div 4) then
+            exit;
+    end
+    else
+    begin
+        if isDxAreaOffscreen(round(X) - SpritesData[Sprite].Width div 2, SpritesData[Sprite].Width) <> 0 then
+            exit;
+        if isDYAreaOffscreen(round(Y) - SpritesData[Sprite].Height div 2 , SpritesData[Sprite].Height) <> 0 then
+            exit;
+    end;
+
+
+    openglPushMatrix;
+    openglTranslatef(X, Y, 0);
+
+// mirror
+    if Dir < 0 then
+        openglScalef(-1.0, 1.0, 1.0);
+
+// apply angle after (conditional) mirroring
+    if Angle <> 0  then
+        openglRotatef(Angle, 0, 0, 1);
+
+    UpdateModelviewProjection;
+
+    DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
+
+    openglPopMatrix;
+
+    UpdateModelviewProjection;
 
 end;
 
