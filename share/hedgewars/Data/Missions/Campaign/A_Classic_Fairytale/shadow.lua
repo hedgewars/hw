@@ -807,7 +807,7 @@ function DoWeaklingsKilled()
 end
 
 function CheckRefuse()
-  return GetHealth(dense) and GetX(dense) > 1400 and StoppedGear(dense)
+  return isHogAlive(dense) and GetX(dense) > 1400 and StoppedGear(dense)
 end
 
 function DoRefuse()
@@ -818,7 +818,7 @@ function DoRefuse()
 end
 
 function CheckAccept()
-  if not GetHealth(dense) then
+  if not isHogAlive(dense) then
     return false
   end
   if GetX(dense) < 1300 then
@@ -842,7 +842,7 @@ function DoAccept()
 end
 
 function CheckConfront()
-  return cyborgAttacked and denseDead == false and StoppedGear(dense)
+  return cyborgAttacked and isHogAlive(dense) and StoppedGear(dense)
 end
 
 function DoConfront()
@@ -904,6 +904,9 @@ end
 
 function CheckReadyForStronglings()
   if stage == loseStage then
+    return false
+  end
+  if not isHogAlive(dense) then
     return false
   end
   return (shotgunTaken and grenadeTaken) or GetX(dense) > 2700
