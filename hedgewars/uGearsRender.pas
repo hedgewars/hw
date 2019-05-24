@@ -931,8 +931,8 @@ begin
                     end
             else
                 // Special hog sprite that makes hog "look" towards the selection icon.
-                // Only works with NoHat for now since it would look weird/creepy for many hats.
-                if (HH^.Hat = 'NoHat') and ((Gear^.State and (gstMoving or gstAttacking)) = 0) and ((Ammoz[amt].Ammo.Propz and ammoprop_ShowSelIcon) <> 0) then
+                // Only works without hat for now since it would look weird/creepy for many hats.
+                if ((HH^.Hat = 'NoHat') or (HH^.HatTex = nil)) and ((Gear^.State and (gstMoving or gstAttacking)) = 0) and ((Ammoz[amt].Ammo.Propz and ammoprop_ShowSelIcon) <> 0) then
                     DrawHedgehog(sx, sy,
                         sign,
                         0,
