@@ -18,6 +18,8 @@ add_executable(${PROJECT_NAME} "main.cpp" "qml.qrc"
     "engine_interface.h"
     "preview_acceptor.cpp" "preview_acceptor.h"
     "net_session.cpp" "net_session.h"
+    "players_model.cpp" "players_model.h"
+    "rooms_model.cpp" "rooms_model.h"
     )
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Network Qt5::Quick)

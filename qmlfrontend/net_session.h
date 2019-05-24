@@ -6,6 +6,8 @@
 #include <QStringList>
 #include <QUrl>
 
+class PlayersListModel;
+class RoomsListModel;
 class NetSession : public QObject {
   Q_OBJECT
 
@@ -18,6 +20,7 @@ class NetSession : public QObject {
   Q_PROPERTY(QString nickname READ nickname WRITE setNickname NOTIFY nicknameChanged)
   Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
   Q_PROPERTY(SessionState sessionState READ sessionState NOTIFY sessionStateChanged)
+  Q_PROPERTY(QString room READ room NOTIFY roomChanged)
   // clang-format on
 
  public:
@@ -25,21 +28,23 @@ class NetSession : public QObject {
   Q_ENUMS(SessionState)
 
   explicit NetSession(QObject *parent = nullptr);
+  ~NetSession() override;
 
   QUrl url() const;
   QAbstractSocket::SocketState state() const;
 
-  Q_INVOKABLE void open();
-
   QString nickname() const;
   QString password() const;
   SessionState sessionState() const;
+  QString room() const;
 
  public slots:
+  void open();
+  void close();
+
   void setUrl(const QUrl &url);
   void setNickname(const QString &nickname);
   void setPassword(const QString &password);
-  void close();
 
  signals:
   void urlChanged(const QUrl url);
@@ -49,6 +54,7 @@ class NetSession : public QObject {
   void sessionStateChanged(SessionState sessionState);
   void warning(const QString &message);
   void error(const QString &message);
+  void roomChanged(const QString &room);
 
  private slots:
   void onReadyRead();
@@ -97,14 +103,21 @@ class NetSession : public QObject {
   void send(const QString &message, const QStringList &parameters);
   void send(const QStringList &message);
   void setSessionState(SessionState sessionState);
+  void setRoom(const QString &room);
 
  private:
   QUrl m_url;
   QSharedPointer<QTcpSocket> m_socket;
+  QSharedPointer<PlayersListModel> m_playersModel;
+  QSharedPointer<RoomsListModel> m_roomsModel;
   QString m_nickname;
   QString m_password;
   QStringList m_buffer;
   SessionState m_sessionState;
+  QString m_serverAuthHash;
+  QString m_room;
+
+  Q_DISABLE_COPY(NetSession)
 };
 
 #endif  // NET_SESSION_H
