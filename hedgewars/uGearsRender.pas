@@ -930,13 +930,24 @@ begin
                             0);
                     end
             else
-                DrawHedgehog(sx, sy,
-                    sign,
-                    0,
-                    4,
-                    0);
-
-                HatVisible:= true;
+                // Special hog sprite that makes hog "look" towards the selection icon.
+                // Only works with NoHat for now since it would look weird/creepy for many hats.
+                if (HH^.Hat = 'NoHat') and ((Gear^.State and (gstMoving or gstAttacking)) = 0) and ((Ammoz[amt].Ammo.Propz and ammoprop_ShowSelIcon) <> 0) then
+                    DrawHedgehog(sx, sy,
+                        sign,
+                        0,
+                        6,
+                        0)
+                // Default idle hedgehog
+                else
+                    begin
+                    DrawHedgehog(sx, sy,
+                        sign,
+                        0,
+                        4,
+                        0);
+                    HatVisible:= true;
+                    end;
             end;
 
             defaultPos:= false
