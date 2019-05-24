@@ -140,7 +140,6 @@ cyborgTeamName = nil
 
 startAnimStarted = false
 blowTaken = false
-fireTaken = false
 gravityTaken = false
 sniperTaken = false
 leaksDead = false
@@ -341,7 +340,6 @@ function AfterOutPitAnim()
   RestoreHedge(cannibals[5])
   AddAmmo(cannibals[5], amDEagle, 0)
   HideHedge(cannibals[5])
-  AddEvent(CheckTookFire, {}, DoTookFire, {}, 0)
   SetGearMessage(dense, band(GetGearMessage(dense), bnot(gmAllStoppable)))
   SetGearMessage(leaks, band(GetGearMessage(leaks), bnot(gmAllStoppable)))
   EndTurn(true)
@@ -413,7 +411,7 @@ function SetupCourseDuo()
   PlaceGirder(1033, 649, 0)
   PlaceGirder(952, 650, 0)
 
-  fireCrate = SpawnSupplyCrate(1846, 1100, amFirePunch)
+  SpawnSupplyCrate(1846, 1100, amFirePunch, AMMO_INFINITE)
   SpawnSupplyCrate(1900, 1100, amPickHammer)
   SpawnSupplyCrate(950, 674, amDynamite)
   SpawnSupplyCrate(994, 825, amRope)
@@ -766,7 +764,7 @@ function SetupPlaceAlone()
   AddGear(2239, 1295, gtMine, 0, 0, 0, 0)
 
   AnimSetGearPosition(leaks, 3781, 1583)
-  AddAmmo(cannibals[1], amShotgun, 100)
+  AddAmmo(cannibals[1], amShotgun, AMMO_INFINITE)
   AddAmmo(leaks, amSwitch, 0)
 end
 
@@ -880,13 +878,6 @@ end
 
 
 --////////////////////////////Event Functions////////////////////////
-function CheckTookFire()
-  return fireTaken
-end
-
-function DoTookFire()
-  AddAmmo(leaks, amFirePunch, 100)
-end
 
 function CheckDensePit()
   if GetHealth(dense) ~= nil then
@@ -1161,8 +1152,6 @@ function onGearDelete(gear)
   end
   if gear == blowCrate then
     blowTaken = true
-  elseif gear == fireCrate then
-    fireTaken = true
   elseif gear == gravityCrate then
     gravityTaken = true
   elseif gear == leaks and not victory then
