@@ -116,6 +116,22 @@ const cStereo_Sky           = 0.0500;
 {$ENDIF}
       AMSlotPadding = (AMSlotSize - 32) shr 1;
 
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
+      amNumOffsetX = 0;
+      {$IFDEF USE_AM_NUMCOLUMN}
+      amNumOffsetY = AMSlotSize;
+      {$ELSE}
+      amNumOffsetY = 0;
+      {$ENDIF}
+{$ELSE}
+      amNumOffsetY = 0;
+      {$IFDEF USE_AM_NUMCOLUMN}
+      amNumOffsetX = AMSlotSize;
+      {$ELSE}
+      amNumOffsetX = 0;
+      {$ENDIF}
+{$ENDIF}
+
       cSendCursorPosTime = 50;
       cCursorEdgesDist   = 100;
 
@@ -644,6 +660,8 @@ if AMState = AMShowingUp then // show ammo menu
         begin
         AMShiftX:= 0;
         AMShiftY:= 0;
+        CursorPoint.X:= AmmoRect.x + AmmoRect.w - 3;
+        CursorPoint.Y:= cScreenHeight - AmmoRect.y - amNumOffsetY - 1;
         AMState:= AMShowing;
         end
     // "Appear" animation
@@ -659,8 +677,8 @@ if AMState = AMShowingUp then // show ammo menu
             begin
             AMShiftX:= 0;
             AMShiftY:= 0;
-            CursorPoint.X:= AmmoRect.x + AmmoRect.w;
-            CursorPoint.Y:= AmmoRect.y;
+            CursorPoint.X:= AmmoRect.x + AmmoRect.w - 3;
+            CursorPoint.Y:= cScreenHeight - AmmoRect.y - amNumOffsetY - 1;
             AMState:= AMShowing;
             end;
     end;
@@ -671,6 +689,7 @@ if AMState = AMHiding then // hide ammo menu
         begin
         AMShiftX:= AMShiftTargetX;
         AMShiftY:= AMShiftTargetY;
+        prevPoint:= CursorPoint;
         AMState:= AMHidden;
         end
     // "Disappear" animation
@@ -687,7 +706,6 @@ if AMState = AMHiding then // hide ammo menu
             AMShiftX:= AMShiftTargetX;
             AMShiftY:= AMShiftTargetY;
             prevPoint:= CursorPoint;
-            //prevTargetPoint:= TargetCursorPoint;
             AMState:= AMHidden;
             end;
     end;
@@ -1974,7 +1992,7 @@ end;
 var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY, dstX: LongInt;
+var EdgesDist, wdy, shs,z, dstX: LongInt;
     inbtwnTrgtAttks: Boolean;
 begin
 {$IFNDEF MOBILE}
@@ -2031,22 +2049,6 @@ if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
 
 if (AMState = AMShowingUp) or (AMState = AMShowing) then
 begin
-{$IFDEF USE_LANDSCAPE_AMMOMENU}
-    amNumOffsetX:= 0;
-    {$IFDEF USE_AM_NUMCOLUMN}
-    amNumOffsetY:= AMSlotSize;
-    {$ELSE}
-    amNumOffsetY:= 0;
-    {$ENDIF}
-{$ELSE}
-    amNumOffsetY:= 0;
-    {$IFDEF USE_AM_NUMCOLUMN}
-    amNumOffsetX:= AMSlotSize;
-    {$ELSE}
-    amNumOffsetX:= 0;
-    {$ENDIF}
-
-{$ENDIF}
     if CursorPoint.X < AmmoRect.x + amNumOffsetX + 3 then//check left
         CursorPoint.X:= AmmoRect.x + amNumOffsetX + 3;
     if CursorPoint.X > AmmoRect.x + AmmoRect.w - 3 then//check right
