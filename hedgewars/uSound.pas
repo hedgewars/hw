@@ -830,7 +830,10 @@ begin
         exit;
 
     if (chn <> -1) and (Mix_Playing(chn) <> 0) then
-        Mix_FadeOutChannel(chn, fadems);
+        if isAudioMuted then
+            Mix_HaltChannel(chn)
+        else
+            Mix_FadeOutChannel(chn, fadems);
 end;
 
 procedure PlayMusic;
