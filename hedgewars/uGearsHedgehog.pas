@@ -1267,7 +1267,7 @@ if (not isZero(Gear^.dY)) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGr
         begin
         Gear^.FlightTime:= 0;
         s:= ansistring(CurrentHedgehog^.Name);
-        AddCaption(FormatA(GetEventString(eidHomerun), s), capcolDefault, capgrpMessage);
+        AddCaption(FormatA(GetEventString(eidHomerun), s), capcolDefault, capgrpMessage2);
         PlaySound(sndHomerun)
         end;
     end
