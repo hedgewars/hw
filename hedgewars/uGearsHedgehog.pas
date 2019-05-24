@@ -785,6 +785,7 @@ var ag, gi: PGear;
     healthBoost: LongInt;
 begin
 if Gear^.State and gstFrozen <> 0 then exit;
+if Gear^.Message and gmDestroy <> 0 then exit;
 
 Gear^.Message:= gmDestroy;
 if (Gear^.Pos and posCaseExplode) <> 0 then
