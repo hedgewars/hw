@@ -1,6 +1,14 @@
 #include "net_session.h"
 
-NetSession::NetSession(QObject *parent) : QObject(parent) {}
+#include "players_model.h"
+#include "rooms_model.h"
+
+NetSession::NetSession(QObject *parent)
+    : QObject(parent),
+      m_playersModel(new PlayersListModel()),
+      m_roomsModel(new RoomsListModel()) {}
+
+NetSession::~NetSession() { close(); }
 
 QUrl NetSession::url() const { return m_url; }
 
@@ -31,6 +39,8 @@ NetSession::SessionState NetSession::sessionState() const {
   return m_sessionState;
 }
 
+QString NetSession::room() const { return m_room; }
+
 void NetSession::setUrl(const QUrl &url) {
   if (m_url == url) return;
 
@@ -52,12 +62,20 @@ void NetSession::setPassword(const QString &password) {
   emit passwordChanged(m_password);
 }
 
+void NetSession::setRoom(const QString &room) {
+  if (m_room == room) return;
+
+  m_room = room;
+  emit roomChanged(m_room);
+}
+
 void NetSession::close() {
   if (!m_socket.isNull()) {
     m_socket->disconnectFromHost();
     m_socket.clear();
 
     setSessionState(NotConnected);
+    setRoom({});
   }
 }
 
@@ -182,9 +200,33 @@ void NetSession::handleKicked(const QStringList &parameters) {}
 
 void NetSession::handleLeft(const QStringList &parameters) {}
 
-void NetSession::handleLobbyJoined(const QStringList &parameters) {}
+void NetSession::handleLobbyJoined(const QStringList &parameters) {
+  for (auto player : parameters) {
+    if (player == m_nickname) {
+      // check if server is authenticated or no authentication was performed at
+      // all
+      if (!m_serverAuthHash.isEmpty()) {
+        emit error(tr("Server authentication error"));
 
-void NetSession::handleLobbyLeft(const QStringList &parameters) {}
+        close();
+      }
+
+      setSessionState(Lobby);
+    }
+
+    m_playersModel->addPlayer(player, false);
+  }
+}
+
+void NetSession::handleLobbyLeft(const QStringList &parameters) {
+  if (parameters.length() == 1) {
+    m_playersModel->removePlayer(parameters[0]);
+  } else if (parameters.length() == 2) {
+    m_playersModel->removePlayer(parameters[0], parameters[1]);
+  } else {
+    qWarning("Malformed LOBBY:LEFT message");
+  }
+}
 
 void NetSession::handleNick(const QStringList &parameters) {
   if (parameters.length()) setNickname(parameters[0]);
@@ -206,9 +248,29 @@ void NetSession::handleReplayStart(const QStringList &parameters) {}
 
 void NetSession::handleRoomAbandoned(const QStringList &parameters) {}
 
-void NetSession::handleRoom(const QStringList &parameters) {}
+void NetSession::handleRoom(const QStringList &parameters) {
+  if (parameters.size() == 10 && parameters[0] == "ADD") {
+    m_roomsModel->addRoom(parameters.mid(1));
+  } else if (parameters.length() == 11 && parameters[0] == "UPD") {
+    m_roomsModel->updateRoom(parameters[1], parameters.mid(2));
 
-void NetSession::handleRooms(const QStringList &parameters) {}
+    // keep track of room name so correct name is displayed
+    if (m_room == parameters[1]) {
+      setRoom(parameters[2]);
+    }
+  } else if (parameters.size() == 2 && parameters[0] == "DEL") {
+    m_roomsModel->removeRoom(parameters[1]);
+  }
+}
+
+void NetSession::handleRooms(const QStringList &parameters) {
+  if (parameters.size() % 9) {
+    qWarning("Net: Malformed ROOMS message");
+    return;
+  }
+
+  m_roomsModel->setRoomsList(parameters);
+}
 
 void NetSession::handleRoundFinished(const QStringList &parameters) {}
 
