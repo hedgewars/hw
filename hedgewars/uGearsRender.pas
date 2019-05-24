@@ -1300,11 +1300,16 @@ begin
                      end;
                  end;
 
-           gtDrill: if (Gear^.State and gsttmpFlag) <> 0 then
-                        DrawSpriteRotated(sprAirDrill, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX))
+           gtDrill: begin
+                    if (Gear^.Pos = 1) then
+                        i:= (RealTicks shr 5 + Gear^.uid) mod 4
                     else
-                        DrawSpriteRotated(sprDrill, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-
+                        i:= Gear^.uid mod 4;
+                    if (Gear^.State and gsttmpFlag) <> 0 then
+                        DrawTextureRotatedF(SpritesData[sprAirDrill].texture, 0.5, 0, 0, x, y, i, 0, 64, 64, DxDy2Angle(Gear^.dY, Gear^.dX))
+                    else
+                        DrawTextureRotatedF(SpritesData[sprDrill].texture, 0.5, 0, 0, x, y, i, 0, 64, 64, DxDy2Angle(Gear^.dY, Gear^.dX));
+                    end;
         gtHedgehog: DrawHH(Gear, x, y);
 
            gtShell: DrawSpriteRotated(sprBazookaShell, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));

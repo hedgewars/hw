@@ -628,6 +628,8 @@ case Kind of
                     gear^.Timer:= 5000;
                 // Tag for drill strike. if 1 then first impact occured already
                 gear^.Tag := 0;
+                // Pos for state. If 1, drill is drilling
+                gear^.Pos := 0;
                 gear^.Radius:= 4;
                 gear^.Density:= _1;
                 end;
