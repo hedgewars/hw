@@ -26,6 +26,7 @@ Gameplay:
  * Use player-chosen team identity in campaigns and singleplayer missions
  * Fix player-chosen teams ignoring custom team controls in campaigns
  * Fix broken behaviour of airborne attacks when placed near bounce world edge
+ * Fix crate sometimes collected twice when switching to hedgehog that touches it
  * Deny placement of airborne attack in “impossible” places in maps with bounce world edge
  * Deny placement of piano beyond bounce world edge
  * Fix laser sight not working properly when it starts out of map bounds
