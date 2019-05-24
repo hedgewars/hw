@@ -252,7 +252,7 @@ function AfterEndAnimDuo()
 end
 
 function SkipMidAnimAlone()
-  AnimSetGearPosition(leaks, 2656, 1842)
+  AnimSetGearPosition(leaks, 2656, 1845)
   AnimSwitchHog(leaks)
   AnimWait(dense, 1)
   AddFunction({func = HideHedge, args = {princess}})
@@ -273,14 +273,15 @@ function AfterStartAnim()
 end
 
 function SkipStartAnim()
+  AnimTurn(leaks, "Left")
   AnimSwitchHog(leaks)
 end
 
 function PlaceCratesDuo()
   SpawnSupplyCrate(3090, 827, amBaseballBat)
-  girderCrate1 = SpawnSupplyCrate(2466, 1814, amGirder)
+  girderCrate1 = SpawnSupplyCrate(2366, 1814, amGirder)
   girderCrate2 = SpawnSupplyCrate(2630, 1278, amGirder)
-  SpawnSupplyCrate(2422, 1810, amParachute)
+  SpawnSupplyCrate(2322, 1810, amParachute)
   SpawnSupplyCrate(3157, 1009, amLowGravity)
   sniperCrate = SpawnSupplyCrate(784, 1715, amSniperRifle)
 end
@@ -328,9 +329,10 @@ function AfterPastFlowerAnim()
 end
 
 function SkipPastFlowerAnim()
-  AnimSetGearPosition(dense, 2656, 1842)
-  AnimSwitchHog(dense)
-  AnimWait(dense, 1)
+  AnimSetGearPosition(dense, 2656, 1845)
+  AnimTurn(dense, "Left")
+  AnimSwitchHog(leaks)
+  AnimWait(leaks, 1)
   AddFunction({func = HideHedge, args = {cyborg}})
 end
 
@@ -485,6 +487,7 @@ function SetupAnimAttacked()
   table.insert(startAnim, {func = AnimSay, args = {leaks, loc("I wonder where Dense Cloud is..."), SAY_THINK, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {leaks, loc("He must be in the village already."), SAY_THINK, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {leaks, loc("I'd better get going myself."), SAY_THINK, 4000}})
+  AddSkipFunction(startAnim, SkipStartAnim, {})
 
   midAnim = {}
   table.insert(midAnim, {func = AnimWait, args = {leaks, 500}})
@@ -497,7 +500,7 @@ function SetupAnimAttacked()
   table.insert(midAnim, {func = AnimSay, args = {cyborg, loc("If you can get that crate fast enough, your beloved \"princess\" may go free."), SAY_SAY, 7000}})
   table.insert(midAnim, {func = AnimSay, args = {cyborg, loc("However, if you fail to do so, she dies a most violent death! Muahahaha!"), SAY_SAY, 8000}})
   table.insert(midAnim, {func = AnimSay, args = {cyborg, loc("Good luck...or else!"), SAY_SAY, 4000}})
-  table.insert(midAnim, {func = AnimTeleportGear, args = {leaks, 2656, 1842}})
+  table.insert(midAnim, {func = AnimTeleportGear, args = {leaks, 2656, 1845}})
   table.insert(midAnim, {func = AnimCustomFunction, args = {cyborg, HideCyborg, {}}, swh = false})
   table.insert(midAnim, {func = AnimSay, args = {leaks, loc("Hey! This is cheating!"), SAY_SHOUT, 4000}})
   AddSkipFunction(midAnim, SkipMidAnimAlone, {})
@@ -508,6 +511,7 @@ function SetupAnimAcceptedDied()
   table.insert(startAnimAD, {func = AnimTurn, args = {leaks, "Left"}})
   table.insert(startAnimAD, {func = AnimSay, args = {leaks, loc("I need to get to the other side of this island, fast!"), SAY_THINK, 5000}})
   table.insert(startAnimAD, {func = AnimSay, args = {leaks, loc("With Dense Cloud on the land of shadows, I'm the village's only hope..."), SAY_THINK, 7000}})
+  AddSkipFunction(startAnimAD, SkipStartAnim, {})
 
   table.insert(midAnimAD, {func = AnimWait, args = {leaks, 500}})
   table.insert(midAnimAD, {func = AnimCustomFunction, swh = false, args = {leaks, RestoreCyborg, {1300, 1200, 1390, 1200}}})
@@ -519,14 +523,14 @@ function SetupAnimAcceptedDied()
   table.insert(midAnimAD, {func = AnimSay, args = {cyborg, loc("If you can get that crate fast enough, your beloved \"princess\" may go free."), SAY_SAY, 7000}})
   table.insert(midAnimAD, {func = AnimSay, args = {cyborg, loc("However, if you fail to do so, she dies a most violent death, just like your friend! Muahahaha!"), SAY_SAY, 8000}})
   table.insert(midAnimAD, {func = AnimSay, args = {cyborg, loc("Good luck...or else!"), SAY_SAY, 4000}})
-  table.insert(midAnimAD, {func = AnimTeleportGear, args = {leaks, 2656, 1842}})
+  table.insert(midAnimAD, {func = AnimTeleportGear, args = {leaks, 2656, 1845}})
   table.insert(midAnimAD, {func = AnimCustomFunction, args = {cyborg, HideCyborg, {}}, swh = false})
   table.insert(midAnimAD, {func = AnimSay, args = {leaks, loc("Hey! This is cheating!"), SAY_SHOUT, 4000}})
   AddSkipFunction(midAnimAD, SkipMidAnimAlone, {})
 
   table.insert(failAnimAD, {func = AnimCustomFunction, args = {cyborg, ClearTrashForPrincessCage, {}}})
-  table.insert(failAnimAD, {func = AnimCustomFunction, swh = false, args = {leaks, RestoreCyborg, {2299, 1687, 2294, 1841}}})
-  table.insert(failAnimAD, {func = AnimTeleportGear, args = {leaks, 2090, 1841}})
+  table.insert(failAnimAD, {func = AnimCustomFunction, swh = false, args = {leaks, RestoreCyborg, {2299, 1687, 2294, 1845}}})
+  table.insert(failAnimAD, {func = AnimTeleportGear, args = {leaks, 2090, 1845}})
   table.insert(failAnimAD, {func = AnimCustomFunction, swh = false, args = {cyborg, SetupKillRoom, {}}})
   table.insert(failAnimAD, {func = AnimTurn, swh = false, args = {cyborg, "Left"}})
   table.insert(failAnimAD, {func = AnimTurn, swh = false, args = {princess, "Left"}})
@@ -581,12 +585,13 @@ function SetupAnimAcceptedLived()
   table.insert(pastFlowerAnimAL, {func = AnimSay, args = {cyborg, loc("Well, well! Isn't that the cutest thing you've ever seen?"), SAY_SAY, 7000}})
   table.insert(pastFlowerAnimAL, {func = AnimSay, args = {cyborg, loc("Two little hogs cooperating, getting past obstacles..."), SAY_SAY, 7000}})
   table.insert(pastFlowerAnimAL, {func = AnimSay, args = {cyborg, loc("Let me test your skills a little, will you?"), SAY_SAY, 6000}})
-  table.insert(pastFlowerAnimAL, {func = AnimTeleportGear, args = {cyborg, 2456, 1842}})
-  table.insert(pastFlowerAnimAL, {func = AnimTeleportGear, args = {dense, 2656, 1842}})
+  table.insert(pastFlowerAnimAL, {func = AnimWait, args = {cyborg, 2000}})
+  table.insert(pastFlowerAnimAL, {func = AnimTeleportGear, args = {cyborg, 2456, 1845}})
+  table.insert(pastFlowerAnimAL, {func = AnimTeleportGear, args = {dense, 2656, 1845}})
   table.insert(pastFlowerAnimAL, {func = AnimCustomFunction, args = {dense, CondNeedToTurn, {cyborg, dense}}})
   table.insert(pastFlowerAnimAL, {func = AnimSay, args = {dense, loc("Why are you doing this?"), SAY_SAY, 4000}})
   table.insert(pastFlowerAnimAL, {func = AnimSay, args = {cyborg, loc("To help you, of course!"), SAY_SAY, 4000}})
-  table.insert(pastFlowerAnimAL, {func = AnimSwitchHog, args = {dense}})
+  table.insert(pastFlowerAnimAL, {func = AnimSwitchHog, args = {leaks}})
   table.insert(pastFlowerAnimAL, {func = AnimDisappear, swh = false, args = {cyborg, 3781, 1583}})
   table.insert(pastFlowerAnimAL, {func = AnimCustomFunction, swh = false, args = {cyborg, HideCyborgOnly, {}}})
   AddSkipFunction(pastFlowerAnimAL, SkipPastFlowerAnim, {})
@@ -643,8 +648,9 @@ function SetupAnimRefusedLived()
   table.insert(pastFlowerAnimRL, {func = AnimSay, args = {cyborg, loc("Well, well! Isn't that the cutest thing you've ever seen?"), SAY_SAY, 7000}})
   table.insert(pastFlowerAnimRL, {func = AnimSay, args = {cyborg, loc("Two little hogs cooperating, getting past obstacles..."), SAY_SAY, 7000}})
   table.insert(pastFlowerAnimRL, {func = AnimSay, args = {cyborg, loc("Let me test your skills a little, will you?"), SAY_SAY, 6000}})
-  table.insert(pastFlowerAnimRL, {func = AnimTeleportGear, args = {cyborg, 2456, 1842}})
-  table.insert(pastFlowerAnimRL, {func = AnimTeleportGear, args = {dense, 2656, 1842}})
+  table.insert(pastFlowerAnimRL, {func = AnimWait, args = {cyborg, 2000}})
+  table.insert(pastFlowerAnimRL, {func = AnimTeleportGear, args = {cyborg, 2456, 1845}})
+  table.insert(pastFlowerAnimRL, {func = AnimTeleportGear, args = {dense, 2656, 1845}})
   table.insert(pastFlowerAnimRL, {func = AnimCustomFunction, args = {dense, CondNeedToTurn, {cyborg, dense}}})
   table.insert(pastFlowerAnimRL, {func = AnimSay, args = {dense, loc("Why are you doing this?"), SAY_SAY, 4000}})
   table.insert(pastFlowerAnimRL, {func = AnimSay, args = {cyborg, loc("You couldn't possibly believe that after refusing my offer I'd just let you go!"), SAY_SAY, 9000}})
@@ -712,13 +718,24 @@ function RestoreHedge(hedge)
 end
 
 function CondNeedToTurn(hog1, hog2)
-  xl, xd = GetX(hog1), GetX(hog2)
+  local xl, xd = GetX(hog1), GetX(hog2)
   if xl > xd then
     AnimInsertStepNext({func = AnimTurn, args = {hog1, "Left"}})
     AnimInsertStepNext({func = AnimTurn, args = {hog2, "Right"}})
   elseif xl < xd then
     AnimInsertStepNext({func = AnimTurn, args = {hog2, "Left"}})
     AnimInsertStepNext({func = AnimTurn, args = {hog1, "Right"}})
+  end
+end
+
+function NeedToTurn(hog1, hog2)
+  local xl, xd = GetX(hog1), GetX(hog2)
+  if xl > xd then
+    AnimTurn(hog1, "Left")
+    AnimTurn(hog2, "Right")
+  elseif xl < xd then
+    AnimTurn(hog2, "Left")
+    AnimTurn(hog1, "Right")
   end
 end
 
