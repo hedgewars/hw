@@ -4170,6 +4170,7 @@ begin
         Gear^.X:= Gear^.X+Gear^.dX*4;
         Gear^.Y:= Gear^.Y+Gear^.dY*4;
         Gear^.SoundChannel := LoopSound(sndDrillRocket);
+        Gear^.Pos:= 1;
         Gear^.doStep := @doStepDrillDrilling;
 
         if (Gear^.State and gsttmpFlag) <> 0 then

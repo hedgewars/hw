@@ -86,6 +86,7 @@ Controls:
  * Fix broken default keyboard controls for team chat and camera movement
 
 Graphics:
+ + Animate drill rockets
  * Fix speech bubbles overlapping in the wrong order
  * Fix wrong ice beam angle if it goes diagonally up out of map through world wrap
  * Fix double water splash when flying saucer drowns
