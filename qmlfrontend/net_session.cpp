@@ -84,9 +84,44 @@ void NetSession::parseNetMessage(const QStringList &message) {
 
   using Handler = std::function<void(NetSession *, const QStringList &)>;
   static QMap<QString, Handler> commandsMap{
+      {"ADD_TEAM", &NetSession::handleAddTeam},
+      {"ASKPASSWORD", &NetSession::handleAskPassword},
+      {"BANLIST", &NetSession::handleBanList},
+      {"BYE", &NetSession::handleBye},
+      {"CFG", &NetSession::handleCfg},
+      {"CHAT", &NetSession::handleChat},
+      {"CLIENT_FLAGS", &NetSession::handleClientFlags},
       {"CONNECTED", &NetSession::handleConnected},
+      {"EM", &NetSession::handleEm},
+      {"ERROR", &NetSession::handleError},
+      {"HH_NUM", &NetSession::handleHhNum},
+      {"INFO", &NetSession::handleInfo},
+      {"JOINED", &NetSession::handleJoined},
+      {"JOINING", &NetSession::handleJoining},
+      {"KICKED", &NetSession::handleKicked},
+      {"LEFT", &NetSession::handleLeft},
+      {"LOBBY:JOINED", &NetSession::handleLobbyJoined},
+      {"LOBBY:LEFT", &NetSession::handleLobbyLeft},
+      {"NICK", &NetSession::handleNick},
+      {"NOTICE", &NetSession::handleNotice},
       {"PING", &NetSession::handlePing},
-      {"BYE", &NetSession::handleBye}};
+      {"PONG", &NetSession::handlePong},
+      {"PROTO", &NetSession::handleProto},
+      {"REDIRECT", &NetSession::handleRedirect},
+      {"REMOVE_TEAM", &NetSession::handleRemoveTeam},
+      {"REPLAY_START", &NetSession::handleReplayStart},
+      {"ROOMABANDONED", &NetSession::handleRoomAbandoned},
+      {"ROOM", &NetSession::handleRoom},
+      {"ROOMS", &NetSession::handleRooms},
+      {"ROUND_FINISHED", &NetSession::handleRoundFinished},
+      {"RUN_GAME", &NetSession::handleRunGame},
+      {"SERVER_AUTH", &NetSession::handleServerAuth},
+      {"SERVER_MESSAGE", &NetSession::handleServerMessage},
+      {"SERVER_VARS", &NetSession::handleServerVars},
+      {"TEAM_ACCEPTED", &NetSession::handleTeamAccepted},
+      {"TEAM_COLOR", &NetSession::handleTeamColor},
+      {"WARNING", &NetSession::handleWarning},
+  };
 
   auto handler =
       commandsMap.value(message[0], &NetSession::handleUnknownCommand);
@@ -95,7 +130,16 @@ void NetSession::parseNetMessage(const QStringList &message) {
 }
 
 void NetSession::handleConnected(const QStringList &parameters) {
-  setSessionState(Login);
+  if (parameters.length() < 2 || parameters[1].toInt() < cMinServerVersion) {
+    send("QUIT", "Server too old");
+    emit error(tr("Server too old"));
+    close();
+  } else {
+    setSessionState(Login);
+
+    send("NICK", m_nickname);
+    send("PROTO", QString::number(cProtocolVersion));
+  }
 }
 
 void NetSession::handlePing(const QStringList &parameters) {
@@ -109,6 +153,78 @@ void NetSession::handleUnknownCommand(const QStringList &parameters) {
 
   qWarning() << "Command is not recognized";
 }
+
+void NetSession::handleAddTeam(const QStringList &parameters) {}
+
+void NetSession::handleAskPassword(const QStringList &parameters) {}
+
+void NetSession::handleBanList(const QStringList &parameters) {}
+
+void NetSession::handleCfg(const QStringList &parameters) {}
+
+void NetSession::handleChat(const QStringList &parameters) {}
+
+void NetSession::handleClientFlags(const QStringList &parameters) {}
+
+void NetSession::handleEm(const QStringList &parameters) {}
+
+void NetSession::handleError(const QStringList &parameters) {}
+
+void NetSession::handleHhNum(const QStringList &parameters) {}
+
+void NetSession::handleInfo(const QStringList &parameters) {}
+
+void NetSession::handleJoined(const QStringList &parameters) {}
+
+void NetSession::handleJoining(const QStringList &parameters) {}
+
+void NetSession::handleKicked(const QStringList &parameters) {}
+
+void NetSession::handleLeft(const QStringList &parameters) {}
+
+void NetSession::handleLobbyJoined(const QStringList &parameters) {}
+
+void NetSession::handleLobbyLeft(const QStringList &parameters) {}
+
+void NetSession::handleNick(const QStringList &parameters) {
+  if (parameters.length()) setNickname(parameters[0]);
+}
+
+void NetSession::handleNotice(const QStringList &parameters) {}
+
+void NetSession::handlePong(const QStringList &parameters) {
+  Q_UNUSED(parameters)
+}
+
+void NetSession::handleProto(const QStringList &parameters) {}
+
+void NetSession::handleRedirect(const QStringList &parameters) {}
+
+void NetSession::handleRemoveTeam(const QStringList &parameters) {}
+
+void NetSession::handleReplayStart(const QStringList &parameters) {}
+
+void NetSession::handleRoomAbandoned(const QStringList &parameters) {}
+
+void NetSession::handleRoom(const QStringList &parameters) {}
+
+void NetSession::handleRooms(const QStringList &parameters) {}
+
+void NetSession::handleRoundFinished(const QStringList &parameters) {}
+
+void NetSession::handleRunGame(const QStringList &parameters) {}
+
+void NetSession::handleServerAuth(const QStringList &parameters) {}
+
+void NetSession::handleServerMessage(const QStringList &parameters) {}
+
+void NetSession::handleServerVars(const QStringList &parameters) {}
+
+void NetSession::handleTeamAccepted(const QStringList &parameters) {}
+
+void NetSession::handleTeamColor(const QStringList &parameters) {}
+
+void NetSession::handleWarning(const QStringList &parameters) {}
 
 void NetSession::send(const QString &message) { send(QStringList(message)); }
 
