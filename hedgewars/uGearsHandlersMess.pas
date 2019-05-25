@@ -709,17 +709,14 @@ begin
         gY := hwRound(Gear^.Y);
         for i:= 0 to 4 do
             begin
-            glass:= AddVisualGear(gx+random(7)-3, gy+random(7)-3, vgtStraightShot);
+            glass:= AddVisualGear(gx+random(7)-3, gy+random(7)-3, vgtEgg);
             if glass <> nil then
                 with glass^ do
                     begin
                     Frame:= 2;
                     Tint:= $41B83ED0 - i * $10081000;
+                    dX:= dX + hwFloat2Float(Gear^.dX) / 2;
                     Angle:= random(360);
-                    dx:= 0.0000001;
-                    dy:= 0;
-                    if random(2) = 0 then
-                        dx := -dx;
                     FrameTicks:= 750;
                     State:= ord(sprEgg)
                     end;
