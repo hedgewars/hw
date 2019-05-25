@@ -181,8 +181,6 @@ winAnimAD = {}
 
 --/////////////////////////Animation Functions///////////////////////
 function AfterMidFailAnim()
-  DismissTeam(nativesTeamName)
-  DismissTeam(princessTeamName)
   EndTurn(true)
 end
 
@@ -1019,7 +1017,7 @@ function DoLost()
   if not cyborgDead then
     SwitchHog(cyborg)
   end
-  if not (leaksDead or denseDead) then
+  if (not (leaksDead or denseDead)) and (TurnsLeft > 0)  then
     AddAnim(endFailAnim)
   end
   AddFunction({func = DismissTeam, args = {nativesTeamName}})
@@ -1058,6 +1056,7 @@ function DoFailedCourse()
   AnimWait(cyborg, 1)
   AddFunction({func = AddAnim, args = {failAnim}})
   AddFunction({func = AddFunction, args = {{func = AfterMidFailAnim, args = {}}}})
+  AddEvent(CheckLost, {}, DoLost, {})
 end
 
 function SkipFailAnimAlone()
