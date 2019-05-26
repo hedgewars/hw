@@ -658,7 +658,7 @@ end
 
 function DoTurnsOver()
   stage = wave3Stage
-  RestoreWave(3)
+  RestoreWave(3, true)
   DeleteCircles()
 end
 
@@ -902,12 +902,16 @@ function SpawnCrates()
 end
 
 
-function RestoreWave(index)
+function RestoreWave(index, animate)
   for i = (index - 1) * 3 + 1, index * 3 do
     if cannibalHidden[i] == true then
       RestoreHog(cannibals[i])
-      AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
-      FollowGear(cannibals[i])
+      if animate then
+        AnimOutOfNowhere(cannibals[i], unpack(cannibalPos[i]))
+      else
+        AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+        FollowGear(cannibals[i])
+      end
       cannibalHidden[i] = false
     end
   end
