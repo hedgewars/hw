@@ -1869,7 +1869,7 @@ end;
 
 function IsHogLocal(HH: PHedgehog): boolean;
 begin
-    IsHogLocal:= (not (HH^.Team^.ExtDriven or (HH^.BotLevel > 0))) or (HH^.Team^.Clan^.ClanIndex = LocalClan) or (GameType = gmtDemo);
+    IsHogLocal:= (not (HH^.Team^.ExtDriven or (HH^.BotLevel > 0))) or (HH^.Team^.Clan^.LocalOrAlly) or (GameType = gmtDemo);
 end;
 
 end.

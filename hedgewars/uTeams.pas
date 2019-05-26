@@ -522,6 +522,7 @@ if c < 0 then
         Color:= TeamColor;
         TagTeamIndex:= 0;
         Flawless:= true;
+        LocalOrAlly:= false;
         DeathLogged:= false;
         StatsHandled:= false;
         end
@@ -562,7 +563,7 @@ for t:= 0 to Pred(TeamsCount) do
         begin
         if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
             begin
-            LocalClan:= Clan^.ClanIndex;
+            Clan^.LocalOrAlly:= true;
             LocalTeam:= t;
             LocalAmmo:= Hedgehogs[0].AmmoStore
             end;
@@ -1082,7 +1083,6 @@ PreviousTeam:= nil;
 CurrentHedgehog:= nil;
 TeamsCount:= 0;
 ClansCount:= 0;
-LocalClan:= -1;
 LocalTeam:= -1;
 LocalAmmo:= -1;
 TeamsGameOver:= false;

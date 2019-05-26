@@ -173,10 +173,6 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
             ClansArray[t]:= cp;
             ClansArray[t]^.ClanIndex:= t;
             ClansArray[0]^.ClanIndex:= 0;
-            if (LocalClan = t) then
-                LocalClan:= 0
-            else if (LocalClan = 0) then
-                LocalClan:= t
             end;
         end;
     CurrentTeam:= ClansArray[0]^.Teams[0];
