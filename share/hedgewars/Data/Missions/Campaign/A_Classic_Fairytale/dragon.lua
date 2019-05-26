@@ -385,7 +385,11 @@ end
 function AfterKillAnim()
   if not cyborgsKilledBeforeCrates then
     PutWeaponCrates()
-    SetTurnTimeLeft(timeAfterCratesTaken)
+    if timeAfterCratesTaken then
+      SetTurnTimeLeft(timeAfterCratesTaken)
+    else
+      SetTurnTimeLeft(TurnTime)
+    end
     SetReadyTimeLeft(Ready)
     AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
     ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!").."|"..loc("Mines time: 5 seconds"), 1, 2000)
