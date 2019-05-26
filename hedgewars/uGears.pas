@@ -1265,7 +1265,7 @@ begin
     or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking <> 0)
     or ((GameFlags and gfInfAttack) <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode <> 0)
     or (CurrentHedgehog^.CurAmmoType = amSniperRifle))
-    and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0) and ((GameFlags and gfInfAttack) = 0)))
+    and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0)))
     and (not LuaClockPaused);
 end;
 
