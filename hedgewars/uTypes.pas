@@ -94,7 +94,7 @@ type
             sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprCreeper, sprHandCreeper, sprMinigun,
             sprSliderInverted, sprFingerBack, sprFingerBackInv, sprTargetPBack, sprTargetPBackInv,
             sprHealthHud, sprHealthPoisonHud, sprVampHud, sprKarmaHud, sprMedicHud, sprMedicPoisonHud,
-            sprHaloHud, sprInvulnHUD, sprAmPiano, sprHandLandGun, sprFirepunch
+            sprHaloHud, sprInvulnHUD, sprAmPiano, sprHandLandGun, sprFirePunch
             );
 
     // Gears that interact with other Gears and/or Land
