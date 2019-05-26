@@ -565,7 +565,10 @@ function SetupPlace()
     end
   end
   HideHedge(cyborg)
+  -- Collect this crate to win
   jetCrate = SpawnSupplyCrate(3915, 1723, amJetpack)
+  -- Protect crate from damage, just in case
+  SetState(jetCrate, bor(GetState(jetCrate), gstNoDamage))
 
   --[[ Block the left entrance.
        Otherwise the player could rope out of the map and
