@@ -212,6 +212,8 @@ cyborgsKilledBeforeCrates = false
 cratesTaken = false
 doneCyborgsDead = false
 
+timeAfterCratesTaken = nil
+
 annoyingGearsForPortalScene = {}
 -----------------------------Animations--------------------------------
 function EmitDenseClouds(dir)
@@ -383,7 +385,8 @@ end
 function AfterKillAnim()
   if not cyborgsKilledBeforeCrates then
     PutWeaponCrates()
-    SetTurnTimeLeft(TurnTime)
+    SetTurnTimeLeft(timeAfterCratesTaken)
+    SetReadyTimeLeft(Ready)
     AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
     ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!").."|"..loc("Mines time: 5 seconds"), 1, 2000)
   end
@@ -398,7 +401,7 @@ end
 function AfterKilledAnim()
   -- Final mission segment with the portal gun
   HideHedge(cyborg)
-  SetTurnTimeLeft(TurnTime)
+  EndTurn(true)
   SetGearMessage(native, 0)
   SpawnSupplyCrate(1184, 399, amPortalGun, 100)
   SpawnSupplyCrate(2259, 755, amTeleport, 2)
@@ -460,6 +463,7 @@ end
 
 function DoCratesTaken()
   cratesTaken = true
+  timeAfterCratesTaken = TurnTimeLeft
   SetupKillAnim()
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(killAnim)
