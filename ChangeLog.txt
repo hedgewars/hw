@@ -31,6 +31,7 @@ Gameplay:
  * Deny placement of piano beyond bounce world edge
  * Fix laser sight not working properly when it starts out of map bounds
  * Fix parachute making hog stuck or fast when bumping into wall while looking other way
+ * Fix temporary hog/timer freeze when throwing sticky mine, then switch to shotgun in inf. attack
  * Add missing winner animation in single missions
 
 Styles and schemes:

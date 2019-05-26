@@ -1296,7 +1296,7 @@ if not isInMultiShoot then
 else if Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle] then
     HHGear^.Message:= HHGear^.Message and gmPrecise;
 
-if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) and isInMultiShoot then
+if (((GameFlags and gfInfAttack) <> 0) or ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0)) and isInMultiShoot then
     AllInactive:= true
 else if not isInMultiShoot then
     AllInactive:= false;
@@ -1434,7 +1434,7 @@ if (HHGear^.State and gstMoving) <> 0 then
     exit
     end;
 
-    if not(isInMultiShoot and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])) and (Hedgehog^.Gear <> nil) then
+    if ((not (isInMultiShoot and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle]) and ((GameFlags and gfInfAttack) = 0)))) and (Hedgehog^.Gear <> nil) then
         begin
         if GHStepTicks > 0 then
             dec(GHStepTicks);
