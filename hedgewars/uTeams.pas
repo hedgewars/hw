@@ -563,7 +563,8 @@ for t:= 0 to Pred(TeamsCount) do
         begin
         if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
             begin
-            Clan^.LocalOrAlly:= true;
+            if (MissionTeam = nil) or (MissionTeam^.TeamName = TeamName) then
+                Clan^.LocalOrAlly:= true;
             LocalTeam:= t;
             LocalAmmo:= Hedgehogs[0].AmmoStore
             end;

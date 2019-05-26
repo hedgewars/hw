@@ -177,6 +177,7 @@ Lua API:
  * Fix DismissTeam not clearing team properly
  * SimpleMission: Fix Lua error spam when a custom goal fails
  * gstWinner state is preserved after the game ended
+ * If there's a mission team IsHogLocal now only returns true for hogs in the same clan as the mission team
 
 ====================== 0.9.25 ======================
 HIGHLIGHTS:
