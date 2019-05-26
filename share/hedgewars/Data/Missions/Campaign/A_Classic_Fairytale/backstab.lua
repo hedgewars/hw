@@ -631,6 +631,7 @@ function SkipWave2DeadAnim()
   TurnNatives()
   PutCircles()
   DeployHog()
+  EndTurn(true)
   if nativesNum > 1 then
     IsolateNatives()
   end
@@ -652,7 +653,6 @@ function AfterWave2DeadAnim()
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
   HideCyborg()
-  EndTurn(true)
   ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: You might want to use some mines ..."), 1, 12000)
 end
 
@@ -1228,7 +1228,7 @@ function onNewTurn()
 end
 
 function onEndTurn()
-  if stage == platformStage then
+  if stage == platformStage and wave3TurnsLeft ~= nil then
     wave3TurnsLeft = wave3TurnsLeft - 1
     if wave3TurnsLeft == 0 then
       DoTurnsOver()
