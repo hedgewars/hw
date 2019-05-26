@@ -499,6 +499,7 @@ function DoMissionFinished()
   end
   RestoreHedge(cyborg)
   DeleteGear(cyborg)
+  DismissTeam(fighterTeamName) -- just in case
   EndTurn(true)
 end
 
@@ -529,7 +530,7 @@ end
 function CyborgDeadReact()
   freshDead = nil
   if cyborgsLeft == 0 then
-    if not cratesTaken then
+    if (not cratesTaken) and (not CheckMissionFinished()) then
        AnimSay(native, loc("I still have to get rid of the crates."), SAY_THINK, 8000)
     end
     return
