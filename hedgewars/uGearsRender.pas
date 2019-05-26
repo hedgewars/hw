@@ -884,6 +884,7 @@ begin
                 amLandGun: DrawSpriteRotated(sprHandLandGun, hx, hy, sign, aangle);
                 amIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                 amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
+                amFirePunch: DrawSpriteRotatedF(sprFirepunch, hx + 6 * sign + 1, hy - 5, (RealTicks div 50) mod 16, sign, 0);
             end;
 
             case amt of
