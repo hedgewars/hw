@@ -141,7 +141,7 @@ startElimination = 0
 stage = 0
 choice = 0
 highJumped = false
-TurnsLeft = 0
+wave3TurnsLeft = nil
 startNativesNum = 0
 nativesTeamName = nil
 tribeTeamName = nil
@@ -646,7 +646,6 @@ function SpawnPlatformCrates()
 end
 
 function AfterWave2DeadAnim()
-  TurnsLeft = 7
   stage = platformStage
   SpawnPlatformCrates()
   SetGearMessage(CurrentHedgehog, 0)
@@ -697,7 +696,7 @@ end
 
 -----------------------------Events------------------------------------
 function CheckTurnsOver()
-  return TurnsLeft == 0
+  return wave3TurnsLeft == 0
 end
 
 function CheckDeployedDead()
@@ -1177,10 +1176,15 @@ function onNewTurn()
     return
   end
 
-  TurnsLeft = TurnsLeft - 1
-  
   if stage == platformStage then
-    AddCaption(string.format(loc("Turns until arrival: %d"), TurnsLeft))
+    if wave3TurnsLeft == nil then
+      wave3TurnsLeft = 7
+    else
+      wave3TurnsLeft = wave3TurnsLeft - 1
+    end
+    if wave3TurnsLeft > 0 then
+      AddCaption(string.format(loc("Turns until arrival: %d"), wave3TurnsLeft))
+    end
   end
   if deployedHog then
     if GetHogTeamName(CurrentHedgehog) == nativesTeamName then
