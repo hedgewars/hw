@@ -32,7 +32,7 @@ After this, the natives must defeat 3 waves of cannibals.
 - One hero is deployed near the circles
 - Player now only controls the hero, switch hog is removed
 - TBS
-- 3rd wave appears
+- 3rd wave appears at end of 7th turn
 - TBS
 - 3rd wave dead
 - Final cut scene
@@ -649,7 +649,6 @@ function AfterWave2DeadAnim()
   stage = platformStage
   SpawnPlatformCrates()
   SetGearMessage(CurrentHedgehog, 0)
-  AddEvent(CheckTurnsOver, {}, DoTurnsOver, {3}, 0)
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
   HideCyborg()
@@ -695,10 +694,6 @@ function AfterStartAnim()
 end
 
 -----------------------------Events------------------------------------
-function CheckTurnsOver()
-  return wave3TurnsLeft == 0
-end
-
 function CheckDeployedDead()
   return deployedDead
 end
@@ -1179,8 +1174,6 @@ function onNewTurn()
   if stage == platformStage then
     if wave3TurnsLeft == nil then
       wave3TurnsLeft = 7
-    else
-      wave3TurnsLeft = wave3TurnsLeft - 1
     end
     if wave3TurnsLeft > 0 then
       AddCaption(string.format(loc("Turns until arrival: %d"), wave3TurnsLeft))
@@ -1227,6 +1220,15 @@ function onNewTurn()
       AddFunction({func = AddWave3DeadAnim, args = {}})
     end
     needToAct = 0
+  end
+end
+
+function onEndTurn()
+  if stage == platformStage then
+    wave3TurnsLeft = wave3TurnsLeft - 1
+    if wave3TurnsLeft == 0 then
+      DoTurnsOver()
+    end
   end
 end
 
