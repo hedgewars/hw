@@ -476,6 +476,7 @@ type
             StatsHandled : boolean; // true if clan's rank has been handled for stats screen
             Flawless: boolean;
             Passive: boolean; // informational. Must be set to true if all of the teams are passive
+            LocalOrAlly: boolean; // true if at least 1 team in the clan is a local team. A local team is a non-extdriven team controlled by a human
             end;
 
      cdeclPtr = procedure; cdecl;
