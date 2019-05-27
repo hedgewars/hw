@@ -1579,7 +1579,7 @@ function HandleStartingStage()
 				preMenuCfg..
 				missionComment ..
 				postMenuCfg ..
-				"", 2, 9999000, true
+				"", 3, 9999000, true
 				)
 
 end

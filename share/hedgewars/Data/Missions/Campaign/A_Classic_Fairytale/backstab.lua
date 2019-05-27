@@ -690,7 +690,7 @@ function AfterStartAnim()
   ShowMission(loc("Backstab"), loc("Judas"),
     string.format(loc("Kill the traitor, %s, or spare his life!"), GetHogName(spyHog)) .. "|" ..
     loc("Kill him or skip your turn."),
-    1, 8000)
+    3, 8000)
 end
 
 -----------------------------Events------------------------------------
@@ -699,7 +699,7 @@ function CheckDeployedDead()
 end
 
 function DoDeployedDead()
-  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have failed to save the tribe!"), 0, 6000)
+  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have failed to save the tribe!"), -amSkip, 6000)
   DismissTeam(nativesTeamName)
   DismissTeam(tribeTeamName)
   DismissTeam(cyborgTeamName)
@@ -759,7 +759,7 @@ function CheckKilledOther()
 end
 
 function DoKilledOther()
-  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), 0, 6000)
+  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), -amSkip, 6000)
   DismissTeam(nativesTeamName)
   DismissTeam(tribeTeamName)
   EndTurn(true)

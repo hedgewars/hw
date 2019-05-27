@@ -695,7 +695,7 @@ function InstructionsRace()
         ShowMission(loc("Racer"),
         	loc("A Hedgewars mini-game"),
         	loc("Touch all waypoints as fast as you can!"),
-		2, 4000)
+		1, 4000)
 end
 
 function onGameStart()

@@ -25,7 +25,7 @@ function printMission()
 		recordInfo = getReadableChallengeRecord("Highscore")
 	end
 	ShowMission(loc("That Sinking Feeling"), loc("Challenge"), loc("Save as many hogs as possible!")
-	.. "|" .. recordInfo, 4, 0)
+	.. "|" .. recordInfo, 10, 0)
 end
 
 -- allow skipping of the intro via hitting precise key
@@ -215,7 +215,7 @@ function onGameTick()
 			if genCounter == 2000 then
 				introStage = 110
 				FollowGear(CurrentHedgehog)
-				ShowMission(loc("That Sinking Feeling"), loc("User Challenge"), loc("Save as many hogs as possible!"), 4, 0)
+				ShowMission(loc("That Sinking Feeling"), loc("User Challenge"), loc("Save as many hogs as possible!"), 10, 0)
 				SetInputMask(0xFFFFFFFF)
 			end
 

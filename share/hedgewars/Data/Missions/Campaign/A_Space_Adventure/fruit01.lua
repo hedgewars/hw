@@ -38,11 +38,11 @@ local goals = {
 		loc("Captain Lime offered his help if you assist him in battle.").."|"..
 		loc("What do you want to do?").."| |"..
 		loc("Fight: Press [Attack]").."|"..
-		loc("Flee: Press [Jump]"), 1, 9999000, true},
+		loc("Flee: Press [Jump]"), 3, 9999000, true},
 	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight!").."|"..loc("Lead your allies to battle and eliminate all the enemies!"), 1, 5000},
 	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee.").."|"..loc("You have to reach the left-most place on the map."), 1, 5000},
-	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 1, 2000},
-	["flee"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to flee."), 1, 2000},
+	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 2, 2000},
+	["flee"] = {missionName, loc("Coward"), loc("You have chosen to flee."), 2, 2000},
 	["flee_final"] = {missionName, loc("Time to run!"), loc("Knock off the enemies from the left-most place of the map!") .. "|" .. loc("Stay there to flee!"), 1, 6000},
 }
 -- crates

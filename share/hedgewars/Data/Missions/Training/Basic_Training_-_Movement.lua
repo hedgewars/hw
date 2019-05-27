@@ -262,7 +262,7 @@ end
 
 local function victory()
 	SaveMissionVar("Won", "true")
-	ShowMission(loc("Basic Movement Training"), loc("Training complete!"),loc("Congratulations! You have completed the obstacle course!"), 0, 0)
+	ShowMission(loc("Basic Movement Training"), loc("Training complete!"),loc("Congratulations! You have completed the obstacle course!"), 4, 0)
 	SendStat(siGameResult, loc("You have completed the Basic Movement Training!"))
 	SendStat(siCustomAchievement, loc("Congratulations!"))
 	SendStat(siCustomAchievement, loc("Return to the training menu by pressing the “Go back” button."))
@@ -538,7 +538,7 @@ function onGameStart()
 	SetInputMask(0)
 	SetSoundMask(sndYesSir, true)
 	LoadGearData()
-	ShowMission(loc("Basic Movement Training"), loc("Basic Training"), loc("Complete the obstacle course."), 1, 0)
+	ShowMission(loc("Basic Movement Training"), loc("Basic Training"), loc("Complete the obstacle course."), 10, 0)
 	FollowGear(hog_greenhorn)
 end
 

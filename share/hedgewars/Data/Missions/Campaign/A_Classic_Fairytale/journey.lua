@@ -201,7 +201,7 @@ function AfterMidAnimAlone()
   SetTurnTimeLeft(TurnTime)
   ShowMission(loc("The Journey Back"), loc("Collateral Damage"),
     loc("Save the princess by collecting the crate in under 12 turns!") .. "|" ..
-    loc("Mines time: 3 seconds"), 0, 6000)
+    loc("Mines time: 3 seconds"), 7, 6000)
   -----------------------///////////////------------
 end
 
@@ -266,7 +266,7 @@ function AfterStartAnim()
   if m2DenseDead == 0 then
     conds = loc("Your hogs must survive!")
   end
-  ShowMission(loc("The Journey Back"), loc("Adventurous"), goal .. "|" .. hint .. "|" .. stuck .. "|" .. conds, 0, 7000)
+  ShowMission(loc("The Journey Back"), loc("Adventurous"), goal .. "|" .. hint .. "|" .. stuck .. "|" .. conds, 1, 7000)
 end
 
 function SkipStartAnim()
@@ -322,7 +322,7 @@ function AfterPastFlowerAnim()
   ShowMission(loc("The Journey Back"), loc("The Savior"), 
     loc("Get Dense Cloud out of the pit!") .. "|" ..
     loc("Your hogs must survive!") .. "|" ..
-    loc("Beware of mines: They explode after 5 seconds."), 1, 5000)
+    loc("Beware of mines: They explode after 5 seconds."), 10, 5000)
 end
 
 function SkipPastFlowerAnim()
@@ -944,7 +944,7 @@ function DoTookBlowTorch()
   ShowMission(loc("The Journey Back"), loc("The Tunnel Maker"), 
     loc("Get past the flower.").."|"..
     loc("Hint: Select the blow torch, aim and press [Fire]. Press [Fire] again to stop.").."|"..
-    loc("Don't blow up the crate."), 0, 6000)
+    loc("Don't blow up the crate."), 2, 6000)
 end
 
 function CheckTookLowGravity()
@@ -955,7 +955,7 @@ function DoTookLowGravity()
   ShowMission(loc("The Journey Back"), loc("The Moonwalk"),
     loc("Hop on top of the next flower and advance to the left coast.").."|"..
     loc("Hint: Select the low gravity and press [Fire].") .. "|" ..
-    loc("Beware of mines: They explode after 3 seconds."), 0, 6000)
+    loc("Beware of mines: They explode after 3 seconds."), 2, 6000)
 end
 
 function CheckOnBridge()
@@ -980,7 +980,7 @@ function DoOnFirstGirder()
   ShowMission(loc("The Journey Back"), loc("Slippery"), 
     loc("Collect the weapon crate at the left coast!") .. "|" ..
     loc("You'd better watch your steps...") .. "|" ..
-    loc("Mines time: 3 seconds"), 0, 4000)
+    loc("Mines time: 3 seconds"), 7, 4000)
 end
 
 function CheckTookSniper()
