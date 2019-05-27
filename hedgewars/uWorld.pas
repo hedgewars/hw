@@ -189,10 +189,10 @@ if LuaGoals <> ansistring('') then
     g:= LuaGoals + '|';
 
 // check different game flags
-g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfKing, gidKing); // king?
 if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) then
     g:= AddGoal(g, gfAny, gidPlaceKing);
+g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
 g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
@@ -230,7 +230,13 @@ if cMinesTime <> 3000 then
 
 // if the string has been set, show it for (default timeframe) seconds
 if length(g) > 0 then
-    ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
+    // choose icon
+    if ((GameFlags and gfKing) <> 0) then
+        // crown icon for King Mode
+        ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 0, 0)
+    else
+        // target icon for anything else
+        ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 
 //cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;
