@@ -64,7 +64,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 7500)
+	ShowMission(missionName, loc("Objectives"), challengeObjectives, 1, 7500)
 
 	-- explosives
 	x = 400

@@ -503,7 +503,7 @@ function showCTFMission()
 		loc("- Dropped flags may be returned or recaptured").."|"..
 		loc("- Hogs will be revived")
 
-	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), rules, 0, 0)
+	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), rules, 11, 0)
 end
 
 function updateScores()

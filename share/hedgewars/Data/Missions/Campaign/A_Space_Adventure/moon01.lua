@@ -176,7 +176,7 @@ function onGameStart()
 	FollowGear(hero.gear)
 
 	ShowMission(campaignName, missionName, string.format(loc("%s has to refuel the saucer."), hero.name)..
-	"|"..loc("Rescue the imprisoned PAotH team and get the fuel!"), -amSkip, 0)
+	"|"..loc("Rescue the imprisoned PAotH team and get the fuel!"), 10, 0)
 
 	AddAmmo(minion1.gear, amDEagle, 10)
 	AddAmmo(minion2.gear, amDEagle, 10)
