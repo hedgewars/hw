@@ -399,12 +399,18 @@ function onNewRound()
 		end
 	end
 
+	local icon
+	if roundNumber >= roundLimit then
+		icon = 0
+	else
+		icon = 2
+	end
 	ShowMission(loc("TechRacer"),
 		loc("Status update"),
 		string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit) .. "| |" ..
 		loc("Best team times: ") .. "|" ..
 		totalComment,
-		0, 4000)
+		icon, 4000)
 
 	-- end game if its at round limit
 	if roundNumber >= roundLimit then

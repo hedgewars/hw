@@ -505,10 +505,16 @@ function onNewRound()
                         totalComment = totalComment .. teamComment[i]
         end
 
+        local icon
+        if roundNumber >= roundLimit then
+                icon = 0
+        else
+                icon = 2
+        end
         ShowMission(    loc("Racer"),
                                         loc("Status update"),
                                         string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit) .. "|" .. " " .. "|" ..
-                                        loc("Best team times: ") .. "|" .. totalComment, 0, 4000)
+                                        loc("Best team times: ") .. "|" .. totalComment, icon, 4000)
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
@@ -857,7 +863,7 @@ function onNewTurn()
                                 infoString = loc("Place 2 waypoints using the waypoint placement tool.")
                         end
                         ShowMission(loc("Racer"),
-                        loc("Waypoint placement phase"), infoString, 2, 4000)
+                        loc("Waypoint placement phase"), infoString, -amAirAttack, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
                         SetWeapon(amAirAttack)
                 end

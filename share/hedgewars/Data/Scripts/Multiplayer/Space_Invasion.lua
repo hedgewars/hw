@@ -571,10 +571,16 @@ function CommentOnScore()
 	else
 		displayTime = 1
 	end
+	local icon
+	if lGameOver then
+		icon = 4
+	else
+		icon = 2
+	end
 	ShowMission(	loc("Space Invasion"),
 			statusText,
 			string.format(loc("Rounds complete: %d/%d"), SI.roundNumber, SI.roundLimit) .. "| " .. "|" ..
-			scoreText .. " |" ..entireC, 4, displayTime)
+			scoreText .. " |" ..entireC, icon, displayTime)
 
 	if lGameOver then
 		local winnerTeam = teamStats[1].name
@@ -1136,7 +1142,7 @@ function onGameStart()
 				loc("Toggle Shield: [Long jump]") .. "|" ..
 				loc("Radar Ping: [High jump]") .. "|" ..
 
-				"", 4, 5000
+				"", 8, 5000
 				)
 
 	CreateMeSomeCircles()

@@ -128,7 +128,7 @@ end
 
 function showStartingInfo()
 
-    ShowMission(loc("Mutant"), loc("A Hedgewars tag game"), rules(), 1, 5000)
+    ShowMission(loc("Mutant"), loc("A Hedgewars tag game"), rules(), -amWatermelon, 5000)
 
 end
 
@@ -465,7 +465,7 @@ function createEndGameStats()
     ShowMission(loc("Mutant"),
         loc("Final result"),
         string.format(loc("Winner: %s"), teamsSorted[1]) .. "| |" .. loc("Scores:") .. " |" ..
-        showScore, 0, 15000)
+        showScore, 4, 15000)
 
         -- return winning team
         return teamsSorted[1]
