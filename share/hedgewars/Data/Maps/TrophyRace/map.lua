@@ -139,11 +139,16 @@ function onGameTick()
         if not reached and x > goal_area[1] and x < goal_area[1] + goal_area[3] and y > goal_area[2] and y < goal_area[2] + goal_area[4] then -- hog is within goal rectangle
             reached = true
             local ttime = GameTime-startTime
+            local icon
             -- give it a sound ;)
             if ttime < besttime then
                 PlaySound (sndHomerun)
+                icon = 0
             elseif ttime > worsttime then
                 PlaySound (sndHellish)
+                icon = -amSkip
+            else
+                icon = 2
             end
             for i = 0, numhhs - 1 do
                 if hhs[i] == CurrentHedgehog then
@@ -194,7 +199,7 @@ function onGameTick()
             ShowMission(loc("TrophyRace"), loc("Status update"),
                 string.format(loc("Time: %.3fs by %s"), (ttime/1000), GetHogName(CurrentHedgehog))
                 .. hscore,
-                0, 0)
+                icon, 0)
             AddCaption(string.format(loc("Time: %.3fs"), (ttime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpMessage2)
             AddCaption(loc("Track completed!"), capcolDefault, capgrpGameState)
             EndTurn(true)

@@ -37,7 +37,7 @@ function showStartingInfo()
 
 	ShowMission(loc("FRENZY"),
                 loc("A frenetic Hedgewars mini-game"),
-                ruleSet, 0, 4000)
+                ruleSet, -amMolotov, 4000)
 
 end
 

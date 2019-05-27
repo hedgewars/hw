@@ -671,7 +671,7 @@ function onGameStart()
 			clockStr ..
 			loc("Ammo is reset at the end of your turn.") .. "|" ..
 
-			"", 4, 4000
+			"", -amMine, 4000
 			)
 
 end
