@@ -7,7 +7,7 @@ local enemyAmmo = {
 
 SimpleMission({
 	missionTitle = loc("Nobody Laugh"),
-	missionIcon = 0,
+	missionIcon = -amHammer,
 	goalText = 
 		loc("Eliminate the enemy.") .. "|" ..
 		loc("Unlimited Attacks: Attacks don't end your turn") .. "|"..

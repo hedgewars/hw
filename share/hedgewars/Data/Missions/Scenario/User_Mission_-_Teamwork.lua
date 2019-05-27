@@ -66,7 +66,7 @@ function onGameStart()
 	SpawnSupplyCrate(1543,744,amJetpack)
 	SpawnSupplyCrate(227,442,amDrill)
 
-	ShowMission(loc("Teamwork"), loc("Scenario"), loc("Eliminate Unit 3378.") .. "|" .. loc("Both your hedgehogs must survive.") .. "|" .. loc("Mines time: 0 seconds"), 0, 0)
+	ShowMission(loc("Teamwork"), loc("Scenario"), loc("Eliminate Unit 3378.") .. "|" .. loc("Both your hedgehogs must survive.") .. "|" .. loc("Mines time: 0 seconds"), 1, 0)
 
 end
 

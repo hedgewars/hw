@@ -162,17 +162,17 @@ else
 end
 
 goals = {
-  [startDialogue] = {loc("First Blood"), loc("First Steps"), loc("Press [Left] or [Right] to move around, [Long Jump] to jump forwards.") .. "| |" .. ctrlJump, 1, 4000},
-  [onShroomAnim] = {loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower.") .. "|" .. ctrlMissionPanel, 1, 7000},
-  [onFlowerAnim] = {loc("First Blood"), loc("Hightime"), loc("Collect the crate on the right.") .. "|" .. loc("Hint: Select the rope, [Up] or [Down] to aim, [Attack] to fire, directional keys to move.") .. "|" .. loc("Ropes can be fired again in the air!") .. "| |" .. ctrlAttack, 1, 7000},
+  [startDialogue] = {loc("First Blood"), loc("First Steps"), loc("Press [Left] or [Right] to move around, [Long Jump] to jump forwards.") .. "| |" .. ctrlJump, 2, 4000},
+  [onShroomAnim] = {loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower.") .. "|" .. ctrlMissionPanel, 2, 7000},
+  [onFlowerAnim] = {loc("First Blood"), loc("Hightime"), loc("Collect the crate on the right.") .. "|" .. loc("Hint: Select the rope, [Up] or [Down] to aim, [Attack] to fire, directional keys to move.") .. "|" .. loc("Ropes can be fired again in the air!") .. "| |" .. ctrlAttack, 2, 7000},
   [tookParaAnim] = {loc("First Blood"), loc("Omnivore"), loc("Get on the head of the mole."), 1, 4000},
-  [onMoleHeadAnim] = {loc("First Blood"), loc("The Leap of Faith"), loc("Use the parachute to get the next crate.") .. "|" .. loc("Hint: Just select the parachute, it opens automatically when you fall."), 1, 4000},
-  [pastMoleHeadAnim] = {loc("First Blood"), loc("The Leap of Faith"), loc("Get that crate!"), 1, 4000},
-  [tookRope2Anim] = {loc("First Blood"), loc("The Rising"), loc("Get that crate!"), 1, 4000},
+  [onMoleHeadAnim] = {loc("First Blood"), loc("The Leap of Faith"), loc("Use the parachute to get the next crate.") .. "|" .. loc("Hint: Just select the parachute, it opens automatically when you fall."), 2, 4000},
+  [pastMoleHeadAnim] = {loc("First Blood"), loc("The Leap of Faith"), loc("Get that crate!"), 5, 4000},
+  [tookRope2Anim] = {loc("First Blood"), loc("The Rising"), loc("Get that crate!"), 7, 4000},
   [tookPunchAnim] = {loc("First Blood"), loc("The Slaughter"), loc("Destroy the targets!") .. "|" .. loc("Hint: Select the Shoryuken and hit [Attack].|P.S.: You can use it mid-air.") .. "| |" .. ctrlAttack, 1, 5000},
-  [challengeAnim] = {loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000},
-  [challengeFailedAnim] = {loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000},
-  [challengeCompletedAnim] = {loc("First Blood"), loc("The Ultimate Weapon"), loc("Get that crate!"), 1, 5000},
+  [challengeAnim] = {loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 7, 5000},
+  [challengeFailedAnim] = {loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 7, 5000},
+  [challengeCompletedAnim] = {loc("First Blood"), loc("The Ultimate Weapon"), loc("Get that crate!"), 7, 5000},
   [beforeKillAnim] = {loc("First Blood"), loc("The First Blood"), loc("Kill the cannibal!"), 1, 5000},
   [closeCannim] = {loc("First Blood"), loc("The First Blood"), loc("KILL IT!"), 1, 5000},
 }
@@ -391,7 +391,7 @@ function DoDeath()
   RemoveEventFunc(CheckDamage)
   RemoveEventFunc(CheckDamagedOthers)
   FinishThem()
-  ShowMission(loc("First Blood"), loc("The wasted youth"), loc("Leaks A Lot gave his life for his tribe! He should have survived!"), 2, 4000)
+  ShowMission(loc("First Blood"), loc("The wasted youth"), loc("Leaks A Lot gave his life for his tribe! He should have survived!"), -amSkip, 4000)
 end
 
 function CheckDamagedOthers()
@@ -430,7 +430,7 @@ function DoMovedUntilJump()
   else
      msg = msg .. loc("Backwards jump: Press [Backspace] twice")
   end
-  ShowMission(loc("First Blood"), loc("Step By Step"), msg, 10, 10000)
+  ShowMission(loc("First Blood"), loc("Step By Step"), msg, 2, 10000)
   AddEvent(CheckOnShroom, {}, DoOnShroom, {}, 0)
 end
 
@@ -627,7 +627,7 @@ function DoDesertColled()
   PutTargets(1)
   AddEvent(CheckTargetsKilled, {}, DoTargetsKilled, {}, 1)
   AddEvent(CheckCannibalKilled, {}, DoCannibalKilledEarly, {}, 0)
-  ShowMission(loc("First Blood"), loc("The Bull's Eye"), loc("Destroy the targets!") .. "| |" .. ctrlAttack, 1, 5000)
+  ShowMission(loc("First Blood"), loc("The Bull's Eye"), loc("Destroy the targets!"), 1, 5000)
 end
 
 function CheckTargetsKilled()
@@ -686,7 +686,7 @@ function StartChallenge(time)
   cratesCollected = 0
   PutCrate(1)
   SetTurnTimeLeft(time)
-  ShowMission(loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 1, 5000)
+  ShowMission(loc("First Blood"), loc("The Crate Frenzy"), loc("Collect the crates within the time limit!|If you fail, you'll have to try again."), 7, 5000)
 end
 
 function ChoiceDialog()
@@ -701,7 +701,7 @@ function ChoiceDialog()
     loc("Press [Left] and [Right] to change the difficulty.") .. "| |" ..
     dstr .. "| |" ..
     loc("Press [Attack] to begin."),
-    0, 9999000, true)
+    3, 9999000, true)
 end
 
 function SetChoice()

@@ -253,7 +253,7 @@ function AfterStronglingsAnim()
     return
   end
   stage = cyborgStage
-  ShowMission(loc("The Shadow Falls"), loc("The Dilemma"), loc("Choose your side! If you want to join the strange man, walk up to him.|Otherwise, walk away from him. If you decide to att...nevermind..."), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The Dilemma"), loc("Choose your side! If you want to join the strange man, walk up to him.|Otherwise, walk away from him. If you decide to att...nevermind..."), 3, 8000)
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckRefuse, {}, DoRefuse, {}, 0)
   AddEvent(CheckAccept, {}, DoAccept, {}, 0)
@@ -1078,7 +1078,7 @@ function onGameStart()
   else
      hint = "|" .. loc("Hint: Cinematics can be skipped with the [Precise] key.")
   end
-  ShowMission(loc("The Shadow Falls"), loc("The First Encounter"), loc("Survive!") .. hint, 1, 0)
+  ShowMission(loc("The Shadow Falls"), loc("The First Encounter"), loc("Survive!") .. hint, 10, 0)
 end
 
 function onGameTick()

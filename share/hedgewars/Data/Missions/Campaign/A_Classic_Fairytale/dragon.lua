@@ -710,7 +710,7 @@ function onGameStart()
   SetupPlace()
   AnimationSetup()
   SetupEvents()
-  ShowMission(loc("Dragon's Lair"), loc("Y Chwiliad"), loc("Find your tribe!|Cross the lake!"), 1, 0)
+  ShowMission(loc("Dragon's Lair"), loc("Y Chwiliad"), loc("Find your tribe!|Cross the lake!"), 10, 0)
 end
 
 function onGameTick()

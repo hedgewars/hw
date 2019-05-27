@@ -129,7 +129,7 @@ function AfterStartAnim()
   ShowMission(loc("Epilogue"), loc("That's all, folks!"),
     loc("You have successfully finished the campaign!").."|"..
     loc("If you wish to replay, there are other possible endings, too!").."|"..
-    loc("You can practice moving around and using utilities in this mission.|However, it will never end!"), 1, 0)
+    loc("You can practice moving around and using utilities in this mission.|However, it will never end!"), 4, 0)
   SaveCampaignVar("Progress", "10")
   SaveCampaignVar("Won", "true")
 end

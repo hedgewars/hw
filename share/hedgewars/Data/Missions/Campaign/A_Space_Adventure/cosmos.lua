@@ -44,7 +44,7 @@ local goals = {
 		loc("Complete the remaining side missions to complete this mission.").."|"..
 		loc("One flower: Incomplete side missions").."|"..
 		loc("Two flowers: All missions complete"), 1, 8000},
-	["free"] = {missionName, loc("Spacetrip"), loc("Use the flying saucer to fly to the other planets."), 1, 5000}
+	["free"] = {missionName, loc("Spacetrip"), loc("Use the flying saucer to fly to the other planets."), -amJetpack, 5000}
 }
 -- crates
 local saucerX = 3270

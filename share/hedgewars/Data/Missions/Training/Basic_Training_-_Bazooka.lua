@@ -213,7 +213,7 @@ function newGamePhase()
 		spawnTargets()
 	elseif gamePhase == 7 then
 		SaveMissionVar("Won", "true")
-		ShowMission(loc("Basic Bazooka Training"), loc("Training complete!"), loc("Congratulations!"), 0, 0)
+		ShowMission(loc("Basic Bazooka Training"), loc("Training complete!"), loc("Congratulations!"), 4, 0)
 		SetInputMask(0)
 		AddAmmo(CurrentHedgehog, amBazooka, 0)
 		if shotsFired > maxTargets then

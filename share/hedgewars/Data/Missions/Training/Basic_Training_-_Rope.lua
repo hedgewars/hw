@@ -368,7 +368,7 @@ function onGearDelete(gear)
 		elseif currentTarget == 7 then
 			SaveMissionVar("Won", "true")
 			ShowMission(loc("Basic Rope Training"), loc("Training complete!"),
-			loc("Congratulations!"), 0, 0)
+			loc("Congratulations!"), 4, 0)
 			if flawless then
 				PlaySound(sndFlawless, hog)
 			else
