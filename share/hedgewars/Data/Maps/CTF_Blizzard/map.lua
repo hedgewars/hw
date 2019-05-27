@@ -578,7 +578,7 @@ function onGameStart()
 		loc("- Hogs will drop the flag when killed") .."|"..
 		loc("- Dropped flags may be returned or recaptured").."|"..
 		loc("- Hogs will be revived") .."|"..
-		loc("- Touch the sparkles near your base to teleport"), 0, 0)
+		loc("- Touch the sparkles near your base to teleport"), 11, 0)
 
 	-- initialize teleporters
 	leftTel = CreateZone(342,1316,42,449)	-- left teleporter (clan 0)

@@ -430,7 +430,7 @@ function DoMovedUntilJump()
   else
      msg = msg .. loc("Backwards jump: Press [Backspace] twice")
   end
-  ShowMission(loc("First Blood"), loc("Step By Step"), msg, -amSkip, 10000)
+  ShowMission(loc("First Blood"), loc("Step By Step"), msg, 10, 10000)
   AddEvent(CheckOnShroom, {}, DoOnShroom, {}, 0)
 end
 
@@ -788,7 +788,7 @@ function onGameStart()
   else
     msgSkip = "|" .. loc("Hint: Cinematics can be skipped with the [Precise] key.")
   end
-  ShowMission(loc("A Classic Fairytale"), loc("First Blood"), loc("Finish your training.") .. msgSkip, -amSkip, 0)
+  ShowMission(loc("A Classic Fairytale"), loc("First Blood"), loc("Finish your training.") .. msgSkip, 10, 0)
   HideHog(cannibal)
 
   AddAnim(startDialogue)
