@@ -161,7 +161,8 @@ void ThemeModel::loadThemes() const
         // since they cannot be used for generated maps, but they can be used
         // for image maps.
         QString landtexpath = QString("physfs://Themes/%1/LandTex.png").arg(theme);
-        if (!QFile::exists(landtexpath))
+        QString bordertexpath = QString("physfs://Themes/%1/Border.png").arg(theme);
+        if ((!QFile::exists(landtexpath)) || (!QFile::exists(bordertexpath)))
         {
             dataset.insert(IsBackgroundThemeRole, true);
         }
