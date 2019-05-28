@@ -65,6 +65,7 @@ class PageGameStats : public AbstractPage
 
     private:
         void AddStatText(const QString & msg);
+        void applySpacing();
 
         QMap<qint32, QVector<qint32> > healthPoints;
         unsigned int playerPosition;
