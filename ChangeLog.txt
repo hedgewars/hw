@@ -69,6 +69,7 @@ A Space Adventure:
  * Searching in the dust: Fix a lot of broken/stupid smuggler behaviours
  * Chasing the blue hog: Fix player not losing the race when timing out while still having the rope
  * Chasing the blue hog: Fix player winning if Crazy Runner died
+ * Bad timing: Win mission in "flee" variant if all enemy hogs are dead
  * Getting to the device: Fix clan colors
  * Various minor tweaks and bugfixes
 
