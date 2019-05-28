@@ -8,6 +8,12 @@ local skipFuncList
 local skipping
 local baseInputMask = 0xFFFFFFFF
 local extraInputMask = baseInputMask
+
+-- DEBUGGING STUFF --
+--[[ Number of animation ticks to decrease whenever AnimUnWait()
+     is called (usually every game tick). Default: 1
+     Increase this number to increase overall animation speed. ]]
+local animSpeed = 1
 --------------------------------Animation---------------------------------
 --------------------------(In-game cinematics)----------------------------
 
@@ -125,7 +131,10 @@ end
 
 function AnimUnWait()
   if globalWait > 0 then
-    globalWait = globalWait - 1
+    globalWait = globalWait - animSpeed
+    if globalWait < 0 then
+      globalWait = 0
+    end
   end
 end
 
