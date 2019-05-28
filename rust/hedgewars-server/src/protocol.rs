@@ -44,7 +44,7 @@ impl ProtocolDecoder {
         Ok(count)
     }
 
-    pub fn extract_messages(&mut self) -> Vec<messages::HWProtocolMessage> {
+    pub fn extract_messages(&mut self) -> Vec<messages::HwProtocolMessage> {
         let mut messages = vec![];
         if !self.is_recovering {
             loop {

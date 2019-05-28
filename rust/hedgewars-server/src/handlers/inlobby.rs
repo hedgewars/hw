@@ -2,14 +2,14 @@ use mio;
 
 use super::common::rnd_reply;
 use crate::{
-    protocol::messages::{
-        add_flags, remove_flags, server_chat, HWProtocolMessage, HWServerMessage::*,
-        ProtocolFlags as Flags,
-    },
     core::{
-        client::HWClient,
-        server::HWServer,
+        client::HwClient,
+        server::HwServer,
         types::{ClientId, ServerVar},
+    },
+    protocol::messages::{
+        add_flags, remove_flags, server_chat, HwProtocolMessage, HwServerMessage::*,
+        ProtocolFlags as Flags,
     },
     utils::is_name_illegal,
 };
@@ -17,12 +17,12 @@ use log::*;
 use std::{collections::HashSet, convert::identity};
 
 pub fn handle(
-    server: &mut HWServer,
+    server: &mut HwServer,
     client_id: ClientId,
     response: &mut super::Response,
-    message: HWProtocolMessage,
+    message: HwProtocolMessage,
 ) {
-    use crate::protocol::messages::HWProtocolMessage::*;
+    use crate::protocol::messages::HwProtocolMessage::*;
     match message {
         CreateRoom(name, password) => {
             if is_name_illegal(&name) {
@@ -94,7 +94,7 @@ pub fn handle(
             }
         }
         Follow(nick) => {
-            if let Some(HWClient {
+            if let Some(HwClient {
                 room_id: Some(room_id),
                 ..
             }) = server.find_client(&nick)

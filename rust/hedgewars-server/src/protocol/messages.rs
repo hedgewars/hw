@@ -2,7 +2,7 @@ use crate::core::types::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType};
 use std::{convert::From, iter::once, ops};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
-pub enum HWProtocolMessage {
+pub enum HwProtocolMessage {
     // common messages
     Ping,
     Pong,
@@ -108,7 +108,7 @@ pub fn remove_flags(flags: &[ProtocolFlags]) -> String {
 }
 
 #[derive(Debug)]
-pub enum HWServerMessage {
+pub enum HwServerMessage {
     Connected(u32),
     Redirect(u16),
 
@@ -156,18 +156,18 @@ pub enum HWServerMessage {
     LegacyReady(bool, Vec<String>),
 }
 
-fn special_chat(nick: &str, msg: String) -> HWServerMessage {
-    HWServerMessage::ChatMsg {
+fn special_chat(nick: &str, msg: String) -> HwServerMessage {
+    HwServerMessage::ChatMsg {
         nick: nick.to_string(),
         msg,
     }
 }
 
-pub fn server_chat(msg: String) -> HWServerMessage {
+pub fn server_chat(msg: String) -> HwServerMessage {
     special_chat("[server]", msg)
 }
 
-pub fn global_chat(msg: String) -> HWServerMessage {
+pub fn global_chat(msg: String) -> HwServerMessage {
     special_chat("(global notice)", msg)
 }
 
@@ -206,10 +206,10 @@ impl GameCfg {
         }
     }
 
-    pub fn to_server_msg(&self) -> HWServerMessage {
-        use self::HWServerMessage::ConfigEntry;
+    pub fn to_server_msg(&self) -> HwServerMessage {
+        use self::HwServerMessage::ConfigEntry;
         let (name, args) = self.to_protocol();
-        HWServerMessage::ConfigEntry(name, args)
+        HwServerMessage::ConfigEntry(name, args)
     }
 }
 
@@ -251,14 +251,14 @@ macro_rules! several {
     [$part: expr, $($other: expr),*] => { once($part).chain(several![$($other),*]) };
 }
 
-impl HWProtocolMessage {
+impl HwProtocolMessage {
     /** Converts the message to a raw `String`, which can be sent over the network.
      *
      * This is the inverse of the `message` parser.
      */
     #[cfg(test)]
     pub(crate) fn to_raw_protocol(&self) -> String {
-        use self::HWProtocolMessage::*;
+        use self::HwProtocolMessage::*;
         match self {
             Ping => msg!["PING"],
             Pong => msg!["PONG"],
@@ -355,9 +355,9 @@ fn construct_message(header: &[&str], msg: &[String]) -> String {
     v.join("\n")
 }
 
-impl HWServerMessage {
+impl HwServerMessage {
     pub fn to_raw_protocol(&self) -> String {
-        use self::HWServerMessage::*;
+        use self::HwServerMessage::*;
         match self {
             Ping => msg!["PING"],
             Pong => msg!["PONG"],

@@ -18,7 +18,7 @@ bitflags! {
     }
 }
 
-pub struct HWClient {
+pub struct HwClient {
     pub id: ClientId,
     pub room_id: Option<usize>,
     pub nick: String,
@@ -29,9 +29,9 @@ pub struct HWClient {
     pub clan: Option<u8>,
 }
 
-impl HWClient {
-    pub fn new(id: ClientId, protocol_number: u16, nick: String) -> HWClient {
-        HWClient {
+impl HwClient {
+    pub fn new(id: ClientId, protocol_number: u16, nick: String) -> HwClient {
+        HwClient {
             id,
             nick,
             protocol_number,

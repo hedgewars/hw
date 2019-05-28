@@ -3,15 +3,15 @@ use mio;
 use super::common::rnd_reply;
 use crate::utils::to_engine_msg;
 use crate::{
-    protocol::messages::{
-        add_flags, remove_flags, server_chat, HWProtocolMessage, HWServerMessage::*,
-        ProtocolFlags as Flags,
-    },
     core::{
-        server::HWServer,
+        room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
+        server::HwServer,
         types,
         types::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
-        room::{HWRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
+    },
+    protocol::messages::{
+        add_flags, remove_flags, server_chat, HwProtocolMessage, HwServerMessage::*,
+        ProtocolFlags as Flags,
     },
     utils::is_name_illegal,
 };
@@ -93,8 +93,8 @@ fn voting_description(kind: &VoteType) -> String {
     )
 }
 
-fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
-    use crate::protocol::messages::HWProtocolMessage::*;
+fn room_message_flag(msg: &HwProtocolMessage) -> RoomFlags {
+    use crate::protocol::messages::HwProtocolMessage::*;
     match msg {
         ToggleRestrictJoin => RoomFlags::RESTRICTED_JOIN,
         ToggleRestrictTeams => RoomFlags::RESTRICTED_TEAM_ADD,
@@ -104,16 +104,16 @@ fn room_message_flag(msg: &HWProtocolMessage) -> RoomFlags {
 }
 
 pub fn handle(
-    server: &mut HWServer,
+    server: &mut HwServer,
     client_id: ClientId,
     response: &mut super::Response,
     room_id: RoomId,
-    message: HWProtocolMessage,
+    message: HwProtocolMessage,
 ) {
     let client = &mut server.clients[client_id];
     let room = &mut server.rooms[room_id];
 
-    use crate::protocol::messages::HWProtocolMessage::*;
+    use crate::protocol::messages::HwProtocolMessage::*;
     match message {
         Part(msg) => {
             let msg = match msg {

@@ -1,16 +1,15 @@
 use crate::{
-    protocol::messages::{
-        server_chat,
-        add_flags, remove_flags,
-        HWProtocolMessage::{self, Rnd},
-        HWServerMessage::{self, *},
-        ProtocolFlags as Flags,
-    },
     core::{
-        client::HWClient,
-        server::HWServer,
+        client::HwClient,
+        room::HwRoom,
+        server::HwServer,
         types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
-        room::HWRoom,
+    },
+    protocol::messages::{
+        add_flags, remove_flags, server_chat,
+        HwProtocolMessage::{self, Rnd},
+        HwServerMessage::{self, *},
+        ProtocolFlags as Flags,
     },
     utils::to_engine_msg,
 };
@@ -21,7 +20,7 @@ use crate::core::types::RoomConfig;
 use rand::{self, seq::SliceRandom, thread_rng, Rng};
 use std::{iter::once, mem::replace};
 
-pub fn rnd_reply(options: &[String]) -> HWServerMessage {
+pub fn rnd_reply(options: &[String]) -> HwServerMessage {
     let mut rng = thread_rng();
 
     let reply = if options.is_empty() {
@@ -36,7 +35,7 @@ pub fn rnd_reply(options: &[String]) -> HWServerMessage {
     }
 }
 
-pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
+pub fn join_lobby(server: &mut HwServer, response: &mut Response) {
     let client_id = response.client_id();
 
     let client = &server.clients[client_id];
@@ -100,7 +99,7 @@ pub fn join_lobby(server: &mut HWServer, response: &mut Response) {
 }
 
 pub fn remove_teams(
-    room: &mut HWRoom,
+    room: &mut HwRoom,
     team_names: Vec<String>,
     is_in_game: bool,
     response: &mut Response,
@@ -144,8 +143,8 @@ pub fn remove_teams(
 }
 
 fn remove_client_from_room(
-    client: &mut HWClient,
-    room: &mut HWRoom,
+    client: &mut HwClient,
+    room: &mut HwRoom,
     response: &mut Response,
     msg: &str,
 ) {
@@ -197,7 +196,7 @@ fn remove_client_from_room(
 }
 
 pub fn change_master(
-    server: &mut HWServer,
+    server: &mut HwServer,
     room_id: RoomId,
     new_master_id: ClientId,
     response: &mut Response,
@@ -229,7 +228,7 @@ pub fn change_master(
 }
 
 pub fn enter_room(
-    server: &mut HWServer,
+    server: &mut HwServer,
     client_id: ClientId,
     room_id: RoomId,
     response: &mut Response,
@@ -271,7 +270,7 @@ pub fn enter_room(
     }
 }
 
-pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Response, msg: &str) {
+pub fn exit_room(server: &mut HwServer, client_id: ClientId, response: &mut Response, msg: &str) {
     let client = &mut server.clients[client_id];
 
     if let Some(room_id) = client.room_id {
@@ -309,7 +308,7 @@ pub fn exit_room(server: &mut HWServer, client_id: ClientId, response: &mut Resp
     }
 }
 
-pub fn remove_client(server: &mut HWServer, response: &mut Response, msg: String) {
+pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String) {
     let client_id = response.client_id();
     let client = &mut server.clients[client_id];
     let nick = client.nick.clone();
@@ -325,8 +324,8 @@ pub fn remove_client(server: &mut HWServer, response: &mut Response, msg: String
 
 pub fn get_room_update(
     room_name: Option<String>,
-    room: &HWRoom,
-    master: Option<&HWClient>,
+    room: &HwRoom,
+    master: Option<&HwClient>,
     response: &mut Response,
 ) {
     let update_msg = RoomUpdated(room_name.unwrap_or(room.name.clone()), room.info(master));
@@ -340,7 +339,7 @@ pub fn get_room_config_impl(config: &RoomConfig, to_client: ClientId, response: 
     }
 }
 
-pub fn get_room_config(room: &HWRoom, to_client: ClientId, response: &mut Response) {
+pub fn get_room_config(room: &HwRoom, to_client: ClientId, response: &mut Response) {
     get_room_config_impl(room.active_config(), to_client, response);
 }
 
@@ -356,7 +355,7 @@ where
 }
 
 pub fn get_room_teams(
-    server: &HWServer,
+    server: &HwServer,
     room_id: RoomId,
     to_client: ClientId,
     response: &mut Response,
@@ -371,7 +370,7 @@ pub fn get_room_teams(
 }
 
 pub fn get_room_flags(
-    server: &HWServer,
+    server: &HwServer,
     room_id: RoomId,
     to_client: ClientId,
     response: &mut Response,
@@ -398,7 +397,7 @@ pub fn get_room_flags(
 }
 
 pub fn apply_voting_result(
-    server: &mut HWServer,
+    server: &mut HwServer,
     room_id: RoomId,
     response: &mut Response,
     kind: VoteType,
@@ -470,7 +469,7 @@ pub fn apply_voting_result(
     }
 }
 
-fn add_vote(room: &mut HWRoom, response: &mut Response, vote: Vote) -> Option<bool> {
+fn add_vote(room: &mut HwRoom, response: &mut Response, vote: Vote) -> Option<bool> {
     let client_id = response.client_id;
     let mut result = None;
 
@@ -498,7 +497,7 @@ fn add_vote(room: &mut HWRoom, response: &mut Response, vote: Vote) -> Option<bo
     result
 }
 
-pub fn submit_vote(server: &mut HWServer, vote: Vote, response: &mut Response) {
+pub fn submit_vote(server: &mut HwServer, vote: Vote, response: &mut Response) {
     let client_id = response.client_id;
     let client = &server.clients[client_id];
 
@@ -519,7 +518,7 @@ pub fn submit_vote(server: &mut HWServer, vote: Vote, response: &mut Response) {
     }
 }
 
-pub fn start_game(server: &mut HWServer, room_id: RoomId, response: &mut Response) {
+pub fn start_game(server: &mut HwServer, room_id: RoomId, response: &mut Response) {
     let (room_clients, room_nicks): (Vec<_>, Vec<_>) = server
         .clients
         .iter()
@@ -558,7 +557,7 @@ pub fn start_game(server: &mut HWServer, room_id: RoomId, response: &mut Respons
     }
 }
 
-pub fn end_game(server: &mut HWServer, room_id: RoomId, response: &mut Response) {
+pub fn end_game(server: &mut HwServer, room_id: RoomId, response: &mut Response) {
     let room = &mut server.rooms[room_id];
     room.ready_players_number = 1;
     let room_master = if let Some(id) = room.master_id {
@@ -613,10 +612,10 @@ pub fn end_game(server: &mut HWServer, room_id: RoomId, response: &mut Response)
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::protocol::messages::HWServerMessage::ChatMsg;
+    use crate::protocol::messages::HwServerMessage::ChatMsg;
     use crate::server::actions::PendingMessage;
 
-    fn reply2string(r: HWServerMessage) -> String {
+    fn reply2string(r: HwServerMessage) -> String {
         match r {
             ChatMsg { msg: p, .. } => String::from(p),
             _ => panic!("expected a ChatMsg"),

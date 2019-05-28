@@ -3,21 +3,17 @@ use std::{collections::HashMap, io, io::Write};
 
 use self::{
     actions::{Destination, DestinationGroup, PendingMessage},
-    inanteroom::LoginResult
+    inanteroom::LoginResult,
 };
 use crate::{
     core::{
-        server::HWServer,
-        types::{ClientId, Replay, RoomId, GameCfg, TeamInfo},
-        room::RoomSave
+        room::RoomSave,
+        server::HwServer,
+        types::{ClientId, GameCfg, Replay, RoomId, TeamInfo},
     },
     protocol::messages::{
-        server_chat,
-        HWProtocolMessage,
-        HWServerMessage,
-        HWServerMessage::*,
-        global_chat,
-        HWProtocolMessage::EngineMessage
+        global_chat, server_chat, HwProtocolMessage, HwProtocolMessage::EngineMessage,
+        HwServerMessage, HwServerMessage::*,
     },
     utils,
 };
@@ -28,9 +24,9 @@ use rand::{thread_rng, RngCore};
 mod actions;
 mod checker;
 mod common;
-mod inroom;
-mod inlobby;
 mod inanteroom;
+mod inlobby;
+mod inroom;
 
 use std::fmt::{Formatter, LowerHex};
 
@@ -132,8 +128,8 @@ impl Response {
 
     pub fn extract_messages<'a, 'b: 'a>(
         &'b mut self,
-        server: &'a HWServer,
-    ) -> impl Iterator<Item = (Vec<ClientId>, HWServerMessage)> + 'a {
+        server: &'a HwServer,
+    ) -> impl Iterator<Item = (Vec<ClientId>, HwServerMessage)> + 'a {
         let client_id = self.client_id;
         self.messages.drain(..).map(move |m| {
             let ids = get_recipients(server, client_id, m.destination);
@@ -163,7 +159,7 @@ impl Extend<PendingMessage> for Response {
 }
 
 fn get_recipients(
-    server: &HWServer,
+    server: &HwServer,
     client_id: ClientId,
     destination: Destination,
 ) -> Vec<ClientId> {
@@ -191,13 +187,13 @@ fn get_recipients(
 }
 
 pub fn handle(
-    server: &mut HWServer,
+    server: &mut HwServer,
     client_id: ClientId,
     response: &mut Response,
-    message: HWProtocolMessage,
+    message: HwProtocolMessage,
 ) {
     match message {
-        HWProtocolMessage::Ping => response.add(Pong.send_self()),
+        HwProtocolMessage::Ping => response.add(Pong.send_self()),
         _ => {
             if server.anteroom.clients.contains(client_id) {
                 match inanteroom::handle(server, client_id, response, message) {
@@ -215,13 +211,13 @@ pub fn handle(
                 }
             } else if server.clients.contains(client_id) {
                 match message {
-                    HWProtocolMessage::Quit(Some(msg)) => {
+                    HwProtocolMessage::Quit(Some(msg)) => {
                         common::remove_client(server, response, "User quit: ".to_string() + &msg);
                     }
-                    HWProtocolMessage::Quit(None) => {
+                    HwProtocolMessage::Quit(None) => {
                         common::remove_client(server, response, "User quit".to_string());
                     }
-                    HWProtocolMessage::Info(nick) => {
+                    HwProtocolMessage::Info(nick) => {
                         if let Some(client) = server.find_client(&nick) {
                             let admin_sign = if client.is_admin() { "@" } else { "" };
                             let master_sign = if client.is_master() { "+" } else { "" };
@@ -253,7 +249,7 @@ pub fn handle(
                                 .add(server_chat("Player is not online.".to_string()).send_self())
                         }
                     }
-                    HWProtocolMessage::ToggleServerRegisteredOnly => {
+                    HwProtocolMessage::ToggleServerRegisteredOnly => {
                         if !server.clients[client_id].is_admin() {
                             response.add(Warning("Access denied.".to_string()).send_self());
                         } else {
@@ -266,14 +262,14 @@ pub fn handle(
                             response.add(server_chat(msg.to_string()).send_all());
                         }
                     }
-                    HWProtocolMessage::Global(msg) => {
+                    HwProtocolMessage::Global(msg) => {
                         if !server.clients[client_id].is_admin() {
                             response.add(Warning("Access denied.".to_string()).send_self());
                         } else {
                             response.add(global_chat(msg).send_all())
                         }
                     }
-                    HWProtocolMessage::SuperPower => {
+                    HwProtocolMessage::SuperPower => {
                         if !server.clients[client_id].is_admin() {
                             response.add(Warning("Access denied.".to_string()).send_self());
                         } else {
@@ -282,7 +278,7 @@ pub fn handle(
                                 .add(server_chat("Super power activated.".to_string()).send_self())
                         }
                     }
-                    HWProtocolMessage::Watch(id) => {
+                    HwProtocolMessage::Watch(id) => {
                         #[cfg(feature = "official-server")]
                         {
                             response.request_io(IoTask::GetReplay { id })
@@ -308,23 +304,23 @@ pub fn handle(
     }
 }
 
-pub fn handle_client_accept(server: &mut HWServer, client_id: ClientId, response: &mut Response) {
+pub fn handle_client_accept(server: &mut HwServer, client_id: ClientId, response: &mut Response) {
     let mut salt = [0u8; 18];
     thread_rng().fill_bytes(&mut salt);
 
     server.anteroom.add_client(client_id, encode(&salt));
 
-    response.add(HWServerMessage::Connected(utils::SERVER_VERSION).send_self());
+    response.add(HwServerMessage::Connected(utils::SERVER_VERSION).send_self());
 }
 
-pub fn handle_client_loss(server: &mut HWServer, client_id: ClientId, response: &mut Response) {
+pub fn handle_client_loss(server: &mut HwServer, client_id: ClientId, response: &mut Response) {
     if server.anteroom.remove_client(client_id).is_none() {
         common::remove_client(server, response, "Connection reset".to_string());
     }
 }
 
 pub fn handle_io_result(
-    server: &mut HWServer,
+    server: &mut HwServer,
     client_id: ClientId,
     response: &mut Response,
     io_result: IoResult,

@@ -1,12 +1,12 @@
 use crate::{
     core::{
-        client::HWClient,
-        server::HWServer,
+        client::HwClient,
+        room::HwRoom,
+        room::{GameInfo, RoomFlags},
+        server::HwServer,
         types::{ClientId, GameCfg, RoomId, VoteType},
-        room::HWRoom,
-        room::{GameInfo, RoomFlags}
     },
-    protocol::messages::{server_chat, HWProtocolMessage, HWServerMessage, HWServerMessage::*},
+    protocol::messages::{server_chat, HwProtocolMessage, HwServerMessage, HwServerMessage::*},
     utils::to_engine_msg,
 };
 use rand::{distributions::Uniform, thread_rng, Rng};
@@ -31,32 +31,32 @@ pub enum Destination {
 
 pub struct PendingMessage {
     pub destination: Destination,
-    pub message: HWServerMessage,
+    pub message: HwServerMessage,
 }
 
 impl PendingMessage {
-    pub fn send(message: HWServerMessage, client_id: ClientId) -> PendingMessage {
+    pub fn send(message: HwServerMessage, client_id: ClientId) -> PendingMessage {
         PendingMessage {
             destination: Destination::ToId(client_id),
             message,
         }
     }
 
-    pub fn send_many(message: HWServerMessage, client_ids: Vec<ClientId>) -> PendingMessage {
+    pub fn send_many(message: HwServerMessage, client_ids: Vec<ClientId>) -> PendingMessage {
         PendingMessage {
             destination: Destination::ToIds(client_ids),
             message,
         }
     }
 
-    pub fn send_self(message: HWServerMessage) -> PendingMessage {
+    pub fn send_self(message: HwServerMessage) -> PendingMessage {
         PendingMessage {
             destination: Destination::ToSelf,
             message,
         }
     }
 
-    pub fn send_all(message: HWServerMessage) -> PendingMessage {
+    pub fn send_all(message: HwServerMessage) -> PendingMessage {
         let destination = Destination::ToAll {
             group: DestinationGroup::All,
             skip_self: false,
@@ -99,7 +99,7 @@ impl PendingMessage {
     }
 }
 
-impl HWServerMessage {
+impl HwServerMessage {
     pub fn send(self, client_id: ClientId) -> PendingMessage {
         PendingMessage::send(self, client_id)
     }
