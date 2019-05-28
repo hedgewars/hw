@@ -315,6 +315,19 @@ function onBattleWin(gear)
 	return win
 end
 
+function onEscapeWinByKill(gear)
+	local win = true
+	for i=1,7 do
+		if GetHealth(yellowArmy[i].gear) or yellowArmy[i].hidden then
+			win = false
+		end
+	end
+	if GetHealth(yellow1.gear) then
+		win = false
+	end
+	return win
+end
+
 function isHeroOnLaunchPad()
 	if not hero.dead and GetX(hero.gear) < 170 and GetY(hero.gear) > 1980 and StoppedGear(hero.gear) then
 		return true
@@ -377,6 +390,15 @@ function escapeWin(gear)
 	EndGame()
 end
 
+function escapeWinByKill(gear)
+	RemoveEventFunc(heroOnLaunchPadWithEnemies)
+	-- add stats
+	saveVariables()
+	SendStat(siGameResult, string.format(loc("%s won!"), teamB.name))
+	sendSimpleTeamRankings({teamA.name, teamD.name, teamB.name, teamC.name})
+	EndGame()
+end
+
 function heroSelect()
 	awaitingInput = false
 	FollowGear(hero.gear)
@@ -391,6 +413,8 @@ function heroSelect()
 		AddAmmo(green1.gear, amSwitch, 100)
 		AddEvent(onHeroOnLaunchPadWithEnemies, {hero.gear}, heroOnLaunchPadWithEnemies, {hero.gear}, 0)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
+		-- Alternative victory in the "flee" mission: ALL yellow hedgehogs killed
+		AddEvent(onEscapeWinByKill, {hero.gear}, escapeWinByKill, {hero.gear}, 0)
 		local greenTeam = { green2, green3, green4, green5 }
 		for i=1,4 do
 			SetHogLevel(greenTeam[i].gear, 1)
