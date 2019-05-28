@@ -204,6 +204,7 @@ void PageGameStats::renderStats()
         if(maxDataPoints < 2) {
             labelGraphTitle->hide();
             graphic->hide();
+            applySpacing();
             return;
         }
 
@@ -275,6 +276,11 @@ void PageGameStats::renderStats()
         labelGraphTitle->show();
         gbDetails->show();
     }
+    applySpacing();
+}
+
+void PageGameStats::applySpacing()
+{
     if (!labelGameStats->isHidden())
     {
         labelGraphTitle->setText("<br>" + labelGraphTitle->text());
