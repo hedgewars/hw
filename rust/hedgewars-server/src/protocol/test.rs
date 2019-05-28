@@ -6,7 +6,7 @@ use proptest::{
 
 use crate::core::types::{GameCfg, HedgehogInfo, ServerVar, ServerVar::*, TeamInfo};
 
-use super::messages::{HWProtocolMessage, HWProtocolMessage::*};
+use super::messages::{HwProtocolMessage, HwProtocolMessage::*};
 
 // Due to inability to define From between Options
 trait Into2<T>: Sized {
@@ -166,7 +166,7 @@ impl Arbitrary for ServerVar {
     type Strategy = BoxedStrategy<ServerVar>;
 }
 
-pub fn gen_proto_msg() -> BoxedStrategy<HWProtocolMessage> where {
+pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
     let res = (0..=55).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Ping,
             0 => Ping(),

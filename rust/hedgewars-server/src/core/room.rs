@@ -1,5 +1,5 @@
 use super::{
-    client::HWClient,
+    client::HwClient,
     types::{
         ClientId, GameCfg, GameCfg::*, RoomConfig, RoomId, TeamInfo, Voting, MAX_HEDGEHOGS_PER_TEAM,
     },
@@ -66,7 +66,7 @@ bitflags! {
     }
 }
 
-pub struct HWRoom {
+pub struct HwRoom {
     pub id: RoomId,
     pub master_id: Option<ClientId>,
     pub name: String,
@@ -86,9 +86,9 @@ pub struct HWRoom {
     pub game_info: Option<GameInfo>,
 }
 
-impl HWRoom {
-    pub fn new(id: RoomId) -> HWRoom {
-        HWRoom {
+impl HwRoom {
+    pub fn new(id: RoomId) -> HwRoom {
+        HwRoom {
             id,
             master_id: None,
             name: String::new(),
@@ -275,7 +275,7 @@ impl HWRoom {
         result
     }
 
-    pub fn info(&self, master: Option<&HWClient>) -> Vec<String> {
+    pub fn info(&self, master: Option<&HwClient>) -> Vec<String> {
         let c = &self.config;
         vec![
             self.flags_string(),

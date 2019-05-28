@@ -18,10 +18,7 @@ use netbuf;
 use slab::Slab;
 
 use crate::{
-    core::{
-        server::HWServer,
-        types::ClientId
-    },
+    core::{server::HwServer, types::ClientId},
     handlers,
     protocol::{messages::*, ProtocolDecoder},
     utils,
@@ -31,8 +28,8 @@ use crate::{
 use super::io::{IOThread, RequestId};
 
 use crate::{
-    protocol::messages::HWServerMessage::Redirect,
-    handlers::{IoResult, IoTask}
+    handlers::{IoResult, IoTask},
+    protocol::messages::HwServerMessage::Redirect,
 };
 
 #[cfg(feature = "tls-connections")]
@@ -142,7 +139,7 @@ impl NetworkClient {
         source: &mut R,
         id: ClientId,
         addr: &SocketAddr,
-    ) -> NetworkResult<Vec<HWProtocolMessage>> {
+    ) -> NetworkResult<Vec<HwProtocolMessage>> {
         let mut bytes_read = 0;
         let result = loop {
             match decoder.read_from(source) {
@@ -175,7 +172,7 @@ impl NetworkClient {
         result
     }
 
-    pub fn read(&mut self) -> NetworkResult<Vec<HWProtocolMessage>> {
+    pub fn read(&mut self) -> NetworkResult<Vec<HwProtocolMessage>> {
         match self.socket {
             ClientSocket::Plain(ref mut stream) => {
                 NetworkClient::read_impl(&mut self.decoder, stream, self.id, &self.peer_addr)
@@ -309,7 +306,7 @@ struct TimerData(TimeoutEvent, ClientId);
 
 pub struct NetworkLayer {
     listener: TcpListener,
-    server: HWServer,
+    server: HwServer,
     clients: Slab<NetworkClient>,
     pending: HashSet<(ClientId, NetworkClientState)>,
     pending_cache: Vec<(ClientId, NetworkClientState)>,
@@ -435,7 +432,7 @@ impl NetworkLayer {
             match event {
                 TimeoutEvent::SendPing { probes_count } => {
                     if let Some(ref mut client) = self.clients.get_mut(client_id) {
-                        client.send_string(&HWServerMessage::Ping.to_raw_protocol());
+                        client.send_string(&HwServerMessage::Ping.to_raw_protocol());
                         client.write()?;
                         let timeout = if probes_count != 0 {
                             create_ping_timeout(&mut self.timer, probes_count - 1, client_id)
@@ -684,7 +681,7 @@ impl NetworkLayerBuilder {
     }
 
     pub fn build(self) -> NetworkLayer {
-        let server = HWServer::new(self.clients_capacity, self.rooms_capacity);
+        let server = HwServer::new(self.clients_capacity, self.rooms_capacity);
         let clients = Slab::with_capacity(self.clients_capacity);
         let pending = HashSet::with_capacity(2 * self.clients_capacity);
         let pending_cache = Vec::with_capacity(2 * self.clients_capacity);

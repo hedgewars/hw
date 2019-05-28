@@ -7,8 +7,8 @@ use mio::{net::*, *};
 use std::{env, str::FromStr as _, time::Duration};
 
 mod core;
-mod protocol;
 mod handlers;
+mod protocol;
 mod server;
 mod utils;
 

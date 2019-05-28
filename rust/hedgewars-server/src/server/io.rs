@@ -6,8 +6,8 @@ use std::{
 };
 
 use crate::{
-    server::database::Database,
     handlers::{IoResult, IoTask},
+    server::database::Database,
 };
 use log::*;
 use mio::{Evented, Poll, PollOpt};

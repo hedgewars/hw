@@ -1,13 +1,10 @@
 use super::{
-    client::HWClient,
-    types::{ClientId, RoomId},
+    client::HwClient,
     indexslab::IndexSlab,
-    room::HWRoom,
+    room::HwRoom,
+    types::{ClientId, RoomId},
 };
-use crate::{
-    utils,
-    protocol::messages::HWProtocolMessage::Greeting
-};
+use crate::{protocol::messages::HwProtocolMessage::Greeting, utils};
 
 use bitflags::*;
 use log::*;
@@ -16,25 +13,25 @@ use std::{borrow::BorrowMut, iter, num::NonZeroU16};
 
 type Slab<T> = slab::Slab<T>;
 
-pub struct HWAnteClient {
+pub struct HwAnteClient {
     pub nick: Option<String>,
     pub protocol_number: Option<NonZeroU16>,
     pub server_salt: String,
     pub is_checker: bool,
 }
 
-pub struct HWAnteroom {
-    pub clients: IndexSlab<HWAnteClient>,
+pub struct HwAnteroom {
+    pub clients: IndexSlab<HwAnteClient>,
 }
 
-impl HWAnteroom {
+impl HwAnteroom {
     pub fn new(clients_limit: usize) -> Self {
         let clients = IndexSlab::with_capacity(clients_limit);
-        HWAnteroom { clients }
+        HwAnteroom { clients }
     }
 
     pub fn add_client(&mut self, client_id: ClientId, salt: String) {
-        let client = HWAnteClient {
+        let client = HwAnteClient {
             nick: None,
             protocol_number: None,
             server_salt: salt,
@@ -43,7 +40,7 @@ impl HWAnteroom {
         self.clients.insert(client_id, client);
     }
 
-    pub fn remove_client(&mut self, client_id: ClientId) -> Option<HWAnteClient> {
+    pub fn remove_client(&mut self, client_id: ClientId) -> Option<HwAnteClient> {
         let mut client = self.clients.remove(client_id);
         client
     }
@@ -69,32 +66,32 @@ bitflags! {
     }
 }
 
-pub struct HWServer {
-    pub clients: IndexSlab<HWClient>,
-    pub rooms: Slab<HWRoom>,
-    pub anteroom: HWAnteroom,
+pub struct HwServer {
+    pub clients: IndexSlab<HwClient>,
+    pub rooms: Slab<HwRoom>,
+    pub anteroom: HwAnteroom,
     pub latest_protocol: u16,
     pub flags: ServerFlags,
     pub greetings: ServerGreetings,
 }
 
-impl HWServer {
+impl HwServer {
     pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
         let rooms = Slab::with_capacity(rooms_limit);
         let clients = IndexSlab::with_capacity(clients_limit);
         Self {
             clients,
             rooms,
-            anteroom: HWAnteroom::new(clients_limit),
+            anteroom: HwAnteroom::new(clients_limit),
             greetings: ServerGreetings::new(),
             latest_protocol: 58,
             flags: ServerFlags::empty(),
         }
     }
 
-    pub fn add_client(&mut self, client_id: ClientId, data: HWAnteClient) {
+    pub fn add_client(&mut self, client_id: ClientId, data: HwAnteClient) {
         if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
-            let mut client = HWClient::new(client_id, protocol.get(), nick);
+            let mut client = HwClient::new(client_id, protocol.get(), nick);
             client.set_is_checker(data.is_checker);
             self.clients.insert(client_id, client);
         }
@@ -136,25 +133,25 @@ impl HWServer {
         self.find_room(name).is_some()
     }
 
-    pub fn find_room(&self, name: &str) -> Option<&HWRoom> {
+    pub fn find_room(&self, name: &str) -> Option<&HwRoom> {
         self.rooms
             .iter()
             .find_map(|(_, r)| Some(r).filter(|r| r.name == name))
     }
 
-    pub fn find_room_mut(&mut self, name: &str) -> Option<&mut HWRoom> {
+    pub fn find_room_mut(&mut self, name: &str) -> Option<&mut HwRoom> {
         self.rooms
             .iter_mut()
             .find_map(|(_, r)| Some(r).filter(|r| r.name == name))
     }
 
-    pub fn find_client(&self, nick: &str) -> Option<&HWClient> {
+    pub fn find_client(&self, nick: &str) -> Option<&HwClient> {
         self.clients
             .iter()
             .find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
     }
 
-    pub fn find_client_mut(&mut self, nick: &str) -> Option<&mut HWClient> {
+    pub fn find_client_mut(&mut self, nick: &str) -> Option<&mut HwClient> {
         self.clients
             .iter_mut()
             .find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
@@ -166,28 +163,28 @@ impl HWServer {
 
     pub fn filter_clients<'a, F>(&'a self, f: F) -> impl Iterator<Item = ClientId> + 'a
     where
-        F: Fn(&(usize, &HWClient)) -> bool + 'a,
+        F: Fn(&(usize, &HwClient)) -> bool + 'a,
     {
         self.clients.iter().filter(f).map(|(_, c)| c.id)
     }
 
     pub fn filter_rooms<'a, F>(&'a self, f: F) -> impl Iterator<Item = RoomId> + 'a
     where
-        F: Fn(&(usize, &HWRoom)) -> bool + 'a,
+        F: Fn(&(usize, &HwRoom)) -> bool + 'a,
     {
         self.rooms.iter().filter(f).map(|(_, c)| c.id)
     }
 
     pub fn collect_clients<F>(&self, f: F) -> Vec<ClientId>
     where
-        F: Fn(&(usize, &HWClient)) -> bool,
+        F: Fn(&(usize, &HwClient)) -> bool,
     {
         self.filter_clients(f).collect()
     }
 
     pub fn collect_nicks<F>(&self, f: F) -> Vec<String>
     where
-        F: Fn(&(usize, &HWClient)) -> bool,
+        F: Fn(&(usize, &HwClient)) -> bool,
     {
         self.clients
             .iter()
@@ -226,15 +223,15 @@ impl HWServer {
     }
 }
 
-fn allocate_room(rooms: &mut Slab<HWRoom>) -> &mut HWRoom {
+fn allocate_room(rooms: &mut Slab<HwRoom>) -> &mut HwRoom {
     let entry = rooms.vacant_entry();
-    let room = HWRoom::new(entry.key());
+    let room = HwRoom::new(entry.key());
     entry.insert(room)
 }
 
 fn create_room(
-    client: &mut HWClient,
-    rooms: &mut Slab<HWRoom>,
+    client: &mut HwClient,
+    rooms: &mut Slab<HwRoom>,
     name: String,
     password: Option<String>,
 ) -> RoomId {
@@ -256,7 +253,7 @@ fn create_room(
     room.id
 }
 
-fn move_to_room(client: &mut HWClient, room: &mut HWRoom) {
+fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     debug_assert!(client.room_id != Some(room.id));
 
     room.players_number += 1;

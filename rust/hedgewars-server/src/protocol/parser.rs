@@ -14,58 +14,56 @@ use std::{
     str::{FromStr, Utf8Error},
 };
 
-use super::{
-    messages::{HWProtocolMessage, HWProtocolMessage::*},
-};
+use super::messages::{HwProtocolMessage, HwProtocolMessage::*};
 use crate::core::types::{
     GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM,
 };
 
 #[derive(Debug, PartialEq)]
-pub struct HWProtocolError {}
+pub struct HwProtocolError {}
 
-impl HWProtocolError {
+impl HwProtocolError {
     fn new() -> Self {
-        HWProtocolError {}
+        HwProtocolError {}
     }
 }
 
-impl<I> ParseError<I> for HWProtocolError {
+impl<I> ParseError<I> for HwProtocolError {
     fn from_error_kind(input: I, kind: ErrorKind) -> Self {
-        HWProtocolError::new()
+        HwProtocolError::new()
     }
 
     fn append(input: I, kind: ErrorKind, other: Self) -> Self {
-        HWProtocolError::new()
+        HwProtocolError::new()
     }
 }
 
-impl From<Utf8Error> for HWProtocolError {
+impl From<Utf8Error> for HwProtocolError {
     fn from(_: Utf8Error) -> Self {
-        HWProtocolError::new()
+        HwProtocolError::new()
     }
 }
 
-impl From<ParseIntError> for HWProtocolError {
+impl From<ParseIntError> for HwProtocolError {
     fn from(_: ParseIntError) -> Self {
-        HWProtocolError::new()
+        HwProtocolError::new()
     }
 }
 
-pub type HWResult<'a, O> = IResult<&'a [u8], O, HWProtocolError>;
+pub type HwResult<'a, O> = IResult<&'a [u8], O, HwProtocolError>;
 
-fn end_of_message(input: &[u8]) -> HWResult<&[u8]> {
+fn end_of_message(input: &[u8]) -> HwResult<&[u8]> {
     tag("\n\n")(input)
 }
 
-fn convert_utf8(input: &[u8]) -> HWResult<&str> {
+fn convert_utf8(input: &[u8]) -> HwResult<&str> {
     match str::from_utf8(input) {
         Ok(str) => Ok((b"", str)),
         Err(utf_err) => Result::Err(Err::Failure(utf_err.into())),
     }
 }
 
-fn convert_from_str<T>(str: &str) -> HWResult<T>
+fn convert_from_str<T>(str: &str) -> HwResult<T>
 where
     T: FromStr<Err = ParseIntError>,
 {
@@ -75,72 +73,72 @@ where
     }
 }
 
-fn str_line(input: &[u8]) -> HWResult<&str> {
+fn str_line(input: &[u8]) -> HwResult<&str> {
     let (i, text) = not_line_ending(input)?;
     Ok((i, convert_utf8(text)?.1))
 }
 
-fn a_line(input: &[u8]) -> HWResult<String> {
+fn a_line(input: &[u8]) -> HwResult<String> {
     let (i, str) = str_line(input)?;
     Ok((i, str.to_string()))
 }
 
-fn hw_tag<'a>(tag_str: &'a str) -> impl Fn(&'a [u8]) -> HWResult<'a, ()> {
+fn hw_tag<'a>(tag_str: &'a str) -> impl Fn(&'a [u8]) -> HwResult<'a, ()> {
     move |i| tag(tag_str)(i).map(|(i, _)| (i, ()))
 }
 
-fn hw_tag_no_case<'a>(tag_str: &'a str) -> impl Fn(&'a [u8]) -> HWResult<'a, ()> {
+fn hw_tag_no_case<'a>(tag_str: &'a str) -> impl Fn(&'a [u8]) -> HwResult<'a, ()> {
     move |i| tag_no_case(tag_str)(i).map(|(i, _)| (i, ()))
 }
 
-fn cmd_arg(input: &[u8]) -> HWResult<String> {
+fn cmd_arg(input: &[u8]) -> HwResult<String> {
     let delimiters = b" \n";
     let (i, str) = take_while(move |c| !delimiters.contains(&c))(input)?;
     Ok((i, convert_utf8(str)?.1.to_string()))
 }
 
-fn u8_line(input: &[u8]) -> HWResult<u8> {
+fn u8_line(input: &[u8]) -> HwResult<u8> {
     let (i, str) = str_line(input)?;
     Ok((i, convert_from_str(str)?.1))
 }
 
-fn u16_line(input: &[u8]) -> HWResult<u16> {
+fn u16_line(input: &[u8]) -> HwResult<u16> {
     let (i, str) = str_line(input)?;
     Ok((i, convert_from_str(str)?.1))
 }
 
-fn u32_line(input: &[u8]) -> HWResult<u32> {
+fn u32_line(input: &[u8]) -> HwResult<u32> {
     let (i, str) = str_line(input)?;
     Ok((i, convert_from_str(str)?.1))
 }
 
-fn yes_no_line(input: &[u8]) -> HWResult<bool> {
+fn yes_no_line(input: &[u8]) -> HwResult<bool> {
     alt((
         |i| tag_no_case(b"YES")(i).map(|(i, _)| (i, true)),
         |i| tag_no_case(b"NO")(i).map(|(i, _)| (i, false)),
     ))(input)
 }
 
-fn opt_arg<'a>(input: &'a [u8]) -> HWResult<'a, Option<String>> {
+fn opt_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
     alt((
         |i: &'a [u8]| peek!(i, end_of_message).map(|(i, _)| (i, None)),
         |i| precededc(i, hw_tag("\n"), a_line).map(|(i, v)| (i, Some(v))),
     ))(input)
 }
 
-fn spaces(input: &[u8]) -> HWResult<&[u8]> {
+fn spaces(input: &[u8]) -> HwResult<&[u8]> {
     precededc(input, hw_tag(" "), |i| take_while(|c| c == b' ')(i))
 }
 
-fn opt_space_arg<'a>(input: &'a [u8]) -> HWResult<'a, Option<String>> {
+fn opt_space_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
     alt((
         |i: &'a [u8]| peek!(i, end_of_message).map(|(i, _)| (i, None)),
         |i| precededc(i, spaces, a_line).map(|(i, v)| (i, Some(v))),
     ))(input)
 }
 
-fn hedgehog_array(input: &[u8]) -> HWResult<[HedgehogInfo; 8]> {
-    fn hedgehog_line(input: &[u8]) -> HWResult<HedgehogInfo> {
+fn hedgehog_array(input: &[u8]) -> HwResult<[HedgehogInfo; 8]> {
+    fn hedgehog_line(input: &[u8]) -> HwResult<HedgehogInfo> {
         let (i, name) = terminatedc(input, a_line, eol)?;
         let (i, hat) = a_line(i)?;
         Ok((i, HedgehogInfo { name, hat }))
@@ -158,7 +156,7 @@ fn hedgehog_array(input: &[u8]) -> HWResult<[HedgehogInfo; 8]> {
     Ok((i, [h1, h2, h3, h4, h5, h6, h7, h8]))
 }
 
-fn voting(input: &[u8]) -> HWResult<VoteType> {
+fn voting(input: &[u8]) -> HwResult<VoteType> {
     alt((
         |i| tag_no_case("PAUSE")(i).map(|(i, _)| (i, VoteType::Pause)),
         |i| tag_no_case("NEWSEED")(i).map(|(i, _)| (i, VoteType::NewSeed)),
@@ -178,12 +176,12 @@ fn voting(input: &[u8]) -> HWResult<VoteType> {
     ))(input)
 }
 
-fn no_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     fn messagec<'a>(
         input: &'a [u8],
         name: &'a str,
-        msg: HWProtocolMessage,
-    ) -> HWResult<'a, HWProtocolMessage> {
+        msg: HwProtocolMessage,
+    ) -> HwResult<'a, HwProtocolMessage> {
         tag(name)(input).map(|(i, _)| (i, msg.clone()))
     }
 
@@ -201,16 +199,16 @@ fn no_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
     ))(input)
 }
 
-fn single_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     fn messagec<'a, T, F, G>(
         input: &'a [u8],
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> HWResult<'a, HWProtocolMessage>
+    ) -> HwResult<'a, HwProtocolMessage>
     where
-        F: Fn(&[u8]) -> HWResult<T>,
-        G: Fn(T) -> HWProtocolMessage,
+        F: Fn(&[u8]) -> HwResult<T>,
+        G: Fn(T) -> HwProtocolMessage,
     {
         precededc(input, hw_tag(name), parser).map(|(i, v)| (i, constructor(v)))
     }
@@ -233,12 +231,12 @@ fn single_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
     ))(input)
 }
 
-fn cmd_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
+fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
     fn cmdc_no_arg<'a>(
         input: &'a [u8],
         name: &'a str,
-        msg: HWProtocolMessage,
-    ) -> HWResult<'a, HWProtocolMessage> {
+        msg: HwProtocolMessage,
+    ) -> HwResult<'a, HwProtocolMessage> {
         tag_no_case(name)(input).map(|(i, _)| (i, msg.clone()))
     }
 
@@ -247,16 +245,16 @@ fn cmd_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> HWResult<'a, HWProtocolMessage>
+    ) -> HwResult<'a, HwProtocolMessage>
     where
-        F: Fn(&'a [u8]) -> HWResult<'a, T>,
-        G: Fn(T) -> HWProtocolMessage,
+        F: Fn(&'a [u8]) -> HwResult<'a, T>,
+        G: Fn(T) -> HwProtocolMessage,
     {
         precededc(input, |i| pairc(i, hw_tag_no_case(name), spaces), parser)
             .map(|(i, v)| (i, constructor(v)))
     }
 
-    fn cmd_no_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    fn cmd_no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         alt((
             |i| cmdc_no_arg(i, "STATS", Stats),
             |i| cmdc_no_arg(i, "FIX", Fix),
@@ -266,7 +264,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
         ))(input)
     }
 
-    fn cmd_single_arg_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+    fn cmd_single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         alt((
             |i| cmdc_single_arg(i, "RESTART_SERVER", |i| tag("YES")(i), |_| RestartServer),
             |i| cmdc_single_arg(i, "DELEGATE", a_line, Delegate),
@@ -312,15 +310,15 @@ fn cmd_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
     )
 }
 
-fn config_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
+fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
     fn cfgc_single_arg<'a, T, F, G>(
         input: &'a [u8],
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> HWResult<'a, GameCfg>
+    ) -> HwResult<'a, GameCfg>
     where
-        F: Fn(&[u8]) -> HWResult<T>,
+        F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> GameCfg,
     {
         precededc(input, |i| terminatedc(i, hw_tag(name), eol), parser)
@@ -373,7 +371,7 @@ fn config_message<'a>(input: &'a [u8]) -> HWResult<'a, HWProtocolMessage> {
     Ok((i, Cfg(cfg)))
 }
 
-fn server_var_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+fn server_var_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     precededc(
         input,
         hw_tag("SET_SERVER_VAR\n"),
@@ -394,7 +392,7 @@ fn server_var_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
     )
 }
 
-fn complex_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     alt((
         |i| {
             precededc(
@@ -533,12 +531,12 @@ fn complex_message(input: &[u8]) -> HWResult<HWProtocolMessage> {
     ))(input)
 }
 
-pub fn malformed_message(input: &[u8]) -> HWResult<()> {
+pub fn malformed_message(input: &[u8]) -> HwResult<()> {
     let (i, _) = terminatedc(input, |i| take_until(&b"\n\n"[..])(i), end_of_message)?;
     Ok((i, ()))
 }
 
-pub fn message(input: &[u8]) -> HWResult<HWProtocolMessage> {
+pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     precededc(
         input,
         |i| take_while(|c| c == b'\n')(i),
@@ -559,15 +557,15 @@ pub fn message(input: &[u8]) -> HWResult<HWProtocolMessage> {
     )
 }
 
-fn extract_messages(input: &[u8]) -> HWResult<Vec<HWProtocolMessage>> {
+fn extract_messages(input: &[u8]) -> HwResult<Vec<HwProtocolMessage>> {
     many0(message)(input)
 }
 
 #[cfg(test)]
 mod test {
     use super::{extract_messages, message};
-    use crate::protocol::parser::HWProtocolError;
-    use crate::protocol::{messages::HWProtocolMessage::*, test::gen_proto_msg};
+    use crate::protocol::parser::HwProtocolError;
+    use crate::protocol::{messages::HwProtocolMessage::*, test::gen_proto_msg};
     use proptest::{proptest, proptest_helper};
 
     #[cfg(test)]
@@ -616,7 +614,7 @@ mod test {
 
         assert_eq!(
             message(b"QUIT\n1\n2\n\n"),
-            Err(nom::Err::Error(HWProtocolError::new()))
+            Err(nom::Err::Error(HwProtocolError::new()))
         );
 
         assert_eq!(
