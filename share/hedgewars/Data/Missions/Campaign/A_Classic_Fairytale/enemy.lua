@@ -9,8 +9,9 @@ Wipe out the Hedge-cogs and Leader teams
 
 = FLOW CHART =
 - Cut scene: startAnim
-- Player starts with 3-4 natives and 4 cannibals
-- Player plays with 4 natives if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0
+- Player starts with 3-5 natives and 4 cannibals
+- Mission adds 1 native if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0
+- Mission adds 1 native (princess) if m8PrincessLeader == 0
 - Enemy starts with 5 cyborgs
 - TBS
 - Goal completed
@@ -212,7 +213,7 @@ function SetupPeopleStartAnim()
     table.insert(startAnim, {func = AnimSay, args = {players[1], loc("And how am I alive?!"), SAY_SAY, 3000}})
   end
   local playerTalker
-  -- There are 3 or 4 natives in this mission. The last one takes part in the dialog
+  -- Number of natives varies in this mission. One of them takes part in the dialog
   if nativesNum >= 4 then
      playerTalker = players[4]
   else
@@ -539,7 +540,7 @@ function AddHogs()
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   nativesTeamName = AddMissionTeam(-2)
-  -- There are 3-4 natives in this mission
+  -- There are 3-5 natives in this mission
   natives[1] = AddHog(nativeNames[leaksNum], 0, 100, nativeHats[leaksNum])
   if m5DeployedNum ~= leaksNum and m8DeployedLeader == 0 then
     natives[2] = AddHog(nativeNames[m5DeployedNum], 0, 100, nativeHats[m5DeployedNum])
