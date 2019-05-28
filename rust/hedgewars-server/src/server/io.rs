@@ -5,8 +5,8 @@ use std::{
     thread,
 };
 
-use crate::server::{
-    database::Database,
+use crate::{
+    server::database::Database,
     handlers::{IoResult, IoTask},
 };
 use log::*;

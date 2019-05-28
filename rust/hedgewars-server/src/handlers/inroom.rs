@@ -7,10 +7,10 @@ use crate::{
         add_flags, remove_flags, server_chat, HWProtocolMessage, HWServerMessage::*,
         ProtocolFlags as Flags,
     },
-    server::{
-        core::HWServer,
-        coretypes,
-        coretypes::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
+    core::{
+        server::HWServer,
+        types,
+        types::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
         room::{HWRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
     },
     utils::is_name_illegal,
@@ -452,7 +452,7 @@ pub fn handle(
                     response.add(server_chat(msg).send_all().in_room(room_id));
                     super::common::submit_vote(
                         server,
-                        coretypes::Vote {
+                        types::Vote {
                             is_pro: true,
                             is_forced: false,
                         },
@@ -467,7 +467,7 @@ pub fn handle(
         Vote(vote) => {
             super::common::submit_vote(
                 server,
-                coretypes::Vote {
+                types::Vote {
                     is_pro: vote,
                     is_forced: false,
                 },
@@ -478,7 +478,7 @@ pub fn handle(
             let is_forced = client.is_admin();
             super::common::submit_vote(
                 server,
-                coretypes::Vote {
+                types::Vote {
                     is_pro: vote,
                     is_forced,
                 },

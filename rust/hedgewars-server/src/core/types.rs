@@ -139,7 +139,7 @@ impl RoomConfig {
     }
 
     pub fn to_game_config(&self) -> Vec<GameCfg> {
-        use crate::server::coretypes::GameCfg::*;
+        use GameCfg::*;
         let mut v = vec![
             Ammo(self.ammo.name.to_string(), self.ammo.settings.clone()),
             Scheme(self.scheme.name.to_string(), self.scheme.settings.clone()),

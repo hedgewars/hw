@@ -2,8 +2,9 @@ use mysql;
 use mysql::{error::DriverError, error::Error, from_row_opt, params};
 use openssl::sha::sha1;
 
-use super::handlers::AccountInfo;
-use crate::server::handlers::Sha1Digest;
+use crate::{
+    handlers::{Sha1Digest, AccountInfo}
+};
 
 const GET_ACCOUNT_QUERY: &str =
     r"SELECT CASE WHEN users.status = 1 THEN users.pass ELSE '' END,

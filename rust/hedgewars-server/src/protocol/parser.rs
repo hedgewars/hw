@@ -14,8 +14,10 @@ use std::{
     str::{FromStr, Utf8Error},
 };
 
-use super::messages::{HWProtocolMessage, HWProtocolMessage::*};
-use crate::server::coretypes::{
+use super::{
+    messages::{HWProtocolMessage, HWProtocolMessage::*},
+};
+use crate::core::types::{
     GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM,
 };
 

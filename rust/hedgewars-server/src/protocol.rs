@@ -1,4 +1,4 @@
-use crate::protocol::parser::message;
+use self::parser::message;
 use log::*;
 use netbuf;
 use nom::{Err, ErrorKind, IResult};
