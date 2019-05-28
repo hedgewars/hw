@@ -1,31 +1,37 @@
 use mio;
 use std::{collections::HashMap, io, io::Write};
 
-use super::{
-    actions::{Destination, DestinationGroup},
-    core::HWServer,
-    coretypes::{ClientId, Replay, RoomId},
-    room::RoomSave,
+use self::{
+    actions::{Destination, DestinationGroup, PendingMessage},
+    inanteroom::LoginResult
 };
 use crate::{
-    protocol::messages::{server_chat, HWProtocolMessage, HWServerMessage, HWServerMessage::*},
-    server::actions::PendingMessage,
+    core::{
+        server::HWServer,
+        types::{ClientId, Replay, RoomId, GameCfg, TeamInfo},
+        room::RoomSave
+    },
+    protocol::messages::{
+        server_chat,
+        HWProtocolMessage,
+        HWServerMessage,
+        HWServerMessage::*,
+        global_chat,
+        HWProtocolMessage::EngineMessage
+    },
     utils,
 };
 use base64::encode;
 use log::*;
 use rand::{thread_rng, RngCore};
 
+mod actions;
 mod checker;
 mod common;
 mod inroom;
-mod lobby;
-mod loggingin;
+mod inlobby;
+mod inanteroom;
 
-use self::loggingin::LoginResult;
-use crate::protocol::messages::global_chat;
-use crate::protocol::messages::HWProtocolMessage::EngineMessage;
-use crate::server::coretypes::{GameCfg, TeamInfo};
 use std::fmt::{Formatter, LowerHex};
 
 #[derive(PartialEq)]
@@ -194,7 +200,7 @@ pub fn handle(
         HWProtocolMessage::Ping => response.add(Pong.send_self()),
         _ => {
             if server.anteroom.clients.contains(client_id) {
-                match loggingin::handle(server, client_id, response, message) {
+                match inanteroom::handle(server, client_id, response, message) {
                     LoginResult::Unchanged => (),
                     LoginResult::Complete => {
                         if let Some(client) = server.anteroom.remove_client(client_id) {
@@ -291,7 +297,7 @@ pub fn handle(
                         }
                     }
                     _ => match server.clients[client_id].room_id {
-                        None => lobby::handle(server, client_id, response, message),
+                        None => inlobby::handle(server, client_id, response, message),
                         Some(room_id) => {
                             inroom::handle(server, client_id, response, room_id, message)
                         }

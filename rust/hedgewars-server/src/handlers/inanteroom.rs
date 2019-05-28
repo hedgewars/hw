@@ -1,16 +1,18 @@
 use mio;
 
-use crate::protocol::messages::HWProtocolMessage::LoadRoom;
-use crate::server::client::HWClient;
-use crate::server::core::HWServer;
 use crate::{
-    protocol::messages::{HWProtocolMessage, HWServerMessage::*},
-    server::{
-        core::{HWAnteClient, HWAnteroom},
-        coretypes::ClientId,
+    protocol::messages::{
+        HWProtocolMessage::LoadRoom,
+        HWProtocolMessage,
+        HWServerMessage::*},
+    core::{
+        client::HWClient,
+        server::{HWServer, HWAnteClient, HWAnteroom},
+        types::ClientId
     },
-    utils::is_name_illegal,
+    utils::is_name_illegal
 };
+
 use log::*;
 #[cfg(feature = "official-server")]
 use openssl::sha::sha1;

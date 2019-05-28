@@ -1,15 +1,15 @@
 use crate::{
-    protocol::messages::server_chat,
     protocol::messages::{
+        server_chat,
         add_flags, remove_flags,
         HWProtocolMessage::{self, Rnd},
         HWServerMessage::{self, *},
         ProtocolFlags as Flags,
     },
-    server::{
+    core::{
         client::HWClient,
-        core::HWServer,
-        coretypes::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
+        server::HWServer,
+        types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
         room::HWRoom,
     },
     utils::to_engine_msg,
@@ -17,7 +17,7 @@ use crate::{
 
 use super::Response;
 
-use crate::server::coretypes::RoomConfig;
+use crate::core::types::RoomConfig;
 use rand::{self, seq::SliceRandom, thread_rng, Rng};
 use std::{iter::once, mem::replace};
 

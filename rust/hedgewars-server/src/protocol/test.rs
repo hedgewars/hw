@@ -4,7 +4,7 @@ use proptest::{
     test_runner::{Reason, TestRunner},
 };
 
-use crate::server::coretypes::{GameCfg, HedgehogInfo, ServerVar, ServerVar::*, TeamInfo};
+use crate::core::types::{GameCfg, HedgehogInfo, ServerVar, ServerVar::*, TeamInfo};
 
 use super::messages::{HWProtocolMessage, HWProtocolMessage::*};
 
@@ -75,7 +75,7 @@ impl Arbitrary for GameCfg {
     type Parameters = ();
 
     fn arbitrary_with(_args: <Self as Arbitrary>::Parameters) -> <Self as Arbitrary>::Strategy {
-        use crate::server::coretypes::GameCfg::*;
+        use crate::core::types::GameCfg::*;
         (0..10)
             .no_shrink()
             .prop_flat_map(|i| {

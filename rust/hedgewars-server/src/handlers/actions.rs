@@ -1,20 +1,16 @@
-use super::{
-    client::HWClient,
-    core::HWServer,
-    coretypes::{ClientId, GameCfg, RoomId, VoteType},
-    handlers,
-    room::HWRoom,
-    room::{GameInfo, RoomFlags},
-};
 use crate::{
+    core::{
+        client::HWClient,
+        server::HWServer,
+        types::{ClientId, GameCfg, RoomId, VoteType},
+        room::HWRoom,
+        room::{GameInfo, RoomFlags}
+    },
     protocol::messages::{server_chat, HWProtocolMessage, HWServerMessage, HWServerMessage::*},
     utils::to_engine_msg,
 };
 use rand::{distributions::Uniform, thread_rng, Rng};
 use std::{io, io::Write, iter::once, mem::replace};
-
-#[cfg(feature = "official-server")]
-use super::database;
 
 pub enum DestinationGroup {
     All,

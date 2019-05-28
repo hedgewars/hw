@@ -1,4 +1,4 @@
-use super::coretypes::ClientId;
+use super::types::ClientId;
 use bitflags::*;
 
 bitflags! {

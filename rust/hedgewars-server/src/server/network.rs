@@ -17,8 +17,12 @@ use mio_extras::timer;
 use netbuf;
 use slab::Slab;
 
-use super::{core::HWServer, coretypes::ClientId, handlers};
 use crate::{
+    core::{
+        server::HWServer,
+        types::ClientId
+    },
+    handlers,
     protocol::{messages::*, ProtocolDecoder},
     utils,
 };
@@ -26,8 +30,11 @@ use crate::{
 #[cfg(feature = "official-server")]
 use super::io::{IOThread, RequestId};
 
-use crate::protocol::messages::HWServerMessage::Redirect;
-use crate::server::handlers::{IoResult, IoTask};
+use crate::{
+    protocol::messages::HWServerMessage::Redirect,
+    handlers::{IoResult, IoTask}
+};
+
 #[cfg(feature = "tls-connections")]
 use openssl::{
     error::ErrorStack,

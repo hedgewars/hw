@@ -1,6 +1,6 @@
-use crate::server::{
+use super::{
     client::HWClient,
-    coretypes::{
+    types::{
         ClientId, GameCfg, GameCfg::*, RoomConfig, RoomId, TeamInfo, Voting, MAX_HEDGEHOGS_PER_TEAM,
     },
 };

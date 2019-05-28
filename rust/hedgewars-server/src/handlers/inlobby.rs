@@ -6,10 +6,10 @@ use crate::{
         add_flags, remove_flags, server_chat, HWProtocolMessage, HWServerMessage::*,
         ProtocolFlags as Flags,
     },
-    server::{
+    core::{
         client::HWClient,
-        core::HWServer,
-        coretypes::{ClientId, ServerVar},
+        server::HWServer,
+        types::{ClientId, ServerVar},
     },
     utils::is_name_illegal,
 };

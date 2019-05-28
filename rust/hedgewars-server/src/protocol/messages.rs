@@ -1,4 +1,4 @@
-use crate::server::coretypes::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType};
+use crate::core::types::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType};
 use std::{convert::From, iter::once, ops};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -183,7 +183,7 @@ impl ServerVar {
 
 impl GameCfg {
     pub fn to_protocol(&self) -> (String, Vec<String>) {
-        use crate::server::coretypes::GameCfg::*;
+        use crate::core::types::GameCfg::*;
         match self {
             FeatureSize(s) => ("FEATURE_SIZE".to_string(), vec![s.to_string()]),
             MapType(t) => ("MAP".to_string(), vec![t.to_string()]),

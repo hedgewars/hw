@@ -1,12 +1,14 @@
 use super::{
     client::HWClient,
-    coretypes::{ClientId, RoomId},
+    types::{ClientId, RoomId},
     indexslab::IndexSlab,
     room::HWRoom,
 };
-use crate::utils;
+use crate::{
+    utils,
+    protocol::messages::HWProtocolMessage::Greeting
+};
 
-use crate::protocol::messages::HWProtocolMessage::Greeting;
 use bitflags::*;
 use log::*;
 use slab;
