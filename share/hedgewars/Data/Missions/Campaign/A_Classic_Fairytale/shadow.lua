@@ -757,23 +757,11 @@ function CheckBrainiacDead()
   return brainiacDead
 end
 
-function isHogAlive(hog)
-  if GetHealth(hog) == nil or GetHealth(hog) <= 0 then
-    return false
-  else
-    local _,_,_,_,_,_,_,_,_,_,_,damage = GetGearValues(hog)
-    if damage > GetHealth(hog)  then
-      return false
-    end
-  end
-  return true
-end
-
 function DoBrainiacDead()
   if stage == loseStage then
     return
   end
-  if (not isHogAlive(dense)) or (not isHogAlive(leaks)) then
+  if (not IsHogAlive(dense)) or (not IsHogAlive(leaks)) then
     return
   end
 
@@ -797,7 +785,7 @@ function DoWeaklingsKilled()
   if stage == loseStage then
     return
   end
-  if (not isHogAlive(dense)) or (not isHogAlive(leaks)) then
+  if (not IsHogAlive(dense)) or (not IsHogAlive(leaks)) then
     return
   end
   SetGearMessage(CurrentHedgehog, 0)
@@ -808,7 +796,7 @@ function DoWeaklingsKilled()
 end
 
 function CheckRefuse()
-  return isHogAlive(dense) and GetX(dense) > 1400 and StoppedGear(dense)
+  return IsHogAlive(dense) and GetX(dense) > 1400 and StoppedGear(dense)
 end
 
 function DoRefuse()
@@ -819,7 +807,7 @@ function DoRefuse()
 end
 
 function CheckAccept()
-  if not isHogAlive(dense) then
+  if not IsHogAlive(dense) then
     return false
   end
   if GetX(dense) < 1300 then
@@ -843,7 +831,7 @@ function DoAccept()
 end
 
 function CheckConfront()
-  return cyborgAttacked and isHogAlive(dense) and StoppedGear(dense)
+  return cyborgAttacked and IsHogAlive(dense) and StoppedGear(dense)
 end
 
 function DoConfront()
@@ -907,7 +895,7 @@ function CheckReadyForStronglings()
   if stage == loseStage then
     return false
   end
-  if not isHogAlive(dense) then
+  if not IsHogAlive(dense) then
     return false
   end
   return (shotgunTaken and grenadeTaken) or GetX(dense) > 2700
@@ -945,7 +933,7 @@ function DoStronglingsDead()
   if stage == loseStage then
     return
   end
-  if not isHogAlive(leaks) then
+  if not IsHogAlive(leaks) then
     return
   end
   SetGearMessage(CurrentHedgehog, 0)
