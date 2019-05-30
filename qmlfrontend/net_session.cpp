@@ -1,12 +1,15 @@
 #include "net_session.h"
 
+#include <QUuid>
+
 #include "players_model.h"
 #include "rooms_model.h"
 
 NetSession::NetSession(QObject *parent)
     : QObject(parent),
       m_playersModel(new PlayersListModel()),
-      m_roomsModel(new RoomsListModel()) {}
+      m_roomsModel(new RoomsListModel()),
+      m_sessionState(NotConnected) {}
 
 NetSession::~NetSession() { close(); }
 
@@ -33,13 +36,13 @@ void NetSession::open() {
 
 QString NetSession::nickname() const { return m_nickname; }
 
-QString NetSession::password() const { return m_password; }
-
 NetSession::SessionState NetSession::sessionState() const {
   return m_sessionState;
 }
 
 QString NetSession::room() const { return m_room; }
+
+QString NetSession::passwordHash() const { return m_passwordHash; }
 
 void NetSession::setUrl(const QUrl &url) {
   if (m_url == url) return;
@@ -55,11 +58,13 @@ void NetSession::setNickname(const QString &nickname) {
   emit nicknameChanged(m_nickname);
 }
 
-void NetSession::setPassword(const QString &password) {
-  if (m_password == password) return;
+void NetSession::setPasswordHash(const QString &passwordHash) {
+  if (m_passwordHash == passwordHash) return;
 
-  m_password = password;
-  emit passwordChanged(m_password);
+  m_passwordHash = passwordHash;
+  emit passwordHashChanged(m_passwordHash);
+
+  if (m_sessionState == Authentication) sendPassword();
 }
 
 void NetSession::setRoom(const QString &room) {
@@ -174,7 +179,23 @@ void NetSession::handleUnknownCommand(const QStringList &parameters) {
 
 void NetSession::handleAddTeam(const QStringList &parameters) {}
 
-void NetSession::handleAskPassword(const QStringList &parameters) {}
+void NetSession::handleAskPassword(const QStringList &parameters) {
+  if (parameters.length() != 1 || parameters[0].length() < 16) {
+    qWarning("Bad ASKPASSWORD message");
+    return;
+  }
+
+  setSessionState(Authentication);
+
+  m_serverSalt = parameters[0];
+  m_clientSalt = QUuid::createUuid().toString();
+
+  if (m_passwordHash.isEmpty()) {
+    emit passwordAsked();
+  } else {
+    sendPassword();
+  }
+}
 
 void NetSession::handleBanList(const QStringList &parameters) {}
 
@@ -304,6 +325,37 @@ void NetSession::send(const QStringList &message) {
   qDebug() << "[CLIENT]" << message;
 
   m_socket->write(message.join('\n').toUtf8() + "\n\n");
+}
+
+void NetSession::sendPassword() {
+  /* When we got password hash, and server asked us for a password, perform
+   * mutual authentication: at this point we have salt chosen by server. Client
+   * sends client salt and hash of secret (password hash) salted with client
+   * salt, server salt, and static salt (predefined string + protocol number).
+   * Server should respond with hash of the same set in different order.
+   */
+
+  if (m_passwordHash.isEmpty() || m_serverSalt.isEmpty()) return;
+
+  QString hash =
+      QCryptographicHash::hash(m_clientSalt.toLatin1()
+                                   .append(m_serverSalt.toLatin1())
+                                   .append(m_passwordHash)
+                                   .append(QByteArray::number(cProtocolVersion))
+                                   .append("!hedgewars"),
+                               QCryptographicHash::Sha1)
+          .toHex();
+
+  m_serverHash =
+      QCryptographicHash::hash(m_serverSalt.toLatin1()
+                                   .append(m_clientSalt.toLatin1())
+                                   .append(m_passwordHash)
+                                   .append(QByteArray::number(cProtocolVersion))
+                                   .append("!hedgewars"),
+                               QCryptographicHash::Sha1)
+          .toHex();
+
+  send("PASSWORD", QStringList{hash, m_clientSalt});
 }
 
 void NetSession::setSessionState(NetSession::SessionState sessionState) {
