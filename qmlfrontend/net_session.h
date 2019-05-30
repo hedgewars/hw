@@ -18,13 +18,13 @@ class NetSession : public QObject {
   Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
   Q_PROPERTY(QAbstractSocket::SocketState state READ state NOTIFY stateChanged)
   Q_PROPERTY(QString nickname READ nickname WRITE setNickname NOTIFY nicknameChanged)
-  Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
   Q_PROPERTY(SessionState sessionState READ sessionState NOTIFY sessionStateChanged)
   Q_PROPERTY(QString room READ room NOTIFY roomChanged)
+  Q_PROPERTY(QString passwordHash READ passwordHash WRITE setPasswordHash NOTIFY passwordHashChanged)
   // clang-format on
 
  public:
-  enum SessionState { NotConnected, Login, Lobby, Room, Game };
+  enum SessionState { NotConnected, Login, Authentication, Lobby, Room, Game };
   Q_ENUMS(SessionState)
 
   explicit NetSession(QObject *parent = nullptr);
@@ -34,9 +34,9 @@ class NetSession : public QObject {
   QAbstractSocket::SocketState state() const;
 
   QString nickname() const;
-  QString password() const;
   SessionState sessionState() const;
   QString room() const;
+  QString passwordHash() const;
 
  public slots:
   void open();
@@ -44,17 +44,18 @@ class NetSession : public QObject {
 
   void setUrl(const QUrl &url);
   void setNickname(const QString &nickname);
-  void setPassword(const QString &password);
+  void setPasswordHash(const QString &passwordHash);
 
  signals:
   void urlChanged(const QUrl url);
   void stateChanged(QAbstractSocket::SocketState state);
   void nicknameChanged(const QString &nickname);
-  void passwordChanged(const QString &password);
   void sessionStateChanged(SessionState sessionState);
   void warning(const QString &message);
   void error(const QString &message);
   void roomChanged(const QString &room);
+  void passwordHashChanged(const QString &passwordHash);
+  void passwordAsked();
 
  private slots:
   void onReadyRead();
@@ -102,6 +103,9 @@ class NetSession : public QObject {
   void send(const QString &message, const QString &param);
   void send(const QString &message, const QStringList &parameters);
   void send(const QStringList &message);
+
+  void sendPassword();
+
   void setSessionState(SessionState sessionState);
   void setRoom(const QString &room);
 
@@ -111,11 +115,14 @@ class NetSession : public QObject {
   QSharedPointer<PlayersListModel> m_playersModel;
   QSharedPointer<RoomsListModel> m_roomsModel;
   QString m_nickname;
-  QString m_password;
   QStringList m_buffer;
   SessionState m_sessionState;
   QString m_serverAuthHash;
   QString m_room;
+  QString m_serverSalt;
+  QString m_serverHash;
+  QString m_clientSalt;
+  QString m_passwordHash;
 
   Q_DISABLE_COPY(NetSession)
 };
