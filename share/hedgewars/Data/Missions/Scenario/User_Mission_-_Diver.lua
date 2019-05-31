@@ -1,6 +1,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
+local playerTeamName
 local player = nil -- This variable will point to the hog's gear
 local enemy = nil
 
@@ -26,7 +27,7 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddMissionTeam(-1)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(1)
 			
 	AddTeam(loc("Toxic Team"), -6, "skull", "Island", "Default_qau", "cm_magicskull")
@@ -96,12 +97,12 @@ end
 
 function onGameResult(winner)
 
-	if winner == 0 then
-		ShowMission(loc("Diver"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
+	if winner == GetTeamClan(playerTeamName) then
+		SendStat(siGameResult, loc("Mission succeeded!"))
 		SaveMissionVar("Won", "true")
 		GameOver = true
 	else
-		ShowMission(loc("Diver"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)		
+		SendStat(siGameResult, loc("Mission failed!"))
 		GameOver = true
 	end
 

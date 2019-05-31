@@ -116,7 +116,6 @@ function onGameTick()
 				SetTurnTimeLeft(1)
 				DismissTeam(playerTeamName)
 			end
-			ShowMission(loc("Dangerous Ducklings"), loc("MISSION FAILED"), loc("You've failed. Try again."), -amRope, 5000);
 		end
 	end
 
@@ -139,13 +138,20 @@ function onGearDelete(gear)
 			awardAchievement(loc("Naughty Ninja"))
 			DismissTeam(enemyTeamName)
 			gameWon = true
-			SaveMissionVar("Won", "true")
 		elseif gear == enemy then
 			HogSay(player, loc("Enjoy the swim..."), SAY_THINK)
 			gameWon = true
-			SaveMissionVar("Won", "true")
 			Retreat(3000)
 		end
 
+	end
+end
+
+function onGameResult(winner)
+	if winner == GetTeamClan(playerTeamName) then
+		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
 	end
 end

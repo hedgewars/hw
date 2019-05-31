@@ -3,6 +3,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 ---------------------------------------------------------------
 
+local playerTeamName
 local player = nil -- This variable will point to the hog's gear
 local instructor = nil
 local enemy = nil
@@ -29,7 +30,7 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddMissionTeam(-1)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(1)
 	AddTeam(loc("Toxic Team"), -6, "skull", "Island", "Default_qau", "cm_magicskull")
 	enemy = AddHog(loc("Poison"), 1, 10, "Skull")
@@ -116,7 +117,6 @@ function onGameTick()
 	end
 
 	if TurnTimeLeft == 1 then
-		--ShowMission(loc(caption), loc(subcaption), loc(timeout), -amSkip, 0);
 		SetHealth(player, 0)
 		GameOver = true
 	end
@@ -149,12 +149,12 @@ function onGearDelete(gear)
 end
 
 function onGameResult(winner)
-	if winner == 0 then
-		ShowMission(loc("Spooky Tree"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0);
+	if winner == GetTeamClan(playerTeamName) then
 		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
 		GameOver = true
 	else
-		ShowMission(loc("Spooky Tree"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
+		SendStat(siGameResult, loc("Mission failed!"))
 		GameOver = true
 	end
 end
