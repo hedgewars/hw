@@ -278,6 +278,13 @@ function onGameTick20()
 	end
 end
 
+function onGearAdd(gear)
+	-- Delete sticky flames to reduce the waiting time after blowing up the barrels
+	if GetGearType(gear) == gtFlame and band(GetState(gear), gsttmpFlag) ~= 0 then
+		DeleteGear(gear)
+	end
+end
+
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
