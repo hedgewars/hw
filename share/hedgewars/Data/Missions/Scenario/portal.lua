@@ -224,5 +224,8 @@ end
 function onGameResult(winningClan)
 	if winningClan == GetHogClan(player) then
 		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
 	end
 end

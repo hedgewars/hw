@@ -94,7 +94,6 @@ function onGearDelete(gear)
 	end
 	-- Note: The victory sequence is done automatically by Hedgewars
 	if  ( ((gear == player) or (gear == p2)) and (GameOver == false)) then
-		ShowMission(loc("Teamwork"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 		GameOver = true
 		SetHealth(p2,0)
 		SetHealth(player,0)
@@ -102,8 +101,13 @@ function onGearDelete(gear)
 
 end
 
-function onGameResult(winningClan)
-	if winningClan == GetTeamClan(playerTeamName) then
+function onGameResult(winner)
+	if winner == GetTeamClan(playerTeamName) then
 		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
+		GameOver = true
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
+		GameOver = true
 	end
 end

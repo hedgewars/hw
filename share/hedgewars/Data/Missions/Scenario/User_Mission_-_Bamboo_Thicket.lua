@@ -2,6 +2,7 @@
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
+local playerTeamName
 local player = nil 
 local enemy = nil
 local firedShell = false
@@ -24,7 +25,7 @@ function onGameInit()
 	WaterRise = 0
 	GameFlags = gfDisableWind
 
-	AddMissionTeam(-1)
+	playerTeamName = AddMissionTeam(-1)
 	player = AddMissionHog(10)
 			
 	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot_qau", "cm_cyborg")
@@ -77,17 +78,17 @@ end
 
 function onGameResult(winner)
 
-	if (winner == 0) then
+	if (winner == GetTeamClan(playerTeamName)) then
 		
 		SaveMissionVar("Won", "true")
-		ShowMission(loc("Bamboo Thicket"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
+		SendStat(siGameResult, loc("Mission succeeded!"))
 		
 		if (turnNumber < 6) and (firedShell == false) then
 			awardAchievement(loc("Energetic Engineer"))
 		end
 
 	else
-		ShowMission(loc("Bamboo Thicket"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
+		SendStat(siGameResult, loc("Mission failed!"))
 	end
 
 end

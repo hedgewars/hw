@@ -522,7 +522,7 @@ function SimpleMission(params)
 				_G.sm.wonVarWritten = true
 			end
 			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
-			SendStat(siGameResult, loc("You win!"))
+			SendStat(siGameResult, loc("Mission succeeded!"))
 			_G.sm.makeStats(_G.sm.playerClan)
 			EndGame()
 			if GetHogLevel(CurrentHedgehog) == 0 then
@@ -537,8 +537,8 @@ function SimpleMission(params)
 	_G.sm.lose = function(failReason)
 		if not _G.sm.gameEnded then
 			_G.sm.gameEnded = true
-			AddCaption(loc("Scenario failed!"), capcolDefault, capgrpGameState)
-			SendStat(siGameResult, loc("You lose!"))
+			AddCaption(loc("Mission failed!"), capcolDefault, capgrpGameState)
+			SendStat(siGameResult, loc("Mission failed!"))
 			if failReason then
 				SendStat(siCustomAchievement, failReason)
 			end
@@ -736,8 +736,11 @@ function SimpleMission(params)
 
 	_G.onGameResult = function(winningClan)
 		if (params.customGoals == nil) and (not _G.sm.wonVarWritten) and (winningClan == _G.sm.playerClan) then
+			SendStat(siGameResult, loc("Mission succeeded!"))
 			SaveMissionVar("Won", "true")
 			_G.sm.wonVarWritten = true
+		else
+			SendStat(siGameResult, loc("Mission failed!"))
 		end
 	end
 
