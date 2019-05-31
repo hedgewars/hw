@@ -14,6 +14,7 @@ local inBattle = false
 local tookPartInBattle = false
 local previousHog = -1
 local permitCaptainLimeDeath = false
+local fixedWind = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -179,19 +180,47 @@ function onGameStart()
 	local x2 = 1306
 	local y1 = 1210
 	local y2 = 1620
-	while true do
-		if y2<y1 then
-			break
-		end
-		if x2<x1 then
-			x2 = 1305
-			y2 = y2 - 50
-		end
-		if not TestRectForObstacle(x2+25, y2+25, x2-25, y2-25, true) then
-			AddGear(x2, y2, gtExplosives, 0, 0, 0, 0)
-		end
-		x2 = x2 - 25
+
+	-- barrel mania in the large hole
+	local barrels = {
+		{1290, 1618},
+		{1285, 1587},
+		{1287, 1556},
+		{1286, 1525},
+		{1247, 1637},
+		{1250, 1606},
+		{1249, 1575},
+		{1251, 1544},
+		{1206, 1646},
+		{1211, 1615},
+		{1209, 1584},
+		{1166, 1646},
+		{1168, 1615},
+		{1170, 1584},
+		{1125, 1637},
+		{1120, 1606},
+		{1128, 1575},
+		{1089, 1622},
+		{1084, 1591},
+		{1093, 1560},
+		{1044, 1596},
+		{1044, 1565},
+		{1005, 1554},
+		{1005, 1523},
+		{973, 1492},
+		{1062, 1534},
+		{1128, 1544},
+		{1168, 1553},
+		{1210, 1553},
+		{1097, 1529},
+		{1040, 1505},
+	}
+	for b=1, #barrels do
+		local barrel = AddGear(barrels[b][1], barrels[b][2], gtExplosives, 0, 0, 0, 0)
+		SetHealth(barrel, 21)
 	end
+
+	-- single barrel at the right corner
 	AddGear(3128, 1680, gtExplosives, 0, 0, 0, 0)
 
 	--mines
@@ -273,15 +302,16 @@ function onGameTick20()
 		heroDeath()
 		permitCaptainLimeDeath = true
 	end
-	if CurrentHedgehog and GetY(CurrentHedgehog) > 1350 then
-		SetWind(-40)
+	if (not fixedWind) and CurrentHedgehog and GetY(CurrentHedgehog) > 1350 then
+		fixedWind = true
+		wind()
 	end
 end
 
 function onGearAdd(gear)
-	-- Delete sticky flames to reduce the waiting time after blowing up the barrels
+	-- Turn sticky flames to normal flames, to reduce the waiting time after blowing up the barrels
 	if GetGearType(gear) == gtFlame and band(GetState(gear), gsttmpFlag) ~= 0 then
-		DeleteGear(gear)
+		SetState(gear, band(GetState(gear), bnot(gsttmpFlag)))
 	end
 end
 
@@ -603,6 +633,10 @@ function heroIsAStupidFool()
 end
 
 function wind()
-	SetWind(GetRandom(201)-100)
+	if fixedWind then
+		SetWind(10)
+	else
+		SetWind(GetRandom(201)-100)
+	end
 end
 
