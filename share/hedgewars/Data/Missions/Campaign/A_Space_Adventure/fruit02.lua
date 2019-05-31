@@ -344,7 +344,10 @@ function onSurface(gear)
 	return false
 end
 
-function onGaptainLimeDeath(gear)
+function onCaptainLimeDeath(gear)
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then
+		return false
+	end
 	if green1.dead then
 		return true
 	end
@@ -352,6 +355,9 @@ function onGaptainLimeDeath(gear)
 end
 
 function onRedTeamDeath(gear)
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then
+		return false
+	end
 	local redDead = true
 	for i=1,table.getn(redHedgehogs) do
 		if GetHealth(redHedgehogs[i].gear) then
@@ -433,7 +439,7 @@ function surface(gear)
 		AddAmmo(green1.gear, amBazooka, 6)
 		AddAmmo(green1.gear, amGrenade, 6)
 		AddAmmo(green1.gear, amDEagle, 2)
-		AddEvent(onGaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
+		AddEvent(onCaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
 	end
 	EndTurn(true)
 	escapeHog(green2.gear)

@@ -297,35 +297,39 @@ function onGreen1Death(gear)
 end
 
 function onBattleWin(gear)
-	local win = true
 	for i=1,7 do
 		if i<3 then
 			if GetHealth(yellowArmy[i].gear) then
-				win = false
+				return false
 			end
 		else
 			if GetHealth(yellowArmy[i].gear) and not yellowArmy[i].hidden then
-				win = false
+				return false
 			end
 		end
 	end
 	if GetHealth(yellow1.gear) then
-		win = false
+		return false
 	end
-	return win
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
+	return true
 end
 
 function onEscapeWinByKill(gear)
-	local win = true
 	for i=1,7 do
 		if GetHealth(yellowArmy[i].gear) or yellowArmy[i].hidden then
-			win = false
+			return false
 		end
 	end
 	if GetHealth(yellow1.gear) then
-		win = false
+		return false
 	end
-	return win
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
+	return true
 end
 
 function isHeroOnLaunchPad()

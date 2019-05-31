@@ -199,6 +199,9 @@ function onHeroDeath(gear)
 end
 
 function onHeroWin(gear)
+	if not IsHogAlive(gear) then
+		return false
+	end
 	local allDead = true
 	for i=1,table.getn(enemies) do
 		if GetHealth(enemies[i].gear) then

@@ -397,7 +397,9 @@ end
 
 function professorAndMinionsDeath(gear)
 	if gameOver then return end
-	SendStat(siCustomAchievement, loc("You have eliminated the whole evil team. You're pretty tough!"))
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
+	SendStat(siCustomAchievement, loc("You have eliminated Professor Hogevil."))
+	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
 
 	SaveCampaignVar("ProfDiedOnMoon", "1")
 	victory()
@@ -405,6 +407,7 @@ end
 
 function professorDeath(gear)
 	if gameOver then return end
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
 	local m1h = GetHealth(minion1.gear)
 	local m2h = GetHealth(minion2.gear)
 	local m3h = GetHealth(minion3.gear)
@@ -421,6 +424,7 @@ function professorDeath(gear)
 end
 
 function afterDialog06()
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
 	EndTurn(true)
 	SendStat(siCustomAchievement, loc("You have eliminated Professor Hogevil."))
 	SendStat(siCustomAchievement, loc("You drove the minions away."))
@@ -429,6 +433,7 @@ function afterDialog06()
 end
 
 function afterDialog05()
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
 	EndTurn(true)
 	HideHog(professor.gear)
 	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
@@ -441,6 +446,7 @@ end
 function minionsDeath(gear)
 	if professor.dead or GetHealth(professor.gear) == nil or GetHealth(professor.gear) == 0 then return end
 	if gameOver then return end
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
 	AddAnim(dialog05)
 end
 

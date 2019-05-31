@@ -71,6 +71,7 @@ A Space Adventure:
  * Chasing the blue hog: Fix player winning if Crazy Runner died
  * Bad timing: Win mission in "flee" variant if all enemy hogs are dead
  * Getting to the device: Fix clan colors
+ * Fix errors when hero and enemies die in same turn
  * Various minor tweaks and bugfixes
 
 Controls:
