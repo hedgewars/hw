@@ -1475,6 +1475,28 @@ begin
     lc_gethogfort:= 1
 end;
 
+function lc_ishogalive(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 1, 'IsHogAlive', 'gearUid') then
+        begin
+        gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
+        if gear <> nil then
+            if gear^.Kind = gtHedgehog then
+                if (gear^.Health > 0) and (gear^.Health > gear^.Damage) and ((gear^.State and (gstDrowning or gstHHDeath)) = 0) and ((gear^.Message and gmDestroy) = 0) then
+                    lua_pushboolean(L, true)
+                else
+                    lua_pushboolean(L, false)
+            else
+                lua_pushboolean(L, false)
+        else
+            lua_pushboolean(L, false);
+        end
+    else
+        lua_pushnil(L); // return value on stack (nil)
+    lc_ishogalive:= 1
+end;
+
 function lc_ishoglocal(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -4477,6 +4499,7 @@ lua_register(luaState, _P'GetHogVoicepack', @lc_gethogvoicepack);
 lua_register(luaState, _P'GetHogFlag', @lc_gethogflag);
 lua_register(luaState, _P'GetHogFort', @lc_gethogfort);
 lua_register(luaState, _P'GetHogGrave', @lc_gethoggrave);
+lua_register(luaState, _P'IsHogAlive', @lc_ishogalive);
 lua_register(luaState, _P'IsHogLocal', @lc_ishoglocal);
 lua_register(luaState, _P'GetHogTeamName', @lc_gethogteamname);
 lua_register(luaState, _P'SetHogTeamName', @lc_sethogteamname);
