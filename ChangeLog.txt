@@ -160,6 +160,7 @@ Lua API:
  + New call: AddMissionTeam(color): Add mission team, i.e. the team selected by player in campaign/mission page
  + New call: AddMissionHog(health): Add a hedgehog for the mission team
  + New call: SetTeamPassive(teamname, isPassive): Mark a team as passive. Passive teams do not play and are treated like frozen teams.
+ + New call: IsHogAlive(gear): Returns true if gear is a hegehog which is alive, not about to die and not hidden
  + New return value: AddTeam/AddMissionTeam return <real team name>, <team index>
  + SetClanColor: Now accepts negative color argument for user clan color, like in AddTeam
  + AddTeam: Append “_qau” to voicepack name to enable automatic selection of voicepack language
