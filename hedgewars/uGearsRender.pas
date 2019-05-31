@@ -96,7 +96,7 @@ end;
 
 
 procedure DrawRopeLine(X1, Y1, X2, Y2: Real; LayerIndex: Longword; var linesLength, ropeLength: Real);
-var dX, dY, angle, length: Real;
+var dX, dY, angle, lineLength: Real;
     FrameIndex: LongWord;
 begin
     if (X1 = X2) and (Y1 = Y2) then
@@ -104,13 +104,13 @@ begin
 
     dX:= X2 - X1;
     dY:= Y2 - Y1;
-    length:= sqrt(sqr(dX) + sqr(dY));
+    lineLength:= sqrt(sqr(dX) + sqr(dY));
     angle:= arctan2(dY, dX) * 180 / PI - 90;
 
-    dX:= dX / length;
-    dY:= dY / length;
+    dX:= dX / lineLength;
+    dY:= dY / lineLength;
 
-    while (ropeLength - linesLength) <= length do
+    while (ropeLength - linesLength) <= lineLength do
     begin
         FrameIndex:= round(ropeLength / cRopeNodeStep);
         if (FrameIndex mod cRopeLayers) = LayerIndex then
@@ -120,7 +120,7 @@ begin
                 FrameIndex, 1, angle);
         ropeLength:= ropeLength + cRopeNodeStep;
     end;
-    linesLength:= linesLength + length
+    linesLength:= linesLength + lineLength
 end;
 
 procedure DrawRopeLayer(Gear: PGear; LayerIndex: LongWord);
