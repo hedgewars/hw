@@ -132,6 +132,7 @@ class HWForm : public QMainWindow
         void EditWeapons(QString oldWeaponsName, QString newWeaponsName, QString ammo);
         void onFrontendFullscreen(bool value);
         void onFrontendEffects(bool value);
+        void onFrontendSoundsToggled(bool value);
         void Music(bool checked);
         void UpdateCampaignPage(int index);
         void UpdateCampaignPageTeam(int index);
