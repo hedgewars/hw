@@ -65,6 +65,7 @@ A Space Adventure:
  + Show your current records at mission start when re-playing one of the challenges
  + Spacetrip: Move flowers of desert planet above cactus
  + Searching in the dust: Enable skip in entire mission
+ + Getting to the device: Different ending when hero chose to battle in "Bad timing" mission
  * Searching in the dust: Fix mission ending when all smugglers are dead
  * Searching in the dust: Fix a lot of broken/stupid smuggler behaviours
  * Chasing the blue hog: Fix player not losing the race when timing out while still having the rope

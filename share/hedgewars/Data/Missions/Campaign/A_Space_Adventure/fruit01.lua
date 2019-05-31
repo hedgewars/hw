@@ -557,6 +557,11 @@ end
 
 function saveVariables()
 	saveCompletedStatus(2)
+	if chooseToBattle then
+		SaveCampaignVar("Fruit01JoinedBattle", "true")
+	else
+		SaveCampaignVar("Fruit01JoinedBattle", "false")
+	end
 	SaveCampaignVar("UnlockedMissions", "4")
 	SaveCampaignVar("Mission1", "8")
 	SaveCampaignVar("Mission2", "3")
