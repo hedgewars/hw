@@ -136,17 +136,18 @@ function onHeroDeath(gear)
 end
 
 function onBoom(gear)
-	local win = true
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
 	for i=1,table.getn(explosives) do
 		if GetHealth(explosives[i]) then
-			win = false
-			break
+			return false
 		end
 	end
 	if currentHealth <= currentDamage then
-		win = false
+		return false
 	end
-	return win
+	return true
 end
 
 -------------- ACTIONS ------------------

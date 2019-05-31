@@ -425,6 +425,9 @@ function onThantaDeath(gear)
 end
 
 function onHeroWin(gear)
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
 	if (not hero.dead and not bandit1.dead) and heroDamageAtCurrentTurn == 0 and (GetX(hero.gear)>=GetX(bandit1.gear)-80
 		and GetX(hero.gear)<=GetX(bandit1.gear)+80)	and (GetY(hero.gear)>=GetY(bandit1.gear)-30 and GetY(hero.gear)<=GetY(bandit1.gear)+30) then
 		return true

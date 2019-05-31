@@ -244,6 +244,9 @@ function onHeroDeath(gear)
 end
 
 function onHeroWin(gear)
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then
+		return false
+	end
 	local enemies = enemiesOdd
 	for i=1,table.getn(enemiesEven) do
 		table.insert(enemies, enemiesEven[i])

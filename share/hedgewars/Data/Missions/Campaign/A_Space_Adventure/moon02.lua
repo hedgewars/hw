@@ -256,9 +256,10 @@ end
 ------------- other functions ---------------
 
 function isHeroNextToRunner()
-	if GetGearType(hero.gear) == gtHedgehog and GetGearType(runner.gear) == gtHedgehog and
+	if IsHogAlive(hero.gear) and IsHogAlive(runner.gear) and
 			math.abs(GetX(hero.gear) - GetX(runner.gear)) < 75 and
-			math.abs(GetY(hero.gear) - GetY(runner.gear)) < 75 and StoppedGear(hero.gear) then
+			math.abs(GetY(hero.gear) - GetY(runner.gear)) < 75 and
+			StoppedGear(hero.gear) and StoppedGear(runner.gear) then
 		return true
 	end
 	return false

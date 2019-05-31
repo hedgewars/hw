@@ -261,6 +261,9 @@ function onHeroDeath(gear)
 end
 
 function onEnemiesDeath(gear)
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
 	local allDead = true
 	if GetHealth(hero.gear) and professor.dead then
 		for i=1,table.getn(thugs) do
