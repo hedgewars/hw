@@ -747,7 +747,6 @@ function sendStats(planetMsg)
 	if GetCampaignVar("Won") == "true" and GetCampaignVar("Mission1Won") ~= "true" then
 		SendStat(siCustomAchievement, loc("Complete all main and side missions to complete the spacetrip mission."))
 	end
-	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
 
@@ -757,14 +756,12 @@ function sendStatsOnRetry()
 		SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel."))
 	end
 	SendStat(siCustomAchievement, loc("You have to be careful and must not die!"))
-	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
 
 function sendStatsOnStuckOnMoon()
 	SendStat(siGameResult, loc("You have to go back to the moon!"))
 	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets."))
-	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
 
@@ -774,7 +771,6 @@ function sendStatsOnRopedToMoon()
 		SendStat(siGameResult, loc("You have violated PAotH regulations!"))
 		SendStat(siCustomAchievement, loc("You have triggered the secret Do-Not-Rope-to-the-Moon Defense System."))
 		SendStat(siCustomAchievement, loc("Use the flying saucer from the crate to fly to the moon."))
-		sendSimpleTeamRankings({teamC.name})
 		EndGame()
 	end
 end
