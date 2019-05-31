@@ -440,6 +440,11 @@ void PageEditTeam::CBTeamLvl_activated(const int index)
     hboxCPUWidget->setHidden(index == 0);
 }
 
+void PageEditTeam::frontendSoundsToggled(bool value)
+{
+    btnTestSound->setEnabled(value);
+}
+
 void PageEditTeam::testSound()
 {
     DataManager & dataMgr = DataManager::instance();

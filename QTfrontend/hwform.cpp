@@ -168,6 +168,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     config = new GameUIConfig(this, DataManager::instance().settingsFileName());
     frontendEffects = config->value("frontend/effects", true).toBool();
+    bool frontendSounds = config->value("frontend/sound", true).toBool();
+    onFrontendSoundsToggled(frontendSounds);
+
     playerHash = QString(QCryptographicHash::hash(config->value("net/nick", config->getRandomNick()).toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
     // Icons for finished missions
@@ -289,6 +292,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageOptions->SchemeNew, SIGNAL(clicked()), this, SLOT(GoToNewScheme()));
     connect(ui.pageOptions->SchemeDelete, SIGNAL(clicked()), this, SLOT(DeleteScheme()));
     connect(ui.pageOptions->CBFrontendEffects, SIGNAL(toggled(bool)), this, SLOT(onFrontendEffects(bool)) );
+    connect(ui.pageOptions->CBFrontendSound, SIGNAL(toggled(bool)), this, SLOT(onFrontendSoundsToggled(bool)));
 
     connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
     connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
@@ -408,6 +412,11 @@ void HWForm::onFrontendEffects(bool value)
         wBackground->startAnimation();
     else
         wBackground->stopAnimation();
+}
+
+void HWForm::onFrontendSoundsToggled(bool value)
+{
+    ui.pageEditTeam->frontendSoundsToggled(value);
 }
 
 /*
