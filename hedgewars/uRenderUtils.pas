@@ -414,7 +414,7 @@ var textWidth, textHeight, x, y, w, h, i, j, pos, line, numLines, edgeWidth, edg
     finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
     {$IFNDEF PAS2C}
-    chars: set of char = [#9,' ',';',':','?','!',','];
+    breakChars: set of char = [#9,' ','-'];
     {$ENDIF}
     substr: ansistring;
     edge, corner, tail: TSPrite;
@@ -464,7 +464,7 @@ begin
         w:= 0;
         i:= round(Sqrt(length(s)) * 2);
         {$IFNDEF PAS2C}
-        s:= WrapText(s, #1, chars, i);
+        s:= WrapText(s, #1, breakChars, i);
         {$ENDIF}
         pos:= 1; line:= 0;
     // Find the longest line for the purposes of centring the text.  Font dependant.
