@@ -19,6 +19,7 @@ Gameplay:
  + Show check mark for completed scenarios, challenges and trainings
  + Training/challenge/scenario menu now supports team selection
  + Most target practices now highlight position of next target (must be unlocked first)
+ + Homing bee can now be used as secondary ammo
  * Fix hedgehogs being pushed around (and other collision bugs) when they overlap
  * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
  * Fix air mine not colliding with crates initially
