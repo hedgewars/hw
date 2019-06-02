@@ -171,9 +171,10 @@ for y:= 0 to Pred(Image^.h) do
                     or (LerpByte((color and BMask) shr BShift, (landColor and BMask) shr BShift, alpha) shl BShift)
                     or (LerpByte(alpha, 255, (color and AMask) shr AShift) shl AShift);
 
-            if Land[cpY + y, cpX + x] <= lfAllObjMask then
-                Land[cpY + y, cpX + x]:= lfObject or LandFlags
             end;
+
+        if ((color and AMask) <> 0) and (Land[cpY + y, cpX + x] <= lfAllObjMask) then
+            Land[cpY + y, cpX + x]:= lfObject or LandFlags
         end;
     p:= PLongwordArray(@(p^[Image^.pitch shr 2]))
     end;
