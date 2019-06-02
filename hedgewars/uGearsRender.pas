@@ -837,13 +837,15 @@ begin
                 amAirMine: DrawSpriteRotated(sprHandAirMine, hx, hy, sign, aangle);
                 amSMine: DrawSpriteRotated(sprHandSMine, hx, hy, sign, aangle);
                 amKnife: DrawSpriteRotatedF(sprHandKnife, hx, hy, 0, sign, aangle);
-                amSeduction: begin
+                amSeduction: if ((Gear^.State and gstMoving) = 0) then
+                             begin
                              DrawSpriteRotated(sprHandSeduction, hx, hy, sign, aangle);
                              DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA);
                              end;
                 amVampiric: DrawSpriteRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amRubber,
-                amGirder: begin
+                amGirder: if ((Gear^.State and gstMoving) = 0) then
+                    begin
                     DrawSpriteRotated(sprHandConstruction, hx, hy, sign, aangle);
                     if cBuildMaxDist = cDefaultBuildMaxDist then
                         begin
@@ -883,7 +885,8 @@ begin
                 amFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amLandGun: DrawSpriteRotated(sprHandLandGun, hx, hy, sign, aangle);
                 amIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
-                amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
+                amResurrector: if ((Gear^.State and gstMoving) = 0) then
+                    DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
                 amFirePunch: DrawSpriteRotatedF(sprFirePunch, hx + 6 * sign + 1, hy - 5, (RealTicks div 50) mod 16, sign, 0);
             end;
 
