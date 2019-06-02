@@ -82,7 +82,7 @@ fn main() {
                         Err(e) => debug!("Error in timer event: {}", e),
                     },
                     #[cfg(feature = "official-server")]
-                    utils::IO_TOKEN => match hw_network.handle_io_result() {
+                    utils::IO_TOKEN => match hw_network.handle_io_result(&poll) {
                         Ok(()) => (),
                         Err(e) => debug!("Error in IO task: {}", e),
                     },

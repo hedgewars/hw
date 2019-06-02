@@ -30,7 +30,7 @@ mod inroom;
 
 use std::fmt::{Formatter, LowerHex};
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug)]
 pub struct Sha1Digest([u8; 20]);
 
 impl Sha1Digest {
@@ -48,6 +48,7 @@ impl LowerHex for Sha1Digest {
     }
 }
 
+#[derive(Debug)]
 pub struct AccountInfo {
     pub is_registered: bool,
     pub is_admin: bool,
@@ -77,6 +78,7 @@ pub enum IoTask {
     },
 }
 
+#[derive(Debug)]
 pub enum IoResult {
     Account(Option<AccountInfo>),
     Replay(Option<Replay>),
