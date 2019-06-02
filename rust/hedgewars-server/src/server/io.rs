@@ -15,12 +15,12 @@ use mio_extras::channel;
 
 pub type RequestId = u32;
 
-pub struct IOThread {
+pub struct IoThread {
     core_tx: mpsc::Sender<(RequestId, IoTask)>,
     core_rx: channel::Receiver<(RequestId, IoResult)>,
 }
 
-impl IOThread {
+impl IoThread {
     pub fn new() -> Self {
         let (core_tx, io_rx) = mpsc::channel();
         let (io_tx, core_rx) = channel::channel();
@@ -29,7 +29,7 @@ impl IOThread {
         db.connect("localhost");
 
         thread::spawn(move || {
-            while let Ok((request_id, task)) = io_rx.try_recv() {
+            while let Ok((request_id, task)) = io_rx.recv() {
                 let response = match task {
                     IoTask::GetAccount {
                         nick,
