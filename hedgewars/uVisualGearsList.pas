@@ -77,6 +77,7 @@ if ((cReducedQuality and rqAntiBoom) <> 0) and
     vgtSpeechBubble,
     vgtHealthTag,
     vgtExplosion,
+    vgtBigExplosion,
     vgtSmokeTrace,
     vgtEvilTrace,
     vgtNote,
