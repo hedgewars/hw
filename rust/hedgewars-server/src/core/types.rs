@@ -48,19 +48,19 @@ pub struct HedgehogInfo {
     pub hat: String,
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Ammo {
     pub name: String,
     pub settings: Option<String>,
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct Scheme {
     pub name: String,
     pub settings: Vec<String>,
 }
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct RoomConfig {
     pub feature_size: u32,
     pub map_type: String,
@@ -153,6 +153,7 @@ impl RoomConfig {
     }
 }
 
+#[derive(Debug)]
 pub struct Replay {
     pub config: RoomConfig,
     pub teams: Vec<TeamInfo>,

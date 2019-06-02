@@ -20,17 +20,13 @@ use slab::Slab;
 use crate::{
     core::{server::HwServer, types::ClientId},
     handlers,
-    protocol::{messages::*, ProtocolDecoder},
+    handlers::{IoResult, IoTask},
+    protocol::{messages::*, messages::HwServerMessage::Redirect, ProtocolDecoder},
     utils,
 };
 
 #[cfg(feature = "official-server")]
 use super::io::{IoThread, RequestId};
-
-use crate::{
-    handlers::{IoResult, IoTask},
-    protocol::messages::HwServerMessage::Redirect,
-};
 
 #[cfg(feature = "tls-connections")]
 use openssl::{
@@ -456,10 +452,12 @@ impl NetworkLayer {
     }
 
     #[cfg(feature = "official-server")]
-    pub fn handle_io_result(&mut self) -> io::Result<()> {
-        if let Some((client_id, result)) = self.io.try_recv() {
+    pub fn handle_io_result(&mut self, poll: &Poll) -> io::Result<()> {
+        while let Some((client_id, result)) = self.io.try_recv() {
+            debug!("Handling io result {:?} for client {}", result, client_id);
             let mut response = handlers::Response::new(client_id);
             handlers::handle_io_result(&mut self.server, client_id, &mut response, result);
+            self.handle_response(response, poll);
         }
         Ok(())
     }
