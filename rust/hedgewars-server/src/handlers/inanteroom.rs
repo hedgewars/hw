@@ -47,7 +47,9 @@ where
     } else {
         #[cfg(feature = "official-server")]
         {
-            response.add(AskPassword(client.server_salt.clone()).send_self());
+            response.request_io(super::IoTask::CheckRegistered {
+                nick: client.nick.as_ref().unwrap().clone(),
+            });
             LoginResult::Unchanged
         }
 

@@ -21,7 +21,7 @@ use crate::{
     core::{server::HwServer, types::ClientId},
     handlers,
     handlers::{IoResult, IoTask},
-    protocol::{messages::*, messages::HwServerMessage::Redirect, ProtocolDecoder},
+    protocol::{messages::HwServerMessage::Redirect, messages::*, ProtocolDecoder},
     utils,
 };
 

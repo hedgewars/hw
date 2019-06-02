@@ -31,6 +31,14 @@ impl IoThread {
         thread::spawn(move || {
             while let Ok((request_id, task)) = io_rx.recv() {
                 let response = match task {
+                    IoTask::CheckRegistered { nick } => match db.is_registered(&nick) {
+                        Ok(is_registered) => IoResult::AccountRegistered(is_registered),
+                        Err(e) => {
+                            warn!("Unable to check account's existence: {}", e);
+                            IoResult::AccountRegistered(false)
+                        }
+                    },
+
                     IoTask::GetAccount {
                         nick,
                         protocol,
