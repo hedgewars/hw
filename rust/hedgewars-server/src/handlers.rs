@@ -57,6 +57,9 @@ pub struct AccountInfo {
 }
 
 pub enum IoTask {
+    CheckRegistered {
+        nick: String,
+    },
     GetAccount {
         nick: String,
         protocol: u16,
@@ -80,6 +83,7 @@ pub enum IoTask {
 
 #[derive(Debug)]
 pub enum IoResult {
+    AccountRegistered(bool),
     Account(Option<AccountInfo>),
     Replay(Option<Replay>),
     SaveRoom(RoomId, bool),
@@ -328,22 +332,30 @@ pub fn handle_io_result(
     io_result: IoResult,
 ) {
     match io_result {
-        IoResult::Account(Some(info)) => {
-            if !info.is_registered && server.is_registered_only() {
+        IoResult::AccountRegistered(is_registered) => {
+            if !is_registered && server.is_registered_only() {
                 response.add(
                     Bye("This server only allows registered users to join.".to_string())
                         .send_self(),
                 );
                 response.remove_client(client_id);
-            } else {
-                response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
-                if let Some(client) = server.anteroom.remove_client(client_id) {
-                    server.add_client(client_id, client);
-                    let client = &mut server.clients[client_id];
-                    client.set_is_registered(info.is_registered);
-                    client.set_is_admin(info.is_admin);
-                    client.set_is_contributor(info.is_admin)
-                }
+            } else if is_registered {
+                let salt = server.anteroom.clients[client_id].server_salt.clone();
+                response.add(AskPassword(salt).send_self());
+            } else if let Some(client) = server.anteroom.remove_client(client_id) {
+                server.add_client(client_id, client);
+                common::join_lobby(server, response);
+            }
+        }
+        IoResult::Account(Some(info)) => {
+            response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
+            if let Some(client) = server.anteroom.remove_client(client_id) {
+                server.add_client(client_id, client);
+                let client = &mut server.clients[client_id];
+                client.set_is_registered(info.is_registered);
+                client.set_is_admin(info.is_admin);
+                client.set_is_contributor(info.is_contributor);
+                common::join_lobby(server, response);
             }
         }
         IoResult::Account(None) => {

@@ -4,6 +4,9 @@ use openssl::sha::sha1;
 
 use crate::handlers::{AccountInfo, Sha1Digest};
 
+const CHECK_ACCOUNT_EXISTS_QUERY: &str =
+    r"SELECT 1 FROM users WHERE users.name = :username LIMIT 1";
+
 const GET_ACCOUNT_QUERY: &str =
     r"SELECT CASE WHEN users.status = 1 THEN users.pass ELSE '' END,
      (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 3),
@@ -11,9 +14,9 @@ const GET_ACCOUNT_QUERY: &str =
      FROM users WHERE users.name = :username";
 
 const STORE_STATS_QUERY: &str = r"INSERT INTO gameserver_stats
-            (players, rooms, last_update)
-            VALUES
-            (:players, :rooms, UNIX_TIMESTAMP())";
+      (players, rooms, last_update)
+      VALUES
+      (:players, :rooms, UNIX_TIMESTAMP())";
 
 const GET_REPLAY_NAME_QUERY: &str = r"SELECT filename FROM achievements WHERE id = :id";
 
@@ -37,6 +40,17 @@ impl Database {
         self.pool = Some(mysql::Pool::new(url)?);
 
         Ok(())
+    }
+
+    pub fn is_registered(&mut self, nick: &str) -> Result<bool, Error> {
+        if let Some(pool) = &self.pool {
+            let is_registered = pool
+                .first_exec(CHECK_ACCOUNT_EXISTS_QUERY, params! { "username" => nick })?
+                .is_some();
+            Ok(is_registered)
+        } else {
+            Err(DriverError::SetupError.into())
+        }
     }
 
     pub fn get_account(
@@ -101,7 +115,7 @@ impl Database {
             if let Some(row) =
                 pool.first_exec(GET_REPLAY_NAME_QUERY, params! { "id" => replay_id })?
             {
-                let (filename) = from_row_opt::<(String)>(row)?;
+                let filename = from_row_opt::<(String)>(row)?;
                 Ok(Some(filename))
             } else {
                 Ok(None)
