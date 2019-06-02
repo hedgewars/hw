@@ -39,7 +39,7 @@ procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug, uLocale;
+uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug, uLocale, uSound;
 
 const
     cSendEmptyPacketTime = 1000;
@@ -512,6 +512,7 @@ if (not CurrentTeam^.ExtDriven) and bShowAmmoMenu then
 with CurrentHedgehog^.Gear^,
     CurrentHedgehog^ do
     if (State and gstChooseTarget) <> 0 then
+        if ((((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackInMove) <> 0) or ((State and gstMoving) = 0)) or ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) = 0)) then
         begin
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoTargetAfter) <> 0 then
             isCursorVisible:= false;
@@ -543,6 +544,8 @@ with CurrentHedgehog^.Gear^,
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
         end
+        else
+            PlaySound(sndDenied)
     else
         if CurrentTeam^.ExtDriven then
             OutError('Got /put while not being in choose target mode', false)

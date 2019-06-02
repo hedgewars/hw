@@ -1441,6 +1441,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_NeedTarget or
                           ammoprop_AttackingPut or
+                          ammoprop_AttackInMove or
                           ammoprop_Utility or
                           ammoprop_DontHold;
                 Count: 2;
