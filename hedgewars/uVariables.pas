@@ -1006,6 +1006,7 @@ const
                           ammoprop_NoTargetAfter or
                           ammoprop_NoWrapTarget or
                           ammoprop_DontHold or
+                          ammoprop_AltUse or
                           ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
