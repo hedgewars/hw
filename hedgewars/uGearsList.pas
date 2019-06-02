@@ -395,7 +395,7 @@ case Kind of
                 gear^.State:= Gear^.State or gstSubmersible
                 end;
    gtSeduction: begin
-                gear^.Radius:= 250;
+                gear^.Radius:= cSeductionDist;
                 end;
  gtShotgunShot: begin
                 if gear^.Timer = 0 then gear^.Timer:= 900;
@@ -717,7 +717,7 @@ gtFlamethrower: begin
                 gear^.Tint:= $C0C000C0
                 end;
  gtResurrector: begin
-                gear^.Radius := 100;
+                gear^.Radius := cResurrectorDist;
                 gear^.Tag := 0;
                 gear^.Tint:= $F5DB35FF
                 end;

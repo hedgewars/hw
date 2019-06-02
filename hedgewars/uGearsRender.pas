@@ -840,7 +840,7 @@ begin
                 amSeduction: if ((Gear^.State and gstMoving) = 0) then
                              begin
                              DrawSpriteRotated(sprHandSeduction, hx, hy, sign, aangle);
-                             DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA);
+                             DrawCircle(ox, oy, cSeductionDist - 2, 4, $FF, $00, $00, $AA);
                              end;
                 amVampiric: DrawSpriteRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amRubber,
@@ -886,7 +886,7 @@ begin
                 amLandGun: DrawSpriteRotated(sprHandLandGun, hx, hy, sign, aangle);
                 amIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                 amResurrector: if ((Gear^.State and gstMoving) = 0) then
-                    DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
+                    DrawCircle(ox, oy, cResurrectorDist - 2, 4, $F5, $DB, $35, $AA);
                 amFirePunch: DrawSpriteRotatedF(sprFirePunch, hx + 6 * sign + 1, hy - 5, (RealTicks div 50) mod 16, sign, 0);
             end;
 

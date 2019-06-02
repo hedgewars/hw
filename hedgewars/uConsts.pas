@@ -214,6 +214,8 @@ const
     cFontPadding = 2 * HDPIScaleFactor;
 
     cDefaultBuildMaxDist = 256; // default max. building distance with girder/rubber
+    cResurrectorDist = 100; // effect distance of resurrector
+    cSeductionDist = 250; // effect distance of seduction
 
     ExtraTime = 30000; // amount of time (ms) given for using Extra Time
 
