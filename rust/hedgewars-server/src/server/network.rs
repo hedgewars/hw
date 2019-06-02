@@ -25,7 +25,7 @@ use crate::{
 };
 
 #[cfg(feature = "official-server")]
-use super::io::{IOThread, RequestId};
+use super::io::{IoThread, RequestId};
 
 use crate::{
     handlers::{IoResult, IoTask},
@@ -251,7 +251,7 @@ struct ServerSsl {
 pub struct IoLayer {
     next_request_id: RequestId,
     request_queue: Vec<(RequestId, ClientId)>,
-    io_thread: IOThread,
+    io_thread: IoThread,
 }
 
 #[cfg(feature = "official-server")]
@@ -260,7 +260,7 @@ impl IoLayer {
         Self {
             next_request_id: 0,
             request_queue: vec![],
-            io_thread: IOThread::new(),
+            io_thread: IoThread::new(),
         }
     }
 
