@@ -173,17 +173,32 @@ pub fn global_chat(msg: String) -> HwServerMessage {
 
 impl ServerVar {
     pub fn to_protocol(&self) -> Vec<String> {
+        use ServerVar::*;
         match self {
-            ServerVar::MOTDNew(s) => vec!["MOTD_NEW".to_string(), s.clone()],
-            ServerVar::MOTDOld(s) => vec!["MOTD_OLD".to_string(), s.clone()],
-            ServerVar::LatestProto(n) => vec!["LATEST_PROTO".to_string(), n.to_string()],
+            MOTDNew(s) => vec!["MOTD_NEW".to_string(), s.clone()],
+            MOTDOld(s) => vec!["MOTD_OLD".to_string(), s.clone()],
+            LatestProto(n) => vec!["LATEST_PROTO".to_string(), n.to_string()],
+        }
+    }
+}
+
+impl VoteType {
+    pub fn to_protocol(&self) -> Vec<String> {
+        use VoteType::*;
+        match self {
+            Kick(nick) => vec!["KICK".to_string(), nick.clone()],
+            Map(None) => vec!["MAP".to_string()],
+            Map(Some(name)) => vec!["MAP".to_string(), name.clone()],
+            Pause => vec!["PAUSE".to_string()],
+            NewSeed => vec!["NEWSEED".to_string()],
+            HedgehogsPerTeam(count) => vec!["HEDGEHOGS".to_string(), count.to_string()],
         }
     }
 }
 
 impl GameCfg {
     pub fn to_protocol(&self) -> (String, Vec<String>) {
-        use crate::core::types::GameCfg::*;
+        use GameCfg::*;
         match self {
             FeatureSize(s) => ("FEATURE_SIZE".to_string(), vec![s.to_string()]),
             MapType(t) => ("MAP".to_string(), vec![t.to_string()]),
@@ -325,7 +340,6 @@ impl HwProtocolMessage {
             StartGame => msg!["START_GAME"],
             EngineMessage(msg) => msg!["EM", msg],
             RoundFinished => msg!["ROUNDFINISHED"],
-            ReplayStart => msg!["REPLAY_START"],
             ToggleRestrictJoin => msg!["TOGGLE_RESTRICT_JOINS"],
             ToggleRestrictTeams => msg!["TOGGLE_RESTRICT_TEAMS"],
             ToggleRegisteredOnly => msg!["TOGGLE_REGISTERED_ONLY"],
@@ -337,7 +351,10 @@ impl HwProtocolMessage {
             Unfix => msg!["CMD", "UNFIX"],
             Greeting(None) => msg!["CMD", "GREETING"],
             Greeting(Some(msg)) => msg!["CMD", format!("GREETING {}", msg)],
-            //CallVote(Option<(String, Option<String>)>) =>, ??
+            CallVote(None) => msg!["CMD", "CALLVOTE"],
+            CallVote(Some(vote)) => {
+                msg!["CMD", format!("CALLVOTE {}", &vote.to_protocol().join(" "))]
+            }
             Vote(msg) => msg!["CMD", format!("VOTE {}", if *msg { "YES" } else { "NO" })],
             ForceVote(msg) => msg!["CMD", format!("FORCE {}", if *msg { "YES" } else { "NO" })],
             Save(name, location) => msg!["CMD", format!("SAVE {} {}", name, location)],
@@ -400,6 +417,7 @@ impl HwServerMessage {
             Notice(msg) => msg!["NOTICE", msg],
             Warning(msg) => msg!["WARNING", msg],
             Error(msg) => msg!["ERROR", msg],
+            ReplayStart => msg!["REPLAY_START"],
 
             LegacyReady(is_ready, nicks) => {
                 construct_message(&[if *is_ready { "READY" } else { "NOT_READY" }], &nicks)

@@ -277,7 +277,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             |i| cmdc_single_arg(i, "FORCE", yes_no_line, ForceVote),
             |i| cmdc_single_arg(i, "INFO", a_line, Info),
             |i| cmdc_single_arg(i, "MAXTEAMS", u8_line, MaxTeams),
-            |i| cmdc_single_arg(i, "CALLVOTE", |i| opt!(i, voting), CallVote),
+            |i| cmdc_single_arg(i, "CALLVOTE", voting, |v| CallVote(Some(v))),
         ))(input)
     }
 
@@ -287,6 +287,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         alt((
             cmd_no_arg_message,
             cmd_single_arg_message,
+            |i| tag_no_case("CALLVOTE")(i).map(|(i, _)| (i, CallVote(None))),
             |i| {
                 precededc(i, hw_tag_no_case("GREETING"), opt_space_arg)
                     .map(|(i, s)| (i, Greeting(s)))
@@ -560,15 +561,12 @@ pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     )
 }
 
-fn extract_messages(input: &[u8]) -> HwResult<Vec<HwProtocolMessage>> {
-    many0(message)(input)
-}
-
 #[cfg(test)]
 mod test {
-    use super::{extract_messages, message};
-    use crate::protocol::parser::HwProtocolError;
-    use crate::protocol::{messages::HwProtocolMessage::*, test::gen_proto_msg};
+    use super::message;
+    use crate::protocol::{
+        messages::HwProtocolMessage::*, parser::HwProtocolError, test::gen_proto_msg,
+    };
     use proptest::{proptest, proptest_helper};
 
     #[cfg(test)]
@@ -618,15 +616,6 @@ mod test {
         assert_eq!(
             message(b"QUIT\n1\n2\n\n"),
             Err(nom::Err::Error(HwProtocolError::new()))
-        );
-
-        assert_eq!(
-            extract_messages(b"\n\n\n\nPING\n\n"),
-            Ok((&b""[..], vec![Ping]))
-        );
-        assert_eq!(
-            extract_messages(b"\n\n\nPING\n\n"),
-            Ok((&b""[..], vec![Ping]))
         );
     }
 }
