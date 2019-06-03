@@ -200,6 +200,7 @@ pub fn handle(
 ) {
     match message {
         HwProtocolMessage::Ping => response.add(Pong.send_self()),
+        HwProtocolMessage::Pong => (),
         _ => {
             if server.anteroom.clients.contains(client_id) {
                 match inanteroom::handle(server, client_id, response, message) {
