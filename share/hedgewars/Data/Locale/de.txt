@@ -414,7 +414,7 @@
 02:05=Frisches Pflaster!
 02:05=Frische Bandagen!
 02:05=Damit wirst du dich besser fühlen
-02:05=Ein Hallo-Trank! Upps, falsches Spiel
+02:05=Ein Heiltrank! Upps, falsches Spiel
 02:05=Zugreifen!
 02:05=Ein gesunder Snack
 02:05=Ein Mittel, um Schmerzen zu lindern
@@ -541,10 +541,9 @@
 02:06=Lasst nicht zu, dass der Feind sie sich holt!
 02:06=Schönes neues Spielzeug!
 02:06=Eine geheimnisvolle Kiste!
-02:06=Ein eckiges Ü-Ei!
+02:06=Eine eckige Überraschung!
 02:06=Die Holzkiste der Pandora!
 02:06=Willst du mit mir spielen?
-02:06=Quadratisch, praktisch, … gefährlich?
 02:06=Diese Kiste bringt Bombenstimmung!
 02:06=Damit kann man dem Feind so richtig einheizen
 02:06=Jetzt geht die Party erst richtig los!
@@ -632,7 +631,7 @@
 02:06=Ich hab gehört, ihr wollt Waffen …
 02:06=Zerstörerische Lieferung!
 02:06=Es ist Zeit, ihnen eine Lektion zu erteilen!
-02:06=Die Chance, um deinen geheimen Plan in die Tat umzusetzen
+02:06=Die Chance, um deinen geheimen Plan umzusetzen
 02:06=Das ist die Chance!
 02:06=Aufsammeln oder in die Luft jagen?
 02:06=Ist das die ultimative Waffe?
@@ -678,7 +677,6 @@
 02:07=Heimwerker atmen auf!
 02:07=Schaffe, schaffe, Häusle baue
 02:07=Werkzeuge kann man immer gebrauchen
-02:07=Auf diese Kisten können Sie bauen
 02:07=Ein Geschenk der Techniker!
 02:07=Strategen freuen sich!
 02:07=Dies könnte deine Mobilität wiederherstellen …

@@ -390,7 +390,7 @@
 02:05=The doctor calls
 02:05=Fresh band-aids!
 02:05=This will make you feel better
-02:05=A Hi-Potion! Whoops, wrong game
+02:05=A potion of healing! Whoops, wrong game
 02:05=A pick-me-up!
 02:05=Grab it
 02:05=A healthy snack
