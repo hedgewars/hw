@@ -4,7 +4,7 @@ use proptest::{
     test_runner::{Reason, TestRunner},
 };
 
-use crate::core::types::{GameCfg, HedgehogInfo, ServerVar, ServerVar::*, TeamInfo};
+use crate::core::types::{GameCfg, HedgehogInfo, ServerVar, ServerVar::*, TeamInfo, VoteType};
 
 use super::messages::{HwProtocolMessage, HwProtocolMessage::*};
 
@@ -166,6 +166,28 @@ impl Arbitrary for ServerVar {
     type Strategy = BoxedStrategy<ServerVar>;
 }
 
+impl Arbitrary for VoteType {
+    type Parameters = ();
+
+    fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+        use VoteType::*;
+        (0..=4)
+            .no_shrink()
+            .prop_flat_map(|i| {
+                proto_msg_match!(i, def = VoteType::Pause,
+                    0 => Kick(Ascii),
+                    1 => Map(Option<Ascii>),
+                    2 => Pause(),
+                    3 => NewSeed(),
+                    4 => HedgehogsPerTeam(u8)
+                )
+            })
+            .boxed()
+    }
+
+    type Strategy = BoxedStrategy<VoteType>;
+}
+
 pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
     let res = (0..=55).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Ping,
@@ -217,7 +239,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
             46 => Fix(),
             47 => Unfix(),
             48 => Greeting(Option<Ascii>),
-            //49 => CallVote(Option<(String, Option<String>)>),
+            49 => CallVote(Option<VoteType>),
             50 => Vote(bool),
             51 => ForceVote(bool),
             52 => Save(Ascii, Ascii),
