@@ -330,6 +330,7 @@ case Kind of
                              ((GetRandom(90)+128) shl 16) or
                              (($d5+c) shl 8) or $ff}
                 end;
+   gtParachute: gear^.Z:= cCurrHHZ;
        gtShell: begin
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_8;
