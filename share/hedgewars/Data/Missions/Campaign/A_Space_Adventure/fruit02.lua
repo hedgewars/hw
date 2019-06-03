@@ -264,8 +264,12 @@ function onNewTurn()
 		SkipTurn()
 	elseif (not inBattle) and GetHogTeamName(CurrentHedgehog) == teamA.name then
 		if CurrentHedgehog ~= hero.gear then
+			-- FIXME: This screw up the selected weapon caption, as
+			-- SwitchHog does not update the selected display caption
 			AnimSwitchHog(hero.gear)
 		end
+		-- Workaround: Add a caption that overwrites the displayed weapon display
+		AddCaption(loc("Let's go!"), capcolDefault, capgrpAmmoinfo)
 		SetTurnTimeLeft(MAX_TURN_TIME)
 		wind()
 	elseif inBattle then
