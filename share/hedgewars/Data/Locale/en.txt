@@ -1,5 +1,6 @@
 ; English locale
 
+; Weapon names
 00:00=Grenade
 00:01=Cluster Bomb
 00:02=Bazooka
@@ -13,6 +14,7 @@
 00:10=Dynamite
 00:11=Baseball Bat
 00:12=Shoryuken
+; Short for “second” (unit of time)
 00:13=sec
 00:14=Parachute
 00:15=Air Attack
@@ -62,6 +64,7 @@
 00:59=Creeper
 00:60=Minigun
 
+; Game messages and HUD texts
 01:00=Loading …
 01:01=Round draw
 01:02=%1 wins!
@@ -77,6 +80,7 @@
 01:12=Last round till Sudden Death!
 01:13=%1 rounds till Sudden Death!
 01:14=Get ready, %1!
+; Bounciness adjectives
 01:15=Slight
 01:16=Low
 01:17=Normal
@@ -1147,7 +1151,7 @@
 02:17=%1 has been checkmated
 02:17=%1 is dead, long live %1!
 
-; Weapon Categories
+; Weapon categories/subcaptions
 03:00=Timed grenade
 03:01=Timed grenade
 03:02=Ballistic weapon
@@ -1211,7 +1215,7 @@
 03:59=Incomplete weapon
 03:60=The ultimate firearm
 
-; Weapon Descriptions (use | as line breaks)
+; Weapon descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Precise + 1-5: Set bounce strength|Attack: Hold to throw with more power
 04:01=Attack your enemies using a cluster bomb.|It will split into smaller bombs once its timer|reaches zero.|1-5: Set cluster bomb's timer|Precise + 1-5: Set bounce strength|Attack: Hold to throw with more power
 04:02=Attack your enemies using a ballistic projectile|that might be influenced by wind.|Attack: Hold to shoot with more power
