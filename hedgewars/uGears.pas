@@ -958,7 +958,7 @@ until n = 0;
 end;
 
 procedure AssignHHCoords;
-var i, t, p, j: LongInt;
+var i, t, p, j, x, y: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PHedgehog;
     Count: Longword;
     divide, sectionDivide: boolean;
@@ -1059,13 +1059,15 @@ for p:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
                     begin
-                    ForcePlaceOnLand(hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2, 
-                                     hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
-                                     sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
-                    Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
+                    x:= hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2;
+                    y:= hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2;
+                    x:= max(min(x, RightX - SpritesData[sprTargetBee].Width), LeftX);
+                    y:= max(y, TopY);
+                    ForcePlaceOnLand(x, y, sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
+                    Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - (SpritesData[sprTargetBee].Height div 2) - Gear^.Radius);
                     AddCI(Gear);
                     Gear^.State:= Gear^.State and (not gsttmpFlag);
-                    AddFileLog('Placed flower for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
+                    AddFileLog('Placed flower for hog at coordinates (' + inttostr(x) + ',' + inttostr(y) + ')')
                     end;
 
 
