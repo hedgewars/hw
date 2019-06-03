@@ -612,8 +612,8 @@ pub fn end_game(server: &mut HwServer, room_id: RoomId, response: &mut Response)
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::handlers::actions::PendingMessage;
     use crate::protocol::messages::HwServerMessage::ChatMsg;
-    use crate::server::actions::PendingMessage;
 
     fn reply2string(r: HwServerMessage) -> String {
         match r {

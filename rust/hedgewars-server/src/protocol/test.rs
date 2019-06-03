@@ -216,7 +216,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
             45 => MaxTeams(u8),
             46 => Fix(),
             47 => Unfix(),
-            48 => Greeting(Ascii),
+            48 => Greeting(Option<Ascii>),
             //49 => CallVote(Option<(String, Option<String>)>),
             50 => Vote(bool),
             51 => ForceVote(bool),

@@ -273,7 +273,6 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             |i| cmdc_single_arg(i, "LOADROOM", a_line, LoadRoom),
             |i| cmdc_single_arg(i, "GLOBAL", a_line, Global),
             |i| cmdc_single_arg(i, "WATCH", u32_line, Watch),
-            |i| cmdc_single_arg(i, "GREETING", a_line, Greeting),
             |i| cmdc_single_arg(i, "VOTE", yes_no_line, Vote),
             |i| cmdc_single_arg(i, "FORCE", yes_no_line, ForceVote),
             |i| cmdc_single_arg(i, "INFO", a_line, Info),
@@ -288,6 +287,10 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         alt((
             cmd_no_arg_message,
             cmd_single_arg_message,
+            |i| {
+                precededc(i, hw_tag_no_case("GREETING"), opt_space_arg)
+                    .map(|(i, s)| (i, Greeting(s)))
+            },
             |i| precededc(i, hw_tag_no_case("PART"), opt_space_arg).map(|(i, s)| (i, Part(s))),
             |i| precededc(i, hw_tag_no_case("QUIT"), opt_space_arg).map(|(i, s)| (i, Quit(s))),
             |i| {

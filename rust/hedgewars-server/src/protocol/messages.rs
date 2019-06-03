@@ -54,7 +54,7 @@ pub enum HwProtocolMessage {
     MaxTeams(u8),
     Fix,
     Unfix,
-    Greeting(String),
+    Greeting(Option<String>),
     CallVote(Option<VoteType>),
     Vote(bool),
     ForceVote(bool),
@@ -335,7 +335,8 @@ impl HwProtocolMessage {
             MaxTeams(count) => msg!["CMD", format!("MAXTEAMS {}", count)],
             Fix => msg!["CMD", "FIX"],
             Unfix => msg!["CMD", "UNFIX"],
-            Greeting(msg) => msg!["CMD", format!("GREETING {}", msg)],
+            Greeting(None) => msg!["CMD", "GREETING"],
+            Greeting(Some(msg)) => msg!["CMD", format!("GREETING {}", msg)],
             //CallVote(Option<(String, Option<String>)>) =>, ??
             Vote(msg) => msg!["CMD", format!("VOTE {}", if *msg { "YES" } else { "NO" })],
             ForceVote(msg) => msg!["CMD", format!("FORCE {}", if *msg { "YES" } else { "NO" })],

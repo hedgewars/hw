@@ -159,7 +159,7 @@ pub fn handle(
         }
         Greeting(text) => {
             if client.is_admin() || client.is_master() && !room.is_fixed() {
-                room.greeting = text;
+                room.greeting = text.unwrap_or(String::new());
             }
         }
         MaxTeams(count) => {
