@@ -69,7 +69,7 @@ impl Database {
                 let server_hash = get_hash(protocol, &password, &server_salt, &client_salt);
                 password.replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
 
-                if password_hash == client_hash {
+                if password_hash == format!("{:x}", client_hash) {
                     Ok(Some(AccountInfo {
                         is_registered: true,
                         is_admin: is_admin == 1,
@@ -80,12 +80,7 @@ impl Database {
                     Ok(None)
                 }
             } else {
-                Ok(Some(AccountInfo {
-                    is_registered: false,
-                    is_admin: false,
-                    is_contributor: false,
-                    server_hash: Sha1Digest::new([0; 20]),
-                }))
+                Ok(None)
             }
         } else {
             Err(DriverError::SetupError.into())
