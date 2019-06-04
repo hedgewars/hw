@@ -177,83 +177,76 @@ fn voting(input: &[u8]) -> HwResult<VoteType> {
             preceded(pair(tag_no_case("HEDGEHOGS"), spaces), u8_line),
             VoteType::HedgehogsPerTeam,
         ),
-        map(
-            preceded(tag_no_case("MAP"), opt_space_arg),
-            VoteType::Map,
-        ),
+        map(preceded(tag_no_case("MAP"), opt_space_arg), VoteType::Map),
     ))(input)
 }
 
 fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
-    fn messagec<'a>(
-        input: &'a [u8],
+    fn message<'a>(
         name: &'a str,
         msg: HwProtocolMessage,
-    ) -> HwResult<'a, HwProtocolMessage> {
-        map(tag(name), |_| msg.clone())(input)
+    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage> {
+        move |i| map(tag(name), |_| msg.clone())(i)
     }
 
     alt((
-        |i| messagec(i, "PING", Ping),
-        |i| messagec(i, "PONG", Pong),
-        |i| messagec(i, "LIST", List),
-        |i| messagec(i, "BANLIST", BanList),
-        |i| messagec(i, "GET_SERVER_VAR", GetServerVar),
-        |i| messagec(i, "TOGGLE_READY", ToggleReady),
-        |i| messagec(i, "START_GAME", StartGame),
-        |i| messagec(i, "TOGGLE_RESTRICT_JOINS", ToggleRestrictJoin),
-        |i| messagec(i, "TOGGLE_RESTRICT_TEAMS", ToggleRestrictTeams),
-        |i| messagec(i, "TOGGLE_REGISTERED_ONLY", ToggleRegisteredOnly),
+        message("PING", Ping),
+        message("PONG", Pong),
+        message("LIST", List),
+        message("BANLIST", BanList),
+        message("GET_SERVER_VAR", GetServerVar),
+        message("TOGGLE_READY", ToggleReady),
+        message("START_GAME", StartGame),
+        message("TOGGLE_RESTRICT_JOINS", ToggleRestrictJoin),
+        message("TOGGLE_RESTRICT_TEAMS", ToggleRestrictTeams),
+        message("TOGGLE_REGISTERED_ONLY", ToggleRegisteredOnly),
     ))(input)
 }
 
 fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
-    fn messagec<'a, T, F, G>(
-        input: &'a [u8],
+    fn message<'a, T, F, G>(
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> HwResult<'a, HwProtocolMessage>
+    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage>
     where
         F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> HwProtocolMessage,
     {
-        map(preceded(tag(name), parser), constructor)(input)
+        map(preceded(tag(name), parser), constructor)
     }
 
     alt((
-        |i| messagec(i, "NICK\n", a_line, Nick),
-        |i| messagec(i, "INFO\n", a_line, Info),
-        |i| messagec(i, "CHAT\n", a_line, Chat),
-        |i| messagec(i, "PART", opt_arg, Part),
-        |i| messagec(i, "FOLLOW\n", a_line, Follow),
-        |i| messagec(i, "KICK\n", a_line, Kick),
-        |i| messagec(i, "UNBAN\n", a_line, Unban),
-        |i| messagec(i, "EM\n", a_line, EngineMessage),
-        |i| messagec(i, "TEAMCHAT\n", a_line, TeamChat),
-        |i| messagec(i, "ROOM_NAME\n", a_line, RoomName),
-        |i| messagec(i, "REMOVE_TEAM\n", a_line, RemoveTeam),
-        |i| messagec(i, "ROUNDFINISHED", opt_arg, |_| RoundFinished),
-        |i| messagec(i, "PROTO\n", u16_line, Proto),
-        |i| messagec(i, "QUIT", opt_arg, Quit),
+        message("NICK\n", a_line, Nick),
+        message("INFO\n", a_line, Info),
+        message("CHAT\n", a_line, Chat),
+        message("PART", opt_arg, Part),
+        message("FOLLOW\n", a_line, Follow),
+        message("KICK\n", a_line, Kick),
+        message("UNBAN\n", a_line, Unban),
+        message("EM\n", a_line, EngineMessage),
+        message("TEAMCHAT\n", a_line, TeamChat),
+        message("ROOM_NAME\n", a_line, RoomName),
+        message("REMOVE_TEAM\n", a_line, RemoveTeam),
+        message("ROUNDFINISHED", opt_arg, |_| RoundFinished),
+        message("PROTO\n", u16_line, Proto),
+        message("QUIT", opt_arg, Quit),
     ))(input)
 }
 
 fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
-    fn cmdc_no_arg<'a>(
-        input: &'a [u8],
+    fn cmd_no_arg<'a>(
         name: &'a str,
         msg: HwProtocolMessage,
-    ) -> HwResult<'a, HwProtocolMessage> {
-        map(tag_no_case(name), |_| msg.clone())(input)
+    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage> {
+        move |i| map(tag_no_case(name), |_| msg.clone())(i)
     }
 
-    fn cmdc_single_arg<'a, T, F, G>(
-        input: &'a [u8],
+    fn cmd_single_arg<'a, T, F, G>(
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> HwResult<'a, HwProtocolMessage>
+    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage>
     where
         F: Fn(&'a [u8]) -> HwResult<'a, T>,
         G: Fn(T) -> HwProtocolMessage,
@@ -261,33 +254,33 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         map(
             preceded(pair(tag_no_case(name), spaces), parser),
             constructor,
-        )(input)
+        )
     }
 
     fn cmd_no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         alt((
-            |i| cmdc_no_arg(i, "STATS", Stats),
-            |i| cmdc_no_arg(i, "FIX", Fix),
-            |i| cmdc_no_arg(i, "UNFIX", Unfix),
-            |i| cmdc_no_arg(i, "REGISTERED_ONLY", ToggleServerRegisteredOnly),
-            |i| cmdc_no_arg(i, "SUPER_POWER", SuperPower),
+            cmd_no_arg("STATS", Stats),
+            cmd_no_arg("FIX", Fix),
+            cmd_no_arg("UNFIX", Unfix),
+            cmd_no_arg("REGISTERED_ONLY", ToggleServerRegisteredOnly),
+            cmd_no_arg("SUPER_POWER", SuperPower),
         ))(input)
     }
 
     fn cmd_single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         alt((
-            |i| cmdc_single_arg(i, "RESTART_SERVER", |i| tag("YES")(i), |_| RestartServer),
-            |i| cmdc_single_arg(i, "DELEGATE", a_line, Delegate),
-            |i| cmdc_single_arg(i, "DELETE", a_line, Delete),
-            |i| cmdc_single_arg(i, "SAVEROOM", a_line, SaveRoom),
-            |i| cmdc_single_arg(i, "LOADROOM", a_line, LoadRoom),
-            |i| cmdc_single_arg(i, "GLOBAL", a_line, Global),
-            |i| cmdc_single_arg(i, "WATCH", u32_line, Watch),
-            |i| cmdc_single_arg(i, "VOTE", yes_no_line, Vote),
-            |i| cmdc_single_arg(i, "FORCE", yes_no_line, ForceVote),
-            |i| cmdc_single_arg(i, "INFO", a_line, Info),
-            |i| cmdc_single_arg(i, "MAXTEAMS", u8_line, MaxTeams),
-            |i| cmdc_single_arg(i, "CALLVOTE", voting, |v| CallVote(Some(v))),
+            cmd_single_arg("RESTART_SERVER", |i| tag("YES")(i), |_| RestartServer),
+            cmd_single_arg("DELEGATE", a_line, Delegate),
+            cmd_single_arg("DELETE", a_line, Delete),
+            cmd_single_arg("SAVEROOM", a_line, SaveRoom),
+            cmd_single_arg("LOADROOM", a_line, LoadRoom),
+            cmd_single_arg("GLOBAL", a_line, Global),
+            cmd_single_arg("WATCH", u32_line, Watch),
+            cmd_single_arg("VOTE", yes_no_line, Vote),
+            cmd_single_arg("FORCE", yes_no_line, ForceVote),
+            cmd_single_arg("INFO", a_line, Info),
+            cmd_single_arg("MAXTEAMS", u8_line, MaxTeams),
+            cmd_single_arg("CALLVOTE", voting, |v| CallVote(Some(v))),
         ))(input)
     }
 
@@ -297,10 +290,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             cmd_no_arg_message,
             cmd_single_arg_message,
             map(tag_no_case("CALLVOTE"), |_| CallVote(None)),
-            map(
-                preceded(tag_no_case("GREETING"), opt_space_arg),
-                Greeting,
-            ),
+            map(preceded(tag_no_case("GREETING"), opt_space_arg), Greeting),
             map(preceded(tag_no_case("PART"), opt_space_arg), Part),
             map(preceded(tag_no_case("QUIT"), opt_space_arg), Quit),
             map(
@@ -325,31 +315,30 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
 }
 
 fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
-    fn cfgc_single_arg<'a, T, F, G>(
-        input: &'a [u8],
+    fn cfg_single_arg<'a, T, F, G>(
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> HwResult<'a, GameCfg>
+    ) -> impl Fn(&'a [u8]) -> HwResult<'a, GameCfg>
     where
         F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> GameCfg,
     {
-        map(preceded(pair(tag(name), newline), parser), constructor)(input)
+        map(preceded(pair(tag(name), newline), parser), constructor)
     }
 
     let (i, cfg) = preceded(
         tag("CFG\n"),
         alt((
-            |i| cfgc_single_arg(i, "THEME", a_line, GameCfg::Theme),
-            |i| cfgc_single_arg(i, "SCRIPT", a_line, GameCfg::Script),
-            |i| cfgc_single_arg(i, "MAP", a_line, GameCfg::MapType),
-            |i| cfgc_single_arg(i, "MAPGEN", u32_line, GameCfg::MapGenerator),
-            |i| cfgc_single_arg(i, "MAZE_SIZE", u32_line, GameCfg::MazeSize),
-            |i| cfgc_single_arg(i, "TEMPLATE", u32_line, GameCfg::Template),
-            |i| cfgc_single_arg(i, "FEATURE_SIZE", u32_line, GameCfg::FeatureSize),
-            |i| cfgc_single_arg(i, "SEED", a_line, GameCfg::Seed),
-            |i| cfgc_single_arg(i, "DRAWNMAP", a_line, GameCfg::DrawnMap),
+            cfg_single_arg("THEME", a_line, GameCfg::Theme),
+            cfg_single_arg("SCRIPT", a_line, GameCfg::Script),
+            cfg_single_arg("MAP", a_line, GameCfg::MapType),
+            cfg_single_arg("MAPGEN", u32_line, GameCfg::MapGenerator),
+            cfg_single_arg("MAZE_SIZE", u32_line, GameCfg::MazeSize),
+            cfg_single_arg("TEMPLATE", u32_line, GameCfg::Template),
+            cfg_single_arg("FEATURE_SIZE", u32_line, GameCfg::FeatureSize),
+            cfg_single_arg("SEED", a_line, GameCfg::Seed),
+            cfg_single_arg("DRAWNMAP", a_line, GameCfg::DrawnMap),
             preceded(pair(tag("AMMO"), newline), |i| {
                 let (i, name) = a_line(i)?;
                 let (i, value) = opt_arg(i)?;
