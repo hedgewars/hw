@@ -16,11 +16,16 @@ impl LaggedFibonacciPRNG {
             index: 54,
         };
 
-        for _i in 0..2048 {
-            prng.get_next();
-        }
+        prng.discard(2048);
 
         prng
+    }
+
+    #[inline]
+    pub fn discard(&mut self, count: usize) {
+        for _i in 0..count {
+            self.get_next();
+        }
     }
 
     #[inline]
