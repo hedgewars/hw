@@ -13,7 +13,7 @@ use nom::{
     combinator::{map, peek},
     error::{ErrorKind, ParseError},
     multi::separated_list,
-    sequence::{delimited, pair, preceded, terminated},
+    sequence::{delimited, pair, preceded, terminated, tuple},
     Err, IResult,
 };
 
@@ -148,19 +148,22 @@ fn opt_space_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
 
 fn hedgehog_array(input: &[u8]) -> HwResult<[HedgehogInfo; 8]> {
     fn hedgehog_line(input: &[u8]) -> HwResult<HedgehogInfo> {
-        let (i, name) = terminated(a_line, newline)(input)?;
-        let (i, hat) = a_line(i)?;
-        Ok((i, HedgehogInfo { name, hat }))
+        map(
+            tuple((terminated(a_line, newline), a_line)),
+            |(name, hat)| HedgehogInfo { name, hat },
+        )(input)
     }
 
-    let (i, h1) = terminated(hedgehog_line, newline)(input)?;
-    let (i, h2) = terminated(hedgehog_line, newline)(i)?;
-    let (i, h3) = terminated(hedgehog_line, newline)(i)?;
-    let (i, h4) = terminated(hedgehog_line, newline)(i)?;
-    let (i, h5) = terminated(hedgehog_line, newline)(i)?;
-    let (i, h6) = terminated(hedgehog_line, newline)(i)?;
-    let (i, h7) = terminated(hedgehog_line, newline)(i)?;
-    let (i, h8) = hedgehog_line(i)?;
+    let (i, (h1, h2, h3, h4, h5, h6, h7, h8)) = tuple((
+        terminated(hedgehog_line, newline),
+        terminated(hedgehog_line, newline),
+        terminated(hedgehog_line, newline),
+        terminated(hedgehog_line, newline),
+        terminated(hedgehog_line, newline),
+        terminated(hedgehog_line, newline),
+        terminated(hedgehog_line, newline),
+        hedgehog_line,
+    ))(input)?;
 
     Ok((i, [h1, h2, h3, h4, h5, h6, h7, h8]))
 }
@@ -344,14 +347,19 @@ fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
                 let (i, value) = opt_arg(i)?;
                 Ok((i, GameCfg::Ammo(name, value)))
             }),
-            preceded(pair(tag("SCHEME"), newline), |i| {
-                let (i, name) = a_line(i)?;
-                let (i, values) = alt((
-                    map(peek(end_of_message), |_| None),
-                    map(preceded(newline, separated_list(newline, a_line)), Some),
-                ))(i)?;
-                Ok((i, GameCfg::Scheme(name, values.unwrap_or_default())))
-            }),
+            preceded(
+                pair(tag("SCHEME"), newline),
+                map(
+                    pair(
+                        a_line,
+                        alt((
+                            map(peek(end_of_message), |_| None),
+                            map(preceded(newline, separated_list(newline, a_line)), Some),
+                        )),
+                    ),
+                    |(name, values)| GameCfg::Scheme(name, values.unwrap_or_default()),
+                ),
+            ),
         )),
     )(input)?;
     Ok((i, Cfg(cfg)))
@@ -376,80 +384,107 @@ fn server_var_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
 
 fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     alt((
-        preceded(pair(tag("PASSWORD"), newline), |i| {
-            let (i, pass) = terminated(a_line, newline)(i)?;
-            let (i, salt) = a_line(i)?;
-            Ok((i, Password(pass, salt)))
-        }),
-        preceded(pair(tag("CHECKER"), newline), |i| {
-            let (i, protocol) = terminated(u16_line, newline)(i)?;
-            let (i, name) = terminated(a_line, newline)(i)?;
-            let (i, pass) = a_line(i)?;
-            Ok((i, Checker(protocol, name, pass)))
-        }),
-        preceded(pair(tag("CREATE_ROOM"), newline), |i| {
-            let (i, name) = a_line(i)?;
-            let (i, pass) = opt_arg(i)?;
-            Ok((i, CreateRoom(name, pass)))
-        }),
-        preceded(pair(tag("JOIN_ROOM"), newline), |i| {
-            let (i, name) = a_line(i)?;
-            let (i, pass) = opt_arg(i)?;
-            Ok((i, JoinRoom(name, pass)))
-        }),
-        preceded(pair(tag("ADD_TEAM"), newline), |i| {
-            let (i, name) = terminated(a_line, newline)(i)?;
-            let (i, color) = terminated(u8_line, newline)(i)?;
-            let (i, grave) = terminated(a_line, newline)(i)?;
-            let (i, fort) = terminated(a_line, newline)(i)?;
-            let (i, voice_pack) = terminated(a_line, newline)(i)?;
-            let (i, flag) = terminated(a_line, newline)(i)?;
-            let (i, difficulty) = terminated(u8_line, newline)(i)?;
-            let (i, hedgehogs) = hedgehog_array(i)?;
-            Ok((
-                i,
-                AddTeam(Box::new(TeamInfo {
-                    owner: String::new(),
-                    name,
-                    color,
-                    grave,
-                    fort,
-                    voice_pack,
-                    flag,
-                    difficulty,
-                    hedgehogs,
-                    hedgehogs_number: 0,
-                })),
-            ))
-        }),
-        preceded(pair(tag("HH_NUM"), newline), |i| {
-            let (i, name) = terminated(a_line, newline)(i)?;
-            let (i, count) = u8_line(i)?;
-            Ok((i, SetHedgehogsNumber(name, count)))
-        }),
-        preceded(pair(tag("TEAM_COLOR"), newline), |i| {
-            let (i, name) = terminated(a_line, newline)(i)?;
-            let (i, color) = u8_line(i)?;
-            Ok((i, SetTeamColor(name, color)))
-        }),
-        preceded(pair(tag("BAN"), newline), |i| {
-            let (i, n) = terminated(a_line, newline)(i)?;
-            let (i, r) = terminated(a_line, newline)(i)?;
-            let (i, t) = u32_line(i)?;
-            Ok((i, Ban(n, r, t)))
-        }),
-        preceded(pair(tag("BAN_IP"), newline), |i| {
-            let (i, n) = terminated(a_line, newline)(i)?;
-            let (i, r) = terminated(a_line, newline)(i)?;
-            let (i, t) = u32_line(i)?;
-            Ok((i, BanIP(n, r, t)))
-        }),
-        preceded(pair(tag("BAN_NICK"), newline), |i| {
-            let (i, n) = terminated(a_line, newline)(i)?;
-            let (i, r) = terminated(a_line, newline)(i)?;
-            let (i, t) = u32_line(i)?;
-            Ok((i, BanNick(n, r, t)))
-        }),
+        preceded(
+            pair(tag("PASSWORD"), newline),
+            map(pair(terminated(a_line, newline), a_line), |(pass, salt)| {
+                Password(pass, salt)
+            }),
+        ),
+        preceded(
+            pair(tag("CHECKER"), newline),
+            map(
+                tuple((
+                    terminated(u16_line, newline),
+                    terminated(a_line, newline),
+                    a_line,
+                )),
+                |(protocol, name, pass)| Checker(protocol, name, pass),
+            ),
+        ),
+        preceded(
+            pair(tag("CREATE_ROOM"), newline),
+            map(pair(a_line, opt_arg), |(name, pass)| CreateRoom(name, pass)),
+        ),
+        preceded(
+            pair(tag("JOIN_ROOM"), newline),
+            map(pair(a_line, opt_arg), |(name, pass)| JoinRoom(name, pass)),
+        ),
+        preceded(
+            pair(tag("ADD_TEAM"), newline),
+            map(
+                tuple((
+                    terminated(a_line, newline),
+                    terminated(u8_line, newline),
+                    terminated(a_line, newline),
+                    terminated(a_line, newline),
+                    terminated(a_line, newline),
+                    terminated(a_line, newline),
+                    terminated(u8_line, newline),
+                    hedgehog_array,
+                )),
+                |(name, color, grave, fort, voice_pack, flag, difficulty, hedgehogs)| {
+                    AddTeam(Box::new(TeamInfo {
+                        owner: String::new(),
+                        name,
+                        color,
+                        grave,
+                        fort,
+                        voice_pack,
+                        flag,
+                        difficulty,
+                        hedgehogs,
+                        hedgehogs_number: 0,
+                    }))
+                },
+            ),
+        ),
+        preceded(
+            pair(tag("HH_NUM"), newline),
+            map(
+                pair(terminated(a_line, newline), u8_line),
+                |(name, count)| SetHedgehogsNumber(name, count),
+            ),
+        ),
+        preceded(
+            pair(tag("TEAM_COLOR"), newline),
+            map(
+                pair(terminated(a_line, newline), u8_line),
+                |(name, color)| SetTeamColor(name, color),
+            ),
+        ),
+        preceded(
+            pair(tag("BAN"), newline),
+            map(
+                tuple((
+                    terminated(a_line, newline),
+                    terminated(a_line, newline),
+                    u32_line,
+                )),
+                |(name, reason, time)| Ban(name, reason, time),
+            ),
+        ),
+        preceded(
+            pair(tag("BAN_IP"), newline),
+            map(
+                tuple((
+                    terminated(a_line, newline),
+                    terminated(a_line, newline),
+                    u32_line,
+                )),
+                |(ip, reason, time)| BanIp(ip, reason, time),
+            ),
+        ),
+        preceded(
+            pair(tag("BAN_NICK"), newline),
+            map(
+                tuple((
+                    terminated(a_line, newline),
+                    terminated(a_line, newline),
+                    u32_line,
+                )),
+                |(nick, reason, time)| BanNick(nick, reason, time),
+            ),
+        ),
     ))(input)
 }
 
