@@ -6,7 +6,17 @@
  * For example, a nullary command like PING will be actually sent as `PING\n\n`.
  * A unary command, such as `START_GAME nick` will be actually sent as `START_GAME\nnick\n\n`.
  */
-use nom::*;
+use nom::{
+    branch::alt,
+    bytes::complete::{tag, tag_no_case, take_until, take_while},
+    character::complete::{newline, not_line_ending},
+    combinator::peek,
+    error::{ErrorKind, ParseError},
+    multi::separated_list,
+    sequence::{pairc, precededc, terminatedc},
+    Err, IResult,
+};
+
 use std::{
     num::ParseIntError,
     ops::Range,
@@ -121,7 +131,7 @@ fn yes_no_line(input: &[u8]) -> HwResult<bool> {
 
 fn opt_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
     alt((
-        |i: &'a [u8]| peek!(i, end_of_message).map(|(i, _)| (i, None)),
+        |i| peek(end_of_message)(i).map(|(i, _)| (i, None)),
         |i| precededc(i, hw_tag("\n"), a_line).map(|(i, v)| (i, Some(v))),
     ))(input)
 }
@@ -132,25 +142,25 @@ fn spaces(input: &[u8]) -> HwResult<&[u8]> {
 
 fn opt_space_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
     alt((
-        |i: &'a [u8]| peek!(i, end_of_message).map(|(i, _)| (i, None)),
+        |i| peek(end_of_message)(i).map(|(i, _)| (i, None)),
         |i| precededc(i, spaces, a_line).map(|(i, v)| (i, Some(v))),
     ))(input)
 }
 
 fn hedgehog_array(input: &[u8]) -> HwResult<[HedgehogInfo; 8]> {
     fn hedgehog_line(input: &[u8]) -> HwResult<HedgehogInfo> {
-        let (i, name) = terminatedc(input, a_line, eol)?;
+        let (i, name) = terminatedc(input, a_line, newline)?;
         let (i, hat) = a_line(i)?;
         Ok((i, HedgehogInfo { name, hat }))
     }
 
-    let (i, h1) = terminatedc(input, hedgehog_line, eol)?;
-    let (i, h2) = terminatedc(i, hedgehog_line, eol)?;
-    let (i, h3) = terminatedc(i, hedgehog_line, eol)?;
-    let (i, h4) = terminatedc(i, hedgehog_line, eol)?;
-    let (i, h5) = terminatedc(i, hedgehog_line, eol)?;
-    let (i, h6) = terminatedc(i, hedgehog_line, eol)?;
-    let (i, h7) = terminatedc(i, hedgehog_line, eol)?;
+    let (i, h1) = terminatedc(input, hedgehog_line, newline)?;
+    let (i, h2) = terminatedc(i, hedgehog_line, newline)?;
+    let (i, h3) = terminatedc(i, hedgehog_line, newline)?;
+    let (i, h4) = terminatedc(i, hedgehog_line, newline)?;
+    let (i, h5) = terminatedc(i, hedgehog_line, newline)?;
+    let (i, h6) = terminatedc(i, hedgehog_line, newline)?;
+    let (i, h7) = terminatedc(i, hedgehog_line, newline)?;
     let (i, h8) = hedgehog_line(i)?;
 
     Ok((i, [h1, h2, h3, h4, h5, h6, h7, h8]))
@@ -306,7 +316,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             },
             |i| {
                 let (i, _) = tag_no_case("RND")(i)?;
-                let (i, _) = alt((spaces, |i: &'a [u8]| peek!(i, end_of_message)))(i)?;
+                let (i, _) = alt((spaces, peek(end_of_message)))(i)?;
                 let (i, v) = str_line(i)?;
                 Ok((i, Rnd(v.split_whitespace().map(String::from).collect())))
             },
@@ -325,7 +335,7 @@ fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> GameCfg,
     {
-        precededc(input, |i| terminatedc(i, hw_tag(name), eol), parser)
+        precededc(input, |i| terminatedc(i, hw_tag(name), newline), parser)
             .map(|(i, v)| (i, constructor(v)))
     }
 
@@ -345,7 +355,7 @@ fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             |i| {
                 precededc(
                     i,
-                    |i| terminatedc(i, hw_tag("AMMO"), eol),
+                    |i| terminatedc(i, hw_tag("AMMO"), newline),
                     |i| {
                         let (i, name) = a_line(i)?;
                         let (i, value) = opt_arg(i)?;
@@ -356,13 +366,13 @@ fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             |i| {
                 precededc(
                     i,
-                    |i| terminatedc(i, hw_tag("SCHEME"), eol),
+                    |i| terminatedc(i, hw_tag("SCHEME"), newline),
                     |i| {
                         let (i, name) = a_line(i)?;
                         let (i, values) = alt((
-                            |i: &'a [u8]| peek!(i, end_of_message).map(|(i, _)| (i, None)),
+                            |i| peek(end_of_message)(i).map(|(i, _)| (i, None)),
                             |i| {
-                                precededc(i, eol, |i| separated_list(eol, a_line)(i))
+                                precededc(i, newline, |i| separated_list(newline, a_line)(i))
                                     .map(|(i, v)| (i, Some(v)))
                             },
                         ))(i)?;
@@ -401,9 +411,9 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("PASSWORD"), eol),
+                |i| terminatedc(i, hw_tag("PASSWORD"), newline),
                 |i| {
-                    let (i, pass) = terminatedc(i, a_line, eol)?;
+                    let (i, pass) = terminatedc(i, a_line, newline)?;
                     let (i, salt) = a_line(i)?;
                     Ok((i, Password(pass, salt)))
                 },
@@ -412,10 +422,10 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("CHECKER"), eol),
+                |i| terminatedc(i, hw_tag("CHECKER"), newline),
                 |i| {
-                    let (i, protocol) = terminatedc(i, u16_line, eol)?;
-                    let (i, name) = terminatedc(i, a_line, eol)?;
+                    let (i, protocol) = terminatedc(i, u16_line, newline)?;
+                    let (i, name) = terminatedc(i, a_line, newline)?;
                     let (i, pass) = a_line(i)?;
                     Ok((i, Checker(protocol, name, pass)))
                 },
@@ -424,7 +434,7 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("CREATE_ROOM"), eol),
+                |i| terminatedc(i, hw_tag("CREATE_ROOM"), newline),
                 |i| {
                     let (i, name) = a_line(i)?;
                     let (i, pass) = opt_arg(i)?;
@@ -435,7 +445,7 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("JOIN_ROOM"), eol),
+                |i| terminatedc(i, hw_tag("JOIN_ROOM"), newline),
                 |i| {
                     let (i, name) = a_line(i)?;
                     let (i, pass) = opt_arg(i)?;
@@ -446,15 +456,15 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("ADD_TEAM"), eol),
+                |i| terminatedc(i, hw_tag("ADD_TEAM"), newline),
                 |i| {
-                    let (i, name) = terminatedc(i, a_line, eol)?;
-                    let (i, color) = terminatedc(i, u8_line, eol)?;
-                    let (i, grave) = terminatedc(i, a_line, eol)?;
-                    let (i, fort) = terminatedc(i, a_line, eol)?;
-                    let (i, voice_pack) = terminatedc(i, a_line, eol)?;
-                    let (i, flag) = terminatedc(i, a_line, eol)?;
-                    let (i, difficulty) = terminatedc(i, u8_line, eol)?;
+                    let (i, name) = terminatedc(i, a_line, newline)?;
+                    let (i, color) = terminatedc(i, u8_line, newline)?;
+                    let (i, grave) = terminatedc(i, a_line, newline)?;
+                    let (i, fort) = terminatedc(i, a_line, newline)?;
+                    let (i, voice_pack) = terminatedc(i, a_line, newline)?;
+                    let (i, flag) = terminatedc(i, a_line, newline)?;
+                    let (i, difficulty) = terminatedc(i, u8_line, newline)?;
                     let (i, hedgehogs) = hedgehog_array(i)?;
                     Ok((
                         i,
@@ -477,9 +487,9 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("HH_NUM"), eol),
+                |i| terminatedc(i, hw_tag("HH_NUM"), newline),
                 |i| {
-                    let (i, name) = terminatedc(i, a_line, eol)?;
+                    let (i, name) = terminatedc(i, a_line, newline)?;
                     let (i, count) = u8_line(i)?;
                     Ok((i, SetHedgehogsNumber(name, count)))
                 },
@@ -488,9 +498,9 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("TEAM_COLOR"), eol),
+                |i| terminatedc(i, hw_tag("TEAM_COLOR"), newline),
                 |i| {
-                    let (i, name) = terminatedc(i, a_line, eol)?;
+                    let (i, name) = terminatedc(i, a_line, newline)?;
                     let (i, color) = u8_line(i)?;
                     Ok((i, SetTeamColor(name, color)))
                 },
@@ -499,10 +509,10 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("BAN"), eol),
+                |i| terminatedc(i, hw_tag("BAN"), newline),
                 |i| {
-                    let (i, n) = terminatedc(i, a_line, eol)?;
-                    let (i, r) = terminatedc(i, a_line, eol)?;
+                    let (i, n) = terminatedc(i, a_line, newline)?;
+                    let (i, r) = terminatedc(i, a_line, newline)?;
                     let (i, t) = u32_line(i)?;
                     Ok((i, Ban(n, r, t)))
                 },
@@ -511,10 +521,10 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("BAN_IP"), eol),
+                |i| terminatedc(i, hw_tag("BAN_IP"), newline),
                 |i| {
-                    let (i, n) = terminatedc(i, a_line, eol)?;
-                    let (i, r) = terminatedc(i, a_line, eol)?;
+                    let (i, n) = terminatedc(i, a_line, newline)?;
+                    let (i, r) = terminatedc(i, a_line, newline)?;
                     let (i, t) = u32_line(i)?;
                     Ok((i, BanIP(n, r, t)))
                 },
@@ -523,10 +533,10 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         |i| {
             precededc(
                 i,
-                |i| terminatedc(i, hw_tag("BAN_NICK"), eol),
+                |i| terminatedc(i, hw_tag("BAN_NICK"), newline),
                 |i| {
-                    let (i, n) = terminatedc(i, a_line, eol)?;
-                    let (i, r) = terminatedc(i, a_line, eol)?;
+                    let (i, n) = terminatedc(i, a_line, newline)?;
+                    let (i, r) = terminatedc(i, a_line, newline)?;
                     let (i, t) = u32_line(i)?;
                     Ok((i, BanNick(n, r, t)))
                 },
