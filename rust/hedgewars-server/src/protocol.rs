@@ -1,7 +1,6 @@
 use self::parser::message;
 use log::*;
 use netbuf;
-use nom::{Err, ErrorKind, IResult};
 use std::io::{Read, Result};
 
 pub mod messages;
