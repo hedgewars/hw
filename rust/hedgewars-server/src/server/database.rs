@@ -20,12 +20,12 @@ const STORE_STATS_QUERY: &str = r"INSERT INTO gameserver_stats
 
 const GET_REPLAY_NAME_QUERY: &str = r"SELECT filename FROM achievements WHERE id = :id";
 
-struct ServerStatistics {
+pub struct ServerStatistics {
     rooms: u32,
     players: u32,
 }
 
-struct Achievements {}
+pub struct Achievements {}
 
 pub struct Database {
     pool: Option<mysql::Pool>,
