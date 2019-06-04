@@ -211,7 +211,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
             18 => Rnd(Vec<Ascii>),
             19 => Kick(Ascii),
             20 => Ban(Ascii, Ascii, u32),
-            21 => BanIP(Ascii, Ascii, u32),
+            21 => BanIp(Ascii, Ascii, u32),
             22 => BanNick(Ascii, Ascii, u32),
             23 => BanList(),
             24 => Unban(Ascii),

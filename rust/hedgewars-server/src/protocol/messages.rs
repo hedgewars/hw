@@ -26,7 +26,7 @@ pub enum HwProtocolMessage {
     Rnd(Vec<String>),
     Kick(String),
     Ban(String, String, u32),
-    BanIP(String, String, u32),
+    BanIp(String, String, u32),
     BanNick(String, String, u32),
     BanList,
     Unban(String),
@@ -304,7 +304,7 @@ impl HwProtocolMessage {
             }
             Kick(name) => msg!["KICK", name],
             Ban(name, reason, time) => msg!["BAN", name, reason, time],
-            BanIP(ip, reason, time) => msg!["BAN_IP", ip, reason, time],
+            BanIp(ip, reason, time) => msg!["BAN_IP", ip, reason, time],
             BanNick(nick, reason, time) => msg!("BAN_NICK", nick, reason, time),
             BanList => msg!["BANLIST"],
             Unban(name) => msg!["UNBAN", name],
