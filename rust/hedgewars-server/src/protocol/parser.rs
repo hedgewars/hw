@@ -84,8 +84,12 @@ where
 }
 
 fn str_line(input: &[u8]) -> HwResult<&str> {
-    let (i, text) = not_line_ending(input)?;
-    Ok((i, convert_utf8(text)?.1))
+    let (i, text) = not_line_ending(input.clone())?;
+    if i != input {
+        Ok((i, convert_utf8(text)?.1))
+    } else {
+        Err(Err::Error(HwProtocolError::new()))
+    }
 }
 
 fn a_line(input: &[u8]) -> HwResult<String> {
@@ -103,8 +107,12 @@ fn hw_tag_no_case<'a>(tag_str: &'a str) -> impl Fn(&'a [u8]) -> HwResult<'a, ()>
 
 fn cmd_arg(input: &[u8]) -> HwResult<String> {
     let delimiters = b" \n";
-    let (i, str) = take_while(move |c| !delimiters.contains(&c))(input)?;
-    Ok((i, convert_utf8(str)?.1.to_string()))
+    let (i, str) = take_while(move |c| !delimiters.contains(&c))(input.clone())?;
+    if i != input {
+        Ok((i, convert_utf8(str)?.1.to_string()))
+    } else {
+        Err(Err::Error(HwProtocolError::new()))
+    }
 }
 
 fn u8_line(input: &[u8]) -> HwResult<u8> {
@@ -316,9 +324,15 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             },
             |i| {
                 let (i, _) = tag_no_case("RND")(i)?;
-                let (i, _) = alt((spaces, peek(end_of_message)))(i)?;
-                let (i, v) = str_line(i)?;
-                Ok((i, Rnd(v.split_whitespace().map(String::from).collect())))
+                let (i, v) = alt((
+                    |i| peek(end_of_message)(i).map(|(i, _)| (i, vec![])),
+                    |i| {
+                        let (i, _) = spaces(i)?;
+                        let (i, v) = separated_list(spaces, cmd_arg)(i)?;
+                        Ok((i, v))
+                    },
+                ))(i)?;
+                Ok((i, Rnd(v)))
             },
         )),
     )
@@ -574,8 +588,9 @@ pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
 #[cfg(test)]
 mod test {
     use super::message;
-    use crate::protocol::{
-        messages::HwProtocolMessage::*, parser::HwProtocolError, test::gen_proto_msg,
+    use crate::{
+        core::types::GameCfg,
+        protocol::{messages::HwProtocolMessage::*, parser::HwProtocolError, test::gen_proto_msg},
     };
     use proptest::{proptest, proptest_helper};
 
@@ -621,6 +636,14 @@ mod test {
         assert_eq!(
             message(b"CMD\nRND A B\n\n"),
             Ok((&b""[..], Rnd(vec![String::from("A"), String::from("B")])))
+        );
+
+        assert_eq!(
+            message(b"CFG\nSCHEME\na\nA\n\n"),
+            Ok((
+                &b""[..],
+                Cfg(GameCfg::Scheme("a".to_string(), vec!["A".to_string()]))
+            ))
         );
 
         assert_eq!(
