@@ -13,7 +13,7 @@ use nom::{
     combinator::{map, peek},
     error::{ErrorKind, ParseError},
     multi::separated_list,
-    sequence::{pair, preceded, terminated},
+    sequence::{delimited, pair, preceded, terminated},
     Err, IResult,
 };
 
@@ -458,19 +458,17 @@ pub fn malformed_message(input: &[u8]) -> HwResult<()> {
 }
 
 pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
-    preceded(
+    delimited(
         take_while(|c| c == b'\n'),
-        terminated(
-            alt((
-                no_arg_message,
-                single_arg_message,
-                cmd_message,
-                config_message,
-                server_var_message,
-                complex_message,
-            )),
-            end_of_message,
-        ),
+        alt((
+            no_arg_message,
+            single_arg_message,
+            cmd_message,
+            config_message,
+            server_var_message,
+            complex_message,
+        )),
+        end_of_message,
     )(input)
 }
 
