@@ -266,6 +266,8 @@ local highSpecialPool = {amExtraDamage, amVampiric}
 
 local kingLinkPerc = 50 -- Percentage of life to share from the team
 
+local teamKingsAlive = {} -- whether the king of each team is still alive
+
 local pointsWepBase = 5 -- Game start points weapons
 local pointsHlpBase = 2 -- Game start points helpers
 local pointsKeepPerc = 80 -- Percentage of points to take to next round
@@ -717,6 +719,7 @@ function setTeamHogs(team)
   if mode == 'king' then
     counter[team]['King'] = 1
     table.insert(group[team], 'King')
+    teamKingsAlive[team] = true
   end
 end
 
@@ -1185,6 +1188,7 @@ function onKingDeath(KingHog)
       end
     end
   end
+  teamKingsAlive[team] = false
 
   -- We don't use DismissTeam, it causes a lot of problems and nasty side-effects.
 
@@ -1323,6 +1327,20 @@ function setupHogTurn(hog)
   addTurnAmmo(hog)
 end
 
+function checkKingAlive(gear)
+  -- This workaround works because in King Mode, we made
+  -- sure only kings can have the crown.
+  if GetHogHat(gear) == 'crown' then
+    teamKingsAlive[getHogInfo(gear, 'team')] = true
+  end
+end
+
+function killLonelyMinion(gear)
+  if teamKingsAlive[getHogInfo(gear, 'team')] == false then
+    SetHealth(gear, 0)
+  end
+end
+
 function onEndTurn()
   if not firstTurnOver then
     firstTurnOver = true
@@ -1349,6 +1367,12 @@ function onEndTurn()
   -- When we are on points mode count remaining weapon/helper points
   if mode == 'points' and GetHealth(CurHog) ~= nil then
     savePoints(CurHog)
+  end
+
+  -- In King Mode, kill all hogs without king in their team
+  if mode == 'king' then
+    runOnGears(checkKingAlive)
+    runOnGears(killLonelyMinion)
   end
 end
 
