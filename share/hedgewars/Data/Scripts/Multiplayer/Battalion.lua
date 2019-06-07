@@ -1747,4 +1747,11 @@ function onGameInit()
   else
     DisableGameFlags(gfPerHogAmmo)
   end
+  if mode ~= 'points' and mode ~= 'highland' and mode ~= 'king' then
+    if GetGameFlag(gfKing) then
+      mode = 'king'
+      modeExplicit = true
+    end
+  end
+  DisableGameFlags(gfKing)
 end
