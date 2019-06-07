@@ -1174,15 +1174,14 @@ function onKingDeath(KingHog)
   local msgColor = getHogInfo(KingHog, 'clanColor')
 
   AddCaption(string.format(loc("The king of %s has died!"), team), capcolDefault, capgrpGameState)
+  SetState(KingHog, gstHHDeath)
 
   -- Kill the rest of the team normally, just like the official King Mode game modifier
   for hog, val in pairs(hogInfo) do
     if getHogInfo(hog, 'team') == team then
       hp = GetHealth(hog)
       if hp ~= nil and hp > 0 then
-        SetState(KingHog, gstHHDeath)
         SetHealth(hog, 0)
-        SetGearValues(hog, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0)
       end
     end
   end
