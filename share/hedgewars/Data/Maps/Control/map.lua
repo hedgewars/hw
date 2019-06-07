@@ -341,6 +341,9 @@ function onGameStart()
 		AddAmmo(hhs[h], amTardis, 0)
 		-- Resurrector is pointless, all hogs are already automatically resurrected.
 		AddAmmo(hhs[h], amResurrector, 0)
+		-- Remove suicidal weapons as they might wipe out the team
+		AddAmmo(hhs[h], amKamikaze, 0)
+		AddAmmo(hhs[h], amPiano, 0)
 	end
 
 	ShowMission(missionName, missionCaption, missionHelp, 0, 0)
