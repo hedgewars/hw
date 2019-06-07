@@ -524,7 +524,7 @@ function onGameStart()
 		fCaptures[i] = 0
 	end
 
-	for h=1, numhhs do
+	for h=0, numhhs-1 do
 		-- Hogs are resurrected for free, so this is pointless
 		AddAmmo(hhs[h], amResurrector, 0)
 		-- Remove suicidal weapons as they might wipe out the team

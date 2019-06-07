@@ -334,7 +334,7 @@ function onGameStart()
 		end
 	end
 
-	for h=1, numhhs do
+	for h=0, numhhs-1 do
 		-- Tardis screws up the game too much, teams might not get killed correctly after victory
 		-- if a hog is still in time-travel.
 		-- This could be fixed, removing the Tardis is just a simple and lazy fix.
