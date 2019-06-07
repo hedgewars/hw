@@ -527,6 +527,9 @@ function onGameStart()
 	for h=1, numhhs do
 		-- Hogs are resurrected for free, so this is pointless
 		AddAmmo(hhs[h], amResurrector, 0)
+		-- Remove suicidal weapons as they might wipe out the team
+		AddAmmo(hhs[h], amKamikaze, 0)
+		AddAmmo(hhs[h], amPiano, 0)
 	end
 
 	updateScores()
