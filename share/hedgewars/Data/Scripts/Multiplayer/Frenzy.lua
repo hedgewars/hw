@@ -11,12 +11,12 @@ local cn = 0
 local frenzyAmmos = {
 	amBazooka,
 	amGrenade,
-	amMolotov,
 	amShotgun,
 	amFirePunch,
 	amMine,
-	amJetpack,
+	amMolotov,
 	amBlowTorch,
+	amJetpack,
 	amTeleport,
 	amLowGravity
 }
