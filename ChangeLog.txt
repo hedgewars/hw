@@ -48,6 +48,7 @@ Styles and schemes:
  * King Mode: Kill resurrected minions if king is not alive
  * HedgeEditor: Fix major FPS drop when there are a lot of objects
  * Control: Fix score failure after using extra time
+ * Frenzy: Fix incorrect ammo slot numbers in ammo menu
 
 A Classic Fairytale:
  + Backstab: Disable utilities before traitor has been dealt with

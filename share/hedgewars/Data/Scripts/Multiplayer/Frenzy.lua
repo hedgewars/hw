@@ -66,6 +66,10 @@ function onGameInit()
 	--WaterRise = 47
 	--HealthDecrease = 0
 
+	for s=1, #frenzyAmmos do
+		SetAmmoSlot(frenzyAmmos[s], s)
+	end
+	SetAmmoSlot(amSkip, 10)
 end
 
 function onGameStart()
