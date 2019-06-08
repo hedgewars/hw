@@ -2931,6 +2931,19 @@ begin
     lc_setammodelay:= 0
 end;
 
+function lc_setammoslot(L : Plua_State) : LongInt; Cdecl;
+var at, slot: LongInt;
+begin
+    if CheckLuaParamCount(L, 2, 'SetAmmoSlot', 'ammoType, slot') then
+        begin
+        at:= Trunc(lua_tonumber(L, 1));
+        slot:= Trunc(lua_tonumber(L, 2));
+        Ammoz[TAmmoType(at)].Slot:= slot - 1;
+        AmmoMenuInvalidated:= true;
+        end;
+    lc_setammoslot:= 0;
+end;
+
 function lc_getrandom(L : Plua_State) : LongInt; Cdecl;
 var m : LongInt;
 begin
@@ -4472,6 +4485,7 @@ lua_register(luaState, _P'AddCaption', @lc_addcaption);
 lua_register(luaState, _P'SetAmmo', @lc_setammo);
 lua_register(luaState, _P'GetAmmo', @lc_getammo);
 lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
+lua_register(luaState, _P'SetAmmoSlot', @lc_setammoslot);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
 lua_register(luaState, _P'PlayMusicSound', @lc_playmusicsound);
 lua_register(luaState, _P'StopMusicSound', @lc_stopmusicsound);
