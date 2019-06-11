@@ -4,7 +4,7 @@ Hedgewars - a turn-based strategy game
 
 Description
 -----------
-This is the funniest and most addictive game you'll ever play—hilarious fun
+Hedgewars is the funniest and most addictive game you'll ever play—hilarious fun
 that you can enjoy anywhere, anytime. **Hedgewars** is a **turn-based strategy
 game** but the real buzz is from watching the **devastation caused by those
 pesky hedgehogs** with those fantastic weapons—sneaky little blighters with
