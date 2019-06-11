@@ -3369,9 +3369,9 @@ begin
         exit
         end;
 
+    HHGear := CurrentHedgehog^.Gear;
     if (Gear^.Message and gmSwitch) <> 0 then
         begin
-        HHGear := CurrentHedgehog^.Gear;
         oldUid:= HHGear^.uid;
         HHGear^.Message := HHGear^.Message and (not gmSwitch);
         Gear^.Message := Gear^.Message and (not gmSwitch);
@@ -3386,9 +3386,10 @@ begin
             switchDir:=  1;
 
         State := HHGear^.State;
-        HHGear^.State := 0;
+        if (HHGear^.State and gstMoving) = 0 then
+            HHGear^.Active := false;
+        HHGear^.State := HHGear^.State and gstMoving;
         HHGear^.Z := cHHZ;
-        HHGear^.Active := false;
         HHGear^.Message:= HHGear^.Message or gmRemoveFromList or gmAddToList;
 
         PlaySound(sndSwitchHog);
@@ -3414,9 +3415,10 @@ begin
         if (switchDir <> 1) then
             HHGear^.Message:= HHGear^.Message or gmPrecise;
         HHGear^.Message:= HHGear^.Message or gmRemoveFromList or gmAddToList;
-        Gear^.X := HHGear^.X;
-        Gear^.Y := HHGear^.Y
         end;
+    doStepHedgehogMoving(HHGear);
+    Gear^.X := HHGear^.X;
+    Gear^.Y := HHGear^.Y
 end;
 
 procedure doStepSwitcher(Gear: PGear);
