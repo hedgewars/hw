@@ -543,6 +543,7 @@ with CurrentHedgehog^.Gear^,
         State:= State and (not gstChooseTarget);
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
+        Message:= Message and (not (gmHJump or gmLJump or gmLeft or gmRight or gmUp or gmDown));
         end
         else
             PlaySound(sndDenied)
