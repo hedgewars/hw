@@ -34,6 +34,7 @@ Gameplay:
  * Fix parachute making hog stuck or fast when bumping into wall while looking other way
  * Add missing winner animation in single missions
  * Fix hog floating when switching to moving hog
+ * Fix jump key not being ignored after placing girder or target
 
 Styles and schemes:
  + The Specialists: Unlock game scheme
