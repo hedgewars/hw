@@ -826,7 +826,7 @@ if hasBorder then
         for x:= LongWord(leftX) to LongWord(rightX) do
             begin
             Land[topY + w, x]:= lfIndestructible;
-            if (x + w) mod 32 < 16 then
+            if (topY + x + w) mod 32 < 16 then
                 c:= AMask
             else
                 c:= AMask or RMask or GMask; // FF00FFFF
