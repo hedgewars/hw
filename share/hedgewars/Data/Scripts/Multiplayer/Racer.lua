@@ -866,6 +866,10 @@ function onNewTurn()
                         loc("Waypoint placement phase"), infoString, -amAirAttack, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
                         SetWeapon(amAirAttack)
+                        -- Bots skip waypoint placement
+                        if GetHogLevel(CurrentHedgehog) ~= 0 then
+                                SkipTurn()
+                        end
                 end
         end
 

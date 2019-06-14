@@ -52,6 +52,8 @@ Styles and schemes:
  * HedgeEditor: Fix major FPS drop when there are a lot of objects
  * Control: Fix score failure after using extra time
  * Frenzy: Fix incorrect ammo slot numbers in ammo menu
+ * Continental supplies: Computer teams now select random continent
+ * WxW, Racer: Computer teams no longer block setup phase
 
 A Classic Fairytale:
  + Backstab: Disable utilities before traitor has been dealt with
