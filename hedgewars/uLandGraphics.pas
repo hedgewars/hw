@@ -161,6 +161,7 @@ end;
 procedure DrawPixelIce(landX, landY, pixelX, pixelY: Longint); inline;
 begin
 if ((Land[landY, landX] and lfIce) <> 0) then exit;
+if (pixelX < LeftX) or (pixelX > RightX) or (pixelY < TopY) then exit;
 if isLandscapeEdge(getPixelWeight(landX, landY)) then
     begin
     if (LandPixels[pixelY, pixelX] and AMask < 255) and (LandPixels[pixelY, pixelX] and AMask > 0) then
