@@ -977,7 +977,7 @@ function PlaceWarn()
 	AddCaption(loc("Please place your hedgehog first!"), msgColorWarn, capgrpMessage2)
 end
 
-function onLJump()
+function AcceptConfiguration()
 	if roundN == 1 then
 		PlaySound(sndPlaced)
 		SetInputMask(0xFFFFFFFF)
@@ -1001,6 +1001,12 @@ function onLJump()
 		end
 		PlaySound(sndYesSir, CurrentHedgehog)
 		FinalizeMenu()
+	end
+end
+
+function onLJump()
+	if roundN == 1 then
+		AcceptConfiguration()
 	elseif roundN == 2 then
 		PlaceWarn()
 	elseif roundN == 100 then
@@ -1363,6 +1369,9 @@ function onNewTurn()
 		UpdateMenu()
 		AddCaption(string.format(loc("%s may choose the rules."), GetHogTeamName(CurrentHedgehog)), msgColorTech, capgrpGameState)
 		HandleStartingStage()
+		if GetHogLevel(CurrentHedgehog) ~= 0 then
+			AcceptConfiguration()
+		end
 	end
 
 end
