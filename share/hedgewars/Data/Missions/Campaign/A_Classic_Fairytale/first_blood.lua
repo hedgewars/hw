@@ -121,12 +121,12 @@ crateNum = {6, 8}
 rope2GirderX = 3245
 rope2GirderY = 1190
 
-stage = 1
+inCrateChallenge = false
 cratesCollected = 0
 chalTries = 0
 targetsDestroyed = 0
 targsWave = 1
-tTime = -1
+tTime = MAX_TURN_TIME
 difficulty = 1
 
 cannibalVisible = false
@@ -582,6 +582,7 @@ function CheckChallengeWon()
 end
 
 function DoChallengeWon()
+  inCrateChallenge = false
   desertCrate = SpawnSupplyCrate(1240, 1212, amDEagle, 100)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(challengeCompletedAnim)
@@ -683,6 +684,7 @@ end
 
 -----------------------------Misc--------------------------------------
 function StartChallenge(time)
+  inCrateChallenge = true
   cratesCollected = 0
   PutCrate(1)
   SetTurnTimeLeft(time)
@@ -710,13 +712,10 @@ function SetChoice()
   ChoiceDialog()
 end
 
-function SetTime(time)
-  SetTurnTimeLeft(time)
-end
-
 function ResetTurnTime()
-  SetTurnTimeLeft(tTime)
-  tTime = -1
+  if inCrateChallenge then
+    SetTurnTimeLeft(tTime)
+  end
 end
 
 function PutCrate(i)
@@ -780,6 +779,7 @@ end
 function onGameStart()
   progress = tonumber(GetCampaignVar("Progress"))
   SetTurnTimeLeft(MAX_TURN_TIME)
+  SetReadyTimeLeft(0)
   FollowGear(youngh)
   local msgSkip
   if INTERFACE == "touch" then
@@ -881,19 +881,30 @@ function onNewTurn()
   end
   SwitchHog(youngh)
   FollowGear(youngh)
-  SetTurnTimeLeft(MAX_TURN_TIME)
+  if inCrateChallenge then
+    ResetTurnTime()
+  else
+    SetTurnTimeLeft(MAX_TURN_TIME)
+    SetReadyTimeLeft(0)
+  end
 end
 
 function onGearDamage(gear, damage)
   if gear == youngh then
     youngdamaged = true
-    tTime = TurnTimeLeft
+    if TurnTimeLeft > 0 then
+      tTime = TurnTimeLeft
+    end
   elseif gear == princess then
     princessDamaged = true
-    tTime = TurnTimeLeft
+    if TurnTimeLeft > 0 then
+      tTime = TurnTimeLeft
+    end
   elseif gear == elderh then
     elderDamaged = true
-    tTime = TurnTimeLeft
+    if TurnTimeLeft > 0 then
+      tTime = TurnTimeLeft
+    end
   elseif gear == cannibal then
     cannibalVisible = true
     cannibalDamaged = true
