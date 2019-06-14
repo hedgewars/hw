@@ -1201,6 +1201,11 @@ function onNewTurn()
 			InitWeaponsMenu(CurrentHedgehog)
 			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=0
 			CS.INIT_TEAMS[GetHogTeamName(CurrentHedgehog)] = 2
+			if GetHogLevel(CurrentHedgehog) ~= 0 then
+				-- Set random continent for bots
+				SetWeapon(amNothing)
+				CS.CONFIRM_CONTINENT_SELECTION=500
+			end
 
 		else
 			--if its not the initialization turn
