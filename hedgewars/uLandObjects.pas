@@ -567,7 +567,7 @@ with Obj do
     begin
     if Maxcnt = 0 then
         exit;
-    x:= 0;
+    x:= leftX;
     repeat
         y:= topY+32; // leave room for a hedgie to teleport in
         repeat
@@ -589,7 +589,7 @@ with Obj do
             inc(y, 3);
         until y >= LAND_HEIGHT - Height;
         inc(x, getrandom(6) + 3)
-    until x >= LAND_WIDTH - Width;
+    until x >= rightX - Width;
     bRes:= cnt <> 0;
     if bRes then
         begin
