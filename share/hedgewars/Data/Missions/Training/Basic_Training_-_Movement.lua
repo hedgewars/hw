@@ -110,6 +110,7 @@ function onGameInit()
 	CaseFreq = 0
 	WaterRise = 0
 	HealthDecrease = 0
+	HealthCaseAmount = 5
 
 	-- DRAW MAP --
 	drawMap()
