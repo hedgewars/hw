@@ -316,6 +316,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             SLQuality = new QSlider(Qt::Horizontal, groupGame);
             SLQuality->setTickPosition(QSlider::TicksBelow);
+            SLQuality->setPageStep(2);
             SLQuality->setMaximum(5);
             SLQuality->setMinimum(0);
             SLQuality->setFixedWidth(150);
