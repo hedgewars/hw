@@ -131,9 +131,9 @@ begin
         end;
 
     if (topY > 0) then
-        EraseLandRectRaw(0, 0, LAND_WIDTH, topY - 1);
+        EraseLandRectRaw(0, 0, LAND_WIDTH, topY);
     if (leftX > 0) then
-        EraseLandRectRaw(0, topY, leftX - 1, LAND_HEIGHT - topY);
+        EraseLandRectRaw(0, topY, leftX, LAND_HEIGHT - topY);
     if (rightX < (LAND_WIDTH - 1)) then
         EraseLandRectRaw(rightX + 1, topY, LAND_WIDTH - (rightX + 1), LAND_HEIGHT - topY);
 end;
