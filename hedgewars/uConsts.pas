@@ -187,6 +187,9 @@ const
 
     cMaxEdgePoints = 32768;
 
+    cBorderWidth = 6; // width of indestructible border
+                      // width of 3 allowed hogs to be knocked through with grenade
+
     cHHRadius = 9; // hedgehog radius
     cHHStepTicks = 29;
 
