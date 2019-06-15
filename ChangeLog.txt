@@ -42,6 +42,7 @@ Styles and schemes:
  + Control, CTF_Blizzard: Display scores in stats screen
  + CTF_Blizzard: Various minor graphical and text improvements
  + Frenzy: Change ammo slots
+ + Continental supplies: Show continent in team bars
  * Balanced Random Weapon: Fix Lua errors after using Time Box
  * Racer: Fix racer ghost not getting reset after a skip
  * Space Invasion: No longer allow to set start shield above shield limit

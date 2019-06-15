@@ -528,6 +528,7 @@ function ShowContinentInfo(continent,time,generalinf)
 	elseif not CS.GAME_STARTED then
 		AddCaption(CS.CONTINENT_INFORMATION[continent][1], GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
 	end
+	SetContinentTeamLabel()
 end
 
 --will show a circle of gears (eye candy)
@@ -1145,6 +1146,16 @@ function onGameInit()
 	SuddenDeathTurns= SuddenDeathTurns+1
 end
 
+function onEndTurn()
+	if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
+	then
+		CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
+		SetContinentWeapons()
+		HideMission()
+	end
+	SetContinentTeamLabel()
+end
+
 --what happen when a turn starts
 function onNewTurn()
 	--will refresh the info on each tab weapon
@@ -1629,6 +1640,10 @@ function ShowContinentLabel(continent)
 	else
 		AddCaption(CS.CONTINENT_INFORMATION[CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]][1], GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
 	end
+end
+
+function SetContinentTeamLabel()
+	SetTeamLabel(GetHogTeamName(CurrentHedgehog), CS.CONTINENT_INFORMATION[CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]][1])
 end
 
 function onGameTick()
