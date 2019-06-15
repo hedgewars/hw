@@ -78,7 +78,7 @@ var AMShiftTargetX, AMShiftTargetY, AMShiftX, AMShiftY, SlotsNum: LongInt;
     timeTexture: PTexture;
     FPS: Longword;
     CountTicks: Longword;
-    prevPoint{, prevTargetPoint}: TPoint;
+    prevPoint: TPoint;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
@@ -107,7 +107,6 @@ const cStereo_Sky           = 0.0500;
       AMTypeMaskX     = $00000001;
       AMTypeMaskY     = $00000002;
       AMTypeMaskAlpha = $00000004;
-      //AMTypeMaskSlide = $00000008;
 
 {$IFDEF MOBILE}
       AMSlotSize = 48;
@@ -238,17 +237,13 @@ if length(g) > 0 then
         // target icon for anything else
         ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 
-//cWaveWidth:= SpritesData[sprWater].Width;
-//cWaveHeight:= SpritesData[sprWater].Height;
 cWaveHeight:= 32;
 
 InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
-//prevTargetPoint.X:= 0;
-//prevTargetPoint.Y:= 0;
-WorldDx:=  -(LongInt(leftX + (playWidth div 2))); // -(LAND_WIDTH div 2);// + cScreenWidth div 2;
+WorldDx:=  -(LongInt(leftX + (playWidth div 2)));
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
 //aligns it to the bottom of the screen, minus the border
@@ -927,10 +922,8 @@ end;
 
 procedure RenderWorldEdge;
 var
-    //VertexBuffer: array [0..3] of TVertex2f;
     tmp, w: LongInt;
     rect: TSDL_Rect;
-    //c1, c2: LongWord; // couple of colours for edges
 begin
 if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
     begin
@@ -962,110 +955,6 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
 
-    (*
-    WARNING: the following render code is outdated and does not work with
-             current Render.pas ! - don't just uncomment without fixing it first
-
-    glDisable(GL_TEXTURE_2D);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    if (WorldEdge = weWrap) or (worldEdge = weBounce) then
-        glColor4ub($00, $00, $00, $40)
-    else
-        begin
-        glEnableClientState(GL_COLOR_ARRAY);
-        glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldFade[0]);
-        end;
-
-    glPushMatrix;
-    glTranslatef(WorldDx, WorldDy, 0);
-
-    VertexBuffer[0].X:= leftX-20;
-    VertexBuffer[0].Y:= -3500;
-    VertexBuffer[1].X:= leftX-20;
-    VertexBuffer[1].Y:= cWaterLine+cVisibleWater;
-    VertexBuffer[2].X:= leftX+30;
-    VertexBuffer[2].Y:= cWaterLine+cVisibleWater;
-    VertexBuffer[3].X:= leftX+30;
-    VertexBuffer[3].Y:= -3500;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    VertexBuffer[0].X:= rightX+20;
-    VertexBuffer[1].X:= rightX+20;
-    VertexBuffer[2].X:= rightX-30;
-    VertexBuffer[3].X:= rightX-30;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldEnd[0]);
-
-    VertexBuffer[0].X:= -5000;
-    VertexBuffer[1].X:= -5000;
-    VertexBuffer[2].X:= leftX-20;
-    VertexBuffer[3].X:= leftX-20;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    VertexBuffer[0].X:= rightX+5000;
-    VertexBuffer[1].X:= rightX+5000;
-    VertexBuffer[2].X:= rightX+20;
-    VertexBuffer[3].X:= rightX+20;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    glPopMatrix;
-    glDisableClientState(GL_COLOR_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-    glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
-    glEnable(GL_TEXTURE_2D);
-
-    // I'd still like to have things happen to the border when a wrap or bounce just occurred, based on a timer
-    if WorldEdge = weBounce then
-        begin
-        // could maybe alternate order of these on a bounce, or maybe drop the outer ones.
-        if LeftImpactTimer mod 2 = 0 then
-            begin
-            c1:= $5454FFFF; c2:= $FFFFFFFF;
-            end
-        else begin
-            c1:= $FFFFFFFF; c2:= $5454FFFF;
-            end;
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 7.0,   c1);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0,   c2);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 3.0,   c1);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 1.0,   c2);
-        if RightImpactTimer mod 2 = 0 then
-            begin
-            c1:= $5454FFFF; c2:= $FFFFFFFF;
-            end
-        else begin
-            c1:= $FFFFFFFF; c2:= $5454FFFF;
-            end;
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 7.0, c1);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, c2);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 3.0, c1);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 1.0, c2)
-        end
-    else if WorldEdge = weWrap then
-        begin
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-RightImpactTimer));
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
-        end
-    else
-        begin
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $2E8B5780);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $2E8B5780)
-        end;
-    if LeftImpactTimer > Lag then dec(LeftImpactTimer,Lag) else LeftImpactTimer:= 0;
-    if RightImpactTimer > Lag then dec(RightImpactTimer,Lag) else RightImpactTimer:= 0
-    *)
     end;
 end;
 
@@ -2204,8 +2093,6 @@ if isCursorVisible then
 amount:= Max(1, round(amount*zoom/2));
 WorldDx:= WorldDx - amount + LongInt(random(1 + amount * 2));
 WorldDy:= WorldDy - amount + LongInt(random(1 + amount * 2));
-//CursorPoint.X:= CursorPoint.X - amount + LongInt(random(1 + amount * 2));
-//CursorPoint.Y:= CursorPoint.Y - amount + LongInt(random(1 + amount * 2))
 end;
 
 
