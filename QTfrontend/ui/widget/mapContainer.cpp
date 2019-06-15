@@ -297,6 +297,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapFeatureSize->setMaximum(25);
     mapFeatureSize->setMinimum(1);
     //mapFeatureSize->setFixedWidth(259);
+    mapFeatureSize->setPageStep(5);
     mapFeatureSize->setValue(m_mapFeatureSize);
     mapFeatureSize->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     bottomLeftLayout->addWidget(mapFeatureSize, 0);
