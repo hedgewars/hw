@@ -1671,7 +1671,7 @@ function onGameTick()
 			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
 			SetContinentWeapons()
 			HideMission()
-			ShowContinentLabel(0)
+			ShowContinentLabel()
 		else
 			ShowContinentLabel()
 		end
