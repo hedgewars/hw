@@ -225,8 +225,10 @@ begin
                     Land[y, x]:= 0;
         end;
 
+    playWidth:= width;
+    playHeight:= height;
     leftX:= 0;
-    rightX:= 4095;
+    rightX:= playWidth - 1;
     topY:= 0;
     hasBorder:= false;
 end;
