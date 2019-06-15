@@ -270,7 +270,7 @@ var xx, yy, newDx, newDy, lx, ly: hwFloat;
     newGear:  PGear;
     CurWeapon: PAmmo;
     usedAmmoType: TAmmoType;
-    altUse: boolean;
+    altUse, faceLeft: boolean;
     elastic: hwFloat;
 begin
 newGear:= nil;
@@ -414,7 +414,10 @@ with Gear^,
                                  PlaySound(sndBaseballBat) // TODO: Only play if something is hit?
                                  end;
                     amParachute: begin
+                                 faceLeft:= IsHogFacingLeft(Gear);
                                  newGear:= AddGear(hwRound(lx), hwRound(ly), gtParachute, 0, _0, _0, 0);
+                                 if faceLeft then
+                                     newGear^.Tag:= -1;
                                  PlaySound(sndParachute)
                                  end;
                     // we save CurWeapon^.Pos (in this case: cursor direction) by using it as (otherwise irrelevant) X value of the new gear.

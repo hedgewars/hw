@@ -662,6 +662,17 @@ begin
                     dec(sy,20);
                     end;
                 gtTeleport: defaultPos:= false;
+                gtParachute:
+                    begin
+                    DrawSpriteRotatedF(sprHHIdle,
+                            sx,
+                            sy,
+                            0,
+                            CurAmmoGear^.Tag,
+                            0);
+                    HatVisible:= true;
+                    defaultPos:= false;
+                    end;
                 gtWhip:
                     begin
                     DrawSpriteRotatedF(sprWhip,

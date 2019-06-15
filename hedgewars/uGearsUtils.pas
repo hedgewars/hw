@@ -1861,7 +1861,9 @@ function IsHogFacingLeft(Gear: PGear): boolean;
 var sign: LongInt;
 begin
     sign:= hwSign(Gear^.dX);
-    if ((Gear^.State and gstHHHJump) <> 0) and (Gear^.Hedgehog^.Effects[heArtillery] = 0) then
+    if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtParachute) then
+        IsHogFacingLeft:= CurAmmoGear^.Tag = -1
+    else if ((Gear^.State and gstHHHJump) <> 0) and (Gear^.Hedgehog^.Effects[heArtillery] = 0) then
         IsHogFacingLeft:= sign > 0
     else
         IsHogFacingLeft:= sign < 0;
