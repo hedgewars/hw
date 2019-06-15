@@ -2985,6 +2985,10 @@ begin
         with HHGear^ do
             begin
             Message := 0;
+            if Gear^.Tag = 1 then
+                dX := _1
+            else
+                dX := - _1;
             SetLittle(dX);
             dY := _0;
             State := State or gstMoving;
