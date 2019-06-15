@@ -51,6 +51,7 @@ function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; d
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean; inline;
 function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; Tint: LongWord; Behind, flipHoriz, flipVert: boolean): boolean; inline;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force, behind, flipHoriz, flipVert: boolean; LandFlags: Word; Tint: LongWord): boolean;
+procedure EraseLandRectRaw(X, Y, width, height: LongWord);
 procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert: boolean);
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
@@ -838,6 +839,17 @@ if Obj = sprAmGirder then
 else if Obj = sprAmRubber then
     ScriptCall('onRubberPlacement', frame, cpX + w div 2, cpY + h div 2);
 
+end;
+
+procedure EraseLandRectRaw(X, Y, width, height: LongWord);
+var tx, ty: LongWord;
+begin
+for ty:= 0 to height - 1 do
+    for tx:= 0 to width - 1 do
+        begin
+        LandPixels[ty, tx]:= 0;
+        Land[Y + ty, X + tx]:= 0;
+        end;
 end;
 
 procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert: boolean);
