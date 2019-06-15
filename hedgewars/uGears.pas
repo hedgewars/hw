@@ -1059,14 +1059,24 @@ for p:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
                     begin
+                    // Get flower position
                     x:= hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2;
                     y:= hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2;
-                    x:= max(min(x, RightX - SpritesData[sprTargetBee].Width), LeftX);
+                    // Calculate offset from map boundaries and border
+                    if hasBorder then
+                        x:= max(min(x, RightX - SpritesData[sprTargetBee].Width) - cBorderWidth, LeftX + cBorderWidth)
+                    else
+                        x:= max(min(x, RightX - SpritesData[sprTargetBee].Width), LeftX);
                     y:= max(y, TopY);
+
+                    // Place flower
                     ForcePlaceOnLand(x, y, sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
+
+                    // Place hog
                     Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - (SpritesData[sprTargetBee].Height div 2) - Gear^.Radius);
                     AddCI(Gear);
                     Gear^.State:= Gear^.State and (not gsttmpFlag);
+
                     AddFileLog('Placed flower for hog at coordinates (' + inttostr(x) + ',' + inttostr(y) + ')')
                     end;
 
