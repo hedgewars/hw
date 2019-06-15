@@ -298,15 +298,16 @@ begin
 
     if GameType = gmtLandPreview then
         cFeatureSize:= 3;
-    ResizeLand((4096 * max(min(cFeatureSize,24),3)) div 12, (2048 * max(min(cFeatureSize,24),3)) div 12);
-    uLandPainted.Draw;
+    playWidth:= (4096 * max(min(cFeatureSize,24),3)) div 12;
+    playHeight:= (2048 * max(min(cFeatureSize,24),3)) div 12;
+    ResizeLand(playWidth, playHeight);
 
     hasGirders:= true;
-    playHeight:= LAND_HEIGHT;
-    playWidth:= LAND_WIDTH;
     leftX:= ((LAND_WIDTH - playWidth) div 2);
     rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
     topY:= LAND_HEIGHT - playHeight;
+
+    uLandPainted.Draw;
 end;
 
 function SelectTemplate: LongInt;
