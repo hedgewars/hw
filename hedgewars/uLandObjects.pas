@@ -619,7 +619,8 @@ end;
 
 function TryPut2(var Obj: TSprayObject; Surface: PSDL_Surface): boolean;
 const MaxPointsIndex = 8095;
-var x, y: Longword;
+var x, y, xStart, yStart: Longword;
+    xWraps, yWraps: Byte;
     ar: array[0..MaxPointsIndex] of TPoint;
     cnt, i: Longword;
     r: TSDL_Rect;
@@ -631,13 +632,20 @@ with Obj do
     begin
     if Maxcnt = 0 then
         exit;
-    x:= 0;
+    xWraps:= 0;
+    yWraps:= 0;
+    // Start at random coordinates
+    xStart:= getrandom(LAND_WIDTH - Width);
+    yStart:= 8 + getrandom(LAND_HEIGHT - Height - 16);
+    x:= xStart;
+    y:= yStart;
     r.x:= 0;
     r.y:= 0;
     r.w:= Width;
     r.h:= Height + 16;
+    // Then iterate through the whole map; this requires we wrap one time per axis
     repeat
-        y:= 8;
+        yWraps:= 0;
         repeat
             if CheckLand(r, x, y - 8, lfBasic)
             and (not CheckIntersect(x, y, Width, Height)) then
@@ -652,9 +660,19 @@ with Obj do
                     else inc(cnt);
                 end;
             inc(y, 12);
-        until y >= LAND_HEIGHT - Height - 8;
-        inc(x, getrandom(12) + 12)
-    until x >= LAND_WIDTH - Width;
+            if (y >= LAND_HEIGHT - Height - 8) or ((yWraps > 0) and (y >= yStart)) then
+                begin
+                inc(yWraps);
+                y:= 8;
+                end;
+        until yWraps > 1;
+        inc(x, getrandom(12) + 12);
+        if (x >= LAND_WIDTH - Width) or ((xWraps > 0) and (x >= xStart)) then
+            begin
+            inc(xWraps);
+            x:= 0;
+            end;
+    until xWraps > 1;
     bRes:= cnt <> 0;
     if bRes then
         begin
