@@ -49,7 +49,6 @@ end;
 
 procedure DrawBorderFromImage(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
-    //r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
     targetMask: Word;
 begin
@@ -269,7 +268,6 @@ begin
         while r.x < LAND_WIDTH do
             begin
             copyToXY(tmpsurf, Surface, r.x, r.y);
-            //SDL_UpperBlit(tmpsurf, nil, Surface, @r);
             inc(r.x, tmpsurf^.w)
             end;
         inc(y, tmpsurf^.h);
@@ -366,7 +364,7 @@ for y:= 0 to LAND_HEIGHT - 1 do
         if (cReducedQuality and rqBlurryLand) = 0 then
             LandPixels[y, x]:= p^[x]// or AMask
         else
-            LandPixels[y div 2, x div 2]:= p^[x];// or AMask;
+            LandPixels[y div 2, x div 2]:= p^[x];
 
     p:= PLongwordArray(@(p^[Surface^.pitch div 4]));
     end;
@@ -782,8 +780,10 @@ else
                     end;
                 end;
 
+// Indestructible map border (top, left, right)
 if hasBorder then
     begin
+    // Make land beyond the border indestructible
     if WorldEdge = weNone then
         begin
         for y:= 0 to LAND_HEIGHT - 1 do
@@ -797,23 +797,26 @@ if hasBorder then
             for x:= 0 to LAND_WIDTH - 1 do
                 Land[y, x]:= lfIndestructible;
         end;
-    // experiment hardcoding cave
-    // also try basing cave dimensions on map/template dimensions, if they exist
-    for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
+    // Render map border
+    for w:= 0 to (cBorderWidth-1) do
         begin
+        // Left and right border
         if (WorldEdge <> weBounce) and (WorldEdge <> weWrap) then
             for y:= LongWord(topY) to LAND_HEIGHT - 1 do
                     begin
+                    // set land flags
                     Land[y, leftX + w]:= lfIndestructible;
                     Land[y, rightX - w]:= lfIndestructible;
+
+                    // paint black and yellow stripes
                     if (y + leftX + w) mod 32 < 16 then
-                        c:= AMask
+                        c:= AMask // black
                     else
-                        c:= AMask or RMask or GMask; // FF00FFFF
+                        c:= AMask or RMask or GMask; // yellow
                     if (y + rightX - w) mod 32 < 16 then
-                        c2:= AMask
+                        c2:= AMask // black
                     else
-                        c2:= AMask or RMask or GMask; // FF00FFFF
+                        c2:= AMask or RMask or GMask; // yellow
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         begin
@@ -827,13 +830,14 @@ if hasBorder then
                         end;
                     end;
 
+        // Top border
         for x:= LongWord(leftX) to LongWord(rightX) do
             begin
             Land[topY + w, x]:= lfIndestructible;
             if (topY + x + w) mod 32 < 16 then
-                c:= AMask
+                c:= AMask // black
             else
-                c:= AMask or RMask or GMask; // FF00FFFF
+                c:= AMask or RMask or GMask; // yellow
 
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[topY + w, x]:= c
@@ -843,6 +847,7 @@ if hasBorder then
         end;
     end;
 
+// Bottom border
 if (GameFlags and gfBottomBorder) <> 0 then
     DrawBottomBorder;
 
