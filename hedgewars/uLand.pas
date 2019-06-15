@@ -285,7 +285,10 @@ end;
 
 procedure GenDrawnMap;
 begin
-    if (cFeatureSize <= 6) then
+    if (cFeatureSize <= 3) then
+        // sizes 1-3 are identical
+        MaxHedgehogs:= 8
+    else if (cFeatureSize <= 6) then
         MaxHedgehogs:= 6 + (cFeatureSize-1) * 2
     else if (cFeatureSize < 11) then
         MaxHedgehogs:= 16 + (cFeatureSize-6) * 4
