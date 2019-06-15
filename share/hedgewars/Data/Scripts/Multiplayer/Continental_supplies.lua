@@ -1643,7 +1643,9 @@ function ShowContinentLabel(continent)
 end
 
 function SetContinentTeamLabel()
-	SetTeamLabel(GetHogTeamName(CurrentHedgehog), CS.CONTINENT_INFORMATION[CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]][1])
+	if not CS.GAME_STARTED then
+		SetTeamLabel(GetHogTeamName(CurrentHedgehog), CS.CONTINENT_INFORMATION[CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]][1])
+	end
 end
 
 function onGameTick()
