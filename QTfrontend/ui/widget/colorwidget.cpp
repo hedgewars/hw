@@ -67,6 +67,7 @@ void ColorWidget::mousePressEvent(QMouseEvent * event)
 
 void ColorWidget::wheelEvent(QWheelEvent *event)
 {
+    event->accept();
     if(event->delta() > 0)
         previousColor();
     else
