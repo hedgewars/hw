@@ -488,6 +488,14 @@ function IsolateNatives()
   end
 end
 
+-- Move camera to (x, y)
+function MoveCameraCustom(x, y)
+   -- We use a dummy gear to feed FollowGear
+   local cameraGear = AddGear(x, y, gtGenericFaller, 0, 0, 0, 5000)
+   SetState(cameraGear, bor(GetState(cameraGear), gstNoGravity+gstInvisible))
+   FollowGear(cameraGear)
+end
+
 function PutCGI()
   AddVisualGear(710, 299, vgtExplosion, 0, false)
   AddVisualGear(690, 299, vgtExplosion, 0, false)
@@ -802,9 +810,12 @@ end
 function SetupWave3DeadAnim()
   table.insert(wave3DeadAnim, {func = AnimTurn, args = {deployedHog, "Left"}})
   table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("That ought to show them!"), SAY_SAY, 4000}})
-  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Guys, do you think there's more of them?"), SAY_SHOUT, 7000}})
+  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Guys, do you think there's more of them?"), SAY_SHOUT, 5000}})
+  table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, MoveCameraCustom, {unpack(nativePos[wiseNum])}}})
   table.insert(wave3DeadAnim, {func = AnimVisualGear, args = {deployedHog, unpack(nativePos[wiseNum]), vgtFeather, 0, true, true}})
-  table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 1000}})
+  table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 1750}})
+  table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, FollowGear, {deployedHog}}})
+  table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 100}})
   table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Where are they?!"), SAY_THINK, 3000}})
   table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, RestoreCyborg, {}}})
   table.insert(wave3DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, 4040, 782}})
