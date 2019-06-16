@@ -1,5 +1,10 @@
 use mio;
-use std::{collections::HashMap, io, io::Write};
+use std::{
+    cmp::PartialEq,
+    collections::HashMap,
+    fmt::{Formatter, LowerHex},
+    iter::Iterator,
+};
 
 use self::{
     actions::{Destination, DestinationGroup, PendingMessage},
@@ -28,8 +33,6 @@ mod inanteroom;
 mod inlobby;
 mod inroom;
 
-use std::fmt::{Formatter, LowerHex};
-
 #[derive(PartialEq, Debug)]
 pub struct Sha1Digest([u8; 20]);
 
@@ -45,6 +48,35 @@ impl LowerHex for Sha1Digest {
             write!(f, "{:02x}", byte)?;
         }
         Ok(())
+    }
+}
+
+impl PartialEq<&str> for Sha1Digest {
+    fn eq(&self, other: &&str) -> bool {
+        if other.len() != self.0.len() * 2 {
+            false
+        } else {
+            #[inline]
+            fn convert(c: u8) -> u8 {
+                if c > b'9' {
+                    c.overflowing_sub(b'a').0.saturating_add(10)
+                } else {
+                    c.overflowing_sub(b'0').0
+                }
+            }
+
+            other
+                .as_bytes()
+                .chunks_exact(2)
+                .zip(&self.0)
+                .all(|(chars, byte)| {
+                    if let [hi, lo] = chars {
+                        convert(*lo) == byte & 0x0f && convert(*hi) == (byte & 0xf0) >> 4
+                    } else {
+                        unreachable!()
+                    }
+                })
+        }
     }
 }
 
@@ -409,5 +441,20 @@ pub fn handle_io_result(
         IoResult::LoadRoom(_, None) => {
             response.add(Warning("Unable to load the room configs.".to_string()).send_self());
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::Sha1Digest;
+
+    #[test]
+    fn hash_cmp_test() {
+        let hash = Sha1Digest([
+            0x37, 0xC4, 0x9F, 0x5C, 0xC3, 0xC9, 0xDB, 0xFC, 0x54, 0xAC, 0x22, 0x04, 0xF6, 0x12,
+            0x9A, 0xED, 0x69, 0xB1, 0xC4, 0x5C,
+        ]);
+
+        assert_eq!(hash, &format!("{:x}", hash)[..]);
     }
 }

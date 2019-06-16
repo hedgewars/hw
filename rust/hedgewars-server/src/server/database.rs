@@ -69,7 +69,7 @@ impl Database {
                 let server_hash = get_hash(protocol, &password, &server_salt, &client_salt);
                 password.replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
 
-                if password_hash == format!("{:x}", client_hash) {
+                if client_hash == password_hash {
                     Ok(Some(AccountInfo {
                         is_registered: true,
                         is_admin: is_admin == 1,
