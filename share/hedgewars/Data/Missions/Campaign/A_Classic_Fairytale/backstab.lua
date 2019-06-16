@@ -788,6 +788,7 @@ function DoWaveDead(index)
 end
 
 function AddWave3DeadAnim()
+  SetSoundMask(sndBoring, true)
   AnimSwitchHog(deployedHog)
   AnimWait(deployedHog, 1)
   AddFunction({func = HideNatives, args = {}})
