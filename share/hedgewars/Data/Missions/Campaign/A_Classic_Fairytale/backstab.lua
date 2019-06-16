@@ -158,7 +158,7 @@ wave3DeadAnim = {}
 
 vCircs = {}
 
-trackedMines = {}
+trackedNonCyborgGears = {}
 -----------------------------Animations--------------------------------
 function Wave2Reaction()
   local i = 1
@@ -938,12 +938,12 @@ function RestoreCyborg()
   if cyborgHidden == true then
     RestoreHog(cyborg)
     cyborgHidden = false
-    -- Clear mines around cyborg
+    -- Clear mines and crates around cyborg
     local vaporized = 0
-    for mine, _ in pairs(trackedMines) do
-       if GetHealth(mine) and GetHealth(cyborg) and gearIsInBox(mine, GetX(cyborg) - 50, GetY(cyborg) - 50, 100, 100) == true then
-          AddVisualGear(GetX(mine), GetY(mine), vgtSmoke, 0, false)
-          DeleteGear(mine)
+    for gear, _ in pairs(trackedNonCyborgGears) do
+       if GetHealth(gear) and GetHealth(cyborg) and gearIsInBox(gear, GetX(cyborg) - 50, GetY(cyborg) - 50, 100, 100) == true then
+          AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
+          DeleteGear(gear)
           vaporized = vaporized + 1
        end
     end
@@ -1098,15 +1098,15 @@ end
 
 function onGearAdd(gear)
   local gt = GetGearType(gear)
-  if gt == gtMine or gt == gtSMine or gt == gtAirMine then
-    trackedMines[gear] = true
+  if gt == gtMine or gt == gtSMine or gt == gtAirMine or gt == gtCase then
+    trackedNonCyborgGears[gear] = true
   end
 end
 
 function onGearDelete(gear)
   local gt = GetGearType(gear)
-  if gt == gtMine or gt == gtSMine or gt == gtAirMine then
-    trackedMines[gear] = nil
+  if gt == gtMine or gt == gtSMine or gt == gtAirMine or gt == gtCase then
+    trackedNonCyborgGears[gear] = nil
   end
 
   for i = 1, 7 do
