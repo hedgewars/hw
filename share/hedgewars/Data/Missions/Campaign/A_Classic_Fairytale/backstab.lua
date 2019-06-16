@@ -83,7 +83,7 @@ nativeHats = {"Rambo", "RobinHood", "pirate_jack", "zoo_Bunny", "IndianChief",
 
 nativePos = {{887, 329}, {1050, 288}, {1731, 707},
              {830, 342}, {1001, 290}, {773, 340},
-             {953, 305}, {347, 648}, {314, 647}}
+             {953, 314}, {347, 648}, {314, 647}}
 
 nativeDir = {"Right", "Left", "Left", 
              "Right", "Left", "Right", 
@@ -105,7 +105,7 @@ cannibalDir = {"Left", "Left", "Left",
 cyborgPos = {1369, 574}
 cyborgPos2 = {1308, 148}
 
-deployedPos = {2522, 1365}
+deployedPos = {2522, 1372}
 -----------------------------Variables---------------------------------
 natives = {}
 nativeDead = {}
@@ -819,7 +819,7 @@ function SetupWave3DeadAnim()
   table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 100}})
   table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Where are they?!"), SAY_THINK, 3000}})
   table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, RestoreCyborg, {}}})
-  table.insert(wave3DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, 4040, 782}})
+  table.insert(wave3DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, 4040, 790}})
   table.insert(wave3DeadAnim, {func = AnimSay, args = {cyborg, loc("These primitive people are so funny!"), SAY_THINK, 6500}})
   table.insert(wave3DeadAnim, {func = AnimMove, args = {cyborg, "Right", 4060, 0, 7000}})
   table.insert(wave3DeadAnim, {func = AnimSwitchHog, args = {deployedHog}})
