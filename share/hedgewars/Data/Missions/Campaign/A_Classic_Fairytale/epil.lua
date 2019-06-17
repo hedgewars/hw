@@ -497,3 +497,8 @@ function onPrecise()
     SetAnimSkip(true)
   end
 end
+
+function onGameResult(winner)
+  AddCaption(loc("Game over!"), capcolDefault, capgrpGameState)
+  SendStat(siGameResult, loc("You have successfully finished the campaign!"))
+end
