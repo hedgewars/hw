@@ -78,6 +78,8 @@ const
 
     capcolDefault         : Longword = $FFFFFFFF; // default caption color
     capcolSetting         : Longword = $FFCCCCCC; // caption color for changing client setting like volume or auto camera
+    capcolDefaultLua      : Longword = $FFFFFFFF; // capcolDefault for Lua
+    capcolSettingLua      : Longword = $CCCCCCFF; // capcolSetting for Lua
 
     cCentralMessageColor  : Longword = $FFFFFF00; // color of message in center of screen like quit or pause
 

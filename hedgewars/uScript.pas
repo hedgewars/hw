@@ -3660,6 +3660,12 @@ begin
     lua_setglobal(luaState, Str2PChar(name));
 end;
 
+procedure ScriptSetLongWord(name : shortstring; value : LongWord);
+begin
+    lua_pushnumber(luaState, value);
+    lua_setglobal(luaState, Str2PChar(name));
+end;
+
 procedure ScriptSetString(name : shortstring; value : shortstring);
 begin
     lua_pushstring(luaState, Str2PChar(value));
@@ -4369,8 +4375,8 @@ for mg:= Low(TMapGen) to High(TMapGen) do
 for we:= Low(TWorldEdge) to High(TWorldEdge) do
     ScriptSetInteger(EnumToStr(we), ord(we));
 
-ScriptSetInteger('capcolDefault'    , capcolDefault);
-ScriptSetInteger('capcolSetting'    , capcolSetting);
+ScriptSetLongWord('capcolDefault'   , capcolDefaultLua);
+ScriptSetLongWord('capcolSetting'   , capcolSettingLua);
 
 ScriptSetInteger('gstDrowning'      , gstDrowning);
 ScriptSetInteger('gstHHDriven'      , gstHHDriven);
