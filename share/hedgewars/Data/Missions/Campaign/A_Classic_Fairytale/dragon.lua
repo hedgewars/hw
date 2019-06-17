@@ -170,7 +170,7 @@ cyborgPos = {745, 1847}
 cyborgsPos = {{2937, 831}, {2945, 1264}, {2335, 1701}, {448, 484}}
 cyborgsDir = {"Left", "Left", "Left", "Right"}
 
-cyborgTeamName, fighterTeamName = nil, nil
+cyborgTeamName, fighterTeamName, nativesTeamName = nil, nil, nil
 
 cratePos = {
             {{788, 1919, amGirder, 2}, true}, {{412, 1615, amGirder, 1}, true},
@@ -639,7 +639,7 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddMissionTeam(-2)
+  nativesTeamName = AddMissionTeam(-2)
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 200, nativeHats[i])
     gearDead[natives[i]] = false
@@ -771,3 +771,12 @@ function onPrecise()
     SetAnimSkip(true)
   end
 end
+
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
+  end
+end
+

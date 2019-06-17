@@ -121,6 +121,7 @@ crateNum = {6, 8}
 rope2GirderX = 3245
 rope2GirderY = 1190
 
+nativesTeamName = nil
 inCrateChallenge = false
 cratesCollected = 0
 chalTries = 0
@@ -756,7 +757,7 @@ function onGameInit()
 	HealthDecrease = 0
 
 
-  AddMissionTeam(-2)
+  nativesTeamName = AddMissionTeam(-2)
   youngh = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   elderh = AddHog(loc("Righteous Beard"), 0, 99, "IndianChief")
   princess = AddHog(loc("Fell From Heaven"), 0, 300, "tiara")
@@ -933,5 +934,13 @@ onRight = onLeft
 function onAttack()
   if difficultyChoice == true then
     DoChoice()
+  end
+end
+
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
   end
 end
