@@ -1192,11 +1192,14 @@ function onNewTurn()
       wave3TurnsLeft = 7
     end
     if wave3TurnsLeft > 0 then
-      AddCaption(string.format(loc("Turns until arrival: %d"), wave3TurnsLeft))
+      -- Workaround for the FIXME below: Use capgrpAmmoinfo to overwrite the incorrect ammo display
+      AddCaption(string.format(loc("Turns until arrival: %d"), wave3TurnsLeft), capcolDefault, capgrpAmmoinfo)
     end
   end
   if deployedHog then
     if GetHogTeamName(CurrentHedgehog) == nativesTeamName then
+      -- FIXME: This screws up the selected weapon caption, as
+      -- this function does not update the selected display caption (workaround above)
       AnimSwitchHog(deployedHog)
     end
   end
