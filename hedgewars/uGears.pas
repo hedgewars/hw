@@ -1064,7 +1064,7 @@ for p:= 0 to Pred(TeamsCount) do
                     y:= hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2;
                     // Calculate offset from map boundaries and border
                     if hasBorder then
-                        x:= max(min(x, RightX - SpritesData[sprTargetBee].Width) - cBorderWidth, LeftX + cBorderWidth)
+                        x:= max(min(x, RightX - SpritesData[sprTargetBee].Width - cBorderWidth), LeftX + cBorderWidth)
                     else
                         x:= max(min(x, RightX - SpritesData[sprTargetBee].Width), LeftX);
                     y:= max(y, TopY);
