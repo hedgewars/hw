@@ -783,7 +783,7 @@ while (i < cExplosives) and (unplaced < 4) do
 
 i:= 0;
 j:= 0;
-p:= 0; // 0 searching, 1 bad position, 2 added.
+p:= 0; // 0: good position, 1: bad position.
 unplaced:= 0;
 if cAirMines > 0 then
     Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0);
@@ -835,7 +835,9 @@ if cAirMines > 0 then
                 if i < cAirMines then
                     Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0)
                 end
-            end;
+            end
+        else
+            p:= 1;
         inc(j)
         end;
 if p <> 0 then DeleteGear(Gear);
