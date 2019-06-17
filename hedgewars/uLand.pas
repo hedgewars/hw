@@ -282,11 +282,9 @@ end;
 
 
 procedure GenDrawnMap;
+var lowerX, upperX, lowerY, upperY, lowerFS, upperFS, value: LongInt;
 begin
-    if (cFeatureSize <= 3) then
-        // sizes 1-3 are identical
-        MaxHedgehogs:= 8
-    else if (cFeatureSize <= 6) then
+    if (cFeatureSize <= 6) then
         MaxHedgehogs:= 6 + (cFeatureSize-1) * 2
     else if (cFeatureSize < 11) then
         MaxHedgehogs:= 16 + (cFeatureSize-6) * 4
@@ -298,9 +296,56 @@ begin
         MaxHedgehogs:= cMaxHHs;
 
     if GameType = gmtLandPreview then
-        cFeatureSize:= 3;
-    playWidth:= (4096 * max(min(cFeatureSize,24),3)) div 12;
-    playHeight:= (2048 * max(min(cFeatureSize,24),3)) div 12;
+        cFeatureSize:= 1;
+
+    // Calculate map size for drawn map, use cFeatureSize to scale.
+
+    // We have pre-determined map size for cFeatureSize 1, 6, 12 and 25.
+    // The other values will be interpolated.
+    if cFeatureSize < 6 then
+        begin
+        // reference size for cFeatureSize 1
+        lowerFS:= 1;
+        lowerX:= 1024;
+        lowerY:= 512;
+        upperFS:= 6;
+        end
+    else if cFeatureSize < 12 then
+        begin
+        // reference size for cFeatureSize 6
+        lowerFS:= 6;
+        lowerX:= 2048;
+        lowerY:= 1024;
+        upperFS:= 12;
+        end
+    else
+        begin
+        // reference size for cFeatureSize 12, size of drawn maps in pre-1.0.0 versions
+        lowerFS:= 12;
+        lowerX:= 4096;
+        lowerY:= 2048;
+        upperFS:= 25;
+        end;
+
+    upperX:= lowerX * 2;
+    upperY:= lowerY * 2;
+
+    if cFeatureSize = 25 then
+        begin
+        // hardcoded size for size level 25
+        playWidth:= 8192;
+        playHeight:= 4096;
+        end
+    else
+        begin
+        // Interpolation formula
+        playWidth:= lowerX + ((upperX-lowerX) div (upperFS-lowerFS))*(cFeatureSize-lowerFS);
+        playHeight:= lowerY + ((upperY-lowerY) div (upperFS-lowerFS))*(cFeatureSize-lowerFS);
+        end;
+
+    if GameType <> gmtLandPreview then
+        WriteLnToConsole('Drawn map size: cFeatureSize='+IntToStr(cFeatureSize)+' playWidth='+IntToStr(playWidth)+' playHeight='+IntToStr(playHeight));
+
     ResizeLand(playWidth, playHeight);
 
     hasGirders:= true;
