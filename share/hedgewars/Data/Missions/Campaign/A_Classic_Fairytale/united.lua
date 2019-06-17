@@ -551,3 +551,10 @@ function onPrecise()
   end
 end
 
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
+  end
+end

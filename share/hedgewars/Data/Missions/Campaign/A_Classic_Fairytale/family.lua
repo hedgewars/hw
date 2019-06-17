@@ -673,3 +673,12 @@ function onPrecise()
 --  end
 --  AddAmmo(natives[1], amTeleport, 100)
 end
+
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
+  end
+end
+
