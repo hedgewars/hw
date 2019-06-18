@@ -18,6 +18,7 @@ pub struct HwAnteClient {
     pub protocol_number: Option<NonZeroU16>,
     pub server_salt: String,
     pub is_checker: bool,
+    pub is_local_admin: bool,
 }
 
 pub struct HwAnteroom {
@@ -30,12 +31,13 @@ impl HwAnteroom {
         HwAnteroom { clients }
     }
 
-    pub fn add_client(&mut self, client_id: ClientId, salt: String) {
+    pub fn add_client(&mut self, client_id: ClientId, salt: String, is_local_admin: bool) {
         let client = HwAnteClient {
             nick: None,
             protocol_number: None,
             server_salt: salt,
             is_checker: false,
+            is_local_admin,
         };
         self.clients.insert(client_id, client);
     }
@@ -93,6 +95,9 @@ impl HwServer {
         if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
             let mut client = HwClient::new(client_id, protocol.get(), nick);
             client.set_is_checker(data.is_checker);
+            #[cfg(not(feature = "official-server"))]
+            client.set_is_admin(data.is_local_admin);
+
             self.clients.insert(client_id, client);
         }
     }

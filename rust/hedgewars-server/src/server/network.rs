@@ -523,7 +523,12 @@ impl NetworkLayer {
             response.add(Redirect(self.ssl.listener.local_addr().unwrap().port()).send_self())
         }
 
-        handlers::handle_client_accept(&mut self.server, client_id, &mut response);
+        handlers::handle_client_accept(
+            &mut self.server,
+            client_id,
+            &mut response,
+            self.clients[client_id].peer_addr.ip().is_loopback(),
+        );
         self.handle_response(response, poll);
     }
 

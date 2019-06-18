@@ -343,11 +343,18 @@ pub fn handle(
     }
 }
 
-pub fn handle_client_accept(server: &mut HwServer, client_id: ClientId, response: &mut Response) {
+pub fn handle_client_accept(
+    server: &mut HwServer,
+    client_id: ClientId,
+    response: &mut Response,
+    is_local: bool,
+) {
     let mut salt = [0u8; 18];
     thread_rng().fill_bytes(&mut salt);
 
-    server.anteroom.add_client(client_id, encode(&salt));
+    server
+        .anteroom
+        .add_client(client_id, encode(&salt), is_local);
 
     response.add(HwServerMessage::Connected(utils::SERVER_VERSION).send_self());
 }
