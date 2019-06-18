@@ -363,11 +363,11 @@ impl NetworkLayer {
         Ok(())
     }
 
-    fn deregister_client(&mut self, poll: &Poll, id: ClientId) {
+    fn deregister_client(&mut self, poll: &Poll, id: ClientId, is_error: bool) {
         if let Some(ref mut client) = self.clients.get_mut(id) {
             poll.deregister(client.socket.inner())
                 .expect("could not deregister socket");
-            if client.has_pending_sends() {
+            if client.has_pending_sends() && !is_error {
                 info!(
                     "client {} ({}) pending removal",
                     client.id, client.peer_addr
@@ -439,7 +439,7 @@ impl NetworkLayer {
         }
 
         for client_id in response.extract_removed_clients() {
-            self.deregister_client(poll, client_id);
+            self.deregister_client(poll, client_id, false);
         }
 
         #[cfg(feature = "official-server")]
@@ -467,6 +467,12 @@ impl NetworkLayer {
                     }
                 }
                 TimeoutEvent::DropClient => {
+                    if let Some(ref mut client) = self.clients.get_mut(client_id) {
+                        client.send_string(
+                            &HwServerMessage::Bye("Ping timeout".to_string()).to_raw_protocol(),
+                        );
+                        client.write();
+                    }
                     self.operation_failed(
                         poll,
                         client_id,
@@ -616,7 +622,7 @@ impl NetworkLayer {
                 self.pending.insert((client_id, state));
             }
             Ok(((), state)) if state == NetworkClientState::Closed => {
-                self.deregister_client(poll, client_id);
+                self.deregister_client(poll, client_id, false);
             }
             Ok(_) => (),
             Err(e) => {
@@ -628,10 +634,14 @@ impl NetworkLayer {
     }
 
     pub fn client_error(&mut self, poll: &Poll, client_id: ClientId) -> io::Result<()> {
-        self.deregister_client(poll, client_id);
-        let mut response = handlers::Response::new(client_id);
-        handlers::handle_client_loss(&mut self.server, client_id, &mut response);
-        self.handle_response(response, poll);
+        let pending_close = self.clients[client_id].pending_close;
+        self.deregister_client(poll, client_id, true);
+
+        if !pending_close {
+            let mut response = handlers::Response::new(client_id);
+            handlers::handle_client_loss(&mut self.server, client_id, &mut response);
+            self.handle_response(response, poll);
+        }
 
         Ok(())
     }
