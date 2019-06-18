@@ -349,14 +349,10 @@ impl NetworkLayer {
     }
 
     fn deregister_client(&mut self, poll: &Poll, id: ClientId) {
-        let mut client_exists = false;
         if let Some(ref client) = self.clients.get(id) {
             poll.deregister(client.socket.inner())
                 .expect("could not deregister socket");
             info!("client {} ({}) removed", client.id, client.peer_addr);
-            client_exists = true;
-        }
-        if client_exists {
             self.clients.remove(id);
             #[cfg(feature = "official-server")]
             self.io.cancel(id);
