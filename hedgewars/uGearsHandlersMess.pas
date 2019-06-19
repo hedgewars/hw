@@ -2063,7 +2063,8 @@ begin
             DeleteGear(Gear);
             exit
             end;
-        doStepFallingGear(Gear);
+        if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) or ((GameTicks and $3F) = 15) then
+            doStepFallingGear(Gear);
         exit
         end;
     isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
@@ -2077,7 +2078,8 @@ begin
         Gear^.dX:= Gear^.dX*airFriction;
         Gear^.dY:= Gear^.dY*airFriction
         end;
-    doStepFallingGear(Gear);
+    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) or ((GameTicks and $3F) = 15) then
+        doStepFallingGear(Gear);
     if (TurnTimeLeft = 0) and ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
         AllInactive := false;
 
@@ -2206,7 +2208,7 @@ begin
 
     if ((Gear^.State and gstAttacking) = 0) then
         begin
-        if ((GameTicks and $1F) = 0) then
+        if (((GameTicks+Gear^.Uid) and $1F) = 0) then
             begin
             if targ <> nil then
                 begin

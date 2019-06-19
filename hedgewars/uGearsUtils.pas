@@ -312,23 +312,23 @@ begin
 
         uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);
 
-	if AprilOne and (Gear^.Hedgehog^.Hat = 'fr_tomato') and (Damage > 2) then
-	    for i := 0 to random(min(Damage,20))+5 do
-		begin
-		vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
-		if vg <> nil then
-		    with vg^ do
-			begin
-			dx:= 0.001 * (random(100)+10);
-			dy:= 0.001 * (random(100)+10);
-			tdy:= -cGravityf;
-			if random(2) = 0 then
-			    dx := -dx;
-			FrameTicks:= random(500) + 1000;
-			State:= ord(sprBubbles);
-			Tint:= $ff0000ff
-			end
-	end
+    if AprilOne and (Gear^.Hedgehog^.Hat = 'fr_tomato') and (Damage > 2) then
+        for i := 0 to random(min(Damage,20))+5 do
+        begin
+        vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
+        if vg <> nil then
+            with vg^ do
+            begin
+            dx:= 0.001 * (random(100)+10);
+            dy:= 0.001 * (random(100)+10);
+            tdy:= -cGravityf;
+            if random(2) = 0 then
+                dx := -dx;
+            FrameTicks:= random(500) + 1000;
+            State:= ord(sprBubbles);
+            Tint:= $ff0000ff
+            end
+    end
     end else
         Gear^.Hedgehog:= AttackerHog;
     inc(Gear^.Damage, Damage);
@@ -1060,39 +1060,75 @@ function CheckGearNearImpl(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt; excl
 var t: PGear;
     width, bound, dX, dY: hwFloat;
     isHit: Boolean;
+    i, j: LongWord;
 begin
-    t:= GearsList;
     bound:= _1_5 * int2hwFloat(max(rX, rY));
     rX:= sqr(rX);
     rY:= sqr(rY);
     width:= int2hwFloat(RightX - LeftX);
-
-    while t <> nil do
-    begin
-        if (t <> exclude) and (t^.Kind = Kind) then
+    if (Kind = gtHedgehog) then
         begin
-            dX := X - t^.X;
-            dY := Y - t^.Y;
-            isHit := (hwAbs(dX) + hwAbs(dY) < bound)
-                and (not ((hwSqr(dX) / rX + hwSqr(dY) / rY) > _1));
+        for j:= 0 to Pred(TeamsCount) do
+            if TeamsArray[j]^.TeamHealth > 0 then // it's impossible for a team to have hogs in game and zero health right?
+                with TeamsArray[j]^ do
+                    for i:= 0 to cMaxHHIndex do
+                        with Hedgehogs[i] do
+                            if (Gear <> nil) and (Gear <> exclude) then
+                                begin
+                                // code duplication - could throw into an inline function I guess
+                                dX := X - Gear^.X;
+                                dY := Y - Gear^.Y;
+                                isHit := (hwAbs(dX) + hwAbs(dY) < bound)
+                                    and (not ((hwSqr(dX) / rX + hwSqr(dY) / rY) > _1));
 
-            if (not isHit) and (WorldEdge = weWrap) then
-            begin
-                if (hwAbs(dX - width) + hwAbs(dY) < bound)
-                    and (not ((hwSqr(dX - width) / rX + hwSqr(dY) / rY) > _1)) then
-                    isHit := true
-                else if (hwAbs(dX + width) + hwAbs(dY) < bound)
-                    and (not ((hwSqr(dX + width) / rX + hwSqr(dY) / rY) > _1)) then
-                    isHit := true
-            end;
+                                if (not isHit) and (WorldEdge = weWrap) then
+                                    begin
+                                    if (hwAbs(dX - width) + hwAbs(dY) < bound)
+                                        and (not ((hwSqr(dX - width) / rX + hwSqr(dY) / rY) > _1)) then
+                                        isHit := true
+                                    else if (hwAbs(dX + width) + hwAbs(dY) < bound)
+                                        and (not ((hwSqr(dX + width) / rX + hwSqr(dY) / rY) > _1)) then
+                                        isHit := true
+                                    end;
 
-            if isHit then
+                                if isHit then
+                                    begin
+                                    CheckGearNearImpl:= Gear;
+                                    exit;
+                                    end
+                                end;
+        end
+    else
+        begin
+        t:= GearsList;
+
+        while t <> nil do
             begin
-                CheckGearNearImpl:= t;
-                exit;
-            end;
-        end;
-        t:= t^.NextGear
+            if (t <> exclude) and (t^.Kind = Kind) then
+                begin
+                dX := X - t^.X;
+                dY := Y - t^.Y;
+                isHit := (hwAbs(dX) + hwAbs(dY) < bound)
+                    and (not ((hwSqr(dX) / rX + hwSqr(dY) / rY) > _1));
+
+                if (not isHit) and (WorldEdge = weWrap) then
+                    begin
+                    if (hwAbs(dX - width) + hwAbs(dY) < bound)
+                        and (not ((hwSqr(dX - width) / rX + hwSqr(dY) / rY) > _1)) then
+                        isHit := true
+                    else if (hwAbs(dX + width) + hwAbs(dY) < bound)
+                        and (not ((hwSqr(dX + width) / rX + hwSqr(dY) / rY) > _1)) then
+                        isHit := true
+                    end;
+
+                if isHit then
+                    begin
+                    CheckGearNearImpl:= t;
+                    exit;
+                    end;
+                end;
+            t:= t^.NextGear
+            end
     end;
 
     CheckGearNearImpl:= nil
