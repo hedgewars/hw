@@ -1763,14 +1763,14 @@ if (hwRound(Gear^.X) < leftX) or
     else if WorldEdge = weBounce then
         begin
         bounced:= false;
-        if (hwRound(Gear^.X) - Gear^.Radius < leftX) and (Gear^.Kind = gtHedgehog) or ((hwSign(Gear^.dX) = -1) and (not isZero(Gear^.dX))) then
+        if (hwRound(Gear^.X) - Gear^.Radius < leftX) and (((hwSign(Gear^.dX) = -1) and (not isZero(Gear^.dX))) or (Gear^.Kind = gtHedgehog)) then
             begin
             LeftImpactTimer:= 333;
             Gear^.dX.isNegative:= false;
             Gear^.X:= int2hwfloat(leftX + Gear^.Radius);
             bounced:= true;
             end
-        else if (hwRound(Gear^.X) - Gear^.Radius > rightX) and (Gear^.Kind = gtHedgehog) or ((hwSign(Gear^.dX) = 1) and (not isZero(Gear^.dX))) then
+        else if (hwRound(Gear^.X) + Gear^.Radius > rightX) and (((hwSign(Gear^.dX) = 1) and (not isZero(Gear^.dX))) or (Gear^.Kind = gtHedgehog)) then
             begin
             RightImpactTimer:= 333;
             Gear^.dX.isNegative:= true;
