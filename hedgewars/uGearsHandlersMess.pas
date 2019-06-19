@@ -2706,7 +2706,9 @@ var
     tdX,tdY, f: HWFloat;
     landPixel: Word;
 begin
-    WorldWrap(Gear);
+    // don't bounce
+    if WorldEdge <> weBounce then
+        WorldWrap(Gear);
     if Gear^.FlightTime > 0 then dec(Gear^.FlightTime);
     // There are 2 flame types: normal and sticky
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
