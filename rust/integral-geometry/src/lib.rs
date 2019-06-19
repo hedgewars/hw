@@ -792,39 +792,41 @@ impl Iterator for ArcPoints {
 }
 
 pub struct EquidistantPoints {
-    vector: Point,
-    iteration: u8,
+    vector: Vec<Point>,
 }
 
 impl EquidistantPoints {
     pub fn new(vector: Point) -> Self {
         Self {
-            vector,
-            iteration: if vector.x == vector.y { 4 } else { 8 },
+            vector: if vector.x == vector.y {
+                vec![
+                    Point::new(vector.x, vector.x),
+                    Point::new(vector.x, -vector.x),
+                    Point::new(-vector.x, -vector.x),
+                    Point::new(-vector.x, vector.x),
+                ]
+            } else {
+                vec![
+                    Point::new(vector.x, vector.y),
+                    Point::new(vector.x, -vector.y),
+                    Point::new(-vector.x, -vector.y),
+                    Point::new(-vector.x, vector.y),
+                    Point::new(vector.y, vector.x),
+                    Point::new(vector.y, -vector.x),
+                    Point::new(-vector.y, -vector.x),
+                    Point::new(-vector.y, vector.x),
+                ]
+            },
         }
     }
 }
 
-impl Iterator for EquidistantPoints {
+impl IntoIterator for EquidistantPoints {
     type Item = Point;
+    type IntoIter = std::vec::IntoIter<Point>;
 
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.iteration > 0 {
-            self.vector.x = -self.vector.x;
-            if self.iteration & 1 == 0 {
-                self.vector.y = -self.vector.y;
-            }
-
-            if self.iteration == 4 {
-                std::mem::swap(&mut self.vector.x, &mut self.vector.y);
-            }
-
-            self.iteration -= 1;
-
-            Some(self.vector)
-        } else {
-            None
-        }
+    fn into_iter(self) -> Self::IntoIter {
+        self.vector.into_iter()
     }
 }
 
@@ -921,16 +923,18 @@ mod tests {
 
     #[test]
     fn equidistant_full() {
-        let n: Vec<Point> = EquidistantPoints::new(Point::new(1, 3)).collect();
+        let n: Vec<Point> = EquidistantPoints::new(Point::new(1, 3))
+            .into_iter()
+            .collect();
         let v = get_points(&[
-            (-1, -3),
-            (1, -3),
-            (-1, 3),
             (1, 3),
-            (-3, -1),
-            (3, -1),
-            (-3, 1),
+            (1, -3),
+            (-1, -3),
+            (-1, 3),
             (3, 1),
+            (3, -1),
+            (-3, -1),
+            (-3, 1),
         ]);
 
         assert_eq!(n, v);
@@ -938,8 +942,10 @@ mod tests {
 
     #[test]
     fn equidistant_half() {
-        let n: Vec<Point> = EquidistantPoints::new(Point::new(2, 2)).collect();
-        let v = get_points(&[(-2, -2), (2, -2), (-2, 2), (2, 2)]);
+        let n: Vec<Point> = EquidistantPoints::new(Point::new(2, 2))
+            .into_iter()
+            .collect();
+        let v = get_points(&[(2, 2), (2, -2), (-2, -2), (-2, 2)]);
 
         assert_eq!(n, v);
     }
