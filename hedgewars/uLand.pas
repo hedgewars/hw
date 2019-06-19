@@ -282,7 +282,7 @@ end;
 
 
 procedure GenDrawnMap;
-var lowerX, upperX, lowerY, upperY, lowerFS, upperFS, value: LongInt;
+var lowerX, upperX, lowerY, upperY, lowerFS, upperFS: LongInt;
 begin
     if (cFeatureSize <= 6) then
         MaxHedgehogs:= 6 + (cFeatureSize-1) * 2
