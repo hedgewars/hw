@@ -1258,6 +1258,8 @@ if Angle <> 0  then
     openglTranslatef(-PivotX, -PivotY, 0);
     end;
 
+UpdateModelviewProjection;
+
 DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
 
 openglPopMatrix;
