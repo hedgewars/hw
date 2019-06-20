@@ -565,7 +565,7 @@ begin
                     end;
                 gtBallgun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
                 gtRCPlane: begin
-                    DrawSpriteRotated(sprHandPlane, hx, hy, sign, 0);
+                    DrawSpriteRotated(sprHandPlane, hx + 1, hy, sign, 0);
                     defaultPos:= false
                     end;
                 gtRope: begin
@@ -925,14 +925,14 @@ begin
                             sign,
                             0);
                 amHammer: DrawSpriteRotatedF(sprHammer,
-                            sx,
+                            sx + sign,
                             sy,
                             0,
                             sign,
                             0);
                 amRCPlane:
                     begin
-                    DrawSpriteRotated(sprHandPlane, hx, hy, sign, 0);
+                    DrawSpriteRotated(sprHandPlane, hx + 1, hy, sign, 0);
                     defaultPos:= false
                     end;
                 amBaseballBat, amMinigun:
