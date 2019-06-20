@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; version 2 of the License
  *
-	 * This program is distributed in the hope that it will be useful,
+     * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -1137,15 +1137,15 @@ begin
         begin
         if (CurAmmoGear = nil) then
             begin
-                if ((Gear^.State and (gstAttacked or gstAnimation or gstHHJumping)) = 0)
-                and (Gear^.Message and (gmLeft or gmRight) = 0) then
+            if ((Gear^.State and (gstAttacked or gstAnimation or gstHHJumping)) = 0)
+            and (Gear^.Message and (gmLeft or gmRight) = 0) then
                 begin
                 amt:= CurrentHedgehog^.CurAmmoType;
-                    case amt of
-                        amBaseballBat: DrawSpritePivotedF(sprHandBaseball,
-                            sx + 9 * sign, sy + 2, 0, sign, -8, 1, aangle);
-                        amMinigun: DrawSpritePivotedF(sprMinigun,
-                            sx + 20 * sign, sy + 4, 0, sign, -18, -2, aangle);
+                case amt of
+                    amBaseballBat: DrawSpritePivotedF(sprHandBaseball,
+                        sx + 9 * sign, sy + 2, 0, sign, -8, 1, aangle);
+                    amMinigun: DrawSpritePivotedF(sprMinigun,
+                        sx + 20 * sign, sy + 4, 0, sign, -18, -2, aangle);
                     end;
                 end;
             end
@@ -1361,13 +1361,13 @@ begin
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
          gtAirMine: 
-					if (Gear^.State and gstFrozen <> 0) then
+                    if (Gear^.State and gstFrozen <> 0) then
                         DrawSprite(sprFrozenAirMine, x-16, y-16, 0)
-					else if (Gear^.Tag <> 0) then
+                    else if (Gear^.Tag <> 0) then
                         DrawSprite(sprAirMine, x-16, y-16, 16 + ((RealTicks div 50 + Gear^.Uid) mod 16))
-					else if (Gear^.State and gstTmpFlag = 0) then                // mine is inactive
+                    else if (Gear^.State and gstTmpFlag = 0) then                // mine is inactive
                         begin
-						if (Gear^.State and gstTmpFlag = 0) then Tint(150,150,150,255);
+                        if (Gear^.State and gstTmpFlag = 0) then Tint(150,150,150,255);
                         DrawSprite(sprAirMine, x-16, y-16, 15);
                         untint
                         end
@@ -1645,8 +1645,8 @@ begin
                           end
                       end;
             gtCreeper: if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
-					     DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.Hedgehog^.Gear^.X-Gear^.X)), 0)
-					else DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.dX)), 0);
+                         DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.Hedgehog^.Gear^.X-Gear^.X)), 0)
+                    else DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.dX)), 0);
 
             gtGenericFaller: begin
                              // DEBUG: draw gtGenericFaller
