@@ -1,5 +1,9 @@
 use integral_geometry::{Rect, Size};
-use std::cmp::{max, min, Ordering};
+use itertools::Itertools;
+use std::{
+    cmp::{max, min, Ordering},
+    ops::Index,
+};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone)]
 struct Fit {
@@ -50,6 +54,10 @@ impl UsedSpace {
     const fn total(&self) -> usize {
         self.total_area
     }
+
+    const fn free(&self) -> usize {
+        self.total_area - self.used_area
+    }
 }
 
 impl std::fmt::Debug for UsedSpace {
@@ -63,14 +71,14 @@ impl std::fmt::Debug for UsedSpace {
     }
 }
 
-pub struct Atlas {
+pub struct Atlas<T> {
     size: Size,
     free_rects: Vec<Rect>,
-    used_rects: Vec<Rect>,
+    used_rects: Vec<(Rect, T)>,
     splits: Vec<Rect>,
 }
 
-impl Atlas {
+impl<T: Copy> Atlas<T> {
     pub fn new(size: Size) -> Self {
         Self {
             size,
@@ -85,7 +93,7 @@ impl Atlas {
     }
 
     pub fn used_space(&self) -> UsedSpace {
-        let used = self.used_rects.iter().map(|r| r.size().area()).sum();
+        let used = self.used_rects.iter().map(|(r, _)| r.size().area()).sum();
         UsedSpace::new(used, self.size.area())
     }
 
@@ -116,7 +124,7 @@ impl Atlas {
         }
     }
 
-    fn split_insert(&mut self, rect: Rect) {
+    fn split_insert(&mut self, rect: Rect, value: T) {
         let mut splits = std::mem::replace(&mut self.splits, vec![]);
         let mut buffer = [Rect::EMPTY; 4];
 
@@ -133,31 +141,31 @@ impl Atlas {
         self.free_rects.extend(splits.drain(..));
         std::mem::replace(&mut self.splits, splits);
 
-        self.used_rects.push(rect);
+        self.used_rects.push((rect, value));
     }
 
-    pub fn insert(&mut self, size: Size) -> Option<Rect> {
+    pub fn insert(&mut self, size: Size, value: T) -> Option<Rect> {
         let (rect, _) = self.find_position(size)?;
-        self.split_insert(rect);
+        self.split_insert(rect, value);
         Some(rect)
     }
 
-    pub fn insert_set<Iter>(&mut self, sizes: Iter) -> Vec<Rect>
+    pub fn insert_set<Iter>(&mut self, sizes: Iter) -> Vec<(Rect, T)>
     where
-        Iter: Iterator<Item = Size>,
+        Iter: Iterator<Item = (Size, T)>,
     {
         let mut sizes: Vec<_> = sizes.collect();
-        let mut result = vec![];
+        let mut result = Vec::with_capacity(sizes.len());
 
-        while let Some((index, (rect, _))) = sizes
+        while let Some((index, (rect, _), value)) = sizes
             .iter()
             .enumerate()
-            .filter_map(|(i, s)| self.find_position(*s).map(|res| (i, res)))
-            .min_by_key(|(_, (_, fit))| fit.clone())
+            .filter_map(|(i, (s, v))| self.find_position(*s).map(|res| (i, res, v)))
+            .min_by_key(|(_, (_, fit), _)| fit.clone())
         {
-            self.split_insert(rect);
+            self.split_insert(rect, *value);
 
-            result.push(rect);
+            result.push((rect, *value));
             sizes.swap_remove(index);
         }
         result
@@ -170,48 +178,85 @@ impl Atlas {
     }
 }
 
+pub type SpriteIndex = u32;
+pub type SpriteLocation = (u32, Rect);
+
 pub struct AtlasCollection {
+    next_index: SpriteIndex,
     texture_size: Size,
-    atlases: Vec<Atlas>,
+    atlases: Vec<Atlas<SpriteIndex>>,
+    rects: Vec<SpriteLocation>,
 }
 
 impl AtlasCollection {
     pub fn new(texture_size: Size) -> Self {
         Self {
+            next_index: 0,
             texture_size,
             atlases: vec![],
+            rects: vec![],
         }
     }
 
     fn repack(&mut self, size: Size) -> bool {
-        for atlas in &mut self.atlases {
-            let mut temp_atlas = Atlas::new(atlas.size());
-            let sizes = atlas
-                .used_rects
-                .iter()
-                .map(|r| r.size())
-                .chain(std::iter::once(size));
-            if !temp_atlas.insert_set(sizes).is_empty() {
-                std::mem::swap(atlas, &mut temp_atlas);
-                return true;
+        for (atlas_index, atlas) in self.atlases.iter_mut().enumerate() {
+            if atlas.used_space().free() >= size.area() {
+                let mut temp_atlas = Atlas::new(atlas.size());
+                let sizes = atlas
+                    .used_rects
+                    .iter()
+                    .map(|(r, v)| (r.size(), *v))
+                    .chain(std::iter::once((size, self.next_index)));
+                let inserts = temp_atlas.insert_set(sizes);
+                if inserts.len() > atlas.used_rects.len() {
+                    self.rects.push((0, Rect::EMPTY));
+                    for (rect, index) in inserts {
+                        self.rects[index as usize] = (atlas_index as u32, rect);
+                    }
+                    std::mem::swap(atlas, &mut temp_atlas);
+                    return true;
+                }
             }
         }
         false
     }
 
-    pub fn insert_sprite(&mut self, size: Size) -> bool {
-        if !self.texture_size.contains(size) {
-            false
-        } else {
-            if let Some(rect) = self.atlases.iter_mut().find_map(|a| a.insert(size)) {
+    #[inline]
+    fn consume_index(&mut self) -> Option<SpriteIndex> {
+        let result = Some(self.next_index);
+        self.next_index += 1;
+        result
+    }
 
+    pub fn insert_sprite(&mut self, size: Size) -> Option<SpriteIndex> {
+        if !self.texture_size.contains(size) {
+            None
+        } else {
+            let index = self.next_index;
+            if let Some(index_rect) = self
+                .atlases
+                .iter_mut()
+                .enumerate()
+                .find_map(|(i, a)| a.insert(size, index).map(|r| (i as u32, r)))
+            {
+                self.rects.push(index_rect);
             } else if !self.repack(size) {
                 let mut atlas = Atlas::new(self.texture_size);
-                atlas.insert(size);
+                let rect = atlas.insert(size, index)?;
                 self.atlases.push(atlas);
+                self.rects.push(((self.atlases.len() - 1) as u32, rect))
             }
-            true
+            self.consume_index()
         }
+    }
+}
+
+impl Index<SpriteIndex> for AtlasCollection {
+    type Output = SpriteLocation;
+
+    #[inline]
+    fn index(&self, index: SpriteIndex) -> &Self::Output {
+        &self.rects[index as usize]
     }
 }
 
@@ -309,10 +354,10 @@ mod tests {
         let atlas_size = Size::square(16);
         let mut atlas = Atlas::new(atlas_size);
 
-        assert_eq!(None, atlas.insert(Size::square(20)));
+        assert_eq!(None, atlas.insert(Size::square(20), ()));
 
         let rect_size = Size::new(11, 3);
-        let rect = atlas.insert(rect_size).unwrap();
+        let rect = atlas.insert(rect_size, ()).unwrap();
 
         assert_eq!(rect, Rect::at_origin(rect_size));
         assert_eq!(2, atlas.free_rects.len());
@@ -356,6 +401,12 @@ mod tests {
         }
     }
 
+    impl HasSize for (Rect, ()) {
+        fn size(&self) -> Size {
+            self.0.size()
+        }
+    }
+
     fn sum_area<S: HasSize>(items: &[S]) -> usize {
         items.iter().map(|s| s.size().area()).sum()
     }
@@ -365,7 +416,7 @@ mod tests {
         fn prop_insert(rects in Vec::<TestRect>::arbitrary()) {
             let container = Rect::at_origin(Size::square(2048));
             let mut atlas = Atlas::new(container.size());
-            let inserted: Vec<_> = rects.iter().filter_map(|TestRect(size)| atlas.insert(*size)).collect();
+            let inserted: Vec<_> = rects.iter().filter_map(|TestRect(size)| atlas.insert(*size, ())).collect();
 
             let mut inserted_pairs = inserted.iter().cartesian_product(inserted.iter());
 
@@ -384,12 +435,12 @@ mod tests {
             let mut atlas = Atlas::new(container.size());
             let mut set_atlas = Atlas::new(container.size());
 
-            let inserted: Vec<_> = rects.iter().filter_map(|TestRect(size)| atlas.insert(*size)).collect();
-            let set_inserted: Vec<_> = set_atlas.insert_set(rects.iter().map(|TestRect(size)| *size));
+            let inserted: Vec<_> = rects.iter().filter_map(|TestRect(size)| atlas.insert(*size, ())).collect();
+            let set_inserted: Vec<_> = set_atlas.insert_set(rects.iter().map(|TestRect(size)| (*size, ())));
 
             let mut set_inserted_pairs = set_inserted.iter().cartesian_product(set_inserted.iter());
 
-            assert!(set_inserted_pairs.all(|(r1, r2)| r1 == r2 || r1 != r2 && !r1.intersects(r2)));
+            assert!(set_inserted_pairs.all(|((r1, _), (r2, _))| r1 == r2 || r1 != r2 && !r1.intersects(r2)));
             assert!(set_atlas.used_space().used() <= atlas.used_space().used());
 
             assert_eq!(sum_area(&set_inserted), sum_area(&inserted));
