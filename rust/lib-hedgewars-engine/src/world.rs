@@ -8,7 +8,7 @@ use landgen::{
 };
 use lfprng::LaggedFibonacciPRNG;
 
-use crate::render::{camera::Camera, MapRenderer};
+use crate::render::{camera::Camera, GearRenderer, MapRenderer};
 
 struct GameState {
     land: Land2D<u32>,
@@ -25,7 +25,8 @@ pub struct World {
     random_numbers_gen: LaggedFibonacciPRNG,
     preview: Option<Land2D<u8>>,
     game_state: Option<GameState>,
-    renderer: Option<MapRenderer>,
+    map_renderer: Option<MapRenderer>,
+    gear_renderer: Option<GearRenderer>,
     camera: Camera,
     last_gear_id: GearId,
 }
@@ -36,7 +37,8 @@ impl World {
             random_numbers_gen: LaggedFibonacciPRNG::new(&[]),
             preview: None,
             game_state: None,
-            renderer: None,
+            map_renderer: None,
+            gear_renderer: None,
             camera: Camera::new(),
             last_gear_id: GearId::default(),
         }
@@ -44,7 +46,8 @@ impl World {
 
     pub fn create_renderer(&mut self, width: u16, height: u16) {
         let land_tile_size = Size::square(512);
-        self.renderer = Some(MapRenderer::new(land_tile_size));
+        self.map_renderer = Some(MapRenderer::new(land_tile_size));
+        self.gear_renderer = Some(GearRenderer::new());
         self.camera = Camera::with_size(Size::new(width as usize, height as usize));
 
         use mapgen::{theme::Theme, MapGenerator};
@@ -56,7 +59,7 @@ impl World {
             let theme =
                 Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
             let texture = MapGenerator::new().make_texture(&state.land, &theme);
-            if let Some(ref mut renderer) = self.renderer {
+            if let Some(ref mut renderer) = self.map_renderer {
                 renderer.init(&texture);
             }
         }
@@ -112,13 +115,16 @@ impl World {
     }
 
     pub fn render(&mut self) {
-        if let Some(ref mut renderer) = self.renderer {
+        if let Some(ref mut renderer) = self.map_renderer {
             unsafe {
                 gl::ClearColor(0.4f32, 0f32, 0.2f32, 1f32);
                 gl::Clear(gl::COLOR_BUFFER_BIT);
             }
 
             renderer.render(&self.camera);
+        }
+        if let Some(ref mut renderer) = self.gear_renderer {
+            renderer.render(&self.camera)
         }
     }
 
