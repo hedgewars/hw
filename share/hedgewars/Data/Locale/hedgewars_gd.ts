@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="gd" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="gd">
 <context>
     <name>About</name>
     <message>
@@ -7,7 +9,7 @@
     </message>
     <message>
         <source>Hedgewars %1</source>
-        <extracomment>%1 contains Hedgewars' version number</extracomment>
+        <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
         <translation>Hedgewars %1</translation>
     </message>
     <message>
@@ -29,7 +31,7 @@
     </message>
     <message>
         <source>Dependency versions:</source>
-        <extracomment>For the version numbers of Hedgewars' software dependencies</extracomment>
+        <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
         <translation>Tionndaidhean na eisimeileachdan:</translation>
     </message>
     <message>
@@ -244,7 +246,12 @@
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation><numerusform>Gach %1d cuairt</numerusform><numerusform>Gach %1a cuairt</numerusform><numerusform>Gach %1mh cuairt</numerusform><numerusform>Gach %1mh cuairt</numerusform></translation>
+        <translation>
+            <numerusform>Gach %1d cuairt</numerusform>
+            <numerusform>Gach %1a cuairt</numerusform>
+            <numerusform>Gach %1mh cuairt</numerusform>
+            <numerusform>Gach %1mh cuairt</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -273,10 +280,6 @@
 <context>
     <name>GameSchemeModel</name>
     <message>
-        <source>new</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>New</source>
         <translation>Ùr</translation>
     </message>
@@ -304,23 +307,48 @@
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
-        <translation><numerusform>%1 mhionaid</numerusform><numerusform>%1 mhionaid</numerusform><numerusform>%1 mionaidean</numerusform><numerusform>%1 mionaid</numerusform></translation>
+        <translation>
+            <numerusform>%1 mhionaid</numerusform>
+            <numerusform>%1 mhionaid</numerusform>
+            <numerusform>%1 mionaidean</numerusform>
+            <numerusform>%1 mionaid</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%1 hour</source>
-        <translation><numerusform>%1 uair</numerusform><numerusform>%1 uair</numerusform><numerusform>%1 uairean</numerusform><numerusform>%1 uair</numerusform></translation>
+        <translation>
+            <numerusform>%1 uair</numerusform>
+            <numerusform>%1 uair</numerusform>
+            <numerusform>%1 uairean</numerusform>
+            <numerusform>%1 uair</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%1 hours</source>
-        <translation><numerusform>%1 uair</numerusform><numerusform>%1 uair</numerusform><numerusform>%1 uairean</numerusform><numerusform>%1 uair</numerusform></translation>
+        <translation>
+            <numerusform>%1 uair</numerusform>
+            <numerusform>%1 uair</numerusform>
+            <numerusform>%1 uairean</numerusform>
+            <numerusform>%1 uair</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%1 day</source>
-        <translation><numerusform>%1 latha</numerusform><numerusform>%1 latha</numerusform><numerusform>%1 làithean</numerusform><numerusform>%1 latha</numerusform></translation>
+        <translation>
+            <numerusform>%1 latha</numerusform>
+            <numerusform>%1 latha</numerusform>
+            <numerusform>%1 làithean</numerusform>
+            <numerusform>%1 latha</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%1 days</source>
-        <translation><numerusform>%1 latha</numerusform><numerusform>%1 latha</numerusform><numerusform>%1 làithean</numerusform><numerusform>%1 latha</numerusform></translation>
+        <translation>
+            <numerusform>%1 latha</numerusform>
+            <numerusform>%1 latha</numerusform>
+            <numerusform>%1 làithean</numerusform>
+            <numerusform>%1 latha</numerusform>
+        </translation>
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
@@ -528,7 +556,7 @@ Feuch an tagh thu far-ainm eile:</translation>
         <translation>Hedgewars – Far-ainm clàraichte</translation>
     </message>
     <message>
-        <source>This nick is registered, and you haven't specified a password.
+        <source>This nick is registered, and you haven&apos;t specified a password.
 
 If this nick isn’t yours, please register your own nick at www.hedgewars.org
 
@@ -609,9 +637,9 @@ Cuir a-steach am facal-faire:</translation>
         <translation>Sgioba %1</translation>
     </message>
     <message>
-        <source>This nick is registered, and you haven't specified a password.
+        <source>This nick is registered, and you haven&apos;t specified a password.
 
-If this nick isn't yours, please register your own nick at www.hedgewars.org
+If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
         <translation>Tha am far-ainm seo clàraichte ’s cha chuir thu facal-faire a-steach.
@@ -654,7 +682,7 @@ Facal-faire:</translation>
 
 We are very sorry for the inconvenience :(
 
-If this keeps happening, please click the '%1' button in the main menu!
+If this keeps happening, please click the &apos;%1&apos; button in the main menu!
 
 Last two engine messages:
 %2</source>
@@ -672,7 +700,7 @@ An dà theachdaireachd mu dheireadh aig an einnsean:
 
 We are very sorry for the inconvenience. :-(
 
-If this keeps happening, please click the 'Feedback' button in the main menu!
+If this keeps happening, please click the &apos;Feedback&apos; button in the main menu!
 
 Last engine message:
 %1</source>
@@ -933,10 +961,6 @@ An teachdaireachd mu dheireadh an einnsein:
         <translation>Thàinig %1 *** %2 a-steach dhan t-seòmar</translation>
     </message>
     <message>
-        <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>%1 *** %2 has left (%3)</source>
         <translation>Dh’fhalbh %1 *** %2  (%3)</translation>
     </message>
@@ -996,7 +1020,7 @@ Thoir sùil air roghainnean ainm is port an fhrithealaiche agus/no feuch ris a-r
     <message>
         <source>To connect to the server, please log in.
 
-If you don't have an account on www.hedgewars.org,
+If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
         <translation>Clàraich a-steach gus ceangal ris an fhrithealaiche.
 
@@ -1023,7 +1047,7 @@ cha leig thu leas ach far-ainm a chur a-steach.</translation>
 
 As a workaround, you could try to reset the Hedgewars video recorder settings to the defaults.
 
-To report this error, please click the 'Feedback' button in the main menu!
+To report this error, please click the &apos;Feedback&apos; button in the main menu!
 
 Last engine message:
 %1</source>
@@ -1072,13 +1096,6 @@ An teachdaireachd mu dheireadh aig an einnsein:
     <message>
         <source>Choose a hat</source>
         <translation>Tagh ad</translation>
-    </message>
-</context>
-<context>
-    <name>KB</name>
-    <message>
-        <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -1158,7 +1175,12 @@ An teachdaireachd mu dheireadh aig an einnsein:
     </message>
     <message numerus="yes">
         <source>%1 seconds</source>
-        <translation><numerusform>%1 diog</numerusform><numerusform>%1 dhiog</numerusform><numerusform>%1 diogan</numerusform><numerusform>%1 diog</numerusform></translation>
+        <translation>
+            <numerusform>%1 diog</numerusform>
+            <numerusform>%1 dhiog</numerusform>
+            <numerusform>%1 diogan</numerusform>
+            <numerusform>%1 diog</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1445,32 +1467,67 @@ An teachdaireachd mu dheireadh aig an einnsein:
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation><numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform><numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; puing.</numerusform></translation>
+        <translation>
+            <numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform>
+            <numerusform>Bhuannaich &lt;b&gt;%1&lt;/b&gt; duais an losgaidh as fhearr le &lt;b&gt;%2&lt;/b&gt; puing.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation><numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; mharbhadh ann an cuairt.</numerusform><numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; mharbhadh ann an cuairt.</numerusform><numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; marbhaidhean ann an cuairt.</numerusform><numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; marbhadh ann an cuairt.</numerusform></translation>
+        <translation>
+            <numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; mharbhadh ann an cuairt.</numerusform>
+            <numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; mharbhadh ann an cuairt.</numerusform>
+            <numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; marbhaidhean ann an cuairt.</numerusform>
+            <numerusform>Is &lt;b&gt;%1&lt;/b&gt; am marbhaiche as fhearr le &lt;b&gt;%2&lt;/b&gt; marbhadh ann an cuairt.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation><numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; ghràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform><numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; ghràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform><numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; gràineagan a mharbhadh uile gu lèir sa chuairt seo.</numerusform><numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; gràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform></translation>
+        <translation>
+            <numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; ghràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform>
+            <numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; ghràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform>
+            <numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; gràineagan a mharbhadh uile gu lèir sa chuairt seo.</numerusform>
+            <numerusform>Chaidh &lt;b&gt;%1&lt;/b&gt; gràineag a mharbhadh uile gu lèir sa chuairt seo.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
         <extracomment>Number of kills in stats screen, written after the team name</extracomment>
-        <translation><numerusform>(%1 mharbhadh)</numerusform><numerusform>(%1 mharbhadh)</numerusform><numerusform>(%1 marbhaidhean)</numerusform><numerusform>(%1 marbhadh)</numerusform></translation>
+        <translation>
+            <numerusform>(%1 mharbhadh)</numerusform>
+            <numerusform>(%1 mharbhadh)</numerusform>
+            <numerusform>(%1 marbhaidhean)</numerusform>
+            <numerusform>(%1 marbhadh)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="vanished"><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; puing.</numerusform></translation>
+        <translation type="vanished">
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh le &lt;b&gt;%2&lt;/b&gt; puing.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="vanished"><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform></translation>
+        <translation type="vanished">
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aige fhèin.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation><numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; turas.</numerusform><numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; thuras.</numerusform><numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; tursan.</numerusform><numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; turas.</numerusform></translation>
+        <translation>
+            <numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; turas.</numerusform>
+            <numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; thuras.</numerusform>
+            <numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; tursan.</numerusform>
+            <numerusform>Thàinig an t-eagal air &lt;b&gt;%1&lt;/b&gt; agus leig e seachad a chuairt &lt;b&gt;%2&lt;/b&gt; turas.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Play again</source>
@@ -1483,15 +1540,30 @@ An teachdaireachd mu dheireadh aig an einnsein:
     <message numerus="yes">
         <source>(%1 %2)</source>
         <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
-        <translation><numerusform>(%1 %2)</numerusform><numerusform>(%1 %2)</numerusform><numerusform>(%1 %2)</numerusform><numerusform>(%1 %2)</numerusform></translation>
+        <translation>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform><numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puing.</numerusform></translation>
+        <translation>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puing.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform><numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform></translation>
+        <translation>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+        </translation>
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
@@ -1500,16 +1572,31 @@ An teachdaireachd mu dheireadh aig an einnsein:
     <message numerus="yes">
         <source>(%1 point(s))</source>
         <extracomment>Number of points in stats screen, written after the team name</extracomment>
-        <translation><numerusform>(%1 phuing)</numerusform><numerusform>(%1 phuing)</numerusform><numerusform>(%1 puingean)</numerusform><numerusform>(%1 puing)</numerusform></translation>
+        <translation>
+            <numerusform>(%1 phuing)</numerusform>
+            <numerusform>(%1 phuing)</numerusform>
+            <numerusform>(%1 puingean)</numerusform>
+            <numerusform>(%1 puing)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>(%L1 second(s))</source>
         <extracomment>Time in seconds</extracomment>
-        <translation><numerusform>(%L1 diog)</numerusform><numerusform>(%L1 dhiog)</numerusform><numerusform>(%L1 diogan)</numerusform><numerusform>(%L1 diog)</numerusform></translation>
+        <translation>
+            <numerusform>(%L1 diog)</numerusform>
+            <numerusform>(%L1 dhiog)</numerusform>
+            <numerusform>(%L1 diogan)</numerusform>
+            <numerusform>(%L1 diog)</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>(%1 crate(s))</source>
-        <translation><numerusform>(%1 chreat)</numerusform><numerusform>(%1 chreat)</numerusform><numerusform>(%1 creataichean)</numerusform><numerusform>(%1 creat)</numerusform></translation>
+        <translation>
+            <numerusform>(%1 chreat)</numerusform>
+            <numerusform>(%1 chreat)</numerusform>
+            <numerusform>(%1 creataichean)</numerusform>
+            <numerusform>(%1 creat)</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1625,10 +1712,6 @@ An teachdaireachd mu dheireadh aig an einnsein:
 </context>
 <context>
     <name>PageNetGame</name>
-    <message>
-        <source>Control</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Edit game preferences</source>
         <translation>Deasaich roghainnean a’ gheama</translation>
@@ -1896,24 +1979,17 @@ An teachdaireachd mu dheireadh aig an einnsein:
 <context>
     <name>PageRoomsList</name>
     <message>
-        <source>Create</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Join</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>Rianachd</translation>
     </message>
-    <message>
-        <source>Room Name:</source>
-        <translation type="unfinished"/>
-    </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation><numerusform>%1 chluicheadair air loidhne</numerusform><numerusform>%1 chluicheadair air loidhne</numerusform><numerusform>%1 cluicheadairean air loidhne</numerusform><numerusform>%1 cluicheadair air loidhne</numerusform></translation>
+        <translation>
+            <numerusform>%1 chluicheadair air loidhne</numerusform>
+            <numerusform>%1 chluicheadair air loidhne</numerusform>
+            <numerusform>%1 cluicheadairean air loidhne</numerusform>
+            <numerusform>%1 cluicheadair air loidhne</numerusform>
+        </translation>
     </message>
     <message>
         <source>Search for a room:</source>
@@ -1938,14 +2014,6 @@ An teachdaireachd mu dheireadh aig an einnsein:
 </context>
 <context>
     <name>PageScheme</name>
-    <message>
-        <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Land can not be destroyed!</source>
         <translation type="vanished">Cha ghabh an talamh a mhilleadh!</translation>
@@ -2288,7 +2356,12 @@ An teachdaireachd mu dheireadh aig an einnsein:
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
-        <translation><numerusform>%1 bhaidht</numerusform><numerusform>%1 bhaidht</numerusform><numerusform>%1 baidhtichean</numerusform><numerusform>%1 baidht</numerusform></translation>
+        <translation>
+            <numerusform>%1 bhaidht</numerusform>
+            <numerusform>%1 bhaidht</numerusform>
+            <numerusform>%1 baidhtichean</numerusform>
+            <numerusform>%1 baidht</numerusform>
+        </translation>
     </message>
     <message>
         <source>(in progress...)</source>
@@ -2367,10 +2440,6 @@ An teachdaireachd mu dheireadh aig an einnsein:
     <message>
         <source>Remove friend</source>
         <translation>Thoir air falbh o na caraidean</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
@@ -2528,10 +2597,6 @@ An teachdaireachd mu dheireadh aig an einnsein:
         <translation>Daonna</translation>
     </message>
     <message>
-        <source>Level</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>(System default)</source>
         <translation>(Bun-roghainn an t-siostaim)</translation>
     </message>
@@ -2678,10 +2743,6 @@ An teachdaireachd mu dheireadh aig an einnsein:
         <translation>Mèinnean</translation>
     </message>
     <message>
-        <source>Version</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Weapons</source>
         <translation>Airm</translation>
     </message>
@@ -2746,10 +2807,6 @@ An teachdaireachd mu dheireadh aig an einnsein:
         <translation>Ainm</translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Grave</source>
         <translation>Uaigh</translation>
     </message>
@@ -2764,10 +2821,6 @@ An teachdaireachd mu dheireadh aig an einnsein:
     <message>
         <source>Locale</source>
         <translation>Cànan</translation>
-    </message>
-    <message>
-        <source>Explosives</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Quality</source>
@@ -3037,14 +3090,6 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
         <translation>Chaidh gach co-cheangal faidhle a shuidheachadh</translation>
     </message>
     <message>
-        <source>Cannot create directory %1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Video upload - Error</source>
         <translation type="vanished">Luchdadh suas video – Mearachd</translation>
     </message>
@@ -3116,7 +3161,12 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
-        <translation><numerusform>A bheil thu airson %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform><numerusform>A bheil thu airson an %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform><numerusform>A bheil thu airson na %1 faidhlichean a thoirt air falbh dha-rìribh?</numerusform><numerusform>A bheil thu airson am %1 faidhle a thoirt air falbh dha-rìribh?</numerusform></translation>
+        <translation>
+            <numerusform>A bheil thu airson %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson an %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson na %1 faidhlichean a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson am %1 faidhle a thoirt air falbh dha-rìribh?</numerusform>
+        </translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
@@ -3197,7 +3247,7 @@ Not all players are ready.</source>
 Chan eil a h-uile cluicheadair ullamh.</translation>
     </message>
     <message>
-        <source>Sorry, Hedgewars can't be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
+        <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
 
 Current number of hedgehogs: %1</source>
         <translation type="vanished">Tha sinn duilich ach chan urrainn dhut Hedgewars a chluiche le corr is 48 gràineag. Feuch ris a-rithist le nas lugha a grhàineagan.
@@ -3307,10 +3357,6 @@ A bheil thu airson ath-cheangal ris gu tèarainte?</translation>
     <message>
         <source>Start</source>
         <translation>Tòisich</translation>
-    </message>
-    <message>
-        <source>Go!</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Play demo</source>
@@ -3535,10 +3581,6 @@ A bheil thu airson ath-cheangal ris gu tèarainte?</translation>
         <translation>Dàlaichean</translation>
     </message>
     <message>
-        <source>new</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>New</source>
         <translation>Ùr</translation>
     </message>
@@ -3641,10 +3683,6 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>switch</source>
         <translation>dèan suids</translation>
-    </message>
-    <message>
-        <source>find hedgehog</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>ammo menu</source>
@@ -3959,10 +3997,6 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
         <translation>Suidhich an tìmear air boma no arm eile le tìmear:</translation>
-    </message>
-    <message>
-        <source>Move the camera to the active hog:</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
