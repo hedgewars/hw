@@ -4,7 +4,7 @@
      Do not escape characters or use the CDATA tag. -->
 <tips>
     <tip>Airson cluiche ann an cinneadh, cha leig thu leas ach an aon dath a thaghadh ’s a thagh caraid. Stiùirichidh sibh na gràineagan agaibh fhèin fa leth fhathast ach caillidh no buannaichidh sibh còmhla.</tip>
-    <tip>Tha airm ann nach dèan ach beagan a dhochann ach dh’fhaoidte gum bi iad glè èifeachdach a-rèir an t-suidheachaidh. Feuch gun cleachd thu Iolaire an fhàsaich gus iomadh gràineag a chur dhan mhuir.</tip>
+    <tip>Tha airm ann nach dèan ach beagan a dhochann ach dh’fhaoidte gum bi iad glè èifeachdach a-rèir an t-suidheachaidh. Feuch gun cleachd thu Iolaire an fhàsaich gus iomadh gràineag a phutadh dhan mhuir.</tip>
     <tip>Mur eil thu cinnteach na nì thu agus mur eil thu airson connadh a chaitheamh gun fheum, leig seachad do chuairt. Ach na fuirich ro fhada on a thigeadh bàs obann ort!</tip>
     <tip>A bheil thu airson ròpannan a shàbhaladh? Leig às an ròpa fad ’s a bhios tu san adhair is loisg e a-rithist. Cho fad ’s nach bean thu ri tìr is a chuimsicheas tu gu soirbheachail, cleachdaidh tu an ròpa agad a-rithist gun a bhith a’ caitheamh connaidh!</tip>
     <tip>Mur eil thu ag iarraidh gun cleachd daoine eile am far-ainm as fhearr leat air an fhrithealaiche oifigeil, clàraich cunntas air <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a>.</tip>
@@ -16,7 +16,7 @@
     <tip>’S e bathar-bog saor (Open Source) a th’ ann an Hedgewars a tha sinn a’ cruthachadh gu saor-thoileach a cum tlachd! Coinnich ris an luchd-leasachaidh ann an <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
     <tip>Bi fèill-chluiche oifigeil againn o àm gu àm. Sgaoilidh sinn brathan-naidheachd mu na tachartasan air <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> beagan làithean ro làimh.</tip>
     <tip>Tha Hedgewars ri fhaighinn ann an iomadh cànan. Ma tha an cànan agad a dhìth no an t-eadar-theangachadh ro shean, nach cuir thu fios thugainn?</tip>
-    <tip>Gabhaidh Hedgewars a ruith air iomadh siostam-obrachaidh, a’ gabhail a-steach Microsoft Windows, Mac OS X agus GNU/Linux.</tip>
+    <tip>Gabhaidh Hedgewars a ruith air iomadh siostam-obrachaidh, a’ gabhail a-steach Microsoft Windows, MacOS agus GNU/Linux.</tip>
     <tip>Cuimhnich gur urrainn dhut na geamannan agad fhèin a suidheachadh air an lìonra ionadail no air loidhne. Tha barrachd roghainnean na geama simplidh agad.</tip>
     <tip>Ma tha iomadh pada-geama agad, ceangail iad ris mus tòisich thu an geama agus sònraich an stiùireadh dha na sgiobannan agad.</tip>
     <tip>Bu chòir dhut beagan fois a ghabhail on chluich gach uair a thìde air eagal ’s gun cuir e an sgithear ort.</tip>
@@ -41,7 +41,7 @@
     <tip>Tha astar coiseachd na cèice an eisimeil air an làr a thèid i tarsaing. Cleachd [attack] gus a spreadhadh tràth.</tip>
     <tip>’S e arm a tha sa ghunna loisgidh ach gabhaidh a chleachdadh gus tunailean a chruthachadh cuideachd.</tip>
     <tip>Cleachd am Molotov Cocktail no an gunna loisgidh gus gràineagan a cumail air falbh o thìr mar thunailean no ùrlaran rè seall.</tip>
-    <tip>An toigh leat Hedgewars? Lean oirnn air <a href="https://www.facebook.com/Hedgewars">Facebook</a> no air <a href="https://twitter.com/hedgewars">Twitter</a></tip>
+    <tip>An toigh leat Hedgewars? Lean oirnn air <a href="https://www.facebook.com/Hedgewars">Facebook</a> no air <a href="https://twitter.com/hedgewars">Twitter</a>.</tip>
     <tip>Dèan na dealbhan agad fhèin dha na cladhan, adan, brataich no fiù ’s mapaichean is ùrlaran mar a thogras tu! Ach thoir an aire gum feum thu an co-roinneadh am badeigin mus cleachd thu air loidhne iad.</tip>
     <tip>Cum na draibhearan video agad cho ùr ’s a ghabhas ach nach èirich duilgheadas dhut le cluich a’ gheama.</tip>
     <tip>Ceann no bonn? Sgrìobh “/rnd” san lobaidh is gheibh thu a-mach. Obraichidh “/rnd rock paper scissors” cuideachd!</tip>
@@ -59,12 +59,12 @@
     <tip>Buailidh a’ chuip air gràineagan is nithean taobh thall balla thana cuideachd.</tip>
     <tip>Mar as luaithe a ghluaiseas corc ’s ann nas motha a dhochann a nì i.</tip>
     <tip>’S urrainn dhut cèic a leigeil tuiteam o chreag ach feumaidh tu seasamh glè dhlùth air an oir, mar sin thoir an aire.</tip>
-    <tip>Cleachd an ròpa agad gus gràineagan eile a bhruthadh air falbh, can le sleamhnachadh air an làr. Canar “gnogag ròpa” ris a’ chleas seo.</tip>
+    <tip>Cleachd an ròpa agad gus gràineagan eile a bhruthadh air falbh, can le sleamhnachadh air an làr. Canar “putadh ròpa” ris a’ chleas seo.</tip>
     <tip>Na fuirich ’nad sheasamh air sliabh deighe ach nach tuit thu. ’S urrainn dhut [precise] a cumail sìos mar roghainn eile.</tip>
-    <tip>Air tìr an t-sneachd ’s na Nollaige, bidh cur ’s cathadh ann ach mura gabh an tìr milleadh.</tip>
+    <tip>Air tìr an t-sneachd ’s na Nollaige, bidh cur ’s cathadh ann ach mura gabh an talamh milleadh.</tip>
     <tip>Thoir an aire air tìr an t-sneachd ’s na Nollaige on a bhios na teannadairean ’nan deigh shleamhainn.</tip>
     <tip>Tha ùine a’ chùlachaidh an eisimeil air an arm a chaidh a chleachdadh. Thoir an aire o nach eil ùine cùlachaidh air cuid a dh’airm idir ’s gun cuir iad crìoch air a’ chuairt agad sa bhad!</tip>
-    <tip>Le beagan sgil, ’s urrainn dhut gràineagan a bhrùthadh nuair a leumas tu às am bonn.</tip>
+    <tip>Le beagan sgil, ’s urrainn dhut gràineagan a phutadh nuair a leumas tu às am bonn.</tip>
     <tip>’S urrainn dha ionnsaigh le shoryuken, piocaid ’s òrd no gunna sìneis aig an àm ceart an dochann tuiteim a chur gu neoni.</tip>
     <tip>Cha bhuail go ghràineag ri astasan nuair a bhios i san adhar.</tip>
     <tip>Tha na tuill a nì rocaidean tochlaidh, isnich fàtha agus iolaire an fhàsaich mòr gu leòr ach an tilg thu tele-phortadh tromhpa – ma tha d’ amas ceart.</tip>

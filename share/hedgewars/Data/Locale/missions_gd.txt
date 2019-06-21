@@ -53,7 +53,7 @@ Big_Armory.name=Arm-lann mòr
 Big_Armory.desc="Tha thu ’nad aonar, tha an arm-lann agad làn agus feumaidh tu ruaig a chur air 8 gràineagan mus fhalbh an ùine ort."
 
 Bazooka_Battlefield.name=Blàr a’ bhazooka
-Bazooka_Battlefield.desc="Rinn na ridirean dìleas agad fàth-feitheamh air an nàmhaid. Mill iad le bazookathan a-mhàin! Ach nach doir cus ùine on a dh’èireas an t-uisge a dh’aithghearr."
+Bazooka_Battlefield.desc="Rinn na gràineagan dìleas agad fàth-feitheamh air an nàmhaid. Mill iad le bazookathan a-mhàin! Ach nach doir cus ùine on a dh’èireas an t-uisge a dh’aithghearr."
 
 Tentacle_Terror.name=Maoimeadh nan greimichean
 Tentacle_Terror.desc="Tha do nàmhaid ghealtach ’na fhalach fo uilebheist uabhasach agus bheir e ort le ionnsaighean-adhair cho luath ’s a dh’fhàgas tu am fasgadh. Seall dha cò fìor-cheannard na h-ifrinne! Feumaidh tu a bhith uabhasach eòlach air an ròpa ach am bi teans agad."
