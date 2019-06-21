@@ -1,5 +1,6 @@
 ; Scottish Gaelic locale
 
+; Weapon names
 00:00=Durcan-spreadhaidh
 00:01=Boma sgapaidh
 00:02=Bazooka
@@ -13,6 +14,7 @@
 00:10=Dineamait
 00:11=Bata ball-beusa
 00:12=Shoryuken
+; Short for “second” (unit of time)
 00:13=diog
 00:14=Paraisiut
 00:15=Ionnsaigh adhair
@@ -62,6 +64,7 @@
 00:59=Snàigear
 00:60=Meanbh-ghunna
 
+; Game messages and HUD texts
 01:00=’Ga luchdadh …
 01:01=Cuairt co-ionnann
 01:02=bhuannaich %1!
@@ -72,11 +75,12 @@
 01:07=%1 air fhàgail
 01:08=Connadh: %1%
 01:09=’Ga shioncronachadh…
-01:10=Cha chuir an acainn seo crìoch air a’ chuairt agad!
+01:10=Cha chuir seo crìoch air a’ chuairt agad!
 01:11=Chan eil an t-arm no acainn seo ri làimh fhathast!
 01:12=A’ chuairt mu dheireadh ron bhàs obann!
 01:13=%1 c(h)uairt(ean) gun bhàs obann!
 01:14=Ullaichibh, %1!
+; Bounciness adjectives
 01:15=Beagan
 01:16=Ìosal
 01:17=Àbhaisteach
@@ -115,6 +119,8 @@
 01:46=[Clan] %1: %2
 ; Hedgehog chat. %1 = hog name, %2 = message
 01:47=[%1]: %2
+; Symbol for unknown mine timer
+01:48=?
 
 ; Event messages
 ; Normal hog (%1) died (0 health)
@@ -426,6 +432,8 @@
 02:07=Barrachd acainnean
 02:07=Tha coltas feumail air seo
 02:07=Seo acainnean dhan innleadair
+02:07=Cruinnich na h-acainnean uile!
+02:07=Seo acainnean dhut!
 
 ; Hog (%1) skips his turn
 02:08=Abair thusa gu bheil %1 ràsanach…
@@ -500,6 +508,16 @@
 02:09=Tha mi cinnteach nach fhaca duine beò sin, %1
 02:09=Tha %1 feumach air barrachd oideachaidh
 02:09=Tha e follaiseach gun deach rudeigin cearr leis an arm aig %1
+02:09=Tha %1 ’ga ionnsachadh fhathast
+02:09=Ìochd!
+02:09=Tha %1 dèidheil air pian
+02:09=Tha %1 a’ cur an nàmhaid am breisleach
+02:09=Tha rudeigin cearr air %1
+02:09=Gun rachadh e na b’ fearr leat an ath-thuras, %1!
+02:09=Tha %1 a’ sabaid ’na aghaidh fhèin
+02:09=Tha %1 fo mhisg
+02:09=Ach carson, %1?
+02:09=Bha droch-thubaist air %1
 
 ; Home run: Hog (%1) uses baseball bat to throw other hog far out of the left/right map bounds
 02:10=A’ seòladh nan neul!
@@ -520,6 +538,11 @@
 02:11=Tha %1 ro thrang airson cluiche
 02:11=Chaidh %1 air chall!
 02:11=Feumaidh %1 falbh
+02:11=Dh’fhalbh %1 leis a’ ghaoith
+02:11=Tha %1 a’ teicheadh
+02:11=Tha %1 feumach air saor-làithean
+02:11=Tha obair-dhachaigh ri dèanamh aig %1
+02:11=Tha a’ chabhag air %1
 
 ; Hog (%1) was poisoned
 02:12=Tha %1 bochd
@@ -611,7 +634,7 @@
 02:17=Cha riaghlaidh %1 tuilleadh
 02:17=Fhuair %1 bàs mar a fhuair an rìoghachd
 
-; Weapon Categories
+; Weapon categories/subcaptions
 03:00=Durcan-spreadhaidh le tìmear
 03:01=Durcan-spreadhaidh le tìmear
 03:02=Arm tilgeil
@@ -675,7 +698,7 @@
 03:59=Arm neo-choileanta
 03:60=An t-arm losgaidh as fhearr
 
-; Weapon Descriptions (use | as line breaks)
+; Weapon descriptions (use | as line breaks)
 04:00=Thoir ionnsaigh air na nàimhdean agad le durcan-spreadhaidh simplidh.|Spreadhaidh e nuair a ruigeas an tìmear aige neoni.|1-5: Suidhich tìmear an durcain|Amas pongail + 1-5: Suidhich neart a’ bhocaidh|Ionnsaigh: Cum sìos gus a thilgeil le barrachd neart
 04:01=Thoir ionnsaigh air na nàimhdean agad le boma sgapaidh.|Thèid a sgapadh ’na bomaichean beaga nuair a ruigeas|an tìmear aige neoni.|1-5: Suidhich tìmear a’ bhoma|Amas pongail + 1-5: Suidhich neart a’ bhocaidh|Ionnsaigh: Cum sìos gus a thilgeil le barrachd neart
 04:02=Thoir ionnsaigh air do nàimhdean le pròiseactal-tilgidh|air an dig buaidh na gaoithe ma dh’fhaoidte.|Ionnsaigh: Cum sìos gus a thilgeil le barrachd neart
@@ -719,7 +742,7 @@
 04:40=Cuir teine air an làr leis a’ bhotal seo a tha làn lionna|a loisgeas (an ceann greis).|Ionnsaigh: Cum sìos gus a thilgeil le barrachd neart
 04:41=Seo dearbhadh gu bheil an nàdar as cumhachdaiche na an soitheach-itealaich.|Giùlainidh an t-eunan do ghràineag mu thimcheall agus leigidh e uighean air|na nàimhdean gus am puinnseanachadh!|Bi luath on a chaitheas an t-eunan ùine na cuairte agad!|Ionnsaigh: Gnìomhaich is leig às uighean|Suas/Clì/Deas: Clap sgiathan ’na chomhair sin
 04:42=Bheir an t-inneal tele-phortaidh so-ghiùlan seo nithean on dàrna|ionad dhan ionad eile sa bhad – thu fhèin, nàmhaid no airm.|Cleachd gu glic e ach an dèid an latha leat!|Aithris-àichidh\: Chan obraich e air bann rubair.|Ionnsaigh: Tilg doras|Dèan suids: Atharraich dath an dorais
-04:43=Cuir an t-iongnadh air càch le do chuid ciùil!|Tuit clàrsach mòr o na speuran|a mhilleas gad rud ’na rathad ach thoir an aire:|Thèid do ghràineag ’na h-ìobairt gus an clàrsach a ghairm.|Cùrsair: Tagh raon amais|F1-F9: Seinn air a’ chlàrsach
+04:43=Cuir an t-iongnadh air càch le do chuid ciùil!|Tuit clàrsach mòr o na speuran|a mhilleas gad rud ’na rathad ach thoir an aire\:|Thèid do ghràineag ’na h-ìobairt gus an clàrsach a ghairm.|Cùrsair: Tagh raon amais|F1-F9: Seinn air a’ chlàrsach
 04:44=Chan e càise a th’ ann ach cogadh bith-eòlach! Cha dèan e mòran|dochainn nuair a ruigeas an tìmear neoni ach thèid gràineag|sam bith a bheir fàileadh às a phuinnseanachadh!|1-5: Suidhich an tìmear|Amas pongail + 1-5: Suidhich neart a’ bhocaidh|Ionnsaigh: Cum sìos gus a thilgeil le barrachd neart
 04:45=Gheibh thu buannachd às an eòlas-nàdair mu dheireadh thall!|Cuir gu dol tonn sìneis marbhtach a loisgeas tron tìr.|Thoir an aire on a tha putadh làidir aig an arm seo.|Ionnsaigh: Loisg
 04:46=Còmhdaich do nàimhdean le lasair theth.|Bheir i tiomachadh air an cridheachan!|Ionnsaigh: Gnìomhaich|Suas/Sìos: Lean ort ’ga amas|Clì/Deas: Gleus neart an steallaidh
@@ -791,3 +814,5 @@
 06:24=/shrug: Crathaidh gràineag a gualainn
 06:25=/wave: Smèididh gràineag
 06:26=Àithne nach aithne dhuinn no paramadairean mì-dhligheach. Can “/help” sa chabadaich airson nan àitheantan a shealltainn.
+06:27=/help room: Seall àitheantan cabadaich an t-seòmair
+06:28=Chan eil thu air loidhne!
