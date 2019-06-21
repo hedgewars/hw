@@ -65,7 +65,7 @@ impl std::fmt::Debug for UsedSpace {
         write!(
             f,
             "{:.2}%",
-            self.used() as f32 / self.total() as f32 / 100.0
+            self.used() as f32 / self.total() as f32 * 100.0
         )?;
         Ok(())
     }
@@ -248,6 +248,14 @@ impl AtlasCollection {
             }
             self.consume_index()
         }
+    }
+
+    pub fn used_space(&self) -> String {
+        self.atlases
+            .iter()
+            .enumerate()
+            .map(|(i, a)| format!("{}: {:?}", i, a.used_space()))
+            .join("\n")
     }
 }
 
