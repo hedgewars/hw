@@ -1246,7 +1246,7 @@ void HWForm::NetNickNotRegistered(const QString & nick)
     noRegMsg.setIcon(QMessageBox::Information);
     noRegMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Nick not registered"));
     noRegMsg.setWindowModality(Qt::WindowModal);
-    noRegMsg.setText(tr("Your nickname is not registered.\nTo prevent someone else from using it,\nplease register it at www.hedgewars.org"));
+    noRegMsg.setText(tr("Your nickname is not registered.\nTo be able to rejoin games in progress and\nprevent someone else from using it,\nplease register it at www.hedgewars.org"));
 
     if (!config->passwordHash().isEmpty())
     {
