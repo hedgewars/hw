@@ -39,6 +39,7 @@ Gameplay:
  * Add missing winner animation in single missions
  * Fix hog floating when switching to moving hog
  * Fix jump key not being ignored after placing girder or target
+ * Explode hog instantly when taking damage while dying
 
 Styles and schemes:
  + The Specialists: Unlock game scheme

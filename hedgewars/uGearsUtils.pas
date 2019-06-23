@@ -283,8 +283,16 @@ begin
         Gear^.LastDamage := AttackerHog;
 
         Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
-        HHHurt(Gear^.Hedgehog, Source, Damage);
-        AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
+
+        if (Gear^.State and gstHHDeath) <> 0 then
+            // If hog took damage while dying, explode hog instantly (see doStepHedgehogDead)
+            Gear^.Timer:= 1
+        else
+            begin
+            HHHurt(Gear^.Hedgehog, Source, Damage);
+            AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
+            end;
+
         tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
         if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (tmpDmg >= 1) then
             begin
