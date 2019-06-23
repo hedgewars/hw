@@ -7,12 +7,14 @@ Highlights:
  + Challenges track the team's highscores
  + Hand-drawn maps can now be scaled with slider
  + Quick games are more random
+ + Homing bee can be used as secondary ammo
  + Can change hedgehog order in The Specialists
  + Turn transition is less hectic
  + Various small HUD improvements
  * Fix wrong key names being displayed in key selection
 
 Gameplay:
+ + Quick games are more random: More map types, random team size and difficulty
  + Hand-drawn maps can now be scaled with slider
  + Slightly longer delays between turns to make it easier to follow the game
  + Track high scores in singleplayer challenges
@@ -20,6 +22,8 @@ Gameplay:
  + Training/challenge/scenario menu now supports team selection
  + Most target practices now highlight position of next target (must be unlocked first)
  + Homing bee can now be used as secondary ammo
+ + If bee target was placed in the dark area in a wrap world edge map, bee will first fly across border
+ + Teach computer players how to use extra time
  * Fix hedgehogs being pushed around (and other collision bugs) when they overlap
  * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
  * Fix air mine not colliding with crates initially
@@ -47,7 +51,7 @@ Styles and schemes:
  * Racer: Fix racer ghost not getting reset after a skip
  * Space Invasion: No longer allow to set start shield above shield limit
  * Battalion, WxW: Crates drop between turns, when appropriate
- * Battalion: Make Sudden Death effects with the base game
+ * Battalion: Sudden Death effects are now like in the base game
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
  * HedgeEditor: Fix major FPS drop when there are a lot of objects
@@ -95,11 +99,12 @@ Controls:
  + Precise + cursor move keys move camera slower
  + New chat command: “/help room” (shows room chat commands within the game)
  + Default demo fast-forward key changed from “S” to “F”
- + Default fallback Sudden Death music of themes (fallback-sd-music) is now sdmusic.ogg
  * Fix broken default keyboard controls for team chat and camera movement
 
 Graphics:
  + Animate drill rockets
+ + New idle shoryuken animation
+ + Scatter molotov cocktail pieces
  * Fix speech bubbles overlapping in the wrong order
  * Fix wrong ice beam angle if it goes diagonally up out of map through world wrap
  * Fix double water splash when flying saucer drowns
@@ -130,12 +135,12 @@ Game HUD:
  * Fix buggy behaviour when entering speech bubble command in hog placement phase
 
 Translations:
- + Major update: Chinese
+ + Complete: German
+ + Major updates: Chinese, Scottish Gaelic
  + Credits page is now translatable
  * Remove Arabic translation from release
 
 Frontend:
- + Quick games are more random: More map types, random team size and difficulty
  + Add button in main menu at top left corner to open credits page
  + Restructure credits page
  + More intelligent automatic mission selection in campaign screen
@@ -160,6 +165,7 @@ Sounds and voicepacks:
  * Fix English voicepack selection of team being overwritten when playing in non-English locale
 
 Theme customization
+ + Default fallback Sudden Death music of themes (fallback-sd-music) is now sdmusic.ogg
  + Make rope stylable by theme: Support for RopeNode.png and rope-step in theme.cfg
 
 Lua API:
@@ -167,20 +173,20 @@ Lua API:
  + New call: GetMissionVar(varname): Get value of mission variable
  + New call: SetTurnTimePaused(isPaused): Call with true to pause turn time, false to unpause
  + New call: GetTurnTimePaused(): Returns true if turn time is paused due to Lua
- + New call: AddMissionTeam(color): Add mission team, i.e. the team selected by player in campaign/mission page
+ + New call: AddMissionTeam(color): Add mission team, i.e. the team selected by player in campaign/mission page. Returns <team name>, <team index>
  + New call: AddMissionHog(health): Add a hedgehog for the mission team
  + New call: SetTeamPassive(teamname, isPassive): Mark a team as passive. Passive teams do not play and are treated like frozen teams.
  + New call: IsHogAlive(gear): Returns true if gear is a hegehog which is alive, not about to die and not hidden
  + New call: SetAmmoSlot(ammoType, slot): Overwrite ammo slot of ammo type (use with care!)
- + New return value: AddTeam/AddMissionTeam return <real team name>, <team index>
+ + New return value: AddTeam returns <real team name>, <team index>
  + SetClanColor: Now accepts negative color argument for user clan color, like in AddTeam
  + AddTeam: Append “_qau” to voicepack name to enable automatic selection of voicepack language
  + ShowMission: Add new icons: hedgehog (10), flags (11)
  + Utils library: New calls: getReadableChallengeRecord, updateChallengeRecord, integerSqrt, integerHypotenuse
  + New callback: onGameResult(winningClan): Called when the game ends normally. winningClan = index of winning clan or -1 on draw
  + New callback: onCaseDrop(gear): Called at the point where a crate MIGHT be dropped between turns. Gear is the crate gear or nil
- + New callback: onHogSwitch(oldHog): Called when hogs was switched with the “switch hedgehog” utility
- + SendStat extension: Option to use predefined modes with siPointType, like "!POINTS" or "!TIME"
+ + New callback: onHogSwitch(oldHog): Called when hog was switched with the “switch hedgehog” utility
+ + SendStat extension: Option to use predefined modes with siPointType: statMessage = "!POINTS", "!TIME", "!TIME0" to "!TIME3", "!CRATES", or "!EMPTY"
  + SimpleMission: Add isMissionTeam attribute for teams
  + SpeedShoppa/TargetPractice libraries: Remove custom hog and team info settings
  + TargetPractice library: Add faceLeft parameter
@@ -192,7 +198,7 @@ Lua API:
  * Fix DismissTeam not clearing team properly
  * SimpleMission: Fix Lua error spam when a custom goal fails
  * gstWinner state is preserved after the game ended
- * If there's a mission team IsHogLocal now only returns true for hogs in the same clan as the mission team
+ * If there's a mission team, IsHogLocal now only returns true for hogs in the same clan as the mission team
 
 ====================== 0.9.25 ======================
 HIGHLIGHTS:
