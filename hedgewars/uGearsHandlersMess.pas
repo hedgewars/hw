@@ -3614,9 +3614,20 @@ begin
 end;
 
 procedure doStepKamikazeIdle(Gear: PGear);
+var HHGear: PGear;
 begin
     AllInactive := false;
     dec(Gear^.Timer);
+    HHGear := Gear^.Hedgehog^.Gear;
+    if (HHGear = nil) or (HHGear^.Damage <> 0) then
+        begin
+        if (HHGear <> nil) then
+            AfterAttack;
+        ClearHitOrder();
+        ClearProximityCache();
+        DeleteGear(Gear);
+        exit;
+        end;
     if Gear^.Timer = 0 then
         begin
         Gear^.Pos := 1;
