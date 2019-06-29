@@ -339,12 +339,20 @@ begin
 end;
 
 procedure RenderAirMineGuiExtras(Gear: PGear; ox, oy: LongInt);
+var isChasing: boolean;
 begin
 // render air mine contour, if underwater
     if (((not SuddenDeathDmg) and (WaterOpacity > cGearContourThreshold)) or (SuddenDeathDmg and (SDWaterOpacity > cGearContourThreshold))) and
         ((cWaterLine < (hwRound(Gear^.Y) + Gear^.Radius + 16)) or
         ((WorldEdge = weSea) and ((hwRound(Gear^.X) < LeftX + 24) or (hwRound(Gear^.X) > RightX - 24)))) then
+        begin
+        isChasing:= ((Gear^.State and gstFrozen) = 0) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and ((Gear^.State and gstTmpFlag) <> 0) and (Gear^.Tag = 0);
+        if isChasing then
+            Tint($FF, $30, $30, $FF);
         DrawSprite(sprAirMine, ox-16, oy-16, 32);
+        if isChasing then
+            untint;
+        end;
 end;
 
 procedure DrawHH(Gear: PGear; ox, oy: LongInt);
