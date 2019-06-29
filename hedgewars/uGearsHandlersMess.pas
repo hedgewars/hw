@@ -1123,11 +1123,14 @@ begin
 end;
 
 procedure doStepBee(Gear: PGear);
+var wrapped: boolean;
 begin
     AllInactive := false;
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
-    WorldWrap(Gear);
+    wrapped:= WorldWrap(Gear);
+    if wrapped then
+        HomingWrap(Gear);
     Gear^.dY := Gear^.dY + cGravity;
     CheckGearDrowning(Gear);
     CheckCollision(Gear);
