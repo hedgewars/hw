@@ -123,7 +123,7 @@ Game HUD:
  + Don't show crate spawn message for initial crates in missions
  + Don't show hedgehog health if “invulnerable” game modifier is active
  + Display player name of own teams in online games
- + Show contour of flying saucer when in highly opaque water
+ + Show contour of flying saucer and air mines when in highly opaque water
  + Remove visual clutter in cut scenes
  + Add setting to set default/initial zoom
  * Black clan color can now be used without visual problems
