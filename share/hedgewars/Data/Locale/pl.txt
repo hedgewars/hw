@@ -54,6 +54,7 @@
 00:51=Kula błotna
 00:52=Nie wybrano broni
 00:53=TARDIS
+; 00:54=Budynek
 00:54=Miotacz błota
 00:55=Zamrażarka
 00:56=Tasak
@@ -102,6 +103,7 @@
 01:37=%1 odchodzi.
 01:38=%1 powraca.
 01:39=%1 automatycznie pomija turę.
+; 01:40=%1 klatek na sekundę
 01:40=%1 fps
 01:41=Parsowanie Lua: WYŁĄCZONE
 01:42=Parsowanie Lua: WŁĄCZONE
@@ -605,6 +607,7 @@
 03:51=Znalezione na ziemi
 03:52=UNUSED
 03:53=Typ 40
+;03:54=Zbuduj coś
 03:54=Narzędzie
 03:55=Chłodniej już nie będzie!
 03:56=Nie przytnij sobie igieł!
@@ -730,3 +733,5 @@
 06:24=/shrug: Spraw, by jeż wzruszył ramionami
 06:25=/wave: Spraw, by jeż pomachał dłonią
 06:26=Nieznana komenda lub niepoprawne parametry. Powiedz w czacie "/help" dla listy komend.
+06:27=/help room: Lista komend czatu w pokoju
+06:28=Nie jesteś online!
