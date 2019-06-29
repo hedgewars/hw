@@ -39,6 +39,7 @@ procedure RenderGear(Gear: PGear; x, y: LongInt);
 procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
 procedure RenderGearHealth(Gear: PGear; x, y: LongInt);
 procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
+procedure RenderAirMineGuiExtras(Gear: PGear; ox, oy: LongInt);
 procedure DrawHHOrder();
 
 var RopePoints: record
@@ -313,7 +314,7 @@ begin
         case CurAmmoGear^.Kind of
             gtJetpack:      begin
                             // render jetpack contour if underwater
-                            if (((not SuddenDeathDmg) and (WaterOpacity > 179)) or (SuddenDeathDmg and (SDWaterOpacity > 179))) and
+                            if (((not SuddenDeathDmg) and (WaterOpacity > cGearContourThreshold)) or (SuddenDeathDmg and (SDWaterOpacity > cGearContourThreshold))) and
                                     ((cWaterLine < (hwRound(Gear^.Y) + Gear^.Radius - 16)) or
                                     ((WorldEdge = weSea) and ((hwRound(Gear^.X) < LeftX) or (hwRound(Gear^.X) > RightX)))) then
                                 DrawSprite(sprJetpack, sx-32, sy-32, 4);
@@ -335,6 +336,15 @@ begin
         begin
         DrawSelectedWeapon(Gear, sx, sy, false);
         end
+end;
+
+procedure RenderAirMineGuiExtras(Gear: PGear; ox, oy: LongInt);
+begin
+// render air mine contour, if underwater
+    if (((not SuddenDeathDmg) and (WaterOpacity > cGearContourThreshold)) or (SuddenDeathDmg and (SDWaterOpacity > cGearContourThreshold))) and
+        ((cWaterLine < (hwRound(Gear^.Y) + Gear^.Radius + 16)) or
+        ((WorldEdge = weSea) and ((hwRound(Gear^.X) < LeftX + 24) or (hwRound(Gear^.X) > RightX - 24)))) then
+        DrawSprite(sprAirMine, ox-16, oy-16, 32);
 end;
 
 procedure DrawHH(Gear: PGear; ox, oy: LongInt);

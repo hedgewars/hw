@@ -718,6 +718,8 @@ while Gear <> nil do
     begin
     x:= hwRound(Gear^.X) + WorldDx;
     y:= hwRound(Gear^.Y) + WorldDy;
+    if Gear^.Kind = gtAirMine then
+        RenderAirMineGuiExtras(Gear, x, y);
     RenderGearHealth(Gear, x, y);
     RenderGearTimer(Gear, x, y);
     if Gear^.Kind = gtHedgehog then
