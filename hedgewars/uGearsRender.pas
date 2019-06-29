@@ -1379,22 +1379,35 @@ begin
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
          gtAirMine: 
+                    // render air mine based on its state:
+                    // frozen
                     if (Gear^.State and gstFrozen <> 0) then
+                        // frozen air mine sprite
                         DrawSprite(sprFrozenAirMine, x-16, y-16, 0)
+                    // stunned (after being shot)
                     else if (Gear^.Tag <> 0) then
+                        // sparks animation
                         DrawSprite(sprAirMine, x-16, y-16, 16 + ((RealTicks div 50 + Gear^.Uid) mod 16))
-                    else if (Gear^.State and gstTmpFlag = 0) then                // mine is inactive
+                    // inactive / initialization phase (shortly after launched by hog)
+                    else if (Gear^.State and gstTmpFlag = 0) then
                         begin
-                        if (Gear^.State and gstTmpFlag = 0) then Tint(150,150,150,255);
+                        // dark air mine, signal lamp off
+                        Tint(150,150,150,255);
                         DrawSprite(sprAirMine, x-16, y-16, 15);
                         untint
                         end
-                    else if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then  // mine is chasing a hog
+                    // actively chasing a hog
+                    else if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+                         // signal lamp rapidly flashes
                          DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 25 + Gear^.Uid) mod 16)
-                    else if Gear^.State and gstChooseTarget <> 0 then   // mine is seeking for hogs
-                         DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 125 + Gear^.Uid) mod 16)
+                    // seeking for hogs
+                    else if Gear^.State and gstChooseTarget <> 0 then
+                         // signal lamp on
+                         DrawSprite(sprAirMine, x-16, y-16, 3)
+                    // active, but not seeking for hogs
                     else
-                         DrawSprite(sprAirMine, x-16, y-16, 4);           // mine is active but not seeking
+                         // signal lamp off
+                         DrawSprite(sprAirMine, x-16, y-16, 15);
 
            gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
                            DrawSpriteRotated(sprSMineOff, x, y, 0, Gear^.DirAngle)
