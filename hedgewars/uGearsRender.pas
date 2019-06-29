@@ -339,18 +339,33 @@ begin
 end;
 
 procedure RenderAirMineGuiExtras(Gear: PGear; ox, oy: LongInt);
-var isChasing: boolean;
+var tinted: boolean;
 begin
 // render air mine contour, if underwater
     if (((not SuddenDeathDmg) and (WaterOpacity > cGearContourThreshold)) or (SuddenDeathDmg and (SDWaterOpacity > cGearContourThreshold))) and
         ((cWaterLine < (hwRound(Gear^.Y) + Gear^.Radius + 16)) or
         ((WorldEdge = weSea) and ((hwRound(Gear^.X) < LeftX + 24) or (hwRound(Gear^.X) > RightX - 24)))) then
         begin
-        isChasing:= ((Gear^.State and gstFrozen) = 0) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and ((Gear^.State and gstTmpFlag) <> 0) and (Gear^.Tag = 0);
-        if isChasing then
-            Tint($FF, $30, $30, $FF);
+        tinted:= true;
+        // tint contour based on air mine state:
+        // not seeking or chasing (frozen, stunned or just launched)
+        if ((Gear^.State and gstFrozen) <> 0) or ((Gear^.State and gstTmpFlag) = 0) or (Gear^.Tag <> 0) then
+            // more transparent
+            Tint($FF, $FF, $FF, $80)
+        // chasing hog
+        else if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+            // reddish
+            Tint($FF, $30, $30, $FF)
+        // not seeking or chasing (no target)
+        else if (Gear^.State and gstChooseTarget) = 0 then
+            // more transparent
+            Tint($FF, $FF, $FF, $80)
+        // seeking
+        else
+            // default color
+            tinted:= false;
         DrawSprite(sprAirMine, ox-16, oy-16, 32);
-        if isChasing then
+        if tinted then
             untint;
         end;
 end;
