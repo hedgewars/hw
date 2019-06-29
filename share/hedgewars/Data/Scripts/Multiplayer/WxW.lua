@@ -1282,7 +1282,8 @@ function onGameStart()
 	end
 
 	if useMenu then
-		ShowMission(loc("Wall to wall"), loc("Please wait …"), "", 2, 300000)
+		ShowMission(loc("Wall to wall"), loc("Please wait …"), "", 2, 0)
+		HideMission()
 		UpdateMenu()
 	else
 		if GetGameFlag(gfPlaceHog) then
