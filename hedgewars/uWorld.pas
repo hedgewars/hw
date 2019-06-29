@@ -1862,6 +1862,13 @@ if isCursorVisible and (not bShowAmmoMenu) then
                     end;
                 DrawSprite(PosSprite, TargetCursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
                 Untint();
+                if (WorldEdge = weWrap) and (CurAmmoType = amBee) then
+                    begin
+                    if (TargetCursorPoint.X - WorldDx > rightX) then
+                        DrawSprite(sprThroughWrap, TargetCursorPoint.X - (SpritesData[sprThroughWrap].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1) - SpritesData[sprThroughWrap].Height - 2, 0)
+                    else if (TargetCursorPoint.X - WorldDx < leftX) then
+                        DrawSprite(sprThroughWrap, TargetCursorPoint.X - (SpritesData[sprThroughWrap].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1) - SpritesData[sprThroughWrap].Height - 2, 1);
+                    end;
                 end;
             end;
     DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight + round(SpritesData[sprArrow].Height / cScaleFactor) - TargetCursorPoint.Y, (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
