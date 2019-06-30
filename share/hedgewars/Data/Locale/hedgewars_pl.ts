@@ -80,46 +80,46 @@
     </message>
     <message>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Twórcy</translation>
     </message>
     <message>
         <source>Other people</source>
-        <translation type="unfinished"></translation>
+        <translation>Inni ludzie</translation>
     </message>
     <message>
         <source>%1 (alias %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (alias %2)</translation>
     </message>
     <message>
         <source>%1 &amp;lt;%2&amp;gt;</source>
         <extracomment>Part of credits. %1: Contributor name. %2: E-mail address</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 &amp;lt;%2&amp;gt;</translation>
     </message>
     <message>
         <source>%1: %2</source>
         <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <source>%1: %2 &amp;lt;%3&amp;gt;</source>
         <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2 &amp;lt;%3&amp;gt;</translation>
     </message>
     <message>
         <source>Extended Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Reszta twórców</translation>
     </message>
     <message>
         <source>An extended credits list can be found in the CREDITS text file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista reszty twórców znajduje się w pliku CREDITS.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>Unknown Compiler: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznany kompilator: %1</translation>
     </message>
 </context>
 <context>
@@ -934,15 +934,15 @@ Ostatnia wiadomość silnika:
     </message>
     <message>
         <source>Scale size of the drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Skaluj rozmiar narysowanej mapy</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Wczytaj</translation>
+        <translation>Wczytaj</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edytuj</translation>
     </message>
 </context>
 <context>
@@ -1087,7 +1087,14 @@ To report this error, please click the &apos;Feedback&apos; button in the main m
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Wystąpił fatalny BŁĄD podczas przetwarzania nagrania wideo! Wideo nie mogło zostać zapisane.
+
+Jako obejście, możesz spróbować zresetować ustawienia nagrywania wideo Hedgewars do domyślnych.
+
+By zgłosić ten błąd, kliknij przycisk &quot;Twoja opinia&quot; w menu głównym!
+
+Ostatnia wiadomość silnika:
+%1</translation>
     </message>
 </context>
 <context>
@@ -1142,7 +1149,7 @@ Last engine message:
     </message>
     <message>
         <source>Warning: The same key is assigned multiple times!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostrzeżenie: Ten sam klawisz jest przypisany wielokrotnie!</translation>
     </message>
 </context>
 <context>
@@ -1603,8 +1610,8 @@ Last engine message:
     <message numerus="yes">
         <source>(%1 point(s))</source>
         <extracomment>Number of points in stats screen, written after the team name</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 punkty/ów)</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -1612,16 +1619,16 @@ Last engine message:
     <message numerus="yes">
         <source>(%L1 second(s))</source>
         <extracomment>Time in seconds</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%L1 sekund(y))</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 crate(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 skrzyń)</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -1723,19 +1730,19 @@ Last engine message:
     <name>PageNet</name>
     <message>
         <source>Connect to the selected server</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz z wybranym serwerem</translation>
     </message>
     <message>
         <source>Update the list of servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaktualizuj listę serwerów</translation>
     </message>
     <message>
         <source>Specify the address and port number of a known server and connect to it directly</source>
-        <translation type="unfinished"></translation>
+        <translation>Podaj adres i numer portu znanego serwera i połącz się bezpośrednio</translation>
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished">Uruchom prywatny serwer</translation>
+        <translation>Uruchom prywatny serwer</translation>
     </message>
 </context>
 <context>
@@ -2350,7 +2357,7 @@ Last engine message:
     </message>
     <message>
         <source>Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios.</source>
-        <translation type="unfinished"></translation>
+        <translation>Misje dla jednego gracza: Naucz się jak grać przez trening, poćwicz swoje zdolności w wyzwaniach lub spróbuj ukończyć cele w scenariuszach.</translation>
     </message>
 </context>
 <context>
@@ -2397,30 +2404,30 @@ Last engine message:
     </message>
     <message>
         <source>Team</source>
-        <translation type="unfinished">Drużyna</translation>
+        <translation>Drużyna</translation>
     </message>
     <message>
         <source>Team highscore: %1</source>
         <extracomment>Highest score of a team</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Najlepszy wynik drużyny: %1</translation>
     </message>
     <message>
         <source>Team lowscore: %1</source>
         <extracomment>Lowest score of a team</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Najgorszy wynik drużyny: %1</translation>
     </message>
     <message>
         <source>Team&apos;s top accuracy: %1%</source>
         <extracomment>Best accuracy of a team (in a challenge)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Najlepsza celność drużyny: %1%</translation>
     </message>
     <message>
         <source>Team&apos;s best time: %L1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>Najlepszy czas drużyny: %L1s</translation>
     </message>
     <message>
         <source>Team&apos;s longest time: %L1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>Najgorszy czas drużyny: %L1s</translation>
     </message>
 </context>
 <context>
@@ -3139,7 +3146,7 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Zoom (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Przybliżenie (%)</translation>
     </message>
 </context>
 <context>
@@ -3494,12 +3501,13 @@ Wydajesz się być tu nowy. Zechcesz zagrać w jakieś misje treningowe, by pozn
     </message>
     <message>
         <source>Server redirection</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekierowanie serwera</translation>
     </message>
     <message>
         <source>This server supports secure connections on port %1.
 Would you like to reconnect securely?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten serwer obsługuje bezpecznie połączenia na porcie %1.
+Czy zechcesz połączyć się ponownie bezpiecznie?</translation>
     </message>
 </context>
 <context>
@@ -3637,7 +3645,7 @@ Would you like to reconnect securely?</source>
     </message>
     <message>
         <source>Specify address</source>
-        <translation type="unfinished"></translation>
+        <translation>Podaj adres</translation>
     </message>
 </context>
 <context>
@@ -4073,59 +4081,59 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>unselect weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>schowaj broń</translation>
     </message>
     <message>
         <source>stand still on slippery land</source>
-        <translation type="unfinished"></translation>
+        <translation>stój nieruchomo na śliskim terenie</translation>
     </message>
     <message>
         <source>change direction without moving</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień kierunek bez poruszania się</translation>
     </message>
     <message>
         <source>switch backwards</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień w przeciwną stronę</translation>
     </message>
     <message>
         <source>change bounciness</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień sprężystość</translation>
     </message>
     <message>
         <source>reset zoom to start value</source>
-        <translation type="unfinished"></translation>
+        <translation>zresetuj przybliżenie do wartości początkowej</translation>
     </message>
     <message>
         <source>set zoom to 100%</source>
-        <translation type="unfinished"></translation>
+        <translation>ustaw przybliżenie na 100%</translation>
     </message>
     <message>
         <source>save map as image</source>
-        <translation type="unfinished"></translation>
+        <translation>zapisz mapę jako obrazek</translation>
     </message>
     <message>
         <source>show object information</source>
-        <translation type="unfinished"></translation>
+        <translation>pokaż informacje o obiekcie</translation>
     </message>
     <message>
         <source>change hedgehog tag types</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień tym tagów jeży</translation>
     </message>
     <message>
         <source>toggle hedgehog tag translucency</source>
-        <translation type="unfinished"></translation>
+        <translation>zmień przezroczystość tagów jeży</translation>
     </message>
     <message>
         <source>toggle HUD</source>
-        <translation type="unfinished"></translation>
+        <translation>przełącz HUD</translation>
     </message>
     <message>
         <source>backwards jump</source>
-        <translation type="unfinished"></translation>
+        <translation>skok w tył</translation>
     </message>
     <message>
         <source>screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>zrzut ekranu</translation>
     </message>
 </context>
 <context>
@@ -4151,43 +4159,43 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <name>binds (combination)</name>
     <message>
         <source>hold down precise</source>
-        <translation type="unfinished"></translation>
+        <translation>przytrzymaj precyzję</translation>
     </message>
     <message>
         <source>precise + left/right</source>
-        <translation type="unfinished"></translation>
+        <translation>precyzja + lewo/prawo</translation>
     </message>
     <message>
         <source>precise + switch</source>
-        <translation type="unfinished"></translation>
+        <translation>precyzja + zmiana</translation>
     </message>
     <message>
         <source>precise + timer</source>
-        <translation type="unfinished"></translation>
+        <translation>precyzja + zapalnik</translation>
     </message>
     <message>
         <source>precise + reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>precyzja + resetuj przybliżenie</translation>
     </message>
     <message>
         <source>precise + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>precyzja + przełącz tagi jeży</translation>
     </message>
     <message>
         <source>switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>zmiana + przełącz tagi jeży</translation>
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>precyzja + zmiana + przełącz tagi jeży</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
-        <translation type="unfinished"></translation>
+        <translation>wysoki skok (dwukrotnie)</translation>
     </message>
     <message>
         <source>precise + screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>precyzja + zrzut ekranu</translation>
     </message>
 </context>
 <context>
@@ -4617,605 +4625,605 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <message>
         <source>(Don&apos;t use)</source>
         <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(Nie przypisane)</translation>
     </message>
     <message>
         <source>Mouse: X1 button </source>
-        <translation type="unfinished"></translation>
+        <translation>Mysz: przycisk X1</translation>
     </message>
     <message>
         <source>Mouse: X2 button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mysz: przycisk X2</translation>
     </message>
     <message>
         <source>Keypad 0</source>
-        <translation type="unfinished"></translation>
+        <translation>0 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 1</source>
-        <translation type="unfinished"></translation>
+        <translation>1 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 2</source>
-        <translation type="unfinished"></translation>
+        <translation>2 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 3</source>
-        <translation type="unfinished"></translation>
+        <translation>3 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 4</source>
-        <translation type="unfinished"></translation>
+        <translation>4 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 5</source>
-        <translation type="unfinished"></translation>
+        <translation>5 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 6</source>
-        <translation type="unfinished"></translation>
+        <translation>6 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 7</source>
-        <translation type="unfinished"></translation>
+        <translation>7 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 8</source>
-        <translation type="unfinished"></translation>
+        <translation>8 numeryczne</translation>
     </message>
     <message>
         <source>Keypad 9</source>
-        <translation type="unfinished"></translation>
+        <translation>9 numeryczne</translation>
     </message>
     <message>
         <source>Keypad .</source>
-        <translation type="unfinished"></translation>
+        <translation>. numeryczna</translation>
     </message>
     <message>
         <source>Keypad /</source>
-        <translation type="unfinished"></translation>
+        <translation>/ numeryczny</translation>
     </message>
     <message>
         <source>Keypad *</source>
-        <translation type="unfinished"></translation>
+        <translation> numeryczna</translation>
     </message>
     <message>
         <source>Keypad -</source>
-        <translation type="unfinished"></translation>
+        <translation>- numeryczny</translation>
     </message>
     <message>
         <source>Keypad +</source>
-        <translation type="unfinished"></translation>
+        <translation>+ numeryczny</translation>
     </message>
     <message>
         <source>Keypad Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Enter numeryczny</translation>
     </message>
     <message>
         <source>PageUp</source>
-        <translation type="unfinished"></translation>
+        <translation>PageUp</translation>
     </message>
     <message>
         <source>PageDown</source>
-        <translation type="unfinished"></translation>
+        <translation>PageDown</translation>
     </message>
     <message>
         <source>Numlock</source>
-        <translation type="unfinished"></translation>
+        <translation>NumLock</translation>
     </message>
     <message>
         <source>CapsLock</source>
-        <translation type="unfinished"></translation>
+        <translation>CapsLock</translation>
     </message>
     <message>
         <source>ScrollLock</source>
-        <translation type="unfinished"></translation>
+        <translation>ScrollLock</translation>
     </message>
     <message>
         <source>Right Shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Prawy Shift</translation>
     </message>
     <message>
         <source>Left Shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Lewy Shift</translation>
     </message>
     <message>
         <source>Right Ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Prawy Ctrl</translation>
     </message>
     <message>
         <source>Left Ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Lewy Ctrl</translation>
     </message>
     <message>
         <source>Right Alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Prawy Alt</translation>
     </message>
     <message>
         <source>Left Alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Lewy Alt</translation>
     </message>
     <message>
         <source>Right GUI</source>
         <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Prawe GUI</translation>
     </message>
     <message>
         <source>Left GUI</source>
         <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Lewe GUI</translation>
     </message>
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(QWERTY)</translation>
     </message>
     <message>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu</translation>
     </message>
 </context>
 <context>
     <name>credits</name>
     <message>
         <source>Programming</source>
-        <translation type="unfinished"></translation>
+        <translation>Programowanie</translation>
     </message>
     <message>
         <source>Game engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Silnik gry</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>Twórca</translation>
     </message>
     <message>
         <source>Many engine improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiele ulepszeń silnika</translation>
     </message>
     <message>
         <source>Gamepad and Lua integration</source>
-        <translation type="unfinished"></translation>
+        <translation>Integracja gamepadów i LUA</translation>
     </message>
     <message>
         <source>Campaign support</source>
-        <translation type="unfinished"></translation>
+        <translation>Obsługa kampanii</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Więcej opcji dostosowania motywów</translation>
     </message>
     <message>
         <source>Some Pas2C and GLES2 work</source>
-        <translation type="unfinished"></translation>
+        <translation>Usprawnienia przy Pas2C i GLES2</translation>
     </message>
     <message>
         <source>Video recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Nagrywanie wideo</translation>
     </message>
     <message>
         <source>Other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Inne usprawnienia</translation>
     </message>
     <message>
         <source>Map generation</source>
-        <translation type="unfinished"></translation>
+        <translation>Generowanie mapy</translation>
     </message>
     <message>
         <source>Core map generators</source>
-        <translation type="unfinished"></translation>
+        <translation>Główne generatory mapy</translation>
     </message>
     <message>
         <source>Perlin maps and other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy Perlina i inne ulepszenia</translation>
     </message>
     <message>
         <source>Maze maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy labiryntów</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Bronie</translation>
     </message>
     <message>
         <source>Most core weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Większość głównych broni</translation>
     </message>
     <message>
         <source>Air mine, rubber, others</source>
-        <translation type="unfinished"></translation>
+        <translation>Mina powietrzna, guma, inne</translation>
     </message>
     <message>
         <source>Drill rocket, ballgun, RC plane</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiertnicza rakieta, pistolet na kulki, zdalnie sterowany samolot</translation>
     </message>
     <message>
         <source>Freezer</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamrażarka</translation>
     </message>
     <message>
         <source>Mine number and time game settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Czas min i czasowe ustawienia gry</translation>
     </message>
     <message>
         <source>Frontend / main menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Frontend / menu główne</translation>
     </message>
     <message>
         <source>Many frontend improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiele ulepszeń frontendu</translation>
     </message>
     <message>
         <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Sterowanie, opinie, mapy i interfejsy kapeluszy</translation>
     </message>
     <message>
         <source>Login dialogs, other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogi logowania; inne usprawnienia</translation>
     </message>
     <message>
         <source>Missions and styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Misje i style</translation>
     </message>
     <message>
         <source>A Classic Fairytale</source>
-        <translation type="unfinished"></translation>
+        <translation>Klasyczna Bajka</translation>
     </message>
     <message>
         <source>A Space Adventure</source>
-        <translation type="unfinished"></translation>
+        <translation>Kosmiczna Przygoda</translation>
     </message>
     <message>
         <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation type="unfinished"></translation>
+        <translation>Stworzył Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</translation>
     </message>
     <message>
         <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation type="unfinished"></translation>
+        <translation>Trening, wyzwania ćwiczebne na czas i celność; Bazookowe pole bitwy, Mackowy terror, Wielka zbrojownia; poprawki błędów i konserwacja</translation>
     </message>
     <message>
         <source>Some styles and missions</source>
-        <translation type="unfinished"></translation>
+        <translation>Jakieś style i misje</translation>
     </message>
     <message>
         <source>Battalion</source>
-        <translation type="unfinished"></translation>
+        <translation>Battalion</translation>
     </message>
     <message>
         <source>Continental supplies</source>
-        <translation type="unfinished"></translation>
+        <translation>Continental supplies</translation>
     </message>
     <message>
         <source>Teamwork 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Praca zespołowa 2</translation>
     </message>
     <message>
         <source>Climb Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Wspinaczka do domu</translation>
     </message>
     <message>
         <source>Portal Mind Challenge</source>
-        <translation type="unfinished"></translation>
+        <translation>Łamigłówka z portalami</translation>
     </message>
     <message>
         <source>Game server</source>
-        <translation type="unfinished"></translation>
+        <translation>Serwer gry</translation>
     </message>
     <message>
         <source>Ports</source>
-        <translation type="unfinished"></translation>
+        <translation>Porty</translation>
     </message>
     <message>
         <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Port na macOS/iPhone; konwersja na OpenGL ES</translation>
     </message>
     <message>
         <source>Android port</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Android netplay, portability abstraction</source>
-        <translation type="unfinished"></translation>
+        <translation>Gra sieciowa na Androidzie; abstrakcja przenośności</translation>
     </message>
     <message>
         <source>WebGL port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port WebGL</translation>
     </message>
     <message>
         <source>iPhone/iPad ports</source>
-        <translation type="unfinished"></translation>
+        <translation>porty iPhone/iPad</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished">Grafika</translation>
+        <translation>Grafika</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">Ogólne</translation>
+        <translation>Ogólne</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation type="unfinished"></translation>
+        <translation>Motywy</translation>
     </message>
     <message>
         <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation type="unfinished"></translation>
+        <translation>Nature, Snow, City, Castle, Halloween, Island</translation>
     </message>
     <message>
         <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation type="unfinished"></translation>
+        <translation>Bamboo, EarthRise, BambooPlinko</translation>
     </message>
     <message>
         <source>Golf, Hoggywood, Stage</source>
-        <translation type="unfinished"></translation>
+        <translation>Golf, Hoggywood, Stage</translation>
     </message>
     <message>
         <source>Hoggywood</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoggywood</translation>
     </message>
     <message>
         <source>Cave, Olympics</source>
-        <translation type="unfinished"></translation>
+        <translation>Cave, Olympics</translation>
     </message>
     <message>
         <source>Fruit, Cake</source>
-        <translation type="unfinished"></translation>
+        <translation>Fruit, Cake</translation>
     </message>
     <message>
         <source>Art</source>
-        <translation type="unfinished"></translation>
+        <translation>Art</translation>
     </message>
     <message>
         <source>Beach</source>
-        <translation type="unfinished"></translation>
+        <translation>Beach</translation>
     </message>
     <message>
         <source>Brick</source>
-        <translation type="unfinished"></translation>
+        <translation>Brick</translation>
     </message>
     <message>
         <source>Hell</source>
-        <translation type="unfinished"></translation>
+        <translation>Hell</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation>Jungle</translation>
     </message>
     <message>
         <source>Sheep</source>
-        <translation type="unfinished"></translation>
+        <translation>Sheep</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapy</translation>
     </message>
     <message>
         <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation type="unfinished"></translation>
+        <translation>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</translation>
     </message>
     <message>
         <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation type="unfinished"></translation>
+        <translation>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</translation>
     </message>
     <message>
         <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation type="unfinished"></translation>
+        <translation>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</translation>
     </message>
     <message>
         <source>Castle, PirateFlag</source>
-        <translation type="unfinished"></translation>
+        <translation>Castle, PirateFlag</translation>
     </message>
     <message>
         <source>ShoppaKing, TrophyRace</source>
-        <translation type="unfinished"></translation>
+        <translation>ShoppaKing, TrophyRace</translation>
     </message>
     <message>
         <source>Battlefield</source>
-        <translation type="unfinished"></translation>
+        <translation>Battlefield</translation>
     </message>
     <message>
         <source>CTF_Blizzard</source>
-        <translation type="unfinished"></translation>
+        <translation>CTF_Blizzard</translation>
     </message>
     <message>
         <source>Cheese</source>
-        <translation type="unfinished"></translation>
+        <translation>Cheese</translation>
     </message>
     <message>
         <source>ClimbHome</source>
-        <translation type="unfinished"></translation>
+        <translation>ClimbHome</translation>
     </message>
     <message>
         <source>Lonely_Island</source>
-        <translation type="unfinished"></translation>
+        <translation>Lonely_Island</translation>
     </message>
     <message>
         <source>Octorama</source>
-        <translation type="unfinished"></translation>
+        <translation>Octorama</translation>
     </message>
     <message>
         <source>portal</source>
-        <translation type="unfinished"></translation>
+        <translation>portal</translation>
     </message>
     <message>
         <source>Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruler</translation>
     </message>
     <message>
         <source>Sticks</source>
-        <translation type="unfinished"></translation>
+        <translation>Sticks</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished">Forty</translation>
+        <translation>Forty</translation>
     </message>
     <message>
         <source>EvilChicken</source>
-        <translation type="unfinished"></translation>
+        <translation>EvilChicken</translation>
     </message>
     <message>
         <source>Olympic</source>
-        <translation type="unfinished"></translation>
+        <translation>Olympic</translation>
     </message>
     <message>
         <source>Tank</source>
-        <translation type="unfinished"></translation>
+        <translation>Tank</translation>
     </message>
     <message>
         <source>Snail</source>
-        <translation type="unfinished"></translation>
+        <translation>Snail</translation>
     </message>
     <message>
         <source>SteelTower</source>
-        <translation type="unfinished"></translation>
+        <translation>SteelTower</translation>
     </message>
     <message>
         <source>Hats, graves, other</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapelusze, nagrobki, inne</translation>
     </message>
     <message>
         <source>See CREDITS text file</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobacz plik CREDITS</translation>
     </message>
     <message>
         <source>Sounds</source>
-        <translation type="unfinished"></translation>
+        <translation>Dźwięki</translation>
     </message>
     <message>
         <source>Hedgehogs voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Głos jeży</translation>
     </message>
     <message>
         <source>Default_pl, Russian_pl voices</source>
-        <translation type="unfinished"></translation>
+        <translation>Głosy Default_pl, Russian_pl</translation>
     </message>
     <message>
         <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation type="unfinished"></translation>
+        <translation>Różni autorzy z www.freesound.org (zobacz plik CREDITS)</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished">Muzyka</translation>
+        <translation>Muzyka</translation>
     </message>
     <message>
         <source>City, Rock, others</source>
-        <translation type="unfinished"></translation>
+        <translation>City, Rock, inne</translation>
     </message>
     <message>
         <source>Compost</source>
-        <translation type="unfinished"></translation>
+        <translation>Compost</translation>
     </message>
     <message>
         <source>EarthRise, oriental, Pirate, snow</source>
-        <translation type="unfinished"></translation>
+        <translation>EarthRise, oriental, Pirate, snow</translation>
     </message>
     <message>
         <source>Fruit, Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation>Fruit, Jungle</translation>
     </message>
     <message>
         <source>Nature</source>
-        <translation type="unfinished"></translation>
+        <translation>Nature</translation>
     </message>
     <message>
         <source>olympics_sd</source>
-        <translation type="unfinished"></translation>
+        <translation>olympics_sd</translation>
     </message>
     <message>
         <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation type="unfinished"></translation>
+        <translation>sdmusic (Hitman [edycja sheepluvy])</translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation type="unfinished"></translation>
+        <translation>Tłumaczenia</translation>
     </message>
     <message>
         <source>Brazilian Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Brazylijski portugalski</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Bułgarski</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Czeski</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiński</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation type="unfinished"></translation>
+        <translation>Fiński</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Francuski</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Niemiecki</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Grecki</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Włoski</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japński</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Koreański</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Litwijski</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polski</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portugalski</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosyjski</translation>
     </message>
     <message>
         <source>Scottish Gaelic</source>
-        <translation type="unfinished"></translation>
+        <translation>Szkocki gaelicki</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Słowacki</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiszpański</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Szwedzki</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukraiński</translation>
     </message>
     <message>
         <source>Special thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Specjalne podziękowania</translation>
     </message>
     <message>
         <source>Project founder</source>
-        <translation type="unfinished"></translation>
+        <translation>Fundator projektu</translation>
     </message>
 </context>
 <context>
@@ -5826,23 +5834,23 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>This server no longer allows unregistered players to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten serwer nie pozwala już na dołączanie niezarejestrowanych graczy</translation>
     </message>
     <message>
         <source>This server now allows unregistered players to join.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten serwer teraz pozwala na dołączanie niezarejestrowanych graczy</translation>
     </message>
     <message>
         <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostępne komendy callvote: hedgehogs &lt;numer&gt;, pause, newseed, map &lt;nazwa&gt;, kick &lt;gracz&gt;</translation>
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Potwierdź restart serwera używając &quot;&apos;/restart_server yes&quot;.</translation>
     </message>
     <message>
         <source>Warning! Room name change flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostrzeżenie! Ochrona przez floodem zmiany nazwy pokoju aktywowana</translation>
     </message>
 </context>
 </TS>
