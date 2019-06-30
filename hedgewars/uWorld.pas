@@ -1777,7 +1777,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
                 i:= fpsTexture^.h + 5
             else
                 i:= 0;
-            DrawTexture((cScreenWidth shr 1) - 60 - offsetX, offsetY + i, fpsTexture);
+            DrawTexture((cScreenWidth shr 1) - 20 - fpsTexture^.w - offsetX, offsetY + i, fpsTexture);
             end;
         end;
 end;
