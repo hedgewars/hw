@@ -137,8 +137,8 @@ Game HUD:
  * Fix buggy behaviour when entering speech bubble command in hog placement phase
 
 Translations:
- + Complete: German
- + Major updates: Chinese, Scottish Gaelic, Polish
+ + Complete: German, Polish
+ + Major updates: Chinese, Scottish Gaelic
  + Credits page is now translatable
  * Remove Arabic translation from release
 
