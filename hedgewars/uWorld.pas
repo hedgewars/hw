@@ -1144,7 +1144,7 @@ var i, t: LongInt;
     r: TSDL_Rect;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
-    replicateToLeft, replicateToRight, tmp, isNotHiddenByCinematic: boolean;
+    replicateToLeft, replicateToRight, isNotHiddenByCinematic: boolean;
 {$IFDEF USE_VIDEO_RECORDING}
     a: Byte;
 {$ENDIF}
@@ -1225,9 +1225,6 @@ if replicateToRight then
 
 DrawWater(255, 0, 0);
 
-tmp:= bShowFinger;
-bShowFinger:= false;
-
 if replicateToLeft then
     begin
     ShiftWorld(-1);
@@ -1245,8 +1242,6 @@ if replicateToRight then
     DrawVisualGears(6, true);
     UnshiftWorld();
     end;
-
-bShowFinger:= tmp;
 
 DrawVisualGears(1, false);
 DrawGears;
