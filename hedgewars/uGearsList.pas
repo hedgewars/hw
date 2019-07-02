@@ -873,15 +873,17 @@ else if Gear^.Kind = gtHedgehog then
         Gear^.Hedgehog^.Gear:= nil;
 
         if Gear^.Hedgehog^.King then
+            // If king died, kill the rest of the team
             begin
-            Gear^.Hedgehog^.Team^.hasKing:= false;
-            for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                with team^.Clan^.Teams[i]^ do
-                    for t:= 0 to cMaxHHIndex do
-                        if Hedgehogs[t].Gear <> nil then
-                            Hedgehogs[t].Gear^.Health:= 0
-                        else if (Hedgehogs[t].GearHidden <> nil) then
-                            Hedgehogs[t].GearHidden^.Health:= 0  // hog is still hidden. if tardis should return though, lua, eh...
+            with Gear^.Hedgehog^.Team^ do
+                begin
+                Gear^.Hedgehog^.Team^.hasKing:= false;
+                for t:= 0 to cMaxHHIndex do
+                    if Hedgehogs[t].Gear <> nil then
+                        Hedgehogs[t].Gear^.Health:= 0
+                    else if (Hedgehogs[t].GearHidden <> nil) then
+                        Hedgehogs[t].GearHidden^.Health:= 0  // Hog is still hidden. If tardis should return though, Lua, eh ...
+                end;
             end;
 
         // Update passive status of clan
