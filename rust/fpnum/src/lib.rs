@@ -1,8 +1,20 @@
 use std::{cmp, ops, ops::Shl};
 
+const POSITIVE_MASK: u64 = 0x0000_0000_0000_0000;
+const NEGATIVE_MASK: u64 = 0xFFFF_FFFF_FFFF_FFFF;
+
+#[inline]
+fn bool_mask(is_negative: bool) -> u64 {
+    if is_negative {
+        NEGATIVE_MASK
+    } else {
+        POSITIVE_MASK
+    }
+}
+
 #[derive(Clone, Debug, Copy)]
 pub struct FPNum {
-    is_negative: bool,
+    sign_mask: u64,
     value: u64,
 }
 
@@ -14,21 +26,17 @@ impl FPNum {
 
     #[inline]
     pub fn signum(&self) -> i8 {
-        if self.is_negative {
-            -1
-        } else {
-            1
-        }
+        (1u8 ^ self.sign_mask as u8).wrapping_sub(self.sign_mask as u8) as i8
     }
 
     #[inline]
     pub const fn is_negative(&self) -> bool {
-        self.is_negative
+        self.sign_mask != POSITIVE_MASK
     }
 
     #[inline]
     pub const fn is_positive(&self) -> bool {
-        !self.is_negative
+        self.sign_mask == POSITIVE_MASK
     }
 
     #[inline]
@@ -39,18 +47,14 @@ impl FPNum {
     #[inline]
     pub const fn abs(&self) -> Self {
         Self {
-            is_negative: false,
+            sign_mask: POSITIVE_MASK,
             value: self.value,
         }
     }
 
     #[inline]
     pub fn round(&self) -> i32 {
-        if self.is_negative {
-            -((self.value >> 32) as i32)
-        } else {
-            (self.value >> 32) as i32
-        }
+        ((self.value >> 32) as i32 ^ self.sign_mask as i32).wrapping_sub(self.sign_mask as i32)
     }
 
     #[inline]
@@ -61,15 +65,15 @@ impl FPNum {
     #[inline]
     pub fn sqr(&self) -> Self {
         Self {
-            is_negative: false,
+            sign_mask: 0,
             value: ((self.value as u128).pow(2) >> 32) as u64,
         }
     }
 
     pub fn sqrt(&self) -> Self {
-        debug_assert!(!self.is_negative);
+        debug_assert!(self.is_positive());
 
-        let mut t: u64 = 0x4000000000000000;
+        let mut t: u64 = 0x4000_0000_0000_0000;
         let mut r: u64 = 0;
         let mut q = self.value;
 
@@ -85,27 +89,35 @@ impl FPNum {
         }
 
         Self {
-            is_negative: false,
+            sign_mask: POSITIVE_MASK,
             value: r << 16,
         }
     }
 
     #[inline]
-    pub const fn with_sign(&self, is_negative: bool) -> FPNum {
+    pub fn with_sign(&self, is_negative: bool) -> FPNum {
         FPNum {
-            is_negative,
+            sign_mask: bool_mask(is_negative),
             ..*self
         }
     }
 
     #[inline]
     pub const fn with_sign_as(self, other: FPNum) -> FPNum {
-        self.with_sign(other.is_negative)
+        FPNum {
+            sign_mask: other.sign_mask,
+            ..self
+        }
     }
 
     #[inline]
     pub const fn point(self) -> FPPoint {
         FPPoint::new(self, self)
+    }
+
+    #[inline]
+    const fn temp_i128(self) -> i128 {
+        ((self.value ^ self.sign_mask) as u128 as i128).wrapping_sub(self.sign_mask as i128)
     }
 }
 
@@ -113,7 +125,7 @@ impl From<i32> for FPNum {
     #[inline]
     fn from(n: i32) -> Self {
         FPNum {
-            is_negative: n < 0,
+            sign_mask: bool_mask(n < 0),
             value: (n.abs() as u64) << 32,
         }
     }
@@ -123,7 +135,7 @@ impl From<u32> for FPNum {
     #[inline]
     fn from(n: u32) -> Self {
         Self {
-            is_negative: false,
+            sign_mask: NEGATIVE_MASK,
             value: (n as u64) << 32,
         }
     }
@@ -132,7 +144,7 @@ impl From<u32> for FPNum {
 impl From<FPNum> for f64 {
     #[inline]
     fn from(n: FPNum) -> Self {
-        if n.is_negative {
+        if n.is_negative() {
             n.value as f64 / (-0x10000000 as f64)
         } else {
             n.value as f64 / 0x10000000 as f64
@@ -143,7 +155,7 @@ impl From<FPNum> for f64 {
 impl PartialEq for FPNum {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
-        self.value == other.value && (self.is_negative == other.is_negative || self.value == 0)
+        self.value == other.value && (self.sign_mask == other.sign_mask || self.value == 0)
     }
 }
 
@@ -159,15 +171,7 @@ impl PartialOrd for FPNum {
 impl Ord for FPNum {
     #[inline]
     fn cmp(&self, rhs: &Self) -> cmp::Ordering {
-        #[inline]
-        fn extend(n: &FPNum) -> i128 {
-            if n.is_negative {
-                -(n.value as i128)
-            } else {
-                n.value as i128
-            }
-        }
-        extend(self).cmp(&(extend(rhs)))
+        self.temp_i128().cmp(&(rhs.temp_i128()))
     }
 }
 
@@ -176,21 +180,11 @@ impl ops::Add for FPNum {
 
     #[inline]
     fn add(self, rhs: Self) -> Self {
-        if self.is_negative == rhs.is_negative {
-            Self {
-                is_negative: self.is_negative,
-                value: self.value + rhs.value,
-            }
-        } else if self.value > rhs.value {
-            Self {
-                is_negative: self.is_negative,
-                value: self.value - rhs.value,
-            }
-        } else {
-            Self {
-                is_negative: rhs.is_negative,
-                value: rhs.value - self.value,
-            }
+        let tmp = self.temp_i128() + rhs.temp_i128();
+        let mask = bool_mask(tmp < 0);
+        Self {
+            sign_mask: mask,
+            value: ((tmp as u64) ^ mask).wrapping_sub(mask),
         }
     }
 }
@@ -199,25 +193,9 @@ impl ops::Sub for FPNum {
     type Output = Self;
 
     #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        if self.is_negative == rhs.is_negative {
-            if self.value > rhs.value {
-                Self {
-                    is_negative: self.is_negative,
-                    value: self.value - rhs.value,
-                }
-            } else {
-                Self {
-                    is_negative: !rhs.is_negative,
-                    value: rhs.value - self.value,
-                }
-            }
-        } else {
-            Self {
-                is_negative: self.is_negative,
-                value: self.value + rhs.value,
-            }
-        }
+    fn sub(self, mut rhs: Self) -> Self {
+        rhs.sign_mask = !rhs.sign_mask;
+        self + rhs
     }
 }
 
@@ -227,7 +205,7 @@ impl ops::Neg for FPNum {
     #[inline]
     fn neg(self) -> Self {
         Self {
-            is_negative: !self.is_negative,
+            sign_mask: !self.sign_mask,
             value: self.value,
         }
     }
@@ -239,7 +217,7 @@ impl ops::Mul for FPNum {
     #[inline]
     fn mul(self, rhs: Self) -> Self {
         Self {
-            is_negative: self.is_negative ^ rhs.is_negative,
+            sign_mask: self.sign_mask ^ rhs.sign_mask,
             value: ((self.value as u128 * rhs.value as u128) >> 32) as u64,
         }
     }
@@ -251,7 +229,7 @@ impl ops::Mul<i32> for FPNum {
     #[inline]
     fn mul(self, rhs: i32) -> Self {
         Self {
-            is_negative: self.is_negative ^ (rhs < 0),
+            sign_mask: self.sign_mask ^ bool_mask(rhs < 0),
             value: self.value * rhs.abs() as u64,
         }
     }
@@ -263,7 +241,7 @@ impl ops::Div for FPNum {
     #[inline]
     fn div(self, rhs: Self) -> Self {
         Self {
-            is_negative: self.is_negative ^ rhs.is_negative,
+            sign_mask: self.sign_mask ^ rhs.sign_mask,
             value: (((self.value as u128) << 32) / rhs.value as u128) as u64,
         }
     }
@@ -275,7 +253,7 @@ impl ops::Div<i32> for FPNum {
     #[inline]
     fn div(self, rhs: i32) -> Self {
         Self {
-            is_negative: self.is_negative ^ (rhs < 0),
+            sign_mask: self.sign_mask ^ bool_mask(rhs < 0),
             value: self.value / rhs.abs() as u64,
         }
     }
@@ -287,7 +265,7 @@ impl ops::Div<u32> for FPNum {
     #[inline]
     fn div(self, rhs: u32) -> Self {
         Self {
-            is_negative: self.is_negative,
+            sign_mask: self.sign_mask,
             value: self.value / rhs as u64,
         }
     }
@@ -307,8 +285,8 @@ const LINEARIZE_TRESHOLD: u64 = 0x1_0000;
 
 #[derive(Clone, Copy, Debug)]
 pub struct FPPoint {
-    x_is_negative: bool,
-    y_is_negative: bool,
+    x_sign_mask: u32,
+    y_sign_mask: u32,
     x_value: u64,
     y_value: u64,
 }
@@ -317,8 +295,8 @@ impl FPPoint {
     #[inline]
     pub const fn new(x: FPNum, y: FPNum) -> Self {
         Self {
-            x_is_negative: x.is_negative,
-            y_is_negative: y.is_negative,
+            x_sign_mask: x.sign_mask as u32,
+            y_sign_mask: y.sign_mask as u32,
             x_value: x.value,
             y_value: y.value,
         }
@@ -342,7 +320,7 @@ impl FPPoint {
     #[inline]
     pub const fn x(&self) -> FPNum {
         FPNum {
-            is_negative: self.x_is_negative,
+            sign_mask: self.x_sign_mask as i32 as u64,
             value: self.x_value,
         }
     }
@@ -350,7 +328,7 @@ impl FPPoint {
     #[inline]
     pub const fn y(&self) -> FPNum {
         FPNum {
-            is_negative: self.y_is_negative,
+            sign_mask: self.y_sign_mask as i32 as u64,
             value: self.y_value,
         }
     }
@@ -393,7 +371,7 @@ impl FPPoint {
             }
 
             FPNum {
-                is_negative: false,
+                sign_mask: POSITIVE_MASK,
                 value: r as u64,
             }
         }
@@ -543,7 +521,7 @@ where
     }
 
     FPNum {
-        is_negative: false,
+        sign_mask: POSITIVE_MASK,
         value: r as u64,
     }
 }
@@ -578,7 +556,7 @@ fn zero() {
 
     assert!(z.is_zero());
     assert!(z.is_positive());
-    assert!((-z).is_negative);
+    assert!((-z).is_negative());
     assert_eq!(n - n, z);
     assert_eq!(-n + n, z);
     assert_eq!(n.with_sign_as(-n), -n);
@@ -595,6 +573,9 @@ fn ord() {
     assert!(n2_25 > n1_5);
     assert!(-n2_25 < n1_5);
     assert!(-n2_25 < -n1_5);
+
+    assert_eq!(n1_5.signum(), 1);
+    assert_eq!((-n1_5).signum(), -1);
 }
 
 #[test]
@@ -605,6 +586,7 @@ fn arith() {
 
     assert_eq!(n1_5 + n1_5, fp!(3));
     assert_eq!(-n1_5 - n1_5, fp!(-3));
+    assert_eq!(n1_5 - n1_5, fp!(0));
 
     assert_eq!(n1_5 * n1_5, n2_25);
     assert_eq!(-n1_5 * -n1_5, n2_25);
