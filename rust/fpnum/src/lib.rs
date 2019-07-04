@@ -117,7 +117,7 @@ impl FPNum {
 
     #[inline]
     const fn temp_i128(self) -> i128 {
-        ((self.value ^ self.sign_mask) as u128 as i128).wrapping_sub(self.sign_mask as i128)
+        ((self.value ^ self.sign_mask) as i128).wrapping_sub(self.sign_mask as i128)
     }
 }
 
@@ -135,7 +135,7 @@ impl From<u32> for FPNum {
     #[inline]
     fn from(n: u32) -> Self {
         Self {
-            sign_mask: NEGATIVE_MASK,
+            sign_mask: POSITIVE_MASK,
             value: (n as u64) << 32,
         }
     }
