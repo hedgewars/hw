@@ -26,7 +26,7 @@ impl FPNum {
 
     #[inline]
     pub fn signum(&self) -> i8 {
-        (1u8 ^ self.sign_mask as u8).wrapping_sub(self.sign_mask as u8) as i8
+        (1u64 ^ self.sign_mask).wrapping_sub(self.sign_mask) as i8
     }
 
     #[inline]
