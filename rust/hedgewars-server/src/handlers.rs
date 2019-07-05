@@ -59,9 +59,9 @@ impl PartialEq<&str> for Sha1Digest {
             #[inline]
             fn convert(c: u8) -> u8 {
                 if c > b'9' {
-                    c.overflowing_sub(b'a').0.saturating_add(10)
+                    c.wrapping_sub(b'a').saturating_add(10)
                 } else {
-                    c.overflowing_sub(b'0').0
+                    c.wrapping_sub(b'0')
                 }
             }
 
