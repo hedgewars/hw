@@ -500,7 +500,7 @@ impl Polygon {
     }
 
     pub fn edges_count(&self) -> usize {
-        self.vertices.len() - 1
+        self.vertices.len().saturating_sub(1)
     }
 
     pub fn get_edge(&self, index: usize) -> Line {
