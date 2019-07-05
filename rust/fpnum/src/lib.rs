@@ -73,24 +73,9 @@ impl FPNum {
     pub fn sqrt(&self) -> Self {
         debug_assert!(self.is_positive());
 
-        let mut t: u64 = 0x4000_0000_0000_0000;
-        let mut r: u64 = 0;
-        let mut q = self.value;
-
-        for _ in 0..32 {
-            let s = r + t;
-            r >>= 1;
-
-            if s <= q {
-                q -= s;
-                r += t;
-            }
-            t >>= 2;
-        }
-
         Self {
             sign_mask: POSITIVE_MASK,
-            value: r << 16,
+            value: integral_sqrt(self.value) << 16,
         }
     }
 
@@ -354,25 +339,11 @@ impl FPPoint {
         if r < LINEARIZE_TRESHOLD {
             FPNum::from(r as u32)
         } else {
-            let mut sqr: u128 = (self.x_value as u128).pow(2) + (self.y_value as u128).pow(2);
-
-            let mut t: u128 = 0x40000000_00000000_00000000_00000000;
-            let mut r: u128 = 0;
-
-            for _ in 0..64 {
-                let s = r + t;
-                r >>= 1;
-
-                if s <= sqr {
-                    sqr -= s;
-                    r += t;
-                }
-                t >>= 2;
-            }
+            let sqr: u128 = (self.x_value as u128).pow(2) + (self.y_value as u128).pow(2);
 
             FPNum {
                 sign_mask: POSITIVE_MASK,
-                value: r as u64,
+                value: integral_sqrt_ext(sqr) as u64,
             }
         }
     }
@@ -500,29 +471,50 @@ bin_assign_op_impl!(FPPoint, ops::SubAssign<FPNum>, sub_assign, -);
 bin_assign_op_impl!(FPPoint, ops::MulAssign<FPNum>, mul_assign, *);
 bin_assign_op_impl!(FPPoint, ops::DivAssign<FPNum>, div_assign, /);
 
+pub fn integral_sqrt(mut value: u64) -> u64 {
+    let mut digit_sqr = 0x4000_0000_0000_0000u64.wrapping_shr(value.leading_zeros() & 0xFFFF_FFFE);
+    let mut result = 0;
+
+    while digit_sqr != 0 {
+        let approx = digit_sqr + result;
+        result >>= 1;
+
+        if approx <= value {
+            value -= approx;
+            result += digit_sqr;
+        }
+        digit_sqr >>= 2;
+    }
+    result
+}
+
+pub fn integral_sqrt_ext(mut value: u128) -> u128 {
+    let mut digit_sqr =
+        0x40000000_00000000_00000000_00000000u128.wrapping_shr(value.leading_zeros() & 0xFFFF_FFFE);
+    let mut result = 0u128;
+
+    while digit_sqr != 0 {
+        let approx = result + digit_sqr;
+        result >>= 1;
+
+        if approx <= value {
+            value -= approx;
+            result += digit_sqr;
+        }
+        digit_sqr >>= 2;
+    }
+    result
+}
+
 pub fn distance<T>(x: T, y: T) -> FPNum
 where
     T: Into<i64> + std::fmt::Debug,
 {
-    let mut sqr: u128 = (x.into().pow(2) as u128).shl(64) + (y.into().pow(2) as u128).shl(64);
-
-    let mut t: u128 = 0x40000000_00000000_00000000_00000000;
-    let mut r: u128 = 0;
-
-    for _ in 0..64 {
-        let s = r + t;
-        r >>= 1;
-
-        if s <= sqr {
-            sqr -= s;
-            r += t;
-        }
-        t >>= 2;
-    }
+    let sqr: u128 = (x.into().pow(2) as u128).shl(64) + (y.into().pow(2) as u128).shl(64);
 
     FPNum {
         sign_mask: POSITIVE_MASK,
-        value: r as u64,
+        value: integral_sqrt_ext(sqr) as u64,
     }
 }
 

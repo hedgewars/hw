@@ -1,4 +1,4 @@
-use fpnum::{distance, fp, FPNum, FPPoint};
+use fpnum::{fp, integral_sqrt, FPNum, FPPoint};
 use std::{
     cmp::{max, min},
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, RangeInclusive, Sub, SubAssign},
@@ -45,7 +45,8 @@ impl Point {
 
     #[inline]
     pub fn integral_norm(self) -> u32 {
-        distance(self.x, self.y).abs_round()
+        let sqr = (self.x as u64).pow(2) + (self.y as u64).pow(2);
+        integral_sqrt(sqr) as u32
     }
 
     #[inline]
