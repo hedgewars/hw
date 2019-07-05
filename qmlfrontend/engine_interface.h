@@ -6,10 +6,23 @@
 
 #ifdef __cplusplus
 #define ENUM_CLASS enum
+
+#ifndef Q_NAMESPACE
+#define Q_NAMESPACE
+#endif
+
+#ifndef Q_ENUM_NS
+#define Q_ENUM_NS(x)
+#endif
+
+#ifndef Q_DECLARE_METATYPE
+#define Q_DECLARE_METATYPE(x)
+#endif
+
 namespace Engine {
 extern "C" {
 #else
-#define ENUM_CLASS enum
+#define ENUM_CLASS enum class
 #endif
 
 typedef struct _EngineInstance EngineInstance;
@@ -68,9 +81,22 @@ typedef void long_event_t(EngineInstance* engine_state,
 typedef void positioned_event_t(EngineInstance* engine_state,
                                 PositionedEventType event_type, int32_t x,
                                 int32_t y);
+}  // extern "C"
+
 #ifdef __cplusplus
-}
-};
+Q_NAMESPACE
+
+Q_ENUM_NS(SimpleEventType)
+Q_ENUM_NS(LongEventType)
+Q_ENUM_NS(LongEventState)
+Q_ENUM_NS(PositionedEventType)
+
+};  // namespace
+
+Q_DECLARE_METATYPE(Engine::SimpleEventType)
+Q_DECLARE_METATYPE(Engine::LongEventType)
+Q_DECLARE_METATYPE(Engine::LongEventState)
+Q_DECLARE_METATYPE(Engine::PositionedEventType)
 #endif
 
 #endif  // ENGINE_H

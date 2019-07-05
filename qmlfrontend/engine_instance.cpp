@@ -87,16 +87,17 @@ void EngineInstance::moveCamera(const QPoint& delta) {
   move_camera(m_instance, delta.x(), delta.y());
 }
 
-void EngineInstance::simpleEvent(SimpleEventType event_type) {
+void EngineInstance::simpleEvent(Engine::SimpleEventType event_type) {
   simple_event(m_instance, event_type);
 }
 
-void EngineInstance::longEvent(LongEventType event_type, LongEventState state) {
+void EngineInstance::longEvent(Engine::LongEventType event_type,
+                               Engine::LongEventState state) {
   long_event(m_instance, event_type, state);
 }
 
-void EngineInstance::positionedEvent(PositionedEventType event_type, qint32 x,
-                                     qint32 y) {
+void EngineInstance::positionedEvent(Engine::PositionedEventType event_type,
+                                     qint32 x, qint32 y) {
   positioned_event(m_instance, event_type, x, y);
 }
 

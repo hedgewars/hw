@@ -23,10 +23,10 @@ int main(int argc, char* argv[]) {
 
   QQmlApplicationEngine engine;
 
-  qRegisterMetaType<EngineInstance::SimpleEventType>();
-  qRegisterMetaType<EngineInstance::LongEventType>();
-  qRegisterMetaType<EngineInstance::LongEventState>();
-  qRegisterMetaType<EngineInstance::PositionedEventType>();
+  qRegisterMetaType<Engine::SimpleEventType>();
+  qRegisterMetaType<Engine::LongEventType>();
+  qRegisterMetaType<Engine::LongEventState>();
+  qRegisterMetaType<Engine::PositionedEventType>();
 
   qmlRegisterSingletonType<PreviewAcceptor>(
       "Hedgewars.Engine", 1, 0, "PreviewAcceptor",
@@ -37,6 +37,9 @@ int main(int argc, char* argv[]) {
   qmlRegisterUncreatableType<EngineInstance>("Hedgewars.Engine", 1, 0,
                                              "EngineInstance",
                                              "Create by HWEngine run methods");
+
+  qmlRegisterUncreatableMetaObject(Engine::staticMetaObject, "Hedgewars.Engine",
+                                   1, 0, "Engine", "Namespace: only enums");
 
   engine.load(QUrl(QLatin1String("qrc:/main.qml")));
   if (engine.rootObjects().isEmpty()) return -1;
