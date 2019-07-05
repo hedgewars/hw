@@ -57,13 +57,11 @@ Page1Form {
 
   Keys.onPressed: {
     if (event.key === Qt.Key_Enter)
-      gameView.engineInstance.longEvent(EngineInstance.Attack,
-                                        EngineInstance.Set)
+      gameView.engineInstance.longEvent(Engine.Attack, Engine.Set)
   }
 
   Keys.onReleased: {
     if (event.key === Qt.Key_Enter)
-      gameView.engineInstance.longEvent(EngineInstance.Attack,
-                                        EngineInstance.Unset)
+      gameView.engineInstance.longEvent(Engine.Attack, Engine.Unset)
   }
 }

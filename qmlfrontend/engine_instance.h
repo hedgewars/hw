@@ -12,15 +12,6 @@ class EngineInstance : public QObject {
   Q_OBJECT
 
  public:
-  using SimpleEventType = Engine::SimpleEventType;
-  Q_ENUMS(SimpleEventType)
-  using LongEventType = Engine::LongEventType;
-  Q_ENUMS(LongEventType)
-  using LongEventState = Engine::LongEventState;
-  Q_ENUMS(LongEventState)
-  using PositionedEventType = Engine::PositionedEventType;
-  Q_ENUMS(PositionedEventType)
-
   explicit EngineInstance(const QString& libraryPath,
                           QObject* parent = nullptr);
   ~EngineInstance();
@@ -40,9 +31,11 @@ class EngineInstance : public QObject {
  public slots:
   void advance(quint32 ticks);
   void moveCamera(const QPoint& delta);
-  void simpleEvent(SimpleEventType event_type);
-  void longEvent(LongEventType event_type, LongEventState state);
-  void positionedEvent(PositionedEventType event_type, qint32 x, qint32 y);
+  void simpleEvent(Engine::SimpleEventType event_type);
+  void longEvent(Engine::LongEventType event_type,
+                 Engine::LongEventState state);
+  void positionedEvent(Engine::PositionedEventType event_type, qint32 x,
+                       qint32 y);
 
  private:
   Engine::EngineInstance* m_instance;
@@ -64,10 +57,5 @@ class EngineInstance : public QObject {
   Engine::positioned_event_t* positioned_event;
   bool m_isValid;
 };
-
-Q_DECLARE_METATYPE(EngineInstance::SimpleEventType)
-Q_DECLARE_METATYPE(EngineInstance::LongEventType)
-Q_DECLARE_METATYPE(EngineInstance::LongEventState)
-Q_DECLARE_METATYPE(EngineInstance::PositionedEventType)
 
 #endif  // ENGINEINSTANCE_H
