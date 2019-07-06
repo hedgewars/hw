@@ -70,6 +70,7 @@ impl FPNum {
         }
     }
 
+    #[inline]
     pub fn sqrt(&self) -> Self {
         debug_assert!(self.is_positive());
 
@@ -471,20 +472,18 @@ bin_assign_op_impl!(FPPoint, ops::SubAssign<FPNum>, sub_assign, -);
 bin_assign_op_impl!(FPPoint, ops::MulAssign<FPNum>, mul_assign, *);
 bin_assign_op_impl!(FPPoint, ops::DivAssign<FPNum>, div_assign, /);
 
-pub fn integral_sqrt(mut value: u64) -> u64 {
-    let mut digit_sqr = 0x4000_0000_0000_0000u64.wrapping_shr(value.leading_zeros() & 0xFFFF_FFFE);
-    let mut result = 0;
+pub fn integral_sqrt(value: u64) -> u64 {
+    let mut digits = (64u32 - 1).saturating_sub(value.leading_zeros()) & 0xFFFF_FFFE;
+    let mut result = if value == 0 { 0u64 } else { 1u64 };
 
-    while digit_sqr != 0 {
-        let approx = digit_sqr + result;
-        result >>= 1;
-
-        if approx <= value {
-            value -= approx;
-            result += digit_sqr;
+    while digits != 0 {
+        result <<= 1;
+        if (result + 1).pow(2) <= value >> (digits - 2) {
+            result += 1;
         }
-        digit_sqr >>= 2;
+        digits -= 2;
     }
+
     result
 }
 
@@ -506,6 +505,7 @@ pub fn integral_sqrt_ext(mut value: u128) -> u128 {
     result
 }
 
+#[inline]
 pub fn distance<T>(x: T, y: T) -> FPNum
 where
     T: Into<i64> + std::fmt::Debug,
