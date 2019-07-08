@@ -680,7 +680,7 @@ begin
         t:= t^.NextGear
         end;
 
-    if ((GameFlags and gfResetWeps) <> 0) and (not PlacingHogs) then
+    if ((GameFlags and gfResetWeps) <> 0) and (not PlacingHogs) and (not PlacingKings) then
         ResetWeapons;
 
     if (GameFlags and gfResetHealth) <> 0 then
@@ -968,7 +968,9 @@ var i, t, p, j, x, y: LongInt;
     divide, sectionDivide: boolean;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
-    PlacingHogs:= true;
+    PlacingHogs:= true
+else if (GameFlags and gfKing) <> 0 then
+    PlacingKings:= true;
 
 divide:= ((GameFlags and gfDivideTeams) <> 0);
 
@@ -1005,6 +1007,8 @@ if sectionDivide then
                                     Unplaced:= true
                                 else
                                     FindPlace(Gear, false, t, t + playWidth div ClansCount, true);// could make Gear == nil;
+                                if PlacingKings and King then
+                                    UnplacedKing:= true;
                                 if Gear <> nil then
                                     begin
                                     Gear^.Pos:= GetRandom(49);
@@ -1039,6 +1043,8 @@ else // mix hedgehogs
             ar[i]^.Unplaced:= true
         else
             FindPlace(ar[i]^.Gear, false, leftX, rightX, true);
+        if PlacingKings and ar[i]^.King then
+            ar[i]^.UnplacedKing:= true;
         if ar[i]^.Gear <> nil then
             begin
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;

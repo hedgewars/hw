@@ -420,6 +420,7 @@ type
             InitialHealth: LongInt; // used for gfResetHealth
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
+            UnplacedKing: boolean;  // Flag for king placing phase in King Mode
             Timer: Longword;
             HealthBarHealth: LongInt;
             Effects: array[THogEffect] of LongInt;

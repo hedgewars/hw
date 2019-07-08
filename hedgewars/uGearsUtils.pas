@@ -1603,7 +1603,7 @@ var t, aTot, uTot, a, h: LongInt;
     i: TAmmoType;
 begin
 SpawnBoxOfSmth:= nil;
-if (PlacingHogs) or
+if (PlacingHogs) or (PlacingKings) or
     (cCaseFactor = 0)
     or (CountGears(gtCase) >= cMaxCaseDrops)
     or (GetRandom(cCaseFactor) <> 0) then

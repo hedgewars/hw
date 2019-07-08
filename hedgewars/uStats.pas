@@ -389,7 +389,7 @@ if FinishedTurnsTotal <> 0 then
         begin end// nothing ?
 
     // Turn skipped
-    else if isTurnSkipped and (not PlacingHogs) then
+    else if isTurnSkipped and (not PlacingHogs) and (not PlacingKings) then
         begin
         AddVoice(sndCoward, PreviousTeam^.voicepack);
         AddCaption(FormatA(GetEventString(eidTurnSkipped), s), capcolDefault, capgrpMessage);
