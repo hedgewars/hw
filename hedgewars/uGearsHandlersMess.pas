@@ -149,7 +149,7 @@ var
 implementation
 uses uConsts, uVariables, uVisualGearsList, uRandom, uCollisions, uGearsList, uUtils, uSound
     , SDLh, uScript, uGearsHedgehog, uGearsUtils, uIO, uCaptions, uLandGraphics
-    , uConsole, uGearsHandlers, uTextures, uRenderUtils, uAmmos, uTeams, uLandTexture
+    , uGearsHandlers, uTextures, uRenderUtils, uAmmos, uTeams, uLandTexture
     , uStore, uAI, uStats, uLocale;
 
 procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
@@ -3069,7 +3069,6 @@ procedure doStepAirAttackWork(Gear: PGear);
 begin
     AllInactive := false;
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
-    WriteLnToConsole('X='+IntToStr(hwRound(Gear^.X))+' dX='+cstr(gear^.dx)+' PLUS='+cstr(Gear^.dx+cAirPlaneSpeed));
     if (Gear^.Health > 0) and (not (Gear^.X < Gear^.dX)) and (Gear^.X < Gear^.dX + cAirPlaneSpeed) then
         begin
         dec(Gear^.Health);
