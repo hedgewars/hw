@@ -2551,6 +2551,7 @@ var
     SpeechType: Longword;
     SpeechText: shortstring;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
+    PlacingKings: boolean; // a convenience flag to indicate placement of kings in King Mode is still in progress
     StepSoundTimer: LongInt;
     StepSoundChannel: LongInt;
 

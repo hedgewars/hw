@@ -201,7 +201,9 @@ with CurrentHedgehog^ do
            if Gear <> nil then
                AddCI(Gear)
            end
-        end;
+        end
+    else if (PreviousTeam <> nil) and PlacingKings and UnplacedKing then
+        UnplacedKing:= false;
 
 PreviousTeam:= CurrentTeam;
 
@@ -252,7 +254,7 @@ repeat
 
         with ClansArray[c]^ do
             begin
-            if (not PlacingHogs) and ((Succ(CurrTeam) mod TeamsNumber) = TagTeamIndex) then
+            if (not PlacingHogs) and (not PlacingKings) and ((Succ(CurrTeam) mod TeamsNumber) = TagTeamIndex) then
                 begin
                 if c = SwapClanPre then
                     inc(TotalRoundsPre);
@@ -264,7 +266,7 @@ repeat
         inc(c);
         if c = ClansCount then
             c:= 0;
-        if (not PlacingHogs) then
+        if (not PlacingHogs) and (not PlacingKings) then
             begin
             if c = SwapClanPre then
                 inc(TotalRoundsPre);
@@ -334,15 +336,18 @@ var i, t: LongInt;
     g: PGear;
     s: ansistring;
 begin
-if PlacingHogs then
+if PlacingHogs or PlacingKings then
     begin
     PlacingHogs:= false;
+    PlacingKings:= false;
     for t:= 0 to Pred(TeamsCount) do
         for i:= 0 to cMaxHHIndex do
-            if (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then
-                PlacingHogs:= true;
+            if ((GameFlags and gfPlaceHog) <> 0) and (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then
+                PlacingHogs:= true
+            else if ((GameFlags and gfPlaceHog) = 0) and ((GameFlags and gfKing) <> 0) and (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].UnplacedKing) then
+                PlacingKings:= true;
 
-    if not PlacingHogs then // Reset  various things I mucked with
+    if (not PlacingHogs) and (not PlacingKings) then // Reset various things I mucked with
         begin
         for i:= 0 to ClansCount do
             if ClansArray[i] <> nil then
@@ -354,7 +359,7 @@ if PlacingHogs then
 
     end;
 
-if not PlacingHogs then
+if (not PlacingHogs) and (not PlacingKings) then
     begin
     if (TotalRoundsReal = -1) then
         TotalRoundsReal:= 0;
@@ -363,7 +368,7 @@ if not PlacingHogs then
     end;
 
 // Determine clan ID to check to determine whether to increase TotalRoundsPre/TotalRoundsReal
-if (not PlacingHogs) then
+if (not PlacingHogs) and (not PlacingKings) then
     begin
     if SwapClanPre = -1 then
         begin
@@ -424,6 +429,11 @@ if PlacingHogs then
         TurnTimeLeft:= 15000
     else TurnTimeLeft:= 0
     end
+else if PlacingKings then
+    if CurrentHedgehog^.King and CurrentHedgehog^.UnplacedKing then
+        TurnTimeLeft:= cHedgehogTurnTime
+    else
+        TurnTimeLeft:= 0
 else
     begin
     if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then

@@ -56,6 +56,8 @@ Styles and schemes:
  * Battalion: Sudden Death effects are now like in the base game
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
+ * King Mode: Fix whole clan being killed if a king died
+ * King Mode: Fix king placement phase not working correctly with multiple teams in a clan
  * HedgeEditor: Fix major FPS drop when there are a lot of objects
  * Control: Fix score failure after using extra time
  * Frenzy: Fix incorrect ammo slot numbers in ammo menu

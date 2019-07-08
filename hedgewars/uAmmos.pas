@@ -126,21 +126,23 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             end;
         ammos[a]:= cnt;
 
-        if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0)
-        and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then
-            Ammoz[a].SkipTurns:= 1;
-
-        if ((GameFlags and gfPlaceHog) <> 0)
+        if (((GameFlags and gfPlaceHog) <> 0)
+        or (((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0)))
         and (a <> amTeleport) and (a <> amSkip)
         and (Ammoz[a].SkipTurns < 10000) then
             inc(Ammoz[a].SkipTurns,10000);
-    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
+    if (((GameFlags and gfPlaceHog) <> 0)
+    or (((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0)))
+    and (a = amTeleport) then
         ammos[a]:= AMMO_INFINITE
         end
 
     else
         ammos[a]:= AMMO_INFINITE;
-    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
+
+    if (((GameFlags and gfPlaceHog) <> 0)
+    or (((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0)))
+    and (a = amTeleport) then
         begin
         InitialCountsLocal[Pred(StoreCnt)][a]:= cnt;
         InitialAmmoCounts[a]:= cnt;
@@ -496,7 +498,7 @@ begin
     ammoReinforcement:= s;
 end;
 
-// Restore indefinitely disabled weapons and initial weapon counts.  Only used for hog placement right now
+// Restore indefinitely disabled weapons and initial weapon counts.
 procedure ResetWeapons;
 var i, t: Longword;
     a: TAmmoType;
