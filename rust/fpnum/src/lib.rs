@@ -131,9 +131,9 @@ impl From<FPNum> for f64 {
     #[inline]
     fn from(n: FPNum) -> Self {
         if n.is_negative() {
-            n.value as f64 / (-0x10000000 as f64)
+            n.value as f64 / -0x1_0000_0000i64 as f64
         } else {
-            n.value as f64 / 0x10000000 as f64
+            n.value as f64 / 0x1_0000_0000i64 as f64
         }
     }
 }
@@ -539,6 +539,8 @@ fn basics() {
 
     assert_eq!(n.round(), 7);
     assert_eq!((-n).round(), -7);
+
+    assert_eq!(f64::from(fp!(5/2)), 2.5f64);
 }
 
 #[test]
