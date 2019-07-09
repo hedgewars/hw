@@ -582,7 +582,8 @@ case Kind of
                 gear^.Elasticity:= _0_3;
                 end;
       gtTardis: begin
-                gear^.Pos:= 1;
+                gear^.Pos:= 1; // tardis phase
+                gear^.Tag:= 0; // 1 = hedgehog died, disappeared, took damage or moved
                 gear^.Z:= cCurrHHZ+1;
                 end;
       gtMortar: begin
