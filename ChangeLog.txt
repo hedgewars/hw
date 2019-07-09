@@ -27,6 +27,7 @@ Gameplay:
  * Fix hedgehogs being pushed around (and other collision bugs) when they overlap
  * Fix homing bee flying weird if passing wrap world edge or target was placed beyond it
  * Fix air mine not colliding with crates initially
+ * Fix buggy behaviour of time box if hog took damage or died before it arrived
  * Fix poison damage not working in first round
  * Use player-chosen team identity in campaigns and singleplayer missions
  * Fix player-chosen teams ignoring custom team controls in campaigns

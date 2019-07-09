@@ -6233,6 +6233,20 @@ var HH: PHedgehog;
     s: ansistring;
 begin
 HH:= Gear^.Hedgehog;
+if Gear^.Tag = 0 then
+    begin
+    if HH^.Gear <> nil then
+        begin
+        if (HH^.Gear^.Damage <> 0) or (HH^.Gear^.Health = 0) or
+        ((HH^.Gear^.State and (gstMoving or gstHHDeath or gstHHGone or gstDrowning)) <> 0) then
+            Gear^.Tag:= 1;
+        end
+    else if HH^.GearHidden = nil then
+        Gear^.Tag:= 1;
+    if (Gear^.Tag = 1) and (Gear = CurAmmoGear) then
+        CurAmmoGear:= nil;
+    end;
+
 if Gear^.Pos = 2 then
     begin
     StopSoundChan(Gear^.SoundChannel);
@@ -6241,11 +6255,12 @@ if Gear^.Pos = 2 then
         begin
         if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
             begin
-            AfterAttack;
-            if Gear = CurAmmoGear then CurAmmoGear := nil;
-            if (HH^.Gear^.Damage = 0) and  (HH^.Gear^.Health > 0) and
-            ((Gear^.State and (gstMoving or gstHHDeath or gstHHGone)) = 0) then
-                HideHog(HH)
+            if Gear^.Tag = 0 then
+                AfterAttack;
+            if Gear = CurAmmoGear then
+                CurAmmoGear:= nil;
+            if Gear^.Tag = 0 then
+                HideHog(HH);
             end
         else if (HH^.GearHidden <> nil) then
             begin
@@ -6267,8 +6282,7 @@ if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then
     begin
     inc(Gear^.Power);
     if (Gear^.Power = 172) and (HH^.Gear <> nil) and
-        (HH^.Gear^.Damage = 0) and (HH^.Gear^.Health > 0) and
-        ((HH^.Gear^.State and (gstMoving or gstHHDeath or gstHHGone)) = 0) then
+        (Gear^.Tag = 0) then
             with HH^.Gear^ do
                 begin
                 State:= State or gstAnimation;
