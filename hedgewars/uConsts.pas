@@ -286,6 +286,7 @@ const
     gstSubmersible    = $00400000; // can survive in water
     gstFrozen         = $00800000; // frozen
     gstNoGravity      = $01000000; // ignores gravity
+    gstInBounceEdge   = $02000000; // spawned in bounce edge
 
     // gear messages
     gmLeft           = $00000001; // left

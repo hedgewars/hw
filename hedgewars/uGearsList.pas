@@ -219,6 +219,53 @@ if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
     gear^.Z:= cHHZ+1
 else gear^.Z:= cUsualZ;
 
+// set gstInBounceEdge if gear spawned inside the bounce world edge
+if WorldEdge = weBounce then
+    if (hwRound(gear^.X) - Gear^.Radius < leftX) or (hwRound(gear^.X) + Gear^.Radius > rightX) then
+        case gear^.Kind of
+            // list all gears here that could collide with the bounce world edge
+            gtHedgehog,
+            gtMine,
+            gtAirBomb,
+            gtDrill,
+            gtNapalmBomb,
+            gtCase,
+            gtAirMine,
+            gtExplosives,
+            gtGrenade,
+            gtShell,
+            gtBee,
+            gtDynamite,
+            gtClusterBomb,
+            gtMelonPiece,
+            gtCluster,
+            gtMortar,
+            gtKamikaze,
+            gtCake,
+            gtWatermelon,
+            gtGasBomb,
+            gtHellishBomb,
+            gtBall,
+            gtRCPlane,
+            gtSniperRifleShot,
+            gtShotgunShot,
+            gtDEagleShot,
+            gtSineGunShot,
+            gtMinigunBullet,
+            gtEgg,
+            gtPiano,
+            gtSMine,
+            gtSnowball,
+            gtKnife,
+            gtCreeper,
+            gtMolotov,
+            gtFlake,
+            gtGrave,
+            gtPortal,
+            gtTarget:
+            gear^.State := gear^.State or gstInBounceEdge;
+        end;
+
 case Kind of
           gtFlame: Gear^.Boom := 2;  // some additional expl in there are x3, x4 this
        gtHedgehog: Gear^.Boom := 30;

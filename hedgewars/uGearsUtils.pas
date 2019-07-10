@@ -1807,20 +1807,31 @@ if (hwRound(Gear^.X) < leftX) or
     else if WorldEdge = weBounce then
         begin
         bounced:= false;
+        // Bounce left
         if (hwRound(Gear^.X) - Gear^.Radius < leftX) and (((hwSign(Gear^.dX) = -1) and (not isZero(Gear^.dX))) or (Gear^.Kind = gtHedgehog)) then
             begin
             LeftImpactTimer:= 333;
+            // Set X coordinate to bounce edge, unless the gear spawned inside the bounce edge before
+            if (Gear^.State and gstInBounceEdge) = 0 then
+                Gear^.X:= int2hwfloat(leftX + Gear^.Radius);
+            // Invert horizontal speed
             Gear^.dX.isNegative:= false;
-            Gear^.X:= int2hwfloat(leftX + Gear^.Radius);
             bounced:= true;
             end
+        // Bounce right
         else if (hwRound(Gear^.X) + Gear^.Radius > rightX) and (((hwSign(Gear^.dX) = 1) and (not isZero(Gear^.dX))) or (Gear^.Kind = gtHedgehog)) then
             begin
             RightImpactTimer:= 333;
+            // Set X coordinate to bounce edge, unless the gear spawned inside the bounce edge before
+            if (Gear^.State and gstInBounceEdge) = 0 then
+                Gear^.X:= int2hwfloat(rightX - Gear^.Radius);
+            // Invert horizontal speed
             Gear^.dX.isNegative:= true;
-            Gear^.X:= int2hwfloat(rightX-Gear^.Radius);
             bounced:= true;
             end;
+        // Clear gstInBounceEdge when gear is no longer inside a bounce edge area
+        if ((Gear^.State and gstInBounceEdge) <> 0) and (hwRound(Gear^.X) - Gear^.Radius >= leftX) and (hwRound(Gear^.X) + Gear^.Radius <= rightX) then
+            Gear^.State:= Gear^.State and (not gstInBounceEdge);
         if (bounced) then
             begin
             WorldWrap:= true;
