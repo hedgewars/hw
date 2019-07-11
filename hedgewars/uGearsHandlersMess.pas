@@ -3095,19 +3095,29 @@ begin
         Gear^.dX := Gear^.dX + int2hwFloat(Gear^.Damage * Gear^.Tag);
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             FollowGear^.State:= FollowGear^.State or gstSubmersible;
-        StopSoundChan(Gear^.SoundChannel, 4000);
+        if (Gear^.SoundChannel <> -1) then
+            begin
+            StopSoundChan(Gear^.SoundChannel, 4000);
+            Gear^.SoundChannel := -1;
+            end;
         end;
 
+    // Particles
     if (GameTicks and $3F) = 0 then
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
         else
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
+    // Get rid of gear and cleanup
     if (hwRound(Gear^.X) > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) < -2048) or ((Gear^.Message and gmDestroy) > 0) then
         begin
-        // avoid to play forever (is this necessary?)
-        StopSoundChan(Gear^.SoundChannel);
+        // fail-safe: instanly stop sound if it wasn't disabled before
+        if (Gear^.SoundChannel <> -1) then
+            begin
+            StopSoundChan(Gear^.SoundChannel);
+            Gear^.SoundChannel := -1;
+            end;
         DeleteGear(Gear)
         end
 end;
