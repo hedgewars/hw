@@ -3120,6 +3120,8 @@ begin
             StopSoundChan(Gear^.SoundChannel);
             Gear^.SoundChannel := -1;
             end;
+        if (WorldEdge = weWrap) then
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBigExplosion);
         DeleteGear(Gear);
         exit;
         end;
@@ -3176,6 +3178,11 @@ begin
         end;
 
     Gear^.Y := int2hwFloat(topY - 300);
+
+    // Appear out of nowhere in wrap
+    if (WorldEdge = weWrap) then
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBigExplosion);
+
     Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * (Gear^.Health-1) * Gear^.Damage) / 2;
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
