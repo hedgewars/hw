@@ -3108,15 +3108,16 @@ begin
 
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             FollowGear^.State:= FollowGear^.State or gstSubmersible;
-        if (Gear^.SoundChannel <> -1) and (WorldEdge <> weSea) then
-            begin
-            StopSoundChan(Gear^.SoundChannel, 4000);
-            Gear^.SoundChannel := -1;
-            end;
         end;
 
     if (Gear^.Health = 0) then
         inc(Gear^.FlightTime);
+
+    if (Gear^.SoundChannel <> -1) and (WorldEdge <> weSea) and (Gear^.FlightTime > 20) then
+        begin
+        StopSoundChan(Gear^.SoundChannel, 4000);
+        Gear^.SoundChannel := -1;
+        end;
 
     // Particles
     if (GameTicks and $3F) = 0 then
@@ -3127,7 +3128,7 @@ begin
 
     // Get rid of gear and cleanup
     if ((WorldEdge = weWrap) and (Gear^.FlightTime >= 4000)) or
-        ((WorldEdge <> weWrap) and (((hwRound(Gear^.X) - Gear^.Radius > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) + Gear^.Radius < -2048) or ((Gear^.Message and gmDestroy) > 0))) then
+        ((WorldEdge <> weWrap) and (((hwRound(Gear^.X) - Gear^.Radius > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) + Gear^.Radius < -2048) or ((Gear^.Message and gmDestroy) > 0)))) then
         begin
         // fail-safe: instanly stop sound if it wasn't disabled before
         if (Gear^.SoundChannel <> -1) then
