@@ -80,46 +80,46 @@
     </message>
     <message>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Автори</translation>
     </message>
     <message>
         <source>Other people</source>
-        <translation type="unfinished"></translation>
+        <translation>Інші люди</translation>
     </message>
     <message>
         <source>%1 (alias %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (псевдо %2)</translation>
     </message>
     <message>
         <source>%1 &amp;lt;%2&amp;gt;</source>
         <extracomment>Part of credits. %1: Contributor name. %2: E-mail address</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 &amp;lt;%2&amp;gt;</translation>
     </message>
     <message>
         <source>%1: %2</source>
         <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <source>%1: %2 &amp;lt;%3&amp;gt;</source>
         <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2 &amp;lt;%3&amp;gt;</translation>
     </message>
     <message>
         <source>Extended Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Розширений список</translation>
     </message>
     <message>
         <source>An extended credits list can be found in the CREDITS text file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Розширений список можна знайти в файлі з назвою CREDITS</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>Unknown Compiler: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Невідомий компілятор: %1</translation>
     </message>
 </context>
 <context>
@@ -273,7 +273,7 @@
     </message>
     <message>
         <source>Map</source>
-        <translation>Карта</translation>
+        <translation>Мапа</translation>
     </message>
     <message>
         <source>Game options</source>
@@ -734,11 +734,11 @@ Last engine message:
     </message>
     <message>
         <source>Map type:</source>
-        <translation>Тип карти:</translation>
+        <translation>Тип мапи:</translation>
     </message>
     <message>
         <source>Image map</source>
-        <translation>Картинка</translation>
+        <translation>Мапа з картинки</translation>
     </message>
     <message>
         <source>Mission map</source>
@@ -762,15 +762,15 @@ Last engine message:
     </message>
     <message>
         <source>Map preview:</source>
-        <translation>Огляд карти:</translation>
+        <translation>Огляд мапи:</translation>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation>Завантажити карту</translation>
+        <translation>Завантажити мапу</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Редагувати карту</translation>
+        <translation>Редагувати мапу</translation>
     </message>
     <message>
         <source>Small islands</source>
@@ -786,7 +786,7 @@ Last engine message:
     </message>
     <message>
         <source>Map size:</source>
-        <translation>Розмір карти:</translation>
+        <translation>Розмір мапи:</translation>
     </message>
     <message>
         <source>Maze style:</source>
@@ -798,15 +798,15 @@ Last engine message:
     </message>
     <message>
         <source>Map:</source>
-        <translation>Карта:</translation>
+        <translation>Мапа:</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation>Завантажити намальовану карту</translation>
+        <translation>Завантажити намальовану мапу</translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation>Намальовані карти</translation>
+        <translation>Намальовані мапи</translation>
     </message>
     <message>
         <source>All files</source>
@@ -814,7 +814,7 @@ Last engine message:
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation>Великі тунелі:</translation>
+        <translation>Великі тунелі</translation>
     </message>
     <message>
         <source>Theme: %1</source>
@@ -822,7 +822,7 @@ Last engine message:
     </message>
     <message>
         <source>Random perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадковий шум</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -834,7 +834,7 @@ Last engine message:
     </message>
     <message>
         <source>View and edit the seed, the source of randomness in the game</source>
-        <translation type="unfinished"></translation>
+        <translation>Перегляд та зміна висіву, джерела випадковості в грі</translation>
     </message>
     <message>
         <source>Randomize the theme</source>
@@ -846,23 +846,23 @@ Last engine message:
     </message>
     <message>
         <source>Randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити мапу, тему і висів</translation>
     </message>
     <message>
         <source>Randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити тему і висів</translation>
     </message>
     <message>
         <source>Randomize the seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити висів</translation>
     </message>
     <message>
         <source>Click to randomize the map, theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Натисність, щоб вибрати випадкові мапу, тему і висів</translation>
     </message>
     <message>
         <source>Click to randomize the theme and seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Натисність, щоб вибрати випадкові тему і висів</translation>
     </message>
     <message>
         <source>Adjust the complexity of the generated map</source>
@@ -878,15 +878,15 @@ Last engine message:
     </message>
     <message>
         <source>Scale size of the drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштабування намальованої мапи</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Завантажити</translation>
+        <translation>Завантажити</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Змінити</translation>
     </message>
 </context>
 <context>
@@ -1023,7 +1023,14 @@ To report this error, please click the &apos;Feedback&apos; button in the main m
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Під час обробки відеозапису сталася фатальна помилка! Відео не вдалося зберегти.
+
+Як обхідний шлях, ви можете спробувати скинути налаштування відеозапису Hedgewars до стандартних значень.
+
+Щоб повідомити про цю помилку, натисніть кнопку &apos;Відгук&apos; у головному меню!
+
+Останнє повідомлення рушія:
+%1</translation>
     </message>
 </context>
 <context>
@@ -1078,7 +1085,7 @@ Last engine message:
     </message>
     <message>
         <source>Warning: The same key is assigned multiple times!</source>
-        <translation type="unfinished"></translation>
+        <translation>Увага: Та сама клавіша призначена кілька разів!</translation>
     </message>
 </context>
 <context>
@@ -1283,7 +1290,7 @@ Last engine message:
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation>Повернути</translation>
+        <translation>Анулювати</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -1299,15 +1306,15 @@ Last engine message:
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation>Завантажити намальовану карту</translation>
+        <translation>Завантажити намальовану мапу</translation>
     </message>
     <message>
         <source>Save drawn map</source>
-        <translation>Зберегти намальовану карту</translation>
+        <translation>Зберегти намальовану мапу</translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation>Намальовані карти</translation>
+        <translation>Намальовані мапи</translation>
     </message>
     <message>
         <source>All files</source>
@@ -1398,7 +1405,7 @@ Last engine message:
     </message>
     <message>
         <source>Randomize the grave</source>
-        <translation>Випадкова могила</translation>
+        <translation>Випадковий надгробок</translation>
     </message>
     <message>
         <source>Randomize the flag</source>
@@ -1512,16 +1519,16 @@ Last engine message:
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; вирішив, що це нормально вбивати власних їжаків за &lt;b&gt;%2&lt;/b&gt; очків.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; вбив &lt;b&gt;%2&lt;/b&gt; з власних їжаків.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -1533,27 +1540,27 @@ Last engine message:
     <message numerus="yes">
         <source>(%1 point(s))</source>
         <extracomment>Number of points in stats screen, written after the team name</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 очко)</numerusform>
+            <numerusform>(%1 очки)</numerusform>
+            <numerusform>(%1 очок)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%L1 second(s))</source>
         <extracomment>Time in seconds</extracomment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%L1 секунда)</numerusform>
+            <numerusform>(%L1 секунди)</numerusform>
+            <numerusform>(%L1 секунд)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 crate(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 ящик)</numerusform>
+            <numerusform>(%1 ящики)</numerusform>
+            <numerusform>(%1 ящиків)</numerusform>
         </translation>
     </message>
 </context>
@@ -1653,19 +1660,19 @@ Last engine message:
     <name>PageNet</name>
     <message>
         <source>Connect to the selected server</source>
-        <translation type="unfinished"></translation>
+        <translation>Під&apos;єднатись до вибраного сервера</translation>
     </message>
     <message>
         <source>Update the list of servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Оновити список серверів</translation>
     </message>
     <message>
         <source>Specify the address and port number of a known server and connect to it directly</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкажіть адресу та номер порту відомого сервера та підключіться до нього</translation>
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished">Запутити приватний сервер</translation>
+        <translation>Запутити приватний сервер</translation>
     </message>
 </context>
 <context>
@@ -1896,7 +1903,7 @@ Last engine message:
     <message>
         <source>MISSING LANGUAGE NAME [%1]</source>
         <extracomment>In the case of an error, this is shown in the language selection for a language with unknown name. %1 = language code</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>ВІДСУТНЯ НАЗВА МОВИ [%1]</translation>
     </message>
     <message>
         <source>Check now</source>
@@ -2069,11 +2076,11 @@ Last engine message:
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation>Вимкнути балки при генеруванні випадкових карт.</translation>
+        <translation>Вимкнути балки при генеруванні випадкових мап.</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation>Вимкнути декорації при генеруванні випадкової карти</translation>
+        <translation>Вимкнути декорації при генеруванні випадкової мапи</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
@@ -2142,11 +2149,11 @@ Last engine message:
     <message>
         <source>Overall damage and knockback in percent</source>
         <extracomment>Description of the game scheme setting “Damage Modifier”. “Knockback” means how much hedgehogs and objects get pushed by explosions and other forces</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Загальна шкода і відкидання у відсотках</translation>
     </message>
     <message>
         <source>Turn time in seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Час ходу в секундах</translation>
     </message>
     <message>
         <source>Initial health of hedgehogs</source>
@@ -2154,15 +2161,15 @@ Last engine message:
     </message>
     <message>
         <source>How many rounds have to be played before Sudden Death begins</source>
-        <translation type="unfinished"></translation>
+        <translation>Кількість  раундів до початку дії Раптовоі Смерті</translation>
     </message>
     <message>
         <source>How much the water rises per turn while in Sudden Death. Set to 0 along with Sudden Death Health Decrease to disable Sudden Death.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скільки води піднімається за хід під час Раптової Смерті. Встановіть 0 тут і на Зменшення Здоров&apos;я, щоб вимкнути Раптову Смерть.</translation>
     </message>
     <message>
         <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скільки здоров&apos;я втрачають іжаки за хід під час Раптової Смерті, аж до 1. Встановіть 0 тут і на Підйом Води, щоб вимкнути Раптову Смерть.</translation>
     </message>
     <message>
         <source>Maximum rope length in percent</source>
@@ -2170,11 +2177,11 @@ Last engine message:
     </message>
     <message>
         <source>Likelihood of a dropped crate being a health crate. All other crates will be weapon or utility crates.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ймовірність того, що кинутий ящик - з аптечкою. Інші ящики містять зброю або пристрої.</translation>
     </message>
     <message>
         <source>Likelihood of a crate dropping before a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Ймовірність падіння ящика перед ходом</translation>
     </message>
     <message>
         <source>Health bonus for collecting a health crate</source>
@@ -2182,27 +2189,27 @@ Last engine message:
     </message>
     <message>
         <source>Detonation timer of mines. The random timer lies between 0 and 5 seconds. The timer of air mines will be a quarter of the mines timer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Таймер детонації мін. Випадковий таймер знаходиться в діапазоні від 0 до 5 секунд. Таймер повітряних мін складає чверть таймера мін.</translation>
     </message>
     <message>
         <source>Average number of mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Середня кількість мін для розміщення на острівній мапі середнього розміру. Кількість масштабується для інших мап.</translation>
     </message>
     <message>
         <source>Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ймовірність того, що міна зіпсована. Не впливає на міни, розміщені їжаками.</translation>
     </message>
     <message>
         <source>Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Середня кількість бочок для розміщення на острівній мапі середнього розміру. Кількість масштабується для інших мап.</translation>
     </message>
     <message>
         <source>Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Середня кількість повітряних мін для розміщення на острівній мапі середнього розміру. Кількість масштабується для інших мап.</translation>
     </message>
     <message>
         <source>Affects the left and right boundaries of the map</source>
-        <translation type="unfinished"></translation>
+        <translation>Впливає на лівий і правий край мапи</translation>
     </message>
     <message>
         <source>Time you get after an attack</source>
@@ -2210,7 +2217,7 @@ Last engine message:
     </message>
     <message>
         <source>Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Додатковий параметр для налаштування стилів гри. Значення залежить від  стилю, зверніться до документації. Або залиште його порожнім.</translation>
     </message>
     <message>
         <source>Name of this scheme</source>
@@ -2276,7 +2283,7 @@ Last engine message:
     </message>
     <message>
         <source>Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios.</source>
-        <translation type="unfinished"></translation>
+        <translation>Місії одного гравця: Навчіться грі в тренуванні, тренуйте свої навички у викликах або спробуйте виконати цілі за сценаріями.</translation>
     </message>
 </context>
 <context>
@@ -2323,30 +2330,30 @@ Last engine message:
     </message>
     <message>
         <source>Team</source>
-        <translation type="unfinished">Команда</translation>
+        <translation>Команда</translation>
     </message>
     <message>
         <source>Team highscore: %1</source>
         <extracomment>Highest score of a team</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Найкращий результат команди: %1</translation>
     </message>
     <message>
         <source>Team lowscore: %1</source>
         <extracomment>Lowest score of a team</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Найгірший результат команди: %1</translation>
     </message>
     <message>
         <source>Team&apos;s top accuracy: %1%</source>
         <extracomment>Best accuracy of a team (in a challenge)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Найвища точність команди: %1%</translation>
     </message>
     <message>
         <source>Team&apos;s best time: %L1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>Кращий час команди: %L1 с</translation>
     </message>
     <message>
         <source>Team&apos;s longest time: %L1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>Найдовший час команди: %L1 с</translation>
     </message>
 </context>
 <context>
@@ -2799,7 +2806,7 @@ Last engine message:
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation>Модифікатор Пошкодженнь</translation>
+        <translation>Модифікатор Пошкоджень</translation>
     </message>
     <message>
         <source>Turn Time</source>
@@ -3015,7 +3022,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Script parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Скриптовий параметр</translation>
     </message>
     <message>
         <source>Air Mines</source>
@@ -3032,7 +3039,7 @@ Do you really want to quit?</source>
     <message>
         <source>% Retreat Time</source>
         <extracomment>Label of game scheme setting for the time you get after an attack</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>% Часу Відступу</translation>
     </message>
     <message>
         <source>Stereoscopy</source>
@@ -3045,11 +3052,11 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажую&lt;br&gt;CAPTCHA ...</translation>
     </message>
     <message>
         <source>Zoom (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштаб (%)</translation>
     </message>
 </context>
 <context>
@@ -3362,12 +3369,13 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Server redirection</source>
-        <translation type="unfinished"></translation>
+        <translation>Перенаправлення сервера</translation>
     </message>
     <message>
         <source>This server supports secure connections on port %1.
 Would you like to reconnect securely?</source>
-        <translation type="unfinished"></translation>
+        <translation>Цей сервер підтримує безпечне з&apos;єднання на порту %1.
+Хочете з&apos;єднатися надійно?</translation>
     </message>
 </context>
 <context>
@@ -3501,7 +3509,7 @@ Would you like to reconnect securely?</source>
     </message>
     <message>
         <source>Specify address</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкажіть адресу</translation>
     </message>
 </context>
 <context>
@@ -3556,7 +3564,7 @@ Would you like to reconnect securely?</source>
     </message>
     <message>
         <source>Map</source>
-        <translation>Карта</translation>
+        <translation>Мапа</translation>
     </message>
     <message>
         <source>Rules</source>
@@ -3568,7 +3576,7 @@ Would you like to reconnect securely?</source>
     </message>
     <message>
         <source>Random Map</source>
-        <translation>Випадкова Карта</translation>
+        <translation>Випадкова Мапа</translation>
     </message>
     <message>
         <source>Random Maze</source>
@@ -3584,7 +3592,7 @@ Would you like to reconnect securely?</source>
     </message>
     <message>
         <source>Random Perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Випадковий шум</translation>
     </message>
     <message>
         <source>Forts</source>
@@ -3595,7 +3603,7 @@ Would you like to reconnect securely?</source>
     <name>SeedPrompt</name>
     <message>
         <source>The map seed is the basis for all random values generated by the game.</source>
-        <translation>Висів карти є основою для всіх випадкових величин, згенерованих грою.</translation>
+        <translation>Висів мапи є основою для всіх випадкових величин, згенерованих грою.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -3735,7 +3743,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>precise aim</source>
-        <translation>точна ціль</translation>
+        <translation>приціл</translation>
     </message>
     <message>
         <source>put</source>
@@ -3743,7 +3751,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>switch</source>
-        <translation>переключити</translation>
+        <translation>переключення</translation>
     </message>
     <message>
         <source>find hedgehog</source>
@@ -3883,92 +3891,92 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>autocam / find hedgehog</source>
-        <translation type="unfinished"></translation>
+        <translation>автокамера / знайти їжака</translation>
     </message>
     <message>
         <source>speed up replay</source>
-        <translation type="unfinished"></translation>
+        <translation>пришвидшити повтор</translation>
     </message>
     <message>
         <source>toggle team bars</source>
         <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>перемкнути смужки команд</translation>
     </message>
     <message>
         <source>pause / auto skip</source>
-        <translation type="unfinished"></translation>
+        <translation>пауза / автопропуск</translation>
     </message>
     <message>
         <source>toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>перемкнути теги їжаків</translation>
     </message>
     <message>
         <source>change timer</source>
-        <translation type="unfinished"></translation>
+        <translation>змінити таймер</translation>
     </message>
     <message>
         <source>show mission information</source>
-        <translation type="unfinished"></translation>
+        <translation>показати інфо про місію</translation>
     </message>
     <message>
         <source>clan chat</source>
-        <translation type="unfinished"></translation>
+        <translation>чат клану</translation>
     </message>
     <message>
         <source>unselect weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>зняти вибір зі зброї</translation>
     </message>
     <message>
         <source>stand still on slippery land</source>
-        <translation type="unfinished"></translation>
+        <translation>спокійно стояти на слизькій землі</translation>
     </message>
     <message>
         <source>change direction without moving</source>
-        <translation type="unfinished"></translation>
+        <translation>змінити напрямок без руху</translation>
     </message>
     <message>
         <source>switch backwards</source>
-        <translation type="unfinished"></translation>
+        <translation>переключити назад</translation>
     </message>
     <message>
         <source>change bounciness</source>
-        <translation type="unfinished"></translation>
+        <translation>змінити стрибучість</translation>
     </message>
     <message>
         <source>reset zoom to start value</source>
-        <translation type="unfinished"></translation>
+        <translation>скинути масштаб до стартового</translation>
     </message>
     <message>
         <source>set zoom to 100%</source>
-        <translation type="unfinished"></translation>
+        <translation>масштаб на 100%</translation>
     </message>
     <message>
         <source>save map as image</source>
-        <translation type="unfinished"></translation>
+        <translation>зберегти мапу як зображення</translation>
     </message>
     <message>
         <source>show object information</source>
-        <translation type="unfinished"></translation>
+        <translation>показати інфо про об&apos;єкт</translation>
     </message>
     <message>
         <source>change hedgehog tag types</source>
-        <translation type="unfinished"></translation>
+        <translation>змінити типи тегів їжаків</translation>
     </message>
     <message>
         <source>toggle hedgehog tag translucency</source>
-        <translation type="unfinished"></translation>
+        <translation>перемкнути прозорість тегів їжаків</translation>
     </message>
     <message>
         <source>toggle HUD</source>
-        <translation type="unfinished"></translation>
+        <translation>перемкнути HUD</translation>
     </message>
     <message>
         <source>backwards jump</source>
-        <translation type="unfinished"></translation>
+        <translation>стрибок назад</translation>
     </message>
     <message>
         <source>screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>знімок</translation>
     </message>
 </context>
 <context>
@@ -3994,43 +4002,43 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>binds (combination)</name>
     <message>
         <source>hold down precise</source>
-        <translation type="unfinished"></translation>
+        <translation>утримуйте приціл</translation>
     </message>
     <message>
         <source>precise + left/right</source>
-        <translation type="unfinished"></translation>
+        <translation>приціл + вліво/вправо</translation>
     </message>
     <message>
         <source>precise + switch</source>
-        <translation type="unfinished"></translation>
+        <translation>приціл + переключення</translation>
     </message>
     <message>
         <source>precise + timer</source>
-        <translation type="unfinished"></translation>
+        <translation>приціл + таймер</translation>
     </message>
     <message>
         <source>precise + reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>приціл + скинути масштаб</translation>
     </message>
     <message>
         <source>precise + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>приціл + перемкнути теги їжаків</translation>
     </message>
     <message>
         <source>switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>переключення + перемкнути теги їжаків</translation>
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>приціл + переключення + перемкнути теги їжаків</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
-        <translation type="unfinished"></translation>
+        <translation>високий стрмбок (двічі)</translation>
     </message>
     <message>
         <source>precise + screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>приціл + знімок</translation>
     </message>
 </context>
 <context>
@@ -4105,19 +4113,19 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемкнути автокамеру / фокус на активного їжака:</translation>
     </message>
     <message>
         <source>Demo replay:</source>
-        <translation type="unfinished"></translation>
+        <translation>Повтор демо:</translation>
     </message>
     <message>
         <source>Heads-up display:</source>
-        <translation type="unfinished"></translation>
+        <translation>Інтерфейс взаємодії:</translation>
     </message>
     <message>
         <source>Talk to your clan or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>Говорити до клану або всіх учасників:</translation>
     </message>
 </context>
 <context>
@@ -4528,133 +4536,133 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>PageUp</source>
-        <translation type="unfinished"></translation>
+        <translation>PageUp</translation>
     </message>
     <message>
         <source>PageDown</source>
-        <translation type="unfinished"></translation>
+        <translation>PageDown</translation>
     </message>
     <message>
         <source>Numlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Numlock</translation>
     </message>
     <message>
         <source>CapsLock</source>
-        <translation type="unfinished"></translation>
+        <translation>CapsLock</translation>
     </message>
     <message>
         <source>ScrollLock</source>
-        <translation type="unfinished"></translation>
+        <translation>ScrollLock</translation>
     </message>
     <message>
         <source>Right Shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Правий Shift</translation>
     </message>
     <message>
         <source>Left Shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Лівий Shift</translation>
     </message>
     <message>
         <source>Right Ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Правий Ctrl</translation>
     </message>
     <message>
         <source>Left Ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Лівий Ctrl</translation>
     </message>
     <message>
         <source>Right Alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Правий Alt</translation>
     </message>
     <message>
         <source>Left Alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Лівий Alt</translation>
     </message>
     <message>
         <source>Right GUI</source>
         <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Права GUI</translation>
     </message>
     <message>
         <source>Left GUI</source>
         <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Ліва GUI</translation>
     </message>
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(QWERTY)</translation>
     </message>
     <message>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Меню</translation>
     </message>
 </context>
 <context>
     <name>credits</name>
     <message>
         <source>Programming</source>
-        <translation type="unfinished"></translation>
+        <translation>Програмування</translation>
     </message>
     <message>
         <source>Game engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Ігровий рушій</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>Творець</translation>
     </message>
     <message>
         <source>Many engine improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Багато покращень рушія</translation>
     </message>
     <message>
         <source>Gamepad and Lua integration</source>
-        <translation type="unfinished"></translation>
+        <translation>Інтеграція геймпадів та Lua</translation>
     </message>
     <message>
         <source>Campaign support</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтримка кампанії</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Покращення налаштувань тем</translation>
     </message>
     <message>
         <source>Some Pas2C and GLES2 work</source>
-        <translation type="unfinished"></translation>
+        <translation>Певна робота з Pas2C та GLES2</translation>
     </message>
     <message>
         <source>Video recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Запис відео</translation>
     </message>
     <message>
         <source>Other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Інші покращення</translation>
     </message>
     <message>
         <source>Map generation</source>
-        <translation type="unfinished"></translation>
+        <translation>Генерування мап</translation>
     </message>
     <message>
         <source>Core map generators</source>
-        <translation type="unfinished"></translation>
+        <translation>Генератори основних мап</translation>
     </message>
     <message>
         <source>Perlin maps and other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Карти з шуму та інші покращення</translation>
     </message>
     <message>
         <source>Maze maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Мапи з лабіринтами</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Зброя</translation>
+        <translation>Зброя</translation>
     </message>
     <message>
         <source>Most core weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Більшість основної зброї</translation>
     </message>
     <message>
         <source>Air mine, rubber, others</source>
@@ -4666,7 +4674,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Freezer</source>
-        <translation type="unfinished"></translation>
+        <translation>Холодильник</translation>
     </message>
     <message>
         <source>Mine number and time game settings</source>
@@ -4674,11 +4682,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Frontend / main menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Фронтенд / головне меню</translation>
     </message>
     <message>
         <source>Many frontend improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Багато покращень фронтенду</translation>
     </message>
     <message>
         <source>Keybinds, feedback, maps and hats interfaces</source>
@@ -4686,19 +4694,19 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Login dialogs, other improvements</source>
-        <translation type="unfinished"></translation>
+        <translation>Діалоги входу, інші покращення</translation>
     </message>
     <message>
         <source>Missions and styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Місії та стилі</translation>
     </message>
     <message>
         <source>A Classic Fairytale</source>
-        <translation type="unfinished"></translation>
+        <translation>Класична казка</translation>
     </message>
     <message>
         <source>A Space Adventure</source>
-        <translation type="unfinished"></translation>
+        <translation>Космічна пригода</translation>
     </message>
     <message>
         <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
@@ -4710,7 +4718,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Some styles and missions</source>
-        <translation type="unfinished"></translation>
+        <translation>Деякі стилі і місії</translation>
     </message>
     <message>
         <source>Battalion</source>
@@ -4722,7 +4730,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Teamwork 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Командна робота 2</translation>
     </message>
     <message>
         <source>Climb Home</source>
@@ -4734,47 +4742,47 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Game server</source>
-        <translation type="unfinished"></translation>
+        <translation>Ігровий сервер</translation>
     </message>
     <message>
         <source>Ports</source>
-        <translation type="unfinished"></translation>
+        <translation>Порти</translation>
     </message>
     <message>
         <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Порт на macOS/iPhone, конвертація на OpenGL-ES</translation>
     </message>
     <message>
         <source>Android port</source>
-        <translation type="unfinished"></translation>
+        <translation>Порт для Android</translation>
     </message>
     <message>
         <source>Android netplay, portability abstraction</source>
-        <translation type="unfinished"></translation>
+        <translation>Мережева гра на Android, портативність</translation>
     </message>
     <message>
         <source>WebGL port</source>
-        <translation type="unfinished"></translation>
+        <translation>Порт на WebGL</translation>
     </message>
     <message>
         <source>iPhone/iPad ports</source>
-        <translation type="unfinished"></translation>
+        <translation>Порти для iPhone/iPad</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished">Графіка</translation>
+        <translation>Графіка</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">Основні</translation>
+        <translation>Основні</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation type="unfinished"></translation>
+        <translation>Теми</translation>
     </message>
     <message>
         <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation type="unfinished"></translation>
+        <translation>Природа, Сніг, Місто, Замок, Хелоуін, Острів</translation>
     </message>
     <message>
         <source>Bamboo, EarthRise, BambooPlinko</source>
@@ -4786,7 +4794,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Hoggywood</source>
-        <translation type="unfinished"></translation>
+        <translation>Голковуд</translation>
     </message>
     <message>
         <source>Cave, Olympics</source>
@@ -4794,35 +4802,35 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Fruit, Cake</source>
-        <translation type="unfinished"></translation>
+        <translation>Фрукти, Торт</translation>
     </message>
     <message>
         <source>Art</source>
-        <translation type="unfinished"></translation>
+        <translation>Мистецтво</translation>
     </message>
     <message>
         <source>Beach</source>
-        <translation type="unfinished"></translation>
+        <translation>Пляж</translation>
     </message>
     <message>
         <source>Brick</source>
-        <translation type="unfinished"></translation>
+        <translation>Цегла</translation>
     </message>
     <message>
         <source>Hell</source>
-        <translation type="unfinished"></translation>
+        <translation>Пекло</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation>Джунглі</translation>
     </message>
     <message>
         <source>Sheep</source>
-        <translation type="unfinished"></translation>
+        <translation>Вівця</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Мапи</translation>
     </message>
     <message>
         <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
@@ -4846,7 +4854,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Battlefield</source>
-        <translation type="unfinished"></translation>
+        <translation>Поле бою</translation>
     </message>
     <message>
         <source>CTF_Blizzard</source>
@@ -4854,7 +4862,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Cheese</source>
-        <translation type="unfinished"></translation>
+        <translation>Сир</translation>
     </message>
     <message>
         <source>ClimbHome</source>
@@ -4870,11 +4878,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>portal</source>
-        <translation type="unfinished"></translation>
+        <translation>портал</translation>
     </message>
     <message>
         <source>Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Лінійка</translation>
     </message>
     <message>
         <source>Sticks</source>
@@ -4882,7 +4890,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished">Форти</translation>
+        <translation>Форти</translation>
     </message>
     <message>
         <source>EvilChicken</source>
@@ -4894,11 +4902,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Tank</source>
-        <translation type="unfinished"></translation>
+        <translation>Танк</translation>
     </message>
     <message>
         <source>Snail</source>
-        <translation type="unfinished"></translation>
+        <translation>Равлик</translation>
     </message>
     <message>
         <source>SteelTower</source>
@@ -4906,31 +4914,31 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Hats, graves, other</source>
-        <translation type="unfinished"></translation>
+        <translation>Капелюхи, надгробки, інше</translation>
     </message>
     <message>
         <source>See CREDITS text file</source>
-        <translation type="unfinished"></translation>
+        <translation>Дивіться в файлі  CREDITS</translation>
     </message>
     <message>
         <source>Sounds</source>
-        <translation type="unfinished"></translation>
+        <translation>Звуки</translation>
     </message>
     <message>
         <source>Hedgehogs voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Голос їжаків</translation>
     </message>
     <message>
         <source>Default_pl, Russian_pl voices</source>
-        <translation type="unfinished"></translation>
+        <translation>Голоси Default_pl, Russian_pl</translation>
     </message>
     <message>
         <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation type="unfinished"></translation>
+        <translation>Різні автори з www.freesound.org (дивіться файл CREDITS)</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished">Музика</translation>
+        <translation>Музика</translation>
     </message>
     <message>
         <source>City, Rock, others</source>
@@ -4938,7 +4946,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Compost</source>
-        <translation type="unfinished"></translation>
+        <translation>Сміття</translation>
     </message>
     <message>
         <source>EarthRise, oriental, Pirate, snow</source>
@@ -4946,11 +4954,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Fruit, Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation>Фрукти, Джунглі</translation>
     </message>
     <message>
         <source>Nature</source>
-        <translation type="unfinished"></translation>
+        <translation>Природа</translation>
     </message>
     <message>
         <source>olympics_sd</source>
@@ -4962,95 +4970,95 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Translations</source>
-        <translation type="unfinished"></translation>
+        <translation>Локалізації</translation>
     </message>
     <message>
         <source>Brazilian Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Бразильська португальська</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Болгарська</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Чеська</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Китайська</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation type="unfinished"></translation>
+        <translation>Фінська</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Французька</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Німецька</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Грецька</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Італійська</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Японська</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Корейська</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Литовська</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Польська</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Португальська</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Російська</translation>
     </message>
     <message>
         <source>Scottish Gaelic</source>
-        <translation type="unfinished"></translation>
+        <translation>Шотландська гаельська</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Словацька</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Іспанська</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Шведська</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation type="unfinished"></translation>
+        <translation>Українська</translation>
     </message>
     <message>
         <source>Special thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Особлива подяка</translation>
     </message>
     <message>
         <source>Project founder</source>
-        <translation type="unfinished"></translation>
+        <translation>Засновник проекту</translation>
     </message>
 </context>
 <context>
