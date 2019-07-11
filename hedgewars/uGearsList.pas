@@ -607,6 +607,9 @@ case Kind of
                 gear^.Health:= 6;
                 gear^.Damage:= 30;
                 gear^.Z:= cHHZ+2;
+                gear^.Karma:= 0; // for sound effect: 0 = normal, 1 = underwater
+                gear^.Radius:= 150;
+                gear^.Density:= _19;
                 gear^.Tint:= gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF
                 end;
      gtAirBomb: begin
