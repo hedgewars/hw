@@ -3079,6 +3079,8 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepAirAttackWork(Gear: PGear);
+var uw, nuw: boolean;
+    tmpFloat: hwFloat;
 begin
     AllInactive := false;
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
@@ -3095,7 +3097,7 @@ begin
         Gear^.dX := Gear^.dX + int2hwFloat(Gear^.Damage * Gear^.Tag);
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             FollowGear^.State:= FollowGear^.State or gstSubmersible;
-        if (Gear^.SoundChannel <> -1) then
+        if (Gear^.SoundChannel <> -1) and (WorldEdge <> weSea) then
             begin
             StopSoundChan(Gear^.SoundChannel, 4000);
             Gear^.SoundChannel := -1;
@@ -3118,8 +3120,35 @@ begin
             StopSoundChan(Gear^.SoundChannel);
             Gear^.SoundChannel := -1;
             end;
-        DeleteGear(Gear)
-        end
+        DeleteGear(Gear);
+        exit;
+        end;
+
+    uw := (Gear^.Karma <> 0); // Was plane underwater last tick?
+    nuw := CheckCoordInWater(hwRound(Gear^.X) + Gear^.Radius * Gear^.Tag, hwRound(Gear^.Y)); // Is plane underwater now?
+
+    // if water entered or left
+    if nuw <> uw then
+        begin
+        tmpFloat:= Gear^.dX;
+        Gear^.dX := cAirPlaneSpeed * Gear^.Tag;
+        AddSplashForGear(Gear, false);
+        Gear^.dX := tmpFloat;
+        StopSoundChan(Gear^.SoundChannel);
+        if nuw then
+            begin
+            Gear^.SoundChannel := LoopSound(sndPlaneWater);
+            StopSoundChan(Gear^.SoundChannel, 4000);
+            Gear^.SoundChannel := -1;
+            Gear^.Karma := 1;
+            end
+        else
+            begin
+            Gear^.SoundChannel := LoopSound(sndPlane);
+            Gear^.Karma := 0;
+            end;
+        end;
+
 end;
 
 procedure doStepAirAttack(Gear: PGear);
@@ -3158,7 +3187,17 @@ begin
                 cGravity) * Gear^.Tag;
 
     Gear^.doStep := @doStepAirAttackWork;
-    Gear^.SoundChannel := LoopSound(sndPlane, 4000);
+
+    if (WorldEdge = weSea) then
+        begin
+        Gear^.SoundChannel := LoopSound(sndPlaneWater, 4000);
+        Gear^.Karma := 1;
+        end
+    else
+        begin
+        Gear^.SoundChannel := LoopSound(sndPlane, 4000);
+        Gear^.Karma := 0;
+        end;
 
 end;
 
@@ -3473,6 +3512,7 @@ begin
         exit
         end;
 
+    // particles
     if (GameTicks and $3F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 end;

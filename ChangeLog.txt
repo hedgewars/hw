@@ -109,6 +109,7 @@ Graphics:
  + Animate drill rockets
  + New idle shoryuken animation
  + Scatter molotov cocktail pieces
+ + Add water effects for air plane
  * Fix speech bubbles overlapping in the wrong order
  * Fix wrong ice beam angle if it goes diagonally up out of map through world wrap
  * Fix double water splash when flying saucer drowns
@@ -165,6 +166,7 @@ Sounds and voicepacks:
  + sndYoohoo has been split to sndYoohoo and sndKiss
  + Voice files sndPoisonCough and sndPoisonMoan are now optional (fall back to Default voicepack)
  + Add taunt: sndFlyAway / Flyaway.ogg: When hedgehog flies off the map
+ + Add underwater sound for airplane
  + Tweak some taunts: sndFirstBlood, sndLeaveMeAlone, sndCutItOut
  * Fix English voicepack selection of team being overwritten when playing in non-English locale
 
