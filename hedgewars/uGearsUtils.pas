@@ -586,7 +586,13 @@ with splash^ do
     else Scale:= Scale + ((1-Scale) / 2);
     if Scale > 1 then Timer:= round(min(Scale*0.0005/cGravityf,4))
     else Timer:= 1;
-    if Scale > 1 then Y:= Y + 10;
+    if Scale > 1 then
+        if (not isImpactH) then
+            Y:= Y + 10
+        else if isImpactRight then
+            X:= X + 10
+        else
+            X:= X - 10;
     // Low Gravity
     FrameTicks:= FrameTicks*Timer;
     end;
