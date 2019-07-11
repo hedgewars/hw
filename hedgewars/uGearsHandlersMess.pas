@@ -3127,7 +3127,7 @@ begin
 
     // Get rid of gear and cleanup
     if ((WorldEdge = weWrap) and (Gear^.FlightTime >= 4000)) or
-        ((WorldEdge <> weWrap) and ((hwRound(Gear^.X) > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) < -2048) or ((Gear^.Message and gmDestroy) > 0))) then
+        ((WorldEdge <> weWrap) and (((hwRound(Gear^.X) - Gear^.Radius > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) + Gear^.Radius < -2048) or ((Gear^.Message and gmDestroy) > 0))) then
         begin
         // fail-safe: instanly stop sound if it wasn't disabled before
         if (Gear^.SoundChannel <> -1) then
