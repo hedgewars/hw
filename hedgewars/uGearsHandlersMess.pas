@@ -2711,9 +2711,7 @@ var
     tdX,tdY, f: HWFloat;
     landPixel: Word;
 begin
-    // don't bounce
-    if WorldEdge <> weBounce then
-        WorldWrap(Gear);
+    WorldWrap(Gear);
     if Gear^.FlightTime > 0 then dec(Gear^.FlightTime);
     // There are 2 flame types: normal and sticky
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
@@ -2773,7 +2771,18 @@ begin
             if Gear^.dY.QWordValue > _0_2.QWordValue then
                 Gear^.dY := Gear^.dY * _0_995;
 
-            Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
+            // Apply speed changes
+
+            tdX:= Gear^.dX + cWindSpeed * 640;
+            // Don't apply wind speed if moving against bounce world edge
+            if (WorldEdge = weBounce) and
+                (((hwRound(Gear^.X + tdX) - Gear^.Radius < leftX) and (hwSign(tdX) = -1)) or
+                ((hwRound(Gear^.X + tdX) + Gear^.Radius > rightX) and (hwSign(tdX) = 1))) then
+                    Gear^.X := Gear^.X + Gear^.dX
+            else
+                // Apply dX and wind speed
+                Gear^.X := Gear^.X + tdX;
+
             Gear^.Y := Gear^.Y + Gear^.dY;
         end;
 

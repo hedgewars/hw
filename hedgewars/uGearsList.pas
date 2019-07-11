@@ -225,6 +225,7 @@ if WorldEdge = weBounce then
         case gear^.Kind of
             // list all gears here that could collide with the bounce world edge
             gtHedgehog,
+            gtFlame,
             gtMine,
             gtAirBomb,
             gtDrill,
