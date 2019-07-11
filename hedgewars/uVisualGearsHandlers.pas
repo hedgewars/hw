@@ -470,7 +470,7 @@ Gear^.X:= Gear^.X + Gear^.dX * Steps;
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
 Gear^.dY:= Gear^.dY + cGravityf * Steps;
 
-if round(Gear^.Y) > cWaterLine then
+if CheckCoordInWater(round(Gear^.X), round(Gear^.Y)) then
     begin
     DeleteVisualGear(Gear);
     PlaySound(TSound(ord(sndDroplet1) + Random(3)));
@@ -848,7 +848,7 @@ Gear^.dY:= Gear^.dY + cGravityf * Steps;
 
 Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
 
-if (round(Gear^.Y) > cWaterLine) and ((cReducedQuality and rqPlainSplash) = 0) then
+if ((cReducedQuality and rqPlainSplash) = 0) and (CheckCoordInWater(round(Gear^.X), round(Gear^.Y))) then
     begin
     AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtDroplet);
     DeleteVisualGear(Gear);
