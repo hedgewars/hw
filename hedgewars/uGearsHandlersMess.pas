@@ -2104,16 +2104,20 @@ begin
     if Gear^.Tag <> 0 then
         begin
         if ((Gear^.FlightTime and $FF) = 0) then
-            begin
-            sparkle:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
-            if sparkle <> nil then
+            // spawn lots of particles when stunned (sparkles or bubbles)
+            if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) = false then
                 begin
-                    sparkle^.dX:= 0.004 * (random(100) - 50);
-                    sparkle^.dY:= -0.05 + 0.004 * (random(100) - 50);
-                    sparkle^.Tint:= $D5CD8CFF;
-                    sparkle^.Angle:= random(360);
-                end;
-            end;
+                sparkle:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
+                if sparkle <> nil then
+                    begin
+                        sparkle^.dX:= 0.004 * (random(100) - 50);
+                        sparkle^.dY:= -0.05 + 0.004 * (random(100) - 50);
+                        sparkle^.Tint:= $D5CD8CFF;
+                        sparkle^.Angle:= random(360);
+                    end;
+                end
+            else
+                AddVisualGear(hwRound(Gear^.X) - 8 + random(16), hwRound(Gear^.Y) + 16 + random(8), vgtBubble);
 
         dec(Gear^.FlightTime);
         if Gear^.FlightTime = 0 then
