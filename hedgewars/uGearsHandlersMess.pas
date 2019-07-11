@@ -3083,10 +3083,14 @@ var uw, nuw: boolean;
     tmpFloat: hwFloat;
 begin
     AllInactive := false;
+    if (WorldEdge = weWrap) then
+        if (WorldWrap(Gear)) then
+            inc(Gear^.Power);
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
-    if (Gear^.Health > 0) and (not (Gear^.X < Gear^.dX)) and (Gear^.X < Gear^.dX + cAirPlaneSpeed) then
+    if (Gear^.Health > 0) and (Gear^.Power >= Gear^.WDTimer) and (((Gear^.Tag = 1) and (not (Gear^.X < Gear^.dX))) or ((Gear^.Tag = -1) and (not (Gear^.X > Gear^.dX)))) then
         begin
         dec(Gear^.Health);
+        Gear^.FlightTime:= 0;
         // Spawn missile
         case Gear^.State of
             0: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
@@ -3094,7 +3098,14 @@ begin
             2: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtNapalmBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
             3: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtDrill, gsttmpFlag, cBombsSpeed * Gear^.Tag, _0, Gear^.Timer + 1);
         end;
-        Gear^.dX := Gear^.dX + int2hwFloat(Gear^.Damage * Gear^.Tag);
+        Gear^.dX := Gear^.X + int2hwFloat(Gear^.Damage * Gear^.Tag);
+        if (WorldEdge = weWrap) then
+            begin
+            Gear^.dX := int2hwFloat(CalcWorldWrap(hwRound(Gear^.dX), 0));
+            if (((Gear^.Tag = 1) and (not (Gear^.X < Gear^.dX))) or ((Gear^.Tag = -1) and (not (Gear^.X > Gear^.dX)))) then
+                inc(Gear^.WDTimer);
+            end;
+
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             FollowGear^.State:= FollowGear^.State or gstSubmersible;
         if (Gear^.SoundChannel <> -1) and (WorldEdge <> weSea) then
@@ -3104,6 +3115,9 @@ begin
             end;
         end;
 
+    if (Gear^.Health = 0) then
+        inc(Gear^.FlightTime);
+
     // Particles
     if (GameTicks and $3F) = 0 then
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
@@ -3112,7 +3126,8 @@ begin
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
     // Get rid of gear and cleanup
-    if (hwRound(Gear^.X) > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) < -2048) or ((Gear^.Message and gmDestroy) > 0) then
+    if ((WorldEdge = weWrap) and (Gear^.FlightTime >= 4000)) or
+        ((WorldEdge <> weWrap) and ((hwRound(Gear^.X) > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) < -2048) or ((Gear^.Message and gmDestroy) > 0))) then
         begin
         // fail-safe: instanly stop sound if it wasn't disabled before
         if (Gear^.SoundChannel <> -1) then
@@ -3169,12 +3184,18 @@ begin
     if Gear^.X.QWordValue = 0 then
         begin
         Gear^.Tag :=  1;
-        Gear^.X := -_2048;
+        if (WorldEdge = weWrap) then
+            Gear^.X := int2hwFloat(CalcWorldWrap(Gear^.Target.X + max(384, LAND_WIDTH shr 2), 0))
+        else
+            Gear^.X := -_2048;
         end
     else
         begin
         Gear^.Tag := -1;
-        Gear^.X := int2hwFloat(max(LAND_WIDTH,4096) + 2048);
+        if (WorldEdge = weWrap) then
+            Gear^.X := int2hwFloat(CalcWorldWrap(Gear^.Target.X - max(384, LAND_WIDTH shr 2), 0))
+        else
+            Gear^.X := int2hwFloat(max(LAND_WIDTH,4096) + 2048);
         end;
 
     Gear^.Y := int2hwFloat(topY - 300);
@@ -3193,12 +3214,24 @@ begin
             Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.Target.Y) - Gear^.Y) * 2 /
                 cGravity) * Gear^.Tag;
 
+    if (WorldEdge = weWrap) then
+        begin
+        Gear^.dX := int2hwFloat(CalcWorldWrap(hwRound(Gear^.dX), 0));
+        if (((Gear^.Tag = 1) and (not (Gear^.X < Gear^.dX))) or ((Gear^.Tag = -1) and (not (Gear^.X > Gear^.dX)))) then
+            Gear^.WDTimer:= 1;
+        end;
+
     Gear^.doStep := @doStepAirAttackWork;
 
     if (WorldEdge = weSea) then
         begin
         Gear^.SoundChannel := LoopSound(sndPlaneWater, 4000);
         Gear^.Karma := 1;
+        end
+    else if  (WorldEdge = weWrap) then
+        begin
+        Gear^.SoundChannel := LoopSound(sndPlane);
+        Gear^.Karma := 0;
         end
     else
         begin

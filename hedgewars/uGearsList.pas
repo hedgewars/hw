@@ -609,6 +609,9 @@ case Kind of
                 gear^.Z:= cHHZ+2;
                 gear^.Karma:= 0; // for sound effect: 0 = normal, 1 = underwater
                 gear^.Radius:= 150;
+                gear^.FlightTime:= 0; // for timeout in weWrap
+                gear^.Power:= 0; // count number of wraps in weWrap
+                gear^.WDTimer:= 0; // number of required wraps
                 gear^.Density:= _19;
                 gear^.Tint:= gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF
                 end;
