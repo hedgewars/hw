@@ -3081,6 +3081,7 @@ end;
 procedure doStepAirAttackWork(Gear: PGear);
 var uw, nuw: boolean;
     tmpFloat: hwFloat;
+    i: LongInt;
 begin
     AllInactive := false;
     if (WorldEdge = weWrap) then
@@ -3122,8 +3123,16 @@ begin
     // Particles
     if (GameTicks and $3F) = 0 then
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
-            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
+            begin
+            // air plane bubbles
+            for i:=1 to 3 do
+                AddVisualGear(hwRound(Gear^.X) - 8 + Random(16), hwRound(Gear^.Y) - 8 + Random(16), vgtBubble);
+            // pilot's snorkel bubbles
+            if random(2) = 0 then
+                AddVisualGear(hwRound(Gear^.X) + 10, hwRound(Gear^.Y) - 50, vgtBubble);
+            end
         else
+            // smoke
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
     // Get rid of gear and cleanup

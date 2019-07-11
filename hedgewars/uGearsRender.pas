@@ -1526,6 +1526,10 @@ begin
                     DrawSpriteRotatedF(sprAirplane, x, y, 0, Gear^.Tag, 0);
                     untint;
                     DrawSpriteRotatedF(sprAirplane, x, y, 1, Gear^.Tag, 0);
+                    if WorldEdge <> weSea then
+                        DrawSpriteRotatedF(sprAirplane, x, y, 2, Gear^.Tag, 0)
+                    else
+                        DrawSpriteRotatedF(sprAirplane, x, y, 3, Gear^.Tag, 0);
                     end;
          gtAirBomb: DrawSpriteRotated(sprAirBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtTeleport: begin
