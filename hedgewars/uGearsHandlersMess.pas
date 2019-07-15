@@ -3240,7 +3240,7 @@ begin
         end
     else if  (WorldEdge = weWrap) then
         begin
-        Gear^.SoundChannel := LoopSound(sndPlane);
+        Gear^.SoundChannel := LoopSound(sndPlane, 500);
         Gear^.Karma := 0;
         end
     else
