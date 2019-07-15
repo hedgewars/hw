@@ -349,8 +349,21 @@ or (SuddenDeathDmg and (SDWaterOpacity > $FE)) then
     DeleteGear(Gear);
     exit;
     end;
-// Delete normally if gear is outside of visible range
-if (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
+// Delete gear normally if it is outside of visible range.
+// But first determine size tolerance for big gears to make sure the gear is REALLY out of range.
+if Gear^.Kind = gtPiano then
+    d:= SpritesData[sprPiano].height
+else if Gear^.Kind = gtRCPlane then
+    d:= SpritesData[sprPlane].width
+else if Gear^.Kind = gtKnife then
+    d:= SpritesData[sprKnife].height
+else if Gear^.Kind = gtDynamite then
+    d:= SpritesData[sprDynamite].height
+else if Gear^.Kind = gtSnowball then
+    d:= SpritesData[sprSnowball].height
+else
+    d:= Gear^.Radius * 2;
+if (hwRound(Gear^.Y) > d + cWaterLine + cVisibleWater) then
     DeleteGear(Gear);
 end;
 
