@@ -154,6 +154,7 @@ local atkArray = {
 	{amMortar,	 1*costFactor},
 	{amDrill,	 3*costFactor},
 	{amSnowball,	 3*costFactor},
+	{amKnife,	 2*costFactor},
 
 	{amGrenade,	 2*costFactor},
 	{amClusterBomb,	 3*costFactor},
@@ -166,7 +167,6 @@ local atkArray = {
 	{amDEagle,	 2*costFactor},
 	{amSniperRifle,	 3*costFactor},
 	--{amSineGun,	 6*costFactor},
-	{amFlamethrower, 4*costFactor},
 	{amIceGun,	15*costFactor},
 	{amMinigun,	13*costFactor},
 
@@ -188,7 +188,7 @@ local atkArray = {
 
 	{amPickHammer,	 2*costFactor},
 	{amBlowTorch,	 4*costFactor},
-	{amKnife,	 2*costFactor},
+	{amFlamethrower, 4*costFactor},
 
 	{amBirdy,	 7*costFactor},
 }
