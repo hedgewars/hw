@@ -1077,6 +1077,10 @@ function onHogAttack(ammoType)
     end
 end
 
+function onSkipTurn()
+    turnSkipped = true
+end
+
 function onAchievementsDeclaration()
     usedWeapons[amSkip] = nil
     usedWeapons[amExtraTime] = nil
