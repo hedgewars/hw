@@ -3353,7 +3353,7 @@ begin
     or (HHGear = nil)
     or ((HHGear^.State and gstMoving) = 0)
     or (HHGear^.Damage > 0)
-    or ((HHGear^.State and gstDrowning) = 1) then
+    or ((HHGear^.State and gstDrowning) <> 0) then
         begin
         DeleteGear(Gear);
         AfterAttack
