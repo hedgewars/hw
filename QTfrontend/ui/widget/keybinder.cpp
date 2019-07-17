@@ -79,7 +79,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setWidgetResizable(true);
     scrollArea->setFrameShape(QFrame::NoFrame);
-    scrollArea->setStyleSheet("background: #130F2A;");
+    scrollArea->setObjectName("keyBinderScrollArea");
 
     // Add key binding pages to bindings tab
     pageKeysLayout->addWidget(scrollArea);
@@ -179,7 +179,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
             curTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
             curTable->verticalHeader()->setDefaultSectionSize(rowHeight);
             curTable->setShowGrid(false);
-            curTable->setStyleSheet("QTableWidget { border: none; } ");
+            curTable->setStyleSheet("QTableWidget { border: none; background-color: transparent; } ");
             curTable->setSelectionBehavior(QAbstractItemView::SelectRows);
             curTable->setSelectionMode(QAbstractItemView::SingleSelection);
             curTable->setFocusPolicy(Qt::NoFocus);

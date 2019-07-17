@@ -547,3 +547,6 @@ QProgressBar::chunk {
 background-color: #FF9B00;
 margin: 2px;
 }
+#keyBinderScrollArea {
+background: #130F2A;
+}
