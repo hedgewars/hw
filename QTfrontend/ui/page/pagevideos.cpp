@@ -128,12 +128,14 @@ QLayout * PageVideos::bodyLayoutDefinition()
         filesTable->verticalHeader()->hide();
         filesTable->setMinimumWidth(400);
 
-        QHeaderView * header = filesTable->horizontalHeader();
+        QHeaderView * header = new QHeaderView(Qt::Horizontal, filesTable);
+        filesTable->setHorizontalHeader(header);
+        header = filesTable->horizontalHeader();
+        header->setStretchLastSection(true);
+        header->setSectionsClickable(false);
         header->setSectionResizeMode(vcName, QHeaderView::ResizeToContents);
         header->setSectionResizeMode(vcSize, QHeaderView::Fixed);
         header->resizeSection(vcSize, 100);
-        header->setStretchLastSection(true);
-        header->setSectionsClickable(false);
 
         btnOpenDir = new QPushButton(QPushButton::tr("Open videos directory"), pTableGroup);
         btnOpenDir->setWhatsThis(QPushButton::tr("Open the video directory in your system"));
