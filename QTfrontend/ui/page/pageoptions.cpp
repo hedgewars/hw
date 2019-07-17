@@ -282,12 +282,11 @@ QLayout * PageOptions::bodyLayoutDefinition()
             lblWinScreenRes->setText(QLabel::tr("Windowed Resolution"));
             groupGame->layout()->addWidget(lblWinScreenRes, 2, 0);
 
-            winResContainer = new QWidget();
-            QHBoxLayout * winResLayout = new QHBoxLayout(winResContainer);
+            QHBoxLayout * winResLayout = new QHBoxLayout();
             winResLayout->setSpacing(0);
-            groupGame->layout()->addWidget(winResContainer, 2, 1);
+            groupGame->layout()->addLayout(winResLayout, 2, 1, 1, 3);
 
-            QLabel *winLabelX = new QLabel(groupGame);
+            winLabelX = new QLabel(groupGame);
             //: Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it
             winLabelX->setText(tr("x"));
             winLabelX->setFixedWidth(40);
@@ -976,7 +975,9 @@ void PageOptions::setFullscreen(int state)
     lblFullScreenRes->setVisible(state);
     CBResolution->setVisible(state);
     lblWinScreenRes->setVisible(!state);
-    winResContainer->setVisible(!state);
+    windowWidthEdit->setVisible(!state);
+    windowHeightEdit->setVisible(!state);
+    winLabelX->setVisible(!state);
 
     int index = this->CBStereoMode->currentIndex();
     if (index != 7 && index != 8 && index != 9)
