@@ -79,6 +79,7 @@ class PageOptions : public AbstractPage
         QComboBox *CBResolution;
         QSpinBox *windowWidthEdit;
         QSpinBox *windowHeightEdit;
+        QLabel *winLabelX;
         QComboBox *CBStereoMode;
         QCheckBox *CBFrontendSound;
         QCheckBox *CBFrontendMusic;
