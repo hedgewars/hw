@@ -201,8 +201,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     mainLayout.setMargin(0);
 
     QWidget * leftSideContainer = new QWidget();
-    leftSideContainer->setObjectName("leftSideContainer");
-    leftSideContainer->setStyleSheet("#leftSideContainer { border-width: 0px; background-color: #ffcc00; border-radius: 10px;} QTextBrowser, SmartLineEdit { background-color: rgb(13, 5, 68); }");
+    leftSideContainer->setObjectName("chatContainer");
     QVBoxLayout * leftSide = new QVBoxLayout(leftSideContainer);
     leftSide->setSpacing(3);
     leftSide->setMargin(3);
@@ -217,7 +216,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     chatText->setMinimumWidth(10);
     chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatText->setOpenLinks(false);
-    chatText->setStyleSheet("QTextBrowser { background-color: rgb(23, 11, 54); border-width: 0px; }");
+    chatText->setObjectName("chatText");
     connect(chatText, SIGNAL(anchorClicked(const QUrl&)),
             this, SLOT(linkClicked(const QUrl&)));
     leftSide->addWidget(chatText, 1);
