@@ -101,6 +101,8 @@ QLayout * PageAdmin::bodyLayoutDefinition()
                               << tr("Reason")
                     );
         twBans->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+        twBans->horizontalHeader()->setSectionsClickable(false);
+        twBans->verticalHeader()->hide();
         twBans->setEditTriggers(QAbstractItemView::NoEditTriggers);
         twBans->setSelectionBehavior(QAbstractItemView::SelectRows);
         twBans->setSelectionMode(QAbstractItemView::SingleSelection);
