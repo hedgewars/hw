@@ -542,3 +542,12 @@ margin: 2px;
 #keyBinderScrollArea {
 background: #130F2A;
 }
+#chatContainer {
+border-width: 0px;
+background-color: #ffcc00;
+border-radius: 10px;
+}
+#chatText {
+background-color: rgb(23, 11, 54);
+border-width: 0px;
+}
