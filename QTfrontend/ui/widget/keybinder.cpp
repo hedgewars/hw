@@ -49,7 +49,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     QVBoxLayout * catListContainer = new QVBoxLayout();
     catListContainer->setContentsMargins(10, 10, 10, 10);
     catList = new QListWidget();
-    catList->setFixedWidth(180);
+    catList->setMinimumWidth(180);
     catList->setStyleSheet("QListWidget::item { font-size: 14px; } QListWidget:hover { border-color: #F6CB1C; } QListWidget::item:selected { background: #150A61; color: yellow; }");
     catList->setFocusPolicy(Qt::NoFocus);
     connect(catList, SIGNAL(currentRowChanged(int)), this, SLOT(changeBindingsPage(int)));
