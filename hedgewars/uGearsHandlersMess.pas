@@ -6330,7 +6330,12 @@ if Gear^.Tag = 0 then
         begin
         if (HH^.Gear^.Damage <> 0) or (HH^.Gear^.Health = 0) or
         ((HH^.Gear^.State and (gstMoving or gstHHDeath or gstHHGone or gstDrowning)) <> 0) then
+            begin
             Gear^.Tag:= 1;
+            HH^.Gear^.State:= HH^.Gear^.State and (not gstAttacking);
+            HH^.Gear^.Message:= HH^.Gear^.Message and (not gmAttack);
+            AfterAttack;
+            end;
         end
     else if HH^.GearHidden = nil then
         Gear^.Tag:= 1;
