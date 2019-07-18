@@ -151,9 +151,11 @@ void FrameTeams::updateDecoFrame()
     {
         setStyleSheet(
             "FrameTeams{"
-            "border: solid;"
+            "border-top: transparent;"
+            "border-left: transparent;"
+            "border-right: transparent;"
+            "border-bottom: solid;"
             "border-width: 1px;"
-            "border-radius: 16px;"
             "border-color: #ffcc00;"
             "}"
         );
