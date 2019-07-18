@@ -89,6 +89,7 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 
 local gameStarted = false
 local gameOver = false
+local winningClan = -1
 local captureLimit = 3
 
 --------------------------
@@ -178,11 +179,12 @@ function CheckScore(clanID)
 
 	if fCaptures[clanID] == captureLimit then
 		gameOver = true
+		winningClan = clanID
 		-- Capture limit reached! We have a winner!
 		for i = 0, (numhhs-1) do
 			if hhs[i] ~= nil then
 				-- Kill all losers
-				if GetHogClan(hhs[i]) ~= clanID then
+				if GetHogClan(hhs[i]) ~= winningClan then
 					SetEffect(hhs[i], heResurrectable, 0)
 					SetHealth(hhs[i],0)
 				end
@@ -628,6 +630,10 @@ function onHogRestore(gear)
 			hhs[i] = gear
 			break
 		end
+	end
+	if gameOver and GetHogClan(gear) ~= winningClan then
+		SetEffect(gear, heResurrectable, 0)
+		SetHealth(gear, 0)
 	end
 end
 
