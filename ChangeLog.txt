@@ -506,6 +506,7 @@ Styles and game modes:
  * Capture the Flag: Fix many bugs caused by playing with >2 teams
  * Capture the Flag: Properly place flag when first hog uses kamikaze or TimeBox
  * Capture the Flag: Fix flag not being dropped when carrier uses piano strike
+ * Capture the Flag: Fix clan not winning if enemy was in time travel
  * CTF_Blizzard: Don't allow more than 2 clans. Excess hogs will be removed
 
 A Space Adventure:
