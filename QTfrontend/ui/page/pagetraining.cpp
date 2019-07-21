@@ -94,20 +94,18 @@ QLayout * PageTraining::bodyLayoutDefinition()
     tbw->setFixedWidth(400);
     pageLayout->setAlignment(tbw, Qt::AlignHCenter);
 
-    QString style = "QListWidget { border-style: none; padding-top: 6px; } QListWidget::item { padding-top: 2px; padding-bottom: 2px; }";
- 
     // training/challenge/scenario lists
     lstTrainings = new QListWidget(this);
     lstTrainings ->setWhatsThis(tr("Pick the training to play"));
-    lstTrainings->setStyleSheet(style);
+    lstTrainings ->setObjectName("trainingList");
 
     lstChallenges = new QListWidget(this);
     lstChallenges ->setWhatsThis(tr("Pick the challenge to play"));
-    lstChallenges->setStyleSheet(style);
+    lstChallenges ->setObjectName("trainingList");
 
     lstScenarios= new QListWidget(this);
     lstScenarios->setWhatsThis(tr("Pick the scenario to play"));
-    lstScenarios->setStyleSheet(style);
+    lstScenarios->setObjectName("trainingList");
 
     tbw->addTab(lstTrainings, tr("Trainings"));
     tbw->addTab(lstChallenges, tr("Challenges"));
