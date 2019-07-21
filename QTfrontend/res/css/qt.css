@@ -551,3 +551,12 @@ border-radius: 10px;
 background-color: rgb(23, 11, 54);
 border-width: 0px;
 }
+#trainingList {
+border-style: none;
+padding-top: 6px;
+}
+#trainingList::item
+{
+padding-top: 2px;
+padding-bottom: 2px;
+}
