@@ -48,7 +48,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uVariables, GLunit, SDLh, SysUtils, uUtils, uIO, uMisc, uTypes, uDebug;
+uses uVariables, GLunit, SDLh, SysUtils, uUtils, uSound, uIO, uMisc, uTypes, uDebug;
 
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 const AvwrapperLibName = 'libavwrapper';
@@ -286,6 +286,14 @@ var format: word;
 begin
     result:= 0;
     AddFileLog('BeginPreRecording');
+    // Videos don't work if /lua command was used, so we forbid them
+    if luaCmdUsed then
+        begin
+        // TODO: Show message to player
+        PlaySound(sndDenied);
+        AddFileLog('Pre-recording prevented; /lua command was used before');
+        exit;
+        end;
 
     thumbnailSaved:= false;
     RecPrefix:= 'hw-' + FormatDateTime('YYYY-MM-DD_HH-mm-ss-z', TDateTime(Now()));

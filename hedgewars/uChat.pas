@@ -35,7 +35,8 @@ procedure CopyToClipboard(var newContent: shortstring);
 procedure TextInput(var event: TSDL_TextInputEvent);
 
 implementation
-uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uLocale;
+uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uLocale
+     {$IFDEF USE_VIDEO_RECORDING}, uVideoRec{$ENDIF};
 
 const MaxStrIndex = 27;
       MaxInputStrLen = 200;
@@ -548,7 +549,15 @@ if (s[1] = '/') then
 
     if (copy(s, 2, 3) = 'lua') then
         begin
+        LuaCmdUsed:= true;
         AddFileLog('/lua issued');
+{$IFDEF USE_VIDEO_RECORDING}
+        if flagPrerecording then
+            begin
+            AddFileLog('Force-stopping prerecording! Lua commands can not be recorded');
+            StopPreRecording;
+            end;
+{$ENDIF}
         if gameType <> gmtNet then
             begin
             liveLua:= (not liveLua);

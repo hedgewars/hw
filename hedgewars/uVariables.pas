@@ -280,6 +280,9 @@ var
     // whether Lua requested to pause the clock
     LuaClockPaused: boolean;
 
+    // whether /lua command was used
+    LuaCmdUsed: boolean;
+
     MaskedSounds : array[TSound] of boolean;
 
     LastVoice : TVoice;
@@ -3006,6 +3009,8 @@ begin
 
     LuaEndTurnRequested:= false;
     LuaNoEndTurnTaunts:= false;
+
+    LuaCmdUsed:= false;
 
     for t:= Low(TSound) to High(TSound) do
         MaskedSounds[t]:= false;
