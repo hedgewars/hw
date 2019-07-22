@@ -259,7 +259,7 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
             "We are very sorry for the inconvenience :(\n\n"
             "If this keeps happening, please click the '%2' button in the main menu!")
             .arg(exitCode)
-            .arg("Feedback"));
+            .arg(QCoreApplication::translate("PageMain", "Feedback")));
 
     }
 }
