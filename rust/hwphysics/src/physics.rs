@@ -93,6 +93,14 @@ impl PositionUpdates {
         self.gear_ids.push(gear_id);
         self.shifts.push((*old_position, *new_position));
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = (GearId, &FPPoint, &FPPoint)> {
+        self.gear_ids
+            .iter()
+            .cloned()
+            .zip(self.shifts.iter())
+            .map(|(id, (from, to))| (id, from, to))
+    }
 }
 
 impl PhysicsProcessor {

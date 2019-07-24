@@ -107,6 +107,9 @@ impl CollisionProcessor {
     }
 
     pub fn process(&mut self, land: &Land2D<u32>, updates: &crate::physics::PositionUpdates) {
+        for (id, old_position, new_position) in updates.iter() {
+            self.grid.update_position(id, old_position, new_position)
+        }
         self.grid.check_collisions(&mut self.detected_collisions);
 
         for (gear_id, collision) in self.enabled_collisions.iter() {
