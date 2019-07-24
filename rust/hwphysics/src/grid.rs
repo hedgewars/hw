@@ -81,7 +81,20 @@ impl Grid {
         let new_bin_index = self.bin_index(new_position);
 
         let old_bin = self.lookup_bin(old_position);
-        if let Some(index) = old_bin.static_refs.iter().position(|id| *id == gear_id) {
+        if let Some(index) = old_bin.dynamic_refs.iter().position(|id| *id == gear_id) {
+            if old_bin_index == new_bin_index {
+                old_bin.dynamic_entries[index].center = *new_position
+            } else {
+                let bounds = old_bin.dynamic_entries.swap_remove(index);
+                let new_bin = self.get_bin(new_bin_index);
+
+                new_bin.dynamic_refs.push(gear_id);
+                new_bin.dynamic_entries.push(CircleBounds {
+                    center: *new_position,
+                    ..bounds
+                });
+            }
+        } else if let Some(index) = old_bin.static_refs.iter().position(|id| *id == gear_id) {
             let bounds = old_bin.static_entries.swap_remove(index);
             old_bin.static_refs.swap_remove(index);
 
@@ -96,19 +109,6 @@ impl Grid {
                 center: *new_position,
                 ..bounds
             });
-        } else if let Some(index) = old_bin.dynamic_refs.iter().position(|id| *id == gear_id) {
-            if old_bin_index == new_bin_index {
-                old_bin.dynamic_entries[index].center = *new_position
-            } else {
-                let bounds = old_bin.dynamic_entries.swap_remove(index);
-                let new_bin = self.get_bin(new_bin_index);
-
-                new_bin.dynamic_refs.push(gear_id);
-                new_bin.dynamic_entries.push(CircleBounds {
-                    center: *new_position,
-                    ..bounds
-                });
-            }
         }
     }
 
