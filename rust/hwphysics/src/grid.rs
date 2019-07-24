@@ -7,16 +7,19 @@ use fpnum::FPPoint;
 use integral_geometry::{GridIndex, Point, Size};
 
 struct GridBin {
-    refs: Vec<GearId>,
+    static_refs: Vec<GearId>,
     static_entries: Vec<CircleBounds>,
+
+    dynamic_refs: Vec<GearId>,
     dynamic_entries: Vec<CircleBounds>,
 }
 
 impl GridBin {
     fn new() -> Self {
         Self {
-            refs: vec![],
+            static_refs: vec![],
             static_entries: vec![],
+            dynamic_refs: vec![],
             dynamic_entries: vec![],
         }
     }
@@ -48,19 +51,65 @@ impl Grid {
         self.index.map(fppoint_round(position))
     }
 
-    fn lookup_bin(&mut self, position: &FPPoint) -> &mut GridBin {
-        let index = self.bin_index(position);
+    fn get_bin(&mut self, index: Point) -> &mut GridBin {
         &mut self.bins[index.x as usize * self.bins_count.width + index.y as usize]
     }
 
+    fn lookup_bin(&mut self, position: &FPPoint) -> &mut GridBin {
+        self.get_bin(self.bin_index(position))
+    }
+
     pub fn insert_static(&mut self, gear_id: GearId, bounds: &CircleBounds) {
-        self.lookup_bin(&bounds.center).static_entries.push(*bounds)
+        let bin = self.lookup_bin(&bounds.center);
+        bin.static_refs.push(gear_id);
+        bin.static_entries.push(*bounds)
     }
 
     pub fn insert_dynamic(&mut self, gear_id: GearId, bounds: &CircleBounds) {
-        self.lookup_bin(&bounds.center)
-            .dynamic_entries
-            .push(*bounds)
+        let bin = self.lookup_bin(&bounds.center);
+        bin.dynamic_refs.push(gear_id);
+        bin.dynamic_entries.push(*bounds);
+    }
+
+    pub fn update_position(
+        &mut self,
+        gear_id: GearId,
+        old_position: &FPPoint,
+        new_position: &FPPoint,
+    ) {
+        let old_bin_index = self.bin_index(old_position);
+        let new_bin_index = self.bin_index(new_position);
+
+        let old_bin = self.lookup_bin(old_position);
+        if let Some(index) = old_bin.static_refs.iter().position(|id| *id == gear_id) {
+            let bounds = old_bin.static_entries.swap_remove(index);
+            old_bin.static_refs.swap_remove(index);
+
+            let new_bin = if old_bin_index == new_bin_index {
+                old_bin
+            } else {
+                self.get_bin(new_bin_index)
+            };
+
+            new_bin.dynamic_refs.push(gear_id);
+            new_bin.dynamic_entries.push(CircleBounds {
+                center: *new_position,
+                ..bounds
+            });
+        } else if let Some(index) = old_bin.dynamic_refs.iter().position(|id| *id == gear_id) {
+            if old_bin_index == new_bin_index {
+                old_bin.dynamic_entries[index].center = *new_position
+            } else {
+                let bounds = old_bin.dynamic_entries.swap_remove(index);
+                let new_bin = self.get_bin(new_bin_index);
+
+                new_bin.dynamic_refs.push(gear_id);
+                new_bin.dynamic_entries.push(CircleBounds {
+                    center: *new_position,
+                    ..bounds
+                });
+            }
+        }
     }
 
     pub fn check_collisions(&self, collisions: &mut DetectedCollisions) {
