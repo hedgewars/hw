@@ -40,7 +40,7 @@ impl World {
             map_renderer: None,
             gear_renderer: None,
             camera: Camera::new(),
-            last_gear_id: GearId::default(),
+            last_gear_id: std::num::NonZeroU16::new(1).unwrap(),
         }
     }
 
@@ -130,7 +130,7 @@ impl World {
 
     fn get_unused_gear_id(&mut self) -> GearId {
         let id = self.last_gear_id;
-        self.last_gear_id += 1;
+        self.last_gear_id = std::num::NonZeroU16::new(self.last_gear_id.get() + 1).unwrap();
         id
     }
 
