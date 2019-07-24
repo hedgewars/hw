@@ -78,20 +78,20 @@ pub struct PhysicsProcessor {
 
 pub struct PositionUpdates {
     pub gear_ids: Vec<GearId>,
-    pub positions: Vec<FPPoint>,
+    pub shifts: Vec<(FPPoint, FPPoint)>,
 }
 
 impl PositionUpdates {
     pub fn new(capacity: usize) -> Self {
         Self {
             gear_ids: Vec::with_capacity(capacity),
-            positions: Vec::with_capacity(capacity),
+            shifts: Vec::with_capacity(capacity),
         }
     }
 
-    pub fn push(&mut self, gear_id: GearId, position: &FPPoint) {
+    pub fn push(&mut self, gear_id: GearId, old_position: &FPPoint, new_position: &FPPoint) {
         self.gear_ids.push(gear_id);
-        self.positions.push(*position);
+        self.shifts.push((*old_position, *new_position));
     }
 }
 
@@ -107,9 +107,10 @@ impl PhysicsProcessor {
 
     pub fn process(&mut self, time_step: FPNum) -> &PositionUpdates {
         for (gear_id, (pos, vel)) in self.dynamic_physics.iter_pos_update() {
+            let old_pos = *pos;
             *pos += *vel * time_step;
             if !vel.is_zero() {
-                self.position_updates.push(gear_id, pos)
+                self.position_updates.push(gear_id, &old_pos, pos)
             } else {
                 self.physics_cleanup.push(gear_id)
             }
