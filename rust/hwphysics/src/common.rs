@@ -1,4 +1,4 @@
-pub type GearId = u16;
+pub type GearId = std::num::NonZeroU16;
 pub trait GearData {}
 
 pub trait GearDataProcessor<T: GearData> {

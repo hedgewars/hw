@@ -114,16 +114,24 @@ impl Grid {
 
     pub fn check_collisions(&self, collisions: &mut DetectedCollisions) {
         for bin in &self.bins {
-            for bounds in &bin.dynamic_entries {
-                for other in &bin.dynamic_entries {
+            for (index, bounds) in bin.dynamic_entries.iter().enumerate() {
+                for (other_index, other) in bin.dynamic_entries.iter().enumerate().skip(index + 1) {
                     if bounds.intersects(other) && bounds != other {
-                        collisions.push(0, 0, &bounds.center)
+                        collisions.push(
+                            bin.dynamic_refs[index],
+                            Some(bin.dynamic_refs[other_index]),
+                            &bounds.center,
+                        )
                     }
                 }
 
-                for other in &bin.static_entries {
+                for (other_index, other) in bin.static_entries.iter().enumerate() {
                     if bounds.intersects(other) {
-                        collisions.push(0, 0, &bounds.center)
+                        collisions.push(
+                            bin.dynamic_refs[index],
+                            Some(bin.static_refs[other_index]),
+                            &bounds.center,
+                        )
                     }
                 }
             }

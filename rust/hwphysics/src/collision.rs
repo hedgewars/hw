@@ -79,7 +79,7 @@ pub struct CollisionProcessor {
 }
 
 pub struct DetectedCollisions {
-    pub pairs: Vec<(GearId, GearId)>,
+    pub pairs: Vec<(GearId, Option<GearId>)>,
     pub positions: Vec<Point>,
 }
 
@@ -91,7 +91,12 @@ impl DetectedCollisions {
         }
     }
 
-    pub fn push(&mut self, contact_gear_id1: GearId, contact_gear_id2: GearId, position: &FPPoint) {
+    pub fn push(
+        &mut self,
+        contact_gear_id1: GearId,
+        contact_gear_id2: Option<GearId>,
+        position: &FPPoint,
+    ) {
         self.pairs.push((contact_gear_id1, contact_gear_id2));
         self.positions.push(fppoint_round(&position));
     }
@@ -119,7 +124,7 @@ impl CollisionProcessor {
                 .any(|(y, r)| (&land[y][r]).iter().any(|v| *v != 0))
             {
                 self.detected_collisions
-                    .push(gear_id, 0, &collision.bounds.center)
+                    .push(gear_id, None, &collision.bounds.center)
             }
         }
     }
