@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation>Das Spielprofil »%1« wird nicht unterstützt</translation>
+        <translation>Das Schema »%1« wird nicht unterstützt</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
