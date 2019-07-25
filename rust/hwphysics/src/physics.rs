@@ -101,6 +101,11 @@ impl PositionUpdates {
             .zip(self.shifts.iter())
             .map(|(id, (from, to))| (id, from, to))
     }
+
+    pub fn clear(&mut self) {
+        self.gear_ids.clear();
+        self.shifts.clear();
+    }
 }
 
 impl PhysicsProcessor {
@@ -114,6 +119,7 @@ impl PhysicsProcessor {
     }
 
     pub fn process(&mut self, time_step: FPNum) -> &PositionUpdates {
+        self.position_updates.clear();
         for (gear_id, (pos, vel)) in self.dynamic_physics.iter_pos_update() {
             let old_pos = *pos;
             *pos += *vel * time_step;
