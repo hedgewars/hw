@@ -1,5 +1,4 @@
-use crate::common::{GearDataProcessor, GearId};
-use fpnum::{fp, FPNum};
+use crate::common::{GearDataProcessor, GearId, Millis};
 use std::{
     cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd},
     collections::BinaryHeap,
@@ -8,7 +7,7 @@ use std::{
 pub type EventId = u16;
 
 struct TimeEvent {
-    time: FPNum,
+    time: Millis,
     gear_id: GearId,
     event_id: EventId,
 }
@@ -52,7 +51,7 @@ impl OccurredEvents {
 
 pub struct TimeProcessor {
     current_event_id: EventId,
-    current_time: FPNum,
+    current_time: Millis,
     events: BinaryHeap<TimeEvent>,
     timeouts: OccurredEvents,
 }
@@ -61,13 +60,13 @@ impl TimeProcessor {
     pub fn new() -> Self {
         Self {
             current_event_id: 0,
-            current_time: fp!(0),
+            current_time: Millis::new(0),
             events: BinaryHeap::with_capacity(1024),
             timeouts: OccurredEvents::new(),
         }
     }
 
-    pub fn register(&mut self, gear_id: GearId, timeout: FPNum) -> EventId {
+    pub fn register(&mut self, gear_id: GearId, timeout: Millis) -> EventId {
         let event_id = self.current_event_id;
         self.current_event_id.wrapping_add(1);
         let event = TimeEvent {
@@ -81,9 +80,9 @@ impl TimeProcessor {
 
     pub fn cancel(&mut self, gear_id: GearId) {}
 
-    pub fn process(&mut self, time_step: FPNum) -> &OccurredEvents {
+    pub fn process(&mut self, time_step: Millis) -> &OccurredEvents {
         self.timeouts.clear();
-        self.current_time += time_step;
+        self.current_time = self.current_time + time_step;
         while self
             .events
             .peek()

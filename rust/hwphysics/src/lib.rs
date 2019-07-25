@@ -10,7 +10,7 @@ use land2d::Land2D;
 
 use crate::{
     collision::{CollisionData, CollisionProcessor, ContactData},
-    common::{GearAllocator, GearData, GearDataAggregator, GearDataProcessor, GearId},
+    common::{GearAllocator, GearData, GearDataAggregator, GearDataProcessor, GearId, Millis},
     physics::{PhysicsData, PhysicsProcessor},
     time::TimeProcessor,
 };
@@ -65,7 +65,7 @@ impl World {
         self.allocator.free(gear_id)
     }
 
-    pub fn step(&mut self, time_step: FPNum, land: &Land2D<u32>) {
+    pub fn step(&mut self, time_step: Millis, land: &Land2D<u32>) {
         let updates = self.physics.process(time_step);
         let collision = self.collision.process(land, &updates);
         let events = self.time.process(time_step);

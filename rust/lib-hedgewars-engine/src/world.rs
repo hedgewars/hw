@@ -1,5 +1,8 @@
 use fpnum::{fp, FPNum, FPPoint};
-use hwphysics::{self as hwp, common::GearId};
+use hwphysics::{
+    self as hwp,
+    common::{GearId, Millis},
+};
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
 use landgen::{
@@ -150,7 +153,7 @@ impl World {
         }
 
         if let Some(ref mut state) = self.game_state {
-            state.physics.step(fp!(1), &state.land);
+            state.physics.step(Millis::new(1), &state.land);
         }
     }
 }
