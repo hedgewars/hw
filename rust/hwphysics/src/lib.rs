@@ -48,7 +48,7 @@ impl World {
 
     pub fn step(&mut self, time_step: FPNum, land: &Land2D<u32>) {
         let updates = self.physics.process(time_step);
-        self.collision.process(land, &updates);
+        let collision = self.collision.process(land, &updates);
     }
 
     pub fn add_gear_data<T>(&mut self, gear_id: GearId, data: T)

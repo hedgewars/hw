@@ -100,6 +100,11 @@ impl DetectedCollisions {
         self.pairs.push((contact_gear_id1, contact_gear_id2));
         self.positions.push(fppoint_round(&position));
     }
+
+    pub fn clear(&mut self) {
+        self.pairs.clear();
+        self.positions.clear()
+    }
 }
 
 impl CollisionProcessor {
@@ -111,10 +116,16 @@ impl CollisionProcessor {
         }
     }
 
-    pub fn process(&mut self, land: &Land2D<u32>, updates: &crate::physics::PositionUpdates) {
+    pub fn process(
+        &mut self,
+        land: &Land2D<u32>,
+        updates: &crate::physics::PositionUpdates,
+    ) -> &DetectedCollisions {
+        self.detected_collisions.clear();
         for (id, old_position, new_position) in updates.iter() {
             self.grid.update_position(id, old_position, new_position)
         }
+
         self.grid.check_collisions(&mut self.detected_collisions);
 
         for (gear_id, collision) in self.enabled_collisions.iter() {
@@ -127,6 +138,8 @@ impl CollisionProcessor {
                     .push(gear_id, None, &collision.bounds.center)
             }
         }
+
+        &self.detected_collisions
     }
 }
 
