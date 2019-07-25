@@ -11,7 +11,7 @@ use integral_geometry::{GridIndex, Point, Size};
 use land2d::Land2D;
 
 pub fn fppoint_round(point: &FPPoint) -> Point {
-    Point::new(point.x().round() as i32, point.y().round() as i32)
+    Point::new(point.x().round(), point.y().round())
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
