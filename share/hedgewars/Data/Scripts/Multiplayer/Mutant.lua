@@ -57,6 +57,9 @@ local winScore = 15
 local hogsLimit = 1
 
 local teamsDead = {}
+local teamsDeleted = {}
+local hogLimitHit = false
+local cnthhs
 
 local circles = {}
 local circleFrame = -1
@@ -143,7 +146,7 @@ function onGameInit()
 end
 
 
-function limitHogs(gear)
+function limitHogsTeam(gear)
     cnthhs = cnthhs + 1
     if cnthhs > 1 then
         hogLimitHit = true
@@ -151,6 +154,13 @@ function limitHogs(gear)
         setGearValue(gear, "excess", true)
         DeleteGear(gear)
     end
+end
+
+function limitHogsClan(gear)
+    hogLimitHit = true
+    SetEffect(gear, heResurrectable, 0)
+    setGearValue(gear, "excess", true)
+    DeleteGear(gear)
 end
 
 function onGameStart()
@@ -163,14 +173,35 @@ function onGameStart()
     teamScan()
     runOnHogs(saveStuff)
 
+    -- Enforce team and hog limits
     hogLimitHit = false
+
+    -- Rule 1: One team per clan
+    if TeamsCount > ClansCount then
+        local usedClans = {}
+        for i=0, TeamsCount - 1 do
+            local teamName = GetTeamName(i)
+            local clanNumber = GetTeamClan(teamName)
+            if not usedClans[clanNumber] then
+                usedClans[clanNumber] = true
+            else
+                runOnHogsInTeam(limitHogsClan, teamName)
+                teamsDeleted[teamName] = true
+                setTeamValue(teamName, "Score", getTeamValue(teamName, "Score") -99999)
+            end
+        end
+    end
+
+    -- Rule 2: One hog per team
     for i=0 , TeamsCount - 1 do
         cnthhs = 0
-        runOnHogsInTeam(limitHogs, GetTeamName(i))
+        runOnHogsInTeam(limitHogsTeam, GetTeamName(i))
     end
     if hogLimitHit then
+        -- TODO: Update warning message to include excess teams as well
         WriteLnToChat(loc("Only one hog per team allowed! Excess hogs will be removed."))
     end
+    trackTeams()
     showStartingInfo()
 end
 
@@ -234,7 +265,6 @@ end
 
 function onNewTurn()
 
-    trackTeams()
     killsCounter = 0
 
     if mutant == nil and TotalRounds >= 0 then
@@ -244,7 +274,10 @@ function onNewTurn()
     checkScore()
 
     for i=0, TeamsCount-1 do
-        SendStat(siClanHealth, getTeamValue(GetTeamName(i), "Score"), GetTeamName(i))
+        local teamName = GetTeamName(i)
+        if not teamsDeleted[teamName] then
+            SendStat(siClanHealth, getTeamValue(teamName, "Score"), teamName)
+        end
     end
 
     giveWeapons(CurrentHedgehog)
@@ -612,7 +645,7 @@ end
 function teamScan()
 
         for j=0, TeamsCount-1 do
-            teamName = GetTeamName(j)
+            local teamName = GetTeamName(j)
             teamsDead[teamName] = false
             setTeamValue(teamName, "Score",0)
             setTeamValue(teamName, "Suicides",0)

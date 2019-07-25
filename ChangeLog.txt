@@ -63,6 +63,7 @@ Styles and schemes:
  * Frenzy: Fix incorrect ammo slot numbers in ammo menu
  * Continental supplies: Computer teams now select random continent
  * WxW, Racer: Computer teams no longer block setup phase
+ * Mutant: Delete excess teams when a clan has more than one team
 
 A Classic Fairytale:
  + Backstab: Disable utilities before traitor has been dealt with
