@@ -6,11 +6,12 @@ use hedgewars_engine_messages::messages::{
 use integral_geometry::{Point, Rect, Size};
 use landgen::outline_template::OutlineTemplate;
 
-use super::{ipc::IPC, world::World};
+use super::{ipc::*, world::World};
 
 pub struct EngineInstance {
     pub world: World,
-    pub ipc: IPC,
+    pub ipc_channel: Channel,
+    ipc_queue: MessagesQueue,
 }
 
 impl EngineInstance {
@@ -34,7 +35,8 @@ impl EngineInstance {
 
         Self {
             world,
-            ipc: IPC::new(),
+            ipc_channel: Channel::new(),
+            ipc_queue: MessagesQueue::new(QueueChatStrategy::LocalGame),
         }
     }
 
@@ -57,7 +59,11 @@ impl EngineInstance {
     }
 
     pub fn process_ipc_queue(&mut self) {
-        let messages: Vec<EngineMessage> = self.ipc.iter().collect();
+        for message in self.ipc_channel.iter() {
+            self.ipc_queue.push(message);
+        }
+
+        let messages: Vec<EngineMessage> = self.ipc_queue.iter(0).collect();
 
         for message in messages {
             println!("Processing message: {:?}", message);

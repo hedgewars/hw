@@ -118,7 +118,7 @@ pub extern "C" fn dispose_preview(engine_state: &mut EngineInstance, preview: &m
 pub extern "C" fn send_ipc(engine_state: &mut EngineInstance, buf: *const u8, size: usize) {
     unsafe {
         (*engine_state)
-            .ipc
+            .ipc_channel
             .write(std::slice::from_raw_parts(buf, size))
             .unwrap();
     }
@@ -128,7 +128,7 @@ pub extern "C" fn send_ipc(engine_state: &mut EngineInstance, buf: *const u8, si
 pub extern "C" fn read_ipc(engine_state: &mut EngineInstance, buf: *mut u8, size: usize) -> usize {
     unsafe {
         (*engine_state)
-            .ipc
+            .ipc_channel
             .read(std::slice::from_raw_parts_mut(buf, size))
             .unwrap_or(0)
     }
