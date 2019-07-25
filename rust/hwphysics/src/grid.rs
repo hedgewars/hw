@@ -120,7 +120,7 @@ impl Grid {
                         collisions.push(
                             bin.dynamic_refs[index],
                             Some(bin.dynamic_refs[other_index]),
-                            &bounds.center,
+                            &((bounds.center + other.center) / 2),
                         )
                     }
                 }
@@ -130,7 +130,7 @@ impl Grid {
                         collisions.push(
                             bin.dynamic_refs[index],
                             Some(bin.static_refs[other_index]),
-                            &bounds.center,
+                            &((bounds.center + other.center) / 2),
                         )
                     }
                 }
