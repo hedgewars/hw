@@ -1,4 +1,4 @@
-use crate::common::{GearData, GearDataProcessor, GearId};
+use crate::common::{GearData, GearDataProcessor, GearId, Millis};
 use fpnum::*;
 use integral_geometry::{GridIndex, Point, Size};
 
@@ -133,11 +133,12 @@ impl PhysicsProcessor {
         }
     }
 
-    pub fn process(&mut self, time_step: FPNum) -> &PositionUpdates {
+    pub fn process(&mut self, time_step: Millis) -> &PositionUpdates {
+        let fp_step = time_step.to_fixed();
         self.position_updates.clear();
         for (gear_id, (pos, vel)) in self.dynamic_physics.iter_pos_update() {
             let old_pos = *pos;
-            *pos += *vel * time_step;
+            *pos += *vel * fp_step;
             if !vel.is_zero() {
                 self.position_updates.push(gear_id, &old_pos, pos)
             } else {
