@@ -55,7 +55,6 @@ named!(synced_message<&[u8], SyncedEngineMessage>, alt!(
       | do_parse!(tag!("P") >> x: be_i24 >> y: be_i24 >> ( CursorMove(x, y) ))
       | do_parse!(tag!("f") >> s: string_tail >> ( SyncedEngineMessage::TeamControlLost(s) ))
       | do_parse!(tag!("g") >> s: string_tail >> ( SyncedEngineMessage::TeamControlGained(s) ))
-      | do_parse!(tag!("h") >> s: string_tail >> ( HogSay(s) ))
       | do_parse!(tag!("t") >> t: be_u8 >> ( Taunt(t) ))
       | do_parse!(tag!("w") >> w: be_u8 >> ( SetWeapon(w) ))
       | do_parse!(tag!("~") >> s: be_u8 >> ( Slot(s) ))
@@ -65,6 +64,9 @@ named!(synced_message<&[u8], SyncedEngineMessage>, alt!(
 named!(unsynced_message<&[u8], UnsyncedEngineMessage>, alt!(
         do_parse!(tag!("F") >> s: string_tail >> ( UnsyncedEngineMessage::TeamControlLost(s) ))
       | do_parse!(tag!("G") >> s: string_tail >> ( UnsyncedEngineMessage::TeamControlGained(s) ))
+      | do_parse!(tag!("h") >> s: string_tail >> ( UnsyncedEngineMessage::HogSay(s) ))
+      | do_parse!(tag!("s") >> s: string_tail >> ( UnsyncedEngineMessage::ChatMessage(s)) )
+      | do_parse!(tag!("b") >> s: string_tail >> ( UnsyncedEngineMessage::TeamMessage(s)) ) // TODO: wtf is the format
 ));
 
 named!(unordered_message<&[u8], UnorderedEngineMessage>, alt!(
@@ -72,8 +74,6 @@ named!(unordered_message<&[u8], UnorderedEngineMessage>, alt!(
     | do_parse!(tag!("!") >> ( Pong ))
     | do_parse!(tag!("E") >> s: string_tail >> ( UnorderedEngineMessage::Error(s)) )
     | do_parse!(tag!("W") >> s: string_tail >> ( Warning(s)) )
-    | do_parse!(tag!("s") >> s: string_tail >> ( ChatMessage(s)) )
-    | do_parse!(tag!("b") >> s: string_tail >> ( TeamMessage(s)) ) // TODO: wtf is the format
     | do_parse!(tag!("M") >> s: string_tail >> ( GameSetupChecksum(s)) )
     | do_parse!(tag!("o") >> ( StopSyncing ))
     | do_parse!(tag!("I") >> ( PauseToggled ))
