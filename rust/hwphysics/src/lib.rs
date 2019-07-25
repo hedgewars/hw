@@ -2,6 +2,7 @@ pub mod collision;
 pub mod common;
 mod grid;
 pub mod physics;
+pub mod time;
 
 use fpnum::FPNum;
 use integral_geometry::Size;
@@ -11,6 +12,7 @@ use crate::{
     collision::{CollisionData, CollisionProcessor, ContactData},
     common::{GearData, GearDataAggregator, GearDataProcessor, GearId},
     physics::{PhysicsData, PhysicsProcessor},
+    time::TimeProcessor,
 };
 
 pub struct JoinedData {
@@ -23,6 +25,7 @@ pub struct JoinedData {
 pub struct World {
     physics: PhysicsProcessor,
     collision: CollisionProcessor,
+    time: TimeProcessor,
 }
 
 macro_rules! processor_map {
@@ -43,12 +46,14 @@ impl World {
         Self {
             physics: PhysicsProcessor::new(),
             collision: CollisionProcessor::new(world_size),
+            time: TimeProcessor::new(),
         }
     }
 
     pub fn step(&mut self, time_step: FPNum, land: &Land2D<u32>) {
         let updates = self.physics.process(time_step);
         let collision = self.collision.process(land, &updates);
+        let events = self.time.process(time_step);
     }
 
     pub fn add_gear_data<T>(&mut self, gear_id: GearId, data: T)

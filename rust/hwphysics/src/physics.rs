@@ -110,7 +110,7 @@ impl PositionUpdates {
 
 impl PhysicsProcessor {
     pub fn new() -> Self {
-        PhysicsProcessor {
+        Self {
             dynamic_physics: DynamicPhysicsCollection::new(),
             static_physics: StaticPhysicsCollection::new(),
             physics_cleanup: Vec::new(),
