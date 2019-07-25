@@ -169,12 +169,13 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     // CPU level flag. Static image, only displayed when computer player is selected
     QImage imgBotlevels = QImage("physfs://Graphics/botlevels.png");
 
-    int botlevelOffsets[5]= { 19, 14, 10, 6, 0 };   
+    int botlevelOffsetsX[5]= { 17, 13, 9, 5, 0 };
+    int botlevelOffsetsY[5]= { 11, 9, 4, 2, 0 };
 
     for(int i=0; i<5; i++) {
         QImage imgCPU = QImage("physfs://Graphics/Flags/cpu.png");
         QPainter painter(&imgCPU);
-        painter.drawImage(botlevelOffsets[i], 0, imgBotlevels, botlevelOffsets[i]);
+        painter.drawImage(botlevelOffsetsX[i], botlevelOffsetsY[i], imgBotlevels, botlevelOffsetsX[i], botlevelOffsetsY[i]);
 
         pixCPU[i] = QPixmap::fromImage(imgCPU);
     }
