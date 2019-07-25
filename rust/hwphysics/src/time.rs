@@ -79,6 +79,8 @@ impl TimeProcessor {
         event_id
     }
 
+    pub fn cancel(&mut self, gear_id: GearId) {}
+
     pub fn process(&mut self, time_step: FPNum) -> &OccurredEvents {
         self.timeouts.clear();
         self.current_time += time_step;

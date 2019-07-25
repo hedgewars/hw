@@ -28,7 +28,6 @@ pub struct World {
     map_renderer: Option<MapRenderer>,
     gear_renderer: Option<GearRenderer>,
     camera: Camera,
-    last_gear_id: GearId,
 }
 
 impl World {
@@ -40,7 +39,6 @@ impl World {
             map_renderer: None,
             gear_renderer: None,
             camera: Camera::new(),
-            last_gear_id: std::num::NonZeroU16::new(1).unwrap(),
         }
     }
 
@@ -128,15 +126,9 @@ impl World {
         }
     }
 
-    fn get_unused_gear_id(&mut self) -> GearId {
-        let id = self.last_gear_id;
-        self.last_gear_id = std::num::NonZeroU16::new(self.last_gear_id.get() + 1).unwrap();
-        id
-    }
-
     fn create_gear(&mut self, position: Point) {
-        let id = self.get_unused_gear_id();
         if let Some(ref mut state) = self.game_state {
+            let id = state.physics.new_gear().unwrap();
             let fp_position = FPPoint::new(position.x.into(), position.y.into());
             state.physics.add_gear_data(
                 id,
