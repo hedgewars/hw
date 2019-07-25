@@ -2,7 +2,6 @@ file(GLOB VoiceSounds
 Boring.ogg
 Byebye.ogg
 Comeonthen.ogg
-Coward.ogg
 Enemydown.ogg
 Firstblood.ogg
 Firepunch*.ogg
