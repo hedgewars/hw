@@ -28,7 +28,6 @@ pub enum SyncedEngineMessage {
     TeamControlLost(String),
     TimeWrap,
     Taunt(u8),
-    HogSay(String),
     Heartbeat,
 }
 
@@ -36,14 +35,15 @@ pub enum SyncedEngineMessage {
 pub enum UnsyncedEngineMessage {
     TeamControlGained(String),
     TeamControlLost(String),
+    HogSay(String),
+    ChatMessage(String),
+    TeamMessage(String),
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum UnorderedEngineMessage {
     Ping,
     Pong,
-    ChatMessage(String),
-    TeamMessage(String),
     Error(String),
     Warning(String),
     StopSyncing,
@@ -194,7 +194,6 @@ impl SyncedEngineMessage {
             TeamControlGained(str) => ems![b'g', str],
             TeamControlLost(str) => ems![b'f', str],
             Taunt(s) => vec![b't', *s],
-            HogSay(str) => ems![b'h', str],
             Heartbeat => em![b'+'],
             TimeWrap => unreachable!(),
         }
@@ -207,6 +206,9 @@ impl UnsyncedEngineMessage {
         match self {
             TeamControlGained(str) => ems![b'G', str],
             TeamControlLost(str) => ems![b'F', str],
+            HogSay(str) => ems![b'h', str],
+            ChatMessage(str) => ems![b's', str],
+            TeamMessage(str) => ems![b'b', str],
         }
     }
 }
@@ -217,8 +219,6 @@ impl UnorderedEngineMessage {
         match self {
             Ping => em![b'?'],
             Pong => em![b'!'],
-            ChatMessage(str) => ems![b's', str],
-            TeamMessage(str) => ems![b'b', str],
             Error(str) => ems![b'E', str],
             Warning(_) => unreachable!(),
             StopSyncing => unreachable!(),
