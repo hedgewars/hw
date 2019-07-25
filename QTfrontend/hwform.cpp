@@ -815,6 +815,8 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         case gtQLocal:
         case gtTraining:
         case gtCampaign:
+        case gtDemo:
+        case gtSave:
             ui.pageGameStats->restartBtnVisible(true);
             break;
         default:
@@ -2441,6 +2443,10 @@ void HWForm::restartGame()
         break;
     case gtLocal:
         game->StartLocal();
+        break;
+    case gtDemo:
+    case gtSave:
+        PlayDemo();
         break;
     default:
         break;
