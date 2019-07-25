@@ -10,7 +10,7 @@ use land2d::Land2D;
 
 use crate::{
     collision::{CollisionData, CollisionProcessor, ContactData},
-    common::{GearData, GearDataAggregator, GearDataProcessor, GearId},
+    common::{GearAllocator, GearData, GearDataAggregator, GearDataProcessor, GearId},
     physics::{PhysicsData, PhysicsProcessor},
     time::TimeProcessor,
 };
@@ -23,6 +23,7 @@ pub struct JoinedData {
 }
 
 pub struct World {
+    allocator: GearAllocator,
     physics: PhysicsProcessor,
     collision: CollisionProcessor,
     time: TimeProcessor,
@@ -44,10 +45,24 @@ processor_map!(CollisionData => collision);
 impl World {
     pub fn new(world_size: Size) -> Self {
         Self {
+            allocator: GearAllocator::new(),
             physics: PhysicsProcessor::new(),
             collision: CollisionProcessor::new(world_size),
             time: TimeProcessor::new(),
         }
+    }
+
+    #[inline]
+    pub fn new_gear(&mut self) -> Option<GearId> {
+        self.allocator.alloc()
+    }
+
+    #[inline]
+    pub fn delete_gear(&mut self, gear_id: GearId) {
+        self.physics.remove(gear_id);
+        self.collision.remove(gear_id);
+        self.time.cancel(gear_id);
+        self.allocator.free(gear_id)
     }
 
     pub fn step(&mut self, time_step: FPNum, land: &Land2D<u32>) {

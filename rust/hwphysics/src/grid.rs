@@ -71,6 +71,8 @@ impl Grid {
         bin.dynamic_entries.push(*bounds);
     }
 
+    pub fn remove(&mut self, gear_id: GearId) {}
+
     pub fn update_position(
         &mut self,
         gear_id: GearId,

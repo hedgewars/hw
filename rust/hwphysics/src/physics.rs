@@ -35,10 +35,18 @@ impl DynamicPhysicsCollection {
         self.gear_ids.len()
     }
 
-    fn push(&mut self, id: GearId, physics: PhysicsData) {
-        self.gear_ids.push(id);
+    fn push(&mut self, gear_id: GearId, physics: PhysicsData) {
+        self.gear_ids.push(gear_id);
         self.positions.push(physics.position);
         self.velocities.push(physics.velocity);
+    }
+
+    fn remove(&mut self, gear_id: GearId) {
+        if let Some(index) = self.gear_ids.iter().position(|id| *id == gear_id) {
+            self.gear_ids.swap_remove(index);
+            self.positions.swap_remove(index);
+            self.velocities.swap_remove(index);
+        }
     }
 
     fn iter_pos_update(&mut self) -> impl Iterator<Item = (GearId, (&mut FPPoint, &FPPoint))> {
@@ -65,6 +73,13 @@ impl StaticPhysicsCollection {
     fn push(&mut self, gear_id: GearId, physics: PhysicsData) {
         self.gear_ids.push(gear_id);
         self.positions.push(physics.position);
+    }
+
+    fn remove(&mut self, gear_id: GearId) {
+        if let Some(index) = self.gear_ids.iter().position(|id| *id == gear_id) {
+            self.gear_ids.swap_remove(index);
+            self.positions.swap_remove(index);
+        }
     }
 }
 
@@ -148,5 +163,10 @@ impl GearDataProcessor<PhysicsData> for PhysicsProcessor {
         } else {
             self.dynamic_physics.push(gear_id, gear_data);
         }
+    }
+
+    fn remove(&mut self, gear_id: GearId) {
+        self.static_physics.remove(gear_id);
+        self.dynamic_physics.remove(gear_id)
     }
 }

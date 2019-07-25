@@ -147,4 +147,8 @@ impl GearDataProcessor<CollisionData> for CollisionProcessor {
     fn add(&mut self, gear_id: GearId, gear_data: CollisionData) {
         self.grid.insert_static(gear_id, &gear_data.bounds);
     }
+
+    fn remove(&mut self, gear_id: GearId) {
+        self.grid.remove(gear_id);
+    }
 }
