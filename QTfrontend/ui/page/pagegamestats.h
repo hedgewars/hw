@@ -58,6 +58,7 @@ class PageGameStats : public AbstractPage
         void clear();
         void renderStats();
         void restartBtnVisible(bool visible);
+        void saveDemoBtnEnabled(bool enabled);
 
     signals:
         void saveDemoRequested();

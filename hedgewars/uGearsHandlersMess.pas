@@ -1701,6 +1701,8 @@ case Gear^.Kind of
         if Gear^.Timer = 0 then
             begin
             SendIPC(_S'N');
+            if (luaCmdUsed) then
+                SendIPC(_S'm');
             SendIPC(_S'q');
             GameState := gsExit
             end

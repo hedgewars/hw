@@ -76,22 +76,29 @@ HWGame::~HWGame()
 
 void HWGame::onClientDisconnect()
 {
-    switch (gameType)
+    if (demoIsPresent)
     {
-        case gtDemo:
-            // for video recording we need demo anyway
-            emit HaveRecord(rtNeither, demo);
-            break;
-        case gtNet:
-            emit HaveRecord(rtDemo, demo);
-            break;
-        default:
-            if (gameState == gsInterrupted || gameState == gsHalted)
-                emit HaveRecord(rtSave, demo);
-            else if (gameState == gsFinished)
-                emit HaveRecord(rtDemo, demo);
-            else
+        switch (gameType)
+        {
+            case gtDemo:
+                // for video recording we need demo anyway
                 emit HaveRecord(rtNeither, demo);
+                break;
+            case gtNet:
+                emit HaveRecord(rtDemo, demo);
+                break;
+            default:
+                if (gameState == gsInterrupted || gameState == gsHalted)
+                    emit HaveRecord(rtSave, demo);
+                else if (gameState == gsFinished)
+                    emit HaveRecord(rtDemo, demo);
+                else
+                    emit HaveRecord(rtNeither, demo);
+        }
+    }
+    else
+    {
+        emit HaveRecord(rtNeither, demo);
     }
     SetGameState(gsStopped);
 }
@@ -452,6 +459,11 @@ void HWGame::ParseMessage(const QByteArray & msg)
             SetGameState(gsFinished);
             break;
         }
+        case 'm':
+        {
+            SetDemoPresence(false);
+            break;
+        }
         case 'H':
         {
             SetGameState(gsHalted);
@@ -749,6 +761,11 @@ void HWGame::SetGameState(GameState state)
     {
         emit TrainingStateChanged(1);
     }
+}
+
+void HWGame::SetDemoPresence(bool hasDemo)
+{
+    emit DemoPresenceChanged(hasDemo);
 }
 
 void HWGame::abort()

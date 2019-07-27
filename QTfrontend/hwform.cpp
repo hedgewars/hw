@@ -129,6 +129,7 @@
 // I started handing this down to each place it touches, but it was getting ridiculous
 // and this one flag does not warrant a static class
 bool frontendEffects = true;
+bool demoIsPresent = true;
 QString playerHash;
 
 QIcon finishedIcon;
@@ -823,6 +824,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
             ui.pageGameStats->restartBtnVisible(false);
             break;
         }
+        ui.pageGameStats->saveDemoBtnEnabled(demoIsPresent);
     }
 
     if (id == ID_PAGE_MAIN)
@@ -1793,6 +1795,7 @@ void HWForm::GameStateChanged(GameState gameState)
     {
         case gsStarted:
         {
+            demoIsPresent = true;
             Music(false);
             if (wBackground) wBackground->stopAnimation();
             if (!hwnet || (!hwnet->isRoomChief() || !hwnet->isInRoom())) GoToPage(ID_PAGE_INGAME);
@@ -1846,12 +1849,18 @@ void HWForm::GameStateChanged(GameState gameState)
     }
 }
 
+void HWForm::DemoPresenceChanged(bool hasDemo)
+{
+    demoIsPresent = hasDemo;
+}
+
 void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo)
 {
     game = new HWGame(config, gamecfg, ammo, pTeamSelWidget);
     connect(game, SIGNAL(CampStateChanged(int)), this, SLOT(UpdateCampaignPageProgress(int)));
     connect(game, SIGNAL(TrainingStateChanged(int)), this, SLOT(UpdateTrainingPageTeam(int)));
     connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
+    connect(game, SIGNAL(DemoPresenceChanged(bool)), this, SLOT(DemoPresenceChanged(bool)));
     connect(game, SIGNAL(GameStats(char, const QString &)), ui.pageGameStats, SLOT(GameStats(char, const QString &)));
     connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowFatalErrorMessage(const QString &)), Qt::QueuedConnection);
     connect(game, SIGNAL(HaveRecord(RecordType, const QByteArray &)), this, SLOT(GetRecord(RecordType, const QByteArray &)));
