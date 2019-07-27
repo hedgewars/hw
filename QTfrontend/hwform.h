@@ -52,6 +52,7 @@ class QSettings;
 class QSignalMapper;
 
 extern bool frontendEffects;
+extern bool demoIsPresent;
 extern QString playerHash;
 
 class HWForm : public QMainWindow
@@ -121,6 +122,7 @@ class HWForm : public QMainWindow
         void RemoveNetTeam(const HWTeam& team);
         void StartMPGame();
         void GameStateChanged(GameState gameState);
+        void DemoPresenceChanged(bool hasDemo);
         void ForcedDisconnect(const QString & reason);
         void ShowFatalErrorMessage(const QString &);
         void GetRecord(RecordType type, const QByteArray & record);

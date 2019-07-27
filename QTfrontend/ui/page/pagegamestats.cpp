@@ -171,6 +171,11 @@ void PageGameStats::restartBtnVisible(bool visible)
     btnRestart->setVisible(visible);
 }
 
+void PageGameStats::saveDemoBtnEnabled(bool enabled)
+{
+    btnSave->setEnabled(enabled);
+}
+
 void PageGameStats::renderStats()
 {
     if(defaultGraphTitle) {

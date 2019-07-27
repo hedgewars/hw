@@ -73,6 +73,8 @@ begin
     s:= s; // avoid compiler hint
     if GameState = gsConfirm then
         begin
+        if (luaCmdUsed) then
+            SendIPC(_S'm');
         SendIPC(_S'Q');
         GameState:= gsExit
         end
@@ -81,6 +83,8 @@ end;
 procedure chHalt (var s: shortstring);
 begin
     s:= s; // avoid compiler hint
+    if (luaCmdUsed) then
+        SendIPC(_S'm');
     SendIPC(_S'H');
     GameState:= gsExit
 end;

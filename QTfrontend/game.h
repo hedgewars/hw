@@ -96,6 +96,7 @@ class HWGame : public TCPBase
         void SendChat(const QString & msg);
         void SendTeamMessage(const QString & msg);
         void GameStateChanged(GameState gameState);
+        void DemoPresenceChanged(bool hasDemo);
         void GameStats(char type, const QString & info);
         void HaveRecord(RecordType type, const QByteArray & record);
         void ErrorMessage(const QString &);
@@ -126,6 +127,7 @@ class HWGame : public TCPBase
         void SendCampaignConfig();
         void ParseMessage(const QByteArray & msg);
         void SetGameState(GameState state);
+        void SetDemoPresence(bool hasDemo);
         void sendCampaignVar(const QByteArray & varToSend);
         void writeCampaignVar(const QByteArray &varVal);
         void sendMissionVar(const QByteArray & varToSend);
