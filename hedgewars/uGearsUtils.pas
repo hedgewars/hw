@@ -284,10 +284,7 @@ begin
 
         Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
 
-        if (Gear^.State and gstHHDeath) <> 0 then
-            // If hog took damage while dying, explode hog instantly (see doStepHedgehogDead)
-            Gear^.Timer:= 1
-        else
+        if (Gear^.State and gstHHDeath) = 0 then
             begin
             HHHurt(Gear^.Hedgehog, Source, Damage);
             AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
