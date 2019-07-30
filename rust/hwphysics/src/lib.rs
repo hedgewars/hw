@@ -4,7 +4,6 @@ mod grid;
 pub mod physics;
 pub mod time;
 
-use fpnum::FPNum;
 use integral_geometry::Size;
 use land2d::Land2D;
 

@@ -1,4 +1,4 @@
-use crate::common::{GearData, GearDataProcessor, GearId, Millis};
+use crate::common::{GearData, GearDataLookup, GearDataProcessor, GearId, LookupEntry, Millis};
 use fpnum::*;
 use integral_geometry::{GridIndex, Point, Size};
 
@@ -35,18 +35,20 @@ impl DynamicPhysicsCollection {
         self.gear_ids.len()
     }
 
-    fn push(&mut self, gear_id: GearId, physics: PhysicsData) {
+    fn push(&mut self, gear_id: GearId, physics: PhysicsData) -> u16 {
         self.gear_ids.push(gear_id);
         self.positions.push(physics.position);
         self.velocities.push(physics.velocity);
+
+        (self.gear_ids.len() - 1) as u16
     }
 
-    fn remove(&mut self, gear_id: GearId) {
-        if let Some(index) = self.gear_ids.iter().position(|id| *id == gear_id) {
-            self.gear_ids.swap_remove(index);
-            self.positions.swap_remove(index);
-            self.velocities.swap_remove(index);
-        }
+    fn remove(&mut self, index: usize) -> Option<GearId> {
+        self.gear_ids.swap_remove(index);
+        self.positions.swap_remove(index);
+        self.velocities.swap_remove(index);
+
+        self.gear_ids.get(index).cloned()
     }
 
     fn iter_pos_update(&mut self) -> impl Iterator<Item = (GearId, (&mut FPPoint, &FPPoint))> {
@@ -70,20 +72,23 @@ impl StaticPhysicsCollection {
         }
     }
 
-    fn push(&mut self, gear_id: GearId, physics: PhysicsData) {
+    fn push(&mut self, gear_id: GearId, physics: PhysicsData) -> u16 {
         self.gear_ids.push(gear_id);
         self.positions.push(physics.position);
+
+        (self.gear_ids.len() - 1) as u16
     }
 
-    fn remove(&mut self, gear_id: GearId) {
-        if let Some(index) = self.gear_ids.iter().position(|id| *id == gear_id) {
-            self.gear_ids.swap_remove(index);
-            self.positions.swap_remove(index);
-        }
+    fn remove(&mut self, index: usize) -> Option<GearId> {
+        self.gear_ids.swap_remove(index);
+        self.positions.swap_remove(index);
+
+        self.gear_ids.get(index).cloned()
     }
 }
 
 pub struct PhysicsProcessor {
+    gear_lookup: GearDataLookup<bool>,
     dynamic_physics: DynamicPhysicsCollection,
     static_physics: StaticPhysicsCollection,
 
@@ -126,6 +131,7 @@ impl PositionUpdates {
 impl PhysicsProcessor {
     pub fn new() -> Self {
         Self {
+            gear_lookup: GearDataLookup::new(),
             dynamic_physics: DynamicPhysicsCollection::new(),
             static_physics: StaticPhysicsCollection::new(),
             physics_cleanup: Vec::new(),
@@ -147,27 +153,30 @@ impl PhysicsProcessor {
         }
         &self.position_updates
     }
-
-    pub fn push(&mut self, gear_id: GearId, physics_data: PhysicsData) {
-        if physics_data.velocity.is_zero() {
-            self.static_physics.push(gear_id, physics_data);
-        } else {
-            self.dynamic_physics.push(gear_id, physics_data);
-        }
-    }
 }
 
 impl GearDataProcessor<PhysicsData> for PhysicsProcessor {
     fn add(&mut self, gear_id: GearId, gear_data: PhysicsData) {
-        if gear_data.velocity.is_zero() {
-            self.static_physics.push(gear_id, gear_data);
+        let is_dynamic = !gear_data.velocity.is_zero();
+        let index = if is_dynamic {
+            self.dynamic_physics.push(gear_id, gear_data)
         } else {
-            self.dynamic_physics.push(gear_id, gear_data);
-        }
+            self.static_physics.push(gear_id, gear_data)
+        };
+
+        self.gear_lookup[gear_id] = LookupEntry::new(index, is_dynamic);
     }
 
     fn remove(&mut self, gear_id: GearId) {
-        self.static_physics.remove(gear_id);
-        self.dynamic_physics.remove(gear_id)
+        let location = self.gear_lookup[gear_id];
+        let relocated_gear_id = if location.value {
+            self.dynamic_physics.remove(location.index as usize)
+        } else {
+            self.static_physics.remove(location.index as usize)
+        };
+
+        if let Some(id) = relocated_gear_id {
+            self.gear_lookup[id].index = location.index;
+        }
     }
 }

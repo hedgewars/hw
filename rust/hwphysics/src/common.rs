@@ -1,10 +1,15 @@
 use fpnum::{fp, FPNum};
-use std::{collections::BinaryHeap, num::NonZeroU16, ops::Add};
+use std::{
+    collections::BinaryHeap,
+    num::NonZeroU16,
+    ops::{Add, Index, IndexMut},
+};
 
 pub type GearId = NonZeroU16;
 pub trait GearData {}
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Debug)]
+#[repr(transparent)]
 pub struct Millis(u32);
 
 impl Millis {
@@ -65,5 +70,55 @@ impl GearAllocator {
 
     pub fn free(&mut self, gear_id: GearId) {
         self.free_ids.push(gear_id)
+    }
+}
+
+#[derive(Clone, Copy, Default)]
+pub struct LookupEntry<T> {
+    pub index: u16,
+    pub value: T,
+}
+
+impl<T> LookupEntry<T> {
+    pub fn new(index: u16, value: T) -> Self {
+        Self { index, value }
+    }
+}
+
+pub struct GearDataLookup<T> {
+    lookup: [LookupEntry<T>; u16::max_value() as usize],
+}
+
+impl<T: Default + Copy> GearDataLookup<T> {
+    pub fn new() -> Self {
+        Self {
+            lookup: [LookupEntry::<T>::default(); u16::max_value() as usize],
+        }
+    }
+}
+
+impl<T> GearDataLookup<T> {
+    pub fn get(&self, gear_id: GearId) -> &LookupEntry<T> {
+        // All possible Gear IDs are valid indices
+        unsafe { self.lookup.get_unchecked(gear_id.get() as usize - 1) }
+    }
+
+    pub fn get_mut(&mut self, gear_id: GearId) -> &mut LookupEntry<T> {
+        // All possible Gear IDs are valid indices
+        unsafe { self.lookup.get_unchecked_mut(gear_id.get() as usize - 1) }
+    }
+}
+
+impl<T> Index<GearId> for GearDataLookup<T> {
+    type Output = LookupEntry<T>;
+
+    fn index(&self, index: GearId) -> &Self::Output {
+        self.get(index)
+    }
+}
+
+impl<T> IndexMut<GearId> for GearDataLookup<T> {
+    fn index_mut(&mut self, index: GearId) -> &mut Self::Output {
+        self.get_mut(index)
     }
 }
