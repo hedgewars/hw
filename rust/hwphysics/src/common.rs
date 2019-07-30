@@ -1,4 +1,4 @@
-use fpnum::{fp, FPNum};
+use fpnum::FPNum;
 use std::{
     collections::BinaryHeap,
     num::NonZeroU16,
@@ -40,6 +40,7 @@ impl Add for Millis {
 pub trait GearDataProcessor<T: GearData> {
     fn add(&mut self, gear_id: GearId, gear_data: T);
     fn remove(&mut self, gear_id: GearId);
+    fn get(&mut self, gear_id: GearId) -> Option<T>;
 }
 
 pub trait GearDataAggregator<T: GearData> {
@@ -75,13 +76,34 @@ impl GearAllocator {
 
 #[derive(Clone, Copy, Default)]
 pub struct LookupEntry<T> {
-    pub index: u16,
-    pub value: T,
+    index: Option<NonZeroU16>,
+    value: T,
 }
 
 impl<T> LookupEntry<T> {
-    pub fn new(index: u16, value: T) -> Self {
-        Self { index, value }
+    #[inline]
+    pub fn index(&self) -> u16 {
+        self.index.map(|i| i.get()).unwrap_or(0) - 1
+    }
+
+    #[inline]
+    pub fn set_index(&mut self, index: u16) {
+        self.index = unsafe { Some(NonZeroU16::new_unchecked(index.saturating_add(1))) };
+    }
+
+    #[inline]
+    pub fn value(&self) -> &T {
+        &self.value
+    }
+
+    #[inline]
+    pub fn value_mut(&mut self) -> &mut T {
+        &mut self.value
+    }
+
+    #[inline]
+    pub fn set_value(&mut self, value: T) {
+        self.value = value;
     }
 }
 
@@ -98,14 +120,31 @@ impl<T: Default + Copy> GearDataLookup<T> {
 }
 
 impl<T> GearDataLookup<T> {
-    pub fn get(&self, gear_id: GearId) -> &LookupEntry<T> {
+    pub fn add(&mut self, gear_id: GearId, index: u16, value: T) {
         // All possible Gear IDs are valid indices
-        unsafe { self.lookup.get_unchecked(gear_id.get() as usize - 1) }
+        let entry = unsafe { self.lookup.get_unchecked_mut(gear_id.get() as usize - 1) };
+        entry.set_index(index);
+        entry.set_value(value);
     }
 
-    pub fn get_mut(&mut self, gear_id: GearId) -> &mut LookupEntry<T> {
+    pub fn get(&self, gear_id: GearId) -> Option<&LookupEntry<T>> {
         // All possible Gear IDs are valid indices
-        unsafe { self.lookup.get_unchecked_mut(gear_id.get() as usize - 1) }
+        let entry = unsafe { self.lookup.get_unchecked(gear_id.get() as usize - 1) };
+        if let Some(index) = entry.index {
+            Some(entry)
+        } else {
+            None
+        }
+    }
+
+    pub fn get_mut(&mut self, gear_id: GearId) -> Option<&mut LookupEntry<T>> {
+        // All possible Gear IDs are valid indices
+        let entry = unsafe { self.lookup.get_unchecked_mut(gear_id.get() as usize - 1) };
+        if let Some(index) = entry.index {
+            Some(entry)
+        } else {
+            None
+        }
     }
 }
 
@@ -113,12 +152,12 @@ impl<T> Index<GearId> for GearDataLookup<T> {
     type Output = LookupEntry<T>;
 
     fn index(&self, index: GearId) -> &Self::Output {
-        self.get(index)
+        self.get(index).unwrap()
     }
 }
 
 impl<T> IndexMut<GearId> for GearDataLookup<T> {
     fn index_mut(&mut self, index: GearId) -> &mut Self::Output {
-        self.get_mut(index)
+        self.get_mut(index).unwrap()
     }
 }

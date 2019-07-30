@@ -1,6 +1,5 @@
-use crate::common::{GearData, GearDataLookup, GearDataProcessor, GearId, LookupEntry, Millis};
+use crate::common::{GearData, GearDataLookup, GearDataProcessor, GearId, Millis};
 use fpnum::*;
-use integral_geometry::{GridIndex, Point, Size};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct PhysicsData {
@@ -164,19 +163,40 @@ impl GearDataProcessor<PhysicsData> for PhysicsProcessor {
             self.static_physics.push(gear_id, gear_data)
         };
 
-        self.gear_lookup[gear_id] = LookupEntry::new(index, is_dynamic);
+        self.gear_lookup.add(gear_id, index, is_dynamic);
     }
 
     fn remove(&mut self, gear_id: GearId) {
-        let location = self.gear_lookup[gear_id];
-        let relocated_gear_id = if location.value {
-            self.dynamic_physics.remove(location.index as usize)
-        } else {
-            self.static_physics.remove(location.index as usize)
-        };
+        if let Some(entry) = self.gear_lookup.get(gear_id) {
+            let relocated_gear_id = if *entry.value() {
+                self.dynamic_physics.remove(entry.index() as usize)
+            } else {
+                self.static_physics.remove(entry.index() as usize)
+            };
 
-        if let Some(id) = relocated_gear_id {
-            self.gear_lookup[id].index = location.index;
+            if let Some(id) = relocated_gear_id {
+                let index = entry.index();
+                self.gear_lookup[id].set_index(index);
+            }
+        }
+    }
+
+    fn get(&mut self, gear_id: GearId) -> Option<PhysicsData> {
+        if let Some(entry) = self.gear_lookup.get(gear_id) {
+            let data = if *entry.value() {
+                PhysicsData {
+                    position: self.dynamic_physics.positions[entry.index() as usize],
+                    velocity: self.dynamic_physics.velocities[entry.index() as usize],
+                }
+            } else {
+                PhysicsData {
+                    position: self.static_physics.positions[entry.index() as usize],
+                    velocity: FPPoint::zero(),
+                }
+            };
+            Some(data)
+        } else {
+            None
         }
     }
 }
