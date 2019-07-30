@@ -3,11 +3,10 @@ use std::ops::RangeInclusive;
 use crate::{
     common::{GearData, GearDataProcessor, GearId},
     grid::Grid,
-    physics::PhysicsData,
 };
 
 use fpnum::*;
-use integral_geometry::{GridIndex, Point, Size};
+use integral_geometry::{Point, Size};
 use land2d::Land2D;
 
 pub fn fppoint_round(point: &FPPoint) -> Point {
@@ -150,5 +149,9 @@ impl GearDataProcessor<CollisionData> for CollisionProcessor {
 
     fn remove(&mut self, gear_id: GearId) {
         self.grid.remove(gear_id);
+    }
+
+    fn get(&mut self, gear_id: GearId) -> Option<CollisionData> {
+        None
     }
 }
