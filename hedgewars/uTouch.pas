@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses SysUtils, uUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uAmmos, uWorld;
+uses SysUtils, uUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uWorld, uGearsHedgehog;
 
 
 procedure initModule;
@@ -74,9 +74,6 @@ var
     moveCursor : boolean;
     invertCursor : boolean;
 
-    xTouchClick,yTouchClick : LongInt;
-    timeSinceClick : Longword;
-
     //Pinch to zoom
     pinchSize : LongInt;
     baseZoomValue: GLFloat;
@@ -92,7 +89,7 @@ var
 procedure onTouchDown(x, y: Single; pointerId: TSDL_FingerId);
 var
     finger: PTouch_Data;
-    xr, yr: LongWord;
+    xr, yr, tmp: LongWord;
 begin
 xr:= round(x * cScreenWidth);
 yr:= round(y * cScreenHeight);
@@ -149,7 +146,7 @@ if isOnWidget(arrowDown, finger^) then
 
 if isOnWidget(pauseButton, finger^) then
     begin
-    isPaused:= not isPaused;
+    ParseTeamCommand('pause');
     moveCursor:= false;
     finger^.pressedWidget:= @pauseButton;
     exit;
@@ -162,10 +159,35 @@ if isOnWidget(utilityWidget, finger^) then
     if(CurrentHedgehog <> nil) then
         begin
         if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Timerable <> 0 then
-            ParseTeamCommand('/timer ' + inttostr((GetCurAmmoEntry(CurrentHedgeHog^)^.Timer div 1000) mod 5 + 1));
+            begin
+            tmp:= HHGetTimerMsg(CurrentHedgehog^.Gear);
+            if tmp <> MSGPARAM_INVALID then
+                ParseTeamCommand('/timer ' + inttostr(tmp mod 5 + 1));
+            end;
         end;
     exit;
     end;
+
+if isOnWidget(utilityWidget2, finger^) then
+    begin
+    finger^.pressedWidget:= @utilityWidget2;
+    moveCursor:= false;
+    if(CurrentHedgehog <> nil) then
+        begin
+        if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_SetBounce <> 0 then
+            begin
+            tmp := HHGetBouncinessMsg(CurrentHedgehog^.Gear);
+            if tmp <> MSGPARAM_INVALID then
+                begin
+                ParseTeamCommand('+precise');
+                ParseTeamCommand('timer ' + inttostr(tmp mod 5 + 1));
+                bounceButtonPressed:= true;
+                end;
+            end;
+        end;
+    exit;
+    end;
+
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
     begin
@@ -296,7 +318,7 @@ if (buttonsDown > 0) and (widget <> nil) then
     end;
 
 if targetting then
-    AddCaption(trmsg[sidPressTarget], cWhiteColor, capgrpAmmoInfo);
+    AddCaption(trmsg[sidPressTarget], capcolDefault, capgrpAmmoInfo);
 
 deleteFinger(pointerId);
 end;
@@ -317,16 +339,6 @@ end;
 
 procedure onTouchClick(finger: TTouch_Data);
 begin
-//if (RealTicks - timeSinceClick < 300) and (sqrt(sqr(finger.X-xTouchClick) + sqr(finger.Y-yTouchClick)) < 30) then
-//    begin
-//    onTouchDoubleClick(finger);
-//    timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds)
-//    exit;
-//    end;
-
-xTouchClick:= finger.x;
-yTouchClick:= finger.y;
-timeSinceClick:= RealTicks;
 
 if bShowAmmoMenu then
     begin
@@ -509,6 +521,12 @@ if aimingCrosshair then
             aimingDown:= false;
             end;
         end;
+
+if bounceButtonPressed then
+    begin
+    ParseTeamCommand('-precise');
+    bounceButtonPressed:= false;
+    end;
 end;
 
 function findFinger(id: TSDL_FingerId): PTouch_Data;
@@ -637,10 +655,10 @@ end;
 procedure initModule;
 var
     index: Longword;
-    //uRenderCoordScaleX, uRenderCoordScaleY: Longword;
 begin
     buttonsDown:= 0;
     pointerCount:= 0;
+    bounceButtonPressed:= false;
 
     setLength(fingers, 4);
     for index := 0 to (Length(fingers)-1) do

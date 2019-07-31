@@ -2,8 +2,9 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 local MineArray = {}
-local player
-local adviceGiven = false
+local player, playerTeamName
+local adviceGiven0 = false
+local adviceGiven1 = false
 local adviceGiven2 = false
 
 function onGameInit()
@@ -13,17 +14,16 @@ function onGameInit()
 	CaseFreq = 0 -- The frequency of crate drops
 	MinesNum = 0 -- The number of mines being placed
 	Explosives = 0 -- The number of explosives being placed
-	Delay = 10 -- The delay between each round
 	Map = "portal" -- The map to be played
 	Theme = "Hell" -- The theme to be used
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Subjects"), 0xFFFF01, "Simple", "Island", "Default", "cm_test")
-	player = AddHog(loc("Subject 1"), 0, 10, "Terminator_Glasses")
+	playerTeamName = AddMissionTeam(-1)
+	player = AddMissionHog(10)
 
-	AddTeam(loc("Hell Army"), 0xFF0402, "skull", "Island", "Default", "cm_hellish")
+	AddTeam(loc("Hell Army"), -9, "skull", "Island", "Default_qau", "cm_hellish")
 	enemy1 = AddHog(loc("Lucifer"), 1, 200, "InfernalHorns")
 	enemy2 = AddHog(loc("Voldemort"), 1, 150, "WizardHat")
 	enemy3 = AddHog(loc("Zombi"), 1, 100, "Zombi")
@@ -33,27 +33,34 @@ function onGameInit()
 	enemy7 = AddHog(loc("C-2"), 1, 50, "cyborg1")
 	enemy8 = AddHog(loc("Rider"), 1, 50, "scif_SparkssHelmet")
 
-	AddTeam(loc("Badmad"), 0xFF0402, "skull", "Island", "Default", "cm_pentagram")
+	AddTeam(loc("Badmad"), -9, "skull", "Island", "Default_qau", "cm_pentagram")
 	enemy9 = AddHog(loc("C-1"), 1, 50, "cyborg2")
 	enemy10 = AddHog(loc("Hidden"), 1, 40, "bushhider")
 	enemy11 = AddHog(loc("Ronald"), 1, 70, "clown")
 	enemy12 = AddHog(loc("Phosphat"), 1, 50, "chef")
 	enemy13 = AddHog(loc("Lestat"), 1, 30, "vampirichog")
 
-	SetGearPosition(player, 350, 1820)
-	SetGearPosition(enemy1, 2037, 1313)
-	SetGearPosition(enemy2, 1369, 1605)
-	SetGearPosition(enemy3, 1750, 1937)
-	SetGearPosition(enemy4, 3125, 89)
-	SetGearPosition(enemy5, 743, 900)
-	SetGearPosition(enemy6, 130, 360)
-	SetGearPosition(enemy7, 1333, 640)
-	SetGearPosition(enemy8, 1355, 200)
-	SetGearPosition(enemy9, 2680, 225)
-	SetGearPosition(enemy10, 2970, 800)
-	SetGearPosition(enemy11, 4050, 1964)
-	SetGearPosition(enemy12, 2666, 950)
-	SetGearPosition(enemy13, 3306, 1205)
+	SetGearPosition(player, 350, 1835)
+	SetGearPosition(enemy1, 2037, 1361)
+	SetGearPosition(enemy2, 1369, 1626)
+	SetGearPosition(enemy3, 1750, 1961)
+	SetGearPosition(enemy4, 3125, 138)
+	SetGearPosition(enemy5, 743, 938)
+	SetGearPosition(enemy6, 130, 388)
+	SetGearPosition(enemy7, 1333, 673)
+	SetGearPosition(enemy8, 1355, 231)
+	SetGearPosition(enemy9, 2680, 264)
+	SetGearPosition(enemy10, 2970, 868)
+	SetGearPosition(enemy11, 4050, 1985)
+	SetGearPosition(enemy12, 2666, 963)
+	SetGearPosition(enemy13, 3306, 1306)
+
+	HogTurnLeft(enemy1, true)
+	HogTurnLeft(enemy2, true)
+	HogTurnLeft(enemy4, true)
+	HogTurnLeft(enemy8, true)
+	HogTurnLeft(enemy9, true)
+	HogTurnLeft(enemy11, true)
 
 end
 
@@ -74,6 +81,12 @@ function onAmmoStoreInit()
 	SetAmmo(amPickHammer, 0, 0, 0, 1)
 	SetAmmo(amSnowball, 0, 0, 0, 1)
 
+end
+
+function onGearAdd(gear)
+	if (GetGearType(gear) == gtHedgehog) and (GetHogTeamName(gear) ~= playerTeamName) then
+		SetEffect(gear, heArtillery, 1)
+	end
 end
 
 function onGameStart()
@@ -160,15 +173,20 @@ function onGameStart()
 		loc("In this mission you have infinite time.") .. "|" ..
 		loc("Mines time: 0 seconds"),
 		-amPortalGun, 5000)
-	HogSay(player, loc("I should get myself a portal device, maybe this crate has one."), SAY_THINK)
+end
 
+function onNewTurn()
+	if (adviceGiven0 == false) then
+		adviceGiven0 = true
+		HogSay(player, loc("I should get myself a portal device, maybe this crate has one."), SAY_THINK)
+	end
 end
 
 function onGameTick()
 
 	if (player ~= nil)  then
-		if (gearIsInBox(player, 1650, 1907, 200, 60) and (adviceGiven == false)) then
-			adviceGiven = true
+		if (gearIsInBox(player, 1650, 1907, 200, 60) and (adviceGiven1 == false)) then
+			adviceGiven1 = true
 			HogSay(player, loc("Hmmm, I’ll have to find some way of moving him off this anti-portal surface."), SAY_THINK)
 		elseif (gearIsInBox(player, 2960, 790, 200, 60) and (adviceGiven2 == false)) then
 			adviceGiven2 = true
@@ -203,3 +221,11 @@ function onGearDelete(gear)
 	end
 end
 
+function onGameResult(winningClan)
+	if winningClan == GetHogClan(player) then
+		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
+	end
+end

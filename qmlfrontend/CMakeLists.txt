@@ -8,6 +8,18 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 
-add_executable(${PROJECT_NAME} "main.cpp" "qml.qrc")
+add_executable(${PROJECT_NAME} "main.cpp" "qml.qrc"
+    "hwengine.cpp" "hwengine.h"
+    "game_config.cpp" "game_config.h"
+    "game_view.cpp" "game_view.h"
+    "team.cpp" "team.h"
+    "engine_instance.cpp" "engine_instance.h"
+    "preview_image_provider.cpp" "preview_image_provider.h"
+    "engine_interface.h"
+    "preview_acceptor.cpp" "preview_acceptor.h"
+    "net_session.cpp" "net_session.h"
+    "players_model.cpp" "players_model.h"
+    "rooms_model.cpp" "rooms_model.h"
+    )
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Quick)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Network Qt5::Quick)

@@ -89,6 +89,7 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 
 local gameStarted = false
 local gameOver = false
+local winningClan = -1
 local captureLimit = 3
 
 --------------------------
@@ -138,22 +139,59 @@ local fGearTimer = 0
 --flag methods
 ------------------------
 
+local RankTeams = function(teamList)
+	local teamRank = function(a, b)
+		if a.score ~= b.score then
+			return a.score > b.score
+		else
+			return a.clan > b.clan
+		end
+	end
+	table.sort(teamList, teamRank)
+	local rank, plusRank, score, clan
+	for i=1, #teamList do
+		if i == 1 then
+			rank = 1
+			plusRank = 1
+			score = teamList[i].score
+			clan = teamList[i].clan
+		end
+		if (teamList[i].score < score) then
+			rank = rank + plusRank
+			plusRank = 1
+		end
+		if (teamList[i].score == score and teamList[i].clan ~= clan) then
+			plusRank = plusRank + 1
+		end
+		teamList[i].rank = rank
+		score = teamList[i].score
+		clan = teamList[i].clan
+	end
+
+	for i=1, #teamList do
+		SendStat(siPointType, "!POINTS")
+		SendStat(siTeamRank, tostring(teamList[i].rank))
+		SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
+	end
+end
+
 function CheckScore(clanID)
 
 	if fCaptures[clanID] == captureLimit then
 		gameOver = true
+		winningClan = clanID
 		-- Capture limit reached! We have a winner!
 		for i = 0, (numhhs-1) do
 			if hhs[i] ~= nil then
 				-- Kill all losers
-				if GetHogClan(hhs[i]) ~= clanID then
+				if GetHogClan(hhs[i]) ~= winningClan then
 					SetEffect(hhs[i], heResurrectable, 0)
 					SetHealth(hhs[i],0)
 				end
 			end
 		end
 		if CurrentHedgehog ~= nil then
-			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 			updateScores()
 		end
 
@@ -165,15 +203,7 @@ function CheckScore(clanID)
 			local clan = GetTeamClan(name)
 			table.insert(teamList, { score = fCaptures[clan], name = name, clan = clan })
 		end
-		local teamRank = function(a, b)
-			return a.score > b.score
-		end
-		table.sort(teamList, teamRank)
-
-		for i=1, #teamList do
-			SendStat(siPointType, loc("point(s)"))
-			SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
-		end
+		RankTeams(teamList)
 
 		if mostCaptures >= 2 then
 			SendStat(siCustomAchievement, string.format(loc("%s (%s) has captured the flag %d times."), mostCapturesHogName, mostCapturesHogTeam, mostCaptures))
@@ -202,7 +232,7 @@ function DoFlagStuff(flag, flagClan)
 		fIsMissing[thiefClan] = false
 		fNeedsRespawn[thiefClan] = true
 		fCaptures[flagClan] = fCaptures[flagClan] +1
-		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+		AddCaption(string.format(loc("%s has scored!"), GetHogName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 		updateScores()
 		PlaySound(sndHomerun)
 		fThief[thiefClan] = nil -- player no longer has the enemy flag
@@ -225,7 +255,7 @@ function DoFlagStuff(flag, flagClan)
 
 		fNeedsRespawn[flagClan] = true
 		HandleRespawns() -- this will set fIsMissing[flagClan] to false :)
-		AddCaption(loc("Flag returned!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Flag returned!"), capcolDefault, capgrpMessage2)
 
 	--if the player is taking the enemy flag (not possible if already holding a flag)
 	elseif GetHogClan(CurrentHedgehog) ~= flagClan and (thiefClan == nil) then
@@ -242,7 +272,7 @@ function DoFlagStuff(flag, flagClan)
 				end
 			end
 		end
-		AddCaption(loc("Flag captured!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Flag captured!"), capcolDefault, capgrpMessage2)
 
 	end
 
@@ -282,7 +312,7 @@ function HandleRespawns()
 
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
-			AddCaption(loc("Flag respawned!"), 0xFFFFFFFF, capgrpMessage2)
+			AddCaption(loc("Flag respawned!"), capcolDefault, capgrpMessage2)
 		end
 
 	end
@@ -412,7 +442,7 @@ end
 function StartTheGame()
 
 	gameStarted = true
-	AddCaption(loc("Game Started!"), 0xFFFFFFFF, capgrpGameState)
+	AddCaption(loc("Game Started!"), capcolDefault, capgrpGameState)
 
 	for i = 0, ClansCount-1 do
 
@@ -475,7 +505,7 @@ function showCTFMission()
 		loc("- Dropped flags may be returned or recaptured").."|"..
 		loc("- Hogs will be revived")
 
-	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), rules, 0, 0)
+	ShowMission(loc("Capture The Flag"), loc("A Hedgewars minigame"), rules, 11, 0)
 end
 
 function updateScores()
@@ -496,9 +526,12 @@ function onGameStart()
 		fCaptures[i] = 0
 	end
 
-	for h=1, numhhs do
+	for h=0, numhhs-1 do
 		-- Hogs are resurrected for free, so this is pointless
 		AddAmmo(hhs[h], amResurrector, 0)
+		-- Remove suicidal weapons as they might wipe out the team
+		AddAmmo(hhs[h], amKamikaze, 0)
+		AddAmmo(hhs[h], amPiano, 0)
 	end
 
 	updateScores()
@@ -570,7 +603,6 @@ function onGearResurrect(gear)
 				FlagThiefDead(gear)
 			end
 		end
-		AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 	end
 
 end
@@ -598,6 +630,10 @@ function onHogRestore(gear)
 			hhs[i] = gear
 			break
 		end
+	end
+	if gameOver and GetHogClan(gear) ~= winningClan then
+		SetEffect(gear, heResurrectable, 0)
+		SetHealth(gear, 0)
 	end
 end
 

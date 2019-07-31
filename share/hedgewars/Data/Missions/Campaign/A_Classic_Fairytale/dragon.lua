@@ -170,6 +170,8 @@ cyborgPos = {745, 1847}
 cyborgsPos = {{2937, 831}, {2945, 1264}, {2335, 1701}, {448, 484}}
 cyborgsDir = {"Left", "Left", "Left", "Right"}
 
+cyborgTeamName, fighterTeamName, nativesTeamName = nil, nil, nil
+
 cratePos = {
             {{788, 1919, amGirder, 2}, true}, {{412, 1615, amGirder, 1}, true},
             {{209, 1474, amSniperRifle, 1}}, {{1178, 637, amDEagle, 1}},
@@ -209,6 +211,8 @@ firstTurn = true
 cyborgsKilledBeforeCrates = false
 cratesTaken = false
 doneCyborgsDead = false
+
+timeAfterCratesTaken = nil
 
 annoyingGearsForPortalScene = {}
 -----------------------------Animations--------------------------------
@@ -362,7 +366,7 @@ function AfterStartAnim()
   end
   FollowGear(native)
   AddNewEvent(CheckGearsDead, {{crates[1], crates[2]}}, PutCrates, {2}, 0) 
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to get rid of the crates first.") .. "|" ..
                                                   loc("As the ammo is sparse, you might want to reuse ropes while mid-air.") .. "|" ..
                                                   loc("The enemy can't move but it might be a good idea to stay out of sight!") .. "|" ..
@@ -381,7 +385,12 @@ end
 function AfterKillAnim()
   if not cyborgsKilledBeforeCrates then
     PutWeaponCrates()
-    TurnTimeLeft = TurnTime
+    if timeAfterCratesTaken then
+      SetTurnTimeLeft(timeAfterCratesTaken)
+    else
+      SetTurnTimeLeft(TurnTime)
+    end
+    SetReadyTimeLeft(Ready)
     AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
     ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!").."|"..loc("Mines time: 5 seconds"), 1, 2000)
   end
@@ -396,7 +405,7 @@ end
 function AfterKilledAnim()
   -- Final mission segment with the portal gun
   HideHedge(cyborg)
-  TurnTimeLeft = TurnTime
+  EndTurn(true)
   SetGearMessage(native, 0)
   SpawnSupplyCrate(1184, 399, amPortalGun, 100)
   SpawnSupplyCrate(2259, 755, amTeleport, 2)
@@ -458,6 +467,7 @@ end
 
 function DoCratesTaken()
   cratesTaken = true
+  timeAfterCratesTaken = TurnTimeLeft
   SetupKillAnim()
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(killAnim)
@@ -497,6 +507,7 @@ function DoMissionFinished()
   end
   RestoreHedge(cyborg)
   DeleteGear(cyborg)
+  DismissTeam(fighterTeamName) -- just in case
   EndTurn(true)
 end
 
@@ -527,7 +538,7 @@ end
 function CyborgDeadReact()
   freshDead = nil
   if cyborgsLeft == 0 then
-    if not cratesTaken then
+    if (not cratesTaken) and (not CheckMissionFinished()) then
        AnimSay(native, loc("I still have to get rid of the crates."), SAY_THINK, 8000)
     end
     return
@@ -563,7 +574,10 @@ function SetupPlace()
     end
   end
   HideHedge(cyborg)
+  -- Collect this crate to win
   jetCrate = SpawnSupplyCrate(3915, 1723, amJetpack)
+  -- Protect crate from damage, just in case
+  SetState(jetCrate, bor(GetState(jetCrate), gstNoDamage))
 
   --[[ Block the left entrance.
        Otherwise the player could rope out of the map and
@@ -625,17 +639,17 @@ function SetupAmmo()
 end
 
 function AddHogs()
-  AddTeam(loc("Natives"), 0x4980C1, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddMissionTeam(-2)
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 200, nativeHats[i])
     gearDead[natives[i]] = false
   end
 
-  AddTeam(loc("011101001"), 0xFF0204, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
   gearDead[cyborg] = false
 
-  AddTeam(loc("011101000"), 0xFFFF01, "ring", "UFO", "Robot", "cm_binary")
+  fighterTeamName = AddTeam(loc("011101000"), -9, "ring", "UFO", "Robot_qau", "cm_binary")
   for i = 1, 4 do
     cyborgs[i] = AddHog(cyborgNames[i], 2, 100, "cyborg2")
     gearDead[cyborgs[i]] = false
@@ -679,7 +693,8 @@ function onGameInit()
   Explosives = 0
   MapGen = mgDrawn
   Theme = "City"
-  SuddenDeathTurns = 25
+  WaterRise = 0
+  HealthDecrease = 0
 
   for i = 1, #map do
      ParseCommand('draw ' .. map[i])
@@ -695,7 +710,7 @@ function onGameStart()
   SetupPlace()
   AnimationSetup()
   SetupEvents()
-  ShowMission(loc("Dragon's Lair"), loc("Y Chwiliad"), loc("Find your tribe!|Cross the lake!"), 1, 0)
+  ShowMission(loc("Dragon's Lair"), loc("Y Chwiliad"), loc("Find your tribe!|Cross the lake!"), 10, 0)
 end
 
 function onGameTick()
@@ -710,7 +725,7 @@ end
 function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("011101000") then
+    if GetHogTeamName(gear) == fighterTeamName then
       freshDead = GetHogName(gear)
       cyborgsLeft = cyborgsLeft - 1
     end
@@ -740,13 +755,13 @@ function onNewTurn()
     AddFunction({func = AfterStartAnim, args = {}})
     firstTurn = false
   end
-  if GetHogTeamName(CurrentHedgehog) == loc("011101000") then
+  if GetHogTeamName(CurrentHedgehog) == fighterTeamName then
     if TotalRounds % 6 == 0 then
       AddAmmo(CurrentHedgehog, amSniperRifle, 1)
       AddAmmo(CurrentHedgehog, amDEagle, 1)
     end
-    TurnTimeLeft = 30000
-  elseif GetHogTeamName(CurrentHedgehog) == loc("011101001") then
+    SetTurnTimeLeft(30000)
+  elseif GetHogTeamName(CurrentHedgehog) == cyborgTeamName then
     EndTurn(true)
   end
 end
@@ -756,3 +771,12 @@ function onPrecise()
     SetAnimSkip(true)
   end
 end
+
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
+  end
+end
+

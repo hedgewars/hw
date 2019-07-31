@@ -266,6 +266,8 @@ local highSpecialPool = {amExtraDamage, amVampiric}
 
 local kingLinkPerc = 50 -- Percentage of life to share from the team
 
+local teamKingsAlive = {} -- whether the king of each team is still alive
+
 local pointsWepBase = 5 -- Game start points weapons
 local pointsHlpBase = 2 -- Game start points helpers
 local pointsKeepPerc = 80 -- Percentage of points to take to next round
@@ -717,6 +719,7 @@ function setTeamHogs(team)
   if mode == 'king' then
     counter[team]['King'] = 1
     table.insert(group[team], 'King')
+    teamKingsAlive[team] = true
   end
 end
 
@@ -923,18 +926,17 @@ function onPickupCrate(crate)
   end
 end
 
-function RandomTurnEvents()
+function onCaseDrop()
   if GetRandom(100) < weaponCrateChance then
     SpawnFakeAmmoCrate(0, 0, false, false)
-    return 5000
+    PlaySound(sndReinforce, CurrentHedgehog)
   elseif GetRandom(100) < utilCrateChance then
     SpawnFakeUtilityCrate(0, 0, false, false)
-    return 5000
+    PlaySound(sndReinforce, CurrentHedgehog)
   elseif GetRandom(100) < healthCrateChance then
     SpawnFakeHealthCrate(0, 0, false, false)
-    return 5000
+    PlaySound(sndReinforce, CurrentHedgehog)
   end
-  return 0
 end
 
 --[[
@@ -944,6 +946,9 @@ end
 ]]--
 
 function onSuddenDeathDamage(hog)
+  if GetEffect(hog, heInvulnerable) ~= 0 then
+    return
+  end
   local hp = GetHealth(hog)
   local maxHp = getHogInfo(hog, 'maxHp')
   local newHp = 0
@@ -975,8 +980,16 @@ function onSuddenDeathDamage(hog)
     hpDec = hp - newHp
 
     SetHealth(hog, newHp)
-    local effect = AddVisualGear(GetX(hog), GetY(hog) +cratePickupGap, vgtHealthTag, hpDec, false)
-    SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, msgColor)
+    if hpDec > 0 then
+      local r = math.random(1, 2)
+      if r == 1 then
+         PlaySound(sndPoisonCough, hog, true)
+      else
+         PlaySound(sndPoisonMoan, hog, true)
+      end
+      local effect = AddVisualGear(GetX(hog), GetY(hog) +cratePickupGap, vgtHealthTag, hpDec, false)
+      SetVisualGearValues(effect, nil, nil, nil, nil, nil, nil, nil, nil, nil, msgColor)
+    end
   end
 end
 
@@ -1163,19 +1176,19 @@ function onKingDeath(KingHog)
   local team = getHogInfo(KingHog, 'team')
   local msgColor = getHogInfo(KingHog, 'clanColor')
 
-  AddCaption(string.format(loc("The king of %s has died!"), team), 0xFFFFFFFF, capgrpGameState)
+  AddCaption(string.format(loc("The king of %s has died!"), team), capcolDefault, capgrpGameState)
+  SetState(KingHog, gstHHDeath)
 
   -- Kill the rest of the team normally, just like the official King Mode game modifier
   for hog, val in pairs(hogInfo) do
     if getHogInfo(hog, 'team') == team then
       hp = GetHealth(hog)
       if hp ~= nil and hp > 0 then
-        SetState(KingHog, gstHHDeath)
         SetHealth(hog, 0)
-        SetGearValues(hog, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0)
       end
     end
   end
+  teamKingsAlive[team] = false
 
   -- We don't use DismissTeam, it causes a lot of problems and nasty side-effects.
 
@@ -1314,6 +1327,20 @@ function setupHogTurn(hog)
   addTurnAmmo(hog)
 end
 
+function checkKingAlive(gear)
+  -- This workaround works because in King Mode, we made
+  -- sure only kings can have the crown.
+  if GetHogHat(gear) == 'crown' then
+    teamKingsAlive[getHogInfo(gear, 'team')] = true
+  end
+end
+
+function killLonelyMinion(gear)
+  if teamKingsAlive[getHogInfo(gear, 'team')] == false then
+    SetHealth(gear, 0)
+  end
+end
+
 function onEndTurn()
   if not firstTurnOver then
     firstTurnOver = true
@@ -1342,8 +1369,11 @@ function onEndTurn()
     savePoints(CurHog)
   end
 
-  -- Run random turn events
-  RandomTurnEvents()
+  -- In King Mode, kill all hogs without king in their team
+  if mode == 'king' then
+    runOnGears(checkKingAlive)
+    runOnGears(killLonelyMinion)
+  end
 end
 
 function savePoints(hog)
@@ -1444,12 +1474,6 @@ function onNewTurn()
 
   if suddenDeath == true then
     onSuddenDeathTurn()
-  else
-    local RoundsTillSD = (SuddenDeathTurns+2) - (TotalRounds+1)
-    -- Show SD reminder every couple of turns, and in the first turn
-    if (not firstTurnOver) or (RoundsTillSD <= 6) or (RoundsTillSD <= 25 and RoundsTillSD % 5 == 0) or (RoundsTillSD % 10 == 0) then
-        AddCaption(string.format(loc("Rounds until Sudden Death: %d"), RoundsTillSD), 0xFFFFFFFF, capgrpGameState)
-    end
   end
 
   -- Generate new weapons for last hog if it's still alive
@@ -1746,4 +1770,11 @@ function onGameInit()
   else
     DisableGameFlags(gfPerHogAmmo)
   end
+  if mode ~= 'points' and mode ~= 'highland' and mode ~= 'king' then
+    if GetGameFlag(gfKing) then
+      mode = 'king'
+      modeExplicit = true
+    end
+  end
+  DisableGameFlags(gfKing)
 end

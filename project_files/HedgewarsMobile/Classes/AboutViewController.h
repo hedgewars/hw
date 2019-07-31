@@ -26,11 +26,11 @@
     NSArray *people;
 }
 
-@property (nonatomic,retain) IBOutlet UITableView *tableView;
-@property (nonatomic,retain) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic,retain) NSArray *people;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) NSArray *people;
 
--(IBAction) buttonPressed:(id) sender;
--(IBAction) segmentedControlChanged:(id) sender;
+- (IBAction)buttonPressed:(id)sender;
+- (IBAction)segmentedControlChanged:(id)sender;
 
 @end

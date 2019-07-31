@@ -42,6 +42,11 @@ topY:= 0;
 
 lx:= LongInt(LAND_WIDTH) - 1;
 
+// don't change world edges for drawn maps
+if (cMapGen = mgDrawn) then
+    // edges were adjusted already in GenDrawnMap() in uLand
+    EXIT;
+
 // use maximum available map width if there is no special world edge
 if WorldEdge = weNone then
     begin

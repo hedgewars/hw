@@ -66,6 +66,7 @@ int MessageDialog::ShowMessage(const QString & title, const QString & msg, QMess
     msgMsg.setWindowTitle(title != NULL ? title : "Hedgewars");
     msgMsg.setText(msg);
     msgMsg.setIcon(icon);
+    msgMsg.setTextFormat(Qt::PlainText);
     msgMsg.setWindowModality(Qt::WindowModal);
 
     return msgMsg.exec();

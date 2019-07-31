@@ -1,0 +1,17 @@
+[package]
+name = "theme-editor"
+version = "0.1.0"
+authors = ["Hedgewars Project"]
+edition = "2018"
+
+[dependencies.sdl2]
+version = "0.31"
+default-features = true
+features = ["image"]
+
+[dependencies]
+land2d = { path = "../land2d" }
+landgen = { path = "../landgen" }
+lfprng = { path = "../lfprng" }
+integral-geometry = { path = "../integral-geometry" }
+rand = "0.5"

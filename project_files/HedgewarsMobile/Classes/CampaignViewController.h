@@ -20,6 +20,6 @@
 
 @interface CampaignViewController : UITableViewController
 
-@property (nonatomic, retain) NSString *campaignName;
+@property (nonatomic, strong) NSString *campaignName;
 
 @end

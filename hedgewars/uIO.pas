@@ -39,7 +39,7 @@ procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
+uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug, uLocale, uSound;
 
 const
     cSendEmptyPacketTime = 1000;
@@ -147,6 +147,8 @@ end;
 procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
     isProcessed: boolean;
+    nick, msg: shortstring;
+    i: LongInt;
 begin
 isProcessed := true;
 
@@ -169,13 +171,40 @@ case s[1] of
               if s[2] = '.' then
                   ParseCommand('campvar ' + copy(s, 3, length(s) - 2), true);
           end;
+     'v': begin
+              if s[2] = '.' then
+                  ParseCommand('missvar ' + copy(s, 3, length(s) - 2), true);
+          end;
      'I': ParseCommand('pause server', true);
      's': if gameType = gmtNet then
              ParseChatCommand('chatmsg ', s, 2)
           else
              isProcessed:= false;
      'b': if gameType = gmtNet then
-             ParseChatCommand('chatmsg ' + #4, s, 2)
+             // parse team message from net
+             // expected format: <PLAYER NAME>]<MESSAGE>
+             begin
+             i:= 2;
+             nick:= '';
+             while (i <= length(s)) and (s[i] <> ']') do
+                begin
+                nick:= nick + s[i];
+                inc(i)
+                end;
+
+             inc(i);
+             msg:= '';
+             while (i <= length(s)) do
+                begin
+                msg:= msg + s[i];
+                inc(i)
+                end;
+             s:= 'b' + Format(shortstring(trmsg[sidChatTeam]), nick, msg);
+             if (nick = '') or (msg = '') then
+                 isProcessed:= false
+             else
+                 ParseChatCommand('chatmsg ' + #4, s, 2);
+             end
           else
              isProcessed:= false;
      else
@@ -254,7 +283,7 @@ close(f)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B', 'c', 'g', 'p');
+const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B', 'c', 'g', 'p', 'R', 'h');
 var buf: shortstring;
 begin
 buf:= 'i' + stc[sit] + s;
@@ -483,6 +512,7 @@ if (not CurrentTeam^.ExtDriven) and bShowAmmoMenu then
 with CurrentHedgehog^.Gear^,
     CurrentHedgehog^ do
     if (State and gstChooseTarget) <> 0 then
+        if ((((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackInMove) <> 0) or ((State and gstMoving) = 0)) or ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) = 0)) then
         begin
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoTargetAfter) <> 0 then
             isCursorVisible:= false;
@@ -498,13 +528,14 @@ with CurrentHedgehog^.Gear^,
                 TargetPoint.X:= CursorPoint.X - WorldDx;
                 TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
                 end;
-            if (WorldEdge <> weBounce) then
+            if (WorldEdge <> weBounce) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoWrapTarget) = 0) then
                 TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
             end
         else
             begin
-            TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
+            if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoWrapTarget) = 0 then
+                TargetPoint.X:= CalcWorldWrap(TargetPoint.X, 0);
             TargetPoint.X:= putX;
             TargetPoint.Y:= putY
             end;
@@ -512,10 +543,13 @@ with CurrentHedgehog^.Gear^,
         State:= State and (not gstChooseTarget);
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
+        Message:= Message and (not (gmHJump or gmLJump or gmLeft or gmRight or gmUp or gmDown));
         end
+        else
+            PlaySound(sndDenied)
     else
         if CurrentTeam^.ExtDriven then
-            OutError('got /put while not being in choose target mode', false)
+            OutError('Got /put while not being in choose target mode', false)
 end;
 
 procedure initModule;

@@ -2,11 +2,11 @@ file(GLOB VoiceSounds
 Boring.ogg
 Byebye.ogg
 Comeonthen.ogg
-Coward.ogg
 Enemydown.ogg
 Firstblood.ogg
 Firepunch*.ogg
 Flawless.ogg
+Flyaway.ogg
 Hello.ogg
 Hurry.ogg
 Illgetyou.ogg

@@ -24,13 +24,13 @@
 @implementation WeaponSettingsViewController
 @synthesize listOfWeapons;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"")
@@ -38,24 +38,22 @@
                                                                   target:self
                                                                   action:@selector(toggleEdit:)];
     self.navigationItem.rightBarButtonItem = editButton;
-    [editButton release];
 
     self.navigationItem.title = NSLocalizedString(@"List of weapons", nil);
 }
 
--(void) viewWillAppear:(BOOL) animated {
+- (void)viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
 
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
     self.listOfWeapons = array;
-    [array release];
 
     [self.tableView reloadData];
 }
 
 // modifies the navigation bar to add the "Add" and "Done" buttons
--(void) toggleEdit:(id) sender {
+- (void)toggleEdit:(id)sender {
     BOOL isEditing = self.tableView.editing;
     [self.tableView setEditing:!isEditing animated:YES];
 
@@ -71,11 +69,10 @@
                                                                      target:self
                                                                      action:@selector(addWeapon:)];
         self.navigationItem.leftBarButtonItem = addButton;
-        [addButton release];
     }
 }
 
--(void) addWeapon:(id) sender {
+- (void)addWeapon:(id)sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Weapon %u.plist", [self.listOfWeapons count]];
 
     [CreationChamber createWeaponNamed:[fileName stringByDeletingPathExtension]];
@@ -88,7 +85,6 @@
 
     NSInteger index = [self.listOfWeapons indexOfObject:fileName];
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    [fileName release];
 }
 
 #pragma mark -
@@ -106,7 +102,7 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
 
     NSUInteger row = [indexPath row];
@@ -118,12 +114,11 @@
 }
 
 // delete the row and the file
--(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];
 
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),[self.listOfWeapons objectAtIndex:row]];
     [[NSFileManager defaultManager] removeItemAtPath:schemeFile error:NULL];
-    [schemeFile release];
 
     [self.listOfWeapons removeObjectAtIndex:row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -131,7 +126,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SingleWeaponViewController *singleWeaponViewController = [[SingleWeaponViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
@@ -143,7 +138,6 @@
     [singleWeaponViewController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
     [self.navigationController pushViewController:singleWeaponViewController animated:YES];
-    [singleWeaponViewController release];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -151,25 +145,12 @@
 
 #pragma mark -
 #pragma mark Memory management
+
 -(void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    MSG_MEMCLEAN();
 }
-
--(void) viewDidUnload
-{
-    self.listOfWeapons = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
-
--(void) dealloc
-{
-    releaseAndNil(listOfWeapons);
-    [super dealloc];
-}
-
 
 @end
 

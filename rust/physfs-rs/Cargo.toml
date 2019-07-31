@@ -1,0 +1,15 @@
+[package]
+
+name = "physfs-rs"
+version = "0.1.0"
+license = "zlib"
+authors = [ "Robert Habermeier" ]
+
+[lib]
+
+name = "physfs"
+
+[dependencies]
+
+libc = "0.1"
+

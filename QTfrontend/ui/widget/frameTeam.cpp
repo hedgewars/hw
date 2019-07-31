@@ -126,7 +126,7 @@ QWidget* FrameTeams::getTeamWidget(HWTeam team)
 
 bool FrameTeams::isFullTeams() const
 {
-    return teamToWidget.size() >= 8;
+    return teamToWidget.size() >= cMaxTeams;
 }
 
 void FrameTeams::emitTeamColorChanged(const HWTeam& team)
@@ -151,9 +151,11 @@ void FrameTeams::updateDecoFrame()
     {
         setStyleSheet(
             "FrameTeams{"
-            "border: solid;"
+            "border-top: transparent;"
+            "border-left: transparent;"
+            "border-right: transparent;"
+            "border-bottom: solid;"
             "border-width: 1px;"
-            "border-radius: 16px;"
             "border-color: #ffcc00;"
             "}"
         );
@@ -162,4 +164,12 @@ void FrameTeams::updateDecoFrame()
     {
         setStyleSheet("FrameTeams{ border: transparent }");
     }
+}
+
+void FrameTeams::resizeEvent(QResizeEvent * event)
+{
+    Q_UNUSED(event);
+
+    QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    QCoreApplication::postEvent(parentWidget(), pevent);
 }

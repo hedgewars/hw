@@ -26,9 +26,11 @@ import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Utils
+import Consts
 import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
+import CommandHelp
 
 
 handleCmd_lobby :: CmdHandler
@@ -116,7 +118,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ answerFullConfig cl jRoom
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
-            ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
+            ++ [AnswerClients [sendChan cl] ["CHAT", nickGreeting, greeting jRoom] | greeting jRoom /= ""]
             ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeamsNames
             ++ [AnswerClients [sendChan cl] ["EM", toEngineMsg "I"] | isPaused `fmap` gameInfo jRoom == Just True]
 
@@ -166,6 +168,13 @@ handleCmd_lobby ("RND":rs) = do
     c <- liftM sendChan thisClient
     return [Random [c] rs]
 
+handleCmd_lobby ["HELP"] = do
+    cl <- thisClient
+    if isAdministrator cl then
+        return (cmdHelpActionList [sendChan cl] cmdHelpLobbyAdmin)
+    else
+        return (cmdHelpActionList [sendChan cl] cmdHelpLobbyPlayer)
+
     ---------------------------
     -- Administrator's stuff --
 
@@ -211,10 +220,18 @@ handleCmd_lobby ["GET_SERVER_VAR"] = serverAdminOnly $
 handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = serverAdminOnly $
     return [ClearAccountsCache]
 
-handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
+handleCmd_lobby ["RESTART_SERVER", "YES"] = serverAdminOnly $
     return [RestartServer]
+
+handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
+    return [Warning $ loc "Please confirm server restart with '/restart_server yes'."]
+
+handleCmd_lobby ["RESTART_SERVER", _] = handleCmd_lobby ["RESTART_SERVER"]
+
 
 handleCmd_lobby ["STATS"] = serverAdminOnly $
     return [Stats]
 
-handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]
+handleCmd_lobby (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: in lobby)"]
+
+handleCmd_lobby [] = return [ProtocolError "Empty command (state: in lobby)"]

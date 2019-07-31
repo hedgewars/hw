@@ -19,6 +19,17 @@
 #include "lauxlib.h"
 #include "lualib.h"
 
+#if ((defined __MACH__) && (defined __APPLE__))
+  #include <TargetConditionals.h>
+  #if TARGET_OS_IPHONE
+    #define LUA_PLATFORM_IOS 1
+  #endif
+#endif
+
+#ifdef LUA_PLATFORM_IOS
+  #include <spawn.h>
+  extern char **environ;
+#endif
 
 static int os_pushresult (lua_State *L, int i, const char *filename) {
   int en = errno;  /* calls to Lua API may change this value */
@@ -36,7 +47,18 @@ static int os_pushresult (lua_State *L, int i, const char *filename) {
 
 
 static int os_execute (lua_State *L) {
-  lua_pushinteger(L, system(luaL_optstring(L, 1, NULL)));
+  const char *command = luaL_optstring(L, 1, NULL);
+  int status;
+#ifndef LUA_PLATFORM_IOS
+  status = system(command);
+#else
+  // untested, may require adjustments depending on `command`
+  pid_t pid;
+  char *argv[] = { (char *)command, NULL };
+  posix_spawn(&pid, argv[0], NULL, NULL, argv, environ);
+  waitpid(pid, &status, 0);
+#endif
+  lua_pushinteger(L, status);
   return 1;
 }
 

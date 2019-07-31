@@ -25,13 +25,13 @@
 @implementation TeamConfigViewController
 @synthesize tableView, selectedTeamsCount, allTeamsCount, listOfAllTeams, listOfSelectedTeams, cachedContentsOfDir;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
                                                            style:UITableViewStyleGrouped];
     aTableView.delegate = self;
@@ -47,9 +47,7 @@
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
         background.contentMode = UIViewContentModeScaleAspectFill;
         background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [backgroundImage release];
         [self.view addSubview:background];
-        [background release];
         [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     }
 
@@ -58,13 +56,12 @@
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.tableView = aTableView;
-    [aTableView release];
 
     [self.view addSubview:self.tableView];
     [super viewDidLoad];
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     if ([self.cachedContentsOfDir isEqualToArray:contentsOfDir] == NO) {
         self.cachedContentsOfDir = contentsOfDir;
@@ -76,14 +73,11 @@
                                          [NSNumber numberWithInt:4],@"number",
                                          [colors objectAtIndex:i%[colors count]],@"color",nil];
             [array addObject:dict];
-            [dict release];
         }
         self.listOfAllTeams = array;
-        [array release];
 
         NSMutableArray *emptyArray = [[NSMutableArray alloc] initWithObjects:nil];
         self.listOfSelectedTeams = emptyArray;
-        [emptyArray release];
 
         self.selectedTeamsCount = [self.listOfSelectedTeams count];
         self.allTeamsCount = [self.listOfAllTeams count];
@@ -93,7 +87,7 @@
     [super viewWillAppear:animated];
 }
 
--(NSInteger) filterNumberOfHogs:(NSInteger) hogs {
+- (NSInteger)filterNumberOfHogs:(NSInteger)hogs {
     NSInteger numberOfHogs;
     if (hogs <= HW_getMaxNumberOfHogs() && hogs >= 1)
         numberOfHogs = hogs;
@@ -108,11 +102,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return (section == 0 ? self.selectedTeamsCount : self.allTeamsCount);
 }
 
@@ -126,11 +120,10 @@
     if (section == 0) {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
         if (cell == nil) {
-            cell = [[[HoldTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
+            cell = [[HoldTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0];
 
             SquareButtonView *squareButton = [[SquareButtonView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
             cell.accessoryView = squareButton;
-            [squareButton release];
         }
 
         NSMutableDictionary *selectedRow = [listOfSelectedTeams objectAtIndex:[indexPath row]];
@@ -148,7 +141,7 @@
     } else {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
         if (cell == nil)
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1];
 
         cell.textLabel.text = [[[self.listOfAllTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
         cell.textLabel.backgroundColor = [UIColor clearColor];
@@ -158,12 +151,9 @@
         if ([[firstHog objectForKey:@"level"] intValue] != 0) {
             NSString *imgString = [[NSString alloc] initWithFormat:@"%@/robotBadge.png",[[NSBundle mainBundle] resourcePath]];
             UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:imgString];
-            [imgString release];
             UIImageView *spriteView = [[UIImageView alloc] initWithImage:sprite];
-            [sprite release];
 
             cell.accessoryView = spriteView;
-            [spriteView release];
         } else
             cell.accessoryView = nil;
     }
@@ -175,7 +165,7 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 45.0;
 }
 
@@ -189,15 +179,14 @@
     UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, 30)];
     theView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [theView addSubview:theLabel];
-    [theLabel release];
-    return [theView autorelease];
+    return theView;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return IS_IPAD() ? 40 : 30;
 }
 
--(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger) section {
+-(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger)section {
     NSInteger height = IS_IPAD() ? 40 : 30;
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
     footer.backgroundColor = [UIColor clearColor];
@@ -218,14 +207,13 @@
         label.text = NSLocalizedString(@"The robot badge indicates an AI-controlled team.",@"");
 
     [footer addSubview:label];
-    [label release];
-    return [footer autorelease];
+    return footer;
 }
 
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];
     NSUInteger section = [indexPath section];
 
@@ -255,7 +243,7 @@
     }
 }
 
--(void) holdAction:(NSString *)content onTable:(UITableView *)aTableView {
+- (void)holdAction:(NSString *)content onTable:(UITableView *)aTableView {
     NSUInteger row;
     for (row = 0; row < [self.listOfSelectedTeams count]; row++) {
         NSDictionary *dict = [self.listOfSelectedTeams objectAtIndex:row];
@@ -276,30 +264,12 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     self.cachedContentsOfDir = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
-
--(void) viewDidUnload {
-    self.tableView = nil;
-    self.listOfAllTeams = nil;
-    self.listOfSelectedTeams = nil;
-    self.cachedContentsOfDir = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
-
--(void) dealloc {
-    releaseAndNil(tableView);
-    releaseAndNil(listOfAllTeams);
-    releaseAndNil(listOfSelectedTeams);
-    releaseAndNil(cachedContentsOfDir);
-    [super dealloc];
-}
-
 
 @end
 

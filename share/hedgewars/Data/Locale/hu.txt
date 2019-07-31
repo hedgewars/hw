@@ -51,7 +51,7 @@
 01:05=Valóban Kilépsz? (%1/%2)
 01:06=Hirtelen halál!
 01:07=%1 maradt
-01:08=Töltet
+01:08=Töltet: %1%
 01:09=Szinkronizálás...
 01:10=A kör nem ér véget ennek a használatával!
 01:11=Ez a fegyver vagy eszköz még nem elérhető!

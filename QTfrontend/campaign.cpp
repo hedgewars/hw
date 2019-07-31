@@ -31,7 +31,7 @@ QSettings* getCampTeamFile(QString & campaignName, QString & teamName)
     // if then is found rename it to use _
     QString spaceCampName = campaignName;
     spaceCampName = spaceCampName.replace(QString("_"),QString(" "));
-    if (!teamfile->childGroups().contains("Campaign " + campaignName) and
+    if (!teamfile->childGroups().contains("Campaign " + campaignName) &&
             teamfile->childGroups().contains("Campaign " + spaceCampName)){
         teamfile->beginGroup("Campaign " + spaceCampName);
         QStringList keys = teamfile->childKeys();
@@ -52,12 +52,20 @@ QSettings* getCampTeamFile(QString & campaignName, QString & teamName)
     missionInList: QComboBox index of the mission as selected in the mission widget
     teamName: Name of the playing team
 */
-bool isMissionWon(QString & campaignName, int missionInList, QString & teamName)
+bool isCampMissionWon(QString & campaignName, int missionInList, QString & teamName)
 {
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
     int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
     int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
-    if(progress>0 and unlockedMissions==0)
+    // The CowardMode cheat unlocks all campaign missions,
+    // but as "punishment", none of them will be marked as completed.
+    // Added to make it easier to test campaigns.
+    bool cheat = teamfile->value("Team/CowardMode", false).toBool();
+    if(cheat)
+    {
+        return false;
+    }
+    else if(progress>0 && unlockedMissions==0)
     {
         QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
         campfile.setIniCodec("UTF-8");
@@ -79,7 +87,8 @@ bool isCampWon(QString & campaignName, QString & teamName)
 {
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
     bool won = teamfile->value("Campaign " + campaignName + "/Won", false).toBool();
-    return won;
+    bool cheat = teamfile->value("Team/CowardMode", false).toBool();
+    return won && !cheat;
 }
 
 QSettings* getCampMetaInfo()
@@ -118,15 +127,20 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
 
     int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
     int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
+    bool cheat = teamfile->value("Team/CowardMode", false).toBool();
 
     QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
     campfile.setIniCodec("UTF-8");
 
     QSettings* m_info = getCampMetaInfo();
 
-    if(progress>=0 and unlockedMissions==0)
+    if(cheat)
     {
-        for(unsigned int i=progress+1;i>0;i--)
+        progress = campfile.value("MissionNum", 1).toInt();
+    }
+    if((progress >= 0 && unlockedMissions == 0) || cheat)
+    {
+        for(unsigned int i = progress + 1; i > 0; i--)
         {
             MissionInfo missionInfo;
             QString script = campfile.value(QString("Mission %1/Script").arg(i)).toString();
@@ -137,8 +151,8 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
                 missionInfo.realName = m_info->value(scriptPrefix+".name", missionInfo.name).toString();
                 missionInfo.description = m_info->value(scriptPrefix + ".desc",
                                             QObject::tr("No description available")).toString();
-                QString image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
-                missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
+                QString image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString("@2x.png"));
+                missionInfo.image = "physfs://Graphics/Missions/Campaign/"+campaignName+"/"+image;
                 if (!QFile::exists(missionInfo.image))
                     missionInfo.image = ":/res/CampaignDefault.png";
                 missionInfoList.append(missionInfo);
@@ -159,8 +173,8 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
             missionInfo.realName = m_info->value(scriptPrefix+".name", missionInfo.name).toString();
             missionInfo.description = m_info->value(scriptPrefix + ".desc",
                                             QObject::tr("No description available")).toString();
-            QString image = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString().replace(QString(".lua"),QString(".png"));
-            missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
+            QString image = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString().replace(QString(".lua"),QString("@2x.png"));
+            missionInfo.image = "physfs://Graphics/Missions/Campaign/"+campaignName+"/"+image;
             if (!QFile::exists(missionInfo.image))
                 missionInfo.image = ":/res/CampaignDefault.png";
             missionInfoList.append(missionInfo);

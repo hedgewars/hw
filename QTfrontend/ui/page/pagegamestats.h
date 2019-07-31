@@ -58,6 +58,7 @@ class PageGameStats : public AbstractPage
         void clear();
         void renderStats();
         void restartBtnVisible(bool visible);
+        void saveDemoBtnEnabled(bool enabled);
 
     signals:
         void saveDemoRequested();
@@ -65,12 +66,19 @@ class PageGameStats : public AbstractPage
 
     private:
         void AddStatText(const QString & msg);
+        void applySpacing();
 
         QMap<qint32, QVector<qint32> > healthPoints;
         unsigned int playerPosition;
+        unsigned int scriptPlayerPosition;
         quint32 lastColor;
         bool defaultGraphTitle;
         QScopedPointer<QGraphicsScene> m_scene;
+
+        QLabel* labelDetails;
+        QGroupBox* gbDetails;
+        QGroupBox* gbRanks;
+        QGridLayout* pageLayout;
 
     protected:
         QLayout * bodyLayoutDefinition();

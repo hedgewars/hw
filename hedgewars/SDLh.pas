@@ -59,7 +59,7 @@ interface
 
 (*  SDL  *)
 const
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
     SDLLibName = 'SDL2.dll';
     SDL_TTFLibName = 'SDL2_ttf.dll';
     SDL_MixerLibName = 'SDL2_mixer.dll';
@@ -109,6 +109,10 @@ const
     SDL_BUTTON_X1        = 4;
     SDL_BUTTON_X2        = 5;
 
+    // SDL_ShowCursor consts
+    SDL_QUERY = -1;
+    SDL_DISABLE = 0;
+    SDL_ENABLE = 1;
 
     SDL_TEXTEDITINGEVENT_TEXT_SIZE = 32;
     SDL_TEXTINPUTEVENT_TEXT_SIZE   = 32;
@@ -247,6 +251,7 @@ const
     MIX_INIT_MP3        = $00000008;
     MIX_INIT_OGG        = $00000010;
     MIX_INIT_FLUIDSYNTH = $00000020;
+    MIX_INIT_OPUS       = $00000040;
 
     {* SDL_TTF *}
     TTF_STYLE_NORMAL = 0;
@@ -541,8 +546,8 @@ const
 /////////////////////////////////////////////////////////////////
 
 // two important reference points for the wanderers of this area
-// http://www.freepascal.org/docs-html/ref/refsu5.html
-// http://www.freepascal.org/docs-html/prog/progsu144.html
+// https://www.freepascal.org/docs-html/ref/refsu5.html
+// https://www.freepascal.org/docs-html/prog/progsu144.html
 
 type
     PSDL_Window   = Pointer;
@@ -553,6 +558,8 @@ type
     TSDL_FingerId = Int64;
     TSDL_Keycode = LongInt;
     TSDL_Scancode = LongInt;
+    TSDL_JoystickID = LongInt;
+    TSDL_bool = LongInt;
 
     TSDL_eventaction = (SDL_ADDEVENT, SDL_PEEPEVENT, SDL_GETEVENT);
 
@@ -656,7 +663,7 @@ type
         fd: LongInt;
         end;
 {$ELSE}
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
     TWinbuffer = record
         data: Pointer;
         size, left: LongInt;
@@ -680,7 +687,7 @@ type
 {$IFDEF ANDROID}
             0: (androidio: TAndroidio);
 {$ELSE}
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
             0: (windowsio: TWindowsio);
 {$ENDIF}
 {$ENDIF}
@@ -765,7 +772,7 @@ type
     TSDL_ControllerAxisEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongInt;
+        which: TSDL_JoystickID;
         axis, padding1, padding2, padding3: Byte;
         value: SmallInt;
         padding4: Word;
@@ -774,14 +781,14 @@ type
     TSDL_ControllerButtonEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongInt;
+        which: TSDL_JoystickID;
         button, states, padding1, padding2: Byte;
         end;
 
     TSDL_ControllerDeviceEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: SmallInt;
+        which: LongInt;
         end;
 
     TSDL_JoyDeviceEvent = TSDL_ControllerDeviceEvent;
@@ -829,17 +836,17 @@ type
     TSDL_JoyAxisEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         axis: Byte;
         padding1, padding2, padding3: Byte;
-        value: LongInt;
+        value: SmallInt;
         padding4: Word;
         end;
 
     TSDL_JoyBallEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         ball: Byte;
         padding1, padding2, padding3: Byte;
         xrel, yrel: SmallInt;
@@ -848,7 +855,7 @@ type
     TSDL_JoyHatEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: LongWord;
+        which: TSDL_JoystickID;
         hat: Byte;
         value: Byte;
         padding1, padding2: Byte;
@@ -857,10 +864,11 @@ type
     TSDL_JoyButtonEvent = record
         type_: LongWord;
         timestamp: LongWord;
-        which: Byte;
+        which: TSDL_JoystickID;
         button: Byte;
         state: Byte;
         padding1: Byte;
+        padding2: Byte;
         end;
 
     TSDL_QuitEvent = record
@@ -1021,7 +1029,7 @@ type
                         sockets: PTCPSocket;
                         end;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
      TThreadFunction = function (p: pointer): Longword; stdcall;
      pfnSDL_CurrentBeginThread = function (
         _Security: pointer; 
@@ -1105,6 +1113,7 @@ procedure SDL_RenderPresent(renderer: PSDL_Renderer); cdecl; external SDLLibName
 function  SDL_RenderReadPixels(renderer: PSDL_Renderer; rect: PSDL_Rect; format: LongInt; pixels: Pointer; pitch: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_RenderSetViewport(window: PSDL_Window; rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 
+function  SDL_SetRelativeMouseMode(enabled: TSDL_bool): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): Boolean; cdecl; external SDLLibName;
 
@@ -1143,7 +1152,7 @@ function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; extern
 
 (* remember to mark the threaded functions as 'cdecl; export;'
    (or have fun debugging nil arguments) *)
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 // SDL uses wrapper in windows
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer; bt: pfnSDL_CurrentBeginThread; et: pfnSDL_CurrentEndThread): PSDL_Thread; cdecl; external SDLLibName;
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; overload;
@@ -1165,7 +1174,7 @@ procedure SDL_LockAudio; cdecl; external SDLLibName;
 procedure SDL_UnlockAudio; cdecl; external SDLLibName;
 
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
-function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
+function  SDL_JoystickNameForIndex(idx: LongInt): PChar; cdecl; external SDLLibName;
 function  SDL_JoystickOpen(idx: LongInt): PSDL_Joystick; cdecl; external SDLLibName;
 function  SDL_JoystickOpened(idx: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_JoystickIndex(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
@@ -1181,7 +1190,7 @@ function  SDL_JoystickGetHat(joy: PSDL_Joystick; hat: LongInt): Byte; cdecl; ext
 function  SDL_JoystickGetButton(joy: PSDL_Joystick; button: LongInt): Byte; cdecl; external SDLLibName;
 procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
 function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
 {$ENDIF}
@@ -1319,7 +1328,7 @@ begin
                   (PByteArray(buf)^[0] shl 24)
 end;
 
-{$IFDEF WIN32}
+{$IFDEF WINDOWS}
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl;
 begin
     SDL_CreateThread:= SDL_CreateThread(fn, name, data, nil, nil)

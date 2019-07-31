@@ -2,15 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-/*
- * power raises base to the power power.
- * This is equivalent to exp(power*ln(base)). Therefore base should be non-negative.
- */
-float fpcrtl_power(float base, float exponent)
-{
-    return exp(exponent * log(base));
-}
-
 /* Currently the games only uses sign of an integer */
 int fpcrtl_signi(int x)
 {
@@ -32,11 +23,15 @@ float fpcrtl_csc(float x)
 
 float __attribute__((overloadable)) fpcrtl_abs(float x)
 {
-    return fabs(x);
+    return fabsf(x);
 }
 double __attribute__((overloadable)) fpcrtl_abs(double x)
 {
     return fabs(x);
+}
+long double __attribute__((overloadable)) fpcrtl_abs(long double x)
+{
+    return fabsl(x);
 }
 int __attribute__((overloadable)) fpcrtl_abs(int x)
 {

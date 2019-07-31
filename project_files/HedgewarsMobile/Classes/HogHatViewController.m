@@ -24,13 +24,13 @@
 @synthesize teamDictionary, hatArray, normalHogSprite, selectedHog;
 
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     // load all the hat file names and store them into hatArray
@@ -41,14 +41,12 @@
     // load the base hog image, drawing will occure in cellForRow...
     NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/basehat-hedgehog.png",[[NSBundle mainBundle] resourcePath]];
     UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile];
-    [normalHogFile release];
     self.normalHogSprite = hogSprite;
-    [hogSprite release];
 
     self.title = NSLocalizedString(@"Change hedgehogs' hat",@"");
 }
 
--(void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
     // this updates the hog name and its hat
@@ -60,11 +58,11 @@
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.hatArray count];
 }
 
@@ -75,16 +73,14 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 
     NSString *hat = [self.hatArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = [hat stringByDeletingPathExtension];
 
     NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
     UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
-    [hatFile release];
     cell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
-    [hatSprite release];
 
     NSDictionary *hog = (self.selectedHog != -1) ? [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:self.selectedHog] : nil;
     if ([[hat stringByDeletingPathExtension] isEqualToString:[hog objectForKey:@"hat"]]) {
@@ -99,7 +95,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger selectedRow = [indexPath row];
     NSString *newHat = [[self.hatArray objectAtIndex:selectedRow] stringByDeletingPathExtension];
@@ -134,32 +130,16 @@
         NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary:oldHog];
         [newHog setObject:newHat forKey:@"hat"];
         [hogsArray replaceObjectAtIndex:i withObject:newHog];
-        [newHog release];
     }
 }
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
+
+- (void)didReceiveMemoryWarning {
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
-
--(void) viewDidUnload {
-    self.normalHogSprite = nil;
-    self.teamDictionary = nil;
-    self.hatArray = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(hatArray);
-    releaseAndNil(teamDictionary);
-    releaseAndNil(normalHogSprite);
-    [super dealloc];
-}
-
 
 @end
 

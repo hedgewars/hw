@@ -41,7 +41,7 @@ extern "C" {
  *
  *   @param filename File to open in platform-independent notation.
  *  @return A valid SDL_RWops structure on success, NULL on error. Specifics
- *           of the error can be gleaned from PHYSFS_getLastError().
+ *           of the error can be gleaned from PHYSFS_getLastErrorCode().
  */
 PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openRead(const char *fname);
 
@@ -53,7 +53,7 @@ PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openRead(const char *fname);
  *
  *   @param filename File to open in platform-independent notation.
  *  @return A valid SDL_RWops structure on success, NULL on error. Specifics
- *           of the error can be gleaned from PHYSFS_getLastError().
+ *           of the error can be gleaned from PHYSFS_getLastErrorCode().
  */
 PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openWrite(const char *fname);
 
@@ -65,7 +65,7 @@ PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openWrite(const char *fname);
  *
  *   @param filename File to open in platform-independent notation.
  *  @return A valid SDL_RWops structure on success, NULL on error. Specifics
- *           of the error can be gleaned from PHYSFS_getLastError().
+ *           of the error can be gleaned from PHYSFS_getLastErrorCode().
  */
 PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openAppend(const char *fname);
 
@@ -77,7 +77,7 @@ PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openAppend(const char *fname);
  *
  *   @param handle a valid PhysicsFS file handle.
  *  @return A valid SDL_RWops structure on success, NULL on error. Specifics
- *           of the error can be gleaned from PHYSFS_getLastError().
+ *           of the error can be gleaned from PHYSFS_getLastErrorCode().
  */
 PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_makeRWops(PHYSFS_File *handle);
 

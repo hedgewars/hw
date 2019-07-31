@@ -30,9 +30,9 @@
     NSInteger numberOfSections;
 }
 
-@property (nonatomic,retain) NSDictionary *teamDictionary;
-@property (nonatomic,retain) NSArray *levelArray;
-@property (nonatomic,retain) NSArray *levelSprites;
-@property (nonatomic,retain) NSIndexPath *lastIndexPath;
+@property (nonatomic, strong) NSDictionary *teamDictionary;
+@property (nonatomic, strong) NSArray *levelArray;
+@property (nonatomic, strong) NSArray *levelSprites;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
 @end

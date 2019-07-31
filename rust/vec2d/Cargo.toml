@@ -1,0 +1,8 @@
+[package]
+name = "vec2d"
+version = "0.1.0"
+authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+edition = "2018"
+
+[dependencies]
+integral-geometry = { path = "../integral-geometry" }

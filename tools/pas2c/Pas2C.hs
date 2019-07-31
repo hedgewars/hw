@@ -1,6 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Pas2C where
 
+import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ
 import Data.Maybe
 import Data.Char
@@ -185,6 +186,7 @@ toCFiles _ _ (_, System _) = return ()
 toCFiles _ _ (_, Redo _) = return ()
 toCFiles outputPath ns pu@(fileName, _) = do
     hPutStrLn stdout $ "Rendering '" ++ fileName ++ "'..."
+    --let (fn, p) = pu in writeFile (outputPath ++ fn ++ ".dump") $ show p
     toCFiles' pu
     where
     toCFiles' (fn, p@(Program {})) = writeFile (outputPath ++ fn ++ ".c") $ "#include \"fpcrtl.h\"\n" ++ (render2C initialState . pascal2C) p
@@ -237,7 +239,7 @@ pascal2C (Unit _ interface implementation _ _) =
 
 pascal2C (Program _ implementation mainFunction) = do
     impl <- implementation2C implementation
-    [main] <- tvar2C True False True True 
+    main <- liftM head $ tvar2C True False True True
         (FunctionDeclaration (Identifier "main" (BTInt True)) False False False (SimpleType $ Identifier "int" (BTInt True)) 
             [VarDeclaration False False ([Identifier "argc" (BTInt True)], SimpleType (Identifier "Integer" (BTInt True))) Nothing
             , VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] 
@@ -697,12 +699,16 @@ initExpr2C' (BuiltInFunction "low" [InitReference e]) = return $
          (Identifier "LongInt" _) -> int (-2^31)
          (Identifier "SmallInt" _) -> int (-2^15)
          _ -> error $ "BuiltInFunction 'low': " ++ show e
-initExpr2C' (BuiltInFunction "high" [e]) = do
+initExpr2C' hi@(BuiltInFunction "high" [e@(InitReference e')]) = do
     void $ initExpr2C e
     t <- gets lastType
     case t of
          (BTArray i _ _) -> initExpr2C' $ BuiltInFunction "pred" [InitRange i]
-         a -> error $ "BuiltInFunction 'high': " ++ show a
+         BTInt _ -> case e' of
+                  (Identifier "LongInt" _) -> return $ int (2147483647)
+                  (Identifier "LongWord" _) -> return $ text "4294967295"
+                  _ -> error $ "BuiltInFunction 'high' in initExpr: " ++ show e'
+         a -> error $ "BuiltInFunction 'high' in initExpr: " ++ show a ++ ": " ++ show hi
 initExpr2C' (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C' e
@@ -768,6 +774,12 @@ type2C t = do
         where
             bt = BTEnum $ map (\(Identifier i _) -> map toLower i) ids
     type2C' (ArrayDecl Nothing t) = type2C (PointerTo t)
+    type2C' (ArrayDecl (Just r1) (ArrayDecl (Just r2) t)) = do
+        t' <- type2C t
+        lt <- gets lastType
+        r1' <- initExpr2C (InitRange r1)
+        r2' <- initExpr2C (InitRange r2)
+        return $ \i -> t' i <> brackets r1' <> brackets r2'
     type2C' (ArrayDecl (Just r) t) = do
         t' <- type2C t
         lt <- gets lastType

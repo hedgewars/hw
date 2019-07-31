@@ -5,10 +5,16 @@ unit uPhysFSLayer;
 interface
 uses SDLh, LuaPas;
 
-const PhysfsLibName = {$IFDEF PHYSFS_INTERNAL}'libhwphysfs'{$ELSE}'libphysfs'{$ENDIF};
-const PhyslayerLibName = 'libphyslayer';
+const PhysfsLibName =
+{$IFDEF PHYSFS_INTERNAL}
+    'libhwphysfs'
+{$ELSE}
+    {$IFDEF WIN32_VCPKG}'physfs'{$ELSE}'libphysfs'{$ENDIF};
+{$ENDIF}
+const PhyslayerLibName =
+    {$IFDEF WIN32_VCPKG}'physlayer'{$ELSE}'libphyslayer'{$ENDIF};
 
-{$IFNDEF WIN32}
+{$IFNDEF WINDOWS}
     {$linklib physfs}
     {$linklib physlayer}
 {$ENDIF}
@@ -29,6 +35,7 @@ function pfsClose(f: PFSFile): boolean;
 procedure pfsReadLn(f: PFSFile; var s: shortstring);
 procedure pfsReadLnA(f: PFSFile; var s: ansistring);
 procedure pfsWriteLn(f: PFSFile; s: shortstring);
+procedure pfsWriteRaw(f: PFSFile; s: PChar; len: QWord);
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 function pfsEOF(f: PFSFile): boolean;
 
@@ -40,7 +47,7 @@ procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
 
 implementation
-uses uConsts, uUtils, uVariables{$IFNDEF PAS2C}{$IFDEF HWLIBRARY}, sysutils{$ENDIF}{$ELSE}, physfs{$ENDIF};
+uses uConsts, uUtils, uVariables{$IFNDEF PAS2C}{$IFDEF HWLIBRARY}, SysUtils{$ENDIF}{$ELSE}, physfs{$ENDIF};
 
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
 function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
@@ -173,6 +180,11 @@ begin
     PHYSFS_writeBytes(f, @c, 1);
 end;
 
+procedure pfsWriteRaw(f: PFSFile; s: PChar; len: QWord);
+begin
+    PHYSFS_writeBytes(f, s, len);
+end;
+
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 var r: Int64;
 begin
@@ -202,7 +214,7 @@ var i: LongInt;
 {$ENDIF}
 begin
 {$IFDEF HWLIBRARY}
-    //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
+    //TODO: https://icculus.org/pipermail/physfs/2011-August/001006.html
     cPhysfsId:= shortstring(GetCurrentDir()) + {$IFDEF DARWIN}{$IFNDEF IPHONEOS}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF}{$ENDIF} ' hedgewars';
 {$ELSE}
     cPhysfsId:= ParamStr(0);

@@ -90,7 +90,7 @@ nativeUnNames = {loc("Zork"), loc("Steve"), loc("Jack"),
 nativeHats = {"Rambo", "RobinHood", "pirate_jack", "zoo_Bunny", "IndianChief",
               "tiara", "AkuAku", "rasta", "hair_yellow"}
 
-nativePos = {{1474, 1188}, {923, 986}, {564, 1120}, {128, 1315}}
+nativePos = {{1474, 1209}, {923, 990}, {564, 1120}, {128, 1315}}
 nativesNum = 4
 nativesLeft = 4
 
@@ -99,11 +99,11 @@ cyborgNames = {loc("Artur Detour"), loc("Led Heart"), loc("Orlando Boom!"), loc(
 
 cyborgsDif = {2, 2, 2, 2, 2, 2, 2, 2}
 cyborgsHealth = {100, 100, 100, 100, 100, 100, 100, 100}
-cyborgPos = {1765, 1145}
+cyborgHidePos = {1665, 1800}
 cyborgsTeamNum = {4, 3}
 cyborgsNum = 7
-cyborgsPos = {{2893, 1717}, {2958, 1701}, {3027, 1696}, {3096, 1698},
-              {2584, 655},  {2047, 1534}, {115, 179}, {2162, 1916}}
+cyborgsPos = {{2893, 1723}, {2958, 1717}, {3027, 1710}, {3096, 1704},
+              {2584, 665},  {2047, 1562}, {115, 179}, {2162, 1916}}
 cyborgsDir = {"Left", "Left", "Left", "Left", "Left", "Left", "Right", "Left"}
 
 crateConsts = {}
@@ -492,14 +492,15 @@ function AfterStartAnim()
   SetHealth(SpawnHealthCrate(519, 1519), 25)
   SetHealth(SpawnHealthCrate(826, 895), 25)
   SpawnSupplyCrate(701, 1046, amGirder, 3)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function SkipAnim(anim)
   if anim == startAnim then
     SetGearPosition(enemy, unpack(enemyPos))
+    HogTurnLeft(enemy, true)
   end
-  if GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
+  if GetHogTeamName(CurrentHedgehog) ~= nativesTeamName then
     EndTurn(true)
   end
   AnimWait(enemy, 1)
@@ -513,7 +514,7 @@ function AfterFleeAnim()
   SetGearMessage(CurrentHedgehog, 0)
   HideHedge(enemy)
   ShowMission(loc("Long Live The Queen"), loc("Coward"), loc("The leader escaped. Defeat the rest of the aliens!"), 1, 0)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function AfterLeaderDeadAnim()
@@ -555,9 +556,9 @@ end
 
 function KillEnemy()
   if enemyFled == "1" then
-    DismissTeam(loc("Leaderbot"))
+    DismissTeam(leaderbotTeamName)
   end
-  DismissTeam(loc("011101001"))
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 
@@ -615,30 +616,11 @@ function GetVariables()
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum")) or leaksNum
   m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
   m5Choice = tonumber(GetCampaignVar("M5Choice")) or choiceEliminate
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
-  m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
-  m5DenseDead = tonumber(GetCampaignVar("M5DenseDead"))
-  m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead"))
-  m5LeaksDead = tonumber(GetCampaignVar("M5LeaksDead"))
-  m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
-  m5ChiefDead = tonumber(GetCampaignVar("M5ChiefDead"))
-  m4WaterDead = tonumber(GetCampaignVar("M4WaterDead"))
-  m5WaterDead = tonumber(GetCampaignVar("M5WaterDead"))
-  m4BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead"))
-  m5BuffaloDead = tonumber(GetCampaignVar("M5BuffaloDead"))
-  m5WiseDead = tonumber(GetCampaignVar("M5WiseDead"))
-  m5GirlDead = tonumber(GetCampaignVar("M5GirlDead"))
+  m5LeaksDead = tonumber(GetCampaignVar("M5LeaksDead")) or 0
+  m5ChiefDead = tonumber(GetCampaignVar("M5ChiefDead")) or 0
 end
 
 function SaveCampaignVariables()
-  for i = 1, 4 do
-    if gearDead[origNatives[i]] ~= true then
-      SaveCampaignVar(nativeSaveNames[i], "0")
-    else
-      SaveCampaignVar(nativeSaveNames[i], "1")
-    end
-  end
-
   SaveCampaignVar("M8DeployedLeader", deployedLeader)
   SaveCampaignVar("M8PrincessLeader", princessLeader)
   SaveCampaignVar("M8EnemyFled", enemyFled)
@@ -649,6 +631,7 @@ function SaveCampaignVariables()
 end
 
 function SetupPlace()
+  HideHedge(cyborg)
   SetHogHat(natives[1], nativeHats[m5DeployedNum])
   SetHogName(natives[1], nativeNames[m5DeployedNum])
 
@@ -721,8 +704,14 @@ function SetupAmmo()
   AddAmmo(natives[1], amMolotov, 0)
 end
 
+nativesTeamName = nil
+beepTeamName = nil
+corpTeamName = nil
+leaderbotTeamName = nil
+cyborgTeamName = nil
+
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddMissionTeam(-2)
   for i = 7, 9 do
     natives[i-6] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
     origNatives[i-6] = natives[i-6]
@@ -731,25 +720,23 @@ function AddHogs()
   origNatives[4] = natives[4]
   nativesLeft = nativesNum
 
-  AddTeam(loc("Beep Loopers"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
+  beepTeamName = AddTeam(loc("Beep Loopers"), -1, "ring", "UFO", "Robot_qau", "cm_cyborg")
   for i = 1, cyborgsTeamNum[1] do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
   end
 
-  AddTeam(loc("Corporationals"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
+  corpTeamName = AddTeam(loc("Corporationals"), -1, "ring", "UFO", "Robot_qau", "cm_cyborg")
   for i = cyborgsTeamNum[1] + 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
   end
   cyborgsLeft = cyborgsTeamNum[1] + cyborgsTeamNum[2]
 
-  AddTeam(loc("Leaderbot"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
+  leaderbotTeamName = AddTeam(loc("Leaderbot"), -1, "ring", "UFO", "Robot_qau", "cm_cyborg")
   enemy = AddHog(loc("Name"), 2, 200, "cyborg1")
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
-  HideHedge(cyborg)
-
-  SetGearPosition(cyborg, 0, 0)
+  SetGearPosition(cyborg, unpack(cyborgHidePos))
 
   for i = 1, nativesNum do
     AnimSetGearPosition(natives[i], unpack(nativePos[i]))
@@ -785,10 +772,10 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
   MapGen = mgDrawn
 	Theme = "Hell"
-  SuddenDeathTurns = 20
+  HealthDecrease = 0
+  WaterRise = 0
 
 	for i = 1, #map do
 		ParseCommand('draw ' .. map[i])
@@ -825,9 +812,9 @@ function onGearDelete(gear)
   local toRemove = nil
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("Beep Loopers") or GetHogTeamName(gear) == loc("Corporationals") then
+    if GetHogTeamName(gear) == beepTeamName or GetHogTeamName(gear) == corpTeamName then
       cyborgsLeft = cyborgsLeft - 1
-    elseif GetHogTeamName(gear) == loc("Natives") then
+    elseif GetHogTeamName(gear) == nativesTeamName then
       for i = 1, nativesLeft do
         if natives[i] == gear then
           toRemove = i
@@ -858,10 +845,10 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
-  if GetHogTeamName(CurrentHedgehog) == loc("011101001") then
+  if GetHogTeamName(CurrentHedgehog) == cyborgTeamName then
     EndTurn(true)
   end
 end
@@ -869,11 +856,13 @@ end
 function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
---  else
---    DeleteGear(cyborgs[1])
---    table.remove(cyborgs, 1)
---    if cyborgsLeft == 0 then
---      DeleteGear(enemy)
---    end
+  end
+end
+
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
   end
 end

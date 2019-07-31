@@ -98,14 +98,13 @@ const
 (*    gtPoisonCloud *) , amNothing
 (*       gtSnowball *) , amSnowball
 (*          gtFlake *) , amNothing
-//(*      gtStructure *) , amStructure  // TODO - This will undoubtedly change once there is more than one structure
 (*        gtLandGun *) , amLandGun
 (*         gtTardis *) , amTardis
 (*         gtIceGun *) , amIceGun
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
-(*           gtDuck *) , amDuck
+(*        gtCreeper *) , amCreeper
 (*        gtMinigun *) , amMinigun
 (*  gtMinigunBullet *) , amMinigun
     );
@@ -204,27 +203,76 @@ gear^.ImpactSound:= sndNone;
 gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
-gear^.CollisionMask:= $FFFF;
+gear^.CollisionMask:= lfAll;
 gear^.Tint:= $FFFFFFFF;
 gear^.Data:= nil;
+gear^.Sticky:= false;
 
 if CurrentHedgehog <> nil then
     begin
     gear^.Hedgehog:= CurrentHedgehog;
     if (CurrentHedgehog^.Gear <> nil) and (hwRound(CurrentHedgehog^.Gear^.X) = X) and (hwRound(CurrentHedgehog^.Gear^.Y) = Y) then
-        gear^.CollisionMask:= lfNotCurrentMask
+        gear^.CollisionMask:= lfNotCurHogCrate
     end;
 
 if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
     gear^.Z:= cHHZ+1
 else gear^.Z:= cUsualZ;
 
+// set gstInBounceEdge if gear spawned inside the bounce world edge
+if WorldEdge = weBounce then
+    if (hwRound(gear^.X) - Gear^.Radius < leftX) or (hwRound(gear^.X) + Gear^.Radius > rightX) then
+        case gear^.Kind of
+            // list all gears here that could collide with the bounce world edge
+            gtHedgehog,
+            gtFlame,
+            gtMine,
+            gtAirBomb,
+            gtDrill,
+            gtNapalmBomb,
+            gtCase,
+            gtAirMine,
+            gtExplosives,
+            gtGrenade,
+            gtShell,
+            gtBee,
+            gtDynamite,
+            gtClusterBomb,
+            gtMelonPiece,
+            gtCluster,
+            gtMortar,
+            gtKamikaze,
+            gtCake,
+            gtWatermelon,
+            gtGasBomb,
+            gtHellishBomb,
+            gtBall,
+            gtRCPlane,
+            gtSniperRifleShot,
+            gtShotgunShot,
+            gtDEagleShot,
+            gtSineGunShot,
+            gtMinigunBullet,
+            gtEgg,
+            gtPiano,
+            gtSMine,
+            gtSnowball,
+            gtKnife,
+            gtCreeper,
+            gtMolotov,
+            gtFlake,
+            gtGrave,
+            gtPortal,
+            gtTarget:
+            gear^.State := gear^.State or gstInBounceEdge;
+        end;
+
 case Kind of
           gtFlame: Gear^.Boom := 2;  // some additional expl in there are x3, x4 this
        gtHedgehog: Gear^.Boom := 30;
            gtMine: Gear^.Boom := 50;
            gtCase: Gear^.Boom := 25;
-        gtAirMine: Gear^.Boom := 25;
+        gtAirMine: Gear^.Boom := 30;
      gtExplosives: Gear^.Boom := 75;
         gtGrenade: Gear^.Boom := 50;
           gtShell: Gear^.Boom := 50;
@@ -266,7 +314,7 @@ gtSniperRifleShot: Gear^.Boom := 100000;
                     else Gear^.Boom := 3;
     gtPoisonCloud: Gear^.Boom := 20;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
-           gtDuck: Gear^.Boom := 40;
+        gtCreeper: Gear^.Boom := 100;
     gtMinigunBullet: Gear^.Boom := 2;
     end;
 
@@ -330,6 +378,10 @@ case Kind of
                              ((GetRandom(90)+128) shl 16) or
                              (($d5+c) shl 8) or $ff}
                 end;
+   gtParachute: begin
+                gear^.Tag:= 1; // hog face dir. 1 = right, -1 = left
+                gear^.Z:= cCurrHHZ;
+                end;
        gtShell: begin
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_8;
@@ -353,6 +405,7 @@ case Kind of
                     Pos:= 0;
                     Radius:= 1;
                     DirAngle:= random(360);
+                    Sticky:= true;
                     if State and gstTmpFlag = 0 then
                         begin
                         dx.isNegative:= GetRandom(2) = 0;
@@ -394,7 +447,7 @@ case Kind of
                 gear^.State:= Gear^.State or gstSubmersible
                 end;
    gtSeduction: begin
-                gear^.Radius:= 250;
+                gear^.Radius:= cSeductionDist;
                 end;
  gtShotgunShot: begin
                 if gear^.Timer = 0 then gear^.Timer:= 900;
@@ -414,7 +467,7 @@ case Kind of
                 RopePoints.Count:= 0;
                 gear^.Tint:= $D8D8D8FF;
                 gear^.Tag:= 0; // normal rope render
-                gear^.CollisionMask:= lfNotCurrentMask //lfNotObjMask or lfNotHHObjMask;
+                gear^.CollisionMask:= lfNotCurHogCrate //lfNotObjMask or lfNotHHObjMask;
                 end;
         gtMine: begin
                 gear^.ImpactSound:= sndMineImpact;
@@ -428,12 +481,17 @@ case Kind of
                 if gear^.Timer = 0 then
                     begin
                     if cMinesTime < 0 then
-                        gear^.Timer:= getrandom(51)*100
+                        begin
+                        gear^.Timer:= getrandom(51)*100;
+                        gear^.Karma:= 1;
+                        end
                     else
-                        gear^.Timer:= cMinesTime
-                    end
+                        gear^.Timer:= cMinesTime;
+                    end;
+                gear^.RenderTimer:= true;
                 end;
      gtAirMine: begin
+                gear^.AdvBounce:= 1;
                 gear^.ImpactSound:= sndAirMineImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Health:= 30;
@@ -445,14 +503,18 @@ case Kind of
                 gear^.Angle:= 175; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
                 gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
                 gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
-                gear^.Karma:= 30; // damage
+                gear^.Tag:= 0;
                 if gear^.Timer = 0 then
                     begin
                     if cMinesTime < 0 then
-                        gear^.Timer:= getrandom(13)*100
+                        begin
+                        gear^.Timer:= getrandom(13)*100;
+                        gear^.Karma:= 1;
+                        end
                     else
-                        gear^.Timer:= cMinesTime div 4
+                        gear^.Timer:= cMinesTime div 4;
                     end;
+                gear^.RenderTimer:= true;
                 gear^.WDTimer:= gear^.Timer
                 end;
        gtSMine: begin
@@ -463,7 +525,9 @@ case Kind of
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1_6;
                 gear^.AdvBounce:= 1;
+                gear^.Sticky:= true;
                 if gear^.Timer = 0 then gear^.Timer:= 500;
+                gear^.RenderTimer:= true;
                 end;
        gtKnife: begin
                 gear^.ImpactSound:= sndKnifeImpact;
@@ -471,10 +535,11 @@ case Kind of
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_8;
                 gear^.Density:= _4;
-                gear^.Radius:= 7
+                gear^.Radius:= 7;
+                gear^.Sticky:= true;
                 end;
         gtCase: begin
-                gear^.ImpactSound:= sndGraveImpact;
+                gear^.ImpactSound:= sndCaseImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_3;
@@ -482,6 +547,8 @@ case Kind of
                 end;
   gtExplosives: begin
                 gear^.AdvBounce:= 1;
+                if GameType in [gmtDemo, gmtRecord] then
+                    gear^.RenderHealth:= true;
                 gear^.ImpactSound:= sndGrenadeImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;
@@ -540,6 +607,12 @@ case Kind of
                 gear^.Health:= 6;
                 gear^.Damage:= 30;
                 gear^.Z:= cHHZ+2;
+                gear^.Karma:= 0; // for sound effect: 0 = normal, 1 = underwater
+                gear^.Radius:= 150;
+                gear^.FlightTime:= 0; // for timeout in weWrap
+                gear^.Power:= 0; // count number of wraps in weWrap
+                gear^.WDTimer:= 0; // number of required wraps
+                gear^.Density:= _19;
                 gear^.Tint:= gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF
                 end;
      gtAirBomb: begin
@@ -563,7 +636,8 @@ case Kind of
                 gear^.Elasticity:= _0_3;
                 end;
       gtTardis: begin
-                gear^.Pos:= 1;
+                gear^.Pos:= 1; // tardis phase
+                gear^.Tag:= 0; // 1 = hedgehog died, disappeared, took damage or moved
                 gear^.Z:= cCurrHHZ+1;
                 end;
       gtMortar: begin
@@ -613,6 +687,8 @@ case Kind of
                     gear^.Timer:= 5000;
                 // Tag for drill strike. if 1 then first impact occured already
                 gear^.Tag := 0;
+                // Pos for state. If 1, drill is drilling
+                gear^.Pos := 0;
                 gear^.Radius:= 4;
                 gear^.Density:= _1;
                 end;
@@ -651,7 +727,8 @@ case Kind of
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
                 gear^.Health := 2000;
-                gear^.FlightTime := 2
+                gear^.FlightTime := 2;
+                gear^.Z:= cCurrHHZ;
                 end;
          gtEgg: begin
                 gear^.AdvBounce:= 1;
@@ -671,6 +748,7 @@ case Kind of
                 gear^.Timer:= 15000;
                 gear^.RenderTimer:= false;
                 gear^.Health:= 100;
+                gear^.Sticky:= true;
                 end;
        gtPiano: begin
                 gear^.Radius:= 32;
@@ -698,7 +776,7 @@ gtFlamethrower: begin
                 gear^.Tint:= $C0C000C0
                 end;
  gtResurrector: begin
-                gear^.Radius := 100;
+                gear^.Radius := cResurrectorDist;
                 gear^.Tag := 0;
                 gear^.Tint:= $F5DB35FF
                 end;
@@ -712,39 +790,30 @@ gtFlamethrower: begin
                 gear^.Radius:= 5;
                 gear^.Density:= _1_5;
                 end;
-{
-   gtStructure: begin
-                gear^.Elasticity:= _0_55;
-                gear^.Friction:= _0_995;
-                gear^.Density:= _0_9;
-                gear^.Radius:= 13;
-                gear^.Health:= 200;
-                gear^.Timer:= 0;
-                gear^.Tag:= TotalRounds + 3;
-                gear^.Pos:= 1;
-                end;
-}
       gtIceGun: begin
                 gear^.Health:= 1000;
                 gear^.Radius:= 8;
+                gear^.Density:= _0;
+                gear^.Tag:= 0; // sound state: 0 = no sound, 1 = ice beam sound, 2 = idle sound
                 end;
-        gtDuck: begin
-                gear^.Pos:= 0;               // 0: in air, 1-4: on water, 5-8: underwater
-                                             // 1: bottom, 2: bottom (mirrored),
-                                             // 3: left Sea edge, 4: right Sea edge
-                                             // 6: bottom, 7: bottom (mirrored)
-                                             // 7: left Sea edge, 8: right Sea edge
-                gear^.Tag:= 1;               // 1: facing right, -1: facing left
-                if gear^.Timer = 0 then      
-                    gear^.Timer:= 15000;     // Explosion timer to avoid duck existing forever
-                gear^.Radius:= 9;            // Collision radius (with landscape)
-                gear^.Karma:= 24;            // Distance from water when swimming
-                gear^.Damage:= 500;          // Speed factor when swimming on water (multiplied with wind speed)
-                gear^.State:= gear^.State or gstSubmersible;
-                gear^.Elasticity:= _0_6;
-                gear^.Friction:= _0_8;
-                gear^.Density:= _0_5;
+     gtCreeper: begin
+                // TODO: Finish creeper initialization implementation
+                gear^.Radius:= cHHRadius;
+                gear^.Elasticity:= _0_35;
+                gear^.Friction:= _0_93;
+                gear^.Density:= _5;
+
                 gear^.AdvBounce:= 1;
+                gear^.ImpactSound:= sndAirMineImpact;
+                gear^.nImpactSounds:= 1;
+                gear^.Health:= 30;
+                gear^.Radius:= 8;
+                gear^.Angle:= 175; // Radius at which it will start "seeking". $FFFFFFFF = unlimited. check is skipped.
+                gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
+                gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
+                if gear^.Timer = 0 then
+                    gear^.Timer:= 5000;
+                gear^.WDTimer:= gear^.Timer
                 end;
      gtMinigun: begin
                 // Timer. First, it's the timer before shooting. Then it will become the shooting timer and is set to Karma
@@ -775,7 +844,6 @@ end;
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
     t,i: Longword;
-    k: boolean;
     cakeData: PCakeData;
     iterator: PGear;
 begin
@@ -783,6 +851,7 @@ begin
 ScriptCall('onGearDelete', gear^.uid);
 
 DeleteCI(Gear);
+RemoveFromProximityCache(Gear);
 
 FreeAndNilTexture(Gear^.Tex);
 
@@ -842,8 +911,8 @@ else if Gear^.Kind = gtHedgehog then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
-            if (((not SuddenDeathDmg) and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF))) then
-                spawnHealthTagForHH(Gear, t);
+            // Display hedgehog damage in water
+            spawnHealthTagForHH(Gear, t);
             end;
 
         team:= Gear^.Hedgehog^.Team;
@@ -859,20 +928,36 @@ else if Gear^.Kind = gtHedgehog then
         Gear^.Hedgehog^.Gear:= nil;
 
         if Gear^.Hedgehog^.King then
+            // If king died, kill the rest of the team
             begin
-            // are there any other kings left? Just doing nil check.  Presumably a mortally wounded king will get reaped soon enough
-            k:= false;
+            with Gear^.Hedgehog^.Team^ do
+                begin
+                Gear^.Hedgehog^.Team^.hasKing:= false;
+                for t:= 0 to cMaxHHIndex do
+                    if Hedgehogs[t].Gear <> nil then
+                        Hedgehogs[t].Gear^.Health:= 0
+                    else if (Hedgehogs[t].GearHidden <> nil) then
+                        Hedgehogs[t].GearHidden^.Health:= 0  // Hog is still hidden. If tardis should return though, Lua, eh ...
+                end;
+            end;
+
+        // Update passive status of clan
+        if (not Gear^.Hedgehog^.Team^.Clan^.Passive) then
+            begin
+            Gear^.Hedgehog^.Team^.Clan^.Passive:= true;
             for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then
-                    k:= true;
-            if not k then
-                for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                    with team^.Clan^.Teams[i]^ do
+                begin
+                with team^.Clan^.Teams[i]^ do
+                    if (not Passive) then
                         for t:= 0 to cMaxHHIndex do
-                            if Hedgehogs[t].Gear <> nil then
-                                Hedgehogs[t].Gear^.Health:= 0
-                            else if (Hedgehogs[t].GearHidden <> nil) then
-                                Hedgehogs[t].GearHidden^.Health:= 0  // hog is still hidden. if tardis should return though, lua, eh...
+                            if (Hedgehogs[t].Gear <> nil) or (Hedgehogs[t].GearHidden <> nil) then
+                                begin
+                                Gear^.Hedgehog^.Team^.Clan^.Passive:= false;
+                                break;
+                                end;
+                if (not Gear^.Hedgehog^.Team^.Clan^.Passive) then
+                    break;
+                end;
             end;
 
         // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog

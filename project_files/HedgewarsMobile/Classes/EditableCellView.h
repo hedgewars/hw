@@ -22,12 +22,12 @@
 
 @protocol EditableCellViewDelegate <NSObject>
 
--(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue;
+- (void)saveTextFieldValue:(NSString *)textString withTag:(NSInteger)tagValue;
 
 @end
 
 @interface EditableCellView : UITableViewCell <UITextFieldDelegate> {
-    id<EditableCellViewDelegate> delegate;
+    id<EditableCellViewDelegate> __weak delegate;
     UITextField *textField;
     UILabel *titleLabel;
     NSUInteger minimumCharacters;
@@ -38,16 +38,16 @@
     NSString *oldValue;
 }
 
-@property (nonatomic,assign) id<EditableCellViewDelegate> delegate;
-@property (nonatomic,retain,readonly) UITextField *textField;
-@property (nonatomic,retain,readonly) UILabel *titleLabel;
-@property (nonatomic,assign) NSUInteger minimumCharacters;
-@property (nonatomic,assign) NSUInteger maximumCharacters;
-@property (nonatomic,assign) BOOL respectEditing;
-@property (nonatomic,retain) NSString *oldValue;
+@property (nonatomic, weak) id<EditableCellViewDelegate> delegate;
+@property (nonatomic, strong, readonly) UITextField *textField;
+@property (nonatomic, strong, readonly) UILabel *titleLabel;
+@property (assign) NSUInteger minimumCharacters;
+@property (assign) NSUInteger maximumCharacters;
+@property (assign) BOOL respectEditing;
+@property (nonatomic, strong) NSString *oldValue;
 
--(void) replyKeyboard;
--(void) cancel:(id) sender;
--(void) save:(id) sender;
+- (void)replyKeyboard;
+- (void)cancel:(id)sender;
+- (void)save:(id)sender;
 
 @end

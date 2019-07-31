@@ -24,7 +24,7 @@
 @implementation SDLUIKitDelegate (customDelegate)
 
 // hijack the the SDL_UIKitAppDelegate to use the UIApplicationDelegate we implement here
-+(NSString *)getAppDelegateClassName {
++ (NSString *)getAppDelegateClassName {
     return @"HedgewarsAppDelegate";
 }
 
@@ -35,7 +35,7 @@
 
 #pragma mark -
 #pragma mark AppDelegate methods
--(id) init {
+- (id)init {
     if ((self = [super init])) {
         mainViewController = nil;
         uiwindow = nil;
@@ -43,14 +43,9 @@
     return self;
 }
 
--(void) dealloc {
-    [mainViewController release];
-    [uiwindow release];
-    [super dealloc];
-}
 
 // override the direct execution of SDL_main to allow us to implement our own frontend
--(void) postFinishLaunch
+- (void)postFinishLaunch
 {
     // Setup Appirater
     [Appirater setAppId:@"391234866"];
@@ -70,12 +65,11 @@
     NSString *controllerName = (IS_IPAD() ? @"MainMenuViewController-iPad" : @"MainMenuViewController-iPhone");
     self.mainViewController = [[MainMenuViewController alloc] initWithNibName:controllerName bundle:nil];
     self.uiwindow.rootViewController = self.mainViewController;
-    [self.mainViewController release];
 
     [self.uiwindow makeKeyAndVisible];
 }
 
--(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
     [HWUtils releaseCache];
     // don't stop music if it is playing
     if ([HWUtils isGameLaunched]) {
@@ -87,7 +81,7 @@
 }
 
 // true multitasking with SDL works only on 4.2 and above; we close the game to avoid a black screen at return
--(void) applicationWillResignActive:(UIApplication *)application {
+- (void)applicationWillResignActive:(UIApplication *)application {
     if ([HWUtils isGameLaunched] && [[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
         HW_terminate(NO);
 

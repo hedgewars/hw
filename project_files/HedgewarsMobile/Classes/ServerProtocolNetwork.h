@@ -29,12 +29,12 @@
 
 @property (assign) TCPsocket ssd;
 @property (assign) NSInteger serverPort;
-@property (nonatomic,retain) NSString *serverAddress;
+@property (nonatomic, strong) NSString *serverAddress;
 
--(id) init;
--(id) init:(NSInteger) onPort withAddress:(NSString *)address;
--(id) initOnPort:(NSInteger) port;
--(id) initToAddress:(NSString *)address;
+- (id)init;
+- (id)init:(NSInteger)onPort withAddress:(NSString *)address;
+- (id)initOnPort:(NSInteger)port;
+- (id)initToAddress:(NSString *)address;
 +(id) openServerConnection;
 
 @end

@@ -27,23 +27,23 @@ typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
 
 }
 
-+(TGameType) gameType;
-+(void) setGameType:(TGameType) type;
-+(TGameStatus) gameStatus;
-+(void) setGameStatus:(TGameStatus) status;
-+(BOOL) isGameLaunched;
-+(BOOL) isGameRunning;
++ (TGameType)gameType;
++ (void)setGameType:(TGameType)type;
++ (TGameStatus)gameStatus;
++ (void)setGameStatus:(TGameStatus)status;
++ (BOOL)isGameLaunched;
++ (BOOL)isGameRunning;
 
-+(NSString *)modelType;
-+(NSArray *)teamColors;
-+(void) releaseCache;
++ (NSString *)modelType;
++ (NSArray *)teamColors;
++ (void)releaseCache;
 
-+(NSInteger) randomPort;
-+(void) freePort:(NSInteger) port;
-+(BOOL) isNetworkReachable;
-+(NSString *) languageID;
-//+(UIView *)mainSDLViewInstance;
-+(NSString *) seed;
++ (NSInteger)randomPort;
++ (void)freePort:(NSInteger)port;
++ (BOOL)isNetworkReachable;
++ (NSString *)languageID;
+//+ (UIView *)mainSDLViewInstance;
++ (NSString *)seed;
 
 @end
 

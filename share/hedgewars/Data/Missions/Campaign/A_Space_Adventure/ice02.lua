@@ -12,16 +12,18 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("Hard flying")
 local challengeStarted = false
+local challengeStartRequested = false
 local currentWaypoint = 1
-local radius = 75
-local totalTime = 15000
+local radius = 75 -- Ring radius. Will become smaller and smaller
+local totalTime = 15000 -- Total available time. Initial value is start time; is added to later when player wins extra time
 local totalSaucers = 3
 local gameEnded = false
+local heroTurn = false
 local RED = 0xff0000ff
-local GREEN = 0x38d61cff
+local GREEN = 0x00ff00ff
 local challengeObjectives = loc("To win the game you have to pass into the rings in time.")..
 	"|"..loc("You'll get extra time in case you need it when you pass a ring.").."|"..
-	loc("Every 2 rings, the ring color will be green and you'll get an extra flying saucer.").."|"..
+	loc("Green double rings also give you a new flying saucer.").."|"..
 	loc("Use the attack key twice to change the flying saucer while floating in mid-air.")
 local timeRecord
 -- dialogs
@@ -41,11 +43,10 @@ ally.name = loc("Paul McHoggy")
 ally.x = 860
 ally.y = 130
 teamA.name = loc("Hog Solo")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Allies")
-teamB.color = 0x38D61C -- green
+teamB.color = -6
 -- way points
-local current waypoint = 1
 local waypoints = {
 	[1] = {x=1450, y=140},
 	[2] = {x=990, y=580},
@@ -69,7 +70,7 @@ local waypoints = {
 function onGameInit()
 	GameFlags = gfInvulnerable + gfOneClanMode
 	Seed = 1
-	TurnTime = 15000
+	TurnTime = totalTime
 	Ready = 25000
 	CaseFreq = 0
 	MinesNum = 0
@@ -81,12 +82,14 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Ally
-	AddTeam(teamB.name, teamB.color, "heart", "Island", "Default", "cm_face")
+	teamB.name = AddTeam(teamB.name, teamB.color, "heart", "Island", "Default_qau", "cm_face")
+	SetTeamPassive(teamB.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	HogTurnLeft(ally.gear, true)
@@ -126,12 +129,20 @@ function onGameStart()
 	AddAnim(dialog01)
 end
 
-function onNewTurn()
-	if not hero.dead and CurrentHedgehog == ally.gear and challengeStarted then
+function onEndTurn()
+	if not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
 		heroLost()
-	elseif not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
+	end
+end
+
+function onNewTurn()
+	if challengeStartRequested then
+		challengeStarted = true
+	end
+	if not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
 		SetWeapon(amJetpack)
 	end
+	heroTurn = CurrentHedgehog == hero.gear
 end
 
 function onGameTick()
@@ -152,6 +163,7 @@ function onGameTick20()
 			local totalTimePrinted  = totalTime / 1000
 			local saucersLeft = GetAmmoCount(hero.gear, amJetpack)
 			local saucersUsed = totalSaucers - saucersLeft
+			SetTeamLabel(teamA.name, string.format(loc("%.3fs"), totalTimePrinted))
 			SendStat(siGameResult, loc("Hooray! You are a champion!"))
 			SendStat(siCustomAchievement, string.format(loc("You completed the mission in %.3f seconds."), totalTimePrinted))
 			if timeRecord ~= nil and totalTime >= timeRecord then
@@ -164,18 +176,30 @@ function onGameTick20()
 				end
 			end
 			SendStat(siCustomAchievement, string.format(loc("You have used %d flying saucers."), saucersUsed))
-			SendStat(siCustomAchievement, string.format(loc("You had %d additional flying saucers left."), saucersLeft))
 
 			local leastSaucersRecord = tonumber(GetCampaignVar("IceStadiumLeastSaucersUsed"))
 			if leastSaucersRecord == nil or saucersUsed < leastSaucersRecord then
 				SaveCampaignVar("IceStadiumLeastSaucersUsed", tostring(saucersUsed))
 			end
 
-			SendStat(siPointType, loc("milliseconds"))
+			SendStat(siPointType, "!TIME")
 			SendStat(siPlayerKills, totalTime, GetHogTeamName(hero.gear))
 			SaveCampaignVar("Mission6Won", "true")
 			checkAllMissionsCompleted()
+			SetTurnTimeLeft(MAX_TURN_TIME)
 			EndGame()
+		end
+	end
+	if heroTurn and challengeStarted and not gameEnded and not hero.dead and ReadyTimeLeft == 0 then
+		local time = totalTime - TurnTimeLeft
+		local timePrinted  = time / 1000
+		SetTeamLabel(teamA.name, string.format(loc("%.1fs"), timePrinted))
+		if TurnTimeLeft <= 0 then
+			local wp = waypoints[currentWaypoint-1]
+			if wp ~= nil then
+				DeleteVisualGear(wp.gear)
+				DeleteVisualGear(wp.gear2)
+			end
 		end
 	end
 end
@@ -237,24 +261,29 @@ end
 ------------------ Other Functions -------------------
 
 function startFlying()
-	AnimSwitchHog(ally.gear)
+	challengeStartRequested = true
 	EndTurn(true)
-	challengeStarted = true
 end
 
 function placeNextWaypoint()
+	if gameEnded then
+		return
+	end
 	if currentWaypoint > 1 then
 		local wp = waypoints[currentWaypoint-1]
 		DeleteVisualGear(wp.gear)
+		DeleteVisualGear(wp.gear2)
 	end
 	if currentWaypoint < 16 then
 		local wp = waypoints[currentWaypoint]
 		wp.gear = AddVisualGear(1,1,vgtCircle,1,true)
-		-- add bonus time and "fuel"
+		-- 1st, 3rd, 5th, 7th, 9th, ... ring
 		if currentWaypoint % 2 == 0 then
-			PlaySound(sndShotgunReload)
+			-- Render single red ring
 			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, RED)
+			-- Give 1 flying saucer and, if needed, extra time
 			AddAmmo(hero.gear, amJetpack, GetAmmoCount(hero.gear, amJetpack)+1)
+			PlaySound(sndShotgunReload)
 			totalSaucers = totalSaucers + 1
 			local vgear = AddVisualGear(GetX(hero.gear), GetY(hero.gear), vgtAmmo, 0, true)
 			if vgear ~= nil then
@@ -262,7 +291,7 @@ function placeNextWaypoint()
 			end
 			local message 
 			if TurnTimeLeft <= 22000 then
-				TurnTimeLeft = TurnTimeLeft + 8000
+				SetTurnTimeLeft(TurnTimeLeft + 8000)
 				totalTime = totalTime + 8000
 				PlaySound(sndExtraTime)
 				message = loc("Got 1 more saucer and 8 more seconds added to the clock")
@@ -270,12 +299,17 @@ function placeNextWaypoint()
 				message = loc("Got 1 more saucer")
 			end
 			AnimCaption(hero.gear, message, 4000)
+		-- 2nd, 4th, 6th, 8th, 10th, ... ring
 		else
+			-- Render double green ring
 			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, GREEN)
+			wp.gear2 = AddVisualGear(1,1,vgtCircle,1,true)
+			SetVisualGearValues(wp.gear2, wp.x,wp.y, 20, 200, 0, 0, 100, radius - 6, 2, GREEN)
+			-- Give extra time, if needed
 			if TurnTimeLeft <= 16000 then
-				TurnTimeLeft = TurnTimeLeft + 6000
-				totalTime = totalTime + 6000
 				if currentWaypoint ~= 1 then
+					SetTurnTimeLeft(TurnTimeLeft + 6000)
+					totalTime = totalTime + 6000
 					PlaySound(sndExtraTime)
 					AnimCaption(hero.gear, loc("6 more seconds added to the clock"), 4000)
 				end
@@ -292,7 +326,7 @@ function placeNextWaypoint()
 end
 
 function checkIfHeroInWaypoint()
-	if not hero.dead then
+	if (not hero.dead) and (TurnTimeLeft > 0) then
 		local wp = waypoints[currentWaypoint-1]
 		if gearIsInCircle(hero.gear, wp.x, wp.y, radius+4, false) then
 			SetWind(GetRandom(201)-100)
@@ -306,8 +340,9 @@ function heroLost()
 	SendStat(siGameResult, loc("Oh man! Learn how to fly!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to pass into the rings in time."))
 	SendStat(siCustomAchievement, loc("You'll get extra time in case you need it when you pass a ring."))
-	SendStat(siCustomAchievement, loc("Every 2 rings you'll get extra flying saucers."))
+	SendStat(siCustomAchievement, loc("Green double rings also give you a new flying saucer."))
 	SendStat(siCustomAchievement, loc("Use the attack key twice to change the flying saucer while being in air."))
 	sendSimpleTeamRankings({teamA.name})
+	gameEnded = true
 	EndGame()
 end

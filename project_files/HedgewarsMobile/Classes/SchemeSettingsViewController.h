@@ -24,6 +24,6 @@
     NSMutableArray *listOfSchemes;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfSchemes;
+@property (nonatomic, strong) NSMutableArray *listOfSchemes;
 
 @end

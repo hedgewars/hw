@@ -3,7 +3,7 @@
 -- This is the mission to acquire the last part.
 -- This mission is the cameo of Professor Hogevil
 -- who has took hostages H and Dr. Cornelius.
--- Hog Solo has to defeat him and his thugs.
+-- The hero has to defeat him and his thugs.
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -43,48 +43,50 @@ local thugs = { thug1, thug2, thug3, thug4, thug5, thug6, thug7 }
 local teamA = {}
 local teamB = {}
 local teamC = {}
+local teamD = {}
 -- hedgehogs values
 hero.name = loc("Hog Solo")
 hero.x = 520
-hero.y = 845
+hero.y = 871
 hero.dead = false
 paoth1.name = loc("H")
 paoth1.x = 3730
-paoth1.y = 1480
+paoth1.y = 1538
 paoth2.name = loc("Dr. Cornelius")
 paoth2.x = 3800
-paoth2.y = 1480
+paoth2.y = 1538
 professor.name = loc("Prof. Hogevil")
 professor.dead = false
 thug1.x = 1265
-thug1.y = 1400
+thug1.y = 1465
 thug1.health = 70
 thug2.x = 2035
-thug2.y = 1320
+thug2.y = 1380
 thug2.health = 95
 thug3.x = 1980
-thug3.y = 815
+thug3.y = 863
 thug3.health = 35
 thug3.turnLeft = true
 thug4.x = 2830
-thug4.y = 1960
+thug4.y = 2007
 thug4.health = 80
 thug5.x = 2890
-thug5.y = 1960
+thug5.y = 2007
 thug5.health = 80
 thug6.x = 2940
-thug6.y = 1960
+thug6.y = 2007
 thug6.health = 80
 thug7.x = 2990
-thug7.y = 1960
+thug7.y = 2007
 thug7.health = 80
 teamA.name = loc("Hog Solo")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("PAotH")
--- FIXME: PAotH should share color with Hog Solo
-teamB.color = 0x0072FF -- blue because otherwise enemies attack them
-teamC.name = loc("Professor")
-teamC.color = 0x0072FF -- blue
+teamB.color = teamA.color
+teamC.name = loc("Professor's Team")
+teamC.color = -2
+teamD.name = loc("Professor")
+teamD.color = -2
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -92,35 +94,38 @@ function onGameInit()
 	Seed = 1
 	TurnTime = 25000
 	CaseFreq = 0
-	MinesNum = 3
+	MinesNum = 0
 	MinesTime = 1500
-	Explosives = 2
-	Delay = 3
+	Explosives = 0
 	HealthCaseAmount = 50
+	-- gfTagTeam makes it easier to skip the PAotH team
+	GameFlags = gfTagTeam
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
 	Map = "death01_map"
 	Theme = "Hell"
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	-- PAotH
-	AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default", "cm_galaxy")
+
+	-- PAotH (passive team)
+	teamB.name = AddTeam(teamB.name, teamB.color, "Earth", "Island", "Default_qau", "cm_galaxy")
+	SetTeamPassive(teamB.name, true)
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
+	SetGearAIHints(paoth1.gear, aihDoesntMatter)
 	paoth2.gear = AddHog(paoth2.name, 0, 100, "Glasses")
 	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
 	HogTurnLeft(paoth2.gear, true)
-	-- Professor and Thugs
-	AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
-	professor.human = AddHog(professor.name, 0, 300, "tophats")
-	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
-	HogTurnLeft(professor.human, true)
-	AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default", "cm_sine")
+	SetGearAIHints(paoth2.gear, aihDoesntMatter)
+
+	-- Professor's Team (computer enemy)
+	teamC.name = AddTeam(teamC.name, teamC.color, "eyecross", "Island", "Default_qau", "cm_sine")
 	professor.bot = AddHog(professor.name, 1, 300, "tophats")
 	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
 	HogTurnLeft(professor.bot, true)
@@ -131,6 +136,13 @@ function onGameInit()
 		HogTurnLeft(thugs[i].gear, not thugs[i].turnLeft)
 	end
 
+	-- Professor (special team for cut sequence only)
+	teamD.name = AddTeam(teamD.name, teamD.color, "star", "Island", "Default_qau", "cm_sine")
+	professor.human = AddHog(professor.name, 0, 300, "tophats")
+	-- hog will be removed and replaced by professor.bot after cut sequence
+	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
+	HogTurnLeft(professor.human, true)
+
 	initCheckpoint("death01")
 
 	AnimInit(true)
@@ -138,6 +150,8 @@ function onGameInit()
 end
 
 function onGameStart()
+	ShowMission(unpack(goals[dialog01]))
+	HideMission()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
@@ -160,6 +174,8 @@ function onGameStart()
 	AddGear(1900, 800, gtExplosives, 0, 0, 0, 0)
 	AddGear(1900, 750, gtExplosives, 0, 0, 0, 0)
 	AddGear(1900, 710, gtExplosives, 0, 0, 0, 0)
+
+	AddGear(698, 1544, gtExplosives, 0, 0, 0, 0)
 	-- add mines
 	AddGear(3520, 1650, gtMine, 0, 0, 0, 0)
 	AddGear(3480, 1680, gtMine, 0, 0, 0, 0)
@@ -168,6 +184,8 @@ function onGameStart()
 	AddGear(2100, 1730, gtMine, 0, 0, 0, 0)
 	AddGear(2150, 1730, gtMine, 0, 0, 0, 0)
 	AddGear(2200, 1750, gtMine, 0, 0, 0, 0)
+
+	AddGear(1891, 1468, gtMine, 0, 0, 0, 0)
 	-- add girders
 	PlaceGirder(3770, 1370, 4)
 	PlaceGirder(3700, 1460, 6)
@@ -198,13 +216,6 @@ function onGameStart()
 	AddAnim(dialog01)
 
 	SendHealthStatsOff()
-end
-
-function onNewTurn()
-	if CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear then
-		AnimSwitchHog(hero.gear)
-		EndTurn(true)
-	end
 end
 
 function onGameTick()
@@ -250,6 +261,9 @@ function onHeroDeath(gear)
 end
 
 function onEnemiesDeath(gear)
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
 	local allDead = true
 	if GetHealth(hero.gear) and professor.dead then
 		for i=1,table.getn(thugs) do
@@ -267,9 +281,9 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to eliminate all your enemies."))
-	sendSimpleTeamRankings({teamC.name, teamA.name})
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+	SendStat(siCustomAchievement, loc("To win the game you have to eliminate Professor Hogevil."))
+	sendSimpleTeamRankings({teamC.name, teamA.name, teamB.name})
 	EndGame()
 end
 
@@ -280,7 +294,7 @@ function enemiesDeath(gear)
 	SendStat(siCustomAchievement, loc("You have rescued H and Dr. Cornelius."))
 	SendStat(siCustomAchievement, loc("You have acquired the last device part."))
 	SendStat(siCustomAchievement, loc("Now go and play the menu mission to complete the campaign."))
-	sendSimpleTeamRankings({teamA.name, teamC.name})
+	sendSimpleTeamRankings({teamA.name, teamB.name, teamC.name})
 	EndGame()
 end
 
@@ -296,7 +310,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the uninhabitable Death Planet ..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome Hog Solo, surprised to see me?"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, string.format(loc("Welcome, %s, surprised to see me?"), hero.name), SAY_SAY, 4000}})
 	if profDiedOnMoon then
 		table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("After you left the moon, my other loyal minions came and resurrected me so I could complete my master plan."), SAY_SAY, 6000}})
 	else
@@ -320,8 +334,13 @@ end
 
 function startBattle()
 	ShowMission(unpack(goals[dialog01]))
-	DeleteGear(professor.human)
+	AddVisualGear(GetX(professor.human), GetY(professor.human), vgtExplosion, 0, false)
+	HideHog(professor.human)
 	RestoreHog(professor.bot)
+	AddVisualGear(GetX(professor.bot), GetY(professor.bot), vgtExplosion, 0, false)
+	PlaySound(sndWarp)
+	SetGearMessage(hero.gear, 0)
 	AnimSwitchHog(professor.gear)
+	FollowGear(professor.gear)
 	EndTurn(true)
 end

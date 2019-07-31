@@ -50,7 +50,6 @@ void startLoadingIndicator(void) {
                                                          UIViewAutoresizingFlexibleBottomMargin;
     [overlay_instance.loadingIndicator startAnimating];
     [overlay_instance.view addSubview:overlay_instance.loadingIndicator];
-    [overlay_instance.loadingIndicator release];
     */
 }
 

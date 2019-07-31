@@ -24,7 +24,7 @@
 @implementation SquareButtonView
 @synthesize ownerDictionary, colorIndex, selectedColor, colorArray;
 
--(id) initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         self.colorIndex = 0;
         self.selectedColor = 0;
@@ -46,7 +46,7 @@
     return self;
 }
 
--(void) nextColor {
+- (void)nextColor {
     self.colorIndex++;
 
     if (self.colorIndex >= [self.colorArray count])
@@ -58,7 +58,7 @@
     [self selectColor:color];
 }
 
--(void) selectColor:(NSUInteger) color {
+- (void)selectColor:(NSUInteger) color {
     if (color != self.selectedColor) {
         self.selectedColor = color;
         self.colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInteger:color]];
@@ -70,11 +70,6 @@
     }
 }
 
--(void) dealloc {
-    releaseAndNil(ownerDictionary);
-    releaseAndNil(colorArray);
-    [super dealloc];
-}
 
 
 @end

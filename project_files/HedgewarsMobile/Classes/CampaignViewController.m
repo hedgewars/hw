@@ -21,7 +21,7 @@
 #import "GameInterfaceBridge.h"
 
 @interface CampaignViewController ()
-@property (nonatomic, retain) NSArray *campaignMissions;
+@property (nonatomic, strong) NSArray *campaignMissions;
 @end
 
 @implementation CampaignViewController
@@ -40,7 +40,6 @@
     
     IniParser *iniParser = [[IniParser alloc] initWithIniFilePath:campaignIniPath];
     NSArray *parsedMissions = [iniParser newParsedSections];
-    [iniParser release];
     
     return parsedMissions;
 }
@@ -52,7 +51,6 @@
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismiss)];
     self.navigationItem.rightBarButtonItem = doneButton;
-    [doneButton release];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"campaignMissionCell"];
 }
@@ -95,10 +93,5 @@
 
 #pragma mark - Dealloc
 
-- (void)dealloc {
-    [_campaignName release];
-    [_campaignMissions release];
-    [super dealloc];
-}
 
 @end

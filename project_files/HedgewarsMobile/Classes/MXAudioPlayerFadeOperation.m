@@ -10,7 +10,7 @@
 #define SKVolumeChangesPerSecond 15
 
 @interface MXAudioPlayerFadeOperation ()
-@property (nonatomic, retain, readwrite) AVAudioPlayer *audioPlayer;
+@property (nonatomic, strong, readwrite) AVAudioPlayer *audioPlayer;
 - (void)beginFadeOperation;
 - (void)finishFadeOperation;
 @end
@@ -31,23 +31,22 @@
 - (AVAudioPlayer *)audioPlayer {
   AVAudioPlayer *result;
   @synchronized(self) {
-    result = [_audioPlayer retain];
+    result = _audioPlayer;
   }
-  return [result autorelease];
+  return result;
 }
 
 - (void)setAudioPlayer:(AVAudioPlayer *)anAudioPlayer {
   @synchronized(self) {
     if (_audioPlayer != anAudioPlayer) {
-      [_audioPlayer release];
-      _audioPlayer = [anAudioPlayer retain];
+      _audioPlayer = anAudioPlayer;
     }
   }
 }
 
 #pragma mark -
 #pragma mark NSOperation
--(id) initFadeWithAudioPlayer:(AVAudioPlayer*)player toVolume:(float)volume overDuration:(NSTimeInterval)duration withDelay:(NSTimeInterval)timeDelay {
+- (id)initFadeWithAudioPlayer:(AVAudioPlayer*)player toVolume:(float)volume overDuration:(NSTimeInterval)duration withDelay:(NSTimeInterval)timeDelay {
   if ((self = [super init])) {
     self.audioPlayer = player;
     [player prepareToPlay];
@@ -125,10 +124,6 @@
   if ([self.audioPlayer isPlaying] && _stopAfterFade) [self.audioPlayer stop];
 }
 
-- (void)dealloc {
-  releaseAndNil(_audioPlayer);
-  [super dealloc];
-}
 
 @end
 

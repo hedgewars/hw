@@ -33,26 +33,26 @@
     NSOperationQueue *audioFaderQueue;
 }
 
-@property (nonatomic,retain) AVAudioPlayer *backgroundMusic;
+@property (nonatomic, strong) AVAudioPlayer *backgroundMusic;
 @property (assign) SystemSoundID clickSound;
 @property (assign) SystemSoundID backSound;
 @property (assign) SystemSoundID selSound;
 
-@property (nonatomic,retain) NSOperationQueue *audioFaderQueue;
+@property (nonatomic, strong) NSOperationQueue *audioFaderQueue;
 
 +(id) mainManager;
 
--(void) playBackgroundMusic;
--(void) pauseBackgroundMusic;
--(void) stopBackgroundMusic;
+- (void)playBackgroundMusic;
+- (void)pauseBackgroundMusic;
+- (void)stopBackgroundMusic;
 
--(void) fadeInBackgroundMusic;
--(void) fadeOutBackgroundMusic;
+- (void)fadeInBackgroundMusic;
+- (void)fadeOutBackgroundMusic;
 
--(void) playClickSound;
--(void) playBackSound;
--(void) playSelectSound;
+- (void)playClickSound;
+- (void)playBackSound;
+- (void)playSelectSound;
 -(SystemSoundID) loadSound:(NSString *)snd;
--(void) unloadSounds;
+- (void)unloadSounds;
 
 @end

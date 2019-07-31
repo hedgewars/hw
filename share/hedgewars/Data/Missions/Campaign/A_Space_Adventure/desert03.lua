@@ -29,7 +29,7 @@ local hero = {
 -- teams
 local teamA = {
 	name = loc("Hog Solo"),
-	color = tonumber("38D61C",16) -- green
+	color = -6
 }
 -- creates & targets
 local rcCrates = {
@@ -61,7 +61,7 @@ local flameCounter = 0
 function onGameInit()
 	GameFlags = gfOneClanMode
 	Seed = 1
-	TurnTime = -1
+	TurnTime = MAX_TURN_TIME
 	Ready = 30000
 	CaseFreq = 0
 	MinesNum = 0
@@ -73,9 +73,10 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(1)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 
 	initCheckpoint("desert03")
@@ -169,7 +170,7 @@ function heroDeath(gear)
 end
 
 function lose(gear)
-	AddCaption(loc("Out of ammo!"), 0xFFFFFFFF, capgrpMessage2)
+	AddCaption(loc("Out of ammo!"), capcolDefault, capgrpMessage2)
 	PlaySound(sndStupid, hero.gear)
 	gameOver()
 end
@@ -235,7 +236,7 @@ function win()
 end
 
 function gameOver()
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have to destroy all the targets."))
 	SendStat(siCustomAchievement, loc("You will fail if you run out of ammo and there are still targets available."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))

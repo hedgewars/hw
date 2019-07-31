@@ -32,7 +32,6 @@ local CakeTries = 0
 local addCake = true
 local takeASeat = false
 local Stars = {}
-local tauntNoo = false
 local jokeAwardNavy = nil
 local jokeAwardSpeed = nil
 local jokeAwardDamage = nil
@@ -86,7 +85,7 @@ end
 
 function onGameInit()
     -- Ensure people get same map for same theme
-    TurnTime = 999999999
+    TurnTime = MAX_TURN_TIME
     CaseFreq = 0
     Explosives = 0
     MineDudPercent = 0
@@ -113,7 +112,7 @@ end
 
 function onGearDelete(gear)
     if gear == MrMine then
-        AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), 0xFFFFFFFF, capgrpMessage2)
+        AddCaption(loc("Once you set off the proximity trigger, Mr. Mine is not your friend"), capcolDefault, capgrpMessage2)
         MrMine = nil
     elseif GetGearType(gear) == gtCake then
         Cake = nil
@@ -128,9 +127,14 @@ end
 function onGameStart()
     --SetClanColor(ClansCount-1, 0x0000ffff) appears to be broken
     SendHealthStatsOff()
+    local recordInfo = ""
+    if isSinglePlayer then
+        recordInfo = getReadableChallengeRecord("Highscore")
+    end
     ShowMission(loc("Climb Home"),
                 loc("Challenge"),
-                loc("You are far from home, and the water is rising, climb up as high as you can!|Your score will be based on your height."),
+                loc("You are far from home, and the water is rising, climb up as high as you can!|Your score will be based on your height.")
+                .. "|" .. recordInfo,
                 -amRope, 0)
     local x = 1818
     for h,i in pairs(HH) do
@@ -184,7 +188,6 @@ function onNewTurn()
     SetWaterLine(32768)
     YouWon = false
     YouLost = false
-    tauntNoo = false
     takeASeat = false
     recordBroken = false
     currTeam = GetHogTeamName(CurrentHedgehog)
@@ -272,16 +275,13 @@ function onGameTick20()
     --end
 
     for s,i in pairs(Stars) do
-        g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(s)
-        if g1 > WaterLine + 500 then
+        local _, Y = GetVisualGearValues(s)
+        if Y ~= nil and Y > WaterLine + 500 then
             DeleteVisualGear(s)
             Stars[s] = nil
+        elseif Y == nil then
+            Stars[s] = nil
         end
-        --else  wasn't really visible, pointless.
-        --    g5 = g5+1
-        --    if g5 > 360 then g5 = 0 end
-        --    SetVisualGearValues(s, g1, g2, g3, g4, g5, g6, g7, g8, g9, g10)
-        --end
     end
 
     -- This will be executed if a player reached home in multiplayer
@@ -351,7 +351,7 @@ function onGameTick20()
 
     if CurrentHedgehog ~= nil and TurnTimeLeft > 0 and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then
         if MaxHeight < delayHeight and
-           TurnTimeLeft<(999999999-delayTime) and 
+           TurnTimeLeft<(MAX_TURN_TIME-delayTime) and
             MaxHeight > 286 and WaterLine > 286 then
             if waterAccel ~= 0 then
                 SetWaterLine(WaterLine-(baseWaterSpeed+div(getActualHeight(MaxHeight)*100,waterAccel)))
@@ -360,19 +360,21 @@ function onGameTick20()
             end
         end
         if y > 0 and y < 30000 and MaxHeight > 286 and math.random(y) < 500 then
-            local s = AddVisualGear(0, 0, vgtStraightShot, 0, true)
-            local c = div(250000,y)
-            if c > 255 then c = 255 end
-            c = c * 0x10000 + 0xFF0000FF
-            SetVisualGearValues(s,
-                math.random(2048), -5000, 0, -1-(1/y*1000), 
-                math.random(360),
-                0,
-                999999999, -- frameticks
-                sprStar, -- star
-                0, c)
-                --,  0xFFCC00FF) -- could be fun to make colour shift as you rise...
-            Stars[s] = 1
+            local s = AddVisualGear(0, 0, vgtStraightShot, 0, false)
+            if s then
+                local c = div(250000,y)
+                if c > 255 then c = 255 end
+                c = c * 0x10000 + 0xFF0000FF
+                SetVisualGearValues(s,
+                    math.random(2048), -5000, 0, -1-(1/y*1000),
+                    math.random(360),
+                    0,
+                    999999999, -- frameticks
+                    sprStar, -- star
+                    0, c)
+                    --,  0xFFCC00FF) -- could be fun to make colour shift as you rise...
+                Stars[s] = 1
+            end
         end
 
         local vx, vy = GetGearVelocity(CurrentHedgehog)
@@ -420,7 +422,8 @@ function onGameTick20()
             end
         end
 
-        local finishTime = (GameTime-startTime)/1000
+        local rawFinishTime = GameTime-startTime
+        local finishTime = rawFinishTime/1000
         local roundedFinishTime = math.ceil(math.floor(finishTime+0.5))
         if isSinglePlayer then
             if distanceFromWater < 0 and not YouLost and not YouWon then
@@ -429,21 +432,24 @@ function onGameTick20()
             end
             -- FIXME: Hog is also in winning box if it just walks into the chair from the left, touching it. Intentional?
             if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
-                AddCaption(loc("Victory!"), 0xFFFFFFFF, capgrpGameState)
+                SaveMissionVar("Won", "true")
+                AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
                 ShowMission(loc("Climb Home"),
                             loc("Made it!"),
                             string.format(loc("Ahhh, home, sweet home. Made it in %d seconds."), roundedFinishTime),
                             -amRope, 0)
                 PlaySound(sndVictory,CurrentHedgehog)
-                SetState(CurrentHedgehog, gstWinner)
                 SendStat(siGameResult, loc("You have beaten the challenge!"))
                 SendStat(siGraphTitle, loc("Your height over time"))
                 SendStat(siCustomAchievement, string.format(loc("%s reached home in %.3f seconds. Congratulations!"), GetHogName(CurrentHedgehog), finishTime))
+                updateChallengeRecord("TimeRecord", rawFinishTime, false)
                 SendStat(siCustomAchievement, string.format(loc("%s bravely climbed up to a dizzy height of %d to reach home."), GetHogName(CurrentHedgehog), getActualHeight(RecordHeight)))
-                SendStat(siPointType, loc("seconds"))
-                SendStat(siPlayerKills, tostring(roundedFinishTime), GetHogTeamName(CurrentHedgehog))
+                updateChallengeRecord("Highscore", getActualHeight(RecordHeight))
+                SendStat(siPointType, "!TIME")
+                SendStat(siPlayerKills, tostring(rawFinishTime), GetHogTeamName(CurrentHedgehog))
 
                 EndGame()
+                SetState(CurrentHedgehog, gstWinner)
                 onAchievementsDeclaration()
                 YouWon = true
             end
@@ -464,7 +470,7 @@ function onGameTick20()
                     (not MrMine or (MrMine and band(GetState(MrMine), gstAttacking) == 0)) then
                 -- Player managed to reach home in multiplayer.
                 -- Stop hog, disable controls, celebrate victory and continue the game after 4 seconds.
-                AddCaption(string.format(loc("%s climbed home in %d seconds!"), GetHogName(CurrentHedgehog), roundedFinishTime), 0xFFFFFFFF, capgrpGameState)
+                AddCaption(string.format(loc("%s climbed home in %d seconds!"), GetHogName(CurrentHedgehog), roundedFinishTime), capcolDefault, capgrpGameState)
                 SendStat(siCustomAchievement, string.format(loc("%s (%s) reached home in %.3f seconds."), GetHogName(CurrentHedgehog), GetHogTeamName(CurrentHedgehog), finishTime))
                 makeMultiPlayerWinnerStat(CurrentHedgehog)
                 PlaySound(sndVictory, CurrentHedgehog)
@@ -495,17 +501,6 @@ function onGameTick20()
                 takeASeat = true
             end
     
-            -- play taunts
-            if not YouWon and not YouLost then
-                local nooDistance = 500
-                if ((x < -nooDistance and vx < 0) or (x > LAND_WIDTH+nooDistance and vx > 0)) then
-                    if (tauntNoo == false and distanceFromWater > 80) then
-                        PlaySound(sndNooo, CurrentHedgehog)
-                        tauntNoo = true
-                    end
-                end
-            end
-
             if addCake and CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil then 
                 -- doing this just after the start the first time to take advantage of randomness sources
                 -- Pick a clear y to start with
@@ -537,7 +532,6 @@ function onGameTick20()
                     hTagHeight = MaxHeight
                     if hTag ~= nil then DeleteVisualGear(hTag) end
                     hTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                    local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
                     local score = 32640-hTagHeight
                     -- snagged from space invasion
                     SetVisualGearValues (
@@ -548,7 +542,7 @@ function onGameTick20()
                             0,          --dy
                             1.1,        --zoom
                             1,          --~= 0 means align to screen
-                            g7,         --frameticks
+                            nil,        --frameticks
             -- 116px off bottom for lowest rock, 286 or so off top for position of chair
             -- 32650 is "0"
                             score,    --value
@@ -572,7 +566,6 @@ function onGameTick20()
                     if not isSinglePlayer then
                         if rTag ~= nil then DeleteVisualGear(rTag) end
                         rTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                        local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
                         -- snagged from space invasion
                         SetVisualGearValues (
                             rTag,        --id
@@ -582,7 +575,7 @@ function onGameTick20()
                             0,          --dy
                             1.1,        --zoom
                             1,          --~= 0 means align to screen
-                            g7,         --frameticks
+                            nil,        --frameticks
             -- 116px off bottom for lowest rock, 286 or so off top for position of chair
             -- 32650 is "0"
                             getActualHeight(RecordHeight),    --value
@@ -595,7 +588,6 @@ function onGameTick20()
             if MaxHeight > 286 then
                 if tTag ~= nil then DeleteVisualGear(tTag) end
                 tTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tTag)
                 -- snagged from space invasion
                 SetVisualGearValues (
                     tTag,        --id
@@ -605,7 +597,7 @@ function onGameTick20()
                     0,          --dy
                     1.1,        --zoom
                     1,          --~= 0 means align to screen
-                    g7,         --frameticks
+                    nil,        --frameticks
                     (GameTime-startTime)/1000,    --value
                     99999999999,--timer
                     0xffffffff
@@ -667,7 +659,7 @@ end
 
 function makeSinglePlayerLoserStats()
     local actualHeight = getActualHeight(RecordHeight)
-    SendStat(siGameResult, loc("You lose!"))
+    SendStat(siGameResult, loc("Challenge over!"))
     SendStat(siGraphTitle, loc("Your height over time"))
     local text
     if actualHeight > 30000 then text = loc("%s was damn close to home.")
@@ -686,7 +678,9 @@ function makeSinglePlayerLoserStats()
     else
         SendStat(siCustomAchievement, string.format(text, RecordHeightHogName))
     end
-    SendStat(siPointType, loc("points"))
+
+    updateChallengeRecord("Highscore", actualHeight)
+    SendStat(siPointType, "!POINTS")
     SendStat(siPlayerKills, actualHeight, GetHogTeamName(CurrentHedgehog))
     EndGame()
     onAchievementsDeclaration()
@@ -742,7 +736,7 @@ function makeFinalMultiPlayerStats()
     end
     checkAwards()
     for i = #ranking, 1, -1 do
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
         SendStat(siPlayerKills, tostring(ranking[i].score), ranking[i].name)
     end
 end

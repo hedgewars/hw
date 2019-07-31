@@ -15,6 +15,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 local hhs = {}
 local hog_greenhorn, hog_cappy
@@ -23,6 +24,7 @@ local switcherGear
 local tookDamage = false
 local switchTextDelay = -1
 local missionPanelConfirmed = false
+local missionPanelConfirmedTimer = 0
 local turnStarted = false
 
 local map = {
@@ -102,29 +104,30 @@ function onGameInit()
 	Seed = 0
 	Theme = "Brick"
 	MapGen = mgDrawn
-	TurnTime = 9999000
+	TurnTime = MAX_TURN_TIME
 	Explosives = 0
 	MinesNum = 0
 	CaseFreq = 0
 	WaterRise = 0
 	HealthDecrease = 0
+	HealthCaseAmount = 5
 
 	-- DRAW MAP --
 	drawMap()
 
 	------ HOG LIST ------
-	AddTeam(loc("Training Team"), 0xFF0204, "deadhog", "SteelTower", "Default", "hedgewars")
+	AddMissionTeam(-1)
 	
-	hhs[1] = AddHog(loc("Greenhorn"), 0, 100, "NoHat")
+	hhs[1] = AddMissionHog(100)
 	SetGearPosition(hhs[1], 404, 1714)
 	SetEffect(hhs[1], heResurrectable, 1)
 
-	hhs[2] = AddHog(loc("Rhombus"), 0, 100, "NoHat")
+	hhs[2] = AddMissionHog(100)
 	SetGearPosition(hhs[2], 620, 1538)
 	SetEffect(hhs[2], heResurrectable, 1)
 	HogTurnLeft(hhs[2], true)
 
-	hhs[3] = AddHog(loc("Trapped"), 0, 100, "NoHat")
+	hhs[3] = AddMissionHog(100)
 	SetGearPosition(hhs[3], 1573, 1824)
 	SetEffect(hhs[3], heResurrectable, 1)
 	
@@ -133,103 +136,114 @@ function onGameInit()
 	SetEffect(hhs[4], heResurrectable, 1)
 	HogTurnLeft(hhs[4], true)
 	
-	hhs[5] = AddHog(loc("Ice"), 0, 100, "NoHat")
+	hhs[5] = AddMissionHog(100)
 	SetGearPosition(hhs[5], 1813, 1285)
 	SetEffect(hhs[5], heResurrectable, 1)
 
 	hog_greenhorn = hhs[1]
 	hog_cappy = hhs[4]
+
+	for i=1,#hhs do
+		if hhs[i] ~= hog_cappy then
+			if GetHogName(hhs[i]) == loc("Cappy") then
+				SetHogName(hhs[i], loc("Greenhorn"))
+			end
+			if GetHogHat(hhs[i]) == "cap_red" then
+				SetHogHat(hhs[i], "NoHat")
+			end
+		end
+	end
 	
 	SendHealthStatsOff()
+	SendRankingStatsOff()
 end
 
 local function LoadGearData()
 
 	--BEGIN CORE DATA--
 
-	local iceColor = 0x00FAFAFA
-
 	------ GIRDER LIST ------
-	PlaceSprite(292, 1488, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(454, 1731, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(467, 1653, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(611, 1702, sprAmGirder, 5, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(426, 1558, sprAmGirder, 7, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(555, 1558, sprAmGirder, 5, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(649, 1600, sprAmGirder, 7, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1072, 1809, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1040, 1831, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1124, 1805, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1175, 1772, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1226, 1738, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1275, 1705, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1325, 1683, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1368, 1560, sprAmGirder, 3, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1390, 1665, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1481, 1716, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1625, 1652, sprAmGirder, 7, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(1729, 1596, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1762, 1545, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1563, 1536, sprAmGirder, 5, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(1506, 1392, sprAmGirder, 6, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(1591, 1450, sprAmGirder, 3, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(1650, 1463, sprAmGirder, 1, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(1766, 1492, sprAmGirder, 4, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(1925, 1492, sprAmGirder, 4, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(2114, 1428, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2187, 1435, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2135, 1478, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2284, 1650, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2005, 1724, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1885, 1562, sprAmGirder, 7, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2252, 1700, sprAmGirder, 2, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(2308, 1803, sprAmGirder, 5, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(2394, 1893, sprAmGirder, 1, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(605, 1761, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1813, 1312, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1742, 1260, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1812, 1210, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1884, 1260, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1545, 1811, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1577, 1761, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1610, 1811, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1440, 1531, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2082, 1337, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2187, 1273, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2097, 1246, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(593, 1465, sprAmGirder, 7, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(684, 1505, sprAmGirder, 5, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2046, 1492, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2064, 1442, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1849, 1426, sprAmGirder, 4, iceColor, nil, nil, nil, lfIce)
-	PlaceSprite(3051, 1957, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(3101, 1956, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(3150, 1954, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(3233, 1962, sprAmGirder, 5, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(3322, 2004, sprAmGirder, 3, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(3391, 2001, sprAmGirder, 1, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(3483, 1982, sprAmGirder, 7, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2770, 1980, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2886, 2005, sprAmGirder, 1, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2698, 1891, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2843, 1891, sprAmGirder, 6, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2834, 1771, sprAmGirder, 5, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2706, 1771, sprAmGirder, 7, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2768, 1818, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(2768, 1899, sprAmGirder, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(1760, 1393, sprAmGirder, 2, 0xFFFFFFFF, nil, nil, nil, lfNormal)
-	PlaceSprite(516, 1795, sprAmGirder, 4, 0xFFFFFFFF, nil, nil, nil, lfNormal)
+	PlaceSprite(292, 1488, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(454, 1731, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(467, 1653, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(611, 1702, sprAmGirder, 5, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(426, 1558, sprAmGirder, 7, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(555, 1558, sprAmGirder, 5, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(649, 1600, sprAmGirder, 7, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1072, 1809, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1040, 1831, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1124, 1805, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1175, 1772, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1226, 1738, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1275, 1705, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1325, 1700, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1342, 1638, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1368, 1560, sprAmGirder, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1390, 1665, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1481, 1716, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1625, 1652, sprAmGirder, 7, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(1729, 1596, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1762, 1545, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1563, 1536, sprAmGirder, 5, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(1506, 1392, sprAmGirder, 6, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(1591, 1450, sprAmGirder, 3, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(1650, 1463, sprAmGirder, 1, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(1766, 1492, sprAmGirder, 4, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(1925, 1492, sprAmGirder, 4, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(2114, 1428, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2187, 1435, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2135, 1478, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2284, 1650, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2005, 1724, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1885, 1562, sprAmGirder, 7, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2252, 1700, sprAmGirder, 2, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(2308, 1803, sprAmGirder, 5, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(2394, 1893, sprAmGirder, 1, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(605, 1761, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1813, 1312, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1742, 1260, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1812, 1210, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1884, 1260, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1545, 1811, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1577, 1761, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1610, 1811, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1440, 1511, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2082, 1337, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2187, 1273, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2097, 1246, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(593, 1465, sprAmGirder, 7, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(684, 1505, sprAmGirder, 5, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2046, 1492, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2064, 1442, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1849, 1426, sprAmGirder, 4, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
+	PlaceSprite(3051, 1957, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(3101, 1956, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(3150, 1954, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(3233, 1962, sprAmGirder, 5, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(3322, 2004, sprAmGirder, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(3391, 2001, sprAmGirder, 1, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(3483, 1982, sprAmGirder, 7, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2770, 1980, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2886, 2005, sprAmGirder, 1, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2698, 1891, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2843, 1891, sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2834, 1771, sprAmGirder, 5, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2706, 1771, sprAmGirder, 7, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2768, 1818, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(2768, 1899, sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(1760, 1393, sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
+	PlaceSprite(516, 1795, sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 
 	------ RUBBER LIST ------
-	PlaceSprite(2151, 1659, sprAmRubber, 3, 0xFFFFFFFF, nil, nil, nil, lfBouncy)
-	PlaceSprite(2399, 1698, sprAmRubber, 3, 0xFFFFFFFF, nil, nil, nil, lfBouncy)
-	PlaceSprite(2467, 1553, sprAmRubber, 2, 0xFFFFFFFF, nil, nil, nil, lfBouncy)
-	PlaceSprite(2279, 1497, sprAmRubber, 0, 0xFFFFFFFF, nil, nil, nil, lfBouncy)
-	PlaceSprite(2414, 1452, sprAmRubber, 0, 0xFFFFFFFF, nil, nil, nil, lfBouncy)
-	PlaceSprite(1860, 1687, sprAmRubber, 1, 0xFFFFFFFF, nil, nil, nil, lfBouncy)
+	PlaceSprite(2151, 1659, sprAmRubber, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
+	PlaceSprite(2399, 1698, sprAmRubber, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
+	PlaceSprite(2467, 1553, sprAmRubber, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
+	PlaceSprite(2279, 1497, sprAmRubber, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
+	PlaceSprite(2414, 1452, sprAmRubber, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
+	PlaceSprite(1860, 1687, sprAmRubber, 1, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 
 	------ SPRITE LIST ------
-	PlaceSprite(1297, 1732, sprTargetBee, 0, 0xFFFFFFFF, nil, nil, nil, lfNormal)
+	PlaceSprite(1297, 1732, sprTargetBee, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 
 	------ CRATE LIST ------
 	crates[1] = SpawnHealthCrate(401, 1850)			-- Jumping
@@ -238,23 +252,30 @@ local function LoadGearData()
 	crates[4] = SpawnHealthCrate(889, 1829)			-- Back Jumping
 	crates[5] = SpawnHealthCrate(1486, 1694)		-- Walking on Ice
 	crates[6] = SpawnHealthCrate(2033, 1470)		-- Walking on Ice completed
-	crates[7] = SpawnHealthCrate(1297, 1683)		-- Back Jumping 2
+	crates[7] = SpawnHealthCrate(1198, 1750)		-- Back Jumping 2
 	crates[8] = SpawnSupplyCrate(1851, 1402, amSwitch, 100)	-- Switch Hedgehog
 	crates[9] = SpawnHealthCrate(564, 1772)			-- Health
-	crates[10] = SpawnHealthCrate(2290, 1622)		-- Turning Around
+	-- FIXME: Not available in touch because no “precise” button
+	if INTERFACE ~= "touch" then
+		crates[10] = SpawnHealthCrate(2290, 1622)		-- Turning Around
+	end
 end
 
 local function victory()
-	ShowMission(loc("Basic Movement Training"), loc("Training complete!"),loc("Congratulations! You have completed the obstacle course!"), 0, 0)
+	SaveMissionVar("Won", "true")
+	ShowMission(loc("Basic Movement Training"), loc("Training complete!"),loc("Congratulations! You have completed the obstacle course!"), 4, 0)
 	SendStat(siGameResult, loc("You have completed the Basic Movement Training!"))
 	SendStat(siCustomAchievement, loc("Congratulations!"))
-	SendStat(siPlayerKills, "0", loc("Training Team"))
+	SendStat(siCustomAchievement, loc("Return to the training menu by pressing the “Go back” button."))
 	PlaySound(sndVictory, CurrentHedgehog)
 	-- Disable controls, end game
 	SetInputMask(0)
 	SetWeapon(amNothing)
 	SetGearMessage(CurrentHedgehog, band(GetGearMessage(CurrentHedgehog), bnot(gmAllStoppable)))
 	EndGame()
+	for i=1,#hhs do
+		SetState(hhs[i], gstWinner)
+	end
 end
 
 local function switchHedgehogText()
@@ -264,11 +285,17 @@ local function switchHedgehogText()
 		loc("To finish hedgehog selection, just do anything|with him, like walking."),
 		2, 20000)
 	else
+		local ctrl = ""
+		if INTERFACE == "desktop" then
+			ctrl = loc("Hit the “Switch Hedgehog” key until you have|selected Cappy, the hedgehog with the cap!").."|"..
+			loc("Switch hedgehog: [Tabulator]")
+		else
+			ctrl = loc("Tap the “rotating arrow” button on the left|until you have selected Cappy, the hedgehog with the cap!")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (2/3)"),
 		loc("You have activated Switch Hedgehog!").."|"..
 		loc("The spinning arrows above your hedgehog show|which hedgehog is selected right now.").."|"..
-		loc("Hit the “Switch Hedgehog” key until you have|selected Cappy, the hedgehog with the cap!").."|"..
-		loc("Switch hedgehog: [Tabulator]"), 2, 20000)
+		ctrl, 2, 20000)
 	end
 end
 
@@ -280,6 +307,7 @@ function onGearAdd(gear)
 end
 
 function onGearDelete(gear)
+	local ctrl = ""
 	-- Switching done
 	if GetGearType(gear) == gtSwitcher then
 		switcherGear = nil
@@ -289,57 +317,103 @@ function onGearDelete(gear)
 			loc("Collect the remaining crates to complete the training."),
 			2, 0)
 		else
+			if INTERFACE == "desktop" then
+				ctrl = loc("Open ammo menu: [Right click]").."|"..
+				loc("Attack: [Space]")
+			elseif INTERFACE == "touch" then
+				ctrl = loc("Open ammo menu: Tap the [Suitcase]").."|"..
+				loc("Attack: Tap the [Bomb]")
+			end
 			ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (Failed!)"),
 			loc("Oops! You have selected the wrong hedgehog! Just try again.").."|"..
 			loc("Select “Switch Hedgehog” from the ammo menu and|hit the “Attack” key to proceed.").."|"..
-			loc("Open ammo menu: [Right click]").."|"..
-			loc("Attack: [Space]"), 2, 0)
+			ctrl, 2, 0)
 		end
 
 	-- Crate collected (or destroyed, but this should not be possible)
 	elseif gear == crates[1] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Long Jump: [Enter]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Long Jump: Tap the [Curvy Arrow] button for long")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Jumping"),
 		loc("Get the next crate by jumping over the abyss.").."|"..
 		loc("Careful, hedgehogs can't swim!").."|"..
-		loc("Long Jump: [Enter]"), 2, 5000)
+		ctrl, 2, 5000)
 	elseif gear == crates[2] then
 		victory()
 	elseif gear == crates[4] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("High Jump: Tap the [Curvy Arrow] shortly").."|"..loc("Back Jump: Double-tap the [Curvy Arrow]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (1/2)"),
 		loc("For the next crate, you have to do back jumps.") .. "|" ..
-		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 5000)
+		loc("To reach higher ground, walk to a ledge, look to the left, then do a back jump.") .. "|" ..
+		ctrl, 2, 6600)
 	elseif gear == crates[7] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("High Jump: Tap the [Curvy Arrow] shortly").."|"..loc("Back Jump: Double-tap the [Curvy Arrow]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Back Jumping (2/2)"),
-		loc("To get over the next obstacle, you need to perform your back jump precisely.").."|"..
-		loc("Hint: Hit “High Jump” again when you're close to the highest point of a high jump.").."|"..
-		loc("Hint: Don't stand too close at the wall before you jump!").."|"..
-		loc("Hint: Use the flower for orientation.").."|"..
-		loc("High Jump: [Backspace]").."|"..loc("Back Jump: [Backspace] ×2"), 2, 15000)
+		loc("To get over the next obstacles, keep some distance from the wall before you back jump.").."|"..
+		loc("Hint: To jump higher, wait a bit before you hit “High Jump” a second time.").."|"..
+		ctrl, 2, 15000)
 	elseif gear == crates[5] then
+		-- FIXME: Touch doesn't have precise aim yet :(
+		if INTERFACE == "desktop" then
+			ctrl = "|" ..
+			loc("You can also hold down the key for “Precise Aim” to prevent slipping.") .. "|" ..
+			loc("Precise Aim: [Left Shift]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Walking on Ice"),
 		loc("These girders are slippery, like ice.").."|"..
 		loc("And you need to move to the top!").."|"..
-		loc("If you don't want to slip away, you have to keep moving!").."|"..
-		loc("You can also hold down the key for “Precise Aim” to prevent slipping.").."|"..
-		loc("Precise Aim: [Left Shift]"), 2, 9000)
+		loc("If you don't want to slip away, you have to keep moving!")..
+		ctrl, 2, 9000)
 	elseif gear == crates[6] then
+		-- FIXME: Touch doesn't have precise aim yet :(
+		if INTERFACE == "desktop" then
+			ctrl = "|" .. loc("Remember: Hold down [Left Shift] to prevent slipping")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("A mysterious Box"),
-		loc("The next crate is an utility crate.").."|"..loc("What's in the box, you ask? Let's find out!").."|"..
-		loc("Remember: Hold down [Left Shift] to prevent slipping"), 2, 6000)
+		loc("The next crate is an utility crate.").."|"..loc("What's in the box, you ask? Let's find out!")..
+		ctrl, 2, 6000)
 	elseif gear == crates[8] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Open ammo menu: [Right click]").."|"..
+			loc("Attack: [Space]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]").."|"..
+			loc("Attack: Tap the [Bomb]")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Switch Hedgehog (1/3)"),
 		loc("You have collected the “Switch Hedgehog” utility!").."|"..
 		loc("This allows to select any hedgehog in your team!").."|"..
 		loc("Select “Switch Hedgehog” from the ammo menu and|hit the “Attack” key.").."|"..
-		loc("Open ammo menu: [Right click]").."|"..
-		loc("Attack: [Space]"), 2, 30000)
+		ctrl, 2, 30000)
 	elseif gear == crates[3] then
 		ShowMission(loc("Basic Movement Training"), loc("Rubber"), loc("As you probably noticed, these rubber bands|are VERY elastic. Hedgehogs and many other|things will bounce off without taking any damage.").."|"..
 		loc("Now try to get out of this bounce house|and take the next crate."), 2, 8000)
 	elseif gear == crates[9] then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Look around: [Mouse movement]") .. "|" ..
+			loc("Zoom: [Rotate mouse wheel]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Look around: [Tap or swipe on the screen]") .. "|" ..
+			-- multi-touch gesture
+			loc("Zoom: [Pinch] with 2 fingers")
+		end
 		ShowMission(loc("Basic Movement Training"), loc("Health"), loc("You just got yourself some extra health.|The more health your hedgehogs have, the better!").."|"..
-		loc("Now go to the next crate."), 2, 900000)
+		loc("The health of your current hedgehog|is shown at the top right corner.").."|"..
+		loc("Now go to the next crate.").."|"..
+		ctrl, 2, 11500)
 	elseif gear == crates[10] then
+		-- FIXME: This crate is unused in touch atm
 		ShowMission(loc("Basic Movement Training"), loc("Turning Around"),
 		loc("By the way, you can turn around without walking|by holding down Precise when you hit a walk control.").."|"..
 		loc("Get the final crate to the right to complete the training.").."|"..
@@ -349,7 +423,7 @@ function onGearDelete(gear)
 end
 
 function onGearDamage(gear)
-	if GetGearType(gear) == gtHedgehog and tookDamage == false then
+	if GetGearType(gear) == gtHedgehog and tookDamage == false and GetX(gear) > 1362 then
 		ShowMission(loc("Basic Movement Training"), loc("Fall Damage"), loc("Ouch! You just took fall damage.").."|"..
 		loc("Better get yourself another health crate to heal your wounds."), 2, 5000)
 		tookDamage = true
@@ -365,19 +439,29 @@ function onSwitch()
 end
 
 local function firstMission()
-	-- This part is CRITICALLY important for all future missions.
-	-- Because the player must know how to show the current mission texts again.
+	-- Here we teach player must know how to show the current mission texts again.
 	-- We force the player to hit Attack before the actual training begins.
+	-- Later, the mission panel key is perma-shown as caption.
+	local ctrl = ""
+	if INTERFACE == "desktop" then
+		ctrl = loc("IMPORTANT: To see the mission panel again, hold the mission panel key.").."| |"..
+		loc("Note: This basic training assumes default controls.").."|"..
+		loc("Mission panel: [M]").."|"..
+		loc("Quit: [Esc]").."|"..
+		loc("Pause: [P]").."| |"..
+		loc("To begin with the training, hit the attack key!").."|"..
+		loc("Attack: [Space]")
+	elseif INTERFACE == "touch" then
+		ctrl = loc("IMPORTANT: To see the mission panel again, pause the game.").."| |"..
+		loc("Pause: Tap the [Pause] button").."| |"..
+		loc("To begin with the training, tap the attack button!").."|"..
+		loc("Attack: Tap the [Bomb]")
+	end
 	ShowMission(loc("Basic Movement Training"), loc("Mission Panel"),
 	loc("This is the mission panel.").."|"..
 	loc("Here you will find the current mission instructions.").."|"..
 	loc("Normally, the mission panel disappears after a few seconds.").."|"..
-	loc("IMPORTANT: To see the mission panel again, use the quit or pause key.").."| |"..
-	loc("Note: This basic training assumes default controls.").."|"..
-	loc("Quit: [Esc]").."|"..
-	loc("Pause: [P]").."| |"..
-	loc("To begin with the training, hit the attack key!").."|"..
-	loc("Attack: [Space]"), 2, 900000)
+	ctrl, 2, 900000, true)
 
 	-- TODO: This and other training missions are currently hardcoding control names.
 	-- This should be fixed eventually.
@@ -394,9 +478,22 @@ function onGameTick20()
 		-- Forces the first mission panel to be displayed without time limit
 		firstMission()
 	end
+	if missionPanelConfirmed then
+		missionPanelConfirmedTimer = missionPanelConfirmedTimer + 20
+		--[[ After confirming the initial mission panel,
+		show the mission panel key as permanent caption
+		so the player can't overlook or forget it. ]]
+		if missionPanelConfirmedTimer > 7000 then
+			if INTERFACE == "desktop" then
+				AddCaption(loc("Press [M] to see the mission texts"), capcolDefault, capgrpMessage2)
+			elseif INTERFACE == "touch" then
+				AddCaption(loc("Tap [Pause] to see the mission texts"), capcolDefault, capgrpMessage2)
+			end
+		end
+	end
 end
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	AddCaption(loc("Your hedgehog has been revived!"))
 	if gear == hog_cappy then
 		SetGearPosition(gear, 404, 1714)
@@ -405,6 +502,9 @@ function onGearResurrect(gear)
 	else
 		-- Generic teleport to Rhombus' cage
 		SetGearPosition(gear, 619, 1559)
+	end
+	if vGear then
+		SetVisualGearValues(vGear, GetX(gear), GetY(gear))
 	end
 	FollowGear(gear)
 end
@@ -439,7 +539,7 @@ function onGameStart()
 	SetInputMask(0)
 	SetSoundMask(sndYesSir, true)
 	LoadGearData()
-	ShowMission(loc("Basic Movement Training"), loc("Basic Training"), loc("Complete the obstacle course."), 1, 0)
+	ShowMission(loc("Basic Movement Training"), loc("Basic Training"), loc("Complete the obstacle course."), 10, 0)
 	FollowGear(hog_greenhorn)
 end
 

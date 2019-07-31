@@ -53,6 +53,9 @@ class FrameTeams : public QFrame
         void addTeam(HWTeam team, bool willPlay);
         void removeTeam(HWTeam team);
 
+    protected:
+        virtual void resizeEvent(QResizeEvent * event);
+
     private:
         int currentColor;
 

@@ -23,25 +23,25 @@
 
 @protocol MapPreviewViewDelegate <NSObject>
 
--(void) turnOnWidgets;
--(void) setMaxLabelText:(NSString *)string;
--(NSDictionary *)getDataForEngine;
+- (void)turnOnWidgets;
+- (void)setMaxLabelText:(NSString *)string;
+- (NSDictionary *)getDataForEngine;
 
 @end
 
 @interface MapPreviewButtonView : UIButton {
-    id<MapPreviewViewDelegate> delegate;
+    id<MapPreviewViewDelegate> __weak delegate;
     TCPsocket sd, csd;
     NSInteger maxHogs;
 }
 
-@property (nonatomic,assign) id<MapPreviewViewDelegate> delegate;
+@property (nonatomic,weak) id<MapPreviewViewDelegate> delegate;
 
--(void) setImageRounded:(UIImage *)image forState:(UIControlState) controlState;
--(void) setImageRounded:(UIImage *)image;
--(void) updatePreviewWithSeed:(NSString *)seed;
--(void) updatePreviewWithFile:(NSString *)filePath;
--(void) turnOnWidgets;
--(NSDictionary *)getDataForEngine;
+- (void)setImageRounded:(UIImage *)image forState:(UIControlState)controlState;
+- (void)setImageRounded:(UIImage *)image;
+- (void)updatePreviewWithSeed:(NSString *)seed;
+- (void)updatePreviewWithFile:(NSString *)filePath;
+- (void)turnOnWidgets;
+- (NSDictionary *)getDataForEngine;
 
 @end

@@ -130,6 +130,24 @@ START_TEST (test_trunc)
           fail_unless(fpcrtl_trunc(-123.456) == -123, "trunc(-123.456)");
           fail_unless(fpcrtl_trunc(12.3456) == 12, "trunc(12.3456)");
           fail_unless(fpcrtl_trunc(-12.3456) == -12, "trunc(-12.3456)");
+          fail_unless(fpcrtl_trunc(0.3) == 0, "trunc(0.3)");
+          fail_unless(fpcrtl_trunc(0.5) == 0, "trunc(0.5)");
+          fail_unless(fpcrtl_trunc(99.9999999) == 99, "trunc(99.9999999)");
+          fail_unless(fpcrtl_trunc(0x01000000.0) == 0x01000000, "trunc(0x01000000.0)");
+          fail_unless(fpcrtl_trunc(0x01000001.0) == 0x01000001, "trunc(0x01000001.0)");
+          fail_unless(fpcrtl_trunc(0x02000000.0) == 0x02000000, "trunc(0x02000000.0)");
+          fail_unless(fpcrtl_trunc(0x04000000.0) == 0x04000000, "trunc(0x04000000.0)");
+          fail_unless(fpcrtl_trunc(0x08000000.0) == 0x08000000, "trunc(0x08000000.0)");
+          fail_unless(fpcrtl_trunc(0x10000000.0) == 0x10000000, "trunc(0x10000000.0)");
+          fail_unless(fpcrtl_trunc(0x10000001.0) == 0x10000001, "trunc(0x10000001.0)");
+          fail_unless(fpcrtl_trunc(0x20000000.0) == 0x20000000, "trunc(0x20000000.0)");
+          fail_unless(fpcrtl_trunc(0x40000000.0) == 0x40000000, "trunc(0x40000000.0)");
+          fail_unless(fpcrtl_trunc(0x80000000.0) == 0x80000000, "trunc(0x80000000.0)");
+          fail_unless(fpcrtl_trunc(0xF0000000.0) == 0xF0000000, "trunc(0xF0000000.0)");
+          fail_unless(fpcrtl_trunc(0xF0000001.0) == 0xF0000001, "trunc(0xF0000001.0)");
+          fail_unless(fpcrtl_trunc(0x01010101.0) == 0x01010101, "trunc(0x01010101.0)");
+          fail_unless(fpcrtl_trunc(0xFFFFFFFF.0) == 0xFFFFFFFF, "trunc(0xFFFFFFFF.0)");
+          fail_unless(fpcrtl_trunc(0x8943FE39.0) == 0x8943FE39, "trunc(0x01000000.0)");
     }
 END_TEST
 

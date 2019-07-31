@@ -45,6 +45,37 @@ endforeach(l)
 list(APPEND locsout ${firstline} "\n}\\;\n")
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h ${locsout})
 
+
+# Credits localization
+file(GLOB CreditsCSV ${CMAKE_SOURCE_DIR}/QTfrontend/res/credits.csv)
+foreach(csvfile ${CreditsCSV})
+    # Load credits.csv
+    file(READ ${csvfile} csv)
+
+    # Match first line of CSV file
+    string(REGEX MATCH "(E|S|U),\"[^\n\"]+\"" loc_top ${csv})
+    string(REGEX REPLACE "(E|S|U),\"([^\n\"]+)\"" "\nQT_TRANSLATE_NOOP(\"credits\", \"\\2\")" s ${loc_top})
+    list(APPEND csvlocs ${s})
+
+    # Match remaining lines of CSV file
+    string(REGEX MATCHALL "\n(E|S|U),\"[^\n\"]+\"" locs ${csv})
+    foreach(str ${locs})
+        string(REGEX REPLACE "(E|S|U),\"([^\n\"]+)\"" "QT_TRANSLATE_NOOP(\"credits\", \"\\2\")" s ${str})
+        list(APPEND csvlocs ${s})
+    endforeach(str)
+endforeach(csvfile)
+
+list(REMOVE_DUPLICATES csvlocs)
+list(GET csvlocs 0 firstline)
+list(REMOVE_AT csvlocs 0)
+set(locsout "const char * creditsMessages[] = {")
+foreach(l ${csvlocs})
+    list(APPEND locsout ${l} ",")
+endforeach(l)
+list(APPEND locsout ${firstline} "\n}\\;\n")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/creditsmessages.h ${locsout})
+
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
@@ -92,8 +123,10 @@ list(APPEND hwfr_src
     main.cpp
     team.cpp
     campaign.cpp
+    mission.cpp
     ui_hwform.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sdlkeys.cpp
     )
 
 if(MINGW)
@@ -136,7 +169,9 @@ set(hwfr_hdrs
     hwconsts.h
     sdlkeys.h
     campaign.h
+    mission.h
     ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h
+    ${CMAKE_CURRENT_BINARY_DIR}/creditsmessages.h
     )
 
 set(hwfr_rez hedgewars.qrc)
@@ -214,6 +249,13 @@ endif()
 
 if(CMAKE_CXX_COMPILER MATCHES "clang*")
     list(APPEND HW_LINK_LIBS stdc++ m)
+    if(NOT APPLE)
+        list(APPEND HW_LINK_LIBS atomic)
+    endif()
+endif()
+
+if(WIN32 AND VCPKG_TOOLCHAIN)
+    list(APPEND HW_LINK_LIBS Qt5::WinMain)
 endif()
 
 target_link_libraries(hedgewars ${HW_LINK_LIBS})

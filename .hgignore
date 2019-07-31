@@ -16,11 +16,11 @@ bin
 *.ppu
 *.*~
 *.core
-hedgewars.pro.user
 config.inc
 cmake_install.cmake
 QTfrontend/hwconsts.cpp
 QTfrontend/servermessages.h
+QTfrontend/creditsmessages.h
 CPackConfig.cmake
 CPackSourceConfig.cmake
 tools/cmake_uninstall.cmake
@@ -44,6 +44,7 @@ moc_*.cpp_parameters
 *.rej
 project_files/hwc/*.c
 project_files/hwc/*.h
+project_files/hwc/*.out
 project_files/Android-build/SDL-android-project/jni/**
 project_files/Android-build/SDL-android-project/obj
 project_files/Android-build/SDL-android-project/libs/armeabi*
@@ -82,8 +83,12 @@ arch.c
 xcuserdata
 *.mode1v3
 *.mode2v3
-gameServer2/target
-gameServer2/Cargo.lock
-gameServer2/gameServer2.iml
 .idea
 Testing/
+rust/*/target
+*.lock
+*.user
+*.iml
+build-qmlfrontend*
+.cabal-sandbox
+cabal.sandbox.config

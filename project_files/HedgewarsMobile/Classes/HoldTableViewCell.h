@@ -22,17 +22,17 @@
 
 @protocol HoldTableViewCellDelegate <NSObject>
 
--(void) holdAction:(NSString *)content onTable:(UITableView *)aTableView;
+- (void)holdAction:(NSString *)content onTable:(UITableView *)aTableView;
 
 @end
 
 @interface HoldTableViewCell : UITableViewCell {
-    id<HoldTableViewCellDelegate> delegate;
+    id<HoldTableViewCellDelegate> __weak delegate;
     NSTimeInterval time;
 }
 
-@property (nonatomic,assign) id<HoldTableViewCellDelegate> delegate;
+@property (nonatomic, weak) id<HoldTableViewCellDelegate> delegate;
 
--(void) holdAction;
+- (void)holdAction;
 
 @end

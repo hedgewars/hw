@@ -10,73 +10,116 @@
     <message>
         <source>Hedgewars %1</source>
         <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
-        <translation type="unfinished">Hedgewars %1</translation>
+        <translation>Hedgewars %1</translation>
     </message>
     <message>
         <source>Revision %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lèirmheas %1 (%2)</translation>
     </message>
     <message>
         <source>Visit our homepage: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tadhail air an làrach-lìn againn: %1</translation>
     </message>
     <message>
         <source>This program is distributed under the %1.</source>
-        <translation type="unfinished">Tha am prògram seo ’ga sgaoileadh fo cheadachas %1.</translation>
+        <translation>Tha am prògram seo ’ga sgaoileadh fo cheadachas %1.</translation>
     </message>
     <message>
         <source>GNU GPL v2</source>
         <extracomment>Short for “GNU General Public License version 2”</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>GNU GPL v2</translation>
     </message>
     <message>
         <source>Dependency versions:</source>
         <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Tionndaidhean na eisimeileachdan:</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>Credits</source>
+        <translation>Urram</translation>
+    </message>
+    <message>
+        <source>Other people</source>
+        <translation>Daoine eile</translation>
+    </message>
+    <message>
+        <source>%1 (alias %2)</source>
+        <translation>%1 (alias %2)</translation>
+    </message>
+    <message>
+        <source>%1 &amp;lt;%2&amp;gt;</source>
+        <extracomment>Part of credits. %1: Contributor name. %2: E-mail address</extracomment>
+        <translation>%1 &amp;lt;%2&amp;gt;</translation>
+    </message>
+    <message>
+        <source>%1: %2</source>
+        <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name</extracomment>
+        <translation>%1: %2</translation>
+    </message>
+    <message>
+        <source>%1: %2 &amp;lt;%3&amp;gt;</source>
+        <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address</extracomment>
+        <translation>%1: %2 &amp;lt;%3&amp;gt;</translation>
+    </message>
+    <message>
+        <source>Extended Credits</source>
+        <translation>Barrachd urraim</translation>
+    </message>
+    <message>
+        <source>An extended credits list can be found in the CREDITS text file.</source>
+        <translation>Gheibh thu liosta le barrachd urraman san fhaidhle teacsa CREDITS.</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
+        <translation>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</translation>
+    </message>
+    <message>
+        <source>Unknown Compiler: %1</source>
+        <translation>Trusaiche nach aithne dhuinn: %1</translation>
     </message>
 </context>
 <context>
@@ -126,7 +169,7 @@
     </message>
     <message>
         <source>Please, specify %1</source>
-        <translation type="vanished">Feuch an sònraidh thu %1</translation>
+        <translation type="vanished">Feuch an sònraich thu %1</translation>
     </message>
     <message>
         <source>nickname</source>
@@ -142,11 +185,11 @@
     </message>
     <message>
         <source>Please specify an IP address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sònraich seòladh IP.</translation>
     </message>
     <message>
         <source>Please specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sònraich far-ainm.</translation>
     </message>
 </context>
 <context>
@@ -180,7 +223,7 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation>Ma lorg thu buga, thoir sùil an deach aithris mar-thà an-seo: </translation>
+        <translation>Ma lorg thu buga, feuch an deach innse dhuinn mu dhèidhinn mu thràth:</translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
@@ -189,6 +232,10 @@
     <message>
         <source>Feedback</source>
         <translation>Beachdan thugainn</translation>
+    </message>
+    <message>
+        <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
+        <translation>Cha leig thu leas ach dh’fhaoidte gun cuidich am fiosrachadh seo ach an càraich sinn bugaichean is duilgheadasan teicnigeach eile.</translation>
     </message>
 </context>
 <context>
@@ -242,11 +289,11 @@
     </message>
     <message>
         <source>New (%1)</source>
-        <translation type="unfinished">Ùr (%1)</translation>
+        <translation>Ùr (%1)</translation>
     </message>
     <message>
         <source>Copy of %1 (%2)</source>
-        <translation type="unfinished">Lethbhreac dhe %1 (%2)</translation>
+        <translation>Lethbhreac dhe %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -305,7 +352,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation>Cha chuir sinn taic ris an sgeama “%1”</translation>
+        <translation>Cha chuir sinn taic ris ann sgeama “%1”</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -324,21 +371,25 @@ Feuch an dearbhaich thu an stàladh agad!</translation>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
+        <extracomment>“Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line</extracomment>
         <translation>Cleachdadh</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
+        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”</extracomment>
         <translation>ROGHAINN</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
+        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
         <translation>TEACSACEANGLAIDH</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
+        <extracomment>“Options” as in “command-line options”</extracomment>
         <translation>Roghainnean</translation>
     </message>
     <message>
@@ -407,7 +458,7 @@ Feuch an dearbhaich thu an stàladh agad!</translation>
     </message>
     <message>
         <source>Couldn&apos;t read %1</source>
-        <translation>Cha b’ urrainn dhuinn %1 a leughadh</translation>
+        <translation>Cha b’ urrainn dhuinn “%1” a leughadh</translation>
     </message>
     <message>
         <source>StyleSheet discarded</source>
@@ -444,6 +495,10 @@ Feuch an dearbhaich thu an stàladh agad!</translation>
     <message>
         <source>List of players</source>
         <translation>Liosta dhe chluicheadairean</translation>
+    </message>
+    <message>
+        <source>%1 has left (message: &quot;%2&quot;)</source>
+        <translation type="vanished">Dh’fhalbh %1 (teachdaireachd: %2)</translation>
     </message>
 </context>
 <context>
@@ -489,7 +544,7 @@ Feuch an dearbhaich thu an stàladh agad!</translation>
     <message>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
-        <translation>Cha cuideigin a’ chleachdadh d’ fhar-ainm %1 air an fhrithealaiche mar-thà.
+        <translation>Cha cuideigin a’ chleachdadh d’ fhar-ainm %1 air an fhrithealaiche mu thràth.
 Feuch an tagh thu far-ainm eile:</translation>
     </message>
     <message>
@@ -498,17 +553,17 @@ Feuch an tagh thu far-ainm eile:</translation>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
-        <translation>Hedgewars - Far-ainm clàraichte</translation>
+        <translation>Hedgewars – Far-ainm clàraichte</translation>
     </message>
     <message>
         <source>This nick is registered, and you haven&apos;t specified a password.
 
-If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
+If this nick isn’t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation>Tha am far-ainm seo clàraichte ’s cha chuir thu facal-faire a-steach.
+        <translation type="vanished">Chaidh am far-ainm seo a chlàradh ’s cha do shònraich thu facal-faire.
 
-Mur ann agadsa a tha am far-ainm seo, clàraich fear agad fhèin air www.hedgewars.org
+Mur ann leatsa a tha am far-ainm, clàraich am far-ainm agad fhèin air www.hedgewars.org
 
 Facal-faire:</translation>
     </message>
@@ -526,7 +581,7 @@ ach nach cleachd duine eile e.</translation>
 Your password wasn&apos;t saved either.</source>
         <translation>
 
-Cha deach am facal-faire agad a shàbhaladh nas motha.</translation>
+Cha deach am facal-faire agad a shàbhaladh na bu mhotha.</translation>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
@@ -534,7 +589,7 @@ Cha deach am facal-faire agad a shàbhaladh nas motha.</translation>
     </message>
     <message>
         <source>Hedgewars - Wrong password</source>
-        <translation>Hedgewars – Facal-faire ceàrr</translation>
+        <translation>Hedgewars – Facal-faire cearr</translation>
     </message>
     <message>
         <source>You entered a wrong password.</source>
@@ -560,7 +615,7 @@ Fuirich diog no dhà mus feuch thu ris a-rithist.</translation>
     </message>
     <message>
         <source>Guest</source>
-        <translation>Aoigh</translation>
+        <translation type="vanished">Aoigh</translation>
     </message>
     <message>
         <source>Room password</source>
@@ -574,29 +629,41 @@ Cuir a-steach am facal-faire:</translation>
     </message>
     <message>
         <source>Team 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sgioba 1</translation>
     </message>
     <message>
         <source>Team %1</source>
         <extracomment>Default team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Sgioba %1</translation>
+    </message>
+    <message>
+        <source>This nick is registered, and you haven&apos;t specified a password.
+
+If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
+
+Password:</source>
+        <translation>Tha am far-ainm seo clàraichte ’s cha chuir thu facal-faire a-steach.
+
+Mur ann agadsa a tha am far-ainm seo, clàraich fear agad fhèin air www.hedgewars.org
+
+Facal-faire:</translation>
     </message>
     <message>
         <source>Computer %1</source>
         <extracomment>Default computer team name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Coimpiutair %1</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Mearachd lìonraidh nach aithne dhuinn (’s dòcha gu bheil leabharlann SSL a dhìth ort).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Feumaidh an gleus seo ceangal ris an eadar-lìon ach tha coltas nach eil thu air loidhne (còd na mearachd: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mearachd taobh a-staigh: Chan eil oibseact na freagairt dligheach.</translation>
     </message>
 </context>
 <context>
@@ -619,13 +686,13 @@ If this keeps happening, please click the &apos;%1&apos; button in the main menu
 
 Last two engine messages:
 %2</source>
-        <translation type="vanished">Thachair MEARACHD mharbhtach! – Thug seo stad air inneal a’ gheama.
+        <translation type="vanished">Thachair mearachd MHARBHTACH! - Thug seo stad air einnsean a’ gheama.
 
-Tha sinn glè dhuilich mun trioblaid seo :(
+Tha sinn glè dhuilich mun duilgheadas :(
 
-Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%1” sa phrìomh chlàr-taice!
+Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%1” air a’ phrìomh chlàr-taice!
 
-An dà theachdaireachd mu dheireadh aig an inneal:
+An dà theachdaireachd mu dheireadh aig an einnsean:
 %2</translation>
     </message>
     <message>
@@ -637,7 +704,14 @@ If this keeps happening, please click the &apos;Feedback&apos; button in the mai
 
 Last engine message:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Thachair mearachd MHARBHTACH! - Thug seo stad air einnsean a’ gheama.
+
+Tha sinn glè dhuilich mun duilgheadas :-(
+
+Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “Beachdan thugainn” air a’ phrìomh chlàr-taice!
+
+An teachdaireachd mu dheireadh an einnsein:
+%2</translation>
     </message>
 </context>
 <context>
@@ -683,6 +757,7 @@ Last engine message:
     </message>
     <message>
         <source>Seed</source>
+        <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
         <translation>Sìol</translation>
     </message>
     <message>
@@ -829,6 +904,18 @@ Last engine message:
         <source>Click to edit</source>
         <translation>Briog gus a dheasachadh</translation>
     </message>
+    <message>
+        <source>Scale size of the drawn map</source>
+        <translation>Sgèilich meud tarraing a’ mhapa</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation>Luchdaich</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>Deasaich</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -838,10 +925,12 @@ Last engine message:
     </message>
     <message>
         <source>IP</source>
+        <extracomment>short for &quot;IP address&quot; (Internet Protocol), part of server address</extracomment>
         <translation>IP</translation>
     </message>
     <message>
         <source>Port</source>
+        <extracomment>short for &quot;port number&quot;, part of server address</extracomment>
         <translation>Port</translation>
     </message>
 </context>
@@ -853,7 +942,7 @@ Last engine message:
     </message>
     <message>
         <source>Connection refused</source>
-        <translation>Chaidh an ceangal a dhiùltadh</translation>
+        <translation type="vanished">Chaidh an ceangal a dhiùltadh</translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -861,7 +950,7 @@ Last engine message:
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Abhbhar fàgail:</translation>
+        <translation type="vanished">Abhbhar fàgail:</translation>
     </message>
     <message>
         <source>You got kicked</source>
@@ -881,7 +970,7 @@ Last engine message:
     </message>
     <message>
         <source>User quit</source>
-        <translation>Dh’fhàg an cleachdaiche an-seo</translation>
+        <translation type="vanished">Dh’fhàg an cleachdaiche an-seo</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
@@ -895,6 +984,32 @@ Last engine message:
         <source>Server authentication error</source>
         <translation>Mearachd dearbhadh an fhrithealaiche</translation>
     </message>
+    <message>
+        <source>Reason:</source>
+        <translation>Adhbhar:</translation>
+    </message>
+    <message>
+        <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
+        <translation>Dhiùlt am frithealaiche oifigeil an ceangal no dh’fhalbh an ùine air. Tha coltas gu bheil rudeigin cearr air an fhrithealaiche oifigeil an-dràsta. Dh’fhaoidte nach e ach duilgheadas sealadach a th’ ann. Feuch ris a-rithist an ceann greis.</translation>
+    </message>
+    <message>
+        <source>The connection was refused by the host or timed out. This might have one of the following reasons:
+- The Hedgewars Server program does currently not run on the host
+- The specified port number is incorrect
+- There is a temporary network problem
+
+Please check the host name and port settings and/or try again later.</source>
+        <translation>Dhiùilt an t-òstair an ceangal no dh’fhalbh an ùine air. Seo na h-adhbharan as buailtiche airson sin:
+– Chan eil prògram frithealaiche Hedgewars Server ’ga ruith air an òstair an-dràsta
+– Chan eil àireamh a’ phuirt mar bu chòir
+– Tha duilgheadas sealadach aig an lìonra
+
+Thoir sùil air roghainnean ainm is port an fhrithealaiche agus/no feuch ris a-rithist an ceann greis.</translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has left (message: &quot;%3&quot;)</source>
+        <translation type="vanished">Dh’fhalbh %1 *** %2 (teachdaireachd: “%3”)</translation>
+    </message>
 </context>
 <context>
     <name>HWPasswordDialog</name>
@@ -907,10 +1022,10 @@ Last engine message:
 
 If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
-        <translation>Log a-steach gus ceangal ris an fhrithealaiche.
+        <translation>Clàraich a-steach gus ceangal ris an fhrithealaiche.
 
-Cha leig thu leas ach far-ainm a chur a-steach
-mur eil cunntas air www.hedgewars.org agad.</translation>
+Mur eil cunntas agad air www.hedgewars.org,
+cha leig thu leas ach far-ainm a chur a-steach.</translation>
     </message>
     <message>
         <source>Nickname:</source>
@@ -923,6 +1038,27 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>New Account</source>
         <translation>Cunntas ùr</translation>
+    </message>
+</context>
+<context>
+    <name>HWRecorder</name>
+    <message>
+        <source>A fatal ERROR occured while processing the video recording! The video could not be saved.
+
+As a workaround, you could try to reset the Hedgewars video recorder settings to the defaults.
+
+To report this error, please click the &apos;Feedback&apos; button in the main menu!
+
+Last engine message:
+%1</source>
+        <translation>Thachair mearachd MHARBHTACH fhad ’s a bha sinn a’ pròiseasadh clàradh a’ video! Cha b’ urrainn dhuinn a’ video a shàbhaladh.
+
+B’ urrainn dhut inneal-clàraidh Hedgewars ath-shuidheachadh air na bun-roghainnean feuch an cuidich sin.
+
+Airson aithris a dhèanamh air a’ mhearachd seo, briog air a’ phutan “Beachdan thugainn” air a’ phrìomh chlàr-taice!
+
+An teachdaireachd mu dheireadh aig an einnsein:
+%1</translation>
     </message>
 </context>
 <context>
@@ -968,6 +1104,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <source>Category</source>
         <translation>Roinn-seòrsa</translation>
     </message>
+    <message>
+        <source>Warning: The same key is assigned multiple times!</source>
+        <translation>Rabhadh: Chaidh an t-aon iuchair a nasgadh iomadh turas!</translation>
+    </message>
 </context>
 <context>
     <name>LibavInteraction</name>
@@ -980,47 +1120,44 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <translation>chan eil fhios</translation>
     </message>
     <message>
-        <source>Duration: %1m %2s</source>
-        <translation type="vanished">Faide: %1m %2d</translation>
-    </message>
-    <message>
         <source>Video: %1x%2</source>
-        <translation type="vanished">Video: %1x%2</translation>
-    </message>
-    <message>
-        <source>%1 fps</source>
-        <translation type="vanished">%1 fps</translation>
+        <translation type="vanished">Video: %1×%2</translation>
     </message>
     <message>
         <source>Duration: %1min %2s</source>
         <extracomment>Duration in minutes and seconds (SI units)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Faide: %1mion %2s</translation>
+    </message>
+    <message>
+        <source>%1 FPS</source>
+        <translation type="vanished">%1 FPS</translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation>Cluicheadair: %1</translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation>Ùrlar: %1</translation>
+    </message>
+    <message>
+        <source>Map: %1</source>
+        <translation>Mapa: %1</translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
+        <extracomment>As in ‘recording’</extracomment>
+        <translation>Clàradh: %1</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3 FPS, %4</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Video: %1×%2, %3 FPS, %4</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Player: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Theme: %1</source>
-        <translation type="unfinished">Ùrlar: %1</translation>
-    </message>
-    <message>
-        <source>Map: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Record: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Video: %1×%2, %3</translation>
     </message>
 </context>
 <context>
@@ -1034,15 +1171,15 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <name>MinesTimeSpinBox</name>
     <message>
         <source>Random</source>
-        <translation type="unfinished">Air thuaiream</translation>
+        <translation>Air thuaiream</translation>
     </message>
     <message numerus="yes">
         <source>%1 seconds</source>
-        <translation type="unfinished">
-            <numerusform>%1 second</numerusform>
-            <numerusform>%1 seconds</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 diog</numerusform>
+            <numerusform>%1 dhiog</numerusform>
+            <numerusform>%1 diogan</numerusform>
+            <numerusform>%1 diog</numerusform>
         </translation>
     </message>
 </context>
@@ -1070,6 +1207,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
+        <extracomment>MOTD = Message Of The Day, the message which is shown to players joining the server</extracomment>
         <translation>Ro-shealladh air maidse an latha:</translation>
     </message>
     <message>
@@ -1112,20 +1250,20 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
 <context>
     <name>PageCampaign</name>
     <message>
-        <source>Start fighting</source>
-        <translation type="unfinished">Tòisich air sabaid</translation>
-    </message>
-    <message>
         <source>Team</source>
-        <translation type="unfinished">Sgioba</translation>
+        <translation>Sgioba</translation>
     </message>
     <message>
         <source>Campaign</source>
-        <translation type="unfinished"></translation>
+        <translation>Iomairt</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation>Misean</translation>
+    </message>
+    <message>
+        <source>Start fighting</source>
+        <translation>Tòisich air sabaid</translation>
     </message>
 </context>
 <context>
@@ -1151,19 +1289,23 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Load the start page</source>
-        <translation type="unfinished"></translation>
+        <translation>Luchdaich an duilleag tòiseachaidh</translation>
+    </message>
+    <message>
+        <source>Open the directory in which the downloaded files are stored in your system</source>
+        <translation type="vanished">Fosgail am pasgan far an tèid na faidhlichean air an luchdadh a-nuas a ghlèidheadh air an t-siostam agad</translation>
     </message>
     <message>
         <source>Unknown network error (possibly missing SSL library).</source>
-        <translation type="unfinished"></translation>
+        <translation>Mearachd lìonraidh nach aithne dhuinn (’s dòcha gu bheil leabharlann SSL a dhìth ort).</translation>
     </message>
     <message>
         <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Feumaidh an gleus seo ceangal ris an eadar-lìon ach tha coltas nach eil thu air loidhne (còd na mearachd: %1).</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mearachd taobh a-staigh: Chan eil oibseact na freagairt dligheach.</translation>
     </message>
 </context>
 <context>
@@ -1222,7 +1364,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Brush size</source>
-        <translation type="unfinished"></translation>
+        <translation>Meud na bruise</translation>
     </message>
 </context>
 <context>
@@ -1268,45 +1410,45 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <translation>Sgioba air thuaiream</translation>
     </message>
     <message>
+        <source>Play a random example of this voice</source>
+        <translation>Cluich ball-eisimpleir air thuaiream air a’ ghuth seo</translation>
+    </message>
+    <message>
         <source>Random Hats</source>
-        <translation type="unfinished"></translation>
+        <translation>Adan air thuaiream</translation>
     </message>
     <message>
         <source>Random Names</source>
-        <translation type="unfinished"></translation>
+        <translation>Ainmean air thuaiream</translation>
     </message>
     <message>
         <source>Randomize the team name</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuaireamaich ainm an sgioba</translation>
     </message>
     <message>
         <source>Randomize the grave</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuaireamaich an uaigh</translation>
     </message>
     <message>
         <source>Randomize the flag</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Play a random example of this voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuaireamaich a’ bhratach</translation>
     </message>
     <message>
         <source>Randomize the voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuaireamaich an guth</translation>
     </message>
     <message>
         <source>Randomize the fort</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuaireamaich an dùn</translation>
     </message>
     <message>
         <source>CPU %1</source>
         <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>CPU %1</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -1407,20 +1549,53 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; phuing.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puingean.</numerusform>
+            <numerusform>Bha &lt;b&gt;%1&lt;/b&gt; dhen bheachd gum b’ fheairrde e na gràineagan aige fhèin a mharbhadh airson &lt;b&gt;%2&lt;/b&gt; puing.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+            <numerusform>Mharbh &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; dhe na gràineagan aca fhèin.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
+        <translation>On a bhuineas a h-uile duine ris an aon chinneadh, cha robh adhbhar sabaid ann. Bha na gràineagan toilichte riamh tuilleadh is cha chuala sinn an corr.</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 point(s))</source>
+        <extracomment>Number of points in stats screen, written after the team name</extracomment>
+        <translation>
+            <numerusform>(%1 phuing)</numerusform>
+            <numerusform>(%1 phuing)</numerusform>
+            <numerusform>(%1 puingean)</numerusform>
+            <numerusform>(%1 puing)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%L1 second(s))</source>
+        <extracomment>Time in seconds</extracomment>
+        <translation>
+            <numerusform>(%L1 diog)</numerusform>
+            <numerusform>(%L1 dhiog)</numerusform>
+            <numerusform>(%L1 diogan)</numerusform>
+            <numerusform>(%L1 diog)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 crate(s))</source>
+        <translation>
+            <numerusform>(%1 chreat)</numerusform>
+            <numerusform>(%1 chreat)</numerusform>
+            <numerusform>(%1 creataichean)</numerusform>
+            <numerusform>(%1 creat)</numerusform>
         </translation>
     </message>
 </context>
@@ -1496,6 +1671,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <source>Play official network game</source>
         <translation>Cluich geama lìonraidh oifigeil</translation>
     </message>
+    <message>
+        <source>Open the Hedgewars online game manual in your web browser</source>
+        <translation>Fosgail leabhar-mìneachaidh Hedgewars air loidhne sa bhrabhsair-lìn agad</translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1510,6 +1689,25 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
         <translation>Tòisich air sabaid (feum air co-dhiù 2 sgioba)</translation>
+    </message>
+</context>
+<context>
+    <name>PageNet</name>
+    <message>
+        <source>Connect to the selected server</source>
+        <translation>Ceangail ris an fhrithealaiche a thagh thu</translation>
+    </message>
+    <message>
+        <source>Update the list of servers</source>
+        <translation>Ùraich liosta nam frithealaichean</translation>
+    </message>
+    <message>
+        <source>Specify the address and port number of a known server and connect to it directly</source>
+        <translation>Sònraich seòladh is àireamh puirt aig frithealaiche air a bheil thu eòlach is ceangail ris gu dìreach</translation>
+    </message>
+    <message>
+        <source>Start private server</source>
+        <translation>Tòisich air frithealaiche prìobhaideach</translation>
     </message>
 </context>
 <context>
@@ -1540,7 +1738,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
-        <translation>Cuir am bolgan air gus sealltainn dha na cluicheadairean eile nuair a bhios tu deiseil ri sabaid</translation>
+        <translation>Cuir am bolgan-solais air gus sealltainn dha na cluicheadairean eile nuair a bhios tu deiseil ri sabaid</translation>
     </message>
     <message>
         <source>Start fighting (requires at least 2 teams)</source>
@@ -1574,7 +1772,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation>Chan urrainn dhut sgioba a dheasachadh o thaghadh nan sgioba. Till dhan phrìomh chlàr-taice gus sgioba a chur ris, a dheasachadh no a sguabadh às.</translation>
+        <translation>Chan urrainn dhut sgiobaidhean a dheasachadh o thaghadh nan sgiobaidhean. Till dhan phrìomh chlàr-taice gus sgiobaidhean a chur ris, a dheasachadh no a sguabadh às.</translation>
     </message>
     <message>
         <source>New scheme</source>
@@ -1646,7 +1844,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Reset to default</source>
-        <translation>Ath-shuidhich air a’ bhun-roghainn</translation>
+        <translation>A’ bhun-roghainn</translation>
     </message>
     <message>
         <source>Reset all binds</source>
@@ -1729,25 +1927,30 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <translation>Roghainnean clàradh video</translation>
     </message>
     <message>
-        <source>x</source>
-        <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MISSING LANGUAGE NAME [%1]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Check now</source>
-        <translation type="unfinished"></translation>
+        <extracomment>In the case of an error, this is shown in the language selection for a language with unknown name. %1 = language code</extracomment>
+        <translation>THA AINM CÀNAIN A DHÌTH [%1]</translation>
     </message>
     <message>
         <source>Can&apos;t delete last team</source>
-        <translation type="unfinished"></translation>
+        <translation>Cha ghabh an sgioba mu dheireadh a sguabadh às</translation>
+    </message>
+    <message>
+        <source>You can’t delete the last team!</source>
+        <translation type="vanished">Chan urrainn dhut an sgioba mu dheireadh a sguabadh às!</translation>
+    </message>
+    <message>
+        <source>x</source>
+        <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
+        <translation>×</translation>
+    </message>
+    <message>
+        <source>Check now</source>
+        <translation>Thoir sùil an-dràsta</translation>
     </message>
     <message>
         <source>You can&apos;t delete the last team!</source>
-        <translation type="unfinished"></translation>
+        <translation>Chan urrainn dhut an sgioba mu dheireadh a sguabadh às!</translation>
     </message>
 </context>
 <context>
@@ -1812,12 +2015,8 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
 <context>
     <name>PageScheme</name>
     <message>
-        <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="vanished">Dìon an dùn agad agus mill na nàimhdean, dà dhath sgioba air a char as motha!</translation>
-    </message>
-    <message>
         <source>Land can not be destroyed!</source>
-        <translation>Cha ghabh an tìr a mhilleadh!</translation>
+        <translation type="vanished">Cha ghabh an talamh a mhilleadh!</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1873,7 +2072,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation>Cuir oibseactan tìre à comas le gintinn nam mapaichean air thuaiream.</translation>
+        <translation>Cuir oibseactan talmhainn à comas le gintinn nam mapaichean air thuaiream.</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
@@ -1941,7 +2140,8 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
-        <translation>Dochainn coitcheann agus bualadh air ais ann an ceudad</translation>
+        <extracomment>Description of the game scheme setting “Damage Modifier”. “Knockback” means how much hedgehogs and objects get pushed by explosions and other forces</extracomment>
+        <translation>Dochainn coitcheann agus putadh ann an ceudad</translation>
     </message>
     <message>
         <source>Turn time in seconds</source>
@@ -2013,11 +2213,19 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Name of this scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Ainm an sgeama seo</translation>
     </message>
     <message>
         <source>Select a hedgehog at the beginning of a turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagh gràineag aig toiseach do chuairte</translation>
+    </message>
+    <message>
+        <source>Land can not be destroyed by most weapons.</source>
+        <translation>Cha mhill a’ mhòrchuid a dh’airm talamh.</translation>
+    </message>
+    <message>
+        <source>%1 (%2)</source>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2055,7 +2263,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Practice your skills in a range of training missions</source>
-        <translation>Cuir gleus air na sgilean agad le miseanan trèanaidh</translation>
+        <translation type="vanished">Cuir gleus air na sgilean agad le miseanan trèanaidh</translation>
     </message>
     <message>
         <source>Watch recorded demos</source>
@@ -2064,6 +2272,10 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>Load a previously saved game</source>
         <translation>Luchdaich geama air a shàbhaladh</translation>
+    </message>
+    <message>
+        <source>Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios.</source>
+        <translation>Miseanan aon-chluicheadair: Ionnsaich mar a chluicheas tu san oideachadh, cleachd na sgilean agad ann an dùbhlanan no feuch an coilean thu an amasan nan cnàmh-sgeulan.</translation>
     </message>
 </context>
 <context>
@@ -2077,36 +2289,59 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
         <translation>Tagh misean!</translation>
     </message>
     <message>
-        <source>Pick the mission or training to play</source>
-        <translation type="vanished">Tagh am misean no trèanadh airson cluiche</translation>
-    </message>
-    <message>
         <source>Start fighting</source>
         <translation>Tòisich air sabaid</translation>
     </message>
     <message>
         <source>Pick the training to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagh an trèanadh airson cluiche</translation>
     </message>
     <message>
         <source>Pick the challenge to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagh an dùbhlan airson cluiche</translation>
     </message>
     <message>
         <source>Pick the scenario to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagh an cnàmh-sgeul airson cluiche</translation>
     </message>
     <message>
         <source>Trainings</source>
-        <translation type="unfinished"></translation>
+        <translation>Trèanadh</translation>
     </message>
     <message>
         <source>Challenges</source>
-        <translation type="unfinished"></translation>
+        <translation>Dùbhlain</translation>
     </message>
     <message>
         <source>Scenarios</source>
-        <translation type="unfinished"></translation>
+        <translation>Cnàmh-sgeulan</translation>
+    </message>
+    <message>
+        <source>Team</source>
+        <translation>Sgioba</translation>
+    </message>
+    <message>
+        <source>Team highscore: %1</source>
+        <extracomment>Highest score of a team</extracomment>
+        <translation>Sgòr as àirde an sgioba: %1</translation>
+    </message>
+    <message>
+        <source>Team lowscore: %1</source>
+        <extracomment>Lowest score of a team</extracomment>
+        <translation>Sgòr as ìsle an sgioba: %1</translation>
+    </message>
+    <message>
+        <source>Team&apos;s top accuracy: %1%</source>
+        <extracomment>Best accuracy of a team (in a challenge)</extracomment>
+        <translation>Pongalachd as àirde an sgioba: %1%</translation>
+    </message>
+    <message>
+        <source>Team&apos;s best time: %L1 s</source>
+        <translation>Ùine as fhearr an sgioba: %L1 d</translation>
+    </message>
+    <message>
+        <source>Team&apos;s longest time: %L1 s</source>
+        <translation>Ùine as fhaide an sgioba: %L1 d</translation>
     </message>
 </context>
 <context>
@@ -2130,7 +2365,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>(in progress...)</source>
-        <translation>(a’ dol air adhart…)</translation>
+        <translation>(a’ dol air adhart …)</translation>
     </message>
     <message>
         <source>encoding</source>
@@ -2151,12 +2386,17 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>%1%</source>
         <extracomment>Video encoding progress. %1 = number</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1%</translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3)</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation type="vanished">%1 (%2%) – %3</translation>
     </message>
     <message>
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2%) – %3</translation>
     </message>
 </context>
 <context>
@@ -2223,7 +2463,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Delegate room control</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiomnaich an smachd air an t-seòmar</translation>
     </message>
 </context>
 <context>
@@ -2334,11 +2574,20 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Enable visual effects such as animated menu transitions and falling stars</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuir an comas èifeachdan lèirsinneach, can tar-mhùthadh beòthaichte nan clàran-taice agus reultan a’ tuiteam</translation>
     </message>
     <message>
         <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ma tha seo an comas, cuiridh Hedgewars an ceann-latha ’s an t-àm sa chruth “YYYY-MM-DD_hh-mm” ris na demothan a thèid a chruthachadh gu fèin-obrachail.</translation>
+    </message>
+    <message>
+        <source>Dampen when losing focus</source>
+        <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
+        <translation>Ìslich mur eil am fòcas air</translation>
+    </message>
+    <message>
+        <source>Reduce the game audio volume if the game window has lost its focus</source>
+        <translation>Ìslich àirde fuaim a’ gheama fhad ’s nach eil am fòcas air uinneag a’ gheama</translation>
     </message>
 </context>
 <context>
@@ -2421,27 +2670,27 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cruthaichidh an Stereosgopachd doimhneachd mas-fhìor air nuair a chuireas tu speuclairean 3D ort.</translation>
     </message>
     <message>
         <source>24 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>24 FPS</translation>
     </message>
     <message>
         <source>25 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>25 FPS</translation>
     </message>
     <message>
         <source>30 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>30 FPS</translation>
     </message>
     <message>
         <source>50 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>50 FPS</translation>
     </message>
     <message>
         <source>60 FPS</source>
-        <translation type="unfinished"></translation>
+        <translation>60 FPS</translation>
     </message>
 </context>
 <context>
@@ -2551,7 +2800,7 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation>% de mhèinnean gun fheum</translation>
+        <translation>% de mhèinnean nach do spreadh</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2596,10 +2845,6 @@ mur eil cunntas air www.hedgewars.org agad.</translation>
     <message>
         <source>% Rope Length</source>
         <translation>% de dh’fhaide nan ròpannan</translation>
-    </message>
-    <message>
-        <source>Stereo rendering</source>
-        <translation type="vanished">Reandaradh stereo</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2666,12 +2911,8 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
         <translation>Astar nam frèam</translation>
     </message>
     <message>
-        <source>Bitrate (Kbps)</source>
-        <translation type="vanished">Bitrate (Kbps)</translation>
-    </message>
-    <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation>’S e “obair ’ga dhèanamh” a tha san togail leasachaidh seo agus dh’fhaoidte nach eil e co-chòrdail ri tionndaidhean eile a’ gheama agus gu bheil cuid a ghleusan briste no neo-choileanta!</translation>
+        <translation>Tha sinn ag obair air an togail leasachaidh seo fhathast agus dh’fhaoidte nach eil e co-chòrdail ri tionndaidhean eile dhen gheama agus gum bi cuid a ghleusan briste no neo-choileanta!</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -2700,14 +2941,6 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     <message>
         <source>Type the security code:</source>
         <translation>Sgrìobh còd na tèarainteachd:</translation>
-    </message>
-    <message>
-        <source>Revision</source>
-        <translation type="vanished">Lèirmheas</translation>
-    </message>
-    <message>
-        <source>This program is distributed under the %1</source>
-        <translation type="vanished">Tha am prògram seo ’ga sgaoileadh fo cheadachas %1</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
@@ -2743,20 +2976,25 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>% Retreat Time</source>
+        <extracomment>Label of game scheme setting for the time you get after an attack</extracomment>
         <translation>% ùine cùlachaidh</translation>
     </message>
     <message>
         <source>Stereoscopy</source>
-        <translation type="unfinished"></translation>
+        <translation>Stereosgopachd</translation>
     </message>
     <message>
         <source>Bitrate (Kibit/s)</source>
         <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Reat nam biod (Kibit/s)</translation>
     </message>
     <message>
         <source>Loading&lt;br&gt;CAPTCHA ...</source>
-        <translation type="unfinished"></translation>
+        <translation>A’ luchdadh&lt;br&gt;CAPTCHA …</translation>
+    </message>
+    <message>
+        <source>Zoom (%)</source>
+        <translation>Sùm (%)</translation>
     </message>
 </context>
 <context>
@@ -2775,11 +3013,11 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>unnamed (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>gun ainm (%1)</translation>
     </message>
     <message>
         <source>Hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gràineag %1</translation>
     </message>
 </context>
 <context>
@@ -2793,7 +3031,7 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     <name>QMessageBox</name>
     <message>
         <source>Connection to server is lost</source>
-        <translation>Chaidh an ceangal ris an fhrithealaiche air chall</translation>
+        <translation type="vanished">Chaidh an ceangal ris an fhrithealaiche air chall</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2825,11 +3063,11 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
-        <translation>A bheil thu airson an sgioba “%1” a sguabadh às dha-rìribh?</translation>
+        <translation>A bheil thu airson an sgioba “%1” a sguabadh às?</translation>
     </message>
     <message>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
-        <translation>Chan urrainn dhut an sgeama tùsail “%1” a sguabadh às!</translation>
+        <translation>Cha ghabh an sgeama tùsail “%1” a sguabadh às!</translation>
     </message>
     <message>
         <source>Please select a record from the list</source>
@@ -2845,7 +3083,7 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>Hedgewars - Success</source>
-        <translation>Hedgewars – Shoirbhich leis</translation>
+        <translation>Hedgewars – Soirbheas</translation>
     </message>
     <message>
         <source>All file associations have been set</source>
@@ -2869,7 +3107,7 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
-        <translation type="vanished">Cluiche clàraidh – Mearachd</translation>
+        <translation type="vanished">Clàradh cluiche – mearachd</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
@@ -2885,7 +3123,7 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>Room Name - Error</source>
-        <translation>Ainm an t-seòmair – Mearachd</translation>
+        <translation>Ainm seòmair – Mearachd</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
@@ -2893,7 +3131,7 @@ A bheil thu airson fàgail an-seo dha-rìribh?</translation>
     </message>
     <message>
         <source>Room Name - Are you sure?</source>
-        <translation>Ainm an t-seòmair – A bheil thu cinnteach?</translation>
+        <translation>Ainm seòmair – A bheil thu cinnteach?</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
@@ -2903,7 +3141,7 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message>
         <source>Schemes - Warning</source>
-        <translation>Sgeamaichean – Rabhadh</translation>
+        <translation>Sgeamaichean – rabhadh</translation>
     </message>
     <message>
         <source>Schemes - Are you sure?</source>
@@ -2911,7 +3149,7 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message>
         <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
-        <translation>A bheil thu airson sgeama a’ gheama “%1” a sguabadh às dha-rìribh?</translation>
+        <translation>A bheil thu airson sgeama “%1” a’ gheama a sguabadh às?</translation>
     </message>
     <message>
         <source>Videos - Are you sure?</source>
@@ -2919,15 +3157,15 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
-        <translation>A bheil thu airson a’ video “%1” a sguabadh às dha-rìribh?</translation>
+        <translation>A bheil thu airson a’ video “%1” a sguabadh às?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
         <translation>
-            <numerusform>A bheil thu airson %1 fhaidhle a sguabadh às dha-rìribh?</numerusform>
-            <numerusform>A bheil thu airson %1 fhaidhle a sguabadh às dha-rìribh?</numerusform>
-            <numerusform>A bheil thu airson %1 faidhlichean a sguabadh às dha-rìribh?</numerusform>
-            <numerusform>A bheil thu airson %1 faidhle a sguabadh às dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson an %1 fhaidhle a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson na %1 faidhlichean a thoirt air falbh dha-rìribh?</numerusform>
+            <numerusform>A bheil thu airson am %1 faidhle a thoirt air falbh dha-rìribh?</numerusform>
         </translation>
     </message>
     <message>
@@ -2940,11 +3178,11 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
-        <translation>Cha ghabh “%1” fosgladh airson sgrìobhadh ann</translation>
+        <translation>Cha ghabh “%1” fosgladh a chum sgrìobhaidh</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
-        <translation>Cha ghabh “%1” fosgladh airson a leughadh</translation>
+        <translation>Cha ghabh “%1” fosgladh a chum leughaidh</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
@@ -2956,11 +3194,11 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
-        <translation>Cha ghabh sgrìobhadh thairis air seata nan arm tùsail “%1”!</translation>
+        <translation type="vanished">Chan urrainn dhut sgrìobhadh thairis air an t-seata nan arm tùsail “%1”!</translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
-        <translation>Cha ghabh seata nan arm tùsail “%1” sguabadh às!</translation>
+        <translation>Chan urrainn dhut an seata nan arm tùsail “%1” a sguabadh às!</translation>
     </message>
     <message>
         <source>Weapons - Are you sure?</source>
@@ -2968,11 +3206,11 @@ A bheil thu airson tighinn a-steach dhan t-seòmar fhathast?</translation>
     </message>
     <message>
         <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
-        <translation>A bheil thu airson seata nan arm “%1” a sguabadh às dha-rìribh?</translation>
+        <translation>A bheil thu airson seata “%1” nan arm a sguabadh às?</translation>
     </message>
     <message>
         <source>Hedgewars - Nick not registered</source>
-        <translation>Hedgewars – Far-ainm gun chlàradh</translation>
+        <translation>Hedgewars – Far-ainm nach eil clàraichte</translation>
     </message>
     <message>
         <source>System Information Preview</source>
@@ -3012,41 +3250,71 @@ Chan eil a h-uile cluicheadair ullamh.</translation>
         <source>Sorry, Hedgewars can&apos;t be played with more than 48 hedgehogs. Please try again with fewer hedgehogs.
 
 Current number of hedgehogs: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Teams - Name already taken</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Tha sinn duilich ach chan urrainn dhut Hedgewars a chluiche le corr is 48 gràineag. Feuch ris a-rithist le nas lugha a grhàineagan.
+
+Tha %1 gràineag agad aig an àm seo.</translation>
     </message>
     <message>
         <source>Please select a file from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tagh faidhle on liosta.</translation>
     </message>
     <message>
         <source>Cannot rename file to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cha ghabh ainm an fhaidhle atharrachadh gu %1.</translation>
     </message>
     <message>
         <source>Cannot delete file %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chan urrainn dhuinn am faidhle %1 a sguabadh às</translation>
+    </message>
+    <message>
+        <source>Teams - Name already taken</source>
+        <translation>Sgiobaidhean – Tha an t-ainm seo ’ga chleachdadh mu thràth</translation>
+    </message>
+    <message>
+        <source>The team name &apos;%1&apos; is already taken, so your team has been renamed to &apos;%2&apos;.</source>
+        <translation>Tha an t-ainm “%1” ’ga chleachdadh mu thràth ’s thug sinn “%2” air an sgioba agad.</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Fàilte gu Hedgewars</translation>
     </message>
     <message>
         <source>Welcome to Hedgewars!
 
 You seem to be new around here. Would you like to play some training missions first to learn the basics of Hedgewars?</source>
-        <translation type="unfinished"></translation>
+        <translation>Fàilte gu Hedgewars!
+
+Tha coltas nach eil thu ’nad sheann-ghaisgeach fhathast. Am bu toigh leat misean oideachaidh no dhà a chluich an toiseach an ionnsaich thu mar a dh’ obraicheas Hedgewars?</translation>
     </message>
     <message>
         <source>Cannot use the weapon scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Cha ghabh an sgeama airm “%1” cleachdadh!</translation>
+    </message>
+    <message>
+        <source>The connection to the server is lost.</source>
+        <translation>Chaidh an ceangal ris an fhrithealaiche air chall.</translation>
+    </message>
+    <message>
+        <source>Schemes - Name already taken</source>
+        <translation>Sgeamaichean – Tha an t-ainm seo ’ga chleachdadh mu thràth</translation>
+    </message>
+    <message>
+        <source>A scheme with the name &apos;%1&apos; already exists. Your scheme has been renamed to &apos;%2&apos;.</source>
+        <translation>Tha an t-ainm “%1” ’ga chleachdadh mu thràth ’s thug sinn “%2” air an sgeama agad.</translation>
+    </message>
+    <message>
+        <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
+        <translation>Tha sgeama airm air a bheil “%1” ann mu thràth. Chaidh na h-atharraichean air an sgeama airm a thilgeil air falbh.</translation>
+    </message>
+    <message>
+        <source>Server redirection</source>
+        <translation>Ath-stiùireadh an fhrithealaiche</translation>
+    </message>
+    <message>
+        <source>This server supports secure connections on port %1.
+Would you like to reconnect securely?</source>
+        <translation>Cuiridh am frithealaiche seo taic ri ceanglaichean tèarainte air port %1.
+A bheil thu airson ath-cheangal ris gu tèarainte?</translation>
     </message>
 </context>
 <context>
@@ -3084,15 +3352,11 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Specify</source>
-        <translation>Sònraich</translation>
+        <translation type="vanished">Sònraich</translation>
     </message>
     <message>
         <source>Start</source>
         <translation>Tòisich</translation>
-    </message>
-    <message>
-        <source>Go!</source>
-        <translation type="vanished">Siuthad!</translation>
     </message>
     <message>
         <source>Play demo</source>
@@ -3178,12 +3442,20 @@ You seem to be new around here. Would you like to play some training missions fi
         <source>Start private server</source>
         <translation>Tòisich frithealaiche prìobhaideach</translation>
     </message>
+    <message>
+        <source>Upload this video to your YouTube account</source>
+        <translation type="vanished">Luchdaich suas a’ video seo dhan chunntas YouTube agad</translation>
+    </message>
+    <message>
+        <source>Specify address</source>
+        <translation>Sònraich seòladh</translation>
+    </message>
 </context>
 <context>
     <name>QSpinBox</name>
     <message>
         <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
-        <translation type="unfinished"></translation>
+        <translation>Sònraich reat nam biod air na videothan a thèid a chlàradh, na iomadach air 1024 biod san diog</translation>
     </message>
 </context>
 <context>
@@ -3286,6 +3558,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Seed</source>
+        <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
         <translation>Sìol</translation>
     </message>
 </context>
@@ -3343,12 +3616,12 @@ Còd na mearachd: %2</translation>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation>Bhàsaich inneal a’ gheama gun dùil.
+        <translation>Thuislich einnsean a’ gheama gun dùil!
 (còd fàgail %1)
 
-Tha sinn glè dhuilich mun trioblaid seo :(
+Tha sinn glè dhuilich mun duilgheadas :(
 
-Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phrìomh chlàr-taice!</translation>
+Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a’ phrìomh chlàr-taice!</translation>
     </message>
 </context>
 <context>
@@ -3501,7 +3774,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>capture</source>
-        <translation>glac</translation>
+        <translation type="vanished">glac</translation>
     </message>
     <message>
         <source>quit</source>
@@ -3517,7 +3790,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>reset zoom</source>
-        <translation>ath-shuidhich an sùm</translation>
+        <translation type="vanished">ath-shuidhich an sùm</translation>
     </message>
     <message>
         <source>long jump</source>
@@ -3554,19 +3827,87 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     <message>
         <source>toggle team bars</source>
         <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>toglaich bàraichean nan sgiobaidhean</translation>
     </message>
     <message>
         <source>team chat</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">cabadaich an sgioba</translation>
     </message>
     <message>
         <source>pause / auto skip</source>
-        <translation type="unfinished"></translation>
+        <translation>cuir ’na stad / gearr leum gu fèin-obrachail</translation>
     </message>
     <message>
         <source>toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>toglaich thagaichean gràineige</translation>
+    </message>
+    <message>
+        <source>change timer</source>
+        <translation>atharraich an tìmear</translation>
+    </message>
+    <message>
+        <source>show mission information</source>
+        <translation>seall fiosrachadh a’ mhisein</translation>
+    </message>
+    <message>
+        <source>clan chat</source>
+        <translation>cabadaich a’ chinnidh</translation>
+    </message>
+    <message>
+        <source>unselect weapon</source>
+        <translation>dì-thagh an t-arm</translation>
+    </message>
+    <message>
+        <source>stand still on slippery land</source>
+        <translation>seas gun ghluasad air tìr sleamhnach</translation>
+    </message>
+    <message>
+        <source>change direction without moving</source>
+        <translation>atharraich do chomhair gun ghluasad</translation>
+    </message>
+    <message>
+        <source>switch backwards</source>
+        <translation>dèan suids an comhair a’ chùil</translation>
+    </message>
+    <message>
+        <source>change bounciness</source>
+        <translation>atharraich am bocadh</translation>
+    </message>
+    <message>
+        <source>reset zoom to start value</source>
+        <translation>ath-shuidhich an sùm air an luach tùsail</translation>
+    </message>
+    <message>
+        <source>set zoom to 100%</source>
+        <translation>suidhich an sùm air 100%</translation>
+    </message>
+    <message>
+        <source>save map as image</source>
+        <translation>sàbhail am mapa ’na dhealbh</translation>
+    </message>
+    <message>
+        <source>show object information</source>
+        <translation>seall fiosrachadh an oibseict</translation>
+    </message>
+    <message>
+        <source>change hedgehog tag types</source>
+        <translation>atharraich seòrsaichean thagaichean gràineige</translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tag translucency</source>
+        <translation>toglaich trìd-shoilleireachd nan tagaichean gràineige</translation>
+    </message>
+    <message>
+        <source>toggle HUD</source>
+        <translation>toglaich an HUD</translation>
+    </message>
+    <message>
+        <source>backwards jump</source>
+        <translation>leum an comhair a’ chùil</translation>
+    </message>
+    <message>
+        <source>screenshot</source>
+        <translation>glacadh-sgrìn</translation>
     </message>
 </context>
 <context>
@@ -3589,6 +3930,49 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
 </context>
 <context>
+    <name>binds (combination)</name>
+    <message>
+        <source>hold down precise</source>
+        <translation>cum sìos an t-amas pongail</translation>
+    </message>
+    <message>
+        <source>precise + left/right</source>
+        <translation>amas pongail + gu clì/deas</translation>
+    </message>
+    <message>
+        <source>precise + switch</source>
+        <translation>amas pongail + dèan suids</translation>
+    </message>
+    <message>
+        <source>precise + timer</source>
+        <translation>amas pongail + tìmear</translation>
+    </message>
+    <message>
+        <source>precise + reset zoom</source>
+        <translation>amas pongail + ath-shuidhich an sùm</translation>
+    </message>
+    <message>
+        <source>precise + toggle hedgehog tags</source>
+        <translation>amas pongail + toglaich thagaichean gràineige</translation>
+    </message>
+    <message>
+        <source>switch + toggle hedgehog tags</source>
+        <translation>dèan suidse + toglaich thagaichean gràineige</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle hedgehog tags</source>
+        <translation>amas pongail + dèan suidse + toglaich thagaichean gràineige</translation>
+    </message>
+    <message>
+        <source>high jump (twice)</source>
+        <translation>leum àrd (dà thuras)</translation>
+    </message>
+    <message>
+        <source>precise + screenshot</source>
+        <translation>amas pongail + glacadh-sgrìn</translation>
+    </message>
+</context>
+<context>
     <name>binds (descriptions)</name>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
@@ -3604,7 +3988,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation>Gearr leum gu gràineag eile (ma ghabhas seo dèanamh):</translation>
+        <translation>Dèan suids gu gràineag eile (ma ghabhas seo dèanamh):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
@@ -3624,7 +4008,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Bruidhinn ris an sgioba agad no ris a h-uile duine:</translation>
+        <translation type="vanished">Bruidhinn ris an sgioba agad no ris a h-uile duine:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
@@ -3632,7 +4016,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation>Atharraich àirde fuaime a’ gheama fhad ’s a bhios tu a’ cluich:</translation>
+        <translation>Atharraich àirde fuaime a’ gheama fhad ’s a bhios tu a’ cluiche:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
@@ -3664,38 +4048,42 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Heads-up display:</source>
-        <translation type="unfinished"></translation>
+        <translation>Heads-up display:</translation>
+    </message>
+    <message>
+        <source>Talk to your clan or all participants:</source>
+        <translation>Bruidhinn ri do chinneadh no ris a h-uile duine:</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation>Aiseal</translation>
+        <translation type="vanished">Aiseal</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation>(Suas)</translation>
+        <translation type="vanished">(Suas)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation>(Sìos)</translation>
+        <translation type="vanished">(Sìos)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation>Ad</translation>
+        <translation type="vanished">Ad</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation>(Gu clì)</translation>
+        <translation type="vanished">(Gu clì)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation>(Gu deas)</translation>
+        <translation type="vanished">(Gu deas)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation>Putan</translation>
+        <translation type="vanished">Putan</translation>
     </message>
     <message>
         <source>Keyboard</source>
@@ -3755,71 +4143,71 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation>0 air pada nan àireamh</translation>
+        <translation type="vanished">0 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation>1 air pada nan àireamh</translation>
+        <translation type="vanished">1 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation>2 air pada nan àireamh</translation>
+        <translation type="vanished">2 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation>3 air pada nan àireamh</translation>
+        <translation type="vanished">3 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation>4 air pada nan àireamh</translation>
+        <translation type="vanished">4 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation>5 air pada nan àireamh</translation>
+        <translation type="vanished">5 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation>6 air pada nan àireamh</translation>
+        <translation type="vanished">6 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation>7 air pada nan àireamh</translation>
+        <translation type="vanished">7 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation>8 air pada nan àireamh</translation>
+        <translation type="vanished">8 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation>9 air pada nan àireamh</translation>
+        <translation type="vanished">9 air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation>. air pada nan àireamh</translation>
+        <translation type="vanished">. air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation>/ air pada nan àireamh</translation>
+        <translation type="vanished">/ air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation>* air pada nan àireamh</translation>
+        <translation type="vanished">* air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation>- air pada nan àireamh</translation>
+        <translation type="vanished">- air pada nan àireamh</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation>+ air pada nan àireamh</translation>
+        <translation type="vanished">+ air pada nan àireamh</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>Enter</translation>
+        <translation type="vanished">Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation>Co-ionnnannachd</translation>
+        <translation type="vanished">Co-ionnannachd</translation>
     </message>
     <message>
         <source>Up</source>
@@ -3851,55 +4239,55 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Page up</source>
-        <translation>Page up</translation>
+        <translation type="vanished">Page up</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation>Page down</translation>
+        <translation type="vanished">Page down</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation>Num lock</translation>
+        <translation type="vanished">Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation>Caps lock</translation>
+        <translation type="vanished">Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation>Scroll lock</translation>
+        <translation type="vanished">Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation>Shift deas</translation>
+        <translation type="vanished">Shift deas</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>Shift clì</translation>
+        <translation type="vanished">Shift clì</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>Ctrl deas</translation>
+        <translation type="vanished">Ctrl deas</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>Ctrl clì</translation>
+        <translation type="vanished">Ctrl clì</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>Alt deas</translation>
+        <translation type="vanished">Alt deas</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>Alt clì</translation>
+        <translation type="vanished">Alt clì</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation>Meta deas</translation>
+        <translation type="vanished">Meta deas</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation>Meta clì</translation>
+        <translation type="vanished">Meta clì</translation>
     </message>
     <message>
         <source>A button</source>
@@ -3983,7 +4371,629 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>DPad</source>
-        <translation>DPad</translation>
+        <translation type="vanished">DPad</translation>
+    </message>
+    <message>
+        <source>D-pad</source>
+        <translation>Pada-D</translation>
+    </message>
+    <message>
+        <source>Axis %1 %2</source>
+        <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
+        <translation>Aiseal %1 %2</translation>
+    </message>
+    <message>
+        <source>Button %1</source>
+        <extracomment>Game controller button. %1 = button number</extracomment>
+        <translation>Putan %1</translation>
+    </message>
+    <message>
+        <source>D-pad %1 %2</source>
+        <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
+        <translation>Pada-D %1 %2</translation>
+    </message>
+    <message>
+        <source>(Don&apos;t use)</source>
+        <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
+        <translation>(Na cleachd seo)</translation>
+    </message>
+    <message>
+        <source>Mouse: X1 button </source>
+        <translation>Luchag: putan X1</translation>
+    </message>
+    <message>
+        <source>Mouse: X2 button</source>
+        <translation>Luchag: putan X2</translation>
+    </message>
+    <message>
+        <source>Keypad 0</source>
+        <translation>0 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 1</source>
+        <translation>1 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 2</source>
+        <translation>2 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 3</source>
+        <translation>3 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 4</source>
+        <translation>4 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 5</source>
+        <translation>5 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 6</source>
+        <translation>6 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 7</source>
+        <translation>7 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 8</source>
+        <translation>8 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad 9</source>
+        <translation>9 air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad .</source>
+        <translation>. air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad /</source>
+        <translation>/ air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad *</source>
+        <translation>* air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad -</source>
+        <translation>- air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad +</source>
+        <translation>+ air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>Keypad Enter</source>
+        <translation>Enter air pada nan àireamh</translation>
+    </message>
+    <message>
+        <source>PageUp</source>
+        <translation>Duilleag suas</translation>
+    </message>
+    <message>
+        <source>PageDown</source>
+        <translation>Duilleag sìos</translation>
+    </message>
+    <message>
+        <source>Numlock</source>
+        <translation>Numlock</translation>
+    </message>
+    <message>
+        <source>CapsLock</source>
+        <translation>Caps Lock</translation>
+    </message>
+    <message>
+        <source>ScrollLock</source>
+        <translation>Scroll Lock</translation>
+    </message>
+    <message>
+        <source>Right Shift</source>
+        <translation>Shift deas</translation>
+    </message>
+    <message>
+        <source>Left Shift</source>
+        <translation>Shift clì</translation>
+    </message>
+    <message>
+        <source>Right Ctrl</source>
+        <translation>Ctrl deas</translation>
+    </message>
+    <message>
+        <source>Left Ctrl</source>
+        <translation>Ctrl clì</translation>
+    </message>
+    <message>
+        <source>Right Alt</source>
+        <translation>Alt deas</translation>
+    </message>
+    <message>
+        <source>Left Alt</source>
+        <translation>Alt clì</translation>
+    </message>
+    <message>
+        <source>Right GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
+        <translation>GUI deas</translation>
+    </message>
+    <message>
+        <source>Left GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
+        <translation>GUI clì</translation>
+    </message>
+    <message>
+        <source>(QWERTY)</source>
+        <extracomment>Name of QWERTY US keyboard layout</extracomment>
+        <translation>(QWERTY)</translation>
+    </message>
+    <message>
+        <source>Menu</source>
+        <translation>Clàr-taice</translation>
+    </message>
+</context>
+<context>
+    <name>credits</name>
+    <message>
+        <source>Programming</source>
+        <translation>Prògramachadh</translation>
+    </message>
+    <message>
+        <source>Game engine</source>
+        <translation>Einnsean a’ gheama</translation>
+    </message>
+    <message>
+        <source>Creator</source>
+        <translation>Ùghdar</translation>
+    </message>
+    <message>
+        <source>Many engine improvements</source>
+        <translation>Iomadh piseach air an einnsean</translation>
+    </message>
+    <message>
+        <source>Gamepad and Lua integration</source>
+        <translation>Amalachadh pada-geama is Lua</translation>
+    </message>
+    <message>
+        <source>Campaign support</source>
+        <translation>Taic ri iomairtean</translation>
+    </message>
+    <message>
+        <source>Theme customization improvements</source>
+        <translation>Piseach air gnàthachadh nan ùrlaran</translation>
+    </message>
+    <message>
+        <source>Some Pas2C and GLES2 work</source>
+        <translation>Obair air Pas2C agus GLES2</translation>
+    </message>
+    <message>
+        <source>Video recording</source>
+        <translation>Clàradh video</translation>
+    </message>
+    <message>
+        <source>Other improvements</source>
+        <translation>Pisich eile</translation>
+    </message>
+    <message>
+        <source>Map generation</source>
+        <translation>Gineadh mhapaichean</translation>
+    </message>
+    <message>
+        <source>Core map generators</source>
+        <translation>Bun-ghineadairean mhapaichean</translation>
+    </message>
+    <message>
+        <source>Perlin maps and other improvements</source>
+        <translation>Mapaichean Perlin is pisich eile</translation>
+    </message>
+    <message>
+        <source>Maze maps</source>
+        <translation>Mapaichean cuartain</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation>Airm</translation>
+    </message>
+    <message>
+        <source>Most core weapons</source>
+        <translation>A’ mhòrchuid dhe na bun-airm</translation>
+    </message>
+    <message>
+        <source>Air mine, rubber, others</source>
+        <translation>Mèin adhair, bann rubair ’s airm eile</translation>
+    </message>
+    <message>
+        <source>Drill rocket, ballgun, RC plane</source>
+        <translation>Rocaid tochlaidh, gunna-bhàlaichean, itealan le smachd chèin</translation>
+    </message>
+    <message>
+        <source>Freezer</source>
+        <translation>Reòthadair</translation>
+    </message>
+    <message>
+        <source>Mine number and time game settings</source>
+        <translation>Roghainnean air uiread nam mèinnean is ùine a’ gheama</translation>
+    </message>
+    <message>
+        <source>Frontend / main menu</source>
+        <translation>Frontend / prìomh chlàr-taice</translation>
+    </message>
+    <message>
+        <source>Many frontend improvements</source>
+        <translation>Iomadh piseach air a’ frontend</translation>
+    </message>
+    <message>
+        <source>Keybinds, feedback, maps and hats interfaces</source>
+        <translation>Eadar-aghaidhean airson nasgadh iuchraichean, beachdan thugainn, mapaichean is adan</translation>
+    </message>
+    <message>
+        <source>Login dialogs, other improvements</source>
+        <translation>Còmhraidhean clàraidh a-steach is pisich eile</translation>
+    </message>
+    <message>
+        <source>Missions and styles</source>
+        <translation>Miseanan is stoidhlichean</translation>
+    </message>
+    <message>
+        <source>A Classic Fairytale</source>
+        <translation>Sean-eachdraidh</translation>
+    </message>
+    <message>
+        <source>A Space Adventure</source>
+        <translation>Dàna-thuras san fhànas</translation>
+    </message>
+    <message>
+        <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
+        <translation>Ùghdar aig Glac a’ bhratach, Modh togail, Stiùireadh, An deasaiche, Highlander, Rèis, Rèis theicnigeach, Na speisealaichean, O bhalla gu balla</translation>
+    </message>
+    <message>
+        <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
+        <translation>Oideachadh, dùbhlanan ùine is cleachdadh amais, Blàr a’ bhazooka, Maoimeadh nan greimichean, Arm-lann mòr, càradh air bugaichean is obair-chàraidh</translation>
+    </message>
+    <message>
+        <source>Some styles and missions</source>
+        <translation>Cuid a stoidhlichean is miseanan</translation>
+    </message>
+    <message>
+        <source>Battalion</source>
+        <translation>Cath</translation>
+    </message>
+    <message>
+        <source>Continental supplies</source>
+        <translation>Solar mòr-thìreach</translation>
+    </message>
+    <message>
+        <source>Teamwork 2</source>
+        <translation>Obair còmhla 2</translation>
+    </message>
+    <message>
+        <source>Climb Home</source>
+        <translation>Sreap dhachaigh</translation>
+    </message>
+    <message>
+        <source>Portal Mind Challenge</source>
+        <translation>Dùbhlan nan doras</translation>
+    </message>
+    <message>
+        <source>Game server</source>
+        <translation>Frithealaiche a’ gheama</translation>
+    </message>
+    <message>
+        <source>Ports</source>
+        <translation>Portadh</translation>
+    </message>
+    <message>
+        <source>macOS/iPhone port, OpenGL-ES conversion</source>
+        <translation>Portadh gu macOS/iPhone, iompachadh gu OpenGL-ES</translation>
+    </message>
+    <message>
+        <source>Android port</source>
+        <translation>Portadh gu Android</translation>
+    </message>
+    <message>
+        <source>Android netplay, portability abstraction</source>
+        <translation>Cluich-lìn Android, eas-chruthachd portaidh</translation>
+    </message>
+    <message>
+        <source>WebGL port</source>
+        <translation>Portadh gu WebGL</translation>
+    </message>
+    <message>
+        <source>iPhone/iPad ports</source>
+        <translation>Portadh gu iPhone/iPad</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Grafaigeachd</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation>Coitcheann</translation>
+    </message>
+    <message>
+        <source>Themes</source>
+        <translation>Ùrlaran</translation>
+    </message>
+    <message>
+        <source>Nature, Snow, City, Castle, Halloween, Island</source>
+        <translation>An nàdar, sneachd, baile, caisteal, Oidhche Shamhna, eilean</translation>
+    </message>
+    <message>
+        <source>Bamboo, EarthRise, BambooPlinko</source>
+        <translation>Bambù, togail talmhainn, BambooPlinko</translation>
+    </message>
+    <message>
+        <source>Golf, Hoggywood, Stage</source>
+        <translation>Goilf, Hoggywood, àrd-ùrlar</translation>
+    </message>
+    <message>
+        <source>Hoggywood</source>
+        <translation>Hoggywood</translation>
+    </message>
+    <message>
+        <source>Cave, Olympics</source>
+        <translation>Uamh, geamannan Oilimpigeach</translation>
+    </message>
+    <message>
+        <source>Fruit, Cake</source>
+        <translation>Meas, cèic</translation>
+    </message>
+    <message>
+        <source>Art</source>
+        <translation>Obair-ealain</translation>
+    </message>
+    <message>
+        <source>Beach</source>
+        <translation>Tràigh</translation>
+    </message>
+    <message>
+        <source>Brick</source>
+        <translation>Breige</translation>
+    </message>
+    <message>
+        <source>Hell</source>
+        <translation>Ifrinn</translation>
+    </message>
+    <message>
+        <source>Jungle</source>
+        <translation>Dlùth-choille</translation>
+    </message>
+    <message>
+        <source>Sheep</source>
+        <translation>Caoraich</translation>
+    </message>
+    <message>
+        <source>Maps</source>
+        <translation>Mapaichean</translation>
+    </message>
+    <message>
+        <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
+        <translation>Ball-basgaid, raon buill-bhasgaid, amar, sruthadh bhuilgean, an leabaidh-chrochte, Hedgelove, Hedgewars, hàidreant, balgain-bhuachair, itealan, ròpannan, craobh</translation>
+    </message>
+    <message>
+        <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
+        <translation>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</translation>
+    </message>
+    <message>
+        <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
+        <translation>Bambù, blocaichean, cèic, Cogs, togail talmhainn, mòr-rathad</translation>
+    </message>
+    <message>
+        <source>Castle, PirateFlag</source>
+        <translation>caisteal, bratach spùinneadair</translation>
+    </message>
+    <message>
+        <source>ShoppaKing, TrophyRace</source>
+        <translation>ShoppaKing, TrophyRace</translation>
+    </message>
+    <message>
+        <source>Battlefield</source>
+        <translation>Blàr</translation>
+    </message>
+    <message>
+        <source>CTF_Blizzard</source>
+        <translation>CTF_Blizzard</translation>
+    </message>
+    <message>
+        <source>Cheese</source>
+        <translation>Càise</translation>
+    </message>
+    <message>
+        <source>ClimbHome</source>
+        <translation>Sreap dhachaigh</translation>
+    </message>
+    <message>
+        <source>Lonely_Island</source>
+        <translation>Lonely_Island</translation>
+    </message>
+    <message>
+        <source>Octorama</source>
+        <translation>Octorama</translation>
+    </message>
+    <message>
+        <source>portal</source>
+        <translation>doras</translation>
+    </message>
+    <message>
+        <source>Ruler</source>
+        <translation>Rùilear</translation>
+    </message>
+    <message>
+        <source>Sticks</source>
+        <translation>Steigeadh</translation>
+    </message>
+    <message>
+        <source>Forts</source>
+        <translation>Dùin</translation>
+    </message>
+    <message>
+        <source>EvilChicken</source>
+        <translation>Cearc olc</translation>
+    </message>
+    <message>
+        <source>Olympic</source>
+        <translation>Geamannan Oilimpigeach</translation>
+    </message>
+    <message>
+        <source>Tank</source>
+        <translation>Tanca</translation>
+    </message>
+    <message>
+        <source>Snail</source>
+        <translation>Seilcheag</translation>
+    </message>
+    <message>
+        <source>SteelTower</source>
+        <translation>Tùr stàilinn</translation>
+    </message>
+    <message>
+        <source>Hats, graves, other</source>
+        <translation>Adan, uaighean, nithean eile</translation>
+    </message>
+    <message>
+        <source>See CREDITS text file</source>
+        <translation>Faic faidhle teacsa CREDITS</translation>
+    </message>
+    <message>
+        <source>Sounds</source>
+        <translation>Fuaimean</translation>
+    </message>
+    <message>
+        <source>Hedgehogs voice</source>
+        <translation>Guth nan gràineagan</translation>
+    </message>
+    <message>
+        <source>Default_pl, Russian_pl voices</source>
+        <translation>Guthan tùsail &apos;s san Ruisis</translation>
+    </message>
+    <message>
+        <source>Various authors from www.freesound.org (see CREDITS text file)</source>
+        <translation>Iomadh ùghdar o www.freesound.org (faic faidhle teacsa CREDITS)</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Ceòl</translation>
+    </message>
+    <message>
+        <source>City, Rock, others</source>
+        <translation>Baile, creag, eile</translation>
+    </message>
+    <message>
+        <source>Compost</source>
+        <translation>Compost</translation>
+    </message>
+    <message>
+        <source>EarthRise, oriental, Pirate, snow</source>
+        <translation>Togail talmhainn, Oirthireach, spùinneadair, sneachd</translation>
+    </message>
+    <message>
+        <source>Fruit, Jungle</source>
+        <translation>Meas, dlùth-choille</translation>
+    </message>
+    <message>
+        <source>Nature</source>
+        <translation>An nàdar</translation>
+    </message>
+    <message>
+        <source>olympics_sd</source>
+        <translation>olympics_sd</translation>
+    </message>
+    <message>
+        <source>sdmusic (Hitman [sheepluva edit])</source>
+        <translation>sdmusic (Hitman [deasachadh sheepluva])</translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation>Eadar-theangachaidhean</translation>
+    </message>
+    <message>
+        <source>Brazilian Portuguese</source>
+        <translation>Portagailis Bhraisileach</translation>
+    </message>
+    <message>
+        <source>Bulgarian</source>
+        <translation>Bulgarais</translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation>Seicis</translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation>Sìnis</translation>
+    </message>
+    <message>
+        <source>Finnish</source>
+        <translation>Fionnlannais</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation>Fraingis</translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation>Gearmailtis</translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation>Greugais</translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation>Eadailtis</translation>
+    </message>
+    <message>
+        <source>Japanese</source>
+        <translation>Seapanais</translation>
+    </message>
+    <message>
+        <source>Korean</source>
+        <translation>Coirèanais</translation>
+    </message>
+    <message>
+        <source>Lithuanian</source>
+        <translation>Liotuainis</translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation>Pòlannais</translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation>Portagailis</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation>Ruisis</translation>
+    </message>
+    <message>
+        <source>Scottish Gaelic</source>
+        <translation>Gàidhlig na h-Alba</translation>
+    </message>
+    <message>
+        <source>Slovak</source>
+        <translation>Slòbhacais</translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation>Spàinntis</translation>
+    </message>
+    <message>
+        <source>Swedish</source>
+        <translation>Suainis</translation>
+    </message>
+    <message>
+        <source>Ukrainian</source>
+        <translation>Ucràinis</translation>
+    </message>
+    <message>
+        <source>Special thanks</source>
+        <translation>Taing shònraichte</translation>
+    </message>
+    <message>
+        <source>Project founder</source>
+        <translation>Stèidheadair a’ phròiseict</translation>
     </message>
 </context>
 <context>
@@ -4010,7 +5020,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation type="vanished">Tha sgioba air a bheil an t-aon ainm air an liosta mar-thà</translation>
+        <translation type="vanished">Tha sgioba air a bheil an t-aon ainm air an liosta mu thràth</translation>
     </message>
     <message>
         <source>round in progress</source>
@@ -4038,11 +5048,11 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation type="vanished">Cha seòmair air a bheil an t-ainm seo ann mar-thà</translation>
+        <translation type="vanished">Tha seòmair air a bheil an t-ainm seo ann mu thràth</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation type="vanished">Chaidh am far-ainm seo a thaghadh mar-thà</translation>
+        <translation type="vanished">Chaidh am far-ainm seo a thaghadh mu thràth</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
@@ -4050,7 +5060,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation type="vanished">Tha am pròtacail aithnichte mar-thà</translation>
+        <translation type="vanished">Tha am pròtacail aithnichte mu thràth</translation>
     </message>
     <message>
         <source>Bad number</source>
@@ -4058,7 +5068,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation>Tha am far-ainm ’ga chleachdadh mar-thà</translation>
+        <translation>Tha am far-ainm ’ga chleachdadh mu thràth</translation>
     </message>
     <message>
         <source>No checker rights</source>
@@ -4082,7 +5092,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>bye</source>
-        <translation>mar sin leat</translation>
+        <translation type="vanished">mar sin leat</translation>
     </message>
     <message>
         <source>No such room</source>
@@ -4110,7 +5120,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>You already have voted</source>
-        <translation type="vanished">Rinn thu bhòtadh mar-thà</translation>
+        <translation type="vanished">Rinn thu bhòtadh mu thràth</translation>
     </message>
     <message>
         <source>Voting closed</source>
@@ -4158,7 +5168,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
-        <translation type="vanished">Chan eil bhòtadh a’ tachairt</translation>
+        <translation type="vanished">Chan eil bhòt a’ dol air adhart</translation>
     </message>
     <message>
         <source>Your vote counted</source>
@@ -4182,7 +5192,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
-        <translation>Àitheantan callvote a tha ri am faighinn: kick &lt;far-ainm&gt;, map &lt;ainm&gt;, pause, newseed, hedgehogs</translation>
+        <translation type="vanished">Àitheantan callvote a tha ri am faighinn: kick &lt;far-ainm&gt;, map &lt;ainm&gt;, pause, newseed, hedgehogs</translation>
     </message>
     <message>
         <source>callvote kick: specify nickname</source>
@@ -4206,147 +5216,411 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2” sa phr�
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation type="unfinished"></translation>
+        <translation>Chan fhoghainn aon chinneadh airson geama a thòiseachadh!</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Innteart rèiteachaidh falamh.</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaidh an t-inntrigeadh a dhiùiltadh</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation type="unfinished"></translation>
+        <translation>Cha tusa ceannard an t-seòmair!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation type="unfinished"></translation>
+        <translation>Fiosrachadh gràineige coirbte!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation type="unfinished"></translation>
+        <translation>Tha cus sgiobaidhean ann!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation type="unfinished"></translation>
+        <translation>Tha cus ghràineagan ann!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tha sgioba air a bheil an t-aon ainm air an liosta mu thràth.</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chan urrainn dhut tighinn a-steach: tha cuairt a’ dol air adhart.</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cha cheadaich an seòmar seo gun dig sgioba ùr a-steach an-dràsta.</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mearachd: Chan eil an sgioba ann a bha thu airson toirt air falbh.</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chan urrainn dhut sgioba nach eil leatsa a thoirt air falbh.</translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Ainm seòmair mì-dhligheach! Feumaidh ainm an t-seòmair a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tha seòmair air a bheil an t-ainm seo ann mu thràth.</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: feumaidh tu far-ainm a shònrachadh.</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote kick: chan eil an cleachdaiche seo ann!</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote map: chan eil am mapa seo ann!</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote pause: chan eil geama ’ga chluich!</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation type="unfinished"></translation>
+        <translation>/callvote hedgehogs: sònraich àireamh eadar 1 is 8.</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Ainm seòmair mì-dhligheach! Feumaidh ainm seòmair a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chan eil an seòmar seo ann.</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation type="unfinished"></translation>
+        <translation>Tha tionndadh dhen t-seòmar mì-chòrdail ris an tionndadh de Hedgewars agad!</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaidh an t-inntrigeadh a dhiùltadh. Cha ghabh an seòmar seo ri tighinn a-steach an-dràsta.</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaidh an t-inntrigeadh a dhiùltadh. Chan fhaod ach cleachdaichean clàraichte tighinn a-steach.</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaidh do thoirmeasg on t-seòmar seo.</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaidh am far-ainm a sholar mu thràth.</translation>
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation>Far-ainm mì-dhligheach! Feumaidh far-ainm a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tha am pròtacail aithnichte mu thràth.</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation type="unfinished"></translation>
+        <translation>Droch àireamh.</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chan eil bhòtadh a’ dol air adhart.</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rinn thu bhòtadh mu thràth.</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaidh do bhòt a chunntadh.</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaidh bhòtadh a dhùnadh.</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chaidh cur ’na stad a thoglachadh.</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dh’fhalbh an ùine air a’ bhòtadh.</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation type="unfinished"></translation>
+        <translation>gràineagan anns gach sgioba:</translation>
+    </message>
+    <message>
+        <source>/info &lt;player&gt;: Show info about player</source>
+        <translation>/info &lt;player&gt;: seall fiosrachadh mun chluicheadair</translation>
+    </message>
+    <message>
+        <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
+        <translation>/me &lt;message&gt;: gnìomh sa chabadaich, mar eisimpleir, thèid “/me ag ithe ceann-cropaig” ’na “* Cluicheadair ag ithe ceann-cropaig”</translation>
+    </message>
+    <message>
+        <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
+        <translation>/rnd: tilg bonn biortail is freagair le “ceann” no “clàrsach”</translation>
+    </message>
+    <message>
+        <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
+        <translation>/rnd [A] [B] [C] [...]: Freagair le facal air thuaiream dhen liosta</translation>
+    </message>
+    <message>
+        <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
+        <translation>/watch &lt;id&gt;: Coimhead air an demo a chaidh a stòradh air an fhrithealaiche leis an ID</translation>
+    </message>
+    <message>
+        <source>/help: Show chat command help</source>
+        <translation>/help: Seall cobhair air àitheantan na cabadaich</translation>
+    </message>
+    <message>
+        <source>/callvote [arguments]: Start a vote</source>
+        <translation>/callvote [argamaidean]: Tòisich air bhòtadh</translation>
+    </message>
+    <message>
+        <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
+        <translation>/vote &lt;yes/no&gt;: Bhòt “yes” (aonta) no “no” (eas-aonta) airson a’ bhòtaidh làithrich</translation>
+    </message>
+    <message>
+        <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
+        <translation type="vanished">/greeting &lt;teachdaireachd&gt;: Suidhich an teachdaireachd fàilteachaidh a chì na cluicheadairean a thig a-steach dhan t-seòmar</translation>
+    </message>
+    <message>
+        <source>/delegate &lt;player&gt;: Surrender room control to player</source>
+        <translation>/delegate &lt;cluicheadair&gt;: Gèill smachd air an t-seòmar dhan chluicheadair</translation>
+    </message>
+    <message>
+        <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
+        <translation>/maxteams &lt;N&gt;: Cuingich an àireamh as motha de sgiobaidhean air N</translation>
+    </message>
+    <message>
+        <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
+        <translation>/global &lt;teachdaireachd&gt;: Cuir teachdaireachd cabadaich uile-choitcheann a chì a h-uile duine air an fhrithealaiche</translation>
+    </message>
+    <message>
+        <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
+        <translation>/registered_only: Toglaich an staid “Buill clàraichte a-mhàin”. Ma tha seo an comas, chan fhaod ach cluicheadairean clàraichte tighinn a-steach dhan fhrithealaiche</translation>
+    </message>
+    <message>
+        <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
+        <translation>/super_power: Rach ’nad thighearna. Leis a’ chumhachd seo, ’s urrainn dhut tighinn a-steach gu seòmar sam bith agus thèid do dhìon ach nach fhaigh thu a’ bhròg idir. Falbhaidh an ùine air nuair a dh’fhàgas tu am frithealaiche</translation>
+    </message>
+    <message>
+        <source>/save &lt;parameter&gt;</source>
+        <translation type="vanished">/save &lt;paramadair&gt;</translation>
+    </message>
+    <message>
+        <source>/stats: Query server stats</source>
+        <translation>/stats: Iarr stadastaireachd an fhrithealaiche</translation>
+    </message>
+    <message>
+        <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
+        <translation>/force &lt;yes/no&gt;: Sparr toradh air a’ bhòtadh làithreach</translation>
+    </message>
+    <message>
+        <source>/fix: Force this room to stay open when it is empty</source>
+        <translation>/fix: Sparr air an t-seòmar seo gum mair e fosgailte nuair a bhios e falamh</translation>
+    </message>
+    <message>
+        <source>/unfix: Undo the /fix command</source>
+        <translation>/unfix: Neo-dhèan an àithne /fix</translation>
+    </message>
+    <message>
+        <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
+        <translation type="vanished">/saveroom &lt;ainm faidhle&gt;: Sàbhail rèiteachadh an t-seòmair ann am faidhle</translation>
+    </message>
+    <message>
+        <source>/loadroom &lt;file name&gt;: Load room configuration from a file</source>
+        <translation type="vanished">/loadroom &lt;ainm faidhle&gt;: Luchdaich rèiteachadh seòmair o fhaidhle</translation>
+    </message>
+    <message>
+        <source>/delete &lt;parameter&gt;</source>
+        <translation type="vanished">/delete &lt;paramadair&gt;</translation>
+    </message>
+    <message>
+        <source>List of lobby chat commands:</source>
+        <translation>Liosta de dh’àitheantan cabadaich an lobaidh:</translation>
+    </message>
+    <message>
+        <source>List of room chat commands:</source>
+        <translation>Liosta de dh’àitheantan cabadaich an t-seòmair:</translation>
+    </message>
+    <message>
+        <source>Commands for server admins only:</source>
+        <translation>Àitheantan do rianairean frithealaiche a-mhàin:</translation>
+    </message>
+    <message>
+        <source>Unknown command:</source>
+        <translation type="vanished">Àithne nach aithne dhuinn:</translation>
+    </message>
+    <message>
+        <source>Say &apos;/help&apos; in chat for a list of commands</source>
+        <translation type="vanished">Can “/help” sa chabadaich airson liosta dhe na h-àitheantan</translation>
+    </message>
+    <message>
+        <source>room</source>
+        <translation>seòmar</translation>
+    </message>
+    <message>
+        <source>lobby</source>
+        <translation>lobaidh</translation>
+    </message>
+    <message>
+        <source>(playing)</source>
+        <translation>(a’ cluich)</translation>
+    </message>
+    <message>
+        <source>(spectating)</source>
+        <translation>(’na amharc)</translation>
+    </message>
+    <message>
+        <source>Player is not online.</source>
+        <translation>Chan eil an cluicheadair air loidhne.</translation>
+    </message>
+    <message>
+        <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
+        <translation>/force: Cleachd “yes” no “no”.</translation>
+    </message>
+    <message>
+        <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
+        <translation>/vote: Cleachd “yes” no “no”.</translation>
+    </message>
+    <message>
+        <source>Kicked</source>
+        <translation>Fhuaras a’ bhròg</translation>
+    </message>
+    <message>
+        <source>This server only allows registered users to join.</source>
+        <translation>Chan fhaod ach cleachdaichean clàraichte tighinn a-steach dhan fhrithealaiche seo.</translation>
+    </message>
+    <message>
+        <source>heads</source>
+        <translation>ceann</translation>
+    </message>
+    <message>
+        <source>tails</source>
+        <translation>clàrsach</translation>
+    </message>
+    <message>
+        <source>This server does not support replays!</source>
+        <translation>Cha chuir am frithealaiche seo taic ri ath-chluiche!</translation>
+    </message>
+    <message>
+        <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
+        <translation>/greeting [teachdaieachd]: Suidhich no falamhaich an teachdaireachd fàilteachaidh a chì na cluicheadairean a thig a-steach dhan t-seòmar</translation>
+    </message>
+    <message>
+        <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
+        <translation>/save &lt;ID an rèiteachaidh&gt; &lt;ainm an rèiteachaidh&gt;: Cuir rèiteachadh làithreach an t-seòmair ri taghadh a’ bhòtaidh airson /callvote map</translation>
+    </message>
+    <message>
+        <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
+        <translation>/delete &lt;ID an rèiteachaidh&gt;: Sguab às dha rèiteachadh seòmair a ghabhas bhòtadh air</translation>
+    </message>
+    <message>
+        <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
+        <translation>/saveroom &lt;ainm faidhle&gt;: Sàbhail a h-uile rèiteachadh seòmair a ghabhas bhòtadh air (agus am fàilteachadh) aig an t-seòmar seo ann am faidhle</translation>
+    </message>
+    <message>
+        <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
+        <translation>/loadroom &lt;ainm faidhle&gt;: Luchdaich rèiteachaidhean seòmair (agus fàilteachadh) o fhaidhle</translation>
+    </message>
+    <message>
+        <source>&apos;Registered only&apos; state toggled.</source>
+        <translation type="vanished">Chaidh an staid “Buill clàraichte a-mhàin” a thoglachadh.</translation>
+    </message>
+    <message>
+        <source>Super power activated.</source>
+        <translation>Chaidh thu ’nad thighearna.</translation>
+    </message>
+    <message>
+        <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
+        <translation>àithne no paramadairean nach aithne dhuinn. Can “/help” sa chabadaich airson liosta dhe na h-àitheantan.</translation>
+    </message>
+    <message>
+        <source>You can&apos;t kick yourself!</source>
+        <translation>Chan urrainn dhut a’ bhròg a thoirt dhut fhèin!</translation>
+    </message>
+    <message>
+        <source>You can&apos;t kick the only other player!</source>
+        <translation>Chan urrainn dhut a’ bhròg a thoirt dhan chluicheadair eile mu dheireadh!</translation>
+    </message>
+    <message>
+        <source>The player is not in your room.</source>
+        <translation>Chan eil an cluicheadair seo san t-seòmar agad.</translation>
+    </message>
+    <message>
+        <source>This player is protected from being kicked.</source>
+        <translation>Tha dìon air a&apos; chluicheadair ach nach fhaigh e a’ bhròg idir.</translation>
+    </message>
+    <message>
+        <source>You&apos;re not the room master or a server admin!</source>
+        <translation>Cha tusa ceannard an t-seòmair is chan eil thu ’nad rianaire frithealaiche!</translation>
+    </message>
+    <message>
+        <source>You&apos;re already the room master.</source>
+        <translation>Is tusa ceannard an t-seòmair mu thràth.</translation>
+    </message>
+    <message>
+        <source>Greeting message cleared.</source>
+        <translation>Chaidh an teachdaireachd fàilteachaidh fhalamhachadh.</translation>
+    </message>
+    <message>
+        <source>Greeting message set.</source>
+        <translation>Chaidh an teachdaireachd fàilteachaidh a shuidheachadh.</translation>
+    </message>
+    <message>
+        <source>/callvote kick: This is only allowed in rooms without a room master.</source>
+        <translation>/callvote kick: Chan eil seo ceadaichte ach ann an seòmar aig nach eil ceannard.</translation>
+    </message>
+    <message>
+        <source>/callvote map: No maps available.</source>
+        <translation>/callvote map: Chan eil mapa ri fhaighinn.</translation>
+    </message>
+    <message>
+        <source>You&apos;re the new room master!</source>
+        <translation>Is tusa ceannard ùr an t-seòmair!</translation>
+    </message>
+    <message>
+        <source>/quit: Quit the server</source>
+        <translation>/quit: Fàg am frithealaiche</translation>
+    </message>
+    <message>
+        <source>This command is only available in the lobby.</source>
+        <translation>Chan eil an àithne seo ri fhaighinn ach san lobaidh.</translation>
+    </message>
+    <message>
+        <source>This command is only available in rooms.</source>
+        <translation>Chan eil an àithne seo ri fhaighinn ach ann an seòmar.</translation>
+    </message>
+    <message>
+        <source>This server no longer allows unregistered players to join.</source>
+        <translation>Cha cheadaich am frithealaiche seo tuilleadh gun dig cluicheadairean gun chlàradh ann.</translation>
+    </message>
+    <message>
+        <source>This server now allows unregistered players to join.</source>
+        <translation>Ceadaichidh am frithealaiche seo a-nis gun dig cluicheadairean gun chlàradh ann.</translation>
+    </message>
+    <message>
+        <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
+        <translation>Àitheantan callvote a tha ri am faighinn: hedgehogs &lt;àireamh&gt;, pause, newseed, map &lt;ainm&gt;, kick &lt;cluicheadair&gt;</translation>
+    </message>
+    <message>
+        <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
+        <translation>Dearbh ath-thòiseachadh an fhrithealaiche le “/restart_server yes”.</translation>
+    </message>
+    <message>
+        <source>Warning! Room name change flood protection activated</source>
+        <translation>Rabhadh! Chaidh dìon tuile air atharrachadh ainm an t-seòmair a ghnìomhachadh</translation>
     </message>
 </context>
 </TS>

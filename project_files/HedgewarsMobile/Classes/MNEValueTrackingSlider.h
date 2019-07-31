@@ -17,6 +17,6 @@
 }
 
 @property (nonatomic, readonly) CGRect thumbRect;
-@property (nonatomic, retain) NSString *textValue;
+@property (nonatomic, strong) NSString *textValue;
 
 @end

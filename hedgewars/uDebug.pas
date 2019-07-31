@@ -56,7 +56,7 @@ begin
     if not Assert then
         begin
         lastConsoleLine:= Msg;
-        OutError(Msg, false);
+        OutError(Msg, isFatal);
         end;
 
     allOK:= allOK and (Assert or (not isFatal));
@@ -69,7 +69,7 @@ begin
     if not Assert then
     begin
         s:= SDL_GetError();
-        OutError(Msg + ': ' + s, false)
+        OutError(Msg + ': ' + s, isFatal)
     end;
 
     allOK:= allOK and (Assert or (not isFatal));

@@ -28,9 +28,9 @@
     UIImage *normalHogSprite;
 }
 
-@property (nonatomic,retain) NSDictionary *teamDictionary;
+@property (nonatomic, strong) NSDictionary *teamDictionary;
 @property (nonatomic) NSInteger selectedHog;
-@property (nonatomic,retain) NSArray *hatArray;
-@property (nonatomic,retain) UIImage *normalHogSprite;
+@property (nonatomic, strong) NSArray *hatArray;
+@property (nonatomic, strong) UIImage *normalHogSprite;
 
 @end

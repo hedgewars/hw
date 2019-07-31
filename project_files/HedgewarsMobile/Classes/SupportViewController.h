@@ -24,6 +24,6 @@
     NSArray *waysToSupport;
 }
 
-@property (nonatomic, retain) NSArray *waysToSupport;
+@property (nonatomic, strong) NSArray *waysToSupport;
 
 @end

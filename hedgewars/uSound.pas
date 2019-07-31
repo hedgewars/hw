@@ -43,6 +43,7 @@ procedure InitSound;                            // Initiates sound-system if isS
 procedure ReleaseSound(complete: boolean);      // Releases sound-system and used resources.
 procedure ResetSound;                           // Reset sound state to the previous state.
 procedure SetSound(enabled: boolean);           // Enable/disable sound-system and backup status.
+procedure SetAudioDampen(enabled: boolean);     // Enable/disable automatic dampening if losing window focus.
 
 // MUSIC
 
@@ -61,12 +62,19 @@ procedure StopMusic;                            // Stops and releases the curren
 // Plays the sound snd [from a given voicepack],
 // if keepPlaying is given and true,
 // then the sound's playback won't be interrupted if asked to play again.
-procedure PlaySound(snd: TSound);
-procedure PlaySound(snd: TSound; keepPlaying: boolean);
-procedure PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean);
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean; ignoreMask: boolean);
+// Returns true if sound was found and is played, false otherwise.
+function PlaySound(snd: TSound): boolean;
+function PlaySound(snd: TSound; keepPlaying: boolean): boolean;
+function PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean): boolean;
+function PlaySound(snd: TSound; keepPlaying, ignoreMask, soundAsMusic: boolean): boolean;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack): boolean;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean): boolean;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask: boolean): boolean;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask, soundAsMusic: boolean): boolean;
+
+// Plays/stops a sound to replace the main background music temporarily.
+procedure PlayMusicSound(snd: TSound);
+procedure StopMusicSound(snd: TSound);
 
 // Plays sound snd [of voicepack] in a loop, but starts with fadems milliseconds of fade-in.
 // Returns sound channel of the looped sound.
@@ -78,11 +86,15 @@ function  LoopSoundV(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongI
 // Stops the normal/looped sound of the given type/in the given channel
 // [with a fade-out effect for fadems milliseconds].
 procedure StopSound(snd: TSound);
+procedure StopSound(snd: TSound; soundAsMusic: boolean);
 procedure StopSoundChan(chn: LongInt);
 procedure StopSoundChan(chn, fadems: LongInt);
 
+// Add voice to the voice queue
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
-procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask: boolean);
+procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask, isFallback: boolean);
+
+// Actually play next voice
 procedure PlayNextVoice;
 
 
@@ -104,7 +116,7 @@ procedure SetVolume(vol: LongInt);
 // Modifies the sound volume of the game by voldelta and returns the new volume level.
 function  ChangeVolume(voldelta: LongInt): LongInt;
 
-// Returns the current volume in percent
+// Returns the current volume in percent. Intended for display on UI.
 function  GetVolumePercent(): LongInt;
 
 // Returns a pointer to the voicepack with the given name.
@@ -117,6 +129,7 @@ var MusicFN: shortstring; // music file name
 
 var Volume: LongInt;
     SoundTimerTicks: Longword;
+    LastVoiceFailed: boolean;
 implementation
 uses uVariables, uConsole, uCommands, uDebug, uPhysFSLayer;
 
@@ -129,16 +142,17 @@ var cInitVolume: LongInt;
     Mus: PMixMusic; // music pointer
     isMusicEnabled: boolean;
     isSoundEnabled: boolean;
+    isAutoDampening: boolean;
     isSEBackup: boolean;
     VoiceList : array[0..7] of TVoice =  (
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil));
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false),
+                    ( snd: sndNone; voicepack: nil; isFallback: false));
     Soundz: array[TSound] of record
             FileName: string[31];
             Path, AltPath    : TPathType;
@@ -154,6 +168,7 @@ var cInitVolume: LongInt;
             (FileName:          'graveimpact.ogg'; Path: ptSounds; AltPath: ptNone),// sndGraveImpact
             (FileName:           'mineimpact.ogg'; Path: ptSounds; AltPath: ptNone),// sndMineImpact
             (FileName:             'minetick.ogg'; Path: ptSounds; AltPath: ptNone),// sndMineTicks
+            // TODO: New mudball sound?
             (FileName:             'Droplet1.ogg'; Path: ptSounds; AltPath: ptNone),// sndMudballImpact
             (FileName:           'pickhammer.ogg'; Path: ptSounds; AltPath: ptNone),// sndPickhammer
             (FileName:                  'gun.ogg'; Path: ptSounds; AltPath: ptNone),// sndGun
@@ -232,8 +247,8 @@ var cInitVolume: LongInt;
             (FileName:             'Droplet3.ogg'; Path: ptCurrTheme; AltPath: ptSounds),// sndDroplet3
             (FileName:                  'egg.ogg'; Path: ptSounds; AltPath: ptNone),// sndEggBreak
             (FileName:             'drillgun.ogg'; Path: ptSounds; AltPath: ptNone),// sndDrillRocket
-            (FileName:          'PoisonCough.ogg'; Path: ptVoices; AltPath: ptNone),// sndPoisonCough
-            (FileName:           'PoisonMoan.ogg'; Path: ptVoices; AltPath: ptNone),// sndPoisonMoan
+            (FileName:          'PoisonCough.ogg'; Path: ptVoices; AltPath: ptDefaultVoice),// sndPoisonCough
+            (FileName:           'PoisonMoan.ogg'; Path: ptVoices; AltPath: ptDefaultVoice),// sndPoisonMoan
             (FileName:             'BirdyLay.ogg'; Path: ptSounds; AltPath: ptNone),// sndBirdyLay
             (FileName:              'Whistle.ogg'; Path: ptSounds; AltPath: ptNone),// sndWhistle
             (FileName:             'beewater.ogg'; Path: ptSounds; AltPath: ptNone),// sndBeeWater
@@ -276,9 +291,10 @@ var cInitVolume: LongInt;
             (FileName:           'countdown2.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown2
             (FileName:           'countdown3.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown3
             (FileName:           'countdown4.ogg'; Path: ptSounds; AltPath: ptNone),// sndCountdown4
-            (FileName:      'rubberduck_drop.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckDrop
-            (FileName:     'rubberduck_water.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckWater
-            (FileName:       'rubberduck_die.ogg'; Path: ptSounds; AltPath: ptNone),// sndDuckDie
+            // TODO: Check which creeper (formerly rubberduck) sounds are needed, maybe rename them
+            (FileName:      'rubberduck_drop.ogg'; Path: ptSounds; AltPath: ptNone),// sndCreeperDrop
+            (FileName:     'rubberduck_water.ogg'; Path: ptSounds; AltPath: ptNone),// sndCreeperWater
+            (FileName:       'rubberduck_die.ogg'; Path: ptSounds; AltPath: ptNone),// sndCreeperDie
             (FileName:              'custom1.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom1
             (FileName:              'custom2.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom2
             (FileName:              'custom3.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom3
@@ -287,42 +303,77 @@ var cInitVolume: LongInt;
             (FileName:              'custom6.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom6
             (FileName:              'custom7.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom7
             (FileName:              'custom8.ogg'; Path: ptSounds; AltPath: ptNone),// sndCustom8
-            (FileName:              'minigun.ogg'; Path: ptSounds; AltPath: ptNone) // sndMinigun
+            (FileName:              'minigun.ogg'; Path: ptSounds; AltPath: ptNone),// sndMinigun
+            (FileName:         'flamethrower.ogg'; Path: ptSounds; AltPath: ptNone),// sndFlamethrower
+            (FileName:        'ice_beam_idle.ogg'; Path: ptSounds; AltPath: ptNone),// sndIceBeamIdle
+            (FileName:              'landgun.ogg'; Path: ptSounds; AltPath: ptNone),// sndLandGun
+            (FileName:          'graveimpact.ogg'; Path: ptSounds; AltPath: ptNone),// sndCaseImpact
+            // TODO: New Extra Damage sound
+            (FileName:             'hell_ugh.ogg'; Path: ptSounds; AltPath: ptNone),// sndExtraDamage
+            (FileName:        'firepunch_hit.ogg'; Path: ptSounds; AltPath: ptNone),// sndFirePunchHit
+            (FileName:              'Grenade.ogg'; Path: ptVoices; AltPath: ptNone),// sndGrenade
+            (FileName:        'Thisoneismine.ogg'; Path: ptVoices; AltPath: ptNone),// sndThisOneIsMine
+            (FileName:              'Whatthe.ogg'; Path: ptVoices; AltPath: ptNone),// sndWhatThe
+            (FileName:               'Solong.ogg'; Path: ptVoices; AltPath: ptNone),// sndSoLong
+            (FileName:               'Ohdear.ogg'; Path: ptVoices; AltPath: ptNone),// sndOhDear
+            (FileName:          'Gonnagetyou.ogg'; Path: ptVoices; AltPath: ptNone),// sndGonnaGetYou
+            (FileName:                 'Drat.ogg'; Path: ptVoices; AltPath: ptNone),// sndDrat
+            (FileName:               'Bugger.ogg'; Path: ptVoices; AltPath: ptNone),// sndBugger
+            (FileName:              'Amazing.ogg'; Path: ptVoices; AltPath: ptNone),// sndAmazing
+            (FileName:            'Brilliant.ogg'; Path: ptVoices; AltPath: ptNone),// sndBrilliant
+            (FileName:            'Excellent.ogg'; Path: ptVoices; AltPath: ptNone),// sndExcellent
+            (FileName:                 'Fire.ogg'; Path: ptVoices; AltPath: ptNone),// sndFire
+            (FileName:            'Watchthis.ogg'; Path: ptVoices; AltPath: ptNone),// sndWatchThis
+            (FileName:              'Runaway.ogg'; Path: ptVoices; AltPath: ptNone),// sndRunAway
+            (FileName:              'Revenge.ogg'; Path: ptVoices; AltPath: ptNone),// sndRevenge
+            (FileName:             'Cutitout.ogg'; Path: ptVoices; AltPath: ptNone),// sndCutItOut
+            (FileName:         'Leavemealone.ogg'; Path: ptVoices; AltPath: ptNone),// sndLeaveMeAlone
+            (FileName:                 'Ouch.ogg'; Path: ptVoices; AltPath: ptNone),// sndOuch
+            (FileName:                  'Hmm.ogg'; Path: ptVoices; AltPath: ptNone),// sndHmm
+            (FileName:                 'Kiss.ogg'; Path: ptSounds; AltPath: ptNone),// sndKiss
+            (FileName:              'Flyaway.ogg'; Path: ptVoices; AltPath: ptNone),// sndFlyAway
+            (FileName:           'planewater.ogg'; Path: ptSounds; AltPath: ptNone) // sndPlaneWater
             );
 
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
-    locName, path: shortstring;
+    tmp, nameStart, langName, path: shortstring;
 begin
+    nameStart:= name;
     i:= 0;
 
-    // Adjust voicepack name if there's a localised version version of the voice
-    if cLocale <> 'en' then
+    { Adjust for language suffix: Voicepacks can have an optional language suffix.
+    It's an underscore followed by an ISO 639-1 or ISO 639-2 language code.
+    The suffix “_qau” is special, it will enable automatic language selection
+    of this voicepack. For example, if team has set Default_qau as voicepack,
+    and the player language is Russian, the actual voicepack will be Default_ru,
+    provided it can be found on the disk.
+    “qau” is a valid ISO 639-2 language code reserved for local use. }
+    tmp:= Copy(name, Length(name) - 3, 4);
+    if (tmp = '_qau') then
+        name:= Copy(name, 1, Length(name) - 4);
+    if (cLanguage <> 'en') and (tmp = '_qau') then
         begin
-        locName:= name+'_'+cLocale;
-        path:= cPathz[ptVoices] + '/' + locName;
+        langName:= name+'_'+cLanguage;
+        path:= cPathz[ptVoices] + '/' + langName;
         if pfsExists(path) then
-            name:= locName
+            name:= langName
         else
-            if Length(cLocale) > 3 then
+            if Length(cLanguage) > 3 then
                 begin
-                locName:= name+'_'+Copy(cLocale,1,2);
-                path:= cPathz[ptVoices] + '/' + locName;
+                langName:= name+'_'+Copy(cLanguage,1,2);
+                path:= cPathz[ptVoices] + '/' + langName;
                 if pfsExists(path) then
-                    name:= locName
+                    name:= langName
                 end
         end;
 
     path:= cPathz[ptVoices] + '/' + name;
 
-    // Fallback to Default if voicepack can't be found at all
-    if (name <> 'Default') and (not pfsExists(path)) then
-        begin
-        path:= cPathz[ptVoices] + '/Default';
-        if pfsExists(path) then
-            exit(AskForVoicepack('Default'));
-        end;
+    // Fallback to localized Default if voicepack can't be found at all
+    if (nameStart <> 'Default_qau') and (not pfsExists(path)) then
+        exit(AskForVoicepack('Default_qau'));
 
     while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') and (i < cMaxTeams) do
         begin
@@ -337,9 +388,14 @@ end;
 procedure InitSound;
 const channels: LongInt = 2;
 var success: boolean;
+    s: shortstring;
 begin
     if not (isSoundEnabled or isMusicEnabled) then
+        begin
+        isAudioMuted:= true;
+        cInitVolume:= 0;
         exit;
+        end;
     WriteToConsole('Init sound...');
     success:= SDL_InitSubSystem(SDL_INIT_AUDIO) = 0;
 
@@ -357,11 +413,24 @@ begin
         WriteLnToConsole(msgFailed);
         isSoundEnabled:= false;
         isMusicEnabled:= false;
+        isAudioMuted:= true;
+        cInitVolume:= 0;
     end;
 
     WriteToConsole('Init SDL_mixer... ');
-    if SDLCheck(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true) then exit;
+
+    if (Mix_Init(MIX_INIT_OGG or MIX_INIT_OPUS) and MIX_INIT_OPUS) = 0 then
+    begin
+      s:= SDL_GetError();
+      WriteToConsole('Cannot init OPUS: ' + s);
+
+      if SDLCheck(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true) then exit;
+    end;
+
     WriteLnToConsole(msgOK);
+
+    // from uVariables to be used by other modules
+    cIsSoundEnabled:= true;
 
     Mix_AllocateChannels(Succ(chanTPU));
     previousVolume:= cInitVolume;
@@ -377,6 +446,11 @@ procedure SetSound(enabled: boolean);
 begin
     isSEBackup:= isSoundEnabled;
     isSoundEnabled:= enabled;
+end;
+
+procedure SetAudioDampen(enabled: boolean);
+begin
+    isAutoDampening:= enabled;
 end;
 
 // when complete is false, this procedure just releases some of the chucks on inactive channels
@@ -416,36 +490,95 @@ begin
         end;
 end;
 
-procedure PlaySound(snd: TSound);
+// Get a fallback voice, assuming that snd is not available. Returns sndNone if none is found.
+function GetFallbackV(snd: TSound): TSound;
 begin
-    PlaySoundV(snd, nil, false, false);
+    // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a "higher-numbered" sound is missing
+    if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+        GetFallbackV := sndFirePunch1
+    else if (snd in [sndOw2, sndOw3, sndOw4, sndOuch]) then
+        GetFallbackV := sndOw1
+    else if (snd in [sndOoff2, sndOoff3]) then
+        GetFallbackV := sndOoff1
+    // Other fallback sounds
+    else if (snd = sndGrenade) then
+        if random(2) = 0 then
+            GetFallbackV := sndNooo
+        else
+            GetFallbackV := sndUhOh
+    else if (snd in [sndDrat, sndBugger]) then
+        GetFallbackV := sndStupid
+    else if (snd in [sndGonnaGetYou, sndIllGetYou, sndJustYouWait, sndCutItOut, sndLeaveMeAlone]) then
+        GetFallbackV := sndRegret
+    else if (snd in [sndOhDear, sndSoLong]) then
+        GetFallbackV := sndByeBye
+    else if (snd in [sndWhatThe, sndUhOh]) then
+        GetFallbackV := sndNooo
+    else if (snd = sndRunAway) then
+        GetFallbackV := sndOops
+    else if (snd = sndThisOneIsMine) then
+        GetFallbackV := sndReinforce
+    else if (snd in [sndAmazing, sndBrilliant, sndExcellent]) then
+        GetFallbackV := sndEnemyDown
+    else if (snd = sndPoisonCough) then
+        GetFallbackV := sndPoisonMoan
+    else if (snd = sndPoisonMoan) then
+        GetFallbackV := sndPoisonCough
+    else if (snd = sndFlawless) then
+        GetFallbackV := sndVictory
+    else if (snd = sndSameTeam) then
+        GetFallbackV := sndTraitor
+    else if (snd = sndMelon) then
+        GetFallbackV := sndCover
+    // sndHmm is used for enemy turn start, so sndHello is an "okay" replacement
+    else if (snd = sndHmm) then
+        GetFallbackV := sndHello
+    else
+        GetFallbackV := sndNone;
 end;
 
-procedure PlaySound(snd: TSound; keepPlaying: boolean);
+function PlaySound(snd: TSound): boolean;
 begin
-    PlaySoundV(snd, nil, keepPlaying, false);
+    PlaySound:= PlaySoundV(snd, nil, false, false, false);
 end;
 
-procedure PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean);
+function PlaySound(snd: TSound; keepPlaying: boolean): boolean;
 begin
-    PlaySoundV(snd, nil, keepPlaying, ignoreMask);
+    PlaySound:= PlaySoundV(snd, nil, keepPlaying, false, false);
 end;
 
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
+function PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask: boolean): boolean;
 begin
-    PlaySoundV(snd, voicepack, false, false);
+    PlaySound:= PlaySoundV(snd, nil, keepPlaying, ignoreMask, false);
 end;
 
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+function PlaySound(snd: TSound; keepPlaying: boolean; ignoreMask, soundAsMusic: boolean): boolean;
 begin
-    PlaySoundV(snd, voicepack, keepPlaying, false);
+    PlaySound:= PlaySoundV(snd, nil, keepPlaying, ignoreMask, soundAsMusic);
 end;
 
-procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean; ignoreMask: boolean);
-var s:shortstring;
+function PlaySoundV(snd: TSound; voicepack: PVoicepack): boolean;
+begin
+    PlaySoundV:= PlaySoundV(snd, voicepack, false, false, false);
+end;
+
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean): boolean;
+begin
+    PlaySoundV:= PlaySoundV(snd, voicepack, keepPlaying, false, false);
+end;
+
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask: boolean): boolean;
+begin
+    PlaySoundV:= PlaySoundV(snd, voicepack, keepPlaying, ignoreMask, false);
+end;
+
+function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask, soundAsMusic: boolean): boolean;
+var s: shortstring;
+tempSnd: TSound;
 rwops: PSDL_RWops;
 begin
-    if (not isSoundEnabled) or fastUntilLag then
+    PlaySoundV:= false;
+    if ((not isSoundEnabled) and (not (soundAsMusic and isMusicEnabled))) or fastUntilLag then
         exit;
 
     if keepPlaying and (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
@@ -459,15 +592,15 @@ begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            // Fallback to sndFirePunch1 / sndOw1 / sndOoff1 if a “higher-numbered” sound is missing
+            // Fallback taunts
             if (not pfsExists(s)) then
                 begin
-                if (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
-                    snd := sndFirePunch1
-                else if (snd in [sndOw2, sndOw3, sndOw4]) then
-                    snd := sndOw1
-                else if (snd in [sndOoff2, sndOoff3]) then
-                    snd := sndOoff1;
+                tempSnd := GetFallbackV(snd);
+                if tempSnd <> sndNone then
+                    begin
+                    snd := tempSnd;
+                    LastVoice.snd := tempSnd;
+                    end;
                 s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
                 end;
             WriteToConsole(msgLoading + s + ' ');
@@ -475,7 +608,7 @@ begin
 
             if rwops = nil then
                 begin
-                s:= cPathz[Soundz[snd].AltPath] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+                s:= cPathz[Soundz[snd].AltPath] + '/' + Soundz[snd].FileName;
                 WriteToConsole(msgLoading + s + ' ... ');
                 rwops := rwopsOpenRead(s);
                 end;
@@ -486,7 +619,8 @@ begin
             else
                 WriteLnToConsole(msgOK)
             end;
-        lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], 0, -1)
+        lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], 0, -1);
+        PlaySoundV:= true;
         end
     else
         begin
@@ -507,16 +641,42 @@ begin
             if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
             WriteLnToConsole(msgOK);
             end;
-        lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
+        lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1);
+        PlaySoundV:= true;
         end;
+end;
+
+procedure PlayMusicSound(snd: TSound);
+begin
+    PauseMusic;
+    PlaySound(snd, false, false, true);
+end;
+
+procedure StopMusicSound(snd: TSound);
+begin
+    StopSound(snd, true);
+    ResumeMusic;
 end;
 
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 begin
-    AddVoice(snd, voicepack, false);
+    AddVoice(snd, voicepack, false, false);
 end;
 
-procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask: boolean);
+{
+AddVoice: Add a voice to the voice queue.
+* snd: Sound ID
+* voicepack: Hedgehog voicepack
+* ignoreMask: If true, the sound will be played anyway if masked by Lua
+* isFallback: If true, this sound is added as fallback if the sound previously added to the
+             queue was not found. Useful to make sure a voice is always played, even if
+             a voicepack is incomplete.
+             Example:
+                 AddVoice(sndRevenge, voiceAttacker);
+                 AddVoice(sndRegret, voiceVictim, false, true);
+             --> plays sndRegret if sndRevenge could not be played.
+}
+procedure AddVoice(snd: TSound; voicepack: PVoicepack; ignoreMask, isFallback: boolean);
 var i : LongInt;
 begin
 
@@ -544,11 +704,13 @@ begin
         begin
         VoiceList[i].snd:= snd;
         VoiceList[i].voicepack:= voicepack;
+        VoiceList[i].isFallback:= isFallback;
         end
 end;
 
 procedure PlayNextVoice;
 var i : LongInt;
+    played : boolean;
 begin
     if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd <> sndNone) and (lastChan[LastVoice.snd] <> -1) and (Mix_Playing(lastChan[LastVoice.snd]) <> 0)) then
         exit;
@@ -556,14 +718,19 @@ begin
     while (i<High(VoiceList)) and (VoiceList[i].snd = sndNone) do
         inc(i);
 
-    if (VoiceList[i].snd <> sndNone) then
+    played:= false;
+    if (VoiceList[i].snd <> sndNone) and ((not VoiceList[i].isFallback) or LastVoiceFailed) then
         begin
         LastVoice.snd:= VoiceList[i].snd;
         LastVoice.voicepack:= VoiceList[i].voicepack;
+        LastVoice.isFallback:= VoiceList[i].isFallback;
         VoiceList[i].snd:= sndNone;
-        PlaySoundV(LastVoice.snd, LastVoice.voicepack)
+        played:= PlaySoundV(LastVoice.snd, LastVoice.voicepack);
+        // Remember if sound was not played.
+        LastVoiceFailed:= (not played);
         end
-    else LastVoice.snd:= sndNone;
+    else
+        LastVoice.snd:= sndNone;
 end;
 
 function LoopSound(snd: TSound): LongInt;
@@ -622,7 +789,7 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
-            if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit;
+            if SDLCheck(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true) then exit(-1);
             WriteLnToConsole(msgOK);
             end;
         if fadems > 0 then
@@ -634,7 +801,12 @@ end;
 
 procedure StopSound(snd: TSound);
 begin
-    if not isSoundEnabled then
+    StopSound(snd, false);
+end;
+
+procedure StopSound(snd: TSound; soundAsMusic: boolean);
+begin
+    if ((not isSoundEnabled) and (not (soundAsMusic and isMusicEnabled))) then
         exit;
 
     if (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
@@ -659,7 +831,10 @@ begin
         exit;
 
     if (chn <> -1) and (Mix_Playing(chn) <> 0) then
-        Mix_FadeOutChannel(chn, fadems);
+        if isAudioMuted then
+            Mix_HaltChannel(chn)
+        else
+            Mix_FadeOutChannel(chn, fadems);
 end;
 
 procedure PlayMusic;
@@ -713,6 +888,12 @@ end;
 function GetVolumePercent(): LongInt;
 begin
     GetVolumePercent:= Volume * 100 div MIX_MAX_VOLUME;
+    // 0 and 100 will only be displayed when at min/max values
+    // to avoid confusion.
+    if ((GetVolumePercent = 0) and (Volume > 0)) then
+        GetVolumePercent:= 1
+    else if ((GetVolumePercent = 100) and (Volume < MIX_MAX_VOLUME)) then
+        GetVolumePercent:= 99;
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
@@ -743,7 +924,7 @@ end;
 
 procedure DampenAudio;
 begin
-    if (isAudioMuted) then
+    if (isAudioMuted or (not isAutoDampening)) then
         exit;
     previousVolume:= Volume;
     ChangeVolume(-Volume * 7 div 9);
@@ -751,7 +932,7 @@ end;
 
 procedure UndampenAudio;
 begin
-     if (isAudioMuted) then
+    if (isAudioMuted or (not isAutoDampening)) then
         exit;
     ChangeVolume(previousVolume - Volume);
 end;
@@ -840,6 +1021,7 @@ procedure preInitModule;
 begin
     isMusicEnabled:= true;
     isSoundEnabled:= true;
+    isAutoDampening:= true;
     cInitVolume:= 100;
 end;
 
@@ -851,12 +1033,15 @@ begin
 
     MusicFN:='';
     SDMusicFN:= 'sdmusic.ogg';
+    FallbackMusicFN:='';
+    FallbackSDMusicFN:= 'sdmusic.ogg';
     Mus:= nil;
     isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
     Volume:= 0;
     SoundTimerTicks:= 0;
-    defVoicepack:= AskForVoicepack('Default');
+    defVoicepack:= AskForVoicepack('Default_qau');
+    LastVoiceFailed:= false;
 
     for i:= Low(TSound) to High(TSound) do
         lastChan[i]:= -1;

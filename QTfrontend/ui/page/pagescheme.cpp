@@ -26,10 +26,14 @@
 #include <QMessageBox>
 #include <QDataWidgetMapper>
 #include <QSpinBox>
+#include <QRegExp>
+#include <QRegExpValidator>
 
+#include "hwconsts.h"
 #include "gameSchemeModel.h"
 #include "pagescheme.h"
 #include "FreqSpinBox.h"
+#include "SDTimeoutSpinBox.h"
 #include "MinesTimeSpinBox.h"
 
 
@@ -89,7 +93,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glGMLayout->addWidget(TBW_switchhog,0,4,1,1);
 
     TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
-    TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
+    TBW_solid->setWhatsThis(tr("Land can not be destroyed by most weapons."));
     glGMLayout->addWidget(TBW_solid,1,0,1,1);
 
     TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity@2x.png");
@@ -171,6 +175,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     // Right
     QLabel * l;
 
+//: Description of the game scheme setting “Damage Modifier”. “Knockback” means how much hedgehogs and objects get pushed by explosions and other forces
     QString wtDamageModifier = tr("Overall damage and knockback in percent");
     QString wtTurnTime = tr("Turn time in seconds");
     QString wtInitHealth = tr("Initial health of hedgehogs");
@@ -251,9 +256,21 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l->setWhatsThis(wtSuddenDeath);
     l->setPixmap(QPixmap(":/res/iconSuddenDeathTime.png"));
     glBSLayout->addWidget(l,3,1,1,1);
-    SB_SuddenDeath = new QSpinBox(gbBasicSettings);
+    /* NOTE:
+       The internally stored value for Sudden Death Timeout
+       is defined as
+       "number of full rounds to play till Sudden Death, minus one"
+       i.e. value 0 means Sudden Death starts in 2nd round.
+       The lowest possible internal value is 0.
+       The user-facing value is different, it's defined as
+       "number of full rounds to play till Sudden Death"
+       i.e. the user-facing value 1 is equivalent to internal value 0.
+       We use SDTimeoutSpinBox for the magic to happen. */
+    SB_SuddenDeath = new SDTimeoutSpinBox(gbBasicSettings);
     SB_SuddenDeath->setWhatsThis(wtSuddenDeath);
-    SB_SuddenDeath->setRange(0, 50);
+    // Will display as 1-52
+    SB_SuddenDeath->setRange(0, 51);
+    // Will display as 16
     SB_SuddenDeath->setValue(15);
     SB_SuddenDeath->setSingleStep(3);
     glBSLayout->addWidget(SB_SuddenDeath,3,2,1,1);
@@ -445,6 +462,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(SB_AirMines,14,2,1,1);
 
     l = new QLabel(gbBasicSettings);
+//: Label of game scheme setting for the time you get after an attack
     l->setText(QLabel::tr("% Retreat Time"));
     l->setWhatsThis(wtGetAwayTime);
     l->setWordWrap(true);
@@ -502,6 +520,9 @@ QLayout * PageScheme::bodyLayoutDefinition()
     L_name->setText(QLabel::tr("Scheme Name:"));
 
     LE_name = new QLineEdit(this);
+    QRegExp rx(*cSafeFileNameRegExp);
+    QRegExpValidator * val = new QRegExpValidator(rx, LE_name);
+    LE_name->setValidator(val);
     LE_name->setWhatsThis(tr("Name of this scheme"));
 
     gl->addWidget(LE_name,15,1,1,5);
@@ -518,8 +539,11 @@ QLayout * PageScheme::footerLayoutDefinition()
 
     bottomLayout->addWidget(selectScheme, 0);
     BtnCopy = addButton(tr("Copy"), bottomLayout, 1);
+    BtnCopy->setStyleSheet("padding: 5px;");
     BtnNew = addButton(tr("New"), bottomLayout, 2);
+    BtnNew->setStyleSheet("padding: 5px;");
     BtnDelete = addButton(tr("Delete"), bottomLayout, 3);
+    BtnDelete->setStyleSheet("padding: 5px;");
 
     bottomLayout->setStretch(1,1);
     bottomLayout->setStretch(2,1);
@@ -540,6 +564,7 @@ void PageScheme::connectSignals()
 
 PageScheme::PageScheme(QWidget* parent) : AbstractPage(parent)
 {
+    changingSchemes = false;
     initPage();
 }
 
@@ -594,24 +619,33 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(LE_ScriptParam, 43);
 
     mapper->toFirst();
+
+    connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataChanged(QModelIndex, QModelIndex)));
 }
 
 void PageScheme::newRow()
 {
+    changingSchemes = true;
     QAbstractItemModel * model = mapper->model();
     model->insertRow(-1);
     selectScheme->setCurrentIndex(model->rowCount() - 1);
+    changingSchemes = false;
+    checkDupe();
 }
 
 void PageScheme::copyRow()
 {
+    changingSchemes = true;
     QAbstractItemModel * model = mapper->model();
     model->insertRow(selectScheme->currentIndex());
     selectScheme->setCurrentIndex(model->rowCount() - 1);
+    changingSchemes = false;
+    checkDupe();
 }
 
 void PageScheme::deleteRow()
 {
+    changingSchemes = true;
     int numberOfDefaultSchemes = ((GameSchemeModel*)mapper->model())->numberOfDefaultSchemes;
     if (selectScheme->currentIndex() < numberOfDefaultSchemes)
     {
@@ -619,6 +653,7 @@ void PageScheme::deleteRow()
         deniedMsg.setIcon(QMessageBox::Warning);
         deniedMsg.setWindowTitle(QMessageBox::tr("Schemes - Warning"));
         deniedMsg.setText(QMessageBox::tr("Cannot delete default scheme '%1'!").arg(selectScheme->currentText()));
+        deniedMsg.setTextFormat(Qt::PlainText);
         deniedMsg.setWindowModality(Qt::WindowModal);
         deniedMsg.exec();
     }
@@ -628,6 +663,7 @@ void PageScheme::deleteRow()
         reallyDeleteMsg.setIcon(QMessageBox::Question);
         reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Schemes - Are you sure?"));
         reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the game scheme '%1'?").arg(selectScheme->currentText()));
+        reallyDeleteMsg.setTextFormat(Qt::PlainText);
         reallyDeleteMsg.setWindowModality(Qt::WindowModal);
         reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
@@ -637,6 +673,15 @@ void PageScheme::deleteRow()
             model->removeRow(selectScheme->currentIndex());
         }
     }
+    changingSchemes = false;
+}
+
+void PageScheme::dataChanged(QModelIndex topLeft, QModelIndex bottomRight)
+{
+    Q_UNUSED(bottomRight)
+    if(topLeft.column() == 0) {
+        checkDupe();
+    };
 }
 
 void PageScheme::schemeSelected(int n)
@@ -646,6 +691,43 @@ void PageScheme::schemeSelected(int n)
     gbBasicSettings->setEnabled(n >= c);
     LE_name->setEnabled(n >= c);
     L_name->setEnabled(n >= c);
+    checkDupe();
 }
 
+// Check for duplicates and rename scheme if duplicate found
+void PageScheme::checkDupe()
+{
+    if (changingSchemes)
+    {
+        return;
+    }
+    int except = selectScheme->currentIndex();
+    QString name = selectScheme->currentText();
+    GameSchemeModel* model = (GameSchemeModel*)mapper->model();
+    bool dupe = model->hasScheme(name, except);
+    if (dupe)
+    {
+        QString newName;
+        //name already used -> look for an appropriate name
+        int i=2;
+        while(model->hasScheme(newName = tr("%1 (%2)").arg(name).arg(i++), except))
+        {
+            if(i > 1000)
+            {
+                return;
+            }
+        }
+        LE_name->setText(newName);
+        selectScheme->setCurrentText(newName);
+        model->renameScheme(except, newName);
+
+        QMessageBox dupeMsg(this);
+        dupeMsg.setIcon(QMessageBox::Warning);
+        dupeMsg.setWindowTitle(QMessageBox::tr("Schemes - Name already taken"));
+        dupeMsg.setTextFormat(Qt::PlainText);
+        dupeMsg.setText(QMessageBox::tr("A scheme with the name '%1' already exists. Your scheme has been renamed to '%2'.").arg(name).arg(newName));
+        dupeMsg.setWindowModality(Qt::WindowModal);
+        dupeMsg.exec();
+    }
+}
 

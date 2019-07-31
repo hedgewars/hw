@@ -24,6 +24,6 @@
     NSMutableArray *listOfTeams;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfTeams;
+@property (nonatomic, strong) NSMutableArray *listOfTeams;
 
 @end

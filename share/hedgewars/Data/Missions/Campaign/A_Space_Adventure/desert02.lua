@@ -5,6 +5,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
@@ -17,6 +18,12 @@ local dialog01 = {}
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope to quickly get to the surface!") .. "|" .. loc("Mines time: 1 second"), 1, 4500},
 }
+-- For an achievement/award (see below)
+local cratesCollected = 0
+local totalCrates = 0
+local damageTaken = false
+local animStarted = false
+local record
 -- health crates
 healthX = 565
 health1Y = 1400
@@ -31,7 +38,7 @@ hero.x = 1600
 hero.y = 1950
 hero.dead = false
 teamA.name = loc("Hog Solo")
-teamA.color = tonumber("38D61C",16) -- green
+teamA.color = -6
 -- way points
 local current waypoint = 1
 local waypoints = {
@@ -58,7 +65,6 @@ function onGameInit()
 	GameFlags = gfOneClanMode
 	Seed = 1
 	TurnTime = 8000
-	Delay = 2
 	CaseFreq = 0
 	HealthCaseAmount = 50
 	MinesNum = 500
@@ -71,12 +77,14 @@ function onGameInit()
 	Map = "desert02_map"
 	Theme = "Desert"
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 
+ 	record = tonumber(GetCampaignVar("FastestMineEscape"))
 	initCheckpoint("desert02")
 
 	AnimInit(true)
@@ -92,6 +100,9 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
+	if record ~= nil then
+		goals[dialog01][3] = goals[dialog01][3] .. "|" .. string.format(loc("Fastest escape: %d turns"), record)
+	end
 	ShowMission(unpack(goals[dialog01]))
 	HideMission()
 
@@ -102,11 +113,17 @@ function onGameStart()
 	SpawnHealthCrate(healthX, health2Y)
 
 	SendHealthStatsOff()
-	AddAnim(dialog01)
 end
 
 function onNewTurn()
+	if not animStarted then
+		AddAnim(dialog01)
+		animStarted = true
+	end
 	SetWeapon(amRope)
+	if TotalRounds >= 0 and record ~= nil then
+		SetTeamLabel(teamA.name, tostring(TotalRounds))
+	end
 end
 
 function onGameTick()
@@ -121,12 +138,25 @@ end
 function onGearAdd(gear)
 	if GetGearType(gear) == gtRope then
 		HideMission()
+	elseif GetGearType(gear) == gtCase then
+		totalCrates = totalCrates + 1
 	end
 end
 
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+		damageTaken = true
+	end
+	-- Crate collected
+	if GetGearType(gear) == gtCase and band(GetGearMessage(gear), gmDestroy) ~= 0 then
+		cratesCollected = cratesCollected + 1
+	end
+end
+
+function onGearDamage(gear)
+	if gear == hero.gear then
+		damageTaken = true
 	end
 end
 
@@ -155,7 +185,7 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("To win the game you have to go to the surface."))
 	SendStat(siCustomAchievement, loc("Most mines are not active."))
 	SendStat(siCustomAchievement, loc("From the second turn and beyond the water rises."))
@@ -167,7 +197,6 @@ function heroSafe(gear)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You have escaped successfully."))
 	SendStat(siCustomAchievement, string.format(loc("Your escape took you %d turns."), TotalRounds))
-	local record = tonumber(GetCampaignVar("FastestMineEscape"))
 	if record ~= nil and TotalRounds >= record then
 		SendStat(siCustomAchievement, string.format(loc("Your fastest escape so far: %d turns"), record))
 	end
@@ -176,6 +205,10 @@ function heroSafe(gear)
 		if record ~= nil then
 			SendStat(siCustomAchievement, loc("This is a new personal best, congratulations!"))
 		end
+	end
+	-- Achievement awarded for escaping with all crates collected and no damage taken
+	if (not damageTaken) and (cratesCollected >= totalCrates) then
+		awardAchievement(loc("Better Safe Than Sorry"))
 	end
 	sendSimpleTeamRankings({teamA.name})
 	SaveCampaignVar("Mission7Won", "true")
@@ -209,4 +242,7 @@ end
 function challengeStart()
 	startChallenge = true
 	EndTurn(true)
+	if record ~= nil then
+		SetTeamLabel(teamA.name, "0")
+	end
 end

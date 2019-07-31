@@ -23,20 +23,22 @@ Kill Weaklings and Stronglings.
 - The remaining Weaklings spawn
 - TBS
 - All Weaklings dead
-- Cut scene: stronglingsAnim: Stronglings spawn, hero walks to forest, meets cyborg, cyborg makes offer
+- Cut scene: stronglingsAnim: Stronglings spawn, Dense Cloud walks to forest, meets cyborg, cyborg makes offer
 - The cyborg offer is an IMPORTANT decision, it completely changes the next mission, and the rest of the story
 | Accept: Player walks to cyborg
     - Cut scene: acceptAnim
-    - Hero needs to walk all the way back (infinite turn time)
-    - Hero reached tree
-    - Turn time starts
-    - TBS
-    - Stronglings defeated
-    | Stronglings defeated with both hogs survived
-        - Cut scene: acceptedSurvivedFinalAnim
-    | Stronglings deafeated with Dense Cloud dead
-        - Cut scene: acceptedDiedFinalAnim
-    > Victory
+    - Dense Cloud needs to walk all the way back (infinite turn time)
+    | Dense Cloud reached tree
+        - Turn time starts
+        - TBS
+        - Stronglings defeated
+        | Stronglings defeated with both hogs survived
+            - Cut scene: acceptedSurvivedFinalAnim
+        | Stronglings defeated with Dense Cloud dead
+            - Cut scene: acceptedDiedFinalAnim
+        > Victory
+    | Dense Cloud dies before reaching the tree
+        > Game over
 | Reject: Player walks away
     - Cut scene: refusedAnim
     - Leaks a Lot teleports back to tree at the start (automatically)
@@ -48,7 +50,7 @@ Kill Weaklings and Stronglings.
     > Victory
 | Attack: Player attacks cyborg
     - Cut scene: attackAnim
-    - Cyborg kills hero
+    - Cyborg kills Dense Cloud
     - Other native's turn to defeat Stronglings
     - TBS
     - Stronglings defeated
@@ -80,6 +82,8 @@ refusedReturnStage = 11
 attackedReturnStage = 12
 loseStage = 13
 
+wave1EnemyTurn = false
+
 ourTeam = 0
 weakTeam = 1
 strongTeam = 2
@@ -93,6 +97,9 @@ choiceRefuse = 2
 choiceAttack = 3
 
 HogNames = {loc("Brainiac"), loc("Corpsemonger"), loc("Femur Lover"), loc("Glark"), loc("Bonely"), loc("Rot Molester"), loc("Bloodrocutor"), loc("Muscle Dissolver"), loc("Bloodsucker")}
+
+nativesTeamName = nil
+weaklingsTeamName = nil
 
 ---POSITIONS---
 
@@ -122,6 +129,7 @@ lastOurHog = leaksNr
 lastEnemyHog = 0
 stage = 0
 choice = 0
+checkAcceptTimer = 0
 
 brainiacDead = false
 cyborgHidden = false
@@ -143,7 +151,6 @@ shotgunUsed = false
 hogNr = {}
 cannibalDead = {}
 isHidden = {}
-
 
 --------------------------Anim skip functions--------------------------
 function AfterRefusedAnim()
@@ -189,7 +196,7 @@ function AfterStartDialogue()
   end
   stage = spyStage
   ShowMission(loc("The Shadow Falls"), loc("Play with me!"), loc("Kill the cannibal!").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 
@@ -220,10 +227,9 @@ function AfterWeaklingsAnim()
   SetHealth(SpawnHealthCrate(2757, 1030), 50)
   SetHealth(SpawnHealthCrate(2899, 1009), 50)
   stage = wave1Stage
-  SwitchHog(dense)
   SetGearMessage(dense, 0)
   SetGearMessage(leaks, 0)
-  TurnTimeLeft = TurnTime
+  EndTurn(true)
   ShowMission(loc("The Shadow Falls"), loc("Why do you not like me?"), loc("Obliterate them!|Hint: You might want to take cover...").."|"..loc("Both your hedgehogs must survive."), 1, 6000)
 end
 
@@ -239,6 +245,7 @@ function SkipWeaklingsAnim()
     AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
     SetState(cannibals[i], 0)
   end
+  AnimSwitchHog(cannibals[2])
 end
 
 function AfterStronglingsAnim()
@@ -246,7 +253,7 @@ function AfterStronglingsAnim()
     return
   end
   stage = cyborgStage
-  ShowMission(loc("The Shadow Falls"), loc("The Dilemma"), loc("Choose your side! If you want to join the strange man, walk up to him.|Otherwise, walk away from him. If you decide to att...nevermind..."), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The Dilemma"), loc("Choose your side! If you want to join the strange man, walk up to him.|Otherwise, walk away from him. If you decide to att...nevermind..."), 3, 8000)
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckRefuse, {}, DoRefuse, {}, 0)
   AddEvent(CheckAccept, {}, DoAccept, {}, 0)
@@ -296,7 +303,6 @@ function AfterAcceptedAnim()
   AddEvent(CheckReadyForStronglings, {}, DoReadyForStronglings, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
   AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
-  RemoveEventFunc(CheckDenseDead)
   SwitchHog(dense)
   AnimWait(dense, 1)
   AddFunction({func = HideHog, args = {cyborg}})
@@ -316,7 +322,7 @@ function AfterAttackedAnim()
     return
   end
   stage = aloneStage
-  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: Set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
+  ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!"), 1, 12000)
   AddAmmo(cannibals[6], amGrenade, 1)
   AddAmmo(cannibals[6], amFirePunch, 0)
   AddAmmo(cannibals[6], amBaseballBat, 0)
@@ -330,7 +336,7 @@ function AfterAttackedAnim()
   AddAmmo(cannibals[9], amFirePunch, 0)
   AddAmmo(cannibals[9], amBaseballBat, 0)
   SetGearMessage(leaks, 0)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadAttacked, {}, 0)
   SwitchHog(leaks)
   AnimWait(dense, 1)
@@ -350,7 +356,6 @@ function SkipAttackedAnim()
   SpawnSupplyCrate(3192, 1101, amShotgun)
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
-  AnimSwitchHog(leaks)
 end
 
   
@@ -466,7 +471,7 @@ function AnimationSetup()
   table.insert(weaklingsAnim, {func = AnimWait, args = {leaks, 400}})
   table.insert(weaklingsAnim, {func = AnimSay, args = {cannibals[3], loc("Are we there yet?"), SAY_SAY, 4000}}) 
   table.insert(weaklingsAnim, {func = AnimSay, args = {dense, loc("This must be some kind of sorcery!"), SAY_SHOUT, 3500}})
-  table.insert(weaklingsAnim, {func = AnimSwitchHog, args = {leaks}})
+  table.insert(weaklingsAnim, {func = AnimSwitchHog, args = {cannibals[2]}})
   AddSkipFunction(weaklingsAnim, SkipWeaklingsAnim, {})
 
   table.insert(stronglingsAnim, {func = AnimGearWait, args = {leaks, 1000}})
@@ -603,13 +608,13 @@ function RefusedStart()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  nativesTeamName = AddMissionTeam(-2)
   ramon = AddHog(loc("Ramon"), 0, 100, "rasta")
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   spiky = AddHog(loc("Spiky Cheese"), 0, 100, "hair_yellow")
 
-  AddTeam(loc("Weaklings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
+  weaklingsTeamName = AddTeam(loc("Weaklings"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   cannibals = {}
   cannibals[1] = AddHog(loc("Brainiac"), 5, 20, "Zombi")
 
@@ -618,14 +623,14 @@ function AddHogs()
     hogNr[cannibals[i]] = i - 2
   end
 
-  AddTeam(loc("Stronglings"), 14483456, "skull", "Island", "Pirate","cm_vampire")
+  AddTeam(loc("Stronglings"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
 
   for i = 6, 9 do
     cannibals[i] = AddHog(HogNames[i], 4, 30, "vampirichog")
     hogNr[cannibals[i]] = i - 2
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Y3K1337"), 0, 200, "cyborg1")
 end
 
@@ -756,6 +761,10 @@ function DoBrainiacDead()
   if stage == loseStage then
     return
   end
+  if (not IsHogAlive(dense)) or (not IsHogAlive(leaks)) then
+    return
+  end
+
   EndTurn(true)
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(weaklingsAnim)
@@ -776,18 +785,18 @@ function DoWeaklingsKilled()
   if stage == loseStage then
     return
   end
-  if denseDead or GetHealth(dense) == 0 or leaksDead or GetHealth(leaks) == 0 then
+  if (not IsHogAlive(dense)) or (not IsHogAlive(leaks)) then
     return
   end
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
   stage = interWeakStage
-  DismissTeam(loc("Weaklings"))
+  DismissTeam(weaklingsTeamName)
 end
 
 function CheckRefuse()
-  return GetX(dense) > 1400 and StoppedGear(dense)
+  return IsHogAlive(dense) and GetX(dense) > 1400 and StoppedGear(dense)
 end
 
 function DoRefuse()
@@ -798,7 +807,20 @@ function DoRefuse()
 end
 
 function CheckAccept()
-  return GetX(dense) < 1300 and StoppedGear(dense)
+  if not IsHogAlive(dense) then
+    return false
+  end
+  if GetX(dense) < 1300 then
+    -- When close to cyborg, wait for a short time before accepting,
+    -- to allow player to attack with melee weapons.
+    checkAcceptTimer = checkAcceptTimer + 1
+    if checkAcceptTimer > 2000 and denseDead == false and StoppedGear(dense) then
+      return true
+    end
+  else
+    checkAcceptTimer = 0
+  end
+  return false
 end
 
 function DoAccept()
@@ -809,7 +831,7 @@ function DoAccept()
 end
 
 function CheckConfront()
-  return cyborgAttacked and StoppedGear(dense)
+  return cyborgAttacked and IsHogAlive(dense) and StoppedGear(dense)
 end
 
 function DoConfront()
@@ -837,21 +859,27 @@ function CheckNeedGirder()
   if stage == loseStage then
     return false
   end
-  return GetX(dense) > 1640 and StoppedGear(dense)
+  return denseDead == false and GetX(dense) > 1640 and StoppedGear(dense)
 end
 
 function DoNeedGirder()
   if stage == loseStage then
     return
   end
-  ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("Return to Leaks A Lot!") .. "|" .. loc("To place a girder, select it, use [Left] and [Right] to select angle and length, place with [Left Click]"), 1, 6000)
+  local ctrl = loc("Hint: To place a girder, select it,|then use [Left] and [Right] to select angle and length,|then choose a location for the girder.")
+  if INTERFACE == "touch" then
+    ctrl = ctrl .. "|" .. loc("Choose location: Tap the [Target] button, then tap on the spot you want to choose")
+  else
+    ctrl = ctrl .. "|" .. loc("Choose location: Left click")
+  end
+  ShowMission(loc("The Shadow Falls"), loc("Under Construction"), loc("Return to Leaks A Lot!") .. "|" .. ctrl, 1, 6000)
 end
 
 function CheckNeedWeapons()
   if stage == loseStage then
     return false
   end
-  return GetX(dense) > 2522 and StoppedGear(dense)
+  return denseDead == false and GetX(dense) > 2522 and StoppedGear(dense)
 end
 
 function DoNeedWeapons()
@@ -867,6 +895,9 @@ function CheckReadyForStronglings()
   if stage == loseStage then
     return false
   end
+  if not IsHogAlive(dense) then
+    return false
+  end
   return (shotgunTaken and grenadeTaken) or GetX(dense) > 2700
 end
 
@@ -874,7 +905,8 @@ function DoReadyForStronglings()
   if stage == loseStage then
     return
   end
-  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Protect yourselves!|Grenade hint: Set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power").."|"..loc("Leaks A Lot must survive!"), 1, 8000)
+
+  ShowMission(loc("The Shadow Falls"), loc("The guardian"), loc("Defeat the cannibals!") .."|".. loc("Leaks A Lot must survive!"), 1, 12000)
   AddAmmo(dense, amSkip, 100)
   AddAmmo(dense, amSwitch, 100)
   AddAmmo(leaks, amSkip, 100)
@@ -882,6 +914,7 @@ function DoReadyForStronglings()
   stage = duoStage
   RemoveEventFunc(CheckNeedGirder)
   RemoveEventFunc(CheckNeedWeapons)
+  RemoveEventFunc(CheckDenseDead)
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDead, {}, 0)
   AddAmmo(cannibals[6], amGrenade, 2)
   AddAmmo(cannibals[6], amShotgun, 2)
@@ -893,14 +926,14 @@ function DoReadyForStronglings()
   AddAmmo(cannibals[9], amShotgun, 2)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function DoStronglingsDead()
   if stage == loseStage then
     return
   end
-  if leaksDead or GetHealth(leaks) == 0 then
+  if not IsHogAlive(leaks) then
     return
   end
   SetGearMessage(CurrentHedgehog, 0)
@@ -985,7 +1018,7 @@ function DoDead()
   end
   AddCaption(loc("...and so the cyborgs took over the world..."))
   stage = loseStage
-  DismissTeam(loc("Natives"))
+  DismissTeam(nativesTeamName)
 end
 
 function CheckDenseDead()
@@ -1002,7 +1035,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
 	Map = "A_Classic_Fairytale_shadow"
 	Theme = "Nature"
 	-- Disable Sudden Death
@@ -1027,7 +1059,14 @@ function onGameStart()
   AddAnim(startDialogue)
   AddFunction({func = AfterStartDialogue, args = {}})
   AddEvent(CheckBrainiacDead, {}, DoBrainiacDead, {}, 0)
-  ShowMission(loc("The Shadow Falls"), loc("The First Encounter"), loc("Survive!|Hint: Cinematics can be skipped with the [Precise] key."), 1, 0)
+  local hint
+  if INTERFACE == "touch" then
+     -- FIXME: No precise key available in Touch yet.
+     hint = ""
+  else
+     hint = "|" .. loc("Hint: Cinematics can be skipped with the [Precise] key.")
+  end
+  ShowMission(loc("The Shadow Falls"), loc("The First Encounter"), loc("Survive!") .. hint, 10, 0)
 end
 
 function onGameTick()
@@ -1064,9 +1103,9 @@ function onGearDelete(gear)
 end
 
 function onGearAdd(gear)
-  if GetGearType(gear) == gtGrenade and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+  if GetGearType(gear) == gtGrenade and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
     grenadeUsed = true
-  elseif GetGearType(gear) == gtShotgunShot and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+  elseif GetGearType(gear) == gtShotgunShot and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
     shotgunUsed = true
   end
 end
@@ -1091,17 +1130,22 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
+  elseif stage == wave1Stage then
+    if GetHogClan(CurrentHedgehog) == GetTeamClan(weaklingsTeamName) and (not wave1EnemyTurn) then
+      EndTurn(true)
+      wave1EnemyTurn = true
+    end
   elseif stage == cyborgStage then
     if CurrentHedgehog ~= dense then
       EndTurn(true)
     else
-      TurnTimeLeft = -1
+      SetTurnTimeLeft(MAX_TURN_TIME)
     end
   elseif stage == acceptedReturnStage then
     SwitchHog(dense)
     FollowGear(dense)
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
   end
 end
 
@@ -1118,3 +1162,10 @@ function onPrecise()
   end
 end
 
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
+  end
+end

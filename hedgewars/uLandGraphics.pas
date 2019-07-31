@@ -51,6 +51,7 @@ function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; d
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean; inline;
 function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; Tint: LongWord; Behind, flipHoriz, flipVert: boolean): boolean; inline;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force, behind, flipHoriz, flipVert: boolean; LandFlags: Word; Tint: LongWord): boolean;
+procedure EraseLandRectRaw(X, Y, width, height: LongWord);
 procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert: boolean);
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
@@ -161,6 +162,7 @@ end;
 procedure DrawPixelIce(landX, landY, pixelX, pixelY: Longint); inline;
 begin
 if ((Land[landY, landX] and lfIce) <> 0) then exit;
+if (pixelX < LeftX) or (pixelX > RightX) or (pixelY < TopY) then exit;
 if isLandscapeEdge(getPixelWeight(landX, landY)) then
     begin
     if (LandPixels[pixelY, pixelX] and AMask < 255) and (LandPixels[pixelY, pixelX] and AMask > 0) then
@@ -236,12 +238,12 @@ begin
     setCurrentHog:
         for i:= fromPix to toPix do
             begin
-            Land[y, i]:= Land[y, i] or lfCurrentHog
+            Land[y, i]:= Land[y, i] or lfCurHogCrate
             end;
     removeCurrentHog:
         for i:= fromPix to toPix do
             begin
-            Land[y, i]:= Land[y, i] and lfNotCurrentMask;
+            Land[y, i]:= Land[y, i] and lfNotCurHogCrate;
             end;
     end;
 end;
@@ -422,7 +424,7 @@ else {if WorldEdge = weSea then}
     if x <= leftX then
         iceR:= min(leftX + iceHeight, iceR)
     else {if x >= rightX then}
-        iceL:= max(LongInt(rightX) - iceHeight, iceL);
+        iceL:= max(rightX - iceHeight, iceL);
     end;
 
 // don't continue if all ice is outside land array
@@ -473,8 +475,8 @@ var tx, ty, by, bx,  i: LongInt;
 begin
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
-        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, TopY) do
+        for tx:= Max(LeftX, ar^[i].Left - Radius) to Min(RightX, ar^[i].Right + Radius) do
             begin
             if (Land[ty, tx] and lfIndestructible) = 0 then
                 begin
@@ -500,8 +502,8 @@ dec(y, Count * dY);
 
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
-        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, TopY) do
+        for tx:= Max(LeftX, ar^[i].Left - Radius) to Min(RightX, ar^[i].Right + Radius) do
             if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
                  if (cReducedQuality and rqBlurryLand) = 0 then
@@ -753,8 +755,8 @@ case bpp of
                    ((not force) and (Land[cpY + y, cpX + x] <> 0))) or
 
                    (not outOfMap and
-                       (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-                       ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or
+                       (((cpY + y) <= topY) or ((cpY + y) >= LAND_HEIGHT) or
+                       ((cpX + x) <= leftX) or ((cpX + x) >= rightX) or
                        ((not force) and (Land[cpY + y, cpX + x] <> 0)))) then
                    begin
                    if SDL_MustLock(Image) then
@@ -795,9 +797,11 @@ case bpp of
                     begin
                     if (LandFlags and lfBasic <> 0) or 
                        ((LandPixels[gY, gX] and AMask shr AShift > 128) and  // This test assumes lfBasic and lfObject differ only graphically
-                         (LandFlags and lfObject = 0)) then
+                         (LandFlags and (lfObject or lfIce) = 0)) then
                          Land[cpY + y, cpX + x]:= lfBasic or LandFlags
-                    else Land[cpY + y, cpX + x]:= lfObject or LandFlags
+                    else if (LandFlags and lfIce = 0) then
+						 Land[cpY + y, cpX + x]:= lfObject or LandFlags
+					else Land[cpY + y, cpX + x]:= LandFlags
                     end;
                 if (not behind) or (LandPixels[gY, gX] = 0) then
                     begin
@@ -837,6 +841,17 @@ else if Obj = sprAmRubber then
 
 end;
 
+procedure EraseLandRectRaw(X, Y, width, height: LongWord);
+var tx, ty: LongWord;
+begin
+for ty:= 0 to height - 1 do
+    for tx:= 0 to width - 1 do
+        begin
+        LandPixels[ty, tx]:= 0;
+        Land[Y + ty, X + tx]:= 0;
+        end;
+end;
+
 procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert: boolean);
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
@@ -871,8 +886,8 @@ p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
-                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) then
+                if ((cpY + y) <= topY) or ((cpY + y) >= LAND_HEIGHT) or
+                   ((cpX + x) <= leftX) or ((cpX + x) >= rightX) then
                    begin
                    if SDL_MustLock(Image) then
                        SDL_UnlockSurface(Image);
@@ -974,8 +989,8 @@ for y:= 0 to Pred(h) do
     begin
     for x:= 0 to Pred(w) do
         if ((p^[x] and AMask) <> 0)
-            and (((cpY + y) < Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-            ((cpX + x) < Longint(leftX)) or ((cpX + x) > Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0)) then
+            and (((cpY + y) < topY) or ((cpY + y) >= LAND_HEIGHT) or
+            ((cpX + x) < leftX) or ((cpX + x) > rightX) or (Land[cpY + y, cpX + x] <> 0)) then
                 pt^[x]:= cWhiteColor
         else
             (pt^[x]):= cWhiteColor and (not AMask);
@@ -1072,8 +1087,8 @@ if (Land[Y, X] and lfDamaged) = 0 then
     exit;
 
 // check location
-if (Y <= LongInt(topY) + 1) or (Y >= LAND_HEIGHT-2)
-or (X <= LongInt(leftX) + 1) or (X >= LongInt(rightX) - 1) then
+if (Y <= topY + 1) or (Y >= LAND_HEIGHT-2)
+or (X <= leftX + 1) or (X >= rightX - 1) then
     exit;
 
 // counter for neighbor pixels that are not known to be undamaged
@@ -1124,8 +1139,8 @@ end;
 procedure Smooth_oldImpl(X, Y: LongInt);
 begin
 // a bit of AA for explosions
-if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
-    (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
+if (Land[Y, X] = 0) and (Y > topY + 1) and
+    (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX - 1) then
     begin
     if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))
     or (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then
@@ -1183,7 +1198,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
     end
 else if ((cReducedQuality and rqBlurryLand) = 0) and ((LandPixels[Y, X] and AMask) = AMask)
 and (Land[Y, X] and (lfDamaged or lfBasic) = lfBasic)
-and (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
+and (Y > topY + 1) and (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX - 1) then
     begin
     if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))
     or (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then

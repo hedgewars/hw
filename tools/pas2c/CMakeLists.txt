@@ -23,8 +23,8 @@ set(ghc_flags
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
         COMMAND "${GHC_EXECUTABLE}"
         ARGS ${ghc_flags}
-        MAIN_DEPENDENCY ${hwserv_main}
-        DEPENDS ${hwserver_sources}
+        MAIN_DEPENDENCY ${pas2c_main}
+        DEPENDS ${pas2c_sources}
         )
 
 add_custom_target(pas2c ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}")

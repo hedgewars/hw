@@ -31,8 +31,9 @@ procedure ResetWorldTex;
 procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
+procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt; forceDisplay : boolean);
 procedure HideMission;
-procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
+procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring; autoLabels: boolean);
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure InitTouchInterface;
@@ -41,6 +42,7 @@ procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
 procedure MoveCamera;
 procedure onFocusStateChanged;
 procedure updateCursorVisibility;
+procedure updateTouchWidgets(ammoType: TAmmoType);
 
 implementation
 uses
@@ -62,6 +64,7 @@ uses
     , uCommands
     , uTeams
     , uDebug
+    , uInputHandler
 {$IFDEF USE_VIDEO_RECORDING}
     , uVideoRec
 {$ENDIF}
@@ -75,7 +78,7 @@ var AMShiftTargetX, AMShiftTargetY, AMShiftX, AMShiftY, SlotsNum: LongInt;
     timeTexture: PTexture;
     FPS: Longword;
     CountTicks: Longword;
-    prevPoint{, prevTargetPoint}: TPoint;
+    prevPoint: TPoint;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
@@ -104,7 +107,6 @@ const cStereo_Sky           = 0.0500;
       AMTypeMaskX     = $00000001;
       AMTypeMaskY     = $00000002;
       AMTypeMaskAlpha = $00000004;
-      //AMTypeMaskSlide = $00000008;
 
 {$IFDEF MOBILE}
       AMSlotSize = 48;
@@ -113,6 +115,22 @@ const cStereo_Sky           = 0.0500;
 {$ENDIF}
       AMSlotPadding = (AMSlotSize - 32) shr 1;
 
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
+      amNumOffsetX = 0;
+      {$IFDEF USE_AM_NUMCOLUMN}
+      amNumOffsetY = AMSlotSize;
+      {$ELSE}
+      amNumOffsetY = 0;
+      {$ENDIF}
+{$ELSE}
+      amNumOffsetY = 0;
+      {$IFDEF USE_AM_NUMCOLUMN}
+      amNumOffsetX = AMSlotSize;
+      {$ELSE}
+      amNumOffsetX = 0;
+      {$ENDIF}
+{$ENDIF}
+
       cSendCursorPosTime = 50;
       cCursorEdgesDist   = 100;
 
@@ -120,22 +138,18 @@ const cStereo_Sky           = 0.0500;
 function AddGoal(s: ansistring; gf: longword; si: TGoalStrId; i: LongInt): ansistring;
 var t: ansistring;
 begin
-{$IFNDEF PAS2C}
     if (GameFlags and gf) <> 0 then
         begin
         t:= inttostr(i);
         s:= s + FormatA(trgoal[si], t) + '|'
         end;
-{$ENDIF}
     AddGoal:= s;
 end;
 
 function AddGoal(s: ansistring; gf: longword; si: TGoalStrId): ansistring;
 begin
-{$IFNDEF PAS2C}
     if (GameFlags and gf) <> 0 then
         s:= s + trgoal[si] + '|';
-{$ENDIF}
     AddGoal:= s;
 end;
 
@@ -158,14 +172,13 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
             ClansArray[t]:= cp;
             ClansArray[t]^.ClanIndex:= t;
             ClansArray[0]^.ClanIndex:= 0;
-            if (LocalClan = t) then
-                LocalClan:= 0
-            else if (LocalClan = 0) then
-                LocalClan:= t
             end;
         end;
     CurrentTeam:= ClansArray[0]^.Teams[0];
     end;
+
+if (GameFlags and gfInvulnerable) <> 0 then
+    cTagsMask:= cTagsMask and (not htHealth);
 
 // if special game flags/settings are changed, add them to the game mode notice window and then show it
 g:= ''; // no text/things to note yet
@@ -175,10 +188,10 @@ if LuaGoals <> ansistring('') then
     g:= LuaGoals + '|';
 
 // check different game flags
-g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfKing, gidKing); // king?
 if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) then
     g:= AddGoal(g, gfAny, gidPlaceKing);
+g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
 g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
@@ -216,19 +229,21 @@ if cMinesTime <> 3000 then
 
 // if the string has been set, show it for (default timeframe) seconds
 if length(g) > 0 then
-    ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
+    // choose icon
+    if ((GameFlags and gfKing) <> 0) then
+        // crown icon for King Mode
+        ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 0, 0)
+    else
+        // target icon for anything else
+        ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 
-//cWaveWidth:= SpritesData[sprWater].Width;
-//cWaveHeight:= SpritesData[sprWater].Height;
 cWaveHeight:= 32;
 
 InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
-//prevTargetPoint.X:= 0;
-//prevTargetPoint.Y:= 0;
-WorldDx:=  -(LongInt(leftX + (playWidth div 2))); // -(LAND_WIDTH div 2);// + cScreenWidth div 2;
+WorldDx:=  -(LongInt(leftX + (playWidth div 2)));
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
 //aligns it to the bottom of the screen, minus the border
@@ -398,6 +413,28 @@ with utilityWidget do
         source.y:= frame.y;
         end;
     end;
+
+with utilityWidget2 do
+    begin
+    show:= false;
+    sprite:= sprBounceButton;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= utilityWidget.frame.x + Round(frame.w * 1.25);
+    frame.y:= arrowLeft.frame.y - Round(frame.h * 1.25);
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
+    with moveAnim do
+        begin
+        target.x:= frame.x;
+        target.y:= frame.y;
+        source.x:= frame.x;
+        source.y:= frame.y;
+        end;
+    end;
+
 {$ENDIF}
 end;
 
@@ -418,7 +455,10 @@ var x, y, i, t, SlotsNumY, SlotsNumX, AMFrame: LongInt;
     STurns: LongInt;
     amSurface: PSDL_Surface;
     AMRect: TSDL_Rect;
-{$IFDEF USE_AM_NUMCOLUMN}tmpsurf: PSDL_Surface;{$ENDIF}
+{$IFDEF USE_AM_NUMCOLUMN}
+    tmpsurf: PSDL_Surface;
+    usesDefaultSlotKeys: boolean;
+{$ENDIF}
 begin
     if cOnlyStats then exit(nil);
 
@@ -454,6 +494,9 @@ begin
 
     x:= AMRect.x;
     y:= AMRect.y;
+{$IFDEF USE_AM_NUMCOLUMN}
+    usesDefaultSlotKeys:= CheckDefaultSlotKeys;
+{$ENDIF USE_AM_NUMCOLUMN}
     for i:= 0 to cMaxSlotIndex do
         if (i <> cHiddenSlotIndex) and (Ammo^[i, 0].Count > 0) then
             begin
@@ -463,7 +506,13 @@ begin
             x:= AMRect.x;
 {$ENDIF}
 {$IFDEF USE_AM_NUMCOLUMN}
-            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar('F' + IntToStr(i+1)), cWhiteColorChannels);
+            // Ammo slot number column
+            if usesDefaultSlotKeys then
+                // F1, F2, F3, F4, ...
+                tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar('F'+IntToStr(i+1)), cWhiteColorChannels)
+            else
+                // 1, 2, 3, 4, ...
+                tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i+1)), cWhiteColorChannels);
             copyToXY(tmpsurf, amSurface,
                      x + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.w shr 1),
                      y + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.h shr 1));
@@ -603,12 +652,16 @@ if AMState = AMShowing then
 
 if AMState = AMShowingUp then // show ammo menu
     begin
-    if (cReducedQuality and rqSlowMenu) <> 0 then
+    // No "appear" animation in low quality or playing with very short turn time.
+    if ((cReducedQuality and rqSlowMenu) <> 0) or (cHedgehogTurnTime <= 10000) then
         begin
         AMShiftX:= 0;
         AMShiftY:= 0;
+        CursorPoint.X:= AmmoRect.x + AmmoRect.w - 3;
+        CursorPoint.Y:= cScreenHeight - AmmoRect.y - amNumOffsetY - 1;
         AMState:= AMShowing;
         end
+    // "Appear" animation
     else
         if AMAnimState < 1 then
             begin
@@ -621,19 +674,22 @@ if AMState = AMShowingUp then // show ammo menu
             begin
             AMShiftX:= 0;
             AMShiftY:= 0;
-            CursorPoint.X:= AmmoRect.x + AmmoRect.w;
-            CursorPoint.Y:= AmmoRect.y;
+            CursorPoint.X:= AmmoRect.x + AmmoRect.w - 3;
+            CursorPoint.Y:= cScreenHeight - AmmoRect.y - amNumOffsetY - 1;
             AMState:= AMShowing;
             end;
     end;
 if AMState = AMHiding then // hide ammo menu
     begin
-    if (cReducedQuality and rqSlowMenu) <> 0 then
+    // No "disappear" animation (see above)
+    if ((cReducedQuality and rqSlowMenu) <> 0) or (cHedgehogTurnTime <= 10000) then
         begin
         AMShiftX:= AMShiftTargetX;
         AMShiftY:= AMShiftTargetY;
+        prevPoint:= CursorPoint;
         AMState:= AMHidden;
         end
+    // "Disappear" animation
     else
         if AMAnimState < 1 then
             begin
@@ -647,7 +703,6 @@ if AMState = AMHiding then // hide ammo menu
             AMShiftX:= AMShiftTargetX;
             AMShiftY:= AMShiftTargetY;
             prevPoint:= CursorPoint;
-            //prevTargetPoint:= TargetCursorPoint;
             AMState:= AMHidden;
             end;
     end;
@@ -736,7 +791,7 @@ c:= -1;
                         Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
                 DrawTexture(AmmoRect.x + AmmoRect.w - 20 - (CountTexz[Ammo^[Slot, Pos].Count]^.w),
-                            AmmoRect.y + AmmoRect.h - BORDERSIZE - (AMslotSize shr 1) - (CountTexz[Ammo^[Slot, Pos].Count]^.w shr 1),
+                            AmmoRect.y + AmmoRect.h - BORDERSIZE - (AMslotSize shr 1) - (CountTexz[Ammo^[Slot, Pos].Count]^.h shr 1),
                             CountTexz[Ammo^[Slot, Pos].Count]);
 
             if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
@@ -745,23 +800,7 @@ c:= -1;
                 SetWeapon(Ammo^[Slot, Pos].AmmoType);
                 bSelected:= false;
                 FreeAndNilTexture(WeaponTooltipTex);
-{$IFDEF USE_TOUCH_INTERFACE}//show the aiming buttons + animation
-                if (Ammo^[Slot, Pos].Propz and ammoprop_NeedUpDown) <> 0 then
-                    begin
-                    if (not arrowUp.show) then
-                        begin
-                        animateWidget(@arrowUp, true, true);
-                        animateWidget(@arrowDown, true, true);
-                        end;
-                    end
-                else
-                    if arrowUp.show then
-                        begin
-                        animateWidget(@arrowUp, true, false);
-                        animateWidget(@arrowDown, true, false);
-                        end;
-                SetUtilityWidgetState(Ammo^[Slot, Pos].AmmoType);
-{$ENDIF}
+                updateTouchWidgets(Ammo^[Slot, Pos].AmmoType);
                 exit
                 end;
             end
@@ -883,10 +922,8 @@ end;
 
 procedure RenderWorldEdge;
 var
-    //VertexBuffer: array [0..3] of TVertex2f;
     tmp, w: LongInt;
     rect: TSDL_Rect;
-    //c1, c2: LongWord; // couple of colours for edges
 begin
 if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
     begin
@@ -894,7 +931,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
 
     rect.y:= ViewTopY;
     rect.h:= ViewHeight;
-    tmp:= LongInt(leftX) + WorldDx;
+    tmp:= leftX + WorldDx;
     w:= tmp - ViewLeftX;
 
     if w > 0 then
@@ -906,7 +943,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
 
-    tmp:= LongInt(rightX) + WorldDx;
+    tmp:= rightX + WorldDx;
     w:= ViewRightX - tmp;
 
     if w > 0 then
@@ -918,110 +955,6 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
 
-    (*
-    WARNING: the following render code is outdated and does not work with
-             current Render.pas ! - don't just uncomment without fixing it first
-
-    glDisable(GL_TEXTURE_2D);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    if (WorldEdge = weWrap) or (worldEdge = weBounce) then
-        glColor4ub($00, $00, $00, $40)
-    else
-        begin
-        glEnableClientState(GL_COLOR_ARRAY);
-        glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldFade[0]);
-        end;
-
-    glPushMatrix;
-    glTranslatef(WorldDx, WorldDy, 0);
-
-    VertexBuffer[0].X:= leftX-20;
-    VertexBuffer[0].Y:= -3500;
-    VertexBuffer[1].X:= leftX-20;
-    VertexBuffer[1].Y:= cWaterLine+cVisibleWater;
-    VertexBuffer[2].X:= leftX+30;
-    VertexBuffer[2].Y:= cWaterLine+cVisibleWater;
-    VertexBuffer[3].X:= leftX+30;
-    VertexBuffer[3].Y:= -3500;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    VertexBuffer[0].X:= rightX+20;
-    VertexBuffer[1].X:= rightX+20;
-    VertexBuffer[2].X:= rightX-30;
-    VertexBuffer[3].X:= rightX-30;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldEnd[0]);
-
-    VertexBuffer[0].X:= -5000;
-    VertexBuffer[1].X:= -5000;
-    VertexBuffer[2].X:= leftX-20;
-    VertexBuffer[3].X:= leftX-20;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    VertexBuffer[0].X:= rightX+5000;
-    VertexBuffer[1].X:= rightX+5000;
-    VertexBuffer[2].X:= rightX+20;
-    VertexBuffer[3].X:= rightX+20;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    glPopMatrix;
-    glDisableClientState(GL_COLOR_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-    glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
-    glEnable(GL_TEXTURE_2D);
-
-    // I'd still like to have things happen to the border when a wrap or bounce just occurred, based on a timer
-    if WorldEdge = weBounce then
-        begin
-        // could maybe alternate order of these on a bounce, or maybe drop the outer ones.
-        if LeftImpactTimer mod 2 = 0 then
-            begin
-            c1:= $5454FFFF; c2:= $FFFFFFFF;
-            end
-        else begin
-            c1:= $FFFFFFFF; c2:= $5454FFFF;
-            end;
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 7.0,   c1);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0,   c2);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 3.0,   c1);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 1.0,   c2);
-        if RightImpactTimer mod 2 = 0 then
-            begin
-            c1:= $5454FFFF; c2:= $FFFFFFFF;
-            end
-        else begin
-            c1:= $FFFFFFFF; c2:= $5454FFFF;
-            end;
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 7.0, c1);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, c2);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 3.0, c1);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 1.0, c2)
-        end
-    else if WorldEdge = weWrap then
-        begin
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-RightImpactTimer));
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
-        end
-    else
-        begin
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $2E8B5780);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $2E8B5780)
-        end;
-    if LeftImpactTimer > Lag then dec(LeftImpactTimer,Lag) else LeftImpactTimer:= 0;
-    if RightImpactTimer > Lag then dec(RightImpactTimer,Lag) else RightImpactTimer:= 0
-    *)
     end;
 end;
 
@@ -1075,25 +1008,29 @@ for t:= 0 to Pred(TeamsCount) do
 
         TeamHealthBarWidth:= cTeamHealthWidth * TeamHealthBarHealth div MaxTeamHealth;
 
-        // draw health bar
+        // draw team health bar
         r.x:= 0;
         r.y:= 0;
         r.w:= 2 + TeamHealthBarWidth;
         r.h:= htex^.h;
         DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
-        // draw health bars right border
+        // draw health bar's right border
         inc(r.x, cTeamHealthWidth + 2);
         r.w:= 3;
         DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
+        // draw hedgehog health separators in team health bar
         h:= 0;
         if not hasGone then
             for i:= 0 to cMaxHHIndex do
                 begin
                 inc(h, Hedgehogs[i].HealthBarHealth);
                 if (h < TeamHealthBarHealth) and (Hedgehogs[i].HealthBarHealth > 0) then
-                    DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                    if (IsTooDarkToRead(Clan^.Color)) then
+                        DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture)
+                    else
+                        DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSliderInverted].Texture);
                 end;
 
         // draw Lua value, if set
@@ -1149,7 +1086,13 @@ for t:= 0 to Pred(TeamsCount) do
             h:= -NameTagTex^.w - 24;
             if OwnerTex <> nil then
                 h:= h - OwnerTex^.w - 4;
+            if (IsTooDarkToRead(TeamsArray[t]^.Clan^.Color)) then
+                DrawSpriteRotatedF(sprFingerBackInv, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFingerBackInv].Width div 4, 0, 1, -90)
+            else
+                DrawSpriteRotatedF(sprFingerBack, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFingerBack].Width div 4, 0, 1, -90);
+            Tint(TeamsArray[t]^.Clan^.Color shl 8 or $FF);
             DrawSpriteRotatedF(sprFinger, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFinger].Width div 4, 0, 1, -90);
+            untint;
             end;
         end;
       end;
@@ -1162,6 +1105,24 @@ if smallScreenOffset <> 0 then
 VisibleTeamsCount:= v;
 end;
 
+procedure RenderAttackBar();
+var i: LongInt;
+    tdx, tdy: Double;
+begin
+    if CurrentTeam <> nil then
+        case AttackBar of
+        2: with CurrentHedgehog^ do
+                begin
+                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
+                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
+                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
+                    DrawSprite(sprPower,
+                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
+                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
+                            i)
+                end;
+        end;
+end;
 
 var preShiftWorldDx: LongInt;
 
@@ -1181,10 +1142,9 @@ procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t: LongInt;
     spr: TSprite;
     r: TSDL_Rect;
-    tdx, tdy: Double;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
-    replicateToLeft, replicateToRight, tmp: boolean;
+    replicateToLeft, replicateToRight, isNotHiddenByCinematic: boolean;
 {$IFDEF USE_VIDEO_RECORDING}
     a: Byte;
 {$ENDIF}
@@ -1196,8 +1156,8 @@ if WorldEdge <> weWrap then
     end
 else
     begin
-    replicateToLeft := (LongInt(leftX)  + WorldDx > ViewLeftX);
-    replicateToRight:= (LongInt(rightX) + WorldDx < ViewRightX);
+    replicateToLeft := (leftX  + WorldDx > ViewLeftX);
+    replicateToRight:= (rightX + WorldDx < ViewRightX);
     end;
 
 ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
@@ -1205,6 +1165,7 @@ ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div
 // note: offsetY is negative!
 offsetY:= 10 *  Min(0, -145 - ScreenBottom); // TODO limit this in the other direction too
 
+// Sky and horizont
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
         // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
@@ -1224,9 +1185,9 @@ if (cReducedQuality and rqNoBackground) = 0 then
             untint;
     end;
 
-DrawVisualGears(0);
+DrawVisualGears(0, false);
 ChangeDepth(RM, -cStereo_MidDistance);
-DrawVisualGears(4);
+DrawVisualGears(4, false);
 
 if (cReducedQuality and rq2DWater) = 0 then
     begin
@@ -1245,7 +1206,7 @@ else
     DrawWaves(-1, 100, - cWaveHeight div 2, - cWaveHeight div 2, 0);
 
 ChangeDepth(RM, cStereo_Land);
-DrawVisualGears(5);
+DrawVisualGears(5, false);
 DrawLand(WorldDx, WorldDy);
 
 if replicateToLeft then
@@ -1264,56 +1225,27 @@ if replicateToRight then
 
 DrawWater(255, 0, 0);
 
-(*
-// Attack bar
-    if CurrentTeam <> nil then
-        case AttackBar of
-        //1: begin
-        //r:= StuffPoz[sPowerBar];
-        //{$WARNINGS OFF}
-        //r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
-        //{$WARNINGS ON}
-        //DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
-        //end;
-        2: with CurrentHedgehog^ do
-                begin
-                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
-                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
-                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower,
-                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
-                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
-                            i)
-                end
-        end;
-*)
-
-tmp:= bShowFinger;
-bShowFinger:= false;
-
 if replicateToLeft then
     begin
     ShiftWorld(-1);
-    DrawVisualGears(1);
+    DrawVisualGears(1, true);
     DrawGears();
-    DrawVisualGears(6);
+    DrawVisualGears(6, true);
     UnshiftWorld();
     end;
 
 if replicateToRight then
     begin
     ShiftWorld(1);
-    DrawVisualGears(1);
+    DrawVisualGears(1, true);
     DrawGears();
-    DrawVisualGears(6);
+    DrawVisualGears(6, true);
     UnshiftWorld();
     end;
 
-bShowFinger:= tmp;
-
-DrawVisualGears(1);
+DrawVisualGears(1, false);
 DrawGears;
-DrawVisualGears(6);
+DrawVisualGears(6, false);
 
 
 if SuddenDeathDmg then
@@ -1321,13 +1253,12 @@ if SuddenDeathDmg then
 else
     DrawWater(WaterOpacity, 0, 0);
 
-    // Waves
+// Waves
 ChangeDepth(RM, cStereo_Water_near);
 DrawWaves( 1, 25 - WorldDx div 9, 0, 0, 12);
 
 if (cReducedQuality and rq2DWater) = 0 then
     begin
-    //DrawWater(WaterOpacity, - offsetY div 40);
     ChangeDepth(RM, cStereo_Water_near);
     DrawWaves(-1, 50 + WorldDx div 6, - offsetY div 40, 23, 8);
     if SuddenDeathDmg then
@@ -1346,7 +1277,27 @@ if (cReducedQuality and rq2DWater) = 0 then
     else
         DrawWaves(-1, 50, cWaveHeight div 2, cWaveHeight div 2, 0);
 
-DrawGearsTimers;
+// line at airplane height for certain airstrike types (when spawning height is important)
+with CurrentHedgehog^ do
+    if (isCursorVisible) and ((CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) or (((GameFlags and gfMoreWind) <> 0) and ((CurAmmoType = amDrillStrike) or (CurAmmoType = amAirAttack)))) then
+        DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
+
+// gear HUD extras (fuel indicator, secondary ammo, etc.)
+if replicateToLeft then
+    begin
+    ShiftWorld(-1);
+    DrawGearsGui();
+    UnshiftWorld();
+    end;
+
+if replicateToRight then
+    begin
+    ShiftWorld(1);
+    DrawGearsGui();
+    UnshiftWorld();
+    end;
+
+DrawGearsGui();
 
 // everything after this ChangeDepth will be drawn outside the screen
 // note: negative parallax gears should last very little for a smooth stereo effect
@@ -1355,18 +1306,18 @@ DrawGearsTimers;
     if replicateToLeft then
         begin
         ShiftWorld(-1);
-        DrawVisualGears(2);
+        DrawVisualGears(2, true);
         UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
         ShiftWorld(1);
-        DrawVisualGears(2);
+        DrawVisualGears(2, true);
         UnshiftWorld();
         end;
 
-    DrawVisualGears(2);
+    DrawVisualGears(2, false);
 
 // everything after this ResetDepth will be drawn at screen level (depth = 0)
 // note: everything that needs to be readable should be on this level
@@ -1375,39 +1326,101 @@ DrawGearsTimers;
     if replicateToLeft then
         begin
         ShiftWorld(-1);
-        DrawVisualGears(3);
+        DrawVisualGears(3, true);
         UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
         ShiftWorld(1);
-        DrawVisualGears(3);
+        DrawVisualGears(3, true);
         UnshiftWorld();
         end;
 
-    DrawVisualGears(3);
+    DrawVisualGears(3, false);
 
-{$WARNINGS OFF}
-// Target
+// Target (e.g. air attack, bee, ...)
 if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> nil) then
     begin
     with PHedgehog(CurrentHedgehog)^ do
         begin
         if CurAmmoType = amBee then
-            DrawSpriteRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            spr:= sprTargetBee
         else
-            DrawSpriteRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
-        end
-    end;
-{$WARNINGS ON}
+            spr:= sprTargetP;
+        if replicateToLeft then
+            begin
+            ShiftWorld(-1);
+            if spr = sprTargetP then
+                begin
+                if IsTooDarkToRead(Team^.Clan^.Color) then
+                    DrawSpriteRotatedF(sprTargetPBackInv, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+                else
+                    DrawSpriteRotatedF(sprTargetPBack, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+                Tint(Team^.Clan^.Color shl 8 or $FF);
+                end;
+            DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+            if spr = sprTargetP then
+                untint;
+            UnshiftWorld();
+            end;
 
+        if replicateToRight then
+            begin
+            ShiftWorld(1);
+            if spr = sprTargetP then
+                begin
+                if IsTooDarkToRead(Team^.Clan^.Color) then
+                    DrawSpriteRotatedF(sprTargetPBackInv, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+                else
+                    DrawSpriteRotatedF(sprTargetPBack, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+                Tint(Team^.Clan^.Color shl 8 or $FF);
+                end;
+            DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+            if spr = sprTargetP then
+                untint;
+            UnshiftWorld();
+            end;
+
+        if spr = sprTargetP then
+            begin
+            if IsTooDarkToRead(Team^.Clan^.Color) then
+                DrawSpriteRotatedF(sprTargetPBackInv, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            else
+                DrawSpriteRotatedF(sprTargetPBack, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+            Tint(Team^.Clan^.Color shl 8 or $FF);
+            end;
+        DrawSpriteRotatedF(spr, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+        if spr = sprTargetP then
+            untint;
+        end;
+    end;
+
+// Attack bar
+if replicateToLeft then
+    begin
+    ShiftWorld(-1);
+    RenderAttackBar();
+    UnshiftWorld();
+    end;
+
+if replicateToRight then
+    begin
+    ShiftWorld(1);
+    RenderAttackBar();
+    UnshiftWorld();
+    end;
+
+RenderAttackBar();
+
+// World edge
 RenderWorldEdge();
 
-// this scale is used to keep the various widgets at the same dimension at all zoom levels
+// This scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
 
-// cinematic effects
+isNotHiddenByCinematic:= true;
+// Cinematic Mode: Determine effects and state
 if CinematicScript or (InCinematicMode and autoCameraOn
     and ((CurrentHedgehog = nil) or CurrentHedgehog^.Team^.ExtDriven
     or (CurrentHedgehog^.BotLevel <> 0) or (GameType = gmtDemo))) then
@@ -1416,7 +1429,10 @@ if CinematicScript or (InCinematicMode and autoCameraOn
         begin
         inc(CinematicSteps, Lag);
         if CinematicSteps > 300 then
-        CinematicSteps:= 300;
+            begin
+            CinematicSteps:= 300;
+            isNotHiddenByCinematic:= false;
+            end;
         end;
     end
 else if CinematicSteps > 0 then
@@ -1426,22 +1442,8 @@ else if CinematicSteps > 0 then
         CinematicSteps:= 0;
     end;
 
-// render black bars
-if CinematicSteps > 0 then
-    begin
-    r.x:= ViewLeftX;
-    r.w:= ViewWidth;
-    r.y:= ViewTopY;
-    CinematicBarH:= (ViewHeight * CinematicSteps) div 2048;
-    r.h:= CinematicBarH;
-    DrawRect(r, 0, 0, 0, $FF, true);
-    r.y:= ViewBottomY - r.h;
-    DrawRect(r, 0, 0, 0, $FF, true);
-    end;
-
-
 // Turn time
-if UIDisplay <> uiNone then
+if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
     begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
@@ -1480,33 +1482,79 @@ if UIDisplay <> uiNone then
         DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
         end;
 
-// Captions
-    DrawCaptions
     end;
 
-{$IFDEF USE_TOUCH_INTERFACE}
-// Draw buttons Related to the Touch interface
-DrawScreenWidget(@arrowLeft);
-DrawScreenWidget(@arrowRight);
-DrawScreenWidget(@arrowUp);
-DrawScreenWidget(@arrowDown);
-
-DrawScreenWidget(@fireButton);
-DrawScreenWidget(@jumpWidget);
-DrawScreenWidget(@AMWidget);
-DrawScreenWidget(@pauseButton);
-DrawScreenWidget(@utilityWidget);
-{$ENDIF}
-
-if UIDisplay = uiAll then
+// Team bars
+if (UIDisplay = uiAll) and (isNotHiddenByCinematic) then
     RenderTeamsHealth;
 
-// Lag alert
-if isInLag then
-    DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
+// Current hedgehog health in top left corner
+if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic) and
+        (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and
+        (CurrentHedgehog^.HealthTagTex <> nil) and
+        ((CurrentHedgehog^.Gear^.State and gstHHDriven) <> 0) then
+    begin
+    t:= 11;
+    i:= t;
+{$IFDEF USE_TOUCH_INTERFACE}
+    i:= t + pauseButton.frame.y + pauseButton.frame.h;
+{$ENDIF}
+
+    // Hide health and healh icons in gfInvulnerable mode (except heResurrectable)
+    if ((GameFlags and gfInvulnerable) = 0) then
+    begin
+    // Health tag
+    DrawTexture(cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 16, i, CurrentHedgehog^.HealthTagTex);
+    inc(t, CurrentHedgehog^.HealthTagTex^.h);
+    cDemoClockFPSOffsetY:= t;
+
+    t:= SpritesData[sprHealthHud].Width + 18;
+    // Main health icon. Appearance depends on game mode and poisoning state
+    if ((GameFlags and gfResetHealth) = 0) then
+        if (CurrentHedgehog^.Effects[hePoisoned] <> 0) then
+            DrawSprite(sprHealthPoisonHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+        else
+            DrawSprite(sprHealthHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+    else
+        if (CurrentHedgehog^.Effects[hePoisoned] <> 0) then
+            DrawSprite(sprMedicPoisonHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+        else
+            DrawSprite(sprMedicHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0);
+    // Put halo above health icon for resurrectable hog
+    if (CurrentHedgehog^.Effects[heResurrectable] <> 0) then
+        DrawSprite(sprHaloHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t - 2), i - SpritesData[sprHaloHud].Height + 1, 0);
+
+    // Additional health-related states
+    inc(t, 2);
+    // Invulnerable
+    if (CurrentHedgehog^.Effects[heInvulnerable] <> 0) then
+        begin
+        inc(t, SpritesData[sprInvulnHud].Width + 2);
+        DrawSprite(sprInvulnHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+        end
+    // Karma
+    else if ((GameFlags and gfKarma) <> 0) then
+        begin
+        inc(t, SpritesData[sprKarmaHud].Width + 2);
+        DrawSprite(sprKarmaHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0)
+        end;
+    // Vampirism
+    if cVampiric then
+        begin
+        inc(t, SpritesData[sprVampHud].Width + 2);
+        DrawSprite(sprVampHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t), i, 0);
+        end;
+    end
+    // in gfInvulnerable mode ...
+    else if (CurrentHedgehog^.Effects[heResurrectable] <> 0) then
+        // show halo for resurrectable hog
+        DrawSprite(sprHaloHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t - 2), i, 0);
+    end
+else
+    cDemoClockFPSOffsetY:= 0;
 
 // Wind bar
-if UIDisplay <> uiNone then
+if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
     begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
@@ -1519,7 +1567,7 @@ if UIDisplay <> uiNone then
     if WindBarWidth > 0 then
         begin
         {$WARNINGS OFF}
-        r.x:= 8 - (RealTicks shr 6) mod 8;
+        r.x:= 8 - (RealTicks shr 6) mod 9;
         {$WARNINGS ON}
         r.y:= 0;
         r.w:= WindBarWidth;
@@ -1530,7 +1578,7 @@ if UIDisplay <> uiNone then
         if WindBarWidth < 0 then
         begin
         {$WARNINGS OFF}
-        r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 8;
+        r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 9;
         {$WARNINGS ON}
         r.y:= 0;
         r.w:= - WindBarWidth;
@@ -1539,27 +1587,96 @@ if UIDisplay <> uiNone then
         end
     end;
 
-{$IFNDEF USE_TOUCH_INTERFACE}
 // Indicators for global effects (extra damage, low gravity)
-// TODO: Add support for touch interface (need to find out correct offset)
-if UIDisplay <> uiNone then
+if (UIDisplay <> uiNone) and (isNotHiddenByCinematic) then
     begin
+{$IFDEF USE_TOUCH_INTERFACE}
+    offsetX:= (cScreenWidth shr 1) - 95;
+    offsetY:= cScreenHeight - 21;
+{$ELSE}
     offsetX:= 45;
     offsetY:= 51;
+{$ENDIF}
 
     if cDamageModifier = _1_5 then
         begin
             DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
             DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amExtraDamage) - 1, 1, 32, 32);
+{$IFDEF USE_TOUCH_INTERFACE}
+            offsetX := offsetX - 33
+{$ELSE}
             offsetX := offsetX + 33
+{$ENDIF}
         end;
     if (cLowGravity) or ((GameFlags and gfLowGravity) <> 0) then
         begin
             DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
             DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amLowGravity) - 1, 1, 32, 32);
+{$IFDEF USE_TOUCH_INTERFACE}
+            offsetX := offsetX - 33
+{$ELSE}
+            offsetX := offsetX + 33
+{$ENDIF}
+        end;
+    if cLaserSighting then
+        begin
+            DrawTextureF(ropeIconTex, 1, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, 0, 1, 32, 32);
+            DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.90, (cScreenWidth shr 1) - offsetX, cScreenHeight - offsetY, ord(amLaserSight) - 1, 1, 32, 32);
         end;
     end;
+
+// Cinematic Mode: Render black bars
+if CinematicSteps > 0 then
+    begin
+    r.x:= ViewLeftX;
+    r.w:= ViewWidth;
+    r.y:= ViewTopY;
+    CinematicBarH:= (ViewHeight * CinematicSteps) div 2048;
+    r.h:= CinematicBarH;
+    DrawRect(r, 0, 0, 0, $FF, true);
+    r.y:= ViewBottomY - r.h;
+    DrawRect(r, 0, 0, 0, $FF, true);
+    end;
+
+// Touchscreen interface widgets
+{$IFDEF USE_TOUCH_INTERFACE}
+DrawScreenWidget(@arrowLeft);
+DrawScreenWidget(@arrowRight);
+DrawScreenWidget(@arrowUp);
+DrawScreenWidget(@arrowDown);
+
+DrawScreenWidget(@fireButton);
+DrawScreenWidget(@jumpWidget);
+DrawScreenWidget(@AMWidget);
+DrawScreenWidget(@utilityWidget);
+DrawScreenWidget(@utilityWidget2);
+DrawScreenWidget(@pauseButton);
 {$ENDIF}
+
+// Captions
+if UIDisplay <> uiNone then
+    DrawCaptions;
+
+// Lag alert
+if isInLag then
+    DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
+
+// Chat
+DrawChat;
+
+
+// Mission panel
+if not isFirstFrame and (missionTimer <> 0) or isShowMission or isPaused or fastUntilLag or (GameState = gsConfirm) then
+    begin
+    if (ReadyTimeLeft = 0) and (missionTimer > 0) then
+        dec(missionTimer, Lag);
+    if missionTimer < 0 then
+        missionTimer:= 0; // avoid subtracting below 0
+    if missionTex <> nil then
+        DrawTextureCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
+    end;
+if missionTimer = 0 then
+    isForceMission := false;
 
 // AmmoMenu
 if bShowAmmoMenu and ((AMState = AMHidden) or (AMState = AMHiding)) then
@@ -1582,44 +1699,33 @@ if (not bShowAmmoMenu) and ((AMstate = AMShowing) or (AMState = AMShowingUp)) th
 if bShowAmmoMenu or (AMState = AMHiding) then
     ShowAmmoMenu;
 
+// Centered status/menu messages (synchronizing, auto skip, pause, etc.)
+if fastUntilLag then
+    DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture)
+else if isAFK then
+    DrawTextureCentered(0, (cScreenHeight shr 1), AFKTexture)
+else if isPaused then
+    DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
+
 // Cursor
 if isCursorVisible and bShowAmmoMenu then
     DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 
-// Chat
-DrawChat;
-
-
-// various captions
-if fastUntilLag then
-    DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture);
-if isPaused then
-    DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
-if isAFK then
-    DrawTextureCentered(0, (cScreenHeight shr 1), AFKTexture);
-if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
-    begin
-    if (ReadyTimeLeft = 0) and (missionTimer > 0) then
-        dec(missionTimer, Lag);
-    if missionTimer < 0 then
-        missionTimer:= 0; // avoid subtracting below 0
-    if missionTex <> nil then
-        DrawTextureCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
-    end;
-
-// fps
+// FPS and demo replay time
 {$IFDEF USE_TOUCH_INTERFACE}
-offsetX:= pauseButton.frame.y + pauseButton.frame.h + 12;
+offsetY:= cDemoClockFPSOffsetY + 10 + pauseButton.frame.y + pauseButton.frame.h;
 {$ELSE}
-offsetX:= 10;
+offsetY:= cDemoClockFPSOffsetY + 10;
 {$ENDIF}
-offsetY:= cOffsetY;
+offsetX:= cOffsetY;
 if (RM = rmDefault) or (RM = rmRightEye) then
     begin
     inc(Frames);
 
     if cShowFPS or (GameType = gmtDemo) then
         inc(CountTicks, Lag);
+
+    // Demo replay time
     if (GameType = gmtDemo) and (CountTicks >= 1000) then
         begin
         i:= GameTicks div 1000;
@@ -1642,29 +1748,36 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         SDL_FreeSurface(tmpSurface)
         end;
 
-    if timeTexture <> nil then
-        DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetY, offsetX + timeTexture^.h+5, timeTexture);
+    if (timeTexture <> nil) and (UIDisplay <> uiNone) then
+        DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetX, offsetY, timeTexture);
 
-    if cShowFPS then
+    // FPS counter
+    if cShowFPS and (UIDisplay <> uiNone) then
         begin
         if CountTicks >= 1000 then
             begin
             FPS:= Frames;
             Frames:= 0;
             CountTicks:= 0;
-            s:= Format(trmsg[sidFPS], inttostr(FPS));
-            tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
+            s:= Format(shortstring(trmsg[sidFPS]), inttostr(FPS));
+            tmpSurface:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trmsg[sidFPS],fnt16)].Handle, Str2PChar(s), cWhiteColorChannels);
             tmpSurface:= doSurfaceConversion(tmpSurface);
             FreeAndNilTexture(fpsTexture);
             fpsTexture:= Surface2Tex(tmpSurface, false);
             SDL_FreeSurface(tmpSurface)
             end;
         if fpsTexture <> nil then
-            DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
+            begin
+            if timeTexture <> nil then
+                i:= fpsTexture^.h + 5
+            else
+                i:= 0;
+            DrawTexture((cScreenWidth shr 1) - 20 - fpsTexture^.w - offsetX, offsetY + i, fpsTexture);
+            end;
         end;
 end;
 
-
+// Quit Y/N question
 if GameState = gsConfirm then
     DrawTextureCentered(0, (cScreenHeight shr 1)-40, ConfirmTexture);
 
@@ -1699,7 +1812,7 @@ if ScreenFade <> sfNone then
     end;
 
 {$IFDEF USE_VIDEO_RECORDING}
-// during video prerecording draw red blinking circle and text 'rec'
+// During video prerecording draw red blinking circle and text 'rec'
 if flagPrerecording then
     begin
     if recTexture = nil then
@@ -1713,8 +1826,8 @@ if flagPrerecording then
         end;
     DrawTexture( -(cScreenWidth shr 1) + 50, 20, recTexture);
 
-    //a:= Byte(Round(127*(1 + sin(RealTicks*0.007))));
-    a:= Byte(min(255, abs(-255 + ((RealTicks div 2) and 511))));
+    t:= -255 + ((RealTicks div 2) and 511);
+    a:= Byte(min(255, abs(t)));
 
     // draw red circle
     DrawCircleFilled(-(cScreenWidth shr 1) + 30, 35, 10, $FF, $00, $00, a);
@@ -1723,29 +1836,6 @@ if flagPrerecording then
 
 SetScale(zoom);
 
-// Attack bar
-    if CurrentTeam <> nil then
-        case AttackBar of
-(*        1: begin
-        r:= StuffPoz[sPowerBar];
-        {$WARNINGS OFF}
-        r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
-        {$WARNINGS ON}
-        DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
-        end;*)
-        2: with CurrentHedgehog^ do
-                begin
-                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
-                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
-                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower,
-                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
-                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
-                            i)
-                end
-        end;
-
-
 // Cursor
 if isCursorVisible and (not bShowAmmoMenu) then
     begin
@@ -1753,11 +1843,9 @@ if isCursorVisible and (not bShowAmmoMenu) then
     with CurrentHedgehog^ do
         if (Gear <> nil) and ((Gear^.State and gstChooseTarget) <> 0) then
             begin
-        if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) or (((GameFlags and gfMoreWind) <> 0) and ((CurAmmoType = amDrillStrike) or (CurAmmoType = amAirAttack))) then
-            DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
         i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
         with Ammoz[CurAmmoType] do
-            if PosCount > 1 then
+            if PosCount > 0 then
                 begin
                 if (CurAmmoType = amGirder) or (CurAmmoType = amTeleport) then
                     begin
@@ -1769,9 +1857,15 @@ if isCursorVisible and (not bShowAmmoMenu) then
                     end;
                 DrawSprite(PosSprite, TargetCursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
                 Untint();
+                if (WorldEdge = weWrap) and (CurAmmoType = amBee) then
+                    begin
+                    if (TargetCursorPoint.X - WorldDx > rightX) then
+                        DrawSprite(sprThroughWrap, TargetCursorPoint.X - (SpritesData[sprThroughWrap].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1) - SpritesData[sprThroughWrap].Height - 2, 0)
+                    else if (TargetCursorPoint.X - WorldDx < leftX) then
+                        DrawSprite(sprThroughWrap, TargetCursorPoint.X - (SpritesData[sprThroughWrap].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1) - SpritesData[sprThroughWrap].Height - 2, 1);
+                    end;
                 end;
             end;
-    //DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
     DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight + round(SpritesData[sprArrow].Height / cScaleFactor) - TargetCursorPoint.Y, (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
     end;
 
@@ -1791,7 +1885,7 @@ end;
 var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY, dstX: LongInt;
+var EdgesDist, wdy, shs,z, dstX: LongInt;
     inbtwnTrgtAttks: Boolean;
 begin
 {$IFNDEF MOBILE}
@@ -1813,9 +1907,9 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
 
             if (WorldEdge = weWrap) then
                 begin
-                    if dstX - prevPoint.X < (LongInt(leftX) - rightX) div 2 then
+                    if dstX - prevPoint.X < (leftX - rightX) div 2 then
                         CursorPoint.X:= (prevPoint.X * 7 + dstX - (leftX - rightX)) div 8
-                    else if dstX - prevPoint.X > (LongInt(rightX) - leftX) div 2 then
+                    else if dstX - prevPoint.X > (rightX - leftX) div 2 then
                         CursorPoint.X:= (prevPoint.X * 7 + dstX - (rightX - leftX)) div 8
                     else
                         CursorPoint.X:= (prevPoint.X * 7 + dstX) div 8;
@@ -1834,9 +1928,9 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
 if (WorldEdge = weWrap) then
     begin
         if -WorldDx < leftX then
-            WorldDx:= WorldDx - LongInt(rightX) + leftX
+            WorldDx:= WorldDx - rightX + leftX
         else if -WorldDx > rightX then
-            WorldDx:= WorldDx + LongInt(rightX) - leftX;
+            WorldDx:= WorldDx + rightX - leftX;
     end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + trunc(CinematicBarH / (cScaleFactor / 2.0)));
@@ -1848,22 +1942,6 @@ if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
 
 if (AMState = AMShowingUp) or (AMState = AMShowing) then
 begin
-{$IFDEF USE_LANDSCAPE_AMMOMENU}
-    amNumOffsetX:= 0;
-    {$IFDEF USE_AM_NUMCOLUMN}
-    amNumOffsetY:= AMSlotSize;
-    {$ELSE}
-    amNumOffsetY:= 0;
-    {$ENDIF}
-{$ELSE}
-    amNumOffsetY:= 0;
-    {$IFDEF USE_AM_NUMCOLUMN}
-    amNumOffsetX:= AMSlotSize;
-    {$ELSE}
-    amNumOffsetX:= 0;
-    {$ENDIF}
-
-{$ENDIF}
     if CursorPoint.X < AmmoRect.x + amNumOffsetX + 3 then//check left
         CursorPoint.X:= AmmoRect.x + amNumOffsetX + 3;
     if CursorPoint.X > AmmoRect.x + AmmoRect.w - 3 then//check right
@@ -1873,7 +1951,6 @@ begin
     if CursorPoint.Y < cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5) then//check bottom
         CursorPoint.Y:= cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5);
     prevPoint:= CursorPoint;
-    //if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
     exit
 end;
 
@@ -1929,7 +2006,6 @@ else
 
 // this moves the camera according to CursorPoint X and Y
 prevPoint:= CursorPoint;
-//if cHasFocus then SDL_WarpMouse(CursorPoint.X + (cScreenWidth shr 1), cScreenHeight - CursorPoint.Y);
 if WorldDy > LAND_HEIGHT + 1024 then
     WorldDy:= LAND_HEIGHT + 1024;
 if WorldDy < wdy then
@@ -1941,12 +2017,21 @@ if WorldDx > 1024 then
 end;
 
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
+begin
+    ShowMission(caption, subcaption, text, icon, time, false);
+end;
+
+procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt; forceDisplay : boolean);
 var r: TSDL_Rect;
 begin
 if cOnlyStats then exit;
 
 r.w:= 32;
 r.h:= 32;
+
+// If true, then mission panel cannot be hidden by releasing the mission panel key.
+// Is in effect until timer runs out, is hidden with HideMission or ShowMission is called with forceDisplay=false.
+isForceMission := forceDisplay;
 
 if time = 0 then
     time:= 5000;
@@ -1970,14 +2055,17 @@ end;
 procedure HideMission;
 begin
     missionTimer:= 0;
+    isForceMission:= false;
 end;
 
-procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring);
+procedure SetAmmoTexts(ammoType: TAmmoType; name: ansistring; caption: ansistring; description: ansistring; autoLabels: boolean);
 var
     ammoStrId: TAmmoStrId;
     ammoStr: ansistring;
     tmpsurf: PSDL_Surface;
 begin
+    if cOnlyStats then exit;
+    
     ammoStrId := Ammoz[ammoType].NameId;
 
     trluaammo[ammoStrId] := name;
@@ -1987,7 +2075,7 @@ begin
         ammoStr:= trammo[ammoStrId];
 
     if checkFails(length(ammoStr) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ammoType)) + '!',true) then exit;
-        
+
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(ammoStr,fnt16)].Handle, PChar(ammoStr), cWhiteColorChannels);
     if checkFails(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ammoType)) + ' failed!',true) then exit;
     tmpsurf:= doSurfaceConversion(tmpsurf);
@@ -1997,6 +2085,7 @@ begin
 
     trluaammoc[ammoStrId] := caption;
     trluaammod[ammoStrId] := description;
+    trluaammoe[ammoStrId] := autoLabels;
 end;
 
 procedure ShakeCamera(amount: LongInt);
@@ -2006,19 +2095,19 @@ if isCursorVisible then
 amount:= Max(1, round(amount*zoom/2));
 WorldDx:= WorldDx - amount + LongInt(random(1 + amount * 2));
 WorldDy:= WorldDy - amount + LongInt(random(1 + amount * 2));
-//CursorPoint.X:= CursorPoint.X - amount + LongInt(random(1 + amount * 2));
-//CursorPoint.Y:= CursorPoint.Y - amount + LongInt(random(1 + amount * 2))
 end;
 
 
 procedure onFocusStateChanged;
 begin
-if (not cHasFocus) and (GameState <> gsConfirm) then
-    ParseCommand('quit', true);
 {$IFDEF MOBILE}
+if (not cHasFocus) and (not isPaused) then
+    ParseCommand('pause', true);
 // when created SDL receives an exposure event that calls UndampenAudio at full power, muting audio
 exit;
 {$ENDIF}
+if (not cHasFocus) and (GameState <> gsConfirm) then
+    ParseCommand('quit', true);
 
 {$IFDEF USE_VIDEO_RECORDING}
 // do not change volume during prerecording as it will affect sound in video file
@@ -2032,10 +2121,51 @@ end;
 
 procedure updateCursorVisibility;
 begin
-    if isPaused or isAFK then
-        SDL_ShowCursor(1)
+    if isPaused or isAFK or (GameState = gsConfirm) then
+        begin
+{$IFNDEF USE_TOUCH_INTERFACE}
+        SDL_SetRelativeMouseMode(SDL_FALSE);
+{$ENDIF}
+        if SDL_ShowCursor(SDL_QUERY) = SDL_DISABLE then
+            begin
+            uCursor.resetPosition;
+{$IFNDEF USE_TOUCH_INTERFACE}
+            SDL_ShowCursor(SDL_ENABLE);
+{$ENDIF}
+            end;
+        end
     else
-        SDL_ShowCursor(ord(GameState = gsConfirm))
+        begin
+        uCursor.resetPositionDelta;
+{$IFNDEF USE_TOUCH_INTERFACE}
+        SDL_ShowCursor(SDL_DISABLE);
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+{$ENDIF}
+        end;
+end;
+
+procedure updateTouchWidgets(ammoType: TAmmoType);
+begin
+{$IFDEF USE_TOUCH_INTERFACE}
+//show the aiming buttons + animation
+if (Ammoz[ammoType].Ammo.Propz and ammoprop_NeedUpDown) <> 0 then
+    begin
+    if (not arrowUp.show) then
+        begin
+        animateWidget(@arrowUp, true, true);
+        animateWidget(@arrowDown, true, true);
+        end;
+    end
+else
+    if arrowUp.show then
+        begin
+        animateWidget(@arrowUp, true, false);
+        animateWidget(@arrowDown, true, false);
+        end;
+SetUtilityWidgetState(ammoType);
+{$ELSE}
+ammoType:= ammoType; // avoid hint
+{$ENDIF}
 end;
 
 procedure SetUtilityWidgetState(ammoType: TAmmoType);
@@ -2048,20 +2178,32 @@ if(CurrentHedgehog <> nil)then
     if ((Ammoz[ammoType].Ammo.Propz and ammoprop_Timerable) <> 0) and (ammoType <> amDrillStrike) then
         begin
         utilityWidget.sprite:= sprTimerButton;
-        animateWidget(@utilityWidget, true, true);
+        if (not utilityWidget.show) then
+            animateWidget(@utilityWidget, true, true);
         end
     else if (Ammoz[ammoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
         begin
         utilityWidget.sprite:= sprTargetButton;
-        animateWidget(@utilityWidget, true, true);
+        if (not utilityWidget.show) then
+            animateWidget(@utilityWidget, true, true);
         end
     else if ammoType = amSwitch then
         begin
         utilityWidget.sprite:= sprSwitchButton;
-        animateWidget(@utilityWidget, true, true);
+        if (not utilityWidget.show) then
+            animateWidget(@utilityWidget, true, true);
         end
     else if utilityWidget.show then
         animateWidget(@utilityWidget, true, false);
+
+    if ((Ammoz[ammoType].Ammo.Propz and ammoprop_SetBounce) <> 0) then
+        begin
+        utilityWidget2.sprite:= sprBounceButton;
+        if (not utilityWidget2.show) then
+            animateWidget(@utilityWidget2, true, true);
+        end
+    else if utilityWidget2.show then
+        animateWidget(@utilityWidget2, true, false);
 {$ELSE}
 ammoType:= ammoType; // avoid hint
 {$ENDIF}

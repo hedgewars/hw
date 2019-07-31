@@ -54,13 +54,11 @@
 00:51=Blatová guľa
 00:52=Žiadna zbraň nie je vybraná
 00:53=Časová kapsula
-; 00:54=Budova
 00:54=Postrek zeme
 00:55=Zmrazovač
 00:56=Sekáčik
 00:57=Gumička
 00:58=Vzdušná mína
-00:59=Gumená kačička
 00:60=Minigun
 
 01:00=Načítam …
@@ -71,7 +69,7 @@
 01:05=Naozaj skončiť (%1/%2)?
 01:06=Rýchla smrť!
 01:07=%1 Ostáva
-01:08=Palivo
+01:08=Palivo: %1%
 01:09=Synchronizujem...
 01:10=Použitím tohto nástroja neskončí váš ťah!
 01:11=Táto zbraň alebo nástroj zatiaľ nie je dostupný!
@@ -315,15 +313,15 @@
 02:16=%1 mal veľmi dlhú prípravu
 
 ; Kráľ (%1) je mŕtvy
-02:27=%1 je mŕtvy, nech žije %1!
-02:27=Kráľovská tragédia: %1 zomrel
-02:27=%1 už nie je medzi nami
-02:27=Náš milovaný kráľ %1 nás opustil
-02:27=Konečne sme sa ťa zbavili, %1!
-02:27=%1 je ex-kráľom
-02:27=%1 žil nebezpečne
-02:27=%1 mal priveľa nepriateľov
-02:27=%1 dostal šach-mat
+02:17=Kráľovská tragédia: %1 zomrel
+02:17=%1 už nie je medzi nami
+02:17=Náš milovaný kráľ %1 nás opustil
+02:17=Konečne sme sa ťa zbavili, %1!
+02:17=%1 je ex-kráľom
+02:17=%1 žil nebezpečne
+02:17=%1 mal priveľa nepriateľov
+02:17=%1 dostal šach-mat
+02:17=%1 je mŕtvy, nech žije %1!
 
 ; Kategórie zbraní
 03:00=Časovaný granát
@@ -380,13 +378,11 @@
 03:51=Nájdené na zemi
 03:52=NEPOUŽÍVANÉ
 03:53=Typ 40
-;03:54=Postavte niečo
 03:54=Pomôcka
 03:55=Kúlovejšie už to byť nemôže!
 03:56=Použite alebo zneužite
 03:57=Pomôcka
 03:58=Vznášajúca sa bomba
-03:59=Plávajúca bomba
 03:60=Totálna zbraň
 
 ; Popis zbraní (ako oddeľovač riadkov použite |)
@@ -444,13 +440,11 @@
 04:51=Nemíňajte muníciu - hod blatom je zdarma.|Trošku štípe a dokáže ježka zhodiť.
 04:52=NEPOUŽITÉ
 04:53=Vyberte sa na cestu časom a priestorom|a nechajte vašich priateľov bojovať bez vás.|Buďte pripravený vrátiť sa kedykoľvek,|buď pri Náhlej smrti alebo keď sú všetci porazení.|Poznámka: Nefunguje počas Náhlej smrti,|ak ste sám alebo ak ste kráľom.
-;04:54=NEKOMPLETNÉ
 04:54=Rozprášte prúd lepkavej hliny.|Postavte mosty, pochovajte nepriateľov,|zapečaťte tunely. Buďte|však opatrný a nezašpinte sa|od nej aj vy.
 04:55=Vráťme sa do doby ľadovej!|Zamrazte ježkov, urobte podlahu šmykľavú alebo|sa poistite pred utopením zmrazením vody.|Útok: Aktivuje/Deaktivuje ľadový lúč|Hore/Dole: Pokračuj v mierení
 04:56=Po nepriateľovi môžete hodiť dva sekáčiky,|zablokovať priechody a tunely a dokonca ich použiť pri šplhaní!|Buďte opatrný! Nože nie su na hranie.|Útok: Podržte pre hod väčšou silou (dvakrát)
 04:57=Použi VEĽMI elastickú gumičku, z ktorej|môžu ježkovia a ďalšie veci skákať|bez ujmy pri dopade.|Vľavo/Vpravo: Mení orientáciu gumičky|Kurzor: Umiestni gumičku na platnú pozíciu
 04:58=Táto bomba so senzorom|priblíženia sa sama udrží|vo vzduchu a prenasleduje ježkov,|ktorý sa k nej nechtiac priblížia.|Jej explózia je slabšia ako|explózia bežnej míny.|Útok: Držaním vystrelíte väčšou silou
-04:59=Pošlite tých špinavých ježkov do kúpeľa! Táto milunká pískajúca|gumená kačička vie plávať na vode a popláve tam, kam ju zaveje|vietor. Vybuchne keď narazí na pevninu, a preto|ju zhoďte z útesu alebo iného bezpečného miesta.|Útok: Spusti gumenú kačičku
 04:60=Pošli dážď guliek na vašich nepriateľov!|A mysleli si, že za tou trojitou vrstvou|trámou sú v bezpečí.|Útok: Vystreľ plnou silou|Hore/Dole: Mierenie
 
 ; Reťazce pre ciele hry

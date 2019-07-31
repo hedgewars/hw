@@ -1,6 +1,9 @@
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player = nil
+local playerTeamName = nil
 local RCGear = nil
 local planesUsed = 0
 local planeTimer = 0
@@ -20,7 +23,7 @@ function onGameInit()
 	GameFlags = gfInfAttack + gfInvulnerable + gfOneClanMode + gfSolidLand
 
 	-- Basically unlimited turn time
-	TurnTime = 100000000
+	TurnTime = MAX_TURN_TIME
 
 	Map = "Ropes"
 	Theme = "Eyes"
@@ -33,27 +36,33 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(loc("Wannabe Flyboys"), 14483456, "Simple", "Island", "Default", "cm_scout")
-	player = AddHog(loc("Ace"), 0, 80, "Gasmask")
-	SetGearPosition(player, 1380, 1500)
+	playerTeamName = AddMissionTeam(-1)
+	player = AddMissionHog(80)
+	SetGearPosition(player, 1380, 1582)
+	HogTurnLeft(player, true)
 
 end
 
 
+local function spawnCrate(x, y)
+	local c = SpawnFakeHealthCrate(x, y, false, false)
+	SetGearValues(c, nil, nil, nil, nil, nil, 0) -- Karma
+end
 
 function onGameStart()
 
 	SendHealthStatsOff()
 
+	local recordInfo = getReadableChallengeRecord("Lowscore")
 	ShowMission     (
                                 loc("RC Plane Challenge"),
                                 loc("Challenge"),
 
                                 loc("Collect or destroy all the health crates.") .. "|" ..
                                 loc("Compete to use as few planes as possible!") .. "|" ..
-								"", -amRCPlane, 4000
+                                recordInfo, -amRCPlane, 4000
                                 )
-	SetTeamLabel(loc("Wannabe Flyboys"), "0")
+	SetTeamLabel(playerTeamName, "0")
 
 	PlaceGirder(2192, 508, 6)
 	PlaceGirder(2192, 670, 6)
@@ -141,25 +150,25 @@ function onGameStart()
 	PlaceGirder(2803, 1373, 2)
 	PlaceGirder(2811, 1559, 2)
 
-	SpawnFakeHealthCrate(930, 557, false, false)
-	SpawnFakeHealthCrate(979, 692, false, false)
-	SpawnFakeHealthCrate(876, 703, false, false)
-	SpawnFakeHealthCrate(2309, 1260, false, false)
-	SpawnFakeHealthCrate(1733, 1127, false, false)
-	SpawnFakeHealthCrate(1738, 1320, false, false)
-	SpawnFakeHealthCrate(3249, 1460, false, false)
-	SpawnFakeHealthCrate(3051, 617, false, false)
-	SpawnFakeHealthCrate(2972, 353, false, false)
-	SpawnFakeHealthCrate(2548, 358, false, false)
+	spawnCrate(930, 557)
+	spawnCrate(979, 692)
+	spawnCrate(876, 703)
+	spawnCrate(2309, 1260)
+	spawnCrate(1733, 1127)
+	spawnCrate(1738, 1320)
+	spawnCrate(3249, 1460)
+	spawnCrate(3051, 617)
+	spawnCrate(2972, 353)
+	spawnCrate(2548, 358)
 
-	SpawnFakeHealthCrate(2090, 1580, false, false)
-	SpawnFakeHealthCrate(1752, 1753, false, false)
-	SpawnFakeHealthCrate(1865, 1758, false, false)
-	SpawnFakeHealthCrate(1985, 1760, false, false)
-	SpawnFakeHealthCrate(2429, 1760, false, false)
-	SpawnFakeHealthCrate(2810, 1480, false, false)
-	SpawnFakeHealthCrate(2800, 1277, false, false)
-	SpawnFakeHealthCrate(2806, 1107, false, false)
+	spawnCrate(2090, 1580)
+	spawnCrate(1752, 1753)
+	spawnCrate(1865, 1758)
+	spawnCrate(1985, 1760)
+	spawnCrate(2429, 1760)
+	spawnCrate(2810, 1480)
+	spawnCrate(2800, 1277)
+	spawnCrate(2806, 1107)
 
 	PlaceGirder(1897, 903, 6)
 	PlaceGirder(1916, 784, 3)
@@ -230,26 +239,26 @@ function onGameStart()
 	PlaceGirder(3210, 179, 2)
 	PlaceGirder(2932, 181, 2)
 
-	SpawnFakeHealthCrate(3804, 1461, false, false)
-	SpawnFakeHealthCrate(3269, 1742, false, false)
-	SpawnFakeHealthCrate(3066, 121, false, false)
-	SpawnFakeHealthCrate(3207, 104, false, false)
-	SpawnFakeHealthCrate(2928, 103, false, false)
-	SpawnFakeHealthCrate(1997, 202, false, false)
-	SpawnFakeHealthCrate(2253, 159, false, false)
-	SpawnFakeHealthCrate(2132, 774, false, false)
-	SpawnFakeHealthCrate(2549, 490, false, false)
-	SpawnFakeHealthCrate(3527, 694, false, false)
-	SpawnFakeHealthCrate(3777, 78, false, false)
-	SpawnFakeHealthCrate(1124, 1746, false, false)
-	SpawnFakeHealthCrate(1056, 1740, false, false)
-	SpawnFakeHealthCrate(993, 1742, false, false)
-	SpawnFakeHealthCrate(799, 1298, false, false)
-	SpawnFakeHealthCrate(577, 1126, false, false)
-	SpawnFakeHealthCrate(596, 1463, false, false)
-	SpawnFakeHealthCrate(3854, 1043, false, false)
-	SpawnFakeHealthCrate(1944, 567, false, false)
-	SpawnFakeHealthCrate(338, 1748, false, false)
+	spawnCrate(3804, 1461)
+	spawnCrate(3269, 1742)
+	spawnCrate(3066, 121)
+	spawnCrate(3207, 104)
+	spawnCrate(2928, 103)
+	spawnCrate(1997, 202)
+	spawnCrate(2253, 159)
+	spawnCrate(2132, 774)
+	spawnCrate(2549, 490)
+	spawnCrate(3527, 694)
+	spawnCrate(3777, 78)
+	spawnCrate(1124, 1746)
+	spawnCrate(1056, 1740)
+	spawnCrate(993, 1742)
+	spawnCrate(799, 1298)
+	spawnCrate(577, 1126)
+	spawnCrate(596, 1463)
+	spawnCrate(3854, 1043)
+	spawnCrate(1944, 567)
+	spawnCrate(338, 1748)
 
 end
 
@@ -278,7 +287,7 @@ function onGameTick20()
 end
 
 function onNewTurn()
-	TurnTimeLeft = -1
+	SetTurnTimeLeft(MAX_TURN_TIME)
 end
 
 function onGearAdd(gear)
@@ -286,7 +295,7 @@ function onGearAdd(gear)
 	if GetGearType(gear) == gtRCPlane then
 		RCGear = gear
 		planesUsed = planesUsed + 1
-		SetTeamLabel(loc("Wannabe Flyboys"), tostring(planesUsed))
+		SetTeamLabel(playerTeamName, tostring(planesUsed))
 		planeTimer = 0
 		missiles = 0
 	end
@@ -344,7 +353,7 @@ function onGearDelete(gear)
 		if cratesLeft == 0 then
 
 			local rank = "unknown"
-			local color = 0xFFFFFFFF
+			local color = capcolDefault
 			local sound = sndVictory
 			if planesUsed >= 156 then
 				rank = loc("Destroyer of planes")	
@@ -406,6 +415,8 @@ function onGearDelete(gear)
 				SendStat(siGameResult, loc("You have finished the challenge!"))
 				SendStat(siCustomAchievement, string.format(loc("You have used %d RC planes."), planesUsed))
 			end
+			SaveMissionVar("Won", "true")
+			updateChallengeRecord("Lowscore", planesUsed)
 		
 			if(totalMissiles > 1) then
 				SendStat(siCustomAchievement, string.format(loc("You have dropped %d missiles."), totalMissiles))
@@ -424,7 +435,7 @@ function onGearDelete(gear)
 			end
 			if(planesUsed == 1) then
 				SendStat(siCustomAchievement, loc("Congratulations! You have truly mastered this challenge! Don't forget to save the demo."))
-				SendStat(siCustomAchievement, string.format(loc("Achievement gotten: %s"), loc("Prestigious Pilot")))
+				awardAchievement(loc("Prestigious Pilot"), nil, false)
 			end
 
 			ShowMission     (
@@ -433,12 +444,10 @@ function onGearDelete(gear)
                                 string.format(loc("Planes used: %d"), planesUsed) .. "|" ..
                                 "", 0, 0
                                 )
-			SetState(player, gstWinner)
 			PlaySound(sound, player)
 
-
-			DismissTeam(loc("Wannabe Flyboys"))
 			EndGame()
+			SetState(player, gstWinner)
 		end
 
 		if RCGear ~= nil then

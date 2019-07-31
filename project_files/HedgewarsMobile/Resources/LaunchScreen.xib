@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.png" translatesAutoresizingMaskIntoConstraints="NO" id="5c9-IM-Yih">
+                    <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="5c9-IM-Yih" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="1vc-8o-Ux5"/>
+                <constraint firstAttribute="trailing" secondItem="5c9-IM-Yih" secondAttribute="trailing" id="1yx-EN-iQi"/>
+                <constraint firstItem="5c9-IM-Yih" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="T5s-JS-oi9"/>
+                <constraint firstAttribute="bottom" secondItem="5c9-IM-Yih" secondAttribute="bottom" id="mHx-0u-9gx"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="background.png" width="480" height="320"/>
+    </resources>
+</document>

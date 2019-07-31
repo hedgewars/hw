@@ -7,7 +7,7 @@
 #define     fpcrtl_min(a, b)                ((a) < (b) ? (a) : (b))
 #define     fpcrtl_max(a, b)                ((a) > (b) ? (a) : (b))
 
-float       fpcrtl_power(float base, float exponent);
+#define     fpcrtl_power(a, b)              pow(a, b)
 
 /* Currently the games only uses sign of an integer */
 int         fpcrtl_signi(int x);
@@ -18,6 +18,7 @@ float       fpcrtl_csc(float x);
 
 float       __attribute__((overloadable))   fpcrtl_abs(float x);
 double      __attribute__((overloadable))   fpcrtl_abs(double x);
+long double __attribute__((overloadable))   fpcrtl_abs(long double x);
 int         __attribute__((overloadable))   fpcrtl_abs(int x);
 int64_t     __attribute__((overloadable))   fpcrtl_abs(int64_t x);
 
@@ -28,6 +29,8 @@ double      log(double);
 double      sin(double);
 double      cos(double);
 double      fabs(double);
+float       fabsf(float);
+long double fabsl(long double);
 double      ceil(double);
 double      sqrt(double);
 double      atan(double);

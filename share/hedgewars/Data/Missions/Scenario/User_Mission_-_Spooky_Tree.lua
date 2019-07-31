@@ -3,6 +3,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 ---------------------------------------------------------------
 
+local playerTeamName
 local player = nil -- This variable will point to the hog's gear
 local instructor = nil
 local enemy = nil
@@ -23,17 +24,15 @@ function onGameInit()
 	MinesNum = 0 -- The number of mines being placed
 	MinesTime  = 1
 	Explosives = 0 -- The number of explosives being placed
-	Delay = 10 -- The delay between each round
 	Map = "Tree" -- The map to be played
 	Theme = "Halloween" -- The theme to be used
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Bloody Rookies"), 14483456, "deadhog", "Island", "Default", "cm_eyes")
-	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
-			--852718
-	AddTeam(loc("Toxic Team"), 	1175851, "skull", "Island", "Default", "cm_magicskull")
+	playerTeamName = AddMissionTeam(-1)
+	player = AddMissionHog(1)
+	AddTeam(loc("Toxic Team"), -6, "skull", "Island", "Default_qau", "cm_magicskull")
 	enemy = AddHog(loc("Poison"), 1, 10, "Skull")
 
 	SetGearPosition(player,970,23)
@@ -118,7 +117,6 @@ function onGameTick()
 	end
 
 	if TurnTimeLeft == 1 then
-		--ShowMission(loc(caption), loc(subcaption), loc(timeout), -amSkip, 0);
 		SetHealth(player, 0)
 		GameOver = true
 	end
@@ -141,18 +139,22 @@ end
 function onGearDelete(gear)
 
 	if gear == GirderCrate then
-		TurnTimeLeft = TurnTimeLeft + 30000
+		SetTurnTimeLeft(TurnTimeLeft + 30000)
 	end
 
 	if GetGearType(gear) == gtCase then
-		TurnTimeLeft = TurnTimeLeft + 5000
+		SetTurnTimeLeft(TurnTimeLeft + 5000)
 	end
 
-	if (gear == enemy) and (GameOver == false) then
-		ShowMission(loc("Spooky Tree"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0);
-	elseif gear == player then
-		ShowMission(loc("Spooky Tree"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
+end
+
+function onGameResult(winner)
+	if winner == GetTeamClan(playerTeamName) then
+		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
+		GameOver = true
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
 		GameOver = true
 	end
-
 end

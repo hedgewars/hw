@@ -25,7 +25,7 @@
 #include "hwmap.h"
 
 HWMap::HWMap(QObject * parent) :
-    TCPBase(false, parent)
+    TCPBase(false, false, parent)
 {
     templateFilter = 0;
     m_mapgen = MAPGEN_REGULAR;

@@ -29,6 +29,7 @@ ThemeFilterProxyModel::ThemeFilterProxyModel(QObject *parent)
 {
     isFilteringDLC = false;
     isFilteringHidden = false;
+    isFilteringBackground = false;
 }
 
 bool ThemeFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex & sourceParent) const
@@ -43,13 +44,15 @@ bool ThemeFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex & 
         searchOkay = in != -1;
     }
 
-    if(isFilteringDLC || isFilteringHidden)
+    if(isFilteringDLC || isFilteringHidden || isFilteringBackground)
     {
         bool isDLC = index.data(ThemeModel::IsDlcRole).toBool();
         bool isHidden = index.data(ThemeModel::IsHiddenRole).toBool();
+        bool isBackground = index.data(ThemeModel::IsBackgroundThemeRole).toBool();
 
         return ( ((isFilteringDLC && !isDLC) || !isFilteringDLC) &&
-                 ((isFilteringHidden && !isHidden) || !isFilteringHidden) ) &&
+                 ((isFilteringHidden && !isHidden) || !isFilteringHidden) &&
+                 ((isFilteringBackground && !isBackground) || !isFilteringBackground) ) &&
                searchOkay;
     }
     else
@@ -69,3 +72,9 @@ void ThemeFilterProxyModel::setFilterHidden(bool enable)
     isFilteringHidden = enable;
     invalidateFilter();
 }
+
+void ThemeFilterProxyModel::setFilterBackground(bool enable)
+{
+    isFilteringBackground = enable;
+    invalidateFilter();
+};

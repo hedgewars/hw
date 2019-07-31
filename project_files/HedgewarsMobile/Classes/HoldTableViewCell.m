@@ -26,14 +26,14 @@
 #define SWIPE_DRAG_HORIZ_MIN 10
 #define SWIPE_DRAG_VERT_MAX 40
 
--(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
         delegate = nil;
     }
     return self;
 }
 
--(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
 
     time = touch.timestamp;
@@ -42,7 +42,7 @@
     [super touchesBegan:touches withEvent:event];
 }
 
--(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
 
     if ( touch.timestamp - time < 0.25 ) {
@@ -55,7 +55,7 @@
         [super touchesCancelled:touches withEvent:event];
 }
 
--(void) holdAction {
+- (void)holdAction {
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(holdAction:onTable:)])
     {
         UITableView *tableView = [self findTable];
@@ -64,11 +64,6 @@
             [self.delegate holdAction:self.textLabel.text onTable:tableView];
         }
     }
-}
-
--(void) dealloc {
-    self.delegate = nil;
-    [super dealloc];
 }
 
 @end

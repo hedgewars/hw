@@ -45,6 +45,7 @@ class PageEditTeam : public AbstractPage
     public slots:
         void CBTeamLvl_activated(const int index);
         void CBFort_activated(const int index);
+        void frontendSoundsToggled(bool value);
 
     private:
         QTabWidget * tbw;

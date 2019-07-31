@@ -28,9 +28,12 @@
 #include <QMessageBox>
 #include <QStandardItemModel>
 #include <QDebug>
+#include <QRegExp>
+#include <QRegExpValidator>
 #include "SquareLabel.h"
 #include "HWApplication.h"
 #include "keybinder.h"
+#include "hwconsts.h"
 
 #include "physfs.h"
 #include "DataManager.h"
@@ -129,6 +132,9 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     TeamNameEdit->setMaxLength(64);
     TeamNameEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     TeamNameEdit->setStyleSheet("QLineEdit { padding: 6px; }");
+    QRegExp rx(*cSafeFileNameRegExp);
+    QRegExpValidator * val = new QRegExpValidator(rx, TeamNameEdit);
+    TeamNameEdit->setValidator(val);
     GBTLayout->addWidget(TeamNameEdit, 0, 1, 1, 2);
     vbox2->addWidget(GBoxTeam);
 
@@ -163,12 +169,13 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     // CPU level flag. Static image, only displayed when computer player is selected
     QImage imgBotlevels = QImage("physfs://Graphics/botlevels.png");
 
-    int botlevelOffsets[5]= { 19, 14, 10, 6, 0 };   
+    int botlevelOffsetsX[5]= { 17, 13, 9, 5, 0 };
+    int botlevelOffsetsY[5]= { 11, 9, 4, 2, 0 };
 
     for(int i=0; i<5; i++) {
         QImage imgCPU = QImage("physfs://Graphics/Flags/cpu.png");
         QPainter painter(&imgCPU);
-        painter.drawImage(botlevelOffsets[i], 0, imgBotlevels, botlevelOffsets[i]);
+        painter.drawImage(botlevelOffsetsX[i], botlevelOffsetsY[i], imgBotlevels, botlevelOffsetsX[i], botlevelOffsetsY[i]);
 
         pixCPU[i] = QPixmap::fromImage(imgCPU);
     }
@@ -434,6 +441,11 @@ void PageEditTeam::CBTeamLvl_activated(const int index)
     hboxCPUWidget->setHidden(index == 0);
 }
 
+void PageEditTeam::frontendSoundsToggled(bool value)
+{
+    btnTestSound->setEnabled(value);
+}
+
 void PageEditTeam::testSound()
 {
     DataManager & dataMgr = DataManager::instance();
@@ -462,12 +474,13 @@ void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
     lazyLoad();
     OldTeamName = name;
 
-    // Mostly create a default team, with 2 important exceptions:
+    // Mostly create a default team, with some important exceptions:
     HWTeam newTeam(name);
     // Randomize grave to make it less likely that default teams have equal graves (important for resurrector)
     HWNamegen::teamRandomGrave(newTeam, false);
     // Randomize fort for greater variety in fort mode with default teams
     HWNamegen::teamRandomFort(newTeam, false);
+    HWNamegen::teamLocalizedDefaultVoice(newTeam);
     // DLC forts and graves intentionally filtered out to prevent desyncs and missing grave error
     // TODO: Remove DLC filter as soon it is not needed anymore
     loadTeam(newTeam);
@@ -490,6 +503,7 @@ void PageEditTeam::deleteTeam(const QString & name)
     reallyDeleteMsg.setIcon(QMessageBox::Question);
     reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Teams - Are you sure?"));
     reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the team '%1'?").arg(name));
+    reallyDeleteMsg.setTextFormat(Qt::PlainText);
     reallyDeleteMsg.setWindowModality(Qt::WindowModal);
     reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
@@ -598,6 +612,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
         else
             qDebug() << "Binds: cannot find" << team.keyBind(i);
     }
+    binder->checkConflicts();
 }
 
 HWTeam PageEditTeam::data()
@@ -657,6 +672,7 @@ void PageEditTeam::saveTeam()
         teamNameFixedMsg.setIcon(QMessageBox::Warning);
         teamNameFixedMsg.setWindowTitle(QMessageBox::tr("Teams - Name already taken"));
         teamNameFixedMsg.setText(QMessageBox::tr("The team name '%1' is already taken, so your team has been renamed to '%2'.").arg(origName).arg(team.name()));
+        teamNameFixedMsg.setTextFormat(Qt::PlainText);
         teamNameFixedMsg.setWindowModality(Qt::WindowModal);
         teamNameFixedMsg.setStandardButtons(QMessageBox::Ok);
         teamNameFixedMsg.exec();
@@ -670,4 +686,5 @@ void PageEditTeam::resetAllBinds()
 {
     for (int i = 0; i < BINDS_NUMBER; i++)
         binder->setBindIndex(i, 0);
+    binder->checkConflicts();
 }

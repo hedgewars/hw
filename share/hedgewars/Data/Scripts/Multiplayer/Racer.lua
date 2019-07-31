@@ -95,7 +95,6 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 -- Got Variables?
 ------------------
 
-local fMod = 1000000 -- 1
 local roundLimit = 3
 local roundNumber = 0
 local firstClan = 10
@@ -118,6 +117,8 @@ local TeamRope = false
 
 local waypointCursor = false
 local waypointPreview = nil
+
+local officialChallenge
 
 --------------------------
 -- hog and team tracking variales
@@ -143,7 +144,7 @@ local cGear = nil
 local cameraGear = nil -- gear created to center the cameera on
 
 local bestClan = 10
-local bestTime = 1000000
+local bestTime = MAX_TURN_TIME
 
 local gameBegun = false
 local gameOver = false
@@ -286,7 +287,7 @@ function RebuildTeamInfo()
                 teamNameArr[i] = " "
                 teamSize[i] = 0
                 teamIndex[i] = 0
-                teamScore[i] = 1000000
+                teamScore[i] = MAX_TURN_TIME
         end
         numTeams = 0
 
@@ -439,7 +440,7 @@ function AdjustScores()
                 end
         end
 
-        if bestTime ~= 1000000 then
+        if bestTime ~= MAX_TURN_TIME then
                 bestTimeComment = string.format(loc("%.1fs"), (bestTime/1000))
         end
 
@@ -465,7 +466,7 @@ function AdjustScores()
         end
 
         for i = 0, (TeamsCount-1) do
-                if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
+                if teamNameArr[i] ~= " " and teamScore[i] ~= MAX_TURN_TIME then
                         SetTeamLabel(teamNameArr[i], string.format(loc("%.1fs"), teamScore[i]/1000))
                 end
         end
@@ -496,7 +497,7 @@ function onNewRound()
 
         totalComment = ""
         for i = 0, (TeamsCount-1) do
-                        if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
+                        if teamNameArr[i] ~= " " and teamScore[i] ~= MAX_TURN_TIME then
                                 teamComment[i] = string.format(loc("%s: %.1fs"), teamNameArr[i], (teamScore[i]/1000)) .. "|"
                         else
                                 teamComment[i] = string.format(loc("%s: Did not finish"), teamNameArr[i]) .. "|"
@@ -504,10 +505,16 @@ function onNewRound()
                         totalComment = totalComment .. teamComment[i]
         end
 
+        local icon
+        if roundNumber >= roundLimit then
+                icon = 0
+        else
+                icon = 2
+        end
         ShowMission(    loc("Racer"),
                                         loc("Status update"),
                                         string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit) .. "|" .. " " .. "|" ..
-                                        loc("Best team times: ") .. "|" .. totalComment, 0, 4000)
+                                        loc("Best team times: ") .. "|" .. totalComment, icon, 4000)
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
@@ -515,33 +522,68 @@ function onNewRound()
                 local unfinishedArray = {}
                 local sortedTeams = {}
                 local k = 1
+                local c = 1
+                local clanScores = {}
+                local previousClan
                 for i = 0, TeamsCount-1 do
-                        if teamScore[i] ~= 1000000 and teamNameArr[i] ~= " " then
+                        local clan = GetTeamClan(teamNameArr[i])
+                        if not clanScores[clan+1] then
+	                       clanScores[clan+1] = {}
+	                       clanScores[clan+1].index = clan
+	                       clanScores[clan+1].score = teamScore[i]
+                        end
+                        if teamScore[i] ~= MAX_TURN_TIME and teamNameArr[i] ~= " " then
                                sortedTeams[k] = {}
                                sortedTeams[k].name = teamNameArr[i]
                                sortedTeams[k].score = teamScore[i]
+	                       sortedTeams[k].clan = clan
                                k = k + 1
                         else
                                table.insert(unfinishedArray, string.format(loc("%s did not finish the race."), teamNameArr[i]))
                         end
                 end
-                table.sort(sortedTeams, function(team1, team2) return team1.score < team2.score end)
+                table.sort(sortedTeams, function(team1, team2)
+                        if team1.score == team2.score then
+                                return team1.clan < team2.clan
+                        else
+                                return team1.score < team2.score
+                        end
+                end)
+                table.sort(clanScores, function(clan1, clan2) return clan1.score < clan2.score end)
+                local rank = 0
+                local rankPlus = 0
+                local prevScore
+                local clanRanks = {}
+                for c = 1, #clanScores do
+                        rankPlus = rankPlus + 1
+                        if clanScores[c].score ~= prevScore then
+                                rank = rank + rankPlus
+                                rankPlus = 0
+                        end
+                        prevScore = clanScores[c].score
+                        clanRanks[clanScores[c].index] = rank
+                end
 
                 -- Write all the stats!
-
                 for i = 1, #sortedTeams do
-                        SendStat(siPointType, loc("milliseconds"))
+                        SendStat(siPointType, "!TIME")
+			SendStat(siTeamRank, tostring(clanRanks[GetTeamClan(sortedTeams[i].name)]))
                         SendStat(siPlayerKills, sortedTeams[i].score, sortedTeams[i].name)
                 end
 
-                if #sortedTeams >= 1 then
-                        SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
+		local roundDraw = false
+		if #clanScores >= 2 and clanScores[1].score == clanScores[2].score and clanScores[1].score ~= MAX_TURN_TIME then
+			roundDraw = true
+                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siCustomAchievement, loc("The teams are tied for the fastest time."))
+                elseif #sortedTeams >= 1 then
                         SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
                         SendStat(siCustomAchievement, string.format(loc("%s wins with a best time of %.1fs."), sortedTeams[1].name, (sortedTeams[1].score/1000)))
                         for i=1,#unfinishedArray do
                                  SendStat(siCustomAchievement, unfinishedArray[i])
                         end
                 else
+			roundDraw = true
                         SendStat(siGameResult, loc("Round draw"))
                         SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
                         if specialPointsCount > 0 then
@@ -553,7 +595,7 @@ function onNewRound()
 
 		-- Kill all the losers
 		for i = 0, (numhhs-1) do
-			if GetHogClan(hhs[i]) ~= bestClan then
+			if GetHogClan(hhs[i]) ~= bestClan or roundDraw then
 				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
 			end
@@ -612,9 +654,8 @@ function HandleGhost()
 
                 fastIndex = fastIndex + 1
 
-                tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
-                g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-                SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, fastColour )
+                local tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
+                SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, fastColour )
 
         end
 
@@ -660,14 +701,16 @@ function InstructionsRace()
         ShowMission(loc("Racer"),
         	loc("A Hedgewars mini-game"),
         	loc("Touch all waypoints as fast as you can!"),
-		2, 4000)
+		1, 4000)
 end
 
 function onGameStart()
-	SendGameResultOff()
-	SendRankingStatsOff()
-        SendHealthStatsOff()
-	SendAchievementsStatsOff()
+	if ClansCount >= 2 then
+		SendGameResultOff()
+		SendRankingStatsOff()
+        	SendHealthStatsOff()
+		SendAchievementsStatsOff()
+	end
 
         SetSoundMask(sndIncoming, true)
         SetSoundMask(sndMissed, true)
@@ -675,6 +718,7 @@ function onGameStart()
         roundN = 0
         lastRound = TotalRounds
         RoundHasChanged = false
+        officialChallenge = detectMapWithDigest()
 
 	if GetBackgroundBrightness() == 1 then
 		-- Dark waypoint colour theme
@@ -796,6 +840,7 @@ function onNewTurn()
         trackTime = 0
 
         currCount = 0 -- hopefully this solves problem
+        fastIndex = 0
         AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
 
@@ -818,9 +863,13 @@ function onNewTurn()
                                 infoString = loc("Place 2 waypoints using the waypoint placement tool.")
                         end
                         ShowMission(loc("Racer"),
-                        loc("Waypoint placement phase"), infoString, 2, 4000)
+                        loc("Waypoint placement phase"), infoString, -amAirAttack, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
                         SetWeapon(amAirAttack)
+                        -- Bots skip waypoint placement
+                        if GetHogLevel(CurrentHedgehog) ~= 0 then
+                                SkipTurn()
+                        end
                 end
         end
 
@@ -981,12 +1030,13 @@ function onGameTick()
 	end
 end
 
-function onGearResurrect(gear)
-
-        AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+function onGearResurrect(gear, vGear)
 
         if gear == CurrentHedgehog then
                 DisableTumbler(false)
+        end
+        if vGear then
+                DeleteVisualGear(vGear)
         end
 
 end
@@ -1002,8 +1052,6 @@ function onGearAdd(gear)
         elseif GetGearType(gear) == gtRope and TeamRope then
             SetTag(gear,1)
             SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))
-        elseif GetGearType(gear) == gtAirMine then
-            DeleteGear(gear)
         end
 end
 
@@ -1027,6 +1075,10 @@ function onHogAttack(ammoType)
     if ammoType == amSkip then
         turnSkipped = true
     end
+end
+
+function onSkipTurn()
+    turnSkipped = true
 end
 
 function onAchievementsDeclaration()
@@ -1058,15 +1110,13 @@ function onAchievementsDeclaration()
         raceType = "mixed race"
     end
 
-    map = detectMapWithDigest()
-
     for i = 0, (numTeams-1) do
-        if teamScore[i] < 1000000 then
-            DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
+        if teamScore[i] < MAX_TURN_TIME then
+            DeclareAchievement(raceType, teamNameArr[i], officialChallenge, teamScore[i])
         end
     end
 
-    if map ~= nil and fastCount > 0 then
+    if officialChallenge ~= nil and fastCount > 0 then
         StartGhostPoints(fastCount)
 
         for i = 0, (fastCount - 1) do

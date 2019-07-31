@@ -28,8 +28,8 @@
     UIWindow *uiwindow;
 }
 
-@property (nonatomic,retain) MainMenuViewController *mainViewController;
-@property (nonatomic,retain) UIWindow *uiwindow;
+@property (nonatomic, strong) MainMenuViewController *mainViewController;
+@property (nonatomic, strong) UIWindow *uiwindow;
 
 @end
 

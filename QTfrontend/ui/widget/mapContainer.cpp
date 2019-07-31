@@ -154,6 +154,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     /* Seed button */
 
     btnSeed = new QPushButton(parentWidget()->parentWidget());
+    //: Refers to the "random seed"; the source of randomness in the game
     btnSeed->setText(tr("Seed"));
     btnSeed->setWhatsThis(tr("View and edit the seed, the source of randomness in the game"));
     btnSeed->setStyleSheet("padding: 5px;");
@@ -228,14 +229,34 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     drawnControls->addStretch(1);
 
-    btnLoadMap = new QPushButton(tr("Load map drawing"));
-    btnLoadMap->setStyleSheet("padding: 20px;");
+    QPixmap pmLoad(":/res/Load.png");
+    QIcon iconLoad = QIcon(pmLoad);
+    sz = iconLoad.actualSize(QSize(48, 48));
+
+    btnLoadMap = new QPushButton(tr("Load"));
+    btnLoadMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    btnLoadMap->setWhatsThis(tr("Load map drawing"));
+    btnLoadMap->setStyleSheet("padding: 5px;");
+    btnLoadMap->setFixedHeight(50);
+    btnLoadMap->setIcon(iconLoad);
+    btnLoadMap->setIconSize(sz);
+    btnLoadMap->setFlat(true);
     drawnControls->addWidget(btnLoadMap, 0);
     m_childWidgets << btnLoadMap;
     connect(btnLoadMap, SIGNAL(clicked()), this, SLOT(loadDrawing()));
 
-    btnEditMap = new QPushButton(tr("Edit map drawing"));
-    btnEditMap->setStyleSheet("padding: 20px;");
+    QPixmap pmEdit(":/res/edit.png");
+    QIcon iconEdit = QIcon(pmEdit);
+    sz = iconEdit.actualSize(QSize(48, 48));
+
+    btnEditMap = new QPushButton(tr("Edit"));
+    btnEditMap->setWhatsThis(tr("Edit map drawing"));
+    btnEditMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    btnEditMap->setStyleSheet("padding: 5px;");
+    btnEditMap->setFixedHeight(50);
+    btnEditMap->setIcon(iconEdit);
+    btnEditMap->setIconSize(sz);
+    btnEditMap->setFlat(true);
     drawnControls->addWidget(btnEditMap, 0);
     m_childWidgets << btnEditMap;
     connect(btnEditMap, SIGNAL(clicked()), this, SIGNAL(drawMapRequested()));
@@ -276,6 +297,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapFeatureSize->setMaximum(25);
     mapFeatureSize->setMinimum(1);
     //mapFeatureSize->setFixedWidth(259);
+    mapFeatureSize->setPageStep(5);
     mapFeatureSize->setValue(m_mapFeatureSize);
     mapFeatureSize->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     bottomLeftLayout->addWidget(mapFeatureSize, 0);
@@ -425,7 +447,7 @@ void HWMapContainer::askForGeneratedPreview()
                    getDrawnMapData(),
                    m_script,
                    m_scriptparam,
-		           m_mapFeatureSize
+                   m_mapFeatureSize
                   );
 
     setHHLimit(0);
@@ -920,6 +942,7 @@ void HWMapContainer::updateHelpTexts(MapModel::MapType type)
     QString randomNoMapPrev = tr("Click to randomize the theme and seed");
     QString mfsComplex = QString(tr("Adjust the complexity of the generated map"));
     QString mfsFortsDistance = QString(tr("Adjust the distance between forts"));
+    QString mfsDrawnMap = QString(tr("Scale size of the drawn map"));
     switch (type)
     {
         case MapModel::GeneratedMap:
@@ -937,6 +960,7 @@ void HWMapContainer::updateHelpTexts(MapModel::MapType type)
         case MapModel::HandDrawnMap:
             mapPreview->setWhatsThis(tr("Click to edit"));
             btnRandomize->setWhatsThis(randomSeed);
+            mapFeatureSize->setWhatsThis(mfsDrawnMap);
             break;
         case MapModel::FortsMap:
             mapPreview->setWhatsThis(randomNoMapPrev);
@@ -989,7 +1013,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             mapgen = MAPGEN_DRAWN;
             setMapInfo(MapModel::MapInfoDrawn);
             btnLoadMap->show();
-            mapFeatureSize->hide();
+            //mapFeatureSize->hide();
             btnEditMap->show();
             break;
         case MapModel::MissionMap:
@@ -1070,18 +1094,14 @@ void HWMapContainer::setFeatureSize(int val)
 {
     m_mapFeatureSize = val;
     intSetFeatureSize(val);
-    //m_mapFeatureSize = val>>2<<2;
-    //if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 4)
-    {
-        m_prevMapFeatureSize = m_mapFeatureSize;
-        updatePreview();
-    }
+    m_prevMapFeatureSize = m_mapFeatureSize;
+    updatePreview();
 }
 
 // unused because I needed the space for the slider
 void HWMapContainer::updateThemeButtonSize()
 {
-    if (m_mapInfo.type != MapModel::StaticMap && m_mapInfo.type != MapModel::HandDrawnMap)
+    if (m_mapInfo.type != MapModel::StaticMap)
     {
         btnTheme->setIconSize(QSize(30, 30));
         btnTheme->setFixedHeight(30);
@@ -1191,6 +1211,15 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
     {
         if (!selectedTheme.isNull() && !selectedTheme.isEmpty())
         {
+            // Fall back to a default theme if current theme is a background theme or hidden
+            QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, m_theme);
+            if (mdl.size() > 0)
+            {
+                if ((mdl.at(0).data(ThemeModel::IsBackgroundThemeRole).toBool() == true) || (mdl.at(0).data(ThemeModel::IsHiddenRole).toBool() == true))
+                {
+                    selectedTheme = "Nature";
+                }
+            }
             setTheme(selectedTheme);
             emit themeChanged(selectedTheme);
         }
@@ -1222,6 +1251,7 @@ void HWMapContainer::loadDrawing()
         errorMsg.setIcon(QMessageBox::Warning);
         errorMsg.setWindowTitle(QMessageBox::tr("File error"));
         errorMsg.setText(QMessageBox::tr("Cannot open '%1' for reading").arg(fileName));
+        errorMsg.setTextFormat(Qt::PlainText);
         errorMsg.setWindowModality(Qt::WindowModal);
         errorMsg.exec();
     }

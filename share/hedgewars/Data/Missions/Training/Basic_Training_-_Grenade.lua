@@ -30,7 +30,7 @@ function onGameInit()
 	Map = "Mushrooms"
 	Seed = 0
 	Theme = "Nature"
-	TurnTime = 9999000
+	TurnTime = MAX_TURN_TIME
 	Explosives = 0
 	MinesNum = 0
 	CaseFreq = 0
@@ -39,18 +39,22 @@ function onGameInit()
 
 	------ TEAM LIST ------
 
-	AddTeam(loc("Grenade Team"), 0xFF0204, "Flower", "Earth", "Default", "cm_grenade")
-	hog = AddHog(loc("Greenhorn"), 0, 1, "NoHat")
+	AddMissionTeam(-1)
+	hog = AddMissionHog(1)
 	SetGearPosition(hog, 570, 157)
 	SetEffect(hog, heResurrectable, 1)
 
 	SendHealthStatsOff()
+	SendRankingStatsOff()
 end
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	if gear == hog then
 		flawless = false
 		SetGearPosition(hog, 570, 157)
+		if vGear then
+			SetVisualGearValues(vGear, GetX(hog), GetY(hog))
+		end
 		AddCaption(loc("Your hedgehog has been revived!"))
 	end
 end
@@ -80,7 +84,7 @@ end
 local function spawnTargets()
 	-- Warm-up
 	if gamePhase == 0 then
-		AddGear(882, 39, gtTarget, 0, 0, 0, 0)
+		AddGear(945, 498, gtTarget, 0, 0, 0, 0)
 	-- Timer
 	elseif gamePhase == 2 then
 		AddGear(233, 97, gtTarget, 0, 0, 0, 0)
@@ -90,12 +94,12 @@ local function spawnTargets()
 	elseif gamePhase == 3 then
 		AddGear(15, 240, gtTarget, 0, 0, 0, 0)
 		AddGear(61, 9, gtTarget, 0, 0, 0, 0)
-		AddGear(945, 498, gtTarget, 0, 0, 0, 0)
+		AddGear(882, 39, gtTarget, 0, 0, 0, 0)
 	-- Bounciness
 	elseif gamePhase == 4 then
-		AddGear(323, 960, gtTarget, 0, 0, 0, 0)
 		AddGear(1318, 208, gtTarget, 0, 0, 0, 0)
 		AddGear(1697, 250, gtTarget, 0, 0, 0, 0)
+		AddGear(323, 960, gtTarget, 0, 0, 0, 0)
 		AddGear(1852, 100, gtTarget, 0, 0, 0, 0)
 	-- Grand Final
 	elseif gamePhase == 5 then
@@ -114,45 +118,74 @@ end
 
 function newGamePhase()
 	-- Spawn targets, update wind and ammo, show instructions
+	local ctrl = ""
 	if gamePhase == 0 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Open ammo menu: [Right click]").."|"..
+			loc("Select weapon: [Left click]")
+		else
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]")
+		end
 		ShowMission(loc("Basic Grenade Training"), loc("Select Weapon"), loc("To begin with the training, select the grenade from the ammo menu!").."|"..
-		loc("Open ammo menu: [Right click]").."|"..
-		loc("Select weapon: [Left click]"), 2, 5000)
+		ctrl, 2, 5000)
 	elseif gamePhase == 1 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Attack: [Space]").."|"..
+			loc("Aim: [Up]/[Down]").."|"..
+			loc("Change direction: [Left]/[Right]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Attack: Tap the [Bomb]").."|"..
+			loc("Aim: [Up]/[Down]").."|"..
+			loc("Change direction: [Left]/[Right]")
+		end
 		ShowMission(loc("Basic Grenade Training"), loc("Warming Up"),
 		loc("Throw a grenade to destroy the target!").."|"..
 		loc("Hold the Attack key pressed for more power.").."|"..
-		loc("Attack: [Space]").."|"..
-		loc("Aim: [Up]/[Down]").."|"..
-		loc("Change direction: [Left]/[Right]"), 2, 20000)
+		ctrl.."|"..
+		loc("Note: Walking is disabled in this mission."), 2, 20000)
 		spawnTargets()
 	elseif gamePhase == 2 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Set detonation timer: [1]-[5]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Change detonation timer: Tap the [Clock]")
+		end
 		ShowMission(loc("Basic Grenade Training"), loc("Timer"),
 		loc("You can change the detonation timer of grenades.").."|"..
 		loc("Grenades explode after 1 to 5 seconds (you decide).").."|"..
-		loc("Set detonation timer: [1]-[5]"), 2, 15000)
+		ctrl, 2, 15000)
 		spawnTargets()
 	elseif gamePhase == 3 then
-		ShowMission(loc("Basic Grenade Training"), loc("No Wind Influcence"), loc("Unlike bazookas, grenades are not influenced by wind.").."|"..
+		ShowMission(loc("Basic Grenade Training"), loc("No Wind Influence"), loc("Unlike bazookas, grenades are not influenced by wind.").."|"..
 		loc("Destroy the targets!"), 2, 6000)
 		SetWind(50)
 		spawnTargets()
 	elseif gamePhase == 4 then
-		ShowMission(loc("Basic Grenade Training"), loc("Bounciness"),
-		loc("You can set the bounciness of grenades (and grenade-like weapons).").."|"..
+		local caption = loc("Bounciness")
+		ctrl = loc("You can set the bounciness of grenades (and grenade-like weapons).").."|"..
 		loc("Grenades with high bounciness bounce a lot and behave chaotic.").."|"..
 		loc("With low bounciness, it barely bounces at all, but it is much more predictable.").."|"..
-		loc("Try out different bounciness levels to reach difficult targets.").."|"..
-		loc("Set bounciness: [Left Shift] + [1]-[5]"),
-		2, 20000)
+		loc("Try out different bounciness levels to reach difficult targets.").."|"
+		if INTERFACE == "desktop" then
+			ctrl = ctrl .. loc("Set bounciness: [Left Shift] + [1]-[5]")
+		elseif INTERFACE == "touch" then
+			ctrl = ctrl .. loc("Change bounciness: Tap [B]")
+		end
+
+		ShowMission(loc("Basic Grenade Training"), caption, ctrl, 2, 20000)
 		spawnTargets()
 	elseif gamePhase == 5 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Precise Aim: [Left Shift] + [Up]/[Down]")
+			-- FIXME: No precise aim in touch interface yet :(
+		end
 		ShowMission(loc("Basic Grenade Training"), loc("Final Targets"), loc("Good job! Now destroy the final targets to finish the training.").."|"..
-		loc("Precise Aim: [Left Shift] + [Up]/[Down]"),
+		ctrl,
 		2, 7000)
 		spawnTargets()
 	elseif gamePhase == 6 then
-		ShowMission(loc("Basic Grenade Training"), loc("Training complete!"), loc("Congratulations!"), 0, 0)
+		SaveMissionVar("Won", "true")
+		ShowMission(loc("Basic Grenade Training"), loc("Training complete!"), loc("Congratulations!"), 4, 0)
 		SetInputMask(0)
 		AddAmmo(CurrentHedgehog, amGrenade, 0)
 		if shotsFired > maxTargets then
@@ -165,9 +198,9 @@ function newGamePhase()
 		end
 		SendStat(siCustomAchievement, loc("Good job!"))
 		SendStat(siGameResult, loc("You have completed the Basic Grenade Training!"))
-		SendStat(siPlayerKills, "0", loc("Grenade Team"))
 		EndGame()
 		gameOver = true
+		SetState(hog, gstWinner)
 	end
 	gamePhase = gamePhase + 1
 end
@@ -187,6 +220,12 @@ end
 
 function onHogAttack(ammoType)
 	if ammoType == amGrenade then
+		HideMission()
+	end
+end
+
+function onAttack()
+	if GetCurAmmoType() == amGrenade then
 		HideMission()
 	end
 end

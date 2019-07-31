@@ -41,14 +41,12 @@
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(dismissAction)];
     self.navigationItem.rightBarButtonItem = closeButton;
-    [closeButton release];
     
 #ifdef DEBUG
     if ([self allowSendLogByEmail])
     {
         UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(sendLogByEmailAction)];
         self.navigationItem.leftBarButtonItem = sendButton;
-        [sendButton release];
     }
 #endif
     
@@ -61,11 +59,9 @@
     UITextView *logView = [[UITextView alloc] initWithFrame:self.view.frame];
     [logView setAutoresizingMask:(UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth)];
     logView.text = debugStr;
-    [debugStr release];
     logView.editable = NO;
     
     [self.view addSubview:logView];
-    [logView release];
 }
 
 #pragma mark - Parameters
@@ -95,7 +91,6 @@
     [picker setMessageBody:emailBody isHTML:NO];
     
     [self presentViewController:picker animated:YES completion:nil];
-    [picker release];
 }
 #endif
 

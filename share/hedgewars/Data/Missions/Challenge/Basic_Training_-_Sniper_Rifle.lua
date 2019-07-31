@@ -13,6 +13,7 @@
 -- about translations.
 -- We can use the function loc(text) to localize a string.
 
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 -- This variable will hold the number of destroyed targets.
@@ -52,7 +53,7 @@ local dynamiteGears = {}
 local delayedTargetTargetX, delayedTargetY
 
 -- Team name of the player's team
-local playerTeamName = loc("Sniperz")
+local playerTeamName
 
 -- This is a custom function to make it easier to
 -- spawn more targets with just one line of code
@@ -123,8 +124,6 @@ function onGameInit()
 	MinesNum = 0
 	-- The number of explosives being placed
 	Explosives = 0
-	-- The delay between each round
-	Delay = 0
 	-- The map to be played
 	Map = "Ropes"
 	-- The theme to be used
@@ -134,10 +133,10 @@ function onGameInit()
 	HealthDecrease = 0
 
 	-- Create the player team
-	AddTeam(playerTeamName, 0xFF0204, "Simple", "Island", "Default", "cm_crosshair")
+	playerTeamName = AddMissionTeam(-1)
 	-- And add a hog to it
-	player = AddHog(loc("Hunter"), 0, 1, "Sniper")
-	SetGearPosition(player, 602, 1465)
+	player = AddMissionHog(1)
+	SetGearPosition(player, 602, 1488)
 end
 
 -- This function is called when the round starts
@@ -149,13 +148,16 @@ function onGameStart()
 	-- Spawn the first target.
 	spawnTarget(860,1020)
 
+	local highscore = getReadableChallengeRecord("Highscore")
 	-- Show some nice mission goals.
 	-- Parameters are: caption, sub caption, description,
 	-- extra text, icon and time to show.
 	-- A negative icon parameter (-n) represents the n-th weapon icon
 	-- A positive icon paramter (n) represents the (n+1)-th mission icon
 	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."), -amSniperRifle, 0)
+	ShowMission(loc("Sniper Training"), loc("Aiming Practice"),
+	loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.")
+	.. "|" .. highscore, -amSniperRifle, 0)
 
 	-- Displayed initial player score
 	SetTeamLabel(playerTeamName, "0")
@@ -174,9 +176,6 @@ function onGameTick20()
 	-- will be at "0 ms" right at the start of the game.
 	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and score < score_goal and game_lost == false then
 		game_lost = true
-		-- ... and show a short message.
-		AddCaption(loc("Time's up!"))
-		ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
 		-- and generate the stats and go to the stats screen
 		generateStats()
 		EndGame()
@@ -191,12 +190,11 @@ function onGameTick20()
 			-- ... end the game ...
 			generateStats()
 			EndGame()
-		else
-			-- ... or just lower the timer by 1.
-			-- Reset the time left to stop the timer
-			TurnTimeLeft = time_goal
+			if score == score_goal then
+				SetState(CurrentHedgehog, gstWinner)
+			end
 		end
-        end_timer = end_timer - 20
+        	end_timer = end_timer - 20
 	end
 end
 
@@ -305,6 +303,9 @@ function onGearDelete(gear)
 			elseif score == 9 then
 				spawnTarget(2930,1500)
 			elseif score == 10 then
+				-- The "tricky" target.
+				-- It spawns behind a wall
+				-- and needs at least 2 shots.
 				AddCaption(loc("This one's tricky."));
 				spawnTarget(700,720)
 			elseif score == 11 then
@@ -383,13 +384,21 @@ function onGearDelete(gear)
 				AddCaption(loc("Last Target!"));
 				spawnTarget(3480,1200)
 			end
-		else
-			if not game_lost then
+		elseif not game_lost then
 			-- Victory!
-			AddCaption(loc("Victory!"), 0xFFFFFFFF, capgrpGameState)
+			SaveMissionVar("Won", "true")
+			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
 			ShowMission(loc("Sniper Training"), loc("Aiming Practice"), loc("Congratulations! You've eliminated all targets|within the allowed time frame."), 0, 0)
-			-- Also let the hogs shout "victory!"
-			PlaySound(sndVictory, CurrentHedgehog)
+			-- Play voice
+			if shots-1 <= score then
+				-- Flawless victory condition: Only 1 shot more than targets
+				-- (1 shot per "normal" target + 2 shots for the "tricky" target)
+				PlaySound(sndFlawless, CurrentHedgehog)
+			else
+				-- "Normal" victory
+				PlaySound(sndVictory, CurrentHedgehog)
+			end
+
 			FollowGear(CurrentHedgehog)
 
 			-- Unselect sniper rifle and disable hog controls
@@ -399,7 +408,9 @@ function onGearDelete(gear)
 
 			-- Save the time left so we may keep it.
 			time_goal = TurnTimeLeft
-			end
+
+			-- Freeze the clock because the challenge has been completed
+			SetTurnTimePaused(true)
 		end
 		SetTeamLabel(playerTeamName, getTargetScore())
 	end
@@ -408,31 +419,44 @@ end
 -- This function calculates the final score of the player and provides some texts and
 -- data for the final stats screen
 function generateStats()
-	local accuracy = 0
+	local accuracy
+	local accuracy_int
 	if shots > 0 then
+		-- NOTE: 100% accuracy is not possible due to the "tricky" target.
 		accuracy = (score/shots)*100
+		accuracy_int = div(score*100, shots)
 	end
 	local end_score_targets = getTargetScore()
 	local end_score_overall
 	if not game_lost then
 		local end_score_time = math.ceil(time_goal/5)
-		local end_score_accuracy = math.ceil(accuracy * 100)
+		local end_score_accuracy = 0
+		if shots > 0 then
+			end_score_accuracy = math.ceil(accuracy * 100)
+		end
 		end_score_overall = end_score_time + end_score_targets + end_score_accuracy
 		SetTeamLabel(playerTeamName, tostring(end_score_overall))
 
 		SendStat(siGameResult, loc("You have successfully finished the sniper rifle training!"))
 		SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), score, score_goal, end_score_targets))
 		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))
-		SendStat(siCustomAchievement, string.format(loc("Accuracy bonus: +%d points"), end_score_accuracy))
+		if end_score_accuracy > 0 then
+			SendStat(siCustomAchievement, string.format(loc("Accuracy bonus: +%d points"), end_score_accuracy))
+		end
 		SendStat(siCustomAchievement, string.format(loc("You had %.2fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
+
+		if(shots > 0) then
+			updateChallengeRecord("AccuracyRecord", accuracy_int)
+		end
 	else
-		SendStat(siGameResult, loc("You lose!"))
+		SendStat(siGameResult, loc("Challenge over!"))
 
 		SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), score, score_goal, end_score_targets))
 		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))
 		end_score_overall = end_score_targets
 	end
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
 	SendStat(siPlayerKills, tostring(end_score_overall), playerTeamName)
+	updateChallengeRecord("Highscore", end_score_overall)
 end
 

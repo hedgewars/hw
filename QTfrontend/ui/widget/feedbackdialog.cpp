@@ -109,7 +109,8 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
 
     CheckSendSpecs = new QCheckBox();
     CheckSendSpecs->setText(QLabel::tr("Send system information"));
-    CheckSendSpecs->setChecked(true);
+    CheckSendSpecs->setChecked(false);
+    CheckSendSpecs->setToolTip(tr("This is optional, but this information might help us to resolve bugs and other technical problems."));
     BtnViewInfo = new QPushButton(tr("View"));
     BtnViewInfo->setFixedHeight(40);
     feedbackLayout->addWidget(CheckSendSpecs, 0, 2, 2, 1);
@@ -329,6 +330,7 @@ void FeedbackDialog::ShowErrorMessage(const QString & msg)
     msgMsg.setIcon(QMessageBox::Warning);
     msgMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Error"));
     msgMsg.setText(msg);
+    msgMsg.setTextFormat(Qt::PlainText);
     msgMsg.setWindowModality(Qt::WindowModal);
     msgMsg.exec();
 }
@@ -416,6 +418,7 @@ void FeedbackDialog::finishedSlot(QNetworkReply* reply)
             infoMsg.setIcon(QMessageBox::Information);
             infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
             infoMsg.setText(reply->readAll());
+            infoMsg.setTextFormat(Qt::PlainText);
             infoMsg.setWindowModality(Qt::WindowModal);
             infoMsg.exec();
 

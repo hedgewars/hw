@@ -27,12 +27,12 @@
     NSArray *colorArray;
 }
 
-@property (nonatomic,retain) NSMutableDictionary *ownerDictionary;
-@property (nonatomic,retain) NSArray *colorArray;
-@property (nonatomic,assign) NSUInteger selectedColor;
-@property (nonatomic,assign) NSUInteger colorIndex;
+@property (nonatomic, strong) NSMutableDictionary *ownerDictionary;
+@property (nonatomic, strong) NSArray *colorArray;
+@property (assign) NSUInteger selectedColor;
+@property (assign) NSUInteger colorIndex;
 
--(void) nextColor;
--(void) selectColor:(NSUInteger) color;
+- (void)nextColor;
+- (void)selectColor:(NSUInteger) color;
 
 @end

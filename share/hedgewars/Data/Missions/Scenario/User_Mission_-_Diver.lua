@@ -1,6 +1,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
+local playerTeamName
 local player = nil -- This variable will point to the hog's gear
 local enemy = nil
 
@@ -19,7 +20,6 @@ function onGameInit()
 	MinesNum = 0 -- The number of mines being placed
 	MinesTime  = 1000
 	Explosives = 0 -- The number of explosives being placed
-	Delay = 10 -- The delay between each round
 	Map = "Hydrant" -- The map to be played
 	Theme = "City" -- The theme to be used
 
@@ -27,10 +27,10 @@ function onGameInit()
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Bloody Rookies"), 14483456, "deadhog", "Island", "Default", "cm_eyes")
-	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
+	playerTeamName = AddMissionTeam(-1)
+	player = AddMissionHog(1)
 			
-	AddTeam(loc("Toxic Team"), 	1175851, "skull", "Island", "Default", "cm_magicskull")
+	AddTeam(loc("Toxic Team"), -6, "skull", "Island", "Default_qau", "cm_magicskull")
 	enemy = AddHog(loc("Poison"), 1, 100, "Skull")
 
 	SetGearPosition(player,430,516)
@@ -95,12 +95,14 @@ function onGearAdd(gear)
 
 end
 
-function onGearDelete(gear)
+function onGameResult(winner)
 
-	if (gear == enemy) and (GameOver == false) then
-		ShowMission(loc("Diver"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
-	elseif gear == player then
-		ShowMission(loc("Diver"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)		
+	if winner == GetTeamClan(playerTeamName) then
+		SendStat(siGameResult, loc("Mission succeeded!"))
+		SaveMissionVar("Won", "true")
+		GameOver = true
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
 		GameOver = true
 	end
 

@@ -42,10 +42,11 @@ function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; p
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure DrawGears;
-procedure DrawGearsTimers;
+procedure DrawGearsGui;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
+procedure RandomizeHHAnim;
 procedure StartSuddenDeath;
 function  GearByUID(uid : Longword) : PGear;
 function  IsClockRunning() : boolean;
@@ -62,11 +63,19 @@ var skipFlag: boolean;
 
 var delay: LongWord;
     delay2: LongWord;
-    step: (stInit, stDelay, stChDmg, stSweep, stTurnReact,
-    stAfterDelay, stChWin, stWater, stChWin2, stHealth,
-    stSpawn, stNTurn);
+    step: (stInit, stDelay1, stChDmg, stSweep, stTurnStats, stChWin1,
+    stTurnReact, stDelay2, stChWin2, stWater, stChWin3,
+    stChKing, stSuddenDeath, stDelay3, stHealth, stSpawn, stDelay4,
+    stNTurn);
     NewTurnTick: LongWord;
-    //SDMusic: shortstring;
+
+const delayInit = 50;
+      delaySDStart = 1600;
+      delaySDWarning = 1000;
+      delayDamageTagFull = 1500;
+      delayDamageTagShort = 500;
+      delayTurnReact = 800;
+      delayFinal = 100;
 
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
 var Gear: PGear;
@@ -86,7 +95,7 @@ while Gear <> nil do
             CheckNoDamage:= false;
 
             dmg:= Gear^.Damage;
-            if Gear^.Health < dmg then
+            if (Gear^.Health < dmg) then
                 begin
                 Gear^.Active:= true;
                 Gear^.Health:= 0
@@ -105,13 +114,49 @@ This doesn't fit well w/ the new loser sprite which is cringing from an attack.
             RenderHealth(Gear^.Hedgehog^);
             RecountTeamHealth(Gear^.Hedgehog^.Team);
 
+            end
+        else if ((GameFlags and gfKing) <> 0) and (not Gear^.Hedgehog^.Team^.hasKing) then
+            begin
+            Gear^.Active:= true;
+            Gear^.Health:= 0;
+            RenderHealth(Gear^.Hedgehog^);
+            RecountTeamHealth(Gear^.Hedgehog^.Team);
             end;
+
         if (not isInMultiShoot) then
             Gear^.Karma:= 0;
         Gear^.Damage:= 0
         end;
     Gear:= Gear^.NextGear
     end;
+end;
+
+function DoDelay: boolean;
+begin
+if delay <= 0 then
+    delay:= 1
+else
+    dec(delay);
+DoDelay:= delay = 0;
+end;
+
+function CheckMinionsDie: boolean;
+var Gear: PGear;
+begin
+    CheckMinionsDie:= false;
+    if (GameFlags and gfKing) = 0 then
+        exit;
+
+    Gear:= GearsList;
+    while Gear <> nil do
+        begin
+        if (Gear^.Kind = gtHedgehog) and (not Gear^.Hedgehog^.King) and (not Gear^.Hedgehog^.Team^.hasKing) then
+            begin
+            CheckMinionsDie:= true;
+            exit;
+            end;
+        Gear:= Gear^.NextGear;
+        end;
 end;
 
 procedure HealthMachine;
@@ -128,19 +173,21 @@ begin
         if Gear^.Kind = gtHedgehog then
             begin
             tmp:= 0;
+            // Deal poison damage (when not frozen)
             if (Gear^.Hedgehog^.Effects[hePoisoned] <> 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) then
                 begin
                 inc(tmp, ModifyDamage(Gear^.Hedgehog^.Effects[hePoisoned], Gear));
                 if (GameFlags and gfResetHealth) <> 0 then
-                    dec(Gear^.Hedgehog^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
+                    dec(Gear^.Hedgehog^.InitialHealth);
                 end;
             // Apply SD health decrease as soon as SD starts
-            if (TotalRounds > cSuddenDTurns - 1) then
+            if (TotalRoundsPre > cSuddenDTurns - 1) then
                 begin
                 inc(tmp, cHealthDecrease);
                 if (GameFlags and gfResetHealth) <> 0 then
                     dec(Gear^.Hedgehog^.InitialHealth, cHealthDecrease)
                 end;
+            // Reduce king health when he is alone in team
             if Gear^.Hedgehog^.King then
                 begin
                 flag:= false;
@@ -156,6 +203,10 @@ begin
                         dec(Gear^.Hedgehog^.InitialHealth, 5)
                     end
                 end;
+            // Initial health must never be below 1 because hog might be resurrected
+            if Gear^.Hedgehog^.InitialHealth < 1 then
+                Gear^.Hedgehog^.InitialHealth:= 1;
+            // Set real damage
             if tmp > 0 then
                 begin
                 // SD damage never reduces health below 1
@@ -163,7 +214,7 @@ begin
                 inc(Gear^.Damage, tmp);
                 if tmp > 0 then
                     // Make hedgehog moan on damage
-                    HHHurt(Gear^.Hedgehog, dsPoison);
+                    HHHurt(Gear^.Hedgehog, dsPoison, tmp);
                 end
             end;
 
@@ -172,8 +223,8 @@ begin
 end;
 
 procedure ProcessGears;
-var t: PGear;
-    i, AliveCount: LongInt;
+var t, tmpGear: PGear;
+    i, j, AliveCount: LongInt;
     s: ansistring;
     prevtime: LongWord;
     stirFallers: boolean;
@@ -225,14 +276,35 @@ while t <> nil do
             end;
         if curHandledGear^.Active then
             begin
-            if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
+            if curHandledGear^.RenderTimer then
                 begin
-                FreeAndNilTexture(curHandledGear^.Tex);
-                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(curHandledGear^.Timer div 1000)), cWhiteColor, fntSmall);
+                // Mine timer
+                if (curHandledGear^.Kind in [gtMine, gtSMine, gtAirMine]) then
+                    begin
+                    if curHandledGear^.Tex = nil then
+                        if (curHandledGear^.Karma = 1) and (not (GameType in [gmtDemo, gmtRecord])) then
+                            // Secret mine timer
+                            curHandledGear^.Tex:= RenderStringTex(trmsg[sidUnknownGearValue], $ff808080, fntSmall)
+                        else
+                            begin
+                            // Display mine timer with up to 1 decimal point of precision (rounded down)
+                            i:= curHandledGear^.Timer div 1000;
+                            j:= (curHandledGear^.Timer mod 1000) div 100;
+                            if j = 0 then
+                                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i)), $ff808080, fntSmall)
+                            else
+                                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(i) + lDecimalSeparator + inttostr(j)), $ff808080, fntSmall);
+                            end
+                    end
+                // Timer of other gears
+                else if ((curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0)) then
+                    begin
+                    // Display time in seconds as whole number, rounded up
+                    FreeAndNilTexture(curHandledGear^.Tex);
+                    curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(curHandledGear^.Timer div 1000)), cWhiteColor, fntSmall);
+                    end;
                 end;
             curHandledGear^.doStep(curHandledGear);
-            // might be useful later
-            //ScriptCall('onGearStep', Gear^.uid);
             end
         end
     end;
@@ -261,24 +333,25 @@ case step of
         begin
         if (not bBetweenTurns) and (not isInMultiShoot) then
             ScriptCall('onEndTurn');
+        delay:= delayInit;
         inc(step)
         end;
-    stDelay:
+    stDelay1:
         begin
-        if delay = 0 then
-            delay:= cInactDelay
-        else
-            dec(delay);
-
-        if delay = 0 then
-            inc(step)
+        if DoDelay() then
+            inc(step);
         end;
-
     stChDmg:
     if CheckNoDamage then
         inc(step)
     else
-        step:= stDelay;
+        begin
+        if (not bBetweenTurns) and (not isInMultiShoot) then
+            delay:= delayDamageTagShort
+        else
+            delay:= delayDamageTagFull;
+        step:= stDelay1;
+        end;
 
     stSweep:
     if SweepDirty then
@@ -289,28 +362,36 @@ case step of
     else
         inc(step);
 
+    stTurnStats:
+        begin
+        if (not bBetweenTurns) and (not isInMultiShoot) then
+            uStats.TurnStats;
+        inc(step)
+        end;
+
+    stChWin1:
+        begin
+        CheckForWin();
+        inc(step)
+        end;
+
     stTurnReact:
         begin
         if (not bBetweenTurns) and (not isInMultiShoot) then
             begin
             uStats.TurnReaction;
+            uStats.TurnStatsReset;
+            delay:= delayTurnReact;
             inc(step)
             end
         else
             inc(step, 2);
         end;
 
-    stAfterDelay:
-        begin
-        if delay = 0 then
-            delay:= cInactDelay
-        else
-            dec(delay);
-
-        if delay = 0 then
-            inc(step)
-            end;
-    stChWin:
+    stDelay2:
+        if DoDelay() then
+            inc(step);
+    stChWin2:
         begin
         CheckForWin();
         inc(step)
@@ -319,53 +400,101 @@ case step of
     if (not bBetweenTurns) and (not isInMultiShoot) then
         begin
         // Start Sudden Death water rise in the 2nd round of Sudden Death
-        if TotalRounds = cSuddenDTurns + 1 then
+        if TotalRoundsPre = cSuddenDTurns + 1 then
             bWaterRising:= true;
         if bWaterRising and (cWaterRise > 0) then
+            begin
+            bDuringWaterRise:= true;
             AddGear(0, 0, gtWaterUp, 0, _0, _0, 0)^.Tag:= cWaterRise;
+            end;
         inc(step)
         end
-    else // since we are not raising the water, a second win-check isn't needed
+    else // since we are not raising the water, another win-check isn't needed
         inc(step,2);
-    stChWin2:
+    stChWin3:
         begin
         CheckForWin;
+        bDuringWaterRise:= false;
         inc(step)
         end;
 
+    stChKing:
+        begin
+        if (not isInMultiShoot) and (CheckMinionsDie) then
+            step:= stChDmg
+        else
+            inc(step);
+        end;
+    stSuddenDeath:
+        begin
+        if ((cWaterRise <> 0) or (cHealthDecrease <> 0)) and (not (isInMultiShoot or bBetweenTurns)) then
+            begin
+            // Start Sudden Death
+            if (TotalRoundsPre = cSuddenDTurns) and (not SuddenDeath) then
+                begin
+                StartSuddenDeath();
+                delay:= delaySDStart;
+                inc(step);
+                end
+            // Show Sudden Death warning message
+            else if (TotalRoundsPre < cSuddenDTurns) and ((LastSuddenDWarn = -2) or (LastSuddenDWarn <> TotalRoundsPre)) then
+                begin
+                i:= cSuddenDTurns - TotalRoundsPre;
+                s:= ansistring(inttostr(i));
+                // X rounds before SD. X = 1, 2, 3, 5, 7, 10, 15, 20, 25, 50, 100, ...
+                if (i > 0) and ((i <= 3) or (i = 7) or ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
+                    begin
+                    if i = 1 then
+                        AddCaption(trmsg[sidRoundSD], capcolDefault, capgrpGameState)
+                    else
+                        AddCaption(FormatA(trmsg[sidRoundsSD], s), capcolDefault, capgrpGameState);
+                    delay:= delaySDWarning;
+                    inc(step);
+                    LastSuddenDWarn:= TotalRoundsPre;
+                    end
+                else
+                    inc(step, 2);
+                end
+            else
+                inc(step, 2);
+            end
+        else
+            inc(step, 2);
+        end;
+    stDelay3:
+        if DoDelay() then
+            inc(step);
     stHealth:
         begin
-        if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
-             begin
-            if (TotalRounds = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
-                StartSuddenDeath()
-            else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
-                begin
-                i:= cSuddenDTurns - TotalRounds;
-                s:= ansistring(inttostr(i));
-                if i = 1 then
-                    AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
-                else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
-                    AddCaption(FormatA(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
-                end;
+        if bBetweenTurns
+        or isInMultiShoot
+        or (TotalRoundsReal = -1) then
+            inc(step)
+        else
+            begin
+            bBetweenTurns:= true;
+            HealthMachine;
+            step:= stChDmg
             end;
-            if bBetweenTurns
-            or isInMultiShoot
-            or (TotalRounds = -1) then
-                inc(step)
-            else
-                begin
-                bBetweenTurns:= true;
-                HealthMachine;
-                step:= stChDmg
-                end
-            end;
+        end;
     stSpawn:
         begin
-        if not isInMultiShoot then
-            SpawnBoxOfSmth;
-        inc(step)
+        if (not isInMultiShoot) then
+            begin
+            tmpGear:= SpawnBoxOfSmth;
+            if tmpGear <> nil then
+                ScriptCall('onCaseDrop', tmpGear^.uid)
+            else
+                ScriptCall('onCaseDrop');
+            delay:= delayFinal;
+            inc(step);
+            end
+        else
+            inc(step, 2)
         end;
+    stDelay4:
+        if DoDelay() then
+            inc(step);
     stNTurn:
         begin
         if isInMultiShoot then
@@ -404,7 +533,8 @@ else if ((GameFlags and gfInfAttack) <> 0) then
         dec(delay2);
 
         if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
-        and (not CurrentHedgehog^.Unplaced) then
+        and (not CurrentHedgehog^.Unplaced)
+        and (not PlacingHogs) then
             begin
             if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0)
             and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
@@ -439,13 +569,12 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 
 if TurnTimeLeft > 0 then
     if IsClockRunning() then
-        //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
         begin
-        if (cHedgehogTurnTime >= 10000)
+        if (cHedgehogTurnTime > TurnTimeLeft)
         and (CurrentHedgehog^.Gear <> nil)
         and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0)
-        and (not isGetAwayTime) then
-            if TurnTimeLeft = 5000 then
+        and (not isGetAwayTime) and (ReadyTimeLeft = 0) then
+            if (TurnTimeLeft = 5000) and (cHedgehogTurnTime >= 10000) then
                 PlaySoundV(sndHurry, CurrentTeam^.voicepack)
             else if TurnTimeLeft = 4000 then
                 PlaySound(sndCountdown4)
@@ -457,7 +586,7 @@ if TurnTimeLeft > 0 then
                 PlaySound(sndCountdown1);
         if ReadyTimeLeft > 0 then
             begin
-            if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) and (not PlacingHogs) then
+            if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) and (not PlacingHogs) and (not CinematicScript) then
                 AddVoice(sndComeonthen, CurrentTeam^.voicepack);
             dec(ReadyTimeLeft)
             end
@@ -490,7 +619,9 @@ if ((GameTicks and $FFFF) = $FFFF) then
     end;
 AddRandomness(CheckSum);
 TurnClockActive:= prevtime <> TurnTimeLeft;
-inc(GameTicks)
+inc(GameTicks);
+if (OuchTauntTimer > 0) then
+    dec(OuchTauntTimer);
 end;
 
 //Purpose, to reset all transient attributes toggled by a utility and clean up various gears and effects at end of turn
@@ -525,18 +656,13 @@ begin
             for i:= 0 to cMaxHHIndex do
                 with Hedgehogs[i] do
                     begin
-(*
-                    if (SpeechGear <> nil) then
-                        begin
-                        DeleteVisualGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
-                        SpeechGear:= nil
-                        end;
-*)
 
                     if (Gear <> nil) then
                         begin
                         if (GameFlags and gfInvulnerable) = 0 then
                             Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
+                        if (Gear^.Hedgehog^.Effects[heArtillery] = 2) then
+                            Gear^.Hedgehog^.Effects[heArtillery]:= 0;
                         end;
                     end;
     t:= GearsList;
@@ -554,7 +680,7 @@ begin
         t:= t^.NextGear
         end;
 
-    if ((GameFlags and gfResetWeps) <> 0) and (not PlacingHogs) then
+    if ((GameFlags and gfResetWeps) <> 0) and (not PlacingHogs) and (not PlacingKings) then
         ResetWeapons;
 
     if (GameFlags and gfResetHealth) <> 0 then
@@ -582,7 +708,8 @@ if SpeechHogNumber > 0 then
     DrawHHOrder();
 end;
 
-procedure DrawGearsTimers;
+// Draw gear timers and other GUI overlays
+procedure DrawGearsGui;
 var Gear: PGear;
     x, y: LongInt;
 begin
@@ -591,7 +718,12 @@ while Gear <> nil do
     begin
     x:= hwRound(Gear^.X) + WorldDx;
     y:= hwRound(Gear^.Y) + WorldDy;
+    if Gear^.Kind = gtAirMine then
+        RenderAirMineGuiExtras(Gear, x, y);
+    RenderGearHealth(Gear, x, y);
     RenderGearTimer(Gear, x, y);
+    if Gear^.Kind = gtHedgehog then
+        RenderHHGuiExtras(Gear, x, y);
     Gear:= Gear^.NextGear
     end;
 end;
@@ -603,6 +735,7 @@ begin
     GearsList:= nil;
     while tt <> nil do
     begin
+        FreeAndNilTexture(tt^.Tex);
         t:= tt;
         tt:= tt^.NextGear;
         Dispose(t)
@@ -652,66 +785,63 @@ while (i < cExplosives) and (unplaced < 4) do
 
 i:= 0;
 j:= 0;
-p:= 0; // 0 searching, 1 bad position, 2 added.
+p:= 0; // 0: good position, 1: bad position.
 unplaced:= 0;
 if cAirMines > 0 then
     Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0);
-while (i < cAirMines) and (j < 1000*cAirMines) do
-    begin
-    p:= 0;
-    if hasBorder then
+    while (i < cAirMines) and (j < 1000*cAirMines) do
         begin
-        rx:= leftX+GetRandom(rightX-leftX-16)+8;
-        ry:= topY+GetRandom(LAND_HEIGHT-topY-16)+8
-        end
-    else
-        begin
-        rx:= leftX+GetRandom(rightX-leftX+400)-200;
-        ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200
-        end;
-    Gear^.X:= int2hwFloat(rx);
-    Gear^.Y:= int2hwFloat(ry);
-    if CheckLandValue(rx, ry, $FFFF) and
-       (TestCollisionYwithGear(Gear,-1) = 0) and
-       (TestCollisionXwithGear(Gear, 1) = 0) and
-       (TestCollisionXwithGear(Gear,-1) = 0) and
-       (TestCollisionYwithGear(Gear, 1) = 0) then
-        begin
-        t:= 0;
-        while (t < TeamsCount) and (p = 0) do
+        p:= 0;
+        if (hasBorder) or (WorldEdge = weBounce) then
+            rx:= leftX+GetRandom(rightX-leftX-16)+8
+        else
+            rx:= leftX+GetRandom(rightX-leftX+400)-200;
+        if hasBorder then
+            ry:= topY+GetRandom(LAND_HEIGHT-topY-16)+8
+        else
+            ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200;
+        Gear^.X:= int2hwFloat(CalcWorldWrap(rx,Gear^.Radius));
+        Gear^.Y:= int2hwFloat(ry);
+        if CheckLandValue(rx, ry, $FFFF) and
+           (TestCollisionYwithGear(Gear,-1) = 0) and
+           (TestCollisionXwithGear(Gear, 1) = 0) and
+           (TestCollisionXwithGear(Gear,-1) = 0) and
+           (TestCollisionYwithGear(Gear, 1) = 0) then
             begin
-            h:= 0;
-            with TeamsArray[t]^ do
-                while (h < cMaxHHIndex) and (p = 0) do
-                    begin
-                    if (Hedgehogs[h].Gear <> nil) then
+            t:= 0;
+            while (t < TeamsCount) and (p = 0) do
+                begin
+                h:= 0;
+                with TeamsArray[t]^ do
+                    while (h <= cMaxHHIndex) and (p = 0) do
                         begin
-                        rdx:=Gear^.X-Hedgehogs[h].Gear^.X;
-                        rdy:=Gear^.Y-Hedgehogs[h].Gear^.Y;
-                        if (Gear^.Angle < $FFFFFFFF) and
-                            ((rdx.Round+rdy.Round < Gear^.Angle) and
-                            (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
+                        if (Hedgehogs[h].Gear <> nil) then
                             begin
-// Debug line. Remove later
-// AddFileLog('Too Close to Hog @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
-
-                            p:= 1
-                            end
+                            rdx:=Gear^.X-Hedgehogs[h].Gear^.X;
+                            rdy:=Gear^.Y-Hedgehogs[h].Gear^.Y;
+                            if (Gear^.Angle < $FFFFFFFF) and
+                                ((rdx.Round+rdy.Round < Gear^.Angle) and
+                                (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
+                                begin
+                                p:= 1
+                                end
+                            end;
+                        inc(h)
                         end;
-                    inc(h)
-                    end;
-            inc(t)
-            end;
-        if p = 0 then
-            begin
-            inc(i);
-            AddFileLog('Placed Air Mine @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
-            if i < cAirMines then
-                Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0)
+                inc(t)
+                end;
+            if p = 0 then
+                begin
+                inc(i);
+                AddFileLog('Placed Air Mine @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
+                if i < cAirMines then
+                    Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0)
+                end
             end
+        else
+            p:= 1;
+        inc(j)
         end;
-    inc(j)
-    end;
 if p <> 0 then DeleteGear(Gear);
 
 if (GameFlags and gfLowGravity) <> 0 then
@@ -744,7 +874,7 @@ for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
     rdx:= _90-(GetRandomf*_360);
     rdy:= _90-(GetRandomf*_360);
     Gear:= AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
-    // Tag=1: This allows this generic faller to be displaced randomly by events
+    // This allows this generic faller to be displaced randomly by events
     Gear^.Tag:= 1;
     end;
 
@@ -832,13 +962,15 @@ until n = 0;
 end;
 
 procedure AssignHHCoords;
-var i, t, p, j: LongInt;
+var i, t, p, j, x, y: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PHedgehog;
     Count: Longword;
     divide, sectionDivide: boolean;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
-    PlacingHogs:= true;
+    PlacingHogs:= true
+else if (GameFlags and gfKing) <> 0 then
+    PlacingKings:= true;
 
 divide:= ((GameFlags and gfDivideTeams) <> 0);
 
@@ -875,9 +1007,10 @@ if sectionDivide then
                                     Unplaced:= true
                                 else
                                     FindPlace(Gear, false, t, t + playWidth div ClansCount, true);// could make Gear == nil;
+                                if PlacingKings and King then
+                                    UnplacedKing:= true;
                                 if Gear <> nil then
                                     begin
-                                    //AddCI(Gear);  uncomment if new hogs should be able to spawn on top of old ones.
                                     Gear^.Pos:= GetRandom(49);
                                     // unless the world is wrapping, make outter teams face to map center
                                     if (WorldEdge <> weWrap) and ((p = 0) or (p = ClansCount - 1)) then
@@ -910,11 +1043,11 @@ else // mix hedgehogs
             ar[i]^.Unplaced:= true
         else
             FindPlace(ar[i]^.Gear, false, leftX, rightX, true);
+        if PlacingKings and ar[i]^.King then
+            ar[i]^.UnplacedKing:= true;
         if ar[i]^.Gear <> nil then
             begin
-            //AddCI(ar[i]^.Gear); uncomment if new hogs should be able to spawn on top of old ones
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
-            ar[i]^.Gear^.Pos:= GetRandom(19)
             end;
         ar[i]:= ar[Count - 1];
         dec(Count)
@@ -936,13 +1069,25 @@ for p:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if (Gear <> nil) and (Gear^.State and gsttmpFlag <> 0) then
                     begin
-                    ForcePlaceOnLand(hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2, 
-                                     hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2, 
-                                     sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
-                    Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - 16 - Gear^.Radius);
+                    // Get flower position
+                    x:= hwRound(Gear^.X) - SpritesData[sprTargetBee].Width div 2;
+                    y:= hwRound(Gear^.Y) - SpritesData[sprTargetBee].Height div 2;
+                    // Calculate offset from map boundaries and border
+                    if hasBorder then
+                        x:= max(min(x, RightX - SpritesData[sprTargetBee].Width - cBorderWidth), LeftX + cBorderWidth)
+                    else
+                        x:= max(min(x, RightX - SpritesData[sprTargetBee].Width), LeftX);
+                    y:= max(y, TopY);
+
+                    // Place flower
+                    ForcePlaceOnLand(x, y, sprTargetBee, 0, lfBasic, $FFFFFFFF, false, false, false);
+
+                    // Place hog
+                    Gear^.Y:= int2hwFloat(hwRound(Gear^.Y) - (SpritesData[sprTargetBee].Height div 2) - Gear^.Radius);
                     AddCI(Gear);
                     Gear^.State:= Gear^.State and (not gsttmpFlag);
-                    AddFileLog('Placed flower for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')')
+
+                    AddFileLog('Placed flower for hog at coordinates (' + inttostr(x) + ',' + inttostr(y) + ')')
                     end;
 
 
@@ -951,6 +1096,18 @@ if divide and (not sectionDivide) then
     SortHHsByClan();
 end;
 
+// Set random pos for all hogs so their animations have different starting points
+procedure RandomizeHHAnim;
+var i, j, p: LongInt;
+begin
+    for p:= 0 to (ClansCount - 1) do
+        with SpawnClansArray[p]^ do
+            for j:= 0 to Pred(TeamsNumber) do
+                with Teams[j]^ do
+                    for i:= 0 to cMaxHHIndex do
+                        if (Hedgehogs[i].Gear <> nil) then
+                            Hedgehogs[i].Gear^.Pos:= GetRandom(19);
+end;
 
 {procedure AmmoFlameWork(Ammo: PGear);
 var t: PGear;
@@ -974,79 +1131,94 @@ end;}
 
 
 function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content, cnt: Longword): PGear;
+var gear: PGear;
 begin
-    FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    gear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    if(FinishedTurnsTotal > -1) then
+        FollowGear:= gear;
     cCaseFactor := 0;
 
     if (crate <> HealthCrate) and (content > ord(High(TAmmoType))) then
         content := ord(High(TAmmoType));
 
-    FollowGear^.Power:= cnt;
+    gear^.Power:= cnt;
 
     case crate of
         HealthCrate:
             begin
-            FollowGear^.Pos := posCaseHealth;
+            gear^.Pos := posCaseHealth;
+            gear^.RenderHealth:= true;
             // health crate is smaller than the other crates
-            FollowGear^.Radius := cCaseHealthRadius;
-            FollowGear^.Health := content;
-            AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+            gear^.Radius := cCaseHealthRadius;
+            gear^.Health := content;
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
             end;
         AmmoCrate:
             begin
-            FollowGear^.Pos := posCaseAmmo;
-            FollowGear^.AmmoType := TAmmoType(content);
-            AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
+            gear^.Pos := posCaseAmmo;
+            gear^.AmmoType := TAmmoType(content);
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
             end;
         UtilityCrate:
             begin
-            FollowGear^.Pos := posCaseUtility;
-            FollowGear^.AmmoType := TAmmoType(content);
-            AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
+            gear^.Pos := posCaseUtility;
+            gear^.AmmoType := TAmmoType(content);
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewUtilityPack), capColDefault, capgrpAmmoInfo);
             end;
     end;
 
     if ( (x = 0) and (y = 0) ) then
-        FindPlace(FollowGear, true, 0, LAND_WIDTH);
+        FindPlace(gear, true, 0, LAND_WIDTH);
 
-    SpawnCustomCrateAt := FollowGear;
+    SpawnCustomCrateAt := gear;
 end;
 
 function SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean): PGear;
+var gear: PGear;
 begin
-    FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    gear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    if(FinishedTurnsTotal > -1) then
+        FollowGear:= gear;
     cCaseFactor := 0;
-    FollowGear^.Pos := posCaseDummy;
+    gear^.Pos := posCaseDummy;
 
     if explode then
-        FollowGear^.Pos := FollowGear^.Pos + posCaseExplode;
+        gear^.Pos := gear^.Pos + posCaseExplode;
     if poison then
-        FollowGear^.Pos := FollowGear^.Pos + posCasePoison;
+        gear^.Pos := gear^.Pos + posCasePoison;
 
     case crate of
         HealthCrate:
             begin
-            FollowGear^.Pos := FollowGear^.Pos + posCaseHealth;
+            gear^.Pos := gear^.Pos + posCaseHealth;
+            gear^.RenderHealth:= true;
+            gear^.Karma:= 2;
             // health crate is smaller than the other crates
-            FollowGear^.Radius := cCaseHealthRadius;
-            AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+            gear^.Radius := cCaseHealthRadius;
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewHealthPack), capcolDefault, capgrpAmmoInfo);
             end;
         AmmoCrate:
             begin
-            FollowGear^.Pos := FollowGear^.Pos + posCaseAmmo;
-            AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
+            gear^.Pos := gear^.Pos + posCaseAmmo;
+            if(FinishedTurnstotal > -1) then
+                AddCaption(GetEventString(eidNewAmmoPack), capcolDefault, capgrpAmmoInfo);
             end;
         UtilityCrate:
             begin
-            FollowGear^.Pos := FollowGear^.Pos + posCaseUtility;
-            AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
+            gear^.Pos := gear^.Pos + posCaseUtility;
+            if(FinishedTurnsTotal > -1) then
+                AddCaption(GetEventString(eidNewUtilityPack), capcolDefault, capgrpAmmoInfo);
             end;
     end;
 
     if ( (x = 0) and (y = 0) ) then
-        FindPlace(FollowGear, true, 0, LAND_WIDTH);
+        FindPlace(gear, true, 0, LAND_WIDTH);
 
-    SpawnFakeCrateAt := FollowGear;
+    SpawnFakeCrateAt := gear;
 end;
 
 procedure StartSuddenDeath();
@@ -1076,7 +1248,7 @@ begin
     Ammoz[amTardis].SkipTurns:= 9999;
     Ammoz[amTardis].Probability:= 0;
 
-    AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
+    AddCaption(trmsg[sidSuddenDeath], capcolDefault, capgrpGameState);
     ScriptCall('onSuddenDeath');
     playSound(sndSuddenDeath);
     StopMusic;
@@ -1115,7 +1287,8 @@ begin
     or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking <> 0)
     or ((GameFlags and gfInfAttack) <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttackingInInfAttackMode <> 0)
     or (CurrentHedgehog^.CurAmmoType = amSniperRifle))
-    and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0)));
+    and (not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0)))
+    and (not LuaClockPaused);
 end;
 
 
@@ -1159,18 +1332,10 @@ begin
 
     if text = '' then text:= '...';
 
-    (*
-    if CheckNoTeamOrHH then
-        begin
-        ParseCommand('say ' + text, true);
-        exit
-        end;
-    *)
-
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
             // if team matches current hedgehog team, default to current hedgehog
-            if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) then
+            if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) and (not CurrentHedgehog^.Unplaced) then
                 hh:= CurrentHedgehog
             else
                 begin
@@ -1179,7 +1344,7 @@ begin
                 c:= 0;
                 while (j <= cMaxHHIndex) and (hh = nil) do
                     begin
-                    if (TeamsArray[t]^.Hedgehogs[j].Gear <> nil) then
+                    if (TeamsArray[t]^.Hedgehogs[j].Gear <> nil) and (not TeamsArray[t]^.Hedgehogs[j].Unplaced) then
                         begin
                         inc(c);
                         if (i=0) or (i=c) then
@@ -1197,8 +1362,7 @@ begin
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
                 end;
-            //ParseCommand('/say [' + hh^.Name + '] '+text, true)
-            AddChatString(#9+'[' + HH^.Name + '] '+text);
+            AddChatString(#9+Format(shortstring(trmsg[sidChatHog]), HH^.Name, text));
             end
         end
     else if (x >= 4) then
@@ -1270,14 +1434,13 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepNapalmBomb,
             @doStepSnowball,
             @doStepSnowflake,
-            //@doStepStructure,
             @doStepLandGun,
             @doStepTardis,
             @doStepIceGun,
             @doStepAddAmmo,
             @doStepGenericFaller,
             @doStepKnife,
-            @doStepDuck,
+            @doStepCreeper,
             @doStepMinigun,
             @doStepMinigunBullet);
 begin
@@ -1302,10 +1465,9 @@ begin
     //typed const
     delay:= 0;
     delay2:= 0;
-    step:= stDelay;
+    step:= stDelay1;
     upd:= 0;
 
-    //SDMusic:= 'hell.ogg';
     NewTurnTick:= $FFFFFFFF;
 end;
 

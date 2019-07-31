@@ -72,8 +72,6 @@ local mineSpawn
 local barrelSpawn
 
 local roundKills = 0
-local barrelsEaten = 0
-local minesEaten = 0
 
 local moveTimer = 0
 local fireTimer = 0
@@ -283,36 +281,57 @@ end
 
 function DrawTag(i)
 
-	zoomL = 1.3
+	local zoomL = 1.3
 
-	xOffset = 40
+	local xOffset, yOffset, tValue, tCol
 
 	if i == 0 then
-		yOffset = 40
+		if INTERFACE == "touch" then
+			xOffset = 60
+			yOffset = ScreenHeight - 35
+		else
+			xOffset = 40
+			yOffset = 40
+		end
 		tCol = 0xffee00ff
 		tValue = TimeLeft
 	elseif i == 1 then
 		zoomL = 1.1
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40
+			yOffset = 70
+		end
 		tCol = wepCol[0]
 		tValue = wepAmmo[0]
 	elseif i == 2 then
 		zoomL = 1.1
-		xOffset = 40 + 35
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126 + 35
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40 + 35
+			yOffset = 70
+		end
 		tCol = wepCol[1]
 		tValue = wepAmmo[1]
 	elseif i == 3 then
 		zoomL = 1.1
-		xOffset = 40 + 70
-		yOffset = 70
+		if INTERFACE == "touch" then
+			xOffset = 126 + 70
+			yOffset = ScreenHeight - 37
+		else
+			xOffset = 40 + 70
+			yOffset = 70
+		end
 		tCol = wepCol[2]
 		tValue = wepAmmo[2]
 	end
 
 	DeleteVisualGear(vTag[i])
 	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
-	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
 	SetVisualGearValues	(
 				vTag[i], 		--id
 				-(ScreenWidth/2) + xOffset,	--xoffset
@@ -321,7 +340,7 @@ function DrawTag(i)
 				0, 			--dy
 				zoomL, 			--zoom
 				1, 			--~= 0 means align to screen
-				g7, 			--frameticks
+				nil, 			--frameticks
 				tValue, 		--value
 				240000, 		--timer
 				tCol		--GetClanColor( GetHogClan(CurrentHedgehog) )
@@ -354,22 +373,12 @@ function CheckProximityToExplosives(gear)
 			AddCaption(loc("+1 barrel!"), wepCol[0], capgrpAmmoinfo )
 			DrawTag(1)
 
-			barrelsEaten = barrelsEaten + 1
-			if barrelsEaten == 5 then
-				AddCaption(string.format(loc("Achievement gotten: %s"), loc("Barrel Eater")),0xffba00ff,capgrpMessage2)
-			end
-
 		elseif (GetGearType(gear) == gtMine) then
 			wepAmmo[1] = wepAmmo[1] + 1
 			PlaySound(sndShotgunReload)
 			DeleteGear(gear)
 			AddCaption(loc("+1 mine!"), wepCol[1], capgrpAmmoinfo )
 			DrawTag(2)
-
-			minesEaten = minesEaten + 1
-			if minesEaten == 5 then
-				AddCaption(string.format(loc("Achievement gotten: %s"), loc("Mine Eater")),0xffba00ff,capgrpMessage2)
-			end
 
 		end
 
@@ -415,7 +424,7 @@ function shotsRemainingMessage()
 			shotsMsg = loc("Ammo: %d")
 		end
 	end
-	AddCaption(string.format(shotsMsg, wepAmmo[wepIndex]), wepCol[wepIndex],capgrpMessage2)
+	AddCaption(string.format(shotsMsg, wepAmmo[wepIndex]), wepCol[wepIndex],capgrpAmmostate)
 end
 
 function ChangeWeapon(newIndex)
@@ -430,11 +439,11 @@ function ChangeWeapon(newIndex)
 
 	local selText
 	if wepIndex == 0 then
-		selText = loc("Barrel Launcher selected!")
+		selText = loc("Barrel Launcher")
 	elseif wepIndex == 1 then
-		selText = loc("Mine Deployer selected!")
+		selText = loc("Mine Deployer")
 	else
-		selText = loc("Flamer selected!")
+		selText = loc("Flamer")
 	end
 	AddCaption(selText, wepCol[wepIndex],capgrpAmmoinfo )
 
@@ -607,7 +616,7 @@ function onGameInit()
 	Delay = 1000
 
 	for i = 0, 3 do
-		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
+		vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	end
 
 	HideTags()
@@ -623,6 +632,7 @@ function onGameInit()
 	wepCount = 3
 
 	DisableGameFlags(gfArtillery + gfSharedAmmo + gfPerHogAmmo + gfTagTeam + gfPlaceHog + gfInvulnerable)
+	SetSoundMask(sndFlyAway, true)
 
 end
 
@@ -661,7 +671,7 @@ function onGameStart()
 			clockStr ..
 			loc("Ammo is reset at the end of your turn.") .. "|" ..
 
-			"", 4, 4000
+			"", -amMine, 4000
 			)
 
 end
@@ -694,13 +704,13 @@ function onNewTurn()
 		gear = AddGear(100, 100, gtExplosives, 0, 0, 0, 0)
 		SetHealth(gear, 100)
 		if FindPlace(gear, false, 0, LAND_WIDTH, false) ~= nil then
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		end
 	end
 	for i = 0, mineSpawn-1 do
 		gear = AddGear(100, 100, gtMine, 0, 0, 0, 0)
 		if FindPlace(gear, false, 0, LAND_WIDTH, false) ~= nil then
-			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		end
 	end
 
@@ -724,8 +734,6 @@ function onNewTurn()
 	ChangeWeapon()
 
 	roundKills = 0
-	barrelsEaten = 0
-	minesEaten = 0
 
 	FollowGear(CurrentHedgehog)
 
@@ -795,9 +803,8 @@ function onGameTick()
 			---------------
 			-- the trail lets you know you have 5s left to pilot, akin to birdy feathers
 			if (TimeLeft <= 5) and (TimeLeft > 0) then
-				tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
-				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, GetClanColor(GetHogClan(CurrentHedgehog)) )
+				local tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
+				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(CurrentHedgehog)) )
 			end
 			--------------
 
@@ -930,18 +937,18 @@ function onGearDelete(gear)
 
 			roundKills = roundKills + 1
 			if roundKills == 2 then
-				AddCaption(loc("Double Kill!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Double Kill!"),capcolDefault,capgrpMessage2)
 			elseif roundKills == 3 then
-				AddCaption(loc("Killing spree!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Killing spree!"),capcolDefault,capgrpMessage2)
 			elseif roundKills >= 4 then
-				AddCaption(loc("Unstoppable!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Unstoppable!"),capcolDefault,capgrpMessage2)
 			end
 
 		elseif gear == CurrentHedgehog then
 			DisableTumbler()
 
 		elseif gear ~= CurrentHedgehog then
-			AddCaption(loc("Friendly Fire!"),0xffba00ff,capgrpMessage2)
+			AddCaption(loc("Friendly Fire!"),capcolDefault,capgrpMessage2)
 		end
 
 	end

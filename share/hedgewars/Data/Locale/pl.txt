@@ -60,9 +60,10 @@
 00:56=Tasak
 00:57=Guma
 00:58=Mina powietrzna
-00:59=Gumowa kaczuszka
+00:59=Creeper
+00:60=Minigun
 
-01:00=Wczytywanie …
+01:00=Wczytywanie...
 01:01=Remis
 01:02=%1 wygrywają!
 01:03=Głośność %1%
@@ -70,7 +71,7 @@
 01:05=Na pewno wyjść (%1/%2)?
 01:06=Nagła śmierć!
 01:07=%1 strzały pozostał(y)
-01:08=Paliwo
+01:08=Paliwo: %1%
 01:09=Synchronizowanie...
 01:10=Użycie tego przedmiotu nie zakończy tury!
 01:11=Ta broń/narzędzie nie jest jeszcze dostępna/e!
@@ -89,12 +90,31 @@
 01:24=Auto-kamera: włączona
 01:25=Wciśnij przycisk celu, by zaznaczyć cel
 01:26=To narzędzie jest niedostępne w Nagłej Śmierci
-; E.g. “+25” when gaining health from crate or vampirism
 01:27=+%1
 01:28=Puste!
+01:29=Nieznany klawisz
+01:30=%1 i %2 wygrywają!
+01:31=%1, %2 i %3 wygrywają!
+01:32=%1, %2, %3 i %4 wygrywają!
+01:33=%1, %2, %3, %4 i %5 wygrywają!
+01:34=%1, %2, %3, %4, %5 i %6 wygrywają!
+01:35=%1, %2, %3, %4, %5, %6 i %7 wygrywają!
+01:36=Każdy wygrywa!
+01:37=%1 odchodzi.
+01:38=%1 powraca.
+01:39=%1 automatycznie pomija turę.
+01:40=%1 fps
+01:41=Parsowanie Lua: WYŁĄCZONE
+01:42=Parsowanie Lua: WŁĄCZONE
+01:43=Parsowanie Lua jest niedozwolone w grze online!
+01:44=%1×
+01:45=%1: %2
+01:46=[Klan] %1: %2
+01:47=[%1]: %2
+01:48=?
 
-; Event messages
-; Hog (%1) died
+; Zdarzenia
+; Jeż (%1) umiera
 02:00=%1 kopnął w kalendarz!
 02:00=%1 ujrzał światło!
 02:00=%1 nie zobaczy już niczego więcej!
@@ -162,7 +182,7 @@
 02:00=%1 został zabity na śmierć
 02:00=%1 mógł nie fikać
 
-; Hog (%1) drowned
+; Jeż (%1) utonął
 02:01=%1 robi za łódź podwodną!
 02:01=%1 udaje Titanica!
 02:01=%1 pływa jak kamień!
@@ -221,7 +241,7 @@
 02:01=%1, uważaj na rekiny!
 02:01=%1 ma bardzo ważne spotkanie na dnie oceanu
 
-; Round starts
+; Początek rundy
 02:02=Walczmy!
 02:02=Cel! Pal!
 02:02=Rozpoczynajmy walkę!
@@ -274,7 +294,7 @@
 02:02=Nie odczuwaj strachu!
 02:02=Bądź odważny i podbijaj!
 
-; Round ends (team/clan %1 wins)
+; Koniec rundy (wygrywa drużyna %1)
 02:03=%1 wygrywają!
 02:03=%1 są zwycięzcami!
 02:03=%1 zmiażdżyli konkurencję!
@@ -282,14 +302,14 @@
 02:03=%1 byli po prostu lepsi
 02:03=Drużynie %1 nikt nie podskoczy
 
-; Round ends (draw)
+; Koniec rundy (remis)
 02:04=Remis
 02:04=Ale nudy, remis
 02:04=Nikt nie wygrywa, remis
 02:04=Wszyscy martwi. Dobrze.
 02:04=Gdzie znikły wszystkie jeże?
 
-; New health crate
+; Spada apteczka
 02:05=Przybyła pomoc!
 02:05=Medyk!
 02:05=Paczka z życiem specjalnie dla Ciebie!
@@ -312,7 +332,7 @@
 02:05=Na zdrowie!
 02:05=Szczepionka!
 
-; New ammo crate
+; Spada amunicja
 02:06=Więcej broni!
 02:06=Posiłki!
 02:06=Ciekawe jaka broń się tam kryje?
@@ -339,7 +359,7 @@
 02:06=Gadżety!
 02:06=Odjazdowy sprzęt!
 
-; New utility crate
+; Spadają narzędzia
 02:07=Czas na narzędzia!
 02:07=To może się przydać...
 02:07=Narzędzia!
@@ -354,7 +374,7 @@
 02:07=Zestaw Małego Majsterkowicza
 02:07=Darmowa paczka narzędzi!
 
-; Hog (%1) skips his turn
+; Jeż (%1) pomija turę
 02:08=%1 jest taki nudny...
 02:08=%1 próbuje się skupić
 02:08=%1 jest leniwy
@@ -401,7 +421,7 @@
 02:08=%1 nie chce połamać sobie igieł
 02:08=%1 ma stracha
 
-; Hog (%1) hurts himself only
+; Jeż (%1) uderzył tylko siebie
 02:09=%1 powinien potrenować celowanie!
 02:09=%1 najwidoczniej nienawidzi samego siebie
 02:09=%1 stoi po złej stronie!
@@ -447,7 +467,7 @@
 02:09=%1 szuka atencji
 02:09=%1 twierdzi, że strzelanie do wrogów jest za mało hipsterskie
 
-; Home run: Hog (%1) uses baseball bat to throw other hog far out of the left/right map bounds
+; Home run: Jeż (%1) wyrzuca innego jeża kijem bejsbolowym bardzo daleko
 02:10=Home Run!
 02:10=To ptak? To samolot?
 02:10=Jeżyk idzie w odstawkę!
@@ -458,7 +478,7 @@
 02:10=%1 daje popis machania kijem
 02:10=%1 wysyła jeże zwiedzać kosmos
 
-; Hog (%1) has to leave (team is gone)
+; Jeż (%1) znika (drużyna odeszła)
 02:11=%1 musi iść spać!
 02:11=%1 ma ważniejsze sprawy na głowie
 02:11=Żegnamy Cię, %1
@@ -470,7 +490,7 @@
 02:11=%1 zamienił się w... nic
 02:11=%1 osiągnął wyższą formę egzystencji
 
-; Hog (%1) was poisoned
+; Jeż (%1) został zatruty
 02:12=%1 czuje się chory
 02:12=%1 chyba ma grypę
 02:12=%1 złapał jakieś paskudztwo
@@ -480,7 +500,7 @@
 02:12=%1 toczy wewnętrzny bój z groźnym wirusem
 02:12=Miejmy nadzieję, że to nie jest zaraźliwe
 
-; Hog (%1) was resurrected by the Resurrector utility
+; Jeż (%1) został ożywiony Wskrzeszaczem
 02:13=%1 został wskrzeszony
 02:13=%1 powraca z grobu
 02:13=%1 udaje Jezusa
@@ -491,7 +511,7 @@
 02:13=%1 pokonał Śmierć i wraca
 02:13=%1 został wyrzucony z piekła
 
-; Hog (%1) explodes after an kamikaze attack
+; Jeż (%1) wybucha po ataku Kamikaze
 02:14=%1 umiera z honorem
 02:14=%1 znalazł odlotowy sposób, by umrzeć
 02:14=%1 zabija siebie i innych
@@ -500,13 +520,13 @@
 02:14=%1 poświęcił się dla ogółu!
 02:14=%1 zginął za słuszną sprawę
 
-; Hog (%1) returned from time-travel with the time box
+; Jeż (%1) wraca z pudła czasoprzestrzennego
 02:15=%1 wraca z wędrówki w czasie
 02:15=%1 jest z powrotem w naszych czasach
 02:15=%1 wraca do teraźniejszości
 02:15=%1, gdzie ty byłeś?
 
-; Hog (%1) runs out of turn time (not shown in infinite attack mode)
+; Jeżowi (%1) kończy się czas tury
 02:16=%1 był za wolny
 02:16=%1 twierdzi, że czas tury to tylko konstrukt społeczny
 02:16=%1 zapomniał zaatakować
@@ -522,8 +542,7 @@
 02:16=%1 wymyślił genialny plan, w którym zabrakło ataku
 02:16=%1 nie jest zbyt szybki
 
-; King (%1) has died
-02:17=%1 nie żyje! Wiwat %1!
+; Król (%1) umarł (tryb króla)
 02:17=%1 był dobrym królem... był
 02:17=Jak na króla, %1 był słabeuszem
 02:17=%1 sobie pokrólował
@@ -594,7 +613,8 @@
 03:56=Nie przytnij sobie igieł!
 03:57=Narzędzie
 03:58=Latająca bomba zbliżeniowa
-03:59=Pływająca bomba
+03:59=Niedokończona broń
+03:60=Ostateczna broń palna
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -628,7 +648,7 @@
 04:28=Krótko po wystrzeleniu, rakieta zacznie wiercić tunel w ziemi|i eksploduje gdy zapalnik zostanie uruchomiony lub jeśli|pojawi się po drugiej stronie terenu.|Atak: Przytrzymaj by strzelić z większą siłą
 04:29=Tego nie powinny używać dzieci!|Pistolet na kulki wystrzeliwuje tony małych|kolorowych kulek wypełnionych materiałem|wybuchowym.|Atak: Strzel kulkami|Góra/Dół: Kontynuuj celowanie
 04:30=Wezwij samolot, żeby zrzucić dużą ilość|napalmu. Dzięki dobremu celowi ten atak|może zlikwidować dużą część mapy, w tym|znajdujące się tam nieszczęsne jeże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz obszar
-04:31=Zaatakuj odległych przeciwników, bądź zbierz|skrzynki! Nie zapomnij o zrzuceniu bomb!|Góra/Dół: Steruj samolotem|Atak: Zrzuć bombę (3x) |Długi skok: Niech Walkirie wkroczą na pole bitwy!
+04:31=Zaatakuj odległych przeciwników, bądź zbierz|skrzynki! Nie zapomnij o zrzuceniu bomb!|Lewo/Prawo: Steruj samolotem|Atak: Zrzuć bombę (3x) |Długi skok: Niech Walkirie wkroczą na pole bitwy!
 04:32=Niska grawitacja jest skuteczniejsza od dowolnej|diety! Skacz wyżej i na większy dystans lub pozwól|przeciwnikom lecieć jeszcze dalej.|Atak: Aktywuj
 04:33=Czasami potrzebujesz dodatkowego kopa|żeby zadawać większe obrażenia. Włącze-|nie spowoduje zwiększenie zadawanych|obrażeń o 50% do końca tury.|Atak: Aktywuj
 04:34=Czyni Cię nieważliwym na obrażenia do za-|kończenia tury. Ale nie szalej, nadal możesz|utonąć.|Atak: Aktywuj
@@ -656,8 +676,9 @@
 04:56=Rzuć w przeciwnika dwoma tasakami i zablokuj mu |drogę lub użyj ich do wspinaczki! Jednak uważaj! |Te tasaki są naprawdę ostre!|Atak: Przytrzymaj by rzucić z większą siłą (dwukrotnie)
 04:57=Tworzy elastyczne paski wykonane z gumy,|od których jeże i inne rzeczy odbijają się|bez obrażeń przy upadku.|Lewo/Prawo: Zmiana orientacji paska|Kursor: Umieść pasek w aktualnej pozycji
 04:58=Ta mina będzie się swobodnie unisić w powietrzu i|podążać za jeżami, które się do niej zblizą.|Jej eksplozja jest jednakże mniejsza niż miny przeciwpiechotnej.|Atak: Przytrzymaj by rzucić z większą siłą
-04:59=Wyślij te brudne jeże popływać! Ta słodka, mała, piskliwa|gumowa kaczuszka zdolna jest pływać po wodzie i będzie|płynąć z wiaterm. Wybucha, kiedy uderzy w ziemię, więc|upewnij się, że zrzucasz ją z klifu lub innego bezpiecznego|miejsca.|Atak: Upuść kaczuszkę
-          
+04:59=Ta broń jest niedokończona i eksperymentalna.|Używaj na własne ryzyko!
+04:60=Wywołaj deszcz pocisków na swoich wrogów!|A oni myśleli, że są bezpieczni za potrójną|warstwą belek.|Atak: Strzel z pełną mocą|Góra/Dół: Kontynuuj celowanie
+
 ; Game goal strings
 05:00=Ustawienia gry
 05:01=Obowiązują następujące zasady:
@@ -682,3 +703,35 @@
 05:20=Każdy z jeży ma oddzielne uzbrojenie
 05:21=Zespół: Zespoły w klanie wykonują tury po kolei|Wspólny czas: Czas jest wspólny dla każdej drużyny w zespole
 05:22=Silny wiatr: Wiatr wpływa prawie na wszystko
+
+
+; Chat command help
+06:00=Lista podstawowych komend czatu klienta:
+06:01=/togglechat: Przełącz wyświetlanie czatu
+06:02=/clan <wiadomość>: Wyślij wiadomość tylko do członków klanu
+06:03=/me <wiadomość>: Akcja czatu, np. “/me je pizzę” staje się “* Gracz je pizzę”
+06:04=/pause: Przełącz pauzę
+06:05=/pause: Przełącz auto-pomijanie
+06:06=/fullscreen: Przełącz pełny ekran
+06:07=/quit: Wyjdź z Hedgewars
+06:08=/help: Wyświetl listę podstawowych komend czatu klienta
+06:09=/help taunts: Wyświetl listę kpiących komend czatu
+06:10=/history: Przełącz wyświetlanie długiej historii czatu
+06:11=/lua: Przełącz parsowanie Lua (dla twórców)
+06:12=Lista kpiacych komend czatu:
+06:13="tekst": Umieść tekst w dymku rozmowy
+06:14='tekst': Umieść tekst w dymku myślenia
+06:15=-tekst-: Umieść tekst w dymku krzyczenia
+06:16=Dla powyższych komend, podaj numer na początku tekstu, by wybrać jeża.
+06:17=/hsa <tekst>: Umieść tekst w dymku rozmowy w następnym ataku
+06:18=/hta <tekst>: Umieść tekst w dymku myślenia w następnym ataku
+06:19=/hya <tekst>: Umieść tekst w dymku krzyczenia w następnym ataku
+06:20=/hurrah: Spraw, by jeż się cieszył
+06:21=/ilovelotsoflemonade: Spraw, by jeż sikał
+06:22=/juggle: Spraw, by jeż żonglował
+06:23=/rollup: Spraw, by jeż przewrócił oczami
+06:24=/shrug: Spraw, by jeż wzruszył ramionami
+06:25=/wave: Spraw, by jeż pomachał dłonią
+06:26=Nieznana komenda lub niepoprawne parametry. Powiedz w czacie "/help" dla listy komend.
+06:27=/help room: Lista komend czatu w pokoju
+06:28=Nie jesteś online!

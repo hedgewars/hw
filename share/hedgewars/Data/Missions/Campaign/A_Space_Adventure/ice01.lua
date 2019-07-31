@@ -73,11 +73,11 @@ bandit5.y = 600
 bandit5.frozen = false
 bandit5.roundsToUnfreeze = 0
 teamA.name = loc("Allies")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Frozen Bandits")
-teamB.color = 0x0072FF -- blue
+teamB.color = -2
 teamC.name = loc("Hog Solo")
-teamC.color = 0x38D61C -- green
+teamC.color = -6
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -88,7 +88,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	Delay = 3
 	Map = "ice01_map"
 	Theme = "Snow"
 	-- Disable Sudden Death
@@ -111,17 +110,19 @@ function onGameInit()
 		SaveCampaignVar("HeroHealth", heroHealth)
 	end
 
-	-- Hog Solo
-	AddTeam(teamC.name, teamC.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
+	-- Hero
+	teamC.name = AddMissionTeam(teamC.color)
+	hero.gear = AddMissionHog(heroHealth)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- Ally
-	AddTeam(teamA.name, teamA.color, "heart", "Island", "Default", "cm_face")
+	teamA.name = AddTeam(teamA.name, teamA.color, "heart", "Island", "Default_qau", "cm_face")
+	SetTeamPassive(teamA.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Frozen Bandits
-	AddTeam(teamB.name, teamB.color, "plant2", "Island", "Default", "cm_pirate")
+	teamB.name = AddTeam(teamB.name, teamB.color, "plant2", "Island", "Default_qau", "cm_pirate")
 	bandit1.gear = AddHog(bandit1.name, 1, 120, "Santa")
 	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)
 	HogTurnLeft(bandit1.gear, true)
@@ -234,29 +235,48 @@ function onGameStart()
 	SendHealthStatsOff()
 end
 
+function getNextBandit(hog)
+	local continue = true
+	local startHog = hog
+	while true do
+		if (GetHealth(hog) and GetEffect(hog, heFrozen) < 256) and
+		( (heroAtFinalStep and (hog == bandit1.gear or hog == bandit4.gear or hog == bandit5.gear)) or
+		((not heroAtFinalStep) and (hog == bandit2.gear or hog == bandit3.gear)) ) then
+			return hog
+		end
+		if hog == bandit1.gear then
+			hog = bandit2.gear
+		elseif hog == bandit2.gear then
+			hog = bandit3.gear
+		elseif hog == bandit3.gear then
+			hog = bandit4.gear
+		elseif hog == bandit4.gear then
+			hog = bandit5.gear
+		elseif hog == bandit5.gear then
+			hog = bandit1.gear
+		end
+		if startHog == hog then
+			return nil
+		end
+	end
+end
+
 function onNewTurn()
 	heroDamageAtCurrentTurn = 0
 	-- round has to start if hero goes near the column
 	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
-		EndTurn(true)
+		SkipTurn()
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
-		TurnTimeLeft = -1
-	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then
-		AnimSwitchHog(hero.gear)
-		EndTurn(true)
-	elseif heroAtFinalStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
-		if (GetHealth(bandit1.gear) and GetEffect(bandit1.gear,heFrozen) > 256) and
-			((GetHealth(bandit4.gear) and GetEffect(bandit4.gear,heFrozen) > 256) or not GetHealth(bandit4.gear)) and
-			((GetHealth(bandit5.gear) and GetEffect(bandit5.gear,heFrozen) > 256) or not GetHealth(bandit5.gear)) then
-			EndTurn(true)
+		SetTurnTimeLeft(MAX_TURN_TIME)
+	elseif (GetHogTeamName(CurrentHedgehog) == teamB.name) then
+		local nextBandit = getNextBandit(CurrentHedgehog)
+		if nextBandit ~= nil then
+			if CurrentHedgehog ~= nextBandit then
+				AnimSwitchHog(nextBandit)
+			end
 		else
-			AnimSwitchHog(hero.gear)
-			EndTurn(true)
+			SkipTurn()
 		end
-	elseif CurrentHedgehog == ally.gear then
-		-- This switches back to hero (indirectly)
-		SwitchHog(bandit1.gear)
-		EndTurn(true)
 	end
 	-- frozen hogs accounting
 	if CurrentHedgehog == hero.gear and heroAtFinalStep and TurnTimeLeft > 0 then
@@ -405,6 +425,9 @@ function onThantaDeath(gear)
 end
 
 function onHeroWin(gear)
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
 	if (not hero.dead and not bandit1.dead) and heroDamageAtCurrentTurn == 0 and (GetX(hero.gear)>=GetX(bandit1.gear)-80
 		and GetX(hero.gear)<=GetX(bandit1.gear)+80)	and (GetY(hero.gear)>=GetY(bandit1.gear)-30 and GetY(hero.gear)<=GetY(bandit1.gear)+30) then
 		return true
@@ -419,6 +442,7 @@ function antiFlyArea(gear)
 	if not heroVisitedAntiFlyArea then
 		EndTurn(true)
 		FollowGear(hero.gear)
+		SetGearMessage(hero.gear, band(GetGearMessage(hero.gear), bnot(gmAllStoppable)))
 		AnimSwitchHog(bandit1.gear)
 		FollowGear(hero.gear)
 		HogSay(hero.gear, loc("My flying saucer stopped working!"), SAY_THINK)
@@ -440,7 +464,7 @@ function nonAntiFlyArea(gear)
 end
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("To win the game you have to stand next to Thanta."))
 	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))
 	SendStat(siCustomAchievement, loc("Use the bazooka and the flying saucer to get the freezer."))
@@ -454,13 +478,13 @@ function heroFinalStep(gear)
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 	SaveCampaignVar("HeroAmmoIce01IceGun", GetAmmoCount(hero.gear, amIceGun))
 	SaveCampaignVar("HeroAmmoIce01Bazooka", GetAmmoCount(hero.gear, amBazooka))
-	AddCaption(loc("Checkpoint reached!"), 0xFFFFFFFF, capgrpMessage2)
+	AddCaption(loc("Checkpoint reached!"), capcolDefault, capgrpMessage2)
 end
 
 function columnCheckPoint(gear)
 	saveCheckpoint("2")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	AddCaption(loc("Checkpoint reached!"), 0xFFFFFFFF, capgrpMessage2)
+	AddCaption(loc("Checkpoint reached!"), capcolDefault, capgrpMessage2)
 	SaveCampaignVar("HeroAmmoIce01IceGun", GetAmmoCount(hero.gear, amIceGun))
 	SaveCampaignVar("HeroAmmoIce01Bazooka", GetAmmoCount(hero.gear, amBazooka))
 end
@@ -470,7 +494,7 @@ function heroAtIceGun(gear)
 end
 
 function thantaDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("Noo, Thanta has to stay alive!"))
 	SendStat(siCustomAchievement, loc("To win the game you have to go next to Thanta."))
 	SendStat(siCustomAchievement, loc("Most of the time you'll be able to use the freezer only."))

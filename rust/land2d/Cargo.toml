@@ -1,0 +1,9 @@
+[package]
+name = "land2d"
+version = "0.1.0"
+authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
+edition = "2018"
+
+[dependencies]
+vec2d = { path = "../vec2d" }
+integral-geometry = { path = "../integral-geometry" }

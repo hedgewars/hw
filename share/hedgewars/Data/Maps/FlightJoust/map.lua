@@ -31,7 +31,6 @@ function onGameInit()
     CaseFreq = 0 
     MinesNum = 0 
     Explosives = 0 
-    Delay = 500 
     SuddenDeathTurns = 99999 -- "disable" sudden death
     Theme = Compost
 end

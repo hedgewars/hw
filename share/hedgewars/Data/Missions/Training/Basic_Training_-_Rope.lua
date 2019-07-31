@@ -9,7 +9,7 @@
 	- Multiple shots / rope re-use to go over water hazard
 	- Drop grenade from rope
 	- Special rules when you only got 1 rope (i.e. when the rope is officially used up)
-	- Rope around obstacles and mines
+	- Rope around obstacles
 ]]
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
@@ -32,7 +32,6 @@ end
 -- Gears
 local hog
 local ropeGear
-local mines = {}
 
 -- Status vars
 local ropeSelected = false	-- rope was selected the first time, used for msg
@@ -42,12 +41,14 @@ local barrelsBoom = false	-- barrels exploded
 local wasFirstTurn = false	-- first turn msg was displayed
 local gameOver = false		-- game over (only victory possible)
 local currentTarget = 0		-- current target ID. First target = 1
+local flawless = true		-- flawless if no damage taken and no mistake made
 
 local cpX, cpY = 208, 1384	-- hog checkpoint, initialized with start coords
 
 -- "Constants"
 local initHogHealth = 50
-local teamName = loc("Wannabe Ropers")
+local initHogHealthFinal = 1
+local teamName
 
 local girderData = {
 	{2012, 1366, 6}, -- water gate
@@ -59,28 +60,6 @@ local girderData = {
 	{1436, 1003, 4}, -- barrel pit protection
 	{3607, 1307, 4}, -- post-water gate
 	{3809, 1375, 0}, -- post-water gate
-}
-
-local mineData = {
-	{1261, 549},
-	{1395, 554},
-	{1719, 458},
-	{1489, 558},
-	{1686, 565},
-	{1581, 561},
-	{1904, 539},
-	{2047, 539},
-	{2226, 608},
-	{2387, 541},
-	{2523, 396},
-	{2899, 324},
-	{3428, 546},
-	{3373, 546},
-	{3271, 546},
-	{3123, 545},
-	{3012, 544},
-	{2907, 544},
-	{2793, 543},
 }
 
 local targetData = {
@@ -110,7 +89,7 @@ function onGameInit()
 	MapFeatureSize = 12
 	TemplateFilter = 0
 	TemplateNumber = 0
-	TurnTime = 9999000
+	TurnTime = MAX_TURN_TIME
 	Explosives = 0
 	MinesNum = 0
 	CaseFreq = 0
@@ -118,34 +97,32 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	AddTeam(teamName, 0xFF0204, "Plinko", "Snail", "Default", "cm_yinyang")
-	hog = AddHog(loc("Roper"), 0, initHogHealth, "StrawHat")
+	teamName = AddMissionTeam(-1)
+	hog = AddMissionHog(initHogHealth)
 	SetGearPosition(hog, cpX, cpY)
 	SetEffect(hog, heResurrectable, 1)
 
 	drawMap()
 
 	SendHealthStatsOff()
+	SendRankingStatsOff()
 
 end
 
--- The final challenge is to rope through a mined obstacle course with only 1 rope.
+-- The final challenge is to rope through an obstacle course with only 1 rope.
 -- If the player screws up, this functinon will restart it.
-local function resetMineChallenge(setPos)
+local function resetFinalChallenge(setPos)
 	if setPos == nil then
 		setPos = true
 	end
-	SetHealth(hog, initHogHealth)
+	SetHealth(hog, initHogHealthFinal)
 	AddAmmo(hog, amRope, 1)
-	for gear, _ in pairs(mines) do
-		DeleteGear(gear)
-	end
+	SetGearVelocity(hog, 0, 0)
 
-	for m=1, #mineData do
-		AddGear(mineData[m][1], mineData[m][2], gtMine, 0, 0, 0, 0)
-	end
 	if setPos then
+		PlaySound(sndWarp)
 		SetGearPosition(hog, cpX, cpY)
+		AddVisualGear(cpX, cpY, vgtExplosion, 0, false)
 		FollowGear(hog)
 	end
 end
@@ -154,7 +131,31 @@ end
 local function eraseGirder(id)
 	EraseSprite(girderData[id][1], girderData[id][2], sprAmGirder, girderData[id][3], false, false, false, false)
 	PlaySound(sndVaporize)
-	AddVisualGear(girderData[id][1], girderData[id][2], vgtSteam, false, 0)
+	local dir = girderData[id][3]
+	if dir == 4 then
+		-- long horizontal
+		for i=-4,4 do
+			AddVisualGear(girderData[id][1] + i * 18, girderData[id][2], vgtSteam, false, 0)
+		end
+	elseif dir == 0 then
+		-- short horizontal
+		for i=-2,1 do
+			AddVisualGear(10 + girderData[id][1] + i * 20, girderData[id][2], vgtSteam, false, 0)
+		end
+	elseif dir == 6 then
+		-- long vertical
+		for i=-4,4 do
+			AddVisualGear(girderData[id][1], girderData[id][2] + i * 18, vgtSteam, false, 0)
+		end
+	elseif dir == 2 then
+		-- short vertical
+		for i=-2,1 do
+			AddVisualGear(girderData[id][1], 10 + girderData[id][2] + i * 20, vgtSteam, false, 0)
+		end
+	else
+		AddVisualGear(girderData[id][1], girderData[id][2], vgtSteam, false, 0)
+	end
+
 	AddCaption(loc("Barrier unlocked!"))
 end
 
@@ -163,6 +164,8 @@ local function loadGearData()
 	for g=1, #girderData do
 		PlaceGirder(unpack(girderData[g]))
 	end
+
+	PlaceSprite(1678, 546, sprTargetBee, 0)
 
 	------ BARRELS ------
 	local barrels = {}
@@ -173,11 +176,6 @@ local function loadGearData()
 	table.insert(barrels, AddGear(1578, 1206, gtExplosives, 0, 0, 0, 0))
 	for b=1, #barrels do
 		SetHealth(barrels[b], 1)
-	end
-
-	------ MINES ------
-	for m=1, #mineData do
-		AddGear(mineData[m][1], mineData[m][2], gtMine, 0, 0, 0, 0)
 	end
 
 	------ FIRST TARGET ------
@@ -194,14 +192,17 @@ function onGameStart()
 end
 
 function onNewTurn()
+	local ctrl = ""
 	if not wasFirstTurn then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Open ammo menu: [Right click]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]")
+		end
 		ShowMission(loc("Basic Rope Training"), loc("Select Rope"),
 		loc("Select the rope to begin!").."|"..
-		loc("Open ammo menu: [Right click]"), 2, 7500)
+		ctrl, 2, 7500)
 		wasFirstTurn = true
-	end
-	if isInMineChallenge then
-		resetMineChallenge()
 	end
 end
 
@@ -212,11 +213,18 @@ function onGameTick()
 
 	-- First rope selection
 	if not ropeSelected and GetCurAmmoType() == amRope then
+		local ctrl = ""
+		if INTERFACE == "desktop" then
+			ctrl = loc("Aim: [Up]/[Down]").."|"..
+			loc("Attack: [Space]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Aim: [Up]/[Down]").."|"..
+			loc("Attack: Tap the [Bomb]")
+		end
 		ShowMission(loc("Basic Rope Training"), loc("Getting Started"),
 		loc("You can use the rope to reach new places.").."|"..
 		loc("Aim at the ceiling and hold [Attack] pressed until the rope attaches.").."|"..
-		loc("Aim: [Up]/[Down]").."|"..
-		loc("Attack: [Space]"), 2, 15000)
+		ctrl, 2, 15000)
 		ropeSelected = true
 	-- Rope attach
 	elseif ropeGear and band(GetState(ropeGear), gstCollision) ~= 0 then
@@ -229,7 +237,7 @@ function onGameTick()
 			loc("Swing: [Left]/[Right]").."|"..
 			loc("Release rope: [Attack]"), 2, 15000)
 			ropeAttached = true
-		elseif currentTarget > 1 then
+		elseif currentTarget > 1 and (not (currentTarget == 6 and barrelsBoom)) then
 			HideMission()
 		end
 	end
@@ -243,6 +251,19 @@ function onGameTick()
 		SetInputMask(bor(GetInputMask(), gmAttack))
 	else
 		SetInputMask(band(GetInputMask(), bnot(gmAttack)))
+	end
+	if isInFinalChallenge then
+		local dX, dY = GetGearVelocity(CurrentHedgehog)
+		local x, y = GetGearPosition(CurrentHedgehog)
+		if band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 and GetAmmoCount(CurrentHedgehog, amRope) == 0 and
+				GetFlightTime(CurrentHedgehog) == 0 and (not ropeGear) and
+				math.abs(dX) < 5 and math.abs(dY) < 5 and
+				(x < 3417 or y > 471) then
+			flawless = false
+			AddCaption(loc("Your rope is gone! Try again!"))
+			resetFinalChallenge()
+			PlaySound(sndWarp)
+		end
 	end
 end
 
@@ -258,8 +279,6 @@ end
 function onGearAdd(gear)
 	if GetGearType(gear) == gtRope then
 		ropeGear = gear
-	elseif GetGearType(gear) == gtMine then
-		mines[gear] = true
 	elseif GetGearType(gear) == gtGrenade then
 		if not ropeGear then
 			DeleteGear(gear)
@@ -267,16 +286,36 @@ function onGearAdd(gear)
 	end
 end
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	-- Teleport hog to previous checkpoint
 	if gear == hog then
+		flawless = false
 		SetGearPosition(hog, cpX, cpY)
+		if vGear then
+			SetVisualGearValues(vGear, GetX(hog), GetY(hog))
+		end
 		FollowGear(hog)
 		AddCaption(loc("Your hedgehog has been revived!"))
-		if isInMineChallenge then
-			resetMineChallenge(false)
+		if isInFinalChallenge then
+			resetFinalChallenge(false)
 		end
 	end
+end
+
+function onGearDamage(gear)
+	if gear == hog then
+		flawless = false
+	end
+end
+
+local function dropNadeText(time)
+	ShowMission(loc("Basic Rope Training"), loc("Rope Weapons"),
+	loc("Some weapons can be dropped from the rope.").."|"..
+	loc("Collect the weapon crate and drop|a grenade from rope to destroy the barrels.").."|"..
+	loc("Step 1: Start roping").."|"..
+	loc("Step 2: Select grenade").."|"..
+	loc("Step 3: Drop the grenade").."| |"..
+	loc("Drop weapon (while on rope): [Long Jump]"), 2, time)
 end
 
 function onGearDelete(gear)
@@ -308,15 +347,9 @@ function onGearDelete(gear)
 			eraseGirder(8)
 			eraseGirder(9)
 		elseif currentTarget == 5 then
-			ShowMission(loc("Basic Rope Training"), loc("Rope Weapons"),
-			loc("Some weapons can be dropped from the rope.").."|"..
-			loc("Collect the weapon crate and drop|a grenade from rope to destroy the barrels.").."|"..
-			loc("Step 1: Start roping").."|"..
-			loc("Step 2: Select grenade").."|"..
-			loc("Step 3: Drop the grenade").."| |"..
-			loc("Drop weapon (while on rope): [Long Jump]"), 2, 20000)
+			dropNadeText(20000)
 			AddAmmo(hog, amBaseballBat, 0)
-			SpawnAmmoCrate(1849, 920, amGrenade, 100)
+			SpawnAmmoCrate(1849, 920, amGrenade, AMMO_INFINITE)
 		elseif currentTarget == 6 then
 			ShowMission(loc("Basic Rope Training"), loc("Finite Ropes"),
 			loc("So far, you had infinite ropes, but in the|real world, ropes are usually limited.").."|"..
@@ -325,25 +358,29 @@ function onGearDelete(gear)
 			loc("If you miss a shot while trying to|re-attach, your rope is gone, too!").."| |"..
 			loc("Final Challenge:").." |"..
 			loc("Reach and destroy the final target to win.").."|"..
-			loc("You only get 1 rope this time, don't waste it!").."|"..
-			loc("Avoid the mines!").."|"..
-			loc("Skip your turn to try again."), 2, 25000)
+			loc("You only get 1 rope this time, don't waste it!"),
+			2, 25000)
 			eraseGirder(4)
 			eraseGirder(5)
 			AddAmmo(hog, amRope, 1)
-			AddAmmo(hog, amSkip, 100)
-			isInMineChallenge = true
+			SetHealth(hog, initHogHealthFinal)
+			isInFinalChallenge = true
 		elseif currentTarget == 7 then
+			SaveMissionVar("Won", "true")
 			ShowMission(loc("Basic Rope Training"), loc("Training complete!"),
-			loc("Congratulations!"), 0, 0)
-			PlaySound(sndVictory, hog)
+			loc("Congratulations!"), 4, 0)
+			if flawless then
+				PlaySound(sndFlawless, hog)
+			else
+				PlaySound(sndVictory, hog)
+			end
 			AddAmmo(hog, amBaseballBat, 0)
 			AddAmmo(hog, amGrenade, 0)
 			AddAmmo(hog, amRope, 0)
 			SendStat(siCustomAchievement, loc("Oh yeah! You sure know how to rope!"))
 			SendStat(siGameResult, loc("You have finished the Basic Rope Training!"))
-			SendStat(siPlayerKills, "0", teamName)
 			EndGame()
+			SetState(hog, gstWinner)
 			gameOver = true
 			SetInputMask(0)
 		end
@@ -357,22 +394,31 @@ function onGearDelete(gear)
 		if not barrelsBoom then
 			barrelsBoom = true
 			AddAmmo(hog, amGrenade, 0)
-			AddAmmo(hog, amBaseballBat, 100)
+			AddAmmo(hog, amBaseballBat, AMMO_INFINITE)
 			eraseGirder(2)
 			eraseGirder(3)
+			ShowMission(loc("Basic Rope Training"),
+				loc("Kaboom!"),
+				loc("Follow the path and destroy the next target."),
+				2, 5000)
 		end
 	elseif GetGearType(gear) == gtRope then
 		ropeGear = nil
 		if ropeAttached and not target1Reached then
+			local ctrl = ""
+			if INTERFACE == "desktop" then
+				ctrl = loc("Aim: [Up]/[Down]").."|"..
+				loc("Attack: [Space]")
+			elseif INTERFACE == "touch" then
+				ctrl = loc("Aim: [Up]/[Down]").."|"..
+				loc("Attack: Tap the [Bomb]")
+			end
 			ShowMission(loc("Basic Rope Training"), loc("How to Rope"),
 			loc("Go to the target.").."|"..
 			loc("Hold [Attack] to attach the rope.").."|"..
-			loc("Aim: [Up]/[Down]").."|"..
-			loc("Attack: [Space]"), 2, 13000)
+			ctrl, 2, 13000)
 			ropeAttached = false
 		end
-	elseif GetGearType(gear) == gtMine then
-		mines[gear] = nil
 	elseif GetGearType(gear) == gtCase then
 		eraseGirder(6)
 		eraseGirder(7)
@@ -384,16 +430,10 @@ function onAmmoStoreInit()
 	SetAmmo(amBaseballBat, 9, 0, 0, 1)
 end
 
-function onHogAttack(ammoType)
-	-- Allow to manually reset final challenge with skip
-	if ammoType == amSkip then
-		resetMineChallenge()
-	end
-end
-
 function onAttack()
 	if GetCurAmmoType() == amGrenade and not ropeGear then
 		AddCaption(loc("You have to drop the grenade from rope!"), 0xFF4000FF, capgrpMessage)
+		dropNadeText(5000)
 		PlaySound(sndDenied)
 	end
 end

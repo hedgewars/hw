@@ -22,12 +22,12 @@
 
 @protocol WeaponButtonControllerDelegate <NSObject>
 
--(void) updateValues:(NSArray *)withArray atIndex:(NSInteger) index;
+- (void)updateValues:(NSArray *)withArray atIndex:(NSInteger)index;
 
 @end
 
 @interface WeaponCellView : UITableViewCell {
-    id<WeaponButtonControllerDelegate> delegate;
+    id<WeaponButtonControllerDelegate> __weak delegate;
     UILabel *weaponName;
     UIImageView *weaponIcon;
 
@@ -50,26 +50,26 @@
     UILabel *helpLabel;
 }
 
-@property (nonatomic,assign) id<WeaponButtonControllerDelegate> delegate;
+@property (nonatomic, weak) id<WeaponButtonControllerDelegate> delegate;
 
-@property (nonatomic,retain) UILabel *weaponName;
-@property (nonatomic,retain) UIImageView *weaponIcon;
+@property (nonatomic, strong) UILabel *weaponName;
+@property (nonatomic, strong) UIImageView *weaponIcon;
 
-@property (nonatomic,retain) UISlider *initialSli;
-@property (nonatomic,retain) UISlider *probabilitySli;
-@property (nonatomic,retain) UISlider *delaySli;
-@property (nonatomic,retain) UISlider *crateSli;
+@property (nonatomic, strong) UISlider *initialSli;
+@property (nonatomic, strong) UISlider *probabilitySli;
+@property (nonatomic, strong) UISlider *delaySli;
+@property (nonatomic, strong) UISlider *crateSli;
 
-@property (nonatomic,retain) UIImageView *initialImg;
-@property (nonatomic,retain) UIImageView *probabilityImg;
-@property (nonatomic,retain) UIImageView *delayImg;
-@property (nonatomic,retain) UIImageView *crateImg;
+@property (nonatomic, strong) UIImageView *initialImg;
+@property (nonatomic, strong) UIImageView *probabilityImg;
+@property (nonatomic, strong) UIImageView *delayImg;
+@property (nonatomic, strong) UIImageView *crateImg;
 
-@property (nonatomic,retain) UILabel *initialLab;
-@property (nonatomic,retain) UILabel *probabilityLab;
-@property (nonatomic,retain) UILabel *delayLab;
-@property (nonatomic,retain) UILabel *crateLab;
+@property (nonatomic, strong) UILabel *initialLab;
+@property (nonatomic, strong) UILabel *probabilityLab;
+@property (nonatomic, strong) UILabel *delayLab;
+@property (nonatomic, strong) UILabel *crateLab;
 
-@property (nonatomic,retain) UILabel *helpLabel;
+@property (nonatomic, strong) UILabel *helpLabel;
 
 @end

@@ -80,13 +80,24 @@ TDateTime fpcrtl_now()
     return fpcrtl_date() + fpcrtl_time();
 }
 
-/*
- * XXX: dummy
- */
+// Semi-dummy implementation of FormatDateTime
 string255 fpcrtl_formatDateTime(string255 FormatStr, TDateTime DateTime)
 {
-    string255 result = STRINIT("2012 01-01");
-    return result;
+    string255 buffer = STRINIT(FormatStr.str);
+    time_t rawtime;
+    struct tm* my_tm;
+
+    // DateTime is ignored, always uses current time.
+    // TODO: Use DateTime argument properly.
+    time(&rawtime);
+    my_tm = localtime(&rawtime);
+
+    // Currently uses a hardcoded format string, FormatStr is ignored.
+    // The format strings for C and Pascal differ!
+    // TODO: Use FormatStr argument properly.
+    size_t len = strftime(buffer.str, sizeof(buffer.str), "%Y-%m-%d-%H-%M-%S-0", my_tm);
+    buffer.len = len;
+    return buffer;
 }
 
 string255 fpcrtl_trim(string255 s)

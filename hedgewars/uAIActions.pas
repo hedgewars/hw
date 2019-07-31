@@ -58,6 +58,7 @@ type TAction = record
 
     TActions = record
         Count, Pos: Longword;
+        ticks: Longword;
         actions: array[0..Pred(MAXACTIONS)] of TAction;
         Score: LongInt;
         isWalkingToABetterPlace: boolean;

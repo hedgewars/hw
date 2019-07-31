@@ -86,6 +86,7 @@ class PageVideos : public AbstractPage
         void deleteSelectedFiles();
         void openVideosDirectory();
         void updateFileList(const QString & path);
+        void ShowFatalErrorMessage(const QString & msg);
 };
 
 #endif // PAGE_VIDEOS_H

@@ -9,11 +9,8 @@ local params = {
 	map = "SB_Crystal",
 	theme = "Cave",
 	hog_x = 2039,
-	hog_y = 684,
-	hogName = loc("Grenadier"),
-	hogHat = "war_desertgrenadier2",
-	teamName = loc("Grenade Group"),
-	teamFlag = "cm_grenade",
+	hog_y = 701,
+	faceLeft = true,
 	targets = {
 		{ x = 1834, y = 747 },
 		{ x = 2308, y = 729 },

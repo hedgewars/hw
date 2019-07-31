@@ -22,33 +22,33 @@
 
 @interface UIScreen (safe)
 
--(CGFloat) safeScale;
--(CGRect) safeBounds;
+- (CGFloat)safeScale;
+- (CGRect)safeBounds;
 
 @end
 
 
 @interface UITableView (backgroundColor)
 
--(void) setBackgroundColorForAnyTable:(UIColor *)color;
+- (void)setBackgroundColorForAnyTable:(UIColor *)color;
 
 @end
 
 
 @interface UIColor (HWColors)
 
-+(UIColor *)darkYellowColor;
-+(UIColor *)lightYellowColor;
-+(UIColor *)darkBlueColor;
-+(UIColor *)darkBlueColorTransparent;
-+(UIColor *)blackColorTransparent;
++ (UIColor *)darkYellowColor;
++ (UIColor *)lightYellowColor;
++ (UIColor *)darkBlueColor;
++ (UIColor *)darkBlueColorTransparent;
++ (UIColor *)blackColorTransparent;
 
 @end
 
 
 @interface UIButton (quickStyle)
 
--(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title;
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
 
 - (void)applyBlackQuickStyle;
 - (void)applyDarkBlueQuickStyle;
@@ -58,9 +58,9 @@
 
 @interface UILabel (quickStyle)
 
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title;
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth;
--(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat)borderWidth;
+- (id)initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat)borderWidth
     withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor;
 
 @end
@@ -68,7 +68,13 @@
 
 @interface NSString (MD5)
 
--(NSString *)MD5hash;
+- (NSString *)MD5hash;
 
 @end
 
+@interface NSUserDefaults (setNonExisting)
+
+- (void)setDefaultValue:(nullable id)value forNonExistingKey:(NSString *_Nonnull)key;
+- (void)setDefaultBool:(BOOL)boolValue forNonExistingKey:(NSString *_Nonnull)key;
+
+@end

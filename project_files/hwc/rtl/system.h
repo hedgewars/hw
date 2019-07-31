@@ -28,7 +28,9 @@ astring     fpcrtl_copyA(astring s, Integer Index, Integer Count);
 /*
  * Insert a shortstring in another at a specified index
  */
-void        fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index);
+void        __attribute__((overloadable))                   fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index);
+void        __attribute__((overloadable))                   fpcrtl_insert__vars(astring *src, astring *dst, SizeInt index);
+
 #define     fpcrtl_insert(src, dst, index)                  fpcrtl_insert__vars(&(src), &(dst), index);
 #define     fpcrtl_Insert                                   fpcrtl_insert
 
@@ -92,7 +94,7 @@ void        fpcrtl_new__vars(void **p, int size);
 #define     fpcrtl_assigned(p)                              ((p) != NULL)
 #define     fpcrtl_Assigned                                 fpcrtl_assigned
 
-Integer     fpcrtl_trunc(extended n);
+Int64       fpcrtl_trunc(extended n);
 Integer     fpcrtl_ceil(extended n);
 
 #define     fpcrtl_val(s, a)                                fpcrtl_val__vars(s, &(a))

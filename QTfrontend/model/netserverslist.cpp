@@ -45,8 +45,10 @@ QVariant HWNetServersModel::headerData(int section,
             case 0:
                 return tr("Title");
             case 1:
+                //: short for "IP address" (Internet Protocol), part of server address
                 return tr("IP");
             case 2:
+                //: short for "port number", part of server address
                 return tr("Port");
             default:
                 return QVariant();

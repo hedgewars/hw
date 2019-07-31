@@ -4,11 +4,13 @@
 #include "physfscompat.h"
 
 #define BUFSIZE 1024
+#define UNUSED(x) (void)(x)
 
 void *physfsReaderBuffer;
 
 PHYSFS_DECL const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
 {
+    UNUSED(L);
 
     if(PHYSFS_eof(f))
     {

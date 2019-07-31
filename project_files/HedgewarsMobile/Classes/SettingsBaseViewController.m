@@ -28,13 +28,13 @@
 @implementation SettingsBaseViewController
 @synthesize targetController, controllerNames, lastIndexPath;
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
 #pragma mark View lifecycle
--(void) viewDidLoad {
+- (void)viewDidLoad {
     // the list of available controllers
     NSArray *array = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
                                                       NSLocalizedString(@"Teams",@""),
@@ -43,7 +43,6 @@
                                                       NSLocalizedString(@"Support",@""),
                                                       nil];
     self.controllerNames = array;
-    [array release];
 
     if (IS_IPAD())
     {
@@ -57,7 +56,6 @@
             [tableView reloadData];
             [self.view addSubview:tableView];
             [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-            [tableView release];
             self.navigationItem.leftBarButtonItem = [self doneButton];
         }
     }
@@ -71,23 +69,24 @@
 
 - (UIBarButtonItem *)doneButton
 {
-    return [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                          target:self
-                                                         action:@selector(dismissSplitView)] autorelease];
+                                                         action:@selector(dismissSplitView)];
 }
 
--(void) dismissSplitView {
+- (void)dismissSplitView {
     [[AudioManagerController mainManager] playBackSound];
-    [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissViewControllerAnimated:YES completion:nil];
+    UIViewController *vc = [[HedgewarsAppDelegate sharedAppDelegate] mainViewController];
+    [vc dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.controllerNames count];
 }
 
@@ -97,7 +96,7 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 
     NSString *iconStr = nil;
     switch ([indexPath row]) {
@@ -125,14 +124,13 @@
     cell.textLabel.text = [controllerNames objectAtIndex:[indexPath row]];
     UIImage *icon = [[UIImage alloc] initWithContentsOfFile:iconStr];
     cell.imageView.image = icon;
-    [icon release];
 
     return cell;
 }
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger newRow = [indexPath row];
     NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
@@ -168,7 +166,6 @@
         nextController.navigationItem.hidesBackButton = YES;
         [nextController viewWillAppear:NO];
         [targetController.navigationController pushViewController:nextController animated:NO];
-        [nextController release];
         
         [[AudioManagerController mainManager] playClickSound];
     }
@@ -177,27 +174,11 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning
+
+- (void)didReceiveMemoryWarning
 {
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
-}
-
--(void) viewDidUnload
-{
-    self.controllerNames = nil;
-    self.lastIndexPath = nil;
-    self.targetController = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc
-{
-    releaseAndNil(targetController);
-    releaseAndNil(controllerNames);
-    releaseAndNil(lastIndexPath);
-    [super dealloc];
 }
 
 @end

@@ -26,9 +26,9 @@
     NSMutableArray *listOfSavegames;
 }
 
-@property (nonatomic,retain) IBOutlet UITableView *tableView;
-@property (nonatomic,retain) NSMutableArray *listOfSavegames;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *listOfSavegames;
 
--(IBAction) buttonPressed:(id) sender;
+- (IBAction)buttonPressed:(id)sender;
 
 @end

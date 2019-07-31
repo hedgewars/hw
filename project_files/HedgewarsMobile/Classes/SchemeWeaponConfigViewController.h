@@ -38,20 +38,20 @@
     BOOL sectionsHidden;
 }
 
-@property (nonatomic,retain) NSArray *listOfSchemes;
-@property (nonatomic,retain) NSArray *listOfWeapons;
-@property (nonatomic,retain) NSArray *listOfScripts;
-@property (nonatomic,retain) NSIndexPath *lastIndexPath_sc;
-@property (nonatomic,retain) NSIndexPath *lastIndexPath_we;
-@property (nonatomic,retain) NSIndexPath *lastIndexPath_lu;
-@property (nonatomic,retain) NSString *selectedScheme;
-@property (nonatomic,retain) NSString *selectedWeapon;
-@property (nonatomic,retain) NSString *selectedScript;
-@property (nonatomic,retain) NSString *scriptCommand;
-@property (nonatomic,retain) UISegmentedControl *topControl;
-@property (nonatomic,assign) BOOL sectionsHidden;
+@property (nonatomic, strong) NSArray *listOfSchemes;
+@property (nonatomic, strong) NSArray *listOfWeapons;
+@property (nonatomic, strong) NSArray *listOfScripts;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath_sc;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath_we;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath_lu;
+@property (nonatomic, strong) NSString *selectedScheme;
+@property (nonatomic, strong) NSString *selectedWeapon;
+@property (nonatomic, strong) NSString *selectedScript;
+@property (nonatomic, strong) NSString *scriptCommand;
+@property (nonatomic, strong) UISegmentedControl *topControl;
+@property (assign) BOOL sectionsHidden;
 
--(void) fillSections;
--(void) emptySections;
+- (void)fillSections;
+- (void)emptySections;
 
 @end

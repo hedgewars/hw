@@ -89,13 +89,13 @@ minion3.x = 3500
 minion3.y = 1750
 
 teamA.name = loc("PAotH")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Minions")
-teamB.color = 0x0072FF -- blue
+teamB.color = -2
 teamC.name = loc("Professor")
-teamC.color = 0x0072FF -- blue
+teamC.color = -2
 teamD.name = loc("Hog Solo")
-teamD.color = 0x38D61C -- green
+teamD.color = -6
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -109,19 +109,20 @@ function onGameInit()
 	Explosives = 0
 	HealthDecrease = 0
 	WaterRise = 0
-	Delay = 5
 	Map = "moon01_map"
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)
-	-- Hog Solo
-	AddTeam(teamD.name, teamD.color, "Simple", "Island", "Default", "hedgewars")
+	-- Hero
+	teamD.name = AddMissionTeam(teamD.color)
 	if tonumber(GetCampaignVar("HeroHealth")) then
-		hero.gear = AddHog(hero.name, 0, tonumber(GetCampaignVar("HeroHealth")), "war_desertgrenadier1")
+		hero.gear = AddMissionHog(tonumber(GetCampaignVar("HeroHealth")))
 	else
-		hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+		hero.gear = AddMissionHog(100)
 	end
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAotH
-	AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default_qau", "cm_galaxy")
+	SetTeamPassive(teamA.name, true)
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "scif_2001O")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
@@ -135,12 +136,13 @@ function onGameInit()
 	AnimSetGearPosition(paoth4.gear, paoth4.x, paoth4.y)
 	HogTurnLeft(paoth4.gear, true)
 	-- Professor
-	AddTeam(teamC.name, teamC.color, "star", "Island", "Default", "cm_sine")
+	teamC.name = AddTeam(teamC.name, teamC.color, "star", "Island", "Default_qau", "cm_sine")
+	SetTeamPassive(teamC.name, true)
 	professor.gear = AddHog(professor.name, 0, professor.health, "tophats")
 	AnimSetGearPosition(professor.gear, professor.x, professor.y)
 	HogTurnLeft(professor.gear, true)
 	-- Minions
-	AddTeam(teamB.name, teamB.color, "eyecross", "Island", "Default", "cm_sine")
+	teamB.name = AddTeam(teamB.name, teamB.color, "eyecross", "Island", "Default_qau", "cm_sine")
 	minion1.gear = AddHog(minion1.name, 1, 50, "Gasmask")
 	AnimSetGearPosition(minion1.gear, minion1.x, minion1.y)
 	HogTurnLeft(minion1.gear, true)
@@ -173,8 +175,8 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 
-	ShowMission(campaignName, missionName, loc("Hog Solo has to refuel his saucer.")..
-	"|"..loc("Rescue the imprisoned PAotH team and get the fuel!"), -amSkip, 0)
+	ShowMission(campaignName, missionName, string.format(loc("%s has to refuel the saucer."), hero.name)..
+	"|"..loc("Rescue the imprisoned PAotH team and get the fuel!"), 10, 0)
 
 	AddAmmo(minion1.gear, amDEagle, 10)
 	AddAmmo(minion2.gear, amDEagle, 10)
@@ -245,7 +247,7 @@ function onNewTurn()
 	-- rounds start if hero got his weapons or got near the enemies
 	if CurrentHedgehog == hero.gear then
 		if not weaponsAcquired and not battleZoneReached then
-			TurnTimeLeft = -1
+			SetTurnTimeLeft(MAX_TURN_TIME)
 		end
 	elseif CurrentHedgehog == minion1.gear or CurrentHedgehog == minion2.gear or CurrentHedgehog == minion3.gear then
 		if not battleZoneReached then
@@ -253,9 +255,6 @@ function onNewTurn()
 		elseif weaponsAcquired and not battleZoneReached and afterDialog02 then
 			battleZone(hero.gear)
 		end
-	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
-		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear then
-		EndTurn(true)
 	elseif CurrentHedgehog == professor.gear then
 		if weaponsAcquired and not battleZoneReached and afterDialog02 then
 			battleZone(hero.gear)
@@ -362,7 +361,7 @@ function weaponsPlatform(gear)
 end
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have to get the weapons and rescue the PAotH researchers."))
 	sendSimpleTeamRankings({teamC.name, teamB.name, teamD.name, teamA.name})
 	EndGame()
@@ -388,7 +387,7 @@ end
 function victory()
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	saveCompletedStatus(1)
-	SendStat(siGameResult, loc("Hog Solo wins, congratulations!"))
+	SendStat(siGameResult, string.format(loc("%s wins, congratulations!"), hero.name))
 	sendSimpleTeamRankings({teamD.name, teamA.name, teamC.name, teamB.name})
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
 	resetCheckpoint() -- reset this mission
@@ -398,7 +397,9 @@ end
 
 function professorAndMinionsDeath(gear)
 	if gameOver then return end
-	SendStat(siCustomAchievement, loc("You have eliminated the whole evil team. You're pretty tough!"))
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
+	SendStat(siCustomAchievement, loc("You have eliminated Professor Hogevil."))
+	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
 
 	SaveCampaignVar("ProfDiedOnMoon", "1")
 	victory()
@@ -406,6 +407,7 @@ end
 
 function professorDeath(gear)
 	if gameOver then return end
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
 	local m1h = GetHealth(minion1.gear)
 	local m2h = GetHealth(minion2.gear)
 	local m3h = GetHealth(minion3.gear)
@@ -422,6 +424,7 @@ function professorDeath(gear)
 end
 
 function afterDialog06()
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
 	EndTurn(true)
 	SendStat(siCustomAchievement, loc("You have eliminated Professor Hogevil."))
 	SendStat(siCustomAchievement, loc("You drove the minions away."))
@@ -430,6 +433,7 @@ function afterDialog06()
 end
 
 function afterDialog05()
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
 	EndTurn(true)
 	HideHog(professor.gear)
 	SendStat(siCustomAchievement, loc("You have eliminated the evil minions."))
@@ -442,6 +446,7 @@ end
 function minionsDeath(gear)
 	if professor.dead or GetHealth(professor.gear) == nil or GetHealth(professor.gear) == 0 then return end
 	if gameOver then return end
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
 	AddAnim(dialog05)
 end
 
@@ -474,7 +479,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near a PAotH base on the moon ..."),  4000}})
-	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Hey, Hog Solo! Finally you have come!"), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, string.format(loc("Hey, %s! Finally you have come!"), hero.name), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("It seems that Professor Hogevil has prepared for your arrival!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("He has captured the rest of the PAotH team and awaits to capture you!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("We have to hurry! Are you armed?"), SAY_SAY, 4300}})

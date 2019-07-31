@@ -21,6 +21,6 @@
 
 @interface MainMenuViewController : UIViewController <UIAlertViewDelegate>
 
--(IBAction) switchViews:(id)sender;
+- (IBAction)switchViews:(id)sender;
 
 @end

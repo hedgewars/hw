@@ -54,7 +54,6 @@
 00:51=Bola de Lama
 00:52=Nenhuma arma selecionada
 00:53=Caixote do Tempo
-; 00:54=Estrutura
 00:54=Terreno-instantâneo
 00:55=Congelador
 00:56=Cutelo
@@ -67,13 +66,13 @@
 01:05=Deseja realmente sair (%1/%2)?
 01:06=Morte Súbita!
 01:07=%1 restante
-01:08=Combustível
+01:08=Combustível: %1%
 01:09=A sincronizar...
 01:10=Usar este utilitário não termina o turno!
 01:11=Esta arma ou utilitário ainda não está disponível!
 01:12=Último turno até Morte Súbita!
 01:13=%1 turnos até Morte Súbita!
-01:14=Prepara-te!
+; 01:14=Get ready, %1!
 01:15=Ligeiro
 01:16=Pouco
 01:17=Normal
@@ -449,7 +448,6 @@
 03:51=Encontrado no chão
 03:52=UNUSED
 03:53=Modelo 40
-;03:54=Constroi qualquer coisa
 03:54=Utilitário
 
 ; Weapon Descriptions (use | as line breaks)
@@ -507,7 +505,6 @@
 04:51=Empurra um ouriço sem perder o turno|criando uma bola de lama tu mesmo!
 04:52=UNUSED
 04:53=Parte numa aventura pelo tempo e espaço,|deixando os teus colegas para se defenderem sozinhos.|Está preparado para regressar a qualquer altura,|para Morte Súbita ou se todos forem derrotados.|Atenção: Não funciona em Morte Súbita,|se estiveres sozinho, ou se fores o Rei.
-;04:54=INCOMPLETO
 04:54=Aplica estas particulas de terreno em spray onde quiseres.|Constroi pontes, enterra inimigos ou fecha túneis.|Tem apenas cuidado, não o uses em ti proprio!
 
 ; Game goal strings

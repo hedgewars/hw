@@ -48,7 +48,7 @@ QLayout * PageSinglePlayer::bodyLayoutDefinition()
     BtnCampaignPage->setVisible(true);
 
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
-    BtnTrainPage->setWhatsThis(tr("Practice your skills in a range of training missions"));
+    BtnTrainPage->setWhatsThis(tr("Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios."));
 
     return vLayout;
 }

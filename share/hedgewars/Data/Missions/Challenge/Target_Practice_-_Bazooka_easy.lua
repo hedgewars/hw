@@ -9,10 +9,8 @@ local params = {
 	map = "Lonely_Island",
 	theme = "Island",
 	hog_x = 1439,
-	hog_y = 482,
-	hogName = loc("Zook"),
-	hogHat = "war_americanww2helmet",
-	teamName = loc("Team Zook"),
+	hog_y = 511,
+	faceLeft = true,
 	targets = {
 		{ x = 1310, y = 756 },
 		{ x = 1281, y = 893 },

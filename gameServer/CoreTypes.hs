@@ -103,11 +103,13 @@ data Action =
     | ReactCmd [B.ByteString]
     | CheckVotes
     | SetRandomSeed
+    | ShowRegisteredOnlyState [ClientChan]
 
 
 data Event = LobbyChatMessage
            | EngineMessage
            | RoomJoin
+           | RoomNameUpdate
 
 type EventsInfo = [(Int, UTCTime)]
 
@@ -310,9 +312,9 @@ newServerInfo =
     ServerInfo
         True
         False
-        "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-        "<font color=yellow><h3 align=center>Hedgewars 0.9.24 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        55 -- latestReleaseVersion
+        "<h2><p align=center><a href=\"https://www.hedgewars.org/\">https://www.hedgewars.org/</a></p></h2>"
+        "<font color=yellow><h3 align=center>Hedgewars 0.9.25 is out! Please update.</h3><p align=center><a href=https://hedgewars.org/download.html>Download page here</a></font>"
+        57 -- latestReleaseVersion
         41 -- earliestCompatibleVersion
         46631
         ""

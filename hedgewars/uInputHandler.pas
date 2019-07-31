@@ -32,11 +32,16 @@ function  KeyBindToCode(bind: shortstring): LongInt;
 function  KeyBindToName(bind: shortstring): shortstring;
 //procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
-procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
+procedure ProcessMouseButton(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
+procedure ProcessMouseMotion(xrel, yrel: LongInt);
 //procedure ProcessMouseWheel(x, y: LongInt);
 procedure ProcessMouseWheel(y: LongInt);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
+
+{$IFDEF USE_AM_NUMCOLUMN}
+function CheckDefaultSlotKeys: boolean;
+{$ENDIF}
 
 procedure ResetKbd;
 procedure ResetMouseWheel;
@@ -55,7 +60,7 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
 implementation
-uses uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer;
+uses uKeyNames, uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer, uCursor;
 
 const
     LSHIFT = $0200;
@@ -66,7 +71,7 @@ const
     RCTRL  = $4000;
 
 var tkbd: array[0..cKbdMaxIndex] of boolean;
-    KeyNames: array [0..cKeyMaxIndex] of string[15];
+    KeyNames: TKeyNames;
     CurrentBinds: TBinds;
     ControllerNumControllers: Integer;
     ControllerEnabled: Integer;
@@ -109,7 +114,7 @@ begin
     else begin
         code:= 0;
         while (code <= High(CurrentBinds.indices)) and (CurrentBinds.indices[code] <> index) do inc(code);
-        checkFails(code <= High(CurrentBinds.indices), 'binds registry inconsistency', True);
+        checkFails(code <= High(CurrentBinds.indices), 'Inconsistency in key binding registry', True);
         KeyBindToCode:= code;
     end;
 end;
@@ -130,7 +135,7 @@ begin
         begin
         name:= SDL_GetKeyName(SDL_GetKeyFromScancode(code));
         if (name = 'Escape') then
-            // Let's shorten the name “Escape” for the quit menu
+            // Let's shorten the name "Escape" for the quit menu
             KeyBindToName:= 'Esc'
         else if (length(name) <> 0) then
             KeyBindToName:= name
@@ -182,7 +187,8 @@ end;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 var
     Trusted: boolean;
-    s      : string;
+    curBind, s: shortstring;
+    readyAborter: boolean;
 begin
 if not(tkbd[code] xor KeyDown) then exit;
 tkbd[code]:= KeyDown;
@@ -222,44 +228,63 @@ if(KeyDown and (code = SDLK_w)) then
 
 if CurrentBinds.indices[code] > 0 then
     begin
+    curBind:= CurrentBinds.binds[CurrentBinds.indices[code]];
+
+    // Check if the keypress should end the ready phase.
+    // Camera movement keys are "safe" since its equivalent to moving the mouse,
+    // which also does not end the ready phase.
+    readyAborter:= (curBind <> '+cur_u') and (curBind <> '+cur_d') and (curBind <> '+cur_l') and (curBind <> '+cur_r');
+
     if (code < cKeyMaxIndex - 2) // means not mouse buttons
         and KeyDown
-        and (not ((CurrentBinds.binds[CurrentBinds.indices[code]] = 'put') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = 'ammomenu') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_u') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_d') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_l') 
-                  or (CurrentBinds.binds[CurrentBinds.indices[code]] = '+cur_r')))
-        and (CurrentTeam <> nil) 
-        and (not CurrentTeam^.ExtDriven) 
+        and (not ((curBind = 'put')
+                  or (curBind = 'ammomenu')
+                  or (curBind = '+cur_u')
+                  or (curBind = '+cur_d')
+                  or (curBind = '+cur_l')
+                  or (curBind = '+cur_r')))
+        and (CurrentTeam <> nil)
+        and (not CurrentTeam^.ExtDriven)
         then bShowAmmoMenu:= false;
 
     if KeyDown then
         begin
         Trusted:= Trusted and (not isPaused); //releasing keys during pause should be allowed on the other hand
 
-        if CurrentBinds.binds[CurrentBinds.indices[code]] = 'switch' then
+        if curBind = 'switch' then
             LocalMessage:= LocalMessage or gmSwitch
-        else if CurrentBinds.binds[CurrentBinds.indices[code]] = '+precise' then
+        else if curBind = '+precise' then
+            begin
             LocalMessage:= LocalMessage or gmPrecise;
+            updateVolumeDelta(true);
+            updateCursorMovementDelta(true, CursorMovementX, CursorMovementX);
+            updateCursorMovementDelta(true, CursorMovementY, CursorMovementY);
+            end;
 
-        ParseCommand(CurrentBinds.binds[CurrentBinds.indices[code]], Trusted);
-        if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+        ParseCommand(curBind, Trusted);
+        // End ready phase
+        if (readyAborter) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
-    else if (CurrentBinds.binds[CurrentBinds.indices[code]][1] = '+') then
+    else if (curBind[1] = '+') then
         begin
-        if CurrentBinds.binds[CurrentBinds.indices[code]] = '+precise' then
+        if curBind = '+precise' then
+            begin
             LocalMessage:= LocalMessage and (not gmPrecise);
-        s:= CurrentBinds.binds[CurrentBinds.indices[code]];
+            updateVolumeDelta(false);
+            updateCursorMovementDelta(false, CursorMovementX, CursorMovementX);
+            updateCursorMovementDelta(false, CursorMovementY, CursorMovementY);
+            end;
+        s:= curBind;
         s[1]:= '-';
         ParseCommand(s, Trusted);
-        if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+        // End ready phase
+        if (readyAborter) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
     else
         begin
-        if CurrentBinds.binds[CurrentBinds.indices[code]] = 'switch' then
+        if curBind = 'switch' then
             LocalMessage:= LocalMessage and (not gmSwitch)
         end
     end
@@ -274,7 +299,7 @@ begin
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 
-procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
+procedure ProcessMouseButton(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 begin
     //writelntoconsole('[MOUSE] '+inttostr(event.button));
     case event.button of
@@ -284,7 +309,16 @@ begin
             ProcessKey(KeyNameToCode('mousem'), ButtonDown);
         SDL_BUTTON_RIGHT:
             ProcessKey(KeyNameToCode('mouser'), ButtonDown);
+        SDL_BUTTON_X1:
+            ProcessKey(KeyNameToCode('mousex1'), ButtonDown);
+        SDL_BUTTON_X2:
+            ProcessKey(KeyNameToCode('mousex2'), ButtonDown);
         end;
+end;
+
+procedure ProcessMouseMotion(xrel, yrel: LongInt);
+begin
+    uCursor.updatePositionDelta(xrel, yrel);
 end;
 
 var mwheelupCode, mwheeldownCode: Integer;
@@ -333,7 +367,7 @@ end;
 procedure RegisterBind(var binds: TBinds; key, value: shortstring);
 var code: LongInt;
 begin
-    checkFails(binds.lastIndex < 255, 'too many binds', true);
+    checkFails(binds.lastIndex < 255, 'Too many key bindings', true);
 
     code:= KeyNameToCode(key);
 
@@ -357,10 +391,14 @@ begin
     RegisterBind(DefaultBinds, _S'`', 'history');
     RegisterBind(DefaultBinds, 'delete', 'rotmask');
     RegisterBind(DefaultBinds, 'home', 'rottags');
+    RegisterBind(DefaultBinds, _S'm', '+mission');
+    RegisterBind(DefaultBinds, _S'o', 'gearinfo');
 
     //numpad
-    //DefaultBinds[265]:= '+volup';
-    //DefaultBinds[256]:= '+voldown';
+    RegisterBind(DefaultBinds, 'keypad_8', '+cur_u');
+    RegisterBind(DefaultBinds, 'keypad_6', '+cur_r');
+    RegisterBind(DefaultBinds, 'keypad_4', '+cur_l');
+    RegisterBind(DefaultBinds, 'keypad_2', '+cur_d');
 
     RegisterBind(DefaultBinds, _S'0', '+volup');
     RegisterBind(DefaultBinds, _S'9', '+voldown');
@@ -369,8 +407,9 @@ begin
     RegisterBind(DefaultBinds, _S'r', 'record');
     RegisterBind(DefaultBinds, _S'h', 'findhh');
     RegisterBind(DefaultBinds, _S'p', 'pause');
-    RegisterBind(DefaultBinds, _S's', '+speedup');
+    RegisterBind(DefaultBinds, _S'f', '+speedup');
     RegisterBind(DefaultBinds, _S't', 'chat');
+    RegisterBind(DefaultBinds, _S'u', 'chat team');
     RegisterBind(DefaultBinds, _S'y', 'confirm');
 
     RegisterBind(DefaultBinds, 'mousem', 'zoomreset');
@@ -379,6 +418,9 @@ begin
 
     RegisterBind(DefaultBinds, 'f12', 'fullscr');
 
+    for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
+    for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
+    RegisterBind(DefaultBinds, _S'n', 'timer_u');
 
     RegisterBind(DefaultBinds, 'mousel', '/put');
     RegisterBind(DefaultBinds, 'mouser', 'ammomenu');
@@ -392,40 +434,26 @@ begin
     RegisterBind(DefaultBinds, 'right', '+right');
     RegisterBind(DefaultBinds, 'left_shift', '+precise');
 
-
-    RegisterBind(DefaultBinds, 'j0a0u', '+left');
-    RegisterBind(DefaultBinds, 'j0a0d', '+right');
-    RegisterBind(DefaultBinds, 'j0a1u', '+up');
-    RegisterBind(DefaultBinds, 'j0a1d', '+down');
-    for i:= 1 to 10 do RegisterBind(DefaultBinds, 'f'+IntToStr(i), 'slot '+char(48+i));
-    for i:= 1 to 5  do RegisterBind(DefaultBinds, IntToStr(i), 'timer '+IntToStr(i));
-
     loadBinds('dbind', cPathz[ptConfig] + '/settings.ini');
 end;
 
 
 procedure InitKbdKeyTable;
-var i, j, k, t: LongInt;
-    s: string[15];
+var i, j, k: LongInt;
 begin
+    // Mouse buttons and mouse wheel
     KeyNames[cKeyMaxIndex    ]:= 'mousel';
     KeyNames[cKeyMaxIndex - 1]:= 'mousem';
     KeyNames[cKeyMaxIndex - 2]:= 'mouser';
-    mwheelupCode:= cKeyMaxIndex - 3;
+    KeyNames[cKeyMaxIndex - 3]:= 'mousex1';
+    KeyNames[cKeyMaxIndex - 4]:= 'mousex2';
+    mwheelupCode:= cKeyMaxIndex - 5;
     KeyNames[mwheelupCode]:= 'wheelup';
-    mwheeldownCode:= cKeyMaxIndex - 4;
+    mwheeldownCode:= cKeyMaxIndex - 6;
     KeyNames[mwheeldownCode]:= 'wheeldown';
 
-    for i:= 0 to cKeyMaxIndex - 5 do
-        begin
-        s:= shortstring(SDL_GetScancodeName(TSDL_Scancode(i)));
-
-        for t:= 1 to Length(s) do
-            if s[t] = ' ' then
-                s[t]:= '_';
-        KeyNames[i]:= LowerCase(s)
-        end;
-
+    // Keyboard keys
+    uKeyNames.populateKeyNames(KeyNames);
 
     // get the size of keyboard array
     SDL_GetKeyboardState(@k);
@@ -458,6 +486,27 @@ begin
 end;
 
 
+{$IFDEF USE_AM_NUMCOLUMN}
+function CheckDefaultSlotKeys: boolean;
+{$IFDEF USE_TOUCH_INTERFACE}
+begin
+    CheckDefaultSlotKeys:= false;
+{$ELSE}
+var i, code: LongInt;
+begin
+    for i:=1 to cMaxSlotIndex do
+        begin
+        code:= KeyNameToCode('f'+IntToStr(i));
+        if CurrentBinds.binds[CurrentBinds.indices[code]] <> 'slot '+char(i+48) then
+            begin
+            CheckDefaultSlotKeys:= false;
+            exit;
+            end;
+        end;
+    CheckDefaultSlotKeys:= true;
+{$ENDIF}
+end;
+{$ENDIF}
 
 {$IFNDEF MOBILE}
 procedure SetBinds(var binds: TBinds);
@@ -497,7 +546,7 @@ procedure ControllerInit;
 var j: Integer;
 begin
 ControllerEnabled:= 0;
-{$IFDEF IPHONE}
+{$IFDEF IPHONEOS}
 exit; // joystick subsystem disabled on iPhone
 {$ENDIF}
 
@@ -513,10 +562,10 @@ if ControllerNumControllers > 0 then
     begin
     for j:= 0 to pred(ControllerNumControllers) do
         begin
-        WriteLnToConsole('Using game controller: ' + shortstring(SDL_JoystickName(j)));
+        WriteLnToConsole('Game controller no. ' + IntToStr(j) + ', name "' + shortstring(SDL_JoystickNameForIndex(j)) + '":');
         Controller[j]:= SDL_JoystickOpen(j);
         if Controller[j] = nil then
-            WriteLnToConsole('* Failed to open game controller!')
+            WriteLnToConsole('* Failed to open game controller no. ' + IntToStr(j) + '!')
         else
             begin
             ControllerNumAxes[j]:= SDL_JoystickNumAxes(Controller[j]);

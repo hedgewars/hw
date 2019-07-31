@@ -26,10 +26,10 @@
     UITabBarController *tabController;
 }
 
-@property (nonatomic, retain) UIViewController *targetController;
-@property (nonatomic, retain) NSArray *controllerNames;
-@property (nonatomic, retain) NSIndexPath *lastIndexPath;
+@property (nonatomic, strong) UIViewController *targetController;
+@property (nonatomic, strong) NSArray *controllerNames;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
--(void) dismissSplitView;
+- (void)dismissSplitView;
 
 @end

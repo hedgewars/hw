@@ -96,6 +96,7 @@ clientSendLoop s tId chan ci = do
 
     where
         killReciever = Exception.throwTo tId . ShutdownThreadException
+        -- intentionally not localized
         quitMessage ["BYE"] = "bye"
         quitMessage ("BYE":msg:_) = msg
         quitMessage _ = error "quitMessage"

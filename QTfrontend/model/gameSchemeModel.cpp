@@ -87,7 +87,9 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
                          << "Timeless"
                          << "Thinking with Portals"
                          << "King Mode"
+                         << "Mutant"
                          << "Construction Mode"
+                         << "The Specialists"
                          << "Space Invasion"
                          << "HedgeEditor"
                          ;
@@ -573,9 +575,57 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant()              // scriptparam    43
             ;
 
+    QList<QVariant> mutant;
+    mutant
+            << predefSchemesNames[10]  // name           0
+            << QVariant(false)         // switchhog      1
+            << QVariant(false)         // team divide    2
+            << QVariant(false)         // solid land     3
+            << QVariant(false)         // border         4
+            << QVariant(false)         // low gravity    5
+            << QVariant(false)         // laser sight    6
+            << QVariant(false)         // invulnerable   7
+            << QVariant(false)         // reset health   8
+            << QVariant(false)         // vampiric       9
+            << QVariant(false)         // karma          10
+            << QVariant(false)         // artillery      11
+            << QVariant(true)          // random order   12
+            << QVariant(false)         // king           13
+            << QVariant(false)         // place hog      14
+            << QVariant(false)         // shared ammo    15
+            << QVariant(false)         // disable girders 16
+            << QVariant(false)         // disable land objects 17
+            << QVariant(false)         // AI survival    18
+            << QVariant(false)         // inf. attack    19
+            << QVariant(true)          // reset weps     20
+            << QVariant(false)         // per hog ammo   21
+            << QVariant(false)         // no wind        22
+            << QVariant(false)         // more wind      23
+            << QVariant(false)         // tag team       24
+            << QVariant(false)         // bottom border  25
+            << QVariant(100)           // damage modfier 26
+            << QVariant(20)            // turn time      27
+            << QVariant(100)           // init health    28
+            << QVariant(15)            // sudden death   29
+            << QVariant(2)             // case prob      30
+            << QVariant(1)             // mines time     31
+            << QVariant(4)             // mines number   32
+            << QVariant(0)             // mine dud pct   33
+            << QVariant(2)             // explosives     34
+            << QVariant(0)             // air mines      35
+            << QVariant(0)             // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(0)             // water rise amt 38
+            << QVariant(0)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            << QVariant()              // scriptparam    43
+            ;
+
     QList<QVariant> construction;
     construction
-            << predefSchemesNames[10]  // name           0
+            << predefSchemesNames[11]  // name           0
             << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
@@ -622,9 +672,58 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant("initialenergy=550, energyperround=50, maxenergy=1000, cratesperround=5") // scriptparam    43
             ;
 
+    QList<QVariant> specialists;
+    specialists
+            << predefSchemesNames[12]  // name           0
+            << QVariant(true)          // switchhog      1
+            << QVariant(false)         // team divide    2
+            << QVariant(false)         // solid land     3
+            << QVariant(false)         // border         4
+            << QVariant(false)         // low gravity    5
+            << QVariant(false)         // laser sight    6
+            << QVariant(false)         // invulnerable   7
+            << QVariant(false)         // reset health   8
+            << QVariant(false)         // vampiric       9
+            << QVariant(false)         // karma          10
+            << QVariant(false)         // artillery      11
+            << QVariant(false)         // random order   12
+            << QVariant(false)         // king           13
+            << QVariant(true)          // place hog      14
+            << QVariant(false)         // shared ammo    15
+            << QVariant(false)         // disable girders 16
+            << QVariant(false)         // disable land objects 17
+            << QVariant(false)         // AI survival    18
+            << QVariant(true)          // inf. attack    19
+            << QVariant(true)          // reset weps     20
+            << QVariant(true)          // per hog ammo   21
+            << QVariant(false)         // no wind        22
+            << QVariant(false)         // more wind      23
+            << QVariant(false)         // tag team       24
+            << QVariant(false)         // bottom border  25
+            << QVariant(100)           // damage modfier 26
+            << QVariant(45)            // turn time      27
+            << QVariant(100)           // init health    28
+            << QVariant(15)            // sudden death   29
+            << QVariant(5)             // case prob      30
+            << QVariant(3)             // mines time     31
+            << QVariant(0)             // mines number   32
+            << QVariant(0)             // mine dud pct   33
+            << QVariant(0)             // explosives     34
+            << QVariant(0)             // air mines      35
+            << QVariant(100)           // health case pct 36
+            << QVariant(25)            // health case amt 37
+            << QVariant(47)            // water rise amt 38
+            << QVariant(5)             // health dec amt 39
+            << QVariant(100)           // rope modfier   40
+            << QVariant(100)           // get away time  41
+            << QVariant(0)             // world edge     42
+            // NOTE: If you change this, also change the defaults in the The Specialists script
+            << QVariant("t=SENDXHPL")  // scriptparam    43
+            ;
+
     QList<QVariant> spaceinvasion;
     spaceinvasion
-            << predefSchemesNames[11]  // name           0
+            << predefSchemesNames[13]  // name           0
             << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
@@ -673,7 +772,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
 
     QList<QVariant> hedgeeditor;
     hedgeeditor
-            << predefSchemesNames[12]  // name           0
+            << predefSchemesNames[14]  // name           0
             << QVariant(false)         // switchhog      1
             << QVariant(false)         // team divide    2
             << QVariant(false)         // solid land     3
@@ -731,12 +830,19 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     schemes.append(timeless);
     schemes.append(thinkingportals);
     schemes.append(kingmode);
+    schemes.append(mutant);
     schemes.append(construction);
+    schemes.append(specialists);
     schemes.append(spaceinvasion);
     schemes.append(hedgeeditor);
 
     if (!QDir(cfgdir->absolutePath() + "/Schemes").exists()) {
         QDir().mkdir(cfgdir->absolutePath() + "/Schemes");
+    }
+    QStringList predefSchemesNamesLower;
+    for (int i = 0; i < predefSchemesNames.size(); ++i)
+    {
+        predefSchemesNamesLower.append(predefSchemesNames[i].toLower());
     }
     if (!QDir(directory).exists()) {
         QDir().mkdir(directory);
@@ -751,7 +857,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             legacyFileConfig.setArrayIndex(i);
 
             QString schemeName = legacyFileConfig.value(spNames[0]).toString();
-            if (!schemeName.isNull() && !predefSchemesNames.contains(schemeName))
+            if (!schemeName.isNull() && !predefSchemesNamesLower.contains(schemeName.toLower()))
             {
                 QList<QVariant> scheme;
                 QFile file(directory + "/" + schemeName + ".hwg");
@@ -793,6 +899,11 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             QString schemeName = scheme_dir[i];
             if (schemeName.endsWith(".hwg", Qt::CaseInsensitive)) {
                 schemeName.chop(4);
+            }
+            // Don't load scheme if name collides with default scheme
+            if (predefSchemesNamesLower.contains(schemeName.toLower())) {
+                qWarning("Game scheme \"%s\" not loaded from file, name collides with a default scheme!", qPrintable(schemeName));
+                continue;
             }
             // Parse game scheme file
             if (file.open(QIODevice::ReadOnly)) {
@@ -856,14 +967,25 @@ int GameSchemeModel::columnCount(const QModelIndex & parent) const
 
 bool GameSchemeModel::hasScheme(QString name)
 {
+    return hasScheme(name, -1);
+}
+
+bool GameSchemeModel::hasScheme(QString name, int ignoreID)
+{
+    QString nameLower = name.toLower();
     for(int i=0; i<schemes.size(); i++)
     {
-        if(schemes[i][0] == name)
+        if(((ignoreID == -1) || (i != ignoreID)) && (schemes[i][0].toString().toLower() == nameLower))
         {
             return true;
         }
     }
     return false;
+}
+
+bool GameSchemeModel::renameScheme(int index, QString newName)
+{
+    return setData(QAbstractItemModel::createIndex(index, 0), QVariant(newName));
 }
 
 Qt::ItemFlags GameSchemeModel::flags(const QModelIndex & index) const

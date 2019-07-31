@@ -30,6 +30,9 @@ procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByCharA(var a, b: ansistring; c: char);
 
+procedure EscapeCharA(var a: ansistring; e: char);
+procedure UnEscapeCharA(var a: ansistring; e: char);
+
 function ExtractFileDir(s: shortstring) : shortstring;
 function ExtractFileName(s: shortstring) : shortstring;
 
@@ -50,6 +53,7 @@ function  Max(a, b: LongInt): LongInt; inline;
 
 function  IntToStr(n: LongInt): shortstring;
 function  StrToInt(s: shortstring): LongInt;
+//function  StrToInt(s: shortstring; var success: boolean): LongInt;
 function  FloatToStr(n: hwFloat): shortstring;
 
 function  DxDy2Angle(const _dY, _dX: hwFloat): real; inline;
@@ -79,6 +83,9 @@ function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
 function CalcWorldWrap(X, radius: LongInt): LongInt;
 
+procedure updateVolumeDelta(precise: boolean);
+procedure updateCursorMovementDelta(precise: boolean; dir: LongInt; var cursorVar: LongInt);
+
 function read1stLn(filePath: shortstring): shortstring;
 function readValueFromINI(key, filePath: shortstring): shortstring;
 
@@ -107,12 +114,12 @@ procedure freeModule;
 
 
 implementation
-uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, uPhysFSLayer, uDebug;
+uses {$IFNDEF PAS2C}typinfo, SDLh, {$ENDIF}Math, uConsts, uVariables, uPhysFSLayer, uDebug;
 
 {$IFDEF DEBUGFILE}
 var logFile: PFSFile;
 {$IFDEF USE_VIDEO_RECORDING}
-    logMutex: TRTLCriticalSection; // mutex for debug file
+    logMutex: PSDL_mutex; // mutex for debug file
 {$ENDIF}
 {$ENDIF}
 var CharArray: array[0..255] of Char;
@@ -250,6 +257,40 @@ if i > 0 then
     end else b:= '';
 end; { SplitByCharA }
 
+// In the ansistring a, escapes all instances of
+// '\e' with an ASCII ESC character, where e is
+// a char chosen by you.
+procedure EscapeCharA(var a: ansistring; e: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(e, a);
+    if (i > 1) and (a[i - 1] = '\') then
+        begin
+        a[i]:= Char($1B); // ASCII ESC
+        Delete(a, i - 1, 1);
+        end
+    else
+        break;
+until (i <= 0);
+end; { EscapeCharA }
+
+// Unescapes a previously escaped string and inserts
+// e back into the string. e is a char chosen by you.
+procedure UnEscapeCharA(var a: ansistring; e: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(Char($1B), a); // ASCII ESC
+    if (i > 0) then
+        begin
+        a[i]:= e;
+        end
+    else
+        break;
+until (i <= 0);
+end; { UnEscapeCharA }
+
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
@@ -331,6 +372,17 @@ begin
 str(n, IntToStr)
 end;
 
+// Convert string to longint, with error checking.
+// Success will be set to false when conversion failed.
+// See documentation on Val procedure for syntax of s
+//function StrToInt(s: shortstring; var success: boolean): LongInt;
+//var Code: Word;
+//begin
+//val(s, StrToInt, Code);
+//success:= Code = 0;
+//end;
+
+// Convert string to longint, without error checking
 function StrToInt(s: shortstring): LongInt;
 begin
 val(s, StrToInt);
@@ -457,7 +509,8 @@ begin
 {$IFDEF DEBUGFILE}
 
 {$IFDEF USE_VIDEO_RECORDING}
-EnterCriticalSection(logMutex);
+if SDL_LockMutex(logMutex) <> 0 then
+    OutError('Logging mutex could not be locked!', true);
 {$ENDIF}
 if logFile <> nil then
     pfsWriteLn(logFile, inttostr(GameTicks)  + ': ' + s)
@@ -465,25 +518,37 @@ else
     WriteLn(stdout, inttostr(GameTicks)  + ': ' + s);
 
 {$IFDEF USE_VIDEO_RECORDING}
-LeaveCriticalSection(logMutex);
+if SDL_UnlockMutex(logMutex) <> 0 then
+    OutError('Logging mutex could not be unlocked!', true);
 {$ENDIF}
 
 {$ENDIF}
 end;
 
 procedure AddFileLogRaw(s: pchar); cdecl;
+var msgLine: PChar;
 begin
 s:= s;
 {$IFNDEF PAS2C}
 {$IFDEF DEBUGFILE}
 {$IFDEF USE_VIDEO_RECORDING}
-EnterCriticalSection(logMutex);
+if SDL_LockMutex(logMutex) <> 0 then
+    OutError('Logging mutex could not be locked!', true);
 {$ENDIF}
-// TODO: uncomment next two lines
-// write(logFile, s);
-// flush(logFile);
+msgLine:= Str2PChar(IntToStr(GameTicks) + ': ');
+if (logFile <> nil) then
+    begin
+    pfsWriteRaw(logFile, msgLine, StrLen(msgLine));
+    pfsWriteRaw(logFile, s, StrLen(s));
+    end
+else
+    begin
+    Write(stdout, msgLine);
+    Flush(stdout);
+    end;
 {$IFDEF USE_VIDEO_RECORDING}
-LeaveCriticalSection(logMutex);
+if SDL_UnlockMutex(logMutex) <> 0 then
+    OutError('Logging mutex could not be unlocked!', true);
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
@@ -518,7 +583,7 @@ while i < l do
        ((#$AC00  <= u) and (u <= #$D7AF))  or // Hangul Syllables
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F))  or // CJK Compatibility Forms
-       ((#$FF66  <= u) and (u <= #$FF9D)))    // halfwidth katakana
+       ((#$FF00  <= u) and (u <= #$FFEF)))    // half- and fullwidth characters
        then
         begin
             CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
@@ -645,6 +710,40 @@ begin
     sanitizeCharForLog:= r
 end;
 
+// helper function for volume change controls
+procedure updateVolumeDelta(precise: boolean);
+begin
+if cVolumeUpKey and (not cVolumeDownKey) then
+    if precise then
+        cVolumeDelta:= 1
+    else
+        cVolumeDelta:= 3
+else if cVolumeDownKey and (not cVolumeUpKey) then
+    if precise then
+        cVolumeDelta:= -1
+    else
+        cVolumeDelta:= -3
+else
+    cVolumeDelta:= 0;
+end;
+
+// helper function for cursor movement change controls
+procedure updateCursorMovementDelta(precise: boolean; dir: LongInt; var cursorVar: LongInt);
+begin
+if dir > 0 then
+    if precise then
+        cursorVar:= cameraKeyboardSpeedSlow
+    else
+        cursorVar:= cameraKeyboardSpeed
+else if dir < 0 then
+    if precise then
+        cursorVar:= - cameraKeyboardSpeedSlow
+    else
+        cursorVar:= - cameraKeyboardSpeed
+else
+    cursorVar:= 0;
+end;
+
 function read1stLn(filePath: shortstring): shortstring;
 var f: pfsFile;
 begin
@@ -715,7 +814,9 @@ begin
         logfileBase:= 'preview';
         {$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}
-    InitCriticalSection(logMutex);
+    logMutex:= SDL_CreateMutex();
+    if (logMutex = nil) then
+        OutError('Could not create mutex for logging', true);
 {$ENDIF}
     if not pfsExists('/Logs') then
         pfsMakeDir('/Logs');
@@ -760,7 +861,7 @@ if logFile <> nil then
 else
     WriteLn(stdout, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
 {$IFDEF USE_VIDEO_RECORDING}
-    DoneCriticalSection(logMutex);
+    SDL_DestroyMutex(logMutex);
 {$ENDIF}
 {$ENDIF}
 end;

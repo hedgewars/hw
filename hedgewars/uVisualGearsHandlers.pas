@@ -246,7 +246,6 @@ s:= min(Steps, cExplFrameTicks);
 
 Gear^.X:= Gear^.X + Gear^.dX * s;
 Gear^.Y:= Gear^.Y + Gear^.dY * s;
-//Gear^.dY:= Gear^.dY + cGravityf;
 
 if Gear^.FrameTicks <= Steps then
     if Gear^.Frame = 0 then
@@ -317,7 +316,7 @@ var vgt: PVisualGear;
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
-Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravityf * (Steps * Steps);
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
 if (Gear^.State and gstTmpFlag) = 0 then
     begin
     Gear^.dY:= Gear^.dY + cGravityf * Steps;
@@ -421,7 +420,6 @@ Gear^.X:= Gear^.X + (cWindSpeedf + Gear^.dX) * Steps;
 Gear^.Y:= Gear^.Y - (cDrownSpeedf + Gear^.dY) * Steps;
 
 Gear^.dX := Gear^.dX + (cWindSpeedf * 0.3 * Steps);
-//Gear^.dY := Gear^.dY - (cDrownSpeedf * 0.995);
 
 if Gear^.FrameTicks <= Steps then
     if Gear^.Frame = 0 then
@@ -472,7 +470,7 @@ Gear^.X:= Gear^.X + Gear^.dX * Steps;
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
 Gear^.dY:= Gear^.dY + cGravityf * Steps;
 
-if round(Gear^.Y) > cWaterLine then
+if CheckCoordInWater(round(Gear^.X), round(Gear^.Y)) then
     begin
     DeleteVisualGear(Gear);
     PlaySound(TSound(ord(sndDroplet1) + Random(3)));
@@ -624,7 +622,6 @@ for i:= 0 to Pred(TeamsCount) do
 Gear^.Timer:= cSorterWorkTime;
 Gear^.doStep:= @doStepTeamHealthSorterWork;
 currsorter:= Gear;
-//doStepTeamHealthSorterWork(Gear, Steps)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -709,8 +706,10 @@ begin
 if round(Gear^.Y) - 10 < cWaterLine then
     DeleteVisualGear(Gear)
 else
-    Gear^.Y:= Gear^.Y - 0.08 * Steps;
-
+    begin
+    Gear^.X:= Gear^.X + Gear^.dX * Steps;
+    Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+    end;
 end;
 
 procedure doStepHealthTag(Gear: PVisualGear; Steps: Longword);
@@ -725,7 +724,7 @@ else
 
 Gear^.doStep:= @doStepHealthTagWork;
 
-if (round(Gear^.Y) > cWaterLine) and (Gear^.Frame = 0)  then
+if (round(Gear^.Y) > cWaterLine) and (Gear^.Frame = 0) and (Gear^.FrameTicks = 0) then
     Gear^.doStep:= @doStepHealthTagWorkUnderWater;
 
 Gear^.Y:= Gear^.Y - Gear^.Tex^.h;
@@ -849,9 +848,10 @@ Gear^.dY:= Gear^.dY + cGravityf * Steps;
 
 Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
 
-if (round(Gear^.Y) > cWaterLine) and ((cReducedQuality and rqPlainSplash) = 0) then
+if CheckCoordInWater(round(Gear^.X), round(Gear^.Y)) then
     begin
-    AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtDroplet);
+    if ((cReducedQuality and rqPlainSplash) = 0) then
+        AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtDroplet);
     DeleteVisualGear(Gear);
     end
 end;
@@ -900,6 +900,7 @@ var
     currwindbar: PVisualGear = nil;
 
 procedure doStepSmoothWindBarWork(Gear: PVisualGear; Steps: Longword);
+const maxWindBarWidth = 73;
 begin
     if currwindbar = Gear then
     begin
@@ -912,6 +913,11 @@ begin
             inc(WindBarWidth)
         else if WindBarWidth > Gear^.Tag then
             dec(WindBarWidth);
+        // Prevent wind bar from overflowing
+        if WindBarWidth > maxWindBarWidth then
+            WindBarWidth:= maxWindBarWidth;
+        if WindBarWidth < - maxWindBarWidth then
+            WindBarWidth:= - maxWindBarWidth;
         end;
     if cWindspeedf > Gear^.dAngle then
         begin
@@ -925,7 +931,7 @@ begin
         end;
     end;
 
-    if ((WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)) or (currwindbar <> Gear) then
+    if (((WindBarWidth = Gear^.Tag) or (Abs(WindBarWidth) >= maxWindBarWidth)) and (cWindspeedf = Gear^.dAngle)) or (currwindbar <> Gear) then
     begin
         if currwindbar = Gear then currwindbar:= nil;
         DeleteVisualGear(Gear)

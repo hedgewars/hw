@@ -6,7 +6,7 @@
 -- by mikade
 
 -- feel free to add map specific walls to LoadConfig, or post additional
--- wall suggestions on our forum at: http://www.hedgewars.org/forum
+-- wall suggestions on our forum at: https://www.hedgewars.org/forum
 
 ----------------
 --0.1
@@ -696,7 +696,11 @@ function DrawBlip(gear)
 	end
 
 	local baseColor, radius, alpha
-	if getGearValue(gear, "frozen") then
+	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then
+		radius = 40
+		baseColor = 0xFFFFFFFF
+		alpha = 255
+	elseif getGearValue(gear, "frozen") then
 		radius = 25
 		baseColor = 0xFFFFFFFF
 		alpha = math.min(255, rAlpha+127)
@@ -705,7 +709,9 @@ function DrawBlip(gear)
 		baseColor = GetClanColor(GetHogClan(CurrentHedgehog))
 		alpha = rAlpha
 	end
-	SetVisualGearValues(getGearValue(gear,"CIRC"), getGearValue(gear,"RX"), getGearValue(gear,"RY"), 100, 255, 1, 10, 0, radius, 3, baseColor-alpha)
+	if getGearValue(gear,"CIRC") ~= nil then
+		SetVisualGearValues(getGearValue(gear,"CIRC"), getGearValue(gear,"RX"), getGearValue(gear,"RY"), 100, 255, 1, 10, 0, radius, 3, baseColor-alpha)
+	end
 end
 
 function TrackRadarBlip(gear)
@@ -718,6 +724,7 @@ function TrackRadarBlip(gear)
 	g2X, g2Y = GetX(gear), GetY(gear)
 	q = g1X - g2X
 	w = g1Y - g2Y
+	-- Floating point operations are safe, it's only for visuals
 	r = math.sqrt( (q*q) + (w*w) )	--alternate
 
 	RCX = getGearValue(gear,"RX")
@@ -846,9 +853,21 @@ function UnfreezeCrates()
 
 end
 
+function onCaseDrop()
+	local crates
+	if roundN == 100 then
+		allowCrate = crateGearsInGame < maxCrates
+		crates = CheckCrateConditions()
+	end
+	if type(crates) == "table" and #crates > 0 and CurrentHedgehog then
+		PlaySound(sndReinforce, CurrentHedgehog)
+	end
+end
+
 function CheckCrateConditions()
 
 	local crateSpawn = AreCratesUnlocked()
+	local crates = {}
 
 	if crateSpawn == true and crateSpawned == false then
 		UnfreezeCrates()
@@ -859,7 +878,7 @@ function CheckCrateConditions()
 				toSpawn = maxCrates - cratesInGame
 			end
 			for i=1,toSpawn do
-				SpawnSupplyCrate(0, 0, weapons[1+GetRandom(#weapons)] )
+				table.insert(crates, SpawnSupplyCrate(0, 0, weapons[1+GetRandom(#weapons)]))
 			end
 			rPingTimer = 0
 			rAlpha = 0
@@ -869,12 +888,13 @@ function CheckCrateConditions()
 		end
 	end
 
+	return crates
 end
 
 function onGearWaterSkip(gear)
 	if gear == CurrentHedgehog then
 		hasSurfed = true
-		AddCaption(loc("Surfer!"), 0xFFFFFFFF, capgrpMessage2)
+		AddCaption(loc("Surfer!"), capcolDefault, capgrpMessage2)
 	end
 end
 
@@ -882,7 +902,7 @@ end
 function WallHit(id, zXMin,zYMin, zWidth, zHeight)
 
 	if wTouched[id] == false then
-		tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
+		AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
 		PlaySound(sndExplosion)
 		wallsLeft = wallsLeft - 1
 
@@ -890,7 +910,7 @@ function WallHit(id, zXMin,zYMin, zWidth, zHeight)
 			AddCaption(loc("All walls touched!"))
 			allWallsHit = true
 			if (requireSurfer == true) and (hasSurfed == false) then
-				AddCaption(loc("Go surf!"), 0xFFFFFFFF, capgrpMessage2)
+				AddCaption(loc("Go surf!"), capcolDefault, capgrpMessage2)
 			end
 		else
 			AddCaption(string.format(loc("Walls left: %d"), wallsLeft))
@@ -900,7 +920,7 @@ function WallHit(id, zXMin,zYMin, zWidth, zHeight)
 
 	wTouched[id] = true
 	if #wTouched > 0 then
-		tempE = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
+		AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmoke, 0, false)
 	end
 
 end
@@ -925,10 +945,7 @@ function BorderSpark(zXMin,zYMin, zWidth, zHeight, bCol)
 		local eY = zYMin + GetRandom(zHeight+10)
 
 		local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
-		if tempE ~= 0 then
-			local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-			SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, 1, g9, bCol )
-		end
+		SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, 1, nil, bCol )
 	end
 
 end
@@ -936,6 +953,9 @@ end
 
 function HandleBorderEffects()
 
+	if CurrentHedgehog == nil or band(GetState(CurrentHedgehog), gstHHDriven) == 0 then
+		return
+	end
 	effectTimer = effectTimer + 1
 	if effectTimer > 15 then --25
 
@@ -957,13 +977,13 @@ function PlaceWarn()
 	AddCaption(loc("Please place your hedgehog first!"), msgColorWarn, capgrpMessage2)
 end
 
-function onLJump()
+function AcceptConfiguration()
 	if roundN == 1 then
 		PlaySound(sndPlaced)
 		SetInputMask(0xFFFFFFFF)
 		AddCaption(loc("Configuration accepted."), msgColorTech, capgrpMessage)
 		if GetGameFlag(gfPlaceHog) then
-			TurnTimeLeft = PlacementTime
+			SetTurnTimeLeft(PlacementTime)
 			AddAmmo(CurrentHedgehog, amTeleport, 100)
 			SetWeapon(amTeleport)
 			AddCaption(
@@ -973,14 +993,20 @@ function onLJump()
 			)
 			roundN = 2
 		else
-			TurnTimeLeft = TurnTime
-			AddCaption(string.format(loc("Let's go, %s!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpMessage2)
+			SetTurnTimeLeft(TurnTime)
+			AddCaption(string.format(loc("Let's go, %s!"), GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpMessage2)
 			roundN = 100
 			wallsLeft = #wTouched
 			allowCrate = true
 		end
 		PlaySound(sndYesSir, CurrentHedgehog)
 		FinalizeMenu()
+	end
+end
+
+function onLJump()
+	if roundN == 1 then
+		AcceptConfiguration()
 	elseif roundN == 2 then
 		PlaceWarn()
 	elseif roundN == 100 then
@@ -1256,7 +1282,8 @@ function onGameStart()
 	end
 
 	if useMenu then
-		ShowMission(loc("Wall to wall"), loc("Please wait …"), "", 2, 300000)
+		ShowMission(loc("Wall to wall"), loc("Please wait …"), "", 2, 0)
+		HideMission()
 		UpdateMenu()
 	else
 		if GetGameFlag(gfPlaceHog) then
@@ -1270,6 +1297,17 @@ function onGameStart()
 	end
 end
 
+function onEndTurn()
+	crateSpawned = false
+	crateCollected = false
+	wallsLeft = #wTouched
+	for i = 1, #wTouched do
+		wTouched[i] = false
+	end
+	hasSurfed = false
+	allWallsHit = false
+end
+
 function onNewTurn()
 	turnsCount = turnsCount + 1
 
@@ -1281,7 +1319,7 @@ function onNewTurn()
 		if roundN < 2 then
 			SetWeapon(amSkip)
 			AddAmmo(CurrentHedgehog, amTeleport, 0)
-			TurnTimeLeft = -1
+			SetTurnTimeLeft(MAX_TURN_TIME)
 			SetInputMask(0)
 		end
 		if roundN == 2 then
@@ -1291,25 +1329,15 @@ function onNewTurn()
 		end
 	end
 
-	wallsLeft = #wTouched
-
-	for i = 1, #wTouched do
-		wTouched[i] = false
-	end
-
-	hasSurfed = false
-	allWallsHit = false
-	crateCollected = false
-
-	crateSpawned = false
-
 	if roundN == 100 then
-		allowCrate = crateGearsInGame < maxCrates
 
 		local teamName = GetHogTeamName(CurrentHedgehog)
 
 		-- Restore team's radar mode
 		radarMode = getTeamValue(teamName, "radarMode")
+		if radarMode == nil then
+			radarMode = 0
+		end
 
 		if not AreCratesUnlocked() then
 			FreezeCrates()
@@ -1333,17 +1361,18 @@ function onNewTurn()
 			setTeamValue(teamName, "skipPenalty", false)
 		end
 
-	else
-		allowCrate = false
 	end
 
 	if roundN == 1 then
-		TurnTimeLeft = -1
+		SetTurnTimeLeft(MAX_TURN_TIME)
 		SetInputMask(0)
 		allowCrate = false
 		UpdateMenu()
 		AddCaption(string.format(loc("%s may choose the rules."), GetHogTeamName(CurrentHedgehog)), msgColorTech, capgrpGameState)
 		HandleStartingStage()
+		if GetHogLevel(CurrentHedgehog) ~= 0 then
+			AcceptConfiguration()
+		end
 	end
 
 end
@@ -1536,12 +1565,22 @@ end
 
 function HandleStartingStage()
 
-	temp = menu[menuIndex].line
-	menu[menuIndex].line = "--> " .. menu[menuIndex].line
+	local renderedLines = {}
+	for m = 1, #menu do
+		local marker
+		local line = menu[m].line
+		if m == menuIndex then
+			marker = "▶"
+		else
+			marker = "▷"
+			line = string.gsub(line, ":", "\\:")
+		end
+		table.insert(renderedLines, marker .. " " .. line)
+	end
 
 	missionComment = ""
-	for i = 1, #menu do
-		missionComment = missionComment .. menu[i].line
+	for l = 1, #renderedLines do
+		missionComment = missionComment .. renderedLines[l]
 	end
 
 	ShowMission	(
@@ -1550,10 +1589,8 @@ function HandleStartingStage()
 				preMenuCfg..
 				missionComment ..
 				postMenuCfg ..
-				"", 2, 9999000
+				"", 3, 9999000, true
 				)
-
-	menu[menuIndex].line = temp
 
 end
 
@@ -1566,8 +1603,10 @@ function onGameTick()
 			gTimer = 1
 
 			if roundN == 100 then
-				CheckForWallCollision()
-				CheckCrateConditions()
+				if band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 then
+					CheckForWallCollision()
+					CheckCrateConditions()
+				end
 
 				if (GetGearType(GetFollowGear()) == gtCase) then
 					FollowGear(CurrentHedgehog)
@@ -1613,10 +1652,11 @@ function onGameTick()
 
 		end
 
-		HandleBorderEffects()
-		HandleCircles()
 
 	end
+
+	HandleBorderEffects()
+	HandleCircles()
 
 end
 
@@ -1643,11 +1683,14 @@ function onGearAdd(gear)
 
 		trackGear(gear)
 
-		table.insert(rCirc, AddVisualGear(0,0,vgtCircle,0,true) )
-		setGearValue(gear,"CIRC",rCirc[#rCirc])
+		local vg = AddVisualGear(0, 0, vgtCircle, 0, true)
+		if vg then
+			table.insert(rCirc, vg)
+			setGearValue(gear,"CIRC",vg)
+			SetVisualGearValues(vg, 0, 0, 100, 255, 1, 10, 0, 40, 3, 0x0)
+		end
 		setGearValue(gear,"RX",0)
 		setGearValue(gear,"RY",0)
-		SetVisualGearValues(rCirc[#rCirc], 0, 0, 100, 255, 1, 10, 0, 40, 3, 0xff00ffff)
 
 		allowCrate = false
 		crateSpawned = true
@@ -1684,7 +1727,8 @@ function onGearDelete(gear)
 		crateGearsInGame = crateGearsInGame - 1
 
 		for i = 1, #rCirc do
-			if rCirc[i] == getGearValue(gear,"CIRC") then
+			local CIRC = getGearValue(gear,"CIRC")
+			if CIRC ~= nil and rCirc[i] == CIRC then
 				DeleteVisualGear(rCirc[i])
 				table.remove(rCirc, i)
 			end
