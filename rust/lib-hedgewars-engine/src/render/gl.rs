@@ -1,6 +1,6 @@
-use integral_geometry::Rect;
+use integral_geometry::{Rect, Size};
 
-use std::{ffi, ffi::CString, mem, ptr, slice};
+use std::{ffi, ffi::CString, mem, num::NonZeroU32, ptr, slice};
 
 #[derive(Default)]
 pub struct PipelineState {
@@ -32,73 +32,115 @@ impl Drop for PipelineState {
 
 #[derive(Debug)]
 pub struct Texture2D {
-    pub handle: u32,
+    pub handle: Option<NonZeroU32>,
 }
 
 impl Drop for Texture2D {
     fn drop(&mut self) {
-        if self.handle != 0 {
+        if let Some(handle) = self.handle {
             unsafe {
-                gl::DeleteTextures(1, &self.handle);
+                gl::DeleteTextures(1, &handle.get());
             }
         }
     }
 }
 
+fn new_texture() -> Option<NonZeroU32> {
+    let mut handle = 0;
+    unsafe {
+        gl::GenTextures(1, &mut handle);
+    }
+    NonZeroU32::new(handle)
+}
+
+fn tex_params(filter: u32) {
+    unsafe {
+        gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::CLAMP_TO_EDGE as i32);
+        gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::CLAMP_TO_EDGE as i32);
+        gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, filter as i32);
+        gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, filter as i32);
+    }
+}
+
 impl Texture2D {
+    pub fn new(size: Size, internal_format: u32, format: u32, ty: u32, filter: u32) -> Self {
+        if let Some(handle) = new_texture() {
+            unsafe {
+                gl::BindTexture(gl::TEXTURE_2D, handle.get());
+                gl::TexImage2D(
+                    gl::TEXTURE_2D,
+                    0,
+                    internal_format as i32,
+                    size.width as i32,
+                    size.height as i32,
+                    0,
+                    format as u32,
+                    ty,
+                    std::ptr::null(),
+                )
+            }
+
+            tex_params(filter);
+            Self {
+                handle: Some(handle),
+            }
+        } else {
+            Self { handle: None }
+        }
+    }
+
     pub fn with_data(
         data: &[u8],
         data_stride: u32,
-        width: u32,
-        height: u32,
+        size: Size,
         internal_format: u32,
         format: u32,
         ty: u32,
         filter: u32,
     ) -> Self {
-        let mut handle = 0;
+        if let Some(handle) = new_texture() {
+            unsafe {
+                gl::BindTexture(gl::TEXTURE_2D, handle.get());
+                gl::PixelStorei(gl::UNPACK_ROW_LENGTH, data_stride as i32);
+                gl::TexImage2D(
+                    gl::TEXTURE_2D,
+                    0,
+                    internal_format as i32,
+                    size.width as i32,
+                    size.height as i32,
+                    0,
+                    format as u32,
+                    ty,
+                    data.as_ptr() as *const _,
+                )
+            }
 
-        unsafe {
-            gl::GenTextures(1, &mut handle);
-
-            gl::BindTexture(gl::TEXTURE_2D, handle);
-            gl::PixelStorei(gl::UNPACK_ROW_LENGTH, data_stride as i32);
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                internal_format as i32,
-                width as i32,
-                height as i32,
-                0,
-                format as u32,
-                ty,
-                data.as_ptr() as *const _,
-            );
-
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::CLAMP_TO_EDGE as i32);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::CLAMP_TO_EDGE as i32);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, filter as i32);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, filter as i32);
+            tex_params(filter);
+            Self {
+                handle: Some(handle),
+            }
+        } else {
+            Self { handle: None }
         }
-
-        Texture2D { handle }
     }
 
     pub fn update(&self, region: Rect, data: &[u8], data_stride: u32, format: u32, ty: u32) {
-        unsafe {
-            gl::BindTexture(gl::TEXTURE_2D, self.handle);
-            gl::PixelStorei(gl::UNPACK_ROW_LENGTH, data_stride as i32);
-            gl::TexSubImage2D(
-                gl::TEXTURE_2D,
-                0,             // texture level
-                region.left(), // texture region
-                region.top(),
-                region.width() as i32 - 1,
-                region.height() as i32 - 1,
-                format,                    // data format
-                ty,                        // data type
-                data.as_ptr() as *const _, // data ptr
-            );
+        if let Some(handle) = self.handle {
+            unsafe {
+                gl::BindTexture(gl::TEXTURE_2D, handle.get());
+                gl::PixelStorei(gl::UNPACK_ROW_LENGTH, data_stride as i32);
+                gl::TexSubImage2D(
+                    gl::TEXTURE_2D,
+                    0,             // texture level
+                    region.left(), // texture region
+                    region.top(),
+                    region.right(),
+                    region.bottom(),
+                    format,                    // data format
+                    ty,                        // data type
+                    data.as_ptr() as *const _, // data ptr
+                );
+            }
         }
     }
 }
@@ -352,9 +394,11 @@ impl Shader {
     pub fn bind_texture_2d(&self, index: u32, texture: &Texture2D) {
         self.bind();
 
-        unsafe {
-            gl::ActiveTexture(gl::TEXTURE0 + index);
-            gl::BindTexture(gl::TEXTURE_2D, texture.handle);
+        if let Some(handle) = texture.handle {
+            unsafe {
+                gl::ActiveTexture(gl::TEXTURE0 + index);
+                gl::BindTexture(gl::TEXTURE_2D, handle.get());
+            }
         }
     }
 }
