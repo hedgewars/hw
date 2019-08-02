@@ -108,13 +108,13 @@ impl<T> LookupEntry<T> {
 }
 
 pub struct GearDataLookup<T> {
-    lookup: [LookupEntry<T>; u16::max_value() as usize],
+    lookup: Box<[LookupEntry<T>]>,
 }
 
 impl<T: Default + Copy> GearDataLookup<T> {
     pub fn new() -> Self {
         Self {
-            lookup: [LookupEntry::<T>::default(); u16::max_value() as usize],
+            lookup: Vec::with_capacity(u16::max_value() as usize).into_boxed_slice()
         }
     }
 }
