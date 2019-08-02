@@ -1,7 +1,4 @@
-use hedgewars_engine_messages::{
-    messages::EngineMessage::*, messages::SyncedEngineMessage::*,
-    messages::UnsyncedEngineMessage::*, messages::*,
-};
+use crate::messages::{EngineMessage::*, SyncedEngineMessage::*, UnsyncedEngineMessage::*, *};
 use queues::*;
 
 #[derive(PartialEq)]
@@ -91,7 +88,7 @@ impl<'a> Iterator for MessagesQueueIterator<'a> {
 
 #[test]
 fn queue_order() {
-    use hedgewars_engine_messages::messages::UnorderedEngineMessage::*;
+    use crate::messages::UnorderedEngineMessage::*;
 
     let mut queue = MessagesQueue::new(QueueChatStrategy::LocalGame);
 

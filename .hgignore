@@ -92,3 +92,5 @@ rust/*/target
 build-qmlfrontend*
 .cabal-sandbox
 cabal.sandbox.config
+*.so
+*_autogen
