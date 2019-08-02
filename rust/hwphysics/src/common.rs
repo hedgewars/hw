@@ -114,7 +114,7 @@ pub struct GearDataLookup<T> {
 impl<T: Default + Copy> GearDataLookup<T> {
     pub fn new() -> Self {
         Self {
-            lookup: Vec::with_capacity(u16::max_value() as usize).into_boxed_slice()
+            lookup: vec![LookupEntry::default(); u16::max_value() as usize].into_boxed_slice(),
         }
     }
 }

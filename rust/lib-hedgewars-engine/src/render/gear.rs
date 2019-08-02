@@ -48,7 +48,7 @@ impl GearRenderer {
 
         let texture = Texture2D::new(max_size, gl::RGBA8, gl::LINEAR);
 
-        let mut pixels = Vec::with_capacity(max_size.area()).into_boxed_slice();
+        let mut pixels = vec![0; max_size.area() * 4].into_boxed_slice();
         for (path, sprite_index) in lookup.drain(..) {
             if let Some((atlas_index, rect)) = atlas.get_rect(sprite_index) {
                 load_sprite_pixels(&path, &mut pixels[..]).expect("Unable to load Graphics");
