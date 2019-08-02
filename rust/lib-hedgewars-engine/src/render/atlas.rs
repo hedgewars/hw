@@ -250,6 +250,10 @@ impl AtlasCollection {
         }
     }
 
+    pub fn get_rect(&self, index: SpriteIndex) -> Option<(u32, Rect)> {
+        self.rects.get(index as usize).cloned()
+    }
+
     pub fn used_space(&self) -> String {
         self.atlases
             .iter()

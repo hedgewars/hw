@@ -63,7 +63,7 @@ fn tex_params(filter: u32) {
 }
 
 impl Texture2D {
-    pub fn new(size: Size, internal_format: u32, format: u32, ty: u32, filter: u32) -> Self {
+    pub fn new(size: Size, internal_format: u32, filter: u32) -> Self {
         if let Some(handle) = new_texture() {
             unsafe {
                 gl::BindTexture(gl::TEXTURE_2D, handle.get());
@@ -74,8 +74,8 @@ impl Texture2D {
                     size.width as i32,
                     size.height as i32,
                     0,
-                    format as u32,
-                    ty,
+                    gl::RGBA,
+                    gl::UNSIGNED_BYTE,
                     std::ptr::null(),
                 )
             }

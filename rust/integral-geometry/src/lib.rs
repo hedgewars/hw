@@ -171,6 +171,14 @@ impl Size {
     pub fn contains(&self, other: Self) -> bool {
         self.width >= other.width && self.height >= other.height
     }
+
+    #[inline]
+    pub fn join(&self, other: Self) -> Self {
+        Self {
+            width: max(self.width, other.width),
+            height: max(self.height, other.height)
+        }
+    }
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
