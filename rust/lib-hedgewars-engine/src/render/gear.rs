@@ -24,7 +24,7 @@ struct SpriteData {
     filename: PathBuf,
 }
 
-const ATLAS_SIZE: Size = Size::square(2024);
+const ATLAS_SIZE: Size = Size::square(2048);
 
 impl GearRenderer {
     pub fn new() -> Self {
@@ -46,13 +46,27 @@ impl GearRenderer {
             atlas.used_space()
         );
 
-        let texture = Texture2D::new(max_size, gl::RGBA8, gl::LINEAR);
+        let texture = Texture2D::new(ATLAS_SIZE, gl::RGBA8, gl::LINEAR);
 
-        let mut pixels = vec![0; max_size.area() * 4].into_boxed_slice();
+        let mut pixels = vec![0; max_size.area()].into_boxed_slice();
+        let mut pixels_transposed = vec![0; max_size.area()].into_boxed_slice();
+
         for (path, sprite_index) in lookup.drain(..) {
             if let Some((atlas_index, rect)) = atlas.get_rect(sprite_index) {
-                load_sprite_pixels(&path, &mut pixels[..]).expect("Unable to load Graphics");
-                texture.update(rect, &pixels, 0, gl::RGBA, gl::UNSIGNED_BYTE);
+                let size = load_sprite_pixels(&path, mapgen::theme::slice_u32_to_u8_mut(&mut pixels[..])).expect("Unable to load Graphics");
+
+                let used_pixels = if size.width == rect.width() {
+                    for y in 0..rect.height() {
+                        for x in 0..rect.width() {
+                            pixels_transposed[y * rect.width() + x] = pixels[x * rect.height() + y];
+                        }
+                    }
+                    &mut pixels_transposed[..]
+                } else {
+                    &mut pixels[..]
+                };
+
+                texture.update(rect, mapgen::theme::slice_u32_to_u8_mut(used_pixels), 0, gl::RGBA, gl::UNSIGNED_BYTE);
             }
         }
 
@@ -64,13 +78,13 @@ impl GearRenderer {
     }
 }
 
-fn load_sprite_pixels(path: &Path, buffer: &mut [u8]) -> io::Result<()> {
+fn load_sprite_pixels(path: &Path, buffer: &mut [u8]) -> io::Result<Size> {
     let decoder = Decoder::new(BufReader::new(File::open(path)?));
     let (info, mut reader) = decoder.read_info()?;
 
     let size = Size::new(info.width as usize, info.height as usize);
     reader.next_frame(buffer)?;
-    Ok(())
+    Ok(size)
 }
 
 fn load_sprite_size(path: &Path) -> io::Result<Size> {
