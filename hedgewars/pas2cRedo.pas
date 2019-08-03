@@ -117,3 +117,4 @@ var
 
     GetCurrentDir : function : PChar;
 
+    glShaderSource : procedure;

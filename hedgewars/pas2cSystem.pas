@@ -90,7 +90,7 @@ var
     glBindRenderbufferEXT, glRenderbufferStorageEXT,
     glFramebufferRenderbufferEXT, glFramebufferTexture2DEXT,
     glUniformMatrix4fv, glVertexAttribPointer, glCreateShader,
-    glShaderSource, glCompileShader, glGetShaderiv, glGetShaderInfoLog,
+    {glShaderSource, }glCompileShader, glGetShaderiv, glGetShaderInfoLog,
     glCreateProgram, glAttachShader, glBindAttribLocation, glLinkProgram,
     glDeleteShader, glGetProgramiv, glGetProgramInfoLog, glUseProgram,
     glUniform1i, glGetUniformLocation, glEnableVertexAttribArray,
