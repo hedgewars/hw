@@ -14,8 +14,8 @@ void main()
 {
     if(enableTexture){
         if (tintAdd){
-            tint.a = 0.0;
-            gl_FragColor = clamp(texture2D(tex0, tex) + tint, 0.0, 1.1);
+            vec4 tint_ = vec4(tint.xyz, 0.0);
+            gl_FragColor = clamp(texture2D(tex0, tex) + tint_, 0.0, 1.1);
         }else{
             gl_FragColor = texture2D(tex0, tex) * tint;
         }
