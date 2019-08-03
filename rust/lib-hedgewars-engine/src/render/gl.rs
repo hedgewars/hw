@@ -134,11 +134,26 @@ impl Texture2D {
                     0,             // texture level
                     region.left(), // texture region
                     region.top(),
-                    region.right(),
-                    region.bottom(),
+                    region.width() as i32,
+                    region.height() as i32,
                     format,                    // data format
                     ty,                        // data type
                     data.as_ptr() as *const _, // data ptr
+                );
+            }
+        }
+    }
+
+    pub fn retrieve(&self, data: &mut [u8]) {
+        if let Some(handle) = self.handle {
+            unsafe {
+                gl::BindTexture(gl::TEXTURE_2D, handle.get());
+                gl::GetTexImage(
+                    gl::TEXTURE_2D,
+                    0,                           // texture level
+                    gl::RGBA,                    // data format
+                    gl::UNSIGNED_BYTE,           // data type
+                    data.as_mut_ptr() as *mut _, // data ptr
                 );
             }
         }
