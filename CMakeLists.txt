@@ -27,9 +27,9 @@ option(NOVIDEOREC "Disable video recording (off)" OFF)
 option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
 
 if(WIN32 OR APPLE)
-    option(LUA_SYSTEM "Use system lua (off)" OFF)
+    option(LUA_SYSTEM "Use system Lua (off)" OFF)
 else()
-    option(LUA_SYSTEM "Use system lua (on)" ON)
+    option(LUA_SYSTEM "Use system Lua (on)" ON)
 endif()
 
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library (off)" OFF)
@@ -40,8 +40,8 @@ option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 option(SKIPBUNDLE "Do not create relocate bundle (off)" OFF)
 
 option(BUILD_ENGINE_C "Compile hwengine as native C (off)" OFF)
-option(BUILD_ENGINE_JS "Compile hwengine as javascript (off)" OFF)
-option(GL2 "Enable OpenGL 2 rendering !!!EXPERIMENTAL - DO NOT USE!!! [default: off)" OFF)
+option(BUILD_ENGINE_JS "Compile hwengine as JavaScript (off)" OFF)
+option(GL2 "Enable OpenGL 2 rendering, only use if you know what you're doing (off)" OFF)
 
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
 if(UNIX AND NOT APPLE)
