@@ -55,7 +55,7 @@ impl GearRenderer {
             if let Some((atlas_index, rect)) = atlas.get_rect(sprite_index) {
                 let size = load_sprite_pixels(&path, mapgen::theme::slice_u32_to_u8_mut(&mut pixels[..])).expect("Unable to load Graphics");
 
-                let used_pixels = if size.width == rect.width() {
+                let used_pixels = if size.width != rect.width() {
                     for y in 0..rect.height() {
                         for x in 0..rect.width() {
                             pixels_transposed[y * rect.width() + x] = pixels[x * rect.height() + y];
