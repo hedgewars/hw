@@ -224,8 +224,8 @@ GLenum glewInit()
 {
     return GLEW_OK;
 }
-#else
+#endif
+
 void fpcrtl_glShaderSource(GLuint shader, GLsizei count,/* const dropped for pas2c compat */ GLchar **string, const GLint *length) {
     glShaderSource(shader, count, (const char * const *)string, length);
 }
-#endif
