@@ -4635,7 +4635,9 @@ begin
 
     if ((Gear^.State and gsttmpFlag) = 0)
     or (HHGear^.dY < _0) then
-        doStepHedgehogMoving(HHGear);
+        doStepHedgehogMoving(HHGear)
+    else
+        HHGear^.dX:= SignAs(_0, HHGear^.dX);
 
     if
         (HHGear^.Damage <> 0)
@@ -4680,7 +4682,6 @@ begin
         if (dY < _0_1) and (dY > -_0_1) then
             begin
             Gear^.State := Gear^.State or gsttmpFlag;
-            dX := SignAs(_0, dX);
             dY := dY - _0_2
             end
         end
