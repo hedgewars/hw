@@ -4619,8 +4619,12 @@ begin
         end;
 
     if (HHGear^.Message and (gmAttack or gmUp or gmLeft or gmRight) <> 0) and
-       (HHGear^.Message and gmPrecise = 0) then
+       (HHGear^.Message and gmPrecise = 0) and
+       ((Gear^.State and gsttmpFlag) <> 0) then
+        begin
         Gear^.State := Gear^.State and (not gsttmpFlag);
+        HHGear^.dX := Gear^.dX;
+        end;
 
     if HHGear^.Message and gmPrecise = 0 then
         HHGear^.Message := HHGear^.Message and (not (gmUp or gmLeft or gmRight));
@@ -4682,7 +4686,8 @@ begin
         if (dY < _0_1) and (dY > -_0_1) then
             begin
             Gear^.State := Gear^.State or gsttmpFlag;
-            dY := dY - _0_2
+            dY := dY - _0_2;
+            Gear^.dX:= dX;
             end
         end
 end;
