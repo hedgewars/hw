@@ -1056,18 +1056,18 @@ begin
 
     while Gear <> nil do
         begin
-        if (Gear^.Kind = gtAirMine) or ((Gear^.Kind = gtHedgehog) and (Gear^.CollisionIndex <> 0)) then
+        if (Gear^.Kind = gtAirMine) or ((Gear^.Kind = gtHedgehog) and (Gear^.CollisionIndex = 0)) then
             begin
             gx:= hwRound(Gear^.X);
             gy:= hwRound(Gear^.Y);
-            r:= Gear^.Radius;
+            r:= Gear^.Radius + 1;
             if (gx + r >= sprX) and (gx - r < sprX + w) and (gy + r >= sprY) and (gy - r < sprY + h) then
                 for y := gy - r to gy + r do
                     for x := gx - r to gx + r do
                         begin
                         if (x >= sprX) and (x < sprX + w) and (y >= sprY) and (y < sprY + h)
-                        and (Sqr(x - gx) + Sqr(y - gy) < Sqr(r))
-                        and (((PLongword(@(p^[Image^.pitch * y + x * 4]))^) and AMask) <> 0) then
+                        and (Sqr(x - gx) + Sqr(y - gy) <= Sqr(r))
+                        and (((PLongword(@(p^[Image^.pitch * (y - sprY) + (x - sprX) * 4]))^) and AMask) <> 0) then
                             begin
                             CheckGearsUnderSprite := true;
                             if SDL_MustLock(Image) then
