@@ -33,6 +33,7 @@ var
     cFullscreenHeight  : LongInt;
     cWindowedWidth     : LongInt;
     cWindowedHeight    : LongInt;
+    cWindowedMaximized : boolean;
     cScreenWidth       : LongInt;
     cScreenHeight      : LongInt;
     cNewScreenWidth    : LongInt;
@@ -2664,6 +2665,7 @@ begin
     cFullscreenHeight := 0;
     cWindowedWidth    := 1024;
     cWindowedHeight   := 768;
+    cWindowedMaximized:= false;
     cScreenWidth      := cWindowedWidth;
     cScreenHeight     := cWindowedHeight;
 

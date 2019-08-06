@@ -507,9 +507,20 @@ void HWGame::ParseMessage(const QByteArray & msg)
             // fetch new window resolution via IPC and save it in the settings
             int size = msg.size();
             QString newResolution = QString().append(msg.mid(2)).left(size - 4);
+            bool windowMaximized;
+            if (newResolution.endsWith('M'))
+            {
+                windowMaximized = true;
+                newResolution.chop(1);
+            }
+            else
+            {
+                windowMaximized = false;
+            }
             QStringList wh = newResolution.split('x');
             config->Form->ui.pageOptions->windowWidthEdit->setValue(wh[0].toInt());
             config->Form->ui.pageOptions->windowHeightEdit->setValue(wh[1].toInt());
+            config->vid_SetMaximized(windowMaximized);
             break;
         }
         case '~':
@@ -609,6 +620,8 @@ QStringList HWGame::getArguments()
     arguments << QString::number(resolutions.second.width());
     arguments << "--height";
     arguments << QString::number(resolutions.second.height());
+    if (config->vid_Maximized())
+        arguments << "--maximized";
     if (config->zoom() != 100) {
         arguments << "--zoom";
         arguments << QString::number(config->zoom());

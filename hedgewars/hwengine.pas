@@ -230,11 +230,14 @@ game to freeze if one online player minimizes Hedgewars. *)
                                 begin
                                 if GameState = gsSuspend then
                                     GameState:= previousGameState;
+                                cWindowedMaximized:= false;
 {$IFDEF ANDROID}
                                 //This call is used to reinitialize the glcontext and reload the textures
                                 ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
 {$ENDIF}
                                 end;
+                        SDL_WINDOWEVENT_MAXIMIZED:
+                                cWindowedMaximized:= true;
                         SDL_WINDOWEVENT_RESIZED:
                                 begin
                                 cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
@@ -302,12 +305,18 @@ game to freeze if one online player minimizes Hedgewars. *)
             cScreenHeight:= cWindowedHeight;
 
             ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
-            WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
+            if cWindowedMaximized then
+                WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight) + ' (maximized)')
+            else
+                WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
             ScriptOnScreenResize();
             InitCameraBorders();
             InitTouchInterface();
             InitZoom(zoomValue);
-            SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
+            if cWindowedMaximized then
+                SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight) + 'M')
+            else
+                SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
         end;
 
         CurrTime:= SDL_GetTicks();

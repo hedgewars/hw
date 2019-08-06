@@ -156,6 +156,7 @@ Frontend:
  + Visual notification when someone joins the room online
  + Display recommended max. hedgehog count for Perlin maps
  + Various minor style tweaks
+ + Remember maximized state of frontend/game window
  * Fix broken handling of /watch chat command on official server
  * Fix renaming a video leading to loss of thumbnail after restart
  * Fix controls list failing to display correct key names with regards to keyboard layout
