@@ -230,6 +230,10 @@ void GameUIConfig::resizeToConfigValues()
     const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
     Form->resize(value("frontend/width", qMin(qMax(deskSize.width()*2/3,800),deskSize.width())).toUInt(),
                  value("frontend/height", qMin(qMax(deskSize.height()*2/3,600),deskSize.height())).toUInt());
+    if(value("frontend/maximized", false) == true)
+        Form->setWindowState(Form->windowState() | Qt::WindowMaximized);
+    else
+        Form->setWindowState(Form->windowState() & ~Qt::WindowMaximized);
 
     // move the window to the center of the screen
     QPoint center = HWApplication::desktop()->availableGeometry(-1).center();
@@ -260,6 +264,7 @@ void GameUIConfig::SaveOptions()
     {
         setValue("frontend/width", Form->width());
         setValue("frontend/height", Form->height());
+        setValue("frontend/maximized", (Form->windowState() & Qt::WindowMaximized) != 0);
     }
     else
     {
