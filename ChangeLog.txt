@@ -41,6 +41,7 @@ Gameplay:
  * Fix jump key not being ignored after placing girder or target
  * Fix buggy hog when hog took damage during "idle" phase in kamikaze attack
  * Fix movement stopping when activating flying saucer after long jump
+ * Girder/rubber can no longer be placed inside moving hogs and land objects
 
 Styles and schemes:
  + The Specialists: Unlock game scheme

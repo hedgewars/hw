@@ -1056,7 +1056,8 @@ begin
 
     while Gear <> nil do
         begin
-        if (Gear^.Kind = gtAirMine) or ((Gear^.Kind = gtHedgehog) and (Gear^.CollisionIndex = 0)) then
+        if (Gear^.Kind in [gtCase, gtExplosives, gtTarget, gtKnife, gtMine, gtAirMine, gtSMine]) or
+            ((Gear^.Kind = gtHedgehog) and (Gear^.CollisionIndex = 0)) then
             begin
             gx:= hwRound(Gear^.X);
             gy:= hwRound(Gear^.Y);
