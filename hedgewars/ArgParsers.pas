@@ -130,14 +130,6 @@ begin
     helpCommandUsed:= true;
 end;
 
-procedure setDepth(var paramIndex: LongInt);
-begin
-    WriteLn(stdout, 'WARNING: --depth is a deprecated command, which could be removed in a future version!');
-    WriteLn(stdout, '         This option no longer does anything, please consider removing it.');
-    WriteLn(stdout, '');
-   inc(ParamIndex);
-end;
-
 procedure statsOnlyGame;
 begin
     cOnlyStats:= true;
@@ -250,20 +242,12 @@ begin
     ZoomValue:= UserZoom;
 end;
 
-procedure parseClassicParameter(cmdarray: array of string; size:LongInt; var paramIndex:LongInt); forward;
-
 function parseParameter(cmd:string; arg:string; var paramIndex:LongInt): Boolean;
-const videoarray: array [0..5] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--maximized', '--depth');
-      audioarray: array [0..2] of string = ('--volume','--nomusic','--nosound');
-      otherarray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
-      mediaarray: array [0..10] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--maximized', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allarray: array [0..19] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--maximized', '--depth', '--volume','--nomusic','--nosound','--nodampen','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..40] of shortstring = (
+const reallyAll: array[0..34] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--maximized', '--frame-interval', '--volume','--nomusic', '--nosound', '--nodampen',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
                 '--zoom',
-  {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
   {misc}        '--stats-only', '--gci', '--help','--protocol', '--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test','--no-holiday-silliness');
 var cmdIndex: byte;
@@ -297,29 +281,22 @@ begin
         {--stereo}              18 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
         {--nick}                19 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
         {--zoom}                20 : setZoom(arg, paramIndex, parseParameter);
-        {deprecated options}
-        {--depth}               21 : setDepth(paramIndex);
-        {--set-video}           22 : parseClassicParameter(videoarray,5,paramIndex);
-        {--set-audio}           23 : parseClassicParameter(audioarray,3,paramIndex);
-        {--set-other}           24 : parseClassicParameter(otherarray,3,paramIndex);
-        {--set-multimedia}      25 : parseClassicParameter(mediaarray,10,paramIndex);
-        {--set-everything}      26 : parseClassicParameter(allarray,14,paramIndex);
         {"internal" options}
-        {--internal}            27 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
-        {--port}                28 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
-        {--recorder}            29 : startVideoRecording(paramIndex);
-        {--landpreview}         30 : GameType := gmtLandPreview;
+        {--internal}            21 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
+        {--port}                22 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
+        {--recorder}            23 : startVideoRecording(paramIndex);
+        {--landpreview}         24 : GameType := gmtLandPreview;
         {anything else}
-        {--stats-only}          31 : statsOnlyGame();
-        {--gci}                 32 : GciEasterEgg();
-        {--help}                33 : DisplayUsage();
-        {--protocol}            34 : DisplayProtocol();
-        {--no-teamtag}          35 : cTagsMask := cTagsMask and (not htTeamName);
-        {--no-hogtag}           36 : cTagsMask := cTagsMask and (not htName);
-        {--no-healthtag}        37 : cTagsMask := cTagsMask and (not htHealth);
-        {--translucent-tags}    38 : cTagsMask := cTagsMask or htTransparent;
-        {--lua-test}            39 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
-        {--no-holiday-silliness} 40 : cHolidaySilliness:= false;
+        {--stats-only}          25 : statsOnlyGame();
+        {--gci}                 26 : GciEasterEgg();
+        {--help}                27 : DisplayUsage();
+        {--protocol}            28 : DisplayProtocol();
+        {--no-teamtag}          29 : cTagsMask := cTagsMask and (not htTeamName);
+        {--no-hogtag}           30 : cTagsMask := cTagsMask and (not htName);
+        {--no-healthtag}        31 : cTagsMask := cTagsMask and (not htHealth);
+        {--translucent-tags}    32 : cTagsMask := cTagsMask or htTransparent;
+        {--lua-test}            33 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--no-holiday-silliness} 34 : cHolidaySilliness:= false;
     else
         begin
         //Assume the first "non parameter" is the demo file, anything else is invalid
@@ -334,48 +311,6 @@ begin
     end;
 end;
 
-procedure parseClassicParameter(cmdarray: array of string; size:LongInt; var paramIndex:LongInt);
-var index, tmpInt: LongInt;
-    isBool, isValid: Boolean;
-    cmd, arg, newSyntax: string;
-begin
-    WriteLn(stdout, 'WARNING: You are using a deprecated command, which could be removed in a future version!');
-    WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');
-    WriteLn(stdout, '         Run "hwegine --help" to learn it!');
-    WriteLn(stdout, '');
-
-    index:= 0;
-    tmpInt:= 1;
-    while (index < size) do
-        begin
-        newSyntax:= '';
-        inc(paramIndex);
-        cmd:= cmdarray[index];
-        arg:= cmdarray[paramIndex];
-        isValid:= (cmd<>'--depth');
-
-        // check if the parameter is a boolean one
-        isBool:= (cmd = '--nomusic') or (cmd = '--nosound') or (cmd = '--nodampen') or (cmd = '--maximized') or (cmd = '--fullscreen') or (cmd = '--showfps') or (cmd = '--altdmg') or (cmd = '--no-teamtag') or (cmd = '--no-hogtag') or (cmd = '--no-healthtag') or (cmd = '--translucent-tags');
-        if isBool and (arg='0') then
-            isValid:= false;
-        if (cmd='--nomusic') or (cmd='--nosound') or (cmd='--nodampen') then
-            isValid:= not isValid;
-
-        if isValid then
-            begin
-            parseParameter(cmd, arg, tmpInt);
-            newSyntax:= newSyntax + cmd + ' ';
-            if not isBool then
-                newSyntax:= newSyntax + arg + ' ';
-            end;
-        inc(index);
-        end;
-
-    WriteLn(stdout, 'Attempted to automatically convert to the new syntax:');
-    WriteLn(stdout, newSyntax);
-    WriteLn(stdout, '');
-end;
-
 procedure parseCommandLine;
 var paramIndex: LongInt;
     paramTotal: LongInt;
@@ -386,15 +321,6 @@ begin
 
     paramIndex:= {$IFDEF HWLIBRARY}0{$ELSE}1{$ENDIF};
     paramTotal:= ParamCount; //-1 because pascal enumeration is inclusive
-    (*
-    WriteLn(stdout, 'total parameters: ' + inttostr(paramTotal));
-    tmpInt:= 0;
-    while (tmpInt <= paramTotal) do
-        begin
-        WriteLn(stdout, inttostr(tmpInt) + ': ' + {$IFDEF HWLIBRARY}argv[tmpInt]{$ELSE}paramCount(tmpInt){$ENDIF});
-        inc(tmpInt);
-        end;
-    *)
     wrongParameter:= false;
     while (paramIndex <= paramTotal) do
         begin
@@ -437,10 +363,6 @@ begin
     if (GameType = gmtBadSyntax) then
         WriteLn(stderr, 'Please use --help to see possible arguments and their usage.');
 
-    (*
-    WriteLn(stdout,'PathPrefix:     ' + PathPrefix);
-    WriteLn(stdout,'UserPathPrefix: ' + UserPathPrefix);
-    *)
 end;
 
 end.

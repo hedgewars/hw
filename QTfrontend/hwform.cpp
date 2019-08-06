@@ -2303,7 +2303,6 @@ void HWForm::UpdateCampaignPageProgress(int index)
         ui.pageCampaign->CBCampaign->setItemIcon(c, notFinishedIcon);
 }
 
-// used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
 QString HWForm::getDemoArguments()
 {
 
