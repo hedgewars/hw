@@ -56,7 +56,7 @@ type
             sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR,
             sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMSlotKeys, sprAMCorners,
             sprFinger, sprAirBomb, sprAirplane, sprAmAirplane, sprAmGirder,
-            sprHHTelepMask, sprSwitch, sprParachute, sprTarget, sprRopeNode,
+            sprHHTelepMask, sprSwitch, sprSwitchBack, sprParachute, sprTarget, sprRopeNode,
             sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
 {$IFDEF USE_TOUCH_INTERFACE}
             sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,

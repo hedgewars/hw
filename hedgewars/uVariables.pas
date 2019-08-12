@@ -468,6 +468,8 @@ const
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; critical: true; checkSum: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHHTelepMask
             (FileName:     'Switch'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSwitch
+            (FileName:     'SwitchBack'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSwitchBack
             (FileName:  'Parachute'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprParachute
             (FileName:     'Target'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;

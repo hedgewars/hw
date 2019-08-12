@@ -1543,6 +1543,12 @@ begin
                     end;
         gtSwitcher: begin
                     setTintAdd(true);
+                    if IsTooDarkToRead(Gear^.Hedgehog^.Team^.Clan^.Color) then
+                        Tint($FFFFFFFF)
+                    else
+                        Tint($000000FF);
+                    DrawSprite(sprSwitchBack, x - 16, y - 56, (RealTicks shr 6) mod 12);
+
                     Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
                     DrawSprite(sprSwitch, x - 16, y - 56, (RealTicks shr 6) mod 12);
                     untint;
