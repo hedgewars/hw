@@ -89,3 +89,4 @@ rust/*/target
 *.user
 *.iml
 build-qmlfrontend*
+build/
