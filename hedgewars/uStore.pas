@@ -861,7 +861,9 @@ begin
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);         // no depth buffer
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);         // no alpha channel
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16);       // buffer should be 16
-    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // prefer hw rendering
+{$IFNDEF DARWIN}
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // force hw rendering except on macOS
+{$ENDIF}
 end;
 
 procedure SetupOpenGL;
