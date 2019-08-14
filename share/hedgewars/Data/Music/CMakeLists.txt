@@ -1,4 +1,4 @@
-file(GLOB BaseMusic *.ogg *.opus)
+file(GLOB BaseMusic *.ogg)
 
 install(FILES
     ${BaseMusic}
