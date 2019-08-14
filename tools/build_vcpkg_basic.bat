@@ -1,6 +1,6 @@
 @echo off
 ::edit these variables if necessary
-set BUILD_TYPE="Debug"
+set BUILD_TYPE="Release"
 ::set if vcpkg is not on path
 set VCPKG_PATH=%VCPKG_ROOT%
 ::set if CMake is not on path
@@ -17,7 +17,7 @@ set PATH=%PASCAL_PATH%;%VCPKG_PATH%;%CMAKE_PATH%;%PATH%
 echo Running cmake...
 set ERRORLEVEL=
 
-cmake . -DCMAKE_TOOLCHAIN_FILE="%VCPKG_PATH%\scripts\buildsystems\vcpkg.cmake" -G"NMake Makefiles" -DNOPNG=1 -DNOSERVER=1 -DNOVIDEOREC=1 -DCMAKE_BUILD_TYPE="%BUILD_TYPE%" -DSDL2_BUILDING_LIBRARY=1
+cmake . -DCMAKE_TOOLCHAIN_FILE="%VCPKG_PATH%\scripts\buildsystems\vcpkg.cmake" -G"NMake Makefiles"  -DNOSERVER=1 -DNOVIDEOREC=1 -DCMAKE_BUILD_TYPE="%BUILD_TYPE%" -DSDL2_BUILDING_LIBRARY=1
 
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
@@ -31,6 +31,8 @@ nmake
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
 echo Build completed successfully
+
+nmake install
 
 :exitpoint
 cd %CURRDIR%
