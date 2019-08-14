@@ -56,11 +56,16 @@ interface
     type PLongInt = ^LongInt;
 {$ENDIF}
 
+{$IFDEF WIN32_VCPKG}
+{$IFDEF DEBUG}
+    {$DEFINE VCPKG_DEBUG}
+{$ENDIF}
+{$ENDIF}
 
 (*  SDL  *)
 const
 {$IFDEF WINDOWS}
-    SDLLibName = 'SDL2.dll';
+    SDLLibName = {$IFDEF VCPKG_DEBUG}'SDL2d.dll'{$ELSE}'SDL2.dll'{$ENDIF};
     SDL_TTFLibName = 'SDL2_ttf.dll';
     SDL_MixerLibName = 'SDL2_mixer.dll';
     SDL_ImageLibName = 'SDL2_image.dll';
