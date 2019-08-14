@@ -191,6 +191,7 @@ endforeach(loop_var)
 
 if (WIN32 AND VCPKG_TOOLCHAIN)
     add_definitions(-dWIN32_VCPKG)
+    add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-dVCPKG_DEBUG")
 endif()
 
 

@@ -56,12 +56,6 @@ interface
     type PLongInt = ^LongInt;
 {$ENDIF}
 
-{$IFDEF WIN32_VCPKG}
-{$IFDEF DEBUG}
-    {$DEFINE VCPKG_DEBUG}
-{$ENDIF}
-{$ENDIF}
-
 (*  SDL  *)
 const
 {$IFDEF WINDOWS}
