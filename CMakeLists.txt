@@ -20,7 +20,9 @@ include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #possible cmake configuration
 option(NOSERVER "Disable gameServer build (off)" OFF)
-option(NOPNG "Disable screenshoot compression (off)" OFF)
+if(NOT WIN32)
+    option(NOPNG "Disable screenshoot compression (off)" OFF)
+endif()
 option(NOVIDEOREC "Disable video recording (off)" OFF)
 
 #libraries are built shared unless explicitly added as a static

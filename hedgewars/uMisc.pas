@@ -99,8 +99,41 @@ Dispose(image);
 SaveScreenshot:= 0;
 end;
 
-{$ELSE} // no PNG_SCREENSHOTS
+{$ELSE} //PNG_SCREENSHOTS
+{$IFDEF WINDOWS}
+function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
+var
+    surface: PSDL_Surface;
+    image: PScreenshot;
+    mirror: PByte;
+    row, stride: LongInt;
+begin
+    image:= PScreenshot(screenshot);
+    mirror:= PByte(GetMem(image^.size));
+    stride:= image^.width * 4;
 
+    for row:= 0 to image^.height - 1 do
+        Move((image^.buffer + row * stride)^,
+             (mirror + (image^.height - row - 1) * stride)^,
+             stride);
+
+    surface:= SDL_CreateRGBSurfaceFrom(
+        mirror,
+        image^.width, image^.height, 32, image^.width * 4,
+        $000000FF, $0000FF00, $00FF0000, $FF000000);
+
+    if surface <> nil then
+        begin
+        IMG_SavePNG(surface, Str2PChar(image^.filename));
+        SDL_FreeSurface(surface);
+        end;
+
+    FreeMem(mirror, image^.size);
+    FreeMem(image^.buffer, image^.size);
+    Dispose(image);
+    SaveScreenshot:= 0;
+end;
+{$ELSE} //WINDOWS
 // this funtion will be executed in separate thread
 function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
 var f: file;
@@ -169,7 +202,8 @@ Dispose(image);
 SaveScreenshot:= 0;
 end;
 
-{$ENDIF} // no PNG_SCREENSHOTS
+{$ENDIF} // WINDOWS
+{$ENDIF} // PNG_SCREENSHOTS
 
 {$IFDEF USE_VIDEO_RECORDING}
 // make image k times smaller (useful for saving thumbnails)
@@ -218,8 +252,13 @@ begin
 format:= GL_RGBA;
 ext:= '.png';
 {$ELSE}
+{$IFDEF WINDOWS}
+format:= GL_RGBA;
+ext:= '.png';
+{$ELSE}
 format:= GL_BGRA;
 ext:= '.bmp';
+{$ENDIF}
 {$ENDIF}
 
 if dump > 0 then

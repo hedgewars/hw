@@ -144,13 +144,15 @@ if(LIBAV_FOUND)
     add_definitions(-dUSE_VIDEO_RECORDING)
 endif()
 
-find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
-if(PNG_FOUND)
-    list(INSERT engine_sources 0 PNGh.pas)
-    list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
-    get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS "-k-L${PNG_LIBRARY_DIR} -Fl${PNG_LIBRARY_DIR}")
-    add_definitions(-dPNG_SCREENSHOTS)
+if(NOT WIN32)
+    find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
+    if(PNG_FOUND)
+        list(INSERT engine_sources 0 PNGh.pas)
+        list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
+        get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-L${PNG_LIBRARY_DIR} -Fl${PNG_LIBRARY_DIR}")
+        add_definitions(-dPNG_SCREENSHOTS)
+    endif()
 endif()
 
 if(LUA_SYSTEM)
