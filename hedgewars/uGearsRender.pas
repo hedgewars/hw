@@ -1547,10 +1547,10 @@ begin
                         Tint($FFFFFFFF)
                     else
                         Tint($000000FF);
-                    DrawSpriteRotatedF(sprSwitchBack, x, y - 40, 0, 0, (RealTicks shr 2) mod 360);
+                    DrawSpriteRotatedF(sprSwitchBack, x + 1, y - 40, 0, 0, (RealTicks div 5) mod 360);
 
                     Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
-                    DrawSpriteRotatedF(sprSwitch, x, y - 40, 0, 0, (RealTicks shr 2) mod 360);
+                    DrawSpriteRotatedF(sprSwitch, x + 1, y - 40, 0, 0, (RealTicks div 5) mod 360);
                     untint;
                     setTintAdd(false);
                     end;
