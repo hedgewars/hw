@@ -1,33 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   id="svg846"
-   version="1.1"
-   width="40"
-   viewBox="0 0 38.717269 40.141553"
-   height="40">
-  <defs
-     id="defs850" />
-  <metadata
-     id="metadata834">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-        <cc:license
-           rdf:resource="" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <path
-     id="path1168"
-     d="m 15.507879,4.1897282 -0.0059,4.850169 A 11.890786,11.890786 0 0 0 7.4827571,20.269221 11.890786,11.890786 0 0 0 15.86032,31.616276 l 7.299998,4.686695 0.0029,-4.77443 A 11.890786,11.890786 0 0 0 31.264178,20.269221 11.890786,11.890786 0 0 0 20.861213,8.4872412 Z m 5.725269,8.8777268 a 7.3191032,7.3191032 0 0 1 5.471063,7.072038 7.3191032,7.3191032 0 0 1 -3.538642,6.259176 l 0.0014,-2.284857 -4.378497,3.31518 a 7.3191032,7.3191032 0 0 1 -6.722553,-7.289499 7.3191032,7.3191032 0 0 1 3.429162,-6.195438 l -0.0037,2.86376 z"
-     style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.42808867;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" height="100%" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 213 213"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil1 {fill:red}
+    .fil0 {fill:black;fill-rule:nonzero}
+   ]]>
+  </style>
+ </defs>
+ <g id="Background">
+  <path class="fil0" d="M118 44l16 17c1,1 2,2 3,3l0 1c0,1 0,2 0,3 0,2 0,3 0,4 -1,2 -2,3 -3,4l-17 16c-1,2 -2,3 -4,3 -1,1 -3,1 -5,0l-1 0c-1,0 -3,-1 -4,-2l0 0c-1,-1 -2,-2 -3,-4l-1 -1c-2,1 -5,2 -7,5 -4,3 -6,8 -6,14 0,1 0,2 0,3 1,1 1,2 1,3 2,5 0,10 -5,11l-18 6c-5,1 -9,-1 -11,-5l0 -1c-1,-2 -1,-5 -2,-8 0,-3 -1,-6 -1,-9 0,-16 6,-29 16,-39 9,-9 20,-15 32,-17 1,-1 1,-2 2,-3l1 -2c0,-1 1,-2 2,-3l1 -1c1,0 3,-1 4,-1l0 0c2,0 4,0 5,0 2,1 3,2 5,3l0 0zm-22 125l-17 -16c-1,-1 -2,-2 -2,-4l-1 0c0,-2 0,-3 0,-4 0,-1 0,-3 1,-4 0,-1 1,-2 2,-3l17 -17c1,-1 3,-2 4,-3 2,0 4,0 5,0l2 0c1,1 2,1 3,2l0 0c1,1 2,2 3,4l1 2c3,-1 5,-3 7,-5 4,-4 6,-9 6,-14 0,-2 0,-3 0,-4 0,-1 -1,-2 -1,-3 -2,-4 1,-9 5,-11l19 -6c4,-1 9,1 10,6l0 0c1,3 2,6 2,8 1,4 1,7 1,10 0,15 -6,29 -16,39 -8,8 -20,14 -32,16 -1,1 -1,2 -2,4l0 1c-1,1 -2,2 -3,3l-1 1c-1,1 -2,1 -4,1l0 0c-1,1 -3,1 -5,0 -1,0 -3,-1 -4,-3l0 0z"/>
+ </g>
+ <g id="Foreground">
+  <path class="fil1" d="M112 50l16 16c1,1 1,1 1,2 0,1 0,1 -1,2 -5,5 -11,11 -16,17 -1,0 -2,0 -2,0 -1,0 -2,0 -2,-1 -1,-3 -2,-4 -3,-8 -15,1 -27,13 -27,29 0,3 0,6 2,9l-19 6c-1,-5 -2,-10 -2,-15 0,-26 20,-47 46,-48 1,-4 2,-6 3,-9 0,0 1,-1 2,-1 0,0 1,0 2,1zm-10 114l-17 -17c-1,-1 -1,-1 -1,-2 0,0 0,-1 1,-1 6,-6 11,-12 17,-17 0,-1 1,-1 2,-1 1,0 1,1 2,1 1,3 2,4 2,8 15,0 27,-13 27,-28 0,-4 0,-7 -1,-10l18 -6c2,5 3,10 3,16 0,26 -21,47 -47,47 0,5 -1,6 -2,9 -1,1 -1,1 -2,1 -1,0 -2,0 -2,0z"/>
+ </g>
 </svg>

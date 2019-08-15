@@ -123,6 +123,7 @@ Game HUD:
  + Display laser sight icon above wind bar when laser sight utility is active
  + Display selected weapon above hedgehog for some weapons/tools
  + Change cursor of piano strike
+ + New style for switching arrows
  + Colorize switching arrows, pointing arrow and target cross in clan color
  + Skip ammo menu animation when playing with turn time of 10s or less
  + Don't show crate spawn message for initial crates in missions
