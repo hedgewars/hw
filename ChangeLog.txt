@@ -141,6 +141,7 @@ Game HUD:
  * Suppress “<team> is gone.” message at end of game
  * Fix game engine ignoring appropriate number formatting of user language
  * Fix buggy behaviour when entering speech bubble command in hog placement phase
+ * Fix switching arrows overlapping hedgehog tags of own hedgehog
 
 Translations:
  + Complete: German, Polish

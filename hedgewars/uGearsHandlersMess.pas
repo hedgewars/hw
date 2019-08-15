@@ -3478,6 +3478,7 @@ begin
         HHGear := CurrentHedgehog^.Gear;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
         DeleteGear(Gear);
+        bShowSwitcher:= false;
         exit
         end;
 
@@ -3538,6 +3539,9 @@ var
     HHGear: PGear;
 begin
     Gear^.doStep := @doStepSwitcherWork;
+
+    // Note: The game assumes there's at most only one gtSwitcher gear in the game.
+    bShowSwitcher:= true;
 
     HHGear := Gear^.Hedgehog^.Gear;
     OnUsedAmmo(HHGear^.Hedgehog^);

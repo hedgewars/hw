@@ -2577,6 +2577,7 @@ var
     bShowAmmoMenu: boolean;
     bSelected: boolean;
     bShowFinger: boolean;
+    bShowSwitcher: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
     SDTint, SkyColor, RQSkyColor, SDSkyColor: TSDL_Color;
