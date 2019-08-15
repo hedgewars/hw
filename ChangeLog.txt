@@ -172,10 +172,14 @@ Sounds and voicepacks:
  + Add underwater sound for airplane
  + Tweak some taunts: sndFirstBlood, sndLeaveMeAlone, sndCutItOut
  * Fix English voicepack selection of team being overwritten when playing in non-English locale
+ * Remove Coward.ogg in Default_es voicepack, it contained an insult
 
 Theme customization
  + Default fallback Sudden Death music of themes (fallback-sd-music) is now sdmusic.ogg
  + Make rope stylable by theme: Support for RopeNode.png and rope-step in theme.cfg
+
+Other game media:
+ + New hat: zoo_crocodile
 
 Lua API:
  + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)
