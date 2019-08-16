@@ -214,6 +214,11 @@ if(BUILD_ENGINE_LIBRARY)
     set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar};${CMAKE_CURRENT_SOURCE_DIR}/hwengine.pas")
     add_library(hwengine SHARED hwLibrary.pas)
 else()
+    if(APPLE)
+        # Handle large linker install_names
+        add_flag_prepend(CMAKE_Pascal_FLAGS "-k-headerpad_max_install_names")
+    endif()
+
     # no need to change name here because target has same name
     set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
     set(destination_dir ${target_binary_install_dir})
