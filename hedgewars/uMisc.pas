@@ -105,21 +105,29 @@ function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
 var
     surface: PSDL_Surface;
     image: PScreenshot;
-    mirror: PByte;
+    rowBuffer: PByte;
     row, stride: LongInt;
 begin
     image:= PScreenshot(screenshot);
-    mirror:= PByte(GetMem(image^.size));
     stride:= image^.width * 4;
+    rowBuffer:= PByte(GetMem(stride));
 
-    for row:= 0 to image^.height - 1 do
-        Move((image^.buffer + row * stride)^,
-             (mirror + (image^.height - row - 1) * stride)^,
+    for row:= 0 to (image^.height div 2) - 1 do
+        begin
+        Move((image^.buffer + (image^.height - row - 1) * stride)^,
+             rowBuffer^,
              stride);
+        Move((image^.buffer + row * stride)^,
+             (image^.buffer + (image^.height - row - 1) * stride)^,
+             stride);
+        Move(rowBuffer^,
+             (image^.buffer + row * stride)^,
+             stride);
+        end;
 
     surface:= SDL_CreateRGBSurfaceFrom(
-        mirror,
-        image^.width, image^.height, 32, image^.width * 4,
+        image^.buffer,
+        image^.width, image^.height, 32, stride,
         $000000FF, $0000FF00, $00FF0000, $FF000000);
 
     if surface <> nil then
@@ -128,7 +136,7 @@ begin
         SDL_FreeSurface(surface);
         end;
 
-    FreeMem(mirror, image^.size);
+    FreeMem(rowBuffer, stride);
     FreeMem(image^.buffer, image^.size);
     Dispose(image);
     SaveScreenshot:= 0;
