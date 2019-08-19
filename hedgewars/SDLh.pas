@@ -218,6 +218,7 @@ const
     GShift = 8;
     BShift = 16;
     AShift = 24;
+    AByteIndex = 0;
 {$ELSE}
     RMask = $FF000000;
     GMask = $00FF0000;
@@ -227,6 +228,7 @@ const
     GShift = 16;
     BShift = 8;
     AShift = 0;
+    AByteIndex = 3;
 {$ENDIF}
 
     KMOD_NONE   = $0000;

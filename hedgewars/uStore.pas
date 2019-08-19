@@ -433,7 +433,10 @@ for ii:= Low(TSprite) to High(TSprite) do
                 tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags);
                 if (tmpsurf <> nil) and checkSum then
                     for y := 0 to tmpsurf^.h-1 do
-                        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w*4)
+                        begin
+                        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w*4);
+                        AddFileLog(FileName + ': ' + IntToStr(syncedPixelDigest));
+                        end;
                 end;
 
             if tmpsurf <> nil then

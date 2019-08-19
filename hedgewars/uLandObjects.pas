@@ -346,10 +346,14 @@ begin
     CountNonZeroz:= lRes;
 end;
 
-procedure ChecksumLandObjectImage(Image: PSDL_Surface);
-var y: LongInt;
+procedure ChecksumLandObjectImage(Image: PSDL_Surface; alphaOnly: boolean);
+var y, x: LongInt;
+var rowData: PByte;
 begin
     if Image = nil then exit;
+
+    if alphaOnly then
+        rowData := GetMem(Image^.w);
 
     if SDL_MustLock(Image) then
         SDL_LockSurface(Image);
@@ -361,11 +365,25 @@ begin
         exit
     end;
 
-    for y := 0 to Image^.h-1 do
-        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Image^.pixels)^[y*Image^.pitch], Image^.w*4);
+    for y := 0 to Image^.h - 1 do
+        begin
+        if alphaOnly then
+            begin
+            for x := 0 to Image^.w - 1 do
+                (rowData + x)^:= (PByte(Image^.pixels) + y * Image^.pitch + x * 4 + AByteIndex)^;
+            syncedPixelDigest:= Adler32Update(syncedPixelDigest, rowData, Image^.w);
+            end
+        else
+            syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Image^.pixels)^[y*Image^.pitch], Image^.w*4);
+
+        AddFileLog(IntToStr(syncedPixelDigest));
+        end;
 
     if SDL_MustLock(Image) then
         SDL_UnlockSurface(Image);
+
+    if alphaOnly then
+        FreeMem(rowData, Image^.w);
 end;
 
 function AddGirder(gX: LongInt; var girSurf: PSDL_Surface): boolean;
@@ -376,7 +394,7 @@ begin
 if girSurf = nil then
     girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
 
-ChecksumLandObjectImage(girsurf);
+ChecksumLandObjectImage(girsurf, true);
 
 girderHeight:= girSurf^.h;
 
@@ -735,7 +753,7 @@ with overlay do
     Width:= Surf^.w;
     Height:= Surf^.h;
     Delete(s, 1, i);
-    ChecksumLandObjectImage(Surf);
+    ChecksumLandObjectImage(Surf, true);
     end;
 end;
 
@@ -945,8 +963,8 @@ while (not pfsEOF(f)) and allOK do
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Broken theme. Object''s max. count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-            ChecksumLandObjectImage(Surf);
-            ChecksumLandObjectImage(Mask);
+            ChecksumLandObjectImage(Surf, true);
+            ChecksumLandObjectImage(Mask, false);
 
             inrectcnt := 0;
 
