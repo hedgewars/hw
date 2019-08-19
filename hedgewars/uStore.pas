@@ -385,7 +385,8 @@ procedure StoreLoad(reload: boolean);
 var ii: TSprite;
     ai: TAmmoType;
     tmpsurf, tmpoverlay: PSDL_Surface;
-    i, y, imflags: LongInt;
+    i, y, x, imflags: LongInt;
+    rowData: PByte;
     keyConfirm, keyQuit: shortstring;
 begin
 AddFileLog('StoreLoad()');
@@ -432,11 +433,17 @@ for ii:= Low(TSprite) to High(TSprite) do
                 // load the image
                 tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags);
                 if (tmpsurf <> nil) and checkSum then
+                    begin
+                    rowData := GetMem(tmpsurf^.w);
                     for y := 0 to tmpsurf^.h-1 do
                         begin
-                        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w*4);
+                        for x := 0 to tmpsurf^.w - 1 do
+                            (rowData + x)^:= (PByte(tmpsurf^.pixels) + y * tmpsurf^.pitch + x * 4 + AByteIndex)^;
+                        syncedPixelDigest:= Adler32Update(syncedPixelDigest, rowData, tmpsurf^.w);
                         AddFileLog(FileName + ': ' + IntToStr(syncedPixelDigest));
                         end;
+                    FreeMem(rowData, tmpsurf^.w);
+                    end;
                 end;
 
             if tmpsurf <> nil then
