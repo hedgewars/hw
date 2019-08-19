@@ -366,7 +366,6 @@ begin
     end;
 
     for y := 0 to Image^.h - 1 do
-        begin
         if alphaOnly then
             begin
             for x := 0 to Image^.w - 1 do
@@ -375,9 +374,6 @@ begin
             end
         else
             syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Image^.pixels)^[y*Image^.pitch], Image^.w*4);
-
-        AddFileLog(IntToStr(syncedPixelDigest));
-        end;
 
     if SDL_MustLock(Image) then
         SDL_UnlockSurface(Image);
