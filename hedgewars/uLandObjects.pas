@@ -959,7 +959,8 @@ while (not pfsEOF(f)) and allOK do
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Broken theme. Object''s max. count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-            ChecksumLandObjectImage(Surf, true);
+            if Mask = nil then
+                ChecksumLandObjectImage(Surf, true);
             ChecksumLandObjectImage(Mask, false);
 
             inrectcnt := 0;
