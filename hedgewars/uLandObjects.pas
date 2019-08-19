@@ -89,18 +89,18 @@ begin
     // this an if instead of masking colours to avoid confusing map creators
     if ((AMask and Pixel) = 0) then
         LandWord:= 0
-    else if Pixel = $FFFFFFFF then                  // white
+    else if (Pixel and AMask > 0) and (Pixel and RMask > 0) and (Pixel and GMask > 0) and (Pixel and BMask > 0) then // whiteish
         LandWord:= lfObject
-    else if Pixel = AMask then                      // black
+    else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask = 0) and (Pixel and BMask = 0) then // blackish
         begin
         LandWord:= lfBasic;
         disableLandBack:= false
         end
-    else if Pixel = (AMask or RMask) then           // red
+    else if (Pixel and AMask > 0) and (Pixel and RMask > 0) and (Pixel and GMask = 0) and (Pixel and BMask = 0) then // reddish
         LandWord:= lfIndestructible
-    else if Pixel = (AMask or BMask) then           // blue
+    else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask = 0) and (Pixel and BMask > 0) then // blueish
         LandWord:= lfObject or lfIce
-    else if Pixel = (AMask or GMask) then           // green
+    else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask > 0) and (Pixel and BMask = 0) then // greenish
         LandWord:= lfObject or lfBouncy
 end;
 
