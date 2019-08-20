@@ -17,7 +17,7 @@ set PATH=%PASCAL_PATH%;%VCPKG_PATH%;%CMAKE_PATH%;%PATH%
 echo Running cmake...
 set ERRORLEVEL=
 
-cmake . -DCMAKE_TOOLCHAIN_FILE="%VCPKG_PATH%\scripts\buildsystems\vcpkg.cmake" -G"NMake Makefiles" -DCMAKE_BUILD_TYPE="%BUILD_TYPE%" -DSDL2_BUILDING_LIBRARY=1
+cmake . -DCMAKE_TOOLCHAIN_FILE="%VCPKG_PATH%\scripts\buildsystems\vcpkg.cmake" -G"NMake Makefiles" -DNOSERVER=1 -DCMAKE_BUILD_TYPE="%BUILD_TYPE%" -DSDL2_BUILDING_LIBRARY=1
 
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
