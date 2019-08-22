@@ -194,6 +194,9 @@ if (WIN32 AND VCPKG_TOOLCHAIN)
     add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-dVCPKG_DEBUG")
 endif()
 
+if (WIN32_WIN64_CROSS_COMPILE)
+    add_flag_append(CMAKE_Pascal_FLAGS "-Px86_64 -Twin64")
+endif()
 
 #SOURCE AND PROGRAMS SECTION
 if(BUILD_ENGINE_LIBRARY)
