@@ -438,7 +438,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                     for y := 0 to tmpsurf^.h-1 do
                         begin
                         for x := 0 to tmpsurf^.w - 1 do
-                            (rowData + x)^:= (PByte(tmpsurf^.pixels) + y * tmpsurf^.pitch + x * 4 + AByteIndex)^;
+                            PByteArray(rowData)^[x] := PByteArray(tmpsurf^.pixels)^[y * tmpsurf^.pitch + x * 4 + AByteIndex];
                         syncedPixelDigest:= Adler32Update(syncedPixelDigest, rowData, tmpsurf^.w);
                         end;
                     FreeMem(rowData, tmpsurf^.w);

@@ -369,7 +369,7 @@ begin
         if alphaOnly then
             begin
             for x := 0 to Image^.w - 1 do
-                (rowData + x)^:= (PByte(Image^.pixels) + y * Image^.pitch + x * 4 + AByteIndex)^;
+                PByteArray(rowData)^[x] := PByteArray(Image^.pixels)^[y * Image^.pitch + x * 4 + AByteIndex];
             syncedPixelDigest:= Adler32Update(syncedPixelDigest, rowData, Image^.w);
             end
         else
