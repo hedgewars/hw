@@ -348,7 +348,7 @@ end;
 
 procedure ChecksumLandObjectImage(Image: PSDL_Surface; alphaOnly: boolean);
 var y, x: LongInt;
-var rowData: PByte;
+var rowData: PByteArray;
 begin
     if Image = nil then exit;
 
@@ -369,7 +369,7 @@ begin
         if alphaOnly then
             begin
             for x := 0 to Image^.w - 1 do
-                PByteArray(rowData)^[x] := PByteArray(Image^.pixels)^[y * Image^.pitch + x * 4 + AByteIndex];
+                rowData^[x] := PByteArray(Image^.pixels)^[y * Image^.pitch + x * 4 + AByteIndex];
             syncedPixelDigest:= Adler32Update(syncedPixelDigest, rowData, Image^.w);
             end
         else
