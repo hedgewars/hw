@@ -84,6 +84,7 @@ impl World {
 mod tests {
     use crate::{
         collision::{CircleBounds, CollisionData},
+        common::Millis,
         physics::PhysicsData,
         World,
     };
@@ -96,7 +97,7 @@ mod tests {
         let world_size = Size::new(2048, 2048);
 
         let mut world = World::new(world_size);
-        let gear_id = 46631;
+        let gear_id = std::num::NonZeroU16::new(46631).unwrap();
 
         world.add_gear_data(
             gear_id,
@@ -118,6 +119,6 @@ mod tests {
 
         let land = Land2D::new(Size::new(world_size.width - 2, world_size.height - 2), 0);
 
-        world.step(fp!(1), &land);
+        world.step(Millis::new(1), &land);
     }
 }
