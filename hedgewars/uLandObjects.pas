@@ -36,7 +36,7 @@ procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
      , uTypes, uVariables, uDebug, uUtils
-     , uPhysFSLayer, adler32, uRenderUtils;
+     , uPhysFSLayer, uRenderUtils;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -346,51 +346,13 @@ begin
     CountNonZeroz:= lRes;
 end;
 
-procedure ChecksumLandObjectImage(Image: PSDL_Surface; alphaOnly: boolean);
-var y, x: LongInt;
-var rowData: PByteArray;
-begin
-    if Image = nil then exit;
-
-    if alphaOnly then
-        rowData := GetMem(Image^.w);
-
-    if SDL_MustLock(Image) then
-        SDL_LockSurface(Image);
-
-    if checkFails(Image^.format^.BytesPerPixel = 4, 'Land object image should be 32bit', true) then
-    begin
-        if SDL_MustLock(Image) then
-            SDL_UnlockSurface(Image);
-        exit
-    end;
-
-    for y := 0 to Image^.h - 1 do
-        if alphaOnly then
-            begin
-            for x := 0 to Image^.w - 1 do
-                rowData^[x] := PByteArray(Image^.pixels)^[y * Image^.pitch + x * 4 + AByteIndex];
-            syncedPixelDigest:= Adler32Update(syncedPixelDigest, rowData, Image^.w);
-            end
-        else
-            syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Image^.pixels)^[y*Image^.pitch], Image^.w*4);
-
-    if SDL_MustLock(Image) then
-        SDL_UnlockSurface(Image);
-
-    if alphaOnly then
-        FreeMem(rowData, Image^.w);
-end;
-
 function AddGirder(gX: LongInt; var girSurf: PSDL_Surface): boolean;
 var x1, x2, y, k, i, girderHeight: LongInt;
     rr: TSDL_Rect;
     bRes: boolean;
 begin
 if girSurf = nil then
-    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
-
-ChecksumLandObjectImage(girsurf, true);
+    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps or ifDigestAlpha);
 
 girderHeight:= girSurf^.h;
 
@@ -745,11 +707,10 @@ with overlay do
     Delete(s, 1, i);
     i:= Pos(',', s);
     if i = 0 then i:= Succ(Length(S));
-    Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps or ifCritical);
+    Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps or ifCritical or ifDigestAlpha );
     Width:= Surf^.w;
     Height:= Surf^.h;
     Delete(s, 1, i);
-    ChecksumLandObjectImage(Surf, true);
     end;
 end;
 
@@ -949,19 +910,22 @@ while (not pfsEOF(f)) and allOK do
             begin
             i:= Pos(',', s);
             Name:= Trim(Copy(s, 1, Pred(i)));
-            Surf:= LoadDataImage(ptCurrTheme, Name, ifColorKey or ifIgnoreCaps or ifCritical);
+
+            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifColorKey or ifIgnoreCaps or ifDigestAll);
+            if Mask = nil then
+                Surf:= LoadDataImage(ptCurrTheme, Name, ifColorKey or ifIgnoreCaps or ifCritical or ifDigestAlpha)
+            else
+                Surf:= LoadDataImage(ptCurrTheme, Name, ifColorKey or ifIgnoreCaps or ifCritical);
+
             Width:= Surf^.w;
             Height:= Surf^.h;
-            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifColorKey or ifIgnoreCaps);
+
             Delete(s, 1, i);
             i:= Pos(',', s);
             Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Broken theme. Object''s max. count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-            if Mask = nil then
-                ChecksumLandObjectImage(Surf, true);
-            ChecksumLandObjectImage(Mask, false);
 
             inrectcnt := 0;
 
