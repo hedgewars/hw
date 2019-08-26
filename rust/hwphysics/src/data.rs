@@ -10,9 +10,9 @@ use std::{
 pub unsafe trait TypeTuple: Sized {
     fn len() -> usize;
     fn get_types(dest: &mut Vec<TypeId>);
-    unsafe fn iter<F>(slices: &[NonNull<u8>], count: usize, f: F)
+    unsafe fn iter<F>(slices: &[NonNull<u8>], count: usize, mut f: F)
     where
-        F: Fn(Self);
+        F: FnMut(Self);
 }
 
 unsafe impl<T: 'static> TypeTuple for (&T,) {
@@ -24,9 +24,9 @@ unsafe impl<T: 'static> TypeTuple for (&T,) {
         dest.push(TypeId::of::<T>());
     }
 
-    unsafe fn iter<F>(slices: &[NonNull<u8>], count: usize, f: F)
+    unsafe fn iter<F>(slices: &[NonNull<u8>], count: usize, mut f: F)
     where
-        F: Fn(Self),
+        F: FnMut(Self),
     {
         let slice1 = slice::from_raw_parts(slices[0].as_ptr() as *const T, count);
         for i in 0..count {
@@ -41,7 +41,7 @@ struct DataBlock {
     max_elements: u16,
     elements_count: u16,
     data: Box<[u8; BLOCK_SIZE]>,
-    blocks: [Option<NonNull<u8>>; 64],
+    component_blocks: [Option<NonNull<u8>>; 64],
 }
 
 impl Unpin for DataBlock {}
@@ -51,7 +51,7 @@ impl DataBlock {
         let total_size: u16 = element_sizes
             .iter()
             .enumerate()
-            .filter(|(i, _)| mask & (164 << *i as u64) != 0)
+            .filter(|(i, _)| mask & (1 << *i as u64) != 0)
             .map(|(_, size)| *size)
             .sum();
         let max_elements = (BLOCK_SIZE / total_size as usize) as u16;
@@ -62,7 +62,7 @@ impl DataBlock {
         let mut offset = 0;
 
         for i in 0..64 {
-            if mask & (164 << i) != 0 {
+            if mask & (1 << i) != 0 {
                 blocks[i] = Some(NonNull::new(data[offset..].as_mut_ptr()).unwrap());
                 offset += element_sizes[i] as usize * max_elements as usize;
             }
@@ -71,7 +71,7 @@ impl DataBlock {
             elements_count: 0,
             max_elements,
             data,
-            blocks,
+            component_blocks: blocks,
         }
     }
 
@@ -123,11 +123,11 @@ impl GearDataManager {
         debug_assert!(!destination.is_full());
 
         for i in 0..64 {
-            if source_mask & 1u64 << i != 0 {
+            if source_mask & 1 << i != 0 {
                 unsafe {
                     copy_nonoverlapping(
-                        source.blocks[i].unwrap().as_ptr(),
-                        destination.blocks[i].unwrap().as_ptr(),
+                        source.component_blocks[i].unwrap().as_ptr(),
+                        destination.component_blocks[i].unwrap().as_ptr(),
                         self.element_sizes[i] as usize,
                     );
                 }
@@ -159,7 +159,7 @@ impl GearDataManager {
 
         for (i, size) in self.element_sizes.iter().cloned().enumerate() {
             if index < block.elements_count - 1 {
-                if let Some(ptr) = block.blocks[i] {
+                if let Some(ptr) = block.component_blocks[i] {
                     unsafe {
                         copy_nonoverlapping(
                             ptr.as_ptr()
@@ -175,7 +175,7 @@ impl GearDataManager {
     }
 
     #[inline]
-    fn ensure_group(&mut self, mask: u64) -> u16 {
+    fn ensure_block(&mut self, mask: u64) -> u16 {
         if let Some(index) = self
             .block_masks
             .iter()
@@ -185,13 +185,14 @@ impl GearDataManager {
             index as u16
         } else {
             self.blocks.push(DataBlock::new(mask, &self.element_sizes));
+            self.block_masks.push(mask);
             (self.blocks.len() - 1) as u16
         }
     }
 
     pub fn add<T: Clone + 'static>(&mut self, gear_id: GearId, value: &T) {
         if let Some(type_index) = self.get_type_index::<T>() {
-            let type_bit = 1u64 << type_index as u64;
+            let type_bit = 1 << type_index as u64;
             let entry = self.lookup[gear_id.get() as usize - 1];
 
             if let Some(index) = entry.index {
@@ -199,11 +200,11 @@ impl GearDataManager {
                 let new_mask = mask | type_bit;
 
                 if new_mask != mask {
-                    let dest_block_index = self.ensure_group(new_mask);
+                    let dest_block_index = self.ensure_block(new_mask);
                     self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
                 }
             } else {
-                let dest_block_index = self.ensure_group(type_bit);
+                let dest_block_index = self.ensure_block(type_bit);
                 self.add_to_block(dest_block_index, value);
             }
         } else {
@@ -216,12 +217,12 @@ impl GearDataManager {
             let entry = self.lookup[gear_id.get() as usize - 1];
             if let Some(index) = entry.index {
                 let destination_mask =
-                    self.block_masks[entry.block_index as usize] & !(1u64 << type_index as u64);
+                    self.block_masks[entry.block_index as usize] & !(1 << type_index as u64);
 
                 if destination_mask == 0 {
                     self.remove_all(gear_id)
                 } else {
-                    let destination_block_index = self.ensure_group(destination_mask);
+                    let destination_block_index = self.ensure_block(destination_mask);
                     self.move_between_blocks(
                         entry.block_index,
                         index.get() - 1,
@@ -254,16 +255,16 @@ impl GearDataManager {
     }
 
     fn create_selector(&self, types: &[TypeId]) -> u64 {
-        let mut selector = 0u64;
+        let mut selector = 0;
         for (i, typ) in self.types.iter().enumerate() {
             if types.contains(&typ) {
-                selector |= 1u64 << (i as u64)
+                selector |= 1 << (i as u64)
             }
         }
         selector
     }
 
-    pub fn iter<T: TypeTuple + 'static, F: Fn(T) + Copy>(&self, f: F) {
+    pub fn iter<T: TypeTuple + 'static, F: FnMut(T)>(&self, mut f: F) {
         let mut types = vec![];
         T::get_types(&mut types);
         debug_assert!(types.iter().all(|t| self.types.contains(t)));
@@ -271,13 +272,21 @@ impl GearDataManager {
         let types_count = types.len();
         let selector = self.create_selector(&types);
 
+        let mut slices = Vec::with_capacity(64);
+
         for (block_index, mask) in self.block_masks.iter().enumerate() {
             if mask & selector == selector {
+                slices.clear();
                 let block = &self.blocks[block_index];
-                for element_index in 0..block.max_elements {
-                    unsafe {
-                        T::iter(unimplemented!(), block.elements_count as usize, f);
+
+                for (i, ptr_opt) in block.component_blocks.iter().cloned().enumerate() {
+                    if let Some(ptr) = ptr_opt {
+                        slices.push(ptr);
                     }
+                }
+
+                unsafe {
+                    T::iter(&slices[..], block.elements_count as usize, |x| f(x));
                 }
             }
         }
@@ -286,16 +295,26 @@ impl GearDataManager {
 
 #[cfg(test)]
 mod test {
-    use super::GearDataManager;
+    use super::{super::common::GearId, GearDataManager};
 
+    #[derive(Clone)]
     struct Datum {
         value: u32,
     }
 
     #[test]
-    fn iteration() {
+    fn single_component_iteration() {
+        assert!(std::mem::size_of::<Datum>() > 0);
+
         let mut manager = GearDataManager::new();
         manager.register::<Datum>();
-        manager.iter(|d: (&Datum,)| {});
+        for i in 1..=5 {
+            manager.add(GearId::new(i as u16).unwrap(), &Datum { value: i });
+        }
+
+        let mut sum = 0;
+        manager.iter(|(d,): (&Datum,)| sum += d.value);
+
+        assert_eq!(sum, 15);
     }
 }
