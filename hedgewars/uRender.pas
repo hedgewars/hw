@@ -520,14 +520,6 @@ begin
 
 {$IFDEF GL2}
 
-{$IFDEF PAS2C}
-    if glewInit() <> GLEW_OK then
-        begin
-        WriteLnToConsole('Failed to initialize GLEW.');
-        halt(HaltStartupError);
-        end;
-{$ENDIF}
-
 {$IFNDEF PAS2C}
     if not Load_GL_VERSION_2_0 then
         begin
