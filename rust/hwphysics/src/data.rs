@@ -3,7 +3,7 @@ use std::{
     any::TypeId,
     mem::{size_of, MaybeUninit},
     num::NonZeroU16,
-    ptr::NonNull,
+    ptr::{copy_nonoverlapping, NonNull},
     slice,
 };
 
@@ -57,7 +57,7 @@ impl DataBlock {
         let max_elements = (BLOCK_SIZE / total_size as usize) as u16;
 
         let mut data: Box<[u8; BLOCK_SIZE]> =
-            Box::new(unsafe { std::mem::MaybeUninit::uninit().assume_init() });
+            Box::new(unsafe { MaybeUninit::uninit().assume_init() });
         let mut blocks = [None; 64];
         let mut offset = 0;
 
@@ -112,15 +112,29 @@ impl GearDataManager {
     }
 
     fn move_between_blocks(&mut self, from_block_index: u16, from_index: u16, to_block_index: u16) {
+        debug_assert!(from_block_index != to_block_index);
         let source_mask = self.block_masks[from_block_index as usize];
         let destination_mask = self.block_masks[to_block_index as usize];
         debug_assert!(source_mask & destination_mask == source_mask);
 
         let source = &self.blocks[from_block_index as usize];
         let destination = &self.blocks[to_block_index as usize];
+        debug_assert!(from_index < source.elements_count);
+        debug_assert!(!destination.is_full());
+
         for i in 0..64 {
-            unimplemented!()
+            if source_mask & 1u64 << i != 0 {
+                unsafe {
+                    copy_nonoverlapping(
+                        source.blocks[i].unwrap().as_ptr(),
+                        destination.blocks[i].unwrap().as_ptr(),
+                        self.element_sizes[i] as usize,
+                    );
+                }
+            }
         }
+        self.blocks[from_block_index as usize].elements_count -= 1;
+        self.blocks[to_block_index as usize].elements_count += 1;
     }
 
     fn add_to_block<T: Clone>(&mut self, block_index: u16, value: &T) {
@@ -145,9 +159,9 @@ impl GearDataManager {
 
         for (i, size) in self.element_sizes.iter().cloned().enumerate() {
             if index < block.elements_count - 1 {
-                if let Some(mut ptr) = block.blocks[i] {
+                if let Some(ptr) = block.blocks[i] {
                     unsafe {
-                        std::ptr::copy_nonoverlapping(
+                        copy_nonoverlapping(
                             ptr.as_ptr()
                                 .add((size * (block.elements_count - 1)) as usize),
                             ptr.as_ptr().add((size * index) as usize),
@@ -201,8 +215,29 @@ impl GearDataManager {
         if let Some(type_index) = self.get_type_index::<T>() {
             let entry = self.lookup[gear_id.get() as usize - 1];
             if let Some(index) = entry.index {
-                self.remove_from_block(entry.block_index, index.get() - 1);
+                let destination_mask =
+                    self.block_masks[entry.block_index as usize] & !(1u64 << type_index as u64);
+
+                if destination_mask == 0 {
+                    self.remove_all(gear_id)
+                } else {
+                    let destination_block_index = self.ensure_group(destination_mask);
+                    self.move_between_blocks(
+                        entry.block_index,
+                        index.get() - 1,
+                        destination_block_index,
+                    );
+                }
             }
+        } else {
+            panic!("Unregistered type")
+        }
+    }
+
+    pub fn remove_all(&mut self, gear_id: GearId) {
+        let entry = self.lookup[gear_id.get() as usize - 1];
+        if let Some(index) = entry.index {
+            self.remove_from_block(entry.block_index, index.get() - 1);
         }
     }
 
