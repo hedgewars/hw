@@ -1,6 +1,5 @@
 #the usual set of dependencies
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer 2 REQUIRED)
 find_package(SDL2_net 2 REQUIRED)
@@ -8,7 +7,6 @@ find_package(SDL2_image 2 REQUIRED)
 find_package(SDL2_ttf 2 REQUIRED)
 
 #compile our rtl implementation
-include_directories(${GLEW_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/rtl)
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${PHYSLAYER_INCLUDE_DIR})
@@ -115,7 +113,6 @@ target_link_libraries(hwengine  fpcrtl
                                 ${SDL2_NET_LIBRARIES}
                                 ${SDL2_IMAGE_LIBRARIES}
                                 ${SDL2_TTF_LIBRARIES}
-                                ${GLEW_LIBRARY}
                                 physfs
                                 physlayer
                                 m
