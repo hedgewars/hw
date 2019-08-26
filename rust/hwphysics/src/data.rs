@@ -7,7 +7,7 @@ use std::{
     slice,
 };
 
-pub trait TypeTuple: Sized {
+pub unsafe trait TypeTuple: Sized {
     fn len() -> usize;
     fn get_types(dest: &mut Vec<TypeId>);
     unsafe fn iter<F>(slices: &[NonNull<u8>], count: usize, f: F)
@@ -15,7 +15,7 @@ pub trait TypeTuple: Sized {
         F: Fn(Self);
 }
 
-impl<T: 'static> TypeTuple for (&T,) {
+unsafe impl<T: 'static> TypeTuple for (&T,) {
     fn len() -> usize {
         1
     }
@@ -123,12 +123,41 @@ impl GearDataManager {
         }
     }
 
-    fn add_to_block<T>(&mut self, block_index: u16, value: &T) {
-        unimplemented!()
+    fn add_to_block<T: Clone>(&mut self, block_index: u16, value: &T) {
+        debug_assert!(self.block_masks[block_index as usize].count_ones() == 1);
+
+        let block = &mut self.blocks[block_index as usize];
+        debug_assert!(block.elements_count < block.max_elements);
+
+        unsafe {
+            let slice = slice::from_raw_parts_mut(
+                block.data.as_mut_ptr() as *mut T,
+                block.max_elements as usize,
+            );
+            *slice.get_unchecked_mut(block.elements_count as usize) = value.clone();
+        };
+        block.elements_count += 1;
     }
 
     fn remove_from_block(&mut self, block_index: u16, index: u16) {
-        unimplemented!()
+        let block = &mut self.blocks[block_index as usize];
+        debug_assert!(index < block.elements_count);
+
+        for (i, size) in self.element_sizes.iter().cloned().enumerate() {
+            if index < block.elements_count - 1 {
+                if let Some(mut ptr) = block.blocks[i] {
+                    unsafe {
+                        std::ptr::copy_nonoverlapping(
+                            ptr.as_ptr()
+                                .add((size * (block.elements_count - 1)) as usize),
+                            ptr.as_ptr().add((size * index) as usize),
+                            size as usize,
+                        );
+                    }
+                }
+            }
+        }
+        block.elements_count -= 1;
     }
 
     #[inline]
@@ -178,9 +207,9 @@ impl GearDataManager {
     }
 
     pub fn register<T: 'static>(&mut self) {
-        assert!(!std::mem::needs_drop::<T>());
-        assert!(self.types.len() <= 64);
-        assert!(size_of::<T>() <= u16::max_value() as usize);
+        debug_assert!(!std::mem::needs_drop::<T>());
+        debug_assert!(self.types.len() <= 64);
+        debug_assert!(size_of::<T>() <= u16::max_value() as usize);
 
         let id = TypeId::of::<T>();
         if !self.types.contains(&id) {
@@ -202,14 +231,18 @@ impl GearDataManager {
     pub fn iter<T: TypeTuple + 'static, F: Fn(T) + Copy>(&self, f: F) {
         let mut types = vec![];
         T::get_types(&mut types);
-        let types_count = types.len();
+        debug_assert!(types.iter().all(|t| self.types.contains(t)));
 
+        let types_count = types.len();
         let selector = self.create_selector(&types);
+
         for (block_index, mask) in self.block_masks.iter().enumerate() {
             if mask & selector == selector {
                 let block = &self.blocks[block_index];
                 for element_index in 0..block.max_elements {
-                    unimplemented!()
+                    unsafe {
+                        T::iter(unimplemented!(), block.elements_count as usize, f);
+                    }
                 }
             }
         }
