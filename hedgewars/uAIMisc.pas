@@ -799,7 +799,7 @@ for i:= 0 to Targets.Count do
                         begin
                         dead:= true;
                         Targets.reset:= true;
-                        if dX < 0.035 then
+                        if gdX < 0.035 then
                             begin
                             subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall);
                             if abs(subrate) > 2000 then inc(Rate,subrate div 1024)
