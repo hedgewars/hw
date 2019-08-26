@@ -276,7 +276,7 @@ while t <> nil do
             end;
         if curHandledGear^.Active then
             begin
-            if curHandledGear^.RenderTimer then
+            if (not cOnlyStats) and curHandledGear^.RenderTimer then
                 begin
                 // Mine timer
                 if (curHandledGear^.Kind in [gtMine, gtSMine, gtAirMine]) then

@@ -2185,6 +2185,7 @@ end;
 
 procedure freeModule;
 begin
+    if cOnlyStats then exit;
 {$IFDEF GL2}
     glDeleteProgram(shaderMain);
     glDeleteProgram(shaderWater);

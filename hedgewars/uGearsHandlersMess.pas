@@ -2422,7 +2422,7 @@ begin
         doStepCase(Gear)
     else
         // health texture (FlightTime = health when the last texture was generated)
-        if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
+        if (not cOnlyStats) and ((Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil)) then
             begin
             Gear^.FlightTime:= Gear^.Health;
             FreeAndNilTexture(Gear^.Tex);
@@ -2500,7 +2500,7 @@ begin
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0;
         // health texture (FlightTime = health when the last texture was generated)
-        if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
+        if (not cOnlyStats) and ((Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil)) then
             begin
             Gear^.FlightTime:= Gear^.Health;
             FreeAndNilTexture(Gear^.Tex);
@@ -2523,12 +2523,14 @@ begin
                         i:= 1
                     else
                         i:= 0
+				else if cOnlyStats then
+					i:= 0
                 // Always show health (default)
                 else
                     i:= 1;
                 if i = 1 then
                     begin
-                    if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
+                    if (not cOnlyStats) and ((Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil)) then
                         begin
                         Gear^.FlightTime:= Gear^.Health;
                         FreeAndNilTexture(Gear^.Tex);
@@ -2537,7 +2539,7 @@ begin
                     end
                 else
                     begin
-                    if (Gear^.FlightTime <> $ffffffff) or (Gear^.Tex = nil) then
+                    if (not cOnlyStats) and ((Gear^.FlightTime <> $ffffffff) or (Gear^.Tex = nil)) then
                         begin
                         Gear^.FlightTime:= $ffffffff;
                         FreeAndNilTexture(Gear^.Tex);
@@ -4615,7 +4617,7 @@ begin
 
     i:= Gear^.Health div 20;
 
-    if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+    if (not cOnlyStats) and (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
         begin
         Gear^.Damage:= i;
         FreeAndNilTexture(Gear^.Tex);
@@ -5887,7 +5889,7 @@ begin
     else
         begin
         i:= Gear^.Health div 5;
-        if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+        if (not cOnlyStats) and (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
             FreeAndNilTexture(Gear^.Tex);
@@ -5978,7 +5980,7 @@ begin
     else
         begin
         i:= Gear^.Health div 10;
-        if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+        if (not cOnlyStats) and (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
             FreeAndNilTexture(Gear^.Tex);
@@ -6497,7 +6499,7 @@ var
   t:LongInt;
 begin
     t:= Gear^.Health div 10;
-    if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+    if (not cOnlyStats) and (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
     begin
     Gear^.Damage:= t;
     FreeAndNilTexture(Gear^.Tex);
