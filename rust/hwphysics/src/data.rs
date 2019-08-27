@@ -85,8 +85,8 @@ impl DataBlock {
         let mut blocks = [None; 64];
         let mut offset = 0;
 
-        for i in 0..64 {
-            if mask & (1 << i) != 0 {
+        for i in 0..element_sizes.len() {
+            if mask & (1 << i as u64) != 0 {
                 blocks[i] = Some(NonNull::new(data[offset..].as_mut_ptr()).unwrap());
                 offset += element_sizes[i] as usize * max_elements as usize;
             }
@@ -135,7 +135,12 @@ impl GearDataManager {
         self.types.iter().position(|id| *id == type_id)
     }
 
-    fn move_between_blocks(&mut self, from_block_index: u16, from_index: u16, to_block_index: u16) {
+    fn move_between_blocks(
+        &mut self,
+        from_block_index: u16,
+        from_index: u16,
+        to_block_index: u16,
+    ) -> u16 {
         debug_assert!(from_block_index != to_block_index);
         let source_mask = self.block_masks[from_block_index as usize];
         let destination_mask = self.block_masks[to_block_index as usize];
@@ -146,22 +151,31 @@ impl GearDataManager {
         debug_assert!(from_index < source.elements_count);
         debug_assert!(!destination.is_full());
 
-        for i in 0..64 {
-            if source_mask & 1 << i != 0 {
+        let to_index = destination.elements_count;
+        for i in 0..self.types.len() {
+            if source_mask & 1 << i as u64 != 0 {
                 unsafe {
                     copy_nonoverlapping(
-                        source.component_blocks[i].unwrap().as_ptr(),
-                        destination.component_blocks[i].unwrap().as_ptr(),
+                        source.component_blocks[i]
+                            .unwrap()
+                            .as_ptr()
+                            .add((from_index * self.element_sizes[i]) as usize),
+                        destination.component_blocks[i]
+                            .unwrap()
+                            .as_ptr()
+                            .add((to_index * self.element_sizes[i]) as usize),
                         self.element_sizes[i] as usize,
                     );
                 }
             }
         }
         self.blocks[from_block_index as usize].elements_count -= 1;
-        self.blocks[to_block_index as usize].elements_count += 1;
+        let destination = &mut self.blocks[to_block_index as usize];
+        destination.elements_count += 1;
+        destination.elements_count - 1
     }
 
-    fn add_to_block<T: Clone>(&mut self, block_index: u16, value: &T) {
+    fn add_to_block<T: Clone>(&mut self, block_index: u16, value: &T) -> u16 {
         debug_assert!(self.block_masks[block_index as usize].count_ones() == 1);
 
         let block = &mut self.blocks[block_index as usize];
@@ -175,6 +189,7 @@ impl GearDataManager {
             *slice.get_unchecked_mut(block.elements_count as usize) = value.clone();
         };
         block.elements_count += 1;
+        block.elements_count - 1
     }
 
     fn remove_from_block(&mut self, block_index: u16, index: u16) {
@@ -225,11 +240,25 @@ impl GearDataManager {
 
                 if new_mask != mask {
                     let dest_block_index = self.ensure_block(new_mask);
-                    self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
+                    let dest_index = self.move_between_blocks(
+                        entry.block_index,
+                        index.get() - 1,
+                        dest_block_index,
+                    );
+                    self.lookup[gear_id.get() as usize - 1] = LookupEntry {
+                        index: unsafe {
+                            Some(NonZeroU16::new_unchecked(dest_index.saturating_add(1)))
+                        },
+                        block_index: dest_block_index,
+                    }
                 }
             } else {
                 let dest_block_index = self.ensure_block(type_bit);
-                self.add_to_block(dest_block_index, value);
+                let index = self.add_to_block(dest_block_index, value);
+                self.lookup[gear_id.get() as usize - 1] = LookupEntry {
+                    index: unsafe { Some(NonZeroU16::new_unchecked(index.saturating_add(1))) },
+                    block_index: dest_block_index,
+                }
             }
         } else {
             panic!("Unregistered type")
@@ -264,6 +293,10 @@ impl GearDataManager {
         if let Some(index) = entry.index {
             self.remove_from_block(entry.block_index, index.get() - 1);
         }
+        self.lookup[gear_id.get() as usize - 1] = LookupEntry {
+            index: None,
+            block_index: 0,
+        }
     }
 
     pub fn register<T: 'static>(&mut self) {
@@ -290,18 +323,17 @@ impl GearDataManager {
                 Some(i) if selector & 1 << i as u64 != 0 => panic!("Duplicate type"),
                 Some(i) => {
                     type_indices[arg_index] = i as i8;
-                    selector &= 1 << i as u64;
+                    selector |= 1 << i as u64;
                 }
                 None => panic!("Unregistered type"),
             }
         }
-
         let mut slices = vec![null_mut(); arg_types.len()];
 
         for (block_index, mask) in self.block_masks.iter().enumerate() {
             if mask & selector == selector {
                 let block = &self.blocks[block_index];
-
+                block.elements_count;
                 for (arg_index, type_index) in type_indices.iter().cloned().enumerate() {
                     slices[arg_index as usize] = block.component_blocks[type_index as usize]
                         .unwrap()
