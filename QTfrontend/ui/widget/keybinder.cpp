@@ -209,7 +209,12 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         curTable->insertRow(row);
         curTable->setItem(row, 0, nameCell);
         QTableWidgetItem * bindCell;
-        if (cbinds[i].action != "!MULTI")
+        // Check if the bind text is bad. This was discovered after the 1.0.0,
+        // so we need a little workaround.
+        bool is_broken_strbind = cbinds[i].strbind == "precise + switch + toggle hedgehog tags";
+                                                    // ^ should be "precise + switch + toggle team bars"
+        // TODO: Remove is_broken_strbind after 1.0.0 release.
+        if (cbinds[i].action != "!MULTI" && (!is_broken_strbind))
         {
             bindCell = new QTableWidgetItem(comboBox->currentText());
             nameCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -218,7 +223,19 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         }
         else
         {
-            bindCell = new QTableWidgetItem(HWApplication::translate("binds (combination)", cbinds[i].strbind.toUtf8().constData()));
+            // Apply workaround for the broken 1.0.0 strbind
+            // TODO: Remove the workaround after 1.0.0 release and fix binds.cpp accordingly.
+            if (is_broken_strbind)
+            {
+                // We simply construct the string from other strings we *do* have. :-)
+                QString cellText =
+                    HWApplication::translate("binds", "precise aim") + " + " +
+                    HWApplication::translate("binds", "switch") + " + " +
+                    HWApplication::translate("binds", "toggle team bars");
+                bindCell = new QTableWidgetItem(cellText);
+            }
+            else
+                bindCell = new QTableWidgetItem(HWApplication::translate("binds (combination)", cbinds[i].strbind.toUtf8().constData()));
             nameCell->setFlags(Qt::NoItemFlags);
             bindCell->setFlags(Qt::NoItemFlags);
             bindCell->setIcon(emptyIcon);
