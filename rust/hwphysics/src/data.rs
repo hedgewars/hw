@@ -13,41 +13,41 @@ pub trait TypeTuple: Sized {
     unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F);
 }
 
-macro_rules! type_typle_impl {
-    ($($n: literal: $t: ident),*) => {
-        impl<$($t: 'static),*> TypeTuple for ($(&$t),*,) {
+macro_rules! type_tuple_impl {
+    ($($n: literal: $t: ident),+) => {
+        impl<$($t: 'static),+> TypeTuple for ($(&$t),+,) {
             fn len() -> usize {
-                [$({TypeId::of::<$t>(); 1}),*].iter().sum()
+                [$({TypeId::of::<$t>(); 1}),+].iter().sum()
             }
 
             fn get_types(types: &mut Vec<TypeId>) {
-                $(types.push(TypeId::of::<$t>()));*
+                $(types.push(TypeId::of::<$t>()));+
             }
 
             unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F)
             {
                 for i in 0..count {
                     unsafe {
-                        f(($(&*(*slices.get_unchecked($n) as *mut $t).add(i)),*,));
+                        f(($(&*(*slices.get_unchecked($n) as *mut $t).add(i)),+,));
                     }
                 }
             }
         }
 
-        impl<$($t: 'static),*> TypeTuple for ($(&mut $t),*,) {
+        impl<$($t: 'static),+> TypeTuple for ($(&mut $t),+,) {
             fn len() -> usize {
-                [$({TypeId::of::<$t>(); 1}),*].iter().sum()
+                [$({TypeId::of::<$t>(); 1}),+].iter().sum()
             }
 
             fn get_types(types: &mut Vec<TypeId>) {
-                $(types.push(TypeId::of::<$t>()));*
+                $(types.push(TypeId::of::<$t>()));+
             }
 
             unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F)
             {
                 for i in 0..count {
                     unsafe {
-                        f(($(&mut *(*slices.get_unchecked($n) as *mut $t).add(i)),*,));
+                        f(($(&mut *(*slices.get_unchecked($n) as *mut $t).add(i)),+,));
                     }
                 }
             }
@@ -55,11 +55,11 @@ macro_rules! type_typle_impl {
     }
 }
 
-type_typle_impl!(0: A);
-type_typle_impl!(0: A, 1: B);
-type_typle_impl!(0: A, 1: B, 2: C);
-type_typle_impl!(0: A, 1: B, 2: C, 3: D);
-type_typle_impl!(0: A, 1: B, 2: C, 3: D, 4: E);
+type_tuple_impl!(0: A);
+type_tuple_impl!(0: A, 1: B);
+type_tuple_impl!(0: A, 1: B, 2: C);
+type_tuple_impl!(0: A, 1: B, 2: C, 3: D);
+type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E);
 
 const BLOCK_SIZE: usize = 32768;
 
