@@ -3,14 +3,14 @@ use std::{
     any::TypeId,
     mem::{size_of, MaybeUninit},
     num::NonZeroU16,
-    ptr::{copy_nonoverlapping, NonNull},
+    ptr::{copy_nonoverlapping, NonNull, null_mut},
     slice,
 };
 
 pub unsafe trait TypeTuple: Sized {
     fn len() -> usize;
     fn get_types(dest: &mut Vec<TypeId>);
-    unsafe fn iter<F>(slices: &[NonNull<u8>], count: usize, mut f: F)
+    unsafe fn iter<F>(slices: &[*mut u8], count: usize, mut f: F)
     where
         F: FnMut(Self);
 }
@@ -24,11 +24,11 @@ unsafe impl<T: 'static> TypeTuple for (&T,) {
         dest.push(TypeId::of::<T>());
     }
 
-    unsafe fn iter<F>(slices: &[NonNull<u8>], count: usize, mut f: F)
+    unsafe fn iter<F>(slices: &[*mut u8], count: usize, mut f: F)
     where
         F: FnMut(Self),
     {
-        let slice1 = slice::from_raw_parts(slices[0].as_ptr() as *const T, count);
+        let slice1 = slice::from_raw_parts(slices[0] as *const T, count);
         for i in 0..count {
             f((slice1.get_unchecked(i),));
         }
@@ -254,35 +254,33 @@ impl GearDataManager {
         }
     }
 
-    fn create_selector(&self, types: &[TypeId]) -> u64 {
-        let mut selector = 0;
-        for (i, typ) in self.types.iter().enumerate() {
-            if types.contains(&typ) {
-                selector |= 1 << (i as u64)
+    pub fn iter<T: TypeTuple + 'static, F: FnMut(T)>(&self, mut f: F) {
+        let mut arg_types = Vec::with_capacity(64);
+        T::get_types(&mut arg_types);
+
+        let mut type_indices = vec![-1i8; arg_types.len()];
+        let mut selector = 0u64;
+
+        for (arg_index, type_id) in arg_types.iter().enumerate() {
+            match self.types.iter().position(|t| t == type_id) {
+                Some(i) if selector & 1 << i as u64 != 0 => panic!("Duplicate type"),
+                Some(i) => {
+                    type_indices[arg_index] = i as i8;
+                    selector &= 1 << i as u64;
+                },
+                None => panic!("Unregistered type")
             }
         }
-        selector
-    }
 
-    pub fn iter<T: TypeTuple + 'static, F: FnMut(T)>(&self, mut f: F) {
-        let mut types = vec![];
-        T::get_types(&mut types);
-        debug_assert!(types.iter().all(|t| self.types.contains(t)));
-
-        let types_count = types.len();
-        let selector = self.create_selector(&types);
-
-        let mut slices = Vec::with_capacity(64);
+        let mut slices = vec![null_mut(); arg_types.len()];
 
         for (block_index, mask) in self.block_masks.iter().enumerate() {
             if mask & selector == selector {
-                slices.clear();
                 let block = &self.blocks[block_index];
 
-                for (i, ptr_opt) in block.component_blocks.iter().cloned().enumerate() {
-                    if let Some(ptr) = ptr_opt {
-                        slices.push(ptr);
-                    }
+                for (arg_index, type_index) in type_indices.iter().cloned().enumerate() {
+                    slices[arg_index as usize] =
+                        block.component_blocks[type_index as usize].unwrap().as_ptr()
                 }
 
                 unsafe {
