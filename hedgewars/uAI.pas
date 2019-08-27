@@ -38,20 +38,15 @@ var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
     StartTicks: Longword;
-    ThinkThread: PSDL_Thread;
-    ThreadLock: PSDL_Mutex;
+    ThreadSem: PSDL_Sem;
 
 procedure FreeActionsList;
 begin
     AddFileLog('FreeActionsList called');
-    if (ThinkThread <> nil) then
-        begin
-        StopThinking:= true;
-        SDL_WaitThread(ThinkThread, nil);
-        end;
-    SDL_LockMutex(ThreadLock);
-    ThinkThread:= nil;
-    SDL_UnlockMutex(ThreadLock);
+
+    StopThinking:= true;
+    SDL_SemWait(ThreadSem);
+    SDL_SemPost(ThreadSem);
 
     if CurrentHedgehog <> nil then
         with CurrentHedgehog^ do
@@ -522,18 +517,18 @@ else
     end;
 
 Me^.State:= Me^.State and (not gstHHThinking);
-SDL_LockMutex(ThreadLock);
-ThinkThread:= nil;
-SDL_UnlockMutex(ThreadLock);
 Think:= 0;
+SDL_SemPost(ThreadSem);
 end;
 
 procedure StartThink(Me: PGear);
+var ThinkThread: PSDL_Thread;
 begin
 if ((Me^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0)
 or isInMultiShoot then
     exit;
 
+SDL_SemWait(ThreadSem);
 //DeleteCI(Me); // this will break demo/netplay
 
 Me^.State:= Me^.State or gstHHThinking;
@@ -556,9 +551,8 @@ if Targets.Count = 0 then
 
 FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot) and ((GameFlags and gfInfAttack) = 0));
 
-SDL_LockMutex(ThreadLock);
 ThinkThread:= SDL_CreateThread(@Think, PChar('think'), Me);
-SDL_UnlockMutex(ThreadLock);
+SDL_DetachThread(ThinkThread);
 end;
 
 {$IFDEF DEBUGAI}
@@ -610,14 +604,13 @@ end;
 procedure initModule;
 begin
     StartTicks:= 0;
-    ThinkThread:= nil;
-    ThreadLock:= SDL_CreateMutex();
+    ThreadSem:= SDL_CreateSemaphore(1);
 end;
 
 procedure freeModule;
 begin
     FreeActionsList();
-    SDL_DestroyMutex(ThreadLock);
+    SDL_DestroySemaphore(ThreadSem);
 end;
 
 end.
