@@ -57,7 +57,7 @@ TBonus = record
 
 TBonuses = record
           activity: boolean;
-          Count : Longword;
+          Count : LongInt;
           ar    : array[0..Pred(MAXBONUS)] of TBonus;
        end;
 
@@ -799,7 +799,7 @@ for i:= 0 to Targets.Count do
                         begin
                         dead:= true;
                         Targets.reset:= true;
-                        if gdX < 0.035 then
+                        if abs(gdX) < 0.035 then
                             begin
                             subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall);
                             if abs(subrate) > 2000 then inc(Rate,subrate div 1024)
