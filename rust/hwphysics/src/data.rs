@@ -24,8 +24,7 @@ macro_rules! type_tuple_impl {
                 $(types.push(TypeId::of::<$t>()));+
             }
 
-            unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F)
-            {
+            unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F) {
                 for i in 0..count {
                     unsafe {
                         f(($(&*(*slices.get_unchecked($n) as *mut $t).add(i)),+,));
@@ -43,8 +42,7 @@ macro_rules! type_tuple_impl {
                 $(types.push(TypeId::of::<$t>()));+
             }
 
-            unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F)
-            {
+            unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F) {
                 for i in 0..count {
                     unsafe {
                         f(($(&mut *(*slices.get_unchecked($n) as *mut $t).add(i)),+,));
@@ -327,10 +325,13 @@ mod test {
         value: u32,
     }
 
+    #[derive(Clone)]
+    struct Tag {
+        nothing: u8,
+    }
+
     #[test]
     fn single_component_iteration() {
-        assert!(std::mem::size_of::<Datum>() > 0);
-
         let mut manager = GearDataManager::new();
         manager.register::<Datum>();
         for i in 1..=5 {
@@ -344,5 +345,26 @@ mod test {
         manager.iter(|(d,): (&mut Datum,)| d.value += 1);
         manager.iter(|(d,): (&Datum,)| sum += d.value);
         assert_eq!(sum, 35);
+    }
+
+    #[test]
+    fn multiple_component_iteration() {
+        let mut manager = GearDataManager::new();
+        manager.register::<Datum>();
+        manager.register::<Tag>();
+        for i in 1..=10 {
+            let gear_id = GearId::new(i as u16).unwrap();
+            manager.add(gear_id, &Datum { value: i });
+            if i & 1 == 0 {
+                manager.add(gear_id, &Tag { nothing: 0 });
+            }
+        }
+
+        let mut sum1 = 0;
+        let mut sum2 = 0;
+        manager.iter(|(d, _): (&Datum, &Tag)| sum1 += d.value);
+        manager.iter(|(_, d): (&Tag, &Datum)| sum2 += d.value);
+        assert_eq!(sum1, 30);
+        assert_eq!(sum2, sum1);
     }
 }
