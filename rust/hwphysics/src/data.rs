@@ -3,37 +3,63 @@ use std::{
     any::TypeId,
     mem::{size_of, MaybeUninit},
     num::NonZeroU16,
-    ptr::{copy_nonoverlapping, NonNull, null_mut},
+    ptr::{copy_nonoverlapping, null_mut, NonNull},
     slice,
 };
 
-pub unsafe trait TypeTuple: Sized {
+pub trait TypeTuple: Sized {
     fn len() -> usize;
     fn get_types(dest: &mut Vec<TypeId>);
-    unsafe fn iter<F>(slices: &[*mut u8], count: usize, mut f: F)
-    where
-        F: FnMut(Self);
+    unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F);
 }
 
-unsafe impl<T: 'static> TypeTuple for (&T,) {
-    fn len() -> usize {
-        1
-    }
+macro_rules! type_typle_impl {
+    ($($n: literal: $t: ident),*) => {
+        impl<$($t: 'static),*> TypeTuple for ($(&$t),*,) {
+            fn len() -> usize {
+                [$({TypeId::of::<$t>(); 1}),*].iter().sum()
+            }
 
-    fn get_types(dest: &mut Vec<TypeId>) {
-        dest.push(TypeId::of::<T>());
-    }
+            fn get_types(types: &mut Vec<TypeId>) {
+                $(types.push(TypeId::of::<$t>()));*
+            }
 
-    unsafe fn iter<F>(slices: &[*mut u8], count: usize, mut f: F)
-    where
-        F: FnMut(Self),
-    {
-        let slice1 = slice::from_raw_parts(slices[0] as *const T, count);
-        for i in 0..count {
-            f((slice1.get_unchecked(i),));
+            unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F)
+            {
+                for i in 0..count {
+                    unsafe {
+                        f(($(&*(*slices.get_unchecked($n) as *mut $t).add(i)),*,));
+                    }
+                }
+            }
+        }
+
+        impl<$($t: 'static),*> TypeTuple for ($(&mut $t),*,) {
+            fn len() -> usize {
+                [$({TypeId::of::<$t>(); 1}),*].iter().sum()
+            }
+
+            fn get_types(types: &mut Vec<TypeId>) {
+                $(types.push(TypeId::of::<$t>()));*
+            }
+
+            unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F)
+            {
+                for i in 0..count {
+                    unsafe {
+                        f(($(&mut *(*slices.get_unchecked($n) as *mut $t).add(i)),*,));
+                    }
+                }
+            }
         }
     }
 }
+
+type_typle_impl!(0: A);
+type_typle_impl!(0: A, 1: B);
+type_typle_impl!(0: A, 1: B, 2: C);
+type_typle_impl!(0: A, 1: B, 2: C, 3: D);
+type_typle_impl!(0: A, 1: B, 2: C, 3: D, 4: E);
 
 const BLOCK_SIZE: usize = 32768;
 
@@ -267,8 +293,8 @@ impl GearDataManager {
                 Some(i) => {
                     type_indices[arg_index] = i as i8;
                     selector &= 1 << i as u64;
-                },
-                None => panic!("Unregistered type")
+                }
+                None => panic!("Unregistered type"),
             }
         }
 
@@ -279,8 +305,9 @@ impl GearDataManager {
                 let block = &self.blocks[block_index];
 
                 for (arg_index, type_index) in type_indices.iter().cloned().enumerate() {
-                    slices[arg_index as usize] =
-                        block.component_blocks[type_index as usize].unwrap().as_ptr()
+                    slices[arg_index as usize] = block.component_blocks[type_index as usize]
+                        .unwrap()
+                        .as_ptr()
                 }
 
                 unsafe {
@@ -312,7 +339,10 @@ mod test {
 
         let mut sum = 0;
         manager.iter(|(d,): (&Datum,)| sum += d.value);
-
         assert_eq!(sum, 15);
+
+        manager.iter(|(d,): (&mut Datum,)| d.value += 1);
+        manager.iter(|(d,): (&Datum,)| sum += d.value);
+        assert_eq!(sum, 35);
     }
 }
