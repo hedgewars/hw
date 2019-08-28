@@ -923,7 +923,7 @@ Content Creation:
 
 Translations:
  + Complete translations: German, Polish
- + Major translation updates: Scottish Gaelic, Italian
+ + Major translation updates: Scottish Gaelic, Italian, Hungarian
  + Loading screen can now be translated
  + A few window titles can be translated
  + Campaign names and campaign mission names can be translated
