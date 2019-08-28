@@ -146,7 +146,7 @@ Game HUD:
 
 Translations:
  + Complete: German, Polish
- + Major updates: Chinese, Scottish Gaelic
+ + Major updates: Chinese, Scottish Gaelic, Hungarian
  + Credits page is now translatable
  * Remove Arabic translation from release
 
