@@ -9,7 +9,7 @@ use std::{
 
 pub trait TypeTuple: Sized {
     fn len() -> usize;
-    fn get_types(dest: &mut Vec<TypeId>);
+    fn get_types(types: &mut Vec<TypeId>);
     unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F);
 }
 
@@ -137,42 +137,46 @@ impl GearDataManager {
 
     fn move_between_blocks(
         &mut self,
-        from_block_index: u16,
-        from_index: u16,
-        to_block_index: u16,
+        src_block_index: u16,
+        src_index: u16,
+        dest_block_index: u16,
     ) -> u16 {
-        debug_assert!(from_block_index != to_block_index);
-        let source_mask = self.block_masks[from_block_index as usize];
-        let destination_mask = self.block_masks[to_block_index as usize];
-        debug_assert!(source_mask & destination_mask == source_mask);
+        debug_assert!(src_block_index != dest_block_index);
+        let src_mask = self.block_masks[src_block_index as usize];
+        let dest_mask = self.block_masks[dest_block_index as usize];
+        debug_assert!(src_mask & dest_mask == src_mask);
 
-        let source = &self.blocks[from_block_index as usize];
-        let destination = &self.blocks[to_block_index as usize];
-        debug_assert!(from_index < source.elements_count);
-        debug_assert!(!destination.is_full());
+        let src_block = &self.blocks[src_block_index as usize];
+        let dest_block = &self.blocks[dest_block_index as usize];
+        debug_assert!(src_index < src_block.elements_count);
+        debug_assert!(!dest_block.is_full());
 
-        let to_index = destination.elements_count;
+        let dest_index = dest_block.elements_count;
         for i in 0..self.types.len() {
-            if source_mask & 1 << i as u64 != 0 {
+            if src_mask & (1 << i as u64) != 0 {
+                let size = self.element_sizes[i];
+                let src_ptr = src_block.component_blocks[i].unwrap().as_ptr();
+                let dest_ptr = dest_block.component_blocks[i].unwrap().as_ptr();
                 unsafe {
                     copy_nonoverlapping(
-                        source.component_blocks[i]
-                            .unwrap()
-                            .as_ptr()
-                            .add((from_index * self.element_sizes[i]) as usize),
-                        destination.component_blocks[i]
-                            .unwrap()
-                            .as_ptr()
-                            .add((to_index * self.element_sizes[i]) as usize),
-                        self.element_sizes[i] as usize,
+                        src_ptr.add((src_index * size) as usize),
+                        dest_ptr.add((dest_index * size) as usize),
+                        size as usize,
                     );
+                    if src_index < src_block.elements_count - 1 {
+                        copy_nonoverlapping(
+                            src_ptr.add((size * (src_block.elements_count - 1)) as usize),
+                            src_ptr.add((size * src_index) as usize),
+                            size as usize,
+                        );
+                    }
                 }
             }
         }
-        self.blocks[from_block_index as usize].elements_count -= 1;
-        let destination = &mut self.blocks[to_block_index as usize];
-        destination.elements_count += 1;
-        destination.elements_count - 1
+        self.blocks[src_block_index as usize].elements_count -= 1;
+        let dest_block = &mut self.blocks[dest_block_index as usize];
+        dest_block.elements_count += 1;
+        dest_block.elements_count - 1
     }
 
     fn add_to_block<T: Clone>(&mut self, block_index: u16, value: &T) -> u16 {
@@ -269,18 +273,14 @@ impl GearDataManager {
         if let Some(type_index) = self.get_type_index::<T>() {
             let entry = self.lookup[gear_id.get() as usize - 1];
             if let Some(index) = entry.index {
-                let destination_mask =
+                let dest_mask =
                     self.block_masks[entry.block_index as usize] & !(1 << type_index as u64);
 
-                if destination_mask == 0 {
+                if dest_mask == 0 {
                     self.remove_all(gear_id)
                 } else {
-                    let destination_block_index = self.ensure_block(destination_mask);
-                    self.move_between_blocks(
-                        entry.block_index,
-                        index.get() - 1,
-                        destination_block_index,
-                    );
+                    let dest_block_index = self.ensure_block(dest_mask);
+                    self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
                 }
             }
         } else {
@@ -320,7 +320,7 @@ impl GearDataManager {
 
         for (arg_index, type_id) in arg_types.iter().enumerate() {
             match self.types.iter().position(|t| t == type_id) {
-                Some(i) if selector & 1 << i as u64 != 0 => panic!("Duplicate type"),
+                Some(i) if selector & (1 << i as u64) != 0 => panic!("Duplicate type"),
                 Some(i) => {
                     type_indices[arg_index] = i as i8;
                     selector |= 1 << i as u64;
