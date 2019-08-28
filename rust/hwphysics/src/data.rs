@@ -11,7 +11,7 @@ use std::{
 
 pub trait TypeTuple: Sized {
     fn get_types(types: &mut Vec<TypeId>);
-    unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F);
+    unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F);
 }
 
 macro_rules! type_tuple_impl {
@@ -21,10 +21,11 @@ macro_rules! type_tuple_impl {
                 $(types.push(TypeId::of::<$t>()));+
             }
 
-            unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F) {
+            unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
                 for i in 0..count {
                     unsafe {
-                        f(($(&*(*slices.get_unchecked($n) as *mut $t).add(i)),+,));
+                        f(*(*slices.get_unchecked(0) as *const GearId).add(i),
+                          ($(&*(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
                     }
                 }
             }
@@ -35,10 +36,11 @@ macro_rules! type_tuple_impl {
                 $(types.push(TypeId::of::<$t>()));+
             }
 
-            unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F) {
+            unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
                 for i in 0..count {
                     unsafe {
-                        f(($(&mut *(*slices.get_unchecked($n) as *mut $t).add(i)),+,));
+                        f(*(*slices.get_unchecked(0) as *const GearId).add(i),
+                          ($(&mut *(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
                     }
                 }
             }
@@ -155,7 +157,7 @@ impl DataBlock {
 }
 
 #[derive(Clone, Copy, Debug, Default)]
-pub struct LookupEntry {
+struct LookupEntry {
     index: Option<NonZeroU16>,
     block_index: u16,
 }
@@ -380,7 +382,12 @@ impl GearDataManager {
         }
     }
 
-    pub fn iter<T: TypeTuple + 'static, F: FnMut(T)>(&self, mut f: F) {
+
+    pub fn iter<T: TypeTuple + 'static, F: FnMut(T)>(&mut self, mut f: F) {
+        self.iter_id(|_, x| f(x));
+    }
+
+    pub fn iter_id<T: TypeTuple + 'static, F: FnMut(GearId, T)>(&mut self, mut f: F) {
         let mut arg_types = Vec::with_capacity(64);
         T::get_types(&mut arg_types);
 
@@ -397,20 +404,21 @@ impl GearDataManager {
                 None => panic!("Unregistered type"),
             }
         }
-        let mut slices = vec![null_mut(); arg_types.len()];
+        let mut slices = vec![null_mut(); arg_types.len() + 1];
 
         for (block_index, mask) in self.block_masks.iter().enumerate() {
             if mask & selector == selector {
-                let block = &self.blocks[block_index];
-                block.elements_count;
+                let block = &mut self.blocks[block_index];
+                slices[0] = block.data.as_mut_ptr();
+
                 for (arg_index, type_index) in type_indices.iter().cloned().enumerate() {
-                    slices[arg_index as usize] = block.component_blocks[type_index as usize]
+                    slices[arg_index as usize + 1] = block.component_blocks[type_index as usize]
                         .unwrap()
                         .as_ptr()
                 }
 
                 unsafe {
-                    T::iter(&slices[..], block.elements_count as usize, |x| f(x));
+                    T::iter(&slices[..], block.elements_count as usize, |id, x| f(id, x));
                 }
             }
         }
