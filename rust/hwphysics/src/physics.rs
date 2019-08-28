@@ -68,12 +68,10 @@ impl PhysicsProcessor {
 
         data.iter_id(
             |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
-                if !vel.0.is_zero() {
-                    let old_pos = pos.0;
-                    vel.0 -= self.gravity * fp_step;
-                    pos.0 += vel.0 * fp_step;
-                    self.position_updates.push(gear_id, &old_pos, &pos.0)
-                }
+                let old_pos = pos.0;
+                vel.0 -= self.gravity * fp_step;
+                pos.0 += vel.0 * fp_step;
+                self.position_updates.push(gear_id, &old_pos, &pos.0)
             },
         );
 
