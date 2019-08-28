@@ -1,9 +1,5 @@
 use fpnum::FPNum;
-use std::{
-    collections::BinaryHeap,
-    num::NonZeroU16,
-    ops::{Add, Index, IndexMut},
-};
+use std::{collections::BinaryHeap, num::NonZeroU16, ops::Add};
 
 pub type GearId = NonZeroU16;
 

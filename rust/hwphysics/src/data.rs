@@ -2,7 +2,6 @@ use super::common::GearId;
 use std::{
     any::TypeId,
     fmt::{Debug, Error, Formatter},
-    io::Write,
     mem::{size_of, MaybeUninit},
     num::NonZeroU16,
     ptr::{copy_nonoverlapping, null_mut, NonNull},

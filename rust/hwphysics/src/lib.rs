@@ -9,7 +9,7 @@ use integral_geometry::Size;
 use land2d::Land2D;
 
 use crate::{
-    collision::{CollisionData, CollisionProcessor, ContactData},
+    collision::CollisionProcessor,
     common::{GearAllocator, GearId, Millis},
     data::GearDataManager,
     physics::PhysicsProcessor,

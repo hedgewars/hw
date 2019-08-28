@@ -12,10 +12,6 @@ pub struct PositionData(pub FPPoint);
 #[repr(transparent)]
 pub struct VelocityData(pub FPPoint);
 
-pub struct PhysicsProcessor {
-    position_updates: PositionUpdates,
-}
-
 pub struct PositionUpdates {
     pub gear_ids: Vec<GearId>,
     pub shifts: Vec<(FPPoint, FPPoint)>,
@@ -48,6 +44,11 @@ impl PositionUpdates {
     }
 }
 
+pub struct PhysicsProcessor {
+    gravity: FPNum,
+    position_updates: PositionUpdates,
+}
+
 impl PhysicsProcessor {
     pub fn register_components(data: &mut GearDataManager) {
         data.register::<PositionData>();
@@ -56,6 +57,7 @@ impl PhysicsProcessor {
 
     pub fn new() -> Self {
         Self {
+            gravity: fp!(100),
             position_updates: PositionUpdates::new(64),
         }
     }
@@ -68,6 +70,7 @@ impl PhysicsProcessor {
             |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
                 if !vel.0.is_zero() {
                     let old_pos = pos.0;
+                    vel.0 -= self.gravity * fp_step;
                     pos.0 += vel.0 * fp_step;
                     self.position_updates.push(gear_id, &old_pos, &pos.0)
                 }
