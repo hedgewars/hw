@@ -57,12 +57,31 @@ impl PhysicsProcessor {
 
     pub fn new() -> Self {
         Self {
-            gravity: fp!(100),
+            gravity: fp!(1 / 10),
             position_updates: PositionUpdates::new(64),
         }
     }
 
-    pub fn process(&mut self, data: &mut GearDataManager, time_step: Millis) -> &PositionUpdates {
+    pub fn process_single_tick(&mut self, data: &mut GearDataManager) -> &PositionUpdates {
+        self.position_updates.clear();
+
+        data.iter_id(
+            |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
+                let old_pos = pos.0;
+                vel.0 -= self.gravity;
+                pos.0 += vel.0;
+                self.position_updates.push(gear_id, &old_pos, &pos.0)
+            },
+        );
+
+        &self.position_updates
+    }
+
+    pub fn process_multiple_ticks(
+        &mut self,
+        data: &mut GearDataManager,
+        time_step: Millis,
+    ) -> &PositionUpdates {
         let fp_step = time_step.to_fixed();
         self.position_updates.clear();
 

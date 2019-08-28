@@ -20,7 +20,7 @@ impl Millis {
 
     #[inline]
     pub fn to_fixed(self) -> FPNum {
-        FPNum::new(self.0 as i32, 1000)
+        FPNum::new(self.0 as i32, 1)
     }
 }
 
