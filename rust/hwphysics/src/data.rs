@@ -1,6 +1,8 @@
 use super::common::GearId;
 use std::{
     any::TypeId,
+    fmt::{Debug, Error, Formatter},
+    io::Write,
     mem::{size_of, MaybeUninit},
     num::NonZeroU16,
     ptr::{copy_nonoverlapping, null_mut, NonNull},
@@ -8,7 +10,6 @@ use std::{
 };
 
 pub trait TypeTuple: Sized {
-    fn len() -> usize;
     fn get_types(types: &mut Vec<TypeId>);
     unsafe fn iter<F: FnMut(Self)>(slices: &[*mut u8], count: usize, mut f: F);
 }
@@ -16,10 +17,6 @@ pub trait TypeTuple: Sized {
 macro_rules! type_tuple_impl {
     ($($n: literal: $t: ident),+) => {
         impl<$($t: 'static),+> TypeTuple for ($(&$t),+,) {
-            fn len() -> usize {
-                [$({TypeId::of::<$t>(); 1}),+].iter().sum()
-            }
-
             fn get_types(types: &mut Vec<TypeId>) {
                 $(types.push(TypeId::of::<$t>()));+
             }
@@ -34,10 +31,6 @@ macro_rules! type_tuple_impl {
         }
 
         impl<$($t: 'static),+> TypeTuple for ($(&mut $t),+,) {
-            fn len() -> usize {
-                [$({TypeId::of::<$t>(); 1}),+].iter().sum()
-            }
-
             fn get_types(types: &mut Vec<TypeId>) {
                 $(types.push(TypeId::of::<$t>()));+
             }
@@ -66,24 +59,62 @@ struct DataBlock {
     elements_count: u16,
     data: Box<[u8; BLOCK_SIZE]>,
     component_blocks: [Option<NonNull<u8>>; 64],
+    element_sizes: Box<[u16]>,
 }
 
 impl Unpin for DataBlock {}
 
+impl Debug for DataBlock {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(
+            f,
+            "Block ({}/{}) {{\n",
+            self.elements_count, self.max_elements
+        )?;
+        write!(f, "\tIDs: [")?;
+        let id_slice = unsafe {
+            slice::from_raw_parts(
+                self.data.as_ptr() as *const GearId,
+                self.elements_count as usize,
+            )
+        };
+        for gear_id in id_slice {
+            write!(f, "{}, ", gear_id)?;
+        }
+        write!(f, "]\n")?;
+        for type_index in 0..self.element_sizes.len() {
+            if let Some(ptr) = self.component_blocks[type_index] {
+                write!(f, "\tC{}: [", type_index)?;
+                let slice = unsafe {
+                    slice::from_raw_parts(
+                        ptr.as_ptr(),
+                        (self.elements_count * self.element_sizes[type_index]) as usize,
+                    )
+                };
+                for byte in slice {
+                    write!(f, "{}, ", byte)?;
+                }
+                write!(f, "]\n")?;
+            }
+        }
+        write!(f, "}}\n")
+    }
+}
+
 impl DataBlock {
-    fn new(mask: u64, element_sizes: &[u16; 64]) -> Self {
+    fn new(mask: u64, element_sizes: &[u16]) -> Self {
         let total_size: u16 = element_sizes
             .iter()
             .enumerate()
             .filter(|(i, _)| mask & (1 << *i as u64) != 0)
             .map(|(_, size)| *size)
             .sum();
-        let max_elements = (BLOCK_SIZE / total_size as usize) as u16;
+        let max_elements = (BLOCK_SIZE / (total_size as usize + size_of::<GearId>())) as u16;
 
         let mut data: Box<[u8; BLOCK_SIZE]> =
             Box::new(unsafe { MaybeUninit::uninit().assume_init() });
         let mut blocks = [None; 64];
-        let mut offset = 0;
+        let mut offset = size_of::<GearId>() * max_elements as usize;
 
         for i in 0..element_sizes.len() {
             if mask & (1 << i as u64) != 0 {
@@ -96,6 +127,25 @@ impl DataBlock {
             max_elements,
             data,
             component_blocks: blocks,
+            element_sizes: Box::from(element_sizes),
+        }
+    }
+
+    fn gear_ids(&self) -> &[GearId] {
+        unsafe {
+            slice::from_raw_parts(
+                self.data.as_ptr() as *const GearId,
+                self.max_elements as usize,
+            )
+        }
+    }
+
+    fn gear_ids_mut(&mut self) -> &mut [GearId] {
+        unsafe {
+            slice::from_raw_parts_mut(
+                self.data.as_mut_ptr() as *mut GearId,
+                self.max_elements as usize,
+            )
         }
     }
 
@@ -108,6 +158,15 @@ impl DataBlock {
 pub struct LookupEntry {
     index: Option<NonZeroU16>,
     block_index: u16,
+}
+
+impl LookupEntry {
+    fn new(block_index: u16, index: u16) -> Self {
+        Self {
+            index: unsafe { Some(NonZeroU16::new_unchecked(index + 1)) },
+            block_index,
+        }
+    }
 }
 
 pub struct GearDataManager {
@@ -135,12 +194,7 @@ impl GearDataManager {
         self.types.iter().position(|id| *id == type_id)
     }
 
-    fn move_between_blocks(
-        &mut self,
-        src_block_index: u16,
-        src_index: u16,
-        dest_block_index: u16,
-    ) -> u16 {
+    fn move_between_blocks(&mut self, src_block_index: u16, src_index: u16, dest_block_index: u16) {
         debug_assert!(src_block_index != dest_block_index);
         let src_mask = self.block_masks[src_block_index as usize];
         let dest_mask = self.block_masks[dest_block_index as usize];
@@ -173,13 +227,30 @@ impl GearDataManager {
                 }
             }
         }
-        self.blocks[src_block_index as usize].elements_count -= 1;
+
+        let src_block = &mut self.blocks[src_block_index as usize];
+        let gear_id = src_block.gear_ids()[src_index as usize];
+
+        if src_index < src_block.elements_count - 1 {
+            let relocated_index = src_block.elements_count as usize - 1;
+            let gear_ids = src_block.gear_ids_mut();
+            let relocated_id = gear_ids[relocated_index];
+
+            gear_ids[src_index as usize] = relocated_id;
+            self.lookup[relocated_id.get() as usize - 1] =
+                LookupEntry::new(src_block_index, src_index);
+        }
+        src_block.elements_count -= 1;
+
         let dest_block = &mut self.blocks[dest_block_index as usize];
+        let dest_index = dest_block.elements_count;
+
+        dest_block.gear_ids_mut()[dest_index as usize] = gear_id;
+        self.lookup[gear_id.get() as usize - 1] = LookupEntry::new(dest_block_index, dest_index);
         dest_block.elements_count += 1;
-        dest_block.elements_count - 1
     }
 
-    fn add_to_block<T: Clone>(&mut self, block_index: u16, value: &T) -> u16 {
+    fn add_to_block<T: Clone>(&mut self, gear_id: GearId, block_index: u16, value: &T) {
         debug_assert!(self.block_masks[block_index as usize].count_ones() == 1);
 
         let block = &mut self.blocks[block_index as usize];
@@ -187,13 +258,16 @@ impl GearDataManager {
 
         unsafe {
             let slice = slice::from_raw_parts_mut(
-                block.data.as_mut_ptr() as *mut T,
+                block.component_blocks[0].unwrap().as_ptr() as *mut T,
                 block.max_elements as usize,
             );
             *slice.get_unchecked_mut(block.elements_count as usize) = value.clone();
         };
+
+        let index = block.elements_count;
+        self.lookup[gear_id.get() as usize - 1] = LookupEntry::new(block_index, index);
+        block.gear_ids_mut()[index as usize] = gear_id;
         block.elements_count += 1;
-        block.elements_count - 1
     }
 
     fn remove_from_block(&mut self, block_index: u16, index: u16) {
@@ -214,6 +288,16 @@ impl GearDataManager {
                 }
             }
         }
+
+        self.lookup[block.gear_ids()[index as usize].get() as usize - 1] = LookupEntry::default();
+        if index < block.elements_count - 1 {
+            let relocated_index = block.elements_count as usize - 1;
+            let gear_ids = block.gear_ids_mut();
+
+            gear_ids[index as usize] = gear_ids[relocated_index];
+            self.lookup[gear_ids[relocated_index].get() as usize - 1] =
+                LookupEntry::new(block_index, index);
+        }
         block.elements_count -= 1;
     }
 
@@ -227,7 +311,10 @@ impl GearDataManager {
         {
             index as u16
         } else {
-            self.blocks.push(DataBlock::new(mask, &self.element_sizes));
+            self.blocks.push(DataBlock::new(
+                mask,
+                &self.element_sizes[0..self.types.len()],
+            ));
             self.block_masks.push(mask);
             (self.blocks.len() - 1) as u16
         }
@@ -244,25 +331,11 @@ impl GearDataManager {
 
                 if new_mask != mask {
                     let dest_block_index = self.ensure_block(new_mask);
-                    let dest_index = self.move_between_blocks(
-                        entry.block_index,
-                        index.get() - 1,
-                        dest_block_index,
-                    );
-                    self.lookup[gear_id.get() as usize - 1] = LookupEntry {
-                        index: unsafe {
-                            Some(NonZeroU16::new_unchecked(dest_index.saturating_add(1)))
-                        },
-                        block_index: dest_block_index,
-                    }
+                    self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
                 }
             } else {
                 let dest_block_index = self.ensure_block(type_bit);
-                let index = self.add_to_block(dest_block_index, value);
-                self.lookup[gear_id.get() as usize - 1] = LookupEntry {
-                    index: unsafe { Some(NonZeroU16::new_unchecked(index.saturating_add(1))) },
-                    block_index: dest_block_index,
-                }
+                self.add_to_block(gear_id, dest_block_index, value);
             }
         } else {
             panic!("Unregistered type")
@@ -292,10 +365,6 @@ impl GearDataManager {
         let entry = self.lookup[gear_id.get() as usize - 1];
         if let Some(index) = entry.index {
             self.remove_from_block(entry.block_index, index.get() - 1);
-        }
-        self.lookup[gear_id.get() as usize - 1] = LookupEntry {
-            index: None,
-            block_index: 0,
         }
     }
 
@@ -387,16 +456,24 @@ mod test {
         for i in 1..=10 {
             let gear_id = GearId::new(i as u16).unwrap();
             manager.add(gear_id, &Datum { value: i });
+        }
+
+        for i in 1..=10 {
+            let gear_id = GearId::new(i as u16).unwrap();
             if i & 1 == 0 {
-                manager.add(gear_id, &Tag { nothing: 0 });
+                manager.add(GearId::new(i as u16).unwrap(), &Tag { nothing: 0 });
             }
         }
 
-        let mut sum1 = 0;
-        let mut sum2 = 0;
-        manager.iter(|(d, _): (&Datum, &Tag)| sum1 += d.value);
-        manager.iter(|(_, d): (&Tag, &Datum)| sum2 += d.value);
-        assert_eq!(sum1, 30);
-        assert_eq!(sum2, sum1);
+        let mut sum = 0;
+        manager.iter(|(d,): (&Datum,)| sum += d.value);
+        assert_eq!(sum, 55);
+
+        let mut tag_sum1 = 0;
+        let mut tag_sum2 = 0;
+        manager.iter(|(d, _): (&Datum, &Tag)| tag_sum1 += d.value);
+        manager.iter(|(_, d): (&Tag, &Datum)| tag_sum2 += d.value);
+        assert_eq!(tag_sum1, 30);
+        assert_eq!(tag_sum2, tag_sum1);
     }
 }
