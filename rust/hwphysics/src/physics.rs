@@ -1,97 +1,18 @@
-use crate::common::{GearData, GearDataLookup, GearDataProcessor, GearId, Millis};
+use crate::{
+    common::{GearId, Millis},
+    data::GearDataManager,
+};
 use fpnum::*;
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
-pub struct PhysicsData {
-    pub position: FPPoint,
-    pub velocity: FPPoint,
-}
+#[repr(transparent)]
+pub struct PositionData(pub FPPoint);
 
-impl GearData for PhysicsData {}
-
-impl PhysicsData {
-    pub fn new(position: FPPoint, velocity: FPPoint) -> Self {
-        Self { position, velocity }
-    }
-}
-
-pub struct DynamicPhysicsCollection {
-    gear_ids: Vec<GearId>,
-    positions: Vec<FPPoint>,
-    velocities: Vec<FPPoint>,
-}
-
-impl DynamicPhysicsCollection {
-    fn new() -> Self {
-        Self {
-            gear_ids: Vec::new(),
-            positions: Vec::new(),
-            velocities: Vec::new(),
-        }
-    }
-
-    fn len(&self) -> usize {
-        self.gear_ids.len()
-    }
-
-    fn push(&mut self, gear_id: GearId, physics: PhysicsData) -> u16 {
-        self.gear_ids.push(gear_id);
-        self.positions.push(physics.position);
-        self.velocities.push(physics.velocity);
-
-        (self.gear_ids.len() - 1) as u16
-    }
-
-    fn remove(&mut self, index: usize) -> Option<GearId> {
-        self.gear_ids.swap_remove(index);
-        self.positions.swap_remove(index);
-        self.velocities.swap_remove(index);
-
-        self.gear_ids.get(index).cloned()
-    }
-
-    fn iter_pos_update(&mut self) -> impl Iterator<Item = (GearId, (&mut FPPoint, &FPPoint))> {
-        self.gear_ids
-            .iter()
-            .cloned()
-            .zip(self.positions.iter_mut().zip(self.velocities.iter()))
-    }
-}
-
-pub struct StaticPhysicsCollection {
-    gear_ids: Vec<GearId>,
-    positions: Vec<FPPoint>,
-}
-
-impl StaticPhysicsCollection {
-    fn new() -> Self {
-        Self {
-            gear_ids: Vec::new(),
-            positions: Vec::new(),
-        }
-    }
-
-    fn push(&mut self, gear_id: GearId, physics: PhysicsData) -> u16 {
-        self.gear_ids.push(gear_id);
-        self.positions.push(physics.position);
-
-        (self.gear_ids.len() - 1) as u16
-    }
-
-    fn remove(&mut self, index: usize) -> Option<GearId> {
-        self.gear_ids.swap_remove(index);
-        self.positions.swap_remove(index);
-
-        self.gear_ids.get(index).cloned()
-    }
-}
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[repr(transparent)]
+pub struct VelocityData(pub FPPoint);
 
 pub struct PhysicsProcessor {
-    gear_lookup: GearDataLookup<bool>,
-    dynamic_physics: DynamicPhysicsCollection,
-    static_physics: StaticPhysicsCollection,
-
-    physics_cleanup: Vec<GearId>,
     position_updates: PositionUpdates,
 }
 
@@ -128,75 +49,31 @@ impl PositionUpdates {
 }
 
 impl PhysicsProcessor {
+    pub fn register_components(data: &mut GearDataManager) {
+        data.register::<PositionData>();
+        data.register::<VelocityData>();
+    }
+
     pub fn new() -> Self {
         Self {
-            gear_lookup: GearDataLookup::new(),
-            dynamic_physics: DynamicPhysicsCollection::new(),
-            static_physics: StaticPhysicsCollection::new(),
-            physics_cleanup: Vec::new(),
-            position_updates: PositionUpdates::new(0),
+            position_updates: PositionUpdates::new(64),
         }
     }
 
-    pub fn process(&mut self, time_step: Millis) -> &PositionUpdates {
+    pub fn process(&mut self, data: &mut GearDataManager, time_step: Millis) -> &PositionUpdates {
         let fp_step = time_step.to_fixed();
         self.position_updates.clear();
-        for (gear_id, (pos, vel)) in self.dynamic_physics.iter_pos_update() {
-            let old_pos = *pos;
-            *pos += *vel * fp_step;
-            if !vel.is_zero() {
-                self.position_updates.push(gear_id, &old_pos, pos)
-            } else {
-                self.physics_cleanup.push(gear_id)
-            }
-        }
+
+        data.iter_id(
+            |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
+                if !vel.0.is_zero() {
+                    let old_pos = pos.0;
+                    pos.0 += vel.0 * fp_step;
+                    self.position_updates.push(gear_id, &old_pos, &pos.0)
+                }
+            },
+        );
+
         &self.position_updates
-    }
-}
-
-impl GearDataProcessor<PhysicsData> for PhysicsProcessor {
-    fn add(&mut self, gear_id: GearId, gear_data: PhysicsData) {
-        let is_dynamic = !gear_data.velocity.is_zero();
-        let index = if is_dynamic {
-            self.dynamic_physics.push(gear_id, gear_data)
-        } else {
-            self.static_physics.push(gear_id, gear_data)
-        };
-
-        self.gear_lookup.add(gear_id, index, is_dynamic);
-    }
-
-    fn remove(&mut self, gear_id: GearId) {
-        if let Some(entry) = self.gear_lookup.get(gear_id) {
-            let relocated_gear_id = if *entry.value() {
-                self.dynamic_physics.remove(entry.index() as usize)
-            } else {
-                self.static_physics.remove(entry.index() as usize)
-            };
-
-            if let Some(id) = relocated_gear_id {
-                let index = entry.index();
-                self.gear_lookup[id].set_index(index);
-            }
-        }
-    }
-
-    fn get(&mut self, gear_id: GearId) -> Option<PhysicsData> {
-        if let Some(entry) = self.gear_lookup.get(gear_id) {
-            let data = if *entry.value() {
-                PhysicsData {
-                    position: self.dynamic_physics.positions[entry.index() as usize],
-                    velocity: self.dynamic_physics.velocities[entry.index() as usize],
-                }
-            } else {
-                PhysicsData {
-                    position: self.static_physics.positions[entry.index() as usize],
-                    velocity: FPPoint::zero(),
-                }
-            };
-            Some(data)
-        } else {
-            None
-        }
     }
 }

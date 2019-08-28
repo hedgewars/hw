@@ -23,10 +23,8 @@ macro_rules! type_tuple_impl {
 
             unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
                 for i in 0..count {
-                    unsafe {
-                        f(*(*slices.get_unchecked(0) as *const GearId).add(i),
-                          ($(&*(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
-                    }
+                    f(*(*slices.get_unchecked(0) as *const GearId).add(i),
+                      ($(&*(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
                 }
             }
         }
@@ -38,10 +36,8 @@ macro_rules! type_tuple_impl {
 
             unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
                 for i in 0..count {
-                    unsafe {
-                        f(*(*slices.get_unchecked(0) as *const GearId).add(i),
-                          ($(&mut *(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
-                    }
+                    f(*(*slices.get_unchecked(0) as *const GearId).add(i),
+                      ($(&mut *(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
                 }
             }
         }
@@ -381,7 +377,6 @@ impl GearDataManager {
             self.types.push(id);
         }
     }
-
 
     pub fn iter<T: TypeTuple + 'static, F: FnMut(T)>(&mut self, mut f: F) {
         self.iter_id(|_, x| f(x));
