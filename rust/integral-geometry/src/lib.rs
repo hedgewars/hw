@@ -45,7 +45,7 @@ impl Point {
 
     #[inline]
     pub fn integral_norm(self) -> u32 {
-        let sqr = (self.x as u64).pow(2) + (self.y as u64).pow(2);
+        let sqr = (self.x as u64).wrapping_pow(2) + (self.y as u64).wrapping_pow(2);
         integral_sqrt(sqr) as u32
     }
 
