@@ -680,7 +680,7 @@ end
 ----------------------------------
 
 function onGameInit()
-        EnableGameFlags(gfInfAttack, gfInvulnerable)
+        EnableGameFlags(gfInfAttack)
         CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
@@ -956,7 +956,10 @@ function onGameTick20()
                                 trackTime = 0
 
                                 SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
-                                AddGear(GetX(CurrentHedgehog)+boostX, GetY(CurrentHedgehog)+boostY, gtGrenade, 0, 0, 0, 1)
+                                Explode(GetX(CurrentHedgehog)+boostX,
+                                        GetY(CurrentHedgehog)+boostY,
+                                        50,
+                                        EXPLNoDamage + EXPLAutoSound)
                                 FollowGear(CurrentHedgehog)
 
                                 HideMission()
