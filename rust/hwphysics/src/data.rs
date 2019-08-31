@@ -10,7 +10,7 @@ use std::{
 
 pub trait TypeTuple: Sized {
     fn get_types(types: &mut Vec<TypeId>);
-    unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F);
+    unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, f: F);
 }
 
 macro_rules! type_tuple_impl {
@@ -166,10 +166,37 @@ impl LookupEntry {
     }
 }
 
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+struct BlockMask {
+    type_mask: u64,
+    tag_mask: u64,
+}
+
+impl BlockMask {
+    #[inline]
+    fn new(type_mask: u64, tag_mask: u64) -> Self {
+        Self {
+            type_mask,
+            tag_mask,
+        }
+    }
+
+    #[inline]
+    fn with_type(&self, type_bit: u64) -> Self {
+        Self::new(self.type_mask | type_bit, self.tag_mask)
+    }
+
+    #[inline]
+    fn with_tag(&self, tag_bit: u64) -> Self {
+        Self::new(self.type_mask, self.tag_mask | tag_bit)
+    }
+}
+
 pub struct GearDataManager {
     types: Vec<TypeId>,
+    tags: Vec<TypeId>,
     blocks: Vec<DataBlock>,
-    block_masks: Vec<u64>,
+    block_masks: Vec<BlockMask>,
     element_sizes: Box<[u16; 64]>,
     lookup: Box<[LookupEntry]>,
 }
@@ -177,7 +204,8 @@ pub struct GearDataManager {
 impl GearDataManager {
     pub fn new() -> Self {
         Self {
-            types: vec![],
+            types: Vec::with_capacity(64),
+            tags: Vec::with_capacity(64),
             blocks: vec![],
             block_masks: vec![],
             element_sizes: Box::new([0; 64]),
@@ -191,11 +219,17 @@ impl GearDataManager {
         self.types.iter().position(|id| *id == type_id)
     }
 
+    #[inline]
+    fn get_tag_index<T: 'static>(&self) -> Option<usize> {
+        let type_id = TypeId::of::<T>();
+        self.tags.iter().position(|id| *id == type_id)
+    }
+
     fn move_between_blocks(&mut self, src_block_index: u16, src_index: u16, dest_block_index: u16) {
         debug_assert!(src_block_index != dest_block_index);
         let src_mask = self.block_masks[src_block_index as usize];
         let dest_mask = self.block_masks[dest_block_index as usize];
-        debug_assert!(src_mask & dest_mask == src_mask);
+        debug_assert!(src_mask.type_mask & dest_mask.type_mask == src_mask.type_mask);
 
         let src_block = &self.blocks[src_block_index as usize];
         let dest_block = &self.blocks[dest_block_index as usize];
@@ -204,7 +238,7 @@ impl GearDataManager {
 
         let dest_index = dest_block.elements_count;
         for i in 0..self.types.len() {
-            if src_mask & (1 << i as u64) != 0 {
+            if src_mask.type_mask & (1 << i as u64) != 0 {
                 let size = self.element_sizes[i];
                 let src_ptr = src_block.component_blocks[i].unwrap().as_ptr();
                 let dest_ptr = dest_block.component_blocks[i].unwrap().as_ptr();
@@ -248,7 +282,12 @@ impl GearDataManager {
     }
 
     fn add_to_block<T: Clone>(&mut self, gear_id: GearId, block_index: u16, value: &T) {
-        debug_assert!(self.block_masks[block_index as usize].count_ones() == 1);
+        debug_assert!(
+            self.block_masks[block_index as usize]
+                .type_mask
+                .count_ones()
+                == 1
+        );
 
         let block = &mut self.blocks[block_index as usize];
         debug_assert!(block.elements_count < block.max_elements);
@@ -299,7 +338,7 @@ impl GearDataManager {
     }
 
     #[inline]
-    fn ensure_block(&mut self, mask: u64) -> u16 {
+    fn ensure_block(&mut self, mask: BlockMask) -> u16 {
         if let Some(index) = self
             .block_masks
             .iter()
@@ -309,7 +348,7 @@ impl GearDataManager {
             index as u16
         } else {
             self.blocks.push(DataBlock::new(
-                mask,
+                mask.type_mask,
                 &self.element_sizes[0..self.types.len()],
             ));
             self.block_masks.push(mask);
@@ -324,14 +363,14 @@ impl GearDataManager {
 
             if let Some(index) = entry.index {
                 let mask = self.block_masks[entry.block_index as usize];
-                let new_mask = mask | type_bit;
+                let new_mask = mask.with_type(type_bit);
 
                 if new_mask != mask {
                     let dest_block_index = self.ensure_block(new_mask);
                     self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
                 }
             } else {
-                let dest_block_index = self.ensure_block(type_bit);
+                let dest_block_index = self.ensure_block(BlockMask::new(type_bit, 0));
                 self.add_to_block(gear_id, dest_block_index, value);
             }
         } else {
@@ -339,15 +378,36 @@ impl GearDataManager {
         }
     }
 
+    pub fn add_tag<T: 'static>(&mut self, gear_id: GearId) {
+        if let Some(tag_index) = self.get_tag_index::<T>() {
+            let tag_bit = 1 << tag_index as u64;
+            let entry = self.lookup[gear_id.get() as usize - 1];
+
+            if let Some(index) = entry.index {
+                let mask = self.block_masks[entry.block_index as usize];
+                let new_mask = mask.with_tag(tag_bit);
+
+                if new_mask != mask {
+                    let dest_block_index = self.ensure_block(new_mask);
+                    self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
+                }
+            } else {
+                panic!("Cannot tag a gear with no data")
+            }
+        } else {
+            panic!("Unregistered tag")
+        }
+    }
+
     pub fn remove<T: 'static>(&mut self, gear_id: GearId) {
         if let Some(type_index) = self.get_type_index::<T>() {
             let entry = self.lookup[gear_id.get() as usize - 1];
             if let Some(index) = entry.index {
-                let dest_mask =
-                    self.block_masks[entry.block_index as usize] & !(1 << type_index as u64);
+                let mut dest_mask = self.block_masks[entry.block_index as usize];
+                dest_mask.type_mask &= !(1 << type_index as u64);
 
-                if dest_mask == 0 {
-                    self.remove_all(gear_id)
+                if dest_mask.type_mask == 0 {
+                    self.remove_from_block(entry.block_index, index.get() - 1);
                 } else {
                     let dest_block_index = self.ensure_block(dest_mask);
                     self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
@@ -367,16 +427,24 @@ impl GearDataManager {
 
     pub fn register<T: 'static>(&mut self) {
         debug_assert!(!std::mem::needs_drop::<T>());
-        debug_assert!(self.types.len() <= 64);
         debug_assert!(size_of::<T>() <= u16::max_value() as usize);
 
         let id = TypeId::of::<T>();
-        if !self.types.contains(&id) {
-            self.element_sizes[self.types.len()] = size_of::<T>() as u16;
-            self.types.push(id);
+        if size_of::<T>() == 0 {
+            if !self.tags.contains(&id) {
+                debug_assert!(self.tags.len() <= 64);
+                self.tags.push(id)
+            }
+        } else {
+            if !self.types.contains(&id) {
+                debug_assert!(self.types.len() <= 64);
+                self.element_sizes[self.types.len()] = size_of::<T>() as u16;
+                self.types.push(id);
+            }
         }
     }
 
+    #[inline]
     pub fn iter<T: TypeTuple + 'static, F: FnMut(T)>(&mut self, mut f: F) {
         self.iter_id(|_, x| f(x));
     }
@@ -401,7 +469,7 @@ impl GearDataManager {
         let mut slices = vec![null_mut(); arg_types.len() + 1];
 
         for (block_index, mask) in self.block_masks.iter().enumerate() {
-            if mask & selector == selector {
+            if mask.type_mask & selector == selector {
                 let block = &mut self.blocks[block_index];
                 slices[0] = block.data.as_mut_ptr();
 
