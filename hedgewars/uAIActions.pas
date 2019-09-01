@@ -68,7 +68,7 @@ procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; Tim
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 
 implementation
-uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uUtils, uIO{$IFDEF TRACEAIACTIONS}, uConsole{$ENDIF};
+uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uConsts, uUtils, uIO{$IFDEF TRACEAIACTIONS}, uConsole{$ENDIF};
 
 var PrevX: LongInt = 0;
     timedelta: Longword = 0;
