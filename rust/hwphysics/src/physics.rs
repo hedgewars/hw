@@ -65,7 +65,7 @@ impl PhysicsProcessor {
     pub fn process_single_tick(&mut self, data: &mut GearDataManager) -> &PositionUpdates {
         self.position_updates.clear();
 
-        data.iter_id(
+        data.iter().run_id(
             |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
                 let old_pos = pos.0;
                 vel.0 -= self.gravity;
@@ -85,7 +85,7 @@ impl PhysicsProcessor {
         let fp_step = time_step.to_fixed();
         self.position_updates.clear();
 
-        data.iter_id(
+        data.iter().run_id(
             |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
                 let old_pos = pos.0;
                 vel.0 -= self.gravity * fp_step;

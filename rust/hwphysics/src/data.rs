@@ -2,6 +2,7 @@ use super::common::GearId;
 use std::{
     any::TypeId,
     fmt::{Debug, Error, Formatter},
+    marker::PhantomData,
     mem::{size_of, MaybeUninit},
     num::NonZeroU16,
     ptr::{copy_nonoverlapping, null_mut, NonNull},
@@ -10,6 +11,19 @@ use std::{
 
 pub trait TypeTuple: Sized {
     fn get_types(types: &mut Vec<TypeId>);
+}
+
+impl TypeTuple for () {
+    fn get_types(types: &mut Vec<TypeId>) {}
+}
+
+impl<T: 'static> TypeTuple for &T {
+    fn get_types(types: &mut Vec<TypeId>) {
+        types.push(TypeId::of::<T>());
+    }
+}
+
+pub trait TypeIter: TypeTuple {
     unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, f: F);
 }
 
@@ -19,7 +33,9 @@ macro_rules! type_tuple_impl {
             fn get_types(types: &mut Vec<TypeId>) {
                 $(types.push(TypeId::of::<$t>()));+
             }
+        }
 
+        impl<$($t: 'static),+> TypeIter for ($(&$t),+,) {
             unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
                 for i in 0..count {
                     f(*(*slices.get_unchecked(0) as *const GearId).add(i),
@@ -32,7 +48,9 @@ macro_rules! type_tuple_impl {
             fn get_types(types: &mut Vec<TypeId>) {
                 $(types.push(TypeId::of::<$t>()));+
             }
+        }
 
+        impl<$($t: 'static),+> TypeIter for ($(&mut $t),+,) {
             unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
                 for i in 0..count {
                     f(*(*slices.get_unchecked(0) as *const GearId).add(i),
@@ -444,32 +462,19 @@ impl GearDataManager {
         }
     }
 
-    #[inline]
-    pub fn iter<T: TypeTuple + 'static, F: FnMut(T)>(&mut self, mut f: F) {
-        self.iter_id(|_, x| f(x));
-    }
-
-    pub fn iter_id<T: TypeTuple + 'static, F: FnMut(GearId, T)>(&mut self, mut f: F) {
-        let mut arg_types = Vec::with_capacity(64);
-        T::get_types(&mut arg_types);
-
-        let mut type_indices = vec![-1i8; arg_types.len()];
-        let mut selector = 0u64;
-
-        for (arg_index, type_id) in arg_types.iter().enumerate() {
-            match self.types.iter().position(|t| t == type_id) {
-                Some(i) if selector & (1 << i as u64) != 0 => panic!("Duplicate type"),
-                Some(i) => {
-                    type_indices[arg_index] = i as i8;
-                    selector |= 1 << i as u64;
-                }
-                None => panic!("Unregistered type"),
-            }
-        }
-        let mut slices = vec![null_mut(); arg_types.len() + 1];
+    fn run_impl<T: TypeIter + 'static, F: FnMut(GearId, T)>(
+        &mut self,
+        type_selector: u64,
+        included_tags: u64,
+        type_indices: &[i8],
+        mut f: F,
+    ) {
+        let mut slices = vec![null_mut(); type_indices.len() + 1];
 
         for (block_index, mask) in self.block_masks.iter().enumerate() {
-            if mask.type_mask & selector == selector {
+            if mask.type_mask & type_selector == type_selector
+                && mask.tag_mask & included_tags == included_tags
+            {
                 let block = &mut self.blocks[block_index];
                 slices[0] = block.data.as_mut_ptr();
 
@@ -485,6 +490,73 @@ impl GearDataManager {
             }
         }
     }
+
+    pub fn iter<T: TypeIter + 'static>(&mut self) -> DataIterator<T> {
+        let mut arg_types = Vec::with_capacity(64);
+        T::get_types(&mut arg_types);
+        let mut type_indices = vec![-1i8; arg_types.len()];
+        let mut selector = 0u64;
+
+        for (arg_index, type_id) in arg_types.iter().enumerate() {
+            match self.types.iter().position(|t| t == type_id) {
+                Some(i) if selector & (1 << i as u64) != 0 => panic!("Duplicate type"),
+                Some(i) => {
+                    type_indices[arg_index] = i as i8;
+                    selector |= 1 << i as u64;
+                }
+                None => panic!("Unregistered type"),
+            }
+        }
+        DataIterator::new(self, selector, type_indices)
+    }
+}
+
+pub struct DataIterator<'a, T> {
+    data: &'a mut GearDataManager,
+    types: u64,
+    type_indices: Vec<i8>,
+    tags: u64,
+    phantom_types: PhantomData<T>,
+}
+
+impl<'a, T: TypeIter + 'static> DataIterator<'a, T> {
+    fn new(
+        data: &'a mut GearDataManager,
+        types: u64,
+        type_indices: Vec<i8>,
+    ) -> DataIterator<'a, T> {
+        Self {
+            data,
+            types,
+            type_indices,
+            tags: 0,
+            phantom_types: PhantomData,
+        }
+    }
+
+    pub fn with_tags<U: TypeTuple + 'static>(self) -> Self {
+        let mut tag_types = Vec::with_capacity(64);
+        U::get_types(&mut tag_types);
+        let mut tags = 0;
+
+        for (i, tag) in self.data.tags.iter().enumerate() {
+            if tag_types.contains(tag) {
+                tags |= 1 << i as u64;
+            }
+        }
+        Self { tags, ..self }
+    }
+
+    #[inline]
+    pub fn run<F: FnMut(T)>(&mut self, mut f: F) {
+        self.run_id(|_, x| f(x))
+    }
+
+    #[inline]
+    pub fn run_id<F: FnMut(GearId, T)>(&mut self, f: F) {
+        self.data
+            .run_impl(self.types, self.tags, &self.type_indices, f);
+    }
 }
 
 #[cfg(test)]
@@ -497,9 +569,7 @@ mod test {
     }
 
     #[derive(Clone)]
-    struct Tag {
-        nothing: u8,
-    }
+    struct Tag;
 
     #[test]
     fn single_component_iteration() {
@@ -510,16 +580,16 @@ mod test {
         }
 
         let mut sum = 0;
-        manager.iter(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
         assert_eq!(sum, 15);
 
-        manager.iter(|(d,): (&mut Datum,)| d.value += 1);
-        manager.iter(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&mut Datum,)| d.value += 1);
+        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
         assert_eq!(sum, 35);
     }
 
     #[test]
-    fn multiple_component_iteration() {
+    fn tagged_component_iteration() {
         let mut manager = GearDataManager::new();
         manager.register::<Datum>();
         manager.register::<Tag>();
@@ -531,19 +601,19 @@ mod test {
         for i in 1..=10 {
             let gear_id = GearId::new(i as u16).unwrap();
             if i & 1 == 0 {
-                manager.add(GearId::new(i as u16).unwrap(), &Tag { nothing: 0 });
+                manager.add_tag::<Tag>(gear_id);
             }
         }
 
         let mut sum = 0;
-        manager.iter(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
         assert_eq!(sum, 55);
 
-        let mut tag_sum1 = 0;
-        let mut tag_sum2 = 0;
-        manager.iter(|(d, _): (&Datum, &Tag)| tag_sum1 += d.value);
-        manager.iter(|(_, d): (&Tag, &Datum)| tag_sum2 += d.value);
-        assert_eq!(tag_sum1, 30);
-        assert_eq!(tag_sum2, tag_sum1);
+        let mut tag_sum = 0;
+        manager
+            .iter()
+            .with_tags::<&Tag>()
+            .run(|(d,): (&Datum,)| tag_sum += d.value);
+        assert_eq!(tag_sum, 30);
     }
 }
