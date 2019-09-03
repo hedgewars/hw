@@ -14,7 +14,7 @@ pub trait TypeTuple: Sized {
 }
 
 impl TypeTuple for () {
-    fn get_types(types: &mut Vec<TypeId>) {}
+    fn get_types(_types: &mut Vec<TypeId>) {}
 }
 
 impl<T: 'static> TypeTuple for &T {

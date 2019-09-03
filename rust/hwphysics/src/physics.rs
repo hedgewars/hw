@@ -12,6 +12,8 @@ pub struct PositionData(pub FPPoint);
 #[repr(transparent)]
 pub struct VelocityData(pub FPPoint);
 
+pub struct AffectedByWind;
+
 pub struct PositionUpdates {
     pub gear_ids: Vec<GearId>,
     pub shifts: Vec<(FPPoint, FPPoint)>,
@@ -46,6 +48,7 @@ impl PositionUpdates {
 
 pub struct PhysicsProcessor {
     gravity: FPNum,
+    wind: FPNum,
     position_updates: PositionUpdates,
 }
 
@@ -53,22 +56,33 @@ impl PhysicsProcessor {
     pub fn register_components(data: &mut GearDataManager) {
         data.register::<PositionData>();
         data.register::<VelocityData>();
+        data.register::<AffectedByWind>();
     }
 
     pub fn new() -> Self {
         Self {
             gravity: fp!(1 / 10),
+            wind: fp!(0),
             position_updates: PositionUpdates::new(64),
         }
     }
 
     pub fn process_single_tick(&mut self, data: &mut GearDataManager) -> &PositionUpdates {
+        let gravity = FPPoint::unit_y() * self.gravity;
+        let wind = FPPoint::unit_x() * self.wind;
+
         self.position_updates.clear();
+
+        data.iter()
+            .with_tags::<&AffectedByWind>()
+            .run(|(vel,): (&mut VelocityData,)| {
+                vel.0 += wind;
+            });
 
         data.iter().run_id(
             |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
                 let old_pos = pos.0;
-                vel.0 -= self.gravity;
+                vel.0 += gravity;
                 pos.0 += vel.0;
                 self.position_updates.push(gear_id, &old_pos, &pos.0)
             },
@@ -83,12 +97,21 @@ impl PhysicsProcessor {
         time_step: Millis,
     ) -> &PositionUpdates {
         let fp_step = time_step.to_fixed();
+        let gravity = FPPoint::unit_y() * (self.gravity * fp_step);
+        let wind = FPPoint::unit_x() * (self.wind * fp_step);
+
         self.position_updates.clear();
+
+        data.iter()
+            .with_tags::<&AffectedByWind>()
+            .run(|(vel,): (&mut VelocityData,)| {
+                vel.0 += wind;
+            });
 
         data.iter().run_id(
             |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
                 let old_pos = pos.0;
-                vel.0 -= self.gravity * fp_step;
+                vel.0 += gravity;
                 pos.0 += vel.0 * fp_step;
                 self.position_updates.push(gear_id, &old_pos, &pos.0)
             },
