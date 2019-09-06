@@ -243,7 +243,12 @@ impl GearDataManager {
         self.tags.iter().position(|id| *id == type_id)
     }
 
-    fn move_between_blocks(&mut self, src_block_index: u16, src_index: u16, dest_block_index: u16) {
+    fn move_between_blocks(
+        &mut self,
+        src_block_index: u16,
+        src_index: u16,
+        dest_block_index: u16,
+    ) -> u16 {
         debug_assert!(src_block_index != dest_block_index);
         let src_mask = self.block_masks[src_block_index as usize];
         let dest_mask = self.block_masks[dest_block_index as usize];
@@ -297,6 +302,7 @@ impl GearDataManager {
         dest_block.gear_ids_mut()[dest_index as usize] = gear_id;
         self.lookup[gear_id.get() as usize - 1] = LookupEntry::new(dest_block_index, dest_index);
         dest_block.elements_count += 1;
+        dest_block.elements_count - 1
     }
 
     fn add_to_block<T: Clone>(&mut self, gear_id: GearId, block_index: u16, value: &T) {
@@ -311,11 +317,8 @@ impl GearDataManager {
         debug_assert!(block.elements_count < block.max_elements);
 
         unsafe {
-            let slice = slice::from_raw_parts_mut(
-                block.component_blocks[0].unwrap().as_ptr() as *mut T,
-                block.max_elements as usize,
-            );
-            *slice.get_unchecked_mut(block.elements_count as usize) = value.clone();
+            *(block.component_blocks[0].unwrap().as_ptr() as *mut T)
+                .add(block.elements_count as usize) = value.clone();
         };
 
         let index = block.elements_count;
@@ -355,6 +358,23 @@ impl GearDataManager {
         block.elements_count -= 1;
     }
 
+    fn write_component<T: Clone>(
+        &mut self,
+        block_index: u16,
+        index: u16,
+        type_index: usize,
+        value: &T,
+    ) {
+        debug_assert!(type_index < self.types.len());
+        let block = &mut self.blocks[block_index as usize];
+        debug_assert!(index < block.elements_count);
+
+        unsafe {
+            *(block.component_blocks[type_index].unwrap().as_ptr() as *mut T).add(index as usize) =
+                value.clone();
+        };
+    }
+
     #[inline]
     fn ensure_block(&mut self, mask: BlockMask) -> u16 {
         if let Some(index) = self
@@ -385,7 +405,12 @@ impl GearDataManager {
 
                 if new_mask != mask {
                     let dest_block_index = self.ensure_block(new_mask);
-                    self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
+                    let dest_index = self.move_between_blocks(
+                        entry.block_index,
+                        index.get() - 1,
+                        dest_block_index,
+                    );
+                    self.write_component(dest_block_index, dest_index, type_index, value);
                 }
             } else {
                 let dest_block_index = self.ensure_block(BlockMask::new(type_bit, 0));
