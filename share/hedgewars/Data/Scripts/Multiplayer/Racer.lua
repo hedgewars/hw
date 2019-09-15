@@ -62,6 +62,8 @@ local waypointPreview = nil
 
 local officialChallenge
 
+local ammoDelays = {}
+
 --------------------------
 -- hog and team tracking variales
 --------------------------
@@ -611,6 +613,11 @@ function onGameInit()
         WaterRise = 0
         HealthDecrease = 0
 
+	-- Remember ammo delays for later
+        for a=0, AmmoTypeMax do
+                local _, _, delay = GetAmmo(a)
+                ammoDelays[a] = delay
+        end
 end
 
 function InstructionsBuild()
@@ -779,6 +786,13 @@ function onNewTurn()
                                 InstructionsRace()
                         end
 
+                        -- Restore old ammo delays
+                        for a=0, AmmoTypeMax do
+                                if a ~= amAirAttack and a ~= amSkip then
+                                        SetAmmoDelay(a, ammoDelays[a])
+                                end
+                        end
+
                         SetAmmoTexts(amSkip, nil, nil, nil)
                 else
                         local infoString
@@ -790,6 +804,11 @@ function onNewTurn()
                         ShowMission(loc("Racer"),
                         loc("Waypoint placement phase"), infoString, -amAirAttack, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, AMMO_INFINITE)
+                        for a=0, AmmoTypeMax do
+                                if a ~= amAirAttack and a ~= amSkip then
+                                        SetAmmoDelay(a, 9999)
+                                end
+                        end
                         SetWeapon(amAirAttack)
                         -- Bots skip waypoint placement
                         if GetHogLevel(CurrentHedgehog) ~= 0 then
