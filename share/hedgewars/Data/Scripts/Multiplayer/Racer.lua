@@ -62,7 +62,7 @@ local waypointPreview = nil
 
 local officialChallenge
 
-local ammoDelays = {}
+local ammoDelays
 
 --------------------------
 -- hog and team tracking variales
@@ -616,12 +616,6 @@ function onGameInit()
         TurnTime = 90000
         WaterRise = 0
         HealthDecrease = 0
-
-	-- Remember ammo delays for later
-        for a=0, AmmoTypeMax do
-                local _, _, delay = GetAmmo(a)
-                ammoDelays[a] = delay
-        end
 end
 
 function InstructionsBuild()
@@ -779,6 +773,15 @@ function onNewTurn()
         fastIndex = 0
         AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
+
+        -- Remember ammo delays for later
+        if ammoDelays == nil then
+                ammoDelays = {}
+                for a=0, AmmoTypeMax do
+                local _, _, delay = GetAmmo(a)
+                        ammoDelays[a] = delay
+                end
+        end
 
         -- Handle Starting Stage of Game
         if (gameOver == false) and (gameBegun == false) then
