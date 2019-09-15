@@ -1,87 +1,29 @@
+--[[
+RACER
+map-independant racing script
+originally by mikade, edited heavily by others
 
-------------------------------------------
--- RACER 0.8
--- map-independant racing script
--- by mikade
+-----------------------------------------
+Script parameters:
+rounds=N
+--> The game will be played with N rounds (default: 3)
+
+waypointradius=N
+--> The waypoints have a radius of N pixels (default: 450)
+
+maxwaypoints=N
+--> The maximum number of waypoints to be placed (default: 8)
+
+teamrope=true
+--> The team will be colored in the color of the team.
 -----------------------------------------
 
--- DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
--- Be careful when editig this script, do not introduce changes lightly!
--- This script is used for time records on the official Hedgewars server.
--- Introducing breaking changes means we have to invalidate past time records!
+DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
+Be careful when editig this script, do not introduce changes lightly!
+This script is used for time records on the official Hedgewars server.
+Introducing breaking changes means we have to invalidate past time records!
 
------------------------------------
---0.1: took all the code from crazy racer and scrapped most of it
------------------------------------
-
--- Removed tumbler system
--- Removed extra adds like boosters etc
--- Added experimental waypoint placement system
--- More user feedback
--- Reduced race complexity limit to 5 waypoints
--- stop placement at complexity limit reached and end turn
--- guys dont keep racing after dying
--- invulnerable feasibility
--- reverted time keeping method
--- reduced feedback display time
--- colour-coded addcaptions
--- cleaned up code
--- support for more players properly added
--- tardis fix
--- remove airstrikes
-
--- i think the remainder 0 .456 sec of the tracktime isnt getting reset on newturn
-
--- update feedback
-
--------
--- 0.2
--------
-
--- allow gameflags
--- extend time to 90s
--- remove other air-attack based weps
--- turn off water rise for sd
-
--------
--- 0.3
--------
-
--- prevent WP being placed in land
--- prevent waypoints being placed outside border
-
--------
--- 0.4
--------
-
--- update user feedback
--- add more sounds
-
--------
--- 0.5
--------
-
--- fix ghost disappearing if hog falls in water or somehow dies
--- lengthen ghost tracking interval to improve performance on slower machines
--- increase waypoint limit to 8
--- allow for persistent showmission information
-
--------
--- 0.6
--------
-
--- remove hogs from racing area as per request
-
--------
--- 0.7
--------
-
--- switch to first available weapon if starting race with no weapon selected
-
--------
--- 0.8
--------
--- allow different boost directions
+]]
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -236,23 +178,6 @@ function GetBackgroundBrightness()
 		return 3
 	end
 end
-
---[[
-Parameters syntax:
-
-teamrope=true
---> The team will be colored in the color of the team.
-
-rounds=N
---> The game will be played with N rounds (default: 3)
-
-waypointradius=N
---> The waypoints have a radius of N pixels (default: 450)
-
-maxwaypoints=N
---> The maximum number of waypoints to be placed (default: 8)
-
-]]
 
 function onParameters()
     parseParams()
