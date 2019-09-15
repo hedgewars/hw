@@ -51,8 +51,10 @@ Styles and schemes:
  + Frenzy: Change ammo slots
  + Continental supplies: Show continent in team bars
  + King Mode: Automatically select teleport in king placement phase
+ + Racer: Invulnerability can now be disabled in game scheme
  * Balanced Random Weapon: Fix Lua errors after using Time Box
  * Racer: Fix racer ghost not getting reset after a skip
+ * Racer, TechRacer: Improve compability with game scheme
  * Space Invasion: No longer allow to set start shield above shield limit
  * Battalion, WxW: Crates drop between turns, when appropriate
  * Battalion: Sudden Death effects are now like in the base game
