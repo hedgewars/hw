@@ -525,6 +525,8 @@ function onNewRound()
 			if GetHogClan(hhs[i]) ~= bestClan or roundDraw then
 				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
+			elseif not roundDraw then
+				SetEffect(hhs[i], heInvulnerable, 1)
 			end
 		end
 
@@ -948,6 +950,7 @@ function onGameTick20()
 
                                 if (CheckWaypoints() == true) then
                                         AdjustScores()
+                                        SetEffect(CurrentHedgehog, heInvulnerable, 1)
                                         DisableTumbler()
                                 end
 
