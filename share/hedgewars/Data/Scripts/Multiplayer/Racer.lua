@@ -774,6 +774,10 @@ function onNewTurn()
         AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
 
+        SetSoundMask(sndStupid, false)
+        SetSoundMask(sndBugger, false)
+        SetSoundMask(sndDrat, false)
+
         -- Remember ammo delays for later
         if ammoDelays == nil then
                 ammoDelays = {}
@@ -953,7 +957,11 @@ function onGameTick20()
 
                                 AddCaption(string.format(loc("Time: %.1fs"), (trackTime/1000)),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 
+				-- Track completed, all waypoints touched
                                 if (CheckWaypoints() == true) then
+                                        SetSoundMask(sndStupid, true)
+                                        SetSoundMask(sndBugger, true)
+                                        SetSoundMask(sndDrat, true)
                                         AdjustScores()
                                         SetEffect(CurrentHedgehog, heInvulnerable, 1)
                                         DisableTumbler()
