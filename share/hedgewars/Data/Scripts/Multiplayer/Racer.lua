@@ -978,6 +978,14 @@ function onGameTick()
 	end
 end
 
+function onGearDamage(gear)
+
+        if gear == CurrentHedgehog then
+                DisableTumbler(false)
+        end
+
+end
+
 function onGearResurrect(gear, vGear)
 
         if gear == CurrentHedgehog then
