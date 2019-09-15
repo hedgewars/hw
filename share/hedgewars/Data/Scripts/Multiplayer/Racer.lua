@@ -789,7 +789,7 @@ function onNewTurn()
                         end
                         ShowMission(loc("Racer"),
                         loc("Waypoint placement phase"), infoString, -amAirAttack, 4000)
-                        AddAmmo(CurrentHedgehog, amAirAttack, 4000)
+                        AddAmmo(CurrentHedgehog, amAirAttack, AMMO_INFINITE)
                         SetWeapon(amAirAttack)
                         -- Bots skip waypoint placement
                         if GetHogLevel(CurrentHedgehog) ~= 0 then
@@ -837,6 +837,7 @@ function onNewTurn()
         AddAmmo(CurrentHedgehog, amMineStrike, 0)
         AddAmmo(CurrentHedgehog, amNapalm, 0)
         AddAmmo(CurrentHedgehog, amPiano, 0)
+        SetAmmoDelay(amAirAttack, 0)
 end
 
 function onGameTick20()
