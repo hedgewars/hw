@@ -848,7 +848,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(false)         // tag team       24
             << QVariant(false)         // bottom border  25
             << QVariant(100)           // damage modfier 26
-            << QVariant(30)            // turn time      27
+            << QVariant(90)            // turn time      27
             << QVariant(100)           // init health    28
             << QVariant(50)            // sudden death   29
             << QVariant(0)             // case prob      30
