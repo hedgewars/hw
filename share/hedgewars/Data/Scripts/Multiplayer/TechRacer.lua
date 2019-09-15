@@ -714,6 +714,7 @@ function onGameInit()
 
 	EnableGameFlags(gfInfAttack, gfDisableWind, gfBorder)
 	DisableGameFlags(gfSolidLand)
+	DisableGameFlags(gfKing, gfSwitchHog, gfAISurvival, gfPlaceHog, gfTagTeam)
 	CaseFreq = 0
 	TurnTime = 90000
 	WaterRise = 0
