@@ -782,7 +782,12 @@ function onNewTurn()
         if ammoDelays == nil then
                 ammoDelays = {}
                 for a=0, AmmoTypeMax do
-                local _, _, delay = GetAmmo(a)
+                        local _, _, delay = GetAmmo(a)
+                        -- delay >= 10000 is special value used in hog placement phase.
+                        -- This extracts the "true" delay
+                        if delay >= 10000 then
+                                delay = delay - 10000
+                        end
                         ammoDelays[a] = delay
                 end
         end
