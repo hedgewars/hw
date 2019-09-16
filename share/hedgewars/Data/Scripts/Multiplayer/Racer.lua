@@ -874,9 +874,9 @@ function onGameTick20()
 
         -- airstrike detected, convert this into a potential waypoint spot
         if cGear ~= nil then
-                x,y = GetGearPosition(cGear)
+                local x,y = GetGearPosition(cGear)
                 if x > -9000 then
-                        x,y = GetGearTarget(cGear)
+                        local x,y = GetGearTarget(cGear)
 
 
                         if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
@@ -895,7 +895,7 @@ function onGameTick20()
                 else
                         DeleteGear(cGear)
                 end
-        SetGearPosition(cGear, -10000, 0)
+        	SetGearPosition(cGear, -10000, y)
         end
 
 
@@ -1021,6 +1021,10 @@ function onGearAdd(gear)
                 SetEffect(gear, heResurrectable, 1)
         elseif GetGearType(gear) == gtAirAttack then
                 cGear = gear
+		local x,y = GetGearPosition(cGear)
+        	SetGearPosition(cGear, 10000, y)
+        elseif (not gameBegun) and GetGearType(gear) == gtAirBomb then
+		DeleteGear(gear)
         elseif GetGearType(gear) == gtRope and TeamRope then
             SetTag(gear,1)
             SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))
