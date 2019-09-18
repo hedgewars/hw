@@ -872,6 +872,9 @@ function onNewTurn()
         AddAmmo(CurrentHedgehog, amMineStrike, 0)
         AddAmmo(CurrentHedgehog, amNapalm, 0)
         AddAmmo(CurrentHedgehog, amPiano, 0)
+        AddAmmo(CurrentHedgehog, amSwitch, 0)
+        AddAmmo(CurrentHedgehog, amKamikaze, 0)
+        AddAmmo(CurrentHedgehog, amIceGun, 0)
         SetAmmoDelay(amAirAttack, 0)
 end
 
