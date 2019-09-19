@@ -1303,7 +1303,7 @@
     THEME:
     - Nature
   ! '#12':
-  - ! 'Racer Challenge #2'
+  - ! 'Racer Challenge #12'
   - SEED: ! '{4f2be5e8-69a0-4116-8d80-d270d772f6ee}'
     MAPGEN: '3'
     FEATURE_SIZE: '12'
