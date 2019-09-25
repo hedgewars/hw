@@ -602,10 +602,6 @@ Please wait a few seconds and try again.</source>
 Пожалуйста, попробуйте снова через несколько секунд.</translation>
     </message>
     <message>
-        <source>Guest</source>
-        <translation type="vanished">Гость</translation>
-    </message>
-    <message>
         <source>Room password</source>
         <translation>Пароль комнаты</translation>
     </message>
@@ -2214,10 +2210,6 @@ Last engine message:
         <translation>Кампания</translation>
     </message>
     <message>
-        <source>Practice your skills in a range of training missions</source>
-        <translation type="vanished">Тренировка мастерства в тренировочных миссиях</translation>
-    </message>
-    <message>
         <source>Watch recorded demos</source>
         <translation>Смотреть записанные демки</translation>
     </message>
@@ -3270,10 +3262,6 @@ Would you like to reconnect securely?</source>
         <translation>Загрузить</translation>
     </message>
     <message>
-        <source>Specify</source>
-        <translation type="vanished">Указать</translation>
-    </message>
-    <message>
         <source>default</source>
         <translation>по умолчанию</translation>
     </message>
@@ -3655,10 +3643,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>таймер на 5 сек</translation>
     </message>
     <message>
-        <source>capture</source>
-        <translation type="vanished">снимок</translation>
-    </message>
-    <message>
         <source>quit</source>
         <translation>выход</translation>
     </message>
@@ -3709,10 +3693,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>zoom out</source>
         <translation>уменьшить</translation>
-    </message>
-    <message>
-        <source>reset zoom</source>
-        <translation type="vanished">сбросить увеличение</translation>
     </message>
     <message>
         <source>long jump</source>
@@ -4040,98 +4020,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>Влево</translation>
     </message>
     <message>
-        <source>Right shift</source>
-        <translation type="vanished">Правый shift</translation>
-    </message>
-    <message>
-        <source>Left shift</source>
-        <translation type="vanished">Левый shift</translation>
-    </message>
-    <message>
-        <source>Right ctrl</source>
-        <translation type="vanished">Правый ctrl</translation>
-    </message>
-    <message>
-        <source>Left ctrl</source>
-        <translation type="vanished">Левый ctrl</translation>
-    </message>
-    <message>
-        <source>Right alt</source>
-        <translation type="vanished">Правый alt</translation>
-    </message>
-    <message>
-        <source>Left alt</source>
-        <translation type="vanished">Левый alt</translation>
-    </message>
-    <message>
-        <source>Numpad 0</source>
-        <translation type="vanished">Цифровая клавиатура 0</translation>
-    </message>
-    <message>
-        <source>Numpad 1</source>
-        <translation type="vanished">Цифровая клавиатура 1</translation>
-    </message>
-    <message>
-        <source>Numpad 2</source>
-        <translation type="vanished">Цифровая клавиатура 2</translation>
-    </message>
-    <message>
-        <source>Numpad 3</source>
-        <translation type="vanished">Цифровая клавиатура 3</translation>
-    </message>
-    <message>
-        <source>Numpad 4</source>
-        <translation type="vanished">Цифровая клавиатура 4</translation>
-    </message>
-    <message>
-        <source>Numpad 5</source>
-        <translation type="vanished">Цифровая клавиатура 5</translation>
-    </message>
-    <message>
-        <source>Numpad 6</source>
-        <translation type="vanished">Цифровая клавиатура 6</translation>
-    </message>
-    <message>
-        <source>Numpad 7</source>
-        <translation type="vanished">Цифровая клавиатура 7</translation>
-    </message>
-    <message>
-        <source>Numpad 8</source>
-        <translation type="vanished">Цифровая клавиатура 8</translation>
-    </message>
-    <message>
-        <source>Numpad 9</source>
-        <translation type="vanished">Цифровая клавиатура 9</translation>
-    </message>
-    <message>
-        <source>Numpad .</source>
-        <translation type="vanished">Цифровая клавиатура .</translation>
-    </message>
-    <message>
-        <source>Numpad /</source>
-        <translation type="vanished">Цифровая клавиатура /</translation>
-    </message>
-    <message>
-        <source>Numpad *</source>
-        <translation type="vanished">Цифровая клавиатура *</translation>
-    </message>
-    <message>
-        <source>Numpad -</source>
-        <translation type="vanished">Цифровая клавиатура -</translation>
-    </message>
-    <message>
-        <source>Numpad +</source>
-        <translation type="vanished">Цифровая клавиатура +</translation>
-    </message>
-    <message>
-        <source>Enter</source>
-        <translation type="vanished">Enter</translation>
-    </message>
-    <message>
-        <source>Equals</source>
-        <translation type="vanished">=</translation>
-    </message>
-    <message>
         <source>Insert</source>
         <translation>Insert</translation>
     </message>
@@ -4142,34 +4030,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>End</source>
         <translation>End</translation>
-    </message>
-    <message>
-        <source>Page up</source>
-        <translation type="vanished">Page up</translation>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation type="vanished">Page down</translation>
-    </message>
-    <message>
-        <source>Num lock</source>
-        <translation type="vanished">Num lock</translation>
-    </message>
-    <message>
-        <source>Caps lock</source>
-        <translation type="vanished">Caps lock</translation>
-    </message>
-    <message>
-        <source>Scroll lock</source>
-        <translation type="vanished">Scroll lock</translation>
-    </message>
-    <message>
-        <source>Right meta</source>
-        <translation type="vanished">Правая метаклавиша</translation>
-    </message>
-    <message>
-        <source>Left meta</source>
-        <translation type="vanished">Левая метаклавишa</translation>
     </message>
     <message>
         <source>A button</source>
@@ -4945,10 +4805,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>/maxteams: укажите число от 2 до 8</translation>
     </message>
     <message>
-        <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
-        <translation type="vanished">Доступные для голосования команды: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</translation>
-    </message>
-    <message>
         <source>The game can&apos;t be started with less than two clans!</source>
         <translation>Игра не может быть начата пока не будет как минимум две команды!</translation>
     </message>
@@ -5239,10 +5095,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
         <translation>/loadroom &lt;имя файла&gt;: Загрузить конфигурацию комнат (и приветствия) для голосования из файла</translation>
-    </message>
-    <message>
-        <source>&apos;Registered only&apos; state toggled.</source>
-        <translation type="vanished">Режим &apos;только для зарегистрированных&apos; переключён</translation>
     </message>
     <message>
         <source>Super power activated.</source>
