@@ -3,7 +3,7 @@ use std::{
     any::TypeId,
     fmt::{Debug, Error, Formatter},
     marker::PhantomData,
-    mem::{size_of, MaybeUninit},
+    mem::{align_of, size_of, MaybeUninit},
     num::NonZeroU16,
     ptr::{copy_nonoverlapping, null_mut, NonNull},
     slice,
@@ -117,26 +117,39 @@ impl Debug for DataBlock {
 }
 
 impl DataBlock {
-    fn new(mask: u64, element_sizes: &[u16]) -> Self {
+    fn new(mask: u64, element_sizes: &[u16], element_alignments: &[u8]) -> Self {
+        let total_padding: usize = element_alignments.iter().map(|x| *x as usize).sum();
         let total_size: u16 = element_sizes
             .iter()
             .enumerate()
             .filter(|(i, _)| mask & (1 << *i as u64) != 0)
             .map(|(_, size)| *size)
             .sum();
-        let max_elements = (BLOCK_SIZE / (total_size as usize + size_of::<GearId>())) as u16;
+        let max_elements =
+            ((BLOCK_SIZE - total_padding) / (total_size as usize + size_of::<GearId>())) as u16;
 
-        let mut data: Box<[u8; BLOCK_SIZE]> =
+        //ensure the block memory is aligned to GearId
+        let tmp_data: Box<[GearId; BLOCK_SIZE / size_of::<GearId>()]> =
             Box::new(unsafe { MaybeUninit::uninit().assume_init() });
+        let mut data: Box<[u8; BLOCK_SIZE]> =
+            unsafe { Box::from_raw(Box::into_raw(tmp_data) as *mut [u8; BLOCK_SIZE]) };
+
         let mut blocks = [None; 64];
-        let mut offset = size_of::<GearId>() * max_elements as usize;
+        let mut address = unsafe {
+            data.as_mut_ptr()
+                .add(size_of::<GearId>() * max_elements as usize)
+        };
 
         for i in 0..element_sizes.len() {
             if mask & (1 << i as u64) != 0 {
-                blocks[i] = Some(NonNull::new(data[offset..].as_mut_ptr()).unwrap());
-                offset += element_sizes[i] as usize * max_elements as usize;
+                unsafe {
+                    address = address.add(address.align_offset(element_alignments[i] as usize));
+                    blocks[i] = Some(NonNull::new_unchecked(address));
+                    address = address.add(element_sizes[i] as usize * max_elements as usize)
+                };
             }
         }
+
         Self {
             elements_count: 0,
             max_elements,
@@ -216,6 +229,7 @@ pub struct GearDataManager {
     blocks: Vec<DataBlock>,
     block_masks: Vec<BlockMask>,
     element_sizes: Box<[u16; 64]>,
+    element_alignments: Box<[u8; 64]>,
     lookup: Box<[LookupEntry]>,
 }
 
@@ -227,6 +241,7 @@ impl GearDataManager {
             blocks: vec![],
             block_masks: vec![],
             element_sizes: Box::new([0; 64]),
+            element_alignments: Box::new([0; 64]),
             lookup: vec![LookupEntry::default(); u16::max_value() as usize].into_boxed_slice(),
         }
     }
@@ -388,6 +403,7 @@ impl GearDataManager {
             self.blocks.push(DataBlock::new(
                 mask.type_mask,
                 &self.element_sizes[0..self.types.len()],
+                &self.element_alignments[0..self.types.len()],
             ));
             self.block_masks.push(mask);
             (self.blocks.len() - 1) as u16
@@ -482,6 +498,7 @@ impl GearDataManager {
             if !self.types.contains(&id) {
                 debug_assert!(self.types.len() <= 64);
                 self.element_sizes[self.types.len()] = size_of::<T>() as u16;
+                self.element_alignments[self.types.len()] = align_of::<T>() as u8;
                 self.types.push(id);
             }
         }
