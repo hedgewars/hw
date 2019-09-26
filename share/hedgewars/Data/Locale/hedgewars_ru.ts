@@ -4295,7 +4295,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Campaign support</source>
-        <translation>Поддержка компаний</translation>
+        <translation>Поддержка кампаний</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
