@@ -2339,7 +2339,7 @@ Last engine message:
     <message>
         <source>%1%</source>
         <extracomment>Video encoding progress. %1 = number</extracomment>
-        <translation><%1%/translation>
+        <translation>%1%</translation>
     </message>
     <message>
         <source>%1 (%2%) - %3</source>
