@@ -438,10 +438,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             // Another kind of fake nick. '(' nicks are server messages, but they must not be translated
             if(!sender.startsWith('('))
             {
-                // don't handle chat messages that are from ignored nicks
-                if (m_playersModel->isFlagSet(sender, PlayersListModel::Ignore))
-                    return;
-
                 // Check for action (/me command)
                 action = HWProto::chatStringToAction(message);
             }

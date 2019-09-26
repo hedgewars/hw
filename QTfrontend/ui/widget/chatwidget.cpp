@@ -426,6 +426,10 @@ void HWChatWidget::printChatString(
     if(!m_usersModel)
         return;
 
+    // don't show chat lines that are from ignored nicks
+    if (m_usersModel->isFlagSet(nick, PlayersListModel::Ignore))
+        return;
+
     bool isFriend = (!nick.isEmpty()) && m_usersModel->isFlagSet(nick, PlayersListModel::Friend);
 
     QString cssClass = (isFriend ? "msg_Friend" : "msg_User") + cssClassPart;
