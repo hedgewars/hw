@@ -4264,7 +4264,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
-        <translation><(QWERTY)/translation>
+        <translation>(QWERTY)</translation>
     </message>
     <message>
         <source>Menu</source>
