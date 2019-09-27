@@ -1464,6 +1464,8 @@ function onPointsTurn()
       break
     end
   end
+
+  updatePointsLabel(LastTeam)
 end
 
 function onNewTurn()
