@@ -1449,15 +1449,15 @@ Ultimo messaggio della macchina:
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation>
-            <numerusform>&lt;p&gt;Il miglior killer è &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisione in un turno.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Il miglior killer è &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisioni in un turno.&lt;/p&gt;</numerusform>
+            <numerusform>Il miglior killer è &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisione in un turno.</numerusform>
+            <numerusform>Il miglior killer è &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisioni in un turno.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
         <translation>
-            <numerusform>&lt;p&gt;Durante questo round è stato ucciso &lt;b&gt;%1&lt;/b&gt; riccio in totale.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Durante questo round sono stati uccisi &lt;b&gt;%1&lt;/b&gt; ricci in totale.&lt;/p&gt;</numerusform>
+            <numerusform>Durante questo round è stato ucciso &lt;b&gt;%1&lt;/b&gt; riccio in totale.</numerusform>
+            <numerusform>Durante questo round sono stati uccisi &lt;b&gt;%1&lt;/b&gt; ricci in totale.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
