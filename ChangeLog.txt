@@ -395,7 +395,7 @@ Content creation:
 
 Translations:
  + Translations kept up-to-date: German, Polish
- + Major translation updates: Russian, Japanese, Scottish Gaelic, Ukrainian
+ + Major translation updates: Russian, Japanese, Scottish Gaelic, Ukrainian, Italian
 
 Lua API:
  * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is deprecated and will become useless in future. Use the setter functions below
