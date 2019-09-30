@@ -573,7 +573,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupAccount->layout()->addWidget(labelNN, 0, 0);
 
             editNetNick = new QLineEdit(groupAccount);
-            editNetNick->setMaxLength(20);
+            editNetNick->setMaxLength(40);
             editNetNick->setText(QLineEdit::tr("anonymous"));
             groupAccount->layout()->addWidget(editNetNick, 0, 1);
 
