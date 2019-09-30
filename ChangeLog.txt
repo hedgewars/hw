@@ -135,6 +135,7 @@ Game HUD:
  + Show contour of flying saucer and air mines when in highly opaque water
  + Remove visual clutter in cut scenes
  + Add setting to set default/initial zoom
+ + Render arrow pointing to hog only one if playing with wrapped map
  * Black clan color can now be used without visual problems
  * Fix last 2 characters in demo chat being missing
  * Hide most HUD elements in cinematic mode
@@ -512,7 +513,9 @@ Styles and game modes:
  + ShoppaMap: Remove script parameter “pad”
  * The Specialists: Less buggy hog switching at turn start
  * Mutant: When game ends due to all land being gone, declare the highest-scoring team the winner
+ * Battalion: Fix incorrect health boost in Highland mode
  * Battalion: Some texts in the mission panel were wrong and misleading
+ * Battalion: Fix points display not updating properly
  * Construction Mode: Remove drill strike if added by weapon scheme (it's broken)
  * Construction Mode, Racer, HedgeEditor: No longer play Incoming voice for building stuff, fix other sound problems
  * Capture the Flag: Fix many bugs caused by playing with >2 teams
