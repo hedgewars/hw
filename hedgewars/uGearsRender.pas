@@ -38,6 +38,7 @@ type
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
 procedure RenderGearHealth(Gear: PGear; x, y: LongInt);
+procedure RenderFinger(Gear: PGear; ox, oy: LongInt);
 procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
 procedure RenderAirMineGuiExtras(Gear: PGear; ox, oy: LongInt);
 procedure DrawHHOrder();
@@ -238,15 +239,12 @@ if TeamsArray[t] <> nil then
 
 end;
 
-// Render some informational GUI next to hedgehog, like fuel and alternate weapon
-procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
+procedure RenderFinger(Gear: PGear; ox, oy: LongInt);
 var HH: PHedgehog;
-    sx, sy, tx, ty, t, hogLR: LongInt;
+    tx, ty, t: LongInt;
     dAngle: real;
 begin
     HH:= Gear^.Hedgehog;
-    sx:= ox + 1; // this offset is very common
-    sy:= oy - 3;
     if HH^.Unplaced then
         exit;
     if (Gear^.State and gstHHDeath) <> 0 then
@@ -256,7 +254,7 @@ begin
     if (CinematicScript) then
         exit;
 
-    // render finger (pointing arrow)
+    // render finger (arrow pointing to hog)
     if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
         begin
         ty := oy - 32;
@@ -294,6 +292,25 @@ begin
         DrawSpriteRotatedF(sprFinger, tx, ty, RealTicks div 32 mod 16, 1, dAngle);
         untint;
         end;
+end;
+
+
+// Render some informational GUI next to hedgehog, like fuel and alternate weapon
+procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
+var HH: PHedgehog;
+    sx, sy, hogLR: LongInt;
+begin
+    HH:= Gear^.Hedgehog;
+    sx:= ox + 1; // this offset is very common
+    sy:= oy - 3;
+    if HH^.Unplaced then
+        exit;
+    if (Gear^.State and gstHHDeath) <> 0 then
+        exit;
+    if (Gear^.State and gstHHGone) <> 0 then
+        exit;
+    if (CinematicScript) then
+        exit;
 
     // render crosshair
     if (CrosshairGear <> nil) and (Gear = CrosshairGear) then
