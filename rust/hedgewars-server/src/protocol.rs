@@ -24,7 +24,8 @@ impl ProtocolDecoder {
     fn recover(&mut self) -> bool {
         self.is_recovering = match parser::malformed_message(&self.buf[..]) {
             Ok((tail, ())) => {
-                self.buf.consume(self.buf.len() - tail.len());
+                let length = tail.len();
+                self.buf.consume(self.buf.len() - length);
                 false
             }
             _ => {
@@ -50,7 +51,8 @@ impl ProtocolDecoder {
                 match parser::message(&self.buf[..]) {
                     Ok((tail, message)) => {
                         messages.push(message);
-                        self.buf.consume(self.buf.len() - tail.len());
+                        let length = tail.len();
+                        self.buf.consume(self.buf.len() - length);
                     }
                     Err(nom::Err::Incomplete(_)) => break,
                     Err(nom::Err::Failure(e)) | Err(nom::Err::Error(e)) => {

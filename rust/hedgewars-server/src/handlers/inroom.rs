@@ -52,7 +52,7 @@ fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
         [size, typ, body..MAX] => {
             VALID_MESSAGES.contains(typ)
                 && match body {
-                    [1...MAX_HEDGEHOGS_PER_TEAM, team, ..] if *typ == b'h' => {
+                    [1..=MAX_HEDGEHOGS_PER_TEAM, team, ..] if *typ == b'h' => {
                         team_indices.contains(team)
                     }
                     _ => *typ != b'h',
@@ -272,12 +272,8 @@ pub fn handle(
             Some((_, name)) => {
                 client.teams_in_game -= 1;
                 client.clan = room.find_team_color(client.id);
-                super::common::remove_teams(
-                    room,
-                    vec![name.to_string()],
-                    client.is_in_game(),
-                    response,
-                );
+                let names = vec![name.to_string()];
+                super::common::remove_teams(room, names, client.is_in_game(), response);
 
                 match room.game_info {
                     Some(ref info) if info.teams_in_game == 0 => {
@@ -438,7 +434,7 @@ pub fn handle(
                 }
                 VoteType::NewSeed => None,
                 VoteType::HedgehogsPerTeam(number) => match number {
-                    1...MAX_HEDGEHOGS_PER_TEAM => None,
+                    1..=MAX_HEDGEHOGS_PER_TEAM => None,
                     _ => Some("/callvote hedgehogs: Specify number from 1 to 8.".to_string()),
                 },
             };

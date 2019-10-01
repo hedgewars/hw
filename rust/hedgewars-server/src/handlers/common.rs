@@ -2,7 +2,7 @@ use crate::{
     core::{
         client::HwClient,
         room::HwRoom,
-        server::HwServer,
+        server::{HwServer, JoinRoomError},
         types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
     },
     protocol::messages::{
@@ -227,32 +227,43 @@ pub fn change_master(
     );
 }
 
-pub fn enter_room(
-    server: &mut HwServer,
-    client_id: ClientId,
-    room_id: RoomId,
+pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
+    client: &HwClient,
+    room: &HwRoom,
+    room_clients: I,
     response: &mut Response,
 ) {
-    let nick = server.clients[client_id].nick.clone();
-    server.move_to_room(client_id, room_id);
+    #[inline]
+    fn collect_nicks<'a, I, F>(clients: I, f: F) -> Vec<String>
+    where
+        I: Iterator<Item = &'a HwClient>,
+        F: Fn(&&'a HwClient) -> bool,
+    {
+        clients.filter(f).map(|c| &c.nick).cloned().collect()
+    }
 
-    response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room_id));
+    let nick = client.nick.clone();
+    response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room.id));
     response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick]).send_all());
-    let nicks = server.collect_nicks(|(_, c)| c.room_id == Some(room_id));
+    let nicks = collect_nicks(room_clients.clone(), |c| c.room_id == Some(room.id));
     response.add(RoomJoined(nicks).send_self());
 
-    get_room_teams(server, room_id, client_id, response);
-
-    let room = &server.rooms[room_id];
-    get_room_config(room, client_id, response);
+    get_room_teams(room, client.id, response);
+    get_room_config(room, client.id, response);
 
     let mut flag_selectors = [
         (
             Flags::RoomMaster,
-            server.collect_nicks(|(_, c)| c.is_master()),
+            collect_nicks(room_clients.clone(), |c| c.is_master()),
         ),
-        (Flags::Ready, server.collect_nicks(|(_, c)| c.is_ready())),
-        (Flags::InGame, server.collect_nicks(|(_, c)| c.is_in_game())),
+        (
+            Flags::Ready,
+            collect_nicks(room_clients.clone(), |c| c.is_ready()),
+        ),
+        (
+            Flags::InGame,
+            collect_nicks(room_clients.clone(), |c| c.is_in_game()),
+        ),
     ];
 
     for (flag, nicks) in &mut flag_selectors {
@@ -267,6 +278,16 @@ pub fn enter_room(
             }
             .send_self(),
         );
+    }
+}
+
+pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
+    use super::strings::*;
+    match error {
+        JoinRoomError::DoesntExist => response.warn(NO_ROOM),
+        JoinRoomError::WrongProtocol => response.warn(WRONG_PROTOCOL),
+        JoinRoomError::Full => response.warn(ROOM_FULL),
+        JoinRoomError::Restricted => response.warn(ROOM_JOIN_RESTRICTED),
     }
 }
 
@@ -354,13 +375,7 @@ where
     }
 }
 
-pub fn get_room_teams(
-    server: &HwServer,
-    room_id: RoomId,
-    to_client: ClientId,
-    response: &mut Response,
-) {
-    let room = &server.rooms[room_id];
+pub fn get_room_teams(room: &HwRoom, to_client: ClientId, response: &mut Response) {
     let current_teams = match room.game_info {
         Some(ref info) => &info.teams_at_start,
         None => &room.teams,

@@ -1,10 +1,10 @@
 use mio;
 
-use super::common::rnd_reply;
+use super::{common::rnd_reply, strings::*};
 use crate::{
     core::{
         client::HwClient,
-        server::HwServer,
+        server::{AccessError, CreateRoomError, HwServer, JoinRoomError},
         types::{ClientId, ServerVar},
     },
     protocol::messages::{
@@ -23,41 +23,34 @@ pub fn handle(
     message: HwProtocolMessage,
 ) {
     use crate::protocol::messages::HwProtocolMessage::*;
+
     match message {
-        CreateRoom(name, password) => {
-            if is_name_illegal(&name) {
-                response.add(Warning("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string()).send_self());
-            } else if server.has_room(&name) {
-                response.add(
-                    Warning("A room with the same name already exists.".to_string()).send_self(),
-                );
-            } else {
-                let flags_msg = ClientFlags(
-                    add_flags(&[Flags::RoomMaster, Flags::Ready]),
-                    vec![server.clients[client_id].nick.clone()],
-                );
-
-                let room_id = server.create_room(client_id, name, password);
-                let room = &server.rooms[room_id];
-                let client = &server.clients[client_id];
-
+        CreateRoom(name, password) => match server.create_room(client_id, name, password) {
+            Err(CreateRoomError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
+            Err(CreateRoomError::AlreadyExists) => response.warn(ROOM_EXISTS),
+            Ok((client, room)) => {
                 response.add(
                     RoomAdd(room.info(Some(&client)))
                         .send_all()
                         .with_protocol(room.protocol_number),
                 );
                 response.add(RoomJoined(vec![client.nick.clone()]).send_self());
-                response.add(flags_msg.send_self());
-
+                response.add(
+                    ClientFlags(
+                        add_flags(&[Flags::RoomMaster, Flags::Ready]),
+                        vec![client.nick.clone()],
+                    )
+                    .send_self(),
+                );
                 response.add(
                     ClientFlags(add_flags(&[Flags::InRoom]), vec![client.nick.clone()]).send_self(),
                 );
-            };
-        }
+            }
+        },
         Chat(msg) => {
             response.add(
                 ChatMsg {
-                    nick: server.clients[client_id].nick.clone(),
+                    nick: server.get_client_nick(client_id).to_string(),
                     msg,
                 }
                 .send_all()
@@ -65,99 +58,62 @@ pub fn handle(
                 .but_self(),
             );
         }
-        JoinRoom(name, _password) => {
-            let room = server.rooms.iter().find(|(_, r)| r.name == name);
-            let room_id = room.map(|(_, r)| r.id);
-
-            let client = &mut server.clients[client_id];
-
-            if let Some((_, room)) = room {
-                if client.protocol_number != room.protocol_number {
-                    response.add(
-                        Warning("Room version incompatible to your Hedgewars version!".to_string())
-                            .send_self(),
-                    );
-                } else if room.is_join_restricted() {
-                    response.add(
-                        Warning(
-                            "Access denied. This room currently doesn't allow joining.".to_string(),
-                        )
-                        .send_self(),
-                    );
-                } else if room.players_number == u8::max_value() {
-                    response.add(Warning("This room is already full".to_string()).send_self());
-                } else if let Some(room_id) = room_id {
-                    super::common::enter_room(server, client_id, room_id, response);
-                }
-            } else {
-                response.add(Warning("No such room.".to_string()).send_self());
+        JoinRoom(name, _password) => match server.join_room_by_name(client_id, &name) {
+            Err(error) => super::common::get_room_join_error(error, response),
+            Ok((client, room, room_clients)) => {
+                super::common::get_room_join_data(client, room, room_clients, response)
             }
-        }
+        },
         Follow(nick) => {
-            if let Some(HwClient {
-                room_id: Some(room_id),
-                ..
-            }) = server.find_client(&nick)
-            {
-                let room = &server.rooms[*room_id];
-                response.add(Joining(room.name.clone()).send_self());
-                super::common::enter_room(server, client_id, *room_id, response);
-            }
-        }
-        SetServerVar(var) => {
-            if !server.clients[client_id].is_admin() {
-                response.add(Warning("Access denied.".to_string()).send_self());
-            } else {
-                match var {
-                    ServerVar::MOTDNew(msg) => server.greetings.for_latest_protocol = msg,
-                    ServerVar::MOTDOld(msg) => server.greetings.for_old_protocols = msg,
-                    ServerVar::LatestProto(n) => server.latest_protocol = n,
+            if let Some(client) = server.find_client(&nick) {
+                if let Some(room_id) = client.room_id {
+                    match server.join_room(client_id, room_id) {
+                        Err(error) => super::common::get_room_join_error(error, response),
+                        Ok((client, room, room_clients)) => {
+                            super::common::get_room_join_data(client, room, room_clients, response)
+                        }
+                    }
+                } else {
+                    response.warn(NO_ROOM);
                 }
-            }
-        }
-        GetServerVar => {
-            if !server.clients[client_id].is_admin() {
-                response.add(Warning("Access denied.".to_string()).send_self());
             } else {
-                let vars: Vec<_> = [
-                    ServerVar::MOTDNew(server.greetings.for_latest_protocol.clone()),
-                    ServerVar::MOTDOld(server.greetings.for_old_protocols.clone()),
-                    ServerVar::LatestProto(server.latest_protocol),
-                ]
-                .iter()
-                .flat_map(|v| v.to_protocol())
-                .collect();
-                response.add(ServerVars(vars).send_self());
+                response.warn(NO_USER);
             }
         }
+        SetServerVar(var) => match server.set_var(client_id, var) {
+            Err(AccessError()) => response.warn(ACCESS_DENIED),
+            Ok(()) => response.add(server_chat(VARIABLE_UPDATED.to_string()).send_self()),
+        },
+        GetServerVar => match server.get_vars(client_id) {
+            Err(AccessError()) => response.warn(ACCESS_DENIED),
+            Ok(vars) => {
+                response.add(
+                    ServerVars(vars.iter().flat_map(|v| v.to_protocol()).collect()).send_self(),
+                );
+            }
+        },
         Rnd(v) => {
             response.add(rnd_reply(&v).send_self());
         }
-        Stats => {
-            let mut protocols: HashSet<_> = server
-                .clients
-                .iter()
-                .map(|(_, c)| c.protocol_number)
-                .chain(server.rooms.iter().map(|(_, r)| r.protocol_number))
-                .collect();
-            let mut protocols: Vec<_> = protocols.drain().collect();
-            protocols.sort();
+        Stats => match server.get_used_protocols(client_id) {
+            Err(AccessError()) => response.warn(ACCESS_DENIED),
+            Ok(protocols) => {
+                let mut html = Vec::with_capacity(protocols.len() + 2);
 
-            let mut html = Vec::with_capacity(protocols.len() + 2);
+                html.push("<table>".to_string());
+                for protocol in protocols {
+                    html.push(format!(
+                        "<tr><td>{}</td><td>{}</td><td>{}</td></tr>",
+                        super::utils::protocol_version_string(protocol),
+                        server.protocol_clients(protocol).count(),
+                        server.protocol_rooms(protocol).count()
+                    ));
+                }
+                html.push("</table>".to_string());
 
-            html.push("<table>".to_string());
-            for protocol in protocols {
-                html.push(format!(
-                    "<tr><td>{}</td><td>{}</td><td>{}</td></tr>",
-                    super::utils::protocol_version_string(protocol),
-                    server.protocol_clients(protocol).count(),
-                    server.protocol_rooms(protocol).count()
-                ));
+                response.add(Warning(html.join("")).send_self());
             }
-            html.push("</table>".to_string());
-
-            response.add(Warning(html.join("")).send_self());
-        }
+        },
         List => warn!("Deprecated LIST message received"),
         _ => warn!("Incorrect command in lobby state"),
     }

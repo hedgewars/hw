@@ -41,7 +41,7 @@ impl<T> IndexSlab<T> {
         }
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = (usize, &T)> {
+    pub fn iter(&self) -> impl Iterator<Item = (usize, &T)> + Clone {
         self.data
             .iter()
             .enumerate()

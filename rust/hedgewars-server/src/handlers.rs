@@ -32,6 +32,7 @@ mod common;
 mod inanteroom;
 mod inlobby;
 mod inroom;
+mod strings;
 
 #[derive(PartialEq, Debug)]
 pub struct Sha1Digest([u8; 20]);
@@ -157,6 +158,11 @@ impl Response {
     #[inline]
     pub fn add(&mut self, message: PendingMessage) {
         self.messages.push(message)
+    }
+
+    #[inline]
+    pub fn warn(&mut self, message: &str) {
+        self.add(Warning(message.to_string()).send_self());
     }
 
     #[inline]
