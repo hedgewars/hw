@@ -1,0 +1,9 @@
+pub const ACCESS_DENIED: &str = "Access denied.";
+pub const ILLEGAL_ROOM_NAME: &str = "Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}";
+pub const NO_ROOM: &str = "No such room.";
+pub const NO_USER: &str = "No such user.";
+pub const ROOM_EXISTS: &str = "A room with the same name already exists.";
+pub const ROOM_FULL: &str = "This room is already full.";
+pub const ROOM_JOIN_RESTRICTED: &str = "Access denied. This room currently doesn't allow joining.";
+pub const VARIABLE_UPDATED: &str = "Server variable has been updated.";
+pub const WRONG_PROTOCOL: &str = "Room version incompatible to your Hedgewars version!";
