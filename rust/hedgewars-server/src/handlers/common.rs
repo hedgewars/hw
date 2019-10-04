@@ -35,10 +35,10 @@ pub fn rnd_reply(options: &[String]) -> HwServerMessage {
     }
 }
 
-pub fn join_lobby(server: &mut HwServer, response: &mut Response) {
+pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
     let client_id = response.client_id();
 
-    let client = &server.clients[client_id];
+    let client = server.client(client_id);
     let nick = vec![client.nick.clone()];
     let mut flags = vec![];
     if client.is_registered() {
@@ -69,7 +69,7 @@ pub fn join_lobby(server: &mut HwServer, response: &mut Response) {
         ),
     ];
 
-    let server_msg = ServerMessage(server.get_greetings(client_id).to_string());
+    let server_msg = ServerMessage(server.get_greetings(client).to_string());
 
     let rooms_msg = Rooms(
         server
@@ -338,8 +338,8 @@ pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String
 
     server.remove_client(client_id);
 
-    response.add(LobbyLeft(nick, msg.to_string()).send_all());
-    response.add(Bye("User quit: ".to_string() + &msg).send_self());
+    response.add(LobbyLeft(nick, msg.clone()).send_all());
+    response.add(Bye(msg).send_self());
     response.remove_client(client_id);
 }
 

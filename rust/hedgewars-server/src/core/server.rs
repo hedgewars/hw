@@ -14,11 +14,13 @@ use std::{borrow::BorrowMut, collections::HashSet, iter, num::NonZeroU16};
 
 type Slab<T> = slab::Slab<T>;
 
+#[derive(Debug)]
 pub enum CreateRoomError {
     InvalidName,
     AlreadyExists,
 }
 
+#[derive(Debug)]
 pub enum JoinRoomError {
     DoesntExist,
     WrongProtocol,
@@ -26,6 +28,9 @@ pub enum JoinRoomError {
     Restricted,
 }
 
+#[derive(Debug)]
+pub struct UninitializedError();
+#[derive(Debug)]
 pub struct AccessError();
 
 pub struct HwAnteClient {
@@ -34,6 +39,9 @@ pub struct HwAnteClient {
     pub server_salt: String,
     pub is_checker: bool,
     pub is_local_admin: bool,
+    pub is_registered: bool,
+    pub is_admin: bool,
+    pub is_contributor: bool,
 }
 
 pub struct HwAnteroom {
@@ -53,6 +61,9 @@ impl HwAnteroom {
             server_salt: salt,
             is_checker: false,
             is_local_admin,
+            is_registered: false,
+            is_admin: false,
+            is_contributor: false,
         };
         self.clients.insert(client_id, client);
     }
@@ -106,12 +117,47 @@ impl HwServer {
         }
     }
 
+    #[inline]
+    pub fn client(&self, client_id: ClientId) -> &HwClient {
+        &self.clients[client_id]
+    }
+
+    #[inline]
+    pub fn client_mut(&mut self, client_id: ClientId) -> &mut HwClient {
+        &mut self.clients[client_id]
+    }
+
+    #[inline]
+    pub fn room(&self, room_id: RoomId) -> &HwRoom {
+        &self.rooms[room_id]
+    }
+
+    #[inline]
+    pub fn room_mut(&mut self, room_id: RoomId) -> &mut HwRoom {
+        &mut self.rooms[room_id]
+    }
+
+    #[inline]
+    pub fn is_admin(&self, client_id: ClientId) -> bool {
+        self.clients
+            .get(client_id)
+            .map(|c| c.is_admin())
+            .unwrap_or(false)
+    }
+
     pub fn add_client(&mut self, client_id: ClientId, data: HwAnteClient) {
         if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
             let mut client = HwClient::new(client_id, protocol.get(), nick);
             client.set_is_checker(data.is_checker);
             #[cfg(not(feature = "official-server"))]
             client.set_is_admin(data.is_local_admin);
+
+            #[cfg(feature = "official-server")]
+            {
+                client.set_is_registered(info.is_registered);
+                client.set_is_admin(info.is_admin);
+                client.set_is_contributor(info.is_contributor);
+            }
 
             self.clients.insert(client_id, client);
         }
@@ -121,8 +167,8 @@ impl HwServer {
         self.clients.remove(client_id);
     }
 
-    pub fn get_greetings(&self, client_id: ClientId) -> &str {
-        if self.clients[client_id].protocol_number < self.latest_protocol {
+    pub fn get_greetings(&self, client: &HwClient) -> &str {
+        if client.protocol_number < self.latest_protocol {
             &self.greetings.for_old_protocols
         } else {
             &self.greetings.for_latest_protocol

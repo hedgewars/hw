@@ -9,6 +9,7 @@ use std::{
 use self::{
     actions::{Destination, DestinationGroup, PendingMessage},
     inanteroom::LoginResult,
+    strings::*,
 };
 use crate::{
     core::{
@@ -166,6 +167,11 @@ impl Response {
     }
 
     #[inline]
+    pub fn error(&mut self, message: &str) {
+        self.add(Error(message.to_string()).send_self());
+    }
+
+    #[inline]
     pub fn request_io(&mut self, task: IoTask) {
         self.io_tasks.push(task)
     }
@@ -246,7 +252,7 @@ pub fn handle(
                     LoginResult::Complete => {
                         if let Some(client) = server.anteroom.remove_client(client_id) {
                             server.add_client(client_id, client);
-                            common::join_lobby(server, response);
+                            common::get_lobby_join_data(server, response);
                         }
                     }
                     LoginResult::Exit => {
@@ -268,7 +274,7 @@ pub fn handle(
                             let master_sign = if client.is_master() { "+" } else { "" };
                             let room_info = match client.room_id {
                                 Some(room_id) => {
-                                    let room = &server.rooms[room_id];
+                                    let room = server.room(room_id);
                                     let status = match room.game_info {
                                         Some(_) if client.teams_in_game == 0 => "(spectating)",
                                         Some(_) => "(playing)",
@@ -290,37 +296,36 @@ pub fn handle(
                             ];
                             response.add(Info(info).send_self())
                         } else {
-                            response
-                                .add(server_chat("Player is not online.".to_string()).send_self())
+                            response.add(server_chat(USER_OFFLINE.to_string()).send_self())
                         }
                     }
                     HwProtocolMessage::ToggleServerRegisteredOnly => {
-                        if !server.clients[client_id].is_admin() {
-                            response.add(Warning("Access denied.".to_string()).send_self());
+                        if !server.is_admin(client_id) {
+                            response.warn(ACCESS_DENIED);
                         } else {
-                            server.set_is_registered_only(server.is_registered_only());
+                            server.set_is_registered_only(!server.is_registered_only());
                             let msg = if server.is_registered_only() {
-                                "This server no longer allows unregistered players to join."
+                                REGISTERED_ONLY_ENABLED
                             } else {
-                                "This server now allows unregistered players to join."
+                                REGISTERED_ONLY_DISABLED
                             };
                             response.add(server_chat(msg.to_string()).send_all());
                         }
                     }
                     HwProtocolMessage::Global(msg) => {
-                        if !server.clients[client_id].is_admin() {
-                            response.add(Warning("Access denied.".to_string()).send_self());
+                        if !server.is_admin(client_id) {
+                            response.warn(ACCESS_DENIED);
                         } else {
                             response.add(global_chat(msg).send_all())
                         }
                     }
                     HwProtocolMessage::SuperPower => {
-                        if !server.clients[client_id].is_admin() {
-                            response.add(Warning("Access denied.".to_string()).send_self());
+                        let client = server.client_mut(client_id);
+                        if !client.is_admin() {
+                            response.warn(ACCESS_DENIED);
                         } else {
-                            server.clients[client_id].set_has_super_power(true);
-                            response
-                                .add(server_chat("Super power activated.".to_string()).send_self())
+                            client.set_has_super_power(true);
+                            response.add(server_chat(SUPER_POWER.to_string()).send_self())
                         }
                     }
                     HwProtocolMessage::Watch(id) => {
@@ -331,13 +336,10 @@ pub fn handle(
 
                         #[cfg(not(feature = "official-server"))]
                         {
-                            response.add(
-                                Warning("This server does not support replays!".to_string())
-                                    .send_self(),
-                            );
+                            response.warn(REPLAY_NOT_SUPPORTED);
                         }
                     }
-                    _ => match server.clients[client_id].room_id {
+                    _ => match server.client(client_id).room_id {
                         None => inlobby::handle(server, client_id, response, message),
                         Some(room_id) => {
                             inroom::handle(server, client_id, response, room_id, message)
@@ -380,38 +382,35 @@ pub fn handle_io_result(
     match io_result {
         IoResult::AccountRegistered(is_registered) => {
             if !is_registered && server.is_registered_only() {
-                response.add(
-                    Bye("This server only allows registered users to join.".to_string())
-                        .send_self(),
-                );
+                response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
                 response.remove_client(client_id);
             } else if is_registered {
                 let salt = server.anteroom.clients[client_id].server_salt.clone();
                 response.add(AskPassword(salt).send_self());
             } else if let Some(client) = server.anteroom.remove_client(client_id) {
                 server.add_client(client_id, client);
-                common::join_lobby(server, response);
+                common::get_lobby_join_data(server, response);
             }
         }
         IoResult::Account(Some(info)) => {
             response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
-            if let Some(client) = server.anteroom.remove_client(client_id) {
+            if let Some(mut client) = server.anteroom.remove_client(client_id) {
+                client.is_registered = info.is_registered;
+                client.is_admin = info.is_admin;
+                client.is_contributor = info.is_contributor;
                 server.add_client(client_id, client);
-                let client = &mut server.clients[client_id];
-                client.set_is_registered(info.is_registered);
-                client.set_is_admin(info.is_admin);
-                client.set_is_contributor(info.is_contributor);
-                common::join_lobby(server, response);
+                common::get_lobby_join_data(server, response);
             }
         }
         IoResult::Account(None) => {
-            response.add(Error("Authentication failed.".to_string()).send_self());
+            response.error(AUTHENTICATION_FAILED);
             response.remove_client(client_id);
         }
         IoResult::Replay(Some(replay)) => {
-            let protocol = server.clients[client_id].protocol_number;
+            let client = server.client(client_id);
+            let protocol = client.protocol_number;
             let start_msg = if protocol < 58 {
-                RoomJoined(vec![server.clients[client_id].nick.clone()])
+                RoomJoined(vec![client.nick.clone()])
             } else {
                 ReplayStart
             };
@@ -427,32 +426,27 @@ pub fn handle_io_result(
             }
         }
         IoResult::Replay(None) => {
-            response.add(Warning("Could't load the replay".to_string()).send_self())
+            response.warn(REPLAY_LOAD_FAILED);
         }
         IoResult::SaveRoom(_, true) => {
-            response.add(server_chat("Room configs saved successfully.".to_string()).send_self());
+            response.add(server_chat(ROOM_CONFIG_SAVED.to_string()).send_self());
         }
         IoResult::SaveRoom(_, false) => {
-            response.add(Warning("Unable to save the room configs.".to_string()).send_self());
+            response.warn(ROOM_CONFIG_SAVE_FAILED);
         }
         IoResult::LoadRoom(room_id, Some(contents)) => {
             if let Some(ref mut room) = server.rooms.get_mut(room_id) {
                 match room.set_saves(&contents) {
-                    Ok(_) => response.add(
-                        server_chat("Room configs loaded successfully.".to_string()).send_self(),
-                    ),
+                    Ok(_) => response.add(server_chat(ROOM_CONFIG_LOADED.to_string()).send_self()),
                     Err(e) => {
                         warn!("Error while deserializing the room configs: {}", e);
-                        response.add(
-                            Warning("Unable to deserialize the room configs.".to_string())
-                                .send_self(),
-                        );
+                        response.warn(ROOM_CONFIG_DESERIALIZE_FAILED);
                     }
                 }
             }
         }
         IoResult::LoadRoom(_, None) => {
-            response.add(Warning("Unable to load the room configs.".to_string()).send_self());
+            response.warn(ROOM_CONFIG_LOAD_FAILED);
         }
     }
 }
