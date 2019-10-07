@@ -393,6 +393,8 @@ with CurrentTeam^.Clan^ do
 CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
 if CurWeapon^.Count = 0 then
     CurrentHedgehog^.CurAmmoType:= amNothing;
+if CurrentHedgehog^.BotLevel <> 0 then
+    CurrentHedgehog^.Gear^.AIHints:= (CurrentHedgehog^.Gear^.AIHints and (not aihAmmosChanged));
 
 with CurrentHedgehog^ do
     begin

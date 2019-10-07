@@ -107,6 +107,7 @@ begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
 windSpeed:= hwFloat2Float(cWindSpeed);
 useThisActions:= false;
+Me^.AIHints:= Me^.AIHints and (not aihAmmosChanged);
 
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
@@ -432,7 +433,7 @@ if Me^.Hedgehog^.BotLevel <> 5 then
     switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch)
 else switchCount:= 0;
 
-if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
+if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity or ((Me^.AIHints and aihAmmosChanged) <> 0) then
     if Targets.Count > 0 then
         begin
         // iterate over current team hedgehogs
@@ -478,7 +479,7 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
             FillBonuses(false);
 
             // Hog has no idea what to do. Use tardis or skip
-            if not bonuses.activity then
+            if (not bonuses.activity) and ((Me^.AIHints and aihAmmosChanged) = 0) then
                 if (((GameFlags and gfInfAttack) <> 0) or (CurrentHedgehog^.MultiShootAttacks = 0)) and (HHHasAmmo(Me^.Hedgehog^, amTardis) > 0) and (CanUseTardis(Me^.Hedgehog^.Gear)) and (random(4) < 3) then
                     // Tardis brings hog to a random place. Perfect for clueless AI
                     begin
@@ -488,6 +489,7 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
                     end
                 else
                     AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+            Me^.AIHints := ME^.AIHints and (not aihAmmosChanged);
             end;
 
         end else SDL_Delay(100)

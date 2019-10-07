@@ -265,7 +265,9 @@ with Hedgehog, CurWeapon^ do
         begin
         PackAmmo(Ammo, Ammoz[AmmoType].Slot);
         CurAmmoType:= amNothing
-        end
+        end;
+if Hedgehog.BotLevel <> 0 then
+    Hedgehog.Gear^.AIHints := Hedgehog.Gear^.AIHints or aihAmmosChanged;
 end;
 
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
