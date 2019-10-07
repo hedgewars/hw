@@ -1,6 +1,6 @@
 + features
 * bugfixes
-============== 1.0.0-dev (unreleased) ==============
+====================== 1.0.0 =======================
 Highlights:
  + Campaigns now respect your team identity instead of overwriting it
  + Single missions now support team selection and track your progress
