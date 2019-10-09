@@ -84,7 +84,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"!MULTI",    QT_TRANSLATE_NOOP("binds (combination)", "precise + toggle hedgehog tags"), QT_TRANSLATE_NOOP("binds", "change hedgehog tag types"), NULL, NULL},
     {"!MULTI",    QT_TRANSLATE_NOOP("binds (combination)", "switch + toggle hedgehog tags"), QT_TRANSLATE_NOOP("binds", "toggle hedgehog tag translucency"), NULL, NULL},
 
-    {"!MULTI",    QT_TRANSLATE_NOOP("binds (combination)", "precise + switch + toggle hedgehog tags"), QT_TRANSLATE_NOOP("binds", "toggle HUD"), NULL, NULL},
+    {"!MULTI",    QT_TRANSLATE_NOOP("binds (combination)", "precise + switch + toggle team bars"), QT_TRANSLATE_NOOP("binds", "toggle HUD"), NULL, NULL},
 #ifdef VIDEOREC
     {"record",    "r",          QT_TRANSLATE_NOOP("binds", "record"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Record video:")}
 #endif
