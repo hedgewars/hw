@@ -112,7 +112,6 @@ include(${CMAKE_MODULE_PATH}/platform.cmake)
 
 #when build type is not specified, assume Debug/Release according to build version information
 if(CMAKE_BUILD_TYPE)
-    string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
     if(NOT((CMAKE_BUILD_TYPE MATCHES "Release") OR
            (CMAKE_BUILD_TYPE MATCHES "Debug") OR
            (CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo")))
