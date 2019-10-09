@@ -59,6 +59,7 @@ local hogsLimit = 1
 local teamsDead = {}
 local teamsDeleted = {}
 local hogLimitHit = false
+local teamLimitHit = false
 local cnthhs
 
 local circles = {}
@@ -157,7 +158,7 @@ function limitHogsTeam(gear)
 end
 
 function limitHogsClan(gear)
-    hogLimitHit = true
+    teamLimitHit = true
     SetEffect(gear, heResurrectable, 0)
     setGearValue(gear, "excess", true)
     DeleteGear(gear)
@@ -197,8 +198,10 @@ function onGameStart()
         cnthhs = 0
         runOnHogsInTeam(limitHogsTeam, GetTeamName(i))
     end
+    if teamLimitHit then
+        WriteLnToChat(loc("Only one team per clan allowed! Excess teams will be removed."))
+    end
     if hogLimitHit then
-        -- TODO: Update warning message to include excess teams as well
         WriteLnToChat(loc("Only one hog per team allowed! Excess hogs will be removed."))
     end
     trackTeams()
