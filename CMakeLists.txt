@@ -54,7 +54,7 @@ option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if so
 
 
 if(BUILD_ENGINE_C AND NOT NOVIDEOREC)
-    if((CMAKE_BUILD_TYPE MATCHES "Release") OR (CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo"))
+    if((CMAKE_BUILD_TYPE STREQUAL "Release") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
         message("NOTE: Video recorder support disabled. It's incompatible with BUILD_ENGINE_C")
         set(BUILD_ENGINE_C ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     else()
@@ -93,7 +93,7 @@ set(CPACK_PACKAGE_VERSION_MAJOR 1)
 set(CPACK_PACKAGE_VERSION_MINOR 0)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(HEDGEWARS_PROTO_VER 59)
-if((CMAKE_BUILD_TYPE MATCHES "Release") OR (CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo"))
+if((CMAKE_BUILD_TYPE STREQUAL "Release") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
     set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 else()
     set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-dev")
@@ -112,9 +112,9 @@ include(${CMAKE_MODULE_PATH}/platform.cmake)
 
 #when build type is not specified, assume Debug/Release according to build version information
 if(CMAKE_BUILD_TYPE)
-    if(NOT((CMAKE_BUILD_TYPE MATCHES "Release") OR
-           (CMAKE_BUILD_TYPE MATCHES "Debug") OR
-           (CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo")))
+    if(NOT((CMAKE_BUILD_TYPE STREQUAL "Release") OR
+           (CMAKE_BUILD_TYPE STREQUAL "Debug") OR
+           (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")))
         set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release/RelWithDebInfo)" FORCE)
         message(STATUS "Unknown build type ${CMAKE_BUILD_TYPE}, using default (${default_build_type})")
     endif()
@@ -167,7 +167,7 @@ endif()
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
                               "-fno-warn-unused-do-bind"

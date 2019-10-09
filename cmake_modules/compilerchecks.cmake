@@ -62,7 +62,7 @@ if(UNIX)
         endif()
     endif()
 
-    if(CMAKE_BUILD_TYPE MATCHES "Release" OR CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo")
+    if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
         set(CMAKE_REQUIRED_FLAGS "-Wl,--as-needed")
         check_c_compiler_flag("" HAVE_ASNEEDED)
         if(HAVE_ASNEEDED)
