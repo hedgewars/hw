@@ -106,6 +106,13 @@ set(CPACK_SOURCE_IGNORE_FILES
     "^${CMAKE_CURRENT_SOURCE_DIR}/gameServer2"
     "^${CMAKE_CURRENT_SOURCE_DIR}/rust"
     "^${CMAKE_CURRENT_SOURCE_DIR}/qmlfrontend"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/hedgewars"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/hwengine"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/hedgewars-server"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/link\\\\.res"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/ppas\\\\.sh"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/libavwrapper\\\\.*"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/libphyslayer\\\\.*"
 )
 
 include(CPack)
