@@ -52,6 +52,7 @@ matrix:
 
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    sudo add-apt-repository ppa:costamagnagianfranco/hedgewars-nightly -y
     sudo apt-get update -qq
   elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew update
@@ -65,18 +66,7 @@ before_install: |
 
 install: |
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    sudo apt-get install -y debhelper cmake dpkg-dev qtbase5-dev qtbase5-private-dev qttools5-dev-tools qttools5-dev libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-net-dev bzip2 ghc libghc-mtl-dev libghc-vector-dev libghc-zlib-dev libghc-random-dev libghc-network-dev libghc-sandi-dev libghc-hslogger-dev libghc-utf8-string-dev libghc-sha-dev libghc-entropy-dev libghc-regex-tdfa-dev libghc-aeson-dev libghc-yaml-dev libghc-text-dev liblua5.1-0-dev fpc fp-compiler fp-units-misc libpng-dev fp-units-gfx libavcodec-dev libavformat-dev libglew1.6-dev
-
-    # for xenial last availible version of libphysfs is 2.0.x, but we need >= 3.0
-    # so... building from sources!
-    wget https://icculus.org/physfs/downloads/physfs-3.0.1.tar.bz2
-    tar -xjf physfs-3.0.1.tar.bz2
-    mkdir physfs-3.0.1-build
-    pushd physfs-3.0.1-build
-    cmake ../physfs-3.0.1
-    make
-    sudo make install
-    popd
+    sudo apt-get install -y cmake debhelper dpkg-dev fp-compiler fp-units-gfx fp-units-misc ghc libavcodec-dev libavformat-dev libghc-aeson-dev libghc-entropy-dev libghc-hslogger-dev libghc-mtl-dev libghc-network-dev libghc-parsec3-dev libghc-random-dev libghc-regex-tdfa-dev libghc-sandi-dev libghc-sha-dev libghc-text-dev libghc-utf8-string-dev libghc-vector-dev libghc-yaml-dev libghc-zlib-dev liblua5.1-dev libphysfs-dev libpng-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev qtbase5-dev qtbase5-private-dev qttools5-dev qttools5-dev-tools
   elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew install qt5
     brew install fpc glew physfs lua51 sdl2 sdl2_image sdl2_net sdl2_ttf ffmpeg ghc cabal-install
