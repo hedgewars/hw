@@ -289,7 +289,6 @@ begin
     // Videos don't work if /lua command was used, so we forbid them
     if luaCmdUsed then
         begin
-        // TODO: Show message to player
         PlaySound(sndDenied);
         AddChatString(#0 + shortstring(trmsg[sidVideoRecLuaFail]));
         AddFileLog('Pre-recording prevented; /lua command was used before');
