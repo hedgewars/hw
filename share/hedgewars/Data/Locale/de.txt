@@ -111,6 +111,7 @@
 01:46=[Klan] %1: %2
 01:47=[%1]: %2
 01:48=?
+01:49=Videos können nicht aufgenommen werden, nachdem der /lua-Befehl benutzt wurde.
 
 ; Event messages
 ; Hog (%1) died

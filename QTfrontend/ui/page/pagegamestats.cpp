@@ -121,7 +121,7 @@ QLayout * PageGameStats::footerLayoutDefinition()
     btnRestart->setFixedHeight(81);
     btnRestart->setStyleSheet("QPushButton{margin-top:24px}");
     btnSave = addButton(":/res/Save.png", bottomLayout, 2, true);
-    btnSave->setWhatsThis(tr("Save"));
+    saveDemoBtnEnabled(true);
     btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
 
     return bottomLayout;
@@ -174,6 +174,10 @@ void PageGameStats::restartBtnVisible(bool visible)
 void PageGameStats::saveDemoBtnEnabled(bool enabled)
 {
     btnSave->setEnabled(enabled);
+    if (enabled)
+        btnSave->setWhatsThis(tr("Save demo"));
+    else
+        btnSave->setWhatsThis(tr("Save demo (unavailable because the /lua command was used)"));
 }
 
 void PageGameStats::renderStats()

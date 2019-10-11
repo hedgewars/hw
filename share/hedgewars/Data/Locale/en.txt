@@ -121,6 +121,7 @@
 01:47=[%1]: %2
 ; Symbol for unknown mine timer
 01:48=?
+01:49=Videos can't be recorded after the /lua command was used.
 
 ; Event messages
 ; Normal hog (%1) died (0 health)

@@ -515,7 +515,8 @@ type
             sidWinner2, sidWinner3, sidWinner4, sidWinner5, sidWinner6,
             sidWinner7, sidWinnerAll, sidTeamGone, sidTeamBack, sidAutoSkip,
             sidFPS, sidLuaParsingOff, sidLuaParsingOn, sidLuaParsingDenied,
-            sidAmmoCount, sidChat, sidChatTeam, sidChatHog, sidUnknownGearValue);
+            sidAmmoCount, sidChat, sidChatTeam, sidChatHog, sidUnknownGearValue,
+            sidVideoRecLuaFail);
 
     TCmdHelpStrId = (
             sidCmdHeaderBasic, sidCmdTogglechat, sidCmdTeam, sidCmdMe,
