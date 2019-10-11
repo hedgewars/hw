@@ -94,8 +94,8 @@ type
             sprFlakeL, sprSDFlakeL, sprCloudL, sprSDCloudL, sprCreeper, sprHandCreeper, sprMinigun,
             sprSliderInverted, sprFingerBack, sprFingerBackInv, sprTargetPBack, sprTargetPBackInv,
             sprHealthHud, sprHealthPoisonHud, sprVampHud, sprKarmaHud, sprMedicHud, sprMedicPoisonHud,
-            sprHaloHud, sprInvulnHUD, sprAmPiano, sprHandLandGun, sprFirePunch, sprThroughWrap
-            );
+            sprHaloHud, sprInvulnHUD, sprAmPiano, sprHandLandGun, sprFirePunch, sprThroughWrap,
+            sprDynamiteDefused);
 
     // Gears that interact with other Gears and/or Land
     // first row of gears (<gtExplosives) should be avoided when searching a spawn place

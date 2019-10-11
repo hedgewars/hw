@@ -1510,7 +1510,10 @@ begin
                         DrawSpriteRotatedF(sprExplosivesRoll, x, y + 4, 1, 0, Gear^.DirAngle)
                     end;
         gtDynamite: begin
-                    DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
+                    if ((Gear^.State and gstDrowning) = 0) then
+                        DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1)
+                    else
+                        DrawSprite(sprDynamiteDefused, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
                     if (random(3) = 0) and ((Gear^.State and gstDrowning) = 0) then
                         begin
                         vg:= AddVisualGear(hwRound(Gear^.X)+12-(Gear^.Tag shr 1), hwRound(Gear^.Y)-16, vgtStraightShot);
