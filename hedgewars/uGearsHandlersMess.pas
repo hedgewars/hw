@@ -2348,6 +2348,8 @@ begin
     doStepFallingGear(Gear);
     AllInactive := false;
 
+    if (Gear^.State and gstDrowning) = 0) then
+        exit;
     if Gear^.Timer mod 166 = 0 then
         inc(Gear^.Tag);
     if Gear^.Timer = 1000 then // might need better timing
