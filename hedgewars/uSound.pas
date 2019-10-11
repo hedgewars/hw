@@ -345,11 +345,11 @@ begin
 
     { Adjust for language suffix: Voicepacks can have an optional language suffix.
     It's an underscore followed by an ISO 639-1 or ISO 639-2 language code.
-    The suffix “_qau” is special, it will enable automatic language selection
+    The suffix "_qau" is special, it will enable automatic language selection
     of this voicepack. For example, if team has set Default_qau as voicepack,
     and the player language is Russian, the actual voicepack will be Default_ru,
     provided it can be found on the disk.
-    “qau” is a valid ISO 639-2 language code reserved for local use. }
+    "qau" is a valid ISO 639-2 language code reserved for local use. }
     tmp:= Copy(name, Length(name) - 3, 4);
     if (tmp = '_qau') then
         name:= Copy(name, 1, Length(name) - 4);
