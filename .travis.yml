@@ -74,11 +74,11 @@ install: |
     # use cabal install haskell deps, pas2c ones are covered by server
     if [[ "$BUILD_ARGS" != *"NOSERVER"* ]]; then
       cabal update
-      cabal install --only-dependencies gameServer/hedgewars-server.cabal
+      cabal install --only-dependencies --cabal-file=gameServer/hedgewars-server.cabal
     fi
     if [[ "$BUILD_ARGS" == *"BUILD_ENGINE_C"* ]]; then
       cabal update
-      cabal install --only-dependencies tools/pas2c/pas2c.cabal
+      cabal install --only-dependencies --cabal-file=tools/pas2c/pas2c.cabal
     fi
     # avoid installing Sparkle, add default unit path
     export BUILD_ARGS="$BUILD_ARGS -DNOAUTOUPDATE=1"
