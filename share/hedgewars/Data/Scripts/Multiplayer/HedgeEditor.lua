@@ -3342,7 +3342,7 @@ function onGameInit()
 
 	reducedSpriteIDArrayFrames = {
 		1, 8, 4, 1, 1,
-		AmmoTypeMax, AmmoTypeMax, 3, 4, 8, 1,
+		AmmoTypeMax, AmmoTypeMax, 3, 4, 9, 1,
 		1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1,
 	}
