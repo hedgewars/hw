@@ -1550,9 +1550,13 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
         end;
     end
     // in gfInvulnerable mode ...
-    else if (CurrentHedgehog^.Effects[heResurrectable] <> 0) then
-        // show halo for resurrectable hog
-        DrawSprite(sprHaloHud, (cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - t - 2), i, 0);
+    else
+        begin
+        DrawSprite(sprInvulnHud, cScreenWidth div 2 - 28, i, 0);
+        if (CurrentHedgehog^.Effects[heResurrectable] <> 0) then
+            // show halo for resurrectable hog
+            DrawSprite(sprHaloHud, cScreenWidth div 2 - 30, i - SpritesData[sprHaloHud].Height + 1, 0);
+        end;
     end
 else
     cDemoClockFPSOffsetY:= 0;
