@@ -332,7 +332,8 @@ var cInitVolume: LongInt;
             (FileName:                  'Hmm.ogg'; Path: ptVoices; AltPath: ptNone),// sndHmm
             (FileName:                 'Kiss.ogg'; Path: ptSounds; AltPath: ptNone),// sndKiss
             (FileName:              'Flyaway.ogg'; Path: ptVoices; AltPath: ptNone),// sndFlyAway
-            (FileName:           'planewater.ogg'; Path: ptSounds; AltPath: ptNone) // sndPlaneWater
+            (FileName:           'planewater.ogg'; Path: ptSounds; AltPath: ptNone),// sndPlaneWater
+            (FileName:         'dynamitefuse.ogg'; Path: ptSounds; AltPath: ptNone) // sndDynamiteFuse
             );
 
 

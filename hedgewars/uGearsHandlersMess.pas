@@ -2348,6 +2348,13 @@ begin
     doStepFallingGear(Gear);
     AllInactive := false;
 
+    if (Gear^.SoundChannel <> -1) and ((Gear^.State and gstDrowning) <> 0) then
+        begin
+        StopSoundChan(Gear^.SoundChannel);
+        Gear^.SoundChannel:= -1;
+        end
+    else if Gear^.SoundChannel = -1 then
+        Gear^.SoundChannel := LoopSound(sndDynamiteFuse);
     if (Gear^.State and gstDrowning) <> 0 then
         exit;
     if Gear^.Timer mod 166 = 0 then
@@ -2356,6 +2363,7 @@ begin
         makeHogsWorry(Gear^.X, Gear^.Y, 75, Gear^.Kind);
     if Gear^.Timer = 0 then
         begin
+        StopSoundChan(Gear^.SoundChannel);
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
