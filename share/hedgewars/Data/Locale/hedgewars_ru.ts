@@ -1475,7 +1475,7 @@ Last engine message:
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation>Когда все имеют один и тот же цвет клана, нет причины воевать. И так ёжики жили долго и и счастливо в мире и согласии.</translation>
+        <translation>Когда все имеют один и тот же цвет союза, нет причины воевать. И так ёжики жили долго и и счастливо в мире и согласии.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 point(s))</source>
@@ -2056,7 +2056,7 @@ Last engine message:
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation>Команды в каждом клане будут последовательно получать право хода, имея общее время на ход.</translation>
+        <translation>Команды в каждом союзе будут последовательно получать право хода, имея общее время на ход.</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -2084,7 +2084,7 @@ Last engine message:
     </message>
     <message>
         <source>Each clan starts in its own part of the terrain.</source>
-        <translation>Каждый клан стартует в своей части карты.</translation>
+        <translation>Каждый союз стартует в своей части карты.</translation>
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
@@ -3745,7 +3745,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>clan chat</source>
-        <translation>чат клана</translation>
+        <translation>чат союза</translation>
     </message>
     <message>
         <source>unselect weapon</source>
@@ -3942,7 +3942,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Talk to your clan or all participants:</source>
-        <translation>Общение с кланом или другими игроками:</translation>
+        <translation>Общение с союзом или другими игроками:</translation>
     </message>
 </context>
 <context>
