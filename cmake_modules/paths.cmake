@@ -61,7 +61,11 @@ if(APPLE)
     #install_name_tool for libraries
     set(CMAKE_BUILD_WITH_INSTALL_NAME_DIR TRUE)
     set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
-else(APPLE AND NOT (${CMAKE_INSTALL_PREFIX} MATCHES "/usr"))
+# should this be a separate if block like so
+#if(NOT APPLE AND NOT (${CMAKE_INSTALL_PREFIX} MATCHES "/usr"))
+# there were some conditions here that implied not setting the RPATH if installed to /usr 
+# but it was not being applied due to else not actually taking parameters  (HT wuzzy)
+else()
     #paths where to find libraries (final slash not optional):
     # - the first is relative to the executable
     # - the second is the same directory of the executable (so it runs in bin/)
