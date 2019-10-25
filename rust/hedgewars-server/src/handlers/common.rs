@@ -2,7 +2,7 @@ use crate::{
     core::{
         client::HwClient,
         room::HwRoom,
-        server::{HwServer, JoinRoomError},
+        server::{HwServer, JoinRoomError, LeaveRoomResult},
         types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
     },
     protocol::messages::{
@@ -96,103 +96,6 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
 
     response.add(server_msg.send_self());
     response.add(rooms_msg.send_self());
-}
-
-pub fn remove_teams(
-    room: &mut HwRoom,
-    team_names: Vec<String>,
-    is_in_game: bool,
-    response: &mut Response,
-) {
-    if let Some(ref mut info) = room.game_info {
-        for team_name in &team_names {
-            info.left_teams.push(team_name.clone());
-
-            if is_in_game {
-                let msg = once(b'F').chain(team_name.bytes());
-                response.add(
-                    ForwardEngineMessage(vec![to_engine_msg(msg)])
-                        .send_all()
-                        .in_room(room.id)
-                        .but_self(),
-                );
-
-                info.teams_in_game -= 1;
-
-                let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
-                if let Some(m) = &info.sync_msg {
-                    info.msg_log.push(m.clone());
-                    info.sync_msg = None
-                }
-                info.msg_log.push(remove_msg.clone());
-
-                response.add(
-                    ForwardEngineMessage(vec![remove_msg])
-                        .send_all()
-                        .in_room(room.id)
-                        .but_self(),
-                );
-            }
-        }
-    }
-
-    for team_name in team_names {
-        room.remove_team(&team_name);
-        response.add(TeamRemove(team_name).send_all().in_room(room.id));
-    }
-}
-
-fn remove_client_from_room(
-    client: &mut HwClient,
-    room: &mut HwRoom,
-    response: &mut Response,
-    msg: &str,
-) {
-    room.players_number -= 1;
-    if room.players_number > 0 || room.is_fixed() {
-        if client.is_ready() && room.ready_players_number > 0 {
-            room.ready_players_number -= 1;
-        }
-
-        let team_names: Vec<_> = room
-            .client_teams(client.id)
-            .map(|t| t.name.clone())
-            .collect();
-        remove_teams(room, team_names, client.is_in_game(), response);
-
-        if room.players_number > 0 {
-            response.add(
-                RoomLeft(client.nick.clone(), msg.to_string())
-                    .send_all()
-                    .in_room(room.id)
-                    .but_self(),
-            );
-        }
-
-        if client.is_master() && !room.is_fixed() {
-            client.set_is_master(false);
-            response.add(
-                ClientFlags(
-                    remove_flags(&[Flags::RoomMaster]),
-                    vec![client.nick.clone()],
-                )
-                .send_all()
-                .in_room(room.id),
-            );
-            room.master_id = None;
-        }
-    }
-
-    client.room_id = None;
-
-    let update_msg = if room.players_number == 0 && !room.is_fixed() {
-        RoomRemove(room.name.clone())
-    } else {
-        RoomUpdated(room.name.clone(), room.info(Some(&client)))
-    };
-    response.add(update_msg.send_all().with_protocol(room.protocol_number));
-
-    response.add(ClientFlags(remove_flags(&[Flags::InRoom]), vec![client.nick.clone()]).send_all());
 }
 
 pub fn change_master(
@@ -291,33 +194,85 @@ pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
     }
 }
 
-pub fn exit_room(server: &mut HwServer, client_id: ClientId, response: &mut Response, msg: &str) {
-    let client = &mut server.clients[client_id];
+pub fn get_remove_teams_data(
+    room_id: RoomId,
+    was_in_game: bool,
+    removed_teams: Vec<String>,
+    response: &mut Response,
+) {
+    if was_in_game {
+        for team_name in &removed_teams {
+            let msg = once(b'F').chain(team_name.bytes());
+            response.add(
+                ForwardEngineMessage(vec![to_engine_msg(msg)])
+                    .send_all()
+                    .in_room(room_id)
+                    .but_self(),
+            );
 
-    if let Some(room_id) = client.room_id {
-        let room = &mut server.rooms[room_id];
+            let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
 
-        remove_client_from_room(client, room, response, msg);
+            response.add(
+                ForwardEngineMessage(vec![remove_msg])
+                    .send_all()
+                    .in_room(room_id)
+                    .but_self(),
+            );
+        }
+    }
 
-        if !room.is_fixed() {
-            if room.players_number == 0 {
-                server.rooms.remove(room_id);
-            } else if room.master_id == None {
-                let new_master_id = server.room_clients(room_id).next();
-                if let Some(new_master_id) = new_master_id {
-                    let new_master_nick = server.clients[new_master_id].nick.clone();
-                    let room = &mut server.rooms[room_id];
-                    room.master_id = Some(new_master_id);
-                    server.clients[new_master_id].set_is_master(true);
+    for team_name in removed_teams {
+        response.add(TeamRemove(team_name).send_all().in_room(room_id));
+    }
+}
 
-                    if room.protocol_number < 42 {
-                        room.name = new_master_nick.clone();
-                    }
+pub fn get_room_leave_data(
+    server: &HwServer,
+    room: &HwRoom,
+    leave_message: &str,
+    result: LeaveRoomResult,
+    response: &mut Response,
+) {
+    let client = server.client(response.client_id);
+    response.add(ClientFlags(remove_flags(&[Flags::InRoom]), vec![client.nick.clone()]).send_all());
 
-                    room.set_join_restriction(false);
-                    room.set_team_add_restriction(false);
-                    room.set_unregistered_players_restriction(true);
+    match (result) {
+        LeaveRoomResult::RoomRemoved => {
+            response.add(
+                RoomRemove(room.name.clone())
+                    .send_all()
+                    .with_protocol(room.protocol_number),
+            );
+        }
 
+        LeaveRoomResult::RoomRemains {
+            is_empty,
+            was_master,
+            new_master,
+            was_in_game,
+            removed_teams,
+        } => {
+            if !is_empty {
+                response.add(
+                    RoomLeft(client.nick.clone(), leave_message.to_string())
+                        .send_all()
+                        .in_room(room.id)
+                        .but_self(),
+                );
+            }
+
+            if was_master {
+                response.add(
+                    ClientFlags(
+                        remove_flags(&[Flags::RoomMaster]),
+                        vec![client.nick.clone()],
+                    )
+                    .send_all()
+                    .in_room(room.id),
+                );
+
+                if let Some(new_master_id) = new_master {
+                    let new_master_nick = server.client(new_master_id).nick.clone();
                     response.add(
                         ClientFlags(add_flags(&[Flags::RoomMaster]), vec![new_master_nick])
                             .send_all()
@@ -325,16 +280,32 @@ pub fn exit_room(server: &mut HwServer, client_id: ClientId, response: &mut Resp
                     );
                 }
             }
+
+            get_remove_teams_data(room.id, was_in_game, removed_teams, response);
+
+            response.add(
+                RoomUpdated(room.name.clone(), room.info(Some(&client)))
+                    .send_all()
+                    .with_protocol(room.protocol_number),
+            );
         }
     }
 }
 
 pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String) {
     let client_id = response.client_id();
-    let client = &mut server.clients[client_id];
+    let client = server.client(client_id);
     let nick = client.nick.clone();
 
-    exit_room(server, client_id, response, &msg);
+    if let Some(room_id) = client.room_id {
+        match server.leave_room(client_id) {
+            Ok(result) => {
+                let room = server.room(room_id);
+                super::common::get_room_leave_data(server, room, &msg, result, response)
+            }
+            Err(_) => (),
+        }
+    }
 
     server.remove_client(client_id);
 
@@ -423,7 +394,15 @@ pub fn apply_voting_result(
                 if client.room_id == Some(room_id) {
                     let id = client.id;
                     response.add(Kicked.send(id));
-                    exit_room(server, id, response, "kicked");
+                    match server.leave_room(response.client_id) {
+                        Ok(result) => {
+                            let room = server.room(room_id);
+                            super::common::get_room_leave_data(
+                                server, room, "kicked", result, response,
+                            )
+                        }
+                        Err(_) => (),
+                    }
                 }
             }
         }

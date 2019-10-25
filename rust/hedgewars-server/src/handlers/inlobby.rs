@@ -1,5 +1,3 @@
-use mio;
-
 use super::{common::rnd_reply, strings::*};
 use crate::{
     core::{

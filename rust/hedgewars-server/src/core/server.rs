@@ -28,6 +28,22 @@ pub enum JoinRoomError {
     Restricted,
 }
 
+pub enum LeaveRoomResult {
+    RoomRemoved,
+    RoomRemains {
+        is_empty: bool,
+        was_master: bool,
+        was_in_game: bool,
+        new_master: Option<ClientId>,
+        removed_teams: Vec<String>,
+    },
+}
+
+#[derive(Debug)]
+pub enum LeaveRoomError {
+    NoRoom,
+}
+
 #[derive(Debug)]
 pub struct UninitializedError();
 #[derive(Debug)]
@@ -138,6 +154,20 @@ impl HwServer {
     }
 
     #[inline]
+    pub fn client_and_room(&self, client_id: ClientId, room_id: RoomId) -> (&HwClient, &HwRoom) {
+        (&self.clients[client_id], &self.rooms[room_id])
+    }
+
+    #[inline]
+    pub fn client_and_room_mut(
+        &mut self,
+        client_id: ClientId,
+        room_id: RoomId,
+    ) -> (&mut HwClient, &mut HwRoom) {
+        (&mut self.clients[client_id], &mut self.rooms[room_id])
+    }
+
+    #[inline]
     pub fn is_admin(&self, client_id: ClientId) -> bool {
         self.clients
             .get(client_id)
@@ -241,6 +271,81 @@ impl HwServer {
             self.join_room(client_id, room_id)
         } else {
             Err(DoesntExist)
+        }
+    }
+
+    pub fn leave_room(&mut self, client_id: ClientId) -> Result<LeaveRoomResult, LeaveRoomError> {
+        let client = &mut self.clients[client_id];
+        if let Some(room_id) = client.room_id {
+            let room = &mut self.rooms[room_id];
+
+            room.players_number -= 1;
+            client.room_id = None;
+
+            let is_empty = room.players_number == 0;
+            let is_fixed = room.is_fixed();
+            let was_master = room.master_id == Some(client_id);
+            let was_in_game = client.is_in_game();
+            let mut removed_teams = vec![];
+
+            if is_empty && !is_fixed {
+                if client.is_ready() && room.ready_players_number > 0 {
+                    room.ready_players_number -= 1;
+                }
+
+                removed_teams = room
+                    .client_teams(client.id)
+                    .map(|t| t.name.clone())
+                    .collect();
+
+                for team_name in &removed_teams {
+                    room.remove_team(team_name);
+                }
+
+                if client.is_master() && !is_fixed {
+                    client.set_is_master(false);
+                    room.master_id = None;
+                }
+            }
+
+            client.set_is_ready(false);
+            client.set_is_in_game(false);
+
+            if !is_fixed {
+                if room.players_number == 0 {
+                    self.rooms.remove(room_id);
+                } else if room.master_id == None {
+                    let new_master_id = self.room_clients(room_id).next();
+                    if let Some(new_master_id) = new_master_id {
+                        let room = &mut self.rooms[room_id];
+                        room.master_id = Some(new_master_id);
+                        let new_master = &mut self.clients[new_master_id];
+                        new_master.set_is_master(true);
+
+                        if room.protocol_number < 42 {
+                            room.name = new_master.nick.clone();
+                        }
+
+                        room.set_join_restriction(false);
+                        room.set_team_add_restriction(false);
+                        room.set_unregistered_players_restriction(true);
+                    }
+                }
+            }
+
+            if is_empty && !is_fixed {
+                Ok(LeaveRoomResult::RoomRemoved)
+            } else {
+                Ok(LeaveRoomResult::RoomRemains {
+                    is_empty,
+                    was_master,
+                    was_in_game,
+                    new_master: self.rooms[room_id].master_id,
+                    removed_teams,
+                })
+            }
+        } else {
+            Err(LeaveRoomError::NoRoom)
         }
     }
 

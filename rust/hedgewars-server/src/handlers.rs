@@ -1,4 +1,3 @@
-use mio;
 use std::{
     cmp::PartialEq,
     collections::HashMap,

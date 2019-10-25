@@ -142,9 +142,22 @@ impl HwRoom {
         &self.teams.last().unwrap().1
     }
 
-    pub fn remove_team(&mut self, name: &str) {
-        if let Some(index) = self.teams.iter().position(|(_, t)| t.name == name) {
+    pub fn remove_team(&mut self, team_name: &str) {
+        if let Some(index) = self.teams.iter().position(|(_, t)| t.name == team_name) {
             self.teams.remove(index);
+
+            if let Some(info) = &mut self.game_info {
+                info.left_teams.push(team_name.to_string());
+                info.teams_in_game -= 1;
+
+                if let Some(m) = &info.sync_msg {
+                    info.msg_log.push(m.clone());
+                    info.sync_msg = None
+                }
+                let remove_msg =
+                    crate::utils::to_engine_msg(iter::once(b'F').chain(team_name.bytes()));
+                info.msg_log.push(remove_msg.clone());
+            }
         }
     }
 
