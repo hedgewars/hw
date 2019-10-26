@@ -614,7 +614,6 @@ function onGameInit()
         -- Force-disable various game flags that would break the script
         DisableGameFlags(gfKing, gfSwitchHog, gfAISurvival, gfPlaceHog, gfTagTeam)
         CaseFreq = 0
-        TurnTime = 90000
         WaterRise = 0
         HealthDecrease = 0
 end
