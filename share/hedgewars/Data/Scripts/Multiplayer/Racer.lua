@@ -101,6 +101,7 @@ local wpY = {}
 local wpCol = {}
 local wpActive = {}
 local wpRad = 450
+local WAYPOINT_RADIUS_MIN = 40
 local wpCount = 0
 local wpLimit = 8
 
@@ -193,7 +194,7 @@ function onParameters()
         end
     end
     if params["waypointradius"] ~= nil then
-        wpRad = math.max(40, math.floor(tonumber(params["waypointradius"])))
+        wpRad = math.max(WAYPOINT_RADIUS_MIN, math.floor(tonumber(params["waypointradius"])))
         if type(wpRad) ~= "number" then
              wpRad = 450
         end
@@ -635,6 +636,20 @@ function InstructionsRace()
 end
 
 function onGameStart()
+
+	-- Adjust pre-defined waypoints in scaled drawn maps
+	if MapGen == mgDrawn and MapFeatureSize ~= 12 and specialPointsCount > 0 then
+		local landW = RightX - LeftX + 1
+		local landH = LAND_HEIGHT - TopY
+		-- Reposition pre-defined waypoints
+        	for i = 0, (specialPointsCount-1) do
+        		specialPointsX[i] = LeftX + div(specialPointsX[i] * landW, 4096)
+        		specialPointsY[i] = TopY + div(specialPointsY[i] * landH, 2048)
+		end
+		-- Scale waypoint size
+		wpRad = math.max(WAYPOINT_RADIUS_MIN, div(wpRad * landW, 4096))
+	end
+
 	if ClansCount >= 2 then
 		SendGameResultOff()
 		SendRankingStatsOff()
