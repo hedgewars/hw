@@ -772,6 +772,7 @@ gtFlamethrower: begin
                 end;
  gtPoisonCloud: begin
                 if gear^.Timer = 0 then gear^.Timer:= 5000;
+                gear^.WDTimer:= gear^.Timer; // initial timer
                 gear^.dY:= int2hwfloat(-4 + longint(getRandom(8))) / 1000;
                 gear^.Tint:= $C0C000C0
                 end;

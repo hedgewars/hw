@@ -1656,8 +1656,8 @@ begin
      gtPoisonCloud: begin
                     if Gear^.Timer < 1020 then
                         Tint(Gear^.Tint and $FFFFFF00 or Gear^.Timer div 8)
-                    else if Gear^.Timer > 3980 then
-                        Tint(Gear^.Tint and $FFFFFF00 or (5000 - Gear^.Timer) div 8)
+                    else if (Gear^.Timer > Gear^.WDTimer - 1020) and (Gear^.WDTimer > 2040) then
+                        Tint(Gear^.Tint and $FFFFFF00 or (Gear^.WDTimer - Gear^.Timer) div 8)
                     else
                         Tint(Gear^.Tint);
                     DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 1, 22, 22, (RealTicks shr 4 + Gear^.UID * 100) mod 360);
