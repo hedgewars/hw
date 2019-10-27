@@ -45,6 +45,20 @@ pub enum LeaveRoomError {
 }
 
 #[derive(Debug)]
+pub struct ChangeMasterResult {
+    pub old_master_id: Option<ClientId>,
+    pub new_master_id: ClientId,
+}
+
+#[derive(Debug)]
+pub enum ChangeMasterError {
+    NoAccess,
+    AlreadyMaster,
+    NoClient,
+    ClientNotInRoom,
+}
+
+#[derive(Debug)]
 pub struct UninitializedError();
 #[derive(Debug)]
 pub struct AccessError();
@@ -346,6 +360,50 @@ impl HwServer {
             }
         } else {
             Err(LeaveRoomError::NoRoom)
+        }
+    }
+
+    pub fn change_master(
+        &mut self,
+        client_id: ClientId,
+        room_id: RoomId,
+        new_master_nick: String,
+    ) -> Result<ChangeMasterResult, ChangeMasterError> {
+        let client = &mut self.clients[client_id];
+        let room = &mut self.rooms[room_id];
+
+        if client.is_admin() || room.master_id == Some(client_id) {
+            let new_master_id = self
+                .clients
+                .iter()
+                .find(|(_, c)| c.nick == new_master_nick)
+                .map(|(id, _)| id);
+
+            match new_master_id {
+                Some(new_master_id) if new_master_id == client_id => {
+                    Err(ChangeMasterError::AlreadyMaster)
+                }
+                Some(new_master_id) => {
+                    let new_master = &mut self.clients[new_master_id];
+                    if new_master.room_id == Some(room_id) {
+                        self.clients[new_master_id].set_is_master(true);
+                        let old_master_id = room.master_id;
+                        if let Some(master_id) = old_master_id {
+                            self.clients[master_id].set_is_master(false);
+                        }
+                        room.master_id = Some(new_master_id);
+                        Ok(ChangeMasterResult {
+                            old_master_id,
+                            new_master_id,
+                        })
+                    } else {
+                        Err(ChangeMasterError::ClientNotInRoom)
+                    }
+                }
+                None => Err(ChangeMasterError::NoClient),
+            }
+        } else {
+            Err(ChangeMasterError::NoAccess)
         }
     }
 

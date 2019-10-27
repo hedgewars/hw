@@ -2,7 +2,7 @@ use super::{common::rnd_reply, strings::*};
 use crate::{
     core::{
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
-        server::{HwServer, LeaveRoomResult},
+        server::{ChangeMasterError, ChangeMasterResult, HwServer, LeaveRoomResult},
         types,
         types::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
     },
@@ -315,7 +315,7 @@ pub fn handle(
                             .in_room(room_id)
                             .but_self(),
                     );
-                    server.clients[owner].clan = Some(color);
+                    server.client_mut(owner).clan = Some(color);
                 }
             } else {
                 response.warn(NO_TEAM);
@@ -571,32 +571,47 @@ pub fn handle(
             let mut echo = vec!["/rnd".to_string()];
             echo.extend(v.into_iter());
             let chat_msg = ChatMsg {
-                nick: server.clients[client_id].nick.clone(),
+                nick: server.client(client_id).nick.clone(),
                 msg: echo.join(" "),
             };
             response.add(chat_msg.send_all().in_room(room_id));
             response.add(result.send_all().in_room(room_id));
         }
-        Delegate(nick) => {
-            let delegate_id = server.find_client(&nick).map(|c| (c.id, c.room_id));
-            let client = &server.clients[client_id];
-            if !(client.is_admin() || client.is_master()) {
-                response.warn("You're not the room master or a server admin!")
-            } else {
-                match delegate_id {
-                    None => response.warn("Player is not online."),
-                    Some((id, _)) if id == client_id => {
-                        response.warn("You're already the room master.")
-                    }
-                    Some((_, id)) if id != Some(room_id) => {
-                        response.warn("The player is not in your room.")
-                    }
-                    Some((id, _)) => {
-                        super::common::change_master(server, room_id, id, response);
-                    }
+        Delegate(nick) => match server.change_master(client_id, room_id, nick) {
+            Ok(ChangeMasterResult {
+                old_master_id,
+                new_master_id,
+            }) => {
+                if let Some(master_id) = old_master_id {
+                    response.add(
+                        ClientFlags(
+                            remove_flags(&[Flags::RoomMaster]),
+                            vec![server.client(master_id).nick.clone()],
+                        )
+                        .send_all()
+                        .in_room(room_id),
+                    );
                 }
+                response.add(
+                    ClientFlags(
+                        add_flags(&[Flags::RoomMaster]),
+                        vec![server.client(new_master_id).nick.clone()],
+                    )
+                    .send_all()
+                    .in_room(room_id),
+                );
             }
-        }
+            Err(ChangeMasterError::NoAccess) => {
+                response.warn("You're not the room master or a server admin!")
+            }
+            Err(ChangeMasterError::AlreadyMaster) => {
+                response.warn("You're already the room master.")
+            }
+            Err(ChangeMasterError::NoClient) => response.warn("Player is not online."),
+            Err(ChangeMasterError::ClientNotInRoom) => {
+                response.warn("The player is not in your room.")
+            }
+        },
         _ => warn!("Unimplemented!"),
     }
 }

@@ -98,38 +98,6 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
     response.add(rooms_msg.send_self());
 }
 
-pub fn change_master(
-    server: &mut HwServer,
-    room_id: RoomId,
-    new_master_id: ClientId,
-    response: &mut Response,
-) {
-    let room = &mut server.rooms[room_id];
-    if let Some(master_id) = room.master_id {
-        server.clients[master_id].set_is_master(false);
-        response.add(
-            ClientFlags(
-                remove_flags(&[Flags::RoomMaster]),
-                vec![server.clients[master_id].nick.clone()],
-            )
-            .send_all()
-            .in_room(room_id),
-        )
-    }
-
-    room.master_id = Some(new_master_id);
-    server.clients[new_master_id].set_is_master(true);
-
-    response.add(
-        ClientFlags(
-            add_flags(&[Flags::RoomMaster]),
-            vec![server.clients[new_master_id].nick.clone()],
-        )
-        .send_all()
-        .in_room(room_id),
-    );
-}
-
 pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
     client: &HwClient,
     room: &HwRoom,
