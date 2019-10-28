@@ -2,7 +2,7 @@ use crate::{
     core::{
         client::HwClient,
         room::HwRoom,
-        server::{HwServer, JoinRoomError, LeaveRoomResult},
+        server::{HwServer, JoinRoomError, LeaveRoomError, LeaveRoomResult, StartGameError},
         types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
     },
     protocol::messages::{
@@ -76,7 +76,7 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
             .rooms
             .iter()
             .filter(|(_, r)| r.protocol_number == client.protocol_number)
-            .flat_map(|(_, r)| r.info(r.master_id.map(|id| &server.clients[id])))
+            .flat_map(|(_, r)| r.info(r.master_id.map(|id| server.client(id))))
             .collect(),
     );
 
@@ -194,7 +194,7 @@ pub fn get_remove_teams_data(
     }
 }
 
-pub fn get_room_leave_data(
+pub fn get_room_leave_result(
     server: &HwServer,
     room: &HwRoom,
     leave_message: &str,
@@ -260,19 +260,30 @@ pub fn get_room_leave_data(
     }
 }
 
+pub fn get_room_leave_data(
+    server: &HwServer,
+    room_id: RoomId,
+    leave_message: &str,
+    result: Result<LeaveRoomResult, LeaveRoomError>,
+    response: &mut Response,
+) {
+    match result {
+        Ok(result) => {
+            let room = server.room(room_id);
+            get_room_leave_result(server, room, leave_message, result, response)
+        }
+        Err(_) => (),
+    }
+}
+
 pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String) {
     let client_id = response.client_id();
     let client = server.client(client_id);
     let nick = client.nick.clone();
 
     if let Some(room_id) = client.room_id {
-        match server.leave_room(client_id) {
-            Ok(result) => {
-                let room = server.room(room_id);
-                super::common::get_room_leave_data(server, room, &msg, result, response)
-            }
-            Err(_) => (),
-        }
+        let result = server.leave_room(client_id);
+        get_room_leave_data(server, room_id, &msg, result, response);
     }
 
     server.remove_client(client_id);
@@ -334,17 +345,13 @@ pub fn get_room_flags(
         response.add(
             ClientFlags(
                 add_flags(&[Flags::RoomMaster]),
-                vec![server.clients[id].nick.clone()],
+                vec![server.client(id).nick.clone()],
             )
             .send(to_client),
         );
     }
-    let nicks: Vec<_> = server
-        .clients
-        .iter()
-        .filter(|(_, c)| c.room_id == Some(room_id) && c.is_ready())
-        .map(|(_, c)| c.nick.clone())
-        .collect();
+    let nicks = server.collect_nicks(|(_, c)| c.room_id == Some(room_id) && c.is_ready());
+
     if !nicks.is_empty() {
         response.add(ClientFlags(add_flags(&[Flags::Ready]), nicks).send(to_client));
     }
@@ -362,15 +369,8 @@ pub fn apply_voting_result(
                 if client.room_id == Some(room_id) {
                     let id = client.id;
                     response.add(Kicked.send(id));
-                    match server.leave_room(response.client_id) {
-                        Ok(result) => {
-                            let room = server.room(room_id);
-                            super::common::get_room_leave_data(
-                                server, room, "kicked", result, response,
-                            )
-                        }
-                        Err(_) => (),
-                    }
+                    let result = server.leave_room(id);
+                    get_room_leave_data(server, room_id, "kicked", result, response);
                 }
             }
         }
@@ -384,7 +384,7 @@ pub fn apply_voting_result(
                 );
                 let room = &server.rooms[room_id];
                 let room_master = if let Some(id) = room.master_id {
-                    Some(&server.clients[id])
+                    Some(server.client(id))
                 } else {
                     None
                 };
@@ -461,10 +461,10 @@ fn add_vote(room: &mut HwRoom, response: &mut Response, vote: Vote) -> Option<bo
 
 pub fn submit_vote(server: &mut HwServer, vote: Vote, response: &mut Response) {
     let client_id = response.client_id;
-    let client = &server.clients[client_id];
+    let client = server.client(client_id);
 
     if let Some(room_id) = client.room_id {
-        let room = &mut server.rooms[room_id];
+        let room = server.room_mut(room_id);
 
         if let Some(res) = add_vote(room, response, vote) {
             response.add(
@@ -480,42 +480,31 @@ pub fn submit_vote(server: &mut HwServer, vote: Vote, response: &mut Response) {
     }
 }
 
-pub fn start_game(server: &mut HwServer, room_id: RoomId, response: &mut Response) {
-    let (room_clients, room_nicks): (Vec<_>, Vec<_>) = server
-        .clients
-        .iter()
-        .map(|(id, c)| (id, c.nick.clone()))
-        .unzip();
-    let room = &mut server.rooms[room_id];
+pub fn get_start_game_data(
+    server: &HwServer,
+    room_id: RoomId,
+    result: Result<Vec<String>, StartGameError>,
+    response: &mut Response,
+) {
+    match result {
+        Ok(room_nicks) => {
+            let room = server.room(room_id);
+            response.add(RunGame.send_all().in_room(room.id));
+            response.add(
+                ClientFlags(add_flags(&[Flags::InGame]), room_nicks)
+                    .send_all()
+                    .in_room(room.id),
+            );
 
-    if !room.has_multiple_clans() {
-        response.add(
-            Warning("The game can't be started with less than two clans!".to_string()).send_self(),
-        );
-    } else if room.protocol_number <= 43 && room.players_number != room.ready_players_number {
-        response.add(Warning("Not all players are ready".to_string()).send_self());
-    } else if room.game_info.is_some() {
-        response.add(Warning("The game is already in progress".to_string()).send_self());
-    } else {
-        room.start_round();
-        for id in room_clients {
-            let c = &mut server.clients[id];
-            c.set_is_in_game(true);
-            c.team_indices = room.client_team_indices(c.id);
+            let room_master = room.master_id.map(|id| server.client(id));
+            get_room_update(None, room, room_master, response);
         }
-        response.add(RunGame.send_all().in_room(room.id));
-        response.add(
-            ClientFlags(add_flags(&[Flags::InGame]), room_nicks)
-                .send_all()
-                .in_room(room.id),
-        );
-
-        let room_master = if let Some(id) = room.master_id {
-            Some(&server.clients[id])
-        } else {
-            None
-        };
-        get_room_update(None, room, room_master, response);
+        Err(StartGameError::NotEnoughClans) => {
+            response.warn("The game can't be started with less than two clans!")
+        }
+        Err(StartGameError::NotEnoughTeams) => (),
+        Err(StartGameError::NotReady) => response.warn("Not all players are ready"),
+        Err(StartGameErrror) => response.warn("The game is already in progress"),
     }
 }
 

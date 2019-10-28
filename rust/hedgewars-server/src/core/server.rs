@@ -59,6 +59,14 @@ pub enum ChangeMasterError {
 }
 
 #[derive(Debug)]
+pub enum StartGameError {
+    NotEnoughClans,
+    NotEnoughTeams,
+    NotReady,
+    AlreadyInGame,
+}
+
+#[derive(Debug)]
 pub struct UninitializedError();
 #[derive(Debug)]
 pub struct AccessError();
@@ -404,6 +412,32 @@ impl HwServer {
             }
         } else {
             Err(ChangeMasterError::NoAccess)
+        }
+    }
+
+    pub fn start_game(&mut self, room_id: RoomId) -> Result<Vec<String>, StartGameError> {
+        let (room_clients, room_nicks): (Vec<_>, Vec<_>) = self
+            .clients
+            .iter()
+            .map(|(id, c)| (id, c.nick.clone()))
+            .unzip();
+
+        let room = &mut self.rooms[room_id];
+
+        if !room.has_multiple_clans() {
+            Err(StartGameError::NotEnoughClans)
+        } else if room.protocol_number <= 43 && room.players_number != room.ready_players_number {
+            Err(StartGameError::NotReady)
+        } else if room.game_info.is_some() {
+            Err(StartGameError::AlreadyInGame)
+        } else {
+            room.start_round();
+            for id in room_clients {
+                let c = &mut self.clients[id];
+                c.set_is_in_game(true);
+                c.team_indices = room.client_team_indices(c.id);
+            }
+            Ok(room_nicks)
         }
     }
 

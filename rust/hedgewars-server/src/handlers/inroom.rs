@@ -2,7 +2,9 @@ use super::{common::rnd_reply, strings::*};
 use crate::{
     core::{
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
-        server::{ChangeMasterError, ChangeMasterResult, HwServer, LeaveRoomResult},
+        server::{
+            ChangeMasterError, ChangeMasterResult, HwServer, LeaveRoomResult, StartGameError,
+        },
         types,
         types::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
     },
@@ -117,13 +119,8 @@ pub fn handle(
                 None => "part".to_string(),
             };
 
-            match server.leave_room(client_id) {
-                Ok(result) => {
-                    let room = server.room(room_id);
-                    super::common::get_room_leave_data(server, room, &msg, result, response)
-                }
-                Err(_) => (),
-            }
+            let result = server.leave_room(client_id);
+            super::common::get_room_leave_data(server, room_id, &msg, result, response);
         }
         Chat(msg) => {
             response.add(
@@ -151,11 +148,15 @@ pub fn handle(
                 room.set_join_restriction(false);
                 room.set_team_add_restriction(false);
                 room.set_unregistered_players_restriction(true);
+            } else {
+                response.warn(ACCESS_DENIED)
             }
         }
         Unfix => {
             if client.is_admin() {
                 room.set_is_fixed(false);
+            } else {
+                response.warn(ACCESS_DENIED)
             }
         }
         Greeting(text) => {
@@ -206,7 +207,8 @@ pub fn handle(
             client.set_is_ready(!client.is_ready());
 
             if room.is_fixed() && room.ready_players_number == room.players_number {
-                super::common::start_game(server, room_id, response);
+                let result = server.start_game(room_id);
+                super::common::get_start_game_data(server, room_id, result, response);
             }
         }
         AddTeam(mut info) => {
@@ -480,7 +482,8 @@ pub fn handle(
             }
         }
         StartGame => {
-            super::common::start_game(server, room_id, response);
+            let result = server.start_game(room_id);
+            super::common::get_start_game_data(server, room_id, result, response);
         }
         EngineMessage(em) => {
             if client.teams_in_game > 0 {
