@@ -55,6 +55,9 @@ local specialPointsX = {}
 local specialPointsY = {}
 local specialPointsCount = 0
 
+local landObjectPoints = {}
+local landObjects = {}
+
 local TeamRope = false
 
 local waypointCursor = false
@@ -656,6 +659,11 @@ function onGameStart()
 		SendAchievementsStatsOff()
 	end
 
+        -- Keep track of land objects that got placed by the scheme (mines, air mines, barrels)
+        for id, _ in pairs(landObjects) do
+                table.insert(landObjectPoints, { type = GetGearType(id), x = GetX(id), y = GetY(id) })
+        end
+
         SetSoundMask(sndIncoming, true)
         SetSoundMask(sndMissed, true)
 
@@ -847,8 +855,17 @@ function onNewTurn()
                 end
         end
 
-        -- Set the waypoints to unactive on new round
         if gameBegun and not gameOver then
+
+                -- Reset land objects so each player starts with same racing conditions
+                for id,_ in pairs(landObjects) do
+                        DeleteGear(id)
+                end
+                for i=1, #landObjectPoints do
+                        AddGear(landObjectPoints[i].x, landObjectPoints[i].y, landObjectPoints[i].type, 0, 0, 0, 0)
+                end
+
+                -- Set the waypoints to unactive
                 for i = 0,(wpCount-1) do
                         wpActive[i] = false
                         wpCol[i] = waypointColour
@@ -1036,18 +1053,20 @@ function onGearResurrect(gear, vGear)
 end
 
 function onGearAdd(gear)
-
-        if GetGearType(gear) == gtHedgehog then
+        local gt = GetGearType(gear)
+        if gt == gtHedgehog then
                 hhs[numhhs] = gear
                 numhhs = numhhs + 1
                 SetEffect(gear, heResurrectable, 1)
-        elseif GetGearType(gear) == gtAirAttack then
+        elseif gt == gtAirAttack then
                 cGear = gear
 		local x,y = GetGearPosition(cGear)
         	SetGearPosition(cGear, 10000, y)
-        elseif (not gameBegun) and GetGearType(gear) == gtAirBomb then
+        elseif (gt == gtMine or gt == gtAirMine or gt == gtExplosives) then
+                landObjects[gear] = true
+        elseif (not gameBegun) and gt == gtAirBomb then
 		DeleteGear(gear)
-        elseif GetGearType(gear) == gtRope and TeamRope then
+        elseif gt == gtRope and TeamRope then
             SetTag(gear,1)
             SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))
         end
@@ -1057,6 +1076,8 @@ function onGearDelete(gear)
 
         if GetGearType(gear) == gtAirAttack then
                 cGear = nil
+        elseif landObjects[gear] == true then
+                landObjects[gear] = nil
         elseif gear == cameraGear then
                 cameraGear = nil
         end
