@@ -613,7 +613,7 @@ end
 ----------------------------------
 
 function onGameInit()
-        EnableGameFlags(gfInfAttack)
+        EnableGameFlags(gfInfAttack, gfSolidLand)
         -- Force-disable various game flags that would break the script
         DisableGameFlags(gfKing, gfSwitchHog, gfAISurvival, gfPlaceHog, gfTagTeam)
         CaseFreq = 0
