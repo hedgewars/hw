@@ -397,91 +397,91 @@ local preMadeTeam = 	{
 				loc_noop("Clowns"),
 				{"WhySoSerious","clown-copper","clown-crossed","clown","Joker"},
 				{loc_noop("Baggy"),loc_noop("Bingo"),loc_noop("Bobo"),loc_noop("Bozo"),loc_noop("Buster"),loc_noop("Chester"),loc_noop("Copper"),loc_noop("Heckles"),loc_noop("Giggles"),loc_noop("Jingo"),loc_noop("Molly"),loc_noop("Loopy"),loc_noop("Patches"),loc_noop("Tatters")},
-				"R","cm_balls","Mobster","Rubberduck","Castle"
+				"R","cm_balls","Mobster_qau","Rubberduck","Castle"
 				},
 
 				{
 				loc_noop("Street Fighters"),
 				{"sf_balrog","sf_blanka","sf_chunli","sf_guile","sf_honda","sf_ken","sf_ryu","sf_vega"},
 				{loc_noop("Balrog"),loc_noop("Blanka"),loc_noop("Chunli"),loc_noop("Guile"),loc_noop("Honda"),loc_noop("Ken"),loc_noop("Ryu"),loc_noop("Vega")},
-				"F","cm_balrog","Surfer","dragonball","Castle"
+				"F","cm_balrog","Surfer_qau","dragonball","Castle"
 				},
 
 				{
 				loc_noop("Cybernetic Empire"),
 				{"cyborg1","cyborg2"},
 				{loc_noop("Unit 189"),loc_noop("Unit 234"),loc_noop("Unit 333"),loc_noop("Unit 485"),loc_noop("Unit 527"),loc_noop("Unit 638"),loc_noop("Unit 709"),loc_noop("Unit 883")},
-				"R","cm_binary","Robot","Grave","Castle"
+				"R","cm_binary","Robot_qau","Grave","Castle"
 				},
 
 				{
 				loc_noop("Color Squad"),
 				{"hair_blue","hair_green","hair_red","hair_yellow","hair_purple","hair_grey","hair_orange","hair_pink"},
 				{loc_noop("Blue"),loc_noop("Green"),loc_noop("Red"),loc_noop("Yellow"),loc_noop("Purple"),loc_noop("Grey"),loc_noop("Orange"),loc_noop("Pink")},
-				"F","mauritius","Singer","Grave","Castle"
+				"F","mauritius","Singer_qau","Grave","Castle"
 				},
 
 				{
 				loc_noop("Fruit"),
 				{"fr_apple","fr_banana","fr_lemon","fr_orange","fr_pumpkin","fr_tomato"},
 				{loc_noop("Juicy"),loc_noop("Squishy"),loc_noop("Sweet"),loc_noop("Sour"),loc_noop("Bitter"),loc_noop("Ripe"),loc_noop("Rotten"),loc_noop("Fruity")},
-				"R","cm_mog","Default","Cherry","Castle"
+				"R","cm_mog","Default_qau","Cherry","Castle"
 				},
 
 				{
 				loc_noop("The Police"),
 				{"bobby","bobby2v","policecap","policegirl","royalguard"},
 				{loc_noop("Hightower"),loc_noop("Lassard"),loc_noop("Callahan"),loc_noop("Jones"),loc_noop("Harris"),loc_noop("Thompson"),loc_noop("Mahoney"),loc_noop("Hooks"),loc_noop("Tackleberry")},
-				"R","cm_star","British","Statue","Castle"
+				"R","cm_star","British_qau","Statue","Castle"
 				},
 
 				{
 				loc_noop("The Ninja-Samurai Alliance"),
 				{"NinjaFull","NinjaStraight","NinjaTriangle","Samurai","StrawHat","StrawHatEyes","StrawHatFacial","naruto"},
 				{loc_noop("Bushi"),loc_noop("Tatsujin"),loc_noop("Itami"),loc_noop("Arashi"),loc_noop("Shinobi"),loc_noop("Ukemi"),loc_noop("Godai"),loc_noop("Kenshi"),loc_noop("Ninpo")},
-				"R","japan","Default","octopus","Castle"
+				"R","japan","Default_qau","octopus","Castle"
 				},
 
 				{
 				loc_noop("Pokémon"),
 				{"poke_ash","poke_charmander","poke_chikorita","poke_jigglypuff","poke_lugia","poke_mudkip","poke_pikachu","poke_slowpoke","poke_squirtle","poke_voltorb"},
 				{loc_noop("Ash"),loc_noop("Charmander"),loc_noop("Chikorita"),loc_noop("Jigglypuff"),loc_noop("Lugia"),loc_noop("Mudkip"),loc_noop("Pikachu"),loc_noop("Slowpoke"),loc_noop("Squirtle"),loc_noop("Voltorb")},
-				"FR","cm_pokemon","Default","pokeball","Castle"
+				"FR","cm_pokemon","Default_qau","pokeball","Castle"
 				},
 
 				{
 				loc_noop("The Zoo"),
 				{"zoo_Bat","zoo_Beaver","zoo_Bunny","zoo_Deer","zoo_Hedgehog","zoo_Moose","zoo_Pig","zoo_Porkey","zoo_Sheep","zoo_chicken","zoo_elephant","zoo_fish","zoo_frog","zoo_snail","zoo_turtle"},
 				{loc_noop("Batty"),loc_noop("Tails"),loc_noop("Bunny"),loc_noop("Deer"),loc_noop("Spikes"),loc_noop("Horns"),loc_noop("Bacon"),loc_noop("Porkey"),loc_noop("Sheepy"),loc_noop("Chicken"),loc_noop("Trunks"),loc_noop("Fishy"),loc_noop("Legs"),loc_noop("Slimer"),loc_noop("Roshi")},
-				"FR","cm_birdy","Default","Bone","Castle"
+				"FR","cm_birdy","Default_qau","Bone","Castle"
 				},
 
 				{
 				loc_noop("The Devs"),
 				{"ushanka","zoo_Sheep","bb_bob","Skull","poke_mudkip","lambda","WizardHat","sf_ryu","android","fr_lemon","mp3"},
 				{loc_noop("unC0Rr"), loc_noop("sheepluva"), loc_noop("nemo"), loc_noop("mikade"), loc_noop("koda"), loc_noop("burp"),loc_noop("HeneK"),loc_noop("Tiyuri"),loc_noop("Xeli"),loc_noop("Displacer"),loc_noop("szczur")},
-				"FR","cm_hw","Classic","Statue","Castle"
+				"FR","cm_hw","Classic_qau","Statue","Castle"
 				},
 
 				{
 				loc_noop("Mushroom Kingdom"),
 				{"sm_daisy","sm_luigi","sm_mario","sm_peach","sm_toad","sm_wario","NoHat","NoHat"},
 				{loc_noop("Daisy"),loc_noop("Luigi"),loc_noop("Mario"),loc_noop("Princess Peach"),loc_noop("Toad"),loc_noop("Wario"),loc_noop("Yoshi"),loc_noop("Waluigi")},
-				"FR","comoros","Default","Badger","Castle"
+				"FR","comoros","Default_qau","Badger","Castle"
 				},
 
 				{
 				loc_noop("Pirates"),
 				{"pirate_jack","pirate_jack_bandana"},
 				{loc_noop("Rusted Diego"),loc_noop("Fuzzy Beard"),loc_noop("Al.Kaholic"),loc_noop("Morris"),loc_noop("Yumme Gunpowder"),loc_noop("Cutlass Cain"),loc_noop("Jim Morgan"),loc_noop("Silver"),loc_noop("Dubloon Devil"),loc_noop("Ugly Mug"),loc_noop("Fair Wind"),loc_noop("Scallywag"),loc_noop("Salty Dog"),loc_noop("Bearded Beast"),loc_noop("Timbers"),loc_noop("Both Barrels"),loc_noop("Jolly Roger")},
-				"R","cm_pirate","Pirate","chest","Castle"
+				"R","cm_pirate","Pirate_qau","chest","Castle"
 				},
 
 				{
 				loc_noop("Gangsters"),
 				{"Moustache","Cowboy","anzac","Bandit","thug","Jason","NinjaFull","chef"},
 				{loc_noop("The Boss"),loc_noop("Jimmy"),loc_noop("Frankie"),loc_noop("Morris"),loc_noop("Mooney"),loc_noop("Knives"),loc_noop("Tony"),loc_noop("Meals")},
-				"F","cm_anarchy","Mobster","deadhog","Castle"
+				"F","cm_anarchy","Mobster_qau","deadhog","Castle"
 				},
 
 
@@ -489,7 +489,7 @@ local preMadeTeam = 	{
 				loc_noop("Twenty-Twenty"),
 				{"Glasses","lambda","SunGlasses","Sniper","Terminator_Glasses","Moustache_glasses","doctor","punkman","rasta"},
 				{loc_noop("Specs"),loc_noop("Speckles"),loc_noop("Spectator"),loc_noop("Glasses"),loc_noop("Glassy"),loc_noop("Harry Potter"),loc_noop("Goggles"),loc_noop("Clark Kent"),loc_noop("Goggs"),loc_noop("Lightbender"),loc_noop("Specs Appeal"),loc_noop("Four Eyes")},
-				"R","cm_face","Default","eyecross","Castle"
+				"R","cm_face","Default_qau","eyecross","Castle"
 				},
 
 
@@ -497,28 +497,28 @@ local preMadeTeam = 	{
 				loc_noop("Monsters"),
 				{"Skull","Jason","ShaggyYeti","Zombi","cyclops","Mummy","hogpharoah","vampirichog"},
 				{loc_noop("Bones"),loc_noop("Jason"),loc_noop("Yeti"),loc_noop("Zombie"),loc_noop("Old One Eye"),loc_noop("Ramesses"),loc_noop("Xerxes"),loc_noop("Count Hogula")},
-				"FR","cm_vampire","Default","octopus","Castle"
+				"FR","cm_vampire","Default_qau","octopus","Castle"
 				},
 
 				{
 				loc_noop("The Iron Curtain"),
 				{"ushanka","war_sovietcomrade1","war_sovietcomrade1","ushanka"},
 				{loc_noop("Alex"),loc_noop("Sergey"),loc_noop("Vladimir"),loc_noop("Andrey"),loc_noop("Dimitry"),loc_noop("Ivan"),loc_noop("Oleg"),loc_noop("Kostya"),loc_noop("Anton"),loc_noop("Eugene")},
-				"R","cm_soviet","Russian","skull","Castle"
+				"R","cm_soviet","Russian_qau","skull","Castle"
 				},
 
 				{
 				loc_noop("Desert Storm"),
 				{"war_desertofficer","war_desertgrenadier1","war_desertmedic","war_desertsapper1","war_desertgrenadier2","war_desertgrenadier4","war_desertsapper2","war_desertgrenadier5"},
 				{loc_noop("Brigadier Briggs"),loc_noop("Lt. Luke"),loc_noop("Sgt. Smith"),loc_noop("Corporal Calvin"),loc_noop("Frank"),loc_noop("Joe"),loc_noop("Sam"),loc_noop("Donald")},
-				"F","bhutan","Default","Grave","Castle"
+				"F","bhutan","Default_qau","Grave","Castle"
 				},
 
 				{
 				loc_noop("The Hospital"),
 				{"doctor","nurse","war_britmedic","war_desertmedic","war_germanww2medic"},
 				{loc_noop("Dr. Blackwell"),loc_noop("Dr. Drew"),loc_noop("Dr. Harvey"),loc_noop("Dr. Crushing"),loc_noop("Dr. Jenner"),loc_noop("Dr. Barnard"),loc_noop("Dr. Parkinson"),loc_noop("Dr. Banting"),loc_noop("Dr. Horace"),loc_noop("Dr. Hollows"),loc_noop("Dr. Jung")},
-				"R","cm_firstaid","Default","heart","Castle"
+				"R","cm_firstaid","Default_qau","heart","Castle"
 				}
 
 				}
@@ -1503,7 +1503,7 @@ function GetDataForSavingHogs(gear)
 		if not tFort then tFort = "Castle" end
 		if not tGrave then tGrave = "Statue" end
 		if not tFlag then tFlag= "hedgewars" end
-		if not tVoice then tVoice = "Default" end
+		if not tVoice then tVoice = "Default_qau" end
 
 		lastRecordedTeam = GetHogTeamName(gear)
 
