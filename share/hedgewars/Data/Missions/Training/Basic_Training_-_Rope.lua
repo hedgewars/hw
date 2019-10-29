@@ -14,6 +14,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Utils.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 -- Map definition automatically converted from HWMAP file by hwmap2lua.sh
 local map =
@@ -42,6 +43,8 @@ local wasFirstTurn = false	-- first turn msg was displayed
 local gameOver = false		-- game over (only victory possible)
 local currentTarget = 0		-- current target ID. First target = 1
 local flawless = true		-- flawless if no damage taken and no mistake made
+local flowerPower = false	-- random flower visual gears appear all ower the place
+local bonusFlowerPlaced = false -- a hidden flower sprite was placed
 
 local cpX, cpY = 208, 1384	-- hog checkpoint, initialized with start coords
 
@@ -118,6 +121,7 @@ local function resetFinalChallenge(setPos)
 	SetHealth(hog, initHogHealthFinal)
 	AddAmmo(hog, amRope, 1)
 	SetGearVelocity(hog, 0, 0)
+	flowerPower = false
 
 	if setPos then
 		PlaySound(sndWarp)
@@ -207,6 +211,13 @@ function onNewTurn()
 end
 
 function onGameTick()
+
+	if flowerPower then
+		for i=1,2 do
+			AddVisualGear(math.random(-1024, LAND_WIDTH+1024), math.random(TopY-1024, LAND_HEIGHT), vgtBeeTrace, 0, false)
+		end
+	end
+
 	if gameOver or (not CurrentHedgehog) then
 		return
 	end
@@ -255,7 +266,13 @@ function onGameTick()
 	if isInFinalChallenge then
 		local dX, dY = GetGearVelocity(CurrentHedgehog)
 		local x, y = GetGearPosition(CurrentHedgehog)
-		if band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 and GetAmmoCount(CurrentHedgehog, amRope) == 0 and
+		local driven = band(GetState(CurrentHedgehog), gstHHDriven) ~= 0
+		if driven and y > 1310 and x < 338 and not flowerPower then
+			-- Player reached the bonus flower. Enable Flower Power mode!
+			PlaySound(sndKiss)
+			flowerPower = true
+		end
+		if driven and GetAmmoCount(CurrentHedgehog, amRope) == 0 and
 				GetFlightTime(CurrentHedgehog) == 0 and (not ropeGear) and
 				math.abs(dX) < 5 and math.abs(dY) < 5 and
 				(x < 3417 or y > 471) then
@@ -268,6 +285,12 @@ function onGameTick()
 end
 
 function onGameTick20()
+	if flowerPower then
+		if math.random(1,2) == 1 then
+			local vg = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtStraightShot, sprTargetBee, false, 1)
+			SetVisualGearValues(vg, nil, nil, nil, nil, math.random(0, 360), nil, nil, nil, nil, 0xFFFFFFC0)
+		end
+	end
 	if not gameOver and not target1Reached and CurrentHedgehog and gearIsInCircle(CurrentHedgehog, targetData[1][1], targetData[1][2], 48, false) then
 		ShowMission(loc("Basic Rope Training"), loc("Target Puncher"),
 		loc("Okay, now destroy the target|using the baseball bat.").."|"..
@@ -362,6 +385,12 @@ function onGearDelete(gear)
 			2, 25000)
 			eraseGirder(4)
 			eraseGirder(5)
+			-- Sneakingly place a flower sprite near spawn when player reached the last section
+			-- When the player reaches it, Flower Power mode is enabled
+			if not bonusFlowerPlaced then
+				PlaceSprite(240, 1360, sprTargetBee, 0)
+				bonusFlowerPlaced = true
+			end
 			AddAmmo(hog, amRope, 1)
 			SetHealth(hog, initHogHealthFinal)
 			isInFinalChallenge = true
@@ -379,6 +408,9 @@ function onGearDelete(gear)
 			AddAmmo(hog, amRope, 0)
 			SendStat(siCustomAchievement, loc("Oh yeah! You sure know how to rope!"))
 			SendStat(siGameResult, loc("You have finished the Basic Rope Training!"))
+			if flowerPower then
+				awardAchievement(loc("Flower Power"))
+			end
 			EndGame()
 			SetState(hog, gstWinner)
 			gameOver = true
