@@ -380,6 +380,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>Das Schema »%1« wird nicht unterstützt</translation>
     </message>
     <message>
@@ -598,7 +599,7 @@ Passwort:</translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Dein Spitzname ist nicht registriert.
+        <translation type="vanished">Dein Spitzname ist nicht registriert.
 Um Andere von der Benutzung abzuhalten, registrier
 ihn bitte auf www.hedgewars.org</translation>
     </message>
@@ -679,6 +680,13 @@ Bitte Kennwort eingeben:</translation>
     <message>
         <source>Internal error: Reply object is invalid.</source>
         <translation>Interner Fehler: Reply-Objekt ist ungültig.</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1604,7 +1612,7 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Save</source>
-        <translation>Speichern</translation>
+        <translation type="vanished">Speichern</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1654,6 +1662,14 @@ Die letzte Meldung der Engine lautet:
             <numerusform>(%1 Kiste)</numerusform>
             <numerusform>(%1 Kisten)</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4204,7 +4220,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation>Genaues Zielen + wechseln + Igelschilder umschalten</translation>
+        <translation type="vanished">Genaues Zielen + wechseln + Igelschilder umschalten</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
@@ -4213,6 +4229,10 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     <message>
         <source>precise + screenshot</source>
         <translation>Genaues Zielen + Bildschirmfoto</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

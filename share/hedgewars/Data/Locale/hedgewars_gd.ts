@@ -352,6 +352,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>Cha chuir sinn taic ris ann sgeama “%1”</translation>
     </message>
     <message>
@@ -571,7 +572,7 @@ Facal-faire:</translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Chan eil d’ fhar-ainm clàraichte.
+        <translation type="vanished">Chan eil d’ fhar-ainm clàraichte.
 ’S urrainn dhut a chlàradh air www.hedgewars.org
 ach nach cleachd duine eile e.</translation>
     </message>
@@ -664,6 +665,13 @@ Facal-faire:</translation>
     <message>
         <source>Internal error: Reply object is invalid.</source>
         <translation>Mearachd taobh a-staigh: Chan eil oibseact na freagairt dligheach.</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1535,7 +1543,7 @@ An teachdaireachd mu dheireadh aig an einnsein:
     </message>
     <message>
         <source>Save</source>
-        <translation>Sàbhail</translation>
+        <translation type="vanished">Sàbhail</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1597,6 +1605,14 @@ An teachdaireachd mu dheireadh aig an einnsein:
             <numerusform>(%1 creataichean)</numerusform>
             <numerusform>(%1 creat)</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3961,7 +3977,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation>amas pongail + dèan suidse + toglaich thagaichean gràineige</translation>
+        <translation type="vanished">amas pongail + dèan suidse + toglaich thagaichean gràineige</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
@@ -3970,6 +3986,10 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>precise + screenshot</source>
         <translation>amas pongail + glacadh-sgrìn</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4994,6 +5014,10 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <message>
         <source>Project founder</source>
         <translation>Stèidheadair a’ phròiseict</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

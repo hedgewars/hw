@@ -354,6 +354,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>Схема &quot;%1&quot; не поддерживается</translation>
     </message>
     <message>
@@ -565,7 +566,7 @@ Password:</source>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Ваше имя пользователя не зарегистрировано.
+        <translation type="vanished">Ваше имя пользователя не зарегистрировано.
 Чтобы никто другой не воспользовался им,
 зарегистрируйте его на www.hedgewars.org</translation>
     </message>
@@ -636,6 +637,13 @@ Please, enter the password:</source>
     <message>
         <source>Internal error: Reply object is invalid.</source>
         <translation>Внутренняя ошибка: невалидный ответ</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1446,7 +1454,7 @@ Last engine message:
     </message>
     <message>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation type="vanished">Сохранить</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1502,6 +1510,14 @@ Last engine message:
             <numerusform>(%1 ящика)</numerusform>
             <numerusform>(%1 ящиков)</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3855,7 +3871,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation>точность + переключить + вкл ярлыки над ёжиками</translation>
+        <translation type="vanished">точность + переключить + вкл ярлыки над ёжиками</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
@@ -3864,6 +3880,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>precise + screenshot</source>
         <translation>точность + снимок экрана</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4732,6 +4752,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Project founder</source>
         <translation>Основатель проекта</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

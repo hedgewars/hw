@@ -342,6 +342,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>不支持遊戲方案“%1”</translation>
     </message>
     <message>
@@ -553,7 +554,7 @@ Password:</source>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>你的暱稱未註冊。
+        <translation type="vanished">你的暱稱未註冊。
 要防止其他人使用它，
 請上www.hedgewars.org進行註冊</translation>
     </message>
@@ -632,6 +633,13 @@ Please, enter the password:</source>
     <message>
         <source>Internal error: Reply object is invalid.</source>
         <translation>內部錯誤: 回覆的對象是無效的</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1483,7 +1491,7 @@ Last engine message:
     </message>
     <message>
         <source>Save</source>
-        <translation>存檔</translation>
+        <translation type="vanished">存檔</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1527,6 +1535,14 @@ Last engine message:
         <translation>
             <numerusform>(%1 箱子)</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3960,7 +3976,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation>精細瞄準 + 切換 + 隊伍資訊欄開關</translation>
+        <translation type="vanished">精細瞄準 + 切換 + 隊伍資訊欄開關</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
@@ -3969,6 +3985,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>precise + screenshot</source>
         <translation>精細瞄準 + 擷圖</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4981,6 +5001,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Project founder</source>
         <translation>項目創始人</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

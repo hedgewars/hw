@@ -340,6 +340,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>Säännöt &apos;%1&apos; ei ole tuettu</translation>
     </message>
     <message>
@@ -555,7 +556,7 @@ Salasana: </translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Nimimerkkiäsi ei ole rekisteröity.
+        <translation type="vanished">Nimimerkkiäsi ei ole rekisteröity.
 Estääksesi muita käyttämästä sitä,
 voit rekisteröidä sen osoitteessa hedgewars.org</translation>
     </message>
@@ -635,6 +636,13 @@ Salasana:</translation>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1468,7 +1476,7 @@ Last engine message:
     </message>
     <message>
         <source>Save</source>
-        <translation>Tallenna</translation>
+        <translation type="vanished">Tallenna</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1518,6 +1526,14 @@ Last engine message:
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3867,15 +3883,15 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>precise + switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>high jump (twice)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>precise + screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4900,6 +4916,10 @@ Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</
     </message>
     <message>
         <source>Project founder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

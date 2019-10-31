@@ -336,6 +336,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -536,12 +537,6 @@ Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your nickname is not registered.
-To prevent someone else from using it,
-please register it at www.hedgewars.org</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>
 
 Your password wasn&apos;t saved either.</source>
@@ -605,6 +600,13 @@ Please, enter the password:</source>
     </message>
     <message>
         <source>Internal error: Reply object is invalid.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1381,10 +1383,6 @@ Last engine message:
         <source>Play again</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
         <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
@@ -1433,6 +1431,14 @@ Last engine message:
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3720,15 +3726,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>precise + switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>high jump (twice)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>precise + screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4757,6 +4763,10 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Project founder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

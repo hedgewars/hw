@@ -344,6 +344,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>Scheme ‘%1’ not supported</translation>
     </message>
     <message>
@@ -563,7 +564,7 @@ Password:</translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Your nickname is not registered.
+        <translation type="vanished">Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</translation>
     </message>
@@ -656,6 +657,13 @@ Password:</translation>
     <message>
         <source>Internal error: Reply object is invalid.</source>
         <translation>Internal error: Reply object is invalid.</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1515,7 +1523,7 @@ Last engine message:
     </message>
     <message>
         <source>Save</source>
-        <translation>Save</translation>
+        <translation type="vanished">Save</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1565,6 +1573,14 @@ Last engine message:
             <numerusform>(%1 crate)</numerusform>
             <numerusform>(%1 crates)</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3985,15 +4001,15 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
         <translation></translation>
     </message>
     <message>
-        <source>precise + switch + toggle hedgehog tags</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>high jump (twice)</source>
         <translation></translation>
     </message>
     <message>
         <source>precise + screenshot</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
         <translation></translation>
     </message>
 </context>
@@ -5022,6 +5038,10 @@ If this keeps happening, please click the ‘%2’ button in the main menu!</tra
     </message>
     <message>
         <source>Project founder</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
         <translation></translation>
     </message>
 </context>

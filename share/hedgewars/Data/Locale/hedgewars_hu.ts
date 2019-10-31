@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="hu">
+<TS version="2.1" language="hu">
 <context>
     <name>About</name>
     <message>
@@ -330,6 +330,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>A(z) %1 séma nem támogatott</translation>
     </message>
     <message>
@@ -541,7 +542,7 @@ Jelszó:</translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>A beceneved nincs regisztrálva.
+        <translation type="vanished">A beceneved nincs regisztrálva.
 Nehogy más is használja, kérjük,
 regisztráld a www.hedgewars.org címen</translation>
     </message>
@@ -614,6 +615,13 @@ Kérjük, add meg a jelszót:</translation>
     <message>
         <source>Internal error: Reply object is invalid.</source>
         <translation>Belső hiba: Érvénytelen válaszobjektum.</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -874,7 +882,7 @@ A játékmotor utolsó üzenete:
     </message>
     <message>
         <source>Connection refused</source>
-        <translation>Kapcsolat visszautasítva</translation>
+        <translation type="vanished">Kapcsolat visszautasítva</translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -882,7 +890,7 @@ A játékmotor utolsó üzenete:
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Kilépés oka:</translation>
+        <translation type="vanished">Kilépés oka:</translation>
     </message>
     <message>
         <source>You got kicked</source>
@@ -1407,7 +1415,7 @@ A motor utolsó üzenete:
     </message>
     <message>
         <source>Save</source>
-        <translation>Mentés</translation>
+        <translation type="vanished">Mentés</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1451,6 +1459,14 @@ A motor utolsó üzenete:
         <translation>
             <numerusform>(%1 csomag)</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1891,7 +1907,7 @@ A motor utolsó üzenete:
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation>A talajt nem lehet elpusztítani!</translation>
+        <translation type="vanished">A talajt nem lehet elpusztítani!</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -2886,7 +2902,7 @@ Tényleg ki akarsz lépni?</translation>
     <name>QMessageBox</name>
     <message>
         <source>Connection to server is lost</source>
-        <translation>A kapcsolat a szerverrel megszakadt</translation>
+        <translation type="vanished">A kapcsolat a szerverrel megszakadt</translation>
     </message>
     <message>
         <source>Error</source>
@@ -3160,7 +3176,7 @@ Szeretnél újracsatlakozni biztonságosan?</translation>
     </message>
     <message>
         <source>Specify</source>
-        <translation>Beállítás</translation>
+        <translation type="vanished">Beállítás</translation>
     </message>
     <message>
         <source>Start</source>
@@ -3560,7 +3576,7 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>pause</source>
-        <translation>szünet</translation>
+        <translation type="vanished">szünet</translation>
     </message>
     <message>
         <source>confirmation</source>
@@ -3580,7 +3596,7 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>capture</source>
-        <translation>elfogás</translation>
+        <translation type="vanished">elfogás</translation>
     </message>
     <message>
         <source>quit</source>
@@ -3596,7 +3612,7 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>reset zoom</source>
-        <translation>nagyítás visszaállítása</translation>
+        <translation type="vanished">nagyítás visszaállítása</translation>
     </message>
     <message>
         <source>long jump</source>
@@ -3759,7 +3775,7 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation>pontos célzás + váltás + süncímkék kapcsolása</translation>
+        <translation type="vanished">pontos célzás + váltás + süncímkék kapcsolása</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
@@ -3768,6 +3784,10 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     <message>
         <source>precise + screenshot</source>
         <translation>pontos célzás + képernyőkép készítése</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3810,7 +3830,7 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Beszélgetés a csapattal vagy minden résztvevővel:</translation>
+        <translation type="vanished">Beszélgetés a csapattal vagy minden résztvevővel:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
@@ -3830,7 +3850,7 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>Sünik feletti címkék beállítása:</translation>
+        <translation type="vanished">Sünik feletti címkék beállítása:</translation>
     </message>
     <message>
         <source>Record video:</source>
@@ -3861,31 +3881,31 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation>Tengely</translation>
+        <translation type="vanished">Tengely</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation>(Fel)</translation>
+        <translation type="vanished">(Fel)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation>(Le)</translation>
+        <translation type="vanished">(Le)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation>Fejfedő</translation>
+        <translation type="vanished">Fejfedő</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation>(Balra)</translation>
+        <translation type="vanished">(Balra)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation>(Jobbra)</translation>
+        <translation type="vanished">(Jobbra)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation>Gomb</translation>
+        <translation type="vanished">Gomb</translation>
     </message>
     <message>
         <source>Keyboard</source>
@@ -3945,71 +3965,71 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation>Numerikus 0</translation>
+        <translation type="vanished">Numerikus 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation>Numerikus 1</translation>
+        <translation type="vanished">Numerikus 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation>Numerikus 2</translation>
+        <translation type="vanished">Numerikus 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation>Numerikus 3</translation>
+        <translation type="vanished">Numerikus 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation>Numerikus 4</translation>
+        <translation type="vanished">Numerikus 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation>Numerikus 5</translation>
+        <translation type="vanished">Numerikus 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation>Numerikus 6</translation>
+        <translation type="vanished">Numerikus 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation>Numerikus 7</translation>
+        <translation type="vanished">Numerikus 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation>Numerikus 8</translation>
+        <translation type="vanished">Numerikus 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation>Numerikus 9</translation>
+        <translation type="vanished">Numerikus 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation>Numerikus .</translation>
+        <translation type="vanished">Numerikus .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation>Numerikus /</translation>
+        <translation type="vanished">Numerikus /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation>Numerikus *</translation>
+        <translation type="vanished">Numerikus *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation>Numerikus -</translation>
+        <translation type="vanished">Numerikus -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation>Numerikus +</translation>
+        <translation type="vanished">Numerikus +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>Enter</translation>
+        <translation type="vanished">Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation>Egyenlő</translation>
+        <translation type="vanished">Egyenlő</translation>
     </message>
     <message>
         <source>Up</source>
@@ -4041,55 +4061,55 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>Page up</source>
-        <translation>Page Up</translation>
+        <translation type="vanished">Page Up</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation>Page Down</translation>
+        <translation type="vanished">Page Down</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation>Num Lock</translation>
+        <translation type="vanished">Num Lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation>Caps Lock</translation>
+        <translation type="vanished">Caps Lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation>Scroll Lock</translation>
+        <translation type="vanished">Scroll Lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation>Jobb oldali Shift</translation>
+        <translation type="vanished">Jobb oldali Shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>Bal oldali Shift</translation>
+        <translation type="vanished">Bal oldali Shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>Jobb oldali Ctrl</translation>
+        <translation type="vanished">Jobb oldali Ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>Bal oldali Ctrl</translation>
+        <translation type="vanished">Bal oldali Ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>Jobb oldali Alt</translation>
+        <translation type="vanished">Jobb oldali Alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>Bal oldali Alt</translation>
+        <translation type="vanished">Bal oldali Alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation>Jobb oldali Meta</translation>
+        <translation type="vanished">Jobb oldali Meta</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation>Bal oldali Meta</translation>
+        <translation type="vanished">Bal oldali Meta</translation>
     </message>
     <message>
         <source>A button</source>
@@ -4173,7 +4193,7 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>DPad</source>
-        <translation>DPad</translation>
+        <translation type="vanished">DPad</translation>
     </message>
     <message>
         <source>D-pad</source>
@@ -4796,6 +4816,10 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     <message>
         <source>Project founder</source>
         <translation>Projektalapító</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

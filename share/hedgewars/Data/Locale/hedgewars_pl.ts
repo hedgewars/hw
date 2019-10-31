@@ -362,6 +362,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>Shemat &apos;%1&apos; nie jest wspierany</translation>
     </message>
     <message>
@@ -581,7 +582,7 @@ Hasło:</translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Twój nick nie jest zarejestrowany.
+        <translation type="vanished">Twój nick nie jest zarejestrowany.
 By zapobiec używania go przez kogoś innego
 zarejestruj go na www.hedgewars.org</translation>
     </message>
@@ -680,6 +681,13 @@ Your password wasn&apos;t saved either.</source>
         <translation>
 
 Twoje hasło nie zostało zapisane.</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1576,7 +1584,7 @@ Ostatnia wiadomość silnika:
     </message>
     <message>
         <source>Save</source>
-        <translation>Zapisz</translation>
+        <translation type="vanished">Zapisz</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1632,6 +1640,14 @@ Ostatnia wiadomość silnika:
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4187,7 +4203,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation>precyzja + zmiana + przełącz tagi jeży</translation>
+        <translation type="vanished">precyzja + zmiana + przełącz tagi jeży</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
@@ -4196,6 +4212,10 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <message>
         <source>precise + screenshot</source>
         <translation>precyzja + zrzut ekranu</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5224,6 +5244,10 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <message>
         <source>Project founder</source>
         <translation>Fundator projektu</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

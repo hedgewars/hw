@@ -348,6 +348,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
         <translation>Schema &apos;%1&apos; non supportato</translation>
     </message>
     <message>
@@ -563,7 +564,7 @@ Password:</translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Il tuo nome non è registrato.
+        <translation type="vanished">Il tuo nome non è registrato.
 Per evitare che qualcun altro lo usi,
 per favore registralo su www.hedgewars.org</translation>
     </message>
@@ -644,6 +645,13 @@ Per piacere, inserisci la password:</translation>
     <message>
         <source>Internal error: Reply object is invalid.</source>
         <translation>Errore interno: Oggetto di risposta non valido.</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1495,7 +1503,7 @@ Ultimo messaggio della macchina:
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation type="vanished">Salva</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -1545,6 +1553,14 @@ Ultimo messaggio della macchina:
             <numerusform>(%1 cassa(s))</numerusform>
             <numerusform></numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3940,7 +3956,7 @@ Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation>Shift + cambia riccio + attiva tags del riccio</translation>
+        <translation type="vanished">Shift + cambia riccio + attiva tags del riccio</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
@@ -3949,6 +3965,10 @@ Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel
     <message>
         <source>precise + screenshot</source>
         <translation>Shift + screenshot</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4973,6 +4993,10 @@ Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel
     <message>
         <source>Project founder</source>
         <translation>Fondatore del progetto</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
