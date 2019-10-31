@@ -686,7 +686,10 @@ Bitte Kennwort eingeben:</translation>
 To be able to rejoin games in progress and
 prevent someone else from using your nickname,
 please register it at www.hedgewars.org.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dein Spitzname ist nicht registriert.
+Um laufenden Spielen wieder beitreten zu können
+und Andere von der Benutzung deines Spitznamens
+abzuhalten, registriere ihn bitte auf www.hedgewars.org.</translation>
     </message>
 </context>
 <context>
@@ -1665,11 +1668,11 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Save demo</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholung speichern</translation>
     </message>
     <message>
         <source>Save demo (unavailable because the /lua command was used)</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholung speichern (nicht möglich, da der /lua-Befehl benutzt wurde)</translation>
     </message>
 </context>
 <context>
@@ -4232,7 +4235,7 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
     </message>
     <message>
         <source>precise + switch + toggle team bars</source>
-        <translation type="unfinished"></translation>
+        <translation>Genaues Zielen + Wechseln + Teamleisten umschalten</translation>
     </message>
 </context>
 <context>
