@@ -117,11 +117,7 @@ function onGameInit()
 	HealthDecrease = 0
 	-- completed main missions
 	status = getCompletedStatus()
-	if status.death01 then
-		Map = "cosmos2_map"
-	else
-		Map = "cosmos_map" -- custom map included in file
-	end
+	Map = "cosmos_map" -- custom map included in file
 	Theme = "Nature"
 	-- Hero
 	teamC.name = AddMissionTeam(teamC.color)
@@ -187,6 +183,15 @@ function onGameInit()
 end
 
 function onGameStart()
+	-- Place meteorite on map
+	if status.final then
+		-- Campaign complete: Blown-up meteorite sprite
+		PlaceSprite(3171, 909, sprCustom2, 0, nil, false, false, false)
+	elseif status.death01 then
+		-- death01 mission complete: Normal meteorite sprite
+		PlaceSprite(3171, 909, sprCustom1, 0, nil, false, false, false)
+	end
+
 	-- wait for the first turn to start
 	AnimWait(hero.gear, 3000)
 
@@ -626,8 +631,8 @@ function setFoundDeviceVisual()
 		end
 	end
 	if status.final then
-		vgear = AddVisualGear(3070, 810, vgtBeeTrace, 0, false)
-		vgear = AddVisualGear(3070, 790, vgtBeeTrace, 0, false)
+		vgear = AddVisualGear(3080, 810, vgtBeeTrace, 0, false)
+		vgear = AddVisualGear(3080, 790, vgtBeeTrace, 0, false)
 	end
 end
 
