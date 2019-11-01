@@ -123,12 +123,14 @@ end
 
 function onGearDelete(gear)
 	if isHog(gear) then
-		-- Set health to 100 (with heal effect, if health was smaller)
-		local healthDiff = 100 - GetHealth(hero.gear)
-		if healthDiff > 1 then
-			HealHog(hero.gear, healthDiff, true, 0x00FF00FF)
-		else
-			SetHealth(hero.gear, 100)
+		if CurrentHedgehog == hero.gear then
+			-- Set health to 100 (with heal effect, if health was smaller)
+			local healthDiff = 100 - GetHealth(hero.gear)
+			if healthDiff > 1 then
+				HealHog(hero.gear, healthDiff, true, 0x00FF00FF)
+			else
+				SetHealth(hero.gear, 100)
+			end
 		end
 		local deadHog = getHog(gear)
 		if deadHog.weapon == amMortar then
@@ -155,7 +157,7 @@ function onGearDelete(gear)
 end
 
 function onGearDamage(gear, damage)
-	if isHog(gear) and GetHealth(hero.gear) then
+	if isHog(gear) and GetHealth(hero.gear) and CurrentHedgehog == hero.gear then
 		local bonusHealth = div(damage, 3)
 		HealHog(hero.gear, bonusHealth, true, 0xFF0000FF)
 	end
