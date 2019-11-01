@@ -20,6 +20,7 @@ local battleZoneReached = false
 local checkPointReached = 1 -- 1 is start of the game
 local afterDialog02 = false
 local gameOver = false
+local minionsDead = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -262,6 +263,9 @@ function onNewTurn()
 			EndTurn(true)
 		end
 	end
+	if minionsDead and (not (professor.dead or GetHealth(professor.gear) == nil or GetHealth(professor.gear) == 0)) then
+		FollowGear(professor.gear)
+	end
 end
 
 function onPrecise()
@@ -444,9 +448,11 @@ function afterDialog05()
 end
 
 function minionsDeath(gear)
+	minionsDead = true
 	if professor.dead or GetHealth(professor.gear) == nil or GetHealth(professor.gear) == 0 then return end
 	if gameOver then return end
 	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then return end
+	SetTeamPassive(teamC.name, false)
 	AddAnim(dialog05)
 end
 
