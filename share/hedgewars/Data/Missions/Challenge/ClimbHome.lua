@@ -4,7 +4,6 @@ isSinglePlayer = true
 
 -- trying to allow random theme, but fixed theme objects...
 -- Also skip some ugly themes, or ones where the sky is "meh"
---local themes = { "Art","Cake","City","EarthRise","Halloween","Olympics","Underwater","Bamboo","Castle","Compost","Eyes","Hell","Planes","Bath","Cave","CrazyMission","Freeway","Island","Sheep","Blox","Cheese","Deepspace","Fruit","Jungle","Snow","Brick","Christmas","Desert","Golf","Nature","Stage" }
 local themes = {"Christmas","Hell","Bamboo","City","Island","Bath","Compost","Jungle","Desert","Nature","Olympics","Brick","EarthRise","Sheep","Cake","Freeway","Snow","Castle","Fruit","Stage","Cave","Golf","Cheese","Halloween"}
 local totalHedgehogs = 0
 local HH = {}
@@ -13,8 +12,8 @@ local dummyHog = nil
 
 
 function onGameInit()
-    -- Ensure people get same map for same theme
     Theme = themes[GetRandom(#themes)+1]
+    -- Ensure people get same map for same theme
     Seed = ""
     TurnTime = MAX_TURN_TIME
     EnableGameFlags(gfOneClanMode)

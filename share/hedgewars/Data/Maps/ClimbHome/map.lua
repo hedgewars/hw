@@ -11,7 +11,6 @@ local MaxHeight = 32640
 local RecordHeight = 33000
 local RecordHeightHogName = nil
 local Fire = {}
---local BoomFire = nil
 local HH = {}
 local totalHedgehogs = 0
 local deadHedgehogs = 0
@@ -91,9 +90,8 @@ function onGameInit()
     MineDudPercent = 0
     EnableGameFlags(gfOneClanMode)
     DisableGameFlags(gfBottomBorder+gfBorder)
-    --This reduced startup time by only about 15% and looked ugly
-    --EnableGameFlags(gfDisableLandObjects) 
-    -- force seed instead.  Some themes will still be easier, but at least you won't luck out on the same theme
+    -- gfDisableLandObjects is not used. This reduced startup time by only about 15% and looked ugly
+    -- Force seed so the land objects are the same. Some themes will still be easier, but at least you won't luck out on the same theme
     Seed = ""
     -- Disable Sudden Death
     WaterRise = 0
@@ -125,7 +123,6 @@ function onGearDelete(gear)
 end
 
 function onGameStart()
-    --SetClanColor(ClansCount-1, 0x0000ffff) appears to be broken
     SendHealthStatsOff()
     local recordInfo = ""
     if isSinglePlayer then
@@ -139,7 +136,6 @@ function onGameStart()
     local x = 1818
     for h,i in pairs(HH) do
         if h ~= nil then
-            -- SetGearPosition(h,x,32549)
             SetGearPosition(h,x,108)
             SetHealth(h,1)
             if x < 1978 then x = x+32 else x = 1818 end
@@ -151,7 +147,7 @@ function onGameStart()
             SetState(h,bor(GetState(h),gstInvisible))
         end
     end
--- 1925,263 - Mr. Mine position
+    -- 1925,263 - Mr. Mine position
     MrMine = AddGear(1925,263,gtMine,0,0,0,0)
     for i=0, TeamsCount-1 do
         SetTeamLabel(GetTeamName(i), "0")
@@ -225,17 +221,10 @@ function onNewTurn()
     CakeTries = 0
 end
 
---function onGearDelete(gear)
---    if gear == WaterRise and MaxHeight > 500 and CurrentHedgehog ~= nil and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then
---        WaterRise = AddGear(0,0,gtWaterUp, 0, 0, 0, 0)
---    end
---end
-
 function FireBoom(x,y,d) -- going to add for rockets too
     PlaySound(sndExplosion)
     AddVisualGear(x,y,vgtExplosion,0,false)
     -- should approximate circle by removing corners
-    --if BoomFire == nil then BoomFire = {} end
     for i = 0,50 do
 	fx = GetRandom(d)-div(d,2)
 	fy = GetRandom(d)-div(d,2)
@@ -253,7 +242,6 @@ function FireBoom(x,y,d) -- going to add for rockets too
         SetTag(flame, 999999+i)
         SetFlightTime(flame, 0)
         Fire[flame]=1
---        BoomFire[flame]=1
     end
 end
 
@@ -266,13 +254,6 @@ function onGameTick20()
         SkipTurn()
         dummySkip = 0
     end
-
-    --if BoomFire ~= nil then
-    --    for f,i in pairs(BoomFire) do
-    --        if band(GetState(f),gstCollision~=0) then DeleteGear(f) end
-    --    end
-    --    BoomFire = nil
-    --end
 
     for s,i in pairs(Stars) do
         local _, Y = GetVisualGearValues(s)
@@ -333,7 +314,7 @@ function onGameTick20()
                         AddCaption(loc("Don't touch the flames!"))
                         CakeFireWarning = true
                     end
-                    FireBoom(cx,cy,200) -- todo animate
+                    FireBoom(cx,cy,200) -- TODO: animate
                     DeleteGear(Cake)
                 end
             end
@@ -372,7 +353,6 @@ function onGameTick20()
                     999999999, -- frameticks
                     sprStar, -- star
                     0, c)
-                    --,  0xFFCC00FF) -- could be fun to make colour shift as you rise...
                 Stars[s] = 1
             end
         end
@@ -693,7 +673,6 @@ function makeMultiPlayerLoserStat(gear)
     if teamBests[teamName] < actualHeight then teamBests[teamName] = actualHeight end
     if teamScoreStats[teamName] == nil then teamScoreStats[teamName] = {} end
     table.insert(teamScoreStats[teamName], actualHeight)
-    --SendStat(siClanHealth, tostring(teamBests[teamName]), teamName)
 end
 
 function makeMultiPlayerWinnerStat(gear)
