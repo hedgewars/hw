@@ -15,7 +15,7 @@ local dummyHog = nil
 function onGameInit()
     -- Ensure people get same map for same theme
     Theme = themes[GetRandom(#themes)+1]
-    Seed = ClimbHome
+    Seed = ""
     TurnTime = MAX_TURN_TIME
     EnableGameFlags(gfOneClanMode)
     DisableGameFlags(gfBottomBorder+gfBorder)

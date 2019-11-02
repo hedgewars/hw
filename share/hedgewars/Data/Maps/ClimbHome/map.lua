@@ -94,7 +94,7 @@ function onGameInit()
     --This reduced startup time by only about 15% and looked ugly
     --EnableGameFlags(gfDisableLandObjects) 
     -- force seed instead.  Some themes will still be easier, but at least you won't luck out on the same theme
-    Seed = ClimbHome
+    Seed = ""
     -- Disable Sudden Death
     WaterRise = 0
     HealthDecrease = 0
