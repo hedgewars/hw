@@ -390,6 +390,12 @@ height: 2px;
 margin: 2px 0px;
 background-color: #ffcc00;
 }
+QSlider::handle::horizontal:hover {
+background-color: yellow;
+}
+QSlider::handle::horizontal:pressed {
+background-color: white;
+}
 QSlider::groove::horizontal:disabled {
 background-color: #a0a0a0;
 }
