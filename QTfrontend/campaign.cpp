@@ -57,25 +57,29 @@ bool isCampMissionWon(QString & campaignName, int missionInList, QString & teamN
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
     int progress = teamfile->value("Campaign " + campaignName + "/Progress", 0).toInt();
     int unlockedMissions = teamfile->value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
-    // The CowardMode cheat unlocks all campaign missions,
-    // but as "punishment", none of them will be marked as completed.
+    QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
+    campfile.setIniCodec("UTF-8");
+    int totalMissions = campfile.value("MissionNum", 1).toInt();
+    // The CowardMode cheat unlocks all campaign missions.
     // Added to make it easier to test campaigns.
     bool cheat = teamfile->value("Team/CowardMode", false).toBool();
-    if(cheat)
+    if(progress>0 && unlockedMissions==0)
     {
-        return false;
-    }
-    else if(progress>0 && unlockedMissions==0)
-    {
-        QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
-        campfile.setIniCodec("UTF-8");
-        int totalMissions = campfile.value("MissionNum", 1).toInt();
-        return (progress > (progress - missionInList)) || (progress >= totalMissions);
+        int maxMission;
+        if(cheat)
+            maxMission = totalMissions - (missionInList + 1);
+        else
+            maxMission = progress - missionInList;
+        return (progress > maxMission) || (progress >= totalMissions);
     }
     else if(unlockedMissions>0)
     {
         int fileMissionId = missionInList + 1;
-        int actualMissionId = teamfile->value(QString("Campaign %1/Mission%2").arg(campaignName, QString::number(fileMissionId)), false).toInt();
+        int actualMissionId;
+        if(cheat)
+            actualMissionId = totalMissions - missionInList;
+        else
+            actualMissionId = teamfile->value(QString("Campaign %1/Mission%2").arg(campaignName, QString::number(fileMissionId)), false).toInt();
         return teamfile->value(QString("Campaign %1/Mission%2Won").arg(campaignName, QString::number(actualMissionId)), false).toBool();
     }
     else
@@ -87,8 +91,7 @@ bool isCampWon(QString & campaignName, QString & teamName)
 {
     QSettings* teamfile = getCampTeamFile(campaignName, teamName);
     bool won = teamfile->value("Campaign " + campaignName + "/Won", false).toBool();
-    bool cheat = teamfile->value("Team/CowardMode", false).toBool();
-    return won && !cheat;
+    return won;
 }
 
 QSettings* getCampMetaInfo()
