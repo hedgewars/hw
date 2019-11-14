@@ -341,6 +341,7 @@ function loseRunnerDeath()
 end
 
 function win()
+	AnimSetInputMask(0)
 	SendStat(siGameResult, loc("Congratulations, you are the fastest!"))
 	-- siCustomAchievements were added earlier
 	SendStat(siPointType, "!TIME")
