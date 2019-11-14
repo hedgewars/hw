@@ -1,5 +1,18 @@
 + features
 * bugfixes
+==================== 1.0.1-dev =====================
+ + Add dynamite fuse sound
+ + Various small HUD tweaks
+ + Racer: Allow to set turn time in game scheme
+ + Racer: Reset mines, air mines and sticky mines every turn
+ + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory
+ * Racer: Resize waypoints in custom-sized drawn maps
+ * A Space Adventure: The First Stop: Fix broken victory condition when eliminating minions
+ * A Space Adventure: Killing the Specialists: Don't award player health if enemy hurts itself
+
+Lua:
+ + Add RopeKnocking library
+
 ====================== 1.0.0 =======================
 Highlights:
  + Campaigns now respect your team identity instead of overwriting it
