@@ -130,6 +130,9 @@ function onNewTurn()
 			runnerTime = runnerTime + runner.places[currentPosition].turnTime
 			SetTeamLabel(teamB.name, string.format(loc("%.1fs"), runnerTime/1000))
 		else
+			if currentPosition > 2 then
+				AddCaption(loc("Go, get him again!"), capcolDefault, capgrpGameState)
+			end
 			SetWeapon(amRope)
 			SetTurnTimeLeft(runner.places[currentPosition].turnTime + previousTimeLeft)
 			previousTimeLeft = 0
@@ -268,9 +271,6 @@ end
 function moveRunner()
 	if currentPosition == 4 then
 		currentPosition = currentPosition + 1
-		if GetX(hero.gear) > GetX(runner.gear) then
-			HogTurnLeft(runner.gear, false)
-		end
 		AddAnim(dialog02)
 
 		-- Update time record
@@ -295,7 +295,6 @@ function moveRunner()
 		AddAmmo(hero.gear, amRope, 1)
 		if currentPosition ~= 1 then
 			if currentPosition > 1 and currentPosition < 4 then
-				AnimCaption(hero.gear, loc("Go, get him again!"), 3000)
 				AnimSay(runner.gear, loc("You got me!"), SAY_SAY, 3000)
 			end
 			runnerCaught = true
@@ -305,6 +304,9 @@ function moveRunner()
 		AddVisualGear(GetX(runner.gear), GetY(runner.gear), vgtExplosion, 0, false) 
 		SetGearPosition(runner.gear, runner.places[currentPosition].x, runner.places[currentPosition].y)
 		EndTurn(true)
+	end
+	if runner.gear and hero.gear then
+		HogTurnLeft(runner.gear, GetX(hero.gear) < GetX(runner.gear))
 	end
 end
 
