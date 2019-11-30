@@ -3091,6 +3091,16 @@ begin
 
     AfterAttack;
 
+    // Delete parachute early if hog already collides
+    if (TestCollisionXwithGear(HHGear, -1) <> 0) and (TestCollisionXwithGear(HHGear, 1) <> 0) then
+        begin
+        HHGear^.dY := cGravity * 100;
+        isCursorVisible:= false;
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
+        DeleteGear(Gear);
+        exit;
+        end;
+
     // make sure hog doesn't end up facing in wrong direction due to high jump
     if (HHGear^.State and gstHHHJump) <> 0 then
         HHGear^.dX.isNegative := (not HHGear^.dX.isNegative);

@@ -9,6 +9,7 @@
  * Racer: Resize waypoints in custom-sized drawn maps
  * A Space Adventure: The First Stop: Fix broken victory condition when eliminating minions
  * A Space Adventure: Killing the Specialists: Don't award player health if enemy hurts itself
+ * Fix hog getting stuck when opening parachute right after a shoryuken digging through land
 
 Lua:
  + Add RopeKnocking library
