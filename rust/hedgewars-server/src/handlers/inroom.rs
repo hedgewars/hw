@@ -274,7 +274,8 @@ pub fn handle(
 
                 match room.game_info {
                     Some(ref info) if info.teams_in_game == 0 => {
-                        super::common::end_game(server, room_id, response)
+                        let result = server.end_game(room_id);
+                        super::common::get_end_game_result(server, room_id, result, response);
                     }
                     _ => (),
                 }
@@ -566,7 +567,8 @@ pub fn handle(
                 }
             }
             if game_ended {
-                super::common::end_game(server, room_id, response)
+                let result = server.end_game(room_id);
+                super::common::get_end_game_result(server, room_id, result, response);
             }
         }
         Rnd(v) => {

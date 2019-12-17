@@ -6,11 +6,10 @@ use super::{
 };
 use crate::{protocol::messages::HwProtocolMessage::Greeting, utils};
 
-use crate::core::server::JoinRoomError::WrongProtocol;
 use bitflags::*;
 use log::*;
 use slab;
-use std::{borrow::BorrowMut, collections::HashSet, iter, num::NonZeroU16};
+use std::{borrow::BorrowMut, collections::HashSet, iter, mem::replace, num::NonZeroU16};
 
 type Slab<T> = slab::Slab<T>;
 
@@ -64,6 +63,13 @@ pub enum StartGameError {
     NotEnoughTeams,
     NotReady,
     AlreadyInGame,
+}
+
+#[derive(Debug)]
+pub struct EndGameResult {
+    pub joined_mid_game_clients: Vec<ClientId>,
+    pub left_teams: Vec<String>,
+    pub unreadied_nicks: Vec<String>,
 }
 
 #[derive(Debug)]
@@ -438,6 +444,46 @@ impl HwServer {
                 c.team_indices = room.client_team_indices(c.id);
             }
             Ok(room_nicks)
+        }
+    }
+
+    pub fn end_game(&mut self, room_id: RoomId) -> EndGameResult {
+        let room = &mut self.rooms[room_id];
+        room.ready_players_number = 1;
+
+        if let Some(info) = replace(&mut room.game_info, None) {
+            let joined_mid_game_clients = self
+                .clients
+                .iter()
+                .filter(|(_, c)| c.room_id == Some(room_id) && c.is_joined_mid_game())
+                .map(|(_, c)| c.id)
+                .collect();
+
+            let unreadied_nicks: Vec<_> = self
+                .clients
+                .iter_mut()
+                .filter(|(_, c)| c.room_id == Some(room_id))
+                .map(|(_, c)| {
+                    c.set_is_ready(c.is_master());
+                    c.set_is_joined_mid_game(false);
+                    c
+                })
+                .filter_map(|c| {
+                    if !c.is_master() {
+                        Some(c.nick.clone())
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+
+            EndGameResult {
+                joined_mid_game_clients,
+                left_teams: info.left_teams.clone(),
+                unreadied_nicks,
+            }
+        } else {
+            unreachable!()
         }
     }
 

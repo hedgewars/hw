@@ -2,7 +2,9 @@ use crate::{
     core::{
         client::HwClient,
         room::HwRoom,
-        server::{HwServer, JoinRoomError, LeaveRoomError, LeaveRoomResult, StartGameError},
+        server::{
+            EndGameResult, HwServer, JoinRoomError, LeaveRoomError, LeaveRoomResult, StartGameError,
+        },
         types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
     },
     protocol::messages::{
@@ -204,7 +206,7 @@ pub fn get_room_leave_result(
     let client = server.client(response.client_id);
     response.add(ClientFlags(remove_flags(&[Flags::InRoom]), vec![client.nick.clone()]).send_all());
 
-    match (result) {
+    match result {
         LeaveRoomResult::RoomRemoved => {
             response.add(
                 RoomRemove(room.name.clone())
@@ -504,57 +506,41 @@ pub fn get_start_game_data(
         }
         Err(StartGameError::NotEnoughTeams) => (),
         Err(StartGameError::NotReady) => response.warn("Not all players are ready"),
-        Err(StartGameErrror) => response.warn("The game is already in progress"),
+        Err(StartGameError::AlreadyInGame) => response.warn("The game is already in progress"),
     }
 }
 
-pub fn end_game(server: &mut HwServer, room_id: RoomId, response: &mut Response) {
-    let room = &mut server.rooms[room_id];
-    room.ready_players_number = 1;
+pub fn get_end_game_result(
+    server: &HwServer,
+    room_id: RoomId,
+    result: EndGameResult,
+    response: &mut Response,
+) {
+    let room = server.room(room_id);
     let room_master = if let Some(id) = room.master_id {
-        Some(&server.clients[id])
+        Some(server.client(id))
     } else {
         None
     };
+
     get_room_update(None, room, room_master, response);
     response.add(RoundFinished.send_all().in_room(room_id));
 
-    if let Some(info) = replace(&mut room.game_info, None) {
-        for (_, client) in server.clients.iter() {
-            if client.room_id == Some(room_id) && client.is_joined_mid_game() {
-                super::common::get_room_config(room, client.id, response);
-                response.extend(
-                    info.left_teams
-                        .iter()
-                        .map(|name| TeamRemove(name.clone()).send(client.id)),
-                );
-            }
-        }
+    for client_id in result.joined_mid_game_clients {
+        super::common::get_room_config(room, client_id, response);
+        response.extend(
+            result
+                .left_teams
+                .iter()
+                .map(|name| TeamRemove(name.clone()).send(client_id)),
+        );
     }
 
-    let nicks: Vec<_> = server
-        .clients
-        .iter_mut()
-        .filter(|(_, c)| c.room_id == Some(room_id))
-        .map(|(_, c)| {
-            c.set_is_ready(c.is_master());
-            c.set_is_joined_mid_game(false);
-            c
-        })
-        .filter_map(|c| {
-            if !c.is_master() {
-                Some(c.nick.clone())
-            } else {
-                None
-            }
-        })
-        .collect();
-
-    if !nicks.is_empty() {
+    if !result.unreadied_nicks.is_empty() {
         let msg = if room.protocol_number < 38 {
-            LegacyReady(false, nicks)
+            LegacyReady(false, result.unreadied_nicks)
         } else {
-            ClientFlags(remove_flags(&[Flags::Ready]), nicks)
+            ClientFlags(remove_flags(&[Flags::Ready]), result.unreadied_nicks)
         };
         response.add(msg.send_all().in_room(room_id));
     }
