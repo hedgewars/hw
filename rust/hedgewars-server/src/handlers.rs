@@ -354,16 +354,25 @@ pub fn handle_client_accept(
     server: &mut HwServer,
     client_id: ClientId,
     response: &mut Response,
+    addr: [u8; 4],
     is_local: bool,
 ) {
-    let mut salt = [0u8; 18];
-    thread_rng().fill_bytes(&mut salt);
+    let ban_reason = Some(addr)
+        .filter(|_| !is_local)
+        .and_then(|a| server.anteroom.find_ip_ban(a));
+    if let Some(reason) = ban_reason {
+        response.add(HwServerMessage::Bye(reason).send_self());
+        response.remove_client(client_id);
+    } else {
+        let mut salt = [0u8; 18];
+        thread_rng().fill_bytes(&mut salt);
 
-    server
-        .anteroom
-        .add_client(client_id, encode(&salt), is_local);
+        server
+            .anteroom
+            .add_client(client_id, encode(&salt), is_local);
 
-    response.add(HwServerMessage::Connected(utils::SERVER_VERSION).send_self());
+        response.add(HwServerMessage::Connected(utils::SERVER_VERSION).send_self());
+    }
 }
 
 pub fn handle_client_loss(server: &mut HwServer, client_id: ClientId, response: &mut Response) {

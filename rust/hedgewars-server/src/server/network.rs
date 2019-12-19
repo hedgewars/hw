@@ -523,13 +523,18 @@ impl NetworkLayer {
             response.add(Redirect(self.ssl.listener.local_addr().unwrap().port()).send_self())
         }
 
-        handlers::handle_client_accept(
-            &mut self.server,
-            client_id,
-            &mut response,
-            self.clients[client_id].peer_addr.ip().is_loopback(),
-        );
-        self.handle_response(response, poll);
+        if let IpAddr::V4(addr) = self.clients[client_id].peer_addr.ip() {
+            handlers::handle_client_accept(
+                &mut self.server,
+                client_id,
+                &mut response,
+                addr.octets(),
+                addr.is_loopback(),
+            );
+            self.handle_response(response, poll);
+        } else {
+            todo!("implement something")
+        }
     }
 
     pub fn accept_client(&mut self, poll: &Poll, server_token: mio::Token) -> io::Result<()> {

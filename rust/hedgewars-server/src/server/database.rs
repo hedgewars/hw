@@ -7,8 +7,7 @@ use crate::handlers::{AccountInfo, Sha1Digest};
 const CHECK_ACCOUNT_EXISTS_QUERY: &str =
     r"SELECT 1 FROM users WHERE users.name = :username LIMIT 1";
 
-const GET_ACCOUNT_QUERY: &str =
-    r"SELECT CASE WHEN users.status = 1 THEN users.pass ELSE '' END,
+const GET_ACCOUNT_QUERY: &str = r"SELECT CASE WHEN users.status = 1 THEN users.pass ELSE '' END,
      (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 3),
      (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 13)
      FROM users WHERE users.name = :username";

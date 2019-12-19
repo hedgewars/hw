@@ -7,11 +7,10 @@ use super::{
 use crate::{protocol::messages::HwProtocolMessage::Greeting, utils};
 
 use bitflags::*;
+use chrono::{offset, DateTime};
 use log::*;
-use slab;
+use slab::Slab;
 use std::{borrow::BorrowMut, collections::HashSet, iter, mem::replace, num::NonZeroU16};
-
-type Slab<T> = slab::Slab<T>;
 
 #[derive(Debug)]
 pub enum CreateRoomError {
@@ -88,14 +87,58 @@ pub struct HwAnteClient {
     pub is_contributor: bool,
 }
 
+struct Ipv4AddrRange {
+    min: [u8; 4],
+    max: [u8; 4],
+}
+
+impl Ipv4AddrRange {
+    fn contains(&self, addr: [u8; 4]) -> bool {
+        (0..4).all(|i| self.min[i] <= addr[i] && addr[i] <= self.max[i])
+    }
+}
+
+struct BanCollection {
+    ban_ips: Vec<Ipv4AddrRange>,
+    ban_timeouts: Vec<DateTime<offset::Utc>>,
+    ban_reasons: Vec<String>,
+}
+
+impl BanCollection {
+    fn new() -> Self {
+        Self {
+            ban_ips: vec![],
+            ban_timeouts: vec![],
+            ban_reasons: vec![],
+        }
+    }
+
+    fn find(&self, addr: [u8; 4]) -> Option<String> {
+        let time = offset::Utc::now();
+        self.ban_ips
+            .iter()
+            .enumerate()
+            .find(|(i, r)| r.contains(addr) && time < self.ban_timeouts[*i])
+            .map(|(i, _)| self.ban_reasons[i].clone())
+    }
+}
+
 pub struct HwAnteroom {
     pub clients: IndexSlab<HwAnteClient>,
+    bans: BanCollection,
 }
 
 impl HwAnteroom {
     pub fn new(clients_limit: usize) -> Self {
         let clients = IndexSlab::with_capacity(clients_limit);
-        HwAnteroom { clients }
+        HwAnteroom {
+            clients,
+            bans: BanCollection::new(),
+        }
+    }
+
+    pub fn find_ip_ban(&self, addr: [u8; 4]) -> Option<String> {
+        self.bans.find(addr)
     }
 
     pub fn add_client(&mut self, client_id: ClientId, salt: String, is_local_admin: bool) {

@@ -12,6 +12,7 @@ default = []
 [dependencies]
 getopts = "0.2.18"
 rand = "0.6"
+chrono = "0.4"
 mio = "0.6"
 mio-extras = "2.0.5"
 slab = "0.4"
