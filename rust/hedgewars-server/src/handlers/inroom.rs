@@ -3,7 +3,8 @@ use crate::{
     core::{
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
         server::{
-            ChangeMasterError, ChangeMasterResult, HwServer, LeaveRoomResult, StartGameError,
+            ChangeMasterError, ChangeMasterResult, HwServer, LeaveRoomResult, ModifyTeamError,
+            StartGameError,
         },
         types,
         types::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
@@ -174,37 +175,31 @@ pub fn handle(
             }
         }
         RoomName(new_name) => {
-            if is_name_illegal(&new_name) {
-                response.warn("Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}");
-            } else if server.has_room(&new_name) {
-                response.warn("A room with the same name already exists.");
-            } else {
-                let (client, room) = server.client_and_room_mut(client_id, room_id);
-                if room.is_fixed() || room.master_id != Some(client_id) {
-                    response.warn(ACCESS_DENIED);
-                } else {
-                    let mut old_name = new_name.clone();
-                    swap(&mut room.name, &mut old_name);
-                    super::common::get_room_update(Some(old_name), room, Some(&client), response);
+            use crate::core::server::ModifyRoomNameError;
+            match server.set_room_name(client_id, room_id, new_name) {
+                Ok(old_name) => {
+                    let (client, room) = server.client_and_room(client_id, room_id);
+                    super::common::get_room_update(Some(old_name), room, Some(client), response)
                 }
+                Err(ModifyRoomNameError::AccessDenied) => response.warn(ACCESS_DENIED),
+                Err(ModifyRoomNameError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
+                Err(ModifyRoomNameError::DuplicateName) => response.warn(ROOM_EXISTS),
             }
         }
         ToggleReady => {
-            let flags = if client.is_ready() {
-                room.ready_players_number -= 1;
-                remove_flags(&[Flags::Ready])
-            } else {
-                room.ready_players_number += 1;
+            let flags = if server.toggle_ready(client_id) {
                 add_flags(&[Flags::Ready])
+            } else {
+                remove_flags(&[Flags::Ready])
             };
+            let (client, room) = server.client_and_room(client_id, room_id);
 
             let msg = if client.protocol_number < 38 {
                 LegacyReady(client.is_ready(), vec![client.nick.clone()])
             } else {
                 ClientFlags(flags, vec![client.nick.clone()])
             };
-            response.add(msg.send_all().in_room(room.id));
-            client.set_is_ready(!client.is_ready());
+            response.add(msg.send_all().in_room(room_id));
 
             if room.is_fixed() && room.ready_players_number == room.players_number {
                 let result = server.start_game(room_id);
@@ -307,21 +302,15 @@ pub fn handle(
             }
         }
         SetTeamColor(team_name, color) => {
-            if let Some((owner, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
-                if !client.is_master() {
-                    response.error(NOT_MASTER);
-                } else {
-                    team.color = color;
-                    response.add(
-                        TeamColor(team.name.clone(), color)
-                            .send_all()
-                            .in_room(room_id)
-                            .but_self(),
-                    );
-                    server.client_mut(owner).clan = Some(color);
-                }
-            } else {
-                response.warn(NO_TEAM);
+            match server.set_team_color(client_id, room_id, &team_name, color) {
+                Ok(()) => response.add(
+                    TeamColor(team_name, color)
+                        .send_all()
+                        .in_room(room_id)
+                        .but_self(),
+                ),
+                Err(ModifyTeamError::NoTeam) => response.warn(NO_TEAM),
+                Err(ModifyTeamError::NotMaster) => response.error(NOT_MASTER),
             }
         }
         Cfg(cfg) => {

@@ -26,6 +26,7 @@ pub enum JoinRoomError {
     Restricted,
 }
 
+#[derive(Debug)]
 pub enum LeaveRoomResult {
     RoomRemoved,
     RoomRemains {
@@ -54,6 +55,19 @@ pub enum ChangeMasterError {
     AlreadyMaster,
     NoClient,
     ClientNotInRoom,
+}
+
+#[derive(Debug)]
+pub enum ModifyTeamError {
+    NoTeam,
+    NotMaster,
+}
+
+#[derive(Debug)]
+pub enum ModifyRoomNameError {
+    AccessDenied,
+    InvalidName,
+    DuplicateName,
 }
 
 #[derive(Debug)]
@@ -210,7 +224,7 @@ impl HwServer {
     }
 
     #[inline]
-    pub fn client_mut(&mut self, client_id: ClientId) -> &mut HwClient {
+    fn client_mut(&mut self, client_id: ClientId) -> &mut HwClient {
         &mut self.clients[client_id]
     }
 
@@ -528,6 +542,73 @@ impl HwServer {
         } else {
             unreachable!()
         }
+    }
+
+    pub fn enable_super_power(&mut self, client_id: ClientId) -> bool {
+        let client = &mut self.clients[client_id];
+        if client.is_admin() {
+            client.set_has_super_power(true);
+        }
+        client.is_admin()
+    }
+
+    pub fn set_room_name(
+        &mut self,
+        client_id: ClientId,
+        room_id: RoomId,
+        mut name: String,
+    ) -> Result<String, ModifyRoomNameError> {
+        let room_exists = self.has_room(&name);
+        let room = &mut self.rooms[room_id];
+        if room.is_fixed() || room.master_id != Some(client_id) {
+            Err(ModifyRoomNameError::AccessDenied)
+        } else if utils::is_name_illegal(&name) {
+            Err(ModifyRoomNameError::InvalidName)
+        } else if room_exists {
+            Err(ModifyRoomNameError::DuplicateName)
+        } else {
+            std::mem::swap(&mut room.name, &mut name);
+            Ok(name)
+        }
+    }
+
+    pub fn add_team(&mut self, client_id: ClientId) {}
+
+    pub fn set_team_color(
+        &mut self,
+        client_id: ClientId,
+        room_id: RoomId,
+        team_name: &str,
+        color: u8,
+    ) -> Result<(), ModifyTeamError> {
+        let client = &self.clients[client_id];
+        let room = &mut self.rooms[room_id];
+        if let Some((owner, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
+            if !client.is_master() {
+                Err(ModifyTeamError::NotMaster)
+            } else {
+                team.color = color;
+                self.clients[owner].clan = Some(color);
+                Ok(())
+            }
+        } else {
+            Err(ModifyTeamError::NoTeam)
+        }
+    }
+
+    pub fn toggle_ready(&mut self, client_id: ClientId) -> bool {
+        let client = &mut self.clients[client_id];
+        if let Some(room_id) = client.room_id {
+            let room = &mut self.rooms[room_id];
+
+            client.set_is_ready(!client.is_ready());
+            if client.is_ready() {
+                room.ready_players_number += 1;
+            } else {
+                room.ready_players_number -= 1;
+            }
+        }
+        client.is_ready()
     }
 
     #[inline]

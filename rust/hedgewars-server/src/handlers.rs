@@ -319,12 +319,10 @@ pub fn handle(
                         }
                     }
                     HwProtocolMessage::SuperPower => {
-                        let client = server.client_mut(client_id);
-                        if !client.is_admin() {
-                            response.warn(ACCESS_DENIED);
-                        } else {
-                            client.set_has_super_power(true);
+                        if server.enable_super_power(client_id) {
                             response.add(server_chat(SUPER_POWER.to_string()).send_self())
+                        } else {
+                            response.warn(ACCESS_DENIED);
                         }
                     }
                     HwProtocolMessage::Watch(id) => {
