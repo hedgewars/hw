@@ -1,4 +1,6 @@
 use super::{common::rnd_reply, strings::*};
+use crate::core::room::GameInfo;
+use crate::core::server::AddTeamError;
 use crate::{
     core::{
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
@@ -206,76 +208,69 @@ pub fn handle(
                 super::common::get_start_game_data(server, room_id, result, response);
             }
         }
-        AddTeam(mut info) => {
-            if room.teams.len() >= room.max_teams as usize {
-                response.warn("Too many teams!");
-            } else if room.addable_hedgehogs() == 0 {
-                response.warn("Too many hedgehogs!");
-            } else if room.find_team(|t| t.name == info.name) != None {
-                response.warn("There's already a team with same name in the list.");
-            } else if room.game_info.is_some() {
-                response.warn("Joining not possible: Round is in progress.");
-            } else if room.is_team_add_restricted() {
-                response.warn("This room currently does not allow adding new teams.");
-            } else {
-                info.owner = client.nick.clone();
-                let team = room.add_team(client.id, *info, client.protocol_number < 42);
-                client.teams_in_game += 1;
-                client.clan = Some(team.color);
-                response.add(TeamAccepted(team.name.clone()).send_self());
-                response.add(
-                    TeamAdd(team.to_protocol())
-                        .send_all()
-                        .in_room(room_id)
-                        .but_self(),
-                );
-                response.add(
-                    TeamColor(team.name.clone(), team.color)
-                        .send_all()
-                        .in_room(room_id),
-                );
-                response.add(
-                    HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
-                        .send_all()
-                        .in_room(room_id),
-                );
+        AddTeam(info) => {
+            use crate::core::server::AddTeamError;
+            match server.add_team(client_id, info) {
+                Ok(team) => {
+                    response.add(TeamAccepted(team.name.clone()).send_self());
+                    response.add(
+                        TeamAdd(team.to_protocol())
+                            .send_all()
+                            .in_room(room_id)
+                            .but_self(),
+                    );
+                    response.add(
+                        TeamColor(team.name.clone(), team.color)
+                            .send_all()
+                            .in_room(room_id),
+                    );
+                    response.add(
+                        HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
+                            .send_all()
+                            .in_room(room_id),
+                    );
 
-                let room = server.room(room_id);
-                let room_master = if let Some(id) = room.master_id {
-                    Some(server.client(id))
-                } else {
-                    None
-                };
-                super::common::get_room_update(None, room, room_master, response);
+                    let room = server.room(room_id);
+                    let room_master = if let Some(id) = room.master_id {
+                        Some(server.client(id))
+                    } else {
+                        None
+                    };
+                    super::common::get_room_update(None, room, room_master, response);
+                }
+                Err(AddTeamError::TooManyTeams) => response.warn(TOO_MANY_TEAMS),
+                Err(AddTeamError::TooManyHedgehogs) => response.warn(TOO_MANY_HEDGEHOGS),
+                Err(AddTeamError::TeamAlreadyExists) => response.warn(TEAM_EXISTS),
+                Err(AddTeamError::GameInProgress) => response.warn(ROUND_IN_PROGRESS),
+                Err(AddTeamError::Restricted) => response.warn(TEAM_ADD_RESTRICTED),
             }
         }
-        RemoveTeam(name) => match room.find_team_owner(&name) {
-            None => response.warn("Error: The team you tried to remove does not exist."),
-            Some((id, _)) if id != client_id => {
-                response.warn("You can't remove a team you don't own.")
-            }
-            Some((_, name)) => {
-                let name = name.to_string();
-                client.teams_in_game -= 1;
-                client.clan = room.find_team_color(client.id);
-                room.remove_team(&name);
-                let removed_teams = vec![name];
-                super::common::get_remove_teams_data(
-                    room_id,
-                    client.is_in_game(),
-                    removed_teams,
-                    response,
-                );
+        RemoveTeam(name) => {
+            use crate::core::server::RemoveTeamError;
+            match server.remove_team(client_id, &name) {
+                Ok(()) => {
+                    let (client, room) = server.client_and_room(client_id, room_id);
 
-                match room.game_info {
-                    Some(ref info) if info.teams_in_game == 0 => {
-                        let result = server.end_game(room_id);
-                        super::common::get_end_game_result(server, room_id, result, response);
+                    let removed_teams = vec![name];
+                    super::common::get_remove_teams_data(
+                        room_id,
+                        client.is_in_game(),
+                        removed_teams,
+                        response,
+                    );
+
+                    match room.game_info {
+                        Some(ref info) if info.teams_in_game == 0 => {
+                            let result = server.end_game(room_id);
+                            super::common::get_end_game_result(server, room_id, result, response);
+                        }
+                        _ => (),
                     }
-                    _ => (),
                 }
+                Err(RemoveTeamError::NoTeam) => response.warn(NO_TEAM_TO_REMOVE),
+                Err(RemoveTeamError::TeamNotOwned) => response.warn(TEAM_NOT_OWNED),
             }
-        },
+        }
         SetHedgehogsNumber(team_name, number) => {
             let addable_hedgehogs = room.addable_hedgehogs();
             if let Some((_, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
@@ -510,54 +505,31 @@ pub fn handle(
             }
         }
         RoundFinished => {
-            let mut game_ended = false;
-            if client.is_in_game() {
-                client.set_is_in_game(false);
+            if let Some(team_names) = server.leave_game(client_id) {
+                let (client, room) = server.client_and_room(client_id, room_id);
                 response.add(
                     ClientFlags(remove_flags(&[Flags::InGame]), vec![client.nick.clone()])
                         .send_all()
                         .in_room(room.id),
                 );
-                let team_names: Vec<_> = room
-                    .client_teams(client_id)
-                    .map(|t| t.name.clone())
-                    .collect();
 
-                if let Some(ref mut info) = room.game_info {
-                    info.teams_in_game -= team_names.len() as u8;
-                    if info.teams_in_game == 0 {
-                        game_ended = true;
-                    }
-
-                    for team_name in team_names {
-                        let msg = once(b'F').chain(team_name.bytes());
-                        response.add(
-                            ForwardEngineMessage(vec![to_engine_msg(msg)])
-                                .send_all()
-                                .in_room(room_id)
-                                .but_self(),
-                        );
-
-                        let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
-                        if let Some(m) = &info.sync_msg {
-                            info.msg_log.push(m.clone());
-                        }
-                        if info.sync_msg.is_some() {
-                            info.sync_msg = None
-                        }
-                        info.msg_log.push(remove_msg.clone());
-                        response.add(
-                            ForwardEngineMessage(vec![remove_msg])
-                                .send_all()
-                                .in_room(room_id)
-                                .but_self(),
-                        );
-                    }
+                for team_name in team_names {
+                    let msg = once(b'F').chain(team_name.bytes());
+                    response.add(
+                        ForwardEngineMessage(vec![to_engine_msg(msg)])
+                            .send_all()
+                            .in_room(room_id)
+                            .but_self(),
+                    );
                 }
-            }
-            if game_ended {
-                let result = server.end_game(room_id);
-                super::common::get_end_game_result(server, room_id, result, response);
+
+                if let Some(GameInfo {
+                    teams_in_game: 0, ..
+                }) = room.game_info
+                {
+                    let result = server.end_game(room_id);
+                    super::common::get_end_game_result(server, room_id, result, response);
+                }
             }
         }
         Rnd(v) => {

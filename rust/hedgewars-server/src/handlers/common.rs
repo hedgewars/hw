@@ -392,7 +392,7 @@ pub fn apply_voting_result(
                 };
                 get_room_update(None, room, room_master, response);
 
-                for (_, client) in server.clients.iter() {
+                for client in server.iter_clients() {
                     if client.room_id == Some(room_id) {
                         super::common::get_room_config(&server.rooms[room_id], client.id, response);
                     }

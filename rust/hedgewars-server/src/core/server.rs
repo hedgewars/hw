@@ -2,10 +2,11 @@ use super::{
     client::HwClient,
     indexslab::IndexSlab,
     room::HwRoom,
-    types::{ClientId, RoomId, ServerVar},
+    types::{ClientId, RoomId, ServerVar, TeamInfo},
 };
 use crate::{protocol::messages::HwProtocolMessage::Greeting, utils};
 
+use bitflags::_core::hint::unreachable_unchecked;
 use bitflags::*;
 use chrono::{offset, DateTime};
 use log::*;
@@ -55,6 +56,21 @@ pub enum ChangeMasterError {
     AlreadyMaster,
     NoClient,
     ClientNotInRoom,
+}
+
+#[derive(Debug)]
+pub enum AddTeamError {
+    TooManyTeams,
+    TooManyHedgehogs,
+    TeamAlreadyExists,
+    GameInProgress,
+    Restricted,
+}
+
+#[derive(Debug)]
+pub enum RemoveTeamError {
+    NoTeam,
+    TeamNotOwned,
 }
 
 #[derive(Debug)]
@@ -229,6 +245,16 @@ impl HwServer {
     }
 
     #[inline]
+    pub fn has_client(&self, client_id: ClientId) -> bool {
+        self.clients.contains(client_id)
+    }
+
+    #[inline]
+    pub fn iter_clients(&self) -> impl Iterator<Item = &HwClient> {
+        self.clients.iter().map(|(_, c)| c)
+    }
+
+    #[inline]
     pub fn room(&self, room_id: RoomId) -> &HwRoom {
         &self.rooms[room_id]
     }
@@ -248,8 +274,8 @@ impl HwServer {
         &mut self,
         client_id: ClientId,
         room_id: RoomId,
-    ) -> (&mut HwClient, &mut HwRoom) {
-        (&mut self.clients[client_id], &mut self.rooms[room_id])
+    ) -> (&HwClient, &mut HwRoom) {
+        (&self.clients[client_id], &mut self.rooms[room_id])
     }
 
     #[inline]
@@ -504,9 +530,44 @@ impl HwServer {
         }
     }
 
+    pub fn leave_game(&mut self, client_id: ClientId) -> Option<Vec<String>> {
+        let client = &mut self.clients[client_id];
+        let client_left = client.is_in_game();
+        if client_left {
+            client.set_is_in_game(false);
+            let room = &mut self.rooms[client.room_id.expect("Client should've been in the game")];
+
+            let team_names: Vec<_> = room
+                .client_teams(client_id)
+                .map(|t| t.name.clone())
+                .collect();
+
+            if let Some(ref mut info) = room.game_info {
+                info.teams_in_game -= team_names.len() as u8;
+
+                for team_name in &team_names {
+                    let remove_msg =
+                        utils::to_engine_msg(std::iter::once(b'F').chain(team_name.bytes()));
+                    if let Some(m) = &info.sync_msg {
+                        info.msg_log.push(m.clone());
+                    }
+                    if info.sync_msg.is_some() {
+                        info.sync_msg = None
+                    }
+                    info.msg_log.push(remove_msg);
+                }
+                Some(team_names)
+            } else {
+                unreachable!();
+            }
+        } else {
+            None
+        }
+    }
+
     pub fn end_game(&mut self, room_id: RoomId) -> EndGameResult {
         let room = &mut self.rooms[room_id];
-        room.ready_players_number = 1;
+        room.ready_players_number = room.master_id.is_some() as u8;
 
         if let Some(info) = replace(&mut room.game_info, None) {
             let joined_mid_game_clients = self
@@ -572,7 +633,58 @@ impl HwServer {
         }
     }
 
-    pub fn add_team(&mut self, client_id: ClientId) {}
+    pub fn add_team(
+        &mut self,
+        client_id: ClientId,
+        mut info: Box<TeamInfo>,
+    ) -> Result<&TeamInfo, AddTeamError> {
+        let client = &mut self.clients[client_id];
+        if let Some(room_id) = client.room_id {
+            let room = &mut self.rooms[room_id];
+            if room.teams.len() >= room.max_teams as usize {
+                Err(AddTeamError::TooManyTeams)
+            } else if room.addable_hedgehogs() == 0 {
+                Err(AddTeamError::TooManyHedgehogs)
+            } else if room.find_team(|t| t.name == info.name) != None {
+                Err(AddTeamError::TeamAlreadyExists)
+            } else if room.game_info.is_some() {
+                Err(AddTeamError::GameInProgress)
+            } else if room.is_team_add_restricted() {
+                Err(AddTeamError::Restricted)
+            } else {
+                info.owner = client.nick.clone();
+                let team = room.add_team(client.id, *info, client.protocol_number < 42);
+                client.teams_in_game += 1;
+                client.clan = Some(team.color);
+                Ok(team)
+            }
+        } else {
+            unreachable!()
+        }
+    }
+
+    pub fn remove_team(
+        &mut self,
+        client_id: ClientId,
+        team_name: &str,
+    ) -> Result<(), RemoveTeamError> {
+        let client = &mut self.clients[client_id];
+        if let Some(room_id) = client.room_id {
+            let room = &mut self.rooms[room_id];
+            match room.find_team_owner(team_name) {
+                None => Err(RemoveTeamError::NoTeam),
+                Some((id, _)) if id != client_id => Err(RemoveTeamError::TeamNotOwned),
+                Some(_) => {
+                    client.teams_in_game -= 1;
+                    client.clan = room.find_team_color(client.id);
+                    room.remove_team(team_name);
+                    Ok(())
+                }
+            }
+        } else {
+            unreachable!();
+        }
+    }
 
     pub fn set_team_color(
         &mut self,

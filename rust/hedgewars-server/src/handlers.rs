@@ -259,7 +259,7 @@ pub fn handle(
                         response.remove_client(client_id);
                     }
                 }
-            } else if server.clients.contains(client_id) {
+            } else if server.has_client(client_id) {
                 match message {
                     HwProtocolMessage::Quit(Some(msg)) => {
                         common::remove_client(server, response, "User quit: ".to_string() + &msg);
