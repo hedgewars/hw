@@ -357,11 +357,9 @@ pub fn handle(
                             response.warn(REPLAY_NOT_SUPPORTED);
                         }
                     }
-                    _ => match state.server.client(client_id).room_id {
+                    _ => match state.server.get_room_control(client_id) {
                         None => inlobby::handle(&mut state.server, client_id, response, message),
-                        Some(room_id) => {
-                            inroom::handle(&mut state.server, client_id, response, room_id, message)
-                        }
+                        Some(control) => inroom::handle(control, response, message),
                     },
                 }
             }

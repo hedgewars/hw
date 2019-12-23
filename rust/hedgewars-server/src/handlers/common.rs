@@ -2,9 +2,7 @@ use crate::{
     core::{
         client::HwClient,
         room::HwRoom,
-        server::{
-            EndGameResult, HwServer, JoinRoomError, LeaveRoomError, LeaveRoomResult, StartGameError,
-        },
+        server::{EndGameResult, HwServer, JoinRoomError, LeaveRoomResult, StartGameError},
         types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
     },
     protocol::messages::{
@@ -74,7 +72,8 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
     let server_msg = ServerMessage(server.get_greetings(client).to_string());
 
     let rooms_msg = Rooms(
-        server.iter_rooms()
+        server
+            .iter_rooms()
             .filter(|r| r.protocol_number == client.protocol_number)
             .flat_map(|r| r.info(r.master_id.map(|id| server.client(id))))
             .collect(),
@@ -260,30 +259,15 @@ pub fn get_room_leave_result(
     }
 }
 
-pub fn get_room_leave_data(
-    server: &HwServer,
-    room_id: RoomId,
-    leave_message: &str,
-    result: Result<LeaveRoomResult, LeaveRoomError>,
-    response: &mut Response,
-) {
-    match result {
-        Ok(result) => {
-            let room = server.room(room_id);
-            get_room_leave_result(server, room, leave_message, result, response)
-        }
-        Err(_) => (),
-    }
-}
-
 pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String) {
     let client_id = response.client_id();
     let client = server.client(client_id);
     let nick = client.nick.clone();
 
-    if let Some(room_id) = client.room_id {
-        let result = server.leave_room(client_id);
-        get_room_leave_data(server, room_id, &msg, result, response);
+    if let Some(mut room_control) = server.get_room_control(client_id) {
+        let room_id = room_control.room().id;
+        let result = room_control.leave_room();
+        get_room_leave_result(server, server.room(room_id), &msg, result, response);
     }
 
     server.remove_client(client_id);
@@ -365,12 +349,20 @@ pub fn apply_voting_result(
 ) {
     match kind {
         VoteType::Kick(nick) => {
-            if let Some(client) = server.find_client(&nick) {
-                if client.room_id == Some(room_id) {
-                    let id = client.id;
-                    response.add(Kicked.send(id));
-                    let result = server.leave_room(id);
-                    get_room_leave_data(server, room_id, "kicked", result, response);
+            if let Some(kicked_client) = server.find_client(&nick) {
+                let kicked_id = kicked_client.id;
+                if kicked_client.room_id == Some(room_id) {
+                    if let Some(mut room_control) = server.get_room_control(kicked_client.id) {
+                        response.add(Kicked.send(kicked_id));
+                        let result = room_control.leave_room();
+                        get_room_leave_result(
+                            room_control.server(),
+                            room_control.room(),
+                            "kicked",
+                            result,
+                            response,
+                        );
+                    }
                 }
             }
         }

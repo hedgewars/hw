@@ -1,11 +1,11 @@
 use super::{common::rnd_reply, strings::*};
 use crate::core::room::GameInfo;
-use crate::core::server::AddTeamError;
+use crate::core::server::{AddTeamError, SetTeamCountError};
 use crate::{
     core::{
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
         server::{
-            ChangeMasterError, ChangeMasterResult, HwServer, LeaveRoomResult, ModifyTeamError,
+            ChangeMasterError, ChangeMasterResult, HwRoomControl, LeaveRoomResult, ModifyTeamError,
             StartGameError,
         },
         types,
@@ -106,13 +106,12 @@ fn room_message_flag(msg: &HwProtocolMessage) -> RoomFlags {
 }
 
 pub fn handle(
-    server: &mut HwServer,
-    client_id: ClientId,
+    mut room_control: HwRoomControl,
     response: &mut super::Response,
-    room_id: RoomId,
     message: HwProtocolMessage,
 ) {
-    let (client, room) = server.client_and_room_mut(client_id, room_id);
+    let (client, room) = room_control.get();
+    let (client_id, room_id) = (client.id, room.id);
 
     use crate::protocol::messages::HwProtocolMessage::*;
     match message {
@@ -122,8 +121,14 @@ pub fn handle(
                 None => "part".to_string(),
             };
 
-            let result = server.leave_room(client_id);
-            super::common::get_room_leave_data(server, room_id, &msg, result, response);
+            let result = room_control.leave_room();
+            super::common::get_room_leave_result(
+                room_control.server(),
+                room_control.room(),
+                &msg,
+                result,
+                response,
+            );
         }
         Chat(msg) => {
             response.add(
@@ -146,41 +151,35 @@ pub fn handle(
             }
         }
         Fix => {
-            if client.is_admin() {
-                room.set_is_fixed(true);
-                room.set_join_restriction(false);
-                room.set_team_add_restriction(false);
-                room.set_unregistered_players_restriction(true);
-            } else {
+            if let Err(_) = room_control.fix_room() {
                 response.warn(ACCESS_DENIED)
             }
         }
         Unfix => {
-            if client.is_admin() {
-                room.set_is_fixed(false);
-            } else {
+            if let Err(_) = room_control.unfix_room() {
                 response.warn(ACCESS_DENIED)
             }
         }
         Greeting(text) => {
-            if client.is_admin() || client.is_master() && !room.is_fixed() {
-                room.greeting = text.unwrap_or(String::new());
+            if let Err(_) = room_control.set_room_greeting(text) {
+                response.warn(ACCESS_DENIED)
             }
         }
         MaxTeams(count) => {
-            if !client.is_master() {
-                response.warn(NOT_MASTER);
-            } else if !(2..=MAX_TEAMS_IN_ROOM).contains(&count) {
-                response.warn("/maxteams: specify number from 2 to 8");
-            } else {
-                room.max_teams = count;
-            }
+            use crate::core::server::SetTeamCountError;
+            match room_control.set_room_max_teams(count) {
+                Ok(()) => {}
+                Err(SetTeamCountError::NotMaster) => response.warn(NOT_MASTER),
+                Err(SetTeamCountError::InvalidNumber) => {
+                    response.warn("/maxteams: specify number from 2 to 8")
+                }
+            };
         }
         RoomName(new_name) => {
             use crate::core::server::ModifyRoomNameError;
-            match server.set_room_name(client_id, room_id, new_name) {
+            match room_control.set_room_name(new_name) {
                 Ok(old_name) => {
-                    let (client, room) = server.client_and_room(client_id, room_id);
+                    let (client, room) = room_control.get();
                     super::common::get_room_update(Some(old_name), room, Some(client), response)
                 }
                 Err(ModifyRoomNameError::AccessDenied) => response.warn(ACCESS_DENIED),
@@ -189,12 +188,12 @@ pub fn handle(
             }
         }
         ToggleReady => {
-            let flags = if server.toggle_ready(client_id) {
+            let flags = if room_control.toggle_ready() {
                 add_flags(&[Flags::Ready])
             } else {
                 remove_flags(&[Flags::Ready])
             };
-            let (client, room) = server.client_and_room(client_id, room_id);
+            let (client, room) = room_control.get();
 
             let msg = if client.protocol_number < 38 {
                 LegacyReady(client.is_ready(), vec![client.nick.clone()])
@@ -204,13 +203,18 @@ pub fn handle(
             response.add(msg.send_all().in_room(room_id));
 
             if room.is_fixed() && room.ready_players_number == room.players_number {
-                let result = server.start_game(room_id);
-                super::common::get_start_game_data(server, room_id, result, response);
+                let result = room_control.start_game();
+                super::common::get_start_game_data(
+                    room_control.server(),
+                    room_id,
+                    result,
+                    response,
+                );
             }
         }
         AddTeam(info) => {
             use crate::core::server::AddTeamError;
-            match server.add_team(client_id, info) {
+            match room_control.add_team(info) {
                 Ok(team) => {
                     response.add(TeamAccepted(team.name.clone()).send_self());
                     response.add(
@@ -230,9 +234,9 @@ pub fn handle(
                             .in_room(room_id),
                     );
 
-                    let room = server.room(room_id);
+                    let room = room_control.room();
                     let room_master = if let Some(id) = room.master_id {
-                        Some(server.client(id))
+                        Some(room_control.server().client(id))
                     } else {
                         None
                     };
@@ -247,9 +251,9 @@ pub fn handle(
         }
         RemoveTeam(name) => {
             use crate::core::server::RemoveTeamError;
-            match server.remove_team(client_id, &name) {
+            match room_control.remove_team(&name) {
                 Ok(()) => {
-                    let (client, room) = server.client_and_room(client_id, room_id);
+                    let (client, room) = room_control.get();
 
                     let removed_teams = vec![name];
                     super::common::get_remove_teams_data(
@@ -261,8 +265,14 @@ pub fn handle(
 
                     match room.game_info {
                         Some(ref info) if info.teams_in_game == 0 => {
-                            let result = server.end_game(room_id);
-                            super::common::get_end_game_result(server, room_id, result, response);
+                            if let Some(result) = room_control.end_game() {
+                                super::common::get_end_game_result(
+                                    room_control.server(),
+                                    room_id,
+                                    result,
+                                    response,
+                                );
+                            }
                         }
                         _ => (),
                     }
@@ -272,62 +282,42 @@ pub fn handle(
             }
         }
         SetHedgehogsNumber(team_name, number) => {
-            let addable_hedgehogs = room.addable_hedgehogs();
-            if let Some((_, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
-                let max_hedgehogs = min(
-                    MAX_HEDGEHOGS_PER_TEAM,
-                    addable_hedgehogs + team.hedgehogs_number,
-                );
-                if !client.is_master() {
-                    response.error(NOT_MASTER);
-                } else if !(1..=max_hedgehogs).contains(&number) {
-                    response
-                        .add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send_self());
-                } else {
-                    team.hedgehogs_number = number;
+            use crate::core::server::SetHedgehogsError;
+            match room_control.set_team_hedgehogs_number(&team_name, number) {
+                Ok(()) => {
                     response.add(
-                        HedgehogsNumber(team.name.clone(), number)
+                        HedgehogsNumber(team_name.clone(), number)
                             .send_all()
                             .in_room(room_id)
                             .but_self(),
                     );
                 }
-            } else {
-                response.warn(NO_TEAM);
+                Err(SetHedgehogsError::NotMaster) => response.error(NOT_MASTER),
+                Err(SetHedgehogsError::NoTeam) => response.warn(NO_TEAM),
+                Err(SetHedgehogsError::InvalidNumber(previous_number)) => {
+                    response.add(HedgehogsNumber(team_name.clone(), previous_number).send_self())
+                }
             }
         }
-        SetTeamColor(team_name, color) => {
-            match server.set_team_color(client_id, room_id, &team_name, color) {
-                Ok(()) => response.add(
-                    TeamColor(team_name, color)
-                        .send_all()
-                        .in_room(room_id)
-                        .but_self(),
-                ),
-                Err(ModifyTeamError::NoTeam) => response.warn(NO_TEAM),
-                Err(ModifyTeamError::NotMaster) => response.error(NOT_MASTER),
-            }
-        }
+        SetTeamColor(team_name, color) => match room_control.set_team_color(&team_name, color) {
+            Ok(()) => response.add(
+                TeamColor(team_name, color)
+                    .send_all()
+                    .in_room(room_id)
+                    .but_self(),
+            ),
+            Err(ModifyTeamError::NoTeam) => response.warn(NO_TEAM),
+            Err(ModifyTeamError::NotMaster) => response.error(NOT_MASTER),
+        },
         Cfg(cfg) => {
-            if room.is_fixed() {
-                response.warn(ACCESS_DENIED);
-            } else if !client.is_master() {
-                response.error(NOT_MASTER);
-            } else {
-                let cfg = match cfg {
-                    GameCfg::Scheme(name, mut values) => {
-                        if client.protocol_number == 49 && values.len() >= 2 {
-                            let mut s = "X".repeat(50);
-                            s.push_str(&values.pop().unwrap());
-                            values.push(s);
-                        }
-                        GameCfg::Scheme(name, values)
-                    }
-                    cfg => cfg,
-                };
-
-                response.add(cfg.to_server_msg().send_all().in_room(room.id).but_self());
-                room.set_config(cfg);
+            use crate::core::server::SetConfigError;
+            let msg = cfg.to_server_msg();
+            match room_control.set_config(cfg) {
+                Ok(()) => {
+                    response.add(msg.send_all().in_room(room_control.room().id).but_self());
+                }
+                Err(SetConfigError::NotMaster) => response.error(NOT_MASTER),
+                Err(SetConfigError::RoomFixed) => response.warn(ACCESS_DENIED),
             }
         }
         Save(name, location) => {
@@ -336,7 +326,7 @@ pub fn handle(
                     .send_all()
                     .in_room(room_id),
             );
-            room.save_config(name, location);
+            room_control.save_config(name, location);
         }
         #[cfg(feature = "official-server")]
         SaveRoom(filename) => {
@@ -361,7 +351,7 @@ pub fn handle(
             }
         }
         Delete(name) => {
-            if !room.delete_config(&name) {
+            if !room_control.delete_config(&name) {
                 response.add(Warning(format!("Save doesn't exist: {}", name)).send_self());
             } else {
                 response.add(
@@ -375,11 +365,11 @@ pub fn handle(
             response.add(server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
                 .send_self());
         }
-        CallVote(Some(kind)) => {
+        /*CallVote(Some(kind)) => {
             let is_in_game = room.game_info.is_some();
             let error = match &kind {
                 VoteType::Kick(nick) => {
-                    if server
+                    if room_control.server()
                         .find_client(&nick)
                         .filter(|c| c.room_id == Some(room_id))
                         .is_some()
@@ -390,7 +380,7 @@ pub fn handle(
                     }
                 }
                 VoteType::Map(None) => {
-                    let names: Vec<_> = server.room(room_id).saves.keys().cloned().collect();
+                    let names: Vec<_> = room.saves.keys().cloned().collect();
                     if names.is_empty() {
                         Some("/callvote map: No maps saved in this room!".to_string())
                     } else {
@@ -421,12 +411,12 @@ pub fn handle(
             match error {
                 None => {
                     let msg = voting_description(&kind);
-                    let voting = Voting::new(kind, server.room_clients(client_id).collect());
-                    let room = server.room_mut(room_id);
+                    let voting = Voting::new(kind, room_control.server().room_clients(client_id).collect());
+                    let room = room_control.server().room_mut(room_id);
                     room.voting = Some(voting);
                     response.add(server_chat(msg).send_all().in_room(room_id));
                     super::common::submit_vote(
-                        server,
+                        room_control.server(),
                         types::Vote {
                             is_pro: true,
                             is_forced: false,
@@ -438,39 +428,39 @@ pub fn handle(
                     response.add(server_chat(msg).send_self());
                 }
             }
-        }
-        Vote(vote) => {
+        }*/
+        /*Vote(vote) => {
             super::common::submit_vote(
-                server,
+                room_control.server(),
                 types::Vote {
                     is_pro: vote,
                     is_forced: false,
                 },
                 response,
             );
-        }
-        ForceVote(vote) => {
+        }*/
+        /*ForceVote(vote) => {
             let is_forced = client.is_admin();
             super::common::submit_vote(
-                server,
+                room_control.server(),
                 types::Vote {
                     is_pro: vote,
                     is_forced,
                 },
                 response,
             );
-        }
+        }*/
         ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly => {
-            if client.is_master() {
-                room.flags.toggle(room_message_flag(&message));
+            if room_control.toggle_flag(room_message_flag(&message)) {
+                let (client, room) = room_control.get();
                 super::common::get_room_update(None, room, Some(&client), response);
             }
         }
         StartGame => {
-            let result = server.start_game(room_id);
-            super::common::get_start_game_data(server, room_id, result, response);
+            let result = room_control.start_game();
+            super::common::get_start_game_data(room_control.server(), room_id, result, response);
         }
-        EngineMessage(em) => {
+        /*EngineMessage(em) => {
             if client.teams_in_game > 0 {
                 let decoding = decode(&em[..]).unwrap();
                 let messages = by_msg(&decoding);
@@ -503,10 +493,10 @@ pub fn handle(
                     }
                 }
             }
-        }
+        }*/
         RoundFinished => {
-            if let Some(team_names) = server.leave_game(client_id) {
-                let (client, room) = server.client_and_room(client_id, room_id);
+            if let Some(team_names) = room_control.leave_game() {
+                let (client, room) = room_control.get();
                 response.add(
                     ClientFlags(remove_flags(&[Flags::InGame]), vec![client.nick.clone()])
                         .send_all()
@@ -527,8 +517,14 @@ pub fn handle(
                     teams_in_game: 0, ..
                 }) = room.game_info
                 {
-                    let result = server.end_game(room_id);
-                    super::common::get_end_game_result(server, room_id, result, response);
+                    if let Some(result) = room_control.end_game() {
+                        super::common::get_end_game_result(
+                            room_control.server(),
+                            room_id,
+                            result,
+                            response,
+                        );
+                    }
                 }
             }
         }
@@ -537,13 +533,13 @@ pub fn handle(
             let mut echo = vec!["/rnd".to_string()];
             echo.extend(v.into_iter());
             let chat_msg = ChatMsg {
-                nick: server.client(client_id).nick.clone(),
+                nick: client.nick.clone(),
                 msg: echo.join(" "),
             };
             response.add(chat_msg.send_all().in_room(room_id));
             response.add(result.send_all().in_room(room_id));
         }
-        Delegate(nick) => match server.change_master(client_id, room_id, nick) {
+        Delegate(nick) => match room_control.change_master(nick) {
             Ok(ChangeMasterResult {
                 old_master_id,
                 new_master_id,
@@ -552,7 +548,7 @@ pub fn handle(
                     response.add(
                         ClientFlags(
                             remove_flags(&[Flags::RoomMaster]),
-                            vec![server.client(master_id).nick.clone()],
+                            vec![room_control.server().client(master_id).nick.clone()],
                         )
                         .send_all()
                         .in_room(room_id),
@@ -561,7 +557,7 @@ pub fn handle(
                 response.add(
                     ClientFlags(
                         add_flags(&[Flags::RoomMaster]),
-                        vec![server.client(new_master_id).nick.clone()],
+                        vec![room_control.server().client(new_master_id).nick.clone()],
                     )
                     .send_all()
                     .in_room(room_id),
