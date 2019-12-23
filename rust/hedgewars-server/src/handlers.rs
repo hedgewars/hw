@@ -12,6 +12,7 @@ use self::{
 };
 use crate::{
     core::{
+        anteroom::HwAnteroom,
         room::RoomSave,
         server::HwServer,
         types::{ClientId, GameCfg, Replay, RoomId, TeamInfo},
@@ -77,6 +78,20 @@ impl PartialEq<&str> for Sha1Digest {
                         unreachable!()
                     }
                 })
+        }
+    }
+}
+
+pub struct ServerState {
+    pub server: HwServer,
+    pub anteroom: HwAnteroom,
+}
+
+impl ServerState {
+    pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
+        Self {
+            server: HwServer::new(clients_limit, rooms_limit),
+            anteroom: HwAnteroom::new(clients_limit),
         }
     }
 }
@@ -236,7 +251,7 @@ fn get_recipients(
 }
 
 pub fn handle(
-    server: &mut HwServer,
+    state: &mut ServerState,
     client_id: ClientId,
     response: &mut Response,
     message: HwProtocolMessage,
@@ -245,35 +260,39 @@ pub fn handle(
         HwProtocolMessage::Ping => response.add(Pong.send_self()),
         HwProtocolMessage::Pong => (),
         _ => {
-            if server.anteroom.clients.contains(client_id) {
-                match inanteroom::handle(server, client_id, response, message) {
+            if state.anteroom.clients.contains(client_id) {
+                match inanteroom::handle(state, client_id, response, message) {
                     LoginResult::Unchanged => (),
                     LoginResult::Complete => {
-                        if let Some(client) = server.anteroom.remove_client(client_id) {
-                            server.add_client(client_id, client);
-                            common::get_lobby_join_data(server, response);
+                        if let Some(client) = state.anteroom.remove_client(client_id) {
+                            state.server.add_client(client_id, client);
+                            common::get_lobby_join_data(&state.server, response);
                         }
                     }
                     LoginResult::Exit => {
-                        server.anteroom.remove_client(client_id);
+                        state.anteroom.remove_client(client_id);
                         response.remove_client(client_id);
                     }
                 }
-            } else if server.has_client(client_id) {
+            } else if state.server.has_client(client_id) {
                 match message {
                     HwProtocolMessage::Quit(Some(msg)) => {
-                        common::remove_client(server, response, "User quit: ".to_string() + &msg);
+                        common::remove_client(
+                            &mut state.server,
+                            response,
+                            "User quit: ".to_string() + &msg,
+                        );
                     }
                     HwProtocolMessage::Quit(None) => {
-                        common::remove_client(server, response, "User quit".to_string());
+                        common::remove_client(&mut state.server, response, "User quit".to_string());
                     }
                     HwProtocolMessage::Info(nick) => {
-                        if let Some(client) = server.find_client(&nick) {
+                        if let Some(client) = state.server.find_client(&nick) {
                             let admin_sign = if client.is_admin() { "@" } else { "" };
                             let master_sign = if client.is_master() { "+" } else { "" };
                             let room_info = match client.room_id {
                                 Some(room_id) => {
-                                    let room = server.room(room_id);
+                                    let room = state.server.room(room_id);
                                     let status = match room.game_info {
                                         Some(_) if client.teams_in_game == 0 => "(spectating)",
                                         Some(_) => "(playing)",
@@ -299,11 +318,13 @@ pub fn handle(
                         }
                     }
                     HwProtocolMessage::ToggleServerRegisteredOnly => {
-                        if !server.is_admin(client_id) {
+                        if !state.server.is_admin(client_id) {
                             response.warn(ACCESS_DENIED);
                         } else {
-                            server.set_is_registered_only(!server.is_registered_only());
-                            let msg = if server.is_registered_only() {
+                            state
+                                .server
+                                .set_is_registered_only(!state.server.is_registered_only());
+                            let msg = if state.server.is_registered_only() {
                                 REGISTERED_ONLY_ENABLED
                             } else {
                                 REGISTERED_ONLY_DISABLED
@@ -312,14 +333,14 @@ pub fn handle(
                         }
                     }
                     HwProtocolMessage::Global(msg) => {
-                        if !server.is_admin(client_id) {
+                        if !state.server.is_admin(client_id) {
                             response.warn(ACCESS_DENIED);
                         } else {
                             response.add(global_chat(msg).send_all())
                         }
                     }
                     HwProtocolMessage::SuperPower => {
-                        if server.enable_super_power(client_id) {
+                        if state.server.enable_super_power(client_id) {
                             response.add(server_chat(SUPER_POWER.to_string()).send_self())
                         } else {
                             response.warn(ACCESS_DENIED);
@@ -336,10 +357,10 @@ pub fn handle(
                             response.warn(REPLAY_NOT_SUPPORTED);
                         }
                     }
-                    _ => match server.client(client_id).room_id {
-                        None => inlobby::handle(server, client_id, response, message),
+                    _ => match state.server.client(client_id).room_id {
+                        None => inlobby::handle(&mut state.server, client_id, response, message),
                         Some(room_id) => {
-                            inroom::handle(server, client_id, response, room_id, message)
+                            inroom::handle(&mut state.server, client_id, response, room_id, message)
                         }
                     },
                 }
@@ -349,7 +370,7 @@ pub fn handle(
 }
 
 pub fn handle_client_accept(
-    server: &mut HwServer,
+    state: &mut ServerState,
     client_id: ClientId,
     response: &mut Response,
     addr: [u8; 4],
@@ -357,7 +378,7 @@ pub fn handle_client_accept(
 ) {
     let ban_reason = Some(addr)
         .filter(|_| !is_local)
-        .and_then(|a| server.anteroom.find_ip_ban(a));
+        .and_then(|a| state.anteroom.find_ip_ban(a));
     if let Some(reason) = ban_reason {
         response.add(HwServerMessage::Bye(reason).send_self());
         response.remove_client(client_id);
@@ -365,7 +386,7 @@ pub fn handle_client_accept(
         let mut salt = [0u8; 18];
         thread_rng().fill_bytes(&mut salt);
 
-        server
+        state
             .anteroom
             .add_client(client_id, encode(&salt), is_local);
 
@@ -373,39 +394,39 @@ pub fn handle_client_accept(
     }
 }
 
-pub fn handle_client_loss(server: &mut HwServer, client_id: ClientId, response: &mut Response) {
-    if server.anteroom.remove_client(client_id).is_none() {
-        common::remove_client(server, response, "Connection reset".to_string());
+pub fn handle_client_loss(state: &mut ServerState, client_id: ClientId, response: &mut Response) {
+    if state.anteroom.remove_client(client_id).is_none() {
+        common::remove_client(&mut state.server, response, "Connection reset".to_string());
     }
 }
 
 pub fn handle_io_result(
-    server: &mut HwServer,
+    state: &mut ServerState,
     client_id: ClientId,
     response: &mut Response,
     io_result: IoResult,
 ) {
     match io_result {
         IoResult::AccountRegistered(is_registered) => {
-            if !is_registered && server.is_registered_only() {
+            if !is_registered && state.server.is_registered_only() {
                 response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
                 response.remove_client(client_id);
             } else if is_registered {
-                let salt = server.anteroom.clients[client_id].server_salt.clone();
+                let salt = state.anteroom.clients[client_id].server_salt.clone();
                 response.add(AskPassword(salt).send_self());
-            } else if let Some(client) = server.anteroom.remove_client(client_id) {
-                server.add_client(client_id, client);
-                common::get_lobby_join_data(server, response);
+            } else if let Some(client) = state.anteroom.remove_client(client_id) {
+                state.server.add_client(client_id, client);
+                common::get_lobby_join_data(&state.server, response);
             }
         }
         IoResult::Account(Some(info)) => {
             response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
-            if let Some(mut client) = server.anteroom.remove_client(client_id) {
+            if let Some(mut client) = state.anteroom.remove_client(client_id) {
                 client.is_registered = info.is_registered;
                 client.is_admin = info.is_admin;
                 client.is_contributor = info.is_contributor;
-                server.add_client(client_id, client);
-                common::get_lobby_join_data(server, response);
+                state.server.add_client(client_id, client);
+                common::get_lobby_join_data(&state.server, response);
             }
         }
         IoResult::Account(None) => {
@@ -413,7 +434,7 @@ pub fn handle_io_result(
             response.remove_client(client_id);
         }
         IoResult::Replay(Some(replay)) => {
-            let client = server.client(client_id);
+            let client = state.server.client(client_id);
             let protocol = client.protocol_number;
             let start_msg = if protocol < 58 {
                 RoomJoined(vec![client.nick.clone()])
@@ -441,7 +462,7 @@ pub fn handle_io_result(
             response.warn(ROOM_CONFIG_SAVE_FAILED);
         }
         IoResult::LoadRoom(room_id, Some(contents)) => {
-            if let Some(ref mut room) = server.rooms.get_mut(room_id) {
+            if let Some(ref mut room) = state.server.rooms.get_mut(room_id) {
                 match room.set_saves(&contents) {
                     Ok(_) => response.add(server_chat(ROOM_CONFIG_LOADED.to_string()).send_self()),
                     Err(e) => {

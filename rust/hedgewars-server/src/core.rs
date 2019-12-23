@@ -1,3 +1,4 @@
+pub mod anteroom;
 pub mod client;
 pub mod indexslab;
 pub mod room;

@@ -18,9 +18,9 @@ use netbuf;
 use slab::Slab;
 
 use crate::{
-    core::{server::HwServer, types::ClientId},
+    core::types::ClientId,
     handlers,
-    handlers::{IoResult, IoTask},
+    handlers::{IoResult, IoTask, ServerState},
     protocol::{messages::HwServerMessage::Redirect, messages::*, ProtocolDecoder},
     utils,
 };
@@ -317,7 +317,7 @@ struct TimerData(TimeoutEvent, ClientId);
 
 pub struct NetworkLayer {
     listener: TcpListener,
-    server: HwServer,
+    server_state: ServerState,
     clients: Slab<NetworkClient>,
     pending: HashSet<(ClientId, NetworkClientState)>,
     pending_cache: Vec<(ClientId, NetworkClientState)>,
@@ -425,7 +425,7 @@ impl NetworkLayer {
         }
 
         debug!("{} pending server messages", response.len());
-        let output = response.extract_messages(&mut self.server);
+        let output = response.extract_messages(&mut self.server_state.server);
         for (clients, message) in output {
             debug!("Message {:?} to {:?}", message, clients);
             let msg_string = message.to_raw_protocol();
@@ -525,7 +525,7 @@ impl NetworkLayer {
 
         if let IpAddr::V4(addr) = self.clients[client_id].peer_addr.ip() {
             handlers::handle_client_accept(
-                &mut self.server,
+                &mut self.server_state,
                 client_id,
                 &mut response,
                 addr.octets(),
@@ -594,7 +594,7 @@ impl NetworkLayer {
             Ok((messages, state)) => {
                 for message in messages {
                     debug!("Handling message {:?} for client {}", message, client_id);
-                    handlers::handle(&mut self.server, client_id, &mut response, message);
+                    handlers::handle(&mut self.server_state, client_id, &mut response, message);
                 }
                 match state {
                     NetworkClientState::NeedsRead => {
@@ -649,7 +649,7 @@ impl NetworkLayer {
 
         if !pending_close {
             let mut response = handlers::Response::new(client_id);
-            handlers::handle_client_loss(&mut self.server, client_id, &mut response);
+            handlers::handle_client_loss(&mut self.server_state, client_id, &mut response);
             self.handle_response(response, poll);
         }
 
@@ -730,7 +730,8 @@ impl NetworkLayerBuilder {
     }
 
     pub fn build(self) -> NetworkLayer {
-        let server = HwServer::new(self.clients_capacity, self.rooms_capacity);
+        let server_state = ServerState::new(self.clients_capacity, self.rooms_capacity);
+
         let clients = Slab::with_capacity(self.clients_capacity);
         let pending = HashSet::with_capacity(2 * self.clients_capacity);
         let pending_cache = Vec::with_capacity(2 * self.clients_capacity);
@@ -738,7 +739,7 @@ impl NetworkLayerBuilder {
 
         NetworkLayer {
             listener: self.listener.expect("No listener provided"),
-            server,
+            server_state,
             clients,
             pending,
             pending_cache,
