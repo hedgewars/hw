@@ -462,7 +462,7 @@ pub fn handle_io_result(
             response.warn(ROOM_CONFIG_SAVE_FAILED);
         }
         IoResult::LoadRoom(room_id, Some(contents)) => {
-            if let Some(ref mut room) = state.server.rooms.get_mut(room_id) {
+            if let Some(ref mut room) = state.server.get_room_mut(room_id) {
                 match room.set_saves(&contents) {
                     Ok(_) => response.add(server_chat(ROOM_CONFIG_LOADED.to_string()).send_self()),
                     Err(e) => {

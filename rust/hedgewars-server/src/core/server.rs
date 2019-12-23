@@ -128,7 +128,7 @@ bitflags! {
 
 pub struct HwServer {
     clients: IndexSlab<HwClient>,
-    pub rooms: Slab<HwRoom>,
+    rooms: Slab<HwRoom>,
     pub latest_protocol: u16,
     pub flags: ServerFlags,
     pub greetings: ServerGreetings,
@@ -178,6 +178,21 @@ impl HwServer {
     }
 
     #[inline]
+    pub fn get_room(&self, room_id: RoomId) -> Option<&HwRoom> {
+        self.rooms.get(room_id)
+    }
+
+    #[inline]
+    pub fn get_room_mut(&mut self, room_id: RoomId) -> Option<&mut HwRoom> {
+        self.rooms.get_mut(room_id)
+    }
+
+    #[inline]
+    pub fn iter_rooms(&self) -> impl Iterator<Item = &HwRoom> {
+        self.rooms.iter().map(|(_, r)| r)
+    }
+
+    #[inline]
     pub fn client_and_room(&self, client_id: ClientId, room_id: RoomId) -> (&HwClient, &HwRoom) {
         (&self.clients[client_id], &self.rooms[room_id])
     }
@@ -187,7 +202,7 @@ impl HwServer {
         &mut self,
         client_id: ClientId,
         room_id: RoomId,
-    ) -> (&HwClient, &mut HwRoom) {
+    ) -> (&HwClient, &HwRoom) {
         (&self.clients[client_id], &mut self.rooms[room_id])
     }
 

@@ -74,11 +74,9 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
     let server_msg = ServerMessage(server.get_greetings(client).to_string());
 
     let rooms_msg = Rooms(
-        server
-            .rooms
-            .iter()
-            .filter(|(_, r)| r.protocol_number == client.protocol_number)
-            .flat_map(|(_, r)| r.info(r.master_id.map(|id| server.client(id))))
+        server.iter_rooms()
+            .filter(|r| r.protocol_number == client.protocol_number)
+            .flat_map(|r| r.info(r.master_id.map(|id| server.client(id))))
             .collect(),
     );
 
@@ -342,7 +340,7 @@ pub fn get_room_flags(
     to_client: ClientId,
     response: &mut Response,
 ) {
-    let room = &server.rooms[room_id];
+    let room = server.room(room_id);
     if let Some(id) = room.master_id {
         response.add(
             ClientFlags(
@@ -378,13 +376,13 @@ pub fn apply_voting_result(
         }
         VoteType::Map(None) => (),
         VoteType::Map(Some(name)) => {
-            if let Some(location) = server.rooms[room_id].load_config(&name) {
+            if let Some(location) = server.room_mut(room_id).load_config(&name) {
                 response.add(
                     server_chat(location.to_string())
                         .send_all()
                         .in_room(room_id),
                 );
-                let room = &server.rooms[room_id];
+                let room = &server.room(room_id);
                 let room_master = if let Some(id) = room.master_id {
                     Some(server.client(id))
                 } else {
@@ -394,13 +392,13 @@ pub fn apply_voting_result(
 
                 for client in server.iter_clients() {
                     if client.room_id == Some(room_id) {
-                        super::common::get_room_config(&server.rooms[room_id], client.id, response);
+                        super::common::get_room_config(server.room(room_id), client.id, response);
                     }
                 }
             }
         }
         VoteType::Pause => {
-            if let Some(ref mut info) = server.rooms[room_id].game_info {
+            if let Some(ref mut info) = server.room_mut(room_id).game_info {
                 info.is_paused = !info.is_paused;
                 response.add(
                     server_chat("Pause toggled.".to_string())
@@ -418,10 +416,10 @@ pub fn apply_voting_result(
             let seed = thread_rng().gen_range(0, 1_000_000_000).to_string();
             let cfg = GameCfg::Seed(seed);
             response.add(cfg.to_server_msg().send_all().in_room(room_id));
-            server.rooms[room_id].set_config(cfg);
+            server.room_mut(room_id).set_config(cfg);
         }
         VoteType::HedgehogsPerTeam(number) => {
-            let r = &mut server.rooms[room_id];
+            let r = server.room_mut(room_id);
             let nicks = r.set_hedgehogs_number(number);
 
             response.extend(

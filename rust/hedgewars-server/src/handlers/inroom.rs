@@ -390,7 +390,7 @@ pub fn handle(
                     }
                 }
                 VoteType::Map(None) => {
-                    let names: Vec<_> = server.rooms[room_id].saves.keys().cloned().collect();
+                    let names: Vec<_> = server.room(room_id).saves.keys().cloned().collect();
                     if names.is_empty() {
                         Some("/callvote map: No maps saved in this room!".to_string())
                     } else {
@@ -422,7 +422,7 @@ pub fn handle(
                 None => {
                     let msg = voting_description(&kind);
                     let voting = Voting::new(kind, server.room_clients(client_id).collect());
-                    let room = &mut server.rooms[room_id];
+                    let room = server.room_mut(room_id);
                     room.voting = Some(voting);
                     response.add(server_chat(msg).send_all().in_room(room_id));
                     super::common::submit_vote(
