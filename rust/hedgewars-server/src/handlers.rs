@@ -233,10 +233,10 @@ fn get_recipients(
         Destination::ToIds(ids) => ids,
         Destination::ToAll { group, skip_self } => {
             let mut ids: Vec<_> = match group {
-                DestinationGroup::All => server.all_clients().collect(),
-                DestinationGroup::Lobby => server.lobby_clients().collect(),
-                DestinationGroup::Protocol(proto) => server.protocol_clients(proto).collect(),
-                DestinationGroup::Room(id) => server.room_clients(id).collect(),
+                DestinationGroup::All => server.iter_client_ids().collect(),
+                DestinationGroup::Lobby => server.lobby_client_ids().collect(),
+                DestinationGroup::Protocol(proto) => server.protocol_client_ids(proto).collect(),
+                DestinationGroup::Room(id) => server.room_client_ids(id).collect(),
             };
 
             if skip_self {
@@ -460,13 +460,11 @@ pub fn handle_io_result(
             response.warn(ROOM_CONFIG_SAVE_FAILED);
         }
         IoResult::LoadRoom(room_id, Some(contents)) => {
-            if let Some(ref mut room) = state.server.get_room_mut(room_id) {
-                match room.set_saves(&contents) {
-                    Ok(_) => response.add(server_chat(ROOM_CONFIG_LOADED.to_string()).send_self()),
-                    Err(e) => {
-                        warn!("Error while deserializing the room configs: {}", e);
-                        response.warn(ROOM_CONFIG_DESERIALIZE_FAILED);
-                    }
+            match state.server.set_room_saves(room_id, &contents) {
+                Ok(_) => response.add(server_chat(ROOM_CONFIG_LOADED.to_string()).send_self()),
+                Err(e) => {
+                    warn!("Error while deserializing the room configs: {}", e);
+                    response.warn(ROOM_CONFIG_DESERIALIZE_FAILED);
                 }
             }
         }

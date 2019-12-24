@@ -161,9 +161,9 @@ bitflags! {
 pub struct HwServer {
     clients: IndexSlab<HwClient>,
     rooms: Slab<HwRoom>,
-    pub latest_protocol: u16,
-    pub flags: ServerFlags,
-    pub greetings: ServerGreetings,
+    latest_protocol: u16,
+    flags: ServerFlags,
+    greetings: ServerGreetings,
 }
 
 impl HwServer {
@@ -205,7 +205,7 @@ impl HwServer {
     }
 
     #[inline]
-    pub fn get_room_mut(&mut self, room_id: RoomId) -> Option<&mut HwRoom> {
+    fn get_room_mut(&mut self, room_id: RoomId) -> Option<&mut HwRoom> {
         self.rooms.get_mut(room_id)
     }
 
@@ -404,7 +404,7 @@ impl HwServer {
             .find_map(|(_, r)| Some(r).filter(|r| r.name == name))
     }
 
-    pub fn find_room_mut(&mut self, name: &str) -> Option<&mut HwRoom> {
+    fn find_room_mut(&mut self, name: &str) -> Option<&mut HwRoom> {
         self.rooms
             .iter_mut()
             .find_map(|(_, r)| Some(r).filter(|r| r.name == name))
@@ -416,13 +416,13 @@ impl HwServer {
             .find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
     }
 
-    pub fn find_client_mut(&mut self, nick: &str) -> Option<&mut HwClient> {
+    fn find_client_mut(&mut self, nick: &str) -> Option<&mut HwClient> {
         self.clients
             .iter_mut()
             .find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
     }
 
-    pub fn all_clients(&self) -> impl Iterator<Item = ClientId> + '_ {
+    pub fn iter_client_ids(&self) -> impl Iterator<Item = ClientId> + '_ {
         self.clients.iter().map(|(id, _)| id)
     }
 
@@ -440,7 +440,7 @@ impl HwServer {
         self.rooms.iter().filter(f).map(|(_, c)| c.id)
     }
 
-    pub fn collect_clients<F>(&self, f: F) -> Vec<ClientId>
+    pub fn collect_client_ids<F>(&self, f: F) -> Vec<ClientId>
     where
         F: Fn(&(usize, &HwClient)) -> bool,
     {
@@ -458,25 +458,25 @@ impl HwServer {
             .collect()
     }
 
-    pub fn lobby_clients(&self) -> impl Iterator<Item = ClientId> + '_ {
+    pub fn lobby_client_ids(&self) -> impl Iterator<Item = ClientId> + '_ {
         self.filter_clients(|(_, c)| c.room_id == None)
     }
 
-    pub fn room_clients(&self, room_id: RoomId) -> impl Iterator<Item = ClientId> + '_ {
+    pub fn room_client_ids(&self, room_id: RoomId) -> impl Iterator<Item = ClientId> + '_ {
         self.filter_clients(move |(_, c)| c.room_id == Some(room_id))
     }
 
-    pub fn protocol_clients(&self, protocol: u16) -> impl Iterator<Item = ClientId> + '_ {
+    pub fn protocol_client_ids(&self, protocol: u16) -> impl Iterator<Item = ClientId> + '_ {
         self.filter_clients(move |(_, c)| c.protocol_number == protocol)
     }
 
-    pub fn protocol_rooms(&self, protocol: u16) -> impl Iterator<Item = RoomId> + '_ {
+    pub fn protocol_room_ids(&self, protocol: u16) -> impl Iterator<Item = RoomId> + '_ {
         self.filter_rooms(move |(_, r)| r.protocol_number == protocol)
     }
 
-    pub fn other_clients_in_room(&self, self_id: ClientId) -> Vec<ClientId> {
+    pub fn other_client_ids_in_room(&self, self_id: ClientId) -> Vec<ClientId> {
         let room_id = self.clients[self_id].room_id;
-        self.collect_clients(|(id, c)| *id != self_id && c.room_id == room_id)
+        self.collect_client_ids(|(id, c)| *id != self_id && c.room_id == room_id)
     }
 
     pub fn is_registered_only(&self) -> bool {
@@ -485,6 +485,14 @@ impl HwServer {
 
     pub fn set_is_registered_only(&mut self, value: bool) {
         self.flags.set(ServerFlags::REGISTERED_ONLY, value)
+    }
+
+    pub fn set_room_saves(&mut self, room_id: RoomId, text: &str) -> Result<(), serde_yaml::Error> {
+        if let Some(room) = self.rooms.get_mut(room_id) {
+            room.set_saves(text)
+        } else {
+            Ok(())
+        }
     }
 }
 
@@ -590,7 +598,7 @@ impl<'a> HwRoomControl<'a> {
                 self.server.rooms.remove(self.room_id);
             } else if room.master_id == None {
                 let protocol_number = room.protocol_number;
-                let new_master_id = self.server.room_clients(self.room_id).next();
+                let new_master_id = self.server.room_client_ids(self.room_id).next();
 
                 if let Some(new_master_id) = new_master_id {
                     let room = self.room_mut();
@@ -672,7 +680,7 @@ impl<'a> HwRoomControl<'a> {
         match self.room().voting {
             Some(_) => Err(VotingInProgress),
             None => {
-                let voting = Voting::new(kind, self.server.room_clients(self.room_id).collect());
+                let voting = Voting::new(kind, self.server.room_client_ids(self.room_id).collect());
                 self.room_mut().voting = Some(voting);
                 Ok(())
             }

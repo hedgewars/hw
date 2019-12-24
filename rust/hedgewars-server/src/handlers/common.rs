@@ -460,7 +460,7 @@ pub fn handle_vote(
 
                     super::common::get_room_update(None, room, room_master, response);
 
-                    for client_id in room_control.server().room_clients(room.id) {
+                    for client_id in room_control.server().room_client_ids(room.id) {
                         super::common::get_room_config(room, client_id, response);
                     }
                 }

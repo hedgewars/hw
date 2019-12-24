@@ -103,8 +103,8 @@ pub fn handle(
                     html.push(format!(
                         "<tr><td>{}</td><td>{}</td><td>{}</td></tr>",
                         super::utils::protocol_version_string(protocol),
-                        server.protocol_clients(protocol).count(),
-                        server.protocol_rooms(protocol).count()
+                        server.protocol_client_ids(protocol).count(),
+                        server.protocol_room_ids(protocol).count()
                     ));
                 }
                 html.push("</table>".to_string());
