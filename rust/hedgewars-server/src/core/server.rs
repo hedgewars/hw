@@ -3,7 +3,7 @@ use super::{
     client::HwClient,
     indexslab::IndexSlab,
     room::HwRoom,
-    types::{ClientId, GameCfg, RoomId, ServerVar, TeamInfo},
+    types::{ClientId, GameCfg, RoomId, ServerVar, TeamInfo, Vote, VoteType, Voting},
 };
 use crate::{protocol::messages::HwProtocolMessage::Greeting, utils};
 
@@ -101,6 +101,24 @@ pub enum ModifyRoomNameError {
 }
 
 #[derive(Debug)]
+pub enum StartVoteError {
+    VotingInProgress,
+}
+
+#[derive(Debug)]
+pub enum VoteResult {
+    Submitted,
+    Succeeded(VoteType),
+    Failed,
+}
+
+#[derive(Debug)]
+pub enum VoteError {
+    NoVoting,
+    AlreadyVoted,
+}
+
+#[derive(Debug)]
 pub enum StartGameError {
     NotEnoughClans,
     NotEnoughTeams,
@@ -167,11 +185,6 @@ impl HwServer {
     }
 
     #[inline]
-    fn client_mut(&mut self, client_id: ClientId) -> &mut HwClient {
-        &mut self.clients[client_id]
-    }
-
-    #[inline]
     pub fn has_client(&self, client_id: ClientId) -> bool {
         self.clients.contains(client_id)
     }
@@ -184,11 +197,6 @@ impl HwServer {
     #[inline]
     pub fn room(&self, room_id: RoomId) -> &HwRoom {
         &self.rooms[room_id]
-    }
-
-    #[inline]
-    pub fn room_mut(&mut self, room_id: RoomId) -> &mut HwRoom {
-        &mut self.rooms[room_id]
     }
 
     #[inline]
@@ -538,6 +546,11 @@ impl<'a> HwRoomControl<'a> {
         )
     }
 
+    pub fn change_client<'b: 'a>(self, client_id: ClientId) -> Option<HwRoomControl<'a>> {
+        let room_id = self.room_id;
+        HwRoomControl::new(self.server, client_id).filter(|c| c.room_id == room_id)
+    }
+
     pub fn leave_room(&mut self) -> LeaveRoomResult {
         let (client, room) = self.get_mut();
         room.players_number -= 1;
@@ -586,7 +599,6 @@ impl<'a> HwRoomControl<'a> {
                     new_master.set_is_master(true);
 
                     if protocol_number < 42 {
-                        todo!();
                         let nick = new_master.nick.clone();
                         self.room_mut().name = nick;
                     }
@@ -655,8 +667,44 @@ impl<'a> HwRoomControl<'a> {
         }
     }
 
-    pub fn vote(&mut self) {
-        todo!("port from the room handler")
+    pub fn start_vote(&mut self, kind: VoteType) -> Result<(), StartVoteError> {
+        use StartVoteError::*;
+        match self.room().voting {
+            Some(_) => Err(VotingInProgress),
+            None => {
+                let voting = Voting::new(kind, self.server.room_clients(self.room_id).collect());
+                self.room_mut().voting = Some(voting);
+                Ok(())
+            }
+        }
+    }
+
+    pub fn vote(&mut self, vote: Vote) -> Result<VoteResult, VoteError> {
+        use self::{VoteError::*, VoteResult::*};
+        let client_id = self.client_id;
+        if let Some(ref mut voting) = self.room_mut().voting {
+            if vote.is_forced || voting.votes.iter().all(|(id, _)| client_id != *id) {
+                voting.votes.push((client_id, vote.is_pro));
+                let i = voting.votes.iter();
+                let pro = i.clone().filter(|(_, v)| *v).count();
+                let contra = i.filter(|(_, v)| !*v).count();
+                let success_quota = voting.voters.len() / 2 + 1;
+                if vote.is_forced && vote.is_pro || pro >= success_quota {
+                    let voting = self.room_mut().voting.take().unwrap();
+                    Ok(Succeeded(voting.kind))
+                } else if vote.is_forced && !vote.is_pro
+                    || contra > voting.voters.len() - success_quota
+                {
+                    Ok(Failed)
+                } else {
+                    Ok(Submitted)
+                }
+            } else {
+                Err(AlreadyVoted)
+            }
+        } else {
+            Err(NoVoting)
+        }
     }
 
     pub fn add_engine_message(&mut self) {
@@ -759,6 +807,10 @@ impl<'a> HwRoomControl<'a> {
         }
     }
 
+    pub fn set_hedgehogs_number(&mut self, number: u8) -> Vec<String> {
+        self.room_mut().set_hedgehogs_number(number)
+    }
+
     pub fn add_team(&mut self, mut info: Box<TeamInfo>) -> Result<&TeamInfo, AddTeamError> {
         use AddTeamError::*;
         let (client, room) = self.get_mut();
@@ -841,6 +893,10 @@ impl<'a> HwRoomControl<'a> {
         self.room_mut().save_config(name, location);
     }
 
+    pub fn load_config(&mut self, name: &str) -> Option<&str> {
+        self.room_mut().load_config(name)
+    }
+
     pub fn delete_config(&mut self, name: &str) -> bool {
         self.room_mut().delete_config(name)
     }
@@ -883,6 +939,13 @@ impl<'a> HwRoomControl<'a> {
             }
             Ok(room_nicks)
         }
+    }
+
+    pub fn toggle_pause(&mut self) -> bool {
+        if let Some(ref mut info) = self.room_mut().game_info {
+            info.is_paused = !info.is_paused;
+        }
+        self.room_mut().game_info.is_some()
     }
 
     pub fn leave_game(&mut self) -> Option<Vec<String>> {

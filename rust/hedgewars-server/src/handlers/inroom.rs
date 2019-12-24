@@ -5,8 +5,8 @@ use crate::{
     core::{
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
         server::{
-            ChangeMasterError, ChangeMasterResult, HwRoomControl, LeaveRoomResult, ModifyTeamError,
-            StartGameError,
+            ChangeMasterError, ChangeMasterResult, HwRoomControl, HwServer, LeaveRoomResult,
+            ModifyTeamError, StartGameError,
         },
         types,
         types::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
@@ -235,11 +235,7 @@ pub fn handle(
                     );
 
                     let room = room_control.room();
-                    let room_master = if let Some(id) = room.master_id {
-                        Some(room_control.server().client(id))
-                    } else {
-                        None
-                    };
+                    let room_master = room.master_id.map(|id| room_control.server().client(id));
                     super::common::get_room_update(None, room, room_master, response);
                 }
                 Err(AddTeamError::TooManyTeams) => response.warn(TOO_MANY_TEAMS),
@@ -365,91 +361,49 @@ pub fn handle(
             response.add(server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
                 .send_self());
         }
-        /*CallVote(Some(kind)) => {
-            let is_in_game = room.game_info.is_some();
-            let error = match &kind {
-                VoteType::Kick(nick) => {
-                    if room_control.server()
-                        .find_client(&nick)
-                        .filter(|c| c.room_id == Some(room_id))
-                        .is_some()
-                    {
-                        None
-                    } else {
-                        Some("/callvote kick: No such user!".to_string())
-                    }
-                }
-                VoteType::Map(None) => {
-                    let names: Vec<_> = room.saves.keys().cloned().collect();
-                    if names.is_empty() {
-                        Some("/callvote map: No maps saved in this room!".to_string())
-                    } else {
-                        Some(format!("Available maps: {}", names.join(", ")))
-                    }
-                }
-                VoteType::Map(Some(name)) => {
-                    if room.saves.get(&name[..]).is_some() {
-                        None
-                    } else {
-                        Some("/callvote map: No such map!".to_string())
-                    }
-                }
-                VoteType::Pause => {
-                    if is_in_game {
-                        None
-                    } else {
-                        Some("/callvote pause: No game in progress!".to_string())
-                    }
-                }
-                VoteType::NewSeed => None,
-                VoteType::HedgehogsPerTeam(number) => match number {
-                    1..=MAX_HEDGEHOGS_PER_TEAM => None,
-                    _ => Some("/callvote hedgehogs: Specify number from 1 to 8.".to_string()),
-                },
-            };
-
-            match error {
-                None => {
-                    let msg = voting_description(&kind);
-                    let voting = Voting::new(kind, room_control.server().room_clients(client_id).collect());
-                    let room = room_control.server().room_mut(room_id);
-                    room.voting = Some(voting);
-                    response.add(server_chat(msg).send_all().in_room(room_id));
-                    super::common::submit_vote(
-                        room_control.server(),
-                        types::Vote {
+        CallVote(Some(kind)) => {
+            use crate::core::server::StartVoteError;
+            let room_id = room_control.room().id;
+            if super::common::check_vote(
+                room_control.server(),
+                room_control.room(),
+                &kind,
+                response,
+            ) {
+                match room_control.start_vote(kind.clone()) {
+                    Ok(()) => {
+                        let msg = voting_description(&kind);
+                        response.add(server_chat(msg).send_all().in_room(room_id));
+                        let vote_result = room_control.vote(types::Vote {
                             is_pro: true,
                             is_forced: false,
-                        },
-                        response,
-                    );
-                }
-                Some(msg) => {
-                    response.add(server_chat(msg).send_self());
+                        });
+                        super::common::handle_vote(room_control, vote_result, response);
+                    }
+                    Err(StartVoteError::VotingInProgress) => {
+                        response.add(
+                            server_chat("There is already voting in progress".to_string())
+                                .send_self(),
+                        );
+                    }
                 }
             }
-        }*/
-        /*Vote(vote) => {
-            super::common::submit_vote(
-                room_control.server(),
-                types::Vote {
-                    is_pro: vote,
-                    is_forced: false,
-                },
-                response,
-            );
-        }*/
-        /*ForceVote(vote) => {
+        }
+        Vote(vote) => {
+            let vote_result = room_control.vote(types::Vote {
+                is_pro: vote,
+                is_forced: false,
+            });
+            super::common::handle_vote(room_control, vote_result, response);
+        }
+        ForceVote(vote) => {
             let is_forced = client.is_admin();
-            super::common::submit_vote(
-                room_control.server(),
-                types::Vote {
-                    is_pro: vote,
-                    is_forced,
-                },
-                response,
-            );
-        }*/
+            let vote_result = room_control.vote(types::Vote {
+                is_pro: vote,
+                is_forced,
+            });
+            super::common::handle_vote(room_control, vote_result, response);
+        }
         ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly => {
             if room_control.toggle_flag(room_message_flag(&message)) {
                 let (client, room) = room_control.get();

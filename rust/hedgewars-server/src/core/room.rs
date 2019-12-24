@@ -11,7 +11,7 @@ use serde_yaml;
 use std::{collections::HashMap, iter};
 
 pub const MAX_TEAMS_IN_ROOM: u8 = 8;
-pub const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_HEDGEHOGS_PER_TEAM * MAX_HEDGEHOGS_PER_TEAM;
+pub const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_TEAMS_IN_ROOM * MAX_HEDGEHOGS_PER_TEAM;
 
 fn client_teams_impl(
     teams: &[(ClientId, TeamInfo)],

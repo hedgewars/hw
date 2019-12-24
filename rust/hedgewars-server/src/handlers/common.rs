@@ -2,8 +2,11 @@ use crate::{
     core::{
         client::HwClient,
         room::HwRoom,
-        server::{EndGameResult, HwServer, JoinRoomError, LeaveRoomResult, StartGameError},
-        types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType},
+        server::{
+            EndGameResult, HwRoomControl, HwServer, JoinRoomError, LeaveRoomResult, StartGameError,
+            VoteError, VoteResult,
+        },
+        types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType, MAX_HEDGEHOGS_PER_TEAM},
     },
     protocol::messages::{
         add_flags, remove_flags, server_chat,
@@ -341,21 +344,102 @@ pub fn get_room_flags(
     }
 }
 
-pub fn apply_voting_result(
-    server: &mut HwServer,
-    room_id: RoomId,
+pub fn check_vote(
+    server: &HwServer,
+    room: &HwRoom,
+    kind: &VoteType,
     response: &mut Response,
-    kind: VoteType,
-) {
-    match kind {
+) -> bool {
+    let error = match &kind {
         VoteType::Kick(nick) => {
-            if let Some(kicked_client) = server.find_client(&nick) {
-                let kicked_id = kicked_client.id;
-                if kicked_client.room_id == Some(room_id) {
-                    if let Some(mut room_control) = server.get_room_control(kicked_client.id) {
+            if server
+                .find_client(&nick)
+                .filter(|c| c.room_id == Some(room.id))
+                .is_some()
+            {
+                None
+            } else {
+                Some("/callvote kick: No such user!".to_string())
+            }
+        }
+        VoteType::Map(None) => {
+            let names: Vec<_> = room.saves.keys().cloned().collect();
+            if names.is_empty() {
+                Some("/callvote map: No maps saved in this room!".to_string())
+            } else {
+                Some(format!("Available maps: {}", names.join(", ")))
+            }
+        }
+        VoteType::Map(Some(name)) => {
+            if room.saves.get(&name[..]).is_some() {
+                None
+            } else {
+                Some("/callvote map: No such map!".to_string())
+            }
+        }
+        VoteType::Pause => {
+            if room.game_info.is_some() {
+                None
+            } else {
+                Some("/callvote pause: No game in progress!".to_string())
+            }
+        }
+        VoteType::NewSeed => None,
+        VoteType::HedgehogsPerTeam(number) => match number {
+            1..=MAX_HEDGEHOGS_PER_TEAM => None,
+            _ => Some("/callvote hedgehogs: Specify number from 1 to 8.".to_string()),
+        },
+    };
+
+    match error {
+        None => true,
+        Some(msg) => {
+            response.add(server_chat(msg).send_self());
+            false
+        }
+    }
+}
+
+pub fn get_vote_data(
+    room_id: RoomId,
+    result: &Result<VoteResult, VoteError>,
+    response: &mut Response,
+) {
+    match result {
+        Ok(VoteResult::Submitted) => {
+            response.add(server_chat("Your vote has been counted.".to_string()).send_self())
+        }
+        Ok(VoteResult::Succeeded(_)) | Ok(VoteResult::Failed) => response.add(
+            server_chat("Voting closed.".to_string())
+                .send_all()
+                .in_room(room_id),
+        ),
+        Err(VoteError::NoVoting) => {
+            response.add(server_chat("There's no voting going on.".to_string()).send_self())
+        }
+        Err(VoteError::AlreadyVoted) => {
+            response.add(server_chat("You already have voted.".to_string()).send_self())
+        }
+    }
+}
+
+pub fn handle_vote(
+    mut room_control: HwRoomControl,
+    result: Result<VoteResult, VoteError>,
+    response: &mut super::Response,
+) {
+    let room_id = room_control.room().id;
+    super::common::get_vote_data(room_control.room().id, &result, response);
+
+    if let Ok(VoteResult::Succeeded(kind)) = result {
+        match kind {
+            VoteType::Kick(nick) => {
+                if let Some(kicked_client) = room_control.server().find_client(&nick) {
+                    let kicked_id = kicked_client.id;
+                    if let Some(mut room_control) = room_control.change_client(kicked_id) {
                         response.add(Kicked.send(kicked_id));
                         let result = room_control.leave_room();
-                        get_room_leave_result(
+                        super::common::get_room_leave_result(
                             room_control.server(),
                             room_control.room(),
                             "kicked",
@@ -365,108 +449,49 @@ pub fn apply_voting_result(
                     }
                 }
             }
-        }
-        VoteType::Map(None) => (),
-        VoteType::Map(Some(name)) => {
-            if let Some(location) = server.room_mut(room_id).load_config(&name) {
-                response.add(
-                    server_chat(location.to_string())
-                        .send_all()
-                        .in_room(room_id),
-                );
-                let room = &server.room(room_id);
-                let room_master = if let Some(id) = room.master_id {
-                    Some(server.client(id))
-                } else {
-                    None
-                };
-                get_room_update(None, room, room_master, response);
+            VoteType::Map(None) => (),
+            VoteType::Map(Some(name)) => {
+                if let Some(location) = room_control.load_config(&name) {
+                    let msg = server_chat(location.to_string());
+                    let room = room_control.room();
+                    response.add(msg.send_all().in_room(room.id));
 
-                for client in server.iter_clients() {
-                    if client.room_id == Some(room_id) {
-                        super::common::get_room_config(server.room(room_id), client.id, response);
+                    let room_master = room.master_id.map(|id| room_control.server().client(id));
+
+                    super::common::get_room_update(None, room, room_master, response);
+
+                    for client_id in room_control.server().room_clients(room.id) {
+                        super::common::get_room_config(room, client_id, response);
                     }
                 }
             }
-        }
-        VoteType::Pause => {
-            if let Some(ref mut info) = server.room_mut(room_id).game_info {
-                info.is_paused = !info.is_paused;
-                response.add(
-                    server_chat("Pause toggled.".to_string())
-                        .send_all()
-                        .in_room(room_id),
-                );
-                response.add(
-                    ForwardEngineMessage(vec![to_engine_msg(once(b'I'))])
-                        .send_all()
-                        .in_room(room_id),
-                );
+            VoteType::Pause => {
+                if room_control.toggle_pause() {
+                    response.add(
+                        server_chat("Pause toggled.".to_string())
+                            .send_all()
+                            .in_room(room_id),
+                    );
+                    response.add(
+                        ForwardEngineMessage(vec![to_engine_msg(once(b'I'))])
+                            .send_all()
+                            .in_room(room_id),
+                    );
+                }
             }
-        }
-        VoteType::NewSeed => {
-            let seed = thread_rng().gen_range(0, 1_000_000_000).to_string();
-            let cfg = GameCfg::Seed(seed);
-            response.add(cfg.to_server_msg().send_all().in_room(room_id));
-            server.room_mut(room_id).set_config(cfg);
-        }
-        VoteType::HedgehogsPerTeam(number) => {
-            let r = server.room_mut(room_id);
-            let nicks = r.set_hedgehogs_number(number);
-
-            response.extend(
-                nicks
-                    .into_iter()
-                    .map(|n| HedgehogsNumber(n, number).send_all().in_room(room_id)),
-            );
-        }
-    }
-}
-
-fn add_vote(room: &mut HwRoom, response: &mut Response, vote: Vote) -> Option<bool> {
-    let client_id = response.client_id;
-    let mut result = None;
-
-    if let Some(ref mut voting) = room.voting {
-        if vote.is_forced || voting.votes.iter().all(|(id, _)| client_id != *id) {
-            response.add(server_chat("Your vote has been counted.".to_string()).send_self());
-            voting.votes.push((client_id, vote.is_pro));
-            let i = voting.votes.iter();
-            let pro = i.clone().filter(|(_, v)| *v).count();
-            let contra = i.filter(|(_, v)| !*v).count();
-            let success_quota = voting.voters.len() / 2 + 1;
-            if vote.is_forced && vote.is_pro || pro >= success_quota {
-                result = Some(true);
-            } else if vote.is_forced && !vote.is_pro || contra > voting.voters.len() - success_quota
-            {
-                result = Some(false);
+            VoteType::NewSeed => {
+                let seed = thread_rng().gen_range(0, 1_000_000_000).to_string();
+                let cfg = GameCfg::Seed(seed);
+                response.add(cfg.to_server_msg().send_all().in_room(room_id));
+                room_control.set_config(cfg);
             }
-        } else {
-            response.add(server_chat("You already have voted.".to_string()).send_self());
-        }
-    } else {
-        response.add(server_chat("There's no voting going on.".to_string()).send_self());
-    }
-
-    result
-}
-
-pub fn submit_vote(server: &mut HwServer, vote: Vote, response: &mut Response) {
-    let client_id = response.client_id;
-    let client = server.client(client_id);
-
-    if let Some(room_id) = client.room_id {
-        let room = server.room_mut(room_id);
-
-        if let Some(res) = add_vote(room, response, vote) {
-            response.add(
-                server_chat("Voting closed.".to_string())
-                    .send_all()
-                    .in_room(room.id),
-            );
-            let voting = replace(&mut room.voting, None).unwrap();
-            if res {
-                apply_voting_result(server, room_id, response, voting.kind);
+            VoteType::HedgehogsPerTeam(number) => {
+                let nicks = room_control.set_hedgehogs_number(number);
+                response.extend(
+                    nicks
+                        .into_iter()
+                        .map(|n| HedgehogsNumber(n, number).send_all().in_room(room_id)),
+                );
             }
         }
     }
@@ -507,11 +532,7 @@ pub fn get_end_game_result(
     response: &mut Response,
 ) {
     let room = server.room(room_id);
-    let room_master = if let Some(id) = room.master_id {
-        Some(server.client(id))
-    } else {
-        None
-    };
+    let room_master = room.master_id.map(|id| server.client(id));
 
     get_room_update(None, room, room_master, response);
     response.add(RoundFinished.send_all().in_room(room_id));
