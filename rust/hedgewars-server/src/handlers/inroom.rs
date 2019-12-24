@@ -414,7 +414,7 @@ pub fn handle(
             let result = room_control.start_game();
             super::common::get_start_game_data(room_control.server(), room_id, result, response);
         }
-        /*EngineMessage(em) => {
+        EngineMessage(em) => {
             if client.teams_in_game > 0 {
                 let decoding = decode(&em[..]).unwrap();
                 let messages = by_msg(&decoding);
@@ -438,16 +438,10 @@ pub fn handle(
                     );
                 }
                 let em_log = encode(&non_empty.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
-                if let Some(ref mut info) = room.game_info {
-                    if !em_log.is_empty() {
-                        info.msg_log.push(em_log);
-                    }
-                    if let Some(msg) = sync_msg {
-                        info.sync_msg = msg;
-                    }
-                }
+
+                room_control.log_engine_msg(em_log, sync_msg);
             }
-        }*/
+        }
         RoundFinished => {
             if let Some(team_names) = room_control.leave_game() {
                 let (client, room) = room_control.get();

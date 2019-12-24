@@ -1032,6 +1032,17 @@ impl<'a> HwRoomControl<'a> {
             None
         }
     }
+
+    pub fn log_engine_msg(&mut self, log_msg: String, sync_msg: Option<Option<String>>) {
+        if let Some(ref mut info) = self.room_mut().game_info {
+            if !log_msg.is_empty() {
+                info.msg_log.push(log_msg);
+            }
+            if let Some(msg) = sync_msg {
+                info.sync_msg = msg;
+            }
+        }
+    }
 }
 
 fn allocate_room(rooms: &mut Slab<HwRoom>) -> &mut HwRoom {
