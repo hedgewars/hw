@@ -123,7 +123,7 @@ for i:= 0 to Pred(Targets.Count) do
             then
             begin
 {$HINTS OFF}
-            Score:= AmmoTests[a].proc(Me, Targets.ar[i], BotLevel, ap);
+            Score:= AmmoTests[a].proc(Me, Targets.ar[i], BotLevel, ap, AmmoTests[a].flags);
 {$HINTS ON}
             if (Score > BadTurn) and (Actions.Score + Score > BestActions.Score) then
                 if (BestActions.Score < 0) or (Actions.Score + Score > BestActions.Score + Byte(BotLevel - 1) * 2048) then

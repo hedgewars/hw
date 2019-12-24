@@ -25,6 +25,7 @@ const
     amtest_Rare            = $00000001; // check only several positions
     amtest_NoTarget        = $00000002; // each pos, but no targetting
     amtest_MultipleAttacks = $00000004; // test could result in multiple attacks, set AttacksNum
+    amtest_NoTrackFall     = $00000008; // skip fall tracing.  
 
 var windSpeed: real;
 
@@ -35,29 +36,29 @@ type TAttackParams = record
         AttackPutX, AttackPutY: LongInt;
         end;
 
-function TestBazooka(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestSnowball(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestGrenade(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestClusterBomb(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestWatermelon(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestDrillRocket(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestMortar(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestShotgun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestSniperRifle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestBaseballBat(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestFirePunch(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestWhip(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestBazooka(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestSnowball(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestGrenade(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestClusterBomb(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestWatermelon(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestDrillRocket(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestMortar(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestShotgun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestSniperRifle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestBaseballBat(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestFirePunch(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestWhip(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 
-type TAmmoTestProc = function (Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+type TAmmoTestProc = function (Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
     TAmmoTest = record
             proc: TAmmoTestProc;
             flags: Longword;
@@ -110,7 +111,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amBirdy
             (proc: nil;              flags: 0), // amPortalGun
             (proc: nil;              flags: 0), // amPiano
-            (proc: @TestGrenade;     flags: 0), // amGasBomb
+            (proc: @TestGrenade;     flags: amtest_NoTrackFall), // amGasBomb
             (proc: @TestShotgun;     flags: 0), // amSineGun
             (proc: nil;              flags: 0), // amFlamethrower
             (proc: @TestGrenade;     flags: 0), // amSMine
@@ -136,7 +137,7 @@ begin
 Metric:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
-function TestBazooka(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestBazooka(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const cExtraTime = 300;
 var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
@@ -146,6 +147,7 @@ var Vx, Vy, r, mX, mY: real;
     t: LongInt;
     value: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 mX:= hwFloat2Float(Me^.X);
 mY:= hwFloat2Float(Me^.Y);
 ap.Time:= 0;
@@ -267,12 +269,13 @@ begin
         calcBeeFlight:= BadTurn
 end;
 
-function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestBee(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var i, j: LongInt;
     valueResult, v, a, p: LongInt;
     mX, mY: real;
     eX, eY: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
     if Level > 1 then
         exit(BadTurn);
 
@@ -320,7 +323,7 @@ begin
         TestBee:= BadTurn // no digging
 end;
 
-function TestDrillRocket(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestDrillRocket(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
     EX, EY: LongInt;
@@ -331,6 +334,7 @@ var Vx, Vy, r, mX, mY: real;
     t2: real;
     timer: Longint;
 begin
+Flags:= Flags; // avoid compiler hint
     if (Level > 3) then exit(BadTurn);
 
     mX:= hwFloat2Float(Me^.X);
@@ -408,7 +412,7 @@ begin
 end;
 
 
-function TestSnowball(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestSnowball(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var Vx, Vy, r: real;
     rTime: LongInt;
     EX, EY: LongInt;
@@ -418,6 +422,7 @@ var Vx, Vy, r: real;
     value: LongInt;
 
 begin
+Flags:= Flags; // avoid compiler hint
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 ap.Time:= 0;
@@ -473,13 +478,14 @@ until (rTime > 5050 - Level * 800);
 TestSnowball:= valueResult
 end;
 
-function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: LongInt;
     targXWrap, x, y, dY, meX, meY: real;
     t: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 valueResult:= BadTurn;
@@ -531,7 +537,7 @@ until (TestTime > 5050 - Level * 800);
 TestMolotov:= valueResult
 end;
 
-function TestGrenade(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestGrenade(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const tDelta = 24;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
@@ -572,7 +578,7 @@ repeat
     EX:= trunc(x);
     EY:= trunc(y);
     if t < 50 then
-        if Level = 1 then
+        if (Level = 1) and (Flags and amtest_NoTrackFall = 0) then
             Score:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else Score:= RateExplosion(Me, EX, EY, 101)
     else
@@ -594,7 +600,7 @@ until TestTime > 4500 - Level * 512;
 TestGrenade:= valueResult
 end;
 
-function TestClusterBomb(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestClusterBomb(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const tDelta = 24;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
@@ -602,6 +608,7 @@ var Vx, Vy, r: real;
     x, y, dY, meX, meY: real;
     t: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 valueResult:= BadTurn;
 TestTime:= 500;
 ap.ExplR:= 0;
@@ -651,7 +658,7 @@ until (TestTime = 4100);
 TestClusterBomb:= valueResult
 end;
 
-function TestWatermelon(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestWatermelon(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const tDelta = 24;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
@@ -659,6 +666,7 @@ var Vx, Vy, r: real;
     targXWrap, x, y, dY, meX, meY: real;
     t: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 valueResult:= BadTurn;
 TestTime:= 500;
 ap.ExplR:= 0;
@@ -734,13 +742,14 @@ end;
                 Solve:= 0
     end;
 
-function TestMortar(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestMortar(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 //const tDelta = 24;
 var Vx, Vy: real;
     Score, EX, EY: LongInt;
     TestTime: Longword;
     x, y, dY, meX, meY: real;
 begin
+Flags:= Flags; // avoid compiler hint
     TestMortar:= BadTurn;
     ap.ExplR:= 0;
 
@@ -796,7 +805,7 @@ begin
         end;
 end;
 
-function TestShotgun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestShotgun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const
     MIN_RANGE =  80;
     MAX_RANGE = 400;
@@ -804,6 +813,7 @@ var Vx, Vy, x, y: real;
     rx, ry, valueResult: LongInt;
     range: integer;
 begin
+Flags:= Flags; // avoid compiler hint
 TestShotgun:= BadTurn;
 ap.ExplR:= 0;
 ap.Time:= 0;
@@ -849,11 +859,12 @@ until (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 4)
 TestShotgun:= BadTurn
 end;
 
-function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var Vx, Vy, x, y, t: real;
     d: Longword;
     ix, iy, valueResult: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 if (Level > 4) or (Targ.Score < 0) or (Targ.Kind <> gtHedgehog) then exit(BadTurn);
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 1;
@@ -902,11 +913,12 @@ TestDesertEagle:= valueResult
 end;
 
 
-function TestSniperRifle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestSniperRifle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var Vx, Vy, x, y, t, dmg: real;
     d: Longword;
     //fallDmg: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 if (Level > 3) or (Targ.Score < 0) or (Targ.Kind <> gtHedgehog) then exit(BadTurn);
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
@@ -944,11 +956,12 @@ else TestSniperRifle:= BadTurn;
 end;
 
 
-function TestBaseballBat(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestBaseballBat(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var valueResult, a, v1, v2: LongInt;
     x, y, trackFall: LongInt;
     dx, dy: real;
 begin
+Flags:= Flags; // avoid compiler hint
     Targ:= Targ; // avoid compiler hint
 
     if Level < 3 then trackFall:= afTrackFall
@@ -996,10 +1009,11 @@ begin
     TestBaseballBat:= valueResult;
 end;
 
-function TestFirePunch(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestFirePunch(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var valueResult, v1, v2, i: LongInt;
     x, y, trackFall: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
     Targ:= Targ; // avoid compiler hint
 
     if Level = 1 then trackFall:= afTrackFall
@@ -1054,10 +1068,11 @@ begin
 end;
 
 
-function TestWhip(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestWhip(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var valueResult, v1, v2: LongInt;
     x, y, trackFall: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
     Targ:= Targ; // avoid compiler hint
 
     if Level = 1 then trackFall:= afTrackFall
@@ -1109,12 +1124,13 @@ begin
     TestWhip:= valueResult;
 end;
 
-function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const step = 8;
 var valueResult, i, v, tx: LongInt;
     trackFall: LongInt;
     t, d, x, y, dx, dy, cx: real;
 begin
+Flags:= Flags; // avoid compiler hint
     ap.ExplR:= 0;
     ap.Time:= 0;
     ap.Power:= 1;
@@ -1196,9 +1212,10 @@ begin
     TestKamikaze:= valueResult;
 end;
 
-function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var rate: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 Level:= Level; // avoid compiler hint
 Targ:= Targ;
 
@@ -1213,7 +1230,7 @@ if rate = 0 then
 TestHammer:= rate;
 end;
 
-function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const cShift = 4;
 var bombsSpeed, X, Y, dY: real;
     b: array[0..9] of boolean;
@@ -1221,6 +1238,7 @@ var bombsSpeed, X, Y, dY: real;
     fexit: boolean;
     i, t, valueResult: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 if (Level > 3) or (cGravityf = 0) then
@@ -1286,11 +1304,12 @@ TestAirAttack:= valueResult;
 end;
 
 
-function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var
     i, failNum: longword;
     maxTop: longword;
 begin
+Flags:= Flags; // avoid compiler hint
     TestTeleport := BadTurn;
     exit(BadTurn);
     Level:= Level; // avoid compiler hint
@@ -1350,10 +1369,11 @@ for i:= 0 to 2040 do
     end;
 end;
 
-function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var valueResult, v1, v2: LongInt;
     cake: TGear;
 begin
+Flags:= Flags; // avoid compiler hint
     Targ:= Targ; // avoid compiler hint
 
     if (Level > 2) then
@@ -1406,11 +1426,12 @@ begin
     TestCake:= valueResult;
 end;
 
-function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var valueResult: LongInt;
     x, y, dx, dy: real;
     EX, EY, t: LongInt;
 begin
+Flags:= Flags; // avoid compiler hint
 Targ:= Targ; // avoid compiler hint
 
 x:= hwFloat2Float(Me^.X) + hwSign(Me^.dX) * 7;
