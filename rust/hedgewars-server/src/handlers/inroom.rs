@@ -48,10 +48,10 @@ const VALID_MESSAGES: &[u8] =
     b"M#+LlRrUuDdZzAaSjJ,NpPwtgfhbc12345\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A";
 const NON_TIMED_MESSAGES: &[u8] = b"M#hb";
 
-/*#[cfg(canhazslicepatterns)]
+#[cfg(canhazslicepatterns)]
 fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
     match msg {
-        [size, typ, body..MAX] => {
+        [size, typ, body @..] => {
             VALID_MESSAGES.contains(typ)
                 && match body {
                     [1..=MAX_HEDGEHOGS_PER_TEAM, team, ..] if *typ == b'h' => {
@@ -62,7 +62,7 @@ fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
         }
         _ => false,
     }
-}*/
+}
 
 fn is_msg_valid(msg: &[u8], _team_indices: &[u8]) -> bool {
     if let Some(typ) = msg.get(1) {
