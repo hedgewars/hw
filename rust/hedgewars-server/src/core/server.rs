@@ -715,10 +715,6 @@ impl<'a> HwRoomControl<'a> {
         }
     }
 
-    pub fn add_engine_message(&mut self) {
-        todo!("port from the room handler")
-    }
-
     pub fn toggle_flag(&mut self, flags: super::room::RoomFlags) -> bool {
         let (client, room) = self.get_mut();
         if client.is_master() {
