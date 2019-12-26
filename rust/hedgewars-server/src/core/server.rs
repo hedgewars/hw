@@ -121,7 +121,6 @@ pub enum VoteError {
 #[derive(Debug)]
 pub enum StartGameError {
     NotEnoughClans,
-    NotEnoughTeams,
     NotReady,
     AlreadyInGame,
 }
@@ -251,9 +250,9 @@ impl HwServer {
 
             #[cfg(feature = "official-server")]
             {
-                client.set_is_registered(info.is_registered);
-                client.set_is_admin(info.is_admin);
-                client.set_is_contributor(info.is_contributor);
+                client.set_is_registered(data.is_registered);
+                client.set_is_admin(data.is_admin);
+                client.set_is_contributor(data.is_contributor);
             }
 
             self.clients.insert(client_id, client);
@@ -653,7 +652,6 @@ impl<'a> HwRoomControl<'a> {
                     let new_master = &mut self.server.clients[new_master_id];
                     if new_master.room_id == Some(self.room_id) {
                         self.server.clients[new_master_id].set_is_master(true);
-                        let room = self.room_mut();
                         let old_master_id = self.room().master_id;
 
                         if let Some(master_id) = old_master_id {

@@ -141,7 +141,7 @@ pub fn handle(
             );
         }
         TeamChat(msg) => {
-            if let Some(ref info) = room.game_info {
+            if room.game_info.is_some() {
                 if let Some(clan_color) = room.find_team_color(client_id) {
                     let engine_msg =
                         to_engine_msg(format!("b{}]{}\x20\x20", client.nick, msg).bytes());

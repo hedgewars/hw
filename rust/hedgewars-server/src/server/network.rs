@@ -471,7 +471,7 @@ impl NetworkLayer {
                         client.send_string(
                             &HwServerMessage::Bye("Ping timeout".to_string()).to_raw_protocol(),
                         );
-                        client.write();
+                        let _res = client.write();
                     }
                     self.operation_failed(
                         poll,
@@ -490,7 +490,7 @@ impl NetworkLayer {
         while let Some((client_id, result)) = self.io.try_recv() {
             debug!("Handling io result {:?} for client {}", result, client_id);
             let mut response = handlers::Response::new(client_id);
-            handlers::handle_io_result(&mut self.server, client_id, &mut response, result);
+            handlers::handle_io_result(&mut self.server_state, client_id, &mut response, result);
             self.handle_response(response, poll);
         }
         Ok(())
@@ -722,7 +722,7 @@ impl NetworkLayerBuilder {
             .set_private_key_file("ssl/key.pem", SslFiletype::PEM)
             .expect("Cannot find private key file");
         builder.set_options(SslOptions::NO_COMPRESSION);
-        builder.set_options(SslOptions::NO_TLSV1_0);
+        builder.set_options(SslOptions::NO_TLSV1);
         builder.set_options(SslOptions::NO_TLSV1_1);
         builder.set_cipher_list("ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384").unwrap();
         ServerSsl {

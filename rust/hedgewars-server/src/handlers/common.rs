@@ -519,7 +519,6 @@ pub fn get_start_game_data(
         Err(StartGameError::NotEnoughClans) => {
             response.warn("The game can't be started with less than two clans!")
         }
-        Err(StartGameError::NotEnoughTeams) => (),
         Err(StartGameError::NotReady) => response.warn("Not all players are ready"),
         Err(StartGameError::AlreadyInGame) => response.warn("The game is already in progress"),
     }

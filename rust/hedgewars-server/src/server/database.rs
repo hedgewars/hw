@@ -109,7 +109,7 @@ impl Database {
             if let Some(row) =
                 pool.first_exec(GET_REPLAY_NAME_QUERY, params! { "id" => replay_id })?
             {
-                let filename = from_row_opt::<(String)>(row)?;
+                let filename = from_row_opt::<String>(row)?;
                 Ok(Some(filename))
             } else {
                 Ok(None)
