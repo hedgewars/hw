@@ -51,7 +51,7 @@ const NON_TIMED_MESSAGES: &[u8] = b"M#hb";
 #[cfg(canhazslicepatterns)]
 fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
     match msg {
-        [size, typ, body @..] => {
+        [size, typ, body @ ..] => {
             VALID_MESSAGES.contains(typ)
                 && match body {
                     [1..=MAX_HEDGEHOGS_PER_TEAM, team, ..] if *typ == b'h' => {

@@ -722,7 +722,9 @@ impl NetworkLayerBuilder {
             .set_private_key_file("ssl/key.pem", SslFiletype::PEM)
             .expect("Cannot find private key file");
         builder.set_options(SslOptions::NO_COMPRESSION);
-        builder.set_cipher_list("DEFAULT:!LOW:!RC4:!EXP").unwrap();
+        builder.set_options(SslOptions::NO_TLSV1_0);
+        builder.set_options(SslOptions::NO_TLSV1_1);
+        builder.set_cipher_list("ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384").unwrap();
         ServerSsl {
             listener,
             context: builder.build(),
