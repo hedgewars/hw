@@ -1,5 +1,6 @@
 use mio;
 
+use super::strings::*;
 use crate::{
     core::{
         anteroom::{HwAnteroom, HwAnteroomClient},
@@ -33,18 +34,12 @@ fn completion_result<'a, I>(
 where
     I: Iterator<Item = &'a HwClient>,
 {
-    let has_nick_clash =
-        other_clients.any(|c| !c.is_checker() && c.nick == *client.nick.as_ref().unwrap());
+    let has_nick_clash = other_clients.any(|c| c.nick == *client.nick.as_ref().unwrap());
 
     if has_nick_clash {
-        if client.protocol_number.unwrap().get() < 38 {
-            response.add(Bye("User quit: Nickname is already in use".to_string()).send_self());
-            LoginResult::Exit
-        } else {
-            client.nick = None;
-            response.add(Notice("NickAlreadyInUse".to_string()).send_self());
-            LoginResult::Unchanged
-        }
+        client.nick = None;
+        response.add(Notice("NickAlreadyInUse".to_string()).send_self());
+        LoginResult::Unchanged
     } else {
         #[cfg(feature = "official-server")]
         {
@@ -76,10 +71,10 @@ pub fn handle(
             let client = &mut server_state.anteroom.clients[client_id];
 
             if client.nick.is_some() {
-                response.add(Error("Nickname already provided.".to_string()).send_self());
+                response.error(NICKNAME_PROVIDED);
                 LoginResult::Unchanged
             } else if is_name_illegal(&nick) {
-                response.add(Bye("Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}".to_string()).send_self());
+                response.add(Bye(ILLEGAL_CLIENT_NAME.to_string()).send_self());
                 LoginResult::Exit
             } else {
                 client.nick = Some(nick.clone());
@@ -95,11 +90,11 @@ pub fn handle(
         HwProtocolMessage::Proto(proto) => {
             let client = &mut server_state.anteroom.clients[client_id];
             if client.protocol_number.is_some() {
-                response.add(Error("Protocol already known.".to_string()).send_self());
+                response.error(PROTOCOL_PROVIDED);
                 LoginResult::Unchanged
-            } else if proto == 0 {
-                response.add(Error("Bad number.".to_string()).send_self());
-                LoginResult::Unchanged
+            } else if proto < 48 {
+                response.add(Bye(PROTOCOL_TOO_OLD.to_string()).send_self());
+                LoginResult::Exit
             } else {
                 client.protocol_number = NonZeroU16::new(proto);
                 response.add(Proto(proto).send_self());
@@ -131,17 +126,29 @@ pub fn handle(
         HwProtocolMessage::Checker(protocol, nick, password) => {
             let client = &mut server_state.anteroom.clients[client_id];
             if protocol == 0 {
-                response.add(Error("Bad number.".to_string()).send_self());
+                response.error("Bad number.");
                 LoginResult::Unchanged
             } else {
                 client.protocol_number = NonZeroU16::new(protocol);
-                client.nick = Some(nick);
                 client.is_checker = true;
-                LoginResult::Complete
+                #[cfg(not(feature = "official-server"))]
+                {
+                    response.request_io(super::IoTask::GetCheckerAccount {
+                        nick: nick,
+                        password: password,
+                    });
+                    LoginResult::Unchanged
+                }
+
+                #[cfg(feature = "official-server")]
+                {
+                    response.add(LogonPassed.send_self());
+                    LoginResult::Complete
+                }
             }
         }
         _ => {
-            warn!("Incorrect command in logging-in state");
+            warn!("Incorrect command in anteroom");
             LoginResult::Unchanged
         }
     }

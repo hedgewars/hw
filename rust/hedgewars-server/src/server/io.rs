@@ -61,6 +61,18 @@ impl IoThread {
                         }
                     }
 
+                    IoTask::GetCheckerAccount { nick, password } => {
+                        match db.get_checker_account(&nick, &password) {
+                            Ok(is_registered) => IoResult::CheckerAccount { is_registered },
+                            Err(e) => {
+                                warn!("Unable to get checker account data: {}", e);
+                                IoResult::CheckerAccount {
+                                    is_registered: false,
+                                }
+                            }
+                        }
+                    }
+
                     IoTask::GetReplay { id } => {
                         let result = match db.get_replay_name(id) {
                             Ok(Some(filename)) => {

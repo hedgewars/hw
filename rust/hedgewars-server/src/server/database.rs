@@ -86,6 +86,23 @@ impl Database {
         }
     }
 
+    pub fn get_checker_account(
+        &mut self,
+        nick: &str,
+        checker_password: &str,
+    ) -> Result<bool, Error> {
+        if let Some(pool) = &self.pool {
+            if let Some(row) = pool.first_exec(GET_ACCOUNT_QUERY, params! { "username" => nick })? {
+                let (mut password, _, _) = from_row_opt::<(String, i32, i32)>(row)?;
+                Ok(checker_password == password)
+            } else {
+                Ok(false)
+            }
+        } else {
+            Err(DriverError::SetupError.into())
+        }
+    }
+
     pub fn store_stats(&mut self, stats: &ServerStatistics) -> Result<(), Error> {
         if let Some(pool) = &self.pool {
             for mut stmt in pool.prepare(STORE_STATS_QUERY).into_iter() {

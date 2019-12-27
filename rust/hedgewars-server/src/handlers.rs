@@ -115,6 +115,10 @@ pub enum IoTask {
         client_salt: String,
         server_salt: String,
     },
+    GetCheckerAccount {
+        nick: String,
+        password: String,
+    },
     GetReplay {
         id: u32,
     },
@@ -133,6 +137,7 @@ pub enum IoTask {
 pub enum IoResult {
     AccountRegistered(bool),
     Account(Option<AccountInfo>),
+    CheckerAccount { is_registered: bool },
     Replay(Option<Replay>),
     SaveRoom(RoomId, bool),
     LoadRoom(RoomId, Option<String>),
@@ -410,12 +415,16 @@ pub fn handle_io_result(
                 response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
                 response.remove_client(client_id);
             } else if is_registered {
-                let salt = state.anteroom.clients[client_id].server_salt.clone();
-                response.add(AskPassword(salt).send_self());
+                let client = &state.anteroom.clients[client_id];
+                response.add(AskPassword(client.server_salt.clone()).send_self());
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
                 state.server.add_client(client_id, client);
                 common::get_lobby_join_data(&state.server, response);
             }
+        }
+        IoResult::Account(None) => {
+            response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
+            response.remove_client(client_id);
         }
         IoResult::Account(Some(info)) => {
             response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
@@ -427,9 +436,16 @@ pub fn handle_io_result(
                 common::get_lobby_join_data(&state.server, response);
             }
         }
-        IoResult::Account(None) => {
-            response.error(AUTHENTICATION_FAILED);
-            response.remove_client(client_id);
+        IoResult::CheckerAccount { is_registered } => {
+            if is_registered {
+                if let Some(client) = state.anteroom.remove_client(client_id) {
+                    state.server.add_client(client_id, client);
+                    response.add(LogonPassed.send_self());
+                }
+            } else {
+                response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
+                response.remove_client(client_id);
+            }
         }
         IoResult::Replay(Some(replay)) => {
             let client = state.server.client(client_id);

@@ -120,6 +120,7 @@ pub enum HwServerMessage {
     Proto(u16),
     AskPassword(String),
     ServerAuth(String),
+    LogonPassed,
 
     LobbyLeft(String, String),
     LobbyJoined(Vec<String>),
@@ -390,6 +391,7 @@ impl HwServerMessage {
             Proto(proto) => msg!["PROTO", proto],
             AskPassword(salt) => msg!["ASKPASSWORD", salt],
             ServerAuth(hash) => msg!["SERVER_AUTH", hash],
+            LogonPassed => msg!["LOGONPASSED"],
             LobbyLeft(nick, msg) => msg!["LOBBY:LEFT", nick, msg],
             LobbyJoined(nicks) => construct_message(&["LOBBY:JOINED"], &nicks),
             ClientFlags(flags, nicks) => construct_message(&["CLIENT_FLAGS", flags], &nicks),

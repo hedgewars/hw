@@ -157,9 +157,24 @@ bitflags! {
     }
 }
 
+struct HwChecker {
+    pub id: ClientId,
+    pub is_ready: bool,
+}
+
+impl HwChecker {
+    pub fn new(id: ClientId) -> Self {
+        Self {
+            id,
+            is_ready: false,
+        }
+    }
+}
+
 pub struct HwServer {
     clients: IndexSlab<HwClient>,
     rooms: Slab<HwRoom>,
+    checkers: IndexSlab<HwChecker>,
     latest_protocol: u16,
     flags: ServerFlags,
     greetings: ServerGreetings,
@@ -169,9 +184,11 @@ impl HwServer {
     pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
         let rooms = Slab::with_capacity(rooms_limit);
         let clients = IndexSlab::with_capacity(clients_limit);
+        let checkers = IndexSlab::new();
         Self {
             clients,
             rooms,
+            checkers,
             greetings: ServerGreetings::new(),
             latest_protocol: 58,
             flags: ServerFlags::empty(),
@@ -242,9 +259,10 @@ impl HwServer {
     }
 
     pub fn add_client(&mut self, client_id: ClientId, data: HwAnteroomClient) {
-        if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
+        if data.is_checker {
+            self.checkers.insert(client_id, HwChecker::new(client_id));
+        } else if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
             let mut client = HwClient::new(client_id, protocol.get(), nick);
-            client.set_is_checker(data.is_checker);
             #[cfg(not(feature = "official-server"))]
             client.set_is_admin(data.is_local_admin);
 
