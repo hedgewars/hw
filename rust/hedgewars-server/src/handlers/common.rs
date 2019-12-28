@@ -159,6 +159,9 @@ pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
     match error {
         JoinRoomError::DoesntExist => response.warn(NO_ROOM),
         JoinRoomError::WrongProtocol => response.warn(WRONG_PROTOCOL),
+        JoinRoomError::WrongPassword => {
+            response.add(Notice("WrongPassword".to_string()).send_self())
+        }
         JoinRoomError::Full => response.warn(ROOM_FULL),
         JoinRoomError::Restricted => response.warn(ROOM_JOIN_RESTRICTED),
     }

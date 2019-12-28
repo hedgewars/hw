@@ -35,20 +35,17 @@ pub fn handle(
                 response.add(RoomJoined(vec![client.nick.clone()]).send_self());
                 response.add(
                     ClientFlags(
-                        add_flags(&[Flags::RoomMaster, Flags::Ready]),
+                        add_flags(&[Flags::RoomMaster, Flags::Ready, Flags::InRoom]),
                         vec![client.nick.clone()],
                     )
-                    .send_self(),
-                );
-                response.add(
-                    ClientFlags(add_flags(&[Flags::InRoom]), vec![client.nick.clone()]).send_self(),
+                    .send_all(),
                 );
             }
         },
         Chat(msg) => {
             response.add(
                 ChatMsg {
-                    nick: server.get_client_nick(client_id).to_string(),
+                    nick: server.client(client_id).nick.clone(),
                     msg,
                 }
                 .send_all()
@@ -56,16 +53,18 @@ pub fn handle(
                 .but_self(),
             );
         }
-        JoinRoom(name, _password) => match server.join_room_by_name(client_id, &name) {
-            Err(error) => super::common::get_room_join_error(error, response),
-            Ok((client, room, room_clients)) => {
-                super::common::get_room_join_data(client, room, room_clients, response)
+        JoinRoom(name, password) => {
+            match server.join_room_by_name(client_id, &name, password.as_deref()) {
+                Err(error) => super::common::get_room_join_error(error, response),
+                Ok((client, room, room_clients)) => {
+                    super::common::get_room_join_data(client, room, room_clients, response)
+                }
             }
-        },
+        }
         Follow(nick) => {
             if let Some(client) = server.find_client(&nick) {
                 if let Some(room_id) = client.room_id {
-                    match server.join_room(client_id, room_id) {
+                    match server.join_room(client_id, room_id, None) {
                         Err(error) => super::common::get_room_join_error(error, response),
                         Ok((client, room, room_clients)) => {
                             super::common::get_room_join_data(client, room, room_clients, response)

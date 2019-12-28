@@ -5,9 +5,8 @@ use super::{
     room::HwRoom,
     types::{ClientId, GameCfg, RoomId, ServerVar, TeamInfo, Vote, VoteType, Voting},
 };
-use crate::{protocol::messages::HwProtocolMessage::Greeting, utils};
+use crate::utils;
 
-use bitflags::_core::hint::unreachable_unchecked;
 use bitflags::*;
 use log::*;
 use slab::Slab;
@@ -23,6 +22,7 @@ pub enum CreateRoomError {
 pub enum JoinRoomError {
     DoesntExist,
     WrongProtocol,
+    WrongPassword,
     Full,
     Restricted,
 }
@@ -290,11 +290,6 @@ impl HwServer {
     }
 
     #[inline]
-    pub fn get_client_nick(&self, client_id: ClientId) -> &str {
-        &self.clients[client_id].nick
-    }
-
-    #[inline]
     pub fn create_room(
         &mut self,
         creator_id: ClientId,
@@ -320,6 +315,7 @@ impl HwServer {
         &mut self,
         client_id: ClientId,
         room_id: RoomId,
+        room_password: Option<&str>,
     ) -> Result<(&HwClient, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
         use JoinRoomError::*;
         let room = &mut self.rooms[room_id];
@@ -327,6 +323,8 @@ impl HwServer {
 
         if client.protocol_number != room.protocol_number {
             Err(WrongProtocol)
+        } else if room.password.is_some() && room_password != room.password.as_deref() {
+            Err(WrongPassword)
         } else if room.is_join_restricted() {
             Err(Restricted)
         } else if room.players_number == u8::max_value() {
@@ -347,12 +345,13 @@ impl HwServer {
         &mut self,
         client_id: ClientId,
         room_name: &str,
+        room_password: Option<&str>,
     ) -> Result<(&HwClient, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
         use JoinRoomError::*;
         let room = self.rooms.iter().find(|(_, r)| r.name == room_name);
         if let Some((_, room)) = room {
             let room_id = room.id;
-            self.join_room(client_id, room_id)
+            self.join_room(client_id, room_id, room_password)
         } else {
             Err(DoesntExist)
         }
@@ -1082,7 +1081,11 @@ fn create_room<'a, 'b>(
     client.room_id = Some(room.id);
     client.set_is_master(true);
     client.set_is_ready(true);
+    client.set_is_in_game(false);
     client.set_is_joined_mid_game(false);
+    client.clan = None;
+    client.teams_in_game = 0;
+    client.team_indices = vec![];
 
     (client, room)
 }
