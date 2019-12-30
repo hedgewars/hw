@@ -62,7 +62,7 @@ bitflags! {
         const FIXED = 0b0000_0001;
         const RESTRICTED_JOIN = 0b0000_0010;
         const RESTRICTED_TEAM_ADD = 0b0000_0100;
-        const RESTRICTED_UNREGISTERED_PLAYERS = 0b0000_1000;
+        const REGISTRATION_REQUIRED = 0b0000_1000;
     }
 }
 
@@ -252,9 +252,8 @@ impl HwRoom {
     pub fn is_team_add_restricted(&self) -> bool {
         self.flags.contains(RoomFlags::RESTRICTED_TEAM_ADD)
     }
-    pub fn are_unregistered_players_restricted(&self) -> bool {
-        self.flags
-            .contains(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS)
+    pub fn is_registration_required(&self) -> bool {
+        self.flags.contains(RoomFlags::REGISTRATION_REQUIRED)
     }
 
     pub fn set_is_fixed(&mut self, value: bool) {
@@ -267,8 +266,7 @@ impl HwRoom {
         self.flags.set(RoomFlags::RESTRICTED_TEAM_ADD, value)
     }
     pub fn set_unregistered_players_restriction(&mut self, value: bool) {
-        self.flags
-            .set(RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS, value)
+        self.flags.set(RoomFlags::REGISTRATION_REQUIRED, value)
     }
 
     fn flags_string(&self) -> String {
@@ -282,7 +280,7 @@ impl HwRoom {
         if self.is_join_restricted() {
             result += "j"
         }
-        if self.are_unregistered_players_restricted() {
+        if self.is_registration_required() {
             result += "r"
         }
         result

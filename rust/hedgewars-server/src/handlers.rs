@@ -270,8 +270,11 @@ pub fn handle(
                     LoginResult::Unchanged => (),
                     LoginResult::Complete => {
                         if let Some(client) = state.anteroom.remove_client(client_id) {
+                            let is_checker = client.is_checker;
                             state.server.add_client(client_id, client);
-                            common::get_lobby_join_data(&state.server, response);
+                            if !is_checker {
+                                common::get_lobby_join_data(&state.server, response);
+                            }
                         }
                     }
                     LoginResult::Exit => {

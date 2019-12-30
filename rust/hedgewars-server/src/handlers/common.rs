@@ -107,18 +107,35 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
     response: &mut Response,
 ) {
     #[inline]
-    fn collect_nicks<'a, I, F>(clients: I, f: F) -> Vec<String>
+    fn partition_nicks<'a, I, F>(clients: I, f: F) -> (Vec<String>, Vec<String>)
     where
-        I: Iterator<Item = &'a HwClient>,
+        I: Iterator<Item = &'a HwClient> + Clone,
         F: Fn(&&'a HwClient) -> bool,
     {
-        clients.filter(f).map(|c| &c.nick).cloned().collect()
+        (
+            clients
+                .clone()
+                .filter(|c| f(c))
+                .map(|c| &c.nick)
+                .cloned()
+                .collect(),
+            clients
+                .filter(|c| !f(c))
+                .map(|c| &c.nick)
+                .cloned()
+                .collect(),
+        )
     }
 
     let nick = client.nick.clone();
-    response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room.id));
+    response.add(
+        RoomJoined(vec![nick.clone()])
+            .send_all()
+            .in_room(room.id)
+            .but_self(),
+    );
     response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick]).send_all());
-    let nicks = collect_nicks(room_clients.clone(), |c| c.room_id == Some(room.id));
+    let nicks = room_clients.clone().map(|c| c.nick.clone()).collect();
     response.add(RoomJoined(nicks).send_self());
 
     get_room_teams(room, client.id, response);
@@ -127,20 +144,28 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
     let mut flag_selectors = [
         (
             Flags::RoomMaster,
-            collect_nicks(room_clients.clone(), |c| c.is_master()),
+            partition_nicks(room_clients.clone(), |c| c.is_master()),
         ),
         (
             Flags::Ready,
-            collect_nicks(room_clients.clone(), |c| c.is_ready()),
+            partition_nicks(room_clients.clone(), |c| c.is_ready()),
         ),
         (
             Flags::InGame,
-            collect_nicks(room_clients.clone(), |c| c.is_in_game()),
+            partition_nicks(room_clients.clone(), |c| c.is_in_game()),
         ),
     ];
 
-    for (flag, nicks) in &mut flag_selectors {
-        response.add(ClientFlags(add_flags(&[*flag]), replace(nicks, vec![])).send_self());
+    for (flag, (set_nicks, cleared_nicks)) in &mut flag_selectors {
+        if !set_nicks.is_empty() {
+            response.add(ClientFlags(add_flags(&[*flag]), replace(set_nicks, vec![])).send_self());
+        }
+
+        if !cleared_nicks.is_empty() {
+            response.add(
+                ClientFlags(remove_flags(&[*flag]), replace(cleared_nicks, vec![])).send_self(),
+            );
+        }
     }
 
     if !room.greeting.is_empty() {
@@ -158,12 +183,13 @@ pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
     use super::strings::*;
     match error {
         JoinRoomError::DoesntExist => response.warn(NO_ROOM),
-        JoinRoomError::WrongProtocol => response.warn(WRONG_PROTOCOL),
+        JoinRoomError::WrongProtocol => response.warn(INCOMPATIBLE_ROOM_PROTOCOL),
         JoinRoomError::WrongPassword => {
             response.add(Notice("WrongPassword".to_string()).send_self())
         }
         JoinRoomError::Full => response.warn(ROOM_FULL),
         JoinRoomError::Restricted => response.warn(ROOM_JOIN_RESTRICTED),
+        JoinRoomError::RegistrationRequired => response.warn(ROOM_REGISTRATION_REQUIRED),
     }
 }
 

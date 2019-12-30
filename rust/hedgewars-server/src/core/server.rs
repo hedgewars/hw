@@ -25,6 +25,7 @@ pub enum JoinRoomError {
     WrongPassword,
     Full,
     Restricted,
+    RegistrationRequired,
 }
 
 #[derive(Debug)]
@@ -206,7 +207,7 @@ impl HwServer {
     }
 
     #[inline]
-    pub fn iter_clients(&self) -> impl Iterator<Item = &HwClient> {
+    pub fn iter_clients(&self) -> impl Iterator<Item = &HwClient> + Clone {
         self.clients.iter().map(|(_, c)| c)
     }
 
@@ -323,10 +324,15 @@ impl HwServer {
 
         if client.protocol_number != room.protocol_number {
             Err(WrongProtocol)
-        } else if room.password.is_some() && room_password != room.password.as_deref() {
+        } else if room.password.is_some()
+            && room_password != room.password.as_deref()
+            && !client.has_super_power()
+        {
             Err(WrongPassword)
         } else if room.is_join_restricted() {
             Err(Restricted)
+        } else if room.is_registration_required() {
+            Err(RegistrationRequired)
         } else if room.players_number == u8::max_value() {
             Err(Full)
         } else {
@@ -335,7 +341,8 @@ impl HwServer {
             Ok((
                 &self.clients[client_id],
                 &self.rooms[room_id],
-                self.clients.iter().map(|(_, c)| c),
+                self.iter_clients()
+                    .filter(move |c| c.room_id == Some(room_id)),
             ))
         }
     }

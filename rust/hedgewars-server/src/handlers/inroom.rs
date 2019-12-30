@@ -100,7 +100,7 @@ fn room_message_flag(msg: &HwProtocolMessage) -> RoomFlags {
     match msg {
         ToggleRestrictJoin => RoomFlags::RESTRICTED_JOIN,
         ToggleRestrictTeams => RoomFlags::RESTRICTED_TEAM_ADD,
-        ToggleRegisteredOnly => RoomFlags::RESTRICTED_UNREGISTERED_PLAYERS,
+        ToggleRegisteredOnly => RoomFlags::REGISTRATION_REQUIRED,
         _ => RoomFlags::empty(),
     }
 }

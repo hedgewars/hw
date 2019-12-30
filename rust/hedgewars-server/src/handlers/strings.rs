@@ -27,6 +27,8 @@ pub const ROOM_EXISTS: &str = "A room with the same name already exists.";
 pub const ROOM_FULL: &str = "This room is already full.";
 pub const ROOM_JOIN_RESTRICTED: &str = "Access denied. This room currently doesn't allow joining.";
 pub const ROUND_IN_PROGRESS: &str = "Joining not possible: Round is in progress.";
+pub const ROOM_REGISTRATION_REQUIRED: &str =
+    "Access denied. This room is for registered users only.";
 pub const SUPER_POWER: &str = "Super power activated.";
 pub const TEAM_EXISTS: &str = "There's already a team with same name in the list.";
 pub const TEAM_NOT_OWNED: &str = "You can't remove a team you don't own.";
@@ -35,4 +37,4 @@ pub const TOO_MANY_HEDGEHOGS: &str = "Too many hedgehogs!";
 pub const TOO_MANY_TEAMS: &str = "Too many teams!";
 pub const USER_OFFLINE: &str = "Player is not online.";
 pub const VARIABLE_UPDATED: &str = "Server variable has been updated.";
-pub const WRONG_PROTOCOL: &str = "Room version incompatible to your Hedgewars version!";
+pub const INCOMPATIBLE_ROOM_PROTOCOL: &str = "Room version incompatible to your Hedgewars version!";
