@@ -134,12 +134,9 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
             .in_room(room.id)
             .but_self(),
     );
-    response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick]).send_all());
+    response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick.clone()]).send_all());
     let nicks = room_clients.clone().map(|c| c.nick.clone()).collect();
     response.add(RoomJoined(nicks).send_self());
-
-    get_room_teams(room, client.id, response);
-    get_room_config(room, client.id, response);
 
     let mut flag_selectors = [
         (
@@ -168,6 +165,9 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
         }
     }
 
+    get_room_teams(room, client.id, response);
+    get_room_config(room, client.id, response);
+
     if !room.greeting.is_empty() {
         response.add(
             ChatMsg {
@@ -176,6 +176,36 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
             }
             .send_self(),
         );
+    }
+
+    if let Some(info) = &room.game_info {
+        response.add(
+            ClientFlags(add_flags(&[Flags::Ready, Flags::InGame]), vec![nick])
+                .send_all()
+                .in_room(room.id),
+        );
+        response.add(RunGame.send_self());
+
+        response.add(
+            ForwardEngineMessage(
+                once(to_engine_msg("e$spectate 1".bytes()))
+                    .chain(info.msg_log.iter().cloned())
+                    .collect(),
+            )
+            .send_self(),
+        );
+
+        for team in info.client_teams(client.id) {
+            response.add(
+                ForwardEngineMessage(vec![to_engine_msg(once(b'G').chain(team.name.bytes()))])
+                    .send_all()
+                    .in_room(room.id),
+            );
+        }
+
+        if info.is_paused {
+            response.add(ForwardEngineMessage(vec![to_engine_msg(once(b'I'))]).send_self());
+        }
     }
 }
 
