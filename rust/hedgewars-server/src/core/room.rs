@@ -13,19 +13,7 @@ use std::{collections::HashMap, iter};
 pub const MAX_TEAMS_IN_ROOM: u8 = 8;
 pub const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_TEAMS_IN_ROOM * MAX_HEDGEHOGS_PER_TEAM;
 
-fn client_teams_impl(
-    teams: &[(ClientId, TeamInfo)],
-    client_id: ClientId,
-) -> impl Iterator<Item = &TeamInfo> + Clone {
-    teams
-        .iter()
-        .filter(move |(id, _)| *id == client_id)
-        .map(|(_, t)| t)
-}
-
 pub struct GameInfo {
-    pub teams_in_game: u8,
-    pub teams_at_start: Vec<(ClientId, TeamInfo)>,
     pub left_teams: Vec<String>,
     pub msg_log: Vec<String>,
     pub sync_msg: Option<String>,
@@ -40,14 +28,8 @@ impl GameInfo {
             msg_log: Vec::new(),
             sync_msg: None,
             is_paused: false,
-            teams_in_game: teams.len() as u8,
-            teams_at_start: teams,
             config,
         }
-    }
-
-    pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> + Clone {
-        client_teams_impl(&self.teams_at_start, client_id)
     }
 }
 
@@ -144,11 +126,8 @@ impl HwRoom {
 
     pub fn remove_team(&mut self, team_name: &str) {
         if let Some(index) = self.teams.iter().position(|(_, t)| t.name == team_name) {
-            self.teams.remove(index);
-
             if let Some(info) = &mut self.game_info {
                 info.left_teams.push(team_name.to_string());
-                info.teams_in_game -= 1;
 
                 if let Some(m) = &info.sync_msg {
                     info.msg_log.push(m.clone());
@@ -157,17 +136,15 @@ impl HwRoom {
                 let remove_msg =
                     crate::utils::to_engine_msg(iter::once(b'F').chain(team_name.bytes()));
                 info.msg_log.push(remove_msg.clone());
+            } else {
+                self.teams.remove(index);
             }
         }
     }
 
     pub fn set_hedgehogs_number(&mut self, n: u8) -> Vec<String> {
         let mut names = Vec::new();
-        let teams = match self.game_info {
-            Some(ref mut info) => &mut info.teams_at_start,
-            None => &mut self.teams,
-        };
-
+        let teams = &mut self.teams;
         if teams.len() as u8 * n <= MAX_HEDGEHOGS_IN_ROOM {
             for (_, team) in teams.iter_mut() {
                 team.hedgehogs_number = n;
@@ -176,6 +153,12 @@ impl HwRoom {
             self.default_hedgehog_number = n;
         }
         names
+    }
+
+    pub fn teams_in_game(&self) -> Option<u8> {
+        self.game_info
+            .as_ref()
+            .map(|info| (self.teams.len() - info.left_teams.len()) as u8)
     }
 
     pub fn find_team_and_owner_mut<F>(&mut self, f: F) -> Option<(ClientId, &mut TeamInfo)>
@@ -197,8 +180,11 @@ impl HwRoom {
             .find_map(|(_, t)| Some(t).filter(|t| f(&t)))
     }
 
-    pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> {
-        client_teams_impl(&self.teams, client_id)
+    pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> + Clone {
+        self.teams
+            .iter()
+            .filter(move |(id, _)| *id == client_id)
+            .map(|(_, t)| t)
     }
 
     pub fn client_team_indices(&self, client_id: ClientId) -> Vec<u8> {
