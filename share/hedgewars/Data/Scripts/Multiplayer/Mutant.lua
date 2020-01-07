@@ -816,6 +816,11 @@ function onGearDelete(gear)
     if GetGearType(gear) == gtHedgehog then
         numhhs = numhhs - 1
 
+        if (not gameOver) and (gear == mutant) then
+            mutant = nil
+            mt_hurt = false
+        end
+
         local found
         for i=0, #hhs do
             if hhs[i] == gear then

@@ -7,6 +7,7 @@
  + Racer: Reset mines, air mines and sticky mines every turn
  + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory
  * Racer: Resize waypoints in custom-sized drawn maps
+ * Mutant: Fix impossible to become mutant after mutant is gone
  * A Space Adventure: The First Stop: Fix broken victory condition when eliminating minions
  * A Space Adventure: Killing the Specialists: Don't award player health if enemy hurts itself
  * Fix hog getting stuck when opening parachute right after a shoryuken digging through land
