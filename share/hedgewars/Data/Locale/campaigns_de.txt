@@ -54,7 +54,7 @@ A_Space_Adventure-desert02.name="Nebenmission: Lauf um dein Leben"
 A_Space_Adventure-desert02.desc="Unser Held suchte nach dem Teil in diesem Tunnel, als er unerwarteterweise anfing, geflutet zu werden! Komm so schnell wie möglich zur Oberfläche und pass auf, keine Mine auszulösen."
 
 A_Space_Adventure-desert03.name="Nebenmission: Präzisionsfliegen"
-A_Space_Adventure-desert03.desc="Unser Held hat etwas Zeit, um mit Funkflugzeugen zu spielen und etwas Spaß zu haben. Flieg das Funkflugzeug und triff alle Ziele!"
+A_Space_Adventure-desert03.desc="Unser Held hat etwas Zeit, um mit Funkflugzeugen zu spielen und etwas Spaß zu haben. Flieg das Funkflugzeug und triff alle Ziele! Wenn du es schaffst, erhältst du zusätzliche Munition für die Hauptmission."
 
 A_Space_Adventure-fruit01.name="Hauptmission: Schlechtes Timing"
 A_Space_Adventure-fruit01.desc="Auf dem Obstplaneten laufen die Dinge nicht so gut. Igel sammeln kein Obst, sondern sie bereiten sich auf den Kampf vor. Du musst dich entscheiden, ob du kämpfen oder fliehen wirst."
@@ -69,7 +69,7 @@ A_Space_Adventure-death01.name="Hauptmission: Das letzte Gefecht"
 A_Space_Adventure-death01.desc="Auf dem Todesplaneten, dem sterilsten Planeten in der Gegend, ist unser Held ganz kurz davor, das letzte Teil des Geräts zu holen! Allerdings erwartet ihn eine unangenehme Überraschung."
 
 A_Space_Adventure-death02.name="Nebenmission: Die Spezialisten töten"
-A_Space_Adventure-death02.desc="Unser Held ist wieder in eine schwierige Situation geraten. Besiege die »5 tödlichen Igel« in ihrem eigenem Spiel!"
+A_Space_Adventure-death02.desc="Unser Held ist wieder in eine schwierige Situation geraten. Besiege die »5 tödlichen Igel« in ihrem eigenem Spiel! Wenn du gewinnst, erhältst du ein paar Extras für die Hauptmission."
 
 A_Space_Adventure-final.name="Hauptmission: Der große Knall"
 A_Space_Adventure-final.desc="Unser Held muss ein paar Sprengkörper, die auf dem Meteoriten platziert wurden, detonieren. Beende diese Mission, ohne verletzt zu werden!"
