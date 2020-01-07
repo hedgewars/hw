@@ -3117,9 +3117,9 @@ function onTimer(s)
 	elseif (preciseOn == true) and (s == 1) then
 		helpDisabled = not(helpDisabled)
 		if helpDisabled then
-			AddCaption(loc("Help Disabled"), colorInfoMessage, capgrpVolume)
+			AddCaption(loc("Help Disabled"), capcolSetting, capgrpVolume)
 		else
-			AddCaption(loc("Help Enabled"), colorInfoMessage, capgrpVolume)
+			AddCaption(loc("Help Enabled"), capcolSetting, capgrpVolume)
 		end
 		updateHelp()
 	elseif (cat[cIndex] == loc("Sprite Placement Mode")) or (cat[cIndex] == loc("Girder Placement Mode")) or (cat[cIndex] == loc("Rubber Placement Mode")) or (cat[cIndex] == loc("Sprite Modification Mode")) then
