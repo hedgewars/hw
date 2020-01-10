@@ -195,7 +195,7 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
             .send_self(),
         );
 
-        for team in room.client_teams(client.id) {
+        for team in info.client_teams(client.id) {
             response.add(
                 ForwardEngineMessage(vec![to_engine_msg(once(b'G').chain(team.name.bytes()))])
                     .send_all()
@@ -372,7 +372,12 @@ where
 }
 
 pub fn get_room_teams(room: &HwRoom, to_client: ClientId, response: &mut Response) {
-    get_teams(room.teams.iter().map(|(_, t)| t), to_client, response);
+    let current_teams = match room.game_info {
+        Some(ref info) => &info.teams_at_start,
+        None => &room.teams,
+    };
+
+    get_teams(current_teams.iter().map(|(_, t)| t), to_client, response);
 }
 
 pub fn get_room_flags(

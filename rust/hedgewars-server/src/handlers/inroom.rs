@@ -259,15 +259,18 @@ pub fn handle(
                         response,
                     );
 
-                    if let Some(0) = room.teams_in_game() {
-                        if let Some(result) = room_control.end_game() {
-                            super::common::get_end_game_result(
-                                room_control.server(),
-                                room_id,
-                                result,
-                                response,
-                            );
+                    match room.game_info {
+                        Some(ref info) if info.teams_in_game == 0 => {
+                            if let Some(result) = room_control.end_game() {
+                                super::common::get_end_game_result(
+                                    room_control.server(),
+                                    room_id,
+                                    result,
+                                    response,
+                                );
+                            }
                         }
+                        _ => (),
                     }
                 }
                 Err(RemoveTeamError::NoTeam) => response.warn(NO_TEAM_TO_REMOVE),
@@ -458,7 +461,10 @@ pub fn handle(
                     );
                 }
 
-                if let Some(0) = room.teams_in_game() {
+                if let Some(GameInfo {
+                    teams_in_game: 0, ..
+                }) = room.game_info
+                {
                     if let Some(result) = room_control.end_game() {
                         super::common::get_end_game_result(
                             room_control.server(),

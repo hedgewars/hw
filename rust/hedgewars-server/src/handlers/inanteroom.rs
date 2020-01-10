@@ -92,7 +92,7 @@ pub fn handle(
             if client.protocol_number.is_some() {
                 response.error(PROTOCOL_PROVIDED);
                 LoginResult::Unchanged
-            } else if proto < 51 {
+            } else if proto < 48 {
                 response.add(Bye(PROTOCOL_TOO_OLD.to_string()).send_self());
                 LoginResult::Exit
             } else {
