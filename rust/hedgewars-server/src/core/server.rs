@@ -986,8 +986,6 @@ impl<'a> HwRoomControl<'a> {
                 .collect();
 
             if let Some(ref mut info) = room.game_info {
-                info.teams_in_game -= team_names.len() as u8;
-
                 for team_name in &team_names {
                     let remove_msg =
                         utils::to_engine_msg(std::iter::once(b'F').chain(team_name.bytes()));
@@ -1012,8 +1010,12 @@ impl<'a> HwRoomControl<'a> {
         let room = self.room_mut();
         room.ready_players_number = room.master_id.is_some() as u8;
 
-        if let Some(info) = replace(&mut room.game_info, None) {
+        if let Some(mut info) = replace(&mut room.game_info, None) {
             let room_id = room.id;
+            for team_name in &info.left_teams {
+                room.remove_team(team_name);
+            }
+
             let joined_mid_game_clients = self
                 .server
                 .clients
@@ -1043,7 +1045,7 @@ impl<'a> HwRoomControl<'a> {
 
             Some(EndGameResult {
                 joined_mid_game_clients,
-                left_teams: info.left_teams.clone(),
+                left_teams: replace(&mut info.left_teams, vec![]),
                 unreadied_nicks,
             })
         } else {
@@ -1114,13 +1116,6 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
 
         if !team_names.is_empty() {
             info.left_teams.retain(|name| !team_names.contains(&name));
-            info.teams_in_game += team_names.len() as u8;
-            room.teams = info
-                .teams_at_start
-                .iter()
-                .filter(|(_, t)| !team_names.contains(&t.name))
-                .cloned()
-                .collect();
         }
     }
 }

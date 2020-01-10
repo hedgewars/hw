@@ -24,13 +24,12 @@ fn client_teams_impl(
 }
 
 pub struct GameInfo {
-    pub teams_in_game: u8,
-    pub teams_at_start: Vec<(ClientId, TeamInfo)>,
+    pub original_teams: Vec<(ClientId, TeamInfo)>,
     pub left_teams: Vec<String>,
     pub msg_log: Vec<String>,
     pub sync_msg: Option<String>,
     pub is_paused: bool,
-    config: RoomConfig,
+    original_config: RoomConfig,
 }
 
 impl GameInfo {
@@ -40,14 +39,13 @@ impl GameInfo {
             msg_log: Vec::new(),
             sync_msg: None,
             is_paused: false,
-            teams_in_game: teams.len() as u8,
-            teams_at_start: teams,
-            config,
+            original_teams: teams,
+            original_config: config,
         }
     }
 
     pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> + Clone {
-        client_teams_impl(&self.teams_at_start, client_id)
+        client_teams_impl(&self.original_teams, client_id)
     }
 }
 
@@ -148,7 +146,6 @@ impl HwRoom {
 
             if let Some(info) = &mut self.game_info {
                 info.left_teams.push(team_name.to_string());
-                info.teams_in_game -= 1;
 
                 if let Some(m) = &info.sync_msg {
                     info.msg_log.push(m.clone());
@@ -164,7 +161,7 @@ impl HwRoom {
     pub fn set_hedgehogs_number(&mut self, n: u8) -> Vec<String> {
         let mut names = Vec::new();
         let teams = match self.game_info {
-            Some(ref mut info) => &mut info.teams_at_start,
+            Some(ref mut info) => &mut info.original_teams,
             None => &mut self.teams,
         };
 
@@ -176,6 +173,12 @@ impl HwRoom {
             self.default_hedgehog_number = n;
         }
         names
+    }
+
+    pub fn teams_in_game(&self) -> Option<u8> {
+        self.game_info
+            .as_ref()
+            .map(|info| (info.original_teams.len() - info.left_teams.len()) as u8)
     }
 
     pub fn find_team_and_owner_mut<F>(&mut self, f: F) -> Option<(ClientId, &mut TeamInfo)>
@@ -303,21 +306,21 @@ impl HwRoom {
 
     pub fn active_config(&self) -> &RoomConfig {
         match self.game_info {
-            Some(ref info) => &info.config,
+            Some(ref info) => &info.original_config,
             None => &self.config,
         }
     }
 
     pub fn map_config(&self) -> Vec<String> {
         match self.game_info {
-            Some(ref info) => info.config.to_map_config(),
+            Some(ref info) => info.original_config.to_map_config(),
             None => self.config.to_map_config(),
         }
     }
 
     pub fn game_config(&self) -> Vec<GameCfg> {
         match self.game_info {
-            Some(ref info) => info.config.to_game_config(),
+            Some(ref info) => info.original_config.to_game_config(),
             None => self.config.to_game_config(),
         }
     }

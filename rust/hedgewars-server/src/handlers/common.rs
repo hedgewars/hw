@@ -231,14 +231,6 @@ pub fn get_remove_teams_data(
 ) {
     if was_in_game {
         for team_name in &removed_teams {
-            let msg = once(b'F').chain(team_name.bytes());
-            response.add(
-                ForwardEngineMessage(vec![to_engine_msg(msg)])
-                    .send_all()
-                    .in_room(room_id)
-                    .but_self(),
-            );
-
             let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
 
             response.add(
@@ -248,10 +240,10 @@ pub fn get_remove_teams_data(
                     .but_self(),
             );
         }
-    }
-
-    for team_name in removed_teams {
-        response.add(TeamRemove(team_name).send_all().in_room(room_id));
+    } else {
+        for team_name in removed_teams {
+            response.add(TeamRemove(team_name).send_all().in_room(room_id));
+        }
     }
 }
 
@@ -373,7 +365,7 @@ where
 
 pub fn get_room_teams(room: &HwRoom, to_client: ClientId, response: &mut Response) {
     let current_teams = match room.game_info {
-        Some(ref info) => &info.teams_at_start,
+        Some(ref info) => &info.original_teams,
         None => &room.teams,
     };
 
@@ -595,23 +587,23 @@ pub fn get_end_game_result(
     get_room_update(None, room, room_master, response);
     response.add(RoundFinished.send_all().in_room(room_id));
 
+    response.extend(
+        result
+            .left_teams
+            .iter()
+            .map(|name| TeamRemove(name.clone()).send_all().in_room(room.id)),
+    );
+
     for client_id in result.joined_mid_game_clients {
         super::common::get_room_config(room, client_id, response);
-        response.extend(
-            result
-                .left_teams
-                .iter()
-                .map(|name| TeamRemove(name.clone()).send(client_id)),
-        );
     }
 
     if !result.unreadied_nicks.is_empty() {
-        let msg = if room.protocol_number < 38 {
-            LegacyReady(false, result.unreadied_nicks)
-        } else {
+        response.add(
             ClientFlags(remove_flags(&[Flags::Ready]), result.unreadied_nicks)
-        };
-        response.add(msg.send_all().in_room(room_id));
+                .send_all()
+                .in_room(room_id),
+        );
     }
 }
 
