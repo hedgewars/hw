@@ -331,6 +331,7 @@ void SelWeaponWidget::save()
         file.close();
     }
     emit weaponsEdited(curWeaponsName, m_name->text(), stateFull);
+    curWeaponsName = m_name->text();
 }
 
 int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
