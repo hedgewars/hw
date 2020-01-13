@@ -611,9 +611,14 @@ pub fn get_end_game_result(
             .map(|name| TeamRemove(name.clone()).send_all().in_room(room.id)),
     );
 
-    for client_id in result.joined_mid_game_clients {
-        super::common::get_room_config(room, Destination::ToId(client_id), response);
+    let midgame_destination = Destination::ToIds(result.joined_mid_game_clients);
+    for (_, team) in &room.teams {
+        response.add(
+            HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
+                .send_to_destination(midgame_destination.clone()),
+        );
     }
+    super::common::get_room_config(room, midgame_destination.clone(), response);
 
     if !result.unreadied_nicks.is_empty() {
         response.add(
