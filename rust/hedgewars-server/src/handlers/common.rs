@@ -17,7 +17,10 @@ use crate::{
     utils::to_engine_msg,
 };
 
-use super::Response;
+use super::{
+    actions::{Destination, DestinationGroup},
+    Response,
+};
 
 use crate::core::types::RoomConfig;
 use rand::{self, seq::SliceRandom, thread_rng, Rng};
@@ -165,8 +168,8 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
         }
     }
 
-    get_room_teams(room, client.id, response);
-    get_room_config(room, client.id, response);
+    get_room_teams(room, Destination::ToSelf, response);
+    get_room_config(room, Destination::ToSelf, response);
 
     if !room.greeting.is_empty() {
         response.add(
@@ -341,41 +344,52 @@ pub fn get_room_update(
     response.add(update_msg.send_all().with_protocol(room.protocol_number));
 }
 
-pub fn get_room_config_impl(config: &RoomConfig, to_client: ClientId, response: &mut Response) {
-    response.add(ConfigEntry("FULLMAPCONFIG".to_string(), config.to_map_config()).send(to_client));
+pub fn get_room_config_impl(
+    config: &RoomConfig,
+    destination: Destination,
+    response: &mut Response,
+) {
+    response.add(
+        ConfigEntry("FULLMAPCONFIG".to_string(), config.to_map_config())
+            .send_to_destination(destination.clone()),
+    );
     for cfg in config.to_game_config() {
-        response.add(cfg.to_server_msg().send(to_client));
+        response.add(cfg.to_server_msg().send_to_destination(destination.clone()));
     }
 }
 
-pub fn get_room_config(room: &HwRoom, to_client: ClientId, response: &mut Response) {
-    get_room_config_impl(room.active_config(), to_client, response);
+pub fn get_room_config(room: &HwRoom, destination: Destination, response: &mut Response) {
+    get_room_config_impl(room.active_config(), destination, response);
 }
 
-pub fn get_teams<'a, I>(teams: I, to_client: ClientId, response: &mut Response)
+pub fn get_teams<'a, I>(teams: I, destination: Destination, response: &mut Response)
 where
     I: Iterator<Item = &'a TeamInfo>,
 {
     for team in teams {
-        response.add(TeamAdd(team.to_protocol()).send(to_client));
-        response.add(TeamColor(team.name.clone(), team.color).send(to_client));
-        response.add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send(to_client));
+        response.add(TeamAdd(team.to_protocol()).send_to_destination(destination.clone()));
+        response
+            .add(TeamColor(team.name.clone(), team.color).send_to_destination(destination.clone()));
+        response.add(
+            HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
+                .send_to_destination(destination.clone()),
+        );
     }
 }
 
-pub fn get_room_teams(room: &HwRoom, to_client: ClientId, response: &mut Response) {
+pub fn get_room_teams(room: &HwRoom, destination: Destination, response: &mut Response) {
     let current_teams = match room.game_info {
         Some(ref info) => &info.original_teams,
         None => &room.teams,
     };
 
-    get_teams(current_teams.iter().map(|(_, t)| t), to_client, response);
+    get_teams(current_teams.iter().map(|(_, t)| t), destination, response);
 }
 
 pub fn get_room_flags(
     server: &HwServer,
     room_id: RoomId,
-    to_client: ClientId,
+    destination: Destination,
     response: &mut Response,
 ) {
     let room = server.room(room_id);
@@ -385,13 +399,14 @@ pub fn get_room_flags(
                 add_flags(&[Flags::RoomMaster]),
                 vec![server.client(id).nick.clone()],
             )
-            .send(to_client),
+            .send_to_destination(destination.clone()),
         );
     }
     let nicks = server.collect_nicks(|(_, c)| c.room_id == Some(room_id) && c.is_ready());
 
     if !nicks.is_empty() {
-        response.add(ClientFlags(add_flags(&[Flags::Ready]), nicks).send(to_client));
+        response
+            .add(ClientFlags(add_flags(&[Flags::Ready]), nicks).send_to_destination(destination));
     }
 }
 
@@ -511,9 +526,11 @@ pub fn handle_vote(
 
                     super::common::get_room_update(None, room, room_master, response);
 
-                    for client_id in room_control.server().room_client_ids(room.id) {
-                        super::common::get_room_config(room, client_id, response);
-                    }
+                    let room_destination = Destination::ToAll {
+                        group: DestinationGroup::Room(room.id),
+                        skip_self: false,
+                    };
+                    super::common::get_room_config(room, room_destination, response);
                 }
             }
             VoteType::Pause => {
@@ -595,7 +612,7 @@ pub fn get_end_game_result(
     );
 
     for client_id in result.joined_mid_game_clients {
-        super::common::get_room_config(room, client_id, response);
+        super::common::get_room_config(room, Destination::ToId(client_id), response);
     }
 
     if !result.unreadied_nicks.is_empty() {

@@ -12,6 +12,7 @@ use crate::{
 use rand::{distributions::Uniform, thread_rng, Rng};
 use std::{io, io::Write, iter::once, mem::replace};
 
+#[derive(Clone)]
 pub enum DestinationGroup {
     All,
     Lobby,
@@ -19,6 +20,7 @@ pub enum DestinationGroup {
     Protocol(u16),
 }
 
+#[derive(Clone)]
 pub enum Destination {
     ToId(ClientId),
     ToIds(Vec<ClientId>),
@@ -111,5 +113,11 @@ impl HwServerMessage {
     }
     pub fn send_all(self) -> PendingMessage {
         PendingMessage::send_all(self)
+    }
+    pub fn send_to_destination(self, destination: Destination) -> PendingMessage {
+        PendingMessage {
+            destination,
+            message: self,
+        }
     }
 }
