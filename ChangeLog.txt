@@ -6,6 +6,7 @@
  + Racer: Allow to set turn time in game scheme
  + Racer: Reset mines, air mines and sticky mines every turn
  + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory
+ + New flags: serbia, montenegro
  * Racer: Resize waypoints in custom-sized drawn maps
  * Mutant: Fix impossible to become mutant after mutant is gone
  * A Space Adventure: The First Stop: Fix broken victory condition when eliminating minions
