@@ -487,7 +487,7 @@ function CheckPastMoleHead()
   end
   local x = GetX(youngh)
   local y = GetY(youngh)
-  return x < 3005 and y > 1500 and StoppedGear(youngh)
+  return x > 2575 and x < 3016 and y > 1538 and StoppedGear(youngh)
 end
 
 function CheckOnOrPastMoleHead()
