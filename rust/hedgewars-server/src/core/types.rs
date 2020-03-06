@@ -28,7 +28,7 @@ pub enum GameCfg {
     DrawnMap(String),
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug, Default)]
 pub struct TeamInfo {
     pub owner: String,
     pub name: String,
@@ -42,7 +42,7 @@ pub struct TeamInfo {
     pub hedgehogs: [HedgehogInfo; MAX_HEDGEHOGS_PER_TEAM as usize],
 }
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug, Default)]
 pub struct HedgehogInfo {
     pub name: String,
     pub hat: String,
