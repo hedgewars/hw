@@ -177,7 +177,6 @@ begin
             // Deal poison damage (when not frozen)
             if (Gear^.Hedgehog^.Effects[hePoisoned] <> 0) and (Gear^.Hedgehog^.Effects[heFrozen] = 0) then
                 begin
-				Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
                 inc(tmp, ModifyDamage(Gear^.Hedgehog^.Effects[hePoisoned], Gear));
                 if (GameFlags and gfResetHealth) <> 0 then
                     dec(Gear^.Hedgehog^.InitialHealth);
