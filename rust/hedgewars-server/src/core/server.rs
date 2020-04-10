@@ -523,6 +523,7 @@ pub struct HwRoomControl<'a> {
     server: &'a mut HwServer,
     client_id: ClientId,
     room_id: RoomId,
+    is_room_removed: bool
 }
 
 impl<'a> HwRoomControl<'a> {
@@ -533,9 +534,17 @@ impl<'a> HwRoomControl<'a> {
                 server,
                 client_id,
                 room_id,
+                is_room_removed: false
             })
         } else {
             None
+        }
+    }
+
+    #[inline]
+    pub fn cleanup_room(self) {
+        if self.is_room_removed {
+            self.server.rooms.remove(self.room_id);
         }
     }
 
@@ -618,7 +627,7 @@ impl<'a> HwRoomControl<'a> {
 
         if !is_fixed {
             if room.players_number == 0 {
-                self.server.rooms.remove(self.room_id);
+                self.is_room_removed = true
             } else if room.master_id == None {
                 let protocol_number = room.protocol_number;
                 let new_master_id = self.server.room_client_ids(self.room_id).next();
