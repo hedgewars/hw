@@ -523,7 +523,7 @@ pub struct HwRoomControl<'a> {
     server: &'a mut HwServer,
     client_id: ClientId,
     room_id: RoomId,
-    is_room_removed: bool
+    is_room_removed: bool,
 }
 
 impl<'a> HwRoomControl<'a> {
@@ -534,7 +534,7 @@ impl<'a> HwRoomControl<'a> {
                 server,
                 client_id,
                 room_id,
-                is_room_removed: false
+                is_room_removed: false,
             })
         } else {
             None

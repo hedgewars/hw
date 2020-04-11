@@ -160,10 +160,7 @@ impl HwRoom {
 
     pub fn set_hedgehogs_number(&mut self, n: u8) -> Vec<String> {
         let mut names = Vec::new();
-        let teams = match self.game_info {
-            Some(ref mut info) => &mut info.original_teams,
-            None => &mut self.teams,
-        };
+        let teams = &mut self.teams;
 
         if teams.len() as u8 * n <= MAX_HEDGEHOGS_IN_ROOM {
             for (_, team) in teams.iter_mut() {
