@@ -617,6 +617,10 @@ pub fn get_end_game_result(
             HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
                 .send_to_destination(midgame_destination.clone()),
         );
+        response.add(
+            TeamColor(team.name.clone(), team.color)
+                .send_to_destination(midgame_destination.clone()),
+        );
     }
     super::common::get_active_room_config(room, midgame_destination.clone(), response);
 
