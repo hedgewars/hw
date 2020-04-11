@@ -26,6 +26,7 @@ fn client_teams_impl(
 pub struct GameInfo {
     pub original_teams: Vec<(ClientId, TeamInfo)>,
     pub left_teams: Vec<String>,
+    pub ingame_teams_count: u8,
     pub msg_log: Vec<String>,
     pub sync_msg: Option<String>,
     pub is_paused: bool,
@@ -39,6 +40,7 @@ impl GameInfo {
             msg_log: Vec::new(),
             sync_msg: None,
             is_paused: false,
+            ingame_teams_count: teams.len() as u8,
             original_teams: teams,
             original_config: config,
         }
@@ -145,6 +147,7 @@ impl HwRoom {
             self.teams.remove(index);
 
             if let Some(info) = &mut self.game_info {
+                info.ingame_teams_count -= 1;
                 info.left_teams.push(team_name.to_string());
 
                 if let Some(m) = &info.sync_msg {
@@ -173,9 +176,7 @@ impl HwRoom {
     }
 
     pub fn teams_in_game(&self) -> Option<u8> {
-        self.game_info
-            .as_ref()
-            .map(|info| (info.original_teams.len() - info.left_teams.len()) as u8)
+        self.game_info.as_ref().map(|info| info.ingame_teams_count)
     }
 
     pub fn find_team_and_owner_mut<F>(&mut self, f: F) -> Option<(ClientId, &mut TeamInfo)>

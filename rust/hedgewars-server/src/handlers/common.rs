@@ -168,8 +168,8 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
         }
     }
 
-    get_room_teams(room, Destination::ToSelf, response);
-    get_room_config(room, Destination::ToSelf, response);
+    get_active_room_teams(room, Destination::ToSelf, response);
+    get_active_room_config(room, Destination::ToSelf, response);
 
     if !room.greeting.is_empty() {
         response.add(
@@ -358,7 +358,7 @@ pub fn get_room_config_impl(
     }
 }
 
-pub fn get_room_config(room: &HwRoom, destination: Destination, response: &mut Response) {
+pub fn get_active_room_config(room: &HwRoom, destination: Destination, response: &mut Response) {
     get_room_config_impl(room.active_config(), destination, response);
 }
 
@@ -377,7 +377,7 @@ where
     }
 }
 
-pub fn get_room_teams(room: &HwRoom, destination: Destination, response: &mut Response) {
+pub fn get_active_room_teams(room: &HwRoom, destination: Destination, response: &mut Response) {
     let current_teams = match room.game_info {
         Some(ref info) => &info.original_teams,
         None => &room.teams,
@@ -530,7 +530,7 @@ pub fn handle_vote(
                         group: DestinationGroup::Room(room.id),
                         skip_self: false,
                     };
-                    super::common::get_room_config(room, room_destination, response);
+                    super::common::get_active_room_config(room, room_destination, response);
                 }
             }
             VoteType::Pause => {
@@ -618,7 +618,7 @@ pub fn get_end_game_result(
                 .send_to_destination(midgame_destination.clone()),
         );
     }
-    super::common::get_room_config(room, midgame_destination.clone(), response);
+    super::common::get_active_room_config(room, midgame_destination.clone(), response);
 
     if !result.unreadied_nicks.is_empty() {
         response.add(
