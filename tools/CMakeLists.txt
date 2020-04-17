@@ -8,7 +8,7 @@ endif()
 
 if(APPLE AND NOT SKIPBUNDLE)
     find_package(Qt5 REQUIRED QUIET COMPONENTS Core Widgets Gui Network)
-    find_package(SDL2 REQUIRED)
+    find_package(SDL2 REQUIRED CONFIG)
     find_package(SDL2_image 2 REQUIRED)
     find_package(SDL2_net 2 REQUIRED)
     find_package(SDL2_ttf 2 REQUIRED)
@@ -26,9 +26,9 @@ if(APPLE AND NOT SKIPBUNDLE)
         endif()
     endif()
 
-    #remove the ";-framework Cocoa" from the SDL2_LIBRARY variable
-    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL2_LIBRARY}")
-    #remove the "libSDLmain.a" from the SDL2_LIBRARY variable
+    #remove the ";-framework Cocoa" from the SDL2_LIBRARIES variable
+    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL2_LIBRARIES}")
+    #remove the "libSDLmain.a" from the SDL2_LIBRARIES variable
     string(REGEX REPLACE ".*;(.*)" "\\1" sdl_library_only "${sdl_library_only}")
 
     #get the neme of the library (harmelss if it is static)

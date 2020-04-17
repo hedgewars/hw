@@ -1,6 +1,6 @@
-find_package(SDL2 REQUIRED)
+find_package(SDL2 REQUIRED CONFIG)
 
-include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${LUA_INCLUDE_DIR})
 
@@ -17,7 +17,7 @@ add_library (physlayer ${PHYSLAYER_SRCS})
 set_target_properties(physlayer PROPERTIES
                           VERSION 1.0
                           SOVERSION 1.0)
-target_link_libraries(physlayer ${SDL2_LIBRARY} lua physfs)
+target_link_libraries(physlayer ${SDL2_LIBRARIES} lua physfs)
 install(TARGETS physlayer RUNTIME DESTINATION ${target_binary_install_dir}
                           LIBRARY DESTINATION ${target_library_install_dir}
                           ARCHIVE DESTINATION ${target_library_install_dir})
