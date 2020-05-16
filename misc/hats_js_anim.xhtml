@@ -8,7 +8,7 @@
 * {padding: 0; margin: 0; }
 body
 {
-    background: url('https://hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Sky.png') fixed no-repeat bottom left;
+    background: url('//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Sky.png') fixed no-repeat bottom left;
     background-color: #0B203D;
     color: #FFD902;
     -moz-background-size: 200%;
@@ -42,14 +42,14 @@ a {
     height: 32px;
     width: 32px;
     color: transparent;
-    background-image: url("https://hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hedgehog/Idle.png");
+    background-image: url("//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hedgehog/Idle.png");
 }
 .girder
 {
     width: 100%;
     height: 30px;
     clear: left;
-    background-image: url('https://hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Girder.png');
+    background-image: url('//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Girder.png');
     background-repeat: repeat-x;
 }
 .hide { visibility: hidden; }
@@ -144,7 +144,7 @@ window.onload = function()
     if (!IS_LOCAL) {
         // Request list of hats from repository URL
         var xml=new XMLHttpRequest();
-        xml.open("GET", "https://hg.hedgewars.org/hedgewars/file/tip/share/hedgewars/Data/Graphics/Hats/");
+        xml.open("GET", "//hg.hedgewars.org/hedgewars/file/tip/share/hedgewars/Data/Graphics/Hats/");
         xml.addEventListener("error", on_xml_error);
         xml.onload = on_xml_loaded;
         xml.send();
@@ -197,7 +197,7 @@ on_hats_loaded = function()
         if (IS_LOCAL)
             h.href = "../share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
         else
-            h.href = "https://hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
+            h.href = "//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
 
         img = new Image();
         img.onload = function() {
@@ -235,7 +235,7 @@ on_hats_loaded = function()
             if (IS_LOCAL)
                 link.href = "../share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
             else
-                link.href = "https://hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
+                link.href = "//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
             link.appendChild(document.createTextNode(masks[i]));
             pm.appendChild(link);
             if (i < missingMasks.length -1)
@@ -367,7 +367,7 @@ function switchTheme()
 {
     var prefix;
     if (!IS_LOCAL)
-        prefix = "https://hg.hedgewars.org/hedgewars/raw-file/tip";
+        prefix = "//hg.hedgewars.org/hedgewars/raw-file/tip";
     else
         prefix = "..";
     document.body.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Themes/'+this.value+'/Sky.png")';
