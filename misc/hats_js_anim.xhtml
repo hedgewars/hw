@@ -314,8 +314,9 @@ function animateHogs()
         // Hedgehog
         a[i].style.backgroundPosition=Math.floor(a[i].idle/16)*-32+"px "+(a[i].idle%16)*-32+"px";
 
+        var maskName = a[i].title;
         // Hat
-        if (staticMasks[masks[i]] === true) {
+        if (staticMasks[maskName] === true) {
             // Hat offset for static hats
             if (a[i].idle === 2 || a[i].idle === 7 || a[i].idle === 12)
                 a[i].firstChild.style.marginTop="-4px";
