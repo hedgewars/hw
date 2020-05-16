@@ -307,7 +307,7 @@ function animateHogs()
     var a = document.getElementsByTagName("a");
     for (var i=0;i<a.length;i++)
     {
-        if (a.className === "hat")
+        if (a[i].className !== "hat")
             continue;
         // Cycle through hedgehog and hat animation frames
 
