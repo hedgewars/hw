@@ -233,10 +233,10 @@ on_hats_loaded = function()
                 continue;
             var link = document.createElement("a");
             if (IS_LOCAL)
-                link.href = "../share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
+                link.href = "../share/hedgewars/Data/Graphics/Hats/"+missingMasks[i]+".png";
             else
-                link.href = "//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
-            link.appendChild(document.createTextNode(masks[i]));
+                link.href = "//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hats/"+missingMasks[i]+".png";
+            link.appendChild(document.createTextNode(missingMasks[i]));
             pm.appendChild(link);
             if (i < missingMasks.length -1)
                 pm.appendChild(document.createTextNode(", "));
