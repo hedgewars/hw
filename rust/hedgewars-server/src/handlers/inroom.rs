@@ -244,23 +244,7 @@ pub fn handle(
                     let (client, room) = room_control.get();
 
                     let removed_teams = vec![name];
-                    super::common::get_remove_teams_data(
-                        room_id,
-                        client.is_in_game(),
-                        removed_teams,
-                        response,
-                    );
-
-                    if let Some(0) = room.teams_in_game() {
-                        if let Some(result) = room_control.end_game() {
-                            super::common::get_end_game_result(
-                                room_control.server(),
-                                room_id,
-                                result,
-                                response,
-                            );
-                        }
-                    }
+                    super::common::get_remove_teams_data(room_id, false, removed_teams, response);
                 }
                 Err(RemoveTeamError::NoTeam) => response.warn(NO_TEAM_TO_REMOVE),
                 Err(RemoveTeamError::TeamNotOwned) => response.warn(TEAM_NOT_OWNED),

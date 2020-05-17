@@ -26,7 +26,6 @@ fn client_teams_impl(
 pub struct GameInfo {
     pub original_teams: Vec<(ClientId, TeamInfo)>,
     pub left_teams: Vec<String>,
-    pub ingame_teams_count: u8,
     pub msg_log: Vec<String>,
     pub sync_msg: Option<String>,
     pub is_paused: bool,
@@ -40,7 +39,6 @@ impl GameInfo {
             msg_log: Vec::new(),
             sync_msg: None,
             is_paused: false,
-            ingame_teams_count: teams.len() as u8,
             original_teams: teams,
             original_config: config,
         }
@@ -48,6 +46,23 @@ impl GameInfo {
 
     pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> + Clone {
         client_teams_impl(&self.original_teams, client_id)
+    }
+
+    pub fn mark_left_teams<'a, I>(&mut self, team_names: I)
+    where
+        I: Iterator<Item = &'a String>,
+    {
+        if let Some(m) = &self.sync_msg {
+            self.msg_log.push(m.clone());
+            self.sync_msg = None
+        }
+
+        for team_name in team_names {
+            self.left_teams.push(team_name.clone());
+
+            let remove_msg = crate::utils::to_engine_msg(iter::once(b'F').chain(team_name.bytes()));
+            self.msg_log.push(remove_msg);
+        }
     }
 }
 
@@ -145,19 +160,6 @@ impl HwRoom {
     pub fn remove_team(&mut self, team_name: &str) {
         if let Some(index) = self.teams.iter().position(|(_, t)| t.name == team_name) {
             self.teams.remove(index);
-
-            if let Some(info) = &mut self.game_info {
-                info.ingame_teams_count -= 1;
-                info.left_teams.push(team_name.to_string());
-
-                if let Some(m) = &info.sync_msg {
-                    info.msg_log.push(m.clone());
-                    info.sync_msg = None
-                }
-                let remove_msg =
-                    crate::utils::to_engine_msg(iter::once(b'F').chain(team_name.bytes()));
-                info.msg_log.push(remove_msg.clone());
-            }
         }
     }
 
@@ -176,7 +178,9 @@ impl HwRoom {
     }
 
     pub fn teams_in_game(&self) -> Option<u8> {
-        self.game_info.as_ref().map(|info| info.ingame_teams_count)
+        self.game_info
+            .as_ref()
+            .map(|info| (info.original_teams.len() - info.left_teams.len()) as u8)
     }
 
     pub fn find_team_and_owner_mut<F>(&mut self, f: F) -> Option<(ClientId, &mut TeamInfo)>
@@ -300,6 +304,10 @@ impl HwRoom {
             c.scheme.name.to_string(),
             c.ammo.name.to_string(),
         ]
+    }
+
+    pub fn config(&self) -> &RoomConfig {
+        &self.config
     }
 
     pub fn active_config(&self) -> &RoomConfig {

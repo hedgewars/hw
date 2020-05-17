@@ -209,6 +209,22 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
         if info.is_paused {
             response.add(ForwardEngineMessage(vec![to_engine_msg(once(b'I'))]).send_self());
         }
+
+        for (_, original_team) in &info.original_teams {
+            if let Some(team) = room.find_team(|team| team.name == original_team.name) {
+                if team.color != original_team.color {
+                    response.add(TeamColor(team.name.clone(), team.color).send_self());
+                }
+                if team.hedgehogs_number != original_team.hedgehogs_number {
+                    response
+                        .add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send_self());
+                }
+            } else {
+                response.add(TeamRemove(original_team.name.clone()).send_self());
+            }
+        }
+
+        get_room_config_impl(room.config(), Destination::ToSelf, response);
     }
 }
 
@@ -608,21 +624,9 @@ pub fn get_end_game_result(
         result
             .left_teams
             .iter()
+            .filter(|name| room.find_team(|t| t.name == **name).is_some())
             .map(|name| TeamRemove(name.clone()).send_all().in_room(room.id)),
     );
-
-    let midgame_destination = Destination::ToIds(result.joined_mid_game_clients);
-    for (_, team) in &room.teams {
-        response.add(
-            HedgehogsNumber(team.name.clone(), team.hedgehogs_number)
-                .send_to_destination(midgame_destination.clone()),
-        );
-        response.add(
-            TeamColor(team.name.clone(), team.color)
-                .send_to_destination(midgame_destination.clone()),
-        );
-    }
-    super::common::get_active_room_config(room, midgame_destination.clone(), response);
 
     if !result.unreadied_nicks.is_empty() {
         response.add(

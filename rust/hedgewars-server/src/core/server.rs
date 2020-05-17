@@ -128,7 +128,6 @@ pub enum StartGameError {
 
 #[derive(Debug)]
 pub struct EndGameResult {
-    pub joined_mid_game_clients: Vec<ClientId>,
     pub left_teams: Vec<String>,
     pub unreadied_nicks: Vec<String>,
 }
@@ -607,13 +606,20 @@ impl<'a> HwRoomControl<'a> {
                 room.ready_players_number -= 1;
             }
 
-            removed_teams = room
-                .client_teams(client.id)
-                .map(|t| t.name.clone())
-                .collect();
-
-            for team_name in &removed_teams {
-                room.remove_team(team_name);
+            if let Some(ref mut info) = room.game_info {
+                removed_teams = info
+                    .client_teams(client.id)
+                    .map(|t| t.name.clone())
+                    .collect();
+                info.mark_left_teams(removed_teams.iter());
+            } else {
+                removed_teams = room
+                    .client_teams(client.id)
+                    .map(|t| t.name.clone())
+                    .collect();
+                for team_name in &removed_teams {
+                    room.remove_team(team_name);
+                }
             }
 
             if client.is_master() && !is_fixed {
@@ -995,20 +1001,8 @@ impl<'a> HwRoomControl<'a> {
                     .map(|t| t.name.clone())
                     .collect();
 
-                info.left_teams.extend(team_names.iter().cloned());
-                info.ingame_teams_count -= team_names.len() as u8;
+                info.mark_left_teams(team_names.iter());
 
-                for team_name in &team_names {
-                    let remove_msg =
-                        utils::to_engine_msg(std::iter::once(b'F').chain(team_name.bytes()));
-                    if let Some(m) = &info.sync_msg {
-                        info.msg_log.push(m.clone());
-                    }
-                    if info.sync_msg.is_some() {
-                        info.sync_msg = None
-                    }
-                    info.msg_log.push(remove_msg);
-                }
                 Some(team_names)
             } else {
                 None
@@ -1028,14 +1022,6 @@ impl<'a> HwRoomControl<'a> {
                 room.remove_team(team_name);
             }
 
-            let joined_mid_game_clients = self
-                .server
-                .clients
-                .iter()
-                .filter(|(_, c)| c.room_id == Some(self.room_id) && c.is_joined_mid_game())
-                .map(|(_, c)| c.id)
-                .collect();
-
             let unreadied_nicks: Vec<_> = self
                 .server
                 .clients
@@ -1043,7 +1029,6 @@ impl<'a> HwRoomControl<'a> {
                 .filter(|(_, c)| c.room_id == Some(room_id))
                 .map(|(_, c)| {
                     c.set_is_ready(c.is_master());
-                    c.set_is_joined_mid_game(false);
                     c
                 })
                 .filter_map(|c| {
@@ -1056,7 +1041,6 @@ impl<'a> HwRoomControl<'a> {
                 .collect();
 
             Some(EndGameResult {
-                joined_mid_game_clients,
                 left_teams: replace(&mut info.left_teams, vec![]),
                 unreadied_nicks,
             })
@@ -1103,7 +1087,6 @@ fn create_room<'a, 'b>(
     client.set_is_master(true);
     client.set_is_ready(true);
     client.set_is_in_game(false);
-    client.set_is_joined_mid_game(false);
     client.clan = None;
     client.teams_in_game = 0;
     client.team_indices = vec![];
@@ -1117,7 +1100,6 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     room.players_number += 1;
 
     client.room_id = Some(room.id);
-    client.set_is_joined_mid_game(room.game_info.is_some());
     client.set_is_in_game(room.game_info.is_some());
 
     if let Some(ref mut info) = room.game_info {
@@ -1128,7 +1110,6 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
 
         if !team_names.is_empty() {
             info.left_teams.retain(|name| !team_names.contains(&name));
-            info.ingame_teams_count += team_names.len() as u8;
         }
     }
 }
