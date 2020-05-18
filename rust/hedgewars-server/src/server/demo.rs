@@ -18,6 +18,7 @@ impl Demo {
     }
 
     fn load(file: String) -> io::Result<Self> {
+        let value = super::haskell::parse(&[]);
         Ok(unimplemented!())
     }
 
@@ -60,8 +61,7 @@ impl Demo {
             const SUFFIX: &str = ".lua";
             if arg.starts_with(PREFIX) && arg.ends_with(SUFFIX) {
                 let script = arg[PREFIX.len()..arg.len() - SUFFIX.len()].to_string();
-                script.replace('_', " ");
-                Ok(script)
+                Ok(script.replace('_', " "))
             } else {
                 error("Script is not multiplayer")
             }
