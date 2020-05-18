@@ -7,24 +7,89 @@ use nom::{
     sequence::{delimited, pair, preceded, separated_pair},
     IResult,
 };
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    fmt::{Display, Error, Formatter},
+};
 
 type HaskellResult<'a, T> = IResult<&'a [u8], T, ()>;
 
 #[derive(Debug, PartialEq)]
 pub enum HaskellValue {
-    List(Vec<HaskellValue>),
-    Tuple(Vec<HaskellValue>),
-    String(String),
     Number(u8),
-    Struct {
-        name: String,
-        fields: HashMap<String, HaskellValue>,
-    },
+    String(String),
+    Tuple(Vec<HaskellValue>),
+    List(Vec<HaskellValue>),
     AnonStruct {
         name: String,
         fields: Vec<HaskellValue>,
     },
+    Struct {
+        name: String,
+        fields: HashMap<String, HaskellValue>,
+    },
+}
+
+fn write_sequence(
+    f: &mut Formatter<'_>,
+    brackets: &[u8; 2],
+    mut items: std::slice::Iter<HaskellValue>,
+) -> Result<(), Error> {
+    write!(f, "{}", brackets[0] as char)?;
+    while let Some(value) = items.next() {
+        write!(f, "{}", value);
+        if !items.as_slice().is_empty() {
+            write!(f, ", ")?;
+        }
+    }
+    if brackets[1] != b'\0' {
+        write!(f, "{}", brackets[1] as char)
+    } else {
+        Ok(())
+    }
+}
+
+fn write_text(f: &mut Formatter<'_>, text: &str) -> Result<(), Error> {
+    write!(f, "\"")?;
+    for c in text.chars() {
+        if c.is_ascii() && !(c as u8).is_ascii_control() {
+            write!(f, "{}", c);
+        } else {
+            let mut bytes = [0u8; 4];
+            let size = c.encode_utf8(&mut bytes).len();
+            for byte in &bytes[0..size] {
+                write!(f, "\\{:03}", byte);
+            }
+        }
+    }
+    write!(f, "\"")
+}
+
+impl Display for HaskellValue {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        match self {
+            HaskellValue::Number(value) => write!(f, "{}", value),
+            HaskellValue::String(value) => write_text(f, value),
+            HaskellValue::Tuple(items) => write_sequence(f, b"()", items.iter()),
+            HaskellValue::List(items) => write_sequence(f, b"[]", items.iter()),
+            HaskellValue::AnonStruct { name, fields } => {
+                write!(f, "{} ", name);
+                write_sequence(f, b" \0", fields.iter())
+            }
+            HaskellValue::Struct { name, fields } => {
+                write!(f, "{} {{", name);
+                let fields = fields.iter().collect::<Vec<_>>();
+                let mut items = fields.iter();
+                while let Some((field_name, value)) = items.next() {
+                    write!(f, "{} = {}", field_name, value);
+                    if !items.as_slice().is_empty() {
+                        write!(f, ", ")?;
+                    }
+                }
+                write!(f, "}}")
+            }
+        }
+    }
 }
 
 fn comma(input: &[u8]) -> HaskellResult<&[u8]> {
@@ -105,7 +170,6 @@ fn string_escape(input: &[u8]) -> HaskellResult<&[u8]> {
             map(tag("GS"), |_| &b"\x1D"[..]),
             map(tag("RS"), |_| &b"\x1E"[..]),
             map(tag("US"), |_| &b"\x1F"[..]),
-            map(tag("SP"), |_| &b"\x20"[..]),
             map(tag("DEL"), |_| &b"\x7F"[..]),
         )),
     ))(input)
