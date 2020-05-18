@@ -1,12 +1,10 @@
 use nom::{
     branch::alt,
-    bytes::complete::{escaped_transform, is_not, tag, take_while},
-    character::is_digit,
-    character::{is_alphanumeric, is_space},
+    bytes::complete::{escaped_transform, is_not, tag, take_while, take_while1},
+    character::{is_alphanumeric, is_digit, is_space},
     combinator::{map, map_res},
     multi::separated_list,
-    sequence::separated_pair,
-    sequence::{delimited, pair},
+    sequence::{delimited, pair, preceded, separated_pair},
     IResult,
 };
 use std::collections::HashMap;
@@ -22,6 +20,10 @@ pub enum HaskellValue {
     Struct {
         name: String,
         fields: HashMap<String, HaskellValue>,
+    },
+    AnonStruct {
+        name: String,
+        fields: Vec<HaskellValue>,
     },
 }
 
@@ -134,7 +136,7 @@ fn list(input: &[u8]) -> HaskellResult<HaskellValue> {
 }
 
 fn identifier(input: &[u8]) -> HaskellResult<String> {
-    map_res(take_while(is_alphanumeric), |s| {
+    map_res(take_while1(is_alphanumeric), |s| {
         std::str::from_utf8(s).map_err(|_| ()).map(String::from)
     })(input)
 }
@@ -148,16 +150,28 @@ fn named_field(input: &[u8]) -> HaskellResult<(String, HaskellValue)> {
 }
 
 fn structure(input: &[u8]) -> HaskellResult<HaskellValue> {
-    map(
-        pair(
-            identifier,
-            surrounded("{", "}", separated_list(comma, named_field)),
+    alt((
+        map(
+            pair(
+                identifier,
+                surrounded("{", "}", separated_list(comma, named_field)),
+            ),
+            |(name, mut fields)| HaskellValue::Struct {
+                name,
+                fields: fields.drain(..).collect(),
+            },
         ),
-        |(name, mut fields)| HaskellValue::Struct {
-            name,
-            fields: fields.drain(..).collect(),
-        },
-    )(input)
+        map(
+            pair(
+                identifier,
+                preceded(take_while1(is_space), separated_list(comma, value)),
+            ),
+            |(name, mut fields)| HaskellValue::AnonStruct {
+                name: name.clone(),
+                fields,
+            },
+        ),
+    ))(input)
 }
 
 fn value(input: &[u8]) -> HaskellResult<HaskellValue> {
@@ -213,7 +227,17 @@ mod test {
         };
 
         assert_eq!(
-            structure(b"Hog {name = \"\\240\\159\\166\\148\",health = 100}"),
+            structure(b"Hog {name = \"\\240\\159\\166\\148\", health = 100}"),
+            Ok((&b""[..], value))
+        );
+
+        let value = AnonStruct {
+            name: "Hog".to_string(),
+            fields: vec![Number(100), String("\u{1f994}".to_string())],
+        };
+
+        assert_eq!(
+            structure(b"Hog 100, \"\\240\\159\\166\\148\""),
             Ok((&b""[..], value))
         );
     }
