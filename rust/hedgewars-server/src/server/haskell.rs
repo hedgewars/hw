@@ -77,6 +77,7 @@ fn string_escape(input: &[u8]) -> HaskellResult<&[u8]> {
             map(tag("b"), |_| &b"\x08"[..]),
             map(tag("v"), |_| &b"\x0B"[..]),
             map(tag("f"), |_| &b"\x0C"[..]),
+            map(tag("&"), |_| &b""[..]),
             map(tag("NUL"), |_| &b"\x00"[..]),
             map(tag("SOH"), |_| &b"\x01"[..]),
             map(tag("STX"), |_| &b"\x02"[..]),
