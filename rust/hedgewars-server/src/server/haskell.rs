@@ -5,7 +5,7 @@ use nom::{
     combinator::{map, map_res},
     multi::separated_list,
     sequence::{delimited, pair, preceded, separated_pair},
-    IResult,
+    ExtendInto, IResult,
 };
 use std::{
     collections::HashMap,
@@ -53,12 +53,12 @@ fn write_text(f: &mut Formatter<'_>, text: &str) -> Result<(), Error> {
     write!(f, "\"")?;
     for c in text.chars() {
         if c.is_ascii() && !(c as u8).is_ascii_control() {
-            write!(f, "{}", c);
+            write!(f, "{}", c)?;
         } else {
             let mut bytes = [0u8; 4];
             let size = c.encode_utf8(&mut bytes).len();
             for byte in &bytes[0..size] {
-                write!(f, "\\{:03}", byte);
+                write!(f, "\\{:03}", byte)?;
             }
         }
     }
@@ -73,15 +73,15 @@ impl Display for HaskellValue {
             HaskellValue::Tuple(items) => write_sequence(f, b"()", items.iter()),
             HaskellValue::List(items) => write_sequence(f, b"[]", items.iter()),
             HaskellValue::AnonStruct { name, fields } => {
-                write!(f, "{} ", name);
+                write!(f, "{} ", name)?;
                 write_sequence(f, b" \0", fields.iter())
             }
             HaskellValue::Struct { name, fields } => {
-                write!(f, "{} {{", name);
+                write!(f, "{} {{", name)?;
                 let fields = fields.iter().collect::<Vec<_>>();
                 let mut items = fields.iter();
                 while let Some((field_name, value)) = items.next() {
-                    write!(f, "{} = {}", field_name, value);
+                    write!(f, "{} = {}", field_name, value)?;
                     if !items.as_slice().is_empty() {
                         write!(f, ", ")?;
                     }
@@ -126,51 +126,78 @@ fn number(input: &[u8]) -> HaskellResult<HaskellValue> {
     map(number_raw, HaskellValue::Number)(input)
 }
 
-const BYTES: &[u8] = b"\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f\x70\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7a\x7b\x7c\x7d\x7e\x7f\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff";
+enum Escape {
+    Empty,
+    Byte(u8),
+}
 
-fn string_escape(input: &[u8]) -> HaskellResult<&[u8]> {
+impl ExtendInto for Escape {
+    type Item = u8;
+    type Extender = Vec<u8>;
+
+    fn new_builder(&self) -> Self::Extender {
+        Vec::new()
+    }
+
+    fn extend_into(&self, acc: &mut Self::Extender) {
+        if let Escape::Byte(b) = self {
+            acc.push(*b);
+        }
+    }
+}
+
+impl Extend<Escape> for Vec<u8> {
+    fn extend<T: IntoIterator<Item = Escape>>(&mut self, iter: T) {
+        for item in iter {
+            item.extend_into(self);
+        }
+    }
+}
+
+fn string_escape(input: &[u8]) -> HaskellResult<Escape> {
+    use Escape::*;
     alt((
-        map(number_raw, |n| &BYTES[n as usize..(n + 1) as usize]),
+        map(number_raw, |n| Byte(n)),
         alt((
-            map(tag("\\"), |_| &b"\\"[..]),
-            map(tag("\""), |_| &b"\""[..]),
-            map(tag("'"), |_| &b"'"[..]),
-            map(tag("n"), |_| &b"\n"[..]),
-            map(tag("r"), |_| &b"\r"[..]),
-            map(tag("t"), |_| &b"\t"[..]),
-            map(tag("a"), |_| &b"\x07"[..]),
-            map(tag("b"), |_| &b"\x08"[..]),
-            map(tag("v"), |_| &b"\x0B"[..]),
-            map(tag("f"), |_| &b"\x0C"[..]),
-            map(tag("&"), |_| &b""[..]),
-            map(tag("NUL"), |_| &b"\x00"[..]),
-            map(tag("SOH"), |_| &b"\x01"[..]),
-            map(tag("STX"), |_| &b"\x02"[..]),
-            map(tag("ETX"), |_| &b"\x03"[..]),
-            map(tag("EOT"), |_| &b"\x04"[..]),
-            map(tag("ENQ"), |_| &b"\x05"[..]),
-            map(tag("ACK"), |_| &b"\x06"[..]),
+            map(tag("\\"), |_| Byte(b'\\')),
+            map(tag("\""), |_| Byte(b'\"')),
+            map(tag("'"), |_| Byte(b'\'')),
+            map(tag("n"), |_| Byte(b'\n')),
+            map(tag("r"), |_| Byte(b'\r')),
+            map(tag("t"), |_| Byte(b'\t')),
+            map(tag("a"), |_| Byte(b'\x07')),
+            map(tag("b"), |_| Byte(b'\x08')),
+            map(tag("v"), |_| Byte(b'\x0B')),
+            map(tag("f"), |_| Byte(b'\x0C')),
+            map(tag("&"), |_| Empty),
+            map(tag("NUL"), |_| Byte(b'\x00')),
+            map(tag("SOH"), |_| Byte(b'\x01')),
+            map(tag("STX"), |_| Byte(b'\x02')),
+            map(tag("ETX"), |_| Byte(b'\x03')),
+            map(tag("EOT"), |_| Byte(b'\x04')),
+            map(tag("ENQ"), |_| Byte(b'\x05')),
+            map(tag("ACK"), |_| Byte(b'\x06')),
         )),
         alt((
-            map(tag("SO"), |_| &b"\x0E"[..]),
-            map(tag("SI"), |_| &b"\x0F"[..]),
-            map(tag("DLE"), |_| &b"\x10"[..]),
-            map(tag("DC1"), |_| &b"\x11"[..]),
-            map(tag("DC2"), |_| &b"\x12"[..]),
-            map(tag("DC3"), |_| &b"\x13"[..]),
-            map(tag("DC4"), |_| &b"\x14"[..]),
-            map(tag("NAK"), |_| &b"\x15"[..]),
-            map(tag("SYN"), |_| &b"\x16"[..]),
-            map(tag("ETB"), |_| &b"\x17"[..]),
-            map(tag("CAN"), |_| &b"\x18"[..]),
-            map(tag("EM"), |_| &b"\x19"[..]),
-            map(tag("SUB"), |_| &b"\x1A"[..]),
-            map(tag("ESC"), |_| &b"\x1B"[..]),
-            map(tag("FS"), |_| &b"\x1C"[..]),
-            map(tag("GS"), |_| &b"\x1D"[..]),
-            map(tag("RS"), |_| &b"\x1E"[..]),
-            map(tag("US"), |_| &b"\x1F"[..]),
-            map(tag("DEL"), |_| &b"\x7F"[..]),
+            map(tag("SO"), |_| Byte(b'\x0E')),
+            map(tag("SI"), |_| Byte(b'\x0F')),
+            map(tag("DLE"), |_| Byte(b'\x10')),
+            map(tag("DC1"), |_| Byte(b'\x11')),
+            map(tag("DC2"), |_| Byte(b'\x12')),
+            map(tag("DC3"), |_| Byte(b'\x13')),
+            map(tag("DC4"), |_| Byte(b'\x14')),
+            map(tag("NAK"), |_| Byte(b'\x15')),
+            map(tag("SYN"), |_| Byte(b'\x16')),
+            map(tag("ETB"), |_| Byte(b'\x17')),
+            map(tag("CAN"), |_| Byte(b'\x18')),
+            map(tag("EM"), |_| Byte(b'\x19')),
+            map(tag("SUB"), |_| Byte(b'\x1A')),
+            map(tag("ESC"), |_| Byte(b'\x1B')),
+            map(tag("FS"), |_| Byte(b'\x1C')),
+            map(tag("GS"), |_| Byte(b'\x1D')),
+            map(tag("RS"), |_| Byte(b'\x1E')),
+            map(tag("US"), |_| Byte(b'\x1F')),
+            map(tag("DEL"), |_| Byte(b'\x7F')),
         )),
     ))(input)
 }
@@ -270,11 +297,14 @@ mod test {
 
         let value = Tuple(vec![
             Number(64),
-            String("text".to_string()),
+            String("text\t1".to_string()),
             List(vec![Number(1), Number(2), Number(3)]),
         ]);
 
-        assert_eq!(tuple(b"(64, \"text\", [1 , 2, 3])"), Ok((&b""[..], value)));
+        assert_eq!(
+            tuple(b"(64, \"text\\t1\", [1 , 2, 3])"),
+            Ok((&b""[..], value))
+        );
     }
 
     #[test]
