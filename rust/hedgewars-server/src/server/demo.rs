@@ -1,5 +1,7 @@
-use crate::core::types::{GameCfg, TeamInfo};
-
+use crate::{
+    core::types::{GameCfg, HedgehogInfo, TeamInfo},
+    server::haskell::HaskellValue,
+};
 use std::{
     fs,
     io::{self, BufReader, Read, Write},
@@ -17,14 +19,25 @@ impl Demo {
         Ok(unimplemented!())
     }
 
-    fn load(file: String) -> io::Result<Self> {
-        let value = super::haskell::parse(&[]);
-        Ok(unimplemented!())
+    fn load(filename: String) -> io::Result<Self> {
+        let mut file = fs::File::open(filename)?;
+        let mut bytes = vec![];
+        file.read_to_end(&mut bytes)?;
+        match super::haskell::parse(&bytes[..]) {
+            Ok((_, value)) => haskell_to_demo(value).ok_or(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "Invalid demo structure",
+            )),
+            Err(_) => Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "Unable to parse file",
+            )),
+        }
     }
 
-    fn load_hwd(file: String) -> io::Result<Self> {
-        let datum = fs::File::open(file)?;
-        let mut reader = io::BufReader::new(datum);
+    fn load_hwd(filename: String) -> io::Result<Self> {
+        let file = fs::File::open(filename)?;
+        let mut reader = io::BufReader::new(file);
 
         #[inline]
         fn error<T>(cause: &str) -> io::Result<T> {
@@ -253,4 +266,71 @@ impl Demo {
             messages,
         })
     }
+}
+
+fn haskell_to_demo(value: HaskellValue) -> Option<Demo> {
+    use HaskellValue::*;
+    let mut lists = value.into_tuple()?;
+    let mut lists_iter = lists.drain(..);
+
+    let teams_list = lists_iter.next()?.into_list()?;
+    let map_config = lists_iter.next()?.into_list()?;
+    let game_config = lists_iter.next()?.into_list()?;
+    let engine_messages = lists_iter.next()?.into_list()?;
+
+    let mut teams = Vec::with_capacity(teams_list.len());
+
+    for team in teams_list {
+        let (_, mut fields) = team.into_struct()?;
+
+        let mut team_info = TeamInfo::default();
+        for (name, value) in fields.drain() {
+            match &name[..] {
+                "teamowner" => team_info.owner = value.into_string()?,
+                "teamname" => team_info.name = value.into_string()?,
+                "teamcolor" => team_info.color = u8::from_str(&value.into_string()?).ok()?,
+                "teamgrave" => team_info.grave = value.into_string()?,
+                "teamfort" => team_info.fort = value.into_string()?,
+                "teamvoicepack" => team_info.voice_pack = value.into_string()?,
+                "teamflag" => team_info.flag = value.into_string()?,
+                "difficulty" => team_info.difficulty = value.into_number()?,
+                "hhnum" => team_info.hedgehogs_number = value.into_number()?,
+                "hedgehogs" => {
+                    for (index, hog) in value
+                        .into_list()?
+                        .drain(..)
+                        .enumerate()
+                        .take(team_info.hedgehogs.len())
+                    {
+                        let (_, mut fields) = hog.into_anon_struct()?;
+                        let mut fields_iter = fields.drain(..);
+                        team_info.hedgehogs[index] = HedgehogInfo {
+                            name: fields_iter.next()?.into_string()?,
+                            hat: fields_iter.next()?.into_string()?,
+                        }
+                    }
+                }
+                _ => (),
+            }
+        }
+        teams.push(team_info)
+    }
+
+    let mut config = Vec::with_capacity(map_config.len() + game_config.len());
+
+    for item in map_config {}
+
+    for item in game_config {}
+
+    let mut messages = Vec::with_capacity(engine_messages.len());
+
+    for message in engine_messages {
+        messages.push(message.into_string()?);
+    }
+
+    Some(Demo {
+        teams,
+        config,
+        messages,
+    })
 }

@@ -30,6 +30,64 @@ pub enum HaskellValue {
     },
 }
 
+impl HaskellValue {
+    pub fn to_number(&self) -> Option<u8> {
+        match self {
+            HaskellValue::Number(value) => Some(*value),
+            _ => None,
+        }
+    }
+
+    pub fn into_number(self) -> Option<u8> {
+        match self {
+            HaskellValue::Number(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn to_string(&self) -> Option<&str> {
+        match self {
+            HaskellValue::String(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_string(self) -> Option<String> {
+        match self {
+            HaskellValue::String(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_list(self) -> Option<Vec<HaskellValue>> {
+        match self {
+            HaskellValue::List(items) => Some(items),
+            _ => None,
+        }
+    }
+
+    pub fn into_tuple(self) -> Option<Vec<HaskellValue>> {
+        match self {
+            HaskellValue::Tuple(items) => Some(items),
+            _ => None,
+        }
+    }
+
+    pub fn into_anon_struct(self) -> Option<(String, Vec<HaskellValue>)> {
+        match self {
+            HaskellValue::AnonStruct { name, fields } => Some((name, fields)),
+            _ => None,
+        }
+    }
+
+    pub fn into_struct(self) -> Option<(String, HashMap<String, HaskellValue>)> {
+        match self {
+            HaskellValue::Struct { name, fields } => Some((name, fields)),
+            _ => None,
+        }
+    }
+}
+
 fn write_sequence(
     f: &mut Formatter<'_>,
     brackets: &[u8; 2],
@@ -37,7 +95,7 @@ fn write_sequence(
 ) -> Result<(), Error> {
     write!(f, "{}", brackets[0] as char)?;
     while let Some(value) = items.next() {
-        write!(f, "{}", value);
+        write!(f, "{}", value)?;
         if !items.as_slice().is_empty() {
             write!(f, ", ")?;
         }
