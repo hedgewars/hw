@@ -1,11 +1,12 @@
 use crate::server::haskell::HaskellValue::Boolean;
+use nom::multi::many0;
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take_while, take_while1},
     character::{is_alphanumeric, is_digit, is_space},
     combinator::{map, map_res},
     multi::separated_list,
-    sequence::{delimited, pair, preceded, separated_pair},
+    sequence::{delimited, pair, preceded, separated_pair, terminated},
     ExtendInto, IResult,
 };
 use std::{
@@ -329,7 +330,7 @@ fn structure(input: &[u8]) -> HaskellResult<HaskellValue> {
                 identifier,
                 preceded(
                     take_while(is_space),
-                    separated_list(take_while1(is_space), value),
+                    many0(terminated(value, take_while(is_space))),
                 ),
             ),
             |(name, mut fields)| HaskellValue::AnonStruct {

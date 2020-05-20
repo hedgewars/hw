@@ -318,9 +318,59 @@ fn haskell_to_demo(value: HaskellValue) -> Option<Demo> {
 
     let mut config = Vec::with_capacity(map_config.len() + game_config.len());
 
-    for item in map_config {}
+    for item in map_config {
+        let mut tuple = item.into_tuple()?;
+        let mut tuple_iter = tuple.drain(..);
+        let name = tuple_iter.next()?.into_string()?;
+        let value = tuple_iter.next()?.into_string()?;
 
-    for item in game_config {}
+        let config_item = match &name[..] {
+            "FEATURE_SIZE" => GameCfg::FeatureSize(u32::from_str(&value).ok()?),
+            "MAP" => GameCfg::MapType(value),
+            "MAPGEN" => GameCfg::MapGenerator(u32::from_str(&value).ok()?),
+            "MAZE_SIZE" => GameCfg::MazeSize(u32::from_str(&value).ok()?),
+            "SEED" => GameCfg::Seed(value),
+            "TEMPLATE" => GameCfg::Template(u32::from_str(&value).ok()?),
+            "DRAWNMAP" => GameCfg::DrawnMap(value),
+            _ => None?,
+        };
+        config.push(config_item);
+    }
+
+    for item in game_config {
+        let mut tuple = item.into_tuple()?;
+        let mut tuple_iter = tuple.drain(..);
+        let name = tuple_iter.next()?.into_string()?;
+        let value = tuple_iter.next()?;
+
+        let config_item = match &name[..] {
+            "AMMO" => {
+                let mut ammo = value.into_list()?;
+                let mut ammo_iter = ammo.drain(..);
+                GameCfg::Ammo(
+                    ammo_iter.next()?.into_string()?,
+                    ammo_iter.next().and_then(|v| v.into_string()),
+                )
+            }
+            "SCHEME" => {
+                let mut scheme = value.into_list()?;
+                let mut scheme_iter = scheme.drain(..);
+                GameCfg::Scheme(
+                    scheme_iter.next()?.into_string()?,
+                    scheme_iter
+                        .next()?
+                        .into_list()?
+                        .drain(..)
+                        .filter_map(|v| v.into_string())
+                        .collect(),
+                )
+            }
+            "SCRIPT" => GameCfg::Script(value.into_string()?),
+            "THEME" => GameCfg::Theme(value.into_string()?),
+            _ => None?,
+        };
+        config.push(config_item);
+    }
 
     let mut messages = Vec::with_capacity(engine_messages.len());
 
