@@ -1,3 +1,4 @@
+use crate::server::haskell::HaskellValue::Boolean;
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take_while, take_while1},
@@ -12,10 +13,11 @@ use std::{
     fmt::{Display, Error, Formatter},
 };
 
-type HaskellResult<'a, T> = IResult<&'a [u8], T, ()>;
+type HaskellResult<'a, T> = IResult<&'a [u8], T>;
 
 #[derive(Debug, PartialEq)]
 pub enum HaskellValue {
+    Boolean(bool),
     Number(u8),
     String(String),
     Tuple(Vec<HaskellValue>),
@@ -126,6 +128,7 @@ fn write_text(f: &mut Formatter<'_>, text: &str) -> Result<(), Error> {
 impl Display for HaskellValue {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         match self {
+            HaskellValue::Boolean(value) => write!(f, "{}", if *value { "True" } else { "False" }),
             HaskellValue::Number(value) => write!(f, "{}", value),
             HaskellValue::String(value) => write_text(f, value),
             HaskellValue::Tuple(items) => write_sequence(f, b"()", items.iter()),
@@ -169,6 +172,13 @@ where
             delimited(take_while(is_space), tag(suffix), take_while(is_space)),
         )(input)
     }
+}
+
+fn boolean(input: &[u8]) -> HaskellResult<HaskellValue> {
+    map(
+        alt((map(tag("True"), |_| true), map(tag("False"), |_| false))),
+        HaskellValue::Boolean,
+    )(input)
 }
 
 fn number_raw(input: &[u8]) -> HaskellResult<u8> {
@@ -268,7 +278,10 @@ fn string_content(mut input: &[u8]) -> HaskellResult<String> {
 }
 
 fn string(input: &[u8]) -> HaskellResult<HaskellValue> {
-    map(surrounded("\"", "\"", string_content), HaskellValue::String)(input)
+    map(
+        delimited(tag("\""), string_content, tag("\"")),
+        HaskellValue::String,
+    )(input)
 }
 
 fn tuple(input: &[u8]) -> HaskellResult<HaskellValue> {
@@ -314,7 +327,10 @@ fn structure(input: &[u8]) -> HaskellResult<HaskellValue> {
         map(
             pair(
                 identifier,
-                preceded(take_while1(is_space), separated_list(comma, value)),
+                preceded(
+                    take_while(is_space),
+                    separated_list(take_while1(is_space), value),
+                ),
             ),
             |(name, mut fields)| HaskellValue::AnonStruct {
                 name: name.clone(),
@@ -325,7 +341,7 @@ fn structure(input: &[u8]) -> HaskellResult<HaskellValue> {
 }
 
 fn value(input: &[u8]) -> HaskellResult<HaskellValue> {
-    alt((number, string, tuple, list, structure))(input)
+    alt((boolean, number, string, tuple, list, structure))(input)
 }
 
 #[inline]
@@ -341,7 +357,7 @@ mod test {
         use HaskellValue::*;
 
         matches!(number(b"127"), Ok((_, Number(127))));
-        matches!(number(b"adas"), Err(nom::Err::Error(())));
+        matches!(number(b"adas"), Err(nom::Err::Error(_)));
 
         assert_eq!(
             string(b"\"Hail \\240\\159\\166\\148!\""),
@@ -386,11 +402,11 @@ mod test {
 
         let value = AnonStruct {
             name: "Hog".to_string(),
-            fields: vec![Number(100), String("\u{1f994}".to_string())],
+            fields: vec![Boolean(true), Number(100), String("\u{1f994}".to_string())],
         };
 
         assert_eq!(
-            structure(b"Hog 100, \"\\240\\159\\166\\148\""),
+            structure(b"Hog True 100 \"\\240\\159\\166\\148\""),
             Ok((&b""[..], value))
         );
     }
