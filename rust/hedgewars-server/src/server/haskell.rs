@@ -1,11 +1,9 @@
-use crate::server::haskell::HaskellValue::Boolean;
-use nom::multi::many0;
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take_while, take_while1},
     character::{is_alphanumeric, is_digit, is_space},
     combinator::{map, map_res},
-    multi::separated_list,
+    multi::{many0, separated_list},
     sequence::{delimited, pair, preceded, separated_pair, terminated},
     ExtendInto, IResult,
 };

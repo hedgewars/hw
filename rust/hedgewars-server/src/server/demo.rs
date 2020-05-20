@@ -8,6 +8,7 @@ use std::{
     str::FromStr,
 };
 
+#[derive(PartialEq, Debug)]
 struct Demo {
     teams: Vec<TeamInfo>,
     config: Vec<GameCfg>,
@@ -341,32 +342,20 @@ fn haskell_to_demo(value: HaskellValue) -> Option<Demo> {
         let mut tuple = item.into_tuple()?;
         let mut tuple_iter = tuple.drain(..);
         let name = tuple_iter.next()?.into_string()?;
-        let value = tuple_iter.next()?;
+        let mut value = tuple_iter.next()?.into_list()?;
+        let mut value_iter = value.drain(..);
 
         let config_item = match &name[..] {
-            "AMMO" => {
-                let mut ammo = value.into_list()?;
-                let mut ammo_iter = ammo.drain(..);
-                GameCfg::Ammo(
-                    ammo_iter.next()?.into_string()?,
-                    ammo_iter.next().and_then(|v| v.into_string()),
-                )
-            }
-            "SCHEME" => {
-                let mut scheme = value.into_list()?;
-                let mut scheme_iter = scheme.drain(..);
-                GameCfg::Scheme(
-                    scheme_iter.next()?.into_string()?,
-                    scheme_iter
-                        .next()?
-                        .into_list()?
-                        .drain(..)
-                        .filter_map(|v| v.into_string())
-                        .collect(),
-                )
-            }
-            "SCRIPT" => GameCfg::Script(value.into_string()?),
-            "THEME" => GameCfg::Theme(value.into_string()?),
+            "AMMO" => GameCfg::Ammo(
+                value_iter.next()?.into_string()?,
+                value_iter.next().and_then(|v| v.into_string()),
+            ),
+            "SCHEME" => GameCfg::Scheme(
+                value_iter.next()?.into_string()?,
+                value_iter.filter_map(|v| v.into_string()).collect(),
+            ),
+            "SCRIPT" => GameCfg::Script(value_iter.next()?.into_string()?),
+            "THEME" => GameCfg::Theme(value_iter.next()?.into_string()?),
             _ => None?,
         };
         config.push(config_item);
