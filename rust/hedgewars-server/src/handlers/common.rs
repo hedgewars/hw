@@ -668,21 +668,4 @@ mod tests {
     fn test_handle_rnd_nonempty() {
         run_handle_test(vec!["A".to_owned(), "B".to_owned(), "C".to_owned()])
     }
-
-    /// This test terminates almost surely (strong law of large numbers)
-    #[test]
-    fn test_distribution() {
-        let eps = 0.000001;
-        let lim = 0.5;
-        let opts = vec![0.to_string(), 1.to_string()];
-        let mut ones = 0;
-        let mut tries = 0;
-
-        while tries < 1000 || ((ones as f64 / tries as f64) - lim).abs() >= eps {
-            tries += 1;
-            if reply2string(rnd_reply(&opts)) == 1.to_string() {
-                ones += 1;
-            }
-        }
-    }
 }
