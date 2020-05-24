@@ -3,21 +3,25 @@ use crate::{
     server::haskell::HaskellValue,
 };
 use std::{
+    collections::HashMap,
     fs,
     io::{self, BufReader, Read, Write},
     str::FromStr,
 };
 
 #[derive(PartialEq, Debug)]
-struct Demo {
+pub struct Demo {
     teams: Vec<TeamInfo>,
     config: Vec<GameCfg>,
     messages: Vec<String>,
 }
 
 impl Demo {
-    fn save(&self, file: String) -> io::Result<()> {
-        Ok(unimplemented!())
+    fn save(self, filename: String) -> io::Result<()> {
+        let text = format!("{}", demo_to_haskell(self));
+        let mut file = fs::File::open(filename)?;
+        file.write(text.as_bytes())?;
+        Ok(())
     }
 
     fn load(filename: String) -> io::Result<Self> {
@@ -267,6 +271,94 @@ impl Demo {
             messages,
         })
     }
+}
+
+fn demo_to_haskell(mut demo: Demo) -> HaskellValue {
+    use HaskellValue as Hs;
+
+    let mut teams = Vec::with_capacity(demo.teams.len());
+    for team in demo.teams {
+        let mut fields = HashMap::<String, HaskellValue>::new();
+
+        fields.insert("teamowner".to_string(), Hs::String(team.owner));
+        fields.insert("teamname".to_string(), Hs::String(team.name));
+        fields.insert("teamcolor".to_string(), Hs::Number(team.color));
+        fields.insert("teamgrave".to_string(), Hs::String(team.grave));
+        fields.insert("teamvoicepack".to_string(), Hs::String(team.voice_pack));
+        fields.insert("teamflag".to_string(), Hs::String(team.flag));
+        fields.insert("difficulty".to_string(), Hs::Number(team.difficulty));
+        fields.insert("hhnum".to_string(), Hs::Number(team.hedgehogs_number));
+
+        let hogs = team
+            .hedgehogs
+            .iter()
+            .map(|hog| Hs::AnonStruct {
+                name: "HedgehogInfo".to_string(),
+                fields: vec![Hs::String(hog.name.clone()), Hs::String(hog.hat.clone())],
+            })
+            .collect();
+
+        fields.insert("hedgehogs".to_string(), Hs::List(hogs));
+
+        teams.push(Hs::Struct {
+            name: "TeamInfo".to_string(),
+            fields,
+        })
+    }
+
+    let mut map_config = vec![];
+    let mut game_config = vec![];
+
+    let mut save_map_config = |name: &str, value: String| {
+        map_config.push(Hs::Tuple(vec![
+            Hs::String(name.to_string()),
+            Hs::String(value),
+        ]));
+    };
+
+    for config_item in &demo.config {
+        match config_item {
+            GameCfg::FeatureSize(size) => save_map_config("FEATURE_SIZE", size.to_string()),
+            GameCfg::MapType(map_type) => save_map_config("MAP", map_type.clone()),
+            GameCfg::MapGenerator(generator) => save_map_config("MAPGEN", generator.to_string()),
+            GameCfg::MazeSize(size) => save_map_config("MAZE_SIZE", size.to_string()),
+            GameCfg::Seed(seed) => save_map_config("SEED", seed.clone()),
+            GameCfg::Template(template) => save_map_config("TEMPLATE", template.to_string()),
+            GameCfg::DrawnMap(map) => save_map_config("DRAWNMAP", map.clone()),
+            _ => (),
+        }
+    }
+
+    let mut save_game_config = |name: &str, mut value: Vec<String>| {
+        map_config.push(Hs::Tuple(vec![
+            Hs::String(name.to_string()),
+            Hs::List(value.drain(..).map(Hs::String).collect()),
+        ]));
+    };
+
+    for config_item in &demo.config {
+        match config_item {
+            GameCfg::Ammo(name, Some(ammo)) => {
+                save_game_config("AMMO", vec![name.clone(), ammo.clone()])
+            }
+            GameCfg::Ammo(name, None) => save_game_config("AMMO", vec![name.clone()]),
+            GameCfg::Scheme(name, scheme) => {
+                let mut values = vec![name.clone()];
+                values.extend_from_slice(&scheme);
+                save_game_config("SCHEME", values);
+            }
+            GameCfg::Script(script) => save_game_config("SCRIPT", vec![script.clone()]),
+            GameCfg::Theme(theme) => save_game_config("THEME", vec![theme.clone()]),
+            _ => (),
+        }
+    }
+
+    Hs::Tuple(vec![
+        Hs::List(teams),
+        Hs::List(map_config),
+        Hs::List(game_config),
+        Hs::List(demo.messages.drain(..).map(Hs::String).collect()),
+    ])
 }
 
 fn haskell_to_demo(value: HaskellValue) -> Option<Demo> {

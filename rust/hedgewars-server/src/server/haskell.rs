@@ -269,7 +269,7 @@ fn string_escape(input: &[u8]) -> HaskellResult<Escape> {
     ))(input)
 }
 
-fn string_content(mut input: &[u8]) -> HaskellResult<String> {
+fn string_content(input: &[u8]) -> HaskellResult<String> {
     map_res(
         escaped_transform(is_not("\"\\"), '\\', string_escape),
         |bytes| String::from_utf8(bytes).map_err(|_| ()),
@@ -331,7 +331,7 @@ fn structure(input: &[u8]) -> HaskellResult<HaskellValue> {
                     many0(terminated(value, take_while(is_space))),
                 ),
             ),
-            |(name, mut fields)| HaskellValue::AnonStruct {
+            |(name, fields)| HaskellValue::AnonStruct {
                 name: name.clone(),
                 fields,
             },
