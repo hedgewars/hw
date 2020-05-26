@@ -100,6 +100,7 @@ with gear^ do
     case Kind of
     vgtFlake:
                 begin
+                State:= 0;
                 Timer:= 0;
                 tdX:= 0;
                 tdY:= 0;

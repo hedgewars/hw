@@ -79,11 +79,12 @@ uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, u
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
-    moved, rising, outside: boolean;
+    moved, rising, outside, fallingFadeIn: boolean;
     vfc, vft, diff: LongWord;
     spawnMargin: LongInt;
 const
     randMargin = 50;
+    maxFallSpeedForFadeIn = 750;
 begin
 if SuddenDeathDmg then
     begin
@@ -103,12 +104,14 @@ with Gear^ do
         Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps * Gear^.Scale;
         vfc:= vobSDFramesCount;
         vft:= vobSDFrameTicks;
+        fallingFadeIn := vobSDFallSpeed <= maxFallSpeedForFadeIn;
         end
     else
         begin
         Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps * Gear^.Scale;
         vfc:= vobFramesCount;
         vft:= vobFrameTicks;
+        fallingFadeIn := vobFallSpeed <= maxFallSpeedForFadeIn;
         end;
 
     if vft > 0 then
@@ -186,6 +189,7 @@ with Gear^ do
         if outside then
             begin
             if rising then
+                // rising flake
                 begin
                 if State = 0 then
                     begin
@@ -194,6 +198,7 @@ with Gear^ do
                     diff:= Min(diff*2, $FF);
                     if diff >= $FF then
                         begin
+                        // end of fade-out
                         diff:= $FF;
                         State:= 1;
                         end;
@@ -201,6 +206,7 @@ with Gear^ do
                     end
                 else
                     begin
+                    // reset and move back to bottom
                     Y:= LAND_HEIGHT + spawnMargin + random(50);
                     moved:= true;
                     State:= 0;
@@ -208,12 +214,29 @@ with Gear^ do
                     end;
                 end
             else
+                // falling flake
                 begin
+                // move back to top
                 Y:= Y - (1024 + spawnMargin + random(50));
                 moved:= true;
+                // activate fade-in if not falling too fast
+                if fallingFadeIn then
+                    begin
+                    State:= $FF;
+                    Tint:= (Tint and $FFFFFF00) or ($FF - State);
+                    end;
                 end;
             if moved then
                 X:= cLeftScreenBorder + random(cScreenSpace);
+            end
+        else if (not rising) and (State > 0) then
+            begin
+            // quickly fade in falling flake after appearing at top
+            if State > 16 then
+                Dec(State, 16)
+            else
+                State:= 0;
+            Tint:= (Tint and $FFFFFF00) or ($FF - State);
             end;
 
         if moved then

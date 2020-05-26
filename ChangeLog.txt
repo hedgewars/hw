@@ -7,7 +7,7 @@
  + Racer: Reset mines, air mines and sticky mines every turn
  + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory
  + New flags: serbia, montenegro
- + Themes: Rising flakes fade out at the top
+ + Themes: Add fade-in and fade-out effects
  + Themes: Make Sudden Death flakes in Underwater theme rise
  * Racer: Resize waypoints in custom-sized drawn maps
  * Mutant: Fix impossible to become mutant after mutant is gone
