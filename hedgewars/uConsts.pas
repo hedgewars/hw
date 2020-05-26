@@ -171,6 +171,7 @@ const
 
     cVisibleWater       : LongInt = 128;
     cTeamHealthWidth    : LongInt = 128;
+    cTeamHealthHeight   : LongInt = 19 * HDPIScaleFactor;
     cGearContourThreshold : LongInt = 179; // if water opacity is higher than this, draw contour for some gears when in water
 
     cifRandomize = $00000001;

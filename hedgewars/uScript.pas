@@ -1403,7 +1403,7 @@ begin
             end;
 
         FreeAndNilTexture(clan^.HealthTex);
-        clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
+        clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, cTeamHealthHeight, clan^.Color);
         end;
 
     lc_setclancolor:= 0
