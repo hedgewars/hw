@@ -80,7 +80,7 @@ uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, u
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
     moved, rising, outside: boolean;
-    vfc, vft: LongWord;
+    vfc, vft, diff: LongWord;
     spawnMargin: LongInt;
 const
     randMargin = 50;
@@ -180,17 +180,40 @@ with Gear^ do
         // flake fell far below map?
         outside:= (not rising) and (round(Y) - spawnMargin + randMargin > LAND_HEIGHT);
         // if not, did it rise far above map?
-        outside:= outside or (rising and (round(Y) < LAND_HEIGHT - 1024 - spawnMargin - randMargin));
+        outside:= outside or (rising and (round(Y) < LAND_HEIGHT - 1024 - randMargin));
 
         // if flake left acceptable vertical area, respawn it opposite side
         if outside then
             begin
-            X:= cLeftScreenBorder + random(cScreenSpace);
             if rising then
-                Y:= Y + (1024 + spawnMargin + random(50))
+                begin
+                if State = 0 then
+                    begin
+                    // fade out rising flake
+                    diff:= (LAND_HEIGHT - 1024 - randMargin) - round(Y);
+                    diff:= Min(diff*2, $FF);
+                    if diff >= $FF then
+                        begin
+                        diff:= $FF;
+                        State:= 1;
+                        end;
+                    Tint:= (Tint and $FFFFFF00) or ($FF - diff);
+                    end
+                else
+                    begin
+                    Y:= LAND_HEIGHT + spawnMargin + random(50);
+                    moved:= true;
+                    State:= 0;
+                    Tint:= Tint or $FF;
+                    end;
+                end
             else
+                begin
                 Y:= Y - (1024 + spawnMargin + random(50));
-            moved:= true;
+                moved:= true;
+                end;
+            if moved then
+                X:= cLeftScreenBorder + random(cScreenSpace);
             end;
 
         if moved then
