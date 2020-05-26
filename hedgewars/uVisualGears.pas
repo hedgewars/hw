@@ -463,7 +463,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud, 0, true)
+    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cCloudsNumber + 1)), LAND_HEIGHT-cCloudOffset, vgtCloud, 0, true)
 end;
 
 procedure ChangeToSDClouds;
@@ -484,8 +484,13 @@ for i:= 0 to 6 do
             end
         else vg:= vg^.NextGear;
     for j:= 0 to cSDCloudsNumber - 1 do
-        AddVisualGear(cLeftScreenBorder + j * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud, 0, true)
+        AddVisualGear(cLeftScreenBorder + j * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-cCloudOffset, vgtCloud, 0, true)
     end;
+end;
+
+procedure AddFlake; inline;
+begin
+    AddVisualGear(cLeftScreenBorder + random(cScreenSpace), LAND_HEIGHT-cCloudOffset+ random(cCloudOffset), vgtFlake);
 end;
 
 procedure AddFlakes;
@@ -496,10 +501,10 @@ if (cReducedQuality and rqKillFlakes) <> 0 then
 
 if hasBorder or (not cSnow) then
     for i:= 0 to Pred(vobCount * cScreenSpace div 4096) do
-        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
+        AddFlake
 else
     for i:= 0 to Pred((vobCount * cScreenSpace div 4096) div 3) do
-        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
+        AddFlake;
 end;
 
 procedure ChangeToSDFlakes;
@@ -526,10 +531,10 @@ for i:= 0 to 6 do
     end;
 if hasBorder or (not cSnow) then
     for i:= 0 to Pred(vobSDCount * cScreenSpace div 4096) do
-        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
+        AddFlake
 else
     for i:= 0 to Pred((vobSDCount * cScreenSpace div 4096) div 3) do
-        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
+        AddFlake;
 end;
 
 procedure initModule;

@@ -195,6 +195,7 @@ const
 
     cBorderWidth = 6; // width of indestructible border
                       // width of 3 allowed hogs to be knocked through with grenade
+    cCloudOffset = 1184; // Y offset for clouds (cloud height = LAND_HEIGHT-cCloudOffset)
 
     cHHRadius = 9; // hedgehog radius
     cHHStepTicks = 29;

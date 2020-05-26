@@ -180,7 +180,7 @@ with Gear^ do
         // flake fell far below map?
         outside:= (not rising) and (round(Y) - spawnMargin + randMargin > LAND_HEIGHT);
         // if not, did it rise far above map?
-        outside:= outside or (rising and (round(Y) < LAND_HEIGHT - 1024 - randMargin));
+        outside:= outside or (rising and (round(Y) < LAND_HEIGHT - (cCloudOffset - 110)));
 
         // if flake left acceptable vertical area, respawn it opposite side
         if outside then
@@ -190,7 +190,7 @@ with Gear^ do
                 if State = 0 then
                     begin
                     // fade out rising flake
-                    diff:= (LAND_HEIGHT - 1024 - randMargin) - round(Y);
+                    diff:= (LAND_HEIGHT - (cCloudOffset - 110)) - round(Y);
                     diff:= Min(diff*2, $FF);
                     if diff >= $FF then
                         begin
@@ -252,7 +252,7 @@ s := (GameTicks + Gear^.Timer) mod 4096;
 t := 8 * Gear^.Scale * hwFloat2Float(AngleSin(s mod 2048));
 if (s < 2048) then t := -t;
 
-Gear^.Y := LAND_HEIGHT - 1184 + LongInt(Gear^.Timer mod 8) + t;
+Gear^.Y := LAND_HEIGHT - cCloudOffset + LongInt(Gear^.Timer mod 8) + t;
 
 if round(Gear^.X) < cLeftScreenBorder then
     Gear^.X:= Gear^.X + cScreenSpace
