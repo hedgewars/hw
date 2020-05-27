@@ -564,7 +564,7 @@ begin
         (((Gear^.Radius < 3) and (Gear^.dY < -_0_1)) or
             ((Gear^.Radius >= 3) and
                 ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)))) then
-        PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true);
+        PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), Gear^.Kind <> gtDynamite);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

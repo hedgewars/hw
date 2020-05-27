@@ -1,7 +1,7 @@
 + features
 * bugfixes
 ==================== 1.0.1-dev =====================
- + Add dynamite fuse sound
+ + Add dynamite fuse and impact sounds
  + Various small HUD tweaks
  + Racer: Allow to set turn time in game scheme
  + Racer: Reset mines, air mines and sticky mines every turn

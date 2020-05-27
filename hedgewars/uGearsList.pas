@@ -567,6 +567,8 @@ case Kind of
                 gear^.Health:= 50
                 end;
     gtDynamite: begin
+                gear^.ImpactSound:= sndDynamiteImpact;
+                gear^.nImpactSounds:= 1;
                 gear^.Radius:= 3;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_03;
