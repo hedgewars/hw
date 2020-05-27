@@ -1334,3 +1334,4 @@
 06:26=Unknown command or invalid parameters. Say “/help” in chat for a list of commands.
 06:27=/help room: List room chat commands
 06:28=You're not online!
+06:29=/bubble: Make hedgehog hold its breath

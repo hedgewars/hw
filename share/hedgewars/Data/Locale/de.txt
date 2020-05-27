@@ -1422,3 +1422,4 @@
 06:26=Unbekannter Befehl oder ungültige Parameter. Sag »/help« im Chat für eine Liste an Befehlen.
 06:27=/help room: Raum-Chatbefehle auflisten
 06:28=Du bist nicht online!
+06:29=/bubble: Igel die Luft anhalten lassen

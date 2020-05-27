@@ -595,6 +595,7 @@ if (s[1] = '/') then
         AddChatString(#3 + shortstring(trcmd[sidCmdRollup]));
         AddChatString(#3 + shortstring(trcmd[sidCmdShrug]));
         AddChatString(#3 + shortstring(trcmd[sidCmdWave]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdBubble]));
         exit
         end;
 
