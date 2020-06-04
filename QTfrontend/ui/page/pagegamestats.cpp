@@ -21,6 +21,7 @@
 #include <QHBoxLayout>
 #include <QGraphicsScene>
 #include <QGroupBox>
+#include <QPainterPath>
 #include <QSizePolicy>
 
 #include "pagegamestats.h"
