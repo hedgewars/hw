@@ -635,15 +635,14 @@ if (s[1] = '/') then
         end;
 
     // hedghog animations/taunts and engine commands
-    if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
-        begin
-        for i:= Low(TWave) to High(TWave) do
-            if (s = Wavez[i].cmd) then
-                begin
+    for i:= Low(TWave) to High(TWave) do
+        if (s = Wavez[i].cmd) then
+            begin
+            // only works for local non-bot teams
+            if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
                 ParseCommand('/taunt ' + char(i), true);
-                exit
-                end;
-        end;
+            exit;
+            end;
 
     for j:= Low(TChatCmd) to High(TChatCmd) do
         if (s = ChatCommandz[j].ChatCmd) then
