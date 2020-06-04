@@ -877,6 +877,13 @@ else if SpritesData[spr].Texture <> nil then
     end
 end;
 
+// Force the lower camera boundary to never be lower than a few pixels below the water line
+function LowerCameraBound: LongInt;
+begin
+LowerCameraBound:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + trunc(CinematicBarH / (cScaleFactor / 2.0)));
+if WorldDy < LowerCameraBound then
+    WorldDy:= LowerCameraBound;
+end;
 
 procedure DrawWorld(Lag: LongInt);
 begin
@@ -897,7 +904,9 @@ begin
         ZoomValue:= zoom;
 
     if (not isPaused) and (not isAFK) and (GameType <> gmtRecord) then
-        MoveCamera;
+        MoveCamera
+    else if (isPaused) then
+        LowerCameraBound;
 
     if cStereoMode = smNone then
         begin
@@ -1941,9 +1950,7 @@ if (WorldEdge = weWrap) then
             WorldDx:= WorldDx + rightX - leftX;
     end;
 
-wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + trunc(CinematicBarH / (cScaleFactor / 2.0)));
-if WorldDy < wdy then
-    WorldDy:= wdy;
+wdy:= LowerCameraBound;
 
 if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
     exit;
