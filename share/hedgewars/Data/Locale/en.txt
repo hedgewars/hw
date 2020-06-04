@@ -1335,3 +1335,4 @@
 06:27=/help room: List room chat commands
 06:28=You're not online!
 06:29=/bubble: Make hedgehog hold its breath
+06:30=/happy: Make hedgehog look happy

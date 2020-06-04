@@ -95,7 +95,7 @@ type
             sprSliderInverted, sprFingerBack, sprFingerBackInv, sprTargetPBack, sprTargetPBackInv,
             sprHealthHud, sprHealthPoisonHud, sprVampHud, sprKarmaHud, sprMedicHud, sprMedicPoisonHud,
             sprHaloHud, sprInvulnHUD, sprAmPiano, sprHandLandGun, sprFirePunch, sprThroughWrap,
-            sprDynamiteDefused, sprHogBubble);
+            sprDynamiteDefused, sprHogBubble, sprHappy);
 
     // Gears that interact with other Gears and/or Land
     // first row of gears (<gtExplosives) should be avoided when searching a spawn place
@@ -189,7 +189,8 @@ type
             siPointType, siTeamRank, siEverAfter);
 
     // Various 'emote' animations a hedgehog can do
-    TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle, waveBubble);
+    TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle, waveBubble,
+             waveHappy);
 
     TRenderMode = (rmDefault, rmLeftEye, rmRightEye);
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
@@ -528,7 +529,7 @@ type
             sidCmdSpeechNumberHint, sidCmdHsa, sidCmdHta, sidCmdHya,
             sidCmdHurrah, sidCmdIlovelotsoflemonade, sidCmdJuggle,
             sidCmdRollup, sidCmdShrug, sidCmdWave, sidCmdUnknown,
-            sidCmdHelpRoom, sidCmdHelpRoomFail, sidCmdBubble);
+            sidCmdHelpRoom, sidCmdHelpRoomFail, sidCmdBubble, sidCmdHappy);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
