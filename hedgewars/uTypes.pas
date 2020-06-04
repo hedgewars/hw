@@ -529,7 +529,8 @@ type
             sidCmdSpeechNumberHint, sidCmdHsa, sidCmdHta, sidCmdHya,
             sidCmdHurrah, sidCmdIlovelotsoflemonade, sidCmdJuggle,
             sidCmdRollup, sidCmdShrug, sidCmdWave, sidCmdUnknown,
-            sidCmdHelpRoom, sidCmdHelpRoomFail, sidCmdBubble, sidCmdHappy);
+            sidCmdHelpRoom, sidCmdHelpRoomFail, sidCmdBubble, sidCmdHappy,
+            sidCmdSad);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,

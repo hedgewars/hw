@@ -1336,3 +1336,4 @@
 06:28=You're not online!
 06:29=/bubble: Make hedgehog hold its breath
 06:30=/happy: Make hedgehog look happy
+06:31=/sad: Make hedgehog look sad

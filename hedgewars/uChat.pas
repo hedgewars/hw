@@ -589,14 +589,15 @@ if (s[1] = '/') then
         AddChatString(#3 + shortstring(trcmd[sidCmdHsa]));
         AddChatString(#3 + shortstring(trcmd[sidCmdHta]));
         AddChatString(#3 + shortstring(trcmd[sidCmdHya]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdHappy]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdWave]));
         AddChatString(#3 + shortstring(trcmd[sidCmdHurrah]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdShrug]));
+        AddChatString(#3 + shortstring(trcmd[sidCmdSad]));
         AddChatString(#3 + shortstring(trcmd[sidCmdIlovelotsoflemonade]));
         AddChatString(#3 + shortstring(trcmd[sidCmdJuggle]));
         AddChatString(#3 + shortstring(trcmd[sidCmdRollup]));
-        AddChatString(#3 + shortstring(trcmd[sidCmdShrug]));
-        AddChatString(#3 + shortstring(trcmd[sidCmdWave]));
         AddChatString(#3 + shortstring(trcmd[sidCmdBubble]));
-        AddChatString(#3 + shortstring(trcmd[sidCmdHappy]));
         exit
         end;
 

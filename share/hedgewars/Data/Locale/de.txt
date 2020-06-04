@@ -1424,3 +1424,4 @@
 06:28=Du bist nicht online!
 06:29=/bubble: Igel die Luft anhalten lassen
 06:30=/happy: Igel glücklich aussehen lassen
+06:31=/sad: Igel unglücklich aussehen lassen
