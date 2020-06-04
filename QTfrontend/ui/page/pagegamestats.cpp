@@ -22,6 +22,7 @@
 #include <QGraphicsScene>
 #include <QGroupBox>
 #include <QSizePolicy>
+#include <QPainterPath>
 
 #include "pagegamestats.h"
 #include "team.h"
