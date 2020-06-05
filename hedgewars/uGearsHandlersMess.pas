@@ -1842,7 +1842,7 @@ var
 procedure doStepBlowTorchWork(Gear: PGear);
 var
     HHGear: PGear;
-    dig: boolean;
+    dig, hit: boolean;
     prevX: LongInt;
 begin
     AllInactive := false;
@@ -1851,6 +1851,7 @@ begin
 
     if Gear^.Hedgehog^.Gear = nil then
         begin
+        ClearProximityCache();
         StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear);
         AfterAttack;
@@ -1862,6 +1863,7 @@ begin
     HedgehogChAngle(HHGear);
 
     dig := false;
+    hit := false;
 
     if abs(LongInt(HHGear^.Angle) - BTPrevAngle) > 7  then
         begin
@@ -1877,6 +1879,9 @@ begin
         if (HHGear^.State and gstHHDriven) = 0 then
             Gear^.Timer := 0
         end;
+
+    if Gear^.Timer mod 1500 = 0 then
+        RefillProximityCache(Gear, 200);
 
     if Gear^.Timer mod cHHStepTicks = 0 then
         begin
@@ -1902,7 +1907,7 @@ begin
             end;
 
         inc(BTSteps);
-        if BTSteps = 7 then
+        if BTSteps = 11 then
             begin
             BTSteps := 0;
             if CheckLandValue(hwRound(HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC) + SignAs(_6,Gear^.dX)), hwRound(HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC)),lfIndestructible) then
@@ -1910,24 +1915,30 @@ begin
                 Gear^.X := HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
                 Gear^.Y := HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
                 end;
-            HHGear^.State := HHGear^.State or gstNoDamage;
-            AmmoShove(Gear, Gear^.Boom, 15);
-            HHGear^.State := HHGear^.State and (not gstNoDamage)
+            hit := true
             end;
         end;
 
     if dig then
         begin
         DrawTunnel(HHGear^.X + Gear^.dX * cHHRadius,
-        HHGear^.Y + Gear^.dY * cHHRadius - _1 -
-        ((hwAbs(Gear^.dX) / (hwAbs(Gear^.dX) + hwAbs(Gear^.dY))) * _0_5 * 7),
-        Gear^.dX, Gear^.dY,
-        cHHStepTicks, cHHRadius * 2 + 7);
+            HHGear^.Y + Gear^.dY * cHHRadius - _1 -
+                ((hwAbs(Gear^.dX) / (hwAbs(Gear^.dX) + hwAbs(Gear^.dY))) * _0_5 * 7),
+            Gear^.dX, Gear^.dY,
+            cHHStepTicks, cHHRadius * 2 + 7);
+
+        HHGear^.State := HHGear^.State or gstNoDamage;
+        if hit then
+            AmmoShoveCache(Gear, Gear^.Boom, 15)
+        else
+            AmmoShoveCache(Gear, 0, 15);
+        HHGear^.State := HHGear^.State and (not gstNoDamage);
         end;
 
     if (TurnTimeLeft = 0) or (Gear^.Timer = 0)
     or ((HHGear^.Message and gmAttack) <> 0) then
         begin
+        ClearProximityCache();
         StopSoundChan(Gear^.SoundChannel);
         HHGear^.Message := 0;
         HHGear^.State := HHGear^.State and (not gstNotKickable);
@@ -1953,6 +1964,7 @@ begin
         cHHStepTicks, cHHRadius * 2 + 7);
     HHGear^.Message := 0;
     HHGear^.State := HHGear^.State or gstNotKickable;
+    RefillProximityCache(Gear, 200);
     Gear^.SoundChannel := LoopSound(sndBlowTorch);
     Gear^.doStep := @doStepBlowTorchWork
 end;
