@@ -84,6 +84,16 @@ void SelWeaponItem::setEnabled(bool value)
     item->setEnabled(value);
 }
 
+int SelWeaponWidget::readWeaponValue(const QChar chr, int max)
+{
+    int value = chr.digitValue();
+    if (value == -1)
+        value = 0;
+    else if (value > max)
+        value = max;
+    return value;
+}
+
 SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     QFrame(parent),
     m_numItems(numItems)
@@ -187,19 +197,19 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
         // TODO: Unhide amCreeper when this weapon is done
         if (i == 6 || i == 57) continue;
         if (k % 4 == 0) ++j;
-        SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
+        SelWeaponItem * swi = new SelWeaponItem(true, i, readWeaponValue(currentState[i], 9), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
         weaponItems[i].append(swi);
         p1Layout->addWidget(swi, j, k % 4);
 
-        SelWeaponItem * pwi = new SelWeaponItem(false, i, currentState[numItems + i].digitValue(), QImage(":/res/ammopicbox.png"), QImage(":/res/ammopicboxgrey.png"), this);
+        SelWeaponItem * pwi = new SelWeaponItem(false, i, readWeaponValue(currentState[numItems + i], 8), QImage(":/res/ammopicbox.png"), QImage(":/res/ammopicboxgrey.png"), this);
         weaponItems[i].append(pwi);
         p2Layout->addWidget(pwi, j, k % 4);
 
-        SelWeaponItem * dwi = new SelWeaponItem(false, i, currentState[numItems*2 + i].digitValue(), QImage(":/res/ammopicdelay.png"), QImage(":/res/ammopicdelaygrey.png"), this);
+        SelWeaponItem * dwi = new SelWeaponItem(false, i, readWeaponValue(currentState[numItems*2 + i], 8), QImage(":/res/ammopicdelay.png"), QImage(":/res/ammopicdelaygrey.png"), this);
         weaponItems[i].append(dwi);
         p3Layout->addWidget(dwi, j, k % 4);
 
-        SelWeaponItem * awi = new SelWeaponItem(false, i, currentState[numItems*3 + i].digitValue(), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
+        SelWeaponItem * awi = new SelWeaponItem(false, i, readWeaponValue(currentState[numItems*3 + i], 8), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
         weaponItems[i].append(awi);
         p4Layout->addWidget(awi, j, k % 4);
 
@@ -229,10 +239,10 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
     {
         twi::iterator it = weaponItems.find(i);
         if (it == weaponItems.end()) continue;
-        it.value()[0]->setItemsNum(ammo[i].digitValue());
-        it.value()[1]->setItemsNum(ammo[m_numItems + i].digitValue());
-        it.value()[2]->setItemsNum(ammo[m_numItems*2 + i].digitValue());
-        it.value()[3]->setItemsNum(ammo[m_numItems*3 + i].digitValue());
+        it.value()[0]->setItemsNum(readWeaponValue(ammo[i], 9));
+        it.value()[1]->setItemsNum(readWeaponValue(ammo[m_numItems + i], 8));
+        it.value()[2]->setItemsNum(readWeaponValue(ammo[m_numItems*2 + i], 8));
+        it.value()[3]->setItemsNum(readWeaponValue(ammo[m_numItems*3 + i], 8));
         it.value()[0]->setEnabled(enable);
         it.value()[1]->setEnabled(enable);
         it.value()[2]->setEnabled(enable);
