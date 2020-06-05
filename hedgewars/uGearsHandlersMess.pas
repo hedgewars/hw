@@ -1842,7 +1842,7 @@ var
 procedure doStepBlowTorchWork(Gear: PGear);
 var
     HHGear: PGear;
-    b: boolean;
+    dig: boolean;
     prevX: LongInt;
 begin
     AllInactive := false;
@@ -1861,14 +1861,14 @@ begin
 
     HedgehogChAngle(HHGear);
 
-    b := false;
+    dig := false;
 
     if abs(LongInt(HHGear^.Angle) - BTPrevAngle) > 7  then
         begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle) * _0_5, Gear^.dX);
         Gear^.dY := AngleCos(HHGear^.Angle) * ( - _0_5);
         BTPrevAngle := HHGear^.Angle;
-        b := true
+        dig := true
         end;
 
     if ((HHGear^.State and gstMoving) <> 0) then
@@ -1880,7 +1880,7 @@ begin
 
     if Gear^.Timer mod cHHStepTicks = 0 then
         begin
-        b := true;
+        dig := true;
         if Gear^.dX.isNegative then
             HHGear^.Message := (HHGear^.Message and (gmAttack or gmUp or gmDown)) or gmLeft
         else
@@ -1891,14 +1891,13 @@ begin
             HHGear^.State := HHGear^.State and (not gstAttacking);
             prevX := hwRound(HHGear^.X);
 
-            // why the call to HedgehogStep then a further increment of X?
-            if (prevX = hwRound(HHGear^.X)) and
-               CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y),
-               lfIndestructible) then HedgehogStep(HHGear);
+            if CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y),lfIndestructible) then
+                begin
+                HedgehogStep(HHGear);
+                if (prevX = hwRound(HHGear^.X)) then
+                    HHGear^.X := HHGear^.X + SignAs(_1, HHGear^.dX);
+                end;
 
-            if (prevX = hwRound(HHGear^.X)) and
-               CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y),
-               lfIndestructible) then HHGear^.X := HHGear^.X + SignAs(_1, HHGear^.dX);
             HHGear^.State := HHGear^.State or gstAttacking
             end;
 
@@ -1917,7 +1916,7 @@ begin
             end;
         end;
 
-    if b then
+    if dig then
         begin
         DrawTunnel(HHGear^.X + Gear^.dX * cHHRadius,
         HHGear^.Y + Gear^.dY * cHHRadius - _1 -
