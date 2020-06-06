@@ -539,7 +539,11 @@ begin
         Gear^.dY := Gear^.dY + cGravity;
         if ((GameFlags and gfMoreWind) <> 0) and
            // Disable gfMoreWind for land objects on turn end to prevent bouncing them forever
-           ((not (Gear^.Kind in [gtMine, gtAirMine, gtSMine, gtKnife, gtExplosives])) or (TurnTimeLeft > 0)) and
+           // This solution is rather ugly, in that it will occassionally suddenly wind physics
+           // while a gear is moving, this can be rather confusing.
+           // TODO: Find a way to make gfMoreWind-affected land objects settle more reliably
+           // and quickler without touching wind itselvs
+           ((not (Gear^.Kind in [gtMine, gtAirMine, gtSMine, gtKnife, gtExplosives])) or (TimeNotInTurn < MaxMoreWindTime)) and
            ((xland or land) = 0) and
            ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density

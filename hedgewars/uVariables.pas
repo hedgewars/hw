@@ -105,6 +105,7 @@ var
     TurnClockActive : boolean;
     TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
+    TimeNotInTurn   : Longword; // Milliseconds that passed while no turn is active
     IsGetAwayTime   : boolean;
     GameOver        : boolean;
     cSuddenDTurns   : LongInt;
@@ -2898,6 +2899,7 @@ begin
     GameOver            := false;
     TurnClockActive     := true;
     TagTurnTimeLeft     := 0;
+    TimeNotInTurn       := 0;
     cSuddenDTurns       := 15;
     LastSuddenDWarn     := -2;
     cInitHealth         := 100;
