@@ -54,6 +54,7 @@ function TestWhip(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParam
 function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDrillStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestMineStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -85,7 +86,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestBaseballBat; flags: amtest_NoTarget), // amBaseballBat
             (proc: nil;              flags: 0), // amParachute
             (proc: @TestAirAttack;   flags: amtest_Rare), // amAirAttack
-            (proc: nil;              flags: 0), // amMineStrike
+            (proc: @TestMineStrike;  flags: amtest_Rare), // amMineStrike
             (proc: nil;              flags: 0), // amBlowTorch
             (proc: nil;              flags: 0), // amGirder
             (proc: nil;              flags: 0), // amTeleport
@@ -1442,6 +1443,85 @@ else
     end;
 
 TestDrillStrike:= valueResult;
+end;
+
+function TestMineStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const cShift = 4;
+var minesSpeed, X, Y, dY: real;
+    b: array[0..9] of boolean;
+    dmg: array[0..9] of LongInt;
+    fexit: boolean;
+    i, t, valueResult: LongInt;
+begin
+Flags:= Flags; // avoid compiler hint
+ap.ExplR:= 0;
+ap.Time:= 0;
+
+// AI currently only supports cMinesTime = 0 because it's the most
+// predictable.
+// Other cMinesTime values are risky because of bouncy mines;
+// so they are unsupported.
+// TODO: Implement mine strike for other values of MineTime
+// TODO: Teach AI to avoid hitting their own with mines
+if (Level > 3) or (cGravityf = 0) or (cMinesTime <> 0) then
+    exit(BadTurn);
+
+ap.Angle:= 0;
+ap.AttackPutX:= Targ.Point.X;
+ap.AttackPutY:= Targ.Point.Y;
+
+minesSpeed:= hwFloat2Float(cBombsSpeed);
+X:= Targ.Point.X - 135 - cShift; // hh center - cShift
+X:= X - minesSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
+Y:= -128;
+dY:= 0;
+
+for i:= 0 to 9 do
+    begin
+    b[i]:= true;
+    dmg[i]:= 0
+    end;
+valueResult:= 0;
+
+repeat
+    X:= X + minesSpeed;
+    Y:= Y + dY;
+    dY:= dY + cGravityf;
+    fexit:= true;
+
+    for i:= 0 to 9 do
+        if b[i] then
+            begin
+            fexit:= false;
+            if TestColl(trunc(X) + LongWord(i * 30), trunc(Y), 4) then
+                begin
+                b[i]:= false;
+                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 96)
+                end
+            end;
+until fexit or (Y > cWaterLine);
+
+for i:= 0 to 5 do
+    if dmg[i] <> BadTurn then
+        inc(valueResult, dmg[i]);
+t:= valueResult;
+ap.AttackPutX:= Targ.Point.X - 60;
+
+for i:= 0 to 3 do
+    if dmg[i] <> BadTurn then
+        begin
+        dec(t, dmg[i]);
+        inc(t, dmg[i + 6]);
+        if t > valueResult then
+            begin
+            valueResult:= t;
+            ap.AttackPutX:= Targ.Point.X - 30 - cShift + i * 30
+            end
+        end;
+
+if valueResult <= 0 then
+    valueResult:= BadTurn;
+TestMineStrike:= valueResult;
 end;
 
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
