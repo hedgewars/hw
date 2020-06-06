@@ -53,6 +53,7 @@ function TestFirePunch(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttack
 function TestWhip(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestDrillStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -118,7 +119,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestGrenade;     flags: 0), // amSMine
             (proc: @TestHammer;      flags: amtest_NoTarget), // amHammer
             (proc: nil;              flags: 0), // amResurrector
-            (proc: nil;              flags: 0), // amDrillStrike
+            (proc: @TestDrillStrike; flags: amtest_Rare), // amDrillStrike
             (proc: nil;              flags: 0), // amSnowball
             (proc: nil;              flags: 0), // amTardis
             (proc: nil;              flags: 0), // amLandGun
@@ -1306,6 +1307,142 @@ if valueResult <= 0 then
 TestAirAttack:= valueResult;
 end;
 
+function TestDrillStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const cShift = 4;
+var bombsSpeed, X, Y, dX, dY, drillX, drillY: real;
+    t2: real;
+    b: array[0..9] of boolean;
+    dmg: array[0..9] of LongInt;
+    fexit, collided: boolean;
+    i, t, value, valueResult, attackTime, drillTimer, targetX: LongInt;
+begin
+Flags:= Flags; // avoid compiler hint
+ap.ExplR:= 0;
+if (Level > 3) or (cGravityf = 0) then
+    exit(BadTurn);
+
+ap.Angle:= 0;
+targetX:= Targ.Point.X;
+ap.AttackPutY:= Targ.Point.Y;
+
+bombsSpeed:= hwFloat2Float(cBombsSpeed);
+X:= Targ.Point.X - 135 - cShift; // hh center - cShift
+X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
+Y:= -128;
+dX:= bombsSpeed;
+dY:= 0;
+
+valueResult:= 0;
+
+attackTime:= 0;
+while attackTime <= 4000 do
+    begin
+    inc(attackTime, 1000);
+    value:= 0;
+    for i:= 0 to 9 do
+        begin
+        b[i]:= true;
+        dmg[i]:= 0
+        end;
+
+    repeat
+        X:= X + dX;
+        Y:= Y + dY;
+        dY:= dY + cGravityf;
+        fexit:= true;
+
+        for i:= 0 to 9 do
+            if b[i] then
+                begin
+                fexit:= false;
+                collided:= false;
+                drillX:= trunc(X) + LongWord(i * 30);
+                drillY:= trunc(Y);
+                // Collided with land ... simulate drilling
+                if TestCollExcludingObjects(trunc(drillX), trunc(drillY), 4) and
+                    (Abs(Targ.Point.X - trunc(X)) + Abs(Targ.Point.Y - trunc(Y)) > 21) then
+                    begin
+                    drillTimer := attackTime;
+                    t2 := 0.5 / sqrt(sqr(dX) + sqr(dY));
+                    dX := dX * t2;
+                    dY := dY * t2;
+                    repeat
+                        drillX:= drillX + dX;
+                        drillY:= drillY + dY;
+                        dec(drillTimer, 10);
+                    until (Abs(Targ.Point.X - drillX) + Abs(Targ.Point.Y - drillY) < 22)
+                        or (drillX < 0)
+                        or (drillY < 0)
+                        or (trunc(drillX) > LAND_WIDTH)
+                        or (trunc(drillY) > LAND_HEIGHT)
+                        // TODO: Simulate falling again when rocket has left terrain again
+                        or (drillTimer <= 0);
+                    collided:= true;
+                    end
+                // Collided with something else ... record collision
+                else if TestColl(trunc(drillX), trunc(drillY), 4) then
+                    collided:= true;
+
+                // Simulate explosion
+                if collided then
+                    begin
+                    b[i]:= false;
+                    dmg[i]:= RateExplosion(Me, trunc(drillX), trunc(drillY), 58);
+                    // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
+                    end;
+                end;
+    until fexit or (Y > cWaterLine);
+
+    for i:= 0 to 5 do
+        if dmg[i] <> BadTurn then
+            inc(value, dmg[i]);
+    t:= value;
+    targetX:= Targ.Point.X - 60;
+
+    for i:= 0 to 3 do
+        if dmg[i] <> BadTurn then
+            begin
+            dec(t, dmg[i]);
+            inc(t, dmg[i + 6]);
+            if t > value then
+                begin
+                value:= t;
+                targetX:= Targ.Point.X - 30 - cShift + i * 30
+                end
+            end;
+
+    if value > valueResult then
+        begin
+        valueResult:= value;
+        ap.AttackPutX:= targetX;
+        ap.Time:= attackTime;
+        end;
+end;
+
+if valueResult <= 0 then
+    valueResult:= BadTurn
+else
+    begin
+    // Weaker AI has chance to get the time wrong by 1-3 seconds
+    if Level = 5 then
+        // +/- 3 seconds
+        ap.Time:= ap.Time + (3 - random(7)) * 1000
+    else if Level = 4 then
+        // +/- 2 seconds
+        ap.Time:= ap.Time + (2 - random(5)) * 1000
+    else if Level = 3 then
+        // +/- 1 second
+        if (random(2) = 0) then
+            ap.Time:= ap.Time + (1 - random(3)) * 1000
+    else if Level = 2 then
+        // 50% chance for +/- 1 second
+        if (random(2) = 0) then
+            ap.Time:= ap.Time + (1 - random(3)) * 1000;
+    ap.Time:= Min(5000, Max(1000, ap.Time));
+    end;
+
+TestDrillStrike:= valueResult;
+end;
 
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var

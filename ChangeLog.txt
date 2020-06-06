@@ -11,6 +11,7 @@
  + Themes: Make Sudden Death flakes in Underwater theme rise
  + New taunt chat commands: /bubble, /happy
  + Teach computer players how to drop mines
+ + Teach computer players how to use drill strike
  * Racer: Resize waypoints in custom-sized drawn maps
  * Mutant: Fix impossible to become mutant after mutant is gone
  * A Classic Fairytale: Mission 1: Fix possibility of getting stuck in “Leap of Faith” section
