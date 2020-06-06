@@ -31,6 +31,7 @@ const MAXACTIONS     = 96;
     aia_Up         = 5;
     aia_Down       = 6;
     aia_Switch     = 7;
+    aia_Precise    = 8;
 
     aia_Weapon     = $8000;
     aia_WaitXL     = $8001;
@@ -73,7 +74,7 @@ uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uConsts, uUtils, uIO{$IFDEF TR
 var PrevX: LongInt = 0;
     timedelta: Longword = 0;
 
-const ActionIdToStr: array[0..7] of string[16] = (
+const ActionIdToStr: array[0..8] of string[16] = (
 {aia_none}           '',
 {aia_Left}           'left',
 {aia_Right}          'right',
@@ -81,7 +82,8 @@ const ActionIdToStr: array[0..7] of string[16] = (
 {aia_attack}         'attack',
 {aia_Up}             'up',
 {aia_Down}           'down',
-{aia_Switch}         'switch'
+{aia_Switch}         'switch',
+{aia_Precise}        'precise'
                      );
 
 {$IFDEF TRACEAIACTIONS}

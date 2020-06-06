@@ -180,6 +180,14 @@ for i:= 0 to Pred(Targets.Count) do
                     if (Ammoz[a].Ammo.Propz and ammoprop_Timerable) <> 0 then
                         AddAction(BestActions, aia_Timer, ap.Time div 1000, 400, 0, 0);
 
+                    // Set minimum mine bounciness for improved aim
+                    if (BotLevel < 5) and (a = amMine) then
+                        begin
+                        AddAction(BestActions, aia_Precise, aim_push, 10, 0, 0);
+                        AddAction(BestActions, aia_Timer, 1, 200, 0, 0);
+                        AddAction(BestActions, aia_Precise, aim_release, 10, 0, 0);
+                        end;
+
                     if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
                         begin
                         dAngle:= LongInt(Me^.Angle) - Abs(ap.Angle);
