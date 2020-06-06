@@ -57,6 +57,7 @@ function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackP
 function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
     TAmmoTest = record
@@ -75,7 +76,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amPickHammer
             (proc: nil;              flags: 0), // amSkip
             (proc: nil;              flags: 0), // amRope
-            (proc: nil;              flags: 0), // amMine
+            (proc: @TestMine;        flags: amtest_NoTarget), // amMine
             (proc: @TestDesertEagle; flags: amtest_MultipleAttacks), // amDEagle
             (proc: @TestDynamite;    flags: amtest_NoTarget), // amDynamite
             (proc: @TestFirePunch;   flags: amtest_NoTarget), // amFirePunch
@@ -1469,6 +1470,51 @@ if (valueResult > 0) then
     valueResult:= BadTurn;
 
 TestDynamite:= valueResult
+end;
+
+function TestMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+var valueResult: LongInt;
+    x, y, dx, dy: real;
+    EX, EY, t: LongInt;
+begin
+Flags:= Flags; // avoid compiler hint
+Targ:= Targ; // avoid compiler hint
+
+x:= hwFloat2Float(Me^.X) + hwSign(Me^.dX) * 7;
+y:= hwFloat2Float(Me^.Y);
+dx:= hwSign(Me^.dX) * 0.02;
+dy:= 0;
+t:= 10000;
+repeat
+    dec(t);
+    x:= x + dx;
+    dy:= dy + cGravityf;
+    y:= y + dy;
+    if ((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 2)) or
+        ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 2)) then
+        t:= 0;
+until t = 0;
+
+EX:= trunc(x);
+EY:= trunc(y);
+
+if Level = 1 then
+    valueResult:= RateExplosion(Me, EX, EY, 51, afTrackFall or afErasesLand)
+else
+    valueResult:= RateExplosion(Me, EX, EY, 51);
+
+if (valueResult > 0) then
+    begin
+    ap.Angle:= 0;
+    ap.Power:= 1;
+    ap.Time:= 0;
+    ap.ExplR:= 100;
+    ap.ExplX:= EX;
+    ap.ExplY:= EY
+    end else
+    valueResult:= BadTurn;
+
+TestMine:= valueResult
 end;
 
 end.
