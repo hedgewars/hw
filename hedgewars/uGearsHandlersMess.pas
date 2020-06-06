@@ -535,8 +535,11 @@ begin
 
     if isFalling and (Gear^.State and gstNoGravity = 0) then
         begin
+        // Apply gravity and wind
         Gear^.dY := Gear^.dY + cGravity;
-        if (GameFlags and gfMoreWind <> 0) and (TurnTimeLeft > 0) and
+        if ((GameFlags and gfMoreWind) <> 0) and
+           // Disable gfMoreWind for land objects on turn end to prevent bouncing them forever
+           ((not (Gear^.Kind in [gtMine, gtAirMine, gtSMine, gtKnife, gtExplosives])) or (TurnTimeLeft > 0)) and
            ((xland or land) = 0) and
            ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density

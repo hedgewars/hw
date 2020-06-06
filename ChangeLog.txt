@@ -15,6 +15,7 @@
  * A Classic Fairytale: Mission 1: Fix possibility of getting stuck in “Leap of Faith” section
  * A Space Adventure: The First Stop: Fix broken victory condition when eliminating minions
  * A Space Adventure: Killing the Specialists: Don't award player health if enemy hurts itself
+ * Fix many projectiles not being affected by Heavy Wind after turn end
  * Fix hog getting stuck when opening parachute right after a shoryuken digging through land
  * Fix weapon schemes sometimes not being saved properly
 
