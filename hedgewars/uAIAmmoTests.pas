@@ -30,7 +30,7 @@ const
 var windSpeed: real;
 
 type TAttackParams = record
-        Time, AttacksNum: Longword;
+        Time, Bounce, AttacksNum: Longword;
         Angle, Power: LongInt;
         ExplX, ExplY, ExplR: LongInt;
         AttackPutX, AttackPutY: LongInt;
@@ -548,6 +548,7 @@ var Vx, Vy, r: real;
 begin
 valueResult:= BadTurn;
 TestTime:= 0;
+ap.Bounce:= 0;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
@@ -612,6 +613,7 @@ begin
 Flags:= Flags; // avoid compiler hint
 valueResult:= BadTurn;
 TestTime:= 500;
+ap.Bounce:= 0;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
@@ -1508,6 +1510,11 @@ if (valueResult > 0) then
     ap.Angle:= 0;
     ap.Power:= 1;
     ap.Time:= 0;
+    if (Level < 5) then
+        // Set minimum mine bounciness for improved aim
+        ap.Bounce:= 1
+    else
+        ap.Bounce:= 0;
     ap.ExplR:= 100;
     ap.ExplX:= EX;
     ap.ExplY:= EY
