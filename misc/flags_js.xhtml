@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- There is, at present, no official xsd for (X)HTML5. A pity. Usefulness would depend on the parser and extensions made by the site.  -->
+    <title>Hedgewars Flags</title>
+
+    <style type="text/css">
+* {padding: 0; margin: 0; }
+body
+{
+    background-color: #0B203D;
+    color: #FFD902;
+    background-size: 100% 100%;
+    font-family: sans-serif;
+}
+form, p
+{
+    background-color: #0B203D;
+    padding: 1em;
+    margin: 1em;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 2px;
+    border-color: #FFD902;
+}
+h1 {
+    margin:10px;
+}
+a {
+    color: #BFBED0;
+    text-decoration: none;
+}
+.flag
+{
+    margin-top: 12px;
+    margin-left: 20px;
+    float: left;
+    border-radius: 3px;
+    border-color: white;
+    border-width: 1px;
+    border-style: solid;
+    height: 17px;
+    width: 24px;
+    color: transparent;
+}
+a div
+{
+    height: 15px;
+    width: 22px;
+    border-radius: 3px;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+}
+    </style>
+    <script type="application/ecmascript">
+//<![CDATA[
+"use strict";
+var IS_LOCAL=false; // set to true to fetch flags locally. Useful for testing.
+var flags;
+if (IS_LOCAL) {
+/* JavaScript version of a sprite sheet - this could be pretty trivially done in pure HTML, but maintenance
+would be easier with a server-side portion. list of sprites could be gotten from server, but would require XSS whitelisting */
+// Last updated: 1.0.0
+flags=["afghanistan","albania","algeria","american_samoa","andorra","angola","anguilla","antigua_and_barbuda","arabemirates",
+"argentina","armenia","aruba","australia","austria","azerbaijan","bahamas","bahrain","bangladesh","barbados","belarus","belgium",
+"belize","benin","bhutan","bolivia","bosnia_and_herzegovina","botswana","brazil","brunei","bulgaria","burkina_faso","burundi",
+"cambodia","cameroon","canada","cape_verde","central_african_republic","chad","chile","china","christmas_island","cm_42",
+"cm_anarchy","cm_balls","cm_balrog","cm_bars","cm_belarus","cm_binary","cm_birdy","cm_bloodyblade","cm_brittany","cm_bubbles",
+"cm_bustamove","cm_cheese","cm_cog","cm_crossedswords","cm_crosshair","cm_cyborg","cm_danger_fire","cm_danger_stripes",
+"cm_dragonrb","cm_duckhead","cm_earth2","cm_earth","cm_eyeofhorus","cm_eyes","cm_face","cm_fcw","cm_female","cm_firstaid",
+"cm_flames","cm_flower","cm_galaxy","cm_girder","cm_grenade","cm_hax0r","cm_heart","cm_hellish","cm_hurrah","cm_hw2",
+"cm_hw","cm_iluvu","cm_kiwi","cm_lips","cm_magicskull","cm_male","cm_mog","cm_music","cm_pacman2","cm_pacman","cm_pentagram",
+"cm_piet","cm_pirate","cm_pokemon","cm_scout","cm_shoppa","cm_sine","cm_skull","cm_sonic","cm_soviet","cm_spider","cm_star",
+"cm_swordshield2","cm_swordshield","cm_test","cm_vampire","cm_waves","cm_yinyang","colombia","comoros",
+"congo-brazzaville","congo_kinshasa","cook_islands","costa_rica","cote_divoire","croatia","cuba","cyprus",
+"czech_republic","denmark","djibouti","dominican_republic","dominica","easttimor","ecuador","egypt","el_salvador",
+"equatorial_guinea","eritrea","esperanto","estonia","ethiopia","europeanunion","fiji","finland","france","gabon","gambia",
+"georgia","germany","ghana","greece","grenada","guam","guatemala","guinea","guyana","haiti","hedgewars","honduras","hungary",
+"iceland","india","indonesia","iran","iraq","ireland","israel","italy","jamaica","japan","jordan","kazakhstan","kenya","kiribati",
+"kuwait","kyrgyzstan","laos","latvia","lebanon","lesotho","liberia","libya","liechtenstein","lithuania","luxembourg","macau",
+"macedonia","madagascar","malawi","malaysia","maldives","mali","malta","marshall_islands","mauritania","mauritius",
+"mexico","micronesia","moldova","monaco","mongolia","montenegro","montserrat","morocco","mozambique","myanmar","namibia","nauru",
+"nepal","netherlands","new_zealand","nicaragua","nigeria","niger","niue","northern_mariana","northkorea","norway","oman",
+"pakistan","palau","palestine","panama","papua_new_guinea","paraguay","peru","philippines","poland","portugal","puerto_rico",
+"qatar","quebec","romania","russian_federation","rwanda","saint_kitts_and_nevis","saint_lucia","saint_vincent_and_the_grenadines",
+"samoa","san_marino","saotomeandprincipe","saudiarabia","senegal","serbia_and_montenegro","serbia","seychelles","sicily",
+"sierra_leone","singapore","slovakia","slovenia","solomon_islands","somalia","south_africa","south_korea","south_sudan","spain",
+"sri_lanka","sudan","suisse","suriname","swaziland","sweden","syrian_arab_republic","taiwan","tajikistan","tanzania","thailand",
+"tibet","timor_leste","togo","tokelau","tonga","trinidad_and_tobago","tunisia","turkey","turkmenistan","tuvalu","uganda","ukraine",
+"uk_scotland","united_arab_emirates","united_kingdom","united_states","uruguay","uzbekistan","vanuatu","vatican","venezuela","vietnam",
+"western_sahara","yemen","yugoslavia","zambia","zimbabwe"
+//,"cpu","cpu_plain"
+];
+}
+else
+{
+flags = [];
+}
+
+var on_xml_loaded = function(ex)
+{
+    var resp = this.responseText;
+    var r = />([^<]*).png</g;
+    var x;
+    while(x = r.exec(resp))
+    {
+        flags.push(x[1]);
+    }
+    on_flags_loaded();
+}
+
+var on_xml_error = function()
+{
+    var p = document.createElement("p");
+    p.appendChild(document.createTextNode("ERROR: List of flags could not be fetched from the server!"));
+    document.body.appendChild(p);
+}
+
+var on_flags_loaded;
+
+window.onload = function()
+{
+    // Load list of flags
+    if (!IS_LOCAL) {
+        // Request list of flags from repository URL
+        var xml=new XMLHttpRequest();
+        xml.open("GET", "//hg.hedgewars.org/hedgewars/file/tip/share/hedgewars/Data/Graphics/Flags/");
+        xml.addEventListener("error", on_xml_error);
+        xml.onload = on_xml_loaded;
+        xml.send();
+    }
+    else
+    {
+        on_flags_loaded();
+    }
+}
+
+on_flags_loaded = function()
+{
+    // Sort flags
+    var flag_compare = function(a, b)
+    {
+        if (a === "hedgewars")
+            return false;
+        else if (b === "hedgewars")
+            return true;
+        else if (a.startsWith("cm_") && !b.startsWith("cm_"))
+            return true;
+        else if (!a.startsWith("cm_") && b.startsWith("cm_"))
+            return false;
+        else
+            return a > b;
+    }
+
+    flags.sort(flag_compare);
+
+    // Render flags
+    var img;
+    var j = 0;
+    var toDelete = [];
+    var a = document.createElement("a");
+    a.className="flag";
+    a.appendChild(document.createElement("div"));
+    a.lastChild.appendChild(document.createTextNode(""));
+
+    var flagState = 0; // 0 = hedgewars, 1 = country flag, 2 = community flag ("cm_")
+
+    for (var i=0;i<flags.length;i++)
+    {
+        var flag = flags[i];
+
+        var oldFlagState = flagState;
+        if (flagState === 0 && flag !== "hedgewars")
+            flagState++;
+        else if (flagState === 1 && flag.startsWith("cm_"))
+            flagState++;
+        if (flagState !== oldFlagState)
+        {
+            j = 0;
+            document.body.appendChild(document.createElement("br"));
+            document.body.appendChild(document.createElement("br"));
+            document.body.appendChild(document.createElement("br"));
+        }
+
+        var h = document.body.appendChild(a.cloneNode(true));
+        if (IS_LOCAL)
+            h.href = "../share/hedgewars/Data/Graphics/Flags/"+flag+".png";
+        else
+            h.href = "//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Flags/"+flag+".png";
+
+        img = new Image();
+        img.onload = function() {
+            var name = this.id.substr(7);
+            if (this.height === 32) {
+                staticMasks[name] = true;
+            }
+            this.remove();
+        }
+        img.src = h.href;
+        img.id = "__flag_"+flag;
+
+        h.lastChild.style.backgroundImage = 'url("'+h.href+'")';
+        h.lastChild.lastChild.data = flag;
+        h.title = flag;
+
+        if (j%17 === 16 || i === flags.length-1)
+        {
+            document.body.appendChild(document.createElement("br"));
+            document.body.appendChild(document.createElement("br"));
+            j = 0;
+        } else
+            j++;
+    }
+
+}
+
+//]]>
+    </script>
+</head>
+<body>
+<h1>List of Hedgewars flags</h1>
+<noscript>
+<p><strong>ERROR</strong>: We're so sorry, but this webpage only works with JavaScript enabled. It seems JavaScript is disabled or not supported in your browser.<br/>
+Normally, this webpage would display a preview of the flags in Hedgewars.</p>
+</noscript>
+</body>
+</html>
