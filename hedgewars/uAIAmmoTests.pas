@@ -44,6 +44,7 @@ function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPa
 function TestClusterBomb(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestWatermelon(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDrillRocket(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestRCPlane(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestMortar(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestShotgun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -102,7 +103,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amNapalm
             (proc: @TestDrillRocket; flags: 0), // amDrill
             (proc: nil;              flags: 0), // amBallgun
-            (proc: nil;              flags: 0), // amRCPlane
+            (proc: @TestRCPlane;     flags: 0), // amRCPlane
             (proc: nil;              flags: 0), // amLowGravity
             (proc: nil;              flags: 0), // amExtraDamage
             (proc: nil;              flags: 0), // amInvulnerable
@@ -415,6 +416,83 @@ Flags:= Flags; // avoid compiler hint
     TestDrillRocket:= valueResult
 end;
 
+function TestRCPlane(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const
+    MIN_RANGE =  200;
+var Vx, Vy, meX, meY, x, y: real;
+    rx, ry, valueResult: LongInt;
+    range, maxRange: integer;
+begin
+// This is a very simple test to let a RC plane fly in a straight line, without dropping any bombs
+// TODO: Teach AI how to steer
+// TODO: Teach AI how to drop bombs
+// TODO: Teach AI how to predict fire behavior
+Flags:= Flags; // avoid compiler hint
+if Level = 5 then
+    exit(BadTurn)
+else if Level = 4 then
+    maxRange:= 2200
+else if Level = 3 then
+    maxRange:= 2900
+else if Level = 2 then
+    maxRange:= 3500
+else
+    maxRange:= 3900;
+TestRCPlane:= BadTurn;
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
+meX:= hwFloat2Float(Me^.X);
+meY:= hwFloat2Float(Me^.Y);
+x:= meX;
+y:= meY;
+range:= Metric(trunc(x), trunc(y), Targ.Point.X, Targ.Point.Y);
+if ( range < MIN_RANGE ) or ( range > maxRange) then
+    exit(BadTurn);
+
+Vx:= (Targ.Point.X - x) * 1 / 1024;
+Vy:= (Targ.Point.Y - y) * 1 / 1024;
+ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
+repeat
+    x:= x + vX;
+    y:= y + vY;
+    rx:= trunc(x);
+    ry:= trunc(y);
+    if ((Me = CurrentHedgehog^.Gear) and TestColl(rx, ry, 8)) or
+        ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, rx, ry, 8)) then
+        begin
+        x:= x + vX * 8;
+        y:= y + vY * 8;
+
+        // Intentionally low rating to discourage use
+        if Level = 1 then
+            valueResult:= RateExplosion(Me, rx, ry, 26, afTrackFall or afErasesLand)
+        else
+            valueResult:= RateExplosion(Me, rx, ry, 26);
+
+        // Check range again in case the plane collided before target
+        range:= Metric(trunc(meX), trunc(meY), rx, ry);
+        if ( range < MIN_RANGE ) or ( range > maxRange) then
+            exit(BadTurn);
+
+        // If impact location is close, above us and wind blows in our direction,
+        // there's a risk of fire flying towards us, so fail in this case.
+        if (Level < 3) and (range <= 600) and (meY >= ry) and
+            (((ap.Angle < 0) and (windSpeed > 0)) or ((ap.Angle > 0) and (windSpeed < 0))) then
+            exit(BadTurn);
+
+        if (valueResult <= 0) then
+            valueResult:= BadTurn;
+        exit(valueResult)
+        end
+until (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 4)
+    or (x < 0)
+    or (y < 0)
+    or (trunc(x) > LAND_WIDTH)
+    or (trunc(y) > LAND_HEIGHT);
+
+TestRCPlane:= BadTurn
+end;
 
 function TestSnowball(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 var Vx, Vy, r: real;

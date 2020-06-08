@@ -14,6 +14,7 @@
  +   - drop mines from a cliff
  +   - use drill strike and piano strike
  +   - use mine strike (0 seconds only)
+ +   - use RC plane (very basic, no bombs)
  * Racer: Resize waypoints in custom-sized drawn maps
  * Mutant: Fix impossible to become mutant after mutant is gone
  * A Classic Fairytale: Mission 1: Fix possibility of getting stuck in “Leap of Faith” section
