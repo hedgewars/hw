@@ -27,6 +27,7 @@ const MAXBONUS = 1024;
       afTrackFall  = $00000001;
       afErasesLand = $00000002;
       afSetSkip    = $00000004;
+      afIgnoreMe   = $00000008;
 
       BadTurn = Low(LongInt) div 4;
 
@@ -539,20 +540,22 @@ begin
 x:= round(CheckWrap(real(x)));
 fallDmg:= 0;
 rate:= 0;
-// add our virtual position
-with Targets.ar[Targets.Count] do
-    begin
-    Point.x:= hwRound(Me^.X);
-    Point.y:= hwRound(Me^.Y);
-    skip:= false;
-    matters:= true;
-    Kind:= gtHedgehog;
-    Density:= 1;
-    Radius:= cHHRadius;
-    Score:= - ThinkingHH^.Health
-    end;
-// rate explosion
 
+if (Flags and afIgnoreMe) = 0 then
+    with Targets.ar[Targets.Count] do
+        // add our virtual position
+        begin
+        Point.x:= hwRound(Me^.X);
+        Point.y:= hwRound(Me^.Y);
+        skip:= false;
+        matters:= true;
+        Kind:= gtHedgehog;
+        Density:= 1;
+        Radius:= cHHRadius;
+        Score:= - ThinkingHH^.Health
+        end;
+
+// rate explosion
 if (Flags and afErasesLand <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
 else erasure:= 0;
 
@@ -561,8 +564,9 @@ hadSkips:= false;
 for i:= 0 to Targets.Count do
     if not Targets.ar[i].dead then
         with Targets.ar[i] do
-          if not matters then hadSkips:= true
-            else
+          if not matters then
+            hadSkips:= true
+          else
             begin
             dmg:= 0;
             dmgBase:= r + Radius div 2;

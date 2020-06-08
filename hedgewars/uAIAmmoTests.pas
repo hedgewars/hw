@@ -1179,7 +1179,7 @@ Flags:= Flags; // avoid compiler hint
         valueResult:= valueResult +
             RateShove(Me, trunc(x), trunc(y)
                 , 30, 30, 25
-                , cx, -0.9, trackFall or afSetSkip);
+                , cx, -0.9, trackFall or afSetSkip or afIgnoreMe);
         end;
 
     if (d < 10) and (dx = 0) then
@@ -1189,14 +1189,14 @@ Flags:= Flags; // avoid compiler hint
         tx:= trunc(x);
         v:= RateShove(Me, tx, trunc(y)
                 , 30, 30, 25
-                , -cx, -0.9, trackFall);
+                , -cx, -0.9, trackFall or afIgnoreMe);
         for i:= 1 to 512 div step - 2 do
             begin
             y:= y + dy;
             v:= v +
                 RateShove(Me, tx, trunc(y)
                     , 30, 30, 25
-                    , -cx, -0.9, trackFall or afSetSkip);
+                    , -cx, -0.9, trackFall or afSetSkip or afIgnoreMe);
             end
         end;
 
@@ -1209,11 +1209,11 @@ Flags:= Flags; // avoid compiler hint
 
     v:= RateShove(Me, trunc(x), trunc(y)
             , 30, 30, 25
-            , cx, -0.9, trackFall);
+            , cx, -0.9, trackFall or afIgnoreMe);
     valueResult:= valueResult + v - KillScore * friendlyfactor div 100 * 1024;
 
     if v < 65536 then
-        inc(valueResult, RateExplosion(Me, trunc(x), trunc(y), 30));
+        inc(valueResult, RateExplosion(Me, trunc(x), trunc(y), 30, afIgnoreMe));
 
     TestKamikaze:= valueResult;
 end;
@@ -1555,9 +1555,9 @@ repeat
     Y:= Y + 32;
     if TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(X), trunc(Y), 32) then
         begin
-        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X)-30, trunc(Y)+40, 161);
-        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X), trunc(Y)+40, 161);
-        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X)+30, trunc(Y)+40, 161);
+        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X)-30, trunc(Y)+40, 161, afIgnoreMe);
+        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X), trunc(Y)+40, 161, afIgnoreMe);
+        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X)+30, trunc(Y)+40, 161, afIgnoreMe);
         inc(i);
         Y:= Y + 48;
         end;
