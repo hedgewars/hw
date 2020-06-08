@@ -12,7 +12,7 @@
  + New taunt chat commands: /bubble, /happy
  + Teach computer players how to ...
  +   - drop mines from a cliff
- +   - use drill strike
+ +   - use drill strike and piano strike
  +   - use mine strike (0 seconds only)
  * Racer: Resize waypoints in custom-sized drawn maps
  * Mutant: Fix impossible to become mutant after mutant is gone

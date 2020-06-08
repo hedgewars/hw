@@ -55,6 +55,7 @@ function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackP
 function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDrillStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestMineStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -113,7 +114,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestMolotov;     flags: 0), // amMolotov
             (proc: nil;              flags: 0), // amBirdy
             (proc: nil;              flags: 0), // amPortalGun
-            (proc: nil;              flags: 0), // amPiano
+            (proc: @TestPiano;       flags: amtest_Rare), // amPiano
             (proc: @TestGrenade;     flags: amtest_NoTrackFall), // amGasBomb
             (proc: @TestShotgun;     flags: 0), // amSineGun
             (proc: nil;              flags: 0), // amFlamethrower
@@ -1522,6 +1523,60 @@ for i:= 0 to 3 do
 if valueResult <= 0 then
     valueResult:= BadTurn;
 TestMineStrike:= valueResult;
+end;
+
+function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const BOUNCES = 5;
+var X, Y: real;
+    dmg: array[0..BOUNCES-1] of LongInt;
+    i, valueResult: LongInt;
+begin
+Flags:= Flags; // avoid compiler hint
+ap.ExplR:= 0;
+ap.Time:= 0;
+if (cGravityf <= 0) then
+    exit(BadTurn);
+
+if (Level > 2) then
+    exit(BadTurn);
+
+ap.Angle:= 0;
+ap.AttackPutX:= Targ.Point.X;
+ap.AttackPutY:= Targ.Point.Y;
+
+X:= Targ.Point.X;
+Y:= -128;
+
+for i:= 0 to BOUNCES-1 do
+    dmg[i]:= 0;
+
+i:= 1;
+repeat
+    Y:= Y + 32;
+    if TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(X), trunc(Y), 32) then
+        begin
+        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X)-30, trunc(Y)+40, 161);
+        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X), trunc(Y)+40, 161);
+        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X)+30, trunc(Y)+40, 161);
+        inc(i);
+        Y:= Y + 48;
+        end;
+until (i >= BOUNCES) or (Y > cWaterLine);
+
+if (i = 0) and (Y > cWaterLine) then
+    exit(BadTurn);
+
+valueResult:= 0;
+for i:= 0 to BOUNCES do
+    if dmg[i] <> BadTurn then
+        inc(valueResult, dmg[i]);
+ap.AttackPutX:= Targ.Point.X;
+
+valueResult:= valueResult - KillScore * friendlyfactor div 100 * 1024;
+
+if valueResult <= 0 then
+    valueResult:= BadTurn;
+TestPiano:= valueResult;
 end;
 
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
