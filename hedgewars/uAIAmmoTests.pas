@@ -1529,7 +1529,7 @@ function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPara
 const BOUNCES = 5;
 var X, Y: real;
     dmg: array[0..BOUNCES-1] of LongInt;
-    i, valueResult: LongInt;
+    i, e, rate, valueResult: LongInt;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
@@ -1552,23 +1552,36 @@ for i:= 0 to BOUNCES-1 do
 
 i:= 1;
 repeat
-    Y:= Y + 32;
+    // Piano goes down
+    Y:= Y + 11;
     if TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(X), trunc(Y), 32) then
         begin
-        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X)-30, trunc(Y)+40, 161, afIgnoreMe);
-        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X), trunc(Y)+40, 161, afIgnoreMe);
-        dmg[i]:= dmg[i] + RateExplosion(Me, trunc(X)+30, trunc(Y)+40, 161, afIgnoreMe);
+        for e:= -1 to 1 do
+            begin
+            rate:= RateExplosion(Me, trunc(X) + 30*e, trunc(Y)+40, 161, afIgnoreMe);
+            if rate <> BadTurn then
+                dmg[i]:= dmg[i] + rate;
+            end;
+
+        if (i > 1) and (dmg[i] > 0) then
+            dmg[i]:= dmg[i] div 2;
         inc(i);
-        Y:= Y + 48;
+        // Skip past the blast hole
+        Y:= Y + 41
         end;
-until (i >= BOUNCES) or (Y > cWaterLine);
+until (i > BOUNCES) or (Y > cWaterLine);
 
 if (i = 0) and (Y > cWaterLine) then
     exit(BadTurn);
 
 valueResult:= 0;
 for i:= 0 to BOUNCES do
-    if dmg[i] <> BadTurn then
+    if dmg[i] <= BadTurn then
+        begin
+        valueResult:= BadTurn;
+        break;
+        end
+    else
         inc(valueResult, dmg[i]);
 ap.AttackPutX:= Targ.Point.X;
 

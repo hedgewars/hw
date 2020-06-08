@@ -542,8 +542,8 @@ fallDmg:= 0;
 rate:= 0;
 
 if (Flags and afIgnoreMe) = 0 then
+    // add our virtual position
     with Targets.ar[Targets.Count] do
-        // add our virtual position
         begin
         Point.x:= hwRound(Me^.X);
         Point.y:= hwRound(Me^.Y);
