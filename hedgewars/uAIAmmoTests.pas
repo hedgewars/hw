@@ -561,61 +561,85 @@ TestSnowball:= valueResult
 end;
 
 function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
-var Vx, Vy, r: real;
-    Score, EX, EY, valueResult: LongInt;
-    TestTime: LongInt;
-    targXWrap, x, y, dY, meX, meY: real;
+const timeLimit = 50;
+var Vx, Vy, r, meX, meY: real;
+    rTime: LongInt;
+    EX, EY: LongInt;
+    valueResult: LongInt;
+    targXWrap, x, y, dX, dY: real;
     t: LongInt;
+    value, range: LongInt;
 begin
 Flags:= Flags; // avoid compiler hint
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
-valueResult:= BadTurn;
-TestTime:= 0;
+ap.Time:= 0;
+rTime:= 350;
 ap.ExplR:= 0;
 if (WorldEdge = weWrap) then
     if (Targ.Point.X < meX) then
          targXWrap:= Targ.Point.X + (RightX-LeftX)
     else targXWrap:= Targ.Point.X - (RightX-LeftX);
+valueResult:= BadTurn;
 repeat
-    inc(TestTime, 300);
+    rTime:= rTime + 300 + Level * 50 + random(300);
     if (WorldEdge = weWrap) and (random(2)=0) then
-         Vx:= (targXWrap - meX) / TestTime
-    else Vx:= (Targ.Point.X - meX) / TestTime;
-    Vy:= cGravityf * (TestTime div 2) - Targ.Point.Y - meY / TestTime;
+         Vx:= (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime
+    else
+         Vx:= (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime;
+    Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
+
     if not (r > 1) then
         begin
         x:= meX;
         y:= meY;
+        dX:= Vx;
         dY:= -Vy;
-        t:= TestTime;
+        t:= rTime;
         repeat
             x:= CheckWrap(x);
-            x:= x + Vx;
+            x:= x + dX;
+
             y:= y + dY;
             dY:= dY + cGravityf;
             dec(t)
-        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 6)) or
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 6))) or (t = 0);
+        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t < -timeLimit);
+
         EX:= trunc(x);
         EY:= trunc(y);
-        if t < 50 then
-            Score:= RateExplosion(Me, EX, EY, 97)  // average of 17 attempts, most good, but some failing spectacularly
-        else
-            Score:= BadTurn;
 
-        if valueResult < Score then
+        // Sanity check 1: Make sure we're not too close to impact location
+        range:= Metric(trunc(meX), trunc(meY), EX, EY);
+        if (range < 150) and (Level < 5) then
+            exit(BadTurn);
+
+        // Sanity check 2: If impact location is close, above us and wind blows
+        // towards us, there's a risk of fire flying towards us, so fail in this case.
+        if (Level < 3) and (range <= 600) and (trunc(meY) >= EX) and
+            (((ap.Angle < 0) and (windSpeed > 0)) or ((ap.Angle > 0) and (windSpeed < 0))) then
+            exit(BadTurn);
+
+        if t >= -timeLimit then
+            value:= RateExplosion(Me, EX, EY, 97) // average of 17 attempts, most good, but some failing spectacularly
+        else
+            value:= BadTurn;
+
+        if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
+            value := BadTurn;
+
+        if (valueResult < value) or ((valueResult = value) and (Level < 3)) then
             begin
-            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
-            ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+            ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
             ap.ExplR:= 100;
             ap.ExplX:= EX;
             ap.ExplY:= EY;
-            valueResult:= Score
+            valueResult:= value
             end;
         end
-until (TestTime > 5050 - Level * 800);
+until rTime > 5050 - Level * 800;
 TestMolotov:= valueResult
 end;
 
