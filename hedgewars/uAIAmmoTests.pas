@@ -62,6 +62,7 @@ function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPar
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestAirMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
     TAmmoTest = record
@@ -129,7 +130,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amIceGun
             (proc: nil;              flags: 0), // amKnife
             (proc: nil;              flags: 0), // amRubber
-            (proc: nil;              flags: 0), // amAirMine
+            (proc: @TestAirMine;     flags: 0), // amAirMine
             (proc: nil;              flags: 0), // amCreeper
             (proc: @TestShotgun;     flags: 0)  // amMinigun
             );
@@ -1910,5 +1911,75 @@ if (valueResult > 0) then
 
 TestMine:= valueResult
 end;
+
+function TestAirMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const
+    MIN_RANGE = 160;
+    MAX_RANGE = 2612;
+var Vx, Vy, meX, meY, x, y, r: real;
+    rx, ry, valueResult: LongInt;
+    range, maxRange: integer;
+begin
+Flags:= Flags; // avoid compiler hint
+maxRange:= MAX_RANGE - ((Level - 1) * 300);
+TestAirMine:= BadTurn;
+ap.ExplR:= 60;
+ap.Time:= 0;
+meX:= hwFloat2Float(Me^.X);
+meY:= hwFloat2Float(Me^.Y);
+x:= meX;
+y:= meY;
+
+// Rough first range check
+range:= Metric(trunc(x), trunc(y), Targ.Point.X, Targ.Point.Y);
+if ( range < MIN_RANGE ) or ( range > maxRange ) then
+    exit(BadTurn);
+
+Vx:= (Targ.Point.X - x) * 1 / 1024;
+Vy:= (Targ.Point.Y - y) * 1 / 1024;
+ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
+repeat
+    x:= x + vX;
+    y:= y + vY;
+    rx:= trunc(x);
+    ry:= trunc(y);
+    if ((Me = CurrentHedgehog^.Gear) and TestColl(rx, ry, 8)) or
+        ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, rx, ry, 8)) then
+        begin
+        x:= x + vX * 8;
+        y:= y + vY * 8;
+
+        if Level = 1 then
+            valueResult:= RateExplosion(Me, rx, ry, 61, afTrackFall)
+        else
+            valueResult:= RateExplosion(Me, rx, ry, 61);
+
+        // Precise range calculation required to calculate power;
+        // The air mine is very sensitive to small changes in power.
+        r:= sqr(meX - rx) + sqr(meY - ry);
+        range:= trunc(sqrt(r));
+
+        if ( range < MIN_RANGE ) or ( range > maxRange ) then
+            exit(BadTurn);
+        ap.Power:= ((range + cHHRadius*2) * cMaxPower) div MAX_RANGE;
+
+        // Apply inaccuracy
+        inc(ap.Power, (random(93*(Level-1)) - 31*(Level-1))); // Level 1 spread: -124 .. 248
+        if (not cLaserSighting) then
+            inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
+
+        if (valueResult <= 0) then
+            valueResult:= BadTurn;
+        exit(valueResult)
+        end
+until (abs(Targ.Point.X - trunc(x)) + abs(Targ.Point.Y - trunc(y)) < 4)
+    or (x < 0)
+    or (y < 0)
+    or (trunc(x) > LAND_WIDTH)
+    or (trunc(y) > LAND_HEIGHT);
+
+TestAirMine := BadTurn
+end;
+
 
 end.
