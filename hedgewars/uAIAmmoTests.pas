@@ -482,6 +482,10 @@ repeat
             (((ap.Angle < 0) and (windSpeed > 0)) or ((ap.Angle > 0) and (windSpeed < 0))) then
             exit(BadTurn);
 
+        // Apply inaccuracy
+        if (not cLaserSighting) then
+            inc(ap.Angle, + AIrndSign(random((Level - 1) * 9)));
+
         if (valueResult <= 0) then
             valueResult:= BadTurn;
         exit(valueResult)
@@ -936,6 +940,9 @@ if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then
 Vx:= (Targ.Point.X - x) * 1 / 1024;
 Vy:= (Targ.Point.Y - y) * 1 / 1024;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
+// Apply inaccuracy
+if (not cLaserSighting) then
+    inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
 repeat
     x:= x + vX;
     y:= y + vY;
@@ -990,6 +997,9 @@ t:= 2 / sqrt(sqr(Targ.Point.X - x)+sqr(Targ.Point.Y-y));
 Vx:= (Targ.Point.X - x) * t;
 Vy:= (Targ.Point.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
+// Apply inaccuracy
+if (not cLaserSighting) then
+    inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
 d:= 0;
 
 ix:= trunc(x);
@@ -1044,6 +1054,9 @@ dmg:= dmg * 0.025; // div 40
 Vx:= (Targ.Point.X - x) * t;
 Vy:= (Targ.Point.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
+// Apply inaccuracy
+inc(ap.Angle, + AIrndSign(random((Level - 1) * 5)));
+
 d:= 0;
 
 repeat
@@ -1270,6 +1283,9 @@ Flags:= Flags; // avoid compiler hint
         dy:= (Targ.Point.Y - y) * t;
 
         ap.Angle:= DxDy2AttackAnglef(dx, -dy)
+        // Apply inaccuracy
+        if (not cLaserSighting) then
+            inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
         end;
 
     if dx >= 0 then cx:= 0.45 else cx:= -0.45;
