@@ -1282,7 +1282,7 @@ Flags:= Flags; // avoid compiler hint
         dx:= (Targ.Point.X - x) * t;
         dy:= (Targ.Point.Y - y) * t;
 
-        ap.Angle:= DxDy2AttackAnglef(dx, -dy)
+        ap.Angle:= DxDy2AttackAnglef(dx, -dy);
         // Apply inaccuracy
         if (not cLaserSighting) then
             inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
