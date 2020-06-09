@@ -11,10 +11,10 @@
  + Themes: Make Sudden Death flakes in Underwater theme rise
  + New taunt chat commands: /bubble, /happy
  + Teach computer players how to ...
- +   - drop mines from a cliff
- +   - use drill strike, piano strike, air mine
+ +   - use drill strike, piano strike, air mine, cleaver
  +   - use mine strike (0 seconds only)
  +   - use RC plane (very basic)
+ +   - drop mines from a cliff
  + Low level computer players are more inaccurate with guns
  * Racer: Resize waypoints in custom-sized drawn maps
  * Mutant: Fix impossible to become mutant after mutant is gone

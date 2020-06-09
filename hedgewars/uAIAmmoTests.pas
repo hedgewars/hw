@@ -62,6 +62,7 @@ function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPar
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestKnife(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestAirMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -128,7 +129,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amTardis
             (proc: nil;              flags: 0), // amLandGun
             (proc: nil;              flags: 0), // amIceGun
-            (proc: nil;              flags: 0), // amKnife
+            (proc: @TestKnife;       flags: 0), // amKnife
             (proc: nil;              flags: 0), // amRubber
             (proc: @TestAirMine;     flags: 0), // amAirMine
             (proc: nil;              flags: 0), // amCreeper
@@ -1926,6 +1927,81 @@ if (valueResult > 0) then
     valueResult:= BadTurn;
 
 TestMine:= valueResult
+end;
+
+function TestKnife(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const timeLimit = 300;
+var Vx, Vy, r, meX, meY: real;
+    rTime: LongInt;
+    EX, EY: LongInt;
+    valueResult: LongInt;
+    targXWrap, x, y, dX, dY: real;
+    t: LongInt;
+    value, range: LongInt;
+begin
+Flags:= Flags; // avoid compiler hint
+meX:= hwFloat2Float(Me^.X);
+meY:= hwFloat2Float(Me^.Y);
+ap.Time:= 0;
+rTime:= 350;
+ap.ExplR:= 0;
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else
+         targXWrap:= Targ.Point.X - (RightX-LeftX);
+valueResult:= BadTurn;
+repeat
+    rTime:= rTime + 300 + Level * 50 + random(300);
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= (targXWrap - meX) / rTime
+    else
+         Vx:= (Targ.Point.X - meX) / rTime;
+    Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
+    r:= sqr(Vx) + sqr(Vy);
+
+    if not (r > 1) then
+        begin
+        x:= meX;
+        y:= meY;
+        dX:= Vx;
+        dY:= -Vy;
+        t:= rTime;
+        repeat
+            x:= CheckWrap(x);
+            x:= x + dX;
+
+            y:= y + dY;
+            dY:= dY + cGravityf;
+            dec(t)
+        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 7)) or
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 7))) or (t < -timeLimit);
+
+        EX:= trunc(x);
+        EY:= trunc(y);
+
+        // Sanity check: Make sure we're not too close to impact location
+        range:= Metric(trunc(meX), trunc(meY), EX, EY);
+        if (range <= 40) then
+            exit(BadTurn);
+
+        if t >= -timeLimit then
+            value:= RateShove(Me, EX, EY, 16, trunc(sqr((abs(dY)+abs(dX))*40000/10000)), 0, dX, dY, 0)
+        else
+            value:= BadTurn;
+
+        if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
+            value := BadTurn;
+
+        if (valueResult < value) or ((valueResult = value) and (Level = 1)) then
+            begin
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 12));
+            ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 22 + 1);
+            valueResult:= value
+            end;
+        end
+until rTime > 5050 - Level * 800;
+TestKnife:= valueResult
 end;
 
 function TestAirMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
