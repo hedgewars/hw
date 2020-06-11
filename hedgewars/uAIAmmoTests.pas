@@ -60,6 +60,7 @@ function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPara
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestSeduction(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestKnife(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -99,7 +100,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestMortar;      flags: 0), // amMortar
             (proc: @TestKamikaze;    flags: 0), // amKamikaze
             (proc: @TestCake;        flags: amtest_Rare or amtest_NoTarget), // amCake
-            (proc: nil;              flags: 0), // amSeduction
+            (proc: @TestSeduction;   flags: amtest_NoTarget), // amSeduction
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
             (proc: nil;              flags: 0), // amHellishBomb
             (proc: nil;              flags: 0), // amNapalm
@@ -1832,6 +1833,27 @@ Flags:= Flags; // avoid compiler hint
         valueResult:= BadTurn;
 
     TestCake:= valueResult;
+end;
+
+function TestSeduction(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+var rate: LongInt;
+begin
+Flags:= Flags; // avoid compiler hint
+Level:= Level; // avoid compiler hint
+Targ:= Targ;
+
+if (Level = 5) then
+    exit(BadTurn);
+
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
+ap.Angle:= 0;
+
+rate:= RateSeduction(Me);
+if rate <= 0 then
+    rate:= BadTurn;
+TestSeduction:= rate;
 end;
 
 function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;

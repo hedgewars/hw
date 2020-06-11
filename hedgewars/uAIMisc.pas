@@ -87,6 +87,7 @@ function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt; 
 function  RealRateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 function  RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
+function  RateSeduction(Me: PGear): LongInt;
 function  RateHammer(Me: PGear): LongInt;
 
 function  HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
@@ -834,6 +835,92 @@ if hadSkips and (rate <= 0) then
 else
     RateShotgun:= rate * 1024;
 ResetTargets;
+end;
+
+function RateSeduction(Me: PGear): LongInt;
+var pX, pY, i, r, rate, subrate, fallDmg: LongInt;
+    diffX, diffY: LongInt;
+    meX, meY, dX, dY: hwFloat;
+    pXr, pYr: real;
+    hadSkips: boolean;
+begin
+meX:= Me^.X;
+meY:= Me^.Y;
+rate:= 0;
+for i:= 0 to Targets.Count do
+    if not Targets.ar[i].dead then
+        with Targets.ar[i] do
+            begin
+            pX:= Point.X;
+            pY:= Point.Y;
+            diffX:= pX - hwRound(meX);
+            diffY:= pY - hwRound(meY);
+            if (Me^.Hedgehog^.BotLevel < 4) and (abs(diffX) <= cHHRadius*2) and (diffY >= 0) and (diffY <= cHHRadius*2) then
+                // Don't use seduction if too close to other hog. We could be
+                // standing on it, so using seduction would remove the ground on
+                // which we stand on, which is dangerous
+                exit(BadTurn);
+
+            if (not matters) then
+                hadSkips:= true
+            else if matters and (Kind = gtHedgehog) and (abs(pX - hwRound(meX)) + abs(pY - hwRound(meY)) < cSeductionDist) then
+                begin
+                r:= trunc(sqrt(sqr(abs(pX - hwRound(meX)))+sqr(abs(pY - hwRound(meY)))));
+                if r < cSeductionDist then
+                    begin
+
+                    if (WorldEdge <> weWrap) or (not (hwAbs(meX - int2hwFloat(pX)) > int2hwFloat(cSeductionDist))) then
+                        dX:= _50 * cGravity * (meX - int2hwFloat(pX)) / _25
+                    else if (not (hwAbs(meX + int2hwFloat((RightX-LeftX) - pX)) > int2hwFloat(cSeductionDist))) then
+                        dX:= _50 * cGravity * (meX + (int2hwFloat((RightX-LeftX) - pX))) / _25
+                    else
+                        dX:= _50 * cGravity * (meX - (int2hwFloat((RightX-LeftX) - pX))) / _25;
+                    dY:= -_450 * cMaxWindSpeed * 2;
+
+
+                    pXr:= pX;
+                    pYr:= pY;
+                    fallDmg:= trunc(TraceShoveFall(pXr, pYr, hwFloat2Float(dX), hwFloat2Float(dY), Targets.ar[i]) * dmgMod);
+
+                    // rate damage
+                    if fallDmg < 0 then // drowning
+                        begin
+                        if Score > 0 then
+                            inc(rate, (KillScore + Score div 10) * 1024) // Add a bit of a bonus for bigger hog drownings
+                        else
+                            dec(rate, (KillScore * friendlyfactor div 100 - Score div 10) * 1024) // and more of a punishment for drowning bigger friendly hogs
+                        end
+                    else if (fallDmg) >= abs(Score) then // deadly fall damage
+                        begin
+                        dead:= true;
+                        Targets.reset:= true;
+                        if (hwFloat2Float(dX) < 0.035) then
+                            begin
+                            subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall); // hog explodes
+                            if abs(subrate) > 2000 then
+                                inc(rate, subrate)
+                            end;
+                        if Score > 0 then
+                             inc(rate, KillScore * 1024 + (fallDmg)) // tiny bonus for dealing more damage than needed to kill
+                        else
+                             dec(rate, KillScore * friendlyfactor div 100 * 1024)
+                        end
+                    else if (fallDmg <> 0) then // non-deadly fall damage
+                        if Score > 0 then
+                             inc(rate, fallDmg * 1024)
+                        else
+                             dec(rate, fallDmg * friendlyfactor div 100 * 1024)
+                    else // no damage, just shoved
+                        if (Score < 0) then
+                            dec(rate, 100); // small penalty for shoving friendly hogs as it might be dangerous
+                    end;
+                end;
+            end;
+
+if hadSkips and (rate <= 0) then
+    RateSeduction:= BadTurn
+else
+    RateSeduction:= rate * 1024;
 end;
 
 function RateHammer(Me: PGear): LongInt;

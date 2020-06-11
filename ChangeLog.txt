@@ -11,7 +11,7 @@
  + Themes: Make Sudden Death flakes in Underwater theme rise
  + New taunt chat commands: /bubble, /happy
  + Teach computer players how to ...
- +   - use drill strike, piano strike, air mine, cleaver
+ +   - use drill strike, piano strike, air mine, cleaver, seduction
  +   - use mine strike (0 seconds only)
  +   - use RC plane (very basic)
  +   - drop mines from a cliff
