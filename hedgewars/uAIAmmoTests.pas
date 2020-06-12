@@ -66,6 +66,7 @@ function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackP
 function TestMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestKnife(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestAirMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestMinigun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
     TAmmoTest = record
@@ -135,7 +136,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amRubber
             (proc: @TestAirMine;     flags: 0), // amAirMine
             (proc: nil;              flags: 0), // amCreeper
-            (proc: @TestShotgun;     flags: 0)  // amMinigun
+            (proc: @TestMinigun;     flags: 0)  // amMinigun
             );
 
 implementation
@@ -2169,5 +2170,69 @@ until (abs(Targ.Point.X - trunc(x)) + abs(Targ.Point.Y - trunc(y)) < 4)
 TestAirMine := BadTurn
 end;
 
+function TestMinigun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const
+    MAX_RANGE = 400;
+var Vx, Vy, x, y: real;
+    rx, ry, valueResult: LongInt;
+    range: integer;
+begin
+// This code is still very similar to TestShotgun,
+// but it's a good simple estimate.
+// TODO: Simulate random bullets
+// TODO: Replace RateShotgun with something else
+// TODO: Teach AI to move aim during shooting
+Flags:= Flags; // avoid compiler hint
+TestMinigun:= BadTurn;
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
+x:= hwFloat2Float(Me^.X);
+y:= hwFloat2Float(Me^.Y);
+range:= Metric(trunc(x), trunc(y), Targ.Point.X, Targ.Point.Y);
+if ( range > MAX_RANGE ) then
+    exit(BadTurn);
+
+Vx:= (Targ.Point.X - x) * 1 / 1024;
+Vy:= (Targ.Point.Y - y) * 1 / 1024;
+ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
+// Minigun angle is limited
+if (ap.Angle < Ammoz[amMinigun].minAngle) or (ap.Angle > Ammoz[amMinigun].maxAngle) then
+    exit(BadTurn);
+
+// Apply inaccuracy
+if (not cLaserSighting) then
+    inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
+repeat
+    x:= x + vX;
+    y:= y + vY;
+    rx:= trunc(x);
+    ry:= trunc(y);
+    if ((Me = CurrentHedgehog^.Gear) and TestColl(rx, ry, 1)) or
+        ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, rx, ry, 1)) then
+    begin
+        x:= x + vX * 8;
+        y:= y + vY * 8;
+        // TODO: Use different rating function
+        valueResult:= RateShotgun(Me, vX, vY, rx, ry);
+
+        if (valueResult = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
+            begin
+            if GameFlags and gfSolidLand = 0 then
+                 valueResult:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, rx, ry) div 64
+            else valueResult := BadTurn
+            end
+        else
+            dec(valueResult, Level * 4000);
+        exit(valueResult)
+    end
+until (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 4)
+    or (x < 0)
+    or (y < 0)
+    or (trunc(x) > LAND_WIDTH)
+    or (trunc(y) > LAND_HEIGHT);
+
+TestMinigun:= BadTurn
+end;
 
 end.
