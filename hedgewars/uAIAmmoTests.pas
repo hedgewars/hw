@@ -56,6 +56,7 @@ function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackP
 function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDrillStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestMineStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestSMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -122,7 +123,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestGrenade;     flags: amtest_NoTrackFall), // amGasBomb
             (proc: @TestShotgun;     flags: 0), // amSineGun
             (proc: nil;              flags: 0), // amFlamethrower
-            (proc: @TestGrenade;     flags: 0), // amSMine
+            (proc: @TestSMine;       flags: 0), // amSMine
             (proc: @TestHammer;      flags: amtest_NoTarget), // amHammer
             (proc: nil;              flags: 0), // amResurrector
             (proc: @TestDrillStrike; flags: amtest_Rare), // amDrillStrike
@@ -1644,6 +1645,79 @@ for i:= 0 to 3 do
 if valueResult <= 0 then
     valueResult:= BadTurn;
 TestMineStrike:= valueResult;
+end;
+
+function TestSMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const timeLimit = 50;
+var Vx, Vy, r, meX, meY: real;
+    rTime: LongInt;
+    EX, EY: LongInt;
+    valueResult: LongInt;
+    targXWrap, x, y, dX, dY: real;
+    t: LongInt;
+    value: LongInt;
+begin
+Flags:= Flags; // avoid compiler hint
+meX:= hwFloat2Float(Me^.X);
+meY:= hwFloat2Float(Me^.Y);
+ap.Time:= 0;
+rTime:= 350;
+ap.ExplR:= 0;
+if (WorldEdge = weWrap) then
+    if (Targ.Point.X < meX) then
+         targXWrap:= Targ.Point.X + (RightX-LeftX)
+    else targXWrap:= Targ.Point.X - (RightX-LeftX);
+valueResult:= BadTurn;
+repeat
+    rTime:= rTime + 300 + Level * 50 + random(300);
+    if (WorldEdge = weWrap) and (random(2)=0) then
+         Vx:= (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime
+    else
+         Vx:= (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime;
+    Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
+    r:= sqr(Vx) + sqr(Vy);
+
+    if not (r > 1) then
+        begin
+        x:= meX;
+        y:= meY;
+        dX:= Vx;
+        dY:= -Vy;
+        t:= rTime;
+        repeat
+            x:= CheckWrap(x);
+            x:= x + dX;
+
+            y:= y + dY;
+            dY:= dY + cGravityf;
+            dec(t)
+        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 2)) or
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 2))) or (t < -timeLimit);
+
+        EX:= trunc(x);
+        EY:= trunc(y);
+
+        if t >= -timeLimit then
+            if (Level = 1) and (Flags and amtest_NoTrackFall = 0) then
+                value:= RateExplosion(Me, EX, EY, 61, afTrackFall)
+            else
+                value:= RateExplosion(Me, EX, EY, 61);
+
+        if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
+            value := BadTurn;
+
+        if (valueResult < value) or ((valueResult = value) and (Level < 3)) then
+            begin
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+            ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
+            ap.ExplR:= 60;
+            ap.ExplX:= EX;
+            ap.ExplY:= EY;
+            valueResult:= value
+            end;
+        end
+until rTime > 5050 - Level * 800;
+TestSMine:= valueResult
 end;
 
 function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
