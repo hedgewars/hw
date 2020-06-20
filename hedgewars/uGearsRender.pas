@@ -662,8 +662,9 @@ begin
                     end;
                 gtBlowTorch:
                     begin
-                    DrawSpriteRotated(sprBlowTorch, hx, hy, sign, aangle);
-                    DrawHedgehog(sx, sy,
+                    sign:= CurAmmoGear^.Tag;
+                    DrawSpriteRotated(sprBlowTorch, ox + 8 * sign, oy - 2, sign, aangle);
+                    DrawHedgehog(ox + 1, oy - 3,
                             sign,
                             3,
                             HH^.visStepPos div 2,
@@ -673,8 +674,8 @@ begin
                             begin
                             DrawTextureF(curhat,
                                 1,
-                                sx,
-                                sy - 5,
+                                ox + 1,
+                                oy - 8,
                                 0,
                                 sign,
                                 32,
@@ -688,8 +689,8 @@ begin
                                 Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
                                 DrawTextureF(curhat,
                                     1,
-                                    sx,
-                                    sy - 5,
+                                    ox + 1,
+                                    oy - 8,
                                     tx,
                                     sign,
                                     32,
@@ -697,7 +698,8 @@ begin
                                 untint
                                 end
                             end;
-                    defaultPos:= false
+                    defaultPos:= false;
+                    sign:= hwSign(Gear^.dX);
                     end;
                 gtFirePunch:
                     begin

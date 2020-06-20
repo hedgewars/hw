@@ -1869,6 +1869,7 @@ begin
         begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle) * _0_5, Gear^.dX);
         Gear^.dY := AngleCos(HHGear^.Angle) * ( - _0_5);
+
         BTPrevAngle := HHGear^.Angle;
         dig := true
         end;
@@ -1935,6 +1936,17 @@ begin
         HHGear^.State := HHGear^.State and (not gstNoDamage);
         end;
 
+    if HHGear^.dX.isNegative <> (Gear^.Tag = -1) then
+    begin
+        inc(Gear^.WDTimer);
+        if Gear^.WDTimer > 150 then
+        begin
+            Gear^.WDTimer := 0;
+            Gear^.Tag := - Gear^.Tag;
+        end
+    end else
+        Gear^.WDTimer := 0;
+
     if (TurnTimeLeft = 0) or (Gear^.Timer = 0)
     or ((HHGear^.Message and gmAttack) <> 0) then
         begin
@@ -1965,6 +1977,14 @@ begin
     HHGear^.Message := 0;
     HHGear^.State := HHGear^.State or gstNotKickable;
     RefillProximityCache(Gear, 200);
+
+    //Throttle counter for direction changes
+    Gear^.WDTimer := 0;
+    if HHGear^.dX.isNegative then
+        Gear^.Tag := -1
+    else
+        Gear^.Tag := 1;
+
     Gear^.SoundChannel := LoopSound(sndBlowTorch);
     Gear^.doStep := @doStepBlowTorchWork
 end;
