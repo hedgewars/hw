@@ -595,6 +595,11 @@ if TurnTimeLeft > 0 then
             dec(TurnTimeLeft)
         end;
 
+if (TurnTimeLeft = 0) and (ReadyTimeLeft = 0) then
+    inc(TimeNotInTurn)
+else
+    TimeNotInTurn:= 0;
+
 if skipFlag then
     begin
     if TagTurnTimeLeft = 0 then

@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- There is, at present, no official xsd for (X)HTML5. A pity. Usefulness would depend on the parser and extensions made by the site.  -->
+    <title>Hedgewars Graves</title>
+
+    <style type="text/css">
+* {padding: 0; margin: 0; }
+body
+{
+    background: url('//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Sky.png') fixed no-repeat bottom left;
+    background-color: #0B203D;
+    color: #FFD902;
+    -moz-background-size: 200%;
+    background-size: 100% 100%;
+    font-family: sans-serif;
+}
+form, p
+{
+    background-color: #0B203D;
+    padding: 1em;
+    margin: 1em;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 2px;
+    border-color: #FFD902;
+}
+h1 {
+    text-shadow: 0 0 2px white;
+    color: black;
+    margin:10px;
+}
+a {
+    color: #BFBED0;
+    text-decoration: none;
+}
+.grave
+{
+    margin-top: 12px;
+    margin-left: 20px;
+    float: left;
+    height: 32px;
+    width: 32px;
+    color: transparent;
+}
+.girder
+{
+    width: 100%;
+    height: 30px;
+    clear: left;
+    background-image: url('//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Themes/Nature/Girder.png');
+    background-repeat: repeat-x;
+}
+.hide { visibility: hidden; }
+a div
+{
+    margin-top: 6px;
+    height: 32px;
+    width: 32px;
+}
+    </style>
+    <script type="application/ecmascript">
+//<![CDATA[
+var IS_LOCAL=false; // set to true to fetch graves locally. Useful for testing.
+var graves;
+if (IS_LOCAL) {
+/* JavaScript version of a sprite sheet - this could be pretty trivially done in pure HTML, but maintenance
+would be easier with a server-side portion. list of sprites could be gotten from server, but would require XSS whitelisting */
+// Last updated: 1.0.0
+graves=["Badger","Bone","bp2","bubble","Cherry","chest","Clover","coffin",
+"deadhog","dragonball","Duck2","Earth","Egg","eyecross","Flower","Ghost",
+"Grave","heart","money","mouton1","octopus","Old_Apple","pi","plant2",
+"plant3","Plinko","pokeball","pyramid","ring","Rip","Rubberduck","Simple",
+"Simple_reversed","skull","star","Statue","TV","Whisky","Yin_and_Yang"];
+}
+else
+{
+graves = [];
+}
+
+var themes = {
+// Last updated: 1.0.0
+"Art":1,
+"Beach":1,
+"Bamboo":1,
+"Bath":1,
+//"Blox":0, //unused, has no Sky.png or Border.png
+"Brick":0,
+"Cake":0,
+"Castle":1,
+"Cave":1,
+"City":1,
+"Cheese":0,
+"Christmas":1,
+"Compost":1,
+"CrazyMission":0,
+"Deepspace":0,
+"Desert":1,
+"EarthRise":0,
+"Eyes":0,
+"Freeway":0,
+"Fruit":1,
+"Halloween":1,
+"Hell":0,
+"Hoggywood":1,
+"Island":0,
+"Jungle":1,
+"Golf":1,
+"Nature":1,
+"Olympics":1,
+"Planes":0,
+"Sheep":1,
+"Snow":1,
+"Stage":1,
+"Underwater":1};
+var girder;
+var animationInterval;
+
+on_xml_loaded = function(ex)
+{
+    var resp = this.responseText;
+    var r = />([^<]*).png</g;
+    var x;
+    while(x = r.exec(resp))
+    {
+        graves.push(x[1]);
+    }
+    on_graves_loaded();
+}
+
+on_xml_error = function()
+{
+    var p = document.createElement("p");
+    p.appendChild(document.createTextNode("ERROR: List of graves could not be fetched from the server!"));
+    document.body.appendChild(p);
+}
+
+window.onload = function()
+{
+    // Load list of graves
+    if (!IS_LOCAL) {
+        // Request list of graves from repository URL
+        var xml=new XMLHttpRequest();
+        xml.open("GET", "//hg.hedgewars.org/hedgewars/file/tip/share/hedgewars/Data/Graphics/Graves/");
+        xml.addEventListener("error", on_xml_error);
+        xml.onload = on_xml_loaded;
+        xml.send();
+    }
+    else
+    {
+        on_graves_loaded();
+    }
+}
+
+on_graves_loaded = function()
+{
+    // Render girders
+    var s = document.styleSheets[0].cssRules;
+    for(var i=0;i<s.length;i++)
+    {
+        if (s[i].selectorText.toLowerCase() === ".girder")
+            girder = s[i];
+    }
+
+    var a = document.createElement("a");
+    var g = document.createElement("div");
+    g.className="girder";
+    a.className="grave";
+    a.appendChild(document.createElement("div"));
+    a.lastChild.appendChild(document.createTextNode(""));
+
+    // Render graves
+    var missingGraves = [];
+    var img;
+    var j = 0;
+    var toDelete = [];
+    for (var i=0;i<graves.length;i++)
+    {
+        var h = document.body.appendChild(a.cloneNode(true));
+        if (IS_LOCAL)
+            h.href = "../share/hedgewars/Data/Graphics/Graves/"+graves[i]+".png";
+        else
+            h.href = "//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Graves/"+graves[i]+".png";
+
+        h.lastChild.style.backgroundImage = 'url("'+h.href+'")';
+        h.lastChild.lastChild.data = graves[i];
+        h.title = graves[i];
+        h.idle = Math.floor(Math.random()*16);
+        if (j%8 === 7 || i === graves.length-1)
+            document.body.appendChild(g.cloneNode(false));
+        j++;
+    }
+
+    // Quick and dirty animation
+    animationInterval = setInterval(animateGraves, 128);
+
+    // Theme selection drop-down list
+    var form = document.body.appendChild(document.createElement("form"));
+
+    var opt = document.createElement("option");
+    opt.appendChild(document.createTextNode(""));
+
+    var label = document.createElement("label");
+    label.htmlFor = "theme_select";
+    label.appendChild(document.createTextNode("Theme: "));
+    form.appendChild(label);
+
+    var sel = form.appendChild(document.createElement("select"));
+    sel.id = "theme_select";
+    sel.onchange = switchTheme;
+    for(var theme in themes)
+    {
+        sel.appendChild(opt.cloneNode(true));
+        sel.lastChild.value = theme;
+        sel.lastChild.lastChild.data = theme;
+        if(theme === "Nature")
+            sel.lastChild.selected = true;
+    }
+    form.appendChild(document.createElement("br"));
+
+    // Checkbox: Switch animation
+    var chk = document.createElement("input");
+    chk.id = "anim";
+    chk.type = "checkbox";
+    chk.onclick = switchAnim;
+    chk.checked = true;
+    form.appendChild(chk);
+    label = document.createElement("label");
+    label.htmlFor = "anim";
+    label.appendChild(document.createTextNode("Animate graves"));
+    form.appendChild(label);
+
+    form.appendChild(document.createElement("br"));
+
+    // Checkbox: Hide girders
+    chk = document.createElement("input");
+    chk.id = "hide_girders";
+    chk.type = "checkbox";
+    chk.onclick = hideGirders;
+    chk.checked = true;
+    form.appendChild(chk);
+    label = document.createElement("label");
+    label.htmlFor = "hide_girders";
+    label.appendChild(document.createTextNode("Show girders"));
+    form.appendChild(label);
+
+    document.body.appendChild(form);
+
+
+}
+
+function animateGraves()
+{
+    var a = document.getElementsByTagName("a");
+    for (var i=0;i<a.length;i++)
+    {
+        if (a[i].className !== "grave")
+            continue;
+        // Cycle thru animation frames
+
+        var maskName = a[i].title;
+        // Grave
+        a[i].firstChild.style.backgroundPosition=Math.floor(a[i].idle/16)*-32+"px "+(a[i].idle%16)*-32+"px";
+
+        // Next frame
+        a[i].idle++;
+        if (a[i].idle > 15)
+            a[i].idle = 0;
+    }
+}
+
+// Turn on or off grave animation
+function switchAnim()
+{
+    if (animationInterval)
+    {
+        clearInterval(animationInterval);
+        animationInterval = null;
+    }
+    else animationInterval = setInterval(animateGraves, 128);
+}
+
+// Turn on or off girders
+function hideGirders()
+{
+    var g = document.getElementsByClassName("girder");
+    for(var i=0;i<g.length;i++)
+        if (this.checked)
+            g[i].className = "girder";
+        else
+            g[i].className = "girder hide";
+
+}
+
+// Select theme according to drop-down list value
+function switchTheme()
+{
+    var prefix;
+    if (!IS_LOCAL)
+        prefix = "//hg.hedgewars.org/hedgewars/raw-file/tip";
+    else
+        prefix = "..";
+    document.body.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Themes/'+this.value+'/Sky.png")';
+    if (themes[this.value])
+        girder.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Themes/'+this.value+'/Girder.png")';
+    else
+        girder.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Graphics/Girder.png")';
+}
+//]]>
+    </script>
+</head>
+<body>
+<h1>List of Hedgewars graves</h1>
+<noscript>
+<p><strong>ERROR</strong>: We're so sorry, but this webpage only works with JavaScript enabled. It seems JavaScript is disabled or not supported in your browser.<br/>
+Normally, this webpage would display an animated preview of the graves in Hedgewars.</p>
+</noscript>
+</body>
+</html>

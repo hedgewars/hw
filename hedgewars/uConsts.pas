@@ -228,6 +228,7 @@ const
     cSeductionDist = 250; // effect distance of seduction
 
     ExtraTime = 30000; // amount of time (ms) given for using Extra Time
+    MaxMoreWindTime = 5000; // amount of time (ms) for land objects like gfMine to be affected after end of turn
 
     // do not change this value
     cDefaultZoomLevel = 2.0; // 100% zoom

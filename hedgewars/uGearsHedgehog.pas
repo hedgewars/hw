@@ -529,7 +529,8 @@ with Gear^,
                   amMineStrike, amDrillStrike,
                       amRubber, amMinigun: CurAmmoGear:= newGear;
             end;
-            if CurAmmoType = amCake then FollowGear:= newGear;
+            if (CurAmmoType = amCake) or (CurAmmoType = amPiano) then
+                FollowGear:= newGear;
 
             if ((CurAmmoType = amMine) or (CurAmmoType = amSMine) or (CurAmmoType = amAirMine)) and (GameFlags and gfInfAttack <> 0) then
                 newGear^.FlightTime:= GameTicks + min(TurnTimeLeft,1000)

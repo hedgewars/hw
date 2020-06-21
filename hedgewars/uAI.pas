@@ -167,11 +167,6 @@ for i:= 0 to Pred(Targets.Count) do
 
                     AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
 
-                    if (Ammoz[a].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
-                        begin
-                        AddAction(BestActions, aia_Put, 0, 8, ap.AttackPutX, ap.AttackPutY)
-                        end;
-
                     if (ap.Angle > 0) then
                         AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
                     else if (ap.Angle < 0) then
@@ -179,6 +174,18 @@ for i:= 0 to Pred(Targets.Count) do
 
                     if (Ammoz[a].Ammo.Propz and ammoprop_Timerable) <> 0 then
                         AddAction(BestActions, aia_Timer, ap.Time div 1000, 400, 0, 0);
+
+                    if ((Ammoz[a].Ammo.Propz and ammoprop_SetBounce) > 0) and (ap.Bounce > 0) then
+                        begin
+                        AddAction(BestActions, aia_Precise, aim_push, 10, 0, 0);
+                        AddAction(BestActions, aia_Timer, ap.Bounce, 200, 0, 0);
+                        AddAction(BestActions, aia_Precise, aim_release, 10, 0, 0);
+                        end;
+
+                    if (Ammoz[a].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
+                        begin
+                        AddAction(BestActions, aia_Put, 0, 8, ap.AttackPutX, ap.AttackPutY)
+                        end;
 
                     if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
                         begin
@@ -247,7 +254,7 @@ procedure Walk(Me: PGear; var Actions: TActions);
 const FallPixForBranching = cHHRadius;
 var
     maxticks, oldticks, steps, tmp: Longword;
-    BaseRate, BestRate, Rate: LongInt;
+    BaseRate, BestRate, Rate, i: LongInt;
     GoInfo: TGoInfo;
     CanGo: boolean;
     AltMe: TGear;
@@ -321,6 +328,13 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                     AddAction(BestActions, aia_Weapon, Longword(amExtraTime), 80, 0, 0);
                     AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                     AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                    // Better bot levels know they can spam extra time if infinite
+                    if (BotLevel < 3) and (HHHasAmmo(Me^.Hedgehog^, amExtraTime) = AMMO_INFINITE) then
+                        for i:= 1 to 3 do
+                            begin
+                            AddAction(BestActions, aia_attack, aim_push, 100, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 100, 0, 0);
+                            end;
                 end;
 
                 break;
