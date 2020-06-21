@@ -1462,8 +1462,16 @@ while i > 0 do
                 end
             else if ((Ammo^.Kind <> gtFlame) or (Gear^.Kind = gtHedgehog)) and (Power <> 0) then
                 begin
-                Gear^.dX:= Ammo^.dX * Power * _0_01;
-                Gear^.dY:= Ammo^.dY * Power * _0_01
+                if (Ammo^.Kind in [gtMinigunBullet]) then
+                    begin    
+                    Gear^.dX:= Gear^.dX + Ammo^.dX * Power * _0_01;
+                    Gear^.dY:= Gear^.dY + Ammo^.dY * Power * _0_01
+                    end 
+                else
+                    begin
+                    Gear^.dX:= Ammo^.dX * Power * _0_01;
+                    Gear^.dY:= Ammo^.dY * Power * _0_01
+                    end
                 end;
 
             if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
