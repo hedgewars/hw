@@ -315,9 +315,14 @@ begin
     // render crosshair
     if (CrosshairGear <> nil) and (Gear = CrosshairGear) then
         begin
-        hogLR:= 1;
-        if IsHogFacingLeft(Gear) then
-            hogLR:= -1;
+        if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtBlowTorch) then
+            hogLR:= CurAmmoGear^.Tag
+        else
+            begin
+            hogLR:= 1;
+            if IsHogFacingLeft(Gear) then
+                hogLR:= -1
+            end;
         setTintAdd(true);
         Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
         DrawTextureRotated(CrosshairTexture,
