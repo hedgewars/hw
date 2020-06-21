@@ -416,6 +416,8 @@ begin
         hogLR:= -1
     else
         hogLR:= 1;
+    if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtBlowTorch) then
+        hogLR:= CurAmmoGear^.Tag;
 
     if (Gear^.State and gstHHDeath) <> 0 then
         begin
