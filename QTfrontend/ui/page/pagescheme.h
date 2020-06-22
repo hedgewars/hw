@@ -107,6 +107,7 @@ class PageScheme : public AbstractPage
         void checkDupe();
 
     private slots:
+        void worldEdgeChanged(int);
         void schemeSelected(int);
         void dataChanged(QModelIndex topLeft, QModelIndex bottomRight);
 };

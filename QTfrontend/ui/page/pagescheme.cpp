@@ -557,6 +557,7 @@ void PageScheme::connectSignals()
     connect(BtnCopy, SIGNAL(clicked()), this, SLOT(copyRow()));
     connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
     connect(BtnDelete, SIGNAL(clicked()), this, SLOT(deleteRow()));
+    connect(CB_WorldEdge, SIGNAL(currentIndexChanged(int)), this, SLOT(worldEdgeChanged(int)));
     mapper = new QDataWidgetMapper(this);
     connect(selectScheme, SIGNAL(currentIndexChanged(int)), mapper, SLOT(setCurrentIndex(int)));
     connect(selectScheme, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeSelected(int)));
@@ -682,6 +683,14 @@ void PageScheme::dataChanged(QModelIndex topLeft, QModelIndex bottomRight)
     if(topLeft.column() == 0) {
         checkDupe();
     };
+}
+
+void PageScheme::worldEdgeChanged(int n)
+{
+    if (mapper->itemDelegate()) 
+    {
+        mapper->itemDelegate()->commitData(CB_WorldEdge);
+    }    
 }
 
 void PageScheme::schemeSelected(int n)
