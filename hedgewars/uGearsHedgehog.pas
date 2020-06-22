@@ -1410,7 +1410,7 @@ if (HHGear^.State and gstMoving) <> 0 then
     wasJumping:= ((HHGear^.State and gstHHJumping) <> 0);
 
     if ((HHGear^.Message and gmHJump) <> 0) and wasJumping and ((HHGear^.State and gstHHHJump) = 0) then
-        if (not (hwAbs(HHGear^.dX) > cLittle)) and (HHGear^.dY < -_0_02) then
+        if (not (hwAbs(HHGear^.dX) > cLittle)) and (HHGear^.dY < _0_05) then
             begin
             HHGear^.State:= HHGear^.State or gstHHHJump;
             HHGear^.dY:= -_0_25;
