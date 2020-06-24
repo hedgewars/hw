@@ -1850,7 +1850,6 @@ procedure doStepBlowTorchWork(Gear: PGear);
 var
     HHGear: PGear;
     dig, hit: boolean;
-    prevX: LongInt;
 begin
     AllInactive := false;
     WorldWrap(Gear);
@@ -1902,14 +1901,9 @@ begin
         if ((HHGear^.State and gstMoving) = 0) then
             begin
             HHGear^.State := HHGear^.State and (not gstAttacking);
-            prevX := hwRound(HHGear^.X);
 
             if CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y),lfIndestructible) then
-                begin
                 HedgehogStep(HHGear);
-                if (prevX = hwRound(HHGear^.X)) then
-                    HHGear^.X := HHGear^.X + SignAs(_1, HHGear^.dX);
-                end;
 
             HHGear^.State := HHGear^.State or gstAttacking
             end;
