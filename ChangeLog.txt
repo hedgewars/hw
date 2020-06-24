@@ -1,15 +1,10 @@
 + features
 * bugfixes
 ==================== 1.0.1-dev =====================
- + Add dynamite fuse and impact sounds
- + Various small HUD tweaks
- + Racer: Allow to set turn time in game scheme
- + Racer: Reset mines, air mines and sticky mines every turn
- + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory
- + New flags: serbia, montenegro
- + Themes: Add fade-in and fade-out effects
- + Themes: Make Sudden Death flakes in Underwater theme rise
- + New taunt chat commands: /bubble, /happy
+Gameplay:
+ + Minigun push is now much stronger
+ + Easier to push hogs around with blowtorch
+ + Backjumps are now a bit easier
  + Teach computer players how to ...
  +   - use drill strike, piano strike, air mine, cleaver, seduction
  +   - use mine strike (0 seconds only)
@@ -17,14 +12,35 @@
  +   - drop mines from a cliff
  + Low level computer players are more inaccurate with guns
  + Various small computer player improvements
- * Racer: Resize waypoints in custom-sized drawn maps
- * Mutant: Fix impossible to become mutant after mutant is gone
+ + New taunt chat commands: /bubble, /happy
+ * Fix many projectiles not being affected by Heavy Wind after turn end
+ * Fix hog getting stuck when opening parachute right after a shoryuken digging through land
+
+Campaigns:
+ + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory
  * A Classic Fairytale: Mission 1: Fix possibility of getting stuck in “Leap of Faith” section
  * A Space Adventure: The First Stop: Fix broken victory condition when eliminating minions
  * A Space Adventure: Killing the Specialists: Don't award player health if enemy hurts itself
- * Fix many projectiles not being affected by Heavy Wind after turn end
- * Fix hog getting stuck when opening parachute right after a shoryuken digging through land
+
+Styles:
+ + Racer: Allow to set turn time in game scheme
+ + Racer: Reset mines, air mines and sticky mines every turn
+ * Racer: Resize waypoints in custom-sized drawn maps
+ * Mutant: Fix impossible to become mutant after mutant is gone
+
+Content:
+ + New flags: serbia, montenegro
+ + New hat: zoo_panda
+
+Graphics:
+ + Add dynamite fuse and impact sounds
+ + Themes: Add fade-in and fade-out effects for background flakes
+ + Themes: Make Sudden Death jellyfish in Underwater theme rise
+ + Various small HUD tweaks
+
+Frontend:
  * Fix weapon schemes sometimes not being saved properly
+ * Fix world edge not being changable under macOS
 
 Lua:
  + Add RopeKnocking library
