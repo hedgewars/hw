@@ -315,14 +315,9 @@ begin
     // render crosshair
     if (CrosshairGear <> nil) and (Gear = CrosshairGear) then
         begin
-        if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtBlowTorch) then
-            hogLR:= CurAmmoGear^.Tag
-        else
-            begin
-            hogLR:= 1;
-            if IsHogFacingLeft(Gear) then
-                hogLR:= -1
-            end;
+        hogLR:= 1;
+        if IsHogFacingLeft(Gear) then
+            hogLR:= -1;
         setTintAdd(true);
         Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
         DrawTextureRotated(CrosshairTexture,
@@ -421,8 +416,6 @@ begin
         hogLR:= -1
     else
         hogLR:= 1;
-    if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtBlowTorch) then
-        hogLR:= CurAmmoGear^.Tag;
 
     if (Gear^.State and gstHHDeath) <> 0 then
         begin
@@ -669,7 +662,6 @@ begin
                     end;
                 gtBlowTorch:
                     begin
-                    sign:= CurAmmoGear^.Tag;
                     DrawSpriteRotated(sprBlowTorch, ox + 8 * sign, oy - 2, sign, aangle);
                     DrawHedgehog(ox + 1, oy - 3,
                             sign,
