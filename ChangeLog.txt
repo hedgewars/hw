@@ -15,6 +15,7 @@ Gameplay:
  + New taunt chat commands: /bubble, /happy
  * Fix many projectiles not being affected by Heavy Wind after turn end
  * Fix hog getting stuck when opening parachute right after a shoryuken digging through land
+ * Fix game hanging if computer hog has nothing to attack
 
 Campaigns:
  + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory

@@ -506,7 +506,14 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity or ((
             Me^.AIHints := ME^.AIHints and (not aihAmmosChanged);
             end;
 
-        end else SDL_Delay(100)
+        end
+    else
+        begin
+        // No target found, skip turn
+        BestActions.Count:= 0;
+        AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+        Me^.AIHints := ME^.AIHints and (not aihAmmosChanged);
+        end
 else
     begin
     BackMe:= Me^;
@@ -559,11 +566,6 @@ StopThinking:= false;
 ThinkingHH:= Me;
 
 FillTargets;
-if Targets.Count = 0 then
-    begin
-    OutError('AI: no targets!?', false);
-    exit
-    end;
 
 FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot) and ((GameFlags and gfInfAttack) = 0));
 
