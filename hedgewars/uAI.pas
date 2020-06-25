@@ -151,7 +151,8 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
-                        if (HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0) and (Me^.Hedgehog^.Effects[heInvulnerable] = 0) then
+                        if ((AmmoTests[a].flags and amtest_NoInvulnerable) = 0) and
+                            (HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0) and (Me^.Hedgehog^.Effects[heInvulnerable] = 0) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amInvulnerable), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
@@ -163,7 +164,8 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
-                        if (HHHasAmmo(Me^.Hedgehog^, amVampiric) > 0) and (not cVampiric) then
+                        if (not cVampiric) and ((AmmoTests[a].flags and amtest_NoVampiric) = 0) and
+                            (HHHasAmmo(Me^.Hedgehog^, amVampiric) > 0) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amVampiric), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);

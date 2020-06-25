@@ -27,6 +27,8 @@ const
     amtest_MultipleAttacks = $00000004; // test could result in multiple attacks, set AttacksNum
     amtest_NoTrackFall     = $00000008; // skip fall tracing.  
     amtest_LaserSight      = $00000010; // supports laser sighting
+    amtest_NoVampiric      = $00000020; // don't use vampirism with this ammo
+    amtest_NoInvulnerable  = $00000040; // don't use invulnerable with this with ammo
 
 var windSpeed: real;
     aiLaserSighting: boolean;
@@ -91,8 +93,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestDesertEagle; flags: amtest_MultipleAttacks or amtest_LaserSight), // amDEagle
             (proc: @TestDynamite;    flags: amtest_NoTarget), // amDynamite
             (proc: @TestFirePunch;   flags: amtest_NoTarget), // amFirePunch
-            (proc: @TestWhip;        flags: amtest_NoTarget), // amWhip
-            (proc: @TestBaseballBat; flags: amtest_NoTarget), // amBaseballBat
+            (proc: @TestWhip;        flags: amtest_NoTarget or amtest_NoInvulnerable), // amWhip
+            (proc: @TestBaseballBat; flags: amtest_NoTarget or amtest_NoInvulnerable), // amBaseballBat
             (proc: nil;              flags: 0), // amParachute
             (proc: @TestAirAttack;   flags: amtest_Rare), // amAirAttack
             (proc: @TestMineStrike;  flags: amtest_Rare), // amMineStrike
@@ -102,7 +104,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             //(proc: @TestTeleport;    flags: amtest_OnTurn), // amTeleport
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
-            (proc: @TestKamikaze;    flags: amtest_LaserSight), // amKamikaze
+            (proc: @TestKamikaze;    flags: amtest_LaserSight or amtest_NoInvulnerable or amtest_NoVampiric), // amKamikaze
             (proc: @TestCake;        flags: amtest_Rare or amtest_NoTarget), // amCake
             (proc: @TestSeduction;   flags: amtest_NoTarget), // amSeduction
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
@@ -122,12 +124,12 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestMolotov;     flags: 0), // amMolotov
             (proc: nil;              flags: 0), // amBirdy
             (proc: nil;              flags: 0), // amPortalGun
-            (proc: @TestPiano;       flags: amtest_Rare), // amPiano
+            (proc: @TestPiano;       flags: amtest_Rare or amtest_NoInvulnerable or amtest_NoVampiric), // amPiano
             (proc: @TestGrenade;     flags: amtest_NoTrackFall), // amGasBomb
             (proc: @TestShotgun;     flags: 0), // amSineGun
             (proc: nil;              flags: 0), // amFlamethrower
             (proc: @TestSMine;       flags: 0), // amSMine
-            (proc: @TestHammer;      flags: amtest_NoTarget), // amHammer
+            (proc: @TestHammer;      flags: amtest_NoTarget or amtest_NoInvulnerable), // amHammer
             (proc: nil;              flags: 0), // amResurrector
             (proc: @TestDrillStrike; flags: amtest_Rare), // amDrillStrike
             (proc: nil;              flags: 0), // amSnowball
