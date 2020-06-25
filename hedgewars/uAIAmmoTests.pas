@@ -571,6 +571,7 @@ end;
 
 function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const timeLimit = 50;
+      Density : real = 2.0;
 var Vx, Vy, r, meX, meY: real;
     rTime: LongInt;
     EX, EY: LongInt;
@@ -596,6 +597,8 @@ repeat
          Vx:= (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime
     else
          Vx:= (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime;
+    if (GameFlags and gfMoreWind) <> 0 then
+         Vx:= -(windSpeed / Density) * rTime * 0.5 + Vx;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
@@ -609,6 +612,8 @@ repeat
         repeat
             x:= CheckWrap(x);
             x:= x + dX;
+            if (GameFlags and gfMoreWind) <> 0 then
+                dX:= dX + windSpeed / Density;
 
             y:= y + dY;
             dY:= dY + cGravityf;
@@ -654,10 +659,11 @@ end;
 
 function TestGrenade(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const tDelta = 24;
+      Density : real = 1.5;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: LongInt;
-    targXWrap, x, y, meX, meY, dY: real;
+    targXWrap, x, y, meX, meY, dX, dY: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
@@ -674,18 +680,24 @@ repeat
     inc(TestTime, 1000);
     if (WorldEdge = weWrap) and (random(2)=0) then
          Vx:= (targXWrap + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta)
-    else Vx:= (Targ.Point.X + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta);
+    else
+         Vx:= (Targ.Point.X + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta);
+    if (GameFlags and gfMoreWind) <> 0 then
+         Vx:= -(windSpeed / Density) * (TestTime + tDelta) * 0.5 + Vx;
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - (Targ.Point.Y - meY) / (TestTime + tDelta);
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
         begin
         x:= meX;
         y:= meY;
+        dX:= Vx;
         dY:= -Vy;
         t:= TestTime;
         repeat
             x:= CheckWrap(x);
-            x:= x + Vx;
+            x:= x + dX;
+            if (GameFlags and gfMoreWind) <> 0 then
+                dX:= dX + windSpeed / Density;
             y:= y + dY;
             dY:= dY + cGravityf;
             dec(t)
@@ -718,10 +730,11 @@ end;
 
 function TestClusterBomb(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const tDelta = 24;
+      Density : real = 1.5;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
-    x, y, dY, meX, meY: real;
+    x, y, dX, dY, meX, meY: real;
     t: LongInt;
 begin
 Flags:= Flags; // avoid compiler hint
@@ -733,8 +746,10 @@ meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 repeat
     inc(TestTime, 900);
+    if (GameFlags and gfMoreWind) <> 0 then
+        Vx:= (-(windSpeed / Density) * (TestTime + tDelta) * 0.5) + ((Targ.Point.X - meX) / (TestTime + tDelta))
     // Try to overshoot slightly, seems to pay slightly better dividends in terms of hitting cluster
-    if meX<Targ.Point.X then
+    else if meX<Targ.Point.X then
         Vx:= ((Targ.Point.X+10) - meX) / (TestTime + tDelta)
     else
         Vx:= ((Targ.Point.X-10) - meX) / (TestTime + tDelta);
@@ -743,11 +758,14 @@ repeat
     if not (r > 1) then
         begin
         x:= meX;
+        dX:= Vx;
         y:= meY;
         dY:= -Vy;
         t:= TestTime;
     repeat
-        x:= x + Vx;
+        x:= x + dX;
+        if (GameFlags and gfMoreWind) <> 0 then
+            dX:= dX + windSpeed / Density;
         y:= y + dY;
         dY:= dY + cGravityf;
         dec(t)
@@ -777,10 +795,11 @@ end;
 
 function TestWatermelon(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const tDelta = 24;
+      Density : real = 2.0;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
-    targXWrap, x, y, dY, meX, meY: real;
+    targXWrap, x, y, dX, dY, meX, meY: real;
     t: LongInt;
 begin
 Flags:= Flags; // avoid compiler hint
@@ -796,19 +815,26 @@ if (WorldEdge = weWrap) then
 repeat
     inc(TestTime, 900);
     if (WorldEdge = weWrap) and (random(2)=0) then
-		 Vx:= (targXWrap - meX) / (TestTime + tDelta)
-    else Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
+        Vx:= (targXWrap - meX) / (TestTime + tDelta)
+    else
+        Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
+    if (GameFlags and gfMoreWind) <> 0 then
+        Vx:= -(windSpeed / Density) * (TestTime + tDelta) * 0.5 + Vx;
+
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Point.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
     if not (r > 1) then
         begin
         x:= meX;
+        dX:= Vx;
         y:= meY;
         dY:= -Vy;
         t:= TestTime;
         repeat
             x:= CheckWrap(x);
-            x:= x + Vx;
+            x:= x + dX;
+            if (GameFlags and gfMoreWind) <> 0 then
+                 dX:= dX + windSpeed / Density;
             y:= y + dY;
             dY:= dY + cGravityf;
             dec(t)
@@ -860,11 +886,11 @@ end;
     end;
 
 function TestMortar(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
-//const tDelta = 24;
+const Density : real = 1.0;
 var Vx, Vy: real;
     Score, EX, EY: LongInt;
     TestTime: Longword;
-    x, y, dY, meX, meY: real;
+    x, y, dX, dY, meX, meY: real;
 begin
 Flags:= Flags; // avoid compiler hint
     TestMortar:= BadTurn;
@@ -882,14 +908,19 @@ Flags:= Flags; // avoid compiler hint
         exit(BadTurn);
 
     Vx:= (Targ.Point.X - meX) / TestTime;
+    if (GameFlags and gfMoreWind) <> 0 then
+        Vx:= -(windSpeed / Density) * TestTime * 0.5 + Vx;
     Vy:= cGravityf * (TestTime div 2) - (Targ.Point.Y - meY) / TestTime;
 
     x:= meX;
+    dX:= Vx;
     y:= meY;
     dY:= -Vy;
 
     repeat
-        x:= x + Vx;
+        x:= x + dX;
+        if (GameFlags and gfMoreWind) <> 0 then
+            dX:= dX + windSpeed / Density;
         y:= y + dY;
         dY:= dY + cGravityf;
         EX:= trunc(x);
@@ -1361,7 +1392,8 @@ end;
 
 function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const cShift = 4;
-var bombsSpeed, X, Y, dY: real;
+      Density : real = 2.0;
+var bombsSpeed, X, Y, dX, dY: real;
     b: array[0..9] of boolean;
     dmg: array[0..9] of LongInt;
     fexit: boolean;
@@ -1381,6 +1413,7 @@ bombsSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
 X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
 Y:= -128;
+dX:= bombsSpeed;
 dY:= 0;
 
 for i:= 0 to 9 do
@@ -1391,7 +1424,9 @@ for i:= 0 to 9 do
 valueResult:= 0;
 
 repeat
-    X:= X + bombsSpeed;
+    X:= X + dX;
+    if (GameFlags and gfMoreWind) <> 0 then
+        dX:= dX + windSpeed / Density;
     Y:= Y + dY;
     dY:= dY + cGravityf;
     fexit:= true;
@@ -1443,7 +1478,8 @@ var bombsSpeed, X, Y, dX, dY, drillX, drillY: real;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
-if (Level > 3) or (cGravityf = 0) then
+// TODO: Add support for More Wind
+if (Level > 3) or (cGravityf = 0) or ((GameFlags and gfMoreWind) <> 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
@@ -1571,7 +1607,8 @@ end;
 
 function TestMineStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const cShift = 4;
-var minesSpeed, X, Y, dY: real;
+      Density : real = 1.0;
+var minesSpeed, X, Y, dX, dY: real;
     b: array[0..9] of boolean;
     dmg: array[0..9] of LongInt;
     fexit: boolean;
@@ -1598,6 +1635,7 @@ minesSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
 X:= X - minesSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
 Y:= -128;
+dX:= minesSpeed;
 dY:= 0;
 
 for i:= 0 to 9 do
@@ -1608,7 +1646,9 @@ for i:= 0 to 9 do
 valueResult:= 0;
 
 repeat
-    X:= X + minesSpeed;
+    X:= X + dX;
+    if (GameFlags and (gfMoreWind or gfInfAttack)) <> 0 then
+        dX:= dX + windSpeed / Density;
     Y:= Y + dY;
     dY:= dY + cGravityf;
     fexit:= true;
@@ -1650,6 +1690,7 @@ end;
 
 function TestSMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const timeLimit = 50;
+      Density : real = 1.6;
 var Vx, Vy, r, meX, meY: real;
     rTime: LongInt;
     EX, EY: LongInt;
@@ -1675,6 +1716,8 @@ repeat
          Vx:= (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime
     else
          Vx:= (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime;
+    if (GameFlags and gfMoreWind) <> 0 then
+         Vx:= -(windSpeed / Density) * rTime * 0.5 + Vx;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
@@ -1688,6 +1731,8 @@ repeat
         repeat
             x:= CheckWrap(x);
             x:= x + dX;
+            if (GameFlags and gfMoreWind) <> 0 then
+                dX:= dX + windSpeed / Density;
 
             y:= y + dY;
             dY:= dY + cGravityf;
@@ -1932,6 +1977,7 @@ TestSeduction:= rate;
 end;
 
 function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const Density : real = 2.0;
 var valueResult: LongInt;
     x, y, dx, dy: real;
     EX, EY, t: LongInt;
@@ -1942,10 +1988,14 @@ Targ:= Targ; // avoid compiler hint
 x:= hwFloat2Float(Me^.X) + hwSign(Me^.dX) * 7;
 y:= hwFloat2Float(Me^.Y);
 dx:= hwSign(Me^.dX) * 0.03;
+if (GameFlags and gfMoreWind) <> 0 then
+    dx:= -(windSpeed / Density) + dx;
 dy:= 0;
 t:= 5000;
 repeat
     dec(t);
+    if (GameFlags and gfMoreWind) <> 0 then
+        dx:= dx + windSpeed / Density;
     x:= x + dx;
     dy:= dy + cGravityf;
     y:= y + dy;
@@ -1977,6 +2027,7 @@ TestDynamite:= valueResult
 end;
 
 function TestMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const Density : real = 1.0;
 var valueResult: LongInt;
     x, y, dx, dy: real;
     EX, EY, t: LongInt;
@@ -1987,10 +2038,14 @@ Targ:= Targ; // avoid compiler hint
 x:= hwFloat2Float(Me^.X) + hwSign(Me^.dX) * 7;
 y:= hwFloat2Float(Me^.Y);
 dx:= hwSign(Me^.dX) * 0.02;
+if (GameFlags and gfMoreWind) <> 0 then
+    dx:= -(windSpeed / Density) + dx;
 dy:= 0;
 t:= 10000;
 repeat
     dec(t);
+    if (GameFlags and gfMoreWind) <> 0 then
+         dx:= dx + windSpeed / Density;
     x:= x + dx;
     dy:= dy + cGravityf;
     y:= y + dy;
@@ -2028,6 +2083,7 @@ end;
 
 function TestKnife(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const timeLimit = 300;
+      Density : real = 4.0;
 var Vx, Vy, r, meX, meY: real;
     rTime: LongInt;
     EX, EY: LongInt;
@@ -2054,6 +2110,8 @@ repeat
          Vx:= (targXWrap - meX) / rTime
     else
          Vx:= (Targ.Point.X - meX) / rTime;
+    if (GameFlags and gfMoreWind) <> 0 then
+         Vx:= -(windSpeed / Density) * rTime * 0.5 + Vx;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
@@ -2067,6 +2125,8 @@ repeat
         repeat
             x:= CheckWrap(x);
             x:= x + dX;
+            if (GameFlags and gfMoreWind) <> 0 then
+                dX:= dX + windSpeed / Density;
 
             y:= y + dY;
             dY:= dY + cGravityf;

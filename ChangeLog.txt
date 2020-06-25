@@ -11,6 +11,7 @@ Gameplay:
  +   - use RC plane (very basic)
  +   - drop mines from a cliff
  + Low level computer players are more inaccurate with guns
+ + Computer player now takes Strong Wind game modifier into account
  + Various small computer player improvements
  + New taunt chat commands: /bubble, /happy
  * Fix many projectiles not being affected by Heavy Wind after turn end
