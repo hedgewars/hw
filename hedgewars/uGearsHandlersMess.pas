@@ -543,9 +543,7 @@ begin
            // while a gear is moving, this can be rather confusing.
            // TODO: Find a way to make gfMoreWind-affected land objects settle more reliably
            // and quickler without touching wind itselvs
-           ((not (Gear^.Kind in [gtMine, gtAirMine, gtSMine, gtKnife, gtExplosives])) or (TimeNotInTurn < MaxMoreWindTime)) and
-           ((xland or land) = 0) and
-           ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
+           ((not (Gear^.Kind in [gtMine, gtAirMine, gtSMine, gtKnife, gtExplosives])) or (TimeNotInTurn < MaxMoreWindTime)) then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
         end;
 
