@@ -106,6 +106,7 @@ var BotLevel: Byte;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
 windSpeed:= hwFloat2Float(cWindSpeed);
+aiLaserSighting:= (cLaserSighting) or (HHHasAmmo(Me^.Hedgehog^, amLaserSight) > 0);
 useThisActions:= false;
 Me^.AIHints:= Me^.AIHints and (not aihAmmosChanged);
 
@@ -141,16 +142,21 @@ for i:= 0 to Pred(Targets.Count) do
 
                     BestActions.Score:= Actions.Score + Score;
 
-                    // if not between shots, activate invulnerability/vampirism if available
+                    // if not between shots, activate invulnerability/vampirism/etc. if available
                     if CurrentHedgehog^.MultiShootAttacks = 0 then
                         begin
+                        if (not cLaserSighting) and (HHHasAmmo(Me^.Hedgehog^, amLaserSight) > 0) and ((AmmoTests[a].flags and amtest_LaserSight) <> 0) then
+                            begin
+                            AddAction(BestActions, aia_Weapon, Longword(amLaserSight), 80, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                            end;
                         if (HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0) and (Me^.Hedgehog^.Effects[heInvulnerable] = 0) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amInvulnerable), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
-
                         if (HHHasAmmo(Me^.Hedgehog^, amExtraDamage) > 0) and (cDamageModifier <> _1_5) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amExtraDamage), 80, 0, 0);

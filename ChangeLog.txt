@@ -6,7 +6,7 @@ Gameplay:
  + Easier to push hogs around with blowtorch
  + Backjumps are now a bit easier
  + Teach computer players how to ...
- +   - use drill strike, piano strike, air mine, cleaver, seduction
+ +   - use drill strike, piano strike, air mine, cleaver, seduction, laser sight
  +   - use mine strike (0 seconds only)
  +   - use RC plane (very basic)
  +   - drop mines from a cliff

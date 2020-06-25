@@ -26,8 +26,10 @@ const
     amtest_NoTarget        = $00000002; // each pos, but no targetting
     amtest_MultipleAttacks = $00000004; // test could result in multiple attacks, set AttacksNum
     amtest_NoTrackFall     = $00000008; // skip fall tracing.  
+    amtest_LaserSight      = $00000010; // supports laser sighting
 
 var windSpeed: real;
+    aiLaserSighting: boolean;
 
 type TAttackParams = record
         Time, Bounce, AttacksNum: Longword;
@@ -81,12 +83,12 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestClusterBomb; flags: 0), // amClusterBomb
             (proc: @TestBazooka;     flags: 0), // amBazooka
             (proc: @TestBee;         flags: amtest_Rare), // amBee
-            (proc: @TestShotgun;     flags: 0), // amShotgun
+            (proc: @TestShotgun;     flags: amtest_LaserSight), // amShotgun
             (proc: nil;              flags: 0), // amPickHammer
             (proc: nil;              flags: 0), // amSkip
             (proc: nil;              flags: 0), // amRope
             (proc: @TestMine;        flags: amtest_NoTarget), // amMine
-            (proc: @TestDesertEagle; flags: amtest_MultipleAttacks), // amDEagle
+            (proc: @TestDesertEagle; flags: amtest_MultipleAttacks or amtest_LaserSight), // amDEagle
             (proc: @TestDynamite;    flags: amtest_NoTarget), // amDynamite
             (proc: @TestFirePunch;   flags: amtest_NoTarget), // amFirePunch
             (proc: @TestWhip;        flags: amtest_NoTarget), // amWhip
@@ -100,7 +102,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             //(proc: @TestTeleport;    flags: amtest_OnTurn), // amTeleport
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
-            (proc: @TestKamikaze;    flags: 0), // amKamikaze
+            (proc: @TestKamikaze;    flags: amtest_LaserSight), // amKamikaze
             (proc: @TestCake;        flags: amtest_Rare or amtest_NoTarget), // amCake
             (proc: @TestSeduction;   flags: amtest_NoTarget), // amSeduction
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
@@ -108,7 +110,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amNapalm
             (proc: @TestDrillRocket; flags: 0), // amDrill
             (proc: nil;              flags: 0), // amBallgun
-            (proc: @TestRCPlane;     flags: 0), // amRCPlane
+            (proc: @TestRCPlane;     flags: amtest_LaserSight), // amRCPlane
             (proc: nil;              flags: 0), // amLowGravity
             (proc: nil;              flags: 0), // amExtraDamage
             (proc: nil;              flags: 0), // amInvulnerable
@@ -134,9 +136,9 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amIceGun
             (proc: @TestKnife;       flags: 0), // amKnife
             (proc: nil;              flags: 0), // amRubber
-            (proc: @TestAirMine;     flags: 0), // amAirMine
+            (proc: @TestAirMine;     flags: amtest_LaserSight), // amAirMine
             (proc: nil;              flags: 0), // amCreeper
-            (proc: @TestMinigun;     flags: 0)  // amMinigun
+            (proc: @TestMinigun;     flags: amtest_LaserSight)  // amMinigun
             );
 
 implementation
@@ -487,7 +489,7 @@ repeat
             exit(BadTurn);
 
         // Apply inaccuracy
-        if (not cLaserSighting) then
+        if (not aiLaserSighting) then
             inc(ap.Angle, + AIrndSign(random((Level - 1) * 9)));
 
         if (valueResult <= 0) then
@@ -976,7 +978,7 @@ Vx:= (Targ.Point.X - x) * 1 / 1024;
 Vy:= (Targ.Point.Y - y) * 1 / 1024;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 // Apply inaccuracy
-if (not cLaserSighting) then
+if (not aiLaserSighting) then
     inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
 repeat
     x:= x + vX;
@@ -1033,7 +1035,7 @@ Vx:= (Targ.Point.X - x) * t;
 Vy:= (Targ.Point.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 // Apply inaccuracy
-if (not cLaserSighting) then
+if (not aiLaserSighting) then
     inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
 d:= 0;
 
@@ -1319,7 +1321,7 @@ Flags:= Flags; // avoid compiler hint
 
         ap.Angle:= DxDy2AttackAnglef(dx, -dy);
         // Apply inaccuracy
-        if (not cLaserSighting) then
+        if (not aiLaserSighting) then
             inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
         end;
 
@@ -2214,7 +2216,7 @@ repeat
 
         // Apply inaccuracy
         inc(ap.Power, (random(93*(Level-1)) - 31*(Level-1))); // Level 1 spread: -124 .. 248
-        if (not cLaserSighting) then
+        if (not aiLaserSighting) then
             inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
 
         if (valueResult <= 0) then
@@ -2261,7 +2263,7 @@ if (ap.Angle < Ammoz[amMinigun].minAngle) or (ap.Angle > Ammoz[amMinigun].maxAng
     exit(BadTurn);
 
 // Apply inaccuracy
-if (not cLaserSighting) then
+if (not aiLaserSighting) then
     inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
 repeat
     x:= x + vX;
