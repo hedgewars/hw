@@ -54,6 +54,8 @@ QString * cDefaultAmmoStore = new QString( AMMOLINE_DEFAULT_QT AMMOLINE_DEFAULT_
 QString * cEmptyAmmoStore =   new QString( AMMOLINE_EMPTY_QT AMMOLINE_EMPTY_PROB
                                            AMMOLINE_EMPTY_DELAY AMMOLINE_EMPTY_CRATE );
 int cAmmoNumber = cDefaultAmmoStore->size() / 4;
+unsigned int ammoMenuAmmos[] = HW_AMMOMENU_ARRAY;
+int cAmmoMenuRows = 6;
 
 QList< QPair<QString, QString> > cDefaultAmmos =
         QList< QPair<QString, QString> >()

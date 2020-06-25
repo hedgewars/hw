@@ -193,25 +193,34 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     int i = 0, k = 0;
     for(; i < m_numItems; ++i)
     {
-        // Hide amSkip (6) and amCreeper (57)
-        // TODO: Unhide amCreeper when this weapon is done
-        if (i == 6 || i == 57) continue;
-        if (k % 4 == 0) ++j;
-        SelWeaponItem * swi = new SelWeaponItem(true, i, readWeaponValue(currentState[i], 9), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
-        weaponItems[i].append(swi);
-        p1Layout->addWidget(swi, j, k % 4);
+        if (k % cAmmoMenuRows == 0)
+            ++j;
+        unsigned int ammo = ammoMenuAmmos[i];
+        // Hide amSkip (7)
+        if (ammo == 7)
+            continue;
+        // Hide unused amCreeper (58)
+        else if (ammo == 58)
+        {
+            ++k;
+            continue;
+        }
+        int a = ammo-1; // ammo ID for SelWeaponItem
+        SelWeaponItem * swi = new SelWeaponItem(true, a, readWeaponValue(currentState[a], 9), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
+        weaponItems[a].append(swi);
+        p1Layout->addWidget(swi, j, k % cAmmoMenuRows);
 
-        SelWeaponItem * pwi = new SelWeaponItem(false, i, readWeaponValue(currentState[numItems + i], 8), QImage(":/res/ammopicbox.png"), QImage(":/res/ammopicboxgrey.png"), this);
-        weaponItems[i].append(pwi);
-        p2Layout->addWidget(pwi, j, k % 4);
+        SelWeaponItem * pwi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems + a], 8), QImage(":/res/ammopicbox.png"), QImage(":/res/ammopicboxgrey.png"), this);
+        weaponItems[a].append(pwi);
+        p2Layout->addWidget(pwi, j, k % cAmmoMenuRows);
 
-        SelWeaponItem * dwi = new SelWeaponItem(false, i, readWeaponValue(currentState[numItems*2 + i], 8), QImage(":/res/ammopicdelay.png"), QImage(":/res/ammopicdelaygrey.png"), this);
-        weaponItems[i].append(dwi);
-        p3Layout->addWidget(dwi, j, k % 4);
+        SelWeaponItem * dwi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems*2 + a], 8), QImage(":/res/ammopicdelay.png"), QImage(":/res/ammopicdelaygrey.png"), this);
+        weaponItems[a].append(dwi);
+        p3Layout->addWidget(dwi, j, k % cAmmoMenuRows);
 
-        SelWeaponItem * awi = new SelWeaponItem(false, i, readWeaponValue(currentState[numItems*3 + i], 8), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
-        weaponItems[i].append(awi);
-        p4Layout->addWidget(awi, j, k % 4);
+        SelWeaponItem * awi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems*3 + a], 8), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
+        weaponItems[a].append(awi);
+        p4Layout->addWidget(awi, j, k % cAmmoMenuRows);
 
         ++k;
     }

@@ -51,6 +51,8 @@ extern QList< QPair<QString, QString> > cDefaultAmmos;
 extern QStringList cQuickGameMaps;
 
 extern unsigned int colors[];
+extern unsigned int ammoMenuAmmos[];
+extern int cAmmoMenuRows;
 
 extern QString * netHost;
 extern quint16 netPort;
@@ -119,3 +121,18 @@ extern int years_since_foundation;
                               0xffffff01, /* yellow */ \
                               /* add new colors here */ \
                               0 }
+
+/* The ammo types, sorted in the same way as in the ammo menu */
+#define HW_AMMOMENU_ARRAY {\
+  3,  4, 22, 29, 51, 55,\
+  1,  2, 26, 27, 40, 44,\
+  5, 10, 38, 45, 54, 59,\
+ 12, 13, 14, 23, 25, 48,\
+  9, 11, 24, 30, 31, 47,\
+ 16, 17, 28, 43, 50, 57,\
+  6, 18, 19, 46, 53, 56,\
+  8, 15, 20, 39, 41, 42,\
+ 34, 36, 37, 49, 52, 58,\
+  7, 21, 32, 33, 35\
+}
+

@@ -41,6 +41,7 @@ Graphics:
  + Various small HUD tweaks
 
 Frontend:
+ + Sort ammos in weapon scheme editor
  * Fix weapon schemes sometimes not being saved properly
  * Fix world edge not being changable under macOS
 
