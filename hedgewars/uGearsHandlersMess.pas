@@ -544,7 +544,7 @@ begin
            // while a gear is moving, this can be rather confusing.
            // TODO: Find a way to make gfMoreWind-affected land objects settle more reliably
            // and quickler without touching wind itselvs
-           ((not (Gear^.Kind in [gtMine, gtAirMine, gtSMine, gtKnife, gtExplosives])) or (TimeNotInTurn < MaxMoreWindTime)) then
+           ((not (Gear^.Kind in [gtMine, gtAirMine, gtSMine, gtKnife, gtExplosives, gtSentry])) or (TimeNotInTurn < MaxMoreWindTime)) then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
         end;
 
@@ -7174,8 +7174,44 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSentry(Gear: PGear);
 begin
-    CheckGearDrowning(Gear);
-    doStepFallingGear(Gear);
+    if CheckGearDrowning(Gear) then
+        exit;
+
+    if (TestCollisionYKick(Gear, 1) = 0) then
+    begin
+        doStepFallingGear(Gear);
+        exit;
+    end;
+
+    if (Gear^.Timer > 0) then
+        dec(Gear^.Timer);
+
+    if (Gear^.Timer = 0) then
+    begin
+        if Gear^.Tag <> 0 then
+        begin
+            Gear^.Tag := 0;
+            Gear^.Timer := 1000 + GetRandom(1000);
+        end
+        else
+        begin
+            Gear^.Tag := GetRandom(2) * 2 - 1;
+            Gear^.Timer := 1000 + GetRandom(3000);
+            Gear^.dX.isNegative := Gear^.Tag < 0;
+            if TestCollisionX(Gear, 1) <> 0 then
+            begin
+                Gear^.Tag := not Gear^.Tag;
+                Gear^.dX.isNegative := not Gear^.dX.isNegative;
+            end
+        end
+    end;
+
+    if (Gear^.Tag <> 0) and ((GameTicks and $1F) = 0) then
+    begin
+        MakeHedgehogsStep(Gear);
+        if TestCollisionX(Gear, 1) <> 0 then
+            Gear^.Timer := 0
+    end;
 end;
 
 end.
