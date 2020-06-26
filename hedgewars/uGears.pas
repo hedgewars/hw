@@ -1461,7 +1461,8 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepKnife,
             @doStepCreeper,
             @doStepMinigun,
-            @doStepMinigunBullet);
+            @doStepMinigunBullet,
+            @doStepSentry);
 begin
     doStepHandlers:= handlers;
 

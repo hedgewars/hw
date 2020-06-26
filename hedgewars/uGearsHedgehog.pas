@@ -400,6 +400,7 @@ with Gear^,
                                  else
                                      newGear^.Tag:= 1;
                                  end;
+                    amSentry: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtSentry, 0, SignAs(_0_03, dX), _0, 0);
                     amFirePunch: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtFirePunch, 0, xx, _0, 0);
                          amWhip: begin
                                  newGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);

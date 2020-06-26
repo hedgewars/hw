@@ -859,7 +859,11 @@ const
             (FileName:     'Bubble'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 38; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpLowest; getDimensions: false; getImageDimensions: true),// sprHogBubble
             (FileName: 'Happy'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpLowest; getDimensions: false; getImageDimensions: true)// sprHappy
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpLowest; getDimensions: false; getImageDimensions: true),// sprHappy
+           (FileName: 'Duck'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+  Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSentry
+            (FileName: 'amDuck'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+  Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandSentry
             );
 
 
@@ -2540,7 +2544,32 @@ const
             PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //23;
-            ejectY: 0) //-6;
+            ejectY: 0), //-6;
+// Sentry
+            (NameId: sidSentry;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                    ammoprop_AttackInMove or
+                    ammoprop_DontHold;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amSentry;
+                AttackVoice: sndLaugh;
+                Bounciness: defaultBounciness);
+            Slot: 9;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 0;
+            PosSprite: sprWater;
+            ejectX: 10;
+            ejectY: -5)
         );
 
 var

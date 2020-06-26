@@ -141,6 +141,7 @@ procedure doStepKnife(Gear: PGear);
 procedure doStepMinigunWork(Gear: PGear);
 procedure doStepMinigun(Gear: PGear);
 procedure doStepMinigunBullet(Gear: PGear);
+procedure doStepSentry(Gear: PGear);
 
 var
     upd: Longword;
@@ -7168,6 +7169,13 @@ begin
     Gear^.Y := Gear^.Y + Gear^.dY * 2;
     Gear^.FlightTime := 0;
     Gear^.doStep := @doStepBulletWork
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepSentry(Gear: PGear);
+begin
+    CheckGearDrowning(Gear);
+    doStepFallingGear(Gear);
 end;
 
 end.

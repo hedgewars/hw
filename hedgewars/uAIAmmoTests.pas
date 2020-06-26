@@ -140,7 +140,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amRubber
             (proc: @TestAirMine;     flags: amtest_LaserSight), // amAirMine
             (proc: nil;              flags: 0), // amCreeper
-            (proc: @TestMinigun;     flags: amtest_LaserSight)  // amMinigun
+            (proc: @TestMinigun;     flags: amtest_LaserSight),  // amMinigun
+            (proc: nil;              flags: 0)  // amSentry
             );
 
 implementation

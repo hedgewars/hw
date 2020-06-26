@@ -107,6 +107,7 @@ const
 (*        gtCreeper *) , amCreeper
 (*        gtMinigun *) , amMinigun
 (*  gtMinigunBullet *) , amMinigun
+(*         gtSentry *) , amSentry
     );
 
 
@@ -259,6 +260,7 @@ if WorldEdge = weBounce then
             gtSnowball,
             gtKnife,
             gtCreeper,
+            gtSentry,
             gtMolotov,
             gtFlake,
             gtGrave,
@@ -315,7 +317,8 @@ gtSniperRifleShot: Gear^.Boom := 100000;
     gtPoisonCloud: Gear^.Boom := 20;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
         gtCreeper: Gear^.Boom := 100;
-    gtMinigunBullet: Gear^.Boom := 2;
+  gtMinigunBullet: Gear^.Boom := 2;
+         gtSentry: Gear^.Boom := 25;
     end;
 
 case Kind of
@@ -828,6 +831,10 @@ gtFlamethrower: begin
  gtMinigunBullet: begin
                 gear^.Radius:= 1;
                 gear^.Health:= 2;
+                end;
+        gtSentry: begin
+                gear^.Radius:= cHHRadius;
+                gear^.Health:= 100;
                 end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;

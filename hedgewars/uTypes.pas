@@ -95,7 +95,7 @@ type
             sprSliderInverted, sprFingerBack, sprFingerBackInv, sprTargetPBack, sprTargetPBackInv,
             sprHealthHud, sprHealthPoisonHud, sprVampHud, sprKarmaHud, sprMedicHud, sprMedicPoisonHud,
             sprHaloHud, sprInvulnHUD, sprAmPiano, sprHandLandGun, sprFirePunch, sprThroughWrap,
-            sprDynamiteDefused, sprHogBubble, sprHappy);
+            sprDynamiteDefused, sprHogBubble, sprHappy, sprSentry, sprHandSentry);
 
     // Gears that interact with other Gears and/or Land
     // first row of gears (<gtExplosives) should be avoided when searching a spawn place
@@ -112,7 +112,7 @@ type
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
             gtNapalmBomb, gtSnowball, gtFlake, gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtCreeper, gtMinigun, gtMinigunBullet); // 68
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtCreeper, gtMinigun, gtMinigunBullet, gtSentry); // 69
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -171,7 +171,7 @@ type
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
             amResurrector, amDrillStrike, amSnowball, amTardis, amLandGun, // 53
-            amIceGun, amKnife, amRubber, amAirMine, amCreeper, amMinigun); // 59
+            amIceGun, amKnife, amRubber, amAirMine, amCreeper, amMinigun, amSentry); // 60
     // NOTE: If we ever reach 126 ammo types, make sure to skip ammo type number 126 because it's
     // reserved as synonym for amNothing. See also chSetWeapon.
 
@@ -506,7 +506,7 @@ type
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
             sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine,
-            sidCreeper, sidMinigun);
+            sidCreeper, sidMinigun, sidSentry);
 
     TMsgStrId = (sidLoading, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
