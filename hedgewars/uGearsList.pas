@@ -563,7 +563,8 @@ case Kind of
                 end;
   gtDEagleShot: begin
                 gear^.Radius:= 1;
-                gear^.Health:= 50
+                gear^.Health:= 50;
+                gear^.Data:= nil;
                 end;
   gtSniperRifleShot: begin
                 gear^.Radius:= 1;
@@ -839,6 +840,7 @@ gtFlamethrower: begin
                 gear^.Elasticity:= _0_5;
                 gear^.Tag:= 0;
                 gear^.Timer:= 500;
+                gear^.WDTimer:= 0;
                 end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;

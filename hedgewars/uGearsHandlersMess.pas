@@ -1607,10 +1607,11 @@ end;
 
 procedure doStepDEagleShot(Gear: PGear);
 begin
-    Gear^.Data:= nil;
-    // remember who fired this
-    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
-        Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
+
+    if Gear^.Data = nil then
+        // remember who fired this
+        if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+            Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
 
     PlaySound(sndGun);
     ClearHitOrder();
@@ -7172,8 +7173,13 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+
 procedure doStepSentry(Gear: PGear);
+var HHGear, bullet: PGear;
+    distX, distY, invDistance: HwFloat;
 begin
+    HHGear:= nil;
+
     if CheckGearDrowning(Gear) then
         exit;
 
@@ -7212,6 +7218,41 @@ begin
         if TestCollisionX(Gear, 1) <> 0 then
             Gear^.Timer := 0
     end;
+
+    if ((GameTicks and $FF) = 0)
+        and (CurrentHedgehog <> nil)
+        and (CurrentHedgehog^.Gear <> nil)
+        and ((CurrentHedgehog^.Gear^.State and (gstMoving or gstHHDriven)) = (gstMoving or gstHHDriven)) then
+    begin
+        HHGear := CurrentHedgehog^.Gear;
+        distX := HHGear^.X - Gear^.X;
+        distY := HHGear^.Y - Gear^.Y;
+        if (distX.isNegative = Gear^.dX.isNegative)
+            and (distX.Round > 32)
+            and (distX.Round < 1000)
+            and (hwAbs(distY) < hwAbs(distX)) then
+        begin
+            invDistance := _1 / Distance(distX, distY);
+
+            distX := distX * invDistance;
+            distY := distY * invDistance;
+
+            bullet := AddGear(
+                 hwRound(Gear^.X), hwRound(Gear^.Y),
+                 gtDEagleShot, 0,
+                 distX,
+                 distY,
+                 0);
+            
+            bullet^.PortalCounter := 1;
+            bullet^.Elasticity := Gear^.X;
+            bullet^.Friction := Gear^.Y;
+            bullet^.Data := Pointer(Gear);
+            inc(Gear^.WDTimer);
+
+            CreateShellForGear(Gear, Gear^.WDTimer and 1);
+        end
+    end
 end;
 
 end.
