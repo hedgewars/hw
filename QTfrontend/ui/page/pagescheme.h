@@ -90,6 +90,7 @@ class PageScheme : public AbstractPage
         MinesTimeSpinBox * SB_MinesTime;
         QSpinBox * SB_Mines;
         QSpinBox * SB_AirMines;
+        QSpinBox * SB_Sentries;
         QSpinBox * SB_MineDuds;
         QSpinBox * SB_Explosives;
         QSpinBox * SB_RopeModifier;

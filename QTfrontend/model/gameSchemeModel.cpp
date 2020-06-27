@@ -63,14 +63,15 @@ QList<QVariant> defaultScheme = QList<QVariant>()
                                 << QVariant(0)             // mine dud pct   33
                                 << QVariant(2)             // explosives     34
                                 << QVariant(0)             // air mines      35
-                                << QVariant(35)            // health case pct 36
-                                << QVariant(25)            // health case amt 37
-                                << QVariant(47)            // water rise amt 38
-                                << QVariant(5)             // health dec amt 39
-                                << QVariant(100)           // rope modfier   40
-                                << QVariant(100)           // get away time  41
-                                << QVariant(0)             // world edge     42
-                                << QVariant()              // scriptparam    43
+                                << QVariant(0)             // sentries       36
+                                << QVariant(35)            // health case pct 37
+                                << QVariant(25)            // health case amt 38
+                                << QVariant(47)            // water rise amt 39
+                                << QVariant(5)             // health dec amt 40
+                                << QVariant(100)           // rope modfier   41
+                                << QVariant(100)           // get away time  42
+                                << QVariant(0)             // world edge     43
+                                << QVariant()              // scriptparam    44
                                 ;
 
 GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
@@ -134,14 +135,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
               << "minedudpct"          // 33
               << "explosives"          // 34
               << "airmines"            // 35
-              << "healthprobability"   // 36
-              << "healthcaseamount"    // 37
-              << "waterrise"           // 38
-              << "healthdecrease"      // 39
-              << "ropepct"             // 40
-              << "getawaytime"         // 41
-              << "worldedge"           // 42
-              << "scriptparam"         // scriptparam    43
+              << "sentries"            // 36
+              << "healthprobability"   // 37
+              << "healthcaseamount"    // 38
+              << "waterrise"           // 39
+              << "healthdecrease"      // 40
+              << "ropepct"             // 41
+              << "getawaytime"         // 42
+              << "worldedge"           // 43
+              << "scriptparam"         // scriptparam    44
               ;
 
     QList<QVariant> proMode;
@@ -182,14 +184,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(2)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> shoppa;
@@ -230,14 +233,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(0)             // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(0)             // water rise amt 38
-            << QVariant(0)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(0)             // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(0)             // water rise amt 39
+            << QVariant(0)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> cleanslate;
@@ -278,14 +282,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(2)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> minefield;
@@ -326,14 +331,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> barrelmayhem;
@@ -374,14 +380,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(200)           // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> tunnelhogs;
@@ -422,14 +429,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(10)            // mine dud pct   33
             << QVariant(10)            // explosives     34
             << QVariant(4)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> timeless;
@@ -470,14 +478,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(10)            // mine dud pct   33
             << QVariant(2)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(30)            // health case amt 37
-            << QVariant(0)             // water rise amt 38
-            << QVariant(0)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(30)            // health case amt 38
+            << QVariant(0)             // water rise amt 39
+            << QVariant(0)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> thinkingportals;
@@ -518,14 +527,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(5)             // explosives     34
             << QVariant(4)             // air mines      35
-            << QVariant(25)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(25)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> kingmode;
@@ -566,14 +576,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(2)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> mutant;
@@ -614,14 +625,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(2)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(0)             // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(0)             // water rise amt 38
-            << QVariant(0)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(0)             // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(0)             // water rise amt 39
+            << QVariant(0)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> construction;
@@ -662,15 +674,16 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
             // NOTE: If you change this, also change the defaults in the Construction Mode script
-            << QVariant("initialenergy=550, energyperround=50, maxenergy=1000, cratesperround=5") // scriptparam    43
+            << QVariant("initialenergy=550, energyperround=50, maxenergy=1000, cratesperround=5") // scriptparam    44
             ;
 
     QList<QVariant> specialists;
@@ -711,15 +724,16 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(100)           // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(47)            // water rise amt 38
-            << QVariant(5)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
+            << QVariant(0)             // sentries       36
+            << QVariant(100)           // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(47)            // water rise amt 39
+            << QVariant(5)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
             // NOTE: If you change this, also change the defaults in the The Specialists script
-            << QVariant("t=SENDXHPL")  // scriptparam    43
+            << QVariant("t=SENDXHPL")  // scriptparam    44
             ;
 
     QList<QVariant> spaceinvasion;
@@ -760,15 +774,16 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(0)             // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(0)             // water rise amt 38
-            << QVariant(0)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
+            << QVariant(0)             // sentries       36
+            << QVariant(0)             // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(0)             // water rise amt 39
+            << QVariant(0)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
             // NOTE: If you change this, also change the defaults in the Space Invasion script
-            << QVariant("rounds=3, shield=30, barrels=5, pings=2, barrelbonus=3, shieldbonus=30, timebonus=4") // scriptparam    43
+            << QVariant("rounds=3, shield=30, barrels=5, pings=2, barrelbonus=3, shieldbonus=30, timebonus=4") // scriptparam    44
             ;
 
     QList<QVariant> hedgeeditor;
@@ -809,14 +824,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(35)            // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(0)            // water rise amt 38
-            << QVariant(0)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36
+            << QVariant(35)            // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(0)            // water rise amt 39
+            << QVariant(0)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
     QList<QVariant> racer;
@@ -857,14 +873,15 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
             << QVariant(0)             // air mines      35
-            << QVariant(0)             // health case pct 36
-            << QVariant(25)            // health case amt 37
-            << QVariant(0)             // water rise amt 38
-            << QVariant(0)             // health dec amt 39
-            << QVariant(100)           // rope modfier   40
-            << QVariant(100)           // get away time  41
-            << QVariant(0)             // world edge     42
-            << QVariant()              // scriptparam    43
+            << QVariant(0)             // sentries       36            
+            << QVariant(0)             // health case pct 37
+            << QVariant(25)            // health case amt 38
+            << QVariant(0)             // water rise amt 39
+            << QVariant(0)             // health dec amt 40
+            << QVariant(100)           // rope modfier   41
+            << QVariant(100)           // get away time  42
+            << QVariant(0)             // world edge     43
+            << QVariant()              // scriptparam    44
             ;
 
 

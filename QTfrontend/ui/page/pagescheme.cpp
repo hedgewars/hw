@@ -191,6 +191,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     QString wtMineDuds = tr("Likelihood of a mine being a dud. Does not affect mines placed by hedgehogs.");
     QString wtExplosives = tr("Average number of barrels to be placed a medium-sized island map. This number will be scaled for other maps.");
     QString wtAirMines = tr("Average number of air mines to be placed a medium-sized island map. This number will be scaled for other maps.");
+    QString wtSentries = tr("Average number of sentry bots to be placed on a medium-sized island map. This number will be scaled for other maps.");
     QString wtWorldEdge = tr("Affects the left and right boundaries of the map");
     QString wtGetAwayTime = tr("Time you get after an attack");
     QString wtScriptParam = tr("Additional parameter to configure game styles. The meaning depends on the used style, refer to the documentation. When in doubt, leave it empty.");
@@ -462,33 +463,50 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(SB_AirMines,14,2,1,1);
 
     l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("Sentry Bots"));
+    l->setWhatsThis(wtSentries);
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,15,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setWhatsThis(wtSentries);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconAirMine.png"));
+    glBSLayout->addWidget(l,15,1,1,1);
+    SB_Sentries = new QSpinBox(gbBasicSettings);
+    SB_Sentries->setWhatsThis(wtSentries);
+    SB_Sentries->setRange(0, 200);
+    SB_Sentries->setValue(0);
+    SB_Sentries->setSingleStep(5);
+    glBSLayout->addWidget(SB_Sentries,15,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
 //: Label of game scheme setting for the time you get after an attack
     l->setText(QLabel::tr("% Retreat Time"));
     l->setWhatsThis(wtGetAwayTime);
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,15,0,1,1);
+    glBSLayout->addWidget(l,16,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtGetAwayTime);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconTime.png"));
-    glBSLayout->addWidget(l,15,1,1,1);
+    glBSLayout->addWidget(l,16,1,1,1);
     SB_GetAwayTime = new QSpinBox(gbBasicSettings);
     SB_GetAwayTime->setWhatsThis(wtGetAwayTime);
     SB_GetAwayTime->setRange(0, 999);
     SB_GetAwayTime->setValue(100);
     SB_GetAwayTime->setSingleStep(25);
-    glBSLayout->addWidget(SB_GetAwayTime,15,2,1,1);
+    glBSLayout->addWidget(SB_GetAwayTime,16,2,1,1);
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("World Edge"));
     l->setWhatsThis(wtWorldEdge);
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,16,0,1,1);
+    glBSLayout->addWidget(l,17,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtWorldEdge);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconEarth.png"));
-    glBSLayout->addWidget(l,16,1,1,1);
+    glBSLayout->addWidget(l,17,1,1,1);
 
     CB_WorldEdge = new QComboBox(gbBasicSettings);
     CB_WorldEdge->setWhatsThis(wtWorldEdge);
@@ -497,24 +515,24 @@ QLayout * PageScheme::bodyLayoutDefinition()
     CB_WorldEdge->insertItem(2, tr("Bounce (Edges reflect)"));
     CB_WorldEdge->insertItem(3, tr("Sea (Edges connect to sea)"));
     /* CB_WorldEdge->insertItem(4, tr("Skybox")); */
-    glBSLayout->addWidget(CB_WorldEdge,16,2,1,1);
+    glBSLayout->addWidget(CB_WorldEdge,17,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Script parameter"));
     l->setWhatsThis(wtScriptParam);
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,17,0,1,1);
+    glBSLayout->addWidget(l,18,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtScriptParam);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconScript.png"));
-    glBSLayout->addWidget(l,17,1,1,1);
+    glBSLayout->addWidget(l,18,1,1,1);
 
     LE_ScriptParam = new QLineEdit(gbBasicSettings);
     LE_ScriptParam->setWhatsThis(wtScriptParam);
     LE_ScriptParam->setMaxLength(240);
-    glBSLayout->addWidget(LE_ScriptParam,17,2,1,1);
+    glBSLayout->addWidget(LE_ScriptParam,18,2,1,1);
 
     L_name = new QLabel(gbBasicSettings);
     L_name->setText(QLabel::tr("Scheme Name:"));
@@ -610,14 +628,15 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_MineDuds, 33);
     mapper->addMapping(SB_Explosives, 34);
     mapper->addMapping(SB_AirMines, 35);
-    mapper->addMapping(SB_HealthCrates, 36);
-    mapper->addMapping(SB_CrateHealth, 37);
-    mapper->addMapping(SB_WaterRise, 38);
-    mapper->addMapping(SB_HealthDecrease, 39);
-    mapper->addMapping(SB_RopeModifier, 40);
-    mapper->addMapping(SB_GetAwayTime, 41);
-    mapper->addMapping(CB_WorldEdge, 42, "currentIndex");
-    mapper->addMapping(LE_ScriptParam, 43);
+    mapper->addMapping(SB_Sentries, 36);
+    mapper->addMapping(SB_HealthCrates, 37);
+    mapper->addMapping(SB_CrateHealth, 38);
+    mapper->addMapping(SB_WaterRise, 39);
+    mapper->addMapping(SB_HealthDecrease, 40);
+    mapper->addMapping(SB_RopeModifier, 41);
+    mapper->addMapping(SB_GetAwayTime, 42);
+    mapper->addMapping(CB_WorldEdge, 43, "currentIndex");
+    mapper->addMapping(LE_ScriptParam, 44);
 
     mapper->toFirst();
 
