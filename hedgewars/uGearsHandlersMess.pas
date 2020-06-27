@@ -7188,7 +7188,7 @@ begin
     if CheckGearDrowning(Gear) then
         exit;
 
-    if TestCollisionYKick(Gear, 1) = 0 then
+    if TestCollisionY(Gear, 1) = 0 then
     begin
         doStepFallingGear(Gear);
         Gear^.Timer := 0;
@@ -7232,6 +7232,7 @@ begin
                 gtDEagleShot, 0,
                 distX, distY, 0);
 
+            bullet^.Boom := 4;
             bullet^.PortalCounter := 1;
             bullet^.Elasticity := Gear^.X;
             bullet^.Friction := Gear^.Y;
