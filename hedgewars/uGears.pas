@@ -863,6 +863,21 @@ if cAirMines > 0 then
         end;
 if p <> 0 then DeleteGear(Gear);
 
+i:= 0;
+unplaced:= 0;
+while (i < cSentries) and (unplaced < 4) do
+    begin
+        Gear:= AddGear(0, 0, gtSentry, 0, _0, _0, 0);
+        FindPlace(Gear, false, 0, LAND_WIDTH);
+
+        if Gear = nil then
+            inc(unplaced)
+        else
+            unplaced:= 0;
+
+        inc(i)
+    end;
+
 if (GameFlags and gfLowGravity) <> 0 then
     begin
     cGravity:= cMaxWindSpeed;

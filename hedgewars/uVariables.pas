@@ -177,6 +177,7 @@ var
 
     cLandMines      : Longword;
     cAirMines       : Longword;
+    cSentries       : Longword;
     cExplosives     : Longword;
 
     cScriptName     : shortstring;
@@ -2959,6 +2960,7 @@ begin
     cMaxCaseDrops   := 5;
     cLandMines      := 4;
     cAirMines       := 0;
+    cSentries       := 0;
     cExplosives     := 2;
 
     GameState       := Low(TGameState);

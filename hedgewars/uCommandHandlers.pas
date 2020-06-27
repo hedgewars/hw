@@ -856,6 +856,11 @@ begin
 cAirMines:= StrToInt(s)
 end;
 
+procedure chSentries(var s: shortstring);
+begin
+cSentries:= StrToInt(s)
+end;
+        
 procedure chExplosives(var s: shortstring);
 begin
 cExplosives:= StrToInt(s)
@@ -980,6 +985,7 @@ begin
     RegisterVariable('minedudpct',@chMineDudPercent, false);
     RegisterVariable('minesnum', @chLandMines     , false);
     RegisterVariable('airmines', @chAirMines      , false);
+    RegisterVariable('sentries', @chSentries      , false);
     RegisterVariable('explosives',@chExplosives    , false);
     RegisterVariable('gmflags' , @chGameFlags      , false);
     RegisterVariable('turntime', @chHedgehogTurnTime, false);
