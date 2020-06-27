@@ -7177,49 +7177,92 @@ end;
 procedure doStepSentry(Gear: PGear);
 var HHGear, bullet: PGear;
     distX, distY, invDistance: HwFloat;
+const sentry_Idle = 0;
+    sentry_Walking = 1;
+    sentry_Aiming = 2;
+    sentry_Attacking = 3;
+    sentry_Reloading = 4;
 begin
     HHGear:= nil;
 
     if CheckGearDrowning(Gear) then
         exit;
 
-    if (TestCollisionYKick(Gear, 1) = 0) then
+    if TestCollisionYKick(Gear, 1) = 0 then
     begin
         doStepFallingGear(Gear);
+        Gear^.Timer := 0;
+        Gear^.Tag := sentry_Idle;
         exit;
     end;
 
-    if (Gear^.Timer > 0) then
-        dec(Gear^.Timer);
+    if Gear^.Timer > 0 then dec(Gear^.Timer);
 
-    if (Gear^.Timer = 0) then
+    if Gear^.Timer = 0 then
     begin
-        if Gear^.Tag <> 0 then
+        if Gear^.Tag = sentry_Idle then
         begin
-            Gear^.Tag := 0;
+            Gear^.Tag := sentry_Walking;
+            Gear^.Timer := 1000 + GetRandom(3000);
+            Gear^.dX.isNegative := GetRandom(2) = 1;
+            if TestCollisionX(Gear, hwSign(Gear^.dX)) <> 0 then
+                Gear^.dX.isNegative := not Gear^.dX.isNegative;
+        end
+        else if Gear^.Tag in [sentry_Walking, sentry_Reloading] then
+        begin
+            Gear^.Tag := sentry_Idle;
             Gear^.Timer := 1000 + GetRandom(1000);
         end
-        else
+        else if Gear^.Tag = sentry_Aiming then
         begin
-            Gear^.Tag := GetRandom(2) * 2 - 1;
-            Gear^.Timer := 1000 + GetRandom(3000);
-            Gear^.dX.isNegative := Gear^.Tag < 0;
-            if TestCollisionX(Gear, 1) <> 0 then
-            begin
-                Gear^.Tag := not Gear^.Tag;
-                Gear^.dX.isNegative := not Gear^.dX.isNegative;
-            end
+            Gear^.WDTimer := 5 + GetRandom(3);
+            Gear^.Tag := sentry_Attacking;
+            Gear^.Timer := 200;
         end
+        else if Gear^.Tag = sentry_Attacking then
+        begin
+            distX := int2hwFloat(Gear^.Target.X) - Gear^.X;
+            distY := int2hwFloat(Gear^.Target.Y) - Gear^.Y;
+            invDistance := _1 / Distance(distX, distY);
+            distX := distX * invDistance;
+            distY := distY * invDistance;
+
+            bullet := AddGear(
+                hwRound(Gear^.X), hwRound(Gear^.Y),
+                gtDEagleShot, 0,
+                distX, distY, 0);
+
+            bullet^.PortalCounter := 1;
+            bullet^.Elasticity := Gear^.X;
+            bullet^.Friction := Gear^.Y;
+            bullet^.Data := Pointer(Gear);
+
+            CreateShellForGear(Gear, Gear^.WDTimer and 1);
+
+            if Gear^.WDTimer = 0 then
+            begin
+                Gear^.Target.X := 0;
+                Gear^.Target.Y := 0;
+                Gear^.Tag := sentry_Reloading;
+                Gear^.Timer := 6000 + GetRandom(2000);
+            end
+            else
+            begin
+                dec(Gear^.WDTimer);
+                Gear^.Timer := 200;
+            end
+        end;
     end;
 
-    if (Gear^.Tag <> 0) and ((GameTicks and $1F) = 0) then
+    if (Gear^.Tag = sentry_Walking) and ((GameTicks and $1F) = 0) then
     begin
         MakeHedgehogsStep(Gear);
-        if TestCollisionX(Gear, 1) <> 0 then
+        if TestCollisionX(Gear, hwSign(Gear^.dX)) <> 0 then
             Gear^.Timer := 0
     end;
 
     if ((GameTicks and $FF) = 0)
+        and (Gear^.Tag in [sentry_Idle, sentry_Walking])
         and (CurrentHedgehog <> nil)
         and (CurrentHedgehog^.Gear <> nil)
         and ((CurrentHedgehog^.Gear^.State and (gstMoving or gstHHDriven)) = (gstMoving or gstHHDriven)) then
@@ -7229,28 +7272,13 @@ begin
         distY := HHGear^.Y - Gear^.Y;
         if (distX.isNegative = Gear^.dX.isNegative)
             and (distX.Round > 32)
-            and (distX.Round < 1000)
+            and (distX.Round < 500)
             and (hwAbs(distY) < hwAbs(distX)) then
         begin
-            invDistance := _1 / Distance(distX, distY);
-
-            distX := distX * invDistance;
-            distY := distY * invDistance;
-
-            bullet := AddGear(
-                 hwRound(Gear^.X), hwRound(Gear^.Y),
-                 gtDEagleShot, 0,
-                 distX,
-                 distY,
-                 0);
-            
-            bullet^.PortalCounter := 1;
-            bullet^.Elasticity := Gear^.X;
-            bullet^.Friction := Gear^.Y;
-            bullet^.Data := Pointer(Gear);
-            inc(Gear^.WDTimer);
-
-            CreateShellForGear(Gear, Gear^.WDTimer and 1);
+            Gear^.Target.X := hwRound(HHGear^.X);
+            Gear^.Target.Y := hwRound(HHGear^.Y);
+            Gear^.Tag := sentry_Aiming;
+            Gear^.Timer := 1800 + GetRandom(400);
         end
     end
 end;
