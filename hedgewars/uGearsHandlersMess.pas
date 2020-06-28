@@ -7174,6 +7174,28 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+function MakeSentryStep(Sentry: PGear; maxYStep: LongInt): Boolean;
+var x, y, offset, direction: LongInt;
+begin
+    MakeSentryStep := false;
+    x := hwRound(Sentry^.X);
+    y := hwRound(Sentry^.Y);
+    direction := hwSign(Sentry^.dX);
+
+    for offset := -maxYStep - 1 to maxYStep + 1 do
+    begin
+        if TestCollisionYImpl(x + direction, y + offset, Sentry^.Radius, 1, Sentry^.CollisionMask) <> 0 then
+            break;
+    end;
+
+    if (offset >= -maxYStep) and (offset <= maxYStep) then
+    begin
+        Sentry^.X := Sentry^.X + signAs(_1, Sentry^.dX);
+        Sentry^.Y := Sentry^.Y + int2hwFloat(offset);
+        MakeSentryStep := true
+    end
+end;
+
 procedure doStepSentry(Gear: PGear);
 var HHGear, bullet: PGear;
     distX, distY, invDistance: HwFloat;
@@ -7205,8 +7227,6 @@ begin
             Gear^.Tag := sentry_Walking;
             Gear^.Timer := 1000 + GetRandom(3000);
             Gear^.dX.isNegative := GetRandom(2) = 1;
-            if TestCollisionX(Gear, hwSign(Gear^.dX)) <> 0 then
-                Gear^.dX.isNegative := not Gear^.dX.isNegative;
         end
         else if Gear^.Tag in [sentry_Walking, sentry_Reloading] then
         begin
@@ -7257,8 +7277,7 @@ begin
 
     if (Gear^.Tag = sentry_Walking) and ((GameTicks and $1F) = 0) then
     begin
-        MakeHedgehogsStep(Gear);
-        if TestCollisionX(Gear, hwSign(Gear^.dX)) <> 0 then
+        if not MakeSentryStep(Gear, 6) then
             Gear^.Timer := 0
     end;
 
@@ -7272,7 +7291,7 @@ begin
         distX := HHGear^.X - Gear^.X;
         distY := HHGear^.Y - Gear^.Y;
         if (distX.isNegative = Gear^.dX.isNegative)
-            and (distX.Round > 32)
+            and (distX.Round > 24)
             and (distX.Round < 500)
             and (hwAbs(distY) < hwAbs(distX)) then
         begin
