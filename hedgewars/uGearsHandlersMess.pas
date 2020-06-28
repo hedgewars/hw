@@ -7196,6 +7196,37 @@ begin
     end
 end;
 
+function TraceAttackPath(fromX, fromY, toX, toY, step: hwFloat; mask: Word): LongWord;
+var distX, distY, dist, invDistance: HwFloat;
+    i, count: LongInt;
+begin
+    TraceAttackPath := 0;
+    if (step < _1)
+        or ((hwRound(fromX) and LAND_WIDTH_MASK) <> 0)
+        or ((hwRound(toX) and LAND_WIDTH_MASK) <> 0)
+        or ((hwRound(fromY) and LAND_HEIGHT_MASK) <> 0)
+        or ((hwRound(toY) and LAND_HEIGHT_MASK) <> 0) then
+        exit;
+
+
+    distX := toX - fromX;
+    distY := toY - fromY;
+    dist := Distance(distX, distY);
+    count := hwRound(dist / step);
+
+    invDistance := step / dist;
+    distX := distX * invDistance;
+    distY := distY * invDistance;
+
+    for i := 0 to count - 1 do
+    begin
+        if (Land[hwRound(fromY), hwRound(fromX)] and mask) <> 0 then
+            Inc(TraceAttackPath);
+        fromX := fromX + distX;
+        fromY := fromY + distY;
+    end
+end;
+
 procedure doStepSentry(Gear: PGear);
 var HHGear, bullet: PGear;
     distX, distY, invDistance: HwFloat;
@@ -7215,6 +7246,8 @@ begin
         doStepFallingGear(Gear);
         Gear^.Timer := 0;
         Gear^.Tag := sentry_Idle;
+        Gear^.Target.X := 0;
+        Gear^.Target.Y := 0;
         exit;
     end;
 
@@ -7253,6 +7286,7 @@ begin
                 distX, distY, 0);
 
             bullet^.Boom := 4;
+            bullet^.Health := 15;
             bullet^.PortalCounter := 1;
             bullet^.Elasticity := Gear^.X;
             bullet^.Friction := Gear^.Y;
@@ -7293,7 +7327,8 @@ begin
         if (distX.isNegative = Gear^.dX.isNegative)
             and (distX.Round > 24)
             and (distX.Round < 500)
-            and (hwAbs(distY) < hwAbs(distX)) then
+            and (hwAbs(distY) < hwAbs(distX))
+            and (TraceAttackPath(Gear^.X, Gear^.Y, HHGear^.X, HHGear^.Y, _4, lfLandMask) <= 18 ) then
         begin
             Gear^.Target.X := hwRound(HHGear^.X);
             Gear^.Target.Y := hwRound(HHGear^.Y);
