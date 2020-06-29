@@ -3188,7 +3188,7 @@ begin
 
     // Get rid of gear and cleanup
     if ((WorldEdge = weWrap) and (Gear^.FlightTime >= 4000)) or
-        ((WorldEdge <> weWrap) and (((hwRound(Gear^.X) - Gear^.Radius > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) + Gear^.Radius < -2048) or ((Gear^.Message and gmDestroy) > 0)))) then
+        ((WorldEdge <> weWrap) and (((hwRound(Gear^.X) - Gear^.Radius > (LAND_WIDTH+2048)) or (hwRound(Gear^.X) + Gear^.Radius < -2048) or ((Gear^.Message and gmDestroy) > 0)))) then
         begin
         // fail-safe: instanly stop sound if it wasn't disabled before
         if (Gear^.SoundChannel <> -1) then
@@ -3256,7 +3256,7 @@ begin
         if (WorldEdge = weWrap) then
             Gear^.X := int2hwFloat(CalcWorldWrap(Gear^.Target.X - max(384, LAND_WIDTH shr 2), 0))
         else
-            Gear^.X := int2hwFloat(max(LAND_WIDTH,4096) + 2048);
+            Gear^.X := int2hwFloat(LAND_WIDTH + 2048);
         end;
 
     Gear^.Y := int2hwFloat(topY - 300);

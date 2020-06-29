@@ -234,9 +234,10 @@ const
     cDefaultZoomLevel = 2.0; // 100% zoom
 
     // Maximum camera positions, values are "pixels outside the mainland"
-    cCamLimitX = 2048; // X (left/right) camera limit, no border. Note: Influences sndFlyAway
+    cCamLimitX = 1920; // X (left/right) camera limit, no border. Note: Influences sndFlyAway
+                       // Note: Also make sure it's far enough from airplane spawn
     cCamLimitY = 2048; // Top Y camera limit, no border
-    cCamLimitBorderX = 2048; // X (left/right) camera limit, with border
+    cCamLimitBorderX = 1920; // X (left/right) camera limit, with border
     cCamLimitBorderY = 2048; // Top Y camera limit, with border
 
     // game flags
