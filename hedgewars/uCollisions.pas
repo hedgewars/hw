@@ -70,8 +70,10 @@ function  CheckCacheCollision(SourceGear: PGear): PGearArray;
 function  CheckGearsLineCollision(Gear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
 function  CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
 
-function  UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
-procedure ClearHitOrderLeq(MinOrder: LongInt);
+function  UpdateHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
+function  UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
+procedure ClearHitOrderLeq(MinOrder: LongInt); inline;
+procedure ClearGlobalHitOrderLeq(MinOrder: LongInt); inline;
 procedure ClearHitOrder();
 
 procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
@@ -122,6 +124,7 @@ var Count: Longword;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
     ga: TGearArray;
     ordera: TGearHitOrder;
+    globalordera: TGearHitOrder;
     proximitya: TGearProximityCache;
 
 procedure AddCI(Gear: PGear);
@@ -340,49 +343,70 @@ begin
     end;
 end;
 
-function UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
+function UpdateHitOrderImpl(HitOrder: PGearHitOrder; Gear: PGear; Order: LongInt): boolean;
 var i: LongInt;
 begin
-UpdateHitOrder:= true;
-for i:= 0 to ordera.Count - 1 do
-    if ordera.ar[i] = Gear then
+    UpdateHitOrderImpl:= true;
+    for i := 0 to HitOrder^.Count - 1 do
+        if HitOrder^.ar[i] = Gear then
         begin
-        if Order <= ordera.order[i] then UpdateHitOrder:= false;
-        ordera.order[i]:= Max(ordera.order[i], order);
-        exit;
+            if Order <= HitOrder^.order[i] then
+                UpdateHitOrderImpl := false;
+            HitOrder^.order[i] := Max(HitOrder^.order[i], Order);
+            exit;
         end;
 
-if ordera.Count > cMaxGearHitOrderInd then
-    UpdateHitOrder:= false
-else
+    if HitOrder^.Count > cMaxGearHitOrderInd then
+        UpdateHitOrderImpl := false
+    else
     begin
-    ordera.ar[ordera.Count]:= Gear;
-    ordera.order[ordera.Count]:= Order;
-    Inc(ordera.Count);
+        HitOrder^.ar[HitOrder^.Count] := Gear;
+        HitOrder^.order[HitOrder^.Count] := Order;
+        Inc(HitOrder^.Count);
     end
 end;
 
-procedure ClearHitOrderLeq(MinOrder: LongInt);
+function UpdateHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
+begin
+    UpdateHitOrder := UpdateHitOrderImpl(@ordera, Gear, Order);
+end;
+
+function UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
+begin
+    UpdateGlobalHitOrder := UpdateHitOrderImpl(@globalordera, Gear, Order);
+end;
+
+procedure ClearHitOrderLeqImpl(HitOrder: PGearHitOrder; MinOrder: LongInt);
 var i, freeIndex: LongInt;
 begin;
-freeIndex:= 0;
-i:= 0;
+    freeIndex:= 0;
+    i:= 0;
 
-while i < ordera.Count do
+    while i < ordera.Count do
     begin
-        if ordera.order[i] <= MinOrder then
-            Dec(ordera.Count)
+        if HitOrder^.order[i] <= MinOrder then
+            Dec(HitOrder^.Count)
         else
+        begin
+            if freeIndex < i then
             begin
-                if freeIndex < i then
-                begin
-                ordera.ar[freeIndex]:= ordera.ar[i];
-                ordera.order[freeIndex]:= ordera.order[i];
-                end;
-            Inc(freeIndex);
+                HitOrder^.ar[freeIndex]:= HitOrder^.ar[i];
+                HitOrder^.order[freeIndex]:= HitOrder^.order[i];
             end;
+            Inc(freeIndex);
+        end;
         Inc(i)
     end
+end;
+
+procedure ClearHitOrderLeq(MinOrder: LongInt); inline;
+begin
+    ClearHitOrderLeqImpl(@ordera, MinOrder);
+end;
+
+procedure ClearGlobalHitOrderLeq(MinOrder: LongInt); inline;
+begin
+    ClearHitOrderLeqImpl(@globalordera, MinOrder);
 end;
 
 procedure ClearHitOrder();
