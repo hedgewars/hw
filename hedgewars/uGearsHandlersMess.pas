@@ -1564,7 +1564,7 @@ begin
             begin
             if Gear^.Kind = gtMinigunBullet then
                 begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5,
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma,
                                 Gear^.Hedgehog, (EXPLNoDamage or EXPLDoNotTouchHH){ or EXPLDontDraw or EXPLNoGfx});
                 VGear := AddVisualGear(hwRound(Gear^.X + Gear^.dX * 5), hwRound(Gear^.Y + Gear^.dY * 5), vgtBulletHit);
                 end
@@ -1607,7 +1607,6 @@ end;
 
 procedure doStepDEagleShot(Gear: PGear);
 begin
-
     if Gear^.Data = nil then
         // remember who fired this
         if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
@@ -7161,10 +7160,10 @@ end;
 
 procedure doStepMinigunBullet(Gear: PGear);
 begin
-    Gear^.Data:= nil;
-    // remember who fired this
-    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
-        Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
+    if Gear^.Data = nil then
+        // remember who fired this
+        if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+            Gear^.Data:= Pointer(Gear^.Hedgehog^.Gear);
 
     Gear^.X := Gear^.X + Gear^.dX * 2;
     Gear^.Y := Gear^.Y + Gear^.dY * 2;
@@ -7244,10 +7243,18 @@ begin
     if TestCollisionY(Gear, 1) = 0 then
     begin
         doStepFallingGear(Gear);
-        Gear^.Timer := 0;
-        Gear^.Tag := sentry_Idle;
-        Gear^.Target.X := 0;
-        Gear^.Target.Y := 0;
+        if Gear^.Tag <> sentry_Idle then
+        begin
+            Gear^.Timer := 0;
+            Gear^.Tag := sentry_Idle;
+            Gear^.Target.X := 0;
+            Gear^.Target.Y := 0;
+            if Gear^.Karma <> 0 then
+            begin
+                ClearGlobalHitOrderLeq(Gear^.Karma);
+                Gear^.Karma := 0;
+            end;
+        end;
         exit;
     end;
 
@@ -7270,7 +7277,7 @@ begin
         begin
             Gear^.WDTimer := 5 + GetRandom(3);
             Gear^.Tag := sentry_Attacking;
-            Gear^.Timer := 200;
+            Gear^.Timer := 100;
         end
         else if Gear^.Tag = sentry_Attacking then
         begin
@@ -7282,29 +7289,35 @@ begin
 
             bullet := AddGear(
                 hwRound(Gear^.X), hwRound(Gear^.Y),
-                gtDEagleShot, 0,
-                distX, distY, 0);
+                gtMinigunBullet, 0,
+                distX * _0_9 + rndSign(getRandomf * _0_1),
+                distY * _0_9 + rndSign(getRandomf * _0_1),
+                0);
 
-            bullet^.Boom := 4;
-            bullet^.Health := 15;
+            bullet^.Karma := 12;
+            bullet^.Pos := 1;
+            bullet^.WDTimer := GameTicks;
             bullet^.PortalCounter := 1;
             bullet^.Elasticity := Gear^.X;
             bullet^.Friction := Gear^.Y;
             bullet^.Data := Pointer(Gear);
 
             CreateShellForGear(Gear, Gear^.WDTimer and 1);
+            PlaySound(sndGun);
 
             if Gear^.WDTimer = 0 then
             begin
                 Gear^.Target.X := 0;
                 Gear^.Target.Y := 0;
+                ClearGlobalHitOrderLeq(Gear^.Karma);
+                Gear^.Karma := 0;
                 Gear^.Tag := sentry_Reloading;
                 Gear^.Timer := 6000 + GetRandom(2000);
             end
             else
             begin
                 dec(Gear^.WDTimer);
-                Gear^.Timer := 200;
+                Gear^.Timer := 100;
             end
         end;
     end;
@@ -7332,6 +7345,7 @@ begin
         begin
             Gear^.Target.X := hwRound(HHGear^.X);
             Gear^.Target.Y := hwRound(HHGear^.Y);
+            Gear^.Karma := GameTicks;
             Gear^.Tag := sentry_Aiming;
             Gear^.Timer := 1800 + GetRandom(400);
         end

@@ -71,6 +71,7 @@ function  CheckGearsLineCollision(Gear: PGear; oX, oY, tX, tY: hwFloat): PGearAr
 function  CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
 
 function  UpdateHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
+function  UpdateHitOrder(Gear: PGear; Order: LongInt; Global: boolean): boolean; inline;
 function  UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
 procedure ClearHitOrderLeq(MinOrder: LongInt); inline;
 procedure ClearGlobalHitOrderLeq(MinOrder: LongInt); inline;
@@ -371,6 +372,14 @@ begin
     UpdateHitOrder := UpdateHitOrderImpl(@ordera, Gear, Order);
 end;
 
+function UpdateHitOrder(Gear: PGear; Order: LongInt; Global: boolean): boolean; inline;
+begin
+    if Global then
+        UpdateHitOrder := UpdateHitOrderImpl(@ordera, Gear, Order)
+    else
+        UpdateHitOrder := UpdateHitOrderImpl(@globalordera, Gear, Order)
+end;
+
 function UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
 begin
     UpdateGlobalHitOrder := UpdateHitOrderImpl(@globalordera, Gear, Order);
@@ -382,7 +391,7 @@ begin;
     freeIndex:= 0;
     i:= 0;
 
-    while i < ordera.Count do
+    while i < HitOrder^.Count do
     begin
         if HitOrder^.order[i] <= MinOrder then
             Dec(HitOrder^.Count)

@@ -832,6 +832,9 @@ gtFlamethrower: begin
  gtMinigunBullet: begin
                 gear^.Radius:= 1;
                 gear^.Health:= 2;
+                gear^.Karma:= 5; //impact radius
+                gear^.Pos:= 0; //uses non-global hit order
+                gear^.Data:= nil;
                 end;
         gtSentry: begin
                 gear^.Radius:= cHHRadius;

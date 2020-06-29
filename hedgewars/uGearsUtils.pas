@@ -1377,7 +1377,10 @@ while i > 0 do
     if (Ammo^.Kind in [gtDEagleShot, gtSniperRifleShot, gtMinigunBullet,
                        gtFirePunch, gtKamikaze, gtWhip, gtShover])
         and (((Ammo^.Data <> nil) and (PGear(Ammo^.Data) = Gear))
-             or (not UpdateHitOrder(Gear, Ammo^.WDTimer))) then
+            or (not UpdateHitOrder(
+                    Gear, 
+                    Ammo^.WDTimer, 
+                    (Ammo^.Kind = gtMinigunBullet) and (Gear^.Pos <> 0)))) then
         continue;
 
     if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and
