@@ -233,6 +233,12 @@ const
     // do not change this value
     cDefaultZoomLevel = 2.0; // 100% zoom
 
+    // Maximum camera positions, values are "pixels outside the mainland"
+    cCamLimitX = 0; // X (left/right) camera limit, no border. Note: Influences sndFlyAway
+    cCamLimitY = 2048; // Top Y camera limit, no border
+    cCamLimitBorderX = 2048; // X (left/right) camera limit, with border
+    cCamLimitBorderY = 2048; // Top Y camera limit, with border
+
     // game flags
     gfAny                = $FFFFFFFF; // mask for all possible gameflags
     gfOneClanMode        = $00000001; // Game does not end if there's only one clan in play. For missions

@@ -877,12 +877,42 @@ else if SpritesData[spr].Texture <> nil then
     end
 end;
 
-// Force the lower camera boundary to never be lower than a few pixels below the water line
-function LowerCameraBound: LongInt;
+// Force camera to stay within a certain area
+procedure CameraBounds;
+var lowBound: LongInt;
 begin
-LowerCameraBound:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + trunc(CinematicBarH / (cScaleFactor / 2.0)));
-if WorldDy < LowerCameraBound then
-    WorldDy:= LowerCameraBound;
+if (not hasBorder) then
+    begin
+    if WorldDy > (-(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - TopY + cCamLimitY) then
+        WorldDy:= (-trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - TopY + cCamLimitY);
+    if (RightX - LeftX + cCamLimitX * 2) div 2 < cScreenWidth / cScaleFactor then
+        WorldDx:= -((LeftX + RightX) div 2)
+    else
+        begin
+        if WorldDx < -LAND_WIDTH - cCamLimitX + (cScreenWidth / cScaleFactor) then
+            WorldDx:= -LAND_WIDTH - cCamLimitX + trunc(cScreenWidth / cScaleFactor);
+        if WorldDx > cCamLimitX - (cScreenWidth / cScaleFactor) then
+            WorldDx:= cCamLimitX - trunc(cScreenWidth / cScaleFactor);
+        end;
+    end
+else
+    begin
+    if WorldDy > (-(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - TopY + cCamLimitBorderY) then
+        WorldDy:= (-trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - TopY + cCamLimitBorderY);
+    if (RightX - LeftX + cCamLimitBorderX * 2) div 2 < cScreenWidth / cScaleFactor then
+        WorldDx:= -((LeftX + RightX) div 2)
+    else
+        begin
+        if WorldDx > -LeftX + cCamLimitBorderX - (cScreenWidth / cScaleFactor) then
+            WorldDx:= -LeftX + cCamLimitBorderX - trunc(cScreenWidth / cScaleFactor);
+        if WorldDx < -RightX - cCamLimitBorderX + (cScreenWidth / cScaleFactor) then
+            WorldDx:= -RightX - cCamLimitBorderX  + trunc(cScreenWidth / cScaleFactor);
+        end;
+    end;
+
+lowBound:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - (cVisibleWater + trunc(CinematicBarH / (cScaleFactor / 2.0)));
+if WorldDy < lowBound then
+    WorldDy:= lowBound;
 end;
 
 procedure DrawWorld(Lag: LongInt);
@@ -906,7 +936,7 @@ begin
     if (not isPaused) and (not isAFK) and (GameType <> gmtRecord) then
         MoveCamera
     else if (isPaused) then
-        LowerCameraBound;
+        CameraBounds;
 
     if cStereoMode = smNone then
         begin
@@ -1902,7 +1932,7 @@ end;
 var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs,z, dstX: LongInt;
+var EdgesDist, shs,z, dstX: LongInt;
     inbtwnTrgtAttks: Boolean;
 begin
 {$IFNDEF MOBILE}
@@ -1950,10 +1980,11 @@ if (WorldEdge = weWrap) then
             WorldDx:= WorldDx + rightX - leftX;
     end;
 
-wdy:= LowerCameraBound;
-
 if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
+    begin
+    CameraBounds;
     exit;
+    end;
 
 if (AMState = AMShowingUp) or (AMState = AMShowing) then
 begin
@@ -1966,6 +1997,7 @@ begin
     if CursorPoint.Y < cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5) then//check bottom
         CursorPoint.Y:= cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5);
     prevPoint:= CursorPoint;
+    CameraBounds;
     exit
 end;
 
@@ -2021,14 +2053,10 @@ else
 
 // this moves the camera according to CursorPoint X and Y
 prevPoint:= CursorPoint;
-if WorldDy > LAND_HEIGHT + 1024 then
-    WorldDy:= LAND_HEIGHT + 1024;
-if WorldDy < wdy then
-    WorldDy:= wdy;
-if WorldDx < - LAND_WIDTH - 1024 then
-    WorldDx:= - LAND_WIDTH - 1024;
-if WorldDx > 1024 then
-    WorldDx:= 1024;
+
+// enforce camera bounds
+CameraBounds();
+
 end;
 
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);

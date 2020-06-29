@@ -1281,7 +1281,7 @@ else
     uStats.hedgehogFlight(Gear, Gear^.FlightTime);
     Gear^.FlightTime:= 0;
     end;
-if (WorldEdge = weNone) and (not Gear^.Hedgehog^.FlownOffMap) and (not isZero(Gear^.dX)) and (not isUnderwater) and ((Gear^.State and gstHHDriven) = 0) and (hwRound(Gear^.Y) < cWaterLine-300) and ((hwRound(Gear^.X) < leftX-2048) or (hwRound(Gear^.X) > rightX+2048)) then
+if (WorldEdge = weNone) and (not hasBorder) and (not Gear^.Hedgehog^.FlownOffMap) and (not isZero(Gear^.dX)) and (not isUnderwater) and ((Gear^.State and gstHHDriven) = 0) and (hwRound(Gear^.Y) < cWaterLine-300) and ((hwRound(Gear^.X) < -cCamLimitX) or (hwRound(Gear^.X) > LAND_WIDTH+cCamLimitX)) then
     begin
     PlaySoundV(sndFlyAway, Gear^.Hedgehog^.Team^.voicepack);
     Gear^.Hedgehog^.FlownOffMap:= true;
