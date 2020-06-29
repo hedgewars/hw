@@ -2017,16 +2017,16 @@ else
 if (CurrentTeam^.ExtDriven and isCursorVisible and autoCameraOn) or
    (not CurrentTeam^.ExtDriven and isCursorVisible) or ((FollowGear <> nil) and autoCameraOn) then
     begin
-    if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
+    if CursorPoint.X < - trunc(cScreenWidth / cScaleFactor) + EdgesDist then
         begin
-        WorldDx:= WorldDx - CursorPoint.X - cScreenWidth div 2 + EdgesDist;
-        CursorPoint.X:= - cScreenWidth div 2 + EdgesDist
+        WorldDx:= WorldDx - CursorPoint.X - trunc(cScreenWidth / cScaleFactor) + EdgesDist;
+        CursorPoint.X:= - trunc(cScreenWidth / cScaleFactor) + EdgesDist
         end
     else
-        if CursorPoint.X > cScreenWidth div 2 - EdgesDist then
+        if CursorPoint.X > trunc(cScreenWidth / cScaleFactor) - EdgesDist then
             begin
-            WorldDx:= WorldDx - CursorPoint.X + cScreenWidth div 2 - EdgesDist;
-            CursorPoint.X:= cScreenWidth div 2 - EdgesDist
+            WorldDx:= WorldDx - CursorPoint.X + trunc(cScreenWidth / cScaleFactor) - EdgesDist;
+            CursorPoint.X:= trunc(cScreenWidth / cScaleFactor) - EdgesDist
             end;
 
     shs:= min(cScreenHeight div 2 - trunc(cScreenHeight / cScaleFactor) + EdgesDist, cScreenHeight - EdgesDist);
