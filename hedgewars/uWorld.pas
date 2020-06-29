@@ -1319,7 +1319,7 @@ if (cReducedQuality and rq2DWater) = 0 then
 // line at airplane height for certain airstrike types (when spawning height is important)
 with CurrentHedgehog^ do
     if (isCursorVisible) and ((CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) or (((GameFlags and gfMoreWind) <> 0) and ((CurAmmoType = amDrillStrike) or (CurAmmoType = amAirAttack)))) then
-        DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
+        DrawLine(-cCamLimitX, topY-300, LAND_WIDTH + cCamLimitX, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
 
 // gear HUD extras (fuel indicator, secondary ammo, etc.)
 if replicateToLeft then
