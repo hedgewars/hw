@@ -1744,7 +1744,7 @@ begin
                          DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.Hedgehog^.Gear^.X-Gear^.X)), 0)
                     else DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.dX)), 0);
             gtSentry: begin
-                DrawSprite(sprSentry, x - 16, y - 16, 0, 0);
+                DrawSpriteRotated(sprSentry, x, y, hwSign(Gear^.dX), 0);
                 DrawCircle(x, y, Gear^.Radius, 1, 255, 0, 0, 255);
             end;
             gtGenericFaller: begin
