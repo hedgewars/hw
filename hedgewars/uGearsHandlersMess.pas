@@ -7173,7 +7173,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function MakeSentryStep(Sentry: PGear; maxYStep: LongInt): Boolean;
+function MakeSentryStep(Sentry: PGear; maxYStep: LongInt; TestOnly: Boolean): Boolean;
 var x, y, offset, direction: LongInt;
 begin
     MakeSentryStep := false;
@@ -7189,8 +7189,11 @@ begin
 
     if (offset >= -maxYStep) and (offset <= maxYStep) then
     begin
-        Sentry^.X := Sentry^.X + signAs(_1, Sentry^.dX);
-        Sentry^.Y := Sentry^.Y + int2hwFloat(offset);
+        if not TestOnly then
+        begin
+            Sentry^.X := Sentry^.X + signAs(_1, Sentry^.dX);
+            Sentry^.Y := Sentry^.Y + int2hwFloat(offset);
+        end;
         MakeSentryStep := true
     end
 end;
@@ -7206,7 +7209,6 @@ begin
         or ((hwRound(fromY) and LAND_HEIGHT_MASK) <> 0)
         or ((hwRound(toY) and LAND_HEIGHT_MASK) <> 0) then
         exit;
-
 
     distX := toX - fromX;
     distY := toY - fromY;
@@ -7267,6 +7269,15 @@ begin
             Gear^.Tag := sentry_Walking;
             Gear^.Timer := 1000 + GetRandom(3000);
             Gear^.dX.isNegative := GetRandom(2) = 1;
+            if not MakeSentryStep(Gear, 6, true) then
+            begin
+                Gear^.dX.isNegative := not Gear^.dX.isNegative;
+                if not MakeSentryStep(Gear, 6, true) then
+                begin
+                    Gear^.Tag := sentry_Idle;
+                    Gear^.Timer := 10000;
+                end;
+            end
         end
         else if Gear^.Tag in [sentry_Walking, sentry_Reloading] then
         begin
@@ -7324,7 +7335,7 @@ begin
 
     if (Gear^.Tag = sentry_Walking) and ((GameTicks and $1F) = 0) then
     begin
-        if not MakeSentryStep(Gear, 6) then
+        if not MakeSentryStep(Gear, 6, false) then
             Gear^.Timer := 0
     end;
 
