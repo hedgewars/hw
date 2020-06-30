@@ -7328,6 +7328,16 @@ begin
             Gear^.Timer := 0
     end;
 
+    if ((GameTicks and $1F) = 0)
+        and (Gear^.Tag = sentry_Aiming)
+        and (CurrentHedgehog <> nil)
+        and (CurrentHedgehog^.Gear <> nil) then
+    begin
+        HHGear := CurrentHedgehog^.Gear;
+        Gear^.Target.X := Gear^.Target.X + hwSign(HHGear^.X - int2hwFloat(Gear^.Target.X));
+        Gear^.Target.Y := Gear^.Target.Y + hwSign(HHGear^.Y - int2hwFloat(Gear^.Target.Y));
+    end;
+
     if ((GameTicks and $FF) = 0)
         and (Gear^.Tag in [sentry_Idle, sentry_Walking])
         and (CurrentHedgehog <> nil)
