@@ -7228,6 +7228,19 @@ begin
     end
 end;
 
+function CheckSentryAttackRange(Sentry: PGear; targetX, targetY: HwFloat): Boolean;
+var distX, distY: hwFloat;
+begin
+    distX := targetX - Sentry^.X;
+    distY := targetY - Sentry^.Y;
+    CheckSentryAttackRange :=
+        (distX.isNegative = Sentry^.dX.isNegative)
+        and (distX.Round > 24)
+        and (distX.Round < 500)
+        and (hwAbs(distY) < hwAbs(distX))
+        and (TraceAttackPath(Sentry^.X, Sentry^.Y, targetX, targetY, _4, lfLandMask) <= 18);
+end;
+
 procedure doStepSentry(Gear: PGear);
 var HHGear, bullet: PGear;
     distX, distY, invDistance: HwFloat;
@@ -7286,9 +7299,19 @@ begin
         end
         else if Gear^.Tag = sentry_Aiming then
         begin
-            Gear^.WDTimer := 5 + GetRandom(3);
-            Gear^.Tag := sentry_Attacking;
-            Gear^.Timer := 100;
+            if CheckSentryAttackRange(Gear, int2hwFloat(Gear^.Target.X), int2hwFloat(Gear^.Target.Y)) then
+            begin
+                Gear^.WDTimer := 5 + GetRandom(3);
+                Gear^.Tag := sentry_Attacking;
+                Gear^.Timer := 100;
+            end
+            else
+            begin
+                Gear^.Target.X := 0;
+                Gear^.Target.Y := 0;
+                Gear^.Tag := sentry_Idle;
+                Gear^.Timer := 5000;
+            end
         end
         else if Gear^.Tag = sentry_Attacking then
         begin
@@ -7356,13 +7379,7 @@ begin
         and ((CurrentHedgehog^.Gear^.State and (gstMoving or gstHHDriven)) = (gstMoving or gstHHDriven)) then
     begin
         HHGear := CurrentHedgehog^.Gear;
-        distX := HHGear^.X - Gear^.X;
-        distY := HHGear^.Y - Gear^.Y;
-        if (distX.isNegative = Gear^.dX.isNegative)
-            and (distX.Round > 24)
-            and (distX.Round < 500)
-            and (hwAbs(distY) < hwAbs(distX))
-            and (TraceAttackPath(Gear^.X, Gear^.Y, HHGear^.X, HHGear^.Y, _4, lfLandMask) <= 18 ) then
+        if CheckSentryAttackRange(Gear, HHGear^.X, HHGear^.Y) then
         begin
             Gear^.Target.X := hwRound(HHGear^.X);
             Gear^.Target.Y := hwRound(HHGear^.Y);
