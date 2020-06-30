@@ -7237,7 +7237,7 @@ begin
         (distX.isNegative = Sentry^.dX.isNegative)
         and (distX.Round > 24)
         and (distX.Round < 500)
-        and (hwAbs(distY) < hwAbs(distX))
+        and (hwAbs(distY) < hwAbs(distX * _1_5))
         and (TraceAttackPath(Sentry^.X, Sentry^.Y, targetX, targetY, _4, lfLandMask) <= 18);
 end;
 
