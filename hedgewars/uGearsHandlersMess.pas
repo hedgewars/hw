@@ -7255,7 +7255,7 @@ begin
     if CheckGearDrowning(Gear) then
         exit;
 
-    if TestCollisionY(Gear, 1) = 0 then
+    if TestCollisionYwithGear(Gear, 1) = 0 then
     begin
         doStepFallingGear(Gear);
         if Gear^.Tag <> sentry_Idle then
