@@ -1,10 +1,10 @@
-use fpnum::{fp, FPNum};
+use fpnum::FPNum;
 use std::{collections::BinaryHeap, num::NonZeroU16, ops::Add};
 
 pub type GearId = NonZeroU16;
-pub trait GearData {}
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy, Debug)]
+#[repr(transparent)]
 pub struct Millis(u32);
 
 impl Millis {
@@ -20,7 +20,7 @@ impl Millis {
 
     #[inline]
     pub fn to_fixed(self) -> FPNum {
-        FPNum::new(self.0 as i32, 1000)
+        FPNum::new(self.0 as i32, 1)
     }
 }
 
@@ -30,15 +30,6 @@ impl Add for Millis {
     fn add(self, rhs: Self) -> Self::Output {
         Self(self.0 + rhs.0)
     }
-}
-
-pub trait GearDataProcessor<T: GearData> {
-    fn add(&mut self, gear_id: GearId, gear_data: T);
-    fn remove(&mut self, gear_id: GearId);
-}
-
-pub trait GearDataAggregator<T: GearData> {
-    fn find_processor(&mut self) -> &mut GearDataProcessor<T>;
 }
 
 pub struct GearAllocator {

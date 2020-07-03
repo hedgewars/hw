@@ -171,8 +171,7 @@ impl MapRenderer {
                     let texture = Texture2D::with_data(
                         data,
                         stride,
-                        self.tile_size.width as u32,
-                        self.tile_size.height as u32,
+                        self.tile_size,
                         gl::RGBA8,
                         gl::RGBA,
                         gl::UNSIGNED_BYTE,

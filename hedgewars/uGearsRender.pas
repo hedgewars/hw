@@ -38,6 +38,7 @@ type
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 procedure RenderGearTimer(Gear: PGear; x, y: LongInt);
 procedure RenderGearHealth(Gear: PGear; x, y: LongInt);
+procedure RenderFinger(Gear: PGear; ox, oy: LongInt);
 procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
 procedure RenderAirMineGuiExtras(Gear: PGear; ox, oy: LongInt);
 procedure DrawHHOrder();
@@ -238,15 +239,12 @@ if TeamsArray[t] <> nil then
 
 end;
 
-// Render some informational GUI next to hedgehog, like fuel and alternate weapon
-procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
+procedure RenderFinger(Gear: PGear; ox, oy: LongInt);
 var HH: PHedgehog;
-    sx, sy, tx, ty, t, hogLR: LongInt;
+    tx, ty, t: LongInt;
     dAngle: real;
 begin
     HH:= Gear^.Hedgehog;
-    sx:= ox + 1; // this offset is very common
-    sy:= oy - 3;
     if HH^.Unplaced then
         exit;
     if (Gear^.State and gstHHDeath) <> 0 then
@@ -256,17 +254,19 @@ begin
     if (CinematicScript) then
         exit;
 
-    // render finger (pointing arrow)
+    // render finger (arrow pointing to hog)
     if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
         begin
         ty := oy - 32;
-        // move finger higher up if tags are above hog
+        // move finger higher up if tags or switching arrows are above hog
         if (cTagsMask and htTeamName) <> 0 then
             ty := ty - HH^.Team^.NameTagTex^.h - 2;
         if (cTagsMask and htName) <> 0 then
             ty := ty - HH^.NameTagTex^.h - 2;
         if (cTagsMask and htHealth) <> 0 then
             ty := ty - HH^.HealthTagTex^.h - 2;
+        if bShowSwitcher then
+            ty := ty - SpritesData[sprSwitch].Height - 4;
         tx := ox;
 
         // don't go offscreen
@@ -292,6 +292,25 @@ begin
         DrawSpriteRotatedF(sprFinger, tx, ty, RealTicks div 32 mod 16, 1, dAngle);
         untint;
         end;
+end;
+
+
+// Render some informational GUI next to hedgehog, like fuel and alternate weapon
+procedure RenderHHGuiExtras(Gear: PGear; ox, oy: LongInt);
+var HH: PHedgehog;
+    sx, sy, hogLR: LongInt;
+begin
+    HH:= Gear^.Hedgehog;
+    sx:= ox + 1; // this offset is very common
+    sy:= oy - 3;
+    if HH^.Unplaced then
+        exit;
+    if (Gear^.State and gstHHDeath) <> 0 then
+        exit;
+    if (Gear^.State and gstHHGone) <> 0 then
+        exit;
+    if (CinematicScript) then
+        exit;
 
     // render crosshair
     if (CrosshairGear <> nil) and (Gear = CrosshairGear) then
@@ -1296,7 +1315,7 @@ var
     vg: PVisualGear;
     i: Longword;
     aAngle: real;
-    startX, endX, startY, endY: LongInt;
+    startX, endX, startY, endY, ty: LongInt;
 begin
     // airmine has its own sprite
     if (Gear^.State and gstFrozen <> 0) and (Gear^.Kind <> gtAirMine) then Tint($A0, $A0, $FF, $FF);
@@ -1543,8 +1562,30 @@ begin
                     end;
         gtSwitcher: begin
                     setTintAdd(true);
+                    if IsTooDarkToRead(Gear^.Hedgehog^.Team^.Clan^.Color) then
+                        Tint($FFFFFFFF)
+                    else
+                        Tint($000000FF);
+
+                    ty := y - SpritesData[sprSwitch].Height;
+                    // Move higher up if hedgehog tags are visible.
+                    // This happens when finger is active. The finger is then moved above the switching arrows.
+                    if bShowFinger then
+                        begin
+                        if (cTagsMask and htTeamName) <> 0 then
+                            ty := ty - Gear^.Hedgehog^.Team^.NameTagTex^.h - 2;
+                        if (cTagsMask and htName) <> 0 then
+                            ty := ty - Gear^.Hedgehog^.NameTagTex^.h - 2;
+                        if (cTagsMask and htHealth) <> 0 then
+                            ty := ty - Gear^.Hedgehog^.HealthTagTex^.h - 2;
+                        if (cTagsMask and (htTeamName or htName or htHealth)) <> 0 then
+                            ty := ty - 4;
+                        end;
+
+                    DrawSpriteRotatedF(sprSwitch, x + 1, ty, 1, 0, (RealTicks div 5) mod 360);
+
                     Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
-                    DrawSprite(sprSwitch, x - 16, y - 56, (RealTicks shr 6) mod 12);
+                    DrawSpriteRotatedF(sprSwitch, x + 1, ty, 0, 0, (RealTicks div 5) mod 360);
                     untint;
                     setTintAdd(false);
                     end;

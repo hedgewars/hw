@@ -17,7 +17,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/.hg AND HGCOMMAND AND NOT NOVERSIONINFOUPDATE)
     endif()
 
     #let's assume that if you have hg you might be interested in debugging
-    set(default_build_type "DEBUG")
+    set(default_build_type "Debug")
 
     #write down hash and rev for easy picking should hg be missing
     file(WRITE "${CMAKE_SOURCE_DIR}/share/version_info.txt" "Hedgewars versioning information, do not modify\nrev ${HEDGEWARS_REVISION}\nhash ${HEDGEWARS_HASH}\n")
@@ -30,12 +30,12 @@ elseif(EXISTS ${CMAKE_SOURCE_DIR}/.git AND GITCOMMAND AND NOT NOVERSIONINFOUPDAT
     set(HEDGEWARS_REVISION "GIT")
 
     #let's assume that if you have git you might be interested in debugging
-    set(default_build_type "DEBUG")
+    set(default_build_type "Debug")
 
     #write down hash and rev for easy picking should hg be missing
     file(WRITE "${CMAKE_SOURCE_DIR}/share/version_info.txt" "Hedgewars versioning information, do not modify\nrev ${HEDGEWARS_REVISION}\nhash ${HEDGEWARS_HASH}\n")
 else()
-    set(default_build_type "RELEASE")
+    set(default_build_type "Release")
     # when compiling outside rev control, fetch revision and hash information from version_info.txt
     find_file(version_info version_info.txt PATH ${CMAKE_SOURCE_DIR}/share)
     if(version_info)

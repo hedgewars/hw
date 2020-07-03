@@ -110,6 +110,8 @@ const
     ifCritical    = $00000002;  // image is critical for gameplay (exit game if unable to load)
     ifColorKey    = $00000004;  // image uses transparent pixels (color keying)
     ifIgnoreCaps  = $00000008;  // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
+    ifDigestAlpha = $00000010;  // add alpha channel to the digest
+    ifDigestAll   = $00000020;  // add all channels to the digest
 
     // texture priority (allows OpenGL to keep frequently used textures in video memory more easily)
     tpLowest      = 0.00;
@@ -326,6 +328,7 @@ const
     // AI hints to be set for any gear
     aihUsualProcessing    = $00000000; // treat gear as usual
     aihDoesntMatter       = $00000001; // ignore gear in attack calculations and don't intentionally attack it
+    aihAmmosChanged       = $00000002; // set when ammos were changed within this turn but not processed yet
 
     // ammo properties
     ammoprop_Timerable    = $00000001; // can set timer

@@ -57,7 +57,7 @@ TBonus = record
 
 TBonuses = record
           activity: boolean;
-          Count : Longword;
+          Count : LongInt;
           ar    : array[0..Pred(MAXBONUS)] of TBonus;
        end;
 
@@ -799,7 +799,7 @@ for i:= 0 to Targets.Count do
                         begin
                         dead:= true;
                         Targets.reset:= true;
-                        if dX < 0.035 then
+                        if abs(gdX) < 0.035 then
                             begin
                             subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall);
                             if abs(subrate) > 2000 then inc(Rate,subrate div 1024)
@@ -961,6 +961,9 @@ var pX, pY, tY: LongInt;
 begin
 HHGo:= false;
 Gear^.CollisionMask:= lfNotCurHogCrate;
+
+Gear^.dX.isNegative:= (Gear^.Message and gmLeft) <> 0;
+
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
@@ -1012,21 +1015,15 @@ repeat
         continue
         end;
 
-        // usual walk
-        if (Gear^.Message and gmLeft) <> 0 then
-            Gear^.dX:= -cLittle
-        else
-            if (Gear^.Message and gmRight) <> 0 then
-                Gear^.dX:=  cLittle
-            else
-                exit(false);
+    // usual walk
+    Gear^.dX:= SignAs(cLittle, Gear^.dX);
 
-        if MakeHedgehogsStep(Gear) then
-            inc(GoInfo.Ticks, cHHStepTicks);
+    if MakeHedgehogsStep(Gear) then
+        inc(GoInfo.Ticks, cHHStepTicks);
 
-        // we have moved for 1 px
-        if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
-            exit(true)
+    // we have moved for 1 px
+    if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
+        exit(true)
 until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstMoving) = 0);
 
 HHJump(AltGear, jmpHJump, GoInfo);

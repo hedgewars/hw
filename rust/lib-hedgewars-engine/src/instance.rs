@@ -2,6 +2,7 @@ use hedgewars_engine_messages::messages::{
     ConfigEngineMessage::*, EngineMessage::*, KeystrokeAction::*, SyncedEngineMessage::*,
     UnorderedEngineMessage::*, UnsyncedEngineMessage::*, *,
 };
+use hedgewars_engine_messages::queue::*;
 
 use integral_geometry::{Point, Rect, Size};
 use landgen::outline_template::OutlineTemplate;

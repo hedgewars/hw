@@ -1299,6 +1299,10 @@ if replicateToRight then
 
 DrawGearsGui();
 
+// Finger (arrow pointing to hedgehog).
+// NOT wrapped like the other stuff because it might be confusing.
+DrawFinger();
+
 // everything after this ChangeDepth will be drawn outside the screen
 // note: negative parallax gears should last very little for a smooth stereo effect
     ChangeDepth(RM, cStereo_Outside);

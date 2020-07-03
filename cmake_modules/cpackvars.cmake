@@ -1,6 +1,6 @@
 
 # revision information in cpack-generated names
-if(CMAKE_BUILD_TYPE MATCHES DEBUG)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(full_suffix "${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION}")
 else()
     set(full_suffix "${HEDGEWARS_VERSION}")

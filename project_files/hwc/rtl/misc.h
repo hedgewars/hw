@@ -5,11 +5,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
-#ifdef EMSCRIPTEN
-#include <GL/gl.h>
-#else
-#include <GL/glew.h>
-#endif
+#include "GL.h"
 
 #define     VA_NUM_ARGS(...)                        VA_NUM_ARGS_IMPL(__VA_ARGS__, 5,4,3,2,1)
 #define     VA_NUM_ARGS_IMPL(_1,_2,_3,_4,_5,N,...)  N
@@ -58,10 +54,5 @@ astring     fpcrtl_pchar2astr(const char *s);
 astring     fpcrtl_str2astr(const string255 s);
 string255   fpcrtl_astr2str(const astring s);
 #define     fpcrtl_TypeInfo                         sizeof // dummy
-
-#ifdef EMSCRIPTEN
-#define     GLEW_OK                                 1
-GLenum      glewInit();
-#endif
 
 #endif

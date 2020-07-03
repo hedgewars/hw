@@ -1367,10 +1367,13 @@ begin
     cake.Radius:= 7;
     cake.CollisionMask:= lfNotCurHogCrate;
     cake.Hedgehog:= Me^.Hedgehog;
+    cake.Kind:= gtCake;
 
     // check left direction
     cake.Angle:= 3;
     cake.dX.isNegative:= true;
+    cake.dX.QWordValue:= 0;
+    cake.dY:= _0;
     cake.X:= Me^.X - _3;
     cake.Y:= Me^.Y;
     checkCakeWalk(Me, @cake, ap);

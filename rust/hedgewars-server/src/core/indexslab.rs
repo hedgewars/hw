@@ -19,6 +19,14 @@ impl<T> IndexSlab<T> {
         }
     }
 
+    pub fn get(&self, index: usize) -> Option<&T> {
+        self.data[index].as_ref()
+    }
+
+    pub fn get_mut(&mut self, index: usize) -> Option<&mut T> {
+        self.data[index].as_mut()
+    }
+
     pub fn insert(&mut self, index: usize, value: T) {
         if index >= self.data.len() {
             self.data.reserve(index - self.data.len() + 1);
@@ -41,7 +49,7 @@ impl<T> IndexSlab<T> {
         }
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = (usize, &T)> {
+    pub fn iter(&self) -> impl Iterator<Item = (usize, &T)> + Clone {
         self.data
             .iter()
             .enumerate()

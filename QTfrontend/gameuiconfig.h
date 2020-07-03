@@ -40,6 +40,8 @@ class GameUIConfig : public QSettings
         QStringList GetTeamsList();
         QRect vid_Resolution();
         std::pair<QRect, QRect> vid_ResolutionPair();
+        bool vid_Maximized();
+        void vid_SetMaximized(bool isMaximized);
         bool vid_Fullscreen();
         quint32 translateQuality();
         bool isSoundEnabled();
@@ -108,6 +110,7 @@ class GameUIConfig : public QSettings
         QList<BindAction> m_binds;
 
         void applyProxySettings();
+        bool pIsEngineWindowMaximized;
 
         QString cachedRandomNick;
 };

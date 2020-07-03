@@ -28,7 +28,7 @@
 #include <QSettings>
 #include <QColor>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "hwconsts.h"
 #include "HWApplication.h"

@@ -43,6 +43,7 @@ procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure DrawGears;
 procedure DrawGearsGui;
+procedure DrawFinger;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
@@ -276,7 +277,7 @@ while t <> nil do
             end;
         if curHandledGear^.Active then
             begin
-            if curHandledGear^.RenderTimer then
+            if (not cOnlyStats) and curHandledGear^.RenderTimer then
                 begin
                 // Mine timer
                 if (curHandledGear^.Kind in [gtMine, gtSMine, gtAirMine]) then
@@ -725,6 +726,19 @@ while Gear <> nil do
     if Gear^.Kind = gtHedgehog then
         RenderHHGuiExtras(Gear, x, y);
     Gear:= Gear^.NextGear
+    end;
+end;
+
+procedure DrawFinger;
+var Gear: PGear;
+    x, y: LongInt;
+begin
+if ((CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)) then
+    begin
+    Gear:= CurrentHedgehog^.Gear;
+    x:= hwRound(Gear^.X) + WorldDx;
+    y:= hwRound(Gear^.Y) + WorldDy;
+    RenderFinger(Gear, x, y);
     end;
 end;
 

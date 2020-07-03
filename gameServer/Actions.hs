@@ -870,8 +870,8 @@ processAction (CheckFailed _) = return ()
 processAction (CheckSuccess _) = return ()
 processAction (QueryReplay _) = processAction $ Warning $ loc "This server does not support replays!"
 processAction (ShowReplay rname) = return ()
-processAction (SaveRoom rname) = return ()
-processAction (LoadRoom rname) = return ()
+processAction (SaveRoom rname) = return () -- TODO: Send warning that this command is unsupported
+processAction (LoadRoom rname) = return () -- TODO: Send warning that this command is unsupported
 #endif
 
 processAction Cleanup = do

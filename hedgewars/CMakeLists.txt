@@ -144,13 +144,15 @@ if(LIBAV_FOUND)
     add_definitions(-dUSE_VIDEO_RECORDING)
 endif()
 
-find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
-if(PNG_FOUND)
-    list(INSERT engine_sources 0 PNGh.pas)
-    list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
-    get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS "-k-L${PNG_LIBRARY_DIR} -Fl${PNG_LIBRARY_DIR}")
-    add_definitions(-dPNG_SCREENSHOTS)
+if(NOT WIN32)
+    find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
+    if(PNG_FOUND)
+        list(INSERT engine_sources 0 PNGh.pas)
+        list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
+        get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-L${PNG_LIBRARY_DIR} -Fl${PNG_LIBRARY_DIR}")
+        add_definitions(-dPNG_SCREENSHOTS)
+    endif()
 endif()
 
 if(LUA_SYSTEM)
@@ -189,8 +191,12 @@ endforeach(loop_var)
 
 if (WIN32 AND VCPKG_TOOLCHAIN)
     add_definitions(-dWIN32_VCPKG)
+    add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-dVCPKG_DEBUG")
 endif()
 
+if (WIN32_WIN64_CROSS_COMPILE)
+    add_flag_append(CMAKE_Pascal_FLAGS "-Px86_64 -Twin64")
+endif()
 
 #SOURCE AND PROGRAMS SECTION
 if(BUILD_ENGINE_LIBRARY)
@@ -211,6 +217,11 @@ if(BUILD_ENGINE_LIBRARY)
     set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar};${CMAKE_CURRENT_SOURCE_DIR}/hwengine.pas")
     add_library(hwengine SHARED hwLibrary.pas)
 else()
+    if(APPLE)
+        # Handle large linker install_names
+        add_flag_prepend(CMAKE_Pascal_FLAGS "-k-headerpad_max_install_names")
+    endif()
+
     # no need to change name here because target has same name
     set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
     set(destination_dir ${target_binary_install_dir})

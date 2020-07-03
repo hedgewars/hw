@@ -398,7 +398,7 @@ procedure StoreLoad(reload: boolean);
 var ii: TSprite;
     ai: TAmmoType;
     tmpsurf, tmpoverlay: PSDL_Surface;
-    i, y, imflags: LongInt;
+    i, imflags: LongInt;
     keyConfirm, keyQuit: shortstring;
 begin
 AddFileLog('StoreLoad()');
@@ -443,10 +443,10 @@ for ii:= Low(TSprite) to High(TSprite) do
                     imflags := (imflags or ifCritical);
 
                 // load the image
-                tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags);
-                if (tmpsurf <> nil) and checkSum then
-                    for y := 0 to tmpsurf^.h-1 do
-                        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w*4)
+                if checkSum then
+                    tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags or ifDigestAlpha)
+                else
+                    tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags);
                 end;
 
             if tmpsurf <> nil then
@@ -650,10 +650,13 @@ end;
 function LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
-    logMsg: shortstring;
+    logMsg, digestMsg: shortstring;
     rwops: PSDL_RWops;
+    y, x: LongInt;
+    rowData: PByteArray;
 begin
     LoadImage:= nil;
+    digestMsg:= '';
     logMsg:= msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + ']';
 
     s:= filename + '.png';
@@ -704,8 +707,37 @@ begin
     if (imageFlags and ifColorKey) <> 0 then
         if checkFails(SDL_SetColorKey(tmpsurf, SDL_TRUE, 0) = 0, errmsgTransparentSet, true) then exit;
 
+    if ((imageFlags and (ifDigestAll or ifDigestAlpha)) <> 0)
+        and (tmpsurf^.format^.BytesPerPixel = 4)then
+        begin
+        if SDL_MustLock(tmpsurf) then
+            SDL_LockSurface(tmpsurf);
+
+        if (imageFlags and ifDigestAll) <> 0 then
+            begin
+            for y := 0 to tmpsurf^.h - 1 do
+                syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(tmpsurf^.pixels)^[y*tmpsurf^.pitch], tmpsurf^.w*4);
+            digestMsg := ' [CD: ' + inttostr(syncedPixelDigest) + ']'
+            end
+        else if (imageFlags and ifDigestAlpha) <> 0 then
+            begin
+            rowData := GetMem(tmpsurf^.w);
+            for y := 0 to tmpsurf^.h - 1 do
+                begin
+                for x := 0 to tmpsurf^.w - 1 do
+                    rowData^[x] := PByteArray(tmpsurf^.pixels)^[y * tmpsurf^.pitch + x * 4 + AByteIndex];
+                syncedPixelDigest:= Adler32Update(syncedPixelDigest, rowData, tmpsurf^.w);
+                end;
+            FreeMem(rowData, tmpsurf^.w);
+            digestMsg := ' [AD: ' + inttostr(syncedPixelDigest) + ']'
+            end;
+
+        if SDL_MustLock(tmpsurf) then
+            SDL_UnlockSurface(tmpsurf);
+        end;
+
     // log success
-    WriteLnToConsole(logMsg + ' ' + msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
+    WriteLnToConsole(logMsg + ' ' + msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')' + digestMsg);
 
     LoadImage:= tmpsurf //Result
 end;
@@ -874,7 +906,9 @@ begin
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);         // no depth buffer
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);         // no alpha channel
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16);       // buffer should be 16
-    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // prefer hw rendering
+{$IFNDEF DARWIN}
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // force hw rendering except on macOS
+{$ENDIF}
 end;
 
 procedure SetupOpenGL;

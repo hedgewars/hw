@@ -56,11 +56,10 @@ interface
     type PLongInt = ^LongInt;
 {$ENDIF}
 
-
 (*  SDL  *)
 const
 {$IFDEF WINDOWS}
-    SDLLibName = 'SDL2.dll';
+    SDLLibName = {$IFDEF VCPKG_DEBUG}'SDL2d.dll'{$ELSE}'SDL2.dll'{$ENDIF};
     SDL_TTFLibName = 'SDL2_ttf.dll';
     SDL_MixerLibName = 'SDL2_mixer.dll';
     SDL_ImageLibName = 'SDL2_image.dll';
@@ -219,6 +218,7 @@ const
     GShift = 8;
     BShift = 16;
     AShift = 24;
+    AByteIndex = 3;
 {$ELSE}
     RMask = $FF000000;
     GMask = $00FF0000;
@@ -228,6 +228,7 @@ const
     GShift = 16;
     BShift = 8;
     AShift = 0;
+    AByteIndex = 0;
 {$ENDIF}
 
     KMOD_NONE   = $0000;
@@ -477,7 +478,6 @@ const
     SDL_SCANCODE_KP_E = 192;
     SDL_SCANCODE_KP_F = 193;
     SDL_SCANCODE_KP_XOR = 194;
-    SDL_SCANCODE_KP_POWER = 195;
     SDL_SCANCODE_KP_PERCENT = 196;
     SDL_SCANCODE_KP_LESS = 197;
     SDL_SCANCODE_KP_GREATER = 198;
@@ -933,6 +933,7 @@ type
 
     PSDL_Thread = Pointer;
     PSDL_mutex = Pointer;
+    PSDL_sem = Pointer;
 
     TSDL_GLattr = (
         SDL_GL_RED_SIZE,
@@ -1160,12 +1161,18 @@ function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 {$ENDIF}
 procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
+procedure SDL_DetachThread(thread: PSDL_Thread); cdecl; external SDLLibName;
 procedure SDL_KillThread(thread: PSDL_Thread); cdecl; external SDLLibName;
 
 function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
 procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
 function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName;
 function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName;
+
+function  SDL_CreateSemaphore(initial_value: Longword): PSDL_sem; cdecl; external SDLLibName;
+procedure SDL_DestroySemaphore(sem: PSDL_sem); cdecl; external SDLLibName;
+function  SDL_SemWait(sem: PSDL_sem): LongInt; cdecl; external SDLLibName;
+function  SDL_SemPost(sem: PSDL_sem): LongInt; cdecl; external SDLLibName;
 
 function  SDL_GL_SetAttribute(attr: TSDL_GLattr; value: LongInt): LongInt; cdecl; external SDLLibName;
 procedure SDL_GL_SwapBuffers; cdecl; external SDLLibName;
@@ -1254,6 +1261,7 @@ function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageL
 function  IMG_Load_RW(rwop: PSDL_RWops; freesrc: LongBool): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_LoadTyped_RW(rwop: PSDL_RWops; freesrc: LongBool; type_: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
+function IMG_SavePNG(surface: PSDL_Surface; const _file: PChar): LongInt; cdecl; external SDL_ImageLibName;
 
 (*  SDL_net  *)
 function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;

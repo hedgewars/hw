@@ -5187,6 +5187,10 @@ Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</tran
         <translation>Griechisch</translation>
     </message>
     <message>
+        <source>Hungarian</source>
+        <translation>Ungarisch</translation>
+    </message>
+    <message>
         <source>Italian</source>
         <translation>Italienisch</translation>
     </message>

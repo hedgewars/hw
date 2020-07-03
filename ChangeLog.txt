@@ -5,7 +5,7 @@ User Interface:
  + In-Game chat size can now be adjusted. Hold Ctrl and press -, + or = while in chat input. Hold shift for finer control.
  + The intial in-game chat size can be configured in the Frontend's "advanced" settings tab.
 
-============== 1.0.0-dev (unreleased) ==============
+====================== 1.0.0 =======================
 Highlights:
  + Campaigns now respect your team identity instead of overwriting it
  + Single missions now support team selection and track your progress
@@ -44,8 +44,9 @@ Gameplay:
  * Add missing winner animation in single missions
  * Fix hog floating when switching to moving hog
  * Fix jump key not being ignored after placing girder or target
- * Explode hog instantly when taking damage while dying
  * Fix buggy hog when hog took damage during "idle" phase in kamikaze attack
+ * Fix movement stopping when activating flying saucer after long jump
+ * Girder/rubber can no longer be placed inside moving hogs and land objects
 
 Styles and schemes:
  + The Specialists: Unlock game scheme
@@ -54,11 +55,16 @@ Styles and schemes:
  + CTF_Blizzard: Various minor graphical and text improvements
  + Frenzy: Change ammo slots
  + Continental supplies: Show continent in team bars
+ + King Mode: Automatically select teleport in king placement phase
+ + Racer: Invulnerability can now be disabled in game scheme
  * Balanced Random Weapon: Fix Lua errors after using Time Box
  * Racer: Fix racer ghost not getting reset after a skip
+ * Racer, TechRacer: Improve compability with game scheme
  * Space Invasion: No longer allow to set start shield above shield limit
  * Battalion, WxW: Crates drop between turns, when appropriate
  * Battalion: Sudden Death effects are now like in the base game
+ * Battalion: Fix incorrect health boost in Highland mode
+ * Battalion: Fix points display not updating properly
  * King Mode: Fix team sometimes not being killed properly if king drowned
  * King Mode: Kill resurrected minions if king is not alive
  * King Mode: Fix whole clan being killed if a king died
@@ -127,6 +133,7 @@ Game HUD:
  + Display laser sight icon above wind bar when laser sight utility is active
  + Display selected weapon above hedgehog for some weapons/tools
  + Change cursor of piano strike
+ + New style for switching arrows
  + Colorize switching arrows, pointing arrow and target cross in clan color
  + Skip ammo menu animation when playing with turn time of 10s or less
  + Don't show crate spawn message for initial crates in missions
@@ -135,6 +142,7 @@ Game HUD:
  + Show contour of flying saucer and air mines when in highly opaque water
  + Remove visual clutter in cut scenes
  + Add setting to set default/initial zoom
+ + Render arrow pointing to hog only one if playing with wrapped map
  * Black clan color can now be used without visual problems
  * Fix last 2 characters in demo chat being missing
  * Hide most HUD elements in cinematic mode
@@ -144,10 +152,11 @@ Game HUD:
  * Suppress “<team> is gone.” message at end of game
  * Fix game engine ignoring appropriate number formatting of user language
  * Fix buggy behaviour when entering speech bubble command in hog placement phase
+ * Fix switching arrows overlapping hedgehog tags of own hedgehog
 
 Translations:
  + Complete: German, Polish
- + Major updates: Chinese, Scottish Gaelic
+ + Major updates: Chinese, Scottish Gaelic, Hungarian
  + Credits page is now translatable
  * Remove Arabic translation from release
 
@@ -161,12 +170,14 @@ Frontend:
  + Visual notification when someone joins the room online
  + Display recommended max. hedgehog count for Perlin maps
  + Various minor style tweaks
+ + Remember maximized state of frontend/game window
  * Fix broken handling of /watch chat command on official server
  * Fix renaming a video leading to loss of thumbnail after restart
  * Fix controls list failing to display correct key names with regards to keyboard layout
  * Fix force-locked schemes getting unlocked when changing map types
  * Fix possible to select background-only or hidden themes indirectly by changing map type
  * Disallow slash, backslash and colon characters in team and scheme names
+ * Increase user name length from 20 to 40
 
 Sounds and voicepacks:
  + sndYoohoo has been split to sndYoohoo and sndKiss
@@ -175,10 +186,14 @@ Sounds and voicepacks:
  + Add underwater sound for airplane
  + Tweak some taunts: sndFirstBlood, sndLeaveMeAlone, sndCutItOut
  * Fix English voicepack selection of team being overwritten when playing in non-English locale
+ * Remove Coward.ogg in Default_es voicepack, it contained an insult
 
 Theme customization
  + Default fallback Sudden Death music of themes (fallback-sd-music) is now sdmusic.ogg
  + Make rope stylable by theme: Support for RopeNode.png and rope-step in theme.cfg
+
+Other game media:
+ + New hat: zoo_crocodile
 
 Lua API:
  + New call: SaveMissionVar(varname, value): Save value to mission variable (variable for non-campaign mission)
@@ -389,7 +404,7 @@ Content creation:
 
 Translations:
  + Translations kept up-to-date: German, Polish
- + Major translation updates: Russian, Japanese, Scottish Gaelic, Ukrainian
+ + Major translation updates: Russian, Japanese, Scottish Gaelic, Ukrainian, Italian
 
 Lua API:
  * Deprecation: Setting TurnTimeLeft/ReadyTimeLeft directly is deprecated and will become useless in future. Use the setter functions below
@@ -919,7 +934,7 @@ Content Creation:
 
 Translations:
  + Complete translations: German, Polish
- + Major translation updates: Scottish Gaelic, Italian
+ + Major translation updates: Scottish Gaelic, Italian, Hungarian
  + Loading screen can now be translated
  + A few window titles can be translated
  + Campaign names and campaign mission names can be translated

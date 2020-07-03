@@ -70,9 +70,12 @@ cmdHelpRoomOnlyAdmin = [
     loc "/fix: Force this room to stay open when it is empty",
     loc "/unfix: Undo the /fix command",
     loc "/save <config ID> <config name>: Add current room configuration as votable choice for /callvote map",
-    loc "/delete <config ID>: Delete a votable room configuration",
+    loc "/delete <config ID>: Delete a votable room configuration"
+#if defined(OFFICIAL_SERVER)
+    ,
     loc "/saveroom <file name>: Save all votable room configurations (and the greeting) of this room into a file",
     loc "/loadroom <file name>: Load votable room configurations (and greeting) from a file"
+#endif
     ]
 
 cmdHelpHeaderLobby :: [B.ByteString]

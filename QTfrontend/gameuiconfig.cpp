@@ -93,6 +93,7 @@ void GameUIConfig::reloadValues(void)
     QString heightStr = QString::number(screenSize.height());
     QString wWidth = value("video/windowedWidth", widthStr).toString();
     QString wHeight = value("video/windowedHeight", heightStr).toString();
+    pIsEngineWindowMaximized = value("video/windowedMaximized", false).toBool();
     // If left blank reset the resolution to the default
     wWidth = (wWidth == "" ? widthStr : wWidth);
     wHeight = (wHeight == "" ? heightStr : wHeight);
@@ -232,6 +233,10 @@ void GameUIConfig::resizeToConfigValues()
     const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
     Form->resize(value("frontend/width", qMin(qMax(deskSize.width()*2/3,800),deskSize.width())).toUInt(),
                  value("frontend/height", qMin(qMax(deskSize.height()*2/3,600),deskSize.height())).toUInt());
+    if(value("frontend/maximized", false) == true)
+        Form->setWindowState(Form->windowState() | Qt::WindowMaximized);
+    else
+        Form->setWindowState(Form->windowState() & ~Qt::WindowMaximized);
 
     // move the window to the center of the screen
     QPoint center = HWApplication::desktop()->availableGeometry(-1).center();
@@ -245,6 +250,7 @@ void GameUIConfig::SaveOptions()
     setValue("video/fullscreenResolution", Form->ui.pageOptions->CBResolution->currentText());
     setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->value());
     setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->value());
+    setValue("video/windowedMaximized", vid_Maximized());
     setValue("video/fullscreen", vid_Fullscreen());
 
     setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
@@ -262,6 +268,7 @@ void GameUIConfig::SaveOptions()
     {
         setValue("frontend/width", Form->width());
         setValue("frontend/height", Form->height());
+        setValue("frontend/maximized", (Form->windowState() & Qt::WindowMaximized) != 0);
     }
     else
     {
@@ -381,6 +388,16 @@ QRect GameUIConfig::vid_Resolution()
         return result.first;
     else
         return result.second;
+}
+
+bool GameUIConfig::vid_Maximized()
+{
+    return pIsEngineWindowMaximized;
+}
+
+void GameUIConfig::vid_SetMaximized(bool isMaximized)
+{
+    pIsEngineWindowMaximized = isMaximized;
 }
 
 bool GameUIConfig::vid_Fullscreen()

@@ -9,7 +9,6 @@ gl = "0.11"
 netbuf = "0.4"
 itertools = "0.8"
 png = "0.13"
-queues = "1.1"
 
 fpnum = { path = "../fpnum" }
 land2d = { path = "../land2d" }

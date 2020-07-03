@@ -1,4 +1,4 @@
-use crate::common::{GearDataProcessor, GearId, Millis};
+use crate::common::{GearId, Millis};
 use std::{
     cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd},
     collections::BinaryHeap,

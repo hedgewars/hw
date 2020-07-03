@@ -916,10 +916,10 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
 		Gear^.PortalCounter:= 0;
     PrevdX:= hwSign(Gear^.dX);
     if (Gear^.Message and gmLeft  )<>0 then
-        Gear^.dX:= -cLittle else
+        Gear^.dX:= -_0 else
     if (Gear^.Message and gmRight )<>0 then
-        Gear^.dX:=  cLittle
-        else exit;
+        Gear^.dX:=  _0
+    else exit;
 
     StepSoundTimer:= cHHStepTicks;
 

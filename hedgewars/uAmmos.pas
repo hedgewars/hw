@@ -202,7 +202,7 @@ for t:= 0 to Pred(TeamsCount) do
             if Hedgehogs[i].Gear <> nil then
                 begin
                 Hedgehogs[i].Ammo:= GetAmmoByNum(Hedgehogs[i].AmmoStore);
-                if (GameFlags and gfPlaceHog) <> 0 then
+                if ((GameFlags and gfPlaceHog) <> 0) or (((GameFlags and gfKing) <> 0) and (Hedgehogs[i].King = true)) then
                     Hedgehogs[i].CurAmmoType:= amTeleport
                 else
                     Hedgehogs[i].CurAmmoType:= amNothing
@@ -265,7 +265,9 @@ with Hedgehog, CurWeapon^ do
         begin
         PackAmmo(Ammo, Ammoz[AmmoType].Slot);
         CurAmmoType:= amNothing
-        end
+        end;
+if Hedgehog.BotLevel <> 0 then
+    Hedgehog.Gear^.AIHints := Hedgehog.Gear^.AIHints or aihAmmosChanged;
 end;
 
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);

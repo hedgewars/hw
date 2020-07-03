@@ -393,6 +393,8 @@ with CurrentTeam^.Clan^ do
 CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
 if CurWeapon^.Count = 0 then
     CurrentHedgehog^.CurAmmoType:= amNothing;
+if CurrentHedgehog^.BotLevel <> 0 then
+    CurrentHedgehog^.Gear^.AIHints:= (CurrentHedgehog^.Gear^.AIHints and (not aihAmmosChanged));
 
 with CurrentHedgehog^ do
     begin
@@ -453,7 +455,7 @@ else
     if ((GameFlags and gfSwitchHog) <> 0) and (not CurrentTeam^.hasGone) and
             // Exception: During the special "Place your King" round in King Mode;
             // you're not supposed to switch away from your king in this round.
-            (not (((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (TotalRoundsReal <= 0))) then
+            (not (((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (TotalRoundsReal = -1))) then
         begin
         g:= AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtSwitcher, 0, _0, _0, 0);
         CurAmmoGear:= g;

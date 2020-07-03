@@ -1,87 +1,29 @@
+--[[
+RACER
+map-independant racing script
+originally by mikade, edited heavily by others
 
-------------------------------------------
--- RACER 0.8
--- map-independant racing script
--- by mikade
+-----------------------------------------
+Script parameters:
+rounds=N
+--> The game will be played with N rounds (default: 3)
+
+waypointradius=N
+--> The waypoints have a radius of N pixels (default: 450)
+
+maxwaypoints=N
+--> The maximum number of waypoints to be placed (default: 8)
+
+teamrope=true
+--> The team will be colored in the color of the team.
 -----------------------------------------
 
--- DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
--- Be careful when editig this script, do not introduce changes lightly!
--- This script is used for time records on the official Hedgewars server.
--- Introducing breaking changes means we have to invalidate past time records!
+DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
+Be careful when editig this script, do not introduce changes lightly!
+This script is used for time records on the official Hedgewars server.
+Introducing breaking changes means we have to invalidate past time records!
 
------------------------------------
---0.1: took all the code from crazy racer and scrapped most of it
------------------------------------
-
--- Removed tumbler system
--- Removed extra adds like boosters etc
--- Added experimental waypoint placement system
--- More user feedback
--- Reduced race complexity limit to 5 waypoints
--- stop placement at complexity limit reached and end turn
--- guys dont keep racing after dying
--- invulnerable feasibility
--- reverted time keeping method
--- reduced feedback display time
--- colour-coded addcaptions
--- cleaned up code
--- support for more players properly added
--- tardis fix
--- remove airstrikes
-
--- i think the remainder 0 .456 sec of the tracktime isnt getting reset on newturn
-
--- update feedback
-
--------
--- 0.2
--------
-
--- allow gameflags
--- extend time to 90s
--- remove other air-attack based weps
--- turn off water rise for sd
-
--------
--- 0.3
--------
-
--- prevent WP being placed in land
--- prevent waypoints being placed outside border
-
--------
--- 0.4
--------
-
--- update user feedback
--- add more sounds
-
--------
--- 0.5
--------
-
--- fix ghost disappearing if hog falls in water or somehow dies
--- lengthen ghost tracking interval to improve performance on slower machines
--- increase waypoint limit to 8
--- allow for persistent showmission information
-
--------
--- 0.6
--------
-
--- remove hogs from racing area as per request
-
--------
--- 0.7
--------
-
--- switch to first available weapon if starting race with no weapon selected
-
--------
--- 0.8
--------
--- allow different boost directions
+]]
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -119,6 +61,8 @@ local waypointCursor = false
 local waypointPreview = nil
 
 local officialChallenge
+
+local ammoDelays
 
 --------------------------
 -- hog and team tracking variales
@@ -236,23 +180,6 @@ function GetBackgroundBrightness()
 		return 3
 	end
 end
-
---[[
-Parameters syntax:
-
-teamrope=true
---> The team will be colored in the color of the team.
-
-rounds=N
---> The game will be played with N rounds (default: 3)
-
-waypointradius=N
---> The waypoints have a radius of N pixels (default: 450)
-
-maxwaypoints=N
---> The maximum number of waypoints to be placed (default: 8)
-
-]]
 
 function onParameters()
     parseParams()
@@ -598,6 +525,8 @@ function onNewRound()
 			if GetHogClan(hhs[i]) ~= bestClan or roundDraw then
 				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
+			elseif not roundDraw then
+				SetEffect(hhs[i], heInvulnerable, 1)
 			end
 		end
 
@@ -680,12 +609,13 @@ end
 ----------------------------------
 
 function onGameInit()
-        EnableGameFlags(gfInfAttack, gfInvulnerable)
+        EnableGameFlags(gfInfAttack)
+        -- Force-disable various game flags that would break the script
+        DisableGameFlags(gfKing, gfSwitchHog, gfAISurvival, gfPlaceHog, gfTagTeam)
         CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
         HealthDecrease = 0
-
 end
 
 function InstructionsBuild()
@@ -844,6 +774,24 @@ function onNewTurn()
         AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
 
+        SetSoundMask(sndStupid, false)
+        SetSoundMask(sndBugger, false)
+        SetSoundMask(sndDrat, false)
+
+        -- Remember ammo delays for later
+        if ammoDelays == nil then
+                ammoDelays = {}
+                for a=0, AmmoTypeMax do
+                        local _, _, delay = GetAmmo(a)
+                        -- delay >= 10000 is special value used in hog placement phase.
+                        -- This extracts the "true" delay
+                        if delay >= 10000 then
+                                delay = delay - 10000
+                        end
+                        ammoDelays[a] = delay
+                end
+        end
+
         -- Handle Starting Stage of Game
         if (gameOver == false) and (gameBegun == false) then
                 if wpCount >= 2 then
@@ -852,6 +800,13 @@ function onNewTurn()
                         firstClan = GetHogClan(CurrentHedgehog)
                         if specialPointsCount == 0 then
                                 InstructionsRace()
+                        end
+
+                        -- Restore old ammo delays
+                        for a=0, AmmoTypeMax do
+                                if a ~= amAirAttack and a ~= amSkip then
+                                        SetAmmoDelay(a, ammoDelays[a])
+                                end
                         end
 
                         SetAmmoTexts(amSkip, nil, nil, nil)
@@ -864,7 +819,12 @@ function onNewTurn()
                         end
                         ShowMission(loc("Racer"),
                         loc("Waypoint placement phase"), infoString, -amAirAttack, 4000)
-                        AddAmmo(CurrentHedgehog, amAirAttack, 4000)
+                        AddAmmo(CurrentHedgehog, amAirAttack, AMMO_INFINITE)
+                        for a=0, AmmoTypeMax do
+                                if a ~= amAirAttack and a ~= amSkip then
+                                        SetAmmoDelay(a, 9999)
+                                end
+                        end
                         SetWeapon(amAirAttack)
                         -- Bots skip waypoint placement
                         if GetHogLevel(CurrentHedgehog) ~= 0 then
@@ -912,15 +872,19 @@ function onNewTurn()
         AddAmmo(CurrentHedgehog, amMineStrike, 0)
         AddAmmo(CurrentHedgehog, amNapalm, 0)
         AddAmmo(CurrentHedgehog, amPiano, 0)
+        AddAmmo(CurrentHedgehog, amSwitch, 0)
+        AddAmmo(CurrentHedgehog, amKamikaze, 0)
+        AddAmmo(CurrentHedgehog, amIceGun, 0)
+        SetAmmoDelay(amAirAttack, 0)
 end
 
 function onGameTick20()
 
         -- airstrike detected, convert this into a potential waypoint spot
         if cGear ~= nil then
-                x,y = GetGearPosition(cGear)
+                local x,y = GetGearPosition(cGear)
                 if x > -9000 then
-                        x,y = GetGearTarget(cGear)
+                        local x,y = GetGearTarget(cGear)
 
 
                         if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
@@ -939,7 +903,7 @@ function onGameTick20()
                 else
                         DeleteGear(cGear)
                 end
-        SetGearPosition(cGear, -10000, 0)
+        	SetGearPosition(cGear, -10000, y)
         end
 
 
@@ -956,7 +920,10 @@ function onGameTick20()
                                 trackTime = 0
 
                                 SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
-                                AddGear(GetX(CurrentHedgehog)+boostX, GetY(CurrentHedgehog)+boostY, gtGrenade, 0, 0, 0, 1)
+                                Explode(GetX(CurrentHedgehog)+boostX,
+                                        GetY(CurrentHedgehog)+boostY,
+                                        50,
+                                        EXPLNoDamage + EXPLAutoSound)
                                 FollowGear(CurrentHedgehog)
 
                                 HideMission()
@@ -998,8 +965,13 @@ function onGameTick20()
 
                                 AddCaption(string.format(loc("Time: %.1fs"), (trackTime/1000)),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 
+				-- Track completed, all waypoints touched
                                 if (CheckWaypoints() == true) then
+                                        SetSoundMask(sndStupid, true)
+                                        SetSoundMask(sndBugger, true)
+                                        SetSoundMask(sndDrat, true)
                                         AdjustScores()
+                                        SetEffect(CurrentHedgehog, heInvulnerable, 1)
                                         DisableTumbler()
                                 end
 
@@ -1030,6 +1002,14 @@ function onGameTick()
 	end
 end
 
+function onGearDamage(gear)
+
+        if gear == CurrentHedgehog then
+                DisableTumbler(false)
+        end
+
+end
+
 function onGearResurrect(gear, vGear)
 
         if gear == CurrentHedgehog then
@@ -1049,6 +1029,10 @@ function onGearAdd(gear)
                 SetEffect(gear, heResurrectable, 1)
         elseif GetGearType(gear) == gtAirAttack then
                 cGear = gear
+		local x,y = GetGearPosition(cGear)
+        	SetGearPosition(cGear, 10000, y)
+        elseif (not gameBegun) and GetGearType(gear) == gtAirBomb then
+		DeleteGear(gear)
         elseif GetGearType(gear) == gtRope and TeamRope then
             SetTag(gear,1)
             SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))

@@ -96,8 +96,10 @@ function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
 function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
 
+function CheckGearsUnderSprite(Sprite: TSprite; sprX, sprY, Frame: LongInt): boolean;
+
 implementation
-uses uConsts, uLandGraphics, uVariables;
+uses uConsts, uLandGraphics, uVariables, SDLh, uLandTexture, uDebug;
 
 type TCollisionEntry = record
     X, Y, Radius: LongInt;
@@ -1018,6 +1020,66 @@ if isColl then
     end;
 
 CalcSlopeBelowGear := _0;
+end;
+
+function CheckGearsUnderSprite(Sprite: TSprite; sprX, sprY, Frame: LongInt): boolean;
+var x, y, bpp, h, w, row, col, gx, gy, r, numFramesFirstCol: LongInt;
+    p: PByteArray;
+    Image: PSDL_Surface;
+    Gear: PGear;
+begin
+    CheckGearsUnderSprite := false;
+    if checkFails(SpritesData[Sprite].Surface <> nil, 'Assert SpritesData[Sprite].Surface failed', true) then exit;
+
+    numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
+    Image:= SpritesData[Sprite].Surface;
+
+    if SDL_MustLock(Image) then
+        if SDLCheck(SDL_LockSurface(Image) >= 0, 'CheckGearsUnderSprite', true) then exit;
+
+    bpp:= Image^.format^.BytesPerPixel;
+
+    if checkFails(bpp = 4, 'It should be 32 bpp sprite', true) then
+        begin
+        if SDL_MustLock(Image) then
+            SDL_UnlockSurface(Image);
+        exit
+        end;
+
+    w:= SpritesData[Sprite].Width;
+    h:= SpritesData[Sprite].Height;
+
+    row:= Frame mod numFramesFirstCol;
+    col:= Frame div numFramesFirstCol;
+    p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
+    Gear:= GearsList;
+
+    while Gear <> nil do
+        begin
+        if (Gear^.Kind = gtAirMine) or
+            ((Gear^.Kind in [gtCase, gtExplosives, gtTarget, gtKnife, gtMine, gtHedgehog, gtSMine]) and (Gear^.CollisionIndex = -1)) then
+            begin
+            gx:= hwRound(Gear^.X);
+            gy:= hwRound(Gear^.Y);
+            r:= Gear^.Radius + 1;
+            if (gx + r >= sprX) and (gx - r < sprX + w) and (gy + r >= sprY) and (gy - r < sprY + h) then
+                for y := gy - r to gy + r do
+                    for x := gx - r to gx + r do
+                        begin
+                        if (x >= sprX) and (x < sprX + w) and (y >= sprY) and (y < sprY + h)
+                        and (Sqr(x - gx) + Sqr(y - gy) <= Sqr(r))
+                        and (((PLongword(@(p^[Image^.pitch * (y - sprY) + (x - sprX) * 4]))^) and AMask) <> 0) then
+                            begin
+                            CheckGearsUnderSprite := true;
+                            if SDL_MustLock(Image) then
+                                SDL_UnlockSurface(Image);
+                            exit
+                            end
+                        end
+            end;
+
+        Gear := Gear^.NextGear
+        end;
 end;
 
 procedure initModule;

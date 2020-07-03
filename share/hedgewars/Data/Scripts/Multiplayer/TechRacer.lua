@@ -714,6 +714,7 @@ function onGameInit()
 
 	EnableGameFlags(gfInfAttack, gfDisableWind, gfBorder)
 	DisableGameFlags(gfSolidLand)
+	DisableGameFlags(gfKing, gfSwitchHog, gfAISurvival, gfPlaceHog, gfTagTeam)
 	CaseFreq = 0
 	TurnTime = 90000
 	WaterRise = 0
@@ -948,6 +949,10 @@ end
 
 function onNewTurn()
 
+	SetSoundMask(sndStupid, false)
+	SetSoundMask(sndDrat, false)
+	SetSoundMask(sndBugger, false)
+
 	CheckForNewRound()
 	TryRepositionHogs()
 
@@ -1088,7 +1093,11 @@ function onGameTick20()
 
 				AddCaption(string.format(loc("Time: %.1fs"), (trackTime/1000)), GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 
+				-- Track completed, all waypoints touched!
 				if (CheckWaypoints() == true) then
+					SetSoundMask(sndStupid, true)
+					SetSoundMask(sndDrat, true)
+					SetSoundMask(sndBugger, true)
 					AdjustScores()
 					DisableTumbler()
 				end

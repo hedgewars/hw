@@ -20,16 +20,18 @@ include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #possible cmake configuration
 option(NOSERVER "Disable gameServer build (off)" OFF)
-option(NOPNG "Disable screenshoot compression (off)" OFF)
+if(NOT WIN32)
+    option(NOPNG "Disable screenshoot compression (off)" OFF)
+endif()
 option(NOVIDEOREC "Disable video recording (off)" OFF)
 
 #libraries are built shared unless explicitly added as a static
 option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
 
 if(WIN32 OR APPLE)
-    option(LUA_SYSTEM "Use system lua (off)" OFF)
+    option(LUA_SYSTEM "Use system Lua (off)" OFF)
 else()
-    option(LUA_SYSTEM "Use system lua (on)" ON)
+    option(LUA_SYSTEM "Use system Lua (on)" ON)
 endif()
 
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library (off)" OFF)
@@ -40,8 +42,8 @@ option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 option(SKIPBUNDLE "Do not create relocate bundle (off)" OFF)
 
 option(BUILD_ENGINE_C "Compile hwengine as native C (off)" OFF)
-option(BUILD_ENGINE_JS "Compile hwengine as javascript (off)" OFF)
-option(GL2 "Enable OpenGL 2 rendering !!!EXPERIMENTAL - DO NOT USE!!! [default: off)" OFF)
+option(BUILD_ENGINE_JS "Compile hwengine as JavaScript (off)" OFF)
+option(GL2 "Enable OpenGL 2 rendering, only use if you know what you're doing (off)" OFF)
 
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
 if(UNIX AND NOT APPLE)
@@ -52,7 +54,7 @@ option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if so
 
 
 if(BUILD_ENGINE_C AND NOT NOVIDEOREC)
-    if((CMAKE_BUILD_TYPE MATCHES "RELEASE") OR (CMAKE_BUILD_TYPE MATCHES "RELWITHDEBUGINFO"))
+    if((CMAKE_BUILD_TYPE STREQUAL "Release") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
         message("NOTE: Video recorder support disabled. It's incompatible with BUILD_ENGINE_C")
         set(BUILD_ENGINE_C ON CACHE STRING "Required for BUILD_ENGINE_JS" FORCE)
     else()
@@ -90,8 +92,8 @@ set(FONTS_DIRS "" CACHE STRING "Additional paths to folders where required fonts
 set(CPACK_PACKAGE_VERSION_MAJOR 1)
 set(CPACK_PACKAGE_VERSION_MINOR 0)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
-set(HEDGEWARS_PROTO_VER 58)
-if((CMAKE_BUILD_TYPE MATCHES "RELEASE") OR (CMAKE_BUILD_TYPE MATCHES "RELWITHDEBUGINFO"))
+set(HEDGEWARS_PROTO_VER 59)
+if((CMAKE_BUILD_TYPE STREQUAL "Release") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
     set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 else()
     set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-dev")
@@ -110,10 +112,9 @@ include(${CMAKE_MODULE_PATH}/platform.cmake)
 
 #when build type is not specified, assume Debug/Release according to build version information
 if(CMAKE_BUILD_TYPE)
-    string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
-    if(NOT((CMAKE_BUILD_TYPE MATCHES "RELEASE") OR
-           (CMAKE_BUILD_TYPE MATCHES "DEBUG") OR
-           (CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")))
+    if(NOT((CMAKE_BUILD_TYPE STREQUAL "Release") OR
+           (CMAKE_BUILD_TYPE STREQUAL "Debug") OR
+           (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")))
         set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release/RelWithDebInfo)" FORCE)
         message(STATUS "Unknown build type ${CMAKE_BUILD_TYPE}, using default (${default_build_type})")
     endif()
@@ -166,7 +167,7 @@ endif()
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
-if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
                               "-fno-warn-unused-do-bind"

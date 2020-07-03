@@ -2,16 +2,36 @@ use super::{
     client::HwClient,
     indexslab::IndexSlab,
     room::HwRoom,
-    types::{ClientId, RoomId},
+    types::{ClientId, RoomId, ServerVar},
 };
 use crate::{protocol::messages::HwProtocolMessage::Greeting, utils};
 
+use crate::core::server::JoinRoomError::WrongProtocol;
 use bitflags::*;
 use log::*;
 use slab;
-use std::{borrow::BorrowMut, iter, num::NonZeroU16};
+use std::{borrow::BorrowMut, collections::HashSet, iter, num::NonZeroU16};
 
 type Slab<T> = slab::Slab<T>;
+
+#[derive(Debug)]
+pub enum CreateRoomError {
+    InvalidName,
+    AlreadyExists,
+}
+
+#[derive(Debug)]
+pub enum JoinRoomError {
+    DoesntExist,
+    WrongProtocol,
+    Full,
+    Restricted,
+}
+
+#[derive(Debug)]
+pub struct UninitializedError();
+#[derive(Debug)]
+pub struct AccessError();
 
 pub struct HwAnteClient {
     pub nick: Option<String>,
@@ -19,6 +39,9 @@ pub struct HwAnteClient {
     pub server_salt: String,
     pub is_checker: bool,
     pub is_local_admin: bool,
+    pub is_registered: bool,
+    pub is_admin: bool,
+    pub is_contributor: bool,
 }
 
 pub struct HwAnteroom {
@@ -38,12 +61,15 @@ impl HwAnteroom {
             server_salt: salt,
             is_checker: false,
             is_local_admin,
+            is_registered: false,
+            is_admin: false,
+            is_contributor: false,
         };
         self.clients.insert(client_id, client);
     }
 
     pub fn remove_client(&mut self, client_id: ClientId) -> Option<HwAnteClient> {
-        let mut client = self.clients.remove(client_id);
+        let client = self.clients.remove(client_id);
         client
     }
 }
@@ -91,12 +117,47 @@ impl HwServer {
         }
     }
 
+    #[inline]
+    pub fn client(&self, client_id: ClientId) -> &HwClient {
+        &self.clients[client_id]
+    }
+
+    #[inline]
+    pub fn client_mut(&mut self, client_id: ClientId) -> &mut HwClient {
+        &mut self.clients[client_id]
+    }
+
+    #[inline]
+    pub fn room(&self, room_id: RoomId) -> &HwRoom {
+        &self.rooms[room_id]
+    }
+
+    #[inline]
+    pub fn room_mut(&mut self, room_id: RoomId) -> &mut HwRoom {
+        &mut self.rooms[room_id]
+    }
+
+    #[inline]
+    pub fn is_admin(&self, client_id: ClientId) -> bool {
+        self.clients
+            .get(client_id)
+            .map(|c| c.is_admin())
+            .unwrap_or(false)
+    }
+
     pub fn add_client(&mut self, client_id: ClientId, data: HwAnteClient) {
         if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
             let mut client = HwClient::new(client_id, protocol.get(), nick);
             client.set_is_checker(data.is_checker);
             #[cfg(not(feature = "official-server"))]
             client.set_is_admin(data.is_local_admin);
+
+            #[cfg(feature = "official-server")]
+            {
+                client.set_is_registered(info.is_registered);
+                client.set_is_admin(info.is_admin);
+                client.set_is_contributor(info.is_contributor);
+            }
 
             self.clients.insert(client_id, client);
         }
@@ -106,12 +167,17 @@ impl HwServer {
         self.clients.remove(client_id);
     }
 
-    pub fn get_greetings(&self, client_id: ClientId) -> &str {
-        if self.clients[client_id].protocol_number < self.latest_protocol {
+    pub fn get_greetings(&self, client: &HwClient) -> &str {
+        if client.protocol_number < self.latest_protocol {
             &self.greetings.for_old_protocols
         } else {
             &self.greetings.for_latest_protocol
         }
+    }
+
+    #[inline]
+    pub fn get_client_nick(&self, client_id: ClientId) -> &str {
+        &self.clients[client_id].nick
     }
 
     #[inline]
@@ -120,24 +186,113 @@ impl HwServer {
         creator_id: ClientId,
         name: String,
         password: Option<String>,
-    ) -> RoomId {
-        create_room(
-            &mut self.clients[creator_id],
-            &mut self.rooms,
-            name,
-            password,
-        )
+    ) -> Result<(&HwClient, &HwRoom), CreateRoomError> {
+        use CreateRoomError::*;
+        if utils::is_name_illegal(&name) {
+            Err(InvalidName)
+        } else if self.has_room(&name) {
+            Err(AlreadyExists)
+        } else {
+            Ok(create_room(
+                &mut self.clients[creator_id],
+                &mut self.rooms,
+                name,
+                password,
+            ))
+        }
+    }
+
+    pub fn join_room(
+        &mut self,
+        client_id: ClientId,
+        room_id: RoomId,
+    ) -> Result<(&HwClient, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
+        use JoinRoomError::*;
+        let room = &mut self.rooms[room_id];
+        let client = &mut self.clients[client_id];
+
+        if client.protocol_number != room.protocol_number {
+            Err(WrongProtocol)
+        } else if room.is_join_restricted() {
+            Err(Restricted)
+        } else if room.players_number == u8::max_value() {
+            Err(Full)
+        } else {
+            move_to_room(client, room);
+            let room_id = room.id;
+            Ok((
+                &self.clients[client_id],
+                &self.rooms[room_id],
+                self.clients.iter().map(|(_, c)| c),
+            ))
+        }
     }
 
     #[inline]
-    pub fn move_to_room(&mut self, client_id: ClientId, room_id: RoomId) {
-        move_to_room(&mut self.clients[client_id], &mut self.rooms[room_id])
+    pub fn join_room_by_name(
+        &mut self,
+        client_id: ClientId,
+        room_name: &str,
+    ) -> Result<(&HwClient, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
+        use JoinRoomError::*;
+        let room = self.rooms.iter().find(|(_, r)| r.name == room_name);
+        if let Some((_, room)) = room {
+            let room_id = room.id;
+            self.join_room(client_id, room_id)
+        } else {
+            Err(DoesntExist)
+        }
     }
 
+    #[inline]
+    pub fn set_var(&mut self, client_id: ClientId, var: ServerVar) -> Result<(), AccessError> {
+        if self.clients[client_id].is_admin() {
+            match var {
+                ServerVar::MOTDNew(msg) => self.greetings.for_latest_protocol = msg,
+                ServerVar::MOTDOld(msg) => self.greetings.for_old_protocols = msg,
+                ServerVar::LatestProto(n) => self.latest_protocol = n,
+            }
+            Ok(())
+        } else {
+            Err(AccessError())
+        }
+    }
+
+    #[inline]
+    pub fn get_vars(&self, client_id: ClientId) -> Result<[ServerVar; 3], AccessError> {
+        if self.clients[client_id].is_admin() {
+            Ok([
+                ServerVar::MOTDNew(self.greetings.for_latest_protocol.clone()),
+                ServerVar::MOTDOld(self.greetings.for_old_protocols.clone()),
+                ServerVar::LatestProto(self.latest_protocol),
+            ])
+        } else {
+            Err(AccessError())
+        }
+    }
+
+    pub fn get_used_protocols(&self, client_id: ClientId) -> Result<Vec<u16>, AccessError> {
+        if self.clients[client_id].is_admin() {
+            let mut protocols: HashSet<_> = self
+                .clients
+                .iter()
+                .map(|(_, c)| c.protocol_number)
+                .chain(self.rooms.iter().map(|(_, r)| r.protocol_number))
+                .collect();
+            let mut protocols: Vec<_> = protocols.drain().collect();
+            protocols.sort();
+            Ok(protocols)
+        } else {
+            Err(AccessError())
+        }
+    }
+
+    #[inline]
     pub fn has_room(&self, name: &str) -> bool {
         self.find_room(name).is_some()
     }
 
+    #[inline]
     pub fn find_room(&self, name: &str) -> Option<&HwRoom> {
         self.rooms
             .iter()
@@ -234,12 +389,12 @@ fn allocate_room(rooms: &mut Slab<HwRoom>) -> &mut HwRoom {
     entry.insert(room)
 }
 
-fn create_room(
-    client: &mut HwClient,
-    rooms: &mut Slab<HwRoom>,
+fn create_room<'a, 'b>(
+    client: &'a mut HwClient,
+    rooms: &'b mut Slab<HwRoom>,
     name: String,
     password: Option<String>,
-) -> RoomId {
+) -> (&'a HwClient, &'b HwRoom) {
     let room = allocate_room(rooms);
 
     room.master_id = Some(client.id);
@@ -255,7 +410,7 @@ fn create_room(
     client.set_is_ready(true);
     client.set_is_joined_mid_game(false);
 
-    room.id
+    (client, room)
 }
 
 fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {

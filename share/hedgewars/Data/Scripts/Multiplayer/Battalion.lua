@@ -752,6 +752,7 @@ function setHogVariant(hog)
 
   hogInfo[hog]['variant'] = hogVar
   SetHealth(hog, variants[hogVar]["hp"])
+  hogInfo[hog]['maxHp'] = variants[hogVar]["hp"]
 end
 
 function getHogInfo(hog, info)
@@ -1150,8 +1151,7 @@ function onHighlandKill(gear)
     end
 
     hpDiff = div(deathMaxHP * highEnemyKillHPBonus, 100)
-    newHP = curHP + hpDiff
-    HealHog(CurHog, newHP)
+    HealHog(CurHog, hpDiff)
   -- Friendly fire! Punish hog by removing weapons and helpers from pool
   -- and reduce health
   else
@@ -1464,6 +1464,8 @@ function onPointsTurn()
       break
     end
   end
+
+  updatePointsLabel(LastTeam)
 end
 
 function onNewTurn()

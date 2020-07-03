@@ -345,11 +345,11 @@ begin
 
     { Adjust for language suffix: Voicepacks can have an optional language suffix.
     It's an underscore followed by an ISO 639-1 or ISO 639-2 language code.
-    The suffix “_qau” is special, it will enable automatic language selection
+    The suffix "_qau" is special, it will enable automatic language selection
     of this voicepack. For example, if team has set Default_qau as voicepack,
     and the player language is Russian, the actual voicepack will be Default_ru,
     provided it can be found on the disk.
-    “qau” is a valid ISO 639-2 language code reserved for local use. }
+    "qau" is a valid ISO 639-2 language code reserved for local use. }
     tmp:= Copy(name, Length(name) - 3, 4);
     if (tmp = '_qau') then
         name:= Copy(name, 1, Length(name) - 4);
@@ -574,7 +574,7 @@ end;
 
 function PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying, ignoreMask, soundAsMusic: boolean): boolean;
 var s: shortstring;
-tempSnd: TSound;
+tempSnd, loadSnd: TSound;
 rwops: PSDL_RWops;
 begin
     PlaySoundV:= false;
@@ -591,24 +591,26 @@ begin
         begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
-            s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            loadSnd:= snd;
+            s:= cPathz[Soundz[loadSnd].Path] + '/' + voicepack^.name + '/' + Soundz[loadSnd].FileName;
+
             // Fallback taunts
             if (not pfsExists(s)) then
                 begin
                 tempSnd := GetFallbackV(snd);
                 if tempSnd <> sndNone then
                     begin
-                    snd := tempSnd;
-                    LastVoice.snd := tempSnd;
+                    loadSnd := tempSnd;
+                    //LastVoice.snd := tempSnd;
                     end;
-                s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+                s:= cPathz[Soundz[loadSnd].Path] + '/' + voicepack^.name + '/' + Soundz[loadSnd].FileName;
                 end;
-            WriteToConsole(msgLoading + s + ' ');
+            WriteToConsole(msgLoading + s + ' ... ');
             rwops := rwopsOpenRead(s);
 
             if rwops = nil then
                 begin
-                s:= cPathz[Soundz[snd].AltPath] + '/' + Soundz[snd].FileName;
+                s:= cPathz[Soundz[loadSnd].AltPath] + '/' + Soundz[loadSnd].FileName;
                 WriteToConsole(msgLoading + s + ' ... ');
                 rwops := rwopsOpenRead(s);
                 end;
@@ -627,7 +629,7 @@ begin
         if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
-            WriteToConsole(msgLoading + s + ' ');
+            WriteToConsole(msgLoading + s + ' ... ');
             rwops := rwopsOpenRead(s);
 
             if rwops = nil then

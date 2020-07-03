@@ -51,7 +51,7 @@ implementation
 uses uVariables, GLunit, SDLh, SysUtils, uUtils, uSound, uIO, uMisc, uTypes, uDebug;
 
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
-const AvwrapperLibName = 'libavwrapper';
+const AvwrapperLibName = {$IFDEF WIN32_VCPKG}'avwrapper'{$ELSE}'libavwrapper'{$ENDIF};
 
 function AVWrapper_Init(
               AddLog: TAddFileLogRaw;

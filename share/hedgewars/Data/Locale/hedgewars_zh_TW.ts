@@ -875,11 +875,11 @@ Last engine message:
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">讀取</translation>
+        <translation>讀取</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>編輯</translation>
     </message>
 </context>
 <context>
@@ -1078,7 +1078,7 @@ Last engine message:
     </message>
     <message>
         <source>Warning: The same key is assigned multiple times!</source>
-        <translation type="unfinished"></translation>
+        <translation>警告! 同一個按鍵被重複分配</translation>
     </message>
 </context>
 <context>
@@ -2947,7 +2947,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Displayed tags above hogs and translucent tags</source>
-        <translation>刺蝟頭上顯示的標籤和半透明的標籤</translation>
+        <translation>刺蝟頭上的標示</translation>
     </message>
     <message>
         <source>World Edge</source>
@@ -2989,7 +2989,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Zoom (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>畫面縮放(%)</translation>
     </message>
 </context>
 <context>
@@ -3299,12 +3299,13 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>Server redirection</source>
-        <translation type="unfinished"></translation>
+        <translation>伺服器重定向</translation>
     </message>
     <message>
         <source>This server supports secure connections on port %1.
 Would you like to reconnect securely?</source>
-        <translation type="unfinished"></translation>
+        <translation>這個伺服器在端口%1支援加密連線。
+你要改用這個端口嗎?</translation>
     </message>
 </context>
 <context>
@@ -3829,7 +3830,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>toggle team bars</source>
         <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
-        <translation>切換隊伍資訊欄</translation>
+        <translation>隊伍資訊欄開關</translation>
     </message>
     <message>
         <source>pause / auto skip</source>
@@ -3837,7 +3838,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>toggle hedgehog tags</source>
-        <translation>切換刺蝟標示</translation>
+        <translation>刺蝟標示開關</translation>
     </message>
     <message>
         <source>change timer</source>
@@ -3857,55 +3858,55 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>stand still on slippery land</source>
-        <translation type="unfinished"></translation>
+        <translation>在滑溜的地面停住</translation>
     </message>
     <message>
         <source>change direction without moving</source>
-        <translation type="unfinished"></translation>
+        <translation>定點轉向</translation>
     </message>
     <message>
         <source>switch backwards</source>
-        <translation type="unfinished"></translation>
+        <translation>反向切換</translation>
     </message>
     <message>
         <source>change bounciness</source>
-        <translation type="unfinished"></translation>
+        <translation>改變反彈力度</translation>
     </message>
     <message>
         <source>reset zoom to start value</source>
-        <translation type="unfinished"></translation>
+        <translation>重置縮放率</translation>
     </message>
     <message>
         <source>set zoom to 100%</source>
-        <translation type="unfinished"></translation>
+        <translation>調整縮放率為100%</translation>
     </message>
     <message>
         <source>save map as image</source>
-        <translation type="unfinished"></translation>
+        <translation>保存地圖</translation>
     </message>
     <message>
         <source>show object information</source>
-        <translation type="unfinished"></translation>
+        <translation>物品資訊開關</translation>
     </message>
     <message>
         <source>change hedgehog tag types</source>
-        <translation type="unfinished"></translation>
+        <translation>刺蝟標示樣式調整</translation>
     </message>
     <message>
         <source>toggle hedgehog tag translucency</source>
-        <translation type="unfinished"></translation>
+        <translation>刺蝟標示半透明開關</translation>
     </message>
     <message>
         <source>toggle HUD</source>
-        <translation type="unfinished"></translation>
+        <translation>抬頭顯示開關</translation>
     </message>
     <message>
         <source>backwards jump</source>
-        <translation type="unfinished"></translation>
+        <translation>向後跳</translation>
     </message>
     <message>
         <source>screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>擷圖</translation>
     </message>
 </context>
 <context>
@@ -3931,43 +3932,43 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>binds (combination)</name>
     <message>
         <source>hold down precise</source>
-        <translation type="unfinished"></translation>
+        <translation>壓住 精細瞄準</translation>
     </message>
     <message>
         <source>precise + left/right</source>
-        <translation type="unfinished"></translation>
+        <translation>精細瞄準 + 左/右</translation>
     </message>
     <message>
         <source>precise + switch</source>
-        <translation type="unfinished"></translation>
+        <translation>精細瞄準 + 切換</translation>
     </message>
     <message>
         <source>precise + timer</source>
-        <translation type="unfinished"></translation>
+        <translation>精細瞄準 + 定時控制</translation>
     </message>
     <message>
         <source>precise + reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>精細瞄準 + 重置縮放率</translation>
     </message>
     <message>
         <source>precise + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>精細瞄準 + 刺蝟標示開關</translation>
     </message>
     <message>
         <source>switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>切換 + 刺蝟標示開關</translation>
     </message>
     <message>
         <source>precise + switch + toggle hedgehog tags</source>
-        <translation type="unfinished"></translation>
+        <translation>精細瞄準 + 切換 + 隊伍資訊欄開關</translation>
     </message>
     <message>
         <source>high jump (twice)</source>
-        <translation type="unfinished"></translation>
+        <translation>跳高（兩次）</translation>
     </message>
     <message>
         <source>precise + screenshot</source>
-        <translation type="unfinished"></translation>
+        <translation>精細瞄準 + 擷圖</translation>
     </message>
 </context>
 <context>
@@ -4026,7 +4027,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation>截圖：</translation>
+        <translation>擷取螢幕畫面：</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
@@ -4385,138 +4386,138 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Mouse: X1 button </source>
-        <translation type="unfinished"></translation>
+        <translation>滑鼠：X1鍵</translation>
     </message>
     <message>
         <source>Mouse: X2 button</source>
-        <translation type="unfinished"></translation>
+        <translation>滑鼠：X2鍵</translation>
     </message>
     <message>
         <source>Keypad 0</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 0</translation>
     </message>
     <message>
         <source>Keypad 1</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 1</translation>
     </message>
     <message>
         <source>Keypad 2</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 2</translation>
     </message>
     <message>
         <source>Keypad 3</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 3</translation>
     </message>
     <message>
         <source>Keypad 4</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 4</translation>
     </message>
     <message>
         <source>Keypad 5</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 5</translation>
     </message>
     <message>
         <source>Keypad 6</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 6</translation>
     </message>
     <message>
         <source>Keypad 7</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 7</translation>
     </message>
     <message>
         <source>Keypad 8</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 8</translation>
     </message>
     <message>
         <source>Keypad 9</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 9</translation>
     </message>
     <message>
         <source>Keypad .</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 .</translation>
     </message>
     <message>
         <source>Keypad /</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 /</translation>
     </message>
     <message>
         <source>Keypad *</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 *</translation>
     </message>
     <message>
         <source>Keypad -</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 -</translation>
     </message>
     <message>
         <source>Keypad +</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 +</translation>
     </message>
     <message>
         <source>Keypad Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>數字小鍵盤 Enter</translation>
     </message>
     <message>
         <source>PageUp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>PageDown</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Numlock</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>CapsLock</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>ScrollLock</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Right Shift</source>
-        <translation type="unfinished"></translation>
+        <translation>右Shift</translation>
     </message>
     <message>
         <source>Left Shift</source>
-        <translation type="unfinished"></translation>
+        <translation>左Shift</translation>
     </message>
     <message>
         <source>Right Ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>右Ctrl</translation>
     </message>
     <message>
         <source>Left Ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>左Ctrl</translation>
     </message>
     <message>
         <source>Right Alt</source>
-        <translation type="unfinished"></translation>
+        <translation>右Alt</translation>
     </message>
     <message>
         <source>Left Alt</source>
-        <translation type="unfinished"></translation>
+        <translation>左Alt</translation>
     </message>
     <message>
         <source>Right GUI</source>
         <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>右Windows鍵</translation>
     </message>
     <message>
         <source>Left GUI</source>
         <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>左Windows鍵</translation>
     </message>
     <message>
         <source>(QWERTY)</source>
         <extracomment>Name of QWERTY US keyboard layout</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>(QWERTY)</translation>
     </message>
     <message>
         <source>Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>菜單鍵</translation>
     </message>
 </context>
 <context>
@@ -5542,7 +5543,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Warning! Room name change flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation>警告! 避免修改房間名氾濫的防護機制被啟動</translation>
     </message>
 </context>
 </TS>

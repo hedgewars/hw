@@ -33,6 +33,7 @@ var
     cFullscreenHeight  : LongInt;
     cWindowedWidth     : LongInt;
     cWindowedHeight    : LongInt;
+    cWindowedMaximized : boolean;
     cScreenWidth       : LongInt;
     cScreenHeight      : LongInt;
     cNewScreenWidth    : LongInt;
@@ -479,7 +480,7 @@ const
             (FileName:     'hhMask'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; critical: true; checkSum: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHHTelepMask
             (FileName:     'Switch'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSwitch
+            Width:  40; Height: 40; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSwitch
             (FileName:  'Parachute'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprParachute
             (FileName:     'Target'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -2589,6 +2590,7 @@ var
     bShowAmmoMenu: boolean;
     bSelected: boolean;
     bShowFinger: boolean;
+    bShowSwitcher: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
     SDTint, SkyColor, RQSkyColor, SDSkyColor: TSDL_Color;
@@ -2678,6 +2680,7 @@ begin
     cFullscreenHeight := 0;
     cWindowedWidth    := 1024;
     cWindowedHeight   := 768;
+    cWindowedMaximized:= false;
     cScreenWidth      := cWindowedWidth;
     cScreenHeight     := cWindowedHeight;
 

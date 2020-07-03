@@ -36,7 +36,7 @@ procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
      , uTypes, uVariables, uDebug, uUtils
-     , uPhysFSLayer, adler32, uRenderUtils;
+     , uPhysFSLayer, uRenderUtils;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -89,18 +89,18 @@ begin
     // this an if instead of masking colours to avoid confusing map creators
     if ((AMask and Pixel) = 0) then
         LandWord:= 0
-    else if Pixel = $FFFFFFFF then                  // white
+    else if (Pixel and AMask > 0) and (Pixel and RMask > 0) and (Pixel and GMask > 0) and (Pixel and BMask > 0) then // whiteish
         LandWord:= lfObject
-    else if Pixel = AMask then                      // black
+    else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask = 0) and (Pixel and BMask = 0) then // blackish
         begin
         LandWord:= lfBasic;
         disableLandBack:= false
         end
-    else if Pixel = (AMask or RMask) then           // red
+    else if (Pixel and AMask > 0) and (Pixel and RMask > 0) and (Pixel and GMask = 0) and (Pixel and BMask = 0) then // reddish
         LandWord:= lfIndestructible
-    else if Pixel = (AMask or BMask) then           // blue
+    else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask = 0) and (Pixel and BMask > 0) then // blueish
         LandWord:= lfObject or lfIce
-    else if Pixel = (AMask or GMask) then           // green
+    else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask > 0) and (Pixel and BMask = 0) then // greenish
         LandWord:= lfObject or lfBouncy
 end;
 
@@ -346,37 +346,13 @@ begin
     CountNonZeroz:= lRes;
 end;
 
-procedure ChecksumLandObjectImage(Image: PSDL_Surface);
-var y: LongInt;
-begin
-    if Image = nil then exit;
-
-    if SDL_MustLock(Image) then
-        SDL_LockSurface(Image);
-
-    if checkFails(Image^.format^.BytesPerPixel = 4, 'Land object image should be 32bit', true) then
-    begin
-        if SDL_MustLock(Image) then
-            SDL_UnlockSurface(Image);
-        exit
-    end;
-
-    for y := 0 to Image^.h-1 do
-        syncedPixelDigest:= Adler32Update(syncedPixelDigest, @PByteArray(Image^.pixels)^[y*Image^.pitch], Image^.w*4);
-
-    if SDL_MustLock(Image) then
-        SDL_UnlockSurface(Image);
-end;
-
 function AddGirder(gX: LongInt; var girSurf: PSDL_Surface): boolean;
 var x1, x2, y, k, i, girderHeight: LongInt;
     rr: TSDL_Rect;
     bRes: boolean;
 begin
 if girSurf = nil then
-    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps);
-
-ChecksumLandObjectImage(girsurf);
+    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifColorKey or ifIgnoreCaps or ifDigestAlpha);
 
 girderHeight:= girSurf^.h;
 
@@ -731,11 +707,10 @@ with overlay do
     Delete(s, 1, i);
     i:= Pos(',', s);
     if i = 0 then i:= Succ(Length(S));
-    Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps or ifCritical);
+    Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifColorKey or ifIgnoreCaps or ifCritical or ifDigestAlpha );
     Width:= Surf^.w;
     Height:= Surf^.h;
     Delete(s, 1, i);
-    ChecksumLandObjectImage(Surf);
     end;
 end;
 
@@ -935,18 +910,22 @@ while (not pfsEOF(f)) and allOK do
             begin
             i:= Pos(',', s);
             Name:= Trim(Copy(s, 1, Pred(i)));
-            Surf:= LoadDataImage(ptCurrTheme, Name, ifColorKey or ifIgnoreCaps or ifCritical);
+
+            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifColorKey or ifIgnoreCaps or ifDigestAll);
+            if Mask = nil then
+                Surf:= LoadDataImage(ptCurrTheme, Name, ifColorKey or ifIgnoreCaps or ifCritical or ifDigestAlpha)
+            else
+                Surf:= LoadDataImage(ptCurrTheme, Name, ifColorKey or ifIgnoreCaps or ifCritical);
+
             Width:= Surf^.w;
             Height:= Surf^.h;
-            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifColorKey or ifIgnoreCaps);
+
             Delete(s, 1, i);
             i:= Pos(',', s);
             Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
                 OutError('Broken theme. Object''s max. count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-            ChecksumLandObjectImage(Surf);
-            ChecksumLandObjectImage(Mask);
 
             inrectcnt := 0;
 

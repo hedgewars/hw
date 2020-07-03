@@ -2422,7 +2422,7 @@ begin
         doStepCase(Gear)
     else
         // health texture (FlightTime = health when the last texture was generated)
-        if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
+        if (not cOnlyStats) and ((Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil)) then
             begin
             Gear^.FlightTime:= Gear^.Health;
             FreeAndNilTexture(Gear^.Tex);
@@ -2500,7 +2500,7 @@ begin
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0;
         // health texture (FlightTime = health when the last texture was generated)
-        if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
+        if (not cOnlyStats) and ((Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil)) then
             begin
             Gear^.FlightTime:= Gear^.Health;
             FreeAndNilTexture(Gear^.Tex);
@@ -2523,12 +2523,14 @@ begin
                         i:= 1
                     else
                         i:= 0
+				else if cOnlyStats then
+					i:= 0
                 // Always show health (default)
                 else
                     i:= 1;
                 if i = 1 then
                     begin
-                    if (Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil) then
+                    if (not cOnlyStats) and ((Gear^.Health <> Gear^.FlightTime) or (Gear^.Tex = nil)) then
                         begin
                         Gear^.FlightTime:= Gear^.Health;
                         FreeAndNilTexture(Gear^.Tex);
@@ -2537,7 +2539,7 @@ begin
                     end
                 else
                     begin
-                    if (Gear^.FlightTime <> $ffffffff) or (Gear^.Tex = nil) then
+                    if (not cOnlyStats) and ((Gear^.FlightTime <> $ffffffff) or (Gear^.Tex = nil)) then
                         begin
                         Gear^.FlightTime:= $ffffffff;
                         FreeAndNilTexture(Gear^.Tex);
@@ -3317,6 +3319,7 @@ begin
             (hwRound(Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y)) > cBuildMaxDist)
             )));
     if distFail
+    or CheckGearsUnderSprite(Ammoz[Gear^.AmmoType].PosSprite, Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Gear^.State)
     or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State, true, LandFlags)) then
         begin
         PlaySound(sndDenied);
@@ -3477,6 +3480,7 @@ begin
         HHGear := CurrentHedgehog^.Gear;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
         DeleteGear(Gear);
+        bShowSwitcher:= false;
         exit
         end;
 
@@ -3537,6 +3541,9 @@ var
     HHGear: PGear;
 begin
     Gear^.doStep := @doStepSwitcherWork;
+
+    // Note: The game assumes there's at most only one gtSwitcher gear in the game.
+    bShowSwitcher:= true;
 
     HHGear := Gear^.Hedgehog^.Gear;
     OnUsedAmmo(HHGear^.Hedgehog^);
@@ -4610,7 +4617,7 @@ begin
 
     i:= Gear^.Health div 20;
 
-    if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+    if (not cOnlyStats) and (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
         begin
         Gear^.Damage:= i;
         FreeAndNilTexture(Gear^.Tex);
@@ -4619,8 +4626,12 @@ begin
         end;
 
     if (HHGear^.Message and (gmAttack or gmUp or gmLeft or gmRight) <> 0) and
-       (HHGear^.Message and gmPrecise = 0) then
+       (HHGear^.Message and gmPrecise = 0) and
+       ((Gear^.State and gsttmpFlag) <> 0) then
+        begin
         Gear^.State := Gear^.State and (not gsttmpFlag);
+        HHGear^.dX := Gear^.dX;
+        end;
 
     if HHGear^.Message and gmPrecise = 0 then
         HHGear^.Message := HHGear^.Message and (not (gmUp or gmLeft or gmRight));
@@ -4635,7 +4646,9 @@ begin
 
     if ((Gear^.State and gsttmpFlag) = 0)
     or (HHGear^.dY < _0) then
-        doStepHedgehogMoving(HHGear);
+        doStepHedgehogMoving(HHGear)
+    else
+        HHGear^.dX:= SignAs(_0, HHGear^.dX);
 
     if
         (HHGear^.Damage <> 0)
@@ -4680,8 +4693,8 @@ begin
         if (dY < _0_1) and (dY > -_0_1) then
             begin
             Gear^.State := Gear^.State or gsttmpFlag;
-            dX := SignAs(_0, dX);
-            dY := dY - _0_2
+            dY := dY - _0_2;
+            Gear^.dX:= dX;
             end
         end
 end;
@@ -5876,7 +5889,7 @@ begin
     else
         begin
         i:= Gear^.Health div 5;
-        if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+        if (not cOnlyStats) and (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
             FreeAndNilTexture(Gear^.Tex);
@@ -5967,7 +5980,7 @@ begin
     else
         begin
         i:= Gear^.Health div 10;
-        if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+        if (not cOnlyStats) and (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
             FreeAndNilTexture(Gear^.Tex);
@@ -6486,7 +6499,7 @@ var
   t:LongInt;
 begin
     t:= Gear^.Health div 10;
-    if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+    if (not cOnlyStats) and (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
     begin
     Gear^.Damage:= t;
     FreeAndNilTexture(Gear^.Tex);

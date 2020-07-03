@@ -1,13 +1,9 @@
 use std::ops::RangeInclusive;
 
-use crate::{
-    common::{GearData, GearDataProcessor, GearId},
-    grid::Grid,
-    physics::PhysicsData,
-};
+use crate::{common::GearId, data::GearDataManager, grid::Grid};
 
 use fpnum::*;
-use integral_geometry::{GridIndex, Point, Size};
+use integral_geometry::{Point, Size};
 use land2d::Land2D;
 
 pub fn fppoint_round(point: &FPPoint) -> Point {
@@ -38,15 +34,11 @@ pub struct CollisionData {
     pub bounds: CircleBounds,
 }
 
-impl GearData for CollisionData {}
-
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct ContactData {
     pub elasticity: FPNum,
     pub friction: FPNum,
 }
-
-impl GearData for ContactData {}
 
 struct EnabledCollisionsCollection {
     gear_ids: Vec<GearId>,
@@ -108,12 +100,29 @@ impl DetectedCollisions {
 }
 
 impl CollisionProcessor {
+    pub fn register_components(data: &mut GearDataManager) {
+        data.register::<CollisionData>();
+        data.register::<ContactData>();
+    }
+
     pub fn new(size: Size) -> Self {
         Self {
             grid: Grid::new(size),
             enabled_collisions: EnabledCollisionsCollection::new(),
             detected_collisions: DetectedCollisions::new(0),
         }
+    }
+
+    pub fn add(&mut self, gear_id: GearId, gear_data: CollisionData) {
+        self.grid.insert_static(gear_id, &gear_data.bounds);
+    }
+
+    pub fn remove(&mut self, gear_id: GearId) {
+        self.grid.remove(gear_id);
+    }
+
+    pub fn get(&mut self, gear_id: GearId) -> Option<CollisionData> {
+        None
     }
 
     pub fn process(
@@ -140,15 +149,5 @@ impl CollisionProcessor {
         }
 
         &self.detected_collisions
-    }
-}
-
-impl GearDataProcessor<CollisionData> for CollisionProcessor {
-    fn add(&mut self, gear_id: GearId, gear_data: CollisionData) {
-        self.grid.insert_static(gear_id, &gear_data.bounds);
-    }
-
-    fn remove(&mut self, gear_id: GearId) {
-        self.grid.remove(gear_id);
     }
 }

@@ -219,9 +219,6 @@ char* fpcrtl__pcharA__vars(astring * s)
     return &s->s[1];
 }
 
-#ifdef EMSCRIPTEN
-GLenum glewInit()
-{
-    return GLEW_OK;
+void fpcrtl_glShaderSource(GLuint shader, GLsizei count,/* const dropped for pas2c compat */ GLchar **string, const GLint *length) {
+    glShaderSource(shader, count, (const char * const *)string, length);
 }
-#endif
