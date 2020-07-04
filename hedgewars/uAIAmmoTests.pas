@@ -493,7 +493,7 @@ repeat
 
         // Apply inaccuracy
         if (not aiLaserSighting) then
-            inc(ap.Angle, + AIrndSign(random((Level - 1) * 9)));
+            inc(ap.Angle, AIrndSign(random((Level - 1) * 9)));
 
         if (valueResult <= 0) then
             valueResult:= BadTurn;
@@ -982,7 +982,7 @@ Vy:= (Targ.Point.Y - y) * 1 / 1024;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 // Apply inaccuracy
 if (not aiLaserSighting) then
-    inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
+    inc(ap.Angle, AIrndSign(random((Level - 1) * 10)));
 repeat
     x:= x + vX;
     y:= y + vY;
@@ -1039,7 +1039,7 @@ Vy:= (Targ.Point.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 // Apply inaccuracy
 if (not aiLaserSighting) then
-    inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
+    inc(ap.Angle, AIrndSign(random((Level - 1) * 10)));
 d:= 0;
 
 ix:= trunc(x);
@@ -1095,7 +1095,7 @@ Vx:= (Targ.Point.X - x) * t;
 Vy:= (Targ.Point.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 // Apply inaccuracy
-inc(ap.Angle, + AIrndSign(random((Level - 1) * 5)));
+inc(ap.Angle, AIrndSign(random((Level - 1) * 5)));
 
 d:= 0;
 
@@ -1325,7 +1325,7 @@ Flags:= Flags; // avoid compiler hint
         ap.Angle:= DxDy2AttackAnglef(dx, -dy);
         // Apply inaccuracy
         if (not aiLaserSighting) then
-            inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
+            inc(ap.Angle, AIrndSign(random((Level - 1) * 10)));
         end;
 
     if dx >= 0 then cx:= 0.45 else cx:= -0.45;
@@ -2220,7 +2220,7 @@ repeat
         // Apply inaccuracy
         inc(ap.Power, (random(93*(Level-1)) - 31*(Level-1))); // Level 1 spread: -124 .. 248
         if (not aiLaserSighting) then
-            inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
+            inc(ap.Angle, AIrndSign(random((Level - 1) * 10)));
 
         if (valueResult <= 0) then
             valueResult:= BadTurn;
@@ -2267,7 +2267,7 @@ if (ap.Angle < Ammoz[amMinigun].minAngle) or (ap.Angle > Ammoz[amMinigun].maxAng
 
 // Apply inaccuracy
 if (not aiLaserSighting) then
-    inc(ap.Angle, + AIrndSign(random((Level - 1) * 10)));
+    inc(ap.Angle, AIrndSign(random((Level - 1) * 10)));
 repeat
     x:= x + vX;
     y:= y + vY;
