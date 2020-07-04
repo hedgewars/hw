@@ -398,16 +398,29 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
             groupGame->layout()->addWidget(WeaponTooltip, 10, 0, 1, 2);
 
-            groupGame->addDivider();
+            // Chat size adjustment
+            QLabel *labelChatSize = new QLabel(groupGame);
+            labelChatSize->setText(QLabel::tr("Initial chat size (%)"));
+            labelChatSize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            groupGame->layout()->addWidget(labelChatSize, 11, 0);
+
+            sbChatSize = new QSpinBox(groupGame);
+            sbChatSize->setSingleStep(5);
+            sbChatSize->setMinimum(80);
+            sbChatSize->setMaximum(2000);
+            sbChatSize->setValue(100);
+            groupGame->layout()->addWidget(sbChatSize, 11, 1, Qt::AlignLeft);
+
+            groupGame->addDivider(); // row 12
 
             lblTags = new QLabel(groupGame);
             lblTags->setText(QLabel::tr("Displayed tags above hogs and translucent tags"));
-            groupGame->layout()->addWidget(lblTags, 12, 0, 1, 2);
+            groupGame->layout()->addWidget(lblTags, 13, 0, 1, 2);
 
             tagsContainer = new QWidget();
             QHBoxLayout * tagsLayout = new QHBoxLayout(tagsContainer);
             tagsLayout->setSpacing(0);
-            groupGame->layout()->addWidget(tagsContainer, 13, 0, 1, 2);
+            groupGame->layout()->addWidget(tagsContainer, 14, 0, 1, 2);
 
             CBTeamTag = new QCheckBox(groupGame);
             CBTeamTag->setText(QCheckBox::tr("Team"));
@@ -713,21 +726,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
             BtnAssociateFiles->setVisible(!custom_data && !custom_config);
             groupMisc->layout()->addWidget(BtnAssociateFiles, 4, 0, 1, 2);
-
-            // Divider
-
-            groupMisc->addDivider(); // row 5
-
-            QLabel *labelChatSize = new QLabel(groupMisc);
-            labelChatSize->setText(QLabel::tr("Initial in-game chat size (%)"));
-            groupMisc->layout()->addWidget(labelChatSize, 6, 0);
-
-            // Chat size adjustment
-            sbChatSize = new QSpinBox(groupMisc);
-            sbChatSize->setMinimum(80);
-            sbChatSize->setMaximum(2000);
-            sbChatSize->setValue(100);
-            groupMisc->layout()->addWidget(sbChatSize, 6, 1);
 
         }
 
