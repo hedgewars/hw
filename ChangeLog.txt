@@ -34,15 +34,13 @@ Content:
  + New flags: serbia, montenegro
  + New hat: zoo_panda
 
-Graphics:
+Graphics / user interface:
  + Add dynamite fuse and impact sounds
  + Themes: Add fade-in and fade-out effects for background flakes
  + Themes: Make Sudden Death jellyfish in Underwater theme rise
+ + In-Game chat size can now be adjusted. Hold Ctrl and press -, + or = while in chat input. Hold Shift for finer control
+ + The intial in-game chat size can be configured in the Frontend's “Video” settings tab
  + Various small HUD tweaks
-
-User Interface:
- + In-Game chat size can now be adjusted. Hold Ctrl and press -, + or = while in chat input. Hold shift for finer control.
- + The intial in-game chat size can be configured in the Frontend's "advanced" settings tab.
 
 Frontend:
  + Sort ammos in weapon scheme editor
