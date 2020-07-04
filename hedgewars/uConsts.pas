@@ -240,6 +240,14 @@ const
     cCamLimitBorderX = 1920; // X (left/right) camera limit, with border
     cCamLimitBorderY = 2048; // Top Y camera limit, with border
 
+    cFontPxToPtRatio   = 1.3281472327365;
+    cBaseChatFontHeight = 12;
+    cChatScaleRelDelta = 0.1;
+    cMinChatScaleValue = 0.8;
+    cMaxChatScaleValue = 10.0;
+
+    cDefaultUIScaleLevel = 1.0;
+
     // game flags
     gfAny                = $FFFFFFFF; // mask for all possible gameflags
     gfOneClanMode        = $00000001; // Game does not end if there's only one clan in play. For missions

@@ -106,6 +106,7 @@ class PageOptions : public AbstractPage
 
         FPSEdit *fpsedit;
         QLabel *labelNN;
+        QSpinBox * sbChatSize;
         QSlider *SLVolume;
         QLabel *lblVolumeLevel;
         QLineEdit *editNetNick;

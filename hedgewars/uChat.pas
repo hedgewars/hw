@@ -35,7 +35,7 @@ procedure CopyToClipboard(var newContent: shortstring);
 procedure TextInput(var event: TSDL_TextInputEvent);
 
 implementation
-uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uLocale
+uses uConsts, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uStore, uLocale
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec{$ENDIF};
 
 const MaxStrIndex = 27;
@@ -94,8 +94,14 @@ const
             );
 
 
-const Padding  = 2;
-      ClHeight = 2 * Padding + 16; // font height
+const PaddingFactor = 0.125; // relative to font size in pixels
+
+var Padding, ClHeight: integer;
+    LastChatScaleValue, LastUIScaleValue: real;
+    SkipNextInput: boolean;
+
+procedure UpdateInputLinePrefix(); forward;
+procedure UpdateCursorCoords(); forward;
 
 // relevant for UTF-8 handling
 function IsFirstCharByte(c: char): boolean; inline;
@@ -114,26 +120,106 @@ begin
     selectedPos:= -1;
 end;
 
+procedure AdjustToUIScale();
+var fntSize, fntSizePx: integer;
+begin
+    // don't do anything if no change
+    if (ChatScaleValue = LastChatScaleValue) and (UIScaleValue = LastUIScaleValue) then
+        exit;
+
+    LastChatScaleValue:= ChatScaleValue;
+    LastUIScaleValue:= UIScaleValue;
+
+    fntSize:= max(1, round(UIScaleValue * ChatScaleValue * cBaseChatFontHeight));
+
+    if Fontz[fntChat].Height <> fntSize then
+        begin
+        // adjust associated heights
+        Fontz[fntChat].Height:= fntSize;
+        Fontz[CJKfntChat].Height:= fntSize;
+        // reload if initialized already
+        if Fontz[fntChat].Handle <> nil then
+            LoadFont(fntChat);
+        if Fontz[CJKfntChat].Handle <> nil then
+            LoadFont(CJKfntChat);
+        end;
+
+    // adjust line height etc.
+    fntSizePx:= round(cFontPxToPtRatio * fntSize);
+    Padding:= max(1, round(PaddingFactor * fntSizePx));
+
+    ClHeight:= 2 * Padding + fntSizePx;
+
+    // clear cache of already rendered lines
+    ReloadLines();
+    UpdateInputLinePrefix();
+    UpdateCursorCoords();
+end;
+
+procedure ChatSizeInc(pxprecise: boolean);
+var fntSize: integer;
+begin
+if pxprecise then
+    begin
+    fntSize:= Fontz[fntChat].Height;
+    inc(fntSize);
+    ChatScaleValue:= 1.0 * fntSize / cBaseChatFontHeight;
+    end
+else
+    ChatScaleValue:= ChatScaleValue * (1.0 + cChatScaleRelDelta);
+if ChatScaleValue > cMaxChatScaleValue then
+    ChatScaleValue:= cMaxChatScaleValue;
+AdjustToUIScale();
+end;
+
+procedure ChatSizeDec(pxprecise: boolean);
+var fntSize: integer;
+begin
+if pxprecise then
+    begin
+    fntSize:= Fontz[fntChat].Height;
+    dec(fntSize);
+    ChatScaleValue:= 1.0 * fntSize / cBaseChatFontHeight;
+    end
+else
+    ChatScaleValue:= ChatScaleValue / (1.0 + cChatScaleRelDelta);
+if ChatScaleValue < cMinChatScaleValue then
+    ChatScaleValue:= cMinChatScaleValue;
+AdjustToUIScale();
+end;
+
+procedure chatSizeReset();
+begin
+ChatScaleValue:= cDefaultChatScale;
+AdjustToUIScale();
+end;
+
+function GetChatFont(str: shortstring): THWFONT;
+begin
+    GetChatFont:= CheckCJKFont(ansistring(str), fntChat);
+end;
+
 procedure UpdateCursorCoords();
 var font: THWFont;
     str : shortstring;
     coff, soff: LongInt;
 begin
+    AdjustToUIScale();
+
     if cursorPos = selectedPos then
         ResetSelection();
 
     // calculate cursor offset
 
     str:= InputStr.s;
-    font:= CheckCJKFont(ansistring(str), fnt16);
+    font:= GetChatFont(str);
 
     // get only substring before cursor to determine length
     // SetLength(str, cursorPos); // makes pas2c unhappy
     str[0]:= char(cursorPos);
     // get render size of text
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @coff, nil);
-
-    cursorX:= 2 + coff;
+    cursorX:= Padding + coff;
 
     // calculate selection width on screen
     if selectedPos >= 0 then
@@ -171,7 +257,7 @@ begin
 
 FreeAndNilTexture(cl.Tex);
 
-font:= CheckCJKFont(ansistring(str), fnt16);
+font:= GetChatFont(str);
 
 // get render size of text
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @cl.Width, nil);
@@ -245,8 +331,9 @@ end;
 procedure ReloadLines;
 var i: LongWord;
 begin
-    if InputStr.s <> '' then
-        SetLine(InputStr, InputStr.s, true);
+    // also reload empty input line (as chat size/scaling might have changed)
+    //if InputStr.s <> '' then
+    SetLine(InputStr, InputStr.s, true);
     for i:= 0 to MaxStrIndex do
         if Strs[i].s <> '' then
             begin
@@ -294,6 +381,8 @@ var i, t, left, top, cnt: LongInt;
     selRect: TSDL_Rect;
     c: char;
 begin
+AdjustToUIScale();
+
 ChatReady:= true; // maybe move to somewhere else?
 
 if ChatHidden and (not showAll) then
@@ -329,12 +418,12 @@ if isInChatMode and (InputStr.Tex <> nil) then
         begin
         // draw cursor
         if ((RealTicks - LastKeyPressTick) and 512) < 256 then
-            DrawLineOnScreen(left + cursorX, top + 2, left + cursorX, top + ClHeight - 2, 2.0, $00, $FF, $FF, $FF);
+            DrawLineOnScreen(left + cursorX, top + Padding, left + cursorX, top + ClHeight - Padding, max(2, round(UIScaleValue * ChatScaleValue * 2.0)), $00, $FF, $FF, $FF);
         end
     else // draw selection
         begin
-        selRect.y:= top + 2;
-        selRect.h:= clHeight - 4;
+        selRect.y:= top + Padding;
+        selRect.h:= clHeight - 2 * Padding;
         if selectionDx < 0 then
             begin
             selRect.x:= left + cursorX + selectionDx;
@@ -1068,7 +1157,7 @@ begin
             // ignore me!!!
             end;
         // TODO: figure out how to determine those keys better
-        SDL_SCANCODE_a:
+        SDL_SCANCODE_b:
             begin
             // select all
             if ctrlonly then
@@ -1104,6 +1193,33 @@ begin
                 DeleteSelected();
                 end
             end;
+            // make chat bigger
+        SDL_SCANCODE_KP_PLUS, SDL_SCANCODE_EQUALS:
+            begin
+            if ctrl then
+                begin
+                ChatSizeInc(selMode);
+                SkipNextInput:= true;
+                end;
+            end;
+            // make chat smaller
+        SDL_SCANCODE_KP_MINUS, SDL_SCANCODE_MINUS:
+            begin
+            if ctrl then
+                begin
+                ChatSizeDec(selMode);
+                SkipNextInput:= true;
+                end;
+            end;
+            // revert chat size to default
+        SDL_SCANCODE_KP_0, SDL_SCANCODE_0:
+            begin
+            if ctrl then
+                begin
+                ChatSizeReset();
+                SkipNextInput:= true;
+                end;
+            end;
         end;
 end;
 
@@ -1112,16 +1228,25 @@ var s: shortstring;
     l: byte;
     isl: integer;
 begin
+    if SkipNextInput then
+        begin
+        SkipNextInput:= false;
+        exit;
+        end;
+
     DeleteSelected();
 
+    s:= '';
     l:= 0;
     // fetch all bytes of character/input
     while event.text[l] <> #0 do
         begin
-        s[l + 1]:= event.text[l];
-        inc(l)
+        if Length(s) < 255 then
+            begin
+            s[l + 1]:= event.text[l];
+            inc(l)
+            end
         end;
-
     if l > 0 then
         begin
         isl:= Length(InputStr.s);
@@ -1236,6 +1361,10 @@ begin
     liveLua:= false;
     ChatHidden:= false;
     firstDraw:= true;
+
+    LastChatScaleValue:= 0;
+    LastUIScaleValue:= 0;
+    SkipNextInput:= false;
 
     InputLinePrefix.Tex:= nil;
     UpdateInputLinePrefix();

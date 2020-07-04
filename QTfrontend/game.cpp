@@ -657,6 +657,8 @@ QStringList HWGame::getArguments()
         arguments << "--translucent-tags";
     if (!config->isHolidaySillinessEnabled())
         arguments << "--no-holiday-silliness";
+    arguments << "--chat-size";
+    arguments << QString::number(config->chatSize());
 
     return arguments;
 }

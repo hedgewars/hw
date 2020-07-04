@@ -40,6 +40,10 @@ Graphics:
  + Themes: Make Sudden Death jellyfish in Underwater theme rise
  + Various small HUD tweaks
 
+User Interface:
+ + In-Game chat size can now be adjusted. Hold Ctrl and press -, + or = while in chat input. Hold shift for finer control.
+ + The intial in-game chat size can be configured in the Frontend's "advanced" settings tab.
+
 Frontend:
  + Sort ammos in weapon scheme editor
  * Fix weapon schemes sometimes not being saved properly

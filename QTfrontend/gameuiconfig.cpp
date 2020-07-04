@@ -178,6 +178,8 @@ void GameUIConfig::reloadValues(void)
             if (m_binds[i].strbind.isEmpty() || m_binds[i].strbind == "default") m_binds[i].strbind = cbinds[i].strbind;
         }
     }
+
+    Form->ui.pageOptions->sbChatSize->setValue(value("chat/size", 100).toInt());
 }
 
 void GameUIConfig::reloadVideosValues(void)
@@ -331,6 +333,8 @@ void GameUIConfig::SaveOptions()
         for(int i = model->rowCount() - 1; i >= 0; --i)
             setValue(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>().name());
     }
+
+    setValue("chat/size", Form->ui.pageOptions->sbChatSize->value());
 
     sync();
 }
@@ -645,6 +649,11 @@ void GameUIConfig::setNetPasswordLength(int passwordLength)
     {
         Form->ui.pageOptions->editNetPassword->setText("");
     }
+}
+
+int GameUIConfig::chatSize()
+{
+    return Form->ui.pageOptions->sbChatSize->value();
 }
 
 quint8 GameUIConfig::volume()

@@ -156,6 +156,8 @@ QStringList HWRecorder::getArguments()
         arguments << config->audioCodec();
     else
         arguments << "no";
+    arguments << "--chat-size";
+    arguments << QString::number(config->chatSize());
 
     return arguments;
 }

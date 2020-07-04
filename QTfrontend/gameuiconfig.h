@@ -53,6 +53,7 @@ class GameUIConfig : public QSettings
         bool isShowFPSEnabled();
         bool isAltDamageEnabled();
         bool appendDateTimeToRecordName();
+        int chatSize();
         quint8 volume();
         quint8 timerInterval();
         QString netNick();
