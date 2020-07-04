@@ -2980,8 +2980,6 @@ begin
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
-    zoom            := cDefaultZoomLevel;
-    ZoomValue       := cDefaultZoomLevel;
 
     if cDefaultChatScale < cMinChatScaleValue then
         cDefaultChatScale := cMinChatScaleValue
