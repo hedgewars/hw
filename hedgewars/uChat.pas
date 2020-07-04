@@ -94,7 +94,7 @@ const
             );
 
 
-const PaddingFactor = (1/6); // relative to font size
+const PaddingFactor = 0.125; // relative to font size in pixels
 
 var Padding, ClHeight: integer;
     LastChatScaleValue, LastUIScaleValue: real;
@@ -121,7 +121,7 @@ begin
 end;
 
 procedure AdjustToUIScale();
-var fntSize: integer;
+var fntSize, fntSizePx: integer;
 begin
     // don't do anything if no change
     if (ChatScaleValue = LastChatScaleValue) and (UIScaleValue = LastUIScaleValue) then
@@ -130,8 +130,7 @@ begin
     LastChatScaleValue:= ChatScaleValue;
     LastUIScaleValue:= UIScaleValue;
 
-    // determine font size - note: +0.001 to because I don't trust float inaccuracy combined with trunc
-    fntSize:= max(1, trunc(UIScaleValue * ChatScaleValue * cBaseChatFontHeight + 0.001));
+    fntSize:= max(1, round(UIScaleValue * ChatScaleValue * cBaseChatFontHeight));
 
     if Fontz[fntChat].Height <> fntSize then
         begin
@@ -146,8 +145,10 @@ begin
         end;
 
     // adjust line height etc.
-    Padding:= max(1, trunc(PaddingFactor * fntSize + 0.1));
-    ClHeight:= 2 * Padding + fntSize;
+    fntSizePx:= round(cFontPxToPtRatio * fntSize);
+    Padding:= max(1, round(PaddingFactor * fntSizePx));
+
+    ClHeight:= 2 * Padding + fntSizePx;
 
     // clear cache of already rendered lines
     ReloadLines();
@@ -285,7 +286,7 @@ strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), cl.color
 if strSurface <> nil then tmpSurface:= SDL_ConvertSurface(strSurface, resSurface^.format, 0);
 SDL_FreeSurface(strSurface);
 //SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
-if tmpSurface <> nil then copyToXY(tmpSurface, resSurface, Padding, 2);
+if tmpSurface <> nil then copyToXY(tmpSurface, resSurface, Padding, Padding);
 SDL_FreeSurface(tmpSurface);
 
 cl.Tex:= Surface2Tex(resSurface, false);
@@ -417,7 +418,7 @@ if isInChatMode and (InputStr.Tex <> nil) then
         begin
         // draw cursor
         if ((RealTicks - LastKeyPressTick) and 512) < 256 then
-            DrawLineOnScreen(left + cursorX, top + Padding, left + cursorX, top + ClHeight - Padding, 2.0, $00, $FF, $FF, $FF);
+            DrawLineOnScreen(left + cursorX, top + Padding, left + cursorX, top + ClHeight - Padding, max(2, round(UIScaleValue * ChatScaleValue * 2.0)), $00, $FF, $FF, $FF);
         end
     else // draw selection
         begin

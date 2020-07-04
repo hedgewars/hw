@@ -230,10 +230,11 @@ const
     // do not change this value
     cDefaultZoomLevel = 2.0; // 100% zoom
 
+    cFontPxToPtRatio   = 1.3281472327365;
     cBaseChatFontHeight = 12;
     cChatScaleRelDelta = 0.1;
     cMinChatScaleValue = 0.8;
-    cMaxChatScaleValue = 20.0;
+    cMaxChatScaleValue = 10.0;
 
     cDefaultUIScaleLevel = 1.0;
 
