@@ -1445,7 +1445,10 @@ repeat
             if TestColl(trunc(X) + LongWord(i * 30), trunc(Y), 4) then
                 begin
                 b[i]:= false;
-                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 58);
+                if Level = 1 then
+                    dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 58, afTrackFall or afErasesLand)
+                else
+                    dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 58);
                 // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
                 if (not firstHit) then
                     begin
@@ -1569,7 +1572,10 @@ while attackTime >= 0 do
             // Simulate explosion
             if collided then
                 begin
-                dmg[i]:= RateExplosion(Me, trunc(drillX), trunc(drillY), 58);
+                if Level = 1 then
+                    dmg[i]:= RateExplosion(Me, trunc(drillX), trunc(drillY), 58, afTrackFall or afErasesLand)
+                else
+                    dmg[i]:= RateExplosion(Me, trunc(drillX), trunc(drillY), 58);
                 // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
                 if not firstHit then
                     begin
@@ -1690,7 +1696,11 @@ repeat
             if TestColl(trunc(X) + LongWord(i * 30), trunc(Y), 4) then
                 begin
                 b[i]:= false;
-                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 96);
+                if Level = 1 then
+                    dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 96, afTrackFall or afErasesLand)
+                else
+                    dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 96);
+
                 if (not firstHit) then
                     begin
                     targetY:= trunc(Y);
