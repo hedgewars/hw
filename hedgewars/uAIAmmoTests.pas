@@ -64,6 +64,7 @@ function TestSMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPara
 function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestResurrector(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestSeduction(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -130,7 +131,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amFlamethrower
             (proc: @TestSMine;       flags: 0), // amSMine
             (proc: @TestHammer;      flags: amtest_NoTarget or amtest_NoInvulnerable), // amHammer
-            (proc: nil;              flags: 0), // amResurrector
+            (proc: @TestResurrector; flags: amtest_NoTarget or amtest_NoInvulnerable or amtest_NoVampiric), // amResurrector
             (proc: @TestDrillStrike; flags: amtest_Rare), // amDrillStrike
             (proc: nil;              flags: 0), // amSnowball
             (proc: nil;              flags: 0), // amTardis
@@ -1485,6 +1486,40 @@ for i:= 0 to 3 do
 if valueResult <= 0 then
     valueResult:= BadTurn;
 TestAirAttack:= valueResult;
+end;
+
+function TestResurrector(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+var rate, heal: LongInt;
+begin
+Flags:= Flags; // avoid compiler hint
+Targ:= Targ;
+
+if (Level = 5) then
+    exit(BadTurn);
+
+if (Me^.Health <= 1) then
+    exit(BadTurn);
+
+if (Level <= 2) and (Me^.Hedgehog^.Effects[hePoisoned] > 0) then
+    // Sacrifice almost all health if poisoned
+    heal:= Me^.Health - 1
+else
+    // Sacrifice up to 10% of own health
+    heal:= (Me^.Health div 10);
+
+ap.ExplR:= 0;
+ap.Time:= 0;
+if (GameFlags and gfInfAttack) = 0 then
+    ap.Power:= max(min(500 * heal - 500, 10000), 10)
+else
+    // Shorter attack duration in inf attack because the clock is ticking!
+    ap.Power:= max(min(500 * heal - 500, 3000), 10);
+ap.Angle:= 0;
+
+rate:= RateResurrector(Me);
+if rate <= 0 then
+    rate:= BadTurn;
+TestResurrector:= rate;
 end;
 
 function TestDrillStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;

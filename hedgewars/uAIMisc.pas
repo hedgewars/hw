@@ -88,6 +88,7 @@ function  RealRateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongI
 function  RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 function  RateSeduction(Me: PGear): LongInt;
+function  RateResurrector(Me: PGear): LongInt;
 function  RateHammer(Me: PGear): LongInt;
 
 function  HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
@@ -102,6 +103,7 @@ var ThinkingHH: PGear;
     walkbonuses: Twalkbonuses;
 
 const KillScore = 200;
+      ResurrectScore = 100;
 var friendlyfactor: LongInt = 300;
 var dmgMod: real = 1.0;
 
@@ -137,6 +139,8 @@ while Gear <> nil do
             (Gear <> ThinkingHH) and
             (Gear^.Health > Gear^.Damage) and
             (not Gear^.Hedgehog^.Team^.hasgone)) or
+        ((Gear^.Kind = gtGrave) and
+            (Gear^.Health = 0)) or
         ((Gear^.Kind = gtExplosives) and
             (Gear^.Health > Gear^.Damage)) or
         ((Gear^.Kind = gtMine) and
@@ -170,6 +174,17 @@ while Gear <> nil do
                     inc(e)
                     end;
                 end
+            else if Gear^.Kind = gtGrave then
+                if (Gear^.Hedgehog^.Team^.Clan = CurrentTeam^.Clan) then
+                    begin
+                    Score:= ResurrectScore;
+                    inc(f);
+                    end
+                else
+                    begin
+                    Score:= -ResurrectScore;
+                    inc(e);
+                    end
             else if Gear^.Kind = gtExplosives then
                 Score:= Gear^.Health - Gear^.Damage
             else if Gear^.Kind = gtMine then
@@ -921,6 +936,45 @@ if hadSkips and (rate <= 0) then
     RateSeduction:= BadTurn
 else
     RateSeduction:= rate * 1024;
+end;
+
+function RateResurrector(Me: PGear): LongInt;
+var i, r, rate, pX, pY: LongInt;
+    meX, meY: hwFloat;
+    hadSkips: boolean;
+begin
+meX:= Me^.X;
+meY:= Me^.Y;
+rate:= 0;
+for i:= 0 to Targets.Count do
+    if (Targets.ar[i].Kind = gtGrave) and (not Targets.ar[i].dead) then
+        with Targets.ar[i] do
+            begin
+            pX:= Point.X;
+            pY:= Point.Y;
+
+            if (not matters) then
+                hadSkips:= true
+            else if matters and (abs(pX - hwRound(meX)) + abs(pY - hwRound(meY)) < cResurrectorDist) then
+                begin
+                r:= trunc(sqrt(sqr(abs(pX - hwRound(meX)))+sqr(abs(pY - hwRound(meY)))));
+                if r < cResurrectorDist then
+                    begin
+                    if Score > 0 then
+                        inc(rate, Score * 1024)
+                    else
+                        inc(rate, Score * friendlyFactor div 100 * 1024);
+                    // a "dead" grave is a grave that we have resurrected
+                    dead:= true;
+                    Targets.reset:= true;
+                    end;
+                end;
+            end;
+
+if hadSkips and (rate <= 0) then
+    RateResurrector:= BadTurn
+else
+    RateResurrector:= rate * 1024;
 end;
 
 function RateHammer(Me: PGear): LongInt;
