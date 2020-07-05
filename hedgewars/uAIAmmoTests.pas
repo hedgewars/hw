@@ -1401,8 +1401,8 @@ const cShift = 4;
 var bombsSpeed, X, Y, dX, dY: real;
     b: array[0..9] of boolean;
     dmg: array[0..9] of LongInt;
-    fexit: boolean;
-    i, t, valueResult: LongInt;
+    fexit, firstHit: boolean;
+    i, t, valueResult, targetY: LongInt;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
@@ -1428,6 +1428,7 @@ for i:= 0 to 9 do
     dmg[i]:= 0
     end;
 valueResult:= 0;
+firstHit:= false;
 
 repeat
     X:= X + dX;
@@ -1444,8 +1445,14 @@ repeat
             if TestColl(trunc(X) + LongWord(i * 30), trunc(Y), 4) then
                 begin
                 b[i]:= false;
-                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 58)
+                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 58);
                 // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
+                if (not firstHit) then
+                    begin
+                    firstHit:= true;
+                    // remember Y of first hit, used for target pos
+                    targetY:= trunc(Y);
+                    end;
                 end
             end;
 until fexit or (Y > cWaterLine);
@@ -1455,6 +1462,10 @@ for i:= 0 to 5 do
         inc(valueResult, dmg[i]);
 t:= valueResult;
 ap.AttackPutX:= Targ.Point.X - 60;
+if firstHit then
+    // this is not strictly neccessry, it's just to make sure
+    // the X is on the height of the first hit
+    ap.AttackPutY:= targetY;
 
 for i:= 0 to 3 do
     if dmg[i] <> BadTurn then
@@ -1479,8 +1490,8 @@ const cShift = 4;
 var bombsSpeed, X, Y, dX, dY, drillX, drillY: real;
     t2: real;
     dmg: array[0..9] of LongInt;
-    collided, drilling, timerRuns: boolean;
-    i, t, value, valueResult, attackTime, drillTimer, targetX: LongInt;
+    collided, drilling, timerRuns, firstHit: boolean;
+    i, t, value, valueResult, attackTime, drillTimer, targetX, targetY: LongInt;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
@@ -1503,6 +1514,7 @@ while attackTime >= 0 do
     begin
     dec(attackTime, 1000);
     value:= 0;
+    firstHit:= false;
     for i:= 0 to 9 do
         begin
         dmg[i]:= 0;
@@ -1556,8 +1568,15 @@ while attackTime >= 0 do
 
             // Simulate explosion
             if collided then
+                begin
                 dmg[i]:= RateExplosion(Me, trunc(drillX), trunc(drillY), 58);
                 // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
+                if not firstHit then
+                    begin
+                    targetY:= trunc(drillY);
+                    firstHit:= true;
+                    end;
+                end;
         until collided or (drillY > cWaterLine);
         end;
 
@@ -1584,6 +1603,8 @@ while attackTime >= 0 do
         begin
         valueResult:= value;
         ap.AttackPutX:= targetX;
+        if firstHit then
+            ap.AttackPutY:= targetY;
         ap.Time:= attackTime;
         end;
 end;
@@ -1619,8 +1640,8 @@ const cShift = 4;
 var minesSpeed, X, Y, dX, dY: real;
     b: array[0..9] of boolean;
     dmg: array[0..9] of LongInt;
-    fexit: boolean;
-    i, t, valueResult: LongInt;
+    fexit, firstHit: boolean;
+    i, t, valueResult, targetY: LongInt;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
@@ -1652,6 +1673,7 @@ for i:= 0 to 9 do
     dmg[i]:= 0
     end;
 valueResult:= 0;
+firstHit:= false;
 
 repeat
     X:= X + dX;
@@ -1668,7 +1690,12 @@ repeat
             if TestColl(trunc(X) + LongWord(i * 30), trunc(Y), 4) then
                 begin
                 b[i]:= false;
-                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 96)
+                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 96);
+                if (not firstHit) then
+                    begin
+                    targetY:= trunc(Y);
+                    firstHit:= true;
+                    end;
                 end
             end;
 until fexit or (Y > cWaterLine);
@@ -1678,6 +1705,8 @@ for i:= 0 to 5 do
         inc(valueResult, dmg[i]);
 t:= valueResult;
 ap.AttackPutX:= Targ.Point.X - 60;
+if firstHit then
+    ap.AttackPutY:= targetY;
 
 for i:= 0 to 3 do
     if dmg[i] <> BadTurn then
@@ -1778,7 +1807,8 @@ function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPara
 const BOUNCES = 5;
 var X, Y: real;
     dmg: array[0..BOUNCES-1] of LongInt;
-    i, e, rate, valueResult: LongInt;
+    i, e, rate, valueResult, targetY: LongInt;
+    firstHit: boolean;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
@@ -1800,11 +1830,15 @@ for i:= 0 to BOUNCES-1 do
     dmg[i]:= 0;
 
 i:= 1;
+firstHit:= false;
 repeat
     // Piano goes down
     Y:= Y + 11;
     if TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(X), trunc(Y), 32) then
         begin
+        if (not firstHit) then
+            targetY:= trunc(Y);
+        firstHit:= true;
         for e:= -1 to 1 do
             begin
             rate:= RateExplosion(Me, trunc(X) + 30*e, trunc(Y)+40, 161, afIgnoreMe);
@@ -1833,6 +1867,8 @@ for i:= 0 to BOUNCES do
     else
         inc(valueResult, dmg[i]);
 ap.AttackPutX:= Targ.Point.X;
+if firstHit then
+    ap.AttackPutY:= targetY;
 
 valueResult:= valueResult - KillScore * friendlyfactor div 100 * 1024;
 
