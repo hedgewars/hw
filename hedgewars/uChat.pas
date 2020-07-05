@@ -1157,7 +1157,7 @@ begin
             // ignore me!!!
             end;
         // TODO: figure out how to determine those keys better
-        SDL_SCANCODE_b:
+        SDL_SCANCODE_a:
             begin
             // select all
             if ctrlonly then
