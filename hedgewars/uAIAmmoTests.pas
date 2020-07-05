@@ -1808,7 +1808,7 @@ const BOUNCES = 5;
 var X, Y: real;
     dmg: array[0..BOUNCES-1] of LongInt;
     i, e, rate, valueResult, targetY: LongInt;
-    firstHit: boolean;
+    firstHit, solidBounce: boolean;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
@@ -1831,14 +1831,20 @@ for i:= 0 to BOUNCES-1 do
 
 i:= 1;
 firstHit:= false;
+solidBounce:= false;
 repeat
     // Piano goes down
-    Y:= Y + 11;
-    if TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(X), trunc(Y), 32) then
+    if (not solidBounce) then
+        Y:= Y + 11;
+    if solidBounce or TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(X), trunc(Y), 32) then
         begin
         if (not firstHit) then
             targetY:= trunc(Y);
         firstHit:= true;
+        if (GameFlags and gfSolidLand) <> 0 then
+            // Don't change Y when indestructible land was hit
+            solidBounce:= true;
+
         for e:= -1 to 1 do
             begin
             rate:= RateExplosion(Me, trunc(X) + 30*e, trunc(Y)+40, 161, afIgnoreMe);
@@ -1849,8 +1855,9 @@ repeat
         if (i > 1) and (dmg[i] > 0) then
             dmg[i]:= dmg[i] div 2;
         inc(i);
-        // Skip past the blast hole
-        Y:= Y + 41
+        if (not solidBounce) then
+            // Skip past the blast hole
+            Y:= Y + 41
         end;
 until (i > BOUNCES) or (Y > cWaterLine);
 
