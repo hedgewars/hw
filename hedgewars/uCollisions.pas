@@ -375,9 +375,9 @@ end;
 function UpdateHitOrder(Gear: PGear; Order: LongInt; Global: boolean): boolean; inline;
 begin
     if Global then
-        UpdateHitOrder := UpdateHitOrderImpl(@ordera, Gear, Order)
-    else
         UpdateHitOrder := UpdateHitOrderImpl(@globalordera, Gear, Order)
+    else
+        UpdateHitOrder := UpdateHitOrderImpl(@ordera, Gear, Order)
 end;
 
 function UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
