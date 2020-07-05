@@ -7197,6 +7197,34 @@ begin
         MakeSentryStep := true
     end
 end;
+    
+function MakeSentryJump(Sentry: PGear; maxXStep, maxYStep: LongInt): Boolean;
+var x, y, offsetX, offsetY: LongInt;
+    jumpTime: hwFloat;
+begin
+    MakeSentryJump := false;
+    x := hwRound(Sentry^.X);
+    y := hwRound(Sentry^.Y);
+    offsetX := (maxXStep - Sentry^.Radius) * hwSign(Sentry^.dX);
+    repeat
+        for offsetY := -maxYStep - 1 to maxYStep + 1 do
+        begin
+            if TestCollisionYImpl(x + offsetX, y + offsetY, Sentry^.Radius, 1, Sentry^.CollisionMask) <> 0 then
+                break;
+        end;
+        if (offsetY >= -maxYStep) and (offsetY <= maxYStep) then
+            break;
+        Dec(offsetX, Sentry^.Radius * hwSign(Sentry^.dX));
+    until offsetX <= 0;
+
+    if (offsetX > 0) and (not cGravity.isNegative) then
+    begin
+        Sentry^.dY := -_0_25;
+        jumpTime := _2 * Sentry^.dY / cGravity;
+        Sentry^.dX := SignAs(int2hwFloat(abs(offsetX) - Sentry^.Radius) / jumpTime, Sentry^.dX);
+        MakeSentryJump := true;
+    end;
+end;
 
 function TraceAttackPath(fromX, fromY, toX, toY, step: hwFloat; mask: Word): LongWord;
 var distX, distY, dist, invDistance: HwFloat;
@@ -7255,7 +7283,7 @@ begin
     if CheckGearDrowning(Gear) then
         exit;
 
-    if TestCollisionYwithGear(Gear, 1) = 0 then
+    if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
     begin
         doStepFallingGear(Gear);
         if Gear^.Tag <> sentry_Idle then
@@ -7281,15 +7309,41 @@ begin
         begin
             Gear^.Tag := sentry_Walking;
             Gear^.Timer := 1000 + GetRandom(3000);
-            Gear^.dX.isNegative := GetRandom(2) = 1;
-            if not MakeSentryStep(Gear, 6, true) then
+            if GetRandom(4) = 0 then
             begin
-                Gear^.dX.isNegative := not Gear^.dX.isNegative;
-                if not MakeSentryStep(Gear, 6, true) then
+                if MakeSentryJump(Gear, 80, 60) then
+                    Gear^.Timer := 4000
+                else
+                    Gear^.Timer := 1000;
+                Gear^.Tag := sentry_Idle;
+            end
+            else
+            begin
+                Gear^.dX.isNegative := GetRandom(2) = 1;
+
+                if MakeSentryStep(Gear, 6, true) then
                 begin
-                    Gear^.Tag := sentry_Idle;
-                    Gear^.Timer := 10000;
-                end;
+                    if GetRandom(4) = 0 then
+                    begin
+                        Gear^.Timer := 2000;
+                        Gear^.Tag := sentry_Idle;
+                    end;
+                end
+                else
+                begin
+                    Gear^.dX.isNegative := not Gear^.dX.isNegative;
+                    if not MakeSentryStep(Gear, 6, true) then
+                    begin
+                        if GetRandom(2) = 0 then
+                        begin
+                            Gear^.dY := - _0_25;
+                            Gear^.Timer := 3000;
+                        end
+                        else
+                            Gear^.Timer := 5000;
+                        Gear^.Tag := sentry_Idle;
+                    end;
+                end
             end
         end
         else if Gear^.Tag in [sentry_Walking, sentry_Reloading] then
