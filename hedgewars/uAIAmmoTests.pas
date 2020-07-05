@@ -1417,7 +1417,7 @@ ap.AttackPutY:= Targ.Point.Y;
 bombsSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
 X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
-Y:= -128;
+Y:= topY - 300;
 
 dX:= bombsSpeed;
 dY:= 0;
@@ -1494,7 +1494,7 @@ ap.AttackPutY:= Targ.Point.Y;
 bombsSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
 X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
-Y:= -128;
+Y:= topY - 300;
 
 valueResult:= 0;
 
@@ -1642,7 +1642,7 @@ ap.AttackPutY:= Targ.Point.Y;
 minesSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
 X:= X - minesSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
-Y:= -128;
+Y:= topY - 300;
 dX:= minesSpeed;
 dY:= 0;
 
@@ -1794,7 +1794,7 @@ ap.AttackPutX:= Targ.Point.X;
 ap.AttackPutY:= Targ.Point.Y;
 
 X:= Targ.Point.X;
-Y:= -128;
+Y:= -1024;
 
 for i:= 0 to BOUNCES-1 do
     dmg[i]:= 0;
