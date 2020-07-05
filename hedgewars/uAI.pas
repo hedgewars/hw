@@ -293,9 +293,9 @@ if not isAfterAttack then
 BestRate:= RatePlace(Me);
 BaseRate:= Max(BestRate, 0);
 
-// switch to 'skip' if we cannot move because of mouse cursor being shown
+// unselect weapon if we cannot move because of mouse cursor being shown
 if (Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
-    AddAction(Actions, aia_Weapon, Longword(amSkip), 100 + random(200), 0, 0);
+    AddAction(Actions, aia_Weapon, Longword(amNothing), 100 + random(200), 0, 0);
 
 if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoMoveAfter) = 0))
     and (CurrentHedgehog^.Effects[heArtillery] = 0) and (cGravityf <> 0) then
