@@ -3299,6 +3299,9 @@ begin
         Gear^.Karma := 0;
         end;
 
+    if (GameFlags and gfInfAttack) = 0 then
+        FollowGear:= Gear;
+
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
