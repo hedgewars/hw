@@ -1418,6 +1418,7 @@ bombsSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
 X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
 Y:= -128;
+
 dX:= bombsSpeed;
 dY:= 0;
 
@@ -1474,17 +1475,16 @@ end;
 
 function TestDrillStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 const cShift = 4;
+      Density : real = 1.0;
 var bombsSpeed, X, Y, dX, dY, drillX, drillY: real;
     t2: real;
-    b: array[0..9] of boolean;
     dmg: array[0..9] of LongInt;
-    fexit, collided: boolean;
+    collided, drilling, timerRuns: boolean;
     i, t, value, valueResult, attackTime, drillTimer, targetX: LongInt;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
-// TODO: Add support for More Wind
-if (Level > 3) or (cGravityf = 0) or ((GameFlags and gfMoreWind) <> 0) then
+if (Level > 3) or (cGravityf = 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
@@ -1495,70 +1495,73 @@ bombsSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
 X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
 Y:= -128;
-dX:= bombsSpeed;
-dY:= 0;
 
 valueResult:= 0;
 
-attackTime:= 0;
-while attackTime <= 4000 do
+attackTime:= 6000;
+while attackTime >= 0 do
     begin
-    inc(attackTime, 1000);
+    dec(attackTime, 1000);
     value:= 0;
     for i:= 0 to 9 do
         begin
-        b[i]:= true;
-        dmg[i]:= 0
+        dmg[i]:= 0;
+        drillX:= trunc(X) + LongWord(i * 30);
+        drillY:= trunc(Y);
+        dX:= bombsSpeed;
+        dY:= 0;
+        collided:= false;
+        drilling:= false;
+        timerRuns:= false;
+        drillTimer := attackTime;
+
+        repeat
+            // Simulate in-air movement
+            drillX:= drillX + dX;
+            drillY:= drillY + dY;
+            if (GameFlags and gfMoreWind) <> 0 then
+                dX:= dX + windSpeed / Density;
+            dY:= dY + cGravityf;
+
+            if timerRuns then
+                dec(drillTimer);
+
+            // Collided with land ... simulate drilling
+            if (drillTimer > 0) and TestCollExcludingObjects(trunc(drillX), trunc(drillY), 4) and
+                (Abs(Targ.Point.X - trunc(drillX)) + Abs(Targ.Point.Y - trunc(drillY)) > 21) then
+                begin
+                drilling := true;
+                timerRuns := true;
+                t2 := 0.5 / sqrt(sqr(dX) + sqr(dY));
+                dX := dX * t2;
+                dY := dY * t2;
+                repeat
+                    drillX:= drillX + dX;
+                    drillY:= drillY + dY;
+                    dec(drillTimer, 10);
+                    if (Abs(Targ.Point.X - drillX) + Abs(Targ.Point.Y - drillY) < 22)
+                        or (drillX < -32)
+                        or (drillY < -32)
+                        or (trunc(drillX) > LAND_WIDTH + 32)
+                        or (trunc(drillY) > cWaterLine)
+                        or (drillTimer <= 0) then
+                        collided:= true
+                    else if not TestCollExcludingObjects(trunc(drillX), trunc(drillY), 4) then
+                        drilling:= false;
+                until (collided or (not drilling));
+                end
+            // Collided with something else ... record collision
+            else if (drillTimer <= 0) or TestColl(trunc(drillX), trunc(drillY), 4) then
+                collided:= true;
+
+            // Simulate explosion
+            if collided then
+                dmg[i]:= RateExplosion(Me, trunc(drillX), trunc(drillY), 58);
+                // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
+        until collided or (drillY > cWaterLine);
         end;
 
-    repeat
-        X:= X + dX;
-        Y:= Y + dY;
-        dY:= dY + cGravityf;
-        fexit:= true;
-
-        for i:= 0 to 9 do
-            if b[i] then
-                begin
-                fexit:= false;
-                collided:= false;
-                drillX:= trunc(X) + LongWord(i * 30);
-                drillY:= trunc(Y);
-                // Collided with land ... simulate drilling
-                if TestCollExcludingObjects(trunc(drillX), trunc(drillY), 4) and
-                    (Abs(Targ.Point.X - trunc(X)) + Abs(Targ.Point.Y - trunc(Y)) > 21) then
-                    begin
-                    drillTimer := attackTime;
-                    t2 := 0.5 / sqrt(sqr(dX) + sqr(dY));
-                    dX := dX * t2;
-                    dY := dY * t2;
-                    repeat
-                        drillX:= drillX + dX;
-                        drillY:= drillY + dY;
-                        dec(drillTimer, 10);
-                    until (Abs(Targ.Point.X - drillX) + Abs(Targ.Point.Y - drillY) < 22)
-                        or (drillX < 0)
-                        or (drillY < 0)
-                        or (trunc(drillX) > LAND_WIDTH)
-                        or (trunc(drillY) > LAND_HEIGHT)
-                        // TODO: Simulate falling again when rocket has left terrain again
-                        or (drillTimer <= 0);
-                    collided:= true;
-                    end
-                // Collided with something else ... record collision
-                else if TestColl(trunc(drillX), trunc(drillY), 4) then
-                    collided:= true;
-
-                // Simulate explosion
-                if collided then
-                    begin
-                    b[i]:= false;
-                    dmg[i]:= RateExplosion(Me, trunc(drillX), trunc(drillY), 58);
-                    // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
-                    end;
-                end;
-    until fexit or (Y > cWaterLine);
-
+    // calculate score
     for i:= 0 to 5 do
         if dmg[i] <> BadTurn then
             inc(value, dmg[i]);
