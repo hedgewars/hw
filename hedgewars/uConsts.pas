@@ -244,7 +244,7 @@ const
     cBaseChatFontHeight = 12;
     cChatScaleRelDelta = 0.1;
     cMinChatScaleValue = 0.8;
-    cMaxChatScaleValue = 10.0;
+    cMaxChatScaleValue = 4.0;
 
     cDefaultUIScaleLevel = 1.0;
 

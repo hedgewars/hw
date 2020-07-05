@@ -407,7 +407,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             sbChatSize = new QSpinBox(groupGame);
             sbChatSize->setSingleStep(5);
             sbChatSize->setMinimum(80);
-            sbChatSize->setMaximum(2000);
+            sbChatSize->setMaximum(400);
             sbChatSize->setValue(100);
             groupGame->layout()->addWidget(sbChatSize, 11, 1, Qt::AlignLeft);
 
