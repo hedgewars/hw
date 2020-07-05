@@ -38,7 +38,8 @@ implementation
 uses uConsts, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils, uStore, uLocale
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec{$ENDIF};
 
-const MaxStrIndex = 27;
+const MaxStrIndex = 27; // Max. possible string index
+      MaxStrPartial = 7; // Max. displayed strings in normal mode
       MaxInputStrLen = 200;
 
 type TChatLine = record
@@ -389,13 +390,18 @@ if ChatHidden and (not showAll) then
     visibleCount:= 0;
 
 // draw chat lines with some distance from screen border
+left:= 4 - cScreenWidth div 2;
 {$IFDEF USE_TOUCH_INTERFACE}
-left:= 4 - cScreenWidth div 2;
-top := 55 + visibleCount * ClHeight; // we start with input line (if any)
+i:= 55;
 {$ELSE}
-left:= 4 - cScreenWidth div 2;
-top := 10 + visibleCount * ClHeight; // we start with input line (if any)
+i:= 10;
 {$ENDIF}
+top := i + visibleCount * ClHeight; // we start with input line (if any)
+if top > cScreenHeight - ClHeight - 60 then
+    begin
+    top:= cScreenHeight - ClHeight - 60;
+    top:= i + top - (top mod ClHeight);
+    end;
 
 // draw chat input line first and under all other lines
 if isInChatMode and (InputStr.Tex <> nil) then
@@ -484,7 +490,7 @@ if ((not ChatHidden) or showAll) and (UIDisplay <> uiNone) then
     t  := 1; // # of current line processed
 
     // draw lines in reverse order
-    while (((t < 7) and (Strs[i].Time > RealTicks)) or ((t <= MaxStrIndex + 1) and showAll))
+    while (((t < MaxStrPartial) and (Strs[i].Time > RealTicks)) or ((t <= MaxStrIndex + 1) and showAll))
     and (Strs[i].Tex <> nil) do
         begin
         top:= top - ClHeight;
