@@ -470,7 +470,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtSentries);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconAirMine.png"));
+    l->setPixmap(QPixmap(":/res/iconSentry.png"));
     glBSLayout->addWidget(l,15,1,1,1);
     SB_Sentries = new QSpinBox(gbBasicSettings);
     SB_Sentries->setWhatsThis(wtSentries);
