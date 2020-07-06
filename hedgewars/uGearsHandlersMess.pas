@@ -6270,7 +6270,7 @@ begin
                     LoadHedgehogHat(resgear^.Hedgehog^, 'Reserved/Zombie');
                 end;
 
-        hh^.Gear^.dY := _0;
+        hh^.Gear^.dY := -cLittle;
         hh^.Gear^.dX := _0;
         doStepHedgehogMoving(hh^.Gear);
         StopSoundChan(Gear^.SoundChannel);
