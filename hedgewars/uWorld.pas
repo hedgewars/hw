@@ -1597,7 +1597,7 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
         DrawSprite(sprInvulnHud, cScreenWidth div 2 - t, i, 0);
         if (CurrentHedgehog^.Effects[heResurrectable] <> 0) then
             // show halo for resurrectable hog
-            DrawSprite(sprHaloHud, cScreenWidth div 2 - 30, i - SpritesData[sprHaloHud].Height + 1, 0);
+            DrawSprite(sprHaloHud, cScreenWidth div 2 - t - 2, i - SpritesData[sprHaloHud].Height + 1, 0);
         // Vampirism
         if cVampiric then
             begin
