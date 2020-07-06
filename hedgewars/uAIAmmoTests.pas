@@ -1509,11 +1509,16 @@ else
 
 ap.ExplR:= 0;
 ap.Time:= 0;
-if (GameFlags and gfInfAttack) = 0 then
-    ap.Power:= max(min(500 * heal - 500, 10000), 10)
+if (Level >= 4) then
+    // slow resurrect
+    ap.Power:= max(512 * heal - 512, 10)
 else
-    // Shorter attack duration in inf attack because the clock is ticking!
-    ap.Power:= max(min(500 * heal - 500, 3000), 10);
+    // fast resurrect
+    ap.Power:= max(16 * heal - 16, 10);
+
+// Time limit
+ap.Power:= min(ap.Power, 5000)
+
 ap.Angle:= 0;
 
 rate:= RateResurrector(Me);

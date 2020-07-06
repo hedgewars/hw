@@ -231,11 +231,15 @@ for i:= 0 to Pred(Targets.Count) do
                                 n:= 1 else n:= ap.AttacksNum;
 
                             AddAction(BestActions, aia_attack, aim_push, 650 + random(300), 0, 0);
+                            if (a = amResurrector) and (BotLevel < 4) then
+                                AddAction(BestActions, aia_Up, aim_push, 1, 0, 0);
                             for t:= 2 to n do
                                 begin
                                 AddAction(BestActions, aia_attack, aim_push, 150, 0, 0);
                                 AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
                                 end;
+                            if (a = amResurrector) and (BotLevel < 4) then
+                                AddAction(BestActions, aia_Up, aim_release, ap.Power, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
                             end;
 
