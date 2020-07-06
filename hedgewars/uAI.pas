@@ -107,6 +107,8 @@ begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
 aiWindSpeed:= hwFloat2Float(cWindSpeed);
 aiLaserSighting:= (cLaserSighting) or (HHHasAmmo(Me^.Hedgehog^, amLaserSight) > 0);
+aiGravity:= cGravity;
+aiGravityf:= cGravityf;
 hasLowGrav:= HHHasAmmo(Me^.Hedgehog^, amLowGravity) > 0;
 useThisActions:= false;
 Me^.AIHints:= Me^.AIHints and (not aihAmmosChanged);
@@ -293,6 +295,8 @@ for i:= 0 to Pred(Targets.Count) do
             or StopThinking
         end
 end;
+aiGravity:= cGravity;
+aiGravityf:= cGravityf;
 end;
 
 procedure Walk(Me: PGear; var Actions: TActions);
@@ -481,6 +485,8 @@ var BackMe, WalkMe: TGear;
     Actions: TActions;
 begin
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
+aiGravity:= cGravity;
+aiGravityf:= cGravityf;
 StartTicks:= GameTicks;
 
 currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
