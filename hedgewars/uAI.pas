@@ -100,18 +100,33 @@ end;
 procedure TestAmmos(var Actions: TActions; Me: PGear; rareChecks: boolean);
 var BotLevel: Byte;
     ap: TAttackParams;
-    Score, i, t, n, dAngle: LongInt;
+    Score, i, l, t, n, dAngle: LongInt;
     a, aa: TAmmoType;
-    useThisActions: boolean;
+    useThisActions, hasLowGrav: boolean;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
 aiWindSpeed:= hwFloat2Float(cWindSpeed);
-aiGravity:= cGravity;
-aiGravityf:= cGravityf;
 aiLaserSighting:= (cLaserSighting) or (HHHasAmmo(Me^.Hedgehog^, amLaserSight) > 0);
+hasLowGrav:= HHHasAmmo(Me^.Hedgehog^, amLowGravity) > 0;
 useThisActions:= false;
 Me^.AIHints:= Me^.AIHints and (not aihAmmosChanged);
 
+for l:= 0 to 1 do // 0 = test with normal gravity. 1 = test with low gravity
+if (l = 0) or ((hasLowGrav) and (not cLowGravity)) then
+begin
+// simulate normal or low gravity
+if (l = 0) then
+    begin
+    aiGravity:= cGravity;
+    aiGravityf:= cGravityf;
+    end
+else if (l = 1) then
+    begin
+    // We calculate the values to better support scripts like Gravity.
+    // This might have a slight inaccuracy, but none have been spotted in testing.
+    aiGravity:= cGravity / _2;
+    aiGravityf:= cGravityf / 2;
+    end;
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
         begin
@@ -123,6 +138,7 @@ for i:= 0 to Pred(Targets.Count) do
         if (CanUseAmmo[a])
             and ((not rareChecks) or ((AmmoTests[a].flags and amtest_Rare) = 0))
             and ((i = 0) or ((AmmoTests[a].flags and amtest_NoTarget) = 0))
+            and ((l = 0) or ((AmmoTests[a].flags and amtest_NoLowGravity) = 0))
             then
             begin
 {$HINTS OFF}
@@ -157,6 +173,12 @@ for i:= 0 to Pred(Targets.Count) do
                             (HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0) and (Me^.Hedgehog^.Effects[heInvulnerable] = 0) then
                             begin
                             AddAction(BestActions, aia_Weapon, Longword(amInvulnerable), 80, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                            end;
+                        if (l = 1) and (hasLowGrav) then
+                            begin
+                            AddAction(BestActions, aia_Weapon, Longword(amLowGravity), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
                             end;
@@ -270,6 +292,7 @@ for i:= 0 to Pred(Targets.Count) do
         until (a = aa) or (CurrentHedgehog^.MultiShootAttacks > 0) {shooting same weapon}
             or StopThinking
         end
+end;
 end;
 
 procedure Walk(Me: PGear; var Actions: TActions);

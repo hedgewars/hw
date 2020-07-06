@@ -29,6 +29,7 @@ const
     amtest_LaserSight      = $00000010; // supports laser sighting
     amtest_NoVampiric      = $00000020; // don't use vampirism with this ammo
     amtest_NoInvulnerable  = $00000040; // don't use invulnerable with this with ammo
+    amtest_NoLowGravity    = $00000080; // don't use low gravity with this with ammo
 
 var aiWindSpeed: real;
     aiGravity: hwFloat;
@@ -133,7 +134,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amFlamethrower
             (proc: @TestSMine;       flags: 0), // amSMine
             (proc: @TestHammer;      flags: amtest_NoTarget or amtest_NoInvulnerable), // amHammer
-            (proc: @TestResurrector; flags: amtest_NoTarget or amtest_NoInvulnerable or amtest_NoVampiric), // amResurrector
+            (proc: @TestResurrector; flags: amtest_NoTarget or amtest_NoInvulnerable or amtest_NoVampiric or amtest_NoLowGravity), // amResurrector
             (proc: @TestDrillStrike; flags: amtest_Rare), // amDrillStrike
             (proc: nil;              flags: 0), // amSnowball
             (proc: nil;              flags: 0), // amTardis
