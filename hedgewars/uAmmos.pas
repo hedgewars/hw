@@ -113,7 +113,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         // avoid things we already have by scheme
         // merge this into DisableSomeWeapons ?
         if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0))
-        or ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0))
+        or ((a in [amInvulnerable, amResurrector, amVampiric]) and ((GameFlags and gfInvulnerable) <> 0))
         or ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0))
         or ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0))
         or ((a = amExtraTime) and (cHedgehogTurnTime >= 1000000))

@@ -15,6 +15,7 @@ Gameplay:
  + Computer player now takes Strong Wind game modifier into account
  + Various small computer player improvements
  + New taunt chat commands: /bubble, /happy
+ + Remove Vamprism and Resurrector ammos when playing in "Invulnerable" game modifier
  * Fix many projectiles not being affected by Heavy Wind after turn end
  * Fix hog getting stuck when opening parachute right after a shoryuken digging through land
  * Fix game hanging if computer hog has nothing to attack
