@@ -241,6 +241,14 @@ for i:= 0 to Pred(Targets.Count) do
                             if (a = amResurrector) and (BotLevel < 4) then
                                 AddAction(BestActions, aia_Up, aim_release, ap.Power, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
+
+                            // Just for fun: 0.01% chance for kamikaze with "wishes" ;-)
+                            if (a = amKamikaze) and (random(10000) = 0) then
+                                begin
+                                AddAction(BestActions, aia_Switch, 0, 1, 0, 0);
+                                AddAction(BestActions, aia_Precise, aim_push, 1, 0, 0);
+                                AddAction(BestActions, aia_Precise, aim_release, 5000, 0, 0);
+                                end;
                             end;
 
                     if (Ammoz[a].Ammo.Propz and ammoprop_Track) <> 0 then
