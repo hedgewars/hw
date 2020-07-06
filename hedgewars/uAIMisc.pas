@@ -1136,7 +1136,8 @@ repeat
         begin
         inc(GoInfo.Ticks);
         Gear^.dY:= Gear^.dY + aiGravity;
-        if Gear^.dY > _0_4 then
+        // taking fall damage?
+        if (Gear^.dY > _0_4) and (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) then
             begin
             GoInfo.FallPix:= 0;
             // try ljump instead of fall with damage
