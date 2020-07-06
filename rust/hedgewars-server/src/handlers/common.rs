@@ -212,15 +212,18 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
 
         for (_, original_team) in &info.original_teams {
             if let Some(team) = room.find_team(|team| team.name == original_team.name) {
-                if team.color != original_team.color {
-                    response.add(TeamColor(team.name.clone(), team.color).send_self());
-                }
-                if team.hedgehogs_number != original_team.hedgehogs_number {
-                    response
-                        .add(HedgehogsNumber(team.name.clone(), team.hedgehogs_number).send_self());
+                if team != original_team {
+                    response.add(TeamRemove(original_team.name.clone()).send_self());
+                    response.add(TeamAdd(team.to_protocol()).send_self());
                 }
             } else {
                 response.add(TeamRemove(original_team.name.clone()).send_self());
+            }
+        }
+
+        for (_, team) in &room.teams {
+            if !info.original_teams.iter().any(|(_, t)| t.name == team.name) {
+                response.add(TeamAdd(team.to_protocol()).send_self());
             }
         }
 

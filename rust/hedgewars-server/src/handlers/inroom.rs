@@ -233,7 +233,6 @@ pub fn handle(
                 Err(AddTeamError::TooManyTeams) => response.warn(TOO_MANY_TEAMS),
                 Err(AddTeamError::TooManyHedgehogs) => response.warn(TOO_MANY_HEDGEHOGS),
                 Err(AddTeamError::TeamAlreadyExists) => response.warn(TEAM_EXISTS),
-                Err(AddTeamError::GameInProgress) => response.warn(ROUND_IN_PROGRESS),
                 Err(AddTeamError::Restricted) => response.warn(TEAM_ADD_RESTRICTED),
             }
         }

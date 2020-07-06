@@ -26,7 +26,6 @@ pub const ROOM_CONFIG_SAVED: &str = "Room configs saved successfully.";
 pub const ROOM_EXISTS: &str = "A room with the same name already exists.";
 pub const ROOM_FULL: &str = "This room is already full.";
 pub const ROOM_JOIN_RESTRICTED: &str = "Access denied. This room currently doesn't allow joining.";
-pub const ROUND_IN_PROGRESS: &str = "Joining not possible: Round is in progress.";
 pub const ROOM_REGISTRATION_REQUIRED: &str =
     "Access denied. This room is for registered users only.";
 pub const SUPER_POWER: &str = "Super power activated.";

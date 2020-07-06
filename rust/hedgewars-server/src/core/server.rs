@@ -59,7 +59,6 @@ pub enum AddTeamError {
     TooManyTeams,
     TooManyHedgehogs,
     TeamAlreadyExists,
-    GameInProgress,
     Restricted,
 }
 
@@ -861,8 +860,6 @@ impl<'a> HwRoomControl<'a> {
             Err(TooManyHedgehogs)
         } else if room.find_team(|t| t.name == info.name) != None {
             Err(TeamAlreadyExists)
-        } else if room.game_info.is_some() {
-            Err(GameInProgress)
         } else if room.is_team_add_restricted() {
             Err(Restricted)
         } else {
