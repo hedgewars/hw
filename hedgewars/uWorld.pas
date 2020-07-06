@@ -1543,13 +1543,14 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
     i:= t + pauseButton.frame.y + pauseButton.frame.h;
 {$ENDIF}
 
+    inc(t, CurrentHedgehog^.HealthTagTex^.h);
+    cDemoClockFPSOffsetY:= t;
+
     // Hide health and healh icons in gfInvulnerable mode (except heResurrectable)
     if ((GameFlags and gfInvulnerable) = 0) then
     begin
     // Health tag
     DrawTexture(cScreenWidth div 2 - CurrentHedgehog^.HealthTagTex^.w - 16, i, CurrentHedgehog^.HealthTagTex);
-    inc(t, CurrentHedgehog^.HealthTagTex^.h);
-    cDemoClockFPSOffsetY:= t;
 
     t:= SpritesData[sprHealthHud].Width + 18;
     // Main health icon. Appearance depends on game mode and poisoning state
@@ -1591,10 +1592,18 @@ if ((UIDisplay = uiAll) or (UIDisplay = uiNoTeams)) and (isNotHiddenByCinematic)
     // in gfInvulnerable mode ...
     else
         begin
-        DrawSprite(sprInvulnHud, cScreenWidth div 2 - 28, i, 0);
+        // Invulnerable
+        inc(t, 8);
+        DrawSprite(sprInvulnHud, cScreenWidth div 2 - t, i, 0);
         if (CurrentHedgehog^.Effects[heResurrectable] <> 0) then
             // show halo for resurrectable hog
             DrawSprite(sprHaloHud, cScreenWidth div 2 - 30, i - SpritesData[sprHaloHud].Height + 1, 0);
+        // Vampirism
+        if cVampiric then
+            begin
+            inc(t, SpritesData[sprVampHud].Width + 2);
+            DrawSprite(sprVampHud, (cScreenWidth div 2 - t), i, 0);
+            end;
         end;
     end
 else
