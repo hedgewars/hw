@@ -30,7 +30,7 @@ const
     amtest_NoVampiric      = $00000020; // don't use vampirism with this ammo
     amtest_NoInvulnerable  = $00000040; // don't use invulnerable with this with ammo
 
-var windSpeed: real;
+var aiWindSpeed: real;
     aiLaserSighting: boolean;
 
 type TAttackParams = record
@@ -177,8 +177,8 @@ valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(300);
     if (WorldEdge = weWrap) and (random(2)=0) then
-         Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime
-    else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime;
+         Vx:= - aiWindSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime
+    else Vx:= - aiWindSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - mY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -193,7 +193,7 @@ repeat
             x:= x + dX;
 
             y:= y + dY;
-            dX:= dX + windSpeed;
+            dX:= dX + aiWindSpeed;
             //dX:= CheckBounce(x,dX);
             dY:= dY + cGravityf;
             dec(t)
@@ -367,8 +367,8 @@ Flags:= Flags; // avoid compiler hint
     repeat
         rTime:= rTime + 300 + Level * 50 + random(300);
         if (WorldEdge = weWrap) and (random(2)=0) then
-             Vx:= - windSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime
-        else Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
+             Vx:= - aiWindSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime
+        else Vx:= - aiWindSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
         Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y - 35 - mY) / rTime;
         r:= sqr(Vx) + sqr(Vy);
         if not (r > 1) then
@@ -382,7 +382,7 @@ Flags:= Flags; // avoid compiler hint
                 x:= CheckWrap(x);
                 x:= x + dX;
                 y:= y + dY;
-                dX:= dX + windSpeed;
+                dX:= dX + aiWindSpeed;
                 dY:= dY + cGravityf;
                 dec(t)
             until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
@@ -489,7 +489,7 @@ repeat
         // If impact location is close, above us and wind blows in our direction,
         // there's a risk of fire flying towards us, so fail in this case.
         if (Level < 3) and (range <= 600) and (meY >= ry) and
-            (((ap.Angle < 0) and (windSpeed > 0)) or ((ap.Angle > 0) and (windSpeed < 0))) then
+            (((ap.Angle < 0) and (aiWindSpeed > 0)) or ((ap.Angle > 0) and (aiWindSpeed < 0))) then
             exit(BadTurn);
 
         // Apply inaccuracy
@@ -533,8 +533,8 @@ if (WorldEdge = weWrap) then
 repeat
     rTime:= rTime + 300 + Level * 50 + random(1000);
     if (WorldEdge = weWrap) and (random(2)=0) then
-         Vx:= - windSpeed * rTime * 0.5 + ((targXWrap + AIrndSign(2)) - meX) / rTime
-    else Vx:= - windSpeed * rTime * 0.5 + ((Targ.Point.X + AIrndSign(2)) - meX) / rTime;
+         Vx:= - aiWindSpeed * rTime * 0.5 + ((targXWrap + AIrndSign(2)) - meX) / rTime
+    else Vx:= - aiWindSpeed * rTime * 0.5 + ((Targ.Point.X + AIrndSign(2)) - meX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -548,7 +548,7 @@ repeat
             x:= CheckWrap(x);
             x:= x + dX;
             y:= y + dY;
-            dX:= dX + windSpeed;
+            dX:= dX + aiWindSpeed;
             dY:= dY + cGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
@@ -604,7 +604,7 @@ repeat
     else
          Vx:= (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime;
     if (GameFlags and gfMoreWind) <> 0 then
-         Vx:= -(windSpeed / Density) * rTime * 0.5 + Vx;
+         Vx:= -(aiWindSpeed / Density) * rTime * 0.5 + Vx;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
@@ -619,7 +619,7 @@ repeat
             x:= CheckWrap(x);
             x:= x + dX;
             if (GameFlags and gfMoreWind) <> 0 then
-                dX:= dX + windSpeed / Density;
+                dX:= dX + aiWindSpeed / Density;
 
             y:= y + dY;
             dY:= dY + cGravityf;
@@ -638,7 +638,7 @@ repeat
         // Sanity check 2: If impact location is close, above us and wind blows
         // towards us, there's a risk of fire flying towards us, so fail in this case.
         if (Level < 3) and (range <= 600) and (trunc(meY) >= EX) and
-            (((ap.Angle < 0) and (windSpeed > 0)) or ((ap.Angle > 0) and (windSpeed < 0))) then
+            (((ap.Angle < 0) and (aiWindSpeed > 0)) or ((ap.Angle > 0) and (aiWindSpeed < 0))) then
             exit(BadTurn);
 
         if t >= -timeLimit then
@@ -689,7 +689,7 @@ repeat
     else
          Vx:= (Targ.Point.X + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta);
     if (GameFlags and gfMoreWind) <> 0 then
-         Vx:= -(windSpeed / Density) * (TestTime + tDelta) * 0.5 + Vx;
+         Vx:= -(aiWindSpeed / Density) * (TestTime + tDelta) * 0.5 + Vx;
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - (Targ.Point.Y - meY) / (TestTime + tDelta);
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -703,7 +703,7 @@ repeat
             x:= CheckWrap(x);
             x:= x + dX;
             if (GameFlags and gfMoreWind) <> 0 then
-                dX:= dX + windSpeed / Density;
+                dX:= dX + aiWindSpeed / Density;
             y:= y + dY;
             dY:= dY + cGravityf;
             dec(t)
@@ -753,7 +753,7 @@ meY:= hwFloat2Float(Me^.Y);
 repeat
     inc(TestTime, 900);
     if (GameFlags and gfMoreWind) <> 0 then
-        Vx:= (-(windSpeed / Density) * (TestTime + tDelta) * 0.5) + ((Targ.Point.X - meX) / (TestTime + tDelta))
+        Vx:= (-(aiWindSpeed / Density) * (TestTime + tDelta) * 0.5) + ((Targ.Point.X - meX) / (TestTime + tDelta))
     // Try to overshoot slightly, seems to pay slightly better dividends in terms of hitting cluster
     else if meX<Targ.Point.X then
         Vx:= ((Targ.Point.X+10) - meX) / (TestTime + tDelta)
@@ -771,7 +771,7 @@ repeat
     repeat
         x:= x + dX;
         if (GameFlags and gfMoreWind) <> 0 then
-            dX:= dX + windSpeed / Density;
+            dX:= dX + aiWindSpeed / Density;
         y:= y + dY;
         dY:= dY + cGravityf;
         dec(t)
@@ -825,7 +825,7 @@ repeat
     else
         Vx:= (Targ.Point.X - meX) / (TestTime + tDelta);
     if (GameFlags and gfMoreWind) <> 0 then
-        Vx:= -(windSpeed / Density) * (TestTime + tDelta) * 0.5 + Vx;
+        Vx:= -(aiWindSpeed / Density) * (TestTime + tDelta) * 0.5 + Vx;
 
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Point.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
@@ -840,7 +840,7 @@ repeat
             x:= CheckWrap(x);
             x:= x + dX;
             if (GameFlags and gfMoreWind) <> 0 then
-                 dX:= dX + windSpeed / Density;
+                 dX:= dX + aiWindSpeed / Density;
             y:= y + dY;
             dY:= dY + cGravityf;
             dec(t)
@@ -915,7 +915,7 @@ Flags:= Flags; // avoid compiler hint
 
     Vx:= (Targ.Point.X - meX) / TestTime;
     if (GameFlags and gfMoreWind) <> 0 then
-        Vx:= -(windSpeed / Density) * TestTime * 0.5 + Vx;
+        Vx:= -(aiWindSpeed / Density) * TestTime * 0.5 + Vx;
     Vy:= cGravityf * (TestTime div 2) - (Targ.Point.Y - meY) / TestTime;
 
     x:= meX;
@@ -926,7 +926,7 @@ Flags:= Flags; // avoid compiler hint
     repeat
         x:= x + dX;
         if (GameFlags and gfMoreWind) <> 0 then
-            dX:= dX + windSpeed / Density;
+            dX:= dX + aiWindSpeed / Density;
         y:= y + dY;
         dY:= dY + cGravityf;
         EX:= trunc(x);
@@ -1434,7 +1434,7 @@ firstHit:= false;
 repeat
     X:= X + dX;
     if (GameFlags and gfMoreWind) <> 0 then
-        dX:= dX + windSpeed / Density;
+        dX:= dX + aiWindSpeed / Density;
     Y:= Y + dY;
     dY:= dY + cGravityf;
     fexit:= true;
@@ -1575,7 +1575,7 @@ while attackTime >= 0 do
             drillX:= drillX + dX;
             drillY:= drillY + dY;
             if (GameFlags and gfMoreWind) <> 0 then
-                dX:= dX + windSpeed / Density;
+                dX:= dX + aiWindSpeed / Density;
             dY:= dY + cGravityf;
 
             if timerRuns then
@@ -1724,7 +1724,7 @@ firstHit:= false;
 repeat
     X:= X + dX;
     if (GameFlags and (gfMoreWind or gfInfAttack)) <> 0 then
-        dX:= dX + windSpeed / Density;
+        dX:= dX + aiWindSpeed / Density;
     Y:= Y + dY;
     dY:= dY + cGravityf;
     fexit:= true;
@@ -1804,7 +1804,7 @@ repeat
     else
          Vx:= (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime;
     if (GameFlags and gfMoreWind) <> 0 then
-         Vx:= -(windSpeed / Density) * rTime * 0.5 + Vx;
+         Vx:= -(aiWindSpeed / Density) * rTime * 0.5 + Vx;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
@@ -1819,7 +1819,7 @@ repeat
             x:= CheckWrap(x);
             x:= x + dX;
             if (GameFlags and gfMoreWind) <> 0 then
-                dX:= dX + windSpeed / Density;
+                dX:= dX + aiWindSpeed / Density;
 
             y:= y + dY;
             dY:= dY + cGravityf;
@@ -2090,13 +2090,13 @@ x:= hwFloat2Float(Me^.X) + hwSign(Me^.dX) * 7;
 y:= hwFloat2Float(Me^.Y);
 dx:= hwSign(Me^.dX) * 0.03;
 if (GameFlags and gfMoreWind) <> 0 then
-    dx:= -(windSpeed / Density) + dx;
+    dx:= -(aiWindSpeed / Density) + dx;
 dy:= 0;
 t:= 5000;
 repeat
     dec(t);
     if (GameFlags and gfMoreWind) <> 0 then
-        dx:= dx + windSpeed / Density;
+        dx:= dx + aiWindSpeed / Density;
     x:= x + dx;
     dy:= dy + cGravityf;
     y:= y + dy;
@@ -2140,13 +2140,13 @@ x:= hwFloat2Float(Me^.X) + hwSign(Me^.dX) * 7;
 y:= hwFloat2Float(Me^.Y);
 dx:= hwSign(Me^.dX) * 0.02;
 if (GameFlags and gfMoreWind) <> 0 then
-    dx:= -(windSpeed / Density) + dx;
+    dx:= -(aiWindSpeed / Density) + dx;
 dy:= 0;
 t:= 10000;
 repeat
     dec(t);
     if (GameFlags and gfMoreWind) <> 0 then
-         dx:= dx + windSpeed / Density;
+         dx:= dx + aiWindSpeed / Density;
     x:= x + dx;
     dy:= dy + cGravityf;
     y:= y + dy;
@@ -2212,7 +2212,7 @@ repeat
     else
          Vx:= (Targ.Point.X - meX) / rTime;
     if (GameFlags and gfMoreWind) <> 0 then
-         Vx:= -(windSpeed / Density) * rTime * 0.5 + Vx;
+         Vx:= -(aiWindSpeed / Density) * rTime * 0.5 + Vx;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
@@ -2227,7 +2227,7 @@ repeat
             x:= CheckWrap(x);
             x:= x + dX;
             if (GameFlags and gfMoreWind) <> 0 then
-                dX:= dX + windSpeed / Density;
+                dX:= dX + aiWindSpeed / Density;
 
             y:= y + dY;
             dY:= dY + cGravityf;

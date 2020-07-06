@@ -105,7 +105,7 @@ var BotLevel: Byte;
     useThisActions: boolean;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
-windSpeed:= hwFloat2Float(cWindSpeed);
+aiWindSpeed:= hwFloat2Float(cWindSpeed);
 aiLaserSighting:= (cLaserSighting) or (HHHasAmmo(Me^.Hedgehog^, amLaserSight) > 0);
 useThisActions:= false;
 Me^.AIHints:= Me^.AIHints and (not aihAmmosChanged);
