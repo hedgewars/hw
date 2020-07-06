@@ -31,6 +31,8 @@ const
     amtest_NoInvulnerable  = $00000040; // don't use invulnerable with this with ammo
 
 var aiWindSpeed: real;
+    aiGravity: hwFloat;
+    aiGravityf: real;
     aiLaserSighting: boolean;
 
 type TAttackParams = record
@@ -179,7 +181,7 @@ repeat
     if (WorldEdge = weWrap) and (random(2)=0) then
          Vx:= - aiWindSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime
     else Vx:= - aiWindSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - mX) / rTime;
-    Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - mY) / rTime;
+    Vy:= aiGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - mY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
         begin
@@ -195,7 +197,7 @@ repeat
             y:= y + dY;
             dX:= dX + aiWindSpeed;
             //dX:= CheckBounce(x,dX);
-            dY:= dY + cGravityf;
+            dY:= dY + aiGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t < -cExtraTime);
@@ -240,7 +242,7 @@ begin
     repeat
         x:= x + dx;
         y:= y + dy;
-        dy:= dy + cGravityf;
+        dy:= dy + aiGravityf;
         f:= ((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
            ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5));
         dec(t)
@@ -369,7 +371,7 @@ Flags:= Flags; // avoid compiler hint
         if (WorldEdge = weWrap) and (random(2)=0) then
              Vx:= - aiWindSpeed * rTime * 0.5 + (targXWrap + AIrndSign(2) - mX) / rTime
         else Vx:= - aiWindSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
-        Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y - 35 - mY) / rTime;
+        Vy:= aiGravityf * rTime * 0.5 - (Targ.Point.Y - 35 - mY) / rTime;
         r:= sqr(Vx) + sqr(Vy);
         if not (r > 1) then
             begin
@@ -383,7 +385,7 @@ Flags:= Flags; // avoid compiler hint
                 x:= x + dX;
                 y:= y + dY;
                 dX:= dX + aiWindSpeed;
-                dY:= dY + cGravityf;
+                dY:= dY + aiGravityf;
                 dec(t)
             until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                    ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (y > cWaterLine);
@@ -535,7 +537,7 @@ repeat
     if (WorldEdge = weWrap) and (random(2)=0) then
          Vx:= - aiWindSpeed * rTime * 0.5 + ((targXWrap + AIrndSign(2)) - meX) / rTime
     else Vx:= - aiWindSpeed * rTime * 0.5 + ((Targ.Point.X + AIrndSign(2)) - meX) / rTime;
-    Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y - meY) / rTime;
+    Vy:= aiGravityf * rTime * 0.5 - (Targ.Point.Y - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
         begin
@@ -549,7 +551,7 @@ repeat
             x:= x + dX;
             y:= y + dY;
             dX:= dX + aiWindSpeed;
-            dY:= dY + cGravityf;
+            dY:= dY + aiGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t <= 0);
@@ -605,7 +607,7 @@ repeat
          Vx:= (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime;
     if (GameFlags and gfMoreWind) <> 0 then
          Vx:= -(aiWindSpeed / Density) * rTime * 0.5 + Vx;
-    Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
+    Vy:= aiGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
     if not (r > 1) then
@@ -622,7 +624,7 @@ repeat
                 dX:= dX + aiWindSpeed / Density;
 
             y:= y + dY;
-            dY:= dY + cGravityf;
+            dY:= dY + aiGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t < -timeLimit);
@@ -690,7 +692,7 @@ repeat
          Vx:= (Targ.Point.X + AIrndOffset(Targ, Level) - meX) / (TestTime + tDelta);
     if (GameFlags and gfMoreWind) <> 0 then
          Vx:= -(aiWindSpeed / Density) * (TestTime + tDelta) * 0.5 + Vx;
-    Vy:= cGravityf * ((TestTime + tDelta) div 2) - (Targ.Point.Y - meY) / (TestTime + tDelta);
+    Vy:= aiGravityf * ((TestTime + tDelta) div 2) - (Targ.Point.Y - meY) / (TestTime + tDelta);
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
         begin
@@ -705,7 +707,7 @@ repeat
             if (GameFlags and gfMoreWind) <> 0 then
                 dX:= dX + aiWindSpeed / Density;
             y:= y + dY;
-            dY:= dY + cGravityf;
+            dY:= dY + aiGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t = 0);
@@ -759,7 +761,7 @@ repeat
         Vx:= ((Targ.Point.X+10) - meX) / (TestTime + tDelta)
     else
         Vx:= ((Targ.Point.X-10) - meX) / (TestTime + tDelta);
-    Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Point.Y-50) - meY) / (TestTime + tDelta);
+    Vy:= aiGravityf * ((TestTime + tDelta) div 2) - ((Targ.Point.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
     if not (r > 1) then
         begin
@@ -773,7 +775,7 @@ repeat
         if (GameFlags and gfMoreWind) <> 0 then
             dX:= dX + aiWindSpeed / Density;
         y:= y + dY;
-        dY:= dY + cGravityf;
+        dY:= dY + aiGravityf;
         dec(t)
     until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
            ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t = 0);
@@ -827,7 +829,7 @@ repeat
     if (GameFlags and gfMoreWind) <> 0 then
         Vx:= -(aiWindSpeed / Density) * (TestTime + tDelta) * 0.5 + Vx;
 
-    Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Point.Y-50) - meY) / (TestTime + tDelta);
+    Vy:= aiGravityf * ((TestTime + tDelta) div 2) - ((Targ.Point.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
     if not (r > 1) then
         begin
@@ -842,7 +844,7 @@ repeat
             if (GameFlags and gfMoreWind) <> 0 then
                  dX:= dX + aiWindSpeed / Density;
             y:= y + dY;
-            dY:= dY + cGravityf;
+            dY:= dY + aiGravityf;
             dec(t)
        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 6)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 6))) or (t = 0);
@@ -874,8 +876,8 @@ end;
     var A, B, D, T: real;
         C: LongInt;
     begin
-        A:= sqr(cGravityf);
-        B:= - cGravityf * (TY - MY) - 1;
+        A:= sqr(aiGravityf);
+        B:= - aiGravityf * (TY - MY) - 1;
         C:= sqr(TY - MY) + sqr(TX - MX);
         D:= sqr(B) - A * C;
         if D >= 0 then
@@ -916,7 +918,7 @@ Flags:= Flags; // avoid compiler hint
     Vx:= (Targ.Point.X - meX) / TestTime;
     if (GameFlags and gfMoreWind) <> 0 then
         Vx:= -(aiWindSpeed / Density) * TestTime * 0.5 + Vx;
-    Vy:= cGravityf * (TestTime div 2) - (Targ.Point.Y - meY) / TestTime;
+    Vy:= aiGravityf * (TestTime div 2) - (Targ.Point.Y - meY) / TestTime;
 
     x:= meX;
     dX:= Vx;
@@ -928,7 +930,7 @@ Flags:= Flags; // avoid compiler hint
         if (GameFlags and gfMoreWind) <> 0 then
             dX:= dX + aiWindSpeed / Density;
         y:= y + dY;
-        dY:= dY + cGravityf;
+        dY:= dY + aiGravityf;
         EX:= trunc(x);
         EY:= trunc(y);
     until (((Me = CurrentHedgehog^.Gear) and TestColl(EX, EY, 4)) or
@@ -1408,7 +1410,7 @@ begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
-if (Level > 3) or (cGravityf = 0) then
+if (Level > 3) or (aiGravityf = 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
@@ -1417,7 +1419,7 @@ ap.AttackPutY:= Targ.Point.Y;
 
 bombsSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
-X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
+X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / aiGravityf);
 Y:= topY - 300;
 
 dX:= bombsSpeed;
@@ -1436,7 +1438,7 @@ repeat
     if (GameFlags and gfMoreWind) <> 0 then
         dX:= dX + aiWindSpeed / Density;
     Y:= Y + dY;
-    dY:= dY + cGravityf;
+    dY:= dY + aiGravityf;
     fexit:= true;
 
     for i:= 0 to 9 do
@@ -1538,7 +1540,7 @@ var bombsSpeed, X, Y, dX, dY, drillX, drillY: real;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
-if (Level > 3) or (cGravityf = 0) then
+if (Level > 3) or (aiGravityf = 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
@@ -1547,7 +1549,7 @@ ap.AttackPutY:= Targ.Point.Y;
 
 bombsSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
-X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
+X:= X - bombsSpeed * sqrt(((Targ.Point.Y + 128) * 2) / aiGravityf);
 Y:= topY - 300;
 
 valueResult:= 0;
@@ -1576,7 +1578,7 @@ while attackTime >= 0 do
             drillY:= drillY + dY;
             if (GameFlags and gfMoreWind) <> 0 then
                 dX:= dX + aiWindSpeed / Density;
-            dY:= dY + cGravityf;
+            dY:= dY + aiGravityf;
 
             if timerRuns then
                 dec(drillTimer);
@@ -1699,7 +1701,7 @@ ap.Time:= 0;
 // so they are unsupported.
 // TODO: Implement mine strike for other values of MineTime
 // TODO: Teach AI to avoid hitting their own with mines
-if (Level > 3) or (cGravityf = 0) or (cMinesTime <> 0) then
+if (Level > 3) or (aiGravityf = 0) or (cMinesTime <> 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
@@ -1708,7 +1710,7 @@ ap.AttackPutY:= Targ.Point.Y;
 
 minesSpeed:= hwFloat2Float(cBombsSpeed);
 X:= Targ.Point.X - 135 - cShift; // hh center - cShift
-X:= X - minesSpeed * sqrt(((Targ.Point.Y + 128) * 2) / cGravityf);
+X:= X - minesSpeed * sqrt(((Targ.Point.Y + 128) * 2) / aiGravityf);
 Y:= topY - 300;
 dX:= minesSpeed;
 dY:= 0;
@@ -1726,7 +1728,7 @@ repeat
     if (GameFlags and (gfMoreWind or gfInfAttack)) <> 0 then
         dX:= dX + aiWindSpeed / Density;
     Y:= Y + dY;
-    dY:= dY + cGravityf;
+    dY:= dY + aiGravityf;
     fexit:= true;
 
     for i:= 0 to 9 do
@@ -1805,7 +1807,7 @@ repeat
          Vx:= (Targ.Point.X + AIrndSign(2) + AIrndOffset(Targ, Level) - meX) / rTime;
     if (GameFlags and gfMoreWind) <> 0 then
          Vx:= -(aiWindSpeed / Density) * rTime * 0.5 + Vx;
-    Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
+    Vy:= aiGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
     if not (r > 1) then
@@ -1822,7 +1824,7 @@ repeat
                 dX:= dX + aiWindSpeed / Density;
 
             y:= y + dY;
-            dY:= dY + cGravityf;
+            dY:= dY + aiGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 2)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 2))) or (t < -timeLimit);
@@ -1863,7 +1865,7 @@ begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
-if (cGravityf <= 0) then
+if (aiGravityf <= 0) then
     exit(BadTurn);
 
 if (Level > 2) then
@@ -2098,7 +2100,7 @@ repeat
     if (GameFlags and gfMoreWind) <> 0 then
         dx:= dx + aiWindSpeed / Density;
     x:= x + dx;
-    dy:= dy + cGravityf;
+    dy:= dy + aiGravityf;
     y:= y + dy;
 
     if TestColl(trunc(x), trunc(y), 3) then
@@ -2148,7 +2150,7 @@ repeat
     if (GameFlags and gfMoreWind) <> 0 then
          dx:= dx + aiWindSpeed / Density;
     x:= x + dx;
-    dy:= dy + cGravityf;
+    dy:= dy + aiGravityf;
     y:= y + dy;
     if ((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 2)) or
         ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 2)) then
@@ -2213,7 +2215,7 @@ repeat
          Vx:= (Targ.Point.X - meX) / rTime;
     if (GameFlags and gfMoreWind) <> 0 then
          Vx:= -(aiWindSpeed / Density) * rTime * 0.5 + Vx;
-    Vy:= cGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
+    Vy:= aiGravityf * rTime * 0.5 - (Targ.Point.Y + 1 - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
 
     if not (r > 1) then
@@ -2230,7 +2232,7 @@ repeat
                 dX:= dX + aiWindSpeed / Density;
 
             y:= y + dY;
-            dY:= dY + cGravityf;
+            dY:= dY + aiGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 7)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 7))) or (t < -timeLimit);

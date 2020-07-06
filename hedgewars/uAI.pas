@@ -106,6 +106,8 @@ var BotLevel: Byte;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
 aiWindSpeed:= hwFloat2Float(cWindSpeed);
+aiGravity:= cGravity;
+aiGravityf:= cGravityf;
 aiLaserSighting:= (cLaserSighting) or (HHHasAmmo(Me^.Hedgehog^, amLaserSight) > 0);
 useThisActions:= false;
 Me^.AIHints:= Me^.AIHints and (not aihAmmosChanged);
@@ -310,7 +312,7 @@ if (Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 th
     AddAction(Actions, aia_Weapon, Longword(amNothing), 100 + random(200), 0, 0);
 
 if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoMoveAfter) = 0))
-    and (CurrentHedgehog^.Effects[heArtillery] = 0) and (cGravityf <> 0) then
+    and (CurrentHedgehog^.Effects[heArtillery] = 0) and (aiGravityf <> 0) then
     begin
     tmp:= random(2) + 1;
     Push(Actions, Me^, tmp);

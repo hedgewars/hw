@@ -108,7 +108,7 @@ var friendlyfactor: LongInt = 300;
 var dmgMod: real = 1.0;
 
 implementation
-uses uCollisions, uVariables, uUtils, uGearsUtils;
+uses uCollisions, uVariables, uUtils, uGearsUtils, uAIAmmoTests;
 
 var
     KnownExplosion: record
@@ -447,7 +447,7 @@ begin
         x:= CheckWrap(x);
         x:= x + dX;
         y:= y + dY;
-        dY:= dY + cGravityf;
+        dY:= dY + aiGravityf;
         skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
         if not skipLandCheck and TestCollExcludingObjects(trunc(x), trunc(y), Target.Radius) then
             with Target do
@@ -494,7 +494,7 @@ begin
         x:= CheckWrap(x);
         x:= x + dX;
         y:= y + dY;
-        dY:= dY + cGravityf;
+        dY:= dY + aiGravityf;
 
 {        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then
             begin
@@ -885,11 +885,11 @@ for i:= 0 to Targets.Count do
                     begin
 
                     if (WorldEdge <> weWrap) or (not (hwAbs(meX - int2hwFloat(pX)) > int2hwFloat(cSeductionDist))) then
-                        dX:= _50 * cGravity * (meX - int2hwFloat(pX)) / _25
+                        dX:= _50 * aiGravity * (meX - int2hwFloat(pX)) / _25
                     else if (not (hwAbs(meX + int2hwFloat((RightX-LeftX) - pX)) > int2hwFloat(cSeductionDist))) then
-                        dX:= _50 * cGravity * (meX + (int2hwFloat((RightX-LeftX) - pX))) / _25
+                        dX:= _50 * aiGravity * (meX + (int2hwFloat((RightX-LeftX) - pX))) / _25
                     else
-                        dX:= _50 * cGravity * (meX - (int2hwFloat((RightX-LeftX) - pX))) / _25;
+                        dX:= _50 * aiGravity * (meX - (int2hwFloat((RightX-LeftX) - pX))) / _25;
                     dY:= -_450 * cMaxWindSpeed * 2;
 
 
@@ -1069,7 +1069,7 @@ repeat
         if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then SetLittle(Gear^.dX);
             Gear^.X:= Gear^.X + Gear^.dX;
         inc(GoInfo.Ticks);
-        Gear^.dY:= Gear^.dY + cGravity;
+        Gear^.dY:= Gear^.dY + aiGravity;
         if Gear^.dY > _0_4 then
             exit(false);
         if (Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, -1) <> 0) then
@@ -1135,7 +1135,7 @@ repeat
     if (Gear^.State and gstMoving) <> 0 then
         begin
         inc(GoInfo.Ticks);
-        Gear^.dY:= Gear^.dY + cGravity;
+        Gear^.dY:= Gear^.dY + aiGravity;
         if Gear^.dY > _0_4 then
             begin
             GoInfo.FallPix:= 0;
