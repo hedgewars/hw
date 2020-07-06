@@ -1517,7 +1517,7 @@ else
     ap.Power:= max(16 * heal - 16, 10);
 
 // Time limit
-ap.Power:= min(ap.Power, 5000)
+ap.Power:= min(ap.Power, 5000);
 
 ap.Angle:= 0;
 
