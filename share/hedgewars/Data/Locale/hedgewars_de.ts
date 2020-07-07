@@ -2134,7 +2134,7 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Teile den Schmerz deines Gegners, teile seinen erleideten Schaden</translation>
+        <translation>Teile den Schmerz deines Gegners, teile seinen erlittenen Schaden</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
