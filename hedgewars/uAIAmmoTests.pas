@@ -1432,7 +1432,7 @@ begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
-if (Level > 3) or (aiGravityf = 0) then
+if (Level > 3) or (aiGravityf <= 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
@@ -1562,7 +1562,7 @@ var bombsSpeed, X, Y, dX, dY, drillX, drillY: real;
 begin
 Flags:= Flags; // avoid compiler hint
 ap.ExplR:= 0;
-if (Level > 3) or (aiGravityf = 0) then
+if (Level > 3) or (aiGravityf <= 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
@@ -1723,7 +1723,7 @@ ap.Time:= 0;
 // so they are unsupported.
 // TODO: Implement mine strike for other values of MineTime
 // TODO: Teach AI to avoid hitting their own with mines
-if (Level > 3) or (aiGravityf = 0) or (cMinesTime <> 0) then
+if (Level > 3) or (aiGravityf <= 0) or (cMinesTime <> 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
