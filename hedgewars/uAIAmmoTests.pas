@@ -136,7 +136,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestHammer;      flags: amtest_NoTarget or amtest_NoInvulnerable), // amHammer
             (proc: @TestResurrector; flags: amtest_NoTarget or amtest_NoInvulnerable or amtest_NoVampiric or amtest_NoLowGravity), // amResurrector
             (proc: @TestDrillStrike; flags: amtest_Rare), // amDrillStrike
-            (proc: nil;              flags: 0), // amSnowball
+            (proc: @TestSnowball;    flags: amtest_NoInvulnerable or amtest_NoVampiric), // amSnowball
             (proc: nil;              flags: 0), // amTardis
             (proc: nil;              flags: 0), // amLandGun
             (proc: nil;              flags: 0), // amIceGun
@@ -513,6 +513,8 @@ TestRCPlane:= BadTurn
 end;
 
 function TestSnowball(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const timeLimit = 5000;
+      Density : real = 0.5;
 var Vx, Vy, r: real;
     rTime: LongInt;
     EX, EY: LongInt;
@@ -532,14 +534,21 @@ valueResult:= BadTurn;
 if (WorldEdge = weWrap) then
     if (Targ.Point.X < meX) then
          targXWrap:= Targ.Point.X + (RightX-LeftX)
-    else targXWrap:= Targ.Point.X - (RightX-LeftX);
+    else
+         targXWrap:= Targ.Point.X - (RightX-LeftX);
 repeat
-    rTime:= rTime + 300 + Level * 50 + random(1000);
+    rTime:= rTime + 300 + Level * 50 + random(300);
     if (WorldEdge = weWrap) and (random(2)=0) then
-         Vx:= - aiWindSpeed * rTime * 0.5 + ((targXWrap + AIrndSign(2)) - meX) / rTime
-    else Vx:= - aiWindSpeed * rTime * 0.5 + ((Targ.Point.X + AIrndSign(2)) - meX) / rTime;
+         Vx:= (targXWrap - meX) / rTime
+    else
+         Vx:= (Targ.Point.X - meX) / rTime;
+    if (GameFlags and gfMoreWind) <> 0 then
+         Vx:= -(aiWindSpeed / Density) * rTime * 0.5 + Vx
+    else
+         Vx:= -aiWindSpeed * rTime * 0.5 + Vx;
     Vy:= aiGravityf * rTime * 0.5 - (Targ.Point.Y - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
+
     if not (r > 1) then
         begin
         x:= meX;
@@ -550,31 +559,43 @@ repeat
         repeat
             x:= CheckWrap(x);
             x:= x + dX;
+            if (GameFlags and gfMoreWind) <> 0 then
+                dX:= dX + aiWindSpeed / Density
+            else
+                dX:= dX + aiWindSpeed;
+
             y:= y + dY;
-            dX:= dX + aiWindSpeed;
             dY:= dY + aiGravityf;
             dec(t)
-        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t <= 0);
+        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 4)) or
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 4))) or (trunc(y) > cWaterLine) or (t < -timeLimit);
+
         EX:= trunc(x);
         EY:= trunc(y);
 
-        value:= RateShove(Me, trunc(x), trunc(y), 5, 1, trunc((abs(dX)+abs(dY))*20), -dX, -dY, afTrackFall);
-        // LOL copypasta: this is score for digging with... snowball
-        //if value = 0 then
-        //    value:= - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64;
+        // Sanity check: Make sure we're not too close to impact location
+        if (Metric(trunc(meX), trunc(meY), EX, EY) <= 40) then
+            value:= BadTurn
+        // Rate attack
+        else if (t >= -timeLimit) and (EY <= cWaterLine) then
+            // radius intentionally set to 16 for shove because lower values don't work reliably
+            value:= RateShove(Me, EX, EY, 16, 0, trunc((abs(dX)+abs(dY))*20), dX, dY, afTrackFall)
+        else
+            value:= BadTurn;
 
-        if valueResult <= value then
+        if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
+            value := BadTurn;
+
+        if (valueResult < value) or ((valueResult = value) and (Level = 1)) then
             begin
-            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
-            ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
-            ap.ExplR:= 0;
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 12));
+            ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 22 + 1);
             ap.ExplX:= EX;
             ap.ExplY:= EY;
             valueResult:= value
             end;
-     end
-until (rTime > 5050 - Level * 800);
+        end
+until rTime > 5050 - Level * 800;
 TestSnowball:= valueResult
 end;
 
