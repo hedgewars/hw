@@ -7272,6 +7272,19 @@ begin
         and (TraceAttackPath(Sentry^.X, Sentry^.Y, targetX, targetY, _4, lfLandMask) <= 18);
 end;
 
+procedure ResetSentryState(Gear: PGear; state, timer: LongInt);
+begin
+    Gear^.Timer := timer;
+    Gear^.Tag := state;
+    Gear^.Target.X := 0;
+    Gear^.Target.Y := 0;
+    if Gear^.Karma <> 0 then
+    begin
+        ClearGlobalHitOrderLeq(Gear^.Karma);
+        Gear^.Karma := 0;
+    end;
+end;
+
 procedure doStepSentry(Gear: PGear);
 var HHGear, bullet: PGear;
     distX, distY, invDistance: HwFloat;
@@ -7286,13 +7299,18 @@ begin
     if CheckGearDrowning(Gear) then
         exit;
 
-    dec(Gear^.Health, Gear^.Damage);
-    Gear^.Damage := 0;
-    if Gear^.Health <= 0 then
+    if Gear^.Damage > 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
-        DeleteGear(Gear);
-        exit;
+        dec(Gear^.Health, Gear^.Damage);
+        Gear^.Damage := 0;
+        if Gear^.Health <= 0 then
+        begin
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+            DeleteGear(Gear);
+            exit;
+        end;
+
+        ResetSentryState(Gear, sentry_Reloading, 10000)
     end;
 
     if ((Gear^.Health * 100) < random(cSentryHealth * 90)) and ((GameTicks and $FF) = 0) then
@@ -7304,18 +7322,8 @@ begin
     if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
     begin
         doStepFallingGear(Gear);
-        if Gear^.Tag <> sentry_Idle then
-        begin
-            Gear^.Timer := 0;
-            Gear^.Tag := sentry_Idle;
-            Gear^.Target.X := 0;
-            Gear^.Target.Y := 0;
-            if Gear^.Karma <> 0 then
-            begin
-                ClearGlobalHitOrderLeq(Gear^.Karma);
-                Gear^.Karma := 0;
-            end;
-        end;
+        if not (Gear^.Tag in [sentry_Idle, sentry_Reloading]) then
+            ResetSentryState(Gear, sentry_Idle, 1000);
         exit;
     end;
 
