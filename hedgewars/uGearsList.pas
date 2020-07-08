@@ -318,7 +318,7 @@ gtSniperRifleShot: Gear^.Boom := 100000;
           gtKnife: Gear^.Boom := 40000; // arbitrary scaling factor since impact-based
         gtCreeper: Gear^.Boom := 100;
   gtMinigunBullet: Gear^.Boom := 2;
-         gtSentry: Gear^.Boom := 25;
+         gtSentry: Gear^.Boom := 40;
     end;
 
 case Kind of
@@ -838,9 +838,9 @@ gtFlamethrower: begin
                 end;
         gtSentry: begin
                 gear^.Radius:= cHHRadius;
-                gear^.Health:= 100;
+                gear^.Health:= 60;
                 gear^.Friction:= _0_93;
-                gear^.Elasticity:= _0_5;
+                gear^.Elasticity:= _0_05;
                 gear^.Tag:= 0;
                 gear^.Timer:= 500;
                 gear^.WDTimer:= 0;

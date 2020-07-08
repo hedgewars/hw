@@ -1217,7 +1217,7 @@ begin
         begin
         dec(i);
         if Collisions^.ar[i]^.Kind in
-            [gtMine, gtSMine, gtAirMine, gtKnife, gtCase, gtTarget, gtExplosives] then
+            [gtMine, gtSMine, gtAirMine, gtKnife, gtCase, gtTarget, gtExplosives, gtSentry] then
             begin
             Gear^.X := Collisions^.ar[i]^.X;
             Gear^.Y := Collisions^.ar[i]^.Y;
@@ -7285,6 +7285,15 @@ begin
 
     if CheckGearDrowning(Gear) then
         exit;
+
+    dec(Gear^.Health, Gear^.Damage);
+    Gear^.Damage := 0;
+    if Gear^.Health <= 0 then
+    begin
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
+        DeleteGear(Gear);
+        exit;
+    end;
 
     if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
     begin
