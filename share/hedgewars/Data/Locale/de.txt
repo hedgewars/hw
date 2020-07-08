@@ -61,6 +61,7 @@
 00:58=Luftmine
 00:59=Creeper
 00:60=Minigun
+00:61=Wachroboter
 
 01:00=Laden …
 01:01=Unentschieden
@@ -1303,6 +1304,7 @@
 03:58=Schwebende Annäherungsmine
 03:59=Unfertige Waffe
 03:60=Die ultimative Feuerwaffe
+03:61=Unfertige Waffe
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1–5: Zeitzünder einstellen|Genaues Zielen + 1-5: Sprungkraft einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -1364,8 +1366,9 @@
 04:56=Du kannst zwei Hackebeile auf deinen Feind schleudern,|Passagen und Tunnel blockieren, und sie sogar zum Klettern|benutzen! Der Schaden erhöht sich mit der Geschwindigkeit.|Aber sei vorsichtig! Es ist gefährlich, mit Messern zu spielen.|Angriff: Gedrückt halten, um mit mehr Schwung zu werfen (zwei mal)
 04:57=Bau einen SEHR elastischen Balken aus Gummi,|von dem Igel und andere Sachen abprallen,|ohne Fallschaden zu nehmen.|Links/Rechts: Ausrichtung des Gummis wählen|Cursor: Gummi platzieren
 04:58=Diese Annäherungsmine wird frei in der Luft schweben und|verfolgt törichte Igel, die dumm genug sind, ihr zu nahe zu|kommen. Allerdings ist ihre Explosion schwächer als|die der Landmine.|Angriff: Halten, um mit mehr Kraft zu werfen
-04:59=Diese Waffe ist unfertig und experimentell.|Benutze sie auf eigene Gefahr!
+04:59=Diese Waffe ist unfertig und experimentell.|Benutze sie auf eigene Gefahr!|Angriff: Einsetzen
 04:60=Lass es Kugeln auf deine Gegner hageln!|Und sie dachten wirklich, sie seien hinter|drei Trägerschichten sicher.|Angriff: Mit voller Kraft feuern|Hoch/Runter: Weiterzielen
+04:61=Diese Waffe ist unfertig und experimentell.|Benutze sie auf eigene Gefahr!|Angriff: Roboter platzieren
 
 ; Game goal strings
 05:00=Spielmodifikationen

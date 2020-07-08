@@ -2134,7 +2134,7 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Teile den Schmerz deines Gegners, teile seinen erleideten Schaden</translation>
+        <translation>Teile den Schmerz deines Gegners, teile seinen erlittenen Schaden</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
@@ -2351,7 +2351,7 @@ Die letzte Meldung der Engine lautet:
     </message>
     <message>
         <source>Average number of sentry bots to be placed on a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Durchschnittliche Anzahl der Wachroboter, die auf mittelgroßen Inselkarten platziert werden. Dieser Wert wird für andere Karten skaliert.</translation>
     </message>
 </context>
 <context>
@@ -3196,11 +3196,11 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Chat size (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatgröße (%)</translation>
     </message>
     <message>
         <source>Sentry Bots</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachroboter</translation>
     </message>
 </context>
 <context>
