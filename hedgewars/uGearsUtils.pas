@@ -957,9 +957,8 @@ while tryAgain do
                 repeat
                     inc(y, 2);
                 until (y >= cWaterLine) or
-                    (ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, $FF00, 0) = 0)) or
-                    (not ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, $FFFF, 0) = 0));
-
+                    (ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, 0) = 0)) or
+                    (not ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, lfAll, 0) = 0));
 
                 sy:= y;
 
@@ -967,21 +966,21 @@ while tryAgain do
                     inc(y);
                 until (y >= cWaterLine) or
                         (ignoreOverlap and 
-                                (CountLand(x, y, Gear^.Radius - 1, 1, $FFFF, 0) <> 0)) or
+                                (CountLand(x, y, Gear^.Radius - 1, 1, lfAll, 0) <> 0)) or
                         (not ignoreOverlap and 
                             (CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, 0) <> 0));
 
                 if (y - sy > Gear^.Radius * 2) and (y < cWaterLine)
                     and (((Gear^.Kind = gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
-                        and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, $FFFF)
-                         or (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF, 0) > Gear^.Radius)
+                        and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, lfAll)
+                         or (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, lfAll, 0) > Gear^.Radius)
                             ))
                     or
                         ((Gear^.Kind <> gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
                         and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, lfIce)
-                         or (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF, lfIce) <> 0)
+                         or (CountLand(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, lfAll, lfIce) <> 0)
                             ))) then
                     begin
                     ar[cnt].X:= x;
