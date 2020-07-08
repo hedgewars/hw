@@ -7295,6 +7295,12 @@ begin
         exit;
     end;
 
+    if ((Gear^.Health * 100) < random(cSentryHealth * 90)) and ((GameTicks and $FF) = 0) then
+        if Gear^.Health * 2 < cSentryHealth then
+            AddVisualGear(hwRound(Gear^.X) - 8 + Random(16), hwRound(Gear^.Y) - 2, vgtSmoke)
+        else
+            AddVisualGear(hwRound(Gear^.X) - 8 + Random(16), hwRound(Gear^.Y) - 2, vgtSmokeWhite);
+
     if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
     begin
         doStepFallingGear(Gear);

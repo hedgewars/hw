@@ -838,7 +838,7 @@ gtFlamethrower: begin
                 end;
         gtSentry: begin
                 gear^.Radius:= cHHRadius;
-                gear^.Health:= 60;
+                gear^.Health:= cSentryHealth;
                 gear^.Friction:= _0_93;
                 gear^.Elasticity:= _0_05;
                 gear^.Tag:= 0;
