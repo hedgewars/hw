@@ -2233,6 +2233,10 @@ Last engine message:
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
+    <message>
+        <source>Average number of sentry bots to be placed on a medium-sized island map. This number will be scaled for other maps.</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -3018,6 +3022,14 @@ Do you really want to quit?</translation>
     </message>
     <message>
         <source>Zoom (%)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Chat size (%)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Sentry Bots</source>
         <translation></translation>
     </message>
 </context>

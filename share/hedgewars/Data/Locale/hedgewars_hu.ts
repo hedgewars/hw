@@ -2126,6 +2126,10 @@ A motor utolsó üzenete:
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
+    <message>
+        <source>Average number of sentry bots to be placed on a medium-sized island map. This number will be scaled for other maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -2866,6 +2870,14 @@ Tényleg ki akarsz lépni?</translation>
     <message>
         <source>Zoom (%)</source>
         <translation>Nagyítás (%)</translation>
+    </message>
+    <message>
+        <source>Chat size (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sentry Bots</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
