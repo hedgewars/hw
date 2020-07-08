@@ -58,7 +58,7 @@ uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
-    , uVisualGearsList, uGearsHandlersMess, uAI;
+    , uVisualGearsList, uGearsHandlersMess, uAI, SDLh;
 
 var skipFlag: boolean;
 
@@ -761,6 +761,62 @@ begin
     end;
 end;
 
+procedure AddSentries(count: LongWord);
+var i, x, y, swapIndex: LongInt;
+    positions: array[0..1023] of TPoint;
+    positionsCount, tries: LongInt;
+begin
+    positionsCount := 0;
+    tries := 2048;
+    while (positionsCount < 1024) and (tries > 0) do
+    begin
+        x := leftX + cHHRadius + GetRandom(rightX - leftX - 2 * cHHRadius);
+        y := cHHRadius;
+
+        while y < cWaterLine do
+        begin
+            repeat
+                inc(y, cHHRadius)
+            until (y >= cWaterLine) or (CountLand(x, y, cHHRadius - 1, 1, lfAll, 0) = 0);
+
+            if y < cWaterLine then
+            begin
+                repeat
+                    inc(y)
+                until (y >= cWaterLine) or (CountLand(x, y, cHHRadius - 1, 1, lfAll, 0) <> 0);
+
+                if y < cWaterLine then
+                begin
+                    swapIndex := GetRandom(positionsCount + 1);
+                    if swapIndex = positionsCount then
+                    begin
+                        positions[positionsCount].X := x;
+                        positions[positionsCount].Y := y;
+                    end
+                    else
+                    begin
+                        positions[positionsCount].X := positions[swapIndex].X;
+                        positions[positionsCount].Y := positions[swapIndex].Y;
+                        positions[swapIndex].X := x;
+                        positions[swapIndex].Y := y;
+                    end;
+                    inc(positionsCount);
+                    if positionsCount >= 1024 then
+                        break;
+                    inc(y, cHHRadius * 2)
+                end
+                else
+                    dec(tries)
+            end
+            else
+                dec(tries)
+        end;
+    end;
+
+    for i := 0 to min(count, positionsCount) - 1 do
+        AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 5000);
+end;
+
 procedure AddMiscGears;
 var p,i,j,t,h,unplaced: Longword;
     rx, ry: LongInt;
@@ -863,20 +919,7 @@ if cAirMines > 0 then
         end;
 if p <> 0 then DeleteGear(Gear);
 
-i:= 0;
-unplaced:= 0;
-while (i < cSentries) and (unplaced < 4) do
-    begin
-        Gear:= AddGear(0, 0, gtSentry, 0, _0, _0, 0);
-        FindPlace(Gear, false, 0, LAND_WIDTH);
-
-        if Gear = nil then
-            inc(unplaced)
-        else
-            unplaced:= 0;
-
-        inc(i)
-    end;
+AddSentries(cSentries);
 
 if (GameFlags and gfLowGravity) <> 0 then
     begin

@@ -41,6 +41,7 @@ procedure ResurrectHedgehog(var gear: PGear);
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
+function CountLand(x, y, r, c: LongInt; mask, antimask: LongWord): LongInt;
 
 function  CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
