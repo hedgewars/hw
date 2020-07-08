@@ -7202,29 +7202,29 @@ begin
 end;
     
 function MakeSentryJump(Sentry: PGear; maxXStep, maxYStep: LongInt): Boolean;
-var x, y, offsetX, offsetY: LongInt;
+var x, y, offsetX, offsetY, direction: LongInt;
     jumpTime: hwFloat;
 begin
     MakeSentryJump := false;
     x := hwRound(Sentry^.X);
     y := hwRound(Sentry^.Y);
-    offsetX := (maxXStep - Sentry^.Radius) * hwSign(Sentry^.dX);
+    offsetX := maxXStep - Sentry^.Radius;
+    direction := hwSign(Sentry^.dX);
+
     repeat
         for offsetY := -maxYStep - 1 to maxYStep + 1 do
-        begin
-            if TestCollisionYImpl(x + offsetX, y + offsetY, Sentry^.Radius, 1, Sentry^.CollisionMask) <> 0 then
+            if TestCollisionYImpl(x + offsetX * direction, y + offsetY, Sentry^.Radius, 1, Sentry^.CollisionMask) <> 0 then
                 break;
-        end;
         if (offsetY >= -maxYStep) and (offsetY <= maxYStep) then
             break;
-        Dec(offsetX, Sentry^.Radius * hwSign(Sentry^.dX));
+        Dec(offsetX, Sentry^.Radius);
     until offsetX <= 0;
 
-    if (offsetX > 0) and (not cGravity.isNegative) then
+    if (offsetX >= Sentry^.Radius) and (not cGravity.isNegative) then
     begin
         Sentry^.dY := -_0_25;
         jumpTime := _2 * Sentry^.dY / cGravity;
-        Sentry^.dX := SignAs(int2hwFloat(abs(offsetX) - Sentry^.Radius) / jumpTime, Sentry^.dX);
+        Sentry^.dX := SignAs(int2hwFloat(offsetX - Sentry^.Radius) / jumpTime, Sentry^.dX);
         MakeSentryJump := true;
     end;
 end;
