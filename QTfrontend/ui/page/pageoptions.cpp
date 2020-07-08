@@ -400,7 +400,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             // Chat size adjustment
             QLabel *labelChatSize = new QLabel(groupGame);
-            labelChatSize->setText(QLabel::tr("Initial chat size (%)"));
+            labelChatSize->setText(QLabel::tr("Chat size (%)"));
             labelChatSize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             groupGame->layout()->addWidget(labelChatSize, 11, 0);
 
