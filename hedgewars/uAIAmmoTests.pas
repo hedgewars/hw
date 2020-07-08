@@ -999,7 +999,8 @@ ap.Power:= 1;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 range:= Metric(trunc(x), trunc(y), Targ.Point.X, Targ.Point.Y);
-if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then
+// Range limits (laser sight can remove upper range limit)
+if (range < MIN_RANGE) or ((range > MAX_RANGE) and (not aiLaserSighting) and (Level >= 4))then
     exit(BadTurn);
 
 Vx:= (Targ.Point.X - x) * 1 / 1024;
