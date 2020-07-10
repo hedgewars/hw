@@ -1745,7 +1745,8 @@ begin
                     else DrawSpriteRotatedF(sprCreeper, x, y, 1, hwRound(SignAs(_1,Gear^.dX)), 0);
             gtSentry: begin
                 DrawSpriteRotated(sprSentry, x, y, hwSign(Gear^.dX), 0);
-                DrawCircle(x, y, Gear^.Radius, 1, 255, 0, 0, 255);
+                if Gear^.Tag >= 0 then
+                    DrawCircle(x, y, Gear^.Radius, 1, 255, 0, 0, 255);
             end;
             gtGenericFaller: begin
                              // DEBUG: draw gtGenericFaller

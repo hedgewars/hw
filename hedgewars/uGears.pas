@@ -814,7 +814,7 @@ begin
     end;
 
     for i := 0 to min(count, positionsCount) - 1 do
-        AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 5000);
+        AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 0);
 end;
 
 procedure AddMiscGears;
@@ -1520,7 +1520,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepCreeper,
             @doStepMinigun,
             @doStepMinigunBullet,
-            @doStepSentry);
+            @doStepSentryDeploy);
 begin
     doStepHandlers:= handlers;
 

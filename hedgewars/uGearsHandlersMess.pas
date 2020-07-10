@@ -141,7 +141,7 @@ procedure doStepKnife(Gear: PGear);
 procedure doStepMinigunWork(Gear: PGear);
 procedure doStepMinigun(Gear: PGear);
 procedure doStepMinigunBullet(Gear: PGear);
-procedure doStepSentry(Gear: PGear);
+procedure doStepSentryDeploy(Gear: PGear);
 
 var
     upd: Longword;
@@ -7286,7 +7286,7 @@ begin
     end;
 end;
 
-procedure doStepSentry(Gear: PGear);
+procedure doStepSentryLand(Gear: PGear);
 var HHGear, bullet: PGear;
     distX, distY, invDistance: HwFloat;
 const sentry_Idle = 0;
@@ -7469,6 +7469,22 @@ begin
             Gear^.Timer := 1800 + GetRandom(400);
         end
     end
+end;
+
+procedure doStepSentryDeploy(Gear: PGear);
+begin
+    Gear^.Tag := -1;
+    if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
+        doStepFallingGear(Gear)
+    else
+    begin
+        if Gear^.Timer > 0 then dec(Gear^.Timer);
+        if Gear^.Timer = 0 then
+        begin
+            Gear^.Tag := 0;
+            Gear^.doStep := @doStepSentryLand;
+        end;
+    end;
 end;
 
 end.

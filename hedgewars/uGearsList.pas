@@ -842,7 +842,7 @@ gtFlamethrower: begin
                 gear^.Friction:= _0_93;
                 gear^.Elasticity:= _0_05;
                 gear^.Tag:= 0;
-                gear^.Timer:= 500;
+                gear^.Timer:= 1000;
                 gear^.WDTimer:= 0;
                 end;
 gtGenericFaller:begin
