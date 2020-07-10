@@ -7190,7 +7190,8 @@ begin
             break;
     end;
 
-    if (offset >= -maxYStep) and (offset <= maxYStep) then
+    if (offset >= -maxYStep) and (offset <= maxYStep)
+       and (TestCollisionYImpl(x + direction, y + offset, Sentry^.Radius, -1, Sentry^.CollisionMask) = 0) then
     begin
         if not TestOnly then
         begin
