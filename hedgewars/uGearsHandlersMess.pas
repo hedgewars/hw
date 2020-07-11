@@ -7575,7 +7575,11 @@ begin
     if (Gear^.Tag = sentry_Walking) and ((GameTicks and $1F) = 0) then
     begin
         if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) = 0 then
-            Gear^.X := Gear^.X + SignAs(_1, Gear^.dX)
+        begin
+            Gear^.dX := SignAs(_1, Gear^.dX);
+            Gear^.X := Gear^.X + Gear^.dX;
+            WorldWrap(Gear);
+        end
         else
             Gear^.Timer := 0
     end;
