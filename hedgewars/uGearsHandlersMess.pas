@@ -7429,7 +7429,9 @@ begin
                     begin
                         if GetRandom(2) = 0 then
                         begin
-                            Gear^.dY := - _0_25;
+                            Gear^.dY := - _0_1;
+                            if TestCollisionYKick(Gear, -1) = 0 then
+                                Gear^.dY := - _0_25;
                             Gear^.Timer := 3000;
                         end
                         else
