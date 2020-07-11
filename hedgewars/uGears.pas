@@ -761,7 +761,7 @@ begin
     end;
 end;
 
-procedure AddSentries(count: LongWord);
+procedure AddLandSentries(count: LongWord);
 var i, x, y, swapIndex: LongInt;
     positions: array[0..1023] of TPoint;
     positionsCount, tries: LongInt;
@@ -815,6 +815,36 @@ begin
 
     for i := 0 to min(count, positionsCount) - 1 do
         AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 0);
+end;
+
+function AddWaterSentries(count: Longword): Longword;
+var i, x, y: LongInt;
+    positions: array[0..255] of TPoint;
+    positionsCount, tries: LongInt;
+begin
+    AddWaterSentries := 0;
+    positionsCount := 0;
+    tries := 512;
+
+    while (positionsCount < 256) and (tries > 0) do
+    begin
+        x := leftX + cHHRadius + GetRandom(rightX - leftX - 2 * cHHRadius);
+        y := cWaterLine - 3 * cHHRadius;
+        if (CountLand(x, y, cHHRadius - 1, 1, lfAll, 0) = 0) then
+        begin
+            positions[positionsCount].X := x;
+            positions[positionsCount].Y := y;
+            inc(positionsCount);
+            if positionsCount >= 256 then
+                break;
+        end;
+    end;
+
+    for i := 0 to min(count, positionsCount) - 1 do
+    begin
+        AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 0);
+        inc(AddWaterSentries);
+    end;
 end;
 
 procedure AddMiscGears;
@@ -919,7 +949,10 @@ if cAirMines > 0 then
         end;
 if p <> 0 then DeleteGear(Gear);
 
-AddSentries(cSentries);
+if cSentries > 10 then
+    AddLandSentries(cSentries - AddWaterSentries(cSentries div 10))
+else
+    AddLandSentries(cSentries);
 
 if (GameFlags and gfLowGravity) <> 0 then
     begin
