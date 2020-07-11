@@ -7471,10 +7471,36 @@ begin
     end
 end;
 
+procedure doStepSentryWater(Gear: PGear);
+begin
+    if Gear^.Tag < 0 then
+    begin
+        CheckGearDrowning(Gear);
+        exit;
+    end;
+
+    Gear^.Y := int2hwFloat(cWaterLine - 3 * Gear^.Radius);
+    if TestCollisionYwithGear(Gear, -1) <> 0 then
+    begin
+        Gear^.Tag := -1;
+        exit;
+    end;
+end;
+
 procedure doStepSentryDeploy(Gear: PGear);
 begin
     Gear^.Tag := -1;
-    if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
+    if hwRound(Gear^.Y) + 3 * Gear^.Radius >= cWaterLine then
+    begin
+        Gear^.Y := int2hwFloat(cWaterLine - 3 * Gear^.Radius);
+        if Gear^.Timer > 0 then dec(Gear^.Timer);
+        if Gear^.Timer = 0 then
+        begin
+            Gear^.Tag := 0;
+            Gear^.doStep := @doStepSentryWater;
+        end;
+    end
+    else if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
         doStepFallingGear(Gear)
     else
     begin
