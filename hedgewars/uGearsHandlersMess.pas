@@ -7354,6 +7354,22 @@ begin
     PlaySound(sndGun);
 end;
 
+function GetSentryTarget(): PGear;
+var HHGear: PGear;
+begin
+    GetSentryTarget := nil;
+    if (CurrentHedgehog <> nil) then
+    begin
+        HHGear := CurrentHedgehog^.Gear;
+        if HHGear <> nil then
+        begin
+            if ((HHGear^.State and gstHHDriven) <> 0)
+                and (HHGear^.CollisionIndex < 0) then
+                GetSentryTarget := HHGear;
+        end
+    end
+end;
+
 procedure doStepSentryLand(Gear: PGear);
 var HHGear: PGear;
 const sentry_Idle = 0;
@@ -7468,20 +7484,18 @@ begin
         AimSentry(Gear);
 
     if ((GameTicks and $FF) = 0)
-        and (Gear^.Tag in [sentry_Idle, sentry_Walking])
-        and (CurrentHedgehog <> nil)
-        and (CurrentHedgehog^.Gear <> nil)
-        and ((CurrentHedgehog^.Gear^.State and (gstMoving or gstHHDriven)) = (gstMoving or gstHHDriven)) then
+        and (Gear^.Tag in [sentry_Idle, sentry_Walking]) then
     begin
-        HHGear := CurrentHedgehog^.Gear;
-        if CheckSentryAttackRange(Gear, HHGear^.X, HHGear^.Y) then
-        begin
-            Gear^.Target.X := hwRound(HHGear^.X);
-            Gear^.Target.Y := hwRound(HHGear^.Y);
-            Gear^.Karma := GameTicks;
-            Gear^.Tag := sentry_Aiming;
-            Gear^.Timer := 1800 + GetRandom(400);
-        end
+        HHGear := GetSentryTarget();
+        if HHGear <> nil then
+            if CheckSentryAttackRange(Gear, HHGear^.X, HHGear^.Y) then
+            begin
+                Gear^.Target.X := hwRound(HHGear^.X);
+                Gear^.Target.Y := hwRound(HHGear^.Y);
+                Gear^.Karma := GameTicks;
+                Gear^.Tag := sentry_Aiming;
+                Gear^.Timer := 1800 + GetRandom(400);
+            end
     end
 end;
 
@@ -7568,20 +7582,18 @@ begin
         AimSentry(Gear);
 
     if ((GameTicks and $FF) = 0)
-        and (Gear^.Tag in [sentry_Idle, sentry_Walking])
-        and (CurrentHedgehog <> nil)
-        and (CurrentHedgehog^.Gear <> nil)
-        and ((CurrentHedgehog^.Gear^.State and (gstMoving or gstHHDriven)) = (gstMoving or gstHHDriven)) then
+        and (Gear^.Tag in [sentry_Idle, sentry_Walking]) then
     begin
-        HHGear := CurrentHedgehog^.Gear;
-        if CheckSentryAttackRange(Gear, HHGear^.X, HHGear^.Y) then
-        begin
-            Gear^.Target.X := hwRound(HHGear^.X);
-            Gear^.Target.Y := hwRound(HHGear^.Y);
-            Gear^.Karma := GameTicks;
-            Gear^.Tag := sentry_Aiming;
-            Gear^.Timer := 1800 + GetRandom(400);
-        end
+        HHGear := GetSentryTarget();
+        if HHGear <> nil then
+            if CheckSentryAttackRange(Gear, HHGear^.X, HHGear^.Y) then
+            begin
+                Gear^.Target.X := hwRound(HHGear^.X);
+                Gear^.Target.Y := hwRound(HHGear^.Y);
+                Gear^.Karma := GameTicks;
+                Gear^.Tag := sentry_Aiming;
+                Gear^.Timer := 1800 + GetRandom(400);
+            end
     end
 end;
 
