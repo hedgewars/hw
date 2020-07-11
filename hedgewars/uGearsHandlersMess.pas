@@ -7286,9 +7286,76 @@ begin
     end;
 end;
 
-procedure doStepSentryLand(Gear: PGear);
-var HHGear, bullet: PGear;
+function CheckSentryDestroyed(Sentry: PGear; damagedState: LongInt): Boolean;
+begin
+    CheckSentryDestroyed := false;
+    if Sentry^.Damage > 0 then
+    begin
+        dec(Sentry^.Health, Sentry^.Damage);
+        Sentry^.Damage := 0;
+        if Sentry^.Health <= 0 then
+        begin
+            doMakeExplosion(hwRound(Sentry^.X), hwRound(Sentry^.Y), Sentry^.Boom, Sentry^.Hedgehog, EXPLAutoSound);
+            DeleteGear(Sentry);
+            CheckSentryDestroyed := true;
+            exit;
+        end
+        else
+            ResetSentryState(Sentry, damagedState, 10000)
+    end;
+
+    if ((Sentry^.Health * 100) < random(cSentryHealth * 90)) and ((GameTicks and $FF) = 0) then
+        if Sentry^.Health * 2 < cSentryHealth then
+            AddVisualGear(hwRound(Sentry^.X) - 8 + Random(16), hwRound(Sentry^.Y) - 2, vgtSmoke)
+        else
+            AddVisualGear(hwRound(Sentry^.X) - 8 + Random(16), hwRound(Sentry^.Y) - 2, vgtSmokeWhite);
+end;
+
+procedure AimSentry(Sentry: PGear);
+var HHGear: PGear;
+begin
+    if CurrentHedgehog <> nil then
+    begin
+        HHGear := CurrentHedgehog^.Gear;
+        if HHGear <> nil then
+        begin
+            Sentry^.Target.X := Sentry^.Target.X + hwSign(HHGear^.X - int2hwFloat(Sentry^.Target.X));
+            Sentry^.Target.Y := Sentry^.Target.Y + hwSign(HHGear^.Y - int2hwFloat(Sentry^.Target.Y));
+        end;
+    end;
+end;
+
+procedure MakeSentryShot(Sentry: PGear);
+var bullet: PGear;
     distX, distY, invDistance: HwFloat;
+begin
+    distX := int2hwFloat(Sentry^.Target.X) - Sentry^.X;
+    distY := int2hwFloat(Sentry^.Target.Y) - Sentry^.Y;
+    invDistance := _1 / Distance(distX, distY);
+    distX := distX * invDistance;
+    distY := distY * invDistance;
+
+    bullet := AddGear(
+        hwRound(Sentry^.X), hwRound(Sentry^.Y),
+        gtMinigunBullet, 0,
+        distX * _0_9 + rndSign(getRandomf * _0_1),
+        distY * _0_9 + rndSign(getRandomf * _0_1),
+        0);
+
+    bullet^.Karma := 12;
+    bullet^.Pos := 1;
+    bullet^.WDTimer := GameTicks;
+    bullet^.PortalCounter := 1;
+    bullet^.Elasticity := Sentry^.X;
+    bullet^.Friction := Sentry^.Y;
+    bullet^.Data := Pointer(Sentry);
+
+    CreateShellForGear(Sentry, Sentry^.WDTimer and 1);
+    PlaySound(sndGun);
+end;
+
+procedure doStepSentryLand(Gear: PGear);
+var HHGear: PGear;
 const sentry_Idle = 0;
     sentry_Walking = 1;
     sentry_Aiming = 2;
@@ -7300,25 +7367,8 @@ begin
     if CheckGearDrowning(Gear) then
         exit;
 
-    if Gear^.Damage > 0 then
-    begin
-        dec(Gear^.Health, Gear^.Damage);
-        Gear^.Damage := 0;
-        if Gear^.Health <= 0 then
-        begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Boom, Gear^.Hedgehog, EXPLAutoSound);
-            DeleteGear(Gear);
-            exit;
-        end;
-
-        ResetSentryState(Gear, sentry_Reloading, 10000)
-    end;
-
-    if ((Gear^.Health * 100) < random(cSentryHealth * 90)) and ((GameTicks and $FF) = 0) then
-        if Gear^.Health * 2 < cSentryHealth then
-            AddVisualGear(hwRound(Gear^.X) - 8 + Random(16), hwRound(Gear^.Y) - 2, vgtSmoke)
-        else
-            AddVisualGear(hwRound(Gear^.X) - 8 + Random(16), hwRound(Gear^.Y) - 2, vgtSmokeWhite);
+    if CheckSentryDestroyed(Gear, sentry_Reloading) then
+        exit;
 
     if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
     begin
@@ -7396,39 +7446,10 @@ begin
         end
         else if Gear^.Tag = sentry_Attacking then
         begin
-            distX := int2hwFloat(Gear^.Target.X) - Gear^.X;
-            distY := int2hwFloat(Gear^.Target.Y) - Gear^.Y;
-            invDistance := _1 / Distance(distX, distY);
-            distX := distX * invDistance;
-            distY := distY * invDistance;
-
-            bullet := AddGear(
-                hwRound(Gear^.X), hwRound(Gear^.Y),
-                gtMinigunBullet, 0,
-                distX * _0_9 + rndSign(getRandomf * _0_1),
-                distY * _0_9 + rndSign(getRandomf * _0_1),
-                0);
-
-            bullet^.Karma := 12;
-            bullet^.Pos := 1;
-            bullet^.WDTimer := GameTicks;
-            bullet^.PortalCounter := 1;
-            bullet^.Elasticity := Gear^.X;
-            bullet^.Friction := Gear^.Y;
-            bullet^.Data := Pointer(Gear);
-
-            CreateShellForGear(Gear, Gear^.WDTimer and 1);
-            PlaySound(sndGun);
+            MakeSentryShot(Gear);
 
             if Gear^.WDTimer = 0 then
-            begin
-                Gear^.Target.X := 0;
-                Gear^.Target.Y := 0;
-                ClearGlobalHitOrderLeq(Gear^.Karma);
-                Gear^.Karma := 0;
-                Gear^.Tag := sentry_Reloading;
-                Gear^.Timer := 6000 + GetRandom(2000);
-            end
+                ResetSentryState(Gear, sentry_Reloading, 6000 + GetRandom(2000))
             else
             begin
                 dec(Gear^.WDTimer);
@@ -7443,15 +7464,8 @@ begin
             Gear^.Timer := 0
     end;
 
-    if ((GameTicks and $1F) = 0)
-        and (Gear^.Tag = sentry_Aiming)
-        and (CurrentHedgehog <> nil)
-        and (CurrentHedgehog^.Gear <> nil) then
-    begin
-        HHGear := CurrentHedgehog^.Gear;
-        Gear^.Target.X := Gear^.Target.X + hwSign(HHGear^.X - int2hwFloat(Gear^.Target.X));
-        Gear^.Target.Y := Gear^.Target.Y + hwSign(HHGear^.Y - int2hwFloat(Gear^.Target.Y));
-    end;
+    if ((GameTicks and $1F) = 0) and (Gear^.Tag = sentry_Aiming) then
+        AimSentry(Gear);
 
     if ((GameTicks and $FF) = 0)
         and (Gear^.Tag in [sentry_Idle, sentry_Walking])
@@ -7472,6 +7486,12 @@ begin
 end;
 
 procedure doStepSentryWater(Gear: PGear);
+var HHGear: PGear;
+const sentry_Idle = 0;
+    sentry_Walking = 1;
+    sentry_Aiming = 2;
+    sentry_Attacking = 3;
+    sentry_Reloading = 4;
 begin
     if Gear^.Tag < 0 then
     begin
@@ -7485,6 +7505,84 @@ begin
         Gear^.Tag := -1;
         exit;
     end;
+
+    if CheckSentryDestroyed(Gear, sentry_Reloading) then
+        exit;
+
+    if Gear^.Timer > 0 then dec(Gear^.Timer);
+
+    if Gear^.Timer = 0 then
+    begin
+        if Gear^.Tag = sentry_Idle then
+        begin
+            Gear^.Tag := sentry_Walking;
+            Gear^.Timer := 3000 + GetRandom(3000);
+            Gear^.dX.isNegative := GetRandom(2) = 1;
+            if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then
+                Gear^.dX.isNegative := not Gear^.dX.isNegative;
+        end
+        else if Gear^.Tag in [sentry_Walking, sentry_Reloading] then
+        begin
+            Gear^.Tag := sentry_Idle;
+            Gear^.Timer := 1000 + GetRandom(1000);
+        end
+        else if Gear^.Tag = sentry_Aiming then
+        begin
+            if CheckSentryAttackRange(Gear, int2hwFloat(Gear^.Target.X), int2hwFloat(Gear^.Target.Y)) then
+            begin
+                Gear^.WDTimer := 5 + GetRandom(3);
+                Gear^.Tag := sentry_Attacking;
+                Gear^.Timer := 100;
+            end
+            else
+            begin
+                Gear^.Target.X := 0;
+                Gear^.Target.Y := 0;
+                Gear^.Tag := sentry_Idle;
+                Gear^.Timer := 5000;
+            end
+        end
+        else if Gear^.Tag = sentry_Attacking then
+        begin
+            MakeSentryShot(Gear);
+
+            if Gear^.WDTimer = 0 then
+                ResetSentryState(Gear, sentry_Reloading, 6000 + GetRandom(2000))
+            else
+            begin
+                dec(Gear^.WDTimer);
+                Gear^.Timer := 100;
+            end
+        end;
+    end;
+
+    if (Gear^.Tag = sentry_Walking) and ((GameTicks and $1F) = 0) then
+    begin
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) = 0 then
+            Gear^.X := Gear^.X + SignAs(_1, Gear^.dX)
+        else
+            Gear^.Timer := 0
+    end;
+
+    if ((GameTicks and $1F) = 0) and (Gear^.Tag = sentry_Aiming) then
+        AimSentry(Gear);
+
+    if ((GameTicks and $FF) = 0)
+        and (Gear^.Tag in [sentry_Idle, sentry_Walking])
+        and (CurrentHedgehog <> nil)
+        and (CurrentHedgehog^.Gear <> nil)
+        and ((CurrentHedgehog^.Gear^.State and (gstMoving or gstHHDriven)) = (gstMoving or gstHHDriven)) then
+    begin
+        HHGear := CurrentHedgehog^.Gear;
+        if CheckSentryAttackRange(Gear, HHGear^.X, HHGear^.Y) then
+        begin
+            Gear^.Target.X := hwRound(HHGear^.X);
+            Gear^.Target.Y := hwRound(HHGear^.Y);
+            Gear^.Karma := GameTicks;
+            Gear^.Tag := sentry_Aiming;
+            Gear^.Timer := 1800 + GetRandom(400);
+        end
+    end
 end;
 
 procedure doStepSentryDeploy(Gear: PGear);
