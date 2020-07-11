@@ -7388,16 +7388,20 @@ begin
 
     if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
     begin
+        DeleteCI(Gear);
         doStepFallingGear(Gear);
         if not (Gear^.Tag in [sentry_Idle, sentry_Reloading]) then
             ResetSentryState(Gear, sentry_Idle, 1000);
         exit;
-    end;
+    end
+    else
+        AddCI(Gear);
 
     if Gear^.Timer > 0 then dec(Gear^.Timer);
 
     if Gear^.Timer = 0 then
     begin
+        DeleteCI(Gear);
         if Gear^.Tag = sentry_Idle then
         begin
             Gear^.Tag := sentry_Walking;
@@ -7474,12 +7478,15 @@ begin
                 Gear^.Timer := 100;
             end
         end;
+        AddCI(Gear);
     end;
 
     if (Gear^.Tag = sentry_Walking) and ((GameTicks and $1F) = 0) then
     begin
+        DeleteCI(Gear);
         if not MakeSentryStep(Gear, 6, false) then
-            Gear^.Timer := 0
+            Gear^.Timer := 0;
+        AddCI(Gear);
     end;
 
     if ((GameTicks and $1F) = 0) and (Gear^.Tag = sentry_Aiming) then

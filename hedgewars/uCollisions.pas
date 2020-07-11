@@ -671,7 +671,7 @@ begin
             if (Gear <> info.cGear)
                 and ((centerX > info.X) xor (Dir > 0))
                 and ((info.cGear^.State and gstNotKickable) = 0)
-                and ((info.cGear^.Kind in [gtHedgehog, gtMine, gtKnife])
+                and ((info.cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtSentry])
                     or (info.cGear^.Kind = gtExplosives) and ((info.cGear^.State and gsttmpflag) <> 0)) // only apply X kick if the barrel is knocked over
                 and (sqr(centerX - info.X) + sqr(centerY - info.Y) <= sqr(info.Radius + Gear^.Radius + 2)) then
             begin
@@ -718,7 +718,7 @@ begin
             if (Gear <> info.cGear)
                 and ((centerY + Gear^.Radius > info.Y) xor (Dir > 0))
                 and (info.cGear^.State and gstNotKickable = 0)
-                and (info.cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives])
+                and (info.cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives, gtSentry])
                 and (sqr(centerX - info.X) + sqr(centerY - info.Y) <= sqr(info.Radius + Gear^.Radius + 2)) then
             begin
                 with info.cGear^ do
