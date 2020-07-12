@@ -1237,22 +1237,22 @@ begin
     AllInactive := false;
 
     if ((Gear^.State and gstAnimation) = 0) then
-        begin
+    begin
         dec(Gear^.Timer);
         if Gear^.Timer = 0 then
-            begin
+        begin
             PlaySound(sndShotgunFire);
             CreateShellForGear(Gear, 0);
             Gear^.State := Gear^.State or gstAnimation
-            end;
-            exit
-        end else
-        if(Gear^.Hedgehog^.Gear = nil) or ((Gear^.Hedgehog^.Gear^.State and gstMoving) <> 0) then
-            begin
+        end
+        else if (Gear^.Hedgehog^.Gear = nil)
+            or ((Gear^.Hedgehog^.Gear^.State and (gstMoving or gstHHDriven)) = gstMoving) then
+        begin
             DeleteGear(Gear);
             AfterAttack;
-            exit
-            end
+        end;
+        exit
+    end
     else
         inc(Gear^.Timer);
 
