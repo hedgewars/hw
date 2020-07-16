@@ -169,6 +169,9 @@ on_flags_loaded = function()
     for (var i=0;i<flags.length;i++)
     {
         var flag = flags[i];
+        // Skip CPU flags
+        if (flag === "cpu" || flag === "cpu_plain")
+            continue;
 
         var oldFlagState = flagState;
         if (flagState === 0 && flag !== "hedgewars")
