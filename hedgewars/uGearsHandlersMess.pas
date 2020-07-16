@@ -7523,7 +7523,7 @@ begin
     end;
 
     Gear^.Y := int2hwFloat(cWaterLine - 3 * Gear^.Radius);
-    if TestCollisionYwithGear(Gear, -1) <> 0 then
+    if TestCollisionYImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius - 1, -1, Gear^.CollisionMask and lfLandMask) <> 0 then
     begin
         Gear^.Tag := -1;
         exit;
