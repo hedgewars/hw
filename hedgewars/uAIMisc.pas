@@ -235,19 +235,29 @@ Gear:= GearsList;
 while Gear <> nil do
     begin
         case Gear^.Kind of
-            gtGrenade
-            , gtClusterBomb
-            , gtGasBomb
-            , gtShell
-            , gtAirAttack
-            , gtMortar
-            , gtWatermelon
-            , gtDrill
+            gtAirAttack
             , gtAirBomb
-            , gtCluster
-            , gtMelonPiece
+            , gtBall
             , gtBee
-            , gtMolotov: bonuses.activity:= true;
+            , gtBirdy
+            , gtClusterBomb
+            , gtCake
+            , gtCluster
+            , gtDrill
+            , gtEgg
+            , gtGasBomb
+            , gtGrenade
+            , gtHellishBomb
+            , gtPiano
+            , gtPoisonCloud
+            , gtRCPlane
+            , gtMelonPiece
+            , gtMolotov
+            , gtMortar
+            , gtNapalmBomb
+            , gtShell
+            , gtSnowball
+            , gtWatermelon: bonuses.activity:= true;
             gtCase:
                 if (Gear^.AIHints and aihDoesntMatter) = 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
