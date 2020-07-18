@@ -402,7 +402,7 @@ begin
 
     if (Land[y-r, x-r] > lfAllObjMask) or
        (Land[y+r, x-r] > lfAllObjMask) or
-       (Land[y-r, x-r] > lfAllObjMask) or
+       (Land[y-r, x+r] > lfAllObjMask) or
        (Land[y+r, x+r] > lfAllObjMask) then
        exit(true);
 
@@ -416,7 +416,7 @@ begin
 
     if (Land[y-r, x-r] and lfNotCurHogCrate <> 0) or
        (Land[y+r, x-r] and lfNotCurHogCrate <> 0) or
-       (Land[y+r, x-r] and lfNotCurHogCrate <> 0) or
+       (Land[y-r, x+r] and lfNotCurHogCrate <> 0) or
        (Land[y+r, x+r] and lfNotCurHogCrate <> 0) then
        exit(true);
 
