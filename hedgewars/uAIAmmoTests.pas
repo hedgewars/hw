@@ -412,10 +412,12 @@ Flags:= Flags; // avoid compiler hint
             EX:= trunc(x);
             EY:= trunc(y);
             // Try to prevent AI from thinking firing into water will cause a drowning
-            if (EY < cWaterLine-5) and (timer > 0) and (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) > 21) then exit(BadTurn);
-            if Level = 1 then
+            if (EY < cWaterLine-5) and (timer > 0) and (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) > 21) then
+                value:= BadTurn
+            else if Level = 1 then
                 value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
-            else value:= RateExplosion(Me, EX, EY, 101);
+            else
+                value:= RateExplosion(Me, EX, EY, 101);
             if valueResult <= value then
                 begin
                 ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
@@ -2270,12 +2272,12 @@ repeat
         // Sanity check: Make sure we're not too close to impact location
         range:= Metric(trunc(meX), trunc(meY), EX, EY);
         if (range <= 40) then
-            exit(BadTurn);
-
-        if t >= -timeLimit then
-            value:= RateShove(Me, EX, EY, 16, trunc(sqr((abs(dY)+abs(dX))*40000/10000)), 0, dX, dY, 0)
+            value:= BadTurn
+        // Timeout
+        else if t < -timeLimit then
+            value:= BadTurn
         else
-            value:= BadTurn;
+            value:= RateShove(Me, EX, EY, 16, trunc(sqr((abs(dY)+abs(dX))*40000/10000)), 0, dX, dY, 0);
 
         if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             value := BadTurn;
