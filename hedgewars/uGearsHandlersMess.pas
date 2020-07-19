@@ -5569,7 +5569,8 @@ begin
                 7: PlaySound(sndPiano7, false, false, true);
                 8: PlaySound(sndPiano8, false, false, true);
             end;
-        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
+        if CurrentHedgehog^.Gear^.MsgParam <= 8 then
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
         CurrentHedgehog^.Gear^.MsgParam := 0;
         CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and (not gmSlot);
         end;
