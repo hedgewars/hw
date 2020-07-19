@@ -63,6 +63,7 @@ function TestKamikaze(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackP
 function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestDrillStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestMineStrike(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+function TestSineGun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestSMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
@@ -130,7 +131,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amPortalGun
             (proc: @TestPiano;       flags: amtest_Rare or amtest_NoInvulnerable or amtest_NoVampiric), // amPiano
             (proc: @TestGrenade;     flags: amtest_NoTrackFall), // amGasBomb
-            (proc: @TestShotgun;     flags: 0), // amSineGun
+            (proc: @TestSineGun;     flags: amtest_NoVampiric), // amSineGun
             (proc: nil;              flags: 0), // amFlamethrower
             (proc: @TestSMine;       flags: 0), // amSMine
             (proc: @TestHammer;      flags: amtest_NoTarget or amtest_NoInvulnerable), // amHammer
@@ -1804,6 +1805,77 @@ for i:= 0 to 3 do
 if valueResult <= 0 then
     valueResult:= BadTurn;
 TestMineStrike:= valueResult;
+end;
+
+function TestSineGun(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
+const
+    MIN_RANGE =  40;
+    MAX_RANGE = 400;
+var Vx, Vy, x, y: real;
+    rx, ry, value, valueResult: LongInt;
+    range: integer;
+    landStop: boolean;
+begin
+// TODO: Also simulate the sine gun's kickback and make sure the attacker
+// doesn't get hurt
+
+Flags:= Flags; // avoid compiler hint
+TestSineGun:= BadTurn;
+valueResult:= 0;
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
+x:= hwFloat2Float(Me^.X);
+y:= hwFloat2Float(Me^.Y);
+range:= Metric(trunc(x), trunc(y), Targ.Point.X, Targ.Point.Y);
+// Range limits
+if (range < MIN_RANGE) or ((range > MAX_RANGE) and (Level >= 4)) then
+    exit(BadTurn);
+
+Vx:= (Targ.Point.X - x) * 1 / 1024;
+Vy:= (Targ.Point.Y - y) * 1 / 1024;
+
+// Never shoot downwards or horizontal because it's dangerous
+// and we don't have a proper check for kickback yet
+if Vy >= 0 then
+    exit(BadTurn);
+
+landStop:= false;
+ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
+// Apply inaccuracy
+if (not aiLaserSighting) then
+    inc(ap.Angle, AIrndSign(random((Level - 1) * 10)));
+repeat
+    x:= x + vX;
+    y:= y + vY;
+    rx:= trunc(x);
+    ry:= trunc(y);
+    if (GameFlags and gfSolidLand) <> 0 then
+        // Stop projectile when colliding with indestructible land
+        landStop:= (Me = CurrentHedgehog^.Gear) and TestColl(rx, ry, 5);
+
+    if landStop or
+       ((Me = CurrentHedgehog^.Gear) and TestCollHogsOrObjects(rx, ry, 5)) or
+       ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, rx, ry, 5)) then
+    begin
+        x:= x + vX * 8;
+        y:= y + vY * 8;
+        value:= RateShove(Me, rx, ry, 5, 35, 50, vX, vY, afTrackFall);
+
+        if (value > 0) then
+            inc(valueResult, value);
+    end
+until (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 5)
+    or (landStop)
+    or (Metric(trunc(x), trunc(y), hwRound(Me^.X), hwRound(Me^.Y)) > MAX_RANGE)
+    or (x < 0)
+    or (y < 0)
+    or (trunc(x) > LAND_WIDTH)
+    or (trunc(y) > LAND_HEIGHT);
+
+if valueResult <= 0 then
+    valueResult:= BadTurn;
+TestSineGun:= valueResult;
 end;
 
 function TestSMine(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
