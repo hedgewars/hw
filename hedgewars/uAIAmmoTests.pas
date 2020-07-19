@@ -653,22 +653,26 @@ repeat
 
         EX:= trunc(x);
         EY:= trunc(y);
-
-        // Sanity check 1: Make sure we're not too close to impact location
         range:= Metric(trunc(meX), trunc(meY), EX, EY);
-        if (range < 150) and (Level < 5) then
-            exit(BadTurn);
 
-        // Sanity check 2: If impact location is close, above us and wind blows
+        // Sanity check 1: Make sure we've hit a hedgehog or object
+        if not TestCollHogsOrObjects(EX, EY, 5) then
+            value:= BadTurn
+        // Sanity check 2: Make sure we're not too close to impact location
+        else if (range < 150) and (Level < 5) then
+            value:= BadTurn
+        // Sanity check 3: If impact location is close, above us and wind blows
         // towards us, there's a risk of fire flying towards us, so fail in this case.
-        if (Level < 3) and (range <= 600) and (trunc(meY) >= EX) and
+        else if (Level < 3) and (range <= 600) and (trunc(meY) >= EX) and
             (((ap.Angle < 0) and (aiWindSpeed > 0)) or ((ap.Angle > 0) and (aiWindSpeed < 0))) then
-            exit(BadTurn);
-
-        if t >= -timeLimit then
-            value:= RateExplosion(Me, EX, EY, 97) // average of 17 attempts, most good, but some failing spectacularly
+            value:= BadTurn
+        // Timeout
+        else if t < -timeLimit then
+            value:= BadTurn
         else
-            value:= BadTurn;
+        // Valid hit!
+            // Weapon does not actually explode, so this rating is an approximation
+            value:= RateExplosion(Me, EX, EY, 97); // average of 17 attempts, most good, but some failing spectacularly
 
         if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             value := BadTurn;

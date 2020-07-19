@@ -79,6 +79,7 @@ procedure AwareOfExplosion(x, y, r: LongInt); inline;
 function  RatePlace(Gear: PGear): LongInt;
 function  CheckWrap(x: real): real; inline;
 function  TestColl(x, y, r: LongInt): boolean; inline;
+function  TestCollHogsOrObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 
@@ -381,6 +382,7 @@ begin
 end;
 
 
+// Check for collision with anything
 function TestCollWithEverything(x, y, r: LongInt): boolean; inline;
 begin
     if not CheckBounds(x, y, r) then
@@ -395,6 +397,7 @@ begin
     TestCollWithEverything := false;
 end;
 
+// Check for collision with non-objects
 function TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 begin
     if not CheckBounds(x, y, r) then
@@ -409,6 +412,7 @@ begin
     TestCollExcludingObjects:= false;
 end;
 
+// Check for collision with something other than current hedgehog or crate
 function TestColl(x, y, r: LongInt): boolean; inline;
 begin
     if not CheckBounds(x, y, r) then
@@ -423,7 +427,22 @@ begin
     TestColl:= false;
 end;
 
+// Check for collision with hedgehog or object
+function TestCollHogsOrObjects(x, y, r: LongInt): boolean; inline;
+begin
+    if not CheckBounds(x, y, r) then
+        exit(false);
 
+    if (Land[y-r, x-r] and lfAllObjMask <> 0) or
+       (Land[y+r, x-r] and lfAllObjMask <> 0) or
+       (Land[y-r, x+r] and lfAllObjMask <> 0) or
+       (Land[y+r, x+r] and lfAllObjMask <> 0) then
+       exit(true);
+
+    TestCollHogsOrObjects:= false;
+end;
+
+// Check for collision with something other than the given "Me" gear.
 // Wrapper to test various approaches.  If it works reasonably, will just replace.
 // Right now, converting to hwFloat is a tad inefficient since the x/y were hwFloat to begin with...
 function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
