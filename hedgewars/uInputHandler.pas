@@ -121,8 +121,6 @@ end;
 
 // Takes a control name (e.g. 'quit') and returns the corresponding
 // human-readable key name from SDL.
-// FIXME: Does not work 100% for all keys yet, but at least it no
-//        longer hardcodes any key name.
 // TODO: Localize
 function KeyBindToName(bind: shortstring): shortstring;
 var code: LongInt;
@@ -141,8 +139,14 @@ begin
             KeyBindToName:= name
         else
             begin
-            WriteLnToConsole('Error: KeyBindToName('+bind+') failed to find SDL key name!');
-            KeyBindToName:= trmsg[sidUnknownKey];
+            if KeyNames[code] <> '' then
+                // Return Hedgewars internal key name if SDL key name is empty
+                KeyBindToName:= KeyNames[code]
+            else
+                begin
+                WriteLnToConsole('Error: KeyBindToName('+bind+'): Hedgewars does not have internal key name for given bind!');
+                KeyBindToName:= trmsg[sidUnknownKey];
+                end;
             end;
         end;
 end;
