@@ -54,7 +54,7 @@ data Message = Packet [B.ByteString]
     deriving Show
 
 serverAddress = "netserver.hedgewars.org"
-protocolNumber = "55"
+protocolNumber = "59"
 
 getLines :: Handle -> IO [B.ByteString]
 getLines h = g
@@ -175,6 +175,7 @@ session l p home exe prefix s = do
         checkReplay home exe prefix chan msgs
         warningM "Check" "Started check"
     onPacket _ ("BYE" : xs) = error $ show xs
+    onPacket _ ("CHAT" : nickname : text) = infoM "Chat" $ ">>> " ++ show nickname ++ ": " ++ show text
     onPacket _ _ = return ()
 
 
@@ -189,6 +190,7 @@ main = withSocketsDo . forever $ do
     updateGlobalLogger "Network" (setLevel WARNING)
     updateGlobalLogger "Check" (setLevel DEBUG)
     updateGlobalLogger "Engine" (setLevel DEBUG)
+    updateGlobalLogger "Chat" (setLevel DEBUG)
 
     d <- getHomeDirectory
     Right (login, password) <- runErrorT $ do
