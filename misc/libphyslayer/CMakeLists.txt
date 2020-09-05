@@ -17,7 +17,11 @@ add_library (physlayer ${PHYSLAYER_SRCS})
 set_target_properties(physlayer PROPERTIES
                           VERSION 1.0
                           SOVERSION 1.0)
-target_link_libraries(physlayer ${SDL2_LIBRARIES} lua physfs)
+if(WIN32 AND VCPKG_TOOLCHAIN)                          
+    target_link_libraries(physlayer SDL2::SDL2 lua physfs)
+else()
+    target_link_libraries(physlayer ${SDL2_LIBRARIES} lua physfs)
+endif()
 install(TARGETS physlayer RUNTIME DESTINATION ${target_binary_install_dir}
                           LIBRARY DESTINATION ${target_library_install_dir}
                           ARCHIVE DESTINATION ${target_library_install_dir})

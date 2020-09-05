@@ -236,7 +236,7 @@ list(APPEND HW_LINK_LIBS
 
 if(WIN32 AND NOT UNIX)
     if(NOT SDL2_LIBRARIES)
-        list(APPEND HW_LINK_LIBS SDL2)
+        list(APPEND HW_LINK_LIBS SDL2::SDL2)
     endif()
 
     list(APPEND HW_LINK_LIBS
