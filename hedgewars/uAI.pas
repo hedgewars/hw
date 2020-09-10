@@ -199,12 +199,12 @@ for i:= 0 to Pred(Targets.Count) do
                             end;
                         end;
 
-                    AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
-
                     if (ap.Angle > 0) then
                         AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
                     else if (ap.Angle < 0) then
                         AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
+
+                    AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
 
                     if (Ammoz[a].Ammo.Propz and ammoprop_Timerable) <> 0 then
                         AddAction(BestActions, aia_Timer, ap.Time div 1000, 400, 0, 0);
