@@ -56,6 +56,7 @@ function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
 function  SpawnBoxOfSmth: PGear;
 procedure PlayBoxSpawnTaunt(Gear: PGear);
 procedure ShotgunShot(Gear: PGear);
+function  CountHogsInTeam(HHGear: PGear; countHidden: boolean): LongInt;
 function  CanUseTardis(HHGear: PGear): boolean;
 
 procedure SetAllToActive;
@@ -1322,10 +1323,33 @@ if (GameFlags and gfSolidLand) = 0 then
     DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cShotgunRadius)
 end;
 
+// Return number of living hogs in HHGear's team
+// * HHGear: hog gear for which to count team hogs
+// * countHidden: if true, also count hidden hogs (e.g. time-travel)
+function CountHogsInTeam(HHGear: PGear; countHidden: boolean): LongInt;
+var i, j, cnt: LongInt;
+    HH: PHedgehog;
+begin
+    if HHGear = nil then
+        exit(0);
+    HH:= HHGear^.Hedgehog;
+    cnt:= 0;
+    for j:= 0 to Pred(HH^.Team^.Clan^.TeamsNumber) do
+        for i:= 0 to Pred(HH^.Team^.Clan^.Teams[j]^.HedgehogsNumber) do
+            if (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear <> nil)
+            and ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0)
+            and (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health > HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then
+                inc(cnt)
+            else if countHidden and (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].GearHidden <> nil) then
+                inc(cnt);
+    CountHogsInTeam:= cnt;
+end;
+
+
 // Returns true if the given hog gear can use the tardis
 function CanUseTardis(HHGear: PGear): boolean;
 var usable: boolean;
-    i, j, cnt: LongInt;
+    cnt: LongInt;
     HH: PHedgehog;
 begin
 (*
@@ -1339,13 +1363,7 @@ begin
     if HHGear <> nil then
     if (HHGear = nil) or (HH^.King) or (SuddenDeathActive) then
         usable:= false;
-    cnt:= 0;
-    for j:= 0 to Pred(HH^.Team^.Clan^.TeamsNumber) do
-        for i:= 0 to Pred(HH^.Team^.Clan^.Teams[j]^.HedgehogsNumber) do
-            if (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear <> nil)
-            and ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0)
-            and (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health > HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then
-                inc(cnt);
+    cnt:= CountHogsInTeam(HHGear, false);
     if (cnt < 2) then
         usable:= false;
     CanUseTardis:= usable;

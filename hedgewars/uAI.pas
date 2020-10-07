@@ -109,6 +109,7 @@ aiWindSpeed:= hwFloat2Float(cWindSpeed);
 aiLaserSighting:= (cLaserSighting) or (HHHasAmmo(Me^.Hedgehog^, amLaserSight) > 0);
 aiGravity:= cGravity;
 aiGravityf:= cGravityf;
+aiHogsInTeam:= CountHogsInTeam(Me, true);
 hasLowGrav:= HHHasAmmo(Me^.Hedgehog^, amLowGravity) > 0;
 useThisActions:= false;
 Me^.AIHints:= Me^.AIHints and (not aihAmmosChanged);

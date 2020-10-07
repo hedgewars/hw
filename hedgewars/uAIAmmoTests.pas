@@ -35,6 +35,7 @@ var aiWindSpeed: real;
     aiGravity: hwFloat;
     aiGravityf: real;
     aiLaserSighting: boolean;
+    aiHogsInTeam: LongInt;
 
 type TAttackParams = record
         Time, Bounce, AttacksNum: Longword;
@@ -1337,6 +1338,10 @@ Flags:= Flags; // avoid compiler hint
     else
         exit(BadTurn);
 
+    // Don't sacrifice last hog
+    if aiHogsInTeam <= 1 then
+        exit(BadTurn);
+
     valueResult:= 0;
     v:= 0;
 
@@ -1970,6 +1975,10 @@ if (aiGravityf <= 0) then
     exit(BadTurn);
 
 if (Level > 2) then
+    exit(BadTurn);
+
+// Don't sacrifice last hog
+if aiHogsInTeam <= 1 then
     exit(BadTurn);
 
 ap.Angle:= 0;
