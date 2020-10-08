@@ -1942,7 +1942,9 @@ repeat
             if (Level = 1) and (Flags and amtest_NoTrackFall = 0) then
                 value:= RateExplosion(Me, EX, EY, 61, afTrackFall)
             else
-                value:= RateExplosion(Me, EX, EY, 61);
+                value:= RateExplosion(Me, EX, EY, 61)
+        else
+            value:= BadTurn;
 
         if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             value := BadTurn;
