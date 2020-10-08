@@ -500,7 +500,7 @@
 04:50=¿Alguien está oculto bajo tierra?|¡Desentiérralos con un bombardeo perforador!|El temporizador controla la profundidad a alcanzar.
 04:51=¿Qué hay más barato que el barro?|Un tiro gratis gracias a la bola de barro.|Hará que el enemigo salga volando|y escuece un poco si te entra en los ojos.
 04:52=SIN USAR
-04:53=Vive una trepidante aventura a través del|espacio y el tiempo mientras tus compañeros|siguen luchando en tu lugar.|Estate preparado para volver en cualquier momento,|o al llegar la Muerte súbita si te has quedado solo.|Aviso: no funciona durante la Muerte súbita,|si estás solo o si eres el rey.
+04:53=Vive una trepidante aventura a través del|espacio y el tiempo mientras tus compañeros|siguen luchando en tu lugar.|Estate preparado para volver en cualquier momento,|o al llegar la Muerte súbita si te has quedado solo.|Aviso\: no funciona durante la Muerte súbita,|si estás solo o si eres el rey.
 04:54=Esparce un chorro de pegajoso barro.|Construye puentes, entierra enemigos o cierra túneles.|¡Ten especial cuidado de no mancharte!
 
 ; Game goal strings

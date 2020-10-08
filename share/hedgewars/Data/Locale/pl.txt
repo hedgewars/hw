@@ -670,7 +670,7 @@
 04:50=Wezwij szwadron śmiercionośnych wierteł|by wykurzyć kogoś z kryjówki. Po użyciu|zostanie zrzuconych 6 wiertniczych bomb|wkręcających się w podłoże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz miejsce zrzutu
 04:51=Obrzuć kogoś błotem! Broń ta nie zadaje dużych|obrażeń ale potrafi zepchnąć z krawędzi!|Atak: Przytrzymaj by strzelić z większą siłą
 04:52=UNUSED
-04:53=Wybierz się w podróż w czasie i przestrzeni|zostawiając swoich kompanów samych na|polu walki. Bądź gotowy na powrót w każdej|chwili. Wrócisz też gdy rozpocznie się Nagła|Śmierć lub jeże zostaną pokonane.|Uwaga: nie zadziała podczas Nagłej Śmierci,|gdy jesteś sam lub jesteś Królem.|Atak: Aktywuj
+04:53=Wybierz się w podróż w czasie i przestrzeni|zostawiając swoich kompanów samych na|polu walki. Bądź gotowy na powrót w każdej|chwili. Wrócisz też gdy rozpocznie się Nagła|Śmierć lub jeże zostaną pokonane.|Uwaga\: nie zadziała podczas Nagłej Śmierci,|gdy jesteś sam lub jesteś Królem.|Atak: Aktywuj
 04:54=Wystrzel strumień kleistej mazi.|Buduj mosty, zasypuj wrogów, zatykaj tunele.|Uważaj by nie zasypać samego siebie!
 04:55=Epoka lodowcowa powraca!!|Zamroź jeże, uczyń podłoże śliskim lub zapobiegnij|utonięciu zamrażając wodę.|Atak: Strzał
 04:56=Rzuć w przeciwnika dwoma tasakami i zablokuj mu |drogę lub użyj ich do wspinaczki! Jednak uważaj! |Te tasaki są naprawdę ostre!|Atak: Przytrzymaj by rzucić z większą siłą (dwukrotnie)

@@ -439,7 +439,7 @@
 04:50=Skrýva sa pred vami nepriateľ pod zemou? Vykopte|ho pomocou raketovej vŕtačky!|Časovač nastavuje počet sekúnd|do detonácie.
 04:51=Nemíňajte muníciu - hod blatom je zdarma.|Trošku štípe a dokáže ježka zhodiť.
 04:52=NEPOUŽITÉ
-04:53=Vyberte sa na cestu časom a priestorom|a nechajte vašich priateľov bojovať bez vás.|Buďte pripravený vrátiť sa kedykoľvek,|buď pri Náhlej smrti alebo keď sú všetci porazení.|Poznámka: Nefunguje počas Náhlej smrti,|ak ste sám alebo ak ste kráľom.
+04:53=Vyberte sa na cestu časom a priestorom|a nechajte vašich priateľov bojovať bez vás.|Buďte pripravený vrátiť sa kedykoľvek,|buď pri Náhlej smrti alebo keď sú všetci porazení.|Poznámka\: Nefunguje počas Náhlej smrti,|ak ste sám alebo ak ste kráľom.
 04:54=Rozprášte prúd lepkavej hliny.|Postavte mosty, pochovajte nepriateľov,|zapečaťte tunely. Buďte|však opatrný a nezašpinte sa|od nej aj vy.
 04:55=Vráťme sa do doby ľadovej!|Zamrazte ježkov, urobte podlahu šmykľavú alebo|sa poistite pred utopením zmrazením vody.|Útok: Aktivuje/Deaktivuje ľadový lúč|Hore/Dole: Pokračuj v mierení
 04:56=Po nepriateľovi môžete hodiť dva sekáčiky,|zablokovať priechody a tunely a dokonca ich použiť pri šplhaní!|Buďte opatrný! Nože nie su na hranie.|Útok: Podržte pre hod väčšou silou (dvakrát)
