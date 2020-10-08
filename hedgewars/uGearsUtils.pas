@@ -41,6 +41,7 @@ procedure ResurrectHedgehog(var gear: PGear);
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity, deleteOnFail: boolean);
 function CountLand(x, y, r, c: LongInt; mask, antimask: LongWord): LongInt;
 
 function  CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
@@ -923,10 +924,15 @@ end;
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
 begin
-    FindPlace(Gear, withFall, Left, Right, false);
+    FindPlace(Gear, withFall, Left, Right, false, true);
 end;
 
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean); inline;
+begin
+    FindPlace(Gear, withFall, Left, Right, skipProximity, true);
+end;
+
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity, deleteOnFail: boolean);
 var x: LongInt;
     y, sy, dir: LongInt;
     ar: array[0..1023] of TPoint;
@@ -1027,18 +1033,17 @@ if cnt2 > 0 then
         begin
         Gear^.X:= int2hwFloat(x);
         Gear^.Y:= int2hwFloat(y);
-        AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
+        AddFileLog('FindPlace: Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
         end
     end
 else
     begin
-    OutError('Can''t find place for Gear', false);
+    OutError('FindPlace: Can''t find place for Gear', false);
     if Gear^.Kind = gtHedgehog then
         begin
         cnt:= 0;
         if GameTicks = 0 then
             begin
-            //AddFileLog('Trying to make a hole');
             while (cnt < 1000) do
                 begin
                 inc(cnt);
@@ -1049,20 +1054,22 @@ else
                     Gear^.State:= Gear^.State or gsttmpFlag;
                     Gear^.X:= int2hwFloat(x);
                     Gear^.Y:= int2hwFloat(y);
-                    AddFileLog('Picked a spot for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')');
+                    AddFileLog('FindPlace: Picked alternative spot for hog at coordinates (' + inttostr(hwRound(Gear^.X)) + ',' + inttostr(hwRound(Gear^.Y)) + ')');
                     cnt:= 2000
                     end
                 end;
             end;
-        if cnt < 2000 then
+        if (deleteOnFail) and (cnt < 2000) then
             begin
+            AddFileLog('FindPlace: No place found, deleting hog');
             Gear^.Hedgehog^.Effects[heResurrectable] := 0;
             DeleteGear(Gear);
             Gear:= nil
             end
         end
-    else
+    else if (deleteOnFail) then
         begin
+        AddFileLog('FindPlace: No place found, deleting Gear');
         DeleteGear(Gear);
         Gear:= nil
         end

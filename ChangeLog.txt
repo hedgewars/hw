@@ -20,6 +20,7 @@ Gameplay:
  * Fix hog getting stuck when opening parachute right after a shoryuken digging through land
  * Fix game hanging if computer hog has nothing to attack
  * Fix hog sometimes not falling after resurrection
+ * Fix hog not returning from TimeBox when all land was destroyed
 
 Campaigns:
  + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory

@@ -6470,7 +6470,7 @@ if (Gear^.Pos = 4) then
     if (cnt = 0) or SuddenDeathDmg or (Gear^.Timer = 0) then
         begin
         if HH^.GearHidden <> nil then
-            FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
+            FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH, true, false);
 
         if HH^.GearHidden <> nil then
             begin
