@@ -6087,22 +6087,20 @@ while i > 0 do
         if (tmp^.Kind = gtHedgehog) or (tmp^.Kind = gtMine) or (tmp^.Kind = gtExplosives) then
             begin
             dmg:= 0;
-            if (tmp^.Kind <> gtHedgehog) or (tmp^.Hedgehog^.Effects[heInvulnerable] = 0) then
+            if (tmp^.Kind <> gtHedgehog) or
+               ((tmp^.Hedgehog^.Effects[heInvulnerable] = 0) and ((tmp^.State and gstHHDeath) = 0)) then
                 begin
                 // base damage on remaining health
                 dmg:= (tmp^.Health - tmp^.Damage);
-                if dmg > 0 then
-                    begin
-                    // always rounding down
-                    dmg:= dmg div Gear^.Boom;
+                // always rounding down
+                dmg:= dmg div Gear^.Boom;
 
-                    if dmg > 0 then
-                        ApplyDamage(tmp, CurrentHedgehog, dmg, dsHammer);
-                    end;
-        tmp^.dY:= _0_03 * Gear^.Boom
+                if dmg > 0 then
+                    ApplyDamage(tmp, CurrentHedgehog, dmg, dsHammer);
+                tmp^.dY:= _0_03 * Gear^.Boom
                 end;
 
-            if (tmp^.Kind <> gtHedgehog) or (dmg > 0) or (tmp^.Health > tmp^.Damage) then
+            if ((tmp^.Kind = gtHedgehog) and ((tmp^.State and gstHHDeath) = 0)) or (tmp^.Health > tmp^.Damage) then
                 begin
                 tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
                 tmp2^.LinkedGear:= tmp;

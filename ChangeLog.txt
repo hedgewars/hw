@@ -21,6 +21,7 @@ Gameplay:
  * Fix game hanging if computer hog has nothing to attack
  * Fix hog sometimes not falling after resurrection
  * Fix hog not returning from TimeBox when all land was destroyed
+ * Fix hammer not digging when hitting hog with 0 health
 
 Campaigns:
  + A Space Adventure: Spacetrip: Meteorite appears blown-up after victory
