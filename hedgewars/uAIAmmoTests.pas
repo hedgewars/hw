@@ -1960,6 +1960,9 @@ repeat
             end;
         end
 until rTime > 5050 - Level * 800;
+if valueResult <> BadTurn then
+    // 27/20 is reuse bonus
+    valueResult:= valueResult * 27 div 20;
 TestSMine:= valueResult
 end;
 
