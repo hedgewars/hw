@@ -550,14 +550,16 @@ begin
                     tx:= round(lx);
                     ty:= round(ly);
                     // reached top edge of land mask
-                    if ((ty and LAND_HEIGHT_MASK) <> 0) and (((ty < LAND_HEIGHT) and (ay < 0)) or ((ty >= TopY) and (ay > 0))) and
-                        (WorldEdge <> weWrap) and (WorldEdge <> weBounce) then
+                    if (WorldEdge <> weBounce) and (WorldEdge <> weWrap) and
+                        ((ty and LAND_HEIGHT_MASK) <> 0) and (((ty < LAND_HEIGHT) and (ay < 0)) or ((ty >= TopY) and (ay > 0))) then
                         begin
                         // assume infinite beam. Extend it way out past camera
                         tx:= round(lx + ax * (max(LAND_WIDTH,4096) div 2));
                         ty:= round(ly + ay * (max(LAND_WIDTH,4096) div 2));
                         break;
                         end;
+                    if ((WorldEdge = weWrap) or (WorldEdge = weBounce)) and (ty < -cCamLimitY) and (ay < 0) then
+                        break;
 
                     if ((hogLR < 0) and (tx < LeftX)) or ((hogLR > 0) and (tx >= RightX)) then
                         if (WorldEdge = weWrap) then
