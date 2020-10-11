@@ -566,7 +566,7 @@ begin
                             if hogLR < 0 then
                                 lx:= RightX - (ax - (lx - LeftX))
                             else
-                                lx:= LeftX + (ax - (RightX - lx));
+                                lx:= LeftX + (-ax - (RightX - lx));
                             tx:= round(lx);
                             inc(wraps);
                             end
