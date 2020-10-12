@@ -1967,7 +1967,8 @@ TestSMine:= valueResult
 end;
 
 function TestPiano(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams; Flags: LongWord): LongInt;
-const BOUNCES = 5;
+// TODO: Test all 5 bounces
+const BOUNCES = 1; // we only test 1 bounce to avoid the rating getting excessively high
 var X, Y: real;
     dmg: array[0..BOUNCES-1] of LongInt;
     i, e, rate, valueResult, targetY: LongInt;
@@ -2014,6 +2015,8 @@ repeat
 
         for e:= -1 to 1 do
             begin
+            // TODO: RateExplosion should remember hogs that already died in the simulation;
+            // because currently, dead hogs might still be counted for damage
             rate:= RateExplosion(Me, trunc(X) + 30*e, trunc(Y)+40, 161, afIgnoreMe);
             if rate <> BadTurn then
                 dmg[i]:= dmg[i] + rate;
