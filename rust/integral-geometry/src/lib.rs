@@ -24,12 +24,12 @@ impl Point {
     }
 
     #[inline]
-    pub fn signum(self) -> Self {
+    pub const fn signum(self) -> Self {
         Self::new(self.x.signum(), self.y.signum())
     }
 
     #[inline]
-    pub fn abs(self) -> Self {
+    pub const fn abs(self) -> Self {
         Self::new(self.x.abs(), self.y.abs())
     }
 
@@ -136,7 +136,7 @@ impl Size {
     }
 
     #[inline]
-    pub fn is_power_of_two(&self) -> bool {
+    pub const fn is_power_of_two(&self) -> bool {
         self.width.is_power_of_two() && self.height.is_power_of_two()
     }
 
@@ -168,7 +168,7 @@ impl Size {
     }
 
     #[inline]
-    pub fn contains(&self, other: Self) -> bool {
+    pub const fn contains(&self, other: Self) -> bool {
         self.width >= other.width && self.height >= other.height
     }
 
@@ -219,7 +219,7 @@ pub struct GridIndex {
 
 impl GridIndex {
     pub fn new(size: Size) -> Self {
-        assert!(size.is_power_of_two());
+        debug_assert!(size.is_power_of_two());
         let shift = Point::new(
             size.width.trailing_zeros() as i32,
             size.height.trailing_zeros() as i32,
@@ -227,7 +227,7 @@ impl GridIndex {
         Self { shift }
     }
 
-    pub fn map(&self, position: Point) -> Point {
+    pub const fn map(&self, position: Point) -> Point {
         Point::new(position.x >> self.shift.x, position.y >> self.shift.y)
     }
 }
@@ -414,12 +414,12 @@ impl Rect {
     }
 
     #[inline]
-    pub fn x_range(&self) -> RangeInclusive<i32> {
+    pub const fn x_range(&self) -> RangeInclusive<i32> {
         self.left()..=self.right()
     }
 
     #[inline]
-    pub fn y_range(&self) -> RangeInclusive<i32> {
+    pub const fn y_range(&self) -> RangeInclusive<i32> {
         self.top()..=self.bottom()
     }
 
@@ -429,7 +429,7 @@ impl Rect {
     }
 
     #[inline]
-    pub fn contains_inside(&self, point: Point) -> bool {
+    pub const fn contains_inside(&self, point: Point) -> bool {
         point.x > self.left()
             && point.x < self.right()
             && point.y > self.top()
@@ -442,7 +442,7 @@ impl Rect {
     }
 
     #[inline]
-    pub fn intersects(&self, other: &Rect) -> bool {
+    pub const fn intersects(&self, other: &Rect) -> bool {
         self.left() <= other.right()
             && self.right() >= other.left()
             && self.top() <= other.bottom()
@@ -451,7 +451,7 @@ impl Rect {
 
     #[inline]
     pub fn split_at(&self, point: Point) -> [Rect; 4] {
-        assert!(self.contains_inside(point));
+        debug_assert!(self.contains_inside(point));
         [
             Self::from_box(self.left(), point.x, self.top(), point.y),
             Self::from_box(point.x, self.right(), self.top(), point.y),
