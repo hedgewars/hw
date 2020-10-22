@@ -13,7 +13,7 @@ import Control.Exception
 import System.IO.Error
 import qualified Data.Map as Map
 import qualified Data.Set as Set
-import Data.List (find)
+import Data.List (find, stripPrefix)
 import Numeric
 
 import PascalParser
@@ -145,13 +145,13 @@ renderCFiles units outputPath = do
         where
         f = do
             checkDuplicateFunDecls tvs
-            mapM_ (tvar2C True False True False) tvs
+            mapM_ (tvar2C True False True False False) tvs
     toNamespace nss (Redo tvs) = -- functions that are re-implemented, add prefix to all of them
         currentScope $ execState f (emptyState nss){currentUnit = "fpcrtl_"}
         where
         f = do
             checkDuplicateFunDecls tvs
-            mapM_ (tvar2C True False True False) tvs
+            mapM_ (tvar2C True False True False False) tvs
     toNamespace _ (Program {}) = Map.empty
     toNamespace nss (Unit (Identifier i _) interface _ _ _) =
         currentScope $ execState (interface2C interface True) (emptyState nss){currentUnit = map toLower i ++ "_"}
@@ -239,7 +239,7 @@ pascal2C (Unit _ interface implementation _ _) =
 
 pascal2C (Program _ implementation mainFunction) = do
     impl <- implementation2C implementation
-    main <- liftM head $ tvar2C True False True True
+    main <- liftM head $ tvar2C True False True True False
         (FunctionDeclaration (Identifier "main" (BTInt True)) False False False (SimpleType $ Identifier "int" (BTInt True)) 
             [VarDeclaration False False ([Identifier "argc" (BTInt True)], SimpleType (Identifier "Integer" (BTInt True))) Nothing
             , VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] 
@@ -254,19 +254,19 @@ pascal2C _ = error "pascal2C: pattern not matched"
 interface2C :: Interface -> Bool -> State RenderState Doc
 interface2C (Interface uses tvars) True = do
     u <- uses2C uses
-    tv <- typesAndVars2C True True True tvars
+    tv <- typesAndVars2C True True True False tvars
     r <- renderStringConsts
     return (u $+$ r $+$ tv)
 interface2C (Interface uses tvars) False = do
     void $ uses2C uses
-    tv <- typesAndVars2C True False False tvars
+    tv <- typesAndVars2C True False False False tvars
     void $ renderStringConsts
     return tv
 
 implementation2C :: Implementation -> State RenderState Doc
 implementation2C (Implementation uses tvars) = do
     u <- uses2C uses
-    tv <- typesAndVars2C True False True tvars
+    tv <- typesAndVars2C True False True True tvars
     r <- renderStringConsts
     return (u $+$ r $+$ tv)
 
@@ -283,10 +283,10 @@ checkDuplicateFunDecls tvs =
 -- the second bool indicates whether declare variable as extern or not
 -- the third bool indicates whether include types or not
 
-typesAndVars2C :: Bool -> Bool -> Bool -> TypesAndVars -> State RenderState Doc
-typesAndVars2C b externVar includeType(TypesAndVars ts) = do
+typesAndVars2C :: Bool -> Bool -> Bool -> Bool -> TypesAndVars -> State RenderState Doc
+typesAndVars2C b externVar includeType static (TypesAndVars ts) = do
     checkDuplicateFunDecls ts
-    liftM (vcat . map (<> semi) . concat) $ mapM (tvar2C b externVar includeType False) ts
+    liftM (vcat . map (<> semi) . concat) $ mapM (tvar2C b externVar includeType False static) ts
 
 setBaseType :: BaseType -> Identifier -> Identifier
 setBaseType bt (Identifier i _) = Identifier i bt
@@ -459,7 +459,7 @@ fromPointer s t = do
 
 
 functionParams2C :: [TypeVarDeclaration] -> State RenderState Doc
-functionParams2C params = liftM (hcat . punctuate comma . concat) $ mapM (tvar2C False False True True) params
+functionParams2C params = liftM (hcat . punctuate comma . concat) $ mapM (tvar2C False False True True False) params
 
 numberOfDeclarations :: [TypeVarDeclaration] -> Int
 numberOfDeclarations = sum . map cnt
@@ -518,7 +518,7 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) inline overload externa
     (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [Record resultId (if isVoid then (BTFunction hasVars False bts t') else t') empty] $ currentScope st
             , currentFunctionResult = if isVoid then [] else render res}) $ do
         p <- functionParams2C params
-        ph <- liftM2 ($+$) (typesAndVars2C False False True tvars) (phrase2C' phrase)
+        ph <- liftM2 ($+$) (typesAndVars2C False False True False tvars) (phrase2C' phrase)
         return (p, ph)
 
     let isTrivialReturn = case phrase of
@@ -555,11 +555,11 @@ fun2C _ tv _ = error $ "fun2C: I don't render " ++ show tv
 -- the second bool indicates whether declare variable as extern or not
 -- the third bool indicates whether include types or not
 -- the fourth bool indicates whether ignore initialization or not (basically for dynamic arrays since we cannot do initialization in function params)
-tvar2C :: Bool -> Bool -> Bool -> Bool -> TypeVarDeclaration -> State RenderState [Doc]
-tvar2C b _ includeType _ f@(FunctionDeclaration (Identifier name _) _ _ _ _ _ _) = do
+tvar2C :: Bool -> Bool -> Bool -> Bool -> Bool -> TypeVarDeclaration -> State RenderState [Doc]
+tvar2C b _ includeType _ _ f@(FunctionDeclaration (Identifier name _) _ _ _ _ _ _) = do
     t <- fun2C b name f
     if includeType then return t else return []
-tvar2C _ _ includeType _ (TypeDeclaration i' t) = do
+tvar2C _ _ includeType _ _ (TypeDeclaration i' t) = do
     i <- id2CTyped t i'
     tp <- type2C t
     let res = if includeType then [text "typedef" <+> tp i] else []
@@ -569,11 +569,11 @@ tvar2C _ _ includeType _ (TypeDeclaration i' t) = do
             return res
         _ -> return res
 
-tvar2C _ _ _ _ (VarDeclaration True _ (ids, t) Nothing) = do
+tvar2C _ _ _ _ _ (VarDeclaration True _ (ids, t) Nothing) = do
     t' <- liftM ((empty <+>) . ) $ type2C t
     liftM (map(\i -> t' i)) $ mapM (id2CTyped2 (Just $ t' empty) (VarParamType t)) ids
 
-tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mInitExpr) = do
+tvar2C _ externVar includeType ignoreInit static (VarDeclaration _ isConst (ids, t) mInitExpr) = do
     t' <- liftM ((declDetails <+>) . ) $ type2C t
     ie <- initExpr mInitExpr
     lt <- gets lastType
@@ -607,7 +607,7 @@ tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mIn
     where
     declDetails = if isConst then text "static const" else if externVar
                                                             then text "extern"
-                                                            else empty
+                                                            else if static then text "static" else empty
     initExpr Nothing = return $ empty
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
     varDeclDecision True True varStr expStr = varStr <+> expStr
@@ -620,7 +620,7 @@ tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mIn
         ArrayDecl _ _ -> error "Mixed dynamic array and static array are not supported."
         _ -> 0
 
-tvar2C f _ _ _ (OperatorDeclaration op (Identifier i _) inline ret params body) = do
+tvar2C f _ _ _ _ (OperatorDeclaration op (Identifier i _) inline ret params body) = do
     r <- op2CTyped op (extractTypes params)
     fun2C f i (FunctionDeclaration r inline False False ret params body)
 
@@ -754,7 +754,7 @@ type2C t = do
              _ -> return $ \a -> i' <+> text "*" <+> a
     type2C' (PointerTo t) = liftM (\tx a -> tx (parens $ text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
-        t' <- withState' f $ mapM (tvar2C False False True False) tvs
+        t' <- withState' f $ mapM (tvar2C False False True False False) tvs
         u <- unions
         return $ \i -> text "struct __" <> i <+> lbrace $+$ nest 4 ((vcat . map (<> semi) . concat $ t') $$ u) $+$ rbrace <+> i
         where
@@ -765,7 +765,7 @@ type2C t = do
                          structs <- mapM struct2C a
                          return $ text "union" $+$ braces (nest 4 $ vcat structs) <> semi
             struct2C stvs = do
-                txts <- withState' f $ mapM (tvar2C False False True False) stvs
+                txts <- withState' f $ mapM (tvar2C False False True False False) stvs
                 return $ text "struct" $+$ braces (nest 4 (vcat . map (<> semi) . concat $ txts)) <> semi
     type2C' (RangeType r) = return (text "int" <+>)
     type2C' (Sequence ids) = do
@@ -920,7 +920,8 @@ phrase2C wb@(WithBlock ref p) = do
             error $ "'with' block referencing non-record type " ++ show a ++ "\n" ++ show wb
 phrase2C (ForCycle i' e1' e2' p up) = do
     i <- id2C IOLookup i'
-    iType <- gets lastIdTypeDecl
+    -- hackishly strip 'static' from type declaration to workaround the use of global variables in 'for' cycles in uLandGenMaze
+    iType <- liftM (text . maybeStripPrefix "static " . show) $ gets lastIdTypeDecl
     e1 <- expr2C e1'
     e2 <- expr2C e2'
     let iEnd = i <> text "__end__"
@@ -935,6 +936,7 @@ phrase2C (ForCycle i' e1' e2' p up) = do
     where
         appendPhrase p (Phrases ps) = Phrases $ ps ++ [p]
         appendPhrase _ _ = error "illegal appendPhrase call"
+        maybeStripPrefix prefix a = fromMaybe a $ stripPrefix prefix a
 phrase2C (RepeatCycle e' p') = do
     e <- expr2C e'
     p <- phrase2C (Phrases p')
