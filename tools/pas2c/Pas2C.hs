@@ -962,12 +962,17 @@ phrase2C a = error $ "phrase2C: " ++ show a
 wrapPhrase p@(Phrases _) = p
 wrapPhrase p = Phrases [p]
 
+parensExpr2C :: Expression -> State RenderState Doc
+parensExpr2C bop@(BinOp _ _ _) = liftM parens $ expr2C bop
+parensExpr2C set@(SetExpression _ ) = liftM parens $ expr2C set
+parensExpr2C e = expr2C e
+
 expr2C :: Expression -> State RenderState Doc
 expr2C (Expression s) = return $ text s
 expr2C bop@(BinOp op expr1 expr2) = do
-    e1 <- expr2C expr1
+    e1 <- parensExpr2C expr1
     t1 <- gets lastType
-    e2 <- expr2C expr2
+    e2 <- parensExpr2C expr2
     t2 <- gets lastType
     case (op2C op, t1, t2) of
         ("+", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcatA" (fff t1 t2 BTString))
@@ -991,8 +996,8 @@ expr2C bop@(BinOp op expr1 expr2) = do
 
         ("==", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (fff t1 t2  BTBool))
         ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (fff t1 t2  BTBool))
-        ("&", BTBool, _) -> return $ parens e1 <+> text "&&" <+> parens e2
-        ("|", BTBool, _) -> return $ parens e1 <+> text "||" <+> parens e2
+        ("&", BTBool, _) -> return $ e1 <+> text "&&" <+> e2
+        ("|", BTBool, _) -> return $ e1 <+> text "||" <+> e2
         (_, BTRecord t1 _, BTRecord t2 _) -> do
             i <- op2CTyped op [SimpleType (Identifier t1 undefined), SimpleType (Identifier t2 undefined)]
             ref2C $ FunCall [expr1, expr2] (SimpleReference i)
@@ -1009,17 +1014,17 @@ expr2C bop@(BinOp op expr1 expr2) = do
                  _ -> error "'in' against not set expression"
         (o, _, _) | o `elem` boolOps -> do
                         modify(\s -> s{lastType = BTBool})
-                        return $ parens e1 <+> text o <+> parens e2
+                        return $ e1 <+> text o <+> e2
                   | otherwise -> do
                         o' <- return $ case o of
                             "/(float)" -> text "/(float)" -- pascal returns real value
                             _ -> text o
                         e1' <- return $ case (o, t1, t2) of
                                 ("-", BTInt False, BTInt False) -> parens $ text "(int64_t)" <+> parens e1
-                                _ -> parens e1
+                                _ -> e1
                         e2' <- return $ case (o, t1, t2) of
                                 ("-", BTInt False, BTInt False) -> parens $ text "(int64_t)" <+> parens e2
-                                _ -> parens e2
+                                _ -> e2
                         return $ e1' <+> o' <+> e2'
     where
         fff t1 t2 = BTFunction False False [(False, t1), (False, t2)]
@@ -1050,7 +1055,7 @@ expr2C (Reference ref) = do
    modify(\s -> s{isFunctionType = False}) -- reset
    if isfunc then ref2CF ref False else ref2CF ref True
 expr2C (PrefixOp op expr) = do
-    e <- expr2C expr
+    e <- parensExpr2C expr
     lt <- gets lastType
     case lt of
         BTRecord t _ -> do
@@ -1060,8 +1065,8 @@ expr2C (PrefixOp op expr) = do
             o <- return $ case op of
                      "not" -> text "!"
                      _ -> text (op2C op)
-            return $ o <> parens e
-        _ -> return $ text (op2C op) <> parens e
+            return $ o <> e
+        _ -> return $ text (op2C op) <> e
 expr2C Null = return $ text "NULL"
 expr2C (CharCode a) = do
     modify(\s -> s{lastType = BTChar})
