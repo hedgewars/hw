@@ -891,6 +891,7 @@ begin
 meX:= Me^.X;
 meY:= Me^.Y;
 rate:= 0;
+hadSkips:= false;
 for i:= 0 to Targets.Count do
     if not Targets.ar[i].dead then
         with Targets.ar[i] do
@@ -975,6 +976,7 @@ begin
 meX:= Me^.X;
 meY:= Me^.Y;
 rate:= 0;
+hadSkips:= false;
 for i:= 0 to Targets.Count do
     if (Targets.ar[i].Kind = gtGrave) and (not Targets.ar[i].dead) then
         with Targets.ar[i] do

@@ -115,7 +115,7 @@ begin
     finalRect.x:= X + cFontBorder + cFontPadding;
     finalRect.y:= Y + cFontBorder;
     if SDLCheck(tmpsurf <> nil, 'TTF_RenderUTF8_Blended', true) then
-        exit;
+        exit(finalRect);
     SDL_UpperBlit(tmpsurf, @textRect, Surface, @finalRect);
     SDL_FreeSurface(tmpsurf);
     finalRect.x:= X;

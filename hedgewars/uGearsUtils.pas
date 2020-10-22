@@ -1903,9 +1903,10 @@ Returns true if target has been changed.
 function HomingWrap(var Gear: PGear): boolean;
 var dist_center, dist_right, dist_left: hwFloat;
 begin
+    HomingWrap:= false;
+
     if WorldEdge = weWrap then
         begin
-        HomingWrap:= false;
         // We just check the same target 3 times:
         // 1) in current section (no change)
         // 2) clone in the right section

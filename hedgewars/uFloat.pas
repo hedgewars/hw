@@ -371,8 +371,8 @@ end;
 
 function hwSqrt1(const t: hwFloat): hwFloat;
 const pwr = 8; // even value, feel free to adjust
-      rThreshold: QWord = 1 shl (pwr + 32);
-      lThreshold: QWord = 1 shl (pwr div 2 + 32);
+      rThreshold: QWord = QWord(1) shl (pwr + 32);
+      lThreshold: QWord = QWord(1) shl (pwr div 2 + 32);
 var l, r: QWord;
     c: hwFloat;
 begin

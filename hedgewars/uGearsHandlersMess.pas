@@ -3233,6 +3233,8 @@ var HHGear: PGear;
 begin
     AllInactive := false;
 
+    HHGear:= nil;
+
     if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
         HHGear:= Gear^.Hedgehog^.Gear;
 
