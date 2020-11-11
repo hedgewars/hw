@@ -55,6 +55,11 @@ impl Grid {
         &mut self.bins[index.y as usize * self.bins_count.width + index.x as usize]
     }
 
+    fn try_get_bin(&mut self, index: Point) -> Option<&mut GridBin> {
+        self.bins
+            .get_mut(index.y as usize * self.bins_count.width + index.x as usize)
+    }
+
     fn lookup_bin(&mut self, position: &FPPoint) -> &mut GridBin {
         self.get_bin(self.bin_index(position))
     }
@@ -82,35 +87,38 @@ impl Grid {
         let old_bin_index = self.bin_index(old_position);
         let new_bin_index = self.bin_index(new_position);
 
-        let old_bin = self.lookup_bin(old_position);
-        if let Some(index) = old_bin.dynamic_refs.iter().position(|id| *id == gear_id) {
-            if old_bin_index == new_bin_index {
-                old_bin.dynamic_entries[index].center = *new_position
+        if let Some(old_bin) = self.try_get_bin(old_bin_index) {
+            let bounds = if let Some(index) =
+                old_bin.dynamic_refs.iter().position(|id| *id == gear_id)
+            {
+                if old_bin_index == new_bin_index {
+                    old_bin.dynamic_entries[index].center = *new_position;
+                    None
+                } else {
+                    Some(old_bin.dynamic_entries.swap_remove(index))
+                }
+            } else if let Some(index) = old_bin.static_refs.iter().position(|id| *id == gear_id) {
+                old_bin.static_refs.swap_remove(index);
+                Some(old_bin.static_entries.swap_remove(index))
             } else {
-                let bounds = old_bin.dynamic_entries.swap_remove(index);
-                let new_bin = self.get_bin(new_bin_index);
-
-                new_bin.dynamic_refs.push(gear_id);
-                new_bin.dynamic_entries.push(CircleBounds {
-                    center: *new_position,
-                    ..bounds
-                });
-            }
-        } else if let Some(index) = old_bin.static_refs.iter().position(|id| *id == gear_id) {
-            let bounds = old_bin.static_entries.swap_remove(index);
-            old_bin.static_refs.swap_remove(index);
-
-            let new_bin = if old_bin_index == new_bin_index {
-                old_bin
-            } else {
-                self.get_bin(new_bin_index)
+                None
             };
 
-            new_bin.dynamic_refs.push(gear_id);
-            new_bin.dynamic_entries.push(CircleBounds {
-                center: *new_position,
-                ..bounds
-            });
+            if let Some(bounds) = bounds {
+                let new_bin = if old_bin_index == new_bin_index {
+                    Some(old_bin)
+                } else {
+                    self.try_get_bin(new_bin_index)
+                };
+
+                if let Some(new_bin) = new_bin {
+                    new_bin.dynamic_refs.push(gear_id);
+                    new_bin.dynamic_entries.push(CircleBounds {
+                        center: *new_position,
+                        ..bounds
+                    });
+                }
+            }
         }
     }
 
