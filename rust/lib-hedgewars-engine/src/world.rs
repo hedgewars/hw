@@ -134,14 +134,10 @@ impl World {
         if let Some(ref mut state) = self.game_state {
             let id = state.physics.new_gear().unwrap();
             let fp_position = FPPoint::new(position.x.into(), position.y.into());
-            state.physics.add_gear_data(
-                id,
-                &PositionData(fp_position)
-            );
-            state.physics.add_gear_data(
-                id,
-                &VelocityData(FPPoint::zero())
-            )
+            state.physics.add_gear_data(id, &PositionData(fp_position));
+            state
+                .physics
+                .add_gear_data(id, &VelocityData(FPPoint::zero()))
         }
     }
 

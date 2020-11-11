@@ -78,7 +78,6 @@ pub extern "C" fn positioned_event(
     x: i32,
     y: i32,
 ) {
-
 }
 
 #[no_mangle]

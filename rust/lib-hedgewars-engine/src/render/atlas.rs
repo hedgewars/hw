@@ -335,7 +335,7 @@ fn split_rect(
                 buffer,
                 &mut buffer_size,
                 free_rect.with_margins(0, 0, 0, -trim),
-            );;
+            );
         }
         if rect.bottom() < free_rect.bottom() {
             let trim = rect.bottom() - free_rect.top() + 1;
@@ -344,7 +344,7 @@ fn split_rect(
                 buffer,
                 &mut buffer_size,
                 free_rect.with_margins(0, 0, -trim, 0),
-            );;
+            );
         }
     }
     if split {
