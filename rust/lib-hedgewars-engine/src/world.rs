@@ -106,14 +106,6 @@ impl World {
         let land = landgen.generate_land(&params, &mut self.random_numbers_gen);
 
         self.game_state = Some(GameState::new(land, physics));
-
-        if let Some(ref mut state) = self.game_state {
-            let position = Point::new(
-                (self.random_numbers_gen.next().unwrap() % state.land.width() as u32) as i32,
-                0,
-            );
-            self.create_gear(position);
-        }
     }
 
     pub fn move_camera(&mut self, position_shift: Point, zoom_shift: f32) {
@@ -156,13 +148,13 @@ impl World {
     pub fn step(&mut self) {
         if let Some(ref mut state) = self.game_state {
             let next = self.random_numbers_gen.next().unwrap();
-            /*if next % 32 == 0 {
+            if next % 32 == 0 {
                 let position = Point::new(
                     (self.random_numbers_gen.next().unwrap() % state.land.width() as u32) as i32,
                     0,
                 );
                 self.create_gear(position);
-            }*/
+            }
         }
 
         if let Some(ref mut state) = self.game_state {
