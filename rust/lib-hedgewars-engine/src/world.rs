@@ -2,6 +2,7 @@ use fpnum::{fp, FPNum, FPPoint};
 use hwphysics::{
     self as hwp,
     common::{GearId, Millis},
+    physics::{PositionData, VelocityData},
 };
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
@@ -135,7 +136,11 @@ impl World {
             let fp_position = FPPoint::new(position.x.into(), position.y.into());
             state.physics.add_gear_data(
                 id,
-                hwp::physics::PhysicsData::new(fp_position, FPPoint::zero()),
+                &PositionData(fp_position)
+            );
+            state.physics.add_gear_data(
+                id,
+                &VelocityData(FPPoint::zero())
             )
         }
     }

@@ -308,7 +308,7 @@ impl OutlinePoints {
     }
 }
 
-#[test()]
+#[test]
 fn points_test() {
     let size = Size::square(100);
     let mut points = OutlinePoints {
