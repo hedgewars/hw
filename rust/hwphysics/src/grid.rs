@@ -52,7 +52,7 @@ impl Grid {
     }
 
     fn get_bin(&mut self, index: Point) -> &mut GridBin {
-        &mut self.bins[index.x as usize * self.bins_count.width + index.y as usize]
+        &mut self.bins[index.y as usize * self.bins_count.width + index.x as usize]
     }
 
     fn lookup_bin(&mut self, position: &FPPoint) -> &mut GridBin {
