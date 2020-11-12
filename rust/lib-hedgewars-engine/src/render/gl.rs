@@ -131,7 +131,7 @@ impl Texture2D {
         size: Size,
         internal_format: TextureInternalFormat,
         format: TextureFormat,
-        ty: TextureDataType,
+        data_type: TextureDataType,
         filter: TextureFilter,
     ) -> Self {
         if is_out_of_bounds(data, data_stride, size) {
@@ -150,7 +150,7 @@ impl Texture2D {
                     size.height as i32,
                     0,
                     format as u32,
-                    ty as u32,
+                    data_type as u32,
                     data.as_ptr() as *const _,
                 )
             }
@@ -171,7 +171,7 @@ impl Texture2D {
         data: &[u8],
         data_stride: Option<NonZeroU32>,
         format: TextureFormat,
-        ty: TextureDataType,
+        data_type: TextureDataType,
     ) {
         if is_out_of_bounds(data, data_stride, self.size) {
             return;
@@ -189,7 +189,7 @@ impl Texture2D {
                     region.width() as i32,
                     region.height() as i32,
                     format as u32,
-                    ty as u32,
+                    data_type as u32,
                     data.as_ptr() as *const _,
                 );
             }
@@ -216,90 +216,108 @@ impl Texture2D {
     }
 }
 
+#[derive(Clone, Copy, Debug)]
+#[repr(u32)]
+pub enum BufferType {
+    Array = gl::ARRAY_BUFFER,
+    ElementArray = gl::ELEMENT_ARRAY_BUFFER,
+}
+
+#[derive(Clone, Copy, Debug)]
+#[repr(u32)]
+pub enum BufferUsage {
+    DynamicDraw = gl::DYNAMIC_DRAW,
+}
+
 #[derive(Debug)]
 pub struct Buffer {
-    pub handle: u32,
-    pub ty: u32,
-    pub usage: u32,
+    pub handle: Option<NonZeroU32>,
+    pub buffer_type: BufferType,
+    pub usage: BufferUsage,
 }
 
 impl Buffer {
-    pub fn empty(
-        ty: u32,
-        usage: u32,
-        //size: isize
-    ) -> Buffer {
+    pub fn empty(buffer_type: BufferType, usage: BufferUsage) -> Buffer {
         let mut buffer = 0;
 
         unsafe {
             gl::GenBuffers(1, &mut buffer);
-            gl::BindBuffer(ty, buffer);
-            //gl::BufferData(ty, size, ptr::null_mut(), usage);
         }
 
         Buffer {
-            handle: buffer,
-            ty,
+            handle: NonZeroU32::new(buffer),
+            buffer_type: buffer_type,
             usage,
         }
     }
 
-    fn with_data(ty: u32, usage: u32, data: &[u8]) -> Buffer {
+    fn with_data(buffer_type: BufferType, usage: BufferUsage, data: &[u8]) -> Buffer {
         let mut buffer = 0;
 
         unsafe {
             gl::GenBuffers(1, &mut buffer);
-            gl::BindBuffer(ty, buffer);
-            gl::BufferData(ty, data.len() as isize, data.as_ptr() as _, usage);
+            if buffer != 0 {
+                gl::BindBuffer(buffer_type as u32, buffer);
+                gl::BufferData(
+                    buffer_type as u32,
+                    data.len() as isize,
+                    data.as_ptr() as _,
+                    usage as u32,
+                );
+            }
         }
 
         Buffer {
-            handle: buffer,
-            ty,
+            handle: NonZeroU32::new(buffer),
+            buffer_type,
             usage,
         }
     }
 
-    pub fn ty(&self) -> u32 {
-        self.ty
+    pub fn ty(&self) -> BufferType {
+        self.buffer_type
     }
 
-    pub fn handle(&self) -> u32 {
+    pub fn handle(&self) -> Option<NonZeroU32> {
         self.handle
     }
 
     pub fn write_typed<T>(&self, data: &[T]) {
-        unsafe {
-            let data =
-                slice::from_raw_parts(data.as_ptr() as *const u8, data.len() * mem::size_of::<T>());
-
-            gl::BindBuffer(self.ty, self.handle);
-            gl::BufferData(
-                self.ty,
-                data.len() as isize,
-                data.as_ptr() as *const _ as *const _,
-                self.usage,
-            );
+        if let Some(handle) = self.handle {
+            unsafe {
+                gl::BindBuffer(self.buffer_type as u32, handle.get());
+                gl::BufferData(
+                    self.buffer_type as u32,
+                    (data.len() * mem::size_of::<T>()) as isize,
+                    data.as_ptr() as *const _,
+                    self.usage as u32,
+                );
+            }
         }
     }
 
     pub fn write(&self, data: &[u8]) {
-        unsafe {
-            gl::BindBuffer(self.ty, self.handle);
-            gl::BufferData(
-                self.ty,
-                data.len() as isize,
-                data.as_ptr() as *const _ as *const _,
-                self.usage,
-            );
+        if let Some(handle) = self.handle {
+            unsafe {
+                gl::BindBuffer(self.buffer_type as u32, handle.get());
+                gl::BufferData(
+                    self.buffer_type as u32,
+                    data.len() as isize,
+                    data.as_ptr() as *const _,
+                    self.usage as u32,
+                );
+            }
         }
     }
 }
 
 impl Drop for Buffer {
     fn drop(&mut self) {
-        unsafe {
-            gl::DeleteBuffers(1, &self.handle);
+        if let Some(handle) = self.handle {
+            let handle = handle.get();
+            unsafe {
+                gl::DeleteBuffers(1, &handle);
+            }
         }
     }
 }
@@ -331,11 +349,11 @@ impl Shader {
         ps: Option<&str>,
         bindings: &[VariableBinding<'a>],
     ) -> Result<Self, String> {
-        unsafe fn compile_shader(ty: u32, shdr: &str) -> Result<u32, String> {
-            let shader = gl::CreateShader(ty);
-            let len = shdr.len() as i32;
-            let shdr = shdr.as_ptr() as *const i8;
-            gl::ShaderSource(shader, 1, &shdr, &len);
+        unsafe fn compile_shader(shader_type: u32, shader_code: &str) -> Result<u32, String> {
+            let shader = gl::CreateShader(shader_type);
+            let len = shader_code.len() as i32;
+            let code_strings = shader_code.as_ptr() as *const i8;
+            gl::ShaderSource(shader, 1, &code_strings, &len);
             gl::CompileShader(shader);
 
             let mut success = 0i32;
@@ -524,8 +542,10 @@ impl InputLayout {
         }
 
         for &(slot, ref buffer) in buffers {
-            unsafe {
-                gl::BindBuffer(buffer.ty(), buffer.handle());
+            if let Some(handle) = buffer.handle() {
+                unsafe {
+                    gl::BindBuffer(buffer.ty() as u32, handle.get());
+                }
             }
 
             for attr in self.elements.iter().filter(|a| a.buffer_slot == slot) {
@@ -557,8 +577,10 @@ impl InputLayout {
         }
 
         if let Some(buf) = index_buffer {
-            unsafe {
-                gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, buf.handle());
+            if let Some(handle) = buf.handle() {
+                unsafe {
+                    gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, handle.get());
+                }
             }
         }
 

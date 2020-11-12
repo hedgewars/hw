@@ -5,8 +5,9 @@ use vec2d::Vec2D;
 use super::{
     camera::Camera,
     gl::{
-        Buffer, InputElement, InputFormat, InputLayout, PipelineState, Shader, Texture2D,
-        TextureDataType, TextureFilter, TextureFormat, TextureInternalFormat, VariableBinding,
+        Buffer, BufferType, BufferUsage, InputElement, InputFormat, InputLayout, PipelineState,
+        Shader, Texture2D, TextureDataType, TextureFilter, TextureFormat, TextureInternalFormat,
+        VariableBinding,
     },
 };
 
@@ -126,8 +127,8 @@ impl MapRenderer {
             tiles: Vec::new(),
             textures: Vec::new(),
 
-            tile_vertex_buffer: Buffer::empty(gl::ARRAY_BUFFER, gl::DYNAMIC_DRAW),
-            tile_index_buffer: Buffer::empty(gl::ELEMENT_ARRAY_BUFFER, gl::DYNAMIC_DRAW),
+            tile_vertex_buffer: Buffer::empty(BufferType::Array, BufferUsage::DynamicDraw),
+            tile_index_buffer: Buffer::empty(BufferType::ElementArray, BufferUsage::DynamicDraw),
             tile_vertices: Vec::new(),
             tile_indices: Vec::new(),
             index_offset: 0,
