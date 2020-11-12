@@ -32,7 +32,8 @@ impl Drop for PipelineState {
 
 #[derive(Debug)]
 pub struct Texture2D {
-    pub handle: Option<NonZeroU32>,
+    handle: Option<NonZeroU32>,
+    size: Size,
 }
 
 impl Drop for Texture2D {
@@ -53,7 +54,7 @@ fn new_texture() -> Option<NonZeroU32> {
     NonZeroU32::new(handle)
 }
 
-fn tex_params(filter: u32) {
+fn tex_params(filter: TextureFilter) {
     unsafe {
         gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::CLAMP_TO_EDGE as i32);
         gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::CLAMP_TO_EDGE as i32);
@@ -62,8 +63,42 @@ fn tex_params(filter: u32) {
     }
 }
 
+#[derive(Clone, Copy, Debug)]
+pub enum TextureFormat {
+    Rgba = gl::RGBA as isize,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum TextureInternalFormat {
+    Rgba8 = gl::RGBA as isize,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum TextureDataType {
+    UnsignedByte = gl::UNSIGNED_BYTE as isize,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum TextureFilter {
+    Nearest = gl::NEAREST as isize,
+    Linear = gl::LINEAR as isize,
+}
+
+#[inline]
+fn get_u32(value: Option<NonZeroU32>) -> u32 {
+    value.map_or(0, |v| v.get())
+}
+
+fn is_out_of_bounds(data: &[u8], data_stride: Option<NonZeroU32>, texture_size: Size) -> bool {
+    let data_stride = get_u32(data_stride);
+    data_stride == 0 && texture_size.area() * 4 > data.len()
+        || data_stride != 0
+            && texture_size.width > data_stride as usize
+            && (texture_size.height * data_stride as usize) * 4 > data.len()
+}
+
 impl Texture2D {
-    pub fn new(size: Size, internal_format: u32, filter: u32) -> Self {
+    pub fn new(size: Size, internal_format: TextureInternalFormat, filter: TextureFilter) -> Self {
         if let Some(handle) = new_texture() {
             unsafe {
                 gl::BindTexture(gl::TEXTURE_2D, handle.get());
@@ -74,8 +109,8 @@ impl Texture2D {
                     size.width as i32,
                     size.height as i32,
                     0,
-                    gl::RGBA,
-                    gl::UNSIGNED_BYTE,
+                    TextureFormat::Rgba as u32,
+                    TextureDataType::UnsignedByte as u32,
                     std::ptr::null(),
                 )
             }
@@ -83,25 +118,30 @@ impl Texture2D {
             tex_params(filter);
             Self {
                 handle: Some(handle),
+                size,
             }
         } else {
-            Self { handle: None }
+            Self { handle: None, size }
         }
     }
 
     pub fn with_data(
         data: &[u8],
-        data_stride: u32,
+        data_stride: Option<NonZeroU32>,
         size: Size,
-        internal_format: u32,
-        format: u32,
-        ty: u32,
-        filter: u32,
+        internal_format: TextureInternalFormat,
+        format: TextureFormat,
+        ty: TextureDataType,
+        filter: TextureFilter,
     ) -> Self {
+        if is_out_of_bounds(data, data_stride, size) {
+            return Self { handle: None, size };
+        }
+
         if let Some(handle) = new_texture() {
             unsafe {
                 gl::BindTexture(gl::TEXTURE_2D, handle.get());
-                gl::PixelStorei(gl::UNPACK_ROW_LENGTH, data_stride as i32);
+                gl::PixelStorei(gl::UNPACK_ROW_LENGTH, get_u32(data_stride) as i32);
                 gl::TexImage2D(
                     gl::TEXTURE_2D,
                     0,
@@ -110,7 +150,7 @@ impl Texture2D {
                     size.height as i32,
                     0,
                     format as u32,
-                    ty,
+                    ty as u32,
                     data.as_ptr() as *const _,
                 )
             }
@@ -118,42 +158,58 @@ impl Texture2D {
             tex_params(filter);
             Self {
                 handle: Some(handle),
+                size,
             }
         } else {
-            Self { handle: None }
+            Self { handle: None, size }
         }
     }
 
-    pub fn update(&self, region: Rect, data: &[u8], data_stride: u32, format: u32, ty: u32) {
+    pub fn update(
+        &self,
+        region: Rect,
+        data: &[u8],
+        data_stride: Option<NonZeroU32>,
+        format: TextureFormat,
+        ty: TextureDataType,
+    ) {
+        if is_out_of_bounds(data, data_stride, self.size) {
+            return;
+        }
+
         if let Some(handle) = self.handle {
             unsafe {
                 gl::BindTexture(gl::TEXTURE_2D, handle.get());
-                gl::PixelStorei(gl::UNPACK_ROW_LENGTH, data_stride as i32);
+                gl::PixelStorei(gl::UNPACK_ROW_LENGTH, get_u32(data_stride) as i32);
                 gl::TexSubImage2D(
                     gl::TEXTURE_2D,
-                    0,             // texture level
-                    region.left(), // texture region
+                    0,
+                    region.left(),
                     region.top(),
                     region.width() as i32,
                     region.height() as i32,
-                    format,                    // data format
-                    ty,                        // data type
-                    data.as_ptr() as *const _, // data ptr
+                    format as u32,
+                    ty as u32,
+                    data.as_ptr() as *const _,
                 );
             }
         }
     }
 
     pub fn retrieve(&self, data: &mut [u8]) {
+        if self.size.area() * 4 > data.len() {
+            return;
+        }
+
         if let Some(handle) = self.handle {
             unsafe {
                 gl::BindTexture(gl::TEXTURE_2D, handle.get());
                 gl::GetTexImage(
                     gl::TEXTURE_2D,
-                    0,                           // texture level
-                    gl::RGBA,                    // data format
-                    gl::UNSIGNED_BYTE,           // data type
-                    data.as_mut_ptr() as *mut _, // data ptr
+                    0,
+                    TextureFormat::Rgba as u32,
+                    TextureDataType::UnsignedByte as u32,
+                    data.as_mut_ptr() as *mut _,
                 );
             }
         }

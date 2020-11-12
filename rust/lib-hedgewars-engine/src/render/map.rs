@@ -6,9 +6,11 @@ use super::{
     camera::Camera,
     gl::{
         Buffer, InputElement, InputFormat, InputLayout, PipelineState, Shader, Texture2D,
-        VariableBinding,
+        TextureDataType, TextureFilter, TextureFormat, TextureInternalFormat, VariableBinding,
     },
 };
+
+use std::num::NonZeroU32;
 
 // TODO: temp
 const VERTEX_SHADER: &'static str = r#"
@@ -164,7 +166,7 @@ impl MapRenderer {
                     let data = unsafe { &land.as_bytes()[offset..] };
                     let stride = land.width();
 
-                    (data, stride as u32)
+                    (data, NonZeroU32::new(stride as u32))
                 };
 
                 let texture_index = if idx >= self.textures.len() {
@@ -172,10 +174,10 @@ impl MapRenderer {
                         data,
                         stride,
                         self.tile_size,
-                        gl::RGBA8,
-                        gl::RGBA,
-                        gl::UNSIGNED_BYTE,
-                        gl::NEAREST,
+                        TextureInternalFormat::Rgba8,
+                        TextureFormat::Rgba,
+                        TextureDataType::UnsignedByte,
+                        TextureFilter::Nearest,
                     );
 
                     let texture_index = self.textures.len();
@@ -189,8 +191,8 @@ impl MapRenderer {
                         texture_region,
                         data,
                         stride,
-                        gl::RGBA,
-                        gl::UNSIGNED_BYTE,
+                        TextureFormat::Rgba,
+                        TextureDataType::UnsignedByte,
                     );
                     idx
                 };

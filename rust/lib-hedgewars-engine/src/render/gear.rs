@@ -1,7 +1,7 @@
 use crate::render::{
     atlas::{AtlasCollection, SpriteIndex, SpriteLocation},
     camera::Camera,
-    gl::Texture2D,
+    gl::{Texture2D, TextureDataType, TextureFilter, TextureFormat, TextureInternalFormat},
 };
 
 use integral_geometry::{Rect, Size};
@@ -18,7 +18,7 @@ use std::{
 };
 
 #[derive(PartialEq, Debug, Clone, Copy)]
-enum SpriteId {
+pub enum SpriteId {
     Mine = 0,
     Grenade,
 
@@ -54,7 +54,11 @@ impl GearRenderer {
     pub fn new() -> Self {
         let mut atlas = AtlasCollection::new(ATLAS_SIZE);
 
-        let texture = Texture2D::new(ATLAS_SIZE, gl::RGBA8, gl::LINEAR);
+        let texture = Texture2D::new(
+            ATLAS_SIZE,
+            TextureInternalFormat::Rgba8,
+            TextureFilter::Linear,
+        );
 
         let mut allocation = Box::new([(0, Rect::at_origin(Size::EMPTY)); MAX_SPRITES]);
 
@@ -73,9 +77,9 @@ impl GearRenderer {
             texture.update(
                 rect,
                 mapgen::theme::slice_u32_to_u8_mut(&mut pixels[..]),
-                0,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
+                None,
+                TextureFormat::Rgba,
+                TextureDataType::UnsignedByte,
             );
 
             allocation[*sprite as usize] = (texture_index, rect);
