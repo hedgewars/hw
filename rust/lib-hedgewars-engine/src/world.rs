@@ -12,7 +12,7 @@ use landgen::{
 };
 use lfprng::LaggedFibonacciPRNG;
 
-use crate::render::{camera::Camera, GearRenderer, MapRenderer};
+use crate::render::{camera::Camera, GearEntry, GearRenderer, MapRenderer};
 
 struct GameState {
     land: Land2D<u32>,
@@ -32,6 +32,7 @@ pub struct World {
     map_renderer: Option<MapRenderer>,
     gear_renderer: Option<GearRenderer>,
     camera: Camera,
+    gear_entries: Vec<GearEntry>,
 }
 
 impl World {
@@ -43,6 +44,7 @@ impl World {
             map_renderer: None,
             gear_renderer: None,
             camera: Camera::new(),
+            gear_entries: vec![],
         }
     }
 
@@ -125,9 +127,26 @@ impl World {
 
             renderer.render(&self.camera);
         }
+
+        self.gear_entries.clear();
+        let mut gear_entries = std::mem::take(&mut self.gear_entries);
+
         if let Some(ref mut renderer) = self.gear_renderer {
-            renderer.render(&self.camera)
+            if let Some(ref mut state) = self.game_state {
+                state
+                    .physics
+                    .iter_data()
+                    .run(|(pos,): (&mut PositionData,)| {
+                        gear_entries.push(GearEntry::new(
+                            f64::from(pos.0.x()) as f32,
+                            f64::from(pos.0.y()) as f32,
+                            Size::square(128),
+                        ))
+                    });
+            }
+            renderer.render(&self.camera, &gear_entries);
         }
+        self.gear_entries = gear_entries;
     }
 
     fn create_gear(&mut self, position: Point) {

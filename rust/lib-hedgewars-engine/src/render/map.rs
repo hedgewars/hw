@@ -13,7 +13,6 @@ use super::{
 
 use std::num::NonZeroU32;
 
-// TODO: temp
 const VERTEX_SHADER: &'static str = r#"
 #version 150
 
@@ -48,7 +47,7 @@ void main()
 }
 "#;
 
-pub struct MapTile {
+struct MapTile {
     // either index into GL texture array or emulated [Texture; N]
     texture_index: u32,
 
@@ -58,13 +57,13 @@ pub struct MapTile {
 
 #[repr(C)]
 #[derive(Copy, Clone)]
-pub struct TileVertex {
+struct TileVertex {
     pos: [f32; 2],
     // doesn't hurt to include another float, just in case..
     uv: [f32; 3],
 }
 
-pub struct DrawTile {
+struct DrawTile {
     texture_index: u32,
     index_len: u32,
 }

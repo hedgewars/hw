@@ -417,14 +417,8 @@ impl Shader {
                 return Err(String::from_utf8_unchecked(log));
             }
 
-            //gl::DetachShader(program, vs);
-            if let Some(ps) = ps {
-                //gl::DetachShader(program, ps);
-            }
-
             gl::UseProgram(program);
 
-            // after linking we setup sampler bindings as specified in the shader
             for bind in bindings {
                 match bind {
                     VariableBinding::Uniform(name, id) => {

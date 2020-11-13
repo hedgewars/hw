@@ -1,7 +1,10 @@
 use crate::render::{
     atlas::{AtlasCollection, SpriteIndex, SpriteLocation},
     camera::Camera,
-    gl::{Texture2D, TextureDataType, TextureFilter, TextureFormat, TextureInternalFormat},
+    gl::{
+        Buffer, BufferType, BufferUsage, InputElement, InputFormat, InputLayout, PipelineState,
+        Shader, Texture2D, TextureDataType, TextureFilter, TextureFormat, TextureInternalFormat,
+    },
 };
 
 use integral_geometry::{Rect, Size};
@@ -14,8 +17,37 @@ use std::{
     fs::{read_dir, File},
     io,
     io::BufReader,
+    mem::size_of,
     path::{Path, PathBuf},
 };
+
+const VERTEX_SHADER: &'static str = r#"
+#version 330 core
+
+layout(location = 0) in vec2 position;
+
+uniform mat4 projection;
+
+void main() {
+	gl_Position = projection * vec4(position, 0.0, 1.0);
+}
+"#;
+
+const PIXEL_SHADER: &'static str = r#"
+#version 330 core
+
+out vec4 outColor;
+
+void main() {
+	 outColor = vec4(0.0, 1.0, 0.0, 1.0);
+}
+"#;
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct Vertex {
+    pos: [f32; 2],
+}
 
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum SpriteId {
@@ -38,9 +70,26 @@ const SPRITE_LOAD_LIST: &[(SpriteId, &str)] = &[
 
 const MAX_SPRITES: usize = SpriteId::MaxSprite as usize + 1;
 
+pub struct GearEntry {
+    position: [f32; 2],
+    size: Size,
+}
+
+impl GearEntry {
+    pub fn new(x: f32, y: f32, size: Size) -> Self {
+        Self {
+            position: [x, y],
+            size,
+        }
+    }
+}
+
 pub struct GearRenderer {
     atlas: AtlasCollection,
     allocation: Box<[SpriteLocation; MAX_SPRITES]>,
+    shader: Shader,
+    layout: InputLayout,
+    vertex_buffer: Buffer,
 }
 
 struct SpriteData {
@@ -85,11 +134,81 @@ impl GearRenderer {
             allocation[*sprite as usize] = (texture_index, rect);
         }
 
-        Self { atlas, allocation }
+        let shader = Shader::new(VERTEX_SHADER, Some(PIXEL_SHADER), &[]).unwrap();
+
+        let layout = InputLayout::new(vec![
+            // position
+            InputElement {
+                shader_slot: 0,
+                buffer_slot: 0,
+                format: InputFormat::Float(gl::FLOAT, false),
+                components: 2,
+                stride: size_of::<Vertex>() as u32,
+                offset: 0,
+            },
+        ]);
+
+        let vertex_buffer = Buffer::empty(BufferType::Array, BufferUsage::DynamicDraw);
+
+        Self {
+            atlas,
+            allocation,
+            shader,
+            layout,
+            vertex_buffer,
+        }
     }
 
-    pub fn render(&mut self, camera: &Camera) {
+    pub fn render(&mut self, camera: &Camera, entries: &[GearEntry]) {
         let projection = camera.projection();
+        self.shader.bind();
+        self.shader.set_matrix("projection", projection.as_ptr());
+
+        let mut data = Vec::with_capacity(entries.len() * 12);
+
+        for entry in entries {
+            let vertices = [
+                [
+                    entry.position[0] - entry.size.width as f32 / 2.0,
+                    entry.position[1] + entry.size.height as f32 / 2.0,
+                ],
+                [
+                    entry.position[0] + entry.size.width as f32 / 2.0,
+                    entry.position[1] + entry.size.height as f32 / 2.0,
+                ],
+                [
+                    entry.position[0] - entry.size.width as f32 / 2.0,
+                    entry.position[1] - entry.size.height as f32 / 2.0,
+                ],
+                [
+                    entry.position[0] + entry.size.width as f32 / 2.0,
+                    entry.position[1] - entry.size.height as f32 / 2.0,
+                ],
+            ];
+
+            data.extend_from_slice(&[
+                vertices[0][0],
+                vertices[0][1],
+                vertices[1][0],
+                vertices[1][1],
+                vertices[2][0],
+                vertices[2][1],
+                vertices[1][0],
+                vertices[1][1],
+                vertices[3][0],
+                vertices[3][1],
+                vertices[2][0],
+                vertices[2][1],
+            ]);
+        }
+
+        self.vertex_buffer.write_typed(&data);
+        let _buffer_bind = self.layout.bind(&[(0, &self.vertex_buffer)], None);
+        let _state = PipelineState::new().with_blend();
+
+        unsafe {
+            gl::DrawArrays(gl::TRIANGLES, 0, entries.len() as i32 * 2);
+        }
     }
 }
 

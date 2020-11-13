@@ -11,7 +11,7 @@ use land2d::Land2D;
 use crate::{
     collision::CollisionProcessor,
     common::{GearAllocator, GearId, Millis},
-    data::GearDataManager,
+    data::{DataIterator, GearDataManager, TypeIter},
     physics::PhysicsProcessor,
     time::TimeProcessor,
 };
@@ -66,6 +66,11 @@ impl World {
     #[inline]
     pub fn add_gear_data<T: Clone + 'static>(&mut self, gear_id: GearId, data: &T) {
         self.data.add(gear_id, data);
+    }
+
+    #[inline]
+    pub fn iter_data<T: TypeIter + 'static>(&mut self) -> DataIterator<T> {
+        self.data.iter()
     }
 }
 
