@@ -207,7 +207,7 @@ impl GearRenderer {
         let _state = PipelineState::new().with_blend();
 
         unsafe {
-            gl::DrawArrays(gl::TRIANGLES, 0, entries.len() as i32 * 2);
+            gl::DrawArrays(gl::TRIANGLES, 0, entries.len() as i32 * 6);
         }
     }
 }
