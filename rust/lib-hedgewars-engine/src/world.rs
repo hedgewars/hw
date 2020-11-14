@@ -140,7 +140,7 @@ impl World {
                         gear_entries.push(GearEntry::new(
                             f64::from(pos.0.x()) as f32,
                             f64::from(pos.0.y()) as f32,
-                            Size::square(128),
+                            Size::square(256),
                         ))
                     });
             }

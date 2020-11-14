@@ -173,10 +173,6 @@ impl Texture2D {
         format: TextureFormat,
         data_type: TextureDataType,
     ) {
-        if is_out_of_bounds(data, data_stride, self.size) {
-            return;
-        }
-
         if let Some(handle) = self.handle {
             unsafe {
                 gl::BindTexture(gl::TEXTURE_2D, handle.get());

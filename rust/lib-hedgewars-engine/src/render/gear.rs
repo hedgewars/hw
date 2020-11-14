@@ -4,6 +4,7 @@ use crate::render::{
     gl::{
         Buffer, BufferType, BufferUsage, InputElement, InputFormat, InputLayout, PipelineState,
         Shader, Texture2D, TextureDataType, TextureFilter, TextureFormat, TextureInternalFormat,
+        VariableBinding,
     },
 };
 
@@ -24,11 +25,15 @@ use std::{
 const VERTEX_SHADER: &'static str = r#"
 #version 330 core
 
-layout(location = 0) in vec2 position;
-
 uniform mat4 projection;
 
+layout(location = 0) in vec2 position;
+layout(location = 1) in vec2 texCoords;
+
+out vec2 varTexCoords;
+
 void main() {
+    varTexCoords = texCoords;
 	gl_Position = projection * vec4(position, 0.0, 1.0);
 }
 "#;
@@ -36,17 +41,22 @@ void main() {
 const PIXEL_SHADER: &'static str = r#"
 #version 330 core
 
+uniform sampler2D texture;
+
+in vec2 varTexCoords;
+
 out vec4 outColor;
 
 void main() {
-	 outColor = vec4(0.0, 1.0, 0.0, 1.0);
+	 outColor = texture2D(texture, varTexCoords);
 }
 "#;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 struct Vertex {
-    pos: [f32; 2],
+    position: [f32; 2],
+    tex_coords: [f32; 2],
 }
 
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -86,6 +96,7 @@ impl GearEntry {
 
 pub struct GearRenderer {
     atlas: AtlasCollection,
+    texture: Texture2D,
     allocation: Box<[SpriteLocation; MAX_SPRITES]>,
     shader: Shader,
     layout: InputLayout,
@@ -119,13 +130,12 @@ impl GearRenderer {
                 .expect(&format!("Could not store sprite {:?}", sprite));
             let (texture_index, rect) = atlas.get_rect(index).unwrap();
 
-            let mut pixels = vec![0; size.area()].into_boxed_slice();
-            load_sprite_pixels(path, mapgen::theme::slice_u32_to_u8_mut(&mut pixels[..]))
-                .expect("Unable to load Graphics");
+            let mut pixels = vec![255u8; size.area() * 4].into_boxed_slice();
+            load_sprite_pixels(path, &mut pixels).expect("Unable to load Graphics");
 
             texture.update(
                 rect,
-                mapgen::theme::slice_u32_to_u8_mut(&mut pixels[..]),
+                &pixels,
                 None,
                 TextureFormat::Rgba,
                 TextureDataType::UnsignedByte,
@@ -134,10 +144,14 @@ impl GearRenderer {
             allocation[*sprite as usize] = (texture_index, rect);
         }
 
-        let shader = Shader::new(VERTEX_SHADER, Some(PIXEL_SHADER), &[]).unwrap();
+        let shader = Shader::new(
+            VERTEX_SHADER,
+            Some(PIXEL_SHADER),
+            &[VariableBinding::Sampler("texture", 0)],
+        )
+        .unwrap();
 
         let layout = InputLayout::new(vec![
-            // position
             InputElement {
                 shader_slot: 0,
                 buffer_slot: 0,
@@ -146,12 +160,21 @@ impl GearRenderer {
                 stride: size_of::<Vertex>() as u32,
                 offset: 0,
             },
+            InputElement {
+                shader_slot: 1,
+                buffer_slot: 0,
+                format: InputFormat::Float(gl::FLOAT, false),
+                components: 2,
+                stride: size_of::<Vertex>() as u32,
+                offset: size_of::<[f32; 2]>() as u32,
+            },
         ]);
 
         let vertex_buffer = Buffer::empty(BufferType::Array, BufferUsage::DynamicDraw);
 
         Self {
             atlas,
+            texture,
             allocation,
             shader,
             layout,
@@ -160,50 +183,51 @@ impl GearRenderer {
     }
 
     pub fn render(&mut self, camera: &Camera, entries: &[GearEntry]) {
+        let mut data = Vec::with_capacity(entries.len() * 6);
+
+        for entry in entries {
+            let v = [
+                Vertex {
+                    position: [
+                        entry.position[0] - entry.size.width as f32 / 2.0,
+                        entry.position[1] + entry.size.height as f32 / 2.0,
+                    ],
+                    tex_coords: [0.0, 0.015625],
+                },
+                Vertex {
+                    position: [
+                        entry.position[0] + entry.size.width as f32 / 2.0,
+                        entry.position[1] + entry.size.height as f32 / 2.0,
+                    ],
+                    tex_coords: [0.015625, 0.015625],
+                },
+                Vertex {
+                    position: [
+                        entry.position[0] - entry.size.width as f32 / 2.0,
+                        entry.position[1] - entry.size.height as f32 / 2.0,
+                    ],
+                    tex_coords: [0.0, 0.0],
+                },
+                Vertex {
+                    position: [
+                        entry.position[0] + entry.size.width as f32 / 2.0,
+                        entry.position[1] - entry.size.height as f32 / 2.0,
+                    ],
+                    tex_coords: [0.015625, 0.0],
+                },
+            ];
+
+            data.extend_from_slice(&[v[0], v[1], v[2], v[1], v[3], v[2]]);
+        }
+
         let projection = camera.projection();
         self.shader.bind();
         self.shader.set_matrix("projection", projection.as_ptr());
-
-        let mut data = Vec::with_capacity(entries.len() * 12);
-
-        for entry in entries {
-            let vertices = [
-                [
-                    entry.position[0] - entry.size.width as f32 / 2.0,
-                    entry.position[1] + entry.size.height as f32 / 2.0,
-                ],
-                [
-                    entry.position[0] + entry.size.width as f32 / 2.0,
-                    entry.position[1] + entry.size.height as f32 / 2.0,
-                ],
-                [
-                    entry.position[0] - entry.size.width as f32 / 2.0,
-                    entry.position[1] - entry.size.height as f32 / 2.0,
-                ],
-                [
-                    entry.position[0] + entry.size.width as f32 / 2.0,
-                    entry.position[1] - entry.size.height as f32 / 2.0,
-                ],
-            ];
-
-            data.extend_from_slice(&[
-                vertices[0][0],
-                vertices[0][1],
-                vertices[1][0],
-                vertices[1][1],
-                vertices[2][0],
-                vertices[2][1],
-                vertices[1][0],
-                vertices[1][1],
-                vertices[3][0],
-                vertices[3][1],
-                vertices[2][0],
-                vertices[2][1],
-            ]);
-        }
+        self.shader.bind_texture_2d(0, &self.texture);
 
         self.vertex_buffer.write_typed(&data);
         let _buffer_bind = self.layout.bind(&[(0, &self.vertex_buffer)], None);
+
         let _state = PipelineState::new().with_blend();
 
         unsafe {
