@@ -1,5 +1,5 @@
 use crate::render::{
-    atlas::{AtlasCollection, SpriteIndex, SpriteLocation},
+    atlas::{AtlasCollection, SpriteIndex},
     camera::Camera,
     gl::{
         Buffer, BufferType, BufferUsage, InputElement, InputFormat, InputLayout, PipelineState,
@@ -12,6 +12,7 @@ use integral_geometry::{Rect, Size};
 
 use png::{ColorType, Decoder, DecodingError};
 
+use std::ops::BitAnd;
 use std::{
     collections::HashMap,
     ffi::OsString,
@@ -60,9 +61,12 @@ struct Vertex {
 }
 
 #[derive(PartialEq, Debug, Clone, Copy)]
+#[repr(u32)]
 pub enum SpriteId {
     Mine = 0,
     Grenade,
+    Cheese,
+    Cleaver,
 
     MaxSprite,
 }
@@ -76,9 +80,19 @@ const SPRITE_LOAD_LIST: &[(SpriteId, &str)] = &[
         SpriteId::Grenade,
         "../../share/hedgewars/Data/Graphics/Bomb.png",
     ),
+    (
+        SpriteId::Cheese,
+        "../../share/hedgewars/Data/Graphics/cheese.png",
+    ),
+    (
+        SpriteId::Cleaver,
+        "../../share/hedgewars/Data/Graphics/cleaver.png",
+    ),
 ];
 
 const MAX_SPRITES: usize = SpriteId::MaxSprite as usize + 1;
+
+type SpriteTexCoords = (u32, [[f32; 2]; 4]);
 
 pub struct GearEntry {
     position: [f32; 2],
@@ -97,7 +111,7 @@ impl GearEntry {
 pub struct GearRenderer {
     atlas: AtlasCollection,
     texture: Texture2D,
-    allocation: Box<[SpriteLocation; MAX_SPRITES]>,
+    allocation: Box<[SpriteTexCoords; MAX_SPRITES]>,
     shader: Shader,
     layout: InputLayout,
     vertex_buffer: Buffer,
@@ -120,7 +134,7 @@ impl GearRenderer {
             TextureFilter::Linear,
         );
 
-        let mut allocation = Box::new([(0, Rect::at_origin(Size::EMPTY)); MAX_SPRITES]);
+        let mut allocation = Box::new([Default::default(); MAX_SPRITES]);
 
         for (sprite, file) in SPRITE_LOAD_LIST {
             let path = Path::new(file);
@@ -141,7 +155,19 @@ impl GearRenderer {
                 TextureDataType::UnsignedByte,
             );
 
-            allocation[*sprite as usize] = (texture_index, rect);
+            let mut tex_coords = [
+                [rect.left() as f32, rect.bottom() as f32 + 1.0],
+                [rect.right() as f32 + 1.0, rect.bottom() as f32 + 1.0],
+                [rect.left() as f32, rect.top() as f32],
+                [rect.right() as f32 + 1.0, rect.top() as f32],
+            ]; //.map(|n| n as f32 / ATLAS_SIZE as f32);
+
+            for coords in &mut tex_coords {
+                coords[0] /= ATLAS_SIZE.width as f32;
+                coords[1] /= ATLAS_SIZE.height as f32;
+            }
+
+            allocation[*sprite as usize] = (texture_index, tex_coords);
         }
 
         let shader = Shader::new(
@@ -185,35 +211,43 @@ impl GearRenderer {
     pub fn render(&mut self, camera: &Camera, entries: &[GearEntry]) {
         let mut data = Vec::with_capacity(entries.len() * 6);
 
-        for entry in entries {
+        for (index, entry) in entries.iter().enumerate() {
+            let sprite_id = match index & 0b11 {
+                0 => SpriteId::Mine,
+                1 => SpriteId::Grenade,
+                2 => SpriteId::Cheese,
+                _ => SpriteId::Cleaver,
+            };
+            let sprite_coords = &self.allocation[sprite_id as usize].1;
+
             let v = [
                 Vertex {
                     position: [
                         entry.position[0] - entry.size.width as f32 / 2.0,
                         entry.position[1] + entry.size.height as f32 / 2.0,
                     ],
-                    tex_coords: [0.0, 0.015625],
+                    tex_coords: sprite_coords[0],
                 },
                 Vertex {
                     position: [
                         entry.position[0] + entry.size.width as f32 / 2.0,
                         entry.position[1] + entry.size.height as f32 / 2.0,
                     ],
-                    tex_coords: [0.015625, 0.015625],
+                    tex_coords: sprite_coords[1],
                 },
                 Vertex {
                     position: [
                         entry.position[0] - entry.size.width as f32 / 2.0,
                         entry.position[1] - entry.size.height as f32 / 2.0,
                     ],
-                    tex_coords: [0.0, 0.0],
+                    tex_coords: sprite_coords[2],
                 },
                 Vertex {
                     position: [
                         entry.position[0] + entry.size.width as f32 / 2.0,
                         entry.position[1] - entry.size.height as f32 / 2.0,
                     ],
-                    tex_coords: [0.015625, 0.0],
+                    tex_coords: sprite_coords[3],
                 },
             ];
 
