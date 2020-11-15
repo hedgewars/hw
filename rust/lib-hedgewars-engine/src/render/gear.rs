@@ -12,7 +12,6 @@ use integral_geometry::{Rect, Size};
 
 use png::{ColorType, Decoder, DecodingError};
 
-use std::ops::BitAnd;
 use std::{
     collections::HashMap,
     ffi::OsString,

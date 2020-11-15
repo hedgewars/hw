@@ -50,8 +50,11 @@ fn main() {
 
     let mut now = Instant::now();
     let mut update = Instant::now();
+    let mut render = Instant::now();
 
+    unsafe { window.make_current().unwrap() };
     let mut is_running = true;
+
     while is_running {
         let curr = Instant::now();
         let delta = curr - now;
@@ -100,9 +103,10 @@ fn main() {
             _ => (),
         });
 
-        unsafe { window.make_current().unwrap() };
-
-        engine.render();
-        window.swap_buffers().unwrap();
+        if render.elapsed() > Duration::from_millis(16) {
+            render = curr;
+            engine.render();
+            window.swap_buffers().unwrap();
+        }
     }
 }
