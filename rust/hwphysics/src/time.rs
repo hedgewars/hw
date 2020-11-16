@@ -68,7 +68,7 @@ impl TimeProcessor {
 
     pub fn register(&mut self, gear_id: GearId, timeout: Millis) -> EventId {
         let event_id = self.current_event_id;
-        self.current_event_id.wrapping_add(1);
+        self.current_event_id = self.current_event_id.wrapping_add(1);
         let event = TimeEvent {
             time: self.current_time + timeout,
             gear_id,
