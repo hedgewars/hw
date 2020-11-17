@@ -48,7 +48,7 @@ impl World {
     pub fn delete_gear(&mut self, gear_id: GearId) {
         self.data.remove_all(gear_id);
         self.collision.remove(gear_id);
-        self.time.cancel(gear_id);
+        self.time.cancel_all(gear_id);
         self.allocator.free(gear_id)
     }
 

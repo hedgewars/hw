@@ -78,7 +78,23 @@ impl TimeProcessor {
         event_id
     }
 
-    pub fn cancel(&mut self, gear_id: GearId) {}
+    fn remove_events<P>(&mut self, predicate: P)
+    where
+        P: Fn(&TimeEvent) -> bool,
+    {
+        let events = self.events.drain().filter(predicate).collect::<Vec<_>>();
+        self.events.extend(events);
+    }
+
+    pub fn cancel(&mut self, event_id: EventId) {
+        //self.events.retain(|event| event.event_id != event_id)
+        self.remove_events(|event| event.event_id != event_id)
+    }
+
+    pub fn cancel_all(&mut self, gear_id: GearId) {
+        //self.events.retain(|event| event.gear_id != gear_id)
+        self.remove_events(|event| event.gear_id != gear_id)
+    }
 
     pub fn process(&mut self, time_step: Millis) -> &OccurredEvents {
         self.timeouts.clear();
