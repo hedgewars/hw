@@ -1,0 +1,98 @@
+Basic_Training_-_Movement.name=基础移动训练
+Basic_Training_-_Movement.desc="新手在这里开始！学会在不同地形移动和切换刺猬"
+
+Basic_Training_-_Bazooka.name=基础火箭筒训练
+Basic_Training_-_Bazooka.desc="学会使用火箭筒, 了解风，并摧毁所有目标"
+
+Basic_Training_-_Grenade.name=基础手榴弹训练
+Basic_Training_-_Grenade.desc="学会使用手榴弹，并摧毁所有目标"
+
+Basic_Training_-_Rope.name=基础绳索训练
+Basic_Training_-_Rope.desc="绳索是你能得到的最实用的工具之一，但这需要大量练习"
+
+Basic_Training_-_Flying_Saucer.name=基础飞碟训练
+Basic_Training_-_Flying_Saucer.desc="学会操控飞碟飞行，在飞行中射击，甚至表演特技"
+
+User_Mission_-_Dangerous_Ducklings.name=危险的小鸭子
+User_Mission_-_Dangerous_Ducklings.desc="是时候进行实战训练了"
+
+User_Mission_-_Diver.name=潜水员
+User_Mission_-_Diver.desc="这个水陆两用的东西，看着简单,用起来难"
+
+User_Mission_-_Teamwork.name=团队合作
+User_Mission_-_Teamwork.desc="一个故障的机器人保护着有价值的军事机密，为了获得机密，你需要带领两个刺猬组成的特别行动队伍打败敌人"
+
+User_Mission_-_Teamwork_2.name=团队合作 2
+User_Mission_-_Teamwork_2.desc="我们找到了机器帝国的秘密前哨，它只由无害的监视机器人守卫。带领你的特别行动队伍摧毁监视机器人，这样我们就能宣称这个基地是我们的"
+
+User_Mission_-_Spooky_Tree.name=怪树
+User_Mission_-_Spooky_Tree.desc="这里有很多空投箱。我希望那些鸟不是很饿"
+
+User_Mission_-_Bamboo_Thicket.name=竹林
+User_Mission_-_Bamboo_Thicket.desc="一个机器人正在威胁竹林，用几乎完美的准确度攻击进入视线的任何人。提前计划, 快速行动除掉敌人"
+
+User_Mission_-_That_Sinking_Feeling.name=淹没的感觉
+User_Mission_-_That_Sinking_Feeling.desc="水涨得很快，时间有限，很多人尝试过但失败了，你能拯救它们所有人吗？"
+
+User_Mission_-_Newton_and_the_Hammock.name=牛顿和吊床
+User_Mission_-_Newton_and_the_Hammock.desc="小刺猬们记住：除非受到外力作用，身体的速度保持不变"
+
+User_Mission_-_The_Great_Escape.name=大逃离
+User_Mission_-_The_Great_Escape.desc="逃离监狱并复仇"
+
+User_Mission_-_Rope_Knock_Challenge.name=绳索撞击
+User_Mission_-_Rope_Knock_Challenge.desc="使用你的绳索把敌人撞下去"
+
+User_Mission_-_Nobody_Laugh.name=没人笑
+User_Mission_-_Nobody_Laugh.desc="Oh, 这些小丑认为它们很搞笑！它们数量超过我们，但我们有很多回合时间。除掉所有喜剧演员，直到这里没有人笑"
+
+User_Mission_-_RCPlane_Challenge.name=遥控飞机挑战
+User_Mission_-_RCPlane_Challenge.desc="使用遥控飞机获得所有箱子。尽可能使用更少的遥控飞机提高你的排名"
+
+Big_Armory.name=大武器库
+Big_Armory.desc="你独自作战，拥有完整的武器库，且必须在时间结束前打败所有八个刺猬"
+
+Bazooka_Battlefield.name=火箭筒战场
+Bazooka_Battlefield.desc="你忠诚的刺猬埋伏了敌人。只用火箭筒打败它们，但不要浪费时间，水面会很快上升"
+
+Tentacle_Terror.name=恐怖触手
+Tentacle_Terror.desc="恐怖的怪物之下，你的敌人像懦夫一样躲起来，当你失去掩护就用空袭攻击你。你需要神乎其技的绳索技术才有机会"
+
+ClimbHome.name=爬回家
+ClimbHome.desc="你离家很远，水面在上升，尽可能地爬到高处"
+
+portal.name=传送门思维挑战
+portal.desc="使用传送门快速移动、到达远处、杀死刺猬，请小心使用"
+
+Target_Practice_-_Bazooka_easy.name=目标训练: 火箭筒（简单）
+Target_Practice_-_Bazooka_easy.desc="尽快打中这些目标"
+
+Target_Practice_-_Bazooka_hard.name=目标训练: 火箭筒（困难）
+Target_Practice_-_Bazooka_hard.desc="你能打中很远的目标吗？"
+
+Target_Practice_-_Cluster_Bomb.name=目标训练: 集束炸弹
+Target_Practice_-_Cluster_Bomb.desc="有人需要用集束炸弹洗个热水澡"
+
+Target_Practice_-_Shotgun.name=目标训练: 霰弹枪
+Target_Practice_-_Shotgun.desc="先射击，再问问题"
+
+Basic_Training_-_Sniper_Rifle.name=目标训练: 狙击枪
+Basic_Training_-_Sniper_Rifle.desc="对于狙击手来说这是完美的射击范围，快速准确摧毁所有目标"
+
+Target_Practice_-_Homing_Bee.name=目标训练: 蜜蜂枪
+Target_Practice_-_Homing_Bee.desc="使用蜜蜂枪比看起来要难"
+
+Target_Practice_-_Grenade_easy.name=目标训练: 手榴弹（简单）
+Target_Practice_-_Grenade_easy.desc="给有抱负的榴弹手的热身训练"
+
+Target_Practice_-_Grenade_hard.name=目标训练: 手榴弹（困难）
+Target_Practice_-_Grenade_hard.desc="这不是给新手的，我们会把目标放在难打的位置"
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=时间试炼: Shoppa Love
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="在这个小地图收集一些箱子"
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=时间试炼: Ropes and Crates
+Challenge_-_Speed_Shoppa_-_Ropes.desc="在这个中等地图收集所有箱子"
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=时间试炼: The Customer is King
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="在这个大地图尽快收集所有箱子"

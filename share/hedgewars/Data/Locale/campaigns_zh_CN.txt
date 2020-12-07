@@ -1,0 +1,61 @@
+A_Classic_Fairytale.name="经典童话"
+
+A_Classic_Fairytale-first_blood.name="任务 1: 第一滴血"
+A_Classic_Fairytale-first_blood.desc="帮助 Leaks a Lot 完成他的训练，成为一个合格的刺猬战士。你将训练使用绳索、降落伞、升龙拳和沙漠之鹰"
+
+A_Classic_Fairytale-shadow.name="任务 2: 暗影降临"
+A_Classic_Fairytale-shadow.desc="Leaks a Lot 和 Dense Cloud 外出打猎。准备好应对在森林等待你的危险。记住，做出明智的选择"
+
+A_Classic_Fairytale-journey.name="任务 3: 归途"
+A_Classic_Fairytale-journey.desc="Leaks a Lot 必须去岛屿的另一边。要快且谨慎."
+
+A_Classic_Fairytale-united.name="任务 4: 团结则存"
+A_Classic_Fairytale-united.desc="经过漫长的旅途，Leaks a Lot 终于回到村庄。然而，没有时间休息。你必须从食人族的愤怒中保卫村庄"
+
+A_Classic_Fairytale-backstab.name="任务 5: 背刺"
+A_Classic_Fairytale-backstab.desc="可怕的食人族正在追杀 Leaks a Lot 和他的朋友们。再次打败他们，保护你的盟友。 相应地使用你的资源打败来袭的敌人!"
+
+A_Classic_Fairytale-dragon.name="任务 6: 龙的巢穴"
+A_Classic_Fairytale-dragon.desc="我们的英雄必须到湖的另一边。成为绳索大师，避免被敌人击中"
+
+A_Classic_Fairytale-family.name="任务 7: 家人团聚"
+A_Classic_Fairytale-family.desc="我们的英雄必须再次拯救部落。消灭敌人，解救战友。小心使用你的资源，因为它们是有限的。在正确的位置钻一些洞并靠近公主。"
+
+A_Classic_Fairytale-queen.name="任务 8: 女王万岁"
+A_Classic_Fairytale-queen.desc="部落必须再次战斗。为了胜利，他们必须和叛徒战斗，并使用所有可用的资源。打败敌人！"
+
+A_Classic_Fairytale-enemy.name="任务 9: 敌人的敌人"
+A_Classic_Fairytale-enemy.desc="多棒的转折！Leaks a Lot 必须和食人族并肩作战，对抗共同的敌人：邪恶机器人！"
+
+A_Classic_Fairytale-epil.name="任务 10: 后记"
+A_Classic_Fairytale-epil.desc="恭喜！Leaks a Lot 终于能在和平中离开，并受到新朋友和部落的赞扬。为你的成功感到自豪！你可以重玩之前的任务，并查看其他可能的结局"
+
+A_Space_Adventure.name="太空冒险"
+A_Space_Adventure-cosmos.name="菜单: 太空旅行"
+A_Space_Adventure-cosmos.desc="Hogera，刺猬的星球，快被巨大的陨石击中. 在这场求生的竞赛中，你必须带领受刺猬星球协会(PAotH)委托的勇敢刺猬，在邻星周围太空旅行，收集所有四个失落已久的反重力设备部件"
+A_Space_Adventure-moon01.name="主要任务: 第一站"
+A_Space_Adventure-moon01.desc="我们的英雄要在月球着陆，为飞碟加满燃料，但 Hogevil 教授先到那里并设好埋伏！救出 PAotH 研究员并赶走 Hogevil 教授！"
+A_Space_Adventure-moon02.name="支线任务: 追逐蓝刺猬"
+A_Space_Adventure-moon02.desc="我们的英雄拜访了一位隐士，住在月球上的 PAotH 老兵。然而，为了收集一些关于 Hogevil 教授的情报，你必须先在追逐游戏中打败隐士 Crazy Runner！"
+A_Space_Adventure-ice01.name="主要任务: 冰冻冒险"
+A_Space_Adventure-ice01.desc="欢迎来到冰雪星球，这里太冷了导致大多数武器不能用。你必须使用在那里找到的武器，从强盗首领 Thanta 手中得到丢失的部件！"
+A_Space_Adventure-ice02.name="支线任务: 艰难飞行"
+A_Space_Adventure-ice02.desc="我们的英雄来到冰雪星球，不可能不参观飞碟的奥林匹克体育场。在这个任务，你可以证明自己飞行技能，并宣称你是最棒的！"
+A_Space_Adventure-desert01.name="主要任务: 尘中搜索"
+A_Space_Adventure-desert01.desc="你在沙漠星球着陆！我们的英雄必须在地下隧道找到丢失的部件。请小心，恶毒的走私者在等着，攻击并抢劫你！"
+A_Space_Adventure-desert02.name="支线任务: 逃命"
+A_Space_Adventure-desert02.desc="我们的英雄在隧道中搜索部件时，隧道意外开始被淹没！尽快回到地面，请小心不要触发地雷。"
+A_Space_Adventure-desert03.name="支线任务: 精确飞行"
+A_Space_Adventure-desert03.desc="我们的英雄有时喜欢玩遥控飞机。控制遥控飞机，击中所有目标！如果你赢了会在主要任务得到奖励"
+A_Space_Adventure-fruit01.name="主要任务: 坏时机"
+A_Space_Adventure-fruit01.desc="在水果星球上，事情进行得不那么顺利。刺猬们没在收集水果，而是准备战斗。你必须选择打或跑。"
+A_Space_Adventure-fruit02.name="主要任务: 取得设备"
+A_Space_Adventure-fruit02.desc="我们的英雄在水果星球上接近了丢失的部件，Captain Lime 会帮你获得这个部件吗？"
+A_Space_Adventure-fruit03.name="主要任务: 精确射击"
+A_Space_Adventure-fruit03.desc="我们的英雄在红色草莓中迷路并被埋伏。消灭他们并为“取得设备”任务赢得额外子弹。"
+A_Space_Adventure-death01.name="主要任务: 最后的遭遇战"
+A_Space_Adventure-death01.desc="在死亡星球，周围最贫瘠的星球，我们的英雄非常接近最后的部件。然而，一个不愉快的惊喜在等着……"
+A_Space_Adventure-death02.name="支线任务: 杀死专家"
+A_Space_Adventure-death02.desc="我们的英雄再次陷入困境。在“致命五刺猬”自己的游戏中打败他们！如果你赢了会在主要任务得到奖励"
+A_Space_Adventure-final.name="主要任务: 大爆炸"
+A_Space_Adventure-final.desc="我们的英雄必须引爆一些放置在陨石上的爆炸物。无伤完成这个任务！"
