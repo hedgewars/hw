@@ -403,8 +403,14 @@ else
 end;
 
 procedure doStepSmallDamage(Gear: PVisualGear; Steps: Longword);
+var s: shortstring;
 begin
 Gear^.Y:= Gear^.Y - 0.02 * Steps;
+if Gear^.Tex = nil then
+    begin
+    s:= IntToStr(Gear^.State);
+    Gear^.Tex:= RenderStringTex(ansistring(s), cWhiteColor, fntSmall);
+    end;
 
 if Gear^.FrameTicks <= Steps then
     DeleteVisualGear(Gear)

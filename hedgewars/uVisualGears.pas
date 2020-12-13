@@ -265,7 +265,8 @@ case Layer of
                                         end
                                     else if (Gear^.Tex <> nil) and (((Gear^.State = 0) and ((Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Team = CurrentTeam))) or (Gear^.State = 2)) then
                                         DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-               vgtSmallDamageTag: DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+               vgtSmallDamageTag: if Gear^.Tex <> nil then
+                                    DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
                vgtHealthTag: if Gear^.Tex <> nil then
                                begin
                                if Gear^.Frame = 0 then

@@ -54,6 +54,7 @@ Frontend:
 
 Lua:
  + Add RopeKnocking library
+ * Fix crash when spawning a vgtSmallDamageTag
 
 ====================== 1.0.0 =======================
 Highlights:
