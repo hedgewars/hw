@@ -177,7 +177,10 @@ with gear^ do
         vgtShell: FrameTicks:= 500;
     vgtSmallDamageTag:
                 begin
-                gear^.FrameTicks:= 1100
+                gear^.Frame:= 0;
+                gear^.FrameTicks:= 1100;
+                gear^.dX:= 0;
+                gear^.dY:= -0.02;
                 end;
     vgtBubble:
                 begin

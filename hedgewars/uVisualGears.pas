@@ -55,7 +55,7 @@ var Gear: PVisualGear;
 begin
 if cAltDamage then
     begin
-    Gear:= AddVisualGear(X, Y, vgtSmallDamageTag);
+    Gear:= AddVisualGear(X, Y, vgtSmallDamageTag, Damage);
     if Gear <> nil then
         with Gear^ do
             Tex:= RenderStringTex(ansistring(inttostr(Damage)), Color, fntSmall);
@@ -266,7 +266,16 @@ case Layer of
                                     else if (Gear^.Tex <> nil) and (((Gear^.State = 0) and ((Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Team = CurrentTeam))) or (Gear^.State = 2)) then
                                         DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
                vgtSmallDamageTag: if Gear^.Tex <> nil then
-                                    DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+                                    begin
+                                    if Gear^.Frame = 0 then
+                                        DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
+                                    else
+                                        begin
+                                        SetScale(cDefaultZoomLevel);
+                                        DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex);
+                                        SetScale(zoom);
+                                        end
+                                    end;
                vgtHealthTag: if Gear^.Tex <> nil then
                                begin
                                if Gear^.Frame = 0 then

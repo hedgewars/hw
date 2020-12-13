@@ -43,7 +43,7 @@ procedure doStepLineTrail(Gear: PVisualGear; Steps: Longword);
 procedure doStepEgg(Gear: PVisualGear; Steps: Longword);
 procedure doStepFire(Gear: PVisualGear; Steps: Longword);
 procedure doStepShell(Gear: PVisualGear; Steps: Longword);
-procedure doStepSmallDamage(Gear: PVisualGear; Steps: Longword);
+procedure doStepSmallDamageTag(Gear: PVisualGear; Steps: Longword);
 procedure doStepBubble(Gear: PVisualGear; Steps: Longword);
 procedure doStepSteam(Gear: PVisualGear; Steps: Longword);
 procedure doStepAmmo(Gear: PVisualGear; Steps: Longword);
@@ -402,15 +402,17 @@ else
     dec(Gear^.FrameTicks, Steps)
 end;
 
-procedure doStepSmallDamage(Gear: PVisualGear; Steps: Longword);
+procedure doStepSmallDamageTag(Gear: PVisualGear; Steps: Longword);
 var s: shortstring;
 begin
-Gear^.Y:= Gear^.Y - 0.02 * Steps;
 if Gear^.Tex = nil then
     begin
     s:= IntToStr(Gear^.State);
     Gear^.Tex:= RenderStringTex(ansistring(s), cWhiteColor, fntSmall);
     end;
+
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
 
 if Gear^.FrameTicks <= Steps then
     DeleteVisualGear(Gear)
@@ -1042,7 +1044,7 @@ const handlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepExpl,
             @doStepExpl,
             @doStepFire,
-            @doStepSmallDamage,
+            @doStepSmallDamageTag,
             @doStepTeamHealthSorter,
             @doStepSpeechBubble,
             @doStepBubble,
