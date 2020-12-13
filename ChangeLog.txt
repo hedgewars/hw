@@ -37,6 +37,7 @@ Styles:
 
 Content:
  + New flags: serbia, montenegro
+ + New graves: Mushroom, Teapot
  + New hat: zoo_panda
 
 Graphics / user interface:
