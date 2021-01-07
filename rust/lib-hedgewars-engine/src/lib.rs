@@ -1,6 +1,7 @@
 pub mod instance;
 pub mod ipc;
 mod render;
+mod time;
 mod world;
 
 use std::{

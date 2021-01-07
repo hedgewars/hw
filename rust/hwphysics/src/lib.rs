@@ -3,7 +3,6 @@ pub mod common;
 mod data;
 mod grid;
 pub mod physics;
-pub mod time;
 
 use integral_geometry::Size;
 use land2d::Land2D;
@@ -13,7 +12,6 @@ use crate::{
     common::{GearAllocator, GearId, Millis},
     data::{DataIterator, GearDataManager, TypeIter},
     physics::PhysicsProcessor,
-    time::TimeProcessor,
 };
 
 pub struct World {
@@ -21,7 +19,6 @@ pub struct World {
     data: GearDataManager,
     physics: PhysicsProcessor,
     collision: CollisionProcessor,
-    time: TimeProcessor,
 }
 
 impl World {
@@ -35,7 +32,6 @@ impl World {
             allocator: GearAllocator::new(),
             physics: PhysicsProcessor::new(),
             collision: CollisionProcessor::new(world_size),
-            time: TimeProcessor::new(),
         }
     }
 
@@ -48,7 +44,6 @@ impl World {
     pub fn delete_gear(&mut self, gear_id: GearId) {
         self.data.remove_all(gear_id);
         self.collision.remove(gear_id);
-        self.time.cancel_all(gear_id);
         self.allocator.free(gear_id)
     }
 
@@ -60,7 +55,6 @@ impl World {
                 .process_multiple_ticks(&mut self.data, time_step)
         };
         let collisions = self.collision.process(land, &updates);
-        let events = self.time.process(time_step);
     }
 
     #[inline]

@@ -1,8 +1,8 @@
-use crate::common::{GearId, Millis};
 use std::{
     cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd},
     collections::BinaryHeap,
 };
+use hwphysics::common::{GearId, Millis};
 
 pub type EventId = u16;
 
@@ -78,7 +78,7 @@ impl TimeProcessor {
         event_id
     }
 
-    fn remove_events<P>(&mut self, predicate: P)
+    fn retain_events<P>(&mut self, predicate: P)
     where
         P: Fn(&TimeEvent) -> bool,
     {
@@ -88,12 +88,12 @@ impl TimeProcessor {
 
     pub fn cancel(&mut self, event_id: EventId) {
         //self.events.retain(|event| event.event_id != event_id)
-        self.remove_events(|event| event.event_id != event_id)
+        self.retain_events(|event| event.event_id != event_id)
     }
 
     pub fn cancel_all(&mut self, gear_id: GearId) {
         //self.events.retain(|event| event.gear_id != gear_id)
-        self.remove_events(|event| event.gear_id != gear_id)
+        self.retain_events(|event| event.gear_id != gear_id)
     }
 
     pub fn process(&mut self, time_step: Millis) -> &OccurredEvents {
