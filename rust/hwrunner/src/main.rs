@@ -40,6 +40,90 @@ impl<T: Error> From<T> for ErrorStub {
 }
 
 impl HwRendererContext {
+    fn get_framebuffer_size(window: &Window) -> (u32, u32) {
+        let size = window.get_inner_size().unwrap();
+        (size.to_physical(window.get_hidpi_factor())).into()
+    }
+
+    fn create_wpgu_swap_chain(window: &Window, surface: &Surface, device: &Device) -> SwapChain {
+        let (width, height) = Self::get_framebuffer_size(window);
+        device.create_swap_chain(
+            &surface,
+            &SwapChainDescriptor {
+                usage: TextureUsage::OUTPUT_ATTACHMENT,
+                format: TextureFormat::Bgra8Unorm,
+                width,
+                height,
+                present_mode: PresentMode::Fifo,
+            },
+        )
+    }
+
+    fn init_wgpu(event_loop: &EventsLoop, size: dpi::LogicalSize) -> HwWgpuRenderingContext {
+        let builder = WindowBuilder::new()
+            .with_title("hwengine")
+            .with_dimensions(size);
+        let window = builder.build(event_loop).unwrap();
+
+        let instance = wgpu::Instance::new(BackendBit::VULKAN);
+
+        let surface = unsafe { instance.create_surface(&window) };
+
+        let adapter = block_on(instance.request_adapter(&RequestAdapterOptions {
+            power_preference: PowerPreference::HighPerformance,
+            compatible_surface: Some(&surface),
+        }))
+        .unwrap();
+
+        let (device, queue) = block_on(adapter.request_device(&Default::default(), None)).unwrap();
+
+        let swap_chain = Self::create_wpgu_swap_chain(&window, &surface, &device);
+
+        HwWgpuRenderingContext {
+            window,
+            surface,
+            adapter,
+            device,
+            queue,
+            swap_chain,
+        }
+    }
+
+    fn init_gl(event_loop: &EventsLoop, size: dpi::LogicalSize) -> HwGlRendererContext {
+        use glutin::ContextBuilder;
+
+        let builder = WindowBuilder::new()
+            .with_title("hwengine")
+            .with_dimensions(size);
+
+        let context = ContextBuilder::new()
+            .with_gl(GlRequest::Latest)
+            .with_gl_profile(GlProfile::Core)
+            .build_windowed(builder, &event_loop)
+            .ok()
+            .unwrap();
+
+        unsafe {
+            context.make_current().unwrap();
+            gl::load_with(|ptr| context.get_proc_address(ptr) as *const _);
+
+            if let Some(sz) = context.get_inner_size() {
+                let (width, height) = Self::get_framebuffer_size(context.window());
+                gl::Viewport(0, 0, width as i32, height as i32);
+            }
+        }
+
+        context
+    }
+
+    fn new(event_loop: &EventsLoop, size: dpi::LogicalSize, use_wgpu: bool) -> Self {
+        if use_wgpu {
+            Self::Wgpu(Self::init_wgpu(event_loop, size))
+        } else {
+            Self::Gl(Self::init_gl(event_loop, size))
+        }
+    }
+
     pub fn window(&self) -> &Window {
         match self {
             HwRendererContext::Gl(gl) => &gl.window(),
@@ -47,22 +131,17 @@ impl HwRendererContext {
         }
     }
 
-    pub fn update(&mut self, size: dpi::LogicalSize) {
-        let phys = size.to_physical(self.window().get_hidpi_factor());
+    pub fn update(&mut self) {
         match self {
             HwRendererContext::Gl(context) => unsafe {
-                gl::Viewport(0, 0, phys.width as i32, phys.height as i32);
+                let (width, height) = Self::get_framebuffer_size(&context.window());
+                gl::Viewport(0, 0, width as i32, height as i32);
             },
             HwRendererContext::Wgpu(context) => {
-                context.swap_chain = context.device.create_swap_chain(
+                context.swap_chain = Self::create_wpgu_swap_chain(
+                    &context.window,
                     &context.surface,
-                    &SwapChainDescriptor {
-                        usage: TextureUsage::OUTPUT_ATTACHMENT,
-                        format: TextureFormat::Bgra8Unorm,
-                        width: phys.width as u32,
-                        height: phys.height as u32,
-                        present_mode: PresentMode::Fifo,
-                    },
+                    &context.device,
                 );
             }
         }
@@ -85,7 +164,12 @@ impl HwRendererContext {
                         attachment: &frame_view,
                         resolve_target: None,
                         ops: Operations {
-                            load: LoadOp::Clear(Color::BLUE),
+                            load: LoadOp::Clear(Color {
+                                r: 0.7,
+                                g: 0.4,
+                                b: 0.2,
+                                a: 1.0,
+                            }),
                             store: false,
                         },
                     }],
@@ -99,91 +183,12 @@ impl HwRendererContext {
     }
 }
 
-fn init_wgpu(event_loop: &EventsLoop, size: dpi::LogicalSize) -> HwWgpuRenderingContext {
-    let builder = WindowBuilder::new()
-        .with_title("hwengine")
-        .with_dimensions(size);
-    let window = builder.build(event_loop).unwrap();
-
-    let instance = wgpu::Instance::new(BackendBit::PRIMARY);
-
-    let surface = unsafe { instance.create_surface(&window) };
-
-    let adapter = block_on(instance.request_adapter(&RequestAdapterOptions {
-        power_preference: PowerPreference::HighPerformance,
-        compatible_surface: Some(&surface),
-    }))
-    .unwrap();
-
-    let (device, queue) = block_on(adapter.request_device(&Default::default(), None)).unwrap();
-
-    let size = window.get_inner_size().unwrap();
-
-    let phys = size.to_physical(window.get_hidpi_factor());
-
-    let mut swap_chain = device.create_swap_chain(
-        &surface,
-        &SwapChainDescriptor {
-            usage: TextureUsage::OUTPUT_ATTACHMENT,
-            format: TextureFormat::Bgra8Unorm,
-            width: phys.width as u32,
-            height: phys.height as u32,
-            present_mode: PresentMode::Fifo,
-        },
-    );
-
-    HwWgpuRenderingContext {
-        window,
-        surface,
-        adapter,
-        device,
-        queue,
-        swap_chain,
-    }
-}
-
-fn init_gl(event_loop: &EventsLoop, size: dpi::LogicalSize) -> HwGlRendererContext {
-    use glutin::ContextBuilder;
-
-    let builder = WindowBuilder::new()
-        .with_title("hwengine")
-        .with_dimensions(size);
-
-    let context = ContextBuilder::new()
-        .with_gl(GlRequest::Latest)
-        .with_gl_profile(GlProfile::Core)
-        .build_windowed(builder, &event_loop)
-        .ok()
-        .unwrap();
-
-    unsafe {
-        context.make_current().unwrap();
-        gl::load_with(|ptr| context.get_proc_address(ptr) as *const _);
-
-        if let Some(sz) = context.get_inner_size() {
-            let phys = sz.to_physical(context.get_hidpi_factor());
-
-            gl::Viewport(0, 0, phys.width as i32, phys.height as i32);
-        }
-    }
-
-    context
-}
-
-fn init(event_loop: &EventsLoop, size: dpi::LogicalSize, use_wgpu: bool) -> HwRendererContext {
-    if use_wgpu {
-        HwRendererContext::Wgpu(init_wgpu(event_loop, size))
-    } else {
-        HwRendererContext::Gl(init_gl(event_loop, size))
-    }
-}
-
 fn main() {
-    let use_wgpu = false;
+    let use_wgpu = true;
     let mut event_loop = EventsLoop::new();
     let (w, h) = (1024.0, 768.0);
 
-    let mut context = init(&event_loop, dpi::LogicalSize::new(w, h), use_wgpu);
+    let mut context = HwRendererContext::new(&event_loop, dpi::LogicalSize::new(w, h), use_wgpu);
 
     let mut engine = EngineInstance::new();
     if !use_wgpu {
@@ -217,7 +222,7 @@ fn main() {
                 WindowEvent::CloseRequested => {
                     is_running = false;
                 }
-                WindowEvent::Resized(size) => context.update(size),
+                WindowEvent::Resized(_) | WindowEvent::HiDpiFactorChanged(_) => context.update(),
 
                 WindowEvent::MouseInput { button, state, .. } => {
                     if let MouseButton::Right = button {
@@ -255,7 +260,7 @@ fn main() {
             if !use_wgpu {
                 engine.render();
             }
-            context.present();
+            context.present().ok().unwrap();
         }
     }
 }
