@@ -23,7 +23,6 @@
 #include <QGroupBox>
 #include <QSizePolicy>
 #include <QPainterPath>
-//#include <stl_algo>
 
 #include "pagegamestats.h"
 #include "team.h"
@@ -263,7 +262,7 @@ void PageGameStats::renderStats()
 
         graphic->setScene(m_scene.data());
 
-        graphic->setSceneRect(0, 0, max(maxDataPoints-1. 1), 1);
+        graphic->setSceneRect(0, 0, max(maxDataPoints-1, 1), 1);
 
         graphic->fitInView(graphic->sceneRect());
 
