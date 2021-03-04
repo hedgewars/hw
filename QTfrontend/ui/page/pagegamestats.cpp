@@ -23,6 +23,7 @@
 #include <QGroupBox>
 #include <QSizePolicy>
 #include <QPainterPath>
+//#include <stl_algo>
 
 #include "pagegamestats.h"
 #include "team.h"
@@ -197,11 +198,6 @@ void PageGameStats::renderStats()
         gbDetails->show();
         m_scene.reset(new QGraphicsScene(this));
 
-        // min and max value across the entire chart
-        qint32 minValue = 0;
-        qint32 maxValue = 0;
-        bool minMaxValuesInitialized = false;
-
         // max data points per clan
         int maxDataPoints = 0;
         for(QMap<qint32, QVector<qint32> >::const_iterator i = healthPoints.constBegin(); i != healthPoints.constEnd(); ++i)
@@ -217,6 +213,24 @@ void PageGameStats::renderStats()
             applySpacing();
             return;
         }
+        
+        QVector<qint32> total_health_over_time;
+        QVector<qint32> accumulative_health_over_time;
+        QMap<qint32, QVector<qint32> >::const_iterator k = healthPoints.constBegin();
+        while (k != healthPoints.constEnd())
+        {
+            const QVector<qint32>& hps = k.value();
+            for(int t = 0; t < hps.size(); ++t) {
+                while (t >= total_health_over_time.size()){
+                     total_health_over_time.append(0);
+                     accumulative_health_over_time.append(0);
+                }
+                
+                total_health_over_time[t]+=hps[t];
+            }
+            
+            ++k;
+        }
 
         QMap<qint32, QVector<qint32> >::const_iterator i = healthPoints.constBegin();
         while (i != healthPoints.constEnd())
@@ -228,57 +242,28 @@ void PageGameStats::renderStats()
 
             if (hps.size()) {
                 path.moveTo(0, hps[0]);
-                if(minMaxValuesInitialized) {
-                    minValue = qMin(minValue, hps[0]);
-                    maxValue = qMax(maxValue, hps[0]);
-                } else {
-                    minValue = hps[0];
-                    maxValue = hps[0];
-                    minMaxValuesInitialized = true;
-                }
             }
 
             for(int t = 0; t < hps.size(); ++t) {
-                path.lineTo(t, hps[t]);
-                maxValue = qMax(maxValue, hps[t]);
-                minValue = qMin(minValue, hps[t]);
+                path.lineTo(t, (accumulative_health_over_time[t]) / std::max(1.0, (qreal) total_health_over_time[t]) );
+                accumulative_health_over_time[t]+=hps[t];
             }
+            path.lineTo(hps.size()-1, 1);
+            path.lineTo(0, 1);
 
             // Draw clan health/score graph lines
             QColor col = QColor(c);
 
-            // Special pen for very dark clan colors
-            if (!(col.red() >= cInvertTextColorAt || col.green() >= cInvertTextColorAt || col.blue() >= cInvertTextColorAt))
-            {
-                QPen pen_marker(QColor(255, 255, 255));
-                pen_marker.setWidth(3);
-                pen_marker.setStyle(Qt::DotLine);
-                pen_marker.setCosmetic(true);
-                m_scene->addPath(path, pen_marker);
-            }
-
-            // Regular pen
-            QPen pen(col);
-            pen.setWidth(2);
-            pen.setCosmetic(true);
-            m_scene->addPath(path, pen);
+            QBrush brush(col);
+            m_scene->addPath(path, Qt::NoPen, brush);
 
             ++i;
         }
+        
 
         graphic->setScene(m_scene.data());
 
-        // Calculate the bounding box of the final chart
-        qint32 sceneMinY = minValue;
-        qint32 sceneMaxY = maxValue;
-        // If all values are 0 or greater, make sure to include 0 at the bottom.
-        if(sceneMinY >= 0 && sceneMaxY >= 0)
-            sceneMinY = 0;
-        // If all values are equal, we must increase sceneMaxY, otherwise the scene rect
-        // would have a height of 0 and will screw up
-        if(sceneMinY == sceneMaxY)
-            sceneMaxY++;
-        graphic->setSceneRect(0, sceneMinY, maxDataPoints-1, sceneMaxY - sceneMinY);
+        graphic->setSceneRect(0, 0, max(maxDataPoints-1. 1), 1);
 
         graphic->fitInView(graphic->sceneRect());
 
