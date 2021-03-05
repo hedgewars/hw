@@ -251,10 +251,11 @@ void PageGameStats::renderStats()
             path.lineTo(0, 1);
 
             // Draw clan health/score graph lines
-            QColor col = QColor(c);
+            QColor darkCol = col.darker(125);
 
-            QBrush brush(col);
-            m_scene->addPath(path, Qt::NoPen, brush);
+            QBrush brush(darkCol);
+            QPen pen = Qt::NoPen;
+            m_scene->addPath(path, pen, brush);
 
             ++i;
         }
@@ -262,7 +263,7 @@ void PageGameStats::renderStats()
 
         graphic->setScene(m_scene.data());
 
-        graphic->setSceneRect(0, 0, max(maxDataPoints-1, 1), 1);
+        graphic->setSceneRect(0, 0, std::max(1, maxDataPoints-1), 1);
 
         graphic->fitInView(graphic->sceneRect());
 
@@ -281,7 +282,7 @@ void PageGameStats::applySpacing()
     }
     if ((!gbDetails->isHidden()) && (!gbRanks->isHidden()))
     {
-        pageLayout->setColumnStretch(0, 1);
+        pageLayout->setColumnStretch(0, 0);
         pageLayout->setColumnStretch(1, 1);
         pageLayout->setHorizontalSpacing(20);
     }
