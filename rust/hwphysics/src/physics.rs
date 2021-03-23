@@ -67,36 +67,28 @@ impl PhysicsProcessor {
         }
     }
 
-    pub fn process_single_tick(&mut self, data: &mut GearDataManager) -> &PositionUpdates {
-        let gravity = FPPoint::unit_y() * self.gravity;
-        let wind = FPPoint::unit_x() * self.wind;
-
-        self.position_updates.clear();
-
-        data.iter()
-            .with_tags::<&AffectedByWind>()
-            .run(|(vel,): (&mut VelocityData,)| {
-                vel.0 += wind;
-            });
-
-        data.iter().run_id(
-            |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
-                let old_pos = pos.0;
-                vel.0 += gravity;
-                pos.0 += vel.0;
-                self.position_updates.push(gear_id, &old_pos, &pos.0)
-            },
-        );
-
-        &self.position_updates
-    }
-
-    pub fn process_multiple_ticks(
+    pub fn process(
         &mut self,
         data: &mut GearDataManager,
         time_step: Millis,
     ) -> &PositionUpdates {
-        let fp_step = time_step.to_fixed();
+        if time_step == Millis::new(1) {
+            self.process_impl::<true>(data, time_step)
+        } else {
+            self.process_impl::<false>(data, time_step)
+        }
+    }
+
+    fn process_impl<const SINGLE_TICK: bool>(
+        &mut self,
+        data: &mut GearDataManager,
+        time_step: Millis,
+    ) -> &PositionUpdates {
+        let fp_step = if SINGLE_TICK {
+            fp!(1)
+        } else {
+            time_step.to_fixed()
+        };
         let gravity = FPPoint::unit_y() * (self.gravity * fp_step);
         let wind = FPPoint::unit_x() * (self.wind * fp_step);
 
@@ -112,7 +104,7 @@ impl PhysicsProcessor {
             |gear_id, (pos, vel): (&mut PositionData, &mut VelocityData)| {
                 let old_pos = pos.0;
                 vel.0 += gravity;
-                pos.0 += vel.0 * fp_step;
+                pos.0 += if SINGLE_TICK { vel.0 } else { vel.0 * fp_step };
                 self.position_updates.push(gear_id, &old_pos, &pos.0)
             },
         );

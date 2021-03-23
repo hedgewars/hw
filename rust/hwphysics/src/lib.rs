@@ -48,12 +48,7 @@ impl World {
     }
 
     pub fn step(&mut self, time_step: Millis, land: &Land2D<u32>) {
-        let updates = if time_step == Millis::new(1) {
-            self.physics.process_single_tick(&mut self.data)
-        } else {
-            self.physics
-                .process_multiple_ticks(&mut self.data, time_step)
-        };
+        let updates = self.physics.process(&mut self.data, time_step);
         let collisions = self.collision.process(land, &updates);
     }
 

@@ -9,12 +9,12 @@ pub struct Millis(u32);
 
 impl Millis {
     #[inline]
-    pub fn new(value: u32) -> Self {
+    pub const fn new(value: u32) -> Self {
         Self(value)
     }
 
     #[inline]
-    pub fn get(self) -> u32 {
+    pub const fn get(self) -> u32 {
         self.0
     }
 
