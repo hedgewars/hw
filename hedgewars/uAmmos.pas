@@ -406,7 +406,7 @@ with Hedgehog do
     CurWeapon:= GetCurAmmoEntry(Hedgehog);
     OldWeapon:= GetCurAmmoEntry(Hedgehog);
 
-    if (Hedgehog.Gear^.State and gstHHDriven) = 0 then
+    if (Hedgehog.Gear <> nil) and (Hedgehog.Gear^.State and gstHHDriven = 0) then
         Hedgehog.CurAmmoType:= amNothing
     else if (CurWeapon^.Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog)
@@ -431,7 +431,7 @@ with Hedgehog do
             s:= s + ansistring(' (' + IntToStr(Count) + ')');
         if (Propz and ammoprop_Timerable) <> 0 then
             s:= s + ansistring(', ' + IntToStr(Timer div 1000) + ' ') + trammo[sidSeconds];
-        if (Hedgehog.Gear^.State and gstHHDriven) <> 0 then
+        if (Hedgehog.Gear <> nil) and (Hedgehog.Gear^.State and gstHHDriven <> 0) then
             AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
         if (Propz and ammoprop_NeedTarget) <> 0 then
             begin
