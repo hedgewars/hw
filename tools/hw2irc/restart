@@ -1,0 +1,8 @@
+#!/bin/bash
+sudo -u nobody killall java; sleep 3; sudo -u nobody killall -9 java;
+sleep 30;
+#sudo -u nobody java net.ercatec.hw2ircsvr.Connection netserver.hedgewars.org 1337 >>out.sheepy 2>>err.sheepy & disown
+sudo -u nobody bash -c 'java net.ercatec.hw2ircsvr.Connection netserver.hedgewars.org 1337 >>out.sheepy 2>&1 & disown'
+sleep 122
+#sudo -u nobody java net.ercatec.hw2ircsvr.Connection >>out 2>>err & disown
+sudo -u nobody bash -c 'java net.ercatec.hw2ircsvr.Connection >>out 2>&1 & disown'
