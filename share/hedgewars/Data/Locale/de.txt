@@ -271,7 +271,7 @@
 02:01=%1 wird für immer Blasen machen
 02:01=%1 war ganz, ganz knapp vor einem Floß
 02:01=%1 dachte, Salzwasser sei gut für die Haut
-02:01=%1 bekommt Salzwasser in seine Wunden
+02:01=%1 bekommt Salzwasser in die Wunden
 02:01=%1 ging über die Planke
 02:01=%1 geht baden
 02:01=%1 ist nass, nass, nass
@@ -485,7 +485,7 @@
 02:05=Notvorräte!
 02:05=Hartnäckige Igel sind gute Igel
 02:05=Vergiss nicht deine Vitamine!
-02:05=Jemand hat wohl seine Pillen vergessen
+02:05=Jemand hat wohl die Pillen vergessen
 02:05=Wir denken an euch!
 02:05=Hilfe für die Verletzten
 02:05=Lasst uns deine Hartnäckigkeit erhöhen
@@ -846,7 +846,7 @@
 02:09=%1 verletzt sich selbst
 02:09=%1 blamiert sich!
 02:09=%1 ist ungeschickt
-02:09=%1 zeigt dem Feind, wozu er fähig ist
+02:09=%1 zeigt dem Feind, wo der Hammer hängt
 02:09=%1 ist nicht perfekt
 02:09=Mach dir keine Sorgen, %1, piemand ist nerfekt
 02:09=%1 hat das bestimmt mit Absicht getan
@@ -933,7 +933,7 @@
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 muss ins Bett!
 02:11=%1 scheint zu beschäftigt zu sein
-02:11=Beam ihn hoch, Scotty!
+02:11=Beam sie hoch, Scotty!
 02:11=%1 muss weg
 02:11=%1 verkrümelt sich
 02:11=%1 macht sich vom Acker
