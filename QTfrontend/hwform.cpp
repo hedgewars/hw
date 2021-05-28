@@ -1295,7 +1295,7 @@ void HWForm::NetNickTaken(const QString & nick)
 
 void HWForm::NetAuthFailed()
 {
-    // Set the password blank if case the user tries to join and enter his password again
+    // Set the password blank if case the user tries to join and enter their password again
     config->clearTempHash();
 
     //Try to login again

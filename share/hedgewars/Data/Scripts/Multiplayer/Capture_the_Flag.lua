@@ -49,9 +49,9 @@
 -- 0.3
 ---------
 -- [fufufufu kamikaze fix]
--- added nill checks to make sure the player doesn't generate errors by producing a nil value in hhs[] when he uses kamikaze
+-- added nil checks to make sure the player doesn't generate errors by producing a nil value in hhs[] when using kamikaze
 -- added a check to make sure the player doesn't kamikaze straight down and make the flag's starting point underwater
--- added a check to make sure the player drops the flag if he has it and he uses kamikaze
+-- added a check to make sure the player drops the flag if they have it and they use kamikaze
 
 --------
 -- 0.4
@@ -62,7 +62,7 @@
 -- fix piano strike exploit
 -- changed delay to allow for better portals
 -- changed starting feedback a little
--- increased the radius around the circle indicating the flag thief so that it doesn't obscure his health
+-- increased the radius around the circle indicating the flag thief so that it doesn't obscure their health
 
 --------
 -- 0.5
@@ -597,7 +597,7 @@ end
 function onGearResurrect(gear)
 
 	if GetGearType(gear) == gtHedgehog then
-		-- mark the flag thief as dead if he needed a respawn
+		-- mark the flag thief as dead if they needed a respawn
 		for i = 0, ClansCount-1 do
 			if gear == fThief[i] then
 				FlagThiefDead(gear)

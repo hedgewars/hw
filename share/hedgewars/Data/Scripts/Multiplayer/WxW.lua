@@ -118,7 +118,7 @@ attackrule	off	If present, enable one of the attack rules “ABL” or “KTL”
 			ABL: All But Last: Players must not only attack the team with the lowest total health
 			KTL: Kill The Leader: If players hit some enemy hedgehog, at least one of them must be a hog from
 			the team with the highest total health.
-			The ABL and KTL rules exclude each other. If a player breaks the rule (if enabled), he must
+			The ABL and KTL rules exclude each other. If a player breaks the rule (if enabled), they must
 			skip in the next round.
 SW		false	Super Weapons: A few crates may contain very powerful weapons (melon, hellish grenade, RC plane, ballgun)
 maxcrates	12	Number of crates which can be at maximum in the game (limited to up to 100 to avoid lag)

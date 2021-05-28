@@ -1047,7 +1047,7 @@ function onGameTick20()
 	end
 
 
-	-- start the player tumbling with a boom once their turn has actually begun
+	-- start the player with a boom once their turn has actually begun
 	if racerActive == false then
 
 		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
@@ -1076,7 +1076,7 @@ function onGameTick20()
 		activationStage = 202
 	end
 
-	-- has the player started his tumbling spree?
+	-- has the player started?
 	if (CurrentHedgehog ~= nil) then
 
 		-- if the RACE has started, show tracktimes and keep tabs on waypoints

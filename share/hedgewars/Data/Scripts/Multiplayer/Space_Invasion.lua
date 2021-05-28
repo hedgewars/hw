@@ -203,7 +203,7 @@ SI.awardTotalKills=0	-- overall killed invaders (min. 30)
 -- hog awards
 SI.awardRoundScore = nil	-- hog with most score in 1 round (min. 50)
 SI.awardRoundKills = nil	-- most kills in 1 round (min. 5)
-SI.awardAccuracy = nil	-- awarded to hog who didn’t miss once in his round, with most kills (min. 5)
+SI.awardAccuracy = nil	-- awarded to hog who didn’t miss once in their round, with most kills (min. 5)
 SI.awardCombo = nil	-- hog with longest combo (min. 5)
 
 

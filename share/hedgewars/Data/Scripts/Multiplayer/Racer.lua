@@ -977,7 +977,7 @@ function onGameTick20()
 		waypointCursor = false
 	end
 
-        -- has the player started his tumbling spree?
+        -- has the player started?
         if (CurrentHedgehog ~= nil) then
 
                 --airstrike conversion used to be here
@@ -1010,7 +1010,7 @@ function onGameTick20()
 
                 end
 
-                -- if the player has expended his tunbling time, stop him tumbling
+                -- if the player has expended their time, stop
                 if TurnTimeLeft <= 20 and not turnSkipped then
                         DisableTumbler()
                 end

@@ -323,13 +323,13 @@ function CheckForHogSwitch()
 
 		if currHog ~= lastHog then
 
-			-- re-assign ammo to this guy, so that his entire ammo set will
+			-- re-assign ammo to this fellow, so that their entire ammo set will
 			-- be visible during another player's turn
 			if lastHog ~= nil and GetHealth(lastHog) then
 				ConvertValues(lastHog)
 			end
 
-			-- give the new hog what he is supposed to have, too
+			-- give the new hog what they are supposed to have, too
 			ConvertValues(CurrentHedgehog)
 
 		end

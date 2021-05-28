@@ -1361,7 +1361,7 @@ var usable: boolean;
 begin
 (*
     Conditions for not activating.
-    1. Hog is last of his clan
+    1. Hog is last of their clan
     2. Sudden Death is in play
     3. Hog is a king
 *)
