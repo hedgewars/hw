@@ -131,24 +131,24 @@
 02:00=%1 never saw that coming!
 02:00=%1 waves goodbye!
 02:00=%1 has gone to a better place!
-02:00=%1 meets his maker!
+02:00=%1 meets their maker!
 02:00=%1 can hang on no longer!
-02:00=%1 has done his duty!
+02:00=%1 has done their duty!
 02:00=%1 makes the ultimate sacrifice!
 02:00=%1 departs this mortal coil!
 02:00=%1 makes like a tree and leaves!
 02:00=%1 has timed out!
 02:00=%1 says peace out!
 02:00=%1 will be fondly remembered!
-02:00=%1 leaves behind a wife and child
-02:00=%1 has launched his last bazooka
-02:00=%1 has tossed his last grenade
-02:00=%1 has baked his last cake
-02:00=%1 has swung on his last rope
-02:00=%1 has called his last airstrike
-02:00=%1 has pumped his last shotgun
-02:00=%1 has thrown his last melon
-02:00=%1 has drawn his last deagle
+02:00=%1 leaves behind a sad family
+02:00=%1 has launched their last bazooka
+02:00=%1 has tossed their last grenade
+02:00=%1 has baked their last cake
+02:00=%1 has swung on their last rope
+02:00=%1 has called their last airstrike
+02:00=%1 has pumped their last shotgun
+02:00=%1 has thrown their last melon
+02:00=%1 has drawn their last deagle
 02:00=%1 took one shot too many
 02:00=%1 could really have used a health crate
 02:00=%1 has gone to play a better game
@@ -156,9 +156,9 @@
 02:00=%1 fails
 02:00=Poor, poor %1 ...
 02:00=%1 prefers WarMUX
-02:00=%1 has been blocking shots with his face
+02:00=%1 has been blocking shots with their face
 02:00=%1 is a hero amongst me...err...hogs
-02:00=%1 finds his place in Valhalla
+02:00=%1 finds their place in Valhalla
 02:00=%1 has left the building
 02:00=%1 goes the way of the dinosaurs
 02:00=%1 brings hedgehogs one step closer to extinction
@@ -232,22 +232,22 @@
 02:01=%1 checks out the deep end
 02:01=%1 goes glug glug glug
 02:01=%1 goes splash
-02:01=%1 forgot his armbands
+02:01=%1 forgot their armbands
 02:01=%1 really should have taken swimming lessons
-02:01=%1 left his surfboard at home
+02:01=%1 left their surfboard at home
 02:01=%1 is washed up
 02:01=%1 is one soggy hog
-02:01=%1 forgot to bring his life jacket
+02:01=%1 forgot to bring their life jacket
 02:01=%1 goes splish splash splish
 02:01=%1 is sleeping with the fishes
 02:01=%1 thinks the water physics suck in this game
 02:01=%1 looks thirsty
 02:01=The sea claims %1
 02:01=%1 is lost at sea
-02:01=%1 should have brought his scuba gear
+02:01=%1 should have brought their scuba gear
 02:01=%1 gets a burial at sea
 02:01=%1 has that sinking feeling
-02:01=%1 is practicing his backstroke
+02:01=%1 is practicing their backstroke
 02:01=%1 goes in search of the Titanic
 02:01=%1 is not Jesus
 02:01=%1 is finding Nemo
@@ -255,7 +255,7 @@
 02:01=You've gotta wonder how many hogs are down there
 02:01=%1 makes the ocean slightly higher
 02:01=%1 didn't enlist in the Navy
-02:01=%1 is doing his impersonation of a dead fish
+02:01=%1 is doing their impersonation of a dead fish
 02:01=At least you didn't go down the toilet, %1
 02:01=Sonic couldn't swim and neither can %1
 02:01=%1 wants to play Ecco the dolphin
@@ -267,11 +267,11 @@
 02:01=%1 is forever blowing bubbles
 02:01=%1 is short of a raft
 02:01=%1 thinks salt water is good for the skin
-02:01=%1 gets salt water in his wounds
+02:01=%1 gets salt water in their wounds
 02:01=%1 has walked the plank
 02:01=%1 has a bath
 02:01=%1 is wet wet wet
-02:01=%1 gets his quills wet
+02:01=%1 gets their quills wet
 02:01=It's Davy Jones' locker for %1
 02:01=%1 explores the Sea
 02:01=Hedgehogs have quills, not gills, %1!
@@ -468,7 +468,7 @@
 02:05=Emergency supplies!
 02:05=Strong hedgehogs are good hedgehogs
 02:05=Don't forget to take your vitamins!
-02:05=Somebody must have forgotten his daily pills
+02:05=Somebody must have forgotten their daily pills
 02:05=Adds to your total health
 02:05=We got you covered!
 02:05=Hurt hedgehogs have help
@@ -747,7 +747,7 @@
 02:07=Collect all the tools!
 02:07=Tools!
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 is sooo boring ...
 02:08=%1 couldn't be bothered
 02:08=%1 is one lazy hog
@@ -761,20 +761,20 @@
 02:08=%1 has a breather
 02:08=%1 has a rest
 02:08=%1 chills out
-02:08=%1 has no faith in his own abilities
+02:08=%1 has no faith in their own abilities
 02:08=%1 decides to do nothing at all
 02:08=%1 lets the enemy destroy itself
 02:08=%1 would be terrible at parties
 02:08=%1 hides out
 02:08=%1 has decided to pass on this opportunity
-02:08=%1 decides the best thing he can do is...nothing
+02:08=%1 decides the best thing to do is...nothing
 02:08=%1 is a big wuss
 02:08=Buck Buck Buck, %1 is a chicken
 02:08=%1 is looking a little yellow
 02:08=%1 is a coward!
 02:08=%1 is waiting for sudden death
 02:08=%1 is not the fighting type
-02:08=%1 is reconsidering his purpose in life
+02:08=%1 is reconsidering their purpose in life
 02:08=%1 was never much of a good shot anyway
 02:08=%1 didn't want to join the army in the first place
 02:08=Stop wasting our time, %1
@@ -802,12 +802,12 @@
 02:08=%1 attacked with nothing
 02:08=%1 is passive
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 should practice aiming!
-02:09=%1 seems to hate himself
+02:09=%1 seems to hate themselves
 02:09=%1 is standing on the wrong side!
 02:09=%1 makes like an emo
-02:09=%1 was holding his weapon the wrong way around
+02:09=%1 was holding their weapon the wrong way around
 02:09=%1 is a little sadistic
 02:09=%1 is a masochist
 02:09=%1 has no instinct of self-preservation
@@ -825,17 +825,17 @@
 02:09=%1 lives by the mantra of "no pain, no gain"
 02:09=%1 is confused
 02:09=%1 hurts itself in its confusion
-02:09=%1 has a knack for embarrassing himself
+02:09=%1 has a knack for embarrassing themselves
 02:09=%1 is a klutz!
 02:09=%1 is clumsy
-02:09=%1 shows the enemy what he's capable of
+02:09=%1 shows the enemy what they're capable of
 02:09=%1 can't be expected to be perfect all the time
 02:09=Don't worry %1, pobody's nerfect
 02:09=%1 totally did that on purpose
 02:09=I won't tell anyone if you don't, %1
 02:09=How embarrassing!
 02:09=I'm sure nobody saw that, %1
-02:09=%1 needs to review his field manual
+02:09=%1 needs to review their field manual
 02:09=%1's weapon clearly malfunctioned
 02:09=%1 is still practicing
 02:09=%1's shot backfired
@@ -852,7 +852,7 @@
 02:09=%1 confuses the enemy
 02:09=Something is wrong with %1
 02:09=Better luck next time, %1!
-02:09=%1 is his worst enemy
+02:09=%1 is their worst enemy
 02:09=Let's call that a technical difficulty, %1?
 02:09=%1 is drunk
 02:09=%1 says “Ouchywawa!”
@@ -896,7 +896,7 @@
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 has to go to bed!
 02:11=%1 seems too busy to play
-02:11=Beam him up, Scotty!
+02:11=Beam 'em up, Scotty!
 02:11=%1 has to go
 02:11=%1 teleports into a parallel universe
 02:11=%1 vanishes into thin air
@@ -1242,8 +1242,8 @@
 04:20=Allows you to play the current turn with|a different hog.|Attack: Enable switching hogs|Switch: Select next hog|Precise + Switch: Select previous hog
 04:21=Shoot a projectile that will release|multiple clusters upon impact. The|clusters are hurled backwards and are|more dangerous than the main projectile.|Attack: Shoot at full power
 04:22=Not just for Indiana Jones! The whip is a|useful weapon in many situations. Especially|when you'd like to shove someone off a cliff.|Attack: Strike everything in front of you
-04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|it into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
-04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but he might detonate earlier this way.|Attack: Start the cake or let it stop and explode
+04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|it into a specific direction hurting everything|on the way and exploding at the end.|Attack: Launch the devastating and deadly attack
+04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but it might detonate earlier this way.|Attack: Start the cake or let it stop and explode
 04:25=With this costume kit your hog becomes irresistibly|attractive and makes nearby hogs jump in blind love|towards it (and into some gap or hole). The seduction is|so heartwarming, it even breaks the ice of frozen hogs.|Attack: Use the irresistible seduction
 04:26=Throw this juicy (and bouncy) watermelon at|your enemies. Once the timer expires, it will|split into several explosive pieces.|1-5: Set watermelon's timer|Attack: Hold to shoot with more power
 04:27=Let hellfire rain onto your opponents by using|this fiendish explosive. Don't get too close to|the explosion as smaller fires might last longer.|Attack: Hold to shoot with more power
