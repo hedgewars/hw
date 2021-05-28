@@ -92,10 +92,10 @@
 ; New utility crate
 02:07=장치상자!
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 통과했다.
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 피학대 성애자인 것 캍아...
 
 ; Hog shot an home run (using the bat and another hog)

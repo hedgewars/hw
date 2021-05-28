@@ -304,7 +304,7 @@
 02:07=Ou, tahle bedna je těžká
 02:07=Možná bys mohl potřebovat tohle
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 je nudný...
 02:08=%1 se nemusel obtěžovat
 02:08=%1 je líný ježek
@@ -342,7 +342,7 @@
 02:08=%1 je slušně vystrašený
 02:08=%1 usnul
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 by měl trénovat míření!
 02:09=%1 se asi nenávidí
 02:09=%1 je na špatné straně!

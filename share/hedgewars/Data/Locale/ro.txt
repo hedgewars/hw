@@ -304,7 +304,7 @@
 02:07=Ooo this box is heavy
 02:07=You might need this
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 is sooo boring...
 02:08=%1 couldn't be bothered
 02:08=%1 is one lazy hog
@@ -342,7 +342,7 @@
 02:08=%1 is scared stiff
 02:08=%1 has fallen asleep
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 should practice aiming!
 02:09=%1 seems to hate himself
 02:09=%1 is standing on the wrong side!

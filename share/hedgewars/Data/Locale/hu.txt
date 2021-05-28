@@ -363,7 +363,7 @@
 02:07=Svájci bicska doboz formában
 02:07=Csináld magad!
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 unalmas…
 02:08=%1 hiába fáradt
 02:08=%1 eléggé lusta
@@ -398,7 +398,7 @@
 02:08=%1 épp mással foglalkozik
 02:08=%1 elaludt
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 gyakorolhatna kicsit!
 02:09=%1 látszólag utálja magát
 02:09=%1 rossz oldalra állt!

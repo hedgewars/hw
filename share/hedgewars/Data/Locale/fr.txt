@@ -281,7 +281,7 @@
 02:07=Bob le bricoleur sait être généreux !
 02:07=Le moment donné par le hasard vaut mieux que le moment choisi !
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 est une lopette...
 02:08=%1 est trooooop rasant...
 02:08=%1 est un hérisson flemmard
@@ -323,7 +323,7 @@
 02:08=Ne crains pas d'avancer lentement, crains seulement de t'arrêter %1
 02:08=Patience ! Avec le temps, l'herbe devient du lait
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 devrait apprendre à viser !
 02:09=%1 s'en veut
 02:09=%1 joue contre son camp !

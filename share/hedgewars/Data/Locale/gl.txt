@@ -188,7 +188,7 @@
 02:07=Sexa o que sexa, seguro que lle sacamos partido!
 02:07=Ferramentas?! Queremos armas!
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 case mexa por riba!
 02:08=%1 está feito un preguiceiro...
 02:08=%1 non dá

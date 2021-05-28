@@ -304,7 +304,7 @@
 02:07=Åh, den her er tung
 02:07=Måske får du brug for den her
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 er sååå kedelig...
 02:08=%1 gad ikke lige
 02:08=%1 er et dovent pindsvin
@@ -342,7 +342,7 @@
 02:08=%1 er stiv af skræk
 02:08=%1 er vist faldet i søvn
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 burde øve sig i at sigte!
 02:09=%1 hader vist sig selv
 02:09=%1 står på den forkerte side!

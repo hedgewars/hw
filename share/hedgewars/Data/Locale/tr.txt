@@ -309,7 +309,7 @@
 02:07=Off bu kutu da ağırmış
 02:07=Buna ihtiyacın olabilir
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 çoook sıkıcı...
 02:08=%1 rahatsız olamazdı
 02:08=%1 tembel bir kirpi
@@ -347,7 +347,7 @@
 02:08=%1 korkak bir ölü
 02:08=%1 uyuya kaldı
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 atış çalışmalı!
 02:09=%1 kendinden nefret ediyor gibi görünüyor
 02:09=%1 yanlış tarafta duruyor!

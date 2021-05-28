@@ -321,7 +321,7 @@
 02:07=Ooh, den här lådan är tung
 02:07=Du kanske behöver det här
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 är såååå tråkig...
 02:08=%1 brydde sig inte
 02:08=%1 är en lat igelkott
@@ -365,7 +365,7 @@
 02:08=Du borde byta karriär om du ska hålla på så, %1
 02:08=Var det allt?
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 borde öva sitt sikte!
 02:09=%1 verka hata sig själv
 02:09=%1 står på fel sida!

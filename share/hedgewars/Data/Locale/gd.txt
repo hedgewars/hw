@@ -435,7 +435,7 @@
 02:07=Cruinnich na h-acainnean uile!
 02:07=Seo acainnean dhut!
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=Abair thusa gu bheil %1 ràsanach…
 02:08=Tha %1 coma
 02:08=Tha %1 ’na ghraineag leisg
@@ -473,7 +473,7 @@
 02:08=Tha %1 chun a bhith gòrach leis an eagal
 02:08=Thuit %1 ’na chadal
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=Chan eil amas math aig %1!
 02:09=Tha coltas gur lugha air %1 e fhèin
 02:09=Sheas %1 air an taobh chearr!

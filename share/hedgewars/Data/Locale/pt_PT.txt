@@ -307,7 +307,7 @@
 02:07=Ooo esta caixa é pesada
 02:07=Podes precisar disto
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 é tão aborrecido...
 02:08=%1 não se quis incomodar
 02:08=%1 é um ouriço tão preguiçoso
@@ -345,7 +345,7 @@
 02:08=%1 está cheio de medo
 02:08=%1 adormeceu
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 devia praticar a pontaria!
 02:09=Parece que %1 se odeia a si mesmo
 02:09=%1 está do lado errado!

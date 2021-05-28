@@ -755,7 +755,7 @@
 02:07=Direkt aus dem Baumarkt
 02:07=Erwecke den Erfinder in dir
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 ist so ein Langeweiler …
 02:08=%1 will nicht gestört werden
 02:08=%1 denkt weiter nach …
@@ -825,7 +825,7 @@
 
 02:08=%1 will nicht gestört werden
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 sollte lieber zielen üben!
 02:09=%1 scheint sich zu hassen
 02:09=%1 steht auf der falschen Seite!

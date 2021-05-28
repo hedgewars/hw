@@ -205,7 +205,7 @@
 02:07=A cegonha chegou
 02:07=Não esqueça o seu cinto de utilidades
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 está entediado
 02:08=%1 não sabe o que fazer
 02:08=%1 não tem criatividade
@@ -232,7 +232,7 @@
 02:08=%1 está paralizado de terror
 02:08=%1 está pedindo para sair
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 se machucou
 02:09=%1 fez dodói
 02:09=%1 é uma anta

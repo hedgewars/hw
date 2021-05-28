@@ -299,7 +299,7 @@
 02:07=Potrebbe servirti
 02:07=Utilissime queste utilità!
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 è così noioso...
 02:08=%1 deve riordinare le idee
 02:08=%1, se non volevi giocare lo potevi anche dire prima!
@@ -339,7 +339,7 @@
 02:08=%1 desidera lasciare che il nemico lo sconfigga
 02:08=%1, domande, dubbi, perplessità?
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 dovrebbe migliorare la sua mira!
 02:09=%1 sembra odiarsi...
 02:09=%1 ha manie suicide...

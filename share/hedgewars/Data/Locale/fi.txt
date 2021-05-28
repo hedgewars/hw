@@ -299,7 +299,7 @@
 02:07=Saatat tarvita tätä
 02:07=Vasara ja nauloja
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 on niin tylsä...
 02:08=%1:ää ei voisi vähempää kiinnostaa
 02:08=%1 on laiska siili
@@ -337,7 +337,7 @@
 02:08=%1 on kangistunut pelosta
 02:08=%1 on nukahtanut
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1:n pitäisi harjoitella tähtäämistä
 02:09=%1 vihaa itseään
 02:09=%1 on väärällä puolella!

@@ -309,7 +309,7 @@
 02:07=Ooo sunki dėžė
 02:07=Tau gali šito prireikti
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1 yra toks nuobodus...
 02:08=%1 net nesumirksėjo
 02:08=%1 yra vienas tingus ežys
@@ -347,7 +347,7 @@
 02:08=%1 persigando
 02:08=%1 užmigo
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1 turėtų treniruoti taiklumą!
 02:09=%1 nekenčia savęs
 02:09=%1 stovi ne toje pusėje!

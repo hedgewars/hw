@@ -209,7 +209,7 @@
 02:07=道具の時間です！
 02:07=この中には、一体何があるのでしょうか？
 
-; Hog (%1) skips his turn
+; Hog (%1) skips their turn
 02:08=%1が退屈そうです。
 02:08=%1が寝ているようです。
 02:08=%1が休憩をとります。
@@ -221,7 +221,7 @@
 02:08=%1が息抜きをしています。
 02:08=%1が眠っています。
 
-; Hog (%1) hurts himself only
+; Hog (%1) hurts themselves only
 02:09=%1の行動は、もちろんわざとでしたね。
 ; The real saying has けってん = shortcoming, whereas てっけん = clenched fist
 02:09=大丈夫ですよ、%1。誰にでも「鉄拳」があります！
