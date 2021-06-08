@@ -95,3 +95,4 @@ cabal.sandbox.config
 *.so
 *_autogen
 build/
+target/
