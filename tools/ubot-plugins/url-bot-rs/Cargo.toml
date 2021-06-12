@@ -1,0 +1,88 @@
+[package]
+name = "url-bot-rs"
+version = "0.3.1"
+description = "Minimal IRC URL bot in Rust"
+keywords = ["irc", "bot", "title"]
+repository = "https://github.com/nuxeh/url-bot-rs"
+authors = ["Edward Cragg <drq.11235@gmail.com>"]
+license = "ISC"
+readme = "README.md"
+build = "build.rs"
+edition = "2018"
+include = [
+  "src/**/*",
+  "build.rs",
+  "Cargo.*",
+  "README.md",
+  "COPYING",
+  "example.config.toml"
+]
+
+[build-dependencies]
+built = { version = "0.4.4", features = ["git2"] }
+man = "0.3.0"
+
+[dev-dependencies]
+tiny_http = "0.8.0"
+diff = "0.1.12"
+tempfile = "3.2.0"
+
+[dependencies]
+irc = "0.13.6"
+tokio-core = "0.1.18"
+rusqlite = "0.14.0"
+chrono = "0.4.19"
+docopt = "1.1.0"
+serde = "1.0.123"
+serde_derive = "1.0.104"
+itertools = "0.10.0"
+regex = "1.4.3"
+lazy_static = "1.4.0"
+failure = "0.1.8"
+reqwest = { version = "0.11.0", features = ["blocking", "cookies", "json"] }
+serde_rusqlite = "0.14.0"
+mime = "0.3.16"
+humansize = "1.1.0"
+unicode-segmentation = "1.7.1"
+toml = "0.5.8"
+directories = "3.0.1"
+log = "0.4.13"
+stderrlog = "0.5.1"
+atty = "0.2.14"
+scraper = { version = "0.12.0", default-features = false, features = [] }
+phf = "0.7.24"
+
+anyhow = "1.0"
+tokio-amqp = "1.0"
+lapin = "1.7"
+tokio = {version="1.6", features = ["full"]}
+futures = "0.3"
+url = "2.2"
+rand = "0.8"
+
+[dependencies.image]
+version = "0.22.5"
+default-features = false
+features = ["gif_codec", "jpeg", "png_codec", "pnm", "tiff", "bmp"]
+
+[features]
+default = []
+sqlite_bundled = ["rusqlite/bundled"]
+
+[package.metadata.deb]
+extended-description = """\
+Standalone IRC bot; for resolving URLs posted, retrieving, and posting page
+titles to a configurable IRC server and channels"""
+maintainer-scripts = "debian"
+assets = [
+    ["example.config.toml", "usr/share/doc/url-bot-rs/", "644"],
+    ["target/assets/url-bot-rs.1", "usr/local/share/man/man1/", "644"],
+    ["systemd/url-bot-rs.service", "lib/systemd/system/", "644"],
+    ["target/release/url-bot-rs", "usr/bin/", "755"],
+    ["target/release/url-bot-get", "usr/bin/", "755"]
+]
+
+[badges]
+coveralls = { repository = "nuxeh/url-bot-rs", branch = "master", service = "github" }
+codecov = { repository = "nuxeh/url-bot-rs", branch = "master" }
+travis-ci = { repository = "nuxeh/url-bot-rs", branch = "master" }
