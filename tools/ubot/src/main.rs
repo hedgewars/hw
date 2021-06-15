@@ -51,6 +51,8 @@ async fn handle_irc(pub_channel: &lapin::Channel, irc_message: &Message) -> AHRe
             &target
         };
 
+        let who = irc_message.source_nickname().unwrap_or(msgtarget);
+
         if message.starts_with("!") {
             if let Some((cmd, param)) = message.split_once(' ') {
                 pub_channel
@@ -58,7 +60,7 @@ async fn handle_irc(pub_channel: &lapin::Channel, irc_message: &Message) -> AHRe
                         "irc",
                         &format!("cmd.{}.{}", &cmd[1..], target),
                         BasicPublishOptions::default(),
-                        format!("{}\n{}", msgtarget, param).as_bytes().to_vec(),
+                        format!("{}\n{}", who, param).as_bytes().to_vec(),
                         BasicProperties::default(),
                     )
                     .await?;
@@ -68,7 +70,7 @@ async fn handle_irc(pub_channel: &lapin::Channel, irc_message: &Message) -> AHRe
                         "irc",
                         &format!("cmd.{}.{}", &message[1..], target),
                         BasicPublishOptions::default(),
-                        msgtarget.as_bytes().to_vec(),
+                        who.as_bytes().to_vec(),
                         BasicProperties::default(),
                     )
                     .await?;
@@ -79,7 +81,7 @@ async fn handle_irc(pub_channel: &lapin::Channel, irc_message: &Message) -> AHRe
                     "irc",
                     &format!("msg.{}", target),
                     BasicPublishOptions::default(),
-                    format!("{}\n{}", msgtarget, message).as_bytes().to_vec(),
+                    format!("{}\n{}", who, message).as_bytes().to_vec(),
                     BasicProperties::default(),
                 )
                 .await?;
