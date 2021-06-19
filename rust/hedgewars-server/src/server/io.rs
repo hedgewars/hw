@@ -84,8 +84,9 @@ impl IoThread {
                                         &filename
                                     }
                                 );
-                                match load_file(&filename) {
-                                    Ok(contents) => Some(unimplemented!()),
+
+                                match crate::core::types::Replay::load(&filename) {
+                                    Ok(replay) => Some(replay),
                                     Err(e) => {
                                         warn!(
                                             "Error while writing the room config file \"{}\": {}",

@@ -1,5 +1,5 @@
 use crate::{
-    core::types::{GameCfg, HedgehogInfo, TeamInfo},
+    core::types::{Ammo, GameCfg, HedgehogInfo, Replay, RoomConfig, Scheme, TeamInfo},
     server::haskell::HaskellValue,
 };
 use std::{
@@ -17,29 +17,6 @@ pub struct Demo {
 }
 
 impl Demo {
-    fn save(self, filename: String) -> io::Result<()> {
-        let text = format!("{}", demo_to_haskell(self));
-        let mut file = fs::File::open(filename)?;
-        file.write(text.as_bytes())?;
-        Ok(())
-    }
-
-    fn load(filename: String) -> io::Result<Self> {
-        let mut file = fs::File::open(filename)?;
-        let mut bytes = vec![];
-        file.read_to_end(&mut bytes)?;
-        match super::haskell::parse(&bytes[..]) {
-            Ok((_, value)) => haskell_to_demo(value).ok_or(io::Error::new(
-                io::ErrorKind::InvalidData,
-                "Invalid demo structure",
-            )),
-            Err(_) => Err(io::Error::new(
-                io::ErrorKind::InvalidData,
-                "Unable to parse file",
-            )),
-        }
-    }
-
     fn load_hwd(filename: String) -> io::Result<Self> {
         let file = fs::File::open(filename)?;
         let mut reader = io::BufReader::new(file);
@@ -273,11 +250,11 @@ impl Demo {
     }
 }
 
-fn demo_to_haskell(mut demo: Demo) -> HaskellValue {
+fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
     use HaskellValue as Hs;
 
-    let mut teams = Vec::with_capacity(demo.teams.len());
-    for team in demo.teams {
+    let mut teams = Vec::with_capacity(replay.teams.len());
+    for team in replay.teams {
         let mut fields = HashMap::<String, HaskellValue>::new();
 
         fields.insert("teamowner".to_string(), Hs::String(team.owner));
@@ -316,17 +293,16 @@ fn demo_to_haskell(mut demo: Demo) -> HaskellValue {
         ]));
     };
 
-    for config_item in &demo.config {
-        match config_item {
-            GameCfg::FeatureSize(size) => save_map_config("FEATURE_SIZE", size.to_string()),
-            GameCfg::MapType(map_type) => save_map_config("MAP", map_type.clone()),
-            GameCfg::MapGenerator(generator) => save_map_config("MAPGEN", generator.to_string()),
-            GameCfg::MazeSize(size) => save_map_config("MAZE_SIZE", size.to_string()),
-            GameCfg::Seed(seed) => save_map_config("SEED", seed.clone()),
-            GameCfg::Template(template) => save_map_config("TEMPLATE", template.to_string()),
-            GameCfg::DrawnMap(map) => save_map_config("DRAWNMAP", map.clone()),
-            _ => (),
-        }
+    let config = replay.config;
+
+    save_map_config("FEATURE_SIZE", config.feature_size.to_string());
+    save_map_config("MAP", config.map_type);
+    save_map_config("MAPGEN", config.map_generator.to_string());
+    save_map_config("MAZE_SIZE", config.maze_size.to_string());
+    save_map_config("SEED", config.seed);
+    save_map_config("TEMPLATE", config.template.to_string());
+    if let Some(drawn_map) = config.drawn_map {
+        save_map_config("DRAWNMAP", drawn_map);
     }
 
     let mut save_game_config = |name: &str, mut value: Vec<String>| {
@@ -336,33 +312,36 @@ fn demo_to_haskell(mut demo: Demo) -> HaskellValue {
         ]));
     };
 
-    for config_item in &demo.config {
-        match config_item {
-            GameCfg::Ammo(name, Some(ammo)) => {
-                save_game_config("AMMO", vec![name.clone(), ammo.clone()])
-            }
-            GameCfg::Ammo(name, None) => save_game_config("AMMO", vec![name.clone()]),
-            GameCfg::Scheme(name, scheme) => {
-                let mut values = vec![name.clone()];
-                values.extend_from_slice(&scheme);
-                save_game_config("SCHEME", values);
-            }
-            GameCfg::Script(script) => save_game_config("SCRIPT", vec![script.clone()]),
-            GameCfg::Theme(theme) => save_game_config("THEME", vec![theme.clone()]),
-            _ => (),
+    match config.ammo {
+        Ammo {
+            name,
+            settings: Some(settings),
+        } => save_game_config("AMMO", vec![name, settings.clone()]),
+        Ammo { name, .. } => save_game_config("AMMO", vec![name.clone()]),
+    }
+
+    match config.scheme {
+        Scheme { name, settings } => {
+            let mut values = vec![name];
+            values.extend_from_slice(&settings);
+            save_game_config("SCHEME", values);
         }
     }
+
+    save_game_config("SCRIPT", vec![config.script]);
+    save_game_config("THEME", vec![config.theme]);
 
     Hs::Tuple(vec![
         Hs::List(teams),
         Hs::List(map_config),
         Hs::List(game_config),
-        Hs::List(demo.messages.drain(..).map(Hs::String).collect()),
+        Hs::List(replay.message_log.drain(..).map(Hs::String).collect()),
     ])
 }
 
-fn haskell_to_demo(value: HaskellValue) -> Option<Demo> {
+fn haskell_to_replay(value: HaskellValue) -> Option<Replay> {
     use HaskellValue::*;
+    let mut config = RoomConfig::new();
     let mut lists = value.into_tuple()?;
     let mut lists_iter = lists.drain(..);
 
@@ -409,25 +388,22 @@ fn haskell_to_demo(value: HaskellValue) -> Option<Demo> {
         teams.push(team_info)
     }
 
-    let mut config = Vec::with_capacity(map_config.len() + game_config.len());
-
     for item in map_config {
         let mut tuple = item.into_tuple()?;
         let mut tuple_iter = tuple.drain(..);
         let name = tuple_iter.next()?.into_string()?;
         let value = tuple_iter.next()?.into_string()?;
 
-        let config_item = match &name[..] {
-            "FEATURE_SIZE" => GameCfg::FeatureSize(u32::from_str(&value).ok()?),
-            "MAP" => GameCfg::MapType(value),
-            "MAPGEN" => GameCfg::MapGenerator(u32::from_str(&value).ok()?),
-            "MAZE_SIZE" => GameCfg::MazeSize(u32::from_str(&value).ok()?),
-            "SEED" => GameCfg::Seed(value),
-            "TEMPLATE" => GameCfg::Template(u32::from_str(&value).ok()?),
-            "DRAWNMAP" => GameCfg::DrawnMap(value),
-            _ => None?,
+        match &name[..] {
+            "FEATURE_SIZE" => config.feature_size = u32::from_str(&value).ok()?,
+            "MAP" => config.map_type = value,
+            "MAPGEN" => config.map_generator = u32::from_str(&value).ok()?,
+            "MAZE_SIZE" => config.maze_size = u32::from_str(&value).ok()?,
+            "SEED" => config.seed = value,
+            "TEMPLATE" => config.template = u32::from_str(&value).ok()?,
+            "DRAWNMAP" => config.drawn_map = Some(value),
+            _ => {}
         };
-        config.push(config_item);
     }
 
     for item in game_config {
@@ -438,19 +414,22 @@ fn haskell_to_demo(value: HaskellValue) -> Option<Demo> {
         let mut value_iter = value.drain(..);
 
         let config_item = match &name[..] {
-            "AMMO" => GameCfg::Ammo(
-                value_iter.next()?.into_string()?,
-                value_iter.next().and_then(|v| v.into_string()),
-            ),
-            "SCHEME" => GameCfg::Scheme(
-                value_iter.next()?.into_string()?,
-                value_iter.filter_map(|v| v.into_string()).collect(),
-            ),
-            "SCRIPT" => GameCfg::Script(value_iter.next()?.into_string()?),
-            "THEME" => GameCfg::Theme(value_iter.next()?.into_string()?),
+            "AMMO" => {
+                config.ammo = Ammo {
+                    name: value_iter.next()?.into_string()?,
+                    settings: value_iter.next().and_then(|v| v.into_string()),
+                }
+            }
+            "SCHEME" => {
+                config.scheme = Scheme {
+                    name: value_iter.next()?.into_string()?,
+                    settings: value_iter.filter_map(|v| v.into_string()).collect(),
+                }
+            }
+            "SCRIPT" => config.script = value_iter.next()?.into_string()?,
+            "THEME" => config.theme = value_iter.next()?.into_string()?,
             _ => None?,
         };
-        config.push(config_item);
     }
 
     let mut messages = Vec::with_capacity(engine_messages.len());
@@ -459,9 +438,34 @@ fn haskell_to_demo(value: HaskellValue) -> Option<Demo> {
         messages.push(message.into_string()?);
     }
 
-    Some(Demo {
-        teams,
+    Some(Replay {
         config,
-        messages,
+        teams,
+        message_log: messages,
     })
+}
+
+impl Replay {
+    pub fn save(self, filename: String) -> io::Result<()> {
+        let text = format!("{}", replay_to_haskell(self));
+        let mut file = fs::File::open(filename)?;
+        file.write(text.as_bytes())?;
+        Ok(())
+    }
+
+    pub fn load(filename: &str) -> io::Result<Self> {
+        let mut file = fs::File::open(filename)?;
+        let mut bytes = vec![];
+        file.read_to_end(&mut bytes)?;
+        match super::haskell::parse(&bytes[..]) {
+            Ok((_, value)) => haskell_to_replay(value).ok_or(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "Invalid replay structure",
+            )),
+            Err(_) => Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "Unable to parse file",
+            )),
+        }
+    }
 }
