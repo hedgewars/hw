@@ -89,7 +89,7 @@ impl IoThread {
                                     Ok(replay) => Some(replay),
                                     Err(e) => {
                                         warn!(
-                                            "Error while writing the room config file \"{}\": {}",
+                                            "Error while reading replay file \"{}\": {}",
                                             filename, e
                                         );
                                         None
