@@ -71,7 +71,7 @@ fn main() {
         for event in events.iter() {
             if event.readiness() & Ready::readable() == Ready::readable() {
                 match event.token() {
-                    token @ utils::SERVER_TOKEN | token @ utils::SECURE_SERVER_TOKEN => {
+                    token @ (utils::SERVER_TOKEN | utils::SECURE_SERVER_TOKEN) => {
                         match hw_network.accept_client(&poll, token) {
                             Ok(()) => (),
                             Err(e) => debug!("Error accepting client: {}", e),

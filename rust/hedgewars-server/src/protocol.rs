@@ -55,7 +55,7 @@ impl ProtocolDecoder {
                         self.buf.consume(self.buf.len() - length);
                     }
                     Err(nom::Err::Incomplete(_)) => break,
-                    Err(nom::Err::Failure(e)) | Err(nom::Err::Error(e)) => {
+                    Err(nom::Err::Failure(e) | nom::Err::Error(e)) => {
                         debug!("Invalid message: {:?}", e);
                         if !self.recover() || self.buf.is_empty() {
                             break;

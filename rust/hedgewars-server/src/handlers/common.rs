@@ -494,7 +494,7 @@ pub fn get_vote_data(
         Ok(VoteResult::Submitted) => {
             response.add(server_chat("Your vote has been counted.".to_string()).send_self())
         }
-        Ok(VoteResult::Succeeded(_)) | Ok(VoteResult::Failed) => response.add(
+        Ok(VoteResult::Succeeded(_) | VoteResult::Failed) => response.add(
             server_chat("Voting closed.".to_string())
                 .send_all()
                 .in_room(room_id),

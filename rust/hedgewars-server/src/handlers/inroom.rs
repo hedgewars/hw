@@ -448,7 +448,7 @@ pub fn handle(
         Rnd(v) => {
             let result = rnd_reply(&v);
             let mut echo = vec!["/rnd".to_string()];
-            echo.extend(v.into_iter());
+            echo.extend(v);
             let chat_msg = ChatMsg {
                 nick: client.nick.clone(),
                 msg: echo.join(" "),

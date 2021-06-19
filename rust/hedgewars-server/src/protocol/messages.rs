@@ -213,7 +213,7 @@ impl GameCfg {
             Scheme(n, s) if s.is_empty() => ("SCHEME".to_string(), vec![n.to_string()]),
             Scheme(n, s) => ("SCHEME".to_string(), {
                 let mut v = vec![n.to_string()];
-                v.extend(s.clone().into_iter());
+                v.extend(s.clone());
                 v
             }),
             Script(s) => ("SCRIPT".to_string(), vec![s.to_string()]),
@@ -259,12 +259,6 @@ macro_rules! msg {
     [$($part: expr),*] => {
         format!(concat!($(const_braces!($part)),*, "\n"), $($part),*);
     };
-}
-
-#[cfg(test)]
-macro_rules! several {
-    [$part: expr] => { once($part) };
-    [$part: expr, $($other: expr),*] => { once($part).chain(several![$($other),*]) };
 }
 
 impl HwProtocolMessage {
@@ -330,7 +324,7 @@ impl HwProtocolMessage {
                 info.difficulty,
                 info.hedgehogs
                     .iter()
-                    .flat_map(|h| several![&h.name[..], &h.hat[..]])
+                    .flat_map(|h| [&h.name[..], &h.hat[..]])
                     .collect::<Vec<_>>()
                     .join("\n")
             ],

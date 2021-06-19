@@ -105,7 +105,7 @@ impl Database {
 
     pub fn store_stats(&mut self, stats: &ServerStatistics) -> Result<(), Error> {
         if let Some(pool) = &self.pool {
-            for mut stmt in pool.prepare(STORE_STATS_QUERY).into_iter() {
+            for mut stmt in pool.prepare(STORE_STATS_QUERY) {
                 stmt.execute(params! {
                     "players" => stats.players,
                     "rooms" => stats.rooms,
