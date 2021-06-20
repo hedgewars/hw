@@ -5,7 +5,7 @@ authors = ["Hedgewars Project"]
 edition = "2018"
 
 [dependencies]
-glutin = "0.20"
+glutin = "0.26"
 gl = "0.11"
 futures = "0.3"
 wgpu = "0.6"

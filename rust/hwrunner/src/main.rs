@@ -1,9 +1,13 @@
 use std::time::Duration;
 
 use futures::executor::block_on;
+use glutin::event_loop::ControlFlow;
 use glutin::{
-    dpi, ContextTrait, DeviceEvent, ElementState, Event, EventsLoop, GlProfile, GlRequest,
-    MouseButton, MouseScrollDelta, Window, WindowBuilder, WindowEvent, WindowedContext,
+    dpi,
+    event::{DeviceEvent, ElementState, Event, MouseButton, MouseScrollDelta, WindowEvent},
+    event_loop::EventLoop,
+    window::{Window, WindowBuilder},
+    ContextWrapper, GlProfile, GlRequest, NotCurrent, PossiblyCurrent, WindowedContext,
 };
 use hedgewars_engine::instance::EngineInstance;
 use integral_geometry::Point;
@@ -15,7 +19,7 @@ use wgpu::{
     TextureFormat, TextureUsage,
 };
 
-type HwGlRendererContext = WindowedContext;
+type HwGlRendererContext = ContextWrapper<PossiblyCurrent, Window>;
 
 struct HwWgpuRenderingContext {
     window: Window,
@@ -41,8 +45,7 @@ impl<T: Error> From<T> for ErrorStub {
 
 impl HwRendererContext {
     fn get_framebuffer_size(window: &Window) -> (u32, u32) {
-        let size = window.get_inner_size().unwrap();
-        (size.to_physical(window.get_hidpi_factor())).into()
+        window.inner_size().into()
     }
 
     fn create_wpgu_swap_chain(window: &Window, surface: &Surface, device: &Device) -> SwapChain {
@@ -59,13 +62,16 @@ impl HwRendererContext {
         )
     }
 
-    fn init_wgpu(event_loop: &EventsLoop, size: dpi::LogicalSize) -> HwWgpuRenderingContext {
+    fn init_wgpu(
+        event_loop: &EventLoop<()>,
+        size: dpi::LogicalSize<f64>,
+    ) -> HwWgpuRenderingContext {
         let builder = WindowBuilder::new()
             .with_title("hwengine")
-            .with_dimensions(size);
+            .with_inner_size(size);
         let window = builder.build(event_loop).unwrap();
 
-        let instance = wgpu::Instance::new(BackendBit::VULKAN);
+        let instance = wgpu::Instance::new(BackendBit::PRIMARY);
 
         let surface = unsafe { instance.create_surface(&window) };
 
@@ -89,12 +95,12 @@ impl HwRendererContext {
         }
     }
 
-    fn init_gl(event_loop: &EventsLoop, size: dpi::LogicalSize) -> HwGlRendererContext {
+    fn init_gl(event_loop: &EventLoop<()>, size: dpi::LogicalSize<f64>) -> HwGlRendererContext {
         use glutin::ContextBuilder;
 
         let builder = WindowBuilder::new()
             .with_title("hwengine")
-            .with_dimensions(size);
+            .with_inner_size(size);
 
         let context = ContextBuilder::new()
             .with_gl(GlRequest::Latest)
@@ -104,19 +110,16 @@ impl HwRendererContext {
             .unwrap();
 
         unsafe {
-            context.make_current().unwrap();
-            gl::load_with(|ptr| context.get_proc_address(ptr) as *const _);
+            let wrapper = context.make_current().unwrap();
+            gl::load_with(|ptr| wrapper.get_proc_address(ptr) as *const _);
 
-            if let Some(sz) = context.get_inner_size() {
-                let (width, height) = Self::get_framebuffer_size(context.window());
-                gl::Viewport(0, 0, width as i32, height as i32);
-            }
+            let (width, height) = Self::get_framebuffer_size(wrapper.window());
+            gl::Viewport(0, 0, width as i32, height as i32);
+            wrapper
         }
-
-        context
     }
 
-    fn new(event_loop: &EventsLoop, size: dpi::LogicalSize, use_wgpu: bool) -> Self {
+    fn new(event_loop: &EventLoop<()>, size: dpi::LogicalSize<f64>, use_wgpu: bool) -> Self {
         if use_wgpu {
             Self::Wgpu(Self::init_wgpu(event_loop, size))
         } else {
@@ -184,8 +187,8 @@ impl HwRendererContext {
 }
 
 fn main() {
-    let use_wgpu = true;
-    let mut event_loop = EventsLoop::new();
+    let use_wgpu = false;
+    let mut event_loop = EventLoop::<()>::new();
     let (w, h) = (1024.0, 768.0);
 
     let mut context = HwRendererContext::new(&event_loop, dpi::LogicalSize::new(w, h), use_wgpu);
@@ -203,26 +206,22 @@ fn main() {
     let mut update_time = Instant::now();
     let mut render_time = Instant::now();
 
-    let mut is_running = true;
+    let current_time = Instant::now();
+    let delta = current_time - now;
+    now = current_time;
+    let ms = delta.as_secs() as f64 * 1000.0 + delta.subsec_millis() as f64;
+    context.window().set_title(&format!("hwengine {:.3}ms", ms));
 
-    while is_running {
-        let current_time = Instant::now();
-        let delta = current_time - now;
-        now = current_time;
-        let ms = delta.as_secs() as f64 * 1000.0 + delta.subsec_millis() as f64;
-        context.window().set_title(&format!("hwengine {:.3}ms", ms));
-
-        if update_time.elapsed() > Duration::from_millis(10) {
-            update_time = current_time;
-            engine.world.step()
-        }
-
-        event_loop.poll_events(|event| match event {
+    event_loop.run(move |event, _, control_flow| {
+        *control_flow = ControlFlow::Poll;
+        match event {
             Event::WindowEvent { event, .. } => match event {
                 WindowEvent::CloseRequested => {
-                    is_running = false;
+                    *control_flow = ControlFlow::Exit;
                 }
-                WindowEvent::Resized(_) | WindowEvent::HiDpiFactorChanged(_) => context.update(),
+                WindowEvent::Resized(_) | WindowEvent::ScaleFactorChanged { .. } => {
+                    context.update()
+                }
 
                 WindowEvent::MouseInput { button, state, .. } => {
                     if let MouseButton::Right = button {
@@ -233,10 +232,7 @@ fn main() {
                 WindowEvent::MouseWheel { delta, .. } => {
                     let zoom_change = match delta {
                         MouseScrollDelta::LineDelta(x, y) => y as f32 * 0.1f32,
-                        MouseScrollDelta::PixelDelta(delta) => {
-                            let physical = delta.to_physical(context.window().get_hidpi_factor());
-                            physical.y as f32 * 0.1f32
-                        }
+                        MouseScrollDelta::PixelDelta(delta) => delta.y as f32 * 0.1f32,
                     };
                     engine.world.move_camera(Point::ZERO, zoom_change);
                 }
@@ -252,8 +248,16 @@ fn main() {
                 }
                 _ => {}
             },
+
             _ => (),
-        });
+        }
+
+        let current_time = Instant::now();
+
+        if update_time.elapsed() > Duration::from_millis(10) {
+            update_time = current_time;
+            engine.world.step()
+        }
 
         if render_time.elapsed() > Duration::from_millis(16) {
             render_time = current_time;
@@ -262,5 +266,5 @@ fn main() {
             }
             context.present().ok().unwrap();
         }
-    }
+    });
 }
