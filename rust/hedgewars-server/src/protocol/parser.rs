@@ -12,7 +12,7 @@ use nom::{
     character::complete::{newline, not_line_ending},
     combinator::{map, peek},
     error::{ErrorKind, ParseError},
-    multi::separated_list,
+    multi::separated_list0,
     sequence::{delimited, pair, preceded, terminated, tuple},
     Err, IResult,
 };
@@ -211,7 +211,7 @@ fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage>
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwProtocolMessage>
     where
         F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> HwProtocolMessage,
@@ -249,7 +249,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage>
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwProtocolMessage>
     where
         F: Fn(&'a [u8]) -> HwResult<'a, T>,
         G: Fn(T) -> HwProtocolMessage,
@@ -308,7 +308,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
                     tag_no_case("RND"),
                     alt((
                         map(peek(end_of_message), |_| vec![]),
-                        preceded(spaces, separated_list(spaces, cmd_arg)),
+                        preceded(spaces, separated_list0(spaces, cmd_arg)),
                     )),
                 ),
                 Rnd,
@@ -322,7 +322,7 @@ fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, GameCfg>
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, GameCfg>
     where
         F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> GameCfg,
@@ -354,7 +354,7 @@ fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
                         a_line,
                         alt((
                             map(peek(end_of_message), |_| None),
-                            map(preceded(newline, separated_list(newline, a_line)), Some),
+                            map(preceded(newline, separated_list0(newline, a_line)), Some),
                         )),
                     ),
                     |(name, values)| GameCfg::Scheme(name, values.unwrap_or_default()),

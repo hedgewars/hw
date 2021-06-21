@@ -16,11 +16,11 @@ chrono = "0.4"
 mio = { version = "0.7", features = ["os-poll", "net"] }
 slab = "0.4"
 netbuf = "0.4"
-nom = "5.1"
+nom = "6.2"
 env_logger = "0.8"
 log = "0.4"
 base64 = "0.13"
-bitflags = "1.1"
+bitflags = "1.2"
 serde = "1.0"
 serde_yaml = "0.8"
 serde_derive = "1.0"
@@ -28,4 +28,4 @@ openssl = { version = "0.10", optional = true }
 mysql = { version = "15.0", optional = true }
 
 [dev-dependencies]
-proptest = "0.9"
+proptest = "1.0"

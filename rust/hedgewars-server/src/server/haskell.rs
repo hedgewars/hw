@@ -3,7 +3,7 @@ use nom::{
     bytes::complete::{escaped_transform, is_not, tag, take_while, take_while1},
     character::{is_alphanumeric, is_digit, is_space},
     combinator::{map, map_res},
-    multi::{many0, separated_list},
+    multi::{many0, separated_list0},
     sequence::{delimited, pair, preceded, separated_pair, terminated},
     ExtendInto, IResult,
 };
@@ -159,10 +159,10 @@ fn comma(input: &[u8]) -> HaskellResult<&[u8]> {
 fn surrounded<'a, P, O>(
     prefix: &'static str,
     suffix: &'static str,
-    parser: P,
-) -> impl Fn(&'a [u8]) -> HaskellResult<'a, O>
+    mut parser: P,
+) -> impl FnMut(&'a [u8]) -> HaskellResult<'a, O>
 where
-    P: Fn(&'a [u8]) -> HaskellResult<'a, O>,
+    P: FnMut(&'a [u8]) -> HaskellResult<'a, O>,
 {
     move |input| {
         delimited(
@@ -285,14 +285,14 @@ fn string(input: &[u8]) -> HaskellResult<HaskellValue> {
 
 fn tuple(input: &[u8]) -> HaskellResult<HaskellValue> {
     map(
-        surrounded("(", ")", separated_list(comma, value)),
+        surrounded("(", ")", separated_list0(comma, value)),
         HaskellValue::Tuple,
     )(input)
 }
 
 fn list(input: &[u8]) -> HaskellResult<HaskellValue> {
     map(
-        surrounded("[", "]", separated_list(comma, value)),
+        surrounded("[", "]", separated_list0(comma, value)),
         HaskellValue::List,
     )(input)
 }
@@ -316,7 +316,7 @@ fn structure(input: &[u8]) -> HaskellResult<HaskellValue> {
         map(
             pair(
                 identifier,
-                surrounded("{", "}", separated_list(comma, named_field)),
+                surrounded("{", "}", separated_list0(comma, named_field)),
             ),
             |(name, mut fields)| HaskellValue::Struct {
                 name,
