@@ -1,7 +1,7 @@
 use std::{
     fs::{File, OpenOptions},
     io::{Error, ErrorKind, Read, Result, Write},
-    sync::mpsc,
+    sync::{mpsc, Arc},
     thread,
 };
 
@@ -10,20 +10,19 @@ use crate::{
     server::database::Database,
 };
 use log::*;
-use mio::{Evented, Poll, PollOpt};
-use mio_extras::channel;
+use mio::{Poll, Waker};
 
 pub type RequestId = u32;
 
 pub struct IoThread {
     core_tx: mpsc::Sender<(RequestId, IoTask)>,
-    core_rx: channel::Receiver<(RequestId, IoResult)>,
+    core_rx: mpsc::Receiver<(RequestId, IoResult)>,
 }
 
 impl IoThread {
-    pub fn new() -> Self {
+    pub fn new(waker: Waker) -> Self {
         let (core_tx, io_rx) = mpsc::channel();
-        let (io_tx, core_rx) = channel::channel();
+        let (io_tx, core_rx) = mpsc::channel();
 
         let mut db = Database::new();
         db.connect("localhost");
@@ -138,6 +137,7 @@ impl IoThread {
                     }
                 };
                 io_tx.send((request_id, response));
+                waker.wake();
             }
         });
 
@@ -154,11 +154,6 @@ impl IoThread {
             Err(mpsc::TryRecvError::Empty) => None,
             Err(mpsc::TryRecvError::Disconnected) => unreachable!(),
         }
-    }
-
-    pub fn register_rx(&self, poll: &mio::Poll, token: mio::Token) -> Result<()> {
-        self.core_rx
-            .register(poll, token, mio::Ready::readable(), PollOpt::edge())
     }
 }
 

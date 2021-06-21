@@ -5,7 +5,6 @@ use std::iter::Iterator;
 pub const SERVER_VERSION: u32 = 3;
 pub const SERVER_TOKEN: mio::Token = mio::Token(1_000_000_000);
 pub const SECURE_SERVER_TOKEN: mio::Token = mio::Token(1_000_000_001);
-pub const TIMER_TOKEN: mio::Token = mio::Token(1_000_000_002);
 pub const IO_TOKEN: mio::Token = mio::Token(1_000_000_003);
 
 pub fn is_name_illegal(name: &str) -> bool {

@@ -567,7 +567,7 @@ pub fn handle_vote(
                 }
             }
             VoteType::NewSeed => {
-                let seed = thread_rng().gen_range(0, 1_000_000_000).to_string();
+                let seed = thread_rng().gen_range(0..1_000_000_000).to_string();
                 let cfg = GameCfg::Seed(seed);
                 response.add(cfg.to_server_msg().send_all().in_room(room_id));
                 room_control.set_config(cfg);

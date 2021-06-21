@@ -4,7 +4,11 @@
 use getopts::Options;
 use log::*;
 use mio::{net::*, *};
-use std::{env, str::FromStr as _, time::Duration};
+use std::{
+    env,
+    str::FromStr as _,
+    time::{Duration, Instant},
+};
 
 mod core;
 mod handlers;
@@ -44,21 +48,23 @@ fn main() {
         .unwrap_or(46631);
     let address = format!("0.0.0.0:{}", port).parse().unwrap();
 
-    let listener = TcpListener::bind(&address).unwrap();
+    let listener = TcpListener::bind(address).unwrap();
 
-    let poll = Poll::new().unwrap();
+    let mut poll = Poll::new().unwrap();
     let mut hw_builder = NetworkLayerBuilder::default().with_listener(listener);
 
     #[cfg(feature = "tls-connections")]
     {
         let address = format!("0.0.0.0:{}", port + 1).parse().unwrap();
-        hw_builder = hw_builder.with_secure_listener(TcpListener::bind(&address).unwrap());
+        hw_builder = hw_builder.with_secure_listener(TcpListener::bind(address).unwrap());
     }
 
-    let mut hw_network = hw_builder.build();
+    let mut hw_network = hw_builder.build(&poll);
     hw_network.register(&poll).unwrap();
 
     let mut events = Events::with_capacity(1024);
+
+    let mut time = Instant::now();
 
     loop {
         let timeout = if hw_network.has_pending_operations() {
@@ -66,10 +72,11 @@ fn main() {
         } else {
             None
         };
+
         poll.poll(&mut events, timeout).unwrap();
 
         for event in events.iter() {
-            if event.readiness() & Ready::readable() == Ready::readable() {
+            if event.is_readable() {
                 match event.token() {
                     token @ (utils::SERVER_TOKEN | utils::SECURE_SERVER_TOKEN) => {
                         match hw_network.accept_client(&poll, token) {
@@ -77,10 +84,6 @@ fn main() {
                             Err(e) => debug!("Error accepting client: {}", e),
                         }
                     }
-                    utils::TIMER_TOKEN => match hw_network.handle_timeout(&poll) {
-                        Ok(()) => (),
-                        Err(e) => debug!("Error in timer event: {}", e),
-                    },
                     #[cfg(feature = "official-server")]
                     utils::IO_TOKEN => match hw_network.handle_io_result(&poll) {
                         Ok(()) => (),
@@ -92,12 +95,11 @@ fn main() {
                     },
                 }
             }
-            if event.readiness() & Ready::writable() == Ready::writable() {
+            if event.is_writable() {
                 match event.token() {
-                    utils::SERVER_TOKEN
-                    | utils::SECURE_SERVER_TOKEN
-                    | utils::TIMER_TOKEN
-                    | utils::IO_TOKEN => unreachable!(),
+                    utils::SERVER_TOKEN | utils::SECURE_SERVER_TOKEN | utils::IO_TOKEN => {
+                        unreachable!()
+                    }
                     Token(token) => match hw_network.client_writable(&poll, token) {
                         Ok(()) => (),
                         Err(e) => debug!("Error writing to client socket {}: {}", token, e),
@@ -110,5 +112,13 @@ fn main() {
             Ok(()) => (),
             Err(e) => debug!("Error in idle handler: {}", e),
         };
+
+        if time.elapsed() > Duration::from_secs(1) {
+            time = Instant::now();
+            match hw_network.handle_timeout(&mut poll) {
+                Ok(()) => (),
+                Err(e) => debug!("Error in timer event: {}", e),
+            }
+        }
     }
 }

@@ -11,10 +11,9 @@ default = []
 
 [dependencies]
 getopts = "0.2"
-rand = "0.7"
+rand = "0.8"
 chrono = "0.4"
-mio = "0.6"
-mio-extras = "2.0"
+mio = { version = "0.7", features = ["os-poll", "net"] }
 slab = "0.4"
 netbuf = "0.4"
 nom = "5.1"

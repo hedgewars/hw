@@ -23,6 +23,7 @@ pub struct TimedEvents<Data, const MAX_TIMEOUT: usize> {
     current_time: Instant,
     current_tick_index: u32,
     next_event_id: u32,
+    events_count: u32,
 }
 
 impl<Data, const MAX_TIMEOUT: usize> TimedEvents<Data, MAX_TIMEOUT> {
@@ -37,6 +38,7 @@ impl<Data, const MAX_TIMEOUT: usize> TimedEvents<Data, MAX_TIMEOUT> {
             current_time: Instant::now(),
             current_tick_index: 0,
             next_event_id: 0,
+            events_count: 0,
         }
     }
 
@@ -51,6 +53,9 @@ impl<Data, const MAX_TIMEOUT: usize> TimedEvents<Data, MAX_TIMEOUT> {
         let entry = self.events[tick_index as usize].vacant_entry();
         let event_index = entry.key() as u32;
         entry.insert(event);
+
+        self.events_count += 1;
+
         Timeout {
             tick_index,
             event_index,
@@ -62,6 +67,7 @@ impl<Data, const MAX_TIMEOUT: usize> TimedEvents<Data, MAX_TIMEOUT> {
         let events = &mut self.events[timeout.tick_index as usize];
         if matches!(events.get(timeout.event_index as usize), Some(Event { event_id: id, ..}) if *id == timeout.event_id)
         {
+            self.events_count -= 1;
             Some(events.remove(timeout.event_index as usize).data)
         } else {
             None
@@ -80,7 +86,12 @@ impl<Data, const MAX_TIMEOUT: usize> TimedEvents<Data, MAX_TIMEOUT> {
                     .map(|e| e.data),
             );
         }
+        self.events_count -= result.len() as u32;
         result
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.events_count == 0
     }
 }
 
