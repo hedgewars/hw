@@ -16,7 +16,7 @@ fn main() {
 
     unsafe {
         let engine = Engine {
-            protocol_version: hwlib.get(b"protocol_version").unwrap(),
+            protocol_version: hwlib.get(b"hedgewars_engine_protocol_version").unwrap(),
             start_engine: hwlib.get(b"start_engine").unwrap(),
             cleanup: hwlib.get(b"cleanup").unwrap(),
         };
