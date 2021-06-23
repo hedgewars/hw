@@ -7,4 +7,5 @@ edition = "2018"
 [dependencies]
 lib-hedgewars-engine = { path = "../lib-hedgewars-engine" }
 libloading = "0.5.0"
-
+getopts = "0.2"
+image = "0.23"
