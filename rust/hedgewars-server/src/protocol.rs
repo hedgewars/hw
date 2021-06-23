@@ -1,12 +1,10 @@
-use self::parser::message;
+use hedgewars_network_protocol::{
+    messages::HwProtocolMessage,
+    parser::{malformed_message, message},
+};
 use log::*;
 use netbuf;
 use std::io::{Read, Result};
-
-pub mod messages;
-mod parser;
-#[cfg(test)]
-pub mod test;
 
 pub struct ProtocolDecoder {
     buf: netbuf::Buf,
@@ -22,7 +20,7 @@ impl ProtocolDecoder {
     }
 
     fn recover(&mut self) -> bool {
-        self.is_recovering = match parser::malformed_message(&self.buf[..]) {
+        self.is_recovering = match malformed_message(&self.buf[..]) {
             Ok((tail, ())) => {
                 let length = tail.len();
                 self.buf.consume(self.buf.len() - length);
@@ -44,11 +42,11 @@ impl ProtocolDecoder {
         Ok(count)
     }
 
-    pub fn extract_messages(&mut self) -> Vec<messages::HwProtocolMessage> {
+    pub fn extract_messages(&mut self) -> Vec<HwProtocolMessage> {
         let mut messages = vec![];
         if !self.is_recovering {
             while !self.buf.is_empty() {
-                match parser::message(&self.buf[..]) {
+                match message(&self.buf[..]) {
                     Ok((tail, message)) => {
                         messages.push(message);
                         let length = tail.len();

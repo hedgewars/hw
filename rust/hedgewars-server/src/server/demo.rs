@@ -1,6 +1,6 @@
-use crate::{
-    core::types::{Ammo, GameCfg, HedgehogInfo, Replay, RoomConfig, Scheme, TeamInfo},
-    server::haskell::HaskellValue,
+use crate::{core::types::Replay, server::haskell::HaskellValue};
+use hedgewars_network_protocol::types::{
+    Ammo, GameCfg, HedgehogInfo, RoomConfig, Scheme, TeamInfo,
 };
 use std::{
     collections::HashMap,

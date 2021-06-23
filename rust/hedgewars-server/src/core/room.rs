@@ -1,10 +1,11 @@
 use super::{
     client::HwClient,
-    types::{
-        ClientId, GameCfg, GameCfg::*, RoomConfig, RoomId, TeamInfo, Voting, MAX_HEDGEHOGS_PER_TEAM,
-    },
+    types::{ClientId, RoomId, Voting},
 };
 use bitflags::*;
+use hedgewars_network_protocol::types::{
+    GameCfg, GameCfg::*, RoomConfig, TeamInfo, MAX_HEDGEHOGS_PER_TEAM,
+};
 use serde::{Deserialize, Serialize};
 use serde_derive::{Deserialize, Serialize};
 use serde_yaml;

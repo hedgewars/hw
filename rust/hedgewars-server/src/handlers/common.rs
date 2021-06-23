@@ -1,3 +1,8 @@
+use super::{
+    actions::{Destination, DestinationGroup},
+    Response,
+};
+use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
         client::HwClient,
@@ -6,23 +11,19 @@ use crate::{
             EndGameResult, HwRoomControl, HwServer, JoinRoomError, LeaveRoomResult, StartGameError,
             VoteError, VoteResult,
         },
-        types::{ClientId, GameCfg, RoomId, TeamInfo, Vote, VoteType, MAX_HEDGEHOGS_PER_TEAM},
+        types::{ClientId, RoomId},
     },
-    protocol::messages::{
+    utils::to_engine_msg,
+};
+use hedgewars_network_protocol::{
+    messages::{
         add_flags, remove_flags, server_chat,
         HwProtocolMessage::{self, Rnd},
         HwServerMessage::{self, *},
         ProtocolFlags as Flags,
     },
-    utils::to_engine_msg,
+    types::{GameCfg, RoomConfig, TeamInfo, Vote, VoteType, MAX_HEDGEHOGS_PER_TEAM},
 };
-
-use super::{
-    actions::{Destination, DestinationGroup},
-    Response,
-};
-
-use crate::core::types::RoomConfig;
 use rand::{self, seq::SliceRandom, thread_rng, Rng};
 use std::{iter::once, mem::replace};
 
@@ -644,7 +645,7 @@ pub fn get_end_game_result(
 mod tests {
     use super::*;
     use crate::handlers::actions::PendingMessage;
-    use crate::protocol::messages::HwServerMessage::ChatMsg;
+    use hedgewars_network_protocol::messages::HwServerMessage::ChatMsg;
 
     fn reply2string(r: HwServerMessage) -> String {
         match r {

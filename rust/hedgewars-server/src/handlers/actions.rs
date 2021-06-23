@@ -4,10 +4,13 @@ use crate::{
         room::HwRoom,
         room::{GameInfo, RoomFlags},
         server::HwServer,
-        types::{ClientId, GameCfg, RoomId, VoteType},
+        types::{ClientId, RoomId},
     },
-    protocol::messages::{server_chat, HwProtocolMessage, HwServerMessage, HwServerMessage::*},
     utils::to_engine_msg,
+};
+use hedgewars_network_protocol::{
+    messages::{server_chat, HwProtocolMessage, HwServerMessage, HwServerMessage::*},
+    types::{GameCfg, VoteType},
 };
 use rand::{distributions::Uniform, thread_rng, Rng};
 use std::{io, io::Write, iter::once, mem::replace};
@@ -101,20 +104,28 @@ impl PendingMessage {
     }
 }
 
-impl HwServerMessage {
-    pub fn send(self, client_id: ClientId) -> PendingMessage {
+pub trait ToPendingMessage {
+    fn send(self, client_id: ClientId) -> PendingMessage;
+    fn send_many(self, client_ids: Vec<ClientId>) -> PendingMessage;
+    fn send_self(self) -> PendingMessage;
+    fn send_all(self) -> PendingMessage;
+    fn send_to_destination(self, destination: Destination) -> PendingMessage;
+}
+
+impl ToPendingMessage for HwServerMessage {
+    fn send(self, client_id: ClientId) -> PendingMessage {
         PendingMessage::send(self, client_id)
     }
-    pub fn send_many(self, client_ids: Vec<ClientId>) -> PendingMessage {
+    fn send_many(self, client_ids: Vec<ClientId>) -> PendingMessage {
         PendingMessage::send_many(self, client_ids)
     }
-    pub fn send_self(self) -> PendingMessage {
+    fn send_self(self) -> PendingMessage {
         PendingMessage::send_self(self)
     }
-    pub fn send_all(self) -> PendingMessage {
+    fn send_all(self) -> PendingMessage {
         PendingMessage::send_all(self)
     }
-    pub fn send_to_destination(self, destination: Destination) -> PendingMessage {
+    fn send_to_destination(self, destination: Destination) -> PendingMessage {
         PendingMessage {
             destination,
             message: self,

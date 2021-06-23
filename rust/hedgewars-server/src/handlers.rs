@@ -10,19 +10,24 @@ use self::{
     inanteroom::LoginResult,
     strings::*,
 };
+use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
         anteroom::HwAnteroom,
         room::RoomSave,
         server::HwServer,
-        types::{ClientId, GameCfg, Replay, RoomId, TeamInfo},
-    },
-    protocol::messages::{
-        global_chat, server_chat, HwProtocolMessage, HwProtocolMessage::EngineMessage,
-        HwServerMessage, HwServerMessage::*,
+        types::{ClientId, Replay, RoomId},
     },
     utils,
 };
+use hedgewars_network_protocol::{
+    messages::{
+        global_chat, server_chat, HwProtocolMessage, HwProtocolMessage::EngineMessage,
+        HwServerMessage, HwServerMessage::*,
+    },
+    types::{GameCfg, TeamInfo},
+};
+
 use base64::encode;
 use log::*;
 use rand::{thread_rng, RngCore};

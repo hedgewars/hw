@@ -27,9 +27,10 @@ use crate::{
     },
     handlers,
     handlers::{IoResult, IoTask, ServerState},
-    protocol::{messages::HwServerMessage::Redirect, messages::*, ProtocolDecoder},
+    protocol::ProtocolDecoder,
     utils,
 };
+use hedgewars_network_protocol::{messages::HwServerMessage::Redirect, messages::*};
 
 #[cfg(feature = "official-server")]
 use super::io::{IoThread, RequestId};

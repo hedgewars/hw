@@ -3,9 +3,10 @@ use super::{
     client::HwClient,
     indexslab::IndexSlab,
     room::HwRoom,
-    types::{ClientId, GameCfg, RoomId, ServerVar, TeamInfo, Vote, VoteType, Voting},
+    types::{ClientId, RoomId, Voting},
 };
 use crate::utils;
+use hedgewars_network_protocol::types::{GameCfg, ServerVar, TeamInfo, Vote, VoteType};
 
 use bitflags::*;
 use log::*;

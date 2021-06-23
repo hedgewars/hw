@@ -1,6 +1,7 @@
 use mio;
 
 use super::strings::*;
+use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
         anteroom::{HwAnteroom, HwAnteroomClient},
@@ -8,10 +9,11 @@ use crate::{
         server::HwServer,
         types::ClientId,
     },
-    protocol::messages::{HwProtocolMessage, HwProtocolMessage::LoadRoom, HwServerMessage::*},
     utils::is_name_illegal,
 };
-
+use hedgewars_network_protocol::messages::{
+    HwProtocolMessage, HwProtocolMessage::LoadRoom, HwServerMessage::*,
+};
 use log::*;
 #[cfg(feature = "official-server")]
 use openssl::sha::sha1;

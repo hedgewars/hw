@@ -1,5 +1,5 @@
-use crate::core::types::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType};
-use std::{convert::From, iter::once, ops};
+use crate::types::{GameCfg, ServerVar, TeamInfo, VoteType};
+use std::iter::once;
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum HwProtocolMessage {
@@ -223,7 +223,6 @@ impl GameCfg {
     }
 
     pub fn to_server_msg(&self) -> HwServerMessage {
-        use self::HwServerMessage::ConfigEntry;
         let (name, args) = self.to_protocol();
         HwServerMessage::ConfigEntry(name, args)
     }
@@ -266,8 +265,7 @@ impl HwProtocolMessage {
      *
      * This is the inverse of the `message` parser.
      */
-    #[cfg(test)]
-    pub(crate) fn to_raw_protocol(&self) -> String {
+    pub fn to_raw_protocol(&self) -> String {
         use self::HwProtocolMessage::*;
         match self {
             Ping => msg!["PING"],
@@ -322,8 +320,7 @@ impl HwProtocolMessage {
                 info.voice_pack,
                 info.flag,
                 info.difficulty,
-                info.hedgehogs
-                    .iter()
+                &(info.hedgehogs.iter())
                     .flat_map(|h| [&h.name[..], &h.hat[..]])
                     .collect::<Vec<_>>()
                     .join("\n")
@@ -356,7 +353,6 @@ impl HwProtocolMessage {
             Delete(name) => msg!["CMD", format!("DELETE {}", name)],
             SaveRoom(name) => msg!["CMD", format!("SAVEROOM {}", name)],
             LoadRoom(name) => msg!["CMD", format!("LOADROOM {}", name)],
-            _ => panic!("Protocol message not yet implemented"),
         }
     }
 }

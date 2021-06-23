@@ -1,6 +1,7 @@
 use super::{common::rnd_reply, strings::*};
 use crate::core::room::GameInfo;
 use crate::core::server::{AddTeamError, SetTeamCountError};
+use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
@@ -8,16 +9,19 @@ use crate::{
             ChangeMasterError, ChangeMasterResult, HwRoomControl, HwServer, LeaveRoomResult,
             ModifyTeamError, StartGameError,
         },
-        types,
-        types::{ClientId, GameCfg, RoomId, VoteType, Voting, MAX_HEDGEHOGS_PER_TEAM},
-    },
-    protocol::messages::{
-        add_flags, remove_flags, server_chat, HwProtocolMessage, HwServerMessage::*,
-        ProtocolFlags as Flags,
+        types::{ClientId, RoomId, Voting},
     },
     utils::{is_name_illegal, to_engine_msg},
 };
 use base64::{decode, encode};
+use hedgewars_network_protocol::{
+    messages::{
+        add_flags, remove_flags, server_chat, HwProtocolMessage, HwServerMessage::*,
+        ProtocolFlags as Flags,
+    },
+    types,
+    types::{GameCfg, VoteType, MAX_HEDGEHOGS_PER_TEAM},
+};
 use log::*;
 use std::{cmp::min, iter::once, mem::swap};
 
@@ -87,7 +91,7 @@ fn voting_description(kind: &VoteType) -> String {
 }
 
 fn room_message_flag(msg: &HwProtocolMessage) -> RoomFlags {
-    use crate::protocol::messages::HwProtocolMessage::*;
+    use hedgewars_network_protocol::messages::HwProtocolMessage::*;
     match msg {
         ToggleRestrictJoin => RoomFlags::RESTRICTED_JOIN,
         ToggleRestrictTeams => RoomFlags::RESTRICTED_TEAM_ADD,
@@ -104,7 +108,7 @@ pub fn handle(
     let (client, room) = room_control.get();
     let (client_id, room_id) = (client.id, room.id);
 
-    use crate::protocol::messages::HwProtocolMessage::*;
+    use hedgewars_network_protocol::messages::HwProtocolMessage::*;
     match message {
         Part(msg) => {
             let msg = match msg {

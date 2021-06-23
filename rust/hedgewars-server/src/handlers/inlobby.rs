@@ -1,15 +1,19 @@
 use super::{common::rnd_reply, strings::*};
+use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
         client::HwClient,
         server::{AccessError, CreateRoomError, HwServer, JoinRoomError},
-        types::{ClientId, ServerVar},
+        types::ClientId,
     },
-    protocol::messages::{
+    utils::is_name_illegal,
+};
+use hedgewars_network_protocol::{
+    messages::{
         add_flags, remove_flags, server_chat, HwProtocolMessage, HwServerMessage::*,
         ProtocolFlags as Flags,
     },
-    utils::is_name_illegal,
+    types::ServerVar,
 };
 use log::*;
 use std::{collections::HashSet, convert::identity};
@@ -20,7 +24,7 @@ pub fn handle(
     response: &mut super::Response,
     message: HwProtocolMessage,
 ) {
-    use crate::protocol::messages::HwProtocolMessage::*;
+    use hedgewars_network_protocol::messages::HwProtocolMessage::*;
 
     match message {
         CreateRoom(name, password) => match server.create_room(client_id, name, password) {

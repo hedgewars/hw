@@ -19,31 +19,28 @@ use nom::{
 
 use std::{
     num::ParseIntError,
-    ops::Range,
     str,
     str::{FromStr, Utf8Error},
 };
 
-use super::messages::{HwProtocolMessage, HwProtocolMessage::*};
-use crate::core::types::{
-    GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM,
-};
+use crate::messages::{HwProtocolMessage, HwProtocolMessage::*};
+use crate::types::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType};
 
 #[derive(Debug, PartialEq)]
 pub struct HwProtocolError {}
 
 impl HwProtocolError {
-    fn new() -> Self {
+    pub fn new() -> Self {
         HwProtocolError {}
     }
 }
 
 impl<I> ParseError<I> for HwProtocolError {
-    fn from_error_kind(input: I, kind: ErrorKind) -> Self {
+    fn from_error_kind(_input: I, _kind: ErrorKind) -> Self {
         HwProtocolError::new()
     }
 
-    fn append(input: I, kind: ErrorKind, other: Self) -> Self {
+    fn append(_input: I, _kind: ErrorKind, _other: Self) -> Self {
         HwProtocolError::new()
     }
 }
@@ -84,7 +81,7 @@ where
 }
 
 fn str_line(input: &[u8]) -> HwResult<&str> {
-    let (i, text) = not_line_ending(input.clone())?;
+    let (i, text) = not_line_ending(<&[u8]>::clone(&input))?;
     if i != input {
         Ok((i, convert_utf8(text)?.1))
     } else {
@@ -98,7 +95,7 @@ fn a_line(input: &[u8]) -> HwResult<String> {
 
 fn cmd_arg(input: &[u8]) -> HwResult<String> {
     let delimiters = b" \n";
-    let (i, str) = take_while(move |c| !delimiters.contains(&c))(input.clone())?;
+    let (i, str) = take_while(move |c| !delimiters.contains(&c))(<&[u8]>::clone(&input))?;
     if i != input {
         Ok((i, convert_utf8(str)?.1.to_string()))
     } else {
@@ -505,72 +502,4 @@ pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         )),
         end_of_message,
     )(input)
-}
-
-#[cfg(test)]
-mod test {
-    use super::message;
-    use crate::{
-        core::types::GameCfg,
-        protocol::{messages::HwProtocolMessage::*, parser::HwProtocolError, test::gen_proto_msg},
-    };
-    use proptest::{proptest, proptest_helper};
-
-    #[cfg(test)]
-    proptest! {
-        #[test]
-        fn is_parser_composition_idempotent(ref msg in gen_proto_msg()) {
-            println!("!! Msg: {:?}, Bytes: {:?} !!", msg, msg.to_raw_protocol().as_bytes());
-            assert_eq!(message(msg.to_raw_protocol().as_bytes()), Ok((&b""[..], msg.clone())))
-        }
-    }
-
-    #[test]
-    fn parse_test() {
-        assert_eq!(message(b"PING\n\n"), Ok((&b""[..], Ping)));
-        assert_eq!(message(b"START_GAME\n\n"), Ok((&b""[..], StartGame)));
-        assert_eq!(
-            message(b"NICK\nit's me\n\n"),
-            Ok((&b""[..], Nick("it's me".to_string())))
-        );
-        assert_eq!(message(b"PROTO\n51\n\n"), Ok((&b""[..], Proto(51))));
-        assert_eq!(
-            message(b"QUIT\nbye-bye\n\n"),
-            Ok((&b""[..], Quit(Some("bye-bye".to_string()))))
-        );
-        assert_eq!(message(b"QUIT\n\n"), Ok((&b""[..], Quit(None))));
-        assert_eq!(
-            message(b"CMD\nwatch 49471\n\n"),
-            Ok((&b""[..], Watch(49471)))
-        );
-        assert_eq!(
-            message(b"BAN\nme\nbad\n77\n\n"),
-            Ok((&b""[..], Ban("me".to_string(), "bad".to_string(), 77)))
-        );
-
-        assert_eq!(message(b"CMD\nPART\n\n"), Ok((&b""[..], Part(None))));
-        assert_eq!(
-            message(b"CMD\nPART _msg_\n\n"),
-            Ok((&b""[..], Part(Some("_msg_".to_string()))))
-        );
-
-        assert_eq!(message(b"CMD\nRND\n\n"), Ok((&b""[..], Rnd(vec![]))));
-        assert_eq!(
-            message(b"CMD\nRND A B\n\n"),
-            Ok((&b""[..], Rnd(vec![String::from("A"), String::from("B")])))
-        );
-
-        assert_eq!(
-            message(b"CFG\nSCHEME\na\nA\n\n"),
-            Ok((
-                &b""[..],
-                Cfg(GameCfg::Scheme("a".to_string(), vec!["A".to_string()]))
-            ))
-        );
-
-        assert_eq!(
-            message(b"QUIT\n1\n2\n\n"),
-            Err(nom::Err::Error(HwProtocolError::new()))
-        );
-    }
 }
