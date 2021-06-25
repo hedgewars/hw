@@ -36,6 +36,14 @@ const PREVIEW_NPIXELS: usize = (PREVIEW_WIDTH * PREVIEW_HEIGHT) as usize;
 const SCALE_FACTOR: u32 = 16;
 const VALUE_PER_INPIXEL: u8 = 1;
 
+/// Resizes the land preview from the library into appropriate format for --preview command.
+///
+/// # Arguments
+///
+/// * `mono_pixels` - Raw pixels of a land preview (monochrome, 0 = empty, else = filled)
+/// * `in_width` - Width of the preview stored in `mono_pixels`
+/// * `in_height` - Height of the preview stored in `mono_pixels`
+/// * `preview_pixels` - Used as **output** for a resized and (kinda) anti-aliased grayscale preview
 fn resize_mono_preview(mono_pixels: &[u8], in_width: u32, in_height: u32, preview_pixels: &mut [u8]) {
 
     assert!(mono_pixels.len() == (in_width * in_height) as usize);
