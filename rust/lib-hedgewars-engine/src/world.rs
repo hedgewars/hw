@@ -27,6 +27,7 @@ impl GameState {
 
 pub struct World {
     random_numbers_gen: LaggedFibonacciPRNG,
+    feature_size: u8,
     preview: Option<Land2D<u8>>,
     game_state: Option<GameState>,
     map_renderer: Option<MapRenderer>,
@@ -39,6 +40,7 @@ impl World {
     pub fn new() -> Self {
         Self {
             random_numbers_gen: LaggedFibonacciPRNG::new(&[]),
+            feature_size: 5,
             preview: None,
             game_state: None,
             map_renderer: None,
@@ -73,6 +75,10 @@ impl World {
         self.random_numbers_gen = LaggedFibonacciPRNG::new(seed);
     }
 
+    pub fn set_feature_size(&mut self, feature_size: u8) {
+        self.feature_size = feature_size;
+    }
+
     pub fn preview(&self) -> &Option<Land2D<u8>> {
         &self.preview
     }
@@ -91,7 +97,10 @@ impl World {
             template
         }
 
-        let params = LandGenerationParameters::new(0u8, u8::max_value(), 5, false, false);
+        // based on old engine min_distance... dunno if this is the correct place tho
+        let distance_divisor = (self.feature_size as u32).pow(2) / 8 + 10;
+
+        let params = LandGenerationParameters::new(0u8, u8::max_value(), distance_divisor, false, false);
         let landgen = TemplatedLandGenerator::new(template());
         self.preview = Some(landgen.generate_land(&params, &mut self.random_numbers_gen));
     }

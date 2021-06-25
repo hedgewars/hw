@@ -81,6 +81,7 @@ named!(unordered_message<&[u8], UnorderedEngineMessage>, alt!(
 named!(config_message<&[u8], ConfigEngineMessage>, alt!(
     do_parse!(tag!("C") >> (ConfigRequest))
     | do_parse!(tag!("eseed ") >> s: string_tail >> ( SetSeed(s)) )
+    | do_parse!(tag!("e$feature_size ") >> s: string_tail >> ( SetFeatureSize(s.parse::<u8>().unwrap())) )
 ));
 
 named!(timestamped_message<&[u8], (SyncedEngineMessage, u16)>,

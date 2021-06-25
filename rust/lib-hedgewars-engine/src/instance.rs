@@ -55,6 +55,7 @@ impl EngineInstance {
     fn process_config_message(&mut self, message: &ConfigEngineMessage) {
         match message {
             SetSeed(seed) => self.world.set_seed(seed.as_bytes()),
+            SetFeatureSize(feature_size) => self.world.set_feature_size(*feature_size),
             _ => unimplemented!(),
         }
     }
