@@ -34,6 +34,7 @@ const PREVIEW_WIDTH: u32 = 256;
 const PREVIEW_HEIGHT: u32 = 128;
 const PREVIEW_NPIXELS: usize = (PREVIEW_WIDTH * PREVIEW_HEIGHT) as usize;
 const SCALE_FACTOR: u32 = 16;
+const VALUE_PER_INPIXEL: u8 = 1;
 
 fn resize_mono_preview(mono_pixels: &[u8], in_width: u32, in_height: u32, preview_pixels: &mut [u8]) {
 
@@ -51,9 +52,21 @@ fn resize_mono_preview(mono_pixels: &[u8], in_width: u32, in_height: u32, previe
             let in_x = h_offset + (x * SCALE_FACTOR);
 
             let out_px_address = (PREVIEW_WIDTH * y + x) as usize;
-            let in_px_address = (in_width * in_y + in_x) as usize;
 
-            preview_pixels[out_px_address] = mono_pixels[in_px_address];
+            let mut in_px_address = (in_width * in_y + in_x) as usize;
+
+            let mut value = 0;
+
+            for i in 0..SCALE_FACTOR as usize {
+                for j in 0..SCALE_FACTOR as usize {
+                    if (value < 0xff) && (mono_pixels[in_px_address + j] != 0) {
+                        value += VALUE_PER_INPIXEL;
+                    }
+                }
+                in_px_address += in_width as usize;
+            }
+
+            preview_pixels[out_px_address] = value;
         }
     }
 }
