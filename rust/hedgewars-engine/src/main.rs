@@ -2,12 +2,12 @@ extern crate libloading;
 
 use libloading::{Library, Symbol};
 use std::ops::Deref;
+use std::cmp::{min,max};
 use std::env;
 use getopts::Options;
 use std::io::prelude::*;
 use std::io::{self, Read};
 use std::net::{Shutdown, TcpStream};
-use image::{GrayImage, imageops};
 
 struct EngineInstance {}
 
@@ -28,6 +28,34 @@ struct PreviewInfo {
   height: u32,
   hedgehogs_number: u8,
   land: *const u8,
+}
+
+const PREVIEW_WIDTH: u32 = 256;
+const PREVIEW_HEIGHT: u32 = 128;
+const PREVIEW_NPIXELS: usize = (PREVIEW_WIDTH * PREVIEW_HEIGHT) as usize;
+const SCALE_FACTOR: u32 = 16;
+
+fn resize_mono_preview(mono_pixels: &[u8], in_width: u32, in_height: u32, preview_pixels: &mut [u8]) {
+
+    assert!(mono_pixels.len() == (in_width * in_height) as usize);
+
+    let v_offset: u32 = max(0, PREVIEW_HEIGHT as i64 - (in_height / SCALE_FACTOR) as i64) as u32;
+    let h_offset: u32 = max(0, (PREVIEW_WIDTH as i64 / 2) - (in_width / SCALE_FACTOR / 2) as i64) as u32;
+
+    for y in v_offset..PREVIEW_HEIGHT {
+
+        let in_y = v_offset + (y * SCALE_FACTOR);
+
+        for x in h_offset..(PREVIEW_WIDTH - h_offset) {
+
+            let in_x = h_offset + (x * SCALE_FACTOR);
+
+            let out_px_address = (PREVIEW_WIDTH * y + x) as usize;
+            let in_px_address = (in_width * in_y + in_x) as usize;
+
+            preview_pixels[out_px_address] = mono_pixels[in_px_address];
+        }
+    }
 }
 
 fn main() {
@@ -101,9 +129,9 @@ fn main() {
                 land: std::ptr::null(),
             };
 
-            engine.generate_preview.deref()(engine_state, preview_info);
+            println!("Generating preview...");
 
-            println!("Sending preview...");
+            engine.generate_preview.deref()(engine_state, preview_info);
 
             //println!("Preview: w = {}, h = {}, n = {}", preview_info.width, preview_info.height, preview_info.hedgehogs_number);
 
@@ -111,14 +139,17 @@ fn main() {
 
             let land_array: &[u8] = std::slice::from_raw_parts(preview_info.land, land_size);
 
-            let raw_image = GrayImage::from_raw(preview_info.width, preview_info.height, land_array.to_vec()).unwrap();
-
             const PREVIEW_WIDTH: u32 = 256;
             const PREVIEW_HEIGHT: u32 = 128;
 
-            let preview_image = imageops::resize(&raw_image, PREVIEW_WIDTH, PREVIEW_HEIGHT, imageops::FilterType::Triangle);
+            println!("Resizing preview...");
 
-            stream.write(preview_image.as_raw()).unwrap();
+            let preview_image: &mut [u8] = &mut [0; PREVIEW_NPIXELS];
+            resize_mono_preview(land_array, preview_info.width, preview_info.height, preview_image);
+
+            println!("Sending preview...");
+
+            stream.write(preview_image).unwrap();
             stream.flush().unwrap();
             stream.write(&[preview_info.hedgehogs_number]).unwrap();
             stream.flush().unwrap();
