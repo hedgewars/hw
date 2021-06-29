@@ -107,9 +107,9 @@ pub fn remove_flags(flags: &[ProtocolFlags]) -> String {
     ProtocolFlags::format('-', flags)
 }
 
-#[derive(Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub enum HwServerMessage {
-    Connected(u32),
+    Connected(String, u32),
     Redirect(u16),
 
     Ping,
@@ -151,7 +151,6 @@ pub enum HwServerMessage {
     Notice(String),
     Warning(String),
     Error(String),
-    Unreachable,
 
     //Deprecated messages
     LegacyReady(bool, Vec<String>),
@@ -370,11 +369,7 @@ impl HwServerMessage {
         match self {
             Ping => msg!["PING"],
             Pong => msg!["PONG"],
-            Connected(protocol_version) => msg![
-                "CONNECTED",
-                "Hedgewars server https://www.hedgewars.org/",
-                protocol_version
-            ],
+            Connected(message, protocol_version) => msg!["CONNECTED", message, protocol_version],
             Redirect(port) => msg!["REDIRECT", port],
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],
@@ -414,8 +409,6 @@ impl HwServerMessage {
             LegacyReady(is_ready, nicks) => {
                 construct_message(&[if *is_ready { "READY" } else { "NOT_READY" }], &nicks)
             }
-
-            _ => msg!["ERROR", "UNIMPLEMENTED"],
         }
     }
 }

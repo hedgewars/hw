@@ -23,7 +23,7 @@ use std::{
     str::{FromStr, Utf8Error},
 };
 
-use crate::messages::{HwProtocolMessage, HwProtocolMessage::*};
+use crate::messages::{HwProtocolMessage, HwProtocolMessage::*, HwServerMessage};
 use crate::types::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType};
 
 #[derive(Debug, PartialEq)]
@@ -499,6 +499,161 @@ pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
             config_message,
             server_var_message,
             complex_message,
+        )),
+        end_of_message,
+    )(input)
+}
+
+pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
+    use HwServerMessage::*;
+
+    fn single_arg_message<'a, T, F, G>(
+        name: &'a str,
+        parser: F,
+        constructor: G,
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    where
+        F: Fn(&[u8]) -> HwResult<T>,
+        G: Fn(T) -> HwServerMessage,
+    {
+        map(
+            preceded(terminated(tag(name), newline), parser),
+            constructor,
+        )
+    }
+
+    fn list_message<'a, G>(
+        name: &'a str,
+        constructor: G,
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    where
+        G: Fn(Vec<String>) -> HwServerMessage,
+    {
+        map(
+            preceded(
+                tag(name),
+                alt((
+                    map(peek(end_of_message), |_| None),
+                    map(preceded(newline, separated_list0(newline, a_line)), Some),
+                )),
+            ),
+            move |values| constructor(values.unwrap_or_default()),
+        )
+    }
+
+    fn string_and_list_message<'a, G>(
+        name: &'a str,
+        constructor: G,
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    where
+        G: Fn(String, Vec<String>) -> HwServerMessage,
+    {
+        preceded(
+            pair(tag(name), newline),
+            map(
+                pair(
+                    a_line,
+                    alt((
+                        map(peek(end_of_message), |_| None),
+                        map(preceded(newline, separated_list0(newline, a_line)), Some),
+                    )),
+                ),
+                move |(name, values)| constructor(name, values.unwrap_or_default()),
+            ),
+        )
+    }
+
+    fn message<'a>(
+        name: &'a str,
+        msg: HwServerMessage,
+    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwServerMessage> {
+        move |i| map(tag(name), |_| msg.clone())(i)
+    }
+
+    delimited(
+        take_while(|c| c == b'\n'),
+        alt((
+            alt((
+                message("PING", Ping),
+                message("PONG", Pong),
+                message("LOGONPASSED", LogonPassed),
+                message("KICKED", Kicked),
+                message("RUN_GAME", RunGame),
+                message("ROUND_FINISHED", RoundFinished),
+                message("REPLAY_START", ReplayStart),
+            )),
+            alt((
+                single_arg_message("REDIRECT", u16_line, Redirect),
+                single_arg_message("BYE", a_line, Bye),
+                single_arg_message("NICK", a_line, Nick),
+                single_arg_message("PROTO", u16_line, Proto),
+                single_arg_message("ASKPASSWORD", a_line, AskPassword),
+                single_arg_message("SERVER_AUTH", a_line, ServerAuth),
+                single_arg_message("ROOM\nDEL", a_line, RoomRemove),
+                single_arg_message("JOINING", a_line, Joining),
+                single_arg_message("REMOVE_TEAM", a_line, TeamRemove),
+                single_arg_message("TEAM_ACCEPTED", a_line, TeamAccepted),
+                single_arg_message("SERVER_MESSAGE", a_line, ServerMessage),
+                single_arg_message("NOTICE", a_line, Notice),
+                single_arg_message("WARNING", a_line, Warning),
+                single_arg_message("ERROR", a_line, Error),
+            )),
+            alt((
+                preceded(
+                    pair(tag("LOBBY:LEFT"), newline),
+                    map(pair(terminated(a_line, newline), a_line), |(nick, msg)| {
+                        LobbyLeft(nick, msg)
+                    }),
+                ),
+                preceded(
+                    pair(tag("CHAT"), newline),
+                    map(pair(terminated(a_line, newline), a_line), |(nick, msg)| {
+                        ChatMsg { nick, msg }
+                    }),
+                ),
+                preceded(
+                    pair(tag("TEAM_COLOR"), newline),
+                    map(
+                        pair(terminated(a_line, newline), u8_line),
+                        |(name, color)| TeamColor(name, color),
+                    ),
+                ),
+                preceded(
+                    pair(tag("HH_NUM"), newline),
+                    map(
+                        pair(terminated(a_line, newline), u8_line),
+                        |(name, count)| HedgehogsNumber(name, count),
+                    ),
+                ),
+                preceded(
+                    pair(tag("CONNECTED"), newline),
+                    map(
+                        pair(terminated(a_line, newline), u32_line),
+                        |(msg, server_protocol_version)| Connected(msg, server_protocol_version),
+                    ),
+                ),
+                preceded(
+                    pair(tag("LEFT"), newline),
+                    map(pair(terminated(a_line, newline), a_line), |(nick, msg)| {
+                        RoomLeft(nick, msg)
+                    }),
+                ),
+            )),
+            alt((
+                string_and_list_message("CLIENT_FLAGS", ClientFlags),
+                string_and_list_message("ROOM\nUPD", RoomUpdated),
+                string_and_list_message("CFG", ConfigEntry),
+            )),
+            alt((
+                list_message("LOBBY:JOINED", LobbyJoined),
+                list_message("ROOMS", Rooms),
+                list_message("ROOM\nADD", RoomAdd),
+                list_message("JOINED", RoomJoined),
+                list_message("ADD_TEAM", TeamAdd),
+                list_message("EM", ForwardEngineMessage),
+                list_message("INFO", Info),
+                list_message("SERVER_VARS", ServerVars),
+            )),
         )),
         end_of_message,
     )(input)

@@ -1,11 +1,13 @@
 use hedgewars_network_protocol::{
-    parser::message,
+    parser::HwProtocolError,
+    parser::{message, server_message},
     types::GameCfg,
-    {messages::HwProtocolMessage::*, parser::HwProtocolError},
 };
 
 #[test]
 fn parse_test() {
+    use hedgewars_network_protocol::messages::HwProtocolMessage::*;
+
     assert_eq!(message(b"PING\n\n"), Ok((&b""[..], Ping)));
     assert_eq!(message(b"START_GAME\n\n"), Ok((&b""[..], StartGame)));
     assert_eq!(
@@ -51,4 +53,24 @@ fn parse_test() {
         message(b"QUIT\n1\n2\n\n"),
         Err(nom::Err::Error(HwProtocolError::new()))
     );
+}
+
+#[test]
+fn parse_server_messages_test() {
+    use hedgewars_network_protocol::messages::HwServerMessage::*;
+
+    assert_eq!(server_message(b"PING\n\n"), Ok((&b""[..], Ping)));
+
+    assert_eq!(
+        server_message(b"JOINING\nnoone\n\n"),
+        Ok((&b""[..], Joining("noone".to_string())))
+    );
+
+    assert_eq!(
+        server_message(b"CLIENT_FLAGS\naaa\nA\nB\n\n"),
+        Ok((
+            &b""[..],
+            ClientFlags("aaa".to_string(), vec!["A".to_string(), "B".to_string()])
+        ))
+    )
 }

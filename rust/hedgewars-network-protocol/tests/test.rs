@@ -4,14 +4,16 @@ use proptest::{
     strategy::{BoxedStrategy, Just, Strategy},
 };
 
-use hedgewars_network_protocol::messages::{HwProtocolMessage, HwProtocolMessage::*};
-use hedgewars_network_protocol::parser::message;
+use hedgewars_network_protocol::messages::{HwProtocolMessage, HwServerMessage};
+use hedgewars_network_protocol::parser::{message, server_message};
 use hedgewars_network_protocol::types::{GameCfg, ServerVar, TeamInfo, VoteType};
 
 use hedgewars_network_protocol::types::testing::*;
 use hedgewars_network_protocol::{proto_msg_case, proto_msg_match};
 
 pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
+    use hedgewars_network_protocol::messages::HwProtocolMessage::*;
+
     let res = (0..=55).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Ping,
             0 => Ping(),
@@ -74,10 +76,64 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
     res.boxed()
 }
 
+pub fn gen_server_msg() -> BoxedStrategy<HwServerMessage> where {
+    use hedgewars_network_protocol::messages::HwServerMessage::*;
+
+    let res = (0..=55).no_shrink().prop_flat_map(|i| {
+        proto_msg_match!(i, def = Ping,
+                    0 => Connected(Ascii, u32),
+                    1 => Redirect(u16),
+                    2 => Ping(),
+                    3 => Pong(),
+                    4 => Bye(Ascii),
+                    5 => Nick(Ascii),
+                    6 => Proto(u16),
+                    7 => AskPassword(Ascii),
+                    8 => ServerAuth(Ascii),
+                    9 => LogonPassed(),
+                    10 => LobbyLeft(Ascii, Ascii),
+                    11 => LobbyJoined(Vec<Ascii>),
+        //            12 => ChatMsg { Ascii, Ascii },
+                    13 => ClientFlags(Ascii, Vec<Ascii>),
+                    14 => Rooms(Vec<Ascii>),
+                    15 => RoomAdd(Vec<Ascii>),
+                    16=> RoomJoined(Vec<Ascii>),
+                    17 => RoomLeft(Ascii, Ascii),
+                    18 => RoomRemove(Ascii),
+                    19 => RoomUpdated(Ascii, Vec<Ascii>),
+                    20 => Joining(Ascii),
+                    21 => TeamAdd(Vec<Ascii>),
+                    22 => TeamRemove(Ascii),
+                    23 => TeamAccepted(Ascii),
+                    24 => TeamColor(Ascii, u8),
+                    25 => HedgehogsNumber(Ascii, u8),
+                    26 => ConfigEntry(Ascii, Vec<Ascii>),
+                    27 => Kicked(),
+                    28 => RunGame(),
+                    29 => ForwardEngineMessage(Vec<Ascii>),
+                    30 => RoundFinished(),
+                    31 => ReplayStart(),
+                    32 => Info(Vec<Ascii>),
+                    33 => ServerMessage(Ascii),
+                    34 => ServerVars(Vec<Ascii>),
+                    35 => Notice(Ascii),
+                    36 => Warning(Ascii),
+                    37 => Error(Ascii)
+                )
+    });
+    res.boxed()
+}
+
 proptest! {
     #[test]
     fn is_parser_composition_idempotent(ref msg in gen_proto_msg()) {
         println!("!! Msg: {:?}, Bytes: {:?} !!", msg, msg.to_raw_protocol().as_bytes());
         assert_eq!(message(msg.to_raw_protocol().as_bytes()), Ok((&b""[..], msg.clone())))
+    }
+
+    #[test]
+    fn is_server_message_parser_composition_idempotent(ref msg in gen_server_msg()) {
+        println!("!! Msg: {:?}, Bytes: {:?} !!", msg, msg.to_raw_protocol().as_bytes());
+        assert_eq!(server_message(msg.to_raw_protocol().as_bytes()), Ok((&b""[..], msg.clone())))
     }
 }

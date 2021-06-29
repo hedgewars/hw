@@ -401,7 +401,7 @@ pub fn handle_client_accept(
             .anteroom
             .add_client(client_id, encode(&salt), is_local);
 
-        response.add(HwServerMessage::Connected(utils::SERVER_VERSION).send_self());
+        response.add(HwServerMessage::Connected(utils::SERVER_MESSAGE.to_owned(), utils::SERVER_VERSION).send_self());
     }
 }
 
