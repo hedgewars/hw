@@ -98,7 +98,8 @@ fn connect_and_run(
         buf.read_from(&mut stream)?;
 
         while let Ok((tail, msg)) = parser::server_message(buf.as_ref()) {
-            buf.consume(buf.len() - tail.len());
+            let tail_len = tail.len();
+            buf.consume(buf.len() - tail_len);
 
             match msg {
                 Connected(_, _) => {
@@ -154,14 +155,14 @@ fn connect_and_run(
                     info!("Chat [{}]: {}", nick, msg);
                 }
                 RoomAdd(fields) => {
-                    let mut l = fields.into_iter();
+                    let l = fields.into_iter();
                     info!("Room added: {}", l.skip(1).next().unwrap());
                 }
                 RoomUpdated(name, fields) => {
-                    let mut l = fields.into_iter();
+                    let l = fields.into_iter();
                     let new_name = l.skip(1).next().unwrap();
 
-                    if (name != new_name) {
+                    if name != new_name {
                         info!("Room renamed: {}", new_name);
                     }
                 }
