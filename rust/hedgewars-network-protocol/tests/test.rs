@@ -14,7 +14,7 @@ use hedgewars_network_protocol::{proto_msg_case, proto_msg_match};
 pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
     use hedgewars_network_protocol::messages::HwProtocolMessage::*;
 
-    let res = (0..=55).no_shrink().prop_flat_map(|i| {
+    let res = (0..=58).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Ping,
             0 => Ping(),
             1 => Pong(),
@@ -70,7 +70,10 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
             52 => Save(Ascii, Ascii),
             53 => Delete(Ascii),
             54 => SaveRoom(Ascii),
-            55 => LoadRoom(Ascii)
+            55 => LoadRoom(Ascii),
+            56 => CheckerReady(),
+            57 => CheckedOk(Vec<Ascii>),
+            58 => CheckedFail(Ascii)
         )
     });
     res.boxed()
@@ -79,7 +82,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
 pub fn gen_server_msg() -> BoxedStrategy<HwServerMessage> where {
     use hedgewars_network_protocol::messages::HwServerMessage::*;
 
-    let res = (0..=55).no_shrink().prop_flat_map(|i| {
+    let res = (0..=38).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Ping,
                     0 => Connected(Ascii, u32),
                     1 => Redirect(u16),
@@ -118,7 +121,8 @@ pub fn gen_server_msg() -> BoxedStrategy<HwServerMessage> where {
                     34 => ServerVars(Vec<Ascii>),
                     35 => Notice(Ascii),
                     36 => Warning(Ascii),
-                    37 => Error(Ascii)
+                    37 => Error(Ascii),
+                    38 => Replay(Vec<Ascii>)
                 )
     });
     res.boxed()

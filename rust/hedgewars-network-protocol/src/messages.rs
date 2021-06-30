@@ -62,6 +62,9 @@ pub enum HwProtocolMessage {
     Delete(String),
     SaveRoom(String),
     LoadRoom(String),
+    CheckerReady,
+    CheckedOk(Vec<String>),
+    CheckedFail(String),
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -151,6 +154,8 @@ pub enum HwServerMessage {
     Notice(String),
     Warning(String),
     Error(String),
+
+    Replay(Vec<String>),
 
     //Deprecated messages
     LegacyReady(bool, Vec<String>),
@@ -352,6 +357,9 @@ impl HwProtocolMessage {
             Delete(name) => msg!["CMD", format!("DELETE {}", name)],
             SaveRoom(name) => msg!["CMD", format!("SAVEROOM {}", name)],
             LoadRoom(name) => msg!["CMD", format!("LOADROOM {}", name)],
+            CheckerReady => msg!["READY"],
+            CheckedOk(args) => msg!["CHECKED", "OK", args.join("\n")],
+            CheckedFail(message) => msg!["CHECKED", "FAIL", message],
         }
     }
 }
@@ -405,6 +413,7 @@ impl HwServerMessage {
             Warning(msg) => msg!["WARNING", msg],
             Error(msg) => msg!["ERROR", msg],
             ReplayStart => msg!["REPLAY_START"],
+            Replay(em) => construct_message(&["REPLAY"], &em),
 
             LegacyReady(is_ready, nicks) => {
                 construct_message(&[if *is_ready { "READY" } else { "NOT_READY" }], &nicks)

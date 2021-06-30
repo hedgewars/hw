@@ -200,6 +200,7 @@ fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         message("TOGGLE_RESTRICT_JOINS", ToggleRestrictJoin),
         message("TOGGLE_RESTRICT_TEAMS", ToggleRestrictTeams),
         message("TOGGLE_REGISTERED_ONLY", ToggleRegisteredOnly),
+        message("READY", CheckerReady),
     ))(input)
 }
 
@@ -231,6 +232,7 @@ fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
         message("ROUNDFINISHED", opt_arg, |_| RoundFinished),
         message("PROTO\n", u16_line, Proto),
         message("QUIT", opt_arg, Quit),
+        message("CHECKED\nFAIL\n", a_line, CheckedFail),
     ))(input)
 }
 
@@ -482,7 +484,17 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
                 |(nick, reason, time)| BanNick(nick, reason, time),
             ),
         ),
-    ))(input)
+        map(
+            preceded(
+                tag("CHECKED\nOK"),
+                alt((
+                    map(peek(end_of_message), |_| None),
+                    map(preceded(newline, separated_list0(newline, a_line)), Some),
+                )),
+            ),
+            |values| CheckedOk(values.unwrap_or_default()),
+        )
+))(input)
 }
 
 pub fn malformed_message(input: &[u8]) -> HwResult<()> {
@@ -653,6 +665,7 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
                 list_message("EM", ForwardEngineMessage),
                 list_message("INFO", Info),
                 list_message("SERVER_VARS", ServerVars),
+                list_message("REPLAY", Replay),
             )),
         )),
         end_of_message,
