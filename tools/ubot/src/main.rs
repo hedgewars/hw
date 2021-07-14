@@ -41,51 +41,84 @@ fn random_string(size: usize) -> String {
 }
 
 async fn handle_irc(pub_channel: &lapin::Channel, irc_message: &Message) -> AHResult<()> {
-    if let Command::PRIVMSG(msgtarget, message) = &irc_message.command {
-        let target = irc_message
-            .response_target()
-            .expect("Really expected PRIVMSG would have a source");
-        let target = if target.starts_with('#') {
-            &target[1..]
-        } else {
-            &target
-        };
+    match &irc_message.command {
+        Command::PRIVMSG(msgtarget, message) => {
+            let target = irc_message
+                .response_target()
+                .expect("Really expected PRIVMSG would have a source");
+            let target = if target.starts_with('#') {
+                &target[1..]
+            } else {
+                &target
+            };
 
-        let who = irc_message.source_nickname().unwrap_or(msgtarget);
+            let who = irc_message.source_nickname().unwrap_or(msgtarget);
 
-        if message.starts_with("!") {
-            if let Some((cmd, param)) = message.split_once(' ') {
-                pub_channel
-                    .basic_publish(
-                        "irc",
-                        &format!("cmd.{}.{}", &cmd[1..], target),
-                        BasicPublishOptions::default(),
-                        format!("{}\n{}", who, param).as_bytes().to_vec(),
-                        BasicProperties::default(),
-                    )
-                    .await?;
+            if message.starts_with("!") {
+                if let Some((cmd, param)) = message.split_once(' ') {
+                    pub_channel
+                        .basic_publish(
+                            "irc",
+                            &format!("cmd.{}.{}", &cmd[1..], target),
+                            BasicPublishOptions::default(),
+                            format!("{}\n{}", who, param).as_bytes().to_vec(),
+                            BasicProperties::default(),
+                        )
+                        .await?;
+                } else {
+                    pub_channel
+                        .basic_publish(
+                            "irc",
+                            &format!("cmd.{}.{}", &message[1..], target),
+                            BasicPublishOptions::default(),
+                            who.as_bytes().to_vec(),
+                            BasicProperties::default(),
+                        )
+                        .await?;
+                }
             } else {
                 pub_channel
                     .basic_publish(
                         "irc",
-                        &format!("cmd.{}.{}", &message[1..], target),
+                        &format!("msg.{}", target),
                         BasicPublishOptions::default(),
-                        who.as_bytes().to_vec(),
+                        format!("{}\n{}", who, message).as_bytes().to_vec(),
                         BasicProperties::default(),
                     )
                     .await?;
             }
-        } else {
+        }
+        Command::JOIN(channel, _, _) => {
             pub_channel
                 .basic_publish(
                     "irc",
-                    &format!("msg.{}", target),
+                    &format!("join.{}", &channel[1..]),
                     BasicPublishOptions::default(),
-                    format!("{}\n{}", who, message).as_bytes().to_vec(),
+                    irc_message
+                        .source_nickname()
+                        .expect("Hey, who joined?")
+                        .as_bytes()
+                        .to_vec(),
                     BasicProperties::default(),
                 )
                 .await?;
         }
+        Command::PART(channel, _) => {
+            pub_channel
+                .basic_publish(
+                    "irc",
+                    &format!("part.{}", &channel[1..]),
+                    BasicPublishOptions::default(),
+                    irc_message
+                        .source_nickname()
+                        .expect("Hey, who left?")
+                        .as_bytes()
+                        .to_vec(),
+                    BasicProperties::default(),
+                )
+                .await?;
+        }
+        _ => (),
     }
 
     Ok(())
