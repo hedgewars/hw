@@ -8,6 +8,8 @@ PHYSFS_DECL void hedgewarsMountPackages()
 {
     char ** filesList = PHYSFS_enumerateFiles("/");
     char **i;
+    
+    if (!filesList) return;
 
     for (i = filesList; *i != NULL; i++)
     {
