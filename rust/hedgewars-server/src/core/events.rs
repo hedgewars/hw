@@ -29,12 +29,7 @@ pub struct TimedEvents<Data, const MAX_TIMEOUT: usize> {
 impl<Data, const MAX_TIMEOUT: usize> TimedEvents<Data, MAX_TIMEOUT> {
     pub fn new() -> Self {
         Self {
-            events: iter::repeat_with(|| Slab::new())
-                .take(MAX_TIMEOUT)
-                .collect::<Vec<_>>()
-                .try_into()
-                .ok()
-                .unwrap(),
+            events: [0; MAX_TIMEOUT].map(|_| Slab::new()),
             current_time: Instant::now(),
             current_tick_index: 0,
             next_event_id: 0,
