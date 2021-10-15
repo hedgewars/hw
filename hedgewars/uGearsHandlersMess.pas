@@ -7359,19 +7359,24 @@ begin
     PlaySound(sndGun);
 end;
 
-function GetSentryTarget(): PGear;
+function GetSentryTarget(sentry: PGear): PGear;
 var HHGear: PGear;
+    friendlyTarget: boolean;
 begin
     GetSentryTarget := nil;
-    if (CurrentHedgehog <> nil) then
+    friendlyTarget := false;
+
+    if CurrentHedgehog <> nil then
     begin
         HHGear := CurrentHedgehog^.Gear;
         if HHGear <> nil then
-        begin
-            if ((HHGear^.State and gstHHDriven) <> 0)
-                and (HHGear^.CollisionIndex < 0) then
-                GetSentryTarget := HHGear;
-        end
+            if ((HHGear^.State and gstHHDriven) <> 0) and (HHGear^.CollisionIndex < 0) then
+            begin
+                if sentry^.Hedgehog <> nil then
+                    friendlyTarget := sentry^.Hedgehog^.Team = CurrentHedgehog^.Team;
+                if not friendlyTarget then
+                    GetSentryTarget := HHGear;
+            end
     end
 end;
 
@@ -7500,7 +7505,7 @@ begin
     if ((GameTicks and $FF) = 0)
         and (Gear^.Tag in [sentry_Idle, sentry_Walking]) then
     begin
-        HHGear := GetSentryTarget();
+        HHGear := GetSentryTarget(Gear);
         if HHGear <> nil then
             if CheckSentryAttackRange(Gear, HHGear^.X, HHGear^.Y) then
             begin
@@ -7602,7 +7607,7 @@ begin
     if ((GameTicks and $FF) = 0)
         and (Gear^.Tag in [sentry_Idle, sentry_Walking]) then
     begin
-        HHGear := GetSentryTarget();
+        HHGear := GetSentryTarget(Gear);
         if HHGear <> nil then
             if CheckSentryAttackRange(Gear, HHGear^.X, HHGear^.Y) then
             begin
