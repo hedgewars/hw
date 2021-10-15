@@ -7354,6 +7354,7 @@ begin
     bullet^.Elasticity := Sentry^.X;
     bullet^.Friction := Sentry^.Y;
     bullet^.Data := Pointer(Sentry);
+    bullet^.Hedgehog := Sentry^.Hedgehog;
 
     CreateShellForGear(Sentry, Sentry^.WDTimer and 1);
     PlaySound(sndGun);
