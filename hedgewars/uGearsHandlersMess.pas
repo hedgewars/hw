@@ -1849,6 +1849,7 @@ procedure doStepBlowTorchWork(Gear: PGear);
 var
     HHGear: PGear;
     dig, hit: boolean;
+    newX, newY: hwFloat;
 begin
     AllInactive := false;
     WorldWrap(Gear);
@@ -1879,7 +1880,7 @@ begin
         dig := true
         end;
 
-    if ((HHGear^.State and gstMoving) <> 0) then
+    if (HHGear^.State and gstMoving) <> 0 then
         begin
         doStepHedgehogMoving(HHGear);
         if (HHGear^.State and gstHHDriven) = 0 then
@@ -1897,25 +1898,28 @@ begin
         else
             HHGear^.Message := (HHGear^.Message and (gmAttack or gmUp or gmDown)) or gmRight;
 
-        if ((HHGear^.State and gstMoving) = 0) then
+        if (HHGear^.State and gstMoving) = 0 then
             begin
             HHGear^.State := HHGear^.State and (not gstAttacking);
 
-            if CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y),lfIndestructible) then
+            if CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y), lfIndestructible) then
                 HedgehogStep(HHGear);
 
             HHGear^.State := HHGear^.State or gstAttacking
             end;
 
+            newX := HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
+            newY := HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
+            if CheckLandValue(hwRound(newX + SignAs(_6, Gear^.dX)), hwRound(newY), lfIndestructible) then
+                begin
+                Gear^.X := newX;
+                Gear^.Y := newY;
+                end;
+
         inc(BTSteps);
-        if BTSteps = 11 then
+        if BTSteps = 15 then
             begin
             BTSteps := 0;
-            if CheckLandValue(hwRound(HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC) + SignAs(_6,Gear^.dX)), hwRound(HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC)),lfIndestructible) then
-                begin
-                Gear^.X := HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
-                Gear^.Y := HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
-                end;
             hit := true
             end;
         end;
