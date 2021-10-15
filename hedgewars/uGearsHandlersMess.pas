@@ -7373,7 +7373,7 @@ begin
             if ((HHGear^.State and gstHHDriven) <> 0) and (HHGear^.CollisionIndex < 0) then
             begin
                 if sentry^.Hedgehog <> nil then
-                    friendlyTarget := sentry^.Hedgehog^.Team = CurrentHedgehog^.Team;
+                    friendlyTarget := sentry^.Hedgehog^.Team^.Clan = CurrentHedgehog^.Team^.Clan;
                 if not friendlyTarget then
                     GetSentryTarget := HHGear;
             end

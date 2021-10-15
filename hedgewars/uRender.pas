@@ -50,6 +50,7 @@ procedure DrawTextureRotatedF   (Texture: PTexture; Scale, OffsetX, OffsetY: GLf
 
 procedure DrawCircle            (X, Y, Radius, Width: LongInt);
 procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
+procedure DrawCircle            (X, Y, Radius, Width: LongInt; color: LongWord);
 procedure DrawCircleFilled      (X, Y, Radius: LongInt; r, g, b, a: Byte);
 
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
@@ -1562,6 +1563,13 @@ end;
 procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 begin
     Tint(r, g, b, a);
+    DrawCircle(X, Y, Radius, Width);
+    untint;
+end;
+
+procedure DrawCircle(X, Y, Radius, Width: LongInt; color: LongWord);
+begin
+    Tint(color);
     DrawCircle(X, Y, Radius, Width);
     untint;
 end;
