@@ -629,7 +629,7 @@ case Kind of
                 gear^.Friction:= _0_995
                 end;
    gtBlowTorch: begin
-                gear^.Radius:= cHHRadius + cBlowTorchC;
+                gear^.Radius:= cHHRadius + cBlowTorchC - 1;
                 if gear^.Timer = 0 then gear^.Timer:= 7500
                 end;
     gtSwitcher: begin
