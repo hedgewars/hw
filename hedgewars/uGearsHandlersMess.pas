@@ -141,6 +141,7 @@ procedure doStepKnife(Gear: PGear);
 procedure doStepMinigunWork(Gear: PGear);
 procedure doStepMinigun(Gear: PGear);
 procedure doStepMinigunBullet(Gear: PGear);
+procedure ResetSentryState(Gear: PGear; state, timer: LongInt);
 procedure doStepSentryDeploy(Gear: PGear);
 
 var
@@ -4079,7 +4080,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSeductionWork(Gear: PGear);
 var i: LongInt;
-    hogs: PGearArrayS;
+    hits: PGearArrayS;
     HHGear: PGear;
 begin
     AllInactive := false;
@@ -4093,12 +4094,12 @@ begin
         exit;
         end;
 
-    hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
-    if hogs.size > 0 then
+    hits := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
+    if hits.size > 0 then
         begin
-        for i:= 0 to hogs.size - 1 do
-            with hogs.ar^[i]^ do
-                if (hogs.ar^[i] <> CurrentHedgehog^.Gear) and (Hedgehog^.Effects[heFrozen] = 0)  then
+        for i:= 0 to hits.size - 1 do
+            with hits.ar^[i]^ do
+                if (hits.ar^[i] <> CurrentHedgehog^.Gear) and (Hedgehog^.Effects[heFrozen] = 0)  then
                     begin
                     if (WorldEdge <> weWrap) or (not (hwAbs(Gear^.X - X) > int2hwFloat(Gear^.Radius))) then
                         dX:= _50 * cGravity * (Gear^.X - X) / _25
@@ -4112,6 +4113,19 @@ begin
                 else if Hedgehog^.Effects[heFrozen] > 255 then
                     Hedgehog^.Effects[heFrozen]:= 255
         end ;
+
+    hits := GearsNear(Gear^.X, Gear^.Y, gtSentry, Gear^.Radius);
+    if hits.size > 0 then
+        for i:= 0 to hits.size - 1 do
+            with hits.ar^[i]^ do
+                if (Gear^.Hedgehog <> nil) and (Hedgehog <> Gear^.Hedgehog)  then
+                    begin
+                    dX := SignAs(_0, dX);
+                    dY := -_0_15;
+                    Hedgehog := Gear^.Hedgehog;
+                    ResetSentryState(hits.ar^[i], 0, 10000);
+                    end;
+
     AfterAttack;
     DeleteGear(Gear);
 end;
