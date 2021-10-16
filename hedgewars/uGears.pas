@@ -814,7 +814,7 @@ begin
     end;
 
     for i := 0 to min(count, positionsCount) - 1 do
-        AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 0);
+        AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 0)^.Hedgehog := nil;
 end;
 
 function AddWaterSentries(count: Longword): Longword;
@@ -842,7 +842,7 @@ begin
 
     for i := 0 to min(count, positionsCount) - 1 do
     begin
-        AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 0);
+        AddGear(positions[i].X, positions[i].Y - cHHRadius, gtSentry, 0, _0, _0, 0)^.Hedgehog := nil;
         inc(AddWaterSentries);
     end;
 end;

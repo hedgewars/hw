@@ -105,15 +105,20 @@ begin
 end;
 
 procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
+var sameClan: Boolean;
 begin
-if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
+sameClan := false;
+if Attacker <> nil then
+    sameClan := Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan;
+
+if sameClan then
     vpHurtSameClan:= Gear^.Hedgehog^.Team^.voicepack
 else
     begin
     if not FirstBlood then
         StepFirstBlood:= true;
     vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
-    if (not killed) and (not bDuringWaterRise) then
+    if (Attacker <> nil) and (not killed) and (not bDuringWaterRise) then
         begin
         // Check if victim got attacked by RevengeHog again
         if (Gear^.Hedgehog^.RevengeHog <> nil) and (Gear^.Hedgehog^.RevengeHog = Attacker) and (Gear^.Hedgehog^.stats.StepRevenge = false) then
@@ -141,7 +146,8 @@ else
 
 if (not bDuringWaterRise) then
     begin
-    inc(Attacker^.stats.StepDamageGiven, Damage);
+    if Attacker <> nil then
+        inc(Attacker^.stats.StepDamageGiven, Damage);
     inc(Gear^.Hedgehog^.stats.StepDamageRecv, Damage);
     end;
 
@@ -157,7 +163,7 @@ if killed then
 
     if bDuringWaterRise then
         inc(KillsSD)
-    else
+    else if Attacker <> nil then
         begin
         inc(Attacker^.stats.StepKills);
         inc(Attacker^.Team^.stats.Kills);

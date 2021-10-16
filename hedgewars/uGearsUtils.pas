@@ -321,25 +321,25 @@ begin
 
         uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);
 
-    if AprilOne and (Gear^.Hedgehog^.Hat = 'fr_tomato') and (Damage > 2) then
-        for i := 0 to random(min(Damage,20))+5 do
-        begin
-        vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
-        if vg <> nil then
-            with vg^ do
+        if AprilOne and (Gear^.Hedgehog^.Hat = 'fr_tomato') and (Damage > 2) then
+            for i := 0 to random(min(Damage,20))+5 do
             begin
-            dx:= 0.001 * (random(100)+10);
-            dy:= 0.001 * (random(100)+10);
-            tdy:= -cGravityf;
-            if random(2) = 0 then
-                dx := -dx;
-            FrameTicks:= random(500) + 1000;
-            State:= ord(sprBubbles);
-            Tint:= $ff0000ff
+            vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
+            if vg <> nil then
+                with vg^ do
+                begin
+                dx:= 0.001 * (random(100)+10);
+                dy:= 0.001 * (random(100)+10);
+                tdy:= -cGravityf;
+                if random(2) = 0 then
+                    dx := -dx;
+                FrameTicks:= random(500) + 1000;
+                State:= ord(sprBubbles);
+                Tint:= $ff0000ff
+                end
             end
-    end
-    end else
-        Gear^.Hedgehog:= AttackerHog;
+        end else if AttackerHog <> nil then
+            Gear^.Hedgehog:= AttackerHog;
     inc(Gear^.Damage, Damage);
 
     ScriptCall('onGearDamage', Gear^.UID, Damage);
