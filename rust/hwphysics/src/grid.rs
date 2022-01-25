@@ -7,20 +7,30 @@ use fpnum::FPPoint;
 use integral_geometry::{GridIndex, Point, Size};
 
 struct GridBin {
-    static_refs: Vec<GearId>,
-    static_entries: Vec<CircleBounds>,
-
-    dynamic_refs: Vec<GearId>,
-    dynamic_entries: Vec<CircleBounds>,
+    refs: Vec<GearId>,
+    entries: Vec<CircleBounds>,
 }
 
 impl GridBin {
     fn new() -> Self {
         Self {
-            static_refs: vec![],
-            static_entries: vec![],
-            dynamic_refs: vec![],
-            dynamic_entries: vec![],
+            refs: vec![],
+            entries: vec![],
+        }
+    }
+
+    fn add(&mut self, gear_id: GearId, bounds: &CircleBounds) {
+        self.refs.push(gear_id);
+        self.entries.push(*bounds);
+    }
+
+    fn remove(&mut self, gear_id: GearId) -> bool {
+        if let Some(pos) = self.refs.iter().position(|id| *id == gear_id) {
+            self.refs.swap_remove(pos);
+            self.entries.swap_remove(pos);
+            true
+        } else {
+            false
         }
     }
 }
@@ -64,86 +74,33 @@ impl Grid {
         self.get_bin(self.bin_index(position))
     }
 
-    pub fn insert_static(&mut self, gear_id: GearId, bounds: &CircleBounds) {
-        let bin = self.lookup_bin(&bounds.center);
-        bin.static_refs.push(gear_id);
-        bin.static_entries.push(*bounds)
+    pub fn insert(&mut self, gear_id: GearId, bounds: &CircleBounds) {
+        self.lookup_bin(&bounds.center).add(gear_id, bounds);
     }
 
-    pub fn insert_dynamic(&mut self, gear_id: GearId, bounds: &CircleBounds) {
-        let bin = self.lookup_bin(&bounds.center);
-        bin.dynamic_refs.push(gear_id);
-        bin.dynamic_entries.push(*bounds);
-    }
-
-    pub fn remove(&mut self, gear_id: GearId) {}
-
-    pub fn update_position(
-        &mut self,
-        gear_id: GearId,
-        old_position: &FPPoint,
-        new_position: &FPPoint,
-    ) {
-        let old_bin_index = self.bin_index(old_position);
-        let new_bin_index = self.bin_index(new_position);
-
-        if let Some(old_bin) = self.try_get_bin(old_bin_index) {
-            let bounds = if let Some(index) =
-                old_bin.dynamic_refs.iter().position(|id| *id == gear_id)
-            {
-                if old_bin_index == new_bin_index {
-                    old_bin.dynamic_entries[index].center = *new_position;
-                    None
-                } else {
-                    Some(old_bin.dynamic_entries.swap_remove(index))
-                }
-            } else if let Some(index) = old_bin.static_refs.iter().position(|id| *id == gear_id) {
-                old_bin.static_refs.swap_remove(index);
-                Some(old_bin.static_entries.swap_remove(index))
-            } else {
-                None
-            };
-
-            if let Some(bounds) = bounds {
-                let new_bin = if old_bin_index == new_bin_index {
-                    Some(old_bin)
-                } else {
-                    self.try_get_bin(new_bin_index)
-                };
-
-                if let Some(new_bin) = new_bin {
-                    new_bin.dynamic_refs.push(gear_id);
-                    new_bin.dynamic_entries.push(CircleBounds {
-                        center: *new_position,
-                        ..bounds
-                    });
-                }
+    fn remove_all(&mut self, gear_id: GearId) {
+        for bin in &mut self.bins {
+            if bin.remove(gear_id) {
+                break;
             }
         }
     }
 
+    pub fn remove(&mut self, gear_id: GearId, bounds: Option<&CircleBounds>) {
+        if let Some(bounds) = bounds {
+            if !self.lookup_bin(&bounds.center).remove(gear_id) {
+                self.remove_all(gear_id);
+            }
+        } else {
+            self.remove_all(gear_id);
+        }
+
+    }
+
     pub fn check_collisions(&self, collisions: &mut DetectedCollisions) {
         for bin in &self.bins {
-            for (index, bounds) in bin.dynamic_entries.iter().enumerate() {
-                for (other_index, other) in bin.dynamic_entries.iter().enumerate().skip(index + 1) {
-                    if bounds.intersects(other) && bounds != other {
-                        collisions.push(
-                            bin.dynamic_refs[index],
-                            Some(bin.dynamic_refs[other_index]),
-                            &((bounds.center + other.center) / 2),
-                        )
-                    }
-                }
+            for (index, bounds) in bin.entries.iter().enumerate() {
 
-                for (other_index, other) in bin.static_entries.iter().enumerate() {
-                    if bounds.intersects(other) {
-                        collisions.push(
-                            bin.dynamic_refs[index],
-                            Some(bin.static_refs[other_index]),
-                            &((bounds.center + other.center) / 2),
-                        )
-                    }
-                }
             }
         }
     }

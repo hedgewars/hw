@@ -114,11 +114,11 @@ impl CollisionProcessor {
     }
 
     pub fn add(&mut self, gear_id: GearId, gear_data: CollisionData) {
-        self.grid.insert_static(gear_id, &gear_data.bounds);
+        self.grid.insert(gear_id, &gear_data.bounds);
     }
 
     pub fn remove(&mut self, gear_id: GearId) {
-        self.grid.remove(gear_id);
+        self.grid.remove(gear_id, None);
     }
 
     pub fn get(&mut self, gear_id: GearId) -> Option<CollisionData> {
@@ -131,10 +131,6 @@ impl CollisionProcessor {
         updates: &crate::physics::PositionUpdates,
     ) -> &DetectedCollisions {
         self.detected_collisions.clear();
-        for (id, old_position, new_position) in updates.iter() {
-            self.grid.update_position(id, old_position, new_position)
-        }
-
         self.grid.check_collisions(&mut self.detected_collisions);
 
         for (gear_id, collision) in self.enabled_collisions.iter() {
