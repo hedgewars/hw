@@ -1,9 +1,6 @@
-use std::{
-    cmp,
-    ops::Index
-};
+use std::{cmp, ops::Index};
 
-use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, Rect, Size, SizeMask};
+use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, PotSize, Rect, Size, SizeMask};
 
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
@@ -15,13 +12,13 @@ impl<T: Copy + PartialEq> Land2D<T> {
     pub fn new(play_size: Size, fill_value: T) -> Self {
         let real_size = play_size.next_power_of_two();
         let top_left = Point::new(
-            ((real_size.width - play_size.width) / 2) as i32,
-            (real_size.height - play_size.height) as i32,
+            ((real_size.width() - play_size.width) / 2) as i32,
+            (real_size.height() - play_size.height) as i32,
         );
         let play_box = Rect::from_size(top_left, play_size);
         Self {
             play_box,
-            pixels: vec2d::Vec2D::new(real_size, fill_value),
+            pixels: vec2d::Vec2D::new(real_size.size(), fill_value),
             mask: real_size.to_mask(),
         }
     }
@@ -31,9 +28,7 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     pub fn raw_pixel_bytes(&self) -> &[u8] {
-        unsafe {
-            self.pixels.as_bytes()
-        }
+        unsafe { self.pixels.as_bytes() }
     }
 
     #[inline]
@@ -47,8 +42,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
     }
 
     #[inline]
-    pub fn size(&self) -> Size {
-        self.pixels.size()
+    pub fn size(&self) -> PotSize {
+        self.mask.to_size()
     }
 
     #[inline]
@@ -117,7 +112,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
                 *v = value;
                 1
             })
-        }).count()
+        })
+        .count()
     }
 
     pub fn draw_line(&mut self, line: Line, value: T) -> usize {
@@ -149,31 +145,34 @@ impl<T: Copy + PartialEq> Land2D<T> {
         let start_x_l = (start_point.x - 1) as usize;
         let start_x_r = start_point.x as usize;
         for dir in [-1, 1].iter().cloned() {
-            push(mask, &mut stack, start_x_l, start_x_r, start_point.y as usize, dir);
+            push(
+                mask,
+                &mut stack,
+                start_x_l,
+                start_x_r,
+                start_point.y as usize,
+                dir,
+            );
         }
 
         while let Some((mut xl, mut xr, y, dir)) = stack.pop() {
             let row = &mut self.pixels[y][..];
-            while xl > 0 && row[xl] != border_value && row[xl] != fill_value
-            {
+            while xl > 0 && row[xl] != border_value && row[xl] != fill_value {
                 xl -= 1;
             }
 
-            while xr < width - 1 && row[xr] != border_value && row[xr] != fill_value
-            {
+            while xr < width - 1 && row[xr] != border_value && row[xr] != fill_value {
                 xr += 1;
             }
 
             while xl < xr {
-                while xl <= xr && (row[xl] == border_value || row[xl] == fill_value)
-                {
+                while xl <= xr && (row[xl] == border_value || row[xl] == fill_value) {
                     xl += 1;
                 }
 
                 let x = xl;
 
-                while xl <= xr && row[xl] != border_value && row[xl] != fill_value
-                {
+                while xl <= xr && row[xl] != border_value && row[xl] != fill_value {
                     row[xl] = fill_value;
                     xl += 1;
                 }
@@ -257,7 +256,8 @@ impl<T: Copy + PartialEq> Land2D<T> {
                     .iter()
                     .map(|m| self.fill_row(center, vector.transform(m), value))
                     .sum::<usize>()
-            }).sum()
+            })
+            .sum()
     }
 
     pub fn draw_thick_line(&mut self, line: Line, radius: i32, value: T) -> usize {

@@ -2,23 +2,21 @@ use png::HasParameters;
 use std::{
     fs::File,
     io::{BufWriter, Read},
-    path::{Path, PathBuf}
+    path::{Path, PathBuf},
 };
 use structopt::StructOpt;
 
 use integral_geometry::{Point, Rect, Size};
+use land2d::Land2D;
 use landgen::{
-    outline_template::OutlineTemplate,
-    template_based::TemplatedLandGenerator,
-    LandGenerationParameters,
-    LandGenerator
-};
-use mapgen::{
-    MapGenerator,
-    theme::{Theme, slice_u32_to_u8}
+    outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
+    LandGenerationParameters, LandGenerator,
 };
 use lfprng::LaggedFibonacciPRNG;
-use land2d::Land2D;
+use mapgen::{
+    theme::{slice_u32_to_u8, Theme},
+    MapGenerator,
+};
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "basic")]
@@ -36,7 +34,7 @@ struct Opt {
     #[structopt(short = "t", long = "template-type")]
     template_type: Option<String>,
     #[structopt(short = "z", long = "theme-dir")]
-    theme_dir: Option<String>
+    theme_dir: Option<String>,
 }
 
 fn template() -> OutlineTemplate {
@@ -60,7 +58,8 @@ fn dump(
     skip_bezier: bool,
     file_name: &Path,
 ) -> std::io::Result<Land2D<u8>> {
-    let params = LandGenerationParameters::new(0 as u8, 255, distance_divisor, skip_distort, skip_bezier);
+    let params =
+        LandGenerationParameters::new(0 as u8, 255, distance_divisor, skip_distort, skip_bezier);
     let landgen = TemplatedLandGenerator::new(template.clone());
     let mut prng = LaggedFibonacciPRNG::new(seed);
     let land = landgen.generate_land(&params, &mut prng);
@@ -87,40 +86,39 @@ fn texturize(theme_dir: &Path, land: &Land2D<u8>, output_filename: &Path) {
     let ref mut w = BufWriter::new(file);
 
     let mut encoder = png::Encoder::new(w, land.width() as u32, land.height() as u32); // Width is 2 pixels and height is 1.
-    encoder
-        .set(png::ColorType::RGBA)
-        .set(png::BitDepth::Eight);
+    encoder.set(png::ColorType::RGBA).set(png::BitDepth::Eight);
 
     let mut writer = encoder.write_header().unwrap();
 
-    writer.write_image_data(slice_u32_to_u8(texture.as_slice())).unwrap();
+    writer
+        .write_image_data(slice_u32_to_u8(texture.as_slice()))
+        .unwrap();
 }
 
 fn main() {
     let opt = Opt::from_args();
     println!("{:?}", opt);
 
-    let template =
-        if let Some(path) = opt.templates_file {
-            let mut result = String::new();
-            File::open(path)
-                .expect("Unable to read templates file")
-                .read_to_string(&mut result);
+    let template = if let Some(path) = opt.templates_file {
+        let mut result = String::new();
+        File::open(path)
+            .expect("Unable to read templates file")
+            .read_to_string(&mut result);
 
-            let mut generator = MapGenerator::new();
+        let mut generator = MapGenerator::new();
 
-            let source =  &result[..];
+        let source = &result[..];
 
-            generator.import_yaml_templates(source);
+        generator.import_yaml_templates(source);
 
-            let template_type = &opt.template_type
-                .expect("No template type specified");
-            generator.get_template(template_type)
-                .expect(&format!("Template type {} not found", template_type))
-                .clone()
-        } else {
-            template()
-        };
+        let template_type = &opt.template_type.expect("No template type specified");
+        generator
+            .get_template(template_type)
+            .expect(&format!("Template type {} not found", template_type))
+            .clone()
+    } else {
+        template()
+    };
 
     if opt.dump_before_distort {
         dump(
@@ -155,10 +153,6 @@ fn main() {
     .unwrap();
 
     if let Some(dir) = opt.theme_dir {
-        texturize(
-            &Path::new(&dir),
-            &land,
-            &Path::new("out.texture.png")
-        );
+        texturize(&Path::new(&dir), &land, &Path::new("out.texture.png"));
     }
 }

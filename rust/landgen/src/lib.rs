@@ -11,7 +11,13 @@ pub struct LandGenerationParameters<T> {
 }
 
 impl<T: Copy + PartialEq> LandGenerationParameters<T> {
-    pub fn new(zero: T, basic: T, distance_divisor: u32, skip_distort: bool, skip_bezier: bool) -> Self {
+    pub fn new(
+        zero: T,
+        basic: T,
+        distance_divisor: u32,
+        skip_distort: bool,
+        skip_bezier: bool,
+    ) -> Self {
         Self {
             zero,
             basic,

@@ -4,7 +4,7 @@ mod data;
 mod grid;
 pub mod physics;
 
-use integral_geometry::Size;
+use integral_geometry::PotSize;
 use land2d::Land2D;
 
 use crate::{
@@ -22,7 +22,7 @@ pub struct World {
 }
 
 impl World {
-    pub fn new(world_size: Size) -> Self {
+    pub fn new(world_size: PotSize) -> Self {
         let mut data = GearDataManager::new();
         PhysicsProcessor::register_components(&mut data);
         CollisionProcessor::register_components(&mut data);
@@ -72,12 +72,12 @@ mod tests {
         World,
     };
     use fpnum::{fp, FPNum, FPPoint};
-    use integral_geometry::Size;
+    use integral_geometry::PotSize;
     use land2d::Land2D;
 
     #[test]
     fn data_flow() {
-        let world_size = Size::new(2048, 2048);
+        let world_size = PotSize::new(2048, 2048).unwrap;
 
         let mut world = World::new(world_size);
         let gear_id = world.new_gear().unwrap();

@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use std::cmp::min;
 
-use integral_geometry::{Line, Ray, Point, Polygon, Rect, Size};
+use integral_geometry::{Line, Point, Polygon, Ray, Rect, Size};
 use land2d::Land2D;
 
 use crate::outline_template::OutlineTemplate;
@@ -76,16 +76,14 @@ impl OutlinePoints {
         fn solve_intersection(
             intersections_box: &Rect,
             ray: &Ray,
-            edge: &Line
-        ) -> Option<(i32, u32)>
-        {
+            edge: &Line,
+        ) -> Option<(i32, u32)> {
             let edge_dir = edge.scaled_direction();
             let aqpb = ray.direction.cross(edge_dir) as i64;
 
             if aqpb != 0 {
-                let mut iy =
-                    ((((edge.start.x - ray.start.x) as i64 * ray.direction.y as i64
-                        + ray.start.y as i64 * ray.direction.x as i64)
+                let mut iy = ((((edge.start.x - ray.start.x) as i64 * ray.direction.y as i64
+                    + ray.start.y as i64 * ray.direction.x as i64)
                     * edge_dir.y as i64
                     - edge.start.y as i64 * edge_dir.x as i64 * ray.direction.y as i64)
                     / aqpb) as i32;
@@ -147,7 +145,7 @@ impl OutlinePoints {
             // same for the right border
             let right_intersection = Point::new(
                 map_box.right(),
-                mid_point.y + normal.tangent_mul(map_box.right() - mid_point.x)  ,
+                mid_point.y + normal.tangent_mul(map_box.right() - mid_point.x),
             );
             dist_right = (mid_point - right_intersection).integral_norm();
 
@@ -203,7 +201,9 @@ impl OutlinePoints {
                 if intersects(&pi.ray_with_dir(normal), &segment) {
                     // ray from segment.start
                     if let Some((t, d)) = solve_intersection(
-                        &self.intersections_box, &normal_ray, &segment.start.line_to(pi),
+                        &self.intersections_box,
+                        &normal_ray,
+                        &segment.start.line_to(pi),
                     ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);
@@ -214,7 +214,9 @@ impl OutlinePoints {
 
                     // ray from segment.end
                     if let Some((t, d)) = solve_intersection(
-                        &self.intersections_box, &normal_ray, &segment.end.line_to(pi)
+                        &self.intersections_box,
+                        &normal_ray,
+                        &segment.end.line_to(pi),
                     ) {
                         if t > 0 {
                             dist_right = min(dist_right, d);

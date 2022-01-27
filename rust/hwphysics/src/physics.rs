@@ -67,11 +67,7 @@ impl PhysicsProcessor {
         }
     }
 
-    pub fn process(
-        &mut self,
-        data: &mut GearDataManager,
-        time_step: Millis,
-    ) -> &PositionUpdates {
+    pub fn process(&mut self, data: &mut GearDataManager, time_step: Millis) -> &PositionUpdates {
         if time_step == Millis::new(1) {
             self.process_impl::<true>(data, time_step)
         } else {

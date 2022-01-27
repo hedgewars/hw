@@ -4,7 +4,7 @@ use crate::{
 };
 
 use fpnum::FPPoint;
-use integral_geometry::{GridIndex, Point, Size};
+use integral_geometry::{GridIndex, Point, PotSize};
 
 struct GridBin {
     refs: Vec<GearId>,
@@ -39,22 +39,27 @@ const GRID_BIN_SIZE: usize = 128;
 
 pub struct Grid {
     bins: Vec<GridBin>,
-    space_size: Size,
-    bins_count: Size,
+    space_size: PotSize,
+    bins_count: PotSize,
     index: GridIndex,
 }
 
 impl Grid {
-    pub fn new(size: Size) -> Self {
-        assert!(size.is_power_of_two());
-        let bins_count = Size::new(size.width / GRID_BIN_SIZE, size.height / GRID_BIN_SIZE);
+    pub fn new(size: PotSize) -> Self {
+        let bins_count =
+            PotSize::new(size.width() / GRID_BIN_SIZE, size.height() / GRID_BIN_SIZE).unwrap();
 
         Self {
             bins: (0..bins_count.area()).map(|_| GridBin::new()).collect(),
             space_size: size,
             bins_count,
-            index: Size::square(GRID_BIN_SIZE).to_grid_index(),
+            index: PotSize::square(GRID_BIN_SIZE).unwrap().to_grid_index(),
         }
+    }
+
+    fn linear_bin_index(&self, index: Point) -> usize {
+        self.bins_count
+            .linear_index(index.x as usize, index.y as usize)
     }
 
     fn bin_index(&self, position: &FPPoint) -> Point {
@@ -62,12 +67,13 @@ impl Grid {
     }
 
     fn get_bin(&mut self, index: Point) -> &mut GridBin {
-        &mut self.bins[index.y as usize * self.bins_count.width + index.x as usize]
+        let index = self.linear_bin_index(index);
+        &mut self.bins[index]
     }
 
     fn try_get_bin(&mut self, index: Point) -> Option<&mut GridBin> {
-        self.bins
-            .get_mut(index.y as usize * self.bins_count.width + index.x as usize)
+        let index = self.linear_bin_index(index);
+        self.bins.get_mut(index)
     }
 
     fn lookup_bin(&mut self, position: &FPPoint) -> &mut GridBin {
@@ -94,14 +100,11 @@ impl Grid {
         } else {
             self.remove_all(gear_id);
         }
-
     }
 
     pub fn check_collisions(&self, collisions: &mut DetectedCollisions) {
         for bin in &self.bins {
-            for (index, bounds) in bin.entries.iter().enumerate() {
-
-            }
+            for (index, bounds) in bin.entries.iter().enumerate() {}
         }
     }
 }

@@ -100,7 +100,7 @@ impl World {
         // based on old engine min_distance... dunno if this is the correct place tho
         let distance_divisor = (self.feature_size as u32).pow(2) / 8 + 10;
 
-        let params = LandGenerationParameters::new(0u8, u8::max_value(), distance_divisor, false, false);
+        let params = LandGenerationParameters::new(0u8, u8::MAX, distance_divisor, false, false);
         let landgen = TemplatedLandGenerator::new(template());
         self.preview = Some(landgen.generate_land(&params, &mut self.random_numbers_gen));
     }
@@ -110,11 +110,11 @@ impl World {
     }
 
     pub fn init(&mut self, template: OutlineTemplate) {
-        let physics = hwp::World::new(template.size);
-
-        let params = LandGenerationParameters::new(0u32, u32::max_value(), 5, false, false);
+        let params = LandGenerationParameters::new(0u32, u32::MAX, 5, false, false);
         let landgen = TemplatedLandGenerator::new(template);
         let land = landgen.generate_land(&params, &mut self.random_numbers_gen);
+
+        let physics = hwp::World::new(land.size());
 
         self.game_state = Some(GameState::new(land, physics));
     }

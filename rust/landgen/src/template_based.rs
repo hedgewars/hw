@@ -1,11 +1,9 @@
+use crate::{
+    outline::OutlinePoints, outline_template::OutlineTemplate, LandGenerationParameters,
+    LandGenerator,
+};
 use integral_geometry::{Point, Size};
 use land2d::Land2D;
-use crate::{
-    LandGenerationParameters,
-    LandGenerator,
-    outline::OutlinePoints,
-    outline_template::OutlineTemplate
-};
 
 pub struct TemplatedLandGenerator {
     outline_template: OutlineTemplate,
@@ -28,7 +26,7 @@ impl LandGenerator for TemplatedLandGenerator {
         let mut points = OutlinePoints::from_outline_template(
             &self.outline_template,
             land.play_box(),
-            land.size(),
+            land.size().size(),
             random_numbers,
         );
 

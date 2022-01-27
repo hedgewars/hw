@@ -3,7 +3,7 @@ use std::ops::RangeInclusive;
 use crate::{common::GearId, data::GearDataManager, grid::Grid};
 
 use fpnum::*;
-use integral_geometry::{Point, Size};
+use integral_geometry::{Point, PotSize};
 use land2d::Land2D;
 
 pub fn fppoint_round(point: &FPPoint) -> Point {
@@ -105,7 +105,7 @@ impl CollisionProcessor {
         data.register::<ContactData>();
     }
 
-    pub fn new(size: Size) -> Self {
+    pub fn new(size: PotSize) -> Self {
         Self {
             grid: Grid::new(size),
             enabled_collisions: EnabledCollisionsCollection::new(),

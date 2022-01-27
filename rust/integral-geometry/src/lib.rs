@@ -141,11 +141,16 @@ impl Size {
     }
 
     #[inline]
-    pub fn next_power_of_two(&self) -> Self {
-        Self {
-            width: self.width.next_power_of_two(),
-            height: self.height.next_power_of_two(),
-        }
+    pub const fn as_power_of_two(&self) -> Option<PotSize> {
+        PotSize::new(self.width, self.height)
+    }
+
+    #[inline]
+    pub const fn next_power_of_two(&self) -> PotSize {
+        PotSize::new_impl(
+            self.width.next_power_of_two(),
+            self.height.next_power_of_two(),
+        )
     }
 
     #[inline]
@@ -154,17 +159,8 @@ impl Size {
     }
 
     #[inline]
-    pub fn to_mask(&self) -> SizeMask {
-        SizeMask::new(*self)
-    }
-
-    #[inline]
     pub fn to_square(&self) -> Self {
         Self::square(max(self.width, self.height))
-    }
-
-    pub fn to_grid_index(&self) -> GridIndex {
-        GridIndex::new(*self)
     }
 
     #[inline]
@@ -174,10 +170,95 @@ impl Size {
 
     #[inline]
     pub fn join(&self, other: Self) -> Self {
+        Self::new(max(self.width, other.width), max(self.height, other.height))
+    }
+}
+
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+pub struct PotSize {
+    size: Size,
+}
+
+impl PotSize {
+    #[inline]
+    const fn new_impl(width: usize, height: usize) -> Self {
+        debug_assert!(width.is_power_of_two() && height.is_power_of_two());
         Self {
-            width: max(self.width, other.width),
-            height: max(self.height, other.height)
+            size: Size::new(width, height),
         }
+    }
+
+    #[inline]
+    pub const fn new(width: usize, height: usize) -> Option<Self> {
+        if width.is_power_of_two() && height.is_power_of_two() {
+            Some(Self::new_impl(width, height))
+        } else {
+            None
+        }
+    }
+
+    pub const fn size(&self) -> Size {
+        self.size
+    }
+
+    pub const fn width(&self) -> usize {
+        self.size.width
+    }
+
+    pub const fn height(&self) -> usize {
+        self.size.height
+    }
+
+    #[inline]
+    pub const fn square(size: usize) -> Option<Self> {
+        if size.is_power_of_two() {
+            Some(Self::new_impl(size, size))
+        } else {
+            None
+        }
+    }
+
+    #[inline]
+    pub const fn area(&self) -> usize {
+        self.size.area()
+    }
+
+    #[inline]
+    pub const fn linear_index(&self, x: usize, y: usize) -> usize {
+        self.size.linear_index(x, y)
+    }
+
+    #[inline]
+    pub const fn transpose(&self) -> Self {
+        Self::new_impl(self.height(), self.width())
+    }
+
+    #[inline]
+    pub fn to_square(&self) -> Self {
+        let size = max(self.width(), self.height());
+        Self::new_impl(size, size)
+    }
+
+    #[inline]
+    pub const fn to_mask(&self) -> SizeMask {
+        SizeMask::new(*self)
+    }
+
+    pub const fn to_grid_index(&self) -> GridIndex {
+        GridIndex::new(*self)
+    }
+
+    #[inline]
+    pub const fn contains(&self, other: Self) -> bool {
+        self.size.contains(other.size)
+    }
+
+    #[inline]
+    pub fn join(&self, other: Self) -> Self {
+        Self::new_impl(
+            max(self.width(), other.width()),
+            max(self.height(), other.height()),
+        )
     }
 }
 
@@ -188,13 +269,10 @@ pub struct SizeMask {
 
 impl SizeMask {
     #[inline]
-    pub fn new(size: Size) -> Self {
-        debug_assert!(size.is_power_of_two());
-        let size = Size {
-            width: !(size.width - 1),
-            height: !(size.height - 1),
-        };
-        Self { size }
+    pub const fn new(size: PotSize) -> Self {
+        Self {
+            size: Size::new(!(size.width() - 1), !(size.height() - 1)),
+        }
     }
 
     #[inline]
@@ -211,6 +289,11 @@ impl SizeMask {
     pub fn contains(&self, point: Point) -> bool {
         self.contains_x(point.x as usize) && self.contains_y(point.y as usize)
     }
+
+    #[inline]
+    pub const fn to_size(&self) -> PotSize {
+        PotSize::new_impl(!self.size.width + 1, !self.size.height + 1)
+    }
 }
 
 pub struct GridIndex {
@@ -218,11 +301,10 @@ pub struct GridIndex {
 }
 
 impl GridIndex {
-    pub fn new(size: Size) -> Self {
-        debug_assert!(size.is_power_of_two());
+    pub const fn new(size: PotSize) -> Self {
         let shift = Point::new(
-            size.width.trailing_zeros() as i32,
-            size.height.trailing_zeros() as i32,
+            size.width().trailing_zeros() as i32,
+            size.height().trailing_zeros() as i32,
         );
         Self { shift }
     }
@@ -324,7 +406,7 @@ impl Rect {
     };
 
     #[inline]
-    pub fn new(top_left: Point, bottom_right: Point) -> Self {
+    pub const fn new(top_left: Point, bottom_right: Point) -> Self {
         debug_assert!(top_left.x <= bottom_right.x + 1);
         debug_assert!(top_left.y <= bottom_right.y + 1);
         Self {
@@ -333,7 +415,7 @@ impl Rect {
         }
     }
 
-    pub fn from_box(left: i32, right: i32, top: i32, bottom: i32) -> Self {
+    pub const fn from_box(left: i32, right: i32, top: i32, bottom: i32) -> Self {
         Self::new(Point::new(left, top), Point::new(right, bottom))
     }
 
@@ -450,7 +532,7 @@ impl Rect {
     }
 
     #[inline]
-    pub fn split_at(&self, point: Point) -> [Rect; 4] {
+    pub const fn split_at(&self, point: Point) -> [Rect; 4] {
         debug_assert!(self.contains_inside(point));
         [
             Self::from_box(self.left(), point.x, self.top(), point.y),
@@ -461,7 +543,7 @@ impl Rect {
     }
 
     #[inline]
-    pub fn with_margins(&self, left: i32, right: i32, top: i32, bottom: i32) -> Self {
+    pub const fn with_margins(&self, left: i32, right: i32, top: i32, bottom: i32) -> Self {
         Self::from_box(
             self.left() - left,
             self.right() + right,

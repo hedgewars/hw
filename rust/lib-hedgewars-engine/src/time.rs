@@ -1,8 +1,8 @@
+use hwphysics::common::{GearId, Millis};
 use std::{
     cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd},
     collections::BinaryHeap,
 };
-use hwphysics::common::{GearId, Millis};
 
 pub type EventId = u16;
 

@@ -14,8 +14,8 @@ struct Fit {
 impl Fit {
     fn new() -> Self {
         Self {
-            short_side: u32::max_value(),
-            long_side: u32::max_value(),
+            short_side: u32::MAX,
+            long_side: u32::MAX,
         }
     }
 
