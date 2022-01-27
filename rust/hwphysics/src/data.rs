@@ -242,7 +242,7 @@ impl GearDataManager {
             block_masks: vec![],
             element_sizes: Box::new([0; 64]),
             element_alignments: Box::new([0; 64]),
-            lookup: vec![LookupEntry::default(); u16::max_value() as usize].into_boxed_slice(),
+            lookup: vec![LookupEntry::default(); u16::MAX as usize].into_boxed_slice(),
         }
     }
 
@@ -486,7 +486,7 @@ impl GearDataManager {
 
     pub fn register<T: 'static>(&mut self) {
         debug_assert!(!std::mem::needs_drop::<T>());
-        debug_assert!(size_of::<T>() <= u16::max_value() as usize);
+        debug_assert!(size_of::<T>() <= u16::MAX as usize);
 
         let id = TypeId::of::<T>();
         if size_of::<T>() == 0 {
@@ -530,6 +530,19 @@ impl GearDataManager {
                     T::iter(&slices[..], block.elements_count as usize, |id, x| f(id, x));
                 }
             }
+        }
+    }
+
+    pub fn get<T: 'static>(&self, gear_id: GearId) -> Option<&T> {
+        let entry = self.lookup[gear_id.get() as usize - 1];
+        match (entry.index, self.get_type_index::<T>()) {
+            (Some(index), Some(type_index)) => {
+                let block = &self.blocks[entry.block_index as usize];
+                block.component_blocks[type_index].map(|ptr| unsafe {
+                    &*(ptr.as_ptr() as *const T).add(index.get() as usize - 1)
+                })
+            }
+            _ => None,
         }
     }
 
@@ -612,6 +625,25 @@ mod test {
 
     #[derive(Clone)]
     struct Tag;
+
+    #[test]
+    fn direct_access() {
+        let mut manager = GearDataManager::new();
+        manager.register::<Datum>();
+        for i in 1..=5 {
+            manager.add(GearId::new(i as u16).unwrap(), &Datum { value: i * i });
+        }
+
+        for i in 1..=5 {
+            assert_eq!(
+                manager
+                    .get::<Datum>(GearId::new(i as u16).unwrap())
+                    .unwrap()
+                    .value,
+                i * i
+            );
+        }
+    }
 
     #[test]
     fn single_component_iteration() {
