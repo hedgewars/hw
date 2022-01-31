@@ -23,8 +23,10 @@ use std::{
     str::{FromStr, Utf8Error},
 };
 
-use crate::messages::{HwProtocolMessage, HwProtocolMessage::*, HwServerMessage};
-use crate::types::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType};
+use crate::{
+    messages::{HwProtocolMessage, HwProtocolMessage::*, HwServerMessage},
+    types::{GameCfg, HedgehogInfo, ServerVar, TeamInfo, VoteType},
+};
 
 #[derive(Debug, PartialEq)]
 pub struct HwProtocolError {}
@@ -493,8 +495,8 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
                 )),
             ),
             |values| CheckedOk(values.unwrap_or_default()),
-        )
-))(input)
+        ),
+    ))(input)
 }
 
 pub fn malformed_message(input: &[u8]) -> HwResult<()> {

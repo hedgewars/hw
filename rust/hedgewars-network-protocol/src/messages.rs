@@ -260,7 +260,7 @@ macro_rules! const_braces {
 
 macro_rules! msg {
     [$($part: expr),*] => {
-        format!(concat!($(const_braces!($part)),*, "\n"), $($part),*);
+        format!(concat!($(const_braces!($part)),*, "\n"), $($part),*)
     };
 }
 

@@ -1,4 +1,4 @@
-use hedgewars_network_protocol::{
+use crate::{
     parser::HwProtocolError,
     parser::{message, server_message},
     types::GameCfg,
@@ -6,7 +6,7 @@ use hedgewars_network_protocol::{
 
 #[test]
 fn parse_test() {
-    use hedgewars_network_protocol::messages::HwProtocolMessage::*;
+    use crate::messages::HwProtocolMessage::*;
 
     assert_eq!(message(b"PING\n\n"), Ok((&b""[..], Ping)));
     assert_eq!(message(b"START_GAME\n\n"), Ok((&b""[..], StartGame)));
@@ -57,7 +57,7 @@ fn parse_test() {
 
 #[test]
 fn parse_server_messages_test() {
-    use hedgewars_network_protocol::messages::HwServerMessage::*;
+    use crate::messages::HwServerMessage::*;
 
     assert_eq!(server_message(b"PING\n\n"), Ok((&b""[..], Ping)));
 
