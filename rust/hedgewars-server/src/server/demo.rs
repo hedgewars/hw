@@ -170,18 +170,16 @@ impl Demo {
                                     u32::from_str(arg).unwrap_or_default(),
                                 )),
                                 "addteam" => {
-                                    if let parts = arg.splitn(3, ' ').collect::<Vec<_>>() {
-                                        let color = parts.get(1).unwrap_or(&"1");
-                                        let name = parts.get(2).unwrap_or(&"Unnamed");
-                                        teams.push(TeamInfo {
-                                            color: (u32::from_str(color).unwrap_or(2113696)
-                                                / 2113696
-                                                - 1)
-                                                as u8,
-                                            name: name.to_string(),
-                                            ..TeamInfo::default()
-                                        })
-                                    };
+                                    let parts = arg.splitn(3, ' ').collect::<Vec<_>>();
+                                    let color = parts.get(1).unwrap_or(&"1");
+                                    let name = parts.get(2).unwrap_or(&"Unnamed");
+                                    teams.push(TeamInfo {
+                                        color: (u32::from_str(color).unwrap_or(2113696) / 2113696
+                                            - 1)
+                                            as u8,
+                                        name: name.to_string(),
+                                        ..TeamInfo::default()
+                                    });
                                 }
                                 "fort" => teams
                                     .last_mut()
@@ -193,21 +191,19 @@ impl Demo {
                                     .for_each(|t| t.grave = arg.to_string()),
                                 "addhh" => {
                                     hog_index = (hog_index + 1) % 8;
-                                    if let parts = arg.splitn(3, ' ').collect::<Vec<_>>() {
-                                        let health = parts.get(1).unwrap_or(&"100");
-                                        teams.last_mut().iter_mut().for_each(|t| {
-                                            if let Some(difficulty) = parts.get(0) {
-                                                t.difficulty =
-                                                    u8::from_str(difficulty).unwrap_or(0);
-                                            }
-                                            if let Some(init_health) = parts.get(1) {
-                                                scheme_properties[2] = init_health.to_string();
-                                            }
-                                            t.hedgehogs_number = (hog_index + 1) as u8;
-                                            t.hedgehogs[hog_index].name =
-                                                parts.get(2).unwrap_or(&"Unnamed").to_string()
-                                        });
-                                    }
+                                    let parts = arg.splitn(3, ' ').collect::<Vec<_>>();
+                                    let health = parts.get(1).unwrap_or(&"100");
+                                    teams.last_mut().iter_mut().for_each(|t| {
+                                        if let Some(difficulty) = parts.get(0) {
+                                            t.difficulty = u8::from_str(difficulty).unwrap_or(0);
+                                        }
+                                        if let Some(init_health) = parts.get(1) {
+                                            scheme_properties[2] = init_health.to_string();
+                                        }
+                                        t.hedgehogs_number = (hog_index + 1) as u8;
+                                        t.hedgehogs[hog_index].name =
+                                            parts.get(2).unwrap_or(&"Unnamed").to_string();
+                                    });
                                 }
                                 "hat" => {
                                     teams

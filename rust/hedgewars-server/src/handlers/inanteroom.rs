@@ -1,5 +1,3 @@
-use mio;
-
 use super::strings::*;
 use crate::handlers::actions::ToPendingMessage;
 use crate::{

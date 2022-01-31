@@ -1,14 +1,12 @@
+#![forbid(unsafe_code)]
 #![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(unused_variables)]
 #![deny(bare_trait_objects)]
 
 use getopts::Options;
 use log::*;
-use mio::{net::*, *};
-use std::{
-    env,
-    str::FromStr as _,
-    time::{Duration, Instant},
-};
+use std::{env, net::SocketAddr, str::FromStr as _};
 
 mod core;
 mod handlers;
@@ -20,7 +18,8 @@ use crate::server::network::{NetworkLayer, NetworkLayerBuilder};
 
 const PROGRAM_NAME: &'_ str = "Hedgewars Game Server";
 
-fn main() {
+#[tokio::main]
+async fn main() -> tokio::io::Result<()> {
     env_logger::init();
 
     info!("Hedgewars game server, protocol {}", utils::SERVER_VERSION);
@@ -34,91 +33,24 @@ fn main() {
         Ok(m) => m,
         Err(e) => {
             println!("{}\n{}", e, opts.short_usage(""));
-            return;
+            return Ok(());
         }
     };
     if matches.opt_present("h") {
         println!("{}", opts.usage(PROGRAM_NAME));
-        return;
+        return Ok(());
     }
 
     let port = matches
         .opt_str("p")
         .and_then(|s| u16::from_str(&s).ok())
         .unwrap_or(46631);
-    let address = format!("0.0.0.0:{}", port).parse().unwrap();
+    let address: SocketAddr = format!("0.0.0.0:{}", port).parse().unwrap();
 
-    let listener = TcpListener::bind(address).unwrap();
+    let server = tokio::net::TcpListener::bind(address).await.unwrap();
 
-    let mut poll = Poll::new().unwrap();
-    let mut hw_builder = NetworkLayerBuilder::default().with_listener(listener);
+    let mut hw_network = NetworkLayerBuilder::default().with_listener(server).build();
 
-    #[cfg(feature = "tls-connections")]
-    {
-        let address = format!("0.0.0.0:{}", port + 1).parse().unwrap();
-        hw_builder = hw_builder.with_secure_listener(TcpListener::bind(address).unwrap());
-    }
-
-    let mut hw_network = hw_builder.build(&poll);
-    hw_network.register(&poll).unwrap();
-
-    let mut events = Events::with_capacity(1024);
-
-    let mut time = Instant::now();
-
-    loop {
-        let timeout = if hw_network.has_pending_operations() {
-            Some(Duration::from_millis(1))
-        } else {
-            None
-        };
-
-        poll.poll(&mut events, timeout).unwrap();
-
-        for event in events.iter() {
-            if event.is_readable() {
-                match event.token() {
-                    token @ (utils::SERVER_TOKEN | utils::SECURE_SERVER_TOKEN) => {
-                        match hw_network.accept_client(&poll, token) {
-                            Ok(()) => (),
-                            Err(e) => debug!("Error accepting client: {}", e),
-                        }
-                    }
-                    #[cfg(feature = "official-server")]
-                    utils::IO_TOKEN => match hw_network.handle_io_result(&poll) {
-                        Ok(()) => (),
-                        Err(e) => debug!("Error in IO task: {}", e),
-                    },
-                    Token(token) => match hw_network.client_readable(&poll, token) {
-                        Ok(()) => (),
-                        Err(e) => debug!("Error reading from client socket {}: {}", token, e),
-                    },
-                }
-            }
-            if event.is_writable() {
-                match event.token() {
-                    utils::SERVER_TOKEN | utils::SECURE_SERVER_TOKEN | utils::IO_TOKEN => {
-                        unreachable!()
-                    }
-                    Token(token) => match hw_network.client_writable(&poll, token) {
-                        Ok(()) => (),
-                        Err(e) => debug!("Error writing to client socket {}: {}", token, e),
-                    },
-                }
-            }
-        }
-
-        match hw_network.on_idle(&poll) {
-            Ok(()) => (),
-            Err(e) => debug!("Error in idle handler: {}", e),
-        };
-
-        if time.elapsed() > Duration::from_secs(1) {
-            time = Instant::now();
-            match hw_network.handle_timeout(&mut poll) {
-                Ok(()) => (),
-                Err(e) => debug!("Error in timer event: {}", e),
-            }
-        }
-    }
+    hw_network.run().await;
+    Ok(())
 }

@@ -1,5 +1,4 @@
 use log::*;
-use mio;
 
 use crate::core::{server::HwServer, types::ClientId};
 use hedgewars_network_protocol::messages::HwProtocolMessage;

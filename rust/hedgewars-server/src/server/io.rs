@@ -10,7 +10,6 @@ use crate::{
     server::database::Database,
 };
 use log::*;
-use mio::{Poll, Waker};
 
 pub type RequestId = u32;
 
