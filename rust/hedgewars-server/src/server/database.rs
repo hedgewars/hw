@@ -1,6 +1,5 @@
-use mysql;
-use mysql::{error::DriverError, error::Error, from_row_opt, params};
-use openssl::sha::sha1;
+use mysql_async::{self, from_row_opt, params, prelude::*, Pool};
+use sha1::{Digest, Sha1};
 
 use crate::handlers::{AccountInfo, Sha1Digest};
 
@@ -27,120 +26,106 @@ pub struct ServerStatistics {
 pub struct Achievements {}
 
 pub struct Database {
-    pool: Option<mysql::Pool>,
+    pool: Pool,
 }
 
 impl Database {
-    pub fn new() -> Self {
-        Self { pool: None }
-    }
-
-    pub fn connect(&mut self, url: &str) -> Result<(), Error> {
-        self.pool = Some(mysql::Pool::new(url)?);
-
-        Ok(())
-    }
-
-    pub fn is_registered(&mut self, nick: &str) -> Result<bool, Error> {
-        if let Some(pool) = &self.pool {
-            let is_registered = pool
-                .first_exec(CHECK_ACCOUNT_EXISTS_QUERY, params! { "username" => nick })?
-                .is_some();
-            Ok(is_registered)
-        } else {
-            Err(DriverError::SetupError.into())
+    pub fn new(url: &str) -> Self {
+        Self {
+            pool: Pool::new(url),
         }
     }
 
-    pub fn get_account(
+    pub async fn get_is_registered(&mut self, nick: &str) -> mysql_async::Result<bool> {
+        let mut connection = self.pool.get_conn().await?;
+        let result = CHECK_ACCOUNT_EXISTS_QUERY
+            .with(params! { "username" => nick })
+            .first(&mut connection)
+            .await?;
+        Ok(!result.is_empty())
+    }
+
+    pub async fn get_account(
         &mut self,
         nick: &str,
         protocol: u16,
         password_hash: &str,
         client_salt: &str,
         server_salt: &str,
-    ) -> Result<Option<AccountInfo>, Error> {
-        if let Some(pool) = &self.pool {
-            if let Some(row) = pool.first_exec(GET_ACCOUNT_QUERY, params! { "username" => nick })? {
-                let (mut password, is_admin, is_contributor) =
-                    from_row_opt::<(String, i32, i32)>(row)?;
-                let client_hash = get_hash(protocol, &password, &client_salt, &server_salt);
-                let server_hash = get_hash(protocol, &password, &server_salt, &client_salt);
-                password.replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
+    ) -> mysql_async::Result<Option<AccountInfo>> {
+        let mut connection = self.pool.get_conn().await?;
+        if let Some((mut password, is_admin, is_contributor)) = GET_ACCOUNT_QUERY
+            .with(params! { "username" => nick })
+            .first::<(String, i32, i32), _>(&mut connection)
+            .await?
+        {
+            let client_hash = get_hash(protocol, &password, &client_salt, &server_salt);
+            let server_hash = get_hash(protocol, &password, &server_salt, &client_salt);
+            password.replace_range(.., "🦔🦔🦔🦔🦔🦔🦔🦔");
 
-                if client_hash == password_hash {
-                    Ok(Some(AccountInfo {
-                        is_registered: true,
-                        is_admin: is_admin == 1,
-                        is_contributor: is_contributor == 1,
-                        server_hash,
-                    }))
-                } else {
-                    Ok(None)
-                }
+            if client_hash == password_hash {
+                Ok(Some(AccountInfo {
+                    is_registered: true,
+                    is_admin: is_admin == 1,
+                    is_contributor: is_contributor == 1,
+                    server_hash,
+                }))
             } else {
                 Ok(None)
             }
         } else {
-            Err(DriverError::SetupError.into())
+            Ok(None)
         }
     }
 
-    pub fn get_checker_account(
+    pub async fn get_checker_account(
         &mut self,
         nick: &str,
         checker_password: &str,
-    ) -> Result<bool, Error> {
-        if let Some(pool) = &self.pool {
-            if let Some(row) = pool.first_exec(GET_ACCOUNT_QUERY, params! { "username" => nick })? {
-                let (mut password, _, _) = from_row_opt::<(String, i32, i32)>(row)?;
-                Ok(checker_password == password)
-            } else {
-                Ok(false)
-            }
+    ) -> mysql_async::Result<bool> {
+        let mut connection = self.pool.get_conn().await?;
+        if let Some((password, _, _)) = GET_ACCOUNT_QUERY
+            .with(params! { "username" => nick })
+            .first::<(String, i32, i32), _>(&mut connection)
+            .await?
+        {
+            Ok(checker_password == password)
         } else {
-            Err(DriverError::SetupError.into())
+            Ok(false)
         }
     }
 
-    pub fn store_stats(&mut self, stats: &ServerStatistics) -> Result<(), Error> {
-        if let Some(pool) = &self.pool {
-            for mut stmt in pool.prepare(STORE_STATS_QUERY) {
-                stmt.execute(params! {
-                    "players" => stats.players,
-                    "rooms" => stats.rooms,
-                })?;
-            }
-            Ok(())
-        } else {
-            Err(DriverError::SetupError.into())
-        }
+    pub async fn store_stats(&mut self, stats: &ServerStatistics) -> mysql_async::Result<()> {
+        let mut connection = self.pool.get_conn().await?;
+        STORE_STATS_QUERY
+            .with(params! {
+                "players" => stats.players,
+                "rooms" => stats.rooms,
+            })
+            .ignore(&mut connection)
+            .await
     }
 
-    pub fn store_achievements(&mut self, achievements: &Achievements) -> Result<(), ()> {
+    pub async fn store_achievements(&mut self, achievements: &Achievements) -> mysql_async::Result<()> {
         Ok(())
     }
 
-    pub fn get_replay_name(&mut self, replay_id: u32) -> Result<Option<String>, Error> {
-        if let Some(pool) = &self.pool {
-            if let Some(row) =
-                pool.first_exec(GET_REPLAY_NAME_QUERY, params! { "id" => replay_id })?
-            {
-                let filename = from_row_opt::<String>(row)?;
-                Ok(Some(filename))
-            } else {
-                Ok(None)
-            }
-        } else {
-            Err(DriverError::SetupError.into())
-        }
+    pub async fn get_replay_name(&mut self, replay_id: u32) -> mysql_async::Result<Option<String>> {
+        let mut connection = self.pool.get_conn().await?;
+        GET_REPLAY_NAME_QUERY
+            .with(params! { "id" => replay_id })
+            .first::<String, _>(&mut connection)
+            .await
     }
 }
 
 fn get_hash(protocol_number: u16, web_password: &str, salt1: &str, salt2: &str) -> Sha1Digest {
-    let s = format!(
+    let data = format!(
         "{}{}{}{}{}",
         salt1, salt2, web_password, protocol_number, "!hedgewars"
     );
-    Sha1Digest::new(sha1(s.as_bytes()))
+
+    let mut sha1 = Sha1::new();
+    sha1.update(&data);
+    Sha1Digest::new(sha1.finalize().try_into().unwrap())
 }
