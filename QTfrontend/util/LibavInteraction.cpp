@@ -73,7 +73,11 @@ QList<Codec> codecs;
 QMap<QString,Format> formats;
 
 // test if given format supports given codec
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+bool FormatQueryCodec(const AVOutputFormat *ofmt, enum AVCodecID codec_id)
+#else
 bool FormatQueryCodec(AVOutputFormat *ofmt, enum AVCodecID codec_id)
+#endif
 {
 #if LIBAVFORMAT_VERSION_MAJOR >= 54
     return avformat_query_codec(ofmt, codec_id, FF_COMPLIANCE_NORMAL) == 1;
@@ -86,12 +90,20 @@ bool FormatQueryCodec(AVOutputFormat *ofmt, enum AVCodecID codec_id)
 
 LibavInteraction::LibavInteraction() : QObject()
 {
+#if LIBAVCODEC_VERSION_MAJOR < 59
     // initialize libav and register all codecs and formats
     av_register_all();
+#endif
 
     // get list of all codecs
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    const AVCodec* pCodec = NULL;
+    void* i = 0;
+    while ((pCodec = av_codec_iterate(&i)))
+#else
     AVCodec* pCodec = NULL;
     while ((pCodec = av_codec_next(pCodec)))
+#endif
     {
         if (!av_codec_is_encoder(pCodec))
             continue;
@@ -179,8 +191,14 @@ LibavInteraction::LibavInteraction() : QObject()
     }
 
     // get list of all formats
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    const AVOutputFormat* pFormat = NULL;
+    i = 0;
+    while ((pFormat = av_muxer_iterate(&i)))
+#else
     AVOutputFormat* pFormat = NULL;
     while ((pFormat = av_oformat_next(pFormat)))
+#endif
     {
         if (!pFormat->extensions)
             continue;
@@ -296,12 +314,22 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
         AVStream* pStream = pContext->streams[i];
         if (!pStream)
             continue;
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+        const AVCodec *st_codec = avcodec_find_decoder(pContext->streams[i]->codecpar->codec_id);
+        AVCodecContext* pCodec = avcodec_alloc_context3(st_codec);
+        avcodec_parameters_to_context(pCodec, pContext->streams[i]->codecpar);
+#else
         AVCodecContext* pCodec = pContext->streams[i]->codec;
+#endif
         if (!pCodec)
             continue;
 
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+        const AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
+#else
         AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
+#endif
         QString decoderName = pDecoder ? pDecoder->name : tr("unknown");
         if (pCodec->codec_type == AVMEDIA_TYPE_VIDEO)
         {

@@ -27,6 +27,10 @@
 #include "libavutil/avutil.h"
 #include "libavutil/mathematics.h"
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+#include <libavcodec/bsf.h>
+#endif
+
 #if (defined _MSC_VER)
 #define AVWRAP_DECL __declspec(dllexport)
 #elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
@@ -171,7 +175,13 @@ static void AddAudioStream()
     }
     g_pAStream->id = 1;
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    const AVCodec *audio_st_codec = avcodec_find_decoder(g_pAStream->codecpar->codec_id);
+    g_pAudio = avcodec_alloc_context3(audio_st_codec);
+    avcodec_parameters_to_context(g_pAudio, g_pAStream->codecpar);
+#else
     g_pAudio = g_pAStream->codec;
+#endif
 
     avcodec_get_context_defaults3(g_pAudio, g_pACodec);
     g_pAudio->codec_id = g_pACodec->id;
@@ -279,7 +289,13 @@ static int AddVideoStream()
     if (!g_pVStream)
         return FatalError("Could not allocate video stream");
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    const AVCodec *video_st_codec = avcodec_find_decoder(g_pVStream->codecpar->codec_id);
+    g_pVideo = avcodec_alloc_context3(video_st_codec);
+    avcodec_parameters_to_context(g_pVideo, g_pVStream->codecpar);
+#else
     g_pVideo = g_pVStream->codec;
+#endif
 
     avcodec_get_context_defaults3(g_pVideo, g_pVCodec);
     g_pVideo->codec_id = g_pVCodec->id;
@@ -499,8 +515,10 @@ AVWRAP_DECL int AVWrapper_Init(
     g_Framerate.den = FramerateDen;
     g_VQuality = VQuality;
 
+#if LIBAVCODEC_VERSION_MAJOR < 59
     // initialize libav and register all codecs and formats
     av_register_all();
+#endif
 
     // find format
     g_pFormat = av_guess_format(pFormatName, NULL, NULL);
@@ -522,8 +540,11 @@ AVWRAP_DECL int AVWrapper_Init(
     strncpy(ext, g_pFormat->extensions, 16);
     ext[15] = 0;
     ext[strcspn(ext,",")] = 0;
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    snprintf(g_pContainer->url, sizeof(g_pContainer->url), "%s.%s", pFilename, ext);
+#else
     snprintf(g_pContainer->filename, sizeof(g_pContainer->filename), "%s.%s", pFilename, ext);
-
+#endif
     // find codecs
     g_pVCodec = avcodec_find_encoder_by_name(pVCodecName);
     g_pACodec = avcodec_find_encoder_by_name(pACodecName);
@@ -560,13 +581,22 @@ AVWRAP_DECL int AVWrapper_Init(
         return FatalError("No video, no audio, aborting...");
 
     // write format info to log
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    av_dump_format(g_pContainer, 0, g_pContainer->url, 1);
+#else
     av_dump_format(g_pContainer, 0, g_pContainer->filename, 1);
+#endif
 
     // open the output file, if needed
     if (!(g_pFormat->flags & AVFMT_NOFILE))
     {
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+        if (avio_open(&g_pContainer->pb, g_pContainer->url, AVIO_FLAG_WRITE) < 0)
+            return FatalError("Could not open output file (%s)", g_pContainer->url);
+#else
         if (avio_open(&g_pContainer->pb, g_pContainer->filename, AVIO_FLAG_WRITE) < 0)
             return FatalError("Could not open output file (%s)", g_pContainer->filename);
+#endif
     }
 
     g_pVFrame->pts = -1;
