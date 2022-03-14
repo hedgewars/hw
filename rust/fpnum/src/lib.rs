@@ -473,7 +473,7 @@ bin_assign_op_impl!(FPPoint, ops::MulAssign<FPNum>, mul_assign, *);
 bin_assign_op_impl!(FPPoint, ops::DivAssign<FPNum>, div_assign, /);
 
 pub fn integral_sqrt(value: u64) -> u64 {
-    let mut digits = (64u32 - 1).saturating_sub(value.leading_zeros()) & 0xFFFF_FFFE;
+    let mut digits = (64u32 - 1).saturating_sub(value.leading_zeros()) & 0xFE;
     let mut result = if value == 0 { 0u64 } else { 1u64 };
 
     while digits != 0 {
@@ -488,20 +488,17 @@ pub fn integral_sqrt(value: u64) -> u64 {
 }
 
 pub fn integral_sqrt_ext(mut value: u128) -> u128 {
-    let mut digit_sqr =
-        0x40000000_00000000_00000000_00000000u128.wrapping_shr(value.leading_zeros() & 0xFFFF_FFFE);
-    let mut result = 0u128;
+    let mut digits = (128u32 - 1).saturating_sub(value.leading_zeros()) & 0xFE;
+    let mut result = if value == 0 { 0u128 } else { 1u128 };
 
-    while digit_sqr != 0 {
-        let approx = result + digit_sqr;
-        result >>= 1;
-
-        if approx <= value {
-            value -= approx;
-            result += digit_sqr;
+    while digits != 0 {
+        result <<= 1;
+        if (result + 1).pow(2) <= value >> (digits - 2) {
+            result += 1;
         }
-        digit_sqr >>= 2;
+        digits -= 2;
     }
+
     result
 }
 
