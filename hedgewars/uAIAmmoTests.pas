@@ -1668,7 +1668,7 @@ while attackTime >= 0 do
         if dmg[i] <> BadTurn then
             inc(value, dmg[i]);
     t:= value;
-    targetX:= Targ.Point.X - 60;
+    targetX:= Targ.Point.X - 60 - cShift;
 
     for i:= 0 to 3 do
         if dmg[i] <> BadTurn then
