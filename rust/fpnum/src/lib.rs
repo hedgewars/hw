@@ -344,7 +344,7 @@ impl FPPoint {
 
             FPNum {
                 sign_mask: POSITIVE_MASK,
-                value: integral_sqrt_ext(sqr) as u64,
+                value: integral_sqrt_ext(sqr),
             }
         }
     }
@@ -487,13 +487,13 @@ pub fn integral_sqrt(value: u64) -> u64 {
     result
 }
 
-pub fn integral_sqrt_ext(mut value: u128) -> u128 {
+pub fn integral_sqrt_ext(value: u128) -> u64 {
     let mut digits = (128u32 - 1).saturating_sub(value.leading_zeros()) & 0xFE;
-    let mut result = if value == 0 { 0u128 } else { 1u128 };
+    let mut result = if value == 0 { 0u64 } else { 1u64 };
 
     while digits != 0 {
         result <<= 1;
-        if (result + 1).pow(2) <= value >> (digits - 2) {
+        if ((result + 1) as u128).pow(2) <= value >> (digits - 2) {
             result += 1;
         }
         digits -= 2;
@@ -511,7 +511,7 @@ where
 
     FPNum {
         sign_mask: POSITIVE_MASK,
-        value: integral_sqrt_ext(sqr) as u64,
+        value: integral_sqrt_ext(sqr),
     }
 }
 
@@ -520,7 +520,6 @@ where
  AngleCos
 */
 
-#[cfg(test)]
 #[test]
 fn basics() {
     let n = fp!(15 / 2);
@@ -538,6 +537,8 @@ fn basics() {
     assert_eq!((-n).round(), -7);
 
     assert_eq!(f64::from(fp!(5/2)), 2.5f64);
+
+    assert_eq!(integral_sqrt_ext(0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF), 0xFFFF_FFFF_FFFF_FFFF);
 }
 
 #[test]
