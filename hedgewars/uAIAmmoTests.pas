@@ -667,8 +667,8 @@ repeat
             value:= BadTurn
         // Sanity check 3: If impact location is close, above us and wind blows
         // towards us, there's a risk of fire flying towards us, so fail in this case.
-        else if (Level < 3) and (range <= 600) and (trunc(meY) >= EX) and
-            (((ap.Angle < 0) and (aiWindSpeed > 0)) or ((ap.Angle > 0) and (aiWindSpeed < 0))) then
+        else if (Level < 3) and (range <= 1000) and (trunc(meY) >= EY) and
+            ((ap.Angle < 0) <> (aiWindSpeed < 0)) then
             value:= BadTurn
         // Timeout
         else if t < -timeLimit then
@@ -1675,7 +1675,7 @@ while attackTime >= 0 do
             begin
             dec(t, dmg[i]);
             inc(t, dmg[i + 6]);
-            if t > value then
+            if t >= value then
                 begin
                 value:= t;
                 targetX:= Targ.Point.X - 30 - cShift + i * 30
