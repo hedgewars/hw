@@ -2201,7 +2201,7 @@ begin
         for t:= 0 to Pred(TeamsCount) do
             with TeamsArray[t]^ do
                 for i:= 0 to cMaxHHIndex do
-                    if (Hedgehogs[i].Gear <> nil) and (Hedgehogs[i].Effects[heFrozen] = 0) then
+                    if (not Hedgehogs[i].Unplaced) and (Hedgehogs[i].Gear <> nil) and (Hedgehogs[i].Effects[heFrozen] = 0) and ((Hedgehogs[i].Gear^.State and gstInvisible) = 0) then
                         begin
                         tmpG:= Hedgehogs[i].Gear;
                         tX:=Gear^.X-tmpG^.X;

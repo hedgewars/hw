@@ -1093,7 +1093,7 @@ begin
                 with TeamsArray[j]^ do
                     for i:= 0 to cMaxHHIndex do
                         with Hedgehogs[i] do
-                            if (Gear <> nil) and (Gear <> exclude) then
+                            if (not Unplaced) and (Gear <> nil) and (Gear <> exclude) then
                                 begin
                                 // code duplication - could throw into an inline function I guess
                                 dX := X - Gear^.X;
