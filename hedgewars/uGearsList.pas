@@ -841,6 +841,7 @@ gtFlamethrower: begin
                 gear^.Health:= cSentryHealth;
                 gear^.Friction:= _0_93;
                 gear^.Elasticity:= _0_05;
+                gear^.Density:= _3;
                 gear^.Tag:= 0;
                 gear^.Timer:= 1000;
                 gear^.WDTimer:= 0;
