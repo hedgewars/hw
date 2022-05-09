@@ -600,10 +600,31 @@ QStringList HWGame::getArguments()
     arguments << "--internal"; //Must be passed as first argument
     arguments << "--port";
     arguments << QString("%1").arg(ipc_port);
+#ifdef _WIN32
+    {
+        QString path = datadir->absolutePath();
+        if (path == QLatin1String(path.toLatin1())) {
+            arguments << "--prefix";
+            arguments << path;
+        } else {
+            arguments << "--prefix64";
+            arguments << path.toUtf8().toBase64();
+        }    
+        path = cfgdir->absolutePath();
+        if (path == QLatin1String(path.toLatin1())) {
+            arguments << "--user-prefix";
+            arguments << path;
+        } else {
+            arguments << "--user-prefix64";
+            arguments << path.toUtf8().toBase64();
+        }
+    }         
+#else 
     arguments << "--prefix";
     arguments << datadir->absolutePath();
     arguments << "--user-prefix";
-    arguments << cfgdir->absolutePath();
+    arguments << cfgdir->absolutePath();    
+#endif
     arguments << "--locale";
     // TODO: Don't bother translators with this nonsense and detect this file automatically.
     //: IMPORTANT: This text has a special meaning, do not translate it directly. This is the file name of translation files for the game engine, found in Data/Locale/. Usually, you replace “en” with the ISO-639-1 language code of your language.

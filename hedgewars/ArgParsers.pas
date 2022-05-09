@@ -244,13 +244,13 @@ begin
 end;
 
 function parseParameter(cmd:string; arg:string; var paramIndex:LongInt): Boolean;
-const reallyAll: array[0..35] of shortstring = (
+const reallyAll: array[0..37] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--maximized', '--frame-interval', '--volume','--nomusic', '--nosound', '--nodampen',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
                 '--zoom',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
-  {misc}        '--stats-only', '--gci', '--help','--protocol', '--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test','--no-holiday-silliness','--chat-size');
+  {misc}        '--stats-only', '--gci', '--help','--protocol', '--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test','--no-holiday-silliness','--chat-size', '--prefix64', '--user-prefix64');
 var cmdIndex: byte;
 begin
     parseParameter:= false;
@@ -299,6 +299,8 @@ begin
         {--lua-test}            33 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
         {--no-holiday-silliness} 34 : cHolidaySilliness:= false;
         {--chat-size}           35 : cDefaultChatScale := 1.0 * getLongIntParameter(arg, paramIndex, parseParameter) / 100;
+        {--prefix64}            36: PathPrefix := DecodeBase64(getstringParameter(arg, paramIndex, parseParameter));
+        {--user-prefix64}       37: UserPathPrefix := DecodeBase64(getstringParameter(arg, paramIndex, parseParameter));
     else
         begin
         //Assume the first "non parameter" is the demo file, anything else is invalid
