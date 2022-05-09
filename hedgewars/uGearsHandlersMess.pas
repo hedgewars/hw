@@ -7362,7 +7362,7 @@ begin
         0);
 
     bullet^.Karma := 12;
-    bullet^.Pos := 1;
+    bullet^.Pos := 1; // To tell apart from minigun bullets
     bullet^.WDTimer := GameTicks;
     bullet^.PortalCounter := 1;
     bullet^.Elasticity := Sentry^.X;

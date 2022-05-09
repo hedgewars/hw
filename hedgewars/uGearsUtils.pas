@@ -1407,7 +1407,7 @@ while i > 0 do
             or (not UpdateHitOrder(
                     Gear, 
                     Ammo^.WDTimer, 
-                    (Ammo^.Kind = gtMinigunBullet) and (Gear^.Pos <> 0)))) then
+                    (Ammo^.Kind = gtMinigunBullet) and (Ammo^.Pos <> 0)))) then
         continue;
 
     if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and
