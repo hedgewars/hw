@@ -860,6 +860,7 @@ unplaced:= 0;
 while (i < cLandMines) and (unplaced < 4) do
     begin
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
+    Gear^.Hedgehog := nil;
     FindPlace(Gear, false, 0, LAND_WIDTH);
 
     if Gear = nil then
@@ -875,6 +876,7 @@ unplaced:= 0;
 while (i < cExplosives) and (unplaced < 4) do
     begin
     Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
+    Gear^.Hedgehog := nil;
     FindPlace(Gear, false, 0, LAND_WIDTH);
 
     if Gear = nil then
@@ -940,7 +942,8 @@ if cAirMines > 0 then
                 inc(i);
                 AddFileLog('Placed Air Mine @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
                 if i < cAirMines then
-                    Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0)
+                    Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0);
+                    Gear^.Hedgehog := nil
                 end
             end
         else
