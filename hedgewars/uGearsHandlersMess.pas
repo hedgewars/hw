@@ -7245,6 +7245,7 @@ begin
         Sentry^.dY := -_0_25;
         jumpTime := _2 * Sentry^.dY / cGravity;
         Sentry^.dX := SignAs(int2hwFloat(offsetX - Sentry^.Radius) / jumpTime, Sentry^.dX);
+        Sentry^.State := Sentry^.State or gstHHJumping;
         MakeSentryJump := true;
     end;
 end;
@@ -7397,6 +7398,7 @@ end;
 
 procedure doStepSentryLand(Gear: PGear);
 var HHGear: PGear;
+    land: Word;
 const sentry_Idle = 0;
     sentry_Walking = 1;
     sentry_Aiming = 2;
@@ -7411,7 +7413,9 @@ begin
     if CheckSentryDestroyed(Gear, sentry_Reloading) then
         exit;
 
-    if Gear^.dY.isNegative or (TestCollisionYwithGear(Gear, 1) = 0) then
+    land := TestCollisionYwithGear(Gear, 1);
+    if Gear^.dY.isNegative or (land = 0) or
+        ((Gear^.dY.QWordValue > _0_01.QWordValue) and ((Gear^.State and gstHHJumping) = 0)) then
     begin
         DeleteCI(Gear);
         doStepFallingGear(Gear);
@@ -7420,7 +7424,12 @@ begin
         exit;
     end
     else
+    begin
         AddCI(Gear);
+        Gear^.State := Gear^.State and (not gstHHJumping);
+        Gear^.dX := SignAs(_0, Gear^.dX);
+        Gear^.dY := SignAs(_0, Gear^.dY);
+    end;
 
     if Gear^.Timer > 0 then dec(Gear^.Timer);
 

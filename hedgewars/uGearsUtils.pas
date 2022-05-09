@@ -183,6 +183,8 @@ while Gear <> nil do
                                     if (not GameOver) then
                                         Gear^.State:= (Gear^.State and (not gstWinner));
                                     end;
+                                if Gear^.Kind = gtSentry then
+                                    Gear^.State:= Gear^.State and (not gstHHJumping);
                                 Gear^.Active:= true;
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear;
                                 if Gear^.Kind = gtAirMine then
