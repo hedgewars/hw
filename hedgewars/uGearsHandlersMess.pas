@@ -1918,7 +1918,7 @@ begin
                 end;
 
         inc(BTSteps);
-        if BTSteps = 15 then
+        if BTSteps = 11 then
             begin
             BTSteps := 0;
             hit := true
