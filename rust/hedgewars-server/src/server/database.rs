@@ -106,7 +106,10 @@ impl Database {
             .await
     }
 
-    pub async fn store_achievements(&mut self, achievements: &Achievements) -> mysql_async::Result<()> {
+    pub async fn store_achievements(
+        &mut self,
+        achievements: &Achievements,
+    ) -> mysql_async::Result<()> {
         Ok(())
     }
 

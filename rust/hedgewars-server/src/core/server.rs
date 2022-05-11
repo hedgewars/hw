@@ -258,6 +258,11 @@ impl HwServer {
             .unwrap_or(false)
     }
 
+    #[inline]
+    pub fn is_checker(&self, client_id: ClientId) -> bool {
+        self.checkers.contains(client_id)
+    }
+
     pub fn add_client(&mut self, client_id: ClientId, data: HwAnteroomClient) {
         if data.is_checker {
             self.checkers.insert(client_id, HwChecker::new(client_id));
