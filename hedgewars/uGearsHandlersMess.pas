@@ -1322,6 +1322,11 @@ var oX, oY: hwFloat;
     VGear: PVisualGear;
     i, steps: LongWord;
 begin
+    if CurrentHedgehog^.Gear = nil then
+        begin
+        DeleteGear(Bullet);
+        exit
+        end;
     if Bullet^.PortalCounter = 0 then
         begin
         ox:= CurrentHedgehog^.Gear^.X + Int2hwFloat(GetLaunchX(CurrentHedgehog^.CurAmmoType, hwSign(CurrentHedgehog^.Gear^.dX), CurrentHedgehog^.Gear^.Angle));
@@ -3513,6 +3518,11 @@ var
     switchDir: Longword;
     oldUid: Longword;
 begin
+    if CurrentHedgehog^.Gear = nil then
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
     AllInactive := false;
 
     if ((Gear^.Message and (not (gmSwitch or gmPrecise))) <> 0) or (TurnTimeLeft = 0) then
@@ -4938,7 +4948,7 @@ begin
     gear^.State :=  gear^.State or gstAnimation and (not gstTmpFlag);
     Gear^.doStep := @doStepBirdyAppear;
 
-    if CurrentHedgehog = nil then
+    if CurrentHedgehog^.Gear = nil then
         begin
         DeleteGear(Gear);
         exit
@@ -4997,7 +5007,7 @@ end;
 procedure doPortalColorSwitch();
 var CurWeapon: PAmmo;
 begin
-    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.State and gstHHDriven) <> 0) and ((CurrentHedgehog^.Gear^.Message and gmSwitch) <> 0) then
+    if (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.State and gstHHDriven) <> 0) and ((CurrentHedgehog^.Gear^.Message and gmSwitch) <> 0) then
             with CurrentHedgehog^ do
                 if (CurAmmoType = amPortalGun) then
                     begin
@@ -5328,7 +5338,7 @@ begin
             if iterator^.dX.isNegative then iterator^.Angle:= 4096-iterator^.Angle;
             end;
 
-        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
+        if (CurrentHedgehog^.Gear <> nil)
         and (iterator = CurrentHedgehog^.Gear)
         and (CurAmmoGear <> nil)
         and (CurAmmoGear^.Kind = gtRope)
@@ -5448,6 +5458,11 @@ var
     s: hwFloat;
     CurWeapon: PAmmo;
 begin
+    if CurrentHedgehog^.Gear = nil then
+        begin
+        DeleteGear(newPortal);
+        exit
+        end;
     s:= Distance (newPortal^.dX, newPortal^.dY);
 
     // Adds the hog speed (only that part in/directly against shot direction)
@@ -5462,62 +5477,61 @@ begin
 
     PlaySound(sndPortalShot);
 
-    if CurrentHedgehog <> nil then
-        with CurrentHedgehog^ do
-            begin
-            CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
-            // let's save the HH's dX's direction so we can decide where the "top" of the portal hole
-            newPortal^.Elasticity.isNegative := CurrentHedgehog^.Gear^.dX.isNegative;
-            // when doing a backjump the dx is the opposite of the facing direction
-            if ((Gear^.State and gstHHHJump) <> 0) and (Effects[heArtillery] = 0) then
-                newPortal^.Elasticity.isNegative := not newPortal^.Elasticity.isNegative;
+	with CurrentHedgehog^ do
+		begin
+		CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
+		// let's save the HH's dX's direction so we can decide where the "top" of the portal hole
+		newPortal^.Elasticity.isNegative := CurrentHedgehog^.Gear^.dX.isNegative;
+		// when doing a backjump the dx is the opposite of the facing direction
+		if ((Gear^.State and gstHHHJump) <> 0) and (Effects[heArtillery] = 0) then
+			newPortal^.Elasticity.isNegative := not newPortal^.Elasticity.isNegative;
 
-            // make portal gun look unloaded
-            if (CurWeapon <> nil) and (CurAmmoType = amPortalGun) then
-                CurWeapon^.Timer := CurWeapon^.Timer or 2;
+		// make portal gun look unloaded
+		if (CurWeapon <> nil) and (CurAmmoType = amPortalGun) then
+			CurWeapon^.Timer := CurWeapon^.Timer or 2;
 
-            iterator := GearsList;
-            while iterator <> nil do
-                begin
-                if (iterator^.Kind = gtPortal) then
-                    if (iterator <> newPortal) and (iterator^.Timer > 0) and (iterator^.Hedgehog = CurrentHedgehog) then
-                        begin
-                        if ((iterator^.Tag and 2) = (newPortal^.Tag and 2)) then
-                            begin
-                            iterator^.Timer:= 0;
-                            end
-                        else
-                            begin
-                            // link portals with each other
-                            newPortal^.LinkedGear := iterator;
-                            iterator^.LinkedGear := newPortal;
-                            iterator^.Health := newPortal^.Health;
-                            end;
-                        end;
-                iterator^.PortalCounter:= 0;
-                iterator := iterator^.NextGear
-                end;
+		iterator := GearsList;
+		while iterator <> nil do
+			begin
+			if (iterator^.Kind = gtPortal) then
+				if (iterator <> newPortal) and (iterator^.Timer > 0) and (iterator^.Hedgehog = CurrentHedgehog) then
+					begin
+					if ((iterator^.Tag and 2) = (newPortal^.Tag and 2)) then
+						begin
+						iterator^.Timer:= 0;
+						end
+					else
+						begin
+						// link portals with each other
+						newPortal^.LinkedGear := iterator;
+						iterator^.LinkedGear := newPortal;
+						iterator^.Health := newPortal^.Health;
+						end;
+					end;
+			iterator^.PortalCounter:= 0;
+			iterator := iterator^.NextGear
+			end;
 
-            if newPortal^.LinkedGear <> nil then
-                begin
-                // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
-                iterator:= GearsList;
-                while iterator <> nil do
-                    begin
-                    if not (iterator^.Kind in [gtPortal, gtAirAttack, gtKnife, gtSMine]) and ((iterator^.Hedgehog <> CurrentHedgehog)
-                    or ((iterator^.Message and gmAllStoppable) = 0)) then
-                            begin
-                            iterator^.Active:= true;
-                            if iterator^.dY.QWordValue = 0 then
-                                iterator^.dY.isNegative:= false;
-                            iterator^.State:= iterator^.State or gstMoving;
-                            DeleteCI(iterator);
-                        //inc(iterator^.dY.QWordValue,10);
-                            end;
-                    iterator:= iterator^.NextGear
-                    end
-                end
-            end;
+		if newPortal^.LinkedGear <> nil then
+			begin
+			// This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
+			iterator:= GearsList;
+			while iterator <> nil do
+				begin
+				if not (iterator^.Kind in [gtPortal, gtAirAttack, gtKnife, gtSMine]) and ((iterator^.Hedgehog <> CurrentHedgehog)
+				or ((iterator^.Message and gmAllStoppable) = 0)) then
+						begin
+						iterator^.Active:= true;
+						if iterator^.dY.QWordValue = 0 then
+							iterator^.dY.isNegative:= false;
+						iterator^.State:= iterator^.State or gstMoving;
+						DeleteCI(iterator);
+					//inc(iterator^.dY.QWordValue,10);
+						end;
+				iterator:= iterator^.NextGear
+				end
+			end
+		end;
     newPortal^.State := newPortal^.State and (not gstCollision);
     newPortal^.State := newPortal^.State or gstMoving;
     newPortal^.doStep := @doStepMovingPortal;
