@@ -188,9 +188,9 @@ begin
     for iY:= srcY to lY do
         begin
         // src pixel index
-        spi:= iY * src^.w  + iX;
+        spi:= iY * src^.pitch div 4  + iX;
         // dest pixel index
-        dpi:= (iY + dY) * dest^.w + (iX + dX);
+        dpi:= (iY + dY) * dest^.pitch div 4 + (iX + dX);
 
         // get src alpha (and set it as target alpha for now)
         aT:= (srcPixels^[spi] and AMask) shr AShift;
