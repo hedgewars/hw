@@ -15,7 +15,8 @@
  * Unless otherwise stated, the rest of PhysicsFS falls under the zlib license.
  *  Please see LICENSE.txt in the root of the source tree.
  *
- * SDL falls under the LGPL license. You can get SDL at http://www.libsdl.org/
+ * SDL 1.2 falls under the LGPL license. SDL 1.3+ is zlib, like PhysicsFS.
+ *  You can get SDL at https://www.libsdl.org/
  *
  *  This file was written by Ryan C. Gordon. (icculus@icculus.org).
  */
@@ -24,10 +25,7 @@
 #define _INCLUDE_PHYSFSRWOPS_H_
 
 #include "physfs.h"
-
 #include "SDL.h"
-
-#include "physfscompat.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,7 +39,7 @@ extern "C" {
  *
  *   @param filename File to open in platform-independent notation.
  *  @return A valid SDL_RWops structure on success, NULL on error. Specifics
- *           of the error can be gleaned from PHYSFS_getLastErrorCode().
+ *           of the error can be gleaned from PHYSFS_getLastError().
  */
 PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openRead(const char *fname);
 
@@ -53,7 +51,7 @@ PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openRead(const char *fname);
  *
  *   @param filename File to open in platform-independent notation.
  *  @return A valid SDL_RWops structure on success, NULL on error. Specifics
- *           of the error can be gleaned from PHYSFS_getLastErrorCode().
+ *           of the error can be gleaned from PHYSFS_getLastError().
  */
 PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openWrite(const char *fname);
 
@@ -65,7 +63,7 @@ PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openWrite(const char *fname);
  *
  *   @param filename File to open in platform-independent notation.
  *  @return A valid SDL_RWops structure on success, NULL on error. Specifics
- *           of the error can be gleaned from PHYSFS_getLastErrorCode().
+ *           of the error can be gleaned from PHYSFS_getLastError().
  */
 PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openAppend(const char *fname);
 
@@ -77,7 +75,7 @@ PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_openAppend(const char *fname);
  *
  *   @param handle a valid PhysicsFS file handle.
  *  @return A valid SDL_RWops structure on success, NULL on error. Specifics
- *           of the error can be gleaned from PHYSFS_getLastErrorCode().
+ *           of the error can be gleaned from PHYSFS_getLastError().
  */
 PHYSFS_DECL SDL_RWops *PHYSFSRWOPS_makeRWops(PHYSFS_File *handle);
 
