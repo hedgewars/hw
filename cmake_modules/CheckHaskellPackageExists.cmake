@@ -11,7 +11,7 @@
 # See the License for more information.
 #=============================================================================
 
-macro(CHECK_HASKELL_PACKAGE_EXISTS PACKAGE MODULE FUNCTION PARAMCOUNT)
+macro(CHECK_HASKELL_PACKAGE_EXISTS PACKAGE MODULE FUNCTION PARAMCOUNT REQUIRED)
 # NOTE: MODULE, FUNCTION and PARAMCOUNT are curretly ignored.
 # TODO: Either implement these or drop?
 
@@ -41,7 +41,11 @@ macro(CHECK_HASKELL_PACKAGE_EXISTS PACKAGE MODULE FUNCTION PARAMCOUNT)
         "Determining if the Haskell package ${PACKAGE} "
         "exists failed with the following output:\n"
         "${BUILD_ERROR}\n\n")
-      message(FATAL_ERROR "Haskell package '${PACKAGE}' required")
+      if("${REQUIRED}" STREQUAL "REQUIRED")
+        message(FATAL_ERROR "Haskell package '${PACKAGE}' required")
+      else()
+        message(STATUS "Haskell package '${PACKAGE}' optionally required, but not found")
+      endif()
     endif()
   endif()
 endmacro()
