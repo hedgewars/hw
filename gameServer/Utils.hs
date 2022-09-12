@@ -41,11 +41,7 @@ import CoreTypes
 
 
 sockAddr2String :: SockAddr -> IO B.ByteString
-sockAddr2String (SockAddrInet _ hostAddr) = liftM B.pack $ inet_ntoa hostAddr
-sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
-    return $ B.pack $ (foldr1 (.)
-        $ List.intersperse (':':)
-        $ concatMap (\n -> (\(a0, a1) -> [showHex a0, showHex a1]) $ divMod n 65536) [a, b, c, d]) []
+sockAddr2String = liftM (B.pack . fromJust . fst) . getNameInfo [] True False
 
 maybeRead :: Read a => String -> Maybe a
 maybeRead s = case reads s of

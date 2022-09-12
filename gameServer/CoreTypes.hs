@@ -23,7 +23,7 @@ import Control.Concurrent
 import Data.Word
 import qualified Data.Map as Map
 import Data.Time
-import Network
+import Network.Socket
 import Data.Function
 import Data.ByteString.Char8 as B
 import Data.Unique

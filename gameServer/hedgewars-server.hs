@@ -50,10 +50,11 @@ server si = do
     proto <- getProtocolNumber "tcp"
     E.bracket
         (socket AF_INET Stream proto)
-        sClose
+        close
         (\sock -> do
             setSocketOption sock ReuseAddr 1
-            bindSocket sock (SockAddrInet (listenPort si) iNADDR_ANY)
+            iNADDR_ANY <- addrAddress . head <$> getAddrInfo Nothing (Just "0") (Just (show (listenPort si)))
+            bind sock iNADDR_ANY
             listen sock maxListenQueue
             startServer si{serverSocket = Just sock}
         )

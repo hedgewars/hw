@@ -709,7 +709,7 @@ processAction RestartServer = do
         args <- gets (runArgs . serverInfo)
         io $ do
             noticeM "Core" "Closing listening socket"
-            sClose sock
+            close sock
             noticeM "Core" "Spawning new server"
             _ <- createProcess (proc "./hedgewars-server" args)
             return ()
