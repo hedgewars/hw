@@ -711,8 +711,8 @@ initExpr2C' hi@(BuiltInFunction "high" [e@(InitReference e')]) = do
          a -> error $ "BuiltInFunction 'high' in initExpr: " ++ show a ++ ": " ++ show hi
 initExpr2C' (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C' e
-initExpr2C' (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C' e
-initExpr2C' (BuiltInFunction "pred" [e]) = liftM (<> text " - 1") $ initExpr2C' e
+initExpr2C' (BuiltInFunction "succ" [e]) = liftM (\e' ->  text "(" <> e' <> text " + 1)") $ initExpr2C' e
+initExpr2C' (BuiltInFunction "pred" [e]) = liftM (\e' ->  text "(" <> e' <> text " - 1)") $ initExpr2C' e
 initExpr2C' b@(BuiltInFunction _ _) = error $ show b
 initExpr2C' (InitTypeCast t' i) = do
     e <- initExpr2C i
