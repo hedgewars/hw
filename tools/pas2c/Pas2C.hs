@@ -711,8 +711,10 @@ initExpr2C' hi@(BuiltInFunction "high" [e@(InitReference e')]) = do
          a -> error $ "BuiltInFunction 'high' in initExpr: " ++ show a ++ ": " ++ show hi
 initExpr2C' (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C' e
 initExpr2C' (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C' e
-initExpr2C' (BuiltInFunction "succ" [e]) = liftM (\e' ->  text "(" <> e' <> text " + 1)") $ initExpr2C' e
-initExpr2C' (BuiltInFunction "pred" [e]) = liftM (\e' ->  text "(" <> e' <> text " - 1)") $ initExpr2C' e
+initExpr2C' (BuiltInFunction "succ" [e]) = 
+    liftM (parens . (<> text " + 1")) $ initExpr2C' e
+initExpr2C' (BuiltInFunction "pred" [e]) = 
+    liftM (parens . (<> text " - 1")) $ initExpr2C' e
 initExpr2C' b@(BuiltInFunction _ _) = error $ show b
 initExpr2C' (InitTypeCast t' i) = do
     e <- initExpr2C i
@@ -1089,10 +1091,10 @@ expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "high" _))) = do
          BTArray (RangeFromTo _ n) _ _ -> initExpr2C n
          _ -> error $ "BuiltInFunCall 'high' from " ++ show e ++ "\ntype: " ++ show lt
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "ord" _))) = liftM parens $ expr2C e
-expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "succ" _))) = liftM (<> text " + 1") $ expr2C e
-expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "pred" _))) = do
-    e'<- expr2C e
-    return $ text "(int)" <> parens e' <> text " - 1"
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "succ" _))) = 
+    liftM (parens . (<> text " + 1")) $ expr2C e
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "pred" _))) = 
+    liftM (parens . (<> text " - 1") . ((text "(int)") <>) . parens) $ expr2C e
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "length" _))) = do
     e' <- expr2C e
     lt <- gets lastType
