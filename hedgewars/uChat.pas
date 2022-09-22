@@ -633,6 +633,18 @@ if (s[1] = '/') then
         exit
         end;
 
+    if (copy(s, 2, 3) = 'ff ') then
+    begin
+       ParseCommand(s, true);
+       exit
+    end;
+
+    if (copy(s, 2, 3) = 'sff') then
+    begin
+       ParseCommand(s, true);
+       exit
+    end;
+
     // debugging commands
     if (copy(s, 2, 7) = 'debugvl') then
         // This command intentionally not documented in /help

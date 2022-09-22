@@ -885,6 +885,7 @@ end;
 procedure chFastUntilLag(var s: shortstring);
 begin
     fastUntilLag:= StrToInt(s) <> 0;
+    fastForward:= fastUntilLag;
 
     if not fastUntilLag then
     begin
@@ -892,6 +893,53 @@ begin
         AddVisualGear(0, 0, vgtTeamHealthSorter);
         AddVisualGear(0, 0, vgtSmoothWindBar)
     end
+end;
+
+procedure chFastForward(var cmd: shortstring);
+var str0, str1, str2 : shortstring;
+    h, m, s : integer;
+begin
+   if gameType <> gmtDemo then
+      exit;
+   if CountChar(cmd, ':') > 2 then
+      exit;
+   str0:= cmd;
+   SplitByChar(str0, str1, ':');
+   SplitByChar(str1, str2, ':');
+   if str2 <> '' then
+   begin
+      h:= StrToInt(str0);
+      m:= StrToInt(str1);
+      s:= StrToInt(str2)
+   end
+   else if str1 <> '' then
+   begin
+      h:= 0;
+      m:= StrToInt(str0);
+      s:= StrToInt(str1)
+   end
+   else
+   begin
+      h:= 0;
+      m:= 0;
+      s:= StrToInt(str0)
+   end;
+   FFGameTick:= (s + m * 60 + h * 60 * 60) * 1000;
+   if FFGameTick > GameTicks then
+   begin
+      fastUntilLag:= True;
+      fastForward:= True;
+   end
+end;
+
+procedure chStopFastForward(var s: shortstring);
+begin
+   if gameType <> gmtDemo then
+      exit;
+   fastUntilLag:= False;
+   fastForward:= False;
+   AddVisualGear(0, 0, vgtTeamHealthSorter);
+   AddVisualGear(0, 0, vgtSmoothWindBar)
 end;
 
 procedure chCampVar(var s:shortstring);
@@ -1026,6 +1074,8 @@ begin
     RegisterVariable('record'  , @chRecord       , true );
     RegisterVariable('worldedge',@chWorldEdge    , false);
     RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);
+    RegisterVariable('ff'      , @chFastForward  , true);
+    RegisterVariable('sff'     , @chStopFastForward, true);
     RegisterVariable('+mission', @chShowMission_p, true);
     RegisterVariable('-mission', @chShowMission_m, true);
     RegisterVariable('gearinfo', @chGearInfo     , true );

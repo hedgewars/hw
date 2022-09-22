@@ -628,6 +628,8 @@ TurnClockActive:= prevtime <> TurnTimeLeft;
 inc(GameTicks);
 if (OuchTauntTimer > 0) then
     dec(OuchTauntTimer);
+if fastForward and (GameTicks = FFGameTick) then
+   ParseCommand('sff', true);
 end;
 
 //Purpose, to reset all transient attributes toggled by a utility and clean up various gears and effects at end of turn

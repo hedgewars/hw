@@ -86,6 +86,7 @@ var
     SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
+    fastForward     : boolean;
     fastScrolling   : boolean;
     autoCameraOn    : boolean;
 
@@ -93,6 +94,7 @@ var
     CampaignVariable: shortstring;
     MissionVariable : shortstring;
     GameTicks       : LongWord;
+    FFGameTick      : LongWord;
     OuchTauntTimer  : LongWord; // Timer which blocks sndOuch from being played too often and fast
     GameState       : TGameState;
     GameType        : TGameType;
@@ -2930,6 +2932,7 @@ begin
     CursorMovementX     := 0;
     CursorMovementY     := 0;
     GameTicks           := 0;
+    FFGameTick          := 0;
     OuchTauntTimer      := 0;
     CheckSum            := 0;
     cWaterLine          := LAND_HEIGHT;
@@ -3008,6 +3011,7 @@ begin
     isForceMission  := false;
     SpeedStart      := 0;
     fastUntilLag    := false;
+    fastForward     := false;
     fastScrolling   := false;
     autoCameraOn    := true;
     cSeed           := '';

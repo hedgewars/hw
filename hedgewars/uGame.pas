@@ -81,7 +81,7 @@ if GameType <> gmtRecord then
     begin
     if Lag > 100 then
         Lag:= 100
-    else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
+    else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) or fastForward then
         Lag:= 2500;
 
     if (GameType = gmtDemo) then

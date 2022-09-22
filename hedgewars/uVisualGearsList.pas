@@ -64,6 +64,8 @@ var gear: PVisualGear;
     sp: real;
 begin
 AddVisualGear:= nil;
+if fastUntilLag and (not Critical) then
+   exit;
 if (GameType <> gmtRecord) and
    (((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) or fastScrolling) and // we are scrolling now
    (not Critical)) then

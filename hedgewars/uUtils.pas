@@ -26,6 +26,7 @@ uses uTypes, uFloat;
 // returns s with whitespaces (chars <= #32) removed form both ends
 function Trim(s: shortstring) : shortstring;
 
+function CountChar(s : shortstring; c: char) : LongInt;
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByCharA(var a, b: ansistring; c: char);
@@ -216,6 +217,18 @@ if lslash = len then
 
 len:= len - lslash;
 ExtractFilename:= copy(s, lslash + 1, len);
+end;
+
+function CountChar(s : shortstring; c: char): LongInt;
+var i, res : LongInt;
+begin
+    res:= 0;
+    for i:= 1 to Length(s) do
+    begin
+        if s[i] = c then
+           Inc(res)
+    end;
+    CountChar:= res
 end;
 
 procedure SplitBySpace(var a,b: shortstring);
