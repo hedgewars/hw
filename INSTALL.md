@@ -118,6 +118,7 @@ Important CMake options:
 - `CMAKE_INSTALL_PREFIX`: Installation directory
 - `NOSERVER`: Set to `ON` to *not* build the server
 - `NOVIDEOREC`: Set to `ON` to *not* build the video recorder
+- `GHC_DYNAMIC`: Set to `ON` to build dynamically-linked haskell object files and executables (needed for some distributions)
 
 ### Step 2: Make
 

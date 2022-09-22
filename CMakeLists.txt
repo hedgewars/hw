@@ -165,6 +165,10 @@ if(GHFLAGS)
 endif()
 
 
+if(GHC_DYNAMIC)
+  list(APPEND haskell_flags "-dynamic")
+endif()
+
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
