@@ -83,7 +83,7 @@ TDateTime fpcrtl_now()
 // Semi-dummy implementation of FormatDateTime
 string255 fpcrtl_formatDateTime(string255 FormatStr, TDateTime DateTime)
 {
-    string255 buffer = STRINIT(FormatStr.str);
+    string255 buffer = FormatStr;
     time_t rawtime;
     struct tm* my_tm;
 
