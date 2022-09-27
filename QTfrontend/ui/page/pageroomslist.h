@@ -93,10 +93,12 @@ class PageRoomsList : public AbstractPage
         QSettings * m_gameSettings;
         QSortFilterProxyModel * roomsModel;
         QSortFilterProxyModel * stateFilteredModel;
+        QSortFilterProxyModel * versionFilteredModel;
         QAction * showGamesInLobby;
         QAction * showGamesInProgress;
         QAction * showPassword;
         QAction * showJoinRestricted;
+        QAction * showIncompatible;
         QSplitter * m_splitter;
 
         GameSchemeModel * gameSchemeModel;

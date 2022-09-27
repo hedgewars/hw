@@ -21,6 +21,7 @@ module HandlerUtils where
 import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as B
 import Data.List
+import Data.Word
 
 import RoomsAndClients
 import CoreTypes
@@ -73,6 +74,11 @@ sameProtoChans = do
     (ci, rnc) <- ask
     let p = clientProto (rnc `client` ci)
     return . map sendChan . filter (\c -> clientProto c == p) . map (client rnc) $ allClients rnc
+
+allChansProto :: Reader (ClientIndex, IRnC) [(ClientChan, Word16)]
+allChansProto = do
+    (ci, rnc) <- ask
+    return . map ((\c -> (sendChan c, clientProto c)) . client rnc) $ allClients rnc
 
 answerClient :: [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 answerClient msg = liftM ((: []) . flip AnswerClients msg) thisClientChans

@@ -394,7 +394,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ROOMS")
     {
-        if(lst.size() % 9 != 1)
+        if(lst.size() % m_roomsListModel->columnCountSupported() != 1)
         {
             qWarning("Net: Malformed ROOMS message");
             return;
@@ -644,7 +644,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if(lst[0] == "ROOM" && lst.size() == 11 && lst[1] == "ADD")
+    if(lst[0] == "ROOM" && lst.size() == m_roomsListModel->columnCountSupported() + 2 && lst[1] == "ADD")
     {
         QStringList tmp = lst;
         tmp.removeFirst();
@@ -654,7 +654,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if(lst[0] == "ROOM" && lst.size() == 12 && lst[1] == "UPD")
+    if(lst[0] == "ROOM" && lst.size() == m_roomsListModel->columnCountSupported() + 3 && lst[1] == "UPD")
     {
         QStringList tmp = lst;
         tmp.removeFirst();

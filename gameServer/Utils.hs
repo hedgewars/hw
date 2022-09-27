@@ -158,11 +158,16 @@ caseInsensitiveCompare a b = upperCase a == upperCase b
 upperCase :: B.ByteString -> B.ByteString
 upperCase = UTF8.fromString . map Char.toUpper . UTF8.toString
 
+roomNameByProto :: B.ByteString -> Word16 -> Word16 -> B.ByteString
+roomNameByProto roomName roomProto clientProto
+    | clientProto < 60 && roomProto /= clientProto = B.concat [B.pack "[v", protoNumber2ver roomProto, B.pack "] ", roomName]
+    | otherwise = roomName
+
 roomInfo :: Word16 -> B.ByteString -> RoomInfo -> [B.ByteString]
 roomInfo p n r
     | p < 46 = [
         showB $ isJust $ gameInfo r,
-        name r,
+        roomNameByProto (name r) (roomProto r) p,
         showB $ playersIn r,
         showB $ length $ teams r,
         n,
@@ -172,7 +177,18 @@ roomInfo p n r
         ]
     | p < 48 = [
         showB $ isJust $ gameInfo r,
-        name r,
+        roomNameByProto (name r) (roomProto r) p,
+        showB $ playersIn r,
+        showB $ length $ teams r,
+        n,
+        Map.findWithDefault "+rnd+" "MAP" (mapParams r),
+        head (Map.findWithDefault ["Normal"] "SCRIPT" (params r)),
+        head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
+        head (Map.findWithDefault ["Default"] "AMMO" (params r))
+        ]
+    | p < 60 = [
+        B.pack roomFlags,
+        roomNameByProto (name r) (roomProto r) p,
         showB $ playersIn r,
         showB $ length $ teams r,
         n,
@@ -190,7 +206,8 @@ roomInfo p n r
         Map.findWithDefault "+rnd+" "MAP" (mapParams r),
         head (Map.findWithDefault ["Normal"] "SCRIPT" (params r)),
         head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
-        head (Map.findWithDefault ["Default"] "AMMO" (params r))
+        head (Map.findWithDefault ["Default"] "AMMO" (params r)),
+        showB $ roomProto r
         ]
     where
         roomFlags = concat [

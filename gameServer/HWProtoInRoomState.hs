@@ -313,7 +313,8 @@ handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do
     cl <- thisClient
     rs <- allRoomInfos
     rm <- thisRoom
-    chans <- sameProtoChans
+    chansProto <- allChansProto
+    let thisRoomNameByProto = roomNameByProto (name rm) (roomProto rm)
 
     return $
         if illegalName newName then
@@ -326,7 +327,7 @@ handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do
             [Warning $ loc "A room with the same name already exists."]
         else
             [ModifyRoom roomUpdate,
-            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (clientProto cl) (nick cl) (roomUpdate rm)),
+            AnswerClientsByProto chansProto (\p -> "ROOM" : "UPD" : thisRoomNameByProto p : roomInfo p (nick cl) (roomUpdate rm)),
             RegisterEvent RoomNameUpdate]
     where
         roomUpdate r = r{name = newName}

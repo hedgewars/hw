@@ -42,8 +42,10 @@ public:
         TeamCountColumn,
         OwnerColumn,
         MapColumn,
+        ScriptColumn,
         SchemeColumn,
-        WeaponsColumn
+        WeaponsColumn,
+        VersionColumn,
     };
 
     explicit RoomsListModel(QObject *parent = 0);
@@ -51,6 +53,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     int rowCount(const QModelIndex & parent) const;
     int columnCount(const QModelIndex & parent) const;
+    int columnCountSupported() const { return c_nColumns; };
     QVariant data(const QModelIndex &index, int role) const;
 
 public slots:
@@ -66,6 +69,7 @@ private:
     QStringList m_headerData;
     MapModel * m_staticMapModel;
     MapModel * m_missionMapModel;
+    static QString protoToVersion(const QString & proto);
 };
 
 #endif // HEDGEWARS_ROOMSLISTMODEL_H

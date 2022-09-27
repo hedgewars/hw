@@ -27,10 +27,11 @@
 
 #include "roomslistmodel.h"
 #include "MapModel.h"
+#include "hwconsts.h"
 
 RoomsListModel::RoomsListModel(QObject *parent) :
     QAbstractTableModel(parent),
-    c_nColumns(9)
+    c_nColumns(10)
 {
     m_headerData = QStringList();
     m_headerData << tr("In progress");
@@ -44,6 +45,7 @@ RoomsListModel::RoomsListModel(QObject *parent) :
     m_headerData << tr("Script");
     m_headerData << tr("Rules");
     m_headerData << tr("Weapons");
+    m_headerData << tr("Version");
 
     m_staticMapModel = DataManager::instance().staticMapModel();
     m_missionMapModel = DataManager::instance().missionMapModel();
@@ -77,6 +79,59 @@ int RoomsListModel::columnCount(const QModelIndex & parent) const
 }
 
 
+QString RoomsListModel::protoToVersion(const QString & proto)
+{
+    bool ok;
+    uint protoNum = proto.toUInt(&ok);
+    if (!ok)
+        return "Unknown";
+    switch (protoNum) {
+    case 17: return "0.9.7-dev";
+    case 19: return "0.9.7";
+    case 20: return "0.9.8-dev";
+    case 21: return "0.9.8";
+    case 22: return "0.9.9-dev";
+    case 23: return "0.9.9";
+    case 24: return "0.9.10-dev";
+    case 25: return "0.9.10";
+    case 26: return "0.9.11-dev";
+    case 27: return "0.9.11";
+    case 28: return "0.9.12-dev";
+    case 29: return "0.9.12";
+    case 30: return "0.9.13-dev";
+    case 31: return "0.9.13";
+    case 32: return "0.9.14-dev";
+    case 33: return "0.9.14";
+    case 34: return "0.9.15-dev";
+    case 35: return "0.9.14.1";
+    case 37: return "0.9.15";
+    case 38: return "0.9.16-dev";
+    case 39: return "0.9.16";
+    case 40: return "0.9.17-dev";
+    case 41: return "0.9.17";
+    case 42: return "0.9.18-dev";
+    case 43: return "0.9.18";
+    case 44: return "0.9.19-dev";
+    case 45: return "0.9.19";
+    case 46: return "0.9.20-dev";
+    case 47: return "0.9.20";
+    case 48: return "0.9.21-dev";
+    case 49: return "0.9.21";
+    case 50: return "0.9.22-dev";
+    case 51: return "0.9.22";
+    case 52: return "0.9.23-dev";
+    case 53: return "0.9.23";
+    case 54: return "0.9.24-dev";
+    case 55: return "0.9.24";
+    case 56: return "0.9.25-dev";
+    case 57: return "0.9.25";
+    case 58: return "1.0.0-dev";
+    case 59: return "1.0.0";
+    case 60: return "1.0.1-dev";
+    default: return "Unknown";
+    }
+}
+
 QVariant RoomsListModel::data(const QModelIndex &index, int role) const
 {
     int column = index.column();
@@ -101,9 +156,10 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
             || ((column != PlayerCountColumn) && (column != TeamCountColumn)))
                 // only decorate name column
                 if ((role != Qt::DecorationRole) || (column != NameColumn))
-                    // only dye map column
-                    if ((role != Qt::ForegroundRole) || (column != MapColumn))
-                        return QVariant();
+                    if ((role != Qt::ForegroundRole))
+                        // UserRole is used for version column filtering
+                        if ((role != Qt::UserRole))
+                            return QVariant();
 
     // decorate room name based on room state
     if (role == Qt::DecorationRole)
@@ -159,6 +215,10 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
                 !m_missionMapModel->mapExists(content))
                 return QString ("? %1").arg(content);
         }
+        else if (column == VersionColumn)
+        {
+            return protoToVersion(content);
+        }
 
         return content;
     }
@@ -166,22 +226,32 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
     // dye map names red if map not available
     if (role == Qt::ForegroundRole)
     {
-        if (content == "+rnd+" ||
-            content == "+maze+" ||
-            content == "+perlin+" ||
-            content == "+drawn+" ||
-            content == "+forts+" ||
-            m_staticMapModel->mapExists(content) ||
-            m_missionMapModel->mapExists(content))
-            return QVariant();
-        else
-            return QBrush(QColor("darkred"));
+        if (m_data[row][VersionColumn] != *cProtoVer)
+            return QBrush(QColor("darkgrey"));
+
+        if (column == MapColumn)
+        {
+            if (content == "+rnd+" ||
+                content == "+maze+" ||
+                content == "+perlin+" ||
+                content == "+drawn+" ||
+                content == "+forts+" ||
+                m_staticMapModel->mapExists(content) ||
+                m_missionMapModel->mapExists(content))
+                return QVariant();
+            else
+                return QBrush(QColor("darkred"));
+        }
+        return QVariant();
     }
 
     if (role == Qt::TextAlignmentRole)
     {
         return (int)(Qt::AlignHCenter | Qt::AlignVCenter);
     }
+
+    if (role == Qt::UserRole && column == VersionColumn)
+        return content;
 
     Q_ASSERT(false);
     return QVariant();

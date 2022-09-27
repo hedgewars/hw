@@ -84,10 +84,14 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     showJoinRestricted = new QAction(QAction::tr("Show join restricted"), stateMenu);
     showJoinRestricted->setCheckable(true);
     showJoinRestricted->setChecked(true);
+    showIncompatible = new QAction(QAction::tr("Show incompatible"), stateMenu);
+    showIncompatible->setCheckable(true);
+    showIncompatible->setChecked(true);
     stateMenu->addAction(showGamesInLobby);
     stateMenu->addAction(showGamesInProgress);
     stateMenu->addAction(showPassword);
     stateMenu->addAction(showJoinRestricted);
+    stateMenu->addAction(showIncompatible);
     btnState->setMenu(stateMenu);
 
     // Help/prompt message at top
@@ -199,6 +203,7 @@ void PageRoomsList::connectSignals()
     connect(showGamesInProgress, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
     connect(showPassword, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
     connect(showJoinRestricted, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
+    connect(showIncompatible, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
 
@@ -232,6 +237,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 {
     roomsModel = NULL;
     stateFilteredModel = NULL;
+    versionFilteredModel = NULL;
 
     initPage();
 }
@@ -554,7 +560,7 @@ void PageRoomsList::setUser(const QString & nickname)
 void PageRoomsList::setModel(RoomsListModel * model)
 {
     // filter chain:
-    // model -> stateFilteredModel -> schemeFilteredModel ->
+    // model -> versionFilteredModel -> stateFilteredModel -> schemeFilteredModel ->
     // -> weaponsFilteredModel -> roomsModel (search filter+sorting)
 
     if (roomsModel == NULL)
@@ -564,12 +570,17 @@ void PageRoomsList::setModel(RoomsListModel * model)
         roomsModel->setSortCaseSensitivity(Qt::CaseInsensitive);
         roomsModel->sort(RoomsListModel::StateColumn, Qt::AscendingOrder);
 
-        stateFilteredModel = new QSortFilterProxyModel(this);
+        versionFilteredModel = new QSortFilterProxyModel(this);
+        versionFilteredModel->setDynamicSortFilter(true);
+        versionFilteredModel->setFilterKeyColumn(RoomsListModel::VersionColumn);
+        versionFilteredModel->setFilterRole(Qt::UserRole);
 
+        stateFilteredModel = new QSortFilterProxyModel(this);
         stateFilteredModel->setDynamicSortFilter(true);
+        stateFilteredModel->setFilterKeyColumn(RoomsListModel::StateColumn);
+        stateFilteredModel->setSourceModel(versionFilteredModel);
 
         roomsModel->setFilterKeyColumn(-1); // search in all columns
-        stateFilteredModel->setFilterKeyColumn(RoomsListModel::StateColumn);
 
         roomsModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
@@ -585,7 +596,7 @@ void PageRoomsList::setModel(RoomsListModel * model)
         connect(roomsList->selectionModel(), SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(roomSelectionChanged(const QModelIndex &, const QModelIndex &)));
     }
 
-    stateFilteredModel->setSourceModel(model);
+    versionFilteredModel->setSourceModel(model);
 
     QHeaderView * h = roomsList->horizontalHeader();
 
@@ -638,6 +649,12 @@ void PageRoomsList::onFilterChanged()
     bool stateProgress = showGamesInProgress->isChecked();
     bool statePassword = showPassword->isChecked();
     bool stateJoinRestricted = showJoinRestricted->isChecked();
+    bool stateIncompatible = showIncompatible->isChecked();
+
+    if (!stateIncompatible)
+        versionFilteredModel->setFilterFixedString(*cProtoVer);
+    else
+        versionFilteredModel->setFilterFixedString("");
 
     QString filter;
     if (!stateLobby && !stateProgress)

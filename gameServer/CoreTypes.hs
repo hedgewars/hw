@@ -46,6 +46,7 @@ instance NFData Action where
 
 data Action =
     AnswerClients ![ClientChan] ![B.ByteString]
+    | AnswerClientsByProto ![(ClientChan, Word16)] !(Word16 -> [B.ByteString])
     | SendServerMessage
     | SendServerVars
     | MoveToRoom RoomIndex

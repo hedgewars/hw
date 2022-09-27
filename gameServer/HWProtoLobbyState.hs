@@ -40,7 +40,7 @@ handleCmd_lobby ["LIST"] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
     rooms <- allRoomInfos
-    let roomsInfoList = concatMap (\r -> roomInfo (clientProto cl) (maybeNick . liftM (client irnc) $ masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
+    let roomsInfoList = concatMap (\r -> roomInfo (clientProto cl) (maybeNick . liftM (client irnc) $ masterID r) r) . filter ((/=) 0 . roomProto)
     return $ if hasAskedList cl then [] else
         [ ModifyClient (\c -> c{hasAskedList = True})
         , AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
@@ -91,7 +91,9 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 []
     let clTeamsNames = map teamname clTeams
     return $
-        if isNothing maybeRI then
+        if isNothing maybeRI && clientProto cl < 60 && B.isPrefixOf "[v" roomName then
+            [Warning $ loc "Room version incompatible to your Hedgewars version!"]
+            else if isNothing maybeRI then
             [Warning $ loc "No such room."]
             else if (not sameProto) && (not $ isAdministrator cl) then
             [Warning $ loc "Room version incompatible to your Hedgewars version!"]

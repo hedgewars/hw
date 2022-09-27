@@ -24,6 +24,7 @@ import Control.Concurrent
 import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.List as L
+import Data.Word
 import qualified Control.Exception as Exception
 import System.Log.Logger
 import Control.Monad
@@ -65,11 +66,21 @@ othersChans = do
     ri <- clientRoomA
     liftM (map sendChan . filter (/= cl)) $ roomClientsS ri
 
+othersChansProto :: StateT ServerState IO [(ClientChan, Word16)]
+othersChansProto = do
+    cl <- client's id
+    ri <- clientRoomA
+    map (\ci -> (sendChan ci, clientProto ci)) . filter (/= cl) <$> roomClientsS ri
+
 processAction :: Action -> StateT ServerState IO ()
 
 
 processAction (AnswerClients chans msg) =
     io $ mapM_ (`writeChan` (msg `deepseq` msg)) (chans `deepseq` chans)
+
+
+processAction (AnswerClientsByProto chansProto msgFunc) =
+    io $ mapM_ (\(chan, proto) -> writeChan chan (msgFunc proto)) chansProto
 
 
 processAction SendServerMessage = do
@@ -279,8 +290,9 @@ processAction (ChangeMaster delegateId)= do
                 )
 
     newRoom' <- io $ room'sM rnc id ri
-    chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo proto (maybeNick newMaster) newRoom')
+    chansProto <- fmap (map (\c -> (sendChan c, clientProto c))) $! allClientsS
+    let oldRoomNameByProto = roomNameByProto oldRoomName (roomProto newRoom')
+    processAction $ AnswerClientsByProto chansProto (\p -> "ROOM" : "UPD" : oldRoomNameByProto p : roomInfo p (maybeNick newMaster) newRoom')
 
 
 processAction (AddRoom roomName roomPassword) = do
@@ -300,10 +312,10 @@ processAction (AddRoom roomName roomPassword) = do
 
     processAction $ MoveToRoom rId
 
-    chans <- liftM (map sendChan) $! sameProtoClientsS proto
+    chansProto <- fmap (map (\c -> (sendChan c, clientProto c))) $! allClientsS
 
     mapM_ processAction [
-      AnswerClients chans ("ROOM" : "ADD" : roomInfo proto n rm{playersIn = 1})
+      AnswerClientsByProto chansProto (\p -> "ROOM" : "ADD" : roomInfo p n rm{playersIn = 1})
         ]
 
 
@@ -312,13 +324,13 @@ processAction RemoveRoom = do
     rnc <- gets roomsClients
     ri <- io $ clientRoomM rnc clId
     roomName <- io $ room'sM rnc name ri
-    others <- othersChans
-    proto <- client's clientProto
-    chans <- liftM (map sendChan) $! sameProtoClientsS proto
+    roomProto <- io $ room'sM rnc roomProto ri
+    others <- othersChansProto
+    chansProto <- fmap (map (\c -> (sendChan c, clientProto c))) $! allClientsS
 
     mapM_ processAction [
-            AnswerClients chans ["ROOM", "DEL", roomName],
-            AnswerClients others ["ROOMABANDONED", roomName]
+            AnswerClientsByProto chansProto (\p -> ["ROOM", "DEL", roomNameByProto roomName roomProto p]),
+            AnswerClientsByProto others (\p -> ["ROOMABANDONED", roomNameByProto roomName roomProto p])
         ]
 
     io $ removeRoom rnc ri
@@ -331,8 +343,9 @@ processAction SendUpdateOnThisRoom = do
     ri <- io $ clientRoomM rnc clId
     rm <- io $ room'sM rnc id ri
     masterCl <- io $ client'sM rnc id `DT.mapM` (masterID rm)
-    chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo proto (maybeNick masterCl) rm)
+    chansProto <- fmap (map (\c -> (sendChan c, clientProto c))) $! allClientsS
+    let thisRoomNameByProto = roomNameByProto (name rm) (roomProto rm)
+    processAction $ AnswerClientsByProto chansProto (\p -> "ROOM" : "UPD" : thisRoomNameByProto p : roomInfo p (maybeNick masterCl) rm)
 
 
 processAction UnreadyRoomClients = do
@@ -536,7 +549,7 @@ processAction JoinLobby = do
         rooms <- roomsM rnc
         mapM (\r -> (mapM (client'sM rnc id) $ masterID r)
             >>= \cn -> return $ roomInfo clProto (maybeNick cn) r)
-            $ filter (\r -> (roomProto r == clProto)) rooms
+            $ filter ((/=) 0 . roomProto) rooms
 
     mapM_ processAction . concat $ [
         [AnswerClients clientsChans ["LOBBY:JOINED", clientNick]]
