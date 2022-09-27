@@ -127,7 +127,7 @@ QString RoomsListModel::protoToVersion(const QString & proto)
     case 57: return "0.9.25";
     case 58: return "1.0.0-dev";
     case 59: return "1.0.0";
-    case 60: return "1.0.1-dev";
+    case 60: return "1.1.0-dev";
     default: return "Unknown";
     }
 }

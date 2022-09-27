@@ -1,6 +1,6 @@
 + features
 * bugfixes
-==================== 1.0.1-dev =====================
+==================== 1.1.0-dev =====================
 Gameplay:
  + Minigun push is now much stronger
  + Easier to push hogs around with blowtorch
