@@ -3,10 +3,12 @@ use super::{
     client::HwClient,
     indexslab::IndexSlab,
     room::HwRoom,
-    types::{ClientId, RoomId, Voting},
+    types::{CheckerId, ClientId, RoomId, Voting},
 };
 use crate::utils;
 use hedgewars_network_protocol::types::{GameCfg, ServerVar, TeamInfo, Vote, VoteType};
+
+use crate::server::replaystorage::ReplayStorage;
 
 use bitflags::*;
 use log::*;
@@ -157,7 +159,7 @@ bitflags! {
     }
 }
 
-struct HwChecker {
+pub struct HwChecker {
     pub id: ClientId,
     pub is_ready: bool,
 }
@@ -169,6 +171,10 @@ impl HwChecker {
             is_ready: false,
         }
     }
+
+    pub fn set_is_ready(&mut self, ready: bool) {
+        self.is_ready = ready
+    }
 }
 
 pub struct HwServer {
@@ -178,6 +184,7 @@ pub struct HwServer {
     latest_protocol: u16,
     flags: ServerFlags,
     greetings: ServerGreetings,
+    replay_storage: Option<ReplayStorage>,
 }
 
 impl HwServer {
@@ -192,12 +199,18 @@ impl HwServer {
             greetings: ServerGreetings::new(),
             latest_protocol: 58,
             flags: ServerFlags::empty(),
+            replay_storage: None,
         }
     }
 
     #[inline]
     pub fn client(&self, client_id: ClientId) -> &HwClient {
         &self.clients[client_id]
+    }
+
+    #[inline]
+    pub fn get_checker_mut(&mut self, checker_id: CheckerId) -> Option<&mut HwChecker> {
+        self.checkers.get_mut(checker_id)
     }
 
     #[inline]
