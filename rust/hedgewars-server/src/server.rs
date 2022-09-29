@@ -5,3 +5,4 @@ mod haskell;
 #[cfg(feature = "official-server")]
 pub mod io;
 pub mod network;
+pub mod replaystorage;
