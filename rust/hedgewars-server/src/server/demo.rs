@@ -135,7 +135,7 @@ impl Demo {
         let mut teams = vec![];
         let mut hog_index = 7usize;
 
-        let mut messages = vec![];
+        let messages = vec![];
 
         while let Some(cmd) = read_command(&mut reader, &mut buffer)? {
             if let Some(index) = cmd.find(' ') {
@@ -302,7 +302,7 @@ fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
     }
 
     let mut save_game_config = |name: &str, mut value: Vec<String>| {
-        map_config.push(Hs::Tuple(vec![
+        game_config.push(Hs::Tuple(vec![
             Hs::String(name.to_string()),
             Hs::List(value.drain(..).map(Hs::String).collect()),
         ]));
