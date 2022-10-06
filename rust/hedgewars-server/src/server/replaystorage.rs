@@ -24,10 +24,9 @@ impl ReplayStorage {
         let result = fs::read_dir("replays")
             .ok()?
             .flat_map(|f| Some(f.ok()?.path()))
-            .filter(|f| {
+            .find(|f| {
                 f.ends_with(&protocol_suffix) && !self.borrowed_replays.iter().any(|e| &e.path == f)
             })
-            .next()
             .and_then(|f| {
                 Some((
                     ReplayId { path: f.clone() },
