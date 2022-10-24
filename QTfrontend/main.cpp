@@ -186,6 +186,7 @@ HWApplication::tr("Options", "command-line")
 }
 
 int main(int argc, char *argv[]) {
+    cfgdir->setPath(QDir::homePath());
 
     // Since we're calling this first, closeResources() will be the last thing called after main() returns.
     atexit(closeResources);
@@ -278,7 +279,6 @@ int main(int argc, char *argv[]) {
         }
         else
         {
-            cfgdir->setPath(QDir::homePath());
             custom_config = false;
         }
 
