@@ -5,9 +5,9 @@ authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 edition = "2018"
 
 [dependencies]
-rust-ini = "0.17"
-dirs = "3.0"
-argparse = "0.2.2"
+rust-ini = "0.18"
+dirs = "4"
+argparse = "0.2"
 log = "0.4"
 stderrlog = "0.5"
 netbuf = "0.4"
@@ -15,4 +15,4 @@ tempfile = "3.0"
 base64 = "0.13"
 hedgewars-network-protocol = { path = "../hedgewars-network-protocol" }
 anyhow = "1.0"
-tokio = {version="1.6", features = ["full"]}
+tokio = {version="1", features = ["full"]}

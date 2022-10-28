@@ -7,7 +7,7 @@ use ini::Ini;
 use log::{debug, info, warn};
 use netbuf::Buf;
 use std::{io::Write, str::FromStr};
-use tokio::{io, io::AsyncWriteExt, net::TcpStream, process::Command};
+use tokio::{io, io::AsyncWriteExt, net::TcpStream, process::Command, sync::mpsc};
 
 async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result<Vec<String>> {
     let mut replay = tempfile::NamedTempFile::new()?;
@@ -81,7 +81,7 @@ async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result
         }
     }
 
-    println!("Engine lines: {:?}", &result);
+    // println!("Engine lines: {:?}", &result);
 
     if result.len() > 0 {
         Ok(result)
@@ -90,12 +90,27 @@ async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result
     }
 }
 
+async fn check_loop(
+    executable: &str,
+    data_prefix: &str,
+    results_sender: mpsc::Sender<Result<Vec<String>>>,
+    mut replay_receiver: mpsc::Receiver<Vec<String>>,
+) -> Result<()> {
+    while let Some(replay) = replay_receiver.recv().await {
+        results_sender
+            .send(check(executable, data_prefix, &replay).await)
+            .await?;
+    }
+
+    Ok(())
+}
+
 async fn connect_and_run(
     username: &str,
     password: &str,
     protocol_number: u16,
-    executable: &str,
-    data_prefix: &str,
+    replay_sender: mpsc::Sender<Vec<String>>,
+    mut results_receiver: mpsc::Receiver<Result<Vec<String>>>,
 ) -> Result<()> {
     info!("Connecting...");
 
@@ -103,26 +118,15 @@ async fn connect_and_run(
 
     let mut buf = Buf::new();
 
-    let mut replay_lines: Option<Vec<String>> = None;
-
     loop {
-        let r = if let Some(ref lines) = replay_lines {
-            let r = tokio::select! {
-                _ = stream.readable() => None,
-                r = check(executable, data_prefix, &lines) => Some(r)
-            };
-
-            r
-        } else {
-            stream.readable().await?;
-            None
+        let r = tokio::select! {
+            _ = stream.readable() => None,
+            r = results_receiver.recv() => r
         };
 
-        println!("Loop: {:?}", &r);
+        //println!("Loop: {:?}", &r);
 
         if let Some(execution_result) = r {
-            replay_lines = None;
-
             match execution_result {
                 Ok(result) => {
                     info!("Checked");
@@ -173,7 +177,7 @@ async fn connect_and_run(
             let tail_len = tail.len();
             buf.consume(buf.len() - tail_len);
 
-            println!("Message from server: {:?}", &msg);
+            // println!("Message from server: {:?}", &msg);
 
             match msg {
                 Connected(_, _) => {
@@ -202,7 +206,7 @@ async fn connect_and_run(
                 }
                 Replay(lines) => {
                     info!("Got a replay");
-                    replay_lines = Some(lines);
+                    replay_sender.send(lines).await?;
                 }
                 Bye(message) => {
                     warn!("Received BYE: {}", message);
@@ -279,5 +283,20 @@ async fn main() -> Result<()> {
 
     info!("Using protocol number {}", protocol_number);
 
-    connect_and_run(&username, &password, protocol_number, &exe, &prefix).await
+    let (replay_sender, replay_receiver) = mpsc::channel(1);
+    let (results_sender, results_receiver) = mpsc::channel(1);
+
+    let (network_result, checker_result) = tokio::join!(
+        connect_and_run(
+            &username,
+            &password,
+            protocol_number,
+            replay_sender,
+            results_receiver
+        ),
+        check_loop(&exe, &prefix, results_sender, replay_receiver)
+    );
+
+    network_result?;
+    checker_result
 }
