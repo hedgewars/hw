@@ -46,7 +46,7 @@ async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result
         .split(|b| *b == '\n' as u8)
         .skip_while(|l| *l != b"WINNERS" && *l != b"DRAW");
 
-    debug!("Engine lines: {:?}", &engine_lines);
+    // debug!("Engine lines: {:?}", &engine_lines);
 
     loop {
         match engine_lines.next() {
