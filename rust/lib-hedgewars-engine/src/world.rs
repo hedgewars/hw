@@ -11,6 +11,7 @@ use landgen::{
     LandGenerationParameters, LandGenerator,
 };
 use lfprng::LaggedFibonacciPRNG;
+use std::path::{Path, PathBuf};
 
 use crate::render::{camera::Camera, GearEntry, GearRenderer, MapRenderer};
 
@@ -34,6 +35,7 @@ pub struct World {
     gear_renderer: Option<GearRenderer>,
     camera: Camera,
     gear_entries: Vec<GearEntry>,
+    data_path: PathBuf,
 }
 
 impl World {
@@ -47,23 +49,23 @@ impl World {
             gear_renderer: None,
             camera: Camera::new(),
             gear_entries: vec![],
+            data_path: PathBuf::from("../../share/hedgewars/Data"),
         }
     }
 
     pub fn create_renderer(&mut self, width: u16, height: u16) {
         let land_tile_size = Size::square(512);
         self.map_renderer = Some(MapRenderer::new(land_tile_size));
-        self.gear_renderer = Some(GearRenderer::new());
+        self.gear_renderer = Some(GearRenderer::new(&self.data_path.as_path()));
         self.camera = Camera::with_size(Size::new(width as usize, height as usize));
 
         use mapgen::{theme::Theme, MapGenerator};
-        use std::path::Path;
 
         if let Some(ref state) = self.game_state {
             self.camera.position = state.land.play_box().center();
 
             let theme =
-                Theme::load(Path::new("../../share/hedgewars/Data/Themes/Cheese/")).unwrap();
+                Theme::load(self.data_path.join(Path::new("Themes/Cheese/")).as_path()).unwrap();
             let texture = MapGenerator::new().make_texture(&state.land, &theme);
             if let Some(ref mut renderer) = self.map_renderer {
                 renderer.init(&texture);

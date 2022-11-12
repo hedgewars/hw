@@ -112,7 +112,7 @@ fn main() {
 
         let engine_state = &mut *engine.start_engine.deref()();
 
-        let port: String = matches.opt_str("port").unwrap();
+        let port: String = matches.opt_str("port").expect("Need IPC port number!");
 
         println!("PORT: {}", port);
 

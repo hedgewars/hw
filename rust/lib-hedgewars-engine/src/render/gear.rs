@@ -73,19 +73,19 @@ pub enum SpriteId {
 const SPRITE_LOAD_LIST: &[(SpriteId, &str)] = &[
     (
         SpriteId::Mine,
-        "../../share/hedgewars/Data/Graphics/MineOn.png",
+        "Graphics/MineOn.png",
     ),
     (
         SpriteId::Grenade,
-        "../../share/hedgewars/Data/Graphics/Bomb.png",
+        "Graphics/Bomb.png",
     ),
     (
         SpriteId::Cheese,
-        "../../share/hedgewars/Data/Graphics/cheese.png",
+        "Graphics/cheese.png",
     ),
     (
         SpriteId::Cleaver,
-        "../../share/hedgewars/Data/Graphics/cleaver.png",
+        "Graphics/cleaver.png",
     ),
 ];
 
@@ -124,7 +124,7 @@ struct SpriteData {
 const ATLAS_SIZE: Size = Size::square(2048);
 
 impl GearRenderer {
-    pub fn new() -> Self {
+    pub fn new(data_path: &Path) -> Self {
         let mut atlas = AtlasCollection::new(ATLAS_SIZE);
 
         let texture = Texture2D::new(
@@ -136,15 +136,15 @@ impl GearRenderer {
         let mut allocation = Box::new([Default::default(); MAX_SPRITES]);
 
         for (sprite, file) in SPRITE_LOAD_LIST {
-            let path = Path::new(file);
-            let size = load_sprite_size(path).expect(&format!("Unable to open {}", file));
+            let path = data_path.join(Path::new(file));
+            let size = load_sprite_size(path.as_path()).expect(&format!("Unable to open {}", file));
             let index = atlas
                 .insert_sprite(size)
                 .expect(&format!("Could not store sprite {:?}", sprite));
             let (texture_index, rect) = atlas.get_rect(index).unwrap();
 
             let mut pixels = vec![255u8; size.area() * 4].into_boxed_slice();
-            load_sprite_pixels(path, &mut pixels).expect("Unable to load Graphics");
+            load_sprite_pixels(path.as_path(), &mut pixels).expect("Unable to load Graphics");
 
             texture.update(
                 rect,
@@ -262,7 +262,6 @@ impl GearRenderer {
         let _buffer_bind = self.layout.bind(&[(0, &self.vertex_buffer)], None);
 
         let _state = PipelineState::new().with_blend();
-
         unsafe {
             gl::DrawArrays(gl::TRIANGLES, 0, entries.len() as i32 * 6);
         }
