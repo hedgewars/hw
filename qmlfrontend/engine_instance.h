@@ -12,7 +12,7 @@ class EngineInstance : public QObject {
   Q_OBJECT
 
  public:
-  explicit EngineInstance(const QString& libraryPath,
+  explicit EngineInstance(const QString& libraryPath,const QString& dataPath,
                           QObject* parent = nullptr);
   ~EngineInstance();
 
@@ -38,7 +38,7 @@ class EngineInstance : public QObject {
                        qint32 y);
 
  private:
-  Engine::EngineInstance* m_instance;
+  std::unique_ptr<Engine::EngineInstance, Engine::cleanup_t*> m_instance;
 
   Engine::hedgewars_engine_protocol_version_t*
       hedgewars_engine_protocol_version;

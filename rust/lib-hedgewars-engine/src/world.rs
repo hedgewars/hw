@@ -39,7 +39,7 @@ pub struct World {
 }
 
 impl World {
-    pub fn new() -> Self {
+    pub fn new(data_path: &Path) -> Self {
         Self {
             random_numbers_gen: LaggedFibonacciPRNG::new(&[]),
             feature_size: 5,
@@ -49,7 +49,7 @@ impl World {
             gear_renderer: None,
             camera: Camera::new(),
             gear_entries: vec![],
-            data_path: PathBuf::from("../../share/hedgewars/Data"),
+            data_path: data_path.to_owned(),
         }
     }
 

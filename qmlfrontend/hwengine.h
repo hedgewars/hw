@@ -20,6 +20,7 @@ class HWEngine : public QObject {
                  setPreviewAcceptor NOTIFY previewAcceptorChanged)
   Q_PROPERTY(QString engineLibrary READ engineLibrary WRITE setEngineLibrary
                  NOTIFY engineLibraryChanged)
+  Q_PROPERTY(QString dataPath READ dataPath WRITE setDataPath NOTIFY dataPathChanged)
 
  public:
   explicit HWEngine(QObject* parent = nullptr);
@@ -32,7 +33,10 @@ class HWEngine : public QObject {
   PreviewAcceptor* previewAcceptor() const;
   QString engineLibrary() const;
 
- public slots:
+  const QString &dataPath() const;
+  void setDataPath(const QString &newDataPath);
+
+public slots:
   void setPreviewAcceptor(PreviewAcceptor* previewAcceptor);
   void setEngineLibrary(const QString& engineLibrary);
 
@@ -45,12 +49,15 @@ class HWEngine : public QObject {
   void previewAcceptorChanged(PreviewAcceptor* previewAcceptor);
   void engineLibraryChanged(const QString& engineLibrary);
 
- private:
+  void dataPathChanged();
+
+private:
   QQmlEngine* m_engine;
   GameConfig m_gameConfig;
   int m_previewHedgehogsCount;
   PreviewAcceptor* m_previewAcceptor;
   QString m_engineLibrary;
+  QString m_dataPath;
 };
 
 #endif  // HWENGINE_H

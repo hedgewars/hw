@@ -340,7 +340,7 @@ void NetSession::sendPassword() {
   QString hash =
       QCryptographicHash::hash(m_clientSalt.toLatin1()
                                    .append(m_serverSalt.toLatin1())
-                                   .append(m_passwordHash)
+                                   .append(m_passwordHash.toLatin1())
                                    .append(QByteArray::number(cProtocolVersion))
                                    .append("!hedgewars"),
                                QCryptographicHash::Sha1)
@@ -349,7 +349,7 @@ void NetSession::sendPassword() {
   m_serverHash =
       QCryptographicHash::hash(m_serverSalt.toLatin1()
                                    .append(m_clientSalt.toLatin1())
-                                   .append(m_passwordHash)
+                                   .append(m_passwordHash.toLatin1())
                                    .append(QByteArray::number(cProtocolVersion))
                                    .append("!hedgewars"),
                                QCryptographicHash::Sha1)

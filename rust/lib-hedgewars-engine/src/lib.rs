@@ -5,10 +5,11 @@ mod time;
 mod world;
 
 use std::{
-    ffi::CString,
+    ffi::{CString, CStr},
     io::{Read, Write},
     mem::replace,
     os::raw::{c_char, c_void},
+    path::Path,
 };
 
 use integral_geometry::Point;
@@ -87,8 +88,10 @@ pub extern "C" fn hedgewars_engine_protocol_version() -> u32 {
 }
 
 #[no_mangle]
-pub extern "C" fn start_engine() -> *mut EngineInstance {
-    let engine_state = Box::new(EngineInstance::new());
+pub extern "C" fn start_engine(data_path: *const i8) -> *mut EngineInstance {
+    let data_path: &str = unsafe { CStr::from_ptr(data_path) }.to_str().unwrap();
+
+    let engine_state = Box::new(EngineInstance::new(Path::new(&data_path)));
 
     Box::leak(engine_state)
 }

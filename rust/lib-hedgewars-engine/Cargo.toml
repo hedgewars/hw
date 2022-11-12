@@ -7,7 +7,7 @@ edition = "2018"
 [dependencies]
 gl = "0.11"
 netbuf = "0.4"
-itertools = "0.8"
+itertools = "0.10"
 png = "0.13"
 
 fpnum = { path = "../fpnum" }

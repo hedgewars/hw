@@ -9,7 +9,7 @@
 #include "game_view.h"
 #include "preview_acceptor.h"
 
-HWEngine::HWEngine(QObject* parent) : QObject(parent) {}
+HWEngine::HWEngine(QObject* parent) : QObject(parent), m_dataPath{QStringLiteral("Data")} {}
 
 HWEngine::~HWEngine() {}
 
@@ -19,7 +19,7 @@ void HWEngine::getPreview() {
   m_gameConfig = GameConfig();
   m_gameConfig.cmdSeed(QUuid::createUuid().toByteArray());
 
-  EngineInstance engine(m_engineLibrary);
+  EngineInstance engine(m_engineLibrary, m_dataPath);
   if (!engine.isValid())  // TODO: error notification
     return;
 
@@ -43,7 +43,8 @@ EngineInstance* HWEngine::runQuickGame() {
   m_gameConfig.cmdTeam(team1);
   m_gameConfig.cmdTeam(team2);
 
-  EngineInstance* engine = new EngineInstance(m_engineLibrary, this);
+  EngineInstance* engine = new EngineInstance(m_engineLibrary, m_dataPath, this);
+  engine->sendConfig(m_gameConfig);
 
   return engine;
   // m_runQueue->queue(m_gameConfig);
@@ -67,4 +68,17 @@ void HWEngine::setEngineLibrary(const QString& engineLibrary) {
 
   m_engineLibrary = engineLibrary;
   emit engineLibraryChanged(m_engineLibrary);
+}
+
+const QString &HWEngine::dataPath() const
+{
+  return m_dataPath;
+}
+
+void HWEngine::setDataPath(const QString &newDataPath)
+{
+  if (m_dataPath == newDataPath)
+    return;
+  m_dataPath = newDataPath;
+  emit dataPathChanged();
 }

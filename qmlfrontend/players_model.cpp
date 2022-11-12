@@ -355,10 +355,10 @@ void PlayersListModel::saveSet(const QSet<QString> &set,
 
   stream << "; this list is used by Hedgewars - do not edit it unless you know "
             "what you're doing!"
-         << endl;
+         << Qt::endl;
 
   foreach (const QString &nick, set.values())
-    stream << nick << endl;
+    stream << nick << Qt::endl;
 
   txt.close();
 }

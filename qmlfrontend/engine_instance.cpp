@@ -13,8 +13,8 @@ extern "C" void (*getProcAddress(const char* fn))() {
     return currentOpenglContext->getProcAddress(fn);
 }
 
-EngineInstance::EngineInstance(const QString& libraryPath, QObject* parent)
-    : QObject(parent) {
+EngineInstance::EngineInstance(const QString& libraryPath, const QString&dataPath, QObject* parent)
+    : QObject(parent), m_instance{nullptr, nullptr} {
   QLibrary hwlib(libraryPath);
 
   if (!hwlib.load())
@@ -62,52 +62,50 @@ EngineInstance::EngineInstance(const QString& libraryPath, QObject* parent)
     qDebug() << "Loaded engine library with protocol version"
              << hedgewars_engine_protocol_version();
 
-    m_instance = start_engine();
+    m_instance = std::unique_ptr<Engine::EngineInstance, Engine::cleanup_t*>(start_engine(dataPath.toUtf8().data()), cleanup);
   } else {
     qDebug("Engine library load failed");
   }
 }
 
-EngineInstance::~EngineInstance() {
-  if (m_isValid) cleanup(m_instance);
-}
+EngineInstance::~EngineInstance() = default;
 
 void EngineInstance::sendConfig(const GameConfig& config) {
   for (auto b : config.config()) {
-    send_ipc(m_instance, reinterpret_cast<uint8_t*>(b.data()),
+    send_ipc(m_instance.get(), reinterpret_cast<uint8_t*>(b.data()),
              static_cast<size_t>(b.size()));
   }
 }
 
 void EngineInstance::advance(quint32 ticks) {
-  advance_simulation(m_instance, ticks);
+  advance_simulation(m_instance.get(), ticks);
 }
 
 void EngineInstance::moveCamera(const QPoint& delta) {
-  move_camera(m_instance, delta.x(), delta.y());
+  move_camera(m_instance.get(), delta.x(), delta.y());
 }
 
 void EngineInstance::simpleEvent(Engine::SimpleEventType event_type) {
-  simple_event(m_instance, event_type);
+  simple_event(m_instance.get(), event_type);
 }
 
 void EngineInstance::longEvent(Engine::LongEventType event_type,
                                Engine::LongEventState state) {
-  long_event(m_instance, event_type, state);
+  long_event(m_instance.get(), event_type, state);
 }
 
 void EngineInstance::positionedEvent(Engine::PositionedEventType event_type,
                                      qint32 x, qint32 y) {
-  positioned_event(m_instance, event_type, x, y);
+  positioned_event(m_instance.get(), event_type, x, y);
 }
 
-void EngineInstance::renderFrame() { render_frame(m_instance); }
+void EngineInstance::renderFrame() { render_frame(m_instance.get()); }
 
 void EngineInstance::setOpenGLContext(QOpenGLContext* context) {
   currentOpenglContext = context;
 
   auto size = context->surface()->size();
-  setup_current_gl_context(m_instance, static_cast<quint16>(size.width()),
+  setup_current_gl_context(m_instance.get(), static_cast<quint16>(size.width()),
                            static_cast<quint16>(size.height()),
                            &getProcAddress);
 }
@@ -115,7 +113,7 @@ void EngineInstance::setOpenGLContext(QOpenGLContext* context) {
 QImage EngineInstance::generatePreview() {
   Engine::PreviewInfo pinfo;
 
-  generate_preview(m_instance, &pinfo);
+  generate_preview(m_instance.get(), &pinfo);
 
   QVector<QRgb> colorTable;
   colorTable.resize(256);
@@ -126,7 +124,7 @@ QImage EngineInstance::generatePreview() {
   previewImage.setColorTable(colorTable);
 
   // Cannot use it here, since QImage refers to original bytes
-  // dispose_preview(m_instance);
+  // dispose_preview(m_instance.get());
 
   return previewImage;
 }

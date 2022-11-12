@@ -35,7 +35,7 @@ typedef struct {
 } PreviewInfo;
 
 typedef uint32_t hedgewars_engine_protocol_version_t();
-typedef EngineInstance* start_engine_t();
+typedef EngineInstance* start_engine_t(const char* data_path);
 typedef void generate_preview_t(EngineInstance* engine_state,
                                 PreviewInfo* preview);
 typedef void dispose_preview_t(EngineInstance* engine_state);

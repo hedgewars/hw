@@ -7,6 +7,8 @@ use hedgewars_engine_messages::queue::*;
 use integral_geometry::{Point, Rect, Size};
 use landgen::outline_template::OutlineTemplate;
 
+use std::path::Path;
+
 use super::{ipc::*, world::World};
 
 pub struct EngineInstance {
@@ -16,8 +18,8 @@ pub struct EngineInstance {
 }
 
 impl EngineInstance {
-    pub fn new() -> Self {
-        let mut world = World::new();
+    pub fn new(data_path: &Path) -> Self {
+        let mut world = World::new(data_path);
 
         fn template() -> OutlineTemplate {
             let mut template = OutlineTemplate::new(Size::new(4096 * 1, 2048 * 1));
