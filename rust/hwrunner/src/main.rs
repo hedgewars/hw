@@ -11,7 +11,10 @@ use glutin::{
 };
 use hedgewars_engine::instance::EngineInstance;
 use integral_geometry::Point;
-use std::error::Error;
+use std::{
+    error::Error,
+    path::Path,
+};
 use wgpu::{
     Adapter, BackendBit, Color, CommandEncoderDescriptor, Device, DeviceDescriptor, Features,
     LoadOp, Operations, PowerPreference, PresentMode, Queue, RenderPassColorAttachmentDescriptor,
@@ -193,7 +196,7 @@ fn main() {
 
     let mut context = HwRendererContext::new(&event_loop, dpi::LogicalSize::new(w, h), use_wgpu);
 
-    let mut engine = EngineInstance::new();
+    let mut engine = EngineInstance::new(Path::new("../../share/hedgewars/Data"));
     if !use_wgpu {
         engine.world.create_renderer(w as u16, h as u16);
     }
