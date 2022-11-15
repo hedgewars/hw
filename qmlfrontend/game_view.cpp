@@ -72,9 +72,11 @@ void GameView::sync() {
   }
 
   if (m_engineInstance) {
-    QPoint mousePos = mapFromGlobal(QCursor::pos()).toPoint();
-    m_engineInstance->moveCamera(mousePos - m_centerPoint);
-    QCursor::setPos(mapToGlobal(m_centerPoint).toPoint());
+    const auto delta = mapFromGlobal(QCursor::pos()).toPoint() - m_centerPoint;
+
+    m_engineInstance->moveCamera(delta);
+
+    QCursor::setPos(window()->screen(), mapToGlobal(m_centerPoint).toPoint());
   }
 
   if (m_renderer) {
