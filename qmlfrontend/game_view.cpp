@@ -42,7 +42,9 @@ void GameView::handleWindowChanged(QQuickWindow* win) {
 void GameView::cleanup() { m_renderer.reset(); }
 
 void GameView::setEngineInstance(EngineInstance* engineInstance) {
-  if (m_engineInstance == engineInstance) return;
+  if (m_engineInstance == engineInstance) {
+    return;
+  }
 
   cleanup();
   m_engineInstance = engineInstance;
@@ -59,13 +61,13 @@ void GameView::sync() {
             &GameViewRenderer::paint, Qt::DirectConnection);
   }
 
-  if (m_windowChanged || (m_viewportSize != window()->size())) {
+  if (m_windowChanged || (m_viewportSize != size())) {
     m_windowChanged = false;
 
     if (m_engineInstance)
       m_engineInstance->setOpenGLContext(window()->openglContext());
 
-    m_viewportSize = window()->size();
+    m_viewportSize = size().toSize();
     m_centerPoint = QPoint(m_viewportSize.width(), m_viewportSize.height()) / 2;
   }
 
@@ -75,7 +77,9 @@ void GameView::sync() {
     QCursor::setPos(mapToGlobal(m_centerPoint).toPoint());
   }
 
-  if (m_renderer) m_renderer->tick(m_delta);
+  if (m_renderer) {
+    m_renderer->tick(m_delta);
+  }
 }
 
 GameViewRenderer::GameViewRenderer()
@@ -90,7 +94,9 @@ void GameViewRenderer::setEngineInstance(EngineInstance* engineInstance) {
 }
 
 void GameViewRenderer::paint() {
-  if (m_delta == 0) return;
+  if (m_delta == 0) {
+    return;
+  }
 
   if (m_engineInstance) {
     m_engineInstance->advance(m_delta);
