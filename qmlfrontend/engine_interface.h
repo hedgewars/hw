@@ -4,8 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifdef __cplusplus
-#define ENUM_CLASS enum
+#include "../rust/lib-hedgewars-engine/target/lib-hedgewars-engine.hpp"
 
 #ifndef Q_NAMESPACE
 #define Q_NAMESPACE
@@ -21,69 +20,35 @@
 
 namespace Engine {
 extern "C" {
-#else
-#define ENUM_CLASS enum class
-#endif
 
-typedef struct _EngineInstance EngineInstance;
+using EngineInstance = hwengine::EngineInstance;
+using PreviewInfo = hwengine::PreviewInfo;
 
-typedef struct {
-  uint32_t width;
-  uint32_t height;
-  uint8_t hedgehogs_number;
-  unsigned char* land;
-} PreviewInfo;
+using hedgewars_engine_protocol_version_t =
+    decltype(hwengine::hedgewars_engine_protocol_version);
 
-typedef uint32_t hedgewars_engine_protocol_version_t();
-typedef EngineInstance* start_engine_t(const char* data_path);
-typedef void generate_preview_t(EngineInstance* engine_state,
-                                PreviewInfo* preview);
-typedef void dispose_preview_t(EngineInstance* engine_state);
-typedef void cleanup_t(EngineInstance* engine_state);
+using start_engine_t = decltype(hwengine::start_engine);
+using generate_preview_t = decltype(hwengine::generate_preview);
+using dispose_preview_t = decltype(hwengine::dispose_preview);
+using cleanup_t = decltype(hwengine::cleanup);
+using send_ipc_t = decltype(hwengine::send_ipc);
+using read_ipc_t = decltype(hwengine::read_ipc);
+using setup_current_gl_context_t = decltype(hwengine::setup_current_gl_context);
+using render_frame_t = decltype(hwengine::render_frame);
+using advance_simulation_t = decltype(hwengine::advance_simulation);
+using move_camera_t = decltype(hwengine::move_camera);
 
-typedef void send_ipc_t(EngineInstance* engine_state, uint8_t* buf,
-                        size_t size);
-typedef size_t read_ipc_t(EngineInstance* engine_state, uint8_t* buf,
-                          size_t size);
+using simple_event_t = decltype(hwengine::simple_event);
+using long_event_t = decltype(hwengine::long_event);
+using positioned_event_t = decltype(hwengine::positioned_event);
 
-typedef void setup_current_gl_context_t(EngineInstance* engine_state,
-                                        uint16_t width, uint16_t height,
-                                        void (*(const char*))());
-typedef void render_frame_t(EngineInstance* engine_state);
+using SimpleEventType = hwengine::SimpleEventType;
+using LongEventType = hwengine::LongEventType;
+using LongEventState = hwengine::LongEventState;
+using PositionedEventType = hwengine::PositionedEventType;
 
-typedef bool advance_simulation_t(EngineInstance* engine_state, uint32_t ticks);
-
-typedef void move_camera_t(EngineInstance* engine_state, int32_t delta_x,
-                           int32_t delta_y);
-
-ENUM_CLASS SimpleEventType{
-    SwitchHedgehog, Timer, LongJump, HighJump, Accept, Deny,
-};
-
-ENUM_CLASS LongEventType{
-    ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Precision, Attack,
-};
-
-ENUM_CLASS LongEventState{
-    Set,
-    Unset,
-};
-
-ENUM_CLASS PositionedEventType{
-    CursorMove,
-    CursorClick,
-};
-
-typedef void simple_event_t(EngineInstance* engine_state,
-                            SimpleEventType event_type);
-typedef void long_event_t(EngineInstance* engine_state,
-                          LongEventType event_type, LongEventState state);
-typedef void positioned_event_t(EngineInstance* engine_state,
-                                PositionedEventType event_type, int32_t x,
-                                int32_t y);
 }  // extern "C"
 
-#ifdef __cplusplus
 Q_NAMESPACE
 
 Q_ENUM_NS(SimpleEventType)
@@ -97,6 +62,5 @@ Q_DECLARE_METATYPE(Engine::SimpleEventType)
 Q_DECLARE_METATYPE(Engine::LongEventType)
 Q_DECLARE_METATYPE(Engine::LongEventState)
 Q_DECLARE_METATYPE(Engine::PositionedEventType)
-#endif
 
 #endif  // ENGINE_H

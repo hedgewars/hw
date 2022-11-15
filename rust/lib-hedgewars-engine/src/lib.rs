@@ -113,7 +113,7 @@ pub extern "C" fn generate_preview(engine_state: &mut EngineInstance, preview: &
 }
 
 #[no_mangle]
-pub extern "C" fn dispose_preview(engine_state: &mut EngineInstance, preview: &mut PreviewInfo) {
+pub extern "C" fn dispose_preview(engine_state: &mut EngineInstance) {
     (*engine_state).world.dispose_preview();
 }
 
@@ -142,7 +142,7 @@ pub extern "C" fn setup_current_gl_context(
     engine_state: &mut EngineInstance,
     width: u16,
     height: u16,
-    gl_loader: extern "C" fn(*const c_char) -> *const c_void,
+    gl_loader: extern "C" fn(*const c_char) -> *mut c_void,
 ) {
     gl::load_with(|name| {
         let c_name = CString::new(name).unwrap();
@@ -175,6 +175,6 @@ pub extern "C" fn move_camera(engine_state: &mut EngineInstance, delta_x: i32, d
 #[no_mangle]
 pub extern "C" fn cleanup(engine_state: *mut EngineInstance) {
     unsafe {
-        Box::from_raw(engine_state);
+        drop(Box::from_raw(engine_state));
     }
 }

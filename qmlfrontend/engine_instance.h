@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QObject>
 #include <QOpenGLContext>
+#include <memory>
 
 #include "engine_interface.h"
 #include "game_config.h"

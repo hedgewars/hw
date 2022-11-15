@@ -6,11 +6,11 @@
 #include <QSurface>
 
 static QOpenGLContext* currentOpenglContext = nullptr;
-extern "C" void (*getProcAddress(const char* fn))() {
+extern "C" void* getProcAddress(const char* fn) {
   if (!currentOpenglContext)
     return nullptr;
   else
-    return currentOpenglContext->getProcAddress(fn);
+    return reinterpret_cast<void*>(currentOpenglContext->getProcAddress(fn));
 }
 
 EngineInstance::EngineInstance(const QString& libraryPath, const QString&dataPath, QObject* parent)
@@ -62,7 +62,9 @@ EngineInstance::EngineInstance(const QString& libraryPath, const QString&dataPat
     qDebug() << "Loaded engine library with protocol version"
              << hedgewars_engine_protocol_version();
 
-    m_instance = std::unique_ptr<Engine::EngineInstance, Engine::cleanup_t*>(start_engine(dataPath.toUtf8().data()), cleanup);
+    m_instance = std::unique_ptr<Engine::EngineInstance, Engine::cleanup_t*>(
+        start_engine(reinterpret_cast<const int8_t*>(dataPath.toUtf8().data())),
+        cleanup);
   } else {
     qDebug("Engine library load failed");
   }

@@ -140,7 +140,7 @@ impl<T: Copy + PartialEq> Land2D<T> {
             if mask.contains_y(yd as usize) {
                 stack.push((xl, xr, yd as usize, dir));
             }
-        };
+        }
 
         let start_x_l = (start_point.x - 1) as usize;
         let start_x_r = start_point.x as usize;
