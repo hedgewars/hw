@@ -298,8 +298,16 @@ end;
 operator * (const z1, z2: hwFloat) z : hwFloat; inline;
 begin
     z.isNegative:= z1.isNegative xor z2.isNegative;
-    z.QWordValue:= QWord(z1.Round) * z2.Frac + QWord(z1.Frac) * z2.Round + ((QWord(z1.Frac) * z2.Frac) shr 32);
-    z.Round:= z.Round + QWord(z1.Round) * z2.Round;
+    
+    if (z1.Round = 0) and (z2.Round = 0) then
+        begin
+        z.QWordValue:= (QWord(z1.Frac) * z2.Frac) shr 32;
+        end 
+    else
+        begin
+        z.QWordValue:= QWord(z1.Round) * z2.Frac + QWord(z1.Frac) * z2.Round + ((QWord(z1.Frac) * z2.Frac) shr 32);
+        z.Round:= z.Round + QWord(z1.Round) * z2.Round;
+    end
 end;
 
 operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
