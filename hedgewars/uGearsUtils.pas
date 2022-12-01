@@ -1080,11 +1080,11 @@ end;
 
 function CheckGearNearImpl(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt; exclude: PGear): PGear;
 var t: PGear;
-    width, bound, dX, dY: hwFloat;
+    width, dX, dY: hwFloat;
     isHit: Boolean;
-    i, j: LongWord;
+    i, j, bound: LongWord;
 begin
-    bound:= _1_5 * int2hwFloat(max(rX, rY));
+    bound:= max(rX, rY) * 3 div 2;
     rX:= sqr(rX);
     rY:= sqr(rY);
     width:= int2hwFloat(RightX - LeftX);
@@ -1100,15 +1100,15 @@ begin
                                 // code duplication - could throw into an inline function I guess
                                 dX := X - Gear^.X;
                                 dY := Y - Gear^.Y;
-                                isHit := (hwAbs(dX) + hwAbs(dY) < bound)
+                                isHit := (dX.Round + dY.Round < bound)
                                     and (not ((hwSqr(dX) / rX + hwSqr(dY) / rY) > _1));
 
                                 if (not isHit) and (WorldEdge = weWrap) then
                                     begin
-                                    if (hwAbs(dX - width) + hwAbs(dY) < bound)
+                                    if ((dX - width).Round + dY.Round < bound)
                                         and (not ((hwSqr(dX - width) / rX + hwSqr(dY) / rY) > _1)) then
                                         isHit := true
-                                    else if (hwAbs(dX + width) + hwAbs(dY) < bound)
+                                    else if ((dX + width).Round + dY.Round < bound)
                                         and (not ((hwSqr(dX + width) / rX + hwSqr(dY) / rY) > _1)) then
                                         isHit := true
                                     end;
@@ -1130,15 +1130,15 @@ begin
                 begin
                 dX := X - t^.X;
                 dY := Y - t^.Y;
-                isHit := (hwAbs(dX) + hwAbs(dY) < bound)
+                isHit := (dX.Round + dY.Round < bound)
                     and (not ((hwSqr(dX) / rX + hwSqr(dY) / rY) > _1));
 
                 if (not isHit) and (WorldEdge = weWrap) then
                     begin
-                    if (hwAbs(dX - width) + hwAbs(dY) < bound)
+                    if ((dX - width).Round + dY.Round < bound)
                         and (not ((hwSqr(dX - width) / rX + hwSqr(dY) / rY) > _1)) then
                         isHit := true
-                    else if (hwAbs(dX + width) + hwAbs(dY) < bound)
+                    else if ((dX + width).Round + dY.Round < bound)
                         and (not ((hwSqr(dX + width) / rX + hwSqr(dY) / rY) > _1)) then
                         isHit := true
                     end;
