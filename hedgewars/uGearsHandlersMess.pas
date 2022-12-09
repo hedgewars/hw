@@ -834,13 +834,14 @@ var xx, yy, px, py, rx, ry, lx, ly: LongInt;
     s: PSDL_Surface;
     p: PLongwordArray;
     lf: LongWord;
+    oldY: hwFloat;
 begin
-inc(Gear^.Pos);
 gun:= (Gear^.State and gstTmpFlag) <> 0;
 move:= false;
 draw:= false;
 if gun then
     begin
+    inc(Gear^.Pos);
     Gear^.State:= Gear^.State and (not gstInvisible);
     doStepFallingGear(Gear);
     CheckCollision(Gear);
@@ -857,12 +858,13 @@ if gun then
         end
     end
 else if GameTicks and $7 = 0 then
-    begin
     with Gear^ do
         begin
+        inc(Pos, 8);
         State:= State and (not gstInvisible);
+        oldY:= Y;
         X:= X + cWindSpeed * 3200 + dX;
-        Y:= Y + dY + cGravity * vobFallSpeed * 8;  // using same value as flakes to try and get similar results
+        Y:= Y + dY + cGravity * (vobFallSpeed * 8);  // using same value as flakes to try and get similar results
         xx:= hwRound(X);
         yy:= hwRound(Y);
         if vobVelocity <> 0 then
@@ -878,7 +880,7 @@ else if GameTicks and $7 = 0 then
             move:= true
         else if (xx > snowRight) or (xx < snowLeft) then
             move:=true
-        else if (cGravity < _0) and (yy < LAND_HEIGHT-1200) then
+        else if (cGravity.isNegative) and (yy < LAND_HEIGHT-1200) then
             move:=true
         // Solid pixel encountered
         else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
@@ -891,33 +893,40 @@ else if GameTicks and $7 = 0 then
                 X:= X - cWindSpeed * 1600 - dX;
                 end
             // If there's room below, on the sides, fill the gaps
-            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx-(1*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx-(1*hwSign(cWindSpeed)))] = 0) then
-                begin
-                X:= X - _0_8 * hwSign(cWindSpeed);
-                Y:= Y - dY - cGravity * vobFallSpeed * 8;
-                end
-            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx-(2*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx-(2*hwSign(cWindSpeed)))] = 0) then
-                begin
-                X:= X - _0_8 * 2 * hwSign(cWindSpeed);
-                Y:= Y - dY - cGravity * vobFallSpeed * 8;
-                end
-            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx+(1*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx+(1*hwSign(cWindSpeed)))] = 0) then
-                begin
-                X:= X + _0_8 * hwSign(cWindSpeed);
-                Y:= Y - dY - cGravity * vobFallSpeed * 8;
-                end
-            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx+(2*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx+(2*hwSign(cWindSpeed)))] = 0) then
-                begin
-                X:= X + _0_8 * 2 * hwSign(cWindSpeed);
-                Y:= Y - dY - cGravity * vobFallSpeed * 8;
-                end
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) then 
+		    begin
+		    if (((xx - 1) and LAND_WIDTH_MASK) = 0) and (Land[yy - 1, (xx - 1)] = 0) then
+		        begin
+		        X:= X - _0_8;
+		        Y:= oldY;
+		        end
+		    else if (((xx - 2) and LAND_WIDTH_MASK) = 0) and (Land[yy - 1, (xx - 2)] = 0) then
+		        begin
+		        X:= X - _1_6;
+		        Y:= oldY;
+		        end
+		    else if (((xx + 1) and LAND_WIDTH_MASK) = 0) and (Land[yy - 1, (xx + 1)] = 0) then
+		        begin
+		        X:= X + _0_8;
+		        Y:= oldY;
+		        end
+		    else if (((xx + 2) and LAND_WIDTH_MASK) = 0) and (Land[yy - 1, (xx + 2)] = 0) then
+		        begin
+		        X:= X + _1_6;
+		        Y:= oldY;
+		        end else
+		    if ((((yy+1) and LAND_HEIGHT_MASK) = 0) and ((Land[yy + 1, xx] and $FF) <> 0)) then 
+		       move:=true 
+		    else 
+		       draw:= true
+		    end
             // if there's an hog/object below do nothing
             else if ((((yy+1) and LAND_HEIGHT_MASK) = 0) and ((Land[yy+1, xx] and $FF) <> 0))
                 then move:=true
             else draw:= true
             end
-        end
-    end;
+        end;
+
 if draw then
     with Gear^ do
         begin
@@ -926,7 +935,6 @@ if draw then
         if (Pos > 20) and ((CurAmmoGear = nil)
         or (CurAmmoGear^.Kind <> gtRope)) then
             begin
-////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
             if not gun then
                 begin
                 dec(yy,3);
@@ -969,9 +977,6 @@ if draw then
                 p:= PLongWordArray(@(p^[s^.pitch shr 2]))
                 end;
 
-            // Why is this here.  For one thing, there's no test on +1 being safe.
-            //Land[py, px+1]:= lfBasic;
-
             if allpx then
                 UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w), true)
             else
@@ -983,7 +988,6 @@ if draw then
                     min(LAND_HEIGHT - yy, Pred(s^.h)), false // could this be true without unnecessarily creating blanks?
                 );
                 end;
-////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
             end
         end;
 
@@ -996,7 +1000,7 @@ if move then
         end;
     Gear^.Pos:= 0;
     Gear^.X:= int2hwFloat(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft);
-    if (cGravity < _0) and (yy < LAND_HEIGHT-1200) then
+    if (cGravity.isNegative) and (yy < LAND_HEIGHT-1200) then
          Gear^.Y:= int2hwFloat(LAND_HEIGHT - 50 - LongInt(GetRandom(50)))
     else Gear^.Y:= int2hwFloat(LAND_HEIGHT + LongInt(GetRandom(50)) - 1250);
     Gear^.State:= Gear^.State or gstInvisible;
