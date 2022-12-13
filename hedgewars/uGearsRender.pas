@@ -558,7 +558,7 @@ begin
                         ty:= round(ly + ay * (max(LAND_WIDTH,4096) div 2));
                         break;
                         end;
-                    if ((WorldEdge = weWrap) or (WorldEdge = weBounce)) and (ty < -cCamLimitY) and (ay < 0) then
+                    if ((WorldEdge = weWrap) or (WorldEdge = weBounce)) and ((ty < -cCamLimitY) or (ty >= TopY + cCamLimitY)) then
                         break;
 
                     if ((hogLR < 0) and (tx < LeftX)) or ((hogLR > 0) and (tx >= RightX)) then
