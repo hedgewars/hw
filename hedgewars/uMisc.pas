@@ -29,10 +29,10 @@ procedure freeModule;
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function MakeScreenshot(filename: shortstring; k: LongInt; dump: LongWord): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
-function  SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
+function  SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect;
 
 implementation
-uses uVariables, uUtils
+uses uVariables, uUtils, uLandUtils
      {$IFDEF PNG_SCREENSHOTS}, PNGh, png {$ENDIF};
 
 type PScreenshot = ^TScreenshot;
@@ -291,15 +291,15 @@ if dump > 0 then
                 PLongWordArray(p)^[y*LAND_WIDTH+x]:= LandPixels[LAND_HEIGHT-1-y, x]
             else
                 begin
-                if Land[LAND_HEIGHT-1-y, x] and lfIndestructible = lfIndestructible then
+                if LandGet(LAND_HEIGHT-1-y, x) and lfIndestructible = lfIndestructible then
                     PLongWordArray(p)^[y*LAND_WIDTH+x]:= (AMask or RMask)
-                else if Land[LAND_HEIGHT-1-y, x] and lfIce = lfIce then
+                else if LandGet(LAND_HEIGHT-1-y, x) and lfIce = lfIce then
                     PLongWordArray(p)^[y*LAND_WIDTH+x]:= (AMask or BMask)
-                else if Land[LAND_HEIGHT-1-y, x] and lfBouncy = lfBouncy then
+                else if LandGet(LAND_HEIGHT-1-y, x) and lfBouncy = lfBouncy then
                     PLongWordArray(p)^[y*LAND_WIDTH+x]:= (AMask or GMask)
-                else if Land[LAND_HEIGHT-1-y, x] and lfObject = lfObject then
+                else if LandGet(LAND_HEIGHT-1-y, x) and lfObject = lfObject then
                     PLongWordArray(p)^[y*LAND_WIDTH+x]:= $FFFFFFFF
-                else if Land[LAND_HEIGHT-1-y, x] and lfBasic = lfBasic then
+                else if LandGet(LAND_HEIGHT-1-y, x) and lfBasic = lfBasic then
                     PLongWordArray(p)^[y*LAND_WIDTH+x]:= AMask
                 else
                     PLongWordArray(p)^[y*LAND_WIDTH+x]:= 0
@@ -353,7 +353,7 @@ begin
     end;
 end;
 
-function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
+function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect;
 begin
     SDL_RectMake.x:= x;
     SDL_RectMake.y:= y;

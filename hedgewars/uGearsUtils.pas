@@ -22,7 +22,7 @@ unit uGearsUtils;
 interface
 uses uTypes, uFloat;
 
-procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
+procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword);
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 procedure AddSplashForGear(Gear: PGear; justSkipping: boolean);
 procedure AddBounceEffectForGear(Gear: PGear; imageScale: Single);
@@ -39,7 +39,7 @@ procedure CheckHHDamage(Gear: PGear);
 procedure CalcRotationDirAngle(Gear: PGear);
 procedure ResurrectHedgehog(var gear: PGear);
 
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity, deleteOnFail: boolean);
 function CountLand(x, y, r, c: LongInt; mask, antimask: LongWord): LongInt;
@@ -47,8 +47,8 @@ function CountLand(x, y, r, c: LongInt; mask, antimask: LongWord): LongInt;
 function  CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
 function  CheckGearDrowning(var Gear: PGear): boolean;
-procedure CheckCollision(Gear: PGear); inline;
-procedure CheckCollisionWithLand(Gear: PGear); inline;
+procedure CheckCollision(Gear: PGear);
+procedure CheckCollisionWithLand(Gear: PGear);
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 procedure AmmoShoveCache(Ammo: PGear; Damage, Power: LongInt);
@@ -62,7 +62,7 @@ function  CanUseTardis(HHGear: PGear): boolean;
 
 procedure SetAllToActive;
 procedure SetAllHHToActive(Ice: boolean);
-procedure SetAllHHToActive(); inline;
+procedure SetAllHHToActive();
 
 function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
@@ -83,9 +83,9 @@ uses uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
     uLocale, uTextures, uRenderUtils, uRandom, SDLh, uDebug,
     uGearsList, Math, uVisualGearsList, uGearsHandlersMess,
-    uGearsHedgehog;
+    uGearsHedgehog, uLandUtils;
 
-procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
+procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword);
 begin
     doMakeExplosion(X, Y, Radius, AttackingHog, Mask, $FFFFFFFF);
 end;
@@ -872,7 +872,7 @@ var i: LongInt;
 begin
     if (y and LAND_HEIGHT_MASK) = 0 then
         for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 1) do
-            if (Land[y, i] and mask <> 0) and (Land[y, i] and antimask = 0) then
+            if (LandGet(y, i) and mask <> 0) and (LandGet(y, i) and antimask = 0) then
                 begin
                 inc(count);
                 if count = c then
@@ -894,8 +894,8 @@ begin
     begin
         for i:= r - c + 2 to r do
         begin
-            if (Land[y, x - i] and mask <> 0) then inc(cnt);
-            if (Land[y, x + i] and mask <> 0) then inc(cnt);
+            if (LandGet(y, x - i) and mask <> 0) then inc(cnt);
+            if (LandGet(y, x + i) and mask <> 0) then inc(cnt);
 
             if cnt >= c then
             begin
@@ -924,12 +924,12 @@ while t <> nil do
 NoGearsToAvoid:= true
 end;
 
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 begin
     FindPlace(Gear, withFall, Left, Right, false, true);
 end;
 
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean); inline;
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 begin
     FindPlace(Gear, withFall, Left, Right, skipProximity, true);
 end;
@@ -959,7 +959,7 @@ while tryAgain do
     repeat
         if GetRandom(2) = 0 then dir:= -1 else dir:= 1;
         x:= max(LAND_WIDTH div 2048, LongInt(GetRandom(Delta)));
-        if dir = 1 then x:= Left + x else x:= Right - x; 
+        if dir = 1 then x:= Left + x else x:= Right - x;
         repeat
             cnt:= 0;
             y:= min(1024, topY) - Gear^.Radius shl 1;
@@ -976,9 +976,9 @@ while tryAgain do
                 repeat
                     inc(y);
                 until (y >= cWaterLine) or
-                        (ignoreOverlap and 
+                        (ignoreOverlap and
                                 (CountLand(x, y, Gear^.Radius - 1, 1, lfAll, 0) <> 0)) or
-                        (not ignoreOverlap and 
+                        (not ignoreOverlap and
                             (CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, 0) <> 0));
 
                 if (y - sy > Gear^.Radius * 2) and (y < cWaterLine)
@@ -1166,7 +1166,7 @@ begin
     CheckGearNear := CheckGearNearImpl(Kind, Gear^.X, Gear^.Y, rX, rY, Gear);
 end;
 
-procedure CheckCollision(Gear: PGear); inline;
+procedure CheckCollision(Gear: PGear);
 begin
     if (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0)
     or (TestCollisionYwithGear(Gear, hwSign(Gear^.dY)) <> 0) then
@@ -1175,7 +1175,7 @@ begin
         Gear^.State := Gear^.State and (not gstCollision)
 end;
 
-procedure CheckCollisionWithLand(Gear: PGear); inline;
+procedure CheckCollisionWithLand(Gear: PGear);
 begin
     if (TestCollisionX(Gear, hwSign(Gear^.dX)) <> 0)
     or (TestCollisionY(Gear, hwSign(Gear^.dY)) <> 0) then
@@ -1407,8 +1407,8 @@ while i > 0 do
                        gtFirePunch, gtKamikaze, gtWhip, gtShover])
         and (((Ammo^.Data <> nil) and (PGear(Ammo^.Data) = Gear))
             or (not UpdateHitOrder(
-                    Gear, 
-                    Ammo^.WDTimer, 
+                    Gear,
+                    Ammo^.WDTimer,
                     (Ammo^.Kind = gtMinigunBullet) and (Ammo^.Pos <> 0)))) then
         continue;
 
@@ -1496,10 +1496,10 @@ while i > 0 do
             else if ((Ammo^.Kind <> gtFlame) or (Gear^.Kind = gtHedgehog)) and (Power <> 0) then
                 begin
                 if (Ammo^.Kind in [gtMinigunBullet]) then
-                    begin    
+                    begin
                     Gear^.dX:= Gear^.dX + Ammo^.dX * Power * _0_01;
                     Gear^.dY:= Gear^.dY + Ammo^.dY * Power * _0_01
-                    end 
+                    end
                 else
                     begin
                     Gear^.dX:= Ammo^.dX * Power * _0_01;
@@ -1585,7 +1585,7 @@ while t <> nil do
     end
 end;
 
-procedure SetAllHHToActive; inline;
+procedure SetAllHHToActive;
 begin
 SetAllHHToActive(true)
 end;

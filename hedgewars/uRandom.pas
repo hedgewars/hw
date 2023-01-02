@@ -32,8 +32,8 @@ uses uFloat;
 
 procedure SetRandomSeed(Seed: shortstring; dropAdditionalPart: boolean); // Sets the seed that should be used for generating pseudo-random values.
 function  GetRandomf: hwFloat; // Returns a pseudo-random hwFloat.
-function  GetRandom(m: LongWord): LongWord; inline; // Returns a positive pseudo-random integer smaller than m.
-procedure AddRandomness(r: LongWord); inline;
+function  GetRandom(m: LongWord): LongWord;  // Returns a positive pseudo-random integer smaller than m.
+procedure AddRandomness(r: LongWord); 
 function  rndSign(num: hwFloat): hwFloat; // Returns num with a random chance of having a inverted sign.
 
 
@@ -42,13 +42,13 @@ implementation
 var cirbuf: array[0..63] of Longword;
     n: byte;
 
-procedure AddRandomness(r: LongWord); inline;
+procedure AddRandomness(r: LongWord); 
 begin
 n:= (n + 1) and $3F;
    cirbuf[n]:= cirbuf[n] xor r;
 end;
 
-function GetNext: Longword; inline;
+function GetNext: Longword; 
 begin
     n:= (n + 1) and $3F;
     cirbuf[n]:=
@@ -90,7 +90,7 @@ GetRandomf.isNegative:= false;
 GetRandomf.QWordValue:= GetNext
 end;
 
-function GetRandom(m: LongWord): LongWord; inline;
+function GetRandom(m: LongWord): LongWord; 
 begin
 GetNext;
 GetRandom:= GetNext mod m

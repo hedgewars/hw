@@ -330,7 +330,7 @@ begin
     ResizeLand(Template.TemplateWidth, Template.TemplateHeight);
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
-            Land[y, x]:= lfBasic;
+            LandSet(y, x, lfBasic);
 
     minDistance:= sqr(cFeatureSize) div 8 + 10;
     //dabDiv:= getRandom(41)+60;
@@ -368,13 +368,13 @@ begin
         for y:= 0 to LAND_HEIGHT - 1 do
             for x:= 0 to LAND_WIDTH - 1 do
                 if (y < LongWord(topY)) or (x < LongWord(leftX)) or (x > LongWord(rightX)) then
-                    Land[y, x]:= 0
+                    LandSet(y, x, 0)
                 else
                     begin
-                    if Land[y, x] = 0 then
-                        Land[y, x]:= lfBasic
-                    else if Land[y, x] = lfBasic then
-                        Land[y, x]:= 0;
+                    if LandGet(y, x) = 0 then
+                        LandSet(y, x, lfBasic)
+                    else if LandGet(y, x) = lfBasic then
+                        LandSet(y, x, 0);
                     end;
         end;
 end;

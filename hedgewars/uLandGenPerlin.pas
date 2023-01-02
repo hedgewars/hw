@@ -11,6 +11,7 @@ uses uVariables
     , uRandom
     , uLandOutline // FillLand
     , uUtils
+    , uLandUtils
     ;
 
 var p: array[0..511] of LongInt;
@@ -39,7 +40,7 @@ const fadear: array[byte] of LongInt =
 4086, 4088, 4089, 4091, 4092, 4092, 4093, 4094, 4094, 4095, 4095,
 4095, 4095, 4095, 4095, 4095);
 
-function fade(t: LongInt) : LongInt; inline;
+function fade(t: LongInt) : LongInt;
 var t0, t1: LongInt;
 begin
     t0:= fadear[t shr 8];
@@ -53,13 +54,13 @@ begin
 end;
 
 
-function lerp(t, a, b: LongInt) : LongInt; inline;
+function lerp(t, a, b: LongInt) : LongInt;
 begin
     lerp:= a + ((Int64(b) - a) * t shr 12)
 end;
 
 
-function grad(hash, x, y: LongInt) : LongInt; inline;
+function grad(hash, x, y: LongInt) : LongInt;
 var h, v, u: LongInt;
 begin
     h:= hash and 15;
@@ -74,7 +75,7 @@ begin
 end;
 
 
-function inoise(x, y: LongInt) : LongInt; inline;
+function inoise(x, y: LongInt) : LongInt;
 const N = $10000;
 var xx, yy, u, v, A, AA, AB, B, BA, BB: LongInt;
 begin
@@ -205,24 +206,24 @@ begin
             }
 
             if r < rCutoff then
-                Land[y, x]:= 0
+                LandSet(y, x, 0)
             else if param1 = 0 then
-                Land[y, x]:= lfObjMask
+                LandSet(y, x, lfObjMask)
             else
-                Land[y, x]:= lfBasic
+                LandSet(y, x, lfBasic)
         end;
     end;
 
     if param1 = 0 then
         begin
         for x:= 0 to width do
-            if Land[height - 1, x] = lfObjMask then FillLand(x, height - 1, 0, lfBasic);
+            if LandGet(height - 1, x) = lfObjMask then FillLand(x, height - 1, 0, lfBasic);
 
         // strip all lfObjMask pixels
         for y:= minY to LAND_HEIGHT - 1 do
             for x:= 0 to LAND_WIDTH - 1 do
-                if Land[y, x] = lfObjMask then
-                    Land[y, x]:= 0;
+                if LandGet(y, x) = lfObjMask then
+                    LandSet(y, x, 0);
         end;
 
     playWidth:= width;

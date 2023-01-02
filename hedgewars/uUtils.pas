@@ -48,16 +48,16 @@ function  EnumToStr(const en : TSprite) : shortstring; overload;
 function  EnumToStr(const en : TMapGen) : shortstring; overload;
 function  EnumToStr(const en : TWorldEdge) : shortstring; overload;
 
-function  Min(a, b: LongInt): LongInt; inline;
-function  MinD(a, b: double) : double; inline;
-function  Max(a, b: LongInt): LongInt; inline;
+function  Min(a, b: LongInt): LongInt; 
+function  MinD(a, b: double) : double; 
+function  Max(a, b: LongInt): LongInt; 
 
 function  IntToStr(n: LongInt): shortstring;
 function  StrToInt(s: shortstring): LongInt;
 //function  StrToInt(s: shortstring; var success: boolean): LongInt;
 function  FloatToStr(n: hwFloat): shortstring;
 
-function  DxDy2Angle(const _dY, _dX: hwFloat): real; inline;
+function  DxDy2Angle(const _dY, _dX: hwFloat): real; 
 function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAnglef(const _dY, _dX: extended): LongInt;
@@ -68,16 +68,16 @@ function  Str2PChar(const s: shortstring): PChar;
 function  DecodeBase64(s: shortstring): shortstring;
 
 function  isPowerOf2(i: Longword): boolean;
-function  toPowerOf2(i: Longword): Longword; inline;
+function  toPowerOf2(i: Longword): Longword; 
 
-function  endian(independent: LongWord): LongWord; inline;
+function  endian(independent: LongWord): LongWord; 
 
 function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
 
 procedure AddFileLog(s: shortstring);
 procedure AddFileLogRaw(s: pchar); cdecl;
 
-function  CheckNoTeamOrHH: boolean; inline;
+function  CheckNoTeamOrHH: boolean; 
 
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
@@ -97,7 +97,7 @@ function StrLength(s: PChar): Longword;
 procedure SetLengthA(var s: ansistring; len: Longword);
 {$ENDIF}
 
-function  isPhone: Boolean; inline;
+function  isPhone: Boolean; 
 
 {$IFDEF IPHONEOS}
 procedure startLoadingIndicator; cdecl; external;
@@ -407,7 +407,7 @@ FloatToStr:= cstr(n) + '_' + inttostr(Lo(n.QWordValue))
 end;
 
 
-function DxDy2Angle(const _dY, _dX: hwFloat): real; inline;
+function DxDy2Angle(const _dY, _dX: hwFloat): real; 
 var dY, dX: Extended;
 begin
 dY:= hwFloat2Float(_dY);
@@ -433,7 +433,7 @@ dX:= hwFloat2Float(_dX);
 DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
 end;
 
-function DxDy2AttackAnglef(const _dY, _dX: extended): LongInt; inline;
+function DxDy2AttackAnglef(const _dY, _dX: extended): LongInt; 
 begin
 DxDy2AttackAnglef:= trunc(arctan2(_dY, _dX) * (cMaxAngle/pi))
 end;
@@ -503,7 +503,7 @@ begin
 end;
 
 
-function endian(independent: LongWord): LongWord; inline;
+function endian(independent: LongWord): LongWord; 
 begin
 {$IFDEF ENDIAN_LITTLE}
 endian:= independent;
@@ -680,7 +680,7 @@ end;
 {$ENDIF}
 
 // this function is just to determine whether we are running on a limited screen device
-function isPhone: Boolean; inline;
+function isPhone: Boolean; 
 begin
     isPhone:= false;
 {$IFDEF IPHONEOS}

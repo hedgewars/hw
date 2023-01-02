@@ -65,6 +65,8 @@
 {$DEFINE _S:=}
 {$DEFINE _P:=}
 
+{$optimization autoInline}
+
 //{$DEFINE TRACEAIACTIONS}
 //{$DEFINE COUNTTICKS}
 

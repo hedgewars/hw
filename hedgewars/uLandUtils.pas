@@ -2,10 +2,40 @@ unit uLandUtils;
 interface
 
 procedure ResizeLand(width, height: LongWord);
+procedure DisposeLand();
 procedure InitWorldEdges();
+
+function  LandGet(y, x: LongInt): Word;
+procedure LandSet(y, x: LongInt; value: Word);
+
+procedure FillLand(x, y: LongInt; border, value: Word);
 
 implementation
 uses uUtils, uConsts, uVariables, uTypes;
+
+const LibFutureName = 'hwengine_future';
+function  create_game_field(width, height: Longword): pointer; cdecl; external LibFutureName;
+procedure dispose_game_field(game_field: pointer); cdecl; external LibFutureName;
+function  land_get(game_field: pointer; x, y: LongInt): Word; cdecl; external LibFutureName;
+procedure land_set(game_field: pointer; x, y: LongInt; value: Word); cdecl; external LibFutureName;
+procedure land_fill(game_field: pointer; x, y: LongInt; border, fill: Word); cdecl; external LibFutureName;
+
+var gameField: pointer;
+
+function  LandGet(y, x: LongInt): Word;
+begin
+    LandGet:= land_get(gameField, x, y)
+end;
+
+procedure LandSet(y, x: LongInt; value: Word);
+begin
+    land_set(gameField, x, y, value)
+end;
+
+procedure FillLand(x, y: LongInt; border, value: Word);
+begin
+    land_fill(gameField, x, y, border, value)
+end;
 
 procedure ResizeLand(width, height: LongWord);
 var potW, potH: LongInt;
@@ -24,13 +54,18 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     else
         SetLength(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2);
 
-    SetLength(Land, LAND_HEIGHT, LAND_WIDTH);
+    gameField:= create_game_field(LAND_WIDTH, LAND_HEIGHT);
     SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
     // 0.5 is already approaching on unplayable
     if (width div 4096 >= 2) or (height div 2048 >= 2) then cMaxZoomLevel:= cMaxZoomLevel/2;
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel
     end;
 initScreenSpaceVars();
+end;
+
+procedure DisposeLand();
+begin
+    dispose_game_field(gameField)
 end;
 
 procedure InitWorldEdges();
@@ -70,7 +105,7 @@ found:= false;
 for cx:= 0 to lx do
     begin
     for cy:= ly downto 0 do
-        if Land[cy, cx] <> 0 then
+        if LandGet(cy, cx) <> 0 then
             begin
             leftX:= max(0, cx - cWorldEdgeDist);
             // break out of both loops
@@ -85,7 +120,7 @@ found:= false;
 for cx:= lx downto 0 do
     begin
     for cy:= ly downto 0 do
-        if Land[cy, cx] <> 0 then
+        if LandGet(cy, cx) <> 0 then
             begin
             rightX:= min(lx, cx + cWorldEdgeDist);
             // break out of both loops

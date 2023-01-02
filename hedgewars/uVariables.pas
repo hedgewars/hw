@@ -303,7 +303,7 @@ var
 
     SDLwindow: PSDL_Window;
     SDLGLcontext: PSDL_GLContext;
-  
+
 /////////////////////////////////////
 //Buttons
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -2589,7 +2589,6 @@ const
         );
 
 var
-    Land: TCollisionArray;
     LandPixels: TLandArray;
     LandDirty: TDirtyTag;
     hasBorder: boolean;

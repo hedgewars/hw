@@ -56,45 +56,45 @@ type hwFloat = record
 {$ENDIF}
 
 // Returns an hwFloat that represents the value of integer parameter i
-function int2hwFloat (const i: LongInt) : hwFloat; inline;
-function hwFloat2Float (const i: hwFloat) : extended; inline;
+function int2hwFloat (const i: LongInt) : hwFloat; 
+function hwFloat2Float (const i: hwFloat) : extended; 
 
 // The implemented operators
 
-operator = (const z1, z2: hwFloat) z : boolean; inline;
+operator = (const z1, z2: hwFloat) z : boolean; 
 {$IFDEF PAS2C}
-operator <> (const z1, z2: hwFloat) z : boolean; inline;
+operator <> (const z1, z2: hwFloat) z : boolean; 
 {$ENDIF}
-operator + (const z1, z2: hwFloat) z : hwFloat; inline;
-operator - (const z1, z2: hwFloat) z : hwFloat; inline;
-operator - (const z1: hwFloat) z : hwFloat; inline;
+operator + (const z1, z2: hwFloat) z : hwFloat; 
+operator - (const z1, z2: hwFloat) z : hwFloat; 
+operator - (const z1: hwFloat) z : hwFloat; 
 
-operator * (const z1, z2: hwFloat) z : hwFloat; inline;
-operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
-operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; inline;
-operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
+operator * (const z1, z2: hwFloat) z : hwFloat; 
+operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat; 
+operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; 
+operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat; 
 
-operator < (const z1, z2: hwFloat) b : boolean; inline;
-operator > (const z1, z2: hwFloat) b : boolean; inline;
+operator < (const z1, z2: hwFloat) b : boolean; 
+operator > (const z1, z2: hwFloat) b : boolean; 
 
 
 // Various functions for hwFloat (some are inlined in the resulting code for better performance)
 
 function cstr(const z: hwFloat): shortstring; // Returns a shortstring representations of the hwFloat.
-function hwRound(const t: hwFloat): LongInt; inline; // Does NOT really round but returns the integer representation of the hwFloat without fractional digits. (-_0_9 -> -0, _1_5 -> _1)
-function hwAbs(const t: hwFloat): hwFloat; inline; // Returns the value of t with positive sign.
-function hwSqr(const t: hwFloat): hwFloat; inline; // Returns the square value of parameter t.
-function hwSqrt1(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
-function hwSqrt(const x: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
+function hwRound(const t: hwFloat): LongInt;  // Does NOT really round but returns the integer representation of the hwFloat without fractional digits. (-_0_9 -> -0, _1_5 -> _1)
+function hwAbs(const t: hwFloat): hwFloat;  // Returns the value of t with positive sign.
+function hwSqr(const t: hwFloat): hwFloat;  // Returns the square value of parameter t.
+function hwSqrt1(const t: hwFloat): hwFloat;  // Returns the the positive square root of parameter t.
+function hwSqrt(const x: hwFloat): hwFloat;  // Returns the the positive square root of parameter t.
 function Distance(const dx, dy: hwFloat): hwFloat; // Returns the distance between two points in 2-dimensional space, of which the parameters are the horizontal and vertical distance.
 function DistanceI(const dx, dy: LongInt): hwFloat; // Same as above for integer parameters.
 function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
 function vector2Angle(const x, y: hwFloat): LongInt;
-function SignAs(const num, signum: hwFloat): hwFloat; inline; // Returns an hwFloat with the value of parameter num and the sign of signum.
-function hwSign(r: hwFloat): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
-function hwSignf(r: real): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
-function isZero(const z: hwFloat): boolean; inline;
+function SignAs(const num, signum: hwFloat): hwFloat;  // Returns an hwFloat with the value of parameter num and the sign of signum.
+function hwSign(r: hwFloat): LongInt;  // Returns an integer with value 1 and sign of parameter r.
+function hwSignf(r: real): LongInt;  // Returns an integer with value 1 and sign of parameter r.
+function isZero(const z: hwFloat): boolean; 
 
 {$WARNINGS OFF}
 // some hwFloat constants
@@ -195,33 +195,33 @@ implementation
 uses uSinTable;
 
 
-function int2hwFloat (const i: LongInt) : hwFloat; inline;
+function int2hwFloat (const i: LongInt) : hwFloat; 
 begin
 int2hwFloat.isNegative:= i < 0;
 int2hwFloat.Round:= abs(i);
 int2hwFloat.Frac:= 0
 end;
 
-function hwFloat2Float (const i: hwFloat) : extended; inline;
+function hwFloat2Float (const i: hwFloat) : extended; 
 begin
 hwFloat2Float:= i.Frac / $100000000 + i.Round;
 if i.isNegative then
     hwFloat2Float:= -hwFloat2Float;
 end;
 
-operator = (const z1, z2: hwFloat) z : boolean; inline;
+operator = (const z1, z2: hwFloat) z : boolean; 
 begin
     z:= (z1.isNegative = z2.isNegative) and (z1.QWordValue = z2.QWordValue);
 end;
 
 {$IFDEF PAS2C}
-operator <> (const z1, z2: hwFloat) z : boolean; inline;
+operator <> (const z1, z2: hwFloat) z : boolean; 
 begin
     z:= (z1.isNegative <> z2.isNegative) or (z1.QWordValue <> z2.QWordValue);
 end;
 {$ENDIF}
 
-operator + (const z1, z2: hwFloat) z : hwFloat; inline;
+operator + (const z1, z2: hwFloat) z : hwFloat; 
 begin
 if z1.isNegative = z2.isNegative then
     begin
@@ -241,7 +241,7 @@ else
         end
 end;
 
-operator - (const z1, z2: hwFloat) z : hwFloat; inline;
+operator - (const z1, z2: hwFloat) z : hwFloat; 
 begin
 if z1.isNegative = z2.isNegative then
     if z1.QWordValue > z2.QWordValue then
@@ -261,12 +261,12 @@ else
     end
 end;
 
-function isZero(const z: hwFloat): boolean; inline;
+function isZero(const z: hwFloat): boolean; 
 begin
 isZero := z.QWordValue = 0;
 end;
 
-operator < (const z1, z2: hwFloat) b : boolean; inline;
+operator < (const z1, z2: hwFloat) b : boolean; 
 begin
 if z1.isNegative xor z2.isNegative then
     b:= z1.isNegative
@@ -277,7 +277,7 @@ else
         b:= (z2.QWordValue < z1.QWordValue) = z1.isNegative
 end;
 
-operator > (const z1, z2: hwFloat) b : boolean; inline;
+operator > (const z1, z2: hwFloat) b : boolean; 
 begin
 if z1.isNegative xor z2.isNegative then
     b:= z2.isNegative
@@ -288,14 +288,14 @@ else
         b:= (z1.QWordValue > z2.QWordValue) <> z2.isNegative
 end;
 
-operator - (const z1: hwFloat) z : hwFloat; inline;
+operator - (const z1: hwFloat) z : hwFloat; 
 begin
     z:= z1;
     z.isNegative:= not z.isNegative
 end;
 
 
-operator * (const z1, z2: hwFloat) z : hwFloat; inline;
+operator * (const z1, z2: hwFloat) z : hwFloat; 
 begin
     z.isNegative:= z1.isNegative xor z2.isNegative;
     
@@ -310,13 +310,13 @@ begin
     end
 end;
 
-operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
+operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat; 
 begin
     z.isNegative:= z1.isNegative xor (z2 < 0);
     z.QWordValue:= z1.QWordValue * abs(z2)
 end;
 
-operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; inline;
+operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; 
 var t: QWord;
 begin
     z.isNegative:= z1.isNegative xor z2.isNegative;
@@ -337,7 +337,7 @@ begin
         end
 end;
 
-operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
+operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat; 
 begin
     z.isNegative:= z1.isNegative xor (z2 < 0);
     z.QWordValue:= z1.QWordValue div abs(z2)
@@ -371,7 +371,7 @@ begin
     hwAbs.isNegative:= false
 end;
 
-function hwSqr(const t: hwFloat): hwFloat; inline;
+function hwSqr(const t: hwFloat): hwFloat; 
 begin
     hwSqr.isNegative:= false;
     hwSqr.QWordValue:= ((QWord(t.Round) * t.Round) shl 32) + QWord(t.Round) * t.Frac * 2 + ((QWord(t.Frac) * t.Frac) shr 32);

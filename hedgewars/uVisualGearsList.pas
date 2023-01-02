@@ -22,9 +22,9 @@ unit uVisualGearsList;
 interface
 uses uTypes;
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord): PVisualGear; inline;
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear; inline;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; 
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord): PVisualGear; 
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear; 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean; Layer: LongInt): PVisualGear;
 procedure DeleteVisualGear(Gear: PVisualGear);
 function  VisualGearByUID(uid : Longword) : PVisualGear;
@@ -39,7 +39,7 @@ var VGCounter: LongWord;
 implementation
 uses uCollisions, uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers, uScript;
 
-function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
+function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; 
 begin
     // adjust some visual gear types if underwater
     if CheckCoordInWater(X, Y) and ((Kind = vgtBeeTrace) or (Kind = vgtSmokeTrace) or (Kind = vgtEvilTrace)) then
@@ -48,12 +48,12 @@ begin
     AddVisualGear:= AddVisualGear(X, Y, Kind, 0, false, -1);
 end;
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord): PVisualGear; inline;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord): PVisualGear; 
 begin
     AddVisualGear:= AddVisualGear(X, Y, Kind, State, false, -1);
 end;
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear; inline;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear; 
 begin
     AddVisualGear:= AddVisualGear(X, Y, Kind, State, Critical, -1);
 end;

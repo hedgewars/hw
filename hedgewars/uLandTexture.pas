@@ -30,7 +30,7 @@ procedure ResetLand;
 procedure SetLandTexture;
 
 implementation
-uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender, uUtils;
+uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender, uUtils, uLandUtils;
 
 const TEXSIZE = 128;
       // in avoid tile borders stretch the blurry texture by 1 pixel more
@@ -60,7 +60,7 @@ var tx, ty: Longword;
 begin
 for ty:= 0 to TEXSIZE - 1 do
     for tx:= 0 to TEXSIZE - 1 do
-        tmpPixels[ty, tx]:= Land[y * TEXSIZE + ty, x * TEXSIZE + tx] or AMask;
+        tmpPixels[ty, tx]:= LandGet(y * TEXSIZE + ty, x * TEXSIZE + tx) or AMask;
 
 Pixels2:= @tmpPixels
 end;

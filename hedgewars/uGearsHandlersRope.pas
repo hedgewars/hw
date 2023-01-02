@@ -26,7 +26,7 @@ procedure doStepRope(Gear: PGear);
 
 implementation
 uses uConsts, uFloat, uCollisions, uVariables, uGearsList, uSound, uGearsUtils,
-    uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender;
+    uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender, uLandUtils;
 
 const
     IsNilHHFatal = false;
@@ -241,7 +241,7 @@ begin
         begin
         lx := hwRound(nx);
         ly := hwRound(ny);
-        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] > lfAllObjMask) then
+        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (LandGet(ly, lx) > lfAllObjMask) then
             begin
             tx := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
@@ -358,7 +358,7 @@ begin
         HHGear^.dY := HHGear^.dY * len;
         end;
 
-    haveCollision:= ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)]) <> 0);
+    haveCollision:= ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((LandGet(hwRound(Gear^.Y), hwRound(Gear^.X))) <> 0);
 
     if not haveCollision then
         begin
@@ -474,7 +474,7 @@ begin
         ty := _0;
         while tt > _20 do
             begin
-            if ((hwRound(Gear^.Y+ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X+tx) and LAND_WIDTH_MASK) = 0) and (Land[hwRound(Gear^.Y+ty), hwRound(Gear^.X+tx)] > lfAllObjMask) then
+            if ((hwRound(Gear^.Y+ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X+tx) and LAND_WIDTH_MASK) = 0) and (LandGet(hwRound(Gear^.Y+ty), hwRound(Gear^.X+tx)) > lfAllObjMask) then
                 begin
                 Gear^.X := Gear^.X + tx;
                 Gear^.Y := Gear^.Y + ty;

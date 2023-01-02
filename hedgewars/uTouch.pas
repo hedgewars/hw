@@ -613,7 +613,7 @@ begin
     fingerHasMoved := trunc(sqrt(sqr(finger.X-finger.historicalX) + sqr(finger.y-finger.historicalY))) > 30;
 end;
 
-function calculateDelta(finger1, finger2: TTouch_Data): LongInt; inline;
+function calculateDelta(finger1, finger2: TTouch_Data): LongInt; 
 begin
     calculateDelta := Round(sqrt(sqr(finger2.x-finger1.x) + sqr(finger2.y-finger1.y)));
 end;

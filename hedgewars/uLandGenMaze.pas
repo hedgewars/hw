@@ -8,7 +8,8 @@ procedure GenMaze;
 
 implementation
 
-uses uRandom, uLandOutline, uLandTemplates, uVariables, uFloat, uConsts, uLandGenTemplateBased, uUtils;
+uses uRandom, uLandOutline, uLandTemplates, uVariables, uFloat, uConsts,
+     uLandGenTemplateBased, uUtils, uLandUtils;
 
 type direction = record x, y: LongInt; end;
 const DIR_N: direction = (x: 0; y: -1);
@@ -403,11 +404,11 @@ off_y := LAND_HEIGHT - playHeight;
 
 for x := 0 to playWidth do
     for y := 0 to off_y - 1 do
-        Land[y, x] := 0;
+        LandSet(y, x, 0);
 
 for x := 0 to playWidth do
     for y := off_y to LAND_HEIGHT - 1 do
-        Land[y, x] := lfBasic;
+        LandSet(y, x, lfBasic);
 
 for y := 0 to num_cells_y - 1 do
     for x := 0 to num_cells_x - 1 do
@@ -527,9 +528,9 @@ if maze_inverted then
 else
     begin
     x := 0;
-    while Land[cellsize div 2 + cellsize + off_y, x] = lfBasic do
+    while LandGet(cellsize div 2 + cellsize + off_y, x) = lfBasic do
         x := x + 1;
-    while Land[cellsize div 2 + cellsize + off_y, x] = 0 do
+    while LandGet(cellsize div 2 + cellsize + off_y, x) = 0 do
         x := x + 1;
     FillLand(x+1, cellsize div 2 + cellsize + off_y, 0, 0);
     end;

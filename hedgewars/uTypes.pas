@@ -99,7 +99,7 @@ type
 
     // Gears that interact with other Gears and/or Land
     // first row of gears (<gtExplosives) should be avoided when searching a spawn place
-    TGearType = (gtFlame, gtHedgehog, gtMine, gtCase, gtAirMine, gtExplosives, 
+    TGearType = (gtFlame, gtHedgehog, gtMine, gtCase, gtAirMine, gtExplosives,
             gtGrenade, gtShell, gtGrave, gtBee, // 9
             gtShotgunShot, gtPickHammer, gtRope,  // 12
             gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 17
@@ -546,7 +546,6 @@ type
 
 
     TLandArray = packed array of array of LongWord;
-    TCollisionArray = packed array of array of Word;
     TDirtyTag = packed array of array of byte;
 
     TPreview  = packed array[0..127, 0..31] of byte;

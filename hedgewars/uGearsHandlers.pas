@@ -36,13 +36,13 @@ const dirs: array[0..3] of TPoint = ((x: 0;  y: -1),
                                      (x: 0;  y:  1),
                                      (x: -1; y:  0));
 
-procedure PrevAngle(Gear: PGear; dA: LongInt); inline;
+procedure PrevAngle(Gear: PGear; dA: LongInt); 
 begin
     inc(Gear^.WDTimer);
     Gear^.Angle := (LongInt(Gear^.Angle) - dA) and 3
 end;
 
-procedure NextAngle(Gear: PGear; dA: LongInt); inline;
+procedure NextAngle(Gear: PGear; dA: LongInt); 
 begin
     inc(Gear^.WDTimer);
     Gear^.Angle := (LongInt(Gear^.Angle) + dA) and 3

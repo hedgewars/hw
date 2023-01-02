@@ -71,20 +71,20 @@ procedure initModule;
 procedure freeModule;
 
 procedure FillTargets;
-procedure ResetTargets; inline;
-procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
+procedure ResetTargets;
+procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt);
 procedure FillBonuses(isAfterAttack: boolean);
-procedure AwareOfExplosion(x, y, r: LongInt); inline;
+procedure AwareOfExplosion(x, y, r: LongInt);
 
 function  RatePlace(Gear: PGear): LongInt;
-function  CheckWrap(x: real): real; inline;
-function  TestColl(x, y, r: LongInt): boolean; inline;
-function  TestCollHogsOrObjects(x, y, r: LongInt): boolean; inline;
-function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
-function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
+function  CheckWrap(x: real): real;
+function  TestColl(x, y, r: LongInt): boolean;
+function  TestCollHogsOrObjects(x, y, r: LongInt): boolean;
+function  TestCollExcludingObjects(x, y, r: LongInt): boolean;
+function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean;
 
-function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
-function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt; inline;
+function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
+function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 function  RealRateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 function  RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
@@ -93,8 +93,8 @@ function  RateResurrector(Me: PGear): LongInt;
 function  RateHammer(Me: PGear): LongInt;
 
 function  HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-function  AIrndSign(num: LongInt): LongInt; inline;
-function  AIrndOffset(targ: TTarget; Level: LongWord): LongInt; inline;
+function  AIrndSign(num: LongInt): LongInt;
+function  AIrndOffset(targ: TTarget; Level: LongWord): LongInt;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -109,14 +109,14 @@ var friendlyfactor: LongInt = 300;
 var dmgMod: real = 1.0;
 
 implementation
-uses uCollisions, uVariables, uUtils, uGearsUtils, uAIAmmoTests;
+uses uCollisions, uVariables, uUtils, uGearsUtils, uAIAmmoTests, uLandUtils;
 
 var
     KnownExplosion: record
         X, Y, Radius: LongInt
         end = (X: 0; Y: 0; Radius: 0);
 
-procedure ResetTargets; inline;
+procedure ResetTargets;
 var i: LongWord;
 begin
 if Targets.reset then
@@ -200,7 +200,7 @@ if e > f then friendlyfactor:= 300 + (e - f) * 30
 else friendlyfactor:= max(30, 300 - f * 80 div max(1,e))
 end;
 
-procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
+procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt);
 begin
 if(bonuses.Count < MAXBONUS) then
     begin
@@ -212,7 +212,7 @@ if(bonuses.Count < MAXBONUS) then
     end;
 end;
 
-procedure AddWalkBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
+procedure AddWalkBonus(x, y: LongInt; r: Longword; s: LongInt);
 begin
 if(walkbonuses.Count < MAXBONUS div 8) then
     begin
@@ -334,7 +334,7 @@ if isAfterAttack then
     end;
 end;
 
-procedure AwareOfExplosion(x, y, r: LongInt); inline;
+procedure AwareOfExplosion(x, y, r: LongInt);
 begin
     KnownExplosion.X:= x;
     KnownExplosion.Y:= y;
@@ -363,17 +363,17 @@ for i:= 0 to Pred(bonuses.Count) do
     RatePlace:= rate;
 end;
 
-function CheckWrap(x: real): real; inline;
+function CheckWrap(x: real): real;
 begin
     if WorldEdge = weWrap then
         if (x < leftX) then
              x:= x + (rightX - leftX)
-        else if x > rightX then    
+        else if x > rightX then
              x:= x - (rightX - leftX);
     CheckWrap:= x;
 end;
 
-function CheckBounds(x, y, r: Longint): boolean; inline;
+function CheckBounds(x, y, r: Longint): boolean;
 begin
     CheckBounds := (((x-r) and LAND_WIDTH_MASK) = 0) and
         (((x+r) and LAND_WIDTH_MASK) = 0) and
@@ -383,60 +383,60 @@ end;
 
 
 // Check for collision with anything
-function TestCollWithEverything(x, y, r: LongInt): boolean; inline;
+function TestCollWithEverything(x, y, r: LongInt): boolean;
 begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x-r] <> 0) or
-       (Land[y+r, x-r] <> 0) or
-       (Land[y-r, x+r] <> 0) or
-       (Land[y+r, x+r] <> 0) then
+    if (LandGet(y-r, x-r) <> 0) or
+       (LandGet(y+r, x-r) <> 0) or
+       (LandGet(y-r, x+r) <> 0) or
+       (LandGet(y+r, x+r) <> 0) then
        exit(true);
 
     TestCollWithEverything := false;
 end;
 
 // Check for collision with non-objects
-function TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
+function TestCollExcludingObjects(x, y, r: LongInt): boolean;
 begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x-r] > lfAllObjMask) or
-       (Land[y+r, x-r] > lfAllObjMask) or
-       (Land[y-r, x+r] > lfAllObjMask) or
-       (Land[y+r, x+r] > lfAllObjMask) then
+    if (LandGet(y-r, x-r) > lfAllObjMask) or
+       (LandGet(y+r, x-r) > lfAllObjMask) or
+       (LandGet(y-r, x+r) > lfAllObjMask) or
+       (LandGet(y+r, x+r) > lfAllObjMask) then
        exit(true);
 
     TestCollExcludingObjects:= false;
 end;
 
 // Check for collision with something other than current hedgehog or crate
-function TestColl(x, y, r: LongInt): boolean; inline;
+function TestColl(x, y, r: LongInt): boolean;
 begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x-r] and lfNotCurHogCrate <> 0) or
-       (Land[y+r, x-r] and lfNotCurHogCrate <> 0) or
-       (Land[y-r, x+r] and lfNotCurHogCrate <> 0) or
-       (Land[y+r, x+r] and lfNotCurHogCrate <> 0) then
+    if (LandGet(y-r, x-r) and lfNotCurHogCrate <> 0) or
+       (LandGet(y+r, x-r) and lfNotCurHogCrate <> 0) or
+       (LandGet(y-r, x+r) and lfNotCurHogCrate <> 0) or
+       (LandGet(y+r, x+r) and lfNotCurHogCrate <> 0) then
        exit(true);
 
     TestColl:= false;
 end;
 
 // Check for collision with hedgehog or object
-function TestCollHogsOrObjects(x, y, r: LongInt): boolean; inline;
+function TestCollHogsOrObjects(x, y, r: LongInt): boolean;
 begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x-r] and lfAllObjMask <> 0) or
-       (Land[y+r, x-r] and lfAllObjMask <> 0) or
-       (Land[y-r, x+r] and lfAllObjMask <> 0) or
-       (Land[y+r, x+r] and lfAllObjMask <> 0) then
+    if (LandGet(y-r, x-r) and lfAllObjMask <> 0) or
+       (LandGet(y+r, x-r) and lfAllObjMask <> 0) or
+       (LandGet(y-r, x+r) and lfAllObjMask <> 0) or
+       (LandGet(y+r, x+r) and lfAllObjMask <> 0) then
        exit(true);
 
     TestCollHogsOrObjects:= false;
@@ -445,7 +445,7 @@ end;
 // Check for collision with something other than the given "Me" gear.
 // Wrapper to test various approaches.  If it works reasonably, will just replace.
 // Right now, converting to hwFloat is a tad inefficient since the x/y were hwFloat to begin with...
-function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
+function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean;
 var MeX, MeY: LongInt;
 begin
     if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
@@ -453,7 +453,7 @@ begin
         MeX:= hwRound(Me^.X);
         MeY:= hwRound(Me^.Y);
         // We are still inside the hog. Skip radius test
-        if ((sqr(x-MeX) + sqr(y-MeY)) < 256) and (Land[y, x] and lfObjMask = 0) then
+        if ((sqr(x-MeX) + sqr(y-MeY)) < 256) and (LandGet(y, x) and lfObjMask = 0) then
             exit(false);
     end;
     TestCollExcludingMe:= TestCollWithEverything(x, y, r)
@@ -566,12 +566,12 @@ begin
     end;
 end;
 
-function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
+function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
 begin
     RateExplosion:= RealRateExplosion(Me, x, y, r, 0);
     ResetTargets;
 end;
-function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt; inline;
+function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 begin
     RateExplosion:= RealRateExplosion(Me, x, y, r, Flags);
     ResetTargets;
@@ -637,7 +637,7 @@ for i:= 0 to Targets.Count do
                     if pY - y < 0 then dY:= -dY;
 
                     if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
-                       (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                       (LandGet(y+cHHRadius+2, x) and lfIndestructible <> 0) then
                          fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0, Targets.ar[i]) * dmgMod)
                     else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure, Targets.ar[i]) * dmgMod)
                     end;
@@ -831,7 +831,7 @@ for i:= 0 to Targets.Count do
                         ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
                        dX:= 0;
                     if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
-                       (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                       (LandGet(y+cHHRadius+2, x) and lfIndestructible <> 0) then
                          fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0, Targets.ar[i]) * dmgMod)
                     else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure, Targets.ar[i]) * dmgMod)
                     end;
@@ -1206,7 +1206,7 @@ until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and 
 HHJump(AltGear, jmpHJump, GoInfo);
 end;
 
-function AIrndSign(num: LongInt): LongInt; inline;
+function AIrndSign(num: LongInt): LongInt;
 begin
 if random(2) = 0 then
     AIrndSign:=   num
@@ -1214,7 +1214,7 @@ else
     AIrndSign:= - num
 end;
 
-function AIrndOffset(targ: TTarget; Level: LongWord): LongInt; inline;
+function AIrndOffset(targ: TTarget; Level: LongWord): LongInt;
 begin
 if Level <> 1 then exit(0);
 // at present level 2 doesn't track falls on most things

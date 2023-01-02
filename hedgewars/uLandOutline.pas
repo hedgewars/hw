@@ -10,12 +10,11 @@ type TPixAr = record
               end;
 
 procedure DrawEdge(var pa: TPixAr; value: Word);
-procedure FillLand(x, y: LongInt; border, value: Word);
 procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
 
 implementation
 
-uses uLandGraphics, uDebug, uVariables, uLandTemplates;
+uses uLandGraphics, uDebug, uVariables, uLandTemplates, uLandUtils;
 
 
 var Stack: record
@@ -52,41 +51,6 @@ begin
         _y:= y;
         _dir:= dir
         end
-end;
-
-procedure FillLand(x, y: LongInt; border, value: Word);
-var xl, xr, dir: LongInt;
-begin
-    Stack.Count:= 0;
-    xl:= x - 1;
-    xr:= x;
-    Push(xl, xr, y, -1);
-    Push(xl, xr, y,  1);
-    dir:= 0;
-    while Stack.Count > 0 do
-        begin
-        Pop(xl, xr, y, dir);
-        while (xl > 0) and (Land[y, xl] <> border) and (Land[y, xl] <> value) do
-            dec(xl);
-        while (xr < LAND_WIDTH - 1) and (Land[y, xr] <> border) and (Land[y, xr] <> value) do
-            inc(xr);
-        while (xl < xr) do
-            begin
-            while (xl <= xr) and ((Land[y, xl] = border) or (Land[y, xl] = value)) do
-                inc(xl);
-            x:= xl;
-            while (xl <= xr) and (Land[y, xl] <> border) and (Land[y, xl] <> value) do
-                begin
-                Land[y, xl]:= value;
-                inc(xl)
-                end;
-            if x < xl then
-                begin
-                Push(x, Pred(xl), y, dir);
-                Push(x, Pred(xl), y,-dir);
-                end;
-            end;
-        end;
 end;
 
 procedure DrawEdge(var pa: TPixAr; value: Word);

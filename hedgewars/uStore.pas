@@ -59,7 +59,7 @@ procedure MakeCrossHairs;
 procedure InitOffscreenOpenGL;
 {$ENDIF}
 
-procedure WarpMouse(x, y: Word); inline;
+procedure WarpMouse(x, y: Word); 
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 procedure SetSkyColor(r, g, b: real);
 
@@ -1363,7 +1363,7 @@ end;
 // for sdl2 we provide a SDL_WarpMouse() which just calls this function
 // this has the advantage of reducing 'uses' and 'ifdef' statements
 // (SDLwindow is a private member of this module)
-procedure WarpMouse(x, y: Word); inline;
+procedure WarpMouse(x, y: Word); 
 begin
     SDL_WarpMouseInWindow(SDLwindow, x, y);
 end;

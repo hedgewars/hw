@@ -30,7 +30,7 @@ procedure initModule;
 procedure freeModule;
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean; Rand: boolean);
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean);
-procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean); inline;
+procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean); 
 procedure ParseCommand(CmdStr: shortstring; TrustedSource, ExternalSource: boolean);
 procedure ParseTeamCommand(s: shortstring);
 procedure StopMessages(Message: Longword);
@@ -76,7 +76,7 @@ else
 end;
 
 
-procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean); inline;
+procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean); 
 begin
     ParseCommand(CmdStr, TrustedSource, false)
 end;

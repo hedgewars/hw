@@ -25,18 +25,18 @@ uses SDLh;
 procedure AddObjects();
 procedure FreeLandObjects();
 procedure LoadThemeConfig;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word); inline;
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word; Flip: boolean);
 procedure BlitOverlayAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
 procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
-procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
+procedure SetLand(y, x: LongInt; Pixel: LongWord);
 
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound
      , uTypes, uVariables, uDebug, uUtils
-     , uPhysFSLayer, uRenderUtils;
+     , uPhysFSLayer, uRenderUtils, uLandUtils;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -84,37 +84,37 @@ var Rects: PRectArray;
     ThemeObjects: TThemeObjects;
     SprayObjects: TSprayObjects;
 
-procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
+procedure SetLand(y, x: LongInt; Pixel: LongWord);
 begin
     // this an if instead of masking colours to avoid confusing map creators
     if ((AMask and Pixel) = 0) then
-        LandWord:= 0
+        LandSet(y, x, 0)
     else if (Pixel and AMask > 0) and (Pixel and RMask > 0) and (Pixel and GMask > 0) and (Pixel and BMask > 0) then // whiteish
-        LandWord:= lfObject
+        LandSet(y, x, lfObject)
     else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask = 0) and (Pixel and BMask = 0) then // blackish
         begin
-        LandWord:= lfBasic;
+        LandSet(y, x, lfBasic);
         disableLandBack:= false
         end
     else if (Pixel and AMask > 0) and (Pixel and RMask > 0) and (Pixel and GMask = 0) and (Pixel and BMask = 0) then // reddish
-        LandWord:= lfIndestructible
+        LandSet(y, x, lfIndestructible)
     else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask = 0) and (Pixel and BMask > 0) then // blueish
-        LandWord:= lfObject or lfIce
+        LandSet(y, x, lfObject or lfIce)
     else if (Pixel and AMask > 0) and (Pixel and RMask = 0) and (Pixel and GMask > 0) and (Pixel and BMask = 0) then // greenish
-        LandWord:= lfObject or lfBouncy
+        LandSet(y, x, lfObject or lfBouncy)
 end;
 
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface);
 begin
     BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0, false);
 end;
 
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word); inline;
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
 begin
     BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, LandFlags, false);
 end;
 
-function LerpByte(src, dst: Byte; l: LongWord): LongWord; inline;
+function LerpByte(src, dst: Byte; l: LongWord): LongWord;
 begin
     LerpByte:= ((255 - l) * src + l * dst) div 255;
 end;
@@ -173,8 +173,8 @@ for y:= 0 to Pred(Image^.h) do
 
             end;
 
-        if ((color and AMask) <> 0) and (Land[cpY + y, cpX + x] <= lfAllObjMask) then
-            Land[cpY + y, cpX + x]:= lfObject or LandFlags
+        if ((color and AMask) <> 0) and (LandGet(cpY + y, cpX + x) <= lfAllObjMask) then
+            LandSet(cpY + y, cpX + x, lfObject or LandFlags)
         end;
     p:= PLongwordArray(@(p^[Image^.pitch shr 2]))
     end;
@@ -224,8 +224,8 @@ for y:= 0 to Pred(Image^.h) do
                 end;
             pLandColor^:= color;
 
-            if Land[cpY + y, cpX + x] <= lfAllObjMask then
-                Land[cpY + y, cpX + x]:= lfObject
+            if LandGet(cpY + y, cpX + x) <= lfAllObjMask then
+                LandSet(cpY + y, cpX + x, lfObject)
             end;
         end;
     p:= PLongwordArray(@(p^[Image^.pitch shr 2]))
@@ -282,8 +282,8 @@ for y:= 0 to Pred(Image^.h) do
                    or (LerpByte(alpha, 255, (color and AMask) shr AShift) shl AShift);
         end;
 
-        if (Land[cpY + y, cpX + x] <= lfAllObjMask) or (Land[cpY + y, cpX + x] and lfObject <> 0)  then
-            SetLand(Land[cpY + y, cpX + x], mp^[x]);
+        if (LandGet(cpY + y, cpX + x) <= lfAllObjMask) or (LandGet(cpY + y, cpX + x) and lfObject <> 0)  then
+            SetLand(cpY + y, cpX + x, mp^[x]);
         end;
 
     p:= PLongwordArray(@(p^[Image^.pitch shr 2]));
@@ -341,7 +341,7 @@ var i: LongInt;
 begin
     lRes:= 0;
     for i:= y to Pred(y + h) do
-        if Land[i, x] <> 0 then
+        if LandGet(i, x) <> 0 then
             inc(lRes);
     CountNonZeroz:= lRes;
 end;
@@ -425,8 +425,8 @@ while (tmpx <= bx - rect.w div 2 - 1) and bRes do
     begin
     bRes:= ((rect.y and LAND_HEIGHT_MASK) = 0) and ((by and LAND_HEIGHT_MASK) = 0)
     and ((tmpx and LAND_WIDTH_MASK) = 0) and ((tmpx2 and LAND_WIDTH_MASK) = 0)
-    and (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color)
-    and (Land[rect.y, tmpx2] = Color) and (Land[by, tmpx2] = Color);
+    and (LandGet(rect.y, tmpx) = Color) and (LandGet(by, tmpx) = Color)
+    and (LandGet(rect.y, tmpx2) = Color) and (LandGet(by, tmpx2) = Color);
     inc(tmpx);
     dec(tmpx2)
     end;
@@ -436,8 +436,8 @@ while (tmpy <= by - rect.h div 2 - 1) and bRes do
     begin
     bRes:= ((tmpy and LAND_HEIGHT_MASK) = 0) and ((tmpy2 and LAND_HEIGHT_MASK) = 0)
     and ((rect.x and LAND_WIDTH_MASK) = 0) and ((bx and LAND_WIDTH_MASK) = 0)
-    and (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color)
-    and (Land[tmpy2, rect.x] = Color) and (Land[tmpy2, bx] = Color);
+    and (LandGet(tmpy, rect.x) = Color) and (LandGet(tmpy, bx) = Color)
+    and (LandGet(tmpy2, rect.x) = Color) and (LandGet(tmpy2, bx) = Color);
     inc(tmpy);
     dec(tmpy2)
     end;
@@ -459,7 +459,7 @@ begin
     begin
         for tmpx := rect.x to bx do
         begin
-            if (((Land[rect.y, tmpx] and LandType) or (Land[by, tmpx] and LandType)) <> 0) then
+            if (((LandGet(rect.y, tmpx) and LandType) or (LandGet(by, tmpx) and LandType)) <> 0) then
             begin
                 CheckLandAny := true;
                 exit;
@@ -467,7 +467,7 @@ begin
         end;
         for tmpy := rect.y to by do
         begin
-            if (((Land[tmpy, rect.x] and LandType) or (Land[tmpy, bx] and LandType)) <> 0) then
+            if (((LandGet(tmpy, rect.x) and LandType) or (LandGet(tmpy, bx) and LandType)) <> 0) then
             begin
                 CheckLandAny := true;
                 exit;
