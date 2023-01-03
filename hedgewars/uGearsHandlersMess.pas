@@ -960,17 +960,17 @@ if draw then
                             if gun then
                                 begin
                                 LandDirty[yy div 32, xx div 32]:= 1;
-                                if LandPixels[ry, rx] = 0 then
+                                if LandPixelGet(ry, rx) = 0 then
                                     LandSet(ly, lx, lfDamaged or lfObject)
                                 else LandSet(ly, lx, lfDamaged or lfBasic)
                                 end
                             else LandSet(ly, lx, lf);
                         if gun then
-                             LandPixels[ry, rx]:= (Gear^.Tint shr 24         shl RShift) or
+                             LandPixelSet(ry, rx, (Gear^.Tint shr 24         shl RShift) or
                                                   (Gear^.Tint shr 16 and $FF shl GShift) or
                                                   (Gear^.Tint shr  8 and $FF shl BShift) or
-                                                  (p^[px] and AMask)
-                        else LandPixels[ry, rx]:= addBgColor(LandPixels[ry, rx], p^[px]);
+                                                  (p^[px] and AMask))
+                        else LandPixelSet(ry, rx, addBgColor(LandPixelGet(ry, rx), p^[px]));
                         end
                     else allpx:= false
                     end;

@@ -1,4 +1,4 @@
-use std::{cmp, ops::Index};
+use std::{cmp, ops::Index, ops::IndexMut};
 
 use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, PotSize, Rect, Size, SizeMask};
 
@@ -285,6 +285,13 @@ impl<T> Index<usize> for Land2D<T> {
     #[inline]
     fn index(&self, row: usize) -> &[T] {
         &self.pixels[row]
+    }
+}
+
+impl<T> IndexMut<usize> for Land2D<T> {
+    #[inline]
+    fn index_mut(&mut self, row: usize) -> &mut [T] {
+        &mut self.pixels[row]
     }
 }
 

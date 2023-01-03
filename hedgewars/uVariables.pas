@@ -2589,7 +2589,6 @@ const
         );
 
 var
-    LandPixels: TLandArray;
     LandDirty: TDirtyTag;
     hasBorder: boolean;
     hasGirders: boolean;

@@ -41,9 +41,9 @@ var digest: shortstring;
 procedure PrettifyLandAlpha();
 begin
     if (cReducedQuality and rqBlurryLand) <> 0 then
-        PrettifyAlpha2D(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2)
+        PrettifyAlpha2D(LAND_HEIGHT div 2, LAND_WIDTH div 2)
     else
-        PrettifyAlpha2D(LandPixels, LAND_HEIGHT, LAND_WIDTH);
+        PrettifyAlpha2D(LAND_HEIGHT, LAND_WIDTH);
 end;
 
 procedure DrawBorderFromImage(Surface: PSDL_Surface);
@@ -107,9 +107,9 @@ begin
                         if ((x + i) and 16) = 0 then c:= c1 else c:= c2;
 
                         if (cReducedQuality and rqBlurryLand) = 0 then
-                            LandPixels[i, x]:= c
+                            LandPixelSet(i, x, c)
                         else
-                            LandPixels[i div 2, x div 2]:= c
+                            LandPixelSet(i div 2, x div 2, c)
                         end;
                     s:= LAND_HEIGHT
                     end
@@ -122,9 +122,9 @@ begin
                     if ((x + y) and 16) = 0 then c:= c1 else c:= c2;
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
-                        LandPixels[y, x]:= c
+                        LandPixelSet(y, x, c)
                     else
-                        LandPixels[y div 2, x div 2]:= c
+                        LandPixelSet(y div 2, x div 2, c)
                     end;
                 end;
 
@@ -141,9 +141,9 @@ begin
                         if ((y + i) and 16) = 0 then c:= c1 else c:= c2;
 
                         if (cReducedQuality and rqBlurryLand) = 0 then
-                            LandPixels[y, i]:= c
+                            LandPixelSet(y, i, c)
                         else
-                            LandPixels[y div 2, i div 2]:= c
+                            LandPixelSet(y div 2, i div 2, c)
                         end;
                     s:= LAND_WIDTH
                     end
@@ -156,9 +156,9 @@ begin
                     if ((x + y) and 16) = 0 then c:= c1 else c:= c2;
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
-                        LandPixels[y, x]:= c
+                        LandPixelSet(y, x, c)
                     else
-                        LandPixels[y div 2, x div 2]:= c
+                        LandPixelSet(y div 2, x div 2, c)
                     end;
                 end
 end;
@@ -406,9 +406,9 @@ for y:= 0 to LAND_HEIGHT - 1 do
     for x:= 0 to LAND_WIDTH - 1 do
     if LandGet(y, x) <> 0 then
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[y, x]:= p^[x]// or AMask
+            LandPixelSet(y, x, p^[x])// or AMask
         else
-            LandPixels[y div 2, x div 2]:= p^[x];
+            LandPixelSet(y div 2, x div 2, p^[x]);
 
     p:= PLongwordArray(@(p^[Surface^.pitch div 4]));
     end;
@@ -444,20 +444,20 @@ begin
             begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
-                    if (LandGet(y, x-1) = lfBasic) and (LandPixels[y, x-1] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y, x-1]
+                    if (LandGet(y, x-1) = lfBasic) and (LandPixelGet(y, x-1) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y, x-1))
 
-                    else if (LandGet(y, x+1) = lfBasic) and (LandPixels[y, x+1] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if (LandGet(y, x+1) = lfBasic) and (LandPixelGet(y, x+1) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y, x+1))
 
-                    else if (LandGet(y-1, x) = lfBasic) and (LandPixels[y-1, x] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y-1, x]
+                    else if (LandGet(y-1, x) = lfBasic) and (LandPixelGet(y-1, x) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y-1, x))
 
-                    else if (LandGet(y+1, x) = lfBasic) and (LandPixels[y+1, x] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y+1, x];
+                    else if (LandGet(y+1, x) = lfBasic) and (LandPixelGet(y+1, x) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y+1, x));
 
-                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
-                        LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (128 shl AShift)
+                    if (((LandPixelGet(y,x) and AMask) shr AShift) > 10) then
+                        LandPixelSet(y, x, (LandPixelGet(y,x) and (not AMask)) or (128 shl AShift))
                     end;
                 LandSet(y, x, lfObject)
             end
@@ -477,20 +477,20 @@ begin
 
                     begin
 
-                    if (LandGet(y, x-1) = lfBasic) and (LandPixels[y,x-1] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y, x-1]
+                    if (LandGet(y, x-1) = lfBasic) and (LandPixelGet(y,x-1) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y, x-1))
 
-                    else if (LandGet(y, x+1) = lfBasic) and (LandPixels[y,x+1] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if (LandGet(y, x+1) = lfBasic) and (LandPixelGet(y,x+1) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y, x+1))
 
-                    else if (LandGet(y+1, x) = lfBasic) and (LandPixels[y+1,x] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y+1, x]
+                    else if (LandGet(y+1, x) = lfBasic) and (LandPixelGet(y+1,x) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y+1, x))
 
-                    else if (LandGet(y-1, x) = lfBasic) and (LandPixels[y-1,x] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y-1, x];
+                    else if (LandGet(y-1, x) = lfBasic) and (LandPixelGet(y-1,x) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y-1, x));
 
-                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
-                        LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (64 shl AShift)
+                    if (((LandPixelGet(y,x) and AMask) shr AShift) > 10) then
+                        LandPixelSet(y, x, (LandPixelGet(y,x) and (not AMask)) or (64 shl AShift))
                     end;
                 LandSet(y, x, lfObject)
             end;
@@ -762,9 +762,9 @@ for w:= 0 to 23 do
             c:= AMask or RMask or GMask; // FF00FFFF
 
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[y, x]:= c
+            LandPixelSet(y, x, c)
         else
-            LandPixels[y div 2, x div 2]:= c
+            LandPixelSet(y div 2, x div 2, c)
         end
 end;
 
@@ -864,13 +864,13 @@ if hasBorder then
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         begin
-                        LandPixels[y, leftX + w]:= c;
-                        LandPixels[y, rightX - w]:= c2;
+                        LandPixelSet(y, leftX + w, c);
+                        LandPixelSet(y, rightX - w, c2);
                         end
                     else
                         begin
-                        LandPixels[y div 2, (leftX + w) div 2]:= c;
-                        LandPixels[y div 2, (rightX - w) div 2]:= c2;
+                        LandPixelSet(y div 2, (leftX + w) div 2, c);
+                        LandPixelSet(y div 2, (rightX - w) div 2, c2);
                         end;
                     end;
 
@@ -884,9 +884,9 @@ if hasBorder then
                 c:= AMask or RMask or GMask; // yellow
 
             if (cReducedQuality and rqBlurryLand) = 0 then
-                LandPixels[topY + w, x]:= c
+                LandPixelSet(topY + w, x, c)
             else
-                LandPixels[(topY + w) div 2, x div 2]:= c;
+                LandPixelSet((topY + w) div 2, x div 2, c);
             end;
         end;
     end;
@@ -914,23 +914,23 @@ if GrayScale then
         for x:= LongWord(leftX) to LongWord(rightX) do
             for y:= LongWord(topY) to LAND_HEIGHT-1 do
                 begin
-                w:= LandPixels[y,x];
+                w:= LandPixelGet(y,x);
                 w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
                       (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
                       (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
                 if w > 255 then
                     w:= 255;
-                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y,x] and AMask);
-                LandPixels[y,x]:= w or (LandPixels[y, x] and AMask)
+                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixelGet(y,x) and AMask);
+                LandPixelSet(y, x, w or (LandPixelGet(y, x) and AMask))
                 end
     else
         for x:= LongWord(leftX div 2) to LongWord(rightX div 2) do
             for y:= LongWord(topY div 2) to LAND_HEIGHT-1 div 2 do
                 begin
-                w:= LandPixels[y div 2,x div 2];
+                w:= LandPixelGet(y div 2,x div 2);
                 w:= ((w shr RShift and $FF) +  (w shr BShift and $FF) + (w shr GShift and $FF)) div 3;
-                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y div 2,x div 2] and AMask);
-                LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
+                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixelGet(y div 2,x div 2) and AMask);
+                LandPixelSet(y, x, w or (LandPixelGet(y div 2, x div 2) and AMask))
                 end
     end;
 
@@ -1072,8 +1072,8 @@ var i: LongInt;
     landPixelDigest  : LongInt;
 begin
     landPixelDigest:= 1;
-//    for i:= 0 to LAND_HEIGHT-1 do
-//        landPixelDigest:= Adler32Update(landPixelDigest, @LandGet(i,x), 2);
+    for i:= 0 to LAND_HEIGHT-1 do
+        landPixelDigest:= Adler32Update(landPixelDigest, LandRow(i), LAND_WIDTH*2);
     s:= 'M' + IntToStr(syncedPixelDigest)+'|'+IntToStr(landPixelDigest);
 
     ScriptSetString('LandDigest',IntToStr(landPixelDigest));
@@ -1097,7 +1097,6 @@ end;
 procedure freeModule;
 begin
     DisposeLand;
-    SetLength(LandPixels, 0, 0);
     SetLength(LandDirty, 0, 0);
 end;
 

@@ -102,7 +102,7 @@ impl<T: Copy> Vec2D<T> {
             slice,
             mem
         };
-        
+
         slice::from_raw_parts(
             self.data.as_ptr() as *const u8,
             self.data.len() * mem::size_of::<T>(),

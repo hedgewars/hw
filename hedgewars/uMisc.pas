@@ -288,7 +288,7 @@ if dump > 0 then
     for y:= 0 to LAND_HEIGHT-1 do
         for x:= 0 to LAND_WIDTH-1 do
             if dump = 2 then
-                PLongWordArray(p)^[y*LAND_WIDTH+x]:= LandPixels[LAND_HEIGHT-1-y, x]
+                PLongWordArray(p)^[y*LAND_WIDTH+x]:= LandPixelGet(LAND_HEIGHT-1-y, x)
             else
                 begin
                 if LandGet(LAND_HEIGHT-1-y, x) and lfIndestructible = lfIndestructible then

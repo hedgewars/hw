@@ -78,13 +78,13 @@ begin
 drawPixelBG := 0;
 if (LandGet(LandY, landX) and lfIndestructible) = 0 then
     begin
-        if ((LandGet(landY, landX) and lfBasic) <> 0) and (((LandPixels[pixelY, pixelX] and AMask) shr AShift) = 255) and (not disableLandBack) then
+        if ((LandGet(landY, landX) and lfBasic) <> 0) and (((LandPixelGet(pixelY, pixelX) and AMask) shr AShift) = 255) and (not disableLandBack) then
         begin
-            LandPixels[pixelY, pixelX]:= LandBackPixel(landX, landY);
+            LandPixelSet(pixelY, pixelX, LandBackPixel(landX, landY));
             inc(drawPixelBG);
         end
-        else if ((LandGet(landY, landX) and lfObject) <> 0) or (((LandPixels[pixelY, pixelX] and AMask) shr AShift) < 255) then
-            LandPixels[pixelY, pixelX]:= ExplosionBorderColorNoA
+        else if ((LandGet(landY, landX) and lfObject) <> 0) or (((LandPixelGet(pixelY, pixelX) and AMask) shr AShift) < 255) then
+            LandPixelSet(pixelY, pixelX, ExplosionBorderColorNoA)
     end;
 end;
 
@@ -93,7 +93,7 @@ begin
 if (LandGet(landY, landX) and lfIndestructible = 0) and
     (((LandGet(landY, landX) and lfBasic) <> 0) or ((LandGet(landY, landX) and lfObject) <> 0)) then
     begin
-    LandPixels[pixelY, pixelX]:= ExplosionBorderColor;
+    LandPixelSet(pixelY, pixelX, ExplosionBorderColor);
     LandSet(landY, landX, (LandGet(landY, landX) or lfDamaged) and (not lfIce));
     LandDirty[landY div 32, landX div 32]:= 1;
     end;
@@ -136,7 +136,7 @@ begin
     // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
     iceSurface:= SpritesData[sprIceTexture].Surface;
     icePixels := iceSurface^.pixels;
-    w:= LandPixels[pixelY, pixelX];
+    w:= LandPixelGet(pixelY, pixelX);
     if w > 0 then
         begin
         w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
@@ -144,17 +144,17 @@ begin
               (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
         if w < 128 then w:= w+128;
         if w > 255 then w:= 255;
-        w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[pixelY, pixelX] and AMask);
-        LandPixels[pixelY, pixelX]:= addBgColor(w, IceColor);
-        LandPixels[pixelY, pixelX]:= addBgColor(LandPixels[pixelY, pixelX], icePixels^[iceSurface^.w * (pixelY mod iceSurface^.h) + (pixelX mod iceSurface^.w)])
+        w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixelGet(pixelY, pixelX) and AMask);
+        LandPixelSet(pixelY, pixelX, addBgColor(w, IceColor));
+        LandPixelSet(pixelY, pixelX, addBgColor(LandPixelGet(pixelY, pixelX), icePixels^[iceSurface^.w * (pixelY mod iceSurface^.h) + (pixelX mod iceSurface^.w)]))
         end
     else
         begin
-        LandPixels[pixelY, pixelX]:= IceColor and (not AMask) or $E8 shl AShift;
-        LandPixels[pixelY, pixelX]:= addBgColor(LandPixels[pixelY, pixelX], icePixels^[iceSurface^.w * (pixelY mod iceSurface^.h) + (pixelX mod iceSurface^.w)]);
+        LandPixelSet(pixelY, pixelX, IceColor and (not AMask) or $E8 shl AShift);
+        LandPixelSet(pixelY, pixelX, addBgColor(LandPixelGet(pixelY, pixelX), icePixels^[iceSurface^.w * (pixelY mod iceSurface^.h) + (pixelX mod iceSurface^.w)]));
         // silly workaround to avoid having to make background erasure a tadb it smarter about sea ice
-        if LandPixels[pixelY, pixelX] and AMask shr AShift = 255 then
-            LandPixels[pixelY, pixelX]:= LandPixels[pixelY, pixelX] and (not AMask) or 254 shl AShift;
+        if LandPixelGet(pixelY, pixelX) and AMask shr AShift = 255 then
+            LandPixelSet(pixelY, pixelX, LandPixelGet(pixelY, pixelX) and (not AMask) or 254 shl AShift);
         end;
 end;
 
@@ -165,10 +165,10 @@ if ((LandGet(landY, landX) and lfIce) <> 0) then exit;
 if (pixelX < LeftX) or (pixelX > RightX) or (pixelY < TopY) then exit;
 if isLandscapeEdge(getPixelWeight(landX, landY)) then
     begin
-    if (LandPixels[pixelY, pixelX] and AMask < 255) and (LandPixels[pixelY, pixelX] and AMask > 0) then
-        LandPixels[pixelY, pixelX] := (IceEdgeColor and (not AMask)) or (LandPixels[pixelY, pixelX] and AMask)
-    else if (LandPixels[pixelY, pixelX] and AMask < 255) or (LandGet(landY, landX) > 255) then
-        LandPixels[pixelY, pixelX] := IceEdgeColor
+    if (LandPixelGet(pixelY, pixelX) and AMask < 255) and (LandPixelGet(pixelY, pixelX) and AMask > 0) then
+        LandPixelSet(pixelY, pixelX, (IceEdgeColor and (not AMask)) or (LandPixelGet(pixelY, pixelX) and AMask))
+    else if (LandPixelGet(pixelY, pixelX) and AMask < 255) or (LandGet(landY, landX) > 255) then
+        LandPixelSet(pixelY, pixelX, IceEdgeColor)
     end
 else if LandGet(landY, landX) > 255 then
     begin
@@ -203,7 +203,7 @@ begin
             begin
             calculatePixelsCoordinates(i, y, px, py);
             if ((LandGet(y, i) and lfIndestructible) = 0) and (not disableLandBack or (LandGet(y, i) > 255))  then
-                LandPixels[py, px]:= ExplosionBorderColorNoA;
+                LandPixelSet(py, px, ExplosionBorderColorNoA);
             end;
     icePixel:
         for i:= fromPix to toPix do
@@ -488,10 +488,10 @@ for i:= 0 to Pred(Count) do
                     begin
                     by:= ty div 2; bx:= tx div 2;
                     end;
-                if ((LandGet(ty, tx) and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
-                    LandPixels[by, bx]:= LandBackPixel(tx, ty)
-                else if ((LandGet(ty, tx) and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
-                    LandPixels[by, bx]:= LandPixels[by, bx] and (not AMASK)
+                if ((LandGet(ty, tx) and lfBasic) <> 0) and (((LandPixelGet(by,bx) and AMask) shr AShift) = 255) and (not disableLandBack) then
+                    LandPixelSet(by, bx, LandBackPixel(tx, ty))
+                else if ((LandGet(ty, tx) and lfObject) <> 0) or (((LandPixelGet(by,bx) and AMask) shr AShift) < 255) then
+                    LandPixelSet(by, bx, LandPixelGet(by, bx) and (not AMASK))
                 end
             end;
     inc(y, dY)
@@ -507,9 +507,9 @@ for i:= 0 to Pred(Count) do
             if ((LandGet(ty, tx) and lfBasic) <> 0) or ((LandGet(ty, tx) and lfObject) <> 0) then
                 begin
                  if (cReducedQuality and rqBlurryLand) = 0 then
-                    LandPixels[ty, tx]:= ExplosionBorderColor
+                    LandPixelSet(ty, tx, ExplosionBorderColor)
                 else
-                    LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor;
+                    LandPixelSet(ty div 2, tx div 2, ExplosionBorderColor);
 
                 LandSet(ty, tx, (LandGet(ty, tx) or lfDamaged) and (not lfIce));
                 LandDirty[ty div 32, tx div 32]:= 1;
@@ -540,9 +540,9 @@ for t:= 0 to 7 do
         if despeckle then
             LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[ty, tx]:= ExplosionBorderColor
+            LandPixelSet(ty, tx, ExplosionBorderColor)
         else
-            LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor
+            LandPixelSet(ty div 2, tx div 2, ExplosionBorderColor)
         end
     end;
 end;
@@ -590,9 +590,9 @@ for i:= 0 to 7 do
             LandDirty[ty div 32, tx div 32]:= 1
             end;
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[ty, tx]:= ExplosionBorderColor
+            LandPixelSet(ty, tx, ExplosionBorderColor)
         else
-            LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor
+            LandPixelSet(ty div 2, tx div 2, ExplosionBorderColor)
         end
     end;
     nx:= nx - dY;
@@ -622,10 +622,10 @@ for i:= -HalfWidth to HalfWidth do
                 begin
                 by:= ty div 2; bx:= tx div 2;
                 end;
-            if ((LandGet(ty, tx) and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
-                LandPixels[by, bx]:= LandBackPixel(tx, ty)
-            else if ((LandGet(ty, tx) and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
-                LandPixels[by, bx]:= LandPixels[by, bx] and (not AMASK);
+            if ((LandGet(ty, tx) and lfBasic) <> 0) and (((LandPixelGet(by,bx) and AMask) shr AShift) = 255) and (not disableLandBack) then
+                LandPixelSet(by, bx, LandBackPixel(tx, ty))
+            else if ((LandGet(ty, tx) and lfObject) <> 0) or (((LandPixelGet(by,bx) and AMask) shr AShift) < 255) then
+                LandPixelSet(by, bx, LandPixelGet(by, bx) and (not AMASK));
             LandSet(ty, tx, 0);
             end
         end;
@@ -651,9 +651,9 @@ for i:= 0 to 7 do
         if despeckle then
             LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[ty, tx]:= ExplosionBorderColor
+            LandPixelSet(ty, tx, ExplosionBorderColor)
         else
-            LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor
+            LandPixelSet(ty div 2, tx div 2, ExplosionBorderColor)
         end
     end;
     nx:= nx - dY;
@@ -796,25 +796,25 @@ case bpp of
                 if (not behind) or (LandGet(cpY + y, cpX + x) and lfLandMask = 0) then
                     begin
                     if (LandFlags and lfBasic <> 0) or
-                       ((LandPixels[gY, gX] and AMask shr AShift > 128) and  // This test assumes lfBasic and lfObject differ only graphically
+                       ((LandPixelGet(gY, gX) and AMask shr AShift > 128) and  // This test assumes lfBasic and lfObject differ only graphically
                          (LandFlags and (lfObject or lfIce) = 0)) then
                          LandSet(cpY + y, cpX + x, lfBasic or LandFlags)
                     else if (LandFlags and lfIce = 0) then
 						 LandSet(cpY + y, cpX + x, lfObject or LandFlags)
 					else LandSet(cpY + y, cpX + x, LandFlags)
                     end;
-                if (not behind) or (LandPixels[gY, gX] = 0) then
+                if (not behind) or (LandPixelGet(gY, gX) = 0) then
                     begin
                     if tint = $FFFFFFFF then
-                        LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
+                        LandPixelSet(gY, gX, PLongword(@(p^[x * 4]))^)
                     else
                         begin
                         pixel:= PLongword(@(p^[x * 4]))^;
-                        LandPixels[gY, gX]:=
+                        LandPixelSet(gY, gX,
                            ceil((pixel shr RShift and $FF) * ((tint shr 24) / 255)) shl RShift or
                            ceil((pixel shr GShift and $FF) * ((tint shr 16 and $ff) / 255)) shl GShift or
                            ceil((pixel shr BShift and $FF) * ((tint shr  8 and $ff) / 255)) shl BShift or
-                           ceil((pixel shr AShift and $FF) * ((tint and $ff) / 255)) shl AShift;
+                           ceil((pixel shr AShift and $FF) * ((tint and $ff) / 255)) shl AShift);
                         end
                     end
                 end;
@@ -847,7 +847,7 @@ begin
 for ty:= 0 to height - 1 do
     for tx:= 0 to width - 1 do
         begin
-        LandPixels[ty, tx]:= 0;
+        LandPixelSet(ty, tx, 0);
         LandSet(Y + ty, X + tx, 0);
         end;
 end;
@@ -918,7 +918,7 @@ p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 
                     begin
                     if not onlyEraseLF then
                         begin
-                        LandPixels[gY, gX]:= 0;
+                        LandPixelSet(gY, gX, 0);
                         LandSet(cpY + y, cpX + x, 0)
                         end
                     else LandSet(cpY + y, cpX + x, LandGet(cpY + y, cpX + x) and (not LandFlags))
@@ -1028,7 +1028,7 @@ begin
         yy:= Y div 2;
     end;
 
-    pixelsweep:= (LandGet(Y, X) <= lfAllObjMask) and ((LandPixels[yy, xx] and AMask) <> 0);
+    pixelsweep:= (LandGet(Y, X) <= lfAllObjMask) and ((LandPixelGet(yy, xx) and AMask) <> 0);
     if (((LandGet(Y, X) and lfDamaged) <> 0) and ((LandGet(Y, X) and lfIndestructible) = 0)) or pixelsweep then
     begin
         c:= 0;
@@ -1047,10 +1047,10 @@ begin
                                 ny:= Y div 2 + i;
                                 nx:= X div 2 + j;
                                 if ((ny and (LAND_HEIGHT_MASK div 2)) = 0) and ((nx and (LAND_WIDTH_MASK div 2)) = 0) then
-                                    if (LandPixels[ny, nx] and AMASK) <> 0 then
+                                    if (LandPixelGet(ny, nx) and AMASK) <> 0 then
                                         inc(c);
                             end
-                            else if (LandPixels[ny, nx] and AMASK)  <> 0 then
+                            else if (LandPixelGet(ny, nx) and AMASK)  <> 0 then
                                     inc(c);
                         end
                     else if LandGet(ny, nx) > 255 then
@@ -1061,9 +1061,9 @@ begin
         if c < 4 then // 0-3 neighbours
         begin
             if ((LandGet(Y, X) and lfBasic) <> 0) and (not disableLandBack) then
-                LandPixels[yy, xx]:= LandBackPixel(X, Y)
+                LandPixelSet(yy, xx, LandBackPixel(X, Y))
             else
-                LandPixels[yy, xx]:= LandPixels[yy, xx] and (not AMASK);
+                LandPixelSet(yy, xx, LandPixelGet(yy, xx) and (not AMASK));
 
             if not pixelsweep then
             begin
@@ -1106,7 +1106,7 @@ for nx:= X-1 to X+1 do
         // only consider undamaged neighbors (also leads to skipping itself)
         if (LandGet(ny, nx) and lfDamaged) = 0 then
             begin
-            pixel:= LandPixels[ny, nx];
+            pixel:= LandPixelGet(ny, nx);
             inc(r, (pixel and RMask) shr RShift);
             inc(g, (pixel and GMask) shr GShift);
             inc(b, (pixel and BMask) shr BShift);
@@ -1132,7 +1132,7 @@ r:= r div 8;
 g:= g div 8;
 b:= b div 8;
 a:= a div 8;
-LandPixels[y,x]:= (r shl RShift) or (g shl GShift) or (b shl BShift) or (a shl AShift);
+LandPixelSet(y, x, (r shl RShift) or (g shl GShift) or (b shl BShift) or (a shl AShift));
 
 end;
 
@@ -1147,21 +1147,21 @@ if (LandGet(Y, X) = 0) and (Y > topY + 1) and
         begin
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then
-                LandPixels[y,x]:= (ExplosionBorderColor and (not AMask)) or (128 shl AShift)
+            if ((LandPixelGet(y,x) and AMask) shr AShift) < 10 then
+                LandPixelSet(y,x, (ExplosionBorderColor and (not AMask)) or (128 shl AShift))
             else
-                LandPixels[y,x]:=
-                                (((((LandPixels[y,x] and RMask shr RShift) div 2)+((ExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
-                                (((((LandPixels[y,x] and GMask shr GShift) div 2)+((ExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
-                                (((((LandPixels[y,x] and BMask shr BShift) div 2)+((ExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
+                LandPixelSet(y,x,
+                                (((((LandPixelGet(y,x) and RMask shr RShift) div 2)+((ExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
+                                (((((LandPixelGet(y,x) and GMask shr GShift) div 2)+((ExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
+                                (((((LandPixelGet(y,x) and BMask shr BShift) div 2)+((ExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift))
             end;
 {
         if (LandGet(y, x-1) = lfObject) then
-            LandGet(y,x):= lfObject
+            LandSet(y,x, lfObject)
         else if (LandGet(y, x+1) = lfObject) then
-            LandGet(y,x):= lfObject
+            LandSet(y,x, lfObject)
         else
-            LandGet(y,x):= lfBasic;
+            LandSet(y,x, lfBasic);
 }
         end
     else if ((((LandGet(y, x-1) and lfDamaged) <> 0) and ((LandGet(y+1,x-1) and lfDamaged) <> 0) and ((LandGet(y+2,x) and lfDamaged) <> 0))
@@ -1175,13 +1175,13 @@ if (LandGet(Y, X) = 0) and (Y > topY + 1) and
         begin
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then
-                LandPixels[y,x]:= (ExplosionBorderColor and (not AMask)) or (64 shl AShift)
+            if ((LandPixelGet(y,x) and AMask) shr AShift) < 10 then
+                LandPixelSet(y,x, (ExplosionBorderColor and (not AMask)) or (64 shl AShift))
             else
-                LandPixels[y,x]:=
-                                (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((ExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
-                                (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((ExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
-                                (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((ExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
+                LandPixelSet(y,x,
+                                (((((LandPixelGet(y,x) and RMask shr RShift) * 3 div 4)+((ExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
+                                (((((LandPixelGet(y,x) and GMask shr GShift) * 3 div 4)+((ExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
+                                (((((LandPixelGet(y,x) and BMask shr BShift) * 3 div 4)+((ExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift))
             end;
 {
         if (LandGet(y, x-1) = lfObject) then
@@ -1196,17 +1196,17 @@ if (LandGet(Y, X) = 0) and (Y > topY + 1) and
 }
         end
     end
-else if ((cReducedQuality and rqBlurryLand) = 0) and ((LandPixels[Y, X] and AMask) = AMask)
+else if ((cReducedQuality and rqBlurryLand) = 0) and ((LandPixelGet(Y, X) and AMask) = AMask)
 and (LandGet(Y, X) and (lfDamaged or lfBasic) = lfBasic)
 and (Y > topY + 1) and (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX - 1) then
     begin
     if ((((LandGet(y, x-1) and lfDamaged) <> 0) and (((LandGet(y+1,x) and lfDamaged) <> 0)) or ((LandGet(y-1,x) and lfDamaged) <> 0))
     or (((LandGet(y, x+1) and lfDamaged) <> 0) and (((LandGet(y-1,x) and lfDamaged) <> 0) or ((LandGet(y+1,x) and lfDamaged) <> 0)))) then
         begin
-        LandPixels[y,x]:=
-                        (((((LandPixels[y,x] and RMask shr RShift) div 2)+((ExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
-                        (((((LandPixels[y,x] and GMask shr GShift) div 2)+((ExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
-                        (((((LandPixels[y,x] and BMask shr BShift) div 2)+((ExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
+        LandPixelSet(y,x,
+                        (((((LandPixelGet(y,x) and RMask shr RShift) div 2)+((ExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
+                        (((((LandPixelGet(y,x) and GMask shr GShift) div 2)+((ExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
+                        (((((LandPixelGet(y,x) and BMask shr BShift) div 2)+((ExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift))
         end
     else if ((((LandGet(y, x-1) and lfDamaged) <> 0) and ((LandGet(y+1,x-1) and lfDamaged) <> 0) and ((LandGet(y+2,x) and lfDamaged) <> 0))
     or (((LandGet(y, x-1) and lfDamaged) <> 0) and ((LandGet(y-1,x-1) and lfDamaged) <> 0) and ((LandGet(y-2,x) and lfDamaged) <> 0))
@@ -1217,10 +1217,10 @@ and (Y > topY + 1) and (Y < LAND_HEIGHT-2) and (X > leftX + 1) and (X < rightX -
     or (((LandGet(y+1, x) and lfDamaged) <> 0) and ((LandGet(y+1,x-1) and lfDamaged) <> 0) and ((LandGet(y,x-2) and lfDamaged) <> 0))
     or (((LandGet(y-1, x) and lfDamaged) <> 0) and ((LandGet(y-1,x-1) and lfDamaged) <> 0) and ((LandGet(y,x-2) and lfDamaged) <> 0))) then
         begin
-        LandPixels[y,x]:=
-                        (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((ExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
-                        (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((ExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
-                        (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((ExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
+        LandPixelSet(y,x,
+                        (((((LandPixelGet(y,x) and RMask shr RShift) * 3 div 4)+((ExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
+                        (((((LandPixelGet(y,x) and GMask shr GShift) * 3 div 4)+((ExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
+                        (((((LandPixelGet(y,x) and BMask shr BShift) * 3 div 4)+((ExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift))
         end
     end
 end;

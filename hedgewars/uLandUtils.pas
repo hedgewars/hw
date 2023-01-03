@@ -1,5 +1,6 @@
 unit uLandUtils;
 interface
+uses SDLh;
 
 procedure ResizeLand(width, height: LongWord);
 procedure DisposeLand();
@@ -7,8 +8,13 @@ procedure InitWorldEdges();
 
 function  LandGet(y, x: LongInt): Word;
 procedure LandSet(y, x: LongInt; value: Word);
+function  LandRow(row: LongInt): PWordArray;
 
 procedure FillLand(x, y: LongInt; border, value: Word);
+
+function  LandPixelGet(y, x: LongInt): Longword;
+procedure LandPixelSet(y, x: LongInt; value: Longword);
+function  LandPixelRow(row: LongInt): PLongwordArray;
 
 implementation
 uses uUtils, uConsts, uVariables, uTypes;
@@ -18,7 +24,12 @@ function  create_game_field(width, height: Longword): pointer; cdecl; external L
 procedure dispose_game_field(game_field: pointer); cdecl; external LibFutureName;
 function  land_get(game_field: pointer; x, y: LongInt): Word; cdecl; external LibFutureName;
 procedure land_set(game_field: pointer; x, y: LongInt; value: Word); cdecl; external LibFutureName;
+function  land_row(game_field: pointer; row: LongInt): PWordArray; cdecl; external LibFutureName;
 procedure land_fill(game_field: pointer; x, y: LongInt; border, fill: Word); cdecl; external LibFutureName;
+
+function  land_pixel_get(game_field: pointer; x, y: LongInt): Longword; cdecl; external LibFutureName;
+procedure land_pixel_set(game_field: pointer; x, y: LongInt; value: Longword); cdecl; external LibFutureName;
+function  land_pixel_row(game_field: pointer; row: LongInt): PLongwordArray; cdecl; external LibFutureName;
 
 var gameField: pointer;
 
@@ -32,9 +43,29 @@ begin
     land_set(gameField, x, y, value)
 end;
 
+function  LandRow(row: LongInt): PWordArray;
+begin
+    LandRow:= land_row(gameField, row)
+end;
+
 procedure FillLand(x, y: LongInt; border, value: Word);
 begin
     land_fill(gameField, x, y, border, value)
+end;
+
+function  LandPixelGet(y, x: LongInt): Longword;
+begin
+    LandPixelGet:= land_pixel_get(gameField, x, y)
+end;
+
+procedure LandPixelSet(y, x: LongInt; value: Longword);
+begin
+    land_pixel_set(gameField, x, y, value)
+end;
+
+function  LandPixelRow(row: LongInt): PLongwordArray;
+begin
+    LandPixelRow:= land_pixel_row(gameField, row)
 end;
 
 procedure ResizeLand(width, height: LongWord);
@@ -49,10 +80,6 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
     LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
     cWaterLine:= LAND_HEIGHT;
-    if (cReducedQuality and rqBlurryLand) = 0 then
-        SetLength(LandPixels, LAND_HEIGHT, LAND_WIDTH)
-    else
-        SetLength(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2);
 
     gameField:= create_game_field(LAND_WIDTH, LAND_HEIGHT);
     SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));

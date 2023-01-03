@@ -527,7 +527,7 @@ begin
 
 {        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then
             begin
-            LandPixels[trunc(y), trunc(x)]:= v;
+            LandPixelGet(trunc(y), trunc(x)):= v;
             UpdateLandTexture(trunc(X), 1, trunc(Y), 1, true);
             end;}
 
@@ -1083,7 +1083,7 @@ end;
 repeat
         {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then
             begin
-            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= Gear^.Hedgehog^.Team^.Clan^.Color;
+            LandPixelGet(hwRound(Gear^.Y), hwRound(Gear^.X)):= Gear^.Hedgehog^.Team^.Clan^.Color;
             UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
             end;}
 
@@ -1149,7 +1149,7 @@ tY:= hwRound(Gear^.Y);
 repeat
         {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then
             begin
-            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= random($FFFFFFFF);//Gear^.Hedgehog^.Team^.Clan^.Color;
+            LandPixelGet(hwRound(Gear^.Y), hwRound(Gear^.X)):= random($FFFFFFFF);//Gear^.Hedgehog^.Team^.Clan^.Color;
             UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
             end;}
 

@@ -23,6 +23,16 @@ pub extern "C" fn land_get(game_field: &mut GameField, x: i32, y: i32) -> u16 {
 }
 
 #[no_mangle]
+pub extern "C" fn land_set(game_field: &mut GameField, x: i32, y: i32, value: u16) {
+    game_field.collision.map(y, x, |p| *p = value);
+}
+
+#[no_mangle]
+pub extern "C" fn land_row(game_field: &mut GameField, row: i32) -> *mut u16 {
+    game_field.collision[row as usize].as_mut_ptr()
+}
+
+#[no_mangle]
 pub extern "C" fn land_fill(
     game_field: &mut GameField,
     x: i32,
@@ -36,11 +46,6 @@ pub extern "C" fn land_fill(
 }
 
 #[no_mangle]
-pub extern "C" fn land_set(game_field: &mut GameField, x: i32, y: i32, value: u16) {
-    game_field.collision.map(y, x, |p| *p = value);
-}
-
-#[no_mangle]
 pub extern "C" fn land_pixel_get(game_field: &mut GameField, x: i32, y: i32) -> u32 {
     game_field.pixels.map(y, x, |p| *p)
 }
@@ -48,6 +53,11 @@ pub extern "C" fn land_pixel_get(game_field: &mut GameField, x: i32, y: i32) -> 
 #[no_mangle]
 pub extern "C" fn land_pixel_set(game_field: &mut GameField, x: i32, y: i32, value: u32) {
     game_field.pixels.map(y, x, |p| *p = value);
+}
+
+#[no_mangle]
+pub extern "C" fn land_pixel_row(game_field: &mut GameField, row: i32) -> *mut u32 {
+    game_field.pixels[row as usize].as_mut_ptr()
 }
 
 #[no_mangle]

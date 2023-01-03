@@ -153,9 +153,9 @@ for y:= 0 to Pred(Image^.h) do
             color:= p^[x];
 
         if (cReducedQuality and rqBlurryLand) = 0 then
-            pLandColor:= @LandPixels[cpY + y, cpX + x]
+            pLandColor:= @(LandPixelRow(cpY + y)^[cpX + x])
         else
-            pLandColor:= @LandPixels[(cpY + y) div 2, (cpX + x) div 2];
+            pLandColor:= @(LandPixelRow((cpY + y) div 2)^[(cpX + x) div 2]);
 
         landColor:= pLandColor^;
         alpha:= (landColor and AMask) shr AShift;
@@ -208,9 +208,9 @@ for y:= 0 to Pred(Image^.h) do
         if (color and AMask) <> 0 then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
-                pLandColor:= @LandPixels[cpY + y, cpX + x]
+                pLandColor:= @(LandPixelRow(cpY + y)^[cpX + x])
             else
-                pLandColor:= @LandPixels[(cpY + y) div 2, (cpX + x) div 2];
+                pLandColor:= @(LandPixelRow((cpY + y) div 2)^[(cpX + x) div 2]);
 
             alpha:= (color and AMask) shr AShift;
             if ((alpha <> $FF) and ((pLandColor^) <> 0)) then
@@ -263,9 +263,9 @@ for y:= 0 to Pred(Image^.h) do
         color:= p^[x];
 
         if (cReducedQuality and rqBlurryLand) = 0 then
-            pLandColor:= @LandPixels[cpY + y, cpX + x]
+            pLandColor:= @(LandPixelRow(cpY + y)^[cpX + x])
         else
-            pLandColor:= @LandPixels[(cpY + y) div 2, (cpX + x) div 2];
+            pLandColor:= @(LandPixelRow((cpY + y) div 2)^[(cpX + x) div 2]);
 
         landColor:= pLandColor^;
         alpha:= (landColor and AMask) shr AShift;

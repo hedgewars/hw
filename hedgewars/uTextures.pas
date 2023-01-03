@@ -26,14 +26,14 @@ function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 procedure Surface2GrayScale(surf: PSDL_Surface);
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure PrettifySurfaceAlpha(surf: PSDL_Surface; pixels: PLongwordArray);
-procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
+procedure PrettifyAlpha2D(height, width: LongWord);
 procedure FreeAndNilTexture(var tex: PTexture);
 
 procedure initModule;
 procedure freeModule;
 
 implementation
-uses GLunit, uUtils, uVariables, uConsts, uDebug, uConsole;
+uses GLunit, uUtils, uVariables, uConsts, uDebug, uConsole, uLandUtils;
 
 var TextureList: PTexture;
 
@@ -194,7 +194,7 @@ begin
     PrettifyAlpha(pixels, nil, si, li, w);
 end;
 
-procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
+procedure PrettifyAlpha2D(height, width: LongWord);
 var
     // current y; last x, second last y of array;
     y, lx, sly: LongWord;
@@ -203,10 +203,10 @@ begin
     lx:= width - 1;
     for y:= 0 to sly do
         begin
-        PrettifyAlpha(PLongWordArray(pixels[y]), PLongWordArray(pixels[y+1]), 0, lx, 0);
+        PrettifyAlpha(LandPixelRow(y), LandPixelRow(y+1), 0, lx, 0);
         end;
     // don't forget last row
-    PrettifyAlpha(PLongWordArray(pixels[sly+1]), nil, 0, lx, 0);
+    PrettifyAlpha(LandPixelRow(sly+1), nil, 0, lx, 0);
 end;
 
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;

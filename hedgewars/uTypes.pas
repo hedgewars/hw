@@ -545,7 +545,6 @@ type
             gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam, gidMoreWind);
 
 
-    TLandArray = packed array of array of LongWord;
     TDirtyTag = packed array of array of byte;
 
     TPreview  = packed array[0..127, 0..31] of byte;
