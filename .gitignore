@@ -32,7 +32,7 @@ misc/liblua/Xcode/build/
 misc/libphysfs/Xcode/build/
 misc/libphyslayer/Xcode/build/
 moc_*.cxx_parameters
-relre:^release\/
+relre:^release/
 *.log
 *.cmd
 *.diff

@@ -793,7 +793,7 @@ begin
         begin
         WriteLnToConsole('Generating land...');
         case cMapGen of
-            mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
+            mgRandom: CreateTemplatedLand(cFeatureSize, cSeed, PathPrefix, Theme);
             mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
             mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
             mgDrawn : GenDrawnMap;
@@ -801,7 +801,7 @@ begin
         else
             OutError('Unknown mapgen', true);
         end;
-        if cMapGen <> mgForts then
+        if (cMapGen <> mgForts) and (cMapGen <> mgRandom) then
             GenLandSurface
         end;
 
@@ -948,7 +948,7 @@ var rh, rw, ox, oy, x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
-        mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
+        mgRandom: CreateTemplatedLand(cFeatureSize, cSeed, PathPrefix, Theme);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;
@@ -1007,7 +1007,7 @@ var rh, rw, ox, oy, x, y, xx, yy, t, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
-        mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
+        mgRandom: CreateTemplatedLand(cFeatureSize, cSeed, PathPrefix, Theme);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;

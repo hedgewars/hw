@@ -9,6 +9,9 @@ authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 [dependencies]
 land2d = { path = "../land2d" }
 integral-geometry = { path = "../integral-geometry" }
+mapgen = { path = "../mapgen" }
+landgen = { path = "../landgen" }
+lfprng = { path = "../lfprng" }
 
 [lib]
 name = "hwengine_future"

@@ -2,6 +2,7 @@ unit uLandUtils;
 interface
 uses SDLh;
 
+procedure CreateTemplatedLand(featureSize: Longword; seed, dataPath, theme: shortstring);
 procedure ResizeLand(width, height: LongWord);
 procedure DisposeLand();
 procedure InitWorldEdges();
@@ -20,8 +21,11 @@ implementation
 uses uUtils, uConsts, uVariables, uTypes;
 
 const LibFutureName = 'hwengine_future';
-function  create_game_field(width, height: Longword): pointer; cdecl; external LibFutureName;
+
+function  create_empty_game_field(width, height: Longword): pointer; cdecl; external LibFutureName;
+procedure get_game_field_parameters(game_field: pointer; var width: LongInt; var height: LongInt); cdecl; external LibFutureName;
 procedure dispose_game_field(game_field: pointer); cdecl; external LibFutureName;
+
 function  land_get(game_field: pointer; x, y: LongInt): Word; cdecl; external LibFutureName;
 procedure land_set(game_field: pointer; x, y: LongInt; value: Word); cdecl; external LibFutureName;
 function  land_row(game_field: pointer; row: LongInt): PWordArray; cdecl; external LibFutureName;
@@ -30,6 +34,8 @@ procedure land_fill(game_field: pointer; x, y: LongInt; border, fill: Word); cde
 function  land_pixel_get(game_field: pointer; x, y: LongInt): Longword; cdecl; external LibFutureName;
 procedure land_pixel_set(game_field: pointer; x, y: LongInt; value: Longword); cdecl; external LibFutureName;
 function  land_pixel_row(game_field: pointer; row: LongInt): PLongwordArray; cdecl; external LibFutureName;
+
+function  generate_templated_game_field(feature_size: Longword; seed, data_path, theme_name: PChar): pointer; cdecl; external LibFutureName;
 
 var gameField: pointer;
 
@@ -68,6 +74,23 @@ begin
     LandPixelRow:= land_pixel_row(gameField, row)
 end;
 
+procedure CreateTemplatedLand(featureSize: Longword; seed, dataPath, theme: shortstring);
+begin
+    seed[byte(seed[0]) + 1]:= #0;
+    theme[byte(theme[0]) + 1]:= #0;
+
+    gameField:= generate_templated_game_field(featureSize, @seed[1], Str2PChar(dataPath), @theme[1]);
+    get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT);
+
+    // let's assume those are powers of two
+    LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
+    LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
+
+    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
+
+    initScreenSpaceVars();
+end;
+
 procedure ResizeLand(width, height: LongWord);
 var potW, potH: LongInt;
 begin
@@ -81,7 +104,7 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
     cWaterLine:= LAND_HEIGHT;
 
-    gameField:= create_game_field(LAND_WIDTH, LAND_HEIGHT);
+    gameField:= create_empty_game_field(LAND_WIDTH, LAND_HEIGHT);
     SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
     // 0.5 is already approaching on unplayable
     if (width div 4096 >= 2) or (height div 2048 >= 2) then cMaxZoomLevel:= cMaxZoomLevel/2;

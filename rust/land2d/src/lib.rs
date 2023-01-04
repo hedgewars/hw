@@ -1,5 +1,5 @@
 use std::{cmp, ops::Index, ops::IndexMut};
-
+use vec2d::Vec2D;
 use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, PotSize, Rect, Size, SizeMask};
 
 pub struct Land2D<T> {
@@ -292,6 +292,23 @@ impl<T> IndexMut<usize> for Land2D<T> {
     #[inline]
     fn index_mut(&mut self, row: usize) -> &mut [T] {
         &mut self.pixels[row]
+    }
+}
+
+impl<T> From<Vec2D<T>> for Land2D<T> {
+    fn from(vec: Vec2D<T>) -> Self {
+        let actual_size = vec.size();
+        let pot_size = actual_size.next_power_of_two();
+
+        assert_eq!(actual_size, pot_size.size());
+
+        let top_left = Point::new(0, 0);
+        let play_box = Rect::from_size(top_left, actual_size);
+        Self {
+            play_box,
+            pixels: vec,
+            mask: pot_size.to_mask(),
+        }
     }
 }
 

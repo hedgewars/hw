@@ -1,5 +1,10 @@
 use integral_geometry::{Point, Size};
 use land2d;
+use landgen::{template_based::TemplatedLandGenerator, LandGenerationParameters, LandGenerator};
+use lfprng::LaggedFibonacciPRNG;
+use mapgen::{theme::Theme, MapGenerator};
+use std::fs;
+use std::{ffi::CStr, path::Path};
 
 #[repr(C)]
 pub struct GameField {
@@ -8,10 +13,69 @@ pub struct GameField {
 }
 
 #[no_mangle]
-pub extern "C" fn create_game_field(width: u32, height: u32) -> *mut GameField {
+pub extern "C" fn get_game_field_parameters(
+    game_field: &GameField,
+    width: *mut i32,
+    height: *mut i32,
+) {
+    unsafe {
+        *width = game_field.collision.width() as i32;
+        *height = game_field.collision.height() as i32;
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn create_empty_game_field(width: u32, height: u32) -> *mut GameField {
     let game_field = Box::new(GameField {
         collision: land2d::Land2D::new(Size::new(width as usize, height as usize), 0),
         pixels: land2d::Land2D::new(Size::new(width as usize, height as usize), 0),
+    });
+
+    Box::leak(game_field)
+}
+
+#[no_mangle]
+pub extern "C" fn generate_templated_game_field(
+    feature_size: u32,
+    seed: *const i8,
+    data_path: *const i8,
+    theme_name: *const i8,
+) -> *mut GameField {
+    let data_path: &str = unsafe { CStr::from_ptr(data_path) }.to_str().unwrap();
+    let data_path = Path::new(&data_path);
+
+    let seed: &str = unsafe { CStr::from_ptr(seed) }.to_str().unwrap();
+    let theme_name: &str = unsafe { CStr::from_ptr(theme_name) }.to_str().unwrap();
+
+    let mut random_numbers_gen = LaggedFibonacciPRNG::new(seed.as_bytes());
+
+    let yaml_templates =
+        fs::read_to_string(data_path.join(Path::new("map_templates.yaml")).as_path())
+            .expect("Error reading map templates file");
+    let mut map_gen = MapGenerator::new();
+    map_gen.import_yaml_templates(&yaml_templates);
+
+    let distance_divisor = feature_size.pow(2) / 8 + 10;
+    let params = LandGenerationParameters::new(0u16, 0x8000u16, distance_divisor, false, false);
+    let template = map_gen
+        .get_template("medium", &mut random_numbers_gen)
+        .expect("Error reading map templates file")
+        .clone();
+    let landgen = TemplatedLandGenerator::new(template);
+    let collision = landgen.generate_land(&params, &mut random_numbers_gen);
+
+    let theme = Theme::load(
+        data_path
+            .join(Path::new("Themes"))
+            .join(Path::new(theme_name))
+            .as_path(),
+    )
+    .unwrap();
+    let pixels = map_gen.make_texture(&collision, &params, &theme);
+
+    let game_field = Box::new(GameField {
+        collision,
+        pixels: pixels.into(),
     });
 
     Box::leak(game_field)
