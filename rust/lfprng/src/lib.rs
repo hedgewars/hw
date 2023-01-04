@@ -1,3 +1,5 @@
+use rand::{Error, RngCore, SeedableRng};
+
 pub struct LaggedFibonacciPRNG {
     circular_buffer: [u32; 64],
     index: usize,
@@ -5,7 +7,7 @@ pub struct LaggedFibonacciPRNG {
 
 impl LaggedFibonacciPRNG {
     pub fn new(init_values: &[u8]) -> Self {
-        let mut buf = [0xa98765 + 68; 64];
+        let mut buf = [0xa98765; 64];
 
         for i in 0..std::cmp::min(init_values.len(), 54) {
             buf[i] = init_values[i] as u32;
@@ -30,10 +32,17 @@ impl LaggedFibonacciPRNG {
 
     #[inline]
     fn get_next(&mut self) -> u32 {
+        const PRIME_NUM: u32 = 2147483629;
+
         self.index = (self.index + 1) & 0x3f;
-        self.circular_buffer[self.index] = (self.circular_buffer[(self.index + 40) & 0x3f]
-            + self.circular_buffer[(self.index + 9) & 0x3f])
-            & 0x7fffffff;
+        let next_value = self.circular_buffer[(self.index + 40) & 0x3f]
+            + self.circular_buffer[(self.index + 9) & 0x3f];
+
+        self.circular_buffer[self.index] = if next_value > PRIME_NUM {
+            next_value - PRIME_NUM
+        } else {
+            next_value
+        };
 
         self.circular_buffer[self.index]
     }
@@ -57,6 +66,32 @@ impl Iterator for LaggedFibonacciPRNG {
     fn next(&mut self) -> Option<Self::Item> {
         self.get_next();
         Some(self.get_next())
+    }
+}
+
+impl RngCore for LaggedFibonacciPRNG {
+    fn next_u32(&mut self) -> u32 {
+        self.get_next().wrapping_add(self.get_next())
+    }
+
+    fn next_u64(&mut self) -> u64 {
+        ((self.next_u32() as u64) << 32) | self.next_u32() as u64
+    }
+
+    fn fill_bytes(&mut self, dest: &mut [u8]) {
+        dest.iter_mut().for_each(|x| *x = self.next_u32() as u8);
+    }
+
+    fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), Error> {
+        Ok(self.fill_bytes(dest))
+    }
+}
+
+impl SeedableRng for LaggedFibonacciPRNG {
+    type Seed = [u8; 32];
+
+    fn from_seed(seed: Self::Seed) -> Self {
+        LaggedFibonacciPRNG::new(&seed)
     }
 }
 
