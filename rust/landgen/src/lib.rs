@@ -26,6 +26,14 @@ impl<T: Copy + PartialEq> LandGenerationParameters<T> {
             skip_bezier,
         }
     }
+
+    pub fn zero(&self) -> T {
+        self.zero
+    }
+
+    pub fn basic(&self) -> T {
+        self.basic
+    }
 }
 
 pub trait LandGenerator {

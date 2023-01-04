@@ -3,12 +3,12 @@ pub mod theme;
 use self::theme::Theme;
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
-use landgen::outline_template::OutlineTemplate;
-use rand::{thread_rng, Rng};
+use landgen::{outline_template::OutlineTemplate, LandGenerationParameters};
 use serde_derive::Deserialize;
 use serde_yaml;
 use std::{borrow::Borrow, collections::hash_map::HashMap, mem::replace};
 use vec2d::Vec2D;
+use rand::{Rng, seq::SliceRandom};
 
 #[derive(Deserialize)]
 struct PointDesc {
@@ -111,13 +111,18 @@ impl MapGenerator {
             .collect();
     }
 
-    pub fn get_template(&self, template_type: &str) -> Option<&OutlineTemplate> {
+    pub fn get_template<R: Rng>(&self, template_type: &str, rng: &mut R) -> Option<&OutlineTemplate> {
         self.templates
             .get(template_type)
-            .and_then(|t| thread_rng().choose(t))
+            .and_then(|t| t.as_slice().choose(rng))
     }
 
-    pub fn make_texture<LandT>(&self, land: &Land2D<LandT>, theme: &Theme) -> Vec2D<u32>
+    pub fn make_texture<LandT>(
+        &self,
+        land: &Land2D<LandT>,
+        parameters: &LandGenerationParameters<LandT>,
+        theme: &Theme,
+    ) -> Vec2D<u32>
     where
         LandT: Copy + Default + PartialEq,
     {
@@ -131,6 +136,7 @@ impl MapGenerator {
                 while sprite_row.len() < land.width() - x_offset {
                     let copy_range = x_offset..x_offset + sprite_row.len();
                     tex_row_copy(
+                        parameters.basic(),
                         &land_row[copy_range.clone()],
                         &mut tex_row[copy_range],
                         sprite_row,
@@ -142,6 +148,7 @@ impl MapGenerator {
                 if x_offset < land.width() {
                     let final_range = x_offset..land.width();
                     tex_row_copy(
+                        parameters.basic(),
                         &land_row[final_range.clone()],
                         &mut tex_row[final_range],
                         &sprite_row[..land.width() - x_offset],
@@ -158,6 +165,7 @@ impl MapGenerator {
             let mut offsets = vec![255u8; land.width()];
 
             land_border_pass(
+                parameters.basic(),
                 land.rows().rev().zip(texture.rows_mut().rev()),
                 &mut offsets,
                 border_width,
@@ -170,6 +178,7 @@ impl MapGenerator {
             offsets.iter_mut().for_each(|v| *v = 255);
 
             land_border_pass(
+                parameters.basic(),
                 land.rows().zip(texture.rows_mut()),
                 &mut offsets,
                 border_width,
@@ -222,8 +231,13 @@ fn blend(source: u32, target: u32) -> u32 {
     (red as u32) << 0 | (green as u32) << 8 | (blue as u32) << 16 | (alpha as u32) << 24
 }
 
-fn land_border_pass<'a, LandT, T, F>(rows: T, offsets: &mut [u8], border_width: u8, pixel_getter: F)
-where
+fn land_border_pass<'a, LandT, T, F>(
+    basic_value: LandT,
+    rows: T,
+    offsets: &mut [u8],
+    border_width: u8,
+    pixel_getter: F,
+) where
     LandT: Default + PartialEq + 'a,
     T: Iterator<Item = (&'a [LandT], &'a mut [u32])>,
     F: (Fn(usize, usize) -> u32),
@@ -235,7 +249,7 @@ where
             .zip(offsets.iter_mut())
             .enumerate()
         {
-            *offset_v = if *land_v == LandT::default() {
+            *offset_v = if *land_v == basic_value {
                 if *offset_v < border_width {
                     *tex_v = blend(pixel_getter(x, *offset_v as usize), *tex_v)
                 }
@@ -247,16 +261,16 @@ where
     }
 }
 
-fn tex_row_copy<LandT>(land_row: &[LandT], tex_row: &mut [u32], sprite_row: &[u32])
-where
+fn tex_row_copy<LandT>(
+    basic_value: LandT,
+    land_row: &[LandT],
+    tex_row: &mut [u32],
+    sprite_row: &[u32],
+) where
     LandT: Default + PartialEq,
 {
     for ((land_v, tex_v), sprite_v) in land_row.iter().zip(tex_row.iter_mut()).zip(sprite_row) {
-        *tex_v = if *land_v == LandT::default() {
-            *sprite_v
-        } else {
-            0
-        }
+        *tex_v = if *land_v == basic_value { *sprite_v } else { 0 }
     }
 }
 
