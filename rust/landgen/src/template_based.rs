@@ -21,7 +21,7 @@ impl LandGenerator for TemplatedLandGenerator {
         parameters: &LandGenerationParameters<T>,
         random_numbers: &mut I,
     ) -> Land2D<T> {
-        let mut land = Land2D::new(self.outline_template.size, parameters.basic);
+        let mut land = Land2D::new(&self.outline_template.size, parameters.basic);
 
         let mut points = OutlinePoints::from_outline_template(
             &self.outline_template,

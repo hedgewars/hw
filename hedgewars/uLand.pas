@@ -355,12 +355,12 @@ begin
     uLandPainted.Draw;
 end;
 
-function SelectTemplate: LongInt;
+function SelectTemplate: shortstring;
 var l: LongInt;
 begin
-    SelectTemplate:= 0;
+    SelectTemplate:= '';
     if (cReducedQuality and rqLowRes) <> 0 then
-        SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))]
+        SelectTemplate:= 'small'
     else
         begin
         if cTemplateFilter = 0 then
@@ -375,20 +375,20 @@ begin
 
             case cTemplateFilter of
             0: OutError('Error selecting TemplateFilter. Ask unC0Rr about what you did wrong', true);
-            1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-            2: SelectTemplate:= MediumTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-            3: SelectTemplate:= LargeTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-            4: SelectTemplate:= CavernTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-            5: SelectTemplate:= WackyTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+            1: SelectTemplate:= 'small';
+            2: SelectTemplate:= 'medium';
+            3: SelectTemplate:= 'large';
+            4: SelectTemplate:= 'cavern';
+            5: SelectTemplate:= 'wacky';
     // For lua only!
             6: begin
-               SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
+               SelectTemplate:= 'small';
                GetRandom(2) // burn 1
                end
             end
         end;
 
-    WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
+    WriteLnToConsole('Using template filter '+SelectTemplate);
 end;
 
 procedure LandSurface2LandPixels(Surface: PSDL_Surface);
@@ -793,7 +793,7 @@ begin
         begin
         WriteLnToConsole('Generating land...');
         case cMapGen of
-            mgRandom: CreateTemplatedLand(cFeatureSize, cSeed, PathPrefix, Theme);
+            mgRandom: GenerateTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
             mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
             mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
             mgDrawn : GenDrawnMap;
@@ -801,7 +801,7 @@ begin
         else
             OutError('Unknown mapgen', true);
         end;
-        if (cMapGen <> mgForts) and (cMapGen <> mgRandom) then
+        if (cMapGen <> mgForts) then
             GenLandSurface
         end;
 
@@ -948,7 +948,7 @@ var rh, rw, ox, oy, x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
-        mgRandom: CreateTemplatedLand(cFeatureSize, cSeed, PathPrefix, Theme);
+        mgRandom: GenerateTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;
@@ -1007,7 +1007,7 @@ var rh, rw, ox, oy, x, y, xx, yy, t, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
-        mgRandom: CreateTemplatedLand(cFeatureSize, cSeed, PathPrefix, Theme);
+        mgRandom: GenerateTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;

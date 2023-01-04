@@ -2,6 +2,7 @@ mod outline;
 pub mod outline_template;
 pub mod template_based;
 
+#[derive(Clone, Copy)]
 pub struct LandGenerationParameters<T> {
     zero: T,
     basic: T,

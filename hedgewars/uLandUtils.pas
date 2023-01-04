@@ -2,7 +2,7 @@ unit uLandUtils;
 interface
 uses SDLh;
 
-procedure CreateTemplatedLand(featureSize: Longword; seed, dataPath, theme: shortstring);
+procedure GenerateTemplatedLand(featureSize: Longword; seed, templateType, dataPath: shortstring);
 procedure ResizeLand(width, height: LongWord);
 procedure DisposeLand();
 procedure InitWorldEdges();
@@ -23,7 +23,7 @@ uses uUtils, uConsts, uVariables, uTypes;
 const LibFutureName = 'hwengine_future';
 
 function  create_empty_game_field(width, height: Longword): pointer; cdecl; external LibFutureName;
-procedure get_game_field_parameters(game_field: pointer; var width: LongInt; var height: LongInt); cdecl; external LibFutureName;
+procedure get_game_field_parameters(game_field: pointer; var width: LongInt; var height: LongInt; var play_width: LongInt; var play_height: LongInt); cdecl; external LibFutureName;
 procedure dispose_game_field(game_field: pointer); cdecl; external LibFutureName;
 
 function  land_get(game_field: pointer; x, y: LongInt): Word; cdecl; external LibFutureName;
@@ -35,7 +35,8 @@ function  land_pixel_get(game_field: pointer; x, y: LongInt): Longword; cdecl; e
 procedure land_pixel_set(game_field: pointer; x, y: LongInt; value: Longword); cdecl; external LibFutureName;
 function  land_pixel_row(game_field: pointer; row: LongInt): PLongwordArray; cdecl; external LibFutureName;
 
-function  generate_templated_game_field(feature_size: Longword; seed, data_path, theme_name: PChar): pointer; cdecl; external LibFutureName;
+function  generate_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external LibFutureName;
+procedure apply_theme(game_field: pointer; data_path, theme_name: PChar); cdecl; external LibFutureName;
 
 var gameField: pointer;
 
@@ -74,13 +75,21 @@ begin
     LandPixelRow:= land_pixel_row(gameField, row)
 end;
 
-procedure CreateTemplatedLand(featureSize: Longword; seed, dataPath, theme: shortstring);
+procedure GenerateTemplatedLand(featureSize: Longword; seed, templateType, dataPath: shortstring);
 begin
     seed[byte(seed[0]) + 1]:= #0;
-    theme[byte(theme[0]) + 1]:= #0;
+    templateType[byte(templateType[0]) + 1]:= #0;
 
-    gameField:= generate_templated_game_field(featureSize, @seed[1], Str2PChar(dataPath), @theme[1]);
-    get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT);
+    gameField:= generate_templated_game_field(featureSize, @seed[1], @templateType[1], Str2PChar(dataPath));
+    get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
+
+    MaxHedgehogs:= 32;
+    hasGirders:= true;
+
+    leftX:= (LAND_WIDTH - playWidth) div 2;
+    rightX:= Pred(leftX + playWidth);
+    topY:= LAND_HEIGHT - playHeight;
+
 
     // let's assume those are powers of two
     LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
