@@ -3225,7 +3225,7 @@ begin
     if CheckLuaParamCount(L, 1, 'HideHog', 'gearUid') then
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
-        if (gear <> nil) and (gear^.hedgehog <> nil) then
+        if (gear <> nil) and (gear^.hedgehog <> nil) and (gear^.hedgehog^.gear <> nil) then
             begin
             HideHog(gear^.hedgehog);
             lua_pushboolean(L, true);
