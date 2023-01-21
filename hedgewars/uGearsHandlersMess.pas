@@ -264,6 +264,7 @@ end;
 
 procedure HideHog(HH: PHedgehog);
 begin
+    if HH^.Gear = nil then exit;
     ScriptCall('onHogHide', HH^.Gear^.Uid);
     DeleteCI(HH^.Gear);
     if FollowGear = HH^.Gear then
