@@ -445,7 +445,11 @@
 03:52=SIN USAR
 03:53=Tipo 40
 03:54=Herramienta
-
+03:55=No se ve genial con esto!
+03:56=Porfavor usalo o dejalo
+03:57=Utilidad
+03:58=Bomba de proximidad flotante.
+03:59=El ultimo poder
 ; Descripciones de armamento ( líneas delimitadas con | )
 04:00=Ataca a tus enemigos usando una sencilla granada.|Explotará una vez el temporizador llegue a cero.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.
 04:01=Ataca a tus enemigos usando una granada de fragmentación.|Se fragmentará en metralla explosiva|una vez el temporizador llegue a cero.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.
@@ -500,9 +504,14 @@
 04:50=¿Alguien está oculto bajo tierra?|¡Desentiérralos con un bombardeo perforador!|El temporizador controla la profundidad a alcanzar.
 04:51=¿Qué hay más barato que el barro?|Un tiro gratis gracias a la bola de barro.|Hará que el enemigo salga volando|y escuece un poco si te entra en los ojos.
 04:52=SIN USAR
-04:53=Vive una trepidante aventura a través del|espacio y el tiempo mientras tus compañeros|siguen luchando en tu lugar.|Estate preparado para volver en cualquier momento,|o al llegar la Muerte súbita si te has quedado solo.|Aviso\: no funciona durante la Muerte súbita,|si estás solo o si eres el rey.
+04:53=Vive una trepidante aventura a través del|espacio y el tiempo mientras tus compañeros|siguen luchando en tu lugar.|Estate preparado para volver en cualquier momento,|o al llegar la Muerte súbita si te has quedado solo.|Aviso: no funciona durante la Muerte súbita,|si estás solo o si eres el rey.
 04:54=Esparce un chorro de pegajoso barro.|Construye puentes, entierra enemigos o cierra túneles.|¡Ten especial cuidado de no mancharte!
-
+04:55=Retorna a la Edad de Hielo!|Congela los erizos y vuelve el piso mas resbaloso|Salvate congelando el agua.|Ataque: activa o desactiva rayo congelador |Arriba o abajo: Continua apuntando
+04:56=Puedes tirar 2 cuchillos al enemigo y bloques|pazadisos y tuneles en vez usarlos|Escalarlos! Su daño incrementa con su velocidad.|Pero se cauteloso, jugar con cuchillos es peligroso.|Attaque: Presiona para disparar con mas poder.
+04:57=Construye una banda elastica muy resistente, desde donde|los erizos y otros rebotan|sin tomar daño de caida.|Izquierda/Derecha: cambiar la orientacion de la banda|Cursor: Coloca la banda en una posicion adecuada.
+04:58=Este bomba de promixidad flota en el aire y sigue|los erizos que se acerquen a esto.|Su explosion es mas debil que una mina.|Ataque: Presiona para obtener mas poder.
+04:59=Esta arma no esta terminada y es experimental.|Usar a su propio riesgo!
+04:60=Libera una lluvia de balas encima de tu amigo!|Y pensaban que estaban a salvo|Detras de una capa triple de vigas.|Ataque: Dispara a poder maximo|Arriba/Abajo: Continua disparando.
 ; Game goal strings
 05:00=Modos de juego
 05:01=Las siguientes reglas están activas:
@@ -526,3 +535,4 @@
 05:19=El arsenal se restaura al final de cada turno
 05:20=Los erizos no comparten arsenal
 05:21=Tag Team: los equipos del mismo clan se van turnando entre ellos.|Turno compartido: los equipos del mismo clan comparten la duración del turno.
+05:22=Viento pesado: el viento afecta casi todo.
