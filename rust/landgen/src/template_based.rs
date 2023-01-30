@@ -16,7 +16,7 @@ impl TemplatedLandGenerator {
 }
 
 impl LandGenerator for TemplatedLandGenerator {
-    fn generate_land<T: Copy + PartialEq, I: Iterator<Item = u32>>(
+    fn generate_land<T: Copy + PartialEq + Default, I: Iterator<Item = u32>>(
         &self,
         parameters: &LandGenerationParameters<T>,
         random_numbers: &mut I,

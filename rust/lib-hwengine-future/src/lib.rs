@@ -110,8 +110,8 @@ pub extern "C" fn apply_theme(
 }
 
 #[no_mangle]
-pub extern "C" fn land_get(game_field: &mut GameField, x: i32, y: i32) -> u16 {
-    game_field.collision.map(y, x, |p| *p)
+pub extern "C" fn land_get(game_field: &GameField, x: i32, y: i32) -> u16 {
+    game_field.collision.get(y, x)
 }
 
 #[no_mangle]
@@ -138,8 +138,8 @@ pub extern "C" fn land_fill(
 }
 
 #[no_mangle]
-pub extern "C" fn land_pixel_get(game_field: &mut GameField, x: i32, y: i32) -> u32 {
-    game_field.pixels.map(y, x, |p| *p)
+pub extern "C" fn land_pixel_get(game_field: &GameField, x: i32, y: i32) -> u32 {
+    game_field.pixels.get(y, x)
 }
 
 #[no_mangle]

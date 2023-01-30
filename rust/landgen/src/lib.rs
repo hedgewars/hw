@@ -1,6 +1,7 @@
 mod outline;
 pub mod outline_template;
 pub mod template_based;
+pub mod wavefront_collapse;
 
 #[derive(Clone, Copy)]
 pub struct LandGenerationParameters<T> {
@@ -11,7 +12,7 @@ pub struct LandGenerationParameters<T> {
     skip_bezier: bool,
 }
 
-impl<T: Copy + PartialEq> LandGenerationParameters<T> {
+impl<T: Copy + PartialEq + Default> LandGenerationParameters<T> {
     pub fn new(
         zero: T,
         basic: T,
@@ -38,17 +39,9 @@ impl<T: Copy + PartialEq> LandGenerationParameters<T> {
 }
 
 pub trait LandGenerator {
-    fn generate_land<T: Copy + PartialEq, I: Iterator<Item = u32>>(
+    fn generate_land<T: Copy + PartialEq + Default, I: Iterator<Item = u32>>(
         &self,
         parameters: &LandGenerationParameters<T>,
         random_numbers: &mut I,
     ) -> land2d::Land2D<T>;
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
 }

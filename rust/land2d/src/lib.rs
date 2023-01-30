@@ -2,13 +2,14 @@ use std::{cmp, ops::Index, ops::IndexMut};
 use vec2d::Vec2D;
 use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, PotSize, Rect, Size, SizeMask};
 
+#[derive(Debug)]
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
     play_box: Rect,
     mask: SizeMask,
 }
 
-impl<T: Copy + PartialEq> Land2D<T> {
+impl<T: Copy + PartialEq + Default> Land2D<T> {
     pub fn new(play_size: &Size, fill_value: T) -> Self {
         let real_size = play_size.next_power_of_two();
         let top_left = Point::new(
@@ -95,6 +96,18 @@ impl<T: Copy + PartialEq> Land2D<T> {
             }
         } else {
             U::default()
+        }
+    }
+
+    #[inline]
+    pub fn get(&self, y: i32, x: i32) -> T {
+        if self.is_valid_coordinate(x, y) {
+            unsafe {
+                // hey, I just checked that coordinates are valid!
+                *self.pixels.get_unchecked(y as usize, x as usize)
+            }
+        } else {
+            T::default()
         }
     }
 

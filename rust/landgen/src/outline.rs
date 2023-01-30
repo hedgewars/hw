@@ -287,7 +287,7 @@ impl OutlinePoints {
         }
     }
 
-    pub fn draw<T: Copy + PartialEq>(&self, land: &mut Land2D<T>, value: T) {
+    pub fn draw<T: Copy + PartialEq + Default>(&self, land: &mut Land2D<T>, value: T) {
         for segment in self.segments_iter() {
             land.draw_line(segment, value);
         }

@@ -4,6 +4,7 @@ use std::{
 };
 use integral_geometry::Size;
 
+#[derive(Debug)]
 pub struct Vec2D<T> {
     data: Vec<T>,
     size: Size,
