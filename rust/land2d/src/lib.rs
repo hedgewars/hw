@@ -19,7 +19,7 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
         let play_box = Rect::from_size(top_left, *play_size);
         Self {
             play_box,
-            pixels: vec2d::Vec2D::new(real_size.size(), fill_value),
+            pixels: vec2d::Vec2D::new(&real_size.size(), fill_value),
             mask: real_size.to_mask(),
         }
     }
