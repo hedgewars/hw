@@ -47,7 +47,7 @@ impl ThemeSprite {
 
     pub fn to_transposed(&self) -> ThemeSprite {
         let size = self.size().transpose();
-        let mut pixels = Vec2D::new(size, 0u32);
+        let mut pixels = Vec2D::new(&size, 0u32);
         for (y, row) in self.pixels.rows().enumerate() {
             for (x, v) in row.iter().enumerate() {
                 pixels[x][y] = *v;
@@ -179,7 +179,7 @@ fn load_sprite(path: &Path) -> Result<ThemeSprite, ThemeLoadError> {
     }
     let size = Size::new(info.width as usize, info.height as usize);
 
-    let mut pixels: Vec2D<u32> = Vec2D::new(size, 0);
+    let mut pixels: Vec2D<u32> = Vec2D::new(&size, 0);
     reader.next_frame(slice_u32_to_u8_mut(pixels.as_mut_slice()))?;
 
     Ok(ThemeSprite { pixels })

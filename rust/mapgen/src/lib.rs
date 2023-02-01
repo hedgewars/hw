@@ -126,7 +126,7 @@ impl MapGenerator {
     where
         LandT: Copy + Default + PartialEq,
     {
-        let mut texture = Vec2D::new(land.size().size(), 0);
+        let mut texture = Vec2D::new(&land.size().size(), 0);
 
         if let Some(land_sprite) = theme.land_texture() {
             for (row_index, (land_row, tex_row)) in land.rows().zip(texture.rows_mut()).enumerate()
