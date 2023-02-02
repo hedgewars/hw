@@ -1,6 +1,6 @@
 use integral_geometry::Size;
-use vec2d::Vec2D;
 use std::collections::HashMap;
+use vec2d::Vec2D;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum Tile {
@@ -60,7 +60,7 @@ impl WavefrontCollapse {
         map_size: &Size,
         seed_fn: F,
         random_numbers: &mut I,
-        ) -> Vec2D<Tile> {
+    ) -> Vec2D<Tile> {
         let mut land = Vec2D::new(&map_size, Tile::Empty);
 
         seed_fn(&mut land);
@@ -116,8 +116,12 @@ impl WavefrontCollapse {
         [
             land.get(y, x + 1).map(|p| *p).unwrap_or_default(),
             land.get(y + 1, x).map(|p| *p).unwrap_or_default(),
-            land.get(y, x.wrapping_sub(1)).map(|p| *p).unwrap_or_default(),
-            land.get(y.wrapping_sub(1), x).map(|p| *p).unwrap_or_default(),
+            land.get(y, x.wrapping_sub(1))
+                .map(|p| *p)
+                .unwrap_or_default(),
+            land.get(y.wrapping_sub(1), x)
+                .map(|p| *p)
+                .unwrap_or_default(),
         ]
     }
 }

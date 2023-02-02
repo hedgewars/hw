@@ -143,6 +143,17 @@ impl<T: Copy> AsMut<[T]> for Vec2D<T> {
     }
 }
 
+impl<T: Clone> Vec2D<T> {
+    pub fn from_iter<I: IntoIterator<Item = T>>(iter: I, size: &Size) -> Option<Vec2D<T>> {
+        let data: Vec<T> = iter.into_iter().collect();
+        if size.width * size.height == data.len() {
+            Some(Vec2D { data, size: *size })
+        } else {
+            None
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

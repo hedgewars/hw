@@ -9,3 +9,4 @@ integral-geometry = { path = "../integral-geometry" }
 land2d = { path = "../land2d" }
 vec2d = { path = "../vec2d" }
 itertools = "0.7.8"
+png = "0.17"
