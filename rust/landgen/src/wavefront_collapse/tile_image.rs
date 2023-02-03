@@ -2,7 +2,7 @@ use super::transform::RotationTransform;
 use std::rc::Rc;
 use vec2d::Vec2D;
 
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Clone, Debug)]
 pub struct Edge<I: PartialEq + Clone> {
     id: I,
     symmetrical: bool,
@@ -109,7 +109,78 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
             left: self.bottom.clone(),
         }
     }
+
+    pub fn right_edge(&self) -> &Edge<I> {
+        &self.right
+    }
+
+    pub fn bottom_edge(&self) -> &Edge<I> {
+        &self.bottom
+    }
+
+    pub fn left_edge(&self) -> &Edge<I> {
+        &self.left
+    }
+
+    pub fn top_edge(&self) -> &Edge<I> {
+        &self.top
+    }
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_edge_new() {
+        let edge = Edge::new(1, true);
+        assert_eq!(edge.id, 1);
+        assert_eq!(edge.symmetrical, true);
+        assert_eq!(edge.reverse, false);
+    }
+
+    #[test]
+    fn test_edge_reversed() {
+        let edge = Edge::new(1, true);
+        let reversed = edge.reversed();
+        assert_eq!(reversed.id, edge.id);
+        assert_eq!(reversed.symmetrical, edge.symmetrical);
+        assert_eq!(reversed.reverse, false);
+
+        let edge = Edge::new(1, false);
+        let reversed = edge.reversed();
+        assert_eq!(reversed.id, edge.id);
+        assert_eq!(reversed.symmetrical, edge.symmetrical);
+        assert_eq!(reversed.reverse, true);
+    }
+
+    #[test]
+    fn test_edge_equality() {
+        let edge1 = Edge::new(1, true);
+        let edge2 = Edge::new(1, true);
+        assert_eq!(edge1, edge2);
+
+        let edge1 = Edge::new(1, false);
+        let edge2 = Edge::new(1, false);
+        assert_eq!(edge1, edge2);
+
+        let edge1 = Edge::new(1, false);
+        let edge2 = Edge::new(2, false);
+        assert_ne!(edge1, edge2);
+    }
+
+    #[test]
+    fn test_edge_equality_with_reverse() {
+        let edge1 = Edge::new(1, true);
+        let edge2 = edge1.reversed();
+        assert_eq!(edge1, edge2);
+
+        let edge1 = Edge::new(1, false);
+        let edge2 = edge1.reversed();
+        assert_ne!(edge1, edge2);
+
+        let edge1 = Edge::new(1, true);
+        let edge2 = edge1.reversed().reversed();
+        assert_eq!(edge1, edge2);
+    }
+}

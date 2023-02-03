@@ -1,16 +1,16 @@
 use integral_geometry::Size;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 use vec2d::Vec2D;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum Tile {
     Empty,
     Outside,
-    Numbered(u32),
+    Numbered(usize),
 }
 
 impl Tile {
-    fn is(&self, i: u32) -> bool {
+    fn is(&self, i: usize) -> bool {
         *self == Tile::Numbered(i)
     }
 
@@ -22,7 +22,7 @@ impl Tile {
         }
     }
 
-    fn is_empty_or(&self, i: u32) -> bool {
+    fn is_empty_or(&self, i: usize) -> bool {
         match self {
             Tile::Numbered(n) => *n == i,
             Tile::Empty => true,
@@ -30,7 +30,7 @@ impl Tile {
         }
     }
 
-    fn is_void_or(&self, i: u32) -> bool {
+    fn is_void_or(&self, i: usize) -> bool {
         match self {
             Tile::Numbered(n) => *n == i,
             _ => true,
@@ -44,12 +44,13 @@ impl Default for Tile {
     }
 }
 
+#[derive(Debug)]
 pub struct CollapseRule {
-    tile: Tile,
-    right: HashSet<Tile>,
-    bottom: HashSet<Tile>,
-    left: HashSet<Tile>,
-    top: HashSet<Tile>,
+    pub tile: Tile,
+    pub right: HashSet<Tile>,
+    pub bottom: HashSet<Tile>,
+    pub left: HashSet<Tile>,
+    pub top: HashSet<Tile>,
 }
 
 pub struct WavefrontCollapse {
@@ -80,7 +81,11 @@ impl WavefrontCollapse {
         while self.collapse_step(random_numbers) {}
     }
 
-    fn add_rule(&mut self, rule: CollapseRule) {
+    pub fn set_rules(&mut self, rules: Vec<CollapseRule>) {
+        self.rules = rules;
+    }
+
+    pub fn add_rule(&mut self, rule: CollapseRule) {
         self.rules.push(rule);
     }
 
@@ -120,21 +125,30 @@ impl WavefrontCollapse {
                         .collect();
 
                     let entropy = possibilities.len();
-                    if entropy > 0 && entropy <= tiles_to_collapse.0 {
-                        let entry = (
-                            y,
-                            x,
-                            possibilities
-                                [random_numbers.next().unwrap_or_default() as usize % entropy],
-                        );
+                    if entropy > 0 {
+                        if entropy <= tiles_to_collapse.0 {
+                            let entry = (
+                                y,
+                                x,
+                                possibilities
+                                    [random_numbers.next().unwrap_or_default() as usize % entropy],
+                            );
 
-                        if entropy < tiles_to_collapse.0 {
-                            tiles_to_collapse = (entropy, vec![entry])
-                        } else {
-                            tiles_to_collapse.1.push(entry)
+                            if entropy < tiles_to_collapse.0 {
+                                tiles_to_collapse = (entropy, vec![entry])
+                            } else {
+                                tiles_to_collapse.1.push(entry)
+                            }
                         }
                     } else {
-                        todo!("no collapse possible")
+                        println!("We're here: {}, {}", x, y);
+                        println!(
+                            "Neighbour tiles are: {:?} {:?} {:?} {:?}",
+                            right_tile, bottom_tile, left_tile, top_tile
+                        );
+                        println!("Rules are: {:?}", self.rules);
+
+                        todo!("no collapse possible - what to do?")
                     }
                 }
             }
@@ -157,6 +171,10 @@ impl WavefrontCollapse {
             false
         }
     }
+
+    pub fn grid(&self) -> &Vec2D<Tile> {
+        &self.grid
+    }
 }
 
 #[cfg(test)]
@@ -168,11 +186,13 @@ mod tests {
     #[test]
     fn test_wavefront_collapse() {
         let size = Size::new(4, 4);
-        let mut rnd = [0u32; 64].into_iter();
+        let mut rnd = [0u32; 64].into_iter().cycle();
         let mut wfc = WavefrontCollapse::default();
+
+        wfc.generate_map(&size, |_| {}, &mut rnd);
 
         let empty_land = Vec2D::new(&size, Tile::Empty);
 
-        assert_eq!(empty_land.as_slice(), wfc.grid.as_slice());
+        assert_eq!(empty_land.as_slice(), wfc.grid().as_slice());
     }
 }

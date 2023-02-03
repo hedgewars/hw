@@ -1,20 +1,17 @@
 use super::tile_image::{Edge, TileImage};
-use super::wavefront_collapse::WavefrontCollapse;
+use super::wavefront_collapse::{CollapseRule, Tile, WavefrontCollapse};
 use crate::{LandGenerationParameters, LandGenerator};
 use integral_geometry::Size;
 use png::Decoder;
+use std::collections::HashSet;
 use std::fs::File;
 use std::io::BufReader;
 
-pub struct WavefrontCollapseLandGenerator {
-    wfc: WavefrontCollapse,
-}
+pub struct WavefrontCollapseLandGenerator {}
 
 impl WavefrontCollapseLandGenerator {
     pub fn new() -> Self {
-        Self {
-            wfc: WavefrontCollapse::default(),
-        }
+        Self {}
     }
 
     pub fn load_template<T: Copy + PartialEq + Default>(
@@ -75,7 +72,62 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
     ) -> land2d::Land2D<T> {
         let tiles = self.load_template(parameters);
 
-        todo!()
+        let mut rules = Vec::<CollapseRule>::new();
+
+        let default_connection = HashSet::from_iter(vec![Tile::Outside, Tile::Empty].into_iter());
+        for (i, tile) in tiles.iter().enumerate() {
+            let mut right = default_connection.clone();
+            let mut bottom = default_connection.clone();
+            let mut left = default_connection.clone();
+            let mut top = default_connection.clone();
+
+            for p in 0..i {
+                if tiles[p].left_edge() == tile.right_edge() {
+                    rules[p].left.insert(Tile::Numbered(i));
+                    right.insert(Tile::Numbered(p));
+                }
+
+                if tiles[p].right_edge() == tile.left_edge() {
+                    rules[p].right.insert(Tile::Numbered(i));
+                    left.insert(Tile::Numbered(p));
+                }
+
+                if tiles[p].top_edge() == tile.bottom_edge() {
+                    rules[p].top.insert(Tile::Numbered(i));
+                    bottom.insert(Tile::Numbered(p));
+                }
+
+                if tiles[p].bottom_edge() == tile.top_edge() {
+                    rules[p].bottom.insert(Tile::Numbered(i));
+                    top.insert(Tile::Numbered(p));
+                }
+            }
+
+            rules.push(CollapseRule {
+                tile: Tile::Numbered(i),
+                top,
+                right,
+                bottom,
+                left,
+            });
+        }
+
+        let mut wfc = WavefrontCollapse::default();
+        wfc.set_rules(rules);
+
+        wfc.generate_map(&Size::new(40, 20), |_| {}, random_numbers);
+
+        let grid = wfc.grid();
+
+        for r in 0..grid.height() {
+            for c in 0..grid.width() {
+                print!("{:?}", grid.get(r, c));
+            }
+
+            println!();
+        }
+
+        todo!("build result")
     }
 }
 
