@@ -1,78 +1,115 @@
-use vec2d::Vec2D;
+use super::transform::RotationTransform;
 use std::rc::Rc;
-use integral_geometry::Size;
+use vec2d::Vec2D;
 
-pub struct TileImage<T> {
-    image: Rc<Vec2D<T>>,
-    flip: bool,
-    mirror: bool,
+#[derive(PartialEq, Clone)]
+pub struct Edge<I: PartialEq + Clone> {
+    id: I,
+    symmetrical: bool,
+    reverse: bool,
 }
 
-impl<T: Copy> TileImage<T> {
-    pub fn new(image: Vec2D<T>) -> Self {
+impl<I: PartialEq + Clone> Edge<I> {
+    pub fn new(id: I, symmetrical: bool) -> Self {
+        Self {
+            id,
+            symmetrical,
+            reverse: false,
+        }
+    }
+
+    pub fn reversed(&self) -> Self {
+        Self {
+            id: self.id.clone(),
+            symmetrical: self.symmetrical,
+            reverse: !self.symmetrical && !self.reverse,
+        }
+    }
+}
+
+#[derive(Clone)]
+pub struct TileImage<T, I: PartialEq + Clone> {
+    image: Rc<Vec2D<T>>,
+    transform: RotationTransform,
+    top: Edge<I>,
+    right: Edge<I>,
+    bottom: Edge<I>,
+    left: Edge<I>,
+}
+
+impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
+    pub fn new(
+        image: Vec2D<T>,
+        top: Edge<I>,
+        right: Edge<I>,
+        bottom: Edge<I>,
+        left: Edge<I>,
+    ) -> Self {
         Self {
             image: Rc::new(image),
-            flip: false,
-            mirror: false,
+            transform: RotationTransform::default(),
+            top,
+            right,
+            bottom,
+            left,
         }
     }
 
     pub fn mirrored(&self) -> Self {
         Self {
             image: self.image.clone(),
-            flip: self.flip,
-            mirror: !self.mirror,
+            transform: self.transform.mirror(),
+            top: self.top.reversed(),
+            right: self.left.reversed(),
+            bottom: self.bottom.reversed(),
+            left: self.right.reversed(),
         }
     }
 
     pub fn flipped(&self) -> Self {
         Self {
             image: self.image.clone(),
-            flip: !self.flip,
-            mirror: self.mirror,
+            transform: self.transform.flip(),
+            top: self.bottom.reversed(),
+            right: self.right.reversed(),
+            bottom: self.top.reversed(),
+            left: self.left.reversed(),
         }
     }
 
-    pub fn split(&self, rows: usize, columns: usize) -> Vec<TileImage<T>> {
-        let mut result = Vec::new();
-        let self_image = self.image.as_ref();
-        let (result_width, result_height) = (self_image.width() / columns, self.image.height() / rows);
-
-        for row in 0..rows {
-            for column in 0..columns {
-                let mut tile_pixels = Vec::new();
-
-                for out_row in 0..result_height {
-                    tile_pixels.push(self_image[row * result_height + out_row][column*result_width..(column+1)*result_width].iter());
-                }
-
-                let tile_image = Vec2D::from_iter(tile_pixels.into_iter().flatten().map(|p| *p), &Size::new(result_width, result_height));
-
-                result.push(TileImage::new(tile_image.expect("correct calculation of tile dimensions")));
-            }
+    pub fn rotated90(&self) -> Self {
+        Self {
+            image: self.image.clone(),
+            transform: self.transform.rotate90(),
+            top: self.left.clone(),
+            right: self.top.clone(),
+            bottom: self.right.clone(),
+            left: self.bottom.clone(),
         }
+    }
 
-        result
+    pub fn rotated180(&self) -> Self {
+        Self {
+            image: self.image.clone(),
+            transform: self.transform.rotate90(),
+            top: self.bottom.clone(),
+            right: self.left.clone(),
+            bottom: self.top.clone(),
+            left: self.right.clone(),
+        }
+    }
+
+    pub fn rotated270(&self) -> Self {
+        Self {
+            image: self.image.clone(),
+            transform: self.transform.rotate90(),
+            top: self.left.clone(),
+            right: self.top.clone(),
+            bottom: self.right.clone(),
+            left: self.bottom.clone(),
+        }
     }
 }
 
 #[cfg(test)]
-mod tests {
-    use super::TileImage;
-    use integral_geometry::Size;
-    use vec2d::Vec2D;
-
-    #[test]
-    fn test_split() {
-        let size = Size::new(6, 4);
-        let sample_data = Vec2D::from_iter((0..24).into_iter(), &size);
-
-        assert!(sample_data.is_some());
-
-        let sample_data = sample_data.unwrap();
-        let big_tile = TileImage::new(sample_data);
-        let subtiles = big_tile.split(2, 2);
-
-        assert_eq!(subtiles.len(), 4);
-    }
-}
+mod tests {}

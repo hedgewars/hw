@@ -1,5 +1,5 @@
 use integral_geometry::Size;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use vec2d::Vec2D;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
@@ -44,14 +44,26 @@ impl Default for Tile {
     }
 }
 
-struct CollapseRule {
-    to_tile: Tile,
-    condition: fn([Tile; 4]) -> bool,
+pub struct CollapseRule {
+    tile: Tile,
+    right: HashSet<Tile>,
+    bottom: HashSet<Tile>,
+    left: HashSet<Tile>,
+    top: HashSet<Tile>,
 }
 
-#[derive(Default)]
 pub struct WavefrontCollapse {
-    rules: HashMap<Tile, Vec<CollapseRule>>,
+    rules: Vec<CollapseRule>,
+    grid: Vec2D<Tile>,
+}
+
+impl Default for WavefrontCollapse {
+    fn default() -> Self {
+        Self {
+            rules: Vec::new(),
+            grid: Vec2D::new(&Size::new(1, 1), Tile::Empty),
+        }
+    }
 }
 
 impl WavefrontCollapse {
@@ -60,69 +72,90 @@ impl WavefrontCollapse {
         map_size: &Size,
         seed_fn: F,
         random_numbers: &mut I,
-    ) -> Vec2D<Tile> {
-        let mut land = Vec2D::new(&map_size, Tile::Empty);
+    ) {
+        self.grid = Vec2D::new(&map_size, Tile::Empty);
 
-        seed_fn(&mut land);
+        seed_fn(&mut self.grid);
 
-        while self.collapse_step(&mut land, random_numbers) {}
-
-        land
+        while self.collapse_step(random_numbers) {}
     }
 
-    fn add_rule(&mut self, from_tile: Tile, to_tile: Tile, condition: fn([Tile; 4]) -> bool) {
-        let rule = CollapseRule { to_tile, condition };
-        self.rules
-            .entry(from_tile)
-            .or_insert_with(Vec::new)
-            .push(rule);
+    fn add_rule(&mut self, rule: CollapseRule) {
+        self.rules.push(rule);
     }
 
-    fn collapse_step<I: Iterator<Item = u32>>(
-        &self,
-        land: &mut Vec2D<Tile>,
-        random_numbers: &mut I,
-    ) -> bool {
-        let mut collapse_occurred = false;
-        for x in 0..land.width() {
-            for y in 0..land.height() {
-                let current_tile = land.get(y, x).expect("valid iteration range");
+    fn get_tile(&self, y: usize, x: usize) -> Tile {
+        self.grid.get(y, x).map(|p| *p).unwrap_or_default()
+    }
 
-                if let Some(rules) = self.rules.get(&current_tile) {
-                    for rule in rules
+    fn collapse_step<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) -> bool {
+        let mut tiles_to_collapse = (usize::max_value(), Vec::new());
+
+        // Iterate through the tiles in the land
+        for x in 0..self.grid.width() {
+            for y in 0..self.grid.height() {
+                let current_tile = self.get_tile(y, x);
+
+                if let Tile::Empty = current_tile {
+                    // calc entropy
+                    let right_tile = self.get_tile(y, x + 1);
+                    let bottom_tile = self.get_tile(y + 1, x);
+                    let left_tile = self.get_tile(y, x.wrapping_sub(1));
+                    let top_tile = self.get_tile(y.wrapping_sub(1), x);
+
+                    let possibilities: Vec<Tile> = self
+                        .rules
                         .iter()
-                        .cycle()
-                        .skip(
-                            random_numbers.next().unwrap_or_default() as usize % (rules.len() + 1),
-                        )
-                        .take(rules.len())
-                    {
-                        let neighbors = self.get_neighbors(&land, x, y);
-                        let have_neighbors = neighbors.iter().any(|t| !t.is_empty());
-                        if have_neighbors && (rule.condition)(neighbors) {
-                            *land.get_mut(y, x).expect("valid iteration range") = rule.to_tile;
-                            collapse_occurred = true;
-                            break;
+                        .filter_map(|rule| {
+                            if rule.right.contains(&right_tile)
+                                && rule.bottom.contains(&bottom_tile)
+                                && rule.left.contains(&left_tile)
+                                && rule.top.contains(&top_tile)
+                            {
+                                Some(rule.tile)
+                            } else {
+                                None
+                            }
+                        })
+                        .collect();
+
+                    let entropy = possibilities.len();
+                    if entropy > 0 && entropy <= tiles_to_collapse.0 {
+                        let entry = (
+                            y,
+                            x,
+                            possibilities
+                                [random_numbers.next().unwrap_or_default() as usize % entropy],
+                        );
+
+                        if entropy < tiles_to_collapse.0 {
+                            tiles_to_collapse = (entropy, vec![entry])
+                        } else {
+                            tiles_to_collapse.1.push(entry)
                         }
+                    } else {
+                        todo!("no collapse possible")
                     }
                 }
             }
         }
 
-        collapse_occurred
-    }
+        let tiles_to_collapse = tiles_to_collapse.1;
+        let possibilities_number = tiles_to_collapse.len();
 
-    fn get_neighbors(&self, land: &Vec2D<Tile>, x: usize, y: usize) -> [Tile; 4] {
-        [
-            land.get(y, x + 1).map(|p| *p).unwrap_or_default(),
-            land.get(y + 1, x).map(|p| *p).unwrap_or_default(),
-            land.get(y, x.wrapping_sub(1))
-                .map(|p| *p)
-                .unwrap_or_default(),
-            land.get(y.wrapping_sub(1), x)
-                .map(|p| *p)
-                .unwrap_or_default(),
-        ]
+        if possibilities_number > 0 {
+            let (y, x, tile) = tiles_to_collapse
+                [random_numbers.next().unwrap_or_default() as usize % possibilities_number];
+
+            *self
+                .grid
+                .get_mut(y, x)
+                .expect("correct iteration over grid") = tile;
+
+            true
+        } else {
+            false
+        }
     }
 }
 
@@ -139,15 +172,7 @@ mod tests {
         let mut wfc = WavefrontCollapse::default();
 
         let empty_land = Vec2D::new(&size, Tile::Empty);
-        let no_rules_land = wfc.generate_map(&size, |_| {}, &mut rnd);
 
-        assert_eq!(empty_land.as_slice(), no_rules_land.as_slice());
-
-        wfc.add_rule(Tile::Empty, Tile::Numbered(0), |neighbors| {
-            neighbors.iter().filter(|&n| *n == Tile::Empty).count() >= 2
-        });
-        let ruled_map = wfc.generate_map(&size, |_| {}, &mut rnd);
-
-        assert_eq!(ruled_map.as_slice(), empty_land.as_slice());
+        assert_eq!(empty_land.as_slice(), wfc.grid.as_slice());
     }
 }

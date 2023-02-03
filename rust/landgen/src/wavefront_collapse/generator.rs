@@ -1,4 +1,4 @@
-use super::tile_image::TileImage;
+use super::tile_image::{Edge, TileImage};
 use super::wavefront_collapse::WavefrontCollapse;
 use crate::{LandGenerationParameters, LandGenerator};
 use integral_geometry::Size;
@@ -17,7 +17,12 @@ impl WavefrontCollapseLandGenerator {
         }
     }
 
-    pub fn load_template<T: Copy + PartialEq + Default>(&self, parameters: &LandGenerationParameters<T>) -> Vec<TileImage<T>> {
+    pub fn load_template<T: Copy + PartialEq + Default>(
+        &self,
+        parameters: &LandGenerationParameters<T>,
+    ) -> Vec<TileImage<T, String>> {
+        let mut result = Vec::new();
+
         let file = File::open("sample.png").expect("file exists");
         let decoder = Decoder::new(BufReader::new(file));
         let mut reader = decoder.read_info().unwrap();
@@ -47,7 +52,18 @@ impl WavefrontCollapseLandGenerator {
             }
         }
 
-        TileImage::<T>::new(tiles_image).split(3, 3)
+        let top_edge = Edge::new("edge".to_owned(), false);
+        let right_edge = Edge::new("edge".to_owned(), false);
+        let bottom_edge = Edge::new("edge".to_owned(), false);
+        let left_edge = Edge::new("edge".to_owned(), false);
+
+        let tile =
+            TileImage::<T, String>::new(tiles_image, top_edge, right_edge, bottom_edge, left_edge);
+
+        result.push(tile.clone());
+        result.push(tile.mirrored());
+
+        result
     }
 }
 
@@ -66,13 +82,13 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
 #[cfg(test)]
 mod tests {
     use super::WavefrontCollapseLandGenerator;
-    use crate::{LandGenerator, LandGenerationParameters};
+    use crate::{LandGenerationParameters, LandGenerator};
     use integral_geometry::Size;
     use vec2d::Vec2D;
 
     #[test]
     fn test_generation() {
-        let wfc_gen =WavefrontCollapseLandGenerator::new();
+        let wfc_gen = WavefrontCollapseLandGenerator::new();
         let landgen_params = LandGenerationParameters::new(0u8, 255u8, 0, true, true);
         wfc_gen.generate_land(&landgen_params, &mut std::iter::repeat(1u32));
     }

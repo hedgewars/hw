@@ -2,7 +2,6 @@ use crate::{
     outline::OutlinePoints, outline_template::OutlineTemplate, LandGenerationParameters,
     LandGenerator,
 };
-use integral_geometry::{Point, Size};
 use land2d::Land2D;
 
 pub struct TemplatedLandGenerator {
