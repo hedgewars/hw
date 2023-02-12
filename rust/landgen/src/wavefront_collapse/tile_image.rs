@@ -1,4 +1,5 @@
-use super::transform::RotationTransform;
+use super::transform::Transform;
+use integral_geometry::Size;
 use std::rc::Rc;
 use vec2d::Vec2D;
 
@@ -25,12 +26,16 @@ impl<I: PartialEq + Clone> Edge<I> {
             reverse: !self.symmetrical && !self.reverse,
         }
     }
+
+    pub fn is_compatible(&self, other: &Self) -> bool {
+        self.id == other.id && (self.reverse != other.reverse || self.symmetrical)
+    }
 }
 
 #[derive(Clone)]
 pub struct TileImage<T, I: PartialEq + Clone> {
     image: Rc<Vec2D<T>>,
-    transform: RotationTransform,
+    transform: Transform,
     top: Edge<I>,
     right: Edge<I>,
     bottom: Edge<I>,
@@ -47,7 +52,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     ) -> Self {
         Self {
             image: Rc::new(image),
-            transform: RotationTransform::default(),
+            transform: Transform::default(),
             top,
             right,
             bottom,
@@ -91,7 +96,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     pub fn rotated180(&self) -> Self {
         Self {
             image: self.image.clone(),
-            transform: self.transform.rotate90(),
+            transform: self.transform.rotate180(),
             top: self.bottom.clone(),
             right: self.left.clone(),
             bottom: self.top.clone(),
@@ -102,7 +107,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     pub fn rotated270(&self) -> Self {
         Self {
             image: self.image.clone(),
-            transform: self.transform.rotate90(),
+            transform: self.transform.rotate270(),
             top: self.left.clone(),
             right: self.top.clone(),
             bottom: self.right.clone(),
@@ -124,6 +129,48 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
 
     pub fn top_edge(&self) -> &Edge<I> {
         &self.top
+    }
+
+    pub fn size(&self) -> Size {
+        match self.transform {
+            Transform::Rotate0(_) => self.image.size(),
+            Transform::Rotate90(_) => Size::new(self.image.size().height, self.image.size().width),
+        }
+    }
+
+    pub fn get(&self, row: usize, column: usize) -> Option<&T> {
+        match self.transform {
+            Transform::Rotate0(_) => {
+                let image_row = if self.transform.is_flipped() {
+                    self.image.height().wrapping_sub(1).wrapping_sub(row)
+                } else {
+                    row
+                };
+
+                let image_column = if self.transform.is_mirrored() {
+                    self.image.width().wrapping_sub(1).wrapping_sub(column)
+                } else {
+                    column
+                };
+
+                self.image.get(image_row, image_column)
+            },
+            Transform::Rotate90(_) => {
+                let image_row = if self.transform.is_flipped() {
+                    column
+                } else {
+                    self.image.height().wrapping_sub(1).wrapping_sub(column)
+                };
+
+                let image_column = if self.transform.is_mirrored() {
+                    self.image.width().wrapping_sub(1).wrapping_sub(row)
+                } else {
+                    row
+                };
+
+                self.image.get(image_row, image_column)
+            },
+        }
     }
 }
 

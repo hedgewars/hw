@@ -7,16 +7,14 @@ pub enum SymmetryTransform {
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
-pub enum RotationTransform {
+pub enum Transform {
     Rotate0(SymmetryTransform),
     Rotate90(SymmetryTransform),
-    Rotate180(SymmetryTransform),
-    Rotate270(SymmetryTransform),
 }
 
-impl Default for RotationTransform {
+impl Default for Transform {
     fn default() -> Self {
-        RotationTransform::Rotate0(SymmetryTransform::Id)
+        Transform::Rotate0(SymmetryTransform::Id)
     }
 }
 
@@ -40,78 +38,89 @@ impl SymmetryTransform {
             FlipMirror => Mirror,
         }
     }
+
+    pub fn is_mirrored(&self) -> bool {
+        match self {
+            Id => false,
+            Flip => false,
+            Mirror => true,
+            FlipMirror => true,
+        }
+    }
+
+    pub fn is_flipped(&self) -> bool {
+        match self {
+            Id => false,
+            Flip => true,
+            Mirror => false,
+            FlipMirror => true,
+        }
+    }
 }
 
-impl RotationTransform {
+impl Transform {
     pub fn new() -> Self {
         Self::default()
     }
 
-    pub fn mirror(self) -> RotationTransform {
+    pub fn mirror(self) -> Transform {
         match self {
-            RotationTransform::Rotate0(s) => RotationTransform::Rotate0(s.mirror()),
-            RotationTransform::Rotate90(s) => RotationTransform::Rotate270(s.mirror()).simplified(),
-            RotationTransform::Rotate180(s) => {
-                RotationTransform::Rotate180(s.mirror()).simplified()
-            }
-            RotationTransform::Rotate270(s) => RotationTransform::Rotate90(s.mirror()),
+            Transform::Rotate0(s) => Transform::Rotate0(s.mirror()),
+            Transform::Rotate90(s) => Transform::Rotate90(s.flip()),
         }
     }
 
-    pub fn flip(self) -> RotationTransform {
+    pub fn flip(self) -> Transform {
         match self {
-            RotationTransform::Rotate0(s) => RotationTransform::Rotate0(s.flip()),
-            RotationTransform::Rotate90(s) => RotationTransform::Rotate90(s.flip()),
-            RotationTransform::Rotate180(s) => RotationTransform::Rotate180(s.flip()).simplified(),
-            RotationTransform::Rotate270(s) => RotationTransform::Rotate270(s.flip()).simplified(),
+            Transform::Rotate0(s) => Transform::Rotate0(s.flip()),
+            Transform::Rotate90(s) => Transform::Rotate90(s.mirror()),
         }
     }
 
-    pub fn rotate90(self) -> RotationTransform {
+    pub fn rotate90(self) -> Transform {
         match self {
-            RotationTransform::Rotate0(s) => RotationTransform::Rotate90(s),
-            RotationTransform::Rotate90(s) => RotationTransform::Rotate180(s).simplified(),
-            RotationTransform::Rotate180(s) => RotationTransform::Rotate270(s).simplified(),
-            RotationTransform::Rotate270(s) => RotationTransform::Rotate0(s),
+            Transform::Rotate0(s) => Transform::Rotate90(s),
+            Transform::Rotate90(s) => Transform::Rotate0(s.flip().mirror()),
         }
     }
 
-    pub fn rotate180(self) -> RotationTransform {
+    pub fn rotate180(self) -> Transform {
         match self {
-            RotationTransform::Rotate0(s) => RotationTransform::Rotate180(s).simplified(),
-            RotationTransform::Rotate90(s) => RotationTransform::Rotate270(s).simplified(),
-            RotationTransform::Rotate180(s) => RotationTransform::Rotate0(s),
-            RotationTransform::Rotate270(s) => RotationTransform::Rotate90(s),
+            Transform::Rotate0(s) => Transform::Rotate0(s.flip().mirror()),
+            Transform::Rotate90(s) => Transform::Rotate90(s.flip().mirror()),
         }
     }
 
-    pub fn rotate270(self) -> RotationTransform {
+    pub fn rotate270(self) -> Transform {
         match self {
-            RotationTransform::Rotate0(s) => RotationTransform::Rotate270(s).simplified(),
-            RotationTransform::Rotate90(s) => RotationTransform::Rotate0(s),
-            RotationTransform::Rotate180(s) => RotationTransform::Rotate90(s),
-            RotationTransform::Rotate270(s) => RotationTransform::Rotate180(s).simplified(),
+            Transform::Rotate0(s) => Transform::Rotate90(s.flip().mirror()),
+            Transform::Rotate90(s) => Transform::Rotate0(s),
         }
     }
 
-    fn simplified(self) -> Self {
+    pub fn is_mirrored(&self) -> bool {
         match self {
-            RotationTransform::Rotate0(s) => RotationTransform::Rotate0(s),
-            RotationTransform::Rotate90(s) => RotationTransform::Rotate90(s),
-            RotationTransform::Rotate180(s) => RotationTransform::Rotate0(s.flip().mirror()),
-            RotationTransform::Rotate270(s) => RotationTransform::Rotate90(s.flip().mirror()),
+            Transform::Rotate0(s) => s.is_mirrored(),
+            Transform::Rotate90(s) => s.is_mirrored(),
+        }
+    }
+
+    pub fn is_flipped(&self) -> bool {
+        match self {
+            Transform::Rotate0(s) => s.is_flipped(),
+            Transform::Rotate90(s) => s.is_flipped(),
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{RotationTransform::*, SymmetryTransform::*, *};
+    use super::{SymmetryTransform::*, Transform::*, *};
 
     // I totally wrote all of this myself and didn't use ChatGPT
     #[test]
     fn test_default() {
-        let rt = RotationTransform::new();
+        let rt = Transform::new();
         assert_eq!(rt, Rotate0(Id));
     }
 
@@ -124,7 +133,7 @@ mod tests {
 
     #[test]
     fn test_flip() {
-        let rt = Rotate180(Mirror);
+        let rt = Transform::new().rotate180().mirror();
         let flipped = rt.flip();
         assert_eq!(flipped, Rotate0(Id));
     }
@@ -145,69 +154,54 @@ mod tests {
 
     #[test]
     fn test_rotate270() {
-        let rt = Rotate180(Flip);
+        let rt = Transform::new().rotate180().flip();
         let rotated = rt.rotate270();
         assert_eq!(rotated, Rotate90(Flip));
     }
 
     #[test]
-    fn test_simplified() {
-        let rt = Rotate180(Id);
-        let simplified = rt.simplified();
-        assert_eq!(simplified, Rotate0(FlipMirror));
+    fn test_rotate180_2() {
+        let rt = Transform::new().rotate180();
+        assert_eq!(rt, Rotate0(FlipMirror));
     }
 
     #[test]
     fn test_rotation_chain() {
         assert_eq!(
-            RotationTransform::default(),
-            RotationTransform::default()
+            Transform::default(),
+            Transform::default()
                 .rotate90()
                 .rotate90()
                 .rotate90()
                 .rotate90()
         );
         assert_eq!(
-            RotationTransform::default().rotate90(),
-            RotationTransform::default()
-                .rotate180()
-                .rotate90()
-                .rotate180()
+            Transform::default().rotate90(),
+            Transform::default().rotate180().rotate90().rotate180()
         );
         assert_eq!(
-            RotationTransform::default().rotate180(),
-            RotationTransform::default()
-                .rotate180()
-                .rotate270()
-                .rotate90()
+            Transform::default().rotate180(),
+            Transform::default().rotate180().rotate270().rotate90()
         );
     }
 
     #[test]
     fn test_combinations_chain() {
         assert_eq!(
-            RotationTransform::default(),
-            RotationTransform::default()
-                .flip()
-                .rotate180()
-                .flip()
-                .rotate180()
+            Transform::default(),
+            Transform::default().flip().rotate180().flip().rotate180()
         );
         assert_eq!(
-            RotationTransform::default(),
-            RotationTransform::default()
+            Transform::default(),
+            Transform::default()
                 .mirror()
                 .rotate180()
                 .mirror()
                 .rotate180()
         );
         assert_eq!(
-            RotationTransform::default(),
-            RotationTransform::default()
-                .rotate90()
-                .flip()
-                .rotate90()
-                .mirror()
+            Transform::default(),
+            Transform::default().rotate90().flip().rotate90().mirror().rotate180()
         );
     }
 }

@@ -7,11 +7,13 @@ use std::collections::HashSet;
 use std::fs::File;
 use std::io::BufReader;
 
-pub struct WavefrontCollapseLandGenerator {}
+pub struct WavefrontCollapseLandGenerator {
+    pub size: Size,
+}
 
 impl WavefrontCollapseLandGenerator {
-    pub fn new() -> Self {
-        Self {}
+    pub fn new(size: &Size) -> Self {
+        Self { size: *size }
     }
 
     pub fn load_template<T: Copy + PartialEq + Default>(
@@ -49,16 +51,18 @@ impl WavefrontCollapseLandGenerator {
             }
         }
 
-        let top_edge = Edge::new("edge".to_owned(), false);
-        let right_edge = Edge::new("edge".to_owned(), false);
-        let bottom_edge = Edge::new("edge".to_owned(), false);
-        let left_edge = Edge::new("edge".to_owned(), false);
+        let top_edge = Edge::new("ef".to_owned(), false);
+        let right_edge = top_edge.reversed();
+        let bottom_edge = Edge::new("ee".to_owned(), true);
+        let left_edge = bottom_edge.clone();
 
         let tile =
             TileImage::<T, String>::new(tiles_image, top_edge, right_edge, bottom_edge, left_edge);
 
         result.push(tile.clone());
-        result.push(tile.mirrored());
+        result.push(tile.rotated90());
+        result.push(tile.rotated180());
+        result.push(tile.rotated270());
 
         result
     }
@@ -82,22 +86,22 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
             let mut top = default_connection.clone();
 
             for p in 0..i {
-                if tiles[p].left_edge() == tile.right_edge() {
+                if tiles[p].left_edge().is_compatible(tile.right_edge()) {
                     rules[p].left.insert(Tile::Numbered(i));
                     right.insert(Tile::Numbered(p));
                 }
 
-                if tiles[p].right_edge() == tile.left_edge() {
+                if tiles[p].right_edge().is_compatible(tile.left_edge()) {
                     rules[p].right.insert(Tile::Numbered(i));
                     left.insert(Tile::Numbered(p));
                 }
 
-                if tiles[p].top_edge() == tile.bottom_edge() {
+                if tiles[p].top_edge().is_compatible(tile.bottom_edge()) {
                     rules[p].top.insert(Tile::Numbered(i));
                     bottom.insert(Tile::Numbered(p));
                 }
 
-                if tiles[p].bottom_edge() == tile.top_edge() {
+                if tiles[p].bottom_edge().is_compatible(tile.top_edge()) {
                     rules[p].bottom.insert(Tile::Numbered(i));
                     top.insert(Tile::Numbered(p));
                 }
@@ -115,7 +119,18 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
         let mut wfc = WavefrontCollapse::default();
         wfc.set_rules(rules);
 
-        wfc.generate_map(&Size::new(40, 20), |_| {}, random_numbers);
+        let wfc_size = if let Some(first_tile) = tiles.first() {
+            let tile_size = first_tile.size();
+
+            Size::new(
+                self.size.width / tile_size.width,
+                self.size.height / tile_size.height,
+            )
+        } else {
+            Size::new(1, 1)
+        };
+
+        wfc.generate_map(&wfc_size, |_| {}, random_numbers);
 
         let grid = wfc.grid();
 
@@ -127,7 +142,30 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
             println!();
         }
 
-        todo!("build result")
+        let mut result = land2d::Land2D::new(&self.size, parameters.zero);
+
+        for row in 0..wfc_size.height {
+            for column in 0..wfc_size.width {
+                if let Some(Tile::Numbered(tile_index)) = wfc.grid().get(row, column) {
+                    let tile = &tiles[*tile_index];
+
+                    for tile_row in 0..tile.size().height {
+                        for tile_column in 0..tile.size().width {
+                            result.map(
+                                (row * tile.size().height + tile_row) as i32,
+                                (column * tile.size().width + tile_column) as i32,
+                                |p| {
+                                    *p =
+                                        *tile.get(tile_row, tile_column).unwrap_or(&parameters.zero)
+                                },
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        result
     }
 }
 
@@ -136,12 +174,36 @@ mod tests {
     use super::WavefrontCollapseLandGenerator;
     use crate::{LandGenerationParameters, LandGenerator};
     use integral_geometry::Size;
+    use std::fs::File;
+    use std::io::BufWriter;
+    use std::path::Path;
     use vec2d::Vec2D;
 
     #[test]
     fn test_generation() {
-        let wfc_gen = WavefrontCollapseLandGenerator::new();
-        let landgen_params = LandGenerationParameters::new(0u8, 255u8, 0, true, true);
-        wfc_gen.generate_land(&landgen_params, &mut std::iter::repeat(1u32));
+        let wfc_gen = WavefrontCollapseLandGenerator::new(&Size::new(2048, 1024));
+        let landgen_params = LandGenerationParameters::new(0u32, 0xff000000u32, 0, true, true);
+        let land = wfc_gen.generate_land(&landgen_params, &mut std::iter::repeat(0u32));
+
+        let path = Path::new(r"output.png");
+        let file = File::create(path).unwrap();
+        let ref mut w = BufWriter::new(file);
+
+        let mut encoder = png::Encoder::new(w, land.width() as u32, land.height() as u32); // Width is 2 pixels and height is 1.
+        encoder.set_color(png::ColorType::Rgba);
+        encoder.set_depth(png::BitDepth::Eight);
+        encoder.set_source_gamma(png::ScaledFloat::from_scaled(45455)); // 1.0 / 2.2, scaled by 100000
+        encoder.set_source_gamma(png::ScaledFloat::new(1.0 / 2.2)); // 1.0 / 2.2, unscaled, but rounded
+        let source_chromaticities = png::SourceChromaticities::new(
+            // Using unscaled instantiation here
+            (0.31270, 0.32900),
+            (0.64000, 0.33000),
+            (0.30000, 0.60000),
+            (0.15000, 0.06000),
+        );
+        encoder.set_source_chromaticities(source_chromaticities);
+        let mut writer = encoder.write_header().unwrap();
+
+        writer.write_image_data(land.raw_pixel_bytes()).unwrap(); // Save
     }
 }

@@ -164,6 +164,11 @@ impl Size {
     }
 
     #[inline]
+    pub fn is_square(&self) -> bool {
+        self.width == self.height
+    }
+
+    #[inline]
     pub const fn contains(&self, other: Self) -> bool {
         self.width >= other.width && self.height >= other.height
     }
