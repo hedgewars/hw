@@ -136,7 +136,7 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
 
         for r in 0..grid.height() {
             for c in 0..grid.width() {
-                print!("{:?}", grid.get(r, c));
+                print!("{:?} ", grid.get(r, c));
             }
 
             println!();
@@ -183,7 +183,7 @@ mod tests {
     fn test_generation() {
         let wfc_gen = WavefrontCollapseLandGenerator::new(&Size::new(2048, 1024));
         let landgen_params = LandGenerationParameters::new(0u32, 0xff000000u32, 0, true, true);
-        let land = wfc_gen.generate_land(&landgen_params, &mut std::iter::repeat(0u32));
+        let land = wfc_gen.generate_land(&landgen_params, &mut [0u32, 1u32, 3u32, 5u32, 7u32, 11u32].into_iter().cycle());
 
         let path = Path::new(r"output.png");
         let file = File::create(path).unwrap();

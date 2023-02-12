@@ -23,19 +23,19 @@ impl<I: PartialEq + Clone> Edge<I> {
         Self {
             id: self.id.clone(),
             symmetrical: self.symmetrical,
-            reverse: !self.symmetrical && !self.reverse,
+            reverse: !self.reverse,
         }
     }
 
     pub fn is_compatible(&self, other: &Self) -> bool {
-        self.id == other.id && (self.reverse != other.reverse || self.symmetrical)
+        self.id == other.id && ((self.reverse != other.reverse) || self.symmetrical)
     }
 }
 
 #[derive(Clone)]
 pub struct TileImage<T, I: PartialEq + Clone> {
     image: Rc<Vec2D<T>>,
-    transform: Transform,
+    pub transform: Transform,
     top: Edge<I>,
     right: Edge<I>,
     bottom: Edge<I>,
@@ -108,10 +108,10 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
         Self {
             image: self.image.clone(),
             transform: self.transform.rotate270(),
-            top: self.left.clone(),
-            right: self.top.clone(),
-            bottom: self.right.clone(),
-            left: self.bottom.clone(),
+            top: self.right.clone(),
+            right: self.bottom.clone(),
+            bottom: self.left.clone(),
+            left: self.top.clone(),
         }
     }
 
@@ -156,13 +156,13 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
                 self.image.get(image_row, image_column)
             },
             Transform::Rotate90(_) => {
-                let image_row = if self.transform.is_flipped() {
+                let image_row = if self.transform.is_mirrored() {
                     column
                 } else {
                     self.image.height().wrapping_sub(1).wrapping_sub(column)
                 };
 
-                let image_column = if self.transform.is_mirrored() {
+                let image_column = if self.transform.is_flipped() {
                     self.image.width().wrapping_sub(1).wrapping_sub(row)
                 } else {
                     row

@@ -141,12 +141,12 @@ impl WavefrontCollapse {
                             }
                         }
                     } else {
-                        println!("We're here: {}, {}", x, y);
+                        /*println!("We're here: {}, {}", x, y);
                         println!(
                             "Neighbour tiles are: {:?} {:?} {:?} {:?}",
                             right_tile, bottom_tile, left_tile, top_tile
                         );
-                        println!("Rules are: {:?}", self.rules);
+                        println!("Rules are: {:?}", self.rules);*/
 
                         //todo!("no collapse possible - what to do?")
                     }

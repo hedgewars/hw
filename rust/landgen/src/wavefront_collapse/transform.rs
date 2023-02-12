@@ -40,6 +40,7 @@ impl SymmetryTransform {
     }
 
     pub fn is_mirrored(&self) -> bool {
+        use SymmetryTransform::*;
         match self {
             Id => false,
             Flip => false,
@@ -49,6 +50,7 @@ impl SymmetryTransform {
     }
 
     pub fn is_flipped(&self) -> bool {
+        use SymmetryTransform::*;
         match self {
             Id => false,
             Flip => true,
