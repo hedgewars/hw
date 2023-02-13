@@ -5,7 +5,8 @@ use integral_geometry::Size;
 use png::Decoder;
 use std::collections::HashSet;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader, Result};
+use std::path::Path;
 
 pub struct WavefrontCollapseLandGenerator {
     pub size: Size,
@@ -16,13 +17,13 @@ impl WavefrontCollapseLandGenerator {
         Self { size: *size }
     }
 
-    pub fn load_template<T: Copy + PartialEq + Default>(
-        &self,
+    fn load_image_tiles<T: Copy + PartialEq + Default>(
         parameters: &LandGenerationParameters<T>,
-    ) -> Vec<TileImage<T, String>> {
+        path: &Path,
+    ) -> Result<Vec<TileImage<T, String>>> {
         let mut result = Vec::new();
 
-        let file = File::open("sample.png").expect("file exists");
+        let file = File::open(path)?;
         let decoder = Decoder::new(BufReader::new(file));
         let mut reader = decoder.read_info().unwrap();
 
@@ -60,9 +61,25 @@ impl WavefrontCollapseLandGenerator {
             TileImage::<T, String>::new(tiles_image, top_edge, right_edge, bottom_edge, left_edge);
 
         result.push(tile.clone());
+        result.push(tile.flipped());
+        result.push(tile.mirrored());
+        result.push(tile.mirrored().flipped());
         result.push(tile.rotated90());
         result.push(tile.rotated180());
         result.push(tile.rotated270());
+
+        Ok(result)
+    }
+
+    pub fn load_template<T: Copy + PartialEq + Default>(
+        &self,
+        parameters: &LandGenerationParameters<T>,
+    ) -> Vec<TileImage<T, String>> {
+        let mut result = Vec::new();
+
+        if let Ok(mut tiles) = Self::load_image_tiles(parameters, Path::new("sample.png")) {
+            result.append(&mut tiles);
+        }
 
         result
     }
@@ -183,7 +200,10 @@ mod tests {
     fn test_generation() {
         let wfc_gen = WavefrontCollapseLandGenerator::new(&Size::new(2048, 1024));
         let landgen_params = LandGenerationParameters::new(0u32, 0xff000000u32, 0, true, true);
-        let land = wfc_gen.generate_land(&landgen_params, &mut [0u32, 1u32, 3u32, 5u32, 7u32, 11u32].into_iter().cycle());
+        let land = wfc_gen.generate_land(
+            &landgen_params,
+            &mut [0u32, 1u32, 3u32, 5u32, 7u32, 11u32].into_iter().cycle(),
+        );
 
         let path = Path::new(r"output.png");
         let file = File::create(path).unwrap();

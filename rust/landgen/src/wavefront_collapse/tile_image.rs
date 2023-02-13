@@ -154,7 +154,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
                 };
 
                 self.image.get(image_row, image_column)
-            },
+            }
             Transform::Rotate90(_) => {
                 let image_row = if self.transform.is_mirrored() {
                     column
@@ -169,7 +169,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
                 };
 
                 self.image.get(image_row, image_column)
-            },
+            }
         }
     }
 }

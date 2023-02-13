@@ -148,7 +148,7 @@ impl WavefrontCollapse {
                         );
                         println!("Rules are: {:?}", self.rules);*/
 
-                        //todo!("no collapse possible - what to do?")
+                        todo!("no collapse possible - what to do?")
                     }
                 }
             }

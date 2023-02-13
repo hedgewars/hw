@@ -203,7 +203,12 @@ mod tests {
         );
         assert_eq!(
             Transform::default(),
-            Transform::default().rotate90().flip().rotate90().mirror().rotate180()
+            Transform::default()
+                .rotate90()
+                .flip()
+                .rotate90()
+                .mirror()
+                .rotate180()
         );
     }
 }
