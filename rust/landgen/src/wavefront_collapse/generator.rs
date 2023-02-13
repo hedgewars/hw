@@ -8,13 +8,44 @@ use std::fs::File;
 use std::io::{BufReader, Result};
 use std::path::Path;
 
-pub struct WavefrontCollapseLandGenerator {
+#[derive(Clone)]
+pub struct EdgeDescription {
+    pub name: String,
+    pub reversed: Option<bool>,
+    pub symmetrical: Option<bool>,
+}
+
+#[derive(Clone)]
+pub struct EdgesDescription {
+    pub top: EdgeDescription,
+    pub right: EdgeDescription,
+    pub bottom: EdgeDescription,
+    pub left: EdgeDescription,
+}
+
+#[derive(Clone)]
+pub struct TileDescription {
+    pub name: String,
+    pub edges: EdgesDescription,
+    pub can_flip: bool,
+    pub can_mirror: bool,
+    pub can_rotate90: bool,
+    pub can_rotate180: bool,
+    pub can_rotate270: bool,
+}
+
+pub struct TemplateDescription {
     pub size: Size,
+    pub tiles: Vec<TileDescription>,
+}
+
+pub struct WavefrontCollapseLandGenerator {
+    pub template: TemplateDescription,
 }
 
 impl WavefrontCollapseLandGenerator {
-    pub fn new(size: &Size) -> Self {
-        Self { size: *size }
+    pub fn new(template: TemplateDescription) -> Self {
+        Self { template }
     }
 
     fn load_image_tiles<T: Copy + PartialEq + Default>(
@@ -140,8 +171,8 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
             let tile_size = first_tile.size();
 
             Size::new(
-                self.size.width / tile_size.width,
-                self.size.height / tile_size.height,
+                self.template.size.width / tile_size.width,
+                self.template.size.height / tile_size.height,
             )
         } else {
             Size::new(1, 1)
@@ -149,17 +180,7 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
 
         wfc.generate_map(&wfc_size, |_| {}, random_numbers);
 
-        let grid = wfc.grid();
-
-        for r in 0..grid.height() {
-            for c in 0..grid.width() {
-                print!("{:?} ", grid.get(r, c));
-            }
-
-            println!();
-        }
-
-        let mut result = land2d::Land2D::new(&self.size, parameters.zero);
+        let mut result = land2d::Land2D::new(&self.template.size, parameters.zero);
 
         for row in 0..wfc_size.height {
             for column in 0..wfc_size.width {
@@ -194,7 +215,6 @@ mod tests {
     use std::fs::File;
     use std::io::BufWriter;
     use std::path::Path;
-    use vec2d::Vec2D;
 
     #[test]
     fn test_generation() {

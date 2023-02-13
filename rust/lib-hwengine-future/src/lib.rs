@@ -1,6 +1,11 @@
 use integral_geometry::{Point, Size};
 use land2d;
-use landgen::{outline_template_based::template_based::TemplatedLandGenerator, LandGenerationParameters, LandGenerator};
+use landgen::{
+    outline_template_based::{
+        outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
+    },
+    LandGenerationParameters, LandGenerator,
+};
 use lfprng::LaggedFibonacciPRNG;
 use mapgen::{theme::Theme, MapGenerator};
 use std::fs;
@@ -59,7 +64,7 @@ pub extern "C" fn generate_templated_game_field(
     let yaml_templates =
         fs::read_to_string(data_path.join(Path::new("map_templates.yaml")).as_path())
             .expect("Error reading map templates file");
-    let mut map_gen = MapGenerator::new();
+    let mut map_gen = MapGenerator::<OutlineTemplate>::new();
     map_gen.import_yaml_templates(&yaml_templates);
 
     let distance_divisor = feature_size.pow(2) / 8 + 10;
@@ -91,7 +96,7 @@ pub extern "C" fn apply_theme(
     let data_path = Path::new(&data_path);
 
     let theme_name: &str = unsafe { CStr::from_ptr(theme_name) }.to_str().unwrap();
-    let map_gen = MapGenerator::new();
+    let map_gen = MapGenerator::<()>::new();
 
     let theme = Theme::load(
         data_path

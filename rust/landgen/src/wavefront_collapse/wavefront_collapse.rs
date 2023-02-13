@@ -9,35 +9,6 @@ pub enum Tile {
     Numbered(usize),
 }
 
-impl Tile {
-    fn is(&self, i: usize) -> bool {
-        *self == Tile::Numbered(i)
-    }
-
-    fn is_empty(&self) -> bool {
-        match self {
-            Tile::Empty => true,
-            Tile::Outside => true,
-            _ => false,
-        }
-    }
-
-    fn is_empty_or(&self, i: usize) -> bool {
-        match self {
-            Tile::Numbered(n) => *n == i,
-            Tile::Empty => true,
-            _ => false,
-        }
-    }
-
-    fn is_void_or(&self, i: usize) -> bool {
-        match self {
-            Tile::Numbered(n) => *n == i,
-            _ => true,
-        }
-    }
-}
-
 impl Default for Tile {
     fn default() -> Self {
         Tile::Outside

@@ -1,79 +1,25 @@
+mod template;
 pub mod theme;
 
 use self::theme::Theme;
+use crate::template::outline::TemplateCollectionDesc as OutlineTemplateCollectionDesc;
+use crate::template::wavefront_collapse::TemplateCollectionDesc as WfcTemplateCollectionDesc;
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
-use landgen::{outline_template_based::outline_template::OutlineTemplate, LandGenerationParameters};
+use landgen::{
+    outline_template_based::{
+        outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
+    },
+    wavefront_collapse::generator::{
+        TemplateDescription as WfcTemplate, WavefrontCollapseLandGenerator,
+    },
+    LandGenerationParameters, LandGenerator,
+};
+use rand::{seq::SliceRandom, Rng};
 use serde_derive::Deserialize;
 use serde_yaml;
 use std::{borrow::Borrow, collections::hash_map::HashMap, mem::replace};
 use vec2d::Vec2D;
-use rand::{Rng, seq::SliceRandom};
-
-#[derive(Deserialize)]
-struct PointDesc {
-    x: u32,
-    y: u32,
-}
-
-#[derive(Deserialize)]
-struct RectDesc {
-    x: u32,
-    y: u32,
-    w: u32,
-    h: u32,
-}
-
-#[derive(Deserialize)]
-struct TemplateDesc {
-    width: usize,
-    height: usize,
-    can_flip: bool,
-    can_invert: bool,
-    can_mirror: bool,
-    is_negative: bool,
-    put_girders: bool,
-    max_hedgehogs: u8,
-    outline_points: Vec<Vec<RectDesc>>,
-    fill_points: Vec<PointDesc>,
-}
-
-#[derive(Deserialize)]
-struct TemplateCollectionDesc {
-    templates: Vec<TemplateDesc>,
-    template_types: HashMap<String, Vec<usize>>,
-}
-
-impl From<&TemplateDesc> for OutlineTemplate {
-    fn from(desc: &TemplateDesc) -> Self {
-        OutlineTemplate {
-            islands: desc
-                .outline_points
-                .iter()
-                .map(|v| {
-                    v.iter()
-                        .map(|r| {
-                            Rect::from_size(
-                                Point::new(r.x as i32, r.y as i32),
-                                Size::new(r.w as usize, r.h as usize),
-                            )
-                        })
-                        .collect()
-                })
-                .collect(),
-            fill_points: desc
-                .fill_points
-                .iter()
-                .map(|p| Point::new(p.x as i32, p.y as i32))
-                .collect(),
-            size: Size::new(desc.width, desc.height),
-            can_flip: desc.can_flip,
-            can_invert: desc.can_invert,
-            can_mirror: desc.can_mirror,
-            is_negative: desc.is_negative,
-        }
-    }
-}
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 struct TemplateType(String);
@@ -85,33 +31,18 @@ impl Borrow<str> for TemplateType {
 }
 
 #[derive(Debug)]
-pub struct MapGenerator {
-    pub(crate) templates: HashMap<TemplateType, Vec<OutlineTemplate>>,
+pub struct MapGenerator<T> {
+    pub(crate) templates: HashMap<TemplateType, Vec<T>>,
 }
 
-impl MapGenerator {
+impl<T> MapGenerator<T> {
     pub fn new() -> Self {
         Self {
             templates: HashMap::new(),
         }
     }
 
-    pub fn import_yaml_templates(&mut self, text: &str) {
-        let mut desc: TemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
-        let templates = replace(&mut desc.templates, vec![]);
-        self.templates = desc
-            .template_types
-            .into_iter()
-            .map(|(size, indices)| {
-                (
-                    TemplateType(size),
-                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
-                )
-            })
-            .collect();
-    }
-
-    pub fn get_template<R: Rng>(&self, template_type: &str, rng: &mut R) -> Option<&OutlineTemplate> {
+    pub fn get_template<R: Rng>(&self, template_type: &str, rng: &mut R) -> Option<&T> {
         self.templates
             .get(template_type)
             .and_then(|t| t.as_slice().choose(rng))
@@ -187,6 +118,48 @@ impl MapGenerator {
         }
 
         texture
+    }
+}
+
+impl MapGenerator<OutlineTemplate> {
+    pub fn import_yaml_templates(&mut self, text: &str) {
+        let mut desc: OutlineTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
+        let templates = replace(&mut desc.templates, vec![]);
+        self.templates = desc
+            .template_types
+            .into_iter()
+            .map(|(size, indices)| {
+                (
+                    TemplateType(size),
+                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                )
+            })
+            .collect();
+    }
+
+    pub fn build_generator(&self, template: OutlineTemplate) -> impl LandGenerator {
+        TemplatedLandGenerator::new(template)
+    }
+}
+
+impl MapGenerator<WfcTemplate> {
+    pub fn import_yaml_templates(&mut self, text: &str) {
+        let mut desc: WfcTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
+        let templates = replace(&mut desc.templates, vec![]);
+        self.templates = desc
+            .template_types
+            .into_iter()
+            .map(|(size, indices)| {
+                (
+                    TemplateType(size),
+                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                )
+            })
+            .collect();
+    }
+
+    pub fn build_generator(&self, template: WfcTemplate) -> impl LandGenerator {
+        WavefrontCollapseLandGenerator::new(template)
     }
 }
 
