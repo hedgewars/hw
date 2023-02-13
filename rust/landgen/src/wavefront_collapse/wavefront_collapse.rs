@@ -45,7 +45,7 @@ impl WavefrontCollapse {
         seed_fn: F,
         random_numbers: &mut I,
     ) {
-        self.grid = Vec2D::new(&map_size, Tile::Empty);
+        self.grid = Vec2D::new(map_size, Tile::Empty);
 
         seed_fn(&mut self.grid);
 
@@ -56,12 +56,8 @@ impl WavefrontCollapse {
         self.rules = rules;
     }
 
-    pub fn add_rule(&mut self, rule: CollapseRule) {
-        self.rules.push(rule);
-    }
-
     fn get_tile(&self, y: usize, x: usize) -> Tile {
-        self.grid.get(y, x).map(|p| *p).unwrap_or_default()
+        self.grid.get(y, x).copied().unwrap_or_default()
     }
 
     fn collapse_step<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) -> bool {
@@ -119,7 +115,7 @@ impl WavefrontCollapse {
                         );
                         println!("Rules are: {:?}", self.rules);*/
 
-                        todo!("no collapse possible - what to do?")
+                        //todo!("no collapse possible - what to do?")
                     }
                 }
             }

@@ -27,6 +27,7 @@ pub struct EdgesDescription {
 pub struct TileDescription {
     pub name: String,
     pub edges: EdgesDescription,
+    pub is_negative: bool,
     pub can_flip: bool,
     pub can_mirror: bool,
     pub can_rotate90: bool,
@@ -34,6 +35,7 @@ pub struct TileDescription {
     pub can_rotate270: bool,
 }
 
+#[derive(Clone)]
 pub struct TemplateDescription {
     pub size: Size,
     pub tiles: Vec<TileDescription>,
@@ -50,11 +52,15 @@ impl WavefrontCollapseLandGenerator {
 
     fn load_image_tiles<T: Copy + PartialEq + Default>(
         parameters: &LandGenerationParameters<T>,
-        path: &Path,
+        tile_description: &TileDescription,
     ) -> Result<Vec<TileImage<T, String>>> {
         let mut result = Vec::new();
 
-        let file = File::open(path)?;
+        let file = File::open(
+            Path::new("../share/hedgewars/Data/Tiles")
+                .join(&tile_description.name)
+                .as_path(),
+        )?;
         let decoder = Decoder::new(BufReader::new(file));
         let mut reader = decoder.read_info().unwrap();
 
@@ -68,36 +74,93 @@ impl WavefrontCollapseLandGenerator {
         let info = reader.next_frame(&mut buf).unwrap();
         let bytes = &buf[..info.buffer_size()];
 
-        let mut tiles_image_pixels = tiles_image.as_mut_slice().into_iter();
+        let mut tiles_image_pixels = tiles_image.as_mut_slice().iter_mut();
 
-        for line in bytes.chunks_exact(info.line_size) {
-            for value in line.chunks_exact(info.color_type.samples()) {
-                *tiles_image_pixels
-                    .next()
-                    .expect("vec2d size matching image dimensions") =
-                    if value.into_iter().all(|p| *p == 0) {
-                        parameters.zero
-                    } else {
-                        parameters.basic
-                    };
+        let (zero, basic) = if tile_description.is_negative {
+            (parameters.basic(), parameters.zero())
+        } else {
+            (parameters.zero(), parameters.basic())
+        };
+
+        match info.color_type.samples() {
+            1 => {
+                for line in bytes.chunks_exact(info.line_size) {
+                    for value in line.iter() {
+                        *tiles_image_pixels
+                            .next()
+                            .expect("vec2d size matching image dimensions") =
+                            if *value == 0 { zero } else { basic };
+                    }
+                }
+            }
+            a => {
+                for line in bytes.chunks_exact(info.line_size) {
+                    for value in line.chunks_exact(a) {
+                        print!("{:?},", value);
+                        *tiles_image_pixels
+                            .next()
+                            .expect("vec2d size matching image dimensions") =
+                            if value[0] == 0u8 {
+                                zero
+                            } else {
+                                basic
+                            };
+                    }
+                }
             }
         }
 
-        let top_edge = Edge::new("ef".to_owned(), false);
-        let right_edge = top_edge.reversed();
-        let bottom_edge = Edge::new("ee".to_owned(), true);
-        let left_edge = bottom_edge.clone();
+        let edges: Vec<Edge<String>> = [
+            &tile_description.edges.top,
+            &tile_description.edges.right,
+            &tile_description.edges.bottom,
+            &tile_description.edges.left,
+        ]
+        .iter()
+        .map(|descr| {
+            let edge = Edge::new(descr.name.clone(), descr.symmetrical.unwrap_or_default());
 
-        let tile =
-            TileImage::<T, String>::new(tiles_image, top_edge, right_edge, bottom_edge, left_edge);
+            if descr.reversed.unwrap_or_default() {
+                edge.reversed()
+            } else {
+                edge
+            }
+        })
+        .collect();
+
+        let [top_edge, right_edge, bottom_edge, left_edge] = edges.as_slice() else {
+            unreachable!()
+        };
+
+        let tile = TileImage::<T, String>::new(
+            tiles_image,
+            top_edge.clone(),
+            right_edge.clone(),
+            bottom_edge.clone(),
+            left_edge.clone(),
+        );
 
         result.push(tile.clone());
-        result.push(tile.flipped());
-        result.push(tile.mirrored());
-        result.push(tile.mirrored().flipped());
-        result.push(tile.rotated90());
-        result.push(tile.rotated180());
-        result.push(tile.rotated270());
+
+        if tile_description.can_flip {
+            result.push(tile.flipped());
+        }
+        if tile_description.can_mirror {
+            result.push(tile.mirrored());
+        }
+        if tile_description.can_flip && tile_description.can_mirror {
+            result.push(tile.mirrored().flipped());
+        }
+
+        if tile_description.can_rotate90 {
+            result.push(tile.rotated90());
+        }
+        if tile_description.can_rotate180 {
+            result.push(tile.rotated180());
+        }
+        if tile_description.can_rotate270 {
+            result.push(tile.rotated270());
+        }
 
         Ok(result)
     }
@@ -108,8 +171,10 @@ impl WavefrontCollapseLandGenerator {
     ) -> Vec<TileImage<T, String>> {
         let mut result = Vec::new();
 
-        if let Ok(mut tiles) = Self::load_image_tiles(parameters, Path::new("sample.png")) {
-            result.append(&mut tiles);
+        for tile_description in self.template.tiles.iter() {
+            if let Ok(mut tiles) = Self::load_image_tiles(parameters, tile_description) {
+                result.append(&mut tiles);
+            }
         }
 
         result

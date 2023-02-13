@@ -1,9 +1,9 @@
-use integral_geometry::{Point, Rect, Size};
-use land2d::Land2D;
-use landgen::{wavefront_collapse::generator::*, LandGenerationParameters};
+use integral_geometry::{Size};
+
+use landgen::{wavefront_collapse::generator::*};
 use serde_derive::Deserialize;
-use serde_yaml;
-use std::{borrow::Borrow, collections::hash_map::HashMap, mem::replace};
+
+use std::{collections::hash_map::HashMap};
 
 #[derive(Deserialize)]
 #[serde(remote = "EdgeDescription")]
@@ -32,6 +32,7 @@ pub struct TileDesc {
     pub name: String,
     #[serde(with = "EdgesDesc")]
     pub edges: EdgesDescription,
+    pub is_negative: bool,
     pub can_flip: bool,
     pub can_mirror: bool,
     pub can_rotate90: bool,
@@ -46,7 +47,7 @@ pub struct TileDescriptionHelper(#[serde(with = "TileDesc")] TileDescription);
 pub struct TemplateDesc {
     pub width: usize,
     pub height: usize,
-    pub can_flip: bool,
+    pub can_invert: bool,
     pub is_negative: bool,
     pub put_girders: bool,
     pub max_hedgehogs: u8,

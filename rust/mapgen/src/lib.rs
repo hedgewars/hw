@@ -4,7 +4,7 @@ pub mod theme;
 use self::theme::Theme;
 use crate::template::outline::TemplateCollectionDesc as OutlineTemplateCollectionDesc;
 use crate::template::wavefront_collapse::TemplateCollectionDesc as WfcTemplateCollectionDesc;
-use integral_geometry::{Point, Rect, Size};
+
 use land2d::Land2D;
 use landgen::{
     outline_template_based::{
@@ -16,9 +16,9 @@ use landgen::{
     LandGenerationParameters, LandGenerator,
 };
 use rand::{seq::SliceRandom, Rng};
-use serde_derive::Deserialize;
-use serde_yaml;
-use std::{borrow::Borrow, collections::hash_map::HashMap, mem::replace};
+
+
+use std::{borrow::Borrow, collections::hash_map::HashMap};
 use vec2d::Vec2D;
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
@@ -124,7 +124,7 @@ impl<T> MapGenerator<T> {
 impl MapGenerator<OutlineTemplate> {
     pub fn import_yaml_templates(&mut self, text: &str) {
         let mut desc: OutlineTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
-        let templates = replace(&mut desc.templates, vec![]);
+        let templates = std::mem::take(&mut desc.templates);
         self.templates = desc
             .template_types
             .into_iter()
@@ -145,7 +145,7 @@ impl MapGenerator<OutlineTemplate> {
 impl MapGenerator<WfcTemplate> {
     pub fn import_yaml_templates(&mut self, text: &str) {
         let mut desc: WfcTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
-        let templates = replace(&mut desc.templates, vec![]);
+        let templates = std::mem::take(&mut desc.templates);
         self.templates = desc
             .template_types
             .into_iter()
@@ -169,7 +169,7 @@ struct Color(u32);
 impl Color {
     #[inline]
     fn red(self) -> u8 {
-        (self.0 >> 0 & 0xFF) as u8
+        (self.0 & 0xFF) as u8
     }
 
     #[inline]
@@ -201,7 +201,7 @@ fn blend(source: u32, target: u32) -> u32 {
     let red = lerp(target.red(), source.red(), source.alpha());
     let green = lerp(target.green(), source.green(), source.alpha());
     let blue = lerp(target.blue(), source.blue(), source.alpha());
-    (red as u32) << 0 | (green as u32) << 8 | (blue as u32) << 16 | (alpha as u32) << 24
+    (red as u32) | (green as u32) << 8 | (blue as u32) << 16 | (alpha as u32) << 24
 }
 
 fn land_border_pass<'a, LandT, T, F>(

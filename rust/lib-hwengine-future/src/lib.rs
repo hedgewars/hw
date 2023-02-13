@@ -1,8 +1,8 @@
 use integral_geometry::{Point, Size};
-use land2d;
+
 use landgen::{
-    outline_template_based::{
-        outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
+    wavefront_collapse::generator::{
+        TemplateDescription as WfcTemplate,
     },
     LandGenerationParameters, LandGenerator,
 };
@@ -62,18 +62,18 @@ pub extern "C" fn generate_templated_game_field(
     let mut random_numbers_gen = LaggedFibonacciPRNG::new(seed.as_bytes());
 
     let yaml_templates =
-        fs::read_to_string(data_path.join(Path::new("map_templates.yaml")).as_path())
+        fs::read_to_string(data_path.join(Path::new("wfc_templates.yaml")).as_path())
             .expect("Error reading map templates file");
-    let mut map_gen = MapGenerator::<OutlineTemplate>::new();
+    let mut map_gen = MapGenerator::<WfcTemplate>::new();
     map_gen.import_yaml_templates(&yaml_templates);
 
     let distance_divisor = feature_size.pow(2) / 8 + 10;
     let params = LandGenerationParameters::new(0u16, 0x8000u16, distance_divisor, false, false);
     let template = map_gen
         .get_template(template_type, &mut random_numbers_gen)
-        .expect("Error reading map templates file")
+        .expect("Error reading templates file")
         .clone();
-    let landgen = TemplatedLandGenerator::new(template);
+    let landgen = map_gen.build_generator(template);
     let collision = landgen.generate_land(&params, &mut random_numbers_gen);
     let size = collision.size().size();
 
