@@ -4,7 +4,7 @@ use std::cmp::min;
 use integral_geometry::{Line, Point, Polygon, Ray, Rect, Size};
 use land2d::Land2D;
 
-use crate::outline_template::OutlineTemplate;
+use super::outline_template::OutlineTemplate;
 
 pub struct OutlinePoints {
     pub islands: Vec<Polygon>,

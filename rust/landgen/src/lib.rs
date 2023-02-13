@@ -1,6 +1,4 @@
-mod outline;
-pub mod outline_template;
-pub mod template_based;
+pub mod outline_template_based;
 pub mod wavefront_collapse;
 
 #[derive(Clone, Copy)]

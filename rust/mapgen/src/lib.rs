@@ -3,7 +3,7 @@ pub mod theme;
 use self::theme::Theme;
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
-use landgen::{outline_template::OutlineTemplate, LandGenerationParameters};
+use landgen::{outline_template_based::outline_template::OutlineTemplate, LandGenerationParameters};
 use serde_derive::Deserialize;
 use serde_yaml;
 use std::{borrow::Borrow, collections::hash_map::HashMap, mem::replace};

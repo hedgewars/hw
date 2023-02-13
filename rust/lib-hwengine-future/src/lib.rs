@@ -1,6 +1,6 @@
 use integral_geometry::{Point, Size};
 use land2d;
-use landgen::{template_based::TemplatedLandGenerator, LandGenerationParameters, LandGenerator};
+use landgen::{outline_template_based::template_based::TemplatedLandGenerator, LandGenerationParameters, LandGenerator};
 use lfprng::LaggedFibonacciPRNG;
 use mapgen::{theme::Theme, MapGenerator};
 use std::fs;

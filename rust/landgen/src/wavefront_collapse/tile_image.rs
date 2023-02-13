@@ -23,7 +23,7 @@ impl<I: PartialEq + Clone> Edge<I> {
         Self {
             id: self.id.clone(),
             symmetrical: self.symmetrical,
-            reverse: !self.reverse,
+            reverse: !self.symmetrical && !self.reverse,
         }
     }
 

@@ -1,5 +1,6 @@
-use crate::{
-    outline::OutlinePoints, outline_template::OutlineTemplate, LandGenerationParameters,
+use super::{
+    outline::OutlinePoints, outline_template::OutlineTemplate};
+use crate::{LandGenerationParameters,
     LandGenerator,
 };
 use land2d::Land2D;
