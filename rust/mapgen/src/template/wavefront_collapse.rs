@@ -1,9 +1,9 @@
-use integral_geometry::{Size};
+use integral_geometry::Size;
 
-use landgen::{wavefront_collapse::generator::*};
+use landgen::wavefront_collapse::generator::*;
 use serde_derive::Deserialize;
 
-use std::{collections::hash_map::HashMap};
+use std::collections::hash_map::HashMap;
 
 #[derive(Deserialize)]
 #[serde(remote = "EdgeDescription")]
@@ -32,12 +32,12 @@ pub struct TileDesc {
     pub name: String,
     #[serde(with = "EdgesDesc")]
     pub edges: EdgesDescription,
-    pub is_negative: bool,
-    pub can_flip: bool,
-    pub can_mirror: bool,
-    pub can_rotate90: bool,
-    pub can_rotate180: bool,
-    pub can_rotate270: bool,
+    pub is_negative: Option<bool>,
+    pub can_flip: Option<bool>,
+    pub can_mirror: Option<bool>,
+    pub can_rotate90: Option<bool>,
+    pub can_rotate180: Option<bool>,
+    pub can_rotate270: Option<bool>,
 }
 
 #[derive(Deserialize)]
@@ -51,6 +51,7 @@ pub struct TemplateDesc {
     pub is_negative: bool,
     pub put_girders: bool,
     pub max_hedgehogs: u8,
+    pub wrap: bool,
     pub tiles: Vec<TileDescriptionHelper>,
 }
 
@@ -69,6 +70,7 @@ impl From<&TemplateDesc> for TemplateDescription {
                 .iter()
                 .map(|TileDescriptionHelper(t)| t.clone())
                 .collect(),
+            wrap: desc.wrap,
         }
     }
 }

@@ -27,18 +27,19 @@ pub struct EdgesDescription {
 pub struct TileDescription {
     pub name: String,
     pub edges: EdgesDescription,
-    pub is_negative: bool,
-    pub can_flip: bool,
-    pub can_mirror: bool,
-    pub can_rotate90: bool,
-    pub can_rotate180: bool,
-    pub can_rotate270: bool,
+    pub is_negative: Option<bool>,
+    pub can_flip: Option<bool>,
+    pub can_mirror: Option<bool>,
+    pub can_rotate90: Option<bool>,
+    pub can_rotate180: Option<bool>,
+    pub can_rotate270: Option<bool>,
 }
 
 #[derive(Clone)]
 pub struct TemplateDescription {
     pub size: Size,
     pub tiles: Vec<TileDescription>,
+    pub wrap: bool,
 }
 
 pub struct WavefrontCollapseLandGenerator {
@@ -76,7 +77,7 @@ impl WavefrontCollapseLandGenerator {
 
         let mut tiles_image_pixels = tiles_image.as_mut_slice().iter_mut();
 
-        let (zero, basic) = if tile_description.is_negative {
+        let (zero, basic) = if tile_description.is_negative.unwrap_or_default() {
             (parameters.basic(), parameters.zero())
         } else {
             (parameters.zero(), parameters.basic())
@@ -100,11 +101,7 @@ impl WavefrontCollapseLandGenerator {
                         *tiles_image_pixels
                             .next()
                             .expect("vec2d size matching image dimensions") =
-                            if value[0] == 0u8 {
-                                zero
-                            } else {
-                                basic
-                            };
+                            if value[0] == 0u8 { zero } else { basic };
                     }
                 }
             }
@@ -142,23 +139,25 @@ impl WavefrontCollapseLandGenerator {
 
         result.push(tile.clone());
 
-        if tile_description.can_flip {
+        if tile_description.can_flip.unwrap_or_default() {
             result.push(tile.flipped());
         }
-        if tile_description.can_mirror {
+        if tile_description.can_mirror.unwrap_or_default() {
             result.push(tile.mirrored());
         }
-        if tile_description.can_flip && tile_description.can_mirror {
+        if tile_description.can_flip.unwrap_or_default()
+            && tile_description.can_mirror.unwrap_or_default()
+        {
             result.push(tile.mirrored().flipped());
         }
 
-        if tile_description.can_rotate90 {
+        if tile_description.can_rotate90.unwrap_or_default() {
             result.push(tile.rotated90());
         }
-        if tile_description.can_rotate180 {
+        if tile_description.can_rotate180.unwrap_or_default() {
             result.push(tile.rotated180());
         }
-        if tile_description.can_rotate270 {
+        if tile_description.can_rotate270.unwrap_or_default() {
             result.push(tile.rotated270());
         }
 
@@ -229,7 +228,7 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
             });
         }
 
-        let mut wfc = WavefrontCollapse::default();
+        let mut wfc = WavefrontCollapse::new(self.template.wrap);
         wfc.set_rules(rules);
 
         let wfc_size = if let Some(first_tile) = tiles.first() {
@@ -246,6 +245,8 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
         wfc.generate_map(&wfc_size, |_| {}, random_numbers);
 
         let mut result = land2d::Land2D::new(&self.template.size, parameters.zero);
+        let offset_y = result.height() - result.play_height();
+        let offset_x = (result.width() - result.play_width()) / 2;
 
         for row in 0..wfc_size.height {
             for column in 0..wfc_size.width {
@@ -255,8 +256,8 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
                     for tile_row in 0..tile.size().height {
                         for tile_column in 0..tile.size().width {
                             result.map(
-                                (row * tile.size().height + tile_row) as i32,
-                                (column * tile.size().width + tile_column) as i32,
+                                (row * tile.size().height + tile_row + offset_y) as i32,
+                                (column * tile.size().width + tile_column + offset_x) as i32,
                                 |p| {
                                     *p =
                                         *tile.get(tile_row, tile_column).unwrap_or(&parameters.zero)
@@ -269,46 +270,5 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
         }
 
         result
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::WavefrontCollapseLandGenerator;
-    use crate::{LandGenerationParameters, LandGenerator};
-    use integral_geometry::Size;
-    use std::fs::File;
-    use std::io::BufWriter;
-    use std::path::Path;
-
-    #[test]
-    fn test_generation() {
-        let wfc_gen = WavefrontCollapseLandGenerator::new(&Size::new(2048, 1024));
-        let landgen_params = LandGenerationParameters::new(0u32, 0xff000000u32, 0, true, true);
-        let land = wfc_gen.generate_land(
-            &landgen_params,
-            &mut [0u32, 1u32, 3u32, 5u32, 7u32, 11u32].into_iter().cycle(),
-        );
-
-        let path = Path::new(r"output.png");
-        let file = File::create(path).unwrap();
-        let ref mut w = BufWriter::new(file);
-
-        let mut encoder = png::Encoder::new(w, land.width() as u32, land.height() as u32); // Width is 2 pixels and height is 1.
-        encoder.set_color(png::ColorType::Rgba);
-        encoder.set_depth(png::BitDepth::Eight);
-        encoder.set_source_gamma(png::ScaledFloat::from_scaled(45455)); // 1.0 / 2.2, scaled by 100000
-        encoder.set_source_gamma(png::ScaledFloat::new(1.0 / 2.2)); // 1.0 / 2.2, unscaled, but rounded
-        let source_chromaticities = png::SourceChromaticities::new(
-            // Using unscaled instantiation here
-            (0.31270, 0.32900),
-            (0.64000, 0.33000),
-            (0.30000, 0.60000),
-            (0.15000, 0.06000),
-        );
-        encoder.set_source_chromaticities(source_chromaticities);
-        let mut writer = encoder.write_header().unwrap();
-
-        writer.write_image_data(land.raw_pixel_bytes()).unwrap(); // Save
     }
 }

@@ -5,7 +5,7 @@ use hedgewars_engine_messages::messages::{
 use hedgewars_engine_messages::queue::*;
 
 use integral_geometry::{Point, Rect, Size};
-use landgen::outline_template::OutlineTemplate;
+use landgen::outline_template_based::outline_template::OutlineTemplate;
 
 use std::path::Path;
 

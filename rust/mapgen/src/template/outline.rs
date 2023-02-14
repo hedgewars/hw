@@ -1,11 +1,9 @@
 use integral_geometry::{Point, Rect, Size};
 
-use landgen::{
-    outline_template_based::outline_template::OutlineTemplate,
-};
+use landgen::outline_template_based::outline_template::OutlineTemplate;
 use serde_derive::Deserialize;
 
-use std::{collections::hash_map::HashMap};
+use std::collections::hash_map::HashMap;
 
 #[derive(Deserialize)]
 pub struct PointDesc {

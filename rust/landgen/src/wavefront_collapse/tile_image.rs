@@ -11,6 +11,7 @@ pub struct Edge<I: PartialEq + Clone> {
 }
 
 impl<I: PartialEq + Clone> Edge<I> {
+    #[inline]
     pub fn new(id: I, symmetrical: bool) -> Self {
         Self {
             id,
@@ -19,6 +20,7 @@ impl<I: PartialEq + Clone> Edge<I> {
         }
     }
 
+    #[inline]
     pub fn reversed(&self) -> Self {
         Self {
             id: self.id.clone(),
@@ -27,6 +29,7 @@ impl<I: PartialEq + Clone> Edge<I> {
         }
     }
 
+    #[inline]
     pub fn is_compatible(&self, other: &Self) -> bool {
         self.id == other.id && ((self.reverse != other.reverse) || self.symmetrical)
     }
@@ -115,22 +118,27 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
         }
     }
 
+    #[inline]
     pub fn right_edge(&self) -> &Edge<I> {
         &self.right
     }
 
+    #[inline]
     pub fn bottom_edge(&self) -> &Edge<I> {
         &self.bottom
     }
 
+    #[inline]
     pub fn left_edge(&self) -> &Edge<I> {
         &self.left
     }
 
+    #[inline]
     pub fn top_edge(&self) -> &Edge<I> {
         &self.top
     }
 
+    #[inline]
     pub fn size(&self) -> Size {
         match self.transform {
             Transform::Rotate0(_) => self.image.size(),
@@ -138,6 +146,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
         }
     }
 
+    #[inline]
     pub fn get(&self, row: usize, column: usize) -> Option<&T> {
         match self.transform {
             Transform::Rotate0(_) => {

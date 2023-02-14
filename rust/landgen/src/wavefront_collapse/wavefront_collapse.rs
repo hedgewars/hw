@@ -27,6 +27,7 @@ pub struct CollapseRule {
 pub struct WavefrontCollapse {
     rules: Vec<CollapseRule>,
     grid: Vec2D<Tile>,
+    wrap: bool,
 }
 
 impl Default for WavefrontCollapse {
@@ -34,11 +35,20 @@ impl Default for WavefrontCollapse {
         Self {
             rules: Vec::new(),
             grid: Vec2D::new(&Size::new(1, 1), Tile::Empty),
+            wrap: false,
         }
     }
 }
 
 impl WavefrontCollapse {
+    pub fn new(wrap: bool) -> Self {
+        Self {
+            rules: Vec::new(),
+            grid: Vec2D::new(&Size::new(1, 1), Tile::Empty),
+            wrap,
+        }
+    }
+
     pub fn generate_map<I: Iterator<Item = u32>, F: FnOnce(&mut Vec2D<Tile>)>(
         &mut self,
         map_size: &Size,
@@ -57,6 +67,20 @@ impl WavefrontCollapse {
     }
 
     fn get_tile(&self, y: usize, x: usize) -> Tile {
+        let x = if self.wrap {
+            if x == usize::MAX {
+                self.grid.width() - 1
+            } else {
+                if x == self.grid.width() {
+                    0
+                } else {
+                    x
+                }
+            }
+        } else {
+            x
+        };
+        
         self.grid.get(y, x).copied().unwrap_or_default()
     }
 

@@ -7,8 +7,9 @@ use hwphysics::{
 use integral_geometry::{Point, Rect, Size};
 use land2d::Land2D;
 use landgen::{
-    outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
-    LandGenerationParameters, LandGenerator,
+    outline_template_based::outline_template::OutlineTemplate,
+    outline_template_based::template_based::TemplatedLandGenerator, LandGenerationParameters,
+    LandGenerator,
 };
 use lfprng::LaggedFibonacciPRNG;
 use std::path::{Path, PathBuf};
@@ -64,9 +65,14 @@ impl World {
         if let Some(ref state) = self.game_state {
             self.camera.position = state.land.play_box().center();
 
+            let parameters = LandGenerationParameters::new(0u32, 0x8000u32, 0, false, false);
             let theme =
                 Theme::load(self.data_path.join(Path::new("Themes/Cheese/")).as_path()).unwrap();
-            let texture = MapGenerator::new().make_texture(&state.land, &theme);
+            let texture = MapGenerator::<OutlineTemplate>::new().make_texture(
+                &state.land,
+                &parameters,
+                &theme,
+            );
             if let Some(ref mut renderer) = self.map_renderer {
                 renderer.init(&texture);
             }

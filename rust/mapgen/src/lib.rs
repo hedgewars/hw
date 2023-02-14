@@ -17,7 +17,6 @@ use landgen::{
 };
 use rand::{seq::SliceRandom, Rng};
 
-
 use std::{borrow::Borrow, collections::hash_map::HashMap};
 use vec2d::Vec2D;
 
@@ -249,7 +248,8 @@ fn tex_row_copy<LandT>(
 
 #[cfg(test)]
 mod tests {
-    use crate::{MapGenerator, TemplateType};
+    use crate::{MapGenerator, TemplateType, OutlineTemplate};
+    use rand::thread_rng;
 
     #[test]
     fn simple_load() {
@@ -283,14 +283,14 @@ template_types:
     test: [0]
 "#;
 
-        let mut generator = MapGenerator::new();
+        let mut generator = MapGenerator::<OutlineTemplate>::new();
         generator.import_yaml_templates(&text);
 
         assert!(generator
             .templates
             .contains_key(&TemplateType("test".to_string())));
 
-        let template = generator.get_template("test").unwrap();
+        let template = generator.get_template("test", &mut thread_rng()).unwrap();
 
         assert_eq!(template.islands[0].len(), 7);
     }

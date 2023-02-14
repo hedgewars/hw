@@ -4,11 +4,12 @@ templates:
   # 00
   -
     width: 3960
-    height: 1980
+    height: 1920
     can_invert: false
     is_negative: false
     put_girders: true
     max_hedgehogs: 40
+    wrap: true
     tiles:
       - name: "120_bar.png"
         edges:

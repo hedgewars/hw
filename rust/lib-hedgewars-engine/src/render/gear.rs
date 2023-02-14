@@ -71,22 +71,10 @@ pub enum SpriteId {
 }
 
 const SPRITE_LOAD_LIST: &[(SpriteId, &str)] = &[
-    (
-        SpriteId::Mine,
-        "Graphics/MineOn.png",
-    ),
-    (
-        SpriteId::Grenade,
-        "Graphics/Bomb.png",
-    ),
-    (
-        SpriteId::Cheese,
-        "Graphics/cheese.png",
-    ),
-    (
-        SpriteId::Cleaver,
-        "Graphics/cleaver.png",
-    ),
+    (SpriteId::Mine, "Graphics/MineOn.png"),
+    (SpriteId::Grenade, "Graphics/Bomb.png"),
+    (SpriteId::Cheese, "Graphics/cheese.png"),
+    (SpriteId::Cleaver, "Graphics/cleaver.png"),
 ];
 
 const MAX_SPRITES: usize = SpriteId::MaxSprite as usize + 1;
