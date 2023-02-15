@@ -70,17 +70,15 @@ impl WavefrontCollapse {
         let x = if self.wrap {
             if x == usize::MAX {
                 self.grid.width() - 1
+            } else if x == self.grid.width() {
+                0
             } else {
-                if x == self.grid.width() {
-                    0
-                } else {
-                    x
-                }
+                x
             }
         } else {
             x
         };
-        
+
         self.grid.get(y, x).copied().unwrap_or_default()
     }
 

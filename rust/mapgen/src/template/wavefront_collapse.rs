@@ -42,6 +42,16 @@ pub struct TileDesc {
 
 #[derive(Deserialize)]
 pub struct TileDescriptionHelper(#[serde(with = "TileDesc")] TileDescription);
+#[derive(Deserialize)]
+pub struct EdgeDescriptionHelper(#[serde(with = "EdgeDesc")] EdgeDescription);
+
+#[derive(Deserialize)]
+pub struct NonStrictEdgesDesc {
+    pub top: Option<EdgeDescriptionHelper>,
+    pub right: Option<EdgeDescriptionHelper>,
+    pub bottom: Option<EdgeDescriptionHelper>,
+    pub left: Option<EdgeDescriptionHelper>,
+}
 
 #[derive(Deserialize)]
 pub struct TemplateDesc {
@@ -52,6 +62,7 @@ pub struct TemplateDesc {
     pub put_girders: bool,
     pub max_hedgehogs: u8,
     pub wrap: bool,
+    pub edges: Option<NonStrictEdgesDesc>,
     pub tiles: Vec<TileDescriptionHelper>,
 }
 
@@ -63,6 +74,18 @@ pub struct TemplateCollectionDesc {
 
 impl From<&TemplateDesc> for TemplateDescription {
     fn from(desc: &TemplateDesc) -> Self {
+        let [top, right, bottom, left] = if let Some(edges) = &desc.edges {
+            [
+                edges.top.as_ref(),
+                edges.right.as_ref(),
+                edges.bottom.as_ref(),
+                edges.left.as_ref(),
+            ]
+            .map(|e| e.map(|EdgeDescriptionHelper(e)| e.clone()))
+        } else {
+            [None, None, None, None]
+        };
+
         Self {
             size: Size::new(desc.width, desc.height),
             tiles: desc
@@ -71,6 +94,12 @@ impl From<&TemplateDesc> for TemplateDescription {
                 .map(|TileDescriptionHelper(t)| t.clone())
                 .collect(),
             wrap: desc.wrap,
+            edges: NonStrictEdgesDescription {
+                top,
+                right,
+                bottom,
+                left,
+            },
         }
     }
 }

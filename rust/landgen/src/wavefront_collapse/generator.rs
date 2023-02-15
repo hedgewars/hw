@@ -36,9 +36,18 @@ pub struct TileDescription {
 }
 
 #[derive(Clone)]
+pub struct NonStrictEdgesDescription {
+    pub top: Option<EdgeDescription>,
+    pub right: Option<EdgeDescription>,
+    pub bottom: Option<EdgeDescription>,
+    pub left: Option<EdgeDescription>,
+}
+
+#[derive(Clone)]
 pub struct TemplateDescription {
     pub size: Size,
     pub tiles: Vec<TileDescription>,
+    pub edges: NonStrictEdgesDescription,
     pub wrap: bool,
 }
 
@@ -107,34 +116,19 @@ impl WavefrontCollapseLandGenerator {
             }
         }
 
-        let edges: Vec<Edge<String>> = [
-            &tile_description.edges.top,
-            &tile_description.edges.right,
-            &tile_description.edges.bottom,
-            &tile_description.edges.left,
-        ]
-        .iter()
-        .map(|descr| {
-            let edge = Edge::new(descr.name.clone(), descr.symmetrical.unwrap_or_default());
-
-            if descr.reversed.unwrap_or_default() {
-                edge.reversed()
-            } else {
-                edge
-            }
-        })
-        .collect();
-
-        let [top_edge, right_edge, bottom_edge, left_edge] = edges.as_slice() else {
-            unreachable!()
-        };
+        let [top_edge, right_edge, bottom_edge, left_edge]: [Edge<String>; 4] = [
+            (&tile_description.edges.top).into(),
+            (&tile_description.edges.right).into(),
+            (&tile_description.edges.bottom).into(),
+            (&tile_description.edges.left).into(),
+        ];
 
         let tile = TileImage::<T, String>::new(
             tiles_image,
-            top_edge.clone(),
-            right_edge.clone(),
-            bottom_edge.clone(),
-            left_edge.clone(),
+            top_edge,
+            right_edge,
+            bottom_edge,
+            left_edge,
         );
 
         result.push(tile.clone());
@@ -178,25 +172,72 @@ impl WavefrontCollapseLandGenerator {
 
         result
     }
-}
 
-impl LandGenerator for WavefrontCollapseLandGenerator {
-    fn generate_land<T: Copy + PartialEq + Default, I: Iterator<Item = u32>>(
+    pub fn build_rules<T: Copy + PartialEq + Default>(
         &self,
-        parameters: &LandGenerationParameters<T>,
-        random_numbers: &mut I,
-    ) -> land2d::Land2D<T> {
-        let tiles = self.load_template(parameters);
+        tiles: &[TileImage<T, String>],
+    ) -> Vec<CollapseRule> {
+        let [grid_top_edge, grid_right_edge, grid_bottom_edge, grid_left_edge]: [Option<
+            Edge<String>,
+        >; 4] = [
+            self.template.edges.top.as_ref(),
+            self.template.edges.right.as_ref(),
+            self.template.edges.bottom.as_ref(),
+            self.template.edges.left.as_ref(),
+        ]
+        .map(|opt| opt.map(|d| d.into()));
 
         let mut rules = Vec::<CollapseRule>::new();
 
-        let default_connection = HashSet::from_iter(vec![Tile::Outside, Tile::Empty].into_iter());
+        let default_connection = HashSet::from_iter(vec![Tile::Empty].into_iter());
         for (i, tile) in tiles.iter().enumerate() {
             let mut right = default_connection.clone();
             let mut bottom = default_connection.clone();
             let mut left = default_connection.clone();
             let mut top = default_connection.clone();
 
+            // compatibility with grid edges
+            if grid_top_edge
+                .as_ref()
+                .map(|e| e.is_compatible(tile.top_edge()))
+                .unwrap_or(true)
+            {
+                top.insert(Tile::Outside);
+            }
+            if grid_right_edge
+                .as_ref()
+                .map(|e| e.is_compatible(tile.right_edge()))
+                .unwrap_or(true)
+            {
+                right.insert(Tile::Outside);
+            }
+            if grid_bottom_edge
+                .as_ref()
+                .map(|e| e.is_compatible(tile.bottom_edge()))
+                .unwrap_or(true)
+            {
+                bottom.insert(Tile::Outside);
+            }
+            if grid_left_edge
+                .as_ref()
+                .map(|e| e.is_compatible(tile.left_edge()))
+                .unwrap_or(true)
+            {
+                left.insert(Tile::Outside);
+            }
+
+            // compatibility with itself
+            if tile.left_edge().is_compatible(tile.right_edge()) {
+                left.insert(Tile::Numbered(i));
+                right.insert(Tile::Numbered(i));
+            }
+
+            if tile.top_edge().is_compatible(tile.bottom_edge()) {
+                top.insert(Tile::Numbered(i));
+                bottom.insert(Tile::Numbered(i));
+            }
+
+            // compatibility with previously defined tiles
             for p in 0..i {
                 if tiles[p].left_edge().is_compatible(tile.right_edge()) {
                     rules[p].left.insert(Tile::Numbered(i));
@@ -228,6 +269,19 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
             });
         }
 
+        rules
+    }
+}
+
+impl LandGenerator for WavefrontCollapseLandGenerator {
+    fn generate_land<T: Copy + PartialEq + Default, I: Iterator<Item = u32>>(
+        &self,
+        parameters: &LandGenerationParameters<T>,
+        random_numbers: &mut I,
+    ) -> land2d::Land2D<T> {
+        let tiles = self.load_template(parameters);
+        let rules = self.build_rules(&tiles);
+
         let mut wfc = WavefrontCollapse::new(self.template.wrap);
         wfc.set_rules(rules);
 
@@ -244,6 +298,7 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
 
         wfc.generate_map(&wfc_size, |_| {}, random_numbers);
 
+        // render tiles into resulting land array
         let mut result = land2d::Land2D::new(&self.template.size, parameters.zero);
         let offset_y = result.height() - result.play_height();
         let offset_x = (result.width() - result.play_width()) / 2;
@@ -270,5 +325,17 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
         }
 
         result
+    }
+}
+
+impl From<&EdgeDescription> for Edge<String> {
+    fn from(val: &EdgeDescription) -> Self {
+        let edge = Edge::new(val.name.clone(), val.symmetrical.unwrap_or_default());
+
+        if val.reversed.unwrap_or_default() {
+            edge.reversed()
+        } else {
+            edge
+        }
     }
 }

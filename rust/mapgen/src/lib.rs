@@ -248,7 +248,7 @@ fn tex_row_copy<LandT>(
 
 #[cfg(test)]
 mod tests {
-    use crate::{MapGenerator, TemplateType, OutlineTemplate};
+    use crate::{MapGenerator, OutlineTemplate, TemplateType};
     use rand::thread_rng;
 
     #[test]
