@@ -180,16 +180,12 @@ impl OutlinePoints {
 
         // now go through all other segments
         for s in self.segments_iter() {
-            if s != segment {
-                if intersects(&normal_ray, &s) {
-                    if let Some((t, d)) =
-                        solve_intersection(&self.intersections_box, &normal_ray, &s)
-                    {
-                        if t > 0 {
-                            dist_right = min(dist_right, d);
-                        } else {
-                            dist_left = min(dist_left, d);
-                        }
+            if s != segment && intersects(&normal_ray, &s) {
+                if let Some((t, d)) = solve_intersection(&self.intersections_box, &normal_ray, &s) {
+                    if t > 0 {
+                        dist_right = min(dist_right, d);
+                    } else {
+                        dist_left = min(dist_left, d);
                     }
                 }
             }
@@ -197,32 +193,33 @@ impl OutlinePoints {
 
         // go through all points, including fill points
         for pi in self.iter().cloned() {
-            if pi != segment.start && pi != segment.end {
-                if intersects(&pi.ray_with_dir(normal), &segment) {
-                    // ray from segment.start
-                    if let Some((t, d)) = solve_intersection(
-                        &self.intersections_box,
-                        &normal_ray,
-                        &segment.start.line_to(pi),
-                    ) {
-                        if t > 0 {
-                            dist_right = min(dist_right, d);
-                        } else {
-                            dist_left = min(dist_left, d);
-                        }
+            if pi != segment.start
+                && pi != segment.end
+                && intersects(&pi.ray_with_dir(normal), &segment)
+            {
+                // ray from segment.start
+                if let Some((t, d)) = solve_intersection(
+                    &self.intersections_box,
+                    &normal_ray,
+                    &segment.start.line_to(pi),
+                ) {
+                    if t > 0 {
+                        dist_right = min(dist_right, d);
+                    } else {
+                        dist_left = min(dist_left, d);
                     }
+                }
 
-                    // ray from segment.end
-                    if let Some((t, d)) = solve_intersection(
-                        &self.intersections_box,
-                        &normal_ray,
-                        &segment.end.line_to(pi),
-                    ) {
-                        if t > 0 {
-                            dist_right = min(dist_right, d);
-                        } else {
-                            dist_left = min(dist_left, d);
-                        }
+                // ray from segment.end
+                if let Some((t, d)) = solve_intersection(
+                    &self.intersections_box,
+                    &normal_ray,
+                    &segment.end.line_to(pi),
+                ) {
+                    if t > 0 {
+                        dist_right = min(dist_right, d);
+                    } else {
+                        dist_left = min(dist_left, d);
                     }
                 }
             }

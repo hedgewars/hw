@@ -123,13 +123,8 @@ impl WavefrontCollapseLandGenerator {
             (&tile_description.edges.left).into(),
         ];
 
-        let tile = TileImage::<T, String>::new(
-            tiles_image,
-            top_edge,
-            right_edge,
-            bottom_edge,
-            left_edge,
-        );
+        let tile =
+            TileImage::<T, String>::new(tiles_image, top_edge, right_edge, bottom_edge, left_edge);
 
         result.push(tile.clone());
 
