@@ -1,3 +1,4 @@
+use integral_geometry::{Point, Rect};
 use png::{ColorType, Decoder, DecodingError};
 use std::{
     fs::{read_dir, File},
@@ -109,9 +110,70 @@ impl TiledSprite {
     }
 }
 
+#[derive(Default)]
+struct Color(u8, u8, u8, u8);
+
+pub struct LandObjectOverlay {
+    texture: ThemeSprite,
+    offset: Point,
+}
+
+pub struct LandObject {
+    texture: ThemeSprite,
+    inland_rects: Vec<Rect>,
+    outland_rects: Vec<Rect>,
+    anchors: Vec<Rect>,
+    overlays: Vec<LandObjectOverlay>,
+}
+
+pub struct LandSpray {
+    texture: ThemeSprite,
+    count: u16,
+}
+
+#[derive(Default)]
+pub struct ThemeColors {
+    border: Color,
+}
+
+pub struct Flakes {
+    texture: ThemeSprite,
+    frames_count: u16,
+    frame_ticks: u16,
+    velocity: u16,
+    fall_speed: u16,
+}
+
+#[derive(Default)]
+pub struct Water {
+    top_color: Color,
+    bottom_color: Color,
+    opacity: u8,
+}
+
+#[derive(Default)]
+pub struct ThemeParts {
+    water: Water,
+    flakes: Option<Flakes>,
+    music: String,
+    sky: Color,
+    tint: Color,
+}
+
+#[derive(Default)]
 pub struct Theme {
+    border_color: Color,
+    clouds_count: u16,
+    flatten_flakes: bool,
     land_texture: Option<ThemeSprite>,
     border_texture: Option<ThemeSprite>,
+    land_objects: Vec<LandObject>,
+    spays: Vec<LandSpray>,
+    use_ice: bool,
+    use_snow: bool,
+    music: String,
+    normal_parts: ThemeParts,
+    sd_parts: ThemeParts,
 }
 
 impl Theme {
@@ -145,10 +207,7 @@ impl From<DecodingError> for ThemeLoadError {
 
 impl Theme {
     pub fn new() -> Self {
-        Theme {
-            land_texture: None,
-            border_texture: None,
-        }
+        Default::default()
     }
 
     pub fn load(path: &Path) -> Result<Theme, ThemeLoadError> {
