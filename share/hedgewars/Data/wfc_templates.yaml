@@ -176,9 +176,21 @@ templates:
     edges: *open_edges
     tiles: *template_00_tiles
 
+
+  - &template_04
+    width: 2200
+    height: 960
+    can_invert: false
+    is_negative: false
+    put_girders: true
+    max_hedgehogs: 24
+    wrap: false
+    edges: *open_edges
+    tiles: *template_00_tiles
+
 template_types:
   small: [2]
-  medium: [1]
+  medium: [4]
   large: [1]
   cavern: [0]
   wacky: [3]

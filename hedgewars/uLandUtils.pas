@@ -89,7 +89,7 @@ begin
     leftX:= (LAND_WIDTH - playWidth) div 2;
     rightX:= Pred(leftX + playWidth);
     topY:= LAND_HEIGHT - playHeight;
-
+    cWaterLine:= LAND_HEIGHT;
 
     // let's assume those are powers of two
     LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
