@@ -8,3 +8,10 @@ edition = "2018"
 fpnum = { path = "../fpnum" }
 integral-geometry = { path = "../integral-geometry" }
 land2d = { path = "../land2d" }
+
+[dev-dependencies]
+criterion = "0.4.0"
+
+[[bench]]
+name = "ecs_bench"
+harness = false

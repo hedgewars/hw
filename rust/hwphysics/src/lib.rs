@@ -1,6 +1,6 @@
 pub mod collision;
 pub mod common;
-mod data;
+pub mod data;
 mod grid;
 pub mod physics;
 
