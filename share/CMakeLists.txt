@@ -19,6 +19,6 @@ if(APPLE)
     install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/dsa_pub.pem"
             DESTINATION ../Resources/)
 elseif(UNIX)
-    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.appdata.xml"
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/appdata/)
+    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.metainfo.xml"
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo/)
 endif()
