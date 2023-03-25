@@ -2,6 +2,7 @@ use std::{
     fs::{File, OpenOptions},
     io::{Error, ErrorKind, Read, Result, Write},
     sync::{mpsc, Arc},
+    task::Waker,
     thread,
 };
 
@@ -23,8 +24,7 @@ impl IoThread {
         let (core_tx, io_rx) = mpsc::channel();
         let (io_tx, core_rx) = mpsc::channel();
 
-        let mut db = Database::new();
-        db.connect("localhost");
+        /*let mut db = Database::new("localhost");
 
         thread::spawn(move || {
             while let Ok((request_id, task)) = io_rx.recv() {
@@ -138,7 +138,7 @@ impl IoThread {
                 io_tx.send((request_id, response));
                 waker.wake();
             }
-        });
+        });*/
 
         Self { core_rx, core_tx }
     }

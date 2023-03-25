@@ -241,7 +241,7 @@ impl NetworkLayer {
                 Ok(stream) => {
                     if let Some(client) = layer.create_client(ClientStream::Tls(stream), addr).await
                     {
-                        tokio::spawn(client.run(update_tx.clone()));
+                        tokio::spawn(client.run(update_tx));
                     }
                 }
                 Err(e) => {
