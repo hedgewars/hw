@@ -18,10 +18,7 @@ use tokio::{
 use tokio_native_tls::{TlsAcceptor, TlsStream};
 
 use crate::{
-    core::{
-        events::{TimedEvents, Timeout},
-        types::ClientId,
-    },
+    core::types::ClientId,
     handlers,
     handlers::{IoResult, IoTask, ServerState},
     protocol::{self, ProtocolDecoder, ProtocolError},
