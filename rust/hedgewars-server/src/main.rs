@@ -27,6 +27,7 @@ async fn main() -> tokio::io::Result<()> {
     let args: Vec<String> = env::args().collect();
     let mut opts = Options::new();
 
+    todo!("Add options for cert paths");
     opts.optopt("p", "port", "port - defaults to 46631", "PORT");
     opts.optflag("h", "help", "help");
     let matches = match opts.parse(&args[1..]) {

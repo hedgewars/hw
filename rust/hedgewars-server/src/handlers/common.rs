@@ -514,6 +514,7 @@ pub fn handle_vote(
     result: Result<VoteResult, VoteError>,
     response: &mut super::Response,
 ) {
+    todo!("voting result needs to be processed with raised privileges");
     let room_id = room_control.room().id;
     super::common::get_vote_data(room_control.room().id, &result, response);
 

@@ -188,6 +188,7 @@ impl NetworkClient {
                             }
                         }
                         Err(e) => {
+                            todo!("send cmdline errors");
                             sender.send(Error(format!("{}", e))).await;
                             if matches!(e, ProtocolError::Timeout) {
                                 Self::write(&mut self.stream, Bytes::from(HwServerMessage::Bye("Ping timeout".to_string()).to_raw_protocol())).await;
@@ -276,6 +277,8 @@ impl NetworkLayer {
             }
         }
 
+        todo!("add the DB task");
+        todo!("add certfile watcher task");
         loop {
             #[cfg(not(feature = "tls-connections"))]
             tokio::select! {

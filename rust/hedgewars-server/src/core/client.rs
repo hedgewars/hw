@@ -30,6 +30,7 @@ pub struct HwClient {
 
 impl HwClient {
     pub fn new(id: ClientId, protocol_number: u16, nick: String) -> HwClient {
+        todo!("add quiet flag");
         HwClient {
             id,
             nick,

@@ -26,6 +26,8 @@ pub fn handle(
 ) {
     use hedgewars_network_protocol::messages::HwProtocolMessage::*;
 
+    todo!("add kick/ban handlers");
+
     match message {
         CreateRoom(name, password) => match server.create_room(client_id, name, password) {
             Err(CreateRoomError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
@@ -47,6 +49,7 @@ pub fn handle(
             }
         },
         Chat(msg) => {
+            todo!("add client quiet flag");
             response.add(
                 ChatMsg {
                     nick: server.client(client_id).nick.clone(),
