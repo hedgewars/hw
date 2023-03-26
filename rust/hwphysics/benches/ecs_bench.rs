@@ -33,17 +33,21 @@ pub fn array_run(c: &mut Criterion) {
 
 pub fn component_run(c: &mut Criterion) {
     let mut manager = GearDataManager::new();
-    manager.register::<Pv>();
+
+    manager.register::<P>();
+    manager.register::<V>();
+
     for i in 1..=SIZE {
         let gear_id = GearId::new(i as u16).unwrap();
-        manager.add(gear_id, &Pv::default());
+        manager.add(gear_id, &P::default());
+        manager.add(gear_id, &V::default());
     }
 
     c.bench_function("component run", |b| {
         b.iter(|| {
             manager
                 .iter()
-                .run(|(item,): (&mut Pv,)| item.velocity += black_box(item.position));
+                .run(|(p, v): (&mut P, &mut V)| v.velocity += black_box(p.position));
         })
     });
 }
