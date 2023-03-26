@@ -224,6 +224,11 @@ impl BlockMask {
     }
 
     #[inline]
+    fn without_type(&self, type_bit: u64) -> Self {
+        Self::new(self.type_mask & !type_bit, self.tag_mask)
+    }
+
+    #[inline]
     fn with_tag(&self, tag_bit: u64) -> Self {
         Self::new(self.type_mask, self.tag_mask | tag_bit)
     }
@@ -273,7 +278,7 @@ impl GearDataManager {
         debug_assert!(src_block_index != dest_block_index);
         let src_mask = self.block_masks[src_block_index as usize];
         let dest_mask = self.block_masks[dest_block_index as usize];
-        debug_assert!(src_mask.type_mask & dest_mask.type_mask == src_mask.type_mask);
+        debug_assert!(src_mask.type_mask & dest_mask.type_mask != 0);
 
         let src_block = &self.blocks[src_block_index as usize];
         let dest_block = &self.blocks[dest_block_index as usize];
@@ -288,13 +293,17 @@ impl GearDataManager {
 
             let size = self.element_sizes[i];
             let src_ptr = src_block.component_blocks[i].unwrap().as_ptr();
-            let dest_ptr = dest_block.component_blocks[i].unwrap().as_ptr();
+            if let Some(dest_ptr) = dest_block.component_blocks[i] {
+                let dest_ptr = dest_ptr.as_ptr();
+                unsafe {
+                    copy_nonoverlapping(
+                        src_ptr.add((src_index * size) as usize),
+                        dest_ptr.add((dest_index * size) as usize),
+                        size as usize,
+                    );
+                }
+            }
             unsafe {
-                copy_nonoverlapping(
-                    src_ptr.add((src_index * size) as usize),
-                    dest_ptr.add((dest_index * size) as usize),
-                    size as usize,
-                );
                 if src_index < src_block.elements_count - 1 {
                     copy_nonoverlapping(
                         src_ptr.add((size * (src_block.elements_count - 1)) as usize),
@@ -310,7 +319,7 @@ impl GearDataManager {
         let src_block = &mut self.blocks[src_block_index as usize];
         let gear_id = src_block.gear_ids()[src_index as usize];
 
-        if src_index < src_block.elements_count - 1 {
+        if src_index + 1 < src_block.elements_count {
             let relocated_index = src_block.elements_count as usize - 1;
             let gear_ids = src_block.gear_ids_mut();
             let relocated_id = gear_ids[relocated_index];
@@ -470,16 +479,24 @@ impl GearDataManager {
 
     pub fn remove<T: 'static>(&mut self, gear_id: GearId) {
         if let Some(type_index) = self.get_type_index::<T>() {
+            let type_bit = 1 << type_index as u64;
             let entry = self.lookup[gear_id.get() as usize - 1];
-            if let Some(index) = entry.index {
-                let mut dest_mask = self.block_masks[entry.block_index as usize];
-                dest_mask.type_mask &= !(1 << type_index as u64);
 
-                if dest_mask.type_mask == 0 {
-                    self.remove_from_block(entry.block_index, index.get() - 1);
-                } else {
-                    let dest_block_index = self.ensure_block(dest_mask);
-                    self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
+            if let Some(index) = entry.index {
+                let mask = self.block_masks[entry.block_index as usize];
+                let new_mask = mask.without_type(type_bit);
+
+                if new_mask != mask {
+                    if new_mask.type_mask == 0 {
+                        self.remove_from_block(entry.block_index, index.get() - 1);
+                    } else {
+                        let dest_block_index = self.ensure_block(new_mask);
+                        self.move_between_blocks(
+                            entry.block_index,
+                            index.get() - 1,
+                            dest_block_index,
+                        );
+                    }
                 }
             }
         } else {
@@ -629,7 +646,12 @@ mod test {
     use super::{super::common::GearId, GearDataManager};
 
     #[derive(Clone)]
-    struct Datum {
+    struct DatumA {
+        value: u32,
+    }
+
+    #[derive(Clone)]
+    struct DatumB {
         value: u32,
     }
 
@@ -639,15 +661,15 @@ mod test {
     #[test]
     fn direct_access() {
         let mut manager = GearDataManager::new();
-        manager.register::<Datum>();
+        manager.register::<DatumA>();
         for i in 1..=5 {
-            manager.add(GearId::new(i as u16).unwrap(), &Datum { value: i * i });
+            manager.add(GearId::new(i as u16).unwrap(), &DatumA { value: i * i });
         }
 
         for i in 1..=5 {
             assert_eq!(
                 manager
-                    .get::<Datum>(GearId::new(i as u16).unwrap())
+                    .get::<DatumA>(GearId::new(i as u16).unwrap())
                     .unwrap()
                     .value,
                 i * i
@@ -658,46 +680,72 @@ mod test {
     #[test]
     fn single_component_iteration() {
         let mut manager = GearDataManager::new();
-        manager.register::<Datum>();
+        manager.register::<DatumA>();
+
         for i in 1..=5 {
-            manager.add(GearId::new(i as u16).unwrap(), &Datum { value: i });
+            manager.add(GearId::new(i as u16).unwrap(), &DatumA { value: i });
         }
 
         let mut sum = 0;
-        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&DatumA,)| sum += d.value);
         assert_eq!(sum, 15);
 
-        manager.iter().run(|(d,): (&mut Datum,)| d.value += 1);
-        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&mut DatumA,)| d.value += 1);
+        manager.iter().run(|(d,): (&DatumA,)| sum += d.value);
         assert_eq!(sum, 35);
     }
 
     #[test]
     fn tagged_component_iteration() {
         let mut manager = GearDataManager::new();
-        manager.register::<Datum>();
+        manager.register::<DatumA>();
         manager.register::<Tag>();
-        for i in 1..=10 {
-            let gear_id = GearId::new(i as u16).unwrap();
-            manager.add(gear_id, &Datum { value: i });
-        }
 
         for i in 1..=10 {
             let gear_id = GearId::new(i as u16).unwrap();
-            if i & 1 == 0 {
-                manager.add_tag::<Tag>(gear_id);
-            }
+            manager.add(gear_id, &DatumA { value: i });
+        }
+
+        for i in (2..=10).step_by(2) {
+            let gear_id = GearId::new(i as u16).unwrap();
+            manager.add_tag::<Tag>(gear_id);
         }
 
         let mut sum = 0;
-        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&DatumA,)| sum += d.value);
         assert_eq!(sum, 55);
 
         let mut tag_sum = 0;
         manager
             .iter()
             .with_tags::<&Tag>()
-            .run(|(d,): (&Datum,)| tag_sum += d.value);
+            .run(|(d,): (&DatumA,)| tag_sum += d.value);
         assert_eq!(tag_sum, 30);
+    }
+
+    #[test]
+    fn removal() {
+        let mut manager = GearDataManager::new();
+        manager.register::<DatumA>();
+        manager.register::<DatumB>();
+
+        for i in 1..=10 {
+            let gear_id = GearId::new(i as u16).unwrap();
+            manager.add(gear_id, &DatumA { value: i });
+            manager.add(gear_id, &DatumB { value: i });
+        }
+
+        for i in (1..=10).step_by(2) {
+            let gear_id = GearId::new(i as u16).unwrap();
+            manager.remove::<DatumA>(gear_id);
+        }
+
+        let mut sum_a = 0;
+        manager.iter().run(|(d,): (&DatumA,)| sum_a += d.value);
+        assert_eq!(sum_a, 30);
+
+        let mut sum_b = 0;
+        manager.iter().run(|(d,): (&DatumB,)| sum_b += d.value);
+        assert_eq!(sum_b, 55);
     }
 }
