@@ -140,14 +140,17 @@ impl DataBlock {
                 .add(size_of::<GearId>() * max_elements as usize)
         };
 
-        for i in 0..element_sizes.len() {
-            if mask & (1 << i as u64) != 0 {
-                unsafe {
-                    address = address.add(address.align_offset(element_alignments[i] as usize));
-                    blocks[i] = Some(NonNull::new_unchecked(address));
-                    address = address.add(element_sizes[i] as usize * max_elements as usize)
-                };
-            }
+        let mut mask_bits = mask;
+        while mask_bits != 0 {
+            let i = mask_bits.trailing_zeros() as usize;
+
+            unsafe {
+                address = address.add(address.align_offset(element_alignments[i] as usize));
+                blocks[i] = Some(NonNull::new_unchecked(address));
+                address = address.add(element_sizes[i] as usize * max_elements as usize)
+            };
+
+            mask_bits &= mask_bits - 1;
         }
 
         Self {
@@ -159,6 +162,7 @@ impl DataBlock {
         }
     }
 
+    #[inline]
     fn gear_ids(&self) -> &[GearId] {
         unsafe {
             slice::from_raw_parts(
@@ -168,6 +172,7 @@ impl DataBlock {
         }
     }
 
+    #[inline]
     fn gear_ids_mut(&mut self) -> &mut [GearId] {
         unsafe {
             slice::from_raw_parts_mut(
@@ -177,6 +182,7 @@ impl DataBlock {
         }
     }
 
+    #[inline]
     fn is_full(&self) -> bool {
         self.elements_count == self.max_elements
     }
@@ -275,26 +281,30 @@ impl GearDataManager {
         debug_assert!(!dest_block.is_full());
 
         let dest_index = dest_block.elements_count;
-        for i in 0..self.types.len() {
-            if src_mask.type_mask & (1 << i as u64) != 0 {
-                let size = self.element_sizes[i];
-                let src_ptr = src_block.component_blocks[i].unwrap().as_ptr();
-                let dest_ptr = dest_block.component_blocks[i].unwrap().as_ptr();
-                unsafe {
+
+        let mut type_mask = src_mask.type_mask;
+        while type_mask != 0 {
+            let i = type_mask.trailing_zeros() as usize;
+
+            let size = self.element_sizes[i];
+            let src_ptr = src_block.component_blocks[i].unwrap().as_ptr();
+            let dest_ptr = dest_block.component_blocks[i].unwrap().as_ptr();
+            unsafe {
+                copy_nonoverlapping(
+                    src_ptr.add((src_index * size) as usize),
+                    dest_ptr.add((dest_index * size) as usize),
+                    size as usize,
+                );
+                if src_index < src_block.elements_count - 1 {
                     copy_nonoverlapping(
-                        src_ptr.add((src_index * size) as usize),
-                        dest_ptr.add((dest_index * size) as usize),
+                        src_ptr.add((size * (src_block.elements_count - 1)) as usize),
+                        src_ptr.add((size * src_index) as usize),
                         size as usize,
                     );
-                    if src_index < src_block.elements_count - 1 {
-                        copy_nonoverlapping(
-                            src_ptr.add((size * (src_block.elements_count - 1)) as usize),
-                            src_ptr.add((size * src_index) as usize),
-                            size as usize,
-                        );
-                    }
                 }
             }
+
+            type_mask &= type_mask - 1;
         }
 
         let src_block = &mut self.blocks[src_block_index as usize];
