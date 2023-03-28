@@ -109,5 +109,11 @@ pub fn component_add_remove(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, array_run, component_run, component_multirun, component_add_remove);
+criterion_group!(
+    benches,
+    array_run,
+    component_run,
+    component_multirun,
+    component_add_remove
+);
 criterion_main!(benches);

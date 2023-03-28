@@ -9,17 +9,28 @@ use std::{
     slice,
 };
 
+const MAX_TYPES: usize = 8;
+
 pub trait TypeTuple: Sized {
-    fn get_types(types: &mut Vec<TypeId>);
+    fn get_types(_types: &mut [TypeId; MAX_TYPES]) -> usize;
 }
 
 impl TypeTuple for () {
-    fn get_types(_types: &mut Vec<TypeId>) {}
+    fn get_types(_types: &mut [TypeId; MAX_TYPES]) -> usize {
+        0
+    }
 }
 
 impl<T: 'static> TypeTuple for &T {
-    fn get_types(types: &mut Vec<TypeId>) {
-        types.push(TypeId::of::<T>());
+    fn get_types(types: &mut [TypeId; MAX_TYPES]) -> usize {
+        if MAX_TYPES > 0 {
+            unsafe {
+                *types.get_unchecked_mut(0) = TypeId::of::<T>();
+            }
+            1
+        } else {
+            0
+        }
     }
 }
 
@@ -30,13 +41,22 @@ pub trait TypeIter: TypeTuple {
 macro_rules! type_tuple_impl {
     ($($n: literal: $t: ident),+) => {
         impl<$($t: 'static),+> TypeTuple for ($(&$t),+,) {
-            fn get_types(types: &mut Vec<TypeId>) {
-                $(types.push(TypeId::of::<$t>()));+
+            fn get_types(types: &mut [TypeId; MAX_TYPES]) -> usize {
+                let mut count = 0;
+                $({
+                    if MAX_TYPES > $n {
+                        unsafe {
+                            *types.get_unchecked_mut($n) = TypeId::of::<$t>();
+                        }
+                        count = $n + 1;
+                    }
+                });+
+                count
             }
         }
 
         impl<$($t: 'static),+> TypeIter for ($(&$t),+,) {
-            unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
+            unsafe fn iter<FI: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: FI) {
                 for i in 0..count {
                     f(*(*slices.get_unchecked(0) as *const GearId).add(i),
                       ($(&*(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
@@ -45,13 +65,22 @@ macro_rules! type_tuple_impl {
         }
 
         impl<$($t: 'static),+> TypeTuple for ($(&mut $t),+,) {
-            fn get_types(types: &mut Vec<TypeId>) {
-                $(types.push(TypeId::of::<$t>()));+
+            fn get_types(types: &mut [TypeId; MAX_TYPES]) -> usize {
+                let mut count = 0;
+                $({
+                    if MAX_TYPES > $n {
+                        unsafe {
+                            *types.get_unchecked_mut($n) = TypeId::of::<$t>();
+                        }
+                        count = $n + 1;
+                    }
+                });+
+                count
             }
         }
 
         impl<$($t: 'static),+> TypeIter for ($(&mut $t),+,) {
-            unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
+            unsafe fn iter<FI: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: FI) {
                 for i in 0..count {
                     f(*(*slices.get_unchecked(0) as *const GearId).add(i),
                       ($(&mut *(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
@@ -66,6 +95,9 @@ type_tuple_impl!(0: A, 1: B);
 type_tuple_impl!(0: A, 1: B, 2: C);
 type_tuple_impl!(0: A, 1: B, 2: C, 3: D);
 type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E);
+type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E, 5: F);
+type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E, 5: F, 6: G);
+type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E, 5: F, 6: G, 7: H);
 
 const BLOCK_SIZE: usize = 32768;
 
@@ -538,7 +570,7 @@ impl GearDataManager {
         type_indices: &[i8],
         mut f: F,
     ) {
-        let mut slices = vec![null_mut(); type_indices.len() + 1];
+        let mut slices = [null_mut(); MAX_TYPES + 1];
 
         for (block_index, mask) in self.block_masks.iter().enumerate() {
             if mask.type_mask & type_selector == type_selector
@@ -554,7 +586,11 @@ impl GearDataManager {
                 }
 
                 unsafe {
-                    T::iter(&slices[..], block.elements_count as usize, |id, x| f(id, x));
+                    T::iter(
+                        &slices[0..=type_indices.len()],
+                        block.elements_count as usize,
+                        |id, x| f(id, x),
+                    );
                 }
             }
         }
@@ -574,12 +610,12 @@ impl GearDataManager {
     }
 
     pub fn iter<T: TypeIter + 'static>(&mut self) -> DataIterator<T> {
-        let mut arg_types = Vec::with_capacity(64);
-        T::get_types(&mut arg_types);
-        let mut type_indices = vec![-1i8; arg_types.len()];
+        let mut arg_types: [TypeId; MAX_TYPES] = unsafe { MaybeUninit::uninit().assume_init() };
+        let types_count = T::get_types(&mut arg_types);
+        let mut type_indices = [-1; MAX_TYPES];
         let mut selector = 0u64;
 
-        for (arg_index, type_id) in arg_types.iter().enumerate() {
+        for (arg_index, type_id) in arg_types[0..types_count].iter().enumerate() {
             match self.types.iter().position(|t| t == type_id) {
                 Some(i) if selector & (1 << i as u64) != 0 => panic!("Duplicate type"),
                 Some(i) => {
@@ -596,7 +632,7 @@ impl GearDataManager {
 pub struct DataIterator<'a, T> {
     data: &'a mut GearDataManager,
     types: u64,
-    type_indices: Vec<i8>,
+    type_indices: [i8; MAX_TYPES],
     tags: u64,
     phantom_types: PhantomData<T>,
 }
@@ -605,7 +641,7 @@ impl<'a, T: TypeIter + 'static> DataIterator<'a, T> {
     fn new(
         data: &'a mut GearDataManager,
         types: u64,
-        type_indices: Vec<i8>,
+        type_indices: [i8; MAX_TYPES],
     ) -> DataIterator<'a, T> {
         Self {
             data,
@@ -617,12 +653,12 @@ impl<'a, T: TypeIter + 'static> DataIterator<'a, T> {
     }
 
     pub fn with_tags<U: TypeTuple + 'static>(self) -> Self {
-        let mut tag_types = Vec::with_capacity(64);
-        U::get_types(&mut tag_types);
+        let mut tag_types: [TypeId; MAX_TYPES] = unsafe { MaybeUninit::uninit().assume_init() };
+        let tags_count = U::get_types(&mut tag_types);
         let mut tags = 0;
 
         for (i, tag) in self.data.tags.iter().enumerate() {
-            if tag_types.contains(tag) {
+            if tag_types[0..tags_count].contains(tag) {
                 tags |= 1 << i as u64;
             }
         }
@@ -636,8 +672,13 @@ impl<'a, T: TypeIter + 'static> DataIterator<'a, T> {
 
     #[inline]
     pub fn run_id<F: FnMut(GearId, T)>(&mut self, f: F) {
+        let types_count = self
+            .type_indices
+            .iter()
+            .position(|i| *i == -1)
+            .unwrap_or(self.type_indices.len());
         self.data
-            .run_impl(self.types, self.tags, &self.type_indices, f);
+            .run_impl(self.types, self.tags, &self.type_indices[0..types_count], f);
     }
 }
 
