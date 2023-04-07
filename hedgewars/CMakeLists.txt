@@ -1,10 +1,10 @@
 enable_language(Pascal)
 
 find_package(SDL2 REQUIRED CONFIG)
-find_package(SDL2_image 2 REQUIRED)
-find_package(SDL2_net 2 REQUIRED)
-find_package(SDL2_ttf 2 REQUIRED)
-find_package(SDL2_mixer 2 REQUIRED)
+find_package(SDL2_image REQUIRED CONFIG)
+find_package(SDL2_net REQUIRED CONFIG)
+find_package(SDL2_ttf REQUIRED CONFIG)
+find_package(SDL2_mixer REQUIRED CONFIG)
 
 include(CheckLibraryExists)
 include(${CMAKE_MODULE_PATH}/utils.cmake)
@@ -168,8 +168,18 @@ else()
 endif()
 
 # PhysFS
-get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
-add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
+if (DEFINED PHYSFS_LIBRARY_RELEASE)
+    if(${USE_DEBUG_LIBRARIES})
+        get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY_DEBUG} PATH)
+        add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY_DEBUG}")
+    else()    
+        get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY_RELEASE} PATH)
+        add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY_RELEASE}")
+    endif()
+else()
+    get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
+    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
+endif()
 
 list(APPEND HW_LINK_LIBS physlayer)
 

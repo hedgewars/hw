@@ -14,7 +14,7 @@ include_directories(${Qt5Core_PRIVATE_INCLUDE_DIRS})
 include(CheckLibraryExists)
 
 find_package(SDL2 REQUIRED CONFIG)
-find_package(SDL2_mixer 2 REQUIRED) #audio in SDLInteraction
+find_package(SDL2_mixer REQUIRED CONFIG) #audio in SDLInteraction
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 
@@ -229,16 +229,13 @@ list(APPEND HW_LINK_LIBS
     Qt5::Core Qt5::Widgets Qt5::Gui Qt5::Network
     )
 
-list(APPEND HW_LINK_LIBS
-    ${SDL2_LIBRARIES}
-    ${SDL2_MIXER_LIBRARIES}
-    )
+if(WIN32 AND VCPKG_TOOLCHAIN)
+    list(APPEND HW_LINK_LIBS SDL2::SDL2 SDL2_mixer::SDL2_mixer)
+else()  
+    list(APPEND HW_LINK_LIBS ${SDL2_LIBRARIES} ${SDL2_MIXER_LIBRARIES})
+endif() 
 
 if(WIN32 AND NOT UNIX)
-    if(NOT SDL2_LIBRARIES)
-        list(APPEND HW_LINK_LIBS SDL2::SDL2)
-    endif()
-
     list(APPEND HW_LINK_LIBS
         ole32
         oleaut32

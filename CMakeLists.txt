@@ -177,6 +177,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
                               "-fno-warn-unused-do-bind"
                               "-O0"
                               )
+    set(USE_DEBUG_LIBRARIES TRUE)
 else()
     list(APPEND haskell_flags "-w" # no warnings
                               "-O2"
@@ -249,7 +250,15 @@ endif()
 if(PHYSFS_LIBRARY AND PHYSFS_INCLUDE_DIR)
     #use an IMPORTED tharget so that we can just use 'physfs' to link
     add_library(physfs UNKNOWN IMPORTED)
-    set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY})
+    if (DEFINED PHYSFS_LIBRARY_RELEASE)
+        if (${USE_DEBUG_LIBRARIES})
+            set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY_DEBUG})
+        else()    
+            set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY_RELEASE})
+        endif()
+    else()
+        set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY})
+    endif()
 else()
     message(FATAL_ERROR "Missing PhysFS! Install PhysFS to fix this.")
 endif()
