@@ -21,6 +21,10 @@
 
 #include "physfs.h"
 
+#if defined(_WIN32) 
+#define PHYSFS_DECL __declspec(dllexport)
+#endif
+
 #if PHYSFS_VER_MAJOR == 2
 #if PHYSFS_VER_MINOR == 0
 
