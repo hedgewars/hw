@@ -22,6 +22,12 @@ if(UNIX)
     endif()
 endif(UNIX)
 
+# FPC 3.2.2 does not create s COFF file for the engine icon, but still includes it
+# in the list of files to be linked, leading to a linking failure
+if(${CMAKE_Pascal_COMPILER_VERSION} VERSION_GREATER_EQUAL 3.2)
+    add_flag_append(CMAKE_Pascal_FLAGS "-dSKIP_RESOURCES")
+endif()
+
 # convert list into pascal array
 if(FONTS_DIRS)
   list(LENGTH FONTS_DIRS ndirs)

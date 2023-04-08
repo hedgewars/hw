@@ -19,7 +19,9 @@
 {$INCLUDE "options.inc"}
 
 {$IFDEF WINDOWS}
+{$IFNDEF SKIP_RESOURCES}
 {$R res/hwengine.rc}
+{$ENDIF}
 {$ENDIF}
 
 {$IFDEF HWLIBRARY}
