@@ -456,13 +456,13 @@ end;
 function lc_setweapon(L : Plua_State) : LongInt; Cdecl;
 var at: LongInt;
 const
-    call = 'SetWeapon';
-    params = 'ammoType';
+    callStr = 'SetWeapon';
+    paramsStr = 'ammoType';
 begin
     // no point to run this without any CurrentHedgehog
-    if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 1, call, params)) then
+    if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 1, callStr, paramsStr)) then
         begin
-        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        at:= LuaToAmmoTypeOrd(L, 1, callStr, paramsStr);
         if at >= 0 then
             ParseCommand('setweap ' + char(at), true, true);
         end;
@@ -472,10 +472,10 @@ end;
 // enable/disable cinematic effects
 function lc_setcinematicmode(L : Plua_State) : LongInt; Cdecl;
 const
-    call = 'SetCinematicMode';
-    params = 'enable';
+    callStr = 'SetCinematicMode';
+    paramsStr = 'enable';
 begin
-    if (CheckLuaParamCount(L, 1, call, params)) then
+    if (CheckLuaParamCount(L, 1, callStr, paramsStr)) then
         begin
         CinematicScript:= lua_toboolean(L, 1);
         end;
@@ -486,10 +486,10 @@ end;
 function lc_setmaxbuilddistance(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
 const
-    call = 'SetMaxBuildDistance';
-    params = '[ distInPx ]';
+    callStr = 'SetMaxBuildDistance';
+    paramsStr = '[ distInPx ]';
 begin
-    if CheckAndFetchParamCountRange(L, 0, 1, call, params, np) then
+    if CheckAndFetchParamCountRange(L, 0, 1, callStr, paramsStr, np) then
         begin
         if np = 0 then
             begin
@@ -508,10 +508,10 @@ var at          : LongInt;
     nextAmmo    : TAmmo;
     s, a, cs, fa: LongInt;
 const
-    call = 'SetNextWeapon';
-    params = '';
+    callStr = 'SetNextWeapon';
+    paramsStr = '';
 begin
-    if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 0, call, params)) then
+    if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 0, callStr, paramsStr)) then
         begin
         at:= -1;
         with CurrentHedgehog^ do
@@ -586,33 +586,33 @@ end;
 
 function lc_setammotexts(L : Plua_State) : LongInt; Cdecl;
 const
-    call = 'SetAmmoTexts';
-    params = 'ammoType, name, caption, description [, showExtra]';
+    callStr = 'SetAmmoTexts';
+    paramsStr = 'ammoType, name, caption, description [, showExtra]';
 var n: integer;
     showExtra: boolean;
 begin
-    if CheckAndFetchParamCount(L, 4, 5, call, params, n) then
+    if CheckAndFetchParamCount(L, 4, 5, callStr, paramsStr, n) then
         begin
         if n = 5 then
             showExtra:= lua_toboolean(L, 5)
         else
             showExtra:= true;
-        SetAmmoTexts(TAmmoType(LuaToAmmoTypeOrd(L, 1, call, params)), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tostringA(L, 4), showExtra);
+        SetAmmoTexts(TAmmoType(LuaToAmmoTypeOrd(L, 1, callStr, paramsStr)), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tostringA(L, 4), showExtra);
         end;
     lc_setammotexts:= 0;
 end;
 
 function lc_setammodescriptionappendix(L : Plua_State) : LongInt; Cdecl;
 const
-    call = 'SetAmmoDescriptionAppendix';
-    params = 'ammoType, descAppend';
+    callStr = 'SetAmmoDescriptionAppendix';
+    paramsStr = 'ammoType, descAppend';
 var
     ammoType: TAmmoType;
     descAppend: ansistring;
 begin
-    if CheckLuaParamCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, callStr, paramsStr) then
         begin
-        ammoType := TAmmoType(LuaToAmmoTypeOrd(L, 1, call, params));
+        ammoType := TAmmoType(LuaToAmmoTypeOrd(L, 1, callStr, paramsStr));
         descAppend := lua_tostringA(L, 2);
         trluaammoa[Ammoz[ammoType].NameId] := descAppend;
         end;
@@ -667,16 +667,16 @@ end;
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
 var cg: LongInt;
 const
-    call = 'AddCaption';
-    params = 'text [, color, captiongroup]';
+    callStr = 'AddCaption';
+    paramsStr = 'text [, color, captiongroup]';
 begin
-    if CheckAndFetchParamCount(L, 1, 3, call, params, cg) then
+    if CheckAndFetchParamCount(L, 1, 3, callStr, paramsStr, cg) then
         begin
         if cg = 1 then
             AddCaption(lua_tostringA(L, 1), capcolDefault, capgrpMessage)
         else
             begin
-            cg:= LuaToCapGroupOrd(L, 3, call, params);
+            cg:= LuaToCapGroupOrd(L, 3, callStr, paramsStr);
             if cg >= 0 then
                 AddCaption(lua_tostringA(L, 1), Trunc(lua_tonumber(L, 2)) shr 8, TCapGroup(cg));
             end
@@ -846,12 +846,12 @@ var gear : PGear;
     dx, dy: hwFloat;
     gt: TGearType;
 const
-    call = 'AddGear';
-    params = 'x, y, gearType, state, dx, dy, timer';
+    callStr = 'AddGear';
+    paramsStr = 'x, y, gearType, state, dx, dy, timer';
 begin
-    if CheckLuaParamCount(L, 7, call, params) then
+    if CheckLuaParamCount(L, 7, callStr, paramsStr) then
         begin
-        t:= LuaToGearTypeOrd(L, 3, call, params);
+        t:= LuaToGearTypeOrd(L, 3, callStr, paramsStr);
         if t >= 0 then
             begin
             gt:= TGearType(t);
@@ -893,13 +893,13 @@ var vg : PVisualGear;
     vgt: TVisualGearType;
     uid: Longword;
 const
-    call = 'AddVisualGear';
-    params = 'x, y, visualGearType, state, critical [, layer]';
+    callStr = 'AddVisualGear';
+    paramsStr = 'x, y, visualGearType, state, critical [, layer]';
 begin
     uid:= 0;
-    if CheckAndFetchParamCount(L, 5, 6, call, params, n) then
+    if CheckAndFetchParamCount(L, 5, 6, callStr, paramsStr, n) then
         begin
-        s:= LuaToVisualGearTypeOrd(L, 3, call, params);
+        s:= LuaToVisualGearTypeOrd(L, 3, callStr, paramsStr);
         if s >= 0 then
             begin
             vgt:= TVisualGearType(s);
@@ -1816,12 +1816,12 @@ function lc_addammo(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
     at, n, c: LongInt;
 const
-    call = 'AddAmmo';
-    params = 'gearUid, ammoType [, ammoCount]';
+    callStr = 'AddAmmo';
+    paramsStr = 'gearUid, ammoType [, ammoCount]';
 begin
-    if CheckAndFetchParamCount(L, 2, 3, call, params, n) then
+    if CheckAndFetchParamCount(L, 2, 3, callStr, paramsStr, n) then
         begin
-        at:= LuaToAmmoTypeOrd(L, 2, call, params);
+        at:= LuaToAmmoTypeOrd(L, 2, callStr, paramsStr);
         if (at >= 0) and (TAmmoType(at) <> amNothing) then
             begin
             gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
@@ -1845,15 +1845,15 @@ var gear : PGear;
     ammo : PAmmo;
     at   : LongInt;
 const
-    call = 'GetAmmoCount';
-    params = 'gearUid, ammoType';
+    callStr = 'GetAmmoCount';
+    paramsStr = 'gearUid, ammoType';
 begin
-    if CheckLuaParamCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, callStr, paramsStr) then
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
             begin
-            at:= LuaToAmmoTypeOrd(L, 2, call, params);
+            at:= LuaToAmmoTypeOrd(L, 2, callStr, paramsStr);
             if at >= 0 then
                 begin
                 ammo:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(at));
@@ -1955,12 +1955,12 @@ function lc_seteffect(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
     t   : LongInt;
 const
-    call = 'SetEffect';
-    params = 'gearUid, effect, effectState';
+    callStr = 'SetEffect';
+    paramsStr = 'gearUid, effect, effectState';
 begin
-    if CheckLuaParamCount(L, 3, call, params) then
+    if CheckLuaParamCount(L, 3, callStr, paramsStr) then
         begin
-        t:= LuaToHogEffectOrd(L, 2, call, params);
+        t:= LuaToHogEffectOrd(L, 2, callStr, paramsStr);
         if t >= 0 then
             begin
             gear := GearByUID(Trunc(lua_tonumber(L, 1)));
@@ -1975,12 +1975,12 @@ function lc_geteffect(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
     t    : LongInt;
 const
-    call = 'GetEffect';
-    params = 'gearUid, effect';
+    callStr = 'GetEffect';
+    paramsStr = 'gearUid, effect';
 begin
-    if CheckLuaParamCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, callStr, paramsStr) then
         begin
-        t:= LuaToHogEffectOrd(L, 2, call, params);
+        t:= LuaToHogEffectOrd(L, 2, callStr, paramsStr);
         if t >= 0 then
             begin
             gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
@@ -2068,10 +2068,10 @@ end;
 function lc_endturn(L : Plua_State) : LongInt; Cdecl;
 var n: LongInt;
 const
-    call = 'EndTurn';
-    params = '[noTaunts]';
+    callStr = 'EndTurn';
+    paramsStr = '[noTaunts]';
 begin
-    if CheckAndFetchParamCount(L, 0, 1, call, params, n) then
+    if CheckAndFetchParamCount(L, 0, 1, callStr, paramsStr, n) then
         if n >= 1 then
             LuaNoEndTurnTaunts:= lua_toboolean(L, 1);
     LuaEndTurnRequested:= true;
@@ -2082,10 +2082,10 @@ function lc_retreat(L : Plua_State) : LongInt; Cdecl;
 var n, time: LongInt;
     respectFactor: Boolean;
 const
-    call = 'Retreat';
-    params = 'time [, respectGetAwayTimeFactor]';
+    callStr = 'Retreat';
+    paramsStr = 'time [, respectGetAwayTimeFactor]';
 begin
-    if CheckAndFetchParamCount(L, 1, 2, call, params, n) then
+    if CheckAndFetchParamCount(L, 1, 2, callStr, paramsStr, n) then
         begin
         IsGetAwayTime:= true;
         AttackBar:= 0;
@@ -2121,12 +2121,12 @@ var statInfo : TStatInfoType;
     color, tn: shortstring;
     needsTn  : boolean;
 const
-    call = 'SendStat';
-    params = 'statInfoType, color [, teamname]';
+    callStr = 'SendStat';
+    paramsStr = 'statInfoType, color [, teamname]';
 begin
-    if CheckAndFetchParamCount(L, 2, 3, call, params, n) then
+    if CheckAndFetchParamCount(L, 2, 3, callStr, paramsStr, n) then
         begin
-        i:= LuaToStatInfoTypeOrd(L, 1, call, params);
+        i:= LuaToStatInfoTypeOrd(L, 1, callStr, paramsStr);
         if i >= 0 then
             begin
             statInfo:= TStatInfoType(i);
@@ -2135,9 +2135,9 @@ begin
             if (n = 3) <> needsTn then
                 begin
                 if n = 3 then
-                    LuaCallError(EnumToStr(statInfo) + ' does not support the teamname parameter', call, params)
+                    LuaCallError(EnumToStr(statInfo) + ' does not support the teamname parameter', callStr, paramsStr)
                 else
-                    LuaCallError(EnumToStr(statInfo) + ' requires the teamname parameter', call, params);
+                    LuaCallError(EnumToStr(statInfo) + ' requires the teamname parameter', callStr, paramsStr);
                 end
             else // count is correct!
                 begin
@@ -2239,12 +2239,12 @@ var gear: PGear;
     n, s: LongInt;
     instaVoice: boolean;
 const
-    call = 'PlaySound';
-    params = 'soundId [, hhGearUid [, instaVoice]]';
+    callStr = 'PlaySound';
+    paramsStr = 'soundId [, hhGearUid [, instaVoice]]';
 begin
-    if CheckAndFetchParamCountRange(L, 1, 3, call, params, n) then
+    if CheckAndFetchParamCountRange(L, 1, 3, callStr, paramsStr, n) then
         begin
-        s:= LuaToSoundOrd(L, 1, call, params);
+        s:= LuaToSoundOrd(L, 1, callStr, paramsStr);
         if s >= 0 then
             begin
             // no gear specified
@@ -2272,12 +2272,12 @@ end;
 function lc_playmusicsound(L : Plua_State) : LongInt; Cdecl;
 var s: LongInt;
 const
-    call = 'PlayMusicSound';
-    params = 'soundId';
+    callStr = 'PlayMusicSound';
+    paramsStr = 'soundId';
 begin
-    if CheckLuaParamCount(L, 1, call, params) then
+    if CheckLuaParamCount(L, 1, callStr, paramsStr) then
         begin
-        s:= LuaToSoundOrd(L, 1, call, params);
+        s:= LuaToSoundOrd(L, 1, callStr, paramsStr);
         if s >= 0 then
             PlayMusicSound(TSound(s))
         end;
@@ -2287,12 +2287,12 @@ end;
 function lc_stopmusicsound(L : Plua_State) : LongInt; Cdecl;
 var s: LongInt;
 const
-    call = 'StopMusicSound';
-    params = 'soundId';
+    callStr = 'StopMusicSound';
+    paramsStr = 'soundId';
 begin
-    if CheckLuaParamCount(L, 1, call, params) then
+    if CheckLuaParamCount(L, 1, callStr, paramsStr) then
         begin
-        s:= LuaToSoundOrd(L, 1, call, params);
+        s:= LuaToSoundOrd(L, 1, callStr, paramsStr);
         if s >= 0 then
             StopMusicSound(TSound(s))
         end;
@@ -2304,12 +2304,12 @@ function lc_setsoundmask(L : Plua_State) : LongInt; Cdecl;
 var s: LongInt;
     soundState: boolean;
 const
-    call = 'SetSoundMask';
-    params = 'soundId, isMasked';
+    callStr = 'SetSoundMask';
+    paramsStr = 'soundId, isMasked';
 begin
-    if CheckLuaParamCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, callStr, paramsStr) then
         begin
-        s:= LuaToSoundOrd(L, 1, call, params);
+        s:= LuaToSoundOrd(L, 1, callStr, paramsStr);
         if s <> Ord(sndNone) then
             begin
             soundState:= lua_toboolean(L, 2);
@@ -2858,12 +2858,12 @@ end;
 function lc_setammo(L : Plua_State) : LongInt; Cdecl;
 var np, at: LongInt;
 const
-    call = 'SetAmmo';
-    params = 'ammoType, count, probability, delay [, numberInCrate]';
+    callStr = 'SetAmmo';
+    paramsStr = 'ammoType, count, probability, delay [, numberInCrate]';
 begin
-    if CheckAndFetchParamCount(L, 4, 5, call, params, np) then
+    if CheckAndFetchParamCount(L, 4, 5, callStr, paramsStr, np) then
         begin
-        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        at:= LuaToAmmoTypeOrd(L, 1, callStr, paramsStr);
         if at >= 0 then
             begin
             if np = 4 then
@@ -2879,13 +2879,13 @@ end;
 function lc_getammo(L : Plua_State) : LongInt; Cdecl;
 var i, at, rawProb, probLevel: LongInt;
 const
-    call = 'GetAmmo';
-    params = 'ammoType';
+    callStr = 'GetAmmo';
+    paramsStr = 'ammoType';
 begin
     lc_getammo:= 0;
-    if CheckLuaParamCount(L, 1, call, params) then
+    if CheckLuaParamCount(L, 1, callStr, paramsStr) then
         begin
-        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        at:= LuaToAmmoTypeOrd(L, 1, callStr, paramsStr);
         if at >= 0 then
             begin
             // Ammo count
@@ -2913,12 +2913,12 @@ end;
 function lc_setammodelay(L : Plua_State) : LongInt; Cdecl;
 var at, delay: LongInt;
 const
-    call = 'SetAmmoDelay';
-    params = 'ammoType, delay';
+    callStr = 'SetAmmoDelay';
+    paramsStr = 'ammoType, delay';
 begin
-    if CheckLuaParamCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, callStr, paramsStr) then
         begin
-        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        at:= LuaToAmmoTypeOrd(L, 1, callStr, paramsStr);
         delay:= Trunc(lua_tonumber(L, 2));
         if (at >= 0) and (TAmmoType(at) <> amNothing) then
             begin
@@ -3065,11 +3065,11 @@ var spr   : TSprite;
     i, n : LongInt;
     placed, behind, flipHoriz, flipVert : boolean;
 const
-    call = 'PlaceSprite';
-    params = 'x, y, sprite, frameIdx, tint, behind, flipHoriz, flipVert [, landFlag, ... ]';
+    callStr = 'PlaceSprite';
+    paramsStr = 'x, y, sprite, frameIdx, tint, behind, flipHoriz, flipVert [, landFlag, ... ]';
 begin
     placed:= false;
-    if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
+    if CheckAndFetchLuaParamMinCount(L, 4, callStr, paramsStr, n) then
         begin
         if not lua_isnoneornil(L, 5) then
             tint := Trunc(lua_tonumber(L, 5))
@@ -3089,12 +3089,12 @@ begin
         for i:= 9 to n do
             lf:= lf or Trunc(lua_tonumber(L, i));
 
-        n:= LuaToSpriteOrd(L, 3, call, params);
+        n:= LuaToSpriteOrd(L, 3, callStr, paramsStr);
         if n >= 0 then
             begin
             spr:= TSprite(n);
             if SpritesData[spr].Surface = nil then
-                LuaError(call + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
+                LuaError(callStr + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
             else
                 placed:= ForcePlaceOnLand(
                     Trunc(lua_tonumber(L, 1)) - SpritesData[spr].Width div 2,
@@ -3113,10 +3113,10 @@ var spr   : TSprite;
     i, n : LongInt;
     eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert : boolean;
 const
-    call = 'EraseSprite';
-    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert [, landFlag, ... ]';
+    callStr = 'EraseSprite';
+    paramsStr = 'x, y, sprite, frameIdx, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert [, landFlag, ... ]';
 begin
-    if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
+    if CheckAndFetchLuaParamMinCount(L, 4, callStr, paramsStr, n) then
         begin
         if not lua_isnoneornil(L, 5) then
             eraseOnLFMatch := lua_toboolean(L, 5)
@@ -3136,12 +3136,12 @@ begin
         for i:= 9 to n do
             lf:= lf or Trunc(lua_tonumber(L, i));
 
-        n:= LuaToSpriteOrd(L, 3, call, params);
+        n:= LuaToSpriteOrd(L, 3, callStr, paramsStr);
         if n >= 0 then
             begin
             spr:= TSprite(n);
             if SpritesData[spr].Surface = nil then
-                LuaError(call + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
+                LuaError(callStr + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
             else
                 EraseLand(
                     Trunc(lua_tonumber(L, 1)) - SpritesData[spr].Width div 2,
@@ -3388,12 +3388,12 @@ end;
 function lc_getammoname(L : Plua_state) : LongInt; Cdecl;
 var np, at: LongInt;
     ignoreOverwrite: Boolean;
-const call = 'GetAmmoName';
-      params = 'ammoType [, ignoreOverwrite ]';
+const callStr = 'GetAmmoName';
+      paramsStr = 'ammoType [, ignoreOverwrite ]';
 begin
-    if CheckAndFetchParamCountRange(L, 1, 2, call, params, np) then
+    if CheckAndFetchParamCountRange(L, 1, 2, callStr, paramsStr, np) then
         begin
-        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        at:= LuaToAmmoTypeOrd(L, 1, callStr, paramsStr);
         ignoreOverwrite := false;
         if np > 1 then
             ignoreOverwrite := lua_toboolean(L, 2);
@@ -3412,15 +3412,15 @@ function lc_getammotimer(L : Plua_state) : LongInt; Cdecl;
 var at: LongInt;
     weapon: PAmmo;
     gear: PGear;
-const call = 'GetAmmoTimer';
-      params = 'gearUid, ammoType';
+const callStr = 'GetAmmoTimer';
+      paramsStr = 'gearUid, ammoType';
 begin
-    if CheckLuaParamCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, callStr, paramsStr) then
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
             begin
-            at:= LuaToAmmoTypeOrd(L, 2, call, params);
+            at:= LuaToAmmoTypeOrd(L, 2, callStr, paramsStr);
             weapon:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(at));
             if (Ammoz[TAmmoType(at)].Ammo.Propz and ammoprop_Timerable) <> 0 then
                 lua_pushnumber(L, weapon^.Timer)
@@ -3600,10 +3600,10 @@ end;
 function lc_endluatest(L : Plua_State) : LongInt; Cdecl;
 var rstring: shortstring;
 const
-    call = 'EndLuaTest';
-    params = 'TEST_SUCCESSFUL or TEST_FAILED';
+    callStr = 'EndLuaTest';
+    paramsStr = 'TEST_SUCCESSFUL or TEST_FAILED';
 begin
-    if CheckLuaParamCount(L, 1, call, params) then
+    if CheckLuaParamCount(L, 1, callStr, paramsStr) then
         begin
 
         case Trunc(lua_tonumber(L, 1)) of
@@ -3611,7 +3611,7 @@ begin
             HaltTestFailed: rstring:= 'FAILED';
         else
             begin
-            LuaCallError('Parameter must be either ' + params, call, params);
+            LuaCallError('Parameter must be either ' + paramsStr, callStr, paramsStr);
             exit(0);
             end;
         end;
