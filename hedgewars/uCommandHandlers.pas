@@ -49,15 +49,16 @@ procedure chQuit(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     if (GameState = gsGame) then
-    begin
+        begin
         CloseChat;
         GameState:= gsConfirm;
-    end
-    else begin
+        end
+    else
         if GameState = gsConfirm then
+            begin
             GameState:= gsGame;
-    end;
-
+            RestoreChat;
+            end;
     updateCursorVisibility;
 end;
 
