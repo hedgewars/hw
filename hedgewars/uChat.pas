@@ -788,6 +788,8 @@ end;
 procedure OpenChat(s: shortstring);
 var i: Integer;
 begin
+    if GameState = gsConfirm then
+        ParseCommand('quit', true);
     isInChatMode:= true;
     SDL_StopTextInput();
     SDL_StartTextInput();
