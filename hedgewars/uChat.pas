@@ -27,6 +27,7 @@ procedure initModule;
 procedure freeModule;
 procedure ReloadLines;
 procedure CleanupInput;
+procedure CloseChat;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(keysym: TSDL_Keysym);
@@ -780,6 +781,13 @@ begin
     //SDL_EnableKeyRepeat(0,0);
     isInChatMode:= false;
     ResetKbd;
+end;
+
+procedure CloseChat;
+begin
+    SetLine(InputStr, '', true);
+    ResetCursor();
+    CleanupInput();
 end;
 
 procedure DelBytesFromInputStrBack(endIdx: integer; count: byte);
