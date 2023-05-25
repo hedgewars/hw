@@ -322,6 +322,29 @@ begin
 
 end;
 
+{$IFNDEF PAS2C}
+// Wraps the text s by inserting breakStr as newlines with
+// maximum column length maxCol.
+// Same as Pascal's WrapText, but without the annoying
+// behavior that text enclosed in " and ' disables word-wrapping
+function SimpleWrapText(s, breakStr: string; maxCol: integer): string;
+var
+    breakChars: set of char = [#9,' ','-'];
+begin
+    // escape the " and ' characters before calling WrapText
+    // using ASCII ESC control character
+    s:= StringReplace(s, '"', #27+'Q', [rfReplaceAll]);
+    s:= StringReplace(s, '''', #27+'q', [rfReplaceAll]);
+
+    s:= WrapText(s, #1, breakChars, maxCol);
+
+    // Undo the escapes
+    s:= StringReplace(s, #27+'Q', '"', [rfReplaceAll]);
+    s:= StringReplace(s, #27+'q', '''', [rfReplaceAll]);
+    SimpleWrapText:= s;
+end;
+{$ENDIF}
+
 function RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
 begin
     RenderStringTex:= RenderStringTexLim(s, Color, font, 0);
@@ -413,9 +436,6 @@ function RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFon
 var textWidth, textHeight, x, y, w, h, i, j, pos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
     finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
-    {$IFNDEF PAS2C}
-    breakChars: set of char = [#9,' ','-'];
-    {$ENDIF}
     substr: ansistring;
     edge, corner, tail: TSPrite;
 begin
@@ -444,10 +464,6 @@ begin
     edgeWidth:= SpritesData[edge].Width;
     cornerWidth:= SpritesData[corner].Width;
     cornerHeight:= SpritesData[corner].Height;
-    // This one screws up WrapText
-    //s:= 'This is the song that never ends.  ''cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they''ll just go on singing it forever just because... This is the song that never ends...';
-    // This one does not
-    //s:= 'This is the song that never ends.  cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they will go on singing it forever just because... This is the song that never ends... ';
 
     numLines:= 0;
 
@@ -464,7 +480,7 @@ begin
         w:= 0;
         i:= round(Sqrt(length(s)) * 2);
         {$IFNDEF PAS2C}
-        s:= WrapText(s, #1, breakChars, i);
+        s:= SimpleWrapText(s, #1, i);
         {$ENDIF}
         pos:= 1; line:= 0;
     // Find the longest line for the purposes of centring the text.  Font dependant.
