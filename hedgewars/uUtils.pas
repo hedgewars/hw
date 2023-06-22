@@ -34,6 +34,9 @@ procedure SplitByCharA(var a, b: ansistring; c: char);
 procedure EscapeCharA(var a: ansistring; e: char);
 procedure UnEscapeCharA(var a: ansistring; e: char);
 
+procedure ReplaceChars(var a: shortstring; c1, c2: char);
+procedure ReplaceCharsA(var a: ansistring; c1, c2: char);
+
 function ExtractFileDir(s: shortstring) : shortstring;
 function ExtractFileName(s: shortstring) : shortstring;
 
@@ -303,6 +306,28 @@ repeat
         break;
 until (i <= 0);
 end; { UnEscapeCharA }
+
+// Replace all characters c1 with c2 in shortstring a
+procedure ReplaceChars(var a: shortstring; c1, c2: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(c1, a);
+    if (i > 0) then
+        a[i]:= c2;
+until (i <= 0);
+end; { ReplaceChars }
+
+// Replace all characters c1 with c2 in antistring a
+procedure ReplaceCharsA(var a: ansistring; c1, c2: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(c1, a);
+    if (i > 0) then
+        a[i]:= c2;
+until (i <= 0);
+end; { ReplaceCharsA }
 
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
