@@ -32,6 +32,7 @@ Introducing breaking changes means we have to invalidate past time records!
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 ------------------
 -- Got Variables?
@@ -508,17 +509,17 @@ function onNewRound()
 		local roundDraw = false
 		if #clanScores >= 2 and clanScores[1].score == clanScores[2].score and clanScores[1].score ~= MAX_TURN_TIME then
 			roundDraw = true
-                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siGameResult, GetEngineString("TMsgStrId", sidDraw))
                         SendStat(siCustomAchievement, loc("The teams are tied for the fastest time."))
                 elseif #sortedTeams >= 1 then
-                        SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
+                        SendStat(siGameResult, formatEngineString(GetEngineString("TMsgStrId", sidWinner), sortedTeams[1].name))
                         SendStat(siCustomAchievement, string.format(loc("%s wins with a best time of %.1fs."), sortedTeams[1].name, (sortedTeams[1].score/1000)))
                         for i=1,#unfinishedArray do
                                  SendStat(siCustomAchievement, unfinishedArray[i])
                         end
                 else
 			roundDraw = true
-                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siGameResult, GetEngineString("TMsgStrId", sidDraw))
                         SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
                         if specialPointsCount > 0 then
                                 SendStat(siCustomAchievement, loc("Maybe you should try an easier map next time."))

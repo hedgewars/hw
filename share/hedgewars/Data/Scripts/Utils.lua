@@ -127,6 +127,22 @@ function integerHypotenuse(x, y)
 	end
 end
 
+-- Insert parameters %1 to %9 into an engine string and returns the result.
+-- * text: engine string with parameters (from GetEngineString)
+-- * ...: Arguments to insert into the string. The number of arguments MUST match
+--        the number of available arguments of the engine string
+--
+-- Example: formatEngineString(GetEngineString("TMsgStrId", sidWinner), "My Team")
+-- to create a string showing the winning team.
+function formatEngineString(text, ...)
+    local input = text
+    for i=1, 9 do
+       text = string.gsub(text, "%%"..i, "%%s")
+    end
+    text = string.format(text, ...)
+    return text
+end
+
 --[[ GLOBAL VARIABLES ]]
 
 -- Shared common land color values for land sprites.

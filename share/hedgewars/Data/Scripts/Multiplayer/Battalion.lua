@@ -804,7 +804,7 @@ function onHealthCratePickup()
   PlaySound(sndShotgunReload)
 
   if GetRandom(100) < emptyCrateChance then
-    AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+    AddCaption(GetEngineString("TMsgStrId", sidEmptyCrate), msgColor, capgrpMessage)
     return
   elseif GetRandom(100) < bonusCrateChance then
     factor = 3
@@ -834,7 +834,7 @@ function onWeaponCratePickup(crate)
 
   if GetRandom(100) < emptyCrateChance then
     if IsHogLocal(CurHog) then
-      AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+      AddCaption(GetEngineString("TMsgStrId", sidEmptyCrate), msgColor, capgrpMessage)
     end
     return
   elseif GetRandom(100) < bonusCrateChance then
@@ -880,7 +880,7 @@ function onUtilityCratePickup(crate)
 
   if GetRandom(100) < emptyCrateChance then
     if IsHogLocal(CurHog) then
-      AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+      AddCaption(GetEngineString("TMsgStrId", sidEmptyCrate), msgColor, capgrpMessage)
     end
     return
   elseif GetRandom(100) < bonusCrateChance then

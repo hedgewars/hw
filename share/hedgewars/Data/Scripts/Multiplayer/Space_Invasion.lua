@@ -2,6 +2,7 @@
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 --[[
 Space Invasion
@@ -584,8 +585,10 @@ function CommentOnScore()
 
 	if lGameOver then
 		local winnerTeam = teamStats[1].name
-		AddCaption(string.format(loc("%s wins!"), winnerTeam), capcolDefault, capgrpGameState)
-		SendStat(siGameResult, string.format(loc("%s wins!"), winnerTeam))
+		local winText = formatEngineString(GetEngineString("TMsgStrId", sidWinner), winnerTeam)
+
+		AddCaption(winText, capcolDefault, capgrpGameState)
+		SendStat(siGameResult, winText)
 
 		for i = 1, TeamsCount do
 			SendStat(siPointType, "!POINTS")
