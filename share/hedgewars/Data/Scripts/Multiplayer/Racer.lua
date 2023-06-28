@@ -191,22 +191,25 @@ function onParameters()
         TeamRope = true
     end
     if params["rounds"] ~= nil then
-        roundLimit = math.max(1, math.floor(tonumber(params["rounds"])))
+        roundLimit = tonumber(params["rounds"])
         if type(roundLimit) ~= "number" then
              roundLimit = 3
         end
+        roundLimit = math.max(1, math.floor(roundLimit))
     end
     if params["waypointradius"] ~= nil then
-        wpRad = math.max(WAYPOINT_RADIUS_MIN, math.floor(tonumber(params["waypointradius"])))
+        wpRad = tonumber(params["waypointradius"])
         if type(wpRad) ~= "number" then
              wpRad = 450
         end
+        wpRad = math.max(WAYPOINT_RADIUS_MIN, math.floor(wpRad))
     end
     if params["maxwaypoints"] ~= nil then
-        wpLimit = math.max(2, math.floor(tonumber(params["maxwaypoints"])))
+        wpLimit = tonumber(params["maxwaypoints"])
         if type(wpLimit) ~= "number" then
              wpLimit = 8
         end
+        wpLimit = math.max(2, math.floor(wpLimit))
     end
 end
 

@@ -682,9 +682,10 @@ function onParameters()
 
 	roundLimit = tonumber(params["rounds"])
 
-	if (roundLimit == 0) or (roundLimit == nil) then
+	if roundLimit == nil then
 		roundLimit = 3
 	end
+	roundLimit = math.max(1, math.floor(roundLimit))
 
 	if mapID == nil then
 		mapID = 2 + GetRandom(7)
