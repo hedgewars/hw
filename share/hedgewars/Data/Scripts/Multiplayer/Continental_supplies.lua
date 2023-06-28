@@ -1144,6 +1144,8 @@ end
 
 function onGameInit()
 	SuddenDeathTurns= SuddenDeathTurns+1
+	-- Disable GameFlags that are incompatible with this game
+	DisableGameFlags(gfKing, gfPlaceHog, gfPerHogAmmo, gfSharedAmmo, gfResetWeps)
 end
 
 function onEndTurn()
