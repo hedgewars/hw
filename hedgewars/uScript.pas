@@ -308,6 +308,32 @@ begin
         LuaToSoundOrd:= i;
 end;
 
+function LuaToMsgStrIdOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= Trunc(lua_tonumber(L, i));
+    if (i < ord(Low(TMsgStrId))) or (i > ord(High(TMsgStrId))) then
+        begin
+        LuaCallError('Invalid message ID!', call, paramsyntax);
+        LuaToMsgStrIdOrd:= -1;
+        end
+    else
+        LuaToMsgStrIdOrd:= i;
+end;
+
+function LuaToGoalStrIdOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= Trunc(lua_tonumber(L, i));
+    if (i < ord(Low(TGoalStrId))) or (i > ord(High(TGoalStrId))) then
+        begin
+        LuaCallError('Invalid goal string ID!', call, paramsyntax);
+        LuaToGoalStrIdOrd:= -1;
+        end
+    else
+        LuaToGoalStrIdOrd:= i;
+end;
+
 function LuaToHogEffectOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
     if lua_isnoneornil(L, i) then i:= -1
@@ -582,6 +608,47 @@ begin
     L:= L; // avoid compiler hint
     HideMission;
     lc_hidemission:= 0;
+end;
+
+function lc_getenginestring(L : Plua_state) : LongInt; Cdecl;
+var stringType: shortstring;
+    msgId: LongInt;
+const callStr = 'GetEngineString';
+      paramsStr = 'stringType, msgId';
+begin
+    if CheckLuaParamCount(L, 2, callStr, paramsStr) then
+        begin
+            stringType:= lua_tostring(L, 1);
+            if (not lua_isnumber(L, 2)) then
+                begin
+                LuaError('Argument ''msgId'' must be a number!');
+                lua_pushnil(L);
+                end
+            else if stringType = 'TMsgStrId' then
+                begin
+                msgId:= LuaToMsgStrIdOrd(L, 2, callStr, paramsStr);
+                if msgId = -1 then
+                    lua_pushnil(L)
+                else
+                    lua_pushstring(L, PChar(trmsg[TMsgStrId(msgId)]))
+                end
+            else if stringType = 'TGoalStrId' then
+                begin
+                msgId:= LuaToGoalStrIdOrd(L, 2, callStr, paramsStr);
+                if msgId = -1 then
+                    lua_pushnil(L)
+                else
+                    lua_pushstring(L, PChar(trgoal[TGoalStrId(msgId)]));
+                end
+            else
+                begin
+                LuaError('Invalid stringType!');
+                lua_pushnil(L);
+                end
+        end
+    else
+        lua_pushnil(L);
+    lc_getenginestring:= 1;
 end;
 
 function lc_setammotexts(L : Plua_State) : LongInt; Cdecl;
@@ -4257,6 +4324,8 @@ var at : TGearType;
     spr: TSprite;
     mg : TMapGen;
     we : TWorldEdge;
+    msi: TMsgStrId;
+    gsi: TGoalStrId;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -4375,6 +4444,13 @@ for mg:= Low(TMapGen) to High(TMapGen) do
 for we:= Low(TWorldEdge) to High(TWorldEdge) do
     ScriptSetInteger(EnumToStr(we), ord(we));
 
+// register message IDs
+for msi:= Low(TMsgStrId) to High(TMsgStrId) do
+    ScriptSetInteger(EnumToStr(msi), ord(msi));
+
+for gsi:= Low(TGoalStrId) to High(TGoalStrId) do
+    ScriptSetInteger(EnumToStr(gsi), ord(gsi));
+
 ScriptSetLongWord('capcolDefault'   , capcolDefaultLua);
 ScriptSetLongWord('capcolSetting'   , capcolSettingLua);
 
@@ -4485,6 +4561,7 @@ lua_register(luaState, _P'GetGearVelocity', @lc_getgearvelocity);
 lua_register(luaState, _P'ParseCommand', @lc_parsecommand);
 lua_register(luaState, _P'ShowMission', @lc_showmission);
 lua_register(luaState, _P'HideMission', @lc_hidemission);
+lua_register(luaState, _P'GetEngineString', @lc_getenginestring);
 lua_register(luaState, _P'SetAmmoTexts', @lc_setammotexts);
 lua_register(luaState, _P'SetAmmoDescriptionAppendix', @lc_setammodescriptionappendix);
 lua_register(luaState, _P'AddCaption', @lc_addcaption);

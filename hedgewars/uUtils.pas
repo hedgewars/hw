@@ -50,6 +50,8 @@ function  EnumToStr(const en : TCapGroup) : shortstring; overload;
 function  EnumToStr(const en : TSprite) : shortstring; overload;
 function  EnumToStr(const en : TMapGen) : shortstring; overload;
 function  EnumToStr(const en : TWorldEdge) : shortstring; overload;
+function  EnumToStr(const en : TMsgStrId) : shortstring; overload;
+function  EnumToStr(const en : TGoalStrId) : shortstring; overload;
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  MinD(a, b: double) : double; inline;
@@ -379,6 +381,15 @@ begin
 EnumToStr := GetEnumName(TypeInfo(TWorldEdge), ord(en))
 end;
 
+function EnumToStr(const en: TMsgStrId) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TMsgStrId), ord(en))
+end;
+
+function EnumToStr(const en: TGoalStrId) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TGoalStrId), ord(en))
+end;
 
 function Min(a, b: LongInt): LongInt;
 begin
