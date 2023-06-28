@@ -2142,7 +2142,11 @@ function onGearAdd(gearUid)
 		CS.PARACHUTE_IS_ON=1
 	elseif(GetGearType(gearUid)==gtSwitcher)
 	then
-		CS.SWITCH_HOG_IS_ON=true
+		if not CS.GAME_STARTED then
+			DeleteGear(gearUid)
+		else
+			CS.SWITCH_HOG_IS_ON=true
+		end
 	end
 end
 
