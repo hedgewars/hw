@@ -1532,7 +1532,7 @@ function onParameters()
     useVariantHats = params['mutate']
   end
 
-  if params['strength'] ~= nil and tonumber(params['strength']) > 0 then
+  if params['strength'] ~= nil and tonumber(params['strength']) ~= nil and tonumber(params['strength']) > 0 then
     strength = tonumber(params['strength'])
     -- Highland
     if mode == 'highland' then
@@ -1561,7 +1561,7 @@ function onParameters()
     end
   end
 
-  if params['luck'] ~= nil and tonumber(params['luck']) > 0 then
+  if params['luck'] ~= nil and tonumber(params['luck']) and tonumber(params['luck']) > 0 then
     luck = tonumber(params['luck'])
 
     healthCrateChance = div(healthCrateChance * luck, 100)

@@ -1040,26 +1040,26 @@ end
 
 function onParameters()
 	parseParams()
-	if params["rounds"] ~= nil then
+	if params["rounds"] ~= nil and tonumber(params["rounds"]) then
 		SI.roundLimit = math.floor(tonumber(params["rounds"]))
 	end
-	if params["barrels"] ~= nil then
+	if params["barrels"] ~= nil and tonumber(params["barrels"]) then
 		SI.startBarrels = math.floor(tonumber(params["barrels"]))
 	end
-	if params["pings"] ~= nil then
+	if params["pings"] ~= nil and tonumber(params["pings"]) then
 		SI.startRadShots = math.floor(tonumber(params["pings"]))
 	end
-	if params["shield"] ~= nil then
+	if params["shield"] ~= nil and tonumber(params["shield"]) then
 		SI.startShield = math.min(250-80, math.floor(tonumber(params["shield"])))
 	end
 
-	if params["barrelbonus"] ~= nil then
+	if params["barrelbonus"] ~= nil and tonumber(params["barrelbonus"]) then
 		SI.barrelBonus = math.floor(tonumber(params["barrelbonus"]))
 	end
-	if params["shieldbonus"] ~= nil then
+	if params["shieldbonus"] ~= nil and tonumber(params["shieldbonus"]) then
 		SI.shieldBonus = math.floor(tonumber(params["shieldbonus"]))
 	end
-	if params["timebonus"] ~= nil then
+	if params["timebonus"] ~= nil and tonumber(params["timebonus"]) then
 		SI.timeBonus = math.floor(tonumber(params["timebonus"]))
 	end
 	if params["forcetheme"] == "false" then
