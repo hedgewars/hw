@@ -29,6 +29,9 @@ procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary sinc
 procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); inline;
 procedure copyToXYFromRect(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
 
+function GetSurfaceFrameCoordinateX(Surface: PSDL_Surface; Frame, frameWidth, frameHeight: LongInt): LongInt;
+function GetSurfaceFrameCoordinateY(Surface: PSDL_Surface; Frame, frameHeight: LongInt): LongInt;
+
 procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); inline;
 procedure DrawSpriteFrame2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt; frame: LongInt);
 procedure DrawLine2Surf(dest: PSDL_Surface; x0,y0,x1,y1:LongInt; r,g,b: byte);
@@ -77,6 +80,24 @@ function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord;
 begin
     WriteInRoundRect:= WriteInRoundRect(Surface, X, Y, Color, Font, s, 0);
 end;*)
+
+function GetSurfaceFrameCoordinateX(Surface: PSDL_Surface; Frame, frameWidth, frameHeight: LongInt): LongInt;
+var nx, ny: LongInt;
+begin
+   nx:= Surface^.w div frameWidth; // number of horizontal frames
+   if nx = 0 then nx:= 1; // one frame is minimum
+   ny:= Surface^.h div frameHeight; // number of vertical frames
+   if ny = 0 then ny:= 1;
+   GetSurfaceFrameCoordinateX:= (Frame div ny) * frameWidth;
+end;
+
+function GetSurfaceFrameCoordinateY(Surface: PSDL_Surface; Frame, frameHeight: LongInt): LongInt;
+var ny: LongInt;
+begin
+   ny:= Surface^.h div frameHeight; // number of vertical frames
+   if ny = 0 then ny:= 1; // one frame is minimum
+   GetSurfaceFrameCoordinateY:= (Frame mod ny) * frameHeight;
+end;
 
 function IsTooDarkToRead(TextColor: LongWord): boolean; inline;
 var clr: TSDL_Color;
