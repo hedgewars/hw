@@ -4,7 +4,7 @@ module PascalParser (
     )
     where
 
-import Text.Parsec
+import Text.Parsec hiding (string')
 import Text.Parsec.Token
 import Text.Parsec.Expr
 import Control.Monad
@@ -720,4 +720,3 @@ redoUnit = do
     string' "var"
     v <- varsDecl True
     return $ Redo (t ++ v)
-

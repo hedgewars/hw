@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module PascalPreprocessor where
 
-import Text.Parsec
+import Text.Parsec hiding (string')
 import Control.Monad.IO.Class
 import Control.Monad
 import System.IO

@@ -2,7 +2,7 @@
 module PascalBasics where
 
 import Text.Parsec.Combinator
-import Text.Parsec.Char
+import Text.Parsec.Char hiding (string')
 import Text.Parsec.Prim
 import Text.Parsec.Token
 import Text.Parsec.Language
