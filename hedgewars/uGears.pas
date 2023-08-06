@@ -288,6 +288,7 @@ while t <> nil do
                             curHandledGear^.Tex:= RenderStringTex(trmsg[sidUnknownGearValue], $ff808080, fntSmall)
                         else
                             begin
+                            FreeAndNilTexture(curHandledGear^.Tex);
                             // Display mine timer with up to 1 decimal point of precision (rounded down)
                             i:= curHandledGear^.Timer div 1000;
                             j:= (curHandledGear^.Timer mod 1000) div 100;
