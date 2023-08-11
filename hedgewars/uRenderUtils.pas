@@ -115,7 +115,7 @@ var w, h: Longword;
     clr: TSDL_Color;
 begin
     TTF_SizeUTF8(Fontz[Font].Handle, PChar(s), @w, @h);
-    if (maxLength > 0) and (w > maxLength * HDPIScaleFactor) then w := maxLength * HDPIScaleFactor;
+    if (maxLength > 0) and (w > round(maxLength * HDPIScaleFactor)) then w := round(maxLength * HDPIScaleFactor);
     finalRect.x:= X;
     finalRect.y:= Y;
     finalRect.w:= w + cFontBorder * 2 + cFontPadding * 2;
@@ -385,7 +385,7 @@ begin
         font:= CheckCJKFont(s, font);
         w:= 0; h:= 0; // avoid compiler hints
         TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
-        if (maxLength > 0) and (w > maxLength * HDPIScaleFactor) then w := maxLength * HDPIScaleFactor;
+        if (maxLength > 0) and (w > round(maxLength * HDPIScaleFactor)) then w := round(maxLength * HDPIScaleFactor);
 
         finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder*2 + cFontPadding*2, h + cFontBorder * 2,
                 32, RMask, GMask, BMask, AMask);
