@@ -13,8 +13,6 @@ use hedgewars_network_protocol::messages::{
     HwProtocolMessage, HwProtocolMessage::LoadRoom, HwServerMessage::*,
 };
 use log::*;
-#[cfg(feature = "official-server")]
-use openssl::sha::sha1;
 use std::{
     fmt::{Formatter, LowerHex},
     num::NonZeroU16,

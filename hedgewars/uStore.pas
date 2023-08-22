@@ -474,12 +474,30 @@ for ii:= Low(TSprite) to High(TSprite) do
                         end;
                 if (ii in [sprAMAmmos, sprAMAmmosBW]) then
                     begin
+                    // Optionally add ammos overlay from HWP file
                     tmpoverlay := LoadDataImage(Path, copy(FileName, 1, length(FileName)-5), (imflags and (not ifCritical)));
                     if tmpoverlay <> nil then
                         begin
                         copyToXY(tmpoverlay, tmpsurf, 0, 0);
                         SDL_FreeSurface(tmpoverlay)
-                        end
+                        end;
+
+                    // Replace ExtraDamage icon with a variant showing "1,5" instead of "1.5"
+                    // if the current locale uses a comma as a decimal separator.
+                    if lDecimalSeparator = ',' then
+                        begin
+                        if ii = sprAMAmmos then
+                            tmpoverlay:= LoadDataImage(ptAmmoMenu, 'Ammos_ExtraDamage_comma', ifNone)
+                        else
+                            tmpoverlay:= LoadDataImage(ptAmmoMenu, 'Ammos_bw_ExtraDamage_comma', ifNone);
+                        if tmpoverlay <> nil then
+                            begin
+                            copyToXY(tmpoverlay, tmpsurf,
+                               GetSurfaceFrameCoordinateX(tmpsurf, ord(amExtraDamage)-1, SpritesData[ii].Width, SpritesData[ii].Height),
+                               GetSurfaceFrameCoordinateY(tmpsurf, ord(amExtraDamage)-1, SpritesData[ii].Height));
+                            SDL_FreeSurface(tmpoverlay);
+                            end;
+                        end;
                     end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
                     begin

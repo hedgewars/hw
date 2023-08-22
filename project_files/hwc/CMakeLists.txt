@@ -112,7 +112,7 @@ target_link_libraries(hwengine  fpcrtl
                                 ${LUA_LIBRARY}
                                 ${OPENGL_LIBRARY}
                                 ${SDL2_LIBRARIES}
-                                ${SDL2_MIXER_LIBRARIES}
+                                ${SDL2_MIXER_LIBRARY}
                                 ${SDL2_NET_LIBRARIES}
                                 ${SDL2_IMAGE_LIBRARIES}
                                 ${SDL2_TTF_LIBRARIES}

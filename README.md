@@ -144,6 +144,6 @@ for a more complete list of authors.
 Contact
 -------
 * Homepage        - https://hedgewars.org/
-* IRC channel     - irc://irc.freenode.net/hedgewars
+* IRC channel     - irc://irc.libera.chat/hedgewars
 * Community forum - https://hedgewars.org/forum
 

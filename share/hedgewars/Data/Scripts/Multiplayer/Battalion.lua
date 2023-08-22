@@ -804,7 +804,7 @@ function onHealthCratePickup()
   PlaySound(sndShotgunReload)
 
   if GetRandom(100) < emptyCrateChance then
-    AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+    AddCaption(GetEngineString("TMsgStrId", sidEmptyCrate), msgColor, capgrpMessage)
     return
   elseif GetRandom(100) < bonusCrateChance then
     factor = 3
@@ -834,7 +834,7 @@ function onWeaponCratePickup(crate)
 
   if GetRandom(100) < emptyCrateChance then
     if IsHogLocal(CurHog) then
-      AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+      AddCaption(GetEngineString("TMsgStrId", sidEmptyCrate), msgColor, capgrpMessage)
     end
     return
   elseif GetRandom(100) < bonusCrateChance then
@@ -880,7 +880,7 @@ function onUtilityCratePickup(crate)
 
   if GetRandom(100) < emptyCrateChance then
     if IsHogLocal(CurHog) then
-      AddCaption(loc("It's empty!"), msgColor, capgrpMessage)
+      AddCaption(GetEngineString("TMsgStrId", sidEmptyCrate), msgColor, capgrpMessage)
     end
     return
   elseif GetRandom(100) < bonusCrateChance then
@@ -1532,7 +1532,7 @@ function onParameters()
     useVariantHats = params['mutate']
   end
 
-  if params['strength'] ~= nil and tonumber(params['strength']) > 0 then
+  if params['strength'] ~= nil and tonumber(params['strength']) ~= nil and tonumber(params['strength']) > 0 then
     strength = tonumber(params['strength'])
     -- Highland
     if mode == 'highland' then
@@ -1561,7 +1561,7 @@ function onParameters()
     end
   end
 
-  if params['luck'] ~= nil and tonumber(params['luck']) > 0 then
+  if params['luck'] ~= nil and tonumber(params['luck']) and tonumber(params['luck']) > 0 then
     luck = tonumber(params['luck'])
 
     healthCrateChance = div(healthCrateChance * luck, 100)

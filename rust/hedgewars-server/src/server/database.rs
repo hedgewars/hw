@@ -1,5 +1,6 @@
 use mysql_async::{self, from_row_opt, params, prelude::*, Pool};
 use sha1::{Digest, Sha1};
+use tokio::sync::mpsc::{channel, Receiver, Sender};
 
 use crate::handlers::{AccountInfo, Sha1Digest};
 
@@ -25,14 +26,96 @@ pub struct ServerStatistics {
 
 pub struct Achievements {}
 
+pub enum DatabaseQuery {
+    CheckRegistered {
+        nick: String,
+    },
+    GetAccount {
+        nick: String,
+        protocol: u16,
+        password_hash: String,
+        client_salt: String,
+        server_salt: String,
+    },
+    GetCheckerAccount {
+        nick: String,
+        password: String,
+    },
+    GetReplayFilename {
+        id: u32,
+    },
+}
+
+pub enum DatabaseResponse {
+    AccountRegistered(bool),
+    Account(Option<AccountInfo>),
+    CheckerAccount { is_registered: bool },
+}
+
 pub struct Database {
     pool: Pool,
+    query_rx: Receiver<DatabaseQuery>,
+    response_tx: Sender<DatabaseResponse>,
 }
 
 impl Database {
     pub fn new(url: &str) -> Self {
+        let (query_tx, query_rx) = channel(32);
+        let (response_tx, response_rx) = channel(32);
         Self {
             pool: Pool::new(url),
+            query_rx,
+            response_tx,
+        }
+    }
+
+    pub async fn run(&mut self) {
+        use DatabaseResponse::*;
+        loop {
+            let query = self.query_rx.recv().await;
+            if let Some(query) = query {
+                match query {
+                    DatabaseQuery::CheckRegistered { nick } => {
+                        let is_registered = self.get_is_registered(&nick).await.unwrap_or(false);
+                        self.response_tx
+                            .send(AccountRegistered(is_registered))
+                            .await;
+                    }
+                    DatabaseQuery::GetAccount {
+                        nick,
+                        protocol,
+                        password_hash,
+                        client_salt,
+                        server_salt,
+                    } => {
+                        let account = self
+                            .get_account(
+                                &nick,
+                                protocol,
+                                &password_hash,
+                                &client_salt,
+                                &server_salt,
+                            )
+                            .await
+                            .unwrap_or(None);
+                        self.response_tx.send(Account(account)).await;
+                    }
+                    DatabaseQuery::GetCheckerAccount { nick, password } => {
+                        let is_registered = self
+                            .get_checker_account(&nick, &password)
+                            .await
+                            .unwrap_or(false);
+                        self.response_tx
+                            .send(CheckerAccount { is_registered })
+                            .await;
+                    }
+                    DatabaseQuery::GetReplayFilename { id } => {
+                        let filename = self.get_replay_name(id).await;
+                    }
+                };
+            } else {
+                break;
+            }
         }
     }
 
@@ -40,9 +123,9 @@ impl Database {
         let mut connection = self.pool.get_conn().await?;
         let result = CHECK_ACCOUNT_EXISTS_QUERY
             .with(params! { "username" => nick })
-            .first(&mut connection)
+            .first::<u32, _>(&mut connection)
             .await?;
-        Ok(!result.is_empty())
+        Ok(!result.is_some())
     }
 
     pub async fn get_account(

@@ -38,11 +38,20 @@
 
 QImage getAmmoImage(int num)
 {
-    static QImage ammo(":Ammos.png");
-    int x = num/(ammo.height()/32);
-    int y = (num-((ammo.height()/32)*x))*32;
-    x*=32;
-    return ammo.copy(x, y, 32, 32);
+    // Show ammo image for ammo selection menu
+    if (QLocale().decimalPoint() == "," && num == HW_AMMOTYPE_EXTRADAMAGE) {
+        // Special case: Extra Damage icon showing "1,5" instead of "1.5" if locale
+        // uses comma as decimal separator
+        static QImage extradamage(":Ammos_ExtraDamage_comma.png");
+        return extradamage;
+    } else {
+        // Normal case: Pick icon from Ammos.png
+        static QImage ammo(":Ammos.png");
+        int x = num/(ammo.height()/32);
+        int y = (num-((ammo.height()/32)*x))*32;
+        x*=32;
+        return ammo.copy(x, y, 32, 32);
+    }
 }
 
 SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QImage imagegrey, QWidget* parent) :

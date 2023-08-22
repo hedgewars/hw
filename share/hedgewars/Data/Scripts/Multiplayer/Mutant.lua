@@ -21,6 +21,7 @@ ___ .-. .-. ___  ___ | |_    .---. ___ .-. | |_
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 --[[
     MUTANT SCRIPT
@@ -792,8 +793,9 @@ function onGearAdd(gear)
         if not gameOver then
             local winner = createEndGameStats()
             if winner then
-                SendStat(siGameResult, string.format(loc("%s wins!"), winner))
-                AddCaption(string.format(loc("%s wins!"), winner), capcolDefault, capgrpGameState)
+                local winText = formatEngineString(GetEngineString("TMsgStrId", sidWinner), winner)
+                SendStat(siGameResult, winText)
+                AddCaption(winText, capcolDefault, capgrpGameState)
             end
             gameOver = true
         end

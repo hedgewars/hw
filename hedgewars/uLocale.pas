@@ -164,6 +164,10 @@ for i:=0 to argCount - 1 do
             8: curArg:= arg9;
         end;
 
+        // Replace % sign in argument with ASCII ESC
+        // to prevent infinite loop below.
+        ReplaceChars(curArg, '%', Char($1B));
+
         repeat
         p:= Pos('%'+IntToStr(i+1), tempstr);
         if (p <> 0) then
@@ -173,6 +177,8 @@ for i:=0 to argCount - 1 do
             end;
         until (p = 0);
     end;
+
+ReplaceChars(tempstr, Char($1B), '%');
 Format:= tempstr;
 end;
 
@@ -196,6 +202,10 @@ for i:=0 to argCount - 1 do
             8: curArg:= arg9;
         end;
 
+        // Replace % sign in argument with ASCII ESC
+        // to prevent infinite loop below.
+        ReplaceCharsA(curArg, '%', Char($1B));
+
         repeat
         p:= Pos('%'+IntToStr(i+1), tempstr);
         if (p <> 0) then
@@ -205,6 +215,8 @@ for i:=0 to argCount - 1 do
             end;
         until (p = 0);
     end;
+
+ReplaceCharsA(tempstr, Char($1B), '%');
 FormatA:= tempstr;
 end;
 

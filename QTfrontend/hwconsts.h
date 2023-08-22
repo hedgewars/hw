@@ -136,3 +136,5 @@ extern int years_since_foundation;
   7, 21, 32, 33, 35, 60\
 }
 
+/* Ammo ID for extra damage */
+#define HW_AMMOTYPE_EXTRADAMAGE 32

@@ -264,6 +264,7 @@ end;
 
 procedure HideHog(HH: PHedgehog);
 begin
+    if HH^.Gear = nil then exit;
     ScriptCall('onHogHide', HH^.Gear^.Uid);
     DeleteCI(HH^.Gear);
     if FollowGear = HH^.Gear then
@@ -6409,6 +6410,7 @@ end;
 procedure doStepTardisWarp(Gear: PGear);
 var HH: PHedgehog;
     i,j,cnt: LongWord;
+    restoreBottomY: LongInt;
     s: ansistring;
 begin
 HH:= Gear^.Hedgehog;
@@ -6505,8 +6507,37 @@ if (Gear^.Pos = 4) then
                     inc(cnt);
     if (cnt = 0) or SuddenDeathDmg or (Gear^.Timer = 0) then
         begin
+        // Place tardis
         if HH^.GearHidden <> nil then
-            FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH, true, false);
+            begin
+            restoreBottomY:= cWaterLine;
+            // Place tardis at a random safe position
+            FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH, restoreBottomY, true, false);
+
+            // If in Sudden Death, rise the minimum possible spawn position to make
+            // it less likely for the hog to drown before its turn
+            if SuddenDeathActive and (cWaterRise > 0) then
+                begin
+                // Enough space to survive the water rise of 1 round.
+                // Also limit the highest spawn height to topY plus a small buffer zone
+                restoreBottomY:= max(topY + cHHRadius * 5, cWaterLine - cWaterRise * (TeamsCount + 1));
+                // If gear is below the safe spawn height, place it again,
+                // but this time with the height limit in place
+                if (HH^.GearHidden <> nil) and (hwRound(HH^.GearHidden^.Y) > restoreBottomY) then
+                    // Due to the reduced Y range, this one might fail for very aggressive SD water rise
+                    begin
+                    FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH, restoreBottomY, true, false);
+                    end;
+                // Still unsafe? Relax the height limit to a third of the map height above cWaterLine
+                if (HH^.GearHidden <> nil) and (hwRound(HH^.GearHidden^.Y) > restoreBottomY) then
+                    begin
+                    restoreBottomY:= cWaterLine - ((cWaterLine - topY) div 3);
+                    // Even this might fail, but it's much less likely. If it fails, we still have the
+                    // position of the first FindPlace as a fallback.
+                    FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH, restoreBottomY, true, false);
+                    end;
+                end;
+            end;
 
         if HH^.GearHidden <> nil then
             begin

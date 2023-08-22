@@ -14,7 +14,7 @@
     </message>
     <message>
         <source>Revision %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Revision %1 (%2)</translation>
     </message>
     <message>
         <source>Visit our homepage: %1</source>
@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>This program is distributed under the %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este programa es distribuido bajo el 1%.</translation>
     </message>
     <message>
         <source>GNU GPL v2</source>
@@ -80,11 +80,11 @@
     </message>
     <message>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Créditos</translation>
     </message>
     <message>
         <source>Other people</source>
-        <translation type="unfinished"></translation>
+        <translation>Otras personas</translation>
     </message>
     <message>
         <source>%1 (alias %2)</source>
@@ -107,11 +107,11 @@
     </message>
     <message>
         <source>Extended Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Créditos extendidos</translation>
     </message>
     <message>
         <source>An extended credits list can be found in the CREDITS text file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Una lista de créditos extendidos puede encontrarse en el archivo de texto CREDITS.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
@@ -119,14 +119,14 @@
     </message>
     <message>
         <source>Unknown Compiler: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Compilador Desconocido: %1</translation>
     </message>
 </context>
 <context>
     <name>AbstractPage</name>
     <message>
         <source>Go back</source>
-        <translation type="unfinished"></translation>
+        <translation>Atrás</translation>
     </message>
 </context>
 <context>
@@ -137,23 +137,23 @@
     </message>
     <message>
         <source>Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>Apodo</translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>IP/Apodo</translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation>Razón</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Duración</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -165,15 +165,15 @@
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Alerta</translation>
     </message>
     <message>
         <source>permanent</source>
-        <translation type="unfinished"></translation>
+        <translation>permanente</translation>
     </message>
     <message>
         <source>Ban player</source>
-        <translation type="unfinished"></translation>
+        <translation>Banear Jugador</translation>
     </message>
     <message>
         <source>Please specify an IP address.</source>
@@ -188,14 +188,14 @@
     <name>DataManager</name>
     <message>
         <source>Use Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar Default</translation>
     </message>
 </context>
 <context>
     <name>FeedbackDialog</name>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ver</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -203,15 +203,15 @@
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar Feedback</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sugerencias, ideas y reportes de fallos son bienvenidos.</translation>
     </message>
     <message>
         <source>Send us feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Envíe sus comentarios!</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>

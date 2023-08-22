@@ -171,7 +171,7 @@ const
 
     cVisibleWater       : LongInt = 128;
     cTeamHealthWidth    : LongInt = 128;
-    cTeamHealthHeight   : LongInt = 19 * HDPIScaleFactor;
+    cTeamHealthHeight   : LongInt = round(19 * HDPIScaleFactor);
     cGearContourThreshold : LongInt = 179; // if water opacity is higher than this, draw contour for some gears when in water
 
     cifRandomize = $00000001;
@@ -221,8 +221,8 @@ const
     cKbdMaxIndex = 65536;//need more room for the modifier keys
 
     // font stuff
-    cFontBorder = 2 * HDPIScaleFactor;
-    cFontPadding = 2 * HDPIScaleFactor;
+    cFontBorder = round(2 * HDPIScaleFactor);
+    cFontPadding = round(2 * HDPIScaleFactor);
 
     cDefaultBuildMaxDist = 256; // default max. building distance with girder/rubber
     cResurrectorDist = 100; // effect distance of resurrector

@@ -32,6 +32,7 @@ Introducing breaking changes means we have to invalidate past time records!
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 ------------------
 -- Got Variables?
@@ -191,22 +192,25 @@ function onParameters()
         TeamRope = true
     end
     if params["rounds"] ~= nil then
-        roundLimit = math.max(1, math.floor(tonumber(params["rounds"])))
+        roundLimit = tonumber(params["rounds"])
         if type(roundLimit) ~= "number" then
              roundLimit = 3
         end
+        roundLimit = math.max(1, math.floor(roundLimit))
     end
     if params["waypointradius"] ~= nil then
-        wpRad = math.max(WAYPOINT_RADIUS_MIN, math.floor(tonumber(params["waypointradius"])))
+        wpRad = tonumber(params["waypointradius"])
         if type(wpRad) ~= "number" then
              wpRad = 450
         end
+        wpRad = math.max(WAYPOINT_RADIUS_MIN, math.floor(wpRad))
     end
     if params["maxwaypoints"] ~= nil then
-        wpLimit = math.max(2, math.floor(tonumber(params["maxwaypoints"])))
+        wpLimit = tonumber(params["maxwaypoints"])
         if type(wpLimit) ~= "number" then
              wpLimit = 8
         end
+        wpLimit = math.max(2, math.floor(wpLimit))
     end
 end
 
@@ -505,17 +509,17 @@ function onNewRound()
 		local roundDraw = false
 		if #clanScores >= 2 and clanScores[1].score == clanScores[2].score and clanScores[1].score ~= MAX_TURN_TIME then
 			roundDraw = true
-                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siGameResult, GetEngineString("TMsgStrId", sidDraw))
                         SendStat(siCustomAchievement, loc("The teams are tied for the fastest time."))
                 elseif #sortedTeams >= 1 then
-                        SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
+                        SendStat(siGameResult, formatEngineString(GetEngineString("TMsgStrId", sidWinner), sortedTeams[1].name))
                         SendStat(siCustomAchievement, string.format(loc("%s wins with a best time of %.1fs."), sortedTeams[1].name, (sortedTeams[1].score/1000)))
                         for i=1,#unfinishedArray do
                                  SendStat(siCustomAchievement, unfinishedArray[i])
                         end
                 else
 			roundDraw = true
-                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siGameResult, GetEngineString("TMsgStrId", sidDraw))
                         SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
                         if specialPointsCount > 0 then
                                 SendStat(siCustomAchievement, loc("Maybe you should try an easier map next time."))

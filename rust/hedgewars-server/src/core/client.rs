@@ -10,6 +10,7 @@ bitflags! {
         const IS_CONTRIBUTOR = 0b0001_0000;
         const HAS_SUPER_POWER = 0b0010_0000;
         const IS_REGISTERED = 0b0100_0000;
+        const IS_MODERATOR = 0b1000_0000;
 
         const NONE = 0b0000_0000;
         const DEFAULT = Self::NONE.bits;
@@ -29,6 +30,7 @@ pub struct HwClient {
 
 impl HwClient {
     pub fn new(id: ClientId, protocol_number: u16, nick: String) -> HwClient {
+        todo!("add quiet flag");
         HwClient {
             id,
             nick,

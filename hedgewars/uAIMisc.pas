@@ -148,7 +148,7 @@ while Gear <> nil do
             (Gear^.Health = 0) and
              (Gear^.Damage < 35))
              )  and
-        (Targets.Count < 256) then
+        (Targets.Count < 255) then
         begin
         with Targets.ar[Targets.Count] do
             begin

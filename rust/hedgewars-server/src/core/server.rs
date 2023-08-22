@@ -189,6 +189,7 @@ pub struct HwServer {
 
 impl HwServer {
     pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
+        todo!("add reconnection IDs");
         let rooms = Slab::with_capacity(rooms_limit);
         let clients = IndexSlab::with_capacity(clients_limit);
         let checkers = IndexSlab::new();

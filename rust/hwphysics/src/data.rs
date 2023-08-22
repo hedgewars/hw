@@ -9,17 +9,28 @@ use std::{
     slice,
 };
 
+const MAX_TYPES: usize = 8;
+
 pub trait TypeTuple: Sized {
-    fn get_types(types: &mut Vec<TypeId>);
+    fn get_types(_types: &mut [TypeId; MAX_TYPES]) -> usize;
 }
 
 impl TypeTuple for () {
-    fn get_types(_types: &mut Vec<TypeId>) {}
+    fn get_types(_types: &mut [TypeId; MAX_TYPES]) -> usize {
+        0
+    }
 }
 
 impl<T: 'static> TypeTuple for &T {
-    fn get_types(types: &mut Vec<TypeId>) {
-        types.push(TypeId::of::<T>());
+    fn get_types(types: &mut [TypeId; MAX_TYPES]) -> usize {
+        if MAX_TYPES > 0 {
+            unsafe {
+                *types.get_unchecked_mut(0) = TypeId::of::<T>();
+            }
+            1
+        } else {
+            0
+        }
     }
 }
 
@@ -30,13 +41,22 @@ pub trait TypeIter: TypeTuple {
 macro_rules! type_tuple_impl {
     ($($n: literal: $t: ident),+) => {
         impl<$($t: 'static),+> TypeTuple for ($(&$t),+,) {
-            fn get_types(types: &mut Vec<TypeId>) {
-                $(types.push(TypeId::of::<$t>()));+
+            fn get_types(types: &mut [TypeId; MAX_TYPES]) -> usize {
+                let mut count = 0;
+                $({
+                    if MAX_TYPES > $n {
+                        unsafe {
+                            *types.get_unchecked_mut($n) = TypeId::of::<$t>();
+                        }
+                        count = $n + 1;
+                    }
+                });+
+                count
             }
         }
 
         impl<$($t: 'static),+> TypeIter for ($(&$t),+,) {
-            unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
+            unsafe fn iter<FI: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: FI) {
                 for i in 0..count {
                     f(*(*slices.get_unchecked(0) as *const GearId).add(i),
                       ($(&*(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
@@ -45,13 +65,22 @@ macro_rules! type_tuple_impl {
         }
 
         impl<$($t: 'static),+> TypeTuple for ($(&mut $t),+,) {
-            fn get_types(types: &mut Vec<TypeId>) {
-                $(types.push(TypeId::of::<$t>()));+
+            fn get_types(types: &mut [TypeId; MAX_TYPES]) -> usize {
+                let mut count = 0;
+                $({
+                    if MAX_TYPES > $n {
+                        unsafe {
+                            *types.get_unchecked_mut($n) = TypeId::of::<$t>();
+                        }
+                        count = $n + 1;
+                    }
+                });+
+                count
             }
         }
 
         impl<$($t: 'static),+> TypeIter for ($(&mut $t),+,) {
-            unsafe fn iter<F: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: F) {
+            unsafe fn iter<FI: FnMut(GearId, Self)>(slices: &[*mut u8], count: usize, mut f: FI) {
                 for i in 0..count {
                     f(*(*slices.get_unchecked(0) as *const GearId).add(i),
                       ($(&mut *(*slices.get_unchecked($n + 1) as *mut $t).add(i)),+,));
@@ -66,6 +95,9 @@ type_tuple_impl!(0: A, 1: B);
 type_tuple_impl!(0: A, 1: B, 2: C);
 type_tuple_impl!(0: A, 1: B, 2: C, 3: D);
 type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E);
+type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E, 5: F);
+type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E, 5: F, 6: G);
+type_tuple_impl!(0: A, 1: B, 2: C, 3: D, 4: E, 5: F, 6: G, 7: H);
 
 const BLOCK_SIZE: usize = 32768;
 
@@ -140,14 +172,17 @@ impl DataBlock {
                 .add(size_of::<GearId>() * max_elements as usize)
         };
 
-        for i in 0..element_sizes.len() {
-            if mask & (1 << i as u64) != 0 {
-                unsafe {
-                    address = address.add(address.align_offset(element_alignments[i] as usize));
-                    blocks[i] = Some(NonNull::new_unchecked(address));
-                    address = address.add(element_sizes[i] as usize * max_elements as usize)
-                };
-            }
+        let mut mask_bits = mask;
+        while mask_bits != 0 {
+            let i = mask_bits.trailing_zeros() as usize;
+
+            unsafe {
+                address = address.add(address.align_offset(element_alignments[i] as usize));
+                blocks[i] = Some(NonNull::new_unchecked(address));
+                address = address.add(element_sizes[i] as usize * max_elements as usize)
+            };
+
+            mask_bits &= mask_bits - 1;
         }
 
         Self {
@@ -159,6 +194,7 @@ impl DataBlock {
         }
     }
 
+    #[inline]
     fn gear_ids(&self) -> &[GearId] {
         unsafe {
             slice::from_raw_parts(
@@ -168,6 +204,7 @@ impl DataBlock {
         }
     }
 
+    #[inline]
     fn gear_ids_mut(&mut self) -> &mut [GearId] {
         unsafe {
             slice::from_raw_parts_mut(
@@ -177,6 +214,7 @@ impl DataBlock {
         }
     }
 
+    #[inline]
     fn is_full(&self) -> bool {
         self.elements_count == self.max_elements
     }
@@ -215,6 +253,11 @@ impl BlockMask {
     #[inline]
     fn with_type(&self, type_bit: u64) -> Self {
         Self::new(self.type_mask | type_bit, self.tag_mask)
+    }
+
+    #[inline]
+    fn without_type(&self, type_bit: u64) -> Self {
+        Self::new(self.type_mask & !type_bit, self.tag_mask)
     }
 
     #[inline]
@@ -267,7 +310,7 @@ impl GearDataManager {
         debug_assert!(src_block_index != dest_block_index);
         let src_mask = self.block_masks[src_block_index as usize];
         let dest_mask = self.block_masks[dest_block_index as usize];
-        debug_assert!(src_mask.type_mask & dest_mask.type_mask == src_mask.type_mask);
+        debug_assert!(src_mask.type_mask & dest_mask.type_mask != 0);
 
         let src_block = &self.blocks[src_block_index as usize];
         let dest_block = &self.blocks[dest_block_index as usize];
@@ -275,32 +318,40 @@ impl GearDataManager {
         debug_assert!(!dest_block.is_full());
 
         let dest_index = dest_block.elements_count;
-        for i in 0..self.types.len() {
-            if src_mask.type_mask & (1 << i as u64) != 0 {
-                let size = self.element_sizes[i];
-                let src_ptr = src_block.component_blocks[i].unwrap().as_ptr();
-                let dest_ptr = dest_block.component_blocks[i].unwrap().as_ptr();
+
+        let mut type_mask = src_mask.type_mask;
+        while type_mask != 0 {
+            let i = type_mask.trailing_zeros() as usize;
+
+            let size = self.element_sizes[i];
+            let src_ptr = src_block.component_blocks[i].unwrap().as_ptr();
+            if let Some(dest_ptr) = dest_block.component_blocks[i] {
+                let dest_ptr = dest_ptr.as_ptr();
                 unsafe {
                     copy_nonoverlapping(
                         src_ptr.add((src_index * size) as usize),
                         dest_ptr.add((dest_index * size) as usize),
                         size as usize,
                     );
-                    if src_index < src_block.elements_count - 1 {
-                        copy_nonoverlapping(
-                            src_ptr.add((size * (src_block.elements_count - 1)) as usize),
-                            src_ptr.add((size * src_index) as usize),
-                            size as usize,
-                        );
-                    }
                 }
             }
+            unsafe {
+                if src_index < src_block.elements_count - 1 {
+                    copy_nonoverlapping(
+                        src_ptr.add((size * (src_block.elements_count - 1)) as usize),
+                        src_ptr.add((size * src_index) as usize),
+                        size as usize,
+                    );
+                }
+            }
+
+            type_mask &= type_mask - 1;
         }
 
         let src_block = &mut self.blocks[src_block_index as usize];
         let gear_id = src_block.gear_ids()[src_index as usize];
 
-        if src_index < src_block.elements_count - 1 {
+        if src_index + 1 < src_block.elements_count {
             let relocated_index = src_block.elements_count as usize - 1;
             let gear_ids = src_block.gear_ids_mut();
             let relocated_id = gear_ids[relocated_index];
@@ -460,16 +511,24 @@ impl GearDataManager {
 
     pub fn remove<T: 'static>(&mut self, gear_id: GearId) {
         if let Some(type_index) = self.get_type_index::<T>() {
+            let type_bit = 1 << type_index as u64;
             let entry = self.lookup[gear_id.get() as usize - 1];
-            if let Some(index) = entry.index {
-                let mut dest_mask = self.block_masks[entry.block_index as usize];
-                dest_mask.type_mask &= !(1 << type_index as u64);
 
-                if dest_mask.type_mask == 0 {
-                    self.remove_from_block(entry.block_index, index.get() - 1);
-                } else {
-                    let dest_block_index = self.ensure_block(dest_mask);
-                    self.move_between_blocks(entry.block_index, index.get() - 1, dest_block_index);
+            if let Some(index) = entry.index {
+                let mask = self.block_masks[entry.block_index as usize];
+                let new_mask = mask.without_type(type_bit);
+
+                if new_mask != mask {
+                    if new_mask.type_mask == 0 {
+                        self.remove_from_block(entry.block_index, index.get() - 1);
+                    } else {
+                        let dest_block_index = self.ensure_block(new_mask);
+                        self.move_between_blocks(
+                            entry.block_index,
+                            index.get() - 1,
+                            dest_block_index,
+                        );
+                    }
                 }
             }
         } else {
@@ -511,7 +570,7 @@ impl GearDataManager {
         type_indices: &[i8],
         mut f: F,
     ) {
-        let mut slices = vec![null_mut(); type_indices.len() + 1];
+        let mut slices = [null_mut(); MAX_TYPES + 1];
 
         for (block_index, mask) in self.block_masks.iter().enumerate() {
             if mask.type_mask & type_selector == type_selector
@@ -527,7 +586,11 @@ impl GearDataManager {
                 }
 
                 unsafe {
-                    T::iter(&slices[..], block.elements_count as usize, |id, x| f(id, x));
+                    T::iter(
+                        &slices[0..=type_indices.len()],
+                        block.elements_count as usize,
+                        |id, x| f(id, x),
+                    );
                 }
             }
         }
@@ -547,12 +610,12 @@ impl GearDataManager {
     }
 
     pub fn iter<T: TypeIter + 'static>(&mut self) -> DataIterator<T> {
-        let mut arg_types = Vec::with_capacity(64);
-        T::get_types(&mut arg_types);
-        let mut type_indices = vec![-1i8; arg_types.len()];
+        let mut arg_types: [TypeId; MAX_TYPES] = unsafe { MaybeUninit::uninit().assume_init() };
+        let types_count = T::get_types(&mut arg_types);
+        let mut type_indices = [-1; MAX_TYPES];
         let mut selector = 0u64;
 
-        for (arg_index, type_id) in arg_types.iter().enumerate() {
+        for (arg_index, type_id) in arg_types[0..types_count].iter().enumerate() {
             match self.types.iter().position(|t| t == type_id) {
                 Some(i) if selector & (1 << i as u64) != 0 => panic!("Duplicate type"),
                 Some(i) => {
@@ -569,7 +632,7 @@ impl GearDataManager {
 pub struct DataIterator<'a, T> {
     data: &'a mut GearDataManager,
     types: u64,
-    type_indices: Vec<i8>,
+    type_indices: [i8; MAX_TYPES],
     tags: u64,
     phantom_types: PhantomData<T>,
 }
@@ -578,7 +641,7 @@ impl<'a, T: TypeIter + 'static> DataIterator<'a, T> {
     fn new(
         data: &'a mut GearDataManager,
         types: u64,
-        type_indices: Vec<i8>,
+        type_indices: [i8; MAX_TYPES],
     ) -> DataIterator<'a, T> {
         Self {
             data,
@@ -590,12 +653,12 @@ impl<'a, T: TypeIter + 'static> DataIterator<'a, T> {
     }
 
     pub fn with_tags<U: TypeTuple + 'static>(self) -> Self {
-        let mut tag_types = Vec::with_capacity(64);
-        U::get_types(&mut tag_types);
+        let mut tag_types: [TypeId; MAX_TYPES] = unsafe { MaybeUninit::uninit().assume_init() };
+        let tags_count = U::get_types(&mut tag_types);
         let mut tags = 0;
 
         for (i, tag) in self.data.tags.iter().enumerate() {
-            if tag_types.contains(tag) {
+            if tag_types[0..tags_count].contains(tag) {
                 tags |= 1 << i as u64;
             }
         }
@@ -609,8 +672,13 @@ impl<'a, T: TypeIter + 'static> DataIterator<'a, T> {
 
     #[inline]
     pub fn run_id<F: FnMut(GearId, T)>(&mut self, f: F) {
+        let types_count = self
+            .type_indices
+            .iter()
+            .position(|i| *i == -1)
+            .unwrap_or(self.type_indices.len());
         self.data
-            .run_impl(self.types, self.tags, &self.type_indices, f);
+            .run_impl(self.types, self.tags, &self.type_indices[0..types_count], f);
     }
 }
 
@@ -619,7 +687,12 @@ mod test {
     use super::{super::common::GearId, GearDataManager};
 
     #[derive(Clone)]
-    struct Datum {
+    struct DatumA {
+        value: u32,
+    }
+
+    #[derive(Clone)]
+    struct DatumB {
         value: u32,
     }
 
@@ -629,15 +702,15 @@ mod test {
     #[test]
     fn direct_access() {
         let mut manager = GearDataManager::new();
-        manager.register::<Datum>();
+        manager.register::<DatumA>();
         for i in 1..=5 {
-            manager.add(GearId::new(i as u16).unwrap(), &Datum { value: i * i });
+            manager.add(GearId::new(i as u16).unwrap(), &DatumA { value: i * i });
         }
 
         for i in 1..=5 {
             assert_eq!(
                 manager
-                    .get::<Datum>(GearId::new(i as u16).unwrap())
+                    .get::<DatumA>(GearId::new(i as u16).unwrap())
                     .unwrap()
                     .value,
                 i * i
@@ -648,46 +721,72 @@ mod test {
     #[test]
     fn single_component_iteration() {
         let mut manager = GearDataManager::new();
-        manager.register::<Datum>();
+        manager.register::<DatumA>();
+
         for i in 1..=5 {
-            manager.add(GearId::new(i as u16).unwrap(), &Datum { value: i });
+            manager.add(GearId::new(i as u16).unwrap(), &DatumA { value: i });
         }
 
         let mut sum = 0;
-        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&DatumA,)| sum += d.value);
         assert_eq!(sum, 15);
 
-        manager.iter().run(|(d,): (&mut Datum,)| d.value += 1);
-        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&mut DatumA,)| d.value += 1);
+        manager.iter().run(|(d,): (&DatumA,)| sum += d.value);
         assert_eq!(sum, 35);
     }
 
     #[test]
     fn tagged_component_iteration() {
         let mut manager = GearDataManager::new();
-        manager.register::<Datum>();
+        manager.register::<DatumA>();
         manager.register::<Tag>();
-        for i in 1..=10 {
-            let gear_id = GearId::new(i as u16).unwrap();
-            manager.add(gear_id, &Datum { value: i });
-        }
 
         for i in 1..=10 {
             let gear_id = GearId::new(i as u16).unwrap();
-            if i & 1 == 0 {
-                manager.add_tag::<Tag>(gear_id);
-            }
+            manager.add(gear_id, &DatumA { value: i });
+        }
+
+        for i in (2..=10).step_by(2) {
+            let gear_id = GearId::new(i as u16).unwrap();
+            manager.add_tag::<Tag>(gear_id);
         }
 
         let mut sum = 0;
-        manager.iter().run(|(d,): (&Datum,)| sum += d.value);
+        manager.iter().run(|(d,): (&DatumA,)| sum += d.value);
         assert_eq!(sum, 55);
 
         let mut tag_sum = 0;
         manager
             .iter()
             .with_tags::<&Tag>()
-            .run(|(d,): (&Datum,)| tag_sum += d.value);
+            .run(|(d,): (&DatumA,)| tag_sum += d.value);
         assert_eq!(tag_sum, 30);
+    }
+
+    #[test]
+    fn removal() {
+        let mut manager = GearDataManager::new();
+        manager.register::<DatumA>();
+        manager.register::<DatumB>();
+
+        for i in 1..=10 {
+            let gear_id = GearId::new(i as u16).unwrap();
+            manager.add(gear_id, &DatumA { value: i });
+            manager.add(gear_id, &DatumB { value: i });
+        }
+
+        for i in (1..=10).step_by(2) {
+            let gear_id = GearId::new(i as u16).unwrap();
+            manager.remove::<DatumA>(gear_id);
+        }
+
+        let mut sum_a = 0;
+        manager.iter().run(|(d,): (&DatumA,)| sum_a += d.value);
+        assert_eq!(sum_a, 30);
+
+        let mut sum_b = 0;
+        manager.iter().run(|(d,): (&DatumB,)| sum_b += d.value);
+        assert_eq!(sum_b, 55);
     }
 }

@@ -34,6 +34,9 @@ procedure SplitByCharA(var a, b: ansistring; c: char);
 procedure EscapeCharA(var a: ansistring; e: char);
 procedure UnEscapeCharA(var a: ansistring; e: char);
 
+procedure ReplaceChars(var a: shortstring; c1, c2: char);
+procedure ReplaceCharsA(var a: ansistring; c1, c2: char);
+
 function ExtractFileDir(s: shortstring) : shortstring;
 function ExtractFileName(s: shortstring) : shortstring;
 
@@ -47,6 +50,8 @@ function  EnumToStr(const en : TCapGroup) : shortstring; overload;
 function  EnumToStr(const en : TSprite) : shortstring; overload;
 function  EnumToStr(const en : TMapGen) : shortstring; overload;
 function  EnumToStr(const en : TWorldEdge) : shortstring; overload;
+function  EnumToStr(const en : TMsgStrId) : shortstring; overload;
+function  EnumToStr(const en : TGoalStrId) : shortstring; overload;
 
 function  Min(a, b: LongInt): LongInt; 
 function  MinD(a, b: double) : double; 
@@ -304,6 +309,28 @@ repeat
 until (i <= 0);
 end; { UnEscapeCharA }
 
+// Replace all characters c1 with c2 in shortstring a
+procedure ReplaceChars(var a: shortstring; c1, c2: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(c1, a);
+    if (i > 0) then
+        a[i]:= c2;
+until (i <= 0);
+end; { ReplaceChars }
+
+// Replace all characters c1 with c2 in antistring a
+procedure ReplaceCharsA(var a: ansistring; c1, c2: char);
+var i: LongInt;
+begin
+repeat
+    i:= Pos(c1, a);
+    if (i > 0) then
+        a[i]:= c2;
+until (i <= 0);
+end; { ReplaceCharsA }
+
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
@@ -354,6 +381,15 @@ begin
 EnumToStr := GetEnumName(TypeInfo(TWorldEdge), ord(en))
 end;
 
+function EnumToStr(const en: TMsgStrId) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TMsgStrId), ord(en))
+end;
+
+function EnumToStr(const en: TGoalStrId) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TGoalStrId), ord(en))
+end;
 
 function Min(a, b: LongInt): LongInt;
 begin

@@ -42,6 +42,7 @@ procedure ResurrectHedgehog(var gear: PGear);
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity, deleteOnFail: boolean);
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right, Bottom: LongInt; skipProximity, deleteOnFail: boolean);
 function CountLand(x, y, r, c: LongInt; mask, antimask: LongWord): LongInt;
 
 function  CheckGearNear(Kind: TGearType; X, Y: hwFloat; rX, rY: LongInt): PGear;
@@ -934,7 +935,12 @@ begin
     FindPlace(Gear, withFall, Left, Right, skipProximity, true);
 end;
 
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity, deleteOnFail: boolean);
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity, deleteOnFail: boolean); inline;
+begin
+    FindPlace(Gear, withFall, Left, Right, cWaterLine, skipProximity, deleteOnFail);
+end;
+
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right, Bottom: LongInt; skipProximity, deleteOnFail: boolean);
 var x: LongInt;
     y, sy, dir: LongInt;
     ar: array[0..1023] of TPoint;
@@ -963,11 +969,11 @@ while tryAgain do
         repeat
             cnt:= 0;
             y:= min(1024, topY) - Gear^.Radius shl 1;
-            while y < cWaterLine do
+            while y < Bottom do
                 begin
                 repeat
                     inc(y, 2);
-                until (y >= cWaterLine) or
+                until (y >= Bottom) or
                     (ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, 0) = 0)) or
                     (not ignoreOverLap and (CountLand(x, y, Gear^.Radius - 1, 1, lfAll, 0) = 0));
 
@@ -975,13 +981,13 @@ while tryAgain do
 
                 repeat
                     inc(y);
-                until (y >= cWaterLine) or
-                        (ignoreOverlap and
+                until (y >= Bottom) or
+                        (ignoreOverlap and 
                                 (CountLand(x, y, Gear^.Radius - 1, 1, lfAll, 0) <> 0)) or
                         (not ignoreOverlap and
                             (CountLand(x, y, Gear^.Radius - 1, 1, lfLandMask, 0) <> 0));
 
-                if (y - sy > Gear^.Radius * 2) and (y < cWaterLine)
+                if (y - sy > Gear^.Radius * 2) and (y < Bottom)
                     and (((Gear^.Kind = gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
                         and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, lfAll)

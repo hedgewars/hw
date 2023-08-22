@@ -2989,6 +2989,6 @@ locale = {
     ["Zombi"] = "Zombi", -- portal
     ["'Zooka Team"] = "Bazookinierzy",
     ["Zoom: [Pinch] with 2 fingers"] = "Przybliż: [Uszczypnij] dwoma palcami", -- Basic_Training_-_Movement
-    ["Zoom: [Rotate mouse wheel]"] = "Przyybliż: [Obróć kółkiem myszy]", -- Basic_Training_-_Movement
+    ["Zoom: [Rotate mouse wheel]"] = "Przybliż: [Obróć kółkiem myszy]", -- Basic_Training_-_Movement
     ["Zork"] = "Zork", -- A_Classic_Fairytale:dragon, A_Classic_Fairytale:family, A_Classic_Fairytale:queen
 }

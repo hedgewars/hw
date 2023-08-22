@@ -27,6 +27,8 @@ procedure initModule;
 procedure freeModule;
 procedure ReloadLines;
 procedure CleanupInput;
+procedure CloseChat;
+procedure RestoreChat;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(keysym: TSDL_Keysym);
@@ -54,6 +56,7 @@ type TChatLine = record
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
     LocalStrs: array[0 .. MaxStrIndex] of shortstring;
+    oldInput: shortstring;
     missedCount: LongWord;
     lastStr: LongWord;
     localLastStr: LongInt;
@@ -782,6 +785,45 @@ begin
     ResetKbd;
 end;
 
+procedure OpenChat(s: shortstring);
+var i: Integer;
+begin
+    if GameState = gsConfirm then
+        ParseCommand('quit', true);
+    isInChatMode:= true;
+    SDL_StopTextInput();
+    SDL_StartTextInput();
+    //Make REALLY sure unexpected events are flushed (1 time is insufficient as of SDL 2.0.7)
+    for i := 1 to 2 do
+    begin
+        SDL_PumpEvents();
+        SDL_FlushEvent(SDL_TEXTINPUT);
+    end;
+    if length(s) = 0 then
+        SetLine(InputStr, '', true)
+    else
+        begin
+        SetLine(InputStr, s, true);
+        cursorPos:= length(s);
+        UpdateCursorCoords();
+        end;
+end;
+
+procedure CloseChat;
+begin
+    oldInput:= InputStr.s;
+    SetLine(InputStr, '', true);
+    ResetCursor();
+    CleanupInput();
+end;
+
+procedure RestoreChat;
+begin
+    if length(oldInput) > 0 then
+        OpenChat(oldInput);
+    oldInput:= '';
+end;
+
 procedure DelBytesFromInputStrBack(endIdx: integer; count: byte);
 var startIdx: integer;
 begin
@@ -1062,7 +1104,9 @@ begin
                 SetLine(InputStr, '', true);
                 ResetCursor();
                 end
-            else CleanupInput
+            else
+                CleanupInput;
+            oldInput:= '';
             end;
         SDL_SCANCODE_RETURN, SDL_SCANCODE_KP_ENTER:
             begin
@@ -1337,27 +1381,12 @@ begin
 end;
 
 procedure chChat(var s: shortstring);
-var i: Integer;
 begin
     s:= s; // avoid compiler hint
-    isInChatMode:= true;
-    SDL_StopTextInput();
-    SDL_StartTextInput();
-    //Make REALLY sure unexpected events are flushed (1 time is insufficient as of SDL 2.0.7)
-    for i := 1 to 2 do
-    begin
-        SDL_PumpEvents();
-        SDL_FlushEvent(SDL_TEXTINPUT);
-    end;
-    //SDL_EnableKeyRepeat(200,45);
     if length(s) = 0 then
-        SetLine(InputStr, '', true)
+        OpenChat('')
     else
-        begin
-        SetLine(InputStr, '/clan ', true);
-        cursorPos:= 6;
-        UpdateCursorCoords();
-        end;
+        OpenChat('/clan ');
 end;
 
 procedure initModule;

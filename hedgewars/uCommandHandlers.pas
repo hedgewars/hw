@@ -27,7 +27,7 @@ procedure freeModule;
 
 implementation
 uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
-    , uVisualGearsList, uGearsHedgehog
+    , uVisualGearsList, uGearsHedgehog, uChat
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 0, 4, 5, 6, 15, 8, 8, 8, 8, 12, 13, 14);
@@ -49,15 +49,16 @@ procedure chQuit(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     if (GameState = gsGame) then
-    begin
-        isInChatMode:= false;
+        begin
+        CloseChat;
         GameState:= gsConfirm;
-    end
-    else begin
+        end
+    else
         if GameState = gsConfirm then
+            begin
             GameState:= gsGame;
-    end;
-
+            RestoreChat;
+            end;
     updateCursorVisibility;
 end;
 

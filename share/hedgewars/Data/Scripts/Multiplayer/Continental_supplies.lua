@@ -236,8 +236,27 @@ function GeneralInformation()
 		select_wep = ""
 		quit_hint = ""
 	end
+	local gameFlagPrepend = ""
+	local continentInfoPlace = loc("Continents: Select a continent after placing your hogs.")
+	local continentInfoNormal = loc("Continents: Select a continent at the beginning.")
+	local continentInfo = continentInfoNormal
+	if GetGameFlag(gfKing) then
+		gameFlagPrepend = gameFlagPrepend .. GetEngineString("TGoalStrId", gidKing).."|"
+		if GetGameFlag(gfPlaceHog) then
+			gameFlagPrepend = gameFlagPrepend .. GetEngineString("TGoalStrId", gidPlaceHog).."|"
+		else
+			gameFlagPrepend = gameFlagPrepend .. GetEngineString("TGoalStrId", gidPlaceKing).."|"
+		end
+		continentInfo = continentInfoPlace
+	else
+		if GetGameFlag(gfPlaceHog) then
+			gameFlagPrepend = gameFlagPrepend .. GetEngineString("TGoalStrId", gidPlaceHog).."|"
+			continentInfo = continentInfoPlace
+		end
+	end
 	local general_information =
-		loc("Continents: Select a continent at the beginning.").."|"..
+		gameFlagPrepend..
+		continentInfo.."|"..
 		loc("Supplies: Each continent gives you unique weapons, specials and health.").."|"..
 		loc("Weapon specials: Some weapons have special modes (see weapon description).")..
 		select_wep..
@@ -1144,9 +1163,15 @@ end
 
 function onGameInit()
 	SuddenDeathTurns= SuddenDeathTurns+1
+	-- Disable GameFlags that are incompatible with this game
+	DisableGameFlags(gfPerHogAmmo, gfSharedAmmo, gfResetWeps)
 end
 
 function onEndTurn()
+	if(TotalRounds == -1) then
+		-- Do nothing if placing hogs
+		return
+	end
 	if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
 	then
 		CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
@@ -1188,7 +1213,7 @@ function onNewTurn()
 	SetAttackState(true)
 
 	--when all hogs are "placed"
-	if(GetCurAmmoType()~=amTeleport)
+	if(TotalRounds ~= -1)
 	then
 		--will run once when the game really starts (after placing hogs and so on
 		if(CS.INIT_TEAMS[GetHogTeamName(CurrentHedgehog)] == nil)
@@ -2142,7 +2167,11 @@ function onGearAdd(gearUid)
 		CS.PARACHUTE_IS_ON=1
 	elseif(GetGearType(gearUid)==gtSwitcher)
 	then
-		CS.SWITCH_HOG_IS_ON=true
+		if not CS.GAME_STARTED then
+			DeleteGear(gearUid)
+		else
+			CS.SWITCH_HOG_IS_ON=true
+		end
 	end
 end
 

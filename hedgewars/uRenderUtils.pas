@@ -29,7 +29,10 @@ procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary sinc
 procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); 
 procedure copyToXYFromRect(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
 
-procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); 
+function GetSurfaceFrameCoordinateX(Surface: PSDL_Surface; Frame, frameWidth, frameHeight: LongInt): LongInt;
+function GetSurfaceFrameCoordinateY(Surface: PSDL_Surface; Frame, frameHeight: LongInt): LongInt;
+
+procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt);
 procedure DrawSpriteFrame2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt; frame: LongInt);
 procedure DrawLine2Surf(dest: PSDL_Surface; x0,y0,x1,y1:LongInt; r,g,b: byte);
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
@@ -78,7 +81,25 @@ begin
     WriteInRoundRect:= WriteInRoundRect(Surface, X, Y, Color, Font, s, 0);
 end;*)
 
-function IsTooDarkToRead(TextColor: LongWord): boolean; 
+function GetSurfaceFrameCoordinateX(Surface: PSDL_Surface; Frame, frameWidth, frameHeight: LongInt): LongInt;
+var nx, ny: LongInt;
+begin
+   nx:= Surface^.w div frameWidth; // number of horizontal frames
+   if nx = 0 then nx:= 1; // one frame is minimum
+   ny:= Surface^.h div frameHeight; // number of vertical frames
+   if ny = 0 then ny:= 1;
+   GetSurfaceFrameCoordinateX:= (Frame div ny) * frameWidth;
+end;
+
+function GetSurfaceFrameCoordinateY(Surface: PSDL_Surface; Frame, frameHeight: LongInt): LongInt;
+var ny: LongInt;
+begin
+   ny:= Surface^.h div frameHeight; // number of vertical frames
+   if ny = 0 then ny:= 1; // one frame is minimum
+   GetSurfaceFrameCoordinateY:= (Frame mod ny) * frameHeight;
+end;
+
+function IsTooDarkToRead(TextColor: LongWord): boolean;
 var clr: TSDL_Color;
 begin
     clr.r:= (TextColor shr 16) and $FF;
@@ -94,7 +115,7 @@ var w, h: Longword;
     clr: TSDL_Color;
 begin
     TTF_SizeUTF8(Fontz[Font].Handle, PChar(s), @w, @h);
-    if (maxLength > 0) and (w > maxLength * HDPIScaleFactor) then w := maxLength * HDPIScaleFactor;
+    if (maxLength > 0) and (w > round(maxLength * HDPIScaleFactor)) then w := round(maxLength * HDPIScaleFactor);
     finalRect.x:= X;
     finalRect.y:= Y;
     finalRect.w:= w + cFontBorder * 2 + cFontPadding * 2;
@@ -322,6 +343,29 @@ begin
 
 end;
 
+{$IFNDEF PAS2C}
+// Wraps the text s by inserting breakStr as newlines with
+// maximum column length maxCol.
+// Same as Pascal's WrapText, but without the annoying
+// behavior that text enclosed in " and ' disables word-wrapping
+function SimpleWrapText(s, breakStr: string; maxCol: integer): string;
+var
+    breakChars: set of char = [#9,' ','-'];
+begin
+    // escape the " and ' characters before calling WrapText
+    // using ASCII ESC control character
+    s:= StringReplace(s, '"', #27+'Q', [rfReplaceAll]);
+    s:= StringReplace(s, '''', #27+'q', [rfReplaceAll]);
+
+    s:= WrapText(s, #1, breakChars, maxCol);
+
+    // Undo the escapes
+    s:= StringReplace(s, #27+'Q', '"', [rfReplaceAll]);
+    s:= StringReplace(s, #27+'q', '''', [rfReplaceAll]);
+    SimpleWrapText:= s;
+end;
+{$ENDIF}
+
 function RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
 begin
     RenderStringTex:= RenderStringTexLim(s, Color, font, 0);
@@ -341,7 +385,7 @@ begin
         font:= CheckCJKFont(s, font);
         w:= 0; h:= 0; // avoid compiler hints
         TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
-        if (maxLength > 0) and (w > maxLength * HDPIScaleFactor) then w := maxLength * HDPIScaleFactor;
+        if (maxLength > 0) and (w > round(maxLength * HDPIScaleFactor)) then w := round(maxLength * HDPIScaleFactor);
 
         finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder*2 + cFontPadding*2, h + cFontBorder * 2,
                 32, RMask, GMask, BMask, AMask);
@@ -413,9 +457,6 @@ function RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFon
 var textWidth, textHeight, x, y, w, h, i, j, pos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
     finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
-    {$IFNDEF PAS2C}
-    breakChars: set of char = [#9,' ','-'];
-    {$ENDIF}
     substr: ansistring;
     edge, corner, tail: TSPrite;
 begin
@@ -444,10 +485,6 @@ begin
     edgeWidth:= SpritesData[edge].Width;
     cornerWidth:= SpritesData[corner].Width;
     cornerHeight:= SpritesData[corner].Height;
-    // This one screws up WrapText
-    //s:= 'This is the song that never ends.  ''cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they''ll just go on singing it forever just because... This is the song that never ends...';
-    // This one does not
-    //s:= 'This is the song that never ends.  cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they will go on singing it forever just because... This is the song that never ends... ';
 
     numLines:= 0;
 
@@ -464,7 +501,7 @@ begin
         w:= 0;
         i:= round(Sqrt(length(s)) * 2);
         {$IFNDEF PAS2C}
-        s:= WrapText(s, #1, breakChars, i);
+        s:= SimpleWrapText(s, #1, i);
         {$ENDIF}
         pos:= 1; line:= 0;
     // Find the longest line for the purposes of centring the text.  Font dependant.
