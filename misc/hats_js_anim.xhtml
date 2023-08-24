@@ -34,7 +34,7 @@ a {
     color: #BFBED0;
     text-decoration: none;
 }
-.hat
+.hat, .hatLocal
 {
     margin-top: 12px;
     margin-left: 20px;
@@ -42,7 +42,14 @@ a {
     height: 32px;
     width: 32px;
     color: transparent;
+}
+.hat
+{
     background-image: url("//hg.hedgewars.org/hedgewars/raw-file/tip/share/hedgewars/Data/Graphics/Hedgehog/Idle.png");
+}
+.hatLocal
+{
+    background-image: url("../share/hedgewars/Data/Graphics/Hedgehog/Idle.png");
 }
 .girder
 {
@@ -177,7 +184,11 @@ on_hats_loaded = function()
     var a = document.createElement("a");
     var g = document.createElement("div");
     g.className="girder";
-    a.className="hat";
+    if (IS_LOCAL) {
+        a.className="hatLocal";
+    } else {
+        a.className="hat";
+    }
     a.appendChild(document.createElement("div"));
     a.lastChild.appendChild(document.createTextNode(""));
 
@@ -211,7 +222,6 @@ on_hats_loaded = function()
         img.id = "__mask_"+masks[i];
 
         h.lastChild.style.backgroundImage = 'url("'+h.href+'")';
-        h.lastChild.lastChild.data = masks[i];
         h.title = masks[i];
         h.idle = Math.floor(Math.random()*19);
         if (j%17 === 16 || i === masks.length-1)
@@ -241,6 +251,7 @@ on_hats_loaded = function()
             if (i < missingMasks.length -1)
                 pm.appendChild(document.createTextNode(", "));
         }
+        document.body.appendChild(document.createElement("br"));
         document.body.appendChild(pm);
     }
 
@@ -280,7 +291,7 @@ on_hats_loaded = function()
     form.appendChild(chk);
     label = document.createElement("label");
     label.htmlFor = "anim";
-    label.appendChild(document.createTextNode("Animate hats"));
+    label.appendChild(document.createTextNode(" Animate hats"));
     form.appendChild(label);
 
     form.appendChild(document.createElement("br"));
@@ -294,12 +305,12 @@ on_hats_loaded = function()
     form.appendChild(chk);
     label = document.createElement("label");
     label.htmlFor = "hide_girders";
-    label.appendChild(document.createTextNode("Show girders"));
+    label.appendChild(document.createTextNode(" Show girders"));
     form.appendChild(label);
 
     document.body.appendChild(form);
 
-
+    switchTheme();
 }
 
 function animateHogs()
@@ -307,7 +318,7 @@ function animateHogs()
     var a = document.getElementsByTagName("a");
     for (var i=0;i<a.length;i++)
     {
-        if (a[i].className !== "hat")
+        if (a[i].className !== "hat" && a[i].className !== "hatLocal")
             continue;
         // Cycle through hedgehog and hat animation frames
 
@@ -371,9 +382,10 @@ function switchTheme()
         prefix = "//hg.hedgewars.org/hedgewars/raw-file/tip";
     else
         prefix = "..";
-    document.body.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Themes/'+this.value+'/Sky.png")';
-    if (themes[this.value])
-        girder.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Themes/'+this.value+'/Girder.png")';
+    var theme = this.value || "Nature";
+    document.body.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Themes/'+theme+'/Sky.png")';
+    if (themes[theme])
+        girder.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Themes/'+theme+'/Girder.png")';
     else
         girder.style.backgroundImage='url("'+prefix+'/share/hedgewars/Data/Graphics/Girder.png")';
 }
