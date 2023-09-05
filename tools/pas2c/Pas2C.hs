@@ -715,6 +715,9 @@ initExpr2C' (BuiltInFunction "succ" [e]) =
     liftM (parens . (<> text " + 1")) $ initExpr2C' e
 initExpr2C' (BuiltInFunction "pred" [e]) = 
     liftM (parens . (<> text " - 1")) $ initExpr2C' e
+initExpr2C' (BuiltInFunction "round" [e]) = do
+    e <- initExpr2C' e
+    return $ text "(int)" <> parens e
 initExpr2C' b@(BuiltInFunction _ _) = error $ show b
 initExpr2C' (InitTypeCast t' i) = do
     e <- initExpr2C i

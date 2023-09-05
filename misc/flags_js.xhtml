@@ -56,8 +56,8 @@ a div
     <script type="application/ecmascript">
 //<![CDATA[
 "use strict";
-var IS_LOCAL=false; // set to true to fetch flags locally. Useful for testing.
-var flags;
+let IS_LOCAL=false; // set to true to fetch flags locally. Useful for testing.
+let flags;
 if (IS_LOCAL) {
 /* JavaScript version of a sprite sheet - this could be pretty trivially done in pure HTML, but maintenance
 would be easier with a server-side portion. list of sprites could be gotten from server, but would require XSS whitelisting */
@@ -98,11 +98,11 @@ else
 flags = [];
 }
 
-var on_xml_loaded = function(ex)
+let on_xml_loaded = function(ex)
 {
-    var resp = this.responseText;
-    var r = />([^<]*).png</g;
-    var x;
+    let resp = this.responseText;
+    let r = />([^<]*).png</g;
+    let x;
     while(x = r.exec(resp))
     {
         flags.push(x[1]);
@@ -110,21 +110,21 @@ var on_xml_loaded = function(ex)
     on_flags_loaded();
 }
 
-var on_xml_error = function()
+let on_xml_error = function()
 {
-    var p = document.createElement("p");
+    let p = document.createElement("p");
     p.appendChild(document.createTextNode("ERROR: List of flags could not be fetched from the server!"));
     document.body.appendChild(p);
 }
 
-var on_flags_loaded;
+let on_flags_loaded;
 
 window.onload = function()
 {
     // Load list of flags
     if (!IS_LOCAL) {
         // Request list of flags from repository URL
-        var xml=new XMLHttpRequest();
+        let xml=new XMLHttpRequest();
         xml.open("GET", "//hg.hedgewars.org/hedgewars/file/tip/share/hedgewars/Data/Graphics/Flags/");
         xml.addEventListener("error", on_xml_error);
         xml.onload = on_xml_loaded;
@@ -139,41 +139,45 @@ window.onload = function()
 on_flags_loaded = function()
 {
     // Sort flags
-    var flag_compare = function(a, b)
+    let flag_compare = function(a, b)
     {
         if (a === "hedgewars")
-            return false;
+            return -1;
         else if (b === "hedgewars")
-            return true;
+            return 1;
         else if (a.startsWith("cm_") && !b.startsWith("cm_"))
-            return true;
+            return 1;
         else if (!a.startsWith("cm_") && b.startsWith("cm_"))
-            return false;
+            return -1;
+        else if (a > b)
+            return 1;
+        else if (a < b)
+            return -1;
         else
-            return a > b;
+            return 0;
     }
 
     flags.sort(flag_compare);
 
     // Render flags
-    var img;
-    var j = 0;
-    var toDelete = [];
-    var a = document.createElement("a");
+    let img;
+    let j = 0;
+    let toDelete = [];
+    let a = document.createElement("a");
     a.className="flag";
     a.appendChild(document.createElement("div"));
     a.lastChild.appendChild(document.createTextNode(""));
 
-    var flagState = 0; // 0 = hedgewars, 1 = country flag, 2 = community flag ("cm_")
+    let flagState = 0; // 0 = hedgewars, 1 = country flag, 2 = community flag ("cm_")
 
-    for (var i=0;i<flags.length;i++)
+    for (let i=0;i<flags.length;i++)
     {
-        var flag = flags[i];
+        let flag = flags[i];
         // Skip CPU flags
         if (flag === "cpu" || flag === "cpu_plain")
             continue;
 
-        var oldFlagState = flagState;
+        let oldFlagState = flagState;
         if (flagState === 0 && flag !== "hedgewars")
             flagState++;
         else if (flagState === 1 && flag.startsWith("cm_"))
@@ -186,7 +190,7 @@ on_flags_loaded = function()
             document.body.appendChild(document.createElement("br"));
         }
 
-        var h = document.body.appendChild(a.cloneNode(true));
+        let h = document.body.appendChild(a.cloneNode(true));
         if (IS_LOCAL)
             h.href = "../share/hedgewars/Data/Graphics/Flags/"+flag+".png";
         else
@@ -194,7 +198,7 @@ on_flags_loaded = function()
 
         img = new Image();
         img.onload = function() {
-            var name = this.id.substr(7);
+            let name = this.id.substr(7);
             if (this.height === 32) {
                 staticMasks[name] = true;
             }
@@ -204,7 +208,6 @@ on_flags_loaded = function()
         img.id = "__flag_"+flag;
 
         h.lastChild.style.backgroundImage = 'url("'+h.href+'")';
-        h.lastChild.lastChild.data = flag;
         h.title = flag;
 
         if (j%17 === 16 || i === flags.length-1)
