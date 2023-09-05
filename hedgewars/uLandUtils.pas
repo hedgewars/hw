@@ -2,7 +2,7 @@ unit uLandUtils;
 interface
 uses SDLh;
 
-procedure GenerateTemplatedLand(featureSize: Longword; seed, templateType, dataPath: shortstring);
+procedure GenerateTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
 procedure ResizeLand(width, height: LongWord);
 procedure DisposeLand();
 procedure InitWorldEdges();
@@ -75,12 +75,12 @@ begin
     LandPixelRow:= land_pixel_row(gameField, row)
 end;
 
-procedure GenerateTemplatedLand(featureSize: Longword; seed, templateType, dataPath: shortstring);
+procedure GenerateTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
 begin
     seed[byte(seed[0]) + 1]:= #0;
     templateType[byte(templateType[0]) + 1]:= #0;
 
-    gameField:= generate_templated_game_field(featureSize, @seed[1], @templateType[1], Str2PChar(dataPath));
+    gameField:= generate_templated_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
     get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
 
     MaxHedgehogs:= 32;
