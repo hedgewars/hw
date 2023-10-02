@@ -1,5 +1,6 @@
 use anyhow::{bail, Result};
 use argparse::{ArgumentParser, Store};
+use base64::{engine::general_purpose, Engine};
 use hedgewars_network_protocol::{
     messages::HwProtocolMessage as ClientMessage, messages::HwServerMessage::*, parser,
 };
@@ -12,8 +13,8 @@ use tokio::{io, io::AsyncWriteExt, net::TcpStream, process::Command, sync::mpsc}
 async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result<Vec<String>> {
     let mut replay = tempfile::NamedTempFile::new()?;
 
-    for line in buffer.into_iter() {
-        replay.write(&base64::decode(line)?)?;
+    for line in buffer.iter() {
+        replay.write_all(&general_purpose::STANDARD.decode(line)?)?;
     }
 
     let temp_file_path = replay.path();
@@ -43,7 +44,7 @@ async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result
 
     let mut engine_lines = output
         .stderr
-        .split(|b| *b == '\n' as u8)
+        .split(|b| *b == b'\n')
         .skip_while(|l| *l != b"WINNERS" && *l != b"DRAW");
 
     // debug!("Engine lines: {:?}", &engine_lines);
@@ -83,7 +84,7 @@ async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result
 
     // println!("Engine lines: {:?}", &result);
 
-    if result.len() > 0 {
+    if !result.is_empty() {
         Ok(result)
     } else {
         bail!("no data from engine")
@@ -133,27 +134,27 @@ async fn connect_and_run(
                     debug!("Check result: [{:?}]", result);
 
                     stream
-                        .write(
+                        .write_all(
                             ClientMessage::CheckedOk(result)
                                 .to_raw_protocol()
                                 .as_bytes(),
                         )
                         .await?;
                     stream
-                        .write(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
+                        .write_all(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
                         .await?;
                 }
                 Err(e) => {
                     info!("Check failed: {:?}", e);
                     stream
-                        .write(
+                        .write_all(
                             ClientMessage::CheckedFail("error".to_owned())
                                 .to_raw_protocol()
                                 .as_bytes(),
                         )
                         .await?;
                     stream
-                        .write(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
+                        .write_all(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
                         .await?;
                 }
             }
@@ -183,7 +184,7 @@ async fn connect_and_run(
                 Connected(_, _) => {
                     info!("Connected");
                     stream
-                        .write(
+                        .write_all(
                             ClientMessage::Checker(
                                 protocol_number,
                                 username.to_owned(),
@@ -196,12 +197,12 @@ async fn connect_and_run(
                 }
                 Ping => {
                     stream
-                        .write(ClientMessage::Pong.to_raw_protocol().as_bytes())
+                        .write_all(ClientMessage::Pong.to_raw_protocol().as_bytes())
                         .await?;
                 }
                 LogonPassed => {
                     stream
-                        .write(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
+                        .write_all(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
                         .await?;
                 }
                 Replay(lines) => {
@@ -216,12 +217,12 @@ async fn connect_and_run(
                     info!("Chat [{}]: {}", nick, msg);
                 }
                 RoomAdd(fields) => {
-                    let l = fields.into_iter();
-                    info!("Room added: {}", l.skip(1).next().unwrap());
+                    let mut l = fields.into_iter();
+                    info!("Room added: {}", l.nth(1).unwrap());
                 }
                 RoomUpdated(name, fields) => {
-                    let l = fields.into_iter();
-                    let new_name = l.skip(1).next().unwrap();
+                    let mut l = fields.into_iter();
+                    let new_name = l.nth(1).unwrap();
 
                     if name != new_name {
                         info!("Room renamed: {}", new_name);
@@ -245,7 +246,7 @@ async fn connect_and_run(
 async fn get_protocol_number(executable: &str) -> Result<u16> {
     let output = Command::new(executable).arg("--protocol").output().await?;
 
-    Ok(u16::from_str(&String::from_utf8(output.stdout).unwrap().trim()).unwrap_or(55))
+    Ok(u16::from_str(String::from_utf8(output.stdout).unwrap().trim()).unwrap_or(55))
 }
 
 #[tokio::main]
@@ -279,7 +280,7 @@ async fn main() -> Result<()> {
     info!("Executable: {}", exe);
     info!("Data dir: {}", prefix);
 
-    let protocol_number = get_protocol_number(&exe.as_str()).await.unwrap_or_default();
+    let protocol_number = get_protocol_number(exe.as_str()).await.unwrap_or_default();
 
     info!("Using protocol number {}", protocol_number);
 
@@ -288,8 +289,8 @@ async fn main() -> Result<()> {
 
     let (network_result, checker_result) = tokio::join!(
         connect_and_run(
-            &username,
-            &password,
+            username,
+            password,
             protocol_number,
             replay_sender,
             results_receiver
