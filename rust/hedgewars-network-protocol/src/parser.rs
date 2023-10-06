@@ -127,7 +127,7 @@ fn yes_no_line(input: &[u8]) -> HwResult<bool> {
     ))(input)
 }
 
-fn opt_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
+fn opt_arg(input: &[u8]) -> HwResult<Option<String>> {
     alt((
         map(peek(end_of_message), |_| None),
         map(preceded(tag("\n"), a_line), Some),
@@ -138,7 +138,7 @@ fn spaces(input: &[u8]) -> HwResult<&[u8]> {
     preceded(tag(" "), take_while(|c| c == b' '))(input)
 }
 
-fn opt_space_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
+fn opt_space_arg(input: &[u8]) -> HwResult<Option<String>> {
     alt((
         map(peek(end_of_message), |_| None),
         map(preceded(spaces, a_line), Some),
@@ -184,10 +184,10 @@ fn voting(input: &[u8]) -> HwResult<VoteType> {
 }
 
 fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
-    fn message<'a>(
-        name: &'a str,
+    fn message(
+        name: &str,
         msg: HwProtocolMessage,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage> {
+    ) -> impl Fn(&[u8]) -> HwResult<HwProtocolMessage> {
         move |i| map(tag(name), |_| msg.clone())(i)
     }
 
@@ -207,11 +207,11 @@ fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
 }
 
 fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
-    fn message<'a, T, F, G>(
-        name: &'a str,
+    fn message<T, F, G>(
+        name: &str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwProtocolMessage>
+    ) -> impl FnMut(&[u8]) -> HwResult<HwProtocolMessage>
     where
         F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> HwProtocolMessage,
@@ -239,10 +239,10 @@ fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
 }
 
 fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
-    fn cmd_no_arg<'a>(
-        name: &'a str,
+    fn cmd_no_arg(
+        name: &str,
         msg: HwProtocolMessage,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage> {
+    ) -> impl Fn(&[u8]) -> HwResult<HwProtocolMessage> {
         move |i| map(tag_no_case(name), |_| msg.clone())(i)
     }
 
@@ -319,11 +319,11 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
 }
 
 fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
-    fn cfg_single_arg<'a, T, F, G>(
-        name: &'a str,
+    fn cfg_single_arg<T, F, G>(
+        name: &str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, GameCfg>
+    ) -> impl FnMut(&[u8]) -> HwResult<GameCfg>
     where
         F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> GameCfg,
@@ -521,11 +521,11 @@ pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
 pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
     use HwServerMessage::*;
 
-    fn single_arg_message<'a, T, F, G>(
-        name: &'a str,
+    fn single_arg_message<T, F, G>(
+        name: &str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    ) -> impl FnMut(&[u8]) -> HwResult<HwServerMessage>
     where
         F: Fn(&[u8]) -> HwResult<T>,
         G: Fn(T) -> HwServerMessage,
@@ -536,10 +536,10 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
         )
     }
 
-    fn list_message<'a, G>(
-        name: &'a str,
+    fn list_message<G>(
+        name: &str,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    ) -> impl FnMut(&[u8]) -> HwResult<HwServerMessage>
     where
         G: Fn(Vec<String>) -> HwServerMessage,
     {
@@ -555,10 +555,10 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
         )
     }
 
-    fn string_and_list_message<'a, G>(
-        name: &'a str,
+    fn string_and_list_message<G>(
+        name: &str,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    ) -> impl FnMut(&[u8]) -> HwResult<HwServerMessage>
     where
         G: Fn(String, Vec<String>) -> HwServerMessage,
     {
@@ -577,10 +577,10 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
         )
     }
 
-    fn message<'a>(
-        name: &'a str,
+    fn message(
+        name: &str,
         msg: HwServerMessage,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwServerMessage> {
+    ) -> impl Fn(&[u8]) -> HwResult<HwServerMessage> {
         move |i| map(tag(name), |_| msg.clone())(i)
     }
 

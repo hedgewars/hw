@@ -1,126 +1,169 @@
+use std::str;
+
+use nom::branch::alt;
+use nom::bytes::streaming::*;
+use nom::combinator::*;
+use nom::error::{ErrorKind, ParseError};
+use nom::multi::*;
+use nom::number::streaming::*;
+use nom::sequence::{pair, preceded, terminated, tuple};
+use nom::{Err, IResult, Parser};
+
 use crate::messages::{
     ConfigEngineMessage::*, EngineMessage::*, KeystrokeAction::*, SyncedEngineMessage::*,
     UnorderedEngineMessage::*, *,
 };
-use nom::{Err::Error, *};
-use std::str;
 
-macro_rules! eof_slice (
-  ($i:expr,) => (
-    {
-      if ($i).input_len() == 0 {
-        Ok(($i, $i))
-      } else {
-        Err(Error(error_position!($i, ErrorKind::Eof::<u32>)))
-      }
+fn eof_slice<I>(i: I) -> IResult<I, I>
+where
+    I: nom::InputLength + Clone,
+{
+    if i.input_len() == 0 {
+        Ok((i.clone(), i))
+    } else {
+        Err(Err::Error(nom::error::Error::new(i, ErrorKind::Eof)))
     }
-  );
-);
+}
+fn unrecognized_message(input: &[u8]) -> IResult<&[u8], EngineMessage> {
+    map(rest, |i: &[u8]| Unknown(i.to_owned()))(input)
+}
 
-named!(unrecognized_message<&[u8], EngineMessage>,
-    do_parse!(rest >> (Unknown))
-);
+fn string_tail(input: &[u8]) -> IResult<&[u8], String> {
+    map_res(rest, str::from_utf8)(input).map(|(i, s)| (i, s.to_owned()))
+}
 
-named!(string_tail<&[u8], String>, map!(map_res!(rest, str::from_utf8), String::from));
+fn length_without_timestamp(input: &[u8]) -> IResult<&[u8], usize> {
+    map_opt(rest_len, |l| if l > 2 { Some(l - 2) } else { None })(input)
+}
 
-named!(length_without_timestamp<&[u8], usize>,
-    map_opt!(rest_len, |l| if l > 2 { Some(l - 2) } else { None } )
-);
+fn synced_message(input: &[u8]) -> IResult<&[u8], SyncedEngineMessage> {
+    alt((
+        alt((
+            map(tag(b"L"), |_| Left(Press)),
+            map(tag(b"l"), |_| Left(Release)),
+            map(tag(b"R"), |_| Right(Press)),
+            map(tag(b"r"), |_| Right(Release)),
+            map(tag(b"U"), |_| Up(Press)),
+            map(tag(b"u"), |_| Up(Release)),
+            map(tag(b"D"), |_| Down(Press)),
+            map(tag(b"d"), |_| Down(Release)),
+            map(tag(b"Z"), |_| Precise(Press)),
+            map(tag(b"z"), |_| Precise(Release)),
+            map(tag(b"A"), |_| Attack(Press)),
+            map(tag(b"a"), |_| Attack(Release)),
+            map(tag(b"N"), |_| NextTurn),
+            map(tag(b"j"), |_| LongJump),
+            map(tag(b"J"), |_| HighJump),
+            map(tag(b"S"), |_| Switch),
+        )),
+        alt((
+            map(tag(b","), |_| Skip),
+            map(tag(b"1"), |_| Timer(1)),
+            map(tag(b"2"), |_| Timer(2)),
+            map(tag(b"3"), |_| Timer(3)),
+            map(tag(b"4"), |_| Timer(4)),
+            map(tag(b"5"), |_| Timer(5)),
+            map(tuple((tag(b"p"), be_i24, be_i24)), |(_, x, y)| Put(x, y)),
+            map(tuple((tag(b"P"), be_i24, be_i24)), |(_, x, y)| {
+                CursorMove(x, y)
+            }),
+            map(preceded(tag(b"f"), string_tail), TeamControlLost),
+            map(preceded(tag(b"g"), string_tail), TeamControlGained),
+            map(preceded(tag(b"t"), be_u8), Taunt),
+            map(preceded(tag(b"w"), be_u8), SetWeapon),
+            map(preceded(tag(b"~"), be_u8), Slot),
+            map(tag(b"+"), |_| Heartbeat),
+        )),
+    ))(input)
+}
 
-named!(synced_message<&[u8], SyncedEngineMessage>, alt!(
-        do_parse!(tag!("L") >> (Left(Press)))
-      | do_parse!(tag!("l") >> ( Left(Release) ))
-      | do_parse!(tag!("R") >> ( Right(Press) ))
-      | do_parse!(tag!("r") >> ( Right(Release) ))
-      | do_parse!(tag!("U") >> ( Up(Press) ))
-      | do_parse!(tag!("u") >> ( Up(Release) ))
-      | do_parse!(tag!("D") >> ( Down(Press) ))
-      | do_parse!(tag!("d") >> ( Down(Release) ))
-      | do_parse!(tag!("Z") >> ( Precise(Press) ))
-      | do_parse!(tag!("z") >> ( Precise(Release) ))
-      | do_parse!(tag!("A") >> ( Attack(Press) ))
-      | do_parse!(tag!("a") >> ( Attack(Release) ))
-      | do_parse!(tag!("N") >> ( NextTurn ))
-      | do_parse!(tag!("j") >> ( LongJump ))
-      | do_parse!(tag!("J") >> ( HighJump ))
-      | do_parse!(tag!("S") >> ( Switch ))
-      | do_parse!(tag!(",") >> ( Skip ))
-      | do_parse!(tag!("1") >> ( Timer(1) ))
-      | do_parse!(tag!("2") >> ( Timer(2) ))
-      | do_parse!(tag!("3") >> ( Timer(3) ))
-      | do_parse!(tag!("4") >> ( Timer(4) ))
-      | do_parse!(tag!("5") >> ( Timer(5) ))
-      | do_parse!(tag!("p") >> x: be_i24 >> y: be_i24 >> ( Put(x, y) ))
-      | do_parse!(tag!("P") >> x: be_i24 >> y: be_i24 >> ( CursorMove(x, y) ))
-      | do_parse!(tag!("f") >> s: string_tail >> ( SyncedEngineMessage::TeamControlLost(s) ))
-      | do_parse!(tag!("g") >> s: string_tail >> ( SyncedEngineMessage::TeamControlGained(s) ))
-      | do_parse!(tag!("t") >> t: be_u8 >> ( Taunt(t) ))
-      | do_parse!(tag!("w") >> w: be_u8 >> ( SetWeapon(w) ))
-      | do_parse!(tag!("~") >> s: be_u8 >> ( Slot(s) ))
-      | do_parse!(tag!("+") >> ( Heartbeat ))
-));
+fn unsynced_message(input: &[u8]) -> IResult<&[u8], UnsyncedEngineMessage> {
+    alt((
+        map(
+            preceded(tag(b"F"), string_tail),
+            UnsyncedEngineMessage::TeamControlLost,
+        ),
+        map(
+            preceded(tag(b"G"), string_tail),
+            UnsyncedEngineMessage::TeamControlGained,
+        ),
+        map(
+            preceded(tag(b"h"), string_tail),
+            UnsyncedEngineMessage::HogSay,
+        ),
+        map(
+            preceded(tag(b"s"), string_tail),
+            UnsyncedEngineMessage::ChatMessage,
+        ),
+        map(
+            preceded(tag(b"b"), string_tail),
+            UnsyncedEngineMessage::TeamMessage,
+        ),
+    ))(input)
+}
 
-named!(unsynced_message<&[u8], UnsyncedEngineMessage>, alt!(
-        do_parse!(tag!("F") >> s: string_tail >> ( UnsyncedEngineMessage::TeamControlLost(s) ))
-      | do_parse!(tag!("G") >> s: string_tail >> ( UnsyncedEngineMessage::TeamControlGained(s) ))
-      | do_parse!(tag!("h") >> s: string_tail >> ( UnsyncedEngineMessage::HogSay(s) ))
-      | do_parse!(tag!("s") >> s: string_tail >> ( UnsyncedEngineMessage::ChatMessage(s)) )
-      | do_parse!(tag!("b") >> s: string_tail >> ( UnsyncedEngineMessage::TeamMessage(s)) ) // TODO: wtf is the format
-));
+fn unordered_message(input: &[u8]) -> IResult<&[u8], UnorderedEngineMessage> {
+    alt((
+        map(tag(b"?"), |_| Ping),
+        map(tag(b"!"), |_| Pong),
+        map(preceded(tag(b"E"), string_tail), Error),
+        map(preceded(tag(b"W"), string_tail), Warning),
+        map(preceded(tag(b"M"), string_tail), GameSetupChecksum),
+        map(tag(b"o"), |_| StopSyncing),
+        map(tag(b"I"), |_| PauseToggled),
+    ))(input)
+}
 
-named!(unordered_message<&[u8], UnorderedEngineMessage>, alt!(
-      do_parse!(tag!("?") >> ( Ping ))
-    | do_parse!(tag!("!") >> ( Pong ))
-    | do_parse!(tag!("E") >> s: string_tail >> ( UnorderedEngineMessage::Error(s)) )
-    | do_parse!(tag!("W") >> s: string_tail >> ( Warning(s)) )
-    | do_parse!(tag!("M") >> s: string_tail >> ( GameSetupChecksum(s)) )
-    | do_parse!(tag!("o") >> ( StopSyncing ))
-    | do_parse!(tag!("I") >> ( PauseToggled ))
-));
+fn config_message(input: &[u8]) -> IResult<&[u8], ConfigEngineMessage> {
+    alt((
+        map(tag(b"C"), |_| ConfigRequest),
+        map(preceded(tag(b"eseed "), string_tail), SetSeed),
+        map(preceded(tag(b"e$feature_size "), string_tail), |s| {
+            SetFeatureSize(s.parse().unwrap_or_default())
+        }),
+    ))(input)
+}
 
-named!(config_message<&[u8], ConfigEngineMessage>, alt!(
-    do_parse!(tag!("C") >> (ConfigRequest))
-    | do_parse!(tag!("eseed ") >> s: string_tail >> ( SetSeed(s)) )
-    | do_parse!(tag!("e$feature_size ") >> s: string_tail >> ( SetFeatureSize(s.parse::<u8>().unwrap())) )
-));
+fn timestamped_message(input: &[u8]) -> IResult<&[u8], (SyncedEngineMessage, u16)> {
+    terminated(pair(synced_message, be_u16), eof_slice)(input)
+}
+fn unwrapped_message(input: &[u8]) -> IResult<&[u8], EngineMessage> {
+    alt((
+        map(timestamped_message, |(m, t)| {
+            EngineMessage::Synced(m, t as u32)
+        }),
+        map(tag(b"#"), |_| Synced(TimeWrap, 65535u32)),
+        map(unordered_message, Unordered),
+        map(unsynced_message, Unsynced),
+        map(config_message, Config),
+        unrecognized_message,
+    ))(input)
+}
 
-named!(timestamped_message<&[u8], (SyncedEngineMessage, u16)>,
-    do_parse!(msg: length_value!(length_without_timestamp, terminated!(synced_message, eof_slice!()))
-        >> timestamp: be_u16
-        >> ((msg, timestamp))
-    )
-);
+fn length_specifier(input: &[u8]) -> IResult<&[u8], u16> {
+    alt((
+        verify(map(take(1usize), |a: &[u8]| a[0] as u16), |&l| l < 64),
+        map(take(2usize), |a: &[u8]| {
+            (a[0] as u16 - 64) * 256 + a[1] as u16 + 64
+        }),
+    ))(input)
+}
 
-named!(unwrapped_message<&[u8], EngineMessage>,
-    alt!(
-        map!(timestamped_message, |(m, t)| Synced(m, t as u32))
-        | do_parse!(tag!("#") >> (Synced(TimeWrap, 65535)))
-        | map!(unordered_message, |m| Unordered(m))
-        | map!(unsynced_message, |m| Unsynced(m))
-        | map!(config_message, |m| Config(m))
-        | unrecognized_message
-));
+fn empty_message(input: &[u8]) -> IResult<&[u8], EngineMessage> {
+    map(tag(b"\0"), |_| Empty)(input)
+}
 
-named!(length_specifier<&[u8], u16>, alt!(
-    verify!(map!(take!(1), |a : &[u8]| a[0] as u16), |l| l < 64)
-    | map!(take!(2), |a| (a[0] as u16 - 64) * 256 + a[1] as u16 + 64)
-    )
-);
+fn non_empty_message(input: &[u8]) -> IResult<&[u8], EngineMessage> {
+    map_parser(length_data(length_specifier), unwrapped_message)(input)
+}
 
-named!(empty_message<&[u8], EngineMessage>,
-    do_parse!(tag!("\0") >> (Empty))
-);
+fn message(input: &[u8]) -> IResult<&[u8], EngineMessage> {
+    alt((empty_message, non_empty_message))(input)
+}
 
-named!(non_empty_message<&[u8], EngineMessage>,
-    length_value!(length_specifier, terminated!(unwrapped_message, eof_slice!())));
-
-named!(message<&[u8], EngineMessage>, alt!(
-      empty_message
-    | non_empty_message
-    )
-);
-
-named!(pub extract_messages<&[u8], Vec<EngineMessage> >, many0!(complete!(message)));
+pub fn extract_messages(input: &[u8]) -> IResult<&[u8], Vec<EngineMessage>> {
+    many0(complete(message))(input)
+}
 
 pub fn extract_message(buf: &[u8]) -> Option<(usize, EngineMessage)> {
     let parse_result = message(buf);
@@ -178,10 +221,13 @@ mod tests {
     #[test]
     fn parse_incorrect_messages() {
         assert_eq!(message(b"\x00"), Ok((&b""[..], Empty)));
-        assert_eq!(message(b"\x01\x00"), Ok((&b""[..], Unknown)));
+        assert_eq!(message(b"\x01\x00"), Ok((&b""[..], Unknown(vec![0]))));
 
         // garbage after correct message
-        assert_eq!(message(b"\x04La\x01\x02"), Ok((&b""[..], Unknown)));
+        assert_eq!(
+            message(b"\x04La\x01\x02"),
+            Ok((&b""[..], Unknown(vec![76, 97, 1, 2])))
+        );
     }
 
     #[test]
@@ -194,6 +240,9 @@ mod tests {
         assert_eq!(string_tail(b"abc"), Ok((&b""[..], String::from("abc"))));
 
         assert_eq!(extract_message(b"\x02#"), None);
+
+        assert_eq!(synced_message(b"L"), Ok((&b""[..], Left(Press))));
+
         assert_eq!(
             extract_message(b"\x01#"),
             Some((2, Synced(TimeWrap, 65535)))
