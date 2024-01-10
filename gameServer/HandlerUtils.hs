@@ -18,6 +18,7 @@
 
 module HandlerUtils where
 
+import Control.Monad
 import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as B
 import Data.List
