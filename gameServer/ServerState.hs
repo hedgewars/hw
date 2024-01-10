@@ -30,6 +30,7 @@ module ServerState
     io
     ) where
 
+import Control.Monad
 import Control.Monad.State.Strict
 import Data.Set as Set(Set)
 import Data.Word

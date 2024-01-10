@@ -19,6 +19,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module HWProtoCore where
 
+import Control.Monad
 import Control.Monad.Reader
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B

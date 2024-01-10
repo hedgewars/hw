@@ -20,6 +20,7 @@
 module ClientIO where
 
 import qualified Control.Exception as Exception
+import Control.Monad
 import Control.Monad.State
 import Control.Concurrent.Chan
 import Control.Concurrent

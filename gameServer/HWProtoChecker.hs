@@ -20,6 +20,7 @@
 module HWProtoChecker where
 
 import Data.Maybe
+import Control.Monad
 import Control.Monad.Reader
 --------------------------------------
 import CoreTypes
