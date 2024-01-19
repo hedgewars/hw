@@ -109,6 +109,7 @@ include(${CMAKE_MODULE_PATH}/utils.cmake)
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
 
+add_subdirectory(tools/corrosion)
 
 #when build type is not specified, assume Debug/Release according to build version information
 if(CMAKE_BUILD_TYPE)

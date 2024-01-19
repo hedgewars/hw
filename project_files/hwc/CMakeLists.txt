@@ -6,6 +6,8 @@ find_package(SDL2_net 2 REQUIRED)
 find_package(SDL2_image 2 REQUIRED)
 find_package(SDL2_ttf 2 REQUIRED)
 
+corrosion_import_crate(MANIFEST_PATH "${CMAKE_SOURCE_DIR}/rust/lib-hwengine-future/Cargo.toml")
+
 #compile our rtl implementation
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/rtl)
 include_directories(${PHYSFS_INCLUDE_DIR})
@@ -119,6 +121,7 @@ target_link_libraries(hwengine  fpcrtl
                                 physfs
                                 physlayer
                                 m
+                                hwengine_future
                                 ${HW_LINK_LIBS}
                                 #TODO: add other libraries
                             )

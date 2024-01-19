@@ -15,4 +15,4 @@ lfprng = { path = "../lfprng" }
 
 [lib]
 name = "hwengine_future"
-crate-type = ["dylib"]
+crate-type = ["cdylib"]

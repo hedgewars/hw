@@ -14,7 +14,7 @@ include_directories(${Qt5Core_PRIVATE_INCLUDE_DIRS})
 include(CheckLibraryExists)
 
 find_package(SDL2 REQUIRED CONFIG)
-find_package(SDL2_mixer REQUIRED CONFIG) #audio in SDLInteraction
+find_package(SDL2_mixer REQUIRED) #audio in SDLInteraction
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 
