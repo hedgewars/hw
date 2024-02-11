@@ -12,6 +12,7 @@ use crate::server::replaystorage::ReplayStorage;
 
 use bitflags::*;
 use log::*;
+use rand::{self, seq::SliceRandom, thread_rng, Rng};
 use slab::Slab;
 use std::{borrow::BorrowMut, cmp::min, collections::HashSet, iter, mem::replace};
 
@@ -109,9 +110,18 @@ pub enum StartVoteError {
 }
 
 #[derive(Debug)]
+pub enum VoteEffect {
+    Kicked(ClientId, LeaveRoomResult),
+    Map(String),
+    Pause,
+    NewSeed(GameCfg),
+    HedgehogsPerTeam(u8, Vec<String>),
+}
+
+#[derive(Debug)]
 pub enum VoteResult {
     Submitted,
-    Succeeded(VoteType),
+    Succeeded(VoteEffect),
     Failed,
 }
 
@@ -609,8 +619,8 @@ impl<'a> HwRoomControl<'a> {
         HwRoomControl::new(self.server, client_id).filter(|c| c.room_id == room_id)
     }
 
-    pub fn leave_room(&mut self) -> LeaveRoomResult {
-        let (client, room) = self.get_mut();
+    fn remove_from_room(&mut self, client_id: ClientId) -> LeaveRoomResult {
+        let Some((client, room)) = self.server.client_and_room_mut(client_id);
         room.players_number -= 1;
         client.room_id = None;
 
@@ -689,6 +699,10 @@ impl<'a> HwRoomControl<'a> {
         }
     }
 
+    pub fn leave_room(&mut self) -> LeaveRoomResult {
+        self.remove_from_room(self.client_id)
+    }
+
     pub fn change_master(
         &mut self,
         new_master_nick: String,
@@ -743,6 +757,40 @@ impl<'a> HwRoomControl<'a> {
         }
     }
 
+    fn apply_vote(&mut self, kind: VoteType) -> Option<VoteEffect> {
+        match kind {
+            VoteType::Kick(nick) => {
+                if let Some(kicked_id) = self
+                    .server
+                    .find_client(&nick)
+                    .filter(|c| c.room_id == Some(self.room_id))
+                    .map(|c| c.id)
+                {
+                    let leave_result = self.remove_from_room(kicked_id);
+                    Some(VoteEffect::Kicked(kicked_id, leave_result))
+                } else {
+                    None
+                }
+            }
+            VoteType::Map(None) => None,
+            VoteType::Map(Some(name)) => self
+                .load_config(&name)
+                .map(|s| VoteEffect::Map(s.to_string())),
+            VoteType::Pause => Some(VoteEffect::Pause).filter(|_| self.toggle_pause()),
+            VoteType::NewSeed => {
+                let seed = thread_rng().gen_range(0..1_000_000_000).to_string();
+                let cfg = GameCfg::Seed(seed);
+                todo!("Protocol backwards compatibility");
+                self.room_mut().set_config(cfg.clone());
+                Some(VoteEffect::NewSeed(cfg))
+            }
+            VoteType::HedgehogsPerTeam(number) => {
+                let nicks = self.set_hedgehogs_number(number);
+                Some(VoteEffect::HedgehogsPerTeam(number, nicks))
+            }
+        }
+    }
+
     pub fn vote(&mut self, vote: Vote) -> Result<VoteResult, VoteError> {
         use self::{VoteError::*, VoteResult::*};
         let client_id = self.client_id;
@@ -753,9 +801,14 @@ impl<'a> HwRoomControl<'a> {
                 let pro = i.clone().filter(|(_, v)| *v).count();
                 let contra = i.filter(|(_, v)| !*v).count();
                 let success_quota = voting.voters.len() / 2 + 1;
+                
                 if vote.is_forced && vote.is_pro || pro >= success_quota {
                     let voting = self.room_mut().voting.take().unwrap();
-                    Ok(Succeeded(voting.kind))
+                    if let Some(effect) = self.apply_vote(voting.kind) {
+                        Ok(Succeeded(effect))
+                    } else {
+                        Ok(Failed)
+                    }
                 } else if vote.is_forced && !vote.is_pro
                     || contra > voting.voters.len() - success_quota
                 {
@@ -941,7 +994,6 @@ impl<'a> HwRoomControl<'a> {
                 }
                 cfg => cfg,
             };
-
             room.set_config(cfg);
             Ok(())
         }

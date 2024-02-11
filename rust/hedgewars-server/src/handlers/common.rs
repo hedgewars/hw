@@ -9,7 +9,7 @@ use crate::{
         room::HwRoom,
         server::{
             EndGameResult, HwRoomControl, HwServer, JoinRoomError, LeaveRoomResult, StartGameError,
-            VoteError, VoteResult,
+            VoteEffect, VoteError, VoteResult,
         },
         types::{ClientId, RoomId},
     },
@@ -510,76 +510,58 @@ pub fn get_vote_data(
 }
 
 pub fn handle_vote(
-    mut room_control: HwRoomControl,
+    room_control: HwRoomControl,
     result: Result<VoteResult, VoteError>,
     response: &mut super::Response,
 ) {
-    todo!("voting result needs to be processed with raised privileges");
     let room_id = room_control.room().id;
-    super::common::get_vote_data(room_control.room().id, &result, response);
+    get_vote_data(room_control.room().id, &result, response);
 
-    if let Ok(VoteResult::Succeeded(kind)) = result {
-        match kind {
-            VoteType::Kick(nick) => {
-                if let Some(kicked_client) = room_control.server().find_client(&nick) {
-                    let kicked_id = kicked_client.id;
-                    if let Some(mut room_control) = room_control.change_client(kicked_id) {
-                        response.add(Kicked.send(kicked_id));
-                        let result = room_control.leave_room();
-                        super::common::get_room_leave_result(
-                            room_control.server(),
-                            room_control.room(),
-                            "kicked",
-                            result,
-                            response,
-                        );
-                    }
-                }
+    if let Ok(VoteResult::Succeeded(effect)) = result {
+        match effect {
+            VoteEffect::Kicked(kicked_id, leave_result) => {
+                response.add(Kicked.send(kicked_id));
+                get_room_leave_result(
+                    room_control.server(),
+                    room_control.room(),
+                    "kicked",
+                    leave_result,
+                    response,
+                );
             }
-            VoteType::Map(None) => (),
-            VoteType::Map(Some(name)) => {
-                if let Some(location) = room_control.load_config(&name) {
-                    let msg = server_chat(location.to_string());
-                    let room = room_control.room();
-                    response.add(msg.send_all().in_room(room.id));
+            VoteEffect::Map(location) => {
+                let msg = server_chat(location.to_string());
+                let room = room_control.room();
+                response.add(msg.send_all().in_room(room.id));
 
-                    let room_master = room.master_id.map(|id| room_control.server().client(id));
+                let room_master = room.master_id.map(|id| room_control.server().client(id));
 
-                    super::common::get_room_update(None, room, room_master, response);
+                get_room_update(None, room, room_master, response);
 
-                    let room_destination = Destination::ToAll {
-                        group: DestinationGroup::Room(room.id),
-                        skip_self: false,
-                    };
-                    super::common::get_active_room_config(room, room_destination, response);
-                }
+                let room_destination = Destination::ToAll {
+                    group: DestinationGroup::Room(room.id),
+                    skip_self: false,
+                };
+                get_active_room_config(room, room_destination, response);
             }
-            VoteType::Pause => {
-                if room_control.toggle_pause() {
-                    response.add(
-                        server_chat("Pause toggled.".to_string())
-                            .send_all()
-                            .in_room(room_id),
-                    );
-                    response.add(
-                        ForwardEngineMessage(vec![to_engine_msg(once(b'I'))])
-                            .send_all()
-                            .in_room(room_id),
-                    );
-                }
+            VoteEffect::Pause => {
+                response.add(
+                    server_chat("Pause toggled.".to_string())
+                        .send_all()
+                        .in_room(room_id),
+                );
+                response.add(
+                    ForwardEngineMessage(vec![to_engine_msg(once(b'I'))])
+                        .send_all()
+                        .in_room(room_id),
+                );
             }
-            VoteType::NewSeed => {
-                let seed = thread_rng().gen_range(0..1_000_000_000).to_string();
-                let cfg = GameCfg::Seed(seed);
+            VoteEffect::NewSeed(cfg) => {
                 response.add(cfg.to_server_msg().send_all().in_room(room_id));
-                room_control
-                    .set_config(cfg)
-                    .expect("Apparently, you cannot just set room config");
             }
-            VoteType::HedgehogsPerTeam(number) => {
-                let nicks = room_control.set_hedgehogs_number(number);
+            VoteEffect::HedgehogsPerTeam(number, team_names) => {
                 response.extend(
-                    nicks
+                    team_names
                         .into_iter()
                         .map(|n| HedgehogsNumber(n, number).send_all().in_room(room_id)),
                 );
