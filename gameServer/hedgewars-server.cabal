@@ -1,5 +1,5 @@
 Name:                hedgewars-server
-Version:             0.1
+Version:             1.1.0
 Synopsis:            hedgewars server
 Description:         hedgewars server
 Homepage:            https://www.hedgewars.org/
@@ -11,37 +11,71 @@ Build-type:          Simple
 Cabal-version:       >=1.10
 
 
+flag officialServer
+  description: Build for official server
+  default:     False
+  manual:      True
+
 Executable hedgewars-server
   main-is: hedgewars-server.hs
+  other-modules:
+    Actions
+    ClientIO
+    CommandHelp
+    ConfigFile
+    Consts
+    CoreTypes
+    Data.TConfig
+    EngineInteraction
+    FloodDetection
+    HWProtoChecker
+    HWProtoCore
+    HWProtoInRoomState
+    HWProtoLobbyState
+    HWProtoNEState
+    HandlerUtils
+    JoinsMonitor
+    NetRoutines
+    OfficialServer.DBInteraction
+    Opts
+    RoomsAndClients
+    ServerCore
+    ServerState
+    Store
+    Utils
+    Votes
 
   default-language:    Haskell2010
 
 -- Don't forget to update INSTALL.md and .travis.yml when you change these dependencies!
   Build-depends:
     base >= 4.8,
-    containers,
-    vector,
-    bytestring,
-    network >= 2.3 && < 3.2,
-    network-bsd >= 2.8.1 && < 2.9,
-    random,
-    time,
-    mtl >= 2,
-    sandi,
-    hslogger,
-    process,
-    deepseq,
-    utf8-string,
-    SHA,
-    entropy,
-    zlib >= 0.5.3 && < 0.7,
-    regex-tdfa,
     binary >= 0.8.5.1,
+    bytestring,
+    containers,
+    deepseq,
+    entropy,
+    hslogger,
+    mtl >= 2,
+    network >= 3.0 && < 3.2,
+    network-bsd >= 2.8.1 && < 2.9,
+    process,
+    random,
+    regex-tdfa,
+    sandi,
+    SHA,
+    time,
+    utf8-string,
+    vector
 
 -- These dependencies are for OFFICIAL_SERVER only and do not need to be mentioned in docs
-    yaml >= 0.8.30,
-    aeson,
-    text >= 1.2
+  if flag(officialServer)
+    build-depends:
+      aeson,
+      text >= 1.2,
+      yaml >= 0.8.30,
+      zlib >= 0.5.3 && < 0.7
+    cpp-options:   -DOFFICIAL_SERVER
 
   if !os(windows)
     build-depends: unix
