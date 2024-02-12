@@ -620,7 +620,7 @@ impl<'a> HwRoomControl<'a> {
     }
 
     fn remove_from_room(&mut self, client_id: ClientId) -> LeaveRoomResult {
-        let Some((client, room)) = self.server.client_and_room_mut(client_id);
+        let (client, room) = self.server.client_and_room_mut(client_id).expect("Caller should have ensured the client is in this room");
         room.players_number -= 1;
         client.room_id = None;
 
@@ -801,7 +801,7 @@ impl<'a> HwRoomControl<'a> {
                 let pro = i.clone().filter(|(_, v)| *v).count();
                 let contra = i.filter(|(_, v)| !*v).count();
                 let success_quota = voting.voters.len() / 2 + 1;
-                
+
                 if vote.is_forced && vote.is_pro || pro >= success_quota {
                     let voting = self.room_mut().voting.take().unwrap();
                     if let Some(effect) = self.apply_vote(voting.kind) {
