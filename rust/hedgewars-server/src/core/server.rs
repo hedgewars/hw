@@ -199,7 +199,7 @@ pub struct HwServer {
 
 impl HwServer {
     pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
-        todo!("add reconnection IDs");
+        //todo!("add reconnection IDs");
         let rooms = Slab::with_capacity(rooms_limit);
         let clients = IndexSlab::with_capacity(clients_limit);
         let checkers = IndexSlab::new();
@@ -780,7 +780,7 @@ impl<'a> HwRoomControl<'a> {
             VoteType::NewSeed => {
                 let seed = thread_rng().gen_range(0..1_000_000_000).to_string();
                 let cfg = GameCfg::Seed(seed);
-                todo!("Protocol backwards compatibility");
+                //todo!("Protocol backwards compatibility");
                 self.room_mut().set_config(cfg.clone());
                 Some(VoteEffect::NewSeed(cfg))
             }

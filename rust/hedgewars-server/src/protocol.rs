@@ -102,6 +102,7 @@ impl ProtocolDecoder {
 
         loop {
             if !self.buffer.has_remaining() {
+                //todo!("ensure the buffer doesn't grow indefinitely")
                 match timeout(self.read_timeout, stream.read_buf(&mut self.buffer)).await {
                     Err(_) => return Err(Timeout),
                     Ok(Err(e)) => return Err(Network(Box::new(e))),

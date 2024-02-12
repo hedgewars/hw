@@ -334,6 +334,7 @@ pub fn handle(
             }
         }
         CallVote(None) => {
+            //todo!("implement ghost points")
             response.add(server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
                 .send_self());
         }

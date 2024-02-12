@@ -24,7 +24,7 @@ impl IoThread {
         let (core_tx, io_rx) = mpsc::channel();
         let (io_tx, core_rx) = mpsc::channel();
 
-        todo!("convert into an IO task");
+        //todo!("convert into an IO task");
 
         /*let mut db = Database::new("localhost");
 
