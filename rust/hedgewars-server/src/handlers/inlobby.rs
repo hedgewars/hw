@@ -27,7 +27,7 @@ pub fn handle(
     use hedgewars_network_protocol::messages::HwProtocolMessage::*;
 
     //todo!("add kick/ban handlers");
-    //todo!("add kick/ban handling");
+    //todo!("add command for forwarding lobby chat into rooms
 
     match message {
         CreateRoom(name, password) => match server.create_room(client_id, name, password) {
