@@ -28,6 +28,8 @@ pub fn handle(
 
     //todo!("add kick/ban handlers");
     //todo!("add command for forwarding lobby chat into rooms
+    //todo!("report player account age")
+    //todo!("port listing rooms for incompatible protocols"))
 
     match message {
         CreateRoom(name, password) => match server.create_room(client_id, name, password) {
