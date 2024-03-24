@@ -8,13 +8,13 @@
  */
 use nom::{
     branch::alt,
-    bytes::complete::{tag, tag_no_case, take_until, take_while},
-    character::complete::{newline, not_line_ending},
+    bytes::streaming::{tag, tag_no_case, take_until, take_while},
+    character::streaming::{newline, not_line_ending},
     combinator::{map, peek},
     error::{ErrorKind, ParseError},
     multi::separated_list0,
     sequence::{delimited, pair, preceded, terminated, tuple},
-    Err, IResult, Parser
+    Err, IResult, Parser,
 };
 
 use std::{
@@ -214,7 +214,7 @@ fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     ) -> impl FnMut(&'a [u8]) -> HwResult<HwProtocolMessage> + '_
     where
         F: Parser<&'a [u8], T, HwProtocolError> + 'a,
-        G: FnMut(T) -> HwProtocolMessage + 'a
+        G: FnMut(T) -> HwProtocolMessage + 'a,
     {
         map(preceded(tag(name), parser), constructor)
     }

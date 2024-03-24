@@ -1,12 +1,22 @@
 use crate::{
     parser::HwProtocolError,
-    parser::{message, server_message},
+    parser::{malformed_message, message, server_message},
     types::GameCfg,
 };
 
 #[test]
 fn parse_test() {
     use crate::messages::HwProtocolMessage::*;
+    use nom::Err::Incomplete;
+
+    assert!(matches!(
+        dbg!(message(b"CHAT\nWhat the")),
+        Err(Incomplete(_))
+    ));
+    assert!(matches!(
+        dbg!(malformed_message(b"CHAT\nWhat the \xF0\x9F\xA6\x94\n\nBYE")),
+        Ok((b"BYE", _))
+    ));
 
     assert_eq!(message(b"PING\n\n"), Ok((&b""[..], Ping)));
     assert_eq!(message(b"START_GAME\n\n"), Ok((&b""[..], StartGame)));
