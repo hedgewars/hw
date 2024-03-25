@@ -102,8 +102,9 @@ impl ProtocolDecoder {
         use ProtocolError::*;
 
         loop {
-            if self.buffer.capacity() < 1024 {
-                self.buffer.reserve(1024 - self.buffer.capacity());
+            let remaining = self.buffer.capacity() - self.buffer.len();
+            if remaining < 1024 {
+                self.buffer.reserve(2048 - remaining);
             }
 
             if !self.buffer.has_remaining() || self.is_recovering {
