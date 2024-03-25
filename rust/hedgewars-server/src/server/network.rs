@@ -216,7 +216,7 @@ pub struct NetworkLayer {
     server_state: ServerState,
     clients: Slab<Sender<Bytes>>,
     update_tx: Sender<ClientUpdate>,
-    update_rx: Receiver<ClientUpdate>
+    update_rx: Receiver<ClientUpdate>,
 }
 
 impl NetworkLayer {
@@ -448,7 +448,7 @@ impl NetworkLayerBuilder {
             server_state,
             clients,
             update_tx,
-            update_rx
+            update_rx,
         }
     }
 }

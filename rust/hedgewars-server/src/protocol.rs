@@ -87,7 +87,10 @@ impl ProtocolDecoder {
                 Err(nom::Err::Incomplete(_)) => {}
                 Err(nom::Err::Failure(e) | nom::Err::Error(e)) => {
                     debug!("Invalid message: {:?}", e);
-                    trace!("Buffer content: {:?}", String::from_utf8_lossy(&self.buffer[..]));
+                    trace!(
+                        "Buffer content: {:?}",
+                        String::from_utf8_lossy(&self.buffer[..])
+                    );
                     self.recover();
                 }
             }

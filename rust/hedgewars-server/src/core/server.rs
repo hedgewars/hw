@@ -361,7 +361,7 @@ impl HwServer {
             Err(Restricted)
         } else if room.is_registration_required() {
             Err(RegistrationRequired)
-        } else if room.players_number == u8::max_value() {
+        } else if room.players_number == u8::MAX {
             Err(Full)
         } else {
             move_to_room(client, room);
@@ -620,7 +620,10 @@ impl<'a> HwRoomControl<'a> {
     }
 
     fn remove_from_room(&mut self, client_id: ClientId) -> LeaveRoomResult {
-        let (client, room) = self.server.client_and_room_mut(client_id).expect("Caller should have ensured the client is in this room");
+        let (client, room) = self
+            .server
+            .client_and_room_mut(client_id)
+            .expect("Caller should have ensured the client is in this room");
         room.players_number -= 1;
         client.room_id = None;
 
@@ -937,7 +940,7 @@ impl<'a> HwRoomControl<'a> {
             Err(Restricted)
         } else {
             info.owner = client.nick.clone();
-            let team = room.add_team(client.id, *info, client.protocol_number < 42);
+            let team = room.add_team(&client, *info, client.protocol_number < 42);
             client.teams_in_game += 1;
             client.clan = Some(team.color);
             Ok(team)
@@ -949,7 +952,7 @@ impl<'a> HwRoomControl<'a> {
         let (client, room) = self.get_mut();
         match room.find_team_owner(team_name) {
             None => Err(NoTeam),
-            Some((id, _)) if id != client.id => Err(RemoveTeamError::TeamNotOwned),
+            Some((id, _)) if id != client.id => Err(TeamNotOwned),
             Some(_) => {
                 client.teams_in_game -= 1;
                 client.clan = room.find_team_color(client.id);
@@ -1171,14 +1174,22 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     client.room_id = Some(room.id);
     client.set_is_in_game(room.game_info.is_some());
 
-    if let Some(ref mut info) = room.game_info {
-        let teams = info.client_teams(client.id);
-        client.teams_in_game = teams.clone().count() as u8;
-        client.clan = teams.clone().next().map(|t| t.color);
-        let team_names: Vec<_> = teams.map(|t| t.name.clone()).collect();
+    #[cfg(feature = "official-server")]
+    let can_rejoin = client.is_registered();
 
-        if !team_names.is_empty() {
-            info.left_teams.retain(|name| !team_names.contains(&name));
+    #[cfg(not(feature = "official-server"))]
+    let can_rejoin = true;
+
+    if can_rejoin {
+        if let Some(ref mut info) = room.game_info {
+            let teams = info.client_teams_by_nick(&client.nick);
+            client.teams_in_game = teams.clone().count() as u8;
+            client.clan = teams.clone().next().map(|t| t.color);
+            let team_names: Vec<_> = teams.map(|t| t.name.clone()).collect();
+
+            if !team_names.is_empty() {
+                info.left_teams.retain(|name| !team_names.contains(&name));
+            }
         }
     }
 }

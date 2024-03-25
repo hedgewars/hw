@@ -496,6 +496,6 @@ pub fn handle(
                 response.warn("The player is not in your room.")
             }
         },
-        _ => warn!("Unimplemented!"),
+        message => warn!("Unimplemented: {:?}", message),
     }
 }

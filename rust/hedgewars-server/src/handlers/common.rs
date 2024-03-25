@@ -211,20 +211,24 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
             response.add(ForwardEngineMessage(vec![to_engine_msg(once(b'I'))]).send_self());
         }
 
-        for (_, original_team) in &info.original_teams {
-            if let Some(team) = room.find_team(|team| team.name == original_team.name) {
-                if team != original_team {
-                    response.add(TeamRemove(original_team.name.clone()).send_self());
+        for original_team in &info.original_teams {
+            if let Some(team) = room.find_team(|team| team.name == original_team.info.name) {
+                if *team != original_team.info {
+                    response.add(TeamRemove(original_team.info.name.clone()).send_self());
                     response.add(TeamAdd(team.to_protocol()).send_self());
                 }
             } else {
-                response.add(TeamRemove(original_team.name.clone()).send_self());
+                response.add(TeamRemove(original_team.info.name.clone()).send_self());
             }
         }
 
-        for (_, team) in &room.teams {
-            if !info.original_teams.iter().any(|(_, t)| t.name == team.name) {
-                response.add(TeamAdd(team.to_protocol()).send_self());
+        for team in &room.teams {
+            if !info
+                .original_teams
+                .iter()
+                .any(|original_team| original_team.info.name == team.info.name)
+            {
+                response.add(TeamAdd(team.info.to_protocol()).send_self());
             }
         }
 
@@ -403,7 +407,11 @@ pub fn get_active_room_teams(room: &HwRoom, destination: Destination, response: 
         None => &room.teams,
     };
 
-    get_teams(current_teams.iter().map(|(_, t)| t), destination, response);
+    get_teams(
+        current_teams.iter().map(|team| &team.info),
+        destination,
+        response,
+    );
 }
 
 pub fn get_room_flags(
