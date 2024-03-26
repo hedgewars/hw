@@ -106,6 +106,7 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
 
 pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
     client: &HwClient,
+    master: Option<&HwClient>,
     room: &HwRoom,
     room_clients: I,
     response: &mut Response,
@@ -234,6 +235,8 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
 
         get_room_config_impl(room.config(), Destination::ToSelf, response);
     }
+
+    get_room_update(None, room, master, response);
 }
 
 pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
@@ -331,8 +334,10 @@ pub fn get_room_leave_result(
 
             get_remove_teams_data(room.id, was_in_game, removed_teams, response);
 
+            let master = new_master.or(Some(client.id)).map(|id| server.client(id));
+
             response.add(
-                RoomUpdated(room.name.clone(), room.info(Some(&client)))
+                RoomUpdated(room.name.clone(), room.info(master))
                     .send_all()
                     .with_protocol(room.protocol_number),
             );
@@ -359,12 +364,12 @@ pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String
 }
 
 pub fn get_room_update(
-    room_name: Option<String>,
+    old_name: Option<String>,
     room: &HwRoom,
     master: Option<&HwClient>,
     response: &mut Response,
 ) {
-    let update_msg = RoomUpdated(room_name.unwrap_or(room.name.clone()), room.info(master));
+    let update_msg = RoomUpdated(old_name.unwrap_or(room.name.clone()), room.info(master));
     response.add(update_msg.send_all().with_protocol(room.protocol_number));
 }
 

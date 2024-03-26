@@ -345,7 +345,7 @@ impl HwServer {
         client_id: ClientId,
         room_id: RoomId,
         room_password: Option<&str>,
-    ) -> Result<(&HwClient, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
+    ) -> Result<(&HwClient, Option<&HwClient>, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
         use JoinRoomError::*;
         let room = &mut self.rooms[room_id];
         let client = &mut self.clients[client_id];
@@ -359,7 +359,7 @@ impl HwServer {
             Err(WrongPassword)
         } else if room.is_join_restricted() {
             Err(Restricted)
-        } else if room.is_registration_required() {
+        } else if room.is_registration_required() && !client.is_registered() {
             Err(RegistrationRequired)
         } else if room.players_number == u8::MAX {
             Err(Full)
@@ -368,6 +368,7 @@ impl HwServer {
             let room_id = room.id;
             Ok((
                 &self.clients[client_id],
+                room.master_id.map(|id| &self.clients[id]),
                 &self.rooms[room_id],
                 self.iter_clients()
                     .filter(move |c| c.room_id == Some(room_id)),
@@ -381,7 +382,7 @@ impl HwServer {
         client_id: ClientId,
         room_name: &str,
         room_password: Option<&str>,
-    ) -> Result<(&HwClient, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
+    ) -> Result<(&HwClient, Option<&HwClient>, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
         use JoinRoomError::*;
         let room = self.rooms.iter().find(|(_, r)| r.name == room_name);
         if let Some((_, room)) = room {
@@ -633,7 +634,9 @@ impl<'a> HwRoomControl<'a> {
         let was_in_game = client.is_in_game();
         let mut removed_teams = vec![];
 
-        if is_empty && !is_fixed {
+        self.is_room_removed = is_empty && !is_fixed;
+
+        if !self.is_room_removed {
             if client.is_ready() && room.ready_players_number > 0 {
                 room.ready_players_number -= 1;
             }
@@ -663,33 +666,29 @@ impl<'a> HwRoomControl<'a> {
         client.set_is_ready(false);
         client.set_is_in_game(false);
 
-        if !is_fixed {
-            if room.players_number == 0 {
-                self.is_room_removed = true
-            } else if room.master_id == None {
-                let protocol_number = room.protocol_number;
-                let new_master_id = self.server.room_client_ids(self.room_id).next();
+        if !self.is_room_removed && room.master_id == None {
+            let protocol_number = room.protocol_number;
+            let new_master_id = self.server.room_client_ids(self.room_id).next();
 
-                if let Some(new_master_id) = new_master_id {
-                    let room = self.room_mut();
-                    room.master_id = Some(new_master_id);
-                    let new_master = &mut self.server.clients[new_master_id];
-                    new_master.set_is_master(true);
+            if let Some(new_master_id) = new_master_id {
+                let room = self.room_mut();
+                room.master_id = Some(new_master_id);
+                let new_master = &mut self.server.clients[new_master_id];
+                new_master.set_is_master(true);
 
-                    if protocol_number < 42 {
-                        let nick = new_master.nick.clone();
-                        self.room_mut().name = nick;
-                    }
-
-                    let room = self.room_mut();
-                    room.set_join_restriction(false);
-                    room.set_team_add_restriction(false);
-                    room.set_unregistered_players_restriction(true);
+                if protocol_number < 42 {
+                    let nick = new_master.nick.clone();
+                    self.room_mut().name = nick;
                 }
+
+                let room = self.room_mut();
+                room.set_join_restriction(false);
+                room.set_team_add_restriction(false);
+                room.set_unregistered_players_restriction(false);
             }
         }
 
-        if is_empty && !is_fixed {
+        if self.is_room_removed {
             LeaveRoomResult::RoomRemoved
         } else {
             LeaveRoomResult::RoomRemains {
