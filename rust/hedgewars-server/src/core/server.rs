@@ -270,7 +270,7 @@ impl HwServer {
     }
 
     #[inline]
-    pub fn get_room_control(&mut self, client_id: ClientId) -> Option<HwRoomControl> {
+    pub fn get_room_control(&mut self, client_id: ClientId) -> HwRoomOrServer {
         HwRoomControl::new(self, client_id)
     }
 
@@ -345,7 +345,15 @@ impl HwServer {
         client_id: ClientId,
         room_id: RoomId,
         room_password: Option<&str>,
-    ) -> Result<(&HwClient, Option<&HwClient>, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
+    ) -> Result<
+        (
+            &HwClient,
+            Option<&HwClient>,
+            &HwRoom,
+            impl Iterator<Item = &HwClient> + Clone,
+        ),
+        JoinRoomError,
+    > {
         use JoinRoomError::*;
         let room = &mut self.rooms[room_id];
         let client = &mut self.clients[client_id];
@@ -382,7 +390,15 @@ impl HwServer {
         client_id: ClientId,
         room_name: &str,
         room_password: Option<&str>,
-    ) -> Result<(&HwClient, Option<&HwClient>, &HwRoom, impl Iterator<Item = &HwClient> + Clone), JoinRoomError> {
+    ) -> Result<
+        (
+            &HwClient,
+            Option<&HwClient>,
+            &HwRoom,
+            impl Iterator<Item = &HwClient> + Clone,
+        ),
+        JoinRoomError,
+    > {
         use JoinRoomError::*;
         let room = self.rooms.iter().find(|(_, r)| r.name == room_name);
         if let Some((_, room)) = room {
@@ -548,6 +564,21 @@ impl HwServer {
     }
 }
 
+pub enum HwRoomOrServer<'a> {
+    Room(HwRoomControl<'a>),
+    Server(&'a mut HwServer),
+}
+
+impl<'a> HwRoomOrServer<'a> {
+    #[inline]
+    pub fn into_room(self) -> Option<HwRoomControl<'a>> {
+        match self {
+            HwRoomOrServer::Room(control) => Some(control),
+            HwRoomOrServer::Server(_) => None,
+        }
+    }
+}
+
 pub struct HwRoomControl<'a> {
     server: &'a mut HwServer,
     client_id: ClientId,
@@ -557,23 +588,16 @@ pub struct HwRoomControl<'a> {
 
 impl<'a> HwRoomControl<'a> {
     #[inline]
-    pub fn new(server: &'a mut HwServer, client_id: ClientId) -> Option<Self> {
+    pub fn new(server: &'a mut HwServer, client_id: ClientId) -> HwRoomOrServer {
         if let Some(room_id) = server.clients[client_id].room_id {
-            Some(Self {
+            HwRoomOrServer::Room(Self {
                 server,
                 client_id,
                 room_id,
                 is_room_removed: false,
             })
         } else {
-            None
-        }
-    }
-
-    #[inline]
-    pub fn cleanup_room(self) {
-        if self.is_room_removed {
-            self.server.rooms.remove(self.room_id);
+            HwRoomOrServer::Server(server)
         }
     }
 
@@ -613,11 +637,6 @@ impl<'a> HwRoomControl<'a> {
             &mut self.server.clients[self.client_id],
             &mut self.server.rooms[self.room_id],
         )
-    }
-
-    pub fn change_client<'b: 'a>(self, client_id: ClientId) -> Option<HwRoomControl<'a>> {
-        let room_id = self.room_id;
-        HwRoomControl::new(self.server, client_id).filter(|c| c.room_id == room_id)
     }
 
     fn remove_from_room(&mut self, client_id: ClientId) -> LeaveRoomResult {
@@ -1128,6 +1147,15 @@ impl<'a> HwRoomControl<'a> {
             if let Some(msg) = sync_msg {
                 info.sync_msg = msg;
             }
+        }
+    }
+}
+
+impl<'a> Drop for HwRoomControl<'a> {
+    #[inline]
+    fn drop(&mut self) {
+        if self.is_room_removed {
+            self.server.rooms.remove(self.room_id);
         }
     }
 }

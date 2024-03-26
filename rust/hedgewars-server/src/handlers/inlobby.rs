@@ -77,7 +77,13 @@ pub fn handle(
                     match server.join_room(client_id, room_id, None) {
                         Err(error) => super::common::get_room_join_error(error, response),
                         Ok((client, master, room, room_clients)) => {
-                            super::common::get_room_join_data(client, master, room, room_clients, response)
+                            super::common::get_room_join_data(
+                                client,
+                                master,
+                                room,
+                                room_clients,
+                                response,
+                            )
                         }
                     }
                 } else {

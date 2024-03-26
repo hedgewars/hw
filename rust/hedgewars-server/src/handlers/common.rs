@@ -350,9 +350,11 @@ pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String
     let client = server.client(client_id);
     let nick = client.nick.clone();
 
-    if let Some(mut room_control) = server.get_room_control(client_id) {
-        let room_id = room_control.room().id;
-        let result = room_control.leave_room();
+    if let Some((room_id, result)) = server
+        .get_room_control(client_id)
+        .into_room()
+        .map(|mut control| (control.room().id, control.leave_room()))
+    {
         get_room_leave_result(server, server.room(room_id), &msg, result, response);
     }
 

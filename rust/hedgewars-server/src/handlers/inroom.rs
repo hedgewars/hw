@@ -124,7 +124,6 @@ pub fn handle(
                 result,
                 response,
             );
-            room_control.cleanup_room();
         }
         Chat(msg) => {
             response.add(
