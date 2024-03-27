@@ -140,7 +140,15 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
             .but_self(),
     );
     response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick.clone()]).send_all());
-    let nicks = room_clients.clone().map(|c| c.nick.clone()).collect();
+    let nicks = once(nick.clone())
+        .chain(
+            room_clients
+                .clone()
+                .filter(|c| c.id != client.id)
+                .map(|c| c.nick.clone()),
+        )
+        .collect();
+
     response.add(RoomJoined(nicks).send_self());
 
     let mut flag_selectors = [
