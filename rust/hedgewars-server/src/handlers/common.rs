@@ -2,6 +2,7 @@ use super::{
     actions::{Destination, DestinationGroup},
     Response,
 };
+use crate::core::server::HwRoomOrServer;
 use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
@@ -358,12 +359,14 @@ pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String
     let client = server.client(client_id);
     let nick = client.nick.clone();
 
-    if let Some((room_id, result)) = server
-        .get_room_control(client_id)
-        .into_room()
-        .map(|mut control| (control.room().id, control.leave_room()))
-    {
-        get_room_leave_result(server, server.room(room_id), &msg, result, response);
+    match server.get_room_control(client_id) {
+        HwRoomOrServer::Room(mut control) => {
+            let room_id = control.room().id;
+            let result = control.leave_room();
+            let server = control.server();
+            get_room_leave_result(server, server.room(room_id), &msg, result, response);
+        }
+        _ => (),
     }
 
     server.remove_client(client_id);
