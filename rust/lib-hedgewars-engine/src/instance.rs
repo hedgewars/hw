@@ -72,7 +72,7 @@ impl EngineInstance {
         for message in messages {
             println!("Processing message: {:?}", message);
             match message {
-                Unknown => println!("Unknown message"),
+                Unknown(data) => println!("Unknown message: {:?}", data),
                 Empty => println!("Empty message"),
                 Synced(_, _) => unimplemented!(),
                 Unsynced(_) => unimplemented!(),
