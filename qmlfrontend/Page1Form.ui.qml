@@ -20,6 +20,7 @@ Item {
 
     RowLayout {
       Layout.alignment: Qt.AlignHCenter
+      Layout.fillHeight: false
 
       Button {
         id: button1
@@ -80,6 +81,10 @@ Item {
 
       Layout.fillWidth: true
       Layout.fillHeight: true
+
+      MouseArea {
+        anchors.fill: parent
+      }
     }
   }
 
