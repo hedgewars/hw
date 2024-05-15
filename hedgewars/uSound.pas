@@ -515,7 +515,7 @@ begin
             GetFallbackV := sndFire
     else if (snd in [sndBugger]) then
         GetFallbackV := sndDrat
-    else if (snd in [sndDrat] then)
+    else if (snd in [sndDrat]) then
         GetFallbackV := sndBugger
     else if (snd in [sndGonnaGetYou, sndIllGetYou, sndRevenge, sndCutItOut, sndLeaveMeAlone]) then
         GetFallbackV := sndRegret
