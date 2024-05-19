@@ -23,7 +23,8 @@ class GameViewRenderer : public QQuickFramebufferObject::Renderer {
 
   QPointer<GameView> m_gameView;
   QPointer<QQuickWindow> m_window;
-  bool m_inited{false};
+  bool m_dirty{true};
+  QSizeF m_gameViewSize;
 };
 
 void GameViewRenderer::render() {
@@ -33,8 +34,8 @@ void GameViewRenderer::render() {
     return;
   }
 
-  if (!m_inited) {
-    m_inited = true;
+  if (m_dirty) {
+    m_dirty = false;
     engine->setOpenGLContext(QOpenGLContext::currentContext());
   }
 
@@ -56,6 +57,12 @@ void GameViewRenderer::synchronize(QQuickFramebufferObject* fbo) {
   if (!m_gameView) {
     m_gameView = qobject_cast<GameView*>(fbo);
     m_window = fbo->window();
+  }
+
+  if (const auto currentSize = m_gameView->size();
+      currentSize != m_gameViewSize) {
+    m_gameViewSize = currentSize;
+    m_dirty = true;
   }
 }
 
