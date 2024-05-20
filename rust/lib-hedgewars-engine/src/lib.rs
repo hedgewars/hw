@@ -62,7 +62,9 @@ pub enum PositionedEventType {
 }
 
 #[no_mangle]
-pub extern "C" fn simple_event(engine_state: &mut EngineInstance, event_type: SimpleEventType) {}
+pub extern "C" fn simple_event(engine_state: &mut EngineInstance, event_type: SimpleEventType) {
+    println!("{:?}", event_type);
+}
 
 #[no_mangle]
 pub extern "C" fn long_event(

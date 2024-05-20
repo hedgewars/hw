@@ -15,7 +15,7 @@ class EngineInstance : public QObject {
  public:
   explicit EngineInstance(const QString& libraryPath,const QString& dataPath,
                           QObject* parent = nullptr);
-  ~EngineInstance();
+  ~EngineInstance() override;
 
   Q_PROPERTY(bool isValid READ isValid NOTIFY isValidChanged)
 
