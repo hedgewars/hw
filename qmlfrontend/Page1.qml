@@ -83,7 +83,19 @@ Page1Form {
   tickButton {
     onClicked: {
       tickButton.visible = false;
+    }
+  }
+
+  Timer {
+    id: advancingTimer
+
+    interval: 100
+    repeat: true
+    running: !tickButton.visible
+
+    onTriggered: {
       gameView.tick(100);
+      gameView.update();
     }
   }
 

@@ -20,6 +20,7 @@ hedgewars-engine-messages = { path = "../hedgewars-engine-messages" }
 hwphysics = { path = "../hwphysics" }
 mapgen = { path = "../mapgen" }
 vec2d = { path = "../vec2d" }
+log = "0.4.21"
 
 [dev-dependencies]
 proptest = "0.9.2"

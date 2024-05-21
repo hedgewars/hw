@@ -154,6 +154,7 @@ pub extern "C" fn setup_current_gl_context(
         gl::Viewport(0, 0, width as i32, height as i32);
     }
     engine_state.world.create_renderer(width, height);
+    engine_state.world.init_renderer();
 }
 
 #[no_mangle]

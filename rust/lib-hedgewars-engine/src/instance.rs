@@ -35,6 +35,7 @@ impl EngineInstance {
         }
 
         world.init(template());
+        world.init_renderer();
 
         Self {
             world,

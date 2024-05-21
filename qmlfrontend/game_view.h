@@ -19,8 +19,8 @@ class GameView : public QQuickFramebufferObject {
   Q_INVOKABLE void tick(quint32 delta);
 
   EngineInstance* engineInstance() const;
-
   Renderer* createRenderer() const override;
+  void executeActions();
 
  Q_SIGNALS:
   void engineInstanceChanged(EngineInstance* engineInstance);
@@ -29,10 +29,12 @@ class GameView : public QQuickFramebufferObject {
   void setEngineInstance(EngineInstance* engineInstance);
 
  private:
-  quint32 m_delta;
   QPointer<EngineInstance> m_engineInstance;
   QSize m_viewportSize;
   QPoint m_centerPoint;
+  QList<std::function<void(EngineInstance*)>> m_actions;
+
+  void addAction(std::function<void(EngineInstance*)>&& action);
 };
 
 #endif  // GAMEVIEW_H

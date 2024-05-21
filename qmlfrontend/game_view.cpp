@@ -64,27 +64,34 @@ void GameViewRenderer::synchronize(QQuickFramebufferObject* fbo) {
     m_gameViewSize = currentSize;
     m_dirty = true;
   }
+
+  m_gameView->executeActions();
 }
 
-GameView::GameView(QQuickItem* parent)
-    : QQuickFramebufferObject(parent), m_delta(0) {
+GameView::GameView(QQuickItem* parent) : QQuickFramebufferObject(parent) {
   setMirrorVertically(true);
 }
 
 void GameView::tick(quint32 delta) {
-  m_delta = delta;
-
-  if (window()) {
-    QTimer* timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &GameView::update);
-    timer->start(100);
-  }
+  addAction([delta](auto engine) { engine->advance(delta); });
 }
 
 EngineInstance* GameView::engineInstance() const { return m_engineInstance; }
 
 QQuickFramebufferObject::Renderer* GameView::createRenderer() const {
   return new GameViewRenderer{};
+}
+
+void GameView::executeActions() {
+  if (!m_engineInstance) {
+    return;
+  }
+
+  for (const auto& action : m_actions) {
+    action(m_engineInstance);
+  }
+
+  m_actions.clear();
 }
 
 void GameView::setEngineInstance(EngineInstance* engineInstance) {
@@ -95,4 +102,8 @@ void GameView::setEngineInstance(EngineInstance* engineInstance) {
   m_engineInstance = engineInstance;
 
   Q_EMIT engineInstanceChanged(m_engineInstance);
+}
+
+void GameView::addAction(std::function<void(EngineInstance*)>&& action) {
+  m_actions.append(std::move(action));
 }
