@@ -215,8 +215,8 @@ void __attribute__((overloadable)) fpcrtl_delete__vars(astring *s, SizeInt index
 
 string255 fpcrtl_floatToStr(double n) {
     string255 t;
-    sprintf(t.str, "%f", n);
-    t.len = strlen(t.str);
+    
+    t.len = sprintf(t.str, "%f", n);
 
     return t;
 }
@@ -352,9 +352,8 @@ Integer fpcrtl_ceil(extended n) {
 LongInt str_to_int(char *src)
 {
     int i;
-    int len = strlen(src);
     char *end;
-    for(i = 0; i < len; i++)
+    for(i = 0; src[i]; i++)
     {
         if(src[i] == '$'){
             // hex
@@ -387,51 +386,41 @@ void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, LongWord *a)
 LongInt fpcrtl_random(LongInt l) {
     // random(0) is undefined in docs but effectively returns 0 in free pascal
     if (l == 0) {
-        printf("WARNING: random(0) called!\n");
+        //printf("WARNING: random(0) called!\n");
         return 0;
     }
     return (LongInt) (rand() / (double) RAND_MAX * l);
 }
 
 void __attribute__((overloadable)) fpcrtl_str__vars(float x, string255 *s) {
-    sprintf(s->str, "%f", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%f", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(double x, string255 *s) {
-    sprintf(s->str, "%f", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%f", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(uint8_t x, string255 *s) {
-    sprintf(s->str, "%u", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%u", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(int8_t x, string255 *s) {
-    sprintf(s->str, "%d", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%d", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(uint16_t x, string255 *s) {
-    sprintf(s->str, "%u", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%u", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(int16_t x, string255 *s) {
-    sprintf(s->str, "%d", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%d", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(uint32_t x, string255 *s) {
-    sprintf(s->str, "%u", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%u", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(int32_t x, string255 *s) {
-    sprintf(s->str, "%d", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%d", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(uint64_t x, string255 *s) {
-    sprintf(s->str, "%llu", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%llu", x);
 }
 void __attribute__((overloadable)) fpcrtl_str__vars(int64_t x, string255 *s) {
-    sprintf(s->str, "%lld", x);
-    s->len = strlen(s->str);
+    s->len = sprintf(s->str, "%lld", x);
 }
 
 /*
