@@ -2592,6 +2592,8 @@ var
     Land: TCollisionArray;
     LandPixels: TLandArray;
     LandDirty: TDirtyTag;
+    Flakes: TGearPackArray;
+    FlakesCount: Longword;
     hasBorder: boolean;
     hasGirders: boolean;
     playHeight, playWidth, leftX, rightX, topY: LongInt;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
@@ -3121,6 +3123,8 @@ begin
 
     SDLWindow:= nil;
     SDLGLContext:= nil;
+
+    FlakesCount:= 0;
 
     for i:= Low(ClansArray) to High(ClansArray) do
         begin

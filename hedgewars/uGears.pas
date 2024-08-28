@@ -223,6 +223,14 @@ begin
     end;
 end;
 
+procedure processFlakes;
+var i: Longword;
+begin
+    if GameTicks and $7 = 0 then
+        for i:= 1 to FlakesCount do
+            doStepSnowflake(@Flakes[i - 1])
+end;
+
 procedure ProcessGears;
 var t, tmpGear: PGear;
     i, j, AliveCount: LongInt;
@@ -255,6 +263,8 @@ else if (StepSoundTimer = 0) and (StepSoundChannel > -1) then
 
 if StepSoundTimer > 0 then
     dec(StepSoundTimer, 1);
+
+processFlakes;
 
 t:= GearsList;
 while t <> nil do
@@ -700,6 +710,7 @@ end;
 procedure DrawGears;
 var Gear: PGear;
     x, y: LongInt;
+    i: Longword;
 begin
 Gear:= GearsList;
 while Gear <> nil do
@@ -711,6 +722,17 @@ while Gear <> nil do
         RenderGear(Gear, x, y);
         end;
     Gear:= Gear^.NextGear
+    end;
+
+for i:= 1 to FlakesCount do
+    begin
+    Gear:= @Flakes[i - 1];
+    if (Gear^.State and gstInvisible = 0) and (Gear^.Message and gmRemoveFromList = 0) then
+        begin
+        x:= hwRound(Gear^.X) + WorldDx;
+        y:= hwRound(Gear^.Y) + WorldDy;
+        RenderGear(Gear, x, y);
+        end;
     end;
 
 if SpeechHogNumber > 0 then
@@ -997,13 +1019,29 @@ for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
 snowRight:= max(LAND_WIDTH,4096)+512;
 snowLeft:= -(snowRight-LAND_WIDTH);
 
+FlakesCount:= 0;
+{
 if (not hasBorder) and cSnow then
+    begin
     for i:= vobCount * Longword(max(LAND_WIDTH,4096)) div 2048 downto 1 do
         begin
         rx:=GetRandom(snowRight - snowLeft);
         ry:=GetRandom(750);
         AddGear(rx + snowLeft, LongInt(LAND_HEIGHT) + ry - 1300, gtFlake, 0, _0, _0, 0)
         end
+    end
+}
+if (not hasBorder) and cSnow then
+    begin
+     FlakesCount:= vobCount * Longword(max(LAND_WIDTH,4096)) div 2048;
+     SetLength(Flakes, FlakesCount);
+     for i:= 0 to FlakesCount - 1 do
+        begin
+        rx:=GetRandom(snowRight - snowLeft);
+        ry:=GetRandom(750);
+        initializeGear(@Flakes[i], rx + snowLeft, LongInt(LAND_HEIGHT) + ry - 1300, gtFlake, 0, _0, _0, 0, 0)
+        end
+     end
 end;
 
 // sort clans horizontally (bubble-sort, because why not)

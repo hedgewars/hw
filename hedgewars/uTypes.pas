@@ -549,6 +549,8 @@ type
     TCollisionArray = packed array of array of Word;
     TDirtyTag = packed array of array of byte;
 
+    TGearPackArray = packed array of TGear;
+
     TPreview  = packed array[0..127, 0..31] of byte;
     TPreviewAlpha  = packed array[0..127, 0..255] of byte;
 
