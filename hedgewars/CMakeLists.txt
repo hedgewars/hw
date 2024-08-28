@@ -1,10 +1,10 @@
 enable_language(Pascal)
 
 find_package(SDL2 REQUIRED CONFIG)
-find_package(SDL2_image REQUIRED CONFIG)
-find_package(SDL2_net REQUIRED CONFIG)
-find_package(SDL2_ttf REQUIRED CONFIG)
-find_package(SDL2_mixer REQUIRED CONFIG)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_net REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 include(CheckLibraryExists)
 include(${CMAKE_MODULE_PATH}/utils.cmake)

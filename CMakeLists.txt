@@ -1,9 +1,7 @@
-cmake_minimum_required(VERSION 2.6.4)
-
-project(hedgewars)
+cmake_minimum_required(VERSION 3.12.0)
 
 #initialise cmake environment
-foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
+foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018 CMP0048)
     if(POLICY ${hwpolicy})
         cmake_policy(SET ${hwpolicy} NEW)
     endif()
@@ -14,6 +12,8 @@ foreach(hwpolicy CMP0026 CMP0068)
         cmake_policy(SET ${hwpolicy} OLD)
     endif()
 endforeach()
+
+project(hedgewars VERSION 1.1.0)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 include(${CMAKE_MODULE_PATH}/utils.cmake)
@@ -89,14 +89,11 @@ endif()
 set(FONTS_DIRS "" CACHE STRING "Additional paths to folders where required fonts can be found ( ; is separator)")
 
 #versioning
-set(CPACK_PACKAGE_VERSION_MAJOR 1)
-set(CPACK_PACKAGE_VERSION_MINOR 1)
-set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(HEDGEWARS_PROTO_VER 60)
 if((CMAKE_BUILD_TYPE STREQUAL "Release") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
-    set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+    set(HEDGEWARS_VERSION "${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.${CMAKE_PROJECT_VERSION_PATCH}")
 else()
-    set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-dev")
+    set(HEDGEWARS_VERSION "${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.${CMAKE_PROJECT_VERSION_PATCH}-dev")
 endif()
 include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 
@@ -108,8 +105,6 @@ include(${CMAKE_MODULE_PATH}/paths.cmake)
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
-
-add_subdirectory(tools/corrosion)
 
 #when build type is not specified, assume Debug/Release according to build version information
 if(CMAKE_BUILD_TYPE)
@@ -266,8 +261,15 @@ endif()
 
 find_package_or_disable_msg(LIBAV NOVIDEOREC "Video recording will not be built")
 
+
 #physfs helper library
 add_subdirectory(misc/libphyslayer)
+
+
+#rust libraries
+add_subdirectory(tools/corrosion)
+corrosion_import_crate(MANIFEST_PATH rust/lib-hedgewars-engine/Cargo.toml)
+
 
 #maybe this could be merged inside hedgewars/CMakeLists.txt
 if(BUILD_ENGINE_C)

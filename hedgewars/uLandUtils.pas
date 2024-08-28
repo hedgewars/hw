@@ -20,23 +20,21 @@ function  LandPixelRow(row: LongInt): PLongwordArray;
 implementation
 uses uUtils, uConsts, uVariables, uTypes;
 
-const LibFutureName = 'hwengine_future';
+function  create_empty_game_field(width, height: Longword): pointer; cdecl; external;
+procedure get_game_field_parameters(game_field: pointer; var width: LongInt; var height: LongInt; var play_width: LongInt; var play_height: LongInt); cdecl; external;
+procedure dispose_game_field(game_field: pointer); cdecl; external;
 
-function  create_empty_game_field(width, height: Longword): pointer; cdecl; external LibFutureName;
-procedure get_game_field_parameters(game_field: pointer; var width: LongInt; var height: LongInt; var play_width: LongInt; var play_height: LongInt); cdecl; external LibFutureName;
-procedure dispose_game_field(game_field: pointer); cdecl; external LibFutureName;
+function  land_get(game_field: pointer; x, y: LongInt): Word; cdecl; external;
+procedure land_set(game_field: pointer; x, y: LongInt; value: Word); cdecl; external;
+function  land_row(game_field: pointer; row: LongInt): PWordArray; cdecl; external;
+procedure land_fill(game_field: pointer; x, y: LongInt; border, fill: Word); cdecl; external;
 
-function  land_get(game_field: pointer; x, y: LongInt): Word; cdecl; external LibFutureName;
-procedure land_set(game_field: pointer; x, y: LongInt; value: Word); cdecl; external LibFutureName;
-function  land_row(game_field: pointer; row: LongInt): PWordArray; cdecl; external LibFutureName;
-procedure land_fill(game_field: pointer; x, y: LongInt; border, fill: Word); cdecl; external LibFutureName;
+function  land_pixel_get(game_field: pointer; x, y: LongInt): Longword; cdecl; external;
+procedure land_pixel_set(game_field: pointer; x, y: LongInt; value: Longword); cdecl; external;
+function  land_pixel_row(game_field: pointer; row: LongInt): PLongwordArray; cdecl; external;
 
-function  land_pixel_get(game_field: pointer; x, y: LongInt): Longword; cdecl; external LibFutureName;
-procedure land_pixel_set(game_field: pointer; x, y: LongInt; value: Longword); cdecl; external LibFutureName;
-function  land_pixel_row(game_field: pointer; row: LongInt): PLongwordArray; cdecl; external LibFutureName;
-
-function  generate_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external LibFutureName;
-procedure apply_theme(game_field: pointer; data_path, theme_name: PChar); cdecl; external LibFutureName;
+function  generate_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
+procedure apply_theme(game_field: pointer; data_path, theme_name: PChar); cdecl; external;
 
 var gameField: pointer;
 
