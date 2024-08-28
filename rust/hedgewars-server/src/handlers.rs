@@ -15,7 +15,7 @@ use crate::{
     core::{
         anteroom::HwAnteroom,
         room::RoomSave,
-        server::HwServer,
+        server::{HwRoomOrServer, HwServer},
         types::{ClientId, Replay, RoomId},
     },
     utils,
@@ -372,8 +372,10 @@ pub fn handle(
                         }
                     }
                     _ => match state.server.get_room_control(client_id) {
-                        None => inlobby::handle(&mut state.server, client_id, response, message),
-                        Some(control) => inroom::handle(control, response, message),
+                        HwRoomOrServer::Room(control) => inroom::handle(control, response, message),
+                        HwRoomOrServer::Server(server) => {
+                            inlobby::handle(server, client_id, response, message)
+                        }
                     },
                 }
             }

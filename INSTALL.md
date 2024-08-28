@@ -81,6 +81,11 @@ To compile it, you need:
     - `regex-tdfa`
     - `binary` >= 0.8.5.1
 
+If you use the `Cabal` based build process:
+    - `zlib` is not needed.
+    - `network` >= 3.0
+    - `network-bsd` >= 2.8.1
+
 Building
 --------
 
@@ -139,6 +144,16 @@ To install Hedgewars to the install directory run:
     # make install
 
 That's all! Enjoy!
+
+### Building the Hedgewars Server only
+
+The Hedgewars Server can also be built separately using `Cabal`. All necessary
+files, including the `hedgewars-server.cabal`, are in the `gameServer`
+subdirectory.
+For most users, the server isn't needed, and this possibility is targeted
+primarily at packagers. If you don't know how to build Haskell projects with
+`Cabal`, this option is likely not for you. Instead use the `cmake` based
+instructions above.
 
 Troubleshooting
 ---------------

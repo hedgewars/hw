@@ -87,6 +87,10 @@ impl ProtocolDecoder {
                 Err(nom::Err::Incomplete(_)) => {}
                 Err(nom::Err::Failure(e) | nom::Err::Error(e)) => {
                     debug!("Invalid message: {:?}", e);
+                    trace!(
+                        "Buffer content: {:?}",
+                        String::from_utf8_lossy(&self.buffer[..])
+                    );
                     self.recover();
                 }
             }
@@ -101,7 +105,13 @@ impl ProtocolDecoder {
         use ProtocolError::*;
 
         loop {
-            if !self.buffer.has_remaining() {
+            let remaining = self.buffer.capacity() - self.buffer.len();
+            if remaining < 1024 {
+                self.buffer.reserve(2048 - remaining);
+            }
+
+            if !self.buffer.has_remaining() || self.is_recovering {
+                //todo!("ensure the buffer doesn't grow indefinitely")
                 match timeout(self.read_timeout, stream.read_buf(&mut self.buffer)).await {
                     Err(_) => return Err(Timeout),
                     Ok(Err(e)) => return Err(Network(Box::new(e))),

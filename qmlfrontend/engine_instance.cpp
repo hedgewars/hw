@@ -88,17 +88,21 @@ void EngineInstance::moveCamera(const QPoint& delta) {
 }
 
 void EngineInstance::simpleEvent(Engine::SimpleEventType event_type) {
-  simple_event(m_instance.get(), event_type);
+  simple_event(m_instance.get(),
+               static_cast<hwengine::SimpleEventType>(event_type));
 }
 
 void EngineInstance::longEvent(Engine::LongEventType event_type,
                                Engine::LongEventState state) {
-  long_event(m_instance.get(), event_type, state);
+  long_event(m_instance.get(), static_cast<hwengine::LongEventType>(event_type),
+             static_cast<hwengine::LongEventState>(state));
 }
 
 void EngineInstance::positionedEvent(Engine::PositionedEventType event_type,
                                      qint32 x, qint32 y) {
-  positioned_event(m_instance.get(), event_type, x, y);
+  positioned_event(m_instance.get(),
+                   static_cast<hwengine::PositionedEventType>(event_type), x,
+                   y);
 }
 
 void EngineInstance::renderFrame() { render_frame(m_instance.get()); }

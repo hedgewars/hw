@@ -20,16 +20,16 @@ User_Mission_-_Diver.name=Diver
 User_Mission_-_Diver.desc="This 'amphibious assault' thing is harder than it looks."
 
 User_Mission_-_Teamwork.name=Teamwork
-User_Mission_-_Teamwork.desc="A malfunctioning cyborg is guarding a valuable military secret. You need to lead a special ops team of two hedgehogs with the task to destroy the enemy in order to obtain the secret! It is absolutely critical for our future operations that both your hedgehogs survive."
+User_Mission_-_Teamwork.desc="A malfunctioning cyborg is guarding a valuable military secret. You need to lead a special ops team of two hedgehogs tasked with destroying the enemy in order to obtain it! It is absolutely critical for our future operations that both hedgehogs survive."
 
 User_Mission_-_Teamwork_2.name=Teamwork 2
-User_Mission_-_Teamwork_2.desc="We have located a secret outpost of the Cybernetic Empire and it is only guarded by a harmless watch bot. Lead your special ops team to destroy the watch bot so we can claim the base as ours. Like before, we need both hedgehogs to survive!"
+User_Mission_-_Teamwork_2.desc="We have located a secret outpost of the Cybernetic Empire and it is only guarded by a harmless watch bot. Lead your special ops team to destroy it so we can claim the base as ours. Like before, we need both hedgehogs to survive!"
 
 User_Mission_-_Spooky_Tree.name=Spooky Tree
 User_Mission_-_Spooky_Tree.desc="Lots of crates out here. I sure hope that bird ain't feeling hungry."
 
 User_Mission_-_Bamboo_Thicket.name=Bamboo Thicket
-User_Mission_-_Bamboo_Thicket.desc="A cyborg is terrorizing the bamboo thicket and attacks anyone in sight with a practically perfect accuracy. Plan ahead, move fast and take out the enemy quickly!"
+User_Mission_-_Bamboo_Thicket.desc="A cyborg is terrorizing the bamboo thicket and attacking anyone in sight, with practically perfect accuracy. Plan ahead, move fast and take out the enemy quickly!"
 
 User_Mission_-_That_Sinking_Feeling.name=That Sinking Feeling
 User_Mission_-_That_Sinking_Feeling.desc="The water is rising rapidly and time is limited. Many have tried and failed. Can you save them all?"
@@ -56,13 +56,13 @@ Bazooka_Battlefield.name=Bazooka Battlefield
 Bazooka_Battlefield.desc="Your loyal hedgehogs have ambushed the enemy. Destroy them only with bazookas! But don't take too long, the water will rise soon."
 
 Tentacle_Terror.name=Tentacle Terror
-Tentacle_Terror.desc="Below a terrible monster, your enemy is hiding like a coward and will attack you with air strikes as soon you lose cover. Show him who's the real boss in Hell! But you need some devilish good roping skills to even stand a chance."
+Tentacle_Terror.desc="Below a terrible monster, your enemy is hiding like a coward and will attack you with air strikes as soon you lose cover. Show him who's the real boss in Hell! But you need some devilishly good roping skills to even stand a chance."
 
 ClimbHome.name=Climb Home
 ClimbHome.desc="You are far away from home and the water is rising. Climb as high as you can!"
 
 portal.name=Portal Mind Challenge
-portal.desc="Use the portal to move fast and far, use it to kill, use it with caution!"
+portal.desc="Use the portal to move fast and far. Use it to kill. Use it with caution!"
 
 Target_Practice_-_Bazooka_easy.name=Target Practice: Bazooka (easy)
 Target_Practice_-_Bazooka_easy.desc="Alright, soldier, blow those targets up as fast as you can!"
@@ -77,7 +77,7 @@ Target_Practice_-_Shotgun.name=Target Practice: Shotgun
 Target_Practice_-_Shotgun.desc="Shoot first, ask questions later!"
 
 Basic_Training_-_Sniper_Rifle.name=Target Practice: Sniper Rifle
-Basic_Training_-_Sniper_Rifle.desc="This is the perfect shooting range for snipers! Destroy all targets as fast and accurate you can and become a legend!"
+Basic_Training_-_Sniper_Rifle.desc="This is the perfect shooting range for snipers! Destroy all targets as fast and as accurately as you can and become a legend!"
 
 Target_Practice_-_Homing_Bee.name=Target Practice: Homing Bee
 Target_Practice_-_Homing_Bee.desc="Using the homing bee is trickier than it seems."
@@ -89,7 +89,7 @@ Target_Practice_-_Grenade_hard.name=Target Practice: Grenade (hard)
 Target_Practice_-_Grenade_hard.desc="This is nothing for greenhorns! We will place the targets at some really tricky positions."
 
 Challenge_-_Speed_Shoppa_-_Hedgelove.name=Time Trial: Shoppa Love
-Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Show your love to rope and collect a few crates on a small map."
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Show your love for roping and collect a few crates on a small map."
 
 Challenge_-_Speed_Shoppa_-_Ropes.name=Time Trial: Ropes and Crates
 Challenge_-_Speed_Shoppa_-_Ropes.desc="Take your rope and collect all crates on this medium-sized map."

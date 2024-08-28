@@ -60,6 +60,7 @@ pub fn handle(
     response: &mut super::Response,
     message: HwProtocolMessage,
 ) -> LoginResult {
+    //todo!("Handle parsing of empty nicks")
     match message {
         HwProtocolMessage::Quit(_) => {
             response.add(Bye("User quit".to_string()).send_self());

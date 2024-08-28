@@ -18,7 +18,6 @@ static QObject* previewacceptor_singletontype_provider(
 }
 
 int main(int argc, char* argv[]) {
-  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
@@ -34,14 +33,15 @@ int main(int argc, char* argv[]) {
   qmlRegisterType<HWEngine>("Hedgewars.Engine", 1, 0, "HWEngine");
   qmlRegisterType<GameView>("Hedgewars.Engine", 1, 0, "GameView");
   qmlRegisterType<NetSession>("Hedgewars.Engine", 1, 0, "NetSession");
-  qmlRegisterUncreatableType<EngineInstance>("Hedgewars.Engine", 1, 0,
-                                             "EngineInstance",
-                                             "Create by HWEngine run methods");
+  qmlRegisterUncreatableType<EngineInstance>(
+      "Hedgewars.Engine", 1, 0, "EngineInstance",
+      QStringLiteral("Create by HWEngine run methods"));
 
   qmlRegisterUncreatableMetaObject(Engine::staticMetaObject, "Hedgewars.Engine",
-                                   1, 0, "Engine", "Namespace: only enums");
+                                   1, 0, "Engine",
+                                   QStringLiteral("Namespace: only enums"));
 
-  engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+  engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
   if (engine.rootObjects().isEmpty()) return -1;
 
   return app.exec();

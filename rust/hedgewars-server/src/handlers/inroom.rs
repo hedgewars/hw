@@ -124,7 +124,6 @@ pub fn handle(
                 result,
                 response,
             );
-            room_control.cleanup_room();
         }
         Chat(msg) => {
             response.add(
@@ -334,6 +333,7 @@ pub fn handle(
             }
         }
         CallVote(None) => {
+            //todo!("implement ghost points")
             response.add(server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
                 .send_self());
         }
@@ -495,6 +495,6 @@ pub fn handle(
                 response.warn("The player is not in your room.")
             }
         },
-        _ => warn!("Unimplemented!"),
+        message => warn!("Unimplemented: {:?}", message),
     }
 }

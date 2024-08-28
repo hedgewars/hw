@@ -6,10 +6,6 @@ use fpnum::*;
 use integral_geometry::{Point, PotSize};
 use land2d::Land2D;
 
-pub fn fppoint_round(point: &FPPoint) -> Point {
-    Point::new(point.x().round(), point.y().round())
-}
-
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct CircleBounds {
     pub center: FPPoint,
@@ -90,7 +86,7 @@ impl DetectedCollisions {
         position: &FPPoint,
     ) {
         self.pairs.push((contact_gear_id1, contact_gear_id2));
-        self.positions.push(fppoint_round(&position));
+        self.positions.push(Point::from_fppoint(&position));
     }
 
     pub fn clear(&mut self) {

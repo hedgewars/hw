@@ -21,6 +21,7 @@ module HWProtoLobbyState where
 
 import Data.Maybe
 import Data.List
+import Control.Monad
 import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as B
 --------------------------------------

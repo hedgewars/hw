@@ -59,7 +59,7 @@ impl Point {
 
     #[inline]
     pub const fn rotate90(self) -> Self {
-        Point::new(self.y, -self.x)
+        Self::new(self.y, -self.x)
     }
 
     #[inline]
@@ -68,8 +68,8 @@ impl Point {
     }
 
     #[inline]
-    pub fn clamp(self, rect: &Rect) -> Point {
-        Point::new(rect.x_range().clamp(self.x), rect.y_range().clamp(self.y))
+    pub fn clamp(self, rect: &Rect) -> Self {
+        Self::new(rect.x_range().clamp(self.x), rect.y_range().clamp(self.y))
     }
 
     #[inline]

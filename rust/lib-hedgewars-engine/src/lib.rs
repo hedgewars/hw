@@ -62,7 +62,9 @@ pub enum PositionedEventType {
 }
 
 #[no_mangle]
-pub extern "C" fn simple_event(engine_state: &mut EngineInstance, event_type: SimpleEventType) {}
+pub extern "C" fn simple_event(engine_state: &mut EngineInstance, event_type: SimpleEventType) {
+    println!("{:?}", event_type);
+}
 
 #[no_mangle]
 pub extern "C" fn long_event(
@@ -152,6 +154,7 @@ pub extern "C" fn setup_current_gl_context(
         gl::Viewport(0, 0, width as i32, height as i32);
     }
     engine_state.world.create_renderer(width, height);
+    engine_state.world.init_renderer();
 }
 
 #[no_mangle]

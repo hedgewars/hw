@@ -32,7 +32,7 @@ struct BanCollection {
 
 impl BanCollection {
     fn new() -> Self {
-        todo!("add nick bans");
+        //todo!("add nick bans");
         Self {
             ban_ips: vec![],
             ban_timeouts: vec![],

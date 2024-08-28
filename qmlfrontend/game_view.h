@@ -1,34 +1,13 @@
 #ifndef GAMEVIEW_H
 #define GAMEVIEW_H
 
-#include <QQuickItem>
-
 #include <QPointer>
+#include <QQuickFramebufferObject>
 #include <QScopedPointer>
-#include <QtGui/QOpenGLFunctions>
-#include <QtGui/QOpenGLShaderProgram>
 
 #include "engine_instance.h"
 
-class GameViewRenderer : public QObject, protected QOpenGLFunctions {
-  Q_OBJECT
- public:
-  explicit GameViewRenderer();
-  ~GameViewRenderer() override;
-
-  void tick(quint32 delta);
-  void setEngineInstance(EngineInstance* engineInstance);
-
- public slots:
-  void paint();
-  void onViewportSizeChanged(QQuickWindow* window);
-
- private:
-  quint32 m_delta;
-  QPointer<EngineInstance> m_engineInstance;
-};
-
-class GameView : public QQuickItem {
+class GameView : public QQuickFramebufferObject {
   Q_OBJECT
 
   Q_PROPERTY(EngineInstance* engineInstance READ engineInstance WRITE
@@ -40,25 +19,22 @@ class GameView : public QQuickItem {
   Q_INVOKABLE void tick(quint32 delta);
 
   EngineInstance* engineInstance() const;
+  Renderer* createRenderer() const override;
+  void executeActions();
 
- signals:
+ Q_SIGNALS:
   void engineInstanceChanged(EngineInstance* engineInstance);
 
- public slots:
-  void sync();
-  void cleanup();
+ public Q_SLOTS:
   void setEngineInstance(EngineInstance* engineInstance);
 
- private slots:
-  void handleWindowChanged(QQuickWindow* win);
-
  private:
-  quint32 m_delta;
-  QScopedPointer<GameViewRenderer> m_renderer;
-  bool m_windowChanged;
   QPointer<EngineInstance> m_engineInstance;
   QSize m_viewportSize;
   QPoint m_centerPoint;
+  QList<std::function<void(EngineInstance*)>> m_actions;
+
+  void addAction(std::function<void(EngineInstance*)>&& action);
 };
 
 #endif  // GAMEVIEW_H

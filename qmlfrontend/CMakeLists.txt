@@ -9,7 +9,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+find_package(Qt6 COMPONENTS Core Quick REQUIRED)
 
 add_executable(${PROJECT_NAME} "main.cpp" "qml.qrc"
     "hwengine.cpp" "hwengine.h"
@@ -25,4 +25,4 @@ add_executable(${PROJECT_NAME} "main.cpp" "qml.qrc"
     "rooms_model.cpp" "rooms_model.h"
     )
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Network Qt5::Quick)
+target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Network Qt6::Quick)

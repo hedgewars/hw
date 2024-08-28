@@ -1,6 +1,6 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import Hedgewars.Engine 1.0
 
@@ -8,18 +8,19 @@ Item {
   id: element
   property alias button1: button1
   property alias previewImage: previewImage
+  property alias preview: preview
   property alias gameButton: gameButton
-  width: 1024
-  height: 800
   property alias netButton: netButton
   property alias tickButton: tickButton
   property alias gameView: gameView
+  property alias gameMouseArea: gameMouseArea
 
   ColumnLayout {
     anchors.fill: parent
 
     RowLayout {
       Layout.alignment: Qt.AlignHCenter
+      Layout.fillHeight: false
 
       Button {
         id: button1
@@ -38,6 +39,7 @@ Item {
     }
 
     Rectangle {
+      id: preview
       border.color: "orange"
       border.width: 5
       radius: 5
@@ -80,6 +82,13 @@ Item {
 
       Layout.fillWidth: true
       Layout.fillHeight: true
+
+      MouseArea {
+        id: gameMouseArea
+        anchors.fill: parent
+
+        property point lastPoint
+      }
     }
   }
 

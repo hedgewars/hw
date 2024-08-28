@@ -470,8 +470,8 @@ while (headcmd <> nil)
     RemoveCmd
     end;
 
-if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
-    checkFails(GameTicks < LongWord(hiTicks shl 16) + headcmd^.loTime,
+if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) and (GameTicks < LongWord(hiTicks shl 16) + headcmd^.loTime) then
+    checkFails(true,
             'oops, queue error. in buffer: ' + headcmd^.cmd +
             ' (' + IntToStr(GameTicks) + ' > ' +
             IntToStr(hiTicks shl 16 + headcmd^.loTime) + ')',

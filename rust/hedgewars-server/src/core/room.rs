@@ -14,18 +14,25 @@ use std::{collections::HashMap, iter};
 pub const MAX_TEAMS_IN_ROOM: u8 = 8;
 pub const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_TEAMS_IN_ROOM * MAX_HEDGEHOGS_PER_TEAM;
 
+#[derive(Clone, Debug)]
+pub struct OwnedTeam {
+    pub owner_id: ClientId,
+    pub owner_nick: String,
+    pub info: TeamInfo,
+}
+
 fn client_teams_impl(
-    teams: &[(ClientId, TeamInfo)],
-    client_id: ClientId,
+    teams: &[OwnedTeam],
+    owner_id: ClientId,
 ) -> impl Iterator<Item = &TeamInfo> + Clone {
     teams
         .iter()
-        .filter(move |(id, _)| *id == client_id)
-        .map(|(_, t)| t)
+        .filter(move |team| team.owner_id == owner_id)
+        .map(|team| &team.info)
 }
 
 pub struct GameInfo {
-    pub original_teams: Vec<(ClientId, TeamInfo)>,
+    pub original_teams: Vec<OwnedTeam>,
     pub left_teams: Vec<String>,
     pub msg_log: Vec<String>,
     pub sync_msg: Option<String>,
@@ -34,7 +41,7 @@ pub struct GameInfo {
 }
 
 impl GameInfo {
-    fn new(teams: Vec<(ClientId, TeamInfo)>, config: RoomConfig) -> GameInfo {
+    fn new(teams: Vec<OwnedTeam>, config: RoomConfig) -> GameInfo {
         GameInfo {
             left_teams: Vec::new(),
             msg_log: Vec::new(),
@@ -45,8 +52,18 @@ impl GameInfo {
         }
     }
 
-    pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> + Clone {
-        client_teams_impl(&self.original_teams, client_id)
+    pub fn client_teams(&self, owner_id: ClientId) -> impl Iterator<Item = &TeamInfo> + Clone {
+        client_teams_impl(&self.original_teams, owner_id)
+    }
+
+    pub fn client_teams_by_nick<'a>(
+        &'a self,
+        owner_nick: &'a str,
+    ) -> impl Iterator<Item = &TeamInfo> + Clone + 'a {
+        self.original_teams
+            .iter()
+            .filter(move |team| team.owner_nick == owner_nick)
+            .map(|team| &team.info)
     }
 
     pub fn mark_left_teams<'a, I>(&mut self, team_names: I)
@@ -95,7 +112,7 @@ pub struct HwRoom {
     pub default_hedgehog_number: u8,
     pub max_teams: u8,
     pub ready_players_number: u8,
-    pub teams: Vec<(ClientId, TeamInfo)>,
+    pub teams: Vec<OwnedTeam>,
     config: RoomConfig,
     pub voting: Option<Voting>,
     pub saves: HashMap<String, RoomSave>,
@@ -125,7 +142,10 @@ impl HwRoom {
     }
 
     pub fn hedgehogs_number(&self) -> u8 {
-        self.teams.iter().map(|(_, t)| t.hedgehogs_number).sum()
+        self.teams
+            .iter()
+            .map(|team| team.info.hedgehogs_number)
+            .sum()
     }
 
     pub fn addable_hedgehogs(&self) -> u8 {
@@ -134,7 +154,7 @@ impl HwRoom {
 
     pub fn add_team(
         &mut self,
-        owner_id: ClientId,
+        owner: &HwClient,
         mut team: TeamInfo,
         preserve_color: bool,
     ) -> &TeamInfo {
@@ -142,24 +162,32 @@ impl HwRoom {
             team.color = iter::repeat(())
                 .enumerate()
                 .map(|(i, _)| i as u8)
-                .take(u8::max_value() as usize + 1)
-                .find(|i| self.teams.iter().all(|(_, t)| t.color != *i))
+                .take(u8::MAX as usize + 1)
+                .find(|i| self.teams.iter().all(|team| team.info.color != *i))
                 .unwrap_or(0u8)
         };
         team.hedgehogs_number = if self.teams.is_empty() {
             self.default_hedgehog_number
         } else {
             self.teams[0]
-                .1
+                .info
                 .hedgehogs_number
                 .min(self.addable_hedgehogs())
         };
-        self.teams.push((owner_id, team));
-        &self.teams.last().unwrap().1
+        self.teams.push(OwnedTeam {
+            owner_id: owner.id,
+            owner_nick: owner.nick.clone(),
+            info: team,
+        });
+        &self.teams.last().unwrap().info
     }
 
     pub fn remove_team(&mut self, team_name: &str) {
-        if let Some(index) = self.teams.iter().position(|(_, t)| t.name == team_name) {
+        if let Some(index) = self
+            .teams
+            .iter()
+            .position(|team| team.info.name == team_name)
+        {
             self.teams.remove(index);
         }
     }
@@ -169,9 +197,9 @@ impl HwRoom {
         let teams = &mut self.teams;
 
         if teams.len() as u8 * n <= MAX_HEDGEHOGS_IN_ROOM {
-            for (_, team) in teams.iter_mut() {
-                team.hedgehogs_number = n;
-                names.push(team.name.clone())
+            for team in teams.iter_mut() {
+                team.info.hedgehogs_number = n;
+                names.push(team.info.name.clone())
             }
             self.default_hedgehog_number = n;
         }
@@ -190,8 +218,8 @@ impl HwRoom {
     {
         self.teams
             .iter_mut()
-            .find(|(_, t)| f(t))
-            .map(|(id, t)| (*id, t))
+            .find(|team| f(&team.info))
+            .map(|team| (team.owner_id, &mut team.info))
     }
 
     pub fn find_team<F>(&self, f: F) -> Option<&TeamInfo>
@@ -200,18 +228,18 @@ impl HwRoom {
     {
         self.teams
             .iter()
-            .find_map(|(_, t)| Some(t).filter(|t| f(&t)))
+            .find_map(|team| Some(&team.info).filter(|t| f(&t)))
     }
 
-    pub fn client_teams(&self, client_id: ClientId) -> impl Iterator<Item = &TeamInfo> {
-        client_teams_impl(&self.teams, client_id)
+    pub fn client_teams(&self, owner_id: ClientId) -> impl Iterator<Item = &TeamInfo> {
+        client_teams_impl(&self.teams, owner_id)
     }
 
     pub fn client_team_indices(&self, client_id: ClientId) -> Vec<u8> {
         self.teams
             .iter()
             .enumerate()
-            .filter(move |(_, (id, _))| *id == client_id)
+            .filter(move |(_, team)| team.owner_id == client_id)
             .map(|(i, _)| i as u8)
             .collect()
     }
@@ -219,15 +247,15 @@ impl HwRoom {
     pub fn clan_team_owners(&self, color: u8) -> impl Iterator<Item = ClientId> + '_ {
         self.teams
             .iter()
-            .filter(move |(_, t)| t.color == color)
-            .map(|(id, _)| *id)
+            .filter(move |team| team.info.color == color)
+            .map(|team| team.owner_id)
     }
 
     pub fn find_team_owner(&self, team_name: &str) -> Option<(ClientId, &str)> {
         self.teams
             .iter()
-            .find(|(_, t)| t.name == team_name)
-            .map(|(id, t)| (*id, &t.name[..]))
+            .find(|team| team.info.name == team_name)
+            .map(|team| (team.owner_id, &team.info.name[..]))
     }
 
     pub fn find_team_color(&self, owner_id: ClientId) -> Option<u8> {
@@ -235,8 +263,8 @@ impl HwRoom {
     }
 
     pub fn has_multiple_clans(&self) -> bool {
-        self.teams.iter().min_by_key(|(_, t)| t.color)
-            != self.teams.iter().max_by_key(|(_, t)| t.color)
+        let colors = self.teams.iter().map(|team| team.info.color);
+        colors.clone().min() != colors.max()
     }
 
     pub fn set_config(&mut self, cfg: GameCfg) {

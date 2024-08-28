@@ -2478,7 +2478,7 @@ Vx:= (Targ.Point.X - x) * 1 / 1024;
 Vy:= (Targ.Point.Y - y) * 1 / 1024;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 // Minigun angle is limited
-if (ap.Angle < Ammoz[amMinigun].minAngle) or (ap.Angle > Ammoz[amMinigun].maxAngle) then
+if (abs(ap.Angle) < Ammoz[amMinigun].minAngle) or (abs(ap.Angle) > Ammoz[amMinigun].maxAngle) then
     exit(BadTurn);
 
 // Apply inaccuracy

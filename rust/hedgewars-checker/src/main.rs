@@ -1,5 +1,6 @@
-use anyhow::{bail, Result};
+use anyhow::{anyhow, bail, Result};
 use argparse::{ArgumentParser, Store};
+use base64::{engine::general_purpose, Engine};
 use hedgewars_network_protocol::{
     messages::HwProtocolMessage as ClientMessage, messages::HwServerMessage::*, parser,
 };
@@ -7,18 +8,19 @@ use ini::Ini;
 use log::{debug, info, warn};
 use netbuf::Buf;
 use std::{io::Write, str::FromStr};
+use tokio::time::MissedTickBehavior;
 use tokio::{io, io::AsyncWriteExt, net::TcpStream, process::Command, sync::mpsc};
 
 async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result<Vec<String>> {
     let mut replay = tempfile::NamedTempFile::new()?;
 
-    for line in buffer.into_iter() {
-        replay.write(&base64::decode(line)?)?;
+    for line in buffer.iter() {
+        replay.write_all(&general_purpose::STANDARD.decode(line)?)?;
     }
 
     let temp_file_path = replay.path();
 
-    let mut home_dir = dirs::home_dir().unwrap();
+    let mut home_dir = dirs::home_dir().ok_or(anyhow!("Home path not detected"))?;
     home_dir.push(".hedgewars");
 
     debug!("Checking replay in {}", temp_file_path.to_string_lossy());
@@ -43,7 +45,7 @@ async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result
 
     let mut engine_lines = output
         .stderr
-        .split(|b| *b == '\n' as u8)
+        .split(|b| *b == b'\n')
         .skip_while(|l| *l != b"WINNERS" && *l != b"DRAW");
 
     // debug!("Engine lines: {:?}", &engine_lines);
@@ -83,7 +85,7 @@ async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result
 
     // println!("Engine lines: {:?}", &result);
 
-    if result.len() > 0 {
+    if !result.is_empty() {
         Ok(result)
     } else {
         bail!("no data from engine")
@@ -118,8 +120,16 @@ async fn connect_and_run(
 
     let mut buf = Buf::new();
 
+    let mut interval = tokio::time::interval(tokio::time::Duration::from_secs(30));
+    interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
+
     loop {
         let r = tokio::select! {
+            _ = interval.tick() => {
+                // Send Ping
+                stream.write_all(ClientMessage::Ping.to_raw_protocol().as_bytes()).await?;
+                None
+            },
             _ = stream.readable() => None,
             r = results_receiver.recv() => r
         };
@@ -133,27 +143,27 @@ async fn connect_and_run(
                     debug!("Check result: [{:?}]", result);
 
                     stream
-                        .write(
+                        .write_all(
                             ClientMessage::CheckedOk(result)
                                 .to_raw_protocol()
                                 .as_bytes(),
                         )
                         .await?;
                     stream
-                        .write(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
+                        .write_all(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
                         .await?;
                 }
                 Err(e) => {
                     info!("Check failed: {:?}", e);
                     stream
-                        .write(
+                        .write_all(
                             ClientMessage::CheckedFail("error".to_owned())
                                 .to_raw_protocol()
                                 .as_bytes(),
                         )
                         .await?;
                     stream
-                        .write(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
+                        .write_all(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
                         .await?;
                 }
             }
@@ -183,7 +193,7 @@ async fn connect_and_run(
                 Connected(_, _) => {
                     info!("Connected");
                     stream
-                        .write(
+                        .write_all(
                             ClientMessage::Checker(
                                 protocol_number,
                                 username.to_owned(),
@@ -196,12 +206,15 @@ async fn connect_and_run(
                 }
                 Ping => {
                     stream
-                        .write(ClientMessage::Pong.to_raw_protocol().as_bytes())
+                        .write_all(ClientMessage::Pong.to_raw_protocol().as_bytes())
                         .await?;
+                }
+                Pong => {
+                    // do nothing
                 }
                 LogonPassed => {
                     stream
-                        .write(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
+                        .write_all(ClientMessage::CheckerReady.to_raw_protocol().as_bytes())
                         .await?;
                 }
                 Replay(lines) => {
@@ -216,12 +229,12 @@ async fn connect_and_run(
                     info!("Chat [{}]: {}", nick, msg);
                 }
                 RoomAdd(fields) => {
-                    let l = fields.into_iter();
-                    info!("Room added: {}", l.skip(1).next().unwrap());
+                    let mut l = fields.into_iter();
+                    info!("Room added: {}", l.nth(1).unwrap());
                 }
                 RoomUpdated(name, fields) => {
-                    let l = fields.into_iter();
-                    let new_name = l.skip(1).next().unwrap();
+                    let mut l = fields.into_iter();
+                    let new_name = l.nth(1).unwrap();
 
                     if name != new_name {
                         info!("Room renamed: {}", new_name);
@@ -245,7 +258,7 @@ async fn connect_and_run(
 async fn get_protocol_number(executable: &str) -> Result<u16> {
     let output = Command::new(executable).arg("--protocol").output().await?;
 
-    Ok(u16::from_str(&String::from_utf8(output.stdout).unwrap().trim()).unwrap_or(55))
+    Ok(u16::from_str(String::from_utf8(output.stdout)?.trim()).unwrap_or(55))
 }
 
 #[tokio::main]
@@ -254,15 +267,18 @@ async fn main() -> Result<()> {
         .verbosity(3)
         .timestamp(stderrlog::Timestamp::Second)
         .module(module_path!())
-        .init()
-        .unwrap();
+        .init()?;
 
-    let mut frontend_settings = dirs::home_dir().unwrap();
+    let mut frontend_settings = dirs::home_dir().ok_or(anyhow!("Home path not detected"))?;
     frontend_settings.push(".hedgewars/settings.ini");
 
     let i = Ini::load_from_file(frontend_settings.to_str().unwrap()).unwrap();
-    let username = i.get_from(Some("net"), "nick").unwrap();
-    let password = i.get_from(Some("net"), "passwordhash").unwrap();
+    let username = i
+        .get_from(Some("net"), "nick")
+        .ok_or(anyhow!("Nickname not found in frontend config"))?;
+    let password = i
+        .get_from(Some("net"), "passwordhash")
+        .ok_or(anyhow!("Password not found in frontend config"))?;
 
     let mut exe = "/usr/local/bin/hwengine".to_string();
     let mut prefix = "/usr/local/share/hedgewars/Data".to_string();
@@ -279,7 +295,7 @@ async fn main() -> Result<()> {
     info!("Executable: {}", exe);
     info!("Data dir: {}", prefix);
 
-    let protocol_number = get_protocol_number(&exe.as_str()).await.unwrap_or_default();
+    let protocol_number = get_protocol_number(exe.as_str()).await?;
 
     info!("Using protocol number {}", protocol_number);
 
@@ -288,8 +304,8 @@ async fn main() -> Result<()> {
 
     let (network_result, checker_result) = tokio::join!(
         connect_and_run(
-            &username,
-            &password,
+            username,
+            password,
             protocol_number,
             replay_sender,
             results_receiver

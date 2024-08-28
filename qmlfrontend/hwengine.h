@@ -4,12 +4,11 @@
 #include <QList>
 #include <QObject>
 
-#include "engine_interface.h"
 #include "game_config.h"
+#include "preview_acceptor.h"
 
 class QQmlEngine;
 class EngineInstance;
-class PreviewAcceptor;
 
 class HWEngine : public QObject {
   Q_OBJECT
@@ -24,7 +23,7 @@ class HWEngine : public QObject {
 
  public:
   explicit HWEngine(QObject* parent = nullptr);
-  ~HWEngine();
+  ~HWEngine() override;
 
   Q_INVOKABLE void getPreview();
   Q_INVOKABLE EngineInstance* runQuickGame();

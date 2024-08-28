@@ -228,12 +228,14 @@ for i:= 0 to Pred(Targets.Count) do
                         if dAngle > 0 then
                             begin
                             AddAction(BestActions, aia_Up, aim_push, 300 + random(250), 0, 0);
-                            AddAction(BestActions, aia_Up, aim_release, dAngle, 0, 0)
+                            AddAction(BestActions, aia_waitAngle, ap.Angle, 1, 0, 0);
+                            AddAction(BestActions, aia_Up, aim_release, 1, 0, 0)
                             end
                         else if dAngle < 0 then
                             begin
                             AddAction(BestActions, aia_Down, aim_push, 300 + random(250), 0, 0);
-                            AddAction(BestActions, aia_Down, aim_release, -dAngle, 0, 0)
+                            AddAction(BestActions, aia_waitAngle, ap.Angle, 1, 0, 0);
+                            AddAction(BestActions, aia_Down, aim_release, 1, 0, 0)
                             end
                         end;
 

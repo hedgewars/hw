@@ -948,8 +948,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             for(int i = 1; i < lst.size(); ++i)
             {
-                emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
                 m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
+                if(!m_playersModel->isFlagSet(lst[i], PlayersListModel::Ignore))
+                        emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
             }
             return;
         }
@@ -962,12 +963,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 return;
             }
 
-            if (lst.size() < 3)
-                emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
-            else
-            {
-                QString leaveMsg = QString(lst[2]);
-                emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1]).arg(HWApplication::translate("server", leaveMsg.toLatin1().constData())));
+            if(!m_playersModel->isFlagSet(lst[1], PlayersListModel::Ignore)) {
+				if (lst.size() < 3)
+					emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
+				else
+				{
+					QString leaveMsg = QString(lst[2]);
+					emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1]).arg(HWApplication::translate("server", leaveMsg.toLatin1().constData())));
+				}
             }
             m_playersModel->playerLeftRoom(lst[1]);
             return;

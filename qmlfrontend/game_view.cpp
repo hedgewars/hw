@@ -1,114 +1,109 @@
 #include "game_view.h"
 
 #include <QtQuick/qquickwindow.h>
+
 #include <QCursor>
+#include <QOpenGLFramebufferObjectFormat>
+#include <QQuickOpenGLUtils>
 #include <QTimer>
 #include <QtGui/QOpenGLContext>
-#include <QtGui/QOpenGLShaderProgram>
 
-GameView::GameView(QQuickItem* parent)
-    : QQuickItem(parent), m_delta(0), m_windowChanged(true) {
-  connect(this, &QQuickItem::windowChanged, this,
-          &GameView::handleWindowChanged);
+class GameViewRenderer : public QQuickFramebufferObject::Renderer {
+ public:
+  explicit GameViewRenderer() = default;
+
+  GameViewRenderer(const GameViewRenderer&) = delete;
+  GameViewRenderer(GameViewRenderer&&) = delete;
+  GameViewRenderer& operator=(const GameViewRenderer&) = delete;
+  GameViewRenderer& operator=(GameViewRenderer&&) = delete;
+
+  void render() override;
+  QOpenGLFramebufferObject* createFramebufferObject(const QSize& size) override;
+  void synchronize(QQuickFramebufferObject* fbo) override;
+
+  QPointer<GameView> m_gameView;
+  QPointer<QQuickWindow> m_window;
+  bool m_dirty{true};
+  QSizeF m_gameViewSize;
+};
+
+void GameViewRenderer::render() {
+  const auto engine = m_gameView->engineInstance();
+
+  if (!engine) {
+    return;
+  }
+
+  if (m_dirty) {
+    m_dirty = false;
+    engine->setOpenGLContext(QOpenGLContext::currentContext());
+  }
+
+  engine->renderFrame();
+
+  QQuickOpenGLUtils::resetOpenGLState();
+}
+
+QOpenGLFramebufferObject* GameViewRenderer::createFramebufferObject(
+    const QSize& size) {
+  QOpenGLFramebufferObjectFormat format;
+  format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+  format.setSamples(8);
+  auto fbo = new QOpenGLFramebufferObject(size, format);
+  return fbo;
+}
+
+void GameViewRenderer::synchronize(QQuickFramebufferObject* fbo) {
+  if (!m_gameView) {
+    m_gameView = qobject_cast<GameView*>(fbo);
+    m_window = fbo->window();
+  }
+
+  if (const auto currentSize = m_gameView->size();
+      currentSize != m_gameViewSize) {
+    m_gameViewSize = currentSize;
+    m_dirty = true;
+  }
+
+  m_gameView->executeActions();
+}
+
+GameView::GameView(QQuickItem* parent) : QQuickFramebufferObject(parent) {
+  setMirrorVertically(true);
 }
 
 void GameView::tick(quint32 delta) {
-  m_delta = delta;
-
-  if (window()) {
-    QTimer* timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, window(), &QQuickWindow::update);
-    timer->start(100);
-
-    // window()->update();
-  }
+  addAction([delta](auto engine) { engine->advance(delta); });
 }
 
 EngineInstance* GameView::engineInstance() const { return m_engineInstance; }
 
-void GameView::handleWindowChanged(QQuickWindow* win) {
-  if (win) {
-    connect(win, &QQuickWindow::beforeSynchronizing, this, &GameView::sync,
-            Qt::DirectConnection);
-    connect(win, &QQuickWindow::sceneGraphInvalidated, this, &GameView::cleanup,
-            Qt::DirectConnection);
-
-    win->setClearBeforeRendering(false);
-
-    m_windowChanged = true;
-  }
+QQuickFramebufferObject::Renderer* GameView::createRenderer() const {
+  return new GameViewRenderer{};
 }
 
-void GameView::cleanup() { m_renderer.reset(); }
+void GameView::executeActions() {
+  if (!m_engineInstance) {
+    return;
+  }
+
+  for (const auto& action : m_actions) {
+    action(m_engineInstance);
+  }
+
+  m_actions.clear();
+}
 
 void GameView::setEngineInstance(EngineInstance* engineInstance) {
   if (m_engineInstance == engineInstance) {
     return;
   }
 
-  cleanup();
   m_engineInstance = engineInstance;
 
-  emit engineInstanceChanged(m_engineInstance);
+  Q_EMIT engineInstanceChanged(m_engineInstance);
 }
 
-void GameView::sync() {
-  if (!m_renderer && m_engineInstance) {
-    m_engineInstance->setOpenGLContext(window()->openglContext());
-    m_renderer.reset(new GameViewRenderer());
-    m_renderer->setEngineInstance(m_engineInstance);
-    connect(window(), &QQuickWindow::beforeRendering, m_renderer.data(),
-            &GameViewRenderer::paint, Qt::DirectConnection);
-  }
-
-  if (m_windowChanged || (m_viewportSize != size())) {
-    m_windowChanged = false;
-
-    if (m_engineInstance)
-      m_engineInstance->setOpenGLContext(window()->openglContext());
-
-    m_viewportSize = size().toSize();
-    m_centerPoint = QPoint(m_viewportSize.width(), m_viewportSize.height()) / 2;
-  }
-
-  if (m_engineInstance) {
-    const auto delta = mapFromGlobal(QCursor::pos()).toPoint() - m_centerPoint;
-
-    m_engineInstance->moveCamera(delta);
-
-    QCursor::setPos(window()->screen(), mapToGlobal(m_centerPoint).toPoint());
-  }
-
-  if (m_renderer) {
-    m_renderer->tick(m_delta);
-  }
-}
-
-GameViewRenderer::GameViewRenderer()
-    : QObject(), m_delta(0), m_engineInstance(nullptr) {}
-
-GameViewRenderer::~GameViewRenderer() {}
-
-void GameViewRenderer::tick(quint32 delta) { m_delta = delta; }
-
-void GameViewRenderer::setEngineInstance(EngineInstance* engineInstance) {
-  m_engineInstance = engineInstance;
-}
-
-void GameViewRenderer::paint() {
-  if (m_delta == 0) {
-    return;
-  }
-
-  if (m_engineInstance) {
-    m_engineInstance->advance(m_delta);
-    m_engineInstance->renderFrame();
-  }
-
-  // m_window->resetOpenGLState();
-}
-
-void GameViewRenderer::onViewportSizeChanged(QQuickWindow* window) {
-  if (m_engineInstance)
-    m_engineInstance->setOpenGLContext(window->openglContext());
+void GameView::addAction(std::function<void(EngineInstance*)>&& action) {
+  m_actions.append(std::move(action));
 }

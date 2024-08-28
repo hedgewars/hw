@@ -13,6 +13,7 @@ use landgen::{
 };
 use lfprng::LaggedFibonacciPRNG;
 use std::path::{Path, PathBuf};
+use log::trace;
 
 use crate::render::{camera::Camera, GearEntry, GearRenderer, MapRenderer};
 
@@ -60,6 +61,12 @@ impl World {
         self.gear_renderer = Some(GearRenderer::new(&self.data_path.as_path()));
         self.camera = Camera::with_size(Size::new(width as usize, height as usize));
 
+        if let Some(ref state) = self.game_state {
+            self.camera.position = state.land.play_box().center();
+        }
+    }
+
+    pub fn init_renderer(&mut self) {
         use mapgen::{theme::Theme, MapGenerator};
 
         if let Some(ref state) = self.game_state {

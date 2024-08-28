@@ -19,6 +19,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Votes where
 
+import Control.Monad
 import Control.Monad.Reader
 import Control.Monad.State.Strict
 import ServerState

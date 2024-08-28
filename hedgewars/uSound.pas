@@ -508,9 +508,16 @@ begin
             GetFallbackV := sndNooo
         else
             GetFallbackV := sndUhOh
-    else if (snd in [sndDrat, sndBugger]) then
-        GetFallbackV := sndStupid
-    else if (snd in [sndGonnaGetYou, sndIllGetYou, sndJustYouWait, sndCutItOut, sndLeaveMeAlone]) then
+    else if (snd = sndCover) then
+        if random(2) = 0 then
+            GetFallbackV := sndWatchThis
+        else
+            GetFallbackV := sndFire
+    else if (snd in [sndBugger]) then
+        GetFallbackV := sndDrat
+    else if (snd in [sndDrat]) then
+        GetFallbackV := sndBugger
+    else if (snd in [sndGonnaGetYou, sndIllGetYou, sndRevenge, sndCutItOut, sndLeaveMeAlone]) then
         GetFallbackV := sndRegret
     else if (snd in [sndOhDear, sndSoLong]) then
         GetFallbackV := sndByeBye

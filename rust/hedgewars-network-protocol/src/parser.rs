@@ -8,13 +8,13 @@
  */
 use nom::{
     branch::alt,
-    bytes::complete::{tag, tag_no_case, take_until, take_while},
-    character::complete::{newline, not_line_ending},
+    bytes::streaming::{tag, tag_no_case, take_until, take_while},
+    character::streaming::{newline, not_line_ending},
     combinator::{map, peek},
     error::{ErrorKind, ParseError},
     multi::separated_list0,
     sequence::{delimited, pair, preceded, terminated, tuple},
-    Err, IResult,
+    Err, IResult, Parser,
 };
 
 use std::{
@@ -127,7 +127,7 @@ fn yes_no_line(input: &[u8]) -> HwResult<bool> {
     ))(input)
 }
 
-fn opt_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
+fn opt_arg(input: &[u8]) -> HwResult<Option<String>> {
     alt((
         map(peek(end_of_message), |_| None),
         map(preceded(tag("\n"), a_line), Some),
@@ -138,7 +138,7 @@ fn spaces(input: &[u8]) -> HwResult<&[u8]> {
     preceded(tag(" "), take_while(|c| c == b' '))(input)
 }
 
-fn opt_space_arg<'a>(input: &'a [u8]) -> HwResult<'a, Option<String>> {
+fn opt_space_arg(input: &[u8]) -> HwResult<Option<String>> {
     alt((
         map(peek(end_of_message), |_| None),
         map(preceded(spaces, a_line), Some),
@@ -184,10 +184,10 @@ fn voting(input: &[u8]) -> HwResult<VoteType> {
 }
 
 fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
-    fn message<'a>(
-        name: &'a str,
+    fn message(
+        name: &str,
         msg: HwProtocolMessage,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage> {
+    ) -> impl Fn(&[u8]) -> HwResult<HwProtocolMessage> + '_ {
         move |i| map(tag(name), |_| msg.clone())(i)
     }
 
@@ -207,14 +207,14 @@ fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
 }
 
 fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
-    fn message<'a, T, F, G>(
+    fn message<'a, T: 'a, F, G>(
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwProtocolMessage>
+    ) -> impl FnMut(&'a [u8]) -> HwResult<HwProtocolMessage> + '_
     where
-        F: Fn(&[u8]) -> HwResult<T>,
-        G: Fn(T) -> HwProtocolMessage,
+        F: Parser<&'a [u8], T, HwProtocolError> + 'a,
+        G: FnMut(T) -> HwProtocolMessage + 'a,
     {
         map(preceded(tag(name), parser), constructor)
     }
@@ -239,10 +239,10 @@ fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
 }
 
 fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
-    fn cmd_no_arg<'a>(
-        name: &'a str,
+    fn cmd_no_arg(
+        name: &str,
         msg: HwProtocolMessage,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwProtocolMessage> {
+    ) -> impl Fn(&[u8]) -> HwResult<HwProtocolMessage> + '_ {
         move |i| map(tag_no_case(name), |_| msg.clone())(i)
     }
 
@@ -319,14 +319,14 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
 }
 
 fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
-    fn cfg_single_arg<'a, T, F, G>(
+    fn cfg_single_arg<'a, T: 'a, F, G>(
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, GameCfg>
+    ) -> impl FnMut(&'a [u8]) -> HwResult<GameCfg> + '_
     where
-        F: Fn(&[u8]) -> HwResult<T>,
-        G: Fn(T) -> GameCfg,
+        F: Parser<&'a [u8], T, HwProtocolError> + 'a,
+        G: Fn(T) -> GameCfg + 'a,
     {
         map(preceded(pair(tag(name), newline), parser), constructor)
     }
@@ -521,14 +521,14 @@ pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
 pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
     use HwServerMessage::*;
 
-    fn single_arg_message<'a, T, F, G>(
+    fn single_arg_message<'a, T: 'a, F, G>(
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    ) -> impl FnMut(&'a [u8]) -> HwResult<HwServerMessage> + '_
     where
-        F: Fn(&[u8]) -> HwResult<T>,
-        G: Fn(T) -> HwServerMessage,
+        F: Parser<&'a [u8], T, HwProtocolError> + 'a,
+        G: Fn(T) -> HwServerMessage + 'a,
     {
         map(
             preceded(terminated(tag(name), newline), parser),
@@ -539,9 +539,9 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
     fn list_message<'a, G>(
         name: &'a str,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    ) -> impl FnMut(&'a [u8]) -> HwResult<HwServerMessage> + '_
     where
-        G: Fn(Vec<String>) -> HwServerMessage,
+        G: Fn(Vec<String>) -> HwServerMessage + 'a,
     {
         map(
             preceded(
@@ -558,9 +558,9 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
     fn string_and_list_message<'a, G>(
         name: &'a str,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage>
+    ) -> impl FnMut(&'a [u8]) -> HwResult<HwServerMessage> + '_
     where
-        G: Fn(String, Vec<String>) -> HwServerMessage,
+        G: Fn(String, Vec<String>) -> HwServerMessage + 'a,
     {
         preceded(
             pair(tag(name), newline),
@@ -577,10 +577,10 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
         )
     }
 
-    fn message<'a>(
-        name: &'a str,
+    fn message(
+        name: &str,
         msg: HwServerMessage,
-    ) -> impl Fn(&'a [u8]) -> HwResult<'a, HwServerMessage> {
+    ) -> impl Fn(&[u8]) -> HwResult<HwServerMessage> + '_ {
         move |i| map(tag(name), |_| msg.clone())(i)
     }
 

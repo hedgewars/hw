@@ -42,25 +42,51 @@ using simple_event_t = decltype(hwengine::simple_event);
 using long_event_t = decltype(hwengine::long_event);
 using positioned_event_t = decltype(hwengine::positioned_event);
 
+}  // extern "C"
+
+Q_NAMESPACE
+
+/*
 using SimpleEventType = hwengine::SimpleEventType;
 using LongEventType = hwengine::LongEventType;
 using LongEventState = hwengine::LongEventState;
 using PositionedEventType = hwengine::PositionedEventType;
+*/
 
-}  // extern "C"
+// NOTE: have to copy these to be able to register then in Qt meta object system
+enum class LongEventState {
+  Set,
+  Unset,
+};
 
-Q_NAMESPACE
+enum class LongEventType {
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  Precision,
+  Attack,
+};
+
+enum class PositionedEventType {
+  CursorMove,
+  CursorClick,
+};
+
+enum class SimpleEventType {
+  SwitchHedgehog,
+  Timer,
+  LongJump,
+  HighJump,
+  Accept,
+  Deny,
+};
 
 Q_ENUM_NS(SimpleEventType)
 Q_ENUM_NS(LongEventType)
 Q_ENUM_NS(LongEventState)
 Q_ENUM_NS(PositionedEventType)
 
-};  // namespace
-
-Q_DECLARE_METATYPE(Engine::SimpleEventType)
-Q_DECLARE_METATYPE(Engine::LongEventType)
-Q_DECLARE_METATYPE(Engine::LongEventState)
-Q_DECLARE_METATYPE(Engine::PositionedEventType)
+};  // namespace Engine
 
 #endif  // ENGINE_H

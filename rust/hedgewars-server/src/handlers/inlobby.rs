@@ -26,7 +26,10 @@ pub fn handle(
 ) {
     use hedgewars_network_protocol::messages::HwProtocolMessage::*;
 
-    todo!("add kick/ban handlers");
+    //todo!("add kick/ban handlers");
+    //todo!("add command for forwarding lobby chat into rooms
+    //todo!("report player account age")
+    //todo!("port listing rooms for incompatible protocols"))
 
     match message {
         CreateRoom(name, password) => match server.create_room(client_id, name, password) {
@@ -49,7 +52,7 @@ pub fn handle(
             }
         },
         Chat(msg) => {
-            todo!("add client quiet flag");
+            //todo!("add client quiet flag");
             response.add(
                 ChatMsg {
                     nick: server.client(client_id).nick.clone(),
@@ -63,8 +66,8 @@ pub fn handle(
         JoinRoom(name, password) => {
             match server.join_room_by_name(client_id, &name, password.as_deref()) {
                 Err(error) => super::common::get_room_join_error(error, response),
-                Ok((client, room, room_clients)) => {
-                    super::common::get_room_join_data(client, room, room_clients, response)
+                Ok((client, master, room, room_clients)) => {
+                    super::common::get_room_join_data(client, master, room, room_clients, response)
                 }
             }
         }
@@ -73,8 +76,14 @@ pub fn handle(
                 if let Some(room_id) = client.room_id {
                     match server.join_room(client_id, room_id, None) {
                         Err(error) => super::common::get_room_join_error(error, response),
-                        Ok((client, room, room_clients)) => {
-                            super::common::get_room_join_data(client, room, room_clients, response)
+                        Ok((client, master, room, room_clients)) => {
+                            super::common::get_room_join_data(
+                                client,
+                                master,
+                                room,
+                                room_clients,
+                                response,
+                            )
                         }
                     }
                 } else {

@@ -1,5 +1,5 @@
 use crate::{
-    collision::{fppoint_round, CircleBounds, DetectedCollisions},
+    collision::{CircleBounds, DetectedCollisions},
     common::GearId,
 };
 
@@ -63,7 +63,7 @@ impl Grid {
     }
 
     fn bin_index(&self, position: &FPPoint) -> Point {
-        self.index.map(fppoint_round(position))
+        self.index.map(Point::from_fppoint(position))
     }
 
     fn get_bin(&mut self, index: Point) -> &mut GridBin {

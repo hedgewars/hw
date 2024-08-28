@@ -128,7 +128,7 @@ pub enum ConfigEngineMessage {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum EngineMessage {
-    Unknown,
+    Unknown(Vec<u8>),
     Empty,
     Synced(SyncedEngineMessage, u32),
     Unsynced(UnsyncedEngineMessage),
@@ -172,7 +172,7 @@ impl SyncedEngineMessage {
             NextTurn => em![b'N'],
             Switch => em![b'S'],
             Timer(t) => vec![b'0' + t],
-            Slot(s) => vec![b'~' , *s],
+            Slot(s) => vec![b'~', *s],
             SetWeapon(s) => vec![b'~', *s],
             Put(x, y) => {
                 let mut v = vec![b'p'];
@@ -180,14 +180,14 @@ impl SyncedEngineMessage {
                 v.write_i24::<BigEndian>(*y).unwrap();
 
                 v
-            },
+            }
             CursorMove(x, y) => {
                 let mut v = vec![b'P'];
                 v.write_i24::<BigEndian>(*x).unwrap();
                 v.write_i24::<BigEndian>(*y).unwrap();
 
                 v
-            },
+            }
             HighJump => em![b'J'],
             LongJump => em![b'j'],
             Skip => em![b','],
@@ -242,7 +242,7 @@ impl EngineMessage {
     fn to_unwrapped(&self) -> Vec<u8> {
         use self::EngineMessage::*;
         match self {
-            Unknown => unreachable!("you're not supposed to construct such messages"),
+            Unknown(_) => unreachable!("you're not supposed to construct such messages"),
             Empty => unreachable!("you're not supposed to construct such messages"),
             Synced(SyncedEngineMessage::TimeWrap, _) => vec![b'#', 0xff, 0xff],
             Synced(msg, timestamp) => {

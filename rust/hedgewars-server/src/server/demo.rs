@@ -135,7 +135,7 @@ impl Demo {
         let mut teams = vec![];
         let mut hog_index = 7usize;
 
-        todo!("read messages from file");
+        //todo!("read messages from file");
         let messages = vec![];
 
         while let Some(cmd) = read_command(&mut reader, &mut buffer)? {

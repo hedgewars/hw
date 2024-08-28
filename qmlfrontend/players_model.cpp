@@ -23,7 +23,7 @@ int PlayersListModel::rowCount(const QModelIndex &parent) const {
 QVariant PlayersListModel::data(const QModelIndex &index, int role) const {
   if (!index.isValid() || index.row() < 0 || index.row() >= rowCount() ||
       index.column() != 0)
-    return QVariant(QVariant::Invalid);
+    return QVariant{};
 
   return m_data.at(index.row()).value(role);
 }
@@ -270,8 +270,8 @@ QHash<quint32, QIcon> &PlayersListModel::m_icons() {
 }
 
 void PlayersListModel::updateSortData(const QModelIndex &index) {
-  QString result =
-      QString("%1%2%3%4%5%6")
+  const auto result =
+      QStringLiteral("%1%2%3%4%5%6")
           // room admins go first, then server admins, then friends
           .arg(1 - index.data(RoomAdmin).toInt())
           .arg(1 - index.data(ServerAdmin).toInt())
@@ -320,11 +320,12 @@ void PlayersListModel::loadSet(QSet<QString> &set, const QString &fileName) {
   if (!txt.open(QIODevice::ReadOnly)) return;
 
   QTextStream stream(&txt);
-  stream.setCodec("UTF-8");
 
   while (!stream.atEnd()) {
     QString str = stream.readLine();
-    if (str.startsWith(";") || str.isEmpty()) continue;
+    if (str.startsWith(';') || str.isEmpty()) {
+      continue;
+    }
 
     set.insert(str.trimmed());
   }
@@ -351,7 +352,6 @@ void PlayersListModel::saveSet(const QSet<QString> &set,
   if (!txt.open(QIODevice::WriteOnly | QIODevice::Truncate)) return;
 
   QTextStream stream(&txt);
-  stream.setCodec("UTF-8");
 
   stream << "; this list is used by Hedgewars - do not edit it unless you know "
             "what you're doing!"
