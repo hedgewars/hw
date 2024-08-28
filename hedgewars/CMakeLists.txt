@@ -189,7 +189,6 @@ endif()
 
 list(APPEND HW_LINK_LIBS physlayer)
 
-
 #opengl 2
 IF(GL2)
     add_definitions(-dGL2)
@@ -246,6 +245,6 @@ else()
 endif()
 
 #even though not actually used, this will trigger relink if any lib changes
-target_link_libraries(hwengine ${HW_LINK_LIBS})
+target_link_libraries(hwengine ${HW_LINK_LIBS} hwengine_future)
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})

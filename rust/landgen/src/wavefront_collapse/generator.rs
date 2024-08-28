@@ -162,6 +162,8 @@ impl WavefrontCollapseLandGenerator {
         for tile_description in self.template.tiles.iter() {
             if let Ok(mut tiles) = Self::load_image_tiles(parameters, tile_description) {
                 result.append(&mut tiles);
+            } else {
+                eprintln!("Failed to load a tile!");
             }
         }
 

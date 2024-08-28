@@ -20,6 +20,8 @@ function  LandPixelRow(row: LongInt): PLongwordArray;
 implementation
 uses uUtils, uConsts, uVariables, uTypes;
 
+{$linklib hwengine_future}
+
 function  create_empty_game_field(width, height: Longword): pointer; cdecl; external;
 procedure get_game_field_parameters(game_field: pointer; var width: LongInt; var height: LongInt; var play_width: LongInt; var play_height: LongInt); cdecl; external;
 procedure dispose_game_field(game_field: pointer); cdecl; external;

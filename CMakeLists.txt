@@ -268,7 +268,7 @@ add_subdirectory(misc/libphyslayer)
 
 #rust libraries
 add_subdirectory(tools/corrosion)
-corrosion_import_crate(MANIFEST_PATH rust/lib-hedgewars-engine/Cargo.toml)
+corrosion_import_crate(MANIFEST_PATH rust/lib-hwengine-future/Cargo.toml)
 
 
 #maybe this could be merged inside hedgewars/CMakeLists.txt
