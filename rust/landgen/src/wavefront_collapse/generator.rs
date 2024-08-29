@@ -6,7 +6,7 @@ use png::Decoder;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::{BufReader, Result};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 #[derive(Clone)]
 pub struct EdgeDescription {
@@ -53,21 +53,23 @@ pub struct TemplateDescription {
 
 pub struct WavefrontCollapseLandGenerator {
     pub template: TemplateDescription,
+    data_path: PathBuf,
 }
 
 impl WavefrontCollapseLandGenerator {
-    pub fn new(template: TemplateDescription) -> Self {
-        Self { template }
+    pub fn new(template: TemplateDescription, data_path: &Path) -> Self {
+        Self { template, data_path: data_path.to_owned() }
     }
 
     fn load_image_tiles<T: Copy + PartialEq + Default>(
+        &self,
         parameters: &LandGenerationParameters<T>,
         tile_description: &TileDescription,
     ) -> Result<Vec<TileImage<T, String>>> {
         let mut result = Vec::new();
 
         let file = File::open(
-            Path::new("../share/hedgewars/Data/Tiles")
+            self.data_path.join("Tiles")
                 .join(&tile_description.name)
                 .as_path(),
         )?;
@@ -160,7 +162,7 @@ impl WavefrontCollapseLandGenerator {
         let mut result = Vec::new();
 
         for tile_description in self.template.tiles.iter() {
-            if let Ok(mut tiles) = Self::load_image_tiles(parameters, tile_description) {
+            if let Ok(mut tiles) = self.load_image_tiles(parameters, tile_description) {
                 result.append(&mut tiles);
             } else {
                 eprintln!("Failed to load a tile!");

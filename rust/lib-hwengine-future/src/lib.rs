@@ -64,7 +64,7 @@ pub extern "C" fn generate_templated_game_field(
     let yaml_templates =
         fs::read_to_string(data_path.join(Path::new("wfc_templates.yaml")).as_path())
             .expect("Error reading map templates file");
-    let mut map_gen = MapGenerator::<WfcTemplate>::new();
+    let mut map_gen = MapGenerator::<WfcTemplate>::new(data_path);
     map_gen.import_yaml_templates(&yaml_templates);
 
     let distance_divisor = feature_size.pow(2) / 8 + 10;
@@ -96,7 +96,7 @@ pub extern "C" fn apply_theme(
     let data_path = Path::new(&data_path);
 
     let theme_name: &str = unsafe { CStr::from_ptr(theme_name) }.to_str().unwrap();
-    let map_gen = MapGenerator::<()>::new();
+    let map_gen = MapGenerator::<()>::new(data_path);
 
     let theme = Theme::load(
         data_path

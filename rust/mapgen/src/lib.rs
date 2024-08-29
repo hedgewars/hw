@@ -4,6 +4,7 @@ pub mod theme;
 use self::theme::Theme;
 use crate::template::outline::TemplateCollectionDesc as OutlineTemplateCollectionDesc;
 use crate::template::wavefront_collapse::TemplateCollectionDesc as WfcTemplateCollectionDesc;
+use std::path::{Path, PathBuf};
 
 use land2d::Land2D;
 use landgen::{
@@ -32,12 +33,14 @@ impl Borrow<str> for TemplateType {
 #[derive(Debug)]
 pub struct MapGenerator<T> {
     pub(crate) templates: HashMap<TemplateType, Vec<T>>,
+    data_path: PathBuf,
 }
 
 impl<T> MapGenerator<T> {
-    pub fn new() -> Self {
+    pub fn new(data_path: &Path) -> Self {
         Self {
             templates: HashMap::new(),
+            data_path: data_path.to_owned(),
         }
     }
 
@@ -158,7 +161,7 @@ impl MapGenerator<WfcTemplate> {
     }
 
     pub fn build_generator(&self, template: WfcTemplate) -> impl LandGenerator {
-        WavefrontCollapseLandGenerator::new(template)
+        WavefrontCollapseLandGenerator::new(template, &self.data_path)
     }
 }
 
