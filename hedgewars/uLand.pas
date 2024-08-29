@@ -793,11 +793,12 @@ begin
         begin
         WriteLnToConsole('Generating land...');
         case cMapGen of
-            mgRandom: GenerateTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
+            mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
             mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
             mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
             mgDrawn : GenDrawnMap;
             mgForts : begin GameFlags:= (GameFlags or gfDivideTeams); MakeFortsMap(); end;
+            mgWfc: GenerateWfcTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         else
             OutError('Unknown mapgen', true);
         end;
@@ -948,11 +949,12 @@ var rh, rw, ox, oy, x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
-        mgRandom: GenerateTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
+        mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;
         mgForts: MakeFortsPreview();
+        mgWfc: GenerateWfcTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
     else
         OutError('Unknown mapgen', true);
     end;
@@ -1007,11 +1009,12 @@ var rh, rw, ox, oy, x, y, xx, yy, t, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
-        mgRandom: GenerateTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
+        mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;
         mgForts: MakeFortsPreview;
+        mgWfc: GenerateWfcTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
     else
         OutError('Unknown mapgen', true);
     end;

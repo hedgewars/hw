@@ -4,6 +4,7 @@ use landgen::{
     wavefront_collapse::generator::{
         TemplateDescription as WfcTemplate,
     },
+    outline_template_based::outline_template::OutlineTemplate,
     LandGenerationParameters, LandGenerator,
 };
 use lfprng::LaggedFibonacciPRNG;
@@ -47,7 +48,47 @@ pub extern "C" fn create_empty_game_field(width: u32, height: u32) -> *mut GameF
 }
 
 #[no_mangle]
-pub extern "C" fn generate_templated_game_field(
+pub extern "C" fn generate_outline_templated_game_field(
+    feature_size: u32,
+    seed: *const i8,
+    template_type: *const i8,
+    data_path: *const i8,
+) -> *mut GameField {
+    let data_path: &str = unsafe { CStr::from_ptr(data_path) }.to_str().unwrap();
+    let data_path = Path::new(&data_path);
+
+    let seed: &str = unsafe { CStr::from_ptr(seed) }.to_str().unwrap();
+    let template_type: &str = unsafe { CStr::from_ptr(template_type) }.to_str().unwrap();
+
+    let mut random_numbers_gen = LaggedFibonacciPRNG::new(seed.as_bytes());
+
+    let yaml_templates =
+        fs::read_to_string(data_path.join(Path::new("map_templates.yaml")).as_path())
+            .expect("Error reading map templates file");
+    let mut map_gen = MapGenerator::<OutlineTemplate>::new(data_path);
+    map_gen.import_yaml_templates(&yaml_templates);
+
+    let distance_divisor = feature_size.pow(2) / 8 + 10;
+    let params = LandGenerationParameters::new(0u16, 0x8000u16, distance_divisor, false, false);
+    let template = map_gen
+        .get_template(template_type, &mut random_numbers_gen)
+        .expect("Error reading outline templates file")
+        .clone();
+    let landgen = map_gen.build_generator(template);
+    let collision = landgen.generate_land(&params, &mut random_numbers_gen);
+    let size = collision.size().size();
+
+    let game_field = Box::new(GameField {
+        collision,
+        pixels: land2d::Land2D::new(&size, 0),
+        landgen_parameters: Some(params),
+    });
+
+    Box::leak(game_field)
+}
+
+#[no_mangle]
+pub extern "C" fn generate_wfc_templated_game_field(
     feature_size: u32,
     seed: *const i8,
     template_type: *const i8,
@@ -71,7 +112,7 @@ pub extern "C" fn generate_templated_game_field(
     let params = LandGenerationParameters::new(0u16, 0x8000u16, distance_divisor, false, false);
     let template = map_gen
         .get_template(template_type, &mut random_numbers_gen)
-        .expect("Error reading templates file")
+        .expect("Error reading wfc templates file")
         .clone();
     let landgen = map_gen.build_generator(template);
     let collision = landgen.generate_land(&params, &mut random_numbers_gen);

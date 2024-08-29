@@ -2,7 +2,8 @@ unit uLandUtils;
 interface
 uses SDLh;
 
-procedure GenerateTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+procedure GenerateOutlineTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+procedure GenerateWfcTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
 procedure ResizeLand(width, height: LongWord);
 procedure DisposeLand();
 procedure InitWorldEdges();
@@ -35,7 +36,8 @@ function  land_pixel_get(game_field: pointer; x, y: LongInt): Longword; cdecl; e
 procedure land_pixel_set(game_field: pointer; x, y: LongInt; value: Longword); cdecl; external;
 function  land_pixel_row(game_field: pointer; row: LongInt): PLongwordArray; cdecl; external;
 
-function  generate_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
+function  generate_outline_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
+function  generate_wfc_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
 procedure apply_theme(game_field: pointer; data_path, theme_name: PChar); cdecl; external;
 
 var gameField: pointer;
@@ -75,12 +77,37 @@ begin
     LandPixelRow:= land_pixel_row(gameField, row)
 end;
 
-procedure GenerateTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+procedure GenerateOutlineTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
 begin
     seed[byte(seed[0]) + 1]:= #0;
     templateType[byte(templateType[0]) + 1]:= #0;
 
-    gameField:= generate_templated_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
+    gameField:= generate_outline_templated_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
+    get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
+
+    MaxHedgehogs:= 32;
+    hasGirders:= true;
+
+    leftX:= (LAND_WIDTH - playWidth) div 2;
+    rightX:= Pred(leftX + playWidth);
+    topY:= LAND_HEIGHT - playHeight;
+    cWaterLine:= LAND_HEIGHT;
+
+    // let's assume those are powers of two
+    LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
+    LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
+
+    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
+
+    initScreenSpaceVars();
+end;
+
+procedure GenerateWfcTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+begin
+    seed[byte(seed[0]) + 1]:= #0;
+    templateType[byte(templateType[0]) + 1]:= #0;
+
+    gameField:= generate_wfc_templated_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
     get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
 
     MaxHedgehogs:= 32;
