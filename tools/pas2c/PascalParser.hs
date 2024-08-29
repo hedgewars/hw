@@ -346,6 +346,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
             , try $ string "overload;"
             , try $ string "export;"
             , try $ string "varargs;"
+            , try $ string "external;"
             , try (string' "external") >> comments >> iD >> comments >>
                 optional (string' "name" >> comments >> stringLiteral pas) >> string' ";" >> return "external;"
             ]
