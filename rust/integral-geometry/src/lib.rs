@@ -496,7 +496,7 @@ impl Rect {
 
     #[inline]
     pub fn with_margin(&self, margin: i32) -> Self {
-        let offset = Point::diag(margin);
+        let offset = Point::new(min(margin, self.width() as i32 / 2), min(margin, self.height() as i32 / 2));
         Self::new(self.top_left() + offset, self.bottom_right() - offset)
     }
 
