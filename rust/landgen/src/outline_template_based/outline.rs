@@ -65,6 +65,7 @@ impl OutlinePoints {
         &self,
         segment: Line,
         distance_divisor: u32,
+        distance_limiting_factor: u32,
         random_numbers: &mut I,
     ) -> Option<Point> {
         #[inline]
@@ -117,7 +118,7 @@ impl OutlinePoints {
             }
         }
 
-        let min_distance = 40;
+        let min_distance = distance_divisor as i32;
         // new point should fall inside this box
         let map_box = self.play_box.with_margin(min_distance);
 
@@ -225,7 +226,7 @@ impl OutlinePoints {
             }
         }
 
-        let max_dist = normal_len * 100 / distance_divisor;
+        let max_dist = normal_len * 128 / distance_limiting_factor;
         dist_left = min(dist_left, max_dist);
         dist_right = min(dist_right, max_dist);
 
@@ -246,13 +247,14 @@ impl OutlinePoints {
     fn divide_edges<I: Iterator<Item = u32>>(
         &mut self,
         distance_divisor: u32,
+        distance_limiting_factor: u32,
         random_numbers: &mut I,
     ) {
         for is in 0..self.islands.len() {
             let mut i = 0;
             while i < self.islands[is].edges_count() {
                 let segment = self.islands[is].get_edge(i);
-                if let Some(new_point) = self.divide_edge(segment, distance_divisor, random_numbers)
+                if let Some(new_point) = self.divide_edge(segment, distance_divisor, distance_limiting_factor, random_numbers)
                 {
                     self.islands[is].split_edge(i, new_point);
                     i += 2;
@@ -274,9 +276,11 @@ impl OutlinePoints {
         distance_divisor: u32,
         random_numbers: &mut I,
     ) {
+        let distance_limiting_factor = 100 + random_numbers.next().unwrap() as u32 % 8 * 10;
+
         loop {
             let old_len = self.total_len();
-            self.divide_edges(distance_divisor, random_numbers);
+            self.divide_edges(distance_divisor, distance_limiting_factor, random_numbers);
 
             if self.total_len() == old_len {
                 break;
