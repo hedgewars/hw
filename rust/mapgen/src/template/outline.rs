@@ -34,9 +34,15 @@ pub struct TemplateDesc {
 }
 
 #[derive(Deserialize)]
+pub struct TemplateTypeDesc {
+    pub indices: Vec<usize>,
+    pub force_invert: Option<bool>,
+}
+
+#[derive(Deserialize)]
 pub struct TemplateCollectionDesc {
     pub templates: Vec<TemplateDesc>,
-    pub template_types: HashMap<String, Vec<usize>>,
+    pub template_types: HashMap<String, TemplateTypeDesc>,
 }
 
 impl From<&TemplateDesc> for OutlineTemplate {

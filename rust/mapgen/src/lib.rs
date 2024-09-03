@@ -133,7 +133,18 @@ impl MapGenerator<OutlineTemplate> {
             .map(|(size, indices)| {
                 (
                     TemplateType(size),
-                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                    indices
+                        .indices
+                        .iter()
+                        .map(|i| Into::<OutlineTemplate>::into(&templates[*i]))
+                        .map(|o| {
+                            if indices.force_invert == Some(true) {
+                                o.cavern()
+                            } else {
+                                o
+                            }
+                        })
+                        .collect(),
                 )
             })
             .collect();

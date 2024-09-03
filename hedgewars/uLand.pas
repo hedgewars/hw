@@ -33,7 +33,7 @@ implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
      uLandGenMaze, uPhysFSLayer, uScript, uLandGenPerlin,
-     uLandGenTemplateBased, uLandUtils, uRenderUtils;
+     uLandUtils, uRenderUtils;
 
 var digest: shortstring;
     maskOnly: boolean;

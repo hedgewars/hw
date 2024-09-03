@@ -52,6 +52,14 @@ impl OutlineTemplate {
         }
     }
 
+    pub fn cavern(self) -> Self {
+        Self {
+            is_negative: true,
+            can_invert: false,
+            ..self
+        }
+    }
+
     pub fn with_fill_points(self, fill_points: Vec<Point>) -> Self {
         Self {
             fill_points,

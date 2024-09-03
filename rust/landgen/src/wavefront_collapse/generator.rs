@@ -58,7 +58,10 @@ pub struct WavefrontCollapseLandGenerator {
 
 impl WavefrontCollapseLandGenerator {
     pub fn new(template: TemplateDescription, data_path: &Path) -> Self {
-        Self { template, data_path: data_path.to_owned() }
+        Self {
+            template,
+            data_path: data_path.to_owned(),
+        }
     }
 
     fn load_image_tiles<T: Copy + PartialEq + Default>(
@@ -69,7 +72,8 @@ impl WavefrontCollapseLandGenerator {
         let mut result = Vec::new();
 
         let file = File::open(
-            self.data_path.join("Tiles")
+            self.data_path
+                .join("Tiles")
                 .join(&tile_description.name)
                 .as_path(),
         )?;

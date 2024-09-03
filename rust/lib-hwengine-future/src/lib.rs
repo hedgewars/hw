@@ -1,11 +1,9 @@
 use integral_geometry::{Point, Size};
 
 use landgen::{
-    wavefront_collapse::generator::{
-        TemplateDescription as WfcTemplate,
-    },
     outline_template_based::outline_template::OutlineTemplate,
-    LandGenerationParameters, LandGenerator,
+    wavefront_collapse::generator::TemplateDescription as WfcTemplate, LandGenerationParameters,
+    LandGenerator,
 };
 use lfprng::LaggedFibonacciPRNG;
 use mapgen::{theme::Theme, MapGenerator};

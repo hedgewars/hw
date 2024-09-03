@@ -18,7 +18,15 @@ impl LandGenerator for TemplatedLandGenerator {
         parameters: &LandGenerationParameters<T>,
         random_numbers: &mut I,
     ) -> Land2D<T> {
-        let mut land = Land2D::new(&self.outline_template.size, parameters.basic);
+        let do_invert = self.outline_template.is_negative
+            && (!self.outline_template.can_invert || random_numbers.next().unwrap() & 1 == 0);
+        let (basic, zero) = if do_invert {
+            (parameters.zero, parameters.basic)
+        } else {
+            (parameters.basic, parameters.zero)
+        };
+
+        let mut land = Land2D::new(&self.outline_template.size, basic);
 
         let mut points = OutlinePoints::from_outline_template(
             &self.outline_template,
@@ -53,13 +61,13 @@ impl LandGenerator for TemplatedLandGenerator {
             points.bezierize(5);
         }
 
-        points.draw(&mut land, parameters.zero);
+        points.draw(&mut land, zero);
 
         for p in &points.fill_points {
-            land.fill(*p, parameters.zero, parameters.zero)
+            land.fill(*p, zero, zero)
         }
 
-        points.draw(&mut land, parameters.basic);
+        points.draw(&mut land, basic);
 
         land
     }

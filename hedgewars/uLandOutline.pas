@@ -14,7 +14,7 @@ procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
 
 implementation
 
-uses uLandGraphics, uDebug, uVariables, uLandTemplates, uLandUtils;
+uses uLandGraphics, uDebug, uVariables, uLandTemplates;
 
 
 var Stack: record

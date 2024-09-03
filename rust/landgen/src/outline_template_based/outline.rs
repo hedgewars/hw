@@ -254,8 +254,12 @@ impl OutlinePoints {
             let mut i = 0;
             while i < self.islands[is].edges_count() {
                 let segment = self.islands[is].get_edge(i);
-                if let Some(new_point) = self.divide_edge(segment, distance_divisor, distance_limiting_factor, random_numbers)
-                {
+                if let Some(new_point) = self.divide_edge(
+                    segment,
+                    distance_divisor,
+                    distance_limiting_factor,
+                    random_numbers,
+                ) {
                     self.islands[is].split_edge(i, new_point);
                     i += 2;
                 } else {
