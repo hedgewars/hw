@@ -262,6 +262,7 @@ fn tex_row_copy<LandT>(
 
 #[cfg(test)]
 mod tests {
+    use std::path::Path;
     use crate::{MapGenerator, OutlineTemplate, TemplateType};
     use rand::thread_rng;
 
@@ -294,10 +295,11 @@ templates:
       - {x: 1023, y: 0}
 
 template_types:
-    test: [0]
+    test:
+      indices: [0]
 "#;
 
-        let mut generator = MapGenerator::<OutlineTemplate>::new();
+        let mut generator = MapGenerator::<OutlineTemplate>::new(Path::new(""));
         generator.import_yaml_templates(&text);
 
         assert!(generator
