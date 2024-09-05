@@ -10,6 +10,7 @@ foreach(dir
     Scripts
     Sounds
     Themes
+    Tiles
     misc
     )
     add_subdirectory(${dir})
@@ -18,3 +19,8 @@ endforeach(dir)
 if(${GL2})
     add_subdirectory(Shaders)
 endif(${GL2})
+
+install(FILES
+    map_templates.yaml
+    wfc_templates.yaml
+    DESTINATION ${SHAREPATH}Data)
