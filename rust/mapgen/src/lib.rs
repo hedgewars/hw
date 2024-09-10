@@ -14,6 +14,7 @@ use landgen::{
     wavefront_collapse::generator::{
         TemplateDescription as WfcTemplate, WavefrontCollapseLandGenerator,
     },
+    maze::{MazeTemplate, MazeLandGenerator},
     LandGenerationParameters, LandGenerator,
 };
 use rand::{seq::SliceRandom, Rng};
@@ -173,6 +174,27 @@ impl MapGenerator<WfcTemplate> {
 
     pub fn build_generator(&self, template: WfcTemplate) -> impl LandGenerator {
         WavefrontCollapseLandGenerator::new(template, &self.data_path)
+    }
+}
+
+impl MapGenerator<MazeTemplate> {
+    pub fn import_yaml_templates(&mut self, text: &str) {
+        let mut desc: MazeTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
+        let templates = std::mem::take(&mut desc.templates);
+        self.templates = desc
+            .template_types
+            .into_iter()
+            .map(|(size, indices)| {
+                (
+                    TemplateType(size),
+                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                )
+            })
+            .collect();
+    }
+
+    pub fn build_generator(&self, template: MazeTemplate) -> impl LandGenerator {
+        MazeLandGenerator::new(template)
     }
 }
 

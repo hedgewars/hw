@@ -1,3 +1,4 @@
+pub mod maze;
 pub mod outline_template_based;
 pub mod wavefront_collapse;
 

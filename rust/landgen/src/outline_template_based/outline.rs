@@ -11,7 +11,7 @@ pub struct OutlinePoints {
     pub fill_points: Vec<Point>,
     pub size: Size,
     pub play_box: Rect,
-    intersections_box: Rect,
+    pub intersections_box: Rect,
 }
 
 impl OutlinePoints {
@@ -65,7 +65,7 @@ impl OutlinePoints {
         &self,
         segment: Line,
         distance_divisor: u32,
-        distance_limiting_factor: u32,
+        distortion_limiting_factor: u32,
         random_numbers: &mut I,
     ) -> Option<Point> {
         #[inline]
@@ -226,7 +226,7 @@ impl OutlinePoints {
             }
         }
 
-        let max_dist = normal_len * 128 / distance_limiting_factor;
+        let max_dist = normal_len * 128 / distortion_limiting_factor;
         dist_left = min(dist_left, max_dist);
         dist_right = min(dist_right, max_dist);
 
@@ -247,7 +247,7 @@ impl OutlinePoints {
     fn divide_edges<I: Iterator<Item = u32>>(
         &mut self,
         distance_divisor: u32,
-        distance_limiting_factor: u32,
+        distortion_limiting_factor: u32,
         random_numbers: &mut I,
     ) {
         for is in 0..self.islands.len() {
@@ -257,7 +257,7 @@ impl OutlinePoints {
                 if let Some(new_point) = self.divide_edge(
                     segment,
                     distance_divisor,
-                    distance_limiting_factor,
+                    distortion_limiting_factor,
                     random_numbers,
                 ) {
                     self.islands[is].split_edge(i, new_point);
@@ -280,11 +280,11 @@ impl OutlinePoints {
         distance_divisor: u32,
         random_numbers: &mut I,
     ) {
-        let distance_limiting_factor = 100 + random_numbers.next().unwrap() as u32 % 8 * 10;
+        let distortion_limiting_factor = 100 + random_numbers.next().unwrap() as u32 % 8 * 10;
 
         loop {
             let old_len = self.total_len();
-            self.divide_edges(distance_divisor, distance_limiting_factor, random_numbers);
+            self.divide_edges(distance_divisor, distortion_limiting_factor, random_numbers);
 
             if self.total_len() == old_len {
                 break;

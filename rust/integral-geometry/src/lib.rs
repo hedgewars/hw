@@ -61,6 +61,14 @@ impl Point {
     pub const fn rotate90(self) -> Self {
         Self::new(self.y, -self.x)
     }
+    #[inline]
+    pub const fn rotate180(self) -> Self {
+        Self::new(-self.x, -self.y)
+    }
+    #[inline]
+    pub const fn rotate270(self) -> Self {
+        Self::new(-self.y, self.x)
+    }
 
     #[inline]
     pub const fn cross(self, other: Point) -> i32 {
