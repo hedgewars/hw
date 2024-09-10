@@ -4,6 +4,8 @@ pub mod theme;
 use self::theme::Theme;
 use crate::template::outline::TemplateCollectionDesc as OutlineTemplateCollectionDesc;
 use crate::template::wavefront_collapse::TemplateCollectionDesc as WfcTemplateCollectionDesc;
+use crate::template::maze::TemplateCollectionDesc as MazeTemplateCollectionDesc;
+
 use std::path::{Path, PathBuf};
 
 use land2d::Land2D;
@@ -187,7 +189,7 @@ impl MapGenerator<MazeTemplate> {
             .map(|(size, indices)| {
                 (
                     TemplateType(size),
-                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                    indices.indices.iter().map(|i| (&templates[*i]).into()).collect(),
                 )
             })
             .collect();

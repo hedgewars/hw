@@ -4,12 +4,12 @@ use integral_geometry::{Point, Polygon, Rect, Size};
 use land2d::Land2D;
 
 pub struct MazeTemplate {
-    width: usize,
-    height: usize,
-    cell_size: usize,
-    inverted: bool,
-    distortion_limiting_factor: u32,
-    braidness: usize,
+    pub width: usize,
+    pub height: usize,
+    pub cell_size: usize,
+    pub inverted: bool,
+    pub distortion_limiting_factor: u32,
+    pub braidness: usize,
 }
 
 pub struct MazeLandGenerator {
@@ -48,7 +48,7 @@ impl MazeLandGenerator {
         let mut step_done = vec![false; num_steps];
         let mut last_cell = vec![Point::diag(0); num_steps];
         let mut came_from_pos = vec![0; num_steps];
-        let mut came_from = vec![vec![Point::diag(0); num_cells.area()]; num_steps];
+        let mut came_from = vec![vec![Point::diag(0); num_steps]; num_cells.area()];
 
         let mut done = false;
         let mut seen_list = vec![vec![None as Option<usize>; seen_cells.width]; seen_cells.height];
@@ -66,22 +66,21 @@ impl MazeLandGenerator {
                 / num_steps;
             last_cell[current_step] = Point::new(
                 (x + current_step * seen_cells.width / num_steps) as i32,
-                random_numbers.next().unwrap_or_default() as i32 / num_steps as i32,
+                random_numbers.next().unwrap_or_default() as i32 % seen_cells.height as i32,
             );
         }
 
         let see_cell = |current_step: usize, start_dir: Point, seen_list: &mut Vec<Vec<Option<usize>>>, x_walls: &mut Vec<Vec<bool>>, y_walls: &mut Vec<Vec<bool>>,
                         last_cell: &mut Vec<Point>, came_from: &mut Vec<Vec<Point>>, came_from_pos: &mut Vec<i32>| {
+            let mut dir = start_dir;
             loop {
-                let p = last_cell[current_step];
-                seen_list[p.y as usize][p.x as usize] = Some(current_step);
-
-                let mut dir = start_dir;
+                let p = dbg!(last_cell[current_step]);
+                seen_list[p.y as usize][p.x as usize] = Some(dbg!(current_step));
 
                 let next_dir_clockwise = true;//random_numbers.next().unwrap_or_default() % 2 == 0;
 
                 for _ in 0..5 {
-                    let sp = p + dir;
+                    let sp = dbg!(p) + dbg!(dir);
                     let when_seen =
                         if sp.x < 0
                             || sp.x >= seen_cells.width as i32
@@ -130,9 +129,10 @@ impl MazeLandGenerator {
                             if dir.x == 1 {
                                 y_walls[p.y as usize][p.x as usize] = false;
                             }
-                            last_cell[current_step] = p + dir;
+                            last_cell[current_step] = dbg!(sp);
                             came_from_pos[current_step] += 1;
                             came_from[came_from_pos[current_step] as usize][current_step] = p;
+                            return true;
                         }
                         _ => {
                             return true;
@@ -277,7 +277,7 @@ impl MazeLandGenerator {
 
         OutlinePoints {
             islands,
-            fill_points: vec![],
+            fill_points: vec![Point::new(1, 1 + off_y)],
             size: *size,
             play_box,
             intersections_box,

@@ -4,6 +4,7 @@ uses SDLh;
 
 procedure GenerateOutlineTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
 procedure GenerateWfcTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+procedure GenerateMazeLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
 procedure ResizeLand(width, height: LongWord);
 procedure DisposeLand();
 procedure InitWorldEdges();
@@ -38,6 +39,7 @@ function  land_pixel_row(game_field: pointer; row: LongInt): PLongwordArray; cde
 
 function  generate_outline_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
 function  generate_wfc_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
+function  generate_maze_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
 procedure apply_theme(game_field: pointer; data_path, theme_name: PChar); cdecl; external;
 
 var gameField: pointer;
@@ -108,6 +110,31 @@ begin
     templateType[byte(templateType[0]) + 1]:= #0;
 
     gameField:= generate_wfc_templated_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
+    get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
+
+    MaxHedgehogs:= 32;
+    hasGirders:= true;
+
+    leftX:= (LAND_WIDTH - playWidth) div 2;
+    rightX:= Pred(leftX + playWidth);
+    topY:= LAND_HEIGHT - playHeight;
+    cWaterLine:= LAND_HEIGHT;
+
+    // let's assume those are powers of two
+    LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
+    LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
+
+    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
+
+    initScreenSpaceVars();
+end;
+
+procedure GenerateMazeLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+begin
+    seed[byte(seed[0]) + 1]:= #0;
+    templateType[byte(templateType[0]) + 1]:= #0;
+
+    gameField:= generate_maze_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
     get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
 
     MaxHedgehogs:= 32;

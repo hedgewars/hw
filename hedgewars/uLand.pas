@@ -32,7 +32,7 @@ procedure GenPreviewAlpha(out Preview: TPreviewAlpha);
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
-     uLandGenMaze, uPhysFSLayer, uScript, uLandGenPerlin,
+     uPhysFSLayer, uScript, uLandGenPerlin,
      uLandUtils, uRenderUtils;
 
 var digest: shortstring;
@@ -794,7 +794,7 @@ begin
         WriteLnToConsole('Generating land...');
         case cMapGen of
             mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
-            mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
+            mgMaze  : GenerateMazeLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
             mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
             mgDrawn : GenDrawnMap;
             mgForts : begin GameFlags:= (GameFlags or gfDivideTeams); MakeFortsMap(); end;
@@ -950,7 +950,7 @@ begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
         mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
-        mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
+        mgMaze: GenerateMazeLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;
         mgForts: MakeFortsPreview();
@@ -1010,7 +1010,7 @@ begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
         mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
-        mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
+        mgMaze: GenerateMazeLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;
         mgForts: MakeFortsPreview;
