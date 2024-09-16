@@ -147,9 +147,9 @@ pub extern "C" fn generate_maze_game_field(
     let template = MazeTemplate {
         width: 4096,
         height: 2048,
-        cell_size: 80,
+        cell_size: 225,
         inverted: false,
-        distortion_limiting_factor: 100,
+        distortion_limiting_factor: 120,
         braidness: 10,
     };
     let landgen = map_gen.build_generator(template);
