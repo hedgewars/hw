@@ -363,7 +363,7 @@ begin
         SelectTemplate:= 'small'
     else
         begin
-        if cTemplateFilter = 0 then
+        if (cTemplateFilter = 0) and (cMapGen <> mgMaze) then
             begin
             l:= getRandom(GroupedTemplatesCount);
             repeat
@@ -373,19 +373,32 @@ begin
             end
             else getRandom(1);
 
-            case cTemplateFilter of
-            0: OutError('Error selecting TemplateFilter. Ask unC0Rr about what you did wrong', true);
-            1: SelectTemplate:= 'small';
-            2: SelectTemplate:= 'medium';
-            3: SelectTemplate:= 'large';
-            4: SelectTemplate:= 'cavern';
-            5: SelectTemplate:= 'wacky';
-    // For lua only!
-            6: begin
-               SelectTemplate:= 'small';
-               GetRandom(2) // burn 1
-               end
-            end
+            case cMapGen of
+                mgMaze:
+                    case cTemplateFilter of
+                    0: SelectTemplate:= 'small_tunnels';
+                    1: SelectTemplate:= 'medium_tunnels';
+                    2: SelectTemplate:= 'large_tunnels';
+                    3: SelectTemplate:= 'small_islands';
+                    4: SelectTemplate:= 'medium_islands';
+                    5: SelectTemplate:= 'large_islands';
+                    else OutError('Error selecting TemplateFilter', true);
+                    end
+              else              
+                    case cTemplateFilter of
+                    1: SelectTemplate:= 'small';
+                    2: SelectTemplate:= 'medium';
+                    3: SelectTemplate:= 'large';
+                    4: SelectTemplate:= 'cavern';
+                    5: SelectTemplate:= 'wacky';
+                    // For lua only!
+                    6: begin
+                       SelectTemplate:= 'small';
+                       GetRandom(2) // burn 1
+                       end
+                    else OutError('Error selecting TemplateFilter', true);
+                    end
+              end
         end;
 
     WriteLnToConsole('Using template filter '+SelectTemplate);

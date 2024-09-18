@@ -278,10 +278,9 @@ impl OutlinePoints {
     pub fn distort<I: Iterator<Item = u32>>(
         &mut self,
         distance_divisor: u32,
+        distortion_limiting_factor: u32,
         random_numbers: &mut I,
     ) {
-        let distortion_limiting_factor = 100 + random_numbers.next().unwrap() as u32 % 8 * 10;
-
         loop {
             let old_len = self.total_len();
             self.divide_edges(distance_divisor, distortion_limiting_factor, random_numbers);

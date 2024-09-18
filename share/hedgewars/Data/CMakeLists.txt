@@ -22,5 +22,6 @@ endif(${GL2})
 
 install(FILES
     map_templates.yaml
+    maze_templates.yaml
     wfc_templates.yaml
     DESTINATION ${SHAREPATH}Data)

@@ -3,6 +3,7 @@ use crate::{LandGenerationParameters, LandGenerator};
 use integral_geometry::{Point, Polygon, Rect, Size};
 use land2d::Land2D;
 
+#[derive(Clone)]
 pub struct MazeTemplate {
     pub width: usize,
     pub height: usize,
@@ -15,7 +16,7 @@ pub struct MazeTemplate {
 struct Maze {
     inverted: bool,
     braidness: u32,
-    off_y: i32,
+    off: Point,
     num_cells: Size,
     num_edges: Size,
     seen_cells: Size,
@@ -109,10 +110,13 @@ impl Maze {
             );
         }
 
+        let off_x = ((size.width - num_cells.width * cell_size) / 2) as i32;
+        let off_y = ((size.height - num_cells.height * cell_size) / 2) as i32;
+
         Self {
             inverted,
             braidness,
-            off_y: ((size.height - num_cells.height * cell_size) / 2) as i32,
+            off: Point::new(off_x, off_y),
             num_cells,
             num_edges,
             seen_cells,
@@ -214,8 +218,8 @@ impl Maze {
             }
         });
         let new_point = Point::new(
-            (p.x - 1) * self.cell_size as i32 + x as i32,
-            (p.y - 1) * self.cell_size as i32 + y as i32 + self.off_y,
+            (p.x - 1) * self.cell_size as i32 + x as i32 + self.off.x,
+            (p.y - 1) * self.cell_size as i32 + y as i32 + self.off.y,
         );
 
         let nv = polygon.len();
@@ -297,20 +301,6 @@ impl Maze {
 
         let mut fill_points = vec![];
 
-        for y in 0..self.num_cells.height {
-            for x in 0..self.num_cells.width {
-                if maze[y][x] {
-                    let half_cell = self.cell_size / 2;
-                    let fill_point = Point::new(
-                        (x * self.cell_size + half_cell) as i32,
-                        (y * self.cell_size + half_cell) as i32 + self.off_y,
-                    );
-                    islands.push(Polygon::new(&[fill_point]));
-                    fill_points.push(fill_point);
-                }
-            }
-        }
-
         for x in 0..self.num_edges.width {
             for y in 0..self.num_cells.height {
                 if self.edge_list[0][y][x] {
@@ -328,16 +318,49 @@ impl Maze {
                             polygon.pop();
                         }
 
-                        /*
-                                                for p in &polygon {
-                                                    println!("{} {}", p.x, p.y);
-                                                }
-                                                println!("\ne\n");
-                        */
+                        for p in &polygon {
+                            println!("{} {}", p.x, p.y);
+                        }
+                        println!("\ne\n");
 
                         islands.push(Polygon::new(&polygon));
                     }
                     polygon.clear();
+                }
+            }
+        }
+
+        for x in 0..self.num_cells.width {
+            for y in 0..self.num_cells.height {
+                if maze[y][x] {
+                    let half_cell = self.cell_size / 2;
+                    let fill_point = Point::new(
+                        (x * self.cell_size + half_cell) as i32 + self.off.x,
+                        (y * self.cell_size + half_cell) as i32 + self.off.y,
+                    );
+                    islands.push(Polygon::new(&[fill_point]));
+                    fill_points.push(fill_point);
+
+                    let mut points = vec![(x, y)];
+
+                    while let Some((x, y)) = points.pop() {
+                        if maze[y][x] {
+                            maze[y][x] = false;
+
+                            if x > 0 {
+                                points.push((x - 1, y));
+                            }
+                            if x < self.num_cells.width - 1 {
+                                points.push((x + 1, y));
+                            }
+                            if y > 0 {
+                                points.push((x, y - 1));
+                            }
+                            if y < self.num_cells.height - 1 {
+                                points.push((x, y + 1));
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -431,7 +454,7 @@ impl LandGenerator for MazeLandGenerator {
         );
 
         if !parameters.skip_distort {
-            points.distort(parameters.distance_divisor, random_numbers);
+            points.distort(parameters.distance_divisor, self.maze_template.distortion_limiting_factor, random_numbers);
         }
 
         if !parameters.skip_bezier {

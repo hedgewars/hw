@@ -141,17 +141,21 @@ pub extern "C" fn generate_maze_game_field(
 
     let mut random_numbers_gen = LaggedFibonacciPRNG::new(seed.as_bytes());
 
-    let map_gen = MapGenerator::<MazeTemplate>::new(data_path);
+    let yaml_templates =
+        fs::read_to_string(data_path.join(Path::new("maze_templates.yaml")).as_path())
+            .expect("Error reading map templates file");
+
+    let mut map_gen = MapGenerator::<MazeTemplate>::new(data_path);
+    map_gen.import_yaml_templates(&yaml_templates);
+
     let distance_divisor = feature_size.pow(2) / 8 + 10;
     let params = LandGenerationParameters::new(0u16, 0x8000u16, distance_divisor, false, false);
-    let template = MazeTemplate {
-        width: 4096,
-        height: 2048,
-        cell_size: 225,
-        inverted: false,
-        distortion_limiting_factor: 120,
-        braidness: 10,
-    };
+
+    let template = map_gen
+        .get_template(template_type, &mut random_numbers_gen)
+        .expect("Error reading maze templates file")
+        .clone();
+
     let landgen = map_gen.build_generator(template);
     let collision = landgen.generate_land(&params, &mut random_numbers_gen);
     let size = collision.size().size();

@@ -189,7 +189,7 @@ impl MapGenerator<MazeTemplate> {
             .map(|(size, indices)| {
                 (
                     TemplateType(size),
-                    indices.indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
                 )
             })
             .collect();

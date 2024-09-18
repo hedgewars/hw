@@ -54,7 +54,9 @@ impl LandGenerator for TemplatedLandGenerator {
         }
 
         if !parameters.skip_distort {
-            points.distort(parameters.distance_divisor, random_numbers);
+            let distortion_limiting_factor = 100 + random_numbers.next().unwrap() % 8 * 10;
+
+            points.distort(parameters.distance_divisor, distortion_limiting_factor, random_numbers);
         }
 
         if !parameters.skip_bezier {
