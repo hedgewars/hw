@@ -78,12 +78,9 @@ set(engine_sources
     adler32.pas
     uLandTemplates.pas
     uLandTexture.pas
+    uLandGenPerlin.pas
     uLandGraphics.pas
     uLandPainted.pas
-    uLandOutline.pas
-    uLandGenMaze.pas
-    uLandGenPerlin.pas
-    uLandGenTemplateBased.pas
     uLandUtils.pas
 
     #this is where dependency tracking becomes hard
