@@ -471,9 +471,9 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
             HWApplication::alert(this, 800);
     }
 
-    chatStrings.append(line);
+    chatStrings.append(QStringLiteral("<div>%1</div>").arg(line));
 
-    chatText->setHtml("<html><body>"+chatStrings.join("<br>")+"</body></html>");
+    chatText->setHtml("<html><body>"+chatStrings.join("")+"</body></html>");
 
     afterContentAdd();
 }
@@ -487,7 +487,7 @@ void HWChatWidget::onServerMessage(const QString& str)
 
     chatStrings.append("<hr>" + str + "<hr>");
 
-    chatText->setHtml("<html><body>"+chatStrings.join("<br>")+"</body></html>");
+    chatText->setHtml("<html><body>"+chatStrings.join("")+"</body></html>");
 
     afterContentAdd();
 }
