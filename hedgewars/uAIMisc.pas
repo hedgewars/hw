@@ -915,12 +915,12 @@ for i:= 0 to Targets.Count do
                     begin
 
                     if (WorldEdge <> weWrap) or (not (hwAbs(meX - int2hwFloat(pX)) > int2hwFloat(cSeductionDist))) then
-                        dX:= _50 * aiGravity * (meX - int2hwFloat(pX)) / _25
+                        dX:= aiGravity * (meX - int2hwFloat(pX)) / 2
                     else if (not (hwAbs(meX + int2hwFloat((RightX-LeftX) - pX)) > int2hwFloat(cSeductionDist))) then
-                        dX:= _50 * aiGravity * (meX + (int2hwFloat((RightX-LeftX) - pX))) / _25
+                        dX:= aiGravity * (meX + (int2hwFloat((RightX-LeftX) - pX))) / 2
                     else
-                        dX:= _50 * aiGravity * (meX - (int2hwFloat((RightX-LeftX) - pX))) / _25;
-                    dY:= -_450 * cMaxWindSpeed * 2;
+                        dX:= aiGravity * (meX - (int2hwFloat((RightX-LeftX) - pX))) / 2;
+                    dY:= -_900 * cMaxWindSpeed;
 
 
                     pXr:= pX;
@@ -1064,7 +1064,7 @@ case JumpType of
         begin
             if TestCollisionYwithGear(Gear, -1) <> 0 then
                 if TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) = 0 then
-                    Gear^.Y:= Gear^.Y - int2hwFloat(2)
+                    Gear^.Y:= Gear^.Y - _2
                 else
                     if TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) = 0 then
                         Gear^.Y:= Gear^.Y - _1;
@@ -1081,12 +1081,6 @@ case JumpType of
 end;
 
 repeat
-        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then
-            begin
-            LandPixelGet(hwRound(Gear^.Y), hwRound(Gear^.X)):= Gear^.Hedgehog^.Team^.Clan^.Color;
-            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
-            end;}
-
     if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius) then
         exit(false);
     if (Gear^.State and gstMoving) <> 0 then
@@ -1147,12 +1141,6 @@ GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
 tY:= hwRound(Gear^.Y);
 repeat
-        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then
-            begin
-            LandPixelGet(hwRound(Gear^.Y), hwRound(Gear^.X)):= random($FFFFFFFF);//Gear^.Hedgehog^.Team^.Clan^.Color;
-            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
-            end;}
-
     pX:= hwRound(Gear^.X);
     pY:= hwRound(Gear^.Y);
     if CheckCoordInWater(pX, pY + cHHRadius) then

@@ -82,6 +82,7 @@ set(engine_sources
     uLandGraphics.pas
     uLandPainted.pas
     uLandUtils.pas
+    uAI2.pas
 
     #this is where dependency tracking becomes hard
     uStore.pas

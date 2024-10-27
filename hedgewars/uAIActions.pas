@@ -120,7 +120,17 @@ end;
 {$ENDIF}
 
 procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
+var t: Longword;
 begin
+if ((Action = aia_LookLeft) or (Action = aia_LookRight)) and (Actions.Count > 0) then
+    begin
+    t:= Actions.actions[Actions.Count - 1].Action;
+    if ((t = aia_LookLeft) or (t = aia_LookRight)) then
+        begin
+        dec(Actions.Count)
+        end;
+    end;
+
 if Actions.Count < MAXACTIONS then
     with Actions do
         begin

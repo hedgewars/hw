@@ -19,6 +19,8 @@ function  LandPixelGet(y, x: LongInt): Longword;
 procedure LandPixelSet(y, x: LongInt; value: Longword);
 function  LandPixelRow(row: LongInt): PLongwordArray;
 
+var gameField: pointer;
+
 implementation
 uses uUtils, uConsts, uVariables, uTypes;
 
@@ -41,8 +43,6 @@ function  generate_outline_templated_game_field(feature_size: Longword; seed, te
 function  generate_wfc_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
 function  generate_maze_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
 procedure apply_theme(game_field: pointer; data_path, theme_name: PChar); cdecl; external;
-
-var gameField: pointer;
 
 function  LandGet(y, x: LongInt): Word;
 begin

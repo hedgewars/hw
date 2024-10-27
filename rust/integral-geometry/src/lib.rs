@@ -4,7 +4,7 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, RangeInclusive, Sub, SubAssign},
 };
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Debug, Hash)]
 pub struct Point {
     pub x: i32,
     pub y: i32,

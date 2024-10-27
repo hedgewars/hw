@@ -1,3 +1,5 @@
+mod ai;
+
 use integral_geometry::{Point, Size};
 
 use landgen::{
@@ -10,6 +12,7 @@ use lfprng::LaggedFibonacciPRNG;
 use mapgen::{theme::Theme, MapGenerator};
 use std::fs;
 use std::{ffi::CStr, path::Path};
+use ai::*;
 
 #[repr(C)]
 pub struct GameField {
@@ -43,7 +46,7 @@ pub extern "C" fn create_empty_game_field(width: u32, height: u32) -> *mut GameF
         landgen_parameters: None,
     });
 
-    Box::leak(game_field)
+    Box::into_raw(game_field)
 }
 
 #[no_mangle]
@@ -83,7 +86,7 @@ pub extern "C" fn generate_outline_templated_game_field(
         landgen_parameters: Some(params),
     });
 
-    Box::leak(game_field)
+    Box::into_raw(game_field)
 }
 
 #[no_mangle]
@@ -123,7 +126,7 @@ pub extern "C" fn generate_wfc_templated_game_field(
         landgen_parameters: Some(params),
     });
 
-    Box::leak(game_field)
+    Box::into_raw(game_field)
 }
 
 #[no_mangle]
@@ -166,7 +169,7 @@ pub extern "C" fn generate_maze_game_field(
         landgen_parameters: Some(params),
     });
 
-    Box::leak(game_field)
+    Box::into_raw(game_field)
 }
 
 #[no_mangle]
@@ -243,4 +246,29 @@ pub extern "C" fn land_pixel_row(game_field: &mut GameField, row: i32) -> *mut u
 #[no_mangle]
 pub extern "C" fn dispose_game_field(game_field: *mut GameField) {
     unsafe { drop(Box::from_raw(game_field)) };
+}
+
+#[no_mangle]
+pub extern "C" fn create_ai(game_field: &GameField) -> *mut AI {
+    Box::into_raw(Box::new(AI::new(game_field)))
+}
+
+#[no_mangle]
+pub extern "C" fn ai_clear_team(ai: &mut AI) {
+    *ai.get_team_mut() = vec![];
+}
+
+#[no_mangle]
+pub extern "C" fn ai_add_team_hedgehog(ai: &mut AI, x: f32, y: f32) {
+    ai.get_team_mut().push(Hedgehog{x, y});
+}
+
+#[no_mangle]
+pub extern "C" fn ai_think(ai: &AI) {
+
+}
+
+#[no_mangle]
+pub extern "C" fn dispose_ai(ai: *mut AI) {
+    unsafe { drop(Box::from_raw(ai)) };
 }

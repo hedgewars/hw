@@ -32,7 +32,7 @@ implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
     uAmmos, uTypes,
     uVariables, uCommands, uUtils, uDebug, uAILandMarks,
-    uGearsUtils;
+    uGearsUtils, uAI2;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
@@ -635,7 +635,7 @@ end;
 var scoreShown: boolean = false;
 {$ENDIF}
 
-procedure ProcessBot;
+procedure ProcessBot_old;
 const cStopThinkTime = 40;
 begin
 with CurrentHedgehog^ do
@@ -675,6 +675,12 @@ with CurrentHedgehog^ do
         else if ((GameTicks - StartTicks) > cMaxAIThinkTime)
             or (TurnTimeLeft <= cStopThinkTime) then
                 StopThinking:= true
+end;
+
+
+procedure ProcessBot;
+begin
+    if false then ProcessBot_old else uAI2.ProcessBot
 end;
 
 procedure initModule;
