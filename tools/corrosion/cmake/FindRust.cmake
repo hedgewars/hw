@@ -12,20 +12,25 @@ concrete Rust version, not a rustup proxy.
 
 cmake_minimum_required(VERSION 3.12)
 
+option(
+        Rust_RUSTUP_INSTALL_MISSING_TARGET
+        "Use Rustup to automatically install missing targets instead of giving up"
+        OFF
+)
+
 # search for Cargo here and set up a bunch of cool flags and stuff
 include(FindPackageHandleStandardArgs)
 
 list(APPEND CMAKE_MESSAGE_CONTEXT "FindRust")
 
-# Print error message and return.
+# Print error message and return. Should not be used from inside functions
 macro(_findrust_failed)
     if("${Rust_FIND_REQUIRED}")
         message(FATAL_ERROR ${ARGN})
     elseif(NOT "${Rust_FIND_QUIETLY}")
         message(WARNING ${ARGN})
     endif()
-    # Note: PARENT_SCOPE is the scope of the caller of the caller of this macro.
-    set(Rust_FOUND "" PARENT_SCOPE)
+    set(Rust_FOUND "")
     return()
 endmacro()
 
@@ -179,7 +184,13 @@ function(_corrosion_determine_libs_new target_triple out_libs out_flags)
                 
                 # Flags start with / for MSVC
                 if (lib MATCHES "^/" AND ${target_triple} MATCHES "msvc$")
-                    list(APPEND flag_list "${lib}")
+                    # Windows GNU uses the compiler to invoke the linker, so -Wl, prefix is needed
+                    # https://gitlab.kitware.com/cmake/cmake/-/blob/9bed4f4d817f139f0c2e050d7420e1e247949fe4/Modules/Platform/Windows-GNU.cmake#L156
+                    if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+                        list(APPEND flag_list "-Wl,${lib}")
+                    else()
+                        list(APPEND flag_list "${lib}")
+                    endif()
                 else()
                     # Strip leading `-l` (unix) and potential .lib suffix (windows)
                     string(REGEX REPLACE "^-l" "" "stripped_lib" "${lib}")
@@ -188,8 +199,10 @@ function(_corrosion_determine_libs_new target_triple out_libs out_flags)
                 endif()
             endforeach()
             set(libs_list "${stripped_lib_list}")
-            # Special case `msvcrt` to link with the debug version in Debug mode.
-            list(TRANSFORM libs_list REPLACE "^msvcrt$" "\$<\$<CONFIG:Debug>:msvcrtd>")
+            # We leave it up to the C/C++ executable that links in the Rust static-library
+            # to determine which version of the msvc runtime library it should select.
+            list(FILTER libs_list EXCLUDE REGEX "^msvcrtd?")
+            list(FILTER flag_list EXCLUDE REGEX "^(-Wl,)?/defaultlib:msvcrtd?")
         else()
             message(DEBUG "Determining required native libraries - failed: Regex match failure.")
             message(DEBUG "`native-static-libs` not found in: `${cargo_build_error_message}`")
@@ -242,7 +255,8 @@ else()
     else()
         find_program(_Rust_COMPILER_TEST rustc PATHS "$ENV{HOME}/.cargo/bin")
         if(NOT EXISTS "${_Rust_COMPILER_TEST}")
-            set(_ERROR_MESSAGE "`rustc` not found in PATH or `$ENV{HOME}/.cargo/bin`.\n"
+            cmake_path(CONVERT "$ENV{HOME}/.cargo/bin" TO_CMAKE_PATH_LIST _cargo_bin_dir)
+            set(_ERROR_MESSAGE "`rustc` not found in PATH or `${_cargo_bin_dir}`.\n"
                     "Hint: Check if `rustc` is in PATH or manually specify the location "
                     "by setting `Rust_COMPILER` to the path to `rustc`.")
             _findrust_failed(${_ERROR_MESSAGE})
@@ -389,23 +403,20 @@ if (Rust_RESOLVE_RUSTUP_TOOLCHAINS)
         )
     endif()
 
-    set(Rust_RUSTUP_TOOLCHAINS CACHE INTERNAL "List of available Rustup toolchains" "${_DISCOVERED_TOOLCHAINS}")
-    set(Rust_RUSTUP_TOOLCHAINS_RUSTC_PATH
+    set(Rust_RUSTUP_TOOLCHAINS "${_DISCOVERED_TOOLCHAINS}" CACHE INTERNAL "List of available Rustup toolchains")
+    set(Rust_RUSTUP_TOOLCHAINS_RUSTC_PATH "${_DISCOVERED_TOOLCHAINS_RUSTC_PATH}"
         CACHE INTERNAL
         "List of the rustc paths corresponding to the toolchain at the same index in `Rust_RUSTUP_TOOLCHAINS`."
-        "${_DISCOVERED_TOOLCHAINS_RUSTC_PATH}"
     )
-    set(Rust_RUSTUP_TOOLCHAINS_CARGO_PATH
+    set(Rust_RUSTUP_TOOLCHAINS_CARGO_PATH "${_DISCOVERED_TOOLCHAINS_CARGO_PATH}"
         CACHE INTERNAL
         "List of the cargo paths corresponding to the toolchain at the same index in `Rust_RUSTUP_TOOLCHAINS`. \
         May also be `NOTFOUND` if the toolchain does not have a cargo executable."
-        "${_DISCOVERED_TOOLCHAINS_CARGO_PATH}"
     )
-    set(Rust_RUSTUP_TOOLCHAINS_VERSION
+    set(Rust_RUSTUP_TOOLCHAINS_VERSION "${_DISCOVERED_TOOLCHAINS_VERSION}"
         CACHE INTERNAL
         "List of the rust toolchain version corresponding to the toolchain at the same index in \
         `Rust_RUSTUP_TOOLCHAINS`."
-        "${_DISCOVERED_TOOLCHAINS_VERSION}"
     )
 
     # Rust_TOOLCHAIN is preferred over a requested version if it is set.
@@ -486,16 +497,15 @@ if (Rust_RESOLVE_RUSTUP_TOOLCHAINS)
         rustc
             HINTS "${_RUST_TOOLCHAIN_PATH}/bin"
             NO_DEFAULT_PATH)
-elseif (Rust_RUSTUP)
-    get_filename_component(_RUST_TOOLCHAIN_PATH "${Rust_RUSTUP}" DIRECTORY)
-    get_filename_component(_RUST_TOOLCHAIN_PATH "${_RUST_TOOLCHAIN_PATH}" DIRECTORY)
-    find_program(
-        Rust_COMPILER_CACHED
-        rustc
-            HINTS "${_RUST_TOOLCHAIN_PATH}/bin"
-            NO_DEFAULT_PATH)
 else()
-    find_program(Rust_COMPILER_CACHED rustc)
+    message(DEBUG "Rust_RESOLVE_RUSTUP_TOOLCHAINS=OFF and Rust_RUSTUP=${Rust_RUSTUP}")
+    if(Rust_RUSTUP)
+        get_filename_component(_RUSTUP_DIR "${Rust_RUSTUP}" DIRECTORY)
+        find_program(Rust_COMPILER_CACHED rustc HINTS "${_RUSTUP_DIR}")
+    else()
+        find_program(Rust_COMPILER_CACHED rustc)
+    endif()
+    message(DEBUG "find_program rustc: ${Rust_COMPILER_CACHED}")
     if (EXISTS "${Rust_COMPILER_CACHED}")
         # rustc is expected to be at `<toolchain_path>/bin/rustc`.
         get_filename_component(_RUST_TOOLCHAIN_PATH "${Rust_COMPILER_CACHED}" DIRECTORY)
@@ -686,13 +696,29 @@ if (NOT Rust_CARGO_TARGET_CACHED)
             set(_CARGO_ABI msvc)
         elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
             OR "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU"
-            OR "${CMAKE_CXX_COMPILER_TARGET}" MATCHES "-gnu$"
-            OR "${CMAKE_C_COMPILER_TARGET}" MATCHES "-gnu$"
-            OR (NOT CMAKE_CROSSCOMPILING AND "${Rust_DEFAULT_HOST_TARGET}" MATCHES "-gnu$")
+            OR (NOT CMAKE_CROSSCOMPILING
+               AND NOT DEFINED CMAKE_CXX_COMPILER_ID
+               AND NOT DEFINED CMAKE_C_COMPILER_ID
+               AND "${Rust_DEFAULT_HOST_TARGET}" MATCHES "-gnu$"
             )
+        )
             set(_CARGO_ABI gnu)
+        elseif(("${CMAKE_C_COMPILER_ID}" MATCHES "Clang$" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang$")
+            AND ("${CMAKE_CXX_COMPILER_TARGET}" MATCHES "-gnu(llvm)?$"
+                OR "${CMAKE_C_COMPILER_TARGET}" MATCHES "-gnu(llvm)?$")
+        )
+            if("${Rust_VERSION}" VERSION_GREATER_EQUAL "1.79")
+                set(_CARGO_ABI gnullvm)
+            else()
+                message(WARNING "Your selected C/C++ compilers suggest you want to use the -gnullvm"
+                        " rust targets, however your Rust compiler version is ${Rust_VERSION}, which is"
+                        " before the promotion of the gnullvm target to tier2."
+                        " Please either use a more recent rust compiler or manually choose a target "
+                        " triple by specifying `Rust_CARGO_TARGET` manually."
+                )
+            endif()
         elseif(NOT "${CMAKE_CROSSCOMPILING}" AND "${Rust_DEFAULT_HOST_TARGET}" MATCHES "-msvc$")
-            # We first check if the gnu branch matches to ensure this fallback is only used
+            # We first check if the gnu branches match to ensure this fallback is only used
             # if no compiler is enabled.
             set(_CARGO_ABI msvc)
         else()
@@ -746,6 +772,46 @@ if (NOT Rust_CARGO_TARGET_CACHED)
     endif()
 
     message(STATUS "Rust Target: ${Rust_CARGO_TARGET_CACHED}")
+endif()
+
+
+if(Rust_TOOLCHAIN_IS_RUSTUP_MANAGED)
+    execute_process(COMMAND rustup target list --toolchain "${Rust_TOOLCHAIN}"
+                    OUTPUT_VARIABLE AVAILABLE_TARGETS_RAW
+    )
+    string(REPLACE "\n" ";" AVAILABLE_TARGETS_RAW "${AVAILABLE_TARGETS_RAW}")
+    string(REPLACE " (installed)" "" "AVAILABLE_TARGETS" "${AVAILABLE_TARGETS_RAW}")
+    set(INSTALLED_TARGETS_RAW "${AVAILABLE_TARGETS_RAW}")
+    list(FILTER INSTALLED_TARGETS_RAW INCLUDE REGEX " \\(installed\\)")
+    string(REPLACE " (installed)" "" "INSTALLED_TARGETS" "${INSTALLED_TARGETS_RAW}")
+    list(TRANSFORM INSTALLED_TARGETS STRIP)
+    if("${Rust_CARGO_TARGET_CACHED}" IN_LIST AVAILABLE_TARGETS)
+        message(DEBUG "Cargo target ${Rust_CARGO_TARGET} is an official target-triple")
+        message(DEBUG "Installed targets: ${INSTALLED_TARGETS}")
+        if(NOT ("${Rust_CARGO_TARGET_CACHED}" IN_LIST INSTALLED_TARGETS))
+            if(Rust_RUSTUP_INSTALL_MISSING_TARGET)
+                message(STATUS "Cargo target ${Rust_CARGO_TARGET_CACHED} is not installed. Installing via rustup.")
+                execute_process(COMMAND "${Rust_RUSTUP}" target add
+                                --toolchain ${Rust_TOOLCHAIN}
+                                ${Rust_CARGO_TARGET_CACHED}
+                                RESULT_VARIABLE target_add_result
+                )
+                if(NOT "${target_add_result}" EQUAL "0")
+                    message(FATAL_ERROR "Target ${Rust_CARGO_TARGET_CACHED} is not installed for toolchain "
+                            "${Rust_TOOLCHAIN} and automatically installing failed with ${target_add_result}.\n"
+                            "You can try to manually install by running\n"
+                            "`rustup target add --toolchain ${Rust_TOOLCHAIN} ${Rust_CARGO_TARGET}`."
+                    )
+                endif()
+                message(STATUS "Installed target ${Rust_CARGO_TARGET_CACHED} successfully.")
+            else()
+                message(FATAL_ERROR "Target ${Rust_CARGO_TARGET_CACHED} is not installed for toolchain ${Rust_TOOLCHAIN}.\n"
+                        "Help: Run `rustup target add --toolchain ${Rust_TOOLCHAIN} ${Rust_CARGO_TARGET_CACHED}` to install "
+                        "the missing target or configure corrosion with `Rust_RUSTUP_INSTALL_MISSING_TARGET=ON`."
+                )
+            endif()
+        endif()
+    endif()
 endif()
 
 if(Rust_CARGO_TARGET_CACHED STREQUAL Rust_DEFAULT_HOST_TARGET)

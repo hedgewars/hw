@@ -33,4 +33,5 @@ add_executable(your_cool_cpp_bin main.cpp)
 target_link_libraries(your_cool_cpp_bin PUBLIC rust-lib)
 ```
 
+
 Please see the [Usage chapter](usage.md) for a complete discussion of possible configuration options.

@@ -1,3 +1,22 @@
+# Unreleased
+
+### Breaking Changes
+
+- The master branch of corrosion now requires CMake 3.22. See also the 
+  [v0.4.0 Release notes](#040-lts-2023-06-01) for more details.
+- Removed native tooling and the corresponding option `CORROSION_NATIVE_TOOLING`.
+  Corrosion now always uses pure CMake.
+
+### New features
+
+- Support using the `$<CONFIG>` generator expression in `OUTPUT_DIRECTORY`. [#459]
+- Add `OVERRIDE_CRATE_TYPE` option to corrosion_import_crate, allowing users to override
+  the crate-types of Rust libraries (e.g. force building as a staticlib instead of an rlib).
+- Support *-windows-gnullvm targets. 
+- experimental support in corrosion_install for installing libraries and header files
+
+[#459]: https://github.com/corrosion-rs/corrosion/pull/459
+
 # v0.5.0 (2024-05-11)
 
 ### Breaking Changes
@@ -23,7 +42,7 @@
 
 - Combine `-framework` flags on macos to avoid linker deduplication errors [#455]
 - `corrosion_experimental_cbindgen()` will now correctly use the package name, instead of assuming that
-    the package and crate name are identical. ([11e27c])
+  the package and crate name are identical. ([11e27c])
 - Set the `AR_<triple>` variable for `cc-rs` (except for msvc targets) [#456]
 - Fix hostbuild when cross-compiling to windows [#477]
 - Consider vworks executable suffix [#504]
@@ -43,7 +62,7 @@
 
 # v0.4.9 (2024-05-01)
 
-### New Features 
+### New Features
 
 - Automatically detect Rust target for OpenHarmony ([#510]).
 
@@ -67,7 +86,7 @@
 
 ### Fixes
 
-- The C/C++ compiler passed from corrosion to `cc-rs` can now be overriden by users setting
+- The C/C++ compiler passed from corrosion to `cc-rs` can now be overridden by users setting
   `CC_<target>` (e.g. `CC_x86_64-unknown-linux-gnu=/path/to/my-compiler`) environment variables ([#475]).
 
 [#475]: https://github.com/corrosion-rs/corrosion/pull/475
