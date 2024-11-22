@@ -14,6 +14,7 @@ function create_ai(game_field: pointer): pointer; cdecl; external;
 procedure ai_clear_team(ai: pointer); cdecl; external;
 procedure ai_add_team_hedgehog(ai: pointer; x, y: real); cdecl; external;
 procedure ai_think(ai: pointer); cdecl; external;
+function ai_have_plan(): boolean; cdecl; external;
 procedure dispose_ai(ai: pointer); cdecl; external;
 
 var ai: pointer;
@@ -38,7 +39,6 @@ begin
             end;
         itHedgehog:= Succ(itHedgehog) mod CurrentTeam^.HedgehogsNumber;
     until (itHedgehog = currHedgehogIndex);
-
 end;
 
 procedure initModule;

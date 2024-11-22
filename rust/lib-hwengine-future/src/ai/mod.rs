@@ -1,6 +1,9 @@
+mod action;
+
 use std::collections::HashMap;
 use integral_geometry::Point;
 use crate::GameField;
+use action::*;
 
 pub struct Target {
     point: Point,
@@ -19,18 +22,7 @@ pub struct AI<'a> {
     game_field: &'a GameField,
     targets: Vec<Target>,
     team: Vec<Hedgehog>,
-}
-
-#[derive(Clone)]
-enum Direction {
-    Left,
-    Right
-}
-#[derive(Clone)]
-enum Action {
-    Walk(Direction),
-    LongJump,
-    HighJump(usize)
+    planned_actions: Option<Actions>,
 }
 
 #[derive(Clone)]
@@ -63,6 +55,7 @@ impl<'a> AI<'a> {
             game_field,
             targets: vec![],
             team: vec![],
+            planned_actions: None,
         }
     }
 
@@ -85,5 +78,9 @@ impl<'a> AI<'a> {
         while let Some(wp) = stack.pop() {
 
         }
+    }
+
+    pub fn have_plan(&self) -> bool {
+        self.planned_actions.is_some()
     }
 }

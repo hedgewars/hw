@@ -269,6 +269,16 @@ pub extern "C" fn ai_think(ai: &AI) {
 }
 
 #[no_mangle]
+pub extern "C" fn ai_have_plan(ai: &AI) -> bool {
+    ai.have_plan()
+}
+
+#[no_mangle]
+pub extern "C" fn ai_get(ai: &AI) -> bool {
+    ai.have_plan()
+}
+
+#[no_mangle]
 pub extern "C" fn dispose_ai(ai: *mut AI) {
     unsafe { drop(Box::from_raw(ai)) };
 }
