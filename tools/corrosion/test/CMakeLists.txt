@@ -15,14 +15,14 @@ option(CORROSION_TESTS_KEEP_BUILDDIRS
 mark_as_advanced(CORROSION_TESTS_NO_CLEANUP)
 
 set(test_install_path "${CMAKE_CURRENT_BINARY_DIR}/test-install-corrosion")
-
+file(REAL_PATH "${CMAKE_CURRENT_SOURCE_DIR}/.." corrosion_source_dir)
 set(test_header_contents
         "option(CORROSION_TESTS_FIND_CORROSION \"Use Corrosion as a subdirectory\" OFF)"
         "if (CORROSION_TESTS_FIND_CORROSION)"
         "    set(CMAKE_PREFIX_PATH \"${test_install_path}\" CACHE INTERNAL \"\" FORCE)"
         "    find_package(Corrosion REQUIRED PATHS \"${test_install_path}\" NO_CMAKE_SYSTEM_PATH)"
         "else()"
-        "    add_subdirectory(\"${CMAKE_CURRENT_SOURCE_DIR}/..\" corrosion)"
+        "    add_subdirectory(\"${corrosion_source_dir}\" corrosion)"
         "endif()"
 )
 
@@ -73,7 +73,7 @@ if(CORROSION_TESTS_INSTALL_CORROSION)
 endif()
 
 function(corrosion_tests_add_test test_name bin_names)
-    set(options "")
+    set(options "IS_HOSTBUILD")
     set(one_value_kewords "TEST_SRC_DIR")
     set(multi_value_keywords "")
     cmake_parse_arguments(PARSE_ARGV 2 TST "${options}" "${one_value_kewords}" "${multi_value_keywords}")
@@ -87,22 +87,30 @@ function(corrosion_tests_add_test test_name bin_names)
         set(test_dir "${test_name}")
     endif()
 
-
+    set(configure_cmake_args)
     if(CMAKE_C_COMPILER)
-        set(TEST_C_COMPILER "C_COMPILER" "${CMAKE_C_COMPILER}")
+        list(APPEND configure_cmake_args "C_COMPILER" "${CMAKE_C_COMPILER}")
     endif()
     if(CMAKE_CXX_COMPILER)
-        set(TEST_CXX_COMPILER "CXX_COMPILER" "${CMAKE_CXX_COMPILER}")
+        list(APPEND configure_cmake_args "CXX_COMPILER" "${CMAKE_CXX_COMPILER}")
+    endif()
+    if(CMAKE_C_COMPILER_TARGET)
+        list(APPEND configure_cmake_args "C_COMPILER_TARGET" "${CMAKE_C_COMPILER_TARGET}")
+    endif()
+    if(CMAKE_CXX_COMPILER_TARGET)
+        list(APPEND configure_cmake_args "CXX_COMPILER_TARGET" "${CMAKE_CXX_COMPILER_TARGET}")
     endif()
     if(CMAKE_GENERATOR_PLATFORM)
-        set(TEST_GENERATOR_PLATFORM "GENERATOR_PLATFORM" "${CMAKE_GENERATOR_PLATFORM}")
-    endif()
-    if(CORROSION_GENERATOR_EXECUTABLE)
-        # Mainly used in CI to build the native generator once and then reuse it for all tests
-        set(TEST_GENERATOR_BIN EXTERNAL_CORROSION_GENERATOR "${CORROSION_GENERATOR_EXECUTABLE}")
+        list(APPEND configure_cmake_args "GENERATOR_PLATFORM" "${CMAKE_GENERATOR_PLATFORM}")
     endif()
     if(CMAKE_CROSSCOMPILING)
-        set(TEST_SYSTEM_NAME SYSTEM_NAME "${CMAKE_SYSTEM_NAME}")
+        list(APPEND configure_cmake_args SYSTEM_NAME "${CMAKE_SYSTEM_NAME}")
+    endif()
+    if(CMAKE_OSX_ARCHITECTURES)
+        list(APPEND configure_cmake_args OSX_ARCHITECTURES "${CMAKE_OSX_ARCHITECTURES}")
+    endif()
+    if(CMAKE_TOOLCHAIN_FILE)
+        list(APPEND configure_cmake_args TOOLCHAIN_FILE "${CMAKE_TOOLCHAIN_FILE}")
     endif()
 
     add_test(NAME "${test_name}_build"
@@ -114,11 +122,7 @@ function(corrosion_tests_add_test test_name bin_names)
             GENERATOR "${CMAKE_GENERATOR}"
             RUST_TOOLCHAIN "${Rust_TOOLCHAIN}"
             CARGO_TARGET "${Rust_CARGO_TARGET}"
-            "${TEST_SYSTEM_NAME}"
-            "${TEST_C_COMPILER}"
-            "${TEST_CXX_COMPILER}"
-            "${TEST_GENERATOR_PLATFORM}"
-            "${TEST_GENERATOR_BIN}"
+            ${configure_cmake_args}
             ${pass_through_arguments}
 
             COMMAND_EXPAND_LISTS
@@ -137,7 +141,7 @@ function(corrosion_tests_add_test test_name bin_names)
         set_tests_properties("${test_name}_run_${bin}" PROPERTIES FIXTURES_REQUIRED "build_fixture_${test_name}")
         # CMAKE_CROSSCOMPILING is not set when cross-compiling with VS (via -A flag).
         # Todo: We could run x86 binaries on x64 hosts.
-        if(CMAKE_CROSSCOMPILING OR CMAKE_VS_PLATFORM_NAME)
+        if((CMAKE_CROSSCOMPILING OR CMAKE_VS_PLATFORM_NAME) AND NOT "${TST_IS_HOSTBUILD}")
             # Todo: In the future we could potentially run some tests with qemu.
             set_tests_properties("${test_name}_run_${bin}" PROPERTIES DISABLED TRUE)
         endif()
@@ -164,12 +168,13 @@ add_subdirectory(cpp2rust)
 if(Rust_VERSION VERSION_GREATER_EQUAL "1.64.0")
     # Flag `--crate-type` is only supported since Rust 1.64.0
     add_subdirectory(crate_type)
+    add_subdirectory(override_crate_type)
 endif()
 add_subdirectory(custom_profiles)
 add_subdirectory(cbindgen)
+add_subdirectory(corrosion_install)
 add_subdirectory(cxxbridge)
 add_subdirectory(envvar)
-add_subdirectory(external_corrosion_generator)
 add_subdirectory(features)
 add_subdirectory(find_rust)
 add_subdirectory(gensource)

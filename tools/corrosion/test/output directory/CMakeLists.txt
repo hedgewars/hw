@@ -1,15 +1,24 @@
-if(CMAKE_VERSION VERSION_LESS 3.19.0)
-    return()
-endif()
-
+set(configure_cmake_args)
 if(CMAKE_C_COMPILER)
-    set(TEST_C_COMPILER "C_COMPILER" "${CMAKE_C_COMPILER}")
+    list(APPEND configure_cmake_args "C_COMPILER" "${CMAKE_C_COMPILER}")
 endif()
 if(CMAKE_CXX_COMPILER)
-    set(TEST_CXX_COMPILER "CXX_COMPILER" "${CMAKE_CXX_COMPILER}")
+    list(APPEND configure_cmake_args "CXX_COMPILER" "${CMAKE_CXX_COMPILER}")
+endif()
+if(CMAKE_C_COMPILER_TARGET)
+    list(APPEND configure_cmake_args "C_COMPILER_TARGET" "${CMAKE_C_COMPILER_TARGET}")
+endif()
+if(CMAKE_CXX_COMPILER_TARGET)
+    list(APPEND configure_cmake_args "CXX_COMPILER_TARGET" "${CMAKE_CXX_COMPILER_TARGET}")
 endif()
 if(CMAKE_GENERATOR_PLATFORM)
-    set(TEST_GENERATOR_PLATFORM "GENERATOR_PLATFORM" "${CMAKE_GENERATOR_PLATFORM}")
+    list(APPEND configure_cmake_args "GENERATOR_PLATFORM" "${CMAKE_GENERATOR_PLATFORM}")
+endif()
+if(CMAKE_OSX_ARCHITECTURES)
+    list(APPEND configure_cmake_args OSX_ARCHITECTURES "${CMAKE_OSX_ARCHITECTURES}")
+endif()
+if(CMAKE_TOOLCHAIN_FILE)
+    list(APPEND configure_cmake_args TOOLCHAIN_FILE "${CMAKE_TOOLCHAIN_FILE}")
 endif()
 
 add_test(NAME "output_directory_build"
@@ -22,9 +31,7 @@ add_test(NAME "output_directory_build"
         RUST_TOOLCHAIN "${Rust_TOOLCHAIN}"
         CARGO_TARGET "${Rust_CARGO_TARGET}"
         SYSTEM_NAME "${CMAKE_SYSTEM_NAME}"
-        "${TEST_C_COMPILER}"
-        "${TEST_CXX_COMPILER}"
-        "${TEST_GENERATOR_PLATFORM}"
+        ${configure_cmake_args}
 
         COMMAND_EXPAND_LISTS
 )
@@ -33,11 +40,13 @@ if(CORROSION_TESTS_INSTALL_CORROSION)
     set_tests_properties("output_directory_build" PROPERTIES FIXTURES_REQUIRED "fixture_corrosion_install")
 endif()
 
-foreach(output_approach targetprop var)
+foreach(output_approach targetprop var targetprop_pdb_fallback)
     if(output_approach STREQUAL "targetprop")
        set(rust_proj_suffix "1")
     elseif(output_approach STREQUAL "var")
         set(rust_proj_suffix "2")
+    elseif(output_approach STREQUAL "targetprop_pdb_fallback")
+        set(rust_proj_suffix "3")
     else()
         message(FATAL_ERROR "specify rust project suffix for new output approach ${output_approach}")
     endif()
@@ -102,6 +111,9 @@ foreach(output_approach targetprop var)
                 # end up in the same directory.
                 set(expected_lib_pdb_path "custom_binlib_pdb_var")
                 set(expected_bin_pdb_path "custom_binlib_pdb_var")
+            elseif(output_approach STREQUAL "targetprop_pdb_fallback")
+                set(expected_lib_pdb_path "custom_lib_targetprop_pdb_fallback")
+                set(expected_bin_pdb_path "custom_bin_targetprop_pdb_fallback")
             else()
                 message(FATAL_ERROR "specify rust project suffix for new output approach ${output_approach}")
             endif()
@@ -138,3 +150,5 @@ set_tests_properties("postbuild_custom_command" PROPERTIES FIXTURES_REQUIRED "bu
 
 add_test(NAME "output_directory_cleanup" COMMAND "${CMAKE_COMMAND}" -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/build")
 set_tests_properties("output_directory_cleanup" PROPERTIES FIXTURES_CLEANUP "build_fixture_output_directory")
+
+
