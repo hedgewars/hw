@@ -5,13 +5,13 @@ use serde_derive::Deserialize;
 
 use std::collections::hash_map::HashMap;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct PointDesc {
     x: u32,
     y: u32,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct RectDesc {
     x: u32,
     y: u32,
@@ -19,7 +19,7 @@ pub struct RectDesc {
     h: u32,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct TemplateDesc {
     width: usize,
     height: usize,
@@ -30,6 +30,7 @@ pub struct TemplateDesc {
     put_girders: bool,
     max_hedgehogs: u8,
     outline_points: Vec<Vec<RectDesc>>,
+    walls: Option<Vec<Vec<RectDesc>>>,
     fill_points: Vec<PointDesc>,
 }
 
@@ -45,11 +46,25 @@ pub struct TemplateCollectionDesc {
     pub template_types: HashMap<String, TemplateTypeDesc>,
 }
 
-impl From<&TemplateDesc> for OutlineTemplate {
-    fn from(desc: &TemplateDesc) -> Self {
+impl From<TemplateDesc> for OutlineTemplate {
+    fn from(desc: TemplateDesc) -> Self {
         OutlineTemplate {
             islands: desc
                 .outline_points
+                .iter()
+                .map(|v| {
+                    v.iter()
+                        .map(|r| {
+                            Rect::from_size(
+                                Point::new(r.x as i32, r.y as i32),
+                                Size::new(r.w as usize, r.h as usize),
+                            )
+                        })
+                        .collect()
+                })
+                .collect(),
+            walls: desc
+                .walls.unwrap_or_default()
                 .iter()
                 .map(|v| {
                     v.iter()

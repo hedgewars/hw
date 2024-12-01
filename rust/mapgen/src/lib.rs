@@ -139,7 +139,7 @@ impl MapGenerator<OutlineTemplate> {
                     indices
                         .indices
                         .iter()
-                        .map(|i| Into::<OutlineTemplate>::into(&templates[*i]))
+                        .map(|i| Into::<OutlineTemplate>::into(templates[*i].clone()))
                         .map(|o| {
                             if indices.force_invert == Some(true) {
                                 o.cavern()

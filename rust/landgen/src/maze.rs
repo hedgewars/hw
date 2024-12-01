@@ -422,6 +422,7 @@ impl MazeLandGenerator {
 
         OutlinePoints {
             islands,
+            walls: vec![],
             fill_points,
             size: *size,
             play_box,
@@ -454,7 +455,11 @@ impl LandGenerator for MazeLandGenerator {
         );
 
         if !parameters.skip_distort {
-            points.distort(parameters.distance_divisor, self.maze_template.distortion_limiting_factor, random_numbers);
+            points.distort(
+                parameters.distance_divisor,
+                self.maze_template.distortion_limiting_factor,
+                random_numbers,
+            );
         }
 
         if !parameters.skip_bezier {

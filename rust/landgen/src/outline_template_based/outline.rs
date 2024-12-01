@@ -8,6 +8,7 @@ use super::outline_template::OutlineTemplate;
 
 pub struct OutlinePoints {
     pub islands: Vec<Polygon>,
+    pub walls: Vec<Polygon>,
     pub fill_points: Vec<Point>,
     pub size: Size,
     pub play_box: Rect,
@@ -37,6 +38,19 @@ impl OutlinePoints {
                         .into()
                 })
                 .collect(),
+            walls: outline_template
+                .walls
+                .iter()
+                .map(|i| {
+                    i.iter()
+                        .zip(random_numbers.tuples())
+                        .map(|(rect, (rnd_a, rnd_b))| {
+                            play_box.top_left() + rect.quotient(rnd_a as usize, rnd_b as usize)
+                        })
+                        .collect::<Vec<_>>()
+                        .into()
+                })
+                .collect(),
             fill_points: outline_template.fill_points.clone(),
             intersections_box: Rect::at_origin(size)
                 .with_margin(size.to_square().width as i32 * -2),
@@ -51,6 +65,7 @@ impl OutlinePoints {
         self.islands
             .iter()
             .flat_map(|p| p.iter())
+            .chain(self.walls.iter().flat_map(|p| p.iter()))
             .chain(self.fill_points.iter())
     }
 
@@ -58,6 +73,7 @@ impl OutlinePoints {
         self.islands
             .iter_mut()
             .flat_map(|i| i.iter_mut())
+            .chain(self.walls.iter_mut().flat_map(|p| p.iter_mut()))
             .chain(self.fill_points.iter_mut())
     }
 
@@ -292,13 +308,22 @@ impl OutlinePoints {
     }
 
     pub fn draw<T: Copy + PartialEq + Default>(&self, land: &mut Land2D<T>, value: T) {
-        for segment in self.segments_iter() {
+        for segment in self.visible_segments_iter() {
             land.draw_line(segment, value);
         }
     }
 
+    fn visible_segments_iter<'a>(&'a self) -> impl Iterator<Item = Line> + 'a {
+        self.islands
+            .iter()
+            .flat_map(|p| p.iter_edges())
+    }
+
     fn segments_iter<'a>(&'a self) -> impl Iterator<Item = Line> + 'a {
-        self.islands.iter().flat_map(|p| p.iter_edges())
+        self.islands
+            .iter()
+            .flat_map(|p| p.iter_edges())
+            .chain(self.walls.iter().flat_map(|p| p.iter_edges()))
     }
 
     pub fn mirror(&mut self) {
@@ -322,6 +347,7 @@ fn points_test() {
             Polygon::new(&[Point::new(0, 0), Point::new(20, 0), Point::new(30, 30)]),
             Polygon::new(&[Point::new(10, 15), Point::new(15, 20), Point::new(20, 15)]),
         ],
+        walls: vec![],
         fill_points: vec![Point::new(1, 1)],
         play_box: Rect::at_origin(size).with_margin(10),
         size: Size::square(100),

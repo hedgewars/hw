@@ -3,6 +3,7 @@ use integral_geometry::{Point, Rect, Size};
 #[derive(Clone, Debug)]
 pub struct OutlineTemplate {
     pub islands: Vec<Vec<Rect>>,
+    pub walls: Vec<Vec<Rect>>,
     pub fill_points: Vec<Point>,
     pub size: Size,
     pub can_flip: bool,
@@ -16,6 +17,7 @@ impl OutlineTemplate {
         OutlineTemplate {
             size,
             islands: Vec::new(),
+            walls: Vec::new(),
             fill_points: Vec::new(),
             can_flip: false,
             can_invert: false,

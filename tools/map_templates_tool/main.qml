@@ -20,7 +20,7 @@ Window {
     Rectangle {
       id: mapContainer
 
-      property int spaceForCode: Math.max(200, parent.height / 2)
+      property int spaceForCode: Math.max(250, parent.height * 0.6)
       property int mapWidth: 2048
       property int mapHeight: 1024
       property real aspectRatio: mapWidth / mapHeight
@@ -39,6 +39,16 @@ Window {
       id: shape
 
       anchors.fill: mapContainer
+    }
+
+    MouseArea {
+      id: mouseArea
+      anchors.fill: mapContainer
+      hoverEnabled: true
+    }
+
+    Label {
+      text: mouseArea.containsMouse ? "(%1, %2)".arg(Math.floor(mouseArea.mouseX / mouseArea.width * mapContainer.mapWidth)).arg(Math.floor(mouseArea.mouseY / mouseArea.height * mapContainer.mapHeight)) : ""
     }
 
     Rectangle {
@@ -119,8 +129,8 @@ Window {
                      newKey = "outline_points"
                    }
 
-                   if (line === "    holes:") {
-                     newKey = "holes"
+                   if (line === "    walls:") {
+                     newKey = "walls"
                    }
 
                    if (line === "    fill_points:") {
@@ -243,6 +253,6 @@ Window {
   }
 
   function renderTemplate(template) {
-    return polygons2shapes(template.outline_points, "red", "black").concat(polygons2shapes(template.holes, "gray", "gray"))
+    return polygons2shapes(template.outline_points, "red", "black").concat(polygons2shapes(template.walls, "gray", "gray"))
   }
 }
