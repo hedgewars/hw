@@ -680,7 +680,7 @@ end;
 
 procedure ProcessBot;
 begin
-    if false then ProcessBot_old else uAI2.ProcessBot
+    if true then ProcessBot_old else uAI2.ProcessBot
 end;
 
 procedure initModule;
