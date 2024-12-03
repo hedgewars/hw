@@ -2145,6 +2145,44 @@ templates:
       - {x: 1023, y: 0}
 
 
+
+  # 47
+  -
+    width: 3072
+    height: 1424
+    can_flip: false
+    can_invert: false
+    can_mirror: true
+    is_negative: false
+    put_girders: true
+    max_hedgehogs: 48
+    outline_points:
+      -
+        - {x: 250, y: 1424, w: 1, h: 1}
+        - {x: 350, y: 1100, w: 800, h: 40}
+        - {x: 1250, y: 1424, w: 1, h: 5}
+      -
+        - {x: 1800, y: 1424, w: 1, h: 1}
+        - {x: 1900, y: 1100, w: 800, h: 40}
+        - {x: 2800, y: 1424, w: 1, h: 5}
+      -
+        - {x: 250, y: 624, w: 1, h: 1}
+        - {x: 350, y: 800, w: 800, h: 40}
+        - {x: 1250, y: 624, w: 1, h: 5}
+      -
+        - {x: 1800, y: 624, w: 1, h: 1}
+        - {x: 1900, y: 800, w: 800, h: 40}
+        - {x: 2800, y: 624, w: 1, h: 5}
+    walls:
+      -
+        - {x: 1386, y: 0, w: 300, h: 1}
+        - {x: 1386, y: 1424, w: 300, h: 1}
+      -
+        - {x: 0, y: 875, w: 1, h: 150}
+        - {x: 3072, y: 875, w: 1, h: 150}
+    fill_points:
+      - {x: 1386, y: 0}
+
 template_types:
   small:
     indices: [39, 40, 42]    
