@@ -2,9 +2,9 @@ mod ai;
 
 use integral_geometry::{Point, Size};
 
+use ai::*;
 use landgen::{
-    outline_template_based::outline_template::OutlineTemplate,
-    maze::MazeTemplate,
+    maze::MazeTemplate, outline_template_based::outline_template::OutlineTemplate,
     wavefront_collapse::generator::TemplateDescription as WfcTemplate, LandGenerationParameters,
     LandGenerator,
 };
@@ -12,7 +12,7 @@ use lfprng::LaggedFibonacciPRNG;
 use mapgen::{theme::Theme, MapGenerator};
 use std::fs;
 use std::{ffi::CStr, path::Path};
-use ai::*;
+use std::ptr::slice_from_raw_parts;
 
 #[repr(C)]
 pub struct GameField {
@@ -24,18 +24,16 @@ pub struct GameField {
 #[no_mangle]
 pub extern "C" fn get_game_field_parameters(
     game_field: &GameField,
-    width: *mut i32,
-    height: *mut i32,
-    play_width: *mut i32,
-    play_height: *mut i32,
+    width: &mut i32,
+    height: &mut i32,
+    play_width: &mut i32,
+    play_height: &mut i32,
 ) {
-    unsafe {
-        *width = game_field.collision.width() as i32;
-        *height = game_field.collision.height() as i32;
+    *width = game_field.collision.width() as i32;
+    *height = game_field.collision.height() as i32;
 
-        *play_width = game_field.collision.play_width() as i32;
-        *play_height = game_field.collision.play_height() as i32;
-    }
+    *play_width = game_field.collision.play_width() as i32;
+    *play_height = game_field.collision.play_height() as i32;
 }
 
 #[no_mangle]
@@ -50,17 +48,17 @@ pub extern "C" fn create_empty_game_field(width: u32, height: u32) -> *mut GameF
 }
 
 #[no_mangle]
-pub extern "C" fn generate_outline_templated_game_field(
+pub unsafe extern "C" fn generate_outline_templated_game_field(
     feature_size: u32,
     seed: *const i8,
     template_type: *const i8,
     data_path: *const i8,
 ) -> *mut GameField {
-    let data_path: &str = unsafe { CStr::from_ptr(data_path) }.to_str().unwrap();
+    let data_path: &str = CStr::from_ptr(data_path).to_str().unwrap();
     let data_path = Path::new(&data_path);
 
-    let seed: &str = unsafe { CStr::from_ptr(seed) }.to_str().unwrap();
-    let template_type: &str = unsafe { CStr::from_ptr(template_type) }.to_str().unwrap();
+    let seed: &str = CStr::from_ptr(seed).to_str().unwrap();
+    let template_type: &str = CStr::from_ptr(template_type).to_str().unwrap();
 
     let mut random_numbers_gen = LaggedFibonacciPRNG::new(seed.as_bytes());
 
@@ -90,17 +88,17 @@ pub extern "C" fn generate_outline_templated_game_field(
 }
 
 #[no_mangle]
-pub extern "C" fn generate_wfc_templated_game_field(
+pub unsafe extern "C" fn generate_wfc_templated_game_field(
     feature_size: u32,
     seed: *const i8,
     template_type: *const i8,
     data_path: *const i8,
 ) -> *mut GameField {
-    let data_path: &str = unsafe { CStr::from_ptr(data_path) }.to_str().unwrap();
+    let data_path: &str = CStr::from_ptr(data_path).to_str().unwrap();
     let data_path = Path::new(&data_path);
 
-    let seed: &str = unsafe { CStr::from_ptr(seed) }.to_str().unwrap();
-    let template_type: &str = unsafe { CStr::from_ptr(template_type) }.to_str().unwrap();
+    let seed: &str = CStr::from_ptr(seed).to_str().unwrap();
+    let template_type: &str = CStr::from_ptr(template_type).to_str().unwrap();
 
     let mut random_numbers_gen = LaggedFibonacciPRNG::new(seed.as_bytes());
 
@@ -130,17 +128,17 @@ pub extern "C" fn generate_wfc_templated_game_field(
 }
 
 #[no_mangle]
-pub extern "C" fn generate_maze_game_field(
+pub unsafe extern "C" fn generate_maze_game_field(
     feature_size: u32,
     seed: *const i8,
     template_type: *const i8,
     data_path: *const i8,
 ) -> *mut GameField {
-    let data_path: &str = unsafe { CStr::from_ptr(data_path) }.to_str().unwrap();
+    let data_path: &str = CStr::from_ptr(data_path).to_str().unwrap();
     let data_path = Path::new(&data_path);
 
-    let seed: &str = unsafe { CStr::from_ptr(seed) }.to_str().unwrap();
-    let template_type: &str = unsafe { CStr::from_ptr(template_type) }.to_str().unwrap();
+    let seed: &str = CStr::from_ptr(seed).to_str().unwrap();
+    let template_type: &str = CStr::from_ptr(template_type).to_str().unwrap();
 
     let mut random_numbers_gen = LaggedFibonacciPRNG::new(seed.as_bytes());
 
@@ -173,15 +171,15 @@ pub extern "C" fn generate_maze_game_field(
 }
 
 #[no_mangle]
-pub extern "C" fn apply_theme(
+pub unsafe extern "C" fn apply_theme(
     game_field: &mut GameField,
     data_path: *const i8,
     theme_name: *const i8,
 ) {
-    let data_path: &str = unsafe { CStr::from_ptr(data_path) }.to_str().unwrap();
+    let data_path: &str = CStr::from_ptr(data_path).to_str().unwrap();
     let data_path = Path::new(&data_path);
 
-    let theme_name: &str = unsafe { CStr::from_ptr(theme_name) }.to_str().unwrap();
+    let theme_name: &str = CStr::from_ptr(theme_name).to_str().unwrap();
     let map_gen = MapGenerator::<()>::new(data_path);
 
     let theme = Theme::load(
@@ -244,8 +242,8 @@ pub extern "C" fn land_pixel_row(game_field: &mut GameField, row: i32) -> *mut u
 }
 
 #[no_mangle]
-pub extern "C" fn dispose_game_field(game_field: *mut GameField) {
-    unsafe { drop(Box::from_raw(game_field)) };
+pub unsafe extern "C" fn dispose_game_field(game_field: *mut GameField) {
+    drop(Box::from_raw(game_field));
 }
 
 #[no_mangle]
@@ -259,14 +257,15 @@ pub extern "C" fn ai_clear_team(ai: &mut AI) {
 }
 
 #[no_mangle]
-pub extern "C" fn ai_add_team_hedgehog(ai: &mut AI, x: f32, y: f32) {
-    ai.get_team_mut().push(Hedgehog{x, y});
+pub unsafe extern "C" fn ai_add_team_hedgehog(ai: &mut AI, x: f32, y: f32, ammo_counts: *const u32) {
+    let ammo_counts = &*slice_from_raw_parts(ammo_counts, crate::ai::ammo::AmmoType::Count as usize);
+    let ammo_counts = std::array::from_fn(|i| ammo_counts[i].clone());
+
+    ai.get_team_mut().push(Hedgehog { x, y, ammo: ammo_counts });
 }
 
 #[no_mangle]
-pub extern "C" fn ai_think(ai: &AI) {
-
-}
+pub extern "C" fn ai_think(ai: &AI) {}
 
 #[no_mangle]
 pub extern "C" fn ai_have_plan(ai: &AI) -> bool {
@@ -279,6 +278,6 @@ pub extern "C" fn ai_get(ai: &AI) -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn dispose_ai(ai: *mut AI) {
-    unsafe { drop(Box::from_raw(ai)) };
+pub unsafe extern "C" fn dispose_ai(ai: *mut AI) {
+    drop(Box::from_raw(ai));
 }

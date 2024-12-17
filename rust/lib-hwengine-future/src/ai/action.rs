@@ -1,24 +1,22 @@
 #[derive(Clone)]
 pub enum Direction {
     Left,
-    Right
+    Right,
 }
 #[derive(Clone)]
 pub enum Action {
     Walk(Direction),
     LongJump,
-    HighJump(usize)
+    HighJump(usize),
 }
 
 pub struct Actions {
-    actions: Vec<Action>
+    actions: Vec<Action>,
 }
 
 impl Actions {
     pub fn new() -> Self {
-        Self {
-            actions: vec![],
-        }
+        Self { actions: vec![] }
     }
 
     pub fn push(&mut self, action: Action) {

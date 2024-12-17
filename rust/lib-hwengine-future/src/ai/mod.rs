@@ -1,25 +1,28 @@
 mod action;
+pub mod ammo;
 
-use std::collections::HashMap;
-use integral_geometry::Point;
 use crate::GameField;
 use action::*;
+use integral_geometry::Point;
+use std::collections::HashMap;
 
 pub struct Target {
     point: Point,
     health: i32,
     radius: u32,
     density: f32,
-
 }
 
 pub struct Hedgehog {
     pub(crate) x: f32,
     pub(crate) y: f32,
+    pub(crate) ammo: [u32; ammo::AmmoType::Count as usize],
+
 }
 
 pub struct AI<'a> {
     game_field: &'a GameField,
+    ammo: [u32; ammo::AmmoType::Count as usize],
     targets: Vec<Target>,
     team: Vec<Hedgehog>,
     planned_actions: Option<Actions>,
@@ -53,10 +56,15 @@ impl<'a> AI<'a> {
     pub fn new(game_field: &'a GameField) -> AI<'a> {
         Self {
             game_field,
+            ammo: [0; ammo::AmmoType::Count as usize],
             targets: vec![],
             team: vec![],
             planned_actions: None,
         }
+    }
+
+    pub fn set_available_ammo(&mut self, ammo: [u32; ammo::AmmoType::Count as usize]) {
+        self.ammo = ammo;
     }
 
     pub fn get_team_mut(&mut self) -> &mut Vec<Hedgehog> {
@@ -67,7 +75,7 @@ impl<'a> AI<'a> {
         let mut stack = Vec::<usize>::new();
         let mut waypoints = Waypoints::default();
 
-        waypoints.add_keypoint(Waypoint{
+        waypoints.add_keypoint(Waypoint {
             x: hedgehog.x,
             y: hedgehog.y,
             ticks: 0,
@@ -75,9 +83,7 @@ impl<'a> AI<'a> {
             previous_point: None,
         });
 
-        while let Some(wp) = stack.pop() {
-
-        }
+        while let Some(wp) = stack.pop() {}
     }
 
     pub fn have_plan(&self) -> bool {
