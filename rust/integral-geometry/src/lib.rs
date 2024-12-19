@@ -107,7 +107,7 @@ impl Point {
 
     #[inline]
     pub fn from_fppoint(p: &FPPoint) -> Self {
-        Self::new(p.x().round(), p.y().round())
+        Self::new(p.x().round() as i32, p.y().round() as i32)
     }
 }
 
@@ -614,11 +614,11 @@ impl Polygon {
         self.vertices.insert(edge_index + 1, vertex);
     }
 
-    pub fn iter<'a>(&'a self) -> impl Iterator<Item = &Point> + 'a {
+    pub fn iter(&self) -> impl Iterator<Item = &Point> {
         (&self.vertices[..self.edges_count()]).iter()
     }
 
-    pub fn iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &mut Point> + 'a {
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Point> {
         let edges_count = self.edges_count();
         let start = self.vertices.as_mut_ptr();
         let end = unsafe { start.add(edges_count) };
