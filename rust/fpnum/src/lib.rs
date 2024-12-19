@@ -1,4 +1,5 @@
-use std::{cmp, ops, ops::Shl};
+use std::{cmp, ops};
+use saturate::SaturatingInto;
 
 const POSITIVE_MASK: u64 = 0x0000_0000_0000_0000;
 const NEGATIVE_MASK: u64 = 0xFFFF_FFFF_FFFF_FFFF;
@@ -66,7 +67,7 @@ impl FPNum {
     pub fn sqr(&self) -> Self {
         Self {
             sign_mask: 0,
-            value: ((self.value as u128).pow(2) >> 32) as u64,
+            value: ((self.value as u128).pow(2) >> 32).saturating_into(),
         }
     }
 
@@ -149,7 +150,7 @@ impl Eq for FPNum {}
 
 impl PartialOrd for FPNum {
     #[inline]
-    fn partial_cmp(&self, rhs: &Self) -> std::option::Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, rhs: &Self) -> Option<cmp::Ordering> {
         Some(self.cmp(rhs))
     }
 }
@@ -204,7 +205,7 @@ impl ops::Mul for FPNum {
     fn mul(self, rhs: Self) -> Self {
         Self {
             sign_mask: self.sign_mask ^ rhs.sign_mask,
-            value: ((self.value as u128 * rhs.value as u128) >> 32) as u64,
+            value: ((self.value as u128 * rhs.value as u128) >> 32).saturating_into(),
         }
     }
 }
@@ -216,7 +217,7 @@ impl ops::Mul<i32> for FPNum {
     fn mul(self, rhs: i32) -> Self {
         Self {
             sign_mask: self.sign_mask ^ bool_mask(rhs < 0),
-            value: self.value * rhs.abs() as u64,
+            value: (self.value as u128 * rhs.abs() as u128).saturating_into(),
         }
     }
 }
@@ -228,7 +229,7 @@ impl ops::Div for FPNum {
     fn div(self, rhs: Self) -> Self {
         Self {
             sign_mask: self.sign_mask ^ rhs.sign_mask,
-            value: (((self.value as u128) << 32) / rhs.value as u128) as u64,
+            value: (((self.value as u128) << 32) / rhs.value as u128).saturating_into(),
         }
     }
 }
@@ -326,7 +327,7 @@ impl FPPoint {
 
     #[inline]
     pub fn max_norm(&self) -> FPNum {
-        std::cmp::max(self.x().abs(), self.y().abs())
+        cmp::max(self.x().abs(), self.y().abs())
     }
 
     #[inline]
@@ -505,9 +506,10 @@ pub fn integral_sqrt_ext(value: u128) -> u64 {
 #[inline]
 pub fn distance<T>(x: T, y: T) -> FPNum
 where
-    T: Into<i64> + std::fmt::Debug,
+    T: Into<i128> + std::fmt::Debug,
 {
-    let sqr: u128 = (x.into().pow(2) as u128).shl(64) + (y.into().pow(2) as u128).shl(64);
+    let [x_squared, y_squared] = [x, y].map(|i| (i.into().pow(2) as u128).saturating_mul(2^64));
+    let sqr: u128 = x_squared.saturating_add(y_squared);
 
     FPNum {
         sign_mask: POSITIVE_MASK,
