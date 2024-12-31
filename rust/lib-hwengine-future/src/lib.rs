@@ -11,8 +11,8 @@ use landgen::{
 use lfprng::LaggedFibonacciPRNG;
 use mapgen::{theme::Theme, MapGenerator};
 use std::fs;
-use std::{ffi::CStr, path::Path};
 use std::ptr::slice_from_raw_parts;
+use std::{ffi::CStr, path::Path};
 
 #[repr(C)]
 pub struct GameField {
@@ -257,11 +257,21 @@ pub extern "C" fn ai_clear_team(ai: &mut AI) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn ai_add_team_hedgehog(ai: &mut AI, x: f32, y: f32, ammo_counts: *const u32) {
-    let ammo_counts = &*slice_from_raw_parts(ammo_counts, crate::ai::ammo::AmmoType::Count as usize);
+pub unsafe extern "C" fn ai_add_team_hedgehog(
+    ai: &mut AI,
+    x: f32,
+    y: f32,
+    ammo_counts: *const u32,
+) {
+    let ammo_counts =
+        &*slice_from_raw_parts(ammo_counts, crate::ai::ammo::AmmoType::Count as usize);
     let ammo_counts = std::array::from_fn(|i| ammo_counts[i].clone());
 
-    ai.get_team_mut().push(Hedgehog { x, y, ammo: ammo_counts });
+    ai.get_team_mut().push(Hedgehog {
+        x,
+        y,
+        ammo: ammo_counts,
+    });
 }
 
 #[no_mangle]

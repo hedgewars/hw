@@ -1,5 +1,6 @@
 mod action;
 pub mod ammo;
+mod attack_tests;
 
 use crate::GameField;
 use action::*;
@@ -17,7 +18,6 @@ pub struct Hedgehog {
     pub(crate) x: f32,
     pub(crate) y: f32,
     pub(crate) ammo: [u32; ammo::AmmoType::Count as usize],
-
 }
 
 pub struct AI<'a> {
@@ -29,7 +29,7 @@ pub struct AI<'a> {
 }
 
 #[derive(Clone)]
-struct Waypoint {
+pub(crate) struct Waypoint {
     x: f32,
     y: f32,
     ticks: usize,
@@ -38,7 +38,7 @@ struct Waypoint {
 }
 
 #[derive(Default)]
-pub struct Waypoints {
+pub(crate) struct Waypoints {
     key_points: Vec<Waypoint>,
     points: HashMap<Point, Waypoint>,
 }
@@ -49,6 +49,15 @@ impl Waypoints {
         let point = Point::new(x, y);
         self.key_points.push(waypoint.clone());
         self.points.insert(point, waypoint);
+    }
+}
+
+impl IntoIterator for Waypoints {
+    type Item = Waypoint;
+    type IntoIter = std::collections::hash_map::IntoValues<Point, Waypoint>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.points.into_values()
     }
 }
 
@@ -71,7 +80,7 @@ impl<'a> AI<'a> {
         &mut self.team
     }
 
-    pub fn walk(hedgehog: &Hedgehog) {
+    pub fn walk(&self, hedgehog: &Hedgehog) {
         let mut stack = Vec::<usize>::new();
         let mut waypoints = Waypoints::default();
 
@@ -83,7 +92,25 @@ impl<'a> AI<'a> {
             previous_point: None,
         });
 
-        while let Some(wp) = stack.pop() {}
+        while let Some(waypoint) = stack.pop() {
+            // find other positions
+        }
+
+        for Waypoint { x, y, .. } in waypoints {
+            self.analyze_position_attacks(x, y);
+        }
+    }
+
+    fn analyze_position_attacks(&self, x: f32, y: f32) {
+        self.ammo
+            .iter()
+            .enumerate()
+            .filter(|&(_, &count)| count > 0u32)
+            .for_each(|(a, &count)| {
+                let a = ammo::AmmoType::try_from(a).expect("What are you iterating over?");
+
+                a.analyze_attacks(self.game_field, &self.targets, x, y)
+            });
     }
 
     pub fn have_plan(&self) -> bool {

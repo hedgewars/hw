@@ -63,3 +63,15 @@ pub enum AmmoType {
     Sentry, // 60
     Count,
 }
+
+impl TryFrom<usize> for AmmoType {
+    type Error = &'static str;
+
+    fn try_from(value: usize) -> Result<Self, Self::Error> {
+        if value < Self::Count as usize {
+            Ok(unsafe { std::mem::transmute(value) })
+        } else {
+            Err("Invalid ammo type")
+        }
+    }
+}

@@ -6,7 +6,7 @@ procedure ProcessBot;
 procedure initModule;
 
 implementation
-uses uLandUtils, uFloat, uVariables, uTypes;
+uses uLandUtils, uFloat, uVariables, uTypes, uAmmos;
 
 {$linklib hwengine_future}
 
@@ -43,7 +43,7 @@ begin
                 for itAmmo:= Low(TAmmoType) to High(TAmmoType) do
                     ammoCounts[itAmmo]:= HHHasAmmo(CurrentTeam^.Hedgehogs[itHedgehog], itAmmo);
 
-                ai_add_team_hedgehog(ai, hwFloat2float(Gear^.X), hwFloat2float(Gear^.Y), ammoCounts)
+                ai_add_team_hedgehog(ai, hwFloat2float(Gear^.X), hwFloat2float(Gear^.Y), @ammoCounts)
             end;
         itHedgehog:= Succ(itHedgehog) mod CurrentTeam^.HedgehogsNumber;
     until (itHedgehog = currHedgehogIndex);
