@@ -19,6 +19,7 @@ if(WIN32 AND VCPKG_TOOLCHAIN)
 else()
 	find_package(SDL2_mixer 2 REQUIRED) #audio in SDLInteraction
 endif()
+
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 

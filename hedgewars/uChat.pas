@@ -108,7 +108,7 @@ procedure UpdateInputLinePrefix(); forward;
 procedure UpdateCursorCoords(); forward;
 
 // relevant for UTF-8 handling
-function IsFirstCharByte(c: char): boolean; inline;
+function IsFirstCharByte(c: char): boolean; 
 begin
     // based on https://en.wikipedia.org/wiki/UTF-8#Description
     IsFirstCharByte:= (byte(c) and $C0) <> $80;

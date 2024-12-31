@@ -129,7 +129,9 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     cType->insertItem(4, tr("Random maze"), MapModel::GeneratedMaze);
     cType->insertItem(5, tr("Random perlin"), MapModel::GeneratedPerlin);
     cType->insertItem(6, tr("Forts"), MapModel::FortsMap);
-    connect(cType, SIGNAL(currentIndexChanged(int)), this, SLOT(mapTypeChanged(int)));
+    cType->insertItem(7, tr("WFC"), MapModel::WfcMap);
+    connect(cType, SIGNAL(currentIndexChanged(int)), this,
+            SLOT(mapTypeChanged(int)));
     m_childWidgets << cType;
 
     /* Randomize button */
@@ -760,19 +762,23 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
                 m_mapInfo.type = MapModel::FortsMap;
                 f = true;
                 break;
+            case MAPGEN_WFC:
+              m_mapInfo.type = MapModel::WfcMap;
+              f = true;
+              break;
             case MAPGEN_MAP:
-                switch (m_mapInfo.type)
-                {
-                    case MapModel::GeneratedMap:
-                    case MapModel::GeneratedMaze:
-                    case MapModel::GeneratedPerlin:
-                    case MapModel::HandDrawnMap:
-                    case MapModel::FortsMap:
-                        m_mapInfo.type = MapModel::Invalid;
-                    default:
-                        break;
-                }
-                break;
+              switch (m_mapInfo.type) {
+                case MapModel::GeneratedMap:
+                case MapModel::GeneratedMaze:
+                case MapModel::GeneratedPerlin:
+                case MapModel::HandDrawnMap:
+                case MapModel::FortsMap:
+                case MapModel::WfcMap:
+                  m_mapInfo.type = MapModel::Invalid;
+                default:
+                  break;
+              }
+              break;
         }
 
         if(f)
@@ -948,10 +954,11 @@ void HWMapContainer::updateHelpTexts(MapModel::MapType type)
         case MapModel::GeneratedMap:
         case MapModel::GeneratedPerlin:
         case MapModel::GeneratedMaze:
-            mapPreview->setWhatsThis(randomAllPrev);
-            mapFeatureSize->setWhatsThis(mfsComplex);
-            btnRandomize->setWhatsThis(randomAll);
-            break;
+        case MapModel::WfcMap:
+          mapPreview->setWhatsThis(randomAllPrev);
+          mapFeatureSize->setWhatsThis(mfsComplex);
+          btnRandomize->setWhatsThis(randomAll);
+          break;
         case MapModel::MissionMap:
         case MapModel::StaticMap:
             mapPreview->setWhatsThis(randomAllPrev);
@@ -1059,8 +1066,15 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             setMapInfo(MapModel::MapInfoForts);
             lblMapList->hide();
             break;
+        case MapModel::WfcMap:
+          mapgen = MAPGEN_WFC;
+          setMapInfo(MapModel::MapInfoRandom);
+          lblMapList->setText(tr("Map size:"));
+          lblMapList->show();
+          generationStyles->show();
+          break;
         default:
-            break;
+          break;
     }
 
     // Update theme button size

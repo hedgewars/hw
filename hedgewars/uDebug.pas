@@ -23,7 +23,7 @@ unit uDebug;
 interface
 
 procedure OutError(Msg: shortstring; isFatalError: boolean);
-//procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
+//procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); 
 function checkFails(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
 function SDLCheck(Assert: boolean; Msg: shortstring; isFatal: boolean): boolean;
 

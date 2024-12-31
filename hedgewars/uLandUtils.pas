@@ -1,11 +1,158 @@
 unit uLandUtils;
 interface
+uses SDLh;
 
+procedure GenerateOutlineTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+procedure GenerateWfcTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+procedure GenerateMazeLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
 procedure ResizeLand(width, height: LongWord);
+procedure DisposeLand();
 procedure InitWorldEdges();
+
+function  LandGet(y, x: LongInt): Word;
+procedure LandSet(y, x: LongInt; value: Word);
+function  LandRow(row: LongInt): PWordArray;
+
+procedure FillLand(x, y: LongInt; border, value: Word);
+
+function  LandPixelGet(y, x: LongInt): Longword;
+procedure LandPixelSet(y, x: LongInt; value: Longword);
+function  LandPixelRow(row: LongInt): PLongwordArray;
+
+var gameField: pointer;
 
 implementation
 uses uUtils, uConsts, uVariables, uTypes;
+
+{$linklib hwengine_future}
+
+function  create_empty_game_field(width, height: Longword): pointer; cdecl; external;
+procedure get_game_field_parameters(game_field: pointer; var width: LongInt; var height: LongInt; var play_width: LongInt; var play_height: LongInt); cdecl; external;
+procedure dispose_game_field(game_field: pointer); cdecl; external;
+
+function  land_get(game_field: pointer; x, y: LongInt): Word; cdecl; external;
+procedure land_set(game_field: pointer; x, y: LongInt; value: Word); cdecl; external;
+function  land_row(game_field: pointer; row: LongInt): PWordArray; cdecl; external;
+procedure land_fill(game_field: pointer; x, y: LongInt; border, fill: Word); cdecl; external;
+
+function  land_pixel_get(game_field: pointer; x, y: LongInt): Longword; cdecl; external;
+procedure land_pixel_set(game_field: pointer; x, y: LongInt; value: Longword); cdecl; external;
+function  land_pixel_row(game_field: pointer; row: LongInt): PLongwordArray; cdecl; external;
+
+function  generate_outline_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
+function  generate_wfc_templated_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
+function  generate_maze_game_field(feature_size: Longword; seed, template_type, data_path: PChar): pointer; cdecl; external;
+procedure apply_theme(game_field: pointer; data_path, theme_name: PChar); cdecl; external;
+
+function  LandGet(y, x: LongInt): Word;
+begin
+    LandGet:= land_get(gameField, x, y)
+end;
+
+procedure LandSet(y, x: LongInt; value: Word);
+begin
+    land_set(gameField, x, y, value)
+end;
+
+function  LandRow(row: LongInt): PWordArray;
+begin
+    LandRow:= land_row(gameField, row)
+end;
+
+procedure FillLand(x, y: LongInt; border, value: Word);
+begin
+    land_fill(gameField, x, y, border, value)
+end;
+
+function  LandPixelGet(y, x: LongInt): Longword;
+begin
+    LandPixelGet:= land_pixel_get(gameField, x, y)
+end;
+
+procedure LandPixelSet(y, x: LongInt; value: Longword);
+begin
+    land_pixel_set(gameField, x, y, value)
+end;
+
+function  LandPixelRow(row: LongInt): PLongwordArray;
+begin
+    LandPixelRow:= land_pixel_row(gameField, row)
+end;
+
+procedure GenerateOutlineTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+begin
+    seed[byte(seed[0]) + 1]:= #0;
+    templateType[byte(templateType[0]) + 1]:= #0;
+
+    gameField:= generate_outline_templated_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
+    get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
+
+    MaxHedgehogs:= 32;
+    hasGirders:= true;
+
+    leftX:= (LAND_WIDTH - playWidth) div 2;
+    rightX:= Pred(leftX + playWidth);
+    topY:= LAND_HEIGHT - playHeight;
+    cWaterLine:= LAND_HEIGHT;
+
+    // let's assume those are powers of two
+    LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
+    LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
+
+    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
+
+    initScreenSpaceVars();
+end;
+
+procedure GenerateWfcTemplatedLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+begin
+    seed[byte(seed[0]) + 1]:= #0;
+    templateType[byte(templateType[0]) + 1]:= #0;
+
+    gameField:= generate_wfc_templated_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
+    get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
+
+    MaxHedgehogs:= 32;
+    hasGirders:= true;
+
+    leftX:= (LAND_WIDTH - playWidth) div 2;
+    rightX:= Pred(leftX + playWidth);
+    topY:= LAND_HEIGHT - playHeight;
+    cWaterLine:= LAND_HEIGHT;
+
+    // let's assume those are powers of two
+    LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
+    LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
+
+    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
+
+    initScreenSpaceVars();
+end;
+
+procedure GenerateMazeLand(featureSize: Longword; seed, templateType: shortstring; dataPath: ansistring);
+begin
+    seed[byte(seed[0]) + 1]:= #0;
+    templateType[byte(templateType[0]) + 1]:= #0;
+
+    gameField:= generate_maze_game_field(featureSize, @seed[1], @templateType[1], PChar(dataPath));
+    get_game_field_parameters(gameField, LAND_WIDTH, LAND_HEIGHT, playWidth, playHeight);
+
+    MaxHedgehogs:= 32;
+    hasGirders:= true;
+
+    leftX:= (LAND_WIDTH - playWidth) div 2;
+    rightX:= Pred(leftX + playWidth);
+    topY:= LAND_HEIGHT - playHeight;
+    cWaterLine:= LAND_HEIGHT;
+
+    // let's assume those are powers of two
+    LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
+    LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
+
+    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
+
+    initScreenSpaceVars();
+end;
 
 procedure ResizeLand(width, height: LongWord);
 var potW, potH: LongInt;
@@ -19,18 +166,19 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
     LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
     cWaterLine:= LAND_HEIGHT;
-    if (cReducedQuality and rqBlurryLand) = 0 then
-        SetLength(LandPixels, LAND_HEIGHT, LAND_WIDTH)
-    else
-        SetLength(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2);
 
-    SetLength(Land, LAND_HEIGHT, LAND_WIDTH);
+    gameField:= create_empty_game_field(LAND_WIDTH, LAND_HEIGHT);
     SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
     // 0.5 is already approaching on unplayable
     if (width div 4096 >= 2) or (height div 2048 >= 2) then cMaxZoomLevel:= cMaxZoomLevel/2;
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel
     end;
 initScreenSpaceVars();
+end;
+
+procedure DisposeLand();
+begin
+    dispose_game_field(gameField)
 end;
 
 procedure InitWorldEdges();
@@ -70,7 +218,7 @@ found:= false;
 for cx:= 0 to lx do
     begin
     for cy:= ly downto 0 do
-        if Land[cy, cx] <> 0 then
+        if LandGet(cy, cx) <> 0 then
             begin
             leftX:= max(0, cx - cWorldEdgeDist);
             // break out of both loops
@@ -85,7 +233,7 @@ found:= false;
 for cx:= lx downto 0 do
     begin
     for cy:= ly downto 0 do
-        if Land[cy, cx] <> 0 then
+        if LandGet(cy, cx) <> 0 then
             begin
             rightX:= min(lx, cx + cWorldEdgeDist);
             // break out of both loops

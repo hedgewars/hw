@@ -29,7 +29,7 @@ procedure doStepHedgehogMoving(Gear: PGear);
 procedure HedgehogChAngle(HHGear: PGear);
 procedure PickUp(HH, Gear: PGear);
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
-procedure CheckIce(Gear: PGear); inline;
+procedure CheckIce(Gear: PGear); 
 procedure PlayTaunt(taunt: Longword);
 function HHGetTimer(Gear: PGear): LongWord;
 function HHGetTimerMsg(Gear: PGear): LongWord;
@@ -1529,7 +1529,7 @@ else
 AllInactive:= false
 end;
 
-procedure CheckIce(Gear: PGear); inline;
+procedure CheckIce(Gear: PGear); 
 (*
 var x,y,tx,ty: LongInt;
     tdX, tdY, slope: hwFloat;

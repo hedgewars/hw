@@ -25,7 +25,7 @@ const
     amtest_Rare            = $00000001; // check only several positions
     amtest_NoTarget        = $00000002; // each pos, but no targetting
     amtest_MultipleAttacks = $00000004; // test could result in multiple attacks, set AttacksNum
-    amtest_NoTrackFall     = $00000008; // skip fall tracing.  
+    amtest_NoTrackFall     = $00000008; // skip fall tracing.
     amtest_LaserSight      = $00000010; // supports laser sighting
     amtest_NoVampiric      = $00000020; // don't use vampirism with this ammo
     amtest_NoInvulnerable  = $00000040; // don't use invulnerable with this with ammo
@@ -151,9 +151,9 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             );
 
 implementation
-uses uVariables, uUtils, uGearsHandlers;
+uses uVariables, uUtils, uGearsHandlers, uLandUtils;
 
-function Metric(x1, y1, x2, y2: LongInt): LongInt; inline;
+function Metric(x1, y1, x2, y2: LongInt): LongInt;
 begin
 Metric:= abs(x1 - x2) + abs(y1 - y2)
 end;
@@ -1081,7 +1081,7 @@ iy:= trunc(y);
 
 if ((ix and LAND_WIDTH_MASK) = 0) and ((iy and LAND_HEIGHT_MASK) = 0) then
     repeat
-        if Land[iy, ix] <> 0 then
+        if LandGet(iy, ix) <> 0 then
             inc(d);
         x:= x + vX;
         y:= y + vY;
@@ -1137,7 +1137,7 @@ repeat
     x:= x + vX;
     y:= y + vY;
     if ((trunc(x) and LAND_WIDTH_MASK) = 0)and((trunc(y) and LAND_HEIGHT_MASK) = 0)
-    and (Land[trunc(y), trunc(x)] <> 0) then
+    and (LandGet(trunc(y), trunc(x)) <> 0) then
         inc(d);
 until (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 4)
     or (x < 0)

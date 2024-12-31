@@ -46,28 +46,30 @@ class MapModel : public QStandardItemModel
         Q_OBJECT
 
     public:
-        enum MapType {
-            Invalid,
-            GeneratedMap,
-            GeneratedMaze,
-            GeneratedPerlin,
-            HandDrawnMap,
-            MissionMap,
-            StaticMap,
-            FortsMap
-        };
+     enum MapType {
+       Invalid,
+       GeneratedMap,
+       GeneratedMaze,
+       GeneratedPerlin,
+       HandDrawnMap,
+       MissionMap,
+       StaticMap,
+       FortsMap,
+       WfcMap
+     };
 
-        /// a struct for holding the attributes of a map.
-        struct MapInfo
-        {
-            MapType type; ///< The map-type
-            QString name; ///< The internal name.
-            QString theme; ///< The theme to be used. (can be empty)
-            quint32 limit; ///< The maximum allowed number of hedgehogs.
-            QString scheme; ///< Default scheme name or "locked", for mission-maps.
-            QString weapons; ///< Default weaponset name or "locked", for missions-maps.
-            QString desc; ///< The brief 1-2 sentence description of the mission, for mission-maps.
-            bool dlc; ///< True if this map was not packaged with the game
+     /// a struct for holding the attributes of a map.
+     struct MapInfo {
+       MapType type;    ///< The map-type
+       QString name;    ///< The internal name.
+       QString theme;   ///< The theme to be used. (can be empty)
+       quint32 limit;   ///< The maximum allowed number of hedgehogs.
+       QString scheme;  ///< Default scheme name or "locked", for mission-maps.
+       QString
+           weapons;  ///< Default weaponset name or "locked", for missions-maps.
+       QString desc;  ///< The brief 1-2 sentence description of the mission,
+                      ///< for mission-maps.
+       bool dlc;      ///< True if this map was not packaged with the game
         };
 
         MapModel(MapType maptype, QObject *parent = 0);

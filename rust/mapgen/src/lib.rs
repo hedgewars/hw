@@ -1,79 +1,28 @@
+mod template;
 pub mod theme;
 
 use self::theme::Theme;
-use integral_geometry::{Point, Rect, Size};
+use crate::template::outline::TemplateCollectionDesc as OutlineTemplateCollectionDesc;
+use crate::template::wavefront_collapse::TemplateCollectionDesc as WfcTemplateCollectionDesc;
+use crate::template::maze::TemplateCollectionDesc as MazeTemplateCollectionDesc;
+
+use std::path::{Path, PathBuf};
+
 use land2d::Land2D;
-use landgen::outline_template::OutlineTemplate;
-use rand::{thread_rng, Rng};
-use serde_derive::Deserialize;
-use serde_yaml;
-use std::{borrow::Borrow, collections::hash_map::HashMap, mem::replace};
+use landgen::{
+    outline_template_based::{
+        outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
+    },
+    wavefront_collapse::generator::{
+        TemplateDescription as WfcTemplate, WavefrontCollapseLandGenerator,
+    },
+    maze::{MazeTemplate, MazeLandGenerator},
+    LandGenerationParameters, LandGenerator,
+};
+use rand::{seq::SliceRandom, Rng};
+
+use std::{borrow::Borrow, collections::hash_map::HashMap};
 use vec2d::Vec2D;
-
-#[derive(Deserialize)]
-struct PointDesc {
-    x: u32,
-    y: u32,
-}
-
-#[derive(Deserialize)]
-struct RectDesc {
-    x: u32,
-    y: u32,
-    w: u32,
-    h: u32,
-}
-
-#[derive(Deserialize)]
-struct TemplateDesc {
-    width: usize,
-    height: usize,
-    can_flip: bool,
-    can_invert: bool,
-    can_mirror: bool,
-    is_negative: bool,
-    put_girders: bool,
-    max_hedgehogs: u8,
-    outline_points: Vec<Vec<RectDesc>>,
-    fill_points: Vec<PointDesc>,
-}
-
-#[derive(Deserialize)]
-struct TemplateCollectionDesc {
-    templates: Vec<TemplateDesc>,
-    template_types: HashMap<String, Vec<usize>>,
-}
-
-impl From<&TemplateDesc> for OutlineTemplate {
-    fn from(desc: &TemplateDesc) -> Self {
-        OutlineTemplate {
-            islands: desc
-                .outline_points
-                .iter()
-                .map(|v| {
-                    v.iter()
-                        .map(|r| {
-                            Rect::from_size(
-                                Point::new(r.x as i32, r.y as i32),
-                                Size::new(r.w as usize, r.h as usize),
-                            )
-                        })
-                        .collect()
-                })
-                .collect(),
-            fill_points: desc
-                .fill_points
-                .iter()
-                .map(|p| Point::new(p.x as i32, p.y as i32))
-                .collect(),
-            size: Size::new(desc.width, desc.height),
-            can_flip: desc.can_flip,
-            can_invert: desc.can_invert,
-            can_mirror: desc.can_mirror,
-            is_negative: desc.is_negative,
-        }
-    }
-}
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 struct TemplateType(String);
@@ -85,43 +34,35 @@ impl Borrow<str> for TemplateType {
 }
 
 #[derive(Debug)]
-pub struct MapGenerator {
-    pub(crate) templates: HashMap<TemplateType, Vec<OutlineTemplate>>,
+pub struct MapGenerator<T> {
+    pub(crate) templates: HashMap<TemplateType, Vec<T>>,
+    data_path: PathBuf,
 }
 
-impl MapGenerator {
-    pub fn new() -> Self {
+impl<T> MapGenerator<T> {
+    pub fn new(data_path: &Path) -> Self {
         Self {
             templates: HashMap::new(),
+            data_path: data_path.to_owned(),
         }
     }
 
-    pub fn import_yaml_templates(&mut self, text: &str) {
-        let mut desc: TemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
-        let templates = replace(&mut desc.templates, vec![]);
-        self.templates = desc
-            .template_types
-            .into_iter()
-            .map(|(size, indices)| {
-                (
-                    TemplateType(size),
-                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
-                )
-            })
-            .collect();
-    }
-
-    pub fn get_template(&self, template_type: &str) -> Option<&OutlineTemplate> {
+    pub fn get_template<R: Rng>(&self, template_type: &str, rng: &mut R) -> Option<&T> {
         self.templates
             .get(template_type)
-            .and_then(|t| thread_rng().choose(t))
+            .and_then(|t| t.as_slice().choose(rng))
     }
 
-    pub fn make_texture<LandT>(&self, land: &Land2D<LandT>, theme: &Theme) -> Vec2D<u32>
+    pub fn make_texture<LandT>(
+        &self,
+        land: &Land2D<LandT>,
+        parameters: &LandGenerationParameters<LandT>,
+        theme: &Theme,
+    ) -> Vec2D<u32>
     where
         LandT: Copy + Default + PartialEq,
     {
-        let mut texture = Vec2D::new(land.size().size(), 0);
+        let mut texture = Vec2D::new(&land.size().size(), 0);
 
         if let Some(land_sprite) = theme.land_texture() {
             for (row_index, (land_row, tex_row)) in land.rows().zip(texture.rows_mut()).enumerate()
@@ -131,6 +72,7 @@ impl MapGenerator {
                 while sprite_row.len() < land.width() - x_offset {
                     let copy_range = x_offset..x_offset + sprite_row.len();
                     tex_row_copy(
+                        parameters.basic(),
                         &land_row[copy_range.clone()],
                         &mut tex_row[copy_range],
                         sprite_row,
@@ -142,6 +84,7 @@ impl MapGenerator {
                 if x_offset < land.width() {
                     let final_range = x_offset..land.width();
                     tex_row_copy(
+                        parameters.basic(),
                         &land_row[final_range.clone()],
                         &mut tex_row[final_range],
                         &sprite_row[..land.width() - x_offset],
@@ -158,6 +101,7 @@ impl MapGenerator {
             let mut offsets = vec![255u8; land.width()];
 
             land_border_pass(
+                parameters.basic(),
                 land.rows().rev().zip(texture.rows_mut().rev()),
                 &mut offsets,
                 border_width,
@@ -170,6 +114,7 @@ impl MapGenerator {
             offsets.iter_mut().for_each(|v| *v = 255);
 
             land_border_pass(
+                parameters.basic(),
                 land.rows().zip(texture.rows_mut()),
                 &mut offsets,
                 border_width,
@@ -181,13 +126,87 @@ impl MapGenerator {
     }
 }
 
+impl MapGenerator<OutlineTemplate> {
+    pub fn import_yaml_templates(&mut self, text: &str) {
+        let mut desc: OutlineTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
+        let templates = std::mem::take(&mut desc.templates);
+        self.templates = desc
+            .template_types
+            .into_iter()
+            .map(|(size, indices)| {
+                (
+                    TemplateType(size),
+                    indices
+                        .indices
+                        .iter()
+                        .map(|i| Into::<OutlineTemplate>::into(templates[*i].clone()))
+                        .map(|o| {
+                            if indices.force_invert == Some(true) {
+                                o.cavern()
+                            } else {
+                                o
+                            }
+                        })
+                        .collect(),
+                )
+            })
+            .collect();
+    }
+
+    pub fn build_generator(&self, template: OutlineTemplate) -> impl LandGenerator {
+        TemplatedLandGenerator::new(template)
+    }
+}
+
+impl MapGenerator<WfcTemplate> {
+    pub fn import_yaml_templates(&mut self, text: &str) {
+        let mut desc: WfcTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
+        let templates = std::mem::take(&mut desc.templates);
+        self.templates = desc
+            .template_types
+            .into_iter()
+            .map(|(size, indices)| {
+                (
+                    TemplateType(size),
+                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                )
+            })
+            .collect();
+    }
+
+    pub fn build_generator(&self, template: WfcTemplate) -> impl LandGenerator {
+        WavefrontCollapseLandGenerator::new(template, &self.data_path)
+    }
+}
+
+impl MapGenerator<MazeTemplate> {
+    pub fn import_yaml_templates(&mut self, text: &str) {
+        let mut desc: MazeTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
+        let templates = std::mem::take(&mut desc.templates);
+        self.templates = desc
+            .template_types
+            .into_iter()
+            .map(|(size, indices)| {
+                (
+                    TemplateType(size),
+                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                )
+            })
+            .collect();
+    }
+
+    pub fn build_generator(&self, template: MazeTemplate) -> impl LandGenerator {
+        MazeLandGenerator::new(template)
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 struct Color(u32);
 
 impl Color {
     #[inline]
     fn red(self) -> u8 {
-        (self.0 >> 0 & 0xFF) as u8
+        (self.0 & 0xFF) as u8
     }
 
     #[inline]
@@ -219,11 +238,16 @@ fn blend(source: u32, target: u32) -> u32 {
     let red = lerp(target.red(), source.red(), source.alpha());
     let green = lerp(target.green(), source.green(), source.alpha());
     let blue = lerp(target.blue(), source.blue(), source.alpha());
-    (red as u32) << 0 | (green as u32) << 8 | (blue as u32) << 16 | (alpha as u32) << 24
+    (red as u32) | (green as u32) << 8 | (blue as u32) << 16 | (alpha as u32) << 24
 }
 
-fn land_border_pass<'a, LandT, T, F>(rows: T, offsets: &mut [u8], border_width: u8, pixel_getter: F)
-where
+fn land_border_pass<'a, LandT, T, F>(
+    basic_value: LandT,
+    rows: T,
+    offsets: &mut [u8],
+    border_width: u8,
+    pixel_getter: F,
+) where
     LandT: Default + PartialEq + 'a,
     T: Iterator<Item = (&'a [LandT], &'a mut [u32])>,
     F: (Fn(usize, usize) -> u32),
@@ -235,7 +259,7 @@ where
             .zip(offsets.iter_mut())
             .enumerate()
         {
-            *offset_v = if *land_v == LandT::default() {
+            *offset_v = if *land_v == basic_value {
                 if *offset_v < border_width {
                     *tex_v = blend(pixel_getter(x, *offset_v as usize), *tex_v)
                 }
@@ -247,22 +271,24 @@ where
     }
 }
 
-fn tex_row_copy<LandT>(land_row: &[LandT], tex_row: &mut [u32], sprite_row: &[u32])
-where
+fn tex_row_copy<LandT>(
+    basic_value: LandT,
+    land_row: &[LandT],
+    tex_row: &mut [u32],
+    sprite_row: &[u32],
+) where
     LandT: Default + PartialEq,
 {
     for ((land_v, tex_v), sprite_v) in land_row.iter().zip(tex_row.iter_mut()).zip(sprite_row) {
-        *tex_v = if *land_v == LandT::default() {
-            *sprite_v
-        } else {
-            0
-        }
+        *tex_v = if *land_v == basic_value { *sprite_v } else { 0 }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{MapGenerator, TemplateType};
+    use std::path::Path;
+    use crate::{MapGenerator, OutlineTemplate, TemplateType};
+    use rand::thread_rng;
 
     #[test]
     fn simple_load() {
@@ -293,17 +319,18 @@ templates:
       - {x: 1023, y: 0}
 
 template_types:
-    test: [0]
+    test:
+      indices: [0]
 "#;
 
-        let mut generator = MapGenerator::new();
+        let mut generator = MapGenerator::<OutlineTemplate>::new(Path::new(""));
         generator.import_yaml_templates(&text);
 
         assert!(generator
             .templates
             .contains_key(&TemplateType("test".to_string())));
 
-        let template = generator.get_template("test").unwrap();
+        let template = generator.get_template("test", &mut thread_rng()).unwrap();
 
         assert_eq!(template.islands[0].len(), 7);
     }

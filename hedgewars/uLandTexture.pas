@@ -30,7 +30,7 @@ procedure ResetLand;
 procedure SetLandTexture;
 
 implementation
-uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender, uUtils;
+uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender, uUtils, uLandUtils;
 
 const TEXSIZE = 128;
       // in avoid tile borders stretch the blurry texture by 1 pixel more
@@ -50,7 +50,7 @@ function Pixels(x, y: Longword): Pointer;
 var ty: Longword;
 begin
 for ty:= 0 to TEXSIZE - 1 do
-    Move(LandPixels[y * TEXSIZE + ty, x * TEXSIZE], tmpPixels[ty, 0], sizeof(Longword) * TEXSIZE);
+    Move(LandPixelRow(y * TEXSIZE + ty)^[x * TEXSIZE], tmpPixels[ty, 0], sizeof(Longword) * TEXSIZE);
 
 Pixels:= @tmpPixels
 end;
@@ -60,7 +60,7 @@ var tx, ty: Longword;
 begin
 for ty:= 0 to TEXSIZE - 1 do
     for tx:= 0 to TEXSIZE - 1 do
-        tmpPixels[ty, tx]:= Land[y * TEXSIZE + ty, x * TEXSIZE + tx] or AMask;
+        tmpPixels[ty, tx]:= LandGet(y * TEXSIZE + ty, x * TEXSIZE + tx) or AMask;
 
 Pixels2:= @tmpPixels
 end;
@@ -129,14 +129,14 @@ else
                     // first check edges
                     while isEmpty and (ty < TEXSIZE) do
                         begin
-                        isEmpty:= LandPixels[ly + ty, lx] and AMask = 0;
-                        if isEmpty then isEmpty:= LandPixels[ly + ty, Pred(lx + TEXSIZE)] and AMask = 0;
+                        isEmpty:= LandPixelGet(ly + ty, lx) and AMask = 0;
+                        if isEmpty then isEmpty:= LandPixelGet(ly + ty, Pred(lx + TEXSIZE)) and AMask = 0;
                         inc(ty)
                         end;
                     while isEmpty and (tx < TEXSIZE-1) do
                         begin
-                        isEmpty:= LandPixels[ly, lx + tx] and AMask = 0;
-                        if isEmpty then isEmpty:= LandPixels[Pred(ly + TEXSIZE), lx + tx] and AMask = 0;
+                        isEmpty:= LandPixelGet(ly, lx + tx) and AMask = 0;
+                        if isEmpty then isEmpty:= LandPixelGet(Pred(ly + TEXSIZE), lx + tx) and AMask = 0;
                         inc(tx)
                         end;
                     // then search every other remaining. does this sort of stuff defeat compiler opts?
@@ -146,7 +146,7 @@ else
                         tx:= 2;
                         while isEmpty and (tx < TEXSIZE-1) do
                             begin
-                            isEmpty:= LandPixels[ly + ty, lx + tx] and AMask = 0;
+                            isEmpty:= LandPixelGet(ly + ty, lx + tx) and AMask = 0;
                             inc(tx,2)
                             end;
                         inc(ty,2);
@@ -158,7 +158,7 @@ else
                         tx:= 1;
                         while isEmpty and (tx < TEXSIZE-1) do
                             begin
-                            isEmpty:= LandPixels[ly + ty, lx + tx] and AMask = 0;
+                            isEmpty:= LandPixelGet(ly + ty, lx + tx) and AMask = 0;
                             inc(tx,2)
                             end;
                         inc(ty,2);

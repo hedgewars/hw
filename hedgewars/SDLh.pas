@@ -931,6 +931,9 @@ type
     TLongWordArray = array[0..16383] of LongWord;
     PLongWordArray = ^TLongWordArray;
 
+    TWordArray = array[0..16383] of Word;
+    PWordArray = ^TWordArray;
+
     PSDL_Thread = Pointer;
     PSDL_mutex = Pointer;
     PSDL_sem = Pointer;
@@ -1033,14 +1036,14 @@ type
 {$IFDEF WINDOWS}
      TThreadFunction = function (p: pointer): Longword; stdcall;
      pfnSDL_CurrentBeginThread = function (
-        _Security: pointer; 
+        _Security: pointer;
         _StackSize: LongWord;
         _StartAddress: TThreadFunction;
         _ArgList: pointer;
         _InitFlag: Longword;
         _ThrdAddr: PLongword): PtrUInt; cdecl;
     pfnSDL_CurrentEndThread = procedure (_Retval: LongInt); cdecl;
-{$ENDIF} 
+{$ENDIF}
 
 /////////////////////////////////////////////////////////////////
 /////////////////////  FUNCTION DEFINITIONS /////////////////////
@@ -1142,7 +1145,7 @@ function  SDL_WaitEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 procedure SDL_SetEventFilter(filter: TSDL_EventFilter); cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
-procedure SDL_WarpMouse(x, y: Word); inline;
+procedure SDL_WarpMouse(x, y: Word);
 
 function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 
@@ -1297,7 +1300,7 @@ uses uStore;
 // for sdl2 we provide a SDL_WarpMouse() which calls the right SDL_WarpMouseInWindow() function
 // this has the advantage of reducing 'uses' and 'ifdef' statements
 // (SDLwindow is a private member of uStore module)
-procedure SDL_WarpMouse(x, y: Word); inline;
+procedure SDL_WarpMouse(x, y: Word);
 begin
     WarpMouse(x, y);
 end;
@@ -1340,7 +1343,7 @@ end;
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl;
 begin
     SDL_CreateThread:= SDL_CreateThread(fn, name, data, nil, nil)
-end;  
+end;
 {$ENDIF}
 
 end.

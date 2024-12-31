@@ -4,7 +4,7 @@ use std::{
     ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, RangeInclusive, Sub, SubAssign},
 };
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[derive(PartialEq, Eq, Clone, Copy, Debug, Hash)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -61,6 +61,14 @@ impl Point {
     pub const fn rotate90(self) -> Self {
         Self::new(self.y, -self.x)
     }
+    #[inline]
+    pub const fn rotate180(self) -> Self {
+        Self::new(-self.x, -self.y)
+    }
+    #[inline]
+    pub const fn rotate270(self) -> Self {
+        Self::new(-self.y, self.x)
+    }
 
     #[inline]
     pub const fn cross(self, other: Point) -> i32 {
@@ -99,7 +107,7 @@ impl Point {
 
     #[inline]
     pub fn from_fppoint(p: &FPPoint) -> Self {
-        Self::new(p.x().round(), p.y().round())
+        Self::new(p.x().round() as i32, p.y().round() as i32)
     }
 }
 
@@ -161,6 +169,11 @@ impl Size {
     #[inline]
     pub fn to_square(&self) -> Self {
         Self::square(max(self.width, self.height))
+    }
+
+    #[inline]
+    pub fn is_square(&self) -> bool {
+        self.width == self.height
     }
 
     #[inline]
@@ -491,7 +504,7 @@ impl Rect {
 
     #[inline]
     pub fn with_margin(&self, margin: i32) -> Self {
-        let offset = Point::diag(margin);
+        let offset = Point::new(min(margin, self.width() as i32 / 2), min(margin, self.height() as i32 / 2));
         Self::new(self.top_left() + offset, self.bottom_right() - offset)
     }
 
@@ -601,11 +614,11 @@ impl Polygon {
         self.vertices.insert(edge_index + 1, vertex);
     }
 
-    pub fn iter<'a>(&'a self) -> impl Iterator<Item = &Point> + 'a {
+    pub fn iter(&self) -> impl Iterator<Item = &Point> {
         (&self.vertices[..self.edges_count()]).iter()
     }
 
-    pub fn iter_mut<'a>(&'a mut self) -> impl Iterator<Item = &mut Point> + 'a {
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut Point> {
         let edges_count = self.edges_count();
         let start = self.vertices.as_mut_ptr();
         let end = unsafe { start.add(edges_count) };

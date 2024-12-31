@@ -152,7 +152,7 @@ implementation
 uses uConsts, uVariables, uVisualGearsList, uRandom, uCollisions, uGearsList, uUtils, uSound
     , SDLh, uScript, uGearsHedgehog, uGearsUtils, uIO, uCaptions, uLandGraphics
     , uGearsHandlers, uTextures, uRenderUtils, uAmmos, uTeams, uLandTexture
-    , uStore, uAI, uStats, uLocale;
+    , uStore, uAI, uStats, uLocale, uLandUtils;
 
 procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
 var
@@ -528,7 +528,7 @@ begin
             end
         else if (collV < 0) and (collH < 0) and tdX.isNegative and tdY.isNegative then
             Gear^.dX.isNegative := false;
-       
+
         isFalling := false;
         Gear^.AdvBounce := 10;
         end;
@@ -884,45 +884,45 @@ else if GameTicks and $7 = 0 then
         else if (cGravity.isNegative) and (yy < LAND_HEIGHT-1200) then
             move:=true
         // Solid pixel encountered
-        else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
+        else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (LandGet(yy, xx) <> 0) then
             begin
-            lf:= Land[yy, xx] and (lfObject or lfBasic or lfIndestructible);
+            lf:= LandGet(yy, xx) and (lfObject or lfBasic or lfIndestructible);
             if lf = 0 then lf:= lfObject;
             // If there's room below keep falling
-            if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
+            if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (LandGet(yy-1, xx) = 0) then
                 begin
                 X:= X - cWindSpeed * 1600 - dX;
                 end
             // If there's room below, on the sides, fill the gaps
-            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) then 
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) then
 		    begin
-		    if (((xx - 1) and LAND_WIDTH_MASK) = 0) and (Land[yy - 1, (xx - 1)] = 0) then
+		    if (((xx - 1) and LAND_WIDTH_MASK) = 0) and (LandGet(yy - 1, (xx - 1)) = 0) then
 		        begin
 		        X:= X - _0_8;
 		        Y:= oldY;
 		        end
-		    else if (((xx - 2) and LAND_WIDTH_MASK) = 0) and (Land[yy - 1, (xx - 2)] = 0) then
+		    else if (((xx - 2) and LAND_WIDTH_MASK) = 0) and (LandGet(yy - 1, (xx - 2)) = 0) then
 		        begin
 		        X:= X - _1_6;
 		        Y:= oldY;
 		        end
-		    else if (((xx + 1) and LAND_WIDTH_MASK) = 0) and (Land[yy - 1, (xx + 1)] = 0) then
+		    else if (((xx + 1) and LAND_WIDTH_MASK) = 0) and (LandGet(yy - 1, (xx + 1)) = 0) then
 		        begin
 		        X:= X + _0_8;
 		        Y:= oldY;
 		        end
-		    else if (((xx + 2) and LAND_WIDTH_MASK) = 0) and (Land[yy - 1, (xx + 2)] = 0) then
+		    else if (((xx + 2) and LAND_WIDTH_MASK) = 0) and (LandGet(yy - 1, (xx + 2)) = 0) then
 		        begin
 		        X:= X + _1_6;
 		        Y:= oldY;
 		        end else
-		    if ((((yy+1) and LAND_HEIGHT_MASK) = 0) and ((Land[yy + 1, xx] and $FF) <> 0)) then 
-		       move:=true 
-		    else 
+		    if ((((yy+1) and LAND_HEIGHT_MASK) = 0) and ((LandGet(yy + 1, xx) and $FF) <> 0)) then
+		       move:=true
+		    else
 		       draw:= true
 		    end
             // if there's an hog/object below do nothing
-            else if ((((yy+1) and LAND_HEIGHT_MASK) = 0) and ((Land[yy+1, xx] and $FF) <> 0))
+            else if ((((yy+1) and LAND_HEIGHT_MASK) = 0) and ((LandGet(yy+1, xx) and $FF) <> 0))
                 then move:=true
             else draw:= true
             end
@@ -949,7 +949,7 @@ if draw then
                 for px:= 0 to Pred(s^.w) do
                     begin
                     lx:=xx + px; ly:=yy + py;
-                    if (ly and LAND_HEIGHT_MASK = 0) and (lx and LAND_WIDTH_MASK = 0) and (Land[ly, lx] and $FF = 0) then
+                    if (ly and LAND_HEIGHT_MASK = 0) and (lx and LAND_WIDTH_MASK = 0) and (LandGet(ly, lx) and $FF = 0) then
                         begin
                         rx:= lx;
                         ry:= ly;
@@ -957,21 +957,21 @@ if draw then
                             begin
                             rx:= rx div 2;ry:= ry div 2;
                             end;
-                        if Land[yy + py, xx + px] <= lfAllObjMask then
+                        if LandGet(yy + py, xx + px) <= lfAllObjMask then
                             if gun then
                                 begin
                                 LandDirty[yy div 32, xx div 32]:= 1;
-                                if LandPixels[ry, rx] = 0 then
-                                    Land[ly, lx]:=  lfDamaged or lfObject
-                                else Land[ly, lx]:=  lfDamaged or lfBasic
+                                if LandPixelGet(ry, rx) = 0 then
+                                    LandSet(ly, lx, lfDamaged or lfObject)
+                                else LandSet(ly, lx, lfDamaged or lfBasic)
                                 end
-                            else Land[ly, lx]:= lf;
+                            else LandSet(ly, lx, lf);
                         if gun then
-                             LandPixels[ry, rx]:= (Gear^.Tint shr 24         shl RShift) or 
-                                                  (Gear^.Tint shr 16 and $FF shl GShift) or 
-                                                  (Gear^.Tint shr  8 and $FF shl BShift) or 
-                                                  (p^[px] and AMask)
-                        else LandPixels[ry, rx]:= addBgColor(LandPixels[ry, rx], p^[px]);
+                             LandPixelSet(ry, rx, (Gear^.Tint shr 24         shl RShift) or
+                                                  (Gear^.Tint shr 16 and $FF shl GShift) or
+                                                  (Gear^.Tint shr  8 and $FF shl BShift) or
+                                                  (p^[px] and AMask))
+                        else LandPixelSet(ry, rx, addBgColor(LandPixelGet(ry, rx), p^[px]));
                         end
                     else allpx:= false
                     end;
@@ -1520,7 +1520,7 @@ begin
 
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) then
         begin
-            LandFlags:= Land[y, x];
+            LandFlags:= LandGet(y, x);
             if LandFlags <> 0 then inc(Gear^.Damage);
             isDigging:= (LandFlags and lfLandMask) <> 0;
         end;
@@ -1762,7 +1762,7 @@ begin
     if (Gear^.Timer mod 47) = 0 then
         begin
         // ok. this was an attempt to turn off dust if not actually drilling land.  I have no idea why it isn't working as expected
-        if (( (y + 12) and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y + 12, x] > 255) then
+        if (( (y + 12) and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (LandGet(y + 12, x) > 255) then
             for i:= 0 to 1 do
                 AddVisualGear(x - 5 + Random(10), y + 12, vgtDust);
 
@@ -2194,7 +2194,7 @@ begin
 
     // If in ready timer, or after turn, or in first 5 seconds of turn (really a window due to extra time utility)
     // or hunting is disabled due to seek radius of 0 then we aren't hunting
-    if (ReadyTimeLeft > 0) or (TurnTimeLeft = 0) or 
+    if (ReadyTimeLeft > 0) or (TurnTimeLeft = 0) or
         ((TurnTimeLeft < cHedgehogTurnTime) and (cHedgehogTurnTime-TurnTimeLeft < 5000)) or
         (Gear^.Angle = 0) then
         gear^.State:= gear^.State and (not gstChooseTarget)
@@ -3452,7 +3452,7 @@ begin
     begin
         DeleteGear(Gear);
         exit
-    end; 
+    end;
 
     valid:= false;
 
@@ -4246,8 +4246,8 @@ begin
         dec(playWidth, 2);
         for i:= 0 to LAND_HEIGHT - 1 do
             begin
-            Land[i, leftX] := 0;
-            Land[i, rightX] := 0;
+            LandSet(i, leftX, 0);
+            LandSet(i, rightX, 0);
             end;
         end;
 
@@ -4255,7 +4255,7 @@ begin
         begin
         dec(cWaterLine);
         for i:= 0 to LAND_WIDTH - 1 do
-            Land[cWaterLine, i] := 0;
+            LandSet(cWaterLine, i, 0);
         SetAllToActive
         end;
 
@@ -5039,8 +5039,8 @@ begin
     doPortalColorSwitch();
 
     // destroy portal if ground it was attached too is gone
-    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] <= lfAllObjMask)
-    or (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and lfBouncy <> 0)
+    if (LandGet(hwRound(Gear^.Y), hwRound(Gear^.X)) <= lfAllObjMask)
+    or (LandGet(hwRound(Gear^.Y), hwRound(Gear^.X)) and lfBouncy <> 0)
     or (Gear^.Timer < 1)
     or (Gear^.Hedgehog^.Team <> CurrentHedgehog^.Team)
     or CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
@@ -5407,12 +5407,12 @@ begin
     ty := 0;
     // avoid compiler hints
 
-    if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > 255) then
+    if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (LandGet(y, x) > 255) then
         begin
         Gear^.State := Gear^.State or gstCollision;
         Gear^.State := Gear^.State and (not gstMoving);
 
-        if (Land[y, x] and lfBouncy <> 0)
+        if (LandGet(y, x) and lfBouncy <> 0)
         or (not CalcSlopeTangent(Gear, x, y, tx, ty, 255))
         or (DistanceI(tx,ty) < _12) then // reject shots at too irregular terrain
             begin
@@ -5773,9 +5773,9 @@ begin
             if (not CheckCoordInWater(rX, rY)) or (not CheckCoordInWater(x, y)) then
                 begin
                 if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
-                    and (Land[y, x] <> 0) then
+                    and (LandGet(y, x) <> 0) then
                         begin
-                        if ((GameFlags and gfSolidLand) <> 0) and (Land[y, x] > 255) then
+                        if ((GameFlags and gfSolidLand) <> 0) and (LandGet(y, x) > 255) then
                             Gear^.Damage := initHealth
                         else if justCollided then
                             begin
@@ -6683,7 +6683,7 @@ begin
         ndY:= -AngleCos(HHGear^.Angle) * _4;
         if (ndX <> dX) or (ndY <> dY) or (Gear^.Message and (gmUp or gmDown) <> 0) or
            (((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
-             (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0)) and
+             (Target.Y and LAND_HEIGHT_MASK = 0) and ((LandGet(Target.Y, Target.X) = 0)) and
              (not CheckCoordInWater(Target.X, Target.Y))) and (CheckGearNear(gtAirMine, int2hwFloat(Target.X),int2hwFloat(Target.Y), Gear^.Radius*3, Gear^.Radius*3) = nil) and
              (not ((WorldEdge = weBounce) and ((Target.X > rightX) or (Target.X < leftX))))) then
             begin
@@ -6717,7 +6717,7 @@ begin
                 else if CheckCoordInWater(Target.X, Target.Y) or
                         ((Target.X and LAND_WIDTH_MASK  = 0) and
                          (Target.Y and LAND_HEIGHT_MASK = 0) and
-                         (Land[Target.Y, Target.X] = lfIce) and
+                         (LandGet(Target.Y, Target.X) = lfIce) and
                          ((Target.Y+iceHeight+5 > cWaterLine) or
                           ((WorldEdge = weSea) and
                            ((Target.X+iceHeight+5 > rightX) or
@@ -6799,13 +6799,13 @@ begin
                                 begin
                                 iter^.Damage:= 0;
                                 iter^.State:= iter^.State or gstFrozen;
-                                if (hwRound(iter^.X) < RightX-16) and (hwRound(iter^.X) > LeftX+16) and 
+                                if (hwRound(iter^.X) < RightX-16) and (hwRound(iter^.X) > LeftX+16) and
                                     (hwRound(iter^.Y) > topY+16) and (hwRound(iter^.Y) < LAND_HEIGHT-16) then
                                     begin
                                     AddCI(iter);
                                     iter^.X:= int2hwFloat(min(RightX-16,max(hwRound(iter^.X), LeftX+16)));
                                     iter^.Y:= int2hwFloat(min(LAND_HEIGHT-16,max(hwRound(iter^.Y),TopY+16)));
-                                    ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);    
+                                    ForcePlaceOnLand(hwRound(iter^.X)-16, hwRound(iter^.Y)-16, sprFrozenAirMine, 0, lfIce, $FFFFFFFF, false, false, false);
                                     iter^.State:= iter^.State or gstInvisible
                                     end
                                 else
@@ -6865,7 +6865,7 @@ begin
                 end
             else if (t > 400) and (CheckCoordInWater(gX, gY) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
-                        and (Land[gY, gX] <> 0))) then
+                        and (LandGet(gY, gX) <> 0))) then
                 begin
                 Target.X:= gX;
                 Target.Y:= gY;
@@ -6888,7 +6888,7 @@ begin
                     Target.Y:= gY;
                     X:= HHGear^.X;
                     Y:= HHGear^.Y
-                    end 
+                    end
                 end;
         end
     end;
@@ -6996,7 +6996,7 @@ begin
         tX:=Gear^.X-targ^.X;
         tY:=Gear^.Y-targ^.Y;
         // allow escaping - should maybe flag this too
-        if (GameTicks > Gear^.FlightTime+10000) or 
+        if (GameTicks > Gear^.FlightTime+10000) or
             ((tX.Round+tY.Round > Gear^.Angle*6) and
             (hwRound(hwSqr(tX) + hwSqr(tY)) > sqr(Gear^.Angle*6))) then
             targ:= nil
@@ -7005,7 +7005,7 @@ begin
     // If in ready timer, or after turn, or in first 5 seconds of turn (really a window due to extra time utility)
     // or mine is inactive due to lack of gsttmpflag or hunting is disabled due to seek radius of 0
     // then we aren't hunting
-    if (ReadyTimeLeft > 0) or (TurnTimeLeft = 0) or 
+    if (ReadyTimeLeft > 0) or (TurnTimeLeft = 0) or
         ((TurnTimeLeft < cHedgehogTurnTime) and (cHedgehogTurnTime-TurnTimeLeft < 5000)) or
         (Gear^.State and gsttmpFlag = 0) or
         (Gear^.Angle = 0) then
@@ -7269,7 +7269,7 @@ begin
         MakeSentryStep := true
     end
 end;
-    
+
 function MakeSentryJump(Sentry: PGear; maxXStep, maxYStep: LongInt): Boolean;
 var x, y, offsetX, offsetY, direction: LongInt;
     jumpTime: hwFloat;
@@ -7322,7 +7322,7 @@ begin
 
     for i := 0 to count - 1 do
     begin
-        if (Land[hwRound(fromY), hwRound(fromX)] and mask) <> 0 then
+        if (LandGet(hwRound(fromY), hwRound(fromX)) and mask) <> 0 then
             Inc(TraceAttackPath);
         fromX := fromX + distX;
         fromY := fromY + distY;

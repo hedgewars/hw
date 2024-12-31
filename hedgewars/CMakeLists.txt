@@ -1,10 +1,10 @@
 enable_language(Pascal)
 
 find_package(SDL2 REQUIRED CONFIG)
-find_package(SDL2_image REQUIRED CONFIG)
-find_package(SDL2_net REQUIRED CONFIG)
-find_package(SDL2_ttf REQUIRED CONFIG)
-find_package(SDL2_mixer REQUIRED CONFIG)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_net REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 include(CheckLibraryExists)
 include(${CMAKE_MODULE_PATH}/utils.cmake)
@@ -78,13 +78,11 @@ set(engine_sources
     adler32.pas
     uLandTemplates.pas
     uLandTexture.pas
+    uLandGenPerlin.pas
     uLandGraphics.pas
     uLandPainted.pas
-    uLandOutline.pas
-    uLandGenMaze.pas
-    uLandGenPerlin.pas
-    uLandGenTemplateBased.pas
     uLandUtils.pas
+    uAI2.pas
 
     #this is where dependency tracking becomes hard
     uStore.pas
@@ -189,7 +187,6 @@ endif()
 
 list(APPEND HW_LINK_LIBS physlayer)
 
-
 #opengl 2
 IF(GL2)
     add_definitions(-dGL2)
@@ -246,6 +243,6 @@ else()
 endif()
 
 #even though not actually used, this will trigger relink if any lib changes
-target_link_libraries(hwengine ${HW_LINK_LIBS})
+target_link_libraries(hwengine ${HW_LINK_LIBS} hwengine_future)
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})

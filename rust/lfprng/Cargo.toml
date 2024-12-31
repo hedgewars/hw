@@ -5,3 +5,4 @@ authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 edition = "2018"
 
 [dependencies]
+rand = "0.8"

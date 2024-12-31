@@ -26,13 +26,13 @@ uses SDLh, uTypes;
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
 
 procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL
-procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); inline;
+procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); 
 procedure copyToXYFromRect(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
 
 function GetSurfaceFrameCoordinateX(Surface: PSDL_Surface; Frame, frameWidth, frameHeight: LongInt): LongInt;
 function GetSurfaceFrameCoordinateY(Surface: PSDL_Surface; Frame, frameHeight: LongInt): LongInt;
 
-procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); inline;
+procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt);
 procedure DrawSpriteFrame2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt; frame: LongInt);
 procedure DrawLine2Surf(dest: PSDL_Surface; x0,y0,x1,y1:LongInt; r,g,b: byte);
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
@@ -41,7 +41,7 @@ function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTextu
 function  RenderStringTexLim(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord): PTexture;
 function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 
-function IsTooDarkToRead(TextColor: Longword): boolean; inline;
+function IsTooDarkToRead(TextColor: Longword): boolean; 
 
 implementation
 uses uVariables, uConsts, uTextures, SysUtils, uUtils, uDebug;
@@ -99,7 +99,7 @@ begin
    GetSurfaceFrameCoordinateY:= (Frame mod ny) * frameHeight;
 end;
 
-function IsTooDarkToRead(TextColor: LongWord): boolean; inline;
+function IsTooDarkToRead(TextColor: LongWord): boolean;
 var clr: TSDL_Color;
 begin
     clr.r:= (TextColor shr 16) and $FF;
@@ -178,7 +178,7 @@ begin
     SDL_UnlockSurface(Surface);
 end;
 
-procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); inline;
+procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); 
 begin
     // copy from complete src
     copyToXYFromRect(src, dest, 0, 0, src^.w, src^.h, destX, destY);
@@ -254,7 +254,7 @@ begin
     SDL_UnlockSurface(dest);
 end;
 
-procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); inline;
+procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); 
 begin
    DrawSpriteFrame2Surf(sprite, dest, x, y, 0);
 end;

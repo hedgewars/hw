@@ -30,18 +30,18 @@ procedure freeModule;
 
 procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); inline;
+procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); 
 procedure DrawSpriteClipped     (Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 procedure DrawSpriteRotated     (Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawSpriteRotatedF    (Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawSpriteRotatedFReal(Sprite: TSprite; X, Y: Real; Frame, Dir: LongInt; Angle: real);
 procedure DrawSpritePivotedF(Sprite: TSprite; X, Y, Frame, Dir, PivotX, PivotY: LongInt; Angle: real);
 
-procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); inline;
+procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); 
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 procedure DrawTexture2          (X, Y: LongInt; Texture: PTexture; Scale, Overlap: GLfloat);
-procedure DrawTextureFromRect   (X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
-procedure DrawTextureFromRect   (X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
+procedure DrawTextureFromRect   (X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture); 
+procedure DrawTextureFromRect   (X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture); 
 procedure DrawTextureFromRectDir(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture; Dir: LongInt);
 procedure DrawTextureCentered   (X, Top: LongInt; Source: PTexture);
 procedure DrawTextureF          (Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
@@ -53,9 +53,9 @@ procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte)
 procedure DrawCircle            (X, Y, Radius, Width: LongInt; color: LongWord);
 procedure DrawCircleFilled      (X, Y, Radius: LongInt; r, g, b, a: Byte);
 
-procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
+procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); 
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
-procedure DrawLineWrapped       (X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; color: LongWord); inline;
+procedure DrawLineWrapped       (X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; color: LongWord); 
 procedure DrawLineWrapped       (X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; r, g, b, a: Byte);
 procedure DrawLineOnScreen      (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawRect              (rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolean);
@@ -70,19 +70,19 @@ procedure RenderClear           (mode: TRenderMode);
 {$ENDIF}
 procedure RenderSetClearColor   (r, g, b, a: real);
 procedure Tint                  (r, g, b, a: Byte);
-procedure Tint                  (c: Longword); inline;
-procedure untint(); inline;
-procedure setTintAdd            (enable: boolean); inline;
+procedure Tint                  (c: Longword); 
+procedure untint(); 
+procedure setTintAdd            (enable: boolean); 
 
 // call this to finish the rendering of current frame
 procedure FinishRender();
 
-function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
-function isCircleOffscreen(X, Y, RadiusSquared: LongInt): boolean; inline;
+function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; 
+function isCircleOffscreen(X, Y, RadiusSquared: LongInt): boolean; 
 
 // 0 => not offscreen, <0 => left/top of screen >0 => right/below of screen
-function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
-function isDyAreaOffscreen(Y, Height: LongInt): LongInt; inline;
+function isDxAreaOffscreen(X, Width: LongInt): LongInt; 
+function isDyAreaOffscreen(Y, Height: LongInt): LongInt; 
 
 procedure SetScale(f: GLfloat);
 procedure UpdateViewLimits();
@@ -97,15 +97,15 @@ procedure ResetDepth(rm: TRenderMode);
 
 procedure EnableTexture(enable:Boolean);
 
-procedure SetTexCoordPointer(p: Pointer;n: Integer); inline;
-procedure SetVertexPointer(p: Pointer;n: Integer); inline;
-procedure SetColorPointer(p: Pointer;n: Integer); inline;
+procedure SetTexCoordPointer(p: Pointer;n: Integer); 
+procedure SetVertexPointer(p: Pointer;n: Integer); 
+procedure SetColorPointer(p: Pointer;n: Integer); 
 
-procedure UpdateModelviewProjection(); inline;
+procedure UpdateModelviewProjection(); 
 
-procedure openglPushMatrix      (); inline;
-procedure openglPopMatrix       (); inline;
-procedure openglTranslatef      (X, Y, Z: GLfloat); inline;
+procedure openglPushMatrix      (); 
+procedure openglPopMatrix       (); 
+procedure openglTranslatef      (X, Y, Z: GLfloat); 
 
 
 implementation
@@ -147,12 +147,12 @@ procedure CreateFramebuffer(var frame, depth, tex: GLuint); forward;
 procedure DeleteFramebuffer(var frame, depth, tex: GLuint); forward;
 {$ENDIF}
 
-function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
+function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; 
 begin
     isAreaOffscreen:= (isDxAreaOffscreen(X, Width) <> 0) or (isDyAreaOffscreen(Y, Height) <> 0);
 end;
 
-function isCircleOffscreen(X, Y, RadiusSquared: LongInt): boolean; inline;
+function isCircleOffscreen(X, Y, RadiusSquared: LongInt): boolean; 
 var dRightX, dBottomY, dLeftX, dTopY: LongInt;
 begin
     dRightX:= (X - ViewRightX);
@@ -166,14 +166,14 @@ begin
         ((dTopY > 0) and (sqr(dTopY) > RadiusSquared))
 end;
 
-function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
+function isDxAreaOffscreen(X, Width: LongInt): LongInt; 
 begin
     if X > ViewRightX then exit(1);
     if X + Width < ViewLeftX then exit(-1);
     isDxAreaOffscreen:= 0;
 end;
 
-function isDyAreaOffscreen(Y, Height: LongInt): LongInt; inline;
+function isDyAreaOffscreen(Y, Height: LongInt): LongInt; 
 begin
     if Y > ViewBottomY then exit(1);
     if Y + Height < ViewTopY then exit(-1);
@@ -658,7 +658,7 @@ glViewport(0, 0, cScreenWidth, cScreenHeight);
     // disable/lower perspective correction (will not need it anyway)
 end;
 
-procedure openglLoadIdentity(); inline;
+procedure openglLoadIdentity(); 
 begin
 {$IFDEF GL2}
     hglLoadIdentity();
@@ -667,7 +667,7 @@ begin
 {$ENDIF}
 end;
 
-procedure openglTranslProjMatrix(X, Y, Z: GLfloat); inline;
+procedure openglTranslProjMatrix(X, Y, Z: GLfloat); 
 begin
 {$IFDEF GL2}
     hglMatrixMode(MATRIX_PROJECTION);
@@ -680,7 +680,7 @@ begin
 {$ENDIF}
 end;
 
-procedure openglPushMatrix(); inline;
+procedure openglPushMatrix(); 
 begin
 {$IFDEF GL2}
     hglPushMatrix();
@@ -689,7 +689,7 @@ begin
 {$ENDIF}
 end;
 
-procedure openglPopMatrix(); inline;
+procedure openglPopMatrix(); 
 begin
 {$IFDEF GL2}
     hglPopMatrix();
@@ -698,7 +698,7 @@ begin
 {$ENDIF}
 end;
 
-procedure openglTranslatef(X, Y, Z: GLfloat); inline;
+procedure openglTranslatef(X, Y, Z: GLfloat); 
 begin
 {$IFDEF GL2}
     hglTranslatef(X, Y, Z);
@@ -707,7 +707,7 @@ begin
 {$ENDIF}
 end;
 
-procedure openglScalef(ScaleX, ScaleY, ScaleZ: GLfloat); inline;
+procedure openglScalef(ScaleX, ScaleY, ScaleZ: GLfloat); 
 begin
 {$IFDEF GL2}
     hglScalef(ScaleX, ScaleY, ScaleZ);
@@ -716,7 +716,7 @@ begin
 {$ENDIF}
 end;
 
-procedure openglRotatef(RotX, RotY, RotZ: GLfloat; dir: LongInt); inline;
+procedure openglRotatef(RotX, RotY, RotZ: GLfloat; dir: LongInt); 
 { workaround for pascal bug https://bugs.freepascal.org/view.php?id=27222 }
 var tmpdir: LongInt;
 begin
@@ -728,7 +728,7 @@ tmpdir:=dir;
 {$ENDIF}
 end;
 
-procedure openglUseColorOnly(b :boolean); inline;
+procedure openglUseColorOnly(b :boolean); 
 begin
     if b then
         begin
@@ -755,7 +755,7 @@ begin
     EnableTexture(not b);
 end;
 
-procedure UpdateModelviewProjection(); inline;
+procedure UpdateModelviewProjection(); 
 {$IFDEF GL2}
 var
     mvp: TMatrix4x4f;
@@ -770,7 +770,7 @@ begin
 {$ENDIF}
 end;
 
-procedure SetTexCoordPointer(p: Pointer; n: Integer); inline;
+procedure SetTexCoordPointer(p: Pointer; n: Integer); 
 begin
 {$IFDEF GL2}
     glBindBuffer(GL_ARRAY_BUFFER, tBuffer);
@@ -786,7 +786,7 @@ begin
 {$ENDIF}
 end;
 
-procedure SetVertexPointer(p: Pointer; n: Integer); inline;
+procedure SetVertexPointer(p: Pointer; n: Integer); 
 begin
 {$IFDEF GL2}
     glBindBuffer(GL_ARRAY_BUFFER, vBuffer);
@@ -802,7 +802,7 @@ begin
 {$ENDIF}
 end;
 
-procedure SetColorPointer(p: Pointer; n: Integer); inline;
+procedure SetColorPointer(p: Pointer; n: Integer); 
 begin
 {$IFDEF GL2}
     glBindBuffer(GL_ARRAY_BUFFER, cBuffer);
@@ -887,19 +887,19 @@ begin
     UpdateModelviewProjection;
 end;
 
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); inline;
+procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); 
 begin
 r.y:= r.y + Height * Position;
 r.h:= Height;
 DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawTextureFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
+procedure DrawTextureFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture); 
 begin
 DrawTextureFromRectDir(X, Y, r^.w, r^.h, r, SourceTexture, 1)
 end;
 
-procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
+procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture); 
 begin
 DrawTextureFromRectDir(X, Y, W, H, r, SourceTexture, 1)
 end;
@@ -967,7 +967,7 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 end;
 
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture); 
 begin
     DrawTexture(X, Y, Texture, 1.0);
 end;
@@ -1375,7 +1375,7 @@ begin
 end;
 
 // Same as below, but with color as LongWord
-procedure DrawLine(X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
+procedure DrawLine(X0, Y0, X1, Y1, Width: Single; color: LongWord); 
 begin
 DrawLine(X0, Y0, X1, Y1, Width, (color shr 24) and $FF, (color shr 16) and $FF, (color shr 8) and $FF, color and $FF)
 end;
@@ -1400,7 +1400,7 @@ begin
 end;
 
 // Same as below, but with color as a longword
-procedure DrawLineWrapped(X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; color: LongWord); inline;
+procedure DrawLineWrapped(X0, Y0, X1, Y1, Width: Single; goesLeft: boolean; Wraps: LongWord; color: LongWord); 
 begin
 DrawLineWrapped(X0, Y0, X1, Y1, Width, goesLeft, Wraps, (color shr 24) and $FF, (color shr 16) and $FF, (color shr 8) and $FF, color and $FF);
 end;
@@ -2073,7 +2073,7 @@ untint;
 
 end;
 
-procedure openglTint(r, g, b, a: Byte); inline;
+procedure openglTint(r, g, b, a: Byte); 
 {$IFDEF GL2}
 const
     scale:Real = 1.0/255.0;
@@ -2109,20 +2109,20 @@ begin
     LastTint:= nc;
 end;
 
-procedure Tint(c: Longword); inline;
+procedure Tint(c: Longword); 
 begin
     if c = LastTint then exit;
     Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
 
-procedure untint(); inline;
+procedure untint(); 
 begin
     if cWhiteColor = LastTint then exit;
     openglTint($FF, $FF, $FF, $FF);
     LastTint:= cWhiteColor;
 end;
 
-procedure setTintAdd(enable: boolean); inline;
+procedure setTintAdd(enable: boolean); 
 begin
     {$IFDEF GL2}
         if enable then

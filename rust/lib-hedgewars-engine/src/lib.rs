@@ -5,7 +5,7 @@ mod time;
 mod world;
 
 use std::{
-    ffi::{CString, CStr},
+    ffi::{CStr, CString},
     io::{Read, Write},
     mem::replace,
     os::raw::{c_char, c_void},

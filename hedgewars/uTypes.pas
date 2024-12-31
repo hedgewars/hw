@@ -99,7 +99,7 @@ type
 
     // Gears that interact with other Gears and/or Land
     // first row of gears (<gtExplosives) should be avoided when searching a spawn place
-    TGearType = (gtFlame, gtHedgehog, gtMine, gtCase, gtAirMine, gtExplosives, 
+    TGearType = (gtFlame, gtHedgehog, gtMine, gtCase, gtAirMine, gtExplosives,
             gtGrenade, gtShell, gtGrave, gtBee, // 9
             gtShotgunShot, gtPickHammer, gtRope,  // 12
             gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 17
@@ -196,7 +196,7 @@ type
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
     TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
     TUIDisplay = (uiAll, uiNoTeams, uiNone);
-    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn, mgForts);
+    TMapGen = (mgRandom, mgMaze, mgPerlin, mgDrawn, mgForts, mgWFC);
 
 
     THHFont = record
@@ -545,8 +545,6 @@ type
             gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam, gidMoreWind);
 
 
-    TLandArray = packed array of array of LongWord;
-    TCollisionArray = packed array of array of Word;
     TDirtyTag = packed array of array of byte;
 
     TGearPackArray = packed array of TGear;

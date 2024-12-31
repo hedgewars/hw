@@ -117,7 +117,7 @@ for i:= 2 to 6 do
         end
 end;
 
-function GetSprite(sprite, SDsprite: TSprite): TSprite; inline;
+function GetSprite(sprite, SDsprite: TSprite): TSprite; 
 begin
     if SuddenDeathDmg then
         exit(SDsprite)
@@ -125,7 +125,7 @@ begin
         exit(sprite);
 end;
 
-function GetSpriteByWind(sprite, Lsprite: TSprite): TSprite; inline;
+function GetSpriteByWind(sprite, Lsprite: TSprite): TSprite; 
 begin
     if (SpritesData[Lsprite].Texture <> nil) and (cWindSpeedf<0) then
         exit(Lsprite)
@@ -133,7 +133,7 @@ begin
         exit(sprite);
 end;
 
-function GetSpriteData(sprite, SDsprite: TSprite): PSpriteData; inline;
+function GetSpriteData(sprite, SDsprite: TSprite): PSpriteData; 
 begin
     exit(@SpritesData[GetSprite(sprite, SDsprite)]);
 end;
@@ -498,7 +498,7 @@ for i:= 0 to 6 do
     end;
 end;
 
-procedure AddFlake; inline;
+procedure AddFlake; 
 begin
     AddVisualGear(cLeftScreenBorder + random(cScreenSpace), LAND_HEIGHT-cCloudOffset+ random(cCloudOffset), vgtFlake);
 end;

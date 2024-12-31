@@ -1,0 +1,196 @@
+---
+# Templates for wavefront collapse map generator in hedgewars
+
+templates:
+  - &template_00
+    width: 3960
+    height: 1920
+    can_invert: false
+    is_negative: false
+    put_girders: true
+    max_hedgehogs: 40
+    wrap: true
+    edges:
+      bottom:
+        name: "ff"
+        symmetrical: true
+    tiles: &template_00_tiles
+      - name: "120_bar.png"
+        edges:
+          top:
+            name: "ff"
+            symmetrical: true
+          right:
+            name: "fe"
+          bottom:
+            name: "ee"
+            symmetrical: true
+          left:
+            name: "fe"
+            reversed: true
+        is_negative: true
+        can_mirror: false
+        can_flip: false
+        can_rotate90: true
+        can_rotate180: true
+        can_rotate270: true
+      - name: "120_corner.png"
+        edges:
+          top:
+            name: "fe"
+          right:
+            name: "ee"
+            symmetrical: true
+          bottom:
+            name: "ee"
+            symmetrical: true
+          left:
+            name: "fe"
+            reversed: true
+        is_negative: true
+        can_mirror: false
+        can_flip: false
+        can_rotate90: true
+        can_rotate180: true
+        can_rotate270: true
+      - name: "120_corner.png"
+        edges:
+          top:
+            name: "fe"
+            reversed: true
+          right:
+            name: "ff"
+            symmetrical: true
+          bottom:
+            name: "ff"
+            symmetrical: true
+          left:
+            name: "fe"
+        is_negative: false
+        can_mirror: false
+        can_flip: false
+        can_rotate90: true
+        can_rotate180: true
+        can_rotate270: true
+      - name: "120_filled.png"
+        edges:
+          top:
+            name: "ff"
+            symmetrical: true
+          right:
+            name: "ff"
+            symmetrical: true
+          bottom:
+            name: "ff"
+            symmetrical: true
+          left:
+            name: "ff"
+            symmetrical: true
+        is_negative: true
+        can_mirror: false
+        can_flip: false
+        can_rotate90: false
+        can_rotate180: false
+        can_rotate270: false
+      - name: "120_filled.png"
+        edges:
+          top:
+            name: "ee"
+            symmetrical: true
+          right:
+            name: "ee"
+            symmetrical: true
+          bottom:
+            name: "ee"
+            symmetrical: true
+          left:
+            name: "ee"
+            symmetrical: true
+        is_negative: false
+        can_mirror: false
+        can_flip: false
+        can_rotate90: false
+        can_rotate180: false
+        can_rotate270: false
+      - name: "120_two_corners.png"
+        edges:
+          top:
+            name: "fe"
+          right:
+            name: "fe"
+            reversed: true
+          bottom:
+            name: "fe"
+          left:
+            name: "fe"
+            reversed: true
+        is_negative: true
+        can_mirror: true
+        can_flip: false
+        can_rotate90: false
+        can_rotate180: false
+        can_rotate270: false
+
+  - &template_01
+    width: 3960
+    height: 1920
+    can_invert: false
+    is_negative: false
+    put_girders: true
+    max_hedgehogs: 40
+    wrap: false
+    edges: &open_edges
+      top:
+        name: "ee"
+        symmetrical: true
+      right:
+        name: "ee"
+        symmetrical: true
+      bottom:
+        name: "ff"
+        symmetrical: true
+      left:
+        name: "ee"
+        symmetrical: true
+    tiles: *template_00_tiles
+
+  - &template_02
+    width: 1200
+    height: 600
+    can_invert: false
+    is_negative: false
+    put_girders: true
+    max_hedgehogs: 24
+    wrap: false
+    edges: *open_edges
+    tiles: *template_00_tiles
+
+  - &template_03
+    width: 720
+    height: 7920
+    can_invert: false
+    is_negative: false
+    put_girders: true
+    max_hedgehogs: 64
+    wrap: false
+    edges: *open_edges
+    tiles: *template_00_tiles
+
+
+  - &template_04
+    width: 2200
+    height: 960
+    can_invert: false
+    is_negative: false
+    put_girders: true
+    max_hedgehogs: 24
+    wrap: false
+    edges: *open_edges
+    tiles: *template_00_tiles
+
+template_types:
+  small: [2]
+  medium: [4]
+  large: [1]
+  cavern: [0]
+  wacky: [3]

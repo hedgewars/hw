@@ -1,0 +1,131 @@
+# Templates for maze map generator in hedgewars
+
+templates:
+  # 00
+  -
+    width: 2048
+    height: 1024
+    max_hedgehogs: 64
+    cell_size: 100
+    distortion_limiting_factor: 140
+    braidness: 12
+    invert: false
+
+  # 01
+  -
+    width: 1536
+    height: 1024
+    max_hedgehogs: 64
+    cell_size: 64
+    distortion_limiting_factor: 160
+    braidness: 8
+    invert: false
+
+  # 02
+  -
+    width: 2048
+    height: 1024
+    max_hedgehogs: 64
+    cell_size: 140
+    distortion_limiting_factor: 140
+    braidness: 12
+    invert: false
+
+  # 03
+  -
+    width: 4096
+    height: 2048
+    max_hedgehogs: 64
+    cell_size: 160
+    distortion_limiting_factor: 180
+    braidness: 16
+    invert: false
+
+  # 04
+  -
+    width: 4096
+    height: 2048
+    max_hedgehogs: 64
+    cell_size: 240
+    distortion_limiting_factor: 220
+    braidness: 20
+    invert: false
+
+  # 05
+  -
+    width: 4096
+    height: 2048
+    max_hedgehogs: 64
+    cell_size: 280
+    distortion_limiting_factor: 220
+    braidness: 20
+    invert: false
+
+  # 06
+  -
+    width: 1024
+    height: 1024
+    max_hedgehogs: 64
+    cell_size: 64
+    distortion_limiting_factor: 150
+    braidness: 3
+    invert: true
+
+  # 07
+  -
+    width: 2048
+    height: 1024
+    max_hedgehogs: 64
+    cell_size: 80
+    distortion_limiting_factor: 150
+    braidness: 5
+    invert: true
+
+  # 08
+  -
+    width: 2048
+    height: 1024
+    max_hedgehogs: 64
+    cell_size: 120
+    distortion_limiting_factor: 150
+    braidness: 5
+    invert: true
+
+  # 09
+  -
+    width: 4096
+    height: 2048
+    max_hedgehogs: 64
+    cell_size: 140
+    distortion_limiting_factor: 200
+    braidness: 10
+    invert: true
+
+  # 10
+  -
+    width: 4096
+    height: 2048
+    max_hedgehogs: 64
+    cell_size: 220
+    distortion_limiting_factor: 250
+    braidness: 10
+    invert: true
+
+  # 11
+  -
+    width: 4096
+    height: 2048
+    max_hedgehogs: 64
+    cell_size: 256
+    distortion_limiting_factor: 280
+    braidness: 10
+    invert: true
+
+template_types:
+  small_tunnels: [0, 1]
+  medium_tunnels: [2, 3]
+  large_tunnels: [4, 5]
+  small_islands: [6, 7]
+  medium_islands: [8, 9]
+  large_islands: [10, 11]
+

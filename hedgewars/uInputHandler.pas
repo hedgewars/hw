@@ -25,7 +25,7 @@ uses SDLh, uTypes;
 procedure initModule;
 procedure freeModule;
 
-function  KeyNameToCode(name: shortstring): LongInt; inline;
+function  KeyNameToCode(name: shortstring): LongInt; 
 function  KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 
 function  KeyBindToCode(bind: shortstring): LongInt;
@@ -36,7 +36,7 @@ procedure ProcessMouseButton(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 procedure ProcessMouseMotion(xrel, yrel: LongInt);
 //procedure ProcessMouseWheel(x, y: LongInt);
 procedure ProcessMouseWheel(y: LongInt);
-procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
+procedure ProcessKey(event: TSDL_KeyboardEvent); 
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 
 {$IFDEF USE_AM_NUMCOLUMN}
@@ -84,7 +84,7 @@ var tkbd: array[0..cKbdMaxIndex] of boolean;
     //ControllerHats: array[0..5] of array[0..19] of Byte;
     //ControllerButtons: array[0..5] of array[0..19] of Byte;
 
-function  KeyNameToCode(name: shortstring): LongInt; inline;
+function  KeyNameToCode(name: shortstring): LongInt; 
 begin
     KeyNameToCode:= KeyNameToCode(name, '');
 end;
@@ -294,7 +294,7 @@ if CurrentBinds.indices[code] > 0 then
     end
 end;
 
-procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
+procedure ProcessKey(event: TSDL_KeyboardEvent); 
 var code: LongInt;
 begin
     // TODO

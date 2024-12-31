@@ -1,9 +1,10 @@
+use integral_geometry::Size;
 use std::{
     ops::{Index, IndexMut},
-    slice::SliceIndex
+    slice::SliceIndex,
 };
-use integral_geometry::Size;
 
+#[derive(Debug)]
 pub struct Vec2D<T> {
     data: Vec<T>,
     size: Size,
@@ -33,7 +34,7 @@ impl<T> IndexMut<usize> for Vec2D<T> {
     }
 }
 
-impl <T> Vec2D<T> {
+impl<T> Vec2D<T> {
     #[inline]
     pub fn width(&self) -> usize {
         self.size.width
@@ -51,8 +52,11 @@ impl <T> Vec2D<T> {
 }
 
 impl<T: Copy> Vec2D<T> {
-    pub fn new(size: Size, value: T) -> Self {
-        Self { size, data: vec![value; size.area()] }
+    pub fn new(size: &Size, value: T) -> Self {
+        Self {
+            size: *size,
+            data: vec![value; size.area()],
+        }
     }
 
     #[inline]
@@ -67,21 +71,41 @@ impl<T: Copy> Vec2D<T> {
 
     #[inline]
     pub fn get(&self, row: usize, column: usize) -> Option<&<usize as SliceIndex<[T]>>::Output> {
-        self.data.get(row * self.width() + column)
+        if row < self.height() && column < self.width() {
+            Some(unsafe { self.data.get_unchecked(row * self.width() + column) })
+        } else {
+            None
+        }
     }
 
     #[inline]
-    pub fn get_mut(&mut self, row: usize, column: usize) -> Option<&mut <usize as SliceIndex<[T]>>::Output> {
-        self.data.get_mut(row * self.size.width + column)
+    pub fn get_mut(
+        &mut self,
+        row: usize,
+        column: usize,
+    ) -> Option<&mut <usize as SliceIndex<[T]>>::Output> {
+        if row < self.height() && column < self.width() {
+            Some(unsafe { self.data.get_unchecked_mut(row * self.size.width + column) })
+        } else {
+            None
+        }
     }
 
     #[inline]
-    pub unsafe fn get_unchecked(&self, row: usize, column: usize) -> &<usize as SliceIndex<[T]>>::Output {
+    pub unsafe fn get_unchecked(
+        &self,
+        row: usize,
+        column: usize,
+    ) -> &<usize as SliceIndex<[T]>>::Output {
         self.data.get_unchecked(row * self.width() + column)
     }
 
     #[inline]
-    pub unsafe fn get_unchecked_mut(&mut self, row: usize, column: usize) -> &mut <usize as SliceIndex<[T]>>::Output {
+    pub unsafe fn get_unchecked_mut(
+        &mut self,
+        row: usize,
+        column: usize,
+    ) -> &mut <usize as SliceIndex<[T]>>::Output {
         self.data.get_unchecked_mut(row * self.size.width + column)
     }
 
@@ -98,11 +122,8 @@ impl<T: Copy> Vec2D<T> {
 
     #[inline]
     pub unsafe fn as_bytes(&self) -> &[u8] {
-        use std::{
-            slice,
-            mem
-        };
-        
+        use std::{mem, slice};
+
         slice::from_raw_parts(
             self.data.as_ptr() as *const u8,
             self.data.len() * mem::size_of::<T>(),
@@ -119,6 +140,17 @@ impl<T: Copy> AsRef<[T]> for Vec2D<T> {
 impl<T: Copy> AsMut<[T]> for Vec2D<T> {
     fn as_mut(&mut self) -> &mut [T] {
         self.as_mut_slice()
+    }
+}
+
+impl<T: Clone> Vec2D<T> {
+    pub fn from_iter<I: IntoIterator<Item = T>>(iter: I, size: &Size) -> Option<Vec2D<T>> {
+        let data: Vec<T> = iter.into_iter().collect();
+        if size.width * size.height == data.len() {
+            Some(Vec2D { data, size: *size })
+        } else {
+            None
+        }
     }
 }
 

@@ -119,6 +119,7 @@ target_link_libraries(hwengine  fpcrtl
                                 physfs
                                 physlayer
                                 m
+                                hwengine_future
                                 ${HW_LINK_LIBS}
                                 #TODO: add other libraries
                             )

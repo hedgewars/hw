@@ -56,7 +56,7 @@ var RopePoints: record
                 end;
 
 implementation
-uses uRender, uRenderUtils, uGearsUtils, uUtils, uVariables, uAmmos, Math, uVisualGearsList;
+uses uRender, uRenderUtils, uGearsUtils, uUtils, uVariables, uAmmos, Math, uVisualGearsList, uLandUtils;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
 var n: LongInt;
@@ -72,7 +72,7 @@ with RopePoints do
 if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
     begin
     EnableTexture(false);
-    
+
     Tint(Gear^.Tint shr 24 div 3, Gear^.Tint shr 16 and $FF div 3, Gear^.Tint shr 8 and $FF div 3, Gear^.Tint and $FF);
 
     n:= RopePoints.Count + 2;
@@ -541,7 +541,7 @@ begin
                 hy:= ty;
                 wraps:= 0;
                 inWorldBounds := ((ty and LAND_HEIGHT_MASK) or (tx and LAND_WIDTH_MASK)) = 0;
-                while (inWorldBounds and ((Land[ty, tx] and lfAll) = 0)) or (not inWorldBounds) do
+                while (inWorldBounds and ((LandGet(ty, tx) and lfAll) = 0)) or (not inWorldBounds) do
                     begin
                     if wraps > cMaxLaserSightWraps then
                         break;
@@ -1049,7 +1049,7 @@ begin
                 ty:= hwRound(Gear^.Y) + cHHRadius + 2;
                 if ((tx and LAND_WIDTH_MASK) = 0) and
                     ((ty and LAND_HEIGHT_MASK) = 0) and
-                        (Land[ty, tx] <> 0) then
+                        (LandGet(ty, tx) <> 0) then
                             AddVisualGear(tx - 2 + Random(4), ty - 8, vgtDust);
                 end;
 
@@ -1417,7 +1417,7 @@ begin
                        DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
-         gtAirMine: 
+         gtAirMine:
                     // render air mine based on its state:
                     // frozen
                     if (Gear^.State and gstFrozen <> 0) then

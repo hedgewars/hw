@@ -26,14 +26,14 @@
 
 #include "tcpBase.h"
 
-enum MapGenerator
-{
-    MAPGEN_REGULAR = 0,
-    MAPGEN_MAZE = 1,
-    MAPGEN_PERLIN = 2,
-    MAPGEN_DRAWN = 3,
-    MAPGEN_FORTS = 4,
-    MAPGEN_MAP = 5
+enum MapGenerator {
+  MAPGEN_REGULAR = 0,
+  MAPGEN_MAZE = 1,
+  MAPGEN_PERLIN = 2,
+  MAPGEN_DRAWN = 3,
+  MAPGEN_FORTS = 4,
+  MAPGEN_WFC = 5,
+  MAPGEN_MAP = 6,
 };
 
 class HWMap : public TCPBase

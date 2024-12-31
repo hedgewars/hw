@@ -32,19 +32,18 @@ procedure GenPreviewAlpha(out Preview: TPreviewAlpha);
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
-     uLandGenMaze, uPhysFSLayer, uScript, uLandGenPerlin,
-     uLandGenTemplateBased, uLandUtils, uRenderUtils;
+     uPhysFSLayer, uScript, uLandGenPerlin,
+     uLandUtils, uRenderUtils;
 
 var digest: shortstring;
     maskOnly: boolean;
 
-
 procedure PrettifyLandAlpha();
 begin
     if (cReducedQuality and rqBlurryLand) <> 0 then
-        PrettifyAlpha2D(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2)
+        PrettifyAlpha2D(LAND_HEIGHT div 2, LAND_WIDTH div 2)
     else
-        PrettifyAlpha2D(LandPixels, LAND_HEIGHT, LAND_WIDTH);
+        PrettifyAlpha2D(LAND_HEIGHT, LAND_WIDTH);
 end;
 
 procedure DrawBorderFromImage(Surface: PSDL_Surface);
@@ -64,18 +63,18 @@ begin
     begin
         yd:= LAND_HEIGHT - 1;
         repeat
-            while (yd > 0) and ((Land[yd, x] and targetMask) = 0) do dec(yd);
+            while (yd > 0) and ((LandGet(yd, x) and targetMask) = 0) do dec(yd);
 
             if (yd < 0) then
                 yd:= 0;
 
-            while (yd < LAND_HEIGHT) and ((Land[yd, x] and targetMask) <> 0) do
+            while (yd < LAND_HEIGHT) and ((LandGet(yd, x) and targetMask) <> 0) do
                 inc(yd);
             dec(yd);
             yu:= yd;
 
-            while (yu > 0  ) and ((Land[yu, x] and targetMask) <> 0) do dec(yu);
-            while (yu < yd ) and ((Land[yu, x] and targetMask) =  0) do inc(yu);
+            while (yu > 0  ) and ((LandGet(yu, x) and targetMask) <> 0) do dec(yu);
+            while (yu < yd ) and ((LandGet(yu, x) and targetMask) =  0) do inc(yu);
 
             if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
                 copyToXYFromRect(tmpsurf, Surface, x mod tmpsurf^.w, 16, 1, 16, x, yd - 15);
@@ -100,7 +99,7 @@ begin
 
     for x:= 0 to LAND_WIDTH - 1 do
         for y:= 0 to LAND_HEIGHT - 1 do
-            if Land[y, x] = 0 then
+            if LandGet(y, x) = 0 then
                 if s < y then
                     begin
                     for i:= max(s, y - 8) to y - 1 do
@@ -108,9 +107,9 @@ begin
                         if ((x + i) and 16) = 0 then c:= c1 else c:= c2;
 
                         if (cReducedQuality and rqBlurryLand) = 0 then
-                            LandPixels[i, x]:= c
+                            LandPixelSet(i, x, c)
                         else
-                            LandPixels[i div 2, x div 2]:= c
+                            LandPixelSet(i div 2, x div 2, c)
                         end;
                     s:= LAND_HEIGHT
                     end
@@ -123,9 +122,9 @@ begin
                     if ((x + y) and 16) = 0 then c:= c1 else c:= c2;
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
-                        LandPixels[y, x]:= c
+                        LandPixelSet(y, x, c)
                     else
-                        LandPixels[y div 2, x div 2]:= c
+                        LandPixelSet(y div 2, x div 2, c)
                     end;
                 end;
 
@@ -134,7 +133,7 @@ begin
 
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
-            if Land[y, x] = 0 then
+            if LandGet(y, x) = 0 then
                 if s < x then
                     begin
                     for i:= max(s, x - 8) to x - 1 do
@@ -142,9 +141,9 @@ begin
                         if ((y + i) and 16) = 0 then c:= c1 else c:= c2;
 
                         if (cReducedQuality and rqBlurryLand) = 0 then
-                            LandPixels[y, i]:= c
+                            LandPixelSet(y, i, c)
                         else
-                            LandPixels[y div 2, i div 2]:= c
+                            LandPixelSet(y div 2, i div 2, c)
                         end;
                     s:= LAND_WIDTH
                     end
@@ -157,9 +156,9 @@ begin
                     if ((x + y) and 16) = 0 then c:= c1 else c:= c2;
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
-                        LandPixels[y, x]:= c
+                        LandPixelSet(y, x, c)
                     else
-                        LandPixels[y div 2, x div 2]:= c
+                        LandPixelSet(y div 2, x div 2, c)
                     end;
                 end
 end;
@@ -356,15 +355,15 @@ begin
     uLandPainted.Draw;
 end;
 
-function SelectTemplate: LongInt;
+function SelectTemplate: shortstring;
 var l: LongInt;
 begin
-    SelectTemplate:= 0;
+    SelectTemplate:= '';
     if (cReducedQuality and rqLowRes) <> 0 then
-        SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))]
+        SelectTemplate:= 'small'
     else
         begin
-        if cTemplateFilter = 0 then
+        if (cTemplateFilter = 0) and (cMapGen <> mgMaze) then
             begin
             l:= getRandom(GroupedTemplatesCount);
             repeat
@@ -374,22 +373,35 @@ begin
             end
             else getRandom(1);
 
-            case cTemplateFilter of
-            0: OutError('Error selecting TemplateFilter. Ask unC0Rr about what you did wrong', true);
-            1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-            2: SelectTemplate:= MediumTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-            3: SelectTemplate:= LargeTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-            4: SelectTemplate:= CavernTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-            5: SelectTemplate:= WackyTemplates[getrandom(TemplateCounts[cTemplateFilter])];
-    // For lua only!
-            6: begin
-               SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
-               GetRandom(2) // burn 1
-               end
-            end
+            case cMapGen of
+                mgMaze:
+                    case cTemplateFilter of
+                    0: SelectTemplate:= 'small_tunnels';
+                    1: SelectTemplate:= 'medium_tunnels';
+                    2: SelectTemplate:= 'large_tunnels';
+                    3: SelectTemplate:= 'small_islands';
+                    4: SelectTemplate:= 'medium_islands';
+                    5: SelectTemplate:= 'large_islands';
+                    else OutError('Error selecting TemplateFilter', true);
+                    end
+              else              
+                    case cTemplateFilter of
+                    1: SelectTemplate:= 'small';
+                    2: SelectTemplate:= 'medium';
+                    3: SelectTemplate:= 'large';
+                    4: SelectTemplate:= 'cavern';
+                    5: SelectTemplate:= 'wacky';
+                    // For lua only!
+                    6: begin
+                       SelectTemplate:= 'small';
+                       GetRandom(2) // burn 1
+                       end
+                    else OutError('Error selecting TemplateFilter', true);
+                    end
+              end
         end;
 
-    WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
+    WriteLnToConsole('Using template filter '+SelectTemplate);
 end;
 
 procedure LandSurface2LandPixels(Surface: PSDL_Surface);
@@ -405,11 +417,11 @@ p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
     begin
     for x:= 0 to LAND_WIDTH - 1 do
-    if Land[y, x] <> 0 then
+    if LandGet(y, x) <> 0 then
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[y, x]:= p^[x]// or AMask
+            LandPixelSet(y, x, p^[x])// or AMask
         else
-            LandPixels[y div 2, x div 2]:= p^[x];
+            LandPixelSet(y div 2, x div 2, p^[x]);
 
     p:= PLongwordArray(@(p^[Surface^.pitch div 4]));
     end;
@@ -439,38 +451,38 @@ begin
 
     for x:= LongWord(leftX+2) to LongWord(rightX-2) do
         for y:= LongWord(topY+2) to LAND_HEIGHT-3 do
-            if (Land[y, x] = 0) and
-               (((Land[y, x-1] = lfBasic) and ((Land[y+1,x] = lfBasic)) or (Land[y-1,x] = lfBasic)) or
-               ((Land[y, x+1] = lfBasic) and ((Land[y-1,x] = lfBasic) or (Land[y+1,x] = lfBasic)))) then
+            if (LandGet(y, x) = 0) and
+               (((LandGet(y, x-1) = lfBasic) and ((LandGet(y+1,x) = lfBasic)) or (LandGet(y-1,x) = lfBasic)) or
+               ((LandGet(y, x+1) = lfBasic) and ((LandGet(y-1,x) = lfBasic) or (LandGet(y+1,x) = lfBasic)))) then
             begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
-                    if (Land[y, x-1] = lfBasic) and (LandPixels[y, x-1] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y, x-1]
+                    if (LandGet(y, x-1) = lfBasic) and (LandPixelGet(y, x-1) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y, x-1))
 
-                    else if (Land[y, x+1] = lfBasic) and (LandPixels[y, x+1] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if (LandGet(y, x+1) = lfBasic) and (LandPixelGet(y, x+1) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y, x+1))
 
-                    else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1, x] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y-1, x]
+                    else if (LandGet(y-1, x) = lfBasic) and (LandPixelGet(y-1, x) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y-1, x))
 
-                    else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1, x] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y+1, x];
+                    else if (LandGet(y+1, x) = lfBasic) and (LandPixelGet(y+1, x) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y+1, x));
 
-                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
-                        LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (128 shl AShift)
+                    if (((LandPixelGet(y,x) and AMask) shr AShift) > 10) then
+                        LandPixelSet(y, x, (LandPixelGet(y,x) and (not AMask)) or (128 shl AShift))
                     end;
-                Land[y,x]:= lfObject
+                LandSet(y, x, lfObject)
             end
-            else if (Land[y, x] = 0) and
-                    (((Land[y, x-1] = lfBasic) and (Land[y+1,x-1] = lfBasic) and (Land[y+2,x] = lfBasic)) or
-                    ((Land[y, x-1] = lfBasic) and (Land[y-1,x-1] = lfBasic) and (Land[y-2,x] = lfBasic)) or
-                    ((Land[y, x+1] = lfBasic) and (Land[y+1,x+1] = lfBasic) and (Land[y+2,x] = lfBasic)) or
-                    ((Land[y, x+1] = lfBasic) and (Land[y-1,x+1] = lfBasic) and (Land[y-2,x] = lfBasic)) or
-                    ((Land[y+1, x] = lfBasic) and (Land[y+1,x+1] = lfBasic) and (Land[y,x+2] = lfBasic)) or
-                    ((Land[y-1, x] = lfBasic) and (Land[y-1,x+1] = lfBasic) and (Land[y,x+2] = lfBasic)) or
-                    ((Land[y+1, x] = lfBasic) and (Land[y+1,x-1] = lfBasic) and (Land[y,x-2] = lfBasic)) or
-                    ((Land[y-1, x] = lfBasic) and (Land[y-1,x-1] = lfBasic) and (Land[y,x-2] = lfBasic))) then
+            else if (LandGet(y, x) = 0) and
+                    (((LandGet(y, x-1) = lfBasic) and (LandGet(y+1,x-1) = lfBasic) and (LandGet(y+2,x) = lfBasic)) or
+                    ((LandGet(y, x-1) = lfBasic) and (LandGet(y-1,x-1) = lfBasic) and (LandGet(y-2,x) = lfBasic)) or
+                    ((LandGet(y, x+1) = lfBasic) and (LandGet(y+1,x+1) = lfBasic) and (LandGet(y+2,x) = lfBasic)) or
+                    ((LandGet(y, x+1) = lfBasic) and (LandGet(y-1,x+1) = lfBasic) and (LandGet(y-2,x) = lfBasic)) or
+                    ((LandGet(y+1, x) = lfBasic) and (LandGet(y+1,x+1) = lfBasic) and (LandGet(y,x+2) = lfBasic)) or
+                    ((LandGet(y-1, x) = lfBasic) and (LandGet(y-1,x+1) = lfBasic) and (LandGet(y,x+2) = lfBasic)) or
+                    ((LandGet(y+1, x) = lfBasic) and (LandGet(y+1,x-1) = lfBasic) and (LandGet(y,x-2) = lfBasic)) or
+                    ((LandGet(y-1, x) = lfBasic) and (LandGet(y-1,x-1) = lfBasic) and (LandGet(y,x-2) = lfBasic))) then
 
                 begin
 
@@ -478,22 +490,22 @@ begin
 
                     begin
 
-                    if (Land[y, x-1] = lfBasic) and (LandPixels[y,x-1] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y, x-1]
+                    if (LandGet(y, x-1) = lfBasic) and (LandPixelGet(y,x-1) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y, x-1))
 
-                    else if (Land[y, x+1] = lfBasic) and (LandPixels[y,x+1] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if (LandGet(y, x+1) = lfBasic) and (LandPixelGet(y,x+1) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y, x+1))
 
-                    else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1,x] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y+1, x]
+                    else if (LandGet(y+1, x) = lfBasic) and (LandPixelGet(y+1,x) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y+1, x))
 
-                    else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1,x] and AMask <> 0) then
-                        LandPixels[y, x]:= LandPixels[y-1, x];
+                    else if (LandGet(y-1, x) = lfBasic) and (LandPixelGet(y-1,x) and AMask <> 0) then
+                        LandPixelSet(y, x, LandPixelGet(y-1, x));
 
-                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
-                        LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (64 shl AShift)
+                    if (((LandPixelGet(y,x) and AMask) shr AShift) > 10) then
+                        LandPixelSet(y, x, (LandPixelGet(y,x) and (not AMask)) or (64 shl AShift))
                     end;
-                Land[y,x]:= lfObject
+                LandSet(y, x, lfObject)
             end;
 
     AddProgress();
@@ -527,8 +539,8 @@ for y:= h1 to h2 do
             begin
             if (y <= wbm) and ((x - w1) mod (bmWidth * 2) >= bmWidth) then
                 continue;
-            Land[y,x]:= lfBasic;
-            Land[y,lastX-x]:= lfBasic;
+            LandSet(y, x, lfBasic);
+            LandSet(y, lastX - x, lfBasic);
             end;
         end;
 
@@ -545,8 +557,8 @@ for y:= h1 to h2 do
             // align battlement on inner edge, because real outer edge could be offscreen
             if (y <= wbm) and ((LAND_WIDTH + x - bmref) mod (bmWidth * 2) >= bmWidth) then
                 continue;
-            Land[y,x]:= lfBasic;
-            Land[y,lastX-x]:= lfBasic;
+            LandSet(y, x, lfBasic);
+            LandSet(y, lastX - x, lfBasic);
             end;
         end;
 end;
@@ -691,7 +703,7 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
         for y:= 0 to Pred(tmpsurf^.h) do
             begin
             for x:= 0 to Pred(tmpsurf^.w) do
-                SetLand(Land[cpY + y, cpX + x], p^[x]);
+                SetLand(cpY + y, cpX + x, p^[x]);
             p:= PLongwordArray(@(p^[tmpsurf^.pitch div 4]));
             end;
 
@@ -756,16 +768,16 @@ for w:= 0 to 23 do
     for x:= LongWord(leftX) to LongWord(rightX) do
         begin
         y:= Longword(cWaterLine) - 1 - w;
-        Land[y, x]:= lfIndestructible;
+        LandSet(y, x, lfIndestructible);
         if (x + y) mod 32 < 16 then
             c:= AMask
         else
             c:= AMask or RMask or GMask; // FF00FFFF
 
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[y, x]:= c
+            LandPixelSet(y, x, c)
         else
-            LandPixels[y div 2, x div 2]:= c
+            LandPixelSet(y div 2, x div 2, c)
         end
 end;
 
@@ -794,15 +806,16 @@ begin
         begin
         WriteLnToConsole('Generating land...');
         case cMapGen of
-            mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
-            mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
+            mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
+            mgMaze  : GenerateMazeLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
             mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
             mgDrawn : GenDrawnMap;
             mgForts : begin GameFlags:= (GameFlags or gfDivideTeams); MakeFortsMap(); end;
+            mgWfc: GenerateWfcTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         else
             OutError('Unknown mapgen', true);
         end;
-        if cMapGen <> mgForts then
+        if (cMapGen <> mgForts) then
             GenLandSurface
         end;
 
@@ -815,7 +828,7 @@ if (GameFlags and gfBorder) <> 0 then
 else
     for y:= LongWord(topY) to LongWord(topY + 5) do
         for x:= LongWord(leftX) to LongWord(rightX) do
-            if Land[y, x] <> 0 then
+            if LandGet(y, x) <> 0 then
                 begin
                 inc(c);
                 if c > LongWord((LAND_WIDTH div 2)) then // avoid accidental triggering
@@ -834,13 +847,13 @@ if hasBorder then
         for y:= 0 to LAND_HEIGHT - 1 do
             for x:= 0 to LAND_WIDTH - 1 do
                 if (y < LongWord(topY)) or (x < LongWord(leftX)) or (x > LongWord(rightX)) then
-                    Land[y, x]:= lfIndestructible;
+                    LandSet(y, x, lfIndestructible);
         end
     else if topY > 0 then
         begin
         for y:= 0 to LongWord(topY - 1) do
             for x:= 0 to LAND_WIDTH - 1 do
-                Land[y, x]:= lfIndestructible;
+                LandSet(y, x, lfIndestructible);
         end;
     // Render map border
     for w:= 0 to (cBorderWidth-1) do
@@ -850,8 +863,8 @@ if hasBorder then
             for y:= LongWord(topY) to LAND_HEIGHT - 1 do
                     begin
                     // set land flags
-                    Land[y, leftX + w]:= lfIndestructible;
-                    Land[y, rightX - w]:= lfIndestructible;
+                    LandSet(y, leftX + w, lfIndestructible);
+                    LandSet(y, rightX - w, lfIndestructible);
 
                     // paint black and yellow stripes
                     if (y + leftX + w) mod 32 < 16 then
@@ -865,29 +878,29 @@ if hasBorder then
 
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         begin
-                        LandPixels[y, leftX + w]:= c;
-                        LandPixels[y, rightX - w]:= c2;
+                        LandPixelSet(y, leftX + w, c);
+                        LandPixelSet(y, rightX - w, c2);
                         end
                     else
                         begin
-                        LandPixels[y div 2, (leftX + w) div 2]:= c;
-                        LandPixels[y div 2, (rightX - w) div 2]:= c2;
+                        LandPixelSet(y div 2, (leftX + w) div 2, c);
+                        LandPixelSet(y div 2, (rightX - w) div 2, c2);
                         end;
                     end;
 
         // Top border
         for x:= LongWord(leftX) to LongWord(rightX) do
             begin
-            Land[topY + w, x]:= lfIndestructible;
+            LandSet(topY + w, x, lfIndestructible);
             if (topY + x + w) mod 32 < 16 then
                 c:= AMask // black
             else
                 c:= AMask or RMask or GMask; // yellow
 
             if (cReducedQuality and rqBlurryLand) = 0 then
-                LandPixels[topY + w, x]:= c
+                LandPixelSet(topY + w, x, c)
             else
-                LandPixels[(topY + w) div 2, x div 2]:= c;
+                LandPixelSet((topY + w) div 2, x div 2, c);
             end;
         end;
     end;
@@ -915,23 +928,23 @@ if GrayScale then
         for x:= LongWord(leftX) to LongWord(rightX) do
             for y:= LongWord(topY) to LAND_HEIGHT-1 do
                 begin
-                w:= LandPixels[y,x];
+                w:= LandPixelGet(y,x);
                 w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
                       (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
                       (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
                 if w > 255 then
                     w:= 255;
-                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y,x] and AMask);
-                LandPixels[y,x]:= w or (LandPixels[y, x] and AMask)
+                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixelGet(y,x) and AMask);
+                LandPixelSet(y, x, w or (LandPixelGet(y, x) and AMask))
                 end
     else
         for x:= LongWord(leftX div 2) to LongWord(rightX div 2) do
             for y:= LongWord(topY div 2) to LAND_HEIGHT-1 div 2 do
                 begin
-                w:= LandPixels[y div 2,x div 2];
+                w:= LandPixelGet(y div 2,x div 2);
                 w:= ((w shr RShift and $FF) +  (w shr BShift and $FF) + (w shr GShift and $FF)) div 3;
-                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y div 2,x div 2] and AMask);
-                LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
+                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixelGet(y div 2,x div 2) and AMask);
+                LandPixelSet(y, x, w or (LandPixelGet(y div 2, x div 2) and AMask))
                 end
     end;
 
@@ -949,11 +962,12 @@ var rh, rw, ox, oy, x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
-        mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
-        mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
+        mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
+        mgMaze: GenerateMazeLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;
         mgForts: MakeFortsPreview();
+        mgWfc: GenerateWfcTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
     else
         OutError('Unknown mapgen', true);
     end;
@@ -994,7 +1008,7 @@ begin
                 for yy:= y * lh to y * lh + 7 do
                     for xx:= x * lw + cbit to x * lw + cbit + 7 do
                         if ((yy-oy) and LAND_HEIGHT_MASK = 0) and ((xx-ox) and LAND_WIDTH_MASK = 0)
-                           and (Land[yy-oy, xx-ox] <> 0) then
+                           and (LandGet(yy-oy, xx-ox) <> 0) then
                             inc(t);
                 if t > 8 then
                     Preview[y, x]:= Preview[y, x] or ($80 shr bit);
@@ -1008,11 +1022,12 @@ var rh, rw, ox, oy, x, y, xx, yy, t, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
-        mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
-        mgMaze: begin ResizeLand(4096,2048); GenMaze; end;
+        mgRandom: GenerateOutlineTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
+        mgMaze: GenerateMazeLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
         mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
         mgDrawn: begin GenDrawnMap; end;
         mgForts: MakeFortsPreview;
+        mgWfc: GenerateWfcTemplatedLand(cFeatureSize, cSeed, SelectTemplate, PathPrefix);
     else
         OutError('Unknown mapgen', true);
     end;
@@ -1052,7 +1067,7 @@ begin
             for yy:= y * lh - oy to y * lh + lh - 1 - oy do
                 for xx:= x * lw - ox to x * lw + lw - 1 - ox do
                     if (yy and LAND_HEIGHT_MASK = 0) and (xx and LAND_WIDTH_MASK = 0)
-                        and (Land[yy, xx] <> 0) then
+                        and (LandGet(yy, xx) <> 0) then
                         inc(t);
 
             Preview[y, x]:= t * 255 div (lh * lw);
@@ -1074,7 +1089,7 @@ var i: LongInt;
 begin
     landPixelDigest:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
-        landPixelDigest:= Adler32Update(landPixelDigest, @Land[i,0], LAND_WIDTH*2);
+        landPixelDigest:= Adler32Update(landPixelDigest, LandRow(i), LAND_WIDTH*2);
     s:= 'M' + IntToStr(syncedPixelDigest)+'|'+IntToStr(landPixelDigest);
 
     ScriptSetString('LandDigest',IntToStr(landPixelDigest));
@@ -1093,21 +1108,11 @@ begin
     maskOnly:= false;
     LAND_WIDTH:= 0;
     LAND_HEIGHT:= 0;
-(*
-    if (cReducedQuality and rqBlurryLand) = 0 then
-        SetLength(LandPixels, LAND_HEIGHT, LAND_WIDTH)
-    else
-        SetLength(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2);
-
-    SetLength(Land, LAND_HEIGHT, LAND_WIDTH);
-    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
-*)
 end;
 
 procedure freeModule;
 begin
-    SetLength(Land, 0, 0);
-    SetLength(LandPixels, 0, 0);
+    DisposeLand;
     SetLength(LandDirty, 0, 0);
 end;
 

@@ -1,24 +1,25 @@
-use std::{cmp, ops::Index};
-
+use std::{cmp, ops::Index, ops::IndexMut};
+use vec2d::Vec2D;
 use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, PotSize, Rect, Size, SizeMask};
 
+#[derive(Debug)]
 pub struct Land2D<T> {
     pixels: vec2d::Vec2D<T>,
     play_box: Rect,
     mask: SizeMask,
 }
 
-impl<T: Copy + PartialEq> Land2D<T> {
-    pub fn new(play_size: Size, fill_value: T) -> Self {
+impl<T: Copy + PartialEq + Default> Land2D<T> {
+    pub fn new(play_size: &Size, fill_value: T) -> Self {
         let real_size = play_size.next_power_of_two();
         let top_left = Point::new(
             ((real_size.width() - play_size.width) / 2) as i32,
             (real_size.height() - play_size.height) as i32,
         );
-        let play_box = Rect::from_size(top_left, play_size);
+        let play_box = Rect::from_size(top_left, *play_size);
         Self {
             play_box,
-            pixels: vec2d::Vec2D::new(real_size.size(), fill_value),
+            pixels: vec2d::Vec2D::new(&real_size.size(), fill_value),
             mask: real_size.to_mask(),
         }
     }
@@ -95,6 +96,18 @@ impl<T: Copy + PartialEq> Land2D<T> {
             }
         } else {
             U::default()
+        }
+    }
+
+    #[inline]
+    pub fn get(&self, y: i32, x: i32) -> T {
+        if self.is_valid_coordinate(x, y) {
+            unsafe {
+                // hey, I just checked that coordinates are valid!
+                *self.pixels.get_unchecked(y as usize, x as usize)
+            }
+        } else {
+            T::default()
         }
     }
 
@@ -285,6 +298,30 @@ impl<T> Index<usize> for Land2D<T> {
     #[inline]
     fn index(&self, row: usize) -> &[T] {
         &self.pixels[row]
+    }
+}
+
+impl<T> IndexMut<usize> for Land2D<T> {
+    #[inline]
+    fn index_mut(&mut self, row: usize) -> &mut [T] {
+        &mut self.pixels[row]
+    }
+}
+
+impl<T> From<Vec2D<T>> for Land2D<T> {
+    fn from(vec: Vec2D<T>) -> Self {
+        let actual_size = vec.size();
+        let pot_size = actual_size.next_power_of_two();
+
+        assert_eq!(actual_size, pot_size.size());
+
+        let top_left = Point::new(0, 0);
+        let play_box = Rect::from_size(top_left, actual_size);
+        Self {
+            play_box,
+            pixels: vec,
+            mask: pot_size.to_mask(),
+        }
     }
 }
 

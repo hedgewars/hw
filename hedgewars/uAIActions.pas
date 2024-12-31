@@ -120,7 +120,17 @@ end;
 {$ENDIF}
 
 procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
+var t: Longword;
 begin
+if ((Action = aia_LookLeft) or (Action = aia_LookRight)) and (Actions.Count > 0) then
+    begin
+    t:= Actions.actions[Actions.Count - 1].Action;
+    if ((t = aia_LookLeft) or (t = aia_LookRight)) then
+        begin
+        dec(Actions.Count)
+        end;
+    end;
+
 if Actions.Count < MAXACTIONS then
     with Actions do
         begin
@@ -136,16 +146,23 @@ if Actions.Count < MAXACTIONS then
         end
 end;
 
-procedure CheckHang(Me: PGear);
+procedure CheckHang(Me: PGear; fromLeft: boolean);
+var newX: LongInt;
 begin
-if hwRound(Me^.X) <> PrevX then
+newX:= hwRound(Me^.X);
+if newX <> PrevX then
     begin
-    PrevX:= hwRound(Me^.X);
+    if (newX < PrevX) = fromLeft then
+        begin
+        FreeActionsList
+        end;
+    
+    PrevX:= newX;
     timedelta:= 0
     end else
         begin
         inc(timedelta);
-        if timedelta > 1700 then
+        if timedelta > 900 then
             begin
             timedelta:= 0;
             FreeActionsList
@@ -186,7 +203,7 @@ with Actions.actions[Actions.Pos] do
                         end
                     else
                         begin
-                        CheckHang(Me);
+                        CheckHang(Me, false);
                         exit
                         end;
 
@@ -205,7 +222,7 @@ with Actions.actions[Actions.Pos] do
                         end
                     else
                         begin
-                        CheckHang(Me);
+                        CheckHang(Me, true);
                         exit
                         end;
             aia_LookLeft: begin

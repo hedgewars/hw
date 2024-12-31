@@ -184,14 +184,14 @@ begin
     LuaError('-- SYNTAX: ' + call + ' ( ' + paramsyntax + ' )');
 end;
 
-procedure LuaParameterCountError(expected, call, paramsyntax: shortstring; wrongcount: LongInt); inline;
+procedure LuaParameterCountError(expected, call, paramsyntax: shortstring; wrongcount: LongInt); 
 begin
     // TODO: i18n?
     LuaCallError('Wrong number of parameters! (is: ' + inttostr(wrongcount) + ', should be: '+ expected + ')', call, paramsyntax);
 end;
 
 // compare with allowed count
-function CheckLuaParamCount(L : Plua_State; count: LongInt; call, paramsyntax: shortstring): boolean; inline;
+function CheckLuaParamCount(L : Plua_State; count: LongInt; call, paramsyntax: shortstring): boolean; 
 var c: LongInt;
 begin
     c:= lua_gettop(L);
@@ -205,7 +205,7 @@ begin
 end;
 
 // check if is either count1 or count2
-function CheckAndFetchParamCount(L : Plua_State; count1, count2: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
+function CheckAndFetchParamCount(L : Plua_State; count1, count2: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; 
 begin
     actual:= lua_gettop(L);
     if (actual <> count1) and (actual <> count2) then
@@ -218,7 +218,7 @@ begin
 end;
 
 // check if is in range of count1 and count2
-function CheckAndFetchParamCountRange(L : Plua_State; count1, count2: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
+function CheckAndFetchParamCountRange(L : Plua_State; count1, count2: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; 
 begin
     actual:= lua_gettop(L);
     if (actual < count1) or (actual > count2) then
@@ -231,7 +231,7 @@ begin
 end;
 
 // check if is same or higher as minCount
-function CheckAndFetchLuaParamMinCount(L : Plua_State; minCount: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
+function CheckAndFetchLuaParamMinCount(L : Plua_State; minCount: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; 
 begin
     actual:= lua_gettop(L);
     if (actual < minCount) then
@@ -243,7 +243,7 @@ begin
     CheckAndFetchLuaParamMinCount:= true;
 end;
 
-function LuaToGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; 
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));
@@ -256,7 +256,7 @@ begin
         LuaToGearTypeOrd:= i;
 end;
 
-function LuaToVisualGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToVisualGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; 
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));
@@ -269,7 +269,7 @@ begin
         LuaToVisualGearTypeOrd:= i;
 end;
 
-function LuaToAmmoTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToAmmoTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; 
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));
@@ -282,7 +282,7 @@ begin
         LuaToAmmoTypeOrd:= i;
 end;
 
-function LuaToStatInfoTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToStatInfoTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; 
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));
@@ -295,7 +295,7 @@ begin
         LuaToStatInfoTypeOrd:= i;
 end;
 
-function LuaToSoundOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToSoundOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; 
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));
@@ -334,7 +334,7 @@ begin
         LuaToGoalStrIdOrd:= i;
 end;
 
-function LuaToHogEffectOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToHogEffectOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt;
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));
@@ -347,7 +347,7 @@ begin
         LuaToHogEffectOrd:= i;
 end;
 
-function LuaToCapGroupOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToCapGroupOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; 
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));
@@ -360,7 +360,7 @@ begin
         LuaToCapGroupOrd:= i;
 end;
 
-function LuaToSpriteOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToSpriteOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; 
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));
@@ -373,7 +373,7 @@ begin
         LuaToSpriteOrd:= i;
 end;
 
-function LuaToMapGenOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+function LuaToMapGenOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; 
 begin
     if lua_isnoneornil(L, i) then i:= -1
     else i:= Trunc(lua_tonumber(L, i));

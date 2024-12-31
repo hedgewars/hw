@@ -71,7 +71,7 @@ procedure doStepCircle(Gear: PVisualGear; Steps: Longword);
 procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
 procedure doStepStraightShot(Gear: PVisualGear; Steps: Longword);
 
-function isSorterActive: boolean; inline;
+function isSorterActive: boolean; 
 procedure initModule;
 
 implementation
@@ -573,7 +573,7 @@ var thexchar: array[0..cMaxTeams] of
             end;
     currsorter: PVisualGear = nil;
 
-function isSorterActive: boolean; inline;
+function isSorterActive: boolean; 
 begin
     isSorterActive:= currsorter <> nil
 end;

@@ -70,11 +70,11 @@ function  CheckCacheCollision(SourceGear: PGear): PGearArray;
 function  CheckGearsLineCollision(Gear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
 function  CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
 
-function  UpdateHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
-function  UpdateHitOrder(Gear: PGear; Order: LongInt; Global: boolean): boolean; inline;
-function  UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
-procedure ClearHitOrderLeq(MinOrder: LongInt); inline;
-procedure ClearGlobalHitOrderLeq(MinOrder: LongInt); inline;
+function  UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
+function  UpdateHitOrder(Gear: PGear; Order: LongInt; Global: boolean): boolean;
+function  UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean;
+procedure ClearHitOrderLeq(MinOrder: LongInt);
+procedure ClearGlobalHitOrderLeq(MinOrder: LongInt);
 procedure ClearHitOrder();
 
 procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
@@ -84,16 +84,16 @@ procedure ClearProximityCache();
 function  TestCollisionXImpl(centerX, centerY, radius, direction: LongInt; collisionMask: Word): Word;
 function  TestCollisionYImpl(centerX, centerY, radius, direction: LongInt; collisionMask: Word): Word;
 
-function  TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word; inline;
-function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word; inline;
+function  TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
+function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 
-function  TestCollisionX(Gear: PGear; Dir: LongInt): Word; inline;
-function  TestCollisionY(Gear: PGear; Dir: LongInt): Word; inline;
+function  TestCollisionX(Gear: PGear; Dir: LongInt): Word;
+function  TestCollisionY(Gear: PGear; Dir: LongInt): Word;
 
-function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): Word; inline;
-function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word; inline;
-function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): Word; inline;
-function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word; inline;
+function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): Word;
+function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word;
+function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): Word;
+function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word;
 
 function  TestCollisionXKickImpl(centerX, centerY, radius, direction: LongInt; collisionMask, kickMask: Word): TKickTest;
 function  TestCollisionYKickImpl(centerX, centerY, radius, direction: LongInt; collisionMask, kickMask: Word): TKickTest;
@@ -103,7 +103,7 @@ function  TestCollisionYKick(Gear: PGear; Dir: LongInt): Word;
 
 function  TestRectangleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 
-function  CheckCoordInWater(X, Y: LongInt): boolean; inline;
+function  CheckCoordInWater(X, Y: LongInt): boolean;
 
 // returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45 = _0_5)
 function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
@@ -113,7 +113,7 @@ function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var out
 function CheckGearsUnderSprite(Sprite: TSprite; sprX, sprY, Frame: LongInt): boolean;
 
 implementation
-uses uConsts, uLandGraphics, uVariables, SDLh, uLandTexture, uDebug;
+uses uConsts, uLandGraphics, uVariables, SDLh, uLandTexture, uDebug, uLandUtils;
 
 type TCollisionEntry = record
     X, Y, Radius: LongInt;
@@ -159,7 +159,7 @@ if Gear^.CollisionIndex >= 0 then
     end;
 end;
 
-function CheckCoordInWater(X, Y: LongInt): boolean; inline;
+function CheckCoordInWater(X, Y: LongInt): boolean;
 begin
     CheckCoordInWater:= (Y > cWaterLine)
         or ((WorldEdge = weSea) and ((X < leftX) or (X > rightX)));
@@ -221,7 +221,7 @@ end;
 
 function LineCollisionTest(oX, oY, dirX, dirY, dirNormSqr, dirNormBound: hwFloat;
         width: LongInt; Gear: PGear):
-    TLineCollision; inline;
+    TLineCollision;
 var toCenterX, toCenterY, r,
     b, bSqr, c, desc, t: hwFloat;
     realT: extended;
@@ -367,12 +367,12 @@ begin
     end
 end;
 
-function UpdateHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
+function UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
 begin
     UpdateHitOrder := UpdateHitOrderImpl(@ordera, Gear, Order);
 end;
 
-function UpdateHitOrder(Gear: PGear; Order: LongInt; Global: boolean): boolean; inline;
+function UpdateHitOrder(Gear: PGear; Order: LongInt; Global: boolean): boolean;
 begin
     if Global then
         UpdateHitOrder := UpdateHitOrderImpl(@globalordera, Gear, Order)
@@ -380,7 +380,7 @@ begin
         UpdateHitOrder := UpdateHitOrderImpl(@ordera, Gear, Order)
 end;
 
-function UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean; inline;
+function UpdateGlobalHitOrder(Gear: PGear; Order: LongInt): boolean;
 begin
     UpdateGlobalHitOrder := UpdateHitOrderImpl(@globalordera, Gear, Order);
 end;
@@ -408,12 +408,12 @@ begin;
     end
 end;
 
-procedure ClearHitOrderLeq(MinOrder: LongInt); inline;
+procedure ClearHitOrderLeq(MinOrder: LongInt);
 begin
     ClearHitOrderLeqImpl(@ordera, MinOrder);
 end;
 
-procedure ClearGlobalHitOrderLeq(MinOrder: LongInt); inline;
+procedure ClearGlobalHitOrderLeq(MinOrder: LongInt);
 begin
     ClearHitOrderLeqImpl(@globalordera, MinOrder);
 end;
@@ -480,8 +480,8 @@ begin
         minY := max(centerY - radius + 1, 0);
         maxY := min(centerY + radius - 1, LAND_HEIGHT - 1);
         for y := minY to maxY do
-            if Land[y, x] and collisionMask <> 0 then
-                exit(Land[y, x] and collisionMask);
+            if LandGet(y, x) and collisionMask <> 0 then
+                exit(LandGet(y, x) and collisionMask);
     end;
     TestCollisionXImpl := 0;
 end;
@@ -499,18 +499,18 @@ begin
         minX := max(centerX - radius + 1, 0);
         maxX := min(centerX + radius - 1, LAND_WIDTH - 1);
         for x := minX to maxX do
-            if Land[y, x] and collisionMask <> 0 then
-                exit(Land[y, x] and collisionMask);
+            if LandGet(y, x) and collisionMask <> 0 then
+                exit(LandGet(y, x) and collisionMask);
     end;
     TestCollisionYImpl := 0;
 end;
 
-function TestCollisionX(Gear: PGear; Dir: LongInt): Word; inline;
+function TestCollisionX(Gear: PGear; Dir: LongInt): Word;
 begin
     TestCollisionX := TestCollisionXImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask and lfLandMask);
 end;
 
-function TestCollisionY(Gear: PGear; Dir: LongInt): Word; inline;
+function TestCollisionY(Gear: PGear; Dir: LongInt): Word;
 begin
     TestCollisionY := TestCollisionYImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask and lfLandMask);
 end;
@@ -533,19 +533,19 @@ begin
         Gear^.CollisionMask:= lfAll;
 end;
 
-function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word; inline;
+function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
 begin
     LegacyFixupX(Gear);
     TestCollisionXwithGear:= TestCollisionXImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask);
 end;
 
-function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word; inline;
+function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 begin
     LegacyFixupY(Gear);
     TestCollisionYwithGear:= TestCollisionYImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask);
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word; inline;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word;
 var collisionMask: Word;
 begin
     if withGear then
@@ -559,7 +559,7 @@ begin
     TestCollisionXwithXYShift := TestCollisionXImpl(hwRound(Gear^.X + ShiftX), hwRound(Gear^.Y) + ShiftY, Gear^.Radius, Dir, collisionMask)
 end;
 
-function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word; inline;
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word;
 var collisionMask: Word;
 begin
     if withGear then
@@ -573,12 +573,12 @@ begin
     TestCollisionYwithXYShift := TestCollisionYImpl(hwRound(Gear^.X) + ShiftX, hwRound(Gear^.Y) + ShiftY, Gear^.Radius, Dir, collisionMask)
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): Word; inline;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): Word;
 begin
     TestCollisionXwithXYShift:= TestCollisionXwithXYShift(Gear, ShiftX, ShiftY, Dir, true);
 end;
 
-function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): Word; inline;
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): Word;
 begin
     TestCollisionYwithXYShift:= TestCollisionYwithXYShift(Gear, ShiftX, ShiftY, Dir, true);
 end;
@@ -599,16 +599,16 @@ begin
         minY := max(centerY - radius + 1, 0);
         maxY := min(centerY + radius - 1, LAND_HEIGHT - 1);
         for y := minY to maxY do
-            if Land[y, x] and collisionMask <> 0 then
+            if LandGet(y, x) and collisionMask <> 0 then
             begin
                 TestCollisionXKickImpl.kick := false;
-                TestCollisionXKickImpl.collisionMask := Land[y, x] and collisionMask;
+                TestCollisionXKickImpl.collisionMask := LandGet(y, x) and collisionMask;
                 exit
             end
-            else if Land[y, x] and kickMask <> 0 then
+            else if LandGet(y, x) and kickMask <> 0 then
             begin
                 TestCollisionXKickImpl.kick := true;
-                TestCollisionXKickImpl.collisionMask := Land[y, x] and kickMask;
+                TestCollisionXKickImpl.collisionMask := LandGet(y, x) and kickMask;
             end;
     end;
 end;
@@ -629,16 +629,16 @@ begin
         minX := max(centerX - radius + 1, 0);
         maxX := min(centerX + radius - 1, LAND_WIDTH - 1);
         for x := minX to maxX do
-            if Land[y, x] and collisionMask <> 0 then
+            if LandGet(y, x) and collisionMask <> 0 then
             begin
                 TestCollisionYKickImpl.kick := false;
-                TestCollisionYKickImpl.collisionMask := Land[y, x] and collisionMask;
+                TestCollisionYKickImpl.collisionMask := LandGet(y, x) and collisionMask;
                 exit
             end
-            else if Land[y, x] and kickMask <> 0 then
+            else if LandGet(y, x) and kickMask <> 0 then
             begin
                 TestCollisionYKickImpl.kick := true;
-                TestCollisionYKickImpl.collisionMask := Land[y, x] and kickMask;
+                TestCollisionYKickImpl.collisionMask := LandGet(y, x) and kickMask;
             end;
     end;
 end;
@@ -767,7 +767,7 @@ if (hasBorder and ((y1 < 0) or (x1 < 0) or (x2 > LAND_WIDTH))) then
 
 for y := y1 to y2 do
     for x := x1 to x2 do
-        if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > TestWord) then
+        if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (LandGet(y, x) > TestWord) then
             exit;
 
 TestRectangleForObstacle:= false
@@ -816,7 +816,7 @@ begin
             tmpy:= collisionY + k * my;
 
             if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK) = 0) then
-                if (Land[tmpy,tmpx] > TestWord) then
+                if (LandGet(tmpy,tmpx) > TestWord) then
                     begin
                     // remember the index belonging to the first and last collision (if in 1st half)
                     if (i <> 0) then
@@ -867,7 +867,7 @@ begin
                 tmpx:= ldx + k * offset[tmpo,0];
                 tmpy:= ldy + k * offset[tmpo,1];
                 if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                and (Land[tmpy,tmpx] > TestWord) then
+                and (LandGet(tmpy,tmpx) > TestWord) then
                     begin
                     ldx:= tmpx;
                     ldy:= tmpy;
@@ -891,7 +891,7 @@ begin
                 tmpx:= rdx + k * offset[tmpo,0];
                 tmpy:= rdy + k * offset[tmpo,1];
                 if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                and (Land[tmpy,tmpx] > TestWord) then
+                and (LandGet(tmpy,tmpx) > TestWord) then
                     begin
                     rdx:= tmpx;
                     rdy:= tmpy;
@@ -934,7 +934,7 @@ if dirY <> 0 then
         i:= x + Gear^.Radius * 2 - 2;
         repeat
         if (x and LAND_WIDTH_MASK) = 0 then
-            if Land[y, x] <> 0 then
+            if LandGet(y, x) <> 0 then
                 if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
                     begin
                     isColl:= true;
@@ -957,7 +957,7 @@ else
         i:= y + Gear^.Radius * 2 - 2;
         repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
-            if Land[y, x] <> 0 then
+            if LandGet(y, x) <> 0 then
                 if (not isColl) or (abs(y-gy) < abs(collY-gy)) then
                     begin
                     isColl:= true;
@@ -1026,7 +1026,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     i:= x + Gear^.Radius * 2 - 2;
     repeat
     if (x and LAND_WIDTH_MASK) = 0 then
-        if (Land[y, x] and lfLandMask) <> 0 then
+        if (LandGet(y, x) and lfLandMask) <> 0 then
             if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
                 begin
                 isColl:= true;
