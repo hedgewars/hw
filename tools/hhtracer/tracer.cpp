@@ -3,18 +3,18 @@
 #include <QRandomGenerator>
 #include <QSvgGenerator>
 
-Tracer::Tracer(QObject* parent)
+Tracer::Tracer(QObject *parent)
     : QObject{parent},
       palette_{{Qt::black,
                 Qt::white,
-                {"#f29ce7"},
                 {"#9f086e"},
+                {"#f29ce7"},
                 {"#54a2fa"},
                 {"#2c78d2"}}} {}
 
 QList<QColor> Tracer::palette() const { return palette_; }
 
-void Tracer::setPalette(const QList<QColor>& newPalette) {
+void Tracer::setPalette(const QList<QColor> &newPalette) {
   if (palette_ == newPalette) return;
   palette_ = newPalette;
   emit paletteChanged();
@@ -22,43 +22,84 @@ void Tracer::setPalette(const QList<QColor>& newPalette) {
 
 double Tracer::bestSolution() const { return bestSolution_; }
 
-void Tracer::start(const QString& fileName) {
+void Tracer::start(const QString &fileName) {
   qDebug() << "Starting using" << fileName;
 
   bestSolution_ = 0;
   solutions_.clear();
   generation_.clear();
-  image_ = QImage{};
+  referenceImage_ = QImage{};
 
   if (palette_.isEmpty()) {
     qDebug("Empty palette");
     return;
   }
 
-  image_.load(QUrl(fileName).toLocalFile());
+  referenceImage_.load(QUrl(fileName).toLocalFile());
 
-  if (image_.isNull()) {
+  if (referenceImage_.isNull()) {
     qDebug("Failed to load image");
     return;
   }
 
-  for (int i = 0; i < 100; ++i) {
+  for (int i = 0; i < 600; ++i) {
     generation_.append(Solution{{32, 32}, palette_});
   }
 }
 
 void Tracer::step() {
-  solutions_.clear();
+  const auto size = generation_.size();
+  const auto keepSize = 10;
+  const auto replaceSize = 50;
+  const auto kept = generation_.mid(0, keepSize);
+  generation_ = generation_.mid(0, size - replaceSize);
 
-  for (auto& solution : generation_) {
-    const auto fileName = newFileName();
-    solutions_.append(fileName);
-
-    solution.render(fileName);
+  for (int i = 0; i < replaceSize; ++i) {
+    generation_.append(Solution{{32, 32}, palette_});
   }
 
-  qDebug() << solutions_;
+  auto rg = QRandomGenerator::global();
 
+  for (qsizetype i = 0; i < size; i += 4) {
+    const auto first = rg->bounded(size);
+    const auto second = rg->bounded(size);
+
+    if (first != second) {
+      generation_[first].crossover(generation_[second]);
+    }
+  }
+
+  std::for_each(std::begin(generation_), std::end(generation_),
+                [this](auto &s) { s.mutate(palette_); });
+
+  std::for_each(std::begin(solutions_), std::end(solutions_),
+                [this](const auto &fn) { QFile::remove(fn); });
+  solutions_.clear();
+
+  generation_.append(kept);
+
+  for (auto &solution : generation_) {
+    solution.render(newFileName());
+
+    solution.calculateFitness(referenceImage_);
+
+    solution.fitness += solution.cost() * 100;
+  }
+
+  std::sort(std::begin(generation_), std::end(generation_),
+            [](const auto &a, const auto &b) { return a.fitness < b.fitness; });
+
+  std::for_each(std::begin(generation_) + size, std::end(generation_),
+                [](const auto &s) { QFile::remove(s.fileName); });
+  generation_.remove(size, kept.size());
+
+  bestSolution_ = generation_[0].fitness;
+
+  std::transform(std::begin(generation_), std::end(generation_),
+                 std::back_inserter(solutions_),
+                 [](const auto &a) { return a.fileName; });
+
+  emit bestSolutionChanged();
   emit solutionsChanged();
 }
 
@@ -71,12 +112,48 @@ QString Tracer::newFileName() {
       QStringLiteral("hedgehog_%1.svg").arg(counter, 3, 32, QChar(u'_')));
 }
 
-Solution::Solution(QSizeF size, const QList<QColor>& palette) : size{size} {
+Solution::Solution(QSizeF size, const QList<QColor> &palette) : size{size} {
   fitness = 0;
-  primitives = {Primitive(size, palette)};
+  primitives = {Primitive(size, palette), Primitive(size, palette)};
 }
 
-void Solution::render(const QString& fileName) const {
+void Solution::calculateFitness(const QImage &target) {
+  QImage candidate{fileName};
+
+  if (candidate.isNull()) {
+    fitness = 1e32;
+    return;
+  }
+
+  // Both images assumed same size, same format
+  double diffSum = 0;
+  int width = target.width();
+  int height = target.height();
+
+  for (int y = 0; y < height; ++y) {
+    auto candScan = reinterpret_cast<const QRgb *>(candidate.scanLine(y));
+    auto targScan = reinterpret_cast<const QRgb *>(target.scanLine(y));
+    for (int x = 0; x < width; ++x) {
+      // Compare RGBA channels
+      const QRgb cPix = candScan[x];
+      const QRgb tPix = targScan[x];
+      // const auto ca = qAlpha(cPix) / 255.0;
+      const auto ta = qAlpha(tPix) / 255.0;
+      const auto dr = qRed(cPix) - qRed(tPix);
+      const auto dg = qGreen(cPix) - qGreen(tPix);
+      const auto db = qBlue(cPix) - qBlue(tPix);
+      const auto da = qAlpha(cPix) - qAlpha(tPix);
+      diffSum +=
+          qMax(qMax(qMax(dr * dr, dg * dg), db * db) * ta, da * da * 1.0);
+    }
+  }
+
+  fitness = diffSum;
+}
+
+void Solution::render(const QString &fileName) {
+  this->fileName = fileName;
+
   const auto imageSize = size.toSize();
 
   QSvgGenerator generator;
@@ -90,7 +167,7 @@ void Solution::render(const QString& fileName) const {
   painter.begin(&generator);
   painter.setRenderHint(QPainter::Antialiasing, true);
 
-  for (const auto& primitive : primitives) {
+  for (const auto &primitive : primitives) {
     painter.setPen(primitive.pen);
     painter.setBrush(primitive.brush);
     painter.resetTransform();
@@ -120,7 +197,98 @@ double Solution::cost() const {
                          [](auto a, auto p) { return a + p.cost(); });
 }
 
-Primitive::Primitive(QSizeF size, const QList<QColor>& palette) {
+void Solution::mutate(const QList<QColor> &palette) {
+  if (primitives.isEmpty()) {
+    return;
+  }
+
+  auto rg = QRandomGenerator::global();
+  double mutationRate = 0.05;
+
+  if (rg->bounded(1.0) > mutationRate) {
+    return;
+  }
+
+  for (auto &prim : primitives) {
+    // Pen width
+    if (rg->bounded(1.0) < mutationRate) {
+      prim.pen.setWidthF(prim.pen.widthF() * (rg->bounded(1.5) + 0.5) + 0.05);
+    }
+
+    // Origin
+    if (rg->bounded(1.0) < mutationRate) {
+      prim.origin += QPointF(rg->bounded(10.0) - 5.0, rg->bounded(10.0) - 5.0);
+    }
+
+    if (prim.type == Polygon) {
+      // Points
+      for (auto &pt : prim.points) {
+        if (rg->bounded(1.0) < mutationRate) {
+          prim.origin +=
+              QPointF(rg->bounded(10.0) - 5.0, rg->bounded(10.0) - 5.0);
+        }
+      }
+    } else {  // Circle/ellipse
+      if (rg->bounded(1.0) < mutationRate) {
+        prim.radius1 *= rg->bounded(0.4) + 0.8;
+      }
+      if (rg->bounded(1.0) < mutationRate) {
+        prim.radius2 *= rg->bounded(0.4) + 0.8;
+      }
+      if (rg->bounded(1.0) < mutationRate) {
+        prim.rotation = rg->bounded(90.0);
+      }
+    }
+  }
+
+  if (rg->bounded(1.0) < mutationRate) {
+    auto i = rg->bounded(primitives.size());
+
+    Primitive p{size, palette};
+    primitives.insert(i, p);
+  }
+
+  if (rg->bounded(1.0) < mutationRate) {
+    auto i = rg->bounded(primitives.size());
+
+    primitives.remove(i);
+  }
+}
+
+void Solution::crossover(Solution &other) {
+  const auto n = qMin(primitives.size(), other.primitives.size());
+
+  auto rg = QRandomGenerator::global();
+
+  if (rg->bounded(1.0) < 0.02) {
+    if (n <= 1) {
+      return;
+    }
+    // swap tails
+    const auto cp = rg->bounded(1, primitives.size());
+    const auto ocp = rg->bounded(1, other.primitives.size());
+
+    const auto tail = primitives.mid(cp);
+    const auto otherTail = other.primitives.mid(ocp);
+
+    primitives.remove(cp, primitives.size() - cp);
+    other.primitives.remove(ocp, other.primitives.size() - ocp);
+
+    primitives.append(otherTail);
+    other.primitives.append(tail);
+  } else {
+    if (n < 1) {
+      return;
+    }
+    // swap one element
+    const auto cp = rg->bounded(primitives.size());
+    const auto ocp = rg->bounded(other.primitives.size());
+
+    qSwap(primitives[cp], other.primitives[ocp]);
+  }
+}
+
+Primitive::Primitive(QSizeF size, const QList<QColor> &palette) {
   auto rg = QRandomGenerator::global();
   auto randomPoint = [&]() -> QPointF {
     return {rg->bounded(size.width()), rg->bounded(size.height())};
@@ -134,8 +302,8 @@ Primitive::Primitive(QSizeF size, const QList<QColor>& palette) {
   } else {
     type = Circle;
 
-    radius1 = rg->bounded(size.width());
-    radius2 = rg->bounded(size.width());
+    radius1 = rg->bounded(size.width() * 0.2) + 2;
+    radius2 = rg->bounded(size.width() * 0.2) + 2;
     rotation = rg->bounded(90);
   }
 

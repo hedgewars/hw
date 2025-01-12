@@ -23,11 +23,14 @@ struct Solution {
   QList<Primitive> primitives;
   double fitness;
   QSizeF size;
+  QString fileName;
 
   explicit Solution(QSizeF size, const QList<QColor>& palette);
-  void calculateFitness(const QImage& image);
-  void render(const QString& fileName) const;
+  void calculateFitness(const QImage& target);
+  void render(const QString& fileName);
   double cost() const;
+  void mutate(const QList<QColor>& palette);
+  void crossover(Solution &other);
 };
 
 class Tracer : public QObject {
@@ -64,7 +67,7 @@ class Tracer : public QObject {
   QStringList solutions_;
   QList<Solution> generation_;
   QTemporaryDir tempDir_;
-  QImage image_;
+  QImage referenceImage_;
 
   QString newFileName();
 };

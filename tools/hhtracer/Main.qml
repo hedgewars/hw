@@ -32,6 +32,10 @@ ApplicationWindow {
           stepTimer.stop();
         }
       }
+
+      Label {
+        text: "Best: %1".arg(tracer.bestSolution)
+      }
     }
   }
 
@@ -55,7 +59,7 @@ ApplicationWindow {
   Timer {
     id: stepTimer
 
-    interval: 1500
+    interval: 120
     repeat: true
     running: false
     triggeredOnStart: true
@@ -70,14 +74,14 @@ ApplicationWindow {
       id: baseImage
 
       Layout.fillWidth: true
-      Layout.preferredHeight: 128
+      Layout.preferredHeight: 32
       fillMode: Image.PreserveAspectFit
     }
 
     GridLayout {
       Layout.fillWidth: true
       Layout.fillHeight: true
-      columns: 10
+      columns: 50
 
       Repeater {
         model: tracer.solutions

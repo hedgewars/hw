@@ -9,10 +9,6 @@ int main(int argc, char *argv[]) {
 
   QQmlApplicationEngine engine;
 
-  // Tracer tracer;
-  // engine.rootContext()->setContextProperty(QStringLiteral("tracer"),
-  // &tracer);
-
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
       []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
