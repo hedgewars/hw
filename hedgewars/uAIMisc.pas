@@ -275,7 +275,14 @@ while Gear <> nil do
                 else if (Gear^.State and gstAttacking) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
                 end;
-            gtAirMine: if ((Gear^.State and gstFrozen) = 0) then AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), gear^.Angle+5, -30);
+                
+            gtAirMine: if ((Gear^.State and gstFrozen) = 0) then 
+                begin
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), gear^.Angle+5, -30);
+                
+                if (Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue then
+                    bonuses.activity:= true
+                end;
 
             gtExplosives:
                 begin
