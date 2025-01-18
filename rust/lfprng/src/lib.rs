@@ -15,7 +15,7 @@ impl LaggedFibonacciPRNG {
 
         let mut prng = Self {
             circular_buffer: buf,
-            index: 54,
+            index: 0,
         };
 
         prng.discard(2048);
@@ -32,19 +32,13 @@ impl LaggedFibonacciPRNG {
 
     #[inline]
     fn get_next(&mut self) -> u32 {
-        const PRIME_NUM: u32 = 2147483629;
-
         self.index = (self.index + 1) & 0x3f;
         let next_value = self.circular_buffer[(self.index + 40) & 0x3f]
-            + self.circular_buffer[(self.index + 9) & 0x3f];
+            .wrapping_add(self.circular_buffer[(self.index + 9) & 0x3f]);
 
-        self.circular_buffer[self.index] = if next_value > PRIME_NUM {
-            next_value - PRIME_NUM
-        } else {
-            next_value
-        };
+        self.circular_buffer[self.index] = next_value;
 
-        self.circular_buffer[self.index]
+        next_value
     }
 
     #[inline]
@@ -100,15 +94,15 @@ impl SeedableRng for LaggedFibonacciPRNG {
 fn compatibility() {
     let mut prng = LaggedFibonacciPRNG::new("{052e2aee-ce41-4720-97bd-559a413bf866}".as_bytes());
 
-    assert_eq!(prng.get_random(1000), 418);
-    assert_eq!(prng.get_random(1000000), 554064);
-    assert_eq!(prng.get_random(0xffffffff), 239515837);
+    assert_eq!(prng.get_random(1000), 145);
+    assert_eq!(prng.get_random(1000000), 385411);
+    assert_eq!(prng.get_random(0xffffffff), 3099784309);
 
     prng.add_randomness(123);
 
-    for i in 0..=100000 {
+    for _ in 0..=100000 {
         prng.get_random(2);
     }
 
-    assert_eq!(prng.get_random(0xffffffff), 525333582);
+    assert_eq!(prng.get_random(0xffffffff), 633923935);
 }
