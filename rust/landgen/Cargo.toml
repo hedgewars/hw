@@ -8,8 +8,9 @@ edition = "2021"
 integral-geometry = { path = "../integral-geometry" }
 land2d = { path = "../land2d" }
 vec2d = { path = "../vec2d" }
-itertools = "0.13"
+itertools = "0.14"
 png = "0.17"
+rand = "0.8"
 
 [dev-dependencies]
 criterion = "0.5"

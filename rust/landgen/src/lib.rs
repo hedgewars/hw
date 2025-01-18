@@ -1,3 +1,5 @@
+use rand::Rng;
+
 pub mod maze;
 pub mod outline_template_based;
 pub mod wavefront_collapse;
@@ -38,9 +40,9 @@ impl<T: Copy + PartialEq + Default> LandGenerationParameters<T> {
 }
 
 pub trait LandGenerator {
-    fn generate_land<T: Copy + PartialEq + Default, I: Iterator<Item = u32>>(
+    fn generate_land<T: Copy + PartialEq + Default>(
         &self,
         parameters: &LandGenerationParameters<T>,
-        random_numbers: &mut I,
+        prng: &mut impl Rng,
     ) -> land2d::Land2D<T>;
 }

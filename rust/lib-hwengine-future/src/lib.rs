@@ -108,8 +108,7 @@ pub unsafe extern "C" fn generate_wfc_templated_game_field(
     let mut map_gen = MapGenerator::<WfcTemplate>::new(data_path);
     map_gen.import_yaml_templates(&yaml_templates);
 
-    let distance_divisor = feature_size.pow(2) / 8 + 10;
-    let params = LandGenerationParameters::new(0u16, 0x8000u16, distance_divisor, false, false);
+    let params = LandGenerationParameters::new(0u16, 0x8000u16, feature_size, false, false);
     let template = map_gen
         .get_template(template_type, &mut random_numbers_gen)
         .expect("Error reading wfc templates file")

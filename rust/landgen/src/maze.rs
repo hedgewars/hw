@@ -2,6 +2,7 @@ use crate::outline_template_based::outline::OutlinePoints;
 use crate::{LandGenerationParameters, LandGenerator};
 use integral_geometry::{Point, Polygon, Rect, Size};
 use land2d::Land2D;
+use rand::Rng;
 
 #[derive(Clone)]
 pub struct MazeTemplate {
@@ -77,13 +78,13 @@ impl Direction {
 }
 
 impl Maze {
-    pub fn new<I: Iterator<Item = u32>>(
+    pub fn new(
         size: &Size,
         cell_size: usize,
         num_steps: usize,
         inverted: bool,
         braidness: u32,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) -> Self {
         let num_cells = Size::new(
             prev_odd(size.width / cell_size),
@@ -102,11 +103,10 @@ impl Maze {
         let edge_list = vec![vec![vec![false; num_cells.width]; num_cells.height]; 2];
 
         for current_step in 0..num_steps {
-            let x = random_numbers.next().unwrap_or_default() as usize % (seen_cells.width - 1)
-                / num_steps;
+            let x = random_numbers.gen_range(0..seen_cells.width - 1) / num_steps;
             last_cell[current_step] = Point::new(
                 (x + current_step * seen_cells.width / num_steps) as i32,
-                random_numbers.next().unwrap_or_default() as i32 % seen_cells.height as i32,
+                random_numbers.gen_range(0..seen_cells.height) as i32,
             );
         }
 
@@ -130,18 +130,18 @@ impl Maze {
         }
     }
 
-    fn see_cell<I: Iterator<Item = u32>>(
+    fn see_cell(
         &mut self,
         current_step: usize,
         start_dir: Direction,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) -> bool {
         let mut dir = start_dir;
         loop {
             let p = self.last_cell[current_step];
             self.seen_list[p.y as usize][p.x as usize] = Some(current_step);
 
-            let next_dir_clockwise = random_numbers.next().unwrap_or_default() % 2 == 0;
+            let next_dir_clockwise = random_numbers.gen();
 
             for _ in 0..5 {
                 let sp = p + dir.0;
@@ -158,9 +158,7 @@ impl Maze {
                 match when_seen {
                     Some(a) if a == current_step => {
                         // try another direction
-                        if !self.inverted
-                            && random_numbers.next().unwrap_or_default() % self.braidness == 0
-                        {
+                        if !self.inverted && random_numbers.gen_range(0..self.braidness) == 0 {
                             if dir.0.x == -1 && p.x > 0 {
                                 self.walls[dir.orientation()][p.y as usize][p.x as usize - 1] =
                                     false;
@@ -386,12 +384,12 @@ impl MazeLandGenerator {
         Self { maze_template }
     }
 
-    fn generate_outline<I: Iterator<Item = u32>>(
+    fn generate_outline(
         &self,
         size: &Size,
         play_box: Rect,
         intersections_box: Rect,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) -> OutlinePoints {
         let num_steps = if self.maze_template.inverted { 3 } else { 1 };
         let mut step_done = vec![false; num_steps];
@@ -411,7 +409,7 @@ impl MazeLandGenerator {
 
             for current_step in 0..num_steps {
                 if !step_done[current_step] {
-                    let dir = Direction::new(random_numbers.next().unwrap_or_default() as usize);
+                    let dir = Direction::new(random_numbers.gen());
                     step_done[current_step] = maze.see_cell(current_step, dir, random_numbers);
                     done = false;
                 }
@@ -432,10 +430,10 @@ impl MazeLandGenerator {
 }
 
 impl LandGenerator for MazeLandGenerator {
-    fn generate_land<T: Copy + PartialEq + Default, I: Iterator<Item = u32>>(
+    fn generate_land<T: Copy + PartialEq + Default>(
         &self,
         parameters: &LandGenerationParameters<T>,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) -> Land2D<T> {
         let do_invert = self.maze_template.inverted;
         let (basic, zero) = if do_invert {

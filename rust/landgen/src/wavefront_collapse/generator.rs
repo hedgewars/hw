@@ -3,6 +3,7 @@ use super::wavefront_collapse::{CollapseRule, Tile, WavefrontCollapse};
 use crate::{LandGenerationParameters, LandGenerator};
 use integral_geometry::Size;
 use png::Decoder;
+use rand::Rng;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::{BufReader, Result};
@@ -179,6 +180,7 @@ impl WavefrontCollapseLandGenerator {
     pub fn build_rules<T: Copy + PartialEq + Default>(
         &self,
         tiles: &[TileImage<T, String>],
+        probability_distribution_factor: i32,
     ) -> Vec<CollapseRule> {
         let [grid_top_edge, grid_right_edge, grid_bottom_edge, grid_left_edge]: [Option<
             Edge<String>,
@@ -263,7 +265,12 @@ impl WavefrontCollapseLandGenerator {
                 }
             }
 
+            let weight = (probability_distribution_factor * 2 * i as i32 / (tiles.len() - 1) as i32
+                + 100
+                - probability_distribution_factor) as u32;
+
             rules.push(CollapseRule {
+                weight,
                 tile: Tile::Numbered(i),
                 top,
                 right,
@@ -277,13 +284,17 @@ impl WavefrontCollapseLandGenerator {
 }
 
 impl LandGenerator for WavefrontCollapseLandGenerator {
-    fn generate_land<T: Copy + PartialEq + Default, I: Iterator<Item = u32>>(
+    fn generate_land<T: Copy + PartialEq + Default>(
         &self,
         parameters: &LandGenerationParameters<T>,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) -> land2d::Land2D<T> {
+        assert!(parameters.distance_divisor >= 1);
+        assert!(parameters.distance_divisor <= 25);
+
         let tiles = self.load_template(parameters);
-        let rules = self.build_rules(&tiles);
+        let distribution_factor = (parameters.distance_divisor - 1) as i32 * 8 - 96;
+        let rules = self.build_rules(&tiles, distribution_factor);
 
         let mut wfc = WavefrontCollapse::new(self.template.wrap);
         wfc.set_rules(rules);

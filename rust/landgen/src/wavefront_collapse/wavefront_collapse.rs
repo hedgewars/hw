@@ -1,4 +1,7 @@
 use integral_geometry::Size;
+use rand::distributions::Distribution;
+use rand::distributions::WeightedIndex;
+use rand::Rng;
 use std::collections::HashSet;
 use vec2d::Vec2D;
 
@@ -17,6 +20,7 @@ impl Default for Tile {
 
 #[derive(Debug)]
 pub struct CollapseRule {
+    pub weight: u32,
     pub tile: Tile,
     pub right: HashSet<Tile>,
     pub bottom: HashSet<Tile>,
@@ -49,11 +53,11 @@ impl WavefrontCollapse {
         }
     }
 
-    pub fn generate_map<I: Iterator<Item = u32>, F: FnOnce(&mut Vec2D<Tile>)>(
+    pub fn generate_map<F: FnOnce(&mut Vec2D<Tile>)>(
         &mut self,
         map_size: &Size,
         seed_fn: F,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) {
         self.grid = Vec2D::new(map_size, Tile::Empty);
 
@@ -82,7 +86,7 @@ impl WavefrontCollapse {
         self.grid.get(y, x).copied().unwrap_or_default()
     }
 
-    fn collapse_step<I: Iterator<Item = u32>>(&mut self, random_numbers: &mut I) -> bool {
+    fn collapse_step(&mut self, random_numbers: &mut impl Rng) -> bool {
         let mut tiles_to_collapse = (usize::max_value(), Vec::new());
 
         // Iterate through the tiles in the land
@@ -97,7 +101,7 @@ impl WavefrontCollapse {
                     let left_tile = self.get_tile(y, x.wrapping_sub(1));
                     let top_tile = self.get_tile(y.wrapping_sub(1), x);
 
-                    let possibilities: Vec<Tile> = self
+                    let possibilities: Vec<(u32, Tile)> = self
                         .rules
                         .iter()
                         .filter_map(|rule| {
@@ -106,7 +110,7 @@ impl WavefrontCollapse {
                                 && rule.left.contains(&left_tile)
                                 && rule.top.contains(&top_tile)
                             {
-                                Some(rule.tile)
+                                Some((rule.weight, rule.tile))
                             } else {
                                 None
                             }
@@ -116,12 +120,10 @@ impl WavefrontCollapse {
                     let entropy = possibilities.len();
                     if entropy > 0 {
                         if entropy <= tiles_to_collapse.0 {
-                            let entry = (
-                                y,
-                                x,
-                                possibilities
-                                    [random_numbers.next().unwrap_or_default() as usize % entropy],
-                            );
+                            let weights = possibilities.iter().map(|(weight, _)| *weight);
+                            let distribution = WeightedIndex::new(weights).unwrap();
+
+                            let entry = (y, x, possibilities[distribution.sample(random_numbers)]);
 
                             if entropy < tiles_to_collapse.0 {
                                 tiles_to_collapse = (entropy, vec![entry])
@@ -147,8 +149,10 @@ impl WavefrontCollapse {
         let possibilities_number = tiles_to_collapse.len();
 
         if possibilities_number > 0 {
-            let (y, x, tile) = tiles_to_collapse
-                [random_numbers.next().unwrap_or_default() as usize % possibilities_number];
+            let weights = tiles_to_collapse.iter().map(|(_, _, (weight, _))| *weight);
+            let distribution = WeightedIndex::new(weights).unwrap();
+
+            let (y, x, (_, tile)) = tiles_to_collapse[distribution.sample(random_numbers)];
 
             *self
                 .grid

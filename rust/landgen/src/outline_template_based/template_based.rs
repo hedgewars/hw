@@ -1,6 +1,7 @@
 use super::{outline::OutlinePoints, outline_template::OutlineTemplate};
 use crate::{LandGenerationParameters, LandGenerator};
 use land2d::Land2D;
+use rand::Rng;
 
 pub struct TemplatedLandGenerator {
     outline_template: OutlineTemplate,
@@ -13,13 +14,13 @@ impl TemplatedLandGenerator {
 }
 
 impl LandGenerator for TemplatedLandGenerator {
-    fn generate_land<T: Copy + PartialEq + Default, I: Iterator<Item = u32>>(
+    fn generate_land<T: Copy + PartialEq + Default>(
         &self,
         parameters: &LandGenerationParameters<T>,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) -> Land2D<T> {
         let do_invert = self.outline_template.is_negative
-            && (!self.outline_template.can_invert || random_numbers.next().unwrap() & 1 == 0);
+            && (!self.outline_template.can_invert || random_numbers.gen());
         let (basic, zero) = if do_invert {
             (parameters.zero, parameters.basic)
         } else {
@@ -36,25 +37,17 @@ impl LandGenerator for TemplatedLandGenerator {
         );
 
         // mirror
-        if self.outline_template.can_mirror {
-            if let Some(b) = random_numbers.next() {
-                if b & 1 != 0 {
-                    points.mirror();
-                }
-            }
+        if self.outline_template.can_mirror && random_numbers.gen() {
+            points.mirror();
         }
 
         // flip
-        if self.outline_template.can_flip {
-            if let Some(b) = random_numbers.next() {
-                if b & 1 != 0 {
-                    points.flip();
-                }
-            }
+        if self.outline_template.can_flip && random_numbers.gen() {
+            points.flip();
         }
 
         if !parameters.skip_distort {
-            let distortion_limiting_factor = 100 + random_numbers.next().unwrap() % 8 * 10;
+            let distortion_limiting_factor = 100 + random_numbers.gen_range(0..8) * 10;
 
             points.distort(
                 parameters.distance_divisor,

@@ -1,10 +1,9 @@
-use itertools::Itertools;
 use std::cmp::min;
 
+use super::outline_template::OutlineTemplate;
 use integral_geometry::{Line, Point, Polygon, Ray, Rect, Size};
 use land2d::Land2D;
-
-use super::outline_template::OutlineTemplate;
+use rand::Rng;
 
 pub struct OutlinePoints {
     pub islands: Vec<Polygon>,
@@ -16,41 +15,32 @@ pub struct OutlinePoints {
 }
 
 impl OutlinePoints {
-    pub fn from_outline_template<I: Iterator<Item = u32>>(
+    pub fn from_outline_template(
         outline_template: &OutlineTemplate,
         play_box: Rect,
         size: Size,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) -> Self {
+        let mut fix_polygons = |polygons: &[Vec<Rect>]| -> Vec<Polygon> {
+            polygons
+                .iter()
+                .map(|i| {
+                    i.iter()
+                        .map(|rect| {
+                            let (rnd_a, rnd_b) = random_numbers.gen();
+                            play_box.top_left() + rect.quotient(rnd_a, rnd_b)
+                        })
+                        .collect::<Vec<_>>()
+                        .into()
+                })
+                .collect()
+        };
+
         Self {
             play_box,
             size,
-            islands: outline_template
-                .islands
-                .iter()
-                .map(|i| {
-                    i.iter()
-                        .zip(random_numbers.tuples())
-                        .map(|(rect, (rnd_a, rnd_b))| {
-                            play_box.top_left() + rect.quotient(rnd_a as usize, rnd_b as usize)
-                        })
-                        .collect::<Vec<_>>()
-                        .into()
-                })
-                .collect(),
-            walls: outline_template
-                .walls
-                .iter()
-                .map(|i| {
-                    i.iter()
-                        .zip(random_numbers.tuples())
-                        .map(|(rect, (rnd_a, rnd_b))| {
-                            play_box.top_left() + rect.quotient(rnd_a as usize, rnd_b as usize)
-                        })
-                        .collect::<Vec<_>>()
-                        .into()
-                })
-                .collect(),
+            islands: fix_polygons(&outline_template.islands),
+            walls: fix_polygons(&outline_template.walls),
             fill_points: outline_template.fill_points.clone(),
             intersections_box: Rect::at_origin(size)
                 .with_margin(size.to_square().width as i32 * -2),
@@ -77,12 +67,12 @@ impl OutlinePoints {
             .chain(self.fill_points.iter_mut())
     }
 
-    fn divide_edge<I: Iterator<Item = u32>>(
+    fn divide_edge(
         &self,
         segment: Line,
         distance_divisor: u32,
         distortion_limiting_factor: u32,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) -> Option<Point> {
         #[inline]
         fn intersects(ray: &Ray, edge: &Line) -> bool {
@@ -251,20 +241,18 @@ impl OutlinePoints {
             Some(mid_point)
         } else {
             // select distance within [-dist_right; dist_left], keeping min_distance in mind
-            let d = -(dist_right as i32)
-                + min_distance
-                + random_numbers.next().unwrap() as i32
-                    % (dist_right as i32 + dist_left as i32 - min_distance * 2);
+            let d = random_numbers
+                .gen_range(-(dist_right as i32) + min_distance..=dist_left as i32 - min_distance);
 
             Some(mid_point + normal * d / normal_len as i32)
         }
     }
 
-    fn divide_edges<I: Iterator<Item = u32>>(
+    fn divide_edges(
         &mut self,
         distance_divisor: u32,
         distortion_limiting_factor: u32,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) {
         for is in 0..self.islands.len() {
             let mut i = 0;
@@ -291,11 +279,11 @@ impl OutlinePoints {
         }
     }
 
-    pub fn distort<I: Iterator<Item = u32>>(
+    pub fn distort(
         &mut self,
         distance_divisor: u32,
         distortion_limiting_factor: u32,
-        random_numbers: &mut I,
+        random_numbers: &mut impl Rng,
     ) {
         loop {
             let old_len = self.total_len();
@@ -314,9 +302,7 @@ impl OutlinePoints {
     }
 
     fn visible_segments_iter<'a>(&'a self) -> impl Iterator<Item = Line> + 'a {
-        self.islands
-            .iter()
-            .flat_map(|p| p.iter_edges())
+        self.islands.iter().flat_map(|p| p.iter_edges())
     }
 
     fn segments_iter<'a>(&'a self) -> impl Iterator<Item = Line> + 'a {
