@@ -228,9 +228,10 @@ impl Theme {
 
 fn load_sprite(path: &Path) -> Result<ThemeSprite, ThemeLoadError> {
     let decoder = Decoder::new(BufReader::new(File::open(path)?));
-    let (info, mut reader) = decoder.read_info()?;
+    let mut reader = decoder.read_info()?;
+    let info = reader.info();
 
-    if info.color_type != ColorType::RGBA {
+    if info.color_type != ColorType::Rgba {
         return Err(ThemeLoadError::Format(format!(
             "Unexpected format: {:?}",
             info.color_type
