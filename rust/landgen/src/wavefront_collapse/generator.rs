@@ -9,14 +9,14 @@ use std::fs::File;
 use std::io::{BufReader, Result};
 use std::path::{Path, PathBuf};
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct EdgeDescription {
     pub name: String,
     pub reversed: Option<bool>,
     pub symmetrical: Option<bool>,
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct EdgesDescription {
     pub top: EdgeDescription,
     pub right: EdgeDescription,
@@ -24,7 +24,7 @@ pub struct EdgesDescription {
     pub left: EdgeDescription,
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct TileDescription {
     pub name: String,
     pub edges: EdgesDescription,
@@ -36,19 +36,26 @@ pub struct TileDescription {
     pub can_rotate270: Option<bool>,
 }
 
-#[derive(Clone)]
-pub struct NonStrictEdgesDescription {
-    pub top: Option<EdgeDescription>,
-    pub right: Option<EdgeDescription>,
-    pub bottom: Option<EdgeDescription>,
-    pub left: Option<EdgeDescription>,
+#[derive(Debug, Clone)]
+pub struct ComplexEdgeDescription {
+    pub begin: Option<EdgeDescription>,
+    pub fill: Option<EdgeDescription>,
+    pub end: Option<EdgeDescription>,
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
+pub struct NonStrictComplexEdgesDescription {
+    pub top: Option<ComplexEdgeDescription>,
+    pub right: Option<ComplexEdgeDescription>,
+    pub bottom: Option<ComplexEdgeDescription>,
+    pub left: Option<ComplexEdgeDescription>,
+}
+
+#[derive(Debug, Clone)]
 pub struct TemplateDescription {
     pub size: Size,
     pub tiles: Vec<TileDescription>,
-    pub edges: NonStrictEdgesDescription,
+    pub edges: NonStrictComplexEdgesDescription,
     pub wrap: bool,
 }
 
@@ -79,7 +86,7 @@ impl WavefrontCollapseLandGenerator {
                 .as_path(),
         )?;
         let decoder = Decoder::new(BufReader::new(file));
-        let mut reader = decoder.read_info().unwrap();
+        let mut reader = decoder.read_info()?;
 
         let info = reader.info();
         let mut tiles_image = vec2d::Vec2D::new(
@@ -88,7 +95,7 @@ impl WavefrontCollapseLandGenerator {
         );
 
         let mut buf = vec![0; reader.output_buffer_size()];
-        let info = reader.next_frame(&mut buf).unwrap();
+        let info = reader.next_frame(&mut buf)?;
         let bytes = &buf[..info.buffer_size()];
 
         let mut tiles_image_pixels = tiles_image.as_mut_slice().iter_mut();
@@ -183,14 +190,14 @@ impl WavefrontCollapseLandGenerator {
         probability_distribution_factor: i32,
     ) -> Vec<CollapseRule> {
         let [grid_top_edge, grid_right_edge, grid_bottom_edge, grid_left_edge]: [Option<
-            Edge<String>,
+            [Option<Edge<String>>; 3],
         >; 4] = [
             self.template.edges.top.as_ref(),
             self.template.edges.right.as_ref(),
             self.template.edges.bottom.as_ref(),
             self.template.edges.left.as_ref(),
         ]
-        .map(|opt| opt.map(|d| d.into()));
+        .map(|opt| opt.map(|d| [&d.begin, &d.fill, &d.end].map(|e| e.as_ref().map(Into::into))));
 
         let mut rules = Vec::<CollapseRule>::new();
 
@@ -201,34 +208,32 @@ impl WavefrontCollapseLandGenerator {
             let mut left = default_connection.clone();
             let mut top = default_connection.clone();
 
+            let iteration = [
+                (&grid_top_edge, tile.top_edge(), &mut top),
+                (&grid_right_edge, tile.right_edge(), &mut right),
+                (&grid_bottom_edge, tile.bottom_edge(), &mut bottom),
+                (&grid_left_edge, tile.left_edge(), &mut left),
+            ];
+
             // compatibility with grid edges
-            if grid_top_edge
-                .as_ref()
-                .map(|e| e.is_compatible(tile.top_edge()))
-                .unwrap_or(true)
-            {
-                top.insert(Tile::Outside);
-            }
-            if grid_right_edge
-                .as_ref()
-                .map(|e| e.is_compatible(tile.right_edge()))
-                .unwrap_or(true)
-            {
-                right.insert(Tile::Outside);
-            }
-            if grid_bottom_edge
-                .as_ref()
-                .map(|e| e.is_compatible(tile.bottom_edge()))
-                .unwrap_or(true)
-            {
-                bottom.insert(Tile::Outside);
-            }
-            if grid_left_edge
-                .as_ref()
-                .map(|e| e.is_compatible(tile.left_edge()))
-                .unwrap_or(true)
-            {
-                left.insert(Tile::Outside);
+            for (edge, tile_edge, set) in iteration {
+                for (is_compatible, tile) in edge
+                    .as_ref()
+                    .map(|e| {
+                        e.clone().map(|ed| {
+                            ed.as_ref()
+                                .map(|e| e.is_compatible(tile_edge))
+                                .unwrap_or(true)
+                        })
+                    })
+                    .unwrap_or([true, true, true])
+                    .into_iter()
+                    .zip([Tile::OutsideBegin, Tile::OutsideFill, Tile::OutsideEnd].into_iter())
+                {
+                    if is_compatible {
+                        set.insert(tile);
+                    }
+                }
             }
 
             // compatibility with itself
@@ -244,21 +249,25 @@ impl WavefrontCollapseLandGenerator {
 
             // compatibility with previously defined tiles
             for p in 0..i {
+                // Check left edge
                 if tiles[p].left_edge().is_compatible(tile.right_edge()) {
                     rules[p].left.insert(Tile::Numbered(i));
                     right.insert(Tile::Numbered(p));
                 }
 
+                // Check right edge
                 if tiles[p].right_edge().is_compatible(tile.left_edge()) {
                     rules[p].right.insert(Tile::Numbered(i));
                     left.insert(Tile::Numbered(p));
                 }
 
+                // Check top edge
                 if tiles[p].top_edge().is_compatible(tile.bottom_edge()) {
                     rules[p].top.insert(Tile::Numbered(i));
                     bottom.insert(Tile::Numbered(p));
                 }
 
+                // Check bottom edge
                 if tiles[p].bottom_edge().is_compatible(tile.top_edge()) {
                     rules[p].bottom.insert(Tile::Numbered(i));
                     top.insert(Tile::Numbered(p));

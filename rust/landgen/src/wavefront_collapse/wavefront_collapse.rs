@@ -8,14 +8,10 @@ use vec2d::Vec2D;
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum Tile {
     Empty,
-    Outside,
+    OutsideBegin,
+    OutsideFill,
+    OutsideEnd,
     Numbered(usize),
-}
-
-impl Default for Tile {
-    fn default() -> Self {
-        Tile::Outside
-    }
 }
 
 #[derive(Debug)]
@@ -83,11 +79,38 @@ impl WavefrontCollapse {
             x
         };
 
-        self.grid.get(y, x).copied().unwrap_or_default()
+        self.grid.get(y, x).copied().unwrap_or_else(|| {
+            let x_out = x >= self.grid.width();
+
+            if x_out {
+                let y_at_begin = y == 0;
+                let y_at_end = y.wrapping_add(1) == self.grid.height();
+                if y_at_begin {
+                    Tile::OutsideBegin
+                } else if y_at_end {
+                    Tile::OutsideEnd
+                } else {
+                    Tile::OutsideFill
+                }
+            } else {
+                // if not x, then it is y
+
+                let x_at_begin = x == 0;
+                let x_at_end = x.wrapping_add(1) == self.grid.width();
+
+                if x_at_begin {
+                    Tile::OutsideBegin
+                } else if x_at_end {
+                    Tile::OutsideEnd
+                } else {
+                    Tile::OutsideFill
+                }
+            }
+        })
     }
 
     fn collapse_step(&mut self, random_numbers: &mut impl Rng) -> bool {
-        let mut tiles_to_collapse = (usize::max_value(), Vec::new());
+        let mut tiles_to_collapse = (usize::MAX, Vec::new());
 
         // Iterate through the tiles in the land
         for x in 0..self.grid.width() {
@@ -96,8 +119,8 @@ impl WavefrontCollapse {
 
                 if let Tile::Empty = current_tile {
                     // calc entropy
-                    let right_tile = self.get_tile(y, x + 1);
-                    let bottom_tile = self.get_tile(y + 1, x);
+                    let right_tile = self.get_tile(y, x.wrapping_add(1));
+                    let bottom_tile = self.get_tile(y.wrapping_add(1), x);
                     let left_tile = self.get_tile(y, x.wrapping_sub(1));
                     let top_tile = self.get_tile(y.wrapping_sub(1), x);
 
