@@ -108,11 +108,17 @@ pub unsafe extern "C" fn generate_wfc_templated_game_field(
     let mut map_gen = MapGenerator::<WfcTemplate>::new(data_path);
     map_gen.import_yaml_templates(&yaml_templates);
 
-    let params = LandGenerationParameters::new(0u16, 0x8000u16, feature_size, false, false);
     let template = map_gen
         .get_template(template_type, &mut random_numbers_gen)
         .expect("Error reading wfc templates file")
         .clone();
+    let (zero, basic) =
+        if template.is_negative || (template.can_invert && random_numbers_gen.get_random(2) == 0) {
+            (0x8000u16, 0u16)
+        } else {
+            (0u16, 0x8000u16)
+        };
+    let params = LandGenerationParameters::new(zero, basic, feature_size, false, false);
     let landgen = map_gen.build_generator(template);
     let collision = landgen.generate_land(&params, &mut random_numbers_gen);
     let size = collision.size().size();

@@ -56,6 +56,8 @@ pub struct TemplateDescription {
     pub size: Size,
     pub tiles: Vec<TileDescription>,
     pub edges: NonStrictComplexEdgesDescription,
+    pub can_invert: bool,
+    pub is_negative: bool,
     pub wrap: bool,
 }
 

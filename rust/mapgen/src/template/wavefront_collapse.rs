@@ -100,6 +100,8 @@ impl From<&TemplateDesc> for TemplateDescription {
                 .map(|TileDescriptionHelper(t)| t.clone())
                 .collect(),
             wrap: desc.wrap,
+            can_invert: desc.can_invert,
+            is_negative: desc.is_negative,
             edges: NonStrictComplexEdgesDescription {
                 top,
                 right,
