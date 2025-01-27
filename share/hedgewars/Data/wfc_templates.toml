@@ -6,18 +6,11 @@
 name = "120_filled.png"
 edges = [ "f", "f", "f", "f" ]
 is_negative = true
-can_mirror = false
-can_flip = false
-can_rotate90 = false
-can_rotate180 = false
-can_rotate270 = false
 
 [[tiles.round120]]
 name = "120_bar.png"
 edges = [ "f", "fe", "e", "ef" ]
 is_negative = true
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true        
@@ -26,18 +19,11 @@ can_rotate270 = true
 name = "120_filled.png"
 edges = [ "e", "e", "e", "e" ]
 is_negative = false
-can_mirror = false
-can_flip = false
-can_rotate90 = false
-can_rotate180 = false
-can_rotate270 = false
 
 [[tiles.round120]]
 name = "120_corner.png"
 edges = [ "fe", "e", "e", "ef" ]
 is_negative = true
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -46,8 +32,6 @@ can_rotate270 = true
 name = "120_corner.png"
 edges = [ "ef", "f", "f", "fe" ]
 is_negative = false
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -58,16 +42,11 @@ edges = [ "fe", "ef", "fe", "ef" ]
 is_negative = true
 can_mirror = true
 can_flip = false
-can_rotate90 = false
-can_rotate180 = false
-can_rotate270 = false
 
 # Rooms tiles
 [[tiles.Rooms]]
 name = "bend_120.png"
 edges = [ "fee", "fee", "f", "f" ]
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -75,8 +54,6 @@ can_rotate270 = true
 [[tiles.Rooms]]
 name = "corner_120.png"
 edges = [ "eef", "fee", "e", "e" ]
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -84,8 +61,6 @@ can_rotate270 = true
 [[tiles.Rooms]]
 name = "corridor_120.png"
 edges = [ "efe", "e", "e", "efe" ]
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = false
 can_rotate270 = false
@@ -93,8 +68,6 @@ can_rotate270 = false
 [[tiles.Rooms]]
 name = "door_120.png"
 edges = [ "f", "fee", "efe", "eef" ]
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -102,17 +75,10 @@ can_rotate270 = true
 [[tiles.Rooms]]
 name = "empty_120.png"
 edges = [ "f", "f", "f", "f" ]
-can_mirror = false
-can_flip = false
-can_rotate90 = false
-can_rotate180 = false
-can_rotate270 = false
 
 [[tiles.Rooms]]
 name = "side_120.png"
 edges = [ "e", "eef", "f", "fee" ]
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -120,8 +86,6 @@ can_rotate270 = true
 [[tiles.Rooms]]
 name = "t_120.png"
 edges = [ "e", "efe", "efe", "efe" ]
-can_mirror = false
-can_flip = false
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -138,11 +102,27 @@ can_rotate270 = true
 [[tiles.Rooms]]
 name = "wall_120.png"
 edges = [ "e", "e", "e", "e" ]
-can_mirror = false
+
+# spikes tiles
+[[tiles.spikes]]
+name = "spikes_filled.png"
+edges = [ "e", "e", "e", "e" ]
+is_negative = true
+
+[[tiles.spikes]]
+name = "spikes_filled.png"
+edges = [ "e", "f", "e", "f" ]
+is_negative = true
+
+[[tiles.spikes]]
+name = "spikes_filled.png"
+edges = [ "f", "f", "f", "f" ]
+
+[[tiles.spikes]]
+name = "spikes_triangle.png"
+edges = [ "e", "f", "f", "e" ]
+can_mirror = true
 can_flip = false
-can_rotate90 = false
-can_rotate180 = false
-can_rotate270 = false
 
 ################ EDGES ################
 [edges.bottom_row]
@@ -154,6 +134,10 @@ left = { begin = "e", fill = "e", end = "e" }
 [edges.top_bottom]
 top.fill = "f"
 bottom.fill = "f"
+
+[edges.full_top_bottom]
+#top = { begin = "f", fill = "f", end = "f" }
+bottom = { begin = "f", fill = "f", end = "f" }
 
 ################ TEMPLATES ################
 [[templates]]
@@ -217,7 +201,7 @@ edges = "bottom_row"
 tiles = [ "round120" ]
 
 [[templates]]
-# 4
+# 5
 width = 3960
 height = 1920
 can_invert = false
@@ -228,6 +212,16 @@ wrap = true
 edges = "top_bottom"
 tiles = [ "Rooms" ]
 
+[[templates]]
+# 6
+width = 2400
+height = 1600
+can_invert = false
+put_girders = true
+max_hedgehogs = 40
+wrap = true
+edges = "full_top_bottom"
+tiles = [ "spikes" ]
 
 [template_types]
 small = [ 2 ]
