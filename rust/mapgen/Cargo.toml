@@ -8,7 +8,6 @@ edition = "2021"
 vec2d = { path = "../vec2d" }
 land2d = { path = "../land2d" }
 landgen = { path = "../landgen" }
-lfprng = { path = "../lfprng" }
 integral-geometry = { path = "../integral-geometry" }
 
 rand = "0.8"
@@ -16,3 +15,4 @@ serde = "1.0"
 serde_yaml = "0.9"
 serde_derive = "1.0"
 png = "0.17"
+toml = "0.8"

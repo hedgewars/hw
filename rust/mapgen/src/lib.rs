@@ -160,7 +160,7 @@ impl MapGenerator<OutlineTemplate> {
 
 impl MapGenerator<WfcTemplate> {
     pub fn import_yaml_templates(&mut self, text: &str) {
-        let mut desc: WfcTemplateCollectionDesc = serde_yaml::from_str(text).unwrap();
+        let mut desc: WfcTemplateCollectionDesc = toml::from_str(text).unwrap();
         let templates = std::mem::take(&mut desc.templates);
         self.templates = desc
             .template_types
@@ -168,7 +168,7 @@ impl MapGenerator<WfcTemplate> {
             .map(|(size, indices)| {
                 (
                     TemplateType(size),
-                    indices.iter().map(|i| (&templates[*i]).into()).collect(),
+                    indices.iter().map(|i| (&templates[*i]).to_template(&desc.tiles, &desc.edges)).collect(),
                 )
             })
             .collect();

@@ -1,0 +1,237 @@
+# Templates for wavefront collapse map generator in hedgewars
+
+################ TILES ################
+# round120 tiles
+[[tiles.round120]]
+name = "120_filled.png"
+edges = [ "f", "f", "f", "f" ]
+is_negative = true
+can_mirror = false
+can_flip = false
+can_rotate90 = false
+can_rotate180 = false
+can_rotate270 = false
+
+[[tiles.round120]]
+name = "120_bar.png"
+edges = [ "f", "fe", "e", "ef" ]
+is_negative = true
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true        
+
+[[tiles.round120]]
+name = "120_filled.png"
+edges = [ "e", "e", "e", "e" ]
+is_negative = false
+can_mirror = false
+can_flip = false
+can_rotate90 = false
+can_rotate180 = false
+can_rotate270 = false
+
+[[tiles.round120]]
+name = "120_corner.png"
+edges = [ "fe", "e", "e", "ef" ]
+is_negative = true
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.round120]]
+name = "120_corner.png"
+edges = [ "ef", "f", "f", "fe" ]
+is_negative = false
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.round120]]
+name = "120_two_corners.png"
+edges = [ "fe", "ef", "fe", "ef" ]
+is_negative = true
+can_mirror = true
+can_flip = false
+can_rotate90 = false
+can_rotate180 = false
+can_rotate270 = false
+
+# Rooms tiles
+[[tiles.Rooms]]
+name = "bend_120.png"
+edges = [ "fee", "fee", "f", "f" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Rooms]]
+name = "corner_120.png"
+edges = [ "eef", "fee", "e", "e" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Rooms]]
+name = "corridor_120.png"
+edges = [ "efe", "e", "e", "efe" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = false
+can_rotate270 = false
+
+[[tiles.Rooms]]
+name = "door_120.png"
+edges = [ "f", "fee", "efe", "eef" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Rooms]]
+name = "empty_120.png"
+edges = [ "f", "f", "f", "f" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = false
+can_rotate180 = false
+can_rotate270 = false
+
+[[tiles.Rooms]]
+name = "side_120.png"
+edges = [ "e", "eef", "f", "fee" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Rooms]]
+name = "t_120.png"
+edges = [ "e", "efe", "efe", "efe" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Rooms]]
+name = "turn_120.png"
+edges = [ "efe", "efe", "e", "e" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Rooms]]
+name = "wall_120.png"
+edges = [ "e", "e", "e", "e" ]
+can_mirror = false
+can_flip = false
+can_rotate90 = false
+can_rotate180 = false
+can_rotate270 = false
+
+################ EDGES ################
+[edges.bottom_row]
+top = { begin = "e", fill = "e", end = "e" }
+right = { begin = "e", fill = "e", end = "e" }
+bottom = { begin = "ef", fill = "f", end = "fe" }
+left = { begin = "e", fill = "e", end = "e" }
+
+[edges.top_bottom]
+top.fill = "f"
+bottom.fill = "f"
+
+################ TEMPLATES ################
+[[templates]]
+# 0
+width = 3960
+height = 1920
+can_invert = false
+is_negative = false
+put_girders = true
+max_hedgehogs = 40
+wrap = true
+edges = "top_bottom"
+tiles = [ "round120" ]
+
+[[templates]]
+# 1
+width = 3960
+height = 1920
+can_invert = false
+is_negative = false
+put_girders = true
+max_hedgehogs = 40
+wrap = false
+edges = "bottom_row"
+tiles = [ "round120" ]
+
+[[templates]]
+# 2
+width = 1200
+height = 600
+can_invert = false
+is_negative = false
+put_girders = true
+max_hedgehogs = 24
+wrap = false
+edges = "bottom_row"
+tiles = [ "round120" ]
+
+[[templates]]
+# 3
+width = 720
+height = 7920
+can_invert = false
+is_negative = false
+put_girders = true
+max_hedgehogs = 64
+wrap = false
+edges = "bottom_row"
+tiles = [ "round120" ]
+
+[[templates]]
+# 4
+width = 2200
+height = 960
+can_invert = false
+is_negative = false
+put_girders = true
+max_hedgehogs = 24
+wrap = false
+edges = "bottom_row"
+tiles = [ "round120" ]
+
+[[templates]]
+# 4
+width = 3960
+height = 1920
+can_invert = false
+is_negative = true
+put_girders = true
+max_hedgehogs = 40
+wrap = true
+edges = "top_bottom"
+tiles = [ "Rooms" ]
+
+
+[template_types]
+small = [ 2 ]
+medium = [ 4 ]
+large = [ 1 ]
+cavern = [ 0, 5 ]
+wacky = [ 3 ]

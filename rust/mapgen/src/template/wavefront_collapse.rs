@@ -35,37 +35,42 @@ pub struct NonStrictComplexEdgesDesc {
 pub struct TemplateDesc {
     pub width: usize,
     pub height: usize,
-    pub can_invert: bool,
-    pub is_negative: bool,
-    pub put_girders: bool,
+    pub can_invert: Option<bool>,
+    pub is_negative: Option<bool>,
+    pub put_girders: Option<bool>,
     pub max_hedgehogs: u8,
-    pub wrap: bool,
-    pub edges: Option<NonStrictComplexEdgesDesc>,
-    pub tiles: Vec<TileDesc>,
+    pub wrap: Option<bool>,
+    pub edges: Option<String>,
+    pub tiles: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct TemplateCollectionDesc {
     pub templates: Vec<TemplateDesc>,
+    pub tiles: HashMap<String, Vec<TileDesc>>,
+    pub edges: HashMap<String, NonStrictComplexEdgesDesc>,
     pub template_types: HashMap<String, Vec<usize>>,
 }
 
-impl From<&TemplateDesc> for TemplateDescription {
-    fn from(desc: &TemplateDesc) -> Self {
+impl TemplateDesc {
+    pub fn to_template(&self, tiles: &HashMap<String, Vec<TileDesc>>, edges: &HashMap<String, NonStrictComplexEdgesDesc>) -> TemplateDescription {
         let [top, right, bottom, left]: [Option<ComplexEdgeDescription>; 4] =
-            if let Some(edges) = &desc.edges {
+            if let Some(edges_name) = &self.edges {
+                let edges = edges.get(edges_name).expect("missing template edges");
                 [&edges.top, &edges.right, &edges.bottom, &edges.left]
                     .map(|e| e.as_ref().map(Into::into))
             } else {
                 [None, None, None, None]
             };
 
-        Self {
-            size: Size::new(desc.width, desc.height),
-            tiles: desc.tiles.iter().map(|t| t.into()).collect(),
-            wrap: desc.wrap,
-            can_invert: desc.can_invert,
-            is_negative: desc.is_negative,
+        let tiles = self.tiles.iter().flat_map(|t| tiles.get(t).expect("missing template tiles")).collect::<Vec<_>>();
+
+        TemplateDescription {
+            size: Size::new(self.width, self.height),
+            tiles: tiles.into_iter().map(|t| t.into()).collect(),
+            wrap: self.wrap.unwrap_or(false),
+            can_invert: self.can_invert.unwrap_or(false),
+            is_negative: self.is_negative.unwrap_or(false),
             edges: NonStrictComplexEdgesDescription {
                 top,
                 right,

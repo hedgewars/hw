@@ -103,7 +103,7 @@ pub unsafe extern "C" fn generate_wfc_templated_game_field(
     let mut random_numbers_gen = LaggedFibonacciPRNG::new(seed.as_bytes());
 
     let yaml_templates =
-        fs::read_to_string(data_path.join(Path::new("wfc_templates.yaml")).as_path())
+        fs::read_to_string(data_path.join(Path::new("wfc_templates.toml")).as_path())
             .expect("Error reading map templates file");
     let mut map_gen = MapGenerator::<WfcTemplate>::new(data_path);
     map_gen.import_yaml_templates(&yaml_templates);
