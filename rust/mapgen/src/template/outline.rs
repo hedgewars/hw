@@ -64,7 +64,8 @@ impl From<TemplateDesc> for OutlineTemplate {
                 })
                 .collect(),
             walls: desc
-                .walls.unwrap_or_default()
+                .walls
+                .unwrap_or_default()
                 .iter()
                 .map(|v| {
                     v.iter()

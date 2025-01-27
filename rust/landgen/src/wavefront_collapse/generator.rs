@@ -364,3 +364,29 @@ impl From<&EdgeDescription> for Edge<String> {
         }
     }
 }
+
+impl<T: AsRef<str>> From<T> for EdgeDescription {
+    fn from(val: T) -> Self {
+        use std::cmp::Ordering;
+
+        let reversed = val.as_ref().chars().rev().collect::<String>();
+
+        match val.as_ref().cmp(&reversed) {
+            Ordering::Less => EdgeDescription {
+                name: val.as_ref().to_owned(),
+                symmetrical: Some(false),
+                reversed: Some(false),
+            },
+            Ordering::Equal => EdgeDescription {
+                name: reversed,
+                symmetrical: Some(true),
+                reversed: Some(false),
+            },
+            Ordering::Greater => EdgeDescription {
+                name: reversed,
+                symmetrical: Some(false),
+                reversed: Some(true),
+            },
+        }
+    }
+}

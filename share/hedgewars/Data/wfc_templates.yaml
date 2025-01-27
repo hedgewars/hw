@@ -12,28 +12,12 @@ templates:
     wrap: true
     edges:
       bottom:
-        fill:
-          name: "ff"
-          symmetrical: true
+        fill: "ff"
       top:
-        fill:
-          name: "ff"
-          symmetrical: true
+        fill: "ff"
     tiles: &template_00_tiles
       - name: "120_filled.png"
-        edges:
-          top:
-            name: "ff"
-            symmetrical: true
-          right:
-            name: "ff"
-            symmetrical: true
-          bottom:
-            name: "ff"
-            symmetrical: true
-          left:
-            name: "ff"
-            symmetrical: true
+        edges: ["ff", "ff", "ff", "ff"]
         is_negative: true
         can_mirror: false
         can_flip: false
@@ -41,18 +25,7 @@ templates:
         can_rotate180: false
         can_rotate270: false
       - name: "120_bar.png"
-        edges:
-          top:
-            name: "ff"
-            symmetrical: true
-          right:
-            name: "fe"
-          bottom:
-            name: "ee"
-            symmetrical: true
-          left:
-            name: "fe"
-            reversed: true
+        edges: ["ff", "fe", "ee", "ef"]
         is_negative: true
         can_mirror: false
         can_flip: false
@@ -60,19 +33,7 @@ templates:
         can_rotate180: true
         can_rotate270: true        
       - name: "120_filled.png"
-        edges:
-          top:
-            name: "ee"
-            symmetrical: true
-          right:
-            name: "ee"
-            symmetrical: true
-          bottom:
-            name: "ee"
-            symmetrical: true
-          left:
-            name: "ee"
-            symmetrical: true
+        edges: ["ee", "ee", "ee", "ee"]
         is_negative: false
         can_mirror: false
         can_flip: false
@@ -80,18 +41,7 @@ templates:
         can_rotate180: false
         can_rotate270: false
       - name: "120_corner.png"
-        edges:
-          top:
-            name: "fe"
-          right:
-            name: "ee"
-            symmetrical: true
-          bottom:
-            name: "ee"
-            symmetrical: true
-          left:
-            name: "fe"
-            reversed: true
+        edges: ["fe", "ee", "ee", "ef"]
         is_negative: true
         can_mirror: false
         can_flip: false
@@ -99,18 +49,7 @@ templates:
         can_rotate180: true
         can_rotate270: true
       - name: "120_corner.png"
-        edges:
-          top:
-            name: "fe"
-            reversed: true
-          right:
-            name: "ff"
-            symmetrical: true
-          bottom:
-            name: "ff"
-            symmetrical: true
-          left:
-            name: "fe"
+        edges: ["ef", "ff", "ff", "fe"]
         is_negative: false
         can_mirror: false
         can_flip: false
@@ -118,17 +57,7 @@ templates:
         can_rotate180: true
         can_rotate270: true
       - name: "120_two_corners.png"
-        edges:
-          top:
-            name: "fe"
-          right:
-            name: "fe"
-            reversed: true
-          bottom:
-            name: "fe"
-          left:
-            name: "fe"
-            reversed: true
+        edges: ["fe", "ef", "fe", "ef"]
         is_negative: true
         can_mirror: true
         can_flip: false
@@ -146,44 +75,21 @@ templates:
     wrap: false
     edges: &open_edges
       top:
-        begin:
-          name: "ee"
-          symmetrical: true
-        fill:
-          name: "ee"
-          symmetrical: true
-        end:
-          name: "ee"
-          symmetrical: true
+        begin: "ee"
+        fill: "ee"
+        end: "ee"
       right:
-        begin:
-          name: "ee"
-          symmetrical: true
-        fill:
-          name: "ee"
-          symmetrical: true
-        end:
-          name: "ee"
-          symmetrical: true
+        begin: "ee"
+        fill: "ee"
+        end: "ee"
       bottom:
-        begin:
-          name: "fe"
-          reversed: true
-        fill:
-          name: "ff"
-          symmetrical: true
-        end:
-          name: "fe"
+        begin: "ef"
+        fill: "ff"
+        end: "fe"
       left:
-        begin:
-          name: "ee"
-          symmetrical: true
-        fill:
-          name: "ee"
-          symmetrical: true
-        end:
-          name: "ee"
-          symmetrical: true
+        begin: "ee"
+        fill: "ee"
+        end: "ee"
     tiles: *template_00_tiles
 
   - &template_02
@@ -230,172 +136,66 @@ templates:
     wrap: true
     edges:
       bottom:
-        fill:
-          name: "fff"
-          symmetrical: true
+        fill: "ff"
     tiles: &rooms_tiles
       - name: "bend_120.png"
-        edges:
-          top:
-            name: "fee"
-          right:
-            name: "fee"
-            reversed: true
-          bottom:
-            name: "fff"
-            symmetrical: true
-          left:
-            name: "fff"
-            symmetrical: true
+        edges: ["fee", "fee", "fff", "fff"]
         can_mirror: false
         can_flip: false
         can_rotate90: true
         can_rotate180: true
         can_rotate270: true
       - name: "corner_120.png"
-        edges:
-          top:
-            name: "fee"
-            reversed: true
-          right:
-            name: "fee"
-          bottom:
-            name: "eee"
-            symmetrical: true
-          left:
-            name: "eee"
-            symmetrical: true
+        edges: ["eef", "fee", "eee", "eee"]
         can_mirror: false
         can_flip: false
         can_rotate90: true
         can_rotate180: true
         can_rotate270: true
       - name: "corridor_120.png"
-        edges:
-          top:
-            name: "efe"
-            symmetrical: true
-          right:
-            name: "eee"
-            symmetrical: true
-          bottom:
-            name: "eee"
-            symmetrical: true
-          left:
-            name: "efe"
-            symmetrical: true
+        edges: ["efe", "eee", "eee", "efe"]
         can_mirror: false
         can_flip: false
         can_rotate90: true
         can_rotate180: false
         can_rotate270: false
       - name: "door_120.png"
-        edges:
-          top:
-            name: "fff"
-            symmetrical: true
-          right:
-            name: "fee"
-          bottom:
-            name: "efe"
-            symmetrical: true
-          left:
-            name: "fee"
-            reversed: true
+        edges: ["fff", "fee", "efe", "eef"]
         can_mirror: false
         can_flip: false
         can_rotate90: true
         can_rotate180: true
         can_rotate270: true
       - name: "empty_120.png"
-        edges:
-          top:
-            name: "fff"
-            symmetrical: true
-          right:
-            name: "fff"
-            symmetrical: true
-          bottom:
-            name: "fff"
-            symmetrical: true
-          left:
-            name: "fff"
-            symmetrical: true
+        edges: ["fff", "fff", "fff", "fff"]
         can_mirror: false
         can_flip: false
         can_rotate90: false
         can_rotate180: false
         can_rotate270: false
       - name: "side_120.png"
-        edges:
-          top:
-            name: "eee"
-            symmetrical: true
-          right:
-            name: "fee"
-            reversed: true
-          bottom:
-            name: "fff"
-            symmetrical: true
-          left:
-            name: "fee"
+        edges: ["eee", "eef", "fff", "fee"]
         can_mirror: false
         can_flip: false
         can_rotate90: true
         can_rotate180: true
         can_rotate270: true
       - name: "t_120.png"
-        edges:
-          top:
-            name: "eee"
-            symmetrical: true
-          right:
-            name: "efe"
-            symmetrical: true
-          bottom:
-            name: "efe"
-            symmetrical: true
-          left:
-            name: "efe"
-            symmetrical: true
+        edges: ["eee", "efe", "efe", "efe"]
         can_mirror: false
         can_flip: false
         can_rotate90: true
         can_rotate180: true
         can_rotate270: true
       - name: "turn_120.png"
-        edges:
-          top:
-            name: "efe"
-            symmetrical: true
-          right:
-            name: "efe"
-            symmetrical: true
-          bottom:
-            name: "eee"
-            symmetrical: true
-          left:
-            name: "eee"
-            symmetrical: true
+        edges: ["efe", "efe", "eee", "eee"]
         can_mirror: false
         can_flip: false
         can_rotate90: true
         can_rotate180: true
         can_rotate270: true
       - name: "wall_120.png"
-        edges:
-          top:
-            name: "eee"
-            symmetrical: true
-          right:
-            name: "eee"
-            symmetrical: true
-          bottom:
-            name: "eee"
-            symmetrical: true
-          left:
-            name: "eee"
-            symmetrical: true
+        edges: ["eee", "eee", "eee", "eee"]
         can_mirror: false
         can_flip: false
         can_rotate90: false

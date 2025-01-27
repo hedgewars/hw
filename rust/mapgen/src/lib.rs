@@ -2,21 +2,21 @@ mod template;
 pub mod theme;
 
 use self::theme::Theme;
+use crate::template::maze::TemplateCollectionDesc as MazeTemplateCollectionDesc;
 use crate::template::outline::TemplateCollectionDesc as OutlineTemplateCollectionDesc;
 use crate::template::wavefront_collapse::TemplateCollectionDesc as WfcTemplateCollectionDesc;
-use crate::template::maze::TemplateCollectionDesc as MazeTemplateCollectionDesc;
 
 use std::path::{Path, PathBuf};
 
 use land2d::Land2D;
 use landgen::{
+    maze::{MazeLandGenerator, MazeTemplate},
     outline_template_based::{
         outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
     },
     wavefront_collapse::generator::{
         TemplateDescription as WfcTemplate, WavefrontCollapseLandGenerator,
     },
-    maze::{MazeTemplate, MazeLandGenerator},
     LandGenerationParameters, LandGenerator,
 };
 use rand::{seq::SliceRandom, Rng};
@@ -286,9 +286,9 @@ fn tex_row_copy<LandT>(
 
 #[cfg(test)]
 mod tests {
-    use std::path::Path;
     use crate::{MapGenerator, OutlineTemplate, TemplateType};
     use rand::thread_rng;
+    use std::path::Path;
 
     #[test]
     fn simple_load() {

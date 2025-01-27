@@ -6,32 +6,9 @@ use serde_derive::Deserialize;
 use std::collections::hash_map::HashMap;
 
 #[derive(Debug, Deserialize)]
-#[serde(remote = "EdgeDescription")]
-pub struct EdgeDesc {
-    pub name: String,
-    pub reversed: Option<bool>,
-    pub symmetrical: Option<bool>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(remote = "EdgesDescription")]
-pub struct EdgesDesc {
-    #[serde(with = "EdgeDesc")]
-    pub top: EdgeDescription,
-    #[serde(with = "EdgeDesc")]
-    pub right: EdgeDescription,
-    #[serde(with = "EdgeDesc")]
-    pub bottom: EdgeDescription,
-    #[serde(with = "EdgeDesc")]
-    pub left: EdgeDescription,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(remote = "TileDescription")]
 pub struct TileDesc {
     pub name: String,
-    #[serde(with = "EdgesDesc")]
-    pub edges: EdgesDescription,
+    pub edges: [String; 4],
     pub is_negative: Option<bool>,
     pub can_flip: Option<bool>,
     pub can_mirror: Option<bool>,
@@ -41,15 +18,10 @@ pub struct TileDesc {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct TileDescriptionHelper(#[serde(with = "TileDesc")] TileDescription);
-#[derive(Debug, Deserialize)]
-pub struct EdgeDescriptionHelper(#[serde(with = "EdgeDesc")] EdgeDescription);
-
-#[derive(Debug, Deserialize)]
 pub struct ComplexEdgeDesc {
-    pub begin: Option<EdgeDescriptionHelper>,
-    pub fill: Option<EdgeDescriptionHelper>,
-    pub end: Option<EdgeDescriptionHelper>,
+    pub begin: Option<String>,
+    pub fill: Option<String>,
+    pub end: Option<String>,
 }
 #[derive(Debug, Deserialize)]
 pub struct NonStrictComplexEdgesDesc {
@@ -69,7 +41,7 @@ pub struct TemplateDesc {
     pub max_hedgehogs: u8,
     pub wrap: bool,
     pub edges: Option<NonStrictComplexEdgesDesc>,
-    pub tiles: Vec<TileDescriptionHelper>,
+    pub tiles: Vec<TileDesc>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -80,25 +52,17 @@ pub struct TemplateCollectionDesc {
 
 impl From<&TemplateDesc> for TemplateDescription {
     fn from(desc: &TemplateDesc) -> Self {
-        let [top, right, bottom, left]:[Option<ComplexEdgeDescription>; 4] = if let Some(edges) = &desc.edges {
-            [
-                &edges.top,
-                &edges.right,
-                &edges.bottom,
-                &edges.left,
-            ]
-            .map(|e| e.as_ref().map(Into::into))
-        } else {
-            [None, None, None, None]
-        };
+        let [top, right, bottom, left]: [Option<ComplexEdgeDescription>; 4] =
+            if let Some(edges) = &desc.edges {
+                [&edges.top, &edges.right, &edges.bottom, &edges.left]
+                    .map(|e| e.as_ref().map(Into::into))
+            } else {
+                [None, None, None, None]
+            };
 
         Self {
             size: Size::new(desc.width, desc.height),
-            tiles: desc
-                .tiles
-                .iter()
-                .map(|TileDescriptionHelper(t)| t.clone())
-                .collect(),
+            tiles: desc.tiles.iter().map(|t| t.into()).collect(),
             wrap: desc.wrap,
             can_invert: desc.can_invert,
             is_negative: desc.is_negative,
@@ -112,12 +76,34 @@ impl From<&TemplateDesc> for TemplateDescription {
     }
 }
 
+impl From<&TileDesc> for TileDescription {
+    fn from(desc: &TileDesc) -> Self {
+        let [top, right, bottom, left]: [EdgeDescription; 4] = desc.edges.clone().map(|e| e.into());
+
+        Self {
+            name: desc.name.clone(),
+            edges: EdgesDescription {
+                top,
+                right,
+                bottom,
+                left,
+            },
+            is_negative: desc.is_negative,
+            can_flip: desc.can_flip,
+            can_mirror: desc.can_mirror,
+            can_rotate90: desc.can_rotate90,
+            can_rotate180: desc.can_rotate180,
+            can_rotate270: desc.can_rotate270,
+        }
+    }
+}
+
 impl From<&ComplexEdgeDesc> for ComplexEdgeDescription {
     fn from(value: &ComplexEdgeDesc) -> Self {
         Self {
-            begin: value.begin.as_ref().map(|EdgeDescriptionHelper(e)| e.clone()),
-            fill: value.fill.as_ref().map(|EdgeDescriptionHelper(e)| e.clone()),
-            end: value.end.as_ref().map(|EdgeDescriptionHelper(e)| e.clone()),
+            begin: value.begin.as_ref().map(|e| e.into()),
+            fill: value.fill.as_ref().map(|e| e.into()),
+            end: value.end.as_ref().map(|e| e.into()),
         }
     }
 }
