@@ -11,7 +11,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 find_program(CLANG_EXECUTABLE
-        NAMES clang-mp-3.3 clang-mp-3.2 clang-mp-3.1 clang-mp-3.0 clang
+        NAMES clang-mp-3.3 clang-mp-3.2 clang-mp-3.1 clang-mp-3.0 clang-20 clang-19 clang-18 clang-17 clang-16 clang-15 clang-14 clang-13 clang-12 clang-11 clang-10 clang-9 clang-8 clang-7 clang-6.0 clang
         PATHS /opt/local/bin /usr/local/bin /usr/bin)
 
 if (CLANG_EXECUTABLE)
