@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QJsonArray>
 #include <QObject>
 #include <QPainter>
 #include <QQmlEngine>
@@ -15,21 +16,22 @@ struct Primitive {
   QList<QPointF> points;                    // polygon
   double radius1{}, radius2{}, rotation{};  // ellipse
 
-  explicit Primitive(QSizeF size, const QList<QColor>& palette);
+  explicit Primitive(QSizeF size, const QJsonObject& atom);
   double cost() const;
 };
 
 struct Solution {
   QList<Primitive> primitives;
-  double fitness;
+  double fitness{1e64};
   QSizeF size;
   QString fileName;
+  quint32 gen;
 
-  explicit Solution(QSizeF size, const QList<QColor>& palette);
+  explicit Solution(QSizeF size, const QJsonArray& atoms);
   void calculateFitness(const QImage& target);
   void render(const QString& fileName);
   double cost() const;
-  void mutate(const QList<QColor>& palette);
+  void mutate();
   void crossover(Solution &other);
 };
 
@@ -37,17 +39,14 @@ class Tracer : public QObject {
   Q_OBJECT
   QML_ELEMENT
 
-  Q_PROPERTY(QList<QColor> palette READ palette WRITE setPalette NOTIFY
-                 paletteChanged FINAL)
+  Q_PROPERTY(
+      QJsonArray atoms READ atoms WRITE setAtoms NOTIFY atomsChanged FINAL)
   Q_PROPERTY(
       double bestSolution READ bestSolution NOTIFY bestSolutionChanged FINAL)
   Q_PROPERTY(QStringList solutions READ solutions NOTIFY solutionsChanged FINAL)
 
  public:
   explicit Tracer(QObject *parent = nullptr);
-
-  QList<QColor> palette() const;
-  void setPalette(const QList<QColor>& newPalette);
 
   double bestSolution() const;
 
@@ -56,18 +55,21 @@ class Tracer : public QObject {
 
   QStringList solutions() const;
 
+  QJsonArray atoms() const;
+  void setAtoms(const QJsonArray& newAtoms);
+
  Q_SIGNALS:
-  void paletteChanged();
   void bestSolutionChanged();
   void solutionsChanged();
+  void atomsChanged();
 
  private:
-  QList<QColor> palette_;
   double bestSolution_;
   QStringList solutions_;
   QList<Solution> generation_;
   QTemporaryDir tempDir_;
   QImage referenceImage_;
+  QJsonArray atoms_;
 
   QString newFileName();
 };

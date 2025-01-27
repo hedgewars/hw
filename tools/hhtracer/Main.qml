@@ -36,6 +36,10 @@ ApplicationWindow {
       Label {
         text: "Best: %1".arg(tracer.bestSolution)
       }
+
+      Label {
+        text: "Gen: %1".arg(tracer.generation)
+      }
     }
   }
 
@@ -45,16 +49,42 @@ ApplicationWindow {
     nameFilters: ["Hedgehog images (*.png)"]
 
     onAccepted: {
-      console.log("Hello")
+      console.log("Hello");
       baseImage.source = selectedFile;
       tracer.start(fileDialog.selectedFile);
+      tracer.generation = 0;
     }
   }
 
   Tracer {
     id: tracer
-  }
 
+    property int generation: 0
+
+    atoms: [
+      {
+        "type": "polygon",
+        "length": 3,
+        "pens": ["#9f086e", "#54a2fa"],
+        "brushes": ["#2c78d2", "#54a2fa"]
+      },
+      {
+        "type": "circle",
+        "pens": ["#9f086e", "#f29ce7"],
+        "brushes": ["#d66bcc",  "#f29ce7"]
+      },
+      {
+        "type": "circle",
+        "pens": ["#000000"],
+        "brushes": [ "#000000"]
+      },
+      {
+        "type": "circle",
+        "pens": ["#ffffff"],
+        "brushes": [ "#ffffff"]
+      }
+    ]
+  }
 
   Timer {
     id: stepTimer
@@ -64,7 +94,15 @@ ApplicationWindow {
     running: false
     triggeredOnStart: true
 
-    onTriggered: tracer.step()
+    onTriggered: {
+      tracer.generation = tracer.generation + 1;
+      tracer.step();
+    }
+  }
+
+  Rectangle {
+    anchors.fill: parent
+    color: "#a0c0a0"
   }
 
   ColumnLayout {
@@ -79,24 +117,24 @@ ApplicationWindow {
     }
 
     GridLayout {
-      Layout.fillWidth: true
       Layout.fillHeight: true
-      columns: 50
+      Layout.fillWidth: true
+      columns: 30
 
       Repeater {
         model: tracer.solutions
 
         Image {
-          width: 32
+          fillMode: Image.PreserveAspectFit
           height: 32
           source: "file://" + modelData
-          fillMode: Image.PreserveAspectFit
+          width: 32
 
           Rectangle {
-            border.width: 1
-            border.color: "black"
-            color: "transparent"
             anchors.fill: parent
+            border.color: "black"
+            border.width: 1
+            color: "transparent"
           }
         }
       }

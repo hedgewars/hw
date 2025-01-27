@@ -1,24 +1,10 @@
 #include "tracer.h"
 
+#include <QJsonObject>
 #include <QRandomGenerator>
 #include <QSvgGenerator>
 
-Tracer::Tracer(QObject *parent)
-    : QObject{parent},
-      palette_{{Qt::black,
-                Qt::white,
-                {"#9f086e"},
-                {"#f29ce7"},
-                {"#54a2fa"},
-                {"#2c78d2"}}} {}
-
-QList<QColor> Tracer::palette() const { return palette_; }
-
-void Tracer::setPalette(const QList<QColor> &newPalette) {
-  if (palette_ == newPalette) return;
-  palette_ = newPalette;
-  emit paletteChanged();
-}
+Tracer::Tracer(QObject *parent) : QObject{parent} {}
 
 double Tracer::bestSolution() const { return bestSolution_; }
 
@@ -30,11 +16,6 @@ void Tracer::start(const QString &fileName) {
   generation_.clear();
   referenceImage_ = QImage{};
 
-  if (palette_.isEmpty()) {
-    qDebug("Empty palette");
-    return;
-  }
-
   referenceImage_.load(QUrl(fileName).toLocalFile());
 
   if (referenceImage_.isNull()) {
@@ -42,25 +23,30 @@ void Tracer::start(const QString &fileName) {
     return;
   }
 
+  referenceImage_ = referenceImage_.convertedTo(QImage::Format_RGBA8888);
+
   for (int i = 0; i < 600; ++i) {
-    generation_.append(Solution{{32, 32}, palette_});
+    generation_.append(Solution{referenceImage_.size(), atoms_});
   }
 }
 
 void Tracer::step() {
   const auto size = generation_.size();
-  const auto keepSize = 10;
-  const auto replaceSize = 50;
+  const auto keepSize = 1;
+  const auto replaceSize = 10;
   const auto kept = generation_.mid(0, keepSize);
   generation_ = generation_.mid(0, size - replaceSize);
 
+  std::for_each(std::begin(generation_), std::end(generation_),
+                [](auto &s) { s.mutate(); });
+
   for (int i = 0; i < replaceSize; ++i) {
-    generation_.append(Solution{{32, 32}, palette_});
+    generation_.append(Solution{referenceImage_.size(), atoms_});
   }
 
   auto rg = QRandomGenerator::global();
 
-  for (qsizetype i = 0; i < size; i += 4) {
+  for (qsizetype i = 0; i < size; i += 6) {
     const auto first = rg->bounded(size);
     const auto second = rg->bounded(size);
 
@@ -69,11 +55,8 @@ void Tracer::step() {
     }
   }
 
-  std::for_each(std::begin(generation_), std::end(generation_),
-                [this](auto &s) { s.mutate(palette_); });
-
   std::for_each(std::begin(solutions_), std::end(solutions_),
-                [this](const auto &fn) { QFile::remove(fn); });
+                [](const auto &fn) { QFile::remove(fn); });
   solutions_.clear();
 
   generation_.append(kept);
@@ -83,7 +66,7 @@ void Tracer::step() {
 
     solution.calculateFitness(referenceImage_);
 
-    solution.fitness += solution.cost() * 100;
+    solution.fitness += solution.cost() * 1e4;
   }
 
   std::sort(std::begin(generation_), std::end(generation_),
@@ -112,9 +95,12 @@ QString Tracer::newFileName() {
       QStringLiteral("hedgehog_%1.svg").arg(counter, 3, 32, QChar(u'_')));
 }
 
-Solution::Solution(QSizeF size, const QList<QColor> &palette) : size{size} {
+Solution::Solution(QSizeF size, const QJsonArray &atoms) : size{size} {
   fitness = 0;
-  primitives = {Primitive(size, palette), Primitive(size, palette)};
+
+  std::transform(std::begin(atoms), std::end(atoms),
+                 std::back_inserter(primitives),
+                 [&](const auto &a) { return Primitive{size, a.toObject()}; });
 }
 
 void Solution::calculateFitness(const QImage &target) {
@@ -125,14 +111,16 @@ void Solution::calculateFitness(const QImage &target) {
     return;
   }
 
+  candidate = candidate.convertedTo(QImage::Format_RGBA8888);
+
   // Both images assumed same size, same format
   double diffSum = 0;
   int width = target.width();
   int height = target.height();
 
   for (int y = 0; y < height; ++y) {
-    auto candScan = reinterpret_cast<const QRgb *>(candidate.scanLine(y));
-    auto targScan = reinterpret_cast<const QRgb *>(target.scanLine(y));
+    const auto candScan = reinterpret_cast<const QRgb *>(candidate.scanLine(y));
+    const auto targScan = reinterpret_cast<const QRgb *>(target.scanLine(y));
     for (int x = 0; x < width; ++x) {
       // Compare RGBA channels
       const QRgb cPix = candScan[x];
@@ -143,8 +131,7 @@ void Solution::calculateFitness(const QImage &target) {
       const auto dg = qGreen(cPix) - qGreen(tPix);
       const auto db = qBlue(cPix) - qBlue(tPix);
       const auto da = qAlpha(cPix) - qAlpha(tPix);
-      diffSum +=
-          qMax(qMax(qMax(dr * dr, dg * dg), db * db) * ta, da * da * 1.0);
+      diffSum += (dr * dr + dg * dg + db * db) * ta + da * da;
     }
   }
 
@@ -197,43 +184,38 @@ double Solution::cost() const {
                          [](auto a, auto p) { return a + p.cost(); });
 }
 
-void Solution::mutate(const QList<QColor> &palette) {
+void Solution::mutate() {
   if (primitives.isEmpty()) {
     return;
   }
 
   auto rg = QRandomGenerator::global();
-  double mutationRate = 0.05;
-
-  if (rg->bounded(1.0) > mutationRate) {
-    return;
-  }
+  double mutationRate = 0.1;
 
   for (auto &prim : primitives) {
     // Pen width
     if (rg->bounded(1.0) < mutationRate) {
-      prim.pen.setWidthF(prim.pen.widthF() * (rg->bounded(1.5) + 0.5) + 0.05);
+      prim.pen.setWidthF(prim.pen.widthF() * (rg->bounded(0.5) + 0.8) + 0.01);
     }
 
     // Origin
     if (rg->bounded(1.0) < mutationRate) {
-      prim.origin += QPointF(rg->bounded(10.0) - 5.0, rg->bounded(10.0) - 5.0);
+      prim.origin += QPointF(rg->bounded(4.0) - 2.0, rg->bounded(4.0) - 2.0);
     }
 
     if (prim.type == Polygon) {
       // Points
       for (auto &pt : prim.points) {
         if (rg->bounded(1.0) < mutationRate) {
-          prim.origin +=
-              QPointF(rg->bounded(10.0) - 5.0, rg->bounded(10.0) - 5.0);
+          pt += QPointF(rg->bounded(2.0) - 1.0, rg->bounded(2.0) - 1.0);
         }
       }
     } else {  // Circle/ellipse
       if (rg->bounded(1.0) < mutationRate) {
-        prim.radius1 *= rg->bounded(0.4) + 0.8;
+        prim.radius1 *= rg->bounded(0.5) + 0.8;
       }
       if (rg->bounded(1.0) < mutationRate) {
-        prim.radius2 *= rg->bounded(0.4) + 0.8;
+        prim.radius2 *= rg->bounded(0.5) + 0.8;
       }
       if (rg->bounded(1.0) < mutationRate) {
         prim.rotation = rg->bounded(90.0);
@@ -242,64 +224,54 @@ void Solution::mutate(const QList<QColor> &palette) {
   }
 
   if (rg->bounded(1.0) < mutationRate) {
-    auto i = rg->bounded(primitives.size());
+    const auto i = rg->bounded(primitives.size());
 
-    Primitive p{size, palette};
-    primitives.insert(i, p);
+    primitives.insert(i, primitives[i]);
   }
 
   if (rg->bounded(1.0) < mutationRate) {
-    auto i = rg->bounded(primitives.size());
+    const auto a = rg->bounded(primitives.size());
+    const auto b = rg->bounded(primitives.size());
+
+    qSwap(primitives[a], primitives[b]);
+  }
+
+  if (rg->bounded(1.0) < mutationRate) {
+    const auto i = rg->bounded(primitives.size());
 
     primitives.remove(i);
   }
 }
 
 void Solution::crossover(Solution &other) {
-  const auto n = qMin(primitives.size(), other.primitives.size());
-
   auto rg = QRandomGenerator::global();
 
-  if (rg->bounded(1.0) < 0.02) {
-    if (n <= 1) {
-      return;
-    }
-    // swap tails
-    const auto cp = rg->bounded(1, primitives.size());
-    const auto ocp = rg->bounded(1, other.primitives.size());
+  const auto n = qMin(primitives.size(), other.primitives.size());
 
-    const auto tail = primitives.mid(cp);
-    const auto otherTail = other.primitives.mid(ocp);
-
-    primitives.remove(cp, primitives.size() - cp);
-    other.primitives.remove(ocp, other.primitives.size() - ocp);
-
-    primitives.append(otherTail);
-    other.primitives.append(tail);
-  } else {
-    if (n < 1) {
-      return;
-    }
-    // swap one element
-    const auto cp = rg->bounded(primitives.size());
-    const auto ocp = rg->bounded(other.primitives.size());
-
-    qSwap(primitives[cp], other.primitives[ocp]);
+  if (n <= 1) {
+    return;
   }
+
+  // swap one element
+  const auto cp = rg->bounded(n);
+  const auto ocp = rg->bounded(n);
+
+  qSwap(primitives[cp], other.primitives[ocp]);
 }
 
-Primitive::Primitive(QSizeF size, const QList<QColor> &palette) {
+Primitive::Primitive(QSizeF size, const QJsonObject &atom) {
   auto rg = QRandomGenerator::global();
   auto randomPoint = [&]() -> QPointF {
     return {rg->bounded(size.width()), rg->bounded(size.height())};
   };
 
-  if (rg->bounded(2) == 0) {
+  if (atom["type"] == "polygon") {
     type = Polygon;
 
-    points.append(randomPoint());
-    points.append(randomPoint());
-  } else {
+    for (int i = 1; i < atom["length"].toInt(3); ++i) {
+      points.append(randomPoint());
+    }
+  } else if (atom["type"] == "circle") {
     type = Circle;
 
     radius1 = rg->bounded(size.width() * 0.2) + 2;
@@ -307,11 +279,23 @@ Primitive::Primitive(QSizeF size, const QList<QColor> &palette) {
     rotation = rg->bounded(90);
   }
 
-  pen = QPen(palette[rg->bounded(palette.length())]);
-  pen.setWidthF(rg->bounded(size.width() * 0.1));
-  brush = QBrush(palette[rg->bounded(palette.length())]);
+  const auto pens = atom["pens"].toVariant().toStringList();
+  pen = QPen(pens[rg->bounded(pens.length())]);
+  pen.setWidthF(rg->bounded(size.width() * 0.05));
+  pen.setJoinStyle(Qt::RoundJoin);
+
+  const auto brushes = atom["brushes"].toVariant().toStringList();
+  brush = QBrush(QColor(brushes[rg->bounded(brushes.length())]));
 
   origin = randomPoint();
 }
 
 double Primitive::cost() const { return 1.0 + 0.1 * points.length(); }
+
+QJsonArray Tracer::atoms() const { return atoms_; }
+
+void Tracer::setAtoms(const QJsonArray &newAtoms) {
+  if (atoms_ == newAtoms) return;
+  atoms_ = newAtoms;
+  emit atomsChanged();
+}
