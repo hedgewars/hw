@@ -33,8 +33,8 @@ pub struct NonStrictComplexEdgesDesc {
 
 #[derive(Debug, Deserialize)]
 pub struct TemplateDesc {
-    pub width: usize,
-    pub height: usize,
+    pub width: u32,
+    pub height: u32,
     pub can_invert: Option<bool>,
     pub is_negative: Option<bool>,
     pub put_girders: Option<bool>,
@@ -53,7 +53,11 @@ pub struct TemplateCollectionDesc {
 }
 
 impl TemplateDesc {
-    pub fn to_template(&self, tiles: &HashMap<String, Vec<TileDesc>>, edges: &HashMap<String, NonStrictComplexEdgesDesc>) -> TemplateDescription {
+    pub fn to_template(
+        &self,
+        tiles: &HashMap<String, Vec<TileDesc>>,
+        edges: &HashMap<String, NonStrictComplexEdgesDesc>,
+    ) -> TemplateDescription {
         let [top, right, bottom, left]: [Option<ComplexEdgeDescription>; 4] =
             if let Some(edges_name) = &self.edges {
                 let edges = edges.get(edges_name).expect("missing template edges");
@@ -63,7 +67,11 @@ impl TemplateDesc {
                 [None, None, None, None]
             };
 
-        let tiles = self.tiles.iter().flat_map(|t| tiles.get(t).expect("missing template tiles")).collect::<Vec<_>>();
+        let tiles = self
+            .tiles
+            .iter()
+            .flat_map(|t| tiles.get(t).expect("missing template tiles"))
+            .collect::<Vec<_>>();
 
         TemplateDescription {
             size: Size::new(self.width, self.height),

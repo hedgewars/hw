@@ -113,20 +113,20 @@ impl Point {
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub struct Size {
-    pub width: usize,
-    pub height: usize,
+    pub width: u32,
+    pub height: u32,
 }
 
 impl Size {
     pub const EMPTY: Self = Self::square(0);
 
     #[inline]
-    pub const fn new(width: usize, height: usize) -> Self {
+    pub const fn new(width: u32, height: u32) -> Self {
         Self { width, height }
     }
 
     #[inline]
-    pub const fn square(size: usize) -> Self {
+    pub const fn square(size: u32) -> Self {
         Self {
             width: size,
             height: size,
@@ -134,12 +134,12 @@ impl Size {
     }
 
     #[inline]
-    pub const fn area(&self) -> usize {
+    pub const fn area(&self) -> u32 {
         self.width * self.height
     }
 
     #[inline]
-    pub const fn linear_index(&self, x: usize, y: usize) -> usize {
+    pub const fn linear_index(&self, x: u32, y: u32) -> u32 {
         y * self.width + x
     }
 
@@ -194,7 +194,7 @@ pub struct PotSize {
 
 impl PotSize {
     #[inline]
-    const fn new_impl(width: usize, height: usize) -> Self {
+    const fn new_impl(width: u32, height: u32) -> Self {
         debug_assert!(width.is_power_of_two() && height.is_power_of_two());
         Self {
             size: Size::new(width, height),
@@ -202,7 +202,7 @@ impl PotSize {
     }
 
     #[inline]
-    pub const fn new(width: usize, height: usize) -> Option<Self> {
+    pub const fn new(width: u32, height: u32) -> Option<Self> {
         if width.is_power_of_two() && height.is_power_of_two() {
             Some(Self::new_impl(width, height))
         } else {
@@ -214,16 +214,16 @@ impl PotSize {
         self.size
     }
 
-    pub const fn width(&self) -> usize {
+    pub const fn width(&self) -> u32 {
         self.size.width
     }
 
-    pub const fn height(&self) -> usize {
+    pub const fn height(&self) -> u32 {
         self.size.height
     }
 
     #[inline]
-    pub const fn square(size: usize) -> Option<Self> {
+    pub const fn square(size: u32) -> Option<Self> {
         if size.is_power_of_two() {
             Some(Self::new_impl(size, size))
         } else {
@@ -232,12 +232,12 @@ impl PotSize {
     }
 
     #[inline]
-    pub const fn area(&self) -> usize {
+    pub const fn area(&self) -> u32 {
         self.size.area()
     }
 
     #[inline]
-    pub const fn linear_index(&self, x: usize, y: usize) -> usize {
+    pub const fn linear_index(&self, x: u32, y: u32) -> u32 {
         self.size.linear_index(x, y)
     }
 
@@ -289,18 +289,18 @@ impl SizeMask {
     }
 
     #[inline]
-    pub fn contains_x<T: Into<usize>>(&self, x: T) -> bool {
+    pub fn contains_x<T: Into<u32>>(&self, x: T) -> bool {
         (self.size.width & x.into()) == 0
     }
 
     #[inline]
-    pub fn contains_y<T: Into<usize>>(&self, y: T) -> bool {
+    pub fn contains_y<T: Into<u32>>(&self, y: T) -> bool {
         (self.size.height & y.into()) == 0
     }
 
     #[inline]
     pub fn contains(&self, point: Point) -> bool {
-        self.contains_x(point.x as usize) && self.contains_y(point.y as usize)
+        self.contains_x(point.x as u32) && self.contains_y(point.y as u32)
     }
 
     #[inline]
@@ -439,7 +439,7 @@ impl Rect {
         )
     }
 
-    pub fn from_size_coords(x: i32, y: i32, width: usize, height: usize) -> Self {
+    pub fn from_size_coords(x: i32, y: i32, width: u32, height: u32) -> Self {
         Self::from_size(Point::new(x, y), Size::new(width, height))
     }
 
@@ -448,13 +448,13 @@ impl Rect {
     }
 
     #[inline]
-    pub const fn width(&self) -> usize {
-        (self.right() - self.left() + 1) as usize
+    pub const fn width(&self) -> u32 {
+        (self.right() - self.left() + 1) as u32
     }
 
     #[inline]
-    pub const fn height(&self) -> usize {
-        (self.bottom() - self.top() + 1) as usize
+    pub const fn height(&self) -> u32 {
+        (self.bottom() - self.top() + 1) as u32
     }
 
     #[inline]
@@ -463,7 +463,7 @@ impl Rect {
     }
 
     #[inline]
-    pub const fn area(&self) -> usize {
+    pub const fn area(&self) -> u32 {
         self.size().area()
     }
 
@@ -504,7 +504,10 @@ impl Rect {
 
     #[inline]
     pub fn with_margin(&self, margin: i32) -> Self {
-        let offset = Point::new(min(margin, self.width() as i32 / 2), min(margin, self.height() as i32 / 2));
+        let offset = Point::new(
+            min(margin, self.width() as i32 / 2),
+            min(margin, self.height() as i32 / 2),
+        );
         Self::new(self.top_left() + offset, self.bottom_right() - offset)
     }
 
@@ -566,7 +569,7 @@ impl Rect {
     }
 
     #[inline]
-    pub fn quotient(self, x: usize, y: usize) -> Point {
+    pub fn quotient(self, x: u32, y: u32) -> Point {
         self.top_left() + Point::new((x % self.width()) as i32, (y % self.height()) as i32)
     }
 }

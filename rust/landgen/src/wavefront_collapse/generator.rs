@@ -91,10 +91,8 @@ impl WavefrontCollapseLandGenerator {
         let mut reader = decoder.read_info()?;
 
         let info = reader.info();
-        let mut tiles_image = vec2d::Vec2D::new(
-            &Size::new(info.width as usize, info.height as usize),
-            parameters.zero,
-        );
+        let mut tiles_image =
+            vec2d::Vec2D::new(&Size::new(info.width, info.height), parameters.zero);
 
         let mut buf = vec![0; reader.output_buffer_size()];
         let info = reader.next_frame(&mut buf)?;
@@ -325,19 +323,20 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
 
         // render tiles into resulting land array
         let mut result = land2d::Land2D::new(&self.template.size, parameters.zero);
-        let offset_y = result.height() - result.play_height();
-        let offset_x = (result.width() - result.play_width()) / 2;
+        let offset_y = result.height() - result.play_height() as usize;
+        let offset_x = (result.width() - result.play_width() as usize) / 2;
 
-        for row in 0..wfc_size.height {
-            for column in 0..wfc_size.width {
+        for row in 0..wfc_size.height as usize {
+            for column in 0..wfc_size.width as usize {
                 if let Some(Tile::Numbered(tile_index)) = wfc.grid().get(row, column) {
                     let tile = &tiles[*tile_index];
 
-                    for tile_row in 0..tile.size().height {
-                        for tile_column in 0..tile.size().width {
+                    for tile_row in 0..tile.size().height as usize {
+                        for tile_column in 0..tile.size().width as usize {
                             result.map(
-                                (row * tile.size().height + tile_row + offset_y) as i32,
-                                (column * tile.size().width + tile_column + offset_x) as i32,
+                                (row * tile.size().height as usize + tile_row + offset_y) as i32,
+                                (column * tile.size().width as usize + tile_column + offset_x)
+                                    as i32,
                                 |p| {
                                     *p =
                                         *tile.get(tile_row, tile_column).unwrap_or(&parameters.zero)

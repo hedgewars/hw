@@ -22,12 +22,12 @@ impl ThemeSprite {
     }
 
     #[inline]
-    pub fn width(&self) -> usize {
+    pub fn width(&self) -> u32 {
         self.size().width
     }
 
     #[inline]
-    pub fn height(&self) -> usize {
+    pub fn height(&self) -> u32 {
         self.size().height
     }
 
@@ -61,7 +61,7 @@ impl ThemeSprite {
         let size = self.size();
         assert!(size.is_power_of_two());
         let tile_width_shift = size.width.trailing_zeros() as usize + 2;
-        let mut pixels = vec![0u32; size.area()];
+        let mut pixels = vec![0u32; size.area() as usize];
 
         for (y, row) in self.pixels.rows().enumerate() {
             for (x, v) in row.iter().enumerate() {
@@ -95,12 +95,12 @@ impl TiledSprite {
     }
 
     #[inline]
-    pub fn width(&self) -> usize {
+    pub fn width(&self) -> u32 {
         self.size().width
     }
 
     #[inline]
-    pub fn height(&self) -> usize {
+    pub fn height(&self) -> u32 {
         self.size().height
     }
 
@@ -237,7 +237,7 @@ fn load_sprite(path: &Path) -> Result<ThemeSprite, ThemeLoadError> {
             info.color_type
         )));
     }
-    let size = Size::new(info.width as usize, info.height as usize);
+    let size = Size::new(info.width, info.height);
 
     let mut pixels: Vec2D<u32> = Vec2D::new(&size, 0);
     reader.next_frame(slice_u32_to_u8_mut(pixels.as_mut_slice()))?;

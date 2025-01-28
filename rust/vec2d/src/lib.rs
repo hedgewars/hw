@@ -4,7 +4,7 @@ use std::{
     slice::SliceIndex,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Vec2D<T> {
     data: Vec<T>,
     size: Size,
@@ -30,19 +30,19 @@ impl<T> IndexMut<usize> for Vec2D<T> {
 
         let pos = row * self.width();
 
-        &mut self.data[pos..pos + self.size.width]
+        &mut self.data[pos..pos + self.size.width as usize]
     }
 }
 
 impl<T> Vec2D<T> {
     #[inline]
     pub fn width(&self) -> usize {
-        self.size.width
+        self.size.width as usize
     }
 
     #[inline]
     pub fn height(&self) -> usize {
-        self.size.height
+        self.size.height as usize
     }
 
     #[inline]
@@ -55,7 +55,7 @@ impl<T: Copy> Vec2D<T> {
     pub fn new(size: &Size, value: T) -> Self {
         Self {
             size: *size,
-            data: vec![value; size.area()],
+            data: vec![value; size.area() as usize],
         }
     }
 
@@ -85,7 +85,10 @@ impl<T: Copy> Vec2D<T> {
         column: usize,
     ) -> Option<&mut <usize as SliceIndex<[T]>>::Output> {
         if row < self.height() && column < self.width() {
-            Some(unsafe { self.data.get_unchecked_mut(row * self.size.width + column) })
+            Some(unsafe {
+                self.data
+                    .get_unchecked_mut(row * self.size.width as usize + column)
+            })
         } else {
             None
         }
@@ -106,7 +109,8 @@ impl<T: Copy> Vec2D<T> {
         row: usize,
         column: usize,
     ) -> &mut <usize as SliceIndex<[T]>>::Output {
-        self.data.get_unchecked_mut(row * self.size.width + column)
+        self.data
+            .get_unchecked_mut(row * self.size.width as usize + column)
     }
 
     #[inline]
@@ -146,7 +150,7 @@ impl<T: Copy> AsMut<[T]> for Vec2D<T> {
 impl<T: Clone> Vec2D<T> {
     pub fn from_iter<I: IntoIterator<Item = T>>(iter: I, size: &Size) -> Option<Vec2D<T>> {
         let data: Vec<T> = iter.into_iter().collect();
-        if size.width * size.height == data.len() {
+        if size.width as usize * size.height as usize == data.len() {
             Some(Vec2D { data, size: *size })
         } else {
             None
@@ -160,7 +164,7 @@ mod tests {
 
     #[test]
     fn basics() {
-        let mut v: Vec2D<u8> = Vec2D::new(Size::new(2, 3), 0xff);
+        let mut v: Vec2D<u8> = Vec2D::new(&Size::new(2, 3), 0xff);
 
         assert_eq!(v.width(), 2);
         assert_eq!(v.height(), 3);
@@ -173,7 +177,7 @@ mod tests {
         assert_eq!(v[2][0], 0xff);
         assert_eq!(v[2][1], 0);
 
-        v.get_mut(2, 1).map(|v| *v = 1);
+        v.get_mut(2, 1).into_iter().for_each(|v| *v = 1);
         assert_eq!(v[2][1], 1);
 
         assert_eq!(v.get_mut(2, 2), None);

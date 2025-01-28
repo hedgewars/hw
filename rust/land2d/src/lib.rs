@@ -48,12 +48,12 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
     }
 
     #[inline]
-    pub fn play_width(&self) -> usize {
+    pub fn play_width(&self) -> u32 {
         self.play_box.width()
     }
 
     #[inline]
-    pub fn play_height(&self) -> usize {
+    pub fn play_height(&self) -> u32 {
         self.play_box.height()
     }
 
@@ -69,12 +69,12 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
 
     #[inline]
     pub fn is_valid_x(&self, x: i32) -> bool {
-        self.mask.contains_x(x as usize)
+        self.mask.contains_x(x as u32)
     }
 
     #[inline]
     pub fn is_valid_y(&self, y: i32) -> bool {
-        self.mask.contains_y(y as usize)
+        self.mask.contains_y(y as u32)
     }
 
     #[inline]
@@ -150,7 +150,7 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
             dir: isize,
         ) {
             let yd = y as isize + dir;
-            if mask.contains_y(yd as usize) {
+            if mask.contains_y(yd as u32) {
                 stack.push((xl, xr, yd as usize, dir));
             }
         }
@@ -331,7 +331,7 @@ mod tests {
 
     #[test]
     fn basics() {
-        let l: Land2D<u8> = Land2D::new(Size::new(30, 50), 0);
+        let l: Land2D<u8> = Land2D::new(&Size::new(30, 50), 0);
 
         assert_eq!(l.play_width(), 30);
         assert_eq!(l.play_height(), 50);
@@ -348,7 +348,7 @@ mod tests {
 
     #[test]
     fn fill() {
-        let mut l: Land2D<u8> = Land2D::new(Size::square(128), 0);
+        let mut l: Land2D<u8> = Land2D::new(&Size::square(128), 0);
 
         l.draw_line(Line::new(Point::new(0, 0), Point::new(32, 96)), 1);
         l.draw_line(Line::new(Point::new(32, 96), Point::new(64, 32)), 1);

@@ -19,10 +19,10 @@ use landgen::{
     },
     LandGenerationParameters, LandGenerator,
 };
-use rand::{seq::SliceRandom, Rng};
+use rand::Rng;
 
-use std::{borrow::Borrow, collections::hash_map::HashMap};
 use rand::prelude::IndexedRandom;
+use std::{borrow::Borrow, collections::hash_map::HashMap};
 use vec2d::Vec2D;
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
@@ -68,7 +68,7 @@ impl<T> MapGenerator<T> {
         if let Some(land_sprite) = theme.land_texture() {
             for (row_index, (land_row, tex_row)) in land.rows().zip(texture.rows_mut()).enumerate()
             {
-                let sprite_row = land_sprite.get_row(row_index % land_sprite.height());
+                let sprite_row = land_sprite.get_row(row_index % land_sprite.height() as usize);
                 let mut x_offset = 0;
                 while sprite_row.len() < land.width() - x_offset {
                     let copy_range = x_offset..x_offset + sprite_row.len();
@@ -79,7 +79,7 @@ impl<T> MapGenerator<T> {
                         sprite_row,
                     );
 
-                    x_offset += land_sprite.width()
+                    x_offset += land_sprite.width() as usize
                 }
 
                 if x_offset < land.width() {
@@ -107,8 +107,10 @@ impl<T> MapGenerator<T> {
                 &mut offsets,
                 border_width,
                 |x, y| {
-                    border_sprite
-                        .get_pixel(x % border_sprite.width(), border_sprite.height() - 1 - y)
+                    border_sprite.get_pixel(
+                        x % border_sprite.width() as usize,
+                        border_sprite.height() as usize - 1 - y,
+                    )
                 },
             );
 
@@ -119,7 +121,7 @@ impl<T> MapGenerator<T> {
                 land.rows().zip(texture.rows_mut()),
                 &mut offsets,
                 border_width,
-                |x, y| border_sprite.get_pixel(x % border_sprite.width(), y),
+                |x, y| border_sprite.get_pixel(x % border_sprite.width() as usize, y),
             );
         }
 
@@ -169,7 +171,10 @@ impl MapGenerator<WfcTemplate> {
             .map(|(size, indices)| {
                 (
                     TemplateType(size),
-                    indices.iter().map(|i| templates[*i].to_template(&desc.tiles, &desc.edges)).collect(),
+                    indices
+                        .iter()
+                        .map(|i| templates[*i].to_template(&desc.tiles, &desc.edges))
+                        .collect(),
                 )
             })
             .collect();

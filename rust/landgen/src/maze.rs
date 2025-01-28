@@ -3,12 +3,13 @@ use crate::{LandGenerationParameters, LandGenerator};
 use integral_geometry::{Point, Polygon, Rect, Size};
 use land2d::Land2D;
 use rand::Rng;
+use vec2d::Vec2D;
 
 #[derive(Clone)]
 pub struct MazeTemplate {
-    pub width: usize,
-    pub height: usize,
-    pub cell_size: usize,
+    pub width: u32,
+    pub height: u32,
+    pub cell_size: u32,
     pub inverted: bool,
     pub distortion_limiting_factor: u32,
     pub braidness: u32,
@@ -21,10 +22,10 @@ struct Maze {
     num_cells: Size,
     num_edges: Size,
     seen_cells: Size,
-    cell_size: usize,
-    seen_list: Vec<Vec<Option<usize>>>,
-    walls: Vec<Vec<Vec<bool>>>,
-    edge_list: Vec<Vec<Vec<bool>>>,
+    cell_size: u32,
+    seen_list: Vec2D<Option<usize>>,
+    walls: Vec<Vec2D<bool>>,
+    edge_list: Vec<Vec2D<bool>>,
     last_cell: Vec<Point>,
     came_from: Vec<Vec<Point>>,
     came_from_pos: Vec<i32>,
@@ -80,7 +81,7 @@ impl Direction {
 impl Maze {
     pub fn new(
         size: &Size,
-        cell_size: usize,
+        cell_size: u32,
         num_steps: usize,
         inverted: bool,
         braidness: u32,
@@ -96,17 +97,17 @@ impl Maze {
 
         let mut last_cell = vec![Point::diag(0); num_steps];
         let came_from_pos = vec![0; num_steps];
-        let came_from = vec![vec![Point::diag(0); num_steps]; num_cells.area()];
+        let came_from = vec![vec![Point::diag(0); num_steps]; num_cells.area() as usize];
 
-        let seen_list = vec![vec![None as Option<usize>; seen_cells.width]; seen_cells.height];
-        let walls = vec![vec![vec![true; seen_cells.width]; seen_cells.height]; 2];
-        let edge_list = vec![vec![vec![false; num_cells.width]; num_cells.height]; 2];
+        let seen_list = Vec2D::new(&seen_cells, None);
+        let walls = vec![Vec2D::new(&seen_cells, true); 2];
+        let edge_list = vec![Vec2D::new(&num_cells, false); 2];
 
         for current_step in 0..num_steps {
-            let x = random_numbers.gen_range(0..seen_cells.width - 1) / num_steps;
+            let x = random_numbers.random_range(0..seen_cells.width as i32 - 1) / num_steps as i32;
             last_cell[current_step] = Point::new(
-                (x + current_step * seen_cells.width / num_steps) as i32,
-                random_numbers.gen_range(0..seen_cells.height) as i32,
+                x + current_step as i32 * seen_cells.width as i32 / num_steps as i32,
+                random_numbers.random_range(..seen_cells.height) as i32,
             );
         }
 
@@ -141,7 +142,7 @@ impl Maze {
             let p = self.last_cell[current_step];
             self.seen_list[p.y as usize][p.x as usize] = Some(current_step);
 
-            let next_dir_clockwise = random_numbers.gen();
+            let next_dir_clockwise = random_numbers.random();
 
             for _ in 0..5 {
                 let sp = p + dir.0;
@@ -158,7 +159,7 @@ impl Maze {
                 match when_seen {
                     Some(a) if a == current_step => {
                         // try another direction
-                        if !self.inverted && random_numbers.gen_range(0..self.braidness) == 0 {
+                        if !self.inverted && random_numbers.random_range(..self.braidness) == 0 {
                             if dir.0.x == -1 && p.x > 0 {
                                 self.walls[dir.orientation()][p.y as usize][p.x as usize - 1] =
                                     false;
@@ -261,46 +262,46 @@ impl Maze {
     pub fn to_islands(mut self) -> (Vec<Polygon>, Vec<Point>) {
         let mut islands: Vec<Polygon> = vec![];
         let mut polygon: Vec<Point> = vec![];
-        let mut maze = vec![vec![false; self.num_cells.width]; self.num_cells.height];
+        let mut maze = Vec2D::new(&self.num_cells, false);
 
-        for x in 0..self.seen_cells.width {
-            for y in 0..self.seen_cells.height {
+        for x in 0..self.seen_cells.width as usize {
+            for y in 0..self.seen_cells.height as usize {
                 if self.seen_list[y][x].is_some() {
                     maze[y * 2 + 1][x * 2 + 1] = true;
                 }
             }
 
-            for y in 0..self.seen_cells.height - 1 {
+            for y in 0..self.seen_cells.height as usize - 1 {
                 if !self.walls[0][y][x] {
                     maze[y * 2 + 2][x * 2 + 1] = true;
                 }
             }
         }
 
-        for x in 0..self.seen_cells.width - 1 {
-            for y in 0..self.seen_cells.height {
+        for x in 0..self.seen_cells.width as usize - 1 {
+            for y in 0..self.seen_cells.height as usize {
                 if !self.walls[1][y][x] {
                     maze[y * 2 + 1][x * 2 + 2] = true;
                 }
             }
         }
 
-        for x in 0..self.num_edges.width {
-            for y in 0..self.num_cells.height {
+        for x in 0..self.num_edges.width as usize {
+            for y in 0..self.num_cells.height as usize {
                 self.edge_list[0][y][x] = maze[y][x] != maze[y][x + 1];
             }
         }
 
-        for x in 0..self.num_cells.width {
-            for y in 0..self.num_edges.height {
+        for x in 0..self.num_cells.width as usize {
+            for y in 0..self.num_edges.height as usize {
                 self.edge_list[1][y][x] = maze[y][x] != maze[y + 1][x];
             }
         }
 
         let mut fill_points = vec![];
 
-        for x in 0..self.num_edges.width {
-            for y in 0..self.num_cells.height {
+        for x in 0..self.num_edges.width as usize {
+            for y in 0..self.num_cells.height as usize {
                 if self.edge_list[0][y][x] {
                     self.edge_list[0][y][x] = false;
                     self.add_vertex(Point::new(x as i32 + 1, y as i32 + 1), &mut polygon);
@@ -328,13 +329,13 @@ impl Maze {
             }
         }
 
-        for x in 0..self.num_cells.width {
-            for y in 0..self.num_cells.height {
+        for x in 0..self.num_cells.width as usize {
+            for y in 0..self.num_cells.height as usize {
                 if maze[y][x] {
                     let half_cell = self.cell_size / 2;
                     let fill_point = Point::new(
-                        (x * self.cell_size + half_cell) as i32 + self.off.x,
-                        (y * self.cell_size + half_cell) as i32 + self.off.y,
+                        (x as u32 * self.cell_size + half_cell) as i32 + self.off.x,
+                        (y as u32 * self.cell_size + half_cell) as i32 + self.off.y,
                     );
                     islands.push(Polygon::new(&[fill_point]));
                     fill_points.push(fill_point);
@@ -348,13 +349,13 @@ impl Maze {
                             if x > 0 {
                                 points.push((x - 1, y));
                             }
-                            if x < self.num_cells.width - 1 {
+                            if x < self.num_cells.width as usize - 1 {
                                 points.push((x + 1, y));
                             }
                             if y > 0 {
                                 points.push((x, y - 1));
                             }
-                            if y < self.num_cells.height - 1 {
+                            if y < self.num_cells.height as usize - 1 {
                                 points.push((x, y + 1));
                             }
                         }
@@ -371,7 +372,7 @@ pub struct MazeLandGenerator {
     maze_template: MazeTemplate,
 }
 
-fn prev_odd(num: usize) -> usize {
+fn prev_odd(num: u32) -> u32 {
     if num & 1 == 0 {
         num - 1
     } else {
@@ -409,7 +410,7 @@ impl MazeLandGenerator {
 
             for current_step in 0..num_steps {
                 if !step_done[current_step] {
-                    let dir = Direction::new(random_numbers.gen());
+                    let dir = Direction::new(random_numbers.random_range(..4));
                     step_done[current_step] = maze.see_cell(current_step, dir, random_numbers);
                     done = false;
                 }

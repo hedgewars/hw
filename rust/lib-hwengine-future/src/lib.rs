@@ -39,8 +39,8 @@ pub extern "C" fn get_game_field_parameters(
 #[no_mangle]
 pub extern "C" fn create_empty_game_field(width: u32, height: u32) -> *mut GameField {
     let game_field = Box::new(GameField {
-        collision: land2d::Land2D::new(&Size::new(width as usize, height as usize), 0),
-        pixels: land2d::Land2D::new(&Size::new(width as usize, height as usize), 0),
+        collision: land2d::Land2D::new(&Size::new(width, height), 0),
+        pixels: land2d::Land2D::new(&Size::new(width, height), 0),
         landgen_parameters: None,
     });
 

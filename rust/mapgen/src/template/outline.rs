@@ -21,8 +21,8 @@ pub struct RectDesc {
 
 #[derive(Deserialize, Clone)]
 pub struct TemplateDesc {
-    width: usize,
-    height: usize,
+    width: u32,
+    height: u32,
     can_flip: bool,
     can_invert: bool,
     can_mirror: bool,
@@ -55,10 +55,7 @@ impl From<TemplateDesc> for OutlineTemplate {
                 .map(|v| {
                     v.iter()
                         .map(|r| {
-                            Rect::from_size(
-                                Point::new(r.x as i32, r.y as i32),
-                                Size::new(r.w as usize, r.h as usize),
-                            )
+                            Rect::from_size(Point::new(r.x as i32, r.y as i32), Size::new(r.w, r.h))
                         })
                         .collect()
                 })
@@ -70,10 +67,7 @@ impl From<TemplateDesc> for OutlineTemplate {
                 .map(|v| {
                     v.iter()
                         .map(|r| {
-                            Rect::from_size(
-                                Point::new(r.x as i32, r.y as i32),
-                                Size::new(r.w as usize, r.h as usize),
-                            )
+                            Rect::from_size(Point::new(r.x as i32, r.y as i32), Size::new(r.w, r.h))
                         })
                         .collect()
                 })

@@ -4,10 +4,10 @@ use serde_derive::Deserialize;
 use std::collections::hash_map::HashMap;
 #[derive(Deserialize)]
 pub struct TemplateDesc {
-    width: usize,
-    height: usize,
+    width: u32,
+    height: u32,
     max_hedgehogs: u8,
-    cell_size: usize,
+    cell_size: u32,
     distortion_limiting_factor: u32,
     braidness: u32,
     invert: bool,
