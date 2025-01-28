@@ -1,4 +1,4 @@
-use rand::{Error, RngCore, SeedableRng};
+use rand::{RngCore, SeedableRng};
 
 pub struct LaggedFibonacciPRNG {
     circular_buffer: [u32; 64],
@@ -65,19 +65,29 @@ impl Iterator for LaggedFibonacciPRNG {
 
 impl RngCore for LaggedFibonacciPRNG {
     fn next_u32(&mut self) -> u32 {
-        self.get_next().wrapping_add(self.get_next())
+        self.get_next();
+        self.get_next()
     }
 
     fn next_u64(&mut self) -> u64 {
-        ((self.next_u32() as u64) << 32) | self.next_u32() as u64
+        ((self.get_next() as u64) << 32) | self.get_next() as u64
     }
 
     fn fill_bytes(&mut self, dest: &mut [u8]) {
-        dest.iter_mut().for_each(|x| *x = self.next_u32() as u8);
-    }
+        let mut chunks = dest.chunks_exact_mut(4);
 
-    fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), Error> {
-        Ok(self.fill_bytes(dest))
+        for chunk in chunks.by_ref() {
+            let value = self.get_next();
+            let bytes = value.to_le_bytes();
+            chunk.copy_from_slice(&bytes);
+        }
+
+        let remainder = chunks.into_remainder();
+        if !remainder.is_empty() {
+            let value = self.next_u32();
+            let bytes = value.to_le_bytes();
+            remainder.copy_from_slice(&bytes[..remainder.len()]);
+        }
     }
 }
 

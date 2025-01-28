@@ -22,6 +22,7 @@ use landgen::{
 use rand::{seq::SliceRandom, Rng};
 
 use std::{borrow::Borrow, collections::hash_map::HashMap};
+use rand::prelude::IndexedRandom;
 use vec2d::Vec2D;
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
@@ -168,7 +169,7 @@ impl MapGenerator<WfcTemplate> {
             .map(|(size, indices)| {
                 (
                     TemplateType(size),
-                    indices.iter().map(|i| (&templates[*i]).to_template(&desc.tiles, &desc.edges)).collect(),
+                    indices.iter().map(|i| templates[*i].to_template(&desc.tiles, &desc.edges)).collect(),
                 )
             })
             .collect();
