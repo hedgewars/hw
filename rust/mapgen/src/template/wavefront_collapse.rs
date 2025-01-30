@@ -8,6 +8,7 @@ use std::collections::hash_map::HashMap;
 #[derive(Debug, Deserialize)]
 pub struct TileDesc {
     pub name: String,
+    pub weight: Option<u8>,
     pub edges: [String; 4],
     pub is_negative: Option<bool>,
     pub can_flip: Option<bool>,
@@ -95,6 +96,7 @@ impl From<&TileDesc> for TileDescription {
 
         Self {
             name: desc.name.clone(),
+            weight: desc.weight.unwrap_or(10),
             edges: EdgesDescription {
                 top,
                 right,

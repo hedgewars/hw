@@ -27,6 +27,7 @@ pub struct EdgesDescription {
 #[derive(Debug, Clone)]
 pub struct TileDescription {
     pub name: String,
+    pub weight: u8,
     pub edges: EdgesDescription,
     pub is_negative: Option<bool>,
     pub can_flip: Option<bool>,
@@ -137,7 +138,7 @@ impl WavefrontCollapseLandGenerator {
         ];
 
         let tile =
-            TileImage::<T, String>::new(tiles_image, top_edge, right_edge, bottom_edge, left_edge);
+            TileImage::<T, String>::new(tiles_image, tile_description.weight, top_edge, right_edge, bottom_edge, left_edge);
 
         result.push(tile.clone());
 
@@ -278,7 +279,7 @@ impl WavefrontCollapseLandGenerator {
                 - probability_distribution_factor) as u32;
 
             rules.push(CollapseRule {
-                weight,
+                weight: weight * tile.weight as u32 + 1,
                 tile: Tile::Numbered(i),
                 top,
                 right,

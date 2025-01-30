@@ -38,6 +38,7 @@ impl<I: PartialEq + Clone> Edge<I> {
 #[derive(Clone)]
 pub struct TileImage<T, I: PartialEq + Clone> {
     image: Rc<Vec2D<T>>,
+    pub weight: u8,
     pub transform: Transform,
     top: Edge<I>,
     right: Edge<I>,
@@ -48,6 +49,7 @@ pub struct TileImage<T, I: PartialEq + Clone> {
 impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     pub fn new(
         image: Vec2D<T>,
+        weight: u8,
         top: Edge<I>,
         right: Edge<I>,
         bottom: Edge<I>,
@@ -55,6 +57,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     ) -> Self {
         Self {
             image: Rc::new(image),
+            weight,
             transform: Transform::default(),
             top,
             right,
@@ -66,6 +69,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     pub fn mirrored(&self) -> Self {
         Self {
             image: self.image.clone(),
+            weight: self.weight,
             transform: self.transform.mirror(),
             top: self.top.reversed(),
             right: self.left.reversed(),
@@ -77,6 +81,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     pub fn flipped(&self) -> Self {
         Self {
             image: self.image.clone(),
+            weight: self.weight,
             transform: self.transform.flip(),
             top: self.bottom.reversed(),
             right: self.right.reversed(),
@@ -88,6 +93,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     pub fn rotated90(&self) -> Self {
         Self {
             image: self.image.clone(),
+            weight: self.weight,
             transform: self.transform.rotate90(),
             top: self.left.clone(),
             right: self.top.clone(),
@@ -99,6 +105,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     pub fn rotated180(&self) -> Self {
         Self {
             image: self.image.clone(),
+            weight: self.weight,
             transform: self.transform.rotate180(),
             top: self.bottom.clone(),
             right: self.left.clone(),
@@ -110,6 +117,7 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
     pub fn rotated270(&self) -> Self {
         Self {
             image: self.image.clone(),
+            weight: self.weight,
             transform: self.transform.rotate270(),
             top: self.right.clone(),
             right: self.bottom.clone(),
