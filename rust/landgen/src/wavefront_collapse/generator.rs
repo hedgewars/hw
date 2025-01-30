@@ -120,7 +120,6 @@ impl WavefrontCollapseLandGenerator {
             a => {
                 for line in bytes.chunks_exact(info.line_size) {
                     for value in line.chunks_exact(a) {
-                        print!("{:?},", value);
                         *tiles_image_pixels
                             .next()
                             .expect("vec2d size matching image dimensions") =

@@ -160,7 +160,7 @@ impl WavefrontCollapse {
                     let entropy = possibilities.len();
                     if entropy > 0 {
                         if entropy <= tiles_to_collapse.0 {
-                            let weights = possibilities.iter().map(|(weight, _)| *weight);
+                            let weights = possibilities.iter().map(|(weight, _)| weight.pow(2));
                             let distribution = WeightedIndex::new(weights).unwrap();
 
                             let entry =
