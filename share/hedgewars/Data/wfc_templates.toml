@@ -112,12 +112,114 @@ name = "wall_120.png"
 edges = [ "e", "e", "e", "e" ]
 is_negative = true
 
+# shoppa tiles
+[[tiles.Shoppa]]
+name = "120_filled.png"
+edges = [ "first_layer_reyal_tsrif", "f", "f", "f" ]
+is_negative = true
+
+[[tiles.Shoppa]]
+name = "120_filled.png"
+edges = [ "e", "e", "e", "e" ]
+
+[[tiles.Shoppa]]
+name = "120_filled.png"
+edges = [ "e", "e", "first_layer_reyal_tsrif", "e" ]
+
+[[tiles.Shoppa]]
+name = "120_filled.png"
+edges = [ "e", "E", "e", "e" ] # forced space
+can_mirror = true
+
+[[tiles.Shoppa]]
+name = "120_filled.png"
+edges = [ "e", "S", "e", "e" ] # another forced space
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Shoppa]]
+name = "shoppa_bar.png"
+edges = [ "e", "efe", "e", "efe" ]
+can_rotate90 = true
+
+[[tiles.Shoppa]]
+name = "shoppa_endpiece.png"
+edges = [ "e", "e", "e", "efe" ]
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Shoppa]]
+name = "shoppa_roundedendpiece.png"
+edges = [ "e", "S", "e", "efe" ]
+can_rotate90 = true
+can_rotate270 = true
+can_mirror = true
+
+[[tiles.Shoppa]]
+name = "shoppa_t.png"
+edges = [ "e", "efe", "efe", "efe" ]
+can_rotate90 = true
+can_rotate270 = true
+
+[[tiles.Shoppa]]
+name = "shoppa_sector.png"
+edges = [ "e", "sector", "first_layer_reyal_tsrif", "e" ]
+
+[[tiles.Shoppa]]
+name = "shoppa_sector.png"
+edges = [ "e", "sector", "rotces", "e" ]
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Shoppa]]
+name = "shoppa_hill_center_1.png"
+edges = [ "e", "E", "retnecllih", "E" ]
+
+[[tiles.Shoppa]]
+name = "shoppa_hill_center_2.png"
+edges = [ "hillcenter", "hillside2R", "H", "L2edisllih" ]
+
+[[tiles.Shoppa]]
+name = "shoppa_hill_side_2.png"
+edges = [ "e", "hillside2L", "3edisllih", "e" ]
+
+[[tiles.Shoppa]]
+name = "shoppa_hill_side_2.png"
+edges = [ "e", "hillside2R", "3edisllih", "e" ]
+can_mirror = true
+
+[[tiles.Shoppa]]
+name = "shoppa_hill_side_3.png"
+edges = [ "hillside3", "H", "4edisllih", "e" ]
+can_mirror = true
+
+[[tiles.Shoppa]]
+name = "shoppa_hill_side_4.png"
+edges = [ "hillside4", "H", "first_layer_reyal_tsrif", "e" ]
+can_mirror = true
+
+[[tiles.Shoppa]]
+name = "120_filled.png"
+edges = [ "H", "H", "first_layer_reyal_tsrif", "H" ]
+is_negative = true
+
+[[tiles.Shoppa]]
+name = "120_filled.png"
+edges = [ "H", "H", "H", "H" ]
+is_negative = true
+
 ################ EDGES ################
 [edges.bottom_row]
 top = { begin = "e", fill = "e", end = "e" }
 right = { begin = "e", fill = "e", end = "e" }
 bottom = { begin = "ef", fill = "f", end = "fe" }
 left = { begin = "e", fill = "e", end = "e" }
+
+[edges.bottom_fill]
+bottom.fill = "f"
 
 [edges.top_bottom]
 top.fill = "f"
@@ -199,9 +301,21 @@ wrap = true
 edges = "full_top_bottom"
 tiles = [ "Rooms" ]
 
+[[templates]]
+# 6
+width = 3960
+height = 1920
+can_invert = false
+is_negative = false
+put_girders = true
+max_hedgehogs = 64
+wrap = true
+edges = "bottom_fill"
+tiles = [ "Shoppa" ]
+
 [template_types]
 small = [ 2 ]
 medium = [ 4 ]
 large = [ 1 ]
 cavern = [ 0, 5 ]
-wacky = [ 3 ]
+wacky = [ 6 ]
