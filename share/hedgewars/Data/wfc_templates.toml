@@ -132,19 +132,14 @@ edges = [ "e", "E", "e", "e" ] # forced space
 can_mirror = true
 
 [[tiles.Shoppa]]
-name = "120_filled.png"
-edges = [ "e", "S", "e", "e" ] # another forced space
-can_rotate90 = true
-can_rotate180 = true
-can_rotate270 = true
-
-[[tiles.Shoppa]]
 name = "shoppa_bar.png"
+weight = 15
 edges = [ "e", "efe", "e", "efe" ]
 can_rotate90 = true
 
 [[tiles.Shoppa]]
 name = "shoppa_endpiece.png"
+weight = 2
 edges = [ "e", "e", "e", "efe" ]
 can_rotate90 = true
 can_rotate180 = true
@@ -152,20 +147,24 @@ can_rotate270 = true
 
 [[tiles.Shoppa]]
 name = "shoppa_roundedendpiece.png"
-edges = [ "e", "S", "e", "efe" ]
+weight = 10
+edges = [ "e", "e", "e", "efe" ]
 can_rotate90 = true
 can_rotate270 = true
 can_mirror = true
 
 [[tiles.Shoppa]]
 name = "shoppa_t.png"
+weight = 4
 edges = [ "e", "efe", "efe", "efe" ]
 can_rotate90 = true
 can_rotate270 = true
 
 [[tiles.Shoppa]]
 name = "shoppa_sector.png"
-edges = [ "e", "sector", "first_layer_reyal_tsrif", "e" ]
+weight = 5
+edges = [ "e", "sector_rotces", "first_layer_reyal_tsrif", "e" ]
+can_mirror = true
 
 [[tiles.Shoppa]]
 name = "shoppa_sector.png"
@@ -176,38 +175,45 @@ can_rotate270 = true
 
 [[tiles.Shoppa]]
 name = "shoppa_hill_center_1.png"
+weight = 1
 edges = [ "e", "E", "retnecllih", "E" ]
 
 [[tiles.Shoppa]]
 name = "shoppa_hill_center_2.png"
+weight = 1
 edges = [ "hillcenter", "hillside2R", "H", "L2edisllih" ]
 
 [[tiles.Shoppa]]
 name = "shoppa_hill_side_2.png"
+weight = 1
 edges = [ "e", "hillside2L", "3edisllih", "e" ]
 
 [[tiles.Shoppa]]
-name = "shoppa_hill_side_2.png"
-edges = [ "e", "hillside2R", "3edisllih", "e" ]
-can_mirror = true
+name = "shoppa_hill_side_2m.png"
+weight = 1
+edges = [ "e", "e", "hillside3", "R2edisllih" ]
 
 [[tiles.Shoppa]]
 name = "shoppa_hill_side_3.png"
+weight = 1
 edges = [ "hillside3", "H", "4edisllih", "e" ]
 can_mirror = true
 
 [[tiles.Shoppa]]
 name = "shoppa_hill_side_4.png"
+weight = 4
 edges = [ "hillside4", "H", "first_layer_reyal_tsrif", "e" ]
 can_mirror = true
 
 [[tiles.Shoppa]]
 name = "120_filled.png"
+weight = 1
 edges = [ "H", "H", "first_layer_reyal_tsrif", "H" ]
 is_negative = true
 
 [[tiles.Shoppa]]
 name = "120_filled.png"
+weight = 0
 edges = [ "H", "H", "H", "H" ]
 is_negative = true
 
