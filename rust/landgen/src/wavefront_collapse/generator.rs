@@ -14,6 +14,7 @@ pub struct EdgeDescription {
     pub name: String,
     pub reversed: Option<bool>,
     pub symmetrical: Option<bool>,
+    pub hard_match: Option<bool>,
 }
 
 #[derive(Debug, Clone)]
@@ -206,12 +207,11 @@ impl WavefrontCollapseLandGenerator {
 
         let mut rules = Vec::<CollapseRule>::new();
 
-        let default_connection = HashSet::from_iter(vec![Tile::Empty].into_iter());
         for (i, tile) in tiles.iter().enumerate() {
-            let mut right = default_connection.clone();
-            let mut bottom = default_connection.clone();
-            let mut left = default_connection.clone();
-            let mut top = default_connection.clone();
+            let mut top = HashSet::new();
+            let mut right = HashSet::new();
+            let mut bottom = HashSet::new();
+            let mut left = HashSet::new();
 
             let iteration = [
                 (&grid_top_edge, tile.edge_set().top(), &mut top),
@@ -222,6 +222,10 @@ impl WavefrontCollapseLandGenerator {
 
             // compatibility with grid edges
             for (edge, tile_edge, set) in iteration {
+                if !tile_edge.hard_match() {
+                    set.insert(Tile::Empty);
+                }
+
                 for (is_compatible, tile) in edge
                     .as_ref()
                     .map(|e| {
@@ -399,7 +403,11 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
 
 impl From<&EdgeDescription> for Edge<String> {
     fn from(val: &EdgeDescription) -> Self {
-        let edge = Edge::new(val.name.clone(), val.symmetrical.unwrap_or_default());
+        let edge = Edge::new(
+            val.name.clone(),
+            val.symmetrical.unwrap_or_default(),
+            val.hard_match.unwrap_or_default(),
+        );
 
         if val.reversed.unwrap_or_default() {
             edge.reversed()
@@ -413,23 +421,36 @@ impl<T: AsRef<str>> From<T> for EdgeDescription {
     fn from(val: T) -> Self {
         use std::cmp::Ordering;
 
-        let reversed = val.as_ref().chars().rev().collect::<String>();
+        let mut chars = val.as_ref().chars();
+        let hard_match = chars.next() == Some('!');
 
-        match val.as_ref().cmp(&reversed) {
+        let (name, reversed): (String, String) = if hard_match {
+            (chars.clone().collect(), chars.rev().collect())
+        } else {
+            (
+                val.as_ref().chars().collect(),
+                val.as_ref().chars().rev().collect(),
+            )
+        };
+
+        match name.cmp(&reversed) {
             Ordering::Less => EdgeDescription {
-                name: val.as_ref().to_owned(),
+                name,
                 symmetrical: Some(false),
                 reversed: Some(false),
+                hard_match: Some(hard_match),
             },
             Ordering::Equal => EdgeDescription {
                 name: reversed,
                 symmetrical: Some(true),
                 reversed: Some(false),
+                hard_match: Some(hard_match),
             },
             Ordering::Greater => EdgeDescription {
                 name: reversed,
                 symmetrical: Some(false),
                 reversed: Some(true),
+                hard_match: Some(hard_match),
             },
         }
     }

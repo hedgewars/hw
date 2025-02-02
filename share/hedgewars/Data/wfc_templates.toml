@@ -127,7 +127,7 @@ edges = [ "e", "e", "e", "e" ]
 # forced space
 name = "120_filled.png"
 weight = 0
-edges = [ "E", "e", "e", "e" ]
+edges = [ "!E", "e", "e", "e" ]
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -135,7 +135,7 @@ can_rotate270 = true
 [[tiles.Shoppa]]
 name = "120_filled.png"
 weight = 10
-edges = [ "e", "e", "first_layer_reyal_tsrif", "e" ]
+edges = [ "e", "e", "!first_layer_reyal_tsrif", "e" ]
 
 [[tiles.Shoppa]]
 name = "shoppa_bar.png"
@@ -173,7 +173,7 @@ can_rotate270 = true
 # first layer semicircle
 name = "shoppa_sector.png"
 weight = 5
-edges = [ "e", "sector_rotces", "first_layer_reyal_tsrif", "e" ]
+edges = [ "e", "sector_rotces", "!first_layer_reyal_tsrif", "e" ]
 anti_match = [1, 0, 0, 1]
 can_mirror = true
 
@@ -188,7 +188,7 @@ can_rotate270 = true
 [[tiles.Shoppa]]
 name = "shoppa_hill_center_1.png"
 weight = 0
-edges = [ "E", "E", "retnecllih", "E" ]
+edges = [ "E", "E", "!retnecllih", "E" ]
 
 [[tiles.Shoppa]]
 name = "shoppa_hill_center_2.png"
@@ -212,7 +212,7 @@ can_mirror = true
 [[tiles.Shoppa]]
 name = "shoppa_hill_side_4.png"
 weight = 6
-edges = [ "hillside4", "H", "first_layer_reyal_tsrif", "e" ]
+edges = [ "hillside4", "H", "!first_layer_reyal_tsrif", "e" ]
 anti_match = [0, 4, 0, 0]
 can_mirror = true
 

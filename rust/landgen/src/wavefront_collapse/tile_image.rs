@@ -8,15 +8,17 @@ pub struct Edge<I: PartialEq + Clone> {
     id: I,
     symmetrical: bool,
     reverse: bool,
+    hard_match: bool,
 }
 
 impl<I: PartialEq + Clone> Edge<I> {
     #[inline]
-    pub fn new(id: I, symmetrical: bool) -> Self {
+    pub fn new(id: I, symmetrical: bool, hard_match: bool) -> Self {
         Self {
             id,
             symmetrical,
             reverse: false,
+            hard_match,
         }
     }
 
@@ -26,7 +28,13 @@ impl<I: PartialEq + Clone> Edge<I> {
             id: self.id.clone(),
             symmetrical: self.symmetrical,
             reverse: !self.symmetrical && !self.reverse,
+            hard_match: self.hard_match,
         }
+    }
+
+    #[inline]
+    pub fn hard_match(&self) -> bool {
+        self.hard_match
     }
 
     #[inline]
