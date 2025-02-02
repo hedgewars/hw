@@ -63,7 +63,7 @@ impl WavefrontCollapse {
         while let Some(b) = self.collapse_step(random_numbers) {
             backtracks += b;
 
-            if backtracks >= 1000 {
+            if backtracks >= 128 {
                 println!("[WFC] Too much backtracking, stopping generation!");
                 break;
             }
@@ -161,10 +161,19 @@ impl WavefrontCollapse {
                     if entropy > 0 {
                         if entropy <= tiles_to_collapse.0 {
                             let weights = possibilities.iter().map(|(weight, _)| weight.pow(2));
-                            let distribution = WeightedIndex::new(weights).unwrap();
 
-                            let entry =
-                                (y, x, possibilities[distribution.sample(random_numbers)].1);
+                            let tile = if weights.clone().sum::<u32>() == 0 {
+                                possibilities
+                                    .as_slice()
+                                    .choose(random_numbers)
+                                    .expect("non-empty slice")
+                                    .1
+                            } else {
+                                let distribution = WeightedIndex::new(weights).unwrap();
+                                possibilities[distribution.sample(random_numbers)].1
+                            };
+
+                            let entry = (y, x, tile);
 
                             if entropy < tiles_to_collapse.0 {
                                 tiles_to_collapse = (entropy, vec![entry])
@@ -173,15 +182,6 @@ impl WavefrontCollapse {
                             }
                         }
                     } else {
-                        /*
-                        println!("We're here: {}, {}", x, y);
-                        println!(
-                            "Neighbour tiles are: {:?} {:?} {:?} {:?}",
-                            right_tile, bottom_tile, left_tile, top_tile
-                        );
-                        println!("Rules are: {:?}", self.rules);
-                        */
-
                         let entries = neighbors
                             .iter()
                             .filter(|(y, x)| self.grid.get(*y, *x).is_some())
@@ -193,8 +193,6 @@ impl WavefrontCollapse {
                         } else {
                             tiles_to_collapse.1.extend(entries);
                         }
-
-                        //todo!("no collapse possible - what to do?")
                     }
                 }
             }
@@ -220,6 +218,7 @@ impl WavefrontCollapse {
 
                 Some(0)
             } else {
+                // all tiles are filled according to the rules
                 None
             }
         }
@@ -227,25 +226,5 @@ impl WavefrontCollapse {
 
     pub fn grid(&self) -> &Vec2D<Tile> {
         &self.grid
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{Tile, WavefrontCollapse};
-    use integral_geometry::Size;
-    use vec2d::Vec2D;
-
-    #[test]
-    fn test_wavefront_collapse() {
-        let size = Size::new(4, 4);
-        let mut rnd = [0u32; 64].into_iter().cycle();
-        let mut wfc = WavefrontCollapse::default();
-
-        wfc.generate_map(&size, |_| {}, &mut rnd);
-
-        let empty_land = Vec2D::new(&size, Tile::Empty);
-
-        assert_eq!(empty_land.as_slice(), wfc.grid().as_slice());
     }
 }

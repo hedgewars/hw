@@ -35,34 +35,143 @@ impl<I: PartialEq + Clone> Edge<I> {
     }
 }
 
+impl Edge<String> {
+    pub fn name(&self) -> String {
+        if self.reverse {
+            self.id.chars().rev().collect()
+        } else {
+            self.id.clone()
+        }
+    }
+}
+
+#[derive(PartialEq, Clone, Debug)]
+pub struct EdgeSet<I: PartialEq + Clone>([Edge<I>; 4]);
+
+impl<I: PartialEq + Clone> EdgeSet<I> {
+    pub fn new(edge_set: [Edge<I>; 4]) -> Self {
+        Self(edge_set)
+    }
+
+    pub fn top(&self) -> &Edge<I> {
+        &self.0[0]
+    }
+
+    pub fn right(&self) -> &Edge<I> {
+        &self.0[1]
+    }
+
+    pub fn bottom(&self) -> &Edge<I> {
+        &self.0[2]
+    }
+
+    pub fn left(&self) -> &Edge<I> {
+        &self.0[3]
+    }
+
+    pub fn mirrored(&self) -> Self {
+        Self([
+            self.0[0].reversed(),
+            self.0[3].reversed(),
+            self.0[2].reversed(),
+            self.0[1].reversed(),
+        ])
+    }
+
+    pub fn flipped(&self) -> Self {
+        Self([
+            self.0[2].reversed(),
+            self.0[1].reversed(),
+            self.0[0].reversed(),
+            self.0[3].reversed(),
+        ])
+    }
+
+    pub fn rotated90(&self) -> Self {
+        Self([
+            self.0[3].clone(),
+            self.0[0].clone(),
+            self.0[1].clone(),
+            self.0[2].clone(),
+        ])
+    }
+
+    pub fn rotated180(&self) -> Self {
+        Self([
+            self.0[2].clone(),
+            self.0[3].clone(),
+            self.0[0].clone(),
+            self.0[1].clone(),
+        ])
+    }
+
+    pub fn rotated270(&self) -> Self {
+        Self([
+            self.0[1].clone(),
+            self.0[2].clone(),
+            self.0[3].clone(),
+            self.0[0].clone(),
+        ])
+    }
+}
+
+#[derive(PartialEq, Clone, Debug)]
+pub enum MatchSide {
+    OnTop,
+    OnRight,
+    OnBottom,
+    OnLeft,
+}
 #[derive(Clone)]
 pub struct TileImage<T, I: PartialEq + Clone> {
     image: Rc<Vec2D<T>>,
     pub weight: u8,
     pub transform: Transform,
-    top: Edge<I>,
-    right: Edge<I>,
-    bottom: Edge<I>,
-    left: Edge<I>,
+    edges: EdgeSet<I>,
+    anti_match: [u64; 4],
 }
 
 impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
-    pub fn new(
-        image: Vec2D<T>,
-        weight: u8,
-        top: Edge<I>,
-        right: Edge<I>,
-        bottom: Edge<I>,
-        left: Edge<I>,
-    ) -> Self {
+    pub fn new(image: Vec2D<T>, weight: u8, edges: EdgeSet<I>, anti_match: [u64; 4]) -> Self {
         Self {
             image: Rc::new(image),
             weight,
             transform: Transform::default(),
-            top,
-            right,
-            bottom,
-            left,
+            edges,
+            anti_match,
+        }
+    }
+
+    pub fn is_compatible(&self, other: &Self, direction: MatchSide) -> bool {
+        match direction {
+            MatchSide::OnTop => {
+                self.anti_match[0] & other.anti_match[2] == 0
+                    && self
+                        .edge_set()
+                        .top()
+                        .is_compatible(other.edge_set().bottom())
+            }
+            MatchSide::OnRight => {
+                self.anti_match[1] & other.anti_match[3] == 0
+                    && self
+                        .edge_set()
+                        .right()
+                        .is_compatible(other.edge_set().left())
+            }
+            MatchSide::OnBottom => {
+                self.anti_match[2] & other.anti_match[0] == 0
+                    && self
+                        .edge_set()
+                        .bottom()
+                        .is_compatible(other.edge_set().top())
+            }
+            MatchSide::OnLeft => {
+                self.anti_match[3] & other.anti_match[1] == 0
+                    && self
+                        .edge_set()
+                        .left()
+                        .is_compatible(other.edge_set().right())
+            }
         }
     }
 
@@ -71,10 +180,13 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
             image: self.image.clone(),
             weight: self.weight,
             transform: self.transform.mirror(),
-            top: self.top.reversed(),
-            right: self.left.reversed(),
-            bottom: self.bottom.reversed(),
-            left: self.right.reversed(),
+            edges: self.edges.mirrored(),
+            anti_match: [
+                self.anti_match[0],
+                self.anti_match[3],
+                self.anti_match[2],
+                self.anti_match[1],
+            ],
         }
     }
 
@@ -83,10 +195,13 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
             image: self.image.clone(),
             weight: self.weight,
             transform: self.transform.flip(),
-            top: self.bottom.reversed(),
-            right: self.right.reversed(),
-            bottom: self.top.reversed(),
-            left: self.left.reversed(),
+            edges: self.edges.flipped(),
+            anti_match: [
+                self.anti_match[2],
+                self.anti_match[1],
+                self.anti_match[0],
+                self.anti_match[3],
+            ],
         }
     }
 
@@ -95,10 +210,13 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
             image: self.image.clone(),
             weight: self.weight,
             transform: self.transform.rotate90(),
-            top: self.left.clone(),
-            right: self.top.clone(),
-            bottom: self.right.clone(),
-            left: self.bottom.clone(),
+            edges: self.edges.rotated90(),
+            anti_match: [
+                self.anti_match[3],
+                self.anti_match[0],
+                self.anti_match[1],
+                self.anti_match[2],
+            ],
         }
     }
 
@@ -107,10 +225,13 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
             image: self.image.clone(),
             weight: self.weight,
             transform: self.transform.rotate180(),
-            top: self.bottom.clone(),
-            right: self.left.clone(),
-            bottom: self.top.clone(),
-            left: self.right.clone(),
+            edges: self.edges.rotated180(),
+            anti_match: [
+                self.anti_match[2],
+                self.anti_match[3],
+                self.anti_match[0],
+                self.anti_match[1],
+            ],
         }
     }
 
@@ -119,31 +240,19 @@ impl<T: Copy, I: PartialEq + Clone> TileImage<T, I> {
             image: self.image.clone(),
             weight: self.weight,
             transform: self.transform.rotate270(),
-            top: self.right.clone(),
-            right: self.bottom.clone(),
-            bottom: self.left.clone(),
-            left: self.top.clone(),
+            edges: self.edges.rotated270(),
+            anti_match: [
+                self.anti_match[1],
+                self.anti_match[2],
+                self.anti_match[3],
+                self.anti_match[0],
+            ],
         }
     }
 
     #[inline]
-    pub fn right_edge(&self) -> &Edge<I> {
-        &self.right
-    }
-
-    #[inline]
-    pub fn bottom_edge(&self) -> &Edge<I> {
-        &self.bottom
-    }
-
-    #[inline]
-    pub fn left_edge(&self) -> &Edge<I> {
-        &self.left
-    }
-
-    #[inline]
-    pub fn top_edge(&self) -> &Edge<I> {
-        &self.top
+    pub fn edge_set(&self) -> &EdgeSet<I> {
+        &self.edges
     }
 
     #[inline]

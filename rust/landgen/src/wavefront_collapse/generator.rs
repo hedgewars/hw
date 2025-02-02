@@ -1,4 +1,4 @@
-use super::tile_image::{Edge, TileImage};
+use super::tile_image::{Edge, EdgeSet, MatchSide, TileImage};
 use super::wavefront_collapse::{CollapseRule, Tile, WavefrontCollapse};
 use crate::{LandGenerationParameters, LandGenerator};
 use integral_geometry::Size;
@@ -29,6 +29,7 @@ pub struct TileDescription {
     pub name: String,
     pub weight: u8,
     pub edges: EdgesDescription,
+    pub anti_match: Option<[u64; 4]>,
     pub is_negative: Option<bool>,
     pub can_flip: Option<bool>,
     pub can_mirror: Option<bool>,
@@ -130,15 +131,19 @@ impl WavefrontCollapseLandGenerator {
             }
         }
 
-        let [top_edge, right_edge, bottom_edge, left_edge]: [Edge<String>; 4] = [
+        let edge_set: EdgeSet<String> = EdgeSet::new([
             (&tile_description.edges.top).into(),
             (&tile_description.edges.right).into(),
             (&tile_description.edges.bottom).into(),
             (&tile_description.edges.left).into(),
-        ];
+        ]);
 
-        let tile =
-            TileImage::<T, String>::new(tiles_image, tile_description.weight, top_edge, right_edge, bottom_edge, left_edge);
+        let tile = TileImage::<T, String>::new(
+            tiles_image,
+            tile_description.weight,
+            edge_set,
+            tile_description.anti_match.unwrap_or_default(),
+        );
 
         result.push(tile.clone());
 
@@ -209,10 +214,10 @@ impl WavefrontCollapseLandGenerator {
             let mut top = default_connection.clone();
 
             let iteration = [
-                (&grid_top_edge, tile.top_edge(), &mut top),
-                (&grid_right_edge, tile.right_edge(), &mut right),
-                (&grid_bottom_edge, tile.bottom_edge(), &mut bottom),
-                (&grid_left_edge, tile.left_edge(), &mut left),
+                (&grid_top_edge, tile.edge_set().top(), &mut top),
+                (&grid_right_edge, tile.edge_set().right(), &mut right),
+                (&grid_bottom_edge, tile.edge_set().bottom(), &mut bottom),
+                (&grid_left_edge, tile.edge_set().left(), &mut left),
             ];
 
             // compatibility with grid edges
@@ -237,12 +242,12 @@ impl WavefrontCollapseLandGenerator {
             }
 
             // compatibility with itself
-            if tile.left_edge().is_compatible(tile.right_edge()) {
+            if tile.is_compatible(&tile, MatchSide::OnLeft) {
                 left.insert(Tile::Numbered(i));
                 right.insert(Tile::Numbered(i));
             }
 
-            if tile.top_edge().is_compatible(tile.bottom_edge()) {
+            if tile.is_compatible(&tile, MatchSide::OnTop) {
                 top.insert(Tile::Numbered(i));
                 bottom.insert(Tile::Numbered(i));
             }
@@ -250,25 +255,25 @@ impl WavefrontCollapseLandGenerator {
             // compatibility with previously defined tiles
             for p in 0..i {
                 // Check left edge
-                if tiles[p].left_edge().is_compatible(tile.right_edge()) {
+                if tiles[p].is_compatible(&tile, MatchSide::OnLeft) {
                     rules[p].left.insert(Tile::Numbered(i));
                     right.insert(Tile::Numbered(p));
                 }
 
                 // Check right edge
-                if tiles[p].right_edge().is_compatible(tile.left_edge()) {
+                if tiles[p].is_compatible(&tile, MatchSide::OnRight) {
                     rules[p].right.insert(Tile::Numbered(i));
                     left.insert(Tile::Numbered(p));
                 }
 
                 // Check top edge
-                if tiles[p].top_edge().is_compatible(tile.bottom_edge()) {
+                if tiles[p].is_compatible(&tile, MatchSide::OnTop) {
                     rules[p].top.insert(Tile::Numbered(i));
                     bottom.insert(Tile::Numbered(p));
                 }
 
                 // Check bottom edge
-                if tiles[p].bottom_edge().is_compatible(tile.top_edge()) {
+                if tiles[p].is_compatible(&tile, MatchSide::OnBottom) {
                     rules[p].bottom.insert(Tile::Numbered(i));
                     top.insert(Tile::Numbered(p));
                 }
@@ -279,7 +284,7 @@ impl WavefrontCollapseLandGenerator {
                 - probability_distribution_factor) as u32;
 
             rules.push(CollapseRule {
-                weight: weight * tile.weight as u32 + 1,
+                weight: weight * tile.weight as u32,
                 tile: Tile::Numbered(i),
                 top,
                 right,
@@ -344,6 +349,46 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
                             );
                         }
                     }
+                } else {
+                    // couldn't find a tile to place here, dump some debug info for tile set maker
+                    let mut edges = ["-", "|", "-", "|"].map(|s| s.to_owned());
+
+                    if row > 0 {
+                        let tile = wfc.grid().get(row - 1, column);
+                        edges[0] = if let Some(Tile::Numbered(tile_index)) = tile {
+                            tiles[*tile_index].edge_set().bottom().name()
+                        } else {
+                            format!("{:?}", tile.unwrap())
+                        }
+                    }
+                    if column < wfc_size.width as usize - 1 {
+                        let tile = wfc.grid().get(row, column + 1);
+                        edges[1] = if let Some(Tile::Numbered(tile_index)) = tile {
+                            tiles[*tile_index].edge_set().left().name()
+                        } else {
+                            format!("{:?}", tile.unwrap())
+                        }
+                    }
+                    if row < wfc_size.height as usize - 1 {
+                        let tile = wfc.grid().get(row + 1, column);
+                        edges[2] = if let Some(Tile::Numbered(tile_index)) = tile {
+                            tiles[*tile_index].edge_set().top().name()
+                        } else {
+                            format!("{:?}", tile.unwrap())
+                        }
+                    }
+                    if column > 0 {
+                        let tile = wfc.grid().get(row, column - 1);
+                        edges[3] = if let Some(Tile::Numbered(tile_index)) = tile {
+                            tiles[*tile_index].edge_set().right().name()
+                        } else {
+                            format!("{:?}", tile.unwrap())
+                        }
+                    }
+                    eprintln!(
+                        "Couldn't find a tile to place here (row, column): ({}, {}), edges are: [{}]",
+                        row, column, edges.join(", "),
+                    );
                 }
             }
         }
