@@ -1,7 +1,7 @@
 use integral_geometry::Size;
 use std::{
     ops::{Index, IndexMut},
-    slice::SliceIndex,
+    slice::{ChunksExact, ChunksExactMut, SliceIndex},
 };
 
 #[derive(Debug, Clone)]
@@ -114,12 +114,12 @@ impl<T: Copy> Vec2D<T> {
     }
 
     #[inline]
-    pub fn rows(&self) -> impl DoubleEndedIterator<Item = &[T]> {
+    pub fn rows(&self) -> ChunksExact<'_, T> {
         self.data.chunks_exact(self.width())
     }
 
     #[inline]
-    pub fn rows_mut(&mut self) -> impl DoubleEndedIterator<Item = &mut [T]> {
+    pub fn rows_mut(&mut self) -> ChunksExactMut<'_, T> {
         let width = self.width();
         self.data.chunks_exact_mut(width)
     }

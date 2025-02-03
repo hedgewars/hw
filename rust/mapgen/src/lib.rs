@@ -66,9 +66,8 @@ impl<T> MapGenerator<T> {
         let mut texture = Vec2D::new(&land.size().size(), 0);
 
         if let Some(land_sprite) = theme.land_texture() {
-            for (row_index, (land_row, tex_row)) in land.rows().zip(texture.rows_mut()).enumerate()
+            for (sprite_row, (land_row, tex_row)) in land_sprite.rows().cycle().zip(land.rows().zip(texture.rows_mut()))
             {
-                let sprite_row = land_sprite.get_row(row_index % land_sprite.height() as usize);
                 let mut x_offset = 0;
                 while sprite_row.len() < land.width() - x_offset {
                     let copy_range = x_offset..x_offset + sprite_row.len();

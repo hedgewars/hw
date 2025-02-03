@@ -7,7 +7,7 @@ use std::{
     path::Path,
     slice::{from_raw_parts, from_raw_parts_mut},
 };
-
+use std::slice::ChunksExact;
 use integral_geometry::Size;
 use vec2d::Vec2D;
 
@@ -32,7 +32,7 @@ impl ThemeSprite {
     }
 
     #[inline]
-    pub fn rows(&self) -> impl DoubleEndedIterator<Item = &[u32]> {
+    pub fn rows(&self) -> ChunksExact<u32> {
         self.pixels.rows()
     }
 
