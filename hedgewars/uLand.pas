@@ -20,7 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uConsts, uTypes, uAILandMarks;
+uses SDLh, uConsts, uTypes, uAILandMarks;
 
 procedure initModule;
 procedure freeModule;
@@ -365,11 +365,7 @@ begin
         begin
         if (cTemplateFilter = 0) and (cMapGen <> mgMaze) then
             begin
-            l:= getRandom(GroupedTemplatesCount);
-            repeat
-                inc(cTemplateFilter);
-                dec(l, TemplateCounts[cTemplateFilter]);
-            until l < 0;
+            l:= getRandom(5) + 1;
             end
             else getRandom(1);
 

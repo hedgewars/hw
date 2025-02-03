@@ -76,7 +76,6 @@ set(engine_sources
     uVideoRec.pas
     uAILandMarks.pas
     adler32.pas
-    uLandTemplates.pas
     uLandTexture.pas
     uLandGenPerlin.pas
     uLandGraphics.pas
