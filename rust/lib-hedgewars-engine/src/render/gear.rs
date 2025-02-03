@@ -131,7 +131,7 @@ impl GearRenderer {
                 .expect(&format!("Could not store sprite {:?}", sprite));
             let (texture_index, rect) = atlas.get_rect(index).unwrap();
 
-            let mut pixels = vec![255u8; size.area() * 4].into_boxed_slice();
+            let mut pixels = vec![255u8; size.area() as usize * 4].into_boxed_slice();
             load_sprite_pixels(path.as_path(), &mut pixels).expect("Unable to load Graphics");
 
             texture.update(
@@ -258,18 +258,20 @@ impl GearRenderer {
 
 fn load_sprite_pixels(path: &Path, buffer: &mut [u8]) -> io::Result<Size> {
     let decoder = Decoder::new(BufReader::new(File::open(path)?));
-    let (info, mut reader) = decoder.read_info()?;
+    let mut reader = decoder.read_info()?;
+    let info = reader.info();
 
-    let size = Size::new(info.width as usize, info.height as usize);
+    let size = Size::new(info.width, info.height);
     reader.next_frame(buffer)?;
     Ok(size)
 }
 
 fn load_sprite_size(path: &Path) -> io::Result<Size> {
     let decoder = Decoder::new(BufReader::new(File::open(path)?));
-    let (info, mut reader) = decoder.read_info()?;
+    let mut reader = decoder.read_info()?;
+    let info = reader.info();
 
-    let size = Size::new(info.width as usize, info.height as usize);
+    let size = Size::new(info.width, info.height);
     Ok(size)
 }
 

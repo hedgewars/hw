@@ -82,7 +82,7 @@ pub struct MapRenderer {
     tile_layout: InputLayout,
 
     tile_size: Size,
-    num_tile_x: usize,
+    num_tile_x: u32,
 }
 
 impl MapRenderer {
@@ -147,8 +147,8 @@ impl MapRenderer {
 
         let tw = self.tile_size.width;
         let th = self.tile_size.height;
-        let lw = land.width();
-        let lh = land.height();
+        let lw = land.width() as u32;
+        let lh = land.height() as u32;
         let num_tile_x = lw / tw;
         let num_tile_y = lh / th;
 
@@ -156,14 +156,14 @@ impl MapRenderer {
 
         for y in 0..num_tile_y {
             for x in 0..num_tile_x {
-                let idx = x + y * num_tile_x;
+                let idx = (x + y * num_tile_x) as usize;
 
                 let (data, stride) = {
                     let bpp = 4;
 
                     let offset = x * tw * bpp + y * th * lw * bpp;
 
-                    let data = unsafe { &land.as_bytes()[offset..] };
+                    let data = unsafe { &land.as_bytes()[offset as usize..] };
                     let stride = land.width();
 
                     (data, NonZeroU32::new(stride as u32))
@@ -187,7 +187,7 @@ impl MapRenderer {
                 } else {
                     let texture_region = Rect::at_origin(self.tile_size);
 
-                    self.textures[idx].update(
+                    self.textures[idx as usize].update(
                         texture_region,
                         data,
                         stride,
@@ -219,8 +219,8 @@ impl MapRenderer {
         self.index_offset = 0;
 
         for (idx, tile) in self.tiles.iter().enumerate() {
-            let tile_x = idx % self.num_tile_x;
-            let tile_y = idx / self.num_tile_x;
+            let tile_x = idx as u32 % self.num_tile_x;
+            let tile_y = idx as u32 / self.num_tile_x;
             let tile_w = self.tile_size.width;
             let tile_h = self.tile_size.width;
 

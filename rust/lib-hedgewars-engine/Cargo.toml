@@ -6,10 +6,10 @@ edition = "2021"
 build = "build.rs"
 
 [dependencies]
-gl = "0.11"
+gl = "0.14"
 netbuf = "0.4"
-itertools = "0.10"
-png = "0.13"
+itertools = "0.14"
+png = "0.17"
 
 fpnum = { path = "../fpnum" }
 land2d = { path = "../land2d" }
@@ -20,13 +20,13 @@ hedgewars-engine-messages = { path = "../hedgewars-engine-messages" }
 hwphysics = { path = "../hwphysics" }
 mapgen = { path = "../mapgen" }
 vec2d = { path = "../vec2d" }
-log = "0.4.21"
+log = "0.4.25"
 
 [dev-dependencies]
 proptest = "0.9.2"
 
 [build-dependencies]
-cbindgen = "0.24"
+cbindgen = "0.28"
 
 [lib]
 name = "hedgewars_engine"

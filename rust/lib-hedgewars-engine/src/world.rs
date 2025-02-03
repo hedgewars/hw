@@ -59,7 +59,7 @@ impl World {
         let land_tile_size = Size::square(512);
         self.map_renderer = Some(MapRenderer::new(land_tile_size));
         self.gear_renderer = Some(GearRenderer::new(&self.data_path.as_path()));
-        self.camera = Camera::with_size(Size::new(width as usize, height as usize));
+        self.camera = Camera::with_size(Size::new(width as u32, height as u32));
 
         if let Some(ref state) = self.game_state {
             self.camera.position = state.land.play_box().center();
@@ -75,7 +75,7 @@ impl World {
             let parameters = LandGenerationParameters::new(0u32, 0x8000u32, 0, false, false);
             let theme =
                 Theme::load(self.data_path.join(Path::new("Themes/Cheese/")).as_path()).unwrap();
-            let texture = MapGenerator::<OutlineTemplate>::new().make_texture(
+            let texture = MapGenerator::<OutlineTemplate>::new(&self.data_path).make_texture(
                 &state.land,
                 &parameters,
                 &theme,

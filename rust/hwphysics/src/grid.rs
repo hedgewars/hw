@@ -35,7 +35,7 @@ impl GridBin {
     }
 }
 
-const GRID_BIN_SIZE: usize = 128;
+const GRID_BIN_SIZE: u32 = 128;
 
 pub struct Grid {
     bins: Vec<GridBin>,
@@ -57,9 +57,9 @@ impl Grid {
         }
     }
 
-    fn linear_bin_index(&self, index: Point) -> usize {
+    fn linear_bin_index(&self, index: Point) -> u32 {
         self.bins_count
-            .linear_index(index.x as usize, index.y as usize)
+            .linear_index(index.x as u32, index.y as u32)
     }
 
     fn bin_index(&self, position: &FPPoint) -> Point {
@@ -68,12 +68,12 @@ impl Grid {
 
     fn get_bin(&mut self, index: Point) -> &mut GridBin {
         let index = self.linear_bin_index(index);
-        &mut self.bins[index]
+        &mut self.bins[index as usize]
     }
 
     fn try_get_bin(&mut self, index: Point) -> Option<&mut GridBin> {
         let index = self.linear_bin_index(index);
-        self.bins.get_mut(index)
+        self.bins.get_mut(index as usize)
     }
 
     fn lookup_bin(&mut self, position: &FPPoint) -> &mut GridBin {

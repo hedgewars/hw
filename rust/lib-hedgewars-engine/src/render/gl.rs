@@ -91,10 +91,10 @@ fn get_u32(value: Option<NonZeroU32>) -> u32 {
 
 fn is_out_of_bounds(data: &[u8], data_stride: Option<NonZeroU32>, texture_size: Size) -> bool {
     let data_stride = get_u32(data_stride);
-    data_stride == 0 && texture_size.area() * 4 > data.len()
+    data_stride == 0 && texture_size.area() * 4 > data.len() as u32
         || data_stride != 0
-            && texture_size.width > data_stride as usize
-            && (texture_size.height * data_stride as usize) * 4 > data.len()
+            && texture_size.width > data_stride
+            && (texture_size.height * data_stride) * 4 > data.len() as u32
 }
 
 impl Texture2D {
@@ -193,7 +193,7 @@ impl Texture2D {
     }
 
     pub fn retrieve(&self, data: &mut [u8]) {
-        if self.size.area() * 4 > data.len() {
+        if self.size.area() * 4 > data.len() as u32 {
             return;
         }
 

@@ -22,7 +22,7 @@ impl Camera {
 
     pub fn viewport(&self) -> Rect {
         #[inline]
-        fn scale(value: usize, zoom: f32) -> i32 {
+        fn scale(value: u32, zoom: f32) -> i32 {
             (value as f32 / zoom / 2.0) as i32
         }
         let half_width = scale(self.size.width, self.zoom);

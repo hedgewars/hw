@@ -35,27 +35,27 @@ impl Fit {
 
 #[derive(PartialEq, Eq)]
 pub struct UsedSpace {
-    used_area: usize,
-    total_area: usize,
+    used_area: u32,
+    total_area: u32,
 }
 
 impl UsedSpace {
-    const fn new(used_area: usize, total_area: usize) -> Self {
+    const fn new(used_area: u32, total_area: u32) -> Self {
         Self {
             used_area,
             total_area,
         }
     }
 
-    const fn used(&self) -> usize {
+    const fn used(&self) -> u32 {
         self.used_area
     }
 
-    const fn total(&self) -> usize {
+    const fn total(&self) -> u32 {
         self.total_area
     }
 
-    const fn free(&self) -> usize {
+    const fn free(&self) -> u32 {
         self.total_area - self.used_area
     }
 }
@@ -93,7 +93,7 @@ impl<T: Copy> Atlas<T> {
     }
 
     pub fn used_space(&self) -> UsedSpace {
-        let used = self.used_rects.iter().map(|(r, _)| r.size().area()).sum();
+        let used = self.used_rects.iter().map(|(r, _)| r.size().area()).sum::<u32>();
         UsedSpace::new(used, self.size.area())
     }
 
@@ -419,7 +419,7 @@ mod tests {
         }
     }
 
-    fn sum_area<S: HasSize>(items: &[S]) -> usize {
+    fn sum_area<S: HasSize>(items: &[S]) -> u32 {
         items.iter().map(|s| s.size().area()).sum()
     }
 
