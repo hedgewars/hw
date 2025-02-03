@@ -116,7 +116,7 @@ is_negative = true
 [[tiles.Shoppa]]
 name = "120_filled.png"
 weight = 0
-edges = [ "first_layer_reyal_tsrif", "f", "f", "f" ]
+edges = [ "first_layer_reyal_tsrif", "f", "!f", "f" ]
 is_negative = true
 
 [[tiles.Shoppa]]
@@ -124,10 +124,19 @@ name = "120_filled.png"
 edges = [ "e", "e", "e", "e" ]
 
 [[tiles.Shoppa]]
+name = "120_filled.png"
+weight = 15
+edges = [ "e", "OE", "EO", "e" ]
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Shoppa]]
 # forced space
 name = "120_filled.png"
 weight = 0
 edges = [ "!E", "e", "e", "e" ]
+anti_match = [0, 1, 0, 1]
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
@@ -179,11 +188,29 @@ can_mirror = true
 
 [[tiles.Shoppa]]
 name = "shoppa_sector.png"
+weight = 8
 edges = [ "e", "sector", "rotces", "e" ]
 anti_match = [1, 0, 0, 1]
 can_rotate90 = true
 can_rotate180 = true
 can_rotate270 = true
+
+[[tiles.Shoppa]]
+name = "120_corner.png"
+weight = 8
+edges = [ "RS", "e", "e", "SR" ]
+anti_match = [0, 1, 1, 0]
+is_negative = true
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Shoppa]]
+name = "120_bar.png"
+edges = [ "RRR", "RS", "e", "SR" ]
+anti_match = [0, 0, 1, 0]
+is_negative = true
+can_flip = true
 
 [[tiles.Shoppa]]
 name = "shoppa_hill_center_1.png"
@@ -211,7 +238,7 @@ can_mirror = true
 
 [[tiles.Shoppa]]
 name = "shoppa_hill_side_4.png"
-weight = 6
+weight = 4
 edges = [ "hillside4", "H", "!first_layer_reyal_tsrif", "e" ]
 anti_match = [0, 4, 0, 0]
 can_mirror = true
@@ -224,7 +251,6 @@ is_negative = true
 
 [[tiles.Shoppa]]
 name = "120_filled.png"
-weight = 10
 edges = [ "H", "H", "H", "H" ]
 anti_match = [0, 2, 0, 2]
 is_negative = true
