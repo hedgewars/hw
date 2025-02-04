@@ -72,7 +72,7 @@ impl World {
         if let Some(ref state) = self.game_state {
             self.camera.position = state.land.play_box().center();
 
-            let parameters = LandGenerationParameters::new(0u32, 0x8000u32, 0, false, false);
+            let parameters = LandGenerationParameters::new(0u32, u32::MAX, 80, false, false);
             let theme =
                 Theme::load(self.data_path.join(Path::new("Themes/Cheese/")).as_path()).unwrap();
             let texture = MapGenerator::<OutlineTemplate>::new(&self.data_path).make_texture(
@@ -112,10 +112,7 @@ impl World {
             template
         }
 
-        // based on old engine min_distance... dunno if this is the correct place tho
-        let distance_divisor = (self.feature_size as u32).pow(2) / 8 + 10;
-
-        let params = LandGenerationParameters::new(0u8, u8::MAX, distance_divisor, false, false);
+        let params = LandGenerationParameters::new(0u8, u8::MAX, 80, false, false);
         let landgen = TemplatedLandGenerator::new(template());
         self.preview = Some(landgen.generate_land(&params, &mut self.random_numbers_gen));
     }
@@ -125,7 +122,7 @@ impl World {
     }
 
     pub fn init(&mut self, template: OutlineTemplate) {
-        let params = LandGenerationParameters::new(0u32, u32::MAX, 5, false, false);
+        let params = LandGenerationParameters::new(0u32, u32::MAX, 80, false, false);
         let landgen = TemplatedLandGenerator::new(template);
         let land = landgen.generate_land(&params, &mut self.random_numbers_gen);
 
