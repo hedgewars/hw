@@ -23,6 +23,7 @@ use rand::Rng;
 
 use rand::prelude::IndexedRandom;
 use std::{borrow::Borrow, collections::hash_map::HashMap};
+use std::fmt::Debug;
 use vec2d::Vec2D;
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
@@ -66,7 +67,10 @@ impl<T> MapGenerator<T> {
         let mut texture = Vec2D::new(&land.size().size(), 0);
 
         if let Some(land_sprite) = theme.land_texture() {
-            for (sprite_row, (land_row, tex_row)) in land_sprite.rows().cycle().zip(land.rows().zip(texture.rows_mut()))
+            for (sprite_row, (land_row, tex_row)) in land_sprite
+                .rows()
+                .cycle()
+                .zip(land.rows().zip(texture.rows_mut()))
             {
                 let mut x_offset = 0;
                 while sprite_row.len() < land.width() - x_offset {
@@ -91,39 +95,44 @@ impl<T> MapGenerator<T> {
                     );
                 }
             }
+        } else {
+            eprintln!("No land texture, expect empty land");
         }
 
-        if let Some(border_sprite) = theme.border_texture() {
-            assert!(border_sprite.height() <= 512);
-            let border_width = (border_sprite.height() / 2) as u8;
-            let border_sprite = border_sprite.to_tiled();
+        if true {
+           shoppa_border(parameters.basic(), &land, &mut texture, 8);
+        } else {
+            if let Some(border_sprite) = theme.border_texture() {
+                assert!(border_sprite.height() <= 512);
+                let border_width = (border_sprite.height() / 2) as u8;
+                let border_sprite = border_sprite.to_tiled();
 
-            let mut offsets = vec![255u8; land.width()];
+                let mut offsets = vec![255u8; land.width()];
 
-            land_border_pass(
-                parameters.basic(),
-                land.rows().rev().zip(texture.rows_mut().rev()),
-                &mut offsets,
-                border_width,
-                |x, y| {
-                    border_sprite.get_pixel(
-                        x % border_sprite.width() as usize,
-                        border_sprite.height() as usize - 1 - y,
-                    )
-                },
-            );
+                land_border_pass(
+                    parameters.basic(),
+                    land.rows().rev().zip(texture.rows_mut().rev()),
+                    &mut offsets,
+                    border_width,
+                    |x, y| {
+                        border_sprite.get_pixel(
+                            x % border_sprite.width() as usize,
+                            border_sprite.height() as usize - 1 - y,
+                        )
+                    },
+                );
 
-            offsets.iter_mut().for_each(|v| *v = 255);
+                offsets.iter_mut().for_each(|v| *v = 255);
 
-            land_border_pass(
-                parameters.basic(),
-                land.rows().zip(texture.rows_mut()),
-                &mut offsets,
-                border_width,
-                |x, y| border_sprite.get_pixel(x % border_sprite.width() as usize, y),
-            );
+                land_border_pass(
+                    parameters.basic(),
+                    land.rows().zip(texture.rows_mut()),
+                    &mut offsets,
+                    border_width,
+                    |x, y| border_sprite.get_pixel(x % border_sprite.width() as usize, y),
+                );
+            }
         }
-
         texture
     }
 }
@@ -272,6 +281,88 @@ fn land_border_pass<'a, LandT, T, F>(
             } else {
                 0
             }
+        }
+    }
+}
+
+fn shoppa_border<LandT>(
+    basic_value: LandT,
+    land: &Land2D<LandT>,
+    texture: &mut Vec2D<u32>,
+    depth: u8,
+) where
+    LandT: Copy + Default + PartialEq,
+{
+    //land.rows().rev().zip(texture.rows_mut().rev()),
+    let mut depth_field = Vec2D::new(&land.size().size(), 0u8);
+
+    for (d, l) in depth_field
+        .as_mut_slice()
+        .iter_mut()
+        .zip(land.raw_pixels().iter())
+    {
+        *d = if *l == basic_value { depth } else { 0 };
+    }
+
+    let chunk_size = depth_field.width();
+    for i in 1..depth_field.height() {
+        let split_index = i * chunk_size;
+        let (left, right) = depth_field.as_mut_slice().split_at_mut(split_index);
+
+        let prev_chunk = &left[(i - 1) * chunk_size..i * chunk_size];
+        let cur_chunk = &mut right[..chunk_size];
+        process_shoppa_row_pair(prev_chunk, cur_chunk);
+    }
+
+    for i in (1..depth_field.height()).rev() {
+        let split_index = i * chunk_size;
+        let (left, right) = depth_field.as_mut_slice().split_at_mut(split_index);
+
+        let cur_chunk = &mut left[(i - 1) * chunk_size..i * chunk_size];
+        let prev_chunk = &right[..chunk_size];
+        process_shoppa_row_pair(prev_chunk, cur_chunk);
+    }
+    
+    for r in depth_field.rows_mut() {
+        let mut it = r.iter_mut();
+        let mut p = *it.next().unwrap();
+        for c in it {
+            if p < *c {
+                *c = p + 1;
+            }
+            
+            p = *c
+        }
+        
+        let mut it = r.iter_mut().rev();
+        let mut p = *it.next().unwrap();
+        for c in it {
+            if p < *c {
+                *c = p + 1;
+            }
+
+            p = *c
+        }
+    }
+
+    for (row_index, (tex_row, depth_row)) in texture.rows_mut().zip(depth_field.rows()).enumerate()
+    {
+        for (column_index, (tex, &d)) in tex_row.iter_mut().zip(depth_row.iter()).enumerate() {
+            if d > 0 && d < depth {
+                *tex = if ((row_index + column_index) / 8) & 1 != 0 {
+                    0xff00ffff
+                } else {
+                    0xff000000
+                };
+            }
+        }
+    }
+}
+
+fn process_shoppa_row_pair(prev_chunk: &[u8], cur_chunk: &mut [u8]) {
+    for (&p, c) in prev_chunk.iter().zip(cur_chunk.iter_mut()) {
+        if p < *c {
+            *c = p + 1;
         }
     }
 }

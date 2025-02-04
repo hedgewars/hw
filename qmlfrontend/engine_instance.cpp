@@ -110,7 +110,7 @@ void EngineInstance::renderFrame() { render_frame(m_instance.get()); }
 void EngineInstance::setOpenGLContext(QOpenGLContext* context) {
   currentOpenglContext = context;
 
-  auto size = context->surface()->size();
+  const auto size = context->surface()->size();
   setup_current_gl_context(m_instance.get(), static_cast<quint16>(size.width()),
                            static_cast<quint16>(size.height()),
                            &getProcAddress);
