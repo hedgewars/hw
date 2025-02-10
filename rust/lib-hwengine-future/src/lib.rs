@@ -1,6 +1,7 @@
 mod ai;
 
 use integral_geometry::{Point, Size};
+use core::ffi::c_char;
 
 use ai::*;
 use landgen::{
@@ -50,9 +51,9 @@ pub extern "C" fn create_empty_game_field(width: u32, height: u32) -> *mut GameF
 #[no_mangle]
 pub unsafe extern "C" fn generate_outline_templated_game_field(
     feature_size: u32,
-    seed: *const i8,
-    template_type: *const i8,
-    data_path: *const i8,
+    seed: *const c_char,
+    template_type: *const c_char,
+    data_path: *const c_char,
 ) -> *mut GameField {
     let data_path: &str = CStr::from_ptr(data_path).to_str().unwrap();
     let data_path = Path::new(&data_path);
@@ -90,9 +91,9 @@ pub unsafe extern "C" fn generate_outline_templated_game_field(
 #[no_mangle]
 pub unsafe extern "C" fn generate_wfc_templated_game_field(
     feature_size: u32,
-    seed: *const i8,
-    template_type: *const i8,
-    data_path: *const i8,
+    seed: *const c_char,
+    template_type: *const c_char,
+    data_path: *const c_char,
 ) -> *mut GameField {
     let data_path: &str = CStr::from_ptr(data_path).to_str().unwrap();
     let data_path = Path::new(&data_path);
@@ -135,9 +136,9 @@ pub unsafe extern "C" fn generate_wfc_templated_game_field(
 #[no_mangle]
 pub unsafe extern "C" fn generate_maze_game_field(
     feature_size: u32,
-    seed: *const i8,
-    template_type: *const i8,
-    data_path: *const i8,
+    seed: *const c_char,
+    template_type: *const c_char,
+    data_path: *const c_char,
 ) -> *mut GameField {
     let data_path: &str = CStr::from_ptr(data_path).to_str().unwrap();
     let data_path = Path::new(&data_path);
@@ -178,8 +179,8 @@ pub unsafe extern "C" fn generate_maze_game_field(
 #[no_mangle]
 pub unsafe extern "C" fn apply_theme(
     game_field: &mut GameField,
-    data_path: *const i8,
-    theme_name: *const i8,
+    data_path: *const c_char,
+    theme_name: *const c_char,
 ) {
     let data_path: &str = CStr::from_ptr(data_path).to_str().unwrap();
     let data_path = Path::new(&data_path);
