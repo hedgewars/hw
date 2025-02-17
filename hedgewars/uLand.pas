@@ -356,7 +356,6 @@ begin
 end;
 
 function SelectTemplate: shortstring;
-var l: LongInt;
 begin
     SelectTemplate:= '';
     if (cReducedQuality and rqLowRes) <> 0 then
@@ -365,7 +364,7 @@ begin
         begin
         if (cTemplateFilter = 0) and (cMapGen <> mgMaze) then
             begin
-            l:= getRandom(5) + 1;
+            cTemplateFilter:= getRandom(5) + 1;
             end
             else getRandom(1);
 
