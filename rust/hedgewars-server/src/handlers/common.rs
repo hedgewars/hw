@@ -2,6 +2,7 @@ use super::{
     actions::{Destination, DestinationGroup},
     Response,
 };
+use crate::core::anteroom::HwAnteroom;
 use crate::core::server::HwRoomOrServer;
 use crate::handlers::actions::ToPendingMessage;
 use crate::{
@@ -354,10 +355,16 @@ pub fn get_room_leave_result(
     }
 }
 
-pub fn remove_client(server: &mut HwServer, response: &mut Response, msg: String) {
+pub fn remove_client(
+    server: &mut HwServer,
+    anteroom: &mut HwAnteroom,
+    response: &mut Response,
+    msg: String,
+) {
     let client_id = response.client_id();
     let client = server.client(client_id);
     let nick = client.nick.clone();
+    anteroom.forget_nick(&nick);
 
     match server.get_room_control(client_id) {
         HwRoomOrServer::Room(mut control) => {

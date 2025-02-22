@@ -20,42 +20,32 @@ use std::{
 
 pub enum LoginResult {
     Unchanged,
-    Complete,
+    Complete(HwAnteroomClient),
     Exit,
 }
 
-fn completion_result<'a, I>(
-    mut other_clients: I,
-    client: &mut HwAnteroomClient,
+fn get_completion_result(
+    anteroom: &mut HwAnteroom,
+    client_id: ClientId,
     response: &mut super::Response,
-) -> LoginResult
-where
-    I: Iterator<Item = &'a HwClient>,
-{
-    let has_nick_clash = other_clients.any(|c| c.nick == *client.nick.as_ref().unwrap());
-
-    if has_nick_clash {
-        client.nick = None;
-        response.add(Notice("NickAlreadyInUse".to_string()).send_self());
+) -> LoginResult {
+    #[cfg(feature = "official-server")]
+    {
+        let client = anteroom.get_client(client_id);
+        response.request_io(super::IoTask::CheckRegistered {
+            nick: client.nick.as_ref().unwrap().clone(),
+        });
         LoginResult::Unchanged
-    } else {
-        #[cfg(feature = "official-server")]
-        {
-            response.request_io(super::IoTask::CheckRegistered {
-                nick: client.nick.as_ref().unwrap().clone(),
-            });
-            LoginResult::Unchanged
-        }
+    }
 
-        #[cfg(not(feature = "official-server"))]
-        {
-            LoginResult::Complete
-        }
+    #[cfg(not(feature = "official-server"))]
+    {
+        LoginResult::Complete(anteroom.remove_client(client_id).unwrap())
     }
 }
 
 pub fn handle(
-    server_state: &mut super::ServerState,
+    anteroom: &mut HwAnteroom,
     client_id: ClientId,
     response: &mut super::Response,
     message: HwProtocolMessage,
@@ -66,8 +56,15 @@ pub fn handle(
             response.add(Bye("User quit".to_string()).send_self());
             LoginResult::Exit
         }
-        HwProtocolMessage::Nick(nick) => {
-            let client = &mut server_state.anteroom.clients[client_id];
+        HwProtocolMessage::Nick(nick, token) => {
+            if anteroom.nick_taken(&nick) {
+                response.add(Notice("NickAlreadyInUse".to_string()).send_self());
+                return LoginResult::Unchanged;
+            }
+            let reconnect = token
+                .map(|t| anteroom.get_nick_token(&nick) == Some(&t[..]))
+                .unwrap_or(false);
+            let client = anteroom.get_client_mut(client_id);
 
             if client.nick.is_some() {
                 response.error(NICKNAME_PROVIDED);
@@ -77,17 +74,23 @@ pub fn handle(
                 LoginResult::Exit
             } else {
                 client.nick = Some(nick.clone());
+                let protocol_number = client.protocol_number;
+                if reconnect {
+                    client.is_registered = reconnect;
+                } else if let Some(token) = anteroom.register_nick_token(&nick) {
+                    response.add(Token(token.to_string()).send_self());
+                }
                 response.add(Nick(nick).send_self());
 
-                if client.protocol_number.is_some() {
-                    completion_result(server_state.server.iter_clients(), client, response)
+                if protocol_number.is_some() {
+                    get_completion_result(anteroom, client_id, response)
                 } else {
                     LoginResult::Unchanged
                 }
             }
         }
         HwProtocolMessage::Proto(proto) => {
-            let client = &mut server_state.anteroom.clients[client_id];
+            let client = anteroom.get_client_mut(client_id);
             if client.protocol_number.is_some() {
                 response.error(PROTOCOL_PROVIDED);
                 LoginResult::Unchanged
@@ -99,7 +102,7 @@ pub fn handle(
                 response.add(Proto(proto).send_self());
 
                 if client.nick.is_some() {
-                    completion_result(server_state.server.iter_clients(), client, response)
+                    get_completion_result(anteroom, client_id, response)
                 } else {
                     LoginResult::Unchanged
                 }
@@ -107,7 +110,7 @@ pub fn handle(
         }
         #[cfg(feature = "official-server")]
         HwProtocolMessage::Password(hash, salt) => {
-            let client = &server_state.anteroom.clients[client_id];
+            let client = anteroom.get_client(client_id);
 
             if let (Some(nick), Some(protocol)) = (client.nick.as_ref(), client.protocol_number) {
                 response.request_io(super::IoTask::GetAccount {
@@ -123,7 +126,7 @@ pub fn handle(
         }
         #[cfg(feature = "official-server")]
         HwProtocolMessage::Checker(protocol, nick, password) => {
-            let client = &mut server_state.anteroom.clients[client_id];
+            let client = anteroom.get_client_mut(client_id);
             if protocol == 0 {
                 response.error("Bad number.");
                 LoginResult::Unchanged
@@ -142,7 +145,8 @@ pub fn handle(
                 #[cfg(feature = "official-server")]
                 {
                     response.add(LogonPassed.send_self());
-                    LoginResult::Complete
+                    anteroom.remember_nick(nick);
+                    LoginResult::Complete(anteroom.remove_client(client_id).unwrap())
                 }
             }
         }

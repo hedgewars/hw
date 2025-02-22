@@ -11,10 +11,10 @@ use hedgewars_network_protocol::types::{GameCfg, ServerVar, TeamInfo, Vote, Vote
 use crate::server::replaystorage::ReplayStorage;
 
 use bitflags::*;
-use log::*;
-use rand::{self, seq::SliceRandom, thread_rng, Rng};
+use rand::{self, thread_rng, Rng};
 use slab::Slab;
-use std::{borrow::BorrowMut, cmp::min, collections::HashSet, iter, mem::replace};
+use std::collections::HashMap;
+use std::{cmp::min, collections::HashSet, mem::replace};
 
 #[derive(Debug)]
 pub enum CreateRoomError {

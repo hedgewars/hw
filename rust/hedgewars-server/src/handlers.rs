@@ -28,6 +28,7 @@ use hedgewars_network_protocol::{
     types::{GameCfg, TeamInfo},
 };
 
+use crate::core::digest::Sha1Digest;
 use base64::encode;
 use log::*;
 use rand::{thread_rng, RngCore};
@@ -39,53 +40,6 @@ mod inanteroom;
 mod inlobby;
 mod inroom;
 mod strings;
-
-#[derive(PartialEq, Debug)]
-pub struct Sha1Digest([u8; 20]);
-
-impl Sha1Digest {
-    pub fn new(digest: [u8; 20]) -> Self {
-        Self(digest)
-    }
-}
-
-impl LowerHex for Sha1Digest {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), std::fmt::Error> {
-        for byte in &self.0 {
-            write!(f, "{:02x}", byte)?;
-        }
-        Ok(())
-    }
-}
-
-impl PartialEq<&str> for Sha1Digest {
-    fn eq(&self, other: &&str) -> bool {
-        if other.len() != self.0.len() * 2 {
-            false
-        } else {
-            #[inline]
-            fn convert(c: u8) -> u8 {
-                if c > b'9' {
-                    c.wrapping_sub(b'a').saturating_add(10)
-                } else {
-                    c.wrapping_sub(b'0')
-                }
-            }
-
-            other
-                .as_bytes()
-                .chunks_exact(2)
-                .zip(&self.0)
-                .all(|(chars, byte)| {
-                    if let [hi, lo] = chars {
-                        convert(*lo) == byte & 0x0f && convert(*hi) == (byte & 0xf0) >> 4
-                    } else {
-                        unreachable!()
-                    }
-                })
-        }
-    }
-}
 
 pub struct ServerState {
     pub server: HwServer,
@@ -270,16 +224,14 @@ pub fn handle(
         HwProtocolMessage::Ping => response.add(Pong.send_self()),
         HwProtocolMessage::Pong => (),
         _ => {
-            if state.anteroom.clients.contains(client_id) {
-                match inanteroom::handle(state, client_id, response, message) {
+            if state.anteroom.has_client(client_id) {
+                match inanteroom::handle(&mut state.anteroom, client_id, response, message) {
                     LoginResult::Unchanged => (),
-                    LoginResult::Complete => {
-                        if let Some(client) = state.anteroom.remove_client(client_id) {
-                            let is_checker = client.is_checker;
-                            state.server.add_client(client_id, client);
-                            if !is_checker {
-                                common::get_lobby_join_data(&state.server, response);
-                            }
+                    LoginResult::Complete(client) => {
+                        let is_checker = client.is_checker;
+                        state.server.add_client(client_id, client);
+                        if !is_checker {
+                            common::get_lobby_join_data(&state.server, response);
                         }
                     }
                     LoginResult::Exit => {
@@ -292,12 +244,18 @@ pub fn handle(
                     HwProtocolMessage::Quit(Some(msg)) => {
                         common::remove_client(
                             &mut state.server,
+                            &mut state.anteroom,
                             response,
                             "User quit: ".to_string() + &msg,
                         );
                     }
                     HwProtocolMessage::Quit(None) => {
-                        common::remove_client(&mut state.server, response, "User quit".to_string());
+                        common::remove_client(
+                            &mut state.server,
+                            &mut state.anteroom,
+                            response,
+                            "User quit".to_string(),
+                        );
                     }
                     HwProtocolMessage::Info(nick) => {
                         if let Some(client) = state.server.find_client(&nick) {
@@ -394,7 +352,7 @@ pub fn handle_client_accept(
         .filter(|_| !is_local)
         .and_then(|a| state.anteroom.find_ip_ban(a));
     if let Some(reason) = ban_reason {
-        response.add(HwServerMessage::Bye(reason).send_self());
+        response.add(Bye(reason).send_self());
         response.remove_client(client_id);
         false
     } else {
@@ -405,17 +363,20 @@ pub fn handle_client_accept(
             .anteroom
             .add_client(client_id, encode(&salt), is_local);
 
-        response.add(
-            HwServerMessage::Connected(utils::SERVER_MESSAGE.to_owned(), utils::SERVER_VERSION)
-                .send_self(),
-        );
+        response
+            .add(Connected(utils::SERVER_MESSAGE.to_owned(), utils::SERVER_VERSION).send_self());
         true
     }
 }
 
 pub fn handle_client_loss(state: &mut ServerState, client_id: ClientId, response: &mut Response) {
     if state.anteroom.remove_client(client_id).is_none() {
-        common::remove_client(&mut state.server, response, "Connection reset".to_string());
+        common::remove_client(
+            &mut state.server,
+            &mut state.anteroom,
+            response,
+            "Connection reset".to_string(),
+        );
     }
 }
 
@@ -431,7 +392,7 @@ pub fn handle_io_result(
                 response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
                 response.remove_client(client_id);
             } else if is_registered {
-                let client = &state.anteroom.clients[client_id];
+                let client = state.anteroom.get_client(client_id);
                 response.add(AskPassword(client.server_salt.clone()).send_self());
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
                 state.server.add_client(client_id, client);
@@ -508,7 +469,7 @@ pub fn handle_io_result(
 
 #[cfg(test)]
 mod test {
-    use super::Sha1Digest;
+    use crate::core::digest::Sha1Digest;
 
     #[test]
     fn hash_cmp_test() {

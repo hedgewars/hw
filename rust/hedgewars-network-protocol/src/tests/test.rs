@@ -206,7 +206,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
             6 => ToggleServerRegisteredOnly(),
             7 => SuperPower(),
             8 => Info(Ascii),
-            9 => Nick(Ascii),
+            9 => Nick(Ascii, Option<Ascii>),
             10 => Proto(u16),
             11 => Password(Ascii, Ascii),
             12 => Checker(u16, Ascii, Ascii),
@@ -264,7 +264,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
 pub fn gen_server_msg() -> BoxedStrategy<HwServerMessage> where {
     use HwServerMessage::*;
 
-    let res = (0..=38).no_shrink().prop_flat_map(|i| {
+    let res = (0..=39).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Ping,
                     0 => Connected(Ascii, u32),
                     1 => Redirect(u16),
@@ -304,7 +304,8 @@ pub fn gen_server_msg() -> BoxedStrategy<HwServerMessage> where {
                     35 => Notice(Ascii),
                     36 => Warning(Ascii),
                     37 => Error(Ascii),
-                    38 => Replay(Vec<Ascii>)
+                    38 => Replay(Vec<Ascii>),
+                    39 => Token(Ascii)
                 )
     });
     res.boxed()

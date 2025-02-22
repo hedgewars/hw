@@ -22,7 +22,7 @@ fn parse_test() {
     assert_eq!(message(b"START_GAME\n\n"), Ok((&b""[..], StartGame)));
     assert_eq!(
         message(b"NICK\nit's me\n\n"),
-        Ok((&b""[..], Nick("it's me".to_string())))
+        Ok((&b""[..], Nick("it's me".to_string(), None)))
     );
     assert_eq!(message(b"PROTO\n51\n\n"), Ok((&b""[..], Proto(51))));
     assert_eq!(

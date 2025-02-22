@@ -1,8 +1,9 @@
 use super::types::ClientId;
 use bitflags::*;
+use std::ops::Deref;
 
 bitflags! {
-    pub struct ClientFlags: u8 {
+    pub struct ClientFlags: u16 {
         const IS_ADMIN = 0b0000_0001;
         const IS_MASTER = 0b0000_0010;
         const IS_READY = 0b0000_0100;
@@ -11,6 +12,7 @@ bitflags! {
         const HAS_SUPER_POWER = 0b0010_0000;
         const IS_REGISTERED = 0b0100_0000;
         const IS_MODERATOR = 0b1000_0000;
+        const IS_REJOINED = 0b1_0000_0000;
 
         const NONE = 0b0000_0000;
         const DEFAULT = Self::NONE.bits;
@@ -72,6 +74,9 @@ impl HwClient {
     pub fn is_registered(&self) -> bool {
         self.contains(ClientFlags::IS_REGISTERED)
     }
+    pub fn is_rejoined(&self) -> bool {
+        self.contains(ClientFlags::IS_REJOINED)
+    }
 
     pub fn set_is_admin(&mut self, value: bool) {
         self.set(ClientFlags::IS_ADMIN, value)
@@ -93,5 +98,8 @@ impl HwClient {
     }
     pub fn set_is_registered(&mut self, value: bool) {
         self.set(ClientFlags::IS_REGISTERED, value)
+    }
+    pub fn set_is_rejoined(&mut self, value: bool) {
+        self.set(ClientFlags::IS_REJOINED, value)
     }
 }

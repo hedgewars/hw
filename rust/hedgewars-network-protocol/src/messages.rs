@@ -1,6 +1,8 @@
 use crate::types::{GameCfg, ServerVar, TeamInfo, VoteType};
 use std::iter::once;
 
+//todo!("add help message")
+
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum HwProtocolMessage {
     // common messages
@@ -13,7 +15,7 @@ pub enum HwProtocolMessage {
     SuperPower,
     Info(String),
     // anteroom messages
-    Nick(String),
+    Nick(String, Option<String>),
     Proto(u16),
     Password(String, String),
     Checker(u16, String, String),
@@ -52,6 +54,7 @@ pub enum HwProtocolMessage {
     Delegate(String),
     TeamChat(String),
     MaxTeams(u8),
+    //command line messages
     Fix,
     Unfix,
     Greeting(Option<String>),
@@ -120,6 +123,7 @@ pub enum HwServerMessage {
     Bye(String),
 
     Nick(String),
+    Token(String),
     Proto(u16),
     AskPassword(String),
     ServerAuth(String),
@@ -281,7 +285,8 @@ impl HwProtocolMessage {
             ToggleServerRegisteredOnly => msg!["CMD", "REGISTERED_ONLY"],
             SuperPower => msg!["CMD", "SUPER_POWER"],
             Info(info) => msg!["CMD", format!("INFO {}", info)],
-            Nick(nick) => msg!("NICK", nick),
+            Nick(nick, None) => msg!["NICK", nick],
+            Nick(nick, Some(token)) => msg!["NICK", nick, token],
             Proto(version) => msg!["PROTO", version],
             Password(p, s) => msg!["PASSWORD", p, s],
             Checker(i, n, p) => msg!["CHECKER", i, n, p],
@@ -381,6 +386,7 @@ impl HwServerMessage {
             Redirect(port) => msg!["REDIRECT", port],
             Bye(msg) => msg!["BYE", msg],
             Nick(nick) => msg!["NICK", nick],
+            Token(token) => msg!["TOKEN", token],
             Proto(proto) => msg!["PROTO", proto],
             AskPassword(salt) => msg!["ASKPASSWORD", salt],
             ServerAuth(hash) => msg!["SERVER_AUTH", hash],

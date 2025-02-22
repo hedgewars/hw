@@ -1,5 +1,8 @@
 use super::{indexslab::IndexSlab, types::ClientId};
+use crate::core::client::HwClient;
+use crate::core::digest::Sha1Digest;
 use chrono::{offset, DateTime};
+use std::collections::{HashMap, HashSet};
 use std::{iter::Iterator, num::NonZeroU16};
 
 pub struct HwAnteroomClient {
@@ -51,8 +54,10 @@ impl BanCollection {
 }
 
 pub struct HwAnteroom {
-    pub clients: IndexSlab<HwAnteroomClient>,
+    clients: IndexSlab<HwAnteroomClient>,
     bans: BanCollection,
+    taken_nicks: HashSet<String>,
+    reconnection_tokens: HashMap<String, String>,
 }
 
 impl HwAnteroom {
@@ -61,6 +66,8 @@ impl HwAnteroom {
         HwAnteroom {
             clients,
             bans: BanCollection::new(),
+            taken_nicks: Default::default(),
+            reconnection_tokens: Default::default(),
         }
     }
 
@@ -82,8 +89,54 @@ impl HwAnteroom {
         self.clients.insert(client_id, client);
     }
 
+    pub fn has_client(&self, id: ClientId) -> bool {
+        self.clients.contains(id)
+    }
+
+    pub fn get_client(&mut self, id: ClientId) -> &HwAnteroomClient {
+        &self.clients[id]
+    }
+
+    pub fn get_client_mut(&mut self, id: ClientId) -> &mut HwAnteroomClient {
+        &mut self.clients[id]
+    }
+
     pub fn remove_client(&mut self, client_id: ClientId) -> Option<HwAnteroomClient> {
         let client = self.clients.remove(client_id);
+        if let Some(HwAnteroomClient {
+            nick: Some(nick), ..
+        }) = &client
+        {
+            self.taken_nicks.remove(nick);
+        }
         client
+    }
+
+    pub fn nick_taken(&self, nick: &str) -> bool {
+        self.taken_nicks.contains(nick)
+    }
+
+    pub fn remember_nick(&mut self, nick: String) {
+        self.taken_nicks.insert(nick);
+    }
+
+    pub fn forget_nick(&mut self, nick: &str) {
+        self.taken_nicks.remove(nick);
+    }
+
+    #[inline]
+    pub fn get_nick_token(&self, nick: &str) -> Option<&str> {
+        self.reconnection_tokens.get(nick).map(|s| &s[..])
+    }
+
+    #[inline]
+    pub fn register_nick_token(&mut self, nick: &str) -> Option<&str> {
+        if self.reconnection_tokens.contains_key(nick) {
+            None
+        } else {
+            let token = format!("{:x}", Sha1Digest::random());
+            self.reconnection_tokens.insert(nick.to_string(), token);
+            Some(&self.reconnection_tokens[nick])
+        }
     }
 }

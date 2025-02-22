@@ -220,7 +220,6 @@ fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     }
 
     alt((
-        message("NICK\n", a_line, Nick),
         message("INFO\n", a_line, Info),
         message("CHAT\n", a_line, Chat),
         message("PART", opt_arg, Part),
@@ -495,6 +494,10 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
                 )),
             ),
             |values| CheckedOk(values.unwrap_or_default()),
+        ),
+        preceded(
+            tag("NICK\n"),
+            map(pair(a_line, opt_arg), |(nick, token)| Nick(nick, token)),
         ),
     ))(input)
 }
