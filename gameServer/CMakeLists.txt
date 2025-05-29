@@ -1,12 +1,17 @@
 cmake_minimum_required(VERSION 3.12.0)
 project(hedgewars-server)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/server_cmake_modules")
-include(${CMAKE_MODULE_PATH}/CheckHaskellPackageExists.cmake)
+if(NOT DEFINED CMAKE_MODULE_PATH)
+ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/server_cmake_modules")
+endif()
+
 include(${CMAKE_MODULE_PATH}/utils.cmake)
-message(${CMAKE_MODULE_PATH})
 
 find_package_or_disable(GHC NOSERVER)
+
+include(${CMAKE_MODULE_PATH}/CheckHaskellPackageExists.cmake)
+
+message("CMP_PATH":${CMAKE_MODULE_PATH})
 
 check_haskell_package_exists(base "Control.Exception" mask 1 REQUIRED)
 check_haskell_package_exists(containers "Data.Map" size 1 REQUIRED)
