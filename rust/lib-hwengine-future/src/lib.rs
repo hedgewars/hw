@@ -1,8 +1,10 @@
 mod ai;
+mod shortstring;
 
-use integral_geometry::{Point, Size};
 use core::ffi::c_char;
+use integral_geometry::{Point, Size};
 
+use crate::shortstring::ShortString;
 use ai::*;
 use landgen::{
     maze::MazeTemplate, outline_template_based::outline_template::OutlineTemplate,
@@ -20,6 +22,15 @@ pub struct GameField {
     collision: land2d::Land2D<u16>,
     pixels: land2d::Land2D<u32>,
     landgen_parameters: Option<LandGenerationParameters<u16>>,
+}
+
+#[repr(C)]
+pub struct HedgehogState {
+    pub x: f32,
+    pub y: f32,
+    pub angle: u32,
+    pub looking_to_the_right: bool,
+    pub is_moving: bool,
 }
 
 #[no_mangle]
@@ -281,7 +292,9 @@ pub unsafe extern "C" fn ai_add_team_hedgehog(
 }
 
 #[no_mangle]
-pub extern "C" fn ai_think(ai: &AI) {}
+pub extern "C" fn ai_think(ai: &mut AI) {
+    ai.plan()
+}
 
 #[no_mangle]
 pub extern "C" fn ai_have_plan(ai: &AI) -> bool {
@@ -289,8 +302,16 @@ pub extern "C" fn ai_have_plan(ai: &AI) -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn ai_get(ai: &AI) -> bool {
-    ai.have_plan()
+pub extern "C" fn ai_get_action(
+    ai: &mut AI,
+    current_hedgehog_state: &HedgehogState,
+    action: &mut ShortString,
+) {
+    *action = ai
+        .get_action(current_hedgehog_state)
+        .as_str()
+        .try_into()
+        .unwrap_or_default();
 }
 
 #[no_mangle]
