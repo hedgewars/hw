@@ -1,10 +1,18 @@
 
 # revision information in cpack-generated names
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(full_suffix "${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION}")
+if(SERVERONLY)
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(full_suffix "server-${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION}")
+	else()
+		set(full_suffix "server-${HEDGEWARS_VERSION}")
+	endif()
 else()
-    set(full_suffix "${HEDGEWARS_VERSION}")
-endif()
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(full_suffix "${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION}")
+	else()
+		set(full_suffix "${HEDGEWARS_VERSION}")
+	endif()
+endif(NOT SERVERONLY)
 
 # CPack variables
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hedgewars, a free turn-based strategy game")
@@ -114,5 +122,13 @@ set(CPACK_SOURCE_IGNORE_FILES
     "^${CMAKE_CURRENT_SOURCE_DIR}/bin/libavwrapper\\\\.*"
     "^${CMAKE_CURRENT_SOURCE_DIR}/bin/libphyslayer\\\\.*"
 )
+if(SERVERONLY)
+	list(APPEND CPACK_SOURCE_IGNORE_FILES
+	"^${CMAKE_CURRENT_SOURCE_DIR}/share"
+ 	"^${CMAKE_CURRENT_SOURCE_DIR}/hedgewars/"
+	"^${CMAKE_CURRENT_SOURCE_DIR}/QTfrontend/"
+	"^${CMAKE_CURRENT_SOURCE_DIR}/project_files/"
+	)
+endif(SERVERONLY)
 
 include(CPack)
