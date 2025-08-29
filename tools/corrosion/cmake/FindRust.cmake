@@ -334,7 +334,7 @@ if (Rust_RESOLVE_RUSTUP_TOOLCHAINS)
     set(_DISCOVERED_TOOLCHAINS_VERSION "")
 
     foreach(_TOOLCHAIN_RAW ${_TOOLCHAINS_RAW})
-        if (_TOOLCHAIN_RAW MATCHES "([a-zA-Z0-9\\._\\-]+)[ \t\r\n]?(\\(default\\) \\(override\\)|\\(default\\)|\\(override\\))?[ \t\r\n]+(.+)")
+        if (_TOOLCHAIN_RAW MATCHES "([a-zA-Z0-9\\._\\-]+)[ \t\r\n]?(\\(active, default\\)|\\(default\\) \\(override\\)|\\(default\\)|\\(override\\))?[ \t\r\n]+(.+)")
             set(_TOOLCHAIN "${CMAKE_MATCH_1}")
             set(_TOOLCHAIN_TYPE "${CMAKE_MATCH_2}")
 
