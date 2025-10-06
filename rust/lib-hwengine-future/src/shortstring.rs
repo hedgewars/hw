@@ -16,12 +16,12 @@ impl TryFrom<&str> for ShortString {
             return Err("String is too long");
         }
 
-        let mut vec = Vec::with_capacity(bytes.len() + 1);
+        let mut vec = Vec::with_capacity(256);
         vec.push(bytes.len() as u8);
         vec.extend_from_slice(bytes);
         vec.resize(256, 0x00);
 
-        let result: [u8; 256] = vec.try_into().unwrap();
+        let result: [u8; 256] = vec.try_into().expect("Size should match");
 
         Ok(Self(result))
     }

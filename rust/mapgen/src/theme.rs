@@ -32,7 +32,7 @@ impl ThemeSprite {
     }
 
     #[inline]
-    pub fn rows(&self) -> ChunksExact<u32> {
+    pub fn rows(&self) -> ChunksExact<'_, u32> {
         self.pixels.rows()
     }
 

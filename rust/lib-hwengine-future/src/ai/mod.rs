@@ -123,7 +123,7 @@ impl<'a> AI<'a> {
         // this is just a test:
         let mut actions = Actions::new();
         actions.push(Action::Walk(Direction::Left));
-        actions.push(Action::StopAt { x: 0, y: 0 });
+        actions.push(Action::StopAt { direction: Direction::Left, x: 0, y: 0 });
         self.actions = Some(actions);
     }
 

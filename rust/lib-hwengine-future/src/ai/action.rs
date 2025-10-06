@@ -12,7 +12,7 @@ pub enum Action {
     Walk(Direction),
     Look(Direction),
     CheckPosition { x: i32, y: i32, angle: i32 },
-    Stop(Direction),
+    StopAt{direction: Direction, x: i32, y: i32},
     LongJump,
     HighJump(usize),
 }
@@ -24,11 +24,11 @@ impl Action {
         match self {
             Walk(Left) | Look(Left) => {"/+left".to_string()},
             Walk(Right) | Look(Right) => {"/+right".to_string()},
-            Stop(Left) => {"/-left".to_string()},
-            Stop(Right) => {"/-right".to_string()},
+            StopAt{direction: Left, ..} => {"/-left".to_string()},
+            StopAt{direction: Right, ..} => {"/-right".to_string()},
             LongJump => {"/ljump".to_string()},
             HighJump(_) => {"/hjump".to_string()},
-            _ => {}
+            _ => {"".to_string()}
         }
     }
 }
@@ -65,8 +65,7 @@ impl Actions {
             Action::StopAt { .. } => {}
             Action::CheckPosition { .. } => {}
             Action::LongJump => {}
-            Action::HighJump(_) => {},
-            Action::Stop => {}
+            Action::HighJump(_) => {}
         }
 
         None
