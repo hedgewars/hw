@@ -18,10 +18,9 @@ set_target_properties(lua PROPERTIES
 install(TARGETS lua RUNTIME DESTINATION ${target_binary_install_dir}
                     LIBRARY DESTINATION ${target_library_install_dir}
                     ARCHIVE DESTINATION ${target_library_install_dir})
-get_target_property(lua_fullpath lua LOCATION)
 
 set(LUA_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Lua include dir" FORCE)
-set(LUA_LIBRARY ${lua_fullpath} CACHE STRING "Lua library" FORCE)
+set(LUA_LIBRARY lua CACHE STRING "Lua library" FORCE)
 
 #emscripten does not expose headers but has an internal binary copy
 if(BUILD_ENGINE_JS)
