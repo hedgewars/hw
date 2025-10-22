@@ -1,0 +1,114 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: ${{ matrix.os_name }}/${{ matrix.compiler_name }}/${{ matrix.build_args }}
+    runs-on: ${{ matrix.os_runner }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os_name:
+          - linux
+          # - osx
+        compiler_name: [gcc, clang]
+        build_args:
+          # - "-DCMAKE_BUILD_TYPE=Release"
+          # - "-DCMAKE_BUILD_TYPE=Debug"
+          - "-DNOSERVER=1 -DGL2=1 -DNOPNG=1"
+          - "-DNOSERVER=1 -DLUA_SYSTEM=0"
+
+        include:
+          - os_name: linux
+            os_runner: ubuntu-22.04
+          - os_name: osx
+            os_runner: macos-15-intel
+
+          - compiler_name: gcc
+            cc: gcc
+            cxx: g++
+          - compiler_name: clang
+            cc: clang
+            cxx: clang++
+
+        exclude:
+          - os_name: osx
+            compiler_name: gcc
+
+    env:
+      CC: ${{ matrix.cc }}
+      CXX: ${{ matrix.cxx }}
+      
+      # Set BUILD_ARGS for the job
+      BUILD_ARGS: ${{ matrix.build_args }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Before Install (Linux)
+        if: matrix.os_name == 'linux'
+        run: |
+          sudo add-apt-repository ppa:costamagnagianfranco/hedgewars-nightly -y
+          sudo apt-get update -qq
+
+      - name: Before Install (macOS)
+        if: matrix.os_name == 'osx'
+        run: brew update
+
+      - name: Install Dependencies (Linux)
+        if: matrix.os_name == 'linux'
+        run: |
+          sudo apt-get install -y --no-install-recommends \
+            cmake debhelper dpkg-dev fp-compiler fp-units-gfx fp-units-misc \
+            ghc libavcodec-dev libavformat-dev libghc-aeson-dev libghc-entropy-dev \
+            libghc-hslogger-dev libghc-mtl-dev libghc-network-dev libghc-parsec3-dev \
+            libghc-random-dev libghc-regex-tdfa-dev libghc-sandi-dev libghc-sha-dev \
+            libghc-text-dev libghc-utf8-string-dev libghc-vector-dev libghc-yaml-dev \
+            libghc-zlib-dev liblua5.1-dev libphysfs-dev libpng-dev libsdl2-dev \
+            libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev \
+            qtbase5-dev qtbase5-private-dev qttools5-dev qttools5-dev-tools
+
+      - name: Install Dependencies (macOS)
+        if: matrix.os_name == 'osx'
+        run: |
+          brew install qt5
+          brew install fpc glew physfs lua sdl2 sdl2_image sdl2_net sdl2_ttf ffmpeg ghc cabal-install
+          brew install sdl2_mixer
+          
+          if [[ "$BUILD_ARGS" != *"NOSERVER"* ]]; then
+            cabal update
+            (cd gameServer && cabal v1-install --only-dependencies)
+          fi
+          
+          if [[ "$BUILD_ARGS" == *"BUILD_ENGINE_C"* ]]; then
+            cabal update
+            (cd tools/pas2c && cabal v1-install --only-dependencies)
+          fi
+          
+          # Add to BUILD_ARGS and export to $GITHUB_ENV to persist for future steps
+          export BUILD_ARGS="$BUILD_ARGS -DNOAUTOUPDATE=1"
+          echo "BUILD_ARGS=$BUILD_ARGS" >> $GITHUB_ENV
+
+      - name: Configure (CMake)
+        run: mkdir build && cd build && cmake $BUILD_ARGS ..
+
+      - name: Build (Make)
+        working-directory: ./build
+        run: make VERBOSE=1
+
+      - name: Test (Linux)
+        if: success() && matrix.os_name == 'linux'
+        working-directory: ./build
+        run: make test_verbose
+
+      - name: Install (macOS)
+        if: success() && matrix.os_name == 'osx'
+        working-directory: ./build
+        run: make install
