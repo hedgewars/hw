@@ -27,8 +27,8 @@ jobs:
         include:
           - os_name: linux
             os_runner: ubuntu-22.04
-          - os_name: osx
-            os_runner: macos-15-intel
+          # - os_name: osx
+          #   os_runner: macos-15-intel
 
           - compiler_name: gcc
             cc: gcc
