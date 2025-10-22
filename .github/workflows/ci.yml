@@ -1,0 +1,195 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  # Job 1: Main build matrix for Linux and macOS
+  build:
+    # Name and runner are now set using the expanded matrix variables
+    name: Build (${{ matrix.os_name }} / ${{ matrix.compiler_name }})
+    runs-on: ${{ matrix.os_runner }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        # 1. Define base matrix axes with primitive values
+        os_name: [linux, osx]
+        compiler_name: [gcc, clang]
+        build_args:
+          - "-DCMAKE_BUILD_TYPE=Release"
+          - "-DCMAKE_BUILD_TYPE=Debug"
+          - "-DNOSERVER=1 -DGL2=1 -DNOPNG=1"
+          - "-DNOSERVER=1 -DLUA_SYSTEM=0"
+
+        # 2. Use 'include' to add context variables (runner, cc, cxx)
+        #    AND to add the 4 special 'include' jobs from Travis
+        include:
+          # Add context for 'linux' jobs
+          - os_name: linux
+            os_runner: ubuntu-20.04
+          # Add context for 'osx' jobs
+          - os_name: osx
+            os_runner: macos-latest
+            
+          # Add context for 'gcc' jobs
+          - compiler_name: gcc
+            cc: gcc
+            cxx: g++
+          # Add context for 'clang' jobs
+          - compiler_name: clang
+            cc: clang
+            cxx: clang++
+
+          # --- Add the 4 special 'include' jobs from Travis ---
+          # These are new jobs, so they need full definitions
+          - os_name: linux
+            os_runner: ubuntu-20.04
+            compiler_name: clang
+            cc: clang
+            cxx: clang++
+            build_args: "-DNOSERVER=1 -DBUILD_ENGINE_C=1"
+          - os_name: osx
+            os_runner: macos-latest
+            compiler_name: clang
+            cc: clang
+            cxx: clang++
+            build_args: "-DNOSERVER=1 -DBUILD_ENGINE_C=1"
+          - os_name: linux
+            os_runner: ubuntu-20.04
+            compiler_name: clang
+            cc: clang
+            cxx: clang++
+            build_args: "-DNOSERVER=1 -DBUILD_ENGINE_C=1 -DGL2=1"
+          - os_name: osx
+            os_runner: macos-latest
+            compiler_name: clang
+            cc: clang
+            cxx: clang++
+            build_args: "-DNOSERVER=1 -DBUILD_ENGINE_C=1 -DGL2=1"
+
+        # 3. Add the 'exclude' job from Travis
+        exclude:
+          - os_name: osx
+            compiler_name: gcc
+            # This will exclude all 4 'build_args' combinations for (osx, gcc)
+
+    env:
+      # Set env vars for C/C++ compilers from the matrix
+      CC: ${{ matrix.cc }}
+      CXX: ${{ matrix.cxx }}
+      
+      # Set BUILD_ARGS for the job
+      BUILD_ARGS: ${{ matrix.build_args }}
+      
+      # Replicate TRAVIS_OS_NAME for script compatibility
+      TRAVIS_OS_NAME: ${{ matrix.os_name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Before Install (Linux)
+        if: matrix.os_name == 'linux'
+        run: |
+          sudo add-apt-repository ppa:costamagnagianfranco/hedgewars-nightly -y
+          sudo apt-get update -qq
+
+      - name: Before Install (macOS)
+        if: matrix.os_name == 'osx'
+        run: brew update
+
+      - name: Install Dependencies (Linux)
+        if: matrix.os_name == 'linux'
+        run: |
+          sudo apt-get install -y --no-install-recommends \
+            cmake debhelper dpkg-dev fp-compiler fp-units-gfx fp-units-misc \
+            ghc libavcodec-dev libavformat-dev libghc-aeson-dev libghc-entropy-dev \
+            libghc-hslogger-dev libghc-mtl-dev libghc-network-dev libghc-parsec3-dev \
+            libghc-random-dev libghc-regex-tdfa-dev libghc-sandi-dev libghc-sha-dev \
+            libghc-text-dev libghc-utf8-string-dev libghc-vector-dev libghc-yaml-dev \
+            libghc-zlib-dev liblua5.1-dev libphysfs-dev libpng-dev libsdl2-dev \
+            libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev \
+            qtbase5-dev qtbase5-private-dev qttools5-dev qttools5-dev-tools
+
+      - name: Install Dependencies (macOS)
+        if: matrix.os_name == 'osx'
+        run: |
+          brew install qt5
+          brew install fpc glew physfs lua51 sdl2 sdl2_image sdl2_net sdl2_ttf ffmpeg ghc cabal-install
+          brew install sdl2_mixer
+          
+          if [[ "$BUILD_ARGS" != *"NOSERVER"* ]]; then
+            cabal update
+            cabal install --only-dependencies --cabal-file=gameServer/hedgewars-server.cabal
+          fi
+          
+          if [[ "$BUILD_ARGS" == *"BUILD_ENGINE_C"* ]]; then
+            cabal update
+            cabal install --only-dependencies --cabal-file=tools/pas2c/pas2c.cabal
+          fi
+          
+          # Add to BUILD_ARGS and export to $GITHUB_ENV to persist for future steps
+          export BUILD_ARGS="$BUILD_ARGS -DNOAUTOUPDATE=1"
+          echo "BUILD_ARGS=$BUILD_ARGS" >> $GITHUB_ENV
+
+      - name: Configure (CMake)
+        run: mkdir build && cd build && cmake $BUILD_ARGS ..
+
+      - name: Build (Make)
+        working-directory: ./build
+        run: make VERBOSE=1
+
+      - name: Test (Linux)
+        if: success() && matrix.os_name == 'linux'
+        working-directory: ./build
+        run: make test_verbose
+
+      - name: Install (macOS)
+        if: success() && matrix.os_name == 'osx'
+        working-directory: ./build
+        run: make install
+
+  # Job 2: Specific build for iOS
+  build-ios:
+    name: Build (iOS)
+    runs-on: macos-latest # Closest to osx_image: xcode7.2, though much newer
+    
+    env:
+      # Set env vars from the Travis 'ios' job
+      TRAVIS_OS_NAME: "ios"
+      SDL_LIB_PATH: "$GITHUB_WORKSPACE/../Library"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install Mercurial
+        run: brew install mercurial
+
+      - name: Before Install (Clone SDL Libs)
+        run: |
+          hg clone http://hg.libsdl.org/SDL $SDL_LIB_PATH/SDL/
+          hg clone http://hg.libsdl.org/SDL_image $SDL_LIB_PATH/SDL_image/
+          hg clone http://hg.libsdl.org/SDL_net $SDL_LIB_PATH/SDL_net/
+          hg clone http://hg.libsdl.org/SDL_ttf $SDL_LIB_PATH/SDL_ttf/
+          hg clone http://hg.libsdl.org/SDL_mixer $SDL_LIB_PATH/SDL_mixer/
+
+      - name: Install Dependencies (FPC)
+        run: |
+          sudo bash tools/dmg_pkg_install.sh ftp://freepascal.stack.nl/pub/mirrors/fpc/dist/3.0.0/i386-macosx/fpc-3.0.0.intel-macosx.dmg
+          sudo bash tools/dmg_pkg_install.sh ftp://freepascal.stack.nl/pub/mirrors/fpc/dist/3.0.0/i386-macosx/fpc-3.0.1.intel-macosx.cross.ios.dmg
+
+      - name: Before Script (Apply Patch & UpdateDataFolder)
+        run: |
+          git apply tools/fix_fpc_ios_build_patch.diff
+          # xctool is deprecated; replaced with xcodebuild
+          xcodebuild -project ./project_files/HedgewarsMobile/Hedgewars.xcodeproj -scheme UpdateDataFolder build
+
+      - name: Build (Xcode)
+        run: |
+          # xctool is deprecated; replaced with xcodebuild
+          xcodebuild -project ./project_files/HedgewarsMobile/Hedgewars.xcodeproj -scheme Hedgewars -configuration Release build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
