@@ -24,7 +24,6 @@ jobs:
     strategy:
       matrix:
         vs_version:
-          - "2019"
           - "2022"
         arch:
           - x86_64
@@ -98,6 +97,7 @@ jobs:
         with:
           toolchain: ${{matrix.rust}}
           targets: ${{matrix.arch}}-pc-windows-msvc
+          components: rust-src
       - name: Setup MSVC Development Environment
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -142,6 +142,7 @@ jobs:
         with:
           toolchain: ${{matrix.rust}}
           targets: ${{matrix.arch}}-pc-windows-gnu
+          components: rust-src
       - name: Configure
         run: cmake -S. -Bbuild "-DRust_TOOLCHAIN=${{steps.install_rust.outputs.name}}" --preset "${{ matrix.generator }}-${{ matrix.arch }}-pc-windows-gnu-${{ matrix.compiler }}"
       - name: Run Tests
@@ -181,6 +182,7 @@ jobs:
         with:
           toolchain: stable
           targets: ${{matrix.arch}}-pc-windows-gnullvm
+          components: rust-src
       - uses: msys2/setup-msys2@v2
         with:
           msystem: ${{matrix.msystem}}
@@ -216,6 +218,7 @@ jobs:
         with:
           toolchain: stable
           targets: aarch64-unknown-linux-gnu
+          components: rust-src
       - name: Configure
         run: cmake -S. -Bbuild "-DRust_TOOLCHAIN=${{steps.install_rust.outputs.name}}" -DRust_CARGO_TARGET=aarch64-unknown-linux-gnu
       - name: Run Tests
@@ -300,6 +303,7 @@ jobs:
         with:
           toolchain: ${{matrix.rust}}
           targets: ${{matrix.arch}}-apple-darwin
+          components: rust-src
       - name: Configure
         run: cmake -S. -Bbuild --log-level=DEBUG -G "${{ matrix.generator }}" "-DRust_TOOLCHAIN=${{steps.install_rust.outputs.name}}" --preset "${{ matrix.arch }}-apple-darwin-${{ matrix.compiler }}"
       - name: Run Tests
@@ -340,12 +344,13 @@ jobs:
       - name: Install CMake
         uses: lukka/get-cmake@519de0c7b4812477d74976b2523a9417f552d126
         with:
-          cmakeVersion: "~3.22.0"
+          cmakeVersion: "~3.24.0"
           ninjaVersion: "~1.10.0"
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable minus 2 releases
+          components: rust-src
       - name: Configure
         run: >
           cmake
@@ -412,6 +417,7 @@ jobs:
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{matrix.rust}}
+          components: rust-src
       - name: Test Corrosion as installed module
         run: >
           cmake

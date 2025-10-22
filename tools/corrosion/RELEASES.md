@@ -6,6 +6,15 @@
   [v0.4.0 Release notes](#040-lts-2023-06-01) for more details.
 - Removed native tooling and the corresponding option `CORROSION_NATIVE_TOOLING`.
   Corrosion now always uses pure CMake.
+- Fix Corrosion placing artifacts into the wrong directory when:
+  1. using a Multi-Config Generator (e.g Visual Studio or XCode) AND
+  2. `OUTPUT_DIRECTORY_<CONFIG>` is not set AND 
+  3. `OUTPUT_DIRECTORY` is set AND
+  4. `OUTPUT_DIRECTORY` does not contain a generator expression
+
+  Corrosion now places artifacts into a `$<CONFIG>` subdirectory of the
+  specified `OUTPUT_DIRECTORY`. This matches the [documented behavior][doc-cmake-rt-output-dir]
+  of CMake for regular CMake targets. ([#568]).
 
 ### New features
 
@@ -14,8 +23,21 @@
   the crate-types of Rust libraries (e.g. force building as a staticlib instead of an rlib).
 - Support *-windows-gnullvm targets. 
 - experimental support in corrosion_install for installing libraries and header files
+- Add `CORROSION_TOOLS_RUST_TOOLCHAIN` cache variable which allows users to select a different
+  rust toolchain for compiling build-tools used by corrosion (currently cbindgen and cxxbridge).
+  This mainly allows using a newer toolchain for such build-tools then for the actual project.
 
+[doc-cmake-rt-output-dir]: https://cmake.org/cmake/help/latest/prop_tgt/RUNTIME_OUTPUT_DIRECTORY.html
 [#459]: https://github.com/corrosion-rs/corrosion/pull/459
+[#568]: https://github.com/corrosion-rs/corrosion/pull/568
+
+# v0.5.1 (2024-12-29)
+
+### Fixes
+
+- Update FindRust to support `rustup` v1.28.0. Support for older rustup versions is retained,
+  so updating corrosion quickly is recommended to all rustup users.
+
 
 # v0.5.0 (2024-05-11)
 
@@ -62,7 +84,7 @@
 
 # v0.4.9 (2024-05-01)
 
-### New Features
+### New Features 
 
 - Automatically detect Rust target for OpenHarmony ([#510]).
 
