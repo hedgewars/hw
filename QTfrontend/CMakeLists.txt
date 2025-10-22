@@ -1,10 +1,18 @@
-if(APPLE AND EXISTS /usr/local/opt/qt5)
-	# Special treatment for OS X users who
-	# install Qt5 via Homebrew.
-	# Homebrew installs Qt5 (up to at least 5.9.1) in
-	# /usr/local/qt5, ensure it can be found by CMake since
-	# it is not in the default /usr/local prefix.
-	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
+if(APPLE)
+    if(EXISTS /usr/local/opt/qt5)
+        # Special treatment for OS X users who
+        # install Qt5 via Homebrew.
+        # Homebrew installs Qt5 (up to at least 5.9.1) in
+        # /usr/local/qt5, ensure it can be found by CMake since
+        # it is not in the default /usr/local prefix.
+        list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
+    endif()
+    if(EXISTS /usr/local/opt/qt@5)
+        list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt@5")
+    endif()
+    if(EXISTS /opt/homebrew/opt/qt@5)
+        list(APPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/qt@5")
+    endif()
 endif()
 
 find_package(Qt5 COMPONENTS Core Widgets Gui Network)
