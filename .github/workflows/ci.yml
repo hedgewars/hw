@@ -40,6 +40,8 @@ jobs:
         exclude:
           - os_name: osx
             compiler_name: gcc
+          - os_name: osx
+            build_args: "-DNOSERVER=1 -DGL2=1 -DNOPNG=1"
 
     env:
       CC: ${{ matrix.cc }}
