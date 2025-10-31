@@ -65,6 +65,7 @@ procedure SetSkyColor(r, g, b: real);
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
      uCommands, uPhysFSLayer, uDebug, uLocale, uInputHandler, adler32
+    {$IFDEF APPLE}{$IFNDEF PAS2C}, Math{$ENDIF}{$ENDIF}
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
@@ -1192,6 +1193,9 @@ end;
 {$IFDEF USE_VIDEO_RECORDING}
 procedure InitOffscreenOpenGL;
 begin
+{$IFDEF APPLE}{$IFNDEF PAS2C}
+    SetExceptionMask(GetExceptionMask + [exInvalidOp, exOverflow]);
+{$ENDIF}{$ENDIF}
     // create hidden window
     SDLwindow:= SDL_CreateWindow(PChar('hedgewars video rendering (SDL2 hidden window)'),
                                  SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
@@ -1277,6 +1281,9 @@ begin
     x:= SDL_WINDOWPOS_CENTERED_MASK;
     y:= SDL_WINDOWPOS_CENTERED_MASK;
 
+{$IFDEF APPLE}{$IFNDEF PAS2C}
+    SetExceptionMask(GetExceptionMask + [exInvalidOp, exOverflow]);
+{$ENDIF}{$ENDIF}
     if SDLwindow = nil then
         begin
 
