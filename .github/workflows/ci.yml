@@ -16,7 +16,7 @@ jobs:
       matrix:
         os_name:
           - linux
-          # - osx
+          - osx
         compiler_name: [gcc, clang]
         build_args:
           # - "-DCMAKE_BUILD_TYPE=Release"
@@ -27,8 +27,8 @@ jobs:
         include:
           - os_name: linux
             os_runner: ubuntu-22.04
-          # - os_name: osx
-          #   os_runner: macos-15-intel
+          - os_name: osx
+            os_runner: macos-15-intel
 
           - compiler_name: gcc
             cc: gcc
@@ -78,13 +78,19 @@ jobs:
       - name: Install Dependencies (macOS)
         if: matrix.os_name == 'osx'
         run: |
-          brew install qt5
-          brew install fpc glew physfs lua sdl2 sdl2_image sdl2_net sdl2_ttf ffmpeg ghc cabal-install
-          brew install sdl2_mixer
-          
+          brew install qt5 fpc glew physfs lua ffmpeg ghc cabal-install 7zip
+
+          mkdir $HOME/Library/Frameworks
+          bash ./tools/dmg_to_framework.sh https://github.com/libsdl-org/SDL/releases/download/release-2.32.10/SDL2-2.32.10.dmg
+          bash ./tools/dmg_to_framework.sh https://github.com/libsdl-org/SDL_image/releases/download/release-2.8.8/SDL2_image-2.8.8.dmg
+          bash ./tools/dmg_to_framework.sh https://github.com/libsdl-org/SDL_net/releases/download/release-2.2.0/SDL2_net-2.2.0.dmg
+          bash ./tools/dmg_to_framework.sh https://github.com/libsdl-org/SDL_ttf/releases/download/release-2.24.0/SDL2_ttf-2.24.0.dmg
+          bash ./tools/dmg_to_framework.sh https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.8.1/SDL2_mixer-2.8.1.dmg
+
           if [[ "$BUILD_ARGS" != *"NOSERVER"* ]]; then
             cabal update
-            (cd gameServer && cabal v1-install --only-dependencies)
+            cabal v1-install alex zlib --global
+            (cd gameServer && cabal v1-install --only-dependencies --force-reinstalls)
           fi
           
           if [[ "$BUILD_ARGS" == *"BUILD_ENGINE_C"* ]]; then
