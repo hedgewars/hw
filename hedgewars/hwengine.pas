@@ -530,6 +530,7 @@ begin
         uAmmos.initModule;
         uCaptions.initModule;
 
+        uStore.initModule;
         uChat.initModule;
         uCollisions.initModule;
         uGears.initModule;
@@ -538,7 +539,6 @@ begin
         uLandTexture.initModule;    //stub
         uSound.initModule;
         uStats.initModule;
-        uStore.initModule;
         uRender.initModule;
         uTeams.initModule;
         uVisualGears.initModule;

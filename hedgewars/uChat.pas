@@ -208,7 +208,8 @@ var font: THWFont;
     str : shortstring;
     coff, soff: LongInt;
 begin
-    AdjustToUIScale();
+    if SDLwindow <> nil then
+        AdjustToUIScale();
 
     if cursorPos = selectedPos then
         ResetSelection();
