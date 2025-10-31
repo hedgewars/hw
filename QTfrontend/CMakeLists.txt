@@ -268,6 +268,12 @@ if(WIN32 AND VCPKG_TOOLCHAIN)
     list(APPEND HW_LINK_LIBS Qt5::WinMain)
 endif()
 
+if(APPLE)
+    target_link_libraries(hedgewars "-framework Foundation")
+    target_link_libraries(hedgewars "-framework AppKit")
+    set_target_properties(hedgewars PROPERTIES LINK_FLAGS "-Wl,-F/Library/Frameworks")
+endif()
+
 target_link_libraries(hedgewars ${HW_LINK_LIBS})
 
 
