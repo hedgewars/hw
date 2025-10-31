@@ -79,4 +79,4 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/hedgewars-server${CMAKE_E
 
 add_custom_target(hedgewars-server ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}")
 
-install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION "bin")
+install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_binary_install_dir})
