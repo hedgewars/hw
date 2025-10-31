@@ -90,6 +90,8 @@ if(APPLE AND NOT SKIPBUNDLE)
         /Library/Frameworks
         /usr/local/lib
         /opt/local/lib
+        # TODO: use "$(brew --prefix)/lib" instead of hardcoding
+        /opt/homebrew/lib
     )
 
     # operate on the Hedgewars.app
