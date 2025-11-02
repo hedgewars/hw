@@ -13,8 +13,8 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("The big bang")
 local challengeObjectives = loc("Find a way to detonate all the explosives and stay alive!").."|"..
-							loc("Red areas are indestructible.").."|"..
-							loc("Green areas are portal-proof.").."|"..
+							loc("Areas with a security outline are indestructible.").."|"..
+							loc("Areas with a green dashed outline are portal-proof.").."|"..
 							loc("Mines time: 0 seconds")
 
 local dialog01 = {}
@@ -30,7 +30,7 @@ local hero = {
 -- teams
 local teamA = {
 	name = loc("Hog Solo"),
-	color = tonumber("38D61C",16) -- green
+	color = -6
 }
 
 -------------- LuaAPI EVENT HANDLERS ------------------
@@ -38,7 +38,7 @@ local teamA = {
 function onGameInit()
 	GameFlags = gfDisableWind + gfOneClanMode
 	Seed = 1
-	TurnTime = -1
+	TurnTime = MAX_TURN_TIME
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 1
@@ -50,9 +50,10 @@ function onGameInit()
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(1)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 
 	initCheckpoint("final")
@@ -63,7 +64,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	ShowMission(missionName, loc("Challenge objectives"), challengeObjectives, -amSkip, 0)
+	ShowMission(missionName, loc("Objectives"), challengeObjectives, 1, 7500)
 
 	-- explosives
 	x = 400
@@ -135,31 +136,34 @@ function onHeroDeath(gear)
 end
 
 function onBoom(gear)
-	local win = true
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
 	for i=1,table.getn(explosives) do
 		if GetHealth(explosives[i]) then
-			win = false
-			break
+			return false
 		end
 	end
 	if currentHealth <= currentDamage then
-		win = false
+		return false
 	end
-	return win
+	return true
 end
 
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have to destroy all the explosives without dying!"))
-	SendStat(siCustomAchievement, loc("Red areas are indestructible."))
-	SendStat(siCustomAchievement, loc("Green areas are portal-proof and repel portals."))
+	SendStat(siCustomAchievement, loc("Areas surrounded by a security border are indestructible."))
+	SendStat(siCustomAchievement, loc("Areas surrounded by a green dashed outline are portal-proof and repel portals."))
 	sendSimpleTeamRankings({teamA.name})
 	EndGame()
 end
 
 function heroBoomReaction(gear)
+	SetSoundMask(sndMissed, true)
+	SetSoundMask(sndYesSir, true)
 	if GetHealth(gear) and GetHealth(gear) > 0 then
 		HogSay(gear, loc("Kaboom! Hahahaha! Take this, stupid meteorite!"), SAY_SHOUT, 2)
 	end

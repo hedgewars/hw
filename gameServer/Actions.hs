@@ -46,6 +46,7 @@ import qualified Text.Regex.TDFA.ByteString as TDFAB
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
+import qualified Data.Yaml as YAML
 #endif
 import CoreTypes
 import Utils
@@ -116,7 +117,7 @@ processAction (ByeClient msg) = do
     loggedIn <- client's isVisible
 
     when (ri /= lobbyId) $ do
-        processAction $ MoveToLobby ("quit: " `B.append` msg)
+        processAction $ (MoveToLobby msg)
         return ()
 
     clientsChans <- liftM (Prelude.map sendChan . Prelude.filter isVisible) $! allClientsS
@@ -265,6 +266,8 @@ processAction (ChangeMaster delegateId)= do
           ModifyClient2 (fromJust newMasterId) (\c -> c{isMaster = True})
         , AnswerClients [sendChan $ fromJust newMaster] ["ROOM_CONTROL_ACCESS", "1"]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick $ fromJust newMaster]
+        -- TODO: Send message to other clients, too (requires proper localization, however)
+        , AnswerClients [sendChan $ fromJust newMaster] ["CHAT", nickServer, loc "You're the new room master!"]
         ]
 
     processAction $
@@ -476,7 +479,7 @@ processAction (ProcessAccountInfo info) = do
             c <- client's isChecker
             when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin isContr
         Guest | isRegisteredUsersOnly si -> do
-            processAction $ ByeClient "Registered users only"
+            processAction $ ByeClient $ loc "This server only allows registered users to join."
             | otherwise -> do
             b <- isBanned
             c <- client's isChecker
@@ -556,7 +559,7 @@ processAction (KickClient kickId) = do
     mapM_ processAction [
         AddIP2Bans clHost (loc "60 seconds cooldown after kick") (addUTCTime 60 currentTime)
         , ModifyClient (\c -> c{isKickedFromServer = True})
-        , ByeClient "Kicked"
+        , ByeClient $ loc "Kicked"
         ]
 
 
@@ -633,7 +636,7 @@ processAction (AddClient cl) = do
         mapM_ processAction
             [
                 CheckBanned True
-                , AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
+                , AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server https://www.hedgewars.org/", serverVersion]
             ]
         else
         processAction $ ByeClient $ loc "Reconnected too fast"
@@ -706,7 +709,7 @@ processAction RestartServer = do
         args <- gets (runArgs . serverInfo)
         io $ do
             noticeM "Core" "Closing listening socket"
-            sClose sock
+            close sock
             noticeM "Core" "Spawning new server"
             _ <- createProcess (proc "./hedgewars-server" args)
             return ()
@@ -730,9 +733,9 @@ processAction Stats = do
 
 
 processAction (Random chans items) = do
-    let i = if null items then ["heads", "tails"] else items
+    let i = if null items then [loc "heads", loc "tails"] else items
     n <- io $ randomRIO (0, length i - 1)
-    processAction $ AnswerClients chans ["CHAT", "[random]", i !! n]
+    processAction $ AnswerClients chans ["CHAT", if null items then nickRandomCoin else nickRandomCustom, i !! n]
 
 
 processAction (LoadGhost location) = do
@@ -817,14 +820,6 @@ processAction (QueryReplay rname) = do
     uid <- client's clUID
     io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) rname
 
-#else
-processAction SaveReplay = return ()
-processAction CheckRecord = return ()
-processAction (CheckFailed _) = return ()
-processAction (CheckSuccess _) = return ()
-processAction (QueryReplay _) = return ()
-#endif
-
 processAction (ShowReplay rname) = do
     c <- client's sendChan
     cl <- client's id
@@ -839,24 +834,45 @@ processAction (ShowReplay rname) = do
     let (teams', params1, params2, roundMsgs') = fromJust cInfo
 
     when (isJust cInfo) $ do
-        mapM_ processAction $ concat [
-            [AnswerClients [c] ["JOINED", nick cl]]
-            , answerFullConfigParams cl params1 params2
-            , answerAllTeams cl teams'
-            , [AnswerClients [c]  ["RUN_GAME"]]
-            , [AnswerClients [c] $ "EM" : roundMsgs']
-            , [AnswerClients [c] ["KICKED"]]
-            ]
+        mapM_ processAction $
+            if clientProto cl < 58 then
+                concat [
+                    [AnswerClients [c] ["JOINED", nick cl]]
+                    , answerFullConfigParams cl params1 params2
+                    , answerAllTeams cl teams'
+                    , [AnswerClients [c]  ["RUN_GAME"]]
+                    , [AnswerClients [c] $ "EM" : roundMsgs']
+                    , [AnswerClients [c] ["KICKED"]]
+                ]
+            else
+                concat [
+                    [AnswerClients [c] ["REPLAY_START"]]
+                    , answerFullConfigParams cl params1 params2
+                    , answerAllTeams cl teams'
+                    , [AnswerClients [c]  ["RUN_GAME"]]
+                    , [AnswerClients [c] $ "EM" : roundMsgs']
+                ]
 
 processAction (SaveRoom rname) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     rm <- io $ room'sM rnc id ri
-    liftIO $ writeFile (B.unpack rname) $ show (greeting rm, roomSaves rm)
+    liftIO $ YAML.encodeFile (B.unpack rname) (greeting rm, roomSaves rm)
 
 processAction (LoadRoom rname) = do
-    (g, rs) <- liftIO $ liftM read $ readFile (B.unpack rname)
+    Right (g, rs) <- io $ YAML.decodeFileEither (B.unpack rname)
     processAction $ ModifyRoom $ \r -> r{greeting = g, roomSaves = rs}
+
+#else
+processAction SaveReplay = return ()
+processAction CheckRecord = return ()
+processAction (CheckFailed _) = return ()
+processAction (CheckSuccess _) = return ()
+processAction (QueryReplay _) = processAction $ Warning $ loc "This server does not support replays!"
+processAction (ShowReplay rname) = return ()
+processAction (SaveRoom rname) = return () -- TODO: Send warning that this command is unsupported
+processAction (LoadRoom rname) = return () -- TODO: Send warning that this command is unsupported
+#endif
 
 processAction Cleanup = do
     jm <- gets joinsMonitor
@@ -879,3 +895,13 @@ processAction (ReactCmd cmd) = do
 
 processAction CheckVotes =
     checkVotes >>= mapM_ processAction
+
+processAction (ShowRegisteredOnlyState chans) = do
+    si <- gets serverInfo
+    processAction $ AnswerClients chans
+        ["CHAT", nickServer,
+        if isRegisteredUsersOnly si then
+            loc "This server no longer allows unregistered players to join."
+        else
+            loc "This server now allows unregistered players to join."
+        ]

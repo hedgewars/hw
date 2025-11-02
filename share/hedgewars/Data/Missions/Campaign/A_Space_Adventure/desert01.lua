@@ -1,6 +1,6 @@
 ------------------- ABOUT ----------------------
 --
--- In the desert planet Hero will have to explore
+-- In the desert planet, the hero will have to explore
 -- the dunes below the surface and find the hidden
 -- crates. It is told that one crate contains the
 -- lost part.
@@ -76,11 +76,11 @@ smuggler3.name = loc("Sandstorm")
 smuggler3.x = 1940
 smuggler3.y = 1625
 teamA.name = loc("PAotH")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Smugglers")
-teamB.color = 0xFE8B0E -- orange
+teamB.color = -7
 teamC.name = loc("Hog Solo")
-teamC.color = 0x38D61C -- green
+teamC.color = -6
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 
@@ -91,28 +91,32 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	Delay = 3
 	HealthCaseAmount = 30
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
 	Map = "desert01_map"
 	Theme = "Desert"
+	-- To prevent victory when smugglers have been defeated
+	GameFlags = gfOneClanMode
 
 	-- get hero health
 	local heroHealth = 100
 
-	-- Hog Solo
-	AddTeam(teamC.name, teamC.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
+	-- Hero
+	teamC.name = AddMissionTeam(teamC.color)
+	hero.gear = AddMissionHog(heroHealth)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- PAotH undercover scientist and chief Sandologist
-	AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default_qau", "cm_galaxy")
+	SetTeamPassive(teamA.name, true)
 	ally.gear = AddHog(ally.name, 0, 100, "Cowboy")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Smugglers
-	AddTeam(teamB.name, teamB.color, "chest", "Island", "Default", "cm_bloodyblade")
+	teamB.name = AddTeam(teamB.name, teamB.color, "chest", "Island", "Default_qau", "cm_bloodyblade")
+	SetTeamPassive(teamB.name, true)
 	smuggler1.gear = AddHog(smuggler1.name, 1, 100, "hair_orange")
 	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y)
 	smuggler2.gear = AddHog(smuggler2.name, 1, 100, "lambda")
@@ -130,7 +134,7 @@ function onGameStart()
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroAtFirstBattle, {hero.gear}, heroAtFirstBattle, {hero.gear}, 1)
-	AddEvent(onHeroAtThirdBattle, {hero.gear}, heroAtThirdBattle, {hero.gear}, 0)
+	AddEvent(onHeroAtThirdBattle, {hero.gear}, heroAtThirdBattle, {hero.gear}, 1)
 	AddEvent(onCheckForWin1, {hero.gear}, checkForWin1, {hero.gear}, 0)
 	AddEvent(onCheckForWin2, {hero.gear}, checkForWin2, {hero.gear}, 0)
 	AddEvent(onCrateDestroyed, {hero.gear}, crateDestroyed, {hero.gear}, 0)
@@ -183,8 +187,8 @@ function onGameStart()
 	end
 
 	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
-	AddEvent(onHeroAtBattlePoint1, {hero.gear}, heroAtBattlePoint1, {hero.gear}, 0)
-	AddEvent(onHeroAtBattlePoint2, {hero.gear}, heroAtBattlePoint2, {hero.gear}, 0)
+	AddEvent(onHeroAtBattlePoint1, {hero.gear}, heroAtBattlePoint1, {hero.gear}, 1)
+	AddEvent(onHeroAtBattlePoint2, {hero.gear}, heroAtBattlePoint2, {hero.gear}, 1)
 	-- crates
 	SpawnSupplyCrate(btorch1X, btorch1Y, amBlowTorch)
 	SpawnHealthCrate(680, 460)
@@ -195,7 +199,6 @@ function onGameStart()
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
 	AddAmmo(hero.gear, amRCPlane, tonumber(getBonus(1)))
-	AddAmmo(hero.gear, amSkip, 0)
 
 	AddAnim(dialog01)
 
@@ -203,31 +206,14 @@ function onGameStart()
 end
 
 function onNewTurn()
-	local function getReady(hog)
-		-- This clears the "Get ready, Hog!" caption from the engine, because it will name the
-		-- false hog because we immediately switch the hog after the turn start.
-		-- TODO: Find a better method for this and show the real hog name (preferably using an engine string)
-		AddCaption("")
-	end
-
-	if CurrentHedgehog ~= hero.gear and not heroIsInBattle then
-		AnimSwitchHog(hero.gear)
-		getReady(hero.gear)
-		TurnTimeLeft = -1
-	elseif CurrentHedgehog == hero.gear and not heroIsInBattle then
-		TurnTimeLeft = -1
+	if CurrentHedgehog == hero.gear and not heroIsInBattle then
+		SetTurnTimeLeft(MAX_TURN_TIME)
 	elseif (CurrentHedgehog == smuggler2.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 1 then
 		AnimSwitchHog(smuggler1.gear)
-		getReady(smuggler1.gear)
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 2 then
 		AnimSwitchHog(smuggler2.gear)
-		getReady(smuggler2.gear)
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler2.gear) and ongoingBattle == 3 then
 		AnimSwitchHog(smuggler3.gear)
-		getReady(smuggler3.gear)
-	elseif CurrentHedgehog == ally.gear then
-		AnimSwitchHog(hero.gear)
-		getReady(hero.gear)
 	end
 end
 
@@ -245,6 +231,9 @@ function onAmmoStoreInit()
 	SetAmmo(amRope, 0, 0, 0, 1)
 	SetAmmo(amPortalGun, 0, 0, 0, 1)
 	SetAmmo(amGirder, 0, 0, 0, 3)
+	-- Give skip to all.
+	-- Skip intentionally kept for player so they can wait for
+	-- better wind conditions.
 	SetAmmo(amSkip, 9, 0, 0, 1)
 end
 
@@ -270,11 +259,13 @@ function onGearDelete(gear)
 			-- Turn the other crate into a fake crate; this will “contain” the device.
 			SetGearPos(other_crate_table.gear, bor(GetGearPos(other_crate_table.gear), 0x8))
 		elseif cratesFound == 1 then
-			-- Second win crate collected:
-			-- This crate contains the anti-gravity part! VICTORY!
-			PlaySound(sndShotgunReload)
-			-- It's displayed as if collecting a normal ammo/utility crate. :-)
-			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			if not candidate_crate_table.destroyed then
+				-- Second win crate collected:
+				-- This crate contains the anti-gravity part! VICTORY!
+				PlaySound(sndShotgunReload)
+				-- It's displayed as if collecting a normal ammo/utility crate. :-)
+				AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+			end
 		end
 	end
 
@@ -285,10 +276,23 @@ function onGearDelete(gear)
 	end
 	if gear == hero.gear then
 		hero.dead = true
-	elseif (gear == smuggler1.gear or gear == smuggler2.gear or gear == smuggler3.gear) and heroIsInBattle then
-		heroIsInBattle = false
-		AddAmmo(hero.gear, amSkip, 0)
-		ongoingBattle = 0
+	elseif heroIsInBattle then
+		if ((ongoingBattle == 1 and gear == smuggler1.gear) or
+		(ongoingBattle == 2 and gear == smuggler2.gear) or
+		(ongoingBattle == 3 and gear == smuggler3.gear)) then
+			heroIsInBattle = false
+			SetTeamPassive(teamB.name, true)
+			ongoingBattle = 0
+			if gear == smuggler1.gear then
+				RemoveEventFunc(onHeroAtFirstBattle)
+				RemoveEventFunc(onHeroFleeFirstBattle)
+			elseif gear == smuggler2.gear then
+				RemoveEventFunc(onHeroAtBattlePoint1)
+				RemoveEventFunc(onHeroAtBattlePoint2)
+			elseif gear == smuggler3.gear then
+				RemoveEventFunc(onHeroAtThirdBattle)
+			end
+		end
 	end
 end
 
@@ -308,7 +312,7 @@ function onHeroDeath(gear)
 end
 
 function onHeroAtFirstBattle(gear)
-	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1450 and GetX(hero.gear) > 80
+	if not hero.dead and (not (heroIsInBattle and ongoingBattle == 1)) and ((not heroIsInBattle) or (heroIsInBattle and ongoingBattle == 3)) and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1233 and GetX(hero.gear) > 80
 			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-40 and
 			-- If hero is standing or at a rope
 			(StoppedGear(hero.gear) or GetGearElasticity(hero.gear) ~= 0) then
@@ -318,7 +322,8 @@ function onHeroAtFirstBattle(gear)
 end
 
 function onHeroFleeFirstBattle(gear)
-	if GetHealth(hero.gear) and GetHealth(smuggler1.gear) and heroIsInBattle
+	if GetHealth(hero.gear) and GetHealth(smuggler1.gear)
+			and heroIsInBattle and ongoingBattle == 1
 			and not gearIsInCircle(smuggler1.gear, GetX(hero.gear), GetY(hero.gear), 1400, false)
 			and StoppedGear(hero.gear) then
 		return true
@@ -328,7 +333,8 @@ end
 
 -- saves the location of the hero and prompts him for the second battle
 function onHeroAtBattlePoint1(gear)
-	if not hero.dead and GetX(hero.gear) > 1000 and GetX(hero.gear) < 1100
+	if not hero.dead and (not (heroIsInBattle and ongoingBattle == 2))
+			and GetX(hero.gear) > 1000 and GetX(hero.gear) < 1100
 			and GetY(hero.gear) > 590 and GetY(hero.gear) < 700 and StoppedGear(hero.gear)
 			and (StoppedGear(hero.gear) or GetGearElasticity(hero.gear) ~= 0) then
 		return true
@@ -337,7 +343,8 @@ function onHeroAtBattlePoint1(gear)
 end
 
 function onHeroAtBattlePoint2(gear)
-	if not hero.dead and GetX(hero.gear) > 1610 and GetX(hero.gear) < 1680
+	if not hero.dead and (not (heroIsInBattle and ongoingBattle == 2))
+			and GetX(hero.gear) > 1610 and GetX(hero.gear) < 1680
 			and GetY(hero.gear) > 850 and GetY(hero.gear) < 1000
 			and (StoppedGear(hero.gear) or GetGearElasticity(hero.gear) ~= 0) then
 		return true
@@ -346,7 +353,8 @@ function onHeroAtBattlePoint2(gear)
 end
 
 function onHeroAtThirdBattle(gear)
-	if not hero.dead and GetX(hero.gear) > 2000 and GetX(hero.gear) < 2200
+	if not hero.dead and (not (heroIsInBattle and ongoingBattle == 3))
+			and GetX(hero.gear) > 2000 and GetX(hero.gear) < 2200
 			and GetY(hero.gear) > 1430 and GetY(hero.gear) < 1670 then
 		return true
 	end
@@ -382,29 +390,32 @@ end
 
 function heroAtFirstBattle(gear)
 	AnimCaption(hero.gear, loc("A smuggler! Prepare for battle"), 5000)
-	-- Remember velocity to restore it later
-	local dx, dy = GetGearVelocity(hero.gear)
-	-- Hog gets scared if on rope
-	if isOnRope() then
-		PlaySound(sndRopeRelease)
-		HogSay(hero.gear, loc("Gasp! A smuggler!"), SAY_SHOUT)
-		dx = div(dx, 3)
-		dy = div(dy, 3)
-	end
-	EndTurn(true)
-	heroIsInBattle = true
-	AddAmmo(hero.gear, amSkip, 100)
 	ongoingBattle = 1
-	AnimSwitchHog(smuggler1.gear)
-	EndTurn(true)
-	SetGearVelocity(hero.gear, dx, dy)
+	if not heroIsInBattle then
+		-- Remember velocity to restore it later
+		local dx, dy = GetGearVelocity(hero.gear)
+		-- Hog gets scared if on rope
+		if isOnRope() then
+			PlaySound(sndRopeRelease)
+			HogSay(hero.gear, loc("Gasp! A smuggler!"), SAY_SHOUT)
+			dx = div(dx, 3)
+			dy = div(dy, 3)
+		end
+		SetGearMessage(hero.gear, 0)
+		SetTeamPassive(teamB.name, false)
+		heroIsInBattle = true
+		--EndTurn(true)
+		AnimSwitchHog(smuggler1.gear)
+		EndTurn(true)
+		SetGearVelocity(hero.gear, dx, dy)
+	end
 end
 
 function heroFleeFirstBattle(gear)
 	AnimSay(smuggler1.gear, loc("Run away, you coward!"), SAY_SHOUT, 4000)
-	EndTurn(true)
+	SetTeamPassive(teamB.name, true)
 	heroIsInBattle = false
-	AddAmmo(hero.gear, amSkip, 0)
+	EndTurn(true)
 	ongoingBattle = 0
 end
 
@@ -417,21 +428,26 @@ function heroAtBattlePoint2(gear)
 end
 
 function heroAtThirdBattle(gear)
-	heroIsInBattle = true
-	AddAmmo(hero.gear, amSkip, 100)
+	-- third battle
 	ongoingBattle = 3
 	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you!"), SAY_SHOUT, 5000)
-	local dx, dy = GetGearVelocity(hero.gear)
-	-- Hog gets scared and falls from rope
-	if isOnRope() then
-		PlaySound(sndRopeRelease)
-		HogSay(hero.gear, loc("Yikes!"), SAY_SHOUT)
-		dx = div(dx, 3)
-		dy = div(dy, 3)
+	if not heroIsInBattle then
+		heroIsInBattle = true
+		SetTeamPassive(teamB.name, false)
+		ongoingBattle = 3
+		local dx, dy = GetGearVelocity(hero.gear)
+		-- Hog gets scared and falls from rope
+		if isOnRope() then
+			PlaySound(sndRopeRelease)
+			HogSay(hero.gear, loc("Yikes!"), SAY_SHOUT)
+			dx = div(dx, 3)
+			dy = div(dy, 3)
+		end
+		SetGearMessage(hero.gear, 0)
+		AnimSwitchHog(smuggler3.gear)
+		EndTurn(true)
+		SetGearVelocity(hero.gear, dx, dy)
 	end
-	AnimSwitchHog(smuggler3.gear)
-	EndTurn(true)
-	SetGearVelocity(hero.gear, dx, dy)
 end
 
 function crateDestroyed(gear)
@@ -500,24 +516,34 @@ function startMission()
 end
 
 function secondBattle()
+	local smugglerMsg = function()
+		AnimSay(smuggler2.gear, loc("This seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
+	end
 	-- second battle
-	if heroIsInBattle and ongoingBattle == 1 then
-		AnimSay(smuggler1.gear, loc("Get him, Spike!"), SAY_SHOUT, 4000)
+	if heroIsInBattle then
+		if ongoingBattle == 1 then
+			AnimSay(smuggler1.gear, loc("Get him, Spike!"), SAY_SHOUT, 4000)
+		else
+			smugglerMsg()
+		end
+		ongoingBattle = 2
+	else
+		smugglerMsg()
+		local dx, dy = GetGearVelocity(hero.gear)
+		-- Hog gets scared if on rope
+		if isOnRope() then
+			PlaySound(sndRopeRelease)
+			HogSay(hero.gear, loc("Gasp!"), SAY_SHOUT)
+			dx = div(dx, 3)
+			dy = div(dy, 3)
+		end
+		SetGearMessage(hero.gear, 0)
+		heroIsInBattle = true
+		SetTeamPassive(teamB.name, false)
+		ongoingBattle = 2
+		AnimSwitchHog(smuggler2.gear)
+		EndTurn(true)
 	end
-	local dx, dy = GetGearVelocity(hero.gear)
-	-- Hog gets scared if on rope
-	if isOnRope() then
-		PlaySound(sndRopeRelease)
-		HogSay(hero.gear, loc("Gasp!"), SAY_SHOUT)
-		dx = div(dx, 3)
-		dy = div(dy, 3)
-	end
-	heroIsInBattle = true
-	AddAmmo(hero.gear, amSkip, 100)
-	ongoingBattle = 2
-	AnimSay(smuggler2.gear, loc("This seems like a wealthy hedgehog, nice ..."), SAY_THINK, 5000)
-	AnimSwitchHog(smuggler2.gear)
-	EndTurn(true)
 	SetGearVelocity(hero.gear, dx, dy)
 end
 
@@ -539,7 +565,7 @@ function checkForWin()
 end
 
 function lose()
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("To win the game you have to find the right crate."))
 	SendStat(siCustomAchievement, loc("You can avoid some battles."))
 	SendStat(siCustomAchievement, loc("Use your ammo wisely."))

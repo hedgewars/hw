@@ -113,6 +113,8 @@ startAnim = {}
 
 gearDead = {}
 hogDead = {}
+
+local traitorTeamName = loc("Traitors")
 --------------------------Anim skip functions--------------------------
 function SkipStartAnim()
   SetGearMessage(CurrentHedgehog, 0)
@@ -127,7 +129,7 @@ function AfterStartAnim()
   ShowMission(loc("Epilogue"), loc("That's all, folks!"),
     loc("You have successfully finished the campaign!").."|"..
     loc("If you wish to replay, there are other possible endings, too!").."|"..
-    loc("You can practice moving around and using utilities in this mission.|However, it will never end!"), 1, 0)
+    loc("You can practice moving around and using utilities in this mission.|However, it will never end!"), 4, 0)
   SaveCampaignVar("Progress", "10")
   SaveCampaignVar("Won", "true")
 end
@@ -311,23 +313,25 @@ function GetVariables()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  local nativesTeamName = AddMissionTeam(-2)
   for i = 1, 5 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-	AddTeam(loc("More Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  local grave, voice, flag = GetHogGrave(natives[1]), GetHogVoicepack(natives[1]), GetHogFlag(natives[1])
+  AddTeam(string.format(loc("%s (contd.)"), nativesTeamName), -2, grave, "Island", voice, flag)
   for i = 6, 10 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
 
-	AddTeam(loc("Cannibals"), 29439, "skull", "Island", "HillBilly", "cm_birdy")
+  AddTeam(loc("Cannibals"), -2, "skull", "Island", "Pirate_qau", "cm_vampire")
   for i = 1, 5 do
     cannibals[i] = AddHog(cannibalNames[i], 0, 100, cannibalHats[i])
   end
 
   if m8Scene == denseScene or m8Scene == waterScene then
-    AddTeam(loc("Traitors"), 29439, "Bone", "Island", "HillBilly", "cm_bloodyblade")
+    traitorTeamName = AddTeam(traitorTeamName, -2, grave, "Island", voice, "cm_bloodyblade")
+    SetTeamPassive(traitorTeamName, true)
     if m8Scene == denseScene then
       DeleteGear(natives[2])
       natives[2] = AddHog(nativeNames[2], 0, 100, nativeHats[2])
@@ -395,7 +399,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
   Map = "Hogville"
 	Theme = "Nature"
   -- Disable Sudden Death
@@ -433,6 +436,9 @@ function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
     hogDead[gear] = true
+  end
+  if IsEveryoneExceptTraitorDead() then
+    SetTeamPassive(traitorTeamName, false)
   end
 end
 
@@ -483,20 +489,16 @@ function IsEveryoneExceptTraitorDead()
 end
 
 function onNewTurn()
-  if AnimInProgress() then
-    TurnTimeLeft = -1
-    return
-  end
-  -- Don't allow player to play with traitor, except when it is the final hog left
-  if CurrentHedgehog == traitor and not IsEveryoneExceptTraitorDead() then
-    EndTurn(true)
-  else
-    TurnTimeLeft = -1
-  end
+  SetTurnTimeLeft(MAX_TURN_TIME)
 end
 
 function onPrecise()
   if GameTime > 2500 then
     SetAnimSkip(true)
   end
+end
+
+function onGameResult(winner)
+  AddCaption(loc("Game over!"), capcolDefault, capgrpGameState)
+  SendStat(siGameResult, loc("You have successfully finished the campaign!"))
 end

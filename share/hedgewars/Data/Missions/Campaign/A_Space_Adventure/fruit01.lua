@@ -38,11 +38,11 @@ local goals = {
 		loc("Captain Lime offered his help if you assist him in battle.").."|"..
 		loc("What do you want to do?").."| |"..
 		loc("Fight: Press [Attack]").."|"..
-		loc("Flee: Press [Jump]"), 1, 9999000},
-	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight!").."|"..loc("Lead the Green Bananas to battle and eliminate all the enemies!"), 1, 5000},
+		loc("Flee: Press [Jump]"), 3, 9999000, true},
+	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight!").."|"..loc("Lead your allies to battle and eliminate all the enemies!"), 1, 5000},
 	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee.").."|"..loc("You have to reach the left-most place on the map."), 1, 5000},
-	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 1, 2000},
-	["flee"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to flee."), 1, 2000},
+	["fight"] = {missionName, loc("Ready for Battle?"), loc("You have chosen to fight!"), 2, 2000},
+	["flee"] = {missionName, loc("Coward"), loc("You have chosen to flee."), 2, 2000},
 	["flee_final"] = {missionName, loc("Time to run!"), loc("Knock off the enemies from the left-most place of the map!") .. "|" .. loc("Stay there to flee!"), 1, 6000},
 }
 -- crates
@@ -97,13 +97,13 @@ local yellowArmy = {
 	{name = loc("Naranja Jed"), x = 960 , y = 516, health = 40},
 }
 teamA.name = loc("Hog Solo")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Green Bananas")
-teamB.color = 0x38D61C -- green
+teamB.color = -6
 teamC.name = loc("Yellow Watermelons")
-teamC.color = 0xFFFF01 -- yellow
+teamC.color = -9
 teamD.name = loc("Captain Lime")
-teamD.color = 0x38D61C -- green
+teamD.color = -6
 
 function onGameInit()
 	Seed = 1
@@ -112,7 +112,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	Delay = 3
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
@@ -120,17 +119,18 @@ function onGameInit()
 	Map = "fruit01_map"
 	Theme = "Fruit"
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- Captain Lime
-	AddTeam(teamD.name, teamD.color, "Cherry", "Island", "Default", "congo-brazzaville")
+	teamD.name = AddTeam(teamD.name, teamD.color, "Cherry", "Island", "Default_qau", "congo-brazzaville")
 	green1.gear = AddHog(green1.name, 0, 200, "war_desertofficer")
 	AnimSetGearPosition(green1.gear, green1.x, green1.y)
 	-- Green Bananas
-	AddTeam(teamB.name, teamB.color, "Cherry", "Island", "Default", "congo-brazzaville")
+	teamB.name = AddTeam(teamB.name, teamB.color, "Cherry", "Island", "Default_qau", "congo-brazzaville")
 	green2.gear = AddHog(green2.name, 0, 100, "war_britmedic")
 	AnimSetGearPosition(green2.gear, green2.x, green2.y)
 	HogTurnLeft(green2.gear, true)
@@ -144,7 +144,7 @@ function onGameInit()
 	AnimSetGearPosition(green5.gear, green5.x, green5.y)
 	HogTurnLeft(green5.gear, true)
 	-- Yellow Watermelons
-	AddTeam(teamC.name, teamC.color, "Flower", "Island", "Default", "cm_mog")
+	teamC.name = AddTeam(teamC.name, teamC.color, "Flower", "Island", "Default_qau", "cm_mog")
 	yellow1.gear = AddHog(yellow1.name, 1, 100, "war_desertgrenadier2")
 	AnimSetGearPosition(yellow1.gear, yellow1.x, yellow1.y)
 	-- the rest of the Yellow Watermelons
@@ -297,22 +297,39 @@ function onGreen1Death(gear)
 end
 
 function onBattleWin(gear)
-	local win = true
 	for i=1,7 do
 		if i<3 then
 			if GetHealth(yellowArmy[i].gear) then
-				win = false
+				return false
 			end
 		else
 			if GetHealth(yellowArmy[i].gear) and not yellowArmy[i].hidden then
-				win = false
+				return false
 			end
 		end
 	end
 	if GetHealth(yellow1.gear) then
-		win = false
+		return false
 	end
-	return win
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
+	return true
+end
+
+function onEscapeWinByKill(gear)
+	for i=1,7 do
+		if GetHealth(yellowArmy[i].gear) or yellowArmy[i].hidden then
+			return false
+		end
+	end
+	if GetHealth(yellow1.gear) then
+		return false
+	end
+	if (not IsHogAlive(gear)) or (not StoppedGear(gear)) then
+		return false
+	end
+	return true
 end
 
 function isHeroOnLaunchPad()
@@ -361,7 +378,7 @@ end
 function battleWin(gear)
 	-- add stats
 	saveVariables()
-	SendStat(siGameResult, loc("Green Bananas won!"))
+	SendStat(siGameResult, string.format(loc("%s won!"), teamB.name))
 	SendStat(siCustomAchievement, loc("You have eliminated all visible enemy hedgehogs!"))
 	sendSimpleTeamRankings({teamA.name, teamD.name, teamB.name, teamC.name})
 	EndGame()
@@ -371,8 +388,17 @@ function escapeWin(gear)
 	RemoveEventFunc(heroOnLaunchPadWithEnemies)
 	-- add stats
 	saveVariables()
-	SendStat(siGameResult, loc("Hog Solo escaped successfully!"))
+	SendStat(siGameResult, string.format(loc("%s escaped successfully!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have reached the take-off area successfully!"))
+	sendSimpleTeamRankings({teamA.name, teamD.name, teamB.name, teamC.name})
+	EndGame()
+end
+
+function escapeWinByKill(gear)
+	RemoveEventFunc(heroOnLaunchPadWithEnemies)
+	-- add stats
+	saveVariables()
+	SendStat(siGameResult, string.format(loc("%s won!"), teamB.name))
 	sendSimpleTeamRankings({teamA.name, teamD.name, teamB.name, teamC.name})
 	EndGame()
 end
@@ -391,6 +417,8 @@ function heroSelect()
 		AddAmmo(green1.gear, amSwitch, 100)
 		AddEvent(onHeroOnLaunchPadWithEnemies, {hero.gear}, heroOnLaunchPadWithEnemies, {hero.gear}, 0)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
+		-- Alternative victory in the "flee" mission: ALL yellow hedgehogs killed
+		AddEvent(onEscapeWinByKill, {hero.gear}, escapeWinByKill, {hero.gear}, 0)
 		local greenTeam = { green2, green3, green4, green5 }
 		for i=1,4 do
 			SetHogLevel(greenTeam[i].gear, 1)
@@ -418,17 +446,17 @@ function Skipanim(anim)
 end
 
 function AnimationSetup()
-	-- DIALOG 01 - Start, Captain Lime talks explains to Hog Solo
+	-- DIALOG 01 - Start, Captain Lime talks and explains stuff to hero
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 1000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the Planet of Fruits a terrible war is about to begin ..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I was told that as the leader of the king's guard, no one knows this world better than you!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("So, I kindly ask for your help."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {green1.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You couldn't have come to a worse time, Hog Solo!"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, string.format(loc("You couldn't have come to a worse time, %s!"), hero.name), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("The clan of the Red Strawberry wants to take over the dominion and overthrow King Pineapple."), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Under normal circumstances we could easily defeat them but we have kindly sent most of our men to the Kingdom of Sand to help with the annual dusting of the king's palace."), SAY_SAY, 8000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("However, the army of Yellow Watermelons is about to attack any moment now."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, string.format(loc("However, the army of %s is about to attack any moment now."), teamC.name), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I would gladly help you if we won this battle but under these circumstances I'll only help you if you fight for our side."), SAY_SAY, 6000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("What do you say? Will you fight for us?"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
@@ -436,7 +464,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AfterDialog01, args = {}})
 	-- DIALOG 02 - Hero selects to fight
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You choose well, Hog Solo!"), SAY_SAY, 3000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, string.format(loc("You choose well, %s!"), hero.name), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I have only 3 hogs available and they are all cadets."), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("As you are more experienced, I want you to lead them to battle."), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Of course, I will observe the battle and intervene if necessary."), SAY_SAY, 5000}})
@@ -465,7 +493,7 @@ end
 
 function startBattle()
 	AnimSetInputMask(0xFFFFFFFF)
-	-- Hog Solo weapons
+	-- Hero weapons
 	AddAmmo(hero.gear, amRope, 2)
 	AddAmmo(hero.gear, amBazooka, 3)
 	AddAmmo(hero.gear, amParachute, 1)
@@ -479,14 +507,14 @@ end
 
 function gameLost()
 	if chooseToBattle then
-		SendStat(siGameResult, loc("The Green Bananas lost, try again!"))
+		SendStat(siGameResult, string.format(loc("%s lost, try again!"), teamB.name))
 		SendStat(siCustomAchievement, loc("You have to eliminate all the visible enemies."))
 		SendStat(siCustomAchievement, loc("5 additional enemies will be spawned during the game."))
 		SendStat(siCustomAchievement, loc("You are in control of all the active ally units."))
 		SendStat(siCustomAchievement, loc("The ally units share their ammo."))
 		SendStat(siCustomAchievement, loc("Try to keep as many allies alive as possible."))
 	else
-		SendStat(siGameResult, loc("Hog Solo couldn't escape, try again!"))
+		SendStat(siGameResult, string.format(loc("%s couldn't escape, try again!"), hero.name))
 		SendStat(siCustomAchievement, loc("You have to get to the left-most land and remove any enemy hog from there."))
 		SendStat(siCustomAchievement, loc("You will play every 3 turns."))
 	end
@@ -495,31 +523,45 @@ function gameLost()
 end
 
 function getNextWave()
+	if GetHogTeamName(CurrentHedgehog) ~= teamC.name then
+		return
+	end
 	if TotalRounds == 4 then
 		RestoreHog(yellowArmy[3].gear)
-		AnimCaption(hero.gear, loc("Next wave in 3 turns"), 5000)
+		AnimCaption(hero.gear, string.format(loc("%s enters the battlefield"), yellowArmy[3].name), 5000)
 		if not chooseToBattle and not GetHealth(yellow1.gear) then
 			SetGearPosition(yellowArmy[3].gear, yellow1.x, yellow1.y)
 		end
+		AnimOutOfNowhere(yellowArmy[3].gear)
 	elseif TotalRounds == 7 then
 		RestoreHog(yellowArmy[4].gear)
 		RestoreHog(yellowArmy[5].gear)
-		AnimCaption(hero.gear, loc("Last wave in 3 turns"), 5000)
+		AnimCaption(hero.gear, string.format(loc("%s and %s enter the battlefield"), yellowArmy[4].name, yellowArmy[5].name), 5000)
 		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear) then
 			SetGearPosition(yellowArmy[4].gear, yellow1.x, yellow1.y)
 		end
+		AnimOutOfNowhere(yellowArmy[4].gear)
+		AnimOutOfNowhere(yellowArmy[5].gear)
 	elseif TotalRounds == 10 then
 		RestoreHog(yellowArmy[6].gear)
 		RestoreHog(yellowArmy[7].gear)
+		AnimCaption(hero.gear, string.format(loc("%s and %s enter the battlefield"), yellowArmy[6].name, yellowArmy[7].name), 5000)
 		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear)
 				and not GetHealth(yellowArmy[4].gear) then
 			SetGearPosition(yellowArmy[6].gear, yellow1.x, yellow1.y)
 		end
+		AnimOutOfNowhere(yellowArmy[6].gear)
+		AnimOutOfNowhere(yellowArmy[7].gear)
 	end
 end
 
 function saveVariables()
 	saveCompletedStatus(2)
+	if chooseToBattle then
+		SaveCampaignVar("Fruit01JoinedBattle", "true")
+	else
+		SaveCampaignVar("Fruit01JoinedBattle", "false")
+	end
 	SaveCampaignVar("UnlockedMissions", "4")
 	SaveCampaignVar("Mission1", "8")
 	SaveCampaignVar("Mission2", "3")

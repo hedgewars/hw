@@ -52,6 +52,7 @@ class QSettings;
 class QSignalMapper;
 
 extern bool frontendEffects;
+extern bool demoIsPresent;
 extern QString playerHash;
 
 class HWForm : public QMainWindow
@@ -75,6 +76,7 @@ class HWForm : public QMainWindow
         void GoToSaves();
         void GoToDemos();
         void GoToNet();
+        void GoToHelp();
         void GoToEditWeapons();
         void GoToNewWeapons();
         void GoToWeapons(int index);
@@ -99,9 +101,10 @@ class HWForm : public QMainWindow
         void startTraining(const QString&, const QString&);
         void StartCampaign();
         void NetConnect();
-        void NetConnectServer(const QString & host, quint16 port);
+        void NetConnectServer(const QString & host, quint16 port, bool useTls);
         void NetConnectOfficialServer();
         void NetStartServer();
+        void NetRedirected(quint16 port);
         void NetDisconnect();
         void NetConnected();
         void NetError(const QString & errmsg);
@@ -119,22 +122,27 @@ class HWForm : public QMainWindow
         void RemoveNetTeam(const HWTeam& team);
         void StartMPGame();
         void GameStateChanged(GameState gameState);
+        void DemoPresenceChanged(bool hasDemo);
         void ForcedDisconnect(const QString & reason);
         void ShowFatalErrorMessage(const QString &);
         void GetRecord(RecordType type, const QByteArray & record);
         void CreateNetGame();
+        void PlayOfficialServerDemo();
         void UpdateWeapons();
         void DeleteWeapons(QString weaponsName);
         void AddWeapons(QString weaponsName, QString ammo);
         void EditWeapons(QString oldWeaponsName, QString newWeaponsName, QString ammo);
         void onFrontendFullscreen(bool value);
         void onFrontendEffects(bool value);
+        void onFrontendSoundsToggled(bool value);
         void Music(bool checked);
         void UpdateCampaignPage(int index);
         void UpdateCampaignPageTeam(int index);
         void UpdateCampaignPageProgress(int index);
         void UpdateCampaignPageMission(int index);
+        void UpdateTrainingPageTeam(int index);
         void InitCampaignPage();
+        void RestoreSingleplayerTeamSelection();
         void showFeedbackDialog();
         void showFeedbackDialogNetChecked();
 
@@ -155,7 +163,7 @@ class HWForm : public QMainWindow
         void FromNetProxySlot(const QByteArray &);
 
     private:
-        void _NetConnect(const QString & hostName, quint16 port, QString nick);
+        void _NetConnect(const QString & hostName, quint16 port, bool useTls, QString nick);
         int  AskForNickAndPwd(void);
         void UpdateTeamsLists();
         void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);

@@ -1,30 +1,30 @@
-Hedgewars, einfach Bombastisch!
+Hedgewars, einfach bombastisch!
 
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
-Hedgewars ist jetzt auch im Mac Appstore verfügbar! Suche Hedgewars von deinem Mac und bekomme deine GRATIS Kopie!
+Hedgewars ist jetzt auch im Mac-App-Store verfügbar! Suche Hedgewars von deinem Mac aus und hol dir deine GRATIS-Kopie!
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 
-Der iOS-Port hat einige exklusiven Features, wie z.B.:
-* iPad VGA-Ausgabe: Schließe einen externen Bildschirm an und spiele mit voller Auflösung;
-* Retina Display-Unterstützung: Spiele das gesamte Spiel mit noch höherer Auflösung;
-* Multitasking: Pausiere das Spiel wann immer du willst;
-* Spielstandwiederherstellung: Egal was passiert, du wirst immer in der Lage sein die Partie zu Ende zu spielen.
+Der iOS-Port hat einige exklusive Features, wie z.B.:
+* iPad-VGA-Ausgabe: Schließe einen externen Bildschirm an und spiele mit voller Auflösung;
+* Retina-Bildschirm-Unterstützung: Spiele das gesamte Spiel mit noch höherer Auflösung;
+* Multitasking: Pausiere das Spiel, wann immer du willst;
+* Spielstandwiederherstellung: Egal was passiert, du wirst immer in der Lage sein, die Partie zu Ende zu spielen.
 
 Beschreibung:
-Es ist das lustigste und süchtig-machendste Spiel auf der Welt - wahnsinniger Spielspaß, wo und wann du willst. Hedgewars ist ein rundenbasiertes Strategiespiel. Aber die richtige Begeisterung verursacht erst, diesen nervigen kleinen Igeln zu zuschauen, wie sie mit ihren fantastischen Waffen alles zerstören - hinterhältige kleine Mistkerle mit bösen Absichten!
+Es ist das lustigste und süchtigmachendste Spiel der Welt – wahnsinniger Spielspaß, wo und wann du willst. Hedgewars ist ein rundenbasiertes Strategiespiel. Aber die richtige Action kommt erst daher, diesen nervigen kleinen Igeln zu zuschauen, wie sie mit ihren absurden Waffen alles zerstören – hinterhältige kleine Mistkerle mit bösen Absichten!
 
-Anders gesagt, Hedgewars ist ein rundenbasiertes Strategie-, Artillerie-, Action- und Comedy-Spiel. In den Hauptrollen die Grimassen der pinken Igel, mit dem Anschein als wollten sie sich aus den Tiefen der Hölle in die Tiefen des Universums vorkämpfen.
+Hedgewars ist ein rundenbasiertes Strategie-, Artillerie-, Action- und Comedy-Spiel mit launischen rosa Igeln, die sich von den Tiefen der Hölle bis in die Tiefen des Universums vorkämpfen.
 
-Als Kommandant ist es deine Aufgabe ein Sondereinsatzkommando aus Igelsoldaten zusammenzustellen und deine Feinde mit Krieg zu überziehen.
+Als Kommandant ist es deine Aufgabe, ein Sondereinsatzkommando aus Igelsoldaten zusammenzustellen und deine Feinde im Krieg zu besiegen.
 
-Jeder Spieler befehligt ein aus mehreren Igeln bestehendes Team. Im Spielverlauf ziehen die Spieler mit einem ihrer Igel. Sie benutzen dann alle zur Verfügung stehende Hilfsmittel und Waffen um die gegnerischen Igel zu töten. Dadurch gewinnen sie das Spiel. Igel können sich auf verschiedene Arten und Weisen auf dem Gelände bewegen, normalerweise durch laufen und springen, sie können aber auch spezielle Hilfsmittel wie zum Beispiel ein Seil oder einen Fallschirm benutzen, um zu ansonsten unerreichbaren Regionen vorzudringen. Um zu verhindern, dass Teilnehmer nicht das Spiel durch übermäßiges Nachdenken oder Bewegen aufhalten, ist jeder Zug zeitlich begrenzt. Während dem Spiel gibt es eine Vielzahl von Waffen und Hilfsmitteln: Granaten, Streubomben, Panzerfäuste, UFOs, Schrotflinten, Desert Eagles, Feuerschläge, Baseballschläger, Dynamit, Minen, Seile, Presslufthammer und Fallschirme. Die meisten Waffen verursachen Explosionen, die auch kreisförmige Stücke des Geländes heraus sprengen. Die verfügbaren Umgebungen sind eine auf einem Gewässer schwimmende Insel oder eine beschränkt zugängliche Höhle mit Wasser auf dem Boden. Ein Igel stirbt wenn er ins Wasser fällt (z.B. weil er von der Insel oder durch ein Loch in deren Boden fällt), er auf irgendeiner Seite aus dem Spielfeld fliegt oder wenn seine Gesundheit unter Null fällt, typischerweise aber durch Explosionen. (Der einem oder mehreren Igeln durch einen Spieler- oder KI-Zug zugefügte Schaden wird erst angerechnet, nachdem alle Bewegungen auf dem Schlachtfeld abgeschlossen ist).
+Jeder Spieler befehligt ein aus mehreren Igeln bestehendes Team. Im Spielverlauf ziehen die Spieler mit einem ihrer Igel. Sie benutzen dann alle zur Verfügung stehende Hilfsmittel und Waffen, um die gegnerischen Igel zu töten. Dadurch gewinnen sie das Spiel. Igel können sich auf verschiedene Arten und Weisen auf dem Gelände bewegen, normalerweise durch laufen und springen, sie können aber auch spezielle Hilfsmittel, wie zum Beispiel ein Seil oder einen Fallschirm, benutzen, um zu ansonsten unerreichbaren Regionen vorzudringen. Um zu verhindern, dass Teilnehmer nicht das Spiel durch übermäßiges Nachdenken oder Bewegen aufhalten, ist jeder Zug zeitlich begrenzt. Während dem Spiel gibt es eine Vielzahl von Waffen und Hilfsmitteln: Granaten, Splittergranaten, Bazookas, fliegende Untertassen, Schrotflinten, Desert Eagles, Shoryuken, Baseballschläger, Dynamit, Minen, Seile, Presslufthämmer, Fallschirme und mehr. Die meisten Waffen verursachen Explosionen, die auch kreisförmige Stücke des Geländes heraus sprengen. Die verfügbaren Umgebungen sind eine auf einem Gewässer schwimmende Insel oder eine beschränkt zugängliche Höhle mit Wasser auf dem Boden. Ein Igel stirbt, wenn er ins Wasser fällt (z.B. weil er von der Insel oder durch ein Loch im Boden fällt), er auf irgendeiner Seite aus dem Spielfeld fliegt oder, wenn seine Gesundheit auf null fällt, typischerweise aber durch Explosionen. (Der einem oder mehreren Igeln durch einen Spieler- oder KI-Zug zugefügte Schaden wird erst angerechnet, nachdem alle Bewegungen auf dem Schlachtfeld abgeschlossen ist.)
 
-* Sensationeller, zerstörerischer, rundenbasierter Krieg für bis zu 6 Spieler
+* Sensationeller, zerstörerischer, rundenbasierter Krieg für bis zu 8 Spieler
 * Lokale- und Online-Multiplayerspiele, mit zusätzlichen KI-Gegnern
 * Kämpfe auf unendlichen vielen, zufällig generierten Karten mit über 20 Umgebungen
-* Benutze 48 (und es werden laufend mehr) überwältigende Waffen! Inklusive dem Piano-Schlag und dem explosiven Roboterkuchen
+* Benutze über 50 (und es werden laufend mehr) überwältigende Waffen und Werkzeuge! Inklusive dem Piano-Angriff und dem explosiven Roboterkuchen
 * Spiel das Spiel auf deine Weise, mit mehr als 20 verschiedenen Modifikatoren kannst du so gut wie jedes Detail anpassen
 * Passe dein Team an, mit über 120 Kostümen, 30 Gräbern, 12 Festungen, 100ten von Flaggen und einzigartigen Stimmen
 * Riesige Schlachten mit bis zu 64 Igeln

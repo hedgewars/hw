@@ -9,11 +9,12 @@ local enemy = nil
 local Pack = nil
 local help = false
 local GameOver = false
+local playerTeamName
 
 function onGameInit()
 	Seed = 0
 	GameFlags = gfDisableWind
-	TurnTime = 600000000
+	TurnTime = MAX_TURN_TIME
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 0
@@ -22,15 +23,14 @@ function onGameInit()
 	WaterRise = 0
 
 	Explosives = 0
-	Delay = 10
 	Map = "CrazyMission"
 	Theme = "CrazyMission"
 
-	AddTeam(loc("Feeble Resistance"), 14483456, "Statue", "Island", "Default", "cm_kiwi")
-	player = AddHog(loc("Greg"), 0, 30, "NoHat")
-	hlayer = AddHog(loc("Mark"), 0, 40, "NoHat")
+	playerTeamName = AddMissionTeam(-1)
+	player = AddMissionHog(30)
+	hlayer = AddMissionHog(40)
 
-	AddTeam(loc("Cybernetic Empire"), 1175851, "ring", "Island", "Robot", "cm_binary")
+	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot_qau", "cm_binary")
 	enemy = AddHog(loc("WatchBot 4000"), 5, 50, "cyborg1")
 
 	SetGearPosition(player, 180, 555)
@@ -101,9 +101,19 @@ function onGearDelete(gear)
 	end
 	-- Note: The victory sequence is done automatically by Hedgewars
 	if ( ((gear == player) or (gear == hlayer)) and (GameOver == false)) then
-		ShowMission(loc("Teamwork 2"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 		GameOver = true
 		SetHealth(hlayer, 0)
 		SetHealth(player, 0)
+	end
+end
+
+function onGameResult(winner)
+	if winner == GetTeamClan(playerTeamName) then
+		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
+		GameOver = true
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
+		GameOver = true
 	end
 end

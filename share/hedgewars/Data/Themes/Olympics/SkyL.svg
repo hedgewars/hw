@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.0"
+   height="1024"
+   width="2048"
+   id="svg2">
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5">
+    <linearGradient
+       id="linearGradient3159">
+      <stop
+         id="stop3161"
+         offset="0"
+         style="stop-color:#b1bed8;stop-opacity:1;" />
+      <stop
+         id="stop3163"
+         offset="1"
+         style="stop-color:#dbe1ed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="763.78711"
+       x2="1042.5674"
+       y1="44.014645"
+       x1="1042.5674"
+       id="linearGradient3165"
+       xlink:href="#linearGradient3159" />
+    <filter
+       id="filter3296">
+      <feGaussianBlur
+         id="feGaussianBlur3298"
+         stdDeviation="19.58669" />
+    </filter>
+  </defs>
+  <g
+     style="display:inline"
+     id="Sky">
+    <rect
+       y="0"
+       x="0"
+       height="1024"
+       width="2048"
+       id="sky"
+       style="opacity:1;fill:url(#linearGradient3165);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       id="hills2"
+       d="M 0,733.17706 C 106.46437,733.17706 186.98085,657.77942 340.58085,657.77942 C 494.18085,657.77942 628.76125,782.57551 726.82924,782.57551 C 824.89724,782.57551 969.78754,719.7456 1084.0566,714.33609 C 1173.9359,710.08119 1328.312,826.58331 1466.1207,826.18276 C 1603.9294,825.78221 1680.6311,714.27025 1787.6247,714.27025 C 1894.6183,714.27025 1972.4613,733.17706 2048,733.17706 L 2048,1070.7985 L 0,1070.7985 L 0,733.17706 z"
+       style="fill:#d3cfb7;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       id="hills1"
+       d="M 387.375 704.5625 C 233.775 704.5625 153.27688 779.96876 46.8125 779.96875 C -28.7262 779.96875 -106.5689 761.0625 -213.5625 761.0625 C -233.35416 761.0625 -252.10758 764.87187 -270.40625 771.09375 L -270.40625 1117.5938 L 46.8125 1117.5938 L 2094.8125 1117.5938 L 2094.8125 779.96875 C 2019.2738 779.96875 1941.4311 761.0625 1834.4375 761.0625 C 1727.4439 761.0625 1650.7151 872.56818 1512.9062 872.96875 C 1375.0975 873.3693 1220.723 756.87009 1130.8438 761.125 C 1016.5747 766.53451 871.69297 829.37503 773.625 829.375 C 675.55701 829.375 540.975 704.56252 387.375 704.5625 z "
+       style="fill:#cfccb0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  </g>
+</svg>

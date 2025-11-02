@@ -17,7 +17,7 @@ Basic_Training_-_Flying_Saucer.name=Grundausbildung: Fliegende Untertasse
 Basic_Training_-_Flying_Saucer.desc="Mit einer fliegenden Untertasse erreicht man so ziemlich jeden Punkt, wenn man denn fliegen kann. Lern, wie man fliegt, wie man von einer fliegenden Untertasse aus angreift und probier ein paar coole Stunts aus."
 
 User_Mission_-_Dangerous_Ducklings.name=Gefährliche Entchen
-User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das in der Grundausbildung Gelernte in die Tag umsetzt!"
+User_Mission_-_Dangerous_Ducklings.desc="Nun gut, Rekrut! Es ist Zeit, dass du das in der Grundausbildung Gelernte in die Tat umsetzt!"
 
 User_Mission_-_Diver.name=Taucher
 User_Mission_-_Diver.desc="Diese amphibische Angriffsstrategie ist schwieriger, als sie aussieht."
@@ -59,7 +59,7 @@ Big_Armory.name=Großes Arsenal
 Big_Armory.desc="Du bist alleine, hast ein volles Arsenal und musst 8 Igel besiegen, bevor die Zeit abläuft."
 
 Bazooka_Battlefield.name=Bazookaschlachtfeld
-Bazooka_Battlefield.desc="Deine treuen Ritter haben den Feind in einen Hinterhalt gelockt. Zerstöre sie nur mit Bazookas! Aber trödel nicht zu lange, denn das Wasser wird bald steigen."
+Bazooka_Battlefield.desc="Deine treuen Igel haben den Feind in einen Hinterhalt gelockt. Zerstöre sie nur mit Bazookas! Aber trödel nicht zu lange, denn das Wasser wird bald steigen."
 
 Tentacle_Terror.name=Tentakel-Terror
 Tentacle_Terror.desc="Unter einem furchtbaren Monster versteckt sich dein Feind wie ein Feigling und wird dich mit Luftangriffen angreifen, sobald du aus der Deckung gehst. Zeig ihm, wer in der Hölle das Sagen hat! Aber du brauchst schon teuflisch gute Seilfähigkeiten, um überhaupt eine Chance zu haben."

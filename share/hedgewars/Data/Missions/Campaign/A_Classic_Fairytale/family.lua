@@ -104,6 +104,11 @@ cyborgsPos = {{2243, 1043}, {3588, 1227}, {2781, 1388},
               {3749, 1040}, {2475, 1338}, {3853, 881}}
 cyborgsDir = {"Left", "Left", "Left", "Left", "Left", "Right"}
 
+princessTeamName = nil
+nativesTeamName = nil
+biomechanicTeamName = nil
+cyborgTeamName = nil
+
 princessPos = {3737, 1181}
 crateConsts = {}
 reactions = {}
@@ -231,7 +236,7 @@ function AfterMidAnim()
      loc("Hint: It might be a good idea to place a girder before starting to drill. Just saying.").."|"..
      string.format(loc("Hint: %s needs to get really close to the princess!"), nativeNames[m5DeployedNum]).."|"..
      loc("Mines time: 5 seconds"), 1, 7000)
-  vCirc = AddVisualGear(0,0,vgtCircle,0,true)
+  local vCirc = AddVisualGear(0,0,vgtCircle,0,true)
   SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
 end
 
@@ -295,7 +300,7 @@ function AfterStartAnim()
   AddNewEvent(CheckOutOfCluster, {}, DoOutOfCluster, {}, 1)
   AddNewEvent(CheckOutOfGrenade, {}, DoOutOfGrenade, {}, 1)
 --  AddNewEvent(CheckNeedToHide, {}, DoNeedToHide, {}, 1)
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
   ShowMission(loc("Family Reunion"), loc("Hostage Situation"), loc("Save the princess! All your hogs must survive!|Hint: Kill the cyborgs first! Use the ammo very carefully!|Hint: You might want to spare a girder for cover!"), 1, 7000)
 end
 
@@ -379,7 +384,7 @@ function Victory()
       SaveCampaignVar("Progress", "7")
     end
     princessFreed = true
-    DismissTeam(loc("011101001"))
+    DismissTeam(cyborgTeamName)
     EndTurn(true)
   end
 end
@@ -435,8 +440,8 @@ function EndMission()
     RemoveEventFunc(CheckCloseToPrincess)
     RemoveEventFunc(CheckPrincessFreed)
     AddCaption(loc("So the princess was never heard of again ..."))
-    DismissTeam(loc("Natives"))
-    DismissTeam(loc("011101001"))
+    DismissTeam(nativesTeamName)
+    DismissTeam(princessTeamName)
     EndTurn(true)
   end
 end
@@ -519,19 +524,23 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  princessTeamName = AddTeam(loc("Princess"), -2, "Bone", "Island", "HillBilly_qau", "cm_female")
+  SetTeamPassive(princessTeamName, true)
+  princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
+  SetGearAIHints(princess, aihDoesntMatter)
+  gearDead[princess] = false
+
+  nativesTeamName = AddMissionTeam(-2)
   for i = 7, 9 do
     natives[i-6] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
     gearDead[natives[i-6]] = false
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
-  princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
   gearDead[cyborg] = false
-  gearDead[princess] = false
 
-  AddTeam(loc("Biomechanic Team"), 14483456, "ring", "UFO", "Robot", "cm_cyborg")
+  biomechanicTeamName = AddTeam(loc("Biomechanic Team"), -1, "ring", "UFO", "Robot_qau", "cm_cyborg")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
     gearDead[cyborgs[i]] = false
@@ -576,10 +585,10 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
   MapGen = mgDrawn
 	Theme = "Hell"
-  SuddenDeathTurns = 35
+  WaterRise = 0
+  HealthDecrease = 0
 
 	for i = 1, #map do
 		ParseCommand('draw ' .. map[i])
@@ -610,7 +619,7 @@ end
 function onGearDelete(gear)
   gearDead[gear] = true
   if GetGearType(gear) == gtHedgehog then
-    if GetHogTeamName(gear) == loc("Biomechanic Team") then
+    if GetHogTeamName(gear) == biomechanicTeamName then
       cyborgsLeft = cyborgsLeft - 1
     end
   end
@@ -632,10 +641,10 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
-  if GetHogTeamName(CurrentHedgehog) == loc("011101001") then
+  if CurrentHedgehog == cyborg then
     if CheckCyborgsDead() ~= true then
       for i = 1, 3 do
         if gearDead[natives[i]] ~= true then
@@ -664,3 +673,12 @@ function onPrecise()
 --  end
 --  AddAmmo(natives[1], amTeleport, 100)
 end
+
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
+  end
+end
+

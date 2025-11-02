@@ -1,13 +1,19 @@
 local animPos, lastx, lasty, jumpTypes, jumpTimes, moveDirs, jumpStarted
 local moveTime = 0
 local backJumped, jTimer, awTime, globalWait, stageEvents, seNum, curEvent
-local needtoDecrease
+local needToDecrease
 local AnimList, AnimListNum
 local FunctionList, FunctionListNum
 local skipFuncList
 local skipping
 local baseInputMask = 0xFFFFFFFF
 local extraInputMask = baseInputMask
+
+-- DEBUGGING STUFF --
+--[[ Number of animation ticks to decrease whenever AnimUnWait()
+     is called (usually every game tick). Default: 1
+     Increase this number to increase overall animation speed. ]]
+local animSpeed = 1
 --------------------------------Animation---------------------------------
 --------------------------(In-game cinematics)----------------------------
 
@@ -102,8 +108,7 @@ function AnimInit(startAnimating)
 end
 
 function AnimSwitchHog(gear)
-  --SetGearMessage(gear, 0)
-  --SetState(gear, 0)
+  SetGearMessage(gear, band(GetGearMessage(gear), bnot(gmAllStoppable)))
   SwitchHog(gear)
   FollowGear(gear)
   return true
@@ -126,7 +131,10 @@ end
 
 function AnimUnWait()
   if globalWait > 0 then
-    globalWait = globalWait - 1
+    globalWait = globalWait - animSpeed
+    if globalWait < 0 then
+      globalWait = 0
+    end
   end
 end
 
@@ -168,7 +176,7 @@ function AnimFollowGear(gear)
 end
 
 function AnimMove(gear, dir, posx, posy, maxMoveTime)
-  dirr = moveDirs[dir]
+  local dirr = moveDirs[dir]
   SetGearMessage(gear, dirr)
   moveTime = moveTime + 1
   if (maxMoveTime and moveTime > maxMoveTime) then
@@ -201,8 +209,8 @@ function AnimJump(gear, jumpType)
     SetGearMessage(gear, jumpTypes[jumpType])
     AnimGearWait(gear, jumpTimes["backback"])
   else
-    curx = GetX(gear)
-    cury = GetY(gear)
+    local curx = GetX(gear)
+    local cury = GetY(gear)
     if curx == lastx and cury == lasty then
       jumpStarted = false
       backJumped = false
@@ -236,6 +244,10 @@ function AnimDisappear(gear, destX, destY)
 end
 
 function AnimOutOfNowhere(gear, destX, destY)
+  if (not destX) or (not destY) then
+    destX = GetX(gear)
+    destY = GetY(gear)
+  end
   AnimSetGearPosition(gear, destX, destY)
   AddVisualGear(destX, destY, vgtBigExplosion, 0, false)
   PlaySound(sndExplosion)
@@ -256,11 +268,8 @@ function AnimTeleportGear(gear, destX, destY)
   return true
 end
 
-function AnimVisualGear(gear, x, y, vgType, state, critical, follow)
-  local vgear = AddVisualGear(x, y, vgType, state, critical)
-  if follow == true then 
-    FollowGear(vgear)
-  end
+function AnimVisualGear(gear, x, y, vgType, state, critical)
+  AddVisualGear(x, y, vgType, state, critical)
   return true
 end
 
@@ -277,7 +286,7 @@ function AnimCustomFunction(gear, func, args)
   if args == nil then
     args = {}
   end
-  retval = func(unpack(args))
+  local retval = func(unpack(args))
   if retval == false then
     return false
   else
@@ -313,7 +322,7 @@ function ShowAnimation()
     skipping = false
     return true
   else
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     if Animate(AnimList[1]) == true then
       RemoveAnim()
     end
@@ -345,7 +354,7 @@ function Animate(steps)
   end
 
   startCinemaLock()
-  retVal = steps[animPos].func(unpack(steps[animPos].args))
+  local retVal = steps[animPos].func(unpack(steps[animPos].args))
   if (retVal ~= false) then
     animPos = animPos + 1
   end
@@ -430,6 +439,6 @@ function StoppedGear(gear)
      -- We consider the gear to be “stopped” if it has been destroyed
      return true
   end
-  dx,dy = GetGearVelocity(gear)
+  local dx,dy = GetGearVelocity(gear)
   return math.abs(dx) <= 1 and math.abs(dy) <= 1
 end

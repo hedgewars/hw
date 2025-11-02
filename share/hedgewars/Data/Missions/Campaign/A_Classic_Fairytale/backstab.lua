@@ -14,7 +14,7 @@ After this, the natives must defeat 3 waves of cannibals.
 - Player is instructed to decide what to do with the traitor
 | Player kills traitor
     - Cut scene: afterChoiceAnim
-| Player spares traitor
+| Player spares traitor (skips turn or moves too far away)
     - Cut scene: afterChoiceAnim (different)
 | Player kills any other hog or own hog
     > Game over
@@ -32,7 +32,7 @@ After this, the natives must defeat 3 waves of cannibals.
 - One hero is deployed near the circles
 - Player now only controls the hero, switch hog is removed
 - TBS
-- 3rd wave appears
+- 3rd wave appears at end of 7th turn
 - TBS
 - 3rd wave dead
 - Final cut scene
@@ -50,6 +50,7 @@ The traitor is chosen based on the past player decisions in the campaign.
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 -----------------------------Constants---------------------------------
 choiceAccepted = 1
@@ -82,7 +83,7 @@ nativeHats = {"Rambo", "RobinHood", "pirate_jack", "zoo_Bunny", "IndianChief",
 
 nativePos = {{887, 329}, {1050, 288}, {1731, 707},
              {830, 342}, {1001, 290}, {773, 340},
-             {953, 305}, {347, 648}, {314, 647}}
+             {953, 314}, {347, 648}, {314, 647}}
 
 nativeDir = {"Right", "Left", "Left", 
              "Right", "Left", "Right", 
@@ -104,7 +105,7 @@ cannibalDir = {"Left", "Left", "Left",
 cyborgPos = {1369, 574}
 cyborgPos2 = {1308, 148}
 
-deployedPos = {2522, 1365}
+deployedPos = {2522, 1372}
 -----------------------------Variables---------------------------------
 natives = {}
 nativeDead = {}
@@ -128,7 +129,6 @@ cyborgHidden = false
 needToAct = 0
 
 m2Choice = 0
-m2DenseDead = 0
 m4DenseDead = 0
 m4BuffaloDead = 0
 m4WaterDead = 0
@@ -141,8 +141,14 @@ startElimination = 0
 stage = 0
 choice = 0
 highJumped = false
-TurnsLeft = 0
+wave3TurnsLeft = nil
 startNativesNum = 0
+nativesTeamName = nil
+tribeTeamName = nil
+cyborgTeamName = nil
+cannibalsTeamName1 = nil
+cannibalsTeamName2 = nil
+runawayX, runawayY = 1932, 829
 
 startAnim = {}
 afterChoiceAnim = {}
@@ -151,6 +157,8 @@ wave2DeadAnim = {}
 wave3DeadAnim = {}
 
 vCircs = {}
+
+trackedNonCyborgGears = {}
 -----------------------------Animations--------------------------------
 function Wave2Reaction()
   local i = 1
@@ -373,6 +381,12 @@ function PutCircles()
   circlesPut = true
 end
 
+function DeleteCircles()
+  for i=1, #vCircs do
+    DeleteVisualGear(vCircs[i])
+  end
+end
+
 function SetupWave2DeadAnim()
   for i = 7, 1, -1 do
     if nativeDead[i] ~= true then
@@ -392,7 +406,6 @@ function SetupWave2DeadAnim()
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I sense another wave of cannibals heading our way!"), SAY_SAY, 6500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I feel something...a place! They will arrive near the circles!"), SAY_SAY, 7500}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], PutCircles, {}}})
-      table.insert(wave2DeadAnim, {func = AnimFollowGear, swh = false, args = {vCircs[1]}})
       table.insert(wave2DeadAnim, {func = AnimWait, args = {natives[wiseNum], 1500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("We need to prevent their arrival!"), SAY_SAY, 4500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("Go, quick!"), SAY_SAY, 2500}})
@@ -400,9 +413,11 @@ function SetupWave2DeadAnim()
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], RestoreCyborg, {}}})
       table.insert(wave2DeadAnim, {func = AnimOutOfNowhere, swh = false, args = {cyborg, cyborgPos2[1], cyborgPos2[2]}})
       table.insert(wave2DeadAnim, {func = AnimTurn, args = {cyborg, "Left"}})
-      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, IsolateNatives, {}}})
-      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, PutCGI, {}}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I want to see how it handles this!"), SAY_SAY, 6000}})
+      if nativesNum > 1 then
+        table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, IsolateNatives, {}}})
+        table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, PutCGI, {}}})
+        table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I want to see how it handles this!"), SAY_SAY, 6000}})
+      end
       table.insert(wave2DeadAnim, {func = AnimSwitchHog, args = {deployedHog}})
       table.insert(wave2DeadAnim, {func = AnimDisappear, args = {cyborg, 0, 0}})
 --      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, DeployHog, {}}})
@@ -413,7 +428,6 @@ function SetupWave2DeadAnim()
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I sense another wave of cannibals heading my way!"), SAY_THINK, 6500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I feel something...a place! They will arrive near the circles!"), SAY_SAY, 7500}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], PutCircles, {}}})
-      table.insert(wave2DeadAnim, {func = AnimFollowGear, swh = false, args = {vCircs[1]}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I need to prevent their arrival!"), SAY_THINK, 4500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("If only I had a way..."), SAY_THINK, 3000}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("Oh, silly me! I forgot that I'm the shaman."), SAY_THINK, 6000}})
@@ -430,7 +444,6 @@ function SetupWave2DeadAnim()
     table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I believe there's more of them."), SAY_SAY, 4000}})
     table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I marked the place of their arrival. You're welcome!"), SAY_SAY, 6000}})
     table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], PutCircles, {}}})
-    table.insert(wave2DeadAnim, {func = AnimFollowGear, swh = false, args = {vCircs[1]}})
     table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {deployedHog, DeployHog, {}}})
     if nativesNum > 1 then
 --      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], RestoreCyborg, {}}})
@@ -475,27 +488,35 @@ function IsolateNatives()
   end
 end
 
+-- Move camera to (x, y)
+function MoveCameraCustom(x, y)
+   -- We use a dummy gear to feed FollowGear
+   local cameraGear = AddGear(x, y, gtGenericFaller, 0, 0, 0, 5000)
+   SetState(cameraGear, bor(GetState(cameraGear), gstNoGravity+gstInvisible))
+   FollowGear(cameraGear)
+end
+
 function PutCGI()
-  AddVisualGear(710, 299, vgtExplosion, 0, true)
-  AddVisualGear(690, 299, vgtExplosion, 0, true)
-  AddVisualGear(761, 209, vgtExplosion, 0, true)
-  AddVisualGear(921, 209, vgtExplosion, 0, true)
-  AddVisualGear(1081, 209, vgtExplosion, 0, true)
-  AddVisualGear(761, 189, vgtExplosion, 0, true)
-  AddVisualGear(921, 189, vgtExplosion, 0, true)
-  AddVisualGear(1081, 189, vgtExplosion, 0, true)
-  AddVisualGear(761, 169, vgtExplosion, 0, true)
-  AddVisualGear(921, 169, vgtExplosion, 0, true)
-  AddVisualGear(1081, 169, vgtExplosion, 0, true)
-  AddVisualGear(761, 149, vgtExplosion, 0, true)
-  AddVisualGear(921, 149, vgtExplosion, 0, true)
-  AddVisualGear(1081, 149, vgtExplosion, 0, true)
-  AddVisualGear(761, 129, vgtExplosion, 0, true)
-  AddVisualGear(921, 129, vgtExplosion, 0, true)
-  AddVisualGear(1081, 129, vgtExplosion, 0, true)
-  AddVisualGear(1120, 261, vgtExplosion, 0, true)
-  AddVisualGear(1140, 261, vgtExplosion, 0, true)
-  AddVisualGear(1160, 261, vgtExplosion, 0, true)
+  AddVisualGear(710, 299, vgtExplosion, 0, false)
+  AddVisualGear(690, 299, vgtExplosion, 0, false)
+  AddVisualGear(761, 209, vgtExplosion, 0, false)
+  AddVisualGear(921, 209, vgtExplosion, 0, false)
+  AddVisualGear(1081, 209, vgtExplosion, 0, false)
+  AddVisualGear(761, 189, vgtExplosion, 0, false)
+  AddVisualGear(921, 189, vgtExplosion, 0, false)
+  AddVisualGear(1081, 189, vgtExplosion, 0, false)
+  AddVisualGear(761, 169, vgtExplosion, 0, false)
+  AddVisualGear(921, 169, vgtExplosion, 0, false)
+  AddVisualGear(1081, 169, vgtExplosion, 0, false)
+  AddVisualGear(761, 149, vgtExplosion, 0, false)
+  AddVisualGear(921, 149, vgtExplosion, 0, false)
+  AddVisualGear(1081, 149, vgtExplosion, 0, false)
+  AddVisualGear(761, 129, vgtExplosion, 0, false)
+  AddVisualGear(921, 129, vgtExplosion, 0, false)
+  AddVisualGear(1081, 129, vgtExplosion, 0, false)
+  AddVisualGear(1120, 261, vgtExplosion, 0, false)
+  AddVisualGear(1140, 261, vgtExplosion, 0, false)
+  AddVisualGear(1160, 261, vgtExplosion, 0, false)
 end
 
 function TeleportNatives()
@@ -579,7 +600,7 @@ end
 
 function AfterHogDeadAnim()
   freshDead = nil
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 --------------------------Anim skip functions--------------------------
@@ -590,8 +611,13 @@ function AfterAfterChoiceAnim()
   AddAmmo(speakerHog, amSwitch, 100)
   SetGearMessage(speakerHog, 0)
   SetState(speakerHog, 0)
-  TurnTimeLeft = -1
-  ShowMission(loc("Backstab"), loc("The food bites back"), loc("Defeat the cannibals"), 1, 4000)
+  SetTurnTimeLeft(MAX_TURN_TIME)
+  ShowMission(loc("Backstab"), loc("The food bites back"), loc("Defeat the cannibals!"), 1, 4000)
+  SetAmmoDelay(amBlowTorch, 0)
+  SetAmmoDelay(amGirder, 0)
+  SetAmmoDelay(amLandGun, 0)
+  SetAmmoDelay(amRope, 0)
+  SetAmmoDelay(amParachute, 0)
   SpawnCrates()
 end
 
@@ -605,15 +631,18 @@ function AfterWave2Anim()
   SetGearMessage(CurrentHedgehog, 0)
   SetState(CurrentHedgehog, 0)
   SpawnCrates()
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function SkipWave2DeadAnim()
   TeleportNatives()
+  TurnNatives()
   PutCircles()
   DeployHog()
-  IsolateNatives()
-  HideCyborg()
+  EndTurn(true)
+  if nativesNum > 1 then
+    IsolateNatives()
+  end
 end
 
 function SpawnPlatformCrates()
@@ -626,20 +655,19 @@ function SpawnPlatformCrates()
 end
 
 function AfterWave2DeadAnim()
-  TurnsLeft = 7
   stage = platformStage
   SpawnPlatformCrates()
   SetGearMessage(CurrentHedgehog, 0)
-  AddEvent(CheckTurnsOver, {}, DoTurnsOver, {3}, 0)
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
-  EndTurn(true)
+  HideCyborg()
   ShowMission(loc("Backstab"), loc("Drills"), loc("You have 7 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: You might want to use some mines ..."), 1, 12000)
 end
 
 function DoTurnsOver()
   stage = wave3Stage
-  RestoreWave(3)
+  RestoreWave(3, true)
+  DeleteCircles()
 end
 
 function SkipWave2Anim()
@@ -662,31 +690,27 @@ end
 
 function AfterStartAnim()
   AnimSwitchHog(natives[leaksNum])
-  EndTurn(true)
   stage = spyKillStage
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
   AddEvent(CheckChoiceRefuse, {}, DoChoiceRefuse, {}, 0)
+  AddEvent(CheckChoiceRunaway, {}, DoChoiceRefuse, {}, 0)
   ShowMission(loc("Backstab"), loc("Judas"),
     string.format(loc("Kill the traitor, %s, or spare his life!"), GetHogName(spyHog)) .. "|" ..
     loc("Kill him or skip your turn."),
-    1, 8000)
+    3, 8000)
 end
 
 -----------------------------Events------------------------------------
-function CheckTurnsOver()
-  return TurnsLeft == 0
-end
-
 function CheckDeployedDead()
   return deployedDead
 end
 
 function DoDeployedDead()
-  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have failed to save the tribe!"), 0, 6000)
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("Tribe"))
-  DismissTeam(loc("011101001"))
+  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have failed to save the tribe!"), -amSkip, 6000)
+  DismissTeam(nativesTeamName)
+  DismissTeam(tribeTeamName)
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 
@@ -705,6 +729,7 @@ end
 
 function DoChoice()
   RemoveEventFunc(CheckChoiceRefuse)
+  RemoveEventFunc(CheckChoiceRunaway)
   SetGearMessage(CurrentHedgehog, 0)
   SetupAfterChoiceAnim()
   AddAnim(afterChoiceAnim)
@@ -712,7 +737,21 @@ function DoChoice()
 end
 
 function CheckChoiceRefuse()
-  return highJumped == true and StoppedGear(CurrentHedgehog)
+  return GetHealth(CurrentHedgehog) and highJumped == true and StoppedGear(CurrentHedgehog)
+end
+
+function CheckChoiceRunaway()
+  return GetHealth(CurrentHedgehog) and band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 and GetHogTeamName(CurrentHedgehog) == nativesTeamName and GetX(CurrentHedgehog) >= runawayX and GetY(CurrentHedgehog) >= runawayY and StoppedGear(CurrentHedgehog)
+end
+
+function CheckChoiceRunawayAll()
+  for i= 1, 7 do
+    local hog = natives[i]
+    if hog ~= nil and GetHealth(hog) and hog ~= spyHog and GetX(hog) >= runawayX and GetY(hog) >= runawayY and StoppedGear(hog) then
+      return true
+    end
+  end
+  return false
 end
 
 function DoChoiceRefuse()
@@ -728,9 +767,9 @@ function CheckKilledOther()
 end
 
 function DoKilledOther()
-  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), 0, 6000)
-  DismissTeam(loc("Natives"))
-  DismissTeam(loc("Tribe"))
+  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), -amSkip, 6000)
+  DismissTeam(nativesTeamName)
+  DismissTeam(tribeTeamName)
   EndTurn(true)
 end
 
@@ -749,6 +788,7 @@ function DoWaveDead(index)
 end
 
 function AddWave3DeadAnim()
+  SetSoundMask(sndBoring, true)
   AnimSwitchHog(deployedHog)
   AnimWait(deployedHog, 1)
   AddFunction({func = HideNatives, args = {}})
@@ -771,12 +811,15 @@ end
 function SetupWave3DeadAnim()
   table.insert(wave3DeadAnim, {func = AnimTurn, args = {deployedHog, "Left"}})
   table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("That ought to show them!"), SAY_SAY, 4000}})
-  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Guys, do you think there's more of them?"), SAY_SHOUT, 7000}})
+  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Guys, do you think there's more of them?"), SAY_SHOUT, 5000}})
+  table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, MoveCameraCustom, {unpack(nativePos[wiseNum])}}})
   table.insert(wave3DeadAnim, {func = AnimVisualGear, args = {deployedHog, unpack(nativePos[wiseNum]), vgtFeather, 0, true, true}})
-  table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 1000}})
+  table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 1750}})
+  table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, FollowGear, {deployedHog}}})
+  table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 100}})
   table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Where are they?!"), SAY_THINK, 3000}})
   table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, RestoreCyborg, {}}})
-  table.insert(wave3DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, 4040, 782}})
+  table.insert(wave3DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, 4040, 790}})
   table.insert(wave3DeadAnim, {func = AnimSay, args = {cyborg, loc("These primitive people are so funny!"), SAY_THINK, 6500}})
   table.insert(wave3DeadAnim, {func = AnimMove, args = {cyborg, "Right", 4060, 0, 7000}})
   table.insert(wave3DeadAnim, {func = AnimSwitchHog, args = {deployedHog}})
@@ -837,10 +880,10 @@ function AfterWave3DeadAnim()
     end
   end
 
-  DismissTeam(loc("Tribe"))
-  DismissTeam(loc("Assault Team"))
-  DismissTeam(loc("Reinforcements"))
-  DismissTeam(loc("011101001"))
+  DismissTeam(tribeTeamName)
+  DismissTeam(cannibalsTeamName1)
+  DismissTeam(cannibalsTeamName2)
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 
@@ -871,12 +914,16 @@ function SpawnCrates()
 end
 
 
-function RestoreWave(index)
+function RestoreWave(index, animate)
   for i = (index - 1) * 3 + 1, index * 3 do
     if cannibalHidden[i] == true then
       RestoreHog(cannibals[i])
-      AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
-      FollowGear(cannibals[i])
+      if animate then
+        AnimOutOfNowhere(cannibals[i], unpack(cannibalPos[i]))
+      else
+        AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+        FollowGear(cannibals[i])
+      end
       cannibalHidden[i] = false
     end
   end
@@ -884,13 +931,12 @@ end
 
 function GetVariables()
   progress = tonumber(GetCampaignVar("Progress"))
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2Choice = tonumber(GetCampaignVar("M2Choice")) or choiceRefused
-  m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
-  m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead"))
-  m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
-  m4WaterDead = tonumber(GetCampaignVar("M4WaterDead"))
-  m4BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead"))
+  m4DenseDead = tonumber(GetCampaignVar("M4DenseDead")) or 0
+  m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead")) or 0
+  m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead")) or 0
+  m4WaterDead = tonumber(GetCampaignVar("M4WaterDead")) or 0
+  m4BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead")) or 0
 end
 
 function HideCyborg()
@@ -904,6 +950,18 @@ function RestoreCyborg()
   if cyborgHidden == true then
     RestoreHog(cyborg)
     cyborgHidden = false
+    -- Clear mines and crates around cyborg
+    local vaporized = 0
+    for gear, _ in pairs(trackedNonCyborgGears) do
+       if GetHealth(gear) and GetHealth(cyborg) and gearIsInBox(gear, GetX(cyborg) - 50, GetY(cyborg) - 50, 100, 100) == true then
+          AddVisualGear(GetX(gear), GetY(gear), vgtSmoke, 0, false)
+          DeleteGear(gear)
+          vaporized = vaporized + 1
+       end
+    end
+    if vaporized > 0 then
+       PlaySound(sndVaporize)
+    end
   end
 end
 
@@ -960,29 +1018,29 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+  tribeTeamName = AddTeam(loc("Tribe"), -2, "Bone", "Island", "HillBilly_qau", "cm_birdy")
+  SetTeamPassive(tribeTeamName, true)
+  for i = 8, 9 do
+    natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
+  end
+
+  nativesTeamName = AddMissionTeam(-2)
   for i = 1, 7 do
     natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
   end
   nativesNum = 7
 
-  AddTeam(loc("Tribe"), 29438, "Bone", "Island", "HillBilly", "cm_birdy")
-  for i = 8, 9 do
-    natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
-  end
-
-
-  AddTeam(loc("Assault Team"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
+  cannibalsTeamName1 = AddTeam(loc("Assault Team"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   for i = 1, 6 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 50, "vampirichog")
   end
 
-  AddTeam(loc("Reinforcements"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
+  cannibalsTeamName2 = AddTeam(loc("Reinforcements"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   for i = 7, 9 do
     cannibals[i] = AddHog(cannibalNames[i], 2, 50, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   for i = 1, 9 do
@@ -1019,7 +1077,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 0
-	Delay = 10 
 	Map = "Cave"
 	Theme = "Nature"
 	WaterRise = 0
@@ -1035,6 +1092,11 @@ function onGameStart()
   AnimationSetup()
   AddAnim(startAnim)
   AddFunction({func = AfterStartAnim, args = {}})
+  SetAmmoDelay(amBlowTorch, 9999)
+  SetAmmoDelay(amGirder, 9999)
+  SetAmmoDelay(amLandGun, 9999)
+  SetAmmoDelay(amRope, 9999)
+  SetAmmoDelay(amParachute, 9999)
 end
 
 function onGameTick()
@@ -1046,7 +1108,19 @@ function onGameTick()
   CheckEvents()
 end
 
+function onGearAdd(gear)
+  local gt = GetGearType(gear)
+  if gt == gtMine or gt == gtSMine or gt == gtAirMine or gt == gtCase then
+    trackedNonCyborgGears[gear] = true
+  end
+end
+
 function onGearDelete(gear)
+  local gt = GetGearType(gear)
+  if gt == gtMine or gt == gtSMine or gt == gtAirMine or gt == gtCase then
+    trackedNonCyborgGears[gear] = nil
+  end
+
   for i = 1, 7 do
     if gear == natives[i] then
       if nativeDead[i] ~= true then
@@ -1109,35 +1183,42 @@ j = 0
 function onNewTurn()
   tmpVar = 0
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
 
-  if GetHogTeamName(CurrentHedgehog) == loc("Tribe") then
-    EndTurn(true)
-    return
-  end
-  TurnsLeft = TurnsLeft - 1
-  
   if stage == platformStage then
-    AddCaption(string.format(loc("Turns until arrival: %d"), TurnsLeft))
+    if wave3TurnsLeft == nil then
+      wave3TurnsLeft = 7
+    end
+    if wave3TurnsLeft > 0 then
+      -- Workaround for the FIXME below: Use capgrpAmmoinfo to overwrite the incorrect ammo display
+      AddCaption(string.format(loc("Turns until arrival: %d"), wave3TurnsLeft), capcolDefault, capgrpAmmoinfo)
+    end
   end
   if deployedHog then
-    if GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+    if GetHogTeamName(CurrentHedgehog) == nativesTeamName then
+      -- FIXME: This screws up the selected weapon caption, as
+      -- this function does not update the selected display caption (workaround above)
       AnimSwitchHog(deployedHog)
     end
   end
 
   if stage == spyKillStage then
-    if CurrentHedgehog == spyHog or GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
+    if GetHogTeamName(CurrentHedgehog) ~= nativesTeamName then
       EndTurn(true)
     else
+      if CurrentHedgehog == spyHog then
+        AnimSwitchHog(natives[leaksNum])
+      end
       SetGearMessage(CurrentHedgehog, 0)
-      --AnimSwitchHog(natives[leaksNum])
-      TurnTimeLeft = -1
+      SetTurnTimeLeft(MAX_TURN_TIME)
+      if CheckChoiceRunawayAll() then
+        highJumped = true
+      end
     end
   else
-    if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+    if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
       SetupHogDeadAnim(freshDead)
       AddAnim(hogDeadAnim)
       AddFunction({func = AfterHogDeadAnim, args = {}})
@@ -1161,6 +1242,15 @@ function onNewTurn()
   end
 end
 
+function onEndTurn()
+  if stage == platformStage and wave3TurnsLeft ~= nil then
+    wave3TurnsLeft = wave3TurnsLeft - 1
+    if wave3TurnsLeft == 0 then
+      DoTurnsOver()
+    end
+  end
+end
+
 function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
@@ -1171,5 +1261,13 @@ end
 function onSkipTurn()
   if stage == spyKillStage then
     highJumped = true
+  end
+end
+
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
   end
 end

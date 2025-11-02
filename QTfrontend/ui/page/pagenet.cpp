@@ -47,20 +47,28 @@ QLayout * PageNet::bodyLayoutDefinition()
     BtnNetConnect = new QPushButton(ConnGroupBox);
     BtnNetConnect->setFont(*font14);
     BtnNetConnect->setText(QPushButton::tr("Connect"));
+    BtnNetConnect->setWhatsThis(tr("Connect to the selected server"));
     GBClayout->addWidget(BtnNetConnect, 2, 2);
 
     tvServersList = new QTableView(ConnGroupBox);
     tvServersList->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tvServersList->setSelectionMode(QAbstractItemView::SingleSelection);
+    tvServersList->setShowGrid(false);
+    tvServersList->setAlternatingRowColors(true);
+    tvServersList->verticalHeader()->setVisible(false);
+
     GBClayout->addWidget(tvServersList, 1, 0, 1, 3);
 
     BtnUpdateSList = new QPushButton(ConnGroupBox);
     BtnUpdateSList->setFont(*font14);
     BtnUpdateSList->setText(QPushButton::tr("Update"));
+    BtnUpdateSList->setWhatsThis(tr("Update the list of servers"));
     GBClayout->addWidget(BtnUpdateSList, 2, 0);
 
     BtnSpecifyServer = new QPushButton(ConnGroupBox);
     BtnSpecifyServer->setFont(*font14);
-    BtnSpecifyServer->setText(QPushButton::tr("Specify"));
+    BtnSpecifyServer->setText(QPushButton::tr("Specify address"));
+    BtnSpecifyServer->setWhatsThis(tr("Specify the address and port number of a known server and connect to it directly"));
     GBClayout->addWidget(BtnSpecifyServer, 2, 1);
 
     return pageLayout;
@@ -71,6 +79,7 @@ QLayout * PageNet::footerLayoutDefinition()
     QHBoxLayout * footerLayout = new QHBoxLayout();
 
     BtnNetSvrStart = formattedButton(QPushButton::tr("Start server"));
+    BtnNetSvrStart->setWhatsThis(tr("Start private server"));
     BtnNetSvrStart->setMinimumSize(180, 50);
     QString serverPath = bindir->absolutePath() + "/hedgewars-server";
 #ifdef Q_OS_WIN
@@ -100,6 +109,7 @@ void PageNet::updateServersList()
     tvServersList->setModel(new HWNetUdpModel(tvServersList));
 
     tvServersList->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    tvServersList->horizontalHeader()->setSectionsClickable(false);
 
     static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
 
@@ -124,5 +134,5 @@ void PageNet::slotConnect()
     QString host = model->index(mi.row(), 1).data().toString();
     quint16 port = model->index(mi.row(), 2).data().toUInt();
 
-    emit connectClicked(host, port);
+    emit connectClicked(host, port, false);
 }

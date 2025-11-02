@@ -23,7 +23,7 @@ import qualified Control.Exception as Exception
 import Control.Monad.State
 import Control.Concurrent.Chan
 import Control.Concurrent
-import Network
+import Network.Socket hiding (recv)
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as B
 ----------------
@@ -90,12 +90,13 @@ clientSendLoop s tId chan ci = do
             sendAll s $ B.unlines answer `B.snoc` '\n'
 
     if isQuit answer then
-        sClose s
+        close s
         else
         clientSendLoop s tId chan ci
 
     where
         killReciever = Exception.throwTo tId . ShutdownThreadException
+        -- intentionally not localized
         quitMessage ["BYE"] = "bye"
         quitMessage ("BYE":msg:_) = msg
         quitMessage _ = error "quitMessage"

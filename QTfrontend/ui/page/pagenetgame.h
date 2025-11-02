@@ -40,6 +40,7 @@ class PageNetGame : public AbstractPage
         void displayError(const QString & message);
         void displayNotice(const QString & message);
         void displayWarning(const QString & message);
+        void cleanupFakeNetTeams();
 
         QPushButton *BtnGo;
         QPushButton *BtnMaster;

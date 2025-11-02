@@ -10,7 +10,6 @@ function onGameInit()
 	CaseFreq = 0
 	MinesNum = 0
 	Explosives = 0
-	Delay = 500
     Map = 'BasketballField'
 	-- Disable Sudden Death
 	WaterRise = 0

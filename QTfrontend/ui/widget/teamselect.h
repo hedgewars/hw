@@ -49,6 +49,8 @@ class TeamSelWidget : public QGroupBox
         QList<HWTeam> getNotPlayingTeams() const;
 	unsigned short getNumHedgehogs() const;
         void setInteractivity(bool interactive);
+        void setUser(const QString& nickname);
+        void cleanupFakeNetTeams();
 
     public slots:
         void addTeam(HWTeam team);
@@ -78,6 +80,7 @@ class TeamSelWidget : public QGroupBox
         QLabel *numTeamNotice;
         bool m_acceptOuter;
         void repaint();
+        QString m_curUser;
 
         QList<HWTeam> curPlayingTeams;
         QList<HWTeam> m_curNotPlayingTeams;

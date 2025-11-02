@@ -61,6 +61,7 @@ class GameCFGWidget : public QGroupBox
         void fullNetConfig();
         void resendSchemeData();
         void resendAmmoData();
+        void resetSchemeStates();
         void setMaster(bool master);
         void setTabbed(bool tabbed);
 
@@ -77,6 +78,7 @@ class GameCFGWidget : public QGroupBox
         void seedChanged(const QString &);
         void themeChanged(const QString &);
         void schemeChanged(int);
+        void updateSchemeEnabledStates(int scriptIndex);
         void scriptChanged(int);
         void jumpToSchemes();
         void jumpToWeapons();

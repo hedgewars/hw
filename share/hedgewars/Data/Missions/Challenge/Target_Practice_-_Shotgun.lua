@@ -8,10 +8,7 @@ local params = {
 	map = "SB_Haunty",
 	theme = "Halloween",
 	hog_x = 320,
-	hog_y = 324,
-	hogHat = "NoHat",
-	hogGrave = "Bones",
-	teamFlag = "cm_crosshair",
+	hog_y = 347,
 	targets = {
 		{ x = 495, y = 501 },
 		{ x = 227, y = 530 },

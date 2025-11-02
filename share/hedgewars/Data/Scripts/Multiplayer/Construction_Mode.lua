@@ -106,6 +106,7 @@ local curWep = amNothing -- current weapon, used to reduce # of calls to GetCurA
 local fortMode = false -- is using a fort map?
 local tempID_CheckProximity = nil -- temporary structure variable for CheckProximity
 local cGear = nil -- detects placement of girders and objects (using airattack)
+local cGearPlacementDone = false
 local uniqueStructureID = 0 -- Counter and ID for structures. Is incremented each time a structure spawns
 
 -- Colors
@@ -120,7 +121,7 @@ local colorWeaponFilter =  0xA800FFFF
 local colorHealingStationParticle = 0x00FF0080
 local colorGeneratorParticle = 0xFFFF00FF
 
-local colorMessageError = 0xFFFFFFFF
+local colorMessageError = capcolDefault
 
 -- Fake ammo types, for the overwritten weapons in Construction Mode
 local amCMStructurePlacer = amAirAttack
@@ -153,7 +154,7 @@ local atkArray = {
 	{amMortar,	 1*costFactor},
 	{amDrill,	 3*costFactor},
 	{amSnowball,	 3*costFactor},
-	{amDuck,	 2*costFactor},
+	{amKnife,	 2*costFactor},
 
 	{amGrenade,	 2*costFactor},
 	{amClusterBomb,	 3*costFactor},
@@ -166,7 +167,6 @@ local atkArray = {
 	{amDEagle,	 2*costFactor},
 	{amSniperRifle,	 3*costFactor},
 	--{amSineGun,	 6*costFactor},
-	{amFlamethrower, 4*costFactor},
 	{amIceGun,	15*costFactor},
 	{amMinigun,	13*costFactor},
 
@@ -188,7 +188,7 @@ local atkArray = {
 
 	{amPickHammer,	 2*costFactor},
 	{amBlowTorch,	 4*costFactor},
-	{amKnife,	 2*costFactor},
+	{amFlamethrower, 4*costFactor},
 
 	{amBirdy,	 7*costFactor},
 }
@@ -287,19 +287,27 @@ function IsConstructionModeAmmo(ammoType)
 end
 
 function RenderClanPower()
+	DrawClanPowerTag()
+end
+
+function UpdateTeamLabels()
 	for i=0, TeamsCount-1 do
 		local name = GetTeamName(i)
 		SetTeamLabel(name, clanPower[GetTeamClan(name)])
 	end
-
-	DrawClanPowerTag()
 end
 
 function DrawClanPowerTag()
 
 	local zoomL = 1.1
-	local xOffset = 45
-	local yOffset = 70
+	local xOffset, yOffset
+	if INTERFACE == "touch" then
+		xOffset = 126
+		yOffset = ScreenHeight - 32
+	else
+		xOffset = 45
+		yOffset = 70
+	end
 	local tValue = clanPower[GetHogClan(CurrentHedgehog)]
 	local tCol = GetClanColor(GetHogClan(CurrentHedgehog))
 
@@ -771,7 +779,7 @@ function CheckProximity(gear)
 							loc("%s is now as poor as a church mouse"),
 						}
 						local r = math.random(1, #msgs)
-						AddCaption(string.format(msgs[r], GetHogName(gear)), 0xFFFFFFFF, capgrpAmmoinfo)
+						AddCaption(string.format(msgs[r], GetHogName(gear)), capcolDefault, capgrpAmmoinfo)
 					end
 
 				end
@@ -1081,6 +1089,7 @@ function PlaceObject(x,y)
 			-- Pay the price
 			clanPower[GetHogClan(CurrentHedgehog)] = clanPower[GetHogClan(CurrentHedgehog)] - placedExpense
 			RenderClanPower()
+			UpdateTeamLabels()
 			if cat[cIndex] == "Girder Placement Mode" or cat[cIndex] == "Rubber Placement Mode" then
 				PlaySound(sndPlaced)
 			end
@@ -1184,10 +1193,12 @@ function HandleConstructionModeTools()
 		if (curWep == amGirder) then
 			cIndex = 1
 			RedefineSubset()
+			updateCost()
 			updated = true
 		elseif (curWep == amRubber) then
 			cIndex = 2
 			RedefineSubset()
+			updateCost()
 			updated = true
 		elseif (curWep == amCMStructurePlacer) then
 			cIndex = 9
@@ -1339,6 +1350,10 @@ function HandleConstructionMode()
 
 	HandleStructures()
 
+	if GameTime % 100 == 0 then
+		UpdateTeamLabels()
+	end
+
 	if CurrentHedgehog ~= nil then
 
 		if wallsVisible == true then
@@ -1371,17 +1386,19 @@ function HandleConstructionMode()
 		local x,y = GetGearTarget(cGear)
 
 		if GetGearType(cGear) == gtAirAttack then
-			DeleteGear(cGear)
-			PlaceObject(x, y)
+			SetGearMessage(cGear, bor(GetGearMessage(cGear), gmDestroy))
+			if not cGearPlacementDone then
+				PlaceObject(x, y)
+				cGearPlacementDone = true
+			end
 		elseif GetGearType(cGear) == gtTeleport then
-
-				CheckTeleport(cGear, x, y)
-				cGear = nil
+			CheckTeleport(cGear, x, y)
+			cGear = nil
+			cGearPlacementDone = true
 		elseif GetGearType(cGear) == gtGirder then
-
 			currentGirderRotation = GetState(cGear)
-
 			PlaceObject(x, y)
+			cGearPlacementDone = true
 		end
 
 	end
@@ -1532,7 +1549,6 @@ function rotateMode(pDir)
 
 	if foundMatch == true then
 		RedefineSubset()
-		--updateCost()
 		HandleConstructionModeTools()
 	end
 end
@@ -1828,6 +1844,7 @@ function onNewTurn()
 	clanCratesSpawned[clan] = 0
 
 	RenderClanPower()
+	UpdateTeamLabels()
 end
 
 function onEndTurn()
@@ -1848,10 +1865,12 @@ function onScreenResize()
 end
 
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	if GetGearType(gear) == gtHedgehog then
-		AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
 		FindRespawner(gear)
+		if vGear then
+			SetVisualGearValues(vGear, GetX(gear), GetY(gear))
+		end
 	end
 end
 
@@ -1861,6 +1880,7 @@ function onGearAdd(gear)
 	local gt = GetGearType(gear)
 	if (gt == gtAirAttack) or (gt == gtTeleport) or (gt == gtGirder) then
 		cGear = gear
+		cGearPlacementDone = false
 	end
 
 	if isATrackedGear(gear) then

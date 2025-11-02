@@ -32,6 +32,8 @@
 #include "SDL.h"
 #include "SDL_version.h"
 #include "physfs.h"
+#include "creditsmessages.h"
+#include "HWApplication.h"
 
 #ifdef VIDEOREC
 extern "C"
@@ -52,6 +54,193 @@ extern "C"
 #endif
 
 #include "about.h"
+
+QString About::getCreditsHtml()
+{
+    // Open the credits file
+
+    /* *** FILE FORMAT OF CREDITS FILE ***
+    The credits file is an RFC-4180-compliant CSV file with 5 columns.
+    The first column (column 1) is always 1 letter long and is the row type.
+    The row type determines the meaning of the other columns.
+
+    The following row types are supported:
+
+    * E: Credits entry
+        * Column 2: Task/contribution
+        * Column 3: Contributor name
+        * Column 4: Contributor e-mail
+        * Column 5: Contributor nickname
+    * M: Alternative credits entry that is a placeholder for other or unknown authors
+        * Columns 2-5: Unused
+    * S: Section
+        * Column 2: Section name
+        * Columns 3-5: Unused
+    * U: Subsection
+        * Column 2: Subsection name
+        * Columns 3-5: Unused
+
+    Columns 2, 3 and 5 MUST be in US-ASCII.
+    */
+    QFile creditsFile(":/res/credits.csv");
+    if (!creditsFile.open(QIODevice::ReadOnly))
+    {
+        qWarning("ERROR: Credits file could not be opened!");
+        return "<p>ERROR: Credits file could not be opened!</p>";
+    }
+    QString creditsString = creditsFile.readAll();
+    QString out = QString("<h1>" + tr("Credits") + "</h1>\n");
+    QStringList cells = QStringList() << QString("") << QString("") << QString("") << QString("") << QString("");
+    bool firstSection = true;
+    unsigned long int column = 0;
+    unsigned long int charInCell = 0;
+    bool isInQuote = false;
+    bool ignoreChar = false;
+    bool lineComplete = false;
+    QChar currChar;
+    QChar prevChar;
+    for(long long int i = 0; i<creditsString.length(); i++)
+    {
+        currChar = creditsString.at(i);
+        QString type, task, name, mail, nick;
+        if(currChar == '"')
+        {
+            if(charInCell == 0)
+            {
+                isInQuote = true;
+                ignoreChar = true;
+            }
+            else if(isInQuote && prevChar != '"')
+            {
+                ignoreChar = true;
+            }
+        }
+        else if(isInQuote && charInCell > 0 && prevChar == '"' && (currChar == '\r' || currChar == ','))
+        {
+            isInQuote = false;
+            ignoreChar = true;
+        }
+
+        charInCell++;
+        if(!isInQuote && currChar == ',')
+        {
+            column++;
+            charInCell = 0;
+        }
+        else if(!isInQuote && currChar == '\n' && prevChar == '\r')
+        {
+            lineComplete = true;
+        }
+        if(!isInQuote && (currChar == '\r' || currChar == '\n' || currChar == ','))
+        {
+            ignoreChar = true;
+        }
+
+
+        if(!ignoreChar)
+        {
+            cells[column].append(currChar);
+        }
+        ignoreChar = false;
+
+        if(lineComplete)
+        {
+            type = cells[0];
+            task = cells[1];
+            name = cells[2];
+            mail = cells[3];
+            nick = cells[4];
+
+            if(type == "S")
+            {
+                // section
+                if (!firstSection)
+                    out = out + "</ul>\n";
+                out = out + "<h2>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</h2>\n<ul>\n";
+                firstSection = false;
+            }
+            else if(type == "U")
+            {
+                // subsection
+                out = out + "</ul>\n";
+                out = out + "<h3>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</h3>\n<ul>\n";
+            }
+            else if(type == "M")
+            {
+                // other people
+                out = out + "<li>" + tr("Other people") + "</li>" + "\n";
+            }
+            else if(type == "E")
+            {
+                QString showName = QString("");
+                if(!name.isEmpty())
+                    name = "<span class=\"name\">"+name+"</span>";
+                if(!nick.isEmpty())
+                    nick= "<span class=\"nick\">"+nick+"</span>";
+                if(!name.isEmpty() && !nick.isEmpty())
+                    showName = tr("%1 (alias %2)").arg(name).arg(nick);
+                else if(name.isEmpty() && !nick.isEmpty())
+                    showName = nick;
+                else if(!name.isEmpty() && nick.isEmpty())
+                    showName = name;
+                // credits list entry
+                QString mailLink = QString("<a href=\"mailto:%1\">%1</a>").arg(mail);
+                if(task.isEmpty() && mail.isEmpty() && !showName.isEmpty())
+                {
+                    // Name only
+                    out = out + "<li>" + showName + "</li>\n";
+                }
+                else if(showName.isEmpty() && mail.isEmpty() && !task.isEmpty())
+                {
+                    // Task only
+                    out = out + "<li>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</li>\n";
+                }
+                else if(task.isEmpty())
+                {
+                    // Name and e-mail
+                    //: Part of credits. %1: Contributor name. %2: E-mail address
+                    out = out + "<li>" + tr("%1 &lt;%2&gt;").arg(showName).arg(mailLink) + "</li>\n";
+                }
+                else if(mail.isEmpty())
+                {
+                    // Contribution and name
+                    //: Part of credits. %1: Description of contribution. %2: Contributor name
+                    out = out + "<li>" + tr("%1: %2")
+                        .arg(HWApplication::translate("credits", task.toLatin1().constData()))
+                        .arg(showName)
+                        + "</li>\n";
+                }
+                else
+                {
+                    // Contribution, name and e-mail
+                    //: Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address
+                    out = out + "<li>" + tr("%1: %2 &lt;%3&gt;")
+                        .arg(HWApplication::translate("credits", task.toLatin1().constData()))
+                        .arg(showName)
+                        .arg(mailLink)
+                        + "</li>\n";
+                }
+            }
+            else
+            {
+                qWarning("Invalid row type in credits.csv: %s", qPrintable(type));
+            }
+            lineComplete = false;
+            column = 0;
+            cells[0] = "";
+            cells[1] = "";
+            cells[2] = "";
+            cells[3] = "";
+            cells[4] = "";
+            charInCell = 0;
+        }
+
+        prevChar = currChar;
+    }
+    creditsFile.close();
+    out = out + "</ul>";
+    return out;
+}
 
 About::About(QWidget * parent) :
     QWidget(parent)
@@ -89,23 +278,51 @@ About::About(QWidget * parent) :
     lbl1->setWordWrap(true);
     mainLayout->addWidget(lbl1, 0, 1);
 
-    lbl2 = new QTextBrowser(this);
-    lbl2->setOpenExternalLinks(true);
-    QUrl localpage = QUrl::fromLocalFile(":/res/html/about.html");
-    lbl2->setSource(localpage); //sets the source of the label from the file above
-    mainLayout->addWidget(lbl2, 1, 1);
+    /* Credits */
+    creditsBrowser = new QTextBrowser(this);
+    creditsBrowser->setOpenExternalLinks(true);
+    QString credits = getCreditsHtml();
+
+    QString header =
+        "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+        "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">"
+        "<head>"
+        "<title>Hedgewars Credits</title>"
+        "<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />"
+        "<style type=\"text/css\">"
+        "     body { color: orange; }"
+        "     a { color: #ffe270; }"
+        "     ul { list-style-type: none; }"
+        "     .name { color: #ffffff; font-weight: bold; }"
+        "     .nick { color: #ffff00; font-weight: bold; }"
+        "</style>"
+        "</head>"
+        "<body>"
+        "";
+    QString footer =
+        ""
+        "<h2>" + tr("Extended Credits") + "</h2>"
+        "<p>" + tr("An extended credits list can be found in the CREDITS text file.") + "</p>"
+        "</body></html>";
+
+    creditsBrowser->setHtml(header + credits + footer);
+    mainLayout->addWidget(creditsBrowser, 1, 1);
 
     /* Library information */
 
     //: For the version numbers of Hedgewars' software dependencies
     QString libinfo = QString(tr("Dependency versions:") + QString("<br>"));
 
-#ifdef __GNUC__
+#if defined(__GNUC__)
     libinfo.append(QString(tr("<a href=\"https://gcc.gnu.org\">GCC</a>: %1")).arg(__VERSION__));
-    libinfo.append(QString("<br>"));
+#elif defined(WIN32_VCPKG)
+    libinfo.append(QString(tr("<a href=\"https://visualstudio.microsoft.com\">VC++</a>: %1")).arg(_MSC_FULL_VER));
+#elif defined(__VERSION__)
+    libinfo.append(QString(tr("Unknown Compiler: %1")).arg(__VERSION__));
 #else
-    libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
+    libinfo.append(QString(tr("Unknown Compiler")));
 #endif
+    libinfo.append(QString("<br>"));
 
     const SDL_version *sdl_ver;
     SDL_version sdl_version;

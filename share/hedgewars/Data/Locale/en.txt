@@ -1,5 +1,6 @@
 ; English locale
 
+; Weapon names
 00:00=Grenade
 00:01=Cluster Bomb
 00:02=Bazooka
@@ -13,6 +14,7 @@
 00:10=Dynamite
 00:11=Baseball Bat
 00:12=Shoryuken
+; Short for “second” (unit of time)
 00:13=sec
 00:14=Parachute
 00:15=Air Attack
@@ -54,15 +56,15 @@
 00:51=Mudball
 00:52=No weapon selected
 00:53=Time Box
-; 00:54=Structure
 00:54=Land Spray
 00:55=Freezer
 00:56=Cleaver
 00:57=Rubber
 00:58=Air Mine
-00:59=Rubber Duck
+00:59=Creeper
 00:60=Minigun
 
+; Game messages and HUD texts
 01:00=Loading …
 01:01=Round draw
 01:02=%1 wins!
@@ -71,13 +73,14 @@
 01:05=Really quit? (%1/%2)
 01:06=Sudden Death!
 01:07=%1 remaining
-01:08=Fuel
+01:08=Fuel: %1%
 01:09=Synchronizing ...
-01:10=Using this utility won't end your turn!
+01:10=This won't end your turn!
 01:11=This weapon or utility is not yet available!
 01:12=Last round till Sudden Death!
 01:13=%1 rounds till Sudden Death!
 01:14=Get ready, %1!
+; Bounciness adjectives
 01:15=Slight
 01:16=Low
 01:17=Normal
@@ -105,6 +108,19 @@
 01:38=%1 is back.
 01:39=%1 automatically skipped turn.
 01:40=%1 fps
+01:41=Lua parsing: OFF
+01:42=Lua parsing: ON
+01:43=Lua parsing is not allowed in online games!
+; Ammo count in ammo menu
+01:44=%1×
+; Chat. %1 = player, %2 = message
+01:45=%1: %2
+; Clan chat. %1 = player, %2 = message
+01:46=[Clan] %1: %2
+; Hedgehog chat. %1 = hog name, %2 = message
+01:47=[%1]: %2
+; Symbol for unknown mine timer
+01:48=?
 
 ; Event messages
 ; Normal hog (%1) died (0 health)
@@ -360,16 +376,9 @@
 ; Round ends in a draw
 02:04=Round draw
 02:04=It's a draw!
-02:04=Nobody wins! Round draw
-02:04=Unbelievable, the round ended in a draw
 02:04=Round draw, how boring
-02:04=Impossible! The round ends in a draw
 02:04=Round draw! Now we have to start again …
-02:04=Game over! Nobody's a winner today
 02:04=Round draw, so disappointing!
-02:04=Nobody wins, how boring!
-02:04=Everyone's a loser today
-02:04=A draw! World balance has been sustained
 02:04=A draw. Everyone fought bravely to the end
 02:04=Hey! Where is the winner?!
 02:04=Where have all the hedgehogs gone?
@@ -385,7 +394,7 @@
 02:05=The doctor calls
 02:05=Fresh band-aids!
 02:05=This will make you feel better
-02:05=A Hi-Potion! Whoops, wrong game
+02:05=A potion of healing! Whoops, wrong game
 02:05=A pick-me-up!
 02:05=Grab it
 02:05=A healthy snack
@@ -636,7 +645,6 @@
 02:06=It's dangerous to go alone. Take this!
 02:06=Heaven likes to play with mortals
 02:06=Pew pew in a box!
-02:06=Could more of you die, please?
 
 ; New utility crate
 02:07=Tooltime!
@@ -1108,7 +1116,6 @@
 02:16=%1 prepared for too long
 
 ; King (%1) has died
-02:17=%1 is dead! Long live %1!
 02:17=Royal tragedy: %1 found dead
 02:17=%1 is no longer with us
 02:17=Our beloved king %1 has left us
@@ -1142,8 +1149,9 @@
 02:17=Down with %1!
 02:17=The Kingdom of %1 has fallen!
 02:17=%1 has been checkmated
+02:17=%1 is dead, long live %1!
 
-; Weapon Categories
+; Weapon categories/subcaptions
 03:00=Timed grenade
 03:01=Timed grenade
 03:02=Ballistic weapon
@@ -1199,16 +1207,15 @@
 03:51=Found on the ground
 03:52=UNUSED
 03:53=Type 40
-;03:54=Build something
 03:54=Utility
 03:55=It doesn't get cooler than this!
 03:56=Please use or misuse
 03:57=Utility
 03:58=Floating proximity bomb
-03:59=Swimming bomb
+03:59=Incomplete weapon
 03:60=The ultimate firearm
 
-; Weapon Descriptions (use | as line breaks)
+; Weapon descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Precise + 1-5: Set bounce strength|Attack: Hold to throw with more power
 04:01=Attack your enemies using a cluster bomb.|It will split into smaller bombs once its timer|reaches zero.|1-5: Set cluster bomb's timer|Precise + 1-5: Set bounce strength|Attack: Hold to throw with more power
 04:02=Attack your enemies using a ballistic projectile|that might be influenced by wind.|Attack: Hold to shoot with more power
@@ -1251,8 +1258,8 @@
 04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility can|take you to almost any position on the battlefield.|Attack: Activate/Deactivate|Up/Left/Right: Apply a short boost into one direction|Long Jump: Drop grenades or similar weapons|Precise + Long Jump: Launch weapon to crosshair|Precise + Up/Down: Adjust aim
 04:40=Set some ground on fire using this bottle|filled with (soon to be) burning liquid.|Attack: Hold to shoot with more power
 04:41=The evidence nature might even top the flying|saucer. Birdy can carry your hog around and|drop eggs on your enemies to poison them!|Be quick, as using Birdy eats into your turn|time!|Attack: Activate and drop eggs|Up/Left/Right: Flap in one direction
-04:42=This portable portal device is capable|of instantly transporting you, your enemies,|or your weaponry between two points on the|terrain.|Use it wisely and your campaign will be a ...|HUGE SUCCESS!|Disclaimer. Does not work on rubber bands.|Attack: Shoot a portal|Switch: Change portal colour
-04:43=Make your musical debut an explosive success!|Drop a mighty piano from the heavens,|stomping everything in its path, but beware:|Your hog must be sacrificed to play the piano.|Cursor: Select target region|F1-F9: Play the piano
+04:42=This portable portal device is capable|of instantly transporting you, your enemies,|or your weaponry between two points on the|terrain.|Use it wisely and your campaign will be a ...|HUGE SUCCESS!|Disclaimer\: Does not work on rubber bands.|Attack: Shoot a portal|Switch: Change portal colour
+04:43=Make your musical debut an explosive success!|Drop a mighty piano from the heavens,|stomping everything in its path, but beware\:|Your hog must be sacrificed to play the piano.|Cursor: Select target region|F1-F9: Play the piano
 04:44=This isn't just cheese, it's biological warfare!|It won't cause an huge amount of damage once|the timer reaches zero but it will definitely|poison anyone unlucky to touch the smell!|1-5: Set timer|Precise + 1-5: Set bounce strength|Attack: Hold to throw with more power
 04:45=All those physics classes have finally paid off!|Launch a devastating sine wave which burns itself|through terrain.|Watch out, this weapon has a strong knockback.|Attack: Shoot
 04:46=Cover your foes with sizzling liquid flame.|Heartwarming!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
@@ -1262,13 +1269,13 @@
 04:50=Is someone hiding underground?|Dig them out with a drill strike!|Timer controls how far it will dig.|Left/Right: Determine attack direction|1-5: Set timer|Cursor: Select target region
 04:51=Get in a free shot by hurling a ball of mud.|Deals no damage, but knocks hogs and|objects back.|Attack: Hold to shoot with more power
 04:52=UNUSED
-04:53=Take a trip through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.|Attack: Activate
+04:53=Take a trip through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer\: Does not function in Sudden Death,|if you are alone, or if you are a King.|Attack: Activate
 04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!|Attack: Activate/Deactivate|Up/Down: Continue aiming|Left/Right: Modify spitting power
 04:55=Bring back the ice-age!|Freeze hedgehogs or objects, make the floor slippery|or save yourself from drowning by freezing the water.|Attack: Activate/Deactivate freeze ray|Up/Down: Continue aiming
 04:56=You can throw two cleavers at your enemy, block|passages and tunnels and even use them for|climbing! Its damage increases with its speed.|But be careful! Playing with knives is dangerous.|Attack: Hold to shoot with more power (twice)
 04:57=Build a VERY elastic rubber band, from which|hedgehogs and other things bounce off|without taking fall damage.|Left/Right: Change rubber band orientation|Cursor: Place rubber band in a valid position
 04:58=This proximity bomb will float freely in the air and follow|hedgehogs careless enough to come too close to it.|Its explosion is weaker than that of the land mine, however.|Attack: Hold to shoot with more power
-04:59=Send those dirty hogs swimming! This cute little squeaky|rubber duck is able to swim on water and will go with the|wind once swimming. It explodes when it hits land, so|make sure to drop it from a cliff or another safe spot.|Attack: Drop the rubber duck
+04:59=This weapon is unfinished and experimental.|Use at your own risk!
 04:60=Unleash a rain of bullets upon your foes!|And they thought they were safe|behind a triple layer of girders.|Attack: Shoot at full power|Up/Down: Continue aiming
 
 ; Game goal strings
@@ -1295,3 +1302,34 @@
 05:20=Per-hog Ammo: Weapons are not shared between hogs
 05:21=Tag Team: Teams in a clan takes successive turns|Shared Time: Teams within a clan share turn time
 05:22=Heavy Wind: Wind affects almost everything
+
+; Chat command help
+06:00=List of basic client chat commands:
+06:01=/togglechat: Toggle chat display
+06:02=/clan <message>: Send message to clan members only
+06:03=/me <message>: Chat action, e.g. “/me eats pizza” becomes “* Player eats pizza”
+06:04=/pause: Toggle pause
+06:05=/pause: Toggle auto skip
+06:06=/fullscreen: Toggle fullscreen
+06:07=/quit: Quit Hedgewars
+06:08=/help: List basic client chat commands
+06:09=/help taunts: List taunt chat commands
+06:10=/history: Toggle long chat history display
+06:11=/lua: Toggle Lua parsing (for developers)
+06:12=List of taunt chat commands:
+06:13="text": Put text in speech bubble
+06:14='text': Put text in thinking bubble
+06:15=-text-: Put text in yelling bubble
+06:16=For above commands, put a number at start of text to select a hog.
+06:17=/hsa <text>: Put text in speech bubble on next attack
+06:18=/hta <text>: Put text in thinking bubble on next attack
+06:19=/hya <text>: Put text in yelling bubble on next attack
+06:20=/hurrah: Make hedgehog grin
+06:21=/ilovelotsoflemonade: Make hedgehog pee
+06:22=/juggle: Make hedgehog juggle
+06:23=/rollup: Make hedgehog roll up
+06:24=/shrug: Make hedgehog shrug
+06:25=/wave: Make hedgehog wave its hand
+06:26=Unknown command or invalid parameters. Say “/help” in chat for a list of commands.
+06:27=/help room: List room chat commands
+06:28=You're not online!

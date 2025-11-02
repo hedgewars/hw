@@ -1,0 +1,12 @@
+[package]
+name = "hwrunner"
+version = "0.1.0"
+authors = ["Hedgewars Project"]
+edition = "2018"
+
+[dependencies]
+glutin = "0.20"
+gl = "0.11"
+integral-geometry = { path = "../integral-geometry" }
+
+lib-hedgewars-engine = { path = "../lib-hedgewars-engine" }

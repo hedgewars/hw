@@ -1,87 +1,29 @@
+--[[
+RACER
+map-independant racing script
+originally by mikade, edited heavily by others
 
-------------------------------------------
--- RACER 0.8
--- map-independant racing script
--- by mikade
+-----------------------------------------
+Script parameters:
+rounds=N
+--> The game will be played with N rounds (default: 3)
+
+waypointradius=N
+--> The waypoints have a radius of N pixels (default: 450)
+
+maxwaypoints=N
+--> The maximum number of waypoints to be placed (default: 8)
+
+teamrope=true
+--> The team will be colored in the color of the team.
 -----------------------------------------
 
--- DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
--- Be careful when editig this script, do not introduce changes lightly!
--- This script is used for time records on the official Hedgewars server.
--- Introducing breaking changes means we have to invalidate past time records!
+DEVELOPER WARNING - FOR OFFICIAL DEVELOPMENT --
+Be careful when editig this script, do not introduce changes lightly!
+This script is used for time records on the official Hedgewars server.
+Introducing breaking changes means we have to invalidate past time records!
 
------------------------------------
---0.1: took all the code from crazy racer and scrapped most of it
------------------------------------
-
--- Removed tumbler system
--- Removed extra adds like boosters etc
--- Added experimental waypoint placement system
--- More user feedback
--- Reduced race complexity limit to 5 waypoints
--- stop placement at complexity limit reached and end turn
--- guys dont keep racing after dying
--- invulnerable feasibility
--- reverted time keeping method
--- reduced feedback display time
--- colour-coded addcaptions
--- cleaned up code
--- support for more players properly added
--- tardis fix
--- remove airstrikes
-
--- i think the remainder 0 .456 sec of the tracktime isnt getting reset on newturn
-
--- update feedback
-
--------
--- 0.2
--------
-
--- allow gameflags
--- extend time to 90s
--- remove other air-attack based weps
--- turn off water rise for sd
-
--------
--- 0.3
--------
-
--- prevent WP being placed in land
--- prevent waypoints being placed outside border
-
--------
--- 0.4
--------
-
--- update user feedback
--- add more sounds
-
--------
--- 0.5
--------
-
--- fix ghost disappearing if hog falls in water or somehow dies
--- lengthen ghost tracking interval to improve performance on slower machines
--- increase waypoint limit to 8
--- allow for persistent showmission information
-
--------
--- 0.6
--------
-
--- remove hogs from racing area as per request
-
--------
--- 0.7
--------
-
--- switch to first available weapon if starting race with no weapon selected
-
--------
--- 0.8
--------
--- allow different boost directions
+]]
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -95,7 +37,6 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 -- Got Variables?
 ------------------
 
-local fMod = 1000000 -- 1
 local roundLimit = 3
 local roundNumber = 0
 local firstClan = 10
@@ -118,6 +59,10 @@ local TeamRope = false
 
 local waypointCursor = false
 local waypointPreview = nil
+
+local officialChallenge
+
+local ammoDelays
 
 --------------------------
 -- hog and team tracking variales
@@ -143,7 +88,7 @@ local cGear = nil
 local cameraGear = nil -- gear created to center the cameera on
 
 local bestClan = 10
-local bestTime = 1000000
+local bestTime = MAX_TURN_TIME
 
 local gameBegun = false
 local gameOver = false
@@ -236,23 +181,6 @@ function GetBackgroundBrightness()
 	end
 end
 
---[[
-Parameters syntax:
-
-teamrope=true
---> The team will be colored in the color of the team.
-
-rounds=N
---> The game will be played with N rounds (default: 3)
-
-waypointradius=N
---> The waypoints have a radius of N pixels (default: 450)
-
-maxwaypoints=N
---> The maximum number of waypoints to be placed (default: 8)
-
-]]
-
 function onParameters()
     parseParams()
     if params["teamrope"] ~= nil then
@@ -286,7 +214,7 @@ function RebuildTeamInfo()
                 teamNameArr[i] = " "
                 teamSize[i] = 0
                 teamIndex[i] = 0
-                teamScore[i] = 1000000
+                teamScore[i] = MAX_TURN_TIME
         end
         numTeams = 0
 
@@ -439,7 +367,7 @@ function AdjustScores()
                 end
         end
 
-        if bestTime ~= 1000000 then
+        if bestTime ~= MAX_TURN_TIME then
                 bestTimeComment = string.format(loc("%.1fs"), (bestTime/1000))
         end
 
@@ -465,7 +393,7 @@ function AdjustScores()
         end
 
         for i = 0, (TeamsCount-1) do
-                if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
+                if teamNameArr[i] ~= " " and teamScore[i] ~= MAX_TURN_TIME then
                         SetTeamLabel(teamNameArr[i], string.format(loc("%.1fs"), teamScore[i]/1000))
                 end
         end
@@ -496,7 +424,7 @@ function onNewRound()
 
         totalComment = ""
         for i = 0, (TeamsCount-1) do
-                        if teamNameArr[i] ~= " " and teamScore[i] ~= 1000000 then
+                        if teamNameArr[i] ~= " " and teamScore[i] ~= MAX_TURN_TIME then
                                 teamComment[i] = string.format(loc("%s: %.1fs"), teamNameArr[i], (teamScore[i]/1000)) .. "|"
                         else
                                 teamComment[i] = string.format(loc("%s: Did not finish"), teamNameArr[i]) .. "|"
@@ -504,10 +432,16 @@ function onNewRound()
                         totalComment = totalComment .. teamComment[i]
         end
 
+        local icon
+        if roundNumber >= roundLimit then
+                icon = 0
+        else
+                icon = 2
+        end
         ShowMission(    loc("Racer"),
                                         loc("Status update"),
                                         string.format(loc("Rounds complete: %d/%d"), roundNumber, roundLimit) .. "|" .. " " .. "|" ..
-                                        loc("Best team times: ") .. "|" .. totalComment, 0, 4000)
+                                        loc("Best team times: ") .. "|" .. totalComment, icon, 4000)
 
         -- end game if its at round limit
         if roundNumber >= roundLimit then
@@ -515,33 +449,68 @@ function onNewRound()
                 local unfinishedArray = {}
                 local sortedTeams = {}
                 local k = 1
+                local c = 1
+                local clanScores = {}
+                local previousClan
                 for i = 0, TeamsCount-1 do
-                        if teamScore[i] ~= 1000000 and teamNameArr[i] ~= " " then
+                        local clan = GetTeamClan(teamNameArr[i])
+                        if not clanScores[clan+1] then
+	                       clanScores[clan+1] = {}
+	                       clanScores[clan+1].index = clan
+	                       clanScores[clan+1].score = teamScore[i]
+                        end
+                        if teamScore[i] ~= MAX_TURN_TIME and teamNameArr[i] ~= " " then
                                sortedTeams[k] = {}
                                sortedTeams[k].name = teamNameArr[i]
                                sortedTeams[k].score = teamScore[i]
+	                       sortedTeams[k].clan = clan
                                k = k + 1
                         else
                                table.insert(unfinishedArray, string.format(loc("%s did not finish the race."), teamNameArr[i]))
                         end
                 end
-                table.sort(sortedTeams, function(team1, team2) return team1.score < team2.score end)
+                table.sort(sortedTeams, function(team1, team2)
+                        if team1.score == team2.score then
+                                return team1.clan < team2.clan
+                        else
+                                return team1.score < team2.score
+                        end
+                end)
+                table.sort(clanScores, function(clan1, clan2) return clan1.score < clan2.score end)
+                local rank = 0
+                local rankPlus = 0
+                local prevScore
+                local clanRanks = {}
+                for c = 1, #clanScores do
+                        rankPlus = rankPlus + 1
+                        if clanScores[c].score ~= prevScore then
+                                rank = rank + rankPlus
+                                rankPlus = 0
+                        end
+                        prevScore = clanScores[c].score
+                        clanRanks[clanScores[c].index] = rank
+                end
 
                 -- Write all the stats!
-
                 for i = 1, #sortedTeams do
-                        SendStat(siPointType, loc("milliseconds"))
+                        SendStat(siPointType, "!TIME")
+			SendStat(siTeamRank, tostring(clanRanks[GetTeamClan(sortedTeams[i].name)]))
                         SendStat(siPlayerKills, sortedTeams[i].score, sortedTeams[i].name)
                 end
 
-                if #sortedTeams >= 1 then
-                        SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
+		local roundDraw = false
+		if #clanScores >= 2 and clanScores[1].score == clanScores[2].score and clanScores[1].score ~= MAX_TURN_TIME then
+			roundDraw = true
+                        SendStat(siGameResult, loc("Round draw"))
+                        SendStat(siCustomAchievement, loc("The teams are tied for the fastest time."))
+                elseif #sortedTeams >= 1 then
                         SendStat(siGameResult, string.format(loc("%s wins!"), sortedTeams[1].name))
                         SendStat(siCustomAchievement, string.format(loc("%s wins with a best time of %.1fs."), sortedTeams[1].name, (sortedTeams[1].score/1000)))
                         for i=1,#unfinishedArray do
                                  SendStat(siCustomAchievement, unfinishedArray[i])
                         end
                 else
+			roundDraw = true
                         SendStat(siGameResult, loc("Round draw"))
                         SendStat(siCustomAchievement, loc("Nobody managed to finish the race. What a shame!"))
                         if specialPointsCount > 0 then
@@ -553,9 +522,11 @@ function onNewRound()
 
 		-- Kill all the losers
 		for i = 0, (numhhs-1) do
-			if GetHogClan(hhs[i]) ~= bestClan then
+			if GetHogClan(hhs[i]) ~= bestClan or roundDraw then
 				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
+			elseif not roundDraw then
+				SetEffect(hhs[i], heInvulnerable, 1)
 			end
 		end
 
@@ -612,9 +583,8 @@ function HandleGhost()
 
                 fastIndex = fastIndex + 1
 
-                tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
-                g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-                SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, fastColour )
+                local tempE = AddVisualGear(fastX[fastIndex], fastY[fastIndex], vgtSmoke, 0, false)
+                SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, fastColour )
 
         end
 
@@ -639,12 +609,13 @@ end
 ----------------------------------
 
 function onGameInit()
-        EnableGameFlags(gfInfAttack, gfInvulnerable)
+        EnableGameFlags(gfInfAttack)
+        -- Force-disable various game flags that would break the script
+        DisableGameFlags(gfKing, gfSwitchHog, gfAISurvival, gfPlaceHog, gfTagTeam)
         CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
         HealthDecrease = 0
-
 end
 
 function InstructionsBuild()
@@ -660,14 +631,16 @@ function InstructionsRace()
         ShowMission(loc("Racer"),
         	loc("A Hedgewars mini-game"),
         	loc("Touch all waypoints as fast as you can!"),
-		2, 4000)
+		1, 4000)
 end
 
 function onGameStart()
-	SendGameResultOff()
-	SendRankingStatsOff()
-        SendHealthStatsOff()
-	SendAchievementsStatsOff()
+	if ClansCount >= 2 then
+		SendGameResultOff()
+		SendRankingStatsOff()
+        	SendHealthStatsOff()
+		SendAchievementsStatsOff()
+	end
 
         SetSoundMask(sndIncoming, true)
         SetSoundMask(sndMissed, true)
@@ -675,6 +648,7 @@ function onGameStart()
         roundN = 0
         lastRound = TotalRounds
         RoundHasChanged = false
+        officialChallenge = detectMapWithDigest()
 
 	if GetBackgroundBrightness() == 1 then
 		-- Dark waypoint colour theme
@@ -796,8 +770,27 @@ function onNewTurn()
         trackTime = 0
 
         currCount = 0 -- hopefully this solves problem
+        fastIndex = 0
         AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
+
+        SetSoundMask(sndStupid, false)
+        SetSoundMask(sndBugger, false)
+        SetSoundMask(sndDrat, false)
+
+        -- Remember ammo delays for later
+        if ammoDelays == nil then
+                ammoDelays = {}
+                for a=0, AmmoTypeMax do
+                        local _, _, delay = GetAmmo(a)
+                        -- delay >= 10000 is special value used in hog placement phase.
+                        -- This extracts the "true" delay
+                        if delay >= 10000 then
+                                delay = delay - 10000
+                        end
+                        ammoDelays[a] = delay
+                end
+        end
 
         -- Handle Starting Stage of Game
         if (gameOver == false) and (gameBegun == false) then
@@ -809,6 +802,13 @@ function onNewTurn()
                                 InstructionsRace()
                         end
 
+                        -- Restore old ammo delays
+                        for a=0, AmmoTypeMax do
+                                if a ~= amAirAttack and a ~= amSkip then
+                                        SetAmmoDelay(a, ammoDelays[a])
+                                end
+                        end
+
                         SetAmmoTexts(amSkip, nil, nil, nil)
                 else
                         local infoString
@@ -818,9 +818,18 @@ function onNewTurn()
                                 infoString = loc("Place 2 waypoints using the waypoint placement tool.")
                         end
                         ShowMission(loc("Racer"),
-                        loc("Waypoint placement phase"), infoString, 2, 4000)
-                        AddAmmo(CurrentHedgehog, amAirAttack, 4000)
+                        loc("Waypoint placement phase"), infoString, -amAirAttack, 4000)
+                        AddAmmo(CurrentHedgehog, amAirAttack, AMMO_INFINITE)
+                        for a=0, AmmoTypeMax do
+                                if a ~= amAirAttack and a ~= amSkip then
+                                        SetAmmoDelay(a, 9999)
+                                end
+                        end
                         SetWeapon(amAirAttack)
+                        -- Bots skip waypoint placement
+                        if GetHogLevel(CurrentHedgehog) ~= 0 then
+                                SkipTurn()
+                        end
                 end
         end
 
@@ -863,15 +872,19 @@ function onNewTurn()
         AddAmmo(CurrentHedgehog, amMineStrike, 0)
         AddAmmo(CurrentHedgehog, amNapalm, 0)
         AddAmmo(CurrentHedgehog, amPiano, 0)
+        AddAmmo(CurrentHedgehog, amSwitch, 0)
+        AddAmmo(CurrentHedgehog, amKamikaze, 0)
+        AddAmmo(CurrentHedgehog, amIceGun, 0)
+        SetAmmoDelay(amAirAttack, 0)
 end
 
 function onGameTick20()
 
         -- airstrike detected, convert this into a potential waypoint spot
         if cGear ~= nil then
-                x,y = GetGearPosition(cGear)
+                local x,y = GetGearPosition(cGear)
                 if x > -9000 then
-                        x,y = GetGearTarget(cGear)
+                        local x,y = GetGearTarget(cGear)
 
 
                         if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
@@ -890,7 +903,7 @@ function onGameTick20()
                 else
                         DeleteGear(cGear)
                 end
-        SetGearPosition(cGear, -10000, 0)
+        	SetGearPosition(cGear, -10000, y)
         end
 
 
@@ -907,7 +920,10 @@ function onGameTick20()
                                 trackTime = 0
 
                                 SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
-                                AddGear(GetX(CurrentHedgehog)+boostX, GetY(CurrentHedgehog)+boostY, gtGrenade, 0, 0, 0, 1)
+                                Explode(GetX(CurrentHedgehog)+boostX,
+                                        GetY(CurrentHedgehog)+boostY,
+                                        50,
+                                        EXPLNoDamage + EXPLAutoSound)
                                 FollowGear(CurrentHedgehog)
 
                                 HideMission()
@@ -949,8 +965,13 @@ function onGameTick20()
 
                                 AddCaption(string.format(loc("Time: %.1fs"), (trackTime/1000)),GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 
+				-- Track completed, all waypoints touched
                                 if (CheckWaypoints() == true) then
+                                        SetSoundMask(sndStupid, true)
+                                        SetSoundMask(sndBugger, true)
+                                        SetSoundMask(sndDrat, true)
                                         AdjustScores()
+                                        SetEffect(CurrentHedgehog, heInvulnerable, 1)
                                         DisableTumbler()
                                 end
 
@@ -981,12 +1002,21 @@ function onGameTick()
 	end
 end
 
-function onGearResurrect(gear)
-
-        AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+function onGearDamage(gear)
 
         if gear == CurrentHedgehog then
                 DisableTumbler(false)
+        end
+
+end
+
+function onGearResurrect(gear, vGear)
+
+        if gear == CurrentHedgehog then
+                DisableTumbler(false)
+        end
+        if vGear then
+                DeleteVisualGear(vGear)
         end
 
 end
@@ -999,11 +1029,13 @@ function onGearAdd(gear)
                 SetEffect(gear, heResurrectable, 1)
         elseif GetGearType(gear) == gtAirAttack then
                 cGear = gear
+		local x,y = GetGearPosition(cGear)
+        	SetGearPosition(cGear, 10000, y)
+        elseif (not gameBegun) and GetGearType(gear) == gtAirBomb then
+		DeleteGear(gear)
         elseif GetGearType(gear) == gtRope and TeamRope then
             SetTag(gear,1)
             SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))
-        elseif GetGearType(gear) == gtAirMine then
-            DeleteGear(gear)
         end
 end
 
@@ -1027,6 +1059,10 @@ function onHogAttack(ammoType)
     if ammoType == amSkip then
         turnSkipped = true
     end
+end
+
+function onSkipTurn()
+    turnSkipped = true
 end
 
 function onAchievementsDeclaration()
@@ -1058,15 +1094,13 @@ function onAchievementsDeclaration()
         raceType = "mixed race"
     end
 
-    map = detectMapWithDigest()
-
     for i = 0, (numTeams-1) do
-        if teamScore[i] < 1000000 then
-            DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
+        if teamScore[i] < MAX_TURN_TIME then
+            DeclareAchievement(raceType, teamNameArr[i], officialChallenge, teamScore[i])
         end
     end
 
-    if map ~= nil and fastCount > 0 then
+    if officialChallenge ~= nil and fastCount > 0 then
         StartGhostPoints(fastCount)
 
         for i = 0, (fastCount - 1) do

@@ -10,10 +10,7 @@ local params = {
 	map = "SB_Grassy",
 	theme = "Castle",
 	hog_x = 2112,
-	hog_y = 913,
-	hogName = loc("Zook"),
-	hogHat = "war_americanww2helmet",
-	teamName = loc("Team Zook"),
+	hog_y = 935,
 	targets = {
 		{ x = 2660, y = 936 },
 		{ x = 2857, y = 629 },

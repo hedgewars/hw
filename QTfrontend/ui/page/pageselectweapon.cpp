@@ -46,11 +46,15 @@ QLayout * PageSelectWeapon::footerLayoutDefinition()
 
     // first row
     BtnNew = addButton(tr("New"), bottomLayout, 0, 1);
+    BtnNew->setStyleSheet("padding: 3px;");
     BtnDefault = addButton(tr("Default"), bottomLayout, 0, 2);
+    BtnDefault->setStyleSheet("padding: 3px;");
 
     // second row
     BtnCopy = addButton(tr("Copy"), bottomLayout, 1, 1);
+    BtnCopy->setStyleSheet("padding: 3px;");
     BtnDelete = addButton(tr("Delete"), bottomLayout, 1, 2);
+    BtnDelete->setStyleSheet("padding: 3px;");
 
     bottomLayout->setColumnStretch(1,1);
     bottomLayout->setColumnStretch(2,1);

@@ -41,6 +41,7 @@ HWNewNet::HWNewNet() :
 {
     m_private_game = false;
     m_nick_registered = false;
+    m_demo_data_pending = false;
 
     m_roomsListModel = new RoomsListModel(this);
 
@@ -74,24 +75,35 @@ HWNewNet::~HWNewNet()
 {
     if (m_game_connected)
     {
-        RawSendNet(QString("QUIT%1%2").arg(delimiter).arg("User quit"));
-        emit disconnected(tr("User quit"));
+        RawSendNet(QString("QUIT%1").arg(delimiter));
+        emit disconnected("");
     }
     NetSocket.flush();
 }
 
-void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
+void HWNewNet::Connect(const QString & hostName, quint16 port, bool useTls, const QString & nick)
 {
     netClientState = Connecting;
     mynick = nick;
     myhost = hostName + QString(":%1").arg(port);
-    NetSocket.connectToHost(hostName, port);
+    if (useTls)
+    {
+        NetSocket.connectToHostEncrypted(hostName, port);
+        if (!NetSocket.waitForEncrypted())
+        {
+            qWarning("Handshake failed");
+        }
+    }
+    else 
+    {
+        NetSocket.connectToHost(hostName, port);
+    }
 }
 
 void HWNewNet::Disconnect()
 {
     if (m_game_connected)
-        RawSendNet(QString("QUIT%1%2").arg(delimiter).arg("User quit"));
+        RawSendNet(QString("QUIT%1").arg(delimiter));
     m_game_connected = false;
 
     NetSocket.disconnectFromHost();
@@ -237,7 +249,12 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
             emit disconnected(tr("The host was not found. Please check the host name and port settings."));
             break;
         case QAbstractSocket::ConnectionRefusedError:
-            emit disconnected(tr("Connection refused"));
+            if (getHost() == (QString("%1:%2").arg(NETGAME_DEFAULT_SERVER).arg(NETGAME_DEFAULT_PORT)))
+                // Error for official server
+                emit disconnected(tr("The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later."));
+            else
+                // Error for every other host
+                emit disconnected(tr("The connection was refused by the host or timed out. This might have one of the following reasons:\n- The Hedgewars Server program does currently not run on the host\n- The specified port number is incorrect\n- There is a temporary network problem\n\nPlease check the host name and port settings and/or try again later."));
             break;
         default:
             emit disconnected(NetSocket.errorString());
@@ -250,6 +267,17 @@ void HWNewNet::SendPasswordHash(const QString & hash)
     m_passwordHash = hash.toLatin1();
 
     maybeSendPassword();
+}
+
+void HWNewNet::ContinueConnection()
+{
+    if (netClientState == Connected)    
+    {
+        RawSendNet(QString("NICK%1%2").arg(delimiter).arg(mynick));
+        RawSendNet(QString("PROTO%1%2").arg(delimiter).arg(*cProtoVer));    
+        m_game_connected = true;
+        emit adminAccess(false);
+    }
 }
 
 void HWNewNet::ParseCmd(const QStringList & lst)
@@ -291,6 +319,27 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
+    if (lst[0] == "REDIRECT")
+    {        
+        if (lst.size() < 2 || lst[1].toInt() == 0)
+        {
+            qWarning("Net: Malformed REDIRECT message");
+            return;            
+        }
+
+        quint16 port = lst[1].toInt();
+        if (port == 0) 
+        {
+            qWarning() << "Invalid redirection port";            
+        }
+        else 
+        {
+            netClientState = Redirected;
+            emit redirected(port);
+        }
+        return;
+    }
+
     if (lst[0] == "CONNECTED")
     {
         if(lst.size() < 3 || lst[2].toInt() < cMinServerVersion)
@@ -303,11 +352,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
 
-        RawSendNet(QString("NICK%1%2").arg(delimiter).arg(mynick));
-        RawSendNet(QString("PROTO%1%2").arg(delimiter).arg(*cProtoVer));
-        netClientState = Connected;
-        m_game_connected = true;
-        emit adminAccess(false);
+        ClientState lastState = netClientState;
+        netClientState = Connected;      
+        if (lastState != Redirected)
+        {
+            ContinueConnection();
+        }
         return;
     }
 
@@ -376,22 +426,50 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
 
-        QString action = HWProto::chatStringToAction(lst[2]);
-
-        if (netClientState == InLobby)
+        QString action;
+        QString message;
+        QString sender = lst[1];
+        // '[' is a special character used in fake nick names of server messages.
+        // Those are supposed to be translated
+        if(!sender.startsWith('['))
         {
-            if (action != NULL)
-                emit lobbyChatAction(lst[1], action);
+            // Normal message
+            message = lst[2];
+            // Another kind of fake nick. '(' nicks are server messages, but they must not be translated
+            if(!sender.startsWith('('))
+            {
+                // Check for action (/me command)
+                action = HWProto::chatStringToAction(message);
+            }
             else
-                emit lobbyChatMessage(lst[1], lst[2]);
+            {
+                // If parenthesis were used, replace them with square brackets
+                // for a consistent style.
+                sender.replace(0, 1, '[');
+                sender.replace(sender.length()-1, 1, ']');
+            }
         }
         else
         {
-            emit chatStringFromNet(HWProto::formatChatMsg(lst[1], lst[2]));
-            if (action != NULL)
-                emit roomChatAction(lst[1], action);
+            // Server message
+            // Server messages are translated client-side
+            message = HWApplication::translate("server", lst[2].toLatin1().constData());
+        }
+
+        if (netClientState == InLobby)
+        {
+            if (!action.isNull())
+                emit lobbyChatAction(sender, action);
             else
-                emit roomChatMessage(lst[1], lst[2]);
+                emit lobbyChatMessage(sender, message);
+        }
+        else
+        {
+            emit chatStringFromNet(HWProto::formatChatMsg(sender, message));
+            if (!action.isNull())
+                emit roomChatAction(sender, action);
+            else
+                emit roomChatMessage(sender, message);
         }
         return;
     }
@@ -721,13 +799,23 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if(netClientState == InRoom || netClientState == InGame)
+    if(netClientState == InLobby && lst[0] == "REPLAY_START")
+    {
+        netClientState = InRoom;
+        m_demo_data_pending = true;
+        emit EnteredGame();
+        emit roomMaster(false);
+        return;
+    }
+
+    if(netClientState == InRoom || netClientState == InGame || netClientState == InDemo)
     {
         if (lst[0] == "EM")
         {
             if(lst.size() < 2)
             {
                 qWarning("Net: Bad EM message");
+                m_demo_data_pending = false;
                 return;
             }
             for(int i = 1; i < lst.size(); ++i)
@@ -735,9 +823,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 QByteArray em = QByteArray::fromBase64(lst[i].toLatin1());
                 emit FromNet(em);
             }
+            m_demo_data_pending = false;
             return;
         }
+    }
 
+    if(netClientState == InRoom || netClientState == InGame)
+    {
         if (lst[0] == "ROUND_FINISHED")
         {
             emit FromNet(QByteArray("\x01o"));
@@ -779,8 +871,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         if (lst[0] == "RUN_GAME")
         {
-            netClientState = InGame;
-            emit AskForRunGame();
+            if(m_demo_data_pending)
+            {
+                netClientState = InDemo;
+                emit AskForOfficialServerDemo();
+            }
+            else
+            {
+                netClientState = InGame;
+                emit AskForRunGame();
+            }
             return;
         }
 
@@ -848,8 +948,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             for(int i = 1; i < lst.size(); ++i)
             {
-                emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
                 m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
+                if(!m_playersModel->isFlagSet(lst[i], PlayersListModel::Ignore))
+                        emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
             }
             return;
         }
@@ -862,10 +963,15 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 return;
             }
 
-            if (lst.size() < 3)
-                emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
-            else
-                emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
+            if(!m_playersModel->isFlagSet(lst[1], PlayersListModel::Ignore)) {
+				if (lst.size() < 3)
+					emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
+				else
+				{
+					QString leaveMsg = QString(lst[2]);
+					emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1]).arg(HWApplication::translate("server", leaveMsg.toLatin1().constData())));
+				}
+            }
             m_playersModel->playerLeftRoom(lst[1]);
             return;
         }
@@ -984,6 +1090,13 @@ void HWNewNet::gameFinished(bool correctly)
     {
         netClientState = InRoom;
         RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimiter).arg(correctly ? "1" : "0"));
+    }
+    else if (netClientState == InDemo)
+    {
+        netClientState = InLobby;
+        askRoomsList();
+        emit LeftRoom(QString());
+        m_playersModel->resetRoomFlags();
     }
 }
 

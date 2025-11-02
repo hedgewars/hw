@@ -50,7 +50,7 @@
 01:05=Saír (%1/%2)?
 01:06=Morte súbita!
 01:07=%1 restante
-01:08=Combustible
+01:08=Combustible: %1%
 01:09=Sincronizando...
 
 ; Mensaxes de eventos

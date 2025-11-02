@@ -105,6 +105,7 @@ local roundsCounter = 0	-- used to determine when to spawn more crates
 						-- currently every 6 TURNS, should this work
 						-- on ROUNDS instead?
 local effectTimer = 0
+local gameEnded = false
 
 local ropeGear = nil
 
@@ -119,6 +120,11 @@ local teamNameArr = {}	-- store the list of teams
 local teamSize = {}	-- store how many hogs per team
 local teamIndex = {} -- at what point in the hhs{} does each team begin
 local clanTeams = {} -- list of teams per clan
+
+local mostCapturesHogName = nil -- name of hog who holds the record of most flags captured
+local mostCapturesHogTeam = nil -- name of team who holds the record of most flags captured
+local mostCaptures = 0 -- number of most per-hog captures
+local capturesPerHog = {}
 
 -------------------
 -- flag variables
@@ -155,8 +161,8 @@ local vCircCol = {}
 --zone and teleporter variables
 --------------------------------
 
-local redTel
-local orangeTel
+local leftTel
+local rightTel
 
 local zXMin = {}
 local zWidth = {}
@@ -175,18 +181,18 @@ function ManageTeleporterEffects()
 	if effectTimer > 50 then
 		effectTimer = 0
 
-		for i = 0,1 do
-			local eX = 10 + zXMin[i] + GetRandom(zWidth[i]-10)
-			local eY = 50 + zYMin[i] + GetRandom(zHeight[i]-110)
-
-			-- steam and smoke and DUST look good, smokering looks trippy
-			-- smoketrace and eviltrace are not effected by wind?
-			-- chunk is a LR falling gear
-			local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
-			if tempE ~= 0 then
-				SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, nil, nil, fCol[i])
-			end
+		local i = GetHogClan(CurrentHedgehog)
+		if i ~= 0 and i ~= 1 then
+			return
 		end
+		local eX = 10 + zXMin[i] + GetRandom(zWidth[i]-10)
+		local eY = 50 + zYMin[i] + GetRandom(zHeight[i]-110)
+
+		-- steam and smoke and DUST look good, smokering looks trippy
+		-- smoketrace and eviltrace are not effected by wind?
+		-- chunk is a LR falling gear
+		local tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
+		SetVisualGearValues(tempE, eX, eY, nil, nil, nil, nil, nil, nil, nil, fCol[i])
 	end
 end
 
@@ -230,14 +236,38 @@ function CheckScore(teamID)
 		alt = 0
 	end
 
-	if fCaptures[teamID] == 3 then
+	if fCaptures[teamID] == 3 and not gameEnded then
+		gameEnded = true
 		for i = 0, (numhhs-1) do
 			if GetHogClan(hhs[i]) == alt then
 				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
 			end
 		end
-		ShowMission(loc("GAME OVER!"), loc("Victory for the ") .. GetHogTeamName(CurrentHedgehog), loc("Hooray!"), 0, 0)
+		local victoryMsg = string.format(loc("Victory for %s!"), GetHogTeamName(CurrentHedgehog))
+		AddCaption(victoryMsg, capcolDefault, capgrpGameState)
+
+		-- Calculate team rankings
+		local teamList = {}
+		for i=0, TeamsCount-1 do
+			local name = GetTeamName(i)
+			local clan = GetTeamClan(name)
+			if fCaptures[clan] ~= nil then
+				table.insert(teamList, { score = fCaptures[clan], name = name, clan = clan })
+			end
+		end
+		local teamRank = function(a, b)
+			return a.score > b.score
+		end
+		table.sort(teamList, teamRank)
+
+		for i=1, #teamList do
+			SendStat(siPointType, "!POINTS")
+			SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
+		end
+		if mostCaptures >= 2 then
+			SendStat(siCustomAchievement, string.format(loc("%s (%s) has captured the flag %d times."), mostCapturesHogName, mostCapturesHogTeam, mostCaptures))
+		end
 	end
 
 end
@@ -248,10 +278,9 @@ function HandleRespawns()
 
 		if fNeedsRespawn[i] == true then
 			fGear[i] = SpawnFakeAmmoCrate(fSpawnX[i],fSpawnY[i],false,false)
-			--fGear[i] = SpawnHealthCrate(fSpawnX[i],fSpawnY[i])
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
-			AddCaption(loc("Flag respawned!"))
+			AddCaption(loc("Flag respawned!"), capcolDefault, capgrpAmmoinfo)
 		end
 
 	end
@@ -261,7 +290,6 @@ end
 function FlagDeleted(gear)
 
 	local wtf, bbq
-	PlaySound(sndShotgunReload)
 	if (gear == fGear[0]) then
 		wtf = 0
 		bbq = 1
@@ -273,21 +301,29 @@ function FlagDeleted(gear)
 	if CurrentHedgehog ~= nil then
 
 		--if the player picks up the flag
-		if CheckDistance(CurrentHedgehog, fGear[wtf]) < 1600 then
+		if band(GetGearMessage(gear), gmDestroy) ~= 0 then
 
 			fGear[wtf] = nil -- the flag has now disappeared and we shouldnt be pointing to it
 
 			-- player has successfully captured the enemy flag
 			if (GetHogClan(CurrentHedgehog) == wtf) and (CurrentHedgehog == fThief[bbq]) and (fIsMissing[wtf] == false) then
+				PlaySound(sndShotgunReload)
 				fIsMissing[wtf] = false
 				fNeedsRespawn[wtf] = true
 				fIsMissing[bbq] = false
 				fNeedsRespawn[bbq] = true
 				fCaptures[wtf] = fCaptures[wtf] +1
 
-				AddCaption(string.format(loc("%s has scored!"), GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+				AddCaption(string.format(loc("%s has scored!"), GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 				for i=1, #clanTeams[wtf] do
 					SetTeamLabel(clanTeams[wtf][i], fCaptures[wtf])
+				end
+
+				capturesPerHog[CurrentHedgehog] = capturesPerHog[CurrentHedgehog] + 1
+				if capturesPerHog[CurrentHedgehog] > mostCaptures then
+					mostCaptures = capturesPerHog[CurrentHedgehog]
+					mostCapturesHogName = GetHogName(CurrentHedgehog)
+					mostCapturesHogTeam = GetHogTeamName(CurrentHedgehog)
 				end
 
 				PlaySound(sndHomerun)
@@ -296,19 +332,20 @@ function FlagDeleted(gear)
 
 			--if the player is returning the flag
 			elseif GetHogClan(CurrentHedgehog) == wtf then
-
+				PlaySound(sndShotgunReload)
 				fNeedsRespawn[wtf] = true
 
 				-- NEW ADDIITON, does this work? Should make it possible to return your flag and then score in the same turn
 				if fIsMissing[wtf] == true then
 					HandleRespawns() -- this will set fIsMissing[wtf] to false :)
-					AddCaption(loc("Flag returned!"))
+					AddCaption(loc("Flag returned!"), capcolDefault, capgrpAmmoinfo)
 				elseif fIsMissing[wtf] == false then
 					AddCaption(loc("That was pointless. The flag will respawn next round."))
 				end
 
 			--if the player is taking the enemy flag
 			elseif GetHogClan(CurrentHedgehog) == bbq then
+				PlaySound(sndShotgunReload)
 				fIsMissing[wtf] = true
 				for i = 0,numhhs-1 do
 					if CurrentHedgehog == hhs[i] then
@@ -323,7 +360,7 @@ function FlagDeleted(gear)
 
 			end
 
-		-- if flag has been destroyed, probably
+		-- if flag has been destroyed
 		else
 
 			if GetY(fGear[wtf]) > 2025 then
@@ -370,6 +407,7 @@ function FlagThiefDead(gear)
 		else
 			fGear[wtf] = SpawnFakeAmmoCrate(fThiefX[wtf],(fThiefY[wtf]-50),false,false)
 		end
+		AddCaption(string.format(loc("%s has dropped the flag!"), GetHogName(gear)), capcolDefault, capgrpAmmoinfo)
 
 		AddVisualGear(fThiefX[wtf], fThiefY[wtf], vgtBigExplosion, 0, false)
 		fThief[wtf] = nil
@@ -401,28 +439,15 @@ end
 -- general methods
 ------------------------
 
-function CheckDistance(gear1, gear2)
-
-	local g1X, g1Y = GetGearPosition(gear1)
-	local g2X, g2Y = GetGearPosition(gear2)
-
-	g1X = g1X - g2X
-	g1Y = g1Y - g2Y
-	local dist = (g1X*g1X) + (g1Y*g1Y)
-
-	return dist
-
-end
-
 function CheckTeleporters()
 
 	local teleportActive = false
 
-	if (GearIsInZone(CurrentHedgehog, redTel) == true) and (GetHogClan(CurrentHedgehog) == 0) then
+	if (GearIsInZone(CurrentHedgehog, leftTel) == true) and (GetHogClan(CurrentHedgehog) == 0) then
 		teleportActive = true
 		destinationX = 1402
 		destinationY = 321
-	elseif (GearIsInZone(CurrentHedgehog, orangeTel) == true) and (GetHogClan(CurrentHedgehog) == 1) then
+	elseif (GearIsInZone(CurrentHedgehog, rightTel) == true) and (GetHogClan(CurrentHedgehog) == 1) then
 		teleportActive = true
 		destinationX = 2692
 		destinationY = 321
@@ -440,6 +465,7 @@ function CheckTeleporters()
 		elseif actionReset == 20 then
 			AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
 			SetGearPosition(CurrentHedgehog,destinationX,destinationY)
+			PlaySound(sndWarp)
 			AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtBigExplosion, 0, false)
 		end
 
@@ -513,6 +539,7 @@ function HandleCrateDrops()
 		elseif r == 7 then
 			SpawnSupplyCrate(0,0,amPortalGun)
 		end
+		PlaySound(sndReinforce, CurrentHedgehog)
 
 	end
 
@@ -536,17 +563,26 @@ function onGameInit()
 	Map = "Blizzard" -- The map to be played
 	Theme = "Snow" -- The theme to be used
 
+	SendHealthStatsOff()
+	SendRankingStatsOff()
+
 end
 
 
 function onGameStart()
 
-	ShowMission(loc("CTF_Blizzard"), loc("Capture The Flag"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
-
+	ShowMission(loc("CTF_Blizzard"), loc("Capture The Flag"),
+		loc("- Return the enemy flag to your base to score") .."|"..
+		string.format(loc("- First clan to score %d captures wins"), 3) .. "|"..
+		loc("- You may only score when your flag is in your base") .."|"..
+		loc("- Hogs will drop the flag when killed") .."|"..
+		loc("- Dropped flags may be returned or recaptured").."|"..
+		loc("- Hogs will be revived") .."|"..
+		loc("- Touch the sparkles near your base to teleport"), 11, 0)
 
 	-- initialize teleporters
-	redTel = CreateZone(342,1316,42,449)	-- red teleporter
-	orangeTel = CreateZone(3719,1330,45,449)	-- orange teleporter
+	leftTel = CreateZone(342,1316,42,449)	-- left teleporter (clan 0)
+	rightTel = CreateZone(3719,1330,45,449)	-- right teleporter (clan 1)
 
 
 	--new improved placement schematics aw yeah
@@ -582,6 +618,10 @@ function onGameStart()
 	fSpawnX[1] = 3123
 	fSpawnY[1] = 1747
 
+	if ClansCount < 2 then
+		return
+	end
+
 	for i = 0, 1 do
 		fGear[i] = SpawnFakeAmmoCrate(fSpawnX[i],fSpawnY[i],false,false)
 		fCirc[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
@@ -614,6 +654,11 @@ end
 function onNewTurn()
 
 	HandleRespawns()
+
+end
+
+function onCaseDrop()
+
 	HandleCrateDrops()
 
 end
@@ -637,7 +682,9 @@ function onGameTick()
 	end
 
 	HandleCircles()
-	ManageTeleporterEffects()
+	if (CurrentHedgehog ~= nil) then
+		ManageTeleporterEffects()
+	end
 
 end
 
@@ -677,7 +724,7 @@ function onAmmoStoreInit()
 end
 
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 
 	-- mark the flag thief as dead if he needed a respawn
 	for i = 0,1 do
@@ -693,7 +740,9 @@ function onGearResurrect(gear)
 		FindPlace(gear, false, 2048, LAND_WIDTH)
 	end
 
-	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+	if vGear then
+		SetVisualGearValues(vGear, GetX(gear), GetY(gear))
+	end
 
 end
 
@@ -703,6 +752,7 @@ function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
 
+		capturesPerHog[gear] = 0
 		if GetHogClan(gear) > 1 then
 			DeleteGear(gear)
 			if not excessHogsWarning then

@@ -7,7 +7,7 @@
 -- Original author: mikade
 
 -- feel free to shower me with your adoration and/or hate mail
--- more info can be found at http://hedgewars.org/HedgeEditor
+-- more info can be found at https://hedgewars.org/HedgeEditor
 
 -- special thanks to nemo, unC0Rr, sheepluva and koda for their assistance
 
@@ -297,8 +297,6 @@ local shoppaPR = {}
 
 -- Misc. state variables
 local hedgeEditorMissionPanelShown = false
-local tagGears = {}
-local showGearTags = true
 
 local tagCursorX, tagCursorY
 
@@ -314,7 +312,7 @@ local atkArray =
 				{amMortar, 	"amMortar"},
 				{amDrill, 	"amDrill"},
 				{amSnowball, 	"amSnowball"},
-				{amDuck,	"amDuck"},
+				{amKnife,	"amKnife"},
 
 				{amGrenade,	"amGrenade"},
 				{amClusterBomb,	"amClusterBomb"},
@@ -327,7 +325,6 @@ local atkArray =
 				{amDEagle,	"amDEagle"},
 				{amSniperRifle,	"amSniperRifle"},
 				{amSineGun, 	"amSineGun"},
-				{amFlamethrower,"amFlamethrower"},
 				{amIceGun, 	"amIceGun"},
 				{amMinigun, 	"amMinigun"},
 
@@ -354,7 +351,7 @@ local atkArray =
 
 				{amPickHammer,	"amPickHammer"},
 				{amBlowTorch, 	"amBlowTorch"},
-				{amKnife,	"amKnife"},
+				{amFlamethrower,"amFlamethrower"},
 
 				{amBirdy,	"amBirdy"},
 
@@ -387,8 +384,8 @@ local utilArray =
 
 				--skiphog is 6
 
-local effectArray = { heInvulnerable, hePoisoned, heResurrectable, heResurrected, heFrozen }
-local effectStr = { "heInvulnerable", "hePoisoned", "heResurrectable", "heResurrected", "heFrozen" }
+local effectArray = { heInvulnerable, hePoisoned, heResurrectable, heResurrected, heFrozen, heArtillery }
+local effectStr = { "heInvulnerable", "hePoisoned", "heResurrectable", "heResurrected", "heFrozen", "heArtillery" }
 
 ----------------------------
 -- hog and map editing junk
@@ -534,33 +531,33 @@ for i=1, #preMadeTeam do
 end
 
 local gameFlagList =	{
+			{"gfOneClanMode", false, gfOneClanMode},
 			{"gfMultiWeapon", false, gfMultiWeapon},
-			{"gfBorder", false, gfBorder},
 			{"gfSolidLand", false, gfSolidLand},
+			{"gfBorder", false, gfBorder},
 			{"gfDivideTeams", false, gfDivideTeams},
 			{"gfLowGravity", false, gfLowGravity},
 			{"gfLaserSight", true, gfLaserSight},
 			{"gfInvulnerable", false, gfInvulnerable},
-			{"gfMines", false, gfMines},
+			{"gfResetHealth", false, gfResetHealth},
 			{"gfVampiric", false, gfVampiric},
 			{"gfKarma", false, gfKarma},
 			{"gfArtillery", false, gfArtillery},
-			{"gfOneClanMode", false, gfOneClanMode},
+			{"gfSwitchHog", false, gfSwitchHog},
 			{"gfRandomOrder", false, gfRandomOrder},
 			{"gfKing", false, gfKing},
 			{"gfPlaceHog", false, gfPlaceHog},
 			{"gfSharedAmmo", false, gfSharedAmmo},
 			{"gfDisableGirders", false, gfDisableGirders},
-			{"gfExplosives", false, gfExplosives},
 			{"gfDisableLandObjects", false, gfDisableLandObjects},
 			{"gfAISurvival", false, gfAISurvival},
 			{"gfInfAttack", true, gfInfAttack},
 			{"gfResetWeps", false, gfResetWeps},
-			{"gfResetHealth", false, gfResetHealth},
 			{"gfPerHogAmmo", false, gfPerHogAmmo},
 			{"gfDisableWind", false, gfDisableWind},
 			{"gfMoreWind", false, gfMoreWind},
-			{"gfTagTeam", false, gfTagTeam}
+			{"gfTagTeam", false, gfTagTeam},
+			{"gfShoppaBorder", false, gfShoppaBorder},
 			}
 
  local reducedSpriteIDArray = {
@@ -595,6 +592,7 @@ local crateSpriteBorer = nil
 local waypointPreviewSprite = nil
 
 local cGear = nil -- detects placement of girders and objects (using airattack)
+local cGearPlacementDone = false
 local curWep = amNothing
 local leftHeld = false
 local rightHeld = false
@@ -778,67 +776,67 @@ function InterpretPoints()
 
 		-- Normal Girders
 		elseif specialPointsFlag[i] == 100 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 101 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 102 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 103 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 104 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 105 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 106 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 		elseif specialPointsFlag[i] == 107 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, U_LAND_TINT_NORMAL, nil, nil, nil, lfNormal)
 
 		-- Invulnerable Girders
 		elseif specialPointsFlag[i] == 108 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 109 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 110 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 111 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 112 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 113 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 114 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 		elseif specialPointsFlag[i] == 115 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, U_LAND_TINT_INDESTRUCTIBLE, nil, nil, nil, lfIndestructible)
 
 		-- Icy Girders
 		elseif specialPointsFlag[i] == 116 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 117 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 118 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 119 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 120 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 121 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 121 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 		elseif specialPointsFlag[i] == 123 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 16448250, nil, nil, nil, lfIce)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, U_LAND_TINT_ICE, nil, nil, nil, lfIce)
 
 		-- Rubber Bands
 		elseif specialPointsFlag[i] == 124 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 0, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 		elseif specialPointsFlag[i] == 125 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 1, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 		elseif specialPointsFlag[i] == 126 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 2, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 		elseif specialPointsFlag[i] == 127 then
-			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 3, U_LAND_TINT_NORMAL, nil, nil, nil, lfBouncy)
 
 		-- Waypoints
 		else -- 0 / no value
@@ -972,17 +970,16 @@ function CallPlaceSprite(pID, silent)
 
 	if landType == lfIce then
 		placedLandFlags[pID] = "lfIce"
-		placedTint[pID] = 250 + (250*0x100) + (250*0x10000) + (0*0x1000000) -- A BGR
+		placedTint[pID] = U_LAND_TINT_ICE
 	elseif landType == lfIndestructible then
 		placedLandFlags[pID] = "lfIndestructible"
-		placedTint[pID] = 250 + (0*0x100) + (0*0x10000) + (150*0x1000000) -- A BGR
+		placedTint[pID] = U_LAND_TINT_INDESTRUCTIBLE
 	elseif landType == lfBouncy then
 		placedLandFlags[pID] = "lfBouncy"
-		placedTint[pID] = 250 + (0*0x100) + (250*0x10000) + (0*0x1000000) -- A BGR
+		placedTint[pID] = U_LAND_TINT_BOUNCY
 	else
 		placedLandFlags[pID] = "lfNormal"
-		--placedTint[pID] = nil
-		placedTint[pID] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
+		placedTint[pID] = U_LAND_TINT_NORMAL
 	end
 
 	-- Special case: Placing amAirAttack of the ammos sprite (since this one is overwritten)
@@ -1147,7 +1144,7 @@ function PlaceObject(x,y)
 
 			--new ermagerd
 			placedLandFlags[placedCount] = "lfBouncy"
-			placedTint[placedCount] = 255 + (255*0x100) + (255*0x10000) + (255*0x1000000) -- A BGR
+			placedTint[placedCount] = U_LAND_TINT_NORMAL
 			placementSucceeded = PlaceSprite(placedX[placedCount], placedY[placedCount], placedSprite[placedCount], placedFrame[placedCount],
 				placedTint[placedCount],
 				nil,
@@ -1487,10 +1484,9 @@ function GetDataForSavingHogs(gear)
 			teamCounter = 1
 		end
 
-		-- Convert color to string
-		local rgba = GetClanColor(GetHogClan(gear))
-		local rgb = div(band(rgba, 0xFFFFFF00), 0x100)
-		local tColor = string.format("0x%X", rgb)
+		-- Color argument for AddTeam; using the
+		-- default clan color format.
+		local tColor = -(GetHogClan(gear)+1)
 
 		local tFort, tGrave, tFlag, tVoice
 		if getGearValue(gear,"grave") == nil then
@@ -2008,6 +2004,7 @@ function SaveLevelData()
 
 	WriteLnToConsole("HedgewarsScriptLoad(\"/Scripts/Locale.lua\")")
 	WriteLnToConsole("HedgewarsScriptLoad(\"/Scripts/Tracker.lua\")")
+	WriteLnToConsole("HedgewarsScriptLoad(\"/Scripts/Utils.lua\")")
 
 	WriteLnToConsole("")
 	WriteLnToConsole("local hhs = {}")
@@ -2083,6 +2080,13 @@ function SaveLevelData()
 		end
 	end
 
+	-- Helper table to convert tint color value to printable string
+	local tint2String = {
+		[U_LAND_TINT_INDESTRUCTIBLE] = "U_LAND_TINT_INDESTRUCTIBLE",
+		[U_LAND_TINT_ICE] = "U_LAND_TINT_ICE",
+		[U_LAND_TINT_BOUNCY] = "U_LAND_TINT_BOUNCY",
+		[U_LAND_TINT_NORMAL] = "U_LAND_TINT_NORMAL",
+	}
 	for i = 0, (placedCount-1) do
 		if placedType[i] == loc("Girder Placement Mode") then
 			table.insert(girderList,
@@ -2091,7 +2095,7 @@ function SaveLevelData()
 				placedY[i] ..", sprAmGirder, " ..
 				placedFrame[i] ..			-- the rotation/frame
 				", " ..
-				placedTint[i] ..", " .. -- color
+				tint2String[placedTint[i]] ..", " .. -- color
 				"nil, nil, nil, " ..
 				placedLandFlags[i] .. ")" --the landType
 				)
@@ -2108,7 +2112,7 @@ function SaveLevelData()
 				placedY[i] ..", sprAmRubber, " ..
 				placedFrame[i] ..
 				", " ..
-				placedTint[i] ..", " .. -- color
+				tint2String[placedTint[i]] ..", " .. -- color
 				"nil, nil, nil, " ..
 				"lfBouncy)" --the landType
 				)
@@ -2125,7 +2129,7 @@ function SaveLevelData()
 				placedY[i] ..", " .. placedSprite[i] .. ", " ..
 				placedFrame[i] .. -- I think this is the frame, can't remember
 				", " ..
-				placedTint[i] ..", " .. -- color
+				tint2String[placedTint[i]] ..", " .. -- color
 				"nil, nil, nil, " ..
 				placedLandFlags[i] .. ")" --the landType
 				)
@@ -2256,33 +2260,33 @@ function SaveLevelData()
 	WriteLnToConsole("")
 	WriteLnToConsole("	if victoryObj > 0 then ")
 	WriteLnToConsole("		if victoryObj == 1 then ")
-	WriteLnToConsole("			vComment = loc(\"- Destroy the red target\") .. \"|\"")
+	WriteLnToConsole([[			vComment = loc("- Destroy the red target") .. "|"]])
 	WriteLnToConsole("		else ")
-	WriteLnToConsole("			vComment = loc(\"- Destroy the red targets\") .. \"|\"")
+	WriteLnToConsole([[			vComment = loc("- Destroy the red targets") .. "|"]])
 	WriteLnToConsole("		end")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	if collectObj > 0 then ")
 	WriteLnToConsole("		if collectObj == 1 then ")
-	WriteLnToConsole("			collectComment = loc(\"- Collect the blue crate\") .. \"|\"")
+	WriteLnToConsole([[			collectComment = loc("- Collect the blue crate") .. "|"]])
 	WriteLnToConsole("		else ")
-	WriteLnToConsole("			collectComment = loc(\"- Collect all the blue crates\") .. \"|\"")
+	WriteLnToConsole([[			collectComment = loc("- Collect all the blue crates") .. "|"]])
 	WriteLnToConsole("		end")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	if (collectObj == 0) and (victoryObj == 0) then")
-	WriteLnToConsole("		vComment = loc(\"- Destroy the enemy\") .. \"|\"")
+	WriteLnToConsole([[		vComment = loc("- Destroy the enemy") .. "|"]])
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
 	WriteLnToConsole("	if failObj > 0 then ")
 	WriteLnToConsole("		if failObj == 1 then ")
-	WriteLnToConsole("			fComment = loc(\"- The green target must survive\") .. \"|\"")
+	WriteLnToConsole([[			fComment = loc("- The green target must survive") .. "|"]])
 	WriteLnToConsole("		else ")
-	WriteLnToConsole("			fComment = loc(\"- The green targets must survive\") .. \"|\"")
+	WriteLnToConsole([[			fComment = loc("- The green targets must survive") .. "|"]])
 	WriteLnToConsole("		end")
 	WriteLnToConsole("	end")
 	WriteLnToConsole("")
-	WriteLnToConsole("	ShowMission(loc(\"User Mission\"), loc(\"Mission\"), collectComment .. vComment .. fComment, 1, 0)")
+	WriteLnToConsole([[	ShowMission(loc("User Mission"), loc("Mission"), collectComment .. vComment .. fComment, 1, 0)]])
 	WriteLnToConsole("")
 	WriteLnToConsole("end")
 
@@ -2333,12 +2337,12 @@ function SaveLevelData()
 	WriteLnToConsole("")
 	WriteLnToConsole("			if (c ==  \"victory\") and (GetHogLevel(hhs[i]) ~= 0) then")
 	WriteLnToConsole("				DismissTeam(GetHogTeamName(hhs[i]))")
-	WriteLnToConsole("				AddCaption(loc(\"Victory!\"), 0xFFFFFFFF, capgrpGameState)")
-	WriteLnToConsole("				ShowMission(loc(\"User Mission\"), loc(\"Mission\"), loc(\"Mission succeeded!\"), 0, 0)")
+	WriteLnToConsole([[				AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)]])
+	WriteLnToConsole([[				ShowMission(loc("User Mission"), loc("Mission"), loc("Mission succeeded!"), 0, 0)]])
 	WriteLnToConsole("			elseif (c ==  \"failure\") and (GetHogLevel(hhs[i]) == 0) then")
 	WriteLnToConsole("				DismissTeam(GetHogTeamName(hhs[i]))")
-	WriteLnToConsole("				AddCaption(loc(\"Defeat!\"), 0xFFFFFFFF, capgrpGameState)")
-	WriteLnToConsole("				ShowMission(loc(\"User Mission\"), loc(\"Mission\"), loc(\"Mission failed!\"), -amSkip, 0)")
+	WriteLnToConsole([[				AddCaption(loc("Defeat!"), capcolDefault, capgrpGameState)]])
+	WriteLnToConsole([[				ShowMission(loc("User Mission"), loc("Mission"), loc("Mission failed!"), -amSkip, 0)]])
 	WriteLnToConsole("			elseif (c ==  \"victory\") and (GetHogLevel(hhs[i]) == 0) then")
 	WriteLnToConsole("				PlaySound(sndVictory,hhs[i]) -- check if we actually need this")
 	WriteLnToConsole("			end")
@@ -2484,16 +2488,16 @@ function PortalEffects(gear)
 			-- Destroy portal ball when max. distance reached
 			if remLife == 0 then
 
-				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
+				local tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
-				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
+				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
-				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
+				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
-				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
+				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, false)
 				SetVisualGearValues(tempE, nil, nil, nil, nil, nil, nil, nil, nil, nil, col)
 
 				PlaySound(sndVaporize)
@@ -2534,8 +2538,7 @@ function updateHelp(curAmmoType)
 				loc("Deletion Mode: [5]") .. "|" ..
 				" " .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amGirder, 60000
+				"", -amGirder, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2552,8 +2555,7 @@ function updateHelp(curAmmoType)
 				loc("Deletion Mode: [5]") .. "|" ..
 				" " .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amRubber, 60000
+				"", -amRubber, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2567,8 +2569,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 8, 60000
+				"", 8, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2581,8 +2582,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amKnife, 60000
+				"", -amKnife, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2595,8 +2595,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 1, 60000
+				"", 1, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2610,8 +2609,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amCMGearPlacementTool, 60000
+				"", -amCMGearPlacementTool, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2625,8 +2623,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amMine, 60000
+				"", -amMine, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2640,8 +2637,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 9, 60000
+				"", 9, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2655,8 +2651,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amSMine, 60000
+				"", -amSMine, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2670,8 +2665,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amAirMine, 60000
+				"", -amAirMine, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2685,8 +2679,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 7, 60000
+				"", 7, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2700,8 +2693,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 5, 60000
+				"", 5, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2715,8 +2707,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 6, 60000
+				"", 6, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2730,8 +2721,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amCMGearPlacementTool, 60000
+				"", -amCMGearPlacementTool, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2751,8 +2741,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 2, 60000
+				"", 2, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2772,8 +2761,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", -amCMGearPlacementTool, 60000
+				"", -amCMGearPlacementTool, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2787,8 +2775,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 0, 60000
+				"", 0, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 	elseif cat[cIndex] == loc("Hog Identity Mode") then
@@ -2801,8 +2788,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 3, 60000
+				"", 3, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2816,8 +2802,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 3, 60000
+				"", 3, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2831,8 +2816,7 @@ function updateHelp(curAmmoType)
 				" " .. "|" ..
 				loc("Change Placement Mode: [Up], [Down]") .. "|" ..
 				loc("Toggle Help: [Precise]+[1]") .. "|" ..
-				loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
-				"", 2, 60000
+				"", 2, 60000, not helpDisabled
 				)
 		hedgeEditorMissionPanelShown = false
 
@@ -2862,8 +2846,13 @@ end
 
 -- Display the X and Y coordinates of the cursor while the cursor is active
 function updateCursorCoords()
-	if band(GetState(CurrentHedgehog), gstChooseTarget) ~= 0 and CursorX ~= -2147483648 then
-		local x1, y = 12, 24
+	if band(GetState(CurrentHedgehog), gstChooseTarget) ~= 0 and CursorX ~= NO_CURSOR then
+		local x1, y
+		if INTERFACE == "touch" then
+			x1, y = 126, 32
+		else
+			x1, y = 12, 24
+		end
 		if tagCursorX then
 			DeleteVisualGear(tagCursorX)
 		end
@@ -3082,14 +3071,15 @@ function HandleHedgeEditor()
 		x,y = GetGearTarget(cGear)
 
 		if GetGearType(cGear) == gtAirAttack and GetCurAmmoType() == amCMGearPlacementTool then
-			DeleteGear(cGear)
-			PlaceObject(x, y)
-		elseif GetGearType(cGear) == gtGirder then
-
+			SetGearMessage(cGear, bor(GetGearMessage(cGear), gmDestroy))
+			if not cGearPlacementDone then
+				PlaceObject(x, y)
+				cGearPlacementDone = true
+			end
+		elseif GetGearType(cGear) == gtGirder and not cGearPlacementDone then
 			CGR = GetState(cGear)
-
-			-- improve rectangle test based on CGR when you can be bothered
 			PlaceObject(x, y)
+			cGearPlacementDone = true
 		end
 
 	end
@@ -3097,118 +3087,6 @@ function HandleHedgeEditor()
 	-- Show cursor coords
 	updateCursorCoords()
 
-	-- Barrel health tags, mine timer tags and health crate health tags
-	do
-		local actualValue	-- internal value
-		local printedValue	-- value exposed to HUD
-		for g, v in pairs(tagGears) do
-			local gt = GetGearType(g)
-			if v == -1 then
-				if gt == gtCase then
-					if(band(GetGearPos(g), 0x2) ~= 0) then
-						v = AddVisualGear(0, 0, vgtHealthTag, GetHealth(g), true)
-						SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, 0x808080FF)
-						tagGears[g] = v
-					else
-						tagGears[g] = nil
-					end
-				else
-					if gt == gtMine and GetHealth(g) == 0 then
-						local _, damage, health
-						_, _, _, _, _, _, _, _, _, _, _, damage = GetGearValues(g)
-						health = 36 - damage
-						v = AddVisualGear(0, 0, vgtHealthTag, health, true)
-						SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, 0x808080FF)
-						tagGears[g] = v
-					end
-				end
-			end
-			-- Delete tag for drowning gears
-			if(band(GetState(g), gstDrowning) ~= 0) then
-				DeleteVisualGear(v)
-				tagGears[g] = nil
-			elseif(tagGears[g] ~= nil and tagGears[g] ~= -1) then
-				local tag, actualvalue, offset_x, offset_y
-				tag = GetState(v)
-				if(gt == gtExplosives) then
-					actualValue = GetHealth(g)
-					printedValue = actualValue
-					offset_y = -20
-					offset_x = 0
-				elseif(gt == gtAirMine) then
-					if(band(GetState(g), gstAttacking) ~= 0) then
-						actualValue = GetTimer(g)
-						printedValue = actualValue
-					else
-						local _
-						_, _, actualValue = GetGearValues(g)
-						printedValue = actualValue
-					end
-					offset_y = 28
-					offset_x = 16
-				elseif(gt == gtCase) then
-					actualValue = GetHealth(g)
-					printedValue = actualValue
-					offset_y = -20
-					offset_x = 1
-				elseif(gt == gtMine) then
-					if(GetHealth(g) ~= 0) then
-						-- Non-dud: Show timer
-						actualValue = GetTimer(g)
-						printedValue = actualValue
-						offset_y = 28
-						offset_x = 16
-					else
-						-- Dud: Show health
-						local _
-						_, _, _, _, _, _, _, _, _, _, _, actualValue = GetGearValues(g)
-						printedValue = 36 - actualValue
-						offset_y = -12
-						offset_x = 0
-					end
-				elseif(gt == gtSMine) then
-					actualValue = GetTimer(g)
-					printedValue = actualValue
-					offset_y = 28
-					offset_x = 16
-				end
-				--[[ The timer tag normally disappears near the water line, this is a really
-				ugly hack to adjust the position of the tag so it is always displayed.
-				FIXME: Find a better solution to fix this. ]]
-				if (GetY(g) + offset_y) > WaterLine and (GetY(g) + offset_y) < WaterLine + 30 then
-					offset_y = (WaterLine - GetY(g))
-				end
-				local tint
-				if(not showGearTags) then
-					-- Hide the tags
-					tint = 0x00000000
-				elseif(gt == gtCase) then
-					tint = 0x80FF80FF
-				elseif(gt == gtExplosives or (gt == gtMine and GetHealth(g) == 0)) then
-					tint = 0x808080FF
-				elseif(band(GetState(g), gstAttacking) ~= 0) then
-					if(actualValue % 1000 > 500) then
-						tint = 0xFFA0A0FF
-					else
-						tint = 0xFF4040FF
-					end
-				else
-					tint = 0xFFFFFFFF
-				end
-				if(actualValue ~= tag) then
-					--[[ If timer/health changed, delete visual gear and add it again.
-					Changing the visual gear state does not have any effect, so we need this hack ]]
-					DeleteVisualGear(v)
-					v = AddVisualGear(GetX(g)+offset_x, GetY(g)+offset_y, vgtHealthTag, printedValue, true)
-					SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tint)
-					tagGears[g] = v
-				else
-					-- Just update position if the health did not change
-					SetVisualGearValues(v, GetX(g)+offset_x, GetY(g)+offset_y, 0, 0, nil, nil, nil, nil, 240000, tint)
-				end
-			end
-		end
-	end
 end
 
 --------------------------------------------------
@@ -3244,14 +3122,6 @@ function onTimer(s)
 			AddCaption(loc("Help Enabled"), colorInfoMessage, capgrpVolume)
 		end
 		updateHelp()
-	elseif (preciseOn == true) and (s == 3) then
-		showGearTags = not(showGearTags)
-		if showGearTags then
-			AddCaption(loc("Gear information shown"), colorInfoMessage, capgrpVolume)
-		else
-			AddCaption(loc("Gear information hidden"), colorInfoMessage, capgrpVolume)
-		end
-
 	elseif (cat[cIndex] == loc("Sprite Placement Mode")) or (cat[cIndex] == loc("Girder Placement Mode")) or (cat[cIndex] == loc("Rubber Placement Mode")) or (cat[cIndex] == loc("Sprite Modification Mode")) then
 
 		if (cat[cIndex] == loc("Rubber Placement Mode")) then
@@ -3479,6 +3349,7 @@ function onGameInit()
 
 	Explosives = 0
 	MinesNum = 0
+	AirMinesNum = 0
 
 	EnableGameFlags(gfInfAttack, gfDisableWind)
 
@@ -3489,14 +3360,13 @@ end
 function showHedgeEditorMissionPanel()
 	ShowMission	(
 		loc("HEDGEEDITOR"),
-		loc("An experimental (and buggy!) editing tool for missions and more"),
+		loc("An experimental editing tool for missions and more"),
 		loc("Manual: https://hedgewars.org/hedgeeditor") .. "|" ..
 		" " .. "|" ..
 		loc("Place Girder: Girder") .. "|" ..
 		loc("Place Rubber: Rubber") .. "|" ..
 		loc("Place Gears (and more): Gear Placement Tool") .. "|" ..
 		loc("Toggle Help: [Precise]+[1]") .. "|" ..
-		loc("Toggle Gear Information: [Precise]+[3]") .. "|" ..
 		" " .. "|" ..
 		loc("Editing Commands: (Use while no weapon is selected)") .. "|" ..
 		loc("Save Level: [Precise]+[4]") .. "|" ..
@@ -3779,7 +3649,7 @@ function onNewTurn()
 	-- regardless of our other ammo, give stuff that is useful for editing
 	SetEditingWeps(100)
 	if GetHogLevel(CurrentHedgehog) == 0 then
-		TurnTimeLeft = -1	-- is that turntime in your pocket? :D
+		SetTurnTimeLeft(MAX_TURN_TIME)
 	else
 		SkipTurn() -- skip the computer's turn
 	end
@@ -3828,37 +3698,10 @@ function onGearAdd(gear)
 
 	if (GetGearType(gear) == gtAirAttack and GetCurAmmoType() == amCMGearPlacementTool) or (GetGearType(gear) == gtGirder) then
 		cGear = gear
+		cGearPlacementDone = false
 	end
 
 	local tagTint
-	if showGearTags then
-		tagTint = 0xFFFFFFFF
-	else
-		tagTint = 0x00000000
-	end
-	if ((GetGearType(gear) == gtMine and GetHealth(gear) ~= 0) or GetGearType(gear) == gtSMine) then
-		local v = AddVisualGear(0, 0, vgtHealthTag, GetTimer(gear), true)
-		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
-		tagGears[gear] = v
-	elseif ((GetGearType(gear) == gtMine and GetHealth(gear) == 0)) then
-		local _, dmg
-		_, _, _, _, _, _, _, _, _, _, dmg = GetGearValues(gear)
-		local v = AddVisualGear(0, 0, vgtHealthTag, 36 - dmg, true)
-		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
-		tagGears[gear] = v
-	elseif (GetGearType(gear) == gtAirMine) then
-		local _, wdTimer
-		_, _, wdTimer = GetGearValues(gear)
-		local v = AddVisualGear(0, 0, vgtHealthTag, wdTimer, true)
-		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
-		tagGears[gear] = v
-	elseif (GetGearType(gear) == gtCase) then
-		tagGears[gear] = -1
-	elseif (GetGearType(gear) == gtExplosives) then 
-		local v = AddVisualGear(0, 0, vgtHealthTag, GetHealth(gear), true)
-		SetVisualGearValues(v, nil, nil, 0, 0, nil, nil, nil, nil, 240000, tagTint)
-		tagGears[gear] = v
-	end
 
 	if isATrackedGear(gear) then
 		trackGear(gear)
@@ -3881,14 +3724,6 @@ function onGearDelete(gear)
 	if (gt == gtAirAttack and GetGearPos(gear) == 0) or gt == gtGirder then
 		cGear = nil
 	end
-
-	if (gt == gtMine or gt == gtSMine or gt == gtAirMine or gt == gtExplosives or gt == gtCase) then 
-		if(tagGears[gear] ~= -1) then
-			DeleteVisualGear(tagGears[gear])
-		end
-		tagGears[gear] = nil
-	end
-
 
 	if isATrackedGear(gear) then
 

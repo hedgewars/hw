@@ -23,7 +23,7 @@ import Control.Concurrent
 import Data.Word
 import qualified Data.Map as Map
 import Data.Time
-import Network
+import Network.Socket
 import Data.Function
 import Data.ByteString.Char8 as B
 import Data.Unique
@@ -103,11 +103,13 @@ data Action =
     | ReactCmd [B.ByteString]
     | CheckVotes
     | SetRandomSeed
+    | ShowRegisteredOnlyState [ClientChan]
 
 
 data Event = LobbyChatMessage
            | EngineMessage
            | RoomJoin
+           | RoomNameUpdate
 
 type EventsInfo = [(Int, UTCTime)]
 
@@ -310,9 +312,9 @@ newServerInfo =
     ServerInfo
         True
         False
-        "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-        "<font color=yellow><h3 align=center>Hedgewars 0.9.24 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        55 -- latestReleaseVersion
+        "<h2><p align=center><a href=\"https://www.hedgewars.org/\">https://www.hedgewars.org/</a></p></h2>"
+        "<font color=yellow><h3 align=center>Hedgewars 1.0.0 is out! Please update.</h3><p align=center><a href=https://hedgewars.org/download.html>Download page here</a></font>"
+        59 -- latestReleaseVersion
         41 -- earliestCompatibleVersion
         46631
         ""

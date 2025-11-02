@@ -13,10 +13,6 @@
 #include "fileio.h"
 #include "pmath.h"
 
-#ifndef EMSCRIPTEN
-#include "GL/glew.h"
-#endif
-
 #define fpcrtl_memcpy                       memcpy
 
 #define luapas_lua_gettop                   lua_gettop

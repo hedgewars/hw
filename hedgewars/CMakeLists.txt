@@ -1,6 +1,6 @@
 enable_language(Pascal)
 
-find_package(SDL2 REQUIRED)
+find_package(SDL2 REQUIRED CONFIG)
 find_package(SDL2_image 2 REQUIRED)
 find_package(SDL2_net 2 REQUIRED)
 find_package(SDL2_ttf 2 REQUIRED)
@@ -12,7 +12,7 @@ include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 enable_language(Pascal)
 add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000 -B")
-add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-gv")
+#add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-gv")
 add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Xs")
 if(UNIX)
     include(TargetArch)
@@ -52,6 +52,7 @@ set(engine_sources
     uConsole.pas
     uCommands.pas
     uDebug.pas
+    uKeyNames.pas
     uInputHandler.pas
     uTextures.pas
     uRenderUtils.pas
@@ -129,7 +130,7 @@ if(APPLE AND (NOT BUILD_ENGINE_LIBRARY))
     add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kOpenGL")
 
     #set the correct library or framework style depending on the main SDL
-    string(FIND "${SDL2_LIBRARY}" "dylib" sdl_framework)
+    string(FIND "${SDL2_LIBRARIES}" "dylib" sdl_framework)
     if(${sdl_framework} GREATER -1)
         add_flag_append(CMAKE_Pascal_FLAGS "-k-lsdl2 -k-lsdl2_image -k-lsdl2_mixer -k-lsdl2_ttf -k-lsdl2_net")
     else()
@@ -143,13 +144,15 @@ if(LIBAV_FOUND)
     add_definitions(-dUSE_VIDEO_RECORDING)
 endif()
 
-find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
-if(PNG_FOUND)
-    list(INSERT engine_sources 0 PNGh.pas)
-    list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
-    get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS "-k-L${PNG_LIBRARY_DIR} -Fl${PNG_LIBRARY_DIR}")
-    add_definitions(-dPNG_SCREENSHOTS)
+if(NOT WIN32)
+    find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
+    if(PNG_FOUND)
+        list(INSERT engine_sources 0 PNGh.pas)
+        list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
+        get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-L${PNG_LIBRARY_DIR} -Fl${PNG_LIBRARY_DIR}")
+        add_definitions(-dPNG_SCREENSHOTS)
+    endif()
 endif()
 
 if(LUA_SYSTEM)
@@ -164,17 +167,10 @@ else()
     add_flag_append(CMAKE_Pascal_FLAGS "-XLAlua=${lua_output_name}")
 endif()
 
-if(PHYSFS_SYSTEM)
-    get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
-else()
-    add_definitions(-dPHYSFS_INTERNAL)
-    list(APPEND HW_LINK_LIBS physfs)
-    #-XLA is a beta fpc flag that renames libraries before passing them to the linker
-    #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
-    #(should be harmless on other platforms)
-    add_flag_append(CMAKE_Pascal_FLAGS "-XLAphysfs=${physfs_output_name}")
-endif()
+# PhysFS
+get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
+add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
+
 list(APPEND HW_LINK_LIBS physlayer)
 
 
@@ -193,6 +189,14 @@ foreach(loop_var ${engine_sources})
     list(APPEND sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/${loop_var}")
 endforeach(loop_var)
 
+if (WIN32 AND VCPKG_TOOLCHAIN)
+    add_definitions(-dWIN32_VCPKG)
+    add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-dVCPKG_DEBUG")
+endif()
+
+if (WIN32_WIN64_CROSS_COMPILE)
+    add_flag_append(CMAKE_Pascal_FLAGS "-Px86_64 -Twin64")
+endif()
 
 #SOURCE AND PROGRAMS SECTION
 if(BUILD_ENGINE_LIBRARY)
@@ -213,6 +217,11 @@ if(BUILD_ENGINE_LIBRARY)
     set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar};${CMAKE_CURRENT_SOURCE_DIR}/hwengine.pas")
     add_library(hwengine SHARED hwLibrary.pas)
 else()
+    if(APPLE)
+        # Handle large linker install_names
+        add_flag_prepend(CMAKE_Pascal_FLAGS "-k-headerpad_max_install_names")
+    endif()
+
     # no need to change name here because target has same name
     set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
     set(destination_dir ${target_binary_install_dir})

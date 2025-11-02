@@ -63,17 +63,21 @@ m2DenseDead = 0
 startAnim = {}
 wave2Anim = {}
 finalAnim = {}
+
+nativesTeamName = nil
+cyborgTeamName = nil
+
 --------------------------Anim skip functions--------------------------
 function AfterHogDeadAnim()
   freshDead = nil
-  TurnTimeLeft = TurnTime
+  SetTurnTimeLeft(TurnTime)
 end
 
 function AfterStartAnim()
-  local goal = loc("Defeat the cannibals!|")
+  local goal = loc("Defeat the cannibals!")
   local chiefgoal = loc("Try to protect the chief! You won't lose if he dies, but it is advised that he survives.")
-  TurnTimeLeft = TurnTime
-  ShowMission(loc("United We Stand"), loc("Invasion"), goal .. chiefgoal, 1, 6000)
+  SetTurnTimeLeft(TurnTime)
+  ShowMission(loc("United We Stand"), loc("Invasion"), goal .. "|" .. chiefgoal, 1, 6000)
 end
 
 function SkipStartAnim()
@@ -136,7 +140,7 @@ function AfterFinalAnim()
   if progress and progress<4 then
     SaveCampaignVar("Progress", "4")
   end
-  DismissTeam(loc("011101001"))
+  DismissTeam(cyborgTeamName)
   EndTurn(true)
 end
 -----------------------------Animations--------------------------------
@@ -285,7 +289,7 @@ function RestoreWave(index)
 end
 
 function GetVariables()
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
+  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead")) or 0
   if m2DenseDead == 1 then
     denseDead = true
   end
@@ -323,8 +327,8 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
-	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
+  nativesTeamName = AddMissionTeam(-2)
+  leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
   water = AddHog(loc("Fiery Water"), 0, 100, "pirate_jack")
   buffalo = AddHog(loc("Raging Buffalo"), 0, 100, "zoo_Bunny")
@@ -332,17 +336,17 @@ function AddHogs()
   natives = {leaks, dense, water, buffalo, chief}
   nativesNum = 5
 
-  AddTeam(loc("Light Cannfantry"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Light Cannfantry"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   for i = 1, 4 do
     cannibals[i] = AddHog(HogNames[i], 2, 40, "Zombi")
   end
 
-  AddTeam(loc("Heavy Cannfantry"), 14483456, "skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Heavy Cannfantry"), -1, "skull", "Island", "Pirate_qau", "cm_vampire")
   for i = 5, 8 do
     cannibals[i] = AddHog(HogNames[i], 2, 55, "vampirichog")
   end
 
-  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_binary")
+  cyborgTeamName = AddTeam(loc("011101001"), -1, "ring", "UFO", "Robot_qau", "cm_binary")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   AnimSetGearPosition(leaks,   unpack(leaksPos))
@@ -432,7 +436,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 3000
 	Explosives = 2
-	Delay = 10 
   Map = "Hogville"
 	Theme = "Nature"
 	-- Disable Sudden Death
@@ -532,10 +535,10 @@ end
 
 function onNewTurn()
   if AnimInProgress() then
-    TurnTimeLeft = -1
+    SetTurnTimeLeft(MAX_TURN_TIME)
     return
   end
-  if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+  if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == nativesTeamName then
     SetupHogDeadAnim(freshDead)
     AddAnim(hogDeadAnim)
     AddFunction({func = AfterHogDeadAnim, args = {}})
@@ -548,3 +551,10 @@ function onPrecise()
   end
 end
 
+function onGameResult(winner)
+  if winner == GetTeamClan(nativesTeamName) then
+    SendStat(siGameResult, loc("Mission succeeded!"))
+  else
+    SendStat(siGameResult, loc("Mission failed!"))
+  end
+end

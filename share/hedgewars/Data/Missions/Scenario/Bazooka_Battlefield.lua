@@ -14,24 +14,16 @@ SimpleMission({
 		[amBazooka] = { count = 9 },
 	},
 	teams = {
-		{ name = loc("Pincer Knights"),
-		flag = "cm_swordshield",
-		grave = "Grave",
+		{ isMissionTeam = true,
 		hogs = {
 			{
-			name = loc("Left Tong"),
 			health = 100,
 			x = 276, y = 825,
-			botLevel = 0,
-			hat = "knight",
 			ammo = { [amSwitch] = 100 },
 			},
 			{
-			name = loc("Right Tong"),
 			health = 100,
 			x = 1794, y = 716,
-			botLevel = 0,
-			hat = "knight",
 			faceLeft = true,
 			},
 		}, },

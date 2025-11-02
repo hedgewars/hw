@@ -8,7 +8,7 @@ endif()
 
 if(APPLE AND NOT SKIPBUNDLE)
     find_package(Qt5 REQUIRED QUIET COMPONENTS Core Widgets Gui Network)
-    find_package(SDL2 REQUIRED)
+    find_package(SDL2 REQUIRED CONFIG)
     find_package(SDL2_image 2 REQUIRED)
     find_package(SDL2_net 2 REQUIRED)
     find_package(SDL2_ttf 2 REQUIRED)
@@ -26,12 +26,9 @@ if(APPLE AND NOT SKIPBUNDLE)
         endif()
     endif()
 
-    #use the associated tool from the libraries we've selected
-    string(REGEX REPLACE "(.*)/include.*" "\\1" qt_base_dir "${QT_INCLUDE_DIR}")
-
-    #remove the ";-framework Cocoa" from the SDL2_LIBRARY variable
-    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL2_LIBRARY}")
-    #remove the "libSDLmain.a" from the SDL2_LIBRARY variable
+    #remove the ";-framework Cocoa" from the SDL2_LIBRARIES variable
+    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL2_LIBRARIES}")
+    #remove the "libSDLmain.a" from the SDL2_LIBRARIES variable
     string(REGEX REPLACE ".*;(.*)" "\\1" sdl_library_only "${sdl_library_only}")
 
     #get the neme of the library (harmelss if it is static)
@@ -39,24 +36,75 @@ if(APPLE AND NOT SKIPBUNDLE)
     string(REGEX REPLACE ".*/(.*)$" "\\1" ZLIB_LIBNAME "${ZLIB_LIBRARY}")
 
     set(frameworks_dir ${CMAKE_INSTALL_PREFIX}/${target_library_install_dir})
+    
     if(${BUILD_ENGINE_LIBRARY})
         set(engine_full_path "${frameworks_dir}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
     else()
         set(engine_full_path "${CMAKE_INSTALL_PREFIX}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
     endif()
 
-    #this tool is present in qt 4.5 but only if you compile from sources
-    #from qt 4.6 is present also in the binary version
-    find_program(macdeployqt_executable NAMES macdeployqt macdeployqt-mac PATHS ${qt_base_dir}/bin)
-    if(NOT macdeployqt_executable)
-        message(FATAL_ERROR "The utility macdeployqt is required to create the bundle (seached: ${qt_base_dir})")
+
+    #create the .app bundle using BundleUtilities instead of old macdeployqt
+    set(APP_DIR "Hedgewars.app")
+    set(APP_BASE_DIR "${CMAKE_INSTALL_PREFIX}/../")  # should be, Hedgewars.app/Contents/MacOS/../
+
+    # macro to install qt5 plugins 
+    # modified from https://github.com/Kitware/CMake/blob/master/Source/QtDialog/CMakeLists.txt
+    macro(install_qt5_plugin _qt_plugin_name _qt_plugins_var)
+      get_target_property(_qt_plugin_path "${_qt_plugin_name}" LOCATION)
+      if(EXISTS "${_qt_plugin_path}")
+        get_filename_component(_qt_plugin_file "${_qt_plugin_path}" NAME)
+        get_filename_component(_qt_plugin_type "${_qt_plugin_path}" PATH)
+        get_filename_component(_qt_plugin_type "${_qt_plugin_type}" NAME)
+        set(_qt_plugin_dir "PlugIns")
+        set(_qt_plugin_dest "${_qt_plugin_dir}/${_qt_plugin_type}")
+        install(FILES "${_qt_plugin_path}"
+          DESTINATION "../${_qt_plugin_dest}" # relative to install dir
+          ${COMPONENT})
+        list(APPEND ${_qt_plugins_var}
+          "\${CMAKE_BINARY_DIR}/${APP_BASE_DIR}/${_qt_plugin_dest}/${_qt_plugin_file}")
+      else()
+        message(FATAL_ERROR "QT plugin ${_qt_plugin_name} not found")
+      endif()
+    endmacro()
+
+    # install cocoa plugin and build list to send to fixup_bundle
+    install_qt5_plugin("Qt5::QCocoaIntegrationPlugin" QT_PLUGINS)
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
+        "[Paths]\nPlugins = ${_qt_plugin_dir}\n")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
+        DESTINATION "../Resources"  # relative to install dir
+        ${COMPONENT})
+
+    # Build up search directories for fixup_bundle
+    set(DIRS "")
+    # Add QT bin and lib paths
+    if(CMAKE_PREFIX_PATH)
+        foreach(dir ${CMAKE_PREFIX_PATH})
+            list(APPEND DIRS "${dir}/bin" "${dir}/lib")
+        endforeach()
     endif()
+    # Add other lib folder from around the system
+    list(APPEND DIRS 
+        ~/Library/Frameworks
+        /Library/Frameworks
+        /usr/local/lib
+        /opt/local/lib
+    )
 
-    #create the .app bundle
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CreateMacBundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake)
-    install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake
-            CODE "message(STATUS \"Your app bundle is ready\")")
+    # operate on the Hedgewars.app
+    set(APPS ${CMAKE_BINARY_DIR}/${APP_DIR})
+    
+    # debugging
+    message(STATUS "APPS: ${APPS}")
+    message(STATUS "QT_PLUGINS: ${QT_PLUGINS}")
+    message(STATUS "DIRS: ${DIRS}")
 
+    # properly fixup the .app to include all dependencies    
+    install(CODE "include(BundleUtilities)
+        fixup_bundle(\"${APPS}\" \"${QT_PLUGINS}\" \"${DIRS}\")")
+    
+    
     #create the .dmg for deployment
     #first make sure .app exists, then remove any old .dmg with same name, finally run the script
     add_custom_target(dmg COMMAND make install
@@ -70,7 +118,7 @@ if(APPLE AND NOT SKIPBUNDLE)
                                   --app-drop-link 410 190
                                   --background "${CMAKE_CURRENT_SOURCE_DIR}/../misc/dmgBackground.png"
                                   ${CMAKE_BINARY_DIR}/Hedgewars-${HEDGEWARS_VERSION}.dmg
-                                  ${CMAKE_BINARY_DIR}/Hedgewars.app
+                                  ${CMAKE_BINARY_DIR}/${APP_DIR}
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 

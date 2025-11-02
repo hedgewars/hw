@@ -79,11 +79,13 @@ class PageOptions : public AbstractPage
         QComboBox *CBResolution;
         QSpinBox *windowWidthEdit;
         QSpinBox *windowHeightEdit;
+        QLabel *winLabelX;
         QComboBox *CBStereoMode;
         QCheckBox *CBFrontendSound;
         QCheckBox *CBFrontendMusic;
         QCheckBox *CBSound;
         QCheckBox *CBMusic;
+        QCheckBox *CBDampenAudio;
         QCheckBox *CBFullscreen;
         QCheckBox *CBFrontendFullscreen;
         QCheckBox *CBShowFPS;
@@ -109,6 +111,7 @@ class PageOptions : public AbstractPage
         QLineEdit *editNetNick;
         QLineEdit *editNetPassword;
         QSlider *SLQuality;
+        QSpinBox *SLZoom;
         QCheckBox *CBFrontendEffects;
         QComboBox * cbProxyType;
         QSpinBox * sbProxyPort;

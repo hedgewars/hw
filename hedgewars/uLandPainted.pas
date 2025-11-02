@@ -58,6 +58,7 @@ begin
         rec:= prec^;
         rec.X:= SDLNet_Read16(@rec.X);
         rec.Y:= SDLNet_Read16(@rec.Y);
+
         if rec.X < -318 then rec.X:= -318;
         if rec.X > 4096+318 then rec.X:= 4096+318;
         if rec.Y < -318 then rec.Y:= -318;
@@ -81,7 +82,7 @@ procedure Draw;
 var pe: PPointEntry;
     prevPoint: PointRec;
     radius: LongInt;
-    color: Longword;
+    color, Xoffset, Yoffset: Longword;
     lineNumber, linePoints: Longword;
 begin
     // shutup compiler
@@ -89,6 +90,8 @@ begin
     prevPoint.Y:= 0;
     radius:= 0;
     linePoints:= 0;
+    Xoffset:= (LAND_WIDTH-(playWidth)) div 2;
+    Yoffset:= LAND_HEIGHT-(playHeight);
 
     pe:= pointsListHead;
     while (pe <> nil) and (pe^.point.flags and $80 = 0) do
@@ -101,6 +104,8 @@ begin
 
     while(pe <> nil) do
         begin
+        pe^.point.X:= LongInt(pe^.point.X) * playWidth div 4096 + Xoffset;
+        pe^.point.Y:= LongInt(pe^.point.Y) * playHeight div 2048 + Yoffset;
         if (pe^.point.flags and $80 <> 0) then
             begin
             if (lineNumber > 0) and (linePoints = 0) and cAdvancedMapGenMode then
@@ -113,9 +118,10 @@ begin
                 else
                 color:= lfBasic;
             radius:= (pe^.point.flags and $3F) * 5 + 3;
+            radius:= (radius * playWidth div 4096);
             linePoints:= FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color);
             end
-            else
+        else
             begin
             inc(linePoints, DrawThickLine(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius, color));
             end;
@@ -123,6 +129,13 @@ begin
         prevPoint:= pe^.point;
         pe:= pe^.next;
         end;
+
+    if (topY > 0) then
+        EraseLandRectRaw(0, 0, LAND_WIDTH, topY);
+    if (leftX > 0) then
+        EraseLandRectRaw(0, topY, leftX, LAND_HEIGHT - topY);
+    if (rightX < (LAND_WIDTH - 1)) then
+        EraseLandRectRaw(rightX + 1, topY, LAND_WIDTH - (rightX + 1), LAND_HEIGHT - topY);
 end;
 
 procedure initModule;

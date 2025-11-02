@@ -28,8 +28,7 @@ import System.Directory
 import Control.Monad.State
 import Control.Concurrent.Chan
 import Control.Concurrent
-import Network
-import Network.BSD
+import Network.BSD hiding (recv)
 import Network.Socket hiding (recv, sClose)
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as B
@@ -55,7 +54,7 @@ data Message = Packet [B.ByteString]
     deriving Show
 
 serverAddress = "netserver.hedgewars.org"
-protocolNumber = "53"
+protocolNumber = "55"
 
 getLines :: Handle -> IO [B.ByteString]
 getLines h = g
@@ -207,7 +206,7 @@ main = withSocketsDo . forever $ do
 
     Exception.bracket
         setupConnection
-        (\s -> noticeM "Core" "Shutting down" >> sClose s)
+        (\s -> noticeM "Core" "Shutting down" >> close s)
         (session login password (d ++ "/.hedgewars") exeFullname dataPrefix)
     where
         setupConnection = do

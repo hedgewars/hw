@@ -73,6 +73,8 @@ begin
     s:= s; // avoid compiler hint
     if GameState = gsConfirm then
         begin
+        if (luaCmdUsed) then
+            SendIPC(_S'm');
         SendIPC(_S'Q');
         GameState:= gsExit
         end
@@ -81,6 +83,8 @@ end;
 procedure chHalt (var s: shortstring);
 begin
     s:= s; // avoid compiler hint
+    if (luaCmdUsed) then
+        SendIPC(_S'm');
     SendIPC(_S'H');
     GameState:= gsExit
 end;
@@ -113,7 +117,7 @@ if s[1]='"' then
 if s[byte(s[0])]='"' then
     Delete(s, byte(s[0]), 1);
 cScriptName:= s;
-ScriptLoad(s)
+ScriptLoad(s, true)
 end;
 
 procedure chScriptParam(var s: shortstring);
@@ -125,49 +129,53 @@ end;
 procedure chCurU_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= -1;
+updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, -1, CursorMovementY);
 end;
 
 procedure chCurU_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= 0;
+if CursorMovementY < 0 then
+    updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 0, CursorMovementY);
 end;
 
 procedure chCurD_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= 1;
+updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 1, CursorMovementY);
 end;
 
 procedure chCurD_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementY:= 0;
+if CursorMovementY > 0 then
+    updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 0, CursorMovementY);
 end;
 
 procedure chCurL_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= -1;
+updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, -1, CursorMovementX);
 end;
 
 procedure chCurL_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= 0;
+if CursorMovementX < 0 then
+    updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 0, CursorMovementX);
 end;
 
 procedure chCurR_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= 1;
+updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 1, CursorMovementX);
 end;
 
 procedure chCurR_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-CursorMovementX:= 0;
+if CursorMovementX > 0 then
+    updateCursorMovementDelta((LocalMessage and gmPrecise) <> 0, 0, CursorMovementX);
 end;
 
 procedure chLeft_p(var s: shortstring);
@@ -419,6 +427,32 @@ with CurrentHedgehog^.Gear^ do
     end
 end;
 
+// Increment timer or bounciness
+procedure chTimerU(var s: shortstring);
+var t: LongWord;
+    tb: Byte;
+begin
+s:= s; // avoid compiler hint
+if CheckNoTeamOrHH then
+    exit;
+// We grab the current timer first so we can increment it
+if (CurrentHedgehog^.Gear^.Message and gmPrecise) = 0 then
+    t:= HHGetTimerMsg(CurrentHedgehog^.Gear)
+else
+    // Use bounciness if Precise is pressed
+    t:= HHGetBouncinessMsg(CurrentHedgehog^.Gear);
+if t <> MSGPARAM_INVALID then
+    begin
+    // Calculate new timer
+    Inc(t);
+    if t > 5 then
+        t:= 1;
+    tb:= t mod 255;
+    // Delegate the actual change to /timer
+    ParseCommand('timer ' + Char(tb + Ord('0')), true);
+    end;
+end;
+
 procedure chSlot(var s: shortstring);
 var slot: LongWord;
     ss: shortstring;
@@ -448,6 +482,11 @@ begin
     if CheckNoTeamOrHH then
         exit;
 
+    (* Use "~" (ASCII character 126) as synonym for NUL byte (=amNothing).
+    This is done to allow to add "setweap ~" in QTfrontend/binds.cpp because
+    the NUL byte would terminate the strings in C++ otherwise. *)
+    if (s[1] = '~') then
+        s[1]:= #0;
     if checkFails((s[0] = #1) and (s[1] <= char(High(TAmmoType))), 'Malformed /setweap', true) then exit;
 
     if not isExternalSource then
@@ -510,7 +549,7 @@ if isDeveloperMode then
     InitStepsFlags:= InitStepsFlags or cifMap
     end;
 cMapName:= s;
-ScriptLoad('Maps/' + s + '/map.lua')
+ScriptLoad('Maps/' + s + '/map.lua', false)
 end;
 
 procedure chSetTheme(var s: shortstring);
@@ -557,16 +596,32 @@ else
     end
 end;
 
-procedure chVol_p(var s: shortstring);
+procedure chVolUp_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-inc(cVolumeDelta, 3)
+cVolumeUpKey:= true;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
 end;
 
-procedure chVol_m(var s: shortstring);
+procedure chVolUp_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-dec(cVolumeDelta, 3)
+cVolumeUpKey:= false;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
+end;
+
+procedure chVolDown_p(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cVolumeDownKey:= true;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
+end;
+
+procedure chVolDown_m(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+cVolumeDownKey:= false;
+updateVolumeDelta((LocalMessage and gmPrecise) <> 0);
 end;
 
 procedure chMute(var s: shortstring);
@@ -584,12 +639,12 @@ if CheckNoTeamOrHH then
 if autoCameraOn then
     begin
     FollowGear:= nil;
-    AddCaption(trmsg[sidAutoCameraOff], $CCCCCC, capgrpVolume);
+    AddCaption(trmsg[sidAutoCameraOff], capcolSetting, capgrpVolume);
     autoCameraOn:= false
     end
 else
     begin
-    AddCaption(trmsg[sidAutoCameraOn], $CCCCCC, capgrpVolume);
+    AddCaption(trmsg[sidAutoCameraOn], capcolSetting, capgrpVolume);
     bShowFinger:= true;
     if not CurrentHedgehog^.Unplaced then
         FollowGear:= CurrentHedgehog^.Gear;
@@ -683,21 +738,32 @@ end;
 procedure chZoomIn(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    if ZoomValue < cMinZoomLevel then
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= ZoomValue + cZoomDeltaSmall
+    else
         ZoomValue:= ZoomValue + cZoomDelta;
+    if ZoomValue > cMinZoomLevel then
+        ZoomValue:= cMinZoomLevel;
 end;
 
 procedure chZoomOut(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    if ZoomValue > cMaxZoomLevel then
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= ZoomValue - cZoomDeltaSmall
+    else
         ZoomValue:= ZoomValue - cZoomDelta;
+    if ZoomValue < cMaxZoomLevel then
+        ZoomValue:= cMaxZoomLevel;
 end;
 
 procedure chZoomReset(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    ZoomValue:= cDefaultZoomLevel;
+    if (LocalMessage and gmPrecise <> 0) then
+        ZoomValue:= cDefaultZoomLevel
+    else
+        ZoomValue:= UserZoom;
 end;
 
 procedure chMapGen(var s: shortstring);
@@ -753,6 +819,11 @@ end;
 procedure chHealthDecrease(var s: shortstring);
 begin
 cHealthDecrease:= StrToInt(s)
+end;
+
+procedure chInitHealth(var s: shortstring);
+begin
+cInitHealth:= StrToInt(s)
 end;
 
 procedure chDamagePercent(var s: shortstring);
@@ -823,6 +894,11 @@ begin
   CampaignVariable := s;
 end;
 
+procedure chMissVar(var s:shortstring);
+begin
+  MissionVariable := s;
+end;
+
 procedure chWorldEdge(var s: shortstring);
 begin
 WorldEdge:= TWorldEdge(StrToInt(s))
@@ -832,6 +908,26 @@ procedure chAdvancedMapGenMode(var s:shortstring);
 begin
   s:= s; // avoid compiler hint
   cAdvancedMapGenMode:= true;
+end;
+
+procedure chShowMission_p(var s: shortstring);
+begin
+  s:= s; // avoid compiler hint
+  isShowMission:= true;
+end;
+
+procedure chShowMission_m(var s: shortstring);
+begin
+  s:= s; // avoid compiler hint
+  isShowMission:= false;
+  if (not isForceMission) then
+    HideMission();
+end;
+
+procedure chGearInfo(var s: shortstring);
+begin
+  s:= s; // avoid compiler hint
+  isShowGearInfo:= not isShowGearInfo;
 end;
 
 procedure initModule;
@@ -877,6 +973,7 @@ begin
     RegisterVariable('sd_turns', @chSuddenDTurns  , false);
     RegisterVariable('waterrise', @chWaterRise    , false);
     RegisterVariable('healthdec', @chHealthDecrease, false);
+    RegisterVariable('inithealth',@chInitHealth, false);
     RegisterVariable('damagepct',@chDamagePercent , false);
     RegisterVariable('ropepct' , @chRopePercent   , false);
     RegisterVariable('getawaytime' , @chGetAwayTime , false);
@@ -903,10 +1000,10 @@ begin
     RegisterVariable('timer'   , @chTimer        , false, true);
     RegisterVariable('taunt'   , @chTaunt        , false);
     RegisterVariable('put'     , @chPut          , false);
-    RegisterVariable('+volup'  , @chVol_p        , true );
-    RegisterVariable('-volup'  , @chVol_m        , true );
-    RegisterVariable('+voldown', @chVol_m        , true );
-    RegisterVariable('-voldown', @chVol_p        , true );
+    RegisterVariable('+volup'  , @chVolUp_p      , true );
+    RegisterVariable('-volup'  , @chVolUp_m      , true );
+    RegisterVariable('+voldown', @chVolDown_p    , true );
+    RegisterVariable('-voldown', @chVolDown_m    , true );
     RegisterVariable('mute'    , @chMute         , true );
     RegisterVariable('findhh'  , @chFindhh       , true );
     RegisterVariable('pause'   , @chPause        , true );
@@ -919,9 +1016,14 @@ begin
     RegisterVariable('+cur_r'  , @chCurR_p       , true );
     RegisterVariable('-cur_r'  , @chCurR_m       , true );
     RegisterVariable('campvar' , @chCampVar      , true );
+    RegisterVariable('missvar' , @chMissVar      , true );
     RegisterVariable('record'  , @chRecord       , true );
     RegisterVariable('worldedge',@chWorldEdge    , false);
     RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);
+    RegisterVariable('+mission', @chShowMission_p, true);
+    RegisterVariable('-mission', @chShowMission_m, true);
+    RegisterVariable('gearinfo', @chGearInfo     , true );
+    RegisterVariable('timer_u' , @chTimerU       , true );
 end;
 
 procedure freeModule;

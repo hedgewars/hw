@@ -26,7 +26,7 @@ local goals = {
 local hero = {
 	name = loc("Hog Solo"),
 	x = 850,
-	y = 460,
+	y = 469,
 	mortarAmmo = 2,
 	firepunchAmmo = 1,
 	deagleAmmo = 4,
@@ -35,20 +35,20 @@ local hero = {
 }
 local heroTurns = 0
 local enemies = {
-	{ name = GetAmmoName(amMortar), x = 1890, y = 520, weapon = amMortar, additionalWeapons = {}},
-	{ name = GetAmmoName(amDEagle), x = 1390, y = 790, weapon = amDEagle, additionalWeapons = {}},
-	{ name = GetAmmoName(amGrenade), x = 186, y = 48, weapon = amGrenade, additionalWeapons = {}},
-	{ name = GetAmmoName(amFirePunch), x = 330, y = 270, weapon = amFirePunch, additionalWeapons = {}},
-	{ name = GetAmmoName(amBazooka), x = 1950, y = 150, weapon = amBazooka, additionalWeapons = {}},
+	{ name = GetAmmoName(amMortar), x = 1890, y = 535, weapon = amMortar, additionalWeapons = {}},
+	{ name = GetAmmoName(amDEagle), x = 1390, y = 815, weapon = amDEagle, additionalWeapons = {}},
+	{ name = GetAmmoName(amGrenade), x = 186, y = 62, weapon = amGrenade, additionalWeapons = {}},
+	{ name = GetAmmoName(amFirePunch), x = 330, y = 285, weapon = amFirePunch, additionalWeapons = {}},
+	{ name = GetAmmoName(amBazooka), x = 1950, y = 152, weapon = amBazooka, additionalWeapons = {}},
 }
 -- teams
 local teamA = {
 	name = loc("Hog Solo"),
-	color = tonumber("38D61C",16) -- green
+	color = -6
 }
 local teamB = {
 	name = loc("5 Deadly Hogs"),
-	color = tonumber("FF0000",16) -- red
+	color = -1
 }
 -- After hero killed an enemy, his weapons will be reset in the next round
 local heroWeaponResetPending = false
@@ -66,21 +66,24 @@ function onGameInit()
 	Explosives = 0
 	Map = "death02_map"
 	Theme = "Hell"
-	Delay = 600 -- this makes the messages between turns more readable
 	-- Disable Sudden Death
 	WaterRise = 0
 	HealthDecrease = 0
 
-	-- Hog Solo
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
-	AnimSetGearPosition(hero.gear, hero.x, hero.y)
+	-- Hero
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
+	SetGearPosition(hero.gear, hero.x, hero.y)
 	-- enemies
 	shuffleHogs(enemies)
-	AddTeam(teamB.name, teamB.color, "skull", "Island", "Default", "cm_skull")
+	teamB.name = AddTeam(teamB.name, teamB.color, "skull", "Island", "Default_qau", "cm_skull")
 	for i=1,table.getn(enemies) do
 		enemies[i].gear = AddHog(enemies[i].name, 1, 100, "war_desertgrenadier1")
-		AnimSetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)
+		SetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)
+		if enemies[i].x > hero.x then
+			HogTurnLeft(enemies[i].gear, true)
+		end
 	end
 
 	initCheckpoint("death02")
@@ -108,7 +111,7 @@ function onNewTurn()
 	battleStarted = true
 	if firstTurn then
 		-- Generous ready time in first turn to more time to read the mission panel
-		ReadyTimeLeft = 35000
+		SetReadyTimeLeft(35000)
 		firstTurn = false
 	end
 	if CurrentHedgehog ~= hero.gear then
@@ -196,6 +199,9 @@ function onHeroDeath(gear)
 end
 
 function onHeroWin(gear)
+	if not IsHogAlive(gear) then
+		return false
+	end
 	local allDead = true
 	for i=1,table.getn(enemies) do
 		if GetHealth(enemies[i].gear) then
@@ -209,7 +215,7 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
 	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies."))
 	SendStat(siCustomAchievement, loc("Read the challenge objectives from within the mission for more details."))
 	sendSimpleTeamRankings({teamB.name, teamA.name})

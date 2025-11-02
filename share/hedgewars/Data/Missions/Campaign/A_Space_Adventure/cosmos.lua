@@ -32,7 +32,7 @@ local dialog08 = {}
 local dialog09 = {}
 -- mission objectives
 local goals = {
-	["init"] = {missionName, loc("Getting ready"), loc("Help Hog Solo to find all the parts of the anti-gravity device.")..
+	["init"] = {missionName, loc("Getting ready"), loc("Find all the parts of the anti-gravity device.")..
 	"|"..loc("Travel to all the neighbor planets and collect all the pieces"), 1, 0},
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
 	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Travel carefully as your fuel is limited"), 1, 4500},
@@ -44,7 +44,7 @@ local goals = {
 		loc("Complete the remaining side missions to complete this mission.").."|"..
 		loc("One flower: Incomplete side missions").."|"..
 		loc("Two flowers: All missions complete"), 1, 8000},
-	["free"] = {missionName, loc("Spacetrip"), loc("Use the flying saucer to fly to the other planets."), 1, 5000}
+	["free"] = {missionName, loc("Spacetrip"), loc("Use the flying saucer to fly to the other planets."), -amJetpack, 5000}
 }
 -- crates
 local saucerX = 3270
@@ -83,11 +83,11 @@ guard2.x = 3400
 guard2.y = 1800
 -- Planetary Association of the Hedgehogs
 teamA.name = loc("PAotH")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
 teamB.name = loc("Guards")
-teamB.color = 0x0072FF -- blue
+teamB.color = -2
 teamC.name = loc("Hog Solo")
-teamC.color = 0x38D61C -- green
+teamC.color = -6
 
 -------------- LuaAPI EVENT HANDLERS ------------------
 function onGameInit()
@@ -98,16 +98,20 @@ function onGameInit()
 
 	Seed = 35
 	ClearGameFlags()
-	EnableGameFlags(gfSolidLand, gfDisableWind, gfTagTeam)
+	EnableGameFlags(gfSolidLand, gfDisableWind)
 	if checkPointReached == 4 then
 		-- Disable walking as long we're stuck on the moon
 		EnableGameFlags(gfArtillery)
 	end
+	if checkPointReached <= 4 and INTERFACE ~= "touch" then
+		-- FIXME: Precise key is not available in Touch
+		goals["init"][3] = goals["init"][3] .. "|" .. loc("Hint: Cinematics can be skipped with the [Precise] key.")
+	end
+
 	TurnTime = 20000
 	CaseFreq = 0
 	MinesNum = 0
 	Explosives = 0
-	Delay = 5
 	-- Disable Sudden Death
 	WaterRise = 0
 	HealthDecrease = 0
@@ -119,19 +123,21 @@ function onGameInit()
 		Map = "cosmos_map" -- custom map included in file
 	end
 	Theme = "Nature"
-	-- I had originally hero in PAotH team and changed it, may reconsider though
-	-- PAotH
-	AddTeam(teamC.name, teamC.color, "Simple", "Island", "Default", "hedgewars")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	-- Hero
+	teamC.name = AddMissionTeam(teamC.color)
+	hero.gear = AddMissionHog(100)
+	hero.name = GetHogName(hero.gear)
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
-	AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default", "cm_galaxy")
+	-- PAotH
+	teamA.name = AddTeam(teamA.name, teamA.color, "Earth", "Island", "Default_qau", "cm_galaxy")
+	SetTeamPassive(teamA.name, true)
 	director.gear = AddHog(director.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(director.gear, director.x, director.y)
 	doctor.gear = AddHog(doctor.name, 0, 100, "Glasses")
 	AnimSetGearPosition(doctor.gear, doctor.x, doctor.y)
 	-- Guards
-	AddTeam(teamB.name, teamB.color, "Statue", "Island", "Default", "cm_swordshield2")
+	teamB.name = AddTeam(teamB.name, teamB.color, "Statue", "Island", "Default_qau", "cm_swordshield2")
 	guard1.gear = AddHog(guard1.name, 1, 100, "policecap")
 	AnimSetGearPosition(guard1.gear, guard1.x, guard1.y)
 	guard2.gear = AddHog(guard2.name, 1, 100, "policecap")
@@ -154,7 +160,7 @@ function onGameInit()
 		startSequence = true
 		AnimSetGearPosition(hero.gear, 1110, 850)
 	elseif checkPointReached == 5 then
-		startSequence = false
+		startSequence = status.death01 and not status.final
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
 		if GetCampaignVar("Planet") == "moon" then
 			AnimSetGearPosition(hero.gear, 1110, 850)
@@ -191,6 +197,8 @@ function onGameStart()
 		else
 			ShowMission(unpack(goals["open_side_missions"]))
 		end
+	elseif status.death01 and not status.final then
+		HideMission()
 	else
 		ShowMission(unpack(goals["init"]))
 	end
@@ -306,7 +314,7 @@ function onNewTurn()
 			getReadyForRumble = false
 		else
 			if guard1.keepTurning then
-				TurnTimeLeft = -1
+				SetTurnTimeLeft(MAX_TURN_TIME)
 			end
 		end
 	elseif not onHeroDeath() and CurrentHedgehog == director.gear or CurrentHedgehog == doctor.gear then
@@ -468,14 +476,14 @@ function moonLanding(gear)
 			SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
 		end
 		AnimCaption(hero.gear,loc("Welcome to the moon!"))
-		TurnTimeLeft = -1
+		SetTurnTimeLeft(MAX_TURN_TIME)
 		SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 		SaveCampaignVar("Planet", "moon")
 		SaveCampaignVar("UnlockedMissions", "3")
 		SaveCampaignVar("Mission1", "2")
 		SaveCampaignVar("Mission2", "13")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("Hog Solo arrived at the moon!"))
+		sendStats(string.format(loc("%s arrived at the moon!"), hero.name))
 	end
 end
 
@@ -508,7 +516,7 @@ function fruitPlanetLanding(gear)
 			SaveCampaignVar("Mission2", "10")
 			SaveCampaignVar("Mission3", "1")
 		end
-		sendStats(loc("Hog Solo arrived at the Fruit Planet!"))
+		sendStats(string.format(loc("%s arrived at the Fruit Planet!"), hero.name))
 	end
 end
 
@@ -523,7 +531,7 @@ function desertPlanetLanding(gear)
 		SaveCampaignVar("Mission2", "7")
 		SaveCampaignVar("Mission3", "12")
 		SaveCampaignVar("Mission4", "1")
-		sendStats(loc("Hog Solo arrived at the Desert Planet!"))
+		sendStats(string.format(loc("%s arrived at the Desert Planet!"), hero.name))
 	end
 end
 
@@ -537,7 +545,7 @@ function icePlanetLanding(gear)
 		SaveCampaignVar("Mission1", "5")
 		SaveCampaignVar("Mission2", "6")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("Hog Solo arrived at the Ice Planet!"))
+		sendStats(string.format(loc("%s arrived at the Ice Planet!"), hero.name))
 	end
 end
 
@@ -553,7 +561,7 @@ function deathPlanetLanding(gear)
 		SaveCampaignVar("Mission1", "9")
 		SaveCampaignVar("Mission2", "11")
 		SaveCampaignVar("Mission3", "1")
-		sendStats(loc("Hog Solo arrived at the Planet of Death!"))
+		sendStats(string.format(loc("%s arrived at the Planet of Death!"), hero.name))
 	end
 end
 
@@ -569,7 +577,7 @@ function meteoriteLanding(gear)
 		SaveCampaignVar("UnlockedMissions", "2")
 		SaveCampaignVar("Mission1", "14")
 		SaveCampaignVar("Mission2", "1")
-		sendStats(loc("Hog Solo arrived at the meteorite!"))
+		sendStats(string.format(loc("%s arrived at the meteorite!"), hero.name))
 	end
 end
 
@@ -600,9 +608,9 @@ function setFoundDeviceVisual()
 		end
 	end
 	if status.desert01 then
-		vgear = AddVisualGear(4015, 316, vgtBeeTrace, 0, false)
+		vgear = AddVisualGear(3759, 28, vgtBeeTrace, 0, false)
 		if status.desert02 and status.desert03 then
-			vgear = AddVisualGear(4015, 296, vgtBeeTrace, 0, false)
+			vgear = AddVisualGear(3759, 8, vgtBeeTrace, 0, false)
 		end
 	end
 	if status.fruit01 and status.fruit02 then
@@ -650,7 +658,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {doctor.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near Secret Base 17 of PAotH in the rural Hogland ..."),  4000}})
-	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("So Hog Solo, here we are ..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {director.gear, string.format(loc("So, %s, here we are ..."), hero.name), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Behind these trees on the east side there is Secret Base 17."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("You have to continue alone from now on."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Be careful, the future of Hogera is in your hands!"), SAY_SAY, 7200}})
@@ -706,7 +714,7 @@ function AnimationSetup()
 	-- DIALOG 08 - Hero wins death01
 	AddSkipFunction(dialog08, Skipanim, {dialog08})
 	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorite’s shadow ..."),  4000}})
-	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("You did great, Hog Solo! However, we aren't out of danger yet!"), SAY_SHOUT, 4500}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, string.format(loc("You did great, %s! However, we aren't out of danger yet!"), hero.name), SAY_SHOUT, 4500}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to stop it now."), SAY_SHOUT, 5000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need it to get split into at least two parts."), SAY_SHOUT, 3000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("PAotH has sent explosives but unfortunately the trigger mechanism seems to be faulty!"), SAY_SHOUT, 5000}})
@@ -739,22 +747,21 @@ function sendStats(planetMsg)
 	if GetCampaignVar("Won") == "true" and GetCampaignVar("Mission1Won") ~= "true" then
 		SendStat(siCustomAchievement, loc("Complete all main and side missions to complete the spacetrip mission."))
 	end
-	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
 
 function sendStatsOnRetry()
 	SendStat(siGameResult, loc("You have to travel again"))
-	SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel."))
+	if checkPointReached < 4 then
+		SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel."))
+	end
 	SendStat(siCustomAchievement, loc("You have to be careful and must not die!"))
-	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
 
 function sendStatsOnStuckOnMoon()
 	SendStat(siGameResult, loc("You have to go back to the moon!"))
 	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets."))
-	sendSimpleTeamRankings({teamC.name})
 	EndGame()
 end
 
@@ -764,7 +771,6 @@ function sendStatsOnRopedToMoon()
 		SendStat(siGameResult, loc("You have violated PAotH regulations!"))
 		SendStat(siCustomAchievement, loc("You have triggered the secret Do-Not-Rope-to-the-Moon Defense System."))
 		SendStat(siCustomAchievement, loc("Use the flying saucer from the crate to fly to the moon."))
-		sendSimpleTeamRankings({teamC.name})
 		EndGame()
 	end
 end

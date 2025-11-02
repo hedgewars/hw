@@ -1,11 +1,14 @@
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local hhs = {}
 local missionWon = nil
+local missionEndHandled = false
 local endTimer = 1000
 local hogsKilled = 0
 local finishTime
 local ouchies = false
+local valkyriesTimer = -1
 
 local HogData =	{
 					{"amn",			"NinjaFull",false},
@@ -70,25 +73,35 @@ local HogData =	{
 
 				}
 
-local playerTeamName = loc("Wannabe Shoppsta")
-
-function GenericEnd()
-	EndGame()
-end
+local playerTeamName
 
 function GetKillScore()
 	return math.ceil((hogsKilled / 16)*6000)
 end
 
+function ProtectEnemies()
+	for i=1, 16 do
+		if hhs[i] and GetHealth(hhs[i]) then
+			SetEffect(hhs[i], heInvulnerable, 1)
+		end
+	end
+end
+
 function GameOverMan()
+	StopMusicSound(sndRideOfTheValkyries)
+	valkyriesTimer = -1
 	missionWon = false
-	ShowMission(loc("Rope-knocking Challenge"), loc("Challenge over!"), loc("Oh no! Just try again!"), -amSkip, 0)
+	ProtectEnemies()
 	SendStat(siGameResult, loc("Challenge over!"))
 	local score = GetKillScore()
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, score))
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
-	PlaySound(sndHellish)
+
+	-- Update highscore
+	updateChallengeRecord("Highscore", score)
+
+	EndGame()
 end
 
 function GG()
@@ -100,11 +113,20 @@ function GG()
 	local hogScore = GetKillScore()
 	local timeScore = math.ceil((finishTime/TurnTime)*6000)
 	local score = hogScore + timeScore
+
 	SendStat(siCustomAchievement, string.format(loc("You have killed %d of 16 hedgehogs (+%d points)."), hogsKilled, hogScore))
 	SendStat(siCustomAchievement, string.format(loc("You have completed this challenge in %.2f s (+%d points)."), completeTime, timeScore))
-	SendStat(siPointType, loc("points"))
+	SendStat(siPointType, "!POINTS")
 	SendStat(siPlayerKills, tostring(score), playerTeamName)
 	SetTeamLabel(playerTeamName, tostring(score))
+
+	-- Update highscore
+	updateChallengeRecord("Highscore", score)
+
+	if hhs[0] and GetHealth(hhs[0]) then
+		SetEffect(hhs[0], heInvulnerable, 1)
+	end
+	SetTurnTimeLeft(MAX_TURN_TIME)
 end
 
 function AssignCharacter(p)
@@ -139,7 +161,6 @@ function onGameInit()
 	GameFlags = gfBorder + gfSolidLand
 
 	TurnTime = 180 * 1000
-	Delay = 500
 	Map = "Ropes"
 	Theme = "Eyes"
 
@@ -151,17 +172,16 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	AddTeam(playerTeamName, 0xFF0204, "money", "Island", "Default", "cm_shoppa")
-	hhs[0] = AddHog(loc("Ace"), 0, 1, "Gasmask")
-	SetGearPosition(player, 1380, 1500)
+	playerTeamName = AddMissionTeam(-1)
+	hhs[0] = AddMissionHog(1)
 
-	AddTeam(loc("Unsuspecting Louts"), 0x4980C1, "Simple", "Island", "Default", "cm_face")
+	AddTeam(loc("Unsuspecting Louts"), -2, "Simple", "Island", "Default", "cm_face")
 	for i = 1, 8 do
 		-- The name "generic" is a placeholder and will be replaced in AssignCharacter
 		hhs[i] = AddHog("generic", 0, 1, "NoHat")
 	end
 
-	AddTeam(loc("Unlucky Sods"), 0x4980C1, "Simple", "Island", "Default", "cm_balrog")
+	AddTeam(loc("Unlucky Sods"), -2, "Simple", "Island", "Default", "cm_balrog")
 	for i = 9, 16 do
 		hhs[i] = AddHog("generic", 0, 1, "NoHat")
 	end
@@ -173,11 +193,17 @@ end
 function onGameStart()
 	SendHealthStatsOff()
 
+	local recordInfo = getReadableChallengeRecord("Highscore")
+	if recordInfo == nil then
+		recordInfo = ""
+	else
+		recordInfo = "|" .. recordInfo
+	end
 	ShowMission     (
                         loc("Rope-knocking Challenge"),
                         loc("Challenge"),
                         loc("Use the rope to knock your enemies to their doom.") .. "|" ..
-                        loc("Finish this challenge as fast as possible to earn bonus points."),
+                        loc("Finish this challenge as fast as possible to earn bonus points.").. recordInfo,
                         -amRope, 4000)
 	SetTeamLabel(playerTeamName, "0")
 
@@ -200,6 +226,7 @@ function onGameStart()
 	SetGearPosition(hhs[14], 3360, 659)
 	SetGearPosition(hhs[15], 3885, 285)
 	SetGearPosition(hhs[16], 935, 1160)
+	HogTurnLeft(hhs[0], true)
 
 	for i = 1, 16 do
 		AssignCharacter(i)
@@ -217,23 +244,37 @@ function onGameTick()
 
 		endTimer = endTimer - 1
 		if endTimer == 1 then
-			GenericEnd()
+			EndGame()
 		end
 
-		if missionWon == true then
-			AddCaption(loc("Victory!"), 0xFFFFFFFF,capgrpGameState)
-		else
-			AddCaption(loc("Challenge over!"), 0xFFFFFFFF,capgrpGameState)
+		if not missionEndHandled then
+			if missionWon == true then
+				SaveMissionVar("Won", "true")
+				AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
+			end
+			missionEndHandled = true
 		end
 
 	end
 
 end
 
+function onGameTick20()
+	if (valkyriesTimer > 0) then
+		valkyriesTimer = valkyriesTimer - 20
+		if valkyriesTimer <= 0 then
+			StopMusicSound(sndRideOfTheValkyries)
+		end
+	end
+end
+
 function onGearDamage(gear, damage)
 
 	if gear == hhs[0] then
 		ouchies = true
+		StopMusicSound(sndRideOfTheValkyries)
+		valkyriesTimer = -1
+		ProtectEnemies()
 	end
 
 	if gear ~= hhs[0] and GetGearType(gear) == gtHedgehog and missionWon == nil and ouchies == false then
@@ -241,13 +282,15 @@ function onGearDamage(gear, damage)
 		AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 		DeleteGear(gear)
 		PlaySound(sndExplosion)
-		AddCaption(string.format(knockTaunt(), GetHogName(gear)), 0xFFFFFFFF, capgrpMessage)
+		AddCaption(string.format(knockTaunt(), GetHogName(gear)), capcolDefault, capgrpMessage)
 
 		hogsKilled = hogsKilled +1
 		SetTeamLabel(playerTeamName, tostring(GetKillScore()))
 
 		if hogsKilled == 15 then
-			PlaySound(sndRideOfTheValkyries)
+			PlayMusicSound(sndRideOfTheValkyries)
+			-- Time in ms after which to return to normal music
+			valkyriesTimer = 20000
 		elseif hogsKilled == 16 then
 			finishTime = TurnTimeLeft
 			GG()

@@ -1,10 +1,10 @@
 /******************************************************************************
  *
- * CSS-like definition of Qt frontend appearance
+ * CSS definition of Qt frontend appearance: Default style.
  *
  ******************************************************************************
  *
- * see http://doc.qt.nokia.com/4.5/stylesheet.html
+ * see https://doc.qt.io/qt-5/style-reference.html
  *
  ******************************************************************************
  *
@@ -93,6 +93,9 @@ margin: 6px 0px 6px 0px;
 TeamShowWidget QPushButton:disabled {
 color: #a0a0a0;
 }
+TeamShowWidget QPushButton:pressed {
+background-color: #362c7a;
+}
 
 QToolButton {
 background-color: #11084A;
@@ -100,10 +103,6 @@ background-color: #11084A;
 
 QToolButton:hover {
 background-color: #150A61;
-}
-
-QToolButton:pressed {
-background-color: #100744;
 }
 
 QLineEdit, QListWidget, QListView, QTableView, QTableWidget, QTextBrowser,
@@ -171,6 +170,8 @@ background-color: rgba(18, 42, 5, 70%);
 
 QPushButton:pressed, QToolButton:pressed {
 border-color: white;
+background-color: #344b1e;
+color: white;
 }
 
 QPushButton:focus {
@@ -191,13 +192,14 @@ border-left-width: 1px;
 border-right-width: 1px;
 border-top-width: 0;
 border-bottom-width: 0px;
-border-color: #001d10;
+border-color: #005F35;
 border-style: solid;
 background-color: #00351d;
 padding: 4px;
 }
 QHeaderView::section:pressed {
-background-color: #00250d;
+background-color: #005A33;
+border-color: #FFFFFF;
 }
 QHeaderView::up-arrow {
 image: url(":/res/sort_up.png");
@@ -227,6 +229,7 @@ QSpinBox::up-button{
 background: transparent;
 width: 16px;
 height: 10px;
+padding-top: 1px;
 }
 
 QSpinBox::up-arrow {
@@ -247,8 +250,13 @@ QSpinBox::down-button {
 background: transparent;
 width: 16px;
 height: 10px;
+padding-bottom: 1px;
 }
 
+QSpinBox, QLineEdit {
+padding: 3px;
+min-height: 18px;
+}
 QComboBox {
 border-radius: 10px;
 padding: 3px;
@@ -401,10 +409,80 @@ text-align: left;
 border-color: #F6CB1C;
 }
 
-#hatList QScrollBar, #themeList QScrollBar {
-background-color: #130F2A;
-border-top-right-radius: 10px;
-border-bottom-right-radius: 10px;
+QScrollBar:vertical {
+border: none;
+color: #FFD902;
+background: #00321c;
+width: 15px;
+margin: 17px 0 17px 0;
+}
+QScrollBar:horizontal {
+border: none;
+color: #FFD902;
+background: #00321c;
+height: 15px;
+margin: 0 17px 0 17px;
+}
+QScrollBar::handle:vertical {
+background: #00321c;
+border: 1px solid #005F35;
+border-radius: 2px;
+min-height: 20px;
+}
+QScrollBar::handle:horizontal {
+background: #00321c;
+border: 1px solid #005F35;
+border-radius: 2px;
+min-width: 20px;
+}
+QScrollBar::handle:pressed {
+background: #005a33;
+border-color: #FFFFFF;
+}
+QScrollBar::add-line, QScrollBar::sub-line {
+border: 1px solid #005F35;
+border-radius: 2px;
+background: #00321c;
+subcontrol-origin: margin;
+}
+QScrollBar::add-line:vertical {
+height: 15px;
+subcontrol-position: bottom;
+}
+QScrollBar::sub-line:vertical {
+height: 15px;
+subcontrol-position: top;
+}
+QScrollBar::add-line:horizontal {
+width: 15px;
+subcontrol-position: right;
+}
+QScrollBar::sub-line:horizontal {
+width: 15px;
+subcontrol-position: left;
+}
+QScrollBar::add-line:pressed, QScrollBar::sub-line:pressed {
+background: #005a33;
+border-color: #FFFFFF;
+}
+
+QScrollBar::up-arrow {
+background-image: url(":/res/scroll_up.png");
+}
+QScrollBar::down-arrow {
+background-image: url(":/res/scroll_down.png");
+}
+QScrollBar::left-arrow {
+background-image: url(":/res/scroll_left.png");
+}
+QScrollBar::right-arrow {
+background-image: url(":/res/scroll_right.png");
+}
+QScrollBar::add-page, QScrollBar::sub-page {
+background: #00190F;
+}
+QScrollBar::add-page:pressed, QScrollBar::sub-page:pressed {
+background: #008751;
 }
 
 #hatList, #themeList {
@@ -433,7 +511,7 @@ background-color: #150A61;
 background-color: #150A61;
 }
 
-QDialogButtonBox QPushButton {
+.QPushButton, .QPushButtonWithSound {
 padding: 3px 5px;
 }
 
@@ -448,4 +526,41 @@ border-radius: 10px;
 
 PageMultiplayer TeamSelWidget {
 min-height: 500px;
+}
+
+QProgressBar {
+border: 3px solid #FFCC00;
+background-color: #150A61;
+border-radius: 5px;
+text-align: center;
+color: #FFFFFF;
+}
+QProgressBar::chunk {
+background-color: #FF9B00;
+margin: 2px;
+}
+#keyBinderScrollArea {
+background: #130F2A;
+}
+#chatContainer {
+border-width: 0px;
+background-color: #ffcc00;
+border-radius: 10px;
+}
+#chatText {
+background-color: rgb(23, 11, 54);
+border-width: 0px;
+}
+#trainingList {
+border-style: none;
+padding-top: 6px;
+}
+#trainingList::item
+{
+padding-top: 2px;
+padding-bottom: 2px;
+}
+ToggleButtonWidget
+{
+padding: 0px;
 }

@@ -5,11 +5,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
-#ifdef EMSCRIPTEN
-#include <GL/gl.h>
-#else
-#include <GL/glew.h>
-#endif
+#include "GL.h"
 
 #define     VA_NUM_ARGS(...)                        VA_NUM_ARGS_IMPL(__VA_ARGS__, 5,4,3,2,1)
 #define     VA_NUM_ARGS_IMPL(_1,_2,_3,_4,_5,N,...)  N
@@ -20,7 +16,8 @@
 
 //#define     FPCRTL_DEBUG
 
-#define     FIX_STRING(s)                           (s.str[s.len == 255 ? 254 : s.len] = 0)
+#define     FIX_STRING(s)                           do { s.str[s.len == 255 ? 254 : s.len] = 0; } while (0)
+#define     FIX_STRINGA(s)                          do { s.str[s.len == MAX_ANSISTRING_LENGTH ? MAX_ANSISTRING_LENGTH - 1 : s.len] = 0; } while (0)
 //#define fpcrtl_check_string(s)     do{ if(strlen((s).str) != (s).len){ \
 //                                        printf("String %s internal inconsistency error. Length should be %d but actually is %d.\n", (s).str, strlen((s).str), (s).len); \
 //                                        assert(0);\
@@ -57,10 +54,5 @@ astring     fpcrtl_pchar2astr(const char *s);
 astring     fpcrtl_str2astr(const string255 s);
 string255   fpcrtl_astr2str(const astring s);
 #define     fpcrtl_TypeInfo                         sizeof // dummy
-
-#ifdef EMSCRIPTEN
-#define     GLEW_OK                                 1
-GLenum      glewInit();
-#endif
 
 #endif

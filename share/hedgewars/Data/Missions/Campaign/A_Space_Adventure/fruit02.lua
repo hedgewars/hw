@@ -14,6 +14,7 @@ local inBattle = false
 local tookPartInBattle = false
 local previousHog = -1
 local permitCaptainLimeDeath = false
+local fixedWind = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -22,12 +23,7 @@ local dialog04 = {}
 local dialog05 = {}
 -- mission objectives
 local minesTimeText = loc("Mines time: 0 seconds")
-local goals = {
-	[dialog01] = {missionName, loc("Exploring the tunnel"), loc("Search for the device with the help of the other hedgehogs ").."|"..loc("Hog Solo has to reach the last crates") .. "|" .. minesTimeText, 1, 4000},
-	[dialog02] = {missionName, loc("Exploring the tunnel"), loc("Explore the tunnel with the other hedgehogs and search for the device").."|"..loc("Hog Solo has to reach the last crates") .. "|" .. minesTimeText, 1, 4000},
-	[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back").."|"..minesTimeText, 1, 4000},
-	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assassins before they attack back").."|"..minesTimeText, 1, 4000},
-}
+local goals
 -- crates
 local girderCrate = {name = amGirder, x = 1680, y = 1160}
 
@@ -51,13 +47,16 @@ hero.x = 1200
 hero.y = 820
 hero.dead = false
 green1.name = loc("Captain Lime")
+green1.hat = "war_desertofficer"
 green1.x = 1050
 green1.y = 820
 green1.dead = false
 green2.name = loc("Mister Pear")
+green2.hat = "war_britmedic"
 green2.x = 1350
 green2.y = 820
 green3.name = loc("Lady Mango")
+green3.hat = "hair_red"
 green3.x = 1450
 green3.y = 820
 local redHedgehogs = {
@@ -68,11 +67,15 @@ local redHedgehogs = {
 }
 -- Hog Solo and Green Bananas
 teamA.name = loc("Hog Solo and GB")
-teamA.color = 0x38D61C -- green
+teamA.color = -6
+-- Captain Lime can use one of 2 clan colors:
+-- One when being friendly (same as hero), and a different one when he turns evil.
+-- Captain Lime be in his own clan.
 teamB.name = loc("Captain Lime")
-teamB.color = 0x38D61D -- greenish
+teamB.colorNice = teamA.color
+teamB.colorEvil = -5
 teamC.name = loc("Fruit Assassins")
-teamC.color = 0xFF0000 -- red
+teamC.color = -1
 
 function onGameInit()
 	GameFlags = gfDisableWind
@@ -82,7 +85,6 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	Delay = 3
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
@@ -91,28 +93,61 @@ function onGameInit()
 
 	local health = 100
 
-	-- Hog Solo and Green Bananas
-	AddTeam(teamA.name, teamA.color, "Simple", "Island", "Default", "hedgehog")
-	hero.gear = AddHog(hero.name, 0, health, "war_desertgrenadier1")
-	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	HogTurnLeft(hero.gear, true)
-	green2.gear = AddHog(green2.name, 0, 100, "war_britmedic")
-	AnimSetGearPosition(green2.gear, green2.x, green2.y)
-	HogTurnLeft(green2.gear, true)
-	green3.gear = AddHog(green3.name, 0, 100, "hair_red")
-	AnimSetGearPosition(green3.gear, green3.x, green3.y)
-	HogTurnLeft(green3.gear, true)
-	-- Captain Lime
-	AddTeam(teamB.name, teamB.color, "Cherry", "Island", "Default", "congo-brazzaville")
-	green1.gear= AddHog(green1.name, 0, 100, "war_desertofficer")
-	AnimSetGearPosition(green1.gear, green1.x, green1.y)
+
 	-- Fruit Assassins
 	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
-	AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default", "cm_scout")
+	teamC.name = AddTeam(teamC.name, teamC.color, "bp2", "Island", "Default_qau", "cm_scout")
 	for i=1,table.getn(redHedgehogs) do
 		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
-		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
+		SetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
 	end
+	local assassinsColor = div(GetClanColor(GetHogClan(redHedgehogs[1].gear)), 0x100)
+
+	-- Hero and Green Bananas
+	teamA.name = AddMissionTeam(teamA.color)
+	hero.gear = AddMissionHog(health)
+	hero.name = GetHogName(hero.gear)
+	SetHogTeamName(hero.gear, string.format(loc("%s and GB"), teamA.name))
+	teamA.name = GetHogTeamName(hero.gear)
+	SetGearPosition(hero.gear, hero.x, hero.y)
+	HogTurnLeft(hero.gear, true)
+	local heroColor = div(GetClanColor(GetHogClan(hero.gear)), 0x100)
+
+	-- companions
+	-- Change companion identity if they have same name as hero
+	-- to avoid confusion.
+	if green2.name == hero.name then
+		green2.name = loc("Green Hog Grape")
+		green2.hat = "war_desertsapper1"
+	elseif green3.name == hero.name then
+		green3.name = loc("Green Hog Grape")
+		green3.hat = "war_desertsapper1"
+	end
+	green2.gear = AddHog(green2.name, 0, 100, green2.hat)
+	SetGearPosition(green2.gear, green2.x, green2.y)
+	HogTurnLeft(green2.gear, true)
+
+	green3.gear = AddHog(green3.name, 0, 100, green3.hat)
+	SetGearPosition(green3.gear, green3.x, green3.y)
+	HogTurnLeft(green3.gear, true)
+
+	-- Captain Lime
+        -- Spawn with his "true" evil color so a new clan is created for Captain Lime ...
+	teamB.name = AddTeam(teamB.name, teamB.colorEvil, "Cherry", "Island", "Default_qau", "congo-brazzaville")
+	SetTeamPassive(teamB.name, true)
+	green1.gear = AddHog(green1.name, 0, 100, green1.hat)
+	-- ... however, we immediately change the color to "nice mode".
+	-- Captain Lime starts as (seemingly) friendly in this mission.
+	SetClanColor(GetHogClan(green1.gear), teamB.colorNice)
+	SetGearPosition(green1.gear, green1.x, green1.y)
+
+	-- Populate goals table
+	goals = {
+		[dialog01] = {missionName, loc("Exploring the tunnel"), loc("Search for the device with the help of the other hedgehogs.").."|"..string.format(loc("%s must collect the final crates."), hero.name) .. "|" .. minesTimeText, 1, 4000},
+		[dialog02] = {missionName, loc("Exploring the tunnel"), loc("Explore the tunnel with the other hedgehogs and search for the device.").."|"..string.format(loc("%s must collect the final crates."), hero.name) .. "|" .. minesTimeText, 1, 4000},
+		[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back.").."|"..minesTimeText, 1, 4000},
+		[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assassins before they attack back.").."|"..minesTimeText, 1, 4000},
+	}
 
 	AnimInit(true)
 	AnimationSetup()
@@ -129,7 +164,7 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onDeviceCrates, {hero.gear}, deviceCrateEvent, {hero.gear}, 0)
 
-	-- Hog Solo and GB weapons
+	-- Hero and Green Bananas weapons
 	AddAmmo(hero.gear, amSwitch, 100)
 	-- Assassins weapons
 	AddAmmo(redHedgehogs[1].gear, amBazooka, 6)
@@ -145,19 +180,47 @@ function onGameStart()
 	local x2 = 1306
 	local y1 = 1210
 	local y2 = 1620
-	while true do
-		if y2<y1 then
-			break
-		end
-		if x2<x1 then
-			x2 = 1305
-			y2 = y2 - 50
-		end
-		if not TestRectForObstacle(x2+25, y2+25, x2-25, y2-25, true) then
-			AddGear(x2, y2, gtExplosives, 0, 0, 0, 0)
-		end
-		x2 = x2 - 25
+
+	-- barrel mania in the large hole
+	local barrels = {
+		{1290, 1618},
+		{1285, 1587},
+		{1287, 1556},
+		{1286, 1525},
+		{1247, 1637},
+		{1250, 1606},
+		{1249, 1575},
+		{1251, 1544},
+		{1206, 1646},
+		{1211, 1615},
+		{1209, 1584},
+		{1166, 1646},
+		{1168, 1615},
+		{1170, 1584},
+		{1125, 1637},
+		{1120, 1606},
+		{1128, 1575},
+		{1089, 1622},
+		{1084, 1591},
+		{1093, 1560},
+		{1044, 1596},
+		{1044, 1565},
+		{1005, 1554},
+		{1005, 1523},
+		{973, 1492},
+		{1062, 1534},
+		{1128, 1544},
+		{1168, 1553},
+		{1210, 1553},
+		{1097, 1529},
+		{1040, 1505},
+	}
+	for b=1, #barrels do
+		local barrel = AddGear(barrels[b][1], barrels[b][2], gtExplosives, 0, 0, 0, 0)
+		SetHealth(barrel, 21)
 	end
+
+	-- single barrel at the right corner
 	AddGear(3128, 1680, gtExplosives, 0, 0, 0, 0)
 
 	--mines
@@ -198,24 +261,29 @@ end
 
 function onNewTurn()
 	if not inBattle and CurrentHedgehog == green1.gear then
-		EndTurn(true)
-	elseif CurrentHedgehog == green2.gear or CurrentHedgehog == green3.gear then
-		EndTurn(true)
+		SkipTurn()
+	elseif (not inBattle) and GetHogTeamName(CurrentHedgehog) == teamA.name then
+		if CurrentHedgehog ~= hero.gear then
+			-- FIXME: This screw up the selected weapon caption, as
+			-- SwitchHog does not update the selected display caption
+			AnimSwitchHog(hero.gear)
+		end
+		-- Workaround: Add a caption that overwrites the displayed weapon display
+		AddCaption(loc("Let's go!"), capcolDefault, capgrpAmmoinfo)
+		SetTurnTimeLeft(MAX_TURN_TIME)
+		wind()
 	elseif inBattle then
 		if CurrentHedgehog == green1.gear and previousHog ~= hero.gear then
-			EndTurn(true)
+			SkipTurn()
 			return
 		end
 		for i=1,table.getn(redHedgehogs) do
 			if CurrentHedgehog == redHedgehogs[i].gear and previousHog ~= hero.gear then
-				EndTurn(true)
+				SkipTurn()
 				return
 			end
 		end
-		TurnTimeLeft = 20000
-		wind()
-	elseif not inBattle and CurrentHedgehog == hero.gear then
-		TurnTimeLeft = -1
+		SetTurnTimeLeft(20000)
 		wind()
 	else
 		EndTurn(true)
@@ -238,8 +306,16 @@ function onGameTick20()
 		heroDeath()
 		permitCaptainLimeDeath = true
 	end
-	if CurrentHedgehog and GetY(CurrentHedgehog) > 1350 then
-		SetWind(-40)
+	if (not fixedWind) and CurrentHedgehog and GetY(CurrentHedgehog) > 1350 then
+		fixedWind = true
+		wind()
+	end
+end
+
+function onGearAdd(gear)
+	-- Turn sticky flames to normal flames, to reduce the waiting time after blowing up the barrels
+	if GetGearType(gear) == gtFlame and band(GetState(gear), gsttmpFlag) ~= 0 then
+		SetState(gear, band(GetState(gear), bnot(gsttmpFlag)))
 	end
 end
 
@@ -254,8 +330,6 @@ function onGearDelete(gear)
 			AddCaption(loc("Anti-Gravity Device Part (+1)"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmostate)
 			deviceCrate.collected = true
 			deviceCrate.collector = CurrentHedgehog
-			-- Spawn rope crate
-			SpawnSupplyCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 		end
 	end
 end
@@ -311,7 +385,10 @@ function onSurface(gear)
 	return false
 end
 
-function onGaptainLimeDeath(gear)
+function onCaptainLimeDeath(gear)
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then
+		return false
+	end
 	if green1.dead then
 		return true
 	end
@@ -319,6 +396,9 @@ function onGaptainLimeDeath(gear)
 end
 
 function onRedTeamDeath(gear)
+	if (not IsHogAlive(hero.gear)) or (not StoppedGear(hero.gear)) then
+		return false
+	end
 	local redDead = true
 	for i=1,table.getn(redHedgehogs) do
 		if GetHealth(redHedgehogs[i].gear) then
@@ -334,13 +414,13 @@ ended = false
 
 function heroDeath(gear)
 	if not ended then
-		SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-		SendStat(siCustomAchievement, loc("To win the game, Hog Solo has to get the bottom crates and come back to the surface."))
+		SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+		SendStat(siCustomAchievement, string.format(loc("To win the game, %s has to get the bottom crates and come back to the surface."), hero.name))
 		SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you."))
 		SendStat(siCustomAchievement, loc("Do not destroy the crates!"))
 		if tookPartInBattle then
 			if permitCaptainLimeDeath then
-				SendStat(siCustomAchievement, loc("You'll have to eliminate the Fruit Assassins at the end."))
+				SendStat(siCustomAchievement, string.format(loc("You'll have to eliminate %s at the end."), teamC.name))
 				sendSimpleTeamRankings({teamC.name, teamA.name})
 			else
 				sendSimpleTeamRankings({teamA.name})
@@ -364,7 +444,7 @@ function deviceCrateEvent(gear)
 	-- Stop hedgehog
 	SetGearMessage(deviceCrate.collector, 0)
 	if deviceCrate.collector == hero.gear then
-		-- Hog Solo collected the device crate
+		-- Hero collected the device crate
 
 		if not tookPartInBattle then
 			-- Captain Lime turns evil
@@ -400,7 +480,7 @@ function surface(gear)
 		AddAmmo(green1.gear, amBazooka, 6)
 		AddAmmo(green1.gear, amGrenade, 6)
 		AddAmmo(green1.gear, amDEagle, 2)
-		AddEvent(onGaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
+		AddEvent(onCaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
 	end
 	EndTurn(true)
 	escapeHog(green2.gear)
@@ -423,7 +503,7 @@ function redTeamDeath(gear)
 	saveCompletedStatus(3)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
 	SendStat(siCustomAchievement, loc("You retrieved the lost part."))
-	SendStat(siCustomAchievement, loc("You defended yourself against the Fruit Assassins."))
+	SendStat(siCustomAchievement, string.format(loc("You defended yourself against %s."), teamC.name))
 	sendSimpleTeamRankings({teamA.name, teamC.name})
 	EndGame()
 end
@@ -433,6 +513,9 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
+	end
+	if anim == dialog03 or anim == dialog04 then
+		spawnRopeCrate()
 	end
 	if anim == dialog03 then
 		makeCptLimeEvil()
@@ -444,10 +527,10 @@ function Skipanim(anim)
 end
 
 function AnimationSetup()
-	-- DIALOG 01 - Start, Captain Lime helps Hog Solo because he took part in the battle
+	-- DIALOG 01 - Start, Captain Lime helps the hero because he took part in the battle
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere else on the planet of fruits, Captain Lime helps Hog Solo"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, string.format(loc("Somewhere else on the planet of fruits, Captain Lime helps %s"), hero.name), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You fought bravely and you helped us win this battle!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("So, as promised I have brought you where I think that the device you are looking for is hidden."), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I know that your resources are low due to the battle but I'll send two of my best hogs to assist you."), SAY_SAY, 7000}})
@@ -455,10 +538,10 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	table.insert(dialog01, {func = ShowMission, args = goals[dialog01]})
-	-- DIALOG02 - Start, Hog Solo escaped from the previous battle
+	-- DIALOG02 - Start, hero escaped from the previous battle
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Somewhere else on the planet of fruits Hog Solo gets closer to the device"), 5000}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, string.format(loc("Somewhere else on the planet of fruits, %s gets closer to the device"), hero.name), 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You are the one who fled! So, you are alive."), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I'm still low on hogs. If you are not afraid I could use a set of extra hands."), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 8000}})
@@ -477,8 +560,9 @@ function AnimationSetup()
 	table.insert(dialog03, {func = FollowGear, args = {hero.gear}})
 	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hooray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! When he returns I'll shoot him and keep that device for myself!"), SAY_THINK, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, string.format(loc("This %s is so naive! I'm going to shoot this fool so I can keep that device for myself!"), hero.name), SAY_THINK, 4000}})
 	table.insert(dialog03, {func = ShowMission, args = goals[dialog03]})
+	table.insert(dialog03, {func = spawnRopeCrate, args = {hero.gear}})
 	table.insert(dialog03, {func = makeCptLimeEvil, args = {hero.gear}})
 	-- DIALOG04 - At crates, hero learns about the Assassins ambush
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
@@ -488,6 +572,7 @@ function AnimationSetup()
 	table.insert(dialog04, {func = AnimWait, args = {redHedgehogs[1].gear, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {redHedgehogs[1].gear, loc("We have spotted the enemy! We'll attack when the enemies start gathering!"), SAY_THINK, 4000}})
 	table.insert(dialog04, {func = ShowMission, args = goals[dialog04]})
+	table.insert(dialog04, {func = spawnRopeCrate, args = {hero.gear}})
 	table.insert(dialog04, {func = goToThesurface, args = {hero.gear}})
 end
 
@@ -522,7 +607,15 @@ end
 function makeCptLimeEvil()
 	-- Turn Captain Lime evil
 	SetHogLevel(green1.gear, 1)
+	SetTeamPassive(teamB.name, false)
+	-- ... and reveal his "true" evil color. Muhahaha!
+	SetClanColor(GetHogClan(green1.gear), teamB.colorEvil)
 	EndTurn(true)
+end
+
+function spawnRopeCrate()
+	-- should be spawned after the device part was gotten and the cut scene finished.
+	SpawnSupplyCrate(ropeCrate.x, ropeCrate.y, ropeCrate.name)
 end
 
 function goToThesurface()
@@ -535,15 +628,19 @@ function heroIsAStupidFool()
 		escapeHog(deviceCrate.collector)
 		AddCaption(loc("The device part has been stolen!"))
 		sendSimpleTeamRankings({teamA.name})
-		SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-		SendStat(siCustomAchievement, loc("Oh no, the Green Bananas have betrayed Hog Solo and stole the anti-gravity device part!"))
-		SendStat(siCustomAchievement, loc("Only Hog Solo can be trusted with the crate."))
+		SendStat(siGameResult, string.format(loc("%s lost, try again!"), hero.name))
+		SendStat(siCustomAchievement, string.format(loc("Oh no, the companions have betrayed %s and stole the anti-gravity device part!"), hero.name))
+		SendStat(siCustomAchievement, string.format(loc("Only %s can be trusted with the crate."), hero.name))
 		EndGame()
 		ended = true
 	end
 end
 
 function wind()
-	SetWind(GetRandom(201)-100)
+	if fixedWind then
+		SetWind(10)
+	else
+		SetWind(GetRandom(201)-100)
+	end
 end
 

@@ -155,7 +155,7 @@ void HWNamegen::teamRandomHats(HWTeam & team, bool withDLC)
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         HWHog hh = team.hedgehog(i);
-        if (sameHogs and i > 0)
+        if (sameHogs && i > 0)
             hh.Hat = team.hedgehog(i-1).Hat;
         else
             hh.Hat = getRandomHat(withDLC);
@@ -226,6 +226,11 @@ void HWNamegen::teamRandomHogName(HWTeam & team, const int HedgehogNumber, const
     hh.Name = namesDict[rand()%(namesDict.size())];
 
     team.setHedgehog(HedgehogNumber, hh);
+}
+
+void HWNamegen::teamLocalizedDefaultVoice(HWTeam & team, bool withDLC)
+{
+    team.setVoicepack(getLocalizedDefaultVoice(withDLC));
 }
 
 QStringList HWNamegen::dictContents(const QString filename)
@@ -487,4 +492,27 @@ QString HWNamegen::getRandomVoice(bool withDLC)
 
     //pick a random voice
     return Voices[rand()%(Voices.size())];
+}
+
+QString HWNamegen::getLocalizedDefaultVoice(bool withDLC)
+{
+    QStringList entries = DataManager::instance().entryList(
+        "Sounds/voices",
+        QDir::Dirs | QDir::NoDotAndDotDot,
+        QStringList("*"),
+        withDLC);
+
+    QString loc = QLocale().name();
+    if(entries.contains("Default_" + loc))
+    {
+        return QString("Default_" + loc);
+    }
+    else if(entries.contains("Default_" + loc.left(2)))
+    {
+        return QString("Default_" + loc.left(2));
+    }
+    else
+    {
+        return QString("Default");
+    }
 }

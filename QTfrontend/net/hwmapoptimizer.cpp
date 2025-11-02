@@ -2,7 +2,7 @@
 #include "hwconsts.h"
 
 HWMapOptimizer::HWMapOptimizer(QObject *parent) :
-    TCPBase(parent)
+    TCPBase(false, false, parent)
 {
 }
 

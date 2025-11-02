@@ -201,8 +201,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     mainLayout.setMargin(0);
 
     QWidget * leftSideContainer = new QWidget();
-    leftSideContainer->setObjectName("leftSideContainer");
-    leftSideContainer->setStyleSheet("#leftSideContainer { border-width: 0px; background-color: #ffcc00; border-radius: 10px;} QTextBrowser, SmartLineEdit { background-color: rgb(13, 5, 68); }");
+    leftSideContainer->setObjectName("chatContainer");
     QVBoxLayout * leftSide = new QVBoxLayout(leftSideContainer);
     leftSide->setSpacing(3);
     leftSide->setMargin(3);
@@ -217,7 +216,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     chatText->setMinimumWidth(10);
     chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatText->setOpenLinks(false);
-    chatText->setStyleSheet("QTextBrowser { background-color: rgb(23, 11, 54); border-width: 0px; }");
+    chatText->setObjectName("chatText");
     connect(chatText, SIGNAL(anchorClicked(const QUrl&)),
             this, SLOT(linkClicked(const QUrl&)));
     leftSide->addWidget(chatText, 1);
@@ -308,7 +307,7 @@ void HWChatWidget::setSettings(QSettings * settings)
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
-    if ((link.scheme() == "http") or (link.scheme() == "https"))
+    if ((link.scheme() == "http") || (link.scheme() == "https"))
         QDesktopServices::openUrl(link);
     else if (link.scheme() == "hwnick")
     {
@@ -373,15 +372,20 @@ void HWChatWidget::returnPressed()
 // it as host would convert it to it's lower case variant
 QString HWChatWidget::linkedNick(const QString & nickname)
 {
-    if (nickname != m_userNick)
+    // '[' and '(' are reserved characters used for fake player names in special server messages
+    if ((nickname != m_userNick) && (!nickname.startsWith('[')) && (!nickname.startsWith('(')))
+        // linked nick
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
                    QString(nickname.toUtf8().toBase64())).arg(nickname.toHtmlEscaped());
 
-    // unlinked nick (if own one)
+    // unlinked nick (if own one or fake player name)
     return QString("<span class=\"nick\">%1</span>").arg(nickname.toHtmlEscaped());
 }
 
-const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((([^/:?&#]+\\.)?hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
+// Regex to make some URLs clickable for selected domains:
+// - hedgewars.org (official website)
+// - hh.unit22.org (community addon server)
+const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((([^/:?&#]+\\.)?hedgewars\\.org|hh\\.unit22\\.org)(/[^ ]*)?)");
 
 bool HWChatWidget::containsHighlight(const QString & sender, const QString & message)
 {
@@ -401,7 +405,7 @@ bool HWChatWidget::containsHighlight(const QString & sender, const QString & mes
 QString HWChatWidget::messageToHTML(const QString & message)
 {
     QString formattedStr = message.toHtmlEscaped();
-    // link some urls
+    // link some URLs
     formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http\\2://\\4\">\\4</a>");
     return formattedStr;
 }
@@ -516,10 +520,18 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
     if (!isIgnored)
         printChatString(nick, QString("*** ") + tr("%1 has joined").arg(linkedNick(nick)), "Join", false);
 
-    if (notifyNick && notify && (m_helloSounds.size() > 0))
+    if (notifyNick && notify)
     {
-        SDLInteraction::instance().playSoundFile(
+        if (m_helloSounds.size() > 0)
+        {
+            SDLInteraction::instance().playSoundFile(
                             m_helloSounds.at(rand() % m_helloSounds.size()));
+        }        
+
+        if (!isInGame())
+        {
+            HWApplication::alert(this, 2000);
+        }
     }
 }
 
@@ -534,10 +546,16 @@ void HWChatWidget::nickRemoved(const QString& nick, const QString & message)
 
     emit nickCountUpdate(chatNicks->model()->rowCount());
 
-    if (message.isEmpty())
+    // Normal quit
+    if (message.isEmpty() || message == "bye")
+    {
         printChatString(nick, QString("*** ") + tr("%1 has left").arg(linkedNick(nick)), "Leave", false);
+    }
+    // Quit with additional server message (i.e. ping timeout)
     else
-        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(messageToHTML(message)), "Leave", false);
+    {
+        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(HWApplication::translate("server", message.toLatin1().constData()).toHtmlEscaped()), "Leave", false);
+    }
 }
 
 void HWChatWidget::clear()
@@ -547,8 +565,7 @@ void HWChatWidget::clear()
     // add default commands
     QStringList cmds;
     // /saveStyleSheet is(/was?) broken because of Physfs or something
-    // cmds << "/me" << "/discardStyleSheet" << "/saveStyleSheet";
-    cmds << "/me" << "/info" << "/quit" << "/clear" << "/discardStyleSheet";
+    cmds << "/clear" << "/help" << "/info" << "/me" << "/quit" << "/rnd";
     chatEditLine->addCommands(cmds);
 
     chatText->clear();
@@ -846,6 +863,12 @@ bool HWChatWidget::parseCommand(const QString & line)
     if (line[0] == '/')
     {
         QString tline = line.trimmed();
+        if (tline.length() <= 1)
+        {
+            // Empty chat command
+            displayWarning(QCoreApplication::translate("server", "Unknown command or invalid parameters. Say '/help' in chat for a list of commands."));
+            return true;
+        }
         if (tline.startsWith("/me"))
             return false; // not a real command
         else if (tline == "/clear") {
@@ -894,7 +917,9 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
 
     QString nick;
 
-    if(mil.size())
+    if(mil.size() == 0)
+        return;
+    else if(mil.size() == 1)
         nick = mil[0].data().toString();
     else
         nick = m_clickedNick;

@@ -15,29 +15,6 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
---approximative version of square root. This function follows the babylonian method.
-function IntegerSqrt(num)
-	local temp=num
-	while(temp*temp-div(temp,2)>num)
-	do
-		temp=div((temp+div(num,temp)),2)
-	end
-
-	return math.abs(temp)
-end
-
--- sqrt(x^2,y^2), work without desyncs. is approximative
-function Norm(xx,yy)
-	--to fix overflows
-	if(((math.abs(xx)^2)+(math.abs(yy)^2))>2^26)
-	then
-		local bitr=2^13
-		return IntegerSqrt((div(math.abs(xx),bitr)^2)+(div(math.abs(yy),bitr)^2))*bitr
-	else
-		return IntegerSqrt((math.abs(xx)^2)+(math.abs(yy)^2))
-	end
-end
-
 -- returns 1 or -1 depending on where it is
 function GetIfNegative(num)
 	if(num<0)
@@ -53,9 +30,11 @@ function EndTurnCS(seconds)
 	-- Set attacked state to prevent “Boring” sound to be played
 	SetState(CurrentHedgehog, bor(GetState(CurrentHedgehog), gstAttacked))
 	--set escape time
-	TurnTimeLeft = GetAwayTime*10*seconds
-	if TurnTimeLeft > 0 then
-		Retreat(TurnTimeLeft, false)
+	local escapeTime = GetAwayTime*10*seconds
+	if escapeTime > 0 then
+		Retreat(escapeTime, false)
+	else
+		SetTurnTimeLeft(escapeTime)
 	end
  end
 
@@ -65,9 +44,8 @@ function ShowDamageTag(hog,damage)
 	SetVisualGearValues(healthtag, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(hog)))
 end
 
---will use IntegerSqrt
 function FireGear(hedgehog,geartype,vx,vy,timer)
-	local hypo=Norm(vx,vy)
+	local hypo=integerHypotenuse(vx,vy)
 	return AddGear(div((GetGearRadius(hedgehog)*2*vx),hypo)+GetX(hedgehog), div((GetGearRadius(hedgehog)*2*vy),hypo)+GetY(hedgehog), geartype, 0, vx, vy, timer)
 end
 
@@ -272,7 +250,7 @@ CS.CONTINENT_INFORMATION =
 {loc("North America"),
 loc("The continent of firearms"),
 loc("The Union: You can select a hedgehog at the start of your turns.").."| |"..
-loc("Special weapons:").."|"..
+loc("Special weapons:").." |"..
 GetAmmoName(amShotgun)..": "..CS.SHOTGUN_SPECIAL_INFO.."|"..
 GetAmmoName(amSniperRifle)..": "..CS.SNIPER_SPECIAL_INFO,
 {amSniperRifle,1},
@@ -281,7 +259,7 @@ GetAmmoName(amSniperRifle)..": "..CS.SNIPER_SPECIAL_INFO,
 
 {loc("South America"),
 loc("The continent of guerilla tactics"),
-"| |"..loc("Special weapons:").."|"
+"| |"..loc("Special weapons:").." |"
 ..GetAmmoName(amGasBomb)..": "..CS.CHEESE_SPECIAL_INFO,
 {amGasBomb,2},
 {{amBirdy,100},{amHellishBomb,1},{amBee,100},{amGasBomb,100},{amFlamethrower,100},{amNapalm,2},{amExtraDamage,3}},
@@ -289,7 +267,7 @@ loc("The continent of guerilla tactics"),
 
 {loc("Europe"),
 loc("The continent of medicine"),
-"| |"..loc("Special weapons:").."|"
+"| |"..loc("Special weapons:").." |"
 ..GetAmmoName(amMolotov)..": "..CS.MOLOTOV_SPECIAL_INFO,
 {amBazooka,3},
 {{amBazooka,100},{amGrenade,100},{amMortar,100},{amMolotov,100},{amVampiric,4},{amPiano,1},{amResurrector,2},{amJetpack,4}},
@@ -297,7 +275,7 @@ loc("The continent of medicine"),
 
 {loc("Africa"),
 loc("The continent of dust"),
-"| |"..loc("Special weapons:").."|"..
+"| |"..loc("Special weapons:").." |"..
 GetAmmoName(amSeduction)..": "..CS.SEDUCTION_SPECIAL_INFO.."|"..
 CS.INVULNERABLE_SPECIAL_INFO.."|"..
 GetAmmoName(amSMine)..": "..CS.STICKY_PROJECTILE_INFO.."|"..
@@ -309,7 +287,7 @@ GetAmmoName(amSMine)..": "..CS.STICKY_NAPALM_INFO,
 {loc("Asia"),
 loc("The continent of ninjas"),
 loc("Textile industry: Will give you a parachute every second turn.").."| |"..
-loc("Special weapons:").."|"..
+loc("Special weapons:").." |"..
 GetAmmoName(amParachute)..": "..CS.PARACHUTE_SPECIAL_INFO,
 {amRope,5},
 {{amRope,100},{amFirePunch,100},{amParachute,1},{amKnife,2},{amDynamite,1}},
@@ -317,7 +295,7 @@ GetAmmoName(amParachute)..": "..CS.PARACHUTE_SPECIAL_INFO,
 
 {loc("Australia"),
 loc("The continent of sports"),
-"| |"..loc("Special weapons:").."|"..
+"| |"..loc("Special weapons:").." |"..
 GetAmmoName(amBaseballBat)..": "..CS.BASEBALLBAT_CRICKET_INFO.."|"..
 GetAmmoName(amBaseballBat)..": "..CS.BASEBALLBAT_BOOMERANG_INFO.."|"..
 loc("Baseball bat specials cannot be used close to other hogs."),
@@ -328,7 +306,7 @@ loc("Baseball bat specials cannot be used close to other hogs."),
 {loc("Antarctica"),
 loc("The continent of ice and science"),
 loc("Antarctic summer: Every 4th turn you get 1 girder, 1 mudball, 2 sine guns and 1 portable portal device.").."| |"..
-loc("Special weapons:").."|"..
+loc("Special weapons:").." |"..
 GetAmmoName(amPickHammer)..": "..CS.PICKHAMMER_SPECIAL_INFO,
 {amIceGun,7},
 {{amSnowball,2},{amPickHammer,100},{amSineGun,4},{amGirder,1},{amExtraTime,1},{amIceGun,1},{amPortalGun,2}},
@@ -336,7 +314,7 @@ GetAmmoName(amPickHammer)..": "..CS.PICKHAMMER_SPECIAL_INFO,
 
 {loc("Kerguelen"),
 loc("The continent of cowards"),
-"| |"..loc("Special weapons:").."|"..
+"| |"..loc("Special weapons:").." |"..
 GetAmmoName(amHammer)..": "..CS.HAMMER_ROAR_INFO.."|"..
 GetAmmoName(amHammer)..": "..CS.HAMMER_SWAP_INFO.."|"..
 GetAmmoName(amHammer)..": "..CS.HAMMER_LONELY_INFO.."|"..
@@ -450,16 +428,16 @@ function ValidateWeapon(hog,weapon,amount)
 end
 
 function SpawnRandomCrate(x,y,strength)
-	local tot=table.maxn(CS.WEAPONS_SUPPORT)+table.maxn(CS.WEAPONS_DAMAGE)
+	local tot=#CS.WEAPONS_SUPPORT + #CS.WEAPONS_DAMAGE
 	local rand=GetRandom(tot)+1
 
-	if(rand>table.maxn(CS.WEAPONS_SUPPORT))
+	if(rand > #CS.WEAPONS_SUPPORT)
 	then
-		local weapon=rand-table.maxn(CS.WEAPONS_SUPPORT)
+		local weapon = rand - #CS.WEAPONS_SUPPORT
 
 		while(wepNotValidBorder(CS.WEAPONS_DAMAGE[weapon][1])==false)
 		do
-			if(weapon>=table.maxn(CS.WEAPONS_DAMAGE))
+			if(weapon >= #CS.WEAPONS_DAMAGE)
 			then
 				weapon=0
 			end
@@ -550,6 +528,7 @@ function ShowContinentInfo(continent,time,generalinf)
 	elseif not CS.GAME_STARTED then
 		AddCaption(CS.CONTINENT_INFORMATION[continent][1], GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
 	end
+	SetContinentTeamLabel()
 end
 
 --will show a circle of gears (eye candy)
@@ -580,7 +559,7 @@ function GetRandomWeapon(hog, weptype, power, onlyonewep, getdelayedweps, mypowe
 
 	if(rand_weaponset_power < power)
 	then
-		local numberofweapons=table.maxn(weptype)
+		local numberofweapons = #weptype
 
 		local random_weapon = math.abs(GetRandom(numberofweapons)+1)
 
@@ -859,7 +838,7 @@ function SouthAmericaSpecialCheeseExplosion(hog)
 				SetState(CurrentHedgehog, gstMoving)
 			end
 			SetGearPosition(hog, GetX(hog),GetY(hog)-3)
-			hypo=Norm(math.abs(GetX(hog)-GetX(CS.TEMP_VALUE)),math.abs(GetY(hog)-GetY(CS.TEMP_VALUE)))
+			hypo=integerHypotenuse(math.abs(GetX(hog)-GetX(CS.TEMP_VALUE)),math.abs(GetY(hog)-GetY(CS.TEMP_VALUE)))
 			SetGearVelocity(hog, div((power_radius_outer-hypo)*power_sa*GetIfNegative(GetX(hog)-GetX(CS.TEMP_VALUE)),power_radius_outer), div((power_radius_outer-hypo)*power_sa*GetIfNegative(GetY(hog)-GetY(CS.TEMP_VALUE)),power_radius_outer))
 		end
 	end
@@ -907,8 +886,8 @@ function transferableParamToWeaponSet(string,icon)
 	continentinfo[4]={}
 	if(icon==1000)
 	then
-		local mid=table.maxn(CS.WEAPONS_DAMAGE)
-		local max=mid+table.maxn(CS.WEAPONS_SUPPORT)
+		local mid = #CS.WEAPONS_DAMAGE
+		local max = mid + #CS.WEAPONS_SUPPORT
 		local ic=(string.byte(string) % max)+1
 
 		if(ic>mid)
@@ -1017,7 +996,7 @@ end
 --cont=no		remove the pre-defined continents
 
 --for custom made continent, follows the same standards as the globalism one. You can make your continent with <Name>~<Information>~<Weapons>. Take the weapons generated from globalism, if you want a GUI :P
---weapons=<ammo><types>, ammo = ascii[116(1 ammo) to 125(inf ammo)] types = ascii[36(Grenade), 37(Clusterbomb) to 90(knife)] see http://hedgewars.org/kb/AmmoTypes
+--weapons=<ammo><types>, ammo = ascii[116(1 ammo) to 125(inf ammo)] types = ascii[36(Grenade), 37(Clusterbomb) to 90(knife)] see https://hedgewars.org/kb/AmmoTypes
 --ex "Own continent~this continent rocks!~tZ}$" will get 1 knife and inf grenades
 function onParameters()
 
@@ -1090,7 +1069,7 @@ function SetCSAmmoDescriptions(mode)
 
 	elseif mode == "weapons" then
 		local specSelect = loc("Switch: Select weapon special")
-		local specHeader = loc("Available weapon specials:")
+		local specHeader = loc("Available weapon specials:") .. " "
 		local specText="|"..
 			specSelect.."| |"..
 			specHeader.."|"
@@ -1167,6 +1146,16 @@ function onGameInit()
 	SuddenDeathTurns= SuddenDeathTurns+1
 end
 
+function onEndTurn()
+	if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
+	then
+		CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
+		SetContinentWeapons()
+		HideMission()
+	end
+	SetContinentTeamLabel()
+end
+
 --what happen when a turn starts
 function onNewTurn()
 	--will refresh the info on each tab weapon
@@ -1212,9 +1201,9 @@ function onNewTurn()
 				CS.HOG_HEALTH=GetHealth(CurrentHedgehog)
 			end
 
-			TurnTimeLeft=100000
+			SetTurnTimeLeft(100000)
 
-			AddCaption(string.format(CS.SELECT_WEP_INFORMATION_SHORT, GetHogTeamName(CurrentHedgehog)), 0xFFFFFFFF, capgrpGameState)
+			AddCaption(string.format(CS.SELECT_WEP_INFORMATION_SHORT, GetHogTeamName(CurrentHedgehog)), capcolDefault, capgrpGameState)
 			AddCaption(loc("No continent selected"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
 			CS.SELECT_CONTINENT_CHECK=true
 			ShowMission(loc("Continental supplies"),loc("Let a continent provide your weapons!"),GeneralInformation(), 0, 0)
@@ -1223,6 +1212,11 @@ function onNewTurn()
 			InitWeaponsMenu(CurrentHedgehog)
 			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=0
 			CS.INIT_TEAMS[GetHogTeamName(CurrentHedgehog)] = 2
+			if GetHogLevel(CurrentHedgehog) ~= 0 then
+				-- Set random continent for bots
+				SetWeapon(amNothing)
+				CS.CONFIRM_CONTINENT_SELECTION=500
+			end
 
 		else
 			--if its not the initialization turn
@@ -1231,7 +1225,7 @@ function onNewTurn()
 
 			if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
 			then
-				CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(table.maxn(CS.CONTINENT_INFORMATION))+1
+				CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
 				SetContinentWeapons()
 			end
 			local currCont=CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]
@@ -1587,13 +1581,13 @@ function TrySelectNextContinent(reverse)
 	then
 		CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)] + direction
 
-		if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]> table.maxn(CS.CONTINENT_INFORMATION))
+		if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]> #CS.CONTINENT_INFORMATION)
 		then
 			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=1
 		end
 		if(CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]<=0)
 		then
-			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=table.maxn(CS.CONTINENT_INFORMATION)
+			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)] = #CS.CONTINENT_INFORMATION
 		end
 		SetContinentWeapons()
 
@@ -1631,17 +1625,26 @@ end
 
 -- Spawn sabotage smoke for inactive hogs (red smoke, more subtle than for active hogs)
 function SabotageSmokeInactive(gear)
-	if GetGearType(gear) == gtHedgehog and gear ~= CurrentHedgehog and CS.SABOTAGE_HOGS[gear]~=nil and CS.SABOTAGE_HOGS[gear]>=1 then
+	if GetGearType(gear) == gtHedgehog and (gear ~= CurrentHedgehog or ReadyTimeLeft > 0) and CS.SABOTAGE_HOGS[gear]~=nil and CS.SABOTAGE_HOGS[gear]>=1 then
 		local vg = AddVisualGear(GetX(gear), GetY(gear), vgtSmokeWhite, 0, false)
 		SetVisualGearValues(vg, nil, nil, nil, nil, nil, nil, nil, nil, nil, 0xFF8080B0)
 	end
 end
 
-function ShowContinentLabel()
-	if CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)] == 0 then
+function ShowContinentLabel(continent)
+	if not continent then
+		continent = CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]
+	end
+	if continent == 0 then
 		AddCaption(loc("Random continent"), GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
 	else
 		AddCaption(CS.CONTINENT_INFORMATION[CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]][1], GetClanColor(GetHogClan(CurrentHedgehog)), capgrpAmmoinfo)
+	end
+end
+
+function SetContinentTeamLabel()
+	if not CS.GAME_STARTED then
+		SetTeamLabel(GetHogTeamName(CurrentHedgehog), CS.CONTINENT_INFORMATION[CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]][1])
 	end
 end
 
@@ -1680,7 +1683,15 @@ function onGameTick()
 		CS.SELECT_CONTINENT_CHECK=false
 		EndTurnCS(0)
 		PlaySound(sndPlaced)
-		ShowContinentLabel()
+		if(CurrentHedgehog and CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]==0)
+		then
+			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
+			SetContinentWeapons()
+			HideMission()
+			ShowContinentLabel()
+		else
+			ShowContinentLabel()
+		end
 		CS.CONFIRM_CONTINENT_SELECTION = -1
 	end
 
@@ -1695,7 +1706,7 @@ function onGameTick20()
 	then
 		if(GetCurAmmoType()==amSwitch)
 		then
-			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(table.maxn(CS.CONTINENT_INFORMATION))+1
+			CS.TEAM_CONTINENT[GetHogTeamName(CurrentHedgehog)]=GetRandom(#CS.CONTINENT_INFORMATION)+1
 			SetContinentWeapons()
 			SetWeapon(amSkip)
 			PlaySound(sndMineTick)
@@ -1760,7 +1771,7 @@ function onGameTick20()
 	if(CS.SABOTAGE_HOGS[CurrentHedgehog]~=nil and CS.SABOTAGE_HOGS[CurrentHedgehog]>=1)
 	then
 		--for sabotage
-		if(CS.SABOTAGE_HOGS[CurrentHedgehog]==1)
+		if(CS.SABOTAGE_HOGS[CurrentHedgehog]==1 and ReadyTimeLeft == 0)
 		then
 			AddCaption(loc("You are sabotaged, RUN!"))
 
@@ -1772,7 +1783,7 @@ function onGameTick20()
 			CS.SABOTAGE_HOGS[CurrentHedgehog]=2
 		end
 
-		if(CS.SABOTAGE_COUNTER % 20 == 0)
+		if(CS.SABOTAGE_HOGS[CurrentHedgehog]==2 and CS.SABOTAGE_COUNTER % 20 == 0)
 		then
 			-- Sabotage effect (red smoke)
 			local vg = AddVisualGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), vgtSmokeWhite, 0, false)
@@ -1786,10 +1797,11 @@ function onGameTick20()
 		then
 			-- Sabotage decreases hog health regularily,
 			-- but invulnerable protects.
-			-- Also do not decrease health while retreating or attacking.
+			-- Also do not decrease health while retreating, attacking or in ready phase.
 			if(GetEffect(CurrentHedgehog, heInvulnerable) == 0 and
 			band(GetState(CurrentHedgehog), gstHHDriven) ~= 0 and
-			band(GetState(CurrentHedgehog), gstAttacked+gstAttacking) == 0)
+			band(GetState(CurrentHedgehog), gstAttacked+gstAttacking) == 0) and
+			(ReadyTimeLeft == 0)
 			then
 				if(GetHealth(CurrentHedgehog)<=CS.SABOTAGE_DAMAGE)
 				then

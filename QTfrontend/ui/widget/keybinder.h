@@ -29,6 +29,7 @@ class QTableWidgetItem;
 class QTableWidget;
 class QBoxLayout;
 class QComboBox;
+class QLabel;
 
 // USAGE NOTE: Every time the widget comes into view, you must call resetInterface()
 
@@ -43,6 +44,9 @@ class KeyBinder : public QWidget
         void setBindIndex(int keyIndex, int bindIndex);
         int bindIndex(int keyIndex);
         void resetInterface();
+        bool hasConflicts();
+        bool checkConflicts();
+        bool checkConflictsWith(int bind, bool updateState);
 
     private:
         QHash<QObject *, QTableWidgetItem *> * bindComboBoxCellMappings;
@@ -51,8 +55,13 @@ class KeyBinder : public QWidget
         QListWidget * catList;
         QBoxLayout *bindingsPages;
         QComboBox * CBBind[BINDS_NUMBER];
+        QLabel * conflictLabel;
+        QIcon * dropDownIcon;
+        QIcon * conflictIcon;
         QString defaultText;
         bool enableSignal;
+        QList<QTableWidgetItem*> conflictItems;
+        bool p_hasConflicts;
 
     signals:
         void bindUpdate(int bindID);

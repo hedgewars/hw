@@ -6,8 +6,12 @@
 // EFFECTS: return the current date time in pascal notation
 //          http://www.merlyn.demon.co.uk/del-prgg.htm#TDT
 TDateTime   fpcrtl_now();
-#define     now                     fpcrtl_now
-#define     Now                     fpcrtl_now
+#define     fpcrtl_Now              fpcrtl_now
+#define     now                     fpcrtl_Now
+#define     Now                     fpcrtl_Now
+
+string255   fpcrtl_formatDateTime(string255 FormatStr, TDateTime DateTime);
+#define     fpcrtl_FormatDateTime   fpcrtl_formatDateTime
 
 // EFFECTS: return the current time
 //          http://www.merlyn.demon.co.uk/del-prgg.htm#TDT

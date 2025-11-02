@@ -1,5 +1,6 @@
 HedgewarsScriptLoad("/Scripts/Params.lua")
-
+local overrideFeatureSize = true
+local paramPadding = 0
 local ObjectList = {}
 
 -- Overall padding for roping freedom
@@ -11,6 +12,12 @@ function onParameters()
     parseParams()
     if params["teamrope"] ~= nil then
         TeamRope = true
+    end
+    if params["scalemap"] ~= nil then 
+        overrideFeatureSize = false 
+    end
+    if params["padding"] ~= nil then
+        paramPadding = tonumber(params["padding"])
     end
 end
 
@@ -328,13 +335,17 @@ end
 
 function onGameInit()
     -- Calculate padding, determined  by map feature size
-    if MapFeatureSize <= 20 then
+	if paramPadding > 0 then
+		Padding = paramPadding
+	elseif MapFeatureSize <= 20 then
         -- 10 .. 710. Step size=35
         Padding = 10 + MapFeatureSize * 35
     else
         -- 780 .. 1060. Step size=70
         Padding = 710 + (MapFeatureSize-20) * 70
     end
+    -- reset feature size after use, to disable scaling
+    if overrideFeatureSize then MapFeatureSize = 12 end
 
     MapGen = mgDrawn
     TemplateFilter = 0

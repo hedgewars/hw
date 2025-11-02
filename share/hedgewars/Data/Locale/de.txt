@@ -6,7 +6,7 @@
 00:03=Zielsuchende Biene
 00:04=Schrotflinte
 00:05=Presslufthammer
-00:06=Runde überspringen
+00:06=Überspringen
 00:07=Seil
 00:08=Mine
 00:09=Desert Eagle
@@ -54,13 +54,12 @@
 00:51=Schlammball
 00:52=Keine Waffe ausgewählt
 00:53=Zeitkasten
-; 00:54=Bauwerk
 00:54=Landkanone
 00:55=Eiskanone
 00:56=Hackebeil
 00:57=Gummi
 00:58=Luftmine
-00:59=Quietscheentchen
+00:59=Creeper
 00:60=Minigun
 
 01:00=Laden …
@@ -71,11 +70,9 @@
 01:05=Wirklich beenden (%1/%2)?
 01:06=Sudden Death!
 01:07=%1 verbleibend
-01:08=Treibstoff
+01:08=Treibstoff: %1%
 01:09=Synchronisiere …
-01:10=Benutzung beendet nicht die eigene Runde!
-01:11=Waffe oder Werkzeug noch nicht verfügbar!
-01:10=Benutzung beendet nicht die eigene Runde!
+01:10=Benutzung beendet nicht den eigenen Zug!
 01:11=Waffe oder Werkzeug noch nicht verfügbar!
 01:12=Letzte Runde bis zum Sudden Death!
 01:13=%1 Runden bis zum Sudden Death!
@@ -106,6 +103,14 @@
 01:38=%1 ist zurück.
 01:39=%1 hat den Zug automatisch übersprungen.
 01:40=%1 fps
+01:41=Lua-Parsing: AUS
+01:42=Lua-Parsing: AN
+01:43=Lua-Parsing ist in Online-Spielen nicht erlaubt!
+01:44=%1×
+01:45=%1: %2
+01:46=[Klan] %1: %2
+01:47=[%1]: %2
+01:48=?
 
 ; Event messages
 ; Hog (%1) died
@@ -341,11 +346,11 @@
 02:02=Habt keine Angst!
 02:02=Seid mutig und siegreich!
 
-02:02=Gleich geht's rund …
-02:02=Hier geht's gleich zur Sache
+02:02=Gleich geht’s rund …
+02:02=Hier geht’s gleich zur Sache
 02:02=Lasst die Spiele beginnen!
-02:02=Jetzt geht's los!
-02:02=Auf geht's!
+02:02=Jetzt geht’s los!
+02:02=Auf geht’s!
 
 ; Round ends and team (%1) wins
 02:03=%1 gewinnt!
@@ -386,19 +391,14 @@
 ; Round ends in a draw
 02:04=Unentschieden
 02:04=Es ist unentschieden!
-02:04=Keiner gewinnt! Unentschieden
-02:04=Unglaublich, diese Runde endet unentschieden
 02:04=Unentschieden, wie langweilig
-02:04=Unmöglich! Es ist unentschieden
 02:04=Unentschieden! Jetzt müssen wir von vorne anfangen …
-02:04=Spiel vorbei! Es hat niemand gewonnen
 02:04=Unentschieden, was für eine Enttäuschung!
-02:04=Heute ist jeder ein Verlierer
+02:04=Unentschieden. Alle kämpften bis zum bitteren Ende
 02:04=Hey, wo ist der Sieger?
 02:04=Wo sind all die Igel hin?
 02:04=Öde! Ich will mein Geld zurück!
-
-02:04=Ach nö, es steht Unentschieden!
+02:04=Alle sind tot. Gut so!
 
 ; New health crate
 02:05=Hilfspaket gesichtet!
@@ -414,7 +414,7 @@
 02:05=Frisches Pflaster!
 02:05=Frische Bandagen!
 02:05=Damit wirst du dich besser fühlen
-02:05=Ein Hallo-Trank! Upps, falsches Spiel
+02:05=Ein Heiltrank! Upps, falsches Spiel
 02:05=Zugreifen!
 02:05=Ein gesunder Snack
 02:05=Ein Mittel, um Schmerzen zu lindern
@@ -443,12 +443,12 @@
 02:05=Heilt die Kranken!
 02:05=Das ist gut für dich
 02:05=Irgendjemand scheint euch zu mögen
-02:05=Schnapp's dir, bevor es der Feind tut!
+02:05=Schnapp’s dir, bevor es der Feind tut!
 02:05=Hilfe für kranke Igel
 02:05=Braucht da unten jemand Hilfe?
 02:05=Alles, was ein verwundeter Igel braucht
 02:05=Schwer verletzt? Das kriegen wir hin
-02:05=Hol dir Erste Hilfe, bevor's zu spät ist
+02:05=Hol dir Erste Hilfe, bevor’s zu spät ist
 02:05=Brotrationen!
 02:05=Stell deine Gesundheit wieder her
 02:05=Das wird euch helfen
@@ -468,7 +468,7 @@
 02:05=Leb etwas länger
 02:05=Diese Kiste wird dir helfen
 02:05=Braucht jemand Hilfe?
-02:05=Hol sie dir, bevor's zu spät ist!
+02:05=Hol sie dir, bevor’s zu spät ist!
 02:05=Niedrige Gesundheit? Wir haben die Lösung!
 02:05=Von fast tot bis kerngesund in nur einem Augenblick!
 02:05=Die effizienteste Art der Heilung
@@ -541,10 +541,9 @@
 02:06=Lasst nicht zu, dass der Feind sie sich holt!
 02:06=Schönes neues Spielzeug!
 02:06=Eine geheimnisvolle Kiste!
-02:06=Ein eckiges Ü-Ei!
+02:06=Eine eckige Überraschung!
 02:06=Die Holzkiste der Pandora!
 02:06=Willst du mit mir spielen?
-02:06=Quadratisch, praktisch, … gefährlich?
 02:06=Diese Kiste bringt Bombenstimmung!
 02:06=Damit kann man dem Feind so richtig einheizen
 02:06=Jetzt geht die Party erst richtig los!
@@ -585,7 +584,7 @@
 02:06=Keine Munition? Kein Problem?
 02:06=Zeit zum Nachladen!
 02:06=Die hier macht »Bumm!«
-02:06=Manche mögen's heiß
+02:06=Manche mögen’s heiß
 02:06=Ein paar unartige Igel brauchen Bestrafung
 02:06=Zerschmettert den Feind!
 02:06=Spaß! Explosionen! Zerstörung!
@@ -599,11 +598,11 @@
 02:06=Heroische Bewaffnung für heroische Igel
 02:06=Überraschungswaffe!
 02:06=Es regnet Kisten!
-02:06=Die ultimative Waffe? Oder nur so 'ne Langweilige?
+02:06=Die ultimative Waffe? Oder nur so ’ne Langweilige?
 02:06=Hol sie dir zuerst
 02:06=Das macht Igel zu Toast
 02:06=So eine wunderschöne … Waffe
-02:06=Was ist da drin? Finden wir's heraus!
+02:06=Was ist da drin? Finden wir’s heraus!
 02:06=Auspacken!
 02:06=Diese Kiste bringt Zerstörung
 02:06=Sie nennen mich »Terminator«
@@ -621,7 +620,7 @@
 02:06=Die Chaoskiste
 02:06=Wer zuerst kommt, mahlt zuerst!
 02:06=Hat jemand »Waffen« gesagt?
-02:06=Jetzt wird's ernst
+02:06=Jetzt wird’s ernst
 02:06=Die Schonfrist ist vorbei
 02:06=Lasst das Wettrüsten beginnen!
 02:06=Nimm dich in acht, wenn der Feind sich sie holt
@@ -632,7 +631,7 @@
 02:06=Ich hab gehört, ihr wollt Waffen …
 02:06=Zerstörerische Lieferung!
 02:06=Es ist Zeit, ihnen eine Lektion zu erteilen!
-02:06=Die Chance, um deinen geheimen Plan in die Tat umzusetzen
+02:06=Die Chance, um deinen geheimen Plan umzusetzen
 02:06=Das ist die Chance!
 02:06=Aufsammeln oder in die Luft jagen?
 02:06=Ist das die ultimative Waffe?
@@ -654,7 +653,6 @@
 02:06=Es ist gefährlich da draußen. Nimm dies!
 02:06=Der Himmel spielt gern mit Sterblichen
 02:06=Peng-peng in einer Kiste!
-02:06=Können ein paar von euch bitte sterben?
 
 02:06=Waffenkiste: Nur echt mit dem Fragezeichen
 02:06=Ein schlagkräftiges Argument!
@@ -679,7 +677,6 @@
 02:07=Heimwerker atmen auf!
 02:07=Schaffe, schaffe, Häusle baue
 02:07=Werkzeuge kann man immer gebrauchen
-02:07=Auf diese Kisten können Sie bauen
 02:07=Ein Geschenk der Techniker!
 02:07=Strategen freuen sich!
 02:07=Dies könnte deine Mobilität wiederherstellen …
@@ -701,7 +698,7 @@
 02:07=Hat jemand einen Werkzeugkasten bestellt?
 02:07=Nützliche Lieferung!
 02:07=Braucht jemand ein Werkzeug?
-02:07=Ich kann's kaum erwarten, diese Kiste zu öffnen!
+02:07=Ich kann’s kaum erwarten, diese Kiste zu öffnen!
 02:07=Ein schwerer Werkzeugkasten fällt vom Himmel!
 02:07=Ein kleines Helferlein für kleine Igelchen
 02:07=Erweitere deine Möglichkeiten
@@ -976,8 +973,8 @@
 02:12=%1 wurde übel vergiftet
 02:12=%1 fühlt sich schwindelig
 02:12=%1 fiel der chemischen Kriegsführung zum Opfer
-02:12=Die Haut von %1 Haut nimmt eine sehr ungesunde Färbung an
-02:12=%1 sollte die Vitamine geschluckt haben
+02:12=%1 nimmt eine sehr ungesunde Färbung an
+02:12=%1 hätte die Vitamine einnehmen sollen
 02:12=%1 hat Bauchschmerzen
 02:12=%1 sieht nicht gerade gesund aus
 02:12=%1 braucht ein Lazarett
@@ -1009,10 +1006,10 @@
 02:12=%1 braucht bald Erste Hilfe
 02:12=%1 sollte eine Gesundheitskiste aufheben
 02:12=%1 wurde von einer Kobra geküsst
-02:11=%1 hat ein geschwächtes Immunsystem
-02:11=%1 spielte zu lange mit kranken Freunden
-02:11=%1 wurde von Bakterien infiziert
-02:11=%1 hat einen inneren Kampf gegen einen Virus
+02:12=%1 hat ein geschwächtes Immunsystem
+02:12=%1 spielte zu lange mit kranken Freunden
+02:12=%1 wurde von Bakterien infiziert
+02:12=%1 hat einen inneren Kampf gegen einen Virus
 
 02:12=%1 fallen die Stacheln aus
 02:12=%1 meldet sich krank
@@ -1204,7 +1201,6 @@
 02:16=%1 vergisst die Zeit
 
 ; King (%1) has died
-02:17=%1 ist tot! Lang lebe %1!
 02:17=Königliche Tragödie: %1 tot aufgefunden
 02:17=%1 ist nicht mehr bei uns
 02:17=Unser geschätzter König %1 ist von uns gegangen
@@ -1241,6 +1237,7 @@
 02:17=%1 stirbt auf dramatische Weise
 02:17=Das Königreich von %1 wurde besiegt
 02:17=%1 wurde schachmatt gesetzt
+02:17=%1 ist tot, lang lebe %1!
 
 ; Weapon Categories
 03:00=Zeitzünder-Granate
@@ -1288,23 +1285,22 @@
 03:42=Portalöffner
 ; the misspelled "Beethoven" is intentional (-> to beat)
 03:43=Spiele Beathovens tödliche Sonate!
-03:44=Ziemlich alt und stinkig
+03:44=Mindestens haltbar bis: 1923
 03:45=Die Macht der Wissenschaft
 03:46=Heiß, heiß, heiß!
 03:47=Klebt (fast) überall
 03:48=In-den-Boden-Stampfer
-03:49=Tut, was man vermutet
+03:49=Hol die Toten zurück IN die Hölle!
 03:50=Maulwurfsfreund
 03:51=Am Boden gefunden
 03:52=NICHT IN VERWENDUNG
 03:53=Typ 40
-;03:54=Baue etwas
 03:54=Werkzeug
 03:55=Cooler wird’s nicht
 03:56=Bitte ge- oder missbrauchen
 03:57=Werkzeug
 03:58=Schwebende Annäherungsmine
-03:59=Schwimmende Bombe
+03:59=Unfertige Waffe
 03:60=Die ultimative Feuerwaffe
 
 ; Weapon Descriptions (use | as line breaks)
@@ -1314,7 +1310,7 @@
 04:03=Starte eine explosive Biene, die auf ein gewähltes|Ziel zusteuern wird. Feuere nicht mit voller Kraft,|um die Zielgenauigkeit zu verbessern.|Cursor: Ziel wählen|Angriff: Halten, um mit mehr Kraft zu feuern
 04:04=Greife deine Feinde mit einer Schrotflinte und|zwei Schüssen an. Durch die Streuung musst du|nicht genau zielen, um trotzdem zu treffen.|Angriff: Feuern (mehrfach)
 04:05=Ab in den Untergrund! Benutze den Presslufthammer,|um einen Schacht nach unten zu graben und so|andere Gebiete zu erreichen.|Angriff: Presslufthammer ein- oder ausschalten|Links/Rechts: Schräg bohren
-04:06=Gelangweilt? Keine Optionen? Munition sparen?|Kein Problem! Passe einfach diese Runde, Feigling!|Angriff: Runde ohne Angriff aussetzen
+04:06=Gelangweilt? Kein Möglichkeiten? Munition sparen?|Kein Problem! Überspringe einfach deinen Zug, Feigling!|Angriff: Zug ohne Angriff überspringen
 04:07=Überbrücke große Distanzen mit gezielt abgefeuerten|Seilschüssen. Benutze deine Bewegungsenergie, um|andere Igel zu schubsen oder wirf vom Seil aus Granaten|und ähnliche Waffen.|Angriff: Seil abfeuern oder lösen|Links/Rechts/Hoch/Runter: Seil schwingen/verkürzen/verlängern|Weitsprung: Waffe benutzen
 04:08=Halte dir deine Feinde fern oder blockiere sie,|indem du ihnen Minen vor die Beine wirfst.|Sei aber schnell genug, damit du sie nicht noch|selbst auslöst!|Angriff: Mine legen|Genaues Zielen + 1-5: Sprungkraft einstellen
 04:09=Nicht so ganz zielsicher? Versuche es mit der|Desert Eagle, denn diese bietet dir vier Schuss.|Angriff: Feuern (mehrfach)
@@ -1345,13 +1341,13 @@
 04:34=Dies macht dich immun gegenüber Schaden für den Rest|des Zuges. Aber sei nicht zu übermütig, denn du könntest|immer noch ertrinken.|Angriff: Aktivieren
 04:35=Manchmal vergeht die Zeit einfach zu schnell.|Schnapp dir 30 zusätzliche Sekunden, um|deinen Angriff abzuschließen.|Angriff: Aktivieren
 04:36=Nun, manchmal trifft man einfach nicht. In solchen|Fällen kann die moderne Technik natürlich nachhelfen.|Angriff: Aktivieren
-04:37=Fürchte nicht das Tageslicht! Die Wirkung hält|nur eine Runde an, aber sie erlaubt es deinem|Igel, 80% des Schadens, den andere Igel während|seines Zuges erleiden, als Leben zu absorbieren.|Angriff: Aktivieren
+04:37=Fürchte nicht das Tageslicht! Die Wirkung hält|nur einen Zug lang an, aber sie erlaubt es deinem|Igel, 80% des Schadens, den andere Igel während|seines Zuges erleiden, als Leben zu absorbieren.|Angriff: Aktivieren
 04:38=Das Scharfschützengewehr kann die vernichtendste|Waffe im gesamten Arsenal sein, allerdings ist|sie auf kurze Distanz sehr ineffektiv. Der|verursachte Schaden nimmt mit der Distanz zu.|Das Zielen ist schwierig, und du musst deine|Stellung halten, sobald die Waffe aktiviert wurde.|Angriff: Zielvisier aktivieren, dann feuern (zwei mal)|Links/Rechts: Umdrehen (zwischen Schüssen)
 04:39=Fliege mit der fliegenden Untertasse in andere|Teile der Karte. Sie ist schwer zu beherrschen,|bringt dich aber an so gut wie jeden Ort.|Angriff: Aktivieren/Deaktivieren|Hoch/Links/Rechts: Einmalig in eine Richtung beschleunigen|Weitsprung: Waffe fallen lassen|Genaues Zielen + Weitsprung: Waffe in Zielrichtung feuern|Genaues Zielen + Hoch/Runter: Zielen
 04:40=Entzünde einen Teil der Landschaft mit dieser|(schon bald) brennenden Flüssigkeit.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:41=Der Beweis, dass die Natur sogar die fliegende|Untertasse übertreffen könnte. Vogli kann|deinen Igel herumtragen und zudem faule Eier|auf deine Feinde fallen lassen, um sie zu vergiften.|Angriff: Aktivieren und Eier fallen lassen|Hoch/Links/Rechts: In eine Richtung flattern
-04:42=Das tragbare Portalgerät ermöglicht es dir,|dich, deine Feinde oder Waffen direkt zwischen|zwei Punkten auf der Karte zu teleportieren.|Benutze es weise und deine Kampagne wird ein …|RIESENERFOLG!|Haftungsausschluss. Funktioniert nicht auf Gummi.|Angriff: Öffnet ein Portal|Wechseln: Wechselt die Portalfarbe
-04:43=Lass dein musikalisches Debüt einschlagen wie eine Bombe!|Lass ein mächtiges Piano vom Himmel fallen, das alles|im Weg zerstampfen wird, aber beachte:|Dein Igel muss sein Leben geben, um das Piano zu spielen.|Cursor: Zielgebiet wählen und Angriff starten|F1–F9: Das Piano spielen
+04:42=Das tragbare Portalgerät ermöglicht es dir,|dich, deine Feinde oder Waffen direkt zwischen|zwei Punkten auf der Karte zu teleportieren.|Benutze es weise und deine Kampagne wird ein …|RIESENERFOLG!|Haftungsausschluss\: Funktioniert nicht auf Gummi.|Angriff: Öffnet ein Portal|Wechseln: Wechselt die Portalfarbe
+04:43=Lass dein musikalisches Debüt einschlagen wie eine Bombe!|Lass ein mächtiges Piano vom Himmel fallen, das alles|im Weg zerstampfen wird, aber beachte\:|Dein Igel muss sein Leben geben, um das Piano zu spielen.|Cursor: Zielgebiet wählen und Angriff starten|F1–F9: Das Piano spielen
 04:44=Das ist nicht nur Käse, das ist biologische Kriegsführung!|Er wird nicht viel Schaden verursachen, sobald der Zünder|abgelaufen ist, aber er wird garantiert jeden in der Nähe|vergiften!|1–5: Zeitzünder einstellen|Genaues Zielen + 1-5: Sprungkraft einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
 04:45=All die Physikstunden haben sich endlich bezahlt gemacht!|Entfessle eine zerstörerische Sinuswelle, die sich durch|das Gelände (und deine Feinde) brennen wird.|Pass auf, die Waffe erzeugt einen ordentlichen Rückstoß.|Angriff: Feuern
 04:46=Brutzle deine Feinde mit fließenden Flammen.|Herzerwärmend!|Angriff: Aktivieren|Hoch/Runter: Beim Feuern zielen|Links/Rechts: Durchfluss ändern
@@ -1361,13 +1357,13 @@
 04:50=Verstecken sich Feinde im Untergrund?|Grabe sie aus mit dem Bohr-Luftangriff!|Der Zeitzünder bestimmt, wie tief dieser graben wird.|Links/Rechts: Angriffsrichtung wählen|1-5: Zeitzünder einstellen|Cursor: Zielgebiet wählen und Angriff starten
 04:51=Wirf mit Dreck um dich! Der Schlammball|schubst Igel und andere Dinge weg,|aber richtet keinen Schaden an.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:52=NICHT IN VERWENDUNG
-04:53=Unternimm eine Reise durch Zeit und Raum,|während du deine Kameraden alleine am Schlachtfeld zurücklässt.|Sei darauf vorbereitet, jederzeit wieder zurückzukommen,|oder auf Sudden Death, oder wenn sie alle besiegt wurden.|Haftungsausschluss. Nicht funktionstüchtig, wenn in Sudden Death,|wenn du alleine bist – oder der König.|Angriff: Aktivieren
+04:53=Unternimm eine Reise durch Zeit und Raum,|während du deine Kameraden alleine am Schlachtfeld zurücklässt.|Sei darauf vorbereitet, jederzeit wieder zurückzukommen,|oder auf Sudden Death, oder wenn sie alle besiegt wurden.|Haftungsausschluss\: Nicht funktionstüchtig, wenn in Sudden Death,|wenn du alleine bist – oder der König.|Angriff: Aktivieren
 04:54=Versprühe einen Strahl klebriger Flocken.|Baue Brücken, begrabe Gegner, versiegle Tunnel.|Pass auf, dass du selbst nichts abbekommst!|Angriff: Aktivieren/Deaktivieren|Hoch/Runter: Beim Feuern zielen|Links/Rechts: Schussweite einstellen
 04:55=Hol die Eiszeit zurück!|Friere Igel und Sachen ein, mach den Boden|rutschig oder rette dich selbst vor dem|Ertrinken, indem du das Wasser einfrierst.|Angriff: Aktivieren/Deaktivieren|Hoch/Runter: Beim Feuern zielen
 04:56=Du kannst zwei Hackebeile auf deinen Feind schleudern,|Passagen und Tunnel blockieren, und sie sogar zum Klettern|benutzen! Der Schaden erhöht sich mit der Geschwindigkeit.|Aber sei vorsichtig! Es ist gefährlich, mit Messern zu spielen.|Angriff: Gedrückt halten, um mit mehr Schwung zu werfen (zwei mal)
 04:57=Bau einen SEHR elastischen Balken aus Gummi,|von dem Igel und andere Sachen abprallen,|ohne Fallschaden zu nehmen.|Links/Rechts: Ausrichtung des Gummis wählen|Cursor: Gummi platzieren
 04:58=Diese Annäherungsmine wird frei in der Luft schweben und|verfolgt törichte Igel, die dumm genug sind, ihr zu nahe zu|kommen. Allerdings ist ihre Explosion schwächer als|die der Landmine.|Angriff: Halten, um mit mehr Kraft zu werfen
-04:59=Gib diesen dreckigen Igeln ein Bad! Dieses süße|kleine Quietscheentchen kann auf Wasser schwimmen|und folgt dabei dem Wind. Sie explodiert bei Kollision|mit Land, also stell sicher, sie von einer Klippe oder|einem anderem sicheren Ort fallen zu lassen.|Angriff: Quietscheentschen fallen lassen
+04:59=Diese Waffe ist unfertig und experimentell.|Benutze sie auf eigene Gefahr!
 04:60=Lass es Kugeln auf deine Gegner hageln!|Und sie dachten wirklich, sie seien hinter|drei Trägerschichten sicher.|Angriff: Mit voller Kraft feuern|Hoch/Runter: Weiterzielen
 
 ; Game goal strings
@@ -1380,13 +1376,13 @@
 05:06=Karma: Igel leiden an dem von ihnen verursachten Schaden
 05:07=Schützt den König: Lass deinen König nicht sterben!
 05:08=Igel platzieren: Wähle vor dem Spielstart die Positionen deiner Igel
-05:09=Artillerie: Deine Igel können nicht laufen
+05:09=Artillerie: Igel können nicht laufen
 05:10=Unzerstörbares Terrain: Die meisten Waffen zerstören das Gelände nicht
 05:11=Gemeinsames Arsenal: Alle Teams gleicher Farbe teilen sich ihr Arsenal
 05:12=Minenzünder: Minen explodieren nach %1 Sekunde(n)
 05:13=Minenzünder: Minen explodieren sofort
 05:14=Minenzünder: Minen explodieren nach 0–5 Sekunden
-05:15=Prozentualer Schaden: Alle Waffen verursachen %1 % Schaden
+05:15=Prozentualer Schaden: (Fast) alle Waffen verursachen %1 % Schaden
 05:16=Sanitäter: Alle Igel werden am Ende der Zuges bis zum Anfangswert geheilt
 05:17=KI-Wiederbelebung: Computergesteuerte Igel erscheinen nach dem Tod wieder
 05:18=Unbegrenzte Attacken: Angriffe beenden deinen Zug nicht
@@ -1394,3 +1390,34 @@
 05:20=Igelwaffen: Igel teilen Waffen nicht untereinander
 05:21=Staffellauf: Teams gleicher Farbe kommen nacheinander dran|Gemeinsame Zeit: Teams gleicher Farbe teilen sich ihre Zugzeit
 05:22=Starker Wind: Wind beeinflusst fast alles
+
+; Chat command help
+06:00=Liste der grundlegenden Client-Chatbefehle:
+06:01=/togglechat: Chatanzeige umschalten
+06:02=/clan <Nachricht>: Nachricht nur an Klanmitglieder schicken
+06:03=/me <Nachricht>: Chataktion, z.B. wird »/me isst Pizza« zu »* Spieler isst Pizza«
+06:04=/pause: Pause umschalten
+06:05=/pause: Automatisches Überspringen umschalten
+06:06=/fullscreen: Vollbild umschalten
+06:07=/quit: Hedgewars verlassen
+06:08=/help: Grundlegende Client-Chatbefehle auflisten
+06:09=/help taunts: Spott-Chatbefehle auflisten
+06:10=/history: Langes Chatprotokoll umschalten
+06:11=/lua: Lua-Parsing umschalten (für Entwickler)
+06:12=Liste der Spott-Chatbefehle:
+06:13="Text": Text in Sprechblase anzeigen
+06:14='Text': Text in Denkblase anzeigen
+06:15=-Text-: Text in Brüllblase anzeigen
+06:16=Füg eine Nummer am Textanfang bei den obigen Befehlen hinzu, um einen Igel auszuwählen.
+06:17=/hsa <Text>: Text in Sprechblase beim nächsten Angriff anzeigen
+06:18=/hta <Text>: Text in Denkblase beim nächsten Angriff anzeigen
+06:19=/hya <Text>: Text in Brüllblase beim nächsten Angriff anzeigen
+06:20=/hurrah: Igel grinsen lassen
+06:21=/ilovelotsoflemonade: Igel pinkeln lassen
+06:22=/juggle: Igel jonglieren lassen
+06:23=/rollup: Igel sich einigeln lassen
+06:24=/shrug: Igel mit den Achseln zucken lassen
+06:25=/wave: Igel winken lassen
+06:26=Unbekannter Befehl oder ungültige Parameter. Sag »/help« im Chat für eine Liste an Befehlen.
+06:27=/help room: Raum-Chatbefehle auflisten
+06:28=Du bist nicht online!

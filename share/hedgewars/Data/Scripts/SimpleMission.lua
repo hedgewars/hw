@@ -27,6 +27,7 @@ See the comment of SimpleMission for a specification of all parameters.
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 --[[
 SimpleMission(params)
@@ -53,27 +54,31 @@ The argument “params” is a table containing fields which describe the missio
 	- probability		probability in crates (default: 0)
 
 	TEAM DATA
+	- isMissionTeam		if true, this is the player's chosen team for this mission (default: false)
 	- hogs			table of hedgehogs in this team (must contain at least 1 hog)
-	- name			team name
 	- clanID		ID of the clan to which this team belongs to. Counting starts at 0.
 				By default, each team goes into its own clan.
 				Important: The clan of the player and allies MUST be 0.
 				Important: You MUST either set the clan ID explicitly for all teams or none of them.
+	These arguments will be ignored if this is a mission team:
+	- name			team name
 	- flag			flag name (default: hedgewars)
 	- grave			grave name (has default grave for each team)
 	- fort			fort name (default: Castle)
+	- voice			voicepack (default: Default_qau)
 
 	HEDGEHOG DATA:
 	- id			optional identifier for goals
-	- name			hog name
-	- x, y			hog position (default: spawns randomly on land)
-	- botLevel		1-5: Bot level (lower=stronger). 0=human player (default: 0)
-	- hat			hat name (default: NoHat)
 	- health		hog health (default: 100)
+	- ammo			table of ammo types
+	- x, y			hog position (default: spawns randomly on land)
 	- poisoned		if true, hedgehog starts poisoned with 5 poison damage. Set to a number for other poison damage (default: false)
 	- frozen		if true, hedgehogs starts frozen (default: false)
 	- faceLeft		initial facing direction. true=left, false=false (default: false)
-	- ammo			table of ammo types
+	These arguments will be ignored if the hog is in a mission team:
+	- name			hog name
+	- botLevel		1-5: Bot level (lower=stronger). 0=human player (default: 0)
+	- hat			hat name (default: NoHat)
 
 	GEAR TYPES:
 	- type			gear type
@@ -157,14 +162,14 @@ The argument “params” is a table containing fields which describe the missio
 	- type="distGearPos"	Distance between a gear and a fixed position
 		FAIL CONDITION:	Gear destroyed
 		- distance	goal distance to compare to
-		- relationship	"greaterThan" or "lowerThan"
+		- relationship	"greaterThan" or "smallerThan"
 		- id		gear to watch
 		- x		x coordinate to reach
 		- y		y coordinate to reach
 	- type="distGearGear"	Distance between two gears
 		FAIL CONDITION:	Any of both gears destroyed
 		- distance	goal distance to compare to
-		- relationship	"greaterThan" or "lowerThan"
+		- relationship	"greaterThan" or "smallerThan"
 		- id1		first gear to compare
 		- id2		second gear to compare
 	- type="damage"		Gear took damage or was destroyed
@@ -200,17 +205,6 @@ local teamHogs = {}
 	HELPER VARIABLES
 ]]
 
-local defaultClanColors = {
-	[0] = 0xff0204,	-- red
-	[1] = 0x4980c1,	-- blue
-	[2] = 0x1de6ba,	-- cyan
-	[3] = 0xb541ef,	-- purple
-	[4] = 0xe55bb0,	-- magenta
-	[5] = 0x20bf00,	-- green
-	[6] = 0xfe8b0e,	-- orange
-	[7] = 0x5f3605,	-- brown
-	[8] = 0xffff01,	-- yellow
-}
 local defaultGraves = {
 	"Grave", "Statue", "pyramid", "Simple", "skull", "Badger", "Duck2", "Flower"
 }
@@ -227,20 +221,6 @@ local function def(value, default)
 	else
 		return value
 	end
-end
-
--- Get hypotenuse of a triangle with legs x and y
-local function hypot(x, y)
-	local t
-	x = math.abs(x)
-	y = math.abs(y)
-	t = math.min(x, y)
-	x = math.max(x, y)
-	if x == 0 then
-		return 0
-	end
-	t = t / x
-	return x * math.sqrt(1 + t * t)
 end
 
 local errord = false
@@ -274,6 +254,8 @@ function SimpleMission(params)
 	_G.sm.gameEnded = false
 
 	_G.sm.playerClan = 0
+
+	_G.sm.wonVarWritten = false
 
 	_G.sm.makeStats = function(winningClan, customAchievements)
 		for t=0, TeamsCount-1 do
@@ -343,7 +325,7 @@ function SimpleMission(params)
 			return (TotalRounds) >= goal.rounds
 		elseif goal.type == "inZone" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			local gX, gY = GetGearPosition(_G.sm.goalGears[goal.id])
 			-- 4 sub-goals, each optional
@@ -353,26 +335,26 @@ function SimpleMission(params)
 			local g4 = (not goal.yMax) or gY <= goal.yMax
 			return g1 and g2 and g3 and g4
 		elseif goal.type == "distGearPos" or goal.type == "distGearGear" then
-			local gX, tY, tX, tY
+			local gX, gY, tX, tY
 			if goal.type == "distGearPos" then
 				if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
 					-- Fail if gear was destroyed
-					return "fail", criticalGearFailText(goal.id)
+					return "fail", _G.sm.criticalGearFailText(goal.id)
 				end
 				gX, gY = GetGearPosition(_G.sm.goalGears[goal.id])
 				tX, tY = goal.x, goal.y
 			elseif goal.type == "distGearGear" then
 				-- Fail if one of the gears was destroyed
 				if getGearValue(_G.sm.goalGears[goal.id1], "sm_destroyed") then
-					return "fail", criticalGearFailText(goal.id1)
+					return "fail", _G.sm.criticalGearFailText(goal.id1)
 				elseif getGearValue(_G.sm.goalGears[goal.id2], "sm_destroyed") then
-					return "fail", criticalGearFailText(goal.id2)
+					return "fail", _G.sm.criticalGearFailText(goal.id2)
 				end
 				gX, gY = GetGearPosition(_G.sm.goalGears[goal.id1])
 				tX, tY = GetGearPosition(_G.sm.goalGears[goal.id2])
 			end
 
-			local h = hypot(gX - tX, gY - tY)
+			local h = integerHypotenuse(gX - tX, gY - tY)
 			if goal.relationship == "smallerThan" then
 				return h < goal.distance
 			elseif goal.relationship == "greaterThan" then
@@ -406,27 +388,27 @@ function SimpleMission(params)
 			local drowned = getGearValue(_G.sm.goalGears[goal.id], "sm_drowned")
 			-- Fail if gear was destroyed by something other than drowning
 			if not drowned and getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return drowned
 		elseif goal.type == "poison" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], hePoisoned) >= 1
 		elseif goal.type == "freeze" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], heFrozen) >= 256
 		elseif goal.type == "cure" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], hePoisoned) == 0
 		elseif goal.type == "melt" then
 			if getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return GetEffect(_G.sm.goalGears[goal.id], heFrozen) == 0
 		elseif goal.type == "waterSkip" then
@@ -434,7 +416,7 @@ function SimpleMission(params)
 			local hasEnoughSkips = getGearValue(_G.sm.goalGears[goal.id], "sm_waterSkips") >= skips
 			-- Fail if gear was destroyed before it got the required number of skips
 			if not hasEnoughSkips and getGearValue(_G.sm.goalGears[goal.id], "sm_destroyed") then
-				return "fail", criticalGearFailText(goal.id)
+				return "fail", _G.sm.criticalGearFailText(goal.id)
 			end
 			return hasEnoughSkips
 		elseif goal.type == "teamDefeat" then
@@ -535,23 +517,28 @@ function SimpleMission(params)
 	_G.sm.win = function()
 		if not _G.sm.gameEnded then
 			_G.sm.gameEnded = true
-			AddCaption(loc("Victory!"), 0xFFFFFFFF, capgrpGameState)
-			SendStat(siGameResult, loc("You win!"))
-			if GetHogLevel(CurrentHedgehog) == 0 then
-				SetState(CurrentHedgehog, bor(GetState(CurrentHedgehog), gstWinner))
-				SetState(CurrentHedgehog, band(GetState(CurrentHedgehog), bnot(gstHHDriven)))
-				PlaySound(sndVictory, CurrentHedgehog)
+			if not _G.sm.wonVarWritten then
+				SaveMissionVar("Won", "true")
+				_G.sm.wonVarWritten = true
 			end
+			AddCaption(loc("Victory!"), capcolDefault, capgrpGameState)
+			SendStat(siGameResult, loc("Mission succeeded!"))
 			_G.sm.makeStats(_G.sm.playerClan)
 			EndGame()
+			if GetHogLevel(CurrentHedgehog) == 0 then
+				for team, hog in pairs(teamHogs[GetHogTeamName(CurrentHedgehog)]) do
+					SetState(hog, gstWinner)
+					PlaySound(sndVictory, hog)
+				end
+			end
 		end
 	end
 
 	_G.sm.lose = function(failReason)
 		if not _G.sm.gameEnded then
 			_G.sm.gameEnded = true
-			AddCaption(loc("Scenario failed!"), 0xFFFFFFFF, capgrpGameState)
-			SendStat(siGameResult, loc("You lose!"))
+			AddCaption(loc("Mission failed!"), capcolDefault, capgrpGameState)
+			SendStat(siGameResult, loc("Mission failed!"))
 			if failReason then
 				SendStat(siCustomAchievement, failReason)
 			end
@@ -574,7 +561,7 @@ function SimpleMission(params)
 	end
 
 	_G.onSuddenDeath = function()
-		sm.isInSuddenDeath = true
+		_G.sm.isInSuddenDeath = true
 	end
 
 	_G.onGearWaterSkip = function(gear)
@@ -638,7 +625,7 @@ function SimpleMission(params)
 		Explosives = 0
 
 		for initVarName, initVarValue in pairs(params.initVars) do
-			if initVarName == GameFlags then
+			if initVarName == "GameFlags" then
 				EnableGameFlags(initVarValue)
 			else
 				_G[initVarName] = initVarValue
@@ -661,12 +648,35 @@ function SimpleMission(params)
 			else
 				clanID = teamData.clanID
 			end
-			grave = def(teamData.grave, defaultGraves[math.min(teamID, 8)])
-			fort = def(teamData.fort, "Castle")
-			voice = def(teamData.voice, "Default")
-			flag = def(teamData.flag, defaultFlags[math.min(teamID, 8)])
 
-			AddTeam(name, defaultClanColors[clanID], grave, fort, voice, flag)
+			local realName
+			if teamData.isMissionTeam then
+				realName = AddMissionTeam(-(clanID+1))
+				_G.sm.playerClan = clanID
+			else
+				grave = def(teamData.grave, defaultGraves[math.min(teamID, 8)])
+				fort = def(teamData.fort, "Castle")
+				voice = def(teamData.voice, "Default_qau")
+				flag = def(teamData.flag, defaultFlags[math.min(teamID, 8)])
+
+				realName = AddTeam(name, -(clanID+1), grave, fort, voice, flag)
+			end
+
+			-- Update all teamDefeat goals if the real team name differs from the
+			-- team configuration.
+			-- (AddTeam might change the name due to naming collisions)
+			if name ~= realName then
+				local checks = { params.customGoals, params.customNonGoals }
+				for c=1, 2 do
+					if checks[c] then
+						for k,goal in pairs(checks[c]) do
+							if goal.type == "teamDefeat" and goal.teamName == name then
+								goal.teamName = realName
+							end
+						end
+					end
+				end
+			end
 
 			for hogID, hogData in pairs(teamData.hogs) do
 				local name, botLevel, health, hat
@@ -674,7 +684,12 @@ function SimpleMission(params)
 				botLevel = def(hogData.botLevel, 0)
 				health = def(hogData.health, 100)
 				hat = def(hogData.hat, "NoHat")
-				local hog = AddHog(name, botLevel, health, hat)
+				local hog
+				if teamData.isMissionTeam then
+					hog = AddMissionHog(health)
+				else
+					hog = AddHog(name, botLevel, health, hat)
+				end
 				if hogData.x ~= nil and hogData.y ~= nil then
 					SetGearPosition(hog, hogData.x, hogData.y)
 				end
@@ -716,6 +731,16 @@ function SimpleMission(params)
 		if params.customGoalCheck == "turnEnd" then
 			_G.sm.checkRegularVictory()
 			_G.sm.checkWinOrFail()
+		end
+	end
+
+	_G.onGameResult = function(winningClan)
+		if (params.customGoals == nil) and (not _G.sm.wonVarWritten) and (winningClan == _G.sm.playerClan) then
+			SendStat(siGameResult, loc("Mission succeeded!"))
+			SaveMissionVar("Won", "true")
+			_G.sm.wonVarWritten = true
+		else
+			SendStat(siGameResult, loc("Mission failed!"))
 		end
 	end
 
@@ -847,7 +872,7 @@ function SimpleMission(params)
 		end
 		if params.rubbers ~= nil then
 			for i, rubberData in pairs(params.rubbers) do
-				PlaceSprite(rubberData.x, rubberData.y, sprAmRubber, 0xFFFFFFFF, rubberData.frameIdx, false, false, false, lfBouncy)
+				PlaceSprite(rubberData.x, rubberData.y, sprAmRubber, capcolDefault, rubberData.frameIdx, false, false, false, lfBouncy)
 			end
 		end
 

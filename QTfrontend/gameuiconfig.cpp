@@ -93,6 +93,7 @@ void GameUIConfig::reloadValues(void)
     QString heightStr = QString::number(screenSize.height());
     QString wWidth = value("video/windowedWidth", widthStr).toString();
     QString wHeight = value("video/windowedHeight", heightStr).toString();
+    pIsEngineWindowMaximized = value("video/windowedMaximized", false).toBool();
     // If left blank reset the resolution to the default
     wWidth = (wWidth == "" ? widthStr : wWidth);
     wHeight = (wHeight == "" ? heightStr : wHeight);
@@ -105,15 +106,17 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBFrontendFullscreen->setChecked(ffscr);
 
     Form->ui.pageOptions->SLQuality->setValue(value("video/quality", 5).toUInt());
+    Form->ui.pageOptions->SLZoom->setValue(value("video/zoom", 100).toUInt());
     Form->ui.pageOptions->CBStereoMode->setCurrentIndex(value("video/stereo", 0).toUInt());
     Form->ui.pageOptions->CBFrontendEffects->setChecked(value("frontend/effects", true).toBool());
     Form->ui.pageOptions->CBSound->setChecked(value("audio/sound", true).toBool());
     Form->ui.pageOptions->CBFrontendSound->setChecked(value("frontend/sound", true).toBool());
     Form->ui.pageOptions->CBMusic->setChecked(value("audio/music", true).toBool());
     Form->ui.pageOptions->CBFrontendMusic->setChecked(value("frontend/music", true).toBool());
+    Form->ui.pageOptions->CBDampenAudio->setChecked(value("audio/dampen", true).toBool());
     Form->ui.pageOptions->SLVolume->setValue(value("audio/volume", 100).toUInt());
 
-    QString netNick = value("net/nick", tr("Guest")+QString("%1").arg(rand())).toString();
+    QString netNick = value("net/nick", getRandomNick()).toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
     bool savePwd = value("net/savepassword",true).toBool();
     Form->ui.pageOptions->CBSavePassword->setChecked(savePwd);
@@ -228,6 +231,10 @@ void GameUIConfig::resizeToConfigValues()
     const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
     Form->resize(value("frontend/width", qMin(qMax(deskSize.width()*2/3,800),deskSize.width())).toUInt(),
                  value("frontend/height", qMin(qMax(deskSize.height()*2/3,600),deskSize.height())).toUInt());
+    if(value("frontend/maximized", false) == true)
+        Form->setWindowState(Form->windowState() | Qt::WindowMaximized);
+    else
+        Form->setWindowState(Form->windowState() & ~Qt::WindowMaximized);
 
     // move the window to the center of the screen
     QPoint center = HWApplication::desktop()->availableGeometry(-1).center();
@@ -239,11 +246,13 @@ void GameUIConfig::resizeToConfigValues()
 void GameUIConfig::SaveOptions()
 {
     setValue("video/fullscreenResolution", Form->ui.pageOptions->CBResolution->currentText());
-    setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->text());
-    setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->text());
+    setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->value());
+    setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->value());
+    setValue("video/windowedMaximized", vid_Maximized());
     setValue("video/fullscreen", vid_Fullscreen());
 
     setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
+    setValue("video/zoom", Form->ui.pageOptions->SLZoom->value());
     setValue("video/stereo", stereoMode());
 
     setValue("frontend/effects", isFrontendEffects());
@@ -257,6 +266,7 @@ void GameUIConfig::SaveOptions()
     {
         setValue("frontend/width", Form->width());
         setValue("frontend/height", Form->height());
+        setValue("frontend/maximized", (Form->windowState() & Qt::WindowMaximized) != 0);
     }
     else
     {
@@ -268,6 +278,7 @@ void GameUIConfig::SaveOptions()
     setValue("audio/music", isMusicEnabled());
     setValue("frontend/music", isFrontendMusicEnabled());
     setValue("audio/volume", Form->ui.pageOptions->SLVolume->value());
+    setValue("audio/dampen", isAudioDampenEnabled());
 
     setValue("net/nick", netNick());
     if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
@@ -361,8 +372,8 @@ std::pair<QRect, QRect> GameUIConfig::vid_ResolutionPair() {
         full.setWidth(wh[0].toInt());
         full.setHeight(wh[1].toInt());
     }
-    windowed.setWidth(Form->ui.pageOptions->windowWidthEdit->text().toInt());
-    windowed.setHeight(Form->ui.pageOptions->windowHeightEdit->text().toInt());
+    windowed.setWidth(Form->ui.pageOptions->windowWidthEdit->value());
+    windowed.setHeight(Form->ui.pageOptions->windowHeightEdit->value());
     return std::make_pair(full, windowed);
 }
 
@@ -373,6 +384,16 @@ QRect GameUIConfig::vid_Resolution()
         return result.first;
     else
         return result.second;
+}
+
+bool GameUIConfig::vid_Maximized()
+{
+    return pIsEngineWindowMaximized;
+}
+
+void GameUIConfig::vid_SetMaximized(bool isMaximized)
+{
+    pIsEngineWindowMaximized = isMaximized;
 }
 
 bool GameUIConfig::vid_Fullscreen()
@@ -439,6 +460,26 @@ bool GameUIConfig::isFrontendFullscreen() const
     return Form->ui.pageOptions->CBFrontendFullscreen->isChecked();
 }
 
+quint16 GameUIConfig::zoom()
+{
+    return Form->ui.pageOptions->SLZoom->value();
+}
+
+bool GameUIConfig::isHolidaySillinessEnabled() const
+{
+    return value("misc/holidaySilliness", true).toBool();
+}
+
+int GameUIConfig::quickGameExperience() const
+{
+    return value("misc/quickGameExperience", 0).toInt();
+}
+
+void GameUIConfig::setQuickGameExperience(int exp)
+{
+    setValue("misc/quickGameExperience", exp);
+}
+
 bool GameUIConfig::isSoundEnabled()
 {
     return Form->ui.pageOptions->CBSound->isChecked();
@@ -455,6 +496,10 @@ bool GameUIConfig::isMusicEnabled()
 bool GameUIConfig::isFrontendMusicEnabled()
 {
     return Form->ui.pageOptions->CBFrontendMusic->isChecked();
+}
+bool GameUIConfig::isAudioDampenEnabled()
+{
+    return Form->ui.pageOptions->CBDampenAudio->isChecked();
 }
 
 bool GameUIConfig::isShowFPSEnabled()
@@ -497,6 +542,16 @@ QString GameUIConfig::netNick()
 void GameUIConfig::updNetNick()
 {
     Form->ui.pageOptions->editNetNick->setText(value("net/nick", "").toString());
+}
+
+QString GameUIConfig::getRandomNick()
+{
+    // Generate random nick name or pick old one if one was already generated.
+    QString nick;
+    if (cachedRandomNick.isNull())
+        // "Guest" + number between 1 and 99999
+        cachedRandomNick = tr("Guest") + QString("%1").arg(rand() % 99999 + 1);
+    return cachedRandomNick;
 }
 
 QByteArray GameUIConfig::netPasswordHash()

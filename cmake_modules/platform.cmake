@@ -1,9 +1,12 @@
 
 if(APPLE)
-    if(${CMAKE_VERSION} VERSION_GREATER "2.8.10.2" AND
-       ${CMAKE_VERSION} VERSION_LESS "2.8.12.1")
-        message(FATAL_ERROR "This version of CMake is known *not* to work, please update or use a lower version")
-    endif()
+    #minimum for macOS.  sorry!
+    cmake_minimum_required(VERSION 3.9.0)
+
+    #set c++11 standard for QT requirements
+    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
 
     set(CMAKE_FIND_FRAMEWORK "FIRST")
 
@@ -31,21 +34,10 @@ if(APPLE)
         set(minimum_macosx_version ${current_macosx_version})
     endif()
 
-    #10.3 systems don't have enough processing power anyway
-    #10.4 does not have @rpath support (which SDL uses)
-    if(minimum_macosx_version VERSION_LESS "10.5")
-        message(FATAL_ERROR "Hedgewars is not supported on your version of Mac OS X")
-    endif()
-
-    if(NOT CMAKE_OSX_ARCHITECTURES)
-        if(current_macosx_version VERSION_LESS "10.6")
-            #SDL is only 32 bit on older OS version
-            if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
-                set(CMAKE_OSX_ARCHITECTURES "ppc7400")
-            else()
-                set(CMAKE_OSX_ARCHITECTURES "i386")
-            endif()
-        endif()
+    #minimum OSX version is 10.8.  Earlier versions cannot compile some dependencies anymore
+    #(like ffmpeg/libav)
+    if(minimum_macosx_version VERSION_LESS "10.8")
+        message(FATAL_ERROR "Hedgewars is unsupported on your platform and requires Mac OS X 10.8+")
     endif()
 
     #parse this system variable and adjust only the powerpc syntax to be compatible with -P
@@ -97,12 +89,6 @@ if(APPLE)
     #add user framework directory
     add_flag_append(CMAKE_Pascal_FLAGS "-Ff~/Library/Frameworks")
 
-    #workaround older cmake versions
-    if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
-        add_flag_append(CMAKE_C_LINK_FLAGS "-Wl,-rpath -Wl,${CMAKE_INSTALL_RPATH}")
-        add_flag_append(CMAKE_CXX_LINK_FLAGS "-Wl,-rpath -Wl,${CMAKE_INSTALL_RPATH}")
-        add_flag_append(CMAKE_Pascal_LINK_FLAGS "-k-rpath -k${CMAKE_INSTALL_RPATH}")
-    endif()
 endif(APPLE)
 
 if(MINGW)

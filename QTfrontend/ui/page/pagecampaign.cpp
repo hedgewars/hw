@@ -33,7 +33,10 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     pageLayout->setRowStretch(0, 1);
     pageLayout->setRowStretch(3, 1);
 
+    QWidget * infoWidget = new QWidget();
+    infoWidget->setObjectName("campaignInfo");
     QGridLayout * infoLayout = new QGridLayout();
+    infoWidget->setLayout(infoLayout);
     infoLayout->setColumnStretch(0, 1);
     infoLayout->setColumnStretch(1, 1);
     infoLayout->setColumnStretch(2, 1);
@@ -43,7 +46,7 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     infoLayout->setRowStretch(1, 1);
 
     // set this as default image first time page is created, this will change in hwform.cpp
-    btnPreview = formattedButton(":/res/campaign/A_Classic_Fairytale/first_blood.png", true);
+    btnPreview = formattedButton("physfs://Graphics/Missions/Campaign/A_Classic_Fairytale/first_blood@2x.png", true);
     btnPreview->setWhatsThis(tr("Start fighting"));
     infoLayout->setAlignment(btnPreview, Qt::AlignHCenter | Qt::AlignVCenter);
 
@@ -69,7 +72,7 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     infoLayout->addWidget(lbltitle,0,2,1,2);
     infoLayout->addWidget(lbldescription,1,2,1,2);
 
-    pageLayout->addLayout(infoLayout, 0, 0, 2, 4);
+    pageLayout->addWidget(infoWidget, 0, 0, 2, 4);
     pageLayout->addWidget(lblteam, 2, 1);
     pageLayout->addWidget(lblcampaign, 3, 1);
     pageLayout->addWidget(lblmission, 4, 1);

@@ -1,7 +1,9 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local player = nil -- This variable will point to the hog's gear
+local playerTeamName, enemyTeamName = nil, nil
 local instructor = nil
 local enemy = nil
 
@@ -23,25 +25,24 @@ function onGameInit()
 	CaseFreq = 0 -- The frequency of crate drops
 	MinesNum = 0 -- The number of mines being placed
 	Explosives = 0 -- The number of explosives being placed
-	Delay = 0 -- The delay between each round
 	Map = "Bath" -- The map to be played
 	Theme = "Bath" -- The theme to be used
 	-- Disable Sudden Death
 	HealthDecrease = 0
 	WaterRise = 0
 
-	AddTeam(loc("Bloody Rookies"), 14483456, "Rubberduck", "Island", "Default", "cm_duckhead")
-	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
+	playerTeamName = AddMissionTeam(-1)
+	player = AddMissionHog(1)
 	instructor = AddHog(loc("Instructor"), 0, 100, "sf_vega")
 
-	AddTeam(loc("Blue Team"), 29439, "bubble", "Island", "Default", "somalia")
+	enemyTeamName = AddTeam(loc("Blue Team"), -2, "bubble", "Island", "Default_qau", "somalia")
 	enemy = AddHog(loc("Filthy Blue"), 1, 100, "Skull")
 
 	SetGearPosition(player,146,902)
 	SetGearPosition(instructor,317,902)
 	SetGearPosition(enemy,1918,837)
 
-	HogSay(player, ".............................", SAY_THINK)
+	HogSay(player, loc("..."), SAY_THINK)
 	HogTurnLeft(instructor, true)
 
 end
@@ -54,7 +55,7 @@ function onGameStart()
 
 	FollowGear(player)
 
-	ShowMission(loc("Dangerous Ducklings"), loc("Scenario"), loc("Eliminate the Blue Team before the time runs out."), -amRope, 5000);
+	ShowMission(loc("Dangerous Ducklings"), loc("Scenario"), loc("Eliminate the enemy before the time runs out."), -amRope, 5000);
 
 end
 
@@ -112,11 +113,9 @@ function onGameTick()
 		endTimer = endTimer + 1
 		if (CurrentHedgehog ~= nil) and (CurrentHedgehog == instructor) then
 			if endTimer >= 3000 then
-				--SetHealth(instructor,0)
-				TurnTimeLeft = 1
-				DismissTeam(loc("Bloody Rookies"))
+				SetTurnTimeLeft(1)
+				DismissTeam(playerTeamName)
 			end
-			ShowMission(loc("Dangerous Ducklings"), loc("MISSION FAILED"), loc("You've failed. Try again."), -amRope, 5000);
 		end
 	end
 
@@ -135,17 +134,24 @@ function onGearDelete(gear)
 			gameLost = true
 		elseif (gear == instructor) and (GetY(gear) > WaterLine) then
 			HogSay(player, loc("See ya!"), SAY_THINK)
-			TurnTimeLeft = 3000
-			local achievementString = string.format(loc("Achievement gotten: %s"), loc("Naughty Ninja"))
-			AddCaption(achievementString, 0xffba00ff, capgrpMessage2)
-			SendStat(siCustomAchievement, achievementString)
-			DismissTeam(loc("Blue Team"))
+			Retreat(3000)
+			awardAchievement(loc("Naughty Ninja"))
+			DismissTeam(enemyTeamName)
 			gameWon = true
 		elseif gear == enemy then
 			HogSay(player, loc("Enjoy the swim..."), SAY_THINK)
 			gameWon = true
-			TurnTimeLeft = 3000
+			Retreat(3000)
 		end
 
+	end
+end
+
+function onGameResult(winner)
+	if winner == GetTeamClan(playerTeamName) then
+		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
 	end
 end

@@ -38,20 +38,15 @@ var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
     StartTicks: Longword;
-    ThinkThread: PSDL_Thread;
-    ThreadLock: PSDL_Mutex;
+    ThreadSem: PSDL_Sem;
 
 procedure FreeActionsList;
 begin
     AddFileLog('FreeActionsList called');
-    if (ThinkThread <> nil) then
-        begin
-        StopThinking:= true;
-        SDL_WaitThread(ThinkThread, nil);
-        end;
-    SDL_LockMutex(ThreadLock);
-    ThinkThread:= nil;
-    SDL_UnlockMutex(ThreadLock);
+
+    StopThinking:= true;
+    SDL_SemWait(ThreadSem);
+    SDL_SemPost(ThreadSem);
 
     if CurrentHedgehog <> nil then
         with CurrentHedgehog^ do
@@ -66,7 +61,6 @@ end;
 
 const cBranchStackSize = 12;
 type TStackEntry = record
-                   WastedTicks: Longword;
                    MadeActions: TActions;
                    Hedgehog: TGear;
                    end;
@@ -76,14 +70,13 @@ var Stack: record
            States: array[0..Pred(cBranchStackSize)] of TStackEntry;
            end;
 
-function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
+function Push(const Actions: TActions; const Me: TGear; Dir: integer): boolean;
 var bRes: boolean;
 begin
     bRes:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
     if bRes then
         with Stack.States[Stack.Count] do
             begin
-            WastedTicks:= Ticks;
             MadeActions:= Actions;
             Hedgehog:= Me;
             Hedgehog.Message:= Dir;
@@ -92,12 +85,11 @@ begin
     Push:= bRes
 end;
 
-procedure Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear);
+procedure Pop(var Actions: TActions; var Me: TGear);
 begin
     dec(Stack.Count);
     with Stack.States[Stack.Count] do
         begin
-        Ticks:= WastedTicks;
         Actions:= MadeActions;
         Me:= Hedgehog
         end
@@ -115,6 +107,7 @@ begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
 windSpeed:= hwFloat2Float(cWindSpeed);
 useThisActions:= false;
+Me^.AIHints:= Me^.AIHints and (not aihAmmosChanged);
 
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
@@ -253,15 +246,16 @@ end;
 procedure Walk(Me: PGear; var Actions: TActions);
 const FallPixForBranching = cHHRadius;
 var
-    ticks, maxticks, oldticks, steps, tmp: Longword;
-    BaseRate, BestRate, Rate: integer;
+    maxticks, oldticks, steps, tmp: Longword;
+    BaseRate, BestRate, Rate: LongInt;
     GoInfo: TGoInfo;
     CanGo: boolean;
     AltMe: TGear;
     BotLevel: Byte;
     a: TAmmoType;
+    isAfterAttack: boolean;
 begin
-ticks:= 0;
+Actions.ticks:= 0;
 oldticks:= 0; // avoid compiler hint
 Stack.Count:= 0;
 
@@ -272,12 +266,13 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 
 BotLevel:= Me^.Hedgehog^.BotLevel;
 
-if (Me^.State and gstAttacked) = 0 then
-    maxticks:= Max(0, TurnTimeLeft - 5000 - LongWord(4000 * BotLevel))
+isAfterAttack:= ((Me^.State and gstAttacked) <> 0) and ((GameFlags and gfInfAttack) = 0);
+if isAfterAttack then
+    maxticks:= Max(0, TurnTimeLeft - 500)
 else
-    maxticks:= TurnTimeLeft;
+    maxticks:= Max(0, TurnTimeLeft - 5000 - LongWord(4000 * BotLevel));
 
-if (Me^.State and gstAttacked) = 0 then
+if not isAfterAttack then
     TestAmmos(Actions, Me, false);
 
 BestRate:= RatePlace(Me);
@@ -291,12 +286,12 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
     and (CurrentHedgehog^.Effects[heArtillery] = 0) and (cGravityf <> 0) then
     begin
     tmp:= random(2) + 1;
-    Push(0, Actions, Me^, tmp);
-    Push(0, Actions, Me^, tmp xor 3);
+    Push(Actions, Me^, tmp);
+    Push(Actions, Me^, tmp xor 3);
 
     while (Stack.Count > 0) and (not StopThinking) do
         begin
-        Pop(ticks, Actions, Me^);
+        Pop(Actions, Me^);
 
         AddAction(Actions, Me^.Message, aim_push, 250, 0, 0);
         if (Me^.Message and gmLeft) <> 0 then
@@ -311,10 +306,25 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
     {$HINTS OFF}
             CanGo:= HHGo(Me, @AltMe, GoInfo);
     {$HINTS ON}
-            oldticks:= ticks;
-            inc(ticks, GoInfo.Ticks);
-            if ticks > maxticks then
+            oldticks:= Actions.ticks;
+            inc(Actions.ticks, GoInfo.Ticks);
+            if (Actions.ticks > maxticks) or (TurnTimeLeft < BestActions.ticks + 5000) then
+            begin
+                if (BotLevel < 5)
+                        and (not isAfterAttack)
+                        and (BestActions.Score > 0) // we have a good move
+                        and (TurnTimeLeft < BestActions.ticks + 5000) // we won't have a lot of time after attack
+                        and (HHHasAmmo(Me^.Hedgehog^, amExtraTime) > 0) // but can use extra time
+                then
+                begin
+                    BestActions.Count:= 0;
+                    AddAction(BestActions, aia_Weapon, Longword(amExtraTime), 80, 0, 0);
+                    AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                    AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                end;
+
                 break;
+            end;
 
             if (BotLevel < 5)
                 and (GoInfo.JumpType = jmpHJump)
@@ -323,7 +333,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 begin
                 // check if we could go backwards and maybe ljump over a gap after this hjump
                 addMark(hwRound(Me^.X), hwRound(Me^.Y), markHJumped);
-                if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
+                if Push(Actions, AltMe, Me^.Message xor 3) then
                     begin
                     with Stack.States[Pred(Stack.Count)] do
                         begin
@@ -336,7 +346,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                         AddAction(MadeActions, aia_HJump, 0, 350, 0, 0);
                         end;
                     // but first check walking forward
-                    Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
+                    Push(Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
                     end;
                 end;
             if (BotLevel < 3)
@@ -346,7 +356,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 begin
                 addMark(hwRound(Me^.X), hwRound(Me^.Y), markLJumped);
                 // at final check where we go after jump walking backward
-                if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
+                if Push(Actions, AltMe, Me^.Message xor 3) then
                     with Stack.States[Pred(Stack.Count)] do
                         begin
                         if (Me^.Message and gmLeft) <> 0 then
@@ -358,12 +368,13 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                         end;
 
                 // push current position so we proceed from it after checking jump+forward walk opportunities
-                if CanGo then Push(ticks, Actions, Me^, Me^.Message);
+                if CanGo then Push(Actions, Me^, Me^.Message);
 
                 // first check where we go after jump walking forward
-                if Push(ticks, Actions, AltMe, Me^.Message) then
+                if Push(Actions, AltMe, Me^.Message) then
                     with Stack.States[Pred(Stack.Count)] do
                         AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
+
                 break
                 end;
 
@@ -379,27 +390,22 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 BestActions:= Actions;
                 BestActions.isWalkingToABetterPlace:= true;
                 BestRate:= Rate;
-                Me^.State:= Me^.State or gstAttacked // we have better place, go there and do not use ammo
+                isAfterAttack:= true // we have better place, go there and do not use ammo
                 end
             else if Rate < BestRate then
                 break;
 
-            if ((Me^.State and gstAttacked) = 0) and ((steps mod 4) = 0) then
+            if (not isAfterAttack) and ((steps mod 4) = 0) then
                 begin
                 if (steps > 4) and checkMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere) then
                     break;
                 addMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere);
 
-                TestAmmos(Actions, Me, ticks shr 12 = oldticks shr 12);
-
+                TestAmmos(Actions, Me, Actions.ticks shr 12 = oldticks shr 12);
                 end;
 
             if GoInfo.FallPix >= FallPixForBranching then
-                Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
-
-            if (StartTicks > GameTicks - 1500) and (not StopThinking) then
-                SDL_Delay(1000);
-
+                Push(Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
             end {while};
 
         if BestRate > BaseRate then
@@ -427,7 +433,7 @@ if Me^.Hedgehog^.BotLevel <> 5 then
     switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch)
 else switchCount:= 0;
 
-if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
+if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity or ((Me^.AIHints and aihAmmosChanged) <> 0) then
     if Targets.Count > 0 then
         begin
         // iterate over current team hedgehogs
@@ -463,8 +469,8 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
             or (itHedgehog = currHedgehogIndex)
             or BestActions.isWalkingToABetterPlace;
 
-            if (StartTicks > GameTicks - 1500) and (not StopThinking) then
-                SDL_Delay(700);
+        if (StartTicks > GameTicks - 1500) and (not StopThinking) then
+            SDL_Delay(700);
 
         if (BestActions.Score < -1023) and (not BestActions.isWalkingToABetterPlace) then
             begin
@@ -473,8 +479,8 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
             FillBonuses(false);
 
             // Hog has no idea what to do. Use tardis or skip
-            if not bonuses.activity then
-                if (((GameFlags and gfInfAttack) <> 0) or (not isInMultiShoot)) and ((HHHasAmmo(Me^.Hedgehog^, amTardis) > 0)) and (CanUseTardis(Me^.Hedgehog^.Gear)) and (random(4) < 3) then
+            if (not bonuses.activity) and ((Me^.AIHints and aihAmmosChanged) = 0) then
+                if (((GameFlags and gfInfAttack) <> 0) or (CurrentHedgehog^.MultiShootAttacks = 0)) and (HHHasAmmo(Me^.Hedgehog^, amTardis) > 0) and (CanUseTardis(Me^.Hedgehog^.Gear)) and (random(4) < 3) then
                     // Tardis brings hog to a random place. Perfect for clueless AI
                     begin
                     AddAction(BestActions, aia_Weapon, Longword(amTardis), 80, 0, 0);
@@ -483,6 +489,7 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
                     end
                 else
                     AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+            Me^.AIHints := ME^.AIHints and (not aihAmmosChanged);
             end;
 
         end else SDL_Delay(100)
@@ -512,18 +519,18 @@ else
     end;
 
 Me^.State:= Me^.State and (not gstHHThinking);
-SDL_LockMutex(ThreadLock);
-ThinkThread:= nil;
-SDL_UnlockMutex(ThreadLock);
 Think:= 0;
+SDL_SemPost(ThreadSem);
 end;
 
 procedure StartThink(Me: PGear);
+var ThinkThread: PSDL_Thread;
 begin
 if ((Me^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0)
 or isInMultiShoot then
     exit;
 
+SDL_SemWait(ThreadSem);
 //DeleteCI(Me); // this will break demo/netplay
 
 Me^.State:= Me^.State or gstHHThinking;
@@ -544,11 +551,10 @@ if Targets.Count = 0 then
     exit
     end;
 
-FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot));
+FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot) and ((GameFlags and gfInfAttack) = 0));
 
-SDL_LockMutex(ThreadLock);
 ThinkThread:= SDL_CreateThread(@Think, PChar('think'), Me);
-SDL_UnlockMutex(ThreadLock);
+SDL_DetachThread(ThinkThread);
 end;
 
 {$IFDEF DEBUGAI}
@@ -561,7 +567,7 @@ begin
 with CurrentHedgehog^ do
     if (Gear <> nil)
     and ((Gear^.State and gstHHDriven) <> 0)
-    and (TurnTimeLeft < cHedgehogTurnTime - 50) then
+    and ((TurnTimeLeft < cHedgehogTurnTime - 50) or (TurnTimeLeft > cHedgehogTurnTime)) then
         if ((Gear^.State and gstHHThinking) = 0) then
             if (BestActions.Pos >= BestActions.Count)
             and (TurnTimeLeft > cStopThinkTime) then
@@ -600,14 +606,13 @@ end;
 procedure initModule;
 begin
     StartTicks:= 0;
-    ThinkThread:= nil;
-    ThreadLock:= SDL_CreateMutex();
+    ThreadSem:= SDL_CreateSemaphore(1);
 end;
 
 procedure freeModule;
 begin
     FreeActionsList();
-    SDL_DestroyMutex(ThreadLock);
+    SDL_DestroySemaphore(ThreadSem);
 end;
 
 end.

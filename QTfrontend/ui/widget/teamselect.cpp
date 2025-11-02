@@ -74,6 +74,11 @@ void TeamSelWidget::setInteractivity(bool interactive)
     framePlaying->setInteractivity(interactive);
 }
 
+void TeamSelWidget::setUser(const QString& nickname)
+{
+    m_curUser = nickname;
+}
+
 void TeamSelWidget::hhNumChanged(const HWTeam& team)
 {
     QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
@@ -152,6 +157,37 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
+// Removes teams classified as net teams but which are owned by the local user.
+// Those teams don't make sense and might be leftovers from a finished game
+// after rejoining. See also: Bugzilla bug 597.
+void TeamSelWidget::cleanupFakeNetTeams()
+{
+    // m_curUser is not set for offline games. No cleanup is needed when offline.
+    if(m_curUser.isNull())
+        return;
+
+    QList<HWTeam>::iterator itPlay = curPlayingTeams.begin();
+    while(itPlay != curPlayingTeams.end())
+    {
+        if(itPlay->isNetTeam() && itPlay->owner() == m_curUser)
+        {
+            qDebug() << QString("cleanupFakeNetTeams: team '%1' removed").arg(itPlay->name());
+            QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
+            framePlaying->removeTeam(*itPlay);
+            itPlay = curPlayingTeams.erase(itPlay);
+        }
+        else
+            itPlay++;
+    }
+
+    // Show team notice if less than two teams.
+    if (curPlayingTeams.size() < 2)
+    {
+        numTeamNotice->show();
+    }
+    emit setEnabledGameStart(curPlayingTeams.size()>1);
+}
+
 void TeamSelWidget::changeTeamStatus(HWTeam team)
 {
     QList<HWTeam>::iterator itDontPlay=std::find(m_curNotPlayingTeams.begin(), m_curNotPlayingTeams.end(), team);
@@ -179,8 +215,9 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
         // dont playing team => playing
         itDontPlay->setColor(framePlaying->getNextColor());
         team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
-        curPlayingTeams.push_back(*itDontPlay);
-        if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
+        team.setOwner(m_curUser);
+        curPlayingTeams.push_back(team);
+        if(!m_acceptOuter) emit teamWillPlay(team);
         m_curNotPlayingTeams.erase(itDontPlay);
 
         // Hide team notice if at least two teams.

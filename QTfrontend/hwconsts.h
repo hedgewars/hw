@@ -28,6 +28,7 @@ extern QString * cVersionString;
 extern QString * cRevisionString;
 extern QString * cHashString;
 extern QString * cDataDir;
+extern QString * cSafeFileNameRegExp;
 
 extern QDir * bindir;
 extern QDir * cfgdir;
@@ -37,7 +38,9 @@ extern bool custom_config;
 extern bool custom_data;
 
 extern int cMaxTeams;
+extern int cMaxHHs;
 extern int cMinServerVersion;
+extern unsigned char cInvertTextColorAt;
 
 class QStandardItemModel;
 
@@ -45,6 +48,7 @@ extern QString * cDefaultAmmoStore;
 extern QString * cEmptyAmmoStore;
 extern int cAmmoNumber;
 extern QList< QPair<QString, QString> > cDefaultAmmos;
+extern QStringList cQuickGameMaps;
 
 extern unsigned int colors[];
 
@@ -73,6 +77,12 @@ extern int years_since_foundation;
 #define NETGAME_DEFAULT_PORT 46631
 #define HEDGEHOGS_PER_TEAM 8
 
+//Selected engine exit codes, see hedgewars/uConsts.pas
+#define HWENGINE_EXITCODE_OK 0
+#define HWENGINE_EXITCODE_FATAL 52
+
+// Default clan colors
+// NOTE: Always keep this in sync with hedgewars/uVariables.pas (ClanColorArray)
 
 // see https://en.wikipedia.org/wiki/List_of_colors
 /*define HW_TEAMCOLOR_ARRAY  {0xff007fff, /. azure          ./ \
@@ -105,7 +115,7 @@ extern int years_since_foundation;
                               0xffe55bb0, /* pink   */ \
                               0xff20bf00, /* green  */ \
                               0xfffe8b0e, /* orange */ \
-                              0xff5f3605, /* brown  */ \
+                              0xff8f5902, /* brown  */ \
                               0xffffff01, /* yellow */ \
                               /* add new colors here */ \
                               0 }

@@ -23,6 +23,7 @@
 #include "gameuiconfig.h"
 #include "hwconsts.h"
 #include "game.h"
+#include "util/MessageDialog.h"
 #include "LibavInteraction.h"
 
 // Encoding is memory expensive process, so we need to limit maximum number
@@ -33,12 +34,13 @@ static int numRecorders = 0;
 static QList<HWRecorder*> queue;
 
 HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
-    TCPBase(false)
+    TCPBase(false, !config->language().isEmpty())
 {
     this->config = config;
     this->prefix = prefix;
     item = 0;
     finished = false;
+    aborted = false;
     name = prefix + "." + LibavInteraction::instance().getExtension(config->AVFormat());
 }
 
@@ -75,6 +77,16 @@ void HWRecorder::onClientRead()
         case 'v':
             finished = true;
             break;
+        case 'E':
+            int size = msg.size();
+            emit ErrorMessage(
+                tr("A fatal ERROR occured while processing the video recording! "
+                "The video could not be saved.\n\n"
+                "As a workaround, you could try to reset the Hedgewars video recorder settings to the defaults.\n\n"
+                "To report this error, please click the 'Feedback' button in the main menu!\n\n"
+                "Last engine message:\n%1")
+                .arg(QString::fromUtf8(msg.mid(2).left(size - 4))));
+            return;
         }
     }
 }
@@ -140,7 +152,10 @@ QStringList HWRecorder::getArguments()
 // Could use a field to use quality instead. maybe quality could override bitrate - or just pass (and set) both.
 // The library does support using both at once after all.
     arguments << QString::number(config->rec_Bitrate()*1024);
-    arguments << (config->recordAudio() ? config->audioCodec() : "no");
+    if (config->recordAudio() && (config->isSoundEnabled() || config->isMusicEnabled()))
+        arguments << config->audioCodec();
+    else
+        arguments << "no";
 
     return arguments;
 }
@@ -148,4 +163,11 @@ QStringList HWRecorder::getArguments()
 bool HWRecorder::simultaneousRun()
 {
     return true;
+}
+
+void HWRecorder::abort()
+{
+    queue.removeOne(this);
+    aborted = true;
+    deleteLater();
 }

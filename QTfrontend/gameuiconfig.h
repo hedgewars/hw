@@ -40,6 +40,8 @@ class GameUIConfig : public QSettings
         QStringList GetTeamsList();
         QRect vid_Resolution();
         std::pair<QRect, QRect> vid_ResolutionPair();
+        bool vid_Maximized();
+        void vid_SetMaximized(bool isMaximized);
         bool vid_Fullscreen();
         quint32 translateQuality();
         bool isSoundEnabled();
@@ -47,12 +49,14 @@ class GameUIConfig : public QSettings
         QString language();
         bool isMusicEnabled();
         bool isFrontendMusicEnabled();
+        bool isAudioDampenEnabled();
         bool isShowFPSEnabled();
         bool isAltDamageEnabled();
         bool appendDateTimeToRecordName();
         quint8 volume();
         quint8 timerInterval();
         QString netNick();
+        QString getRandomNick();
         QByteArray netPasswordHash();
         int netPasswordLength();
         void clearPasswordHash();
@@ -65,6 +69,10 @@ class GameUIConfig : public QSettings
         bool isReducedQuality() const;
         bool isFrontendEffects() const;
         bool isFrontendFullscreen() const;
+        quint16 zoom();
+        bool isHolidaySillinessEnabled() const;
+        int quickGameExperience() const;
+        void setQuickGameExperience(int exp);
         void resizeToConfigValues();
         quint32 stereoMode() const;
         void setValue(const QString & key, const QVariant & value);
@@ -101,6 +109,9 @@ class GameUIConfig : public QSettings
         QList<BindAction> m_binds;
 
         void applyProxySettings();
+        bool pIsEngineWindowMaximized;
+
+        QString cachedRandomNick;
 };
 
 #endif

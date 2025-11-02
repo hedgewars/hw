@@ -28,6 +28,7 @@
 #include <QLocale>
 #include <QSettings>
 
+#include "mission.h"
 #include "hwconsts.h"
 #include "DataManager.h"
 
@@ -37,26 +38,32 @@ QLayout * PageTraining::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
 
-// left column
-
     // declare start button, caption and description
     btnPreview = formattedButton(":/res/Trainings.png", true);
 
-    // make both rows equal height
+    // tweak widget spacing
     pageLayout->setRowStretch(0, 1);
     pageLayout->setRowStretch(1, 1);
+    pageLayout->setRowStretch(2, 1);
+    pageLayout->setColumnStretch(0, 5);
+    pageLayout->setColumnStretch(1, 1);
+    pageLayout->setColumnStretch(2, 9);
+    pageLayout->setColumnStretch(3, 5);
 
-    // add start button, caption and description to 3 different rows
-    pageLayout->addWidget(btnPreview, 0, 0);
+    QWidget * infoWidget = new QWidget();
+    QHBoxLayout * infoLayout = new QHBoxLayout();
+    // add preview, caption and description
+    infoWidget->setLayout(infoLayout);
+    infoLayout->addWidget(btnPreview);
 
     // center preview
-    pageLayout->setAlignment(btnPreview, Qt::AlignRight | Qt::AlignVCenter);
-
-
-// right column
+    infoLayout->setAlignment(btnPreview, Qt::AlignRight | Qt::AlignVCenter);
 
     // info area (caption on top, description below)
-    QVBoxLayout * infoLayout = new QVBoxLayout();
+    QWidget * infoTextWidget = new QWidget();
+    QVBoxLayout * infoTextLayout = new QVBoxLayout();
+    infoTextWidget->setObjectName("trainingInfo");
+    infoTextWidget->setLayout(infoTextLayout);
 
     lblCaption = new QLabel();
     lblCaption->setMinimumWidth(360);
@@ -66,37 +73,50 @@ QLayout * PageTraining::bodyLayoutDefinition()
     lblDescription->setMinimumWidth(360);
     lblDescription->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     lblDescription->setWordWrap(true);
+    lblHighscores = new QLabel();
+    lblHighscores->setMinimumWidth(360);
+    lblHighscores->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
-    infoLayout->addWidget(lblCaption);
-    infoLayout->addWidget(lblDescription);
+    infoTextLayout->addWidget(lblCaption);
+    infoTextLayout->addWidget(lblDescription);
+    infoTextLayout->addWidget(lblHighscores);
 
-    pageLayout->addLayout(infoLayout, 0, 1);
-    pageLayout->setAlignment(infoLayout, Qt::AlignLeft);
+    infoLayout->addWidget(infoTextWidget);
+
+    pageLayout->addWidget(infoWidget, 0, 1, 1, 2); // span 2 columns
+    pageLayout->setAlignment(infoTextWidget, Qt::AlignLeft);
 
 
     // tab widget containing all lists
     tbw = new QTabWidget(this);
-    pageLayout->addWidget(tbw, 1, 0, 1, 2); // span 2 columns
+    pageLayout->addWidget(tbw, 1, 0, 1, 4); // span 4 columns
     // let's not make the tab widget use more space than needed
     tbw->setFixedWidth(400);
     pageLayout->setAlignment(tbw, Qt::AlignHCenter);
-    
-    tbw->setStyleSheet("QListWidget { border-style: none; padding-top: 6px; }");
 
     // training/challenge/scenario lists
     lstTrainings = new QListWidget(this);
     lstTrainings ->setWhatsThis(tr("Pick the training to play"));
+    lstTrainings ->setObjectName("trainingList");
 
     lstChallenges = new QListWidget(this);
     lstChallenges ->setWhatsThis(tr("Pick the challenge to play"));
+    lstChallenges ->setObjectName("trainingList");
 
     lstScenarios= new QListWidget(this);
     lstScenarios->setWhatsThis(tr("Pick the scenario to play"));
+    lstScenarios->setObjectName("trainingList");
 
     tbw->addTab(lstTrainings, tr("Trainings"));
     tbw->addTab(lstChallenges, tr("Challenges"));
     tbw->addTab(lstScenarios, tr("Scenarios"));
     tbw->setCurrentWidget(lstTrainings);
+
+    QLabel* lblteam = new QLabel(tr("Team"));
+    CBTeam = new QComboBox(this);
+    CBTeam->setMaxVisibleItems(30);
+    pageLayout->addWidget(lblteam, 2, 1);
+    pageLayout->addWidget(CBTeam, 2, 2);
 
     return pageLayout;
 }
@@ -197,6 +217,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
         // first, load scripts in order specified in order.cfg (if present)
         QFile orderFile(QString("physfs://Missions/%1/order.cfg").arg(subFolder));
         QStringList orderedMissions;
+
         if (orderFile.open(QFile::ReadOnly))
         {
             QString m_id;
@@ -284,7 +305,7 @@ void PageTraining::startSelected()
     list = (QListWidget*) tbw->currentWidget();
     QListWidgetItem * curItem = list->currentItem();
 
-    if (curItem != NULL)
+    if ((curItem != NULL) && (CBTeam->currentIndex() != -1))
         emit startMission(curItem->data(Qt::UserRole).toString(), getSubFolderOfSelected());
 }
 
@@ -299,37 +320,70 @@ void PageTraining::updateInfo()
         list = (QListWidget*) tbw->currentWidget();
         if (list->currentItem())
         {
-            // TODO also use .pngs in userdata folder
+            QString missionName = list->currentItem()->data(Qt::UserRole).toString();
             QString thumbFile =     "physfs://Graphics/Missions/" +
                                     subFolder + "/" +
-                                    list->currentItem()->data(Qt::UserRole).toString() +
+                                    missionName +
                                     "@2x.png";
 
             if (QFile::exists(thumbFile))
                 btnPreview->setIcon(QIcon(thumbFile));
+            else if (tbw->currentWidget() == lstChallenges)
+                btnPreview->setIcon(QIcon(":/res/Challenges.png"));
+            else if (tbw->currentWidget() == lstScenarios)
+                // TODO: Prettier scenario fallback image
+                btnPreview->setIcon(QIcon(":/res/Scenarios.png"));
             else
                 btnPreview->setIcon(QIcon(":/res/Trainings.png"));
 
             btnPreview->setWhatsThis(tr("Start fighting"));
 
-            QString realName = list->currentItem()->data(
-                                    Qt::UserRole).toString();
-
-            QString caption = m_info->value(realName + ".name",
+            QString caption = m_info->value(missionName + ".name",
                                             list->currentItem()->text()).toString();
 
-            QString description = m_info->value(realName + ".desc",
+            QString description = m_info->value(missionName + ".desc",
                                                 tr("No description available")).toString();
 
             lblCaption->setText("<h2>" + caption +"</h2>");
             lblDescription->setText(description);
+
+            // Challenge highscores
+            QString highscoreText = QString("");
+            QString teamName = CBTeam->currentText();
+            if (missionValueExists(missionName, teamName, "Highscore"))
+                highscoreText = highscoreText +
+                    //: Highest score of a team
+                    tr("Team highscore: %1")
+                    .arg(getMissionValue(missionName, teamName, "Highscore").toString()) + "\n";
+            if (missionValueExists(missionName, teamName, "Lowscore"))
+                highscoreText = highscoreText +
+                    //: Lowest score of a team
+                    tr("Team lowscore: %1")
+                    .arg(getMissionValue(missionName, teamName, "Lowscore").toString()) + "\n";
+            if (missionValueExists(missionName, teamName, "AccuracyRecord"))
+                highscoreText = highscoreText +
+                    //: Best accuracy of a team (in a challenge)
+                    tr("Team's top accuracy: %1%")
+                    .arg(getMissionValue(missionName, teamName, "AccuracyRecord").toString()) + "\n";
+            if (missionValueExists(missionName, teamName, "TimeRecord"))
+            {
+                double time = ((double) getMissionValue(missionName, teamName, "TimeRecord").toInt()) / 1000.0;
+                highscoreText = highscoreText + tr("Team's best time: %L1 s").arg(time, 0, 'f', 3) + "\n";
+            }
+            if (missionValueExists(missionName, teamName, "TimeRecordHigh"))
+            {
+                double time = ((double) getMissionValue(missionName, teamName, "TimeRecordHigh").toInt()) / 1000.0;
+                highscoreText = highscoreText + tr("Team's longest time: %L1 s").arg(time, 0, 'f', 3) + "\n";
+            }
+
+            lblHighscores->setText(highscoreText);
         }
         else
         {
             btnPreview->setIcon(QIcon(":/res/Trainings.png"));
             lblCaption->setText(tr("Select a mission!"));
-            // TODO better text and tr()
             lblDescription->setText("");
+            lblHighscores->setText("");
         }
     }
 }

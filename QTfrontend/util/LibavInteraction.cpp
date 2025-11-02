@@ -57,14 +57,14 @@ struct Codec
     bool isAudio;
     QString shortName; // used for identification
     QString longName; // used for displaying to user
-    bool isRecomended;
+    bool isRecommended;
 };
 
 struct Format
 {
     QString shortName;
     QString longName;
-    bool isRecomended;
+    bool isRecommended;
     QString extension;
     QVector<Codec*> codecs;
 };
@@ -73,7 +73,11 @@ QList<Codec> codecs;
 QMap<QString,Format> formats;
 
 // test if given format supports given codec
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+bool FormatQueryCodec(const AVOutputFormat *ofmt, enum AVCodecID codec_id)
+#else
 bool FormatQueryCodec(AVOutputFormat *ofmt, enum AVCodecID codec_id)
+#endif
 {
 #if LIBAVFORMAT_VERSION_MAJOR >= 54
     return avformat_query_codec(ofmt, codec_id, FF_COMPLIANCE_NORMAL) == 1;
@@ -86,12 +90,20 @@ bool FormatQueryCodec(AVOutputFormat *ofmt, enum AVCodecID codec_id)
 
 LibavInteraction::LibavInteraction() : QObject()
 {
+#if LIBAVCODEC_VERSION_MAJOR < 59
     // initialize libav and register all codecs and formats
     av_register_all();
+#endif
 
     // get list of all codecs
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    const AVCodec* pCodec = NULL;
+    void* i = 0;
+    while ((pCodec = av_codec_iterate(&i)))
+#else
     AVCodec* pCodec = NULL;
     while ((pCodec = av_codec_next(pCodec)))
+#endif
     {
         if (!av_codec_is_encoder(pCodec))
             continue;
@@ -101,6 +113,10 @@ LibavInteraction::LibavInteraction() : QObject()
 
         // this encoders seems to be buggy
         if (strcmp(pCodec->name, "rv10") == 0 || strcmp(pCodec->name, "rv20") == 0)
+            continue;
+
+        // this encoder is experimental (as of Jan 17, 2019)
+        if (strcmp(pCodec->name, "libaom-av1") == 0)
             continue;
 
         // doesn't support stereo sound
@@ -151,35 +167,38 @@ LibavInteraction::LibavInteraction() : QObject()
         codec.shortName = pCodec->name;
         codec.longName = pCodec->long_name;
 
-        codec.isRecomended = false;
+        codec.isRecommended = false;
         if (strcmp(pCodec->name, "libx264") == 0)
         {
             codec.longName = "H.264/MPEG-4 Part 10 AVC (x264)";
-            codec.isRecomended = true;
+            codec.isRecommended = true;
         }
         else if (strcmp(pCodec->name, "libxvid") == 0)
         {
             codec.longName = "MPEG-4 Part 2 (Xvid)";
-            codec.isRecomended = true;
+            codec.isRecommended = true;
         }
         else if (strcmp(pCodec->name, "libmp3lame") == 0)
         {
             codec.longName = "MP3 (MPEG audio layer 3) (LAME)";
-            codec.isRecomended = true;
+            codec.isRecommended = true;
         }
         else
             codec.longName = pCodec->long_name;
 
         if (strcmp(pCodec->name, "mpeg4") == 0 || strcmp(pCodec->name, "ac3_fixed") == 0)
-            codec.isRecomended = true;
-
-        // FIXME: remove next line
-        //codec.longName += QString(" (%1)").arg(codec.shortName);
+            codec.isRecommended = true;
     }
 
     // get list of all formats
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    const AVOutputFormat* pFormat = NULL;
+    i = 0;
+    while ((pFormat = av_muxer_iterate(&i)))
+#else
     AVOutputFormat* pFormat = NULL;
     while ((pFormat = av_oformat_next(pFormat)))
+#endif
     {
         if (!pFormat->extensions)
             continue;
@@ -207,10 +226,7 @@ LibavInteraction::LibavInteraction() : QObject()
         format.shortName = pFormat->name;
         format.longName = QString("%1 (*.%2)").arg(pFormat->long_name).arg(ext);
 
-        // FIXME: remove next line
-        //format.longName += QString(" (%1)").arg(format.shortName);
-
-        format.isRecomended = strcmp(pFormat->name, "mp4") == 0 || strcmp(pFormat->name, "avi") == 0;
+        format.isRecommended = strcmp(pFormat->name, "mp4") == 0 || strcmp(pFormat->name, "avi") == 0;
 
         formats[pFormat->name] = format;
     }
@@ -220,7 +236,7 @@ void LibavInteraction::fillFormats(QComboBox * pFormats)
 {
     // first insert recomended formats
     foreach(const Format & format, formats)
-        if (format.isRecomended)
+        if (format.isRecommended)
             pFormats->addItem(format.longName, format.shortName);
 
     // remember where to place separator between recomended and other formats
@@ -228,7 +244,7 @@ void LibavInteraction::fillFormats(QComboBox * pFormats)
 
     // insert remaining formats
     foreach(const Format & format, formats)
-        if (!format.isRecomended)
+        if (!format.isRecommended)
             pFormats->addItem(format.longName, format.shortName);
 
     // insert separator if necessary
@@ -243,7 +259,7 @@ void LibavInteraction::fillCodecs(const QString & fmt, QComboBox * pVCodecs, QCo
     // first insert recomended codecs
     foreach(Codec * codec, format.codecs)
     {
-        if (codec->isRecomended)
+        if (codec->isRecommended)
         {
             if (codec->isAudio)
                 pACodecs->addItem(codec->longName, codec->shortName);
@@ -259,7 +275,7 @@ void LibavInteraction::fillCodecs(const QString & fmt, QComboBox * pVCodecs, QCo
     // insert remaining codecs
     foreach(Codec * codec, format.codecs)
     {
-        if (!codec->isRecomended)
+        if (!codec->isRecommended)
         {
             if (codec->isAudio)
                 pACodecs->addItem(codec->longName, codec->shortName);
@@ -298,12 +314,22 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
         AVStream* pStream = pContext->streams[i];
         if (!pStream)
             continue;
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+        const AVCodec *st_codec = avcodec_find_decoder(pContext->streams[i]->codecpar->codec_id);
+        AVCodecContext* pCodec = avcodec_alloc_context3(st_codec);
+        avcodec_parameters_to_context(pCodec, pContext->streams[i]->codecpar);
+#else
         AVCodecContext* pCodec = pContext->streams[i]->codec;
+#endif
         if (!pCodec)
             continue;
 
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+        const AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
+#else
         AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
+#endif
         QString decoderName = pDecoder ? pDecoder->name : tr("unknown");
         if (pCodec->codec_type == AVMEDIA_TYPE_VIDEO)
         {

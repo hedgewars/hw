@@ -90,6 +90,7 @@ bool HWApplication::event(QEvent *event)
             form->NetConnectQuick(address, (quint16) port);
             return true;
         } else {
+            //: Here, “scheme” refers to the scheme of a Uniform Resource Identifier”
             const QString errmsg = tr("Scheme '%1' not supported").arg(scheme);
             MessageDialog::ShowErrorMessage(errmsg, form);
             return false;

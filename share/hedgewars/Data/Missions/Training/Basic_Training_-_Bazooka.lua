@@ -12,6 +12,7 @@
 ]]
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
 local hog			-- Hog gear
 local weaponSelected = false	-- Player has selected the weapon
@@ -37,7 +38,7 @@ function onGameInit()
 	Seed = 0
 	Theme = "Nature"
 	MapGen = mgDrawn
-	TurnTime = 9999000
+	TurnTime = MAX_TURN_TIME
 	Explosives = 0
 	MinesNum = 0
 	CaseFreq = 0
@@ -46,18 +47,22 @@ function onGameInit()
 
 	------ TEAM LIST ------
 
-	AddTeam(loc("Bazooka Team"), 0xFF0204, "Flower", "Earth", "Default", "hedgewars")
-	hog = AddHog(loc("Greenhorn"), 0, 100, "NoHat")
+	AddMissionTeam(-1)
+	hog = AddMissionHog(100)
 	SetGearPosition(hog, 1485, 2001)
 	SetEffect(hog, heResurrectable, 1)
 
 	SendHealthStatsOff()
+	SendRankingStatsOff()
 end
 
-function onGearResurrect(gear)
+function onGearResurrect(gear, vGear)
 	if gear == hog then
 		flawless = false
 		SetGearPosition(hog, 1485, 2001)
+		if vGear then
+			SetVisualGearValues(vGear, GetX(hog), GetY(hog))
+		end
 		AddCaption(loc("Your hedgehog has been revived!"))
 	end
 end
@@ -126,23 +131,42 @@ function onGameStart()
 end
 
 function newGamePhase()
+	local ctrl = ""
 	-- Spawn targets, update wind and ammo, show instructions
 	if gamePhase == 0 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Open ammo menu: [Right click]").."|"..
+			loc("Select weapon: [Left click]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Open ammo menu: Tap the [Suitcase]")
+		end
 		ShowMission(loc("Basic Bazooka Training"), loc("Select Weapon"), loc("To begin with the training, select the bazooka from the ammo menu!").."|"..
-		loc("Open ammo menu: [Right click]").."|"..
-		loc("Select weapon: [Left click]"), 2, 5000)
+		ctrl, 2, 5000)
 	elseif gamePhase == 1 then
-		ShowMission(loc("Basic Bazooka Training"), loc("My First Bazooka"), loc("Let's get started!").."|"..
+		if INTERFACE == "desktop" then
+			ctrl = loc("Attack: [Space]").."|"..
+			loc("Aim: [Up]/[Down]").."|"..
+			loc("Walk: [Left]/[Right]")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("Attack: Tap the [Bomb]").."|"..
+			loc("Aim: [Up]/[Down]").."|"..
+			loc("Walk: [Left]/[Right]")
+		end
+		ShowMission(loc("Basic Bazooka Training"), loc("My First Bazooka"),
+		loc("Let's get started!").."|"..
 		loc("Launch some bazookas to destroy the targets!").."|"..
 		loc("Hold the Attack key pressed for more power.").."|"..
 		loc("Don't hit yourself!").."|"..
-		loc("Attack: [Space]").."|"..
-		loc("Aim: [Up]/[Down]").."|"..
-		loc("Walk: [Left]/[Right]"), 2, 10000)
+		ctrl, 2, 10000)
 		spawnTargets()
 	elseif gamePhase == 2 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("You see the wind strength at the bottom right corner.")
+		elseif INTERFACE == "touch" then
+			ctrl = loc("You see the wind strength at the top.")
+		end
 		ShowMission(loc("Basic Bazooka Training"), loc("Wind"), loc("Bazookas are influenced by wind.").."|"..
-		loc("You see the wind strength at the bottom right corner.").."|"..
+		ctrl.."|"..
 		loc("Destroy the targets!"), 2, 5000)
 		SetWind(50)
 		spawnTargets()
@@ -177,19 +201,26 @@ function newGamePhase()
 		SetWind(-33)
 		spawnTargets()
 	elseif gamePhase == 6 then
+		if INTERFACE == "desktop" then
+			ctrl = loc("Precise Aim: [Left Shift] + [Up]/[Down]").."|"
+		end
 		ShowMission(loc("Basic Bazooka Training"), loc("Final Targets"),
 		loc("The final targets are quite tricky. You need to aim well.").."|"..
-		loc("Precise Aim: [Left Shift] + [Up]/[Down]").."|"..
+		ctrl..
 		loc("Hint: It might be easier if you vary the angle only slightly."),
 		2, 12000)
 		SetWind(75)
 		spawnTargets()
 	elseif gamePhase == 7 then
-		ShowMission(loc("Basic Bazooka Training"), loc("Training complete!"), loc("Congratulations!"), 0, 0)
+		SaveMissionVar("Won", "true")
+		ShowMission(loc("Basic Bazooka Training"), loc("Training complete!"), loc("Congratulations!"), 4, 0)
 		SetInputMask(0)
 		AddAmmo(CurrentHedgehog, amBazooka, 0)
 		if shotsFired > maxTargets then
 			flawless = false
+		else
+			-- For 100% accuracy
+			awardAchievement(loc("Bazooka Master"))
 		end
 		if flawless then
 			PlaySound(sndFlawless, hog)
@@ -198,8 +229,8 @@ function newGamePhase()
 		end
 		SendStat(siCustomAchievement, loc("Good job!"))
 		SendStat(siGameResult, loc("You have completed the Basic Bazooka Training!"))
-		SendStat(siPlayerKills, "0", loc("Bazooka Team"))
 		EndGame()
+		SetState(hog, gstWinner)
 		gameOver = true
 	end
 	gamePhase = gamePhase + 1
@@ -213,6 +244,12 @@ end
 
 function onHogAttack(ammoType)
 	if ammoType == amBazooka then
+		HideMission()
+	end
+end
+
+function onAttack()
+	if GetCurAmmoType() == amBazooka then
 		HideMission()
 	end
 end

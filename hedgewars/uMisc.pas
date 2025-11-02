@@ -26,7 +26,6 @@ uses SDLh, uConsts, GLunit, uTypes;
 procedure initModule;
 procedure freeModule;
 
-procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function MakeScreenshot(filename: shortstring; k: LongInt; dump: LongWord): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
@@ -45,17 +44,6 @@ type PScreenshot = ^TScreenshot;
          end;
 
 var conversionFormat : PSDL_PixelFormat;
-
-procedure movecursor(dx, dy: LongInt);
-var x, y: LongInt;
-begin
-if (dx = 0) and (dy = 0) then exit;
-
-SDL_GetMouseState(@x, @y);
-Inc(x, dx);
-Inc(y, dy);
-SDL_WarpMouse(x, y);
-end;
 
 {$IFDEF PNG_SCREENSHOTS}
 // this funtion will be executed in separate thread
@@ -111,8 +99,49 @@ Dispose(image);
 SaveScreenshot:= 0;
 end;
 
-{$ELSE} // no PNG_SCREENSHOTS
+{$ELSE} //PNG_SCREENSHOTS
+{$IFDEF WINDOWS}
+function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
+var
+    surface: PSDL_Surface;
+    image: PScreenshot;
+    rowBuffer: PByte;
+    row, stride: LongInt;
+begin
+    image:= PScreenshot(screenshot);
+    stride:= image^.width * 4;
+    rowBuffer:= PByte(GetMem(stride));
 
+    for row:= 0 to (image^.height div 2) - 1 do
+        begin
+        Move((image^.buffer + (image^.height - row - 1) * stride)^,
+             rowBuffer^,
+             stride);
+        Move((image^.buffer + row * stride)^,
+             (image^.buffer + (image^.height - row - 1) * stride)^,
+             stride);
+        Move(rowBuffer^,
+             (image^.buffer + row * stride)^,
+             stride);
+        end;
+
+    surface:= SDL_CreateRGBSurfaceFrom(
+        image^.buffer,
+        image^.width, image^.height, 32, stride,
+        $000000FF, $0000FF00, $00FF0000, $FF000000);
+
+    if surface <> nil then
+        begin
+        IMG_SavePNG(surface, Str2PChar(image^.filename));
+        SDL_FreeSurface(surface);
+        end;
+
+    FreeMem(rowBuffer, stride);
+    FreeMem(image^.buffer, image^.size);
+    Dispose(image);
+    SaveScreenshot:= 0;
+end;
+{$ELSE} //WINDOWS
 // this funtion will be executed in separate thread
 function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
 var f: file;
@@ -181,11 +210,12 @@ Dispose(image);
 SaveScreenshot:= 0;
 end;
 
-{$ENDIF} // no PNG_SCREENSHOTS
+{$ENDIF} // WINDOWS
+{$ENDIF} // PNG_SCREENSHOTS
 
 {$IFDEF USE_VIDEO_RECORDING}
 // make image k times smaller (useful for saving thumbnails)
-procedure ReduceImage(img: PByte; width, height, k: LongInt);
+procedure ReduceImage(img: PByteArray; width, height, k: LongInt);
 var i, j, i0, j0, w, h, r, g, b: LongInt;
 begin
     w:= width  div k;
@@ -203,14 +233,14 @@ begin
                 for i0:= 0 to k-1 do
                     for j0:= 0 to k-1 do
                     begin
-                        inc(r, img[4*(width*(i*k+i0) + j*k+j0)+0]);
-                        inc(g, img[4*(width*(i*k+i0) + j*k+j0)+1]);
-                        inc(b, img[4*(width*(i*k+i0) + j*k+j0)+2]);
+                        inc(r, img^[4*(width*(i*k+i0) + j*k + j0)+0]);
+                        inc(g, img^[4*(width*(i*k+i0) + j*k + j0)+1]);
+                        inc(b, img^[4*(width*(i*k+i0) + j*k + j0)+2]);
                     end;
-                img[4*(w*i + j)+0]:= r div (k*k);
-                img[4*(w*i + j)+1]:= g div (k*k);
-                img[4*(w*i + j)+2]:= b div (k*k);
-                img[4*(w*i + j)+3]:= 255;
+                img^[4*(w*i + j)+0]:= r div (k*k);
+                img^[4*(w*i + j)+1]:= g div (k*k);
+                img^[4*(w*i + j)+2]:= b div (k*k);
+                img^[4*(w*i + j)+3]:= 255;
             end;
     end;
 end;
@@ -230,8 +260,13 @@ begin
 format:= GL_RGBA;
 ext:= '.png';
 {$ELSE}
+{$IFDEF WINDOWS}
+format:= GL_RGBA;
+ext:= '.png';
+{$ELSE}
 format:= GL_BGRA;
 ext:= '.bmp';
+{$ENDIF}
 {$ENDIF}
 
 if dump > 0 then

@@ -8,10 +8,7 @@ local params = {
 	map = "Hedgewars",
 	theme = "Nature",
 	hog_x = 1990,
-	hog_y = 514,
-	hogHat = "NoHat",
-	teamGrave = "bp2",
-	teamFlag = "cm_flower",
+	hog_y = 533,
 	targets = {
 		{ x = 1949, y = 273 },
 		{ x = 1734, y = 322 },

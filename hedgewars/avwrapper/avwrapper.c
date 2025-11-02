@@ -27,6 +27,10 @@
 #include "libavutil/avutil.h"
 #include "libavutil/mathematics.h"
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+#include <libavcodec/bsf.h>
+#endif
+
 #if (defined _MSC_VER)
 #define AVWRAP_DECL __declspec(dllexport)
 #elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
@@ -35,16 +39,22 @@
 #define AVWRAP_DECL
 #endif
 
+#define UNUSED(x) (void)(x)
+
 static AVFormatContext* g_pContainer;
-static AVOutputFormat* g_pFormat;
+static const AVOutputFormat* g_pFormat;
 static AVStream* g_pAStream;
 static AVStream* g_pVStream;
 static AVFrame* g_pAFrame;
 static AVFrame* g_pVFrame;
-static AVCodec* g_pACodec;
-static AVCodec* g_pVCodec;
+static const AVCodec* g_pACodec;
+static const AVCodec* g_pVCodec;
 static AVCodecContext* g_pAudio;
 static AVCodecContext* g_pVideo;
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+static AVPacket* g_pAPacket;
+static AVPacket* g_pVPacket;
+#endif
 
 static int g_Width, g_Height;
 static uint32_t g_Frequency, g_Channels;
@@ -52,8 +62,13 @@ static int g_VQuality;
 static AVRational g_Framerate;
 
 static FILE* g_pSoundFile;
+#if LIBAVUTIL_VERSION_MAJOR < 53
 static int16_t* g_pSamples;
+#endif
 static int g_NumSamples;
+#if LIBAVCODEC_VERSION_MAJOR >= 53
+static int64_t g_NextAudioPts;
+#endif
 
 
 // compatibility section
@@ -87,6 +102,8 @@ static void rescale_ts(AVPacket *pkt, AVRational ctb, AVRational stb)
     if (pkt->duration > 0)
         pkt->duration = av_rescale_q(pkt->duration, ctb, stb);
 }
+
+#define avcodec_free_context(ctx)           do { avcodec_close(*ctx); av_freep(ctx); } while (0)
 #endif
 
 #ifndef AV_CODEC_CAP_DELAY
@@ -138,6 +155,9 @@ static int FatalError(const char* pFmt, ...)
 // (there is mutex in AddFileLogRaw).
 static void LogCallback(void* p, int Level, const char* pFmt, va_list VaArgs)
 {
+    UNUSED(p);
+    UNUSED(Level);
+
     char Buffer[1024];
 
     vsnprintf(Buffer, 1024, pFmt, VaArgs);
@@ -156,8 +176,42 @@ static void Log(const char* pFmt, ...)
     AddFileLogRaw(Buffer);
 }
 
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+static int EncodeAndWriteFrame(
+        const AVStream* pStream,
+        AVCodecContext* pCodecContext,
+        const AVFrame* pFrame,
+        AVPacket* pPacket)
+{
+    int ret;
+
+    ret = avcodec_send_frame(pCodecContext, pFrame);
+    if (ret < 0)
+        return FatalError("avcodec_send_frame failed: %d", ret);
+    while (1)
+    {
+        ret = avcodec_receive_packet(pCodecContext, pPacket);
+        if (ret == AVERROR(EAGAIN))
+            return 1;
+        else if (ret == AVERROR_EOF)
+            return 0;
+        else if (ret < 0)
+            return FatalError("avcodec_receive_packet failed: %d", ret);
+
+        av_packet_rescale_ts(pPacket, pCodecContext->time_base, pStream->time_base);
+
+        // Write the compressed frame to the media file.
+        pPacket->stream_index = pStream->index;
+        ret = av_interleaved_write_frame(g_pContainer, pPacket);
+        if (ret != 0)
+            return FatalError("Error while writing frame: %d", ret);
+    }
+}
+#endif
+
 static void AddAudioStream()
 {
+    int ret;
     g_pAStream = avformat_new_stream(g_pContainer, g_pACodec);
     if(!g_pAStream)
     {
@@ -166,15 +220,45 @@ static void AddAudioStream()
     }
     g_pAStream->id = 1;
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    g_pAudio = avcodec_alloc_context3(g_pACodec);
+#else
     g_pAudio = g_pAStream->codec;
 
     avcodec_get_context_defaults3(g_pAudio, g_pACodec);
     g_pAudio->codec_id = g_pACodec->id;
+#endif
 
     // put parameters
     g_pAudio->sample_fmt = AV_SAMPLE_FMT_S16;
     g_pAudio->sample_rate = g_Frequency;
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+    const AVChannelLayout* pChLayout = g_pACodec->ch_layouts;
+    if (pChLayout)
+    {
+        for (; pChLayout->nb_channels; pChLayout++)
+        {
+            if (pChLayout->nb_channels == g_Channels)
+            {
+                ret = av_channel_layout_copy(&g_pAudio->ch_layout, pChLayout);
+                if (ret != 0)
+                {
+                    Log("Channel layout copy failed: %d\n", ret);
+                    return;
+                }
+                break;
+            }
+        }
+    }
+    if (!g_pAudio->ch_layout.nb_channels)
+    {
+        // no suitable layout found
+        g_pAudio->ch_layout.order = AV_CHANNEL_ORDER_UNSPEC;
+        g_pAudio->ch_layout.nb_channels = g_Channels;
+    }
+#else
     g_pAudio->channels = g_Channels;
+#endif
 
     // set time base as invers of sample rate
     g_pAudio->time_base.den = g_pAStream->time_base.den = g_Frequency;
@@ -198,6 +282,15 @@ static void AddAudioStream()
         return;
     }
 
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+    ret = avcodec_parameters_from_context(g_pAStream->codecpar, g_pAudio);
+    if (ret < 0)
+    {
+        Log("Could not copy parameters from codec context: %d\n", ret);
+        return;
+    }
+#endif
+
 #if LIBAVCODEC_VERSION_MAJOR >= 54
     if (g_pACodec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
 #else
@@ -206,13 +299,46 @@ static void AddAudioStream()
         g_NumSamples = 4096;
     else
         g_NumSamples = g_pAudio->frame_size;
-    g_pSamples = (int16_t*)av_malloc(g_NumSamples*g_Channels*sizeof(int16_t));
     g_pAFrame = av_frame_alloc();
     if (!g_pAFrame)
     {
         Log("Could not allocate frame\n");
         return;
     }
+#if LIBAVUTIL_VERSION_MAJOR >= 53
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+    ret = av_channel_layout_copy(&g_pAFrame->ch_layout, &g_pAudio->ch_layout);
+    if (ret != 0)
+    {
+        Log("Channel layout copy for frame failed: %d\n", ret);
+        return;
+    }
+#else
+    g_pAFrame->channels = g_pAudio->channels;
+#endif
+    g_pAFrame->format = g_pAudio->sample_fmt;
+    g_pAFrame->sample_rate = g_pAudio->sample_rate;
+    g_pAFrame->nb_samples = g_NumSamples;
+    ret = av_frame_get_buffer(g_pAFrame, 1);
+    if (ret < 0)
+    {
+        Log("Failed to allocate frame buffer: %d\n", ret);
+        return;
+    }
+#else
+    g_pSamples = (int16_t*)av_malloc(g_NumSamples*g_Channels*sizeof(int16_t));
+#endif
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+    g_pAPacket = av_packet_alloc();
+    if (!g_pAPacket)
+    {
+        Log("Could not allocate audio packet\n");
+        return;
+    }
+#endif
+#if LIBAVCODEC_VERSION_MAJOR >= 53
+    g_NextAudioPts = 0;
+#endif
 }
 
 // returns non-zero if there is more sound, -1 in case of error
@@ -221,22 +347,46 @@ static int WriteAudioFrame()
     if (!g_pAStream)
         return 0;
 
-    AVPacket Packet;
-    av_init_packet(&Packet);
-    Packet.data = NULL;
-    Packet.size = 0;
+    int ret;
+    int16_t* pData;
+#if LIBAVUTIL_VERSION_MAJOR >= 53
+    ret = av_frame_make_writable(g_pAFrame);
+    if (ret < 0)
+        return FatalError("Could not make audio frame writable: %d", ret);
+    pData = (int16_t*) g_pAFrame->data[0];
+#else
+    pData = g_pSamples;
+#endif
 
-    int NumSamples = fread(g_pSamples, 2*g_Channels, g_NumSamples, g_pSoundFile);
+    int NumSamples = fread(pData, 2*g_Channels, g_NumSamples, g_pSoundFile);
 
 #if LIBAVCODEC_VERSION_MAJOR >= 53
     AVFrame* pFrame = NULL;
     if (NumSamples > 0)
     {
         g_pAFrame->nb_samples = NumSamples;
+        g_pAFrame->pts = g_NextAudioPts;
+        g_NextAudioPts += NumSamples;
+#if LIBAVUTIL_VERSION_MAJOR < 53
         avcodec_fill_audio_frame(g_pAFrame, g_Channels, AV_SAMPLE_FMT_S16,
-                                 (uint8_t*)g_pSamples, NumSamples*2*g_Channels, 1);
+                                 (uint8_t*)pData, NumSamples*2*g_Channels, 1);
+#endif
         pFrame = g_pAFrame;
     }
+#endif
+
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+    ret = EncodeAndWriteFrame(g_pAStream, g_pAudio, pFrame, g_pAPacket);
+    if (ret < 0)
+        return FatalError("Audio frame processing failed");
+    return ret;
+#else
+    AVPacket Packet;
+    av_init_packet(&Packet);
+    Packet.data = NULL;
+    Packet.size = 0;
+
+#if LIBAVCODEC_VERSION_MAJOR >= 53
     // when NumSamples == 0 we still need to call encode_audio2 to flush
     int got_packet;
     if (avcodec_encode_audio2(g_pAudio, &Packet, pFrame, &got_packet) != 0)
@@ -251,7 +401,7 @@ static int WriteAudioFrame()
     int BufferSize = OUTBUFFER_SIZE;
     if (g_pAudio->frame_size == 0)
         BufferSize = NumSamples*g_Channels*2;
-    Packet.size = avcodec_encode_audio(g_pAudio, g_OutBuffer, BufferSize, g_pSamples);
+    Packet.size = avcodec_encode_audio(g_pAudio, g_OutBuffer, BufferSize, pData);
     if (Packet.size == 0)
         return 1;
     if (g_pAudio->coded_frame && g_pAudio->coded_frame->pts != AV_NOPTS_VALUE)
@@ -265,19 +415,25 @@ static int WriteAudioFrame()
     if (av_interleaved_write_frame(g_pContainer, &Packet) != 0)
         return FatalError("Error while writing audio frame");
     return 1;
+#endif
 }
 
 // add a video output stream
 static int AddVideoStream()
 {
+    int ret;
     g_pVStream = avformat_new_stream(g_pContainer, g_pVCodec);
     if (!g_pVStream)
         return FatalError("Could not allocate video stream");
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    g_pVideo = avcodec_alloc_context3(g_pVCodec);
+#else
     g_pVideo = g_pVStream->codec;
 
     avcodec_get_context_defaults3(g_pVideo, g_pVCodec);
     g_pVideo->codec_id = g_pVCodec->id;
+#endif
 
     // put parameters
     // resolution must be a multiple of two
@@ -340,6 +496,12 @@ static int AddVideoStream()
     if (avcodec_open2(g_pVideo, g_pVCodec, NULL) < 0)
         return FatalError("Could not open video codec %s", g_pVCodec->long_name);
 
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+    ret = avcodec_parameters_from_context(g_pVStream->codecpar, g_pVideo);
+    if (ret < 0)
+        return FatalError("Could not copy parameters from codec context: %d", ret);
+#endif
+
     g_pVFrame = av_frame_alloc();
     if (!g_pVFrame)
         return FatalError("Could not allocate frame");
@@ -348,6 +510,12 @@ static int AddVideoStream()
     g_pVFrame->width = g_Width;
     g_pVFrame->height = g_Height;
     g_pVFrame->format = AV_PIX_FMT_YUV420P;
+
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+    g_pVPacket = av_packet_alloc();
+    if (!g_pVPacket)
+        return FatalError("Could not allocate packet");
+#endif
 
     return avcodec_default_get_buffer2(g_pVideo, g_pVFrame, 0);
 }
@@ -359,13 +527,19 @@ static int WriteFrame(AVFrame* pFrame)
     // write interleaved audio frame
     if (g_pAStream)
     {
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+        if (!g_pAPacket)
+            return FatalError("Error while writing video frame: g_pAPacket does not exist");
+#endif
         VideoTime = (double)g_pVFrame->pts * g_pVStream->time_base.num/g_pVStream->time_base.den;
         do
         {
+            if (!g_pAFrame)
+                return FatalError("Error while writing video frame: g_pAFrame does not exist");
             AudioTime = (double)g_pAFrame->pts * g_pAStream->time_base.num/g_pAStream->time_base.den;
             ret = WriteAudioFrame();
         }
-        while (AudioTime < VideoTime && ret);
+        while (AudioTime < VideoTime && ret > 0);
         if (ret < 0)
             return ret;
     }
@@ -373,13 +547,18 @@ static int WriteFrame(AVFrame* pFrame)
     if (!g_pVStream)
         return 0;
 
+    g_pVFrame->pts++;
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+    ret = EncodeAndWriteFrame(g_pVStream, g_pVideo, pFrame, g_pVPacket);
+    if (ret < 0)
+        return FatalError("Video frame processing failed");
+    return ret;
+#else
     AVPacket Packet;
     av_init_packet(&Packet);
     Packet.data = NULL;
     Packet.size = 0;
 
-    g_pVFrame->pts++;
-#if LIBAVCODEC_VERSION_MAJOR < 58
     if (g_pFormat->flags & AVFMT_RAWPICTURE)
     {
         /* raw video case. The API will change slightly in the near
@@ -394,7 +573,6 @@ static int WriteFrame(AVFrame* pFrame)
         return 0;
     }
     else
-#endif
     {
 #if LIBAVCODEC_VERSION_MAJOR >= 54
         int got_packet;
@@ -424,6 +602,7 @@ static int WriteFrame(AVFrame* pFrame)
 
         return 1;
     }
+#endif
 }
 
 AVWRAP_DECL int AVWrapper_WriteFrame(uint8_t *buf)
@@ -492,8 +671,10 @@ AVWRAP_DECL int AVWrapper_Init(
     g_Framerate.den = FramerateDen;
     g_VQuality = VQuality;
 
+#if LIBAVCODEC_VERSION_MAJOR < 59
     // initialize libav and register all codecs and formats
     av_register_all();
+#endif
 
     // find format
     g_pFormat = av_guess_format(pFormatName, NULL, NULL);
@@ -514,9 +695,16 @@ AVWRAP_DECL int AVWrapper_Init(
     char ext[16];
     strncpy(ext, g_pFormat->extensions, 16);
     ext[15] = 0;
-    ext[strcspn(ext,",")] = 0;
+    size_t extLen = strcspn(ext, ",");
+    ext[extLen] = 0;
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    // pFilename + dot + ext + null byte
+    size_t urlLen = strlen(pFilename) + 1 + extLen + 1;
+    g_pContainer->url = av_malloc(urlLen);
+    snprintf(g_pContainer->url, urlLen, "%s.%s", pFilename, ext);
+#else
     snprintf(g_pContainer->filename, sizeof(g_pContainer->filename), "%s.%s", pFilename, ext);
-
+#endif
     // find codecs
     g_pVCodec = avcodec_find_encoder_by_name(pVCodecName);
     g_pACodec = avcodec_find_encoder_by_name(pACodecName);
@@ -553,13 +741,22 @@ AVWRAP_DECL int AVWrapper_Init(
         return FatalError("No video, no audio, aborting...");
 
     // write format info to log
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    av_dump_format(g_pContainer, 0, g_pContainer->url, 1);
+#else
     av_dump_format(g_pContainer, 0, g_pContainer->filename, 1);
+#endif
 
     // open the output file, if needed
     if (!(g_pFormat->flags & AVFMT_NOFILE))
     {
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+        if (avio_open(&g_pContainer->pb, g_pContainer->url, AVIO_FLAG_WRITE) < 0)
+            return FatalError("Could not open output file (%s)", g_pContainer->url);
+#else
         if (avio_open(&g_pContainer->pb, g_pContainer->filename, AVIO_FLAG_WRITE) < 0)
             return FatalError("Could not open output file (%s)", g_pContainer->filename);
+#endif
     }
 
     g_pVFrame->pts = -1;
@@ -599,21 +796,33 @@ AVWRAP_DECL int AVWrapper_Close()
     // free everything
     if (g_pVStream)
     {
-        avcodec_close(g_pVideo);
-        av_free(g_pVideo);
-        av_free(g_pVStream);
+        avcodec_free_context(&g_pVideo);
         av_frame_free(&g_pVFrame);
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+        av_packet_free(&g_pVPacket);
+#endif
     }
     if (g_pAStream)
     {
-        avcodec_close(g_pAudio);
-        av_free(g_pAudio);
-        av_free(g_pAStream);
+        avcodec_free_context(&g_pAudio);
         av_frame_free(&g_pAFrame);
+#if LIBAVCODEC_VERSION_MAJOR >= 58
+        av_packet_free(&g_pAPacket);
+#endif
+#if LIBAVUTIL_VERSION_MAJOR < 53
         av_free(g_pSamples);
+#endif
         fclose(g_pSoundFile);
     }
 
+#if LIBAVCODEC_VERSION_MAJOR >= 59
+    avformat_free_context(g_pContainer);
+#else
+    if (g_pVStream)
+        av_free(g_pVStream);
+    if (g_pAStream)
+        av_free(g_pAStream);
     av_free(g_pContainer);
+#endif
     return 0;
 }

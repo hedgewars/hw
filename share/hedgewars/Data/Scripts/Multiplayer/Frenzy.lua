@@ -11,12 +11,12 @@ local cn = 0
 local frenzyAmmos = {
 	amBazooka,
 	amGrenade,
-	amMolotov,
 	amShotgun,
 	amFirePunch,
 	amMine,
-	amJetpack,
+	amMolotov,
 	amBlowTorch,
+	amJetpack,
 	amTeleport,
 	amLowGravity
 }
@@ -26,21 +26,24 @@ function showStartingInfo()
 	ruleSet = "" ..
 	loc("RULES:") .. " |" ..
 	loc("Each turn is only ONE SECOND!") .. "|" ..
-	loc("Use your ready time to think.") .. "|" ..
-	loc("Slot keys save time! (F1-F10 by default)") .. "| |"
-	for i=1, #frenzyAmmos do
-		ruleSet = ruleSet .. string.format(loc("Slot %d: %s"), i, GetAmmoName(frenzyAmmos[i])) .. "|"
+	loc("Use your ready time to think.")
+	if INTERFACE ~= "touch" then
+		ruleSet = ruleSet .. "|" ..
+		loc("Slot keys save time! (F1-F10 by default)") .. "| |"
+		for i=1, #frenzyAmmos do
+			ruleSet = ruleSet .. string.format(loc("Slot %d: %s"), i, GetAmmoName(frenzyAmmos[i])) .. "|"
+		end
 	end
 
 	ShowMission(loc("FRENZY"),
                 loc("A frenetic Hedgewars mini-game"),
-                ruleSet, 0, 4000)
+                ruleSet, -amMolotov, 4000)
 
 end
 
 function onGameInit()
 
-	if TurnTime > 10001 then
+	if TurnTime > 8000 then
 		Ready = 8000
 	else
 		Ready = TurnTime
@@ -63,6 +66,10 @@ function onGameInit()
 	--WaterRise = 47
 	--HealthDecrease = 0
 
+	for s=1, #frenzyAmmos do
+		SetAmmoSlot(frenzyAmmos[s], s)
+	end
+	SetAmmoSlot(amSkip, 10)
 end
 
 function onGameStart()

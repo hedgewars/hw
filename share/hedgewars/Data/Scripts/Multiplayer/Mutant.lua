@@ -12,7 +12,8 @@ ___ .-. .-. ___  ___ | |_    .---. ___ .-. | |_
 
 
 ----  Recommended settings:
-----    * one hedgehog per team
+----    * one hedgehog per team (forced by game)
+----    * one team per clan
 ----    * 'Small' one-island map
 
 --]]
@@ -23,15 +24,10 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 
 --[[
     MUTANT SCRIPT
-
-    To Do:  -Clean-up this fucking piece of code
-            -Debug
-            -Find a girlfriend
-            -Fix Sheepluva's hat  +[p]
-            -Cookies
------------------------]]
+]]
 
 local hhs = {}
+local crates = {}
 local numhhs = 0
 local meh = false
 
@@ -61,6 +57,9 @@ local winScore = 15
 local hogsLimit = 1
 
 local teamsDead = {}
+local teamsDeleted = {}
+local hogLimitHit = false
+local cnthhs
 
 local circles = {}
 local circleFrame = -1
@@ -103,46 +102,51 @@ local feederHat = "poke_slowpoke"
 
 function rules()
 
-	local ruleSet = loc("Hedgehogs will be revived after their death.") .. "|" ..
-	string.format(loc("Mines explode after %d s."), div(MinesTime, 1000)) .. "|" ..
-	loc("The first hedgehog to kill someone becomes the Mutant.") .. "|" ..
-	loc("The Mutant has super weapons and a lot of health.") .. "|" ..
-	loc("The Mutant loses health quickly, but gains health by killing.") .. "|" ..
-	" |" ..
-	loc("Score points by killing other hedgehogs.") .. "|" ..
-	loc("The hedgehog with least points (or most deaths) becomes the Bottom Feeder.") .. "|" ..
-	loc("The score and deaths are shown next to the team bar.") .. "|" ..
-	string.format(loc("Goal: Score %d points or more to win!"), winScore) .. "|" ..
+    local mineStr
+    if MinesTime < 0 then
+        mineStr = loc("Mines time: 0s-5s")
+    else
+        mineStr = string.format(loc("Mines explode after %d s."), div(MinesTime, 1000))
+    end
+    local ruleSet = loc("Hedgehogs will be revived after their death.") .. "|" ..
+    mineStr .. "|" ..
+    loc("The first hedgehog to kill someone becomes the Mutant.") .. "|" ..
+    loc("The Mutant has super weapons and a lot of health.") .. "|" ..
+    loc("The Mutant loses health quickly, but gains health by killing.") .. "|" ..
+    " |" ..
+    loc("Score points by killing other hedgehogs.") .. "|" ..
+    loc("The hedgehog with least points (or most deaths) becomes the Bottom Feeder.") .. "|" ..
+    loc("The score and deaths are shown next to the team bar.") .. "|" ..
+    string.format(loc("Goal: Score %d points or more to win!"), winScore) .. "|" ..
         " |" ..
-	loc("Scoring: ") .. "|" ..
-	loc("+2 for becoming the Mutant") .. "|" ..
-	loc("+1 to the Mutant for killing anyone") .. "|" ..
-	loc("+1 to the Bottom Feeder for killing anyone") .. "|" ..
-	loc("-1 to anyone for a suicide")
+    loc("Scoring: ") .. "|" ..
+    loc("+2 for becoming the Mutant") .. "|" ..
+    loc("+1 to the Mutant for killing anyone") .. "|" ..
+    loc("+1 to the Bottom Feeder for killing anyone") .. "|" ..
+    loc("-1 to anyone for a suicide")
 
-	return ruleSet
+    return ruleSet
 
 end
 
 function showStartingInfo()
 
-	ShowMission(loc("Mutant"), loc("A Hedgewars tag game"), rules(), 1, 5000)
+    ShowMission(loc("Mutant"), loc("A Hedgewars tag game"), rules(), -amWatermelon, 5000)
 
 end
 
 function onGameInit()
-    TurnTime = 20000
+    -- Sudden Death would be weird
     WaterRise = 0
     HealthDecrease = 0
-    EnableGameFlags(gfResetWeps, gfPerHogAmmo)
-    HealthCaseProb=0
-    HealthCaseAmount=0
-    MinesTime=1000
-    CaseFreq = 2
+    -- Weapons must be reset for the Mutant mechanic to work
+    EnableGameFlags(gfResetWeps)
+    -- King Mode messes with game too much
+    DisableGameFlags(gfKing)
 end
 
 
-function limitHogs(gear)
+function limitHogsTeam(gear)
     cnthhs = cnthhs + 1
     if cnthhs > 1 then
         hogLimitHit = true
@@ -152,22 +156,52 @@ function limitHogs(gear)
     end
 end
 
+function limitHogsClan(gear)
+    hogLimitHit = true
+    SetEffect(gear, heResurrectable, 0)
+    setGearValue(gear, "excess", true)
+    DeleteGear(gear)
+end
+
 function onGameStart()
-    SendHealthStatsOff()
+    if ClansCount >= 2 then
+        SendHealthStatsOff()
+        SendAchievementsStatsOff()
+    end
     SendRankingStatsOff()
-    SendAchievementsStatsOff()
     trackTeams()
     teamScan()
     runOnHogs(saveStuff)
 
+    -- Enforce team and hog limits
     hogLimitHit = false
+
+    -- Rule 1: One team per clan
+    if TeamsCount > ClansCount then
+        local usedClans = {}
+        for i=0, TeamsCount - 1 do
+            local teamName = GetTeamName(i)
+            local clanNumber = GetTeamClan(teamName)
+            if not usedClans[clanNumber] then
+                usedClans[clanNumber] = true
+            else
+                runOnHogsInTeam(limitHogsClan, teamName)
+                teamsDeleted[teamName] = true
+                setTeamValue(teamName, "Score", getTeamValue(teamName, "Score") -99999)
+            end
+        end
+    end
+
+    -- Rule 2: One hog per team
     for i=0 , TeamsCount - 1 do
         cnthhs = 0
-        runOnHogsInTeam(limitHogs, GetTeamName(i))
+        runOnHogsInTeam(limitHogsTeam, GetTeamName(i))
     end
     if hogLimitHit then
+        -- TODO: Update warning message to include excess teams as well
         WriteLnToChat(loc("Only one hog per team allowed! Excess hogs will be removed."))
     end
+    trackTeams()
     showStartingInfo()
 end
 
@@ -231,17 +265,19 @@ end
 
 function onNewTurn()
 
-    trackTeams()
     killsCounter = 0
 
-    if mutant == nil then
-        AddCaption( loc("First killer will mutate"), 0xFFFFFFFF, capgrpGameState )
+    if mutant == nil and TotalRounds >= 0 then
+        AddCaption( loc("First killer will mutate"), capcolDefault, capgrpGameState )
     end
 
     checkScore()
 
     for i=0, TeamsCount-1 do
-        SendStat(siClanHealth, getTeamValue(GetTeamName(i), "Score"), GetTeamName(i))
+        local teamName = GetTeamName(i)
+        if not teamsDeleted[teamName] then
+            SendStat(siClanHealth, getTeamValue(teamName, "Score"), teamName)
+        end
     end
 
     giveWeapons(CurrentHedgehog)
@@ -262,23 +298,23 @@ end
 
 function countBodies()
         if killsCounter == 2 then
-            AddCaption(loc("Double kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Double kill!"), capcolDefault, capgrpGameState )
         elseif killsCounter == 3 then
-            AddCaption(loc("Mega kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Mega kill!"), capcolDefault, capgrpGameState )
             PlaySound(sndRegret)
         elseif killsCounter == 4 then
-            AddCaption(loc("Ultra kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Ultra kill!"), capcolDefault, capgrpGameState )
         elseif killsCounter == 5 then
-            AddCaption(loc("Monster kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Monster kill!"), capcolDefault, capgrpGameState )
             PlaySound(sndIllGetYou)
         elseif killsCounter == 6 then
-            AddCaption(loc("Ludicrous kill!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Ludicrous kill!"), capcolDefault, capgrpGameState )
             PlaySound(sndNutter)
         elseif killsCounter == 7 then
-            AddCaption(loc("Holy shit!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Holy shit!"), capcolDefault, capgrpGameState )
             PlaySound(sndLaugh)
         elseif killsCounter > 8 then
-            AddCaption(loc("Insanity!"), 0xFFFFFFFF, capgrpGameState )
+            AddCaption(loc("Insanity!"), capcolDefault, capgrpGameState )
         end
 
         if killsCounter > recordKills then
@@ -294,8 +330,7 @@ function onGameTick()
         for i = 0, #hhs do
             if circles[hhs[i]] ~= nil and hhs[i]~= nil then
                 hhx, hhy = GetGearPosition(hhs[i])
-                X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint = GetVisualGearValues(circles[hhs[i]])
-                SetVisualGearValues(circles[hhs[i]], hhx + 1, hhy - 3, 0, 0, 0, 0, 0, 40 - (circleFrame % 25), Timer, Tint)
+                SetVisualGearValues(circles[hhs[i]], hhx + 1, hhy - 3, 0, 0, 0, 0, 0, 40 - (circleFrame % 25))
             end
         end
 
@@ -311,23 +346,34 @@ function onGameTick()
         end
     end
 
-    if TurnTimeLeft==0 and mt_hurt then
+    if (TurnTimeLeft==0 or band(GetState(mutant), gstHHDriven) == 0) and mt_hurt then
         mt_hurt = false
     end
 
-    if mt_hurt and mutant~=nil then
+    -- Mutant's disease
+    -- Hurt Mutant during its turn time
+    -- Mutant's health is safe in ready phase
+    if mt_hurt and mutant~=nil and ReadyTimeLeft == 0 then
         timer = timer + 1
-            if timer > disease_timer then
-                timer = 0
-                SetHealth(mutant, GetHealth(mutant)-disease )
-                AddVisualGear(GetX(mutant), GetY(mutant)-5, vgtHealthTag, disease, true)
-                    if GetHealth(mutant)<=0 then
-                        SetHealth(mutant,0)
-                        mt_hurt= false
-                        setGearValue(mutant,"SelfDestruct",true)
-                        EndTurn()
-                    end
+        if timer > disease_timer then
+            timer = 0
+            local h = GetHealth(mutant)-disease
+            SetHealth(mutant, h)
+            -- Low health warning
+            if h <= 75 then
+                PlaySound(sndPoisonMoan, mutant)
+            elseif h <= 150 then
+                PlaySound(sndPoisonCough, mutant)
             end
+            local tag = AddVisualGear(GetX(mutant), GetY(mutant)-5, vgtHealthTag, disease, true)
+            SetVisualGearValues(tag, nil, nil, nil, nil, nil, nil, nil, nil, nil, GetClanColor(GetHogClan(mutant)))
+            if GetHealth(mutant)<=0 then
+                SetHealth(mutant,0)
+                mt_hurt= false
+                setGearValue(mutant,"SelfDestruct",true)
+                EndTurn()
+            end
+        end
     end
 
 end
@@ -423,11 +469,22 @@ function createEndGameStats()
 
     -- Score and stats stuff
     local showScore = ""
+    local rank = 0
+    local rankPlus = 1
+    local prevScore
     table.sort(teamsSorted, function(team1, team2) return getTeamValue(team1, "Score") > getTeamValue(team2, "Score") end)
     for i=1, TeamsCount do
-        SendStat(siPointType, loc("point(s)"))
         local score = getTeamValue(teamsSorted[i], "Score")
         local deaths = getTeamValue(teamsSorted[i], "DeadHogs")
+        if i == 1 or score < prevScore then
+            rank = rank + rankPlus
+            rankPlus = 1
+            prevScore = score
+        else
+            rankPlus = rankPlus + 1
+        end
+        SendStat(siPointType, "!POINTS")
+        SendStat(siTeamRank, rank)
         SendStat(siPlayerKills, score, teamsSorted[i])
 
         showScore = showScore .. string.format(loc("%s: %d (deaths: %d)"), teamsSorted[i], score, deaths) .. "|"
@@ -441,7 +498,7 @@ function createEndGameStats()
     ShowMission(loc("Mutant"),
         loc("Final result"),
         string.format(loc("Winner: %s"), teamsSorted[1]) .. "| |" .. loc("Scores:") .. " |" ..
-        showScore, 0, 15000)
+        showScore, 4, 15000)
 
         -- return winning team
         return teamsSorted[1]
@@ -510,8 +567,8 @@ local only_low_score = true
     end
 
     if meh == false then
-		meh = true
-	end
+        meh = true
+    end
 
     end
 end
@@ -531,6 +588,13 @@ function setAIHints()
             SetGearAIHints(hhs[i], aihUsualProcessing)
         else
             SetGearAIHints(hhs[i], aihDoesntMatter)
+        end
+    end
+    for k,v in pairs(crates) do
+        if CurrentHedgehog == mutant and v ~= nil  then
+            SetGearAIHints(v, aihDoesntMatter)
+        else
+            SetGearAIHints(v, aihUsualProcessing)
         end
     end
 end
@@ -581,7 +645,7 @@ end
 function teamScan()
 
         for j=0, TeamsCount-1 do
-            teamName = GetTeamName(j)
+            local teamName = GetTeamName(j)
             teamsDead[teamName] = false
             setTeamValue(teamName, "Score",0)
             setTeamValue(teamName, "Suicides",0)
@@ -695,20 +759,20 @@ end
 end
 
 function onGearDamage(gear, damage)
-	if not gameOver and GetGearType(gear) == gtHedgehog then
-		totalDamage = totalDamage + damage
-	end
+    if not gameOver and GetGearType(gear) == gtHedgehog then
+        totalDamage = totalDamage + damage
+    end
 end
 
 function onSkipTurn()
-	-- Record skips for achievement
-	local team = GetHogTeamName(CurrentHedgehog)
-	increaseTeamValue(team, "Skips")
-	if(getTeamValue(team, "Skips") > recordSkips) then
-		recordSkips = getTeamValue(team, "Skips")
-		recordSkipsHogName = getGearValue(CurrentHedgehog, "Name")
-		recordSkipsTeamName = team
-	end
+    -- Record skips for achievement
+    local team = GetHogTeamName(CurrentHedgehog)
+    increaseTeamValue(team, "Skips")
+    if(getTeamValue(team, "Skips") > recordSkips) then
+        recordSkips = getTeamValue(team, "Skips")
+        recordSkipsHogName = getGearValue(CurrentHedgehog, "Name")
+        recordSkipsTeamName = team
+    end
 end
 
 function onGearAdd(gear)
@@ -719,12 +783,14 @@ function onGearAdd(gear)
         hhs[numhhs] = gear
         numhhs = numhhs + 1
         SetEffect(gear, heResurrectable, 1)
+    elseif GetGearType(gear) == gtCase then
+        crates[gear] = gear
     elseif GetGearType(gear) == gtATFinishGame then
         if not gameOver then
             local winner = createEndGameStats()
             if winner then
                 SendStat(siGameResult, string.format(loc("%s wins!"), winner))
-                AddCaption(string.format(loc("%s wins!"), winner), 0xFFFFFFFF, capgrpGameState)
+                AddCaption(string.format(loc("%s wins!"), winner), capcolDefault, capgrpGameState)
             end
             gameOver = true
         end
@@ -774,6 +840,7 @@ function onGearDelete(gear)
         end
         trackDeletion(gear)
     elseif GetGearType(gear) == gtCase then
+        crates[gear] = nil
         -- Check if a crate has been collected
         if band(GetGearMessage(gear), gmDestroy) ~= 0 and CurrentHedgehog ~= nil then
             -- Update crate collection achievement

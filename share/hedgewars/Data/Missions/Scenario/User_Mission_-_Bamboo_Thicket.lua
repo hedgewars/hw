@@ -1,6 +1,8 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Achievements.lua")
 
+local playerTeamName
 local player = nil 
 local enemy = nil
 local firedShell = false
@@ -23,10 +25,10 @@ function onGameInit()
 	WaterRise = 0
 	GameFlags = gfDisableWind
 
-	AddTeam(loc("Pathetic Resistance"), 14483456, "Plinko", "Island", "Default", "cm_yinyang")
-	player = AddHog(loc("Ikeda"), 0, 10, "StrawHat")
+	playerTeamName = AddMissionTeam(-1)
+	player = AddMissionHog(10)
 			
-	AddTeam(loc("Cybernetic Empire"), 	1175851, "ring", "Island", "Robot", "cm_cyborg")
+	AddTeam(loc("Cybernetic Empire"), -6, "ring", "Island", "Robot_qau", "cm_cyborg")
 	enemy = AddHog(loc("Unit 835"), 1, 10, "cyborg1")
 
 	SetGearPosition(player,142,656)
@@ -74,20 +76,19 @@ function onGearAdd(gear)
 
 end
 
-function onGearDelete(gear)
+function onGameResult(winner)
 
-	if (gear == enemy) then
+	if (winner == GetTeamClan(playerTeamName)) then
 		
-		ShowMission(loc("Bamboo Thicket"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
+		SaveMissionVar("Won", "true")
+		SendStat(siGameResult, loc("Mission succeeded!"))
 		
 		if (turnNumber < 6) and (firedShell == false) then
-			local achievementString = string.format(loc("Achievement gotten: %s"), loc("Energetic Engineer"))
-			AddCaption(achievementString, 0xffba00ff, capgrpMessage2)
-			SendStat(siCustomAchievement, achievementString)
+			awardAchievement(loc("Energetic Engineer"))
 		end
 
-	elseif gear == player then
-		ShowMission(loc("Bamboo Thicket"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
+	else
+		SendStat(siGameResult, loc("Mission failed!"))
 	end
 
 end

@@ -33,5 +33,6 @@ void glGetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei *length, GLcha
 void glGetShaderiv(GLuint shader, GLenum pname, GLint *params);
 GLuint glCreateShader(GLenum shaderType);
 void glCompileShader(GLuint shader);
-void glShaderSource(GLuint shader, GLsizei count,/* const dropped for pas2c compat */ GLchar **string, const GLint *length);
+//void glShaderSource(GLuint shader, GLsizei count,/* const dropped for pas2c compat */ GLchar **string, const GLint *length);
+void glShaderSource(GLuint shader, GLsizei count, const GLchar *const*string, const GLint *length);
 #endif

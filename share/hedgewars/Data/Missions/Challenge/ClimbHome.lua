@@ -16,15 +16,15 @@ function onGameInit()
     -- Ensure people get same map for same theme
     Theme = themes[GetRandom(#themes)+1]
     Seed = ClimbHome
-    TurnTime = 999999999
+    TurnTime = MAX_TURN_TIME
     EnableGameFlags(gfOneClanMode)
     DisableGameFlags(gfBottomBorder+gfBorder)
     CaseFreq = 0
     Explosives = 0
     MineDudPercent = 0
     Map = "ClimbHome"
-    AddTeam(loc("Lonely Hog"), 0xDD0000, "bubble", "Island", "Default")
-    player = AddHog(loc("Climber"), 0, 1, "NoHat")
+    AddMissionTeam(-1)
+    player = AddMissionHog(1)
     if showWaterStats then
         dummyHog = AddHog(" ", 0, 1, "NoHat")
         HH[dummyHog] = nil

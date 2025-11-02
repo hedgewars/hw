@@ -24,6 +24,7 @@ uses uFloat, uTypes, uUtils;
 
 const cMaxGearArrayInd = 1023;
 const cMaxGearHitOrderInd = 1023;
+const cMaxGearProximityCacheInd = 1023;
 
 type PGearArray = ^TGearArray;
     TGearArray = record
@@ -40,6 +41,12 @@ type PGearHitOrder = ^TGearHitOrder;
         Count: Longword
         end;
 
+type PGearProximityCache = ^TGearProximityCache;
+    TGearProximityCache = record
+        ar: array[0..cMaxGearProximityCacheInd] of PGear;
+        Count: Longword
+        end;
+
 type TLineCollision = record
         hasCollision: Boolean;
         cX, cY: LongInt; //for visual effects only
@@ -53,6 +60,7 @@ procedure DeleteCI(Gear: PGear);
 
 function  CheckGearsCollision(Gear: PGear): PGearArray;
 function  CheckAllGearsCollision(SourceGear: PGear): PGearArray;
+function  CheckCacheCollision(SourceGear: PGear): PGearArray;
 
 function  CheckGearsLineCollision(Gear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
 function  CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat): PGearArray;
@@ -60,6 +68,10 @@ function  CheckAllGearsLineCollision(SourceGear: PGear; oX, oY, tX, tY: hwFloat)
 function  UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
 procedure ClearHitOrderLeq(MinOrder: LongInt);
 procedure ClearHitOrder();
+
+procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
+procedure RemoveFromProximityCache(Gear: PGear);
+procedure ClearProximityCache();
 
 function  TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
 function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
@@ -84,8 +96,10 @@ function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
 function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
 
+function CheckGearsUnderSprite(Sprite: TSprite; sprX, sprY, Frame: LongInt): boolean;
+
 implementation
-uses uConsts, uLandGraphics, uVariables;
+uses uConsts, uLandGraphics, uVariables, SDLh, uLandTexture, uDebug;
 
 type TCollisionEntry = record
     X, Y, Radius: LongInt;
@@ -97,6 +111,7 @@ var Count: Longword;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
     ga: TGearArray;
     ordera: TGearHitOrder;
+    proximitya: TGearProximityCache;
 
 procedure AddCI(Gear: PGear);
 begin
@@ -132,7 +147,7 @@ end;
 function CheckCoordInWater(X, Y: LongInt): boolean; inline;
 begin
     CheckCoordInWater:= (Y > cWaterLine)
-        or ((WorldEdge = weSea) and ((X < LongInt(leftX)) or (X > LongInt(rightX))));
+        or ((WorldEdge = weSea) and ((X < leftX) or (X > rightX)));
 end;
 
 function CheckGearsCollision(Gear: PGear): PGearArray;
@@ -180,8 +195,8 @@ begin
                (sqr(mx - hwRound(Gear^.x)) + sqr(my - hwRound(Gear^.y)) <= sqr(Gear^.Radius + tr))then
             begin
                 ga.ar[ga.Count]:= Gear;
-                ga.cX[ga.Count]:= hwround(SourceGear^.X);
-                ga.cY[ga.Count]:= hwround(SourceGear^.Y);
+                ga.cX[ga.Count]:= mx;
+                ga.cY[ga.Count]:= my;
                 inc(ga.Count)
             end;
 
@@ -287,6 +302,33 @@ begin
     end;
 end;
 
+function CheckCacheCollision(SourceGear: PGear): PGearArray;
+var mx, my, tr, i: LongInt;
+    Gear: PGear;
+begin
+    CheckCacheCollision:= @ga;
+    ga.Count:= 0;
+
+    mx:= hwRound(SourceGear^.X);
+    my:= hwRound(SourceGear^.Y);
+
+    tr:= SourceGear^.Radius + 2;
+
+    for i:= 0 to proximitya.Count - 1 do
+    begin
+        Gear:= proximitya.ar[i];
+        // Assuming the cache has been filled correctly, it will not contain SourceGear
+        // and other gears won't be far enough for sqr overflow
+        if (sqr(mx - hwRound(Gear^.X)) + sqr(my - hwRound(Gear^.Y)) <= sqr(Gear^.Radius + tr)) then
+        begin
+            ga.ar[ga.Count]:= Gear;
+            ga.cX[ga.Count]:= mx;
+            ga.cY[ga.Count]:= my;
+            inc(ga.Count)
+        end;
+    end;
+end;
+
 function UpdateHitOrder(Gear: PGear; Order: LongInt): boolean;
 var i: LongInt;
 begin
@@ -337,14 +379,58 @@ begin
     ordera.Count:= 0;
 end;
 
+procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
+var cx, cy, dx, dy, r: LongInt;
+    Gear: PGear;
+begin
+    proximitya.Count:= 0;
+    cx:= hwRound(SourceGear^.X);
+    cy:= hwRound(SourceGear^.Y);
+    Gear:= GearsList;
+
+    while (Gear <> nil) and (proximitya.Count <= cMaxGearProximityCacheInd) do
+    begin
+        dx:= abs(hwRound(Gear^.X) - cx);
+        dy:= abs(hwRound(Gear^.Y) - cy);
+        r:= radius + Gear^.radius + 2;
+        if (Gear <> SourceGear) and (max(dx, dy) <= r) and (sqr(dx) + sqr(dy) <= sqr(r)) then
+        begin
+            proximitya.ar[proximitya.Count]:= Gear;
+            inc(proximitya.Count)
+        end;
+        Gear := Gear^.NextGear
+    end;
+end;
+
+procedure RemoveFromProximityCache(Gear: PGear);
+var i: LongInt;
+begin
+    i := 0;
+    while i < proximitya.Count do
+        begin
+        if proximitya.ar[i] = Gear then
+            begin
+                proximitya.ar[i]:= proximitya.ar[proximitya.Count - 1];
+                dec(proximitya.Count);
+            end
+        else
+            inc(i);
+        end;
+end;
+
+procedure ClearProximityCache();
+begin
+    proximitya.Count:= 0;
+end;
+
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
-if (Gear^.CollisionMask = lfNotCurrentMask) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+if (Gear^.CollisionMask = lfNotCurHogCrate) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
     ((hwRound(Gear^.Hedgehog^.Gear^.X) + Gear^.Hedgehog^.Gear^.Radius + 16 < hwRound(Gear^.X) - Gear^.Radius) or
      (hwRound(Gear^.Hedgehog^.Gear^.X) - Gear^.Hedgehog^.Gear^.Radius - 16 > hwRound(Gear^.X) + Gear^.Radius)) then
-    Gear^.CollisionMask:= $FFFF;
+    Gear^.CollisionMask:= lfAll;
 
 x:= hwRound(Gear^.X);
 if Dir < 0 then
@@ -370,10 +456,10 @@ function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
-if (Gear^.CollisionMask = lfNotCurrentMask) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+if (Gear^.CollisionMask = lfNotCurHogCrate) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
     ((hwRound(Gear^.Hedgehog^.Gear^.Y) + Gear^.Hedgehog^.Gear^.Radius + 16 < hwRound(Gear^.Y) - Gear^.Radius) or
      (hwRound(Gear^.Hedgehog^.Gear^.Y) - Gear^.Hedgehog^.Gear^.Radius - 16 > hwRound(Gear^.Y) + Gear^.Radius)) then
-    Gear^.CollisionMask:= $FFFF;
+    Gear^.CollisionMask:= lfAll;
 
 y:= hwRound(Gear^.Y);
 if Dir < 0 then
@@ -417,7 +503,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
             begin
             if Land[y, x] and Gear^.CollisionMask <> 0 then
                 begin
-                if Land[y, x] and Gear^.CollisionMask > 255 then
+                if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                     exit(Land[y, x] and Gear^.CollisionMask)
                 else
                     pixel:= Land[y, x] and Gear^.CollisionMask;
@@ -483,7 +569,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
             begin
-            if Land[y, x] and Gear^.CollisionMask > 255 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask)
             else // if Land[y, x] <> 0 then
                 pixel:= Land[y, x] and Gear^.CollisionMask;
@@ -558,7 +644,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
     i:= y + Gear^.Radius * 2 - 2;
     repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
-            if Land[y, x] and Gear^.CollisionMask > 255 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask);
     inc(y)
     until (y > i);
@@ -581,7 +667,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     i:= x + Gear^.Radius * 2 - 2;
     repeat
         if (x and LAND_WIDTH_MASK) = 0 then
-            if Land[y, x] and Gear^.CollisionMask > 255 then
+            if ((Land[y, x] and Gear^.CollisionMask) and lfLandMask) <> 0 then
                 exit(Land[y, x] and Gear^.CollisionMask);
     inc(x)
     until (x > i);
@@ -897,7 +983,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     i:= x + Gear^.Radius * 2 - 2;
     repeat
     if (x and LAND_WIDTH_MASK) = 0 then
-        if Land[y, x] > 255 then
+        if (Land[y, x] and lfLandMask) <> 0 then
             if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
                 begin
                 isColl:= true;
@@ -934,6 +1020,66 @@ if isColl then
     end;
 
 CalcSlopeBelowGear := _0;
+end;
+
+function CheckGearsUnderSprite(Sprite: TSprite; sprX, sprY, Frame: LongInt): boolean;
+var x, y, bpp, h, w, row, col, gx, gy, r, numFramesFirstCol: LongInt;
+    p: PByteArray;
+    Image: PSDL_Surface;
+    Gear: PGear;
+begin
+    CheckGearsUnderSprite := false;
+    if checkFails(SpritesData[Sprite].Surface <> nil, 'Assert SpritesData[Sprite].Surface failed', true) then exit;
+
+    numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
+    Image:= SpritesData[Sprite].Surface;
+
+    if SDL_MustLock(Image) then
+        if SDLCheck(SDL_LockSurface(Image) >= 0, 'CheckGearsUnderSprite', true) then exit;
+
+    bpp:= Image^.format^.BytesPerPixel;
+
+    if checkFails(bpp = 4, 'It should be 32 bpp sprite', true) then
+        begin
+        if SDL_MustLock(Image) then
+            SDL_UnlockSurface(Image);
+        exit
+        end;
+
+    w:= SpritesData[Sprite].Width;
+    h:= SpritesData[Sprite].Height;
+
+    row:= Frame mod numFramesFirstCol;
+    col:= Frame div numFramesFirstCol;
+    p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
+    Gear:= GearsList;
+
+    while Gear <> nil do
+        begin
+        if (Gear^.Kind = gtAirMine) or
+            ((Gear^.Kind in [gtCase, gtExplosives, gtTarget, gtKnife, gtMine, gtHedgehog, gtSMine]) and (Gear^.CollisionIndex = -1)) then
+            begin
+            gx:= hwRound(Gear^.X);
+            gy:= hwRound(Gear^.Y);
+            r:= Gear^.Radius + 1;
+            if (gx + r >= sprX) and (gx - r < sprX + w) and (gy + r >= sprY) and (gy - r < sprY + h) then
+                for y := gy - r to gy + r do
+                    for x := gx - r to gx + r do
+                        begin
+                        if (x >= sprX) and (x < sprX + w) and (y >= sprY) and (y < sprY + h)
+                        and (Sqr(x - gx) + Sqr(y - gy) <= Sqr(r))
+                        and (((PLongword(@(p^[Image^.pitch * (y - sprY) + (x - sprX) * 4]))^) and AMask) <> 0) then
+                            begin
+                            CheckGearsUnderSprite := true;
+                            if SDL_MustLock(Image) then
+                                SDL_UnlockSurface(Image);
+                            exit
+                            end
+                        end
+            end;
+
+        Gear := Gear^.NextGear
+        end;
 end;
 
 procedure initModule;

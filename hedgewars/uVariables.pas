@@ -33,6 +33,7 @@ var
     cFullscreenHeight  : LongInt;
     cWindowedWidth     : LongInt;
     cWindowedHeight    : LongInt;
+    cWindowedMaximized : boolean;
     cScreenWidth       : LongInt;
     cScreenHeight      : LongInt;
     cNewScreenWidth    : LongInt;
@@ -41,8 +42,8 @@ var
     ipcPort            : Word;
     AprilOne           : boolean;
     cFullScreen        : boolean;
-    cLocaleFName       : shortstring;
-    cLocale            : shortstring;
+    cLanguageFName     : shortstring;
+    cLanguage          : shortstring;
     cTimerInterval     : LongInt;
     PathPrefix         : ansistring;
     UserPathPrefix     : ansistring;
@@ -55,6 +56,7 @@ var
 
     cAltDamage         : boolean;
     cReducedQuality    : LongWord;
+    cHolidaySilliness  : boolean;
     UserNick           : shortstring;
     recordFileName     : shortstring;
     cReadyDelay        : Longword;
@@ -78,6 +80,9 @@ var
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
     isAFK           : boolean;
+    isShowMission   : boolean;
+    isShowGearInfo  : boolean;
+    isForceMission  : boolean;
     SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
@@ -86,7 +91,9 @@ var
 
     CheckSum        : LongWord;
     CampaignVariable: shortstring;
+    MissionVariable : shortstring;
     GameTicks       : LongWord;
+    OuchTauntTimer  : LongWord; // Timer which blocks sndOuch from being played too often and fast
     GameState       : TGameState;
     GameType        : TGameType;
     InputMask       : LongWord;
@@ -101,12 +108,17 @@ var
     IsGetAwayTime   : boolean;
     GameOver        : boolean;
     cSuddenDTurns   : LongInt;
+    LastSuddenDWarn : LongInt; // last round in which the last SD warning appeared. -2 = no warning so far
+    cInitHealth     : LongInt; // initial hedgehog health (from game scheme. note the real hog health is sent directly
+                               // from frontend, this is only used to inform Lua scripts)
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
     cTemplateFilter : LongInt;
     cFeatureSize    : LongInt;
     cMapGen         : TMapGen;
     cRopePercent    : LongWord;
+    cRopeNodeStep   : LongWord;
+    cRopeLayers     : LongInt;
     cGetAwayTime    : LongWord;
 
     cAdvancedMapGenMode: boolean;
@@ -125,8 +137,9 @@ var
 
     cTagsMask        : byte;
     cPrevTagsMask    : byte;
-    zoom             : GLfloat;
-    ZoomValue        : GLfloat;
+    zoom             : GLfloat; // current zoom
+    ZoomValue        : GLfloat; // aimed zoom
+    UserZoom         : GLfloat; // user-chosen initial and default zoom
 
     cWaterLine       : LongInt;
     cGearScrEdgesDist: LongInt;
@@ -159,6 +172,8 @@ var
     cScreenSpace          : Longword;
 
     cCaseFactor     : Longword;
+    cMaxCaseDrops   : Longword; // Max. number of crates which can be in the game when dropping
+
     cLandMines      : Longword;
     cAirMines       : Longword;
     cExplosives     : Longword;
@@ -166,16 +181,21 @@ var
     cScriptName     : shortstring;
     cScriptParam    : shortstring;
     cSeed           : shortstring;
+    cIsSoundEnabled : boolean; // If the sound system is enabled
     cVolumeDelta    : LongInt;
+    cVolumeUpKey    : boolean;
+    cVolumeDownKey  : boolean;
     cMuteToggle     : boolean; // Mute toggle requested
     cHasFocus       : boolean;
     cInactDelay     : Longword;
 
     bBetweenTurns   : boolean;
     bWaterRising    : boolean;
+    bDuringWaterRise: boolean;
 
     CrosshairX      : LongInt;
     CrosshairY      : LongInt;
+    CrosshairGear   : PGear;
     CursorMovementX : LongInt;
     CursorMovementY : LongInt;
     cWaveHeight     : LongInt;
@@ -200,7 +220,9 @@ var
     cMaxZoomLevel   : real;
     cMinZoomLevel   : real;
     cZoomDelta      : real;
+    cZoomDeltaSmall : real;
     cMinMaxZoomLevelDelta : real;
+    cDemoClockFPSOffsetY : LongInt;
 
 
     flagMakeCapture : boolean;
@@ -212,9 +234,11 @@ var
 
     WaterColorArray : array[0..7] of HwColor4f;
     SDWaterColorArray : array[0..7] of HwColor4f;
+    ClanColorArray : array[0..Pred(cClanColors)] of Longword;
 
     TargetCursorPoint     : TPoint;
     CursorPoint           : TPoint;
+    CursorPointDelta      : TPoint;
     TargetPoint           : TPoint;
 
     ScreenFade      : TScreenFade;
@@ -254,6 +278,12 @@ var
     LuaEndTurnRequested: boolean;
     LuaNoEndTurnTaunts: boolean;
 
+    // whether Lua requested to pause the clock
+    LuaClockPaused: boolean;
+
+    // whether /lua command was used
+    LuaCmdUsed: boolean;
+
     MaskedSounds : array[TSound] of boolean;
 
     LastVoice : TVoice;
@@ -269,10 +299,12 @@ var
 //Buttons
 {$IFDEF USE_TOUCH_INTERFACE}
     buttonScale: GLFloat;
+    bounceButtonPressed: boolean;
 
     arrowUp, arrowDown, arrowLeft, arrowRight : TOnScreenWidget;
     firebutton, jumpWidget, AMWidget          : TOnScreenWidget;
     pauseButton, utilityWidget                : TOnScreenWidget;
+    utilityWidget2                            : TOnScreenWidget;
 {$ENDIF}
 
 
@@ -286,7 +318,7 @@ const
         '//',                            // ptData
         '/Graphics',                     // ptGraphics
         '/Themes',                       // ptThemes
-        '/Themes/Bamboo',                // ptCurrTheme
+        '/Themes/Nature',                // ptCurrTheme
         '/Config',                       // ptConfig
         '/Config/Teams',                 // ptTeams
         '/Maps',                         // ptMaps
@@ -305,7 +337,9 @@ const
         '/Missions/Maps',                // ptMissionMaps
         '/Graphics/SuddenDeath',         // ptSuddenDeath
         '/Graphics/Buttons',             // ptButton
-        '/Shaders'                       // ptShaders
+        '/Shaders',                      // ptShaders
+        '/Sounds/voices/Default',        // ptDefaultVoice
+        '/misc'                          // ptMisc
     );
 
 var
@@ -433,13 +467,13 @@ const
             (FileName:     'hhMask'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; critical: true; checkSum: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHHTelepMask
             (FileName:     'Switch'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSwitch
+            Width:  40; Height: 40; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSwitch
             (FileName:  'Parachute'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprParachute
             (FileName:     'Target'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTarget
-            (FileName:   'RopeNode'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:   6; Height:  6; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprRopeNode
+            (FileName:   'RopeNode'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width:   16; Height:  16; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprRopeNode
             (FileName:   'thinking'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpLowest; getDimensions: false; getImageDimensions: true),// sprQuestion
             (FileName:   'PowerBar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -473,6 +507,8 @@ const
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTargetButton
             (FileName: 'switchbutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprSwitchButton
+            (FileName: 'bouncebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprBounceButton
 {$ENDIF}
             (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprFlake
@@ -730,7 +766,7 @@ const
             (FileName:  'botlevels'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 22; Height: 15; imageWidth: 22; imageHeight: 15; saveSurf: true; critical: true; checkSum: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprBotlevels
             (FileName:  'amCleaver'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: false),// sprHandKnife
+            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandKnife
             (FileName:  'cleaver'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 64; Height: 64; imageWidth: 64; imageHeight: 128; saveSurf: false; critical: true; checkSum: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprKnife
             (FileName:  'star'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -775,13 +811,50 @@ const
             Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: false; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprCloudL
             (FileName:     'SDCloudsL'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: false; checkSum: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprSDCloudL
+            // TODO: Rename creeper image
             (FileName:     'Duck'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprDuck
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprCreeper
+            // TODO: Rename creeper hand image
             (FileName:    'amDuck'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHandDuck
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHandCreeper
             (FileName: 'amMinigun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprMinigun
+            Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprMinigun
+            (FileName:  'sliderInverted'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; critical: true; checkSum: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprSliderInverted
+            (FileName:     'FingerBack'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprFingerBack
+            (FileName:     'FingerBackInv'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprFingerBackInv
+            (FileName:    'TargetpBack'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetPBack
+            (FileName:    'TargetpBackInv'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetPBackInv
+            (FileName:    'HealthHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHealthHud
+            (FileName:    'HealthPoisonHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHealthPoisonHud
+            (FileName:    'VampHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  24; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprVampHUD
+            (FileName:    'KarmaHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprKarmaHUD
+            (FileName:    'MedicHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMedicHud
+            (FileName:    'MedicPoisonHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMedicPoisonHud
+            (FileName:    'HaloHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  22; Height: 11; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHaloHUD
+            (FileName:    'InvulnHUD'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  18; Height: 18; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprInvulnHUD
+            (FileName: 'amPiano'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  42; Height: 42; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAmPiano
+            (FileName:  'amLandGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHandLandGun
+            (FileName: 'amShoryuken'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprFirePunch
+            (FileName: 'throughWrap'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  16; Height: 13; imageWidth: 0; imageHeight: 0; saveSurf: false; critical: true; checkSum: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprTroughWrap
             );
+
 
 const
     Wavez: array [TWave] of record
@@ -816,9 +889,11 @@ type
             PosSprite: TSprite;
             ejectX, ejectY: Longint;
             end;
+    TAmmoCounts = array[TAmmoType] of Longword;
 
 var
     Ammoz: array [TAmmoType] of TAmmozRec;
+    InitialAmmoCounts: TAmmoCounts;
 
 const
     AmmozInit: array [TAmmoType] of TAmmozRec = (
@@ -833,14 +908,14 @@ const
                 Pos: 0;
                 AmmoType: amNothing;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: cHiddenSlotIndex;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
-            SkipTurns: 9999;
-            PosCount: 1;
+            SkipTurns: 0;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -861,14 +936,14 @@ const
                 Pos: 0;
                 AmmoType: amGrenade;
                 AttackVoice: sndCover;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -889,14 +964,14 @@ const
                 Pos: 0;
                 AmmoType: amClusterBomb;
                 AttackVoice: sndCover;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -914,15 +989,15 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBazooka;
-                AttackVoice: sndNone;
-                Bounciness: 1000);
+                AttackVoice: sndFire;
+                Bounciness: defaultBounciness);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -6),
@@ -935,15 +1010,17 @@ const
             Ammo: (Propz: ammoprop_Power or
                           ammoprop_NeedTarget or
                           ammoprop_NoTargetAfter or
+                          ammoprop_NoWrapTarget or
                           ammoprop_DontHold or
+                          ammoprop_AltUse or
                           ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBee;
-                AttackVoice: sndNone;
-                Bounciness: 1000);
+                AttackVoice: sndFire;
+                Bounciness: defaultBounciness);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -969,14 +1046,14 @@ const
                 Pos: 0;
                 AmmoType: amShotgun;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 2;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //26;
             ejectY: -6),
@@ -997,14 +1074,14 @@ const
                 Pos: 0;
                 AmmoType: amPickHammer;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1024,14 +1101,14 @@ const
                 Pos: 0;
                 AmmoType: amSkip;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1054,14 +1131,14 @@ const
                     Pos: 0;
                     AmmoType: amRope;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: cMaxAngle div 2;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1082,14 +1159,14 @@ const
                 Pos: 0;
                 AmmoType: amMine;
                 AttackVoice: sndLaugh;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 4;
             TimeAfterTurn: 5000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1106,14 +1183,14 @@ const
                 Pos: 0;
                 AmmoType: amDEagle;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 2;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //23;
             ejectY: -6),
@@ -1133,14 +1210,14 @@ const
                 Pos: 0;
                 AmmoType: amDynamite;
                 AttackVoice: sndLaugh;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 4;
             TimeAfterTurn: 5000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1159,14 +1236,14 @@ const
                 Pos: 0;
                 AmmoType: amFirePunch;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 3;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1183,14 +1260,14 @@ const
                 Pos: 0;
                 AmmoType: amWhip;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 3;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1208,14 +1285,14 @@ const
                 Pos: 0;
                 AmmoType: amBaseballBat;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 3;
             TimeAfterTurn: 5000;
             minAngle: 0;
             maxAngle: cMaxAngle div 2;
             isDamaging: true;
             SkipTurns: 2;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1232,6 +1309,7 @@ const
                           ammoprop_DontHold or
                           ammoprop_Utility or
                           ammoprop_AltAttack or
+                          ammoprop_ShowSelIcon or
                           ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
@@ -1239,14 +1317,14 @@ const
                 Pos: 0;
                 AmmoType: amParachute;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1266,8 +1344,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amAirAttack;
-                AttackVoice: sndIncoming;
-                Bounciness: 1000);
+                AttackVoice: sndNone; // handled in doStepAirAttack
+                Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1294,8 +1372,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amMineStrike;
-                AttackVoice: sndIncoming;
-                Bounciness: 1000);
+                AttackVoice: sndNone; // handled in doStepAirAttack
+                Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1321,14 +1399,14 @@ const
                 Pos: 0;
                 AmmoType: amBlowTorch;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 6;
             TimeAfterTurn: 3000;
             minAngle: 804;
             maxAngle: 1327;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1349,7 +1427,7 @@ const
                     Pos: 0;
                     AmmoType: amGirder;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 6;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1370,6 +1448,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_NeedTarget or
                           ammoprop_AttackingPut or
+                          ammoprop_AttackInMove or
                           ammoprop_Utility or
                           ammoprop_DontHold;
                 Count: 2;
@@ -1378,7 +1457,7 @@ const
                 Pos: 0;
                 AmmoType: amTeleport;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1399,6 +1478,7 @@ const
                           ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_Utility or
+                          ammoprop_ShowSelIcon or
                           ammoprop_DontHold;
                     Count: 3;
                     NumPerTurn: 0;
@@ -1406,14 +1486,14 @@ const
                     Pos: 0;
                     AmmoType: amSwitch;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1430,14 +1510,14 @@ const
                 Pos: 0;
                 AmmoType: amMortar;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -6),
@@ -1458,14 +1538,14 @@ const
                 Pos: 0;
                 AmmoType: amKamikaze;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 3;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1485,14 +1565,14 @@ const
                 Pos: 0;
                 AmmoType: amCake;
                 AttackVoice: sndLaugh;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 4;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 4;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1511,14 +1591,14 @@ const
                 Pos: 0;
                 AmmoType: amSeduction;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 3;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1538,14 +1618,14 @@ const
                 Pos: 0;
                 AmmoType: amWatermelon;
                 AttackVoice: sndMelon;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1563,15 +1643,15 @@ const
                 Timer: 5000;
                 Pos: 0;
                 AmmoType: amHellishBomb;
-                AttackVoice: sndNone;
-                Bounciness: 1000);
+                AttackVoice: sndWatchThis;
+                Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1591,8 +1671,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amNapalm;
-                AttackVoice: sndIncoming;
-                Bounciness: 1000);
+                AttackVoice: sndNone; // handled in doStepAirAttack
+                Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1617,15 +1697,15 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amDrill;
-                AttackVoice: sndNone;
-                Bounciness: 1000);
+                AttackVoice: sndFire;
+                Bounciness: defaultBounciness);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprDrill;
             ejectX: 0; //20;
             ejectY: -6),
@@ -1644,14 +1724,14 @@ const
                 Pos: 0;
                 AmmoType: amBallgun;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 4;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -3),
@@ -1671,14 +1751,14 @@ const
                 Pos: 0;
                 AmmoType: amRCPlane;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 4;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 4;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1692,6 +1772,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
@@ -1700,14 +1781,14 @@ const
                     Pos: 0;
                     AmmoType: amLowGravity;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1721,6 +1802,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
@@ -1729,14 +1811,14 @@ const
                     Pos: 0;
                     AmmoType: amExtraDamage;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1750,6 +1832,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
@@ -1758,14 +1841,14 @@ const
                     Pos: 0;
                     AmmoType: amInvulnerable;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1779,6 +1862,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
@@ -1787,14 +1871,14 @@ const
                     Pos: 0;
                     AmmoType: amExtraTime;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1808,6 +1892,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
+                          ammoprop_ShowSelIcon or
                           ammoprop_Utility or
                           ammoprop_NeedUpDown or
                           ammoprop_Effect;
@@ -1817,14 +1902,14 @@ const
                     Pos: 0;
                     AmmoType: amLaserSight;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1846,14 +1931,14 @@ const
                     Pos: 0;
                     AmmoType: amVampiric;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1873,14 +1958,14 @@ const
                 Pos: 0;
                 AmmoType: amSniperRifle;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 2;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //40;
             ejectY: -5),
@@ -1896,6 +1981,7 @@ const
                           ammoprop_DontHold or
                           ammoprop_Utility or
                           ammoprop_NeedUpDown or
+                          ammoprop_ShowSelIcon or
                           ammoprop_AltAttack;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1903,14 +1989,14 @@ const
                 Pos: 0;
                 AmmoType: amJetpack;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 7;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1928,15 +2014,15 @@ const
                 Timer: 3000;
                 Pos: 0;
                 AmmoType: amMolotov;
-                AttackVoice: sndNone;
-                Bounciness: 1000);
+                AttackVoice: sndWatchThis;
+                Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1949,6 +2035,7 @@ const
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_NeedUpDown or
+                          ammoprop_ShowSelIcon or
                           ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1956,14 +2043,14 @@ const
                 Pos: 0;
                 AmmoType: amBirdy;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 7;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -1984,14 +2071,14 @@ const
                 Pos: 0;
                 AmmoType: amPortalGun;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: -5; //29;
             ejectY: -7),
@@ -2003,7 +2090,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
                             ammoprop_NeedTarget or
-                            ammoprop_NoTargetAfter or
+                            // NoTargetAfter is handled manually in doStepPiano
                             ammoprop_AttackingPut or
                             ammoprop_DontHold or
                             ammoprop_NotBorder or
@@ -2013,8 +2100,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amPiano;
-                AttackVoice: sndIncoming;
-                Bounciness: 1000);
+                AttackVoice: sndNone; // handled in doStepPiano
+                Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -2022,7 +2109,7 @@ const
             isDamaging: true;
             SkipTurns: 7;
             PosCount: 1;
-            PosSprite: sprWater;
+            PosSprite: sprAmPiano;
             ejectX: 0;
             ejectY: 0),
 
@@ -2042,14 +2129,14 @@ const
                 Pos: 0;
                 AmmoType: amGasBomb;
                 AttackVoice: sndCover;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2067,14 +2154,14 @@ const
                 Pos: 0;
                 AmmoType: amSineGun;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 2;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2093,14 +2180,14 @@ const
                 Pos: 0;
                 AmmoType: amFlamethrower;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
-            Slot: 2;
+                Bounciness: defaultBounciness);
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -3),
@@ -2119,14 +2206,14 @@ const
                 Pos: 0;
                 AmmoType: amSMine;
                 AttackVoice: sndLaugh;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 4;
             TimeAfterTurn: 5000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2143,14 +2230,14 @@ const
                 Pos: 0;
                 AmmoType: amHammer;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 3;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2162,21 +2249,22 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
                           ammoprop_Utility or
-                          ammoprop_NoRoundEnd;
+                          ammoprop_NoRoundEnd or
+                          ammoprop_DoesntStopTimerWhileAttacking;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amResurrector;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 8;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2197,8 +2285,8 @@ const
                 Timer: 5000;
                 Pos: 0;
                 AmmoType: amDrillStrike;
-                AttackVoice: sndIncoming;
-                Bounciness: 1000);
+                AttackVoice: sndNone; // handled in doStepAirAttack
+                Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -2225,14 +2313,14 @@ const
                 Pos: 0;
                 AmmoType: amSnowball;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2245,6 +2333,7 @@ const
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_Utility or
+                          ammoprop_ShowSelIcon or
                           ammoprop_DontHold or
                           ammoprop_ForceTurnEnd;
                 Count: 2;
@@ -2253,7 +2342,7 @@ const
                 Pos: 0;
                 AmmoType: amTardis;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -2264,35 +2353,6 @@ const
             PosSprite: sprAmTeleport;
             ejectX: 0;
             ejectY: 0),
-
-// Structure
-{
-            (NameId: sidStructure;
-            NameTex: nil;
-            Probability: 0;
-            NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or
-                          ammoprop_NoCrosshair or
-                          ammoprop_Utility or
-                          ammoprop_DontHold;
-                Count: 1;
-                NumPerTurn: 0;
-                Timer: 0;
-                Pos: 0;
-                AmmoType: amStructure;
-                AttackVoice: sndNone;
-                Bounciness: 1000);
-            Slot: 6;
-            TimeAfterTurn: 0;
-            minAngle: 0;
-            maxAngle: 0;
-            isDamaging: false;
-            SkipTurns: 0;
-            PosCount: 1;
-            PosSprite: sprWater;
-            ejectX: 0;
-            ejectY: 0),
-}
 
 // Land Gun
             (NameId: sidLandGun;
@@ -2308,14 +2368,14 @@ const
                 Pos: 0;
                 AmmoType: amLandGun;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -3),
@@ -2333,14 +2393,14 @@ const
                 Pos: 0;
                 AmmoType: amIceGun;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 2;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //20;
             ejectY: -3),
@@ -2357,15 +2417,15 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amKnife;
-                AttackVoice: sndNone;
-                Bounciness: 1000);
-            Slot: 6;
+                AttackVoice: sndWatchThis;
+                Bounciness: defaultBounciness);
+            Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
@@ -2385,7 +2445,7 @@ const
                     Pos: 0;
                     AmmoType: amRubber;
                     AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 6;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -2410,19 +2470,19 @@ const
                 Pos: 0;
                 AmmoType: amAirMine;
                 AttackVoice: sndLaugh;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 5;
             TimeAfterTurn: 5000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
-// Rubber duck
-            (NameId: sidDuck;
+// Creeper
+            (NameId: sidCreeper;
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
@@ -2434,16 +2494,18 @@ const
                 NumPerTurn: 0;
                 Timer: 15000;
                 Pos: 0;
-                AmmoType: amDuck;
+                AmmoType: amCreeper;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
-            Slot: 0;
+                Bounciness: defaultBounciness);
+            // Slot chosen to prevent ammo column overflow
+            // TODO: Change slot when creeper is finished
+            Slot: 8;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 15;
             ejectY: -7),
@@ -2459,14 +2521,14 @@ const
                 Pos: 0;
                 AmmoType: amMinigun;
                 AttackVoice: sndNone;
-                Bounciness: 1000);
+                Bounciness: defaultBounciness);
             Slot: 2;
             TimeAfterTurn: 3000;
             minAngle: cMaxAngle div 6;
             maxAngle: 5 * cMaxAngle div 6;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
+            PosCount: 0;
             PosSprite: sprWater;
             ejectX: 0; //23;
             ejectY: 0) //-6;
@@ -2478,7 +2540,8 @@ var
     LandDirty: TDirtyTag;
     hasBorder: boolean;
     hasGirders: boolean;
-    playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
+    playHeight, playWidth, leftX, rightX, topY: LongInt;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
+	MaxHedgehogs: LongWord;
     LandBackSurface: PSDL_Surface;
     CurAmmoGear: PGear;
     lastGearByUID: PGear;
@@ -2492,18 +2555,19 @@ var
     SpeechType: Longword;
     SpeechText: shortstring;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
+    PlacingKings: boolean; // a convenience flag to indicate placement of kings in King Mode is still in progress
     StepSoundTimer: LongInt;
     StepSoundChannel: LongInt;
 
     CurrentTeam: PTeam;
     PreviousTeam: PTeam;
+    MissionTeam: PTeam;
     CurrentHedgehog: PHedgehog;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
     TeamsCount: Longword; // number of teams on game start
     VisibleTeamsCount: Longword; // number of teams visible in team bar
     ClansArray, SpawnClansArray: TClansArray;
     ClansCount: Longword;
-    LocalClan: LongInt;  // last non-bot, non-extdriven clan
     LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index, updated to next upcoming hog for per-hog-ammo
     CurMinAngle, CurMaxAngle: Longword;
@@ -2513,6 +2577,7 @@ var
     bShowAmmoMenu: boolean;
     bSelected: boolean;
     bShowFinger: boolean;
+    bShowSwitcher: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
     SDTint, SkyColor, RQSkyColor, SDSkyColor: TSDL_Color;
@@ -2572,6 +2637,8 @@ var
     aTexCoord: GLint;
     aColor: GLint;
 
+    lDecimalSeparator: Char;
+
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
     trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
@@ -2582,6 +2649,7 @@ var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trluaammoe: array[TAmmoStrId] of boolean;   // whether to render extra text (Lua overwrite)
     trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
     trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
+    trcmd:   array[TCmdHelpStrId] of ansistring; // chat command help
     cTestLua : Boolean;
 
 procedure preInitModule;
@@ -2598,14 +2666,16 @@ begin
     cFullscreenHeight := 0;
     cWindowedWidth    := 1024;
     cWindowedHeight   := 768;
+    cWindowedMaximized:= false;
     cScreenWidth      := cWindowedWidth;
     cScreenHeight     := cWindowedHeight;
 
     cShowFPS        := false;
     cAltDamage      := false;
+    cHolidaySilliness := true;
     cTimerInterval  := 8;
     cReducedQuality := rqNone;
-    cLocaleFName    := 'en.txt';
+    cLanguageFName  := 'en.txt';
     cFullScreen     := false;
 
     UserPathPrefix  := '';
@@ -2620,6 +2690,22 @@ begin
     cScriptName     := '';
     cScriptParam    := '';
     cTestLua        := False;
+
+    UserZoom        := cDefaultZoomLevel;
+    zoom            := cDefaultZoomLevel;
+    ZoomValue       := cDefaultZoomLevel;
+
+{$IFDEF MOBILE}
+    cMaxZoomLevel   := 0.5;
+    cMinZoomLevel   := 3.5;
+    cZoomDelta      := 0.20;
+    cZoomDeltaSmall := 0.10;
+{$ELSE}
+    cMaxZoomLevel   := 1.0;
+    cMinZoomLevel   := 3.0;
+    cZoomDelta      := 0.25;
+    cZoomDeltaSmall := 0.125;
+{$ENDIF}
 
 {$IFDEF USE_VIDEO_RECORDING}
     RecPrefix          := '';
@@ -2660,8 +2746,8 @@ begin
     Move(AmmozInit, Ammoz, sizeof(Ammoz));
 
 
-    cLocale:= cLocaleFName;
-    SplitByChar(cLocale, s, '.');
+    cLanguage:= cLanguageFName;
+    SplitByChar(cLanguage, s, '.');
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
@@ -2710,6 +2796,19 @@ begin
     WaterColorArray[7]:= WaterColorArray[1];
 
     WaterOpacity:= $80;
+
+    // default clan colors
+    // always keep in sync with QTfrontend/hwconsts.h
+
+    ClanColorArray[0] := $ffff0204;
+    ClanColorArray[1] := $ff4980c1;
+    ClanColorArray[2] := $ff1de6ba;
+    ClanColorArray[3] := $ffb541ef;
+    ClanColorArray[4] := $ffe55bb0;
+    ClanColorArray[5] := $ff20bf00;
+    ClanColorArray[6] := $fffe8b0e;
+    ClanColorArray[7] := $ff8f5902;
+    ClanColorArray[8] := $ffffff01;
 
     // default sudden death water
 
@@ -2761,27 +2860,22 @@ begin
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
 
-{$IFDEF MOBILE}
-    cMaxZoomLevel:= 0.5;
-    cMinZoomLevel:= 3.5;
-    cZoomDelta:= 0.20;
-{$ELSE}
-    cMaxZoomLevel:= 1.0;
-    cMinZoomLevel:= 3.0;
-    cZoomDelta:= 0.25;
-    {$ENDIF}
-
     aVertex:= 0;
     aTexCoord:= 1;
     aColor:= 2;
 
+    lDecimalSeparator       := '.';
+
 
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel;
+
+    cDemoClockFPSOffsetY := 0;
 
     // int, longint longword and byte
     CursorMovementX     := 0;
     CursorMovementY     := 0;
     GameTicks           := 0;
+    OuchTauntTimer      := 0;
     CheckSum            := 0;
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
@@ -2797,12 +2891,16 @@ begin
     TurnClockActive     := true;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
+    LastSuddenDWarn     := -2;
+    cInitHealth         := 100;
     cDamagePercent      := 100;
     cRopePercent        := 100;
+    cRopeNodeStep       := 4;
+    cRopeLayers         := 1;
     cGetAwayTime        := 100;
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
-    cFeatureSize        := 50;
+    cFeatureSize        := 12;
     cMapGen             := mgRandom;
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;
@@ -2819,13 +2917,12 @@ begin
     RealTicks       := 0;
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
     cCaseFactor     := 5;  {0..9}
+    cMaxCaseDrops   := 5;
     cLandMines      := 4;
     cAirMines       := 0;
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
-    zoom            := cDefaultZoomLevel;
-    ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
     cLaserSighting  := false;
     cLaserSightingSniper := false;
@@ -2834,18 +2931,25 @@ begin
     flagDumpLand    := false;
     bBetweenTurns   := false;
     bWaterRising    := false;
+    bDuringWaterRise:= false;
     isCursorVisible := false;
     isInLag         := false;
     isPaused        := false;
     isInMultiShoot  := false;
     isSpeed         := false;
     isAFK           := false;
+    isShowMission   := false;
+    isShowGearInfo  := false;
+    isForceMission  := false;
     SpeedStart      := 0;
     fastUntilLag    := false;
     fastScrolling   := false;
     autoCameraOn    := true;
     cSeed           := '';
+    cIsSoundEnabled := false;
     cVolumeDelta    := 0;
+    cVolumeUpKey    := false;
+    cVolumeDownKey  := false;
     cMuteToggle     := false;
     cHasFocus       := true;
     cInactDelay     := 100;
@@ -2909,6 +3013,8 @@ begin
     LuaEndTurnRequested:= false;
     LuaNoEndTurnTaunts:= false;
 
+    LuaCmdUsed:= false;
+
     for t:= Low(TSound) to High(TSound) do
         MaskedSounds[t]:= false;
 
@@ -2929,6 +3035,7 @@ begin
     GearsList:= nil;
     CurrentTeam:= nil;
     PreviousTeam:= nil;
+    MissionTeam:= nil;
     CurrentHedgehog:= nil;
     FollowGear:= nil;
     lastVisualGearByUID:= nil;

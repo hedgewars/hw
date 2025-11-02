@@ -1,61 +1,25 @@
---------------------------------
--- CONTROL 0.6
---------------------------------
+-------------
+-- CONTROL --
+-------------
 
----------
--- 0.2
----------
--- fixed score display errrors
--- added missing resurrection effects
--- moved hogs off control points if thats where they started
--- added sanity limit for the above
--- added tint tags to display clan score on each point as it scors
--- added gameflags filter
--- changed scoring rate
--- hogs now only score point DURING THEIR TURN
--- map now accepts custom weaponsets and themes 
--- changed win limit
+-- Goal: Stand on pillars to score points over time.
+-- First clan to hit the score limit wins!
 
----------
--- 0.3
----------
-
--- added translation support
-
---------
--- 0.4
---------
-
--- added scaling scoring based on clans: 300 points to win - 25 per team in game
-
---------
--- 0.5
---------
-
--- removed user branding
--- fixed infinite attack time exploit
-
---------
--- 0.6
---------
-
--- timebox fix
--- support for more players
--- remove version numbers
--- enable limited sudden death
--- using skip go generates as many points as you would have gotten had you sat and waited
+-- Rules:
+-- * Each pillar you control generates 1 point every 2 seconds.
+-- * If multiple clans compete for a pillar, no one generates points for this pillar.
+-- * If you skip turn, you win the same points as if you would have just waited out the turn
+-- * Hogs get revived.
 
 -----------------
---script begins
+-- script begins
 -----------------
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 ---------------------------------------------------------------
-----------lots of bad variables and things
-----------because someone is too lazy
-----------to read about tables properly
------------------- "Oh well, they probably have the memory"
+-- lots variables and things
+---------------------------------------------------------------
 
 local TimeCounter = 0
 
@@ -89,7 +53,6 @@ local vCircCol = {}
 local numhhs = 0 -- store number of hedgehogs
 local hhs = {} -- store hedgehog gears
 
-local numTeams --  store the number of teams in the game
 local teamNameArr = {}	-- store the list of teams
 local teamClan = {}
 local teamSize = {}	-- store how many hogs per team
@@ -148,13 +111,13 @@ function ZonesAreEmpty()
 	okay = true
 
 	for i = 0,(zCount-1) do
-				
+
 		for k = 0, (numhhs-1) do
 			if (hhs[k] ~= nil) then
-			if (GearIsInZone(hhs[k],i)) == true then
-				FindPlace(hhs[k], false, 0, LAND_WIDTH, true)
-				okay = false
-			end
+				if (GearIsInZone(hhs[k],i)) == true then
+					FindPlace(hhs[k], false, 0, LAND_WIDTH, true)
+					okay = false
+				end
 			end
 		end
 	end
@@ -169,66 +132,59 @@ function CheckZones()
 		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)
 		cOwnerClan[i] = nil
 		for k = 0, (numhhs-1) do
-			if (hhs[k] ~= nil) then --and (GetGearType(hhs[k]) ~= nil) then
-                if (GearIsInZone(hhs[k],i)) == true then
+			if (hhs[k] ~= nil) then
+				if (GearIsInZone(hhs[k],i)) == true then
+					if cOwnerClan[i] ~= nil then
+						if cOwnerClan[i] ~= GetHogClan(hhs[k]) then
+							--if the hog now being compared is different to one that is also here and was previously compared
+							SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)
 
-                    if cOwnerClan[i] ~= nil then
-                        if cOwnerClan[i] ~= GetHogClan(hhs[k]) then 
-                            --if the hog now being compared is different to one that is also here and was previously compared
-                            
-                            SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)						
-                            --SetVisualGearValues(vCirc[i], 2739, 1378, 20, 255, 1, 10, 0, 300, 5, 0xffffffff)
-        
-                            cOwnerClan[i] = 10 -- this means conflicted
-                        end
-                    elseif cOwnerClan[i] == nil then
-                        cOwnerClan[i] = GetHogClan(hhs[k])
-                        --SetVisualGearValues(vCirc[i], 2739, 1378, 20, 255, 1, 10, 0, 300, 5, GetClanColor( GetHogClan(hhs[k])) )
-                        SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], GetClanColor( GetHogClan(hhs[k])))
-        
-                    end
+							cOwnerClan[i] = 10 -- this means conflicted
+						end
+					elseif cOwnerClan[i] == nil then
+						cOwnerClan[i] = GetHogClan(hhs[k])
+						SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], GetClanColor( GetHogClan(hhs[k])))
+					end
 
-                end
-           -- else hhs[k] = nil
+				end
 			end
 		end
-
 	end
 
 end
 
 function AwardPoints()
-		
+
 	for i = 0,(zCount-1) do
-		-- give score to all players controlling points		
-		--if (cOwnerClan[i] ~= nil) and (cOwnerClan[i] ~= 10) then
-		--	teamScore[cOwnerClan[i]] = teamScore[cOwnerClan[i]] + 1
-		--end
-		
-		-- only give score to the player currently in control		
-		if CurrentHedgehog ~= nil then		
+		-- give score to all players controlling points
+
+		-- only give score to the player currently in control
+		if CurrentHedgehog ~= nil then
 			if cOwnerClan[i] == GetHogClan(CurrentHedgehog) then
 				teamScore[cOwnerClan[i]] = teamScore[cOwnerClan[i]] + 1
 			end
 		end
 	end
 
-	-- i want to show all the tags at once as having the SAME score not 1,2,3,4 so alas, repeating the loop seems needed	
-	for i = 0,(zCount-1) do			
-		if CurrentHedgehog ~= nil then		
+	-- i want to show all the tags at once as having the SAME score not 1,2,3,4 so alas, repeating the loop seems needed
+	for i = 0,(zCount-1) do
+		if CurrentHedgehog ~= nil then
 			if cOwnerClan[i] == GetHogClan(CurrentHedgehog) then
-				g = AddVisualGear(vCircX[i], vCircY[i]-100, vgtHealthTag, 100, False)
-                if g ~= 0 then
-				    SetVisualGearValues(g, vCircX[i], vCircY[i]-100, 0, 0, 0, 0, 0, teamScore[cOwnerClan[i]], 1500, GetClanColor(cOwnerClan[i]))
-                end
+				local g = AddVisualGear(vCircX[i], vCircY[i]-100, vgtHealthTag, 100, false)
+				SetVisualGearValues(g, vCircX[i], vCircY[i]-100, 0, 0, 0, 0, 0, teamScore[cOwnerClan[i]], 1500, GetClanColor(cOwnerClan[i]))
 			end
 		end
 	end
 
-	-- Update team labels
+	-- Update team labels and graph
+	local clanGraphPointWritten = {}
 	for i = 0,(TeamsCount-1) do
 		if teamNameArr[i] ~= " " then
 			SetTeamLabel(teamNameArr[i], teamScore[teamClan[i]])
+			if not clanGraphPointWritten[teamClan[i]] then
+				SendStat(siClanHealth, teamScore[teamClan[i]], teamNameArr[i])
+				clanGraphPointWritten[teamClan[i]] = true
+			end
 		end
 	end
 
@@ -248,7 +204,7 @@ function RebuildTeamInfo()
 		teamIndex[i] = 0
 		teamScore[i] = 0
 	end
-	numTeams = 0
+	local numTeams = 0
 
 	for i = 0, (numhhs-1) do
 
@@ -279,11 +235,11 @@ function RebuildTeamInfo()
 	end
 
 	-- find out how many hogs per team, and the index of the first hog in hhs
-	for i = 0, (numTeams-1) do
+	for i = 0, TeamsCount-1 do
 		SetTeamLabel(GetTeamName(i), "0")
 		for z = 0, (numhhs-1) do
 			if GetHogTeamName(hhs[z]) == teamNameArr[i] then
-				teamClan[i] = GetHogClan(hhs[z])				
+				teamClan[i] = GetHogClan(hhs[z])
 				if teamSize[i] == 0 then
 					teamIndex[i] = z -- should give starting index
 				end
@@ -300,15 +256,12 @@ end
 -- game methods
 ------------------------
 
-function onAttack()
+function onSkipTurn()
 
 	if CurrentHedgehog ~= nil then
-		if GetCurAmmoType() == amSkip then
-			z = (TurnTimeLeft / 2000) - (TurnTimeLeft / 2000)%2 
-			--AddCaption("scored: " .. z,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
-			for i = 0, z do
-				AwardPoints()
-			end
+		z = (TurnTimeLeft / 2000) - (TurnTimeLeft / 2000)%2
+		for i = 0, z do
+			AwardPoints()
 		end
 	end
 
@@ -317,11 +270,14 @@ end
 function onGameInit()
 
 	-- Things we don't modify here will use their default values.
-	
+
 	EnableGameFlags(gfInfAttack, gfSolidLand)
 	DisableGameFlags(gfKing, gfAISurvival)
 	WaterRise = 0
 	HealthDecrease = 0
+
+	SendHealthStatsOff()
+	SendRankingStatsOff()
 
 end
 
@@ -342,8 +298,8 @@ function onGameStart()
 	vCircX[3], vCircY[3] = 1942, 77
 	vCircX[4], vCircY[4] = 3883, 89
 	vCircX[5], vCircY[5] = 2739, 1378
-	
-	for i = 0, 5 do	
+
+	for i = 0, 5 do
 		vCirc[i] = AddVisualGear(0,0,vgtCircle,0,true)
 		vCircMinA[i] = 20
 		vCircMaxA[i] = 255
@@ -357,76 +313,118 @@ function onGameStart()
 		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], vCircCol[i])
 	end
 
-	--zxc = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
-	--SetVisualGearValues(zxc, 1000,1000, 20, 255, 1,    10,                     0,         100,        1,      GetClanColor(0))
-					--minO,max0 -glowyornot	--pulsate timer	 -- fuckall      -- radius -- width  -- colour
-
 	--new improved placement schematics aw yeah
 	RebuildTeamInfo()
 
-	for i = 0, (numTeams-1) do
+	for i = 0, ClansCount - 1 do
 		pointLimit = pointLimit - 25
 	end
 
 	missionHelp = loc("Control pillars to score points.") .. "|" ..
+		loc("Hedgehogs will be revived after their death.") .. "|" ..
 		string.format(loc("Score goal: %d"), pointLimit)
-	
+
 	-- reposition hogs if they are on control points until they are not or sanity limit kicks in
 	reN = 0
-	--zz = 0
 	while (reN < 10) do
 		if ZonesAreEmpty() == false then
-			reN = reN + 1	
-			--zz = zz + 1	
-			--SetGearPosition(hhs[0], 631, 82) -- put this in here to thwart attempts at repositioning and test sanity limit	
+			reN = reN + 1
 		else
-			reN = 15		
+			reN = 15
 		end
-		--AddCaption(zz) -- number of times it took to work
 	end
 
-	for h=1, numhhs do
+	for h=0, numhhs-1 do
 		-- Tardis screws up the game too much, teams might not get killed correctly after victory
 		-- if a hog is still in time-travel.
 		-- This could be fixed, removing the Tardis is just a simple and lazy fix.
 		AddAmmo(hhs[h], amTardis, 0)
 		-- Resurrector is pointless, all hogs are already automatically resurrected.
 		AddAmmo(hhs[h], amResurrector, 0)
+		-- Remove suicidal weapons as they might wipe out the team
+		AddAmmo(hhs[h], amKamikaze, 0)
+		AddAmmo(hhs[h], amPiano, 0)
 	end
 
 	ShowMission(missionName, missionCaption, missionHelp, 0, 0)
 
 end
 
+local RankTeams = function(teamList)
+	local teamRank = function(a, b)
+		if a.score ~= b.score then
+			return a.score > b.score
+		else
+			return a.clan > b.clan
+		end
+	end
+	table.sort(teamList, teamRank)
+	local rank, plusRank, score, clan
+	for i=1, #teamList do
+		if i == 1 then
+			rank = 1
+			plusRank = 1
+			score = teamList[i].score
+			clan = teamList[i].clan
+		end
+		if (teamList[i].score < score) then
+			rank = rank + plusRank
+			plusRank = 1
+		end
+		if (teamList[i].score == score and teamList[i].clan ~= clan) then
+			plusRank = plusRank + 1
+		end
+		teamList[i].rank = rank
+		score = teamList[i].score
+		clan = teamList[i].clan
+	end
+
+	for i=1, #teamList do
+		SendStat(siPointType, "!POINTS")
+		SendStat(siTeamRank, tostring(teamList[i].rank))
+		SendStat(siPlayerKills, tostring(teamList[i].score), teamList[i].name)
+	end
+end
 
 function onNewTurn()
 
-	-- reset the time counter so that it will get set to TurnTimeLeft in onGameTick	
+	-- reset the time counter so that it will get set to TurnTimeLeft in onGameTick
 	TimeCounter = 0
-		
+
 	if lastTeam ~= GetHogTeamName(CurrentHedgehog) then
 		lastTeam = GetHogTeamName(CurrentHedgehog)
 	end
 
 	if gameWon == false then
-	
-		for i = 0, (numTeams-1) do
+
+		for i = 0, TeamsCount - 1 do
 			if teamScore[i] >= pointLimit then --150
 				gameWon = true
-				winnerClan = i			
+				winnerClan = i
 			end
 		end
 
 		if gameWon == true then
 			for i = 0, (numhhs-1) do
-				if hhs[i] ~= nil then				
+				if hhs[i] ~= nil then
 					if GetHogClan(hhs[i]) ~= winnerClan then
 						SetEffect(hhs[i], heResurrectable, 0)
 						SetHealth(hhs[i],0)
 					end
-				end			
+				end
 			end
-			TurnTimeLeft = 1
+			EndTurn(true)
+
+			-- Rankings
+			local teamList = {}
+			for i=0, TeamsCount - 1 do
+				local name = GetTeamName(i)
+				local clan = GetTeamClan(name)
+				table.insert(teamList, { score = teamScore[teamClan[i]], name = name, clan = clan })
+			end
+			RankTeams(teamList)
+			SendStat(siGraphTitle, loc("Score graph"))
+
 		end
 
 	end
@@ -439,43 +437,32 @@ function onGameTick()
 	if (vCircCount >= 500) and (gameWon == false) then
 		vCircCount = 0
 		CheckZones()
-	end	
-
-	-- things we wanna check often
-	if (CurrentHedgehog ~= nil) then
-	--	AddCaption(GetX(CurrentHedgehog) .. "; " .. GetY(CurrentHedgehog))
-		--AddCaption(teamNameArr[0] .. " : " .. teamScore[0])
-		--AddCaption(GetHogTeamName(CurrentHedgehog) .. " : " .. teamScore[GetHogClan(CurrentHedgehog)]) -- this end up 1?
-		
-		-- huh? the first clan added seems to be clan 1, not 0 ??
-
 	end
 
-	-- set TimeCounter to starting time if it is uninitialised (from onNewTurn)	
+	-- set TimeCounter to starting time if it is uninitialised (from onNewTurn)
 	if (TimeCounter == 0) and (TurnTimeLeft > 0) then
-		TimeCounter = TurnTimeLeft	
-	end	
-	
-	-- has it ACTUALLY been 2 seconds since we last did this?	
+		TimeCounter = TurnTimeLeft
+	end
+
+	-- has it ACTUALLY been 2 seconds since we last did this?
 	if (TimeCounter - TurnTimeLeft) >= 2000 then
 		TimeCounter = TurnTimeLeft
-		
+
 		if (gameWon == false) then
-			AwardPoints()		
-		end	
-	end	
-	
-	--AddCaption(TimeCounter)	
-	--hGCount = hGCount + 1
-	--if (hGCount >= 2000) and (gameWon == false) then
-	--	hGCount = 0
-	--	AwardPoints()
-	--end
+			AwardPoints()
+		end
+	end
 
 end
 
-function onGearResurrect(gear)
-	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+function onHogAttack(ammoType)
+	-- Update TimeCounter after using extra time
+	if ammoType == amExtraTime then
+		if (TimeCounter == 0) and (TurnTimeLeft > 0) then
+			TimeCounter = TurnTimeLeft
+		end
+		TimeCounter = TimeCounter + 30000
+	end
 end
 
 function InABetterPlaceNow(gear)
@@ -485,23 +472,6 @@ function InABetterPlaceNow(gear)
 		end
 	end
 end
-
-function onHogHide(gear)
-	 InABetterPlaceNow(gear)
-end
-
-function onHogRestore(gear)
-	match = false
-	for i = 0, (numhhs-1) do
-		if (hhs[i] == nil) and (match == false) then
-			hhs[i] = gear
-			--AddCaption(GetHogName(gear) .. " has reappeared it seems!")
-			--FollowGear(gear)
-			match = true
-		end
-	end
-end
-
 
 function onGearAdd(gear)
 

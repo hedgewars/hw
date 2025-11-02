@@ -1,0 +1,91 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>Ha egy barátoddal egy klánban szeretnél játszani, csak válasszátok ugyanazt a színt. Így is mindegyikőtök a saját sünjeit vezeti majd, de osztoztok a győzelmen és a vereségen.</tip>
+    <tip>Bizonyos fegyverek talán csak kis sebzést okoznak, de a megfelelő helyzetben sokkal pusztítóbbak is lehetnek. Próbálj például a Sivatagi Sassal egyszerre több sünt a vízbe taszítani.</tip>
+    <tip>Ha bizonytalan vagy, mitévő legyél, és nem akarsz lőszert pocsékolni, hagyj ki egy kört. De ne vesztegess el sok időt, mert jön a hirtelen halál!</tip>
+    <tip>Takarékoskodnál a kötéllel? Engedd el a kötelet a levegőben, és lőj újra. Amíg nem érsz földet vagy tévesztesz célt, addig újra felhasználhatod ugyanazt a kötelet!</tip>
+    <tip>Ha nem szeretnéd, hogy valaki más lecsapjon a választott becenevedre a hivatalos kiszolgálón, regisztrálj fiókot a <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> címen!</tip>
+    <tip>Unod már a sima játékokat? Próbáld ki a küldetéseket – azok más és más játékmenetet nyújtanak.</tip>
+    <tip>A játék eleve rögzíti a legutoljára játszott meccset bemutató formájában. A „Helyi játék” menüben a jobb alsó sarokban lévő „Bemutatók” gombra kattintva lejátszhatod és kezelheted őket.</tip>
+    <tip>A Hedgewars egy szabad szoftver (nyílt forráskódú), amit a szabadidőnkben fejlesztünk. Probléma esetén kérdezz a fórumokon, vagy látogasd meg IRC szobánkat!</tip>
+    <tip>A Hedgewars egy szabad szoftver (nyílt forráskódú), amit a szabadidőnkben fejlesztünk. Ha tetszik, nyugodtan küldj egy kis adományt, vagy add hozzá te is a munkádat!</tip>
+    <tip>A Hedgewars egy szabad szoftver (nyílt forráskódú), amit a szabadidőnkben fejlesztünk. Nyugodtan oszd meg családoddal, barátaiddal is!</tip>
+    <tip>A Hedgewars egy szabad szoftver (nyílt forráskódú), amit a szabadidőnkben fejlesztünk, csak a móka kedvéért! A fejlesztőkkel a <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a> csatornán találkozhatsz.</tip>
+    <tip>Időről időre hivatalos bajnokságok indulnak. A közelgő eseményeket pár nappal előre bejelentjük a <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> webhelyen.</tip>
+    <tip>A Hedgewars sok nyelven elérhető. Ha a te nyelved fordítása hiányzik vagy elavult, nyugodtan keress minket!</tip>
+    <tip>A Hedgewars számos operációs rendszerre elérhető, többek között Microsoft Windowsra, macOS-re és GNU/Linuxra is.</tip>
+    <tip>Ne feledd, hogy készíthetsz saját játékot is helyi vagy hálózati/online módban. Nem csak a „Gyors játék” létezik!</tip>
+    <tip>Ha gamepadeket szeretnél hozzárendelni csapatokhoz, még a játék indítása előtt csatlakoztasd azokat a géphez.</tip>
+    <tip>Érdemes óránként legalább egy rövid szünetet tartani, nehogy megártson a testednek a sok játék a gép előtt.</tip>
+    <tip>Ha a videokártyád nem támogatja a hardveres gyosítású OpenGL-t, próbálkozz az alacsony minőségű mód bekapcsolásával, hogy javuljon a teljesítmény.</tip>
+    <tip>Ha a videokártyád nem támogatja a hardveres gyosítású OpenGL-t, próbálkozz az érintett illesztőprogramok frissítésével.</tip>
+    <tip>Nyitottak vagyunk a javaslatokra és az építő kritikára. Ha valami nem tetszik, vagy van egy remek ötleted, ne tartsd magadban!</tip>
+    <tip>A saját érdekedben is kérünk, hogy légy tapintatos és barátságos, mikor a kiszolgálónkon játszol. Azt se feledd, hogy a játékosok egy része még gyerek!</tip>
+    <tip>Az olyan játékmódok, mint például a „Vámpírizmus” vagy a „Karma”, egészen új taktikáknak adnak teret. Próbáld ki őket egy saját készítésű játékban!</tip>
+    <tip>Kérjük, ne telepítsd a Hedgewarst olyan számítógépre, ami nem a tiéd (pl. iskolai, egyetemi, munkahelyi gépek), hacsak meg nem engedik. Nem szeretnénk, ha bajba kerülnél.</tip>
+    <tip>A Hedgewars remek rövid játék lehet a szünetekben. Csak ne tegyetek bele túl sok sünt vagy túl nagy pályát. Az életpontok és az idő csökkentése is jó ötlet.</tip>
+    <tip>A játék készítése során egyetlen sünnek sem esett bántódása.</tip>
+    <tip>Háromféle ugrás van. A [magasugrás] kétszeri lenyomása egy igen magas, hátrafelé irányú ugrást eredményez.</tip>
+    <tip>Félsz, hogy leesel egy szakadék szélén? Ha lenyomva tartod a [pontos célzás]t, úgy fordulhatsz jobbra vagy balra, hogy közben nem mozdulsz.</tip>
+    <tip>Egyes fegyverek sajátos stratégiát vagy egyszerűen sok gyakorlást igényelnek, úgyhogy ne add fel egy eszköz használatát, csak mert egyszer mellélőttél.</tip>
+    <tip>A legtöbb fegyver vízbe esve nem működik. Kivétel például a méhecske és a torta.</tip>
+    <tip>A pálpusztai sajt csak kicsit robban. De a szaga, amit elvisz a szél, sok sünt tud egyszerre megmérgezni.</tip>
+    <tip>A zongoracsapás a legerősebb légitámadás. Viszont elveszíted a sünt, aki előadja, így van egy nagy hátránya is.</tip>
+    <tip>A méhecske használata trükkös lehet. Fordulási szöge a sebességétől függ, úgyhogy lehetőleg ne teljes erővel lődd ki!</tip>
+    <tip>A tapadóaknákkal remekül lehet kis láncreakciókat indítani, amik az ellenséges sünt szorult helyzetbe, vagy éppen a vízbe juttatják.</tip>
+    <tip>A kalapácsot a legjobb hídon vagy gerendán használni. Akire lecsapsz, az alatt a padló is beszakad.</tip>
+    <tip>Ha beszorultál egy ellenséges sün mögé, a kalapáccsal kiszabadíthatod magad anélkül, hogy egy robbanásban magad is megsérülnél.</tip>
+    <tip>Hogy milyen messzire jut a torta, a bejárandó területtől függ. Idő előtti felrobbantásához haszáld a [támadás] gombot.</tip>
+    <tip>A lángszóró egy fegyver, de alagutat is lehet vele ásni.</tip>
+    <tip>A Molotov-koktéllal vagy a lángszóróval ideiglegesen megakadályozhatod, hogy egy sün áthaladjon egy területen, például alagúton vagy hídon.</tip>
+    <tip>Tetszik a Hedgewars? Légy rajongónk a <a href="https://www.facebook.com/Hedgewars">Facebookon</a>, vagy kövess minket a <a href="https://twitter.com/hedgewars">Twitteren</a>!</tip>
+    <tip>Nyugodtan rajzolj saját sírokat, fejfedőket, zászlókat vagy akár pályákat, témákat is! Viszont az online használathoz valahol meg kell osztanod ezeket.</tip>
+    <tip>Rendszeresen frissítsd a videokártyád illesztőprogramjait, hogy elkerüld a játék közbeni problémákat.</tip>
+    <tip>Fej vagy írás? Írd be a várakozóba, hogy „/rnd”, és megtudod. Sőt: az „/rnd kő papír olló” is működik!</tip>
+    <tip>Beállíthatod, hogy a Hedgewarsszal kapcsolatos fájlok (játékmentések és bemutató felvételek) a játékhoz legyenek társítva, így azokat kedvenc fájlkezelődből vagy webböngésződből is elindíthatod.</tip>
+    <tip>A befulladt aknák nem veszélytelenek: noha időzítőjük elromlott, attól még felrobbanhatnak, ha sokat piszkálják azokat!</tip>
+    <tip>A szerelem forró! A csábítással felolvaszthatod a lefagyasztott sünöket.</tip>
+    <tip>Ha egy hordó füstölög, akkor annak már nincs sok hátra, és kis sérüléstől is felrobbanhat.</tip>
+    <tip>A hordók 60 életpontról indulnak, és úgy sérülnek, mint a sünök, tehát kell egy kicsit háborgatni őket, hogy felrobbanjanak.</tip>
+    <tip>Jobban pattogtatnád a fegyvereket? A gránátok, repeszgránátok, a pálpusztai sajt és az aknák pattogósságát az időzítő gombokkal állíthatod, ha közben lenyomod a [pontos célzás] gombot.</tip>
+    <tip>Már elfelejtetted a játék céljait vagy módosítóit? A Kilépés vagy a Szünet gomb megnyomásával újra átnézheted azokat.</tip>
+    <tip>Nemcsak a sünöket lehet elütni, elcsapni és földbe döngölni. Semmi sem állhat az utadba!</tip>
+    <tip>Hacsak másként nincs beállítva, az aknák 3 másodperc után robbannak.</tip>
+    <tip>Király módban az uralkodó erősebben, egészségesebben kezd, és ellenállóbb a sebzésekkel, robbanásokkal szemben, mint az alattvalók.</tip>
+    <tip>Király módban az uralkodó minden körben sérül, ha már nincs alattvaló a csapatban.</tip>
+    <tip>Az ostor a vékonyabb falakon át is eléri a sünöket, tárgyakat.</tip>
+    <tip>Minél gyorsabban repül a bárd, annál nagyobbat sebez.</tip>
+    <tip>A tortát ledobhatod szakadék széléről is, de nagyon a szélén kell állnod, úgyhogy csak óvatosan!</tip>
+    <tip>A kötéllel odébb küldhetsz más sünöket, például a földön csúszással. Ezt a technikát „kötélütés”-nek hívják.</tip>
+    <tip>Ne állj meg egy jeges lejtőn, mert lecsúszol. Esetleg lenyomhatod a [pontos célzás]t.</tip>
+    <tip>A Hó és a Karácsony témájú pályákon idővel rakodik a hó, kivéve, ha a pálya nem roncsolható.</tip>
+    <tip>Vigyázz a Hó és a Karácsony témájú pályákon, mert a gerendák csúszós jégből vannak!</tip>
+    <tip>A visszavonulási idő a használt fegyvertől függ. Vigyázz, mert bizonyos fegyvereknél egyáltalán nincs, és azonnal befejezik a körödet!</tip>
+    <tip>Ha ügyesen csinálod, elüthetsz egy sünt pusztán azzal, hogy kiugrasz alóla.</tip>
+    <tip>Ha jól időzíted a támadást, akkor a Shoryuken, a légkalapács és a szinuszpuska megmenthet az esési sérüléstől.</tip>
+    <tip>Amíg a sünöd a levegőben van, nem találják el a lövedékek.</tip>
+    <tip>Az ásórakéta, az orvlövészpuska és a Sivatagi Sas által vágott réseken át lehet lőni átjárokat – ha elég pontosan célzol.</tip>
+    <tip>Az elsősegélycsomaggal meggyógyíthatod a mérgezett sünödet.</tip>
+    <tip>A csomagokat felveheted az RC repülővel, a Shoryukennel, a légkalapáccsal és a Kamikazéval is.</tip>
+    <tip>Vigyázz, nehogy felrobbantsd magad, miközben a fúrópajzzsal megközelítesz egy csomagot.</tip>
+    <tip>A légi aknák a körök első 5 másodpercében nem működnek, csak utána kezdenek sünöket keresni.</tip>
+    <tip>Ne menj túl közel a légi aknához, mert ha elkezd követni, aligha menekülhetsz meg eszközök nélkül!</tip>
+    <tip>A légi aknák negyedannyi idő után robbannak, mint a rendes aknák.</tip>
+    <tip>Ha a pályán egy bárd egy robbanásban legalább 30 pont sérülést szerez, előfordulhat, hogy leesik. Minél nagyobb a sérülés, annál valószínűbb.</tip>
+    <tip>Figyelj a szélre, mert a lángokat és egyes lőszereket elfújja.</tip>
+    <tip>A fúrópajzzsal odébb tolhatod a sünöket és a hosszú időzítésű aknákat.</tip>
+    <tip>Ha nekimégy a fúrópajzzsal egy hordónak, abból nagy baj lehet.</tip>
+    <tip>Ha beírod a csevegőbe, hogy „/help”, parancsok listáját láthatod. Ezek olyan különleges funkciókat nyújtanak, mint például a gúnyolódás vagy a szavazás.</tip>
+    <windows-only>
+        <tip>A Hedgewars beállítófájljait a „Dokumentumok\Hedgewars” mappában találod. Lemásolhatod vagy magaddal viheted, de ne szerkeszd őket kézzel.</tip>
+    </windows-only>
+    <mac-only>
+        <tip>A Hedgewars beállítófájljait a saját mappádban a „Könyvtár/Alkalmazástámogatás/Hedgewars” mappában találod. Lemásolhatod vagy magaddal viheted, de ne szerkeszd őket kézzel.</tip>
+    </mac-only>
+    <linux-only>
+        <tip>A Hedgewars beállítófájljait a saját mappádban a „.hedgewars” almappában találod. Lemásolhatod vagy magaddal viheted, de ne szerkeszd őket kézzel.</tip>
+    </linux-only>
+</tips>

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  \-}
 
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings,CPP #-}
 module Utils where
 
 import Data.Char
@@ -32,16 +32,16 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.UTF8 as UTF8
 import Data.Maybe
+#if defined(OFFICIAL_SERVER)
+import qualified Data.Aeson.Types as Aeson
+import qualified Data.Text as Text
+#endif
 -------------------------------------------------
 import CoreTypes
 
 
 sockAddr2String :: SockAddr -> IO B.ByteString
-sockAddr2String (SockAddrInet _ hostAddr) = liftM B.pack $ inet_ntoa hostAddr
-sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
-    return $ B.pack $ (foldr1 (.)
-        $ List.intersperse (':':)
-        $ concatMap (\n -> (\(a0, a1) -> [showHex a0, showHex a1]) $ divMod n 65536) [a, b, c, d]) []
+sockAddr2String = liftM (B.pack . fromJust . fst) . getNameInfo [] True False
 
 maybeRead :: Read a => String -> Maybe a
 maybeRead s = case reads s of
@@ -77,7 +77,7 @@ illegalName :: B.ByteString -> Bool
 illegalName b = B.null b || length s > 40 || all isSpace s || isSpace (head s) || isSpace (last s) || any isIllegalChar s
     where
         s = UTF8.toString b
-        isIllegalChar c = c `List.elem` ("$()*+?[]^{|}\x7F" ++ ['\x00'..'\x1F'])
+        isIllegalChar c = c `List.elem` ("$()*+?[]^{|}\x7F" ++ ['\x00'..'\x1F'] ++ ['\xFFF0'..'\xFFFF'])
 
 protoNumber2ver :: Word16 -> B.ByteString
 protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
@@ -121,6 +121,10 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             , (54, "0.9.24-dev")
             , (55, "0.9.24")
             , (56, "0.9.25-dev")
+            , (57, "0.9.25")
+            , (58, "1.0.0-dev")
+            , (59, "1.0.0")
+            , (60, "1.0.1-dev")
             ]
 
 askFromConsole :: B.ByteString -> IO B.ByteString
@@ -231,6 +235,9 @@ answerAllTeams cl = concatMap toAnswer
             AnswerClients [clChan] ["HH_NUM", teamname team, showB $ hhnum team]]
 
 
+-- Locale function to localize strings.
+-- loc is just the identity functions, but it will be collected by scripts
+-- for localization. Use loc to mark a string for translation.
 loc :: B.ByteString -> B.ByteString
 loc = id
 
@@ -253,3 +260,17 @@ sanitizeName = B.map sc
 
 isRegistered :: ClientInfo -> Bool
 isRegistered = (<) 0 . B.length . webPassword
+
+#if defined(OFFICIAL_SERVER)
+instance Aeson.ToJSON B.ByteString where
+  toJSON = Aeson.toJSON . B.unpack
+
+instance Aeson.FromJSON B.ByteString where
+  parseJSON = Aeson.withText "ByteString" $ pure . B.pack . Text.unpack
+  
+instance Aeson.ToJSONKey B.ByteString where
+  toJSONKey = Aeson.toJSONKeyText (Text.pack . B.unpack)
+  
+instance Aeson.FromJSONKey B.ByteString where
+  fromJSONKey = Aeson.FromJSONKeyTextParser (return . B.pack . Text.unpack)
+#endif  
