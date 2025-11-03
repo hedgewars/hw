@@ -1,0 +1,5 @@
+This folder contains source code for PhysFS 2.1.0 with some modifications
+
+It is _still_ used for iOS version of hw, so PLEASE MAKE SURE IT STILL BUILDS IF YOU REMOVE libphysfs
+
+TODO: update Xcode project to PhysFS 3.x
