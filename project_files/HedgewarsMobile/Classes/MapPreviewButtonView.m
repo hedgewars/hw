@@ -86,10 +86,12 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0), ^{
         NSString *ipcString = [[NSString alloc] initWithFormat:@"%ld", (long)self.port];
         NSString *documentsDirectory = DOCUMENTS_FOLDER();
+        NSString *resourcePath = [[NSString alloc] initWithFormat:@"%@/Data", [[NSBundle mainBundle] resourcePath]];
         
         NSMutableArray *gameParameters = [[NSMutableArray alloc] initWithObjects:
                                           @"--internal",
                                           @"--port", ipcString,
+                                          @"--prefix", resourcePath,
                                           @"--user-prefix", documentsDirectory,
                                           @"--landpreview",
                                           nil];
