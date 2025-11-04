@@ -131,6 +131,7 @@
 
             GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
             gcvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            gcvc.modalPresentationStyle = UIModalPresentationFullScreen;
 
             [self presentViewController:gcvc animated:YES completion:nil];
             break;
@@ -152,6 +153,7 @@
                 splitViewRootController.delegate = nil;
                 splitViewRootController.showsMasterInPortrait = YES;
                 splitViewRootController.viewControllers = [NSArray arrayWithObjects:leftNavController, rightNavController, nil];
+                splitViewRootController.modalPresentationStyle = UIModalPresentationFullScreen;
 
                 [self presentViewController:splitViewRootController animated:YES completion:nil];
             }
