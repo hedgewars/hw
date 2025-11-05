@@ -403,6 +403,8 @@
     
     // initialize some "default" values
     self.slider.value = 0.05f;
+    self.slider.minimumValue = 0.00f;
+    self.slider.maximumValue = 0.05f;
     self.slider.enabled = NO;
     self.oldValue = 5;
     self.busy = NO;
