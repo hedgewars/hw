@@ -54,17 +54,22 @@
 #pragma mark -
 #pragma mark Provider functions
 // unpacks team data from the selected team.plist to a sequence of engine commands
-- (void)provideTeamData:(NSString *)teamName forHogs:(NSInteger)numberOfPlayingHogs withHealth:(NSInteger)initialHealth ofColor:(NSNumber *)teamColor {
+- (void)provideTeamData:(NSString *)teamName
+                forHogs:(NSInteger)numberOfPlayingHogs
+             withHealth:(NSInteger)initialHealth
+                ofColor:(NSNumber *)teamColor
+              isMission:(BOOL)isMission {
     /*
-     addteam <32charsMD5hash> <color> <team name>
-     addhh <level> <health> <hedgehog name>
+     {addteam, setmissteam} <32charsMD5hash> <color> <team name>
+     {addhh, addmisshh} <level> <health> <hedgehog name>
      <level> is 0 for human, 1-5 for bots (5 is the most stupid)
     */
 
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@", TEAMS_DIRECTORY(), teamName];
     NSDictionary *teamData = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
 
-    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@",
+    NSString *addTeamCmd = isMission ? @"esetmissteam" : @"eaddteam";
+    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"%@ %@ %@ %@", addTeamCmd,
                                       [teamData objectForKey:@"hash"], [teamColor stringValue], [teamName stringByDeletingPathExtension]];
     [self sendToEngine: teamHashColorAndName];
 
@@ -80,11 +85,12 @@
     NSString *flag = [[NSString alloc] initWithFormat:@"eflag %@", [teamData objectForKey:@"flag"]];
     [self sendToEngine: flag];
 
+    NSString *addHogCmd = isMission ? @"eaddmisshh" : @"eaddhh";
     NSArray *hogs = [teamData objectForKey:@"hedgehogs"];
     for (int i = 0; i < numberOfPlayingHogs; i++) {
         NSDictionary *hog = [hogs objectAtIndex:i];
 
-        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %ld %@",
+        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"%@ %@ %ld %@", addHogCmd,
                                            [hog objectForKey:@"level"], (long)initialHealth, [hog objectForKey:@"hogname"]];
         [self sendToEngine: hogLevelHealthAndName];
 
@@ -250,10 +256,18 @@
                 // seed info
                 [self sendToEngine:[gameConfig objectForKey:@"seed_command"]];
 
-                // missions/tranings/campaign only need the script configuration set and seed
+                // missions/tranings/campaign only need the script configuration set, seed and mission team
                 TGameType currentGameType = [HWUtils gameType];
-                if (currentGameType == gtMission || currentGameType == gtCampaign)
+                if (currentGameType == gtMission || currentGameType == gtCampaign) {
+                    // set mission team
+                    NSDictionary *teamData = [[gameConfig objectForKey:@"teams_list"] firstObject];
+                    [self provideTeamData:[teamData objectForKey:@"team"]
+                                  forHogs:[[teamData objectForKey:@"number"] intValue]
+                               withHealth:100
+                                  ofColor:[teamData objectForKey:@"color"]
+                                isMission:YES];
                     break;
+                }
                 
                 // dimension of the map
                 [self sendToEngine:[gameConfig objectForKey:@"templatefilter_command"]];
@@ -280,7 +294,8 @@
                     [self provideTeamData:[teamData objectForKey:@"team"]
                                   forHogs:[[teamData objectForKey:@"number"] intValue]
                                withHealth:health
-                                  ofColor:[teamData objectForKey:@"color"]];
+                                  ofColor:[teamData objectForKey:@"color"]
+                                isMission:NO];
                 }
                 break;
             }
