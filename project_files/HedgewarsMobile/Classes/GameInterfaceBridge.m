@@ -228,7 +228,15 @@ static UIViewController *callingController;
 + (void)startMissionGame:(NSString *)withSubPath {
     NSString *seedCmd = [self seedCommand];
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/%@.lua", withSubPath];
-    NSDictionary *missionDict = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath, @"mission_command", seedCmd, @"seed_command", nil];
+    
+    // TODO: allow user to select a team
+    NSNumber *teamColor = [[HWUtils teamColors] firstObject];
+    NSDictionary *missionTeam = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:4],@"number",
+                                                                           teamColor,@"color",
+                                                                           @"Ninjas.plist",@"team",nil];
+    NSArray *listOfTeams = [[NSArray alloc] initWithObjects:missionTeam, nil];
+    
+    NSDictionary *missionDict = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath, @"mission_command", seedCmd, @"seed_command", listOfTeams, @"teams_list", nil];
 
     [self startGame:gtMission atPath:nil withOptions:missionDict];
 }
@@ -243,8 +251,15 @@ static UIViewController *callingController;
 + (void)startCampaignMissionGameWithScript:(NSString *)missionScriptName forCampaign:(NSString *)campaignName {
     NSString *seedCmd = [self seedCommand];
     NSString *campaignMissionPath = [[NSString alloc] initWithFormat:@"escript Missions/Campaign/%@/%@", campaignName, missionScriptName];
-    NSDictionary *campaignMissionDict = [[NSDictionary alloc] initWithObjectsAndKeys:campaignMissionPath, @"mission_command", seedCmd, @"seed_command", nil];
     
+    NSNumber *teamColor = [[HWUtils teamColors] firstObject];
+    NSDictionary *missionTeam = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:4],@"number",
+                                                                           teamColor,@"color",
+                                                                           @"Ninjas.plist",@"team",nil];
+    NSArray *listOfTeams = [[NSArray alloc] initWithObjects:missionTeam, nil];
+
+    NSDictionary *campaignMissionDict = [[NSDictionary alloc] initWithObjectsAndKeys:campaignMissionPath, @"mission_command", seedCmd, @"seed_command", listOfTeams, @"teams_list", nil];
+
     [self startGame:gtCampaign atPath:nil withOptions:campaignMissionDict];
 }
 
