@@ -131,7 +131,7 @@
                 urlString = @"https://www.hedgewars.org";
                 break;
             case 3:
-                urlString = @"https://webchat.freenode.net/?channels=hedgewars";
+                urlString = @"https://web.libera.chat/#hedgewars";
                 break;
             default:
                 DLog(@"No way");
