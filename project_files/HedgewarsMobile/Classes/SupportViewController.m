@@ -34,8 +34,6 @@
 
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Leave a positive review on iTunes!",@""),
-                      NSLocalizedString(@"Join us on Facebook",@""),
-                      NSLocalizedString(@"Follow us on Twitter",@""),
                       NSLocalizedString(@"Visit our website",@""),
                       NSLocalizedString(@"Chat with the devs in IRC",@""),
                       nil];
@@ -79,15 +77,9 @@
         cell.textLabel.textAlignment = NSTextAlignmentLeft;
         switch (row) {
             case 0:
-                imgName = @"fb";
-                break;
-            case 1:
-                imgName = @"tw";
-                break;
-            case 2:
                 imgName = @"hedgehog";
                 break;
-            case 3:
+            case 1:
                 imgName = @"irc";
                 break;
             default:
@@ -122,15 +114,9 @@
         switch ([indexPath row])
         {
             case 0:
-                urlString = @"https://www.facebook.com/Hedgewars";
-                break;
-            case 1:
-                urlString = @"https://twitter.com/hedgewars";
-                break;
-            case 2:
                 urlString = @"https://www.hedgewars.org";
                 break;
-            case 3:
+            case 1:
                 urlString = @"https://web.libera.chat/#hedgewars";
                 break;
             default:
