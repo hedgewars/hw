@@ -29,13 +29,21 @@
     DLog(@"Creating necessary files");
     NSInteger index;
 
-    // SAVES - just delete and overwrite
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SAVES_DIRECTORY()])
-        [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
-    [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY()
-                              withIntermediateDirectories:NO
-                                               attributes:nil
-                                                    error:NULL];
+    char *fullver;
+    int proto;
+    HW_versionInfo(&proto, &fullver);
+    NSNumber *engineProtoVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"EngineProtoVersion"];
+    if (![engineProtoVersion isEqual:[NSNumber numberWithInt:proto]]) {
+        // SAVES - delete and overwrite on proto change
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SAVES_DIRECTORY()])
+            [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
+        [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY()
+                                  withIntermediateDirectories:NO
+                                                   attributes:nil
+                                                        error:NULL];
+
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:proto] forKey:@"EngineProtoVersion"];
+    }
 
     // SCREENSHOTS - just create it the first time
     if ([[NSFileManager defaultManager] fileExistsAtPath:SCREENSHOTS_DIRECTORY()] == NO)
