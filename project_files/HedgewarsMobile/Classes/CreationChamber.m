@@ -20,6 +20,8 @@
 #import "CreationChamber.h"
 #import "weapons.h"
 
+#define SCHEME_FORMAT_VERSION 1
+
 @implementation CreationChamber
 
 #pragma mark Checking status
@@ -51,15 +53,20 @@
     for (NSString *name in teamNames)
         [self createTeamNamed:name ofType:index++ controlledByAI:[name isEqualToString:@"Robots"]];
 
-    // SCHEMES - always overwrite and delete custom ones
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
-        [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
-    NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                            @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Fort Mode",@"Timeless",
-                            @"Thinking with Portals",@"King Mode",@"Construction Mode",nil];
-    index = 0;
-    for (NSString *name in schemeNames)
-        [self createSchemeNamed:name ofType:index++];
+    NSNumber *schemeFormatVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"SchemeFormatVersion"];
+    if (![schemeFormatVersion isEqual:@SCHEME_FORMAT_VERSION]) {
+        // SCHEMES - overwrite and delete custom ones of format changes
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
+            [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
+        NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
+                                @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Fort Mode",@"Timeless",
+                                @"Thinking with Portals",@"King Mode",@"Construction Mode",nil];
+        index = 0;
+        for (NSString *name in schemeNames)
+            [self createSchemeNamed:name ofType:index++];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@SCHEME_FORMAT_VERSION forKey:@"SchemeFormatVersion"];
+    }
 
     // WEAPONS - always overwrite as merge is not needed (missing weaps are 0ed automatically)
     NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
