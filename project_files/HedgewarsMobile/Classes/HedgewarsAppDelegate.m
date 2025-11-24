@@ -20,6 +20,7 @@
 #import "HedgewarsAppDelegate.h"
 #import "MainMenuViewController.h"
 #import "Appirater.h"
+#import <AVFAudio/AVAudioSession.h>
 
 @implementation SDLUIKitDelegate (customDelegate)
 
@@ -47,6 +48,9 @@
 // override the direct execution of SDL_main to allow us to implement our own frontend
 - (void)postFinishLaunch
 {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+
     // Setup Appirater
     [Appirater setAppId:@"391234866"];
     [Appirater setDaysUntilPrompt:3];
@@ -78,14 +82,6 @@
     }
     MSG_MEMCLEAN();
     // don't clean mainMenuViewController here!!!
-}
-
-// true multitasking with SDL works only on 4.2 and above; we close the game to avoid a black screen at return
-- (void)applicationWillResignActive:(UIApplication *)application {
-    if ([HWUtils isGameLaunched] && [[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
-        HW_terminate(NO);
-
-    [super applicationWillResignActive:application];
 }
 
 @end

@@ -248,10 +248,10 @@
         NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
         NSUInteger numberOfHats = [hatArray count];
         int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 16 : 1;
-        
-        self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
+
         NSInteger numberOfHogs = 1 + arc4random_uniform(15);
         DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
+        NSMutableArray *animations = [[NSMutableArray alloc] initWithCapacity:numberOfHogs];
         for (int i = 0; i < numberOfHogs; i++) {
             NSString *hat = [hatArray objectAtIndex:arc4random_uniform((int)numberOfHats)];
 
@@ -268,24 +268,32 @@
                     [animation addObject:hogWithHat];
                 }
             }
-
-            UIImageView *hog = [[UIImageView alloc] initWithImage:[animation firstObject]];
-            hog.animationImages = animation;
-            hog.animationDuration = 3;
-
-            int x = 20*i+arc4random_uniform(128);
-            while (x > 320 - 32)
-                x = i*arc4random_uniform(32);
-            
-            hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
-            [self.imgContainer addSubview:hog];
-            [hog startAnimating];
+            [animations addObject:animation];
         }
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
-            
+            CGFloat cx = self.view.frame.size.width / 1024;
+            CGFloat cy = self.view.frame.size.height / 768;
+
+            self.imgContainer = [[UIView alloc] initWithFrame:CGRectMakeScaled(0, 0, 300, 40, cx, cy)];
+            for (int i = 0; i < numberOfHogs; i++) {
+                NSMutableArray *animation = [animations objectAtIndex:i];
+
+                UIImageView *hog = [[UIImageView alloc] initWithImage:[animation firstObject]];
+                hog.contentMode = UIViewContentModeBottom;
+                hog.animationImages = animation;
+                hog.animationDuration = 3;
+
+                int x = 20*i+arc4random_uniform(128);
+                while (x > 320 - 32)
+                    x = i*arc4random_uniform(32);
+                
+                hog.frame = CGRectMakeScaled(x, 25, hog.frame.size.width, hog.frame.size.height, cx, cy);
+                [self.imgContainer addSubview:hog];
+                [hog startAnimating];
+            }
             [self.view addSubview:self.imgContainer];
-            
+
             // don't place the nice hogs if there is no space for them
             if ((self.interfaceOrientation == UIInterfaceOrientationPortrait ||
                  self.interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown))
@@ -322,15 +330,18 @@
 
     if (IS_IPAD())
     {
+        CGFloat cx = self.view.frame.size.width / 1024;
+        CGFloat cy = self.view.frame.size.height / 768;
+
         // the label for the filter slider
-        UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40)
+        UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMakeScaled(116, 714, 310, 40, cx, cy)
                                                    andTitle:nil
                                             withBorderWidth:2.0f];
         self.sliderBackground = backLabel;
         [self.view addSubview:self.sliderBackground];
 
         // the label for max hogs
-        UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(598, 714, 310, 40)
+        UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMakeScaled(598, 714, 310, 40, cx, cy)
                                                   andTitle:NSLocalizedString(@"Loading...",@"")
                                            withBorderWidth:2.0f];
         maxLabel.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
@@ -365,27 +376,38 @@
     }
 }
 
+CG_INLINE CGRect
+CGRectMakeScaled(CGFloat x, CGFloat y, CGFloat width, CGFloat height, CGFloat cx, CGFloat cy) {
+    return CGRectMake(x*cx, y*cy, width*cx, height*cy);
+}
+
 - (void)updateiPadUIForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     if ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
          interfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
+        CGFloat cx = self.view.frame.size.width / 1024;
+        CGFloat cy = self.view.frame.size.height / 768;
+
         self.imgContainer.alpha = 1;
-        self.titleImage.frame = CGRectMake(357, 17, 309, 165);
-        self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 60, 320, 620);
-        self.mapConfigViewController.view.frame = CGRectMake(704, 0, 320, 680);
-        self.teamConfigViewController.view.frame = CGRectMake(337, 187, 350, 505);
-        self.mapConfigViewController.maxLabel.frame = CGRectMake(121, 714, 300, 40);
-        self.sliderBackground.frame = CGRectMake(603, 714, 300, 40);
-        self.mapConfigViewController.slider.frame = CGRectMake(653, 724, 200, 23);
+        self.titleImage.frame = CGRectMakeScaled(357, 17, 309, 165, cx, cy);
+        self.schemeWeaponConfigViewController.view.frame = CGRectMakeScaled(0, 60, 320, 620, cx, cy);
+        self.mapConfigViewController.view.frame = CGRectMakeScaled(704, 0, 320, 680, cx, cy);
+        self.teamConfigViewController.view.frame = CGRectMakeScaled(337, 187, 350, 505, cx, cy);
+        self.mapConfigViewController.maxLabel.frame = CGRectMakeScaled(121, 714, 300, 40, cx, cy);
+        self.sliderBackground.frame = CGRectMakeScaled(603, 714, 300, 40, cx, cy);
+        self.mapConfigViewController.slider.frame = CGRectMakeScaled(653, 724, 200, 23, cx, cy);
     } else {
+        CGFloat cx = self.view.frame.size.width / 768;
+        CGFloat cy = self.view.frame.size.height / 1024;
+
         self.imgContainer.alpha = 0;
-        self.titleImage.frame = CGRectMake(37, 28, 309, 165);
-        self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 214, 378, 366);
-        self.mapConfigViewController.view.frame = CGRectMake(390, 0, 378, 580);
-        self.teamConfigViewController.view.frame = CGRectMake(170, 590, 428, 366);
-        self.mapConfigViewController.maxLabel.frame = CGRectMake(104, 975, 200, 40);
-        self.sliderBackground.frame = CGRectMake(465, 975, 200, 40);
-        self.mapConfigViewController.slider.frame = CGRectMake(475, 983, 180, 23);
+        self.titleImage.frame = CGRectMakeScaled(37, 28, 309, 165, cx, cy);
+        self.schemeWeaponConfigViewController.view.frame = CGRectMakeScaled(0, 214, 378, 366, cx, cy);
+        self.mapConfigViewController.view.frame = CGRectMakeScaled(390, 0, 378, 580, cx, cy);
+        self.teamConfigViewController.view.frame = CGRectMakeScaled(170, 590, 428, 366, cx, cy);
+        self.mapConfigViewController.maxLabel.frame = CGRectMakeScaled(104, 975, 200, 40, cx, cy);
+        self.sliderBackground.frame = CGRectMakeScaled(465, 975, 200, 40, cx, cy);
+        self.mapConfigViewController.slider.frame = CGRectMakeScaled(475, 983, 180, 23, cx, cy);
     }
 }
 

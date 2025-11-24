@@ -1,0 +1,28 @@
+diff --git a/Xcode/SDL_mixer.xcodeproj/project.pbxproj b/Xcode/SDL_mixer.xcodeproj/project.pbxproj
+index 2abf3a91..9585b563 100644
+--- a/Xcode/SDL_mixer.xcodeproj/project.pbxproj
++++ b/Xcode/SDL_mixer.xcodeproj/project.pbxproj
+@@ -860,7 +860,10 @@
+ 				);
+ 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+ 				GCC_WARN_UNDECLARED_SELECTOR = YES;
+-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"";
++				HEADER_SEARCH_PATHS = (
++					"\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"",
++					"\"$(SRCROOT)/../../SDL/include/\"",
++				);
+ 				INFOPLIST_FILE = "Info-Framework.plist";
+ 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+ 				LD_RUNPATH_SEARCH_PATHS = (
+@@ -910,7 +913,10 @@
+ 				);
+ 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+ 				GCC_WARN_UNDECLARED_SELECTOR = YES;
+-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"";
++				HEADER_SEARCH_PATHS = (
++					"\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"",
++					"\"$(SRCROOT)/../../SDL/include/\"",
++				);
+ 				INFOPLIST_FILE = "Info-Framework.plist";
+ 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+ 				LD_RUNPATH_SEARCH_PATHS = (

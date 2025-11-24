@@ -47,7 +47,7 @@
 
 -(int)  sendToEngine:(NSString *)string;
 -(int)  sendToEngineNoSave:(NSString *)string;
-- (void)provideTeamData:(NSString *)teamName forHogs:(NSInteger)numberOfPlayingHogs withHealth:(NSInteger)initialHealth ofColor:(NSNumber *)teamColor;
+- (void)provideTeamData:(NSString *)teamName forHogs:(NSInteger)numberOfPlayingHogs withHealth:(NSInteger)initialHealth ofColor:(NSNumber *)teamColor isMission:(BOOL)isMission;
 - (void)provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger)numberOfTeams;
 - (NSInteger)provideScheme:(NSString *)schemeName;
 

@@ -1,0 +1,28 @@
+diff --git a/Xcode/SDL_ttf.xcodeproj/project.pbxproj b/Xcode/SDL_ttf.xcodeproj/project.pbxproj
+index be2024b..b1eeb14 100644
+--- a/Xcode/SDL_ttf.xcodeproj/project.pbxproj
++++ b/Xcode/SDL_ttf.xcodeproj/project.pbxproj
+@@ -1058,7 +1058,10 @@
+ 					"TTF_USE_HARFBUZZ=1",
+ 				);
+ 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"";
++				HEADER_SEARCH_PATHS = (
++					"\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"",
++					"\"$(SRCROOT)/../../SDL/include/\"",
++				);
+ 				INFOPLIST_FILE = "Info-Framework.plist";
+ 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+@@ -1097,7 +1100,10 @@
+ 					"TTF_USE_HARFBUZZ=1",
+ 				);
+ 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"";
++				HEADER_SEARCH_PATHS = (
++					"\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"",
++					"\"$(SRCROOT)/../../SDL/include/\"",
++				);
+ 				INFOPLIST_FILE = "Info-Framework.plist";
+ 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

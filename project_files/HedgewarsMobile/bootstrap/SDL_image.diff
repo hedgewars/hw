@@ -1,0 +1,20 @@
+diff --git a/Xcode/SDL_image.xcodeproj/project.pbxproj b/Xcode/SDL_image.xcodeproj/project.pbxproj
+index 71119c0d..8cab6bba 100644
+--- a/Xcode/SDL_image.xcodeproj/project.pbxproj
++++ b/Xcode/SDL_image.xcodeproj/project.pbxproj
+@@ -656,6 +656,7 @@
+ 					"\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"",
+ 					"\"$(SRCROOT)/../external/jpeg\"",
+ 					"\"$(PROJECT_DIR)/jxl\"",
++					"\"$(SRCROOT)/../../SDL/include/\"",
+ 				);
+ 				INFOPLIST_FILE = "Info-Framework.plist";
+ 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+@@ -747,6 +748,7 @@
+ 					"\"$(SRCROOT)/$(PLATFORM)/SDL2.framework/Headers\"",
+ 					"\"$(SRCROOT)/../external/jpeg\"",
+ 					"\"$(PROJECT_DIR)/jxl\"",
++					"\"$(SRCROOT)/../../SDL/include/\"",
+ 				);
+ 				INFOPLIST_FILE = "Info-Framework.plist";
+ 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
