@@ -164,6 +164,10 @@
         [self sendToEngine:strToSend];
     }
 
+    // TODO: account for scheme scriptparam overrrides
+    NSString *scriptparam = @"e$scriptparam ";
+    [self sendToEngine:scriptparam];
+
     return result;
 }
 
