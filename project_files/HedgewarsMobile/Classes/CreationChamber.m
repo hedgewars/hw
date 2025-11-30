@@ -68,7 +68,8 @@
             [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
         NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
                                 @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Timeless",
-                                @"Thinking with Portals",@"King Mode",@"Construction Mode",nil];
+                                @"Thinking with Portals",@"King Mode",@"Construction Mode",
+                                @"The Specialist",@"Mutant",@"Racer",nil];
         index = 0;
         for (NSString *name in schemeNames)
             [self createSchemeNamed:name ofType:index++];
@@ -406,6 +407,47 @@
             [gamemodArray replaceObjectAtIndex:16 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:18 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:20 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 11: // the specialists
+            [basicArray replaceObjectAtIndex:8 withObject:[NSNumber numberWithInt:100]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
+            [gamemodArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:18 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:19 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:20 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 12: // mutant
+            [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:20]];
+            [basicArray replaceObjectAtIndex:4 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:5 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:2]];
+            [basicArray replaceObjectAtIndex:8 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:1]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:4]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:19 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 13: // racer
+            [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:90]];
+            [basicArray replaceObjectAtIndex:3 withObject:[NSNumber numberWithInt:50]];
+            [basicArray replaceObjectAtIndex:4 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:5 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:8 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
+            [gamemodArray replaceObjectAtIndex:0 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:1 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:5 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:16 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:18 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:19 withObject:[NSNumber numberWithBool:YES]];
             break;
     }
 
