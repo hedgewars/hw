@@ -136,15 +136,8 @@
 
     NSArray *basicArray = [schemeDictionary objectForKey:@"basic"];
     NSArray *gamemodArray = [schemeDictionary objectForKey:@"gamemod"];
-    int result = 0;
-    int mask = 0x00000004;
 
-    // pack the game modifiers in a single var and send it
-    for (NSNumber *value in gamemodArray) {
-        if ([value boolValue] == YES)
-            result |= mask;
-        mask <<= 1;
-    }
+    int result = [self getGameFlags:gamemodArray];
     NSString *flags = [[NSString alloc] initWithFormat:@"e$gmflags %d",result];
     [self sendToEngine:flags];
 
@@ -167,6 +160,65 @@
     // TODO: account for scheme scriptparam overrrides
     NSString *scriptparam = @"e$scriptparam ";
     [self sendToEngine:scriptparam];
+
+    return result;
+}
+
+// Flags should be consistent with GameCFGWidget::getGameFlags
+- (int)getGameFlags:(NSArray *)gamemodArray {
+    int result = 0;
+
+    // gamemodArray index corresponds to gameMods.plist
+    if ([gamemodArray[10] boolValue])
+        result |= 0x00001000;       // switch hog
+    if ([gamemodArray[2] boolValue])
+        result |= 0x00000010;       // divide teams
+    if ([gamemodArray[0] boolValue])
+        result |= 0x00000004;       // solid land
+    if ([gamemodArray[1] boolValue])
+        result |= 0x00000008;       // border
+    if ([gamemodArray[3] boolValue])
+        result |= 0x00000020;       // low gravity
+    if ([gamemodArray[4] boolValue])
+        result |= 0x00000040;       // laser sight
+    if ([gamemodArray[5] boolValue])
+        result |= 0x00000080;       // invulnerable
+    if ([gamemodArray[6] boolValue])
+        result |= 0x00000100;       // reset health
+    if ([gamemodArray[7] boolValue])
+        result |= 0x00000200;       // vampirism
+    if ([gamemodArray[8] boolValue])
+        result |= 0x00000400;       // karma
+    if ([gamemodArray[9] boolValue])
+        result |= 0x00000800;       // artillery
+    if ([gamemodArray[11] boolValue])
+        result |= 0x00002000;       // random
+    if ([gamemodArray[12] boolValue])
+        result |= 0x00004000;       // king
+    if ([gamemodArray[13] boolValue])
+        result |= 0x00008000;       // place hogs
+    if ([gamemodArray[14] boolValue])
+        result |= 0x00010000;       // shared ammo
+    if ([gamemodArray[15] boolValue])
+        result |= 0x00020000;       // disable girders
+    if ([gamemodArray[16] boolValue])
+        result |= 0x00040000;       // disable land obj
+    if ([gamemodArray[17] boolValue])
+        result |= 0x00080000;       // ai survival
+    if ([gamemodArray[18] boolValue])
+        result |= 0x00100000;       // infinite attacks
+    if ([gamemodArray[19] boolValue])
+        result |= 0x00200000;       // reset weaps
+    if ([gamemodArray[20] boolValue])
+        result |= 0x00400000;       // per hog ammo
+    if ([gamemodArray[21] boolValue])
+        result |= 0x00800000;       // no wind
+    if ([gamemodArray[22] boolValue])
+        result |= 0x01000000;       // more wind
+    if ([gamemodArray[23] boolValue])
+        result |= 0x02000000;       // tag team
+    if ([gamemodArray[24] boolValue])
+        result |= 0x04000000;       // bottom
 
     return result;
 }

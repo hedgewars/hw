@@ -20,7 +20,7 @@
 #import "CreationChamber.h"
 #import "weapons.h"
 
-#define SCHEME_FORMAT_VERSION 1
+#define SCHEME_FORMAT_VERSION 2
 
 @implementation CreationChamber
 
@@ -322,14 +322,16 @@
             [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:1]];
             [basicArray replaceObjectAtIndex:8 withObject:[NSNumber numberWithInt:0]];
             [basicArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithInt:25]];
+            [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:0]];
             [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
-            [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:8]];
+            [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:0]];
+            [gamemodArray replaceObjectAtIndex:0 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:1 withObject:[NSNumber numberWithBool:YES]];
-            [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:16 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:19 withObject:[NSNumber numberWithBool:YES]];
             break;
         case 3:  // clean slate
@@ -365,7 +367,7 @@
             [basicArray replaceObjectAtIndex:12 withObject:[NSNumber numberWithInt:10]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:10]];
             [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:4]];
-            [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:1 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithBool:YES]];

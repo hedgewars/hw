@@ -256,7 +256,7 @@ quint32 GameCFGWidget::getGameFlags() const
     quint32 result = 0;
 
     if (schemeData(1).toBool())
-        result |= 0x00001000;       // fort
+        result |= 0x00001000;       // switch hog
     if (schemeData(2).toBool())
         result |= 0x00000010;       // divide teams
     if (schemeData(3).toBool())
@@ -270,7 +270,7 @@ quint32 GameCFGWidget::getGameFlags() const
     if (schemeData(7).toBool())
         result |= 0x00000080;       // invulnerable
     if (schemeData(8).toBool())
-        result |= 0x00000100;       // mines
+        result |= 0x00000100;       // reset health
     if (schemeData(9).toBool())
         result |= 0x00000200;       // vampirism
     if (schemeData(10).toBool())
