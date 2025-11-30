@@ -67,7 +67,7 @@
         if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
             [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
         NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                                @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Fort Mode",@"Timeless",
+                                @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Timeless",
                                 @"Thinking with Portals",@"King Mode",@"Construction Mode",nil];
         index = 0;
         for (NSString *name in schemeNames)
@@ -373,15 +373,7 @@
             [gamemodArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:16 withObject:[NSNumber numberWithBool:YES]];
             break;
-        case 7:  // fort mode
-            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
-            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
-            [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
-            [gamemodArray replaceObjectAtIndex:3 withObject:[NSNumber numberWithBool:YES]];
-            [gamemodArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithBool:YES]];
-            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
-            break;
-        case 8:  // timeless
+        case 7:  // timeless
             [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:100]];
             [basicArray replaceObjectAtIndex:4 withObject:[NSNumber numberWithInt:0]];
             [basicArray replaceObjectAtIndex:5 withObject:[NSNumber numberWithInt:0]];
@@ -392,7 +384,7 @@
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:20 withObject:[NSNumber numberWithBool:YES]];
             break;
-        case 9:  // thinking with portals
+        case 8:  // thinking with portals
             [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:2]];
             [basicArray replaceObjectAtIndex:8 withObject:[NSNumber numberWithInt:25]];
             [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:4]];
@@ -402,11 +394,11 @@
             [gamemodArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             break;
-        case 10: // king mode
+        case 9: // king mode
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:12 withObject:[NSNumber numberWithBool:YES]];
             break;
-        case 11: // construction mode
+        case 10: // construction mode
             [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
