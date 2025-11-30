@@ -69,7 +69,7 @@
         NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
                                 @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Timeless",
                                 @"Thinking with Portals",@"King Mode",@"Construction Mode",
-                                @"The Specialist",@"Mutant",@"Racer",nil];
+                                @"The Specialists",@"Mutant",@"Racer",nil];
         index = 0;
         for (NSString *name in schemeNames)
             [self createSchemeNamed:name ofType:index++];
