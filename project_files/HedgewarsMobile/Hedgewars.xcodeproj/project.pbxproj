@@ -2001,6 +2001,7 @@
 		};
 		61806B78170B83EA00C601BC /* config.inc */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);

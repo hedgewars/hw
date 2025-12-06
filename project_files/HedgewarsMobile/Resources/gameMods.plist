@@ -84,11 +84,11 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Defend your fort and destroy the opponents</string>
+		<string>Select a hedgehog at the beginning of a turn</string>
 		<key>image</key>
-		<string>Forts</string>
+		<string>SwitchHog</string>
 		<key>title</key>
-		<string>Fort Mode</string>
+		<string>Switch Hedgehogs</string>
 	</dict>
 	<dict>
 		<key>description</key>
