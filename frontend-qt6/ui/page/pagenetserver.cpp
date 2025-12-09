@@ -108,8 +108,8 @@ QLayout * PageNetServer::footerLayoutDefinition()
 
 void PageNetServer::connectSignals()
 {
-    connect(BtnDefault, SIGNAL(clicked()), this, SLOT(setDefaultPort()));
-    connect(BtnShare, SIGNAL(clicked()), this, SLOT(copyUrl()));
+    connect(BtnDefault, &QAbstractButton::clicked, this, &PageNetServer::setDefaultPort);
+    connect(BtnShare, &QAbstractButton::clicked, this, &PageNetServer::copyUrl);
 }
 
 PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)

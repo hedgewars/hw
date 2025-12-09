@@ -113,10 +113,10 @@ QLayout * PageAdmin::bodyLayoutDefinition()
         QPushButton * btnAdd = addButton(tr("Add"), tab2Layout, 1, 0);
         QPushButton * btnRemove = addButton(tr("Remove"), tab2Layout, 2, 0);
 
-        connect(btnRefresh, SIGNAL(clicked()), this, SIGNAL(bansListRequest()));
-        connect(btnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClicked()));
-        connect(btnAdd, SIGNAL(clicked()), this, SLOT(onAddClicked()));
-        connect(btnRemove, SIGNAL(clicked()), this, SLOT(onRemoveClicked()));
+        connect(btnRefresh, &QAbstractButton::clicked, this, &PageAdmin::bansListRequest);
+        connect(btnRefresh, &QAbstractButton::clicked, this, &PageAdmin::onRefreshClicked);
+        connect(btnAdd, &QAbstractButton::clicked, this, &PageAdmin::onAddClicked);
+        connect(btnRemove, &QAbstractButton::clicked, this, &PageAdmin::onRemoveClicked);
     }
 
     return pageLayout;
@@ -124,11 +124,11 @@ QLayout * PageAdmin::bodyLayoutDefinition()
 
 void PageAdmin::connectSignals()
 {
-    connect(pbAsk, SIGNAL(clicked()), this, SIGNAL(askServerVars()));
-    connect(leServerMessageNew, SIGNAL(textChanged(QString)), tb, SLOT(setHtml(const QString &)));
-    connect(leServerMessageOld, SIGNAL(textChanged(QString)), tb, SLOT(setHtml(const QString &)));
-    connect(pbClearAccountsCache, SIGNAL(clicked()), this, SIGNAL(clearAccountsCache()));
-    connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
+    connect(pbAsk, &QAbstractButton::clicked, this, &PageAdmin::askServerVars);
+    connect(leServerMessageNew, &QLineEdit::textChanged, tb, &QTextEdit::setHtml);
+    connect(leServerMessageOld, &QLineEdit::textChanged, tb, &QTextEdit::setHtml);
+    connect(pbClearAccountsCache, &QAbstractButton::clicked, this, &PageAdmin::clearAccountsCache);
+    connect(pbSetSM, &QAbstractButton::clicked, this, &PageAdmin::smChanged);
 }
 
 PageAdmin::PageAdmin(QWidget* parent) : AbstractPage(parent)

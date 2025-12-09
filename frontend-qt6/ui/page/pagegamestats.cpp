@@ -130,9 +130,9 @@ QLayout * PageGameStats::footerLayoutDefinition()
 
 void PageGameStats::connectSignals()
 {
-    connect(this, SIGNAL(pageEnter()), this, SLOT(renderStats()));
-    connect(btnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
-    connect(btnRestart, SIGNAL(clicked()), this, SIGNAL(restartGameRequested()));
+    connect(this, &AbstractPage::pageEnter, this, &PageGameStats::renderStats);
+    connect(btnSave, &QAbstractButton::clicked, this, &PageGameStats::saveDemoRequested);
+    connect(btnRestart, &QAbstractButton::clicked, this, &PageGameStats::restartGameRequested);
 }
 
 PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)

@@ -123,8 +123,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
   ScriptsLabel->setTextFormat(Qt::PlainText);
   GBoxOptionsLayout->addWidget(ScriptsLabel, 1, 1);
 
-  connect(Scripts, SIGNAL(currentIndexChanged(int)), this,
-          SLOT(scriptChanged(int)));
+  connect(Scripts, &QComboBox::currentIndexChanged, this,
+          &GameCFGWidget::scriptChanged);
 
   QWidget *SchemeWidget = new QWidget(this);
   GBoxOptionsLayout->addWidget(SchemeWidget, 2, 0, 1, 2);
@@ -141,8 +141,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
   GameSchemesLabel->setTextFormat(Qt::PlainText);
   SchemeWidgetLayout->addWidget(GameSchemesLabel, 0, 2);
 
-  connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this,
-          SLOT(schemeChanged(int)));
+  connect(GameSchemes, &QComboBox::currentIndexChanged, this,
+          &GameCFGWidget::schemeChanged);
 
   lblScheme = new QLabel(QLabel::tr("Scheme"), SchemeWidget);
   SchemeWidgetLayout->addWidget(lblScheme, 0, 0);
@@ -157,7 +157,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
   goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
   goToSchemePage->setStyleSheet(QStringLiteral("padding: 0px;"));
   SchemeWidgetLayout->addWidget(goToSchemePage, 0, 3);
-  connect(goToSchemePage, SIGNAL(clicked()), this, SLOT(jumpToSchemes()));
+  connect(goToSchemePage, &QAbstractButton::clicked, this, &GameCFGWidget::jumpToSchemes);
 
   lblWeapons = new QLabel(QLabel::tr("Weapons"), SchemeWidget);
   SchemeWidgetLayout->addWidget(lblWeapons, 1, 0);
@@ -171,8 +171,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
   WeaponsNameLabel->setTextFormat(Qt::PlainText);
   SchemeWidgetLayout->addWidget(WeaponsNameLabel, 1, 2);
 
-  connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this,
-          SLOT(ammoChanged(int)));
+  connect(WeaponsName, &QComboBox::currentIndexChanged, this,
+          &GameCFGWidget::ammoChanged);
 
   goToWeaponPage = new QPushButton(SchemeWidget);
   goToWeaponPage->setWhatsThis(tr("Edit weapons"));
@@ -181,7 +181,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
   goToWeaponPage->setMaximumWidth(pmEdit.width() + 6);
   goToWeaponPage->setStyleSheet(QStringLiteral("padding: 0px;"));
   SchemeWidgetLayout->addWidget(goToWeaponPage, 1, 3);
-  connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
+  connect(goToWeaponPage, &QAbstractButton::clicked, this, &GameCFGWidget::jumpToWeapons);
 
   bindEntries = new QCheckBox(SchemeWidget);
   bindEntries->setWhatsThis(tr("Game scheme will auto-select a weapon"));
@@ -198,27 +198,27 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
       "url(\":/res/unlock_disabled.png\");   }");
   SchemeWidgetLayout->addWidget(bindEntries, 0, 1, 0, 1, Qt::AlignVCenter);
 
-  connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this,
-          SLOT(seedChanged(const QString &)));
+  connect(pMapContainer, &HWMapContainer::seedChanged, this,
+          &GameCFGWidget::seedChanged);
   connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this,
           SLOT(mapChanged(const QString &)));
-  connect(pMapContainer, SIGNAL(mapgenChanged(MapGenerator)), this,
-          SLOT(mapgenChanged(MapGenerator)));
-  connect(pMapContainer, SIGNAL(mazeSizeChanged(int)), this,
-          SLOT(maze_sizeChanged(int)));
-  connect(pMapContainer, SIGNAL(mapFeatureSizeChanged(int)), this,
-          SLOT(slMapFeatureSizeChanged(int)));
-  connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this,
-          SLOT(themeChanged(const QString &)));
-  connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this,
-          SLOT(templateFilterChanged(int)));
-  connect(pMapContainer, SIGNAL(drawMapRequested()), this,
-          SIGNAL(goToDrawMap()));
-  connect(pMapContainer, SIGNAL(drawnMapChanged(const QByteArray &)), this,
-          SLOT(onDrawnMapChanged(const QByteArray &)));
+  connect(pMapContainer, &HWMapContainer::mapgenChanged, this,
+          &GameCFGWidget::mapgenChanged);
+  connect(pMapContainer, &HWMapContainer::mazeSizeChanged, this,
+          &GameCFGWidget::maze_sizeChanged);
+  connect(pMapContainer, &HWMapContainer::mapFeatureSizeChanged, this,
+          &GameCFGWidget::slMapFeatureSizeChanged);
+  connect(pMapContainer, &HWMapContainer::themeChanged, this,
+          &GameCFGWidget::themeChanged);
+  connect(pMapContainer, &HWMapContainer::newTemplateFilter, this,
+          &GameCFGWidget::templateFilterChanged);
+  connect(pMapContainer, &HWMapContainer::drawMapRequested, this,
+          &GameCFGWidget::goToDrawMap);
+  connect(pMapContainer, &HWMapContainer::drawnMapChanged, this,
+          &GameCFGWidget::onDrawnMapChanged);
 
-  connect(&DataManager::instance(), SIGNAL(updated()), this,
-          SLOT(updateModelViews()));
+  connect(&DataManager::instance(), &DataManager::updated, this,
+          &GameCFGWidget::updateModelViews);
 }
 
 void GameCFGWidget::setTabbed(bool tabbed)

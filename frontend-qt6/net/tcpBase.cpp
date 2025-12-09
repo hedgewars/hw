@@ -138,15 +138,15 @@ void TCPBase::NewConnection()
         return;
     }
 
-    disconnect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
+    disconnect(IPCServer.data(), &QTcpServer::newConnection, this, &TCPBase::NewConnection);
     IPCSocket = IPCServer->nextPendingConnection();
 
     if(!IPCSocket) return;
 
     m_connected = true;
 
-    connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
-    connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+    connect(IPCSocket.data(), &QAbstractSocket::disconnected, this, &TCPBase::ClientDisconnect);
+    connect(IPCSocket.data(), &QIODevice::readyRead, this, &TCPBase::ClientRead);
     SendToClientFirst();
 
     if(simultaneousRun())
@@ -158,7 +158,7 @@ void TCPBase::NewConnection()
 
 void TCPBase::RealStart()
 {
-    connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
+    connect(IPCServer.data(), &QTcpServer::newConnection, this, &TCPBase::NewConnection);
     IPCSocket = 0;
 
 #ifdef HWLIBRARY
@@ -177,8 +177,8 @@ void TCPBase::RealStart()
     process = new QProcess(this);
     connect(process, SIGNAL(error(QProcess::ProcessError)),
         this, SLOT(StartProcessError(QProcess::ProcessError)));
-    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)),
-        this, SLOT(onEngineDeath(int, QProcess::ExitStatus)));
+    connect(process, &QProcess::finished,
+        this, &TCPBase::onEngineDeath);
     QStringList arguments = getArguments();
 
 #ifdef QT_DEBUG
@@ -217,7 +217,7 @@ void TCPBase::ClientDisconnect()
     }
 
     if(IPCSocket) {
-      disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+      disconnect(IPCSocket.data(), &QIODevice::readyRead, this, &TCPBase::ClientRead);
       IPCSocket->deleteLater();
       IPCSocket = NULL;
     }
@@ -271,7 +271,7 @@ void TCPBase::tcpServerReady()
 {
     if (!srvsList.isEmpty())
     {
-        disconnect(srvsList.first(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+        disconnect(srvsList.first(), &TCPBase::isReadyNow, this, &TCPBase::tcpServerReady);
         RealStart();
     }
     else
@@ -300,7 +300,7 @@ void TCPBase::Start(bool couldCancelPreviousRequest)
             Start(couldCancelPreviousRequest);
         } else
         {
-            connect(last, SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+            connect(last, &TCPBase::isReadyNow, this, &TCPBase::tcpServerReady);
             srvsList.push_back(this);
         }
     }

@@ -73,8 +73,8 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
 
     QPushButton * btnCancel = new QPushButton(tr("Cancel"));
     QPushButton * btnOkay = new QPushButton(tr("Create room"));
-    connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
-    connect(btnOkay, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(btnCancel, &QAbstractButton::clicked, this, &QDialog::reject);
+    connect(btnOkay, &QAbstractButton::clicked, this, &QDialog::accept);
 #ifdef Q_OS_MAC
         buttonLayout->addWidget(btnCancel);
         buttonLayout->addWidget(btnOkay);
@@ -86,7 +86,7 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
 
     setStyleSheet(QStringLiteral("QPushButton { padding: 5px; }"));
 
-    connect(cbSetPassword, SIGNAL(toggled(bool)), this, SLOT(checkBoxToggled()));
+    connect(cbSetPassword, &QAbstractButton::toggled, this, &RoomNamePrompt::checkBoxToggled);
 }
 
 QString RoomNamePrompt::getRoomName()

@@ -50,13 +50,13 @@ HWAskQuitDialog::HWAskQuitDialog(QWidget* parent, HWForm * form) : QDialog(paren
     QPushButton * pbMore = dbbButtons->addButton(QPushButton::tr("More info"), QDialogButtonBox::HelpRole);
     layout->addWidget(dbbButtons);
 
-    connect(pbYes,  SIGNAL(clicked()), this, SLOT(accept()));
-    connect(pbNo,   SIGNAL(clicked()), this, SLOT(reject()));
-    connect(pbMore, SIGNAL(clicked()), this, SLOT(goToPageVideos()));
+    connect(pbYes,  &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(pbNo,   &QAbstractButton::clicked, this, &QDialog::reject);
+    connect(pbMore, &QAbstractButton::clicked, this, &HWAskQuitDialog::goToPageVideos);
 
     // update list periodically
     QTimer * timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(updateList()));
+    connect(timer, &QTimer::timeout, this, &HWAskQuitDialog::updateList);
     timer->start(200);
 
     this->setWindowModality(Qt::WindowModal);

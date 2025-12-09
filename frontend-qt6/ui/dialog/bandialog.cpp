@@ -54,8 +54,8 @@ BanDialog::BanDialog(QWidget *parent) :
     hbox->addWidget(btnOk);
     hbox->addWidget(btnCancel);
 
-    connect(btnOk, SIGNAL(clicked()), this, SLOT(okClicked()));
-    connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(btnOk, &QAbstractButton::clicked, this, &BanDialog::okClicked);
+    connect(btnCancel, &QAbstractButton::clicked, this, &QDialog::reject);
 
     this->setWindowModality(Qt::WindowModal);
     this->setWindowTitle(tr("Ban player"));

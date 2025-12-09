@@ -52,7 +52,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     catList->setMinimumWidth(180);
     catList->setStyleSheet(QStringLiteral("QListWidget::item { font-size: 14px; } QListWidget:hover { border-color: #F6CB1C; } QListWidget::item:selected { background: #150A61; color: yellow; }"));
     catList->setFocusPolicy(Qt::NoFocus);
-    connect(catList, SIGNAL(currentRowChanged(int)), this, SLOT(changeBindingsPage(int)));
+    connect(catList, &QListWidget::currentRowChanged, this, &KeyBinder::changeBindingsPage);
     catListContainer->addWidget(catList);
     pageKeysLayout->addLayout(catListContainer);
 
@@ -65,7 +65,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         btnResetAll->setFixedHeight(40);
         catListContainer->setStretch(1, 0);
         catListContainer->setSpacing(10);
-        connect(btnResetAll, SIGNAL(clicked()), this, SIGNAL(resetAllBinds()));
+        connect(btnResetAll, &QAbstractButton::clicked, this, &KeyBinder::resetAllBinds);
     }
 
     // Container for pages of key bindings
@@ -183,8 +183,8 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
             curTable->setSelectionBehavior(QAbstractItemView::SelectRows);
             curTable->setSelectionMode(QAbstractItemView::SingleSelection);
             curTable->setFocusPolicy(Qt::NoFocus);
-            connect(curTable, SIGNAL(itemSelectionChanged()), this, SLOT(bindSelectionChanged()));
-            connect(curTable, SIGNAL(itemClicked(QTableWidgetItem *)), this, SLOT(bindCellClicked(QTableWidgetItem *)));
+            connect(curTable, &QTableWidget::itemSelectionChanged, this, &KeyBinder::bindSelectionChanged);
+            connect(curTable, &QTableWidget::itemClicked, this, &KeyBinder::bindCellClicked);
             curLayout->addWidget(curTable, 0);
         }
 

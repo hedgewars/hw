@@ -111,7 +111,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     BtnViewInfo->setFixedHeight(40);
     feedbackLayout->addWidget(CheckSendSpecs, 0, 2, 2, 1);
     feedbackLayout->addWidget(BtnViewInfo, 0, 3, 2, 1);
-    connect(BtnViewInfo, SIGNAL(clicked()), this, SLOT(ShowSpecs()));
+    connect(BtnViewInfo, &QAbstractButton::clicked, this, &FeedbackDialog::ShowSpecs);
 
 
     label_description = new QLabel();
@@ -129,7 +129,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     QPushButton * BtnCancel = new QPushButton(tr("Cancel"));
     feedbackLayout->addWidget(BtnCancel, 3, 0);
     BtnCancel->setFixedHeight(40);
-    connect(BtnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(BtnCancel, &QAbstractButton::clicked, this, &QDialog::reject);
 
     label_captcha = new QLabel();
     label_captcha->setStyleSheet(QStringLiteral("border: 3px solid #ffcc00; border-radius: 4px"));
@@ -158,7 +158,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
 
     feedbackLayout->addWidget(BtnSend, 3, 3);
     BtnSend->setFixedHeight(40);
-    connect(BtnSend, SIGNAL(clicked()), this, SLOT(SendFeedback()));
+    connect(BtnSend, &QAbstractButton::clicked, this, &FeedbackDialog::SendFeedback);
 
     pageLayout->addLayout(feedbackLayout);
 
@@ -397,7 +397,7 @@ QNetworkAccessManager * FeedbackDialog::GetNetManager()
 {
     if (netManager) return netManager;
     netManager = new QNetworkAccessManager(this);
-    connect(netManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(NetReply(QNetworkReply*)));
+    connect(netManager, &QNetworkAccessManager::finished, this, &FeedbackDialog::NetReply);
     return netManager;
 }
 

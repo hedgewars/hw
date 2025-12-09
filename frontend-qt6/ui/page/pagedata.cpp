@@ -69,10 +69,10 @@ QLayout * PageDataDownload::footerLayoutDefinition()
 
 void PageDataDownload::connectSignals()
 {
-    connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
-    connect(this, SIGNAL(goBack()), this, SLOT(onPageLeave()));
-    connect(pbOpenDir, SIGNAL(clicked()), this, SLOT(openPackagesDir()));
-    connect(pbHome, SIGNAL(clicked()), this, SLOT(fetchList()));
+    connect(web, &QTextBrowser::anchorClicked, this, &PageDataDownload::request);
+    connect(this, &AbstractPage::goBack, this, &PageDataDownload::onPageLeave);
+    connect(pbOpenDir, &QAbstractButton::clicked, this, &PageDataDownload::openPackagesDir);
+    connect(pbHome, &QAbstractButton::clicked, this, &PageDataDownload::fetchList);
 }
 
 PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
@@ -111,8 +111,8 @@ void PageDataDownload::request(const QUrl &url)
 
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
         QNetworkReply *reply = manager->get(newRequest);
-        connect(reply, SIGNAL(finished()), this, SLOT(fileDownloaded()));
-        connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
+        connect(reply, &QNetworkReply::finished, this, &PageDataDownload::fileDownloaded);
+        connect(reply, &QNetworkReply::downloadProgress, this, &PageDataDownload::downloadProgress);
 
         QProgressBar *progressBar = new QProgressBar(this);
         progressBarsLayout->addWidget(progressBar);
@@ -126,7 +126,7 @@ void PageDataDownload::request(const QUrl &url)
 
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
         QNetworkReply *reply = manager->get(newRequest);
-        connect(reply, SIGNAL(finished()), this, SLOT(pageDownloaded()));
+        connect(reply, &QNetworkReply::finished, this, &PageDataDownload::pageDownloaded);
     }
 }
 

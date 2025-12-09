@@ -74,9 +74,9 @@ QLayout * PagePlayDemo::footerLayoutDefinition()
 
 void PagePlayDemo::connectSignals()
 {
-    connect(BtnRenameRecord, SIGNAL(clicked()), this, SLOT(renameRecord()));
-    connect(BtnRemoveRecord, SIGNAL(clicked()), this, SLOT(removeRecord()));
-    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(refresh()));
+    connect(BtnRenameRecord, &QAbstractButton::clicked, this, &PagePlayDemo::renameRecord);
+    connect(BtnRemoveRecord, &QAbstractButton::clicked, this, &PagePlayDemo::removeRecord);
+    connect(&DataManager::instance(), &DataManager::updated, this, &PagePlayDemo::refresh);
 }
 
 PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)

@@ -58,9 +58,9 @@ HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent)
     pbCancel->setText(QPushButton::tr("Cancel"));
     layout->addWidget(pbCancel, 3, 2);
 
-    connect(pbOK, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
-    connect(pbDefault, SIGNAL(clicked()), this, SLOT(setDefaultPort()));
+    connect(pbOK, &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(pbCancel, &QAbstractButton::clicked, this, &QDialog::reject);
+    connect(pbDefault, &QAbstractButton::clicked, this, &HWHostPortDialog::setDefaultPort);
 
     this->setWindowModality(Qt::WindowModal);
     this->setWindowTitle(tr("Connect to server"));

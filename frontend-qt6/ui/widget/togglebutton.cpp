@@ -51,7 +51,7 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
     setIconSize(pixOff.size());
     setIcon(icoUnchecked);
 
-    connect(this, SIGNAL(toggled(bool)), this, SLOT(eventToggled(bool)));
+    connect(this, &QAbstractButton::toggled, this, &ToggleButtonWidget::eventToggled);
 }
 
 ToggleButtonWidget::~ToggleButtonWidget()

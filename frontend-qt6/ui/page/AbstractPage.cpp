@@ -80,7 +80,7 @@ void AbstractPage::initPage()
     bottomLeftLayout->addStretch(1);
 
     // connect signals
-    connect(btnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+    connect(btnBack, &QAbstractButton::clicked, this, &AbstractPage::goBack);
     connectSignals();
 }
 

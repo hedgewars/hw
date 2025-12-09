@@ -148,22 +148,22 @@ QLayout * PageTraining::footerLayoutDefinition()
 
 void PageTraining::connectSignals()
 {
-    connect(lstTrainings, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(updateInfo()));
-    connect(lstTrainings, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(updateInfo()));
-    connect(lstTrainings, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(startSelected()));
+    connect(lstTrainings, &QListWidget::currentItemChanged, this, &PageTraining::updateInfo);
+    connect(lstTrainings, &QListWidget::itemClicked, this, &PageTraining::updateInfo);
+    connect(lstTrainings, &QListWidget::itemDoubleClicked, this, &PageTraining::startSelected);
 
-    connect(lstChallenges, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(updateInfo()));
-    connect(lstChallenges, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(updateInfo()));
-    connect(lstChallenges, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(startSelected()));
+    connect(lstChallenges, &QListWidget::currentItemChanged, this, &PageTraining::updateInfo);
+    connect(lstChallenges, &QListWidget::itemClicked, this, &PageTraining::updateInfo);
+    connect(lstChallenges, &QListWidget::itemDoubleClicked, this, &PageTraining::startSelected);
 
-    connect(lstScenarios, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(updateInfo()));
-    connect(lstScenarios, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(updateInfo()));
-    connect(lstScenarios, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(startSelected()));
+    connect(lstScenarios, &QListWidget::currentItemChanged, this, &PageTraining::updateInfo);
+    connect(lstScenarios, &QListWidget::itemClicked, this, &PageTraining::updateInfo);
+    connect(lstScenarios, &QListWidget::itemDoubleClicked, this, &PageTraining::startSelected);
 
-    connect(tbw, SIGNAL(currentChanged(int)), this, SLOT(updateInfo()));
+    connect(tbw, &QTabWidget::currentChanged, this, &PageTraining::updateInfo);
 
-    connect(btnPreview, SIGNAL(clicked()), this, SLOT(startSelected()));
-    connect(btnStart, SIGNAL(clicked()), this, SLOT(startSelected()));
+    connect(btnPreview, &QAbstractButton::clicked, this, &PageTraining::startSelected);
+    connect(btnStart, &QAbstractButton::clicked, this, &PageTraining::startSelected);
 }
 
 

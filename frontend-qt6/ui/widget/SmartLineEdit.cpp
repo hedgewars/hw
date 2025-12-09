@@ -36,10 +36,10 @@ SmartLineEdit::SmartLineEdit(QWidget * parent, int maxHistorySize)
   resetAutoCompletionStatus();
 
   // reset autocompletion status when cursor is moved or content is changed
-  connect(this, SIGNAL(cursorPositionChanged(int, int)), this,
-          SLOT(resetAutoCompletionStatus()));
-  connect(this, SIGNAL(textChanged(const QString&)), this,
-          SLOT(resetAutoCompletionStatus()));
+  connect(this, &QLineEdit::cursorPositionChanged, this,
+          &SmartLineEdit::resetAutoCompletionStatus);
+  connect(this, &QLineEdit::textChanged, this,
+          &SmartLineEdit::resetAutoCompletionStatus);
 }
 
 

@@ -67,11 +67,11 @@ TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams *
         colorWidget->setMinimumHeight(26);
         colorWidget->setMaximumHeight(26);
         colorWidget->setColor(team.color());
-        connect(colorWidget, SIGNAL(colorChanged(int)), this, SLOT(onColorChanged(int)));
+        connect(colorWidget, &ColorWidget::colorChanged, this, &TeamShowWidget::onColorChanged);
         mainLayout.addWidget(colorWidget);
 
         phhoger = new CHedgehogerWidget(QImage(QStringLiteral(":/res/hh25x25.png")), QImage(QStringLiteral(":/res/hh25x25grey.png")), this);
-        connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
+        connect(phhoger, &CHedgehogerWidget::hedgehogsNumChanged, this, &TeamShowWidget::hhNumChanged);
         phhoger->setHHNum(team.numHedgehogs());
         mainLayout.addWidget(phhoger);
     }
@@ -79,7 +79,7 @@ TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams *
     {
     }
 
-    QObject::connect(butt, SIGNAL(clicked()), this, SLOT(activateTeam()));
+    QObject::connect(butt, &QAbstractButton::clicked, this, &TeamShowWidget::activateTeam);
     //QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
 }
 

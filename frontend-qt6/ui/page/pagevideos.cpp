@@ -208,12 +208,12 @@ QLayout * PageVideos::footerLayoutDefinition()
 
 void PageVideos::connectSignals()
 {
-    connect(filesTable, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClicked(int, int)));
-    connect(filesTable, SIGNAL(cellChanged(int,int)), this, SLOT(cellChanged(int, int)));
-    connect(filesTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(currentCellChanged()));
-    connect(btnPlay,   SIGNAL(clicked()), this, SLOT(playSelectedFile()));
-    connect(btnDelete, SIGNAL(clicked()), this, SLOT(deleteSelectedFiles()));
-    connect(btnOpenDir, SIGNAL(clicked()), this, SLOT(openVideosDirectory()));
+    connect(filesTable, &QTableWidget::cellDoubleClicked, this, &PageVideos::cellDoubleClicked);
+    connect(filesTable, &QTableWidget::cellChanged, this, &PageVideos::cellChanged);
+    connect(filesTable, &QTableWidget::currentCellChanged, this, &PageVideos::currentCellChanged);
+    connect(btnPlay,   &QAbstractButton::clicked, this, &PageVideos::playSelectedFile);
+    connect(btnDelete, &QAbstractButton::clicked, this, &PageVideos::deleteSelectedFiles);
+    connect(btnOpenDir, &QAbstractButton::clicked, this, &PageVideos::openVideosDirectory);
 }
 
 PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
@@ -233,7 +233,7 @@ void PageVideos::init(GameUIConfig * config)
     QString path = cfgdir.absolutePath() + QStringLiteral("/Videos");
     QFileSystemWatcher * pWatcher = new QFileSystemWatcher(this);
     pWatcher->addPath(path);
-    connect(pWatcher, SIGNAL(directoryChanged(const QString &)), this, SLOT(updateFileList(const QString &)));
+    connect(pWatcher, &QFileSystemWatcher::directoryChanged, this, &PageVideos::updateFileList);
     updateFileList(path);
 
     startEncoding(); // this is for videos recorded from demos which were executed directly (without frontend)
@@ -323,9 +323,9 @@ void PageVideos::addRecorder(HWRecorder* pRecorder)
     progressBar->setMinimum(0);
     progressBar->setMaximum(10000);
     progressBar->setValue(0);
-    connect(pRecorder, SIGNAL(onProgress(float)), this, SLOT(updateProgress(float)));
-    connect(pRecorder, SIGNAL(encodingFinished(bool)), this, SLOT(encodingFinished(bool)));
-    connect(pRecorder, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowFatalErrorMessage(const QString &)), Qt::QueuedConnection);
+    connect(pRecorder, &HWRecorder::onProgress, this, &PageVideos::updateProgress);
+    connect(pRecorder, &HWRecorder::encodingFinished, this, &PageVideos::encodingFinished);
+    connect(pRecorder, &HWRecorder::ErrorMessage, this, &PageVideos::ShowFatalErrorMessage, Qt::QueuedConnection);
     filesTable->setCellWidget(row, vcProgress, progressBar);
 
     numRecorders++;

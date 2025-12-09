@@ -61,8 +61,8 @@ HWPasswordDialog::HWPasswordDialog(QWidget* parent) : QDialog(parent)
     QPushButton * pbCancel = dbbButtons->addButton(QDialogButtonBox::Cancel);
     layout->addWidget(dbbButtons, 6, 0);
 
-    connect(pbOK, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(pbOK, &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(pbCancel, &QAbstractButton::clicked, this, &QDialog::reject);
 
     this->setWindowModality(Qt::WindowModal);
 }

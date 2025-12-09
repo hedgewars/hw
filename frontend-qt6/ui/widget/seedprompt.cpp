@@ -62,8 +62,8 @@ SeedPrompt::SeedPrompt(QWidget* parent, const QString & seed, bool editable) : Q
     {
         QPushButton * btnCancel = new QPushButton(tr("Cancel"));
         QPushButton * btnOkay = new QPushButton(tr("Set seed"));
-        connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
-        connect(btnOkay, SIGNAL(clicked()), this, SLOT(accept()));
+        connect(btnCancel, &QAbstractButton::clicked, this, &QDialog::reject);
+        connect(btnOkay, &QAbstractButton::clicked, this, &QDialog::accept);
 #ifdef Q_OS_MAC
         buttonLayout->addWidget(btnCancel);
         buttonLayout->addWidget(btnOkay);
@@ -76,14 +76,14 @@ SeedPrompt::SeedPrompt(QWidget* parent, const QString & seed, bool editable) : Q
     else
     {
         QPushButton * btnClose = new QPushButton(tr("Close"));
-        connect(btnClose, SIGNAL(clicked()), this, SLOT(reject()));
+        connect(btnClose, &QAbstractButton::clicked, this, &QDialog::reject);
         buttonLayout->addWidget(btnClose);
         btnClose->setDefault(true);
     }
 
     setStyleSheet(QStringLiteral("QPushButton { padding: 5px; }"));
 
-    connect(this, SIGNAL(accepted()), this, SLOT(setSeed()));
+    connect(this, &QDialog::accepted, this, &SeedPrompt::setSeed);
 }
 
 void SeedPrompt::setSeed()

@@ -217,8 +217,8 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatText->setOpenLinks(false);
     chatText->setObjectName("chatText");
-    connect(chatText, SIGNAL(anchorClicked(const QUrl&)),
-            this, SLOT(linkClicked(const QUrl&)));
+    connect(chatText, &QTextBrowser::anchorClicked,
+            this, &HWChatWidget::linkClicked);
     leftSide->addWidget(chatText, 1);
 
     // Input box
@@ -232,7 +232,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     chatEditLine->setStyleSheet(QStringLiteral("SmartLineEdit { background-color: rgb(23, 11, 54); padding: 2px 8px; border-width: 0px; border-radius: 7px; } SmartLineEdit:hover, SmartLineEdit:focus { background-color: rgb(13, 5, 68); }"));
     chatEditLine->setFixedHeight(24);
     chatEditLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+    connect(chatEditLine, &QLineEdit::returnPressed, this, &HWChatWidget::returnPressed);
 
     leftSide->addWidget(chatEditLine, 0);
 
@@ -248,10 +248,10 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatNicks->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(chatNicks, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(chatNickDoubleClicked(QModelIndex)));
+    connect(chatNicks, &QAbstractItemView::doubleClicked,
+            this, &HWChatWidget::chatNickDoubleClicked);
 
-    connect(chatNicks, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(nicksContextMenuRequested(QPoint)));
+    connect(chatNicks, &QWidget::customContextMenuRequested, this, &HWChatWidget::nicksContextMenuRequested);
 
     mainLayout.addSpacing(0);
     mainLayout.addWidget(chatNicks, 24);
@@ -261,31 +261,31 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     acInfo = new QAction(QAction::tr("Info"), chatNicks);
     acInfo->setIcon(QIcon(":/res/info.png"));
     acInfo->setData(QVariant(false));
-    connect(acInfo, SIGNAL(triggered(bool)), this, SLOT(onInfo()));
+    connect(acInfo, &QAction::triggered, this, &HWChatWidget::onInfo);
     acKick = new QAction(QAction::tr("Kick"), chatNicks);
     acKick->setIcon(QIcon(":/res/kick.png"));
     acKick->setData(QVariant(false));
-    connect(acKick, SIGNAL(triggered(bool)), this, SLOT(onKick()));
+    connect(acKick, &QAction::triggered, this, &HWChatWidget::onKick);
     acBan = new QAction(QAction::tr("Ban"), chatNicks);
     acBan->setIcon(QIcon(":/res/ban.png"));
     acBan->setData(QVariant(true));
-    connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onBan()));
+    connect(acBan, &QAction::triggered, this, &HWChatWidget::onBan);
     acDelegate = new QAction(QAction::tr("Delegate room control"), chatNicks);
     acDelegate->setIcon(QIcon(":/res/chat/roomadmin.png"));
     acDelegate->setData(QVariant(true));
-    connect(acDelegate, SIGNAL(triggered(bool)), this, SLOT(onDelegate()));
+    connect(acDelegate, &QAction::triggered, this, &HWChatWidget::onDelegate);
     acFollow = new QAction(QAction::tr("Follow"), chatNicks);
     acFollow->setIcon(QIcon(":/res/follow.png"));
     acFollow->setData(QVariant(false));
-    connect(acFollow, SIGNAL(triggered(bool)), this, SLOT(onFollow()));
+    connect(acFollow, &QAction::triggered, this, &HWChatWidget::onFollow);
     acIgnore = new QAction(QAction::tr("Ignore"), chatNicks);
     acIgnore->setIcon(QIcon(":/res/ignore.png"));
     acIgnore->setData(QVariant(true));
-    connect(acIgnore, SIGNAL(triggered(bool)), this, SLOT(onIgnore()));
+    connect(acIgnore, &QAction::triggered, this, &HWChatWidget::onIgnore);
     acFriend = new QAction(QAction::tr("Add friend"), chatNicks);
     acFriend->setIcon(QIcon(":/res/addfriend.png"));
     acFriend->setData(QVariant(true));
-    connect(acFriend, SIGNAL(triggered(bool)), this, SLOT(onFriend()));
+    connect(acFriend, &QAction::triggered, this, &HWChatWidget::onFriend);
 
     chatNicks->insertAction(0, acFriend);
     chatNicks->insertAction(0, acInfo);

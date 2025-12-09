@@ -28,7 +28,7 @@ HWNetUdpServer::HWNetUdpServer(QObject *parent, const QString & descr, quint16 p
 {
     pUdpSocket = new QUdpSocket(this);
     pUdpSocket->bind(NETGAME_DEFAULT_PORT);
-    connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
+    connect(pUdpSocket, &QIODevice::readyRead, this, &HWNetUdpServer::onClientRead);
 }
 
 void HWNetUdpServer::onClientRead()

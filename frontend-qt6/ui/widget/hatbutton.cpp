@@ -28,7 +28,7 @@ HatButton::HatButton(QWidget* parent) : QPushButton(parent)
     setFixedSize(44, 44);
 
     m_hatModel = 0;
-    connect(this, SIGNAL(clicked()), this, SLOT(showPrompt()));
+    connect(this, &QAbstractButton::clicked, this, &HatButton::showPrompt);
 }
 
 void HatButton::setModel(HatModel *model)

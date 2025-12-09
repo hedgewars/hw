@@ -28,7 +28,7 @@ HWNetUdpModel::HWNetUdpModel(QObject* parent) :
     pUdpSocket = new QUdpSocket(this);
 
     pUdpSocket->bind();
-    connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
+    connect(pUdpSocket, &QIODevice::readyRead, this, &HWNetUdpModel::onClientRead);
 }
 
 void HWNetUdpModel::updateList()

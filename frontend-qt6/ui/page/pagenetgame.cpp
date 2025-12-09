@@ -157,12 +157,12 @@ QLayout * PageNetGame::footerLayoutDefinition()
 
 void PageNetGame::connectSignals()
 {
-    connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+    connect(btnSetup, &QAbstractButton::clicked, this, &PageNetGame::SetupClicked);
 
-    connect(BtnUpdate, SIGNAL(clicked()), this, SLOT(onUpdateClick()));
-    connect(leRoomName, SIGNAL(returnPressed()), this, SLOT(onUpdateClick()));
+    connect(BtnUpdate, &QAbstractButton::clicked, this, &PageNetGame::onUpdateClick);
+    connect(leRoomName, &QLineEdit::returnPressed, this, &PageNetGame::onUpdateClick);
 
-    connect(leRoomName, SIGNAL(textChanged(const QString &)), this, SLOT(onRoomNameEdited()));
+    connect(leRoomName, &QLineEdit::textChanged, this, &PageNetGame::onRoomNameEdited);
 }
 
 PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)

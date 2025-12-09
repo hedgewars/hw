@@ -28,7 +28,7 @@ QPushButtonWithSound::QPushButtonWithSound(QWidget *parent) :
     QPushButton(parent),
     isSoundEnabled(true)
 {
-    connect(this, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+    connect(this, &QAbstractButton::clicked, this, &QPushButtonWithSound::buttonClicked);
 }
 
 void QPushButtonWithSound::buttonClicked()

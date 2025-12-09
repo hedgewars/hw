@@ -47,7 +47,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     tbw = new QTabWidget();
     QWidget * page1 = new QWidget(this);
     binder = new KeyBinder(this, tr("Select an action to choose a custom key bind for this team"), tr("Use my default"), tr("Reset all binds"));
-    connect(binder, SIGNAL(resetAllBinds()), this, SLOT(resetAllBinds()));
+    connect(binder, &KeyBinder::resetAllBinds, this, &PageEditTeam::resetAllBinds);
     tbw->addTab(page1, tr("General"));
     tbw->addTab(binder, tr("Custom Controls"));
     pageLayout->addWidget(tbw, 0, 0, 1, 3);
@@ -256,7 +256,7 @@ QLayout * PageEditTeam::footerLayoutDefinition()
 
 void PageEditTeam::connectSignals()
 {
-    connect(this, SIGNAL(pageLeave()), this, SLOT(saveTeam()));
+    connect(this, &AbstractPage::pageLeave, this, &PageEditTeam::saveTeam);
 
     signalMapper1 = new QSignalMapper(this);
     signalMapper2 = new QSignalMapper(this);
@@ -273,21 +273,21 @@ void PageEditTeam::connectSignals()
         signalMapper2->setMapping(btnRandomHogName[i], i);
     }
 
-    connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomTeam()));
-    connect(btnRandomNames, SIGNAL(clicked()), this, SLOT(setRandomHogNames()));
-    connect(btnRandomHats, SIGNAL(clicked()), this, SLOT(setRandomHats()));
+    connect(btnRandomTeam, &QAbstractButton::clicked, this, &PageEditTeam::setRandomTeam);
+    connect(btnRandomNames, &QAbstractButton::clicked, this, &PageEditTeam::setRandomHogNames);
+    connect(btnRandomHats, &QAbstractButton::clicked, this, &PageEditTeam::setRandomHats);
 
-    connect(CBTeamLvl, SIGNAL(currentIndexChanged(const int)), this, SLOT(CBTeamLvl_activated(const int)));
+    connect(CBTeamLvl, &QComboBox::currentIndexChanged, this, &PageEditTeam::CBTeamLvl_activated);
 
-    connect(btnRandomTeamName, SIGNAL(clicked()), this, SLOT(setRandomTeamName()));
-    connect(btnRandomGrave, SIGNAL(clicked()), this, SLOT(setRandomGrave()));
-    connect(btnRandomFlag, SIGNAL(clicked()), this, SLOT(setRandomFlag()));
-    connect(btnRandomVoice, SIGNAL(clicked()), this, SLOT(setRandomVoice()));
-    connect(btnRandomFort, SIGNAL(clicked()), this, SLOT(setRandomFort()));
+    connect(btnRandomTeamName, &QAbstractButton::clicked, this, &PageEditTeam::setRandomTeamName);
+    connect(btnRandomGrave, &QAbstractButton::clicked, this, &PageEditTeam::setRandomGrave);
+    connect(btnRandomFlag, &QAbstractButton::clicked, this, &PageEditTeam::setRandomFlag);
+    connect(btnRandomVoice, &QAbstractButton::clicked, this, &PageEditTeam::setRandomVoice);
+    connect(btnRandomFort, &QAbstractButton::clicked, this, &PageEditTeam::setRandomFort);
 
-    connect(btnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
+    connect(btnTestSound, &QAbstractButton::clicked, this, &PageEditTeam::testSound);
 
-    connect(CBFort, SIGNAL(currentIndexChanged(const int)), this, SLOT(CBFort_activated(const int)));
+    connect(CBFort, &QComboBox::currentIndexChanged, this, &PageEditTeam::CBFort_activated);
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :

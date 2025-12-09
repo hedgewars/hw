@@ -78,7 +78,7 @@ QLayout * PageMultiplayer::footerLayoutDefinition()
 
 void PageMultiplayer::connectSignals()
 {
-    PageMultiplayer::connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+    PageMultiplayer::connect(btnSetup, &QAbstractButton::clicked, this, &PageMultiplayer::SetupClicked);
 }
 
 PageMultiplayer::PageMultiplayer(QWidget* parent) : AbstractPage(parent)

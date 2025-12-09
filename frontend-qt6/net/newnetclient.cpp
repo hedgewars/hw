@@ -62,13 +62,13 @@ HWNewNet::HWNewNet() :
     m_roomPlayersModel->setFilterFixedString(QStringLiteral("true"));
 
     // socket stuff
-    connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
-    connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
-    connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
+    connect(&NetSocket, &QIODevice::readyRead, this, &HWNewNet::ClientRead);
+    connect(&NetSocket, &QAbstractSocket::connected, this, &HWNewNet::OnConnect);
+    connect(&NetSocket, &QAbstractSocket::disconnected, this, &HWNewNet::OnDisconnect);
     connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(displayError(QAbstractSocket::SocketError)));
 
-    connect(this, SIGNAL(messageProcessed()), this, SLOT(ClientRead()), Qt::QueuedConnection);
+    connect(this, &HWNewNet::messageProcessed, this, &HWNewNet::ClientRead, Qt::QueuedConnection);
 }
 
 HWNewNet::~HWNewNet()

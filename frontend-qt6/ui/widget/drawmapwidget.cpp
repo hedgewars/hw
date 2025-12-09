@@ -55,8 +55,8 @@ void DrawMapWidget::setScene(DrawMapScene * scene)
     m_scene = scene;
 
     ui->graphicsView->setScene(scene);
-    connect(scene, SIGNAL(pathChanged()), this, SLOT(pathChanged()));
-    connect(scene, SIGNAL(brushSizeChanged(int)), this, SLOT(brushSizeChanged_slot(int)));
+    connect(scene, &DrawMapScene::pathChanged, this, &DrawMapWidget::pathChanged);
+    connect(scene, &DrawMapScene::brushSizeChanged, this, &DrawMapWidget::brushSizeChanged_slot);
 }
 
 void DrawMapWidget::resizeEvent(QResizeEvent * event)

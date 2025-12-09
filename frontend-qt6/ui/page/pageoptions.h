@@ -149,60 +149,62 @@ class PageOptions : public AbstractPage
 
 
     private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
-        int resetBindToDefault(int bindID);
-        void setupTabPage(QWidget * tabpage, QVBoxLayout ** leftColumn, QVBoxLayout ** rightColumn);
+     QLayout *bodyLayoutDefinition() override;
+     QLayout *footerLayoutDefinition() override;
+     void connectSignals() override;
+     int resetBindToDefault(int bindID);
+     void setupTabPage(QWidget *tabpage, QVBoxLayout **leftColumn,
+                       QVBoxLayout **rightColumn);
 
-        bool previousFullscreenValue;
-        int previousResolutionIndex;
-        int previousQuality;
-        QLabel *LblNoEditTeam;
-        QPushButton *BtnNewTeam;
-        QPushButton *BtnEditTeam;
-        QPushButton *BtnDeleteTeam;
-        QList<QPushButton *> m_colorButtons;
+     bool previousFullscreenValue;
+     int previousResolutionIndex;
+     int previousQuality;
+     QLabel *LblNoEditTeam;
+     QPushButton *BtnNewTeam;
+     QPushButton *BtnEditTeam;
+     QPushButton *BtnDeleteTeam;
+     QList<QPushButton *> m_colorButtons;
 
-        QComboBox *comboAVFormats;
-        QComboBox *comboVideoCodecs;
-        QComboBox *comboAudioCodecs;
-        QPushButton *btnDefaults;
-        QPushButton *btnUpdateNow;
-        GameUIConfig * config;
-        KeyBinder * binder;
-        int currentTab;
-        int binderTab;
+     QComboBox *comboAVFormats;
+     QComboBox *comboVideoCodecs;
+     QComboBox *comboAudioCodecs;
+     QPushButton *btnDefaults;
+     QPushButton *btnUpdateNow;
+     GameUIConfig *config;
+     KeyBinder *binder;
+     int currentTab;
+     int binderTab;
 
-        QLabel * lblFullScreenRes;
-        QLabel * lblWinScreenRes;
-        QLabel * lblTags;
-        QWidget * winResContainer;
-        QWidget * tagsContainer;
+     QLabel *lblFullScreenRes;
+     QLabel *lblWinScreenRes;
+     QLabel *lblTags;
+     QWidget *winResContainer;
+     QWidget *tagsContainer;
 
     private Q_SLOTS:
-        void forceFullscreen(int index);
-        void setFullscreen(int state);
-        void setResolution(int state);
-        void setQuality(int value);
-        void trimNetNick();
-        void requestEditSelectedTeam();
-        void requestDeleteSelectedTeam();
-        void savePwdChanged(int state);
-        void colorButtonClicked(int i);
-        void onColorModelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
-        void onProxyTypeChanged();
-        void changeAVFormat(int index);
-        void changeUseGameRes(int state);
-        void changeRecordAudio(int state);
-        void checkForUpdates();
-        void tabIndexChanged(int);
-        void bindUpdated(int bindID);
-        void resetAllBinds();
-        void setVolume(int);
+     void forceFullscreen(int index);
+     void setFullscreen(bool state);
+     void setResolution(int state);
+     void setQuality(int value);
+     void trimNetNick();
+     void requestEditSelectedTeam();
+     void requestDeleteSelectedTeam();
+     void savePwdChanged(bool state);
+     void colorButtonClicked(int i);
+     void onColorModelDataChanged(const QModelIndex &topLeft,
+                                  const QModelIndex &bottomRight);
+     void onProxyTypeChanged();
+     void changeAVFormat(int index);
+     void changeUseGameRes(int state);
+     void changeRecordAudio(int state);
+     void checkForUpdates();
+     void tabIndexChanged(int);
+     void bindUpdated(int bindID);
+     void resetAllBinds();
+     void setVolume(int);
 
     public Q_SLOTS:
-        void setDefaultOptions();
+     void setDefaultOptions();
 };
 
 #endif

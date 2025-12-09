@@ -96,7 +96,7 @@ QLayout * PageNet::footerLayoutDefinition()
 
 void PageNet::connectSignals()
 {
-    connect(BtnNetConnect, SIGNAL(clicked()), this, SLOT(slotConnect()));
+    connect(BtnNetConnect, &QAbstractButton::clicked, this, &PageNet::slotConnect);
 }
 
 PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
@@ -113,8 +113,8 @@ void PageNet::updateServersList()
 
     static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
 
-    connect(BtnUpdateSList, SIGNAL(clicked()), static_cast<HWNetServersModel *>(tvServersList->model()), SLOT(updateList()));
-    connect(tvServersList, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotConnect()));
+    connect(BtnUpdateSList, &QAbstractButton::clicked, static_cast<HWNetServersModel *>(tvServersList->model()), &HWNetServersModel::updateList);
+    connect(tvServersList, &QAbstractItemView::doubleClicked, this, &PageNet::slotConnect);
 }
 
 void PageNet::slotConnect()

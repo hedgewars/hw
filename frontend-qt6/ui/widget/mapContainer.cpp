@@ -130,8 +130,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     cType->insertItem(5, tr("Random perlin"), MapModel::GeneratedPerlin);
     cType->insertItem(6, tr("Forts"), MapModel::FortsMap);
     cType->insertItem(7, tr("WFC"), MapModel::WfcMap);
-    connect(cType, SIGNAL(currentIndexChanged(int)), this,
-            SLOT(mapTypeChanged(int)));
+    connect(cType, &QComboBox::currentIndexChanged, this,
+            &HWMapContainer::mapTypeChanged);
     m_childWidgets << cType;
 
     /* Randomize button */
@@ -146,7 +146,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnRandomize->setIconSize(sz);
     btnRandomize->setFlat(true);
     btnRandomize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(btnRandomize, SIGNAL(clicked()), this, SLOT(setRandomMap()));
+    connect(btnRandomize, &QAbstractButton::clicked, this, &HWMapContainer::setRandomMap);
 
     m_childWidgets << btnRandomize;
     btnRandomize->setStyleSheet(QStringLiteral("padding: 5px;"));
@@ -161,7 +161,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnSeed->setWhatsThis(tr("View and edit the seed, the source of randomness in the game"));
     btnSeed->setStyleSheet(QStringLiteral("padding: 5px;"));
     btnSeed->setFixedHeight(cType->height());
-    connect(btnSeed, SIGNAL(clicked()), this, SLOT(showSeedPrompt()));
+    connect(btnSeed, &QAbstractButton::clicked, this, &HWMapContainer::showSeedPrompt);
     topLayout->addWidget(btnSeed, 0);
 
     /* Map preview label */
@@ -179,7 +179,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapPreview->setFixedSize(256 + 6, 128 + 6);
     mapPreview->setContentsMargins(0, 0, 0, 0);
     leftLayout->addWidget(mapPreview, 0);
-    connect(mapPreview, SIGNAL(clicked()), this, SLOT(previewClicked()));
+    connect(mapPreview, &QAbstractButton::clicked, this, &HWMapContainer::previewClicked);
     m_childWidgets << mapPreview;
 
     /* Bottom-Left layout */
@@ -245,7 +245,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnLoadMap->setFlat(true);
     drawnControls->addWidget(btnLoadMap, 0);
     m_childWidgets << btnLoadMap;
-    connect(btnLoadMap, SIGNAL(clicked()), this, SLOT(loadDrawing()));
+    connect(btnLoadMap, &QAbstractButton::clicked, this, &HWMapContainer::loadDrawing);
 
     QPixmap pmEdit(QStringLiteral(":/res/edit.png"));
     QIcon iconEdit = QIcon(pmEdit);
@@ -261,7 +261,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnEditMap->setFlat(true);
     drawnControls->addWidget(btnEditMap, 0);
     m_childWidgets << btnEditMap;
-    connect(btnEditMap, SIGNAL(clicked()), this, SIGNAL(drawMapRequested()));
+    connect(btnEditMap, &QAbstractButton::clicked, this, &HWMapContainer::drawMapRequested);
 
     drawnControls->addStretch(1);
 
@@ -276,7 +276,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     new QListWidgetItem(tr("Large"), generationStyles);
     new QListWidgetItem(tr("Cavern"), generationStyles);
     new QListWidgetItem(tr("Wacky"), generationStyles);
-    connect(generationStyles, SIGNAL(currentRowChanged(int)), this, SLOT(setTemplateFilter(int)));
+    connect(generationStyles, &QListWidget::currentRowChanged, this, &HWMapContainer::setTemplateFilter);
     m_childWidgets << generationStyles;
     rightLayout->addWidget(generationStyles, 1);
 
@@ -289,7 +289,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     new QListWidgetItem(tr("Small islands"), mazeStyles);
     new QListWidgetItem(tr("Medium islands"), mazeStyles);
     new QListWidgetItem(tr("Large islands"), mazeStyles);
-    connect(mazeStyles, SIGNAL(currentRowChanged(int)), this, SLOT(setMazeSize(int)));
+    connect(mazeStyles, &QListWidget::currentRowChanged, this, &HWMapContainer::setMazeSize);
     m_childWidgets << mazeStyles;
     rightLayout->addWidget(mazeStyles, 1);
 
@@ -303,7 +303,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapFeatureSize->setValue(m_mapFeatureSize);
     mapFeatureSize->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     bottomLeftLayout->addWidget(mapFeatureSize, 0);
-    connect(mapFeatureSize, SIGNAL(valueChanged(int)), this, SLOT(setFeatureSize(int)));
+    connect(mapFeatureSize, &QAbstractSlider::valueChanged, this, &HWMapContainer::setFeatureSize);
     m_childWidgets << mapFeatureSize;
 
     /* Mission description */
@@ -328,7 +328,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnRandTheme->setIconSize(QSize(24, 24));
     btnRandTheme->setFixedHeight(30);
     btnRandTheme->setFixedWidth(30);
-    connect(btnRandTheme, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
+    connect(btnRandTheme, &QAbstractButton::clicked, this, &HWMapContainer::setRandomTheme);
     m_childWidgets << btnRandTheme;
     themeHBox->addWidget(btnRandTheme, 0);
 
@@ -338,7 +338,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnTheme->setIconSize(QSize(30, 30));
     btnTheme->setFixedHeight(30);
     btnTheme->setMaximumWidth(222);
-    connect(btnTheme, SIGNAL(clicked()), this, SLOT(showThemePrompt()));
+    connect(btnTheme, &QAbstractButton::clicked, this, &HWMapContainer::showThemePrompt);
     m_childWidgets << btnTheme;
     themeHBox->addWidget(btnTheme, 1);
 
@@ -439,9 +439,9 @@ void HWMapContainer::addInfoToPreview(const QPixmap &image, const QLinearGradien
 void HWMapContainer::askForGeneratedPreview()
 {
     pMap = new HWMap(this);
-    connect(pMap, SIGNAL(ImageReceived(QPixmap)), this, SLOT(onImageReceived(const QPixmap)));
-    connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
-    connect(pMap, SIGNAL(destroyed(QObject *)), this, SLOT(onPreviewMapDestroyed(QObject *)));
+    connect(pMap, &HWMap::ImageReceived, this, &HWMapContainer::onImageReceived);
+    connect(pMap, &HWMap::HHLimitReceived, this, &HWMapContainer::setHHLimit);
+    connect(pMap, &QObject::destroyed, this, &HWMapContainer::onPreviewMapDestroyed);
     pMap->getImage(m_seed,
                    getTemplateFilter(),
                    get_mapgen(),
@@ -1279,7 +1279,7 @@ void HWMapContainer::loadDrawing()
 void HWMapContainer::showSeedPrompt()
 {
     SeedPrompt prompt(parentWidget()->parentWidget(), getCurrentSeed(), isMaster());
-    connect(&prompt, SIGNAL(seedSelected(const QString &)), this, SLOT(setNewSeed(const QString &)));
+    connect(&prompt, &SeedPrompt::seedSelected, this, &HWMapContainer::setNewSeed);
     prompt.exec();
 }
 
@@ -1368,9 +1368,9 @@ void HWMapContainer::setupMissionMapsView(const QString & initialMap)
     missionMapList->setEditTriggers(QAbstractItemView::NoEditTriggers);
     QItemSelectionModel * missionSelectionModel = missionMapList->selectionModel();
     connect(missionSelectionModel,
-            SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
+            &QItemSelectionModel::currentRowChanged,
             this,
-            SLOT(missionMapChanged(const QModelIndex &, const QModelIndex &)));
+            &HWMapContainer::missionMapChanged);
     int m = 0;
     if(!initialMap.isNull())
         m = m_missionMapModel->findMap(initialMap);
@@ -1387,9 +1387,9 @@ void HWMapContainer::setupStaticMapsView(const QString & initialMap)
     staticMapList->setEditTriggers(QAbstractItemView::NoEditTriggers);
     QItemSelectionModel * staticSelectionModel = staticMapList->selectionModel();
     connect(staticSelectionModel,
-            SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
+            &QItemSelectionModel::currentRowChanged,
             this,
-            SLOT(staticMapChanged(const QModelIndex &, const QModelIndex &)));
+            &HWMapContainer::staticMapChanged);
     int m = 0;
     if(!initialMap.isNull())
         m = m_staticMapModel->findMap(initialMap);

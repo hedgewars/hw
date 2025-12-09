@@ -190,20 +190,20 @@ QLayout * PageRoomsList::footerLayoutDefinition()
 
 void PageRoomsList::connectSignals()
 {
-    connect(chatWidget, SIGNAL(nickCountUpdate(const int)), this, SLOT(updateNickCounter(const int)));
+    connect(chatWidget, &HWChatWidget::nickCountUpdate, this, &PageRoomsList::updateNickCounter);
 
-    connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
-    connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
+    connect(BtnCreate, &QAbstractButton::clicked, this, &PageRoomsList::onCreateClick);
+    connect(BtnJoin, &QAbstractButton::clicked, this, &PageRoomsList::onJoinClick);
     connect(searchText, SIGNAL(moveUp()), this, SLOT(moveSelectionUp()));
     connect(searchText, SIGNAL(moveDown()), this, SLOT(moveSelectionDown()));
-    connect(searchText, SIGNAL(returnPressed()), this, SLOT(onJoinClick()));
+    connect(searchText, &QLineEdit::returnPressed, this, &PageRoomsList::onJoinClick);
     connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
     connect(roomsList, SIGNAL(clicked (const QModelIndex &)), searchText, SLOT(setFocus()));
-    connect(showGamesInLobby, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
-    connect(showGamesInProgress, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
-    connect(showPassword, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
-    connect(showJoinRestricted, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
-    connect(showIncompatible, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
+    connect(showGamesInLobby, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
+    connect(showGamesInProgress, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
+    connect(showPassword, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
+    connect(showJoinRestricted, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
+    connect(showIncompatible, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
 
@@ -211,8 +211,8 @@ void PageRoomsList::connectSignals()
     connect(this, SIGNAL(pageEnter()), searchText, SLOT(setFocus()));
 
     // sorting
-    connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-            this, SLOT(onSortIndicatorChanged(int, Qt::SortOrder)));
+    connect(roomsList->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+            this, &PageRoomsList::onSortIndicatorChanged);
 }
 
 void PageRoomsList::moveSelectionUp()
@@ -593,7 +593,7 @@ void PageRoomsList::setModel(RoomsListModel * model)
         connect(roomsModel, SIGNAL(layoutChanged()), roomsList, SLOT(repaint()));
 
         // When a selection changes
-        connect(roomsList->selectionModel(), SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(roomSelectionChanged(const QModelIndex &, const QModelIndex &)));
+        connect(roomsList->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &PageRoomsList::roomSelectionChanged);
     }
 
     versionFilteredModel->setSourceModel(model);

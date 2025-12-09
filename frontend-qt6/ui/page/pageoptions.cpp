@@ -90,8 +90,8 @@ QLayout * PageOptions::bodyLayoutDefinition()
     pageLayout->addWidget(tabs);
 
     binder = new KeyBinder(this, tr("Select an action to change what key controls it"), tr("Reset to default"), tr("Reset all binds"));
-    connect(binder, SIGNAL(bindUpdate(int)), this, SLOT(bindUpdated(int)));
-    connect(binder, SIGNAL(resetAllBinds()), this, SLOT(resetAllBinds()));
+    connect(binder, &KeyBinder::bindUpdate, this, &PageOptions::bindUpdated);
+    connect(binder, &KeyBinder::resetAllBinds, this, &PageOptions::resetAllBinds);
 
     QWidget * pageGame = new QWidget(this);
     tabs->addTab(pageGame, tr("Game"));
@@ -115,7 +115,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
     QWidget * pageAdvanced = new QWidget(this);
     tabs->addTab(pageAdvanced, tr("Advanced"));
 
-    connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(tabIndexChanged(int)));
+    connect(tabs, &QTabWidget::currentChanged, this, &PageOptions::tabIndexChanged);
 
     QPixmap pmNew(QStringLiteral(":/res/new.png"));
     QPixmap pmEdit(QStringLiteral(":/res/edit.png"));
@@ -143,7 +143,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnNewTeam->setIcon(pmNew);
             BtnNewTeam->setMaximumWidth(pmNew.width() + 6);
             BtnNewTeam->setStyleSheet(QStringLiteral("padding: 0px;"));
-            connect(BtnNewTeam, SIGNAL(clicked()), this, SIGNAL(newTeamRequested()));
+            connect(BtnNewTeam, &QAbstractButton::clicked, this, &PageOptions::newTeamRequested);
             groupTeams->layout()->addWidget(BtnNewTeam, 0, 1);
 
             BtnEditTeam = new QPushButton(groupTeams);
@@ -152,7 +152,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnEditTeam->setIcon(pmEdit);
             BtnEditTeam->setMaximumWidth(pmEdit.width() + 6);
             BtnEditTeam->setStyleSheet(QStringLiteral("padding: 0px;"));
-            connect(BtnEditTeam, SIGNAL(clicked()), this, SLOT(requestEditSelectedTeam()));
+            connect(BtnEditTeam, &QAbstractButton::clicked, this, &PageOptions::requestEditSelectedTeam);
             groupTeams->layout()->addWidget(BtnEditTeam, 0, 2);
 
             BtnDeleteTeam = new QPushButton(groupTeams);
@@ -161,7 +161,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnDeleteTeam->setIcon(pmDelete);
             BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
             BtnDeleteTeam->setStyleSheet(QStringLiteral("padding: 0px;"));
-            connect(BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(requestDeleteSelectedTeam()));
+            connect(BtnDeleteTeam, &QAbstractButton::clicked, this, &PageOptions::requestDeleteSelectedTeam);
             groupTeams->layout()->addWidget(BtnDeleteTeam, 0, 3);
 
             LblNoEditTeam = new QLabel(groupTeams);
@@ -476,7 +476,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             QSignalMapper * mapper = new QSignalMapper(this);
             QStandardItemModel * model = DataManager::instance().colorsModel();
 
-            connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onColorModelDataChanged(QModelIndex,QModelIndex)));
+            connect(model, &QAbstractItemModel::dataChanged, this, &PageOptions::onColorModelDataChanged);
             for(int i = 0; i < model->rowCount(); ++i)
             {
                 QPushButton * btn = new QPushButton(this);
@@ -495,7 +495,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             QPushButton * btn = new QPushButton(this);
             groupColors->layout()->addWidget(btn, (model->rowCount() - 1) / 3 + 1, 0, 1, 3);
             btn->setText(tr("Reset to default colors"));
-            connect(btn, SIGNAL(clicked()), &DataManager::instance(), SLOT(resetColors()));
+            connect(btn, &QAbstractButton::clicked, &DataManager::instance(), &DataManager::resetColors);
         }
 
         leftColumn->addStretch(1);
@@ -649,7 +649,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupProxy->layout()->addWidget(leProxyPassword, 4, 1);
 
 
-            connect(cbProxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged()));
+            connect(cbProxyType, &QComboBox::currentIndexChanged, this, &PageOptions::onProxyTypeChanged);
             onProxyTypeChanged();
         }
 
@@ -919,13 +919,15 @@ void PageOptions::connectSignals()
     connect(btnDefaults, SIGNAL(clicked()), this, SLOT(setDefaultOptions()));
 #endif
     //connect(this, SIGNAL(pageEnter()), this, SLOT(setTeamOptionsEnabled()));
-    connect(SLVolume, SIGNAL(valueChanged(int)), this, SLOT(setVolume(int)));
-    connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
-    connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
-    connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));
-    connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
-    connect(editNetNick, SIGNAL(editingFinished()), this, SLOT(trimNetNick()));
-    connect(CBSavePassword, SIGNAL(stateChanged(int)), this, SLOT(savePwdChanged(int)));
+    connect(SLVolume, &QAbstractSlider::valueChanged, this, &PageOptions::setVolume);
+    connect(SLQuality, &QAbstractSlider::valueChanged, this, &PageOptions::setQuality);
+    connect(CBResolution, &QComboBox::currentIndexChanged, this, &PageOptions::setResolution);
+    connect(CBFullscreen, &QCheckBox::checkStateChanged, this,
+            &PageOptions::setFullscreen);
+    connect(CBStereoMode, &QComboBox::currentIndexChanged, this, &PageOptions::forceFullscreen);
+    connect(editNetNick, &QLineEdit::editingFinished, this, &PageOptions::trimNetNick);
+    connect(CBSavePassword, &QCheckBox::checkStateChanged, this,
+            &PageOptions::savePwdChanged);
 }
 
 void PageOptions::setVolume(int volume)
@@ -984,20 +986,19 @@ void PageOptions::setQuality(int value)
         previousQuality = this->SLQuality->value();
 }
 
-void PageOptions::setFullscreen(int state)
-{
-    Q_UNUSED(state);
+void PageOptions::setFullscreen(bool state) {
+  Q_UNUSED(state);
 
-    lblFullScreenRes->setVisible(state);
-    CBResolution->setVisible(state);
-    lblWinScreenRes->setVisible(!state);
-    windowWidthEdit->setVisible(!state);
-    windowHeightEdit->setVisible(!state);
-    winLabelX->setVisible(!state);
+  lblFullScreenRes->setVisible(state);
+  CBResolution->setVisible(state);
+  lblWinScreenRes->setVisible(!state);
+  windowWidthEdit->setVisible(!state);
+  windowHeightEdit->setVisible(!state);
+  winLabelX->setVisible(!state);
 
-    int index = this->CBStereoMode->currentIndex();
-    if (index != 7 && index != 8 && index != 9)
-        previousFullscreenValue = this->CBFullscreen->isChecked();
+  int index = this->CBStereoMode->currentIndex();
+  if (index != 7 && index != 8 && index != 9)
+    previousFullscreenValue = this->CBFullscreen->isChecked();
 }
 
 void PageOptions::setResolution(int state)
@@ -1014,12 +1015,12 @@ void PageOptions::trimNetNick()
     editNetNick->setText(editNetNick->text().trimmed());
 }
 
-void PageOptions::savePwdChanged(int state) {
-    if (state == 0) {
-        editNetPassword->setEnabled(false);
-        editNetPassword->setText(QLatin1String(""));
-    } else
-        editNetPassword->setEnabled(true);
+void PageOptions::savePwdChanged(bool state) {
+  if (!state) {
+    editNetPassword->setEnabled(false);
+    editNetPassword->setText(QLatin1String(""));
+  } else
+    editNetPassword->setEnabled(true);
 }
 
 void PageOptions::requestEditSelectedTeam()

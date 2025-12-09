@@ -53,55 +53,54 @@
 #include <QParallelAnimationGroup>
 #endif
 
-#include "hwform.h"
-#include "game.h"
-#include "team.h"
-#include "mission.h"
+#include "AutoUpdater.h"
+#include "DataManager.h"
+#include "MessageDialog.h"
+#include "bgwidget.h"
 #include "campaign.h"
-#include "teamselect.h"
-#include "selectWeapon.h"
-#include "gameuiconfig.h"
-#include "pageinfo.h"
-#include "pagetraining.h"
-#include "pagesingleplayer.h"
-#include "pageselectweapon.h"
-#include "pageadmin.h"
-#include "pagecampaign.h"
-#include "pagescheme.h"
-#include "pagenetgame.h"
-#include "pageroomslist.h"
-#include "pageconnecting.h"
-#include "pageoptions.h"
-#include "pageeditteam.h"
-#include "pagemultiplayer.h"
-#include "pagenet.h"
-#include "pagemain.h"
-#include "pagenetserver.h"
-#include "pagedrawmap.h"
-#include "pagegamestats.h"
-#include "pageplayrecord.h"
-#include "pagedata.h"
-#include "pagevideos.h"
-#include "hwconsts.h"
-#include "newnetclient.h"
-#include "gamecfgwidget.h"
-#include "netserverslist.h"
-#include "netudpserver.h"
 #include "chatwidget.h"
+#include "drawmapwidget.h"
+#include "feedbackdialog.h"
+#include "game.h"
+#include "gameSchemeModel.h"
+#include "gamecfgwidget.h"
+#include "gameuiconfig.h"
+#include "hwconsts.h"
+#include "hwform.h"
 #include "input_ip.h"
 #include "input_password.h"
-#include "gameSchemeModel.h"
-#include "bgwidget.h"
-#include "drawmapwidget.h"
+#include "mission.h"
 #include "mouseoverfilter.h"
-#include "roomslistmodel.h"
-#include "recorder.h"
+#include "netserverslist.h"
+#include "netudpserver.h"
+#include "newnetclient.h"
+#include "pageadmin.h"
+#include "pagecampaign.h"
+#include "pageconnecting.h"
+#include "pagedata.h"
+#include "pagedrawmap.h"
+#include "pageeditteam.h"
+#include "pagegamestats.h"
+#include "pageinfo.h"
+#include "pagemain.h"
+#include "pagemultiplayer.h"
+#include "pagenet.h"
+#include "pagenetgame.h"
+#include "pagenetserver.h"
+#include "pageoptions.h"
+#include "pageplayrecord.h"
+#include "pageroomslist.h"
+#include "pagescheme.h"
+#include "pageselectweapon.h"
+#include "pagesingleplayer.h"
+#include "pagetraining.h"
+#include "pagevideos.h"
 #include "playerslistmodel.h"
-#include "feedbackdialog.h"
-
-#include "MessageDialog.h"
-#include "DataManager.h"
-#include "AutoUpdater.h"
+#include "recorder.h"
+#include "roomslistmodel.h"
+#include "selectWeapon.h"
+#include "team.h"
+#include "teamselect.h"
 
 #ifdef Q_OS_WIN
 #ifndef WINVER
@@ -213,7 +212,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #else
     // ctrl+q closes frontend for consistency
     QShortcut * closeFrontend = new QShortcut(QKeySequence(QStringLiteral("Ctrl+Q")), this);
-    connect (closeFrontend, SIGNAL(activated()), this, SLOT(close()));
+    connect(closeFrontend, &QShortcut::activated, this, &QWidget::close);
     //QShortcut * updateData = new QShortcut(QKeySequence("F5"), this);
     //connect (updateData, SIGNAL(activated()), &DataManager::instance(), SLOT(reload()));
 #endif
@@ -243,7 +242,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
 
-    connect(ui.pageMain->BtnFeedback, SIGNAL(clicked()), this, SLOT(showFeedbackDialog()));
+    connect(ui.pageMain->BtnFeedback, &QAbstractButton::clicked, this,
+            &HWForm::showFeedbackDialog);
 
     connect(ui.pageMain->BtnTitle, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnTitle, ID_PAGE_INFO);
@@ -254,7 +254,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnDataDownload, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnDataDownload, ID_PAGE_DATADOWNLOAD);
 
-    connect(ui.pageMain->BtnHelp, SIGNAL(clicked()), this, SLOT(GoToHelp()));
+    connect(ui.pageMain->BtnHelp, &QAbstractButton::clicked, this,
+            &HWForm::GoToHelp);
 
 #ifdef VIDEOREC
     connect(ui.pageMain->BtnVideos, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
@@ -264,61 +265,91 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     //connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     //connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
-    connect(ui.pageEditTeam, SIGNAL(goBack()), this, SLOT(AfterTeamEdit()));
+    connect(ui.pageEditTeam, &AbstractPage::goBack, this,
+            &HWForm::AfterTeamEdit);
 
-    connect(ui.pageMultiplayer->BtnStartMPGame, SIGNAL(clicked()), this, SLOT(StartMPGame()));
-    connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
-            ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
-    connect(ui.pageMultiplayer, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
-    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
-    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToWeapons(int)));
+    connect(ui.pageMultiplayer->BtnStartMPGame, &QAbstractButton::clicked, this,
+            &HWForm::StartMPGame);
+    connect(ui.pageMultiplayer->teamsSelect,
+            &TeamSelWidget::setEnabledGameStart,
+            ui.pageMultiplayer->BtnStartMPGame, &QWidget::setEnabled);
+    connect(ui.pageMultiplayer, &PageMultiplayer::SetupClicked, this,
+            &HWForm::IntermediateSetup);
+    connect(ui.pageMultiplayer->gameCFG, &GameCFGWidget::goToSchemes, this,
+            &HWForm::GoToScheme);
+    connect(ui.pageMultiplayer->gameCFG, &GameCFGWidget::goToWeapons, this,
+            &HWForm::GoToWeapons);
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMultiplayer->gameCFG, ID_PAGE_DRAWMAP);
 
-
-    connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
+    connect(ui.pagePlayDemo->BtnPlayDemo, &QAbstractButton::clicked, this,
+            &HWForm::PlayDemo);
     connect(ui.pagePlayDemo->DemosList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(PlayDemo()));
 
-    connect(ui.pageOptions, SIGNAL(newTeamRequested()), this, SLOT(NewTeam()));
-    connect(ui.pageOptions, SIGNAL(editTeamRequested(const QString&)), this, SLOT(EditTeam(const QString&)));
-    connect(ui.pageOptions, SIGNAL(deleteTeamRequested(const QString&)), this, SLOT(DeleteTeam(const QString&)));
-    connect(ui.pageOptions, SIGNAL(goBack()), config, SLOT(SaveOptions()));
-    connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
+    connect(ui.pageOptions, &PageOptions::newTeamRequested, this,
+            &HWForm::NewTeam);
+    connect(ui.pageOptions, &PageOptions::editTeamRequested, this,
+            &HWForm::EditTeam);
+    connect(ui.pageOptions, &PageOptions::deleteTeamRequested, this,
+            &HWForm::DeleteTeam);
+    connect(ui.pageOptions, &AbstractPage::goBack, config,
+            &GameUIConfig::SaveOptions);
+    connect(ui.pageOptions->BtnAssociateFiles, &QAbstractButton::clicked, this,
+            &HWForm::AssociateFiles);
 
-    connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToEditWeapons()));
-    connect(ui.pageOptions->WeaponNew, SIGNAL(clicked()), this, SLOT(GoToNewWeapons()));
-    connect(ui.pageOptions->WeaponDelete, SIGNAL(clicked()), this, SLOT(DeleteWeaponSet()));
-    connect(ui.pageOptions->SchemeEdit, SIGNAL(clicked()), this, SLOT(GoToEditScheme()));
-    connect(ui.pageOptions->SchemeNew, SIGNAL(clicked()), this, SLOT(GoToNewScheme()));
-    connect(ui.pageOptions->SchemeDelete, SIGNAL(clicked()), this, SLOT(DeleteScheme()));
-    connect(ui.pageOptions->CBFrontendEffects, SIGNAL(toggled(bool)), this, SLOT(onFrontendEffects(bool)) );
-    connect(ui.pageOptions->CBFrontendSound, SIGNAL(toggled(bool)), this, SLOT(onFrontendSoundsToggled(bool)));
+    connect(ui.pageOptions->WeaponEdit, &QAbstractButton::clicked, this,
+            &HWForm::GoToEditWeapons);
+    connect(ui.pageOptions->WeaponNew, &QAbstractButton::clicked, this,
+            &HWForm::GoToNewWeapons);
+    connect(ui.pageOptions->WeaponDelete, &QAbstractButton::clicked, this,
+            &HWForm::DeleteWeaponSet);
+    connect(ui.pageOptions->SchemeEdit, &QAbstractButton::clicked, this,
+            &HWForm::GoToEditScheme);
+    connect(ui.pageOptions->SchemeNew, &QAbstractButton::clicked, this,
+            &HWForm::GoToNewScheme);
+    connect(ui.pageOptions->SchemeDelete, &QAbstractButton::clicked, this,
+            &HWForm::DeleteScheme);
+    connect(ui.pageOptions->CBFrontendEffects, &QAbstractButton::toggled, this,
+            &HWForm::onFrontendEffects);
+    connect(ui.pageOptions->CBFrontendSound, &QAbstractButton::toggled, this,
+            &HWForm::onFrontendSoundsToggled);
 
-    connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
+    connect(ui.pageNet->BtnSpecifyServer, &QAbstractButton::clicked, this,
+            &HWForm::NetConnect);
     connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNet->BtnNetSvrStart, ID_PAGE_NETSERVER);
 
-    connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16, bool)), this, SLOT(NetConnectServer(const QString &, quint16, bool)));
+    connect(ui.pageNet, &PageNet::connectClicked, this,
+            &HWForm::NetConnectServer);
 
-    connect(ui.pageNetServer->BtnStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
+    connect(ui.pageNetServer->BtnStart, &QAbstractButton::clicked, this,
+            &HWForm::NetStartServer);
 
-    connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
-            ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
-    connect(ui.pageNetGame, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
-    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
-    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToWeapons(int)));
+    connect(ui.pageNetGame->pNetTeamsWidget,
+            &TeamSelWidget::setEnabledGameStart, ui.pageNetGame->BtnStart,
+            &QWidget::setEnabled);
+    connect(ui.pageNetGame, &PageNetGame::SetupClicked, this,
+            &HWForm::IntermediateSetup);
+    connect(ui.pageNetGame->pGameCFG, &GameCFGWidget::goToSchemes, this,
+            &HWForm::GoToScheme);
+    connect(ui.pageNetGame->pGameCFG, &GameCFGWidget::goToWeapons, this,
+            &HWForm::GoToWeapons);
     connect(ui.pageNetGame->pGameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNetGame->pGameCFG, ID_PAGE_DRAWMAP);
 
     connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageRoomsList->BtnAdmin, ID_PAGE_ADMIN);
 
-    connect(ui.pageInfo->BtnSnapshots, SIGNAL(clicked()), this, SLOT(OpenSnapshotFolder()));
+    connect(ui.pageInfo->BtnSnapshots, &QAbstractButton::clicked, this,
+            &HWForm::OpenSnapshotFolder);
 
-    connect(ui.pageGameStats, SIGNAL(saveDemoRequested()), this, SLOT(saveDemoWithCustomName()));
-    connect(ui.pageGameStats, SIGNAL(restartGameRequested()), this, SLOT(restartGame()));
+    connect(ui.pageGameStats, &PageGameStats::saveDemoRequested, this,
+            &HWForm::saveDemoWithCustomName);
+    connect(ui.pageGameStats, &PageGameStats::restartGameRequested, this,
+            &HWForm::restartGame);
 
-    connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
+    connect(ui.pageSinglePlayer->BtnSimpleGamePage, &QAbstractButton::clicked,
+            this, &HWForm::SimpleGame);
     connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnTrainPage, ID_PAGE_TRAINING);
 
@@ -328,34 +359,49 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnMultiplayer, ID_PAGE_MULTIPLAYER);
 
-    connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
-    connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
+    connect(ui.pageSinglePlayer->BtnLoad, &QAbstractButton::clicked, this,
+            &HWForm::GoToSaves);
+    connect(ui.pageSinglePlayer->BtnDemos, &QAbstractButton::clicked, this,
+            &HWForm::GoToDemos);
 
-    connect(ui.pageTraining, SIGNAL(startMission(const QString&, const QString&)), this, SLOT(startTraining(const QString&, const QString&)));
+    connect(ui.pageTraining, &PageTraining::startMission, this,
+            &HWForm::startTraining);
 
-    connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
-    connect(ui.pageCampaign->btnPreview, SIGNAL(clicked()), this, SLOT(StartCampaign()));
-    connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
-    connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageTeam(int)));
-    connect(ui.pageCampaign->CBCampaign, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
-    connect(ui.pageCampaign->CBMission, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageMission(int)));
-    connect(ui.pageTraining->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateTrainingPageTeam(int)));
-    connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), ui.pageTraining->CBTeam, SLOT(setCurrentIndex(int)));
-    connect(ui.pageTraining->CBTeam, SIGNAL(currentIndexChanged(int)), ui.pageCampaign->CBTeam, SLOT(setCurrentIndex(int)));
+    connect(ui.pageCampaign->BtnStartCampaign, &QAbstractButton::clicked, this,
+            &HWForm::StartCampaign);
+    connect(ui.pageCampaign->btnPreview, &QAbstractButton::clicked, this,
+            &HWForm::StartCampaign);
+    connect(ui.pageCampaign->CBTeam, &QComboBox::currentIndexChanged, this,
+            &HWForm::UpdateCampaignPage);
+    connect(ui.pageCampaign->CBTeam, &QComboBox::currentIndexChanged, this,
+            &HWForm::UpdateCampaignPageTeam);
+    connect(ui.pageCampaign->CBCampaign, &QComboBox::currentIndexChanged, this,
+            &HWForm::UpdateCampaignPage);
+    connect(ui.pageCampaign->CBMission, &QComboBox::currentIndexChanged, this,
+            &HWForm::UpdateCampaignPageMission);
+    connect(ui.pageTraining->CBTeam, &QComboBox::currentIndexChanged, this,
+            &HWForm::UpdateTrainingPageTeam);
+    connect(ui.pageCampaign->CBTeam, &QComboBox::currentIndexChanged,
+            ui.pageTraining->CBTeam, &QComboBox::setCurrentIndex);
+    connect(ui.pageTraining->CBTeam, &QComboBox::currentIndexChanged,
+            ui.pageCampaign->CBTeam, &QComboBox::setCurrentIndex);
 
-    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted(QString)),
-             this, SLOT(DeleteWeapons(QString)));
-    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsAdded(QString, QString)),
-             this, SLOT(AddWeapons(QString, QString)));
-    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsEdited(QString, QString, QString)),
-             this, SLOT(EditWeapons(QString, QString, QString)));
-    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsEdited(QString, QString, QString)),
-             ui.pageNetGame->pGameCFG, SLOT(resendAmmoData()));
+    connect(ui.pageSelectWeapon->pWeapons, &SelWeaponWidget::weaponsDeleted,
+            this, &HWForm::DeleteWeapons);
+    connect(ui.pageSelectWeapon->pWeapons, &SelWeaponWidget::weaponsAdded, this,
+            &HWForm::AddWeapons);
+    connect(ui.pageSelectWeapon->pWeapons, &SelWeaponWidget::weaponsEdited,
+            this, &HWForm::EditWeapons);
+    connect(ui.pageSelectWeapon->pWeapons, &SelWeaponWidget::weaponsEdited,
+            ui.pageNetGame->pGameCFG, &GameCFGWidget::resendAmmoData);
 
-    connect(ui.pageMain->BtnNetLocal, SIGNAL(clicked()), this, SLOT(GoToNet()));
-    connect(ui.pageMain->BtnNetOfficial, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
+    connect(ui.pageMain->BtnNetLocal, &QAbstractButton::clicked, this,
+            &HWForm::GoToNet);
+    connect(ui.pageMain->BtnNetOfficial, &QAbstractButton::clicked, this,
+            &HWForm::NetConnectOfficialServer);
 
-    connect(ui.pageVideos, SIGNAL(goBack()), config, SLOT(SaveVideosOptions()));
+    connect(ui.pageVideos, &AbstractPage::goBack, config,
+            &GameUIConfig::SaveVideosOptions);
 
     gameSchemeModel =
         new GameSchemeModel(this, cfgdir.absolutePath() + QStringLiteral("/Schemes/Game"));
@@ -390,7 +436,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ((AbstractPage*)ui.Pages->widget(ID_PAGE_MAIN))->triggerPageEnter();
     GoBack();
 
-    connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
+    connect(config, &GameUIConfig::frontendFullscreen, this,
+            &HWForm::onFrontendFullscreen);
     onFrontendFullscreen(config->isFrontendFullscreen());
 }
 
@@ -898,7 +945,8 @@ void HWForm::GoToPage(int id)
 #endif
 
         // let's hide the old slide after its animation has finished
-        connect(animationOldSlide, SIGNAL(finished()), ui.Pages->widget(lastid), SLOT(hide()));
+        connect(animationOldSlide, &QAbstractAnimation::finished,
+                ui.Pages->widget(lastid), &QWidget::hide);
 
         // start animations
         animationOldSlide->start(QAbstractAnimation::DeleteWhenStopped);
@@ -1014,7 +1062,8 @@ void HWForm::GoBack()
 #endif
 
         // let's hide the old slide after its animation has finished
-        connect(animationNewSlide, SIGNAL(finished()), ui.Pages->widget(curid), SLOT(hide()));
+        connect(animationNewSlide, &QAbstractAnimation::finished,
+                ui.Pages->widget(curid), &QWidget::hide);
 
         // start animations
         animationOldSlide->start(QAbstractAnimation::DeleteWhenStopped);
@@ -1377,118 +1426,139 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, bool useTls, QS
 
     GoToPage(ID_PAGE_CONNECTING);
 
-    connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(AskForOfficialServerDemo()), this, SLOT(PlayOfficialServerDemo()), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(redirected(quint16)), this, SLOT(NetRedirected(quint16)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(connected()), this, SLOT(NetConnected()), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(LeftRoom(const QString&)), this, SLOT(NetLeftRoom(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(RemoveNetTeam(const HWTeam&)), this, SLOT(RemoveNetTeam(const HWTeam&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(NickRegistered(const QString&)), this, SLOT(NetNickRegistered(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(NickNotRegistered(const QString&)), this, SLOT(NetNickNotRegistered(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()), Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::AskForRunGame, this,
+            &HWForm::CreateNetGame, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::AskForOfficialServerDemo, this,
+            &HWForm::PlayOfficialServerDemo, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::redirected, this, &HWForm::NetRedirected,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::connected, this, &HWForm::NetConnected,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::Error, this, &HWForm::NetError,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::Warning, this, &HWForm::NetWarning,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::EnteredGame, this, &HWForm::NetGameEnter,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::LeftRoom, this, &HWForm::NetLeftRoom,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::AddNetTeam, this, &HWForm::AddNetTeam,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::RemoveNetTeam, this,
+            &HWForm::RemoveNetTeam, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::TeamAccepted, this,
+            &HWForm::NetTeamAccepted, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::NickRegistered, this,
+            &HWForm::NetNickRegistered, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::NickNotRegistered, this,
+            &HWForm::NetNickNotRegistered, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::NickTaken, this, &HWForm::NetNickTaken,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::AuthFailed, this, &HWForm::NetAuthFailed,
+            Qt::QueuedConnection);
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
-    connect(hwnet, SIGNAL(askForRoomPassword()), this, SLOT(askRoomPassword()), Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::askForRoomPassword, this,
+            &HWForm::askRoomPassword, Qt::QueuedConnection);
 
     ui.pageRoomsList->chatWidget->setUsersModel(hwnet->lobbyPlayersModel());
     ui.pageNetGame->chatWidget->setUsersModel(hwnet->roomPlayersModel());
 
 // rooms list page stuff
     ui.pageRoomsList->setModel(hwnet->roomsListModel());
-    connect(hwnet, SIGNAL(adminAccess(bool)),
-            ui.pageRoomsList, SLOT(setAdmin(bool)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(adminAccess(bool)),
-            ui.pageRoomsList->chatWidget, SLOT(adminAccess(bool)), Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::adminAccess, ui.pageRoomsList,
+            &PageRoomsList::setAdmin, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::adminAccess, ui.pageRoomsList->chatWidget,
+            &HWChatWidget::adminAccess, Qt::QueuedConnection);
 
-    connect(hwnet, SIGNAL(serverMessage(const QString&)),
-            ui.pageRoomsList->chatWidget, SLOT(onServerMessage(const QString&)), Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::serverMessage,
+            ui.pageRoomsList->chatWidget, &HWChatWidget::onServerMessage,
+            Qt::QueuedConnection);
 
-    connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &, const QString &)),
-            hwnet, SLOT(CreateRoom(const QString&, const QString &)));
-    connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &, const QString &)),
-            hwnet, SLOT(JoinRoom(const QString&, const QString &)));
-//  connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
-//      this, SLOT(NetGameMaster()));
-//  connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
-//      this, SLOT(NetGameSlave()));
-    connect(ui.pageRoomsList, SIGNAL(askForRoomList()),
-            hwnet, SLOT(askRoomsList()));
+    connect(ui.pageRoomsList, &PageRoomsList::askForCreateRoom, hwnet.data(),
+            &HWNewNet::CreateRoom);
+    connect(ui.pageRoomsList, &PageRoomsList::askForJoinRoom, hwnet.data(),
+            &HWNewNet::JoinRoom);
+    //  connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
+    //      this, SLOT(NetGameMaster()));
+    //  connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
+    //      this, SLOT(NetGameSlave()));
+    connect(ui.pageRoomsList, &PageRoomsList::askForRoomList, hwnet.data(),
+            &HWNewNet::askRoomsList);
 
-// room status stuff
-    connect(hwnet, SIGNAL(roomMaster(bool)),
-            this, SLOT(NetGameChangeStatus(bool)));
+    // room status stuff
+    connect(hwnet.data(), &HWNewNet::roomMaster, this,
+            &HWForm::NetGameChangeStatus);
 
-// net page stuff
-    connect(hwnet, SIGNAL(roomNameUpdated(const QString &)),
-            ui.pageNetGame, SLOT(setRoomName(const QString &)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(roomChatAction(const QString&, const QString&)),
-            ui.pageNetGame->chatWidget, SLOT(onChatAction(const QString&, const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(roomChatMessage(const QString&, const QString&)),
-            ui.pageNetGame->chatWidget, SLOT(onChatMessage(const QString&, const QString&)), Qt::QueuedConnection);
+    // net page stuff
+    connect(hwnet.data(), &HWNewNet::roomNameUpdated, ui.pageNetGame,
+            &PageNetGame::setRoomName, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::roomChatAction, ui.pageNetGame->chatWidget,
+            &HWChatWidget::onChatAction, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::roomChatMessage,
+            ui.pageNetGame->chatWidget, &HWChatWidget::onChatMessage,
+            Qt::QueuedConnection);
 
-    connect(hwnet, SIGNAL(roomMaster(bool)),
-            ui.pageNetGame->chatWidget, SLOT(adminAccess(bool)), Qt::QueuedConnection);
-    connect(ui.pageNetGame->chatWidget, SIGNAL(chatLine(const QString&)),
-            hwnet, SLOT(chatLineToNetWithEcho(const QString&)));
-    connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), hwnet, SLOT(ToggleReady()));
-    connect(hwnet, SIGNAL(setMyReadyStatus(bool)),
-            ui.pageNetGame, SLOT(setReadyStatus(bool)), Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::roomMaster, ui.pageNetGame->chatWidget,
+            &HWChatWidget::adminAccess, Qt::QueuedConnection);
+    connect(ui.pageNetGame->chatWidget, &HWChatWidget::chatLine, hwnet.data(),
+            &HWNewNet::chatLineToNetWithEcho);
+    connect(ui.pageNetGame->BtnGo, &QAbstractButton::clicked, hwnet.data(),
+            &HWNewNet::ToggleReady);
+    connect(hwnet.data(), &HWNewNet::setMyReadyStatus, ui.pageNetGame,
+            &PageNetGame::setReadyStatus, Qt::QueuedConnection);
 
-// chat widget actions
-    connect(ui.pageNetGame->chatWidget, SIGNAL(kick(const QString&)),
-            hwnet, SLOT(kickPlayer(const QString&)));
-    connect(ui.pageNetGame->chatWidget, SIGNAL(delegate(const QString&)),
-            hwnet, SLOT(delegateToPlayer(const QString&)));
-    connect(ui.pageNetGame->chatWidget, SIGNAL(ban(const QString&)),
-            hwnet, SLOT(banPlayer(const QString&)));
-    connect(ui.pageNetGame->chatWidget, SIGNAL(info(const QString&)),
-            hwnet, SLOT(infoPlayer(const QString&)));
-    connect(ui.pageNetGame->chatWidget, SIGNAL(follow(const QString&)),
-            hwnet, SLOT(followPlayer(const QString&)));
-    connect(ui.pageNetGame->chatWidget, SIGNAL(consoleCommand(const QString&)),
-            hwnet, SLOT(consoleCommand(const QString&)));
-    connect(ui.pageRoomsList->chatWidget, SIGNAL(kick(const QString&)),
-            hwnet, SLOT(kickPlayer(const QString&)));
-    connect(ui.pageRoomsList->chatWidget, SIGNAL(ban(const QString&)),
-            hwnet, SLOT(banPlayer(const QString&)));
-    connect(ui.pageRoomsList->chatWidget, SIGNAL(info(const QString&)),
-            hwnet, SLOT(infoPlayer(const QString&)));
-    connect(ui.pageRoomsList->chatWidget, SIGNAL(follow(const QString&)),
-            hwnet, SLOT(followPlayer(const QString&)));
-    connect(ui.pageRoomsList->chatWidget, SIGNAL(consoleCommand(const QString&)),
-            hwnet, SLOT(consoleCommand(const QString&)));
+    // chat widget actions
+    connect(ui.pageNetGame->chatWidget, &HWChatWidget::kick, hwnet.data(),
+            &HWNewNet::kickPlayer);
+    connect(ui.pageNetGame->chatWidget, &HWChatWidget::delegate, hwnet.data(),
+            &HWNewNet::delegateToPlayer);
+    connect(ui.pageNetGame->chatWidget, &HWChatWidget::ban, hwnet.data(),
+            &HWNewNet::banPlayer);
+    connect(ui.pageNetGame->chatWidget, &HWChatWidget::info, hwnet.data(),
+            &HWNewNet::infoPlayer);
+    connect(ui.pageNetGame->chatWidget, &HWChatWidget::follow, hwnet.data(),
+            &HWNewNet::followPlayer);
+    connect(ui.pageNetGame->chatWidget, &HWChatWidget::consoleCommand,
+            hwnet.data(), &HWNewNet::consoleCommand);
+    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::kick, hwnet.data(),
+            &HWNewNet::kickPlayer);
+    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::ban, hwnet.data(),
+            &HWNewNet::banPlayer);
+    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::info, hwnet.data(),
+            &HWNewNet::infoPlayer);
+    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::follow, hwnet.data(),
+            &HWNewNet::followPlayer);
+    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::consoleCommand,
+            hwnet.data(), &HWNewNet::consoleCommand);
 
-// player info
-    connect(hwnet, SIGNAL(playerInfo(const QString&, const QString&, const QString&, const QString&)),
-            ui.pageRoomsList->chatWidget, SLOT(onPlayerInfo(const QString&, const QString&, const QString&, const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(playerInfo(const QString&, const QString&, const QString&, const QString&)),
-            ui.pageNetGame->chatWidget, SLOT(onPlayerInfo(const QString&, const QString&, const QString&, const QString&)), Qt::QueuedConnection);
+    // player info
+    connect(hwnet.data(), &HWNewNet::playerInfo, ui.pageRoomsList->chatWidget,
+            &HWChatWidget::onPlayerInfo, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::playerInfo, ui.pageNetGame->chatWidget,
+            &HWChatWidget::onPlayerInfo, Qt::QueuedConnection);
 
-// chatting
-    connect(ui.pageRoomsList->chatWidget, SIGNAL(chatLine(const QString&)),
-            hwnet, SLOT(chatLineToLobby(const QString&)));
-    connect(hwnet, SIGNAL(lobbyChatAction(const QString&,const QString&)),
-            ui.pageRoomsList->chatWidget, SLOT(onChatAction(const QString&,const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(lobbyChatMessage(const QString&, const QString&)),
-            ui.pageRoomsList->chatWidget, SLOT(onChatMessage(const QString&, const QString&)), Qt::QueuedConnection);
+    // chatting
+    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::chatLine, hwnet.data(),
+            &HWNewNet::chatLineToLobby);
+    connect(hwnet.data(), &HWNewNet::lobbyChatAction,
+            ui.pageRoomsList->chatWidget, &HWChatWidget::onChatAction,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::lobbyChatMessage,
+            ui.pageRoomsList->chatWidget, &HWChatWidget::onChatMessage,
+            Qt::QueuedConnection);
 
-// nick list stuff
+    // nick list stuff
     {
         QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(hwnet->lobbyPlayersModel());
         if(playersSortFilterModel)
         {
             PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
-            connect(players, SIGNAL(nickAdded(const QString&, bool)),
-                    ui.pageNetGame->chatWidget, SLOT(nickAdded(const QString&, bool)));
+            connect(players, &PlayersListModel::nickAdded,
+                    ui.pageNetGame->chatWidget, &HWChatWidget::nickAdded);
             connect(players, SIGNAL(nickRemoved(const QString&)),
                     ui.pageNetGame->chatWidget, SLOT(nickRemoved(const QString&)));
-            connect(players, SIGNAL(nickAddedLobby(const QString&, bool)),
-                    ui.pageRoomsList->chatWidget, SLOT(nickAdded(const QString&, bool)));
+            connect(players, &PlayersListModel::nickAddedLobby,
+                    ui.pageRoomsList->chatWidget, &HWChatWidget::nickAdded);
             connect(players, SIGNAL(nickRemovedLobby(const QString&)),
                     ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&)));
             connect(players, SIGNAL(nickRemovedLobby(const QString&, const QString&)),
@@ -1497,43 +1567,65 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, bool useTls, QS
     }
 
 // teams selecting stuff
-    connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(hhogsNumChanged(const HWTeam&)),
-            hwnet, SLOT(onHedgehogsNumChanged(const HWTeam&)));
-    connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamColorChanged(const HWTeam&)),
-            hwnet, SLOT(onTeamColorChanged(const HWTeam&)));
-    connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamWillPlay(HWTeam)), hwnet, SLOT(AddTeam(HWTeam)));
-    connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(acceptRequested(HWTeam)), hwnet, SLOT(AddTeam(HWTeam)));
-    connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamNotPlaying(const HWTeam&)), hwnet, SLOT(RemoveTeam(const HWTeam&)));
-    connect(hwnet, SIGNAL(hhnumChanged(const HWTeam&)),
-            ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
-            ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)), Qt::QueuedConnection);
+    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::hhogsNumChanged,
+            hwnet.data(), &HWNewNet::onHedgehogsNumChanged);
+    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamColorChanged,
+            hwnet.data(), &HWNewNet::onTeamColorChanged);
+    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamWillPlay,
+            hwnet.data(), &HWNewNet::AddTeam);
+    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::acceptRequested,
+            hwnet.data(), &HWNewNet::AddTeam);
+    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamNotPlaying,
+            hwnet.data(), &HWNewNet::RemoveTeam);
+    connect(hwnet.data(), &HWNewNet::hhnumChanged,
+            ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::changeHHNum,
+            Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::teamColorChanged,
+            ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::changeTeamColor,
+            Qt::QueuedConnection);
 
-// admin stuff
-    connect(hwnet, SIGNAL(serverMessageNew(const QString&)), ui.pageAdmin, SLOT(serverMessageNew(const QString &)));
-    connect(hwnet, SIGNAL(serverMessageOld(const QString&)), ui.pageAdmin, SLOT(serverMessageOld(const QString &)));
-    connect(hwnet, SIGNAL(latestProtocolVar(int)), ui.pageAdmin, SLOT(protocol(int)));
-    connect(hwnet, SIGNAL(bansList(const QStringList &)), ui.pageAdmin, SLOT(setBansList(const QStringList &)));
-    connect(ui.pageAdmin, SIGNAL(setServerMessageNew(const QString&)), hwnet, SLOT(setServerMessageNew(const QString &)));
-    connect(ui.pageAdmin, SIGNAL(setServerMessageOld(const QString&)), hwnet, SLOT(setServerMessageOld(const QString &)));
-    connect(ui.pageAdmin, SIGNAL(setProtocol(int)), hwnet, SLOT(setLatestProtocolVar(int)));
-    connect(ui.pageAdmin, SIGNAL(askServerVars()), hwnet, SLOT(askServerVars()));
-    connect(ui.pageAdmin, SIGNAL(clearAccountsCache()), hwnet, SLOT(clearAccountsCache()));
-    connect(ui.pageAdmin, SIGNAL(bansListRequest()), hwnet, SLOT(getBanList()));
-    connect(ui.pageAdmin, SIGNAL(removeBan(QString)), hwnet, SLOT(removeBan(QString)));
-    connect(ui.pageAdmin, SIGNAL(banIP(QString,QString,int)), hwnet, SLOT(banIP(QString,QString,int)));
-    connect(ui.pageAdmin, SIGNAL(banNick(QString,QString,int)), hwnet, SLOT(banNick(QString,QString,int)));
+    // admin stuff
+    connect(hwnet.data(), &HWNewNet::serverMessageNew, ui.pageAdmin,
+            &PageAdmin::serverMessageNew);
+    connect(hwnet.data(), &HWNewNet::serverMessageOld, ui.pageAdmin,
+            &PageAdmin::serverMessageOld);
+    connect(hwnet.data(), &HWNewNet::latestProtocolVar, ui.pageAdmin,
+            &PageAdmin::protocol);
+    connect(hwnet.data(), &HWNewNet::bansList, ui.pageAdmin,
+            &PageAdmin::setBansList);
+    connect(ui.pageAdmin, &PageAdmin::setServerMessageNew, hwnet.data(),
+            &HWNewNet::setServerMessageNew);
+    connect(ui.pageAdmin, &PageAdmin::setServerMessageOld, hwnet.data(),
+            &HWNewNet::setServerMessageOld);
+    connect(ui.pageAdmin, &PageAdmin::setProtocol, hwnet.data(),
+            &HWNewNet::setLatestProtocolVar);
+    connect(ui.pageAdmin, &PageAdmin::askServerVars, hwnet.data(),
+            &HWNewNet::askServerVars);
+    connect(ui.pageAdmin, &PageAdmin::clearAccountsCache, hwnet.data(),
+            &HWNewNet::clearAccountsCache);
+    connect(ui.pageAdmin, &PageAdmin::bansListRequest, hwnet.data(),
+            &HWNewNet::getBanList);
+    connect(ui.pageAdmin, &PageAdmin::removeBan, hwnet.data(),
+            &HWNewNet::removeBan);
+    connect(ui.pageAdmin, &PageAdmin::banIP, hwnet.data(), &HWNewNet::banIP);
+    connect(ui.pageAdmin, &PageAdmin::banNick, hwnet.data(),
+            &HWNewNet::banNick);
 
-// disconnect
-    connect(hwnet, SIGNAL(disconnected(const QString&)), this, SLOT(ForcedDisconnect(const QString&)), Qt::QueuedConnection);
+    // disconnect
+    connect(hwnet.data(), &HWNewNet::disconnected, this,
+            &HWForm::ForcedDisconnect, Qt::QueuedConnection);
 
-// config stuff
-    connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));
-    connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
-    connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
+    // config stuff
+    connect(hwnet.data(), &HWNewNet::paramChanged, ui.pageNetGame->pGameCFG,
+            &GameCFGWidget::setParam);
+    connect(ui.pageNetGame->pGameCFG, &GameCFGWidget::paramChanged,
+            hwnet.data(), &HWNewNet::onParamChanged);
+    connect(hwnet.data(), &HWNewNet::configAsked, ui.pageNetGame->pGameCFG,
+            &GameCFGWidget::fullNetConfig);
 
     // using proxy slot to prevent loss of game messages when they're sent to not yet connected slot of game object
-    connect(hwnet, SIGNAL(FromNet(const QByteArray &)), this, SLOT(FromNetProxySlot(const QByteArray &)), Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::FromNet, this, &HWForm::FromNetProxySlot,
+            Qt::QueuedConnection);
 
     //nick and pass stuff
     hwnet->m_private_game = !(hostName == NETGAME_DEFAULT_SERVER && port == NETGAME_DEFAULT_PORT);
@@ -1568,7 +1660,8 @@ int HWForm::AskForNickAndPwd(void)
             //open dialog
             HWPasswordDialog * pwDialog = new HWPasswordDialog(this);
             // make the "new account" button dialog open a browser with the registration page
-            connect(pwDialog->pbNewAccount, SIGNAL(clicked()), this, SLOT(openRegistrationPage()));
+            connect(pwDialog->pbNewAccount, &QAbstractButton::clicked, this,
+                    &HWForm::openRegistrationPage);
             pwDialog->cbSave->setChecked(config->value("net/savepassword", true).toBool());
 
             //if nickname is present, put it into the field
@@ -1662,7 +1755,7 @@ void HWForm::NetStartServer()
         return;
     }
 
-    QTimer::singleShot(250, this, SLOT(AsyncNetServerStart()));
+    QTimer::singleShot(250, this, &HWForm::AsyncNetServerStart);
 
     pRegisterServer = new HWNetUdpServer(0,
                                          ui.pageNetServer->leServerDescr->text(),
@@ -1852,13 +1945,19 @@ void HWForm::DemoPresenceChanged(bool hasDemo)
 void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo)
 {
     game = new HWGame(config, gamecfg, ammo, pTeamSelWidget);
-    connect(game, SIGNAL(CampStateChanged(int)), this, SLOT(UpdateCampaignPageProgress(int)));
-    connect(game, SIGNAL(TrainingStateChanged(int)), this, SLOT(UpdateTrainingPageTeam(int)));
-    connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
-    connect(game, SIGNAL(DemoPresenceChanged(bool)), this, SLOT(DemoPresenceChanged(bool)));
-    connect(game, SIGNAL(GameStats(char, const QString &)), ui.pageGameStats, SLOT(GameStats(char, const QString &)));
-    connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowFatalErrorMessage(const QString &)), Qt::QueuedConnection);
-    connect(game, SIGNAL(HaveRecord(RecordType, const QByteArray &)), this, SLOT(GetRecord(RecordType, const QByteArray &)));
+    connect(game.data(), &HWGame::CampStateChanged, this,
+            &HWForm::UpdateCampaignPageProgress);
+    connect(game.data(), &HWGame::TrainingStateChanged, this,
+            &HWForm::UpdateTrainingPageTeam);
+    connect(game.data(), &HWGame::GameStateChanged, this,
+            &HWForm::GameStateChanged);
+    connect(game.data(), &HWGame::DemoPresenceChanged, this,
+            &HWForm::DemoPresenceChanged);
+    connect(game.data(), &HWGame::GameStats, ui.pageGameStats,
+            &PageGameStats::GameStats);
+    connect(game.data(), &HWGame::ErrorMessage, this,
+            &HWForm::ShowFatalErrorMessage, Qt::QueuedConnection);
+    connect(game.data(), &HWGame::HaveRecord, this, &HWForm::GetRecord);
     m_lastDemo = QByteArray();
 }
 
@@ -1936,13 +2035,19 @@ void HWForm::CreateNetGame()
 
     CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
 
-    connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
-    connect(game, SIGNAL(SendChat(const QString &)), hwnet, SLOT(chatLineToNet(const QString &)));
-    connect(game, SIGNAL(SendConsoleCommand(const QString&)), hwnet, SLOT(consoleCommand(const QString&)));
-    connect(game, SIGNAL(SendTeamMessage(const QString &)), hwnet, SLOT(SendTeamMessage(const QString &)));
-    connect(hwnet, SIGNAL(chatStringFromNet(const QString &)), game, SLOT(FromNetChat(const QString &)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(Warning(const QString&)), game, SLOT(FromNetWarning(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(Error(const QString&)), game, SLOT(FromNetError(const QString&)), Qt::QueuedConnection);
+    connect(game.data(), &HWGame::SendNet, hwnet.data(), &HWNewNet::SendNet);
+    connect(game.data(), &HWGame::SendChat, hwnet.data(),
+            &HWNewNet::chatLineToNet);
+    connect(game.data(), &HWGame::SendConsoleCommand, hwnet.data(),
+            &HWNewNet::consoleCommand);
+    connect(game.data(), &HWGame::SendTeamMessage, hwnet.data(),
+            &HWNewNet::SendTeamMessage);
+    connect(hwnet.data(), &HWNewNet::chatStringFromNet, game.data(),
+            &HWGame::FromNetChat, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::Warning, game.data(),
+            &HWGame::FromNetWarning, Qt::QueuedConnection);
+    connect(hwnet.data(), &HWNewNet::Error, game.data(), &HWGame::FromNetError,
+            Qt::QueuedConnection);
 
     game->StartNet();
 }
@@ -2013,16 +2118,19 @@ void HWForm::NetGameMaster()
 
         ui.pageNetGame->setRoomName(hwnet->getRoom());
 
-        connect(ui.pageNetGame->BtnStart, SIGNAL(clicked()), this, SLOT(startGame()));
-        connect(ui.pageNetGame, SIGNAL(askForUpdateRoomName(const QString &)), hwnet, SLOT(updateRoomName(const QString &)));
-        connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
-        connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
-        connect(ui.pageNetGame->restrictUnregistered, SIGNAL(triggered()), hwnet, SLOT(toggleRegisteredOnly()));
+        connect(ui.pageNetGame->BtnStart, &QAbstractButton::clicked, this,
+                &HWForm::startGame);
+        connect(ui.pageNetGame, &PageNetGame::askForUpdateRoomName,
+                hwnet.data(), &HWNewNet::updateRoomName);
+        connect(ui.pageNetGame->restrictJoins, &QAction::triggered,
+                hwnet.data(), &HWNewNet::toggleRestrictJoins);
+        connect(ui.pageNetGame->restrictTeamAdds, &QAction::triggered,
+                hwnet.data(), &HWNewNet::toggleRestrictTeamAdds);
+        connect(ui.pageNetGame->restrictUnregistered, &QAction::triggered,
+                hwnet.data(), &HWNewNet::toggleRegisteredOnly);
         connect(ui.pageNetGame->pGameCFG->GameSchemes->model(),
-                SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-                ui.pageNetGame->pGameCFG,
-                SLOT(resendSchemeData())
-               );
+                &QAbstractItemModel::dataChanged, ui.pageNetGame->pGameCFG,
+                &GameCFGWidget::resendSchemeData);
     }
 }
 
@@ -2034,15 +2142,16 @@ void HWForm::NetGameSlave()
     if (hwnet)
     {
         NetGameSchemeModel * netAmmo = new NetGameSchemeModel(hwnet);
-        connect(hwnet, SIGNAL(netSchemeConfig(QStringList)), netAmmo, SLOT(setNetSchemeConfig(QStringList)));
+        connect(hwnet.data(), &HWNewNet::netSchemeConfig, netAmmo,
+                &NetGameSchemeModel::setNetSchemeConfig);
 
         ui.pageNetGame->pGameCFG->GameSchemes->setModel(netAmmo);
 
         ui.pageNetGame->setRoomName(hwnet->getRoom());
 
         ui.pageNetGame->pGameCFG->GameSchemes->view()->disconnect(hwnet);
-        connect(hwnet, SIGNAL(netSchemeConfig(QStringList)),
-                this, SLOT(selectFirstNetScheme()));
+        connect(hwnet.data(), &HWNewNet::netSchemeConfig, this,
+                &HWForm::selectFirstNetScheme);
     }
 
     ui.pageNetGame->setMasterMode(false);
@@ -2483,7 +2592,8 @@ void HWForm::showFeedbackDialog()
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkReply *reply = manager->get(newRequest);
-    connect(reply, SIGNAL(finished()), this, SLOT(showFeedbackDialogNetChecked()));
+    connect(reply, &QNetworkReply::finished, this,
+            &HWForm::showFeedbackDialogNetChecked);
 }
 
 void HWForm::showFeedbackDialogNetChecked()

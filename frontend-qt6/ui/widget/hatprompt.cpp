@@ -99,11 +99,11 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     txtFilter->setFocus();
     txtFilter->setFixedHeight(22);
     txtFilter->setStyleSheet(QStringLiteral("LineEditCursor { border-width: 0px; border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: 4px; padding-bottom: 2px; background-color: rgb(23, 11, 54); } LineEditCursor:hover, LineEditCursor:focus { background-color: rgb(13, 5, 68); }"));
-    connect(txtFilter, SIGNAL(textChanged(const QString &)), this, SLOT(filterChanged(const QString &)));
-    connect(txtFilter, SIGNAL(moveUp()), this, SLOT(moveUp()));
-    connect(txtFilter, SIGNAL(moveDown()), this, SLOT(moveDown()));
-    connect(txtFilter, SIGNAL(moveLeft()), this, SLOT(moveLeft()));
-    connect(txtFilter, SIGNAL(moveRight()), this, SLOT(moveRight()));
+    connect(txtFilter, &QLineEdit::textChanged, this, &HatPrompt::filterChanged);
+    connect(txtFilter, &LineEditCursor::moveUp, this, &HatPrompt::moveUp);
+    connect(txtFilter, &LineEditCursor::moveDown, this, &HatPrompt::moveDown);
+    connect(txtFilter, &LineEditCursor::moveLeft, this, &HatPrompt::moveLeft);
+    connect(txtFilter, &LineEditCursor::moveRight, this, &HatPrompt::moveRight);
 
     // Corner widget
     QLabel * corner = new QLabel();
@@ -118,12 +118,12 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
     // Cancel button (closes dialog)
     QPushButton * btnCancel = new QPushButton(tr("Cancel"));
-    connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(btnCancel, &QAbstractButton::clicked, this, &QDialog::reject);
 
     // Select button
     QPushButton * btnSelect = new QPushButton(tr("Use selected hat"));
     btnSelect->setDefault(true);
-    connect(btnSelect, SIGNAL(clicked()), this, SLOT(onAccepted()));
+    connect(btnSelect, &QAbstractButton::clicked, this, &HatPrompt::onAccepted);
 
     // Add hats
     list = new HatListView();
@@ -137,8 +137,8 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     list->setSelectionMode(QAbstractItemView::SingleSelection);
     list->setObjectName("hatList");
     list->setCurrentIndex(filterModel->index(currentIndex, 0));
-    connect(list, SIGNAL(activated(const QModelIndex &)), this, SLOT(hatChosen(const QModelIndex &)));
-    connect(list, SIGNAL(clicked(const QModelIndex &)), this, SLOT(hatChosen(const QModelIndex &)));
+    connect(list, &QAbstractItemView::activated, this, &HatPrompt::hatChosen);
+    connect(list, &QAbstractItemView::clicked, this, &HatPrompt::hatChosen);
 
     // Add elements to layouts
     dialogLayout->addLayout(topLayout, 0, 0, 1, 3);

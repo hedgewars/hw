@@ -85,20 +85,20 @@ QLayout * PageDrawMap::footerLayoutDefinition()
 
 void PageDrawMap::connectSignals()
 {
-    connect(cbEraser, SIGNAL(toggled(bool)), drawMapWidget, SLOT(setErasing(bool)));
-    connect(pbUndo, SIGNAL(clicked()), drawMapWidget, SLOT(undo()));
-    connect(pbClear, SIGNAL(clicked()), drawMapWidget, SLOT(clear()));
-    connect(pbOptimize, SIGNAL(clicked()), drawMapWidget, SLOT(optimize()));
-    connect(sbBrushSize, SIGNAL(valueChanged(int)), drawMapWidget, SLOT(setBrushSize(int)));
+    connect(cbEraser, &QAbstractButton::toggled, drawMapWidget, &DrawMapWidget::setErasing);
+    connect(pbUndo, &QAbstractButton::clicked, drawMapWidget, &DrawMapWidget::undo);
+    connect(pbClear, &QAbstractButton::clicked, drawMapWidget, &DrawMapWidget::clear);
+    connect(pbOptimize, &QAbstractButton::clicked, drawMapWidget, &DrawMapWidget::optimize);
+    connect(sbBrushSize, &QSpinBox::valueChanged, drawMapWidget, &DrawMapWidget::setBrushSize);
 
-    connect(drawMapWidget, SIGNAL(brushSizeChanged(int)), this, SLOT(brushSizeChanged(int)));
+    connect(drawMapWidget, &DrawMapWidget::brushSizeChanged, this, &PageDrawMap::brushSizeChanged);
 
-    connect(pbLoad, SIGNAL(clicked()), this, SLOT(load()));
-    connect(pbSave, SIGNAL(clicked()), this, SLOT(save()));
+    connect(pbLoad, &QAbstractButton::clicked, this, &PageDrawMap::load);
+    connect(pbSave, &QAbstractButton::clicked, this, &PageDrawMap::save);
 
-    connect(rbPolyline, SIGNAL(toggled(bool)), this, SLOT(pathTypeSwitched(bool)));
-    connect(rbRectangle, SIGNAL(toggled(bool)), this, SLOT(pathTypeSwitched(bool)));
-    connect(rbEllipse, SIGNAL(toggled(bool)), this, SLOT(pathTypeSwitched(bool)));
+    connect(rbPolyline, &QAbstractButton::toggled, this, &PageDrawMap::pathTypeSwitched);
+    connect(rbRectangle, &QAbstractButton::toggled, this, &PageDrawMap::pathTypeSwitched);
+    connect(rbEllipse, &QAbstractButton::toggled, this, &PageDrawMap::pathTypeSwitched);
 }
 
 PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)

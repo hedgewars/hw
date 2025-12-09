@@ -14,7 +14,7 @@ ColorWidget::ColorWidget(QStandardItemModel *colorsModel, QWidget *parent) :
     setColor(0);
     setAutoFillBackground(true);
 
-    connect(m_colorsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(dataChanged(QModelIndex,QModelIndex)));
+    connect(m_colorsModel, &QAbstractItemModel::dataChanged, this, &ColorWidget::dataChanged);
 }
 
 ColorWidget::~ColorWidget()

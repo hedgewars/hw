@@ -57,7 +57,7 @@ QVariant DataBrowser::loadResource(int type, const QUrl & name)
             newRequest.setAttribute(urlAttribute, name);
 
             QNetworkReply *reply = manager->get(newRequest);
-            connect(reply, SIGNAL(finished()), this, SLOT(resourceDownloaded()));
+            connect(reply, &QNetworkReply::finished, this, &DataBrowser::resourceDownloaded);
         }
     }
 

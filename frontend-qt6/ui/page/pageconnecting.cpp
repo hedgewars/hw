@@ -34,7 +34,7 @@ QLayout * PageConnecting::bodyLayoutDefinition()
 
 void PageConnecting::connectSignals()
 {
-    connect(this, SIGNAL(goBack()), this, SIGNAL(cancelConnection()));
+    connect(this, &AbstractPage::goBack, this, &PageConnecting::cancelConnection);
 }
 
 PageConnecting::PageConnecting(QWidget* parent) :  AbstractPage(parent)
