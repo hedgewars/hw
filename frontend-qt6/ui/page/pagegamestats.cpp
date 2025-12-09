@@ -41,7 +41,7 @@ void FitGraphicsView::resizeEvent(QResizeEvent * event)
 
 QLayout * PageGameStats::bodyLayoutDefinition()
 {
-    kindOfPoints = QString("");
+    kindOfPoints = QLatin1String("");
     defaultGraphTitle = true;
     pageLayout = new QGridLayout();
     pageLayout->setRowStretch(0, 1);
@@ -57,7 +57,7 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     labelGameStats = new QLabel(this);
     labelDetails = new QLabel(this);
     labelDetails->setTextFormat(Qt::RichText);
-    labelDetails->setText("<h1><img src=\":/res/StatsD.png\"> " + PageGameStats::tr("Details").toHtmlEscaped() + "</h1>");
+    labelDetails->setText(QStringLiteral("<h1><img src=\":/res/StatsD.png\"> ") + PageGameStats::tr("Details").toHtmlEscaped() + QStringLiteral("</h1>"));
     labelDetails->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     labelGameStats->setTextFormat(Qt::RichText);
     labelGameStats->setAlignment(Qt::AlignTop);
@@ -72,7 +72,7 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     graphic->setObjectName("gameStatsView");
     labelGraphTitle = new QLabel(this);
     labelGraphTitle->setTextFormat(Qt::RichText);
-    labelGraphTitle->setText("<h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph").toHtmlEscaped() + "</h1>");
+    labelGraphTitle->setText(QStringLiteral("<h1><img src=\":/res/StatsH.png\"> ") + PageGameStats::tr("Health graph").toHtmlEscaped() + QStringLiteral("</h1>"));
     labelGraphTitle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     gbl->addWidget(labelGraphTitle);
     gbl->addWidget(graphic);
@@ -91,7 +91,7 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     labelGameRank = new QLabel(gbRanks);
     QLabel* l = new QLabel(this);
     l->setTextFormat(Qt::RichText);
-    l->setText("<h1><img src=\":/res/StatsR.png\"> " + PageGameStats::tr("Ranking").toHtmlEscaped() + "</h1>");
+    l->setText(QStringLiteral("<h1><img src=\":/res/StatsR.png\"> ") + PageGameStats::tr("Ranking").toHtmlEscaped() + QStringLiteral("</h1>"));
     l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     gbl->addWidget(l);
     gbl->addWidget(labelGameRank);
@@ -116,14 +116,14 @@ QLayout * PageGameStats::footerLayoutDefinition()
     bottomLayout->addWidget(mainNote, 0);
     bottomLayout->setStretch(0,1);
 
-    btnRestart = addButton(":/res/Start.png", bottomLayout, 1, true);
+    btnRestart = addButton(QStringLiteral(":/res/Start.png"), bottomLayout, 1, true);
     btnRestart->setWhatsThis(tr("Play again"));
     btnRestart->setFixedWidth(58);
     btnRestart->setFixedHeight(81);
-    btnRestart->setStyleSheet("QPushButton{margin-top:24px}");
-    btnSave = addButton(":/res/Save.png", bottomLayout, 2, true);
+    btnRestart->setStyleSheet(QStringLiteral("QPushButton{margin-top:24px}"));
+    btnSave = addButton(QStringLiteral(":/res/Save.png"), bottomLayout, 2, true);
     saveDemoBtnEnabled(true);
-    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+    btnSave->setStyleSheet(QStringLiteral("QPushButton{margin: 24px 0 0 0;}"));
 
     return bottomLayout;
 }
@@ -150,10 +150,10 @@ void PageGameStats::AddStatText(const QString & msg)
 
 void PageGameStats::clear()
 {
-    labelGameStats->setText("");
+    labelGameStats->setText(QLatin1String(""));
     healthPoints.clear();
-    labelGameRank->setText("");
-    labelGameWin->setText("");
+    labelGameRank->setText(QLatin1String(""));
+    labelGameWin->setText(QLatin1String(""));
     playerPosition = 0;
     scriptPlayerPosition = 0;
     lastColor = 0;
@@ -184,7 +184,7 @@ void PageGameStats::saveDemoBtnEnabled(bool enabled)
 void PageGameStats::renderStats()
 {
     if(defaultGraphTitle) {
-        labelGraphTitle->setText("<h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph").toHtmlEscaped() + "</h1>");
+        labelGraphTitle->setText(QStringLiteral("<h1><img src=\":/res/StatsH.png\"> ") + PageGameStats::tr("Health graph").toHtmlEscaped() + QStringLiteral("</h1>"));
     } else {
         defaultGraphTitle = true;
     }
@@ -293,7 +293,7 @@ void PageGameStats::applySpacing()
 {
     if (!labelGameStats->isHidden())
     {
-        labelGraphTitle->setText("<br>" + labelGraphTitle->text());
+        labelGraphTitle->setText(QStringLiteral("<br>") + labelGraphTitle->text());
     }
     if ((!gbDetails->isHidden()) && (!gbRanks->isHidden()))
     {
@@ -309,14 +309,14 @@ void PageGameStats::GameStats(char type, const QString & info)
     {
         case 'r' :
         {
-            labelGameWin->setText(QString("<h1 align=\"center\">%1</h1>").arg(info.toHtmlEscaped()));
+            labelGameWin->setText(QStringLiteral("<h1 align=\"center\">%1</h1>").arg(info.toHtmlEscaped()));
             break;
         }
         case 'D' :
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsBestShot.png\"> " + PageGameStats::tr("The best shot award was won by <b>%1</b> with <b>%2</b> pts.", "", num).arg(info.mid(i + 1).toHtmlEscaped(), info.left(i)) + "</p>";
+            QString message = QStringLiteral("<p><img src=\":/res/StatsBestShot.png\"> ") + PageGameStats::tr("The best shot award was won by <b>%1</b> with <b>%2</b> pts.", "", num).arg(info.mid(i + 1).toHtmlEscaped(), info.left(i)) + QStringLiteral("</p>");
             AddStatText(message);
             break;
         }
@@ -324,14 +324,14 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsBestKiller.png\"> " + PageGameStats::tr("The best killer is <b>%1</b> with <b>%2</b> kills in a turn.", "", num).arg(info.mid(i + 1).toHtmlEscaped(), info.left(i)) + "</p>";
+            QString message = QStringLiteral("<p><img src=\":/res/StatsBestKiller.png\"> ") + PageGameStats::tr("The best killer is <b>%1</b> with <b>%2</b> kills in a turn.", "", num).arg(info.mid(i + 1).toHtmlEscaped(), info.left(i)) + QStringLiteral("</p>");
             AddStatText(message);
             break;
         }
         case 'K' :
         {
             int num = info.toInt();
-            QString message = "<p><img src=\":/res/StatsHedgehogsKilled.png\"> " +  PageGameStats::tr("A total of <b>%1</b> hedgehog(s) were killed during this round.", "", num).arg(num) + "</p>";
+            QString message = QStringLiteral("<p><img src=\":/res/StatsHedgehogsKilled.png\"> ") +  PageGameStats::tr("A total of <b>%1</b> hedgehog(s) were killed during this round.", "", num).arg(num) + QStringLiteral("</p>");
             AddStatText(message);
             break;
         }
@@ -347,7 +347,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             // TODO: change default picture or add change pic capability
             defaultGraphTitle = false;
-            labelGraphTitle->setText("<h1><img src=\":/res/StatsR.png\"> " + info.toHtmlEscaped() + "</h1>");
+            labelGraphTitle->setText(QStringLiteral("<h1><img src=\":/res/StatsR.png\"> ") + info.toHtmlEscaped() + QStringLiteral("</h1>"));
             break;
         }
         case 'T':   // local team stats
@@ -389,16 +389,16 @@ void PageGameStats::GameStats(char type, const QString & info)
             switch (realPlayerPosition)
             {
                 case 1:
-                    image = "<img src=\":/res/StatsMedal1.png\">";
+                    image = QStringLiteral("<img src=\":/res/StatsMedal1.png\">");
                     break;
                 case 2:
-                    image = "<img src=\":/res/StatsMedal2.png\">";
+                    image = QStringLiteral("<img src=\":/res/StatsMedal2.png\">");
                     break;
                 case 3:
-                    image = "<img src=\":/res/StatsMedal3.png\">";
+                    image = QStringLiteral("<img src=\":/res/StatsMedal3.png\">");
                     break;
                 default:
-                    image = "<img src=\":/res/StatsMedal4.png\">";
+                    image = QStringLiteral("<img src=\":/res/StatsMedal4.png\">");
                     break;
             }
 
@@ -407,29 +407,29 @@ void PageGameStats::GameStats(char type, const QString & info)
             if(kindOfPoints.isEmpty()) {
                 //: Number of kills in stats screen, written after the team name
                 killstring = PageGameStats::tr("(%1 kill)", "", kills).arg(kills);
-            } else if (kindOfPoints == "!POINTS") {
+            } else if (kindOfPoints == QLatin1String("!POINTS")) {
                 //: Number of points in stats screen, written after the team name
                 killstring = PageGameStats::tr("(%1 point(s))", "", kills).arg(kills);
-            } else if (kindOfPoints == "!TIME") {
+            } else if (kindOfPoints == QLatin1String("!TIME")) {
                 //: Time in seconds
                 killstring = PageGameStats::tr("(%L1 second(s))", "", kills).arg((double) kills/1000, 0, 'f', 3);
-            } else if (kindOfPoints.startsWith("!TIME") && kindOfPoints.length() == 6) {
+            } else if (kindOfPoints.startsWith(QLatin1String("!TIME")) && kindOfPoints.length() == 6) {
                 int len = kindOfPoints.at(6).digitValue();
                 if(len != -1)
                     killstring = PageGameStats::tr("(%L1 second(s))", "", kills).arg((double) kills/1000, 0, 'f', len);
                 else
                     qWarning("SendStat: siPointType received with !TIME and invalid number length!");
-            } else if (kindOfPoints == "!CRATES") {
+            } else if (kindOfPoints == QLatin1String("!CRATES")) {
                 killstring = PageGameStats::tr("(%1 crate(s))", "", kills).arg(kills);
-            } else if (kindOfPoints == "!EMPTY") {
-                killstring = QString("");
+            } else if (kindOfPoints == QLatin1String("!EMPTY")) {
+                killstring = QLatin1String("");
             } else {
                 //: For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”
                 killstring = PageGameStats::tr("(%1 %2)", "", kills).arg(kills).arg(kindOfPoints);
             }
-            kindOfPoints = QString("");
+            kindOfPoints = QLatin1String("");
 
-            message = QString("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(realPlayerPosition), playername.toHtmlEscaped(), clanColor.name().toHtmlEscaped()) + killstring.toHtmlEscaped() + "</h2></p>";
+            message = QStringLiteral("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(realPlayerPosition), playername.toHtmlEscaped(), clanColor.name().toHtmlEscaped()) + killstring.toHtmlEscaped() + QStringLiteral("</h2></p>");
 
             labelGameRank->setText(labelGameRank->text() + message);
             scriptPlayerPosition = 0;
@@ -440,7 +440,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot their own hedgehogs for <b>%2</b> pts.", "", num).arg(info.mid(i + 1).toHtmlEscaped()).arg(num) + "</p>";
+            QString message = QStringLiteral("<p><img src=\":/res/StatsMostSelfDamage.png\"> ") + PageGameStats::tr("<b>%1</b> thought it's good to shoot their own hedgehogs for <b>%2</b> pts.", "", num).arg(info.mid(i + 1).toHtmlEscaped()).arg(num) + QStringLiteral("</p>");
             AddStatText(message);
             break;
         }
@@ -448,7 +448,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of their own hedgehogs.", "", num).arg(info.mid(i + 1).toHtmlEscaped()).arg(num) + "</p>";
+            QString message = QStringLiteral("<p><img src=\":/res/StatsSelfKilled.png\"> ") + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of their own hedgehogs.", "", num).arg(info.mid(i + 1).toHtmlEscaped()).arg(num) + QStringLiteral("</p>");
             AddStatText(message);
             break;
         }
@@ -456,13 +456,13 @@ void PageGameStats::GameStats(char type, const QString & info)
         {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsSkipped.png\"> " + PageGameStats::tr("<b>%1</b> was scared and skipped turn <b>%2</b> times.", "", num).arg(info.mid(i + 1).toHtmlEscaped()).arg(num) + "</p>";
+            QString message = QStringLiteral("<p><img src=\":/res/StatsSkipped.png\"> ") + PageGameStats::tr("<b>%1</b> was scared and skipped turn <b>%2</b> times.", "", num).arg(info.mid(i + 1).toHtmlEscaped()).arg(num) + QStringLiteral("</p>");
             AddStatText(message);
             break;
         }
         case 'c' :
         {
-            QString message = "<p><img src=\":/res/StatsCustomAchievement.png\"> "+info.toHtmlEscaped()+" </p>";
+            QString message = QStringLiteral("<p><img src=\":/res/StatsCustomAchievement.png\"> ")+info.toHtmlEscaped()+QStringLiteral(" </p>");
             AddStatText(message);
             break;
         }
@@ -473,7 +473,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         }
         case 'h' :
         {
-            QString message = "<p><img src=\":/res/StatsEverAfter.png\"> " + PageGameStats::tr("With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.").toHtmlEscaped() + "</p>";
+            QString message = QStringLiteral("<p><img src=\":/res/StatsEverAfter.png\"> ") + PageGameStats::tr("With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.").toHtmlEscaped() + QStringLiteral("</p>");
             AddStatText(message);
             break;
         }

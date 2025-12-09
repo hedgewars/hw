@@ -21,14 +21,14 @@ void HWMapOptimizer::optimizeMap(const Paths &paths)
 QStringList HWMapOptimizer::getArguments()
 {
     QStringList arguments;
-    arguments << "--internal";
-    arguments << "--port";
-    arguments << QString("%1").arg(ipc_port);
-    arguments << "--user-prefix";
+    arguments << QStringLiteral("--internal");
+    arguments << QStringLiteral("--port");
+    arguments << QStringLiteral("%1").arg(ipc_port);
+    arguments << QStringLiteral("--user-prefix");
     arguments << cfgdir.absolutePath();
-    arguments << "--prefix";
+    arguments << QStringLiteral("--prefix");
     arguments << datadir.absolutePath();
-    arguments << "--landpreview";
+    arguments << QStringLiteral("--landpreview");
     return arguments;
 }
 

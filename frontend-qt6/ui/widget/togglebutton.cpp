@@ -24,7 +24,7 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
 {
     setCheckable(true);
 
-    QPixmap pixOffOverlay(":/res/btnDisabled.png");
+    QPixmap pixOffOverlay(QStringLiteral(":/res/btnDisabled.png"));
     QPainter * painter = new QPainter();
 
     QPixmap pixOn = QPixmap(img);

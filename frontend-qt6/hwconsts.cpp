@@ -56,73 +56,73 @@ int cAmmoMenuRows = 6;
 
 QList<QPair<QString, QString> > cDefaultAmmos =
     QList<QPair<QString, QString> >()
-    << qMakePair(QString("Default"), cDefaultAmmoStore)
-    << qMakePair(QString("Crazy"),
+    << qMakePair(QStringLiteral("Default"), cDefaultAmmoStore)
+    << qMakePair(QStringLiteral("Crazy"),
                  QString(AMMOLINE_CRAZY_QT AMMOLINE_CRAZY_PROB
                              AMMOLINE_CRAZY_DELAY AMMOLINE_CRAZY_CRATE))
-    << qMakePair(QString("Pro Mode"),
+    << qMakePair(QStringLiteral("Pro Mode"),
                  QString(AMMOLINE_PROMODE_QT AMMOLINE_PROMODE_PROB
                              AMMOLINE_PROMODE_DELAY AMMOLINE_PROMODE_CRATE))
-    << qMakePair(QString("Shoppa"),
+    << qMakePair(QStringLiteral("Shoppa"),
                  QString(AMMOLINE_SHOPPA_QT AMMOLINE_SHOPPA_PROB
                              AMMOLINE_SHOPPA_DELAY AMMOLINE_SHOPPA_CRATE))
-    << qMakePair(QString("Clean Slate"),
+    << qMakePair(QStringLiteral("Clean Slate"),
                  QString(AMMOLINE_CLEAN_QT AMMOLINE_CLEAN_PROB
                              AMMOLINE_CLEAN_DELAY AMMOLINE_CLEAN_CRATE))
-    << qMakePair(QString("Minefield"),
+    << qMakePair(QStringLiteral("Minefield"),
                  QString(AMMOLINE_MINES_QT AMMOLINE_MINES_PROB
                              AMMOLINE_MINES_DELAY AMMOLINE_MINES_CRATE))
-    << qMakePair(QString("Thinking with Portals"),
+    << qMakePair(QStringLiteral("Thinking with Portals"),
                  QString(AMMOLINE_PORTALS_QT AMMOLINE_PORTALS_PROB
                              AMMOLINE_PORTALS_DELAY AMMOLINE_PORTALS_CRATE))
-    << qMakePair(QString("One of Everything"),
+    << qMakePair(QStringLiteral("One of Everything"),
                  QString(AMMOLINE_ONEEVERY_QT AMMOLINE_ONEEVERY_PROB
                              AMMOLINE_ONEEVERY_DELAY AMMOLINE_ONEEVERY_CRATE))
     << qMakePair(
-           QString("Highlander"),
+           QStringLiteral("Highlander"),
            QString(AMMOLINE_HIGHLANDER_QT AMMOLINE_HIGHLANDER_PROB
                        AMMOLINE_HIGHLANDER_DELAY AMMOLINE_HIGHLANDER_CRATE))
-    << qMakePair(QString("Balanced Random Weapon"),
+    << qMakePair(QStringLiteral("Balanced Random Weapon"),
                  QString(AMMOLINE_BRW_QT AMMOLINE_BRW_PROB AMMOLINE_BRW_DELAY
                              AMMOLINE_BRW_CRATE))
     << qMakePair(
-           QString("Construction Mode"),
+           QStringLiteral("Construction Mode"),
            QString(AMMOLINE_CONSTRUCTION_QT AMMOLINE_CONSTRUCTION_PROB
                        AMMOLINE_CONSTRUCTION_DELAY AMMOLINE_CONSTRUCTION_CRATE))
-    << qMakePair(QString("Shoppa Pro"),
+    << qMakePair(QStringLiteral("Shoppa Pro"),
                  QString(AMMOLINE_SHOPPAPRO_QT AMMOLINE_SHOPPAPRO_PROB
                              AMMOLINE_SHOPPAPRO_DELAY AMMOLINE_SHOPPAPRO_CRATE))
     << qMakePair(
-           QString("HedgeEditor"),
+           QStringLiteral("HedgeEditor"),
            QString(AMMOLINE_HEDGEEDITOR_QT AMMOLINE_HEDGEEDITOR_PROB
                        AMMOLINE_HEDGEEDITOR_DELAY AMMOLINE_HEDGEEDITOR_CRATE));
 
 QStringList cQuickGameMaps = QStringList()
-    << "Bamboo"
-    << "Bath"
-    << "Battlefield"
-    << "Blox"
-    << "Bubbleflow"
-    << "Cake"
-    << "Castle"
-    << "Cheese"
-    << "Cogs"
-    << "CrazyMission"
-    << "EarthRise"
-    << "Eyes"
-    << "Hammock"
-    << "HedgeFortress"
-    << "Hedgelove"
-    << "Hedgewars"
-    << "Hydrant"
-    << "Lonely_Island"
-    << "Mushrooms"
-    << "Octorama"
-    << "PirateFlag"
-    << "Plane"
-    << "Sheep"
-    << "Trash"
-    << "Tree";
+    << QStringLiteral("Bamboo")
+    << QStringLiteral("Bath")
+    << QStringLiteral("Battlefield")
+    << QStringLiteral("Blox")
+    << QStringLiteral("Bubbleflow")
+    << QStringLiteral("Cake")
+    << QStringLiteral("Castle")
+    << QStringLiteral("Cheese")
+    << QStringLiteral("Cogs")
+    << QStringLiteral("CrazyMission")
+    << QStringLiteral("EarthRise")
+    << QStringLiteral("Eyes")
+    << QStringLiteral("Hammock")
+    << QStringLiteral("HedgeFortress")
+    << QStringLiteral("Hedgelove")
+    << QStringLiteral("Hedgewars")
+    << QStringLiteral("Hydrant")
+    << QStringLiteral("Lonely_Island")
+    << QStringLiteral("Mushrooms")
+    << QStringLiteral("Octorama")
+    << QStringLiteral("PirateFlag")
+    << QStringLiteral("Plane")
+    << QStringLiteral("Sheep")
+    << QStringLiteral("Trash")
+    << QStringLiteral("Tree");
 
 unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
 

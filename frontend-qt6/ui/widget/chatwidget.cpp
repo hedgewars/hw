@@ -45,7 +45,7 @@
 QString * HWChatWidget::s_styleSheet = NULL;
 QStringList * HWChatWidget::s_displayNone = NULL;
 bool HWChatWidget::s_isTimeStamped = true;
-QString HWChatWidget::s_tsFormat = ":mm:ss";
+QString HWChatWidget::s_tsFormat = QStringLiteral(":mm:ss");
 
 const QString & HWChatWidget::styleSheet()
 {
@@ -66,9 +66,9 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     if (orgStyleSheet.isEmpty())
     {
         // load external stylesheet if there is any
-        QFile extFile("physfs://css/chat.css");
+        QFile extFile(QStringLiteral("physfs://css/chat.css"));
 
-        QFile resFile(":/res/css/chat.css");
+        QFile resFile(QStringLiteral(":/res/css/chat.css"));
 
         QFile & file = (extFile.exists()?extFile:resFile);
 
@@ -77,7 +77,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
             QTextStream in(&file);
             while (!in.atEnd())
             {
-                style.append(in.readLine()+"\n");
+                style.append(in.readLine()+QStringLiteral("\n"));
             }
             orgStyleSheet = style;
 
@@ -90,13 +90,13 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     // prepare for MAGIC :D
 
     // matches (multi-)whitespaces (for replacement with simple space)
-    QRegularExpression ws("\\s+");
+    QRegularExpression ws(QStringLiteral("\\s+"));
 
     // matches comments (for removal)
-    QRegularExpression rem("/\\*([^*]|\\*(?!/))*\\*/");
+    QRegularExpression rem(QStringLiteral("/\\*([^*]|\\*(?!/))*\\*/"));
 
     // strip comments and multi-whitespaces to compress the style-sheet a bit
-    style = style.remove(rem).replace(ws," ");
+    style = style.remove(rem).replace(ws,QStringLiteral(" "));
 
 
     // now let's see what messages the user does not want to be displayed
@@ -106,13 +106,13 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
 
     // matches definitions lacking display:none; (for removal)
     QRegularExpression displayed(
-        "([^{}]*\\{)(?!([^}]*;)* ?display ?: ?none ?(;[^}]*)?\\})[^}]*\\}");
+        QStringLiteral("([^{}]*\\{)(?!([^}]*;)* ?display ?: ?none ?(;[^}]*)?\\})[^}]*\\}"));
 
     // matches all {...} and , (used as seperator for splitting into names)
-    QRegularExpression split(" *(\\{[^}]*\\}|,) *");
+    QRegularExpression split(QStringLiteral(" *(\\{[^}]*\\}|,) *"));
 
     // matches class names that are referenced without hierachy
-    QRegularExpression nohierarchy("^.[^ .]+$");
+    QRegularExpression nohierarchy(QStringLiteral("^.[^ .]+$"));
 
     QStringList victims =
         QString(style)
@@ -123,7 +123,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
             .  // get a list of the names
         filter(nohierarchy)
             .  // only direct class names
-        replaceInStrings(QRegularExpression("^."), "");  // crop .
+        replaceInStrings(QRegularExpression(QStringLiteral("^.")), QLatin1String(""));  // crop .
 
     if (victims.contains("timestamp")) {
       s_isTimeStamped = false;
@@ -131,7 +131,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     } else {
       s_isTimeStamped = true;
       s_tsFormat = ((victims.contains("timestamp:hours")) ? "" : "hh:") +
-                   QString("mm") +
+                   QStringLiteral("mm") +
                    ((victims.contains("timestamp:seconds")) ? "" : ":ss");
     }
 
@@ -156,19 +156,19 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
 
 void HWChatWidget::displayError(const QString & message)
 {
-    addLine("msg_Error", " !!! " + message);
+    addLine(QStringLiteral("msg_Error"), QStringLiteral(" !!! ") + message);
 }
 
 
 void HWChatWidget::displayNotice(const QString & message)
 {
-    addLine("msg_Notice", " *** " + message);
+    addLine(QStringLiteral("msg_Notice"), QStringLiteral(" *** ") + message);
 }
 
 
 void HWChatWidget::displayWarning(const QString & message)
 {
-    addLine("msg_Warning", " *!* " + message);
+    addLine(QStringLiteral("msg_Warning"), QStringLiteral(" *!* ") + message);
 }
 
 
@@ -188,14 +188,14 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     m_scrollBarPos = 0;
 
     QStringList vpList =
-         QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
+         QStringList() << QStringLiteral("Classic") << QStringLiteral("Default") << QStringLiteral("Mobster") << QStringLiteral("Russian");
 
     foreach (const QString & vp, vpList)
     {
-        m_helloSounds.append(QString("/Sounds/voices/%1/Hello.ogg").arg(vp));
+        m_helloSounds.append(QStringLiteral("/Sounds/voices/%1/Hello.ogg").arg(vp));
     }
 
-    m_hilightSound = "/Sounds/beep.ogg";
+    m_hilightSound = QStringLiteral("/Sounds/beep.ogg");
 
     mainLayout.setContentsMargins({});
 
@@ -228,7 +228,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     chatEditLine = new SmartLineEdit();
     chatEditLine->setWhatsThis(tr("Enter chat messages here and send them with [Enter]"));
     chatEditLine->setMaxLength(300);
-    chatEditLine->setStyleSheet("SmartLineEdit { background-color: rgb(23, 11, 54); padding: 2px 8px; border-width: 0px; border-radius: 7px; } SmartLineEdit:hover, SmartLineEdit:focus { background-color: rgb(13, 5, 68); }");
+    chatEditLine->setStyleSheet(QStringLiteral("SmartLineEdit { background-color: rgb(23, 11, 54); padding: 2px 8px; border-width: 0px; border-radius: 7px; } SmartLineEdit:hover, SmartLineEdit:focus { background-color: rgb(13, 5, 68); }"));
     chatEditLine->setFixedHeight(24);
     chatEditLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
@@ -306,9 +306,9 @@ void HWChatWidget::setSettings(QSettings * settings)
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
-    if ((link.scheme() == "http") || (link.scheme() == "https"))
+    if ((link.scheme() == QLatin1String("http")) || (link.scheme() == QLatin1String("https")))
         QDesktopServices::openUrl(link);
-    else if (link.scheme() == "hwnick")
+    else if (link.scheme() == QLatin1String("hwnick"))
     {
         // decode nick
         QString nick = QString::fromUtf8(QByteArray::fromBase64(link.query(QUrl::FullyDecoded).toLatin1()));
@@ -374,11 +374,11 @@ QString HWChatWidget::linkedNick(const QString & nickname)
     // '[' and '(' are reserved characters used for fake player names in special server messages
     if ((nickname != m_userNick) && (!nickname.startsWith('[')) && (!nickname.startsWith('(')))
         // linked nick
-        return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
+        return QStringLiteral("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
                    QString(nickname.toUtf8().toBase64())).arg(nickname.toHtmlEscaped());
 
     // unlinked nick (if own one or fake player name)
-    return QString("<span class=\"nick\">%1</span>").arg(nickname.toHtmlEscaped());
+    return QStringLiteral("<span class=\"nick\">%1</span>").arg(nickname.toHtmlEscaped());
 }
 
 // Regex to make some URLs clickable for selected domains:
@@ -411,12 +411,12 @@ QString HWChatWidget::messageToHTML(const QString & message)
 
 void HWChatWidget::onChatAction(const QString & nick, const QString & action)
 {
-    printChatString(nick, "* " + linkedNick(nick) + " " + messageToHTML(action), "Action", containsHighlight(nick, action));
+    printChatString(nick, QStringLiteral("* ") + linkedNick(nick) + QStringLiteral(" ") + messageToHTML(action), QStringLiteral("Action"), containsHighlight(nick, action));
 }
 
 void HWChatWidget::onChatMessage(const QString & nick, const QString & message)
 {
-    printChatString(nick, linkedNick(nick) + ": " + messageToHTML(message), "Chat", containsHighlight(nick, message));
+    printChatString(nick, linkedNick(nick) + QStringLiteral(": ") + messageToHTML(message), QStringLiteral("Chat"), containsHighlight(nick, message));
 }
 
 void HWChatWidget::printChatString(
@@ -455,16 +455,16 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
 
     if (s_isTimeStamped)
     {
-        QString tsMarkUp = "<span class=\"timestamp\">[%1]</span> ";
+        QString tsMarkUp = QStringLiteral("<span class=\"timestamp\">[%1]</span> ");
         QTime now = QDateTime::currentDateTime().time();
         line = tsMarkUp.arg(now.toString(s_tsFormat)) + line;
     }
 
-    line = QString("<span class=\"%1\">%2</span>").arg(cssClass).arg(line);
+    line = QStringLiteral("<span class=\"%1\">%2</span>").arg(cssClass).arg(line);
 
     if (isHighlight)
     {
-        line = QString("<span class=\"highlight\">%1</span>").arg(line);
+        line = QStringLiteral("<span class=\"highlight\">%1</span>").arg(line);
         SDLInteraction::instance().playSoundFile(m_hilightSound);
         if (!isInGame())
             HWApplication::alert(this, 800);
@@ -472,7 +472,7 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
 
     chatStrings.append(QStringLiteral("<div>%1</div>").arg(line));
 
-    chatText->setHtml("<html><body>"+chatStrings.join("")+"</body></html>");
+    chatText->setHtml(QStringLiteral("<html><body>")+chatStrings.join(QLatin1String(""))+QStringLiteral("</body></html>"));
 
     afterContentAdd();
 }
@@ -484,9 +484,9 @@ void HWChatWidget::onServerMessage(const QString& str)
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 
-    chatStrings.append("<hr>" + str + "<hr>");
+    chatStrings.append(QStringLiteral("<hr>") + str + QStringLiteral("<hr>"));
 
-    chatText->setHtml("<html><body>"+chatStrings.join("")+"</body></html>");
+    chatText->setHtml(QStringLiteral("<html><body>")+chatStrings.join(QLatin1String(""))+QStringLiteral("</body></html>"));
 
     afterContentAdd();
 }
@@ -517,7 +517,7 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
     emit nickCountUpdate(chatNicks->model()->rowCount());
 
     if (!isIgnored)
-        printChatString(nick, QString("*** ") + tr("%1 has joined").arg(linkedNick(nick)), "Join", false);
+        printChatString(nick, QStringLiteral("*** ") + tr("%1 has joined").arg(linkedNick(nick)), QStringLiteral("Join"), false);
 
     if (notifyNick && notify)
     {
@@ -536,7 +536,7 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
 void HWChatWidget::nickRemoved(const QString& nick)
 {
-    nickRemoved(nick, "");
+    nickRemoved(nick, QLatin1String(""));
 }
 
 void HWChatWidget::nickRemoved(const QString& nick, const QString & message)
@@ -546,14 +546,14 @@ void HWChatWidget::nickRemoved(const QString& nick, const QString & message)
     emit nickCountUpdate(chatNicks->model()->rowCount());
 
     // Normal quit
-    if (message.isEmpty() || message == "bye")
+    if (message.isEmpty() || message == QLatin1String("bye"))
     {
-        printChatString(nick, QString("*** ") + tr("%1 has left").arg(linkedNick(nick)), "Leave", false);
+        printChatString(nick, QStringLiteral("*** ") + tr("%1 has left").arg(linkedNick(nick)), QStringLiteral("Leave"), false);
     }
     // Quit with additional server message (i.e. ping timeout)
     else
     {
-        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(HWApplication::translate("server", message.toLatin1().constData()).toHtmlEscaped()), "Leave", false);
+        printChatString(nick, QStringLiteral("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(HWApplication::translate("server", message.toLatin1().constData()).toHtmlEscaped()), QStringLiteral("Leave"), false);
     }
 }
 
@@ -564,7 +564,7 @@ void HWChatWidget::clear()
     // add default commands
     QStringList cmds;
     // /saveStyleSheet is(/was?) broken because of Physfs or something
-    cmds << "/clear" << "/help" << "/info" << "/me" << "/quit" << "/rnd";
+    cmds << QStringLiteral("/clear") << QStringLiteral("/help") << QStringLiteral("/info") << QStringLiteral("/me") << QStringLiteral("/quit") << QStringLiteral("/rnd");
     chatEditLine->addCommands(cmds);
 
     chatText->clear();
@@ -574,15 +574,15 @@ void HWChatWidget::clear()
     // clear and re compile regexp for highlighting
     m_highlights.clear();
 
-    QString hlRegExp("^(.* )?%1[^-a-z0-9_]*( .*)?$");
-    QRegularExpression whitespace("\\s");
+    QString hlRegExp(QStringLiteral("^(.* )?%1[^-a-z0-9_]*( .*)?$"));
+    QRegularExpression whitespace(QStringLiteral("\\s"));
 
     if (!m_userNick.isEmpty())
       m_highlights.append(QRegularExpression(
           hlRegExp.arg(QRegularExpression::escape(m_userNick.toLower()))));
 
-    QFile file(cfgdir.absolutePath() + "/" + m_userNick.toLower() +
-               "_highlight.txt");
+    QFile file(cfgdir.absolutePath() + QStringLiteral("/") + m_userNick.toLower() +
+               QStringLiteral("_highlight.txt"));
 
     if (file.exists() && (file.open(QIODevice::ReadOnly | QIODevice::Text)))
     {
@@ -602,8 +602,8 @@ void HWChatWidget::clear()
             file.close();
     }
 
-    QFile file2(cfgdir.absolutePath() + "/" + m_userNick.toLower() +
-                "_hlregexp.txt");
+    QFile file2(cfgdir.absolutePath() + QStringLiteral("/") + m_userNick.toLower() +
+                QStringLiteral("_hlregexp.txt"));
 
     if (file2.exists() && (file2.open(QIODevice::ReadOnly | QIODevice::Text)))
     {
@@ -624,9 +624,9 @@ void HWChatWidget::onPlayerInfo(
             const QString & version,
             const QString & roomInfo)
 {
-    addLine("msg_PlayerInfo", QString(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
+    addLine(QStringLiteral("msg_PlayerInfo"), QStringLiteral(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
         .arg(linkedNick(nick))
-        .arg(QString(ip == "[]"?"":ip).toHtmlEscaped())
+        .arg(QString(ip == QLatin1String("[]")?QLatin1String(""):ip).toHtmlEscaped())
         .arg(version.toHtmlEscaped())
         .arg(roomInfo.toHtmlEscaped())
     );
@@ -786,7 +786,7 @@ void HWChatWidget::dragEnterEvent(QDragEnterEvent * event)
             QUrl url = urls[0];
 
             static QRegularExpression localFileRegExp(
-                "file://.*\\.css$", QRegularExpression::CaseInsensitiveOption);
+                QStringLiteral("file://.*\\.css$"), QRegularExpression::CaseInsensitiveOption);
 
             if (url.toString().contains(localFileRegExp))
               event->acceptProposedAction();
@@ -807,7 +807,7 @@ void HWChatWidget::dropEvent(QDropEvent * event)
         while (!in.atEnd())
         {
             QString line = in.readLine();
-            style.append(line + "\n");
+            style.append(line + QStringLiteral("\n"));
         }
 
         setStyleSheet(style);
@@ -835,13 +835,13 @@ void HWChatWidget::discardStyleSheet()
 
 void HWChatWidget::saveStyleSheet()
 {
-    QString dest = "physfs://css/chat.css";
+    QString dest = QStringLiteral("physfs://css/chat.css");
 
     QFile file(dest);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QTextStream out(&file);
-        QStringList lines = s_styleSheet->split("\n", Qt::KeepEmptyParts);
+        QStringList lines = s_styleSheet->split(QStringLiteral("\n"), Qt::KeepEmptyParts);
 
         // strip trailing empty lines
         while (lines.last().isEmpty())
@@ -871,15 +871,15 @@ bool HWChatWidget::parseCommand(const QString & line)
             displayWarning(QCoreApplication::translate("server", "Unknown command or invalid parameters. Say '/help' in chat for a list of commands."));
             return true;
         }
-        if (tline.startsWith("/me"))
+        if (tline.startsWith(QLatin1String("/me")))
             return false; // not a real command
-        else if (tline == "/clear") {
+        else if (tline == QLatin1String("/clear")) {
             chatStrings.clear();
             chatText->clear();
         }
-        else if (tline == "/discardStyleSheet")
+        else if (tline == QLatin1String("/discardStyleSheet"))
             discardStyleSheet();
-        else if (tline == "/saveStyleSheet")
+        else if (tline == QLatin1String("/saveStyleSheet"))
             saveStyleSheet();
         else
             emit consoleCommand(tline.mid(1));

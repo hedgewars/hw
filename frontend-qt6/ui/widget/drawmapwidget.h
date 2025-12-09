@@ -64,7 +64,7 @@ namespace Ui
                 arLayout->setAlignment(Qt::AlignCenter);
                 vbox->addLayout(arLayout);
 
-                lblPoints = new QLabel("0", drawMapWidget);
+                lblPoints = new QLabel(QStringLiteral("0"), drawMapWidget);
                 lblPoints->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
                 arLayout->addWidget(lblPoints);
 

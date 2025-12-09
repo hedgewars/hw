@@ -84,51 +84,51 @@ QString RoomsListModel::protoToVersion(const QString & proto)
     bool ok;
     uint protoNum = proto.toUInt(&ok);
     if (!ok)
-        return "Unknown";
+        return QStringLiteral("Unknown");
     switch (protoNum) {
-    case 17: return "0.9.7-dev";
-    case 19: return "0.9.7";
-    case 20: return "0.9.8-dev";
-    case 21: return "0.9.8";
-    case 22: return "0.9.9-dev";
-    case 23: return "0.9.9";
-    case 24: return "0.9.10-dev";
-    case 25: return "0.9.10";
-    case 26: return "0.9.11-dev";
-    case 27: return "0.9.11";
-    case 28: return "0.9.12-dev";
-    case 29: return "0.9.12";
-    case 30: return "0.9.13-dev";
-    case 31: return "0.9.13";
-    case 32: return "0.9.14-dev";
-    case 33: return "0.9.14";
-    case 34: return "0.9.15-dev";
-    case 35: return "0.9.14.1";
-    case 37: return "0.9.15";
-    case 38: return "0.9.16-dev";
-    case 39: return "0.9.16";
-    case 40: return "0.9.17-dev";
-    case 41: return "0.9.17";
-    case 42: return "0.9.18-dev";
-    case 43: return "0.9.18";
-    case 44: return "0.9.19-dev";
-    case 45: return "0.9.19";
-    case 46: return "0.9.20-dev";
-    case 47: return "0.9.20";
-    case 48: return "0.9.21-dev";
-    case 49: return "0.9.21";
-    case 50: return "0.9.22-dev";
-    case 51: return "0.9.22";
-    case 52: return "0.9.23-dev";
-    case 53: return "0.9.23";
-    case 54: return "0.9.24-dev";
-    case 55: return "0.9.24";
-    case 56: return "0.9.25-dev";
-    case 57: return "0.9.25";
-    case 58: return "1.0.0-dev";
-    case 59: return "1.0.0";
-    case 60: return "1.1.0-dev";
-    default: return "Unknown";
+    case 17: return QStringLiteral("0.9.7-dev");
+    case 19: return QStringLiteral("0.9.7");
+    case 20: return QStringLiteral("0.9.8-dev");
+    case 21: return QStringLiteral("0.9.8");
+    case 22: return QStringLiteral("0.9.9-dev");
+    case 23: return QStringLiteral("0.9.9");
+    case 24: return QStringLiteral("0.9.10-dev");
+    case 25: return QStringLiteral("0.9.10");
+    case 26: return QStringLiteral("0.9.11-dev");
+    case 27: return QStringLiteral("0.9.11");
+    case 28: return QStringLiteral("0.9.12-dev");
+    case 29: return QStringLiteral("0.9.12");
+    case 30: return QStringLiteral("0.9.13-dev");
+    case 31: return QStringLiteral("0.9.13");
+    case 32: return QStringLiteral("0.9.14-dev");
+    case 33: return QStringLiteral("0.9.14");
+    case 34: return QStringLiteral("0.9.15-dev");
+    case 35: return QStringLiteral("0.9.14.1");
+    case 37: return QStringLiteral("0.9.15");
+    case 38: return QStringLiteral("0.9.16-dev");
+    case 39: return QStringLiteral("0.9.16");
+    case 40: return QStringLiteral("0.9.17-dev");
+    case 41: return QStringLiteral("0.9.17");
+    case 42: return QStringLiteral("0.9.18-dev");
+    case 43: return QStringLiteral("0.9.18");
+    case 44: return QStringLiteral("0.9.19-dev");
+    case 45: return QStringLiteral("0.9.19");
+    case 46: return QStringLiteral("0.9.20-dev");
+    case 47: return QStringLiteral("0.9.20");
+    case 48: return QStringLiteral("0.9.21-dev");
+    case 49: return QStringLiteral("0.9.21");
+    case 50: return QStringLiteral("0.9.22-dev");
+    case 51: return QStringLiteral("0.9.22");
+    case 52: return QStringLiteral("0.9.23-dev");
+    case 53: return QStringLiteral("0.9.23");
+    case 54: return QStringLiteral("0.9.24-dev");
+    case 55: return QStringLiteral("0.9.24");
+    case 56: return QStringLiteral("0.9.25-dev");
+    case 57: return QStringLiteral("0.9.25");
+    case 58: return QStringLiteral("1.0.0-dev");
+    case 59: return QStringLiteral("1.0.0");
+    case 60: return QStringLiteral("1.1.0-dev");
+    default: return QStringLiteral("Unknown");
     }
 }
 
@@ -173,20 +173,20 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
 
         QString flags = m_data.at(row).at(StateColumn);
 
-        if (flags.contains("g"))
+        if (flags.contains(QLatin1String("g")))
         {
-            if (flags.contains("j"))
+            if (flags.contains(QLatin1String("j")))
                 return QVariant(roomBusyIconRed);
-            else if (flags.contains("p"))
+            else if (flags.contains(QLatin1String("p")))
                 return QVariant(roomBusyIconGreen);
             else
                 return QVariant(roomBusyIcon);
         }
         else
         {
-            if (flags.contains("j"))
+            if (flags.contains(QLatin1String("j")))
                 return QVariant(roomWaitingIconRed);
-            else if (flags.contains("p"))
+            else if (flags.contains(QLatin1String("p")))
                 return QVariant(roomWaitingIconGreen);
             else
                 return QVariant(roomWaitingIcon);
@@ -203,17 +203,17 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
             // special names
             if (content[0] == '+')
             {
-                if (content == "+rnd+") return tr("Random Map");
-                if (content == "+maze+") return tr("Random Maze");
-                if (content == "+perlin+") return tr("Random Perlin");
-                if (content == "+drawn+") return tr("Hand-drawn");
-                if (content == "+forts+") return tr("Forts");
+                if (content == QLatin1String("+rnd+")) return tr("Random Map");
+                if (content == QLatin1String("+maze+")) return tr("Random Maze");
+                if (content == QLatin1String("+perlin+")) return tr("Random Perlin");
+                if (content == QLatin1String("+drawn+")) return tr("Hand-drawn");
+                if (content == QLatin1String("+forts+")) return tr("Forts");
             }
 
             // prefix ? if map not available
             if (!m_staticMapModel->mapExists(content) &&
                 !m_missionMapModel->mapExists(content))
-                return QString ("? %1").arg(content);
+                return QStringLiteral ("? %1").arg(content);
         }
         else if (column == VersionColumn)
         {
@@ -230,9 +230,9 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
         return QBrush(QColor("darkgrey"));
 
       if (column == MapColumn) {
-        if (content == "+rnd+" || content == "+maze+" ||
-            content == "+perlin+" || content == "+drawn+" ||
-            content == "+forts+" || m_staticMapModel->mapExists(content) ||
+        if (content == QLatin1String("+rnd+") || content == QLatin1String("+maze+") ||
+            content == QLatin1String("+perlin+") || content == QLatin1String("+drawn+") ||
+            content == QLatin1String("+forts+") || m_staticMapModel->mapExists(content) ||
             m_missionMapModel->mapExists(content))
           return QVariant();
         else

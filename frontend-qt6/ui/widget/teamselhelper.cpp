@@ -53,7 +53,7 @@ TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams *
                          QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty()))
                          : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty()));
 
-    butt = new QPushButton(difficultyIcon, team.name().replace("&","&&"), this);
+    butt = new QPushButton(difficultyIcon, team.name().replace(QLatin1String("&"),QLatin1String("&&")), this);
     butt->setFlat(true);
     butt->setToolTip(team.owner());
     mainLayout.addWidget(butt);
@@ -70,7 +70,7 @@ TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams *
         connect(colorWidget, SIGNAL(colorChanged(int)), this, SLOT(onColorChanged(int)));
         mainLayout.addWidget(colorWidget);
 
-        phhoger = new CHedgehogerWidget(QImage(":/res/hh25x25.png"), QImage(":/res/hh25x25grey.png"), this);
+        phhoger = new CHedgehogerWidget(QImage(QStringLiteral(":/res/hh25x25.png")), QImage(QStringLiteral(":/res/hh25x25grey.png")), this);
         connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
         phhoger->setHHNum(team.numHedgehogs());
         mainLayout.addWidget(phhoger);

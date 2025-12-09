@@ -49,7 +49,7 @@ QString HWProto::formatChatMsg(const QString & nick, const QString & msg)
 {
     // Messages using the /me command.
     // Server messages (nick starts with a bracket) are never considered /me messages.
-    if(msg.left(4) == "/me " && (!nick.startsWith('[')) && (!nick.startsWith('(')))
+    if(msg.left(4) == QLatin1String("/me ") && (!nick.startsWith('[')) && (!nick.startsWith('(')))
         return QString("\x02* %1 %2").arg(nick).arg(msg.mid(4));
     // Normal chat message
     else
@@ -58,7 +58,7 @@ QString HWProto::formatChatMsg(const QString & nick, const QString & msg)
 
 QString HWProto::chatStringToAction(const QString & string)
 {
-    if(string.left(4) == "/me ")
+    if(string.left(4) == QLatin1String("/me "))
         return string.mid(4);
     else
         return QString();

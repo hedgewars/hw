@@ -72,13 +72,13 @@ QLayout * PageDrawMap::footerLayoutDefinition()
 
     bottomLayout->addStretch();
 
-    pbLoad = addButton(":/res/Load.png", bottomLayout, 0, true, Qt::AlignBottom);
+    pbLoad = addButton(QStringLiteral(":/res/Load.png"), bottomLayout, 0, true, Qt::AlignBottom);
     pbLoad ->setWhatsThis(tr("Load"));
-    pbLoad->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+    pbLoad->setStyleSheet(QStringLiteral("QPushButton{margin: 24px 0 0 0;}"));
 
-    pbSave = addButton(":/res/Save.png", bottomLayout, 0, true, Qt::AlignBottom);
+    pbSave = addButton(QStringLiteral(":/res/Save.png"), bottomLayout, 0, true, Qt::AlignBottom);
     pbSave ->setWhatsThis(tr("Save"));
-    pbSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+    pbSave->setStyleSheet(QStringLiteral("QPushButton{margin: 24px 0 0 0;}"));
 
     return bottomLayout;
 }
@@ -108,10 +108,10 @@ PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
 
 void PageDrawMap::load()
 {
-  QString loadDir = QDir(cfgdir.absolutePath() + "/DrawnMaps").absolutePath();
+  QString loadDir = QDir(cfgdir.absolutePath() + QStringLiteral("/DrawnMaps")).absolutePath();
   QString fileName = QFileDialog::getOpenFileName(
       this, tr("Load drawn map"), loadDir,
-      tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+      tr("Drawn Maps") + QStringLiteral(" (*.hwmap);;") + tr("All files") + QStringLiteral(" (*)"));
 
   if (!fileName.isEmpty()) drawMapWidget->load(fileName);
 }
@@ -119,10 +119,10 @@ void PageDrawMap::load()
 void PageDrawMap::save()
 {
   QString saveDir =
-      QDir(cfgdir.absolutePath() + "/DrawnMaps/map.hwmap").absolutePath();
+      QDir(cfgdir.absolutePath() + QStringLiteral("/DrawnMaps/map.hwmap")).absolutePath();
   QString fileName = QFileDialog::getSaveFileName(
       this, tr("Save drawn map"), saveDir,
-      tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+      tr("Drawn Maps") + QStringLiteral(" (*.hwmap);;") + tr("All files") + QStringLiteral(" (*)"));
 
   if (!fileName.isEmpty()) drawMapWidget->save(fileName);
 }

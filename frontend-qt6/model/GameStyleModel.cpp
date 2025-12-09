@@ -33,8 +33,8 @@ void GameStyleModel::loadGameStyles()
     beginResetModel();
 
     QIcon dlcIcon;
-    dlcIcon.addFile(":/res/dlcMarker.png", QSize(), QIcon::Normal, QIcon::On);
-    dlcIcon.addFile(":/res/dlcMarkerSelected.png", QSize(), QIcon::Selected, QIcon::On);
+    dlcIcon.addFile(QStringLiteral(":/res/dlcMarker.png"), QSize(), QIcon::Normal, QIcon::On);
+    dlcIcon.addFile(QStringLiteral(":/res/dlcMarkerSelected.png"), QSize(), QIcon::Selected, QIcon::On);
     QPixmap emptySpace = QPixmap(7, 15);
     emptySpace.fill(QColor(0, 0, 0, 0));
     QIcon notDlcIcon = QIcon(emptySpace);
@@ -43,10 +43,10 @@ void GameStyleModel::loadGameStyles()
     QStandardItemModel::clear();
 
     QList<QStandardItem * > items;
-    items.append(new QStandardItem(notDlcIcon, "Normal"));
+    items.append(new QStandardItem(notDlcIcon, QStringLiteral("Normal")));
 
     // define a separator item
-    QStandardItem * separator = new QStandardItem("---");
+    QStandardItem * separator = new QStandardItem(QStringLiteral("---"));
     separator->setData(QLatin1String("separator"), Qt::AccessibleDescriptionRole);
     separator->setFlags(separator->flags() & ~( Qt::ItemIsEnabled | Qt::ItemIsSelectable ) );
 
@@ -54,22 +54,22 @@ void GameStyleModel::loadGameStyles()
 
 
     QStringList scripts = DataManager::instance().entryList(
-                             QString("Scripts/Multiplayer"),
+                             QStringLiteral("Scripts/Multiplayer"),
                              QDir::Files,
                              QStringList("*.lua")
                          );
 
     foreach(QString script, scripts)
     {
-        script = script.remove(".lua", Qt::CaseInsensitive);
+        script = script.remove(QStringLiteral(".lua"), Qt::CaseInsensitive);
 
-        QFile scriptCfgFile(QString("physfs://Scripts/Multiplayer/%2.cfg").arg(script));
+        QFile scriptCfgFile(QStringLiteral("physfs://Scripts/Multiplayer/%2.cfg").arg(script));
 
         QString name = script;
-        name = name.replace("_", " ");
+        name = name.replace(QLatin1String("_"), QLatin1String(" "));
 
-        QString scheme = "locked";
-        QString weapons = "locked";
+        QString scheme = QStringLiteral("locked");
+        QString weapons = QStringLiteral("locked");
 
         if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly))
         {
@@ -79,14 +79,14 @@ void GameStyleModel::loadGameStyles()
             scriptCfgFile.close();
 
             if (!scheme.isEmpty())
-                scheme.replace("_", " ");
+                scheme.replace(QLatin1String("_"), QLatin1String(" "));
 
             if (!weapons.isEmpty())
-                weapons.replace("_", " ");
+                weapons.replace(QLatin1String("_"), QLatin1String(" "));
         }
 
         // detect if script is dlc
-        QString scriptPath = PHYSFS_getRealDir(QString("Scripts/Multiplayer/%1.lua").arg(script).toLocal8Bit().data());
+        QString scriptPath = PHYSFS_getRealDir(QStringLiteral("Scripts/Multiplayer/%1.lua").arg(script).toLocal8Bit().data());
         bool isDLC = !scriptPath.startsWith(datadir.absolutePath());
 
         QStandardItem * item;

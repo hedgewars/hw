@@ -52,7 +52,7 @@ HWApplication::HWApplication(int &argc, char **argv) :
     urlString = NULL;
     if (argc > 1) {
         urlString = new QString(argv[1]);
-        if (urlString->contains("//", Qt::CaseInsensitive) == false) {
+        if (urlString->contains(QLatin1String("//"), Qt::CaseInsensitive) == false) {
             delete urlString;
             urlString = NULL;
         }
@@ -80,13 +80,12 @@ bool HWApplication::event(QEvent *event)
         address = openEvent->url().host();
 
         QFile file(path);
-        if (scheme == "file" && file.exists()) {
+        if (scheme == QLatin1String("file") && file.exists()) {
             form->PlayDemoQuick(path);
             return true;
-        } else if (scheme == "hwplay") {
+        } else if (scheme == QLatin1String("hwplay")) {
             int port = openEvent->url().port(NETGAME_DEFAULT_PORT);
-            if (address == "")
-                address = NETGAME_DEFAULT_SERVER;
+            if (address.isEmpty()) address = NETGAME_DEFAULT_SERVER;
             form->NetConnectQuick(address, (quint16) port);
             return true;
         } else {

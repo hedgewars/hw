@@ -51,7 +51,7 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
         QListView * listview = dynamic_cast<QListView*>(dist);
         if (button || textfield || checkbox || droplist || slider || tab || listview)
         {
-            SDLInteraction::instance().playSoundFile("/Sounds/steps.ogg");
+            SDLInteraction::instance().playSoundFile(QStringLiteral("/Sounds/steps.ogg"));
         }
     }
     else if (event->type() == QEvent::Leave)
@@ -63,7 +63,7 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
             abstractpage->setButtonDescription( * abstractpage->getDefaultDescription());
         }
         else
-            abstractpage->setButtonDescription("");
+            abstractpage->setButtonDescription(QLatin1String(""));
     }
     return false;
 }

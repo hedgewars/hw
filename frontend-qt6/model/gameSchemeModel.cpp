@@ -78,72 +78,72 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QAbstractTableModel(parent)
 {
     predefSchemesNames = QStringList()
-                         << "Default"
-                         << "Pro Mode"
-                         << "Shoppa"
-                         << "Clean Slate"
-                         << "Minefield"
-                         << "Barrel Mayhem"
-                         << "Tunnel Hogs"
-                         << "Timeless"
-                         << "Thinking with Portals"
-                         << "King Mode"
-                         << "Mutant"
-                         << "Construction Mode"
-                         << "The Specialists"
-                         << "Space Invasion"
-                         << "HedgeEditor"
-                         << "Racer"
+                         << QStringLiteral("Default")
+                         << QStringLiteral("Pro Mode")
+                         << QStringLiteral("Shoppa")
+                         << QStringLiteral("Clean Slate")
+                         << QStringLiteral("Minefield")
+                         << QStringLiteral("Barrel Mayhem")
+                         << QStringLiteral("Tunnel Hogs")
+                         << QStringLiteral("Timeless")
+                         << QStringLiteral("Thinking with Portals")
+                         << QStringLiteral("King Mode")
+                         << QStringLiteral("Mutant")
+                         << QStringLiteral("Construction Mode")
+                         << QStringLiteral("The Specialists")
+                         << QStringLiteral("Space Invasion")
+                         << QStringLiteral("HedgeEditor")
+                         << QStringLiteral("Racer")
                          ;
 
     numberOfDefaultSchemes = predefSchemesNames.size();
 
     spNames = QStringList()
-              << "name"                //  0 | Name should be first forever
-              << "switchhog"           //  1
-              << "divteams"            //  2
-              << "solidland"           //  3
-              << "border"              //  4
-              << "lowgrav"             //  5
-              << "laser"               //  6
-              << "invulnerability"     //  7
-              << "resethealth"         //  8
-              << "vampiric"            //  9
-              << "karma"               // 10
-              << "artillery"           // 11
-              << "randomorder"         // 12
-              << "king"                // 13
-              << "placehog"            // 14
-              << "sharedammo"          // 15
-              << "disablegirders"      // 16
-              << "disablelandobjects"  // 17
-              << "aisurvival"          // 18
-              << "infattack"           // 19
-              << "resetweps"           // 20
-              << "perhogammo"          // 21
-              << "disablewind"         // 22
-              << "morewind"            // 23
-              << "tagteam"             // 24
-              << "bottomborder"        // 25
-              << "damagefactor"        // 26
-              << "turntime"            // 27
-              << "health"              // 28
-              << "suddendeath"         // 29
-              << "caseprobability"     // 30
-              << "minestime"           // 31
-              << "minesnum"            // 32
-              << "minedudpct"          // 33
-              << "explosives"          // 34
-              << "airmines"            // 35
-              << "sentries"            // 36
-              << "healthprobability"   // 37
-              << "healthcaseamount"    // 38
-              << "waterrise"           // 39
-              << "healthdecrease"      // 40
-              << "ropepct"             // 41
-              << "getawaytime"         // 42
-              << "worldedge"           // 43
-              << "scriptparam"         // scriptparam    44
+              << QStringLiteral("name")                //  0 | Name should be first forever
+              << QStringLiteral("switchhog")           //  1
+              << QStringLiteral("divteams")            //  2
+              << QStringLiteral("solidland")           //  3
+              << QStringLiteral("border")              //  4
+              << QStringLiteral("lowgrav")             //  5
+              << QStringLiteral("laser")               //  6
+              << QStringLiteral("invulnerability")     //  7
+              << QStringLiteral("resethealth")         //  8
+              << QStringLiteral("vampiric")            //  9
+              << QStringLiteral("karma")               // 10
+              << QStringLiteral("artillery")           // 11
+              << QStringLiteral("randomorder")         // 12
+              << QStringLiteral("king")                // 13
+              << QStringLiteral("placehog")            // 14
+              << QStringLiteral("sharedammo")          // 15
+              << QStringLiteral("disablegirders")      // 16
+              << QStringLiteral("disablelandobjects")  // 17
+              << QStringLiteral("aisurvival")          // 18
+              << QStringLiteral("infattack")           // 19
+              << QStringLiteral("resetweps")           // 20
+              << QStringLiteral("perhogammo")          // 21
+              << QStringLiteral("disablewind")         // 22
+              << QStringLiteral("morewind")            // 23
+              << QStringLiteral("tagteam")             // 24
+              << QStringLiteral("bottomborder")        // 25
+              << QStringLiteral("damagefactor")        // 26
+              << QStringLiteral("turntime")            // 27
+              << QStringLiteral("health")              // 28
+              << QStringLiteral("suddendeath")         // 29
+              << QStringLiteral("caseprobability")     // 30
+              << QStringLiteral("minestime")           // 31
+              << QStringLiteral("minesnum")            // 32
+              << QStringLiteral("minedudpct")          // 33
+              << QStringLiteral("explosives")          // 34
+              << QStringLiteral("airmines")            // 35
+              << QStringLiteral("sentries")            // 36
+              << QStringLiteral("healthprobability")   // 37
+              << QStringLiteral("healthcaseamount")    // 38
+              << QStringLiteral("waterrise")           // 39
+              << QStringLiteral("healthdecrease")      // 40
+              << QStringLiteral("ropepct")             // 41
+              << QStringLiteral("getawaytime")         // 42
+              << QStringLiteral("worldedge")           // 43
+              << QStringLiteral("scriptparam")         // scriptparam    44
               ;
 
     QList<QVariant> proMode;
@@ -902,8 +902,8 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     schemes.append(hedgeeditor);
     schemes.append(racer);
 
-    if (!QDir(cfgdir.absolutePath() + "/Schemes").exists()) {
-      QDir().mkdir(cfgdir.absolutePath() + "/Schemes");
+    if (!QDir(cfgdir.absolutePath() + QStringLiteral("/Schemes")).exists()) {
+      QDir().mkdir(cfgdir.absolutePath() + QStringLiteral("/Schemes"));
     }
     QStringList predefSchemesNamesLower;
     for (int i = 0; i < predefSchemesNames.size(); ++i)
@@ -915,7 +915,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
 
         qDebug("No /Schemes/Game directory found. Trying to import game schemes from schemes.ini.");
 
-        QSettings legacyFileConfig(cfgdir.absolutePath() + "/schemes.ini",
+        QSettings legacyFileConfig(cfgdir.absolutePath() + QStringLiteral("/schemes.ini"),
                                    QSettings::IniFormat);
         int size = legacyFileConfig.beginReadArray("schemes");
         int imported = 0;
@@ -927,7 +927,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
             if (!schemeName.isNull() && !predefSchemesNamesLower.contains(schemeName.toLower()))
             {
                 QList<QVariant> scheme;
-                QFile file(directory + "/" + schemeName + ".hwg");
+                QFile file(directory + QStringLiteral("/") + schemeName + QStringLiteral(".hwg"));
 
                 // Add keys to scheme info and create file
                 if (file.open(QIODevice::WriteOnly)) {
@@ -963,11 +963,11 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
         for(int i = 0; i < scheme_dir.size(); i++)
         {
             QList<QVariant> scheme;
-            QFile file(directory + "/" + scheme_dir[i]);
+            QFile file(directory + QStringLiteral("/") + scheme_dir[i]);
 
             // Chop off file name suffix
             QString schemeName = scheme_dir[i];
-            if (schemeName.endsWith(".hwg", Qt::CaseInsensitive)) {
+            if (schemeName.endsWith(QLatin1String(".hwg"), Qt::CaseInsensitive)) {
                 schemeName.chop(4);
             }
             // Don't load scheme if name collides with default scheme
@@ -1133,8 +1133,8 @@ bool GameSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
 
     QList<QVariant> scheme = schemes[row];
     int j = spNames.indexOf("name");
-    QFile(cfgdir.absolutePath() + "/Schemes/Game/" + scheme[j].toString() +
-          ".hwg")
+    QFile(cfgdir.absolutePath() + QStringLiteral("/Schemes/Game/") + scheme[j].toString() +
+          QStringLiteral(".hwg"))
         .remove();
     schemes.removeAt(row);
 
@@ -1163,8 +1163,8 @@ void GameSchemeModel::Save()
         int j = spNames.indexOf("name");
 
         QString schemeName = scheme[j].toString();
-        QFile file(cfgdir.absolutePath() + "/Schemes/Game/" + schemeName +
-                   ".hwg");
+        QFile file(cfgdir.absolutePath() + QStringLiteral("/Schemes/Game/") + schemeName +
+                   QStringLiteral(".hwg"));
 
         if (file.open(QIODevice::WriteOnly)) {
             QTextStream stream(&file);

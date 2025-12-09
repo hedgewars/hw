@@ -239,7 +239,7 @@ QStringList HWNamegen::dictContents(const QString filename)
     QStringList list;
 
     // find .txt to load the names from
-    QFile file(QString("physfs://Names/%1.txt").arg(filename));
+    QFile file(QStringLiteral("physfs://Names/%1.txt").arg(filename));
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -266,7 +266,7 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
     QStringList list;
 
     // Find and check .cfg to load the dicts from
-    QString path = QString("physfs://Names/%1.cfg").arg(hatname);
+    QString path = QStringLiteral("physfs://Names/%1.cfg").arg(hatname);
     QFileInfo check_file(path);
 
     // Note: The .cfg file is optional; a fallback mechanism is in place (see below)
@@ -292,7 +292,7 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
 
     // Use Data/Names/generic.cfg by default
     if (list.size() == 0)
-        list.append(QString("generic"));
+        list.append(QStringLiteral("generic"));
 
     return list;
 }
@@ -303,7 +303,7 @@ bool HWNamegen::loadTypes()
     typesAvailable = false;
 
     // find .ini to load the names from
-    QFile * file = new QFile(QString("physfs://Names/types.ini"));
+    QFile * file = new QFile(QStringLiteral("physfs://Names/types.ini"));
 
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
@@ -317,7 +317,7 @@ bool HWNamegen::loadTypes()
         while (!in.atEnd())
         {
             QString line = in.readLine();
-            if (line == QString("#####"))
+            if (line == QStringLiteral("#####"))
             {
                 counter++; //toggle mode (teamnames || hats)
                 if ((counter%2) == 0)
@@ -326,7 +326,7 @@ bool HWNamegen::loadTypes()
                     TypesHatnames.append(QStringList());
                 }
             }
-            else if ((line == QString("*****")) || (line == QString("*END*")))
+            else if ((line == QStringLiteral("*****")) || (line == QStringLiteral("*END*")))
             {
                 typesAvailable = true;
                 return true; // bye bye
@@ -385,14 +385,14 @@ QString HWNamegen::getRandomHat(bool withDLC)
 
     // list all available hats
     Hats.append(DataManager::instance()
-                    .entryList("Graphics/Hats", QDir::Files,
+                    .entryList(QStringLiteral("Graphics/Hats"), QDir::Files,
                                QStringList("*.png"), withDLC)
-                    .replaceInStrings(QRegularExpression("\\.png$"), ""));
+                    .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")), QLatin1String("")));
 
     if(Hats.size()==0)
     {
         // TODO do some serious error handling
-        return "Error";
+        return QStringLiteral("Error");
     }
 
     // pick a random hat
@@ -405,14 +405,14 @@ QString HWNamegen::getRandomGrave(bool withDLC)
 
     //list all available Graves
     Graves.append(DataManager::instance()
-                      .entryList("Graphics/Graves", QDir::Files,
+                      .entryList(QStringLiteral("Graphics/Graves"), QDir::Files,
                                  QStringList("*.png"), withDLC)
-                      .replaceInStrings(QRegularExpression("\\.png$"), ""));
+                      .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")), QLatin1String("")));
 
     if(Graves.size()==0)
     {
         // TODO do some serious error handling
-        return "Error";
+        return QStringLiteral("Error");
     }
 
     //pick a random grave
@@ -425,9 +425,9 @@ QString HWNamegen::getRandomFlag(bool withDLC)
 
     //list all available flags
     Flags.append(DataManager::instance()
-                     .entryList("Graphics/Flags", QDir::Files,
+                     .entryList(QStringLiteral("Graphics/Flags"), QDir::Files,
                                 QStringList("*.png"), withDLC)
-                     .replaceInStrings(QRegularExpression("\\.png$"), ""));
+                     .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")), QLatin1String("")));
     //remove internal flags
     Flags.removeAll("cpu");
     Flags.removeAll("cpu_plain");
@@ -435,7 +435,7 @@ QString HWNamegen::getRandomFlag(bool withDLC)
     if(Flags.size()==0)
     {
         // TODO do some serious error handling
-        return "Error";
+        return QStringLiteral("Error");
     }
 
     //pick a random flag
@@ -449,13 +449,13 @@ QString HWNamegen::getRandomFort(bool withDLC)
     //list all available Forts
     Forts.append(
         DataManager::instance()
-            .entryList("Forts", QDir::Files, QStringList("*L.png"), withDLC)
-            .replaceInStrings(QRegularExpression("L\\.png$"), ""));
+            .entryList(QStringLiteral("Forts"), QDir::Files, QStringList("*L.png"), withDLC)
+            .replaceInStrings(QRegularExpression(QStringLiteral("L\\.png$")), QLatin1String("")));
 
     if(Forts.size()==0)
     {
         // TODO do some serious error handling
-        return "Error";
+        return QStringLiteral("Error");
     }
 
     //pick a random fort
@@ -468,7 +468,7 @@ QString HWNamegen::getRandomVoice(bool withDLC)
 
     //list all available voices 
     Voices.append(DataManager::instance().entryList(
-                     "Sounds/voices",
+                     QStringLiteral("Sounds/voices"),
                      QDir::Dirs | QDir::NoDotAndDotDot,
                      QStringList("*"),
                      withDLC));
@@ -476,7 +476,7 @@ QString HWNamegen::getRandomVoice(bool withDLC)
     if(Voices.size()==0)
     {
         // TODO do some serious error handling
-        return "Error";
+        return QStringLiteral("Error");
     }
 
     //pick a random voice
@@ -486,22 +486,22 @@ QString HWNamegen::getRandomVoice(bool withDLC)
 QString HWNamegen::getLocalizedDefaultVoice(bool withDLC)
 {
     QStringList entries = DataManager::instance().entryList(
-        "Sounds/voices",
+        QStringLiteral("Sounds/voices"),
         QDir::Dirs | QDir::NoDotAndDotDot,
         QStringList("*"),
         withDLC);
 
     QString loc = QLocale().name();
-    if(entries.contains("Default_" + loc))
+    if(entries.contains(QStringLiteral("Default_") + loc))
     {
-        return QString("Default_" + loc);
+        return QString(QStringLiteral("Default_") + loc);
     }
-    else if(entries.contains("Default_" + loc.left(2)))
+    else if(entries.contains(QStringLiteral("Default_") + loc.left(2)))
     {
-        return QString("Default_" + loc.left(2));
+        return QString(QStringLiteral("Default_") + loc.left(2));
     }
     else
     {
-        return QString("Default");
+        return QStringLiteral("Default");
     }
 }

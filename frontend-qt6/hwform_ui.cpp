@@ -61,7 +61,7 @@ void Ui_HWForm::setupUi(HWForm *HWForm)
 #endif
     HWForm->setWindowTitle(title);
     centralWidget = new QWidget(HWForm);
-    centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
+    centralWidget->setObjectName(QStringLiteral("centralWidget"));
 
     SetupPages(centralWidget);
 
@@ -74,7 +74,7 @@ void Ui_HWForm::setupUi(HWForm *HWForm)
 
 void Ui_HWForm::SetupFonts()
 {
-    font14 = new QFont("MS Shell Dlg", 14);
+    font14 = new QFont(QStringLiteral("MS Shell Dlg"), 14);
 }
 
 void Ui_HWForm::SetupPages(QWidget *Parent)

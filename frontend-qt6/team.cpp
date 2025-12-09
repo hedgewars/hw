@@ -43,12 +43,12 @@ HWTeam::HWTeam(const QString & teamname) :
     {
         m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name = (QLineEdit::tr("Hedgehog %1").arg(i+1));
-        m_hedgehogs[i].Hat = "NoHat";
+        m_hedgehogs[i].Hat = QStringLiteral("NoHat");
     }
-    m_grave = "Statue";
-    m_fort = "Plane";
-    m_voicepack = "Default";
-    m_flag = "hedgewars";
+    m_grave = QStringLiteral("Statue");
+    m_fort = QStringLiteral("Plane");
+    m_voicepack = QStringLiteral("Default");
+    m_flag = QStringLiteral("hedgewars");
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
         m_binds.append(BindAction());
@@ -80,7 +80,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
         m_hedgehogs[i].Hat=strLst[i * 2 + 8];
 // Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
 // Checking net teams is probably pointless, but can't hurt.
-        if (m_hedgehogs[i].Hat.isEmpty()) m_hedgehogs[i].Hat = "NoHat";
+        if (m_hedgehogs[i].Hat.isEmpty()) m_hedgehogs[i].Hat = QStringLiteral("NoHat");
     }
     m_color = 0;
 }
@@ -92,18 +92,18 @@ HWTeam::HWTeam() :
     , m_isNetTeam(false)
     , m_isMissionTeam(false)
 {
-    m_name = QString("Team");
+    m_name = QStringLiteral("Team");
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name = QStringLiteral("hedgehog %1").arg(i);
-        m_hedgehogs[i].Hat = "NoHat";
+        m_hedgehogs[i].Hat = QStringLiteral("NoHat");
     }
 
-    m_grave = QString("Simple"); // default
-    m_fort = QString("Island"); // default
-    m_voicepack = "Default";
-    m_flag = "hedgewars";
+    m_grave = QStringLiteral("Simple"); // default
+    m_fort = QStringLiteral("Island"); // default
+    m_voicepack = QStringLiteral("Default");
+    m_flag = QStringLiteral("hedgewars");
 
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
@@ -160,7 +160,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
 
 bool HWTeam::loadFromFile()
 {
-  QSettings teamfile(QString(cfgdir.absolutePath() + "/Teams/%1.hwt")
+  QSettings teamfile(QString(cfgdir.absolutePath() + QStringLiteral("/Teams/%1.hwt"))
                          .arg(DataManager::safeFileName(m_name)),
                      QSettings::IniFormat, 0);
   m_name = teamfile.value("Team/Name", m_name).toString();
@@ -170,17 +170,17 @@ bool HWTeam::loadFromFile()
   m_flag = teamfile.value("Team/Flag", "hedgewars").toString();
   m_difficulty = teamfile.value("Team/Difficulty", 0).toInt();
   for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++) {
-    QString hh = QString("Hedgehog%1/").arg(i);
+    QString hh = QStringLiteral("Hedgehog%1/").arg(i);
     m_hedgehogs[i].Name =
-        teamfile.value(hh + "Name", QString("Hedgehog %1").arg(i + 1))
+        teamfile.value(hh + QStringLiteral("Name"), QStringLiteral("Hedgehog %1").arg(i + 1))
             .toString();
-    m_hedgehogs[i].Hat = teamfile.value(hh + "Hat", "NoHat").toString();
+    m_hedgehogs[i].Hat = teamfile.value(hh + QStringLiteral("Hat"), "NoHat").toString();
   }
     for(int i = 0; i < BINDS_NUMBER; i++)
-        m_binds[i].strbind = teamfile.value(QString("Binds/%1").arg(m_binds[i].action), QString()).toString();
+        m_binds[i].strbind = teamfile.value(QStringLiteral("Binds/%1").arg(m_binds[i].action), QString()).toString();
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
-            AchievementProgress[i] = teamfile.value(QString("Achievements/%1").arg(achievements[i][0]), 0).toUInt();
+            AchievementProgress[i] = teamfile.value(QStringLiteral("Achievements/%1").arg(achievements[i][0]), 0).toUInt();
         else
             break;
     return true;
@@ -188,7 +188,7 @@ bool HWTeam::loadFromFile()
 
 bool HWTeam::fileExists()
 {
-  QFile f(QString(cfgdir.absolutePath() + "/Teams/%1.hwt")
+  QFile f(QString(cfgdir.absolutePath() + QStringLiteral("/Teams/%1.hwt"))
               .arg(DataManager::safeFileName(m_name)));
   return f.exists();
 }
@@ -205,7 +205,7 @@ bool HWTeam::deleteFile()
 {
     if(m_isNetTeam)
         return false;
-    QFile cfgfile(QString(cfgdir.absolutePath() + "/Teams/%1.hwt")
+    QFile cfgfile(QString(cfgdir.absolutePath() + QStringLiteral("/Teams/%1.hwt"))
                       .arg(DataManager::safeFileName(m_name)));
     cfgfile.remove();
     return true;
@@ -215,13 +215,13 @@ bool HWTeam::saveToFile()
 {
     if (OldTeamName != m_name)
     {
-      QFile cfgfile(QString(cfgdir.absolutePath() + "/Teams/%1.hwt")
+      QFile cfgfile(QString(cfgdir.absolutePath() + QStringLiteral("/Teams/%1.hwt"))
                         .arg(DataManager::safeFileName(OldTeamName)));
       cfgfile.remove();
       OldTeamName = m_name;
     }
 
-    QString fileName = QString(cfgdir.absolutePath() + "/Teams/%1.hwt")
+    QString fileName = QString(cfgdir.absolutePath() + QStringLiteral("/Teams/%1.hwt"))
                            .arg(DataManager::safeFileName(m_name));
     DataManager::ensureFileExists(fileName);
     QSettings teamfile(fileName, QSettings::IniFormat, 0);
@@ -234,18 +234,18 @@ bool HWTeam::saveToFile()
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
-        QString hh = QString("Hedgehog%1/").arg(i);
-        teamfile.setValue(hh + "Name", m_hedgehogs[i].Name);
-        teamfile.setValue(hh + "Hat", m_hedgehogs[i].Hat);
+        QString hh = QStringLiteral("Hedgehog%1/").arg(i);
+        teamfile.setValue(hh + QStringLiteral("Name"), m_hedgehogs[i].Name);
+        teamfile.setValue(hh + QStringLiteral("Hat"), m_hedgehogs[i].Hat);
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        if(QString(m_binds[i].action) != QString("!MULTI"))
-            teamfile.setValue(QString("Binds/%1").arg(m_binds[i].action), m_binds[i].strbind);
+        if(QString(m_binds[i].action) != QStringLiteral("!MULTI"))
+            teamfile.setValue(QStringLiteral("Binds/%1").arg(m_binds[i].action), m_binds[i].strbind);
     }
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
-            teamfile.setValue(QString("Achievements/%1").arg(achievements[i][0]), AchievementProgress[i]);
+            teamfile.setValue(QStringLiteral("Achievements/%1").arg(achievements[i][0]), AchievementProgress[i]);
         else
             break;
 
@@ -255,41 +255,41 @@ bool HWTeam::saveToFile()
 QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
 {
     QStringList sl;
-    QString cmdAddHog = "eaddhh";
+    QString cmdAddHog = QStringLiteral("eaddhh");
 
     if (m_isNetTeam)
     {
-        sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toUtf8(), QCryptographicHash::Md5).toHex())));
-        sl.push_back("erdriven");
+        sl.push_back(QStringLiteral("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toUtf8(), QCryptographicHash::Md5).toHex())));
+        sl.push_back(QStringLiteral("erdriven"));
     }
     else
     {
         if (m_isMissionTeam)
         {
-            sl.push_back(QString("esetmissteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
-            cmdAddHog = "eaddmisshh";
+            sl.push_back(QStringLiteral("esetmissteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
+            cmdAddHog = QStringLiteral("eaddmisshh");
         }
         else
         {
-            sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
+            sl.push_back(QStringLiteral("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
         }
     }
 
-    sl.push_back(QString("egrave " + m_grave));
-    sl.push_back(QString("efort " + m_fort));
-    sl.push_back(QString("evoicepack " + m_voicepack));
-    sl.push_back(QString("eflag " + m_flag));
+    sl.push_back(QString(QStringLiteral("egrave ") + m_grave));
+    sl.push_back(QString(QStringLiteral("efort ") + m_fort));
+    sl.push_back(QString(QStringLiteral("evoicepack ") + m_voicepack));
+    sl.push_back(QString(QStringLiteral("eflag ") + m_flag));
 
     if(!m_owner.isEmpty())
-        sl.push_back(QString("eowner ") + m_owner);
+        sl.push_back(QStringLiteral("eowner ") + m_owner);
 
     for (int t = 0; t < m_numHedgehogs; t++)
     {
-        sl.push_back(QString(cmdAddHog + " %1 %2 %3")
+        sl.push_back(QString(cmdAddHog + QStringLiteral(" %1 %2 %3"))
                      .arg(QString::number(m_difficulty),
                           QString::number(InitHealth),
                           m_hedgehogs[t].Name));
-        sl.push_back(QString("ehat %1")
+        sl.push_back(QStringLiteral("ehat %1")
                      .arg(m_hedgehogs[t].Hat));
     }
     return sl;

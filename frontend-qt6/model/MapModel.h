@@ -135,14 +135,14 @@ class MapModel : public QStandardItemModel
          */
         static QStandardItem * infoToItem(
             const QIcon & icon,
-            const QString caption,
+            const QString &caption,
             MapType type = Invalid,
-            QString name = "",
-            QString theme = "",
+            const QString &name = QLatin1String(""),
+            const QString &theme = QLatin1String(""),
             quint32 limit = 0,
-            QString scheme = "",
-            QString weapons = "",
-            QString desc = "",
+            const QString &scheme = QLatin1String(""),
+            const QString &weapons = QLatin1String(""),
+            const QString &desc = QLatin1String(""),
             bool dlc = false);
 };
 

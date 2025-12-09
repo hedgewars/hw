@@ -85,7 +85,7 @@ QLayout * PageNetServer::bodyLayoutDefinition()
               "<div align=\"center\">"
               "<a href=\"https://hedgewars.org/kb/HWPlaySchemeSyntax\">" +
               tr("Click here for details") +
-              "</a></div>");
+              QStringLiteral("</a></div>"));
     labelURL->setOpenExternalLinks(true);
     gbLayout->addWidget(labelURL, 3, 1);
 
@@ -128,17 +128,17 @@ void PageNetServer::setDefaultPort()
 // after 4 seconds of timeout.
 void PageNetServer::copyUrl()
 {
-    QString address = "hwplay://";
+    QString address = QStringLiteral("hwplay://");
 
     QTcpSocket socket;
-    socket.connectToHost("www.hedgewars.org", 80);
+    socket.connectToHost(QStringLiteral("www.hedgewars.org"), 80);
     if (socket.waitForConnected(4000))
         address += socket.localAddress().toString();
     else
-        address += "<" + tr("Insert your address here") + ">";
+        address += QStringLiteral("<") + tr("Insert your address here") + QStringLiteral(">");
 
     if (sbPort->value() != NETGAME_DEFAULT_PORT)
-        address += ":" + QString::number(sbPort->value());
+        address += QStringLiteral(":") + QString::number(sbPort->value());
 
     QClipboard *clipboard = HWApplication::clipboard();
     clipboard->setText(address);

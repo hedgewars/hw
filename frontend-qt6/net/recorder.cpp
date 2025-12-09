@@ -41,7 +41,7 @@ HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
     item = 0;
     finished = false;
     aborted = false;
-    name = prefix + "." + LibavInteraction::instance().getExtension(config->AVFormat());
+    name = prefix + QStringLiteral(".") + LibavInteraction::instance().getExtension(config->AVFormat());
 }
 
 HWRecorder::~HWRecorder()
@@ -114,38 +114,38 @@ QStringList HWRecorder::getArguments()
     QRect resolution = config->rec_Resolution();
     QString nick = config->netNick().toUtf8().toBase64();
 
-    arguments << "--internal";
-    arguments << "--port";
-    arguments << QString("%1").arg(ipc_port);
-    arguments << "--prefix";
+    arguments << QStringLiteral("--internal");
+    arguments << QStringLiteral("--port");
+    arguments << QStringLiteral("%1").arg(ipc_port);
+    arguments << QStringLiteral("--prefix");
     arguments << datadir.absolutePath();
-    arguments << "--user-prefix";
+    arguments << QStringLiteral("--user-prefix");
     arguments << cfgdir.absolutePath();
-    arguments << "--locale";
+    arguments << QStringLiteral("--locale");
     arguments << HWGame::tr("en.txt");
-    arguments << "--frame-interval";
+    arguments << QStringLiteral("--frame-interval");
     arguments << QString::number(config->timerInterval());
-    arguments << "--width";
+    arguments << QStringLiteral("--width");
     arguments << QString::number(resolution.width());
-    arguments << "--height";
+    arguments << QStringLiteral("--height");
     arguments << QString::number(resolution.height());
-    arguments << "--nosound";
-    arguments << "--raw-quality";
+    arguments << QStringLiteral("--nosound");
+    arguments << QStringLiteral("--raw-quality");
     arguments << QString::number(config->translateQuality());
-    arguments << "--stereo";
+    arguments << QStringLiteral("--stereo");
     arguments << QString::number(config->stereoMode());
-    arguments << "--nomusic";
-    arguments << "--volume";
-    arguments << "0";
+    arguments << QStringLiteral("--nomusic");
+    arguments << QStringLiteral("--volume");
+    arguments << QStringLiteral("0");
     if (config->isAltDamageEnabled())
-        arguments << "--altdmg";
+        arguments << QStringLiteral("--altdmg");
     if (!nick.isEmpty()) {
-        arguments << "--nick";
+        arguments << QStringLiteral("--nick");
         arguments << nick;
     }
-    arguments << "--recorder";
+    arguments << QStringLiteral("--recorder");
     arguments << QString::number(config->rec_Framerate()); //cVideoFramerateNum
-    arguments << "1"; //cVideoFramerateDen
+    arguments << QStringLiteral("1"); //cVideoFramerateDen
     arguments << prefix;
     arguments << config->AVFormat();
     arguments << config->videoCodec();
@@ -155,8 +155,8 @@ QStringList HWRecorder::getArguments()
     if (config->recordAudio() && (config->isSoundEnabled() || config->isMusicEnabled()))
         arguments << config->audioCodec();
     else
-        arguments << "no";
-    arguments << "--chat-size";
+        arguments << QStringLiteral("no");
+    arguments << QStringLiteral("--chat-size");
     arguments << QString::number(config->chatSize());
 
     return arguments;

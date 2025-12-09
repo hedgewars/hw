@@ -34,7 +34,7 @@ AbstractPage::AbstractPage(QWidget* parent)
     Q_UNUSED(parent);
     defautDesc = new QString();
 
-    font14 = new QFont("MS Shell Dlg", 14);
+    font14 = new QFont(QStringLiteral("MS Shell Dlg"), 14);
 }
 
 void AbstractPage::initPage()
@@ -51,7 +51,7 @@ void AbstractPage::initPage()
     pageLayout->setRowStretch(1,0);
 
     // add back/exit button
-    btnBack = formattedButton(":/res/Exit.png", true);
+    btnBack = formattedButton(QStringLiteral(":/res/Exit.png"), true);
     btnBack->setWhatsThis(tr("Go back"));
     bottomLeftLayout->addWidget(btnBack, 0, Qt::AlignBottom);
 
@@ -68,7 +68,7 @@ void AbstractPage::initPage()
     descLabel->setWordWrap(true);
     descLabel->setOpenExternalLinks(true);
     descLabel->setFixedHeight(60);
-    descLabel->setStyleSheet("font-size: 16px");
+    descLabel->setStyleSheet(QStringLiteral("font-size: 16px"));
     bottomLeftLayout->addWidget(descLabel);
     pageLayout->addWidget(descLabel, 1, 1);
 

@@ -55,7 +55,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     leRoomName->setMaximumWidth(600);
     leRoomName->setFixedHeight(30);
     leRoomName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    leRoomName->setStyleSheet("border-right: 0; padding-left: 4px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;");
+    leRoomName->setStyleSheet(QStringLiteral("border-right: 0; padding-left: 4px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;"));
     roomConfigLayout->addWidget(leRoomName, 100);
 
     BtnUpdate = new QPushButton();
@@ -63,7 +63,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     BtnUpdate->setEnabled(false);
     BtnUpdate->setText(tr("Update"));
     BtnUpdate->setFixedHeight(leRoomName->height() - 0);
-    BtnUpdate->setStyleSheet("border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding: auto 4px;");
+    BtnUpdate->setStyleSheet(QStringLiteral("border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding: auto 4px;"));
     roomConfigLayout->addWidget(BtnUpdate, 0);
 
     lblRoomNameReadOnly = new QLabel();
@@ -71,7 +71,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     lblRoomNameReadOnly->setMaximumWidth(600);
     lblRoomNameReadOnly->setFixedHeight(30);
     lblRoomNameReadOnly->setObjectName("labelLikeLineEdit");
-    lblRoomNameReadOnly->setStyleSheet("font: 12px;");
+    lblRoomNameReadOnly->setStyleSheet(QStringLiteral("font: 12px;"));
     lblRoomNameReadOnly->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     lblRoomNameReadOnly->setVisible(false);
     roomConfigLayout->addWidget(lblRoomNameReadOnly, 100);
@@ -81,7 +81,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     BtnMaster = new QPushButton();
     BtnMaster->setText(tr("Room controls"));
     BtnMaster->setFixedHeight(leRoomName->height() - 0);
-    BtnMaster->setStyleSheet("QPushButton { padding: auto 4px; } QPushButton:pressed { background-color: #ffcc00; border-color: #ffcc00; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; color: #11084A; }");
+    BtnMaster->setStyleSheet(QStringLiteral("QPushButton { padding: auto 4px; } QPushButton:pressed { background-color: #ffcc00; border-color: #ffcc00; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; color: #11084A; }"));
     roomConfigLayout->addWidget(BtnMaster, 0);
 
     roomConfigLayout->addStretch(1);
@@ -115,7 +115,7 @@ QLayout * PageNetGame::footerLayoutLeftDefinition()
     QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
     bottomLeftLayout->setContentsMargins(0,0,0,0);
 
-    btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true, Qt::AlignBottom);
+    btnSetup = addButton(QStringLiteral(":/res/Settings.png"), bottomLeftLayout, 0, true, Qt::AlignBottom);
     btnSetup->setWhatsThis(tr("Edit game preferences"));
 
     return bottomLeftLayout;
@@ -143,7 +143,7 @@ QLayout * PageNetGame::footerLayoutDefinition()
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStart = new QPushButton();
     BtnStart->setText(tr("Start"));
-    BtnStart->setStyleSheet("padding: 5px 10px");
+    BtnStart->setStyleSheet(QStringLiteral("padding: 5px 10px"));
     BtnStart->setWhatsThis(tr("Start fighting (requires at least 2 teams)"));
     BtnStart->setIcon(lp);
     BtnStart->setFixedHeight(50);

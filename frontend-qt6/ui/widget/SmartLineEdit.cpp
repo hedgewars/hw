@@ -27,7 +27,7 @@
 SmartLineEdit::SmartLineEdit(QWidget * parent, int maxHistorySize)
     : HistoryLineEdit(parent, maxHistorySize)
 {
-  m_whitespace = QRegularExpression("\\s");
+  m_whitespace = QRegularExpression(QStringLiteral("\\s"));
 
   m_cmds = new QStringList();
   m_nicks = new QStringList();
@@ -135,11 +135,11 @@ void SmartLineEdit::keyPressEvent(QKeyEvent * event)
 
 void SmartLineEdit::autoComplete()
 {
-    QString match = "";
+    QString match = QLatin1String("");
     bool isNick = false;
     QString matchMe = text();
-    QString prefix = "";
-    QString postfix = "";
+    QString prefix = QLatin1String("");
+    QString postfix = QLatin1String("");
     bool isFirstWord;
 
     // we are trying to rematch, so use the data from earlier
@@ -167,7 +167,7 @@ void SmartLineEdit::autoComplete()
         prefix  = matchMe.left (cp);
         postfix = matchMe.right(matchMe.length()-cp);
 
-        matchMe = "";
+        matchMe = QLatin1String("");
 
 
         // use the whole word the curser is on for matching
@@ -248,9 +248,9 @@ void SmartLineEdit::autoComplete()
 
 void SmartLineEdit::resetAutoCompletionStatus()
 {
-    m_beforeMatch = "";
+    m_beforeMatch = QLatin1String("");
     m_hasJustMatched = false;
-    m_prefix = "";
-    m_postfix = "";
+    m_prefix = QLatin1String("");
+    m_postfix = QLatin1String("");
 }
 

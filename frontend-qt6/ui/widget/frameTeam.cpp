@@ -162,7 +162,7 @@ void FrameTeams::updateDecoFrame()
     }
     else
     {
-        setStyleSheet("FrameTeams{ border: transparent }");
+        setStyleSheet(QStringLiteral("FrameTeams{ border: transparent }"));
     }
 }
 

@@ -92,8 +92,8 @@ void GameUIConfig::reloadValues(void)
     QString wHeight = value("video/windowedHeight", heightStr).toString();
     pIsEngineWindowMaximized = value("video/windowedMaximized", false).toBool();
     // If left blank reset the resolution to the default
-    wWidth = (wWidth == "" ? widthStr : wWidth);
-    wHeight = (wHeight == "" ? heightStr : wHeight);
+    wWidth = (wWidth.isEmpty() ? widthStr : wWidth);
+    wHeight = (wHeight.isEmpty() ? heightStr : wHeight);
     Form->ui.pageOptions->windowWidthEdit->setValue(wWidth.toInt());
     Form->ui.pageOptions->windowHeightEdit->setValue(wHeight.toInt());
 
@@ -123,7 +123,7 @@ void GameUIConfig::reloadValues(void)
     int passLength = value("net/passwordlength", 0).toInt();
     if (!savePwd) {
         Form->ui.pageOptions->editNetPassword->setEnabled(false);
-        Form->ui.pageOptions->editNetPassword->setText("");
+        Form->ui.pageOptions->editNetPassword->setText(QLatin1String(""));
         setNetPasswordLength(0);
     } else
     {
@@ -164,14 +164,14 @@ void GameUIConfig::reloadValues(void)
     { // load colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
-            model->item(i)->setData(QColor(value(QString("colors/color%1").arg(i), model->item(i)->data()).toString()));
+            model->item(i)->setData(QColor(value(QStringLiteral("colors/color%1").arg(i), model->item(i)->data()).toString()));
     }
 
     { // load binds
         for(int i = 0; i < BINDS_NUMBER; i++)
         {
-            m_binds[i].strbind = value(QString("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();
-            if (m_binds[i].strbind.isEmpty() || m_binds[i].strbind == "default") m_binds[i].strbind = cbinds[i].strbind;
+            m_binds[i].strbind = value(QStringLiteral("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();
+            if (m_binds[i].strbind.isEmpty() || m_binds[i].strbind == QLatin1String("default")) m_binds[i].strbind = cbinds[i].strbind;
         }
     }
 
@@ -212,13 +212,13 @@ void GameUIConfig::reloadVideosValues(void)
 QStringList GameUIConfig::GetTeamsList()
 {
     QDir teamdir;
-    teamdir.cd(cfgdir.absolutePath() + "/Teams");
+    teamdir.cd(cfgdir.absolutePath() + QStringLiteral("/Teams"));
     QStringList teamslist = teamdir.entryList(QStringList("*.hwt"),QDir::Files|QDir::Hidden);
     QStringList cleanedList;
     for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it )
     {
       QString tmpTeamStr =
-          (*it).replace(QRegularExpression("^(.*)\\.hwt$"), "\\1");
+          (*it).replace(QRegularExpression(QStringLiteral("^(.*)\\.hwt$")), "\\1");
       cleanedList.push_back(tmpTeamStr);
     }
     return cleanedList;
@@ -244,42 +244,42 @@ void GameUIConfig::resizeToConfigValues()
 
 void GameUIConfig::SaveOptions()
 {
-    setValue("video/fullscreenResolution", Form->ui.pageOptions->CBResolution->currentText());
-    setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->value());
-    setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->value());
-    setValue("video/windowedMaximized", vid_Maximized());
-    setValue("video/fullscreen", vid_Fullscreen());
+    setValue(QStringLiteral("video/fullscreenResolution"), Form->ui.pageOptions->CBResolution->currentText());
+    setValue(QStringLiteral("video/windowedWidth"), Form->ui.pageOptions->windowWidthEdit->value());
+    setValue(QStringLiteral("video/windowedHeight"), Form->ui.pageOptions->windowHeightEdit->value());
+    setValue(QStringLiteral("video/windowedMaximized"), vid_Maximized());
+    setValue(QStringLiteral("video/fullscreen"), vid_Fullscreen());
 
-    setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
-    setValue("video/zoom", Form->ui.pageOptions->SLZoom->value());
-    setValue("video/stereo", stereoMode());
+    setValue(QStringLiteral("video/quality"), Form->ui.pageOptions->SLQuality->value());
+    setValue(QStringLiteral("video/zoom"), Form->ui.pageOptions->SLZoom->value());
+    setValue(QStringLiteral("video/stereo"), stereoMode());
 
-    setValue("frontend/effects", isFrontendEffects());
+    setValue(QStringLiteral("frontend/effects"), isFrontendEffects());
 
-    setValue("misc/weaponTooltips", Form->ui.pageOptions->WeaponTooltip->isChecked());
+    setValue(QStringLiteral("misc/weaponTooltips"), Form->ui.pageOptions->WeaponTooltip->isChecked());
 
     bool ffscr = isFrontendFullscreen();
-    setValue("frontend/fullscreen", ffscr);
+    setValue(QStringLiteral("frontend/fullscreen"), ffscr);
     emit frontendFullscreen(ffscr);
     if (!ffscr)
     {
-        setValue("frontend/width", Form->width());
-        setValue("frontend/height", Form->height());
-        setValue("frontend/maximized", (Form->windowState() & Qt::WindowMaximized) != 0);
+        setValue(QStringLiteral("frontend/width"), Form->width());
+        setValue(QStringLiteral("frontend/height"), Form->height());
+        setValue(QStringLiteral("frontend/maximized"), (Form->windowState() & Qt::WindowMaximized) != 0);
     }
     else
     {
         //resizeToConfigValues(); // TODO: why this has been made?
     }
 
-    setValue("audio/sound", isSoundEnabled());
-    setValue("frontend/sound", isFrontendSoundEnabled());
-    setValue("audio/music", isMusicEnabled());
-    setValue("frontend/music", isFrontendMusicEnabled());
-    setValue("audio/volume", Form->ui.pageOptions->SLVolume->value());
-    setValue("audio/dampen", isAudioDampenEnabled());
+    setValue(QStringLiteral("audio/sound"), isSoundEnabled());
+    setValue(QStringLiteral("frontend/sound"), isFrontendSoundEnabled());
+    setValue(QStringLiteral("audio/music"), isMusicEnabled());
+    setValue(QStringLiteral("frontend/music"), isFrontendMusicEnabled());
+    setValue(QStringLiteral("audio/volume"), Form->ui.pageOptions->SLVolume->value());
+    setValue(QStringLiteral("audio/dampen"), isAudioDampenEnabled());
 
-    setValue("net/nick", netNick());
+    setValue(QStringLiteral("net/nick"), netNick());
     if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
         setPasswordHash(netPasswordHash());
     }
@@ -287,24 +287,24 @@ void GameUIConfig::SaveOptions()
         clearPasswordHash();
     }
 
-    setValue("net/savepassword", Form->ui.pageOptions->CBSavePassword->isChecked());
-    setValue("net/ip", netHost);
-    setValue("net/port", netPort);
-    setValue("net/servername", Form->ui.pageNetServer->leServerDescr->text());
-    setValue("net/serverport", Form->ui.pageNetServer->sbPort->value());
+    setValue(QStringLiteral("net/savepassword"), Form->ui.pageOptions->CBSavePassword->isChecked());
+    setValue(QStringLiteral("net/ip"), netHost);
+    setValue(QStringLiteral("net/port"), netPort);
+    setValue(QStringLiteral("net/servername"), Form->ui.pageNetServer->leServerDescr->text());
+    setValue(QStringLiteral("net/serverport"), Form->ui.pageNetServer->sbPort->value());
 
-    setValue("fps/show", isShowFPSEnabled());
-    setValue("fps/limit", Form->ui.pageOptions->fpsedit->value());
+    setValue(QStringLiteral("fps/show"), isShowFPSEnabled());
+    setValue(QStringLiteral("fps/limit"), Form->ui.pageOptions->fpsedit->value());
 
-    setValue("misc/altdamage", isAltDamageEnabled());
+    setValue(QStringLiteral("misc/altdamage"), isAltDamageEnabled());
 
-    setValue("misc/teamtag",   Form->ui.pageOptions->CBTeamTag->isChecked());
-    setValue("misc/hogtag",    Form->ui.pageOptions->CBHogTag->isChecked());
-    setValue("misc/healthtag", Form->ui.pageOptions->CBHealthTag->isChecked());
-    setValue("misc/tagopacity",Form->ui.pageOptions->CBTagOpacity->isChecked());
+    setValue(QStringLiteral("misc/teamtag"),   Form->ui.pageOptions->CBTeamTag->isChecked());
+    setValue(QStringLiteral("misc/hogtag"),    Form->ui.pageOptions->CBHogTag->isChecked());
+    setValue(QStringLiteral("misc/healthtag"), Form->ui.pageOptions->CBHealthTag->isChecked());
+    setValue(QStringLiteral("misc/tagopacity"),Form->ui.pageOptions->CBTagOpacity->isChecked());
 
-    setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());
-    setValue("misc/locale", language());
+    setValue(QStringLiteral("misc/appendTimeToRecords"), appendDateTimeToRecordName());
+    setValue(QStringLiteral("misc/locale"), language());
 
 #ifdef SPARKLE_ENABLED
     setValue("misc/autoUpdate", isAutoUpdateEnabled());
@@ -312,14 +312,14 @@ void GameUIConfig::SaveOptions()
 
     { // setup proxy
         int proxyType = Form->ui.pageOptions->cbProxyType->currentIndex();
-        setValue("proxy/type", proxyType);
+        setValue(QStringLiteral("proxy/type"), proxyType);
 
         if(proxyType == PageOptions::Socks5Proxy || proxyType == PageOptions::HTTPProxy)
         {
-            setValue("proxy/host", Form->ui.pageOptions->leProxy->text());
-            setValue("proxy/port", Form->ui.pageOptions->sbProxyPort->value());
-            setValue("proxy/login", Form->ui.pageOptions->leProxyLogin->text());
-            setValue("proxy/password", Form->ui.pageOptions->leProxyPassword->text());
+            setValue(QStringLiteral("proxy/host"), Form->ui.pageOptions->leProxy->text());
+            setValue(QStringLiteral("proxy/port"), Form->ui.pageOptions->sbProxyPort->value());
+            setValue(QStringLiteral("proxy/login"), Form->ui.pageOptions->leProxyLogin->text());
+            setValue(QStringLiteral("proxy/password"), Form->ui.pageOptions->leProxyPassword->text());
         }
 
         applyProxySettings();
@@ -328,10 +328,10 @@ void GameUIConfig::SaveOptions()
     { // save colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
-            setValue(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>().name());
+            setValue(QStringLiteral("colors/color%1").arg(i), model->item(i)->data().value<QColor>().name());
     }
 
-    setValue("chat/size", Form->ui.pageOptions->sbChatSize->value());
+    setValue(QStringLiteral("chat/size"), Form->ui.pageOptions->sbChatSize->value());
 
     sync();
 }
@@ -339,15 +339,15 @@ void GameUIConfig::SaveOptions()
 void GameUIConfig::SaveVideosOptions()
 {
     QRect res = rec_Resolution();
-    setValue("videorec/format", AVFormat());
-    setValue("videorec/videocodec", videoCodec());
-    setValue("videorec/audiocodec", audioCodec());
-    setValue("videorec/framerate", rec_Framerate());
-    setValue("videorec/bitrate", rec_Bitrate());
-    setValue("videorec/width", res.width());
-    setValue("videorec/height", res.height());
-    setValue("videorec/usegameres", Form->ui.pageOptions->checkUseGameRes->isChecked());
-    setValue("videorec/audio", recordAudio());
+    setValue(QStringLiteral("videorec/format"), AVFormat());
+    setValue(QStringLiteral("videorec/videocodec"), videoCodec());
+    setValue(QStringLiteral("videorec/audiocodec"), audioCodec());
+    setValue(QStringLiteral("videorec/framerate"), rec_Framerate());
+    setValue(QStringLiteral("videorec/bitrate"), rec_Bitrate());
+    setValue(QStringLiteral("videorec/width"), res.width());
+    setValue(QStringLiteral("videorec/height"), res.height());
+    setValue(QStringLiteral("videorec/usegameres"), Form->ui.pageOptions->checkUseGameRes->isChecked());
+    setValue(QStringLiteral("videorec/audio"), recordAudio());
 
     sync();
 }
@@ -478,7 +478,7 @@ int GameUIConfig::quickGameExperience() const
 
 void GameUIConfig::setQuickGameExperience(int exp)
 {
-    setValue("misc/quickGameExperience", exp);
+    setValue(QStringLiteral("misc/quickGameExperience"), exp);
 }
 
 bool GameUIConfig::isSoundEnabled()
@@ -551,7 +551,7 @@ QString GameUIConfig::getRandomNick()
     QString nick;
     if (cachedRandomNick.isNull())
         // "Guest" + number between 1 and 99999
-        cachedRandomNick = tr("Guest") + QString("%1").arg(rand() % 99999 + 1);
+        cachedRandomNick = tr("Guest") + QStringLiteral("%1").arg(rand() % 99999 + 1);
     return cachedRandomNick;
 }
 
@@ -572,22 +572,22 @@ bool GameUIConfig::netPasswordIsValid()
 
 void GameUIConfig::clearPasswordHash()
 {
-    setValue("net/passwordhash", QString());
-    setValue("net/passwordlength", 0);
-    setValue("net/savepassword", false); //changes the savepassword value to false in order to not let the user save an empty password in PAGE_SETUP
+    setValue(QStringLiteral("net/passwordhash"), QString());
+    setValue(QStringLiteral("net/passwordlength"), 0);
+    setValue(QStringLiteral("net/savepassword"), false); //changes the savepassword value to false in order to not let the user save an empty password in PAGE_SETUP
     Form->ui.pageOptions->editNetPassword->setEnabled(false);
-    Form->ui.pageOptions->editNetPassword->setText("");
+    Form->ui.pageOptions->editNetPassword->setText(QLatin1String(""));
 }
 
 void GameUIConfig::setPasswordHash(const QString & passwordhash)
 {
-    setValue("net/passwordhash", passwordhash);
+    setValue(QStringLiteral("net/passwordhash"), passwordhash);
     if (!passwordhash.isEmpty()) {
       // WTF - the whole point of "password length" was to have the dots match
       // what they typed.  This is totally pointless, and all hashes are the
       // same length for a given hash so might as well hardcode it.
       // setValue("net/passwordlength", passwordhash.size()/4);
-      setValue("net/passwordlength", 8);
+      setValue(QStringLiteral("net/passwordlength"), 8);
 
       // More WTF
       // setNetPasswordLength(passwordhash.size()/4);  //the hash.size() is
@@ -595,7 +595,7 @@ void GameUIConfig::setPasswordHash(const QString & passwordhash)
       // the PW
       setNetPasswordLength(8);
     } else {
-      setValue("net/passwordlength", 0);
+      setValue(QStringLiteral("net/passwordlength"), 0);
       setNetPasswordLength(0);
     }
 }
@@ -645,7 +645,7 @@ void GameUIConfig::setNetPasswordLength(int passwordLength)
     }
     else
     {
-        Form->ui.pageOptions->editNetPassword->setText("");
+        Form->ui.pageOptions->editNetPassword->setText(QLatin1String(""));
     }
 }
 
@@ -709,7 +709,7 @@ QString GameUIConfig::bind(int bindID)
 void GameUIConfig::setBind(int bindID, QString & strbind)
 {
     m_binds[bindID].strbind = strbind;
-    setValue(QString("Binds/%1").arg(m_binds[bindID].action), strbind);
+    setValue(QStringLiteral("Binds/%1").arg(m_binds[bindID].action), strbind);
 }
 
 void GameUIConfig::applyProxySettings()

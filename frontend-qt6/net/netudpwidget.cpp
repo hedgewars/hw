@@ -56,7 +56,7 @@ void HWNetUdpModel::onClientRead()
         pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
 
         QString packet = QString::fromUtf8(datagram.data());
-        if(packet.startsWith("hedgewars server"))
+        if(packet.startsWith(QLatin1String("hedgewars server")))
         {
             QStringList sl;
             sl << packet.remove(0, 17) << clientAddr.toString() << QString::number(NETGAME_DEFAULT_PORT);

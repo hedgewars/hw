@@ -61,7 +61,7 @@ class HWForm : public QMainWindow
         Q_OBJECT
 
     public:
-        HWForm(QWidget *parent = 0, QString styleSheet = "");
+        HWForm(QWidget *parent = 0, QString styleSheet = QLatin1String(""));
         Ui_HWForm ui;
         static GameUIConfig * config;
         void exit();

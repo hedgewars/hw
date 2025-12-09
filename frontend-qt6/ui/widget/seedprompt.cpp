@@ -49,7 +49,7 @@ SeedPrompt::SeedPrompt(QWidget* parent, const QString & seed, bool editable) : Q
     editBox = new QLineEdit();
     editBox->setText(seed);
     editBox->setReadOnly(!editable);
-    editBox->setStyleSheet("QLineEdit { padding: 3px; }");
+    editBox->setStyleSheet(QStringLiteral("QLineEdit { padding: 3px; }"));
     dialogLayout->addWidget(editBox, 1);
 
     dialogLayout->addStretch(1);
@@ -81,7 +81,7 @@ SeedPrompt::SeedPrompt(QWidget* parent, const QString & seed, bool editable) : Q
         btnClose->setDefault(true);
     }
 
-    setStyleSheet("QPushButton { padding: 5px; }");
+    setStyleSheet(QStringLiteral("QPushButton { padding: 5px; }"));
 
     connect(this, SIGNAL(accepted()), this, SLOT(setSeed()));
 }

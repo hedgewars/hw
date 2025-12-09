@@ -50,7 +50,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     catListContainer->setContentsMargins(10, 10, 10, 10);
     catList = new QListWidget();
     catList->setMinimumWidth(180);
-    catList->setStyleSheet("QListWidget::item { font-size: 14px; } QListWidget:hover { border-color: #F6CB1C; } QListWidget::item:selected { background: #150A61; color: yellow; }");
+    catList->setStyleSheet(QStringLiteral("QListWidget::item { font-size: 14px; } QListWidget:hover { border-color: #F6CB1C; } QListWidget::item:selected { background: #150A61; color: yellow; }"));
     catList->setFocusPolicy(Qt::NoFocus);
     connect(catList, SIGNAL(currentRowChanged(int)), this, SLOT(changeBindingsPage(int)));
     catListContainer->addWidget(catList);
@@ -61,7 +61,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     {
         QPushButton * btnResetAll = new QPushButton(resetButtonText);
         catListContainer->addWidget(btnResetAll);
-        btnResetAll->setStyleSheet("padding: 5px 10px");
+        btnResetAll->setStyleSheet(QStringLiteral("padding: 5px 10px"));
         btnResetAll->setFixedHeight(40);
         catListContainer->setStretch(1, 0);
         catListContainer->setSpacing(10);
@@ -88,12 +88,12 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     // Custom help text
     QLabel * helpLabel = new QLabel();
     helpLabel->setText(helpText);
-    helpLabel->setStyleSheet("color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-radius: 10px; padding: auto 20px;");
+    helpLabel->setStyleSheet(QStringLiteral("color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-radius: 10px; padding: auto 20px;"));
     helpLabel->setFixedHeight(24);
     rightLayout->addWidget(helpLabel, 0, Qt::AlignCenter);
     conflictLabel = new QLabel();
     conflictLabel->setText(tr("Warning: The same key is assigned multiple times!"));
-    conflictLabel->setStyleSheet("color: white; background: #E31A1A; border: solid 4px #E31A1A; border-radius: 10px; padding: auto 20px;");
+    conflictLabel->setStyleSheet(QStringLiteral("color: white; background: #E31A1A; border: solid 4px #E31A1A; border-radius: 10px; padding: auto 20px;"));
     conflictLabel->setFixedHeight(24);
     conflictLabel->setHidden(true);
     rightLayout->addWidget(conflictLabel, 0, Qt::AlignCenter);
@@ -126,13 +126,13 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
     bindCellComboBoxMappings = new QHash<QTableWidgetItem *, QComboBox *>();
 
     dropDownIcon = new QIcon();
-    QPixmap dd1 = QPixmap(":/res/dropdown.png");
-    QPixmap dd2 = QPixmap(":/res/dropdown_selected.png");
+    QPixmap dd1 = QPixmap(QStringLiteral(":/res/dropdown.png"));
+    QPixmap dd2 = QPixmap(QStringLiteral(":/res/dropdown_selected.png"));
     dropDownIcon->addPixmap(dd1, QIcon::Normal);
     dropDownIcon->addPixmap(dd2, QIcon::Selected);
     conflictIcon = new QIcon();
-    QPixmap kc1 = QPixmap(":/res/keyconflict.png");
-    QPixmap kc2 = QPixmap(":/res/keyconflict_selected.png");
+    QPixmap kc1 = QPixmap(QStringLiteral(":/res/keyconflict.png"));
+    QPixmap kc2 = QPixmap(QStringLiteral(":/res/keyconflict_selected.png"));
     conflictIcon->addPixmap(kc1, QIcon::Normal);
     conflictIcon->addPixmap(kc2, QIcon::Selected);
     QPixmap emptySpace = QPixmap(16, 16);
@@ -179,7 +179,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
             curTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
             curTable->verticalHeader()->setDefaultSectionSize(rowHeight);
             curTable->setShowGrid(false);
-            curTable->setStyleSheet("QTableWidget { border: none; background-color: transparent; } ");
+            curTable->setStyleSheet(QStringLiteral("QTableWidget { border: none; background-color: transparent; } "));
             curTable->setSelectionBehavior(QAbstractItemView::SelectRows);
             curTable->setSelectionMode(QAbstractItemView::SingleSelection);
             curTable->setFocusPolicy(Qt::NoFocus);
@@ -190,7 +190,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
 
         // Hidden combo box
         QComboBox * comboBox;
-        if (cbinds[i].action != "!MULTI")
+        if (cbinds[i].action != QLatin1String("!MULTI"))
         {
             comboBox = CBBind[i] = new QComboBox(curTable);
             comboBox->setModel((QAbstractItemModel*)DataManager::instance().bindsModel());
@@ -209,7 +209,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         curTable->insertRow(row);
         curTable->setItem(row, 0, nameCell);
         QTableWidgetItem * bindCell;
-        if (cbinds[i].action != "!MULTI")
+        if (cbinds[i].action != QLatin1String("!MULTI"))
         {
             bindCell = new QTableWidgetItem(comboBox->currentText());
             nameCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -227,7 +227,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         curTable->resizeColumnsToContents();
         curTable->setFixedHeight(curTable->verticalHeader()->length() + 10);
 
-        if (cbinds[i].action != "!MULTI")
+        if (cbinds[i].action != QLatin1String("!MULTI"))
         {
             // Updates the text in the table cell
             connect(comboBox, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(bindChanged(const QString &)));
@@ -323,7 +323,7 @@ bool KeyBinder::checkConflictsWith(int compareTo, bool updateState)
         QString bind1 = CBBind[i]->currentData(Qt::UserRole + 1).toString();
         QString bind2 = CBBind[compareTo]->currentData(Qt::UserRole + 1).toString();
         // TODO: For team key binds, also check collisions with global key binds
-        if((!(bind1 == "none" || bind2 == "none" || bind1 == "default" || bind2 == "default")) && (bind1 == bind2))
+        if((!(bind1 == QLatin1String("none") || bind2 == QLatin1String("none") || bind1 == QLatin1String("default") || bind2 == QLatin1String("default"))) && (bind1 == bind2))
         {
             if(updateState)
             {

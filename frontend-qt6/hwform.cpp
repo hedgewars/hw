@@ -144,19 +144,19 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     , hwnet(0)
 {
     // set music track
-    SDLInteraction::instance().setMusicTrack("/Music/main_theme.ogg");
+    SDLInteraction::instance().setMusicTrack(QStringLiteral("/Music/main_theme.ogg"));
 
     this->setStyleSheet(styleSheet);
 
 
     QIcon * hwIcon = new QIcon();
-    hwIcon->addFile(":/res/hh_small.png");
+    hwIcon->addFile(QStringLiteral(":/res/hh_small.png"));
     //hwIcon->addFile(":/res/hh25x25.png");
     // crop-workaround for the fact that hh25x25.png is actually 25x35
-    QPixmap pm(":/res/hh25x25.png");
+    QPixmap pm(QStringLiteral(":/res/hh25x25.png"));
     hwIcon->addPixmap(pm.copy(0,(pm.height()-25)/2,25,25));
-    hwIcon->addFile(":/res/teamicon.png");
-    hwIcon->addFile(":/res/teamicon2.png");
+    hwIcon->addFile(QStringLiteral(":/res/teamicon.png"));
+    hwIcon->addFile(QStringLiteral(":/res/teamicon2.png"));
 
     this->setWindowIcon(*hwIcon);
     ui.setupUi(this);
@@ -174,8 +174,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     playerHash = QString(QCryptographicHash::hash(config->value("net/nick", config->getRandomNick()).toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
     // Icons for finished missions
-    finishedIcon.addFile(":/res/missionFinished.png", QSize(), QIcon::Normal, QIcon::On);
-    finishedIcon.addFile(":/res/missionFinishedSelected.png", QSize(), QIcon::Selected, QIcon::On);
+    finishedIcon.addFile(QStringLiteral(":/res/missionFinished.png"), QSize(), QIcon::Normal, QIcon::On);
+    finishedIcon.addFile(QStringLiteral(":/res/missionFinishedSelected.png"), QSize(), QIcon::Selected, QIcon::On);
 
     // A transparent icon, used to nicely align the unfinished missions with the finished ones
     QPixmap emptySpace = QPixmap(15, 15);
@@ -212,14 +212,14 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect (hideFrontend, SIGNAL(activated()), this, SLOT(showMinimized()));
 #else
     // ctrl+q closes frontend for consistency
-    QShortcut * closeFrontend = new QShortcut(QKeySequence("Ctrl+Q"), this);
+    QShortcut * closeFrontend = new QShortcut(QKeySequence(QStringLiteral("Ctrl+Q")), this);
     connect (closeFrontend, SIGNAL(activated()), this, SLOT(close()));
     //QShortcut * updateData = new QShortcut(QKeySequence("F5"), this);
     //connect (updateData, SIGNAL(activated()), &DataManager::instance(), SLOT(reload()));
 #endif
 
-    previousCampaignName = "";
-    previousTeamName = "";
+    previousCampaignName = QLatin1String("");
+    previousTeamName = QLatin1String("");
     UpdateTeamsLists();
     InitCampaignPage();
     RestoreSingleplayerTeamSelection();
@@ -358,7 +358,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageVideos, SIGNAL(goBack()), config, SLOT(SaveVideosOptions()));
 
     gameSchemeModel =
-        new GameSchemeModel(this, cfgdir.absolutePath() + "/Schemes/Game");
+        new GameSchemeModel(this, cfgdir.absolutePath() + QStringLiteral("/Schemes/Game"));
     ui.pageScheme->setModel(gameSchemeModel);
     ui.pageMultiplayer->gameCFG->GameSchemes->setModel(gameSchemeModel);
     ui.pageOptions->SchemesName->setModel(gameSchemeModel);
@@ -462,7 +462,7 @@ void HWForm::UpdateWeapons()
         for(int i = 0; i < names.size(); ++i)
             (*it)->addItem(names[i], ui.pageSelectWeapon->pWeapons->getWeaponsString(names[i]));
 
-        int pos = (*it)->findText("Default");
+        int pos = (*it)->findText(QStringLiteral("Default"));
         if (pos != -1)
         {
             (*it)->setCurrentIndex(pos);
@@ -674,7 +674,7 @@ void HWForm::GoToHelp()
 {
     // For now just opens the Hedgewars Wiki in external browser.
     // TODO: Replace this with an offline help someday (bug 660).
-    QDesktopServices::openUrl(QUrl("https://hedgewars.org/wiki"));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://hedgewars.org/wiki")));
 }
 
 void HWForm::GoToVideos()
@@ -693,30 +693,30 @@ QString HWForm::stringifyPageId(quint32 id)
     QString pageName;
     switch (id)
     {
-      case ID_PAGE_SETUP_TEAM :   pageName = "PAGE_SETUP_TEAM"; break;
-      case ID_PAGE_SETUP :        pageName = "PAGE_SETUP"; break;
-      case ID_PAGE_MULTIPLAYER :  pageName = "PAGE_MULTIPLAYER"; break;
-      case ID_PAGE_DEMOS :        pageName = "PAGE_DEMOS"; break;
-      case ID_PAGE_NET :          pageName = "PAGE_NET"; break;
-      case ID_PAGE_NETGAME :      pageName = "PAGE_NETGAME"; break;
-      case ID_PAGE_INFO :         pageName = "PAGE_INFO"; break;
-      case ID_PAGE_MAIN :         pageName = "PAGE_MAIN"; break;
-      case ID_PAGE_GAMESTATS :    pageName = "PAGE_GAMESTATS"; break;
-      case ID_PAGE_SINGLEPLAYER : pageName = "PAGE_SINGLEPLAYER"; break;
-      case ID_PAGE_TRAINING :     pageName = "PAGE_TRAINING"; break;
-      case ID_PAGE_SELECTWEAPON : pageName = "PAGE_SELECTWEAPON"; break;
-      case ID_PAGE_NETSERVER :    pageName = "PAGE_NETSERVER"; break;
-      case ID_PAGE_INGAME :       pageName = "PAGE_INGAME"; break;
-      case ID_PAGE_ROOMSLIST :    pageName = "PAGE_ROOMSLIST"; break;
-      case ID_PAGE_CONNECTING :   pageName = "PAGE_CONNECTING"; break;
-      case ID_PAGE_SCHEME :       pageName = "PAGE_SCHEME"; break;
-      case ID_PAGE_ADMIN :        pageName = "PAGE_ADMIN"; break;
-      case ID_PAGE_CAMPAIGN :     pageName = "PAGE_CAMPAIGN"; break;
-      case ID_PAGE_DRAWMAP :      pageName = "PAGE_DRAWMAP"; break;
-      case ID_PAGE_DATADOWNLOAD : pageName = "PAGE_DATADOWNLOAD"; break;
-      case ID_PAGE_VIDEOS :       pageName = "PAGE_VIDEOS"; break;
-      case MAX_PAGE :             pageName = "MAX_PAGE"; break;
-      default :                   pageName = "UNKNOWN_PAGE"; break;
+      case ID_PAGE_SETUP_TEAM :   pageName = QStringLiteral("PAGE_SETUP_TEAM"); break;
+      case ID_PAGE_SETUP :        pageName = QStringLiteral("PAGE_SETUP"); break;
+      case ID_PAGE_MULTIPLAYER :  pageName = QStringLiteral("PAGE_MULTIPLAYER"); break;
+      case ID_PAGE_DEMOS :        pageName = QStringLiteral("PAGE_DEMOS"); break;
+      case ID_PAGE_NET :          pageName = QStringLiteral("PAGE_NET"); break;
+      case ID_PAGE_NETGAME :      pageName = QStringLiteral("PAGE_NETGAME"); break;
+      case ID_PAGE_INFO :         pageName = QStringLiteral("PAGE_INFO"); break;
+      case ID_PAGE_MAIN :         pageName = QStringLiteral("PAGE_MAIN"); break;
+      case ID_PAGE_GAMESTATS :    pageName = QStringLiteral("PAGE_GAMESTATS"); break;
+      case ID_PAGE_SINGLEPLAYER : pageName = QStringLiteral("PAGE_SINGLEPLAYER"); break;
+      case ID_PAGE_TRAINING :     pageName = QStringLiteral("PAGE_TRAINING"); break;
+      case ID_PAGE_SELECTWEAPON : pageName = QStringLiteral("PAGE_SELECTWEAPON"); break;
+      case ID_PAGE_NETSERVER :    pageName = QStringLiteral("PAGE_NETSERVER"); break;
+      case ID_PAGE_INGAME :       pageName = QStringLiteral("PAGE_INGAME"); break;
+      case ID_PAGE_ROOMSLIST :    pageName = QStringLiteral("PAGE_ROOMSLIST"); break;
+      case ID_PAGE_CONNECTING :   pageName = QStringLiteral("PAGE_CONNECTING"); break;
+      case ID_PAGE_SCHEME :       pageName = QStringLiteral("PAGE_SCHEME"); break;
+      case ID_PAGE_ADMIN :        pageName = QStringLiteral("PAGE_ADMIN"); break;
+      case ID_PAGE_CAMPAIGN :     pageName = QStringLiteral("PAGE_CAMPAIGN"); break;
+      case ID_PAGE_DRAWMAP :      pageName = QStringLiteral("PAGE_DRAWMAP"); break;
+      case ID_PAGE_DATADOWNLOAD : pageName = QStringLiteral("PAGE_DATADOWNLOAD"); break;
+      case ID_PAGE_VIDEOS :       pageName = QStringLiteral("PAGE_VIDEOS"); break;
+      case MAX_PAGE :             pageName = QStringLiteral("MAX_PAGE"); break;
+      default :                   pageName = QStringLiteral("UNKNOWN_PAGE"); break;
     }
     return pageName;
 }
@@ -953,9 +953,9 @@ void HWForm::GoBack()
         }
 
     if (curid == ID_PAGE_CAMPAIGN)
-        config->setValue("frontend/lastSingleplayerTeam", ui.pageCampaign->CBTeam->currentText());
+        config->setValue(QStringLiteral("frontend/lastSingleplayerTeam"), ui.pageCampaign->CBTeam->currentText());
     if (curid == ID_PAGE_TRAINING)
-        config->setValue("frontend/lastSingleplayerTeam", ui.pageTraining->CBTeam->currentText());
+        config->setValue(QStringLiteral("frontend/lastSingleplayerTeam"), ui.pageTraining->CBTeam->currentText());
 
     if (curid == ID_PAGE_ROOMSLIST || curid == ID_PAGE_CONNECTING) NetDisconnect();
     if (curid == ID_PAGE_NETGAME && hwnet && hwnet->isInRoom()) hwnet->partRoom();
@@ -1033,8 +1033,8 @@ void HWForm::GoBack()
 void HWForm::OpenSnapshotFolder()
 {
   QString path =
-      QDir::toNativeSeparators(cfgdir.absolutePath() + "/Screenshots");
-  QDesktopServices::openUrl(QUrl("file:///" + path));
+      QDir::toNativeSeparators(cfgdir.absolutePath() + QStringLiteral("/Screenshots"));
+  QDesktopServices::openUrl(QUrl(QStringLiteral("file:///") + path));
 }
 
 void HWForm::btnExitPressed()
@@ -1190,7 +1190,7 @@ void HWForm::NetPassword(const QString & nick)
     //Check them
 
     if (temphash.isEmpty() && hash.isEmpty()) { //If the user enters a registered nick with no password, sends a bogus hash
-        hwnet->SendPasswordHash("THISISNOHASH");
+        hwnet->SendPasswordHash(QStringLiteral("THISISNOHASH"));
     }
     else if (temphash.isEmpty()) { //Send saved hash as default
         hwnet->SendPasswordHash(hash);
@@ -1271,7 +1271,7 @@ void HWForm::NetNickTaken(const QString & nick)
         GoBack();
         if (retry && hwnet) {
             if (hwnet->m_private_game) {
-                QStringList list = hwnet->getHost().split(":");
+                QStringList list = hwnet->getHost().split(QStringLiteral(":"));
                 NetConnectServer(list.at(0), list.at(1).toShort(), false);
             } else
                 NetConnectOfficialServer();
@@ -1281,7 +1281,7 @@ void HWForm::NetNickTaken(const QString & nick)
 
     if(hwnet)
         hwnet->NewNick(newNick);
-    config->setValue("net/nick", newNick);
+    config->setValue(QStringLiteral("net/nick"), newNick);
     config->updNetNick();
 
     ui.pageRoomsList->setUser(nick);
@@ -1596,7 +1596,7 @@ int HWForm::AskForNickAndPwd(void)
                 GoBack();
                 if (retry) {
                     if (hwnet->m_private_game) {
-                        QStringList list = hwnet->getHost().split(":");
+                        QStringList list = hwnet->getHost().split(QStringLiteral(":"));
                         NetConnectServer(list.at(0), list.at(1).toShort(), false);
                     } else
                         NetConnectOfficialServer();
@@ -1604,7 +1604,7 @@ int HWForm::AskForNickAndPwd(void)
                 break; //loop restart
             } else {
                 //update nickname if it's fine
-                config->setValue("net/nick", nickname);
+                config->setValue(QStringLiteral("net/nick"), nickname);
                 config->updNetNick();
             }
 
@@ -1618,7 +1618,7 @@ int HWForm::AskForNickAndPwd(void)
                 config->setTempHash(temphash);
 
                 //if user wants to save password
-                config->setValue("net/savepassword", save);
+                config->setValue(QStringLiteral("net/savepassword"), save);
                 if (save) {
                     // user wants to save password
                     ui.pageOptions->CBSavePassword->setChecked(true);
@@ -1670,7 +1670,7 @@ void HWForm::NetStartServer()
 
 void HWForm::AsyncNetServerStart()
 {
-    NetConnectServer("localhost", pnetserver->getRunningPort(), false);
+    NetConnectServer(QStringLiteral("localhost"), pnetserver->getRunningPort(), false);
 }
 
 void HWForm::NetDisconnect()
@@ -1694,11 +1694,11 @@ void HWForm::NetDisconnect()
 
 void HWForm::ForcedDisconnect(const QString & reason)
 {
-    if (reason == "Reconnected too fast") { //TODO: this is a hack, which should be remade
+    if (reason == QLatin1String("Reconnected too fast")) { //TODO: this is a hack, which should be remade
         bool retry = RetryDialog(tr("Hedgewars - Connection error"), tr("You reconnected too fast.\nPlease wait a few seconds and try again."));
         if (retry) {
             if (hwnet->m_private_game) {
-                QStringList list = hwnet->getHost().split(":");
+                QStringList list = hwnet->getHost().split(QStringLiteral(":"));
                 NetConnectServer(list.at(0), list.at(1).toUInt(), false);
             } else
                 NetConnectOfficialServer();
@@ -1714,9 +1714,9 @@ void HWForm::ForcedDisconnect(const QString & reason)
     }
     if (pnetserver)
         return; // we have server - let it care of all things
-    if (hwnet && (reason != "bye"))
+    if (hwnet && (reason != QLatin1String("bye")))
     {
-        QString errorStr = QMessageBox::tr("The connection to the server is lost.") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Reason:") + "\n" + reason));
+        QString errorStr = QMessageBox::tr("The connection to the server is lost.") + (reason.isEmpty()?QLatin1String(""):(QStringLiteral("\n\n") + HWNewNet::tr("Reason:") + QStringLiteral("\n") + reason));
         MessageDialog::ShowErrorMessage(errorStr, this);
     }
 
@@ -1740,7 +1740,7 @@ void HWForm::NetRedirected(quint16 port)
 
     if (questionMsg.exec() == QMessageBox::Yes)
     {        
-        QString host = hwnet->getHost().split(":").at(0);
+        QString host = hwnet->getHost().split(QStringLiteral(":")).at(0);
         NetConnectServer(host, port, true);
     }
     else if (hwnet)
@@ -1869,26 +1869,26 @@ void HWForm::GetRecord(RecordType type, const QByteArray & record)
         QByteArray demo = record;
         QString recordFileName =
             config->appendDateTimeToRecordName() ?
-            QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm") :
-            "LastRound";
+            QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm")) :
+            QStringLiteral("LastRound");
 
-        recordFileName += "_" + cRevisionString + "-" + cHashString;
+        recordFileName += QStringLiteral("_") + cRevisionString + QStringLiteral("-") + cHashString;
 
         if (type == rtDemo)
         {
             demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
             demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
             demo.replace(QByteArray("\x02TS"), QByteArray("\x02TD"));
-            filename = cfgdir.absolutePath() + "/Demos/" + recordFileName +
-                       "." + cProtoVer + ".hwd";
+            filename = cfgdir.absolutePath() + QStringLiteral("/Demos/") + recordFileName +
+                       QStringLiteral(".") + cProtoVer + QStringLiteral(".hwd");
             m_lastDemo = demo;
         }
         else
         {
             demo.replace(QByteArray("\x02TL"), QByteArray("\x02TS"));
             demo.replace(QByteArray("\x02TN"), QByteArray("\x02TS"));
-            filename = cfgdir.absolutePath() + "/Saves/" + recordFileName +
-                       "." + cProtoVer + ".hws";
+            filename = cfgdir.absolutePath() + QStringLiteral("/Saves/") + recordFileName +
+                       QStringLiteral(".") + cProtoVer + QStringLiteral(".hws");
         }
 
         QFile demofile(filename);
@@ -2102,7 +2102,7 @@ void HWForm::UpdateTrainingPageTeam(int index)
         for(unsigned int i = 0; i < n; i++)
         {
             QListWidgetItem* item = listWidget->item(i);
-            QString missionName = QString(item->data(Qt::UserRole).toString()).replace(QString(" "),QString("_"));
+            QString missionName = QString(item->data(Qt::UserRole).toString()).replace(QStringLiteral(" "),QStringLiteral("_"));
             if(isMissionWon(missionName, tName))
                 item->setIcon(finishedIcon);
             else
@@ -2118,7 +2118,7 @@ void HWForm::InitCampaignPage()
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
 
     QStringList entries = DataManager::instance().entryList(
-                                  "Missions/Campaign",
+                                  QStringLiteral("Missions/Campaign"),
                                   QDir::Dirs,
                                   QStringList("[^\\.]*")
                               );
@@ -2196,7 +2196,7 @@ void HWForm::UpdateCampaignPageTeam(int index)
     QString tName = team.name();
 
     QStringList entries = DataManager::instance().entryList(
-                                  "Missions/Campaign",
+                                  QStringLiteral("Missions/Campaign"),
                                   QDir::Dirs,
                                   QStringList("[^\\.]*")
                               );
@@ -2206,7 +2206,7 @@ void HWForm::UpdateCampaignPageTeam(int index)
     // Update campaign status
     for(unsigned int i = 0; i < n; i++)
     {
-        QString campaignName = QString(entries[i]).replace(QString(" "),QString("_"));
+        QString campaignName = QString(entries[i]).replace(QStringLiteral(" "),QStringLiteral("_"));
         if(isCampWon(campaignName, tName))
             ui.pageCampaign->CBCampaign->setItemIcon(i, finishedIcon);
         else
@@ -2221,7 +2221,7 @@ void HWForm::UpdateCampaignPageMission(int index)
     // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
     // this will cause segfault. This check prevents illegal memory reads
     if(index > -1 && index < campaignMissionInfo.count()) {
-        ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
+        ui.pageCampaign->lbltitle->setText(QStringLiteral("<h2>")+ui.pageCampaign->CBMission->currentText()+QStringLiteral("</h2>"));
         ui.pageCampaign->lbldescription->setText(campaignMissionInfo[index].description);
         ui.pageCampaign->btnPreview->setIcon(QIcon(campaignMissionInfo[index].image));
     }
@@ -2301,32 +2301,32 @@ void HWForm::UpdateCampaignPageProgress(int index)
 
 QString HWForm::getDemoArguments()
 {
-  QString prefix = "\"" + datadir.absolutePath() + "\"";
-  QString userPrefix = "\"" + cfgdir.absolutePath() + "\"";
+  QString prefix = QStringLiteral("\"") + datadir.absolutePath() + QStringLiteral("\"");
+  QString userPrefix = QStringLiteral("\"") + cfgdir.absolutePath() + QStringLiteral("\"");
 #ifdef Q_OS_WIN
     prefix = prefix.replace("/","\\");
     userPrefix = userPrefix.replace("/","\\");
 #endif
 
     std::pair<QRect, QRect> resolutions = config->vid_ResolutionPair();
-    return QString("--prefix " + prefix
-                   + " --user-prefix " + userPrefix
-                   + " --fullscreen-width " + QString::number(resolutions.first.width())
-                   + " --fullscreen-height " + QString::number(resolutions.first.height())
-                   + " --width " + QString::number(resolutions.second.width())
-                   + " --height " + QString::number(resolutions.second.height())
+    return QString(QStringLiteral("--prefix ") + prefix
+                   + QStringLiteral(" --user-prefix ") + userPrefix
+                   + QStringLiteral(" --fullscreen-width ") + QString::number(resolutions.first.width())
+                   + QStringLiteral(" --fullscreen-height ") + QString::number(resolutions.first.height())
+                   + QStringLiteral(" --width ") + QString::number(resolutions.second.width())
+                   + QStringLiteral(" --height ") + QString::number(resolutions.second.height())
                    + (config->vid_Maximized() ? " --maximized" : "")
-                   + (config->zoom() == 100 ? "" : " --zoom " + QString::number(config->zoom()))
-                   + " --volume " + QString::number(config->volume())
+                   + (config->zoom() == 100 ? QLatin1String("") : QStringLiteral(" --zoom ") + QString::number(config->zoom()))
+                   + QStringLiteral(" --volume ") + QString::number(config->volume())
                    + (config->isMusicEnabled() ? "" : " --nomusic")
                    + (config->isSoundEnabled() ? "" : " --nosound")
                    + (config->isAudioDampenEnabled() ? "" : " --nodampen")
-                   + " --locale " + config->language() + ".txt"
+                   + QStringLiteral(" --locale ") + config->language() + QStringLiteral(".txt")
                    + (config->vid_Fullscreen() ? " --fullscreen" : "")
                    + (config->isShowFPSEnabled() ? " --showfps" : "")
                    + (config->isAltDamageEnabled() ? " --altdmg" : "")
-                   + " --frame-interval " + QString::number(config->timerInterval())
-                   + " --raw-quality " + QString::number(config->translateQuality()))
+                   + QStringLiteral(" --frame-interval ") + QString::number(config->timerInterval())
+                   + QStringLiteral(" --raw-quality ") + QString::number(config->translateQuality()))
                    + (!config->Form->ui.pageOptions->CBTeamTag->isChecked() ? " --no-teamtag" : "")
                    + (!config->Form->ui.pageOptions->CBHogTag->isChecked() ? " --no-hogtag" : "")
                    + (!config->Form->ui.pageOptions->CBHealthTag->isChecked() ? " --no-healthtag" : "")
@@ -2363,35 +2363,35 @@ void HWForm::AssociateFiles()
     system("/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -domain local -domain system -domain user");
 #else
     // this is a little silly due to all the system commands below anyway - just use mkdir -p ?  Does have the advantage of the alert I guess
-    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");
-    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
-    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/mime");
-    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/mime/packages");
-    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");
-    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
-    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/applications");
+    if (success) success = checkForDir(QDir::home().absolutePath() + QStringLiteral("/.local"));
+    if (success) success = checkForDir(QDir::home().absolutePath() + QStringLiteral("/.local/share"));
+    if (success) success = checkForDir(QDir::home().absolutePath() + QStringLiteral("/.local/share/mime"));
+    if (success) success = checkForDir(QDir::home().absolutePath() + QStringLiteral("/.local/share/mime/packages"));
+    if (success) success = checkForDir(QDir::home().absolutePath() + QStringLiteral("/.local"));
+    if (success) success = checkForDir(QDir::home().absolutePath() + QStringLiteral("/.local/share"));
+    if (success) success = checkForDir(QDir::home().absolutePath() + QStringLiteral("/.local/share/applications"));
     if (success)
       success = QFile::copy(
-          datadir.absolutePath() + "/misc/hedgewars-mimeinfo.xml",
-          QDir::home().absolutePath() + "/.local/share/mime/packages");
+          datadir.absolutePath() + QStringLiteral("/misc/hedgewars-mimeinfo.xml"),
+          QDir::home().absolutePath() + QStringLiteral("/.local/share/mime/packages"));
     if (success)
       success = QFile::copy(
-          datadir.absolutePath() + "/misc/hedgewars.desktop",
-          QDir::home().absolutePath() + "/.local/share/applications");
+          datadir.absolutePath() + QStringLiteral("/misc/hedgewars.desktop"),
+          QDir::home().absolutePath() + QStringLiteral("/.local/share/applications"));
     if (success)
       success = QFile::copy(
-          datadir.absolutePath() + "/misc/hwengine.desktop",
-          QDir::home().absolutePath() + "/.local/share/applications");
+          datadir.absolutePath() + QStringLiteral("/misc/hwengine.desktop"),
+          QDir::home().absolutePath() + QStringLiteral("/.local/share/applications"));
     if (success)
-      success = system(("update-mime-database " + QDir::home().absolutePath() +
-                        "/.local/share/mime")
+      success = system((QStringLiteral("update-mime-database ") + QDir::home().absolutePath() +
+                        QStringLiteral("/.local/share/mime"))
                            .toLocal8Bit()
                            .constData()) == 0;
     if (success) success = system("xdg-mime default hedgewars.desktop x-scheme-handler/hwplay")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-demo")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-save")==0;
     // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home.  This assumes no spaces in the data dir path
-    if (success) success = system(("sed -i 's|^\\(Exec=.*\\) \\(%f\\)|\\1 \\2 "+arguments+"|' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
+    if (success) success = system(("sed -i 's|^\\(Exec=.*\\) \\(%f\\)|\\1 \\2 "+arguments+QStringLiteral("|' ")+QDir::home().absolutePath()+QStringLiteral("/.local/share/applications/hwengine.desktop")).toLocal8Bit().constData())==0;
 #endif
     if (success)
     {
@@ -2409,7 +2409,7 @@ void HWForm::AssociateFiles()
 
 void HWForm::openRegistrationPage()
 {
-    QDesktopServices::openUrl(QUrl("https://www.hedgewars.org/user/register"));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://www.hedgewars.org/user/register")));
 }
 
 void HWForm::saveDemoWithCustomName()
@@ -2424,8 +2424,8 @@ void HWForm::saveDemoWithCustomName()
 
             if(!fileName.isEmpty())
             {
-              QString filePath = cfgdir.absolutePath() + "/Demos/" + fileName +
-                                 "." + cProtoVer + ".hwd";
+              QString filePath = cfgdir.absolutePath() + QStringLiteral("/Demos/") + fileName +
+                                 QStringLiteral(".") + cProtoVer + QStringLiteral(".hwd");
               QFile demofile(filePath);
               ok = demofile.open(QIODevice::WriteOnly);
               if (!ok)
@@ -2478,7 +2478,7 @@ void HWForm::ShowFatalErrorMessage(const QString & msg)
 
 void HWForm::showFeedbackDialog()
 {
-    QNetworkRequest newRequest(QUrl("https://www.hedgewars.org"));
+    QNetworkRequest newRequest(QUrl(QStringLiteral("https://www.hedgewars.org")));
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkReply *reply = manager->get(newRequest);

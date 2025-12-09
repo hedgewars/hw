@@ -51,19 +51,19 @@ void HatModel::loadHats()
     DataManager & dataMgr = DataManager::instance();
 
     // Default hat icon
-    QPixmap hhpix = QPixmap("physfs://Graphics/Hedgehog/Idle.png").copy(0, 0, 32, 32);
+    QPixmap hhpix = QPixmap(QStringLiteral("physfs://Graphics/Hedgehog/Idle.png")).copy(0, 0, 32, 32);
 
     // my reserved hats
     QStringList hatsList = dataMgr.entryList(
-                               "Graphics/Hats/Reserved",
+                               QStringLiteral("Graphics/Hats/Reserved"),
                                QDir::Files,
-                               QStringList(playerHash+"*.png")
+                               QStringList(playerHash+QStringLiteral("*.png"))
                            );
     int nReserved = hatsList.size();
 
     // regular hats
     hatsList.append(dataMgr.entryList(
-                        "Graphics/Hats",
+                        QStringLiteral("Graphics/Hats"),
                         QDir::Files,
                         QStringList("*.png")
                     )
@@ -78,15 +78,15 @@ void HatModel::loadHats()
         if (isReserved) continue; // For some reason, reserved hats were added in 9.19-dev, so this will hide them. Uncomment to show them.
 
         QString str = hatsList.at(i);
-        str = str.remove(QRegularExpression("\\.png$"));
+        str = str.remove(QRegularExpression(QStringLiteral("\\.png$")));
         QPixmap hatpix(
-                "physfs://Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str +
-                ".png"
+                QStringLiteral("physfs://Graphics/Hats/") + QString(isReserved?"Reserved/":"") + str +
+                QStringLiteral(".png")
         );
 
         // rename properly
         if (isReserved)
-            str = "Reserved "+str.remove(0,32);
+            str = QStringLiteral("Reserved ")+str.remove(0,32);
 
         // Color for team hats. We use the default color of the first team.
         QColor overlay_color = QColor(colors[0]);
@@ -129,7 +129,7 @@ void HatModel::loadHats()
 
         painter.end();
 
-        if (str == "NoHat")
+        if (str == QLatin1String("NoHat"))
             hats.prepend(new QStandardItem(QIcon(ppix), str));
         else
             hats.append(new QStandardItem(QIcon(ppix), str));

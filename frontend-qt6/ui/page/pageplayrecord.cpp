@@ -62,7 +62,7 @@ QLayout * PagePlayDemo::footerLayoutDefinition()
     BtnPlayDemo = addButton(tr("Play demo"), bottomLayout, 0, false, Qt::AlignBottom);
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
-    BtnPlayDemo->setStyleSheet("padding: 5px 10px");
+    BtnPlayDemo->setStyleSheet(QStringLiteral("padding: 5px 10px"));
     BtnPlayDemo->setIcon(lp);
     BtnPlayDemo->setFixedHeight(50);
     BtnPlayDemo->setIconSize(sz);
@@ -94,25 +94,25 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
     dir.cd(cfgdir.absolutePath());
     if (rectype == RT_Demo)
     {
-        dir.cd("Demos");
-        extension = "hwd";
+        dir.cd(QStringLiteral("Demos"));
+        extension = QStringLiteral("hwd");
         BtnPlayDemo->setText(QPushButton::tr("Play demo"));
         BtnPlayDemo->setWhatsThis(tr("Play the selected demo"));
     }
     else
     {
-        dir.cd("Saves");
-        extension = "hws";
+        dir.cd(QStringLiteral("Saves"));
+        extension = QStringLiteral("hws");
         BtnPlayDemo->setText(QPushButton::tr("Load"));
         BtnPlayDemo->setWhatsThis(tr("Load the selected game"));
     }
     dir.setFilter(QDir::Files);
 
     QStringList sl = dir.entryList(
-        QStringList(QString("*.%2.%1").arg(extension, cProtoVer)));
+        QStringList(QStringLiteral("*.%2.%1").arg(extension, cProtoVer)));
     sl.replaceInStrings(
         QRegularExpression(
-            QString("^(.*)\\.%2\\.%1$").arg(extension, cProtoVer)),
+            QStringLiteral("^(.*)\\.%2\\.%1$").arg(extension, cProtoVer)),
         "\\1");
 
     DemosList->clear();
@@ -123,7 +123,7 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
       DemosList->item(i)->setData(
           Qt::UserRole,
           dir.absoluteFilePath(
-              QString("%1.%3.%2").arg(sl[i], extension, cProtoVer)));
+              QStringLiteral("%1.%3.%2").arg(sl[i], extension, cProtoVer)));
       DemosList->item(i)->setIcon(recType == RT_Demo
                                       ? QIcon(":/res/file_demo.png")
                                       : QIcon(":/res/file_save.png"));
@@ -161,11 +161,11 @@ void PagePlayDemo::renameRecord()
     QString newname = QInputDialog::getText(
         this, tr("Rename dialog"), tr("Enter new file name:"),
         QLineEdit::Normal,
-        finfo.completeBaseName().replace("." + cProtoVer, ""), &ok);
+        finfo.completeBaseName().replace(QStringLiteral(".") + cProtoVer, QLatin1String("")), &ok);
 
     if(ok && newname.size())
     {
-      QString newfullname = QString("%1/%2.%3.%4")
+      QString newfullname = QStringLiteral("%1/%2.%3.%4")
                                 .arg(finfo.absolutePath())
                                 .arg(newname)
                                 .arg(cProtoVer)

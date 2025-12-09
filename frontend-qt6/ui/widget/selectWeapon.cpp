@@ -40,14 +40,14 @@
 QImage getAmmoImage(int num)
 {
     // Show ammo image for ammo selection menu
-    if (QLocale().decimalPoint() == "," && num == HW_AMMOTYPE_EXTRADAMAGE) {
+    if (QLocale().decimalPoint() == QLatin1String(",") && num == HW_AMMOTYPE_EXTRADAMAGE) {
         // Special case: Extra Damage icon showing "1,5" instead of "1.5" if locale
         // uses comma as decimal separator
-        static QImage extradamage(":Ammos_ExtraDamage_comma.png");
+        static QImage extradamage(QStringLiteral(":Ammos_ExtraDamage_comma.png"));
         return extradamage;
     } else {
         // Normal case: Pick icon from Ammos.png
-        static QImage ammo(":Ammos.png");
+        static QImage ammo(QStringLiteral(":Ammos.png"));
         int x = num/(ammo.height()/32);
         int y = (num-((ammo.height()/32)*x))*32;
         x*=32;
@@ -114,22 +114,24 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
         wconf->insert(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
     }
 
-    if (!QDir(cfgdir.absolutePath() + "/Schemes").exists()) {
-      QDir().mkdir(cfgdir.absolutePath() + "/Schemes");
+    if (!QDir(cfgdir.absolutePath() + QStringLiteral("/Schemes")).exists()) {
+      QDir().mkdir(cfgdir.absolutePath() + QStringLiteral("/Schemes"));
     }
     QStringList defaultAmmos;
     for(int i = 0; i < cDefaultAmmos.size(); ++i)
     {
         defaultAmmos.append(cDefaultAmmos[i].first.toLower());
     }
-    if (!QDir(cfgdir.absolutePath() + "/Schemes/Ammo").exists()) {
+    if (!QDir(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo"))
+             .exists()) {
       qDebug(
           "No /Schemes/Ammo directory found. Trying to import weapon schemes "
           "from weapons.ini.");
-      QDir().mkdir(cfgdir.absolutePath() + "/Schemes/Ammo");
+      QDir().mkdir(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo"));
 
-      QSettings old_wconf(cfgdir.absolutePath() + "/weapons.ini",
-                          QSettings::IniFormat);
+      QSettings old_wconf(
+          cfgdir.absolutePath() + QStringLiteral("/weapons.ini"),
+          QSettings::IniFormat);
 
       QStringList keys = old_wconf.allKeys();
       int imported = 0;
@@ -137,8 +139,8 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
         if (!defaultAmmos.contains(keys[i].toLower())) {
           wconf->insert(keys[i],
                         fixWeaponSet(old_wconf.value(keys[i]).toString()));
-          QFile file(cfgdir.absolutePath() + "/Schemes/Ammo/" + keys[i] +
-                     ".hwa");
+          QFile file(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo/") +
+                     keys[i] + QStringLiteral(".hwa"));
           if (file.open(QIODevice::WriteOnly)) {
             QTextStream stream(&file);
             stream << old_wconf.value(keys[i]).toString() << "\n";
@@ -150,10 +152,12 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
       qDebug("%d weapon scheme(s) imported.", imported);
     } else {
       QStringList schemes =
-          QDir(cfgdir.absolutePath() + "/Schemes/Ammo").entryList(QDir::Files);
+          QDir(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo"))
+              .entryList(QDir::Files);
 
       for (int i = 0; i < schemes.size(); i++) {
-        QFile file(cfgdir.absolutePath() + "/Schemes/Ammo/" + schemes[i]);
+        QFile file(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo/") +
+                   schemes[i]);
         QString config;
         if (file.open(QIODevice::ReadOnly)) {
           QTextStream stream(&file);
@@ -163,7 +167,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 
         // Chop off file name suffix
         QString schemeName = schemes[i];
-        if (schemeName.endsWith(".hwa", Qt::CaseInsensitive)) {
+        if (schemeName.endsWith(QLatin1String(".hwa"), Qt::CaseInsensitive)) {
           schemeName.chop(4);
         }
         // Don't load weapon scheme if name collides with any default scheme
@@ -223,19 +227,19 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
             continue;
         }
         int a = ammo-1; // ammo ID for SelWeaponItem
-        SelWeaponItem * swi = new SelWeaponItem(true, a, readWeaponValue(currentState[a], 9), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
+        SelWeaponItem * swi = new SelWeaponItem(true, a, readWeaponValue(currentState[a], 9), QImage(QStringLiteral(":/res/ammopic.png")), QImage(QStringLiteral(":/res/ammopicgrey.png")), this);
         weaponItems[a].append(swi);
         p1Layout->addWidget(swi, j, k % cAmmoMenuRows);
 
-        SelWeaponItem * pwi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems + a], 8), QImage(":/res/ammopicbox.png"), QImage(":/res/ammopicboxgrey.png"), this);
+        SelWeaponItem * pwi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems + a], 8), QImage(QStringLiteral(":/res/ammopicbox.png")), QImage(QStringLiteral(":/res/ammopicboxgrey.png")), this);
         weaponItems[a].append(pwi);
         p2Layout->addWidget(pwi, j, k % cAmmoMenuRows);
 
-        SelWeaponItem * dwi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems*2 + a], 8), QImage(":/res/ammopicdelay.png"), QImage(":/res/ammopicdelaygrey.png"), this);
+        SelWeaponItem * dwi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems*2 + a], 8), QImage(QStringLiteral(":/res/ammopicdelay.png")), QImage(QStringLiteral(":/res/ammopicdelaygrey.png")), this);
         weaponItems[a].append(dwi);
         p3Layout->addWidget(dwi, j, k % cAmmoMenuRows);
 
-        SelWeaponItem * awi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems*3 + a], 8), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
+        SelWeaponItem * awi = new SelWeaponItem(false, a, readWeaponValue(currentState[numItems*3 + a], 8), QImage(QStringLiteral(":/res/ammopic.png")), QImage(QStringLiteral(":/res/ammopicgrey.png")), this);
         weaponItems[a].append(awi);
         p4Layout->addWidget(awi, j, k % cAmmoMenuRows);
 
@@ -299,8 +303,7 @@ void SelWeaponWidget::save()
     //prevent this.
     if (isDeleting)
         return;
-    if (m_name->text() == "")
-        return;
+    if (m_name->text().isEmpty()) return;
 
     // Don't save an default ammo scheme
     for(int i = 0; i < cDefaultAmmos.size(); ++i)
@@ -355,14 +358,13 @@ void SelWeaponWidget::save()
         }
     }
 
-    if (curWeaponsName != "")
-    {
-        // remove old entry
-        wconf->remove(curWeaponsName);
+    if (!curWeaponsName.isEmpty()) {
+      // remove old entry
+      wconf->remove(curWeaponsName);
     }
     wconf->insert(m_name->text(), stateFull);
-    QFile file(cfgdir.absolutePath() + "/Schemes/Ammo/" + m_name->text() +
-               ".hwa");
+    QFile file(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo/") +
+               m_name->text() + QStringLiteral(".hwa"));
     if (file.open(QIODevice::WriteOnly)) {
         QTextStream stream( &file );
         stream << stateFull << "\n";
@@ -380,13 +382,15 @@ int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
 
 QString SelWeaponWidget::getWeaponsString(const QString& name) const
 {
-    return wconf->find(name).value();
+  return std::as_const(wconf)->find(name).value();
 }
 
 void SelWeaponWidget::deleteWeaponsName()
 {
     QString delWeaponsName = curWeaponsName;
-    if (delWeaponsName == "") return;
+    if (delWeaponsName.isEmpty()) {
+      return;
+    }
 
     for(int i = 0; i < cDefaultAmmos.size(); i++)
     {
@@ -415,8 +419,8 @@ void SelWeaponWidget::deleteWeaponsName()
     {
         isDeleting = true;
         wconf->remove(delWeaponsName);
-        QFile(cfgdir.absolutePath() + "/Schemes/Ammo/" + curWeaponsName +
-              ".hwa")
+        QFile(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo/") +
+              curWeaponsName + QStringLiteral(".hwa"))
             .remove();
         emit weaponsDeleted(delWeaponsName);
     }
@@ -443,7 +447,7 @@ void SelWeaponWidget::setWeaponsName(const QString& name)
 
     curWeaponsName = name;
 
-    if(name != "" && wconf->contains(name))
+    if(!name.isEmpty() && wconf->contains(name))
     {
         setWeapons(wconf->find(name).value());
     }

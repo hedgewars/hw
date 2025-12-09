@@ -83,7 +83,7 @@ class VideoItem : public QTableWidgetItem
         bool ready()
         { return !pRecorder; }
 
-        QString path() { return cfgdir.absoluteFilePath("Videos/" + name); }
+        QString path() { return cfgdir.absoluteFilePath(QStringLiteral("Videos/") + name); }
 };
 
 VideoItem::VideoItem(const QString& name)
@@ -115,7 +115,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         QStringList columns;
         columns << tr("Name");
         columns << tr("Size");
-        columns << "";
+        columns << QLatin1String("");
 
         filesTable = new QTableWidget(pTableGroup);
         filesTable->setColumnCount(vcNumColumns);
@@ -230,7 +230,7 @@ void PageVideos::init(GameUIConfig * config)
 {
     this->config = config;
 
-    QString path = cfgdir.absolutePath() + "/Videos";
+    QString path = cfgdir.absolutePath() + QStringLiteral("/Videos");
     QFileSystemWatcher * pWatcher = new QFileSystemWatcher(this);
     pWatcher->addPath(path);
     connect(pWatcher, SIGNAL(directoryChanged(const QString &)), this, SLOT(updateFileList(const QString &)));
@@ -269,7 +269,7 @@ void PageVideos::updateSize(int row)
     QString path =
         item->ready()
             ? item->path()
-            : cfgdir.absoluteFilePath("VideoTemp/" + item->pRecorder->name);
+            : cfgdir.absoluteFilePath(QStringLiteral("VideoTemp/") + item->pRecorder->name);
     filesTable->item(row, vcSize)->setText(FileSizeStr(path));
 }
 
@@ -297,7 +297,7 @@ void PageVideos::updateFileList(const QString & path)
             row = appendRow(name);
         VideoItem * item = nameItem(row);
         item->seen = true;
-        item->desc = "";
+        item->desc = QLatin1String("");
         setName(item, item->name);
         updateSize(row);
     }
@@ -369,14 +369,14 @@ void PageVideos::encodingFinished(bool success)
     if (success)
     {
         // move file to destination
-        success = cfgdir.rename("VideoTemp/" + pRecorder->name,
-                                "Videos/" + item->name);
+        success = cfgdir.rename(QStringLiteral("VideoTemp/") + pRecorder->name,
+                                QStringLiteral("Videos/") + item->name);
         if (!success)
         {
             // unable to rename for some reason (maybe user entered incorrect name);
             // try to use temp name instead.
-            success = cfgdir.rename("VideoTemp/" + pRecorder->name,
-                                    "Videos/" + pRecorder->name);
+            success = cfgdir.rename(QStringLiteral("VideoTemp/") + pRecorder->name,
+                                    QStringLiteral("Videos/") + pRecorder->name);
             if (success)
                 setName(item, pRecorder->name);
         }
@@ -455,7 +455,7 @@ void PageVideos::cellChanged(int row, int column)
     }
 #endif
     if (item->ready() &&
-        !cfgdir.rename("Videos/" + oldName, "Videos/" + newName)) {
+        !cfgdir.rename(QStringLiteral("Videos/") + oldName, QStringLiteral("Videos/") + newName)) {
       // unable to rename for some reason (maybe user entered incorrect name),
       // therefore restore old name in cell
       setName(item, oldName);
@@ -463,10 +463,10 @@ void PageVideos::cellChanged(int row, int column)
     }
     if (item->ready())
     {
-      cfgdir.rename("VideoThumbnails/" + oldPrefix + ".png",
-                    "VideoThumbnails/" + newPrefix + ".png");
-      cfgdir.rename("VideoThumbnails/" + oldPrefix + ".bmp",
-                    "VideoThumbnails/" + newPrefix + ".bmp");
+      cfgdir.rename(QStringLiteral("VideoThumbnails/") + oldPrefix + QStringLiteral(".png"),
+                    QStringLiteral("VideoThumbnails/") + newPrefix + QStringLiteral(".png"));
+      cfgdir.rename(QStringLiteral("VideoThumbnails/") + oldPrefix + QStringLiteral(".bmp"),
+                    QStringLiteral("VideoThumbnails/") + newPrefix + QStringLiteral(".bmp"));
     }
     item->name = newName;
     item->prefix = newPrefix;
@@ -547,7 +547,7 @@ void PageVideos::updateDescription()
     btnDelete->setText(item->ready()? QPushButton::tr("Delete") :  QPushButton::tr("Cancel"));
 
     // construct string with desctiption of this file to display it
-    QString desc = item->name + "\n\n";
+    QString desc = item->name + QStringLiteral("\n\n");
 
     if (!item->ready())
         desc += tr("(in progress...)");
@@ -564,8 +564,8 @@ void PageVideos::updateDescription()
             item->desc = LibavInteraction::instance().getFileInfo(path);
 
             // extract prefix (original name) from description (it is enclosed in prefix[???]prefix)
-            int prefixBegin = item->desc.indexOf("prefix[");
-            int prefixEnd   = item->desc.indexOf("]prefix");
+            int prefixBegin = item->desc.indexOf(QLatin1String("prefix["));
+            int prefixEnd   = item->desc.indexOf(QLatin1String("]prefix"));
             if (prefixBegin != -1 && prefixEnd != -1)
             {
                 item->prefix = item->desc.mid(prefixBegin + 7, prefixEnd - (prefixBegin + 7));
@@ -594,9 +594,9 @@ void PageVideos::updateDescription()
     if (!item->prefix.isEmpty())
     {
       QString thumbName =
-          cfgdir.absoluteFilePath("VideoThumbnails/" + item->prefix);
+          cfgdir.absoluteFilePath(QStringLiteral("VideoThumbnails/") + item->prefix);
       QPixmap pic;
-      if (pic.load(thumbName + ".png") || pic.load(thumbName + ".bmp")) {
+      if (pic.load(thumbName + QStringLiteral(".png")) || pic.load(thumbName + QStringLiteral(".bmp"))) {
         if (pic.height() * ThumbnailSize.width() >
             pic.width() * ThumbnailSize.height())
           pic = pic.scaledToWidth(ThumbnailSize.width());
@@ -619,7 +619,7 @@ void PageVideos::play(int row)
 {
     VideoItem * item = nameItem(row);
     if (item && item->ready())
-        QDesktopServices::openUrl(QUrl("file:///" + QDir::toNativeSeparators(item->path())));
+        QDesktopServices::openUrl(QUrl(QStringLiteral("file:///") + QDir::toNativeSeparators(item->path())));
 }
 
 void PageVideos::playSelectedFile()
@@ -656,11 +656,11 @@ void PageVideos::deleteSelectedFiles()
         item->pRecorder->abort();
     else
     {
-      cfgdir.remove("Videos/" + item->name);
+      cfgdir.remove(QStringLiteral("Videos/") + item->name);
       // we have no idea whether screenshot is going to be bmp or png so let's
       // delete both
-      cfgdir.remove("VideoThumbnails/" + item->prefix + ".png");
-      cfgdir.remove("VideoThumbnails/" + item->prefix + ".bmp");
+      cfgdir.remove(QStringLiteral("VideoThumbnails/") + item->prefix + QStringLiteral(".png"));
+      cfgdir.remove(QStringLiteral("VideoThumbnails/") + item->prefix + QStringLiteral(".bmp"));
     }
 
 // this code is for removing several files when multiple selection is enabled
@@ -715,23 +715,23 @@ void PageVideos::keyPressEvent(QKeyEvent * pEvent)
 
 void PageVideos::openVideosDirectory()
 {
-  QString path = QDir::toNativeSeparators(cfgdir.absolutePath() + "/Videos");
-  QDesktopServices::openUrl(QUrl("file:///" + path));
+  QString path = QDir::toNativeSeparators(cfgdir.absolutePath() + QStringLiteral("/Videos"));
+  QDesktopServices::openUrl(QUrl(QStringLiteral("file:///") + path));
 }
 
 // clear VideoTemp directory
 void PageVideos::clearTemp()
 {
     qDebug("Clearing VideoTemp directory ...");
-    QDir temp(cfgdir.absolutePath() + "/VideoTemp");
+    QDir temp(cfgdir.absolutePath() + QStringLiteral("/VideoTemp"));
     QStringList files = temp.entryList(QDir::Files);
     foreach (const QString& file, files)
     {
         // Legacy support: Move thumbnails to correct dir
-        if (file.endsWith(".bmp") || file.endsWith(".png"))
+        if (file.endsWith(QLatin1String(".bmp")) || file.endsWith(QLatin1String(".png")))
         {
             qDebug("Moving video thumbnail '%s' to VideoThumbnails directory", qPrintable(file));
-            cfgdir.rename("VideoTemp/" + file, "VideoThumbnails/" + file);
+            cfgdir.rename(QStringLiteral("VideoTemp/") + file, QStringLiteral("VideoThumbnails/") + file);
         }
         else
             temp.remove(file);
@@ -759,7 +759,7 @@ foo.avi (15.21% - encoding)
 */
 QString PageVideos::getVideosInProgress()
 {
-    QString list = "";
+    QString list = QLatin1String("");
     int count = filesTable->rowCount();
     for (int i = 0; i < count; i++)
     {
@@ -775,22 +775,22 @@ QString PageVideos::getVideosInProgress()
             .arg(item->name)
             .arg(QLocale().toString(progress, 'f', 2))
             .arg(tr("encoding"))
-            + "\n";
+            + QStringLiteral("\n");
     }
     return list;
 }
 
 void PageVideos::startEncoding(const QByteArray & record)
 {
-  QDir videoTempDir(cfgdir.absolutePath() + "/VideoTemp/");
+  QDir videoTempDir(cfgdir.absolutePath() + QStringLiteral("/VideoTemp/"));
   QStringList files =
       videoTempDir.entryList(QStringList("*.txtout"), QDir::Files);
   foreach (const QString& str, files) {
     QString prefix = str;
     prefix.chop(7);  // remove ".txtout"
     videoTempDir.rename(
-        prefix + ".txtout",
-        prefix + ".txtin");  // rename this file to not open it twice
+        prefix + QStringLiteral(".txtout"),
+        prefix + QStringLiteral(".txtin"));  // rename this file to not open it twice
 
     HWRecorder* pRecorder = new HWRecorder(config, prefix);
 
@@ -799,7 +799,7 @@ void PageVideos::startEncoding(const QByteArray & record)
     else {
       // this is for videos recorded from demos which were executed directly
       // (without frontend)
-      QFile demofile(videoTempDir.absoluteFilePath(prefix + ".hwd"));
+      QFile demofile(videoTempDir.absoluteFilePath(prefix + QStringLiteral(".hwd")));
       if (!demofile.open(QIODevice::ReadOnly)) continue;
       QByteArray demo = demofile.readAll();
       if (demo.isEmpty()) continue;

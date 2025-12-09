@@ -83,15 +83,15 @@ QString About::getCreditsHtml()
 
     Columns 2, 3 and 5 MUST be in US-ASCII.
     */
-    QFile creditsFile(":/res/credits.csv");
+    QFile creditsFile(QStringLiteral(":/res/credits.csv"));
     if (!creditsFile.open(QIODevice::ReadOnly))
     {
         qWarning("ERROR: Credits file could not be opened!");
-        return "<p>ERROR: Credits file could not be opened!</p>";
+        return QStringLiteral("<p>ERROR: Credits file could not be opened!</p>");
     }
     QString creditsString = creditsFile.readAll();
-    QString out = QString("<h1>" + tr("Credits") + "</h1>\n");
-    QStringList cells = QStringList() << QString("") << QString("") << QString("") << QString("") << QString("");
+    QString out = QString(QStringLiteral("<h1>") + tr("Credits") + QStringLiteral("</h1>\n"));
+    QStringList cells = QStringList() << QLatin1String("") << QLatin1String("") << QLatin1String("") << QLatin1String("") << QLatin1String("");
     bool firstSection = true;
     unsigned long int column = 0;
     unsigned long int charInCell = 0;
@@ -152,32 +152,32 @@ QString About::getCreditsHtml()
             mail = cells[3];
             nick = cells[4];
 
-            if(type == "S")
+            if(type == QLatin1String("S"))
             {
                 // section
                 if (!firstSection)
-                    out = out + "</ul>\n";
-                out = out + "<h2>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</h2>\n<ul>\n";
+                    out = out + QStringLiteral("</ul>\n");
+                out = out + QStringLiteral("<h2>") + HWApplication::translate("credits", task.toLatin1().constData()) + QStringLiteral("</h2>\n<ul>\n");
                 firstSection = false;
             }
-            else if(type == "U")
+            else if(type == QLatin1String("U"))
             {
                 // subsection
-                out = out + "</ul>\n";
-                out = out + "<h3>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</h3>\n<ul>\n";
+                out = out + QStringLiteral("</ul>\n");
+                out = out + QStringLiteral("<h3>") + HWApplication::translate("credits", task.toLatin1().constData()) + QStringLiteral("</h3>\n<ul>\n");
             }
-            else if(type == "M")
+            else if(type == QLatin1String("M"))
             {
                 // other people
-                out = out + "<li>" + tr("Other people") + "</li>" + "\n";
+                out = out + QStringLiteral("<li>") + tr("Other people") + QStringLiteral("</li>") + QStringLiteral("\n");
             }
-            else if(type == "E")
+            else if(type == QLatin1String("E"))
             {
-                QString showName = QString("");
+                QString showName = QLatin1String("");
                 if(!name.isEmpty())
-                    name = "<span class=\"name\">"+name+"</span>";
+                    name = QStringLiteral("<span class=\"name\">")+name+QStringLiteral("</span>");
                 if(!nick.isEmpty())
-                    nick= "<span class=\"nick\">"+nick+"</span>";
+                    nick= QStringLiteral("<span class=\"nick\">")+nick+QStringLiteral("</span>");
                 if(!name.isEmpty() && !nick.isEmpty())
                     showName = tr("%1 (alias %2)").arg(name).arg(nick);
                 else if(name.isEmpty() && !nick.isEmpty())
@@ -185,41 +185,41 @@ QString About::getCreditsHtml()
                 else if(!name.isEmpty() && nick.isEmpty())
                     showName = name;
                 // credits list entry
-                QString mailLink = QString("<a href=\"mailto:%1\">%1</a>").arg(mail);
+                QString mailLink = QStringLiteral("<a href=\"mailto:%1\">%1</a>").arg(mail);
                 if(task.isEmpty() && mail.isEmpty() && !showName.isEmpty())
                 {
                     // Name only
-                    out = out + "<li>" + showName + "</li>\n";
+                    out = out + QStringLiteral("<li>") + showName + QStringLiteral("</li>\n");
                 }
                 else if(showName.isEmpty() && mail.isEmpty() && !task.isEmpty())
                 {
                     // Task only
-                    out = out + "<li>" + HWApplication::translate("credits", task.toLatin1().constData()) + "</li>\n";
+                    out = out + QStringLiteral("<li>") + HWApplication::translate("credits", task.toLatin1().constData()) + QStringLiteral("</li>\n");
                 }
                 else if(task.isEmpty())
                 {
                     // Name and e-mail
                     //: Part of credits. %1: Contributor name. %2: E-mail address
-                    out = out + "<li>" + tr("%1 &lt;%2&gt;").arg(showName).arg(mailLink) + "</li>\n";
+                    out = out + QStringLiteral("<li>") + tr("%1 &lt;%2&gt;").arg(showName).arg(mailLink) + QStringLiteral("</li>\n");
                 }
                 else if(mail.isEmpty())
                 {
                     // Contribution and name
                     //: Part of credits. %1: Description of contribution. %2: Contributor name
-                    out = out + "<li>" + tr("%1: %2")
+                    out = out + QStringLiteral("<li>") + tr("%1: %2")
                         .arg(HWApplication::translate("credits", task.toLatin1().constData()))
                         .arg(showName)
-                        + "</li>\n";
+                        + QStringLiteral("</li>\n");
                 }
                 else
                 {
                     // Contribution, name and e-mail
                     //: Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address
-                    out = out + "<li>" + tr("%1: %2 &lt;%3&gt;")
+                    out = out + QStringLiteral("<li>") + tr("%1: %2 &lt;%3&gt;")
                         .arg(HWApplication::translate("credits", task.toLatin1().constData()))
                         .arg(showName)
                         .arg(mailLink)
-                        + "</li>\n";
+                        + QStringLiteral("</li>\n");
                 }
             }
             else
@@ -228,18 +228,18 @@ QString About::getCreditsHtml()
             }
             lineComplete = false;
             column = 0;
-            cells[0] = "";
-            cells[1] = "";
-            cells[2] = "";
-            cells[3] = "";
-            cells[4] = "";
+            cells[0] = QLatin1String("");
+            cells[1] = QLatin1String("");
+            cells[2] = QLatin1String("");
+            cells[3] = QLatin1String("");
+            cells[4] = QLatin1String("");
             charInCell = 0;
         }
 
         prevChar = currChar;
     }
     creditsFile.close();
-    out = out + "</ul>";
+    out = out + QStringLiteral("</ul>");
     return out;
 }
 
@@ -252,7 +252,7 @@ About::About(QWidget * parent) :
     mainLayout->addLayout(leftLayout, 0, 0, 2, 1);
 
     QLabel *imageLabel = new QLabel;
-    QImage image(":/res/Hedgehog.png");
+    QImage image(QStringLiteral(":/res/Hedgehog.png"));
     imageLabel->setPixmap(QPixmap::fromImage(image));
     imageLabel->setFixedWidth(273);
     imageLabel->setFixedHeight(300);
@@ -263,7 +263,7 @@ About::About(QWidget * parent) :
     lbl1->setOpenExternalLinks(true);
     lbl1->setText(
         //: %1 contains Hedgewars' version number
-        "<div align=\"center\"><h1>" +
+        QStringLiteral("<div align=\"center\"><h1>") +
         QString(tr("Hedgewars %1")).arg(cVersionString) +
         "</h1>"
         //: “Revision” stands for a revision in Mercurial, a distributed version
@@ -277,13 +277,13 @@ About::About(QWidget * parent) :
             .arg("<a "
                  "href=\"https://www.hedgewars.org/\">https://"
                  "www.hedgewars.org/</a>") +
-        "</p>" +
+        QStringLiteral("</p>") +
         //: %1 is the name of a license
         tr("This program is distributed under the %1.")
-            .arg("<a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">" +
+            .arg(QStringLiteral("<a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">") +
                  //: Short for “GNU General Public License version 2”
-                 tr("GNU GPL v2") + "</a>") +
-        "</div>");
+                 tr("GNU GPL v2") + QStringLiteral("</a>")) +
+        QStringLiteral("</div>"));
     lbl1->setWordWrap(true);
     mainLayout->addWidget(lbl1, 0, 1);
 
@@ -320,7 +320,7 @@ About::About(QWidget * parent) :
     /* Library information */
 
     //: For the version numbers of Hedgewars' software dependencies
-    QString libinfo = QString(tr("Dependency versions:") + QString("<br>"));
+    QString libinfo = QString(tr("Dependency versions:") + QStringLiteral("<br>"));
 
 #if defined(__GNUC__)
     libinfo.append(QString(tr("<a href=\"https://gcc.gnu.org\">GCC</a>: %1")).arg(__VERSION__));
@@ -331,7 +331,7 @@ About::About(QWidget * parent) :
 #else
     libinfo.append(QString(tr("Unknown Compiler")));
 #endif
-    libinfo.append(QString("<br>"));
+    libinfo.append(QStringLiteral("<br>"));
 
     const SDL_version *sdl_ver;
     SDL_version sdl_version;
@@ -341,14 +341,14 @@ About::About(QWidget * parent) :
         .arg(sdl_ver->major)
         .arg(sdl_ver->minor)
         .arg(sdl_ver->patch));
-    libinfo.append(QString("<br>"));
+    libinfo.append(QStringLiteral("<br>"));
 
     const SDL_version *sdlmixer_ver = Mix_Linked_Version();
     libinfo.append(QString(tr("<a href=\"https://www.libsdl.org/\">SDL2_mixer</a>: %1.%2.%3"))
         .arg(sdlmixer_ver->major)
         .arg(sdlmixer_ver->minor)
         .arg(sdlmixer_ver->patch));
-    libinfo.append(QString("<br>"));
+    libinfo.append(QStringLiteral("<br>"));
 
     // the remaining sdl modules used only in engine, so instead of needlessly linking them here
     // we dynamically call the function returning the linked version
@@ -362,7 +362,7 @@ About::About(QWidget * parent) :
                 .arg(sdlnet_ver->major)
                 .arg(sdlnet_ver->minor)
                 .arg(sdlnet_ver->patch));
-            libinfo.append(QString("<br>"));
+            libinfo.append(QStringLiteral("<br>"));
         }
         SDL_UnloadObject(sdlnet_handle);
     }
@@ -377,7 +377,7 @@ About::About(QWidget * parent) :
                 .arg(sdlimage_ver->major)
                 .arg(sdlimage_ver->minor)
                 .arg(sdlimage_ver->patch));
-            libinfo.append(QString("<br>"));
+            libinfo.append(QStringLiteral("<br>"));
         }
         SDL_UnloadObject(sdlimage_handle);
     }
@@ -392,14 +392,14 @@ About::About(QWidget * parent) :
                 .arg(sdlttf_ver->major)
                 .arg(sdlttf_ver->minor)
                 .arg(sdlttf_ver->patch));
-            libinfo.append(QString("<br>"));
+            libinfo.append(QStringLiteral("<br>"));
         }
         SDL_UnloadObject(sdlttf_handle);
     }
 
 
     libinfo.append(QString(tr("<a href=\"https://www.qt.io/developers/\">Qt</a>: %1")).arg(QT_VERSION_STR));
-    libinfo.append(QString("<br>"));
+    libinfo.append(QStringLiteral("<br>"));
 
 #ifdef VIDEOREC
     libinfo.append(QString(tr("<a href=\"https://libav.org\">libavcodec</a>: %1.%2.%3"))
@@ -423,7 +423,7 @@ About::About(QWidget * parent) :
         .arg(PHYSFS_VER_MAJOR)
         .arg(PHYSFS_VER_MINOR)
         .arg(PHYSFS_VER_PATCH));
-    libinfo.append(QString("<br>"));
+    libinfo.append(QStringLiteral("<br>"));
 
     // TODO: how to add Lua information?
 
@@ -445,7 +445,7 @@ void About::dragEnterEvent(QDragEnterEvent * event)
         QList<QUrl> urls = event->mimeData()->urls();
         QString url = urls[0].toString();
         if (urls.count() == 1)
-          if (url.contains(QRegularExpression("^file://.*\\.ogg$")))
+          if (url.contains(QRegularExpression(QStringLiteral("^file://.*\\.ogg$"))))
             event->acceptProposedAction();
     }
 }
@@ -453,7 +453,7 @@ void About::dragEnterEvent(QDragEnterEvent * event)
 void About::dropEvent(QDropEvent * event)
 {
   QString file = event->mimeData()->urls()[0].toString().remove(
-      QRegularExpression("^file://"));
+      QRegularExpression(QStringLiteral("^file://")));
 
   SDLInteraction::instance().setMusicTrack(file);
 

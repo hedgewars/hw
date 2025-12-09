@@ -50,7 +50,7 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
     leRoomName->setText(roomName);
     //leRoomName->setMaxLength(59); // It didn't like 60 :(
     leRoomName->setMaxLength(40);
-    leRoomName->setStyleSheet("QLineEdit { padding: 3px; }");
+    leRoomName->setStyleSheet(QStringLiteral("QLineEdit { padding: 3px; }"));
     leRoomName->selectAll();
     dialogLayout->addWidget(leRoomName);
 
@@ -60,7 +60,7 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
 
     lePassword = new QLineEdit(this);
     lePassword->setMaxLength(30);
-    lePassword->setStyleSheet("QLineEdit { padding: 3px; }");
+    lePassword->setStyleSheet(QStringLiteral("QLineEdit { padding: 3px; }"));
     lePassword->setEnabled(false);
     dialogLayout->addWidget(lePassword);
 
@@ -84,7 +84,7 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
 #endif
     btnOkay->setDefault(true);
 
-    setStyleSheet("QPushButton { padding: 5px; }");
+    setStyleSheet(QStringLiteral("QPushButton { padding: 5px; }"));
 
     connect(cbSetPassword, SIGNAL(toggled(bool)), this, SLOT(checkBoxToggled()));
 }

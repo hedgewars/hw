@@ -78,7 +78,7 @@ class HWChatWidget : public QWidget
         static QString s_tsFormat;
         static const QRegularExpression URLREGEXP;
 
-        static void setStyleSheet(const QString & styleSheet = "");
+        static void setStyleSheet(const QString & styleSheet = QLatin1String(""));
 
         void addLine(const QString & cssClass, QString line, bool isHighlight = false);
         bool parseCommand(const QString & line);

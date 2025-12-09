@@ -58,14 +58,14 @@ void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int 
 QStringList HWMap::getArguments()
 {
     QStringList arguments;
-    arguments << "--internal";
-    arguments << "--port";
-    arguments << QString("%1").arg(ipc_port);
-    arguments << "--user-prefix";
+    arguments << QStringLiteral("--internal");
+    arguments << QStringLiteral("--port");
+    arguments << QStringLiteral("%1").arg(ipc_port);
+    arguments << QStringLiteral("--user-prefix");
     arguments << cfgdir.absolutePath();
-    arguments << "--prefix";
+    arguments << QStringLiteral("--prefix");
     arguments << datadir.absolutePath();
-    arguments << "--landpreview";
+    arguments << QStringLiteral("--landpreview");
     return arguments;
 }
 
@@ -119,21 +119,21 @@ void HWMap::onClientDisconnect()
 
 void HWMap::SendToClientFirst()
 {
-    SendIPC(QString("eseed %1").arg(m_seed).toUtf8());
-    SendIPC(QString("e$template_filter %1").arg(templateFilter).toUtf8());
-    SendIPC(QString("e$mapgen %1").arg(m_mapgen).toUtf8());
-    SendIPC(QString("e$feature_size %1").arg(m_feature_size).toUtf8());
+    SendIPC(QStringLiteral("eseed %1").arg(m_seed).toUtf8());
+    SendIPC(QStringLiteral("e$template_filter %1").arg(templateFilter).toUtf8());
+    SendIPC(QStringLiteral("e$mapgen %1").arg(m_mapgen).toUtf8());
+    SendIPC(QStringLiteral("e$feature_size %1").arg(m_feature_size).toUtf8());
     if (!m_script.isEmpty())
     {
-        SendIPC(QString("escript Scripts/Multiplayer/%1.lua").arg(m_script).toUtf8());
-        SendIPC(QString("e$scriptparam %1").arg(m_scriptparam).toUtf8());
+        SendIPC(QStringLiteral("escript Scripts/Multiplayer/%1.lua").arg(m_script).toUtf8());
+        SendIPC(QStringLiteral("e$scriptparam %1").arg(m_scriptparam).toUtf8());
     }
 
     switch (m_mapgen)
     {
         case MAPGEN_MAZE:
         case MAPGEN_PERLIN:
-            SendIPC(QString("e$maze_size %1").arg(m_maze_size).toUtf8());
+            SendIPC(QStringLiteral("e$maze_size %1").arg(m_maze_size).toUtf8());
             break;
 
         case MAPGEN_DRAWN:

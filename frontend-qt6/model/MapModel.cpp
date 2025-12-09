@@ -50,7 +50,7 @@ QSortFilterProxyModel * MapModel::withoutDLC()
         // filtering based on IsDlcRole would be nicer
         // but seems this model can only do string-based filtering :|
         m_filteredNoDLC->setFilterRegularExpression(
-            QRegularExpression("^[^*]"));
+            QRegularExpression(QStringLiteral("^[^*]")));
     }
     return m_filteredNoDLC;
 }
@@ -71,8 +71,8 @@ bool MapModel::loadMaps()
     DataManager & datamgr = DataManager::instance();
 
     // fetch list of available maps
-    QStringList maps =
-        datamgr.entryList("Maps", QDir::AllDirs | QDir::NoDotAndDotDot);
+    QStringList maps = datamgr.entryList(QStringLiteral("Maps"),
+                                         QDir::AllDirs | QDir::NoDotAndDotDot);
 
     // empty list, so that we can (re)fill it
     QStandardItemModel::clear();
@@ -83,110 +83,110 @@ bool MapModel::loadMaps()
 
 
     QIcon dlcIcon;
-    dlcIcon.addFile(":/res/dlcMarker.png", QSize(), QIcon::Normal, QIcon::On);
-    dlcIcon.addFile(":/res/dlcMarkerSelected.png", QSize(), QIcon::Selected, QIcon::On);
+    dlcIcon.addFile(QStringLiteral(":/res/dlcMarker.png"), QSize(),
+                    QIcon::Normal, QIcon::On);
+    dlcIcon.addFile(QStringLiteral(":/res/dlcMarkerSelected.png"), QSize(),
+                    QIcon::Selected, QIcon::On);
     QPixmap emptySpace = QPixmap(7, 15);
     emptySpace.fill(QColor(0, 0, 0, 0));
     QIcon notDlcIcon = QIcon(emptySpace);
 
     // add mission/static maps to lists
-    foreach (QString map, maps)
-    {
-        // only 2 map relate files are relevant:
-        // - the cfg file that contains the settings/info of the map
-        // - the lua file - if it exists it's a mission, otherwise it isn't
-        QFile mapLuaFile(QString("physfs://Maps/%1/map.lua").arg(map));
-        QFile mapCfgFile(QString("physfs://Maps/%1/map.cfg").arg(map));
+    for (auto map : maps) {
+      // only 2 map relate files are relevant:
+      // - the cfg file that contains the settings/info of the map
+      // - the lua file - if it exists it's a mission, otherwise it isn't
+      QFile mapLuaFile(QStringLiteral("physfs://Maps/%1/map.lua").arg(map));
+      QFile mapCfgFile(QStringLiteral("physfs://Maps/%1/map.cfg").arg(map));
 
-        if (mapCfgFile.open(QFile::ReadOnly))
-        {
-            QString caption;
-            QString theme;
-            quint32 limit = 0;
-            QString scheme;
-            QString weapons;
-            QString desc;
-            bool dlc;
+      if (mapCfgFile.open(QFile::ReadOnly)) {
+        QString caption;
+        QString theme;
+        quint32 limit = 0;
+        QString scheme;
+        QString weapons;
+        QString desc;
+        bool dlc;
 
-            // if there is a lua file for this map, then it's a mission
-            bool isMission = mapLuaFile.exists();
-            MapType type = isMission ? MissionMap : StaticMap;
+        // if there is a lua file for this map, then it's a mission
+        bool isMission = mapLuaFile.exists();
+        MapType type = isMission ? MissionMap : StaticMap;
 
-            // if we're supposed to ignore this type, continue
-            if (type != m_maptype) continue;
+        // if we're supposed to ignore this type, continue
+        if (type != m_maptype) continue;
 
-            // load map info from file
-            QTextStream input(&mapCfgFile);
-            theme = input.readLine();
-            limit = input.readLine().toInt();
-            if (isMission) { // scheme and weapons are only relevant for missions
-                scheme = input.readLine();
-                weapons = input.readLine();
-            }
-            mapCfgFile.close();
+        // load map info from file
+        QTextStream input(&mapCfgFile);
+        theme = input.readLine();
+        limit = input.readLine().toInt();
+        if (isMission) {  // scheme and weapons are only relevant for missions
+          scheme = input.readLine();
+          weapons = input.readLine();
+        }
+        mapCfgFile.close();
 
-            // load description (if applicable)
-            if (isMission)
-            {
-                // get locale
-                QSettings settings(datamgr.settingsFileName(), QSettings::IniFormat);
-                QString locale = QLocale().name();
+        // load description (if applicable)
+        if (isMission) {
+          // get locale
+          QSettings settings(datamgr.settingsFileName(), QSettings::IniFormat);
+          QString locale = QLocale().name();
 
-                QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
-                desc = descSettings.value(locale, QString()).toString();
-                // If not found, try with language-only code
-                if (desc.isEmpty())
-                {
-                  QString localeSimple =
-                      locale.remove(QRegularExpression("_.*$"));
-                  desc = descSettings.value(localeSimple, QString()).toString();
-                  // If still not found, use English
-                  if (desc.isEmpty())
-                    desc = descSettings.value("en", QString()).toString();
-                }
-                desc = desc.replace("_n", "\n").replace("_c", ",").replace("__", "_");
-            }
-
-            // detect if map is dlc
-            QString mapDir = PHYSFS_getRealDir(QString("Maps/%1/map.cfg").arg(map).toLocal8Bit().data());
-            dlc = !mapDir.startsWith(datadir.absolutePath());
-
-            // let's use some semi-sane hedgehog limit, rather than none
-            if (limit == 0)
-                limit = 18;
-
-            // the default scheme/weaponset for missions.
-            // if empty we assume the map sets these internally -> locked
-            if (isMission)
-            {
-                if (scheme.isEmpty())
-                    scheme = "locked";
-                else
-                    scheme.replace("_", " ");
-
-                if (weapons.isEmpty())
-                    weapons = "locked";
-                else
-                    weapons.replace("_", " ");
-            }
-
-            // caption
-            caption = map;
-
-            QIcon icon;
-            if (dlc)
-                icon = dlcIcon;
-            else
-                icon = notDlcIcon;
-
-            // we know everything there is about the map, let's get am item for it
-            QStandardItem * item = MapModel::infoToItem(
-                icon, caption, type, map, theme, limit, scheme, weapons, desc, dlc);
-
-            // append item to the list
-            mapList.append(item);
+          QSettings descSettings(
+              QStringLiteral("physfs://Maps/%1/desc.txt").arg(map),
+              QSettings::IniFormat);
+          desc = descSettings.value(locale, QString()).toString();
+          // If not found, try with language-only code
+          if (desc.isEmpty()) {
+            QString localeSimple =
+                locale.remove(QRegularExpression(QStringLiteral("_.*$")));
+            desc = descSettings.value(localeSimple, QString()).toString();
+            // If still not found, use English
+            if (desc.isEmpty())
+              desc = descSettings.value("en", QString()).toString();
+          }
+          desc = desc.replace(QLatin1String("_n"), QLatin1String("\n"))
+                     .replace(QLatin1String("_c"), QLatin1String(","))
+                     .replace(QLatin1String("__"), QLatin1String("_"));
         }
 
+        // detect if map is dlc
+        QString mapDir = PHYSFS_getRealDir(
+            QStringLiteral("Maps/%1/map.cfg").arg(map).toLocal8Bit().data());
+        dlc = !mapDir.startsWith(datadir.absolutePath());
+
+        // let's use some semi-sane hedgehog limit, rather than none
+        if (limit == 0) limit = 18;
+
+        // the default scheme/weaponset for missions.
+        // if empty we assume the map sets these internally -> locked
+        if (isMission) {
+          if (scheme.isEmpty())
+            scheme = QStringLiteral("locked");
+          else
+            scheme.replace(QLatin1String("_"), QLatin1String(" "));
+
+          if (weapons.isEmpty())
+            weapons = QStringLiteral("locked");
+          else
+            weapons.replace(QLatin1String("_"), QLatin1String(" "));
+        }
+
+        // caption
+        caption = map;
+
+        QIcon icon;
+        if (dlc)
+          icon = dlcIcon;
+        else
+          icon = notDlcIcon;
+
+        // we know everything there is about the map, let's get am item for it
+        QStandardItem *item = MapModel::infoToItem(
+            icon, caption, type, map, theme, limit, scheme, weapons, desc, dlc);
+
+        // append item to the list
+        mapList.append(item);
+      }
     }
 
     // Create column-index lookup table
@@ -229,33 +229,27 @@ QStandardItem * MapModel::getMap(const QString & map)
     return item(loc);
 }
 
-QStandardItem * MapModel::infoToItem(
-    const QIcon & icon,
-    const QString caption,
-    MapType type,
-    QString name,
-    QString theme,
-    quint32 limit,
-    QString scheme,
-    QString weapons,
-    QString desc,
-    bool dlc)
-{
-    QStandardItem * item = new QStandardItem(icon, caption);
-    MapInfo mapInfo;
-    QVariant qvar(QVariant::UserType);
+QStandardItem *MapModel::infoToItem(const QIcon &icon, const QString &caption,
+                                    MapType type, const QString &name,
+                                    const QString &theme, quint32 limit,
+                                    const QString &scheme,
+                                    const QString &weapons, const QString &desc,
+                                    bool dlc) {
+  QStandardItem *item = new QStandardItem(icon, caption);
+  MapInfo mapInfo;
+  QVariant qvar;
 
-    mapInfo.type = type;
-    mapInfo.name = name;
-    mapInfo.theme = theme;
-    mapInfo.limit = limit;
-    mapInfo.scheme = scheme;
-    mapInfo.weapons = weapons;
-    mapInfo.desc = desc.isEmpty() ? tr("No description available.") : desc;
-    mapInfo.dlc = dlc;
+  mapInfo.type = type;
+  mapInfo.name = name;
+  mapInfo.theme = theme;
+  mapInfo.limit = limit;
+  mapInfo.scheme = scheme;
+  mapInfo.weapons = weapons;
+  mapInfo.desc = desc.isEmpty() ? tr("No description available.") : desc;
+  mapInfo.dlc = dlc;
 
-    qvar.setValue(mapInfo);
-    item->setData(qvar, Qt::UserRole + 1);
+  qvar.setValue(mapInfo);
+  item->setData(qvar, Qt::UserRole + 1);
 
-    return item;
+  return item;
 }

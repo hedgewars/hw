@@ -43,12 +43,14 @@ QLayout * PageMain::bodyLayoutDefinition()
     pageLayout->setRowStretch(3, 1);
     pageLayout->setRowStretch(4, 1);
 
-    BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
+    BtnSinglePlayer = addButton(QStringLiteral(":/res/LocalPlay.png"),
+                                pageLayout, 2, 0, 1, 2, true);
     BtnSinglePlayer->setWhatsThis(tr("Play a game on a single computer"));
     pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
     //BtnNet = addButton(":/res/NetworkPlay.png", (QBoxLayout*)netLayout, 1, true);
-    BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
+    BtnNet = addButton(QStringLiteral(":/res/NetworkPlay.png"), pageLayout, 2,
+                       2, 1, 2, true);
     BtnNet->setWhatsThis(tr("Play a game across a network"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
@@ -74,22 +76,24 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnNetOfficial->setVisible(false);
 
     // button order matters for overlapping (what's on top and what isn't)
-    BtnTitle = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
+    BtnTitle = addButton(QStringLiteral(":/res/HedgewarsTitle.png"), pageLayout,
+                         0, 0, 1, 4, true);
     BtnTitle ->setObjectName("infoButton");
     BtnTitle->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnTitle, Qt::AlignHCenter);
 
-    BtnInfo = addButton(":/res/AboutIcon.png", pageLayout, 0, 0, 1, 1, true);
+    BtnInfo = addButton(QStringLiteral(":/res/AboutIcon.png"), pageLayout, 0, 0,
+                        1, 1, true);
     BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnInfo, Qt::AlignLeft | Qt::AlignTop);
 
     BtnFeedback = addButton(tr("Feedback"), pageLayout, 4, 0, 1, 4, false);
-    BtnFeedback->setStyleSheet("padding: 5px 10px");
+    BtnFeedback->setStyleSheet(QStringLiteral("padding: 5px 10px"));
     BtnFeedback->setWhatsThis(tr("Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars"));
     pageLayout->setAlignment(BtnFeedback, Qt::AlignHCenter);
 
     BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 5, 0, 1, 4, false);
-    BtnDataDownload->setStyleSheet("padding: 5px 10px");
+    BtnDataDownload->setStyleSheet(QStringLiteral("padding: 5px 10px"));
     BtnDataDownload->setWhatsThis(tr("Access the user created content downloadable from our website"));
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
 
@@ -117,10 +121,12 @@ QLayout * PageMain::footerLayoutDefinition()
     BtnVideos->setWhatsThis(tr("Manage videos recorded from game"));
 #endif
 
-    BtnHelp = addButton(":/res/Help.png", bottomLayout, 2, true, Qt::AlignBottom);
+    BtnHelp = addButton(QStringLiteral(":/res/Help.png"), bottomLayout, 2, true,
+                        Qt::AlignBottom);
     BtnHelp->setWhatsThis(tr("Open the Hedgewars online game manual in your web browser"));
 
-    BtnSetup = addButton(":/res/Settings.png", bottomLayout, 3, true, Qt::AlignBottom);
+    BtnSetup = addButton(QStringLiteral(":/res/Settings.png"), bottomLayout, 3,
+                         true, Qt::AlignBottom);
     BtnSetup->setWhatsThis(tr("Edit game preferences"));
 
     return bottomLayout;
@@ -131,7 +137,8 @@ void PageMain::connectSignals()
 #ifndef QT_DEBUG
     connect(this, SIGNAL(pageEnter()), this, SLOT(updateTip()));
 #endif
-    connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    connect(BtnNet, &QAbstractButton::clicked, this,
+            &PageMain::toggleNetworkChoice);
     //connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
     //connect(BtnNetOfficial, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
     // TODO: add signal-forwarding required by (currently missing) encapsulation
@@ -165,59 +172,65 @@ QString PageMain::randomTip()
 #else
     int platform = 3;
 #endif
-    if(!Tips.length())
-    {
-        DataManager & dataMgr = DataManager::instance();
+    if (Tips.isEmpty()) {
+      DataManager& dataMgr = DataManager::instance();
 
-        // get locale
-        QSettings settings(dataMgr.settingsFileName(),
-                           QSettings::IniFormat);
+      // get locale
+      QSettings settings(dataMgr.settingsFileName(), QSettings::IniFormat);
 
-        QString loc = QLocale().name();
+      QString loc = QLocale().name();
 
-        QString tipFile = QString("physfs://Locale/tips_" + loc + ".xml");
+      QString tipFile = QString(QStringLiteral("physfs://Locale/tips_") + loc +
+                                QStringLiteral(".xml"));
 
-        // if file is non-existant try with language only
-        if (!QFile::exists(tipFile))
-          tipFile = QString("physfs://Locale/tips_" +
-                            loc.remove(QRegularExpression("_.*$")) + ".xml");
+      // if file is non-existant try with language only
+      if (!QFile::exists(tipFile))
+        tipFile =
+            QString(QStringLiteral("physfs://Locale/tips_") +
+                    loc.remove(QRegularExpression(QStringLiteral("_.*$"))) +
+                    QStringLiteral(".xml"));
 
-        // fallback if file for current locale is non-existant
-        if (!QFile::exists(tipFile))
-            tipFile = QString("physfs://Locale/tips_en.xml");
+      // fallback if file for current locale is non-existant
+      if (!QFile::exists(tipFile))
+        tipFile = QStringLiteral("physfs://Locale/tips_en.xml");
 
-        QFile file(tipFile);
-        file.open(QIODevice::ReadOnly);
-        QTextStream in(&file);
-        QString line = in.readLine();
-        int tip_platform = 0;
-        while (!line.isNull()) {
-            if(line.contains("<windows-only>", Qt::CaseSensitive))
-                tip_platform = 1;
-            if(line.contains("<mac-only>", Qt::CaseSensitive))
-                tip_platform = 2;
-            if(line.contains("<linux-only>", Qt::CaseSensitive))
-                tip_platform = 3;
-            if(line.contains("</windows-only>", Qt::CaseSensitive) ||
-                    line.contains("</mac-only>", Qt::CaseSensitive) ||
-                    line.contains("</linux-only>", Qt::CaseSensitive)) {
-                tip_platform = 0;
-            }
-            QStringList split_string =
-                line.split(QRegularExpression("</?tip>"));
-            if((tip_platform == platform || tip_platform == 0) && split_string.size() != 1)
-                Tips << split_string[1];
-            line = in.readLine();
+      QFile file(tipFile);
+      file.open(QIODevice::ReadOnly);
+      QTextStream in(&file);
+      QString line = in.readLine();
+      int tip_platform = 0;
+      while (!line.isNull()) {
+        if (line.contains(QLatin1String("<windows-only>"), Qt::CaseSensitive))
+          tip_platform = 1;
+        if (line.contains(QLatin1String("<mac-only>"), Qt::CaseSensitive))
+          tip_platform = 2;
+        if (line.contains(QLatin1String("<linux-only>"), Qt::CaseSensitive))
+          tip_platform = 3;
+        if (line.contains(QLatin1String("</windows-only>"),
+                          Qt::CaseSensitive) ||
+            line.contains(QLatin1String("</mac-only>"), Qt::CaseSensitive) ||
+            line.contains(QLatin1String("</linux-only>"), Qt::CaseSensitive)) {
+          tip_platform = 0;
         }
-        // The following tip will require links to app store entries first.
-        //Tips << tr("Want to play Hedgewars any time? Grab the Mobile version for %1 and %2.", "Tips").arg("").arg("");
-        // the ios version is located here: http://itunes.apple.com/us/app/hedgewars/id391234866
+        QStringList split_string =
+            line.split(QRegularExpression(QStringLiteral("</?tip>")));
+        if ((tip_platform == platform || tip_platform == 0) &&
+            split_string.size() != 1)
+          Tips << split_string[1];
+        line = in.readLine();
+      }
+      // The following tip will require links to app store entries first.
+      // Tips << tr("Want to play Hedgewars any time? Grab the Mobile version
+      // for %1 and %2.", "Tips").arg("").arg("");
+      // the ios version is located here:
+      // http://itunes.apple.com/us/app/hedgewars/id391234866
 
-        file.close();
+      file.close();
     }
 
-    if(Tips.length())
-        return Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
+    if (!Tips.isEmpty())
+      return std::as_const(
+          Tips)[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
     else
         return QString();
 }

@@ -35,19 +35,19 @@ QLayout * PageSinglePlayer::bodyLayoutDefinition()
     vLayout->addStretch();
 
     topLine->addStretch();
-    BtnSimpleGamePage = addButton(":/res/SimpleGame.png", topLine, 0, true);
+    BtnSimpleGamePage = addButton(QStringLiteral(":/res/SimpleGame.png"), topLine, 0, true);
     BtnSimpleGamePage->setWhatsThis(tr("Play a quick game against the computer with random settings"));
     topLine->addSpacing(60);
-    BtnMultiplayer = addButton(":/res/Multiplayer.png", topLine, 1, true);
+    BtnMultiplayer = addButton(QStringLiteral(":/res/Multiplayer.png"), topLine, 1, true);
     BtnMultiplayer->setWhatsThis(tr("Play a hotseat game against your friends, or AI teams"));
     topLine->addStretch();
 
 
-    BtnCampaignPage = addButton(":/res/Campaign.png", middleLine, 0, true);
+    BtnCampaignPage = addButton(QStringLiteral(":/res/Campaign.png"), middleLine, 0, true);
     BtnCampaignPage->setWhatsThis(tr("Campaign Mode"));
     BtnCampaignPage->setVisible(true);
 
-    BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
+    BtnTrainPage = addButton(QStringLiteral(":/res/Trainings.png"), middleLine, 1, true);
     BtnTrainPage->setWhatsThis(tr("Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios."));
 
     return vLayout;
@@ -58,10 +58,10 @@ QLayout * PageSinglePlayer::footerLayoutDefinition()
     QHBoxLayout * bottomLine = new QHBoxLayout();
     bottomLine->addStretch();
 
-    BtnDemos = addButton(":/res/Record.png", bottomLine, 1, true);
+    BtnDemos = addButton(QStringLiteral(":/res/Record.png"), bottomLine, 1, true);
     BtnDemos->setWhatsThis(tr("Watch recorded demos"));
-    BtnLoad = addButton(":/res/Load.png", bottomLine, 2, true);
-    BtnLoad->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+    BtnLoad = addButton(QStringLiteral(":/res/Load.png"), bottomLine, 2, true);
+    BtnLoad->setStyleSheet(QStringLiteral("QPushButton{margin: 24px 0 0 0;}"));
     BtnLoad->setWhatsThis(tr("Load a previously saved game"));
 
     bottomLine->setStretch(1,0);

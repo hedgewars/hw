@@ -48,7 +48,7 @@ QLayout * PageMultiplayer::footerLayoutLeftDefinition()
 {
     QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
 
-    btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true, Qt::AlignBottom);
+    btnSetup = addButton(QStringLiteral(":/res/Settings.png"), bottomLeftLayout, 0, true, Qt::AlignBottom);
     btnSetup->setWhatsThis(tr("Edit game preferences"));
 
     return bottomLeftLayout;
@@ -61,7 +61,7 @@ QLayout * PageMultiplayer::footerLayoutDefinition()
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnStartMPGame = new QPushButton();
-    BtnStartMPGame->setStyleSheet("padding: 5px 10px");
+    BtnStartMPGame->setStyleSheet(QStringLiteral("padding: 5px 10px"));
     BtnStartMPGame->setText(tr("Start"));
     BtnStartMPGame->setWhatsThis(tr("Start fighting (requires at least 2 teams)"));
     BtnStartMPGame->setIcon(lp);

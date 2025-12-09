@@ -39,7 +39,7 @@ QLayout * PageTraining::bodyLayoutDefinition()
     QGridLayout * pageLayout = new QGridLayout();
 
     // declare start button, caption and description
-    btnPreview = formattedButton(":/res/Trainings.png", true);
+    btnPreview = formattedButton(QStringLiteral(":/res/Trainings.png"), true);
 
     // tweak widget spacing
     pageLayout->setRowStretch(0, 1);
@@ -128,7 +128,7 @@ QLayout * PageTraining::footerLayoutDefinition()
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
     btnStart = new QPushButton();
-    btnStart->setStyleSheet("padding: 5px 10px");
+    btnStart->setStyleSheet(QStringLiteral("padding: 5px 10px"));
     btnStart->setText(QPushButton::tr("Start"));
     btnStart->setWhatsThis(tr("Start fighting"));
     btnStart->setMinimumWidth(sz.width() + 60);
@@ -179,16 +179,16 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 
     QString loc = QLocale().name();
 
-    QString infoFile = QString("physfs://Locale/missions_" + loc + ".txt");
+    QString infoFile = QString(QStringLiteral("physfs://Locale/missions_") + loc + QStringLiteral(".txt"));
 
     // if file is non-existant try with language only
     if (!QFile::exists(infoFile))
-      infoFile = QString("physfs://Locale/missions_" +
-                         loc.remove(QRegularExpression("_.*$")) + ".txt");
+      infoFile = QString(QStringLiteral("physfs://Locale/missions_") +
+                         loc.remove(QRegularExpression(QStringLiteral("_.*$"))) + QStringLiteral(".txt"));
 
     // fallback if file for current locale is non-existant
     if (!QFile::exists(infoFile))
-        infoFile = QString("physfs://Locale/missions_en.txt");
+        infoFile = QStringLiteral("physfs://Locale/missions_en.txt");
 
 
     // preload mission info for current locale
@@ -201,21 +201,21 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     for(int i=1; i<=3; i++) {
         switch(i) {
             case 1:
-                subFolder = "Training";
+                subFolder = QStringLiteral("Training");
                 m_widget = lstTrainings;
                 break;
             case 2:
-                subFolder = "Challenge";
+                subFolder = QStringLiteral("Challenge");
                 m_widget = lstChallenges;
                 break;
             case 3:
-                subFolder = "Scenario";
+                subFolder = QStringLiteral("Scenario");
                 m_widget = lstScenarios;
                 break;
         }
         // scripts to load
         // first, load scripts in order specified in order.cfg (if present)
-        QFile orderFile(QString("physfs://Missions/%1/order.cfg").arg(subFolder));
+        QFile orderFile(QStringLiteral("physfs://Missions/%1/order.cfg").arg(subFolder));
         QStringList orderedMissions;
 
         if (orderFile.open(QFile::ReadOnly))
@@ -230,8 +230,8 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
                     break;
                 }
                 QListWidgetItem * item = new QListWidgetItem(m_id);
-                QString name = item->text().replace("_", " ");
-                name = m_info->value(m_id + ".name", name).toString();
+                QString name = item->text().replace(QLatin1String("_"), QLatin1String(" "));
+                name = m_info->value(m_id + QStringLiteral(".name"), name).toString();
                 item->setText(name);
                 item->setData(Qt::UserRole, m_id);
                 m_widget->addItem(item);
@@ -242,9 +242,9 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 
         // then, just load anything else in no particular order
         m_list = dataMgr
-                     .entryList("Missions/" + subFolder, QDir::Files,
+                     .entryList(QStringLiteral("Missions/") + subFolder, QDir::Files,
                                 QStringList("*.lua"))
-                     .replaceInStrings(QRegularExpression("\\.lua$"), "");
+                     .replaceInStrings(QRegularExpression(QStringLiteral("\\.lua$")), QLatin1String(""));
 
         foreach (const QString & m_id, m_list)
         {
@@ -257,10 +257,10 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
             QListWidgetItem * item = new QListWidgetItem(m_id);
 
             // fallback name: replace underscores in mission name with spaces
-            QString name = item->text().replace("_", " ");
+            QString name = item->text().replace(QLatin1String("_"), QLatin1String(" "));
 
             // see if we can get a prettier/translated name
-            name = m_info->value(m_id + ".name", name).toString();
+            name = m_info->value(m_id + QStringLiteral(".name"), name).toString();
 
             item->setText(name);
 
@@ -288,13 +288,13 @@ QString PageTraining::getSubFolderOfSelected()
 {
     QString subFolder;
     if (tbw->currentWidget() == lstTrainings) {
-        subFolder = "Training";
+        subFolder = QStringLiteral("Training");
     } else if (tbw->currentWidget() == lstChallenges) {
-        subFolder = "Challenge";
+        subFolder = QStringLiteral("Challenge");
     } else if (tbw->currentWidget() == lstScenarios) {
-        subFolder = "Scenario";
+        subFolder = QStringLiteral("Scenario");
     } else {
-        subFolder = "Training";
+        subFolder = QStringLiteral("Training");
     }
     return subFolder;
 }
@@ -321,10 +321,10 @@ void PageTraining::updateInfo()
         if (list->currentItem())
         {
             QString missionName = list->currentItem()->data(Qt::UserRole).toString();
-            QString thumbFile =     "physfs://Graphics/Missions/" +
-                                    subFolder + "/" +
+            QString thumbFile =     QStringLiteral("physfs://Graphics/Missions/") +
+                                    subFolder + QStringLiteral("/") +
                                     missionName +
-                                    "@2x.png";
+                                    QStringLiteral("@2x.png");
 
             if (QFile::exists(thumbFile))
                 btnPreview->setIcon(QIcon(thumbFile));
@@ -338,42 +338,42 @@ void PageTraining::updateInfo()
 
             btnPreview->setWhatsThis(tr("Start fighting"));
 
-            QString caption = m_info->value(missionName + ".name",
+            QString caption = m_info->value(missionName + QStringLiteral(".name"),
                                             list->currentItem()->text()).toString();
 
-            QString description = m_info->value(missionName + ".desc",
+            QString description = m_info->value(missionName + QStringLiteral(".desc"),
                                                 tr("No description available")).toString();
 
-            lblCaption->setText("<h2>" + caption +"</h2>");
+            lblCaption->setText(QStringLiteral("<h2>") + caption +QStringLiteral("</h2>"));
             lblDescription->setText(description);
 
             // Challenge highscores
-            QString highscoreText = QString("");
+            QString highscoreText = QLatin1String("");
             QString teamName = CBTeam->currentText();
-            if (missionValueExists(missionName, teamName, "Highscore"))
+            if (missionValueExists(missionName, teamName, QStringLiteral("Highscore")))
                 highscoreText = highscoreText +
                     //: Highest score of a team
                     tr("Team highscore: %1")
-                    .arg(getMissionValue(missionName, teamName, "Highscore").toString()) + "\n";
-            if (missionValueExists(missionName, teamName, "Lowscore"))
+                    .arg(getMissionValue(missionName, teamName, QStringLiteral("Highscore")).toString()) + QStringLiteral("\n");
+            if (missionValueExists(missionName, teamName, QStringLiteral("Lowscore")))
                 highscoreText = highscoreText +
                     //: Lowest score of a team
                     tr("Team lowscore: %1")
-                    .arg(getMissionValue(missionName, teamName, "Lowscore").toString()) + "\n";
-            if (missionValueExists(missionName, teamName, "AccuracyRecord"))
+                    .arg(getMissionValue(missionName, teamName, QStringLiteral("Lowscore")).toString()) + QStringLiteral("\n");
+            if (missionValueExists(missionName, teamName, QStringLiteral("AccuracyRecord")))
                 highscoreText = highscoreText +
                     //: Best accuracy of a team (in a challenge)
                     tr("Team's top accuracy: %1%")
-                    .arg(getMissionValue(missionName, teamName, "AccuracyRecord").toString()) + "\n";
-            if (missionValueExists(missionName, teamName, "TimeRecord"))
+                    .arg(getMissionValue(missionName, teamName, QStringLiteral("AccuracyRecord")).toString()) + QStringLiteral("\n");
+            if (missionValueExists(missionName, teamName, QStringLiteral("TimeRecord")))
             {
-                double time = ((double) getMissionValue(missionName, teamName, "TimeRecord").toInt()) / 1000.0;
-                highscoreText = highscoreText + tr("Team's best time: %L1 s").arg(time, 0, 'f', 3) + "\n";
+                double time = ((double) getMissionValue(missionName, teamName, QStringLiteral("TimeRecord")).toInt()) / 1000.0;
+                highscoreText = highscoreText + tr("Team's best time: %L1 s").arg(time, 0, 'f', 3) + QStringLiteral("\n");
             }
-            if (missionValueExists(missionName, teamName, "TimeRecordHigh"))
+            if (missionValueExists(missionName, teamName, QStringLiteral("TimeRecordHigh")))
             {
-                double time = ((double) getMissionValue(missionName, teamName, "TimeRecordHigh").toInt()) / 1000.0;
-                highscoreText = highscoreText + tr("Team's longest time: %L1 s").arg(time, 0, 'f', 3) + "\n";
+                double time = ((double) getMissionValue(missionName, teamName, QStringLiteral("TimeRecordHigh")).toInt()) / 1000.0;
+                highscoreText = highscoreText + tr("Team's longest time: %L1 s").arg(time, 0, 'f', 3) + QStringLiteral("\n");
             }
 
             lblHighscores->setText(highscoreText);
@@ -382,8 +382,8 @@ void PageTraining::updateInfo()
         {
             btnPreview->setIcon(QIcon(":/res/Trainings.png"));
             lblCaption->setText(tr("Select a mission!"));
-            lblDescription->setText("");
-            lblHighscores->setText("");
+            lblDescription->setText(QLatin1String(""));
+            lblHighscores->setText(QLatin1String(""));
         }
     }
 }

@@ -69,7 +69,7 @@ QStringList DataManager::entryList(
     bool withDLC
 ) const
 {
-    QDir tmpDir(QString("physfs://%1").arg(subDirectory));
+    QDir tmpDir(QStringLiteral("physfs://%1").arg(subDirectory));
     QStringList result = tmpDir.entryList(nameFilters, filters);
 
     // sort case-insensitive
@@ -78,7 +78,7 @@ QStringList DataManager::entryList(
     foreach ( QString fn, result)
     {
         // Filter out DLC entries if desired
-        QString realDir = PHYSFS_getRealDir(QString(subDirectory + "/" + fn).toLocal8Bit().data());
+        QString realDir = PHYSFS_getRealDir(QString(subDirectory + QStringLiteral("/") + fn).toLocal8Bit().data());
         if(withDLC || realDir == absolutePath)
             sortedFileNames.insert(fn.toLower(), fn);
     }
@@ -166,7 +166,7 @@ QStandardItemModel * DataManager::bindsModel()
             QString keyId = QString(sdlkeys[j][0]);
             QString keyDisplay;
             bool isKeyboard = sdlkeys_iskeyboard[j] == true;
-            if (keyId == "none" || (!isKeyboard))
+            if (keyId == QLatin1String("none") || (!isKeyboard))
                 keyDisplay = HWApplication::translate("binds (keys)", sdlkeys[j][1]);
             else
                 // Get key name with respect to keyboard layout
@@ -176,18 +176,18 @@ QStandardItemModel * DataManager::bindsModel()
             if (kbFallback)
             {
                 keyDisplay = QString(sdlkeys[j][1]);
-                if ((QString(sdlkeys[j][0]) != "f13") && (QString(sdlkeys[j][0]) != "f14") && (QString(sdlkeys[j][0]) != "f15"))
+                if ((QString(sdlkeys[j][0]) != QLatin1String("f13")) && (QString(sdlkeys[j][0]) != QLatin1String("f14")) && (QString(sdlkeys[j][0]) != QLatin1String("f15")))
                 {
                     // If SDL doesn't know a name, show fallback name and a warning
                     //: Name of QWERTY US keyboard layout
-                    keyDisplay = keyDisplay + QString(" ") + HWApplication::translate("binds (keys)", "(QWERTY)");
+                    keyDisplay = keyDisplay + QStringLiteral(" ") + HWApplication::translate("binds (keys)", "(QWERTY)");
                 }
             }
             if (isKeyboard)
             {
                 if (!kbFallback)
                     keyDisplay = HWApplication::translate("binds (keys)", keyDisplay.toUtf8().constData());
-                keyDisplay = HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + keyDisplay;
+                keyDisplay = HWApplication::translate("binds (keys)", "Keyboard") + QStringLiteral(": ") + keyDisplay;
             }
             item->setData(keyDisplay, Qt::DisplayRole);
             item->setData(QString::fromLatin1(sdlkeys[j][0]), Qt::UserRole + 1);
@@ -202,10 +202,10 @@ QString DataManager::settingsFileName()
 {
     if(m_settingsFileName.isEmpty())
     {
-      QFile settingsFile(cfgdir.absoluteFilePath("settings.ini"));
+      QFile settingsFile(cfgdir.absoluteFilePath(QStringLiteral("settings.ini")));
 
       if (!settingsFile.exists()) {
-        QFile oldSettingsFile(cfgdir.absoluteFilePath("hedgewars.ini"));
+        QFile oldSettingsFile(cfgdir.absoluteFilePath(QStringLiteral("hedgewars.ini")));
 
         if (settingsFile.open(QFile::WriteOnly)) {
           settingsFile.close();
@@ -216,7 +216,7 @@ QString DataManager::settingsFileName()
           QSettings sNew(settingsFile.fileName(), QSettings::IniFormat);
 
           foreach (const QString &key, sOld.allKeys()) {
-            if (key.startsWith("colors/color"))
+            if (key.startsWith(QLatin1String("colors/color")))
               sNew.setValue(key, sOld.value(key).value<QColor>().name());
             else
               sNew.setValue(key, sOld.value(key));

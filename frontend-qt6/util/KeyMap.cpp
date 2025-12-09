@@ -29,7 +29,7 @@ bool KeyMap::getKeyMap()
 {
     if (keyMapGenerated)
         return true;
-    QFile keyFile(":keys.csv");
+    QFile keyFile(QStringLiteral(":keys.csv"));
     if (!keyFile.open(QIODevice::ReadOnly))
     {
         qWarning("ERROR: keys.csv could not be opened!");

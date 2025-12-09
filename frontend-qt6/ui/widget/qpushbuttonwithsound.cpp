@@ -37,5 +37,5 @@ void QPushButtonWithSound::buttonClicked()
         return;
 
     if (this->isEnabled())
-        SDLInteraction::instance().playSoundFile("/Sounds/roperelease.ogg");
+        SDLInteraction::instance().playSoundFile(QStringLiteral("/Sounds/roperelease.ogg"));
 }

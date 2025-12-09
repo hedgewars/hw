@@ -26,19 +26,19 @@
 QSettings* getMissionTeamFile(QString & missionName, QString & teamName)
 {
   QSettings* teamfile =
-      new QSettings(cfgdir.absolutePath() + "/Teams/" + teamName + ".hwt",
+      new QSettings(cfgdir.absolutePath() + QStringLiteral("/Teams/") + teamName + QStringLiteral(".hwt"),
                     QSettings::IniFormat, 0);
-  if (!teamfile->childGroups().contains("Mission " + missionName) &&
-      teamfile->childGroups().contains("Mission " + missionName)) {
-    teamfile->beginGroup("Mission " + missionName);
+  if (!teamfile->childGroups().contains(QStringLiteral("Mission ") + missionName) &&
+      teamfile->childGroups().contains(QStringLiteral("Mission ") + missionName)) {
+    teamfile->beginGroup(QStringLiteral("Mission ") + missionName);
     QStringList keys = teamfile->childKeys();
     teamfile->endGroup();
     for (int i = 0; i < keys.size(); i++) {
       QVariant value =
-          teamfile->value("Mission " + missionName + "/" + keys[i]);
-      teamfile->setValue("Mission " + missionName + "/" + keys[i], value);
+          teamfile->value(QStringLiteral("Mission ") + missionName + QStringLiteral("/") + keys[i]);
+      teamfile->setValue(QStringLiteral("Mission ") + missionName + QStringLiteral("/") + keys[i], value);
     }
-    teamfile->remove("Mission " + missionName);
+    teamfile->remove(QStringLiteral("Mission ") + missionName);
   }
 
     return teamfile;
@@ -52,7 +52,7 @@ QSettings* getMissionTeamFile(QString & missionName, QString & teamName)
 bool isMissionWon(QString & missionName, QString & teamName)
 {
     QSettings* teamfile = getMissionTeamFile(missionName, teamName);
-    bool won = teamfile->value("Mission " + missionName + "/Won", false).toBool();
+    bool won = teamfile->value(QStringLiteral("Mission ") + missionName + QStringLiteral("/Won"), false).toBool();
     return won;
 }
 
@@ -65,7 +65,7 @@ bool isMissionWon(QString & missionName, QString & teamName)
 bool missionValueExists(QString & missionName, QString & teamName, QString key)
 {
     QSettings* teamfile = getMissionTeamFile(missionName, teamName);
-    return teamfile->contains("Mission " + missionName + "/" + key);
+    return teamfile->contains(QStringLiteral("Mission ") + missionName + QStringLiteral("/") + key);
 }
 /**
     Returns a mission value.
@@ -77,5 +77,5 @@ bool missionValueExists(QString & missionName, QString & teamName, QString key)
 QVariant getMissionValue(QString & missionName, QString & teamName, QString key)
 {
     QSettings* teamfile = getMissionTeamFile(missionName, teamName);
-    return teamfile->value("Mission " + missionName + "/" + key);
+    return teamfile->value(QStringLiteral("Mission ") + missionName + QStringLiteral("/") + key);
 }

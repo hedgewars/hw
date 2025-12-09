@@ -55,7 +55,7 @@ QVariant HWNetServersModel::headerData(int section,
         }
     }
     else
-        return QString("%1").arg(section + 1);
+        return QStringLiteral("%1").arg(section + 1);
 }
 
 int HWNetServersModel::rowCount(const QModelIndex &parent) const

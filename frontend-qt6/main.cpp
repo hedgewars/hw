@@ -34,7 +34,6 @@
 #include "SDLInteraction.h"
 #include "hwconsts.h"
 #include "hwform.h"
-#include "newnetclient.h"
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -145,32 +144,30 @@ void restrictedMessageHandler(QtMsgType type, const QMessageLogContext &context,
 
 QString getUsage()
 {
-    return QString(
-"%1: hedgewars [%2...] [%3]\n"
-"\n"
-"%4:\n"
-"  --help              %5\n"
-"  --config-dir=PATH   %6\n"
-"  --data-dir=PATH     %7\n"
-"\n"
-"%8"
-"\n"
-).arg(
-//: “Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line
-HWApplication::tr("Usage", "command-line")
-).arg(
-//: Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”
-HWApplication::tr("OPTION", "command-line")
-).arg(
-//: Name of a command-line argument, shown when running “hedgewars --help” in command-line
-HWApplication::tr("CONNECTSTRING", "command-line")
-).arg(
-//: “Options” as in “command-line options”
-HWApplication::tr("Options", "command-line")
-).arg(HWApplication::tr("Display this help", "command-line"))
-.arg(HWApplication::tr("Custom path for configuration data and user data", "command-line"))
-.arg(HWApplication::tr("Custom path to the game data folder", "command-line"))
-.arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg(HWApplication::tr("CONNECTSTRING", "command-line")).arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
+  return QString(
+             "%1: hedgewars [%2...] [%3]\n"
+             "\n"
+             "%4:\n"
+             "  --help              %5\n"
+             "  --config-dir=PATH   %6\n"
+             "  --data-dir=PATH     %7\n"
+             "\n"
+             "%8"
+             "\n")
+      .arg(HWApplication::tr("Usage", "command-line"),
+           HWApplication::tr("OPTION", "command-line"),
+           HWApplication::tr("CONNECTSTRING", "command-line"),
+           HWApplication::tr("Options", "command-line"),
+           HWApplication::tr("Display this help", "command-line"),
+           HWApplication::tr("Custom path for configuration data and user data",
+                             "command-line"),
+           HWApplication::tr("Custom path to the game data folder",
+                             "command-line"),
+           HWApplication::tr(
+               "Hedgewars can use a %1 (e.g. \"%2\") to connect on start.",
+               "command-line")
+               .arg(HWApplication::tr("CONNECTSTRING", "command-line"),
+                    QStringLiteral("hwplay://") + NETGAME_DEFAULT_SERVER));
 }
 
 int main(int argc, char *argv[]) {
@@ -210,14 +207,14 @@ int main(int argc, char *argv[]) {
         {
             QString arg = *i;
 
-            QRegularExpression opt(R"(^--(\S+)=(.+)$)");
+            QRegularExpression opt(QStringLiteral(R"(^--(\S+)=(.+)$)"));
             auto match = opt.match(arg);
             if (match.hasMatch()) {
               parsedArgs[match.captured(1)] = match.captured(2);
               i = arguments.erase(i);
             } else {
-              if (arg.startsWith("--")) {
-                if (arg == "--help") {
+              if (arg.startsWith(QLatin1String("--"))) {
+                if (arg == QLatin1String("--help")) {
                   cmdMsgState = cmdMsgHelp;
                   qInstallMessageHandler(restrictedMessageHandler);
                 } else {
@@ -239,29 +236,25 @@ int main(int argc, char *argv[]) {
 
     if(cmdMsgState == cmdMsgNone)
     {
-        if(parsedArgs.contains("data-dir"))
-        {
-            QFileInfo f(parsedArgs["data-dir"]);
-            parsedArgs.remove("data-dir");
-            if(!f.exists())
-            {
-                qWarning() << "WARNING: Cannot open data-dir=" << f.absoluteFilePath();
-            }
-            cDataDir = f.absoluteFilePath();
-            custom_data = true;
+      if (parsedArgs.contains(QStringLiteral("data-dir"))) {
+        QFileInfo f(parsedArgs[QStringLiteral("data-dir")]);
+        parsedArgs.remove(QStringLiteral("data-dir"));
+        if (!f.exists()) {
+          qWarning() << "WARNING: Cannot open data-dir="
+                     << f.absoluteFilePath();
         }
+        cDataDir = f.absoluteFilePath();
+        custom_data = true;
+      }
 
-        if(parsedArgs.contains("config-dir"))
-        {
-            QFileInfo f(parsedArgs["config-dir"]);
-            parsedArgs.remove("config-dir");
-            cfgdir.setPath(f.absoluteFilePath());
-            custom_config = true;
-        }
-        else
-        {
-            custom_config = false;
-        }
+      if (parsedArgs.contains(QStringLiteral("config-dir"))) {
+        QFileInfo f(parsedArgs[QStringLiteral("config-dir")]);
+        parsedArgs.remove(QStringLiteral("config-dir"));
+        cfgdir.setPath(f.absoluteFilePath());
+        custom_config = true;
+      } else {
+        custom_config = false;
+      }
 
         if (!parsedArgs.isEmpty())
         {
@@ -273,7 +266,7 @@ int main(int argc, char *argv[]) {
 
         // Select Qt style
         QStyle* coreStyle;
-        coreStyle = QStyleFactory::create("Windows");
+        coreStyle = QStyleFactory::create(QStringLiteral("Windows"));
         if(coreStyle != 0) {
             QApplication::setStyle(coreStyle);
             qDebug("Qt style set: Windows");
@@ -320,34 +313,31 @@ int main(int argc, char *argv[]) {
             cfgdir->cd(".hedgewars");
         }
 #else
-      checkForDir(cfgdir.absolutePath() + "/.hedgewars");
-      cfgdir.cd(".hedgewars");
+      checkForDir(cfgdir.absolutePath() + QStringLiteral("/.hedgewars"));
+      cfgdir.cd(QStringLiteral(".hedgewars"));
 #endif
     }
 
     if (checkForDir(cfgdir.absolutePath())) {
-      // alternative loading/lookup paths
-      checkForDir(cfgdir.absolutePath() + "/Data");
+      QStringList otherPaths{// alternative loading/lookup paths
+                             "/Data",
+                             // config/save paths
+                             "/Demos", "/DrawnMaps", "/Saves", "/Screenshots",
+                             "/Teams", "/Logs", "/Videos", "/VideoTemp",
+                             "/VideoThumbnails"};
 
-      // config/save paths
-      checkForDir(cfgdir.absolutePath() + "/Demos");
-      checkForDir(cfgdir.absolutePath() + "/DrawnMaps");
-      checkForDir(cfgdir.absolutePath() + "/Saves");
-      checkForDir(cfgdir.absolutePath() + "/Screenshots");
-      checkForDir(cfgdir.absolutePath() + "/Teams");
-      checkForDir(cfgdir.absolutePath() + "/Logs");
-      checkForDir(cfgdir.absolutePath() + "/Videos");
-      checkForDir(cfgdir.absolutePath() + "/VideoTemp");
-      checkForDir(cfgdir.absolutePath() + "/VideoThumbnails");
+      for (auto path : otherPaths) {
+        checkForDir(cfgdir.absolutePath() + path);
+      }
     }
 
     datadir.cd(bindir.absolutePath());
     datadir.cd(cDataDir);
-    if (!datadir.cd("Data")) {
+    if (!datadir.cd(QStringLiteral("Data"))) {
       MessageDialog::ShowFatalMessage(
           HWApplication::tr("Failed to open data directory:\n%1\n\nPlease "
                             "check your installation!")
-              .arg(datadir.absolutePath() + "/Data"));
+              .arg(datadir.absolutePath() + QStringLiteral("/Data")));
       return 1;
     }
 
@@ -374,8 +364,8 @@ int main(int argc, char *argv[]) {
             qDebug("Detected system locale: %s", qPrintable(cc));
 
             // Fallback to current input locale if "C" locale is returned
-            if(cc == "C")
-                cc = HWApplication::inputMethod()->locale().name();
+            if (cc == QLatin1String("C"))
+              cc = HWApplication::inputMethod()->locale().name();
         }
         else
         {
@@ -385,15 +375,20 @@ int main(int argc, char *argv[]) {
         QString defaultLocaleName = QLocale().name();
         qDebug("Frontend uses locale: %s", qPrintable(defaultLocaleName));
 
-        if (defaultLocaleName != "C")
-        {
-            // Load locale files into translators
-            if (!TranslatorHedgewars.load(QLocale(), "hedgewars", "_", QString("physfs://Locale")))
-                qWarning("Failed to install Hedgewars translation (%s)", qPrintable(defaultLocaleName));
-            if (!TranslatorQt.load(QLocale(), "qt", "_", QString(QLibraryInfo::location(QLibraryInfo::TranslationsPath))))
-                qWarning("Failed to install Qt translation (%s)", qPrintable(defaultLocaleName));
-            app.installTranslator(&TranslatorHedgewars);
-            app.installTranslator(&TranslatorQt);
+        if (defaultLocaleName != QLatin1String("C")) {
+          // Load locale files into translators
+          if (!TranslatorHedgewars.load(QLocale(), QStringLiteral("hedgewars"),
+                                        QStringLiteral("_"),
+                                        QStringLiteral("physfs://Locale")))
+            qWarning("Failed to install Hedgewars translation (%s)",
+                     qPrintable(defaultLocaleName));
+          if (!TranslatorQt.load(
+                  QLocale(), QStringLiteral("qt"), QStringLiteral("_"),
+                  QString(QLibraryInfo::path(QLibraryInfo::TranslationsPath))))
+            qWarning("Failed to install Qt translation (%s)",
+                     qPrintable(defaultLocaleName));
+          app.installTranslator(&TranslatorHedgewars);
+          app.installTranslator(&TranslatorQt);
         }
         app.setLayoutDirection(QLocale().textDirection());
 
@@ -462,7 +457,7 @@ int main(int argc, char *argv[]) {
 
     SDLInteraction::instance();
 
-    QString style = "";
+    QString style;
     QString fname;
 
     bool holidaySilliness = settings.value("misc/holidaySilliness", true).toBool();
@@ -478,26 +473,26 @@ int main(int argc, char *argv[]) {
     switch (season)
     {
         case SEASON_CHRISTMAS :
-            fname = "christmas.css";
-            break;
+          fname = QStringLiteral("christmas.css");
+          break;
         case SEASON_APRIL1 :
-            fname = "april1.css";
-            break;
+          fname = QStringLiteral("april1.css");
+          break;
         case SEASON_EASTER :
-            fname = "easter.css";
-            break;
+          fname = QStringLiteral("easter.css");
+          break;
         case SEASON_HWBDAY :
-            fname = "birthday.css";
-            break;
+          fname = QStringLiteral("birthday.css");
+          break;
         default :
-            fname = "qt.css";
-            break;
+          fname = QStringLiteral("qt.css");
+          break;
     }
 
     // load external stylesheet if there is any
-    QFile extFile("physfs://css/" + fname);
+    QFile extFile(QStringLiteral("physfs://css/") + fname);
 
-    QFile resFile(":/res/css/" + fname);
+    QFile resFile(QStringLiteral(":/res/css/") + fname);
 
     QFile & file = (extFile.exists() ? extFile : resFile);
 

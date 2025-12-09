@@ -191,14 +191,14 @@ void TCPBase::RealStart()
     if(m_usesCustomLanguage)
     {
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-        QString hwengineLang = QLocale().name() + ".UTF8";
+        QString hwengineLang = QLocale().name() + QStringLiteral(".UTF8");
         qDebug("Setting hwengine environment: LANG=%s", qPrintable(hwengineLang));
         // TODO: Check if this is correct and works on all systems
-        env.insert("LANG", QLocale().name() + ".UTF8");
+        env.insert(QStringLiteral("LANG"), QLocale().name() + QStringLiteral(".UTF8"));
         process->setProcessEnvironment(env);
     }
     qDebug("Starting hwengine ...");
-    process->start(bindir.absolutePath() + "/hwengine", arguments);
+    process->start(bindir.absolutePath() + QStringLiteral("/hwengine"), arguments);
 #endif
     m_hasStarted = true;
 }
@@ -237,7 +237,7 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
 {
   MessageDialog::ShowFatalMessage(
       tr("Unable to run engine at %1\nError code: %2")
-          .arg(bindir.absolutePath() + "/hwengine")
+          .arg(bindir.absolutePath() + QStringLiteral("/hwengine"))
           .arg(error));
   ClientDisconnect();
 }

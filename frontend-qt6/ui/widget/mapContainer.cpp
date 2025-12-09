@@ -66,7 +66,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_withoutDLC = false;
     m_missingMap = false;
 
-    hhSmall.load(":/res/hh_small.png");
+    hhSmall.load(QStringLiteral(":/res/hh_small.png"));
     hhLimit = 18;
     templateFilter = 0;
     m_master = true;
@@ -149,7 +149,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     connect(btnRandomize, SIGNAL(clicked()), this, SLOT(setRandomMap()));
 
     m_childWidgets << btnRandomize;
-    btnRandomize->setStyleSheet("padding: 5px;");
+    btnRandomize->setStyleSheet(QStringLiteral("padding: 5px;"));
     btnRandomize->setFixedHeight(cType->height());
     topLayout->addWidget(btnRandomize, 1);
 
@@ -159,7 +159,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     //: Refers to the "random seed"; the source of randomness in the game
     btnSeed->setText(tr("Seed"));
     btnSeed->setWhatsThis(tr("View and edit the seed, the source of randomness in the game"));
-    btnSeed->setStyleSheet("padding: 5px;");
+    btnSeed->setStyleSheet(QStringLiteral("padding: 5px;"));
     btnSeed->setFixedHeight(cType->height());
     connect(btnSeed, SIGNAL(clicked()), this, SLOT(showSeedPrompt()));
     topLayout->addWidget(btnSeed, 0);
@@ -219,7 +219,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     teMapName->setReadOnly(true);
     teMapName->setAcceptRichText(false);
     teMapName->setFrameStyle(QFrame::NoFrame);
-    teMapName->setStyleSheet("background-color: transparent");
+    teMapName->setStyleSheet(QStringLiteral("background-color: transparent"));
 
     teMapName->setLineWrapMode(QTextEdit::WidgetWidth);
     teMapName->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
@@ -231,14 +231,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     drawnControls->addStretch(1);
 
-    QPixmap pmLoad(":/res/Load.png");
+    QPixmap pmLoad(QStringLiteral(":/res/Load.png"));
     QIcon iconLoad = QIcon(pmLoad);
     sz = iconLoad.actualSize(QSize(48, 48));
 
     btnLoadMap = new QPushButton(tr("Load"));
     btnLoadMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     btnLoadMap->setWhatsThis(tr("Load map drawing"));
-    btnLoadMap->setStyleSheet("padding: 5px;");
+    btnLoadMap->setStyleSheet(QStringLiteral("padding: 5px;"));
     btnLoadMap->setFixedHeight(50);
     btnLoadMap->setIcon(iconLoad);
     btnLoadMap->setIconSize(sz);
@@ -247,14 +247,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_childWidgets << btnLoadMap;
     connect(btnLoadMap, SIGNAL(clicked()), this, SLOT(loadDrawing()));
 
-    QPixmap pmEdit(":/res/edit.png");
+    QPixmap pmEdit(QStringLiteral(":/res/edit.png"));
     QIcon iconEdit = QIcon(pmEdit);
     sz = iconEdit.actualSize(QSize(48, 48));
 
     btnEditMap = new QPushButton(tr("Edit"));
     btnEditMap->setWhatsThis(tr("Edit map drawing"));
     btnEditMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    btnEditMap->setStyleSheet("padding: 5px;");
+    btnEditMap->setStyleSheet(QStringLiteral("padding: 5px;"));
     btnEditMap->setFixedHeight(50);
     btnEditMap->setIcon(iconEdit);
     btnEditMap->setIconSize(sz);
@@ -312,7 +312,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     lblDesc->setWordWrap(true);
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     lblDesc->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
-    lblDesc->setStyleSheet("font: 10px;");
+    lblDesc->setStyleSheet(QStringLiteral("font: 10px;"));
     bottomLeftLayout->addWidget(lblDesc, 100);
 
     /* Add stretch above theme button */
@@ -418,11 +418,11 @@ void HWMapContainer::addInfoToPreview(const QPixmap &image, const QLinearGradien
     {
         p.setPen(QColor(0xff,0xcc,0x00));
         p.setBrush(QColor(0, 0, 0));
-        p.setFont(QFont("MS Shell Dlg", 10));
+        p.setFont(QFont(QStringLiteral("MS Shell Dlg"), 10));
 
         p.drawRect(finalImage.rect().width() - hhSmall.rect().width() - 28, 3, 40, 20);
 
-        QString text = (hhLimit > 0) ? QString::number(hhLimit) : "?";
+        QString text = (hhLimit > 0) ? QString::number(hhLimit) : QStringLiteral("?");
         p.drawText(finalImage.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
         p.drawPixmap(finalImage.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
     }
@@ -458,7 +458,7 @@ void HWMapContainer::askForGeneratedPreview()
     waitImage.fill(Qt::transparent);
 
     QPainter p(&waitImage);
-    const QPixmap waitIcon(":/res/iconTime.png");
+    const QPixmap waitIcon(QStringLiteral(":/res/iconTime.png"));
     int x = (waitImage.width() - waitIcon.width()) / 2;
     int y = (waitImage.height() - waitIcon.height()) / 2;
     p.drawPixmap(QPoint(x, y), waitIcon);
@@ -566,23 +566,23 @@ void HWMapContainer::setScript(const QString & script, const QString & scriptpar
 
 void HWMapContainer::intSetMap(const QString & map)
 {
-    if (map == "+rnd+")
+    if (map == QLatin1String("+rnd+"))
     {
         //changeMapType(MapModel::GeneratedMap);
     }
-    else if (map == "+maze+")
+    else if (map == QLatin1String("+maze+"))
     {
         //changeMapType(MapModel::GeneratedMaze);
     }
-    else if (map == "+perlin+")
+    else if (map == QLatin1String("+perlin+"))
     {
         //changeMapType(MapModel::GeneratedPerlin);
     }
-    else if (map == "+drawn+")
+    else if (map == QLatin1String("+drawn+"))
     {
         //changeMapType(MapModel::HandDrawnMap);
     }
-    else if (map == "+forts+")
+    else if (map == QLatin1String("+forts+"))
     {
         //nuffin
     }
@@ -854,7 +854,7 @@ void HWMapContainer::updatePreview()
     {
         case MapModel::Invalid:
             // Map error image
-            failPixmap = QPixmap(":/res/missingMap.png");
+            failPixmap = QPixmap(QStringLiteral(":/res/missingMap.png"));
             setImage(failPixmap, linearGradMapError, false);
             lblDesc->clear();
             break;
@@ -870,7 +870,7 @@ void HWMapContainer::updatePreview()
             if(m_missingMap)
             {
                 // Map error image due to missing map
-                failPixmap = QPixmap(":/res/missingMap.png");
+                failPixmap = QPixmap(QStringLiteral(":/res/missingMap.png"));
                 setImage(failPixmap, linearGradMapError, false);
                 lblDesc->clear();
                 break;
@@ -879,7 +879,7 @@ void HWMapContainer::updatePreview()
             {
                 // Draw map preview
                 QPixmap mapImage;
-                bool success = mapImage.load("physfs://Maps/" + m_mapInfo.name + "/preview.png");
+                bool success = mapImage.load(QStringLiteral("physfs://Maps/") + m_mapInfo.name + QStringLiteral("/preview.png"));
 
                 setHHLimit(m_mapInfo.limit);
                 if(!success)
@@ -1231,7 +1231,7 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
             {
                 if ((mdl.at(0).data(ThemeModel::IsBackgroundThemeRole).toBool() == true) || (mdl.at(0).data(ThemeModel::IsHiddenRole).toBool() == true))
                 {
-                    selectedTheme = "Nature";
+                    selectedTheme = QStringLiteral("Nature");
                 }
             }
             setTheme(selectedTheme);
@@ -1252,10 +1252,10 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
 
 void HWMapContainer::loadDrawing()
 {
-  QString loadDir = QDir(cfgdir.absolutePath() + "/DrawnMaps").absolutePath();
+  QString loadDir = QDir(cfgdir.absolutePath() + QStringLiteral("/DrawnMaps")).absolutePath();
   QString fileName = QFileDialog::getOpenFileName(
       this, tr("Load drawn map"), loadDir,
-      tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+      tr("Drawn Maps") + QStringLiteral(" (*.hwmap);;") + tr("All files") + QStringLiteral(" (*)"));
 
   if (fileName.isEmpty()) return;
 
@@ -1347,13 +1347,13 @@ void HWMapContainer::setMissingTheme(const QString & name)
     if (name.isNull() || name.isEmpty()) return;
 
     m_theme = name;
-    QPixmap pixMissing = QPixmap(":/res/missingTheme@2x.png");
+    QPixmap pixMissing = QPixmap(QStringLiteral(":/res/missingTheme@2x.png"));
     QIcon iconMissing  = QIcon();
     iconMissing.addPixmap(pixMissing, QIcon::Normal);
     iconMissing.addPixmap(pixMissing, QIcon::Disabled);
     btnTheme->setIcon(iconMissing);
     // Question mark in front of theme name denotes it's missing
-    btnTheme->setText(tr("Theme: %1").arg("?" + name));
+    btnTheme->setText(tr("Theme: %1").arg(QStringLiteral("?") + name));
     updateThemeButtonSize();
 }
 
@@ -1407,7 +1407,7 @@ void HWMapContainer::setMapNameLabel(QString mapName, bool validMap)
     }
     teMapName->setPlainText(mapName);
     if(validMap)
-        teMapName->setStyleSheet("background-color: transparent;");
+        teMapName->setStyleSheet(QStringLiteral("background-color: transparent;"));
     else
-        teMapName->setStyleSheet("background-color: transparent; color: #b50000;");
+        teMapName->setStyleSheet(QStringLiteral("background-color: transparent; color: #b50000;"));
 }

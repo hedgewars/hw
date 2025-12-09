@@ -99,19 +99,19 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent), enabled(false)
     switch (season)
     {
         case SEASON_CHRISTMAS :
-            fname = "Flake.png";
+            fname = QStringLiteral("Flake.png");
             break;
         case SEASON_EASTER :
-            fname = "Egg.png";
+            fname = QStringLiteral("Egg.png");
             break;
         case SEASON_HWBDAY :
-            fname = "Confetti.png";
+            fname = QStringLiteral("Confetti.png");
             break;
         default :
-            fname = "Star.png";
+            fname = QStringLiteral("Star.png");
     }
 
-    sprite.load(":/res/" + fname);
+    sprite.load(QStringLiteral(":/res/") + fname);
 
     setAutoFillBackground(false);
 

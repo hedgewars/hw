@@ -117,16 +117,16 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
     connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(tabIndexChanged(int)));
 
-    QPixmap pmNew(":/res/new.png");
-    QPixmap pmEdit(":/res/edit.png");
-    QPixmap pmDelete(":/res/delete.png");
+    QPixmap pmNew(QStringLiteral(":/res/new.png"));
+    QPixmap pmEdit(QStringLiteral(":/res/edit.png"));
+    QPixmap pmDelete(QStringLiteral(":/res/delete.png"));
 
     { // game page
         QVBoxLayout * leftColumn, * rightColumn;
         setupTabPage(pageGame, &leftColumn, &rightColumn);
 
         { // group: Teams
-            OptionGroupBox * groupTeams = new OptionGroupBox(":/res/teamicon.png", tr("Teams"), this);
+            OptionGroupBox * groupTeams = new OptionGroupBox(QStringLiteral(":/res/teamicon.png"), tr("Teams"), this);
             groupTeams->setMinimumWidth(400);
             rightColumn->addWidget(groupTeams);
 
@@ -142,7 +142,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnNewTeam->setIconSize(pmNew.size());
             BtnNewTeam->setIcon(pmNew);
             BtnNewTeam->setMaximumWidth(pmNew.width() + 6);
-            BtnNewTeam->setStyleSheet("padding: 0px;");
+            BtnNewTeam->setStyleSheet(QStringLiteral("padding: 0px;"));
             connect(BtnNewTeam, SIGNAL(clicked()), this, SIGNAL(newTeamRequested()));
             groupTeams->layout()->addWidget(BtnNewTeam, 0, 1);
 
@@ -151,7 +151,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnEditTeam->setIconSize(pmEdit.size());
             BtnEditTeam->setIcon(pmEdit);
             BtnEditTeam->setMaximumWidth(pmEdit.width() + 6);
-            BtnEditTeam->setStyleSheet("padding: 0px;");
+            BtnEditTeam->setStyleSheet(QStringLiteral("padding: 0px;"));
             connect(BtnEditTeam, SIGNAL(clicked()), this, SLOT(requestEditSelectedTeam()));
             groupTeams->layout()->addWidget(BtnEditTeam, 0, 2);
 
@@ -160,7 +160,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             BtnDeleteTeam->setIconSize(pmDelete.size());
             BtnDeleteTeam->setIcon(pmDelete);
             BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
-            BtnDeleteTeam->setStyleSheet("padding: 0px;");
+            BtnDeleteTeam->setStyleSheet(QStringLiteral("padding: 0px;"));
             connect(BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(requestDeleteSelectedTeam()));
             groupTeams->layout()->addWidget(BtnDeleteTeam, 0, 3);
 
@@ -172,7 +172,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: schemes
-            OptionGroupBox * groupSchemes = new OptionGroupBox(":/res/schemeicon.png", tr("Schemes"), this);
+            OptionGroupBox * groupSchemes = new OptionGroupBox(QStringLiteral(":/res/schemeicon.png"), tr("Schemes"), this);
             leftColumn->addWidget(groupSchemes);
 
             groupSchemes->layout()->setColumnStretch(0, 1);
@@ -187,7 +187,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             SchemeNew->setIconSize(pmNew.size());
             SchemeNew->setIcon(pmNew);
             SchemeNew->setMaximumWidth(pmNew.width() + 6);
-            SchemeNew->setStyleSheet("padding: 0px;");
+            SchemeNew->setStyleSheet(QStringLiteral("padding: 0px;"));
             groupSchemes->layout()->addWidget(SchemeNew, 0, 1);
 
             SchemeEdit = new QPushButton(groupSchemes);
@@ -195,7 +195,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             SchemeEdit->setIconSize(pmEdit.size());
             SchemeEdit->setIcon(pmEdit);
             SchemeEdit->setMaximumWidth(pmEdit.width() + 6);
-            SchemeEdit->setStyleSheet("padding: 0px;");
+            SchemeEdit->setStyleSheet(QStringLiteral("padding: 0px;"));
             groupSchemes->layout()->addWidget(SchemeEdit, 0, 2);
 
             SchemeDelete = new QPushButton(groupSchemes);
@@ -203,12 +203,12 @@ QLayout * PageOptions::bodyLayoutDefinition()
             SchemeDelete->setIconSize(pmDelete.size());
             SchemeDelete->setIcon(pmDelete);
             SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
-            SchemeDelete->setStyleSheet("padding: 0px;");
+            SchemeDelete->setStyleSheet(QStringLiteral("padding: 0px;"));
             groupSchemes->layout()->addWidget(SchemeDelete, 0, 3);
         }
 
         { // group: weapons
-            OptionGroupBox * groupWeapons = new OptionGroupBox(":/res/weaponsicon.png", tr("Weapons"), this);
+            OptionGroupBox * groupWeapons = new OptionGroupBox(QStringLiteral(":/res/weaponsicon.png"), tr("Weapons"), this);
             leftColumn->addWidget(groupWeapons);
 
             groupWeapons->layout()->setColumnStretch(0, 1);
@@ -223,7 +223,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponNew->setIconSize(pmNew.size());
             WeaponNew->setIcon(pmNew);
             WeaponNew->setMaximumWidth(pmNew.width() + 6);
-            WeaponNew->setStyleSheet("padding: 0px;");
+            WeaponNew->setStyleSheet(QStringLiteral("padding: 0px;"));
             groupWeapons->layout()->addWidget(WeaponNew, 0, 1);
 
             WeaponEdit = new QPushButton(groupWeapons);
@@ -231,7 +231,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponEdit->setIconSize(pmEdit.size());
             WeaponEdit->setIcon(pmEdit);
             WeaponEdit->setMaximumWidth(pmEdit.width() + 6);
-            WeaponEdit->setStyleSheet("padding: 0px;");
+            WeaponEdit->setStyleSheet(QStringLiteral("padding: 0px;"));
             groupWeapons->layout()->addWidget(WeaponEdit, 0, 2);
 
             WeaponDelete = new QPushButton(groupWeapons);
@@ -239,7 +239,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponDelete->setIconSize(pmDelete.size());
             WeaponDelete->setIcon(pmDelete);
             WeaponDelete->setMaximumWidth(pmDelete.width() + 6);
-            WeaponDelete->setStyleSheet("padding: 0px;");
+            WeaponDelete->setStyleSheet(QStringLiteral("padding: 0px;"));
             groupWeapons->layout()->addWidget(WeaponDelete, 0, 3);
         }
 
@@ -252,7 +252,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         setupTabPage(pageGraphics, &leftColumn, &rightColumn);
 
         { // group: game
-            OptionGroupBox * groupGame = new OptionGroupBox(":/res/graphicsicon.png", tr("Game"), this);
+            OptionGroupBox * groupGame = new OptionGroupBox(QStringLiteral(":/res/graphicsicon.png"), tr("Game"), this);
             leftColumn->addWidget(groupGame);
 
             groupGame->layout()->setColumnStretch(0, 0);
@@ -446,7 +446,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: frontend
-            OptionGroupBox * groupFrontend = new OptionGroupBox(":/res/frontendicon.png", tr("Frontend"), this);
+            OptionGroupBox * groupFrontend = new OptionGroupBox(QStringLiteral(":/res/frontendicon.png"), tr("Frontend"), this);
             rightColumn->addWidget(groupFrontend);
 
             // Fullscreen
@@ -464,7 +464,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: colors
-            OptionGroupBox * groupColors = new OptionGroupBox(":/res/Palette.png", tr("Custom colors"), this);
+            OptionGroupBox * groupColors = new OptionGroupBox(QStringLiteral(":/res/Palette.png"), tr("Custom colors"), this);
             rightColumn->addWidget(groupColors);
 
             groupColors->layout()->setColumnStretch(0, 1);
@@ -482,7 +482,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
                 QPushButton * btn = new QPushButton(this);
                 btn->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
                 groupColors->layout()->addWidget(btn, i / 3, i % 3);
-                btn->setStyleSheet(QString("background: %1").arg(model->item(i)->data().value<QColor>().name()));
+                btn->setStyleSheet(QStringLiteral("background: %1").arg(model->item(i)->data().value<QColor>().name()));
                 m_colorButtons.append(btn);
                 connect(btn, SIGNAL(clicked()), mapper, SLOT(map()));
                 mapper->setMapping(btn, i);
@@ -507,7 +507,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         setupTabPage(pageAudio, &leftColumn, &rightColumn);
 
         { // group: game
-            OptionGroupBox * groupGame = new OptionGroupBox(":/res/audio.png", tr("Game audio"), this);
+            OptionGroupBox * groupGame = new OptionGroupBox(QStringLiteral(":/res/audio.png"), tr("Game audio"), this);
             leftColumn->addWidget(groupGame);
             groupGame->layout()->setColumnStretch(1, 0);
             groupGame->layout()->setColumnStretch(2, 1);
@@ -553,7 +553,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: frontend
-            OptionGroupBox * groupFrontend = new OptionGroupBox(":/res/audio.png", tr("Frontend audio"), this);
+            OptionGroupBox * groupFrontend = new OptionGroupBox(QStringLiteral(":/res/audio.png"), tr("Frontend audio"), this);
             rightColumn->addWidget(groupFrontend);
 
             CBFrontendSound = new QCheckBox(groupFrontend);
@@ -576,7 +576,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         setupTabPage(pageNetwork, &leftColumn, &rightColumn);
 
         { // group: account
-            OptionGroupBox * groupAccount = new OptionGroupBox(":/res/teamicon.png", tr("Account"), this);
+            OptionGroupBox * groupAccount = new OptionGroupBox(QStringLiteral(":/res/teamicon.png"), tr("Account"), this);
             leftColumn->addWidget(groupAccount);
 
             // Label and field for net nick
@@ -602,7 +602,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         }
 
         { // group: proxy
-            OptionGroupBox * groupProxy = new OptionGroupBox(":/res/net.png", tr("Proxy settings"), this);
+            OptionGroupBox * groupProxy = new OptionGroupBox(QStringLiteral(":/res/net.png"), tr("Proxy settings"), this);
             rightColumn->addWidget(groupProxy);
 
             // Labels
@@ -662,7 +662,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         setupTabPage(pageAdvanced, &leftColumn, &rightColumn);
 
         { // group: miscellaneous
-            OptionGroupBox * groupMisc = new OptionGroupBox(":/res/Settings.png", tr("Miscellaneous"), this);
+            OptionGroupBox * groupMisc = new OptionGroupBox(QStringLiteral(":/res/Settings.png"), tr("Miscellaneous"), this);
             leftColumn->addWidget(groupMisc);
 
             // Language
@@ -674,24 +674,24 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBLanguage = new QComboBox(groupMisc);
             CBLanguage->setMaxVisibleItems(50);
             groupMisc->layout()->addWidget(CBLanguage, 0, 1);
-            QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
+            QStringList locs = DataManager::instance().entryList(QStringLiteral("Locale"), QDir::Files, QStringList("hedgewars_*.qm"));
             QStringList langnames;
             CBLanguage->addItem(QComboBox::tr("(System default)"), QString());
             for(int i = 0; i < locs.count(); i++)
             {
               QString lname = locs[i].replace(
-                  QRegularExpression("hedgewars_(.*)\\.qm"), "\\1");
+                  QRegularExpression(QStringLiteral("hedgewars_(.*)\\.qm")), "\\1");
               QLocale loc = QLocale(lname);
               QString entryName;
               // If local identifier has underscore, it means the country has
               // been specified
-              if (lname.contains("_")) {
+              if (lname.contains(QLatin1String("_"))) {
                 // Append country name for disambiguation
                 // FIXME: These brackets are hardcoded and can't be translated.
                 // Luckily, these are rarely used and work with most languages
                 // anyway
-                entryName = loc.nativeLanguageName() + " (" +
-                            loc.nativeTerritoryName() + ")";
+                entryName = loc.nativeLanguageName() + QStringLiteral(" (") +
+                            loc.nativeTerritoryName() + QStringLiteral(")");
               } else {
                 // Usually, we just print the language name
                 entryName = loc.nativeLanguageName();
@@ -930,7 +930,7 @@ void PageOptions::connectSignals()
 
 void PageOptions::setVolume(int volume)
 {
-    lblVolumeLevel->setText(QString("%1\%").arg(volume));
+    lblVolumeLevel->setText(QStringLiteral("%1\%").arg(volume));
 }
 
 void PageOptions::setupTabPage(QWidget * tabpage, QVBoxLayout ** leftColumn, QVBoxLayout ** rightColumn)
@@ -1017,7 +1017,7 @@ void PageOptions::trimNetNick()
 void PageOptions::savePwdChanged(int state) {
     if (state == 0) {
         editNetPassword->setEnabled(false);
-        editNetPassword->setText("");
+        editNetPassword->setText(QLatin1String(""));
     } else
         editNetPassword->setEnabled(true);
 }
@@ -1055,7 +1055,7 @@ void PageOptions::colorButtonClicked(int i)
     if(c.isValid())
     {
         DataManager::instance().colorsModel()->item(i)->setData(c);
-        m_colorButtons[i]->setStyleSheet(QString("background: %1").arg(c.name()));
+        m_colorButtons[i]->setStyleSheet(QStringLiteral("background: %1").arg(c.name()));
     }
 }
 
@@ -1065,7 +1065,7 @@ void PageOptions::onColorModelDataChanged(const QModelIndex & topLeft, const QMo
 
     QStandardItemModel * model = DataManager::instance().colorsModel();
 
-    m_colorButtons[topLeft.row()]->setStyleSheet(QString("background: %1").arg(model->item(topLeft.row())->data().value<QColor>().name()));
+    m_colorButtons[topLeft.row()]->setStyleSheet(QStringLiteral("background: %1").arg(model->item(topLeft.row())->data().value<QColor>().name()));
 }
 
 void PageOptions::onProxyTypeChanged()
@@ -1142,31 +1142,31 @@ void PageOptions::setDefaultCodecs()
     // VLC should be able to handle any of these configurations
     // Quicktime X only opens the first one
     // Windows Media Player TODO
-    if (tryCodecs("mp4", "libx264", "aac"))
+    if (tryCodecs(QStringLiteral("mp4"), QStringLiteral("libx264"), QStringLiteral("aac")))
         return;
-    if (tryCodecs("mp4", "libx264", "libfaac"))
+    if (tryCodecs(QStringLiteral("mp4"), QStringLiteral("libx264"), QStringLiteral("libfaac")))
         return;
-    if (tryCodecs("mp4", "libx264", "libmp3lame"))
+    if (tryCodecs(QStringLiteral("mp4"), QStringLiteral("libx264"), QStringLiteral("libmp3lame")))
         return;
-    if (tryCodecs("mp4", "libx264", "mp2"))
+    if (tryCodecs(QStringLiteral("mp4"), QStringLiteral("libx264"), QStringLiteral("mp2")))
         return;
-    if (tryCodecs("avi", "libxvid", "libmp3lame"))
+    if (tryCodecs(QStringLiteral("avi"), QStringLiteral("libxvid"), QStringLiteral("libmp3lame")))
         return;
-    if (tryCodecs("avi", "libxvid", "ac3_fixed"))
+    if (tryCodecs(QStringLiteral("avi"), QStringLiteral("libxvid"), QStringLiteral("ac3_fixed")))
         return;
-    if (tryCodecs("avi", "libxvid", "mp2"))
+    if (tryCodecs(QStringLiteral("avi"), QStringLiteral("libxvid"), QStringLiteral("mp2")))
         return;
-    if (tryCodecs("avi", "mpeg4", "libmp3lame"))
+    if (tryCodecs(QStringLiteral("avi"), QStringLiteral("mpeg4"), QStringLiteral("libmp3lame")))
         return;
-    if (tryCodecs("avi", "mpeg4", "ac3_fixed"))
+    if (tryCodecs(QStringLiteral("avi"), QStringLiteral("mpeg4"), QStringLiteral("ac3_fixed")))
         return;
-    if (tryCodecs("avi", "mpeg4", "mp2"))
+    if (tryCodecs(QStringLiteral("avi"), QStringLiteral("mpeg4"), QStringLiteral("mp2")))
         return;
 
     // this shouldn't happen, just in case
-    if (tryCodecs("ogg", "libtheora", "libvorbis"))
+    if (tryCodecs(QStringLiteral("ogg"), QStringLiteral("libtheora"), QStringLiteral("libvorbis")))
         return;
-    tryCodecs("ogg", "libtheora", "flac");
+    tryCodecs(QStringLiteral("ogg"), QStringLiteral("libtheora"), QStringLiteral("flac"));
 }
 
 void PageOptions::setDefaultOptions()
@@ -1259,7 +1259,7 @@ void PageOptions::bindUpdated(int bindID)
 // Returns: The bind model index of the default.
 int PageOptions::resetBindToDefault(int bindID)
 {
-    if (QString(cbinds[bindID].action) == QString("!MULTI"))
+    if (QString(cbinds[bindID].action) == QStringLiteral("!MULTI"))
         return -1;
     QStandardItemModel * binds = DataManager::instance().bindsModel();
     QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, cbinds[bindID].strbind, 1, Qt::MatchExactly);

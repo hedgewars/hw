@@ -72,103 +72,103 @@ QLayout * PageScheme::bodyLayoutDefinition()
     gbBasicSettings->setLayout(glBSLayout);
     // Left
 
-    TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders@2x.png");
+    TBW_disablegirders = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnDisableGirders@2x.png"));
     TBW_disablegirders->setWhatsThis(tr("Disable girders when generating random maps."));
     glGMLayout->addWidget(TBW_disablegirders,0,0,1,1);
 
-    TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects@2x.png");
+    TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnDisableLandObjects@2x.png"));
     TBW_disablelandobjects->setWhatsThis(tr("Disable land objects when generating random maps."));
     glGMLayout->addWidget(TBW_disablelandobjects,0,1,1,1);
 
-    TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder@2x.png");
+    TBW_border = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnBorder@2x.png"));
     TBW_border->setWhatsThis(tr("Add an indestructible border around the terrain"));
     glGMLayout->addWidget(TBW_border,0,2,1,1);
 
-    TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder@2x.png");
+    TBW_bottomborder = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnBottomBorder@2x.png"));
     TBW_bottomborder->setWhatsThis(tr("Add an indestructible border along the bottom"));
     glGMLayout->addWidget(TBW_bottomborder,0,3,1,1);
 
-    TBW_switchhog = new ToggleButtonWidget(gbGameModes, ":/res/btnSwitchHog@2x.png");
+    TBW_switchhog = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnSwitchHog@2x.png"));
     TBW_switchhog->setWhatsThis(tr("Select a hedgehog at the beginning of a turn"));
     glGMLayout->addWidget(TBW_switchhog,0,4,1,1);
 
-    TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
+    TBW_solid = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnSolid@2x.png"));
     TBW_solid->setWhatsThis(tr("Land can not be destroyed by most weapons."));
     glGMLayout->addWidget(TBW_solid,1,0,1,1);
 
-    TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity@2x.png");
+    TBW_lowGravity = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnLowGravity@2x.png"));
     TBW_lowGravity->setWhatsThis(tr("Lower gravity"));
     glGMLayout->addWidget(TBW_lowGravity,1,1,1,1);
 
-    TBW_nowind = new ToggleButtonWidget(gbGameModes, ":/res/btnNoWind@2x.png");
+    TBW_nowind = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnNoWind@2x.png"));
     TBW_nowind->setWhatsThis(tr("You will not have to worry about wind anymore."));
     glGMLayout->addWidget(TBW_nowind,1,2,1,1);
 
-    TBW_morewind = new ToggleButtonWidget(gbGameModes, ":/res/btnMoreWind@2x.png");
+    TBW_morewind = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnMoreWind@2x.png"));
     TBW_morewind->setWhatsThis(tr("Wind will affect almost everything."));
     glGMLayout->addWidget(TBW_morewind,1,3,1,1);
 
-    TBW_artillery = new ToggleButtonWidget(gbGameModes, ":/res/btnArtillery@2x.png");
+    TBW_artillery = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnArtillery@2x.png"));
     TBW_artillery->setWhatsThis(tr("Your hogs are unable to move, put your artillery skills to the test"));
     glGMLayout->addWidget(TBW_artillery,1,4,1,1);
 
-    TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric@2x.png");
+    TBW_vampiric = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnVampiric@2x.png"));
     TBW_vampiric->setWhatsThis(tr("Gain 80% of the damage you do back in health"));
     glGMLayout->addWidget(TBW_vampiric,2,0,1,1);
 
-    TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma@2x.png");
+    TBW_karma = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnKarma@2x.png"));
     TBW_karma->setWhatsThis(tr("Share your opponents pain, share their damage"));
     glGMLayout->addWidget(TBW_karma,2,1,1,1);
 
-    TBW_resethealth = new ToggleButtonWidget(gbGameModes, ":/res/btnResetHealth@2x.png");
+    TBW_resethealth = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnResetHealth@2x.png"));
     TBW_resethealth->setWhatsThis(tr("All (living) hedgehogs are fully restored at the end of turn"));
     glGMLayout->addWidget(TBW_resethealth,2,2,1,1);
 
-    TBW_aisurvival = new ToggleButtonWidget(gbGameModes, ":/res/btnAISurvival@2x.png");
+    TBW_aisurvival = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnAISurvival@2x.png"));
     TBW_aisurvival->setWhatsThis(tr("AI respawns on death."));
     glGMLayout->addWidget(TBW_aisurvival,2,3,1,1);
 
-    TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvulnerable@2x.png");
+    TBW_invulnerable = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnInvulnerable@2x.png"));
     TBW_invulnerable->setWhatsThis(tr("All hogs have a personal forcefield"));
     glGMLayout->addWidget(TBW_invulnerable,2,4,1,1);
 
-    TBW_perhogammo = new ToggleButtonWidget(gbGameModes, ":/res/btnPerHogAmmo@2x.png");
+    TBW_perhogammo = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnPerHogAmmo@2x.png"));
     TBW_perhogammo->setWhatsThis(tr("Each hedgehog has its own ammo. It does not share with the team."));
     glGMLayout->addWidget(TBW_perhogammo,3,0,1,1);
 
-    TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo@2x.png");
+    TBW_sharedammo = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnSharedAmmo@2x.png"));
     TBW_sharedammo->setWhatsThis(tr("Ammo is shared between all teams that share a colour."));
     glGMLayout->addWidget(TBW_sharedammo,3,1,1,1);
 
-    TBW_resetweps = new ToggleButtonWidget(gbGameModes, ":/res/btnResetWeps@2x.png");
+    TBW_resetweps = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnResetWeps@2x.png"));
     TBW_resetweps->setWhatsThis(tr("Weapons are reset to starting values each turn."));
     glGMLayout->addWidget(TBW_resetweps,3,2,1,1);
 
-    TBW_infattack = new ToggleButtonWidget(gbGameModes, ":/res/btnInfAttack@2x.png");
+    TBW_infattack = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnInfAttack@2x.png"));
     TBW_infattack->setWhatsThis(tr("Attacking does not end your turn."));
     glGMLayout->addWidget(TBW_infattack,3,3,1,1);
 
-    TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight@2x.png");
+    TBW_laserSight = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnLaserSight@2x.png"));
     TBW_laserSight->setWhatsThis(tr("Assisted aiming with laser sight"));
     glGMLayout->addWidget(TBW_laserSight,3,4,1,1);
 
-    TBW_randomorder = new ToggleButtonWidget(gbGameModes, ":/res/btnRandomOrder@2x.png");
+    TBW_randomorder = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnRandomOrder@2x.png"));
     TBW_randomorder->setWhatsThis(tr("Order of play is random instead of in room order."));
     glGMLayout->addWidget(TBW_randomorder,4,0,1,1);
 
-    TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog@2x.png");
+    TBW_placehog = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnPlaceHog@2x.png"));
     TBW_placehog->setWhatsThis(tr("Take turns placing your hedgehogs before the start of play."));
     glGMLayout->addWidget(TBW_placehog,4,1,1,1);
 
-    TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide@2x.png");
+    TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnTeamsDivide@2x.png"));
     TBW_teamsDivide->setWhatsThis(tr("Each clan starts in its own part of the terrain."));
     glGMLayout->addWidget(TBW_teamsDivide,4,2,1,1);
 
-    TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnTagTeam@2x.png");
+    TBW_tagteam = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnTagTeam@2x.png"));
     TBW_tagteam->setWhatsThis(tr("Teams in each clan take successive turns sharing their turn time."));
     glGMLayout->addWidget(TBW_tagteam,4,3,1,1);
 
-    TBW_king = new ToggleButtonWidget(gbGameModes, ":/res/btnKing@2x.png");
+    TBW_king = new ToggleButtonWidget(gbGameModes, QStringLiteral(":/res/btnKing@2x.png"));
     TBW_king->setWhatsThis(tr("Play with a King. If he dies, your side dies."));
     glGMLayout->addWidget(TBW_king,4,4,1,1);
 
@@ -204,7 +204,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtDamageModifier);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconDamage.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconDamage.png")));
     glBSLayout->addWidget(l,0,1,1,1);
     SB_DamageModifier = new QSpinBox(gbBasicSettings);
     SB_DamageModifier->setWhatsThis(wtDamageModifier);
@@ -221,7 +221,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtTurnTime);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconTime.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconTime.png")));
     glBSLayout->addWidget(l,1,1,1,1);
     SB_TurnTime = new QSpinBox(gbBasicSettings);
     SB_TurnTime->setWhatsThis(wtTurnTime);
@@ -238,7 +238,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtInitHealth);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconInitHealth.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconInitHealth.png")));
     glBSLayout->addWidget(l,2,1,1,1);
     SB_InitHealth = new QSpinBox(gbBasicSettings);
     SB_InitHealth->setWhatsThis(wtInitHealth);
@@ -255,7 +255,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setWhatsThis(wtSuddenDeath);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeathTime.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconSuddenDeathTime.png")));
     glBSLayout->addWidget(l,3,1,1,1);
     /* NOTE:
        The internally stored value for Sudden Death Timeout
@@ -284,7 +284,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtWaterRise);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeathWater.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconSuddenDeathWater.png")));
     glBSLayout->addWidget(l,4,1,1,1);
     SB_WaterRise = new QSpinBox(gbBasicSettings);
     SB_WaterRise->setWhatsThis(wtWaterRise);
@@ -301,7 +301,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtHealthDecrease);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconSuddenDeath.png")));
     glBSLayout->addWidget(l,5,1,1,1);
     SB_HealthDecrease = new QSpinBox(gbBasicSettings);
     SB_HealthDecrease->setWhatsThis(wtHealthDecrease);
@@ -318,7 +318,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtRopeModifier);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconRope.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconRope.png")));
     glBSLayout->addWidget(l,6,1,1,1);
     SB_RopeModifier = new QSpinBox(gbBasicSettings);
     SB_RopeModifier->setWhatsThis(wtRopeModifier);
@@ -335,7 +335,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setWhatsThis(wtCaseProb);
-    l->setPixmap(QPixmap(":/res/iconBox.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconBox.png")));
     glBSLayout->addWidget(l,7,1,1,1);
     SB_CaseProb = new FreqSpinBox(gbBasicSettings);
     SB_CaseProb->setWhatsThis(wtCaseProb);
@@ -351,7 +351,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setWhatsThis(wtHealthCrates);
-    l->setPixmap(QPixmap(":/res/iconHealthPercent.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconHealthPercent.png")));
     glBSLayout->addWidget(l,8,1,1,1);
     SB_HealthCrates = new QSpinBox(gbBasicSettings);
     SB_HealthCrates->setWhatsThis(wtHealthCrates);
@@ -368,7 +368,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setWhatsThis(wtCrateHealth);
-    l->setPixmap(QPixmap(":/res/iconHealth.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconHealth.png")));
     glBSLayout->addWidget(l,9,1,1,1);
     SB_CrateHealth = new QSpinBox(gbBasicSettings);
     SB_CrateHealth->setWhatsThis(wtCrateHealth);
@@ -385,7 +385,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtMinesTime);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconMineTime.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconMineTime.png")));
     glBSLayout->addWidget(l,10,1,1,1);
     SB_MinesTime = new MinesTimeSpinBox(gbBasicSettings);
     SB_MinesTime->setWhatsThis(wtMinesTime);
@@ -402,7 +402,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtMines);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconMine.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconMine.png")));
     glBSLayout->addWidget(l,11,1,1,1);
     SB_Mines = new QSpinBox(gbBasicSettings);
     SB_Mines->setWhatsThis(wtMines);
@@ -419,7 +419,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtMineDuds);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconDud.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconDud.png")));
     glBSLayout->addWidget(l,12,1,1,1);
     SB_MineDuds = new QSpinBox(gbBasicSettings);
     SB_MineDuds->setWhatsThis(wtMineDuds);
@@ -436,7 +436,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtExplosives);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconExplosive.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconExplosive.png")));
     glBSLayout->addWidget(l,13,1,1,1);
     SB_Explosives = new QSpinBox(gbBasicSettings);
     SB_Explosives->setWhatsThis(wtExplosives);
@@ -453,7 +453,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtAirMines);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconAirMine.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconAirMine.png")));
     glBSLayout->addWidget(l,14,1,1,1);
     SB_AirMines = new QSpinBox(gbBasicSettings);
     SB_AirMines->setWhatsThis(wtAirMines);
@@ -470,7 +470,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtSentries);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconSentry.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconSentry.png")));
     glBSLayout->addWidget(l,15,1,1,1);
     SB_Sentries = new QSpinBox(gbBasicSettings);
     SB_Sentries->setWhatsThis(wtSentries);
@@ -488,7 +488,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtGetAwayTime);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconTime.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconTime.png")));
     glBSLayout->addWidget(l,16,1,1,1);
     SB_GetAwayTime = new QSpinBox(gbBasicSettings);
     SB_GetAwayTime->setWhatsThis(wtGetAwayTime);
@@ -505,7 +505,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtWorldEdge);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconEarth.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconEarth.png")));
     glBSLayout->addWidget(l,17,1,1,1);
 
     CB_WorldEdge = new QComboBox(gbBasicSettings);
@@ -526,7 +526,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l = new QLabel(gbBasicSettings);
     l->setWhatsThis(wtScriptParam);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconScript.png"));
+    l->setPixmap(QPixmap(QStringLiteral(":/res/iconScript.png")));
     glBSLayout->addWidget(l,18,1,1,1);
 
     LE_ScriptParam = new QLineEdit(gbBasicSettings);
@@ -557,11 +557,11 @@ QLayout * PageScheme::footerLayoutDefinition()
 
     bottomLayout->addWidget(selectScheme, 0);
     BtnCopy = addButton(tr("Copy"), bottomLayout, 1);
-    BtnCopy->setStyleSheet("padding: 5px;");
+    BtnCopy->setStyleSheet(QStringLiteral("padding: 5px;"));
     BtnNew = addButton(tr("New"), bottomLayout, 2);
-    BtnNew->setStyleSheet("padding: 5px;");
+    BtnNew->setStyleSheet(QStringLiteral("padding: 5px;"));
     BtnDelete = addButton(tr("Delete"), bottomLayout, 3);
-    BtnDelete->setStyleSheet("padding: 5px;");
+    BtnDelete->setStyleSheet(QStringLiteral("padding: 5px;"));
 
     bottomLayout->setStretch(1,1);
     bottomLayout->setStretch(2,1);
@@ -572,13 +572,16 @@ QLayout * PageScheme::footerLayoutDefinition()
 
 void PageScheme::connectSignals()
 {
-    connect(BtnCopy, SIGNAL(clicked()), this, SLOT(copyRow()));
-    connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
-    connect(BtnDelete, SIGNAL(clicked()), this, SLOT(deleteRow()));
-    connect(CB_WorldEdge, SIGNAL(currentIndexChanged(int)), this, SLOT(worldEdgeChanged(int)));
-    mapper = new QDataWidgetMapper(this);
-    connect(selectScheme, SIGNAL(currentIndexChanged(int)), mapper, SLOT(setCurrentIndex(int)));
-    connect(selectScheme, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeSelected(int)));
+  connect(BtnCopy, &QAbstractButton::clicked, this, &PageScheme::copyRow);
+  connect(BtnNew, &QAbstractButton::clicked, this, &PageScheme::newRow);
+  connect(BtnDelete, &QAbstractButton::clicked, this, &PageScheme::deleteRow);
+  connect(CB_WorldEdge, &QComboBox::currentIndexChanged, this,
+          &PageScheme::worldEdgeChanged);
+  mapper = new QDataWidgetMapper(this);
+  connect(selectScheme, &QComboBox::currentIndexChanged, mapper,
+          &QDataWidgetMapper::setCurrentIndex);
+  connect(selectScheme, &QComboBox::currentIndexChanged, this,
+          &PageScheme::schemeSelected);
 }
 
 PageScheme::PageScheme(QWidget* parent) : AbstractPage(parent)
@@ -640,7 +643,8 @@ void PageScheme::setModel(QAbstractItemModel * model)
 
     mapper->toFirst();
 
-    connect(model, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataChanged(QModelIndex, QModelIndex)));
+    auto placeholder = connect(model, &QAbstractItemModel::dataChanged, this,
+                               &PageScheme::dataChanged);
 }
 
 void PageScheme::newRow()
@@ -706,10 +710,11 @@ void PageScheme::dataChanged(QModelIndex topLeft, QModelIndex bottomRight)
 
 void PageScheme::worldEdgeChanged(int n)
 {
-    if (mapper->itemDelegate()) 
-    {
-        mapper->itemDelegate()->commitData(CB_WorldEdge);
-    }    
+  Q_UNUSED(n)
+
+  if (mapper->itemDelegate()) {
+    mapper->itemDelegate()->commitData(CB_WorldEdge);
+  }
 }
 
 void PageScheme::schemeSelected(int n)

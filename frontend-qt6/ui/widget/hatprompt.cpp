@@ -65,7 +65,7 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     resize(550, 430);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    setStyleSheet("QPushButton { padding: 5px; margin-top: 10px; }");
+    setStyleSheet(QStringLiteral("QPushButton { padding: 5px; margin-top: 10px; }"));
 
     // Hat model, and a model for setting a filter
     HatModel * hatModel = DataManager::instance().hatModel();
@@ -83,7 +83,7 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     // Help/prompt message at top
     QLabel * lblDesc = new QLabel(tr("Search for a hat:"));
     lblDesc->setObjectName("lblDesc");
-    lblDesc->setStyleSheet("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-top-left-radius: 10px; padding: 4px 10px;}");
+    lblDesc->setStyleSheet(QStringLiteral("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-top-left-radius: 10px; padding: 4px 10px;}"));
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     lblDesc->setFixedHeight(24);
     lblDesc->setMinimumWidth(0);
@@ -92,13 +92,13 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     QWidget * filterContainer = new QWidget();
     filterContainer->setFixedHeight(24);
     filterContainer->setObjectName("filterContainer");
-    filterContainer->setStyleSheet("#filterContainer { background: #F6CB1C; border-top-right-radius: 10px; padding: 3px; }");
+    filterContainer->setStyleSheet(QStringLiteral("#filterContainer { background: #F6CB1C; border-top-right-radius: 10px; padding: 3px; }"));
     filterContainer->setFixedWidth(150);
     txtFilter = new LineEditCursor(filterContainer);
     txtFilter->setFixedWidth(150);
     txtFilter->setFocus();
     txtFilter->setFixedHeight(22);
-    txtFilter->setStyleSheet("LineEditCursor { border-width: 0px; border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: 4px; padding-bottom: 2px; background-color: rgb(23, 11, 54); } LineEditCursor:hover, LineEditCursor:focus { background-color: rgb(13, 5, 68); }");
+    txtFilter->setStyleSheet(QStringLiteral("LineEditCursor { border-width: 0px; border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: 4px; padding-bottom: 2px; background-color: rgb(23, 11, 54); } LineEditCursor:hover, LineEditCursor:focus { background-color: rgb(13, 5, 68); }"));
     connect(txtFilter, SIGNAL(textChanged(const QString &)), this, SLOT(filterChanged(const QString &)));
     connect(txtFilter, SIGNAL(moveUp()), this, SLOT(moveUp()));
     connect(txtFilter, SIGNAL(moveDown()), this, SLOT(moveDown()));
@@ -107,7 +107,7 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
     // Corner widget
     QLabel * corner = new QLabel();
-    corner->setPixmap(QPixmap(QString::fromUtf8(":/res/inverse-corner-bl.png")));
+    corner->setPixmap(QPixmap(QStringLiteral(":/res/inverse-corner-bl.png")));
     corner->setFixedSize(10, 10);
 
     // Add widgets to top layout

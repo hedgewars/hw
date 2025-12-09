@@ -114,11 +114,11 @@ void ItemNum::paintEvent(QPaintEvent* event)
         QRect target(0, 0, 100, 32);
         if (enabled)
         {
-            painter.drawImage(target, QImage(":/res/infinity.png"));
+            painter.drawImage(target, QImage(QStringLiteral(":/res/infinity.png")));
         }
         else
         {
-            painter.drawImage(target, QImage(":/res/infinitygrey.png"));
+            painter.drawImage(target, QImage(QStringLiteral(":/res/infinitygrey.png")));
         }
     }
     else

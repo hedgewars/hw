@@ -73,7 +73,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     QVBoxLayout * pageLayout = new QVBoxLayout();
     QGridLayout * feedbackLayout = new QGridLayout();
 
-    setStyleSheet("QPushButton { padding: 5px }");
+    setStyleSheet(QStringLiteral("QPushButton { padding: 5px }"));
 
     info = new QLabel();
     info->setText(QString(
@@ -135,7 +135,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     connect(BtnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 
     label_captcha = new QLabel();
-    label_captcha->setStyleSheet("border: 3px solid #ffcc00; border-radius: 4px");
+    label_captcha->setStyleSheet(QStringLiteral("border: 3px solid #ffcc00; border-radius: 4px"));
     label_captcha->setText(QLabel::tr("Loading<br>CAPTCHA ..."));
     label_captcha->setFixedSize(200, 50);
     captchaLayout->addWidget(label_captcha);
@@ -157,7 +157,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     feedbackLayout->addWidget(captchaLayoutWidget, 3, 1, 1, 2);
 
     BtnSend = new QPushButton(tr("Send Feedback"));
-    BtnSend->setStyleSheet("qproperty-icon: url(:/res/Start.png);");
+    BtnSend->setStyleSheet(QStringLiteral("qproperty-icon: url(:/res/Start.png);"));
 
     feedbackLayout->addWidget(BtnSend, 3, 3);
     BtnSend->setFixedHeight(40);
@@ -175,20 +175,20 @@ void FeedbackDialog::GenerateSpecs()
 {
     // Gather some information about the system and embed it into the report
     auto screen = qGuiApp->primaryScreen();
-    QString os_version = "Operating system: ";
-    QString qt_version = QString("Qt version: ") + QT_VERSION_STR + QString("\n");
-    QString total_ram = "Total RAM: ";
-    QString number_of_cores = "Number of cores: ";
-    QString compiler_bits = "Compiler architecture: ";
-    QString compiler_version = "Compiler version: ";
-    QString kernel_line = "Kernel: ";
+    QString os_version = QStringLiteral("Operating system: ");
+    QString qt_version = QStringLiteral("Qt version: ") + QT_VERSION_STR + QStringLiteral("\n");
+    QString total_ram = QStringLiteral("Total RAM: ");
+    QString number_of_cores = QStringLiteral("Number of cores: ");
+    QString compiler_bits = QStringLiteral("Compiler architecture: ");
+    QString compiler_version = QStringLiteral("Compiler version: ");
+    QString kernel_line = QStringLiteral("Kernel: ");
     QString screen_size =
-        "Size of the screen(s): " + QString::number(screen->size().width()) +
-        "x" + QString::number(screen->size().height()) + "\n";
+        QStringLiteral("Size of the screen(s): ") + QString::number(screen->size().width()) +
+        QStringLiteral("x") + QString::number(screen->size().height()) + QStringLiteral("\n");
     QString number_of_screens =
-        "Number of screens: " + QString::number(qGuiApp->screens().count()) +
-        "\n";
-    QString processor_name = "Processor: ";
+        QStringLiteral("Number of screens: ") + QString::number(qGuiApp->screens().count()) +
+        QStringLiteral("\n");
+    QString processor_name = QStringLiteral("Processor: ");
 
     // platform specific code
 #ifdef Q_OS_MACX
@@ -249,19 +249,19 @@ void FeedbackDialog::GenerateSpecs()
     kernel_line += "Windows kernel\n";
 #endif
 #ifdef Q_OS_LINUX
-    number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
+    number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + QStringLiteral("\n");
     quint32 pages = sysconf(_SC_PHYS_PAGES);
     quint32 page_size = sysconf(_SC_PAGE_SIZE);
     quint64 total = (quint64)pages * page_size / 1024 / 1024;
-    total_ram += QString::number(total) + " MB\n";
-    os_version += "GNU/Linux or BSD\n";
+    total_ram += QString::number(total) + QStringLiteral(" MB\n");
+    os_version += QLatin1String("GNU/Linux or BSD\n");
 #endif
 
     // uname -a
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     QProcess *process = new QProcess();
     QStringList arguments = QStringList("-a");
-    process->start("uname", arguments);
+    process->start(QStringLiteral("uname"), arguments);
     if (process->waitForFinished())
         kernel_line += QString(process->readAll());
     delete process;
@@ -296,22 +296,22 @@ void FeedbackDialog::GenerateSpecs()
     processor_name += QByteArray(reinterpret_cast<char*>(&registers[1]), 4);
     processor_name += QByteArray(reinterpret_cast<char*>(&registers[2]), 4);
     processor_name += QByteArray(reinterpret_cast<char*>(&registers[3]), 4);
-    processor_name += "\n";
+    processor_name += QLatin1String("\n");
 #else
     processor_name += "Unknown";
 #endif
 
     // compiler
 #ifdef __GNUC__
-    compiler_version += "GCC " + QString(__VERSION__) + "\n";
+    compiler_version += QStringLiteral("GCC ") + QStringLiteral(__VERSION__) + QStringLiteral("\n");
 #else
     compiler_version += "Unknown\n";
 #endif
 
     if(sizeof(void*) == 4)
-        compiler_bits += "i386\n";
+        compiler_bits += QLatin1String("i386\n");
     else if(sizeof(void*) == 8)
-        compiler_bits += "x86_64\n";
+        compiler_bits += QLatin1String("x86_64\n");
 
     // concat system info
     specs = qt_version
@@ -345,7 +345,7 @@ void FeedbackDialog::ShowSpecs()
     msgMsg.setText(specs);
     msgMsg.setTextFormat(Qt::PlainText);
     msgMsg.setWindowModality(Qt::WindowModal);
-    msgMsg.setStyleSheet("background: #0A0533;");
+    msgMsg.setStyleSheet(QStringLiteral("background: #0A0533;"));
     msgMsg.exec();
 }
 
@@ -371,7 +371,7 @@ void FeedbackDialog::NetReply(QNetworkReply *reply)
             return;
         }
 
-        QString url = "https://hedgewars.org/feedback/?captcha&id=";
+        QString url = QStringLiteral("https://hedgewars.org/feedback/?captcha&id=");
         url += QString::number(captchaID);
 
         QNetworkAccessManager *netManager = GetNetManager();
@@ -392,7 +392,7 @@ void FeedbackDialog::NetReply(QNetworkReply *reply)
         QPixmap pixmap;
         pixmap.loadFromData(imageData);
         label_captcha->setPixmap(pixmap);
-        captcha_code->setText("");
+        captcha_code->setText(QLatin1String(""));
     }
 }
 
@@ -407,7 +407,7 @@ QNetworkAccessManager * FeedbackDialog::GetNetManager()
 void FeedbackDialog::LoadCaptchaImage()
 {
         QNetworkAccessManager *netManager = GetNetManager();
-        QUrl captchaURL("https://hedgewars.org/feedback/?gencaptcha");
+        QUrl captchaURL(QStringLiteral("https://hedgewars.org/feedback/?gencaptcha"));
         QNetworkRequest req(captchaURL);
         genCaptchaRequest = netManager->get(req);
 }
@@ -430,7 +430,7 @@ void FeedbackDialog::finishedSlot(QNetworkReply* reply)
     }
     else
     {
-        ShowErrorMessage(QString("Error: ") + reply->readAll());
+        ShowErrorMessage(QStringLiteral("Error: ") + reply->readAll());
         LoadCaptchaImage();
     }
 }

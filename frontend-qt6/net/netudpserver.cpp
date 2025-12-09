@@ -43,7 +43,7 @@ void HWNetUdpServer::onClientRead()
         if(datagram.startsWith("hedgewars client"))
         {
             // send answer to client
-            pUdpSocket->writeDatagram(QString("hedgewars server\n%1").arg(m_descr).toUtf8(), clientAddr, clientPort);
+            pUdpSocket->writeDatagram(QStringLiteral("hedgewars server\n%1").arg(m_descr).toUtf8(), clientAddr, clientPort);
         }
     }
 }

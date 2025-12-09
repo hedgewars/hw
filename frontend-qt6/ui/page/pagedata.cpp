@@ -52,13 +52,13 @@ QLayout * PageDataDownload::footerLayoutDefinition()
     QHBoxLayout * bottomLayout = new QHBoxLayout();
     bottomLayout->setStretch(0, 1);
 
-    pbHome = addButton(":/res/home.png", bottomLayout, 1, true, Qt::AlignBottom);
+    pbHome = addButton(QStringLiteral(":/res/home.png"), bottomLayout, 1, true, Qt::AlignBottom);
     pbHome->setMinimumHeight(50);
     pbHome->setMinimumWidth(50);
     pbHome->setWhatsThis(tr("Load the start page"));
 
-    pbOpenDir = addButton(":/res/folder.png", bottomLayout, 2, true, Qt::AlignBottom);
-    pbOpenDir->setStyleSheet("padding: 5px 10px");
+    pbOpenDir = addButton(QStringLiteral(":/res/folder.png"), bottomLayout, 2, true, Qt::AlignBottom);
+    pbOpenDir->setStyleSheet(QStringLiteral("padding: 5px 10px"));
     pbOpenDir->setWhatsThis(tr("Open packages directory"));
     pbOpenDir->setMinimumHeight(50);
 
@@ -97,11 +97,11 @@ void PageDataDownload::request(const QUrl &url)
         return;
     }
     else if(url.host().isEmpty())
-        finalUrl = QUrl("https://www.hedgewars.org" + url.path());
+        finalUrl = QUrl(QStringLiteral("https://www.hedgewars.org") + url.path());
     else
         finalUrl = url;
 
-    if(url.path().endsWith(".hwp") || url.path().endsWith(".zip"))
+    if(url.path().endsWith(QLatin1String(".hwp")) || url.path().endsWith(QLatin1String(".zip")))
     {
         qWarning() << "Download Request" << url.toString();
         QString fileName = QFileInfo(url.toString()).fileName();
@@ -142,8 +142,8 @@ void PageDataDownload::pageDownloaded()
         if (reply->error() == QNetworkReply::NoError)
         {
             QString html = QString::fromUtf8(reply->readAll());
-                    int begin = html.indexOf("<!-- BEGIN -->");
-                    int end = html.indexOf("<!-- END -->");
+                    int begin = html.indexOf(QLatin1String("<!-- BEGIN -->"));
+                    int end = html.indexOf(QLatin1String("<!-- END -->"));
                     if(begin != -1 && begin < end)
                     {
                         html.truncate(end);
@@ -179,11 +179,11 @@ void PageDataDownload::fileDownloaded()
         }
 
         QDir extractDir(cfgdir);
-        extractDir.cd("Data");
+        extractDir.cd(QStringLiteral("Data"));
 
         QString fileName = extractDir.filePath(QFileInfo(reply->url().path()).fileName());
-        if(fileName.endsWith(".zip"))
-            fileName = fileName.left(fileName.length() - 4) + ".hwp";
+        if(fileName.endsWith(QLatin1String(".zip")))
+            fileName = fileName.left(fileName.length() - 4) + QStringLiteral(".hwp");
 
         QFile out(fileName);
         if(!out.open(QFile::WriteOnly))
@@ -216,7 +216,7 @@ void PageDataDownload::downloadProgress(qint64 bytesRecieved, qint64 bytesTotal)
 
 void PageDataDownload::fetchList()
 {
-    request(QUrl("https://hedgewars.org/content.html"));
+    request(QUrl(QStringLiteral("https://hedgewars.org/content.html")));
 }
 
 void PageDataDownload::onPageLeave()
@@ -229,6 +229,6 @@ void PageDataDownload::onPageLeave()
 
 void PageDataDownload::openPackagesDir()
 {
-  QString path = QDir::toNativeSeparators(cfgdir.absolutePath() + "/Data");
-  QDesktopServices::openUrl(QUrl("file:///" + path));
+  QString path = QDir::toNativeSeparators(cfgdir.absolutePath() + QStringLiteral("/Data"));
+  QDesktopServices::openUrl(QUrl(QStringLiteral("file:///") + path));
 }
