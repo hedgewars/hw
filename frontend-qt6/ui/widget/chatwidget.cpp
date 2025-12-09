@@ -187,13 +187,14 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     m_scrollToBottom = false;
     m_scrollBarPos = 0;
 
-    QStringList vpList =
-         QStringList() << QStringLiteral("Classic") << QStringLiteral("Default") << QStringLiteral("Mobster") << QStringLiteral("Russian");
+    QStringList vpList{QStringLiteral("Classic"), QStringLiteral("Default"),
+                       QStringLiteral("Mobster"), QStringLiteral("Russian")};
 
-    Q_FOREACH (const QString & vp, vpList)
-    {
-        m_helloSounds.append(QStringLiteral("/Sounds/voices/%1/Hello.ogg").arg(vp));
-    }
+    std::transform(
+        std::begin(vpList), std::end(vpList), std::back_inserter(m_helloSounds),
+        [](auto &&vp) {
+          return QStringLiteral("/Sounds/voices/%1/Hello.ogg").arg(vp);
+        });
 
     m_hilightSound = QStringLiteral("/Sounds/beep.ogg");
 
@@ -354,14 +355,13 @@ void HWChatWidget::returnPressed()
 {
     QStringList lines = chatEditLine->text().split('\n');
     chatEditLine->rememberCurrentText();
-    Q_FOREACH (const QString &line, lines)
-    {
-        // skip empty/whitespace lines
-        if (line.trimmed().isEmpty())
-            continue;
+    for (auto &&line : lines) {
+      // skip empty/whitespace lines
+      if (line.trimmed().isEmpty()) continue;
 
-        if (!parseCommand(line))
-            Q_EMIT chatLine(line);
+      if (!parseCommand(line)) {
+        Q_EMIT chatLine(line);
+      }
     }
     chatEditLine->clear();
 }
@@ -374,8 +374,9 @@ QString HWChatWidget::linkedNick(const QString & nickname)
     // '[' and '(' are reserved characters used for fake player names in special server messages
     if ((nickname != m_userNick) && (!nickname.startsWith('[')) && (!nickname.startsWith('(')))
         // linked nick
-        return QStringLiteral("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
-                   QString(nickname.toUtf8().toBase64())).arg(nickname.toHtmlEscaped());
+        return QStringLiteral("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>")
+            .arg(QString(nickname.toUtf8().toBase64()),
+                 nickname.toHtmlEscaped());
 
     // unlinked nick (if own one or fake player name)
     return QStringLiteral("<span class=\"nick\">%1</span>").arg(nickname.toHtmlEscaped());
@@ -394,7 +395,7 @@ bool HWChatWidget::containsHighlight(const QString & sender, const QString & mes
     {
         QString lcStr = message.toLower();
 
-        Q_FOREACH (const QRegularExpression &hl, m_highlights) {
+        for (auto &&hl : m_highlights) {
           if (lcStr.contains(hl)) return true;
         }
     }
@@ -591,8 +592,7 @@ void HWChatWidget::clear()
         {
             QString line = in.readLine();
             QStringList list = line.split(whitespace);
-            Q_FOREACH (QString word, list)
-            {
+            for (auto &&word : list) {
               m_highlights.append(QRegularExpression(
                   hlRegExp.arg(QRegularExpression::escape(word.toLower()))));
             }
@@ -847,8 +847,7 @@ void HWChatWidget::saveStyleSheet()
         while (lines.last().isEmpty())
             lines.takeLast();
 
-        Q_FOREACH (const QString & line, lines)
-        {
+        for (auto &&line : lines) {
           out << line << "\n";
         }
         out << "\n";
@@ -978,8 +977,9 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
 
     m_nicksMenu->clear();
 
-    Q_FOREACH(QAction * action, chatNicks->actions())
-        m_nicksMenu->addAction(action);
+    for (auto action : chatNicks->actions()) {
+      m_nicksMenu->addAction(action);
+    }
 
     m_nicksMenu->popup(chatNicks->mapToGlobal(pos));
 }

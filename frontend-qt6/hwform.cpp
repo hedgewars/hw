@@ -1071,10 +1071,11 @@ void HWForm::IntermediateSetup()
         curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
     }
 
+    const auto chillingTeams = curTeamSelWidget->getNotPlayingTeams();
     QStringList tmnames;
-
-    Q_FOREACH(HWTeam team, curTeamSelWidget->getNotPlayingTeams())
-    tmnames += team.name();
+    std::transform(std::begin(chillingTeams), std::end(chillingTeams),
+                   std::back_inserter(tmnames),
+                   [](auto &&team) { return team.name(); });
 
     //UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
     UpdateTeamsLists();

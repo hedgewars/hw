@@ -283,23 +283,21 @@ void PageVideos::updateFileList(const QString & path)
         nameItem(i)->seen = false;
 
     QStringList files = QDir(path).entryList(QDir::Files);
-    Q_FOREACH (const QString & name, files)
-    {
-        int row = -1;
-        Q_FOREACH (QTableWidgetItem * item, filesTable->findItems(name, Qt::MatchExactly))
-        {
-            if (item->type() != QTableWidgetItem::UserType || !((VideoItem*)item)->ready())
-                continue;
-            row = item->row();
-            break;
-        }
-        if (row == -1)
-            row = appendRow(name);
-        VideoItem * item = nameItem(row);
-        item->seen = true;
-        item->desc = QLatin1String("");
-        setName(item, item->name);
-        updateSize(row);
+    for (auto&& name : files) {
+      int row = -1;
+      for (auto item : filesTable->findItems(name, Qt::MatchExactly)) {
+        if (item->type() != QTableWidgetItem::UserType ||
+            !(dynamic_cast<VideoItem*>(item)->ready()))
+          continue;
+        row = item->row();
+        break;
+      }
+      if (row == -1) row = appendRow(name);
+      VideoItem* item = nameItem(row);
+      item->seen = true;
+      item->desc = QLatin1String("");
+      setName(item, item->name);
+      updateSize(row);
     }
 
     // remove all non seen files
@@ -725,16 +723,16 @@ void PageVideos::clearTemp()
     qDebug("Clearing VideoTemp directory ...");
     QDir temp(cfgdir.absolutePath() + QStringLiteral("/VideoTemp"));
     QStringList files = temp.entryList(QDir::Files);
-    Q_FOREACH (const QString& file, files)
-    {
-        // Legacy support: Move thumbnails to correct dir
-        if (file.endsWith(QLatin1String(".bmp")) || file.endsWith(QLatin1String(".png")))
-        {
-            qDebug("Moving video thumbnail '%s' to VideoThumbnails directory", qPrintable(file));
-            cfgdir.rename(QStringLiteral("VideoTemp/") + file, QStringLiteral("VideoThumbnails/") + file);
-        }
-        else
-            temp.remove(file);
+    for (auto&& file : files) {
+      // Legacy support: Move thumbnails to correct dir
+      if (file.endsWith(QLatin1String(".bmp")) ||
+          file.endsWith(QLatin1String(".png"))) {
+        qDebug("Moving video thumbnail '%s' to VideoThumbnails directory",
+               qPrintable(file));
+        cfgdir.rename(QStringLiteral("VideoTemp/") + file,
+                      QStringLiteral("VideoThumbnails/") + file);
+      } else
+        temp.remove(file);
     }
 }
 
@@ -764,7 +762,6 @@ QString PageVideos::getVideosInProgress()
     for (int i = 0; i < count; i++)
     {
         VideoItem * item = nameItem(i);
-        QString process;
         if (item->ready())
             continue;
         float progress = 100*item->progress;
@@ -772,10 +769,9 @@ QString PageVideos::getVideosInProgress()
             progress = 99.99; // displaying 100% may be confusing
         //: Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)
         list += QString(tr("%1 (%2%) - %3"))
-            .arg(item->name)
-            .arg(QLocale().toString(progress, 'f', 2))
-            .arg(tr("encoding"))
-            + QStringLiteral("\n");
+                    .arg(item->name, QLocale().toString(progress, 'f', 2),
+                         tr("encoding")) +
+                QStringLiteral("\n");
     }
     return list;
 }
@@ -785,7 +781,7 @@ void PageVideos::startEncoding(const QByteArray & record)
   QDir videoTempDir(cfgdir.absolutePath() + QStringLiteral("/VideoTemp/"));
   QStringList files =
       videoTempDir.entryList(QStringList("*.txtout"), QDir::Files);
-  Q_FOREACH (const QString& str, files) {
+  for (auto&& str : files) {
     QString prefix = str;
     prefix.chop(7);  // remove ".txtout"
     videoTempDir.rename(

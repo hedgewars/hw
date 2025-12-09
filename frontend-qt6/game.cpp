@@ -124,7 +124,7 @@ void HWGame::commonConfig()
 
     if (m_pTeamSelWidget)
     {
-      Q_FOREACH (HWTeam team, m_pTeamSelWidget->getPlayingTeams()) {
+      for (auto&& team : m_pTeamSelWidget->getPlayingTeams()) {
         HWProto::addStringToBuffer(
             buf,
             QStringLiteral("eammloadt %1").arg(ammostr.mid(0, cAmmoNumber)));

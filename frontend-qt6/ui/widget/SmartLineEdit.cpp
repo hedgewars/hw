@@ -59,10 +59,9 @@ void SmartLineEdit::addCommands(const QStringList & commands)
 
 void SmartLineEdit::removeCommands(const QStringList & commands)
 {
-    Q_FOREACH (const QString & cmd, commands)
-    {
-        m_cmds->removeAll(cmd);
-    }
+  for (auto&& cmd : commands) {
+    m_cmds->removeAll(cmd);
+  }
 }
 
 
@@ -159,16 +158,16 @@ void SmartLineEdit::autoComplete()
         int cp = cursorPosition();
 
         // cursor is not in or at end/beginning of word
-        if ((cp = matchMe.length()) || (QString(matchMe.at(cp)).contains(m_whitespace)))
-            if ((cp < 1) || (QString(matchMe.at(cp-1)).contains(m_whitespace)))
-                return;
+        if ((cp == matchMe.length()) ||
+            (QString(matchMe.at(cp)).contains(m_whitespace)))
+          if ((cp < 1) || (QString(matchMe.at(cp - 1)).contains(m_whitespace)))
+            return;
 
         // crop matchMe at cursor position
         prefix  = matchMe.left (cp);
         postfix = matchMe.right(matchMe.length()-cp);
 
-        matchMe = QLatin1String("");
-
+        matchMe.clear();
 
         // use the whole word the curser is on for matching
         int prefixLen = prefix.lastIndexOf(m_whitespace) + 1;
@@ -191,39 +190,37 @@ void SmartLineEdit::autoComplete()
 
     if (isFirstWord)
     {
-        // find matching commands
-        Q_FOREACH (const QString & cmd, *m_cmds)
-        {
-            if (cmd.startsWith(matchMe, Qt::CaseInsensitive))
-            {
-                match = cmd;
+      // FIXME: UB alarm: modifying container that we iterate on
+      // find matching commands
+      for (auto&& cmd : *m_cmds) {
+        if (cmd.startsWith(matchMe, Qt::CaseInsensitive)) {
+          match = cmd;
 
-                // move match to end so next time new matches will be preferred
-                m_cmds->removeAll(cmd);
-                m_cmds->append(cmd);
+          // move match to end so next time new matches will be preferred
+          m_cmds->removeAll(cmd);
+          m_cmds->append(cmd);
 
-                break;
-            }
+          break;
         }
+      }
     }
 
     if (match.isEmpty())
     {
-        // find matching nicks
-        Q_FOREACH (const QString & nick, *m_nicks)
-        {
-            if (nick.startsWith(matchMe, Qt::CaseInsensitive))
-            {
-                match = nick;
-                isNick = true;
+      // FIXME: UB alarm: modifying container that we iterate on
+      // find matching nicks
+      for (auto&& nick : *m_nicks) {
+        if (nick.startsWith(matchMe, Qt::CaseInsensitive)) {
+          match = nick;
+          isNick = true;
 
-                // move match to end so next time new matches will be prefered
-                m_nicks->removeAll(nick);
-                m_nicks->append(nick);
+          // move match to end so next time new matches will be prefered
+          m_nicks->removeAll(nick);
+          m_nicks->append(nick);
 
-                break;
-            }
+          break;
         }
+      }
     }
 
     // we found a single match?

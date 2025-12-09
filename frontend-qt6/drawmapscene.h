@@ -91,7 +91,7 @@ class DrawMapScene : public QGraphicsScene
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
         virtual void wheelEvent(QGraphicsSceneWheelEvent *);
 
-        QPainterPath pointsToPath(const QList<QPoint> points);
+        QPainterPath pointsToPath(const QList<QPoint> &points);
 
         quint8 serializePenWidth(int width);
         int deserializePenWidth(quint8 width);

@@ -75,12 +75,14 @@ QStringList DataManager::entryList(
     // sort case-insensitive
     QMap<QString, QString> sortedFileNames;
     QString absolutePath = datadir.absolutePath().toLocal8Bit().data();
-    Q_FOREACH ( QString fn, result)
-    {
-        // Filter out DLC entries if desired
-        QString realDir = PHYSFS_getRealDir(QString(subDirectory + QStringLiteral("/") + fn).toLocal8Bit().data());
-        if(withDLC || realDir == absolutePath)
-            sortedFileNames.insert(fn.toLower(), fn);
+    for (auto &&fn : result) {
+      // Filter out DLC entries if desired
+      QString realDir =
+          PHYSFS_getRealDir(QString(subDirectory + QStringLiteral("/") + fn)
+                                .toLocal8Bit()
+                                .data());
+      if (withDLC || realDir == absolutePath)
+        sortedFileNames.insert(fn.toLower(), fn);
     }
     result = sortedFileNames.values();
 
@@ -215,7 +217,7 @@ QString DataManager::settingsFileName()
           QSettings sOld(oldSettingsFile.fileName(), QSettings::IniFormat);
           QSettings sNew(settingsFile.fileName(), QSettings::IniFormat);
 
-          Q_FOREACH (const QString &key, sOld.allKeys()) {
+          for (auto &&key : sOld.allKeys()) {
             if (key.startsWith(QLatin1String("colors/color")))
               sNew.setValue(key, sOld.value(key).value<QColor>().name());
             else

@@ -246,28 +246,27 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
                                 QStringList("*.lua"))
                      .replaceInStrings(QRegularExpression(QStringLiteral("\\.lua$")), QLatin1String(""));
 
-        Q_FOREACH (const QString & m_id, m_list)
-        {
-            // Disallow duplicates from order.cfg
-            if (orderedMissions.contains(m_id))
-            {
-                continue;
-            }
+        for (auto&& m_id : m_list) {
+          // Disallow duplicates from order.cfg
+          if (orderedMissions.contains(m_id)) {
+            continue;
+          }
 
-            QListWidgetItem * item = new QListWidgetItem(m_id);
+          QListWidgetItem* item = new QListWidgetItem(m_id);
 
-            // fallback name: replace underscores in mission name with spaces
-            QString name = item->text().replace(QLatin1String("_"), QLatin1String(" "));
+          // fallback name: replace underscores in mission name with spaces
+          QString name =
+              item->text().replace(QLatin1String("_"), QLatin1String(" "));
 
-            // see if we can get a prettier/translated name
-            name = m_info->value(m_id + QStringLiteral(".name"), name).toString();
+          // see if we can get a prettier/translated name
+          name = m_info->value(m_id + QStringLiteral(".name"), name).toString();
 
-            item->setText(name);
+          item->setText(name);
 
-            // store original name in data
-            item->setData(Qt::UserRole, m_id);
+          // store original name in data
+          item->setData(Qt::UserRole, m_id);
 
-            m_widget->addItem(item);
+          m_widget->addItem(item);
         }
     }
 

@@ -1293,8 +1293,9 @@ void HWMapContainer::setMaster(bool master)
     if (master == m_master) return;
     m_master = master;
 
-    Q_FOREACH (QWidget *widget, m_childWidgets)
-        widget->setEnabled(master);
+    for (auto widget : m_childWidgets) {
+      widget->setEnabled(master);
+    }
 
     if(m_mapInfo.type == MapModel::StaticMap)
     {

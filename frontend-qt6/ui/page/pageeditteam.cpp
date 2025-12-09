@@ -329,39 +329,33 @@ void PageEditTeam::lazyLoad()
 
     // forts
     list = dataMgr.entryList(QStringLiteral("Forts"), QDir::Files, QStringList("*L.png"));
-    Q_FOREACH (QString file, list)
-    {
-        QString fortPath = PHYSFS_getRealDir(QStringLiteral("Forts/%1").arg(file).toLocal8Bit().data());
+    for (auto&& file : list) {
+      QString fortPath = PHYSFS_getRealDir(
+          QStringLiteral("Forts/%1").arg(file).toLocal8Bit().data());
 
-        QString fort = file.replace(QRegularExpression(QStringLiteral("L\\.png$")), QLatin1String(""));
+      QString fort = file.replace(
+          QRegularExpression(QStringLiteral("L\\.png$")), QLatin1String(""));
 
-        bool isDLC = !fortPath.startsWith(datadir.absolutePath());
-        if (isDLC)
-        {
-            CBFort->addItem(dlcIcon, fort, fort);
-        }
-        else
-        {
-            CBFort->addItem(notDlcIcon, fort, fort);
-        }
-
+      bool isDLC = !fortPath.startsWith(datadir.absolutePath());
+      if (isDLC) {
+        CBFort->addItem(dlcIcon, fort, fort);
+      } else {
+        CBFort->addItem(notDlcIcon, fort, fort);
+      }
     }
-
 
     // graves
     list =
         dataMgr.entryList(QStringLiteral("Graphics/Graves"), QDir::Files, QStringList("*.png"));
 
-    Q_FOREACH (QString file, list)
-    {
-        QPixmap pix(QStringLiteral("physfs://Graphics/Graves/") + file);
-        if ((pix.height() > 32) || pix.width() > 32)
-            pix = pix.copy(0, 0, 32, 32);
-        QIcon icon(pix);
+    for (auto&& file : list) {
+      QPixmap pix(QStringLiteral("physfs://Graphics/Graves/") + file);
+      if ((pix.height() > 32) || pix.width() > 32) pix = pix.copy(0, 0, 32, 32);
+      QIcon icon(pix);
 
-        QString grave = file.remove(pngSuffix);
+      QString grave = file.remove(pngSuffix);
 
-        CBGrave->addItem(icon, grave);
+      CBGrave->addItem(icon, grave);
     }
 
     // flags
@@ -390,21 +384,24 @@ void PageEditTeam::lazyLoad()
     int insertAt = 2; // insert country flags after Hedgewars flag and seperator
 
     // add all country flags
-    Q_FOREACH (const QString & file, list)
-    {
-        QIcon icon(QPixmap(QLatin1String("physfs://Graphics/Flags/") + file));
+    for (auto&& file : list) {
+      QIcon icon(QPixmap(QLatin1String("physfs://Graphics/Flags/") + file));
 
-        QString flag = QString(file).remove(pngSuffix);
+      QString flag = QString(file).remove(pngSuffix);
 
-        bool isCountryFlag = !file.startsWith(QLatin1String("cm_"));
+      bool isCountryFlag = !file.startsWith(QLatin1String("cm_"));
 
-        if (isCountryFlag)
-        {
-            CBFlag->insertItem(insertAt, icon, flag.replace(QLatin1String("_"), QLatin1String(" ")), flag);
-            insertAt++;
-        }
-        else // append community flags at end
-            CBFlag->addItem(icon, flag.replace(QLatin1String("cm_"), QComboBox::tr("Community") + QStringLiteral(": ")), flag);
+      if (isCountryFlag) {
+        CBFlag->insertItem(insertAt, icon,
+                           flag.replace(QLatin1String("_"), QLatin1String(" ")),
+                           flag);
+        insertAt++;
+      } else  // append community flags at end
+        CBFlag->addItem(
+            icon,
+            flag.replace(QLatin1String("cm_"),
+                         QComboBox::tr("Community") + QStringLiteral(": ")),
+            flag);
     }
 
     // add separator between country flags and community flags

@@ -410,8 +410,9 @@ QByteArray GameCFGWidget::getFullConfig() const
 
     QByteArray result;
 
-    Q_FOREACH(QByteArray ba, bcfg)
-    HWProto::addByteArrayToBuffer(result, ba);
+    for (auto &&ba : bcfg) {
+      HWProto::addByteArrayToBuffer(result, ba);
+    }
 
     return result;
 }
@@ -819,6 +820,7 @@ void GameCFGWidget::setMaster(bool master)
     WeaponsNameLabel->setHidden(master);
     ScriptsLabel->setHidden(master);
 
-    Q_FOREACH (QWidget *widget, m_childWidgets)
-        widget->setEnabled(master);
+    for (auto widget : m_childWidgets) {
+      widget->setEnabled(master);
+    }
 }

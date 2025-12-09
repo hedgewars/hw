@@ -165,21 +165,22 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             break;
         }
         case Rectangle: {
-            QPoint p1 = paths.first().initialPoint;
-            QPoint p2 = currentPos.toPoint();
-            QList<QPoint> rpoints;
-            rpoints << p1 << QPoint(p1.x(), p2.y()) << p2 << QPoint(p2.x(), p1.y()) << p1;
-            paths.first().points = rpoints;
-            break;
+          QPoint p1 = paths.constFirst().initialPoint;
+          QPoint p2 = currentPos.toPoint();
+          QList<QPoint> rpoints;
+          rpoints << p1 << QPoint(p1.x(), p2.y()) << p2
+                  << QPoint(p2.x(), p1.y()) << p1;
+          paths.first().points = rpoints;
+          break;
         }
         case Ellipse:
-            QPoint p1 = paths.first().initialPoint;
-            QPoint p2 = currentPos.toPoint();
-            QList<QPointF> points = makeEllipse(p1, p2);
-            QList<QPoint> epoints;
-            Q_FOREACH (const QPointF &p, points) epoints.append(p.toPoint());
-            paths.first().points = epoints;
-            break;
+          QPoint p1 = paths.constFirst().initialPoint;
+          QPoint p2 = currentPos.toPoint();
+          QList<QPointF> points = makeEllipse(p1, p2);
+          QList<QPoint> epoints;
+          for (auto p : points) epoints.append(p.toPoint());
+          paths.first().points = epoints;
+          break;
         }
 
         m_currPath = 0;
@@ -244,32 +245,32 @@ void DrawMapScene::undo()
     if(m_isCursorShown)
         return;
 
-    if(paths.size())
-    {
-        removeItem(items().first());
-        paths.removeFirst();
+    if (!paths.isEmpty()) {
+      removeItem(items().constFirst());
+      paths.removeFirst();
 
-        Q_EMIT pathChanged();
-    }
-    else if(oldItems.size())
-    {
-        while(oldItems.size())
-            addItem(oldItems.takeFirst());
-        paths = oldPaths;
+      Q_EMIT pathChanged();
+    } else if (!oldItems.isEmpty()) {
+      while (!oldItems.isEmpty()) {
+        addItem(oldItems.takeFirst());
+      }
+      paths = oldPaths;
 
-        Q_EMIT pathChanged();
+      Q_EMIT pathChanged();
     }
 }
 
 void DrawMapScene::clearMap()
 {
     // cursor is a part of items()
-    if(m_isCursorShown)
-        return;
+    if (m_isCursorShown) {
+      return;
+    }
 
     // don't clear if already cleared
-    if(!items().size())
-        return;
+    if (items().isEmpty()) {
+      return;
+    }
 
     m_specialPoints.clear();
     oldItems.clear();
@@ -277,8 +278,8 @@ void DrawMapScene::clearMap()
     // do this since clear() would _destroy_ all items
     for(int i = paths.size() - 1; i >= 0; --i)
     {
-        oldItems.push_front(items().first());
-        removeItem(items().first());
+      oldItems.push_front(items().constFirst());
+      removeItem(items().constFirst());
     }
 
     items().clear();
@@ -313,7 +314,7 @@ QByteArray DrawMapScene::encode()
     {
         int cnt = 0;
         PathParams params = paths.at(i);
-        Q_FOREACH (QPoint point, params.points) {
+        for (auto point : params.points) {
           qint16 px = qToBigEndian((qint16)point.x());
           qint16 py = qToBigEndian((qint16)point.y());
           quint8 flags = 0;
@@ -447,24 +448,22 @@ void DrawMapScene::simplifyLast()
 int DrawMapScene::pointsCount()
 {
     int cnt = 0;
-    Q_FOREACH (PathParams p, paths) cnt += p.points.size();
+    for (auto p : paths) cnt += p.points.size();
 
     return cnt;
 }
 
-QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> points)
-{
-    QPainterPath path;
+QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> &points) {
+  QPainterPath path;
 
-    if(points.size())
-    {
-        QPointF p = points[0] + QPointF(0.01, 0.01);
-        path.moveTo(p);
+  if (!points.isEmpty()) {
+    QPointF p = points[0] + QPointF(0.01, 0.01);
+    path.moveTo(p);
 
-        Q_FOREACH (QPoint p, points) path.lineTo(p);
-    }
+    for (auto p : points) path.lineTo(p);
+  }
 
-    return path;
+  return path;
 }
 
 quint8 DrawMapScene::serializePenWidth(int width)
@@ -523,12 +522,14 @@ QPointF DrawMapScene::putSomeConstraints(const QPointF &initialPoint, const QPoi
 
 void DrawMapScene::optimize()
 {
-    if(!paths.size()) return;
+  if (paths.isEmpty()) {
+    return;
+  }
 
     // break paths into segments
     Paths pth;
 
-    Q_FOREACH (const PathParams &pp, paths) {
+    for (auto &&pp : paths) {
       int l = pp.points.size();
 
       if (l == 1) {
@@ -550,7 +551,7 @@ void DrawMapScene::optimize()
     m_specialPoints.clear();
 
     // render the result
-    Q_FOREACH (const PathParams &p, pth) {
+    for (auto &&p : pth) {
       if (p.erasing)
         m_pen.setBrush(m_eraser);
       else
