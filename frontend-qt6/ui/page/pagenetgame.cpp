@@ -247,7 +247,7 @@ void PageNetGame::onUpdateClick()
         m_gameSettings->setValue("frontend/lastroomname", leRoomName->text());
         leRoomName->rememberCurrentText();
         BtnUpdate->setEnabled(false);
-        emit askForUpdateRoomName(leRoomName->text());
+        Q_EMIT askForUpdateRoomName(leRoomName->text());
     }
     else
     {

@@ -91,7 +91,7 @@ class HWGame : public TCPBase
         virtual void onClientRead();
         virtual void onClientDisconnect();
 
-    signals:
+    Q_SIGNALS:
         void SendNet(const QByteArray & msg);
         void SendChat(const QString & msg);
         void SendTeamMessage(const QString & msg);
@@ -104,7 +104,7 @@ class HWGame : public TCPBase
         void TrainingStateChanged(int);
         void SendConsoleCommand(const QString & command);
 
-    public slots:
+    public Q_SLOTS:
         void FromNet(const QByteArray & msg);
         void FromNetChat(const QString & msg);
         void FromNetWarning(const QString & msg);

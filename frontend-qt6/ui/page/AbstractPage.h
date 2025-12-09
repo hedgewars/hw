@@ -77,7 +77,7 @@ class AbstractPage : public QWidget
         */
         QString * getDefaultDescription();
 
-    signals:
+    Q_SIGNALS:
 
         /**
          * @brief This signal is emitted when going back to the previous is
@@ -95,7 +95,7 @@ class AbstractPage : public QWidget
          */
         void pageLeave();
 
-    public slots:
+    public Q_SLOTS:
 
         /**
          * @brief This slot is called to trigger this page's pageEnter signal

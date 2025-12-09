@@ -276,7 +276,7 @@ void KeyBinder::bindChanged(const QString & text)
         {
             if (CBBind[i] == sender())
             {
-                emit bindUpdate(i);
+                Q_EMIT bindUpdate(i);
                 checkConflicts();
                 break;
             }

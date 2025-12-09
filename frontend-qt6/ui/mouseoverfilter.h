@@ -12,9 +12,9 @@ class MouseOverFilter : public QObject
         void setUi(Ui_HWForm *uiForm);
     protected:
         bool eventFilter( QObject *dist, QEvent *event );
-    signals:
+    Q_SIGNALS:
 
-    public slots:
+    public Q_SLOTS:
 
     private:
         Ui_HWForm *ui;

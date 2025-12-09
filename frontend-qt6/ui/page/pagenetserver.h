@@ -42,7 +42,7 @@ class PageNetServer : public AbstractPage
         QLayout * footerLayoutDefinition();
         void connectSignals();
 
-    private slots:
+    private Q_SLOTS:
         void setDefaultPort();
         void copyUrl();
 };

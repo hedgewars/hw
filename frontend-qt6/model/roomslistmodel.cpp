@@ -337,5 +337,5 @@ void RoomsListModel::updateRoom(const QString & name, const QStringList & info)
 
     m_data[i] = info;
 
-    emit dataChanged(index(i, 0), index(i, columnCount(QModelIndex()) - 1));
+    Q_EMIT dataChanged(index(i, 0), index(i, columnCount(QModelIndex()) - 1));
 }

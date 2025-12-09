@@ -40,7 +40,7 @@ class RoomNamePrompt : public QDialog
         QCheckBox * cbSetPassword;
         QLineEdit * lePassword;
 
-    private slots:
+    private Q_SLOTS:
         void checkBoxToggled();
 };
 

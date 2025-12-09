@@ -142,7 +142,7 @@ class PageOptions : public AbstractPage
 
         void setTeamOptionsEnabled(bool enabled);
 
-    signals:
+    Q_SIGNALS:
         void newTeamRequested();
         void editTeamRequested(const QString & teamName);
         void deleteTeamRequested(const QString & teamName);
@@ -180,7 +180,7 @@ class PageOptions : public AbstractPage
         QWidget * winResContainer;
         QWidget * tagsContainer;
 
-    private slots:
+    private Q_SLOTS:
         void forceFullscreen(int index);
         void setFullscreen(int state);
         void setResolution(int state);
@@ -201,7 +201,7 @@ class PageOptions : public AbstractPage
         void resetAllBinds();
         void setVolume(int);
 
-    public slots:
+    public Q_SLOTS:
         void setDefaultOptions();
 };
 

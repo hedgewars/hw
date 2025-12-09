@@ -53,14 +53,14 @@ class PageGameStats : public AbstractPage
         QString kindOfPoints;
         FitGraphicsView * graphic;
 
-    public slots:
+    public Q_SLOTS:
         void GameStats(char type, const QString & info);
         void clear();
         void renderStats();
         void restartBtnVisible(bool visible);
         void saveDemoBtnEnabled(bool enabled);
 
-    signals:
+    Q_SIGNALS:
         void saveDemoRequested();
         void restartGameRequested();
 

@@ -30,10 +30,10 @@ class SeedPrompt : public QDialog
     public:
         SeedPrompt(QWidget* parent, const QString & seed, bool editable);
 
-    signals:
+    Q_SIGNALS:
         void seedSelected(const QString & seed);
 
-    private slots:
+    private Q_SLOTS:
         void setSeed();
 
     private:

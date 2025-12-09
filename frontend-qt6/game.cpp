@@ -82,23 +82,23 @@ void HWGame::onClientDisconnect()
         {
             case gtDemo:
                 // for video recording we need demo anyway
-                emit HaveRecord(rtNeither, demo);
+                Q_EMIT HaveRecord(rtNeither, demo);
                 break;
             case gtNet:
-                emit HaveRecord(rtDemo, demo);
-                break;
+              Q_EMIT HaveRecord(rtDemo, demo);
+              break;
             default:
                 if (gameState == gsInterrupted || gameState == gsHalted)
-                    emit HaveRecord(rtSave, demo);
+                  Q_EMIT HaveRecord(rtSave, demo);
                 else if (gameState == gsFinished)
-                    emit HaveRecord(rtDemo, demo);
+                  Q_EMIT HaveRecord(rtDemo, demo);
                 else
-                    emit HaveRecord(rtNeither, demo);
+                  Q_EMIT HaveRecord(rtNeither, demo);
         }
     }
     else
     {
-        emit HaveRecord(rtNeither, demo);
+      Q_EMIT HaveRecord(rtNeither, demo);
     }
     SetGameState(gsStopped);
 }
@@ -124,17 +124,26 @@ void HWGame::commonConfig()
 
     if (m_pTeamSelWidget)
     {
-        foreach(HWTeam team, m_pTeamSelWidget->getPlayingTeams())
-        {
-            HWProto::addStringToBuffer(buf, QStringLiteral("eammloadt %1").arg(ammostr.mid(0, cAmmoNumber)));
-            HWProto::addStringToBuffer(buf, QStringLiteral("eammprob %1").arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
-            HWProto::addStringToBuffer(buf, QStringLiteral("eammdelay %1").arg(ammostr.mid(2 * cAmmoNumber, cAmmoNumber)));
-            HWProto::addStringToBuffer(buf, QStringLiteral("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
-            if(gamecfg->schemeData(15).toBool() || !gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QStringLiteral("eammstore"));
-            HWProto::addStringListToBuffer(buf,
-                                           team.teamGameConfig(gamecfg->getInitHealth()));
-            ;
-        }
+      Q_FOREACH (HWTeam team, m_pTeamSelWidget->getPlayingTeams()) {
+        HWProto::addStringToBuffer(
+            buf,
+            QStringLiteral("eammloadt %1").arg(ammostr.mid(0, cAmmoNumber)));
+        HWProto::addStringToBuffer(
+            buf, QStringLiteral("eammprob %1")
+                     .arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
+        HWProto::addStringToBuffer(
+            buf, QStringLiteral("eammdelay %1")
+                     .arg(ammostr.mid(2 * cAmmoNumber, cAmmoNumber)));
+        HWProto::addStringToBuffer(
+            buf, QStringLiteral("eammreinf %1")
+                     .arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
+        if (gamecfg->schemeData(15).toBool() ||
+            !gamecfg->schemeData(21).toBool())
+          HWProto::addStringToBuffer(buf, QStringLiteral("eammstore"));
+        HWProto::addStringListToBuffer(
+            buf, team.teamGameConfig(gamecfg->getInitHealth()));
+        ;
+      }
     }
 
     RawSendIPC(buf);
@@ -466,18 +475,19 @@ void HWGame::ParseMessage(const QByteArray & msg)
         case 'E':
         {
             int size = msg.size();
-            emit ErrorMessage(
+            Q_EMIT ErrorMessage(
                 tr("A fatal ERROR occured! The game engine had to stop.\n\n"
-                "We are very sorry for the inconvenience. :-(\n\n"
-                "If this keeps happening, please click the 'Feedback' button in the main menu!\n\n"
-                "Last engine message:\n%1")
-                .arg(QString::fromUtf8(msg.mid(2).left(size - 4))));
+                   "We are very sorry for the inconvenience. :-(\n\n"
+                   "If this keeps happening, please click the 'Feedback' "
+                   "button in the main menu!\n\n"
+                   "Last engine message:\n%1")
+                    .arg(QString::fromUtf8(msg.mid(2).left(size - 4))));
             return;
         }
         case 'i':
         {
-            emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));
-            break;
+          Q_EMIT GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));
+          break;
         }
         case 'Q':
         {
@@ -503,7 +513,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
         {
             int size = msg.size();
             QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
-            emit SendChat(msgbody);
+            Q_EMIT SendChat(msgbody);
             QByteArray buf;
             HWProto::addStringToBuffer(
                 buf, QStringLiteral("s") +
@@ -516,7 +526,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
         {
             int size = msg.size();
             QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
-            emit SendTeamMessage(msgbody);
+            Q_EMIT SendTeamMessage(msgbody);
             break;
         }
         case 'V':
@@ -560,7 +570,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
         {
             int size = msg.size();
             QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
-            emit SendConsoleCommand(msgbody);
+            Q_EMIT SendConsoleCommand(msgbody);
             break;
         }
         default:
@@ -604,11 +614,10 @@ void HWGame::onClientRead()
     quint8 msglen;
     quint32 bufsize;
     while (!readbuffer.isEmpty() && ((bufsize = readbuffer.size()) > 0) &&
-            ((msglen = readbuffer.data()[0]) < bufsize))
-    {
-        QByteArray msg = readbuffer.left(msglen + 1);
-        readbuffer.remove(0, msglen + 1);
-        ParseMessage(msg);
+           ((msglen = readbuffer.constData()[0]) < bufsize)) {
+      QByteArray msg = readbuffer.left(msglen + 1);
+      readbuffer.remove(0, msglen + 1);
+      ParseMessage(msg);
     }
 
     flushNetBuffer();
@@ -616,12 +625,11 @@ void HWGame::onClientRead()
 
 void HWGame::flushNetBuffer()
 {
-    if(m_netSendBuffer.size())
-    {
-        emit SendNet(m_netSendBuffer);
+  if (!m_netSendBuffer.isEmpty()) {
+    Q_EMIT SendNet(m_netSendBuffer);
 
-        m_netSendBuffer.clear();
-    }
+    m_netSendBuffer.clear();
+  }
 }
 
 QStringList HWGame::getArguments()
@@ -724,8 +732,8 @@ void HWGame::PlayDemo(const QString & demofilename, bool isSave)
     QFile demofile(demofilename);
     if (!demofile.open(QIODevice::ReadOnly))
     {
-        emit ErrorMessage(tr("Cannot open demofile %1").arg(demofilename));
-        return ;
+      Q_EMIT ErrorMessage(tr("Cannot open demofile %1").arg(demofilename));
+      return;
     }
 
     // read demo
@@ -823,20 +831,20 @@ void HWGame::StartCampaign(const QString & camp, const QString & campScript, con
 void HWGame::SetGameState(GameState state)
 {
     gameState = state;
-    emit GameStateChanged(state);
+    Q_EMIT GameStateChanged(state);
     if (gameType == gtCampaign)
     {
-        emit CampStateChanged(state);
+      Q_EMIT CampStateChanged(state);
     }
     else if (gameType == gtTraining)
     {
-        emit TrainingStateChanged(1);
+      Q_EMIT TrainingStateChanged(1);
     }
 }
 
 void HWGame::SetDemoPresence(bool hasDemo)
 {
-    emit DemoPresenceChanged(hasDemo);
+  Q_EMIT DemoPresenceChanged(hasDemo);
 }
 
 void HWGame::abort()

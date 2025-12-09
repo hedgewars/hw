@@ -55,7 +55,7 @@ class SelWeaponWidget : public QFrame
         void deletionDone();
         void init();
 
-    public slots:
+    public Q_SLOTS:
         void setDefault();
         void setWeapons(const QString& ammo);
         //sets the name of the current set
@@ -66,7 +66,7 @@ class SelWeaponWidget : public QFrame
         void save();
         void copy();
 
-    signals:
+    Q_SIGNALS:
         void weaponsDeleted(QString weaponsName);
         void weaponsAdded(QString weaponsName, QString ammo);
         void weaponsEdited(QString oldWeaponsName, QString newWeaponsName, QString ammo);

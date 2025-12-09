@@ -57,11 +57,11 @@ class DrawMapScene : public QGraphicsScene
         int pointsCount();
         int brushSize();
 
-    signals:
+    Q_SIGNALS:
         void pathChanged();
         void brushSizeChanged(int brushSize);
 
-    public slots:
+    public Q_SLOTS:
         void undo();
         void clearMap();
         void simplifyLast();

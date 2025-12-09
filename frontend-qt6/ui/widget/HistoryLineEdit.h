@@ -70,7 +70,7 @@ class HistoryLineEdit : public QLineEdit
         void reset();
 
 
-    public slots:
+    public Q_SLOTS:
         /**
          * @brief Clears the contents.
          */

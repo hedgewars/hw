@@ -50,10 +50,10 @@ class PageDrawMap : public AbstractPage
         QRadioButton * rbEllipse;
         QSpinBox * sbBrushSize;
 
-    public slots:
+    public Q_SLOTS:
         void brushSizeChanged(int brushSize);
 
-    private slots:
+    private Q_SLOTS:
         void load();
         void save();
         void pathTypeSwitched(bool b);

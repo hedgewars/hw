@@ -71,6 +71,6 @@ void HatButton::showPrompt()
     if (hatID < 0) return;
 
     setCurrentIndex(hatID);
-    emit currentIndexChanged(hatID);
-    emit currentHatChanged(currentHat());
+    Q_EMIT currentIndexChanged(hatID);
+    Q_EMIT currentHatChanged(currentHat());
 }

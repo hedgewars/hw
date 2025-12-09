@@ -28,7 +28,7 @@ class PageConnecting : public AbstractPage
     public:
         PageConnecting(QWidget* parent = 0);
 
-    signals:
+    Q_SIGNALS:
         void cancelConnection();
 
     protected:

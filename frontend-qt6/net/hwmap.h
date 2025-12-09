@@ -51,7 +51,7 @@ class HWMap : public TCPBase
         virtual void onClientDisconnect();
         virtual void SendToClientFirst();
 
-    signals:
+    Q_SIGNALS:
         void ImageReceived(const QPixmap & newImage);
         void HHLimitReceived(int hhLimit);
 
@@ -65,7 +65,7 @@ class HWMap : public TCPBase
         int m_feature_size;
         QByteArray m_drawMapData;
 
-    private slots:
+    private Q_SLOTS:
 };
 
 #endif // _HWMAP_INCLUDED

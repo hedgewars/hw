@@ -120,7 +120,7 @@ void ThemeModel::loadThemes() const
     m_data.reserve(themes.size());
 #endif
 
-    foreach (QString theme, themes)
+    Q_FOREACH (QString theme, themes)
     {
         QMap<int, QVariant> dataset;
 

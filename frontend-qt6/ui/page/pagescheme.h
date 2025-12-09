@@ -40,7 +40,7 @@ class PageScheme : public AbstractPage
 
         void setModel(QAbstractItemModel * model);
 
-    public slots:
+    public Q_SLOTS:
         void newRow();
         void copyRow();
         void deleteRow();
@@ -107,7 +107,7 @@ class PageScheme : public AbstractPage
 
         void checkDupe();
 
-    private slots:
+    private Q_SLOTS:
         void worldEdgeChanged(int);
         void schemeSelected(int);
         void dataChanged(QModelIndex topLeft, QModelIndex bottomRight);

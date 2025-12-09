@@ -41,7 +41,7 @@ class HWHostPortDialog : public QDialog
         QPushButton* pbCancel;
         QPushButton * pbDefault;
 
-    private slots:
+    private Q_SLOTS:
         void setDefaultPort();
 };
 

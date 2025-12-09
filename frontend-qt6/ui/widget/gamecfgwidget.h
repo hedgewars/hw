@@ -56,7 +56,7 @@ class GameCFGWidget : public QGroupBox
      QVariant schemeData(int column) const;
      bool isMaster();
 
-    public slots:
+    public Q_SLOTS:
         void setParam(const QString & param, const QStringList & value);
         void fullNetConfig();
         void resendSchemeData();
@@ -65,13 +65,13 @@ class GameCFGWidget : public QGroupBox
         void setMaster(bool master);
         void setTabbed(bool tabbed);
 
-    signals:
+    Q_SIGNALS:
         void paramChanged(const QString & param, const QStringList & value);
         void goToSchemes(int);
         void goToWeapons(int);
         void goToDrawMap();
 
-    private slots:
+    private Q_SLOTS:
         void ammoChanged(int index);
         void mapChanged(const QString &);
         void templateFilterChanged(int);

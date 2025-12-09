@@ -49,7 +49,7 @@ class TCPBase : public QObject
         bool isConnected();
         bool hasStarted();
 
-    signals:
+    Q_SIGNALS:
         void isReadyNow();
 
     protected:
@@ -84,7 +84,7 @@ class TCPBase : public QObject
         void RealStart();
         QPointer<QTcpSocket> IPCSocket;
 
-    private slots:
+    private Q_SLOTS:
         void NewConnection();
         void ClientDisconnect();
         void ClientRead();

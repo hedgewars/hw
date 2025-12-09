@@ -178,10 +178,10 @@ QString * AbstractPage::getDefaultDescription()
 
 void AbstractPage::triggerPageEnter()
 {
-    emit pageEnter();
+    Q_EMIT pageEnter();
 }
 
 void AbstractPage::triggerPageLeave()
 {
-    emit pageLeave();
+    Q_EMIT pageLeave();
 }

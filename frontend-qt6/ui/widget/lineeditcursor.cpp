@@ -23,13 +23,13 @@
 void LineEditCursor::keyPressEvent(QKeyEvent * event)
 {
     if (event->key() == Qt::Key_Up)
-        emit moveUp();
+        Q_EMIT moveUp();
     else if (event->key() == Qt::Key_Down)
-        emit moveDown();
+        Q_EMIT moveDown();
     else if (event->key() == Qt::Key_Left)
-        emit moveLeft();
+        Q_EMIT moveLeft();
     else if (event->key() == Qt::Key_Right)
-        emit moveRight();
+        Q_EMIT moveRight();
     else
         QLineEdit::keyPressEvent(event);
 }

@@ -37,10 +37,10 @@ class TeamLabel : public QLabel
     public:
         TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
 
-    signals:
+    Q_SIGNALS:
         void teamActivated(QString team_name);
 
-    public slots:
+    public Q_SLOTS:
         void teamButtonClicked();
 
 };
@@ -49,11 +49,11 @@ class TeamShowWidget : public QWidget
 {
         Q_OBJECT
 
-    public slots:
+    public Q_SLOTS:
         void changeTeamColor(int color = 0);
         void hhNumChanged();
 
-    private slots:
+    private Q_SLOTS:
         void activateTeam();
         void onColorChanged(int color);
 
@@ -74,7 +74,7 @@ class TeamShowWidget : public QWidget
         QPushButton* butt;
         FrameTeams * m_parentFrameTeams;
 
-    signals:
+    Q_SIGNALS:
         void teamStatusChanged(const HWTeam &);
         void hhNmChanged(const HWTeam&);
         void teamColorChanged(const HWTeam&);

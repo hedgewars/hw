@@ -35,7 +35,7 @@ class PageDataDownload : public AbstractPage
     public:
         PageDataDownload(QWidget* parent = 0);
 
-    public slots:
+    public Q_SLOTS:
         void fetchList();
 
     protected:
@@ -52,7 +52,7 @@ class PageDataDownload : public AbstractPage
 
         bool m_contentDownloaded; ///< true if something was downloaded since last page leave
 
-    private slots:
+    private Q_SLOTS:
         void request(const QUrl &url);
 
         void pageDownloaded();

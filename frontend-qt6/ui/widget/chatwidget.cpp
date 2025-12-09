@@ -190,7 +190,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     QStringList vpList =
          QStringList() << QStringLiteral("Classic") << QStringLiteral("Default") << QStringLiteral("Mobster") << QStringLiteral("Russian");
 
-    foreach (const QString & vp, vpList)
+    Q_FOREACH (const QString & vp, vpList)
     {
         m_helloSounds.append(QStringLiteral("/Sounds/voices/%1/Hello.ogg").arg(vp));
     }
@@ -354,14 +354,14 @@ void HWChatWidget::returnPressed()
 {
     QStringList lines = chatEditLine->text().split('\n');
     chatEditLine->rememberCurrentText();
-    foreach (const QString &line, lines)
+    Q_FOREACH (const QString &line, lines)
     {
         // skip empty/whitespace lines
         if (line.trimmed().isEmpty())
             continue;
 
         if (!parseCommand(line))
-            emit chatLine(line);
+            Q_EMIT chatLine(line);
     }
     chatEditLine->clear();
 }
@@ -394,7 +394,7 @@ bool HWChatWidget::containsHighlight(const QString & sender, const QString & mes
     {
         QString lcStr = message.toLower();
 
-        foreach (const QRegularExpression &hl, m_highlights) {
+        Q_FOREACH (const QRegularExpression &hl, m_highlights) {
           if (lcStr.contains(hl)) return true;
         }
     }
@@ -507,14 +507,14 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
     if (isIgnored && m_isAdmin && m_autoKickEnabled)
     {
-        emit kick(nick);
+        Q_EMIT kick(nick);
         return;
     }
 
     if ((!isIgnored) && (nick != m_userNick)) // don't auto-complete own name
         chatEditLine->addNickname(nick);
 
-    emit nickCountUpdate(chatNicks->model()->rowCount());
+    Q_EMIT nickCountUpdate(chatNicks->model()->rowCount());
 
     if (!isIgnored)
         printChatString(nick, QStringLiteral("*** ") + tr("%1 has joined").arg(linkedNick(nick)), QStringLiteral("Join"), false);
@@ -543,7 +543,7 @@ void HWChatWidget::nickRemoved(const QString& nick, const QString & message)
 {
     chatEditLine->removeNickname(nick);
 
-    emit nickCountUpdate(chatNicks->model()->rowCount());
+    Q_EMIT nickCountUpdate(chatNicks->model()->rowCount());
 
     // Normal quit
     if (message.isEmpty() || message == QLatin1String("bye"))
@@ -591,7 +591,7 @@ void HWChatWidget::clear()
         {
             QString line = in.readLine();
             QStringList list = line.split(whitespace);
-            foreach (QString word, list)
+            Q_FOREACH (QString word, list)
             {
               m_highlights.append(QRegularExpression(
                   hlRegExp.arg(QRegularExpression::escape(word.toLower()))));
@@ -637,7 +637,7 @@ void HWChatWidget::onKick()
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
     if(mil.size())
-        emit kick(mil[0].data().toString());
+        Q_EMIT kick(mil[0].data().toString());
 }
 
 void HWChatWidget::onBan()
@@ -645,7 +645,7 @@ void HWChatWidget::onBan()
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
     if(mil.size())
-        emit ban(mil[0].data().toString());
+        Q_EMIT ban(mil[0].data().toString());
 }
 
 void HWChatWidget::onDelegate()
@@ -653,7 +653,7 @@ void HWChatWidget::onDelegate()
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
     if(mil.size())
-        emit delegate(mil[0].data().toString());
+        Q_EMIT delegate(mil[0].data().toString());
 }
 
 void HWChatWidget::onInfo()
@@ -661,7 +661,7 @@ void HWChatWidget::onInfo()
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
     if(mil.size())
-        emit info(mil[0].data().toString());
+        Q_EMIT info(mil[0].data().toString());
 }
 
 void HWChatWidget::onFollow()
@@ -669,7 +669,7 @@ void HWChatWidget::onFollow()
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
     if(mil.size())
-        emit follow(mil[0].data().toString());
+        Q_EMIT follow(mil[0].data().toString());
 }
 
 void HWChatWidget::onIgnore()
@@ -701,7 +701,7 @@ void HWChatWidget::onIgnore()
     {
         // don't consider ignored people friends
         if(players->isFlagSet(nick, PlayersListModel::Friend))
-            emit onFriend();
+            Q_EMIT onFriend();
 
         players->setFlag(nick, PlayersListModel::Ignore, true);
         chatEditLine->removeNickname(nick);
@@ -740,7 +740,7 @@ void HWChatWidget::onFriend()
     else // not on list - add
     {
         if(players->isFlagSet(nick, PlayersListModel::Ignore))
-            emit onIgnore();
+            Q_EMIT onIgnore();
 
         players->setFlag(nick, PlayersListModel::Friend, true);
         chatEditLine->addNickname(nick);
@@ -847,7 +847,7 @@ void HWChatWidget::saveStyleSheet()
         while (lines.last().isEmpty())
             lines.takeLast();
 
-        foreach (const QString & line, lines)
+        Q_FOREACH (const QString & line, lines)
         {
           out << line << "\n";
         }
@@ -882,7 +882,7 @@ bool HWChatWidget::parseCommand(const QString & line)
         else if (tline == QLatin1String("/saveStyleSheet"))
             saveStyleSheet();
         else
-            emit consoleCommand(tline.mid(1));
+            Q_EMIT consoleCommand(tline.mid(1));
 
         return true;
     }
@@ -978,7 +978,7 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
 
     m_nicksMenu->clear();
 
-    foreach(QAction * action, chatNicks->actions())
+    Q_FOREACH(QAction * action, chatNicks->actions())
         m_nicksMenu->addAction(action);
 
     m_nicksMenu->popup(chatNicks->mapToGlobal(pos));

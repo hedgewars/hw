@@ -1024,13 +1024,13 @@ void PageOptions::savePwdChanged(int state) {
 
 void PageOptions::requestEditSelectedTeam()
 {
-    emit editTeamRequested(CBTeamName->currentText());
+    Q_EMIT editTeamRequested(CBTeamName->currentText());
 }
 
 void PageOptions::requestDeleteSelectedTeam()
 {
     if(CBTeamName->count() > 1)
-        emit deleteTeamRequested(CBTeamName->currentText());
+        Q_EMIT deleteTeamRequested(CBTeamName->currentText());
     else
         QMessageBox::warning(this, tr("Can't delete last team"), tr("You can't delete the last team!"));
 }

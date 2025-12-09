@@ -37,7 +37,7 @@ void ColorWidget::setColor(int color)
     setPalette(p);
     */
 
-    emit colorChanged(m_color);
+    Q_EMIT colorChanged(m_color);
 }
 
 int ColorWidget::getColor()

@@ -246,7 +246,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
                                 QStringList("*.lua"))
                      .replaceInStrings(QRegularExpression(QStringLiteral("\\.lua$")), QLatin1String(""));
 
-        foreach (const QString & m_id, m_list)
+        Q_FOREACH (const QString & m_id, m_list)
         {
             // Disallow duplicates from order.cfg
             if (orderedMissions.contains(m_id))
@@ -306,7 +306,7 @@ void PageTraining::startSelected()
     QListWidgetItem * curItem = list->currentItem();
 
     if ((curItem != NULL) && (CBTeam->currentIndex() != -1))
-        emit startMission(curItem->data(Qt::UserRole).toString(), getSubFolderOfSelected());
+        Q_EMIT startMission(curItem->data(Qt::UserRole).toString(), getSubFolderOfSelected());
 }
 
 

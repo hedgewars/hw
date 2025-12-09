@@ -329,7 +329,7 @@ void PageEditTeam::lazyLoad()
 
     // forts
     list = dataMgr.entryList(QStringLiteral("Forts"), QDir::Files, QStringList("*L.png"));
-    foreach (QString file, list)
+    Q_FOREACH (QString file, list)
     {
         QString fortPath = PHYSFS_getRealDir(QStringLiteral("Forts/%1").arg(file).toLocal8Bit().data());
 
@@ -352,7 +352,7 @@ void PageEditTeam::lazyLoad()
     list =
         dataMgr.entryList(QStringLiteral("Graphics/Graves"), QDir::Files, QStringList("*.png"));
 
-    foreach (QString file, list)
+    Q_FOREACH (QString file, list)
     {
         QPixmap pix(QStringLiteral("physfs://Graphics/Graves/") + file);
         if ((pix.height() > 32) || pix.width() > 32)
@@ -390,7 +390,7 @@ void PageEditTeam::lazyLoad()
     int insertAt = 2; // insert country flags after Hedgewars flag and seperator
 
     // add all country flags
-    foreach (const QString & file, list)
+    Q_FOREACH (const QString & file, list)
     {
         QIcon icon(QPixmap(QLatin1String("physfs://Graphics/Flags/") + file));
 

@@ -260,7 +260,7 @@ void GameUIConfig::SaveOptions()
 
     bool ffscr = isFrontendFullscreen();
     setValue(QStringLiteral("frontend/fullscreen"), ffscr);
-    emit frontendFullscreen(ffscr);
+    Q_EMIT frontendFullscreen(ffscr);
     if (!ffscr)
     {
         setValue(QStringLiteral("frontend/width"), Form->width());

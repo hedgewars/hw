@@ -28,7 +28,7 @@ class LineEditCursor : public QLineEdit
     public:
         LineEditCursor(QWidget* parent = 0) : QLineEdit(parent) {}
 
-    signals:
+    Q_SIGNALS:
         void moveUp();
         void moveDown();
         void moveLeft();

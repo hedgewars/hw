@@ -88,5 +88,5 @@ SeedPrompt::SeedPrompt(QWidget* parent, const QString & seed, bool editable) : Q
 
 void SeedPrompt::setSeed()
 {
-    emit seedSelected(editBox->text());
+    Q_EMIT seedSelected(editBox->text());
 }

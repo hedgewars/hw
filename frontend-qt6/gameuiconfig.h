@@ -96,10 +96,10 @@ class GameUIConfig : public QSettings
         void reloadValues();
         void reloadVideosValues();
 
-    signals:
+    Q_SIGNALS:
         void frontendFullscreen(bool value);
 
-    public slots:
+    public Q_SLOTS:
         void SaveOptions();
         void SaveVideosOptions();
         void updNetNick();

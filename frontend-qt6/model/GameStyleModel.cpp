@@ -59,7 +59,7 @@ void GameStyleModel::loadGameStyles()
                              QStringList("*.lua")
                          );
 
-    foreach(QString script, scripts)
+    Q_FOREACH(QString script, scripts)
     {
         script = script.remove(QStringLiteral(".lua"), Qt::CaseInsensitive);
 

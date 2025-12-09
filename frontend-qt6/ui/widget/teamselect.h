@@ -52,13 +52,13 @@ class TeamSelWidget : public QGroupBox
         void setUser(const QString& nickname);
         void cleanupFakeNetTeams();
 
-    public slots:
+    public Q_SLOTS:
         void addTeam(HWTeam team);
         void changeHHNum(const HWTeam&);
         void changeTeamColor(const HWTeam&);
         void changeTeamStatus(HWTeam team);
 
-    signals:
+    Q_SIGNALS:
         void setEnabledGameStart(bool);
         void teamWillPlay(const HWTeam& team);
         void teamNotPlaying(const HWTeam& team);
@@ -66,7 +66,7 @@ class TeamSelWidget : public QGroupBox
         void teamColorChanged(const HWTeam&);
         void acceptRequested(const HWTeam& team);
 
-    private slots:
+    private Q_SLOTS:
         void pre_changeTeamStatus(const HWTeam&);
         void hhNumChanged(const HWTeam& team);
         void proxyTeamColorChanged(const HWTeam& team);

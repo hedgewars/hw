@@ -71,7 +71,7 @@ class HWMapContainer : public QWidget
         QLineEdit* seedEdit;
         bool isMaster();
 
-    public slots:
+    public Q_SLOTS:
         void askForGeneratedPreview();
         void setSeed(const QString & seed);
         void setScript(const QString & script, const QString & scriptparam);
@@ -88,7 +88,7 @@ class HWMapContainer : public QWidget
         void setMaster(bool master);
         void setRandomWithoutDLC(bool withoutDLC);
 
-    signals:
+    Q_SIGNALS:
         void seedChanged(const QString & seed);
         void mapChanged(const QString & map);
         void themeChanged(const QString & theme);
@@ -99,7 +99,7 @@ class HWMapContainer : public QWidget
         void drawMapRequested();
         void drawnMapChanged(const QByteArray & data);
 
-    private slots:
+    private Q_SLOTS:
         void onImageReceived(const QPixmap & newImage);
         void setHHLimit(int hhLimit);
         void setRandomSeed();

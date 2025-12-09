@@ -138,9 +138,9 @@ PageAdmin::PageAdmin(QWidget* parent) : AbstractPage(parent)
 
 void PageAdmin::smChanged()
 {
-    emit setServerMessageNew(leServerMessageNew->text());
-    emit setServerMessageOld(leServerMessageOld->text());
-    emit setProtocol(sbProtocol->value());
+    Q_EMIT setServerMessageNew(leServerMessageNew->text());
+    Q_EMIT setServerMessageOld(leServerMessageOld->text());
+    Q_EMIT setProtocol(sbProtocol->value());
 }
 
 void PageAdmin::serverMessageNew(const QString & str)
@@ -166,13 +166,13 @@ void PageAdmin::onAddClicked()
     {
         if(dialog.byIP())
         {
-            emit banIP(dialog.banId(), dialog.reason(), dialog.duration());
+            Q_EMIT banIP(dialog.banId(), dialog.reason(), dialog.duration());
         } else
         {
-            emit banNick(dialog.banId(), dialog.reason(), dialog.duration());
+            Q_EMIT banNick(dialog.banId(), dialog.reason(), dialog.duration());
         }
 
-        emit bansListRequest();
+        Q_EMIT bansListRequest();
     }
 }
 
@@ -182,8 +182,8 @@ void PageAdmin::onRemoveClicked()
 
     if(sel.size())
     {
-        emit removeBan(twBans->item(sel[0]->row(), 0)->data(Qt::DisplayRole).toString());
-        emit bansListRequest();
+        Q_EMIT removeBan(twBans->item(sel[0]->row(), 0)->data(Qt::DisplayRole).toString());
+        Q_EMIT bansListRequest();
     }
 }
 

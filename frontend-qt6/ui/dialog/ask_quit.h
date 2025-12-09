@@ -32,7 +32,7 @@ class HWAskQuitDialog : public QDialog
     public:
         HWAskQuitDialog(QWidget* parent, HWForm *form);
 
-    private slots:
+    private Q_SLOTS:
         void goToPageVideos();
         void updateList();
 

@@ -35,7 +35,7 @@ class PageMultiplayer : public AbstractPage
         TeamSelWidget *teamsSelect;
         QPushButton *BtnStartMPGame;
 
-    signals:
+    Q_SIGNALS:
         void SetupClicked();
 
     private:

@@ -46,10 +46,10 @@ class GameSchemeModel : public QAbstractTableModel
         QStringList predefSchemesNames;
         QStringList spNames;
 
-    public slots:
+    public Q_SLOTS:
         void Save();
 
-    signals:
+    Q_SIGNALS:
         void dataChanged(const QModelIndex &topLeft, const QModelIndex& bottomRight);
 
     protected:
@@ -68,7 +68,7 @@ class NetGameSchemeModel : public QAbstractTableModel
         int columnCount(const QModelIndex & parent) const;
         QVariant data(const QModelIndex &index, int role) const;
 
-    public slots:
+    public Q_SLOTS:
         void setNetSchemeConfig(QStringList cfg);
 
     private:

@@ -13,10 +13,10 @@ public:
     void optimizeMap(const Paths & paths);
     bool couldBeRemoved();
     
-signals:    
+Q_SIGNALS:    
     void optimizedMap(const Paths & paths);
     
-public slots:
+public Q_SLOTS:
 
 protected:
     QStringList getArguments();

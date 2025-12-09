@@ -124,13 +124,13 @@ class DataManager: public QObject
 
         static bool ensureFileExists(const QString & fileName);
 
-    public slots:
+    public Q_SLOTS:
         /// Reloads data from storage.
         void reload();
         void resetColors();
 
 
-    signals:
+    Q_SIGNALS:
         /// This signal is emitted after the data has been updated.
         void updated();
 

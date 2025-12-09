@@ -34,10 +34,10 @@ class PageTraining : public AbstractPage
         QPushButton * btnStart;
         QComboBox * CBTeam;
 
-    public slots:
+    public Q_SLOTS:
         void updateInfo();
 
-    signals:
+    Q_SIGNALS:
         void startMission(const QString & scriptName, const QString & subFolder);
 
 
@@ -56,7 +56,7 @@ class PageTraining : public AbstractPage
         QString getSubFolderOfSelected();
 
 
-    private slots:
+    private Q_SLOTS:
         void startSelected();
 
 };

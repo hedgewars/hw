@@ -33,10 +33,10 @@ class HWNetUdpModel : public HWNetServersModel
 
         QVariant data(const QModelIndex &index, int role) const;
 
-    public slots:
+    public Q_SLOTS:
         void updateList();
 
-    private slots:
+    private Q_SLOTS:
         void onClientRead();
 
     private:

@@ -30,13 +30,13 @@ class PageAdmin : public AbstractPage
     public:
         PageAdmin(QWidget* parent = 0);
 
-    public slots:
+    public Q_SLOTS:
         void serverMessageNew(const QString & str);
         void serverMessageOld(const QString & str);
         void protocol(int proto);
         void setBansList(const QStringList & bans);
 
-    signals:
+    Q_SIGNALS:
         void setServerMessageNew(const QString & str);
         void setServerMessageOld(const QString & str);
         void setProtocol(int proto);
@@ -61,7 +61,7 @@ class PageAdmin : public AbstractPage
         QPushButton * pbClearAccountsCache;
         QTableWidget * twBans;
 
-    private slots:
+    private Q_SLOTS:
         void smChanged();
         void onAddClicked();
         void onRemoveClicked();

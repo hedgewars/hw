@@ -25,7 +25,7 @@ private:
     QLineEdit * leReason;
     QComboBox * cbTime;
 
-private slots:
+private Q_SLOTS:
     void okClicked();
 };
 

@@ -53,7 +53,7 @@ class PageMain : public AbstractPage
         QString randomTip();
         QStringList Tips;
 
-    private slots:
+    private Q_SLOTS:
         void toggleNetworkChoice();
         void updateTip();
 };

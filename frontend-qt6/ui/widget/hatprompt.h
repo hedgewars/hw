@@ -52,7 +52,7 @@ class HatPrompt : public QDialog
         HatListView * list;
         QSortFilterProxyModel * filterModel;
 
-    private slots:
+    private Q_SLOTS:
         void onAccepted();
         void hatChosen(const QModelIndex & index);
         void filterChanged(const QString & text);

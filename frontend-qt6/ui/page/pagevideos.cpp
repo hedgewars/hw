@@ -283,10 +283,10 @@ void PageVideos::updateFileList(const QString & path)
         nameItem(i)->seen = false;
 
     QStringList files = QDir(path).entryList(QDir::Files);
-    foreach (const QString & name, files)
+    Q_FOREACH (const QString & name, files)
     {
         int row = -1;
-        foreach (QTableWidgetItem * item, filesTable->findItems(name, Qt::MatchExactly))
+        Q_FOREACH (QTableWidgetItem * item, filesTable->findItems(name, Qt::MatchExactly))
         {
             if (item->type() != QTableWidgetItem::UserType || !((VideoItem*)item)->ready())
                 continue;
@@ -725,7 +725,7 @@ void PageVideos::clearTemp()
     qDebug("Clearing VideoTemp directory ...");
     QDir temp(cfgdir.absolutePath() + QStringLiteral("/VideoTemp"));
     QStringList files = temp.entryList(QDir::Files);
-    foreach (const QString& file, files)
+    Q_FOREACH (const QString& file, files)
     {
         // Legacy support: Move thumbnails to correct dir
         if (file.endsWith(QLatin1String(".bmp")) || file.endsWith(QLatin1String(".png")))
@@ -785,7 +785,7 @@ void PageVideos::startEncoding(const QByteArray & record)
   QDir videoTempDir(cfgdir.absolutePath() + QStringLiteral("/VideoTemp/"));
   QStringList files =
       videoTempDir.entryList(QStringList("*.txtout"), QDir::Files);
-  foreach (const QString& str, files) {
+  Q_FOREACH (const QString& str, files) {
     QString prefix = str;
     prefix.chop(7);  // remove ".txtout"
     videoTempDir.rename(

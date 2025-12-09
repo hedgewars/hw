@@ -37,7 +37,7 @@ class HatModel : public QStandardItemModel
     public:
         HatModel(QObject *parent = 0);
 
-    public slots:
+    public Q_SLOTS:
         /// Reloads hats using the DataManager.
         void loadHats();
 };

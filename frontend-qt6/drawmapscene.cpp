@@ -116,7 +116,7 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
         m_currPath->setPath(path);
 
-        emit pathChanged();
+        Q_EMIT pathChanged();
     }
 
     if(!m_isCursorShown)
@@ -142,7 +142,7 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     paths.prepend(params);
     m_currPath->setPath(path);
 
-    emit pathChanged();
+    Q_EMIT pathChanged();
 }
 
 void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
@@ -177,15 +177,14 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             QPoint p2 = currentPos.toPoint();
             QList<QPointF> points = makeEllipse(p1, p2);
             QList<QPoint> epoints;
-            foreach(const QPointF & p, points)
-                epoints.append(p.toPoint());
+            Q_FOREACH (const QPointF &p, points) epoints.append(p.toPoint());
             paths.first().points = epoints;
             break;
         }
 
         m_currPath = 0;
 
-        emit pathChanged();
+        Q_EMIT pathChanged();
     }
 }
 
@@ -206,7 +205,7 @@ void DrawMapScene::setBrushSize(int newBrushSize)
         paths.first().width = serializePenWidth(m_pen.width());
     }
 
-    emit brushSizeChanged(newBrushSize);
+    Q_EMIT brushSizeChanged(newBrushSize);
 }
 
 int DrawMapScene::brushSize()
@@ -250,7 +249,7 @@ void DrawMapScene::undo()
         removeItem(items().first());
         paths.removeFirst();
 
-        emit pathChanged();
+        Q_EMIT pathChanged();
     }
     else if(oldItems.size())
     {
@@ -258,7 +257,7 @@ void DrawMapScene::undo()
             addItem(oldItems.takeFirst());
         paths = oldPaths;
 
-        emit pathChanged();
+        Q_EMIT pathChanged();
     }
 }
 
@@ -288,7 +287,7 @@ void DrawMapScene::clearMap()
 
     paths.clear();
 
-    emit pathChanged();
+    Q_EMIT pathChanged();
 }
 
 
@@ -314,23 +313,20 @@ QByteArray DrawMapScene::encode()
     {
         int cnt = 0;
         PathParams params = paths.at(i);
-        foreach(QPoint point, params.points)
-        {
-            qint16 px = qToBigEndian((qint16)point.x());
-            qint16 py = qToBigEndian((qint16)point.y());
-            quint8 flags = 0;
-            if(!cnt)
-            {
-                flags = 0x80 + params.width;
-                if(params.erasing) flags |= 0x40;
-            }
-            b.append((const char *)&px, 2);
-            b.append((const char *)&py, 2);
-            b.append((const char *)&flags, 1);
+        Q_FOREACH (QPoint point, params.points) {
+          qint16 px = qToBigEndian((qint16)point.x());
+          qint16 py = qToBigEndian((qint16)point.y());
+          quint8 flags = 0;
+          if (!cnt) {
+            flags = 0x80 + params.width;
+            if (params.erasing) flags |= 0x40;
+          }
+          b.append((const char *)&px, 2);
+          b.append((const char *)&py, 2);
+          b.append((const char *)&flags, 1);
 
-            ++cnt;
+          ++cnt;
         }
-
     }
 
     return b;
@@ -411,7 +407,7 @@ void DrawMapScene::decode(QByteArray data)
         paths.prepend(params);
     }
 
-    emit pathChanged();
+    Q_EMIT pathChanged();
 
     // Restore erasing mode
     setErasing(erasing);
@@ -451,8 +447,7 @@ void DrawMapScene::simplifyLast()
 int DrawMapScene::pointsCount()
 {
     int cnt = 0;
-    foreach(PathParams p, paths)
-        cnt += p.points.size();
+    Q_FOREACH (PathParams p, paths) cnt += p.points.size();
 
     return cnt;
 }
@@ -466,8 +461,7 @@ QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> points)
         QPointF p = points[0] + QPointF(0.01, 0.01);
         path.moveTo(p);
 
-        foreach(QPoint p, points)
-        path.lineTo(p);
+        Q_FOREACH (QPoint p, points) path.lineTo(p);
     }
 
     return path;
@@ -534,22 +528,18 @@ void DrawMapScene::optimize()
     // break paths into segments
     Paths pth;
 
-    foreach(const PathParams & pp, paths)
-    {
-        int l = pp.points.size();
+    Q_FOREACH (const PathParams &pp, paths) {
+      int l = pp.points.size();
 
-        if(l == 1)
-        {
-            pth.prepend(pp);
-        } else
-        {
-            for(int i = l - 2; i >= 0; --i)
-            {
-                PathParams p = pp;
-                p.points = QList<QPoint>() << p.points[i] << p.points[i + 1];
-                pth.prepend(pp);
-            }
+      if (l == 1) {
+        pth.prepend(pp);
+      } else {
+        for (int i = l - 2; i >= 0; --i) {
+          PathParams p = pp;
+          p.points = QList<QPoint>() << p.points[i] << p.points[i + 1];
+          pth.prepend(pp);
         }
+      }
     }
 
     // clear the scene
@@ -560,17 +550,16 @@ void DrawMapScene::optimize()
     m_specialPoints.clear();
 
     // render the result
-    foreach(const PathParams & p, pth)
-    {
-        if(p.erasing)
-            m_pen.setBrush(m_eraser);
-        else
-            m_pen.setBrush(m_brush);
+    Q_FOREACH (const PathParams &p, pth) {
+      if (p.erasing)
+        m_pen.setBrush(m_eraser);
+      else
+        m_pen.setBrush(m_brush);
 
-        m_pen.setWidth(deserializePenWidth(p.width));
+      m_pen.setWidth(deserializePenWidth(p.width));
 
-        addPath(pointsToPath(p.points), m_pen);
+      addPath(pointsToPath(p.points), m_pen);
     }
 
-    emit pathChanged();
+    Q_EMIT pathChanged();
 }

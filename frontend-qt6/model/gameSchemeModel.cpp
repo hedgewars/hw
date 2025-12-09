@@ -1078,7 +1078,7 @@ bool GameSchemeModel::setData(const QModelIndex & index, const QVariant & value,
 
     schemes[index.row()][index.column()] = value;
 
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
     return true;
 }
 

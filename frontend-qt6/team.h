@@ -101,7 +101,7 @@ class HWTeam : public QObject
         bool operator < (const HWTeam& t1) const;
         HWTeam & operator = (const HWTeam & other);
 
-public slots:
+public Q_SLOTS:
         void setColor(int color);
 
     private:

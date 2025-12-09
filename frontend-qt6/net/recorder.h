@@ -48,7 +48,7 @@ class HWRecorder : public TCPBase
         virtual void onClientRead();
         virtual void onClientDisconnect();
 
-    signals:
+    Q_SIGNALS:
         void onProgress(float progress); // 0 < progress < 1
         void encodingFinished(bool success);
         void ErrorMessage(const QString &);

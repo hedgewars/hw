@@ -131,7 +131,7 @@ bool FrameTeams::isFullTeams() const
 
 void FrameTeams::emitTeamColorChanged(const HWTeam& team)
 {
-    emit teamColorChanged(team);
+    Q_EMIT teamColorChanged(team);
 }
 
 QSize FrameTeams::sizeHint() const

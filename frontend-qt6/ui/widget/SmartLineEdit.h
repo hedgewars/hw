@@ -141,7 +141,7 @@ class SmartLineEdit : public HistoryLineEdit
       */
      void autoComplete();
 
-    private slots:
+    private Q_SLOTS:
      /**
       * @brief Resets the information about the last match and text replacement.
       */

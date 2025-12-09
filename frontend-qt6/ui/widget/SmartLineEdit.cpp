@@ -59,7 +59,7 @@ void SmartLineEdit::addCommands(const QStringList & commands)
 
 void SmartLineEdit::removeCommands(const QStringList & commands)
 {
-    foreach (const QString & cmd, commands)
+    Q_FOREACH (const QString & cmd, commands)
     {
         m_cmds->removeAll(cmd);
     }
@@ -192,7 +192,7 @@ void SmartLineEdit::autoComplete()
     if (isFirstWord)
     {
         // find matching commands
-        foreach (const QString & cmd, *m_cmds)
+        Q_FOREACH (const QString & cmd, *m_cmds)
         {
             if (cmd.startsWith(matchMe, Qt::CaseInsensitive))
             {
@@ -210,7 +210,7 @@ void SmartLineEdit::autoComplete()
     if (match.isEmpty())
     {
         // find matching nicks
-        foreach (const QString & nick, *m_nicks)
+        Q_FOREACH (const QString & nick, *m_nicks)
         {
             if (nick.startsWith(matchMe, Qt::CaseInsensitive))
             {

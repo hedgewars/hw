@@ -370,7 +370,7 @@ void SelWeaponWidget::save()
         stream << stateFull << "\n";
         file.close();
     }
-    emit weaponsEdited(curWeaponsName, m_name->text(), stateFull);
+    Q_EMIT weaponsEdited(curWeaponsName, m_name->text(), stateFull);
     curWeaponsName = m_name->text();
 }
 
@@ -422,7 +422,7 @@ void SelWeaponWidget::deleteWeaponsName()
         QFile(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo/") +
               curWeaponsName + QStringLiteral(".hwa"))
             .remove();
-        emit weaponsDeleted(delWeaponsName);
+        Q_EMIT weaponsDeleted(delWeaponsName);
     }
 }
 
@@ -438,7 +438,7 @@ void SelWeaponWidget::newWeaponsName()
     }
     setWeaponsName(newName);
     wconf->insert(newName, cEmptyAmmoStore);
-    emit weaponsAdded(newName, cEmptyAmmoStore);
+    Q_EMIT weaponsAdded(newName, cEmptyAmmoStore);
 }
 
 void SelWeaponWidget::setWeaponsName(const QString& name)
@@ -485,7 +485,7 @@ void SelWeaponWidget::copy()
         setWeaponsName(newName);
         setWeapons(ammo);
         wconf->insert(newName, ammo);
-        emit weaponsAdded(newName, ammo);
+        Q_EMIT weaponsAdded(newName, ammo);
     }
 }
 

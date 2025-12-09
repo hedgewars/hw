@@ -73,7 +73,7 @@ class BGWidget : public QWidget
         QImage * rotatedSprites[360];
     protected:
         void paintEvent(QPaintEvent * event);
-    private slots:
+    private Q_SLOTS:
         void animate();
 };
 

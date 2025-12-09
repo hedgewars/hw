@@ -22,14 +22,14 @@ public:
     void setColor(int color);
     int getColor();
 
-signals:
+Q_SIGNALS:
     void colorChanged(int color);
 
 private:
     int m_color;
     QStandardItemModel * m_colorsModel;
 
-private slots:
+private Q_SLOTS:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
 protected:

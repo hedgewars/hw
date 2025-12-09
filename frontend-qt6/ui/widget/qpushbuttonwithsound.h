@@ -27,10 +27,10 @@ class QPushButtonWithSound : public QPushButton
     public:
         explicit QPushButtonWithSound(QWidget *parent = 0);
         bool isSoundEnabled;
-    signals:
+    Q_SIGNALS:
 
-    public slots:
-    private slots:
+    public Q_SLOTS:
+    private Q_SLOTS:
         void buttonClicked();
 
 };

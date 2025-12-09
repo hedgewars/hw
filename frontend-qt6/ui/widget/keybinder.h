@@ -63,11 +63,11 @@ class KeyBinder : public QWidget
         QList<QTableWidgetItem*> conflictItems;
         bool p_hasConflicts;
 
-    signals:
+    Q_SIGNALS:
         void bindUpdate(int bindID);
         void resetAllBinds();
 
-    private slots:
+    private Q_SLOTS:
         void changeBindingsPage(int page);
         void bindChanged(const QString &);
         void bindCellClicked(QTableWidgetItem * item);

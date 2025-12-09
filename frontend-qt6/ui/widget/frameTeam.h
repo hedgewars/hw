@@ -46,10 +46,10 @@ class FrameTeams : public QFrame
         QSize sizeHint() const;
         void setDecoFrameEnabled(bool enabled);
 
-    signals:
+    Q_SIGNALS:
         void teamColorChanged(const HWTeam&);
 
-    public slots:
+    public Q_SLOTS:
         void addTeam(HWTeam team, bool willPlay);
         void removeTeam(HWTeam team);
 

@@ -61,12 +61,12 @@ class PageRoomsList : public AbstractPage
 
         void setModel(RoomsListModel * model);
 
-    public slots:
+    public Q_SLOTS:
         void setAdmin(bool);
         void setUser(const QString & nickname);
         void updateNickCounter(int cnt);
 
-    signals:
+    Q_SIGNALS:
         void askForCreateRoom(const QString &, const QString &);
         void askForJoinRoom(const QString &, const QString &);
         void askForRoomList();
@@ -77,7 +77,7 @@ class PageRoomsList : public AbstractPage
         QLayout * footerLayoutDefinition();
         void connectSignals();
 
-    private slots:
+    private Q_SLOTS:
         void onCreateClick();
         void onJoinClick();
         void onRefreshClick();

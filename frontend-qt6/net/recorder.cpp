@@ -46,7 +46,7 @@ HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
 
 HWRecorder::~HWRecorder()
 {
-    emit encodingFinished(finished);
+    Q_EMIT encodingFinished(finished);
     if (queue.empty())
         numRecorders--;
     else
@@ -72,14 +72,14 @@ void HWRecorder::onClientRead()
             SendIPC("!");
             break;
         case 'p':
-            emit onProgress((quint8(msg.at(2))*256.0 + quint8(msg.at(3)))*0.0001);
+            Q_EMIT onProgress((quint8(msg.at(2))*256.0 + quint8(msg.at(3)))*0.0001);
             break;
         case 'v':
             finished = true;
             break;
         case 'E':
             int size = msg.size();
-            emit ErrorMessage(
+            Q_EMIT ErrorMessage(
                 tr("A fatal ERROR occured while processing the video recording! "
                 "The video could not be saved.\n\n"
                 "As a workaround, you could try to reset the Hedgewars video recorder settings to the defaults.\n\n"

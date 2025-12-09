@@ -32,7 +32,7 @@
 
 void TeamLabel::teamButtonClicked()
 {
-    emit teamActivated(text());
+    Q_EMIT teamActivated(text());
 }
 
 TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams * parent) :
@@ -102,12 +102,12 @@ void TeamShowWidget::setHHNum(unsigned int num)
 void TeamShowWidget::hhNumChanged()
 {
     m_team.setNumHedgehogs(phhoger->getHedgehogsNum());
-    emit hhNmChanged(m_team);
+    Q_EMIT hhNmChanged(m_team);
 }
 
 void TeamShowWidget::activateTeam()
 {
-    emit teamStatusChanged(m_team);
+    Q_EMIT teamStatusChanged(m_team);
 }
 
 /*HWTeamTempParams TeamShowWidget::getTeamParams() const
@@ -129,7 +129,7 @@ void TeamShowWidget::onColorChanged(int color)
 {
     m_team.setColor(color);
 
-    emit teamColorChanged(m_team);
+    Q_EMIT teamColorChanged(m_team);
 }
 
 HWTeam TeamShowWidget::getTeam() const

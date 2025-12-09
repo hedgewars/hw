@@ -57,17 +57,17 @@ class PageNetGame : public AbstractPage
         TeamSelWidget* pNetTeamsWidget;
         GameCFGWidget* pGameCFG;
 
-    public slots:
+    public Q_SLOTS:
         void setRoomName(const QString & roomName);
         void setReadyStatus(bool isReady);
         void setUser(const QString & nickname);
         void onUpdateClick();
         void setMasterMode(bool isMaster);
 
-    private slots:
+    private Q_SLOTS:
         void onRoomNameEdited();
 
-    signals:
+    Q_SIGNALS:
         void SetupClicked();
         void askForUpdateRoomName(const QString &);
 

@@ -36,7 +36,7 @@ class ToggleButtonWidget : public QPushButton
     private:
         QIcon icoUnchecked;
         QIcon icoChecked;
-    private slots:
+    private Q_SLOTS:
         void eventToggled(bool checked);
 };
 

@@ -43,7 +43,7 @@ void CHedgehogerWidget::incItems()
     //if (pOurFrameTeams->overallHedgehogs < pOurFrameTeams->maxHedgehogsPerGame) {
     numItems++;
     //pOurFrameTeams->overallHedgehogs++;
-    emit hedgehogsNumChanged();
+    Q_EMIT hedgehogsNumChanged();
     //}
 }
 
@@ -51,7 +51,7 @@ void CHedgehogerWidget::decItems()
 {
     numItems--;
     //pOurFrameTeams->overallHedgehogs--;
-    emit hedgehogsNumChanged();
+    Q_EMIT hedgehogsNumChanged();
 }
 
 CHedgehogerWidget::~CHedgehogerWidget()

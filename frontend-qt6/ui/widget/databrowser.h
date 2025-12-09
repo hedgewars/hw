@@ -35,9 +35,9 @@ class DataBrowser : public QTextBrowser
     public:
         explicit DataBrowser(QWidget *parent = 0);
 
-    signals:
+    Q_SIGNALS:
 
-    public slots:
+    public Q_SLOTS:
 
     private:
         QNetworkAccessManager *manager;
@@ -49,7 +49,7 @@ class DataBrowser : public QTextBrowser
 
         QVariant loadResource(int type, const QUrl & name);
 
-    private slots:
+    private Q_SLOTS:
         void resourceDownloaded();
 };
 

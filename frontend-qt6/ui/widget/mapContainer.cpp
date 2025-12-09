@@ -474,7 +474,7 @@ void HWMapContainer::previewClicked()
         switch (m_mapInfo.type)
         {
             case MapModel::HandDrawnMap:
-                emit drawMapRequested();
+                Q_EMIT drawMapRequested();
                 break;
             default:
                 setRandomMap();
@@ -674,7 +674,7 @@ void HWMapContainer::setRandomMap()
 void HWMapContainer::setRandomSeed()
 {
     setSeed(QUuid::createUuid().toString());
-    emit seedChanged(m_seed);
+    Q_EMIT seedChanged(m_seed);
 }
 
 void HWMapContainer::setRandomWithoutDLC(bool withoutDLC)
@@ -694,13 +694,13 @@ void HWMapContainer::setRandomTheme()
     if(!tmodel->rowCount()) return;
     quint32 themeNum = rand() % tmodel->rowCount();
     updateTheme(tmodel->index(themeNum,0));
-    emit themeChanged(m_theme);
+    Q_EMIT themeChanged(m_theme);
 }
 
 void HWMapContainer::intSetTemplateFilter(int filter)
 {
     generationStyles->setCurrentRow(filter);
-    emit newTemplateFilter(filter);
+    Q_EMIT newTemplateFilter(filter);
 }
 
 void HWMapContainer::setTemplateFilter(int filter)
@@ -723,7 +723,7 @@ int HWMapContainer::getMazeSize(void) const
 void HWMapContainer::intSetMazeSize(int size)
 {
     mazeStyles->setCurrentRow(size);
-    emit mazeSizeChanged(size);
+    Q_EMIT mazeSizeChanged(size);
 }
 
 void HWMapContainer::setMazeSize(int size)
@@ -807,7 +807,7 @@ QByteArray HWMapContainer::getDrawnMapData()
 void HWMapContainer::setNewSeed(const QString & newSeed)
 {
     setSeed(newSeed);
-    emit seedChanged(newSeed);
+    Q_EMIT seedChanged(newSeed);
 }
 
 DrawMapScene * HWMapContainer::getDrawMapScene()
@@ -817,7 +817,7 @@ DrawMapScene * HWMapContainer::getDrawMapScene()
 
 void HWMapContainer::mapDrawingFinished()
 {
-    emit drawnMapChanged(getDrawnMapData());
+    Q_EMIT drawnMapChanged(getDrawnMapData());
 
     updatePreview();
 }
@@ -1041,7 +1041,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             mapFeatureSize->hide();
             lblDesc->setText(m_mapInfo.desc);
             lblDesc->show();
-            emit mapChanged(m_curMap);
+            Q_EMIT mapChanged(m_curMap);
             break;
         case MapModel::StaticMap:
             setupStaticMapsView();
@@ -1059,7 +1059,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
                 teMapName->show();
             }
             mapFeatureSize->hide();
-            emit mapChanged(m_curMap);
+            Q_EMIT mapChanged(m_curMap);
             break;
         case MapModel::FortsMap:
             mapgen = MAPGEN_FORTS;
@@ -1095,14 +1095,14 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
 
     repaint();
 
-    emit mapgenChanged(mapgen);
+    Q_EMIT mapgenChanged(mapgen);
 }
 
 void HWMapContainer::intSetFeatureSize(int val)
 {
     mapFeatureSize->setValue(val);    
     updateHelpTexts((MapModel::MapType)cType->itemData(cType->currentIndex()).toInt());
-    emit mapFeatureSizeChanged(val);
+    Q_EMIT mapFeatureSizeChanged(val);
 }
 void HWMapContainer::setFeatureSize(int val)
 {
@@ -1142,7 +1142,7 @@ void HWMapContainer::showThemePrompt()
 
     QModelIndex current = m_themeModel->index(theme, 0);
     updateTheme(current);
-    emit themeChanged(m_theme);
+    Q_EMIT themeChanged(m_theme);
 }
 
 void HWMapContainer::updateTheme(const QModelIndex & current)
@@ -1235,19 +1235,19 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
                 }
             }
             setTheme(selectedTheme);
-            emit themeChanged(selectedTheme);
+            Q_EMIT themeChanged(selectedTheme);
         }
     }
     else
     {
         setTheme(m_mapInfo.theme);
-        emit themeChanged(m_mapInfo.theme);
+        Q_EMIT themeChanged(m_mapInfo.theme);
     }
 
     lblDesc->setText(mapInfo.desc);
 
     updatePreview();
-    emit mapChanged(m_curMap);
+    Q_EMIT mapChanged(m_curMap);
 }
 
 void HWMapContainer::loadDrawing()
@@ -1293,7 +1293,7 @@ void HWMapContainer::setMaster(bool master)
     if (master == m_master) return;
     m_master = master;
 
-    foreach (QWidget *widget, m_childWidgets)
+    Q_FOREACH (QWidget *widget, m_childWidgets)
         widget->setEnabled(master);
 
     if(m_mapInfo.type == MapModel::StaticMap)

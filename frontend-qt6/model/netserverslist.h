@@ -33,7 +33,7 @@ class HWNetServersModel : public QAbstractTableModel
         int rowCount(const QModelIndex & parent) const;
         int columnCount(const QModelIndex & parent) const;
 
-    public slots:
+    public Q_SLOTS:
         virtual void updateList();
 
     protected:

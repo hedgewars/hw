@@ -52,7 +52,7 @@ class ThemePrompt : public QDialog
         ThemeListView * list;
         QSortFilterProxyModel * filterModel;
 
-    private slots:
+    private Q_SLOTS:
         void onAccepted();
         void onRejected();
         void themeChosen(const QModelIndex & index);

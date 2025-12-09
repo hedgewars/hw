@@ -47,7 +47,7 @@ public:
 
     QModelIndex nicknameIndex(const QString & nickname);
 
-public slots:
+public Q_SLOTS:
     void addPlayer(const QString & nickname, bool notify);
     void removePlayer(const QString & nickname, const QString & msg = QString());
     void playerJoinedRoom(const QString & nickname, bool notify);
@@ -55,7 +55,7 @@ public slots:
     void resetRoomFlags();
     void setNickname(const QString & nickname);
 
-signals:
+Q_SIGNALS:
     void nickAdded(const QString& nick, bool notifyNick);
     void nickRemoved(const QString& nick);
     void nickAddedLobby(const QString& nick, bool notifyNick);

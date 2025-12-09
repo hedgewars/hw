@@ -492,7 +492,7 @@ void PageRoomsList::onRoomNameChosen(const QString & roomName, const QString & p
     if (!roomName.trimmed().isEmpty())
     {
         m_gameSettings->setValue("frontend/lastroomname", roomName);
-        emit askForCreateRoom(roomName, password);
+        Q_EMIT askForCreateRoom(roomName, password);
     }
     else
     {
@@ -520,14 +520,14 @@ void PageRoomsList::onJoinClick()
     QString roomName = roomsList->model()->index(mdl[0].row(), 1).data().toString();
 
     if (!gameInLobby)
-        emit askJoinConfirmation(roomName);
+        Q_EMIT askJoinConfirmation(roomName);
     else
-        emit askForJoinRoom(roomName, QString());
+        Q_EMIT askForJoinRoom(roomName, QString());
 }
 
 void PageRoomsList::onRefreshClick()
 {
-    emit askForRoomList();
+    Q_EMIT askForRoomList();
 }
 
 void PageRoomsList::onJoinConfirmation(const QString & room)
@@ -543,7 +543,7 @@ void PageRoomsList::onJoinConfirmation(const QString & room)
 
     if (reallyJoinMsg.exec() == QMessageBox::Ok)
     {
-        emit askForJoinRoom(room, QString());
+        Q_EMIT askForJoinRoom(room, QString());
     }
 }
 

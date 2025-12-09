@@ -152,7 +152,7 @@ void TCPBase::NewConnection()
     if(simultaneousRun())
     {
         srvsList.removeOne(this);
-        emit isReadyNow();
+        Q_EMIT isReadyNow();
     }
 }
 
@@ -213,7 +213,7 @@ void TCPBase::ClientDisconnect()
         thread->quit();
         thread->wait();
 #endif
-        emit isReadyNow();
+        Q_EMIT isReadyNow();
     }
 
     if(IPCSocket) {

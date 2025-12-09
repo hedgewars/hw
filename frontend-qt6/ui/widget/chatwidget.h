@@ -108,7 +108,7 @@ class HWChatWidget : public QWidget
             const QString & cssClassPart,
             bool highlight);
 
-    public slots:
+    public Q_SLOTS:
         void onChatAction(const QString & nick, const QString & str);
         void onChatMessage(const QString & nick, const QString & str);
         void onServerMessage(const QString& str);
@@ -123,7 +123,7 @@ class HWChatWidget : public QWidget
             const QString & version,
             const QString & roomInfo);
 
-    signals:
+    Q_SIGNALS:
         void chatLine(const QString& str);
         void kick(const QString & str);
         void ban(const QString & str);
@@ -161,7 +161,7 @@ class HWChatWidget : public QWidget
         bool m_scrollToBottom;
         int m_scrollBarPos;
 
-    private slots:
+    private Q_SLOTS:
         void returnPressed();
         void onBan();
         void onKick();

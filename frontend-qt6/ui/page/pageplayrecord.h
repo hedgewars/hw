@@ -47,7 +47,7 @@ class PagePlayDemo : public AbstractPage
         QPushButton *BtnRemoveRecord;
         QListWidget *DemosList;
 
-    public slots:
+    public Q_SLOTS:
         void refresh();
 
     private:
@@ -57,7 +57,7 @@ class PagePlayDemo : public AbstractPage
 
         RecordType recType;
 
-    private slots:
+    private Q_SLOTS:
         void renameRecord();
         void removeRecord();
 };

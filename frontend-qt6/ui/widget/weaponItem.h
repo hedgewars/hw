@@ -30,7 +30,7 @@ class WeaponItem : public ItemNum
         WeaponItem(const QImage& im, const QImage& img, QWidget * parent);
         virtual ~WeaponItem();
 
-    signals:
+    Q_SIGNALS:
         void hedgehogsNumChanged();
 
     protected:

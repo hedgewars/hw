@@ -42,7 +42,7 @@ class PageEditTeam : public AbstractPage
         void editTeam(const QString & name, const QString & playerHash);
         void deleteTeam(const QString & name);
 
-    public slots:
+    public Q_SLOTS:
         void CBTeamLvl_activated(const int index);
         void CBFort_activated(const int index);
         void frontendSoundsToggled(bool value);
@@ -96,7 +96,7 @@ class PageEditTeam : public AbstractPage
 
         void lazyLoad();
 
-    private slots:
+    private Q_SLOTS:
         void saveTeam();
         void setRandomTeam();
         void setRandomHogNames();

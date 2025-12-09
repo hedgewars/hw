@@ -65,7 +65,7 @@ class FeedbackDialog : public QDialog
         QNetworkReply * genCaptchaRequest;
         QNetworkAccessManager * nam;
 
-    private slots:
+    private Q_SLOTS:
         virtual void NetReply(QNetworkReply*);
         virtual void ShowSpecs();
         void SendFeedback();

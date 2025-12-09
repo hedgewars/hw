@@ -100,7 +100,7 @@ class DrawMapWidget : public QWidget
 
         void setScene(DrawMapScene * scene);
 
-    public slots:
+    public Q_SLOTS:
         void undo();
         void clear();
         void optimize();
@@ -110,7 +110,7 @@ class DrawMapWidget : public QWidget
         void setPathType(DrawMapScene::PathType pathType);
         void setBrushSize(int brushSize);
 
-    signals:
+    Q_SIGNALS:
         void brushSizeChanged(int brushSize);
 
     protected:
@@ -123,7 +123,7 @@ class DrawMapWidget : public QWidget
 
         DrawMapScene * m_scene;
 
-    private slots:
+    private Q_SLOTS:
         void pathChanged();
         void brushSizeChanged_slot(int brushSize);
 };

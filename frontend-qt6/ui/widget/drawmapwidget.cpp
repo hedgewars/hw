@@ -192,7 +192,7 @@ void DrawMapWidget::pathChanged()
 
 void DrawMapWidget::brushSizeChanged_slot(int brushSize)
 {
-    emit brushSizeChanged(brushSize);
+    Q_EMIT brushSizeChanged(brushSize);
 }
 
 DrawMapView::DrawMapView(QWidget *parent) :

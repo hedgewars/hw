@@ -56,7 +56,7 @@ public:
     int columnCountSupported() const { return c_nColumns; };
     QVariant data(const QModelIndex &index, int role) const;
 
-public slots:
+public Q_SLOTS:
     void setRoomsList(const QStringList & rooms);
     void addRoom(const QStringList & info);
     void removeRoom(const QString & name);

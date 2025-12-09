@@ -34,10 +34,10 @@ class PageNet : public AbstractPage
         QPushButton * BtnNetSvrStart;
         QPushButton * BtnSpecifyServer;
 
-    public slots:
+    public Q_SLOTS:
         void updateServersList();
 
-    signals:
+    Q_SIGNALS:
         void connectClicked(const QString & host, quint16 port, bool useTls);
 
     private:
@@ -48,7 +48,7 @@ class PageNet : public AbstractPage
         QGroupBox * ConnGroupBox;
         QGridLayout * GBClayout;
 
-    private slots:
+    private Q_SLOTS:
         void slotConnect();
 };
 

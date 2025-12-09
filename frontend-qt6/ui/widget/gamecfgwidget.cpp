@@ -259,12 +259,12 @@ void GameCFGWidget::setTabbed(bool tabbed)
 
 void GameCFGWidget::jumpToSchemes()
 {
-    emit goToSchemes(GameSchemes->currentIndex());
+    Q_EMIT goToSchemes(GameSchemes->currentIndex());
 }
 
 void GameCFGWidget::jumpToWeapons()
 {
-    emit goToWeapons(WeaponsName->currentIndex());
+    Q_EMIT goToWeapons(WeaponsName->currentIndex());
 }
 
 QVariant GameCFGWidget::schemeData(int column) const
@@ -410,7 +410,7 @@ QByteArray GameCFGWidget::getFullConfig() const
 
     QByteArray result;
 
-    foreach(QByteArray ba, bcfg)
+    Q_FOREACH(QByteArray ba, bcfg)
     HWProto::addByteArrayToBuffer(result, ba);
 
     return result;
@@ -560,7 +560,7 @@ void GameCFGWidget::ammoChanged(int index)
     if (index >= 0)
     {
         WeaponsNameLabel->setText(WeaponsName->currentText());
-        emit paramChanged(
+        Q_EMIT paramChanged(
             QStringLiteral("AMMO"),
             QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
         );
@@ -651,22 +651,22 @@ void GameCFGWidget::mapChanged(const QString & value)
         lblWeapons->setEnabled(true);
         bindEntries->setEnabled(true);
     }
-    emit paramChanged(QStringLiteral("MAP"), QStringList(value));
+    Q_EMIT paramChanged(QStringLiteral("MAP"), QStringList(value));
 }
 
 void GameCFGWidget::templateFilterChanged(int value)
 {
-    emit paramChanged(QStringLiteral("TEMPLATE"), QStringList(QString::number(value)));
+    Q_EMIT paramChanged(QStringLiteral("TEMPLATE"), QStringList(QString::number(value)));
 }
 
 void GameCFGWidget::seedChanged(const QString & value)
 {
-    emit paramChanged(QStringLiteral("SEED"), QStringList(value));
+    Q_EMIT paramChanged(QStringLiteral("SEED"), QStringList(value));
 }
 
 void GameCFGWidget::themeChanged(const QString & value)
 {
-    emit paramChanged(QStringLiteral("THEME"), QStringList(value));
+    Q_EMIT paramChanged(QStringLiteral("THEME"), QStringList(value));
 }
 
 void GameCFGWidget::schemeChanged(int index)
@@ -680,7 +680,7 @@ void GameCFGWidget::schemeChanged(int index)
     if (sl.size() >= 42)
     {
         sl[sl.size()-1].prepend('!');
-        emit paramChanged(QStringLiteral("SCHEME"), sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
+        Q_EMIT paramChanged(QStringLiteral("SCHEME"), sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
     }
 
     if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked())
@@ -693,7 +693,7 @@ void GameCFGWidget::schemeChanged(int index)
             if (0 == res)
             {
                 WeaponsName->setCurrentIndex(i);
-                emit ammoChanged(i);
+                Q_EMIT ammoChanged(i);
                 break;
             }
         }
@@ -738,24 +738,24 @@ void GameCFGWidget::scriptChanged(int index)
         ScriptsLabel->setStyleSheet(QLatin1String(""));
     }
 
-    emit paramChanged(QStringLiteral("SCRIPT"), QStringList(name));
+    Q_EMIT paramChanged(QStringLiteral("SCRIPT"), QStringList(name));
 }
 
 void GameCFGWidget::mapgenChanged(MapGenerator m)
 {
     int scriptIndex = Scripts->currentIndex();
     updateSchemeEnabledStates(scriptIndex);
-    emit paramChanged(QStringLiteral("MAPGEN"), QStringList(QString::number(m)));
+    Q_EMIT paramChanged(QStringLiteral("MAPGEN"), QStringList(QString::number(m)));
 }
 
 void GameCFGWidget::maze_sizeChanged(int s)
 {
-    emit paramChanged(QStringLiteral("MAZE_SIZE"), QStringList(QString::number(s)));
+    Q_EMIT paramChanged(QStringLiteral("MAZE_SIZE"), QStringList(QString::number(s)));
 }
 
 void GameCFGWidget::slMapFeatureSizeChanged(int s)
 {
-    emit paramChanged(QStringLiteral("FEATURE_SIZE"), QStringList(QString::number(s)));
+    Q_EMIT paramChanged(QStringLiteral("FEATURE_SIZE"), QStringList(QString::number(s)));
 }
 
 void GameCFGWidget::resendSchemeData()
@@ -770,7 +770,7 @@ void GameCFGWidget::resendAmmoData()
 
 void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
 {
-    emit paramChanged(QStringLiteral("DRAWNMAP"), QStringList(qCompress(data, 9).toBase64()));
+    Q_EMIT paramChanged(QStringLiteral("DRAWNMAP"), QStringList(qCompress(data, 9).toBase64()));
 }
 
 
@@ -819,6 +819,6 @@ void GameCFGWidget::setMaster(bool master)
     WeaponsNameLabel->setHidden(master);
     ScriptsLabel->setHidden(master);
 
-    foreach (QWidget *widget, m_childWidgets)
+    Q_FOREACH (QWidget *widget, m_childWidgets)
         widget->setEnabled(master);
 }

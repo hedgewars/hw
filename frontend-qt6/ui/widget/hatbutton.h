@@ -41,15 +41,15 @@ class HatButton : public QPushButton
         QModelIndex m_hat;
         HatModel * m_hatModel;
 
-    signals:
+    Q_SIGNALS:
         void currentIndexChanged(int);
         void currentHatChanged(const QString &);
 
-    public slots:
+    public Q_SLOTS:
         void setCurrentIndex(int index);
         void setCurrentHat(const QString & name);
 
-    private slots:
+    private Q_SLOTS:
         void showPrompt();
 };
 

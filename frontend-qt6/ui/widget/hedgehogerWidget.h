@@ -35,7 +35,7 @@ class CHedgehogerWidget : public ItemNum
         void setHHNum (unsigned int num);
         void setNonInteractive();
 
-    signals:
+    Q_SIGNALS:
         void hedgehogsNumChanged();
 
     protected:

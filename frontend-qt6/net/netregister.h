@@ -28,7 +28,7 @@ class HWNetRegisterServer : public QObject
     public:
         HWNetRegisterServer(QObject *parent, const QString & descr, quint16 port);
 
-    public slots:
+    public Q_SLOTS:
         virtual void unregister();
 };
 

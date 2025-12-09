@@ -76,7 +76,7 @@ class PageVideos : public AbstractPage
 
         int numRecorders;
 
-    private slots:
+    private Q_SLOTS:
         void encodingFinished(bool success);
         void updateProgress(float value);
         void cellDoubleClicked(int row, int column);

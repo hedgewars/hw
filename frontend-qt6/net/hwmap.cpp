@@ -92,8 +92,8 @@ void HWMap::onClientDisconnect()
         p.fillRect(pxres.rect(), linearGrad);
         p.drawPixmap(0, 0, px);
 
-        emit HHLimitReceived(buf[128 * 32]);
-        emit ImageReceived(px);
+        Q_EMIT HHLimitReceived(buf[128 * 32]);
+        Q_EMIT ImageReceived(px);
     } else if (readbuffer.size() == 128 * 256 + 1)
     {
         QVector<QRgb> colorTable;
@@ -112,8 +112,8 @@ void HWMap::onClientDisconnect()
         p.fillRect(pxres.rect(), linearGrad);
         p.drawPixmap(0, 0, px);
 
-        emit HHLimitReceived(buf[128 * 256]);
-        emit ImageReceived(px);
+        Q_EMIT HHLimitReceived(buf[128 * 256]);
+        Q_EMIT ImageReceived(px);
     }
 }
 

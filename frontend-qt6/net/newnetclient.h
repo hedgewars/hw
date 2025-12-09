@@ -96,7 +96,7 @@ class HWNewNet : public QObject
 
         ClientState netClientState;
 
-    signals:
+    Q_SIGNALS:
         void AskForRunGame();
         void AskForOfficialServerDemo();
         void connected();
@@ -147,7 +147,7 @@ class HWNewNet : public QObject
 
         void messageProcessed();
 
-    public slots:
+    public Q_SLOTS:
         void ToggleReady();
         void chatLineToNet(const QString& str);
         void chatLineToNetWithEcho(const QString&);
@@ -188,7 +188,7 @@ class HWNewNet : public QObject
         void banNick(const QString & nick, const QString & reason, int seconds);
         void roomPasswordEntered(const QString & password);
 
-    private slots:
+    private Q_SLOTS:
         void ClientRead();
         void OnConnect();
         void OnDisconnect();
