@@ -18,14 +18,11 @@
 
 #include "netregister.h"
 
-HWNetRegisterServer::HWNetRegisterServer(QObject *parent, const QString & descr, quint16 port) :
-    QObject(parent)
-{
-    Q_UNUSED(descr);
-    Q_UNUSED(port);
+HWNetRegisterServer::HWNetRegisterServer(QObject *parent, const QString &descr,
+                                         quint16 port)
+    : QObject(parent) {
+  Q_UNUSED(descr);
+  Q_UNUSED(port);
 }
 
-void HWNetRegisterServer::unregister()
-{
-
-}
+void HWNetRegisterServer::unregister() {}

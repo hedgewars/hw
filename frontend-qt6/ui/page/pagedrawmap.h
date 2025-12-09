@@ -24,40 +24,38 @@
 class DrawMapWidget;
 class QRadioButton;
 
-class PageDrawMap : public AbstractPage
-{
-        Q_OBJECT
+class PageDrawMap : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageDrawMap(QWidget* parent = 0);
+ public:
+  PageDrawMap(QWidget* parent = 0);
 
-        DrawMapWidget * drawMapWidget;
+  DrawMapWidget* drawMapWidget;
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ protected:
+  QLayout* bodyLayoutDefinition();
+  QLayout* footerLayoutDefinition();
+  void connectSignals();
 
-    private:
-        QPushButton * pbUndo;
-        QPushButton * pbClear;
-        QPushButton * pbLoad;
-        QPushButton * pbSave;
-        QPushButton * pbOptimize;
-        QCheckBox * cbEraser;
-        QRadioButton * rbPolyline;
-        QRadioButton * rbRectangle;
-        QRadioButton * rbEllipse;
-        QSpinBox * sbBrushSize;
+ private:
+  QPushButton* pbUndo;
+  QPushButton* pbClear;
+  QPushButton* pbLoad;
+  QPushButton* pbSave;
+  QPushButton* pbOptimize;
+  QCheckBox* cbEraser;
+  QRadioButton* rbPolyline;
+  QRadioButton* rbRectangle;
+  QRadioButton* rbEllipse;
+  QSpinBox* sbBrushSize;
 
-    public Q_SLOTS:
-        void brushSizeChanged(int brushSize);
+ public Q_SLOTS:
+  void brushSizeChanged(int brushSize);
 
-    private Q_SLOTS:
-        void load();
-        void save();
-        void pathTypeSwitched(bool b);
+ private Q_SLOTS:
+  void load();
+  void save();
+  void pathTypeSwitched(bool b);
 };
 
 #endif
-

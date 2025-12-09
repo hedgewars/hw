@@ -21,26 +21,26 @@
 #define _NET_UDPSERVER_INCLUDED
 
 #include <QObject>
+
 #include "netregister.h"
 
 class QUdpSocket;
 
-class HWNetUdpServer : public HWNetRegisterServer
-{
-        Q_OBJECT
+class HWNetUdpServer : public HWNetRegisterServer {
+  Q_OBJECT
 
-    public:
-        HWNetUdpServer(QObject *parent, const QString & descr, quint16 port);
+ public:
+  HWNetUdpServer(QObject* parent, const QString& descr, quint16 port);
 
-    public Q_SLOTS:
-        void unregister();
+ public Q_SLOTS:
+  void unregister();
 
-    private Q_SLOTS:
-        void onClientRead();
+ private Q_SLOTS:
+  void onClientRead();
 
-    private:
-        QUdpSocket* pUdpSocket;
-        QString m_descr;
+ private:
+  QUdpSocket* pUdpSocket;
+  QString m_descr;
 };
 
-#endif // _NET_UDPSERVER_INCLUDED
+#endif  // _NET_UDPSERVER_INCLUDED

@@ -23,18 +23,16 @@
 
 #include "MinesTimeSpinBox.h"
 
+MinesTimeSpinBox::MinesTimeSpinBox(QWidget* parent)
+    : QSpinBox(parent) {
+        // do nothing
+      };
 
-MinesTimeSpinBox::MinesTimeSpinBox(QWidget* parent) : QSpinBox(parent)
-{
-    // do nothing
-};
-
-
-QString MinesTimeSpinBox::textFromValue(int value) const
-{
-    switch (value)
-    {
-        case -1: return tr("Random");
-        default: return tr("%1 seconds", "", value).arg(value);
-    }
+QString MinesTimeSpinBox::textFromValue(int value) const {
+  switch (value) {
+    case -1:
+      return tr("Random");
+    default:
+      return tr("%1 seconds", "", value).arg(value);
+  }
 }

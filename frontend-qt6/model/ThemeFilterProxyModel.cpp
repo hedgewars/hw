@@ -21,47 +21,44 @@
  * @brief ThemeFilterProxyModel class implementation
  */
 
-#include "ThemeModel.h"
 #include "ThemeFilterProxyModel.h"
 
+#include "ThemeModel.h"
+
 ThemeFilterProxyModel::ThemeFilterProxyModel(QObject *parent)
-    : QSortFilterProxyModel(parent)
-{
-    isFilteringDLC = false;
-    isFilteringHidden = false;
-    isFilteringBackground = false;
+    : QSortFilterProxyModel(parent) {
+  isFilteringDLC = false;
+  isFilteringHidden = false;
+  isFilteringBackground = false;
 }
 
-bool ThemeFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex & sourceParent) const
-{
-    QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-    bool searchOkay = true;
-    if (!filterRegularExpression().isValid()) {
-      // Check regular expression set by the theme chooser search
-      QString name = index.data(ThemeModel::ActualNameRole).toString();
-      int in = name.contains(filterRegularExpression());
-      searchOkay = in != -1;
-    }
+bool ThemeFilterProxyModel::filterAcceptsRow(
+    int sourceRow, const QModelIndex &sourceParent) const {
+  QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
+  bool searchOkay = true;
+  if (!filterRegularExpression().isValid()) {
+    // Check regular expression set by the theme chooser search
+    QString name = index.data(ThemeModel::ActualNameRole).toString();
+    int in = name.contains(filterRegularExpression());
+    searchOkay = in != -1;
+  }
 
-    if(isFilteringDLC || isFilteringHidden || isFilteringBackground)
-    {
-        bool isDLC = index.data(ThemeModel::IsDlcRole).toBool();
-        bool isHidden = index.data(ThemeModel::IsHiddenRole).toBool();
-        bool isBackground = index.data(ThemeModel::IsBackgroundThemeRole).toBool();
+  if (isFilteringDLC || isFilteringHidden || isFilteringBackground) {
+    bool isDLC = index.data(ThemeModel::IsDlcRole).toBool();
+    bool isHidden = index.data(ThemeModel::IsHiddenRole).toBool();
+    bool isBackground = index.data(ThemeModel::IsBackgroundThemeRole).toBool();
 
-        return ( ((isFilteringDLC && !isDLC) || !isFilteringDLC) &&
-                 ((isFilteringHidden && !isHidden) || !isFilteringHidden) &&
-                 ((isFilteringBackground && !isBackground) || !isFilteringBackground) ) &&
-               searchOkay;
-    }
-    else
-    {
-        return searchOkay;
-    }
+    return (((isFilteringDLC && !isDLC) || !isFilteringDLC) &&
+            ((isFilteringHidden && !isHidden) || !isFilteringHidden) &&
+            ((isFilteringBackground && !isBackground) ||
+             !isFilteringBackground)) &&
+           searchOkay;
+  } else {
+    return searchOkay;
+  }
 }
 
-void ThemeFilterProxyModel::setFilterDLC(bool enable)
-{
+void ThemeFilterProxyModel::setFilterDLC(bool enable) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
   beginFilterChange();
   isFilteringDLC = enable;
@@ -72,8 +69,7 @@ void ThemeFilterProxyModel::setFilterDLC(bool enable)
 #endif
 }
 
-void ThemeFilterProxyModel::setFilterHidden(bool enable)
-{
+void ThemeFilterProxyModel::setFilterHidden(bool enable) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
   beginFilterChange();
   isFilteringHidden = enable;
@@ -84,8 +80,7 @@ void ThemeFilterProxyModel::setFilterHidden(bool enable)
 #endif
 }
 
-void ThemeFilterProxyModel::setFilterBackground(bool enable)
-{
+void ThemeFilterProxyModel::setFilterBackground(bool enable) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
   beginFilterChange();
   isFilteringBackground = enable;

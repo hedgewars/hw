@@ -19,18 +19,20 @@
 #ifndef MISSION_H
 #define MISSION_H
 
-#include <QString>
 #include <QSettings>
+#include <QString>
 
-QSettings* getMissionTeamFile(QString & missionName, QString & teamName);
-bool isMissionWon(QString & missionName, QString & teamName);
+QSettings* getMissionTeamFile(QString& missionName, QString& teamName);
+bool isMissionWon(QString& missionName, QString& teamName);
 /**
     Returns true if the mission value adressed with the provided
     missionName: Name of the mission in question
     teamName: Name of the playing team
     key: name of key to check
 */
-bool missionValueExists(QString& missionName, QString& teamName, const QString &key);
-QVariant getMissionValue(QString & missionName, QString & teamName, const QString &key);
+bool missionValueExists(QString& missionName, QString& teamName,
+                        const QString& key);
+QVariant getMissionValue(QString& missionName, QString& teamName,
+                         const QString& key);
 
 #endif

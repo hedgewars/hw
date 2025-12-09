@@ -24,23 +24,22 @@
 
 class QUdpSocket;
 
-class HWNetUdpModel : public HWNetServersModel
-{
-        Q_OBJECT
+class HWNetUdpModel : public HWNetServersModel {
+  Q_OBJECT
 
-    public:
-        HWNetUdpModel(QObject *parent = 0);
+ public:
+  HWNetUdpModel(QObject *parent = 0);
 
-        QVariant data(const QModelIndex &index, int role) const;
+  QVariant data(const QModelIndex &index, int role) const;
 
-    public Q_SLOTS:
-        void updateList();
+ public Q_SLOTS:
+  void updateList();
 
-    private Q_SLOTS:
-        void onClientRead();
+ private Q_SLOTS:
+  void onClientRead();
 
-    private:
-        QUdpSocket* pUdpSocket;
+ private:
+  QUdpSocket *pUdpSocket;
 };
 
-#endif // _NET_UDPWIDGET_INCLUDED
+#endif  // _NET_UDPWIDGET_INCLUDED

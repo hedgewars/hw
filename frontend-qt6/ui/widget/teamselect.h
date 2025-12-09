@@ -20,11 +20,11 @@
 #ifndef _TEAM_SELECT_INCLUDED
 #define _TEAM_SELECT_INCLUDED
 
-#include <QLabel>
-#include <QGroupBox>
-#include <QVBoxLayout>
 #include <QColor>
+#include <QGroupBox>
+#include <QLabel>
 #include <QMultiMap>
+#include <QVBoxLayout>
 
 #include "team.h"
 
@@ -35,55 +35,55 @@ class QPushButton;
 
 using namespace std;
 
-class TeamSelWidget : public QGroupBox
-{
-        Q_OBJECT
+class TeamSelWidget : public QGroupBox {
+  Q_OBJECT
 
-    public:
-        TeamSelWidget(QWidget* parent);
-        void setAcceptOuter(bool acceptOuter);
-        void removeNetTeam(const HWTeam& team);
-        void resetPlayingTeams(const QList<HWTeam>& teamslist);
-        bool isPlaying(const HWTeam &team) const;
-        QList<HWTeam> getPlayingTeams() const;
-        QList<HWTeam> getNotPlayingTeams() const;
-	unsigned short getNumHedgehogs() const;
-        void setInteractivity(bool interactive);
-        void setUser(const QString& nickname);
-        void cleanupFakeNetTeams();
+ public:
+  TeamSelWidget(QWidget* parent);
+  void setAcceptOuter(bool acceptOuter);
+  void removeNetTeam(const HWTeam& team);
+  void resetPlayingTeams(const QList<HWTeam>& teamslist);
+  bool isPlaying(const HWTeam& team) const;
+  QList<HWTeam> getPlayingTeams() const;
+  QList<HWTeam> getNotPlayingTeams() const;
+  unsigned short getNumHedgehogs() const;
+  void setInteractivity(bool interactive);
+  void setUser(const QString& nickname);
+  void cleanupFakeNetTeams();
 
-    public Q_SLOTS:
-        void addTeam(const HWTeam &team);
-        void changeHHNum(const HWTeam&);
-        void changeTeamColor(const HWTeam&);
-        void changeTeamStatus(HWTeam team);
+ public Q_SLOTS:
+  void addTeam(const HWTeam& team);
+  void changeHHNum(const HWTeam&);
+  void changeTeamColor(const HWTeam&);
+  void changeTeamStatus(HWTeam team);
 
-    Q_SIGNALS:
-        void setEnabledGameStart(bool);
-        void teamWillPlay(const HWTeam& team);
-        void teamNotPlaying(const HWTeam& team);
-        void hhogsNumChanged(const HWTeam&);
-        void teamColorChanged(const HWTeam&);
-        void acceptRequested(const HWTeam& team);
+ Q_SIGNALS:
+  void setEnabledGameStart(bool);
+  void teamWillPlay(const HWTeam& team);
+  void teamNotPlaying(const HWTeam& team);
+  void hhogsNumChanged(const HWTeam&);
+  void teamColorChanged(const HWTeam&);
+  void acceptRequested(const HWTeam& team);
 
-    private Q_SLOTS:
-        void pre_changeTeamStatus(const HWTeam&);
-        void hhNumChanged(const HWTeam& team);
-        void proxyTeamColorChanged(const HWTeam& team);
+ private Q_SLOTS:
+  void pre_changeTeamStatus(const HWTeam&);
+  void hhNumChanged(const HWTeam& team);
+  void proxyTeamColorChanged(const HWTeam& team);
 
-    private:
-        void addScrArea(FrameTeams* pfteams, QColor color, int minHeight, int maxHeight, bool setFrame);
-        FrameTeams* framNotPlaying;
-        FrameTeams* framePlaying;
+ private:
+  void addScrArea(FrameTeams* pfteams, QColor color, int minHeight,
+                  int maxHeight, bool setFrame);
+  FrameTeams* framNotPlaying;
+  FrameTeams* framePlaying;
 
-        QVBoxLayout mainLayout;
-        QLabel *numTeamNotice;
-        bool m_acceptOuter;
-        void repaint();
-        QString m_curUser;
+  QVBoxLayout mainLayout;
+  QLabel* numTeamNotice;
+  bool m_acceptOuter;
+  void repaint();
+  QString m_curUser;
 
-        QList<HWTeam> curPlayingTeams;
-        QList<HWTeam> m_curNotPlayingTeams;
+  QList<HWTeam> curPlayingTeams;
+  QList<HWTeam> m_curNotPlayingTeams;
 };
 
-#endif // _TEAM_SELECT_INCLUDED
+#endif  // _TEAM_SELECT_INCLUDED

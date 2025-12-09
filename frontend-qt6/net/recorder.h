@@ -19,44 +19,43 @@
 #ifndef RECORDER_H
 #define RECORDER_H
 
-#include <QString>
 #include <QByteArray>
+#include <QString>
 
 #include "tcpBase.h"
 
 class GameUIConfig;
 class VideoItem;
 
-class HWRecorder : public TCPBase
-{
-        Q_OBJECT
-    public:
-        HWRecorder(GameUIConfig * config, const QString & prefix);
-        virtual ~HWRecorder();
+class HWRecorder : public TCPBase {
+  Q_OBJECT
+ public:
+  HWRecorder(GameUIConfig *config, const QString &prefix);
+  virtual ~HWRecorder();
 
-        void EncodeVideo(const QByteArray & record);
-        void abort();
-        bool simultaneousRun();
+  void EncodeVideo(const QByteArray &record);
+  void abort();
+  bool simultaneousRun();
 
-        VideoItem * item; // used by pagevideos
-        QString name;
-        QString prefix;
+  VideoItem *item;  // used by pagevideos
+  QString name;
+  QString prefix;
 
-    protected:
-        // virtuals from TCPBase
-        virtual QStringList getArguments();
-        virtual void onClientRead();
-        virtual void onClientDisconnect();
+ protected:
+  // virtuals from TCPBase
+  virtual QStringList getArguments();
+  virtual void onClientRead();
+  virtual void onClientDisconnect();
 
-    Q_SIGNALS:
-        void onProgress(float progress); // 0 < progress < 1
-        void encodingFinished(bool success);
-        void ErrorMessage(const QString &);
+ Q_SIGNALS:
+  void onProgress(float progress);  // 0 < progress < 1
+  void encodingFinished(bool success);
+  void ErrorMessage(const QString &);
 
-    private:
-        bool finished;
-        bool aborted;
-        GameUIConfig * config;
+ private:
+  bool finished;
+  bool aborted;
+  GameUIConfig *config;
 };
 
-#endif // RECORDER_H
+#endif  // RECORDER_H

@@ -31,25 +31,23 @@
  * <code>SpinBox</code> that returns its value as localized mines time.
  * @since  0.9.23
  */
-class MinesTimeSpinBox : public QSpinBox
-{
-        Q_OBJECT
+class MinesTimeSpinBox : public QSpinBox {
+  Q_OBJECT
 
-    public:
-        /**
-         * @brief Class constructor.
-         * @param parent parent widget.
-         */
-        MinesTimeSpinBox(QWidget * parent);
+ public:
+  /**
+   * @brief Class constructor.
+   * @param parent parent widget.
+   */
+  MinesTimeSpinBox(QWidget* parent);
 
-    protected:
-        /**
-         * Returns its value localized.
-         * @param value integer value to be representing as string.
-         * @return string representation
-         */
-        QString textFromValue(int value) const;
+ protected:
+  /**
+   * Returns its value localized.
+   * @param value integer value to be representing as string.
+   * @return string representation
+   */
+  QString textFromValue(int value) const;
 };
 
-
-#endif // HEDGEWARS_MINESTIMESPINBOX_H
+#endif  // HEDGEWARS_MINESTIMESPINBOX_H

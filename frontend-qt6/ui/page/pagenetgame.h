@@ -19,70 +19,68 @@
 #ifndef PAGE_NETGAME_H
 #define PAGE_NETGAME_H
 
-#include "HistoryLineEdit.h"
-
 #include "AbstractPage.h"
+#include "HistoryLineEdit.h"
 
 class HWChatWidget;
 class TeamSelWidget;
 class GameCFGWidget;
 class QSettings;
 
-class PageNetGame : public AbstractPage
-{
-        Q_OBJECT
+class PageNetGame : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageNetGame(QWidget* parent);
+ public:
+  PageNetGame(QWidget *parent);
 
-        void setSettings(QSettings * settings);
+  void setSettings(QSettings *settings);
 
-        void displayError(const QString & message);
-        void displayNotice(const QString & message);
-        void displayWarning(const QString & message);
-        void cleanupFakeNetTeams();
+  void displayError(const QString &message);
+  void displayNotice(const QString &message);
+  void displayWarning(const QString &message);
+  void cleanupFakeNetTeams();
 
-        QPushButton *BtnGo;
-        QPushButton *BtnMaster;
-        QPushButton *BtnStart;
-        QPushButton *BtnUpdate;
-        HistoryLineEdit *leRoomName;
+  QPushButton *BtnGo;
+  QPushButton *BtnMaster;
+  QPushButton *BtnStart;
+  QPushButton *BtnUpdate;
+  HistoryLineEdit *leRoomName;
 
-        QAction * restrictJoins;
-        QAction * restrictTeamAdds;
-        QAction * restrictUnregistered;
+  QAction *restrictJoins;
+  QAction *restrictTeamAdds;
+  QAction *restrictUnregistered;
 
-        HWChatWidget* chatWidget;
+  HWChatWidget *chatWidget;
 
-        TeamSelWidget* pNetTeamsWidget;
-        GameCFGWidget* pGameCFG;
+  TeamSelWidget *pNetTeamsWidget;
+  GameCFGWidget *pGameCFG;
 
-    public Q_SLOTS:
-        void setRoomName(const QString & roomName);
-        void setReadyStatus(bool isReady);
-        void setUser(const QString & nickname);
-        void onUpdateClick();
-        void setMasterMode(bool isMaster);
+ public Q_SLOTS:
+  void setRoomName(const QString &roomName);
+  void setReadyStatus(bool isReady);
+  void setUser(const QString &nickname);
+  void onUpdateClick();
+  void setMasterMode(bool isMaster);
 
-    private Q_SLOTS:
-        void onRoomNameEdited();
+ private Q_SLOTS:
+  void onRoomNameEdited();
 
-    Q_SIGNALS:
-        void SetupClicked();
-        void askForUpdateRoomName(const QString &);
+ Q_SIGNALS:
+  void SetupClicked();
+  void askForUpdateRoomName(const QString &);
 
-    protected:
-        void resizeEvent(QResizeEvent * event);
+ protected:
+  void resizeEvent(QResizeEvent *event);
 
-    private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        QLayout * footerLayoutLeftDefinition();
-        void connectSignals();
+ private:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  QLayout *footerLayoutLeftDefinition();
+  void connectSignals();
 
-        QSettings * m_gameSettings;
-        QPushButton * btnSetup;
-        QLabel * lblRoomNameReadOnly;
+  QSettings *m_gameSettings;
+  QPushButton *btnSetup;
+  QLabel *lblRoomNameReadOnly;
 };
 
 #endif

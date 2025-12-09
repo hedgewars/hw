@@ -48,102 +48,99 @@
 #include "pagetraining.h"
 #include "pagevideos.h"
 
-void Ui_HWForm::setupUi(HWForm *HWForm)
-{
-    SetupFonts();
+void Ui_HWForm::setupUi(HWForm *HWForm) {
+  SetupFonts();
 
-    HWForm->setObjectName(QStringLiteral("HWForm"));
-    HWForm->resize(QSize(640, 480).expandedTo(HWForm->minimumSizeHint()));
-    HWForm->setMinimumSize(QSize(720, 450));
-    QString title = QMainWindow::tr("Hedgewars %1").arg(cVersionString);
+  HWForm->setObjectName(QStringLiteral("HWForm"));
+  HWForm->resize(QSize(640, 480).expandedTo(HWForm->minimumSizeHint()));
+  HWForm->setMinimumSize(QSize(720, 450));
+  QString title = QMainWindow::tr("Hedgewars %1").arg(cVersionString);
 #ifdef QT_DEBUG
-    title += QStringLiteral("-r%1 (%2)").arg(cRevisionString, cHashString);
+  title += QStringLiteral("-r%1 (%2)").arg(cRevisionString, cHashString);
 #endif
-    HWForm->setWindowTitle(title);
-    centralWidget = new QWidget(HWForm);
-    centralWidget->setObjectName(QStringLiteral("centralWidget"));
+  HWForm->setWindowTitle(title);
+  centralWidget = new QWidget(HWForm);
+  centralWidget->setObjectName(QStringLiteral("centralWidget"));
 
-    SetupPages(centralWidget);
+  SetupPages(centralWidget);
 
-    HWForm->setCentralWidget(centralWidget);
+  HWForm->setCentralWidget(centralWidget);
 
-    Pages->setCurrentIndex(0);
+  Pages->setCurrentIndex(0);
 
-    QMetaObject::connectSlotsByName(HWForm);
+  QMetaObject::connectSlotsByName(HWForm);
 }
 
-void Ui_HWForm::SetupFonts()
-{
-    font14 = new QFont(QStringLiteral("MS Shell Dlg"), 14);
+void Ui_HWForm::SetupFonts() {
+  font14 = new QFont(QStringLiteral("MS Shell Dlg"), 14);
 }
 
-void Ui_HWForm::SetupPages(QWidget *Parent)
-{
-    Pages = new QStackedLayout(Parent);
+void Ui_HWForm::SetupPages(QWidget *Parent) {
+  Pages = new QStackedLayout(Parent);
 
-    pageEditTeam = new PageEditTeam(Parent);
-    Pages->addWidget(pageEditTeam);
+  pageEditTeam = new PageEditTeam(Parent);
+  Pages->addWidget(pageEditTeam);
 
-    pageOptions = new PageOptions();
-    Pages->addWidget(pageOptions);
+  pageOptions = new PageOptions();
+  Pages->addWidget(pageOptions);
 
-    pageMultiplayer = new PageMultiplayer();
-    Pages->addWidget(pageMultiplayer);
+  pageMultiplayer = new PageMultiplayer();
+  Pages->addWidget(pageMultiplayer);
 
-    pagePlayDemo = new PagePlayDemo();
-    Pages->addWidget(pagePlayDemo);
+  pagePlayDemo = new PagePlayDemo();
+  Pages->addWidget(pagePlayDemo);
 
-    pageNet = new PageNet();
-    Pages->addWidget(pageNet);
+  pageNet = new PageNet();
+  Pages->addWidget(pageNet);
 
-    pageNetGame = new PageNetGame(Parent);
-    Pages->addWidget(pageNetGame);
+  pageNetGame = new PageNetGame(Parent);
+  Pages->addWidget(pageNetGame);
 
-    pageInfo = new PageInfo();
-    Pages->addWidget(pageInfo);
+  pageInfo = new PageInfo();
+  Pages->addWidget(pageInfo);
 
-    pageMain = new PageMain();
-    Pages->addWidget(pageMain);
+  pageMain = new PageMain();
+  Pages->addWidget(pageMain);
 
-    pageGameStats = new PageGameStats();
-    Pages->addWidget(pageGameStats);
+  pageGameStats = new PageGameStats();
+  Pages->addWidget(pageGameStats);
 
-    pageSinglePlayer = new PageSinglePlayer();
-    Pages->addWidget(pageSinglePlayer);
+  pageSinglePlayer = new PageSinglePlayer();
+  Pages->addWidget(pageSinglePlayer);
 
-    pageTraining = new PageTraining();
-    Pages->addWidget(pageTraining);
+  pageTraining = new PageTraining();
+  Pages->addWidget(pageTraining);
 
-    pageSelectWeapon = new PageSelectWeapon();
-    Pages->addWidget(pageSelectWeapon);
+  pageSelectWeapon = new PageSelectWeapon();
+  Pages->addWidget(pageSelectWeapon);
 
-    pageNetServer = new PageNetServer();
-    Pages->addWidget(pageNetServer);
+  pageNetServer = new PageNetServer();
+  Pages->addWidget(pageNetServer);
 
-    pageInGame = new PageInGame();
-    Pages->addWidget(pageInGame);
+  pageInGame = new PageInGame();
+  Pages->addWidget(pageInGame);
 
-    pageRoomsList = new PageRoomsList(Parent);
-    Pages->addWidget(pageRoomsList);
+  pageRoomsList = new PageRoomsList(Parent);
+  Pages->addWidget(pageRoomsList);
 
-    pageConnecting = new PageConnecting();
-    Pages->addWidget(pageConnecting);
+  pageConnecting = new PageConnecting();
+  Pages->addWidget(pageConnecting);
 
-    pageScheme = new PageScheme();
-    Pages->addWidget(pageScheme);
+  pageScheme = new PageScheme();
+  Pages->addWidget(pageScheme);
 
-    pageAdmin = new PageAdmin();
-    Pages->addWidget(pageAdmin);
+  pageAdmin = new PageAdmin();
+  Pages->addWidget(pageAdmin);
 
-    pageCampaign = new PageCampaign();
-    Pages->addWidget(pageCampaign);
+  pageCampaign = new PageCampaign();
+  Pages->addWidget(pageCampaign);
 
-    pageDrawMap = new PageDrawMap();
-    Pages->addWidget(pageDrawMap);
+  pageDrawMap = new PageDrawMap();
+  Pages->addWidget(pageDrawMap);
 
-    pageDataDownload = new PageDataDownload();
-    Pages->addWidget(pageDataDownload);
+  pageDataDownload = new PageDataDownload();
+  Pages->addWidget(pageDataDownload);
 
-    pageVideos = new PageVideos();
-    Pages->addWidget(pageVideos);
+  pageVideos = new PageVideos();
+  Pages->addWidget(pageVideos);
 }

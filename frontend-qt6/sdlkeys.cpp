@@ -20,8 +20,7 @@
 
 #include <QtGlobal>
 
-char sdlkeys[1024][2][128] =
-{
+char sdlkeys[1024][2][128] = {
     // Mouse
     {"mousel", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Left button")},
     {"mousem", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Middle button")},
@@ -139,32 +138,27 @@ char sdlkeys[1024][2][128] =
     //: Windows key / Command key / Meta key /Super key (right)
     {"right_gui", QT_TRANSLATE_NOOP("binds (keys)", "Right GUI")},
     //: Windows key / Command key / Meta key /Super key (left)
-    {"left_gui", QT_TRANSLATE_NOOP("binds (keys)", "Left GUI")}
-};
+    {"left_gui", QT_TRANSLATE_NOOP("binds (keys)", "Left GUI")}};
 
 // helper list for sdlkeys. true for keyboard keys, false for other
 bool sdlkeys_iskeyboard[1024];
 
 // button name definitions for Microsoft's XBox360 controller
 // don't modify button order!
-char xb360buttons[10][128] =
-{
-    QT_TRANSLATE_NOOP("binds (keys)", "A button"),
-    QT_TRANSLATE_NOOP("binds (keys)", "B button"),
-    QT_TRANSLATE_NOOP("binds (keys)", "X button"),
-    QT_TRANSLATE_NOOP("binds (keys)", "Y button"),
-    QT_TRANSLATE_NOOP("binds (keys)", "LB button"),
-    QT_TRANSLATE_NOOP("binds (keys)", "RB button"),
-    QT_TRANSLATE_NOOP("binds (keys)", "Back button"),
-    QT_TRANSLATE_NOOP("binds (keys)", "Start button"),
-    QT_TRANSLATE_NOOP("binds (keys)", "Left stick"),
-    QT_TRANSLATE_NOOP("binds (keys)", "Right stick")
-};
+char xb360buttons[10][128] = {QT_TRANSLATE_NOOP("binds (keys)", "A button"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "B button"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "X button"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "Y button"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "LB button"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "RB button"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "Back button"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "Start button"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "Left stick"),
+                              QT_TRANSLATE_NOOP("binds (keys)", "Right stick")};
 
 // axis name definitions for Microsoft's XBox360 controller
 // don't modify axis order!
-char xbox360axes[][128] =
-{
+char xbox360axes[][128] = {
     QT_TRANSLATE_NOOP("binds (keys)", "Left stick (Right)"),
     QT_TRANSLATE_NOOP("binds (keys)", "Left stick (Left)"),
     QT_TRANSLATE_NOOP("binds (keys)", "Left stick (Down)"),
@@ -192,4 +186,3 @@ char controllerright[128] = QT_TRANSLATE_NOOP("binds (keys)", "Right");
 
 //: Special entry in key selection when an action has no control assigned
 char unboundcontrol[128] = QT_TRANSLATE_NOOP("binds (keys)", "(Don't use)");
-

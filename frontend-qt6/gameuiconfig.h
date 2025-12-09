@@ -19,100 +19,101 @@
 #ifndef GAMECONFIG_H
 #define GAMECONFIG_H
 
-#include <QSettings>
-#include <QStringList>
-#include <QRect>
 #include <QEvent>
 #include <QList>
+#include <QRect>
+#include <QSettings>
+#include <QStringList>
 #include <utility>
+
 #include "binds.h"
 
 class HWForm;
 class QSettings;
 
-class GameUIConfig : public QSettings
-{
-        Q_OBJECT
+class GameUIConfig : public QSettings {
+  Q_OBJECT
 
-    public:
-        HWForm * Form;
-        GameUIConfig(HWForm * FormWidgets, const QString & fileName);
-        QStringList GetTeamsList();
-        QRect vid_Resolution();
-        std::pair<QRect, QRect> vid_ResolutionPair();
-        bool vid_Maximized();
-        void vid_SetMaximized(bool isMaximized);
-        bool vid_Fullscreen();
-        quint32 translateQuality();
-        bool isSoundEnabled();
-        bool isFrontendSoundEnabled();
-        QString language();
-        bool isMusicEnabled();
-        bool isFrontendMusicEnabled();
-        bool isAudioDampenEnabled();
-        bool isShowFPSEnabled();
-        bool isAltDamageEnabled();
-        bool appendDateTimeToRecordName();
-        int chatSize();
-        quint8 volume();
-        quint8 timerInterval();
-        QString netNick();
-        QString getRandomNick();
-        QByteArray netPasswordHash();
-        int netPasswordLength();
-        void clearPasswordHash();
-        void setPasswordHash(const QString & passwordhash);
-        QString passwordHash();
-        void clearTempHash();
-        void setTempHash(const QString & temphash);
-        QString tempHash();
-        void setNetPasswordLength(int passwordLength);
-        bool isReducedQuality() const;
-        bool isFrontendEffects() const;
-        bool isFrontendFullscreen() const;
-        quint16 zoom();
-        bool isHolidaySillinessEnabled() const;
-        int quickGameExperience() const;
-        void setQuickGameExperience(int exp);
-        void resizeToConfigValues();
-        quint32 stereoMode() const;
-        void setValue(const QString & key, const QVariant & value);
-        QString bind(int bindID);
-        void setBind(int bindID, QString & strbind);
+ public:
+  HWForm *Form;
+  GameUIConfig(HWForm *FormWidgets, const QString &fileName);
+  QStringList GetTeamsList();
+  QRect vid_Resolution();
+  std::pair<QRect, QRect> vid_ResolutionPair();
+  bool vid_Maximized();
+  void vid_SetMaximized(bool isMaximized);
+  bool vid_Fullscreen();
+  quint32 translateQuality();
+  bool isSoundEnabled();
+  bool isFrontendSoundEnabled();
+  QString language();
+  bool isMusicEnabled();
+  bool isFrontendMusicEnabled();
+  bool isAudioDampenEnabled();
+  bool isShowFPSEnabled();
+  bool isAltDamageEnabled();
+  bool appendDateTimeToRecordName();
+  int chatSize();
+  quint8 volume();
+  quint8 timerInterval();
+  QString netNick();
+  QString getRandomNick();
+  QByteArray netPasswordHash();
+  int netPasswordLength();
+  void clearPasswordHash();
+  void setPasswordHash(const QString &passwordhash);
+  QString passwordHash();
+  void clearTempHash();
+  void setTempHash(const QString &temphash);
+  QString tempHash();
+  void setNetPasswordLength(int passwordLength);
+  bool isReducedQuality() const;
+  bool isFrontendEffects() const;
+  bool isFrontendFullscreen() const;
+  quint16 zoom();
+  bool isHolidaySillinessEnabled() const;
+  int quickGameExperience() const;
+  void setQuickGameExperience(int exp);
+  void resizeToConfigValues();
+  quint32 stereoMode() const;
+  void setValue(const QString &key, const QVariant &value);
+  QString bind(int bindID);
+  void setBind(int bindID, QString &strbind);
 
-        QString AVFormat();
-        QString videoCodec();
-        QString audioCodec();
-        QRect rec_Resolution();
-        int rec_Framerate();
-        int rec_Bitrate();
-        bool recordAudio();
+  QString AVFormat();
+  QString videoCodec();
+  QString audioCodec();
+  QRect rec_Resolution();
+  int rec_Framerate();
+  int rec_Bitrate();
+  bool recordAudio();
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED
-        bool isAutoUpdateEnabled();
+  bool isAutoUpdateEnabled();
 #endif
 #endif
-        void reloadValues();
-        void reloadVideosValues();
+  void reloadValues();
+  void reloadVideosValues();
 
-    Q_SIGNALS:
-        void frontendFullscreen(bool value);
+ Q_SIGNALS:
+  void frontendFullscreen(bool value);
 
-    public Q_SLOTS:
-        void SaveOptions();
-        void SaveVideosOptions();
-        void updNetNick();
-    private:
-        bool netPasswordIsValid();
-        bool eventFilter(QObject *object, QEvent *event);
-        QString temphash;
-        QList<BindAction> m_binds;
+ public Q_SLOTS:
+  void SaveOptions();
+  void SaveVideosOptions();
+  void updNetNick();
 
-        void applyProxySettings();
-        bool pIsEngineWindowMaximized;
+ private:
+  bool netPasswordIsValid();
+  bool eventFilter(QObject *object, QEvent *event);
+  QString temphash;
+  QList<BindAction> m_binds;
 
-        QString cachedRandomNick;
+  void applyProxySettings();
+  bool pIsEngineWindowMaximized;
+
+  QString cachedRandomNick;
 };
 
 #endif

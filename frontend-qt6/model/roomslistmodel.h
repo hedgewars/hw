@@ -29,47 +29,46 @@
 
 #include "DataManager.h"
 
-class RoomsListModel : public QAbstractTableModel
-{
-    Q_OBJECT
-public:
-    // if you add a column here, also incr. c_nColumns in constructor
-    // also adjust header in constructor to changes
-    enum Column {
-        StateColumn,
-        NameColumn,
-        PlayerCountColumn,
-        TeamCountColumn,
-        OwnerColumn,
-        MapColumn,
-        ScriptColumn,
-        SchemeColumn,
-        WeaponsColumn,
-        VersionColumn,
-    };
+class RoomsListModel : public QAbstractTableModel {
+  Q_OBJECT
+ public:
+  // if you add a column here, also incr. c_nColumns in constructor
+  // also adjust header in constructor to changes
+  enum Column {
+    StateColumn,
+    NameColumn,
+    PlayerCountColumn,
+    TeamCountColumn,
+    OwnerColumn,
+    MapColumn,
+    ScriptColumn,
+    SchemeColumn,
+    WeaponsColumn,
+    VersionColumn,
+  };
 
-    explicit RoomsListModel(QObject *parent = 0);
+  explicit RoomsListModel(QObject *parent = 0);
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    int rowCount(const QModelIndex & parent) const;
-    int columnCount(const QModelIndex & parent) const;
-    int columnCountSupported() const { return c_nColumns; };
-    QVariant data(const QModelIndex &index, int role) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  int rowCount(const QModelIndex &parent) const;
+  int columnCount(const QModelIndex &parent) const;
+  int columnCountSupported() const { return c_nColumns; };
+  QVariant data(const QModelIndex &index, int role) const;
 
-public Q_SLOTS:
-    void setRoomsList(const QStringList & rooms);
-    void addRoom(const QStringList & info);
-    void removeRoom(const QString & name);
-    void updateRoom(const QString & name, const QStringList & info);
-    int rowOfRoom(const QString & name);
+ public Q_SLOTS:
+  void setRoomsList(const QStringList &rooms);
+  void addRoom(const QStringList &info);
+  void removeRoom(const QString &name);
+  void updateRoom(const QString &name, const QStringList &info);
+  int rowOfRoom(const QString &name);
 
-private:
-    const int c_nColumns;
-    QList<QStringList> m_data;
-    QStringList m_headerData;
-    MapModel * m_staticMapModel;
-    MapModel * m_missionMapModel;
-    static QString protoToVersion(const QString & proto);
+ private:
+  const int c_nColumns;
+  QList<QStringList> m_data;
+  QStringList m_headerData;
+  MapModel *m_staticMapModel;
+  MapModel *m_missionMapModel;
+  static QString protoToVersion(const QString &proto);
 };
 
-#endif // HEDGEWARS_ROOMSLISTMODEL_H
+#endif  // HEDGEWARS_ROOMSLISTMODEL_H

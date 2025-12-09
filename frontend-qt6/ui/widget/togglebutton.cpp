@@ -54,11 +54,8 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget *parent, const QString &img)
           &ToggleButtonWidget::eventToggled);
 }
 
-ToggleButtonWidget::~ToggleButtonWidget()
-{
-}
+ToggleButtonWidget::~ToggleButtonWidget() {}
 
-void ToggleButtonWidget::eventToggled(bool checked)
-{
-    setIcon(checked ? icoChecked : icoUnchecked);
+void ToggleButtonWidget::eventToggled(bool checked) {
+  setIcon(checked ? icoChecked : icoUnchecked);
 }

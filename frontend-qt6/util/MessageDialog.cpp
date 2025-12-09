@@ -17,58 +17,45 @@
  */
 
 #include "MessageDialog.h"
+
 #include "HWApplication.h"
 
-
-
-int MessageDialog::ShowFatalMessage(const QString & msg, QWidget * parent)
-{
-    return ShowMessage(QMessageBox::tr("Hedgewars - Error"),
-                       msg,
-                       QMessageBox::Critical,
-                       parent);
+int MessageDialog::ShowFatalMessage(const QString& msg, QWidget* parent) {
+  return ShowMessage(QMessageBox::tr("Hedgewars - Error"), msg,
+                     QMessageBox::Critical, parent);
 }
 
-int MessageDialog::ShowErrorMessage(const QString & msg, QWidget * parent)
-{
-    return ShowMessage(QMessageBox::tr("Hedgewars - Warning"),
-                       msg,
-                       QMessageBox::Warning,
-                       parent);
+int MessageDialog::ShowErrorMessage(const QString& msg, QWidget* parent) {
+  return ShowMessage(QMessageBox::tr("Hedgewars - Warning"), msg,
+                     QMessageBox::Warning, parent);
 }
 
-int MessageDialog::ShowInfoMessage(const QString & msg, QWidget * parent)
-{
-    return ShowMessage(QMessageBox::tr("Hedgewars - Information"),
-                       msg,
-                       QMessageBox::Information,
-                       parent);
+int MessageDialog::ShowInfoMessage(const QString& msg, QWidget* parent) {
+  return ShowMessage(QMessageBox::tr("Hedgewars - Information"), msg,
+                     QMessageBox::Information, parent);
 }
 
-int MessageDialog::ShowMessage(const QString & title, const QString & msg, QMessageBox::Icon icon, QWidget * parent)
-{
-    // if no parent try to use active window
-    parent = parent ? parent : HWApplication::activeWindow();
+int MessageDialog::ShowMessage(const QString& title, const QString& msg,
+                               QMessageBox::Icon icon, QWidget* parent) {
+  // if no parent try to use active window
+  parent = parent ? parent : HWApplication::activeWindow();
 
-    // didn't work? make child of hwform (e.g. for style and because modal)
-    if (!parent)
-    {
-        try
-        {
-            HWApplication * app = dynamic_cast<HWApplication*>(HWApplication::instance());
-            if (app->form)
-                parent = app->form;
-        }
-        catch (...) { /* nothing */ }
+  // didn't work? make child of hwform (e.g. for style and because modal)
+  if (!parent) {
+    try {
+      HWApplication* app =
+          dynamic_cast<HWApplication*>(HWApplication::instance());
+      if (app->form) parent = app->form;
+    } catch (...) { /* nothing */
     }
+  }
 
-    QMessageBox msgMsg(parent);
-    msgMsg.setWindowTitle(title.isEmpty() ? QStringLiteral("Hedgewars")
-                                          : title);
-    msgMsg.setText(msg);
-    msgMsg.setIcon(icon);
-    msgMsg.setTextFormat(Qt::PlainText);
-    msgMsg.setWindowModality(Qt::WindowModal);
+  QMessageBox msgMsg(parent);
+  msgMsg.setWindowTitle(title.isEmpty() ? QStringLiteral("Hedgewars") : title);
+  msgMsg.setText(msg);
+  msgMsg.setIcon(icon);
+  msgMsg.setTextFormat(Qt::PlainText);
+  msgMsg.setWindowModality(Qt::WindowModal);
 
-    return msgMsg.exec();
+  return msgMsg.exec();
 }

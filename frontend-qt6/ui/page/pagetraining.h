@@ -21,45 +21,39 @@
 
 #include "AbstractPage.h"
 
-class PageTraining : public AbstractPage
-{
-        Q_OBJECT
+class PageTraining : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageTraining(QWidget* parent = 0);
-        QListWidget * lstTrainings;
-        QListWidget * lstChallenges;
-        QListWidget * lstScenarios;
-        QPushButton * btnPreview;
-        QPushButton * btnStart;
-        QComboBox * CBTeam;
+ public:
+  PageTraining(QWidget* parent = 0);
+  QListWidget* lstTrainings;
+  QListWidget* lstChallenges;
+  QListWidget* lstScenarios;
+  QPushButton* btnPreview;
+  QPushButton* btnStart;
+  QComboBox* CBTeam;
 
-    public Q_SLOTS:
-        void updateInfo();
+ public Q_SLOTS:
+  void updateInfo();
 
-    Q_SIGNALS:
-        void startMission(const QString & scriptName, const QString & subFolder);
+ Q_SIGNALS:
+  void startMission(const QString& scriptName, const QString& subFolder);
 
+ protected:
+  QLayout* bodyLayoutDefinition();
+  QLayout* footerLayoutDefinition();
+  void connectSignals();
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ private:
+  QLabel* lblCaption;
+  QLabel* lblDescription;
+  QLabel* lblHighscores;
+  QTabWidget* tbw;
+  QSettings* m_info;
+  QString getSubFolderOfSelected();
 
-
-    private:
-        QLabel * lblCaption;
-        QLabel * lblDescription;
-        QLabel * lblHighscores;
-        QTabWidget * tbw;
-        QSettings * m_info;
-        QString getSubFolderOfSelected();
-
-
-    private Q_SLOTS:
-        void startSelected();
-
+ private Q_SLOTS:
+  void startSelected();
 };
 
 #endif
-

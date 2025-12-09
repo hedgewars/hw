@@ -32,109 +32,103 @@
 #include "DataManager.h"
 #include "hwform.h"  // player hash
 
-HatModel::HatModel(QObject* parent) :
-    QStandardItemModel(parent)
-{}
+HatModel::HatModel(QObject* parent) : QStandardItemModel(parent) {}
 
-void HatModel::loadHats()
-{
-    qDebug("HatModel::loadHats()");
+void HatModel::loadHats() {
+  qDebug("HatModel::loadHats()");
 
-    // this method resets the contents of this model (important to know for views).
-    QStandardItemModel::beginResetModel();
-    QStandardItemModel::clear();
+  // this method resets the contents of this model (important to know for
+  // views).
+  QStandardItemModel::beginResetModel();
+  QStandardItemModel::clear();
 
-    // New hats to add to model
-    QList<QStandardItem *> hats;
+  // New hats to add to model
+  QList<QStandardItem*> hats;
 
-    // we'll need the DataManager a few times, so let's get a reference to it
-    DataManager & dataMgr = DataManager::instance();
+  // we'll need the DataManager a few times, so let's get a reference to it
+  DataManager& dataMgr = DataManager::instance();
 
-    // Default hat icon
-    QPixmap hhpix = QPixmap(QStringLiteral("physfs://Graphics/Hedgehog/Idle.png")).copy(0, 0, 32, 32);
+  // Default hat icon
+  QPixmap hhpix = QPixmap(QStringLiteral("physfs://Graphics/Hedgehog/Idle.png"))
+                      .copy(0, 0, 32, 32);
 
-    // my reserved hats
-    QStringList hatsList = dataMgr.entryList(
-                               QStringLiteral("Graphics/Hats/Reserved"),
-                               QDir::Files,
-                               QStringList(playerHash+QStringLiteral("*.png"))
-                           );
-    int nReserved = hatsList.size();
+  // my reserved hats
+  QStringList hatsList =
+      dataMgr.entryList(QStringLiteral("Graphics/Hats/Reserved"), QDir::Files,
+                        QStringList(playerHash + QStringLiteral("*.png")));
+  int nReserved = hatsList.size();
 
-    // regular hats
-    hatsList.append(dataMgr.entryList(
-                        QStringLiteral("Graphics/Hats"),
-                        QDir::Files,
-                        QStringList("*.png")
-                    )
-                   );
-    int nHats = hatsList.size();
+  // regular hats
+  hatsList.append(dataMgr.entryList(QStringLiteral("Graphics/Hats"),
+                                    QDir::Files, QStringList("*.png")));
+  int nHats = hatsList.size();
 
-    // Add each hat
-    for (int i = 0; i < nHats; i++)
-    {
-        bool isReserved = (i < nReserved);
+  // Add each hat
+  for (int i = 0; i < nHats; i++) {
+    bool isReserved = (i < nReserved);
 
-        if (isReserved) continue; // For some reason, reserved hats were added in 9.19-dev, so this will hide them. Uncomment to show them.
+    if (isReserved)
+      continue;  // For some reason, reserved hats were added in 9.19-dev, so
+                 // this will hide them. Uncomment to show them.
 
-        QString str = hatsList.at(i);
-        str = str.remove(QRegularExpression(QStringLiteral("\\.png$")));
-        QPixmap hatpix(
-                QStringLiteral("physfs://Graphics/Hats/") + QString(isReserved?"Reserved/":"") + str +
-                QStringLiteral(".png")
-        );
+    QString str = hatsList.at(i);
+    str = str.remove(QRegularExpression(QStringLiteral("\\.png$")));
+    QPixmap hatpix(QStringLiteral("physfs://Graphics/Hats/") +
+                   QString(isReserved ? "Reserved/" : "") + str +
+                   QStringLiteral(".png"));
 
-        // rename properly
-        if (isReserved)
-            str = QStringLiteral("Reserved ")+str.remove(0,32);
+    // rename properly
+    if (isReserved) str = QStringLiteral("Reserved ") + str.remove(0, 32);
 
-        // Color for team hats. We use the default color of the first team.
-        QColor overlay_color = QColor(colors[0]);
+    // Color for team hats. We use the default color of the first team.
+    QColor overlay_color = QColor(colors[0]);
 
-        QPixmap ppix(32, 37);
-        ppix.fill(QColor(Qt::transparent));
-        QPainter painter(&ppix);
+    QPixmap ppix(32, 37);
+    ppix.fill(QColor(Qt::transparent));
+    QPainter painter(&ppix);
 
-        QPixmap opix(32, 37);
-        opix.fill(QColor(Qt::transparent));
-        QPainter overlay_painter(&opix);
+    QPixmap opix(32, 37);
+    opix.fill(QColor(Qt::transparent));
+    QPainter overlay_painter(&opix);
 
-        // The hat is drawn in reverse: First the color overlay, then the hat, then the hedgehog.
+    // The hat is drawn in reverse: First the color overlay, then the hat, then
+    // the hedgehog.
 
-        // draw hat's color layer, if present
-        int overlay_offset = -1;
-        if((hatpix.height() == 32) && (hatpix.width() == 64)) {
-            overlay_offset = 32;
-        } else if(hatpix.width() > 64) {
-            overlay_offset = 64;
-        }
-        if(overlay_offset > -1) {
-            // colorized layer
-            overlay_painter.drawPixmap(QPoint(0, 0), hatpix.copy(overlay_offset, 0, 32, 32));
-            overlay_painter.setCompositionMode(QPainter::CompositionMode_Multiply);
-            overlay_painter.fillRect(0, 0, 32, 32, overlay_color);
+    // draw hat's color layer, if present
+    int overlay_offset = -1;
+    if ((hatpix.height() == 32) && (hatpix.width() == 64)) {
+      overlay_offset = 32;
+    } else if (hatpix.width() > 64) {
+      overlay_offset = 64;
+    }
+    if (overlay_offset > -1) {
+      // colorized layer
+      overlay_painter.drawPixmap(QPoint(0, 0),
+                                 hatpix.copy(overlay_offset, 0, 32, 32));
+      overlay_painter.setCompositionMode(QPainter::CompositionMode_Multiply);
+      overlay_painter.fillRect(0, 0, 32, 32, overlay_color);
 
-            // uncolorized layer and combine
-            painter.drawPixmap(QPoint(0, 0), hatpix.copy(overlay_offset, 0, 32, 32));
-            painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-            painter.drawPixmap(QPoint(0, 0), opix.copy(0, 0, 32, 32));
-        }
-
-        // draw hat below the color layer
-        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-        painter.drawPixmap(QPoint(0, 0), hatpix.copy(0, 0, 32, 32));
-
-        // draw hedgehog below the hat
-        painter.drawPixmap(QPoint(0, 5), hhpix);
-
-        painter.end();
-
-        if (str == QLatin1String("NoHat"))
-            hats.prepend(new QStandardItem(QIcon(ppix), str));
-        else
-            hats.append(new QStandardItem(QIcon(ppix), str));
+      // uncolorized layer and combine
+      painter.drawPixmap(QPoint(0, 0), hatpix.copy(overlay_offset, 0, 32, 32));
+      painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+      painter.drawPixmap(QPoint(0, 0), opix.copy(0, 0, 32, 32));
     }
 
-    QStandardItemModel::appendColumn(hats);
-    QStandardItemModel::endResetModel();
+    // draw hat below the color layer
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    painter.drawPixmap(QPoint(0, 0), hatpix.copy(0, 0, 32, 32));
+
+    // draw hedgehog below the hat
+    painter.drawPixmap(QPoint(0, 5), hhpix);
+
+    painter.end();
+
+    if (str == QLatin1String("NoHat"))
+      hats.prepend(new QStandardItem(QIcon(ppix), str));
+    else
+      hats.append(new QStandardItem(QIcon(ppix), str));
+  }
+
+  QStandardItemModel::appendColumn(hats);
+  QStandardItemModel::endResetModel();
 }

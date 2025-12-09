@@ -23,49 +23,48 @@
 
 class QTableWidget;
 
-class PageAdmin : public AbstractPage
-{
-        Q_OBJECT
+class PageAdmin : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageAdmin(QWidget* parent = 0);
+ public:
+  PageAdmin(QWidget* parent = 0);
 
-    public Q_SLOTS:
-        void serverMessageNew(const QString & str);
-        void serverMessageOld(const QString & str);
-        void protocol(int proto);
-        void setBansList(const QStringList & bans);
+ public Q_SLOTS:
+  void serverMessageNew(const QString& str);
+  void serverMessageOld(const QString& str);
+  void protocol(int proto);
+  void setBansList(const QStringList& bans);
 
-    Q_SIGNALS:
-        void setServerMessageNew(const QString & str);
-        void setServerMessageOld(const QString & str);
-        void setProtocol(int proto);
-        void askServerVars();
-        void clearAccountsCache();
-        void bansListRequest();
-        void removeBan(const QString &);
-        void banIP(const QString & ip, const QString & reason, int seconds);
-        void banNick(const QString & nick, const QString & reason, int seconds);
+ Q_SIGNALS:
+  void setServerMessageNew(const QString& str);
+  void setServerMessageOld(const QString& str);
+  void setProtocol(int proto);
+  void askServerVars();
+  void clearAccountsCache();
+  void bansListRequest();
+  void removeBan(const QString&);
+  void banIP(const QString& ip, const QString& reason, int seconds);
+  void banNick(const QString& nick, const QString& reason, int seconds);
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        void connectSignals();
+ protected:
+  QLayout* bodyLayoutDefinition();
+  void connectSignals();
 
-    private:
-        QLineEdit * leServerMessageNew;
-        QLineEdit * leServerMessageOld;
-        QPushButton * pbSetSM;
-        QPushButton * pbAsk;
-        QSpinBox * sbProtocol;
-        QTextBrowser * tb;
-        QPushButton * pbClearAccountsCache;
-        QTableWidget * twBans;
+ private:
+  QLineEdit* leServerMessageNew;
+  QLineEdit* leServerMessageOld;
+  QPushButton* pbSetSM;
+  QPushButton* pbAsk;
+  QSpinBox* sbProtocol;
+  QTextBrowser* tb;
+  QPushButton* pbClearAccountsCache;
+  QTableWidget* twBans;
 
-    private Q_SLOTS:
-        void smChanged();
-        void onAddClicked();
-        void onRemoveClicked();
-        void onRefreshClicked();
+ private Q_SLOTS:
+  void smChanged();
+  void onAddClicked();
+  void onRemoveClicked();
+  void onRefreshClicked();
 };
 
 #endif

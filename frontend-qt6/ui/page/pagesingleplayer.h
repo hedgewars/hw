@@ -23,26 +23,24 @@
 
 class GameCFGWidget;
 
-class PageSinglePlayer : public AbstractPage
-{
-        Q_OBJECT
+class PageSinglePlayer : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageSinglePlayer(QWidget* parent = 0);
+ public:
+  PageSinglePlayer(QWidget *parent = 0);
 
-        QPushButton *BtnSimpleGamePage;
-        QPushButton *BtnTrainPage;
-        QPushButton *BtnCampaignPage;
-        QPushButton *BtnMultiplayer;
-        QPushButton *BtnLoad;
-        QPushButton *BtnDemos;
-        GameCFGWidget *gameCFG;
+  QPushButton *BtnSimpleGamePage;
+  QPushButton *BtnTrainPage;
+  QPushButton *BtnCampaignPage;
+  QPushButton *BtnMultiplayer;
+  QPushButton *BtnLoad;
+  QPushButton *BtnDemos;
+  GameCFGWidget *gameCFG;
 
-    private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ private:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 };
 
 #endif
-

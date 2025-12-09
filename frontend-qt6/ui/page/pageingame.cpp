@@ -16,25 +16,21 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "pageingame.h"
+
 #include <QHBoxLayout>
 #include <QLabel>
 
-#include "pageingame.h"
+QLayout* PageInGame::bodyLayoutDefinition() {
+  QHBoxLayout* pageLayout = new QHBoxLayout();
 
-QLayout * PageInGame::bodyLayoutDefinition()
-{
-    QHBoxLayout * pageLayout = new QHBoxLayout();
+  QLabel* label = new QLabel(this);
+  label->setText(tr("In game..."));
+  pageLayout->addWidget(label);
 
-    QLabel * label = new QLabel(this);
-    label->setText(tr("In game..."));
-    pageLayout->addWidget(label);
+  setBackButtonVisible(false);
 
-    setBackButtonVisible(false);
-
-    return pageLayout;
+  return pageLayout;
 }
 
-PageInGame::PageInGame(QWidget * parent) :  AbstractPage(parent)
-{
-    initPage();
-}
+PageInGame::PageInGame(QWidget* parent) : AbstractPage(parent) { initPage(); }

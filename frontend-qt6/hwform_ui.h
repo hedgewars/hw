@@ -48,41 +48,40 @@ class QWidget;
 class QMainWindow;
 class HWForm;
 
-class Ui_HWForm
-{
-    public:
-        QWidget *centralWidget;
+class Ui_HWForm {
+ public:
+  QWidget *centralWidget;
 
-        PageMain *pageMain;
-        PageEditTeam *pageEditTeam;
-        PageMultiplayer *pageMultiplayer;
-        PagePlayDemo *pagePlayDemo;
-        PageOptions *pageOptions;
-        PageNet *pageNet;
-        PageNetServer * pageNetServer;
-        PageNetChat *pageNetChat;
-        PageNetGame *pageNetGame;
-        PageInfo *pageInfo;
-        PageDataDownload *pageDataDownload;
-        PageGameStats *pageGameStats;
-        PageSinglePlayer *pageSinglePlayer;
-        PageTraining *pageTraining;
-        PageSelectWeapon *pageSelectWeapon;
-        PageInGame *pageInGame;
-        PageRoomsList *pageRoomsList;
-        PageConnecting *pageConnecting;
-        PageScheme *pageScheme;
-        PageAdmin *pageAdmin;
-        PageCampaign *pageCampaign;
-        PageDrawMap *pageDrawMap;
-        PageVideos *pageVideos;
+  PageMain *pageMain;
+  PageEditTeam *pageEditTeam;
+  PageMultiplayer *pageMultiplayer;
+  PagePlayDemo *pagePlayDemo;
+  PageOptions *pageOptions;
+  PageNet *pageNet;
+  PageNetServer *pageNetServer;
+  PageNetChat *pageNetChat;
+  PageNetGame *pageNetGame;
+  PageInfo *pageInfo;
+  PageDataDownload *pageDataDownload;
+  PageGameStats *pageGameStats;
+  PageSinglePlayer *pageSinglePlayer;
+  PageTraining *pageTraining;
+  PageSelectWeapon *pageSelectWeapon;
+  PageInGame *pageInGame;
+  PageRoomsList *pageRoomsList;
+  PageConnecting *pageConnecting;
+  PageScheme *pageScheme;
+  PageAdmin *pageAdmin;
+  PageCampaign *pageCampaign;
+  PageDrawMap *pageDrawMap;
+  PageVideos *pageVideos;
 
-        QStackedLayout *Pages;
-        QFont *font14;
+  QStackedLayout *Pages;
+  QFont *font14;
 
-        void setupUi(HWForm *HWForm);
-        void SetupFonts();
-        void SetupPages(QWidget *Parent);
+  void setupUi(HWForm *HWForm);
+  void SetupFonts();
+  void SetupPages(QWidget *Parent);
 };
 
-#endif // UI_HWFORM_H
+#endif  // UI_HWFORM_H

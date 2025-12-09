@@ -21,19 +21,18 @@
 
 #include "AbstractPage.h"
 
-class PageConnecting : public AbstractPage
-{
-        Q_OBJECT
+class PageConnecting : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageConnecting(QWidget* parent = 0);
+ public:
+  PageConnecting(QWidget* parent = 0);
 
-    Q_SIGNALS:
-        void cancelConnection();
+ Q_SIGNALS:
+  void cancelConnection();
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        void connectSignals();
+ protected:
+  QLayout* bodyLayoutDefinition();
+  void connectSignals();
 };
 
 #endif

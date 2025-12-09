@@ -19,23 +19,22 @@
 #ifndef _SQUARELABEL_H
 #define _SQUARELABEL_H
 
-#include <QWidget>
 #include <QPixmap>
+#include <QWidget>
 
-class SquareLabel : public QWidget
-{
-        Q_OBJECT
+class SquareLabel : public QWidget {
+  Q_OBJECT
 
-    public:
-        SquareLabel(QWidget * parent = 0);
+ public:
+  SquareLabel(QWidget* parent = 0);
 
-        void setPixmap(const QPixmap & pixmap);
-    protected:
-        virtual void paintEvent(QPaintEvent * event);
+  void setPixmap(const QPixmap& pixmap);
 
-    private:
-        QPixmap pixmap;
+ protected:
+  virtual void paintEvent(QPaintEvent* event);
 
+ private:
+  QPixmap pixmap;
 };
 
-#endif // _SQUARELABEL_H
+#endif  // _SQUARELABEL_H

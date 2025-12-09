@@ -26,91 +26,90 @@ class FreqSpinBox;
 class SDTimeoutSpinBox;
 class MinesTimeSpinBox;
 
-class PageScheme : public AbstractPage
-{
-        Q_OBJECT
+class PageScheme : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageScheme(QWidget* parent = 0);
+ public:
+  PageScheme(QWidget *parent = 0);
 
-        QPushButton * BtnCopy;
-        QPushButton * BtnNew;
-        QPushButton * BtnDelete;
-        QComboBox * selectScheme;
+  QPushButton *BtnCopy;
+  QPushButton *BtnNew;
+  QPushButton *BtnDelete;
+  QComboBox *selectScheme;
 
-        void setModel(QAbstractItemModel * model);
+  void setModel(QAbstractItemModel *model);
 
-    public Q_SLOTS:
-        void newRow();
-        void copyRow();
-        void deleteRow();
+ public Q_SLOTS:
+  void newRow();
+  void copyRow();
+  void deleteRow();
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ protected:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 
-    private:
-        QDataWidgetMapper * mapper;
-        ToggleButtonWidget * TBW_teamsDivide;
-        ToggleButtonWidget * TBW_solid;
-        ToggleButtonWidget * TBW_border;
-        ToggleButtonWidget * TBW_lowGravity;
-        ToggleButtonWidget * TBW_laserSight;
-        ToggleButtonWidget * TBW_invulnerable;
-        ToggleButtonWidget * TBW_resethealth;
-        ToggleButtonWidget * TBW_vampiric;
-        ToggleButtonWidget * TBW_karma;
-        ToggleButtonWidget * TBW_artillery;
-        ToggleButtonWidget * TBW_randomorder;
-        ToggleButtonWidget * TBW_king;
-        ToggleButtonWidget * TBW_placehog;
-        ToggleButtonWidget * TBW_sharedammo;
-        ToggleButtonWidget * TBW_disablegirders;
-        ToggleButtonWidget * TBW_disablelandobjects;
-        ToggleButtonWidget * TBW_aisurvival;
-        ToggleButtonWidget * TBW_infattack;
-        ToggleButtonWidget * TBW_resetweps;
-        ToggleButtonWidget * TBW_perhogammo;
-        ToggleButtonWidget * TBW_nowind;
-        ToggleButtonWidget * TBW_morewind;
-        ToggleButtonWidget * TBW_tagteam;
-        ToggleButtonWidget * TBW_bottomborder;
-        ToggleButtonWidget * TBW_switchhog;
+ private:
+  QDataWidgetMapper *mapper;
+  ToggleButtonWidget *TBW_teamsDivide;
+  ToggleButtonWidget *TBW_solid;
+  ToggleButtonWidget *TBW_border;
+  ToggleButtonWidget *TBW_lowGravity;
+  ToggleButtonWidget *TBW_laserSight;
+  ToggleButtonWidget *TBW_invulnerable;
+  ToggleButtonWidget *TBW_resethealth;
+  ToggleButtonWidget *TBW_vampiric;
+  ToggleButtonWidget *TBW_karma;
+  ToggleButtonWidget *TBW_artillery;
+  ToggleButtonWidget *TBW_randomorder;
+  ToggleButtonWidget *TBW_king;
+  ToggleButtonWidget *TBW_placehog;
+  ToggleButtonWidget *TBW_sharedammo;
+  ToggleButtonWidget *TBW_disablegirders;
+  ToggleButtonWidget *TBW_disablelandobjects;
+  ToggleButtonWidget *TBW_aisurvival;
+  ToggleButtonWidget *TBW_infattack;
+  ToggleButtonWidget *TBW_resetweps;
+  ToggleButtonWidget *TBW_perhogammo;
+  ToggleButtonWidget *TBW_nowind;
+  ToggleButtonWidget *TBW_morewind;
+  ToggleButtonWidget *TBW_tagteam;
+  ToggleButtonWidget *TBW_bottomborder;
+  ToggleButtonWidget *TBW_switchhog;
 
-        QSpinBox * SB_DamageModifier;
-        QSpinBox * SB_TurnTime;
-        QSpinBox * SB_InitHealth;
-        SDTimeoutSpinBox * SB_SuddenDeath;
-        QSpinBox * SB_WaterRise;
-        QSpinBox * SB_HealthDecrease;
-        FreqSpinBox * SB_CaseProb;
-        QSpinBox * SB_HealthCrates;
-        QSpinBox * SB_CrateHealth;
-        MinesTimeSpinBox * SB_MinesTime;
-        QSpinBox * SB_Mines;
-        QSpinBox * SB_AirMines;
-        QSpinBox * SB_Sentries;
-        QSpinBox * SB_MineDuds;
-        QSpinBox * SB_Explosives;
-        QSpinBox * SB_RopeModifier;
-        QSpinBox * SB_GetAwayTime;
-        QComboBox * CB_WorldEdge;
-        QLineEdit * LE_name;
-        QLabel * L_name;
-        QLineEdit * LE_ScriptParam;
+  QSpinBox *SB_DamageModifier;
+  QSpinBox *SB_TurnTime;
+  QSpinBox *SB_InitHealth;
+  SDTimeoutSpinBox *SB_SuddenDeath;
+  QSpinBox *SB_WaterRise;
+  QSpinBox *SB_HealthDecrease;
+  FreqSpinBox *SB_CaseProb;
+  QSpinBox *SB_HealthCrates;
+  QSpinBox *SB_CrateHealth;
+  MinesTimeSpinBox *SB_MinesTime;
+  QSpinBox *SB_Mines;
+  QSpinBox *SB_AirMines;
+  QSpinBox *SB_Sentries;
+  QSpinBox *SB_MineDuds;
+  QSpinBox *SB_Explosives;
+  QSpinBox *SB_RopeModifier;
+  QSpinBox *SB_GetAwayTime;
+  QComboBox *CB_WorldEdge;
+  QLineEdit *LE_name;
+  QLabel *L_name;
+  QLineEdit *LE_ScriptParam;
 
-        QGroupBox * gbGameModes;
-        QGroupBox * gbBasicSettings;
+  QGroupBox *gbGameModes;
+  QGroupBox *gbBasicSettings;
 
-        bool changingSchemes;
+  bool changingSchemes;
 
-        void checkDupe();
+  void checkDupe();
 
-    private Q_SLOTS:
-        void worldEdgeChanged(int);
-        void schemeSelected(int);
-        void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+ private Q_SLOTS:
+  void worldEdgeChanged(int);
+  void schemeSelected(int);
+  void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 };
 
 #endif

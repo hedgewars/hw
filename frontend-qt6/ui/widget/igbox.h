@@ -22,23 +22,23 @@
 #include <QGroupBox>
 #include <QIcon>
 
-class IconedGroupBox : public QGroupBox
-{
-        Q_OBJECT
+class IconedGroupBox : public QGroupBox {
+  Q_OBJECT
 
-    public:
-        IconedGroupBox(QWidget * parent = 0);
+ public:
+  IconedGroupBox(QWidget* parent = 0);
 
-        void setIcon(const QIcon & icon);
-        void setTitleTextPadding(int px);
-        void setContentTopPadding(int px);
-    protected:
-        virtual void paintEvent(QPaintEvent * event);
+  void setIcon(const QIcon& icon);
+  void setTitleTextPadding(int px);
+  void setContentTopPadding(int px);
 
-    private:
-        QIcon icon;
-        int titleLeftPadding;
-        int contentTopPadding;
+ protected:
+  virtual void paintEvent(QPaintEvent* event);
+
+ private:
+  QIcon icon;
+  int titleLeftPadding;
+  int contentTopPadding;
 };
 
-#endif // _IGBOX_H
+#endif  // _IGBOX_H

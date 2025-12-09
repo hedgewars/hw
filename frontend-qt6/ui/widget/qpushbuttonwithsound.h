@@ -21,18 +21,16 @@
 
 #include <QPushButton>
 
-class QPushButtonWithSound : public QPushButton
-{
-        Q_OBJECT
-    public:
-        explicit QPushButtonWithSound(QWidget *parent = 0);
-        bool isSoundEnabled;
-    Q_SIGNALS:
+class QPushButtonWithSound : public QPushButton {
+  Q_OBJECT
+ public:
+  explicit QPushButtonWithSound(QWidget *parent = 0);
+  bool isSoundEnabled;
+ Q_SIGNALS:
 
-    public Q_SLOTS:
-    private Q_SLOTS:
-        void buttonClicked();
-
+ public Q_SLOTS:
+ private Q_SLOTS:
+  void buttonClicked();
 };
 
-#endif // QPUSHBUTTONWITHSOUND_H
+#endif  // QPUSHBUTTONWITHSOUND_H

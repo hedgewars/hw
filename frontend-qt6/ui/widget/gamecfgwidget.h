@@ -33,86 +33,84 @@ class QLabel;
 class QTableView;
 class QTabWidget;
 
-class GameCFGWidget : public QGroupBox
-{
-        Q_OBJECT
+class GameCFGWidget : public QGroupBox {
+  Q_OBJECT
 
-        Q_PROPERTY(bool master READ isMaster WRITE setMaster)
+  Q_PROPERTY(bool master READ isMaster WRITE setMaster)
 
-    public:
-     explicit GameCFGWidget(QWidget* parent, bool randomWithoutDLC = false);
-     quint32 getGameFlags() const;
-     quint32 getInitHealth() const;
-     QByteArray getFullConfig() const;
-     QComboBox* Scripts;
-     QComboBox* GameSchemes;
-     QComboBox* WeaponsName;
-     QPushButton* goToSchemePage;
-     QPushButton* goToWeaponPage;
-     QLabel* ScriptsLabel;
-     QLabel* GameSchemesLabel;
-     QLabel* WeaponsNameLabel;
-     HWMapContainer* pMapContainer;
-     QVariant schemeData(int column) const;
-     bool isMaster();
+ public:
+  explicit GameCFGWidget(QWidget* parent, bool randomWithoutDLC = false);
+  quint32 getGameFlags() const;
+  quint32 getInitHealth() const;
+  QByteArray getFullConfig() const;
+  QComboBox* Scripts;
+  QComboBox* GameSchemes;
+  QComboBox* WeaponsName;
+  QPushButton* goToSchemePage;
+  QPushButton* goToWeaponPage;
+  QLabel* ScriptsLabel;
+  QLabel* GameSchemesLabel;
+  QLabel* WeaponsNameLabel;
+  HWMapContainer* pMapContainer;
+  QVariant schemeData(int column) const;
+  bool isMaster();
 
-    public Q_SLOTS:
-        void setParam(const QString & param, const QStringList & value);
-        void fullNetConfig();
-        void resendSchemeData();
-        void resendAmmoData();
-        void resetSchemeStates();
-        void setMaster(bool master);
-        void setTabbed(bool tabbed);
+ public Q_SLOTS:
+  void setParam(const QString& param, const QStringList& value);
+  void fullNetConfig();
+  void resendSchemeData();
+  void resendAmmoData();
+  void resetSchemeStates();
+  void setMaster(bool master);
+  void setTabbed(bool tabbed);
 
-    Q_SIGNALS:
-        void paramChanged(const QString & param, const QStringList & value);
-        void goToSchemes(int);
-        void goToWeapons(int);
-        void goToDrawMap();
+ Q_SIGNALS:
+  void paramChanged(const QString& param, const QStringList& value);
+  void goToSchemes(int);
+  void goToWeapons(int);
+  void goToDrawMap();
 
-    private Q_SLOTS:
-        void ammoChanged(int index);
-        void mapChanged(const QString &);
-        void templateFilterChanged(int);
-        void seedChanged(const QString &);
-        void themeChanged(const QString &);
-        void schemeChanged(int);
-        void updateSchemeEnabledStates(int scriptIndex);
-        void scriptChanged(int);
-        void jumpToSchemes();
-        void jumpToWeapons();
-        void mapgenChanged(MapGenerator m);
-        void maze_sizeChanged(int s);
-        void slMapFeatureSizeChanged(int s);
-        void onDrawnMapChanged(const QByteArray & data);
-        void updateModelViews();
+ private Q_SLOTS:
+  void ammoChanged(int index);
+  void mapChanged(const QString&);
+  void templateFilterChanged(int);
+  void seedChanged(const QString&);
+  void themeChanged(const QString&);
+  void schemeChanged(int);
+  void updateSchemeEnabledStates(int scriptIndex);
+  void scriptChanged(int);
+  void jumpToSchemes();
+  void jumpToWeapons();
+  void mapgenChanged(MapGenerator m);
+  void maze_sizeChanged(int s);
+  void slMapFeatureSizeChanged(int s);
+  void onDrawnMapChanged(const QByteArray& data);
+  void updateModelViews();
 
-    private:
-        QVBoxLayout mainLayout;
-        QCheckBox * bindEntries;
-        QString curNetAmmoName;
-        QString curNetAmmo;
-        QRegularExpression seedRegexp;
-        QString m_curScript;
-        bool m_master;
-        QList<QWidget *> m_childWidgets;
-        QGridLayout * GBoxOptionsLayout;
-        QWidget * OptionsInnerContainer;
-        QWidget * StackContainer;
-        QLabel * lblScript;
-        QLabel * lblScheme;
-        QLabel * lblWeapons;
+ private:
+  QVBoxLayout mainLayout;
+  QCheckBox* bindEntries;
+  QString curNetAmmoName;
+  QString curNetAmmo;
+  QRegularExpression seedRegexp;
+  QString m_curScript;
+  bool m_master;
+  QList<QWidget*> m_childWidgets;
+  QGridLayout* GBoxOptionsLayout;
+  QWidget* OptionsInnerContainer;
+  QWidget* StackContainer;
+  QLabel* lblScript;
+  QLabel* lblScheme;
+  QLabel* lblWeapons;
 
-        QWidget * mapContainerFree;
-        QWidget * mapContainerTabbed;
-        QWidget * optionsContainerFree;
-        QWidget * optionsContainerTabbed;
-        bool tabbed;
-        QTabWidget * tabs;
+  QWidget* mapContainerFree;
+  QWidget* mapContainerTabbed;
+  QWidget* optionsContainerFree;
+  QWidget* optionsContainerTabbed;
+  bool tabbed;
+  QTabWidget* tabs;
 
-        void setNetAmmo(const QString& name, const QString& ammo);
-
+  void setNetAmmo(const QString& name, const QString& ammo);
 };
 
-#endif // GAMECONFIGWIDGET_H
+#endif  // GAMECONFIGWIDGET_H

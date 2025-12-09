@@ -35,31 +35,29 @@
  * @author Wuzzy
  * @since  0.9.25
  */
-class SDTimeoutSpinBox : public QSpinBox
-{
-        Q_OBJECT
+class SDTimeoutSpinBox : public QSpinBox {
+  Q_OBJECT
 
-    public:
-        /**
-         * @brief Class constructor.
-         * @param parent parent widget.
-         */
-        SDTimeoutSpinBox(QWidget * parent);
+ public:
+  /**
+   * @brief Class constructor.
+   * @param parent parent widget.
+   */
+  SDTimeoutSpinBox(QWidget* parent);
 
-    protected:
-        /**
-         * Returns its value in real number of rounds.
-         * @param internal value integer value to be represented as string.
-         * @return the real number of rounds
-         */
-        QString textFromValue(int value) const;
-        /**
-         * Returns the internally-used value for SD timeout.
-         * @param user-facing string, i.e. real number of rounds
-         * @return internally-stored SD timeout value
-         */
-        int valueFromText(const QString & text) const;
+ protected:
+  /**
+   * Returns its value in real number of rounds.
+   * @param internal value integer value to be represented as string.
+   * @return the real number of rounds
+   */
+  QString textFromValue(int value) const;
+  /**
+   * Returns the internally-used value for SD timeout.
+   * @param user-facing string, i.e. real number of rounds
+   * @return internally-stored SD timeout value
+   */
+  int valueFromText(const QString& text) const;
 };
 
-
-#endif // HEDGEWARS_SDTIMEOUTSPINBOX_H
+#endif  // HEDGEWARS_SDTIMEOUTSPINBOX_H

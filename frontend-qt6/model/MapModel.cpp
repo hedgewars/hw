@@ -21,212 +21,207 @@
  * @brief MapModel class implementation
  */
 
+#include "MapModel.h"
+
 #include <QSettings>
 
-#include "physfs.h"
-#include "MapModel.h"
 #include "HWApplication.h"
 #include "hwconsts.h"
+#include "physfs.h"
 
-MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", "", 0, "", "", "", false};
-MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", "", false};
-MapModel::MapInfo MapModel::MapInfoPerlin = {MapModel::GeneratedMaze, "+perlin+", "", 0, "", "", "", false};
-MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "", 0, "", "", "", false};
-MapModel::MapInfo MapModel::MapInfoForts = {MapModel::FortsMap, "+forts+", "", 0, "", "", "", false};
+MapModel::MapInfo MapModel::MapInfoRandom = {
+    MapModel::GeneratedMap, "+rnd+", "", 0, "", "", "", false};
+MapModel::MapInfo MapModel::MapInfoMaze = {
+    MapModel::GeneratedMaze, "+maze+", "", 0, "", "", "", false};
+MapModel::MapInfo MapModel::MapInfoPerlin = {
+    MapModel::GeneratedMaze, "+perlin+", "", 0, "", "", "", false};
+MapModel::MapInfo MapModel::MapInfoDrawn = {
+    MapModel::HandDrawnMap, "+drawn+", "", 0, "", "", "", false};
+MapModel::MapInfo MapModel::MapInfoForts = {
+    MapModel::FortsMap, "+forts+", "", 0, "", "", "", false};
 
-MapModel::MapModel(MapType maptype, QObject *parent) : QStandardItemModel(parent)
-{
-    m_maptype = maptype;
-    m_loaded = false;
-    m_filteredNoDLC = NULL;
+MapModel::MapModel(MapType maptype, QObject *parent)
+    : QStandardItemModel(parent) {
+  m_maptype = maptype;
+  m_loaded = false;
+  m_filteredNoDLC = NULL;
 }
 
-QSortFilterProxyModel * MapModel::withoutDLC()
-{
-    if (m_filteredNoDLC == NULL)
-    {
-        m_filteredNoDLC = new QSortFilterProxyModel(this);
-        m_filteredNoDLC->setSourceModel(this);
-        // filtering based on IsDlcRole would be nicer
-        // but seems this model can only do string-based filtering :|
-        m_filteredNoDLC->setFilterRegularExpression(
-            QRegularExpression(QStringLiteral("^[^*]")));
-    }
-    return m_filteredNoDLC;
+QSortFilterProxyModel *MapModel::withoutDLC() {
+  if (m_filteredNoDLC == NULL) {
+    m_filteredNoDLC = new QSortFilterProxyModel(this);
+    m_filteredNoDLC->setSourceModel(this);
+    // filtering based on IsDlcRole would be nicer
+    // but seems this model can only do string-based filtering :|
+    m_filteredNoDLC->setFilterRegularExpression(
+        QRegularExpression(QStringLiteral("^[^*]")));
+  }
+  return m_filteredNoDLC;
 }
 
-bool MapModel::loadMaps()
-{
-    if(m_loaded)
-        return false;
+bool MapModel::loadMaps() {
+  if (m_loaded) return false;
 
-    m_loaded = true;
+  m_loaded = true;
 
-    qDebug("[LAZINESS] MapModel::loadMaps()");
+  qDebug("[LAZINESS] MapModel::loadMaps()");
 
-    // this method resets the contents of this model (important to know for views).
-    beginResetModel();
+  // this method resets the contents of this model (important to know for
+  // views).
+  beginResetModel();
 
-    // we'll need the DataManager a few times, so let's get a reference to it
-    DataManager & datamgr = DataManager::instance();
+  // we'll need the DataManager a few times, so let's get a reference to it
+  DataManager &datamgr = DataManager::instance();
 
-    // fetch list of available maps
-    QStringList maps = datamgr.entryList(QStringLiteral("Maps"),
-                                         QDir::AllDirs | QDir::NoDotAndDotDot);
+  // fetch list of available maps
+  QStringList maps = datamgr.entryList(QStringLiteral("Maps"),
+                                       QDir::AllDirs | QDir::NoDotAndDotDot);
 
-    // empty list, so that we can (re)fill it
-    QStandardItemModel::clear();
+  // empty list, so that we can (re)fill it
+  QStandardItemModel::clear();
 
-    //QList<QStandardItem *> staticMaps;
-    //QList<QStandardItem *> missionMaps;
-    QList<QStandardItem *> mapList;
+  // QList<QStandardItem *> staticMaps;
+  // QList<QStandardItem *> missionMaps;
+  QList<QStandardItem *> mapList;
 
+  QIcon dlcIcon;
+  dlcIcon.addFile(QStringLiteral(":/res/dlcMarker.png"), QSize(), QIcon::Normal,
+                  QIcon::On);
+  dlcIcon.addFile(QStringLiteral(":/res/dlcMarkerSelected.png"), QSize(),
+                  QIcon::Selected, QIcon::On);
+  QPixmap emptySpace = QPixmap(7, 15);
+  emptySpace.fill(QColor(0, 0, 0, 0));
+  QIcon notDlcIcon = QIcon(emptySpace);
 
-    QIcon dlcIcon;
-    dlcIcon.addFile(QStringLiteral(":/res/dlcMarker.png"), QSize(),
-                    QIcon::Normal, QIcon::On);
-    dlcIcon.addFile(QStringLiteral(":/res/dlcMarkerSelected.png"), QSize(),
-                    QIcon::Selected, QIcon::On);
-    QPixmap emptySpace = QPixmap(7, 15);
-    emptySpace.fill(QColor(0, 0, 0, 0));
-    QIcon notDlcIcon = QIcon(emptySpace);
+  // add mission/static maps to lists
+  for (auto map : maps) {
+    // only 2 map relate files are relevant:
+    // - the cfg file that contains the settings/info of the map
+    // - the lua file - if it exists it's a mission, otherwise it isn't
+    QFile mapLuaFile(QStringLiteral("physfs://Maps/%1/map.lua").arg(map));
+    QFile mapCfgFile(QStringLiteral("physfs://Maps/%1/map.cfg").arg(map));
 
-    // add mission/static maps to lists
-    for (auto map : maps) {
-      // only 2 map relate files are relevant:
-      // - the cfg file that contains the settings/info of the map
-      // - the lua file - if it exists it's a mission, otherwise it isn't
-      QFile mapLuaFile(QStringLiteral("physfs://Maps/%1/map.lua").arg(map));
-      QFile mapCfgFile(QStringLiteral("physfs://Maps/%1/map.cfg").arg(map));
+    if (mapCfgFile.open(QFile::ReadOnly)) {
+      QString caption;
+      QString theme;
+      quint32 limit = 0;
+      QString scheme;
+      QString weapons;
+      QString desc;
+      bool dlc;
 
-      if (mapCfgFile.open(QFile::ReadOnly)) {
-        QString caption;
-        QString theme;
-        quint32 limit = 0;
-        QString scheme;
-        QString weapons;
-        QString desc;
-        bool dlc;
+      // if there is a lua file for this map, then it's a mission
+      bool isMission = mapLuaFile.exists();
+      MapType type = isMission ? MissionMap : StaticMap;
 
-        // if there is a lua file for this map, then it's a mission
-        bool isMission = mapLuaFile.exists();
-        MapType type = isMission ? MissionMap : StaticMap;
+      // if we're supposed to ignore this type, continue
+      if (type != m_maptype) continue;
 
-        // if we're supposed to ignore this type, continue
-        if (type != m_maptype) continue;
-
-        // load map info from file
-        QTextStream input(&mapCfgFile);
-        theme = input.readLine();
-        limit = input.readLine().toInt();
-        if (isMission) {  // scheme and weapons are only relevant for missions
-          scheme = input.readLine();
-          weapons = input.readLine();
-        }
-        mapCfgFile.close();
-
-        // load description (if applicable)
-        if (isMission) {
-          // get locale
-          QSettings settings(datamgr.settingsFileName(), QSettings::IniFormat);
-          QString locale = QLocale().name();
-
-          QSettings descSettings(
-              QStringLiteral("physfs://Maps/%1/desc.txt").arg(map),
-              QSettings::IniFormat);
-          desc = descSettings.value(locale, QString()).toString();
-          // If not found, try with language-only code
-          if (desc.isEmpty()) {
-            QString localeSimple =
-                locale.remove(QRegularExpression(QStringLiteral("_.*$")));
-            desc = descSettings.value(localeSimple, QString()).toString();
-            // If still not found, use English
-            if (desc.isEmpty())
-              desc = descSettings.value("en", QString()).toString();
-          }
-          desc = desc.replace(QLatin1String("_n"), QLatin1String("\n"))
-                     .replace(QLatin1String("_c"), QLatin1String(","))
-                     .replace(QLatin1String("__"), QLatin1String("_"));
-        }
-
-        // detect if map is dlc
-        QString mapDir = PHYSFS_getRealDir(
-            QStringLiteral("Maps/%1/map.cfg").arg(map).toLocal8Bit().data());
-        dlc = !mapDir.startsWith(datadir.absolutePath());
-
-        // let's use some semi-sane hedgehog limit, rather than none
-        if (limit == 0) limit = 18;
-
-        // the default scheme/weaponset for missions.
-        // if empty we assume the map sets these internally -> locked
-        if (isMission) {
-          if (scheme.isEmpty())
-            scheme = QStringLiteral("locked");
-          else
-            scheme.replace(QLatin1String("_"), QLatin1String(" "));
-
-          if (weapons.isEmpty())
-            weapons = QStringLiteral("locked");
-          else
-            weapons.replace(QLatin1String("_"), QLatin1String(" "));
-        }
-
-        // caption
-        caption = map;
-
-        QIcon icon;
-        if (dlc)
-          icon = dlcIcon;
-        else
-          icon = notDlcIcon;
-
-        // we know everything there is about the map, let's get am item for it
-        QStandardItem *item = MapModel::infoToItem(
-            icon, caption, type, map, theme, limit, scheme, weapons, desc, dlc);
-
-        // append item to the list
-        mapList.append(item);
+      // load map info from file
+      QTextStream input(&mapCfgFile);
+      theme = input.readLine();
+      limit = input.readLine().toInt();
+      if (isMission) {  // scheme and weapons are only relevant for missions
+        scheme = input.readLine();
+        weapons = input.readLine();
       }
+      mapCfgFile.close();
+
+      // load description (if applicable)
+      if (isMission) {
+        // get locale
+        QSettings settings(datamgr.settingsFileName(), QSettings::IniFormat);
+        QString locale = QLocale().name();
+
+        QSettings descSettings(
+            QStringLiteral("physfs://Maps/%1/desc.txt").arg(map),
+            QSettings::IniFormat);
+        desc = descSettings.value(locale, QString()).toString();
+        // If not found, try with language-only code
+        if (desc.isEmpty()) {
+          QString localeSimple =
+              locale.remove(QRegularExpression(QStringLiteral("_.*$")));
+          desc = descSettings.value(localeSimple, QString()).toString();
+          // If still not found, use English
+          if (desc.isEmpty())
+            desc = descSettings.value("en", QString()).toString();
+        }
+        desc = desc.replace(QLatin1String("_n"), QLatin1String("\n"))
+                   .replace(QLatin1String("_c"), QLatin1String(","))
+                   .replace(QLatin1String("__"), QLatin1String("_"));
+      }
+
+      // detect if map is dlc
+      QString mapDir = PHYSFS_getRealDir(
+          QStringLiteral("Maps/%1/map.cfg").arg(map).toLocal8Bit().data());
+      dlc = !mapDir.startsWith(datadir.absolutePath());
+
+      // let's use some semi-sane hedgehog limit, rather than none
+      if (limit == 0) limit = 18;
+
+      // the default scheme/weaponset for missions.
+      // if empty we assume the map sets these internally -> locked
+      if (isMission) {
+        if (scheme.isEmpty())
+          scheme = QStringLiteral("locked");
+        else
+          scheme.replace(QLatin1String("_"), QLatin1String(" "));
+
+        if (weapons.isEmpty())
+          weapons = QStringLiteral("locked");
+        else
+          weapons.replace(QLatin1String("_"), QLatin1String(" "));
+      }
+
+      // caption
+      caption = map;
+
+      QIcon icon;
+      if (dlc)
+        icon = dlcIcon;
+      else
+        icon = notDlcIcon;
+
+      // we know everything there is about the map, let's get am item for it
+      QStandardItem *item = MapModel::infoToItem(
+          icon, caption, type, map, theme, limit, scheme, weapons, desc, dlc);
+
+      // append item to the list
+      mapList.append(item);
     }
+  }
 
-    // Create column-index lookup table
+  // Create column-index lookup table
 
-    m_mapIndexes.clear();
+  m_mapIndexes.clear();
 
+  int count = mapList.size();
+  for (int i = 0; i < count; i++) {
+    QStandardItem *si = mapList.at(i);
+    QVariant v = si->data(Qt::UserRole + 1);
+    if (v.canConvert<MapInfo>())
+      m_mapIndexes.insert(v.value<MapInfo>().name, i);
+  }
 
-    int count = mapList.size();
-    for (int i = 0; i < count; i++)
-    {
-        QStandardItem * si = mapList.at(i);
-        QVariant v = si->data(Qt::UserRole + 1);
-        if (v.canConvert<MapInfo>())
-            m_mapIndexes.insert(v.value<MapInfo>().name, i);
-    }
+  QStandardItemModel::appendColumn(mapList);
 
-    QStandardItemModel::appendColumn(mapList);
+  endResetModel();
 
-    endResetModel();
-
-    return true;
+  return true;
 }
 
-bool MapModel::mapExists(const QString & map)
-{
-    return findMap(map) >= 0;
+bool MapModel::mapExists(const QString &map) { return findMap(map) >= 0; }
+
+int MapModel::findMap(const QString &map) {
+  loadMaps();
+
+  return m_mapIndexes.value(map, -1);
 }
 
-int MapModel::findMap(const QString & map)
-{
-    loadMaps();
-
-    return m_mapIndexes.value(map, -1);
-}
-
-QStandardItem * MapModel::getMap(const QString & map)
-{
-    int loc = findMap(map);
-    if (loc < 0) return NULL;
-    return item(loc);
+QStandardItem *MapModel::getMap(const QString &map) {
+  int loc = findMap(map);
+  if (loc < 0) return NULL;
+  return item(loc);
 }
 
 QStandardItem *MapModel::infoToItem(const QIcon &icon, const QString &caption,

@@ -24,22 +24,21 @@
 #ifndef HEDGEWARS_HATMODEL_H
 #define HEDGEWARS_HATMODEL_H
 
+#include <QIcon>
+#include <QPair>
 #include <QStandardItemModel>
 #include <QStringList>
 #include <QVector>
-#include <QPair>
-#include <QIcon>
 
-class HatModel : public QStandardItemModel
-{
-        Q_OBJECT
+class HatModel : public QStandardItemModel {
+  Q_OBJECT
 
-    public:
-        HatModel(QObject *parent = 0);
+ public:
+  HatModel(QObject *parent = 0);
 
-    public Q_SLOTS:
-        /// Reloads hats using the DataManager.
-        void loadHats();
+ public Q_SLOTS:
+  /// Reloads hats using the DataManager.
+  void loadHats();
 };
 
-#endif // HEDGEWARS_HATMODEL_H
+#endif  // HEDGEWARS_HATMODEL_H

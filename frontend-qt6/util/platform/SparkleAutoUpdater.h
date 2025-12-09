@@ -9,22 +9,21 @@
 
 #include "AutoUpdater.h"
 
-class SparkleAutoUpdater : public AutoUpdater
-{
-    public:
-        SparkleAutoUpdater();
-        SparkleAutoUpdater(const SparkleAutoUpdater &) = delete;
-        SparkleAutoUpdater(SparkleAutoUpdater &&) = delete;
-        SparkleAutoUpdater &operator=(const SparkleAutoUpdater &) = delete;
-        SparkleAutoUpdater &operator=(SparkleAutoUpdater &&) = delete;
-        ~SparkleAutoUpdater();
+class SparkleAutoUpdater : public AutoUpdater {
+ public:
+  SparkleAutoUpdater();
+  SparkleAutoUpdater(const SparkleAutoUpdater &) = delete;
+  SparkleAutoUpdater(SparkleAutoUpdater &&) = delete;
+  SparkleAutoUpdater &operator=(const SparkleAutoUpdater &) = delete;
+  SparkleAutoUpdater &operator=(SparkleAutoUpdater &&) = delete;
+  ~SparkleAutoUpdater();
 
-        void checkForUpdates() override;
-        void checkForUpdatesNow() override;
+  void checkForUpdates() override;
+  void checkForUpdatesNow() override;
 
-       private:
-        class Private;
-        Private* d;
+ private:
+  class Private;
+  Private *d;
 };
 
 #endif

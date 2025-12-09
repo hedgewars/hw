@@ -23,21 +23,19 @@
 
 class About;
 
-class PageInfo : public AbstractPage
-{
-        Q_OBJECT
+class PageInfo : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageInfo(QWidget* parent = 0);
+ public:
+  PageInfo(QWidget *parent = 0);
 
-        QPushButton *BtnSnapshots;
-        About *about;
+  QPushButton *BtnSnapshots;
+  About *about;
 
-    private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ private:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 };
 
 #endif
-

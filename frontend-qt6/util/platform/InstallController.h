@@ -19,8 +19,7 @@
 #ifndef INSTALLCONTROLLER_H
 #define INSTALLCONTROLLER_H
 
-class InstallController
-{
+class InstallController {
  public:
   InstallController(const InstallController &) = delete;
   InstallController(InstallController &&) = delete;

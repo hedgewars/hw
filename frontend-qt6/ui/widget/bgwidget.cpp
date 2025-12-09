@@ -23,179 +23,157 @@
 
 #include "hwconsts.h"
 
-SpritePosition::SpritePosition(QWidget * parent, int sw, int sh)
-{
-    wParent = parent;
-    iSpriteWidth = sw;
-    iSpriteHeight = sh;
+SpritePosition::SpritePosition(QWidget *parent, int sw, int sh) {
+  wParent = parent;
+  iSpriteWidth = sw;
+  iSpriteHeight = sh;
+  reset();
+}
+
+SpritePosition::~SpritePosition() {}
+
+void SpritePosition::move() {
+  fX += fXMov;
+  fY += fYMov;
+  iAngle += 4;
+  if (iAngle >= 360) iAngle = 0;
+  if ((fX - fXMov) > wParent->width())
+    reset();
+  else if ((fY - fYMov) > wParent->height())
     reset();
 }
 
-SpritePosition::~SpritePosition()
-{
+void SpritePosition::reset() {
+  // random movement values
+  fYMov = QRandomGenerator::global()->bounded(4.0) + 3.0;
+  fXMov = fYMov * (0.2 + QRandomGenerator::global()->bounded(
+                             0.6));  // so between 0.2 and 0.8, or 0.5 +/- 0.3
+
+  // random respawn locations
+  int tmp = fXMov * (wParent->height() / fYMov);
+  fX = QRandomGenerator::global()->bounded(wParent->width() + tmp) - tmp;
+
+  // adjust respawn location to be next to (but outside) the parent's limits
+  if (fX > -iSpriteWidth) {
+    fY = -1 * iSpriteHeight;
+  } else {
+    fY = QRandomGenerator::global()->bounded(wParent->height());
+    fX = -iSpriteWidth;
+  }
+
+  // random initial angle
+  iAngle = QRandomGenerator::global()->bounded(360);
 }
 
-void SpritePosition::move()
-{
-    fX += fXMov;
-    fY += fYMov;
-    iAngle += 4;
-    if (iAngle >= 360) iAngle = 0;
-    if ((fX - fXMov) > wParent->width()) reset();
-    else if ((fY - fYMov) > wParent->height()) reset();
-}
+QPoint SpritePosition::pos() { return QPoint((int)fX, (int)fY); }
 
-void SpritePosition::reset()
-{
-    // random movement values
-    fYMov = QRandomGenerator::global()->bounded(4.0) + 3.0;
-    fXMov = fYMov * (0.2 + QRandomGenerator::global()->bounded(
-                               0.6));  // so between 0.2 and 0.8, or 0.5 +/- 0.3
+int SpritePosition::getAngle() { return iAngle; }
 
-    // random respawn locations
-    int tmp = fXMov * (wParent->height() / fYMov);
-    fX = QRandomGenerator::global()->bounded(wParent->width() + tmp) - tmp;
-
-    // adjust respawn location to be next to (but outside) the parent's limits
-    if (fX > -iSpriteWidth)
-    {
-        fY = -1 * iSpriteHeight;
-    }
-    else
-    {
-      fY = QRandomGenerator::global()->bounded(wParent->height());
-      fX = -iSpriteWidth;
-    }
-
-    // random initial angle
-    iAngle = QRandomGenerator::global()->bounded(360);
-}
-
-QPoint SpritePosition::pos()
-{
-    return QPoint((int)fX,(int)fY);
-}
-
-int SpritePosition::getAngle()
-{
-    return iAngle;
-}
-
-void SpritePosition::init()
-{
+void SpritePosition::init() {
   fY = QRandomGenerator::global()->bounded(wParent->height() + 1);
   fX = QRandomGenerator::global()->bounded(wParent->width() + 1);
 }
 
-BGWidget::BGWidget(QWidget * parent) : QWidget(parent), enabled(false)
-{
-    setAttribute(Qt::WA_NoSystemBackground, true);
+BGWidget::BGWidget(QWidget *parent) : QWidget(parent), enabled(false) {
+  setAttribute(Qt::WA_NoSystemBackground, true);
 
-    QString fname;
+  QString fname;
 
-    //For each season, there is a replacement for the star (Star.png)
-    //Todo: change element for easter and birthday
-    //Simply replace Confetti.png and Egg.png with an appropriate graphic)
-    switch (season)
-    {
-        case SEASON_CHRISTMAS :
-            fname = QStringLiteral("Flake.png");
-            break;
-        case SEASON_EASTER :
-            fname = QStringLiteral("Egg.png");
-            break;
-        case SEASON_HWBDAY :
-            fname = QStringLiteral("Confetti.png");
-            break;
-        default :
-            fname = QStringLiteral("Star.png");
-    }
+  // For each season, there is a replacement for the star (Star.png)
+  // Todo: change element for easter and birthday
+  // Simply replace Confetti.png and Egg.png with an appropriate graphic)
+  switch (season) {
+    case SEASON_CHRISTMAS:
+      fname = QStringLiteral("Flake.png");
+      break;
+    case SEASON_EASTER:
+      fname = QStringLiteral("Egg.png");
+      break;
+    case SEASON_HWBDAY:
+      fname = QStringLiteral("Confetti.png");
+      break;
+    default:
+      fname = QStringLiteral("Star.png");
+  }
 
-    sprite.load(QStringLiteral(":/res/") + fname);
+  sprite.load(QStringLiteral(":/res/") + fname);
 
-    setAutoFillBackground(false);
+  setAutoFillBackground(false);
 
-    for (int i = 0; i < SPRITE_MAX; i++) spritePositions[i] = new SpritePosition(this, sprite.width(), sprite.height());
+  for (int i = 0; i < SPRITE_MAX; i++)
+    spritePositions[i] =
+        new SpritePosition(this, sprite.width(), sprite.height());
 
-    for (int i = 0; i < 90; i++)
-    {
-        rotatedSprites[i] = new QImage(sprite.width(), sprite.height(), QImage::Format_ARGB32);
-        rotatedSprites[i]->fill(0);
+  for (int i = 0; i < 90; i++) {
+    rotatedSprites[i] =
+        new QImage(sprite.width(), sprite.height(), QImage::Format_ARGB32);
+    rotatedSprites[i]->fill(0);
 
-        QPoint translate(sprite.width()/2, sprite.height()/2);
-
-        QPainter p;
-        p.begin(rotatedSprites[i]);
-        //  p.setRenderHint(QPainter::Antialiasing);
-        p.setRenderHint(QPainter::SmoothPixmapTransform);
-        p.translate(translate.x(), translate.y());
-        p.rotate(4 * i);
-        p.translate(-1*translate.x(), -1*translate.y());
-        p.drawImage(0, 0, sprite);
-    }
-
-    timerAnimation = new QTimer();
-    connect(timerAnimation, &QTimer::timeout, this, &BGWidget::animate);
-    timerAnimation->setInterval(ANIMATION_INTERVAL);
-}
-
-BGWidget::~BGWidget()
-{
-    for (int i = 0; i < SPRITE_MAX; i++) delete spritePositions[i];
-    for (int i = 0; i < 90; i++) delete rotatedSprites[i];
-    delete timerAnimation;
-}
-
-void BGWidget::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-    if (!enabled)
-        return;
+    QPoint translate(sprite.width() / 2, sprite.height() / 2);
 
     QPainter p;
+    p.begin(rotatedSprites[i]);
+    //  p.setRenderHint(QPainter::Antialiasing);
+    p.setRenderHint(QPainter::SmoothPixmapTransform);
+    p.translate(translate.x(), translate.y());
+    p.rotate(4 * i);
+    p.translate(-1 * translate.x(), -1 * translate.y());
+    p.drawImage(0, 0, sprite);
+  }
 
-    p.begin(this);
-
-    for (int i = 0; i < SPRITE_MAX; i++)
-    {
-        QPoint point = spritePositions[i]->pos();
-        p.drawImage(point.x(), point.y(), *rotatedSprites[spritePositions[i]->getAngle()/4]);
-    }
-
-    p.end();
+  timerAnimation = new QTimer();
+  connect(timerAnimation, &QTimer::timeout, this, &BGWidget::animate);
+  timerAnimation->setInterval(ANIMATION_INTERVAL);
 }
 
-void BGWidget::animate()
-{
-    if (!enabled)
-        return;
-
-    for (int i = 0; i < SPRITE_MAX; i++)
-    {
-        QPoint oldPos = spritePositions[i]->pos();
-        spritePositions[i]->move();
-        QPoint newPos = spritePositions[i]->pos();
-
-        int xdiff = newPos.x() - oldPos.x();
-        int ydiff = newPos.y() - oldPos.y();
-        update(oldPos.x(), oldPos.y(), xdiff+sprite.width(), ydiff+sprite.height());
-    }
-
-    //repaint(); // Repaint every frame. Prevents ghosting of widgets if widgets resize in runtime.
+BGWidget::~BGWidget() {
+  for (int i = 0; i < SPRITE_MAX; i++) delete spritePositions[i];
+  for (int i = 0; i < 90; i++) delete rotatedSprites[i];
+  delete timerAnimation;
 }
 
-void BGWidget::startAnimation()
-{
-    timerAnimation->start();
+void BGWidget::paintEvent(QPaintEvent *event) {
+  Q_UNUSED(event);
+  if (!enabled) return;
+
+  QPainter p;
+
+  p.begin(this);
+
+  for (int i = 0; i < SPRITE_MAX; i++) {
+    QPoint point = spritePositions[i]->pos();
+    p.drawImage(point.x(), point.y(),
+                *rotatedSprites[spritePositions[i]->getAngle() / 4]);
+  }
+
+  p.end();
 }
 
-void BGWidget::stopAnimation()
-{
-    timerAnimation->stop();
-    repaint();
+void BGWidget::animate() {
+  if (!enabled) return;
+
+  for (int i = 0; i < SPRITE_MAX; i++) {
+    QPoint oldPos = spritePositions[i]->pos();
+    spritePositions[i]->move();
+    QPoint newPos = spritePositions[i]->pos();
+
+    int xdiff = newPos.x() - oldPos.x();
+    int ydiff = newPos.y() - oldPos.y();
+    update(oldPos.x(), oldPos.y(), xdiff + sprite.width(),
+           ydiff + sprite.height());
+  }
+
+  // repaint(); // Repaint every frame. Prevents ghosting of widgets if widgets
+  // resize in runtime.
 }
 
-void BGWidget::init()
-{
-    for (int i = 0; i < SPRITE_MAX; i++) spritePositions[i]->init();
+void BGWidget::startAnimation() { timerAnimation->start(); }
+
+void BGWidget::stopAnimation() {
+  timerAnimation->stop();
+  repaint();
+}
+
+void BGWidget::init() {
+  for (int i = 0; i < SPRITE_MAX; i++) spritePositions[i]->init();
 }

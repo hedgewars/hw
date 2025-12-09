@@ -25,21 +25,19 @@ class QLabel;
 class HWForm;
 class PageVideos;
 
-class HWAskQuitDialog : public QDialog
-{
-        Q_OBJECT
+class HWAskQuitDialog : public QDialog {
+  Q_OBJECT
 
-    public:
-        HWAskQuitDialog(QWidget* parent, HWForm *form);
+ public:
+  HWAskQuitDialog(QWidget* parent, HWForm* form);
 
-    private Q_SLOTS:
-        void goToPageVideos();
-        void updateList();
+ private Q_SLOTS:
+  void goToPageVideos();
+  void updateList();
 
-    private:
-        HWForm * form;
-        QLabel * lbList;
+ private:
+  HWForm* form;
+  QLabel* lbList;
 };
 
-
-#endif // INPUT_PASSWORD_H
+#endif  // INPUT_PASSWORD_H

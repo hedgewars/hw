@@ -21,15 +21,14 @@
 
 #include <QSpinBox>
 
-class FPSEdit : public QSpinBox
-{
-        Q_OBJECT
+class FPSEdit : public QSpinBox {
+  Q_OBJECT
 
-    public:
-        FPSEdit(QWidget * parent = 0);
+ public:
+  FPSEdit(QWidget* parent = 0);
 
-    protected:
-        QString textFromValue (int value) const;
+ protected:
+  QString textFromValue(int value) const;
 };
 
-#endif // _FPSEDIT_H
+#endif  // _FPSEDIT_H

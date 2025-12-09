@@ -21,30 +21,29 @@
 
 #include "AbstractPage.h"
 
-class PageNetServer : public AbstractPage
-{
-        Q_OBJECT
+class PageNetServer : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageNetServer(QWidget* parent = 0);
+ public:
+  PageNetServer(QWidget *parent = 0);
 
-        QPushButton *BtnStart;
-        QPushButton *BtnDefault;
-        QPushButton *BtnShare;
-        QLabel *labelSD;
-        QLabel *labelPort;
-        QLabel *labelURL;
-        QLineEdit *leServerDescr;
-        QSpinBox *sbPort;
+  QPushButton *BtnStart;
+  QPushButton *BtnDefault;
+  QPushButton *BtnShare;
+  QLabel *labelSD;
+  QLabel *labelPort;
+  QLabel *labelURL;
+  QLineEdit *leServerDescr;
+  QSpinBox *sbPort;
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ protected:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 
-    private Q_SLOTS:
-        void setDefaultPort();
-        void copyUrl();
+ private Q_SLOTS:
+  void setDefaultPort();
+  void copyUrl();
 };
 
 #endif

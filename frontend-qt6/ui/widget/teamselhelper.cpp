@@ -17,98 +17,95 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QPixmap>
-#include <QPainter>
-#include <QStyleFactory>
-#include <QDebug>
+#include "teamselhelper.h"
 
+#include <QDebug>
+#include <QPainter>
+#include <QPixmap>
+#include <QStyleFactory>
 #include <algorithm>
 
-#include "teamselhelper.h"
-#include "hwconsts.h"
-#include "frameTeam.h"
-#include "colorwidget.h"
 #include "DataManager.h"
+#include "colorwidget.h"
+#include "frameTeam.h"
+#include "hwconsts.h"
 
-void TeamLabel::teamButtonClicked()
-{
-    Q_EMIT teamActivated(text());
+void TeamLabel::teamButtonClicked() { Q_EMIT teamActivated(text()); }
+
+TeamShowWidget::TeamShowWidget(const HWTeam& team, bool isPlaying,
+                               FrameTeams* parent)
+    : QWidget(parent),
+      mainLayout(this),
+      m_team(team),
+      m_isPlaying(isPlaying),
+      phhoger(0),
+      colorWidget(0) {
+  m_parentFrameTeams = parent;
+  QPalette newPalette = palette();
+  newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+  setPalette(newPalette);
+  setAutoFillBackground(true);
+
+  mainLayout.setSpacing(3);
+  mainLayout.setContentsMargins({});
+  this->setMaximumHeight(38);
+  this->setMinimumHeight(38);
+  QIcon difficultyIcon =
+      team.isNetTeam()
+          ? QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty()))
+          : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty()));
+
+  butt = new QPushButton(
+      difficultyIcon,
+      team.name().replace(QLatin1String("&"), QLatin1String("&&")), this);
+  butt->setFlat(true);
+  butt->setToolTip(team.owner());
+  mainLayout.addWidget(butt);
+
+  if (m_isPlaying) {
+    // team color
+    colorWidget = new ColorWidget(DataManager::instance().colorsModel(), this);
+    colorWidget->setMinimumWidth(26);
+    colorWidget->setMaximumWidth(26);
+    colorWidget->setMinimumHeight(26);
+    colorWidget->setMaximumHeight(26);
+    colorWidget->setColor(team.color());
+    connect(colorWidget, &ColorWidget::colorChanged, this,
+            &TeamShowWidget::onColorChanged);
+    mainLayout.addWidget(colorWidget);
+
+    phhoger = new CHedgehogerWidget(
+        QImage(QStringLiteral(":/res/hh25x25.png")),
+        QImage(QStringLiteral(":/res/hh25x25grey.png")), this);
+    connect(phhoger, &CHedgehogerWidget::hedgehogsNumChanged, this,
+            &TeamShowWidget::hhNumChanged);
+    phhoger->setHHNum(team.numHedgehogs());
+    mainLayout.addWidget(phhoger);
+  } else {
+  }
+
+  QObject::connect(butt, &QAbstractButton::clicked, this,
+                   &TeamShowWidget::activateTeam);
+  // QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
 }
 
-TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams * parent) :
-    QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0),
-    colorWidget(0)
-{
-    m_parentFrameTeams = parent;
-    QPalette newPalette = palette();
-    newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
-    setPalette(newPalette);
-    setAutoFillBackground(true);
+void TeamShowWidget::setInteractivity(bool interactive) {
+  if (m_team.isNetTeam()) {
+    butt->setEnabled(interactive);
+  }
 
-    mainLayout.setSpacing(3);
-    mainLayout.setContentsMargins({});
-    this->setMaximumHeight(38);
-    this->setMinimumHeight(38);
-    QIcon difficultyIcon=team.isNetTeam() ?
-                         QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty()))
-                         : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty()));
-
-    butt = new QPushButton(difficultyIcon, team.name().replace(QLatin1String("&"),QLatin1String("&&")), this);
-    butt->setFlat(true);
-    butt->setToolTip(team.owner());
-    mainLayout.addWidget(butt);
-
-    if(m_isPlaying)
-    {
-        // team color
-        colorWidget = new ColorWidget(DataManager::instance().colorsModel(), this);
-        colorWidget->setMinimumWidth(26);
-        colorWidget->setMaximumWidth(26);
-        colorWidget->setMinimumHeight(26);
-        colorWidget->setMaximumHeight(26);
-        colorWidget->setColor(team.color());
-        connect(colorWidget, &ColorWidget::colorChanged, this, &TeamShowWidget::onColorChanged);
-        mainLayout.addWidget(colorWidget);
-
-        phhoger = new CHedgehogerWidget(QImage(QStringLiteral(":/res/hh25x25.png")), QImage(QStringLiteral(":/res/hh25x25grey.png")), this);
-        connect(phhoger, &CHedgehogerWidget::hedgehogsNumChanged, this, &TeamShowWidget::hhNumChanged);
-        phhoger->setHHNum(team.numHedgehogs());
-        mainLayout.addWidget(phhoger);
-    }
-    else
-    {
-    }
-
-    QObject::connect(butt, &QAbstractButton::clicked, this, &TeamShowWidget::activateTeam);
-    //QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
+  colorWidget->setEnabled(interactive);
+  phhoger->setEnabled(interactive);
 }
 
-void TeamShowWidget::setInteractivity(bool interactive)
-{
-    if(m_team.isNetTeam())
-    {
-        butt->setEnabled(interactive);
-    }
+void TeamShowWidget::setHHNum(unsigned int num) { phhoger->setHHNum(num); }
 
-    colorWidget->setEnabled(interactive);
-    phhoger->setEnabled(interactive);
+void TeamShowWidget::hhNumChanged() {
+  m_team.setNumHedgehogs(phhoger->getHedgehogsNum());
+  Q_EMIT hhNmChanged(m_team);
 }
 
-void TeamShowWidget::setHHNum(unsigned int num)
-{
-    phhoger->setHHNum(num);
-}
-
-void TeamShowWidget::hhNumChanged()
-{
-    m_team.setNumHedgehogs(phhoger->getHedgehogsNum());
-    Q_EMIT hhNmChanged(m_team);
-}
-
-void TeamShowWidget::activateTeam()
-{
-    Q_EMIT teamStatusChanged(m_team);
-}
+void TeamShowWidget::activateTeam() { Q_EMIT teamStatusChanged(m_team); }
 
 /*HWTeamTempParams TeamShowWidget::getTeamParams() const
 {
@@ -119,20 +116,14 @@ void TeamShowWidget::activateTeam()
   return params;
 }*/
 
-
-void TeamShowWidget::changeTeamColor(int color)
-{
-    colorWidget->setColor(color);
+void TeamShowWidget::changeTeamColor(int color) {
+  colorWidget->setColor(color);
 }
 
-void TeamShowWidget::onColorChanged(int color)
-{
-    m_team.setColor(color);
+void TeamShowWidget::onColorChanged(int color) {
+  m_team.setColor(color);
 
-    Q_EMIT teamColorChanged(m_team);
+  Q_EMIT teamColorChanged(m_team);
 }
 
-HWTeam TeamShowWidget::getTeam() const
-{
-    return m_team;
-}
+HWTeam TeamShowWidget::getTeam() const { return m_team; }

@@ -19,8 +19,8 @@
 #ifndef _KEY_BINDER_H
 #define _KEY_BINDER_H
 
-#include <QWidget>
 #include <QHash>
+#include <QWidget>
 
 #include "binds.h"
 
@@ -31,47 +31,49 @@ class QBoxLayout;
 class QComboBox;
 class QLabel;
 
-// USAGE NOTE: Every time the widget comes into view, you must call resetInterface()
+// USAGE NOTE: Every time the widget comes into view, you must call
+// resetInterface()
 
-class KeyBinder : public QWidget
-{
-    Q_OBJECT
+class KeyBinder : public QWidget {
+  Q_OBJECT
 
-    public:
-        KeyBinder(QWidget * parent = NULL, const QString & helpText = QString(), const QString & defaultText = QString(), const QString & resetButtonText = QString());
-        ~KeyBinder();
+ public:
+  KeyBinder(QWidget *parent = NULL, const QString &helpText = QString(),
+            const QString &defaultText = QString(),
+            const QString &resetButtonText = QString());
+  ~KeyBinder();
 
-        void setBindIndex(int keyIndex, int bindIndex);
-        int bindIndex(int keyIndex);
-        void resetInterface();
-        bool hasConflicts();
-        bool checkConflicts();
-        bool checkConflictsWith(int bind, bool updateState);
+  void setBindIndex(int keyIndex, int bindIndex);
+  int bindIndex(int keyIndex);
+  void resetInterface();
+  bool hasConflicts();
+  bool checkConflicts();
+  bool checkConflictsWith(int bind, bool updateState);
 
-    private:
-     QHash<QObject *, QTableWidgetItem *> bindComboBoxCellMappings;
-     QHash<QTableWidgetItem *, QComboBox *> bindCellComboBoxMappings;
-     QTableWidget *selectedBindTable;
-     QListWidget *catList;
-     QBoxLayout *bindingsPages;
-     QComboBox *CBBind[BINDS_NUMBER];
-     QLabel *conflictLabel;
-     QIcon *dropDownIcon;
-     QIcon *conflictIcon;
-     QString defaultText;
-     bool enableSignal;
-     QList<QTableWidgetItem *> conflictItems;
-     bool p_hasConflicts;
+ private:
+  QHash<QObject *, QTableWidgetItem *> bindComboBoxCellMappings;
+  QHash<QTableWidgetItem *, QComboBox *> bindCellComboBoxMappings;
+  QTableWidget *selectedBindTable;
+  QListWidget *catList;
+  QBoxLayout *bindingsPages;
+  QComboBox *CBBind[BINDS_NUMBER];
+  QLabel *conflictLabel;
+  QIcon *dropDownIcon;
+  QIcon *conflictIcon;
+  QString defaultText;
+  bool enableSignal;
+  QList<QTableWidgetItem *> conflictItems;
+  bool p_hasConflicts;
 
-    Q_SIGNALS:
-        void bindUpdate(int bindID);
-        void resetAllBinds();
+ Q_SIGNALS:
+  void bindUpdate(int bindID);
+  void resetAllBinds();
 
-    private Q_SLOTS:
-        void changeBindingsPage(int page);
-        void bindChanged(const QString &);
-        void bindCellClicked(QTableWidgetItem * item);
-        void bindSelectionChanged();
+ private Q_SLOTS:
+  void changeBindingsPage(int page);
+  void bindChanged(const QString &);
+  void bindCellClicked(QTableWidgetItem *item);
+  void bindSelectionChanged();
 };
 
-#endif // _KEY_BINDER_H
+#endif  // _KEY_BINDER_H

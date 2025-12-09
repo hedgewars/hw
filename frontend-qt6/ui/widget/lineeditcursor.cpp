@@ -16,20 +16,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QKeyEvent>
-
 #include "lineeditcursor.h"
 
-void LineEditCursor::keyPressEvent(QKeyEvent * event)
-{
-    if (event->key() == Qt::Key_Up)
-        Q_EMIT moveUp();
-    else if (event->key() == Qt::Key_Down)
-        Q_EMIT moveDown();
-    else if (event->key() == Qt::Key_Left)
-        Q_EMIT moveLeft();
-    else if (event->key() == Qt::Key_Right)
-        Q_EMIT moveRight();
-    else
-        QLineEdit::keyPressEvent(event);
+#include <QKeyEvent>
+
+void LineEditCursor::keyPressEvent(QKeyEvent* event) {
+  if (event->key() == Qt::Key_Up)
+    Q_EMIT moveUp();
+  else if (event->key() == Qt::Key_Down)
+    Q_EMIT moveDown();
+  else if (event->key() == Qt::Key_Left)
+    Q_EMIT moveLeft();
+  else if (event->key() == Qt::Key_Right)
+    Q_EMIT moveRight();
+  else
+    QLineEdit::keyPressEvent(event);
 }

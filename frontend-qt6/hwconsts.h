@@ -17,10 +17,10 @@
  */
 
 #if !(TARGET_OS_IPHONE)
-#include <QString>
 #include <QDir>
-#include <QStringList>
 #include <QPair>
+#include <QString>
+#include <QStringList>
 
 extern const QString cProtoVer;
 extern const QString cVersionString;
@@ -46,7 +46,7 @@ class QStandardItemModel;
 extern const QString cDefaultAmmoStore;
 extern const QString cEmptyAmmoStore;
 extern int cAmmoNumber;
-extern QList< QPair<QString, QString> > cDefaultAmmos;
+extern QList<QPair<QString, QString> > cDefaultAmmos;
 extern QStringList cQuickGameMaps;
 
 extern unsigned int colors[];
@@ -56,18 +56,17 @@ extern int cAmmoMenuRows;
 extern QString netHost;
 extern quint16 netPort;
 
-
-//Current season, SEASON_NONE by default
+// Current season, SEASON_NONE by default
 extern int season;
-//On the day of hedgewars birthday (Oct 31st) this variable is assigned
-//with number of years past 2004 (foundation of hedgewars)
-//Could be used to implement a text/graphic like "This is the xxth birthday of hedgewars" or similar
+// On the day of hedgewars birthday (Oct 31st) this variable is assigned
+// with number of years past 2004 (foundation of hedgewars)
+// Could be used to implement a text/graphic like "This is the xxth birthday of
+// hedgewars" or similar
 extern int years_since_foundation;
 
 #endif
 
-
-//Different seasons; assigned to season (int)
+// Different seasons; assigned to season (int)
 #define SEASON_NONE 0
 #define SEASON_CHRISTMAS 2
 #define SEASON_HWBDAY 4
@@ -78,7 +77,7 @@ extern int years_since_foundation;
 #define NETGAME_DEFAULT_PORT 46631
 #define HEDGEHOGS_PER_TEAM 8
 
-//Selected engine exit codes, see hedgewars/uConsts.pas
+// Selected engine exit codes, see hedgewars/uConsts.pas
 #define HWENGINE_EXITCODE_OK 0
 #define HWENGINE_EXITCODE_FATAL 52
 
@@ -108,32 +107,26 @@ extern int years_since_foundation;
                               0xfff1c3e1, /. pink   ./ \
                               // add new colors here
                               0 }*/
-/* another set. this one is a merge of mikade/bugq colours w/ a bit of channel feedback */
-#define HW_TEAMCOLOR_ARRAY  { 0xffff0204, /* red    */ \
-                              0xff4980c1, /* blue   */ \
-                              0xff1de6ba, /* teal   */ \
-                              0xffb541ef, /* purple */ \
-                              0xffe55bb0, /* pink   */ \
-                              0xff20bf00, /* green  */ \
-                              0xfffe8b0e, /* orange */ \
-                              0xff8f5902, /* brown  */ \
-                              0xffffff01, /* yellow */ \
-                              /* add new colors here */ \
-                              0 }
+/* another set. this one is a merge of mikade/bugq colours w/ a bit of channel
+ * feedback */
+#define HW_TEAMCOLOR_ARRAY                            \
+  {0xffff0204,              /* red    */              \
+   0xff4980c1,              /* blue   */              \
+   0xff1de6ba,              /* teal   */              \
+   0xffb541ef,              /* purple */              \
+   0xffe55bb0,              /* pink   */              \
+   0xff20bf00,              /* green  */              \
+   0xfffe8b0e,              /* orange */              \
+   0xff8f5902,              /* brown  */              \
+   0xffffff01, /* yellow */ /* add new colors here */ \
+   0}
 
 /* The ammo types, sorted in the same way as in the ammo menu */
-#define HW_AMMOMENU_ARRAY {\
-  3,  4, 22, 29, 51, 55,\
-  1,  2, 26, 27, 40, 44,\
-  5, 10, 38, 45, 54, 59,\
- 12, 13, 14, 23, 25, 48,\
-  9, 11, 24, 30, 31, 47,\
- 16, 17, 28, 43, 50, 57,\
-  6, 18, 19, 46, 53, 56,\
-  8, 15, 20, 39, 41, 42,\
- 34, 36, 37, 49, 52, 58,\
-  7, 21, 32, 33, 35, 60\
-}
+#define HW_AMMOMENU_ARRAY                                      \
+  {3,  4,  22, 29, 51, 55, 1,  2,  26, 27, 40, 44, 5,  10, 38, \
+   45, 54, 59, 12, 13, 14, 23, 25, 48, 9,  11, 24, 30, 31, 47, \
+   16, 17, 28, 43, 50, 57, 6,  18, 19, 46, 53, 56, 8,  15, 20, \
+   39, 41, 42, 34, 36, 37, 49, 52, 58, 7,  21, 32, 33, 35, 60}
 
 /* Ammo ID for extra damage */
 #define HW_AMMOTYPE_EXTRADAMAGE 32

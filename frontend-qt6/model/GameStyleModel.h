@@ -24,25 +24,29 @@
 #ifndef HEDGEWARS_GAMESTYLEMODEL_H
 #define HEDGEWARS_GAMESTYLEMODEL_H
 
+#include <QMap>
 #include <QStandardItemModel>
 #include <QStringList>
-#include <QMap>
 
 #include "DataManager.h"
 
 /**
  * @brief A model listing available game styles
  */
-class GameStyleModel : public QStandardItemModel
-{
-        Q_OBJECT
+class GameStyleModel : public QStandardItemModel {
+  Q_OBJECT
 
-    public:
-        enum DataRoles { ScriptRole = Qt::UserRole+1, SchemeRole, WeaponsRole, IsDlcRole };
+ public:
+  enum DataRoles {
+    ScriptRole = Qt::UserRole + 1,
+    SchemeRole,
+    WeaponsRole,
+    IsDlcRole
+  };
 
-    public Q_SLOTS:
-        /// reloads the themes from the DataManager
-        void loadGameStyles();
+ public Q_SLOTS:
+  /// reloads the themes from the DataManager
+  void loadGameStyles();
 };
 
-#endif // HEDGEWARS_GAMESTYLEMODEL_H
+#endif  // HEDGEWARS_GAMESTYLEMODEL_H

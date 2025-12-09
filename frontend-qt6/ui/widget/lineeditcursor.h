@@ -21,21 +21,20 @@
 
 #include <QLineEdit>
 
-class LineEditCursor : public QLineEdit
-{
-        Q_OBJECT
+class LineEditCursor : public QLineEdit {
+  Q_OBJECT
 
-    public:
-        LineEditCursor(QWidget* parent = 0) : QLineEdit(parent) {}
+ public:
+  LineEditCursor(QWidget* parent = 0) : QLineEdit(parent) {}
 
-    Q_SIGNALS:
-        void moveUp();
-        void moveDown();
-        void moveLeft();
-        void moveRight();
+ Q_SIGNALS:
+  void moveUp();
+  void moveDown();
+  void moveLeft();
+  void moveRight();
 
-    private:
-        void keyPressEvent(QKeyEvent * event);
+ private:
+  void keyPressEvent(QKeyEvent* event);
 };
 
-#endif // LINEEDITCURSOR_H
+#endif  // LINEEDITCURSOR_H

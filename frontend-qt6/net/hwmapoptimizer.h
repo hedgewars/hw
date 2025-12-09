@@ -1,30 +1,29 @@
 #ifndef HWMAPOPTIMIZER_H
 #define HWMAPOPTIMIZER_H
 
-#include "tcpBase.h"
 #include "drawmapscene.h"
+#include "tcpBase.h"
 
-class HWMapOptimizer : public TCPBase
-{
-    Q_OBJECT
-public:
-    explicit HWMapOptimizer(QObject *parent = 0);
+class HWMapOptimizer : public TCPBase {
+  Q_OBJECT
+ public:
+  explicit HWMapOptimizer(QObject *parent = 0);
 
-    void optimizeMap(const Paths & paths);
-    bool couldBeRemoved();
-    
-Q_SIGNALS:    
-    void optimizedMap(const Paths & paths);
-    
-public Q_SLOTS:
+  void optimizeMap(const Paths &paths);
+  bool couldBeRemoved();
 
-protected:
-    QStringList getArguments();
-    void onClientDisconnect();
-    void SendToClientFirst();
+ Q_SIGNALS:
+  void optimizedMap(const Paths &paths);
 
-private:
-    Paths m_paths;
+ public Q_SLOTS:
+
+ protected:
+  QStringList getArguments();
+  void onClientDisconnect();
+  void SendToClientFirst();
+
+ private:
+  Paths m_paths;
 };
 
-#endif // HWMAPOPTIMIZER_H
+#endif  // HWMAPOPTIMIZER_H

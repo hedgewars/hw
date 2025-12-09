@@ -5,8 +5,7 @@
 #ifndef AUTOUPDATER_H
 #define AUTOUPDATER_H
 
-class AutoUpdater
-{
+class AutoUpdater {
  public:
   AutoUpdater() = default;
 

@@ -10,33 +10,32 @@ class ColorWidget;
 
 class QStandardItemModel;
 
-class ColorWidget : public QFrame
-{
-    Q_OBJECT
+class ColorWidget : public QFrame {
+  Q_OBJECT
 
-public:
-    explicit ColorWidget(QStandardItemModel *colorsModel, QWidget *parent = 0);
-    ~ColorWidget();
+ public:
+  explicit ColorWidget(QStandardItemModel *colorsModel, QWidget *parent = 0);
+  ~ColorWidget();
 
-    void setColors(QStandardItemModel * colorsModel);
-    void setColor(int color);
-    int getColor();
+  void setColors(QStandardItemModel *colorsModel);
+  void setColor(int color);
+  int getColor();
 
-Q_SIGNALS:
-    void colorChanged(int color);
+ Q_SIGNALS:
+  void colorChanged(int color);
 
-private:
-    int m_color;
-    QStandardItemModel * m_colorsModel;
+ private:
+  int m_color;
+  QStandardItemModel *m_colorsModel;
 
-private Q_SLOTS:
-    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+ private Q_SLOTS:
+  void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
-protected:
-    void mousePressEvent(QMouseEvent * event);
-    void wheelEvent(QWheelEvent * event);
-    void nextColor();
-    void previousColor();
+ protected:
+  void mousePressEvent(QMouseEvent *event);
+  void wheelEvent(QWheelEvent *event);
+  void nextColor();
+  void previousColor();
 };
 
-#endif // COLORWIDGET_H
+#endif  // COLORWIDGET_H

@@ -26,41 +26,35 @@
 class QPushButton;
 class QListWidget;
 
-class PagePlayDemo : public AbstractPage
-{
-        Q_OBJECT
+class PagePlayDemo : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        enum RecordType
-        {
-            RT_Demo,
-            RT_Save
-        };
+ public:
+  enum RecordType { RT_Demo, RT_Save };
 
-        PagePlayDemo(QWidget* parent = 0);
+  PagePlayDemo(QWidget *parent = 0);
 
-        void FillFromDir(RecordType rectype);
-        bool isSave();
+  void FillFromDir(RecordType rectype);
+  bool isSave();
 
-        QPushButton *BtnPlayDemo;
-        QPushButton *BtnRenameRecord;
-        QPushButton *BtnRemoveRecord;
-        QListWidget *DemosList;
+  QPushButton *BtnPlayDemo;
+  QPushButton *BtnRenameRecord;
+  QPushButton *BtnRemoveRecord;
+  QListWidget *DemosList;
 
-    public Q_SLOTS:
-        void refresh();
+ public Q_SLOTS:
+  void refresh();
 
-    private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ private:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 
-        RecordType recType;
+  RecordType recType;
 
-    private Q_SLOTS:
-        void renameRecord();
-        void removeRecord();
+ private Q_SLOTS:
+  void renameRecord();
+  void removeRecord();
 };
 
-
-#endif // PLAYRECORDPAGE_H
+#endif  // PLAYRECORDPAGE_H

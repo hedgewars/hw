@@ -21,27 +21,26 @@
 
 #include "AbstractPage.h"
 
-class PageCampaign : public AbstractPage
-{
-        Q_OBJECT
+class PageCampaign : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageCampaign(QWidget* parent = 0);
+ public:
+  PageCampaign(QWidget *parent = 0);
 
-        QPushButton *btnPreview;
-        QPushButton *BtnStartCampaign;
-        QLabel *lbldescription;
-        QLabel *lbltitle;
-        QComboBox   *CBMission;
-        QComboBox   *CBCampaign;
-        QComboBox   *CBTeam;
-        bool currentMissionWon = false;
+  QPushButton *btnPreview;
+  QPushButton *BtnStartCampaign;
+  QLabel *lbldescription;
+  QLabel *lbltitle;
+  QComboBox *CBMission;
+  QComboBox *CBCampaign;
+  QComboBox *CBTeam;
+  bool currentMissionWon = false;
 
-    protected:
-        QLayout * bodyLayoutDefinition();
+ protected:
+  QLayout *bodyLayoutDefinition();
 
-    private:
-        QLayout * footerLayoutDefinition();
+ private:
+  QLayout *footerLayoutDefinition();
 };
 
 #endif

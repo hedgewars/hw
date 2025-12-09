@@ -24,28 +24,28 @@
 /**
  * @brief Class for interacting with ffmpeg/libav libraries
  *
- * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton
+ * pattern</a>
  */
-class LibavInteraction : public QObject
-{
-    Q_OBJECT;
+class LibavInteraction : public QObject {
+  Q_OBJECT;
 
-    LibavInteraction();
+  LibavInteraction();
 
-public:
+ public:
+  static LibavInteraction& instance();
 
-    static LibavInteraction & instance();
+  // fill combo box with known file formats
+  void fillFormats(QComboBox* pFormats);
 
-    // fill combo box with known file formats
-    void fillFormats(QComboBox * pFormats);
+  // fill combo boxes with known codecs for given formats
+  void fillCodecs(const QString& format, QComboBox* pVCodecs,
+                  QComboBox* pACodecs);
 
-    // fill combo boxes with known codecs for given formats
-    void fillCodecs(const QString & format, QComboBox * pVCodecs, QComboBox * pACodecs);
+  QString getExtension(const QString& format);
 
-    QString getExtension(const QString & format);
-
-    // get information about file (duration, resolution etc) in multiline string
-    QString getFileInfo(const QString & filepath);
+  // get information about file (duration, resolution etc) in multiline string
+  QString getFileInfo(const QString& filepath);
 };
 
-#endif // LIBAV_INTERACTION
+#endif  // LIBAV_INTERACTION

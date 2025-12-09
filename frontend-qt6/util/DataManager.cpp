@@ -21,246 +21,222 @@
  * @brief DataManager class implementation
  */
 
-#include <QMap>
-#include <QStringList>
-#include <QStandardItemModel>
-#include <QFileInfo>
-#include <QSettings>
-#include <QColor>
+#include "DataManager.h"
 
 #include <SDL.h>
 
-#include "hwconsts.h"
-#include "HWApplication.h"
-#include "sdlkeys.h"
-#include "KeyMap.h"
-#include "physfs.h"
-
-#include "DataManager.h"
+#include <QColor>
+#include <QFileInfo>
+#include <QMap>
+#include <QSettings>
+#include <QStandardItemModel>
+#include <QStringList>
 
 #include "GameStyleModel.h"
+#include "HWApplication.h"
 #include "HatModel.h"
+#include "KeyMap.h"
 #include "MapModel.h"
 #include "ThemeModel.h"
+#include "hwconsts.h"
+#include "physfs.h"
+#include "sdlkeys.h"
 
-DataManager::DataManager()
-{
-    m_hatModel = NULL;
-    m_staticMapModel = NULL;
-    m_missionMapModel = NULL;
-    m_themeModel = NULL;
-    m_colorsModel = NULL;
-    m_bindsModel = NULL;
-    m_gameStyleModel = NULL;
+DataManager::DataManager() {
+  m_hatModel = NULL;
+  m_staticMapModel = NULL;
+  m_missionMapModel = NULL;
+  m_themeModel = NULL;
+  m_colorsModel = NULL;
+  m_bindsModel = NULL;
+  m_gameStyleModel = NULL;
 }
 
-
-DataManager & DataManager::instance()
-{
-    static DataManager instance;
-    return instance;
+DataManager &DataManager::instance() {
+  static DataManager instance;
+  return instance;
 }
 
+QStringList DataManager::entryList(const QString &subDirectory,
+                                   QDir::Filters filters,
+                                   const QStringList &nameFilters,
+                                   bool withDLC) const {
+  QDir tmpDir(QStringLiteral("physfs://%1").arg(subDirectory));
+  QStringList result = tmpDir.entryList(nameFilters, filters);
 
-QStringList DataManager::entryList(
-    const QString & subDirectory,
-    QDir::Filters filters,
-    const QStringList & nameFilters,
-    bool withDLC
-) const
-{
-    QDir tmpDir(QStringLiteral("physfs://%1").arg(subDirectory));
-    QStringList result = tmpDir.entryList(nameFilters, filters);
+  // sort case-insensitive
+  QMap<QString, QString> sortedFileNames;
+  QString absolutePath = datadir.absolutePath().toLocal8Bit().data();
+  for (auto &&fn : result) {
+    // Filter out DLC entries if desired
+    QString realDir = PHYSFS_getRealDir(
+        QString(subDirectory + QStringLiteral("/") + fn).toLocal8Bit().data());
+    if (withDLC || realDir == absolutePath)
+      sortedFileNames.insert(fn.toLower(), fn);
+  }
+  result = sortedFileNames.values();
 
-    // sort case-insensitive
-    QMap<QString, QString> sortedFileNames;
-    QString absolutePath = datadir.absolutePath().toLocal8Bit().data();
-    for (auto &&fn : result) {
-      // Filter out DLC entries if desired
-      QString realDir =
-          PHYSFS_getRealDir(QString(subDirectory + QStringLiteral("/") + fn)
-                                .toLocal8Bit()
-                                .data());
-      if (withDLC || realDir == absolutePath)
-        sortedFileNames.insert(fn.toLower(), fn);
+  return result;
+}
+
+GameStyleModel *DataManager::gameStyleModel() {
+  if (m_gameStyleModel == NULL) {
+    m_gameStyleModel = new GameStyleModel();
+    m_gameStyleModel->loadGameStyles();
+  }
+  return m_gameStyleModel;
+}
+
+HatModel *DataManager::hatModel() {
+  if (m_hatModel == NULL) {
+    m_hatModel = new HatModel();
+    m_hatModel->loadHats();
+  }
+  return m_hatModel;
+}
+
+MapModel *DataManager::staticMapModel() {
+  if (m_staticMapModel == NULL) {
+    m_staticMapModel = new MapModel(MapModel::StaticMap, this);
+  }
+  return m_staticMapModel;
+}
+
+MapModel *DataManager::missionMapModel() {
+  if (m_missionMapModel == NULL) {
+    m_missionMapModel = new MapModel(MapModel::MissionMap, this);
+  }
+  return m_missionMapModel;
+}
+
+ThemeModel *DataManager::themeModel() {
+  if (m_themeModel == NULL) {
+    m_themeModel = new ThemeModel();
+  }
+  return m_themeModel;
+}
+
+QStandardItemModel *DataManager::colorsModel() {
+  if (m_colorsModel == NULL) {
+    m_colorsModel = new QStandardItemModel();
+
+    int i = 0;
+    while (colors[i]) {
+      QStandardItem *item = new QStandardItem();
+      item->setData(QColor(colors[i]));
+      m_colorsModel->appendRow(item);
+      ++i;
     }
-    result = sortedFileNames.values();
+  }
 
-    return result;
+  return m_colorsModel;
 }
 
-GameStyleModel * DataManager::gameStyleModel()
-{
-    if (m_gameStyleModel == NULL) {
-        m_gameStyleModel = new GameStyleModel();
-        m_gameStyleModel->loadGameStyles();
-    }
-    return m_gameStyleModel;
-}
+QStandardItemModel *DataManager::bindsModel() {
+  KeyMap km = KeyMap::instance();
+  if (m_bindsModel == NULL) {
+    m_bindsModel = new QStandardItemModel();
 
-HatModel * DataManager::hatModel()
-{
-    if (m_hatModel == NULL) {
-        m_hatModel = new HatModel();
-        m_hatModel->loadHats();
-    }
-    return m_hatModel;
-}
+    QStandardItem *firstItem = new QStandardItem();
+    firstItem->setData(tr("Use Default"), Qt::DisplayRole);
+    firstItem->setData("default", Qt::UserRole + 1);
+    m_bindsModel->appendRow(firstItem);
 
-MapModel * DataManager::staticMapModel()
-{
-    if (m_staticMapModel == NULL) {
-        m_staticMapModel = new MapModel(MapModel::StaticMap, this);
-    }
-    return m_staticMapModel;
-}
+    for (int j = 0; sdlkeys[j][1][0] != '\0'; j++) {
+      QStandardItem *item = new QStandardItem();
+      QString keyId = QString(sdlkeys[j][0]);
+      QString keyDisplay;
+      bool isKeyboard = sdlkeys_iskeyboard[j] == true;
+      if (keyId == QLatin1String("none") || (!isKeyboard))
+        keyDisplay = HWApplication::translate("binds (keys)", sdlkeys[j][1]);
+      else
+        // Get key name with respect to keyboard layout
+        keyDisplay = QString(SDL_GetKeyName(
+            SDL_GetKeyFromScancode(km.getScancodeFromKeyname(sdlkeys[j][0]))));
 
-MapModel * DataManager::missionMapModel()
-{
-    if (m_missionMapModel == NULL) {
-        m_missionMapModel = new MapModel(MapModel::MissionMap, this);
-    }
-    return m_missionMapModel;
-}
-
-ThemeModel * DataManager::themeModel()
-{
-    if (m_themeModel == NULL) {
-        m_themeModel = new ThemeModel();
-    }
-    return m_themeModel;
-}
-
-QStandardItemModel * DataManager::colorsModel()
-{
-    if(m_colorsModel == NULL)
-    {
-        m_colorsModel = new QStandardItemModel();
-
-        int i = 0;
-        while(colors[i])
-        {
-            QStandardItem * item = new QStandardItem();
-            item->setData(QColor(colors[i]));
-            m_colorsModel->appendRow(item);
-            ++i;
-        }
-    }
-
-    return m_colorsModel;
-}
-
-QStandardItemModel * DataManager::bindsModel()
-{
-    KeyMap km = KeyMap::instance();
-    if(m_bindsModel == NULL)
-    {
-        m_bindsModel = new QStandardItemModel();
-
-        QStandardItem * firstItem = new QStandardItem();
-        firstItem->setData(tr("Use Default"), Qt::DisplayRole);
-        firstItem->setData("default", Qt::UserRole + 1);
-        m_bindsModel->appendRow(firstItem);
-
-        for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
-        {
-            QStandardItem * item = new QStandardItem();
-            QString keyId = QString(sdlkeys[j][0]);
-            QString keyDisplay;
-            bool isKeyboard = sdlkeys_iskeyboard[j] == true;
-            if (keyId == QLatin1String("none") || (!isKeyboard))
-                keyDisplay = HWApplication::translate("binds (keys)", sdlkeys[j][1]);
-            else
-                // Get key name with respect to keyboard layout
-                keyDisplay = QString(SDL_GetKeyName(SDL_GetKeyFromScancode(km.getScancodeFromKeyname(sdlkeys[j][0]))));
-
-            bool kbFallback = keyDisplay.trimmed().isEmpty();
-            if (kbFallback)
-            {
-                keyDisplay = QString(sdlkeys[j][1]);
-                if ((QString(sdlkeys[j][0]) != QLatin1String("f13")) && (QString(sdlkeys[j][0]) != QLatin1String("f14")) && (QString(sdlkeys[j][0]) != QLatin1String("f15")))
-                {
-                    // If SDL doesn't know a name, show fallback name and a warning
-                    //: Name of QWERTY US keyboard layout
-                    keyDisplay = keyDisplay + QStringLiteral(" ") + HWApplication::translate("binds (keys)", "(QWERTY)");
-                }
-            }
-            if (isKeyboard)
-            {
-                if (!kbFallback)
-                    keyDisplay = HWApplication::translate("binds (keys)", keyDisplay.toUtf8().constData());
-                keyDisplay = HWApplication::translate("binds (keys)", "Keyboard") + QStringLiteral(": ") + keyDisplay;
-            }
-            item->setData(keyDisplay, Qt::DisplayRole);
-            item->setData(QString::fromLatin1(sdlkeys[j][0]), Qt::UserRole + 1);
-            m_bindsModel->appendRow(item);
-        }
-    }
-
-    return m_bindsModel;
-}
-
-QString DataManager::settingsFileName()
-{
-    if(m_settingsFileName.isEmpty())
-    {
-      QFile settingsFile(cfgdir.absoluteFilePath(QStringLiteral("settings.ini")));
-
-      if (!settingsFile.exists()) {
-        QFile oldSettingsFile(cfgdir.absoluteFilePath(QStringLiteral("hedgewars.ini")));
-
-        if (settingsFile.open(QFile::WriteOnly)) {
-          settingsFile.close();
-        }
-
-        if (oldSettingsFile.exists()) {
-          QSettings sOld(oldSettingsFile.fileName(), QSettings::IniFormat);
-          QSettings sNew(settingsFile.fileName(), QSettings::IniFormat);
-
-          for (auto &&key : sOld.allKeys()) {
-            if (key.startsWith(QLatin1String("colors/color")))
-              sNew.setValue(key, sOld.value(key).value<QColor>().name());
-            else
-              sNew.setValue(key, sOld.value(key));
-          }
+      bool kbFallback = keyDisplay.trimmed().isEmpty();
+      if (kbFallback) {
+        keyDisplay = QString(sdlkeys[j][1]);
+        if ((QString(sdlkeys[j][0]) != QLatin1String("f13")) &&
+            (QString(sdlkeys[j][0]) != QLatin1String("f14")) &&
+            (QString(sdlkeys[j][0]) != QLatin1String("f15"))) {
+          // If SDL doesn't know a name, show fallback name and a warning
+          //: Name of QWERTY US keyboard layout
+          keyDisplay = keyDisplay + QStringLiteral(" ") +
+                       HWApplication::translate("binds (keys)", "(QWERTY)");
         }
       }
+      if (isKeyboard) {
+        if (!kbFallback)
+          keyDisplay = HWApplication::translate(
+              "binds (keys)", keyDisplay.toUtf8().constData());
+        keyDisplay = HWApplication::translate("binds (keys)", "Keyboard") +
+                     QStringLiteral(": ") + keyDisplay;
+      }
+      item->setData(keyDisplay, Qt::DisplayRole);
+      item->setData(QString::fromLatin1(sdlkeys[j][0]), Qt::UserRole + 1);
+      m_bindsModel->appendRow(item);
+    }
+  }
 
-        m_settingsFileName = settingsFile.fileName();
+  return m_bindsModel;
+}
+
+QString DataManager::settingsFileName() {
+  if (m_settingsFileName.isEmpty()) {
+    QFile settingsFile(cfgdir.absoluteFilePath(QStringLiteral("settings.ini")));
+
+    if (!settingsFile.exists()) {
+      QFile oldSettingsFile(
+          cfgdir.absoluteFilePath(QStringLiteral("hedgewars.ini")));
+
+      if (settingsFile.open(QFile::WriteOnly)) {
+        settingsFile.close();
+      }
+
+      if (oldSettingsFile.exists()) {
+        QSettings sOld(oldSettingsFile.fileName(), QSettings::IniFormat);
+        QSettings sNew(settingsFile.fileName(), QSettings::IniFormat);
+
+        for (auto &&key : sOld.allKeys()) {
+          if (key.startsWith(QLatin1String("colors/color")))
+            sNew.setValue(key, sOld.value(key).value<QColor>().name());
+          else
+            sNew.setValue(key, sOld.value(key));
+        }
+      }
     }
 
-    return m_settingsFileName;
+    m_settingsFileName = settingsFile.fileName();
+  }
+
+  return m_settingsFileName;
 }
 
-QString DataManager::safeFileName(QString fileName)
-{
-    fileName.replace('\\', '_');
-    fileName.replace('/', '_');
-    fileName.replace(':', '_');
+QString DataManager::safeFileName(QString fileName) {
+  fileName.replace('\\', '_');
+  fileName.replace('/', '_');
+  fileName.replace(':', '_');
 
-    return fileName;
+  return fileName;
 }
 
-void DataManager::reload()
-{
-    // removed for now (also code was a bit unclean, could lead to segfault if
-    // reload() is called before all members are initialized - because currently
-    // they are initialized in the getter methods rather than the constructor)
+void DataManager::reload() {
+  // removed for now (also code was a bit unclean, could lead to segfault if
+  // reload() is called before all members are initialized - because currently
+  // they are initialized in the getter methods rather than the constructor)
 }
 
-void DataManager::resetColors()
-{
-    for(int i = colorsModel()->rowCount() - 1; i >= 0; --i)
-    {
-        m_colorsModel->item(i)->setData(QColor(colors[i]));
-    }
+void DataManager::resetColors() {
+  for (int i = colorsModel()->rowCount() - 1; i >= 0; --i) {
+    m_colorsModel->item(i)->setData(QColor(colors[i]));
+  }
 }
 
-bool DataManager::ensureFileExists(const QString &fileName)
-{
-    QFile tmpfile(fileName);
-    if (!tmpfile.exists())
-        return tmpfile.open(QFile::WriteOnly);
-    else
-        return true;
+bool DataManager::ensureFileExists(const QString &fileName) {
+  QFile tmpfile(fileName);
+  if (!tmpfile.exists())
+    return tmpfile.open(QFile::WriteOnly);
+  else
+    return true;
 }

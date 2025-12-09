@@ -19,22 +19,11 @@
 
 #include "weaponItem.h"
 
-WeaponItem::WeaponItem(const QImage& im, const QImage& img, QWidget * parent) :
-    ItemNum(im, img, parent, 0)
-{
-}
+WeaponItem::WeaponItem(const QImage& im, const QImage& img, QWidget* parent)
+    : ItemNum(im, img, parent, 0) {}
 
-WeaponItem::~WeaponItem()
-{
-}
+WeaponItem::~WeaponItem() {}
 
-void WeaponItem::incItems()
-{
-    ++numItems;
-}
+void WeaponItem::incItems() { ++numItems; }
 
-void WeaponItem::decItems()
-{
-    --numItems;
-}
-
+void WeaponItem::decItems() { --numItems; }

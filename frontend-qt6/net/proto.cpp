@@ -18,48 +18,43 @@
 
 #include "proto.h"
 
-HWProto::HWProto()
-{
+HWProto::HWProto() {}
 
+QByteArray &HWProto::addByteArrayToBuffer(QByteArray &buf,
+                                          const QByteArray &msg) {
+  QByteArray bmsg = msg;
+  bmsg = bmsg.left(250);
+  quint8 sz = bmsg.size();
+  buf.append(QByteArray((char *)&sz, 1));
+  buf.append(bmsg);
+  return buf;
 }
 
-QByteArray & HWProto::addByteArrayToBuffer(QByteArray & buf, const QByteArray & msg)
-{
-    QByteArray bmsg = msg;
-    bmsg = bmsg.left(250);
-    quint8 sz = bmsg.size();
-    buf.append(QByteArray((char *)&sz, 1));
-    buf.append(bmsg);
-    return buf;
+QByteArray &HWProto::addStringToBuffer(QByteArray &buf, const QString &string) {
+  return addByteArrayToBuffer(buf, string.toUtf8());
 }
 
-QByteArray & HWProto::addStringToBuffer(QByteArray & buf, const QString & string)
-{
-    return addByteArrayToBuffer(buf, string.toUtf8());
+QByteArray &HWProto::addStringListToBuffer(QByteArray &buf,
+                                           const QStringList &strList) {
+  for (int i = 0; i < strList.size(); i++) addStringToBuffer(buf, strList[i]);
+  return buf;
 }
 
-QByteArray & HWProto::addStringListToBuffer(QByteArray & buf, const QStringList & strList)
-{
-    for (int i = 0; i < strList.size(); i++)
-        addStringToBuffer(buf, strList[i]);
-    return buf;
+QString HWProto::formatChatMsg(const QString &nick, const QString &msg) {
+  // Messages using the /me command.
+  // Server messages (nick starts with a bracket) are never considered /me
+  // messages.
+  if (msg.left(4) == QLatin1String("/me ") && (!nick.startsWith('[')) &&
+      (!nick.startsWith('(')))
+    return QString("\x02* %1 %2").arg(nick, msg.mid(4));
+  // Normal chat message
+  else
+    return QString("\x01%1: %2").arg(nick, msg);
 }
 
-QString HWProto::formatChatMsg(const QString & nick, const QString & msg)
-{
-    // Messages using the /me command.
-    // Server messages (nick starts with a bracket) are never considered /me messages.
-    if(msg.left(4) == QLatin1String("/me ") && (!nick.startsWith('[')) && (!nick.startsWith('(')))
-        return QString("\x02* %1 %2").arg(nick, msg.mid(4));
-    // Normal chat message
-    else
-        return QString("\x01%1: %2").arg(nick, msg);
-}
-
-QString HWProto::chatStringToAction(const QString & string)
-{
-    if(string.left(4) == QLatin1String("/me "))
-        return string.mid(4);
-    else
-        return QString();
+QString HWProto::chatStringToAction(const QString &string) {
+  if (string.left(4) == QLatin1String("/me "))
+    return string.mid(4);
+  else
+    return QString();
 }

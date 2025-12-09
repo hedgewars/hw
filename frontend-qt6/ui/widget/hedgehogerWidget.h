@@ -24,28 +24,27 @@
 
 class FrameTeams;
 
-class CHedgehogerWidget : public ItemNum
-{
-        Q_OBJECT
+class CHedgehogerWidget : public ItemNum {
+  Q_OBJECT
 
-    public:
-        CHedgehogerWidget(const QImage& im, const QImage& img, QWidget * parent);
-        virtual ~CHedgehogerWidget();
-        unsigned char getHedgehogsNum() const;
-        void setHHNum (unsigned int num);
-        void setNonInteractive();
+ public:
+  CHedgehogerWidget(const QImage& im, const QImage& img, QWidget* parent);
+  virtual ~CHedgehogerWidget();
+  unsigned char getHedgehogsNum() const;
+  void setHHNum(unsigned int num);
+  void setNonInteractive();
 
-    Q_SIGNALS:
-        void hedgehogsNumChanged();
+ Q_SIGNALS:
+  void hedgehogsNumChanged();
 
-    protected:
-        virtual void incItems();
-        virtual void decItems();
+ protected:
+  virtual void incItems();
+  virtual void decItems();
 
-        virtual void paintEvent(QPaintEvent* event);
+  virtual void paintEvent(QPaintEvent* event);
 
-    private:
-        CHedgehogerWidget();
+ private:
+  CHedgehogerWidget();
 };
 
-#endif // _HEDGEHOGER_WIDGET
+#endif  // _HEDGEHOGER_WIDGET

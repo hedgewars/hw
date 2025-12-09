@@ -25,23 +25,22 @@ class QLineEdit;
 class QLabel;
 class QCheckBox;
 
-class RoomNamePrompt : public QDialog
-{
-        Q_OBJECT
+class RoomNamePrompt : public QDialog {
+  Q_OBJECT
 
-    public:
-        RoomNamePrompt(QWidget* parent, const QString & roomName);
-        QString getRoomName();
-        QString getPassword();
+ public:
+  RoomNamePrompt(QWidget* parent, const QString& roomName);
+  QString getRoomName();
+  QString getPassword();
 
-    private:
-        QLineEdit * leRoomName;
-        QLabel * label;
-        QCheckBox * cbSetPassword;
-        QLineEdit * lePassword;
+ private:
+  QLineEdit* leRoomName;
+  QLabel* label;
+  QCheckBox* cbSetPassword;
+  QLineEdit* lePassword;
 
-    private Q_SLOTS:
-        void checkBoxToggled();
+ private Q_SLOTS:
+  void checkBoxToggled();
 };
 
-#endif // ROOMNAMEPROMPT_H
+#endif  // ROOMNAMEPROMPT_H

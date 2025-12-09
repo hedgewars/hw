@@ -16,68 +16,72 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "pagesingleplayer.h"
+
 #include <QGridLayout>
 #include <QPushButton>
 
-#include "pagesingleplayer.h"
 #include "gamecfgwidget.h"
 
-QLayout * PageSinglePlayer::bodyLayoutDefinition()
-{
-    QVBoxLayout * vLayout = new QVBoxLayout();
+QLayout* PageSinglePlayer::bodyLayoutDefinition() {
+  QVBoxLayout* vLayout = new QVBoxLayout();
 
-    QHBoxLayout * topLine = new QHBoxLayout();
-    QHBoxLayout * middleLine = new QHBoxLayout();
-    vLayout->addStretch();
-    vLayout->addLayout(topLine);
-    vLayout->addSpacing(30);
-    vLayout->addLayout(middleLine);
-    vLayout->addStretch();
+  QHBoxLayout* topLine = new QHBoxLayout();
+  QHBoxLayout* middleLine = new QHBoxLayout();
+  vLayout->addStretch();
+  vLayout->addLayout(topLine);
+  vLayout->addSpacing(30);
+  vLayout->addLayout(middleLine);
+  vLayout->addStretch();
 
-    topLine->addStretch();
-    BtnSimpleGamePage = addButton(QStringLiteral(":/res/SimpleGame.png"), topLine, 0, true);
-    BtnSimpleGamePage->setWhatsThis(tr("Play a quick game against the computer with random settings"));
-    topLine->addSpacing(60);
-    BtnMultiplayer = addButton(QStringLiteral(":/res/Multiplayer.png"), topLine, 1, true);
-    BtnMultiplayer->setWhatsThis(tr("Play a hotseat game against your friends, or AI teams"));
-    topLine->addStretch();
+  topLine->addStretch();
+  BtnSimpleGamePage =
+      addButton(QStringLiteral(":/res/SimpleGame.png"), topLine, 0, true);
+  BtnSimpleGamePage->setWhatsThis(
+      tr("Play a quick game against the computer with random settings"));
+  topLine->addSpacing(60);
+  BtnMultiplayer =
+      addButton(QStringLiteral(":/res/Multiplayer.png"), topLine, 1, true);
+  BtnMultiplayer->setWhatsThis(
+      tr("Play a hotseat game against your friends, or AI teams"));
+  topLine->addStretch();
 
+  BtnCampaignPage =
+      addButton(QStringLiteral(":/res/Campaign.png"), middleLine, 0, true);
+  BtnCampaignPage->setWhatsThis(tr("Campaign Mode"));
+  BtnCampaignPage->setVisible(true);
 
-    BtnCampaignPage = addButton(QStringLiteral(":/res/Campaign.png"), middleLine, 0, true);
-    BtnCampaignPage->setWhatsThis(tr("Campaign Mode"));
-    BtnCampaignPage->setVisible(true);
+  BtnTrainPage =
+      addButton(QStringLiteral(":/res/Trainings.png"), middleLine, 1, true);
+  BtnTrainPage->setWhatsThis(
+      tr("Singleplayer missions: Learn how to play in the training, practice "
+         "your skills in challenges or try to complete goals in scenarios."));
 
-    BtnTrainPage = addButton(QStringLiteral(":/res/Trainings.png"), middleLine, 1, true);
-    BtnTrainPage->setWhatsThis(tr("Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios."));
-
-    return vLayout;
+  return vLayout;
 }
 
-QLayout * PageSinglePlayer::footerLayoutDefinition()
-{
-    QHBoxLayout * bottomLine = new QHBoxLayout();
-    bottomLine->addStretch();
+QLayout* PageSinglePlayer::footerLayoutDefinition() {
+  QHBoxLayout* bottomLine = new QHBoxLayout();
+  bottomLine->addStretch();
 
-    BtnDemos = addButton(QStringLiteral(":/res/Record.png"), bottomLine, 1, true);
-    BtnDemos->setWhatsThis(tr("Watch recorded demos"));
-    BtnLoad = addButton(QStringLiteral(":/res/Load.png"), bottomLine, 2, true);
-    BtnLoad->setStyleSheet(QStringLiteral("QPushButton{margin: 24px 0 0 0;}"));
-    BtnLoad->setWhatsThis(tr("Load a previously saved game"));
+  BtnDemos = addButton(QStringLiteral(":/res/Record.png"), bottomLine, 1, true);
+  BtnDemos->setWhatsThis(tr("Watch recorded demos"));
+  BtnLoad = addButton(QStringLiteral(":/res/Load.png"), bottomLine, 2, true);
+  BtnLoad->setStyleSheet(QStringLiteral("QPushButton{margin: 24px 0 0 0;}"));
+  BtnLoad->setWhatsThis(tr("Load a previously saved game"));
 
-    bottomLine->setStretch(1,0);
-    bottomLine->setStretch(2,0);
-    bottomLine->setAlignment(BtnDemos, Qt::AlignRight | Qt::AlignBottom);
-    bottomLine->setAlignment(BtnLoad, Qt::AlignRight | Qt::AlignBottom);
+  bottomLine->setStretch(1, 0);
+  bottomLine->setStretch(2, 0);
+  bottomLine->setAlignment(BtnDemos, Qt::AlignRight | Qt::AlignBottom);
+  bottomLine->setAlignment(BtnLoad, Qt::AlignRight | Qt::AlignBottom);
 
-    return bottomLine;
+  return bottomLine;
 }
 
-void PageSinglePlayer::connectSignals()
-{
-    //TODO
+void PageSinglePlayer::connectSignals() {
+  // TODO
 }
 
-PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
-{
-    initPage();
+PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent) {
+  initPage();
 }

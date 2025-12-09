@@ -18,6 +18,4 @@
 
 #include "InstallController.h"
 
-InstallController::~InstallController()
-{
-}
+InstallController::~InstallController() {}

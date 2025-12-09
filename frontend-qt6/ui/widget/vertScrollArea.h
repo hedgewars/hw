@@ -22,15 +22,14 @@
 
 #include <QScrollArea>
 
-class VertScrArea : public QScrollArea
-{
-        Q_OBJECT
+class VertScrArea : public QScrollArea {
+  Q_OBJECT
 
-    public:
-        VertScrArea(QColor frameColor, QWidget * parent = 0);
+ public:
+  VertScrArea(QColor frameColor, QWidget* parent = 0);
 
-    protected:
-        virtual void resizeEvent(QResizeEvent * event);
+ protected:
+  virtual void resizeEvent(QResizeEvent* event);
 };
 
-#endif // _VERT_SCROLL_AREA_INCLUDED
+#endif  // _VERT_SCROLL_AREA_INCLUDED

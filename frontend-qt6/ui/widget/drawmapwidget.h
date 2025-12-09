@@ -19,113 +19,105 @@
 #ifndef DRAWMAPWIDGET_H
 #define DRAWMAPWIDGET_H
 
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QPushButton>
 #include <QGraphicsView>
+#include <QHBoxLayout>
 #include <QLabel>
+#include <QPushButton>
 #include <QSizePolicy>
+#include <QWidget>
 
 #include "drawmapscene.h"
 
+class DrawMapView : public QGraphicsView {
+  Q_OBJECT
 
-class DrawMapView : public QGraphicsView
-{
-    Q_OBJECT
+ public:
+  explicit DrawMapView(QWidget *parent = 0);
+  ~DrawMapView();
 
-public:
-    explicit DrawMapView(QWidget *parent = 0);
-    ~DrawMapView();
+  void setScene(DrawMapScene *scene);
 
-    void setScene(DrawMapScene *scene);
+ protected:
+  void enterEvent(QEnterEvent *event) override;
+  void leaveEvent(QEvent *event) override;
+  bool viewportEvent(QEvent *event) override;
 
-protected:
- void enterEvent(QEnterEvent *event) override;
- void leaveEvent(QEvent *event) override;
- bool viewportEvent(QEvent *event) override;
-
-private:
-    DrawMapScene * m_scene;
+ private:
+  DrawMapScene *m_scene;
 };
 
-namespace Ui
-{
-    class Ui_DrawMapWidget
-    {
-        public:
-            DrawMapView *graphicsView;
-            QLabel * lblPoints;
+namespace Ui {
+class Ui_DrawMapWidget {
+ public:
+  DrawMapView *graphicsView;
+  QLabel *lblPoints;
 
-            void setupUi(QWidget *drawMapWidget)
-            {
-                QVBoxLayout * vbox = new QVBoxLayout(drawMapWidget);
-                vbox->setContentsMargins({0, 0, 0, 0});
-                QLayout * arLayout = new QVBoxLayout();
-                arLayout->setAlignment(Qt::AlignCenter);
-                vbox->addLayout(arLayout);
+  void setupUi(QWidget *drawMapWidget) {
+    QVBoxLayout *vbox = new QVBoxLayout(drawMapWidget);
+    vbox->setContentsMargins({0, 0, 0, 0});
+    QLayout *arLayout = new QVBoxLayout();
+    arLayout->setAlignment(Qt::AlignCenter);
+    vbox->addLayout(arLayout);
 
-                lblPoints = new QLabel(QStringLiteral("0"), drawMapWidget);
-                lblPoints->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-                arLayout->addWidget(lblPoints);
+    lblPoints = new QLabel(QStringLiteral("0"), drawMapWidget);
+    lblPoints->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    arLayout->addWidget(lblPoints);
 
-                graphicsView = new DrawMapView(drawMapWidget);
-                graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-                graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-                graphicsView->setRenderHint(QPainter::Antialiasing, true);
-                graphicsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-                arLayout->addWidget(graphicsView);
+    graphicsView = new DrawMapView(drawMapWidget);
+    graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    graphicsView->setRenderHint(QPainter::Antialiasing, true);
+    graphicsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    arLayout->addWidget(graphicsView);
 
-                retranslateUi(drawMapWidget);
+    retranslateUi(drawMapWidget);
 
-                QMetaObject::connectSlotsByName(drawMapWidget);
-            } // setupUi
+    QMetaObject::connectSlotsByName(drawMapWidget);
+  }  // setupUi
 
-            void retranslateUi(QWidget *drawMapWidget)
-            {
-                Q_UNUSED(drawMapWidget);
-            } // retranslateUi
-
-    };
-
-    class DrawMapWidget: public Ui_DrawMapWidget {};
-}
-
-class DrawMapWidget : public QWidget
-{
-        Q_OBJECT
-
-    public:
-        explicit DrawMapWidget(QWidget *parent = 0);
-        ~DrawMapWidget();
-
-        void setScene(DrawMapScene * scene);
-
-    public Q_SLOTS:
-        void undo();
-        void clear();
-        void optimize();
-        void setErasing(bool erasing);
-        void save(const QString & fileName);
-        void load(const QString & fileName);
-        void setPathType(DrawMapScene::PathType pathType);
-        void setBrushSize(int brushSize);
-
-    Q_SIGNALS:
-        void brushSizeChanged(int brushSize);
-
-    protected:
-        void changeEvent(QEvent *e);
-        virtual void resizeEvent(QResizeEvent * event);
-        virtual void showEvent(QShowEvent * event);
-
-    private:
-        Ui::DrawMapWidget *ui;
-
-        DrawMapScene * m_scene;
-
-    private Q_SLOTS:
-        void pathChanged();
-        void brushSizeChanged_slot(int brushSize);
+  void retranslateUi(QWidget *drawMapWidget) {
+    Q_UNUSED(drawMapWidget);
+  }  // retranslateUi
 };
 
-#endif // DRAWMAPWIDGET_H
+class DrawMapWidget : public Ui_DrawMapWidget {};
+}  // namespace Ui
+
+class DrawMapWidget : public QWidget {
+  Q_OBJECT
+
+ public:
+  explicit DrawMapWidget(QWidget *parent = 0);
+  ~DrawMapWidget();
+
+  void setScene(DrawMapScene *scene);
+
+ public Q_SLOTS:
+  void undo();
+  void clear();
+  void optimize();
+  void setErasing(bool erasing);
+  void save(const QString &fileName);
+  void load(const QString &fileName);
+  void setPathType(DrawMapScene::PathType pathType);
+  void setBrushSize(int brushSize);
+
+ Q_SIGNALS:
+  void brushSizeChanged(int brushSize);
+
+ protected:
+  void changeEvent(QEvent *e);
+  virtual void resizeEvent(QResizeEvent *event);
+  virtual void showEvent(QShowEvent *event);
+
+ private:
+  Ui::DrawMapWidget *ui;
+
+  DrawMapScene *m_scene;
+
+ private Q_SLOTS:
+  void pathChanged();
+  void brushSizeChanged_slot(int brushSize);
+};
+
+#endif  // DRAWMAPWIDGET_H

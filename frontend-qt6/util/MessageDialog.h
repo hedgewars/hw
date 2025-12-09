@@ -23,21 +23,23 @@
 
 class QWidget;
 
-class MessageDialog
-{
-    public:
-        static int ShowFatalMessage(const QString & msg, QWidget * parent = 0);
-        static int ShowErrorMessage(const QString & msg, QWidget * parent = 0);
-        static int ShowInfoMessage(const QString & msg, QWidget * parent = 0);
-        /**
-         * @brief Displays a message.
-         * @param title message title or <code>NULL</code> if no/default title
-         * @param msg message to display
-         * @param icon (optional) icon to be displayed next to the message
-         * @param parent parent Widget
-         * @return a QMessageBox::StandardButton value indicating which button was clicked
-         */
-        static int ShowMessage(const QString & title, const QString & msg, QMessageBox::Icon icon = QMessageBox::NoIcon, QWidget * parent = 0);
+class MessageDialog {
+ public:
+  static int ShowFatalMessage(const QString& msg, QWidget* parent = 0);
+  static int ShowErrorMessage(const QString& msg, QWidget* parent = 0);
+  static int ShowInfoMessage(const QString& msg, QWidget* parent = 0);
+  /**
+   * @brief Displays a message.
+   * @param title message title or <code>NULL</code> if no/default title
+   * @param msg message to display
+   * @param icon (optional) icon to be displayed next to the message
+   * @param parent parent Widget
+   * @return a QMessageBox::StandardButton value indicating which button was
+   * clicked
+   */
+  static int ShowMessage(const QString& title, const QString& msg,
+                         QMessageBox::Icon icon = QMessageBox::NoIcon,
+                         QWidget* parent = 0);
 };
 
 #endif

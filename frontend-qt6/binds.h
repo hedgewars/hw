@@ -27,15 +27,14 @@
 #define BINDS_NUMBER 62
 #endif
 
-struct BindAction
-{
-    QString action;
-    QString strbind;
-    const char * name;
-    const char * category;
-    const char * description;
+struct BindAction {
+  QString action;
+  QString strbind;
+  const char* name;
+  const char* category;
+  const char* description;
 };
 
 extern const BindAction cbinds[BINDS_NUMBER];
 
-#endif // BINDS_H
+#endif  // BINDS_H

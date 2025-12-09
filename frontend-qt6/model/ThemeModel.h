@@ -25,39 +25,44 @@
 #define HEDGEWARS_THEMEMODEL_H
 
 #include <QAbstractListModel>
-#include <QStringList>
-#include <QMap>
 #include <QIcon>
+#include <QMap>
+#include <QStringList>
 #include <QTextStream>
 
-#include "ThemeFilterProxyModel.h"
 #include "DataManager.h"
+#include "ThemeFilterProxyModel.h"
 
 /**
  * @brief A model listing available themes
  */
-class ThemeModel : public QAbstractListModel
-{
-        Q_OBJECT
+class ThemeModel : public QAbstractListModel {
+  Q_OBJECT
 
-    public:
-        enum Roles { ActualNameRole = Qt::UserRole, IsDlcRole, IconPathRole, IsHiddenRole, IsBackgroundThemeRole };
-        explicit ThemeModel(QObject *parent = 0);
+ public:
+  enum Roles {
+    ActualNameRole = Qt::UserRole,
+    IsDlcRole,
+    IconPathRole,
+    IsHiddenRole,
+    IsBackgroundThemeRole
+  };
+  explicit ThemeModel(QObject *parent = 0);
 
-        int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        QVariant data(const QModelIndex &index, int role) const;
-        ThemeFilterProxyModel * withoutDLC();
-        ThemeFilterProxyModel * withoutHidden();
-        ThemeFilterProxyModel * withoutDLCOrHidden();
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  QVariant data(const QModelIndex &index, int role) const;
+  ThemeFilterProxyModel *withoutDLC();
+  ThemeFilterProxyModel *withoutHidden();
+  ThemeFilterProxyModel *withoutDLCOrHidden();
 
-    private:
-        mutable QList<QMap<int, QVariant> > m_data;
-        mutable bool m_themesLoaded;
-        mutable ThemeFilterProxyModel * m_filteredNoDLC;
-        mutable ThemeFilterProxyModel * m_filteredNoHidden;
-        mutable ThemeFilterProxyModel * m_filteredNoDLCOrHidden;
+ private:
+  mutable QList<QMap<int, QVariant> > m_data;
+  mutable bool m_themesLoaded;
+  mutable ThemeFilterProxyModel *m_filteredNoDLC;
+  mutable ThemeFilterProxyModel *m_filteredNoHidden;
+  mutable ThemeFilterProxyModel *m_filteredNoDLCOrHidden;
 
-        void loadThemes() const;
+  void loadThemes() const;
 };
 
-#endif // HEDGEWARS_THEMEMODEL_H
+#endif  // HEDGEWARS_THEMEMODEL_H

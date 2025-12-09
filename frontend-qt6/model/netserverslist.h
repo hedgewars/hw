@@ -22,22 +22,21 @@
 #include <QAbstractTableModel>
 #include <QStringList>
 
-class HWNetServersModel : public QAbstractTableModel
-{
-        Q_OBJECT
+class HWNetServersModel : public QAbstractTableModel {
+  Q_OBJECT
 
-    public:
-        HWNetServersModel(QObject *parent = 0);
+ public:
+  HWNetServersModel(QObject *parent = 0);
 
-        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        int rowCount(const QModelIndex & parent) const;
-        int columnCount(const QModelIndex & parent) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  int rowCount(const QModelIndex &parent) const;
+  int columnCount(const QModelIndex &parent) const;
 
-    public Q_SLOTS:
-        virtual void updateList();
+ public Q_SLOTS:
+  virtual void updateList();
 
-    protected:
-        QList<QStringList> games;
+ protected:
+  QList<QStringList> games;
 };
 
-#endif // _NET_SERVERSLIST_INCLUDED
+#endif  // _NET_SERVERSLIST_INCLUDED

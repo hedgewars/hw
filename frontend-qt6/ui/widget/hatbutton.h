@@ -19,38 +19,37 @@
 #ifndef HATBUTTON_H
 #define HATBUTTON_H
 
+#include <QModelIndex>
 #include <QPushButton>
 #include <QString>
-#include <QModelIndex>
 
 class HatModel;
 
-class HatButton : public QPushButton
-{
-        Q_OBJECT
-        Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex)
-        Q_PROPERTY(QString currentHat READ currentHat WRITE setCurrentHat)
+class HatButton : public QPushButton {
+  Q_OBJECT
+  Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex)
+  Q_PROPERTY(QString currentHat READ currentHat WRITE setCurrentHat)
 
-    public:
-        HatButton(QWidget* parent);
-        int currentIndex();
-        QString currentHat() const;
-        void setModel(HatModel * model);
+ public:
+  HatButton(QWidget* parent);
+  int currentIndex();
+  QString currentHat() const;
+  void setModel(HatModel* model);
 
-    private:
-        QModelIndex m_hat;
-        HatModel * m_hatModel;
+ private:
+  QModelIndex m_hat;
+  HatModel* m_hatModel;
 
-    Q_SIGNALS:
-        void currentIndexChanged(int);
-        void currentHatChanged(const QString &);
+ Q_SIGNALS:
+  void currentIndexChanged(int);
+  void currentHatChanged(const QString&);
 
-    public Q_SLOTS:
-        void setCurrentIndex(int index);
-        void setCurrentHat(const QString & name);
+ public Q_SLOTS:
+  void setCurrentIndex(int index);
+  void setCurrentHat(const QString& name);
 
-    private Q_SLOTS:
-        void showPrompt();
+ private Q_SLOTS:
+  void showPrompt();
 };
 
-#endif // HATBUTTON_H
+#endif  // HATBUTTON_H

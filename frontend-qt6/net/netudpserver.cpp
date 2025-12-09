@@ -17,38 +17,36 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "netudpserver.h"
+
 #include <QUdpSocket>
 
-#include "netudpserver.h"
 #include "hwconsts.h"
 
-HWNetUdpServer::HWNetUdpServer(QObject *parent, const QString & descr, quint16 port) :
-    HWNetRegisterServer(parent, descr, port),
-    m_descr(descr)
-{
-    pUdpSocket = new QUdpSocket(this);
-    pUdpSocket->bind(NETGAME_DEFAULT_PORT);
-    connect(pUdpSocket, &QIODevice::readyRead, this, &HWNetUdpServer::onClientRead);
+HWNetUdpServer::HWNetUdpServer(QObject *parent, const QString &descr,
+                               quint16 port)
+    : HWNetRegisterServer(parent, descr, port), m_descr(descr) {
+  pUdpSocket = new QUdpSocket(this);
+  pUdpSocket->bind(NETGAME_DEFAULT_PORT);
+  connect(pUdpSocket, &QIODevice::readyRead, this,
+          &HWNetUdpServer::onClientRead);
 }
 
-void HWNetUdpServer::onClientRead()
-{
-    while (pUdpSocket->hasPendingDatagrams())
-    {
-        QByteArray datagram;
-        datagram.resize(pUdpSocket->pendingDatagramSize());
-        QHostAddress clientAddr;
-        quint16 clientPort;
-        pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
-        if(datagram.startsWith("hedgewars client"))
-        {
-            // send answer to client
-            pUdpSocket->writeDatagram(QStringLiteral("hedgewars server\n%1").arg(m_descr).toUtf8(), clientAddr, clientPort);
-        }
+void HWNetUdpServer::onClientRead() {
+  while (pUdpSocket->hasPendingDatagrams()) {
+    QByteArray datagram;
+    datagram.resize(pUdpSocket->pendingDatagramSize());
+    QHostAddress clientAddr;
+    quint16 clientPort;
+    pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr,
+                             &clientPort);
+    if (datagram.startsWith("hedgewars client")) {
+      // send answer to client
+      pUdpSocket->writeDatagram(
+          QStringLiteral("hedgewars server\n%1").arg(m_descr).toUtf8(),
+          clientAddr, clientPort);
     }
+  }
 }
 
-void HWNetUdpServer::unregister()
-{
-    deleteLater();
-}
+void HWNetUdpServer::unregister() { deleteLater(); }

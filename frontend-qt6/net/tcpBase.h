@@ -20,100 +20,97 @@
 #ifndef _TCPBASE_INCLUDED
 #define _TCPBASE_INCLUDED
 
+#include <QByteArray>
+#include <QDir>
+#include <QImage>
+#include <QList>
 #include <QObject>
+#include <QPointer>
+#include <QProcess>
+#include <QString>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <QByteArray>
-#include <QString>
-#include <QDir>
-#include <QProcess>
 #include <QThread>
-#include <QPointer>
 #include <QVector>
-#include <QList>
-
-#include <QImage>
 
 #define MAXMSGCHARS 255
 
-class TCPBase : public QObject
-{
-        Q_OBJECT
+class TCPBase : public QObject {
+  Q_OBJECT
 
-    public:
-        TCPBase(bool demoMode, bool usesCustomLanguage, QObject * parent = 0);
-        virtual ~TCPBase();
+ public:
+  TCPBase(bool demoMode, bool usesCustomLanguage, QObject *parent = 0);
+  virtual ~TCPBase();
 
-        virtual bool couldBeRemoved();
-        virtual bool simultaneousRun();
-        bool isConnected();
-        bool hasStarted();
+  virtual bool couldBeRemoved();
+  virtual bool simultaneousRun();
+  bool isConnected();
+  bool hasStarted();
 
-    Q_SIGNALS:
-        void isReadyNow();
+ Q_SIGNALS:
+  void isReadyNow();
 
-    protected:
-        bool m_hasStarted;
-        quint16 ipc_port;
+ protected:
+  bool m_hasStarted;
+  quint16 ipc_port;
 
-        void Start(bool couldCancelPreviousRequest);
+  void Start(bool couldCancelPreviousRequest);
 
-        QByteArray readbuffer;
+  QByteArray readbuffer;
 
-        QByteArray toSendBuf;
-        QByteArray demo;
+  QByteArray toSendBuf;
+  QByteArray demo;
 
-        void SendIPC(const QByteArray & buf);
-        void RawSendIPC(const QByteArray & buf);
+  void SendIPC(const QByteArray &buf);
+  void RawSendIPC(const QByteArray &buf);
 
-        virtual QStringList getArguments()=0;
-        virtual void onClientRead();
-        virtual void onClientDisconnect();
-        virtual void SendToClientFirst();
+  virtual QStringList getArguments() = 0;
+  virtual void onClientRead();
+  virtual void onClientDisconnect();
+  virtual void SendToClientFirst();
 
-    private:
-        static QPointer<QTcpServer> IPCServer;
+ private:
+  static QPointer<QTcpServer> IPCServer;
 #ifdef HWLIBRARY
-        QThread * thread;
+  QThread *thread;
 #else
-        QProcess * process;
+  QProcess *process;
 #endif
-        bool m_isDemoMode;
-        bool m_connected;
-        bool m_usesCustomLanguage;
-        void RealStart();
-        QPointer<QTcpSocket> IPCSocket;
+  bool m_isDemoMode;
+  bool m_connected;
+  bool m_usesCustomLanguage;
+  void RealStart();
+  QPointer<QTcpSocket> IPCSocket;
 
-    private Q_SLOTS:
-        void NewConnection();
-        void ClientDisconnect();
-        void ClientRead();
-        void StartProcessError(QProcess::ProcessError error);
-        void onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus);
+ private Q_SLOTS:
+  void NewConnection();
+  void ClientDisconnect();
+  void ClientRead();
+  void StartProcessError(QProcess::ProcessError error);
+  void onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus);
 
-        void tcpServerReady();
+  void tcpServerReady();
 };
 
 #ifdef HWLIBRARY
-class EngineInstance : public QObject
-{
-    Q_OBJECT
-public:
-    EngineInstance(QObject *parent = 0);
-    ~EngineInstance();
+class EngineInstance : public QObject {
+  Q_OBJECT
+ public:
+  EngineInstance(QObject *parent = 0);
+  ~EngineInstance();
 
-    void setArguments(const QStringList & arguments);
+  void setArguments(const QStringList &arguments);
 
-public slots:
-    void start();
+ public slots:
+  void start();
 
-signals:
-    void finished();
+ signals:
+  void finished();
 
-private:
-    QList<QByteArray> m_arguments;
-    QVector<char *> m_argv;
+ private:
+  QList<QByteArray> m_arguments;
+  QVector<char *> m_argv;
 };
 #endif
 
-#endif // _TCPBASE_INCLUDED
+#endif  // _TCPBASE_INCLUDED

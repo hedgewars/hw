@@ -20,27 +20,29 @@
 #define _PROTO_H
 
 #include <QByteArray>
+#include <QObject>
 #include <QString>
 #include <QStringList>
-#include <QObject>
 
-class HWProto : public QObject
-{
-        Q_OBJECT
+class HWProto : public QObject {
+  Q_OBJECT
 
-    public:
-        HWProto();
-        static QByteArray & addStringToBuffer(QByteArray & buf, const QString & string);
-        static QByteArray & addByteArrayToBuffer(QByteArray & buf, const QByteArray & msg);
-        static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
-        static QString formatChatMsg(const QString & nick, const QString & msg);
-        static QString formatChatMsgForFrontend(const QString & msg);
-        /**
-         * @brief Determines if a chat string represents a chat action and returns the action.
-         * @param string chat string
-         * @return the action-message or NULL if message is no action
-         */
-        static QString chatStringToAction(const QString & string);
+ public:
+  HWProto();
+  static QByteArray& addStringToBuffer(QByteArray& buf, const QString& string);
+  static QByteArray& addByteArrayToBuffer(QByteArray& buf,
+                                          const QByteArray& msg);
+  static QByteArray& addStringListToBuffer(QByteArray& buf,
+                                           const QStringList& strList);
+  static QString formatChatMsg(const QString& nick, const QString& msg);
+  static QString formatChatMsgForFrontend(const QString& msg);
+  /**
+   * @brief Determines if a chat string represents a chat action and returns the
+   * action.
+   * @param string chat string
+   * @return the action-message or NULL if message is no action
+   */
+  static QString chatStringToAction(const QString& string);
 };
 
-#endif // _PROTO_H
+#endif  // _PROTO_H

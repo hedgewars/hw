@@ -35,203 +35,174 @@ QList<QStringList> HWNamegen::TypesTeamnames;
 QList<QStringList> HWNamegen::TypesHatnames;
 bool HWNamegen::typesAvailable = false;
 
-void HWNamegen::teamRandomTeamName(HWTeam & team)
-{
-    QString newName = getRandomTeamName(-1);
-    if(!newName.isNull())
-        team.setName(newName);
+void HWNamegen::teamRandomTeamName(HWTeam &team) {
+  QString newName = getRandomTeamName(-1);
+  if (!newName.isNull()) team.setName(newName);
 }
 
-void HWNamegen::teamRandomFlag(HWTeam & team, bool withDLC)
-{
-    team.setFlag(getRandomFlag(withDLC));
+void HWNamegen::teamRandomFlag(HWTeam &team, bool withDLC) {
+  team.setFlag(getRandomFlag(withDLC));
 }
 
-void HWNamegen::teamRandomVoice(HWTeam & team, bool withDLC)
-{
-    team.setVoicepack(getRandomVoice(withDLC));
+void HWNamegen::teamRandomVoice(HWTeam &team, bool withDLC) {
+  team.setVoicepack(getRandomVoice(withDLC));
 }
 
-void HWNamegen::teamRandomGrave(HWTeam & team, bool withDLC)
-{
-    team.setGrave(getRandomGrave(withDLC));
+void HWNamegen::teamRandomGrave(HWTeam &team, bool withDLC) {
+  team.setGrave(getRandomGrave(withDLC));
 }
 
-void HWNamegen::teamRandomFort(HWTeam & team, bool withDLC)
-{
-    team.setFort(getRandomFort(withDLC));
+void HWNamegen::teamRandomFort(HWTeam &team, bool withDLC) {
+  team.setFort(getRandomFort(withDLC));
 }
 
-void HWNamegen::teamRandomEverything(HWTeam & team)
-{
-    // load types if not already loaded
-    if (!typesAvailable)
-        if (!loadTypes())
-            return; // abort if loading failed
+void HWNamegen::teamRandomEverything(HWTeam &team) {
+  // load types if not already loaded
+  if (!typesAvailable)
+    if (!loadTypes()) return;  // abort if loading failed
 
-    // abort if there are no hat types
-    if (TypesHatnames.size() <= 0)
-        return;
+  // abort if there are no hat types
+  if (TypesHatnames.size() <= 0) return;
 
-    // the hat will influence which names the hogs get
-    int kind = (rand()%(TypesHatnames.size()));
+  // the hat will influence which names the hogs get
+  int kind = (rand() % (TypesHatnames.size()));
 
-    team.setGrave(getRandomGrave());
-    team.setFort(getRandomFort());
-    team.setFlag(getRandomFlag());
-    team.setVoicepack(getRandomVoice());
+  team.setGrave(getRandomGrave());
+  team.setFort(getRandomFort());
+  team.setFlag(getRandomFlag());
+  team.setVoicepack(getRandomVoice());
 
-    QStringList dicts;
-    QStringList dict;
+  QStringList dicts;
+  QStringList dict;
 
-    // Randomness mode:
-    // 0: Themed hats (from types.ini)
-    // 1: Equal hats for all
-    // 2: Random hat for each hedgehog
-    int r = rand() % 10;
-    int randomMode;
-    if (r <= 4)		// 0-4 (50%)
-       randomMode = 0;
-    else if (r <= 8)	// 5-8 (40%)
-       randomMode = 1;
-    else		// 9   (10%)
-       randomMode = 2;
+  // Randomness mode:
+  // 0: Themed hats (from types.ini)
+  // 1: Equal hats for all
+  // 2: Random hat for each hedgehog
+  int r = rand() % 10;
+  int randomMode;
+  if (r <= 4)  // 0-4 (50%)
+    randomMode = 0;
+  else if (r <= 8)  // 5-8 (40%)
+    randomMode = 1;
+  else  // 9   (10%)
+    randomMode = 2;
 
-    // Generate random hats
-    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
-    {
-        HWHog hh = team.hedgehog(i);
+  // Generate random hats
+  for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++) {
+    HWHog hh = team.hedgehog(i);
 
-        if (randomMode == 0)
-        {
-            hh.Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
-        }
-        else if (randomMode == 1)
-        {
-            if (i == 0)
-            {
-                hh.Hat = getRandomHat();
-            }
-            else
-            {
-                hh.Hat = team.hedgehog(i-1).Hat;
-            }
-        }
-        else if (randomMode == 2)
-        {
-            hh.Hat = getRandomHat();
-        }
-
-        team.setHedgehog(i,hh);
-
-        // there is a chance that this hog has the same hat as the previous one
-        // let's reuse the hat-specific dict in this case
-        if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
-        {
-            dicts = dictsForHat(team.hedgehog(i).Hat);
-            dict  = dictContents(dicts[rand()%(dicts.size())]);
-        }
-
-        // give each hedgehog a random name
-        HWNamegen::teamRandomHogName(team,i,dict);
+    if (randomMode == 0) {
+      hh.Hat = TypesHatnames[kind][rand() % (TypesHatnames[kind].size())];
+    } else if (randomMode == 1) {
+      if (i == 0) {
+        hh.Hat = getRandomHat();
+      } else {
+        hh.Hat = team.hedgehog(i - 1).Hat;
+      }
+    } else if (randomMode == 2) {
+      hh.Hat = getRandomHat();
     }
 
-    // If using themed hats, use themed team name.
-    // Otherwise, only use “generic” team names from the first team
-    // in types.txt.
-    if (randomMode == 0)
-        team.setName(getRandomTeamName(kind));
-    else
-        team.setName(getRandomTeamName(0));
+    team.setHedgehog(i, hh);
 
+    // there is a chance that this hog has the same hat as the previous one
+    // let's reuse the hat-specific dict in this case
+    if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i - 1).Hat)) {
+      dicts = dictsForHat(team.hedgehog(i).Hat);
+      dict = dictContents(dicts[rand() % (dicts.size())]);
+    }
+
+    // give each hedgehog a random name
+    HWNamegen::teamRandomHogName(team, i, dict);
+  }
+
+  // If using themed hats, use themed team name.
+  // Otherwise, only use “generic” team names from the first team
+  // in types.txt.
+  if (randomMode == 0)
+    team.setName(getRandomTeamName(kind));
+  else
+    team.setName(getRandomTeamName(0));
 }
 
 // Set random hats for entire team
-void HWNamegen::teamRandomHats(HWTeam & team, bool withDLC)
-{
-    // 50% chance that all hogs are set to the same hat.
-    // 50% chance that each hog gets a random head individually.
+void HWNamegen::teamRandomHats(HWTeam &team, bool withDLC) {
+  // 50% chance that all hogs are set to the same hat.
+  // 50% chance that each hog gets a random head individually.
 
-    bool sameHogs = (rand()%2) == 0;
-    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
-    {
-        HWHog hh = team.hedgehog(i);
-        if (sameHogs && i > 0)
-            hh.Hat = team.hedgehog(i-1).Hat;
-        else
-            hh.Hat = getRandomHat(withDLC);
-        team.setHedgehog(i, hh);
-    }
+  bool sameHogs = (rand() % 2) == 0;
+  for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++) {
+    HWHog hh = team.hedgehog(i);
+    if (sameHogs && i > 0)
+      hh.Hat = team.hedgehog(i - 1).Hat;
+    else
+      hh.Hat = getRandomHat(withDLC);
+    team.setHedgehog(i, hh);
+  }
 }
 
-void HWNamegen::teamRandomHat(HWTeam & team, const int HedgehogNumber, bool withDLC)
-{
-    HWHog hh = team.hedgehog(HedgehogNumber);
+void HWNamegen::teamRandomHat(HWTeam &team, const int HedgehogNumber,
+                              bool withDLC) {
+  HWHog hh = team.hedgehog(HedgehogNumber);
 
-    hh.Hat = getRandomHat(withDLC);
+  hh.Hat = getRandomHat(withDLC);
 
-    team.setHedgehog(HedgehogNumber, hh);
+  team.setHedgehog(HedgehogNumber, hh);
 }
 
-void HWNamegen::teamRandomHat(HWTeam & team, const int HedgehogNumber, const QStringList & dict)
-{
-    HWHog hh = team.hedgehog(HedgehogNumber);
+void HWNamegen::teamRandomHat(HWTeam &team, const int HedgehogNumber,
+                              const QStringList &dict) {
+  HWHog hh = team.hedgehog(HedgehogNumber);
 
-    hh.Name = dict[rand()%(dict.size())];
+  hh.Name = dict[rand() % (dict.size())];
 
-    team.setHedgehog(HedgehogNumber, hh);
+  team.setHedgehog(HedgehogNumber, hh);
 }
 
-void HWNamegen::teamRandomHogNames(HWTeam & team)
-{
-    QStringList dicts, dict;
-    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
-    {
-        // there is a chance that this hog has the same hat as the previous one
-        // let's reuse the hat-specific dict in this case
-        if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
-        {
-            dicts = dictsForHat(team.hedgehog(i).Hat);
-            dict  = dictContents(dicts[rand()%(dicts.size())]);
-        }
-
-        // give each hedgehog a random name
-        HWNamegen::teamRandomHogName(team,i,dict);
-    }
-}
-
-void HWNamegen::teamRandomHogName(HWTeam & team, const int HedgehogNumber)
-{
-    QStringList dicts = dictsForHat(team.hedgehog(HedgehogNumber).Hat);
-
-    QStringList dict = dictContents(dicts[rand()%(dicts.size())]);
-
-    teamRandomHogName(team, HedgehogNumber, dict);
-}
-
-void HWNamegen::teamRandomHogName(HWTeam & team, const int HedgehogNumber, const QStringList & dict)
-{
-    QStringList namesDict = dict;
-
-    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
-    {
-        namesDict.removeOne(team.hedgehog(i).Name);
+void HWNamegen::teamRandomHogNames(HWTeam &team) {
+  QStringList dicts, dict;
+  for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++) {
+    // there is a chance that this hog has the same hat as the previous one
+    // let's reuse the hat-specific dict in this case
+    if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i - 1).Hat)) {
+      dicts = dictsForHat(team.hedgehog(i).Hat);
+      dict = dictContents(dicts[rand() % (dicts.size())]);
     }
 
-    // if our dict doesn't have any new names we'll have to use duplicates
-    if (namesDict.size() < 1)
-        namesDict = dict;
-
-    HWHog hh = team.hedgehog(HedgehogNumber);
-
-    hh.Name = namesDict[rand()%(namesDict.size())];
-
-    team.setHedgehog(HedgehogNumber, hh);
+    // give each hedgehog a random name
+    HWNamegen::teamRandomHogName(team, i, dict);
+  }
 }
 
-void HWNamegen::teamLocalizedDefaultVoice(HWTeam & team, bool withDLC)
-{
-    team.setVoicepack(getLocalizedDefaultVoice(withDLC));
+void HWNamegen::teamRandomHogName(HWTeam &team, const int HedgehogNumber) {
+  QStringList dicts = dictsForHat(team.hedgehog(HedgehogNumber).Hat);
+
+  QStringList dict = dictContents(dicts[rand() % (dicts.size())]);
+
+  teamRandomHogName(team, HedgehogNumber, dict);
+}
+
+void HWNamegen::teamRandomHogName(HWTeam &team, const int HedgehogNumber,
+                                  const QStringList &dict) {
+  QStringList namesDict = dict;
+
+  for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++) {
+    namesDict.removeOne(team.hedgehog(i).Name);
+  }
+
+  // if our dict doesn't have any new names we'll have to use duplicates
+  if (namesDict.size() < 1) namesDict = dict;
+
+  HWHog hh = team.hedgehog(HedgehogNumber);
+
+  hh.Name = namesDict[rand() % (namesDict.size())];
+
+  team.setHedgehog(HedgehogNumber, hh);
+}
+
+void HWNamegen::teamLocalizedDefaultVoice(HWTeam &team, bool withDLC) {
+  team.setVoicepack(getLocalizedDefaultVoice(withDLC));
 }
 
 QStringList HWNamegen::dictContents(const QString &filename) {
@@ -287,209 +258,181 @@ QStringList HWNamegen::dictsForHat(const QString &hatname) {
 }
 
 // loades types from ini files. returns true on success.
-bool HWNamegen::loadTypes()
-{
-    typesAvailable = false;
+bool HWNamegen::loadTypes() {
+  typesAvailable = false;
 
-    // find .ini to load the names from
-    QFile * file = new QFile(QStringLiteral("physfs://Names/types.ini"));
+  // find .ini to load the names from
+  QFile *file = new QFile(QStringLiteral("physfs://Names/types.ini"));
 
+  if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text)) {
+    int counter = 0;  // counter starts with 0 (teamnames mode)
+    TypesTeamnames.append(QStringList());
+    TypesHatnames.append(QStringList());
 
-    if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-
-        int counter = 0; //counter starts with 0 (teamnames mode)
-        TypesTeamnames.append(QStringList());
-        TypesHatnames.append(QStringList());
-
-        QTextStream in(file);
-        while (!in.atEnd())
-        {
-            QString line = in.readLine();
-            if (line == QStringLiteral("#####"))
-            {
-                counter++; //toggle mode (teamnames || hats)
-                if ((counter%2) == 0)
-                {
-                    TypesTeamnames.append(QStringList());
-                    TypesHatnames.append(QStringList());
-                }
-            }
-            else if ((line == QStringLiteral("*****")) || (line == QStringLiteral("*END*")))
-            {
-                typesAvailable = true;
-                return true; // bye bye
-            }
-            else
-            {
-                if ((counter%2) == 0)
-                {
-                    // even => teamnames mode
-                    TypesTeamnames[(counter/2)].append(line);
-                }
-                else
-                {
-                    // odd => hats mode
-                    TypesHatnames[((counter-1)/2)].append(line);
-                }
-            }
+    QTextStream in(file);
+    while (!in.atEnd()) {
+      QString line = in.readLine();
+      if (line == QStringLiteral("#####")) {
+        counter++;  // toggle mode (teamnames || hats)
+        if ((counter % 2) == 0) {
+          TypesTeamnames.append(QStringList());
+          TypesHatnames.append(QStringList());
         }
-
+      } else if ((line == QStringLiteral("*****")) ||
+                 (line == QStringLiteral("*END*"))) {
         typesAvailable = true;
+        return true;  // bye bye
+      } else {
+        if ((counter % 2) == 0) {
+          // even => teamnames mode
+          TypesTeamnames[(counter / 2)].append(line);
+        } else {
+          // odd => hats mode
+          TypesHatnames[((counter - 1) / 2)].append(line);
+        }
+      }
     }
 
-    // this QFile isn't needed any further
-    delete file;
+    typesAvailable = true;
+  }
 
-    return typesAvailable;
+  // this QFile isn't needed any further
+  delete file;
+
+  return typesAvailable;
 }
 
 /* Generates a random team name.
 kind: Use to select a team name out of a group (types.ini).
 Use a negative value if you don't care.
 This function may return a null QString on error(this should never happen). */
-QString HWNamegen::getRandomTeamName(int kind)
-{
-    // load types if not already loaded
-    if (!typesAvailable)
-        if (!loadTypes())
-            return QString(); // abort if loading failed
+QString HWNamegen::getRandomTeamName(int kind) {
+  // load types if not already loaded
+  if (!typesAvailable)
+    if (!loadTypes()) return QString();  // abort if loading failed
 
-    // abort if there are no hat types
-    if (TypesHatnames.size() <= 0)
-        return QString();
+  // abort if there are no hat types
+  if (TypesHatnames.size() <= 0) return QString();
 
-    if(kind < 0)
-        kind = (rand()%(TypesHatnames.size()));
+  if (kind < 0) kind = (rand() % (TypesHatnames.size()));
 
-    if (!TypesTeamnames.at(kind).isEmpty())
-      return TypesTeamnames[kind][rand() % (TypesTeamnames[kind].size())];
-    else
-        return QString();
+  if (!TypesTeamnames.at(kind).isEmpty())
+    return TypesTeamnames[kind][rand() % (TypesTeamnames[kind].size())];
+  else
+    return QString();
 }
 
-QString HWNamegen::getRandomHat(bool withDLC)
-{
-    QStringList Hats;
+QString HWNamegen::getRandomHat(bool withDLC) {
+  QStringList Hats;
 
-    // list all available hats
-    Hats.append(DataManager::instance()
-                    .entryList(QStringLiteral("Graphics/Hats"), QDir::Files,
-                               QStringList("*.png"), withDLC)
-                    .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")), QLatin1String("")));
+  // list all available hats
+  Hats.append(
+      DataManager::instance()
+          .entryList(QStringLiteral("Graphics/Hats"), QDir::Files,
+                     QStringList("*.png"), withDLC)
+          .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")),
+                            QLatin1String("")));
 
-    if (Hats.isEmpty()) {
-      // TODO do some serious error handling
-      return QStringLiteral("Error");
-    }
+  if (Hats.isEmpty()) {
+    // TODO do some serious error handling
+    return QStringLiteral("Error");
+  }
 
-    // pick a random hat
-    return Hats[rand()%(Hats.size())];
+  // pick a random hat
+  return Hats[rand() % (Hats.size())];
 }
 
-QString HWNamegen::getRandomGrave(bool withDLC)
-{
-    QStringList Graves;
+QString HWNamegen::getRandomGrave(bool withDLC) {
+  QStringList Graves;
 
-    //list all available Graves
-    Graves.append(DataManager::instance()
-                      .entryList(QStringLiteral("Graphics/Graves"), QDir::Files,
-                                 QStringList("*.png"), withDLC)
-                      .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")), QLatin1String("")));
+  // list all available Graves
+  Graves.append(
+      DataManager::instance()
+          .entryList(QStringLiteral("Graphics/Graves"), QDir::Files,
+                     QStringList("*.png"), withDLC)
+          .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")),
+                            QLatin1String("")));
 
-    if(Graves.size()==0)
-    {
-        // TODO do some serious error handling
-        return QStringLiteral("Error");
-    }
+  if (Graves.size() == 0) {
+    // TODO do some serious error handling
+    return QStringLiteral("Error");
+  }
 
-    //pick a random grave
-    return Graves[rand()%(Graves.size())];
+  // pick a random grave
+  return Graves[rand() % (Graves.size())];
 }
 
-QString HWNamegen::getRandomFlag(bool withDLC)
-{
-    QStringList Flags;
+QString HWNamegen::getRandomFlag(bool withDLC) {
+  QStringList Flags;
 
-    //list all available flags
-    Flags.append(DataManager::instance()
-                     .entryList(QStringLiteral("Graphics/Flags"), QDir::Files,
-                                QStringList("*.png"), withDLC)
-                     .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")), QLatin1String("")));
-    //remove internal flags
-    Flags.removeAll("cpu");
-    Flags.removeAll("cpu_plain");
+  // list all available flags
+  Flags.append(
+      DataManager::instance()
+          .entryList(QStringLiteral("Graphics/Flags"), QDir::Files,
+                     QStringList("*.png"), withDLC)
+          .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")),
+                            QLatin1String("")));
+  // remove internal flags
+  Flags.removeAll("cpu");
+  Flags.removeAll("cpu_plain");
 
-    if(Flags.size()==0)
-    {
-        // TODO do some serious error handling
-        return QStringLiteral("Error");
-    }
+  if (Flags.size() == 0) {
+    // TODO do some serious error handling
+    return QStringLiteral("Error");
+  }
 
-    //pick a random flag
-    return Flags[rand()%(Flags.size())];
+  // pick a random flag
+  return Flags[rand() % (Flags.size())];
 }
 
-QString HWNamegen::getRandomFort(bool withDLC)
-{
-    QStringList Forts;
+QString HWNamegen::getRandomFort(bool withDLC) {
+  QStringList Forts;
 
-    //list all available Forts
-    Forts.append(
-        DataManager::instance()
-            .entryList(QStringLiteral("Forts"), QDir::Files, QStringList("*L.png"), withDLC)
-            .replaceInStrings(QRegularExpression(QStringLiteral("L\\.png$")), QLatin1String("")));
+  // list all available Forts
+  Forts.append(
+      DataManager::instance()
+          .entryList(QStringLiteral("Forts"), QDir::Files,
+                     QStringList("*L.png"), withDLC)
+          .replaceInStrings(QRegularExpression(QStringLiteral("L\\.png$")),
+                            QLatin1String("")));
 
-    if(Forts.size()==0)
-    {
-        // TODO do some serious error handling
-        return QStringLiteral("Error");
-    }
+  if (Forts.size() == 0) {
+    // TODO do some serious error handling
+    return QStringLiteral("Error");
+  }
 
-    //pick a random fort
-    return Forts[rand()%(Forts.size())];
+  // pick a random fort
+  return Forts[rand() % (Forts.size())];
 }
 
-QString HWNamegen::getRandomVoice(bool withDLC)
-{
-    QStringList Voices;
+QString HWNamegen::getRandomVoice(bool withDLC) {
+  QStringList Voices;
 
-    //list all available voices 
-    Voices.append(DataManager::instance().entryList(
-                     QStringLiteral("Sounds/voices"),
-                     QDir::Dirs | QDir::NoDotAndDotDot,
-                     QStringList("*"),
-                     withDLC));
+  // list all available voices
+  Voices.append(DataManager::instance().entryList(
+      QStringLiteral("Sounds/voices"), QDir::Dirs | QDir::NoDotAndDotDot,
+      QStringList("*"), withDLC));
 
-    if(Voices.size()==0)
-    {
-        // TODO do some serious error handling
-        return QStringLiteral("Error");
-    }
+  if (Voices.size() == 0) {
+    // TODO do some serious error handling
+    return QStringLiteral("Error");
+  }
 
-    //pick a random voice
-    return Voices[rand()%(Voices.size())];
+  // pick a random voice
+  return Voices[rand() % (Voices.size())];
 }
 
-QString HWNamegen::getLocalizedDefaultVoice(bool withDLC)
-{
-    QStringList entries = DataManager::instance().entryList(
-        QStringLiteral("Sounds/voices"),
-        QDir::Dirs | QDir::NoDotAndDotDot,
-        QStringList("*"),
-        withDLC);
+QString HWNamegen::getLocalizedDefaultVoice(bool withDLC) {
+  QStringList entries = DataManager::instance().entryList(
+      QStringLiteral("Sounds/voices"), QDir::Dirs | QDir::NoDotAndDotDot,
+      QStringList("*"), withDLC);
 
-    QString loc = QLocale().name();
-    if(entries.contains(QStringLiteral("Default_") + loc))
-    {
-        return QString(QStringLiteral("Default_") + loc);
-    }
-    else if(entries.contains(QStringLiteral("Default_") + loc.left(2)))
-    {
-        return QString(QStringLiteral("Default_") + loc.left(2));
-    }
-    else
-    {
-        return QStringLiteral("Default");
-    }
+  QString loc = QLocale().name();
+  if (entries.contains(QStringLiteral("Default_") + loc)) {
+    return QString(QStringLiteral("Default_") + loc);
+  } else if (entries.contains(QStringLiteral("Default_") + loc.left(2))) {
+    return QString(QStringLiteral("Default_") + loc.left(2));
+  } else {
+    return QStringLiteral("Default");
+  }
 }

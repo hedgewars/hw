@@ -21,21 +21,20 @@
 
 #include "InstallController.h"
 
-class M3Panel : public InstallController
-{
-    public:
-        M3Panel(void);
-        M3Panel(const M3Panel &) = delete;
-        M3Panel(M3Panel &&) = delete;
-        M3Panel &operator=(const M3Panel &) = delete;
-        M3Panel &operator=(M3Panel &&) = delete;
-        ~M3Panel();
+class M3Panel : public InstallController {
+ public:
+  M3Panel(void);
+  M3Panel(const M3Panel &) = delete;
+  M3Panel(M3Panel &&) = delete;
+  M3Panel &operator=(const M3Panel &) = delete;
+  M3Panel &operator=(M3Panel &&) = delete;
+  ~M3Panel();
 
-        void showInstallController() override;
+  void showInstallController() override;
 
-       private:
-        class Private;
-        Private* m;
+ private:
+  class Private;
+  Private *m;
 };
 
 #endif

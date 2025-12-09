@@ -23,40 +23,38 @@
 
 class QIcon;
 
-class PageMain : public AbstractPage
-{
-    Q_OBJECT
+class PageMain : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageMain(QWidget * parent = 0);
-        void resetNetworkChoice();
+ public:
+  PageMain(QWidget* parent = 0);
+  void resetNetworkChoice();
 
-        QPushButton * BtnSinglePlayer;
-        QPushButton * BtnNet;
-        QPushButton * BtnNetLocal;
-        QPushButton * BtnNetOfficial;
-        QPushButton * BtnSetup;
-        QPushButton * BtnFeedback;
-        QPushButton * BtnTitle;
-        QPushButton * BtnInfo;
-        QPushButton * BtnDataDownload;
-        QPushButton * BtnVideos;
-        QPushButton * BtnHelp;
-        QLabel * mainNote;
+  QPushButton* BtnSinglePlayer;
+  QPushButton* BtnNet;
+  QPushButton* BtnNetLocal;
+  QPushButton* BtnNetOfficial;
+  QPushButton* BtnSetup;
+  QPushButton* BtnFeedback;
+  QPushButton* BtnTitle;
+  QPushButton* BtnInfo;
+  QPushButton* BtnDataDownload;
+  QPushButton* BtnVideos;
+  QPushButton* BtnHelp;
+  QLabel* mainNote;
 
-    private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
-        QIcon originalNetworkIcon, disabledNetworkIcon;
+ private:
+  QLayout* bodyLayoutDefinition();
+  QLayout* footerLayoutDefinition();
+  void connectSignals();
+  QIcon originalNetworkIcon, disabledNetworkIcon;
 
-        QString randomTip();
-        QStringList Tips;
+  QString randomTip();
+  QStringList Tips;
 
-    private Q_SLOTS:
-        void toggleNetworkChoice();
-        void updateTip();
+ private Q_SLOTS:
+  void toggleNetworkChoice();
+  void updateTip();
 };
 
 #endif
-

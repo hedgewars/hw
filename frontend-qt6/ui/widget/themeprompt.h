@@ -19,17 +19,16 @@
 #ifndef THEMEPROMPT_H
 #define THEMEPROMPT_H
 
-#include <QWidget>
 #include <QDialog>
 #include <QListView>
+#include <QWidget>
 
 class QLineEdit;
 class QModelIndex;
 class QSortFilterProxyModel;
 class LineEditCursor;
 
-class ThemeListView : public QListView
-{
+class ThemeListView : public QListView {
   Q_OBJECT
   friend class ThemePrompt;
 
@@ -41,27 +40,26 @@ class ThemeListView : public QListView
   void moveRight();
 };
 
-class ThemePrompt : public QDialog
-{
-        Q_OBJECT
+class ThemePrompt : public QDialog {
+  Q_OBJECT
 
-    public:
-        ThemePrompt(int currentIndex = 0, QWidget* parent = 0);
+ public:
+  ThemePrompt(int currentIndex = 0, QWidget* parent = 0);
 
-    private:
-        LineEditCursor * txtFilter;
-        ThemeListView * list;
-        QSortFilterProxyModel * filterModel;
+ private:
+  LineEditCursor* txtFilter;
+  ThemeListView* list;
+  QSortFilterProxyModel* filterModel;
 
-    private Q_SLOTS:
-        void onAccepted();
-        void onRejected();
-        void themeChosen(const QModelIndex & index);
-        void filterChanged(const QString & text);
-        void moveUp();
-        void moveDown();
-        void moveLeft();
-        void moveRight();
+ private Q_SLOTS:
+  void onAccepted();
+  void onRejected();
+  void themeChosen(const QModelIndex& index);
+  void filterChanged(const QString& text);
+  void moveUp();
+  void moveDown();
+  void moveLeft();
+  void moveRight();
 };
 
-#endif // THEMEPROMPT_H
+#endif  // THEMEPROMPT_H

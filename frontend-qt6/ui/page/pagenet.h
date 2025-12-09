@@ -21,36 +21,34 @@
 
 #include "AbstractPage.h"
 
-class PageNet : public AbstractPage
-{
-        Q_OBJECT
+class PageNet : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageNet(QWidget* parent = 0);
+ public:
+  PageNet(QWidget* parent = 0);
 
-        QPushButton* BtnUpdateSList;
-        QTableView * tvServersList;
-        QPushButton * BtnNetConnect;
-        QPushButton * BtnNetSvrStart;
-        QPushButton * BtnSpecifyServer;
+  QPushButton* BtnUpdateSList;
+  QTableView* tvServersList;
+  QPushButton* BtnNetConnect;
+  QPushButton* BtnNetSvrStart;
+  QPushButton* BtnSpecifyServer;
 
-    public Q_SLOTS:
-        void updateServersList();
+ public Q_SLOTS:
+  void updateServersList();
 
-    Q_SIGNALS:
-        void connectClicked(const QString & host, quint16 port, bool useTls);
+ Q_SIGNALS:
+  void connectClicked(const QString& host, quint16 port, bool useTls);
 
-    private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ private:
+  QLayout* bodyLayoutDefinition();
+  QLayout* footerLayoutDefinition();
+  void connectSignals();
 
-        QGroupBox * ConnGroupBox;
-        QGridLayout * GBClayout;
+  QGroupBox* ConnGroupBox;
+  QGridLayout* GBClayout;
 
-    private Q_SLOTS:
-        void slotConnect();
+ private Q_SLOTS:
+  void slotConnect();
 };
 
 #endif
-

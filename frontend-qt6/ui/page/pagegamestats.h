@@ -19,71 +19,69 @@
 #ifndef STATSPAGE_H
 #define STATSPAGE_H
 
-#include <QVector>
-#include <QMap>
 #include <QGraphicsView>
+#include <QMap>
+#include <QVector>
 
 #include "AbstractPage.h"
 
-class FitGraphicsView : public QGraphicsView
-{
-        Q_OBJECT
+class FitGraphicsView : public QGraphicsView {
+  Q_OBJECT
 
-    public:
-        FitGraphicsView(QWidget* parent = 0);
+ public:
+  FitGraphicsView(QWidget *parent = 0);
 
-    protected:
-        void resizeEvent(QResizeEvent * event);
+ protected:
+  void resizeEvent(QResizeEvent *event);
 };
 
-class PageGameStats : public AbstractPage
-{
-        Q_OBJECT
+class PageGameStats : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageGameStats(QWidget* parent = 0);
+ public:
+  PageGameStats(QWidget *parent = 0);
 
-        QPushButton *btnSave;
-        QPushButton *btnRestart;
-        QLabel *mainNote;
-        QLabel *labelGameStats;
-        QLabel *labelGameWin;
-        QLabel *labelGameRank;
-        QLabel *labelGraphTitle;
-        QString kindOfPoints;
-        FitGraphicsView * graphic;
+  QPushButton *btnSave;
+  QPushButton *btnRestart;
+  QLabel *mainNote;
+  QLabel *labelGameStats;
+  QLabel *labelGameWin;
+  QLabel *labelGameRank;
+  QLabel *labelGraphTitle;
+  QString kindOfPoints;
+  FitGraphicsView *graphic;
 
-    public Q_SLOTS:
-        void GameStats(char type, const QString & info);
-        void clear();
-        void renderStats();
-        void restartBtnVisible(bool visible);
-        void saveDemoBtnEnabled(bool enabled);
+ public Q_SLOTS:
+  void GameStats(char type, const QString &info);
+  void clear();
+  void renderStats();
+  void restartBtnVisible(bool visible);
+  void saveDemoBtnEnabled(bool enabled);
 
-    Q_SIGNALS:
-        void saveDemoRequested();
-        void restartGameRequested();
+ Q_SIGNALS:
+  void saveDemoRequested();
+  void restartGameRequested();
 
-    private:
-        void AddStatText(const QString & msg);
-        void applySpacing();
+ private:
+  void AddStatText(const QString &msg);
+  void applySpacing();
 
-        QMap<qint32, QVector<qint32> > healthPoints;
-        unsigned int playerPosition;
-        unsigned int scriptPlayerPosition;
-        quint32 lastColor;
-        bool defaultGraphTitle;
-        QScopedPointer<QGraphicsScene> m_scene;
+  QMap<qint32, QVector<qint32> > healthPoints;
+  unsigned int playerPosition;
+  unsigned int scriptPlayerPosition;
+  quint32 lastColor;
+  bool defaultGraphTitle;
+  QScopedPointer<QGraphicsScene> m_scene;
 
-        QLabel* labelDetails;
-        QGroupBox* gbDetails;
-        QGroupBox* gbRanks;
-        QGridLayout* pageLayout;
+  QLabel *labelDetails;
+  QGroupBox *gbDetails;
+  QGroupBox *gbRanks;
+  QGridLayout *pageLayout;
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ protected:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 };
 
-#endif // STATSPAGE_H
+#endif  // STATSPAGE_H

@@ -16,44 +16,39 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "pageinfo.h"
+
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
 
-#include "pageinfo.h"
 #include "about.h"
 
-QLayout * PageInfo::bodyLayoutDefinition()
-{
-    QGridLayout * pageLayout = new QGridLayout();
+QLayout* PageInfo::bodyLayoutDefinition() {
+  QGridLayout* pageLayout = new QGridLayout();
 
-    pageLayout->setColumnStretch(0, 1);
-    pageLayout->setColumnStretch(1, 1);
-    pageLayout->setColumnStretch(2, 1);
+  pageLayout->setColumnStretch(0, 1);
+  pageLayout->setColumnStretch(1, 1);
+  pageLayout->setColumnStretch(2, 1);
 
-    about = new About();
-    pageLayout->addWidget(about, 0, 0, 1, 3);
+  about = new About();
+  pageLayout->addWidget(about, 0, 0, 1, 3);
 
-    return pageLayout;
+  return pageLayout;
 }
 
-QLayout * PageInfo::footerLayoutDefinition()
-{
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
-    bottomLayout->setContentsMargins(0,0,0,0);
-    BtnSnapshots = addButton(QStringLiteral(":/res/folder.png"), bottomLayout, 0, true, Qt::AlignBottom);
-    BtnSnapshots->setWhatsThis(tr("Open the snapshot folder"));
-    BtnSnapshots->setMinimumSize(50,50);
-    return bottomLayout;
+QLayout* PageInfo::footerLayoutDefinition() {
+  QHBoxLayout* bottomLayout = new QHBoxLayout();
+  bottomLayout->setContentsMargins(0, 0, 0, 0);
+  BtnSnapshots = addButton(QStringLiteral(":/res/folder.png"), bottomLayout, 0,
+                           true, Qt::AlignBottom);
+  BtnSnapshots->setWhatsThis(tr("Open the snapshot folder"));
+  BtnSnapshots->setMinimumSize(50, 50);
+  return bottomLayout;
 }
 
-void PageInfo::connectSignals()
-{
-    //TODO
+void PageInfo::connectSignals() {
+  // TODO
 }
 
-PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
-{
-    initPage();
-}
-
+PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent) { initPage(); }

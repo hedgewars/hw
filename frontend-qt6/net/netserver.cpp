@@ -17,34 +17,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hwconsts.h"
 #include "netserver.h"
 
-HWNetServer::~HWNetServer()
-{
-    StopServer();
+#include "hwconsts.h"
+
+HWNetServer::~HWNetServer() { StopServer(); }
+
+bool HWNetServer::StartServer(quint16 port) {
+  ds_port = port;
+
+  QStringList params;
+  params << QStringLiteral("--port=%1").arg(port);
+  params << QStringLiteral("--dedicated=False");
+
+  process.start(bindir.absolutePath() + QStringLiteral("/hedgewars-server"),
+                params);
+
+  return process.waitForStarted(5000);
 }
 
-bool HWNetServer::StartServer(quint16 port)
-{
-    ds_port = port;
+void HWNetServer::StopServer() { process.close(); }
 
-    QStringList params;
-    params << QStringLiteral("--port=%1").arg(port);
-    params << QStringLiteral("--dedicated=False");
-
-    process.start(bindir.absolutePath() + QStringLiteral("/hedgewars-server"), params);
-
-    return process.waitForStarted(5000);
-}
-
-void HWNetServer::StopServer()
-{
-    process.close();
-}
-
-
-quint16 HWNetServer::getRunningPort() const
-{
-    return ds_port;
-}
+quint16 HWNetServer::getRunningPort() const { return ds_port; }

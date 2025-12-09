@@ -20,119 +20,118 @@
 #define GAME_H
 
 #include <QString>
-#include "team.h"
-#include "namegen.h"
 
+#include "namegen.h"
 #include "tcpBase.h"
+#include "team.h"
 
 class GameUIConfig;
 class GameCFGWidget;
 class TeamSelWidget;
 
-enum GameType
-{
-    gtNone     = 0,
-    gtLocal    = 1,
-    gtQLocal   = 2,
-    gtDemo     = 3,
-    gtNet      = 4,
-    gtTraining = 5,
-    gtCampaign = 6,
-    gtSave     = 7,
+enum GameType {
+  gtNone = 0,
+  gtLocal = 1,
+  gtQLocal = 2,
+  gtDemo = 3,
+  gtNet = 4,
+  gtTraining = 5,
+  gtCampaign = 6,
+  gtSave = 7,
 };
 
-enum GameState
-{
-    gsNotStarted = 0,
-    gsStarted  = 1,
-    gsInterrupted = 2,
-    gsFinished = 3,
-    gsStopped = 4,
-    gsDestroyed = 5,
-    gsHalted = 6
+enum GameState {
+  gsNotStarted = 0,
+  gsStarted = 1,
+  gsInterrupted = 2,
+  gsFinished = 3,
+  gsStopped = 4,
+  gsDestroyed = 5,
+  gsHalted = 6
 };
 
-enum RecordType
-{
-    rtDemo,
-    rtSave,
-    rtNeither,
+enum RecordType {
+  rtDemo,
+  rtSave,
+  rtNeither,
 };
 
-bool checkForDir(const QString & dir);
+bool checkForDir(const QString &dir);
 
 // last game info
 extern QList<QVariant> lastGameStartArgs;
 extern GameType lastGameType;
-extern GameCFGWidget * lastGameCfg;
+extern GameCFGWidget *lastGameCfg;
 extern QString lastGameAmmo;
-extern TeamSelWidget * lastGameTeamSel;
+extern TeamSelWidget *lastGameTeamSel;
 
-class HWGame : public TCPBase
-{
-        Q_OBJECT
-    public:
-        HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, const QString &ammo, TeamSelWidget* pTeamSelWidget = 0);
-        virtual ~HWGame();
-        void AddTeam(const QString & team);
-        void PlayDemo(const QString & demofilename, bool isSave);
-        void PlayOfficialServerDemo();
-        void StartLocal();
-        void StartQuick();
-        void StartNet();
-        void StartTraining(const QString & file, const QString & subFolder, const QString & trainTeam);
-        void StartCampaign(const QString & camp, const QString & campScript, const QString & campTeam);
-        void abort();
-        GameState gameState;
-        bool netSuspend;
+class HWGame : public TCPBase {
+  Q_OBJECT
+ public:
+  HWGame(GameUIConfig *config, GameCFGWidget *gamecfg, const QString &ammo,
+         TeamSelWidget *pTeamSelWidget = 0);
+  virtual ~HWGame();
+  void AddTeam(const QString &team);
+  void PlayDemo(const QString &demofilename, bool isSave);
+  void PlayOfficialServerDemo();
+  void StartLocal();
+  void StartQuick();
+  void StartNet();
+  void StartTraining(const QString &file, const QString &subFolder,
+                     const QString &trainTeam);
+  void StartCampaign(const QString &camp, const QString &campScript,
+                     const QString &campTeam);
+  void abort();
+  GameState gameState;
+  bool netSuspend;
 
-    protected:
-        virtual QStringList getArguments();
-        virtual void onClientRead();
-        virtual void onClientDisconnect();
+ protected:
+  virtual QStringList getArguments();
+  virtual void onClientRead();
+  virtual void onClientDisconnect();
 
-    Q_SIGNALS:
-        void SendNet(const QByteArray & msg);
-        void SendChat(const QString & msg);
-        void SendTeamMessage(const QString & msg);
-        void GameStateChanged(GameState gameState);
-        void DemoPresenceChanged(bool hasDemo);
-        void GameStats(char type, const QString & info);
-        void HaveRecord(RecordType type, const QByteArray & record);
-        void ErrorMessage(const QString &);
-        void CampStateChanged(int);
-        void TrainingStateChanged(int);
-        void SendConsoleCommand(const QString & command);
+ Q_SIGNALS:
+  void SendNet(const QByteArray &msg);
+  void SendChat(const QString &msg);
+  void SendTeamMessage(const QString &msg);
+  void GameStateChanged(GameState gameState);
+  void DemoPresenceChanged(bool hasDemo);
+  void GameStats(char type, const QString &info);
+  void HaveRecord(RecordType type, const QByteArray &record);
+  void ErrorMessage(const QString &);
+  void CampStateChanged(int);
+  void TrainingStateChanged(int);
+  void SendConsoleCommand(const QString &command);
 
-    public Q_SLOTS:
-        void FromNet(const QByteArray & msg);
-        void FromNetChat(const QString & msg);
-        void FromNetWarning(const QString & msg);
-        void FromNetError(const QString & msg);
+ public Q_SLOTS:
+  void FromNet(const QByteArray &msg);
+  void FromNetChat(const QString &msg);
+  void FromNetWarning(const QString &msg);
+  void FromNetError(const QString &msg);
 
-    private:
-        char msgbuf[MAXMSGCHARS];
-        QString ammostr;
-        GameUIConfig * config;
-        GameCFGWidget * gamecfg;
-        TeamSelWidget* m_pTeamSelWidget;
-        GameType gameType;
-        QByteArray m_netSendBuffer;
+ private:
+  char msgbuf[MAXMSGCHARS];
+  QString ammostr;
+  GameUIConfig *config;
+  GameCFGWidget *gamecfg;
+  TeamSelWidget *m_pTeamSelWidget;
+  GameType gameType;
+  QByteArray m_netSendBuffer;
 
-        void commonConfig();
-        void SendConfig();
-        void SendQuickConfig();
-        void SendNetConfig();
-        void SendTrainingConfig();
-        void SendCampaignConfig();
-        void ParseMessage(const QByteArray & msg);
-        void SetGameState(GameState state);
-        void SetDemoPresence(bool hasDemo);
-        void sendCampaignVar(const QByteArray & varToSend);
-        void writeCampaignVar(const QByteArray &varVal);
-        void sendMissionVar(const QByteArray & varToSend);
-        void writeMissionVar(const QByteArray &varVal);
-        void flushNetBuffer();
+  void commonConfig();
+  void SendConfig();
+  void SendQuickConfig();
+  void SendNetConfig();
+  void SendTrainingConfig();
+  void SendCampaignConfig();
+  void ParseMessage(const QByteArray &msg);
+  void SetGameState(GameState state);
+  void SetDemoPresence(bool hasDemo);
+  void sendCampaignVar(const QByteArray &varToSend);
+  void writeCampaignVar(const QByteArray &varVal);
+  void sendMissionVar(const QByteArray &varToSend);
+  void writeMissionVar(const QByteArray &varVal);
+  void flushNetBuffer();
 };
 
 #endif

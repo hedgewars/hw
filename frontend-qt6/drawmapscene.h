@@ -19,9 +19,9 @@
 #ifndef DRAWMAPSCENE_H
 #define DRAWMAPSCENE_H
 
+#include <QGraphicsEllipseItem>
 #include <QGraphicsScene>
 #include <QPainterPath>
-#include <QGraphicsEllipseItem>
 
 #define DRAWN_MAP_BRUSH_SIZE_STEP (10)
 #define DRAWN_MAP_BRUSH_SIZE_MAX (516)
@@ -30,73 +30,67 @@
 
 class QGraphicsPathItem;
 
-struct PathParams
-{
-    quint8 width;
-    bool erasing;
-    QPoint initialPoint;
-    QList<QPoint> points;
+struct PathParams {
+  quint8 width;
+  bool erasing;
+  QPoint initialPoint;
+  QList<QPoint> points;
 };
 
 typedef QList<PathParams> Paths;
 
-class DrawMapScene : public QGraphicsScene
-{
-        Q_OBJECT
-    public:
-        enum PathType {
-            Polyline  = 0,
-            Rectangle = 1,
-            Ellipse   = 2
-        };
+class DrawMapScene : public QGraphicsScene {
+  Q_OBJECT
+ public:
+  enum PathType { Polyline = 0, Rectangle = 1, Ellipse = 2 };
 
-        explicit DrawMapScene(QObject *parent = 0);
+  explicit DrawMapScene(QObject *parent = 0);
 
-        QByteArray encode();
-        void decode(QByteArray data);
-        int pointsCount();
-        int brushSize();
+  QByteArray encode();
+  void decode(QByteArray data);
+  int pointsCount();
+  int brushSize();
 
-    Q_SIGNALS:
-        void pathChanged();
-        void brushSizeChanged(int brushSize);
+ Q_SIGNALS:
+  void pathChanged();
+  void brushSizeChanged(int brushSize);
 
-    public Q_SLOTS:
-        void undo();
-        void clearMap();
-        void simplifyLast();
-        void optimize();
-        void setErasing(bool erasing);
-        void showCursor();
-        void hideCursor();
-        void setPathType(DrawMapScene::PathType pathType);
-        void setBrushSize(int brushSize);
+ public Q_SLOTS:
+  void undo();
+  void clearMap();
+  void simplifyLast();
+  void optimize();
+  void setErasing(bool erasing);
+  void showCursor();
+  void hideCursor();
+  void setPathType(DrawMapScene::PathType pathType);
+  void setBrushSize(int brushSize);
 
-    private:
-        QPen m_pen;
-        QBrush m_eraser;
-        QBrush m_brush;
-        QGraphicsPathItem  * m_currPath;
-        Paths paths;
-        Paths oldPaths;
-        bool m_isErasing;
-        QList<QGraphicsItem *> oldItems;
-        QGraphicsEllipseItem * m_cursor;
-        bool m_isCursorShown;
-        QByteArray m_specialPoints;
-        PathType m_pathType;
+ private:
+  QPen m_pen;
+  QBrush m_eraser;
+  QBrush m_brush;
+  QGraphicsPathItem *m_currPath;
+  Paths paths;
+  Paths oldPaths;
+  bool m_isErasing;
+  QList<QGraphicsItem *> oldItems;
+  QGraphicsEllipseItem *m_cursor;
+  bool m_isCursorShown;
+  QByteArray m_specialPoints;
+  PathType m_pathType;
 
-        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
-        virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
-        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
-        virtual void wheelEvent(QGraphicsSceneWheelEvent *);
+  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+  virtual void wheelEvent(QGraphicsSceneWheelEvent *);
 
-        QPainterPath pointsToPath(const QList<QPoint> &points);
+  QPainterPath pointsToPath(const QList<QPoint> &points);
 
-        quint8 serializePenWidth(int width);
-        int deserializePenWidth(quint8 width);
-        QList<QPointF> makeEllipse(QPointF center, QPointF corner);
-        QPointF putSomeConstraints(QPointF initialPoint, QPointF point);
+  quint8 serializePenWidth(int width);
+  int deserializePenWidth(quint8 width);
+  QList<QPointF> makeEllipse(QPointF center, QPointF corner);
+  QPointF putSomeConstraints(QPointF initialPoint, QPointF point);
 };
 
-#endif // DRAWMAPSCENE_H
+#endif  // DRAWMAPSCENE_H

@@ -21,59 +21,54 @@
  * @brief DataBrowser class implementation
  */
 
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QDebug>
-#include <QUrl>
-
 #include "databrowser.h"
 
-const QNetworkRequest::Attribute typeAttribute = (QNetworkRequest::Attribute)(QNetworkRequest::User + 1);
-const QNetworkRequest::Attribute urlAttribute = (QNetworkRequest::Attribute)(QNetworkRequest::User + 2);
+#include <QDebug>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QUrl>
 
-DataBrowser::DataBrowser(QWidget *parent) :
-    QTextBrowser(parent)
-{
+const QNetworkRequest::Attribute typeAttribute =
+    (QNetworkRequest::Attribute)(QNetworkRequest::User + 1);
+const QNetworkRequest::Attribute urlAttribute =
+    (QNetworkRequest::Attribute)(QNetworkRequest::User + 2);
 
-    manager = new QNetworkAccessManager(this);
+DataBrowser::DataBrowser(QWidget *parent) : QTextBrowser(parent) {
+  manager = new QNetworkAccessManager(this);
 }
 
-QVariant DataBrowser::loadResource(int type, const QUrl & name)
-{
-    if(type == QTextDocument::ImageResource || type == QTextDocument::StyleSheetResource)
-    {
-        if(resources.contains(name.toString()))
-        {
-            return resources.take(name.toString());
-        }
-        else if(!requestedResources.contains(name.toString()))
-        {
-            qDebug() << "Requesting resource" << name.toString();
-            requestedResources.insert(name.toString());
+QVariant DataBrowser::loadResource(int type, const QUrl &name) {
+  if (type == QTextDocument::ImageResource ||
+      type == QTextDocument::StyleSheetResource) {
+    if (resources.contains(name.toString())) {
+      return resources.take(name.toString());
+    } else if (!requestedResources.contains(name.toString())) {
+      qDebug() << "Requesting resource" << name.toString();
+      requestedResources.insert(name.toString());
 
-            QNetworkRequest newRequest(QUrl(QStringLiteral("https://www.hedgewars.org") + name.toString()));
-            newRequest.setAttribute(typeAttribute, type);
-            newRequest.setAttribute(urlAttribute, name);
+      QNetworkRequest newRequest(
+          QUrl(QStringLiteral("https://www.hedgewars.org") + name.toString()));
+      newRequest.setAttribute(typeAttribute, type);
+      newRequest.setAttribute(urlAttribute, name);
 
-            QNetworkReply *reply = manager->get(newRequest);
-            connect(reply, &QNetworkReply::finished, this, &DataBrowser::resourceDownloaded);
-        }
+      QNetworkReply *reply = manager->get(newRequest);
+      connect(reply, &QNetworkReply::finished, this,
+              &DataBrowser::resourceDownloaded);
     }
+  }
 
-    return QVariant();
+  return QVariant();
 }
 
-void DataBrowser::resourceDownloaded()
-{
-    QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
+void DataBrowser::resourceDownloaded() {
+  QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
 
-    if(reply)
-    {
-        int type = reply->request().attribute(typeAttribute).toInt();
-        QUrl url = reply->request().attribute(urlAttribute).toUrl();
-        resources.insert(url.toString(), reply->readAll());
-        document()->addResource(type, reply->request().url(), QVariant());
-        update();
-    }
+  if (reply) {
+    int type = reply->request().attribute(typeAttribute).toInt();
+    QUrl url = reply->request().attribute(urlAttribute).toUrl();
+    resources.insert(url.toString(), reply->readAll());
+    document()->addResource(type, reply->request().url(), QVariant());
+    update();
+  }
 }

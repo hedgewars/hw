@@ -16,60 +16,47 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QUdpSocket>
-#include <QListWidget>
-
 #include "netserverslist.h"
 
-HWNetServersModel::HWNetServersModel(QObject* parent) :
-    QAbstractTableModel(parent)
-{
+#include <QListWidget>
+#include <QUdpSocket>
 
-}
+HWNetServersModel::HWNetServersModel(QObject* parent)
+    : QAbstractTableModel(parent) {}
 
-void HWNetServersModel::updateList()
-{
+void HWNetServersModel::updateList() {}
 
-}
+QVariant HWNetServersModel::headerData(int section, Qt::Orientation orientation,
+                                       int role) const {
+  if (role != Qt::DisplayRole) return QVariant();
 
-QVariant HWNetServersModel::headerData(int section,
-                                       Qt::Orientation orientation, int role) const
-{
-    if (role != Qt::DisplayRole)
+  if (orientation == Qt::Horizontal) {
+    switch (section) {
+      case 0:
+        return tr("Title");
+      case 1:
+        //: short for "IP address" (Internet Protocol), part of server address
+        return tr("IP");
+      case 2:
+        //: short for "port number", part of server address
+        return tr("Port");
+      default:
         return QVariant();
-
-    if (orientation == Qt::Horizontal)
-    {
-        switch (section)
-        {
-            case 0:
-                return tr("Title");
-            case 1:
-                //: short for "IP address" (Internet Protocol), part of server address
-                return tr("IP");
-            case 2:
-                //: short for "port number", part of server address
-                return tr("Port");
-            default:
-                return QVariant();
-        }
     }
-    else
-        return QStringLiteral("%1").arg(section + 1);
+  } else
+    return QStringLiteral("%1").arg(section + 1);
 }
 
-int HWNetServersModel::rowCount(const QModelIndex &parent) const
-{
-    if (parent.isValid())
-        return 0;
-    else
-        return games.size();
+int HWNetServersModel::rowCount(const QModelIndex& parent) const {
+  if (parent.isValid())
+    return 0;
+  else
+    return games.size();
 }
 
-int HWNetServersModel::columnCount(const QModelIndex & parent) const
-{
-    if (parent.isValid())
-        return 0;
-    else
-        return 3;
+int HWNetServersModel::columnCount(const QModelIndex& parent) const {
+  if (parent.isValid())
+    return 0;
+  else
+    return 3;
 }

@@ -24,29 +24,26 @@
 class GameCFGWidget;
 class TeamSelWidget;
 
-class PageMultiplayer : public AbstractPage
-{
-        Q_OBJECT
+class PageMultiplayer : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageMultiplayer(QWidget* parent = 0);
+ public:
+  PageMultiplayer(QWidget *parent = 0);
 
-        GameCFGWidget *gameCFG;
-        TeamSelWidget *teamsSelect;
-        QPushButton *BtnStartMPGame;
+  GameCFGWidget *gameCFG;
+  TeamSelWidget *teamsSelect;
+  QPushButton *BtnStartMPGame;
 
-    Q_SIGNALS:
-        void SetupClicked();
+ Q_SIGNALS:
+  void SetupClicked();
 
-    private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        QLayout * footerLayoutLeftDefinition();
-        void connectSignals();
+ private:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  QLayout *footerLayoutLeftDefinition();
+  void connectSignals();
 
-        QPushButton * btnSetup;
+  QPushButton *btnSetup;
 };
 
 #endif
-
-

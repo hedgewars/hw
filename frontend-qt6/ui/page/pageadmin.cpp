@@ -16,200 +16,183 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "pageadmin.h"
+
 #include <QGridLayout>
+#include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
-#include <QSpinBox>
 #include <QPushButton>
-#include <QTextBrowser>
+#include <QSpinBox>
 #include <QTableWidget>
-#include <QHeaderView>
+#include <QTextBrowser>
 
-#include "pageadmin.h"
-#include "chatwidget.h"
 #include "bandialog.h"
+#include "chatwidget.h"
 
-QLayout * PageAdmin::bodyLayoutDefinition()
-{
-    QVBoxLayout * pageLayout = new QVBoxLayout();
+QLayout* PageAdmin::bodyLayoutDefinition() {
+  QVBoxLayout* pageLayout = new QVBoxLayout();
 
-    QTabWidget * tabs = new QTabWidget(this);
-    pageLayout->addWidget(tabs);
-    QWidget * page1 = new QWidget(this);
-    QWidget * page2 = new QWidget(this);
-    tabs->addTab(page1, tr("General"));
-    tabs->addTab(page2, tr("Bans"));
+  QTabWidget* tabs = new QTabWidget(this);
+  pageLayout->addWidget(tabs);
+  QWidget* page1 = new QWidget(this);
+  QWidget* page2 = new QWidget(this);
+  tabs->addTab(page1, tr("General"));
+  tabs->addTab(page2, tr("Bans"));
 
-    // page 1
-    {
-        QGridLayout * tab1Layout = new QGridLayout(page1);
+  // page 1
+  {
+    QGridLayout* tab1Layout = new QGridLayout(page1);
 
-        // 0
-        pbAsk = addButton(tr("Fetch data"), tab1Layout, 0, 0, 1, 3);
+    // 0
+    pbAsk = addButton(tr("Fetch data"), tab1Layout, 0, 0, 1, 3);
 
-        // 1
-        QLabel * lblSMN = new QLabel(this);
-        lblSMN->setText(tr("Server message for latest version:"));
-        tab1Layout->addWidget(lblSMN, 1, 0);
+    // 1
+    QLabel* lblSMN = new QLabel(this);
+    lblSMN->setText(tr("Server message for latest version:"));
+    tab1Layout->addWidget(lblSMN, 1, 0);
 
-        leServerMessageNew = new QLineEdit(this);
-        tab1Layout->addWidget(leServerMessageNew, 1, 1);
+    leServerMessageNew = new QLineEdit(this);
+    tab1Layout->addWidget(leServerMessageNew, 1, 1);
 
-        // 2
-        QLabel * lblSMO = new QLabel(this);
-        lblSMO->setText(tr("Server message for previous versions:"));
-        tab1Layout->addWidget(lblSMO, 2, 0);
+    // 2
+    QLabel* lblSMO = new QLabel(this);
+    lblSMO->setText(tr("Server message for previous versions:"));
+    tab1Layout->addWidget(lblSMO, 2, 0);
 
-        leServerMessageOld = new QLineEdit(this);
-        tab1Layout->addWidget(leServerMessageOld, 2, 1);
+    leServerMessageOld = new QLineEdit(this);
+    tab1Layout->addWidget(leServerMessageOld, 2, 1);
 
-        // 3
-        QLabel * lblP = new QLabel(this);
-        lblP->setText(tr("Latest version protocol number:"));
-        tab1Layout->addWidget(lblP, 3, 0);
+    // 3
+    QLabel* lblP = new QLabel(this);
+    lblP->setText(tr("Latest version protocol number:"));
+    tab1Layout->addWidget(lblP, 3, 0);
 
-        sbProtocol = new QSpinBox(this);
-        tab1Layout->addWidget(sbProtocol, 3, 1);
+    sbProtocol = new QSpinBox(this);
+    tab1Layout->addWidget(sbProtocol, 3, 1);
 
-        // 4
-        QLabel * lblPreview = new QLabel(this);
-        //: MOTD = Message Of The Day, the message which is shown to players joining the server
-        lblPreview->setText(tr("MOTD preview:"));
-        tab1Layout->addWidget(lblPreview, 4, 0);
+    // 4
+    QLabel* lblPreview = new QLabel(this);
+    //: MOTD = Message Of The Day, the message which is shown to players joining
+    //: the server
+    lblPreview->setText(tr("MOTD preview:"));
+    tab1Layout->addWidget(lblPreview, 4, 0);
 
-        tb = new QTextBrowser(this);
-        tb->setOpenExternalLinks(true);
-        tb->document()->setDefaultStyleSheet(HWChatWidget::styleSheet());
-        tab1Layout->addWidget(tb, 4, 1, 1, 2);
+    tb = new QTextBrowser(this);
+    tb->setOpenExternalLinks(true);
+    tb->document()->setDefaultStyleSheet(HWChatWidget::styleSheet());
+    tab1Layout->addWidget(tb, 4, 1, 1, 2);
 
-        // 5
-        pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), tab1Layout, 5, 0);
+    // 5
+    pbClearAccountsCache =
+        addButton(tr("Clear Accounts Cache"), tab1Layout, 5, 0);
 
-        // 6
-        pbSetSM = addButton(tr("Set data"), tab1Layout, 6, 0, 1, 3);
+    // 6
+    pbSetSM = addButton(tr("Set data"), tab1Layout, 6, 0, 1, 3);
+  }
+
+  // page 2
+  {
+    QGridLayout* tab2Layout = new QGridLayout(page2);
+    twBans = new QTableWidget(this);
+    twBans->setColumnCount(3);
+    twBans->setHorizontalHeaderLabels(
+        QStringList()
+        //: IP = short for "IP address" (Internet Protocol). Nick = short for
+        //: "nick name"
+        << tr("IP/Nick") << tr("Expiration") << tr("Reason"));
+    twBans->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+    twBans->horizontalHeader()->setSectionsClickable(false);
+    twBans->verticalHeader()->hide();
+    twBans->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    twBans->setSelectionBehavior(QAbstractItemView::SelectRows);
+    twBans->setSelectionMode(QAbstractItemView::SingleSelection);
+    twBans->setAlternatingRowColors(true);
+    tab2Layout->addWidget(twBans, 0, 1, 4, 1);
+
+    QPushButton* btnRefresh = addButton(tr("Refresh"), tab2Layout, 0, 0);
+    QPushButton* btnAdd = addButton(tr("Add"), tab2Layout, 1, 0);
+    QPushButton* btnRemove = addButton(tr("Remove"), tab2Layout, 2, 0);
+
+    connect(btnRefresh, &QAbstractButton::clicked, this,
+            &PageAdmin::bansListRequest);
+    connect(btnRefresh, &QAbstractButton::clicked, this,
+            &PageAdmin::onRefreshClicked);
+    connect(btnAdd, &QAbstractButton::clicked, this, &PageAdmin::onAddClicked);
+    connect(btnRemove, &QAbstractButton::clicked, this,
+            &PageAdmin::onRemoveClicked);
+  }
+
+  return pageLayout;
+}
+
+void PageAdmin::connectSignals() {
+  connect(pbAsk, &QAbstractButton::clicked, this, &PageAdmin::askServerVars);
+  connect(leServerMessageNew, &QLineEdit::textChanged, tb, &QTextEdit::setHtml);
+  connect(leServerMessageOld, &QLineEdit::textChanged, tb, &QTextEdit::setHtml);
+  connect(pbClearAccountsCache, &QAbstractButton::clicked, this,
+          &PageAdmin::clearAccountsCache);
+  connect(pbSetSM, &QAbstractButton::clicked, this, &PageAdmin::smChanged);
+}
+
+PageAdmin::PageAdmin(QWidget* parent) : AbstractPage(parent) { initPage(); }
+
+void PageAdmin::smChanged() {
+  Q_EMIT setServerMessageNew(leServerMessageNew->text());
+  Q_EMIT setServerMessageOld(leServerMessageOld->text());
+  Q_EMIT setProtocol(sbProtocol->value());
+}
+
+void PageAdmin::serverMessageNew(const QString& str) {
+  leServerMessageNew->setText(str);
+}
+
+void PageAdmin::serverMessageOld(const QString& str) {
+  leServerMessageOld->setText(str);
+}
+
+void PageAdmin::protocol(int proto) { sbProtocol->setValue(proto); }
+
+void PageAdmin::onAddClicked() {
+  BanDialog dialog(this);
+
+  if (dialog.exec()) {
+    if (dialog.byIP()) {
+      Q_EMIT banIP(dialog.banId(), dialog.reason(), dialog.duration());
+    } else {
+      Q_EMIT banNick(dialog.banId(), dialog.reason(), dialog.duration());
     }
 
-    // page 2
-    {
-        QGridLayout * tab2Layout = new QGridLayout(page2);
-        twBans = new QTableWidget(this);
-        twBans->setColumnCount(3);
-        twBans->setHorizontalHeaderLabels(QStringList()
-                              //: IP = short for "IP address" (Internet Protocol). Nick = short for "nick name"
-                              << tr("IP/Nick")
-                              << tr("Expiration")
-                              << tr("Reason")
-                    );
-        twBans->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-        twBans->horizontalHeader()->setSectionsClickable(false);
-        twBans->verticalHeader()->hide();
-        twBans->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        twBans->setSelectionBehavior(QAbstractItemView::SelectRows);
-        twBans->setSelectionMode(QAbstractItemView::SingleSelection);
-        twBans->setAlternatingRowColors(true);
-        tab2Layout->addWidget(twBans, 0, 1, 4, 1);
+    Q_EMIT bansListRequest();
+  }
+}
 
-        QPushButton * btnRefresh = addButton(tr("Refresh"), tab2Layout, 0, 0);
-        QPushButton * btnAdd = addButton(tr("Add"), tab2Layout, 1, 0);
-        QPushButton * btnRemove = addButton(tr("Remove"), tab2Layout, 2, 0);
+void PageAdmin::onRemoveClicked() {
+  QList<QTableWidgetItem*> sel = twBans->selectedItems();
 
-        connect(btnRefresh, &QAbstractButton::clicked, this, &PageAdmin::bansListRequest);
-        connect(btnRefresh, &QAbstractButton::clicked, this, &PageAdmin::onRefreshClicked);
-        connect(btnAdd, &QAbstractButton::clicked, this, &PageAdmin::onAddClicked);
-        connect(btnRemove, &QAbstractButton::clicked, this, &PageAdmin::onRemoveClicked);
+  if (!sel.isEmpty()) {
+    Q_EMIT removeBan(
+        twBans->item(sel[0]->row(), 0)->data(Qt::DisplayRole).toString());
+    Q_EMIT bansListRequest();
+  }
+}
+
+void PageAdmin::setBansList(const QStringList& bans) {
+  if (bans.size() % 4) return;
+
+  twBans->setRowCount(bans.size() / 4);
+
+  for (int i = 0; i < bans.size(); i += 4) {
+    if (!twBans->item(i / 4, 0)) {
+      twBans->setItem(i / 4, 0, new QTableWidgetItem());
+      twBans->setItem(i / 4, 1, new QTableWidgetItem());
+      twBans->setItem(i / 4, 2, new QTableWidgetItem());
     }
 
-    return pageLayout;
+    twBans->item(i / 4, 0)->setData(Qt::DisplayRole, bans[i + 1]);
+    twBans->item(i / 4, 1)->setData(Qt::DisplayRole, bans[i + 3]);
+    twBans->item(i / 4, 2)->setData(Qt::DisplayRole, bans[i + 2]);
+  }
 }
 
-void PageAdmin::connectSignals()
-{
-    connect(pbAsk, &QAbstractButton::clicked, this, &PageAdmin::askServerVars);
-    connect(leServerMessageNew, &QLineEdit::textChanged, tb, &QTextEdit::setHtml);
-    connect(leServerMessageOld, &QLineEdit::textChanged, tb, &QTextEdit::setHtml);
-    connect(pbClearAccountsCache, &QAbstractButton::clicked, this, &PageAdmin::clearAccountsCache);
-    connect(pbSetSM, &QAbstractButton::clicked, this, &PageAdmin::smChanged);
-}
-
-PageAdmin::PageAdmin(QWidget* parent) : AbstractPage(parent)
-{
-    initPage();
-}
-
-void PageAdmin::smChanged()
-{
-    Q_EMIT setServerMessageNew(leServerMessageNew->text());
-    Q_EMIT setServerMessageOld(leServerMessageOld->text());
-    Q_EMIT setProtocol(sbProtocol->value());
-}
-
-void PageAdmin::serverMessageNew(const QString & str)
-{
-    leServerMessageNew->setText(str);
-}
-
-void PageAdmin::serverMessageOld(const QString & str)
-{
-    leServerMessageOld->setText(str);
-}
-
-void PageAdmin::protocol(int proto)
-{
-    sbProtocol->setValue(proto);
-}
-
-void PageAdmin::onAddClicked()
-{
-    BanDialog dialog(this);
-
-    if(dialog.exec())
-    {
-        if(dialog.byIP())
-        {
-            Q_EMIT banIP(dialog.banId(), dialog.reason(), dialog.duration());
-        } else
-        {
-            Q_EMIT banNick(dialog.banId(), dialog.reason(), dialog.duration());
-        }
-
-        Q_EMIT bansListRequest();
-    }
-}
-
-void PageAdmin::onRemoveClicked()
-{
-    QList<QTableWidgetItem *> sel = twBans->selectedItems();
-
-    if(!sel.isEmpty())
-    {
-        Q_EMIT removeBan(twBans->item(sel[0]->row(), 0)->data(Qt::DisplayRole).toString());
-        Q_EMIT bansListRequest();
-    }
-}
-
-void PageAdmin::setBansList(const QStringList & bans)
-{
-    if(bans.size() % 4)
-        return;
-
-    twBans->setRowCount(bans.size() / 4);
-
-    for(int i = 0; i < bans.size(); i += 4)
-    {
-        if(!twBans->item(i / 4, 0))
-        {
-            twBans->setItem(i / 4, 0, new QTableWidgetItem());
-            twBans->setItem(i / 4, 1, new QTableWidgetItem());
-            twBans->setItem(i / 4, 2, new QTableWidgetItem());
-        }
-
-        twBans->item(i / 4, 0)->setData(Qt::DisplayRole, bans[i + 1]);
-        twBans->item(i / 4, 1)->setData(Qt::DisplayRole, bans[i + 3]);
-        twBans->item(i / 4, 2)->setData(Qt::DisplayRole, bans[i + 2]);
-    }
-}
-
-void PageAdmin::onRefreshClicked()
-{
-    twBans->setRowCount(0);
-}
+void PageAdmin::onRefreshClicked() { twBans->setRowCount(0); }

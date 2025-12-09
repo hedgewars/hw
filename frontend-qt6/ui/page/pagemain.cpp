@@ -16,237 +16,242 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "pagemain.h"
+
 #include <QGridLayout>
 #include <QHBoxLayout>
-#include <QPushButton>
 #include <QLabel>
-#include <QTime>
+#include <QPushButton>
 #include <QSettings>
+#include <QTime>
 
-#include "pagemain.h"
+#include "DataManager.h"
 #include "hwconsts.h"
 #include "hwform.h"
-#include "DataManager.h"
 
-QLayout * PageMain::bodyLayoutDefinition()
-{
-    QGridLayout * pageLayout = new QGridLayout();
-    //pageLayout->setColumnStretch(0, 1);
-    //pageLayout->setColumnStretch(1, 2);
-    //pageLayout->setColumnStretch(2, 1);
+QLayout* PageMain::bodyLayoutDefinition() {
+  QGridLayout* pageLayout = new QGridLayout();
+  // pageLayout->setColumnStretch(0, 1);
+  // pageLayout->setColumnStretch(1, 2);
+  // pageLayout->setColumnStretch(2, 1);
 
-    //QPushButton* btnLogo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
-    //pageLayout->setAlignment(btnLogo, Qt::AlignHCenter);
-    pageLayout->setRowStretch(0, 1);
-    pageLayout->setRowStretch(1, 1);
-    pageLayout->setRowStretch(2, 0);
-    pageLayout->setRowStretch(3, 1);
-    pageLayout->setRowStretch(4, 1);
+  // QPushButton* btnLogo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0,
+  // 0, 1, 4, true); pageLayout->setAlignment(btnLogo, Qt::AlignHCenter);
+  pageLayout->setRowStretch(0, 1);
+  pageLayout->setRowStretch(1, 1);
+  pageLayout->setRowStretch(2, 0);
+  pageLayout->setRowStretch(3, 1);
+  pageLayout->setRowStretch(4, 1);
 
-    BtnSinglePlayer = addButton(QStringLiteral(":/res/LocalPlay.png"),
-                                pageLayout, 2, 0, 1, 2, true);
-    BtnSinglePlayer->setWhatsThis(tr("Play a game on a single computer"));
-    pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
+  BtnSinglePlayer = addButton(QStringLiteral(":/res/LocalPlay.png"), pageLayout,
+                              2, 0, 1, 2, true);
+  BtnSinglePlayer->setWhatsThis(tr("Play a game on a single computer"));
+  pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
-    //BtnNet = addButton(":/res/NetworkPlay.png", (QBoxLayout*)netLayout, 1, true);
-    BtnNet = addButton(QStringLiteral(":/res/NetworkPlay.png"), pageLayout, 2,
-                       2, 1, 2, true);
-    BtnNet->setWhatsThis(tr("Play a game across a network"));
-    pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
+  // BtnNet = addButton(":/res/NetworkPlay.png", (QBoxLayout*)netLayout, 1,
+  // true);
+  BtnNet = addButton(QStringLiteral(":/res/NetworkPlay.png"), pageLayout, 2, 2,
+                     1, 2, true);
+  BtnNet->setWhatsThis(tr("Play a game across a network"));
+  pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
-    originalNetworkIcon = BtnNet->icon();
-    disabledNetworkIcon = QIcon(":/res/NetworkPlayDisabled.png");
+  originalNetworkIcon = BtnNet->icon();
+  disabledNetworkIcon = QIcon(":/res/NetworkPlayDisabled.png");
 
-    //QWidget *netLayoutWidget = new QWidget();
-    QVBoxLayout *netLayout = new QVBoxLayout(BtnNet);
-    //pageLayout->addWidget(netLayoutWidget, 2, 2, 1, 2);
-    //netLayoutWidget->setStyleSheet("background: green;");
-    //netLayoutWidget->setFixedSize(314, 260);
-    netLayout->setSpacing(20);
-    netLayout->setAlignment(Qt::AlignHCenter);
+  // QWidget *netLayoutWidget = new QWidget();
+  QVBoxLayout* netLayout = new QVBoxLayout(BtnNet);
+  // pageLayout->addWidget(netLayoutWidget, 2, 2, 1, 2);
+  // netLayoutWidget->setStyleSheet("background: green;");
+  // netLayoutWidget->setFixedSize(314, 260);
+  netLayout->setSpacing(20);
+  netLayout->setAlignment(Qt::AlignHCenter);
 
-    BtnNetLocal = addButton(tr("Play local network game"), (QBoxLayout*)netLayout, 0, false);
-    BtnNetLocal->setWhatsThis(tr("Play a game across a local area network"));
-    BtnNetLocal->setFixedSize(BtnNet->width() - 50, 60);
-    BtnNetLocal->setVisible(false);
+  BtnNetLocal = addButton(tr("Play local network game"), (QBoxLayout*)netLayout,
+                          0, false);
+  BtnNetLocal->setWhatsThis(tr("Play a game across a local area network"));
+  BtnNetLocal->setFixedSize(BtnNet->width() - 50, 60);
+  BtnNetLocal->setVisible(false);
 
-    BtnNetOfficial = addButton(tr("Play official network game"), (QBoxLayout*)netLayout, 0, false);
-    BtnNetOfficial->setWhatsThis(tr("Play a game on an official server"));
-    BtnNetOfficial->setFixedSize(BtnNet->width() - 50, 60);
-    BtnNetOfficial->setVisible(false);
+  BtnNetOfficial = addButton(tr("Play official network game"),
+                             (QBoxLayout*)netLayout, 0, false);
+  BtnNetOfficial->setWhatsThis(tr("Play a game on an official server"));
+  BtnNetOfficial->setFixedSize(BtnNet->width() - 50, 60);
+  BtnNetOfficial->setVisible(false);
 
-    // button order matters for overlapping (what's on top and what isn't)
-    BtnTitle = addButton(QStringLiteral(":/res/HedgewarsTitle.png"), pageLayout,
-                         0, 0, 1, 4, true);
-    BtnTitle ->setObjectName("infoButton");
-    BtnTitle->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
-    pageLayout->setAlignment(BtnTitle, Qt::AlignHCenter);
+  // button order matters for overlapping (what's on top and what isn't)
+  BtnTitle = addButton(QStringLiteral(":/res/HedgewarsTitle.png"), pageLayout,
+                       0, 0, 1, 4, true);
+  BtnTitle->setObjectName("infoButton");
+  BtnTitle->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
+  pageLayout->setAlignment(BtnTitle, Qt::AlignHCenter);
 
-    BtnInfo = addButton(QStringLiteral(":/res/AboutIcon.png"), pageLayout, 0, 0,
-                        1, 1, true);
-    BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
-    pageLayout->setAlignment(BtnInfo, Qt::AlignLeft | Qt::AlignTop);
+  BtnInfo = addButton(QStringLiteral(":/res/AboutIcon.png"), pageLayout, 0, 0,
+                      1, 1, true);
+  BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
+  pageLayout->setAlignment(BtnInfo, Qt::AlignLeft | Qt::AlignTop);
 
-    BtnFeedback = addButton(tr("Feedback"), pageLayout, 4, 0, 1, 4, false);
-    BtnFeedback->setStyleSheet(QStringLiteral("padding: 5px 10px"));
-    BtnFeedback->setWhatsThis(tr("Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars"));
-    pageLayout->setAlignment(BtnFeedback, Qt::AlignHCenter);
+  BtnFeedback = addButton(tr("Feedback"), pageLayout, 4, 0, 1, 4, false);
+  BtnFeedback->setStyleSheet(QStringLiteral("padding: 5px 10px"));
+  BtnFeedback->setWhatsThis(
+      tr("Leave a feedback here reporting issues, suggesting features or just "
+         "saying how you like Hedgewars"));
+  pageLayout->setAlignment(BtnFeedback, Qt::AlignHCenter);
 
-    BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 5, 0, 1, 4, false);
-    BtnDataDownload->setStyleSheet(QStringLiteral("padding: 5px 10px"));
-    BtnDataDownload->setWhatsThis(tr("Access the user created content downloadable from our website"));
-    pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
+  BtnDataDownload =
+      addButton(tr("Downloadable Content"), pageLayout, 5, 0, 1, 4, false);
+  BtnDataDownload->setStyleSheet(QStringLiteral("padding: 5px 10px"));
+  BtnDataDownload->setWhatsThis(
+      tr("Access the user created content downloadable from our website"));
+  pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
 
-    // disable exit button sound
-    btnBack->isSoundEnabled = false;
+  // disable exit button sound
+  btnBack->isSoundEnabled = false;
 
-    return pageLayout;
+  return pageLayout;
 }
 
-QLayout * PageMain::footerLayoutDefinition()
-{
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
+QLayout* PageMain::footerLayoutDefinition() {
+  QHBoxLayout* bottomLayout = new QHBoxLayout();
 
-    mainNote = new QLabel(this);
-    mainNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    mainNote->setWordWrap(true);
+  mainNote = new QLabel(this);
+  mainNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  mainNote->setWordWrap(true);
 
-    bottomLayout->addWidget(mainNote, 0);
-    bottomLayout->setStretch(0,1);
+  bottomLayout->addWidget(mainNote, 0);
+  bottomLayout->setStretch(0, 1);
 
-    btnBack->setWhatsThis(tr("Exit game"));
+  btnBack->setWhatsThis(tr("Exit game"));
 
 #ifdef VIDEOREC
-    BtnVideos = addButton(":/res/Videos.png", bottomLayout, 1, true, Qt::AlignBottom);
-    BtnVideos->setWhatsThis(tr("Manage videos recorded from game"));
+  BtnVideos =
+      addButton(":/res/Videos.png", bottomLayout, 1, true, Qt::AlignBottom);
+  BtnVideos->setWhatsThis(tr("Manage videos recorded from game"));
 #endif
 
-    BtnHelp = addButton(QStringLiteral(":/res/Help.png"), bottomLayout, 2, true,
-                        Qt::AlignBottom);
-    BtnHelp->setWhatsThis(tr("Open the Hedgewars online game manual in your web browser"));
+  BtnHelp = addButton(QStringLiteral(":/res/Help.png"), bottomLayout, 2, true,
+                      Qt::AlignBottom);
+  BtnHelp->setWhatsThis(
+      tr("Open the Hedgewars online game manual in your web browser"));
 
-    BtnSetup = addButton(QStringLiteral(":/res/Settings.png"), bottomLayout, 3,
-                         true, Qt::AlignBottom);
-    BtnSetup->setWhatsThis(tr("Edit game preferences"));
+  BtnSetup = addButton(QStringLiteral(":/res/Settings.png"), bottomLayout, 3,
+                       true, Qt::AlignBottom);
+  BtnSetup->setWhatsThis(tr("Edit game preferences"));
 
-    return bottomLayout;
+  return bottomLayout;
 }
 
-void PageMain::connectSignals()
-{
+void PageMain::connectSignals() {
 #ifndef QT_DEBUG
-    connect(this, SIGNAL(pageEnter()), this, SLOT(updateTip()));
+  connect(this, SIGNAL(pageEnter()), this, SLOT(updateTip()));
 #endif
-    connect(BtnNet, &QAbstractButton::clicked, this,
-            &PageMain::toggleNetworkChoice);
-    //connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
-    //connect(BtnNetOfficial, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
-    // TODO: add signal-forwarding required by (currently missing) encapsulation
+  connect(BtnNet, &QAbstractButton::clicked, this,
+          &PageMain::toggleNetworkChoice);
+  // connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+  // connect(BtnNetOfficial, SIGNAL(clicked()), this,
+  // SLOT(toggleNetworkChoice()));
+  //  TODO: add signal-forwarding required by (currently missing) encapsulation
 }
 
-PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
-{
-    initPage();
+PageMain::PageMain(QWidget* parent) : AbstractPage(parent) {
+  initPage();
 
-    if(frontendEffects)
-        setAttribute(Qt::WA_NoSystemBackground, true);
-    mainNote->setOpenExternalLinks(true);
+  if (frontendEffects) setAttribute(Qt::WA_NoSystemBackground, true);
+  mainNote->setOpenExternalLinks(true);
 #ifdef QT_DEBUG
-    setDefaultDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
+  setDefaultDescription(
+      QLabel::tr("This development build is 'work in progress' and may not be "
+                 "compatible with other versions of the game, while some "
+                 "features might be broken or incomplete!"));
 #else
-    setDefaultDescription(QLabel::tr("Tip: %1").arg(randomTip()));
+  setDefaultDescription(QLabel::tr("Tip: %1").arg(randomTip()));
 #endif
 }
 
-void PageMain::updateTip()
-{
-    setDefaultDescription(QLabel::tr("Tip: %1").arg(randomTip()));
+void PageMain::updateTip() {
+  setDefaultDescription(QLabel::tr("Tip: %1").arg(randomTip()));
 }
 
-QString PageMain::randomTip()
-{
+QString PageMain::randomTip() {
 #ifdef _WIN32
-    int platform = 1;
+  int platform = 1;
 #elif defined __APPLE__
-    int platform = 2;
+  int platform = 2;
 #else
-    int platform = 3;
+  int platform = 3;
 #endif
-    if (Tips.isEmpty()) {
-      DataManager& dataMgr = DataManager::instance();
+  if (Tips.isEmpty()) {
+    DataManager& dataMgr = DataManager::instance();
 
-      // get locale
-      QSettings settings(dataMgr.settingsFileName(), QSettings::IniFormat);
+    // get locale
+    QSettings settings(dataMgr.settingsFileName(), QSettings::IniFormat);
 
-      QString loc = QLocale().name();
+    QString loc = QLocale().name();
 
-      QString tipFile = QString(QStringLiteral("physfs://Locale/tips_") + loc +
-                                QStringLiteral(".xml"));
+    QString tipFile = QString(QStringLiteral("physfs://Locale/tips_") + loc +
+                              QStringLiteral(".xml"));
 
-      // if file is non-existant try with language only
-      if (!QFile::exists(tipFile))
-        tipFile =
-            QString(QStringLiteral("physfs://Locale/tips_") +
-                    loc.remove(QRegularExpression(QStringLiteral("_.*$"))) +
-                    QStringLiteral(".xml"));
+    // if file is non-existant try with language only
+    if (!QFile::exists(tipFile))
+      tipFile = QString(QStringLiteral("physfs://Locale/tips_") +
+                        loc.remove(QRegularExpression(QStringLiteral("_.*$"))) +
+                        QStringLiteral(".xml"));
 
-      // fallback if file for current locale is non-existant
-      if (!QFile::exists(tipFile))
-        tipFile = QStringLiteral("physfs://Locale/tips_en.xml");
+    // fallback if file for current locale is non-existant
+    if (!QFile::exists(tipFile))
+      tipFile = QStringLiteral("physfs://Locale/tips_en.xml");
 
-      QFile file(tipFile);
-      file.open(QIODevice::ReadOnly);
-      QTextStream in(&file);
-      QString line = in.readLine();
-      int tip_platform = 0;
-      while (!line.isNull()) {
-        if (line.contains(QLatin1String("<windows-only>"), Qt::CaseSensitive))
-          tip_platform = 1;
-        if (line.contains(QLatin1String("<mac-only>"), Qt::CaseSensitive))
-          tip_platform = 2;
-        if (line.contains(QLatin1String("<linux-only>"), Qt::CaseSensitive))
-          tip_platform = 3;
-        if (line.contains(QLatin1String("</windows-only>"),
-                          Qt::CaseSensitive) ||
-            line.contains(QLatin1String("</mac-only>"), Qt::CaseSensitive) ||
-            line.contains(QLatin1String("</linux-only>"), Qt::CaseSensitive)) {
-          tip_platform = 0;
-        }
-        QStringList split_string =
-            line.split(QRegularExpression(QStringLiteral("</?tip>")));
-        if ((tip_platform == platform || tip_platform == 0) &&
-            split_string.size() != 1)
-          Tips << split_string[1];
-        line = in.readLine();
+    QFile file(tipFile);
+    file.open(QIODevice::ReadOnly);
+    QTextStream in(&file);
+    QString line = in.readLine();
+    int tip_platform = 0;
+    while (!line.isNull()) {
+      if (line.contains(QLatin1String("<windows-only>"), Qt::CaseSensitive))
+        tip_platform = 1;
+      if (line.contains(QLatin1String("<mac-only>"), Qt::CaseSensitive))
+        tip_platform = 2;
+      if (line.contains(QLatin1String("<linux-only>"), Qt::CaseSensitive))
+        tip_platform = 3;
+      if (line.contains(QLatin1String("</windows-only>"), Qt::CaseSensitive) ||
+          line.contains(QLatin1String("</mac-only>"), Qt::CaseSensitive) ||
+          line.contains(QLatin1String("</linux-only>"), Qt::CaseSensitive)) {
+        tip_platform = 0;
       }
-      // The following tip will require links to app store entries first.
-      // Tips << tr("Want to play Hedgewars any time? Grab the Mobile version
-      // for %1 and %2.", "Tips").arg("").arg("");
-      // the ios version is located here:
-      // http://itunes.apple.com/us/app/hedgewars/id391234866
-
-      file.close();
+      QStringList split_string =
+          line.split(QRegularExpression(QStringLiteral("</?tip>")));
+      if ((tip_platform == platform || tip_platform == 0) &&
+          split_string.size() != 1)
+        Tips << split_string[1];
+      line = in.readLine();
     }
+    // The following tip will require links to app store entries first.
+    // Tips << tr("Want to play Hedgewars any time? Grab the Mobile version
+    // for %1 and %2.", "Tips").arg("").arg("");
+    // the ios version is located here:
+    // http://itunes.apple.com/us/app/hedgewars/id391234866
 
-    if (!Tips.isEmpty())
-      return std::as_const(
-          Tips)[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
-    else
-        return QString();
+    file.close();
+  }
+
+  if (!Tips.isEmpty())
+    return std::as_const(
+        Tips)[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
+  else
+    return QString();
 }
 
-void PageMain::toggleNetworkChoice()
-{
-    bool visible = BtnNetLocal->isVisible();
-    BtnNetLocal->setVisible(!visible);
-    BtnNetOfficial->setVisible(!visible);
-    if (visible)    BtnNet->setIcon(originalNetworkIcon);
-    else            BtnNet->setIcon(disabledNetworkIcon);
-}
-
-void PageMain::resetNetworkChoice()
-{
-    BtnNetLocal->setVisible(false);
-    BtnNetOfficial->setVisible(false);
+void PageMain::toggleNetworkChoice() {
+  bool visible = BtnNetLocal->isVisible();
+  BtnNetLocal->setVisible(!visible);
+  BtnNetOfficial->setVisible(!visible);
+  if (visible)
     BtnNet->setIcon(originalNetworkIcon);
+  else
+    BtnNet->setIcon(disabledNetworkIcon);
+}
+
+void PageMain::resetNetworkChoice() {
+  BtnNetLocal->setVisible(false);
+  BtnNetOfficial->setVisible(false);
+  BtnNet->setIcon(originalNetworkIcon);
 }

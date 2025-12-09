@@ -21,81 +21,82 @@
 #define _SELECT_WEAPON_INCLUDED
 
 #include <QFrame>
-#include <QMap>
 #include <QList>
+#include <QMap>
 
 class QGridLayout;
 class WeaponItem;
 class QLineEdit;
 class QSettings;
 
-class SelWeaponItem : public QWidget
-{
-        Q_OBJECT
+class SelWeaponItem : public QWidget {
+  Q_OBJECT
 
-    public:
-        SelWeaponItem(bool allowInfinite, int iconNum, int wNum, const QImage &image, const QImage &imagegrey, QWidget* parent=0);
+ public:
+  SelWeaponItem(bool allowInfinite, int iconNum, int wNum, const QImage& image,
+                const QImage& imagegrey, QWidget* parent = 0);
 
-        unsigned char getItemsNum() const;
-        void setItemsNum(const unsigned char num);
-        void setEnabled(bool value);
+  unsigned char getItemsNum() const;
+  void setItemsNum(const unsigned char num);
+  void setEnabled(bool value);
 
-    private:
-        WeaponItem* item;
+ private:
+  WeaponItem* item;
 };
 
-class SelWeaponWidget : public QFrame
-{
-        Q_OBJECT
+class SelWeaponWidget : public QFrame {
+  Q_OBJECT
 
-    public:
-        SelWeaponWidget(int numItems, QWidget* parent=0);
-        QString getWeaponsString(const QString& name) const;
-        QStringList getWeaponNames() const;
-        void deletionDone();
-        void init();
+ public:
+  SelWeaponWidget(int numItems, QWidget* parent = 0);
+  QString getWeaponsString(const QString& name) const;
+  QStringList getWeaponNames() const;
+  void deletionDone();
+  void init();
 
-    public Q_SLOTS:
-        void setDefault();
-        void setWeapons(const QString& ammo);
-        //sets the name of the current set
-        void setWeaponsName(const QString& name);
-        void switchWeapons(const QString& name);
-        void deleteWeaponsName();
-        void newWeaponsName();
-        void save();
-        void copy();
+ public Q_SLOTS:
+  void setDefault();
+  void setWeapons(const QString& ammo);
+  // sets the name of the current set
+  void setWeaponsName(const QString& name);
+  void switchWeapons(const QString& name);
+  void deleteWeaponsName();
+  void newWeaponsName();
+  void save();
+  void copy();
 
-    Q_SIGNALS:
-        void weaponsDeleted(QString weaponsName);
-        void weaponsAdded(QString weaponsName, QString ammo);
-        void weaponsEdited(QString oldWeaponsName, QString newWeaponsName, QString ammo);
+ Q_SIGNALS:
+  void weaponsDeleted(QString weaponsName);
+  void weaponsAdded(QString weaponsName, QString ammo);
+  void weaponsEdited(QString oldWeaponsName, QString newWeaponsName,
+                     QString ammo);
 
-    private:
-        //the name of the current weapon set
-        QString curWeaponsName;
-        //set to true while an entry is deleted. Used to avoid duplicate saving due to combobox change
-        bool isDeleting;
+ private:
+  // the name of the current weapon set
+  QString curWeaponsName;
+  // set to true while an entry is deleted. Used to avoid duplicate saving due
+  // to combobox change
+  bool isDeleting;
 
-        QLineEdit* m_name;
+  QLineEdit* m_name;
 
-        //storage for all the weapons sets
-        QMap<QString, QString>* wconf;
+  // storage for all the weapons sets
+  QMap<QString, QString>* wconf;
 
-        const int m_numItems;
-        int operator [] (unsigned int weaponIndex) const;
+  const int m_numItems;
+  int operator[](unsigned int weaponIndex) const;
 
-        typedef QList<SelWeaponItem*> ItemsList;
-        typedef QMap<int, ItemsList> twi;
-        twi weaponItems;
-        //layout element for each tab:
-        QGridLayout* p1Layout;
-        QGridLayout* p2Layout;
-        QGridLayout* p3Layout;
-        QGridLayout* p4Layout;
+  typedef QList<SelWeaponItem*> ItemsList;
+  typedef QMap<int, ItemsList> twi;
+  twi weaponItems;
+  // layout element for each tab:
+  QGridLayout* p1Layout;
+  QGridLayout* p2Layout;
+  QGridLayout* p3Layout;
+  QGridLayout* p4Layout;
 
-        QString fixWeaponSet(const QString & s);
-        int readWeaponValue(const QChar chr, int max);
+  QString fixWeaponSet(const QString& s);
+  int readWeaponValue(const QChar chr, int max);
 };
 
-#endif // _SELECT_WEAPON_INCLUDED
+#endif  // _SELECT_WEAPON_INCLUDED

@@ -20,6 +20,7 @@
 #define PAGE_DATA_H
 
 #include <QUrl>
+
 #include "AbstractPage.h"
 
 class DataBrowser;
@@ -27,40 +28,39 @@ class QProgressBar;
 class QNetworkReply;
 class QVBoxLayout;
 
+class PageDataDownload : public AbstractPage {
+  Q_OBJECT
 
-class PageDataDownload : public AbstractPage
-{
-        Q_OBJECT
+ public:
+  PageDataDownload(QWidget *parent = 0);
 
-    public:
-        PageDataDownload(QWidget* parent = 0);
+ public Q_SLOTS:
+  void fetchList();
 
-    public Q_SLOTS:
-        void fetchList();
+ protected:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ private:
+  DataBrowser *web;
+  QHash<QNetworkReply *, QProgressBar *> progressBars;
+  QVBoxLayout *progressBarsLayout;
+  QPushButtonWithSound *pbOpenDir;
+  QPushButtonWithSound *pbHome;
 
-    private:
-        DataBrowser *web;
-        QHash<QNetworkReply*, QProgressBar *> progressBars;
-        QVBoxLayout *progressBarsLayout;
-        QPushButtonWithSound * pbOpenDir;
-        QPushButtonWithSound * pbHome;
+  bool m_contentDownloaded;  ///< true if something was downloaded since last
+                             ///< page leave
 
-        bool m_contentDownloaded; ///< true if something was downloaded since last page leave
+ private Q_SLOTS:
+  void request(const QUrl &url);
 
-    private Q_SLOTS:
-        void request(const QUrl &url);
+  void pageDownloaded();
+  void fileDownloaded();
+  void downloadProgress(qint64, qint64);
+  void openPackagesDir();
 
-        void pageDownloaded();
-        void fileDownloaded();
-        void downloadProgress(qint64, qint64);
-        void openPackagesDir();
-
-        void onPageLeave();
+  void onPageLeave();
 };
 
 #endif

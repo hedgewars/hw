@@ -16,28 +16,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QVBoxLayout>
-#include <QLabel>
-
 #include "pageconnecting.h"
 
-QLayout * PageConnecting::bodyLayoutDefinition()
-{
-    QVBoxLayout * pageLayout = new QVBoxLayout();
+#include <QLabel>
+#include <QVBoxLayout>
 
-    QLabel * lblConnecting = new QLabel(this);
-    lblConnecting->setText(tr("Connecting..."));
-    pageLayout->addWidget(lblConnecting);
+QLayout* PageConnecting::bodyLayoutDefinition() {
+  QVBoxLayout* pageLayout = new QVBoxLayout();
 
-    return pageLayout;
+  QLabel* lblConnecting = new QLabel(this);
+  lblConnecting->setText(tr("Connecting..."));
+  pageLayout->addWidget(lblConnecting);
+
+  return pageLayout;
 }
 
-void PageConnecting::connectSignals()
-{
-    connect(this, &AbstractPage::goBack, this, &PageConnecting::cancelConnection);
+void PageConnecting::connectSignals() {
+  connect(this, &AbstractPage::goBack, this, &PageConnecting::cancelConnection);
 }
 
-PageConnecting::PageConnecting(QWidget* parent) :  AbstractPage(parent)
-{
-    initPage();
+PageConnecting::PageConnecting(QWidget* parent) : AbstractPage(parent) {
+  initPage();
 }

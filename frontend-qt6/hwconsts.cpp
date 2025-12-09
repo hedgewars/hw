@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "hwconsts.h"
 
 #include <QStandardItemModel>
 
-#include "hwconsts.h"
 #include "weapons.h"
 
 // cDataDir gets 'Data' appended later (in main.cpp)
@@ -97,32 +97,22 @@ QList<QPair<QString, QString> > cDefaultAmmos =
            QString(AMMOLINE_HEDGEEDITOR_QT AMMOLINE_HEDGEEDITOR_PROB
                        AMMOLINE_HEDGEEDITOR_DELAY AMMOLINE_HEDGEEDITOR_CRATE));
 
-QStringList cQuickGameMaps = QStringList()
-    << QStringLiteral("Bamboo")
-    << QStringLiteral("Bath")
-    << QStringLiteral("Battlefield")
-    << QStringLiteral("Blox")
-    << QStringLiteral("Bubbleflow")
-    << QStringLiteral("Cake")
-    << QStringLiteral("Castle")
-    << QStringLiteral("Cheese")
-    << QStringLiteral("Cogs")
-    << QStringLiteral("CrazyMission")
-    << QStringLiteral("EarthRise")
-    << QStringLiteral("Eyes")
-    << QStringLiteral("Hammock")
-    << QStringLiteral("HedgeFortress")
-    << QStringLiteral("Hedgelove")
-    << QStringLiteral("Hedgewars")
-    << QStringLiteral("Hydrant")
-    << QStringLiteral("Lonely_Island")
-    << QStringLiteral("Mushrooms")
-    << QStringLiteral("Octorama")
-    << QStringLiteral("PirateFlag")
-    << QStringLiteral("Plane")
-    << QStringLiteral("Sheep")
-    << QStringLiteral("Trash")
-    << QStringLiteral("Tree");
+QStringList cQuickGameMaps =
+    QStringList() << QStringLiteral("Bamboo") << QStringLiteral("Bath")
+                  << QStringLiteral("Battlefield") << QStringLiteral("Blox")
+                  << QStringLiteral("Bubbleflow") << QStringLiteral("Cake")
+                  << QStringLiteral("Castle") << QStringLiteral("Cheese")
+                  << QStringLiteral("Cogs") << QStringLiteral("CrazyMission")
+                  << QStringLiteral("EarthRise") << QStringLiteral("Eyes")
+                  << QStringLiteral("Hammock")
+                  << QStringLiteral("HedgeFortress")
+                  << QStringLiteral("Hedgelove") << QStringLiteral("Hedgewars")
+                  << QStringLiteral("Hydrant")
+                  << QStringLiteral("Lonely_Island")
+                  << QStringLiteral("Mushrooms") << QStringLiteral("Octorama")
+                  << QStringLiteral("PirateFlag") << QStringLiteral("Plane")
+                  << QStringLiteral("Sheep") << QStringLiteral("Trash")
+                  << QStringLiteral("Tree");
 
 unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
 

@@ -16,34 +16,35 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QResizeEvent>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QGridLayout>
-#include <QSpinBox>
-#include <QLabel>
-#include <QMessageBox>
-#include <QTableView>
-#include <QScrollBar>
-#include <QTabWidget>
-#include <QPushButton>
-#include <QDebug>
-#include <QList>
-
 #include "gamecfgwidget.h"
-#include "igbox.h"
+
+#include <QCheckBox>
+#include <QDebug>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QList>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QResizeEvent>
+#include <QScrollBar>
+#include <QSpinBox>
+#include <QTabWidget>
+#include <QTableView>
+
 #include "DataManager.h"
-#include "hwconsts.h"
-#include "gameSchemeModel.h"
-#include "proto.h"
 #include "GameStyleModel.h"
+#include "gameSchemeModel.h"
+#include "hwconsts.h"
+#include "igbox.h"
+#include "proto.h"
 #include "themeprompt.h"
 
-GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
-    QGroupBox(parent)
-    , mainLayout(this)
-    , seedRegexp(QStringLiteral("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}"))
-{
+GameCFGWidget::GameCFGWidget(QWidget *parent, bool randomWithoutDLC)
+    : QGroupBox(parent),
+      mainLayout(this),
+      seedRegexp(QStringLiteral("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-"
+                                "f]{4}-[0-9a-f]{12}\\}")) {
   mainLayout.setContentsMargins({});
   setMinimumHeight(310);
   setMaximumHeight(447);
@@ -157,7 +158,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
   goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
   goToSchemePage->setStyleSheet(QStringLiteral("padding: 0px;"));
   SchemeWidgetLayout->addWidget(goToSchemePage, 0, 3);
-  connect(goToSchemePage, &QAbstractButton::clicked, this, &GameCFGWidget::jumpToSchemes);
+  connect(goToSchemePage, &QAbstractButton::clicked, this,
+          &GameCFGWidget::jumpToSchemes);
 
   lblWeapons = new QLabel(QLabel::tr("Weapons"), SchemeWidget);
   SchemeWidgetLayout->addWidget(lblWeapons, 1, 0);
@@ -181,7 +183,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
   goToWeaponPage->setMaximumWidth(pmEdit.width() + 6);
   goToWeaponPage->setStyleSheet(QStringLiteral("padding: 0px;"));
   SchemeWidgetLayout->addWidget(goToWeaponPage, 1, 3);
-  connect(goToWeaponPage, &QAbstractButton::clicked, this, &GameCFGWidget::jumpToWeapons);
+  connect(goToWeaponPage, &QAbstractButton::clicked, this,
+          &GameCFGWidget::jumpToWeapons);
 
   bindEntries = new QCheckBox(SchemeWidget);
   bindEntries->setWhatsThis(tr("Game scheme will auto-select a weapon"));
@@ -221,204 +224,188 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool randomWithoutDLC) :
           &GameCFGWidget::updateModelViews);
 }
 
-void GameCFGWidget::setTabbed(bool tabbed)
-{
-    if (tabbed && !this->tabbed)
-    { // Make tabbed
-        tabs->setCurrentIndex(0);
-        StackContainer->setVisible(false);
-        tabs->setVisible(true);
-        pMapContainer->setParent(mapContainerTabbed);
-        OptionsInnerContainer->setParent(optionsContainerTabbed);
-        pMapContainer->setVisible(true);
-        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        this->tabbed = true;
+void GameCFGWidget::setTabbed(bool tabbed) {
+  if (tabbed && !this->tabbed) {  // Make tabbed
+    tabs->setCurrentIndex(0);
+    StackContainer->setVisible(false);
+    tabs->setVisible(true);
+    pMapContainer->setParent(mapContainerTabbed);
+    OptionsInnerContainer->setParent(optionsContainerTabbed);
+    pMapContainer->setVisible(true);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    this->tabbed = true;
+  } else if (!tabbed && this->tabbed) {  // Make stacked
+    pMapContainer->setParent(mapContainerFree);
+    OptionsInnerContainer->setParent(optionsContainerFree);
+    tabs->setVisible(false);
+    StackContainer->setVisible(true);
+    pMapContainer->setVisible(true);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    this->tabbed = false;
+  }
+
+  // Restore scrollbar palettes, since Qt seems to forget them easily when
+  // switching parents
+  QList<QScrollBar *> allSBars = findChildren<QScrollBar *>();
+  QPalette pal = palette();
+  pal.setColor(QPalette::WindowText, QColor(0xff, 0xcc, 0x00));
+  pal.setColor(QPalette::Button, QColor(0x00, 0x35, 0x1d));
+  pal.setColor(QPalette::Base, QColor(0x00, 0x35, 0x1d));
+  pal.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+
+  for (int i = 0; i < allSBars.size(); ++i) allSBars.at(i)->setPalette(pal);
+}
+
+void GameCFGWidget::jumpToSchemes() {
+  Q_EMIT goToSchemes(GameSchemes->currentIndex());
+}
+
+void GameCFGWidget::jumpToWeapons() {
+  Q_EMIT goToWeapons(WeaponsName->currentIndex());
+}
+
+QVariant GameCFGWidget::schemeData(int column) const {
+  return GameSchemes->model()->data(
+      GameSchemes->model()->index(GameSchemes->currentIndex(), column));
+}
+
+quint32 GameCFGWidget::getGameFlags() const {
+  quint32 result = 0;
+
+  if (schemeData(1).toBool()) result |= 0x00001000;   // switch hog
+  if (schemeData(2).toBool()) result |= 0x00000010;   // divide teams
+  if (schemeData(3).toBool()) result |= 0x00000004;   // solid land
+  if (schemeData(4).toBool()) result |= 0x00000008;   // border
+  if (schemeData(5).toBool()) result |= 0x00000020;   // low gravity
+  if (schemeData(6).toBool()) result |= 0x00000040;   // laser sight
+  if (schemeData(7).toBool()) result |= 0x00000080;   // invulnerable
+  if (schemeData(8).toBool()) result |= 0x00000100;   // reset health
+  if (schemeData(9).toBool()) result |= 0x00000200;   // vampirism
+  if (schemeData(10).toBool()) result |= 0x00000400;  // karma
+  if (schemeData(11).toBool()) result |= 0x00000800;  // artillery
+  if (schemeData(12).toBool()) result |= 0x00002000;  // random
+  if (schemeData(13).toBool()) result |= 0x00004000;  // king
+  if (schemeData(14).toBool()) result |= 0x00008000;  // place hogs
+  if (schemeData(15).toBool()) result |= 0x00010000;  // shared ammo
+  if (schemeData(16).toBool()) result |= 0x00020000;  // disable girders
+  if (schemeData(17).toBool()) result |= 0x00040000;  // disable land obj
+  if (schemeData(18).toBool()) result |= 0x00080000;  // ai survival
+  if (schemeData(19).toBool()) result |= 0x00100000;  // infinite attacks
+  if (schemeData(20).toBool()) result |= 0x00200000;  // reset weaps
+  if (schemeData(21).toBool()) result |= 0x00400000;  // per hog ammo
+  if (schemeData(22).toBool()) result |= 0x00800000;  // no wind
+  if (schemeData(23).toBool()) result |= 0x01000000;  // more wind
+  if (schemeData(24).toBool()) result |= 0x02000000;  // tag team
+  if (schemeData(25).toBool()) result |= 0x04000000;  // bottom
+
+  return result;
+}
+
+quint32 GameCFGWidget::getInitHealth() const { return schemeData(28).toInt(); }
+
+QByteArray GameCFGWidget::getFullConfig() const {
+  QList<QByteArray> bcfg;
+  int mapgen = pMapContainer->get_mapgen();
+  if (Scripts->currentIndex() > 0) {
+    bcfg << QStringLiteral("escript Scripts/Multiplayer/%1.lua")
+                .arg(Scripts
+                         ->itemData(Scripts->currentIndex(),
+                                    GameStyleModel::ScriptRole)
+                         .toString())
+                .toUtf8();
+  }
+
+  QString currentMap = pMapContainer->getCurrentMap();
+  if (currentMap.size() > 0) {
+    bcfg << QString(QStringLiteral("emap ") + currentMap).toUtf8();
+
+    // engine should figure it out on its own
+    //        if(pMapContainer->getCurrentIsMission())
+    //            bcfg << QString("escript
+    //            Maps/%1/map.lua").arg(currentMap).toUtf8();
+  }
+  bcfg << QString(QStringLiteral("etheme ") + pMapContainer->getCurrentTheme())
+              .toUtf8();
+
+  bcfg << QString(QStringLiteral("eseed ") + pMapContainer->getCurrentSeed())
+              .toUtf8();
+  bcfg << QStringLiteral("e$gmflags %1").arg(getGameFlags()).toUtf8();
+  bcfg << QStringLiteral("e$damagepct %1").arg(schemeData(26).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$turntime %1")
+              .arg(schemeData(27).toInt() * 1000)
+              .toUtf8();
+  bcfg
+      << QStringLiteral("e$inithealth %1").arg(schemeData(28).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$sd_turns %1").arg(schemeData(29).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$casefreq %1").arg(schemeData(30).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$minestime %1")
+              .arg(schemeData(31).toInt() * 1000)
+              .toUtf8();
+  bcfg << QStringLiteral("e$minesnum %1").arg(schemeData(32).toInt()).toUtf8();
+  bcfg
+      << QStringLiteral("e$minedudpct %1").arg(schemeData(33).toInt()).toUtf8();
+  bcfg
+      << QStringLiteral("e$explosives %1").arg(schemeData(34).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$airmines %1").arg(schemeData(35).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$sentries %1").arg(schemeData(36).toInt()).toUtf8();
+  bcfg
+      << QStringLiteral("e$healthprob %1").arg(schemeData(37).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$hcaseamount %1")
+              .arg(schemeData(38).toInt())
+              .toUtf8();
+  bcfg << QStringLiteral("e$waterrise %1").arg(schemeData(39).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$healthdec %1").arg(schemeData(40).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$ropepct %1").arg(schemeData(41).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$getawaytime %1")
+              .arg(schemeData(42).toInt())
+              .toUtf8();
+  bcfg << QStringLiteral("e$worldedge %1").arg(schemeData(43).toInt()).toUtf8();
+  bcfg << QStringLiteral("e$template_filter %1")
+              .arg(pMapContainer->getTemplateFilter())
+              .toUtf8();
+  bcfg << QStringLiteral("e$feature_size %1")
+              .arg(pMapContainer->getFeatureSize())
+              .toUtf8();
+  bcfg << QStringLiteral("e$mapgen %1").arg(mapgen).toUtf8();
+  if (!schemeData(44).isNull())
+    bcfg << QStringLiteral("e$scriptparam %1")
+                .arg(schemeData(44).toString())
+                .toUtf8();
+  else
+    bcfg << QStringLiteral("e$scriptparam ").toUtf8();
+
+  switch (mapgen) {
+    case MAPGEN_MAZE:
+    case MAPGEN_PERLIN:
+      bcfg << QStringLiteral("e$maze_size %1")
+                  .arg(pMapContainer->getMazeSize())
+                  .toUtf8();
+      break;
+
+    case MAPGEN_DRAWN: {
+      QByteArray data = pMapContainer->getDrawnMapData();
+      while (data.size() > 0) {
+        QByteArray tmp = data;
+        tmp.truncate(200);
+        tmp.prepend("edraw ");
+        bcfg << tmp;
+        data.remove(0, 200);
+      }
+      break;
     }
-    else if (!tabbed && this->tabbed)
-    { // Make stacked
-        pMapContainer->setParent(mapContainerFree);
-        OptionsInnerContainer->setParent(optionsContainerFree);
-        tabs->setVisible(false);
-        StackContainer->setVisible(true);
-        pMapContainer->setVisible(true);
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        this->tabbed = false;
-    }
+    default:;
+  }
 
-    // Restore scrollbar palettes, since Qt seems to forget them easily when switching parents
-    QList<QScrollBar *> allSBars = findChildren<QScrollBar *>();
-    QPalette pal = palette();
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xcc, 0x00));
-    pal.setColor(QPalette::Button, QColor(0x00, 0x35, 0x1d));
-    pal.setColor(QPalette::Base, QColor(0x00, 0x35, 0x1d));
-    pal.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+  QByteArray result;
 
-    for (int i = 0; i < allSBars.size(); ++i)
-        allSBars.at(i)->setPalette(pal);
+  for (auto &&ba : bcfg) {
+    HWProto::addByteArrayToBuffer(result, ba);
+  }
+
+  return result;
 }
 
-void GameCFGWidget::jumpToSchemes()
-{
-    Q_EMIT goToSchemes(GameSchemes->currentIndex());
-}
-
-void GameCFGWidget::jumpToWeapons()
-{
-    Q_EMIT goToWeapons(WeaponsName->currentIndex());
-}
-
-QVariant GameCFGWidget::schemeData(int column) const
-{
-    return GameSchemes->model()->data(GameSchemes->model()->index(GameSchemes->currentIndex(), column));
-}
-
-quint32 GameCFGWidget::getGameFlags() const
-{
-    quint32 result = 0;
-
-    if (schemeData(1).toBool())
-        result |= 0x00001000;       // switch hog
-    if (schemeData(2).toBool())
-        result |= 0x00000010;       // divide teams
-    if (schemeData(3).toBool())
-        result |= 0x00000004;       // solid land
-    if (schemeData(4).toBool())
-        result |= 0x00000008;       // border
-    if (schemeData(5).toBool())
-        result |= 0x00000020;       // low gravity
-    if (schemeData(6).toBool())
-        result |= 0x00000040;       // laser sight
-    if (schemeData(7).toBool())
-        result |= 0x00000080;       // invulnerable
-    if (schemeData(8).toBool())
-        result |= 0x00000100;       // reset health
-    if (schemeData(9).toBool())
-        result |= 0x00000200;       // vampirism
-    if (schemeData(10).toBool())
-        result |= 0x00000400;       // karma
-    if (schemeData(11).toBool())
-        result |= 0x00000800;       // artillery
-    if (schemeData(12).toBool())
-        result |= 0x00002000;       // random
-    if (schemeData(13).toBool())
-        result |= 0x00004000;       // king
-    if (schemeData(14).toBool())
-        result |= 0x00008000;       // place hogs
-    if (schemeData(15).toBool())
-        result |= 0x00010000;       // shared ammo
-    if (schemeData(16).toBool())
-        result |= 0x00020000;       // disable girders
-    if (schemeData(17).toBool())
-        result |= 0x00040000;       // disable land obj
-    if (schemeData(18).toBool())
-        result |= 0x00080000;       // ai survival
-    if (schemeData(19).toBool())
-        result |= 0x00100000;       // infinite attacks
-    if (schemeData(20).toBool())
-        result |= 0x00200000;       // reset weaps
-    if (schemeData(21).toBool())
-        result |= 0x00400000;       // per hog ammo
-    if (schemeData(22).toBool())
-        result |= 0x00800000;       // no wind
-    if (schemeData(23).toBool())
-        result |= 0x01000000;       // more wind
-    if (schemeData(24).toBool())
-        result |= 0x02000000;       // tag team
-    if (schemeData(25).toBool())
-        result |= 0x04000000;       // bottom
-
-    return result;
-}
-
-quint32 GameCFGWidget::getInitHealth() const
-{
-    return schemeData(28).toInt();
-}
-
-QByteArray GameCFGWidget::getFullConfig() const
-{
-    QList<QByteArray> bcfg;
-    int mapgen = pMapContainer->get_mapgen();
-    if (Scripts->currentIndex() > 0)
-    {
-        bcfg << QStringLiteral("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString()).toUtf8();
-    }
-
-    QString currentMap = pMapContainer->getCurrentMap();
-    if (currentMap.size() > 0)
-    {
-        bcfg << QString(QStringLiteral("emap ") + currentMap).toUtf8();
-
-// engine should figure it out on its own
-//        if(pMapContainer->getCurrentIsMission())
-//            bcfg << QString("escript Maps/%1/map.lua").arg(currentMap).toUtf8();
-    }
-    bcfg << QString(QStringLiteral("etheme ") + pMapContainer->getCurrentTheme()).toUtf8();
-
-    bcfg << QString(QStringLiteral("eseed ") + pMapContainer->getCurrentSeed()).toUtf8();
-    bcfg << QStringLiteral("e$gmflags %1").arg(getGameFlags()).toUtf8();
-    bcfg << QStringLiteral("e$damagepct %1").arg(schemeData(26).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$turntime %1").arg(schemeData(27).toInt() * 1000).toUtf8();
-    bcfg << QStringLiteral("e$inithealth %1").arg(schemeData(28).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$sd_turns %1").arg(schemeData(29).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$casefreq %1").arg(schemeData(30).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$minestime %1").arg(schemeData(31).toInt() * 1000).toUtf8();
-    bcfg << QStringLiteral("e$minesnum %1").arg(schemeData(32).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$minedudpct %1").arg(schemeData(33).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$explosives %1").arg(schemeData(34).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$airmines %1").arg(schemeData(35).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$sentries %1").arg(schemeData(36).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$healthprob %1").arg(schemeData(37).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$hcaseamount %1").arg(schemeData(38).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$waterrise %1").arg(schemeData(39).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$healthdec %1").arg(schemeData(40).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$ropepct %1").arg(schemeData(41).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$getawaytime %1").arg(schemeData(42).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$worldedge %1").arg(schemeData(43).toInt()).toUtf8();
-    bcfg << QStringLiteral("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
-    bcfg << QStringLiteral("e$feature_size %1").arg(pMapContainer->getFeatureSize()).toUtf8();
-    bcfg << QStringLiteral("e$mapgen %1").arg(mapgen).toUtf8();
-    if(!schemeData(44).isNull())
-        bcfg << QStringLiteral("e$scriptparam %1").arg(schemeData(44).toString()).toUtf8();
-    else
-        bcfg << QStringLiteral("e$scriptparam ").toUtf8();
-
-
-    switch (mapgen)
-    {
-        case MAPGEN_MAZE:
-        case MAPGEN_PERLIN:
-            bcfg << QStringLiteral("e$maze_size %1").arg(pMapContainer->getMazeSize()).toUtf8();
-            break;
-
-        case MAPGEN_DRAWN:
-        {
-            QByteArray data = pMapContainer->getDrawnMapData();
-            while(data.size() > 0)
-            {
-                QByteArray tmp = data;
-                tmp.truncate(200);
-                tmp.prepend("edraw ");
-                bcfg << tmp;
-                data.remove(0, 200);
-            }
-            break;
-        }
-        default:
-            ;
-    }
-
-    QByteArray result;
-
-    for (auto &&ba : bcfg) {
-      HWProto::addByteArrayToBuffer(result, ba);
-    }
-
-    return result;
-}
-
-void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
-{
+void GameCFGWidget::setNetAmmo(const QString &name, const QString &ammo) {
   bool illegal = ammo.size() != cDefaultAmmoStore.size();
   if (illegal) {
     QMessageBox illegalMsg(parentWidget());
@@ -431,396 +418,344 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
     illegalMsg.exec();
   }
 
-    int pos = WeaponsName->findText(name);
-    if ((pos == -1) || illegal)   // prevent from overriding schemes with bad ones
-    {
-        WeaponsName->addItem(name, ammo);
-        WeaponsName->setCurrentIndex(WeaponsName->count() - 1);
+  int pos = WeaponsName->findText(name);
+  if ((pos == -1) || illegal)  // prevent from overriding schemes with bad ones
+  {
+    WeaponsName->addItem(name, ammo);
+    WeaponsName->setCurrentIndex(WeaponsName->count() - 1);
+  } else {
+    WeaponsName->setItemData(pos, ammo);
+    WeaponsName->setCurrentIndex(pos);
+  }
+}
+
+void GameCFGWidget::fullNetConfig() {
+  ammoChanged(WeaponsName->currentIndex());
+
+  seedChanged(pMapContainer->getCurrentSeed());
+  templateFilterChanged(pMapContainer->getTemplateFilter());
+
+  QString t = pMapContainer->getCurrentTheme();
+  if (!t.isEmpty()) themeChanged(t);
+
+  schemeChanged(GameSchemes->currentIndex());
+  scriptChanged(Scripts->currentIndex());
+
+  mapgenChanged(pMapContainer->get_mapgen());
+  maze_sizeChanged(pMapContainer->getMazeSize());
+  slMapFeatureSizeChanged(pMapContainer->getFeatureSize());
+
+  if (pMapContainer->get_mapgen() == 2)
+    onDrawnMapChanged(pMapContainer->getDrawnMapData());
+
+  // map must be the last
+  QString map = pMapContainer->getCurrentMap();
+  if (!map.isEmpty()) mapChanged(map);
+}
+
+void GameCFGWidget::setParam(const QString &param, const QStringList &slValue) {
+  if (slValue.size() == 1) {
+    QString value = slValue[0];
+    if (param == QLatin1String("MAP")) {
+      pMapContainer->setMap(value);
+      return;
     }
+    if (param == QLatin1String("SEED")) {
+      pMapContainer->setSeed(value);
+      return;
+    }
+    if (param == QLatin1String("THEME")) {
+      pMapContainer->setTheme(value);
+      return;
+    }
+    if (param == QLatin1String("TEMPLATE")) {
+      pMapContainer->setTemplateFilter(value.toUInt());
+      return;
+    }
+    if (param == QLatin1String("MAPGEN")) {
+      pMapContainer->setMapgen((MapGenerator)value.toUInt());
+      return;
+    }
+    if (param == QLatin1String("FEATURE_SIZE")) {
+      pMapContainer->setFeatureSize(value.toUInt());
+      return;
+    }
+    if (param == QLatin1String("MAZE_SIZE")) {
+      pMapContainer->setMazeSize(value.toUInt());
+      return;
+    }
+    if (param == QLatin1String("SCRIPT")) {
+      int in = Scripts->findText(value);
+      Scripts->setCurrentIndex(in);
+      ScriptsLabel->setText(value);
+      pMapContainer->setScript(
+          Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole)
+              .toString()
+              .toUtf8(),
+          schemeData(43).toString());
+      return;
+    }
+    if (param == QLatin1String("DRAWNMAP")) {
+      pMapContainer->setDrawnMapData(
+          qUncompress(QByteArray::fromBase64(slValue[0].toLatin1())));
+      return;
+    }
+  }
+
+  if (slValue.size() == 2) {
+    if (param == QLatin1String("AMMO")) {
+      setNetAmmo(slValue[0], slValue[1]);
+      return;
+    }
+  }
+
+  if (slValue.size() == 6) {
+    if (param == QLatin1String("FULLMAPCONFIG")) {
+      QString seed = slValue[4];
+
+      pMapContainer->setAllMapParameters(
+          slValue[1], (MapGenerator)slValue[2].toUInt(), slValue[3].toUInt(),
+          seed, slValue[5].toUInt(), slValue[0].toUInt());
+      return;
+    }
+  }
+
+  qWarning("Got bad config param from net");
+}
+
+void GameCFGWidget::ammoChanged(int index) {
+  if (index >= 0) {
+    WeaponsNameLabel->setText(WeaponsName->currentText());
+    Q_EMIT paramChanged(QStringLiteral("AMMO"),
+                        QStringList()
+                            << WeaponsName->itemText(index)
+                            << WeaponsName->itemData(index).toString());
+  } else {
+    WeaponsNameLabel->setText(QLatin1String(""));
+  }
+}
+
+void GameCFGWidget::resetSchemeStates() {
+  updateSchemeEnabledStates(Scripts->currentIndex());
+}
+
+void GameCFGWidget::updateSchemeEnabledStates(int scriptIndex) {
+  QString scheme;
+  QString weapons;
+  if (scriptIndex > 0) {
+    scheme =
+        Scripts->itemData(scriptIndex, GameStyleModel::SchemeRole).toString();
+    weapons =
+        Scripts->itemData(scriptIndex, GameStyleModel::WeaponsRole).toString();
+  } else {
+    scheme = pMapContainer->getCurrentScheme();
+    weapons = pMapContainer->getCurrentWeapons();
+  }
+  if (scheme == QLatin1String("locked")) {
+    GameSchemes->setEnabled(false);
+    goToSchemePage->setEnabled(false);
+    lblScheme->setEnabled(false);
+    GameSchemes->setCurrentIndex(
+        GameSchemes->findText(QStringLiteral("Default")));
+  } else if (m_master) {
+    GameSchemes->setEnabled(true);
+    goToSchemePage->setEnabled(true);
+    lblScheme->setEnabled(true);
+    int num = GameSchemes->findText(scheme);
+    if (num != -1) GameSchemes->setCurrentIndex(num);
+  }
+
+  if (weapons == QLatin1String("locked")) {
+    WeaponsName->setEnabled(false);
+    goToWeaponPage->setEnabled(false);
+    lblWeapons->setEnabled(false);
+    WeaponsName->setCurrentIndex(
+        WeaponsName->findText(QStringLiteral("Default")));
+  } else if (m_master) {
+    WeaponsName->setEnabled(true);
+    goToWeaponPage->setEnabled(true);
+    lblWeapons->setEnabled(true);
+    int num = WeaponsName->findText(weapons);
+    if (num != -1) WeaponsName->setCurrentIndex(num);
+  }
+
+  if (scheme != QLatin1String("locked") && weapons != QLatin1String("locked"))
+    bindEntries->setEnabled(true);
+  else
+    bindEntries->setEnabled(false);
+}
+
+void GameCFGWidget::mapChanged(const QString &value) {
+  if (isEnabled() && pMapContainer->getCurrentIsMission()) {
+    Scripts->setEnabled(false);
+    lblScript->setEnabled(false);
+    Scripts->setCurrentIndex(0);
+    updateSchemeEnabledStates(0);
+  } else {
+    Scripts->setEnabled(true);
+    lblScript->setEnabled(true);
+    GameSchemes->setEnabled(true);
+    goToSchemePage->setEnabled(true);
+    lblScheme->setEnabled(true);
+    WeaponsName->setEnabled(true);
+    goToWeaponPage->setEnabled(true);
+    lblWeapons->setEnabled(true);
+    bindEntries->setEnabled(true);
+  }
+  Q_EMIT paramChanged(QStringLiteral("MAP"), QStringList(value));
+}
+
+void GameCFGWidget::templateFilterChanged(int value) {
+  Q_EMIT paramChanged(QStringLiteral("TEMPLATE"),
+                      QStringList(QString::number(value)));
+}
+
+void GameCFGWidget::seedChanged(const QString &value) {
+  Q_EMIT paramChanged(QStringLiteral("SEED"), QStringList(value));
+}
+
+void GameCFGWidget::themeChanged(const QString &value) {
+  Q_EMIT paramChanged(QStringLiteral("THEME"), QStringList(value));
+}
+
+void GameCFGWidget::schemeChanged(int index) {
+  QStringList sl;
+
+  int size = GameSchemes->model()->columnCount();
+  for (int i = 0; i < size; ++i) sl << schemeData(i).toString();
+
+  if (sl.size() >= 42) {
+    sl[sl.size() - 1].prepend('!');
+    Q_EMIT paramChanged(
+        QStringLiteral("SCHEME"),
+        sl);  // this is a stupid hack for the fact that SCHEME is being sent
+              // once, empty. Still need to find out why.
+  }
+
+  if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked()) {
+    QString schemeName = GameSchemes->itemText(index);
+    for (int i = 0; i < WeaponsName->count(); i++) {
+      QString weapName = WeaponsName->itemText(i);
+      int res = QString::compare(weapName, schemeName, Qt::CaseSensitive);
+      if (0 == res) {
+        WeaponsName->setCurrentIndex(i);
+        Q_EMIT ammoChanged(i);
+        break;
+      }
+    }
+  }
+
+  if (index == -1)
+    GameSchemesLabel->setText(QLatin1String(""));
+  else
+    GameSchemesLabel->setText(GameSchemes->currentText());
+
+  pMapContainer->setScript(
+      Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole)
+          .toString()
+          .toUtf8(),
+      schemeData(43).toString());
+}
+
+void GameCFGWidget::scriptChanged(int index) {
+  const QString &name = Scripts->itemText(index);
+  m_curScript = name;
+
+  if (isEnabled() && index > 0) {
+    updateSchemeEnabledStates(index);
+  } else {
+    GameSchemes->setEnabled(true);
+    goToSchemePage->setEnabled(true);
+    lblScheme->setEnabled(true);
+    WeaponsName->setEnabled(true);
+    goToWeaponPage->setEnabled(true);
+    lblWeapons->setEnabled(true);
+    bindEntries->setEnabled(true);
+  }
+  if (index == -1) {
+    pMapContainer->setScript(QLatin1String(""), QLatin1String(""));
+    ScriptsLabel->setStyleSheet(QStringLiteral("color: #b50000;"));
+  } else {
+    pMapContainer->setScript(
+        Scripts->itemData(index, GameStyleModel::ScriptRole)
+            .toString()
+            .toUtf8(),
+        schemeData(43).toString());
+    ScriptsLabel->setText(Scripts->currentText());
+    ScriptsLabel->setStyleSheet(QLatin1String(""));
+  }
+
+  Q_EMIT paramChanged(QStringLiteral("SCRIPT"), QStringList(name));
+}
+
+void GameCFGWidget::mapgenChanged(MapGenerator m) {
+  int scriptIndex = Scripts->currentIndex();
+  updateSchemeEnabledStates(scriptIndex);
+  Q_EMIT paramChanged(QStringLiteral("MAPGEN"),
+                      QStringList(QString::number(m)));
+}
+
+void GameCFGWidget::maze_sizeChanged(int s) {
+  Q_EMIT paramChanged(QStringLiteral("MAZE_SIZE"),
+                      QStringList(QString::number(s)));
+}
+
+void GameCFGWidget::slMapFeatureSizeChanged(int s) {
+  Q_EMIT paramChanged(QStringLiteral("FEATURE_SIZE"),
+                      QStringList(QString::number(s)));
+}
+
+void GameCFGWidget::resendSchemeData() {
+  schemeChanged(GameSchemes->currentIndex());
+}
+
+void GameCFGWidget::resendAmmoData() {
+  ammoChanged(WeaponsName->currentIndex());
+}
+
+void GameCFGWidget::onDrawnMapChanged(const QByteArray &data) {
+  Q_EMIT paramChanged(QStringLiteral("DRAWNMAP"),
+                      QStringList(qCompress(data, 9).toBase64()));
+}
+
+void GameCFGWidget::updateModelViews() {
+  // restore game-style selection
+  if (!m_curScript.isEmpty()) {
+    int idx = Scripts->findText(m_curScript);
+    if (idx >= 0)
+      Scripts->setCurrentIndex(idx);
     else
-    {
-        WeaponsName->setItemData(pos, ammo);
-        WeaponsName->setCurrentIndex(pos);
-    }
+      Scripts->setCurrentIndex(0);
+  }
 }
 
-void GameCFGWidget::fullNetConfig()
-{
-    ammoChanged(WeaponsName->currentIndex());
+bool GameCFGWidget::isMaster() { return m_master; }
 
-    seedChanged(pMapContainer->getCurrentSeed());
-    templateFilterChanged(pMapContainer->getTemplateFilter());
+void GameCFGWidget::setMaster(bool master) {
+  if (master == m_master) return;
+  m_master = master;
 
-    QString t = pMapContainer->getCurrentTheme();
-    if(!t.isEmpty())
-        themeChanged(t);
-
-    schemeChanged(GameSchemes->currentIndex());
-    scriptChanged(Scripts->currentIndex());
-
-    mapgenChanged(pMapContainer->get_mapgen());
-    maze_sizeChanged(pMapContainer->getMazeSize());
-    slMapFeatureSizeChanged(pMapContainer->getFeatureSize());
-
-    if(pMapContainer->get_mapgen() == 2)
-        onDrawnMapChanged(pMapContainer->getDrawnMapData());
-
-    // map must be the last
-    QString map = pMapContainer->getCurrentMap();
-    if (!map.isEmpty())
-        mapChanged(map);
-}
-
-void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
-{
-    if (slValue.size() == 1)
-    {
-        QString value = slValue[0];
-        if (param == QLatin1String("MAP"))
-        {
-            pMapContainer->setMap(value);
-            return;
-        }
-        if (param == QLatin1String("SEED"))
-        {
-            pMapContainer->setSeed(value);
-            return;
-        }
-        if (param == QLatin1String("THEME"))
-        {
-            pMapContainer->setTheme(value);
-            return;
-        }
-        if (param == QLatin1String("TEMPLATE"))
-        {
-            pMapContainer->setTemplateFilter(value.toUInt());
-            return;
-        }
-        if (param == QLatin1String("MAPGEN"))
-        {
-            pMapContainer->setMapgen((MapGenerator)value.toUInt());
-            return;
-        }
-        if (param == QLatin1String("FEATURE_SIZE"))
-        {
-            pMapContainer->setFeatureSize(value.toUInt());
-            return;
-        }
-        if (param == QLatin1String("MAZE_SIZE"))
-        {
-            pMapContainer->setMazeSize(value.toUInt());
-            return;
-        }
-        if (param == QLatin1String("SCRIPT"))
-        {
-            int in = Scripts->findText(value);
-            Scripts->setCurrentIndex(in);
-            ScriptsLabel->setText(value);
-            pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
-            return;
-        }
-        if (param == QLatin1String("DRAWNMAP"))
-        {
-            pMapContainer->setDrawnMapData(qUncompress(QByteArray::fromBase64(slValue[0].toLatin1())));
-            return;
-        }
+  if (master) {
+    // Reset script if not found
+    if (Scripts->currentIndex() == -1) {
+      Scripts->setCurrentIndex(Scripts->findText(QStringLiteral("Normal")));
     }
+  }
 
-    if (slValue.size() == 2)
-    {
-        if (param == QLatin1String("AMMO"))
-        {
-            setNetAmmo(slValue[0], slValue[1]);
-            return;
-        }
-    }
+  pMapContainer->setMaster(master);
 
-    if (slValue.size() == 6)
-    {
-        if (param == QLatin1String("FULLMAPCONFIG"))
-        {
-            QString seed = slValue[4];
+  GameSchemes->setHidden(!master);
+  WeaponsName->setHidden(!master);
+  Scripts->setHidden(!master);
+  goToSchemePage->setHidden(!master);
+  goToWeaponPage->setHidden(!master);
+  bindEntries->setHidden(!master);
 
-            pMapContainer->setAllMapParameters(
-                slValue[1],
-                (MapGenerator)slValue[2].toUInt(),
-                slValue[3].toUInt(),
-                seed,
-                slValue[5].toUInt(),
-                slValue[0].toUInt()
-            );
-            return;
-        }
-    }
+  GameSchemesLabel->setHidden(master);
+  WeaponsNameLabel->setHidden(master);
+  ScriptsLabel->setHidden(master);
 
-    qWarning("Got bad config param from net");
-}
-
-void GameCFGWidget::ammoChanged(int index)
-{
-    if (index >= 0)
-    {
-        WeaponsNameLabel->setText(WeaponsName->currentText());
-        Q_EMIT paramChanged(
-            QStringLiteral("AMMO"),
-            QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
-        );
-    }
-    else
-    {
-        WeaponsNameLabel->setText(QLatin1String(""));
-    }
-}
-
-void GameCFGWidget::resetSchemeStates()
-{
-    updateSchemeEnabledStates(Scripts->currentIndex());
-}
-
-void GameCFGWidget::updateSchemeEnabledStates(int scriptIndex)
-{
-    QString scheme;
-    QString weapons;
-    if(scriptIndex > 0)
-    {
-        scheme = Scripts->itemData(scriptIndex, GameStyleModel::SchemeRole).toString();
-        weapons = Scripts->itemData(scriptIndex, GameStyleModel::WeaponsRole).toString();
-    }
-    else
-    {
-        scheme = pMapContainer->getCurrentScheme();
-        weapons = pMapContainer->getCurrentWeapons();
-    }
-    if (scheme == QLatin1String("locked"))
-    {
-        GameSchemes->setEnabled(false);
-        goToSchemePage->setEnabled(false);
-        lblScheme->setEnabled(false);
-        GameSchemes->setCurrentIndex(GameSchemes->findText(QStringLiteral("Default")));
-    }
-    else if(m_master)
-    {
-        GameSchemes->setEnabled(true);
-        goToSchemePage->setEnabled(true);
-        lblScheme->setEnabled(true);
-        int num = GameSchemes->findText(scheme);
-        if (num != -1)
-            GameSchemes->setCurrentIndex(num);
-    }
-
-    if (weapons == QLatin1String("locked"))
-    {
-        WeaponsName->setEnabled(false);
-        goToWeaponPage->setEnabled(false);
-        lblWeapons->setEnabled(false);
-        WeaponsName->setCurrentIndex(WeaponsName->findText(QStringLiteral("Default")));
-    }
-    else if(m_master)
-    {
-        WeaponsName->setEnabled(true);
-        goToWeaponPage->setEnabled(true);
-        lblWeapons->setEnabled(true);
-        int num = WeaponsName->findText(weapons);
-        if (num != -1)
-            WeaponsName->setCurrentIndex(num);
-    }
-
-    if (scheme != QLatin1String("locked") && weapons != QLatin1String("locked"))
-        bindEntries->setEnabled(true);
-    else
-        bindEntries->setEnabled(false);
-}
-
-void GameCFGWidget::mapChanged(const QString & value)
-{
-    if(isEnabled() && pMapContainer->getCurrentIsMission())
-    {
-        Scripts->setEnabled(false);
-        lblScript->setEnabled(false);
-        Scripts->setCurrentIndex(0);
-        updateSchemeEnabledStates(0);
-    }
-    else
-    {
-        Scripts->setEnabled(true);
-        lblScript->setEnabled(true);
-        GameSchemes->setEnabled(true);
-        goToSchemePage->setEnabled(true);
-        lblScheme->setEnabled(true);
-        WeaponsName->setEnabled(true);
-        goToWeaponPage->setEnabled(true);
-        lblWeapons->setEnabled(true);
-        bindEntries->setEnabled(true);
-    }
-    Q_EMIT paramChanged(QStringLiteral("MAP"), QStringList(value));
-}
-
-void GameCFGWidget::templateFilterChanged(int value)
-{
-    Q_EMIT paramChanged(QStringLiteral("TEMPLATE"), QStringList(QString::number(value)));
-}
-
-void GameCFGWidget::seedChanged(const QString & value)
-{
-    Q_EMIT paramChanged(QStringLiteral("SEED"), QStringList(value));
-}
-
-void GameCFGWidget::themeChanged(const QString & value)
-{
-    Q_EMIT paramChanged(QStringLiteral("THEME"), QStringList(value));
-}
-
-void GameCFGWidget::schemeChanged(int index)
-{
-    QStringList sl;
-
-    int size = GameSchemes->model()->columnCount();
-    for(int i = 0; i < size; ++i)
-        sl << schemeData(i).toString();
-
-    if (sl.size() >= 42)
-    {
-        sl[sl.size()-1].prepend('!');
-        Q_EMIT paramChanged(QStringLiteral("SCHEME"), sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
-    }
-
-    if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked())
-    {
-        QString schemeName = GameSchemes->itemText(index);
-        for (int i = 0; i < WeaponsName->count(); i++)
-        {
-            QString weapName = WeaponsName->itemText(i);
-            int res = QString::compare(weapName, schemeName, Qt::CaseSensitive);
-            if (0 == res)
-            {
-                WeaponsName->setCurrentIndex(i);
-                Q_EMIT ammoChanged(i);
-                break;
-            }
-        }
-    }
-
-    if(index == -1)
-        GameSchemesLabel->setText(QLatin1String(""));
-    else
-        GameSchemesLabel->setText(GameSchemes->currentText());
-
-    pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
-}
-
-void GameCFGWidget::scriptChanged(int index)
-{
-    const QString & name = Scripts->itemText(index);
-    m_curScript = name;
-
-    if(isEnabled() && index > 0)
-    {
-        updateSchemeEnabledStates(index);
-    }
-    else
-    {
-        GameSchemes->setEnabled(true);
-        goToSchemePage->setEnabled(true);
-        lblScheme->setEnabled(true);
-        WeaponsName->setEnabled(true);
-        goToWeaponPage->setEnabled(true);
-        lblWeapons->setEnabled(true);
-        bindEntries->setEnabled(true);
-    }
-    if (index == -1)
-    {
-        pMapContainer->setScript(QLatin1String(""), QLatin1String(""));
-        ScriptsLabel->setStyleSheet(QStringLiteral("color: #b50000;"));
-    }
-    else
-    {
-        pMapContainer->setScript(Scripts->itemData(index, GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
-        ScriptsLabel->setText(Scripts->currentText());
-        ScriptsLabel->setStyleSheet(QLatin1String(""));
-    }
-
-    Q_EMIT paramChanged(QStringLiteral("SCRIPT"), QStringList(name));
-}
-
-void GameCFGWidget::mapgenChanged(MapGenerator m)
-{
-    int scriptIndex = Scripts->currentIndex();
-    updateSchemeEnabledStates(scriptIndex);
-    Q_EMIT paramChanged(QStringLiteral("MAPGEN"), QStringList(QString::number(m)));
-}
-
-void GameCFGWidget::maze_sizeChanged(int s)
-{
-    Q_EMIT paramChanged(QStringLiteral("MAZE_SIZE"), QStringList(QString::number(s)));
-}
-
-void GameCFGWidget::slMapFeatureSizeChanged(int s)
-{
-    Q_EMIT paramChanged(QStringLiteral("FEATURE_SIZE"), QStringList(QString::number(s)));
-}
-
-void GameCFGWidget::resendSchemeData()
-{
-    schemeChanged(GameSchemes->currentIndex());
-}
-
-void GameCFGWidget::resendAmmoData()
-{
-    ammoChanged(WeaponsName->currentIndex());
-}
-
-void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
-{
-    Q_EMIT paramChanged(QStringLiteral("DRAWNMAP"), QStringList(qCompress(data, 9).toBase64()));
-}
-
-
-void GameCFGWidget::updateModelViews()
-{
-    // restore game-style selection
-    if (!m_curScript.isEmpty())
-    {
-        int idx = Scripts->findText(m_curScript);
-        if (idx >= 0)
-            Scripts->setCurrentIndex(idx);
-        else
-            Scripts->setCurrentIndex(0);
-    }
-}
-
-bool GameCFGWidget::isMaster()
-{
-    return m_master;
-}
-
-void GameCFGWidget::setMaster(bool master)
-{
-    if (master == m_master) return;
-    m_master = master;
-
-    if (master)
-    {
-        // Reset script if not found
-        if (Scripts->currentIndex() == -1)
-        {
-            Scripts->setCurrentIndex(Scripts->findText(QStringLiteral("Normal")));
-        }
-    }
-
-    pMapContainer->setMaster(master);
-
-    GameSchemes->setHidden(!master);
-    WeaponsName->setHidden(!master);
-    Scripts->setHidden(!master);
-    goToSchemePage->setHidden(!master);
-    goToWeaponPage->setHidden(!master);
-    bindEntries->setHidden(!master);
-
-    GameSchemesLabel->setHidden(master);
-    WeaponsNameLabel->setHidden(master);
-    ScriptsLabel->setHidden(master);
-
-    for (auto widget : m_childWidgets) {
-      widget->setEnabled(master);
-    }
+  for (auto widget : m_childWidgets) {
+    widget->setEnabled(master);
+  }
 }

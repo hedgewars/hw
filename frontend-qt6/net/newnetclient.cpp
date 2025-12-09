@@ -17,1299 +17,1100 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "newnetclient.h"
+
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QInputDialog>
-#include <QCryptographicHash>
 #include <QSortFilterProxyModel>
 #include <QUuid>
 
-#include "hwconsts.h"
-#include "newnetclient.h"
-#include "proto.h"
-#include "game.h"
-#include "roomslistmodel.h"
-#include "playerslistmodel.h"
-#include "servermessages.h"
 #include "HWApplication.h"
+#include "game.h"
+#include "hwconsts.h"
+#include "playerslistmodel.h"
+#include "proto.h"
+#include "roomslistmodel.h"
+#include "servermessages.h"
 
-char delimiter='\n';
+char delimiter = '\n';
 
-HWNewNet::HWNewNet() :
-    isChief(false),
-    m_game_connected(false),
-    netClientState(Disconnected)
-{
-    m_private_game = false;
+HWNewNet::HWNewNet()
+    : isChief(false), m_game_connected(false), netClientState(Disconnected) {
+  m_private_game = false;
+  m_nick_registered = false;
+  m_demo_data_pending = false;
+
+  m_roomsListModel = new RoomsListModel(this);
+
+  m_playersModel = new PlayersListModel(this);
+
+  m_lobbyPlayersModel = new QSortFilterProxyModel(this);
+  m_lobbyPlayersModel->setSourceModel(m_playersModel);
+  m_lobbyPlayersModel->setSortRole(PlayersListModel::SortRole);
+  m_lobbyPlayersModel->setDynamicSortFilter(true);
+  m_lobbyPlayersModel->sort(0);
+
+  m_roomPlayersModel = new QSortFilterProxyModel(this);
+  m_roomPlayersModel->setSourceModel(m_playersModel);
+  m_roomPlayersModel->setSortRole(PlayersListModel::SortRole);
+  m_roomPlayersModel->setDynamicSortFilter(true);
+  m_roomPlayersModel->sort(0);
+  m_roomPlayersModel->setFilterRole(PlayersListModel::RoomFilterRole);
+  m_roomPlayersModel->setFilterFixedString(QStringLiteral("true"));
+
+  // socket stuff
+  connect(&NetSocket, &QIODevice::readyRead, this, &HWNewNet::ClientRead);
+  connect(&NetSocket, &QAbstractSocket::connected, this, &HWNewNet::OnConnect);
+  connect(&NetSocket, &QAbstractSocket::disconnected, this,
+          &HWNewNet::OnDisconnect);
+  connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+          SLOT(displayError(QAbstractSocket::SocketError)));
+
+  connect(this, &HWNewNet::messageProcessed, this, &HWNewNet::ClientRead,
+          Qt::QueuedConnection);
+}
+
+HWNewNet::~HWNewNet() {
+  if (m_game_connected) {
+    RawSendNet(QStringLiteral("QUIT%1").arg(delimiter));
+    Q_EMIT disconnected(QLatin1String(""));
+  }
+  NetSocket.flush();
+}
+
+void HWNewNet::Connect(const QString& hostName, quint16 port, bool useTls,
+                       const QString& nick) {
+  netClientState = Connecting;
+  mynick = nick;
+  myhost = hostName + QStringLiteral(":%1").arg(port);
+  if (useTls) {
+    NetSocket.connectToHostEncrypted(hostName, port);
+    if (!NetSocket.waitForEncrypted()) {
+      qWarning("Handshake failed");
+    }
+  } else {
+    NetSocket.connectToHost(hostName, port);
+  }
+}
+
+void HWNewNet::Disconnect() {
+  if (m_game_connected) RawSendNet(QStringLiteral("QUIT%1").arg(delimiter));
+  m_game_connected = false;
+
+  NetSocket.disconnectFromHost();
+}
+
+void HWNewNet::CreateRoom(const QString& room, const QString& password) {
+  if (netClientState != InLobby || !ByteLength(room)) {
+    qWarning("Illegal try to create room!");
+    return;
+  }
+
+  myroom = room;
+
+  if (password.isEmpty())
+    RawSendNet(QStringLiteral("CREATE_ROOM%1%2").arg(delimiter, room));
+  else
+    RawSendNet(
+        QStringLiteral("CREATE_ROOM%1%2%1%3").arg(delimiter, room, password));
+
+  isChief = true;
+}
+
+void HWNewNet::JoinRoom(const QString& room, const QString& password) {
+  if (netClientState != InLobby) {
+    qWarning("Illegal try to join room!");
+    return;
+  }
+
+  myroom = room;
+
+  if (password.isEmpty())
+    RawSendNet(QStringLiteral("JOIN_ROOM%1%2").arg(delimiter, room));
+  else
+    RawSendNet(
+        QStringLiteral("JOIN_ROOM%1%2%1%3").arg(delimiter, room, password));
+
+  isChief = false;
+}
+
+void HWNewNet::AddTeam(const HWTeam& team) {
+  QString cmd = QStringLiteral("ADD_TEAM") + delimiter + team.name() +
+                delimiter + QString::number(team.color()) + delimiter +
+                team.grave() + delimiter + team.fort() + delimiter +
+                team.voicepack() + delimiter + team.flag() + delimiter +
+                QString::number(team.difficulty());
+
+  for (int i = 0; i < HEDGEHOGS_PER_TEAM; ++i) {
+    cmd.append(delimiter);
+    cmd.append(team.hedgehog(i).Name);
+    cmd.append(delimiter);
+    cmd.append(team.hedgehog(i).Hat);
+  }
+  RawSendNet(cmd);
+}
+
+void HWNewNet::RemoveTeam(const HWTeam& team) {
+  RawSendNet(QStringLiteral("REMOVE_TEAM") + delimiter + team.name());
+}
+
+void HWNewNet::NewNick(const QString& nick) {
+  RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, nick));
+}
+
+void HWNewNet::ToggleReady() { RawSendNet(QStringLiteral("TOGGLE_READY")); }
+
+void HWNewNet::SendNet(const QByteArray& buf) {
+  QString msg = QString(buf.toBase64());
+
+  RawSendNet(QStringLiteral("EM%1%2").arg(delimiter, msg));
+}
+
+int HWNewNet::ByteLength(const QString& str) { return str.toUtf8().size(); }
+
+void HWNewNet::RawSendNet(const QString& str) { RawSendNet(str.toUtf8()); }
+
+void HWNewNet::RawSendNet(const QByteArray& buf) {
+  qDebug() << "Client: "
+           << QString(QString::fromUtf8(buf)).split(QStringLiteral("\n"));
+  NetSocket.write(buf);
+  NetSocket.write("\n\n", 2);
+}
+
+void HWNewNet::ClientRead() {
+  while (NetSocket.canReadLine()) {
+    QString s = QString::fromUtf8(NetSocket.readLine());
+    if (s.endsWith('\n')) s.chop(1);
+
+    if (s.size() == 0) {
+      ParseCmd(cmdbuf);
+      cmdbuf.clear();
+      Q_EMIT messageProcessed();
+      return;
+    } else
+      cmdbuf << s;
+  }
+}
+
+void HWNewNet::OnConnect() { netClientState = Connected; }
+
+void HWNewNet::OnDisconnect() {
+  netClientState = Disconnected;
+  if (m_game_connected) Q_EMIT disconnected(QLatin1String(""));
+  m_game_connected = false;
+}
+
+void HWNewNet::displayError(QAbstractSocket::SocketError socketError) {
+  m_game_connected = false;
+
+  switch (socketError) {
+    case QAbstractSocket::RemoteHostClosedError:
+      Q_EMIT disconnected(tr("Remote host has closed connection"));
+      break;
+    case QAbstractSocket::HostNotFoundError:
+      Q_EMIT disconnected(
+          tr("The host was not found. Please check the host name and port "
+             "settings."));
+      break;
+    case QAbstractSocket::ConnectionRefusedError:
+      if (getHost() == (QStringLiteral("%1:%2")
+                            .arg(NETGAME_DEFAULT_SERVER)
+                            .arg(NETGAME_DEFAULT_PORT)))
+        // Error for official server
+        Q_EMIT disconnected(
+            tr("The connection was refused by the official server or "
+               "timed out. Something seems to be wrong with the "
+               "official server at the moment. This might be a "
+               "temporary problem. Please try again later."));
+      else
+        // Error for every other host
+        Q_EMIT disconnected(
+            tr("The connection was refused by the host or timed out. This "
+               "might have one of the following reasons:\n- The Hedgewars "
+               "Server program does currently not run on the host\n- The "
+               "specified port number is incorrect\n- There is a "
+               "temporary network problem\n\nPlease check the host name "
+               "and port settings and/or try again later."));
+      break;
+    default:
+      Q_EMIT disconnected(NetSocket.errorString());
+  }
+}
+
+void HWNewNet::SendPasswordHash(const QString& hash) {
+  // don't send it immediately, only store and check if server asked us for a
+  // password
+  m_passwordHash = hash.toLatin1();
+
+  maybeSendPassword();
+}
+
+void HWNewNet::ContinueConnection() {
+  if (netClientState == Connected) {
+    RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, mynick));
+    RawSendNet(QStringLiteral("PROTO%1%2").arg(delimiter, cProtoVer));
+    m_game_connected = true;
+    Q_EMIT adminAccess(false);
+  }
+}
+
+void HWNewNet::ParseCmd(const QStringList& lst) {
+  qDebug() << "Server: " << lst;
+
+  if (lst.isEmpty()) {
+    qWarning("Net client: Bad message");
+    return;
+  }
+
+  if (lst[0] == QLatin1String("NICK")) {
+    mynick = lst[1];
+    m_playersModel->setNickname(mynick);
     m_nick_registered = false;
-    m_demo_data_pending = false;
+    return;
+  }
 
-    m_roomsListModel = new RoomsListModel(this);
+  if (lst[0] == QLatin1String("PROTO")) return;
 
-    m_playersModel = new PlayersListModel(this);
-
-    m_lobbyPlayersModel = new QSortFilterProxyModel(this);
-    m_lobbyPlayersModel->setSourceModel(m_playersModel);
-    m_lobbyPlayersModel->setSortRole(PlayersListModel::SortRole);
-    m_lobbyPlayersModel->setDynamicSortFilter(true);
-    m_lobbyPlayersModel->sort(0);
-
-    m_roomPlayersModel = new QSortFilterProxyModel(this);
-    m_roomPlayersModel->setSourceModel(m_playersModel);
-    m_roomPlayersModel->setSortRole(PlayersListModel::SortRole);
-    m_roomPlayersModel->setDynamicSortFilter(true);
-    m_roomPlayersModel->sort(0);
-    m_roomPlayersModel->setFilterRole(PlayersListModel::RoomFilterRole);
-    m_roomPlayersModel->setFilterFixedString(QStringLiteral("true"));
-
-    // socket stuff
-    connect(&NetSocket, &QIODevice::readyRead, this, &HWNewNet::ClientRead);
-    connect(&NetSocket, &QAbstractSocket::connected, this, &HWNewNet::OnConnect);
-    connect(&NetSocket, &QAbstractSocket::disconnected, this, &HWNewNet::OnDisconnect);
-    connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-            SLOT(displayError(QAbstractSocket::SocketError)));
-
-    connect(this, &HWNewNet::messageProcessed, this, &HWNewNet::ClientRead, Qt::QueuedConnection);
-}
-
-HWNewNet::~HWNewNet()
-{
-    if (m_game_connected)
-    {
-        RawSendNet(QStringLiteral("QUIT%1").arg(delimiter));
-        Q_EMIT disconnected(QLatin1String(""));
-    }
-    NetSocket.flush();
-}
-
-void HWNewNet::Connect(const QString & hostName, quint16 port, bool useTls, const QString & nick)
-{
-    netClientState = Connecting;
-    mynick = nick;
-    myhost = hostName + QStringLiteral(":%1").arg(port);
-    if (useTls)
-    {
-        NetSocket.connectToHostEncrypted(hostName, port);
-        if (!NetSocket.waitForEncrypted())
-        {
-            qWarning("Handshake failed");
-        }
-    }
-    else 
-    {
-        NetSocket.connectToHost(hostName, port);
-    }
-}
-
-void HWNewNet::Disconnect()
-{
-    if (m_game_connected)
-        RawSendNet(QStringLiteral("QUIT%1").arg(delimiter));
-    m_game_connected = false;
-
-    NetSocket.disconnectFromHost();
-}
-
-void HWNewNet::CreateRoom(const QString & room, const QString & password)
-{
-    if(netClientState != InLobby || !ByteLength(room))
-    {
-        qWarning("Illegal try to create room!");
-        return;
-    }
-
-    myroom = room;
-
-    if(password.isEmpty())
-        RawSendNet(QStringLiteral("CREATE_ROOM%1%2").arg(delimiter, room));
+  if (lst[0] == QLatin1String("ERROR")) {
+    if (lst.size() == 2)
+      Q_EMIT Error(
+          HWApplication::translate("server", lst[1].toLatin1().constData()));
     else
-        RawSendNet(QStringLiteral("CREATE_ROOM%1%2%1%3").arg(delimiter, room, password));
+      Q_EMIT Error(QStringLiteral("Unknown error"));
+    return;
+  }
 
-    isChief = true;
-}
-
-void HWNewNet::JoinRoom(const QString & room, const QString &password)
-{
-    if(netClientState != InLobby)
-    {
-        qWarning("Illegal try to join room!");
-        return;
-    }
-
-    myroom = room;
-
-    if(password.isEmpty())
-        RawSendNet(QStringLiteral("JOIN_ROOM%1%2").arg(delimiter, room));
+  if (lst[0] == QLatin1String("WARNING")) {
+    if (lst.size() == 2)
+      Q_EMIT Warning(
+          HWApplication::translate("server", lst[1].toLatin1().constData()));
     else
-        RawSendNet(QStringLiteral("JOIN_ROOM%1%2%1%3").arg(delimiter, room, password));
+      Q_EMIT Warning(QStringLiteral("Unknown warning"));
+    return;
+  }
 
-    isChief = false;
-}
-
-void HWNewNet::AddTeam(const HWTeam & team)
-{
-    QString cmd = QStringLiteral("ADD_TEAM") + delimiter +
-                  team.name() + delimiter +
-                  QString::number(team.color()) + delimiter +
-                  team.grave() + delimiter +
-                  team.fort() + delimiter +
-                  team.voicepack() + delimiter +
-                  team.flag() + delimiter +
-                  QString::number(team.difficulty());
-
-    for(int i = 0; i < HEDGEHOGS_PER_TEAM; ++i)
-    {
-        cmd.append(delimiter);
-        cmd.append(team.hedgehog(i).Name);
-        cmd.append(delimiter);
-        cmd.append(team.hedgehog(i).Hat);
+  if (lst[0] == QLatin1String("REDIRECT")) {
+    if (lst.size() < 2 || lst[1].toInt() == 0) {
+      qWarning("Net: Malformed REDIRECT message");
+      return;
     }
-    RawSendNet(cmd);
-}
 
-void HWNewNet::RemoveTeam(const HWTeam & team)
-{
-    RawSendNet(QStringLiteral("REMOVE_TEAM") + delimiter + team.name());
-}
-
-void HWNewNet::NewNick(const QString & nick)
-{
-    RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, nick));
-}
-
-void HWNewNet::ToggleReady()
-{
-    RawSendNet(QStringLiteral("TOGGLE_READY"));
-}
-
-void HWNewNet::SendNet(const QByteArray & buf)
-{
-    QString msg = QString(buf.toBase64());
-
-    RawSendNet(QStringLiteral("EM%1%2").arg(delimiter, msg));
-}
-
-int HWNewNet::ByteLength(const QString & str)
-{
-	return str.toUtf8().size();
-}
-
-void HWNewNet::RawSendNet(const QString & str)
-{
-    RawSendNet(str.toUtf8());
-}
-
-void HWNewNet::RawSendNet(const QByteArray & buf)
-{
-    qDebug() << "Client: " << QString(QString::fromUtf8(buf)).split(QStringLiteral("\n"));
-    NetSocket.write(buf);
-    NetSocket.write("\n\n", 2);
-}
-
-void HWNewNet::ClientRead()
-{
-    while (NetSocket.canReadLine())
-    {
-        QString s = QString::fromUtf8(NetSocket.readLine());
-        if (s.endsWith('\n')) s.chop(1);
-
-        if (s.size() == 0)
-        {
-            ParseCmd(cmdbuf);
-            cmdbuf.clear();
-            Q_EMIT messageProcessed();
-            return ;
-        }
-        else
-            cmdbuf << s;
+    quint16 port = lst[1].toInt();
+    if (port == 0) {
+      qWarning() << "Invalid redirection port";
+    } else {
+      netClientState = Redirected;
+      Q_EMIT redirected(port);
     }
-}
+    return;
+  }
 
-void HWNewNet::OnConnect()
-{
+  if (lst[0] == QLatin1String("CONNECTED")) {
+    if (lst.size() < 3 || lst[2].toInt() < cMinServerVersion) {
+      // TODO: Warn user, disconnect
+      qWarning() << "Server too old";
+      RawSendNet(QStringLiteral("QUIT%1%2").arg(delimiter, "Server too old"));
+      Disconnect();
+      Q_EMIT disconnected(tr("The server is too old. Disconnecting now."));
+      return;
+    }
+
+    ClientState lastState = netClientState;
     netClientState = Connected;
-}
-
-void HWNewNet::OnDisconnect()
-{
-    netClientState = Disconnected;
-    if (m_game_connected) Q_EMIT disconnected(QLatin1String(""));
-    m_game_connected = false;
-}
-
-void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
-{
-    m_game_connected = false;
-
-    switch (socketError)
-    {
-        case QAbstractSocket::RemoteHostClosedError:
-          Q_EMIT disconnected(tr("Remote host has closed connection"));
-          break;
-        case QAbstractSocket::HostNotFoundError:
-          Q_EMIT disconnected(
-              tr("The host was not found. Please check the host name and port "
-                 "settings."));
-          break;
-        case QAbstractSocket::ConnectionRefusedError:
-            if (getHost() == (QStringLiteral("%1:%2").arg(NETGAME_DEFAULT_SERVER).arg(NETGAME_DEFAULT_PORT)))
-                // Error for official server
-                Q_EMIT disconnected(
-                    tr("The connection was refused by the official server or "
-                       "timed out. Something seems to be wrong with the "
-                       "official server at the moment. This might be a "
-                       "temporary problem. Please try again later."));
-            else
-                // Error for every other host
-                Q_EMIT disconnected(tr(
-                    "The connection was refused by the host or timed out. This "
-                    "might have one of the following reasons:\n- The Hedgewars "
-                    "Server program does currently not run on the host\n- The "
-                    "specified port number is incorrect\n- There is a "
-                    "temporary network problem\n\nPlease check the host name "
-                    "and port settings and/or try again later."));
-            break;
-        default:
-          Q_EMIT disconnected(NetSocket.errorString());
+    if (lastState != Redirected) {
+      ContinueConnection();
     }
-}
+    return;
+  }
 
-void HWNewNet::SendPasswordHash(const QString & hash)
-{
-    // don't send it immediately, only store and check if server asked us for a password
-    m_passwordHash = hash.toLatin1();
+  if (lst[0] == QLatin1String("SERVER_AUTH")) {
+    if (lst.size() < 2) {
+      qWarning("Net: Malformed SERVER_AUTH message");
+      return;
+    }
+
+    if (lst[1] != m_serverHash) {
+      Error(QStringLiteral("Server authentication error"));
+      Disconnect();
+    } else {
+      // empty m_serverHash variable means no authentication was performed
+      // or server passed authentication
+      m_serverHash.clear();
+    }
+
+    return;
+  }
+
+  if (lst[0] == QLatin1String("PING")) {
+    if (lst.size() > 1)
+      RawSendNet(QStringLiteral("PONG%1%2").arg(delimiter, lst[1]));
+    else
+      RawSendNet(QStringLiteral("PONG"));
+    return;
+  }
+
+  if (lst[0] == QLatin1String("ROOMS")) {
+    if (lst.size() % m_roomsListModel->columnCountSupported() != 1) {
+      qWarning("Net: Malformed ROOMS message");
+      return;
+    }
+    m_roomsListModel->setRoomsList(lst.mid(1));
+    if (m_private_game == false && m_nick_registered == false) {
+      Q_EMIT NickNotRegistered(mynick);
+    }
+    return;
+  }
+
+  if (lst[0] == QLatin1String("SERVER_MESSAGE")) {
+    if (lst.size() < 2) {
+      qWarning("Net: Empty SERVERMESSAGE message");
+      return;
+    }
+    Q_EMIT serverMessage(lst[1]);
+    return;
+  }
+
+  if (lst[0] == QLatin1String("CHAT")) {
+    if (lst.size() < 3) {
+      qWarning("Net: Empty CHAT message");
+      return;
+    }
+
+    QString action;
+    QString message;
+    QString sender = lst[1];
+    // '[' is a special character used in fake nick names of server messages.
+    // Those are supposed to be translated
+    if (!sender.startsWith('[')) {
+      // Normal message
+      message = lst[2];
+      // Another kind of fake nick. '(' nicks are server messages, but they must
+      // not be translated
+      if (!sender.startsWith('(')) {
+        // Check for action (/me command)
+        action = HWProto::chatStringToAction(message);
+      } else {
+        // If parenthesis were used, replace them with square brackets
+        // for a consistent style.
+        sender.replace(0, 1, '[');
+        sender.replace(sender.length() - 1, 1, ']');
+      }
+    } else {
+      // Server message
+      // Server messages are translated client-side
+      message =
+          HWApplication::translate("server", lst[2].toLatin1().constData());
+    }
+
+    if (netClientState == InLobby) {
+      if (!action.isNull())
+        Q_EMIT lobbyChatAction(sender, action);
+      else
+        Q_EMIT lobbyChatMessage(sender, message);
+    } else {
+      Q_EMIT chatStringFromNet(HWProto::formatChatMsg(sender, message));
+      if (!action.isNull())
+        Q_EMIT roomChatAction(sender, action);
+      else
+        Q_EMIT roomChatMessage(sender, message);
+    }
+    return;
+  }
+
+  if (lst[0] == QLatin1String("INFO")) {
+    if (lst.size() < 5) {
+      qWarning("Net: Malformed INFO message");
+      return;
+    }
+    Q_EMIT playerInfo(lst[1], lst[2], lst[3], lst[4]);
+    if (netClientState != InLobby) {
+      QStringList tmp = lst;
+      tmp.removeFirst();
+      Q_EMIT chatStringFromNet(tmp.join(QStringLiteral(" ")).prepend('\x01'));
+    }
+    return;
+  }
+
+  if (lst[0] == QLatin1String("SERVER_VARS")) {
+    QStringList tmp = lst;
+    tmp.removeFirst();
+    while (tmp.size() >= 2) {
+      if (tmp[0] == QLatin1String("MOTD_NEW"))
+        Q_EMIT serverMessageNew(tmp[1]);
+      else if (tmp[0] == QLatin1String("MOTD_OLD"))
+        Q_EMIT serverMessageOld(tmp[1]);
+      else if (tmp[0] == QLatin1String("LATEST_PROTO"))
+        Q_EMIT latestProtocolVar(tmp[1].toInt());
+
+      tmp.removeFirst();
+      tmp.removeFirst();
+    }
+    return;
+  }
+
+  if (lst[0] == QLatin1String("BANLIST")) {
+    QStringList tmp = lst;
+    tmp.removeFirst();
+    Q_EMIT bansList(tmp);
+    return;
+  }
+
+  if (lst[0] == QLatin1String("CLIENT_FLAGS") ||
+      lst[0] == QLatin1String("CF")) {
+    if (lst.size() < 3 || lst[1].size() < 2) {
+      qWarning("Net: Malformed CLIENT_FLAGS message");
+      return;
+    }
+
+    QString flags = lst[1];
+    bool setFlag = flags[0] == '+';
+    const QStringList nicks = lst.mid(2);
+
+    while (flags.size() > 1) {
+      flags.remove(0, 1);
+      char c = flags[0].toLatin1();
+      bool inRoom = (netClientState == InRoom || netClientState == InGame);
+
+      switch (c) {
+        // flag indicating if a player is ready to start a game
+        case 'r':
+          if (inRoom)
+            for (auto nick : nicks) {
+              if (nick == mynick) {
+                Q_EMIT setMyReadyStatus(setFlag);
+              }
+              m_playersModel->setFlag(nick, PlayersListModel::Ready, setFlag);
+            }
+          break;
+
+        // flag indicating if a player is a registered user
+        case 'u':
+          for (auto nick : nicks)
+            m_playersModel->setFlag(nick, PlayersListModel::Registered,
+                                    setFlag);
+          break;
+        // flag indicating if a player is in room
+        case 'i':
+          for (auto nick : nicks)
+            m_playersModel->setFlag(nick, PlayersListModel::InRoom, setFlag);
+          break;
+        // flag indicating if a player is contributor
+        case 'c':
+          for (auto nick : nicks)
+            m_playersModel->setFlag(nick, PlayersListModel::Contributor,
+                                    setFlag);
+          break;
+        // flag indicating if a player has engine running
+        case 'g':
+          if (inRoom)
+            for (auto nick : nicks) {
+              m_playersModel->setFlag(nick, PlayersListModel::InGame, setFlag);
+            }
+          break;
+
+        // flag indicating if a player is the host/master of the room
+        case 'h':
+          if (inRoom)
+            for (auto nick : nicks) {
+              if (nick == mynick) {
+                isChief = setFlag;
+                Q_EMIT roomMaster(isChief);
+              }
+
+              m_playersModel->setFlag(nick, PlayersListModel::RoomAdmin,
+                                      setFlag);
+            }
+          break;
+
+        // flag indicating if a player is admin (if so -> worship them!)
+        case 'a':
+          for (auto nick : nicks) {
+            if (nick == mynick) Q_EMIT adminAccess(setFlag);
+
+            m_playersModel->setFlag(nick, PlayersListModel::ServerAdmin,
+                                    setFlag);
+          }
+          break;
+
+        default:
+          qWarning() << "Net: Unknown client-flag: " << c;
+      }
+    }
+
+    return;
+  }
+
+  if (lst[0] == QLatin1String("KICKED")) {
+    netClientState = InLobby;
+    askRoomsList();
+    Q_EMIT LeftRoom(tr("You got kicked"));
+    m_playersModel->resetRoomFlags();
+
+    return;
+  }
+
+  if (lst[0] == QLatin1String("LOBBY:JOINED")) {
+    if (lst.size() < 2) {
+      qWarning("Net: Bad JOINED message");
+      return;
+    }
+
+    for (int i = 1; i < lst.size(); ++i) {
+      if (lst[i] == mynick) {
+        // check if server is authenticated or no authentication was performed
+        // at all
+        if (!m_serverHash.isEmpty()) {
+          Error(tr("Server authentication error"));
+
+          Disconnect();
+        }
+
+        netClientState = InLobby;
+        // RawSendNet(QString("LIST")); //deprecated
+        Q_EMIT connected();
+      }
+
+      m_playersModel->addPlayer(lst[i], false);
+    }
+    return;
+  }
+
+  if (lst[0] == QLatin1String("ROOM") &&
+      lst.size() == m_roomsListModel->columnCountSupported() + 2 &&
+      lst[1] == QLatin1String("ADD")) {
+    QStringList tmp = lst;
+    tmp.removeFirst();
+    tmp.removeFirst();
+
+    m_roomsListModel->addRoom(tmp);
+    return;
+  }
+
+  if (lst[0] == QLatin1String("ROOM") &&
+      lst.size() == m_roomsListModel->columnCountSupported() + 3 &&
+      lst[1] == QLatin1String("UPD")) {
+    QStringList tmp = lst;
+    tmp.removeFirst();
+    tmp.removeFirst();
+
+    QString roomName = tmp.takeFirst();
+    m_roomsListModel->updateRoom(roomName, tmp);
+
+    // keep track of room name so correct name is displayed
+    if (myroom == roomName && myroom != tmp[1]) {
+      myroom = tmp[1];
+      Q_EMIT roomNameUpdated(myroom);
+    }
+
+    return;
+  }
+
+  if (lst[0] == QLatin1String("ROOM") && lst.size() == 3 &&
+      lst[1] == QLatin1String("DEL")) {
+    m_roomsListModel->removeRoom(lst[2]);
+    return;
+  }
+
+  if (lst[0] == QLatin1String("LOBBY:LEFT")) {
+    if (lst.size() < 2) {
+      qWarning("Net: Bad LOBBY:LEFT message");
+      return;
+    }
+
+    if (lst.size() < 3)
+      m_playersModel->removePlayer(lst[1]);
+    else
+      m_playersModel->removePlayer(lst[1], lst[2]);
+
+    return;
+  }
+
+  if (lst[0] == QLatin1String("ASKPASSWORD")) {
+    // server should send us salt of at least 16 characters
+
+    if (lst.size() < 2 || lst[1].size() < 16) {
+      qWarning("Net: Bad ASKPASSWORD message");
+      return;
+    }
+
+    Q_EMIT NickRegistered(mynick);
+    m_nick_registered = true;
+
+    // store server salt
+    // when this variable is set, it is assumed that server asked us for a
+    // password
+    m_serverSalt = lst[1].toLatin1();
+    m_clientSalt = QUuid::createUuid().toByteArray();
 
     maybeSendPassword();
-}
 
-void HWNewNet::ContinueConnection()
-{
-    if (netClientState == Connected)    
-    {
-        RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, mynick));
-        RawSendNet(QStringLiteral("PROTO%1%2").arg(delimiter, cProtoVer));
-        m_game_connected = true;
-        Q_EMIT adminAccess(false);
-    }
-}
+    return;
+  }
 
-void HWNewNet::ParseCmd(const QStringList & lst)
-{
-    qDebug() << "Server: " << lst;
-
-    if(lst.isEmpty())
-    {
-        qWarning("Net client: Bad message");
-        return;
+  if (lst[0] == QLatin1String("NOTICE")) {
+    if (lst.size() < 2) {
+      qWarning("Net: Bad NOTICE message");
+      return;
     }
 
-    if (lst[0] == QLatin1String("NICK"))
-    {
-        mynick = lst[1];
-        m_playersModel->setNickname(mynick);
-        m_nick_registered = false;
-        return ;
+    bool ok;
+    int n = lst[1].toInt(&ok);
+    if (!ok) {
+      qWarning("Net: Bad NOTICE message");
+      return;
     }
 
-    if (lst[0] == QLatin1String("PROTO"))
-        return ;
+    handleNotice(n);
 
-    if (lst[0] == QLatin1String("ERROR"))
-    {
-        if (lst.size() == 2)
-          Q_EMIT Error(HWApplication::translate("server",
-                                                lst[1].toLatin1().constData()));
-        else
-          Q_EMIT Error(QStringLiteral("Unknown error"));
-        return;
+    return;
+  }
+
+  if (lst[0] == QLatin1String("BYE")) {
+    if (lst.size() < 2) {
+      qWarning("Net: Bad BYE message");
+      return;
+    }
+    if (lst[1] == QLatin1String("Authentication failed")) {
+      Q_EMIT AuthFailed();
+      m_game_connected = false;
+      Disconnect();
+      // omitted 'emit disconnected()', we don't want the error message
+      return;
+    }
+    m_game_connected = false;
+    Disconnect();
+    Q_EMIT disconnected(
+        HWApplication::translate("server", lst[1].toLatin1().constData()));
+    return;
+  }
+
+  if (lst[0] == QLatin1String("JOINING")) {
+    if (lst.size() != 2) {
+      qWarning("Net: Bad JOINING message");
+      return;
     }
 
-    if (lst[0] == QLatin1String("WARNING"))
-    {
-        if (lst.size() == 2)
-          Q_EMIT Warning(HWApplication::translate(
-              "server", lst[1].toLatin1().constData()));
-        else
-          Q_EMIT Warning(QStringLiteral("Unknown warning"));
-        return;
+    myroom = lst[1];
+    Q_EMIT roomNameUpdated(myroom);
+    return;
+  }
+
+  if (netClientState == InLobby && lst[0] == QLatin1String("JOINED")) {
+    if (lst.size() < 2 || lst[1] != mynick) {
+      qWarning("Net: Bad JOINED message");
+      return;
     }
 
-    if (lst[0] == QLatin1String("REDIRECT"))
-    {        
-        if (lst.size() < 2 || lst[1].toInt() == 0)
-        {
-            qWarning("Net: Malformed REDIRECT message");
-            return;            
-        }
-
-        quint16 port = lst[1].toInt();
-        if (port == 0) 
-        {
-            qWarning() << "Invalid redirection port";            
-        }
-        else 
-        {
-            netClientState = Redirected;
-            Q_EMIT redirected(port);
-        }
-        return;
-    }
-
-    if (lst[0] == QLatin1String("CONNECTED"))
-    {
-        if(lst.size() < 3 || lst[2].toInt() < cMinServerVersion)
-        {
-            // TODO: Warn user, disconnect
-            qWarning() << "Server too old";
-            RawSendNet(QStringLiteral("QUIT%1%2").arg(delimiter, "Server too old"));
-            Disconnect();
-            Q_EMIT disconnected(
-                tr("The server is too old. Disconnecting now."));
-            return;
-        }
-
-        ClientState lastState = netClientState;
-        netClientState = Connected;      
-        if (lastState != Redirected)
-        {
-            ContinueConnection();
-        }
-        return;
-    }
-
-    if (lst[0] == QLatin1String("SERVER_AUTH"))
-    {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Malformed SERVER_AUTH message");
-            return;
-        }
-
-        if(lst[1] != m_serverHash)
-        {
-            Error(QStringLiteral("Server authentication error"));
-            Disconnect();
-        } else
-        {
-            // empty m_serverHash variable means no authentication was performed
-            // or server passed authentication
-            m_serverHash.clear();
-        }
-
-        return;
-    }
-
-    if (lst[0] == QLatin1String("PING"))
-    {
-        if (lst.size() > 1)
-            RawSendNet(QStringLiteral("PONG%1%2").arg(delimiter, lst[1]));
-        else
-            RawSendNet(QStringLiteral("PONG"));
-        return;
-    }
-
-    if (lst[0] == QLatin1String("ROOMS"))
-    {
-        if(lst.size() % m_roomsListModel->columnCountSupported() != 1)
-        {
-            qWarning("Net: Malformed ROOMS message");
-            return;
-        }
-        m_roomsListModel->setRoomsList(lst.mid(1));
-        if (m_private_game == false && m_nick_registered == false)
-        {
-          Q_EMIT NickNotRegistered(mynick);
-        }
-        return;
-    }
-
-    if (lst[0] == QLatin1String("SERVER_MESSAGE"))
-    {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Empty SERVERMESSAGE message");
-            return;
-        }
-        Q_EMIT serverMessage(lst[1]);
-        return;
-    }
-
-    if (lst[0] == QLatin1String("CHAT"))
-    {
-        if(lst.size() < 3)
-        {
-            qWarning("Net: Empty CHAT message");
-            return;
-        }
-
-        QString action;
-        QString message;
-        QString sender = lst[1];
-        // '[' is a special character used in fake nick names of server messages.
-        // Those are supposed to be translated
-        if(!sender.startsWith('['))
-        {
-            // Normal message
-            message = lst[2];
-            // Another kind of fake nick. '(' nicks are server messages, but they must not be translated
-            if(!sender.startsWith('('))
-            {
-                // Check for action (/me command)
-                action = HWProto::chatStringToAction(message);
-            }
-            else
-            {
-                // If parenthesis were used, replace them with square brackets
-                // for a consistent style.
-                sender.replace(0, 1, '[');
-                sender.replace(sender.length()-1, 1, ']');
-            }
-        }
-        else
-        {
-            // Server message
-            // Server messages are translated client-side
-            message = HWApplication::translate("server", lst[2].toLatin1().constData());
-        }
-
-        if (netClientState == InLobby)
-        {
-            if (!action.isNull())
-              Q_EMIT lobbyChatAction(sender, action);
-            else
-              Q_EMIT lobbyChatMessage(sender, message);
-        }
-        else
-        {
-          Q_EMIT chatStringFromNet(HWProto::formatChatMsg(sender, message));
-          if (!action.isNull())
-            Q_EMIT roomChatAction(sender, action);
-          else
-            Q_EMIT roomChatMessage(sender, message);
-        }
-        return;
-    }
-
-    if (lst[0] == QLatin1String("INFO"))
-    {
-        if(lst.size() < 5)
-        {
-            qWarning("Net: Malformed INFO message");
-            return;
-        }
-        Q_EMIT playerInfo(lst[1], lst[2], lst[3], lst[4]);
-        if (netClientState != InLobby)
-        {
-            QStringList tmp = lst;
-            tmp.removeFirst();
-            Q_EMIT chatStringFromNet(
-                tmp.join(QStringLiteral(" ")).prepend('\x01'));
-        }
-        return;
-    }
-
-    if (lst[0] == QLatin1String("SERVER_VARS"))
-    {
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        while (tmp.size() >= 2)
-        {
-          if (tmp[0] == QLatin1String("MOTD_NEW"))
-            Q_EMIT serverMessageNew(tmp[1]);
-          else if (tmp[0] == QLatin1String("MOTD_OLD"))
-            Q_EMIT serverMessageOld(tmp[1]);
-          else if (tmp[0] == QLatin1String("LATEST_PROTO"))
-            Q_EMIT latestProtocolVar(tmp[1].toInt());
-
-          tmp.removeFirst();
-          tmp.removeFirst();
-        }
-        return;
-    }
-
-    if (lst[0] == QLatin1String("BANLIST"))
-    {
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        Q_EMIT bansList(tmp);
-        return;
-    }
-
-    if (lst[0] == QLatin1String("CLIENT_FLAGS") || lst[0] == QLatin1String("CF"))
-    {
-        if(lst.size() < 3 || lst[1].size() < 2)
-        {
-            qWarning("Net: Malformed CLIENT_FLAGS message");
-            return;
-        }
-
-        QString flags = lst[1];
-        bool setFlag = flags[0] == '+';
-        const QStringList nicks = lst.mid(2);
-
-        while(flags.size() > 1)
-        {
-            flags.remove(0, 1);
-            char c = flags[0].toLatin1();
-            bool inRoom = (netClientState == InRoom || netClientState == InGame);
-
-            switch(c)
-            {
-                // flag indicating if a player is ready to start a game
-                case 'r':
-                    if(inRoom)
-                      for (auto nick : nicks) {
-                        if (nick == mynick) {
-                          Q_EMIT setMyReadyStatus(setFlag);
-                        }
-                        m_playersModel->setFlag(nick, PlayersListModel::Ready,
-                                                setFlag);
-                      }
-                        break;
-
-                // flag indicating if a player is a registered user
-                case 'u':
-                  for (auto nick : nicks)
-                    m_playersModel->setFlag(nick, PlayersListModel::Registered,
-                                            setFlag);
-                  break;
-                // flag indicating if a player is in room
-                case 'i':
-                  for (auto nick : nicks)
-                    m_playersModel->setFlag(nick, PlayersListModel::InRoom,
-                                            setFlag);
-                  break;
-                // flag indicating if a player is contributor
-                case 'c':
-                  for (auto nick : nicks)
-                    m_playersModel->setFlag(nick, PlayersListModel::Contributor,
-                                            setFlag);
-                  break;
-                // flag indicating if a player has engine running
-                case 'g':
-                    if(inRoom)
-                      for (auto nick : nicks) {
-                        m_playersModel->setFlag(nick, PlayersListModel::InGame,
-                                                setFlag);
-                      }
-                    break;
-
-                // flag indicating if a player is the host/master of the room
-                case 'h':
-                    if(inRoom)
-                      for (auto nick : nicks) {
-                        if (nick == mynick) {
-                          isChief = setFlag;
-                          Q_EMIT roomMaster(isChief);
-                        }
-
-                        m_playersModel->setFlag(
-                            nick, PlayersListModel::RoomAdmin, setFlag);
-                      }
-                    break;
-
-                // flag indicating if a player is admin (if so -> worship them!)
-                case 'a':
-                  for (auto nick : nicks) {
-                    if (nick == mynick) Q_EMIT adminAccess(setFlag);
-
-                    m_playersModel->setFlag(nick, PlayersListModel::ServerAdmin,
-                                            setFlag);
-                  }
-                        break;
-
-                default:
-                        qWarning() << "Net: Unknown client-flag: " << c;
-            }
-        }
-
-        return;
-    }
-
-    if(lst[0] == QLatin1String("KICKED"))
-    {
-        netClientState = InLobby;
-        askRoomsList();
-        Q_EMIT LeftRoom(tr("You got kicked"));
-        m_playersModel->resetRoomFlags();
-
-        return;
-    }
-
-    if(lst[0] == QLatin1String("LOBBY:JOINED"))
-    {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad JOINED message");
-            return;
-        }
-
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            if (lst[i] == mynick)
-            {
-                // check if server is authenticated or no authentication was performed at all
-                if(!m_serverHash.isEmpty())
-                {
-                    Error(tr("Server authentication error"));
-
-                    Disconnect();
-                }
-
-                netClientState = InLobby;
-                //RawSendNet(QString("LIST")); //deprecated
-                Q_EMIT connected();
-            }
-
-            m_playersModel->addPlayer(lst[i], false);
-        }
-        return;
-    }
-
-    if(lst[0] == QLatin1String("ROOM") && lst.size() == m_roomsListModel->columnCountSupported() + 2 && lst[1] == QLatin1String("ADD"))
-    {
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        tmp.removeFirst();
-
-        m_roomsListModel->addRoom(tmp);
-        return;
-    }
-
-    if(lst[0] == QLatin1String("ROOM") && lst.size() == m_roomsListModel->columnCountSupported() + 3 && lst[1] == QLatin1String("UPD"))
-    {
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        tmp.removeFirst();
-
-        QString roomName = tmp.takeFirst();
-        m_roomsListModel->updateRoom(roomName, tmp);
-
-        // keep track of room name so correct name is displayed
-        if(myroom == roomName && myroom != tmp[1])
-        {
-            myroom = tmp[1];
-            Q_EMIT roomNameUpdated(myroom);
-        }
-
-        return;
-    }
-
-    if(lst[0] == QLatin1String("ROOM") && lst.size() == 3 && lst[1] == QLatin1String("DEL"))
-    {
-        m_roomsListModel->removeRoom(lst[2]);
-        return;
-    }
-
-    if(lst[0] == QLatin1String("LOBBY:LEFT"))
-    {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad LOBBY:LEFT message");
-            return;
-        }
-
-        if (lst.size() < 3)
-            m_playersModel->removePlayer(lst[1]);
-        else
-            m_playersModel->removePlayer(lst[1], lst[2]);
-
-        return;
-    }
-
-    if (lst[0] == QLatin1String("ASKPASSWORD"))
-    {
-        // server should send us salt of at least 16 characters
-
-        if(lst.size() < 2 || lst[1].size() < 16)
-        {
-            qWarning("Net: Bad ASKPASSWORD message");
-            return;
-        }
-
-        Q_EMIT NickRegistered(mynick);
-        m_nick_registered = true;
-
-        // store server salt
-        // when this variable is set, it is assumed that server asked us for a password
-        m_serverSalt = lst[1].toLatin1();
-        m_clientSalt = QUuid::createUuid().toByteArray();
-
-        maybeSendPassword();
-
-        return;
-    }
-
-    if (lst[0] == QLatin1String("NOTICE"))
-    {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad NOTICE message");
-            return;
-        }
-
-        bool ok;
-        int n = lst[1].toInt(&ok);
-        if(!ok)
-        {
-            qWarning("Net: Bad NOTICE message");
-            return;
-        }
-
-        handleNotice(n);
-
-        return;
-    }
-
-    if (lst[0] == QLatin1String("BYE"))
-    {
-        if (lst.size() < 2)
-        {
-            qWarning("Net: Bad BYE message");
-            return;
-        }
-        if (lst[1] == QLatin1String("Authentication failed"))
-        {
-          Q_EMIT AuthFailed();
-          m_game_connected = false;
-          Disconnect();
-          // omitted 'emit disconnected()', we don't want the error message
-          return;
-        }
-        m_game_connected = false;
-        Disconnect();
-        Q_EMIT disconnected(
-            HWApplication::translate("server", lst[1].toLatin1().constData()));
-        return;
-    }
-
-    if(lst[0] == QLatin1String("JOINING"))
-    {
-        if(lst.size() != 2)
-        {
-            qWarning("Net: Bad JOINING message");
-            return;
-        }
-
-        myroom = lst[1];
-        Q_EMIT roomNameUpdated(myroom);
-        return;
-    }
-
-    if(netClientState == InLobby && lst[0] == QLatin1String("JOINED"))
-    {
-        if(lst.size() < 2 || lst[1] != mynick)
-        {
-            qWarning("Net: Bad JOINED message");
-            return;
-        }
-
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            if (lst[i] == mynick)
-            {
-                netClientState = InRoom;
-                Q_EMIT EnteredGame();
-                Q_EMIT roomMaster(isChief);
-                if (isChief) Q_EMIT configAsked();
-            }
-
-            m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
-
-            Q_EMIT chatStringFromNet(
-                tr("%1 *** %2 has joined the room").arg('\x03', lst[i]));
-        }
-        return;
-    }
-
-    if(netClientState == InLobby && lst[0] == QLatin1String("REPLAY_START"))
-    {
+    for (int i = 1; i < lst.size(); ++i) {
+      if (lst[i] == mynick) {
         netClientState = InRoom;
-        m_demo_data_pending = true;
         Q_EMIT EnteredGame();
-        Q_EMIT roomMaster(false);
+        Q_EMIT roomMaster(isChief);
+        if (isChief) Q_EMIT configAsked();
+      }
+
+      m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
+
+      Q_EMIT chatStringFromNet(
+          tr("%1 *** %2 has joined the room").arg('\x03', lst[i]));
+    }
+    return;
+  }
+
+  if (netClientState == InLobby && lst[0] == QLatin1String("REPLAY_START")) {
+    netClientState = InRoom;
+    m_demo_data_pending = true;
+    Q_EMIT EnteredGame();
+    Q_EMIT roomMaster(false);
+    return;
+  }
+
+  if (netClientState == InRoom || netClientState == InGame ||
+      netClientState == InDemo) {
+    if (lst[0] == QLatin1String("EM")) {
+      if (lst.size() < 2) {
+        qWarning("Net: Bad EM message");
+        m_demo_data_pending = false;
         return;
+      }
+      for (int i = 1; i < lst.size(); ++i) {
+        QByteArray em = QByteArray::fromBase64(lst[i].toLatin1());
+        Q_EMIT FromNet(em);
+      }
+      m_demo_data_pending = false;
+      return;
+    }
+  }
+
+  if (netClientState == InRoom || netClientState == InGame) {
+    if (lst[0] == QLatin1String("ROUND_FINISHED")) {
+      Q_EMIT FromNet(QByteArray("\x01o"));
+      return;
     }
 
-    if(netClientState == InRoom || netClientState == InGame || netClientState == InDemo)
-    {
-        if (lst[0] == QLatin1String("EM"))
-        {
-            if(lst.size() < 2)
-            {
-                qWarning("Net: Bad EM message");
-                m_demo_data_pending = false;
-                return;
-            }
-            for(int i = 1; i < lst.size(); ++i)
-            {
-                QByteArray em = QByteArray::fromBase64(lst[i].toLatin1());
-                Q_EMIT FromNet(em);
-            }
-            m_demo_data_pending = false;
-            return;
-        }
+    if (lst[0] == QLatin1String("ADD_TEAM")) {
+      if (lst.size() != 24) {
+        qWarning("Net: Bad ADDTEAM message");
+        return;
+      }
+      QStringList tmp = lst;
+      tmp.removeFirst();
+      HWTeam team(tmp);
+      Q_EMIT AddNetTeam(team);
+      return;
     }
 
-    if(netClientState == InRoom || netClientState == InGame)
-    {
-        if (lst[0] == QLatin1String("ROUND_FINISHED"))
-        {
-          Q_EMIT FromNet(QByteArray("\x01o"));
-          return;
-        }
-
-        if (lst[0] == QLatin1String("ADD_TEAM"))
-        {
-            if(lst.size() != 24)
-            {
-                qWarning("Net: Bad ADDTEAM message");
-                return;
-            }
-            QStringList tmp = lst;
-            tmp.removeFirst();
-            HWTeam team(tmp);
-            Q_EMIT AddNetTeam(team);
-            return;
-        }
-
-        if (lst[0] == QLatin1String("REMOVE_TEAM"))
-        {
-            if(lst.size() != 2)
-            {
-                qWarning("Net: Bad REMOVETEAM message");
-                return;
-            }
-            Q_EMIT RemoveNetTeam(HWTeam(lst[1]));
-            return;
-        }
-
-        if(lst[0] == QLatin1String("ROOMABANDONED"))
-        {
-            netClientState = InLobby;
-            m_playersModel->resetRoomFlags();
-            Q_EMIT LeftRoom(tr("Room destroyed"));
-            return;
-        }
-
-        if (lst[0] == QLatin1String("RUN_GAME"))
-        {
-            if(m_demo_data_pending)
-            {
-                netClientState = InDemo;
-                Q_EMIT AskForOfficialServerDemo();
-            }
-            else
-            {
-                netClientState = InGame;
-                Q_EMIT AskForRunGame();
-            }
-            return;
-        }
-
-        if (lst[0] == QLatin1String("TEAM_ACCEPTED"))
-        {
-            if (lst.size() != 2)
-            {
-                qWarning("Net: Bad TEAM_ACCEPTED message");
-                return;
-            }
-            Q_EMIT TeamAccepted(lst[1]);
-            return;
-        }
-
-        if (lst[0] == QLatin1String("CFG"))
-        {
-            if(lst.size() < 3)
-            {
-                qWarning("Net: Bad CFG message");
-                return;
-            }
-            QStringList tmp = lst;
-            tmp.removeFirst();
-            tmp.removeFirst();
-            if (lst[1] == QLatin1String("SCHEME"))
-              Q_EMIT netSchemeConfig(tmp);
-            else
-              Q_EMIT paramChanged(lst[1], tmp);
-            return;
-        }
-
-        if (lst[0] == QLatin1String("HH_NUM"))
-        {
-            if (lst.size() != 3)
-            {
-                qWarning("Net: Bad TEAM_ACCEPTED message");
-                return;
-            }
-            HWTeam tmptm(lst[1]);
-            tmptm.setNumHedgehogs(lst[2].toUInt());
-            Q_EMIT hhnumChanged(tmptm);
-            return;
-        }
-
-        if (lst[0] == QLatin1String("TEAM_COLOR"))
-        {
-            if (lst.size() != 3)
-            {
-                qWarning("Net: Bad TEAM_COLOR message");
-                return;
-            }
-            HWTeam tmptm(lst[1]);
-            tmptm.setColor(lst[2].toInt());
-            Q_EMIT teamColorChanged(tmptm);
-            return;
-        }
-
-        if(lst[0] == QLatin1String("JOINED"))
-        {
-            if(lst.size() < 2)
-            {
-                qWarning("Net: Bad JOINED message");
-                return;
-            }
-
-            for(int i = 1; i < lst.size(); ++i)
-            {
-                m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
-                if(!m_playersModel->isFlagSet(lst[i], PlayersListModel::Ignore))
-                  Q_EMIT chatStringFromNet(tr("%1 *** %2 has joined the room")
-                                               .arg('\x03', lst[i]));
-            }
-            return;
-        }
-
-        if(lst[0] == QLatin1String("LEFT"))
-        {
-            if(lst.size() < 2)
-            {
-                qWarning("Net: Bad LEFT message");
-                return;
-            }
-
-            if(!m_playersModel->isFlagSet(lst[1], PlayersListModel::Ignore)) {
-				if (lst.size() < 3)
-                                  Q_EMIT chatStringFromNet(
-                                      tr("%1 *** %2 has left")
-                                          .arg('\x03', lst[1]));
-                                else
-				{
-					QString leaveMsg = QString(lst[2]);
-                                        Q_EMIT chatStringFromNet(
-                                            tr("%1 *** %2 has left (%3)")
-                                                .arg('\x03', lst[1], HWApplication::translate(
-                                                    "server",
-                                                    leaveMsg.toLatin1()
-                                                        .constData())));
-                                }
-            }
-            m_playersModel->playerLeftRoom(lst[1]);
-            return;
-        }
+    if (lst[0] == QLatin1String("REMOVE_TEAM")) {
+      if (lst.size() != 2) {
+        qWarning("Net: Bad REMOVETEAM message");
+        return;
+      }
+      Q_EMIT RemoveNetTeam(HWTeam(lst[1]));
+      return;
     }
 
-    qWarning() << "Net: Unknown message or wrong state:" << lst;
+    if (lst[0] == QLatin1String("ROOMABANDONED")) {
+      netClientState = InLobby;
+      m_playersModel->resetRoomFlags();
+      Q_EMIT LeftRoom(tr("Room destroyed"));
+      return;
+    }
+
+    if (lst[0] == QLatin1String("RUN_GAME")) {
+      if (m_demo_data_pending) {
+        netClientState = InDemo;
+        Q_EMIT AskForOfficialServerDemo();
+      } else {
+        netClientState = InGame;
+        Q_EMIT AskForRunGame();
+      }
+      return;
+    }
+
+    if (lst[0] == QLatin1String("TEAM_ACCEPTED")) {
+      if (lst.size() != 2) {
+        qWarning("Net: Bad TEAM_ACCEPTED message");
+        return;
+      }
+      Q_EMIT TeamAccepted(lst[1]);
+      return;
+    }
+
+    if (lst[0] == QLatin1String("CFG")) {
+      if (lst.size() < 3) {
+        qWarning("Net: Bad CFG message");
+        return;
+      }
+      QStringList tmp = lst;
+      tmp.removeFirst();
+      tmp.removeFirst();
+      if (lst[1] == QLatin1String("SCHEME"))
+        Q_EMIT netSchemeConfig(tmp);
+      else
+        Q_EMIT paramChanged(lst[1], tmp);
+      return;
+    }
+
+    if (lst[0] == QLatin1String("HH_NUM")) {
+      if (lst.size() != 3) {
+        qWarning("Net: Bad TEAM_ACCEPTED message");
+        return;
+      }
+      HWTeam tmptm(lst[1]);
+      tmptm.setNumHedgehogs(lst[2].toUInt());
+      Q_EMIT hhnumChanged(tmptm);
+      return;
+    }
+
+    if (lst[0] == QLatin1String("TEAM_COLOR")) {
+      if (lst.size() != 3) {
+        qWarning("Net: Bad TEAM_COLOR message");
+        return;
+      }
+      HWTeam tmptm(lst[1]);
+      tmptm.setColor(lst[2].toInt());
+      Q_EMIT teamColorChanged(tmptm);
+      return;
+    }
+
+    if (lst[0] == QLatin1String("JOINED")) {
+      if (lst.size() < 2) {
+        qWarning("Net: Bad JOINED message");
+        return;
+      }
+
+      for (int i = 1; i < lst.size(); ++i) {
+        m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
+        if (!m_playersModel->isFlagSet(lst[i], PlayersListModel::Ignore))
+          Q_EMIT chatStringFromNet(
+              tr("%1 *** %2 has joined the room").arg('\x03', lst[i]));
+      }
+      return;
+    }
+
+    if (lst[0] == QLatin1String("LEFT")) {
+      if (lst.size() < 2) {
+        qWarning("Net: Bad LEFT message");
+        return;
+      }
+
+      if (!m_playersModel->isFlagSet(lst[1], PlayersListModel::Ignore)) {
+        if (lst.size() < 3)
+          Q_EMIT chatStringFromNet(
+              tr("%1 *** %2 has left").arg('\x03', lst[1]));
+        else {
+          QString leaveMsg = QString(lst[2]);
+          Q_EMIT chatStringFromNet(
+              tr("%1 *** %2 has left (%3)")
+                  .arg('\x03', lst[1],
+                       HWApplication::translate(
+                           "server", leaveMsg.toLatin1().constData())));
+        }
+      }
+      m_playersModel->playerLeftRoom(lst[1]);
+      return;
+    }
+  }
+
+  qWarning() << "Net: Unknown message or wrong state:" << lst;
 }
 
-void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
-{
-    if (isChief)
-        RawSendNet(QStringLiteral("HH_NUM%1%2%1%3")
+void HWNewNet::onHedgehogsNumChanged(const HWTeam& team) {
+  if (isChief)
+    RawSendNet(QStringLiteral("HH_NUM%1%2%1%3")
                    .arg(delimiter, team.name())
                    .arg(team.numHedgehogs()));
 }
 
-void HWNewNet::onTeamColorChanged(const HWTeam& team)
-{
-    if (isChief)
-        RawSendNet(QStringLiteral("TEAM_COLOR%1%2%1%3")
+void HWNewNet::onTeamColorChanged(const HWTeam& team) {
+  if (isChief)
+    RawSendNet(QStringLiteral("TEAM_COLOR%1%2%1%3")
                    .arg(delimiter, team.name())
                    .arg(team.color()));
 }
 
-void HWNewNet::onParamChanged(const QString & param, const QStringList & value)
-{
-    if (isChief)
-        RawSendNet(
-            QStringLiteral("CFG%1%2%1%3")
-            .arg(delimiter, param, value.join(QString(delimiter)))
-        );
+void HWNewNet::onParamChanged(const QString& param, const QStringList& value) {
+  if (isChief)
+    RawSendNet(QStringLiteral("CFG%1%2%1%3")
+                   .arg(delimiter, param, value.join(QString(delimiter))));
 }
 
-void HWNewNet::chatLineToNetWithEcho(const QString& str)
-{
+void HWNewNet::chatLineToNetWithEcho(const QString& str) {
   if (!str.isEmpty()) {
     Q_EMIT chatStringFromNet(HWProto::formatChatMsg(mynick, str));
     chatLineToNet(str);
   }
 }
 
-void HWNewNet::chatLineToNet(const QString& str)
-{
-    if(ByteLength(str))
-    {
-        RawSendNet(QStringLiteral("CHAT") + delimiter + str);
-        QString action = HWProto::chatStringToAction(str);
-        if (!action.isEmpty())
-          Q_EMIT(roomChatAction(mynick, action));
-        else
-          Q_EMIT(roomChatMessage(mynick, str));
-    }
+void HWNewNet::chatLineToNet(const QString& str) {
+  if (ByteLength(str)) {
+    RawSendNet(QStringLiteral("CHAT") + delimiter + str);
+    QString action = HWProto::chatStringToAction(str);
+    if (!action.isEmpty())
+      Q_EMIT(roomChatAction(mynick, action));
+    else
+      Q_EMIT(roomChatMessage(mynick, str));
+  }
 }
 
-void HWNewNet::chatLineToLobby(const QString& str)
-{
-    if(ByteLength(str))
-    {
-        RawSendNet(QStringLiteral("CHAT") + delimiter + str);
-        QString action = HWProto::chatStringToAction(str);
-        if (!action.isEmpty())
-          Q_EMIT(lobbyChatAction(mynick, action));
-        else
-          Q_EMIT(lobbyChatMessage(mynick, str));
-    }
+void HWNewNet::chatLineToLobby(const QString& str) {
+  if (ByteLength(str)) {
+    RawSendNet(QStringLiteral("CHAT") + delimiter + str);
+    QString action = HWProto::chatStringToAction(str);
+    if (!action.isEmpty())
+      Q_EMIT(lobbyChatAction(mynick, action));
+    else
+      Q_EMIT(lobbyChatMessage(mynick, str));
+  }
 }
 
-void HWNewNet::SendTeamMessage(const QString& str)
-{
-    RawSendNet(QStringLiteral("TEAMCHAT") + delimiter + str);
+void HWNewNet::SendTeamMessage(const QString& str) {
+  RawSendNet(QStringLiteral("TEAMCHAT") + delimiter + str);
 }
 
-void HWNewNet::askRoomsList()
-{
-    if(netClientState != InLobby)
-    {
-        qWarning("Illegal try to get rooms list!");
-        return;
-    }
-    //RawSendNet(QString("LIST")); //deprecated
+void HWNewNet::askRoomsList() {
+  if (netClientState != InLobby) {
+    qWarning("Illegal try to get rooms list!");
+    return;
+  }
+  // RawSendNet(QString("LIST")); //deprecated
 }
 
-HWNewNet::ClientState HWNewNet::clientState()
-{
-    return netClientState;
-}
+HWNewNet::ClientState HWNewNet::clientState() { return netClientState; }
 
-QString HWNewNet::getNick()
-{
-    return mynick;
-}
+QString HWNewNet::getNick() { return mynick; }
 
-QString HWNewNet::getRoom()
-{
-    return myroom;
-}
+QString HWNewNet::getRoom() { return myroom; }
 
-QString HWNewNet::getHost()
-{
-    return myhost;
-}
+QString HWNewNet::getHost() { return myhost; }
 
-bool HWNewNet::isRoomChief()
-{
-    return isChief;
-}
+bool HWNewNet::isRoomChief() { return isChief; }
 
-void HWNewNet::gameFinished(bool correctly)
-{
-    if (netClientState == InGame)
-    {
-        netClientState = InRoom;
-        RawSendNet(QStringLiteral("ROUNDFINISHED%1%2").arg(delimiter, correctly ? "1" : "0"));
-    }
-    else if (netClientState == InDemo)
-    {
-        netClientState = InLobby;
-        askRoomsList();
-        Q_EMIT LeftRoom(QString());
-        m_playersModel->resetRoomFlags();
-    }
-}
-
-void HWNewNet::banPlayer(const QString & nick)
-{
-    RawSendNet(QStringLiteral("BAN%1%2").arg(delimiter, nick));
-}
-
-void HWNewNet::banIP(const QString & ip, const QString & reason, int seconds)
-{
-    RawSendNet(QStringLiteral("BANIP%1%2%1%3%1%4").arg(delimiter, ip, reason).arg(seconds));
-}
-
-void HWNewNet::banNick(const QString & nick, const QString & reason, int seconds)
-{
-    RawSendNet(QStringLiteral("BANNICK%1%2%1%3%1%4").arg(delimiter, nick, reason).arg(seconds));
-}
-
-void HWNewNet::getBanList()
-{
-    RawSendNet(QByteArray("BANLIST"));
-}
-
-void HWNewNet::removeBan(const QString & b)
-{
-    RawSendNet(QStringLiteral("UNBAN%1%2").arg(delimiter, b));
-}
-
-void HWNewNet::kickPlayer(const QString & nick)
-{
-    RawSendNet(QStringLiteral("KICK%1%2").arg(delimiter, nick));
-}
-
-void HWNewNet::delegateToPlayer(const QString & nick)
-{
-    RawSendNet(QStringLiteral("DELEGATE%1%2").arg(delimiter, nick));
-}
-
-void HWNewNet::infoPlayer(const QString & nick)
-{
-    RawSendNet(QStringLiteral("INFO%1%2").arg(delimiter, nick));
-}
-
-void HWNewNet::followPlayer(const QString & nick)
-{
-    if (!isInRoom())
-    {
-        RawSendNet(QStringLiteral("FOLLOW%1%2").arg(delimiter, nick));
-        isChief = false;
-    }
-}
-
-void HWNewNet::consoleCommand(const QString & cmd)
-{
-    RawSendNet(QStringLiteral("CMD%1%2").arg(delimiter, cmd));
-}
-
-bool HWNewNet::allPlayersReady()
-{
-    int ready = 0;
-    for (int i = 0; i < m_roomPlayersModel->rowCount(); i++)
-        if (m_roomPlayersModel->index(i, 0).data(PlayersListModel::Ready).toBool()) ready++;
-
-    return (ready == m_roomPlayersModel->rowCount());
-}
-
-void HWNewNet::startGame()
-{
-    RawSendNet(QStringLiteral("START_GAME"));
-}
-
-void HWNewNet::updateRoomName(const QString & name)
-{
-    RawSendNet(QStringLiteral("ROOM_NAME%1%2").arg(delimiter, name));
-}
-
-
-void HWNewNet::toggleRestrictJoins()
-{
-    RawSendNet(QStringLiteral("TOGGLE_RESTRICT_JOINS"));
-}
-
-void HWNewNet::toggleRestrictTeamAdds()
-{
-    RawSendNet(QStringLiteral("TOGGLE_RESTRICT_TEAMS"));
-}
-
-void HWNewNet::toggleRegisteredOnly()
-{
-    RawSendNet(QStringLiteral("TOGGLE_REGISTERED_ONLY"));
-}
-
-void HWNewNet::clearAccountsCache()
-{
-    RawSendNet(QStringLiteral("CLEAR_ACCOUNTS_CACHE"));
-}
-
-void HWNewNet::partRoom()
-{
+void HWNewNet::gameFinished(bool correctly) {
+  if (netClientState == InGame) {
+    netClientState = InRoom;
+    RawSendNet(QStringLiteral("ROUNDFINISHED%1%2")
+                   .arg(delimiter, correctly ? "1" : "0"));
+  } else if (netClientState == InDemo) {
     netClientState = InLobby;
+    askRoomsList();
+    Q_EMIT LeftRoom(QString());
     m_playersModel->resetRoomFlags();
-    RawSendNet(QStringLiteral("PART"));
+  }
 }
 
-bool HWNewNet::isInRoom()
-{
-    return netClientState >= InRoom;
+void HWNewNet::banPlayer(const QString& nick) {
+  RawSendNet(QStringLiteral("BAN%1%2").arg(delimiter, nick));
 }
 
-void HWNewNet::setServerMessageNew(const QString & msg)
-{
-    RawSendNet(QStringLiteral("SET_SERVER_VAR%1MOTD_NEW%1%2").arg(delimiter, msg));
+void HWNewNet::banIP(const QString& ip, const QString& reason, int seconds) {
+  RawSendNet(QStringLiteral("BANIP%1%2%1%3%1%4")
+                 .arg(delimiter, ip, reason)
+                 .arg(seconds));
 }
 
-void HWNewNet::setServerMessageOld(const QString & msg)
-{
-    RawSendNet(QStringLiteral("SET_SERVER_VAR%1MOTD_OLD%1%2").arg(delimiter, msg));
+void HWNewNet::banNick(const QString& nick, const QString& reason,
+                       int seconds) {
+  RawSendNet(QStringLiteral("BANNICK%1%2%1%3%1%4")
+                 .arg(delimiter, nick, reason)
+                 .arg(seconds));
 }
 
-void HWNewNet::setLatestProtocolVar(int proto)
-{
-    RawSendNet(QStringLiteral("SET_SERVER_VAR%1LATEST_PROTO%1%2").arg(delimiter).arg(proto));
+void HWNewNet::getBanList() { RawSendNet(QByteArray("BANLIST")); }
+
+void HWNewNet::removeBan(const QString& b) {
+  RawSendNet(QStringLiteral("UNBAN%1%2").arg(delimiter, b));
 }
 
-void HWNewNet::askServerVars()
-{
-    RawSendNet(QStringLiteral("GET_SERVER_VAR"));
+void HWNewNet::kickPlayer(const QString& nick) {
+  RawSendNet(QStringLiteral("KICK%1%2").arg(delimiter, nick));
 }
 
-void HWNewNet::handleNotice(int n)
-{
-    switch(n)
-    {
-        case 0:
-          Q_EMIT NickTaken(mynick);
-          break;
-        case 2:
-          Q_EMIT askForRoomPassword();
-          break;
-    }
+void HWNewNet::delegateToPlayer(const QString& nick) {
+  RawSendNet(QStringLiteral("DELEGATE%1%2").arg(delimiter, nick));
 }
 
-RoomsListModel * HWNewNet::roomsListModel()
-{
-    return m_roomsListModel;
+void HWNewNet::infoPlayer(const QString& nick) {
+  RawSendNet(QStringLiteral("INFO%1%2").arg(delimiter, nick));
 }
 
-QAbstractItemModel *HWNewNet::lobbyPlayersModel()
-{
-    return m_lobbyPlayersModel;
+void HWNewNet::followPlayer(const QString& nick) {
+  if (!isInRoom()) {
+    RawSendNet(QStringLiteral("FOLLOW%1%2").arg(delimiter, nick));
+    isChief = false;
+  }
 }
 
-QAbstractItemModel *HWNewNet::roomPlayersModel()
-{
-    return m_roomPlayersModel;
+void HWNewNet::consoleCommand(const QString& cmd) {
+  RawSendNet(QStringLiteral("CMD%1%2").arg(delimiter, cmd));
 }
 
-void HWNewNet::roomPasswordEntered(const QString &password)
-{
-    if(!myroom.isEmpty())
-        JoinRoom(myroom, password);
+bool HWNewNet::allPlayersReady() {
+  int ready = 0;
+  for (int i = 0; i < m_roomPlayersModel->rowCount(); i++)
+    if (m_roomPlayersModel->index(i, 0).data(PlayersListModel::Ready).toBool())
+      ready++;
+
+  return (ready == m_roomPlayersModel->rowCount());
 }
 
-void HWNewNet::maybeSendPassword()
-{
-/* When we got password hash, and server asked us for a password, perform mutual authentication:
- * at this point we have salt chosen by server
- * client sends client salt and hash of secret (password hash) salted with client salt, server salt,
- * and static salt (predefined string + protocol number)
- * server should respond with hash of the same set in different order.
- */
+void HWNewNet::startGame() { RawSendNet(QStringLiteral("START_GAME")); }
 
-    if(m_passwordHash.isEmpty() || m_serverSalt.isEmpty())
-        return;
+void HWNewNet::updateRoomName(const QString& name) {
+  RawSendNet(QStringLiteral("ROOM_NAME%1%2").arg(delimiter, name));
+}
 
-    QString hash = QCryptographicHash::hash(m_clientSalt.append(m_serverSalt)
-                                                .append(m_passwordHash)
-                                                .append(cProtoVer.toLatin1())
-                                                .append("!hedgewars"),
-                                            QCryptographicHash::Sha1)
-                       .toHex();
+void HWNewNet::toggleRestrictJoins() {
+  RawSendNet(QStringLiteral("TOGGLE_RESTRICT_JOINS"));
+}
 
-    m_serverHash = QCryptographicHash::hash(m_serverSalt.append(m_clientSalt)
-                                                .append(m_passwordHash)
-                                                .append(cProtoVer.toLatin1())
-                                                .append("!hedgewars"),
-                                            QCryptographicHash::Sha1)
-                       .toHex();
+void HWNewNet::toggleRestrictTeamAdds() {
+  RawSendNet(QStringLiteral("TOGGLE_RESTRICT_TEAMS"));
+}
 
-    RawSendNet(QStringLiteral("PASSWORD%1%2%1%3").arg(delimiter, hash).arg(m_clientSalt));
+void HWNewNet::toggleRegisteredOnly() {
+  RawSendNet(QStringLiteral("TOGGLE_REGISTERED_ONLY"));
+}
+
+void HWNewNet::clearAccountsCache() {
+  RawSendNet(QStringLiteral("CLEAR_ACCOUNTS_CACHE"));
+}
+
+void HWNewNet::partRoom() {
+  netClientState = InLobby;
+  m_playersModel->resetRoomFlags();
+  RawSendNet(QStringLiteral("PART"));
+}
+
+bool HWNewNet::isInRoom() { return netClientState >= InRoom; }
+
+void HWNewNet::setServerMessageNew(const QString& msg) {
+  RawSendNet(
+      QStringLiteral("SET_SERVER_VAR%1MOTD_NEW%1%2").arg(delimiter, msg));
+}
+
+void HWNewNet::setServerMessageOld(const QString& msg) {
+  RawSendNet(
+      QStringLiteral("SET_SERVER_VAR%1MOTD_OLD%1%2").arg(delimiter, msg));
+}
+
+void HWNewNet::setLatestProtocolVar(int proto) {
+  RawSendNet(QStringLiteral("SET_SERVER_VAR%1LATEST_PROTO%1%2")
+                 .arg(delimiter)
+                 .arg(proto));
+}
+
+void HWNewNet::askServerVars() { RawSendNet(QStringLiteral("GET_SERVER_VAR")); }
+
+void HWNewNet::handleNotice(int n) {
+  switch (n) {
+    case 0:
+      Q_EMIT NickTaken(mynick);
+      break;
+    case 2:
+      Q_EMIT askForRoomPassword();
+      break;
+  }
+}
+
+RoomsListModel* HWNewNet::roomsListModel() { return m_roomsListModel; }
+
+QAbstractItemModel* HWNewNet::lobbyPlayersModel() {
+  return m_lobbyPlayersModel;
+}
+
+QAbstractItemModel* HWNewNet::roomPlayersModel() { return m_roomPlayersModel; }
+
+void HWNewNet::roomPasswordEntered(const QString& password) {
+  if (!myroom.isEmpty()) JoinRoom(myroom, password);
+}
+
+void HWNewNet::maybeSendPassword() {
+  /* When we got password hash, and server asked us for a password, perform
+   * mutual authentication: at this point we have salt chosen by server client
+   * sends client salt and hash of secret (password hash) salted with client
+   * salt, server salt, and static salt (predefined string + protocol number)
+   * server should respond with hash of the same set in different order.
+   */
+
+  if (m_passwordHash.isEmpty() || m_serverSalt.isEmpty()) return;
+
+  QString hash = QCryptographicHash::hash(m_clientSalt.append(m_serverSalt)
+                                              .append(m_passwordHash)
+                                              .append(cProtoVer.toLatin1())
+                                              .append("!hedgewars"),
+                                          QCryptographicHash::Sha1)
+                     .toHex();
+
+  m_serverHash = QCryptographicHash::hash(m_serverSalt.append(m_clientSalt)
+                                              .append(m_passwordHash)
+                                              .append(cProtoVer.toLatin1())
+                                              .append("!hedgewars"),
+                                          QCryptographicHash::Sha1)
+                     .toHex();
+
+  RawSendNet(QStringLiteral("PASSWORD%1%2%1%3")
+                 .arg(delimiter, hash)
+                 .arg(m_clientSalt));
 }

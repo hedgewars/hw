@@ -20,6 +20,7 @@
 #define PAGE_ROOMLIST_H
 
 #include <QTableView>
+
 #include "AbstractPage.h"
 
 class HWChatWidget;
@@ -29,8 +30,7 @@ class RoomsListModel;
 class QSortFilterProxyModel;
 class QSplitter;
 
-class RoomTableView : public QTableView
-{
+class RoomTableView : public QTableView {
   Q_OBJECT
   friend class PageRoomsList;
 
@@ -40,71 +40,70 @@ class RoomTableView : public QTableView
   void moveDown();
 };
 
-class PageRoomsList : public AbstractPage
-{
-        Q_OBJECT
+class PageRoomsList : public AbstractPage {
+  Q_OBJECT
 
-    public:
-     explicit PageRoomsList(QWidget *parent);
-     void displayError(const QString &message);
-     void displayNotice(const QString &message);
-     void displayWarning(const QString &message);
-     void setSettings(QSettings *settings);
+ public:
+  explicit PageRoomsList(QWidget *parent);
+  void displayError(const QString &message);
+  void displayNotice(const QString &message);
+  void displayWarning(const QString &message);
+  void setSettings(QSettings *settings);
 
-     QLineEdit *searchText;
-     RoomTableView *roomsList;
-     QPushButton *BtnCreate;
-     QPushButton *BtnJoin;
-     QPushButton *BtnAdmin;
-     QComboBox *CBState;
-     HWChatWidget *chatWidget;
-     QLabel *lblCount;
+  QLineEdit *searchText;
+  RoomTableView *roomsList;
+  QPushButton *BtnCreate;
+  QPushButton *BtnJoin;
+  QPushButton *BtnAdmin;
+  QComboBox *CBState;
+  HWChatWidget *chatWidget;
+  QLabel *lblCount;
 
-     void setModel(RoomsListModel *model);
+  void setModel(RoomsListModel *model);
 
-    public Q_SLOTS:
-        void setAdmin(bool);
-        void setUser(const QString & nickname);
-        void updateNickCounter(int cnt);
+ public Q_SLOTS:
+  void setAdmin(bool);
+  void setUser(const QString &nickname);
+  void updateNickCounter(int cnt);
 
-    Q_SIGNALS:
-        void askForCreateRoom(const QString &, const QString &);
-        void askForJoinRoom(const QString &, const QString &);
-        void askForRoomList();
-        void askJoinConfirmation(const QString &);
+ Q_SIGNALS:
+  void askForCreateRoom(const QString &, const QString &);
+  void askForJoinRoom(const QString &, const QString &);
+  void askForRoomList();
+  void askJoinConfirmation(const QString &);
 
-    protected:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+ protected:
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 
-    private Q_SLOTS:
-        void onCreateClick();
-        void onJoinClick();
-        void onRefreshClick();
-        void onJoinConfirmation(const QString &);
-        void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
-        void onFilterChanged();
-        void onRoomNameChosen(const QString &, const QString &password);
-        void roomSelectionChanged(const QModelIndex &, const QModelIndex &);
-        void moveSelectionUp();
-        void moveSelectionDown();
+ private Q_SLOTS:
+  void onCreateClick();
+  void onJoinClick();
+  void onRefreshClick();
+  void onJoinConfirmation(const QString &);
+  void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
+  void onFilterChanged();
+  void onRoomNameChosen(const QString &, const QString &password);
+  void roomSelectionChanged(const QModelIndex &, const QModelIndex &);
+  void moveSelectionUp();
+  void moveSelectionDown();
 
-    private:
-        QSettings * m_gameSettings;
-        QSortFilterProxyModel * roomsModel;
-        QSortFilterProxyModel * stateFilteredModel;
-        QSortFilterProxyModel * versionFilteredModel;
-        QAction * showGamesInLobby;
-        QAction * showGamesInProgress;
-        QAction * showPassword;
-        QAction * showJoinRestricted;
-        QAction * showIncompatible;
-        QSplitter * m_splitter;
+ private:
+  QSettings *m_gameSettings;
+  QSortFilterProxyModel *roomsModel;
+  QSortFilterProxyModel *stateFilteredModel;
+  QSortFilterProxyModel *versionFilteredModel;
+  QAction *showGamesInLobby;
+  QAction *showGamesInProgress;
+  QAction *showPassword;
+  QAction *showJoinRestricted;
+  QAction *showIncompatible;
+  QSplitter *m_splitter;
 
-        GameSchemeModel * gameSchemeModel;
+  GameSchemeModel *gameSchemeModel;
 
-        bool restoreHeaderState();
+  bool restoreHeaderState();
 };
 
 #endif

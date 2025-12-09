@@ -20,24 +20,24 @@
 #ifndef TOGGLEBUTTONWIDGET_H
 #define TOGGLEBUTTONWIDGET_H
 
-#include <QWidget>
+#include <QIcon>
+#include <QLabel>
 #include <QPainter>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <QLabel>
-#include <QIcon>
+#include <QWidget>
 
-class ToggleButtonWidget : public QPushButton
-{
-        Q_OBJECT
-    public:
-        ToggleButtonWidget(QWidget * parent, const QString &img);
-        ~ToggleButtonWidget();
-    private:
-        QIcon icoUnchecked;
-        QIcon icoChecked;
-    private Q_SLOTS:
-        void eventToggled(bool checked);
+class ToggleButtonWidget : public QPushButton {
+  Q_OBJECT
+ public:
+  ToggleButtonWidget(QWidget *parent, const QString &img);
+  ~ToggleButtonWidget();
+
+ private:
+  QIcon icoUnchecked;
+  QIcon icoChecked;
+ private Q_SLOTS:
+  void eventToggled(bool checked);
 };
 
-#endif // TOGGLEBUTTONWIDGET_H
+#endif  // TOGGLEBUTTONWIDGET_H

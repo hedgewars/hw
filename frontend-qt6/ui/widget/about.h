@@ -19,24 +19,23 @@
 #ifndef _ABOUT_H
 #define _ABOUT_H
 
-#include <QWidget>
 #include <QDropEvent>
 #include <QTextBrowser>
+#include <QWidget>
 
-class About : public QWidget
-{
-        Q_OBJECT
+class About : public QWidget {
+  Q_OBJECT
 
-    public:
-        About(QWidget * parent = 0);
+ public:
+  About(QWidget* parent = 0);
 
-    protected:
-        virtual void dragEnterEvent(QDragEnterEvent * event);
-        virtual void dropEvent(QDropEvent * event);
+ protected:
+  virtual void dragEnterEvent(QDragEnterEvent* event);
+  virtual void dropEvent(QDropEvent* event);
 
-    private:
-        QString getCreditsHtml();
-        QTextBrowser * creditsBrowser;
+ private:
+  QString getCreditsHtml();
+  QTextBrowser* creditsBrowser;
 };
 
-#endif // _ABOUT_H
+#endif  // _ABOUT_H

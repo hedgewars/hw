@@ -16,26 +16,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "qpushbuttonwithsound.h"
+
 #include <QDir>
 
-#include "qpushbuttonwithsound.h"
 #include "DataManager.h"
 #include "SDLInteraction.h"
-#include "hwform.h"
 #include "gameuiconfig.h"
+#include "hwform.h"
 
-QPushButtonWithSound::QPushButtonWithSound(QWidget *parent) :
-    QPushButton(parent),
-    isSoundEnabled(true)
-{
-    connect(this, &QAbstractButton::clicked, this, &QPushButtonWithSound::buttonClicked);
+QPushButtonWithSound::QPushButtonWithSound(QWidget *parent)
+    : QPushButton(parent), isSoundEnabled(true) {
+  connect(this, &QAbstractButton::clicked, this,
+          &QPushButtonWithSound::buttonClicked);
 }
 
-void QPushButtonWithSound::buttonClicked()
-{
-    if ( !isSoundEnabled )
-        return;
+void QPushButtonWithSound::buttonClicked() {
+  if (!isSoundEnabled) return;
 
-    if (this->isEnabled())
-        SDLInteraction::instance().playSoundFile(QStringLiteral("/Sounds/roperelease.ogg"));
+  if (this->isEnabled())
+    SDLInteraction::instance().playSoundFile(
+        QStringLiteral("/Sounds/roperelease.ogg"));
 }

@@ -16,57 +16,57 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QLineEdit>
-#include <QSpinBox>
-#include <QPushButton>
+#include "input_ip.h"
+
 #include <QGridLayout>
 #include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpinBox>
 
-#include "input_ip.h"
 #include "hwconsts.h"
 
-HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent)
-{
-    QGridLayout * layout = new QGridLayout(this);
+HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent) {
+  QGridLayout* layout = new QGridLayout(this);
 
-    QLabel * lbHost = new QLabel(this);
-    lbHost->setText(QLabel::tr("Host:"));
-    layout->addWidget(lbHost, 0, 0);
+  QLabel* lbHost = new QLabel(this);
+  lbHost->setText(QLabel::tr("Host:"));
+  layout->addWidget(lbHost, 0, 0);
 
-    QLabel * lbPort = new QLabel(this);
-    lbPort->setText(QLabel::tr("Port:"));
-    layout->addWidget(lbPort, 1, 0);
+  QLabel* lbPort = new QLabel(this);
+  lbPort->setText(QLabel::tr("Port:"));
+  layout->addWidget(lbPort, 1, 0);
 
-    leHost = new QLineEdit(this);
-    layout->addWidget(leHost, 0, 1, 1, 2);
+  leHost = new QLineEdit(this);
+  layout->addWidget(leHost, 0, 1, 1, 2);
 
-    sbPort = new QSpinBox(this);
-    sbPort->setMinimum(0);
-    sbPort->setMaximum(65535);
-    layout->addWidget(sbPort, 1, 1, 1, 2);
+  sbPort = new QSpinBox(this);
+  sbPort->setMinimum(0);
+  sbPort->setMaximum(65535);
+  layout->addWidget(sbPort, 1, 1, 1, 2);
 
-    pbDefault = new QPushButton(this);
-    pbDefault->setText(QPushButton::tr("default"));
-    layout->addWidget(pbDefault, 1, 3);
+  pbDefault = new QPushButton(this);
+  pbDefault->setText(QPushButton::tr("default"));
+  layout->addWidget(pbDefault, 1, 3);
 
-    pbOK = new QPushButton(this);
-    pbOK->setText(QPushButton::tr("OK"));
-    pbOK->setDefault(true);
-    layout->addWidget(pbOK, 3, 1);
+  pbOK = new QPushButton(this);
+  pbOK->setText(QPushButton::tr("OK"));
+  pbOK->setDefault(true);
+  layout->addWidget(pbOK, 3, 1);
 
-    pbCancel = new QPushButton(this);
-    pbCancel->setText(QPushButton::tr("Cancel"));
-    layout->addWidget(pbCancel, 3, 2);
+  pbCancel = new QPushButton(this);
+  pbCancel->setText(QPushButton::tr("Cancel"));
+  layout->addWidget(pbCancel, 3, 2);
 
-    connect(pbOK, &QAbstractButton::clicked, this, &QDialog::accept);
-    connect(pbCancel, &QAbstractButton::clicked, this, &QDialog::reject);
-    connect(pbDefault, &QAbstractButton::clicked, this, &HWHostPortDialog::setDefaultPort);
+  connect(pbOK, &QAbstractButton::clicked, this, &QDialog::accept);
+  connect(pbCancel, &QAbstractButton::clicked, this, &QDialog::reject);
+  connect(pbDefault, &QAbstractButton::clicked, this,
+          &HWHostPortDialog::setDefaultPort);
 
-    this->setWindowModality(Qt::WindowModal);
-    this->setWindowTitle(tr("Connect to server"));
+  this->setWindowModality(Qt::WindowModal);
+  this->setWindowTitle(tr("Connect to server"));
 }
 
-void HWHostPortDialog::setDefaultPort()
-{
-    sbPort->setValue(NETGAME_DEFAULT_PORT);
+void HWHostPortDialog::setDefaultPort() {
+  sbPort->setValue(NETGAME_DEFAULT_PORT);
 }

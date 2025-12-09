@@ -18,209 +18,192 @@
 
 #include "pageplayrecord.h"
 
+#include <QFileInfo>
 #include <QFont>
 #include <QGridLayout>
-#include <QPushButton>
+#include <QInputDialog>
 #include <QListWidget>
 #include <QListWidgetItem>
-#include <QFileInfo>
 #include <QMessageBox>
-#include <QInputDialog>
-
-#include "hwconsts.h"
+#include <QPushButton>
 
 #include "DataManager.h"
+#include "hwconsts.h"
 
-QLayout * PagePlayDemo::bodyLayoutDefinition()
-{
-    QGridLayout * pageLayout = new QGridLayout();
+QLayout* PagePlayDemo::bodyLayoutDefinition() {
+  QGridLayout* pageLayout = new QGridLayout();
 
-    pageLayout->setColumnStretch(0, 1);
-    pageLayout->setColumnStretch(1, 2);
-    pageLayout->setColumnStretch(2, 1);
-    pageLayout->setRowStretch(2, 100);
+  pageLayout->setColumnStretch(0, 1);
+  pageLayout->setColumnStretch(1, 2);
+  pageLayout->setColumnStretch(2, 1);
+  pageLayout->setRowStretch(2, 100);
 
-    BtnRenameRecord = new QPushButton(this);
-    BtnRenameRecord->setText(QPushButton::tr("Rename"));
-    pageLayout->addWidget(BtnRenameRecord, 0, 2);
+  BtnRenameRecord = new QPushButton(this);
+  BtnRenameRecord->setText(QPushButton::tr("Rename"));
+  pageLayout->addWidget(BtnRenameRecord, 0, 2);
 
-    BtnRemoveRecord = new QPushButton(this);
-    BtnRemoveRecord->setText(QPushButton::tr("Delete"));
-    pageLayout->addWidget(BtnRemoveRecord, 1, 2);
+  BtnRemoveRecord = new QPushButton(this);
+  BtnRemoveRecord->setText(QPushButton::tr("Delete"));
+  pageLayout->addWidget(BtnRemoveRecord, 1, 2);
 
-    DemosList = new QListWidget(this);
-    DemosList->setGeometry(QRect(170, 10, 311, 311));
-    pageLayout->addWidget(DemosList, 0, 1, 3, 1);
+  DemosList = new QListWidget(this);
+  DemosList->setGeometry(QRect(170, 10, 311, 311));
+  pageLayout->addWidget(DemosList, 0, 1, 3, 1);
 
-    return pageLayout;
+  return pageLayout;
 }
 
-QLayout * PagePlayDemo::footerLayoutDefinition()
-{
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
+QLayout* PagePlayDemo::footerLayoutDefinition() {
+  QHBoxLayout* bottomLayout = new QHBoxLayout();
 
-    BtnPlayDemo = addButton(tr("Play demo"), bottomLayout, 0, false, Qt::AlignBottom);
-    const QIcon& lp = QIcon(":/res/Start.png");
-    QSize sz = lp.actualSize(QSize(65535, 65535));
-    BtnPlayDemo->setStyleSheet(QStringLiteral("padding: 5px 10px"));
-    BtnPlayDemo->setIcon(lp);
-    BtnPlayDemo->setFixedHeight(50);
-    BtnPlayDemo->setIconSize(sz);
-    BtnPlayDemo->setFlat(true);
-    BtnPlayDemo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  BtnPlayDemo =
+      addButton(tr("Play demo"), bottomLayout, 0, false, Qt::AlignBottom);
+  const QIcon& lp = QIcon(":/res/Start.png");
+  QSize sz = lp.actualSize(QSize(65535, 65535));
+  BtnPlayDemo->setStyleSheet(QStringLiteral("padding: 5px 10px"));
+  BtnPlayDemo->setIcon(lp);
+  BtnPlayDemo->setFixedHeight(50);
+  BtnPlayDemo->setIconSize(sz);
+  BtnPlayDemo->setFlat(true);
+  BtnPlayDemo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    return bottomLayout;
+  return bottomLayout;
 }
 
-void PagePlayDemo::connectSignals()
-{
-    connect(BtnRenameRecord, &QAbstractButton::clicked, this, &PagePlayDemo::renameRecord);
-    connect(BtnRemoveRecord, &QAbstractButton::clicked, this, &PagePlayDemo::removeRecord);
-    connect(&DataManager::instance(), &DataManager::updated, this, &PagePlayDemo::refresh);
+void PagePlayDemo::connectSignals() {
+  connect(BtnRenameRecord, &QAbstractButton::clicked, this,
+          &PagePlayDemo::renameRecord);
+  connect(BtnRemoveRecord, &QAbstractButton::clicked, this,
+          &PagePlayDemo::removeRecord);
+  connect(&DataManager::instance(), &DataManager::updated, this,
+          &PagePlayDemo::refresh);
 }
 
-PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
-{
-    initPage();
+PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent) {
+  initPage();
 }
 
-void PagePlayDemo::FillFromDir(RecordType rectype)
-{
-    QDir dir;
-    QString extension;
+void PagePlayDemo::FillFromDir(RecordType rectype) {
+  QDir dir;
+  QString extension;
 
-    recType = rectype;
+  recType = rectype;
 
-    dir.cd(cfgdir.absolutePath());
-    if (rectype == RT_Demo)
-    {
-        dir.cd(QStringLiteral("Demos"));
-        extension = QStringLiteral("hwd");
-        BtnPlayDemo->setText(QPushButton::tr("Play demo"));
-        BtnPlayDemo->setWhatsThis(tr("Play the selected demo"));
-    }
-    else
-    {
-        dir.cd(QStringLiteral("Saves"));
-        extension = QStringLiteral("hws");
-        BtnPlayDemo->setText(QPushButton::tr("Load"));
-        BtnPlayDemo->setWhatsThis(tr("Load the selected game"));
-    }
-    dir.setFilter(QDir::Files);
+  dir.cd(cfgdir.absolutePath());
+  if (rectype == RT_Demo) {
+    dir.cd(QStringLiteral("Demos"));
+    extension = QStringLiteral("hwd");
+    BtnPlayDemo->setText(QPushButton::tr("Play demo"));
+    BtnPlayDemo->setWhatsThis(tr("Play the selected demo"));
+  } else {
+    dir.cd(QStringLiteral("Saves"));
+    extension = QStringLiteral("hws");
+    BtnPlayDemo->setText(QPushButton::tr("Load"));
+    BtnPlayDemo->setWhatsThis(tr("Load the selected game"));
+  }
+  dir.setFilter(QDir::Files);
 
-    QStringList sl = dir.entryList(
-        QStringList(QStringLiteral("*.%2.%1").arg(extension, cProtoVer)));
-    sl.replaceInStrings(
-        QRegularExpression(
-            QStringLiteral("^(.*)\\.%2\\.%1$").arg(extension, cProtoVer)),
-        "\\1");
+  QStringList sl = dir.entryList(
+      QStringList(QStringLiteral("*.%2.%1").arg(extension, cProtoVer)));
+  sl.replaceInStrings(
+      QRegularExpression(
+          QStringLiteral("^(.*)\\.%2\\.%1$").arg(extension, cProtoVer)),
+      "\\1");
 
-    DemosList->clear();
-    DemosList->addItems(sl);
+  DemosList->clear();
+  DemosList->addItems(sl);
 
-    for (int i = 0; i < DemosList->count(); ++i)
-    {
-      DemosList->item(i)->setData(
-          Qt::UserRole,
-          dir.absoluteFilePath(
-              QStringLiteral("%1.%3.%2").arg(sl[i], extension, cProtoVer)));
-      DemosList->item(i)->setIcon(recType == RT_Demo
-                                      ? QIcon(":/res/file_demo.png")
-                                      : QIcon(":/res/file_save.png"));
-    }
+  for (int i = 0; i < DemosList->count(); ++i) {
+    DemosList->item(i)->setData(
+        Qt::UserRole,
+        dir.absoluteFilePath(
+            QStringLiteral("%1.%3.%2").arg(sl[i], extension, cProtoVer)));
+    DemosList->item(i)->setIcon(recType == RT_Demo
+                                    ? QIcon(":/res/file_demo.png")
+                                    : QIcon(":/res/file_save.png"));
+  }
 }
 
-
-void PagePlayDemo::refresh()
-{
-    if (this->isVisible())
-        FillFromDir(recType);
+void PagePlayDemo::refresh() {
+  if (this->isVisible()) FillFromDir(recType);
 }
 
+void PagePlayDemo::renameRecord() {
+  QListWidgetItem* curritem = DemosList->currentItem();
+  if (!curritem) {
+    QMessageBox recordMsg(this);
+    recordMsg.setIcon(QMessageBox::Warning);
+    recordMsg.setWindowTitle(QMessageBox::tr("Error"));
+    recordMsg.setText(QMessageBox::tr("Please select a file from the list."));
+    recordMsg.setTextFormat(Qt::PlainText);
+    recordMsg.setWindowModality(Qt::WindowModal);
+    recordMsg.exec();
+    return;
+  }
+  QFile rfile(curritem->data(Qt::UserRole).toString());
 
-void PagePlayDemo::renameRecord()
-{
-    QListWidgetItem * curritem = DemosList->currentItem();
-    if (!curritem)
-    {
-        QMessageBox recordMsg(this);
-        recordMsg.setIcon(QMessageBox::Warning);
-        recordMsg.setWindowTitle(QMessageBox::tr("Error"));
-        recordMsg.setText(QMessageBox::tr("Please select a file from the list."));
-        recordMsg.setTextFormat(Qt::PlainText);
-        recordMsg.setWindowModality(Qt::WindowModal);
-        recordMsg.exec();
-        return ;
-    }
-    QFile rfile(curritem->data(Qt::UserRole).toString());
+  QFileInfo finfo(rfile);
 
-    QFileInfo finfo(rfile);
+  bool ok;
 
-    bool ok;
+  QString newname = QInputDialog::getText(
+      this, tr("Rename dialog"), tr("Enter new file name:"), QLineEdit::Normal,
+      finfo.completeBaseName().replace(QStringLiteral(".") + cProtoVer,
+                                       QLatin1String("")),
+      &ok);
 
-    QString newname = QInputDialog::getText(
-        this, tr("Rename dialog"), tr("Enter new file name:"),
-        QLineEdit::Normal,
-        finfo.completeBaseName().replace(QStringLiteral(".") + cProtoVer, QLatin1String("")), &ok);
+  if (ok && !newname.isEmpty()) {
+    QString newfullname =
+        QStringLiteral("%1/%2.%3.%4")
+            .arg(finfo.absolutePath(), newname, cProtoVer, finfo.suffix());
 
-    if(ok && !newname.isEmpty())
-    {
-      QString newfullname = QStringLiteral("%1/%2.%3.%4")
-                                .arg(finfo.absolutePath(), newname, cProtoVer, finfo.suffix());
-
-      ok = rfile.rename(newfullname);
-      if (!ok) {
-        QMessageBox renameMsg(this);
-        renameMsg.setIcon(QMessageBox::Warning);
-        renameMsg.setWindowTitle(QMessageBox::tr("Error"));
-        renameMsg.setText(
-            QMessageBox::tr("Cannot rename file to %1.").arg(newfullname));
-        renameMsg.setTextFormat(Qt::PlainText);
-        renameMsg.setWindowModality(Qt::WindowModal);
-        renameMsg.exec();
-      } else
-        FillFromDir(recType);
-    }
+    ok = rfile.rename(newfullname);
+    if (!ok) {
+      QMessageBox renameMsg(this);
+      renameMsg.setIcon(QMessageBox::Warning);
+      renameMsg.setWindowTitle(QMessageBox::tr("Error"));
+      renameMsg.setText(
+          QMessageBox::tr("Cannot rename file to %1.").arg(newfullname));
+      renameMsg.setTextFormat(Qt::PlainText);
+      renameMsg.setWindowModality(Qt::WindowModal);
+      renameMsg.exec();
+    } else
+      FillFromDir(recType);
+  }
 }
 
-void PagePlayDemo::removeRecord()
-{
-    QListWidgetItem * curritem = DemosList->currentItem();
-    if (!curritem)
-    {
-        QMessageBox recordMsg(this);
-        recordMsg.setIcon(QMessageBox::Warning);
-        recordMsg.setWindowTitle(QMessageBox::tr("Error"));
-        recordMsg.setText(QMessageBox::tr("Please select a file from the list."));
-        recordMsg.setTextFormat(Qt::PlainText);
-        recordMsg.setWindowModality(Qt::WindowModal);
-        recordMsg.exec();
-        return ;
-    }
-    QFile rfile(curritem->data(Qt::UserRole).toString());
+void PagePlayDemo::removeRecord() {
+  QListWidgetItem* curritem = DemosList->currentItem();
+  if (!curritem) {
+    QMessageBox recordMsg(this);
+    recordMsg.setIcon(QMessageBox::Warning);
+    recordMsg.setWindowTitle(QMessageBox::tr("Error"));
+    recordMsg.setText(QMessageBox::tr("Please select a file from the list."));
+    recordMsg.setTextFormat(Qt::PlainText);
+    recordMsg.setWindowModality(Qt::WindowModal);
+    recordMsg.exec();
+    return;
+  }
+  QFile rfile(curritem->data(Qt::UserRole).toString());
 
-    bool ok;
+  bool ok;
 
-    ok = rfile.remove();
-    if(!ok)
-    {
-        QMessageBox removeMsg(this);
-        removeMsg.setIcon(QMessageBox::Warning);
-        removeMsg.setWindowTitle(QMessageBox::tr("Error"));
-        removeMsg.setText(QMessageBox::tr("Cannot delete file %1.").arg(rfile.fileName()));
-        removeMsg.setTextFormat(Qt::PlainText);
-        removeMsg.setWindowModality(Qt::WindowModal);
-        removeMsg.exec();
-    }
-    else
-    {
-        int i = DemosList->row(curritem);
-        delete curritem;
-        DemosList->setCurrentRow(i < DemosList->count() ? i : DemosList->count() - 1);
-    }
+  ok = rfile.remove();
+  if (!ok) {
+    QMessageBox removeMsg(this);
+    removeMsg.setIcon(QMessageBox::Warning);
+    removeMsg.setWindowTitle(QMessageBox::tr("Error"));
+    removeMsg.setText(
+        QMessageBox::tr("Cannot delete file %1.").arg(rfile.fileName()));
+    removeMsg.setTextFormat(Qt::PlainText);
+    removeMsg.setWindowModality(Qt::WindowModal);
+    removeMsg.exec();
+  } else {
+    int i = DemosList->row(curritem);
+    delete curritem;
+    DemosList->setCurrentRow(i < DemosList->count() ? i
+                                                    : DemosList->count() - 1);
+  }
 }
 
-bool PagePlayDemo::isSave()
-{
-    return recType == RT_Save;
-}
+bool PagePlayDemo::isSave() { return recType == RT_Save; }

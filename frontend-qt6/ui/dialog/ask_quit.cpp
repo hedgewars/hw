@@ -16,66 +16,67 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QVBoxLayout>
-#include <QLabel>
+#include "ask_quit.h"
+
 #include <QDialogButtonBox>
+#include <QLabel>
 #include <QPushButton>
 #include <QTimer>
+#include <QVBoxLayout>
 
 #include "hwform.h"
-#include "ask_quit.h"
 #include "pagevideos.h"
 
-HWAskQuitDialog::HWAskQuitDialog(QWidget* parent, HWForm * form) : QDialog(parent)
-{
-    this->form = form;
+HWAskQuitDialog::HWAskQuitDialog(QWidget* parent, HWForm* form)
+    : QDialog(parent) {
+  this->form = form;
 
-    setWindowTitle(tr("Do you really want to quit?"));
+  setWindowTitle(tr("Do you really want to quit?"));
 
-    QVBoxLayout * layout = new QVBoxLayout(this);
+  QVBoxLayout* layout = new QVBoxLayout(this);
 
-    QLabel * lbLabel = new QLabel(this);
-    lbLabel->setText(QLabel::tr("There are videos that are currently being processed.\n"
-                                "Exiting now will abort them.\n"
-                                "Do you really want to quit?"));
-    layout->addWidget(lbLabel);
+  QLabel* lbLabel = new QLabel(this);
+  lbLabel->setText(
+      QLabel::tr("There are videos that are currently being processed.\n"
+                 "Exiting now will abort them.\n"
+                 "Do you really want to quit?"));
+  layout->addWidget(lbLabel);
 
-    lbList = new QLabel(this);
-    layout->addWidget(lbList);
-    updateList();
+  lbList = new QLabel(this);
+  layout->addWidget(lbList);
+  updateList();
 
-    QDialogButtonBox* dbbButtons = new QDialogButtonBox(this);
-    QPushButton * pbYes = dbbButtons->addButton(QDialogButtonBox::Yes);
-    QPushButton * pbNo  = dbbButtons->addButton(QDialogButtonBox::No);
-    QPushButton * pbMore = dbbButtons->addButton(QPushButton::tr("More info"), QDialogButtonBox::HelpRole);
-    layout->addWidget(dbbButtons);
+  QDialogButtonBox* dbbButtons = new QDialogButtonBox(this);
+  QPushButton* pbYes = dbbButtons->addButton(QDialogButtonBox::Yes);
+  QPushButton* pbNo = dbbButtons->addButton(QDialogButtonBox::No);
+  QPushButton* pbMore = dbbButtons->addButton(QPushButton::tr("More info"),
+                                              QDialogButtonBox::HelpRole);
+  layout->addWidget(dbbButtons);
 
-    connect(pbYes,  &QAbstractButton::clicked, this, &QDialog::accept);
-    connect(pbNo,   &QAbstractButton::clicked, this, &QDialog::reject);
-    connect(pbMore, &QAbstractButton::clicked, this, &HWAskQuitDialog::goToPageVideos);
+  connect(pbYes, &QAbstractButton::clicked, this, &QDialog::accept);
+  connect(pbNo, &QAbstractButton::clicked, this, &QDialog::reject);
+  connect(pbMore, &QAbstractButton::clicked, this,
+          &HWAskQuitDialog::goToPageVideos);
 
-    // update list periodically
-    QTimer * timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &HWAskQuitDialog::updateList);
-    timer->start(200);
+  // update list periodically
+  QTimer* timer = new QTimer(this);
+  connect(timer, &QTimer::timeout, this, &HWAskQuitDialog::updateList);
+  timer->start(200);
 
-    this->setWindowModality(Qt::WindowModal);
+  this->setWindowModality(Qt::WindowModal);
 }
 
-void HWAskQuitDialog::goToPageVideos()
-{
-    reject();
-    form->GoToVideos();
+void HWAskQuitDialog::goToPageVideos() {
+  reject();
+  form->GoToVideos();
 }
 
-void HWAskQuitDialog::updateList()
-{
-    QString text = form->ui.pageVideos->getVideosInProgress();
-    if (text.isEmpty())
-    {
-        // automatically exit when everything is finished
-        accept();
-        return;
-    }
-    lbList->setText(text);
+void HWAskQuitDialog::updateList() {
+  QString text = form->ui.pageVideos->getVideosInProgress();
+  if (text.isEmpty()) {
+    // automatically exit when everything is finished
+    accept();
+    return;
+  }
+  lbList->setText(text);
 }

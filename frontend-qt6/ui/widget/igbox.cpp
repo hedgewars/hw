@@ -16,27 +16,23 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QPainter>
-#include <QPoint>
-#include <QStylePainter>
-#include <QStyleOptionGroupBox>
-
 #include "igbox.h"
 
-IconedGroupBox::IconedGroupBox(QWidget * parent)
-    : QGroupBox(parent)
-{
-// Has issues with border-radius on children
-//    setAttribute(Qt::WA_PaintOnScreen, true);
-    titleLeftPadding = 49;
-    contentTopPadding = 5;
+#include <QPainter>
+#include <QPoint>
+#include <QStyleOptionGroupBox>
+#include <QStylePainter>
+
+IconedGroupBox::IconedGroupBox(QWidget* parent) : QGroupBox(parent) {
+  // Has issues with border-radius on children
+  //    setAttribute(Qt::WA_PaintOnScreen, true);
+  titleLeftPadding = 49;
+  contentTopPadding = 5;
 }
 
-void IconedGroupBox::setIcon(const QIcon & icon)
-{
-    if (this->icon.isNull())
-        setStyleSheet(QString(
-                          "IconedGroupBox{"
+void IconedGroupBox::setIcon(const QIcon& icon) {
+  if (this->icon.isNull())
+    setStyleSheet(QString("IconedGroupBox{"
                           "margin-top: 46px;"
                           "margin-left: 12px;"
                           "padding: %1px 2px 5px 2px;"
@@ -47,33 +43,26 @@ void IconedGroupBox::setIcon(const QIcon & icon)
                           "padding-left: %2px;"
                           "padding-top: 15px;"
                           "text-align: left;"
-                          "}"
-                      ).arg(contentTopPadding).arg(titleLeftPadding)
-                     );
+                          "}")
+                      .arg(contentTopPadding)
+                      .arg(titleLeftPadding));
 
-    this->icon = icon;
-    repaint();
+  this->icon = icon;
+  repaint();
 }
 
-void IconedGroupBox::paintEvent(QPaintEvent * event)
-{
-    Q_UNUSED(event);
+void IconedGroupBox::paintEvent(QPaintEvent* event) {
+  Q_UNUSED(event);
 
-    QStylePainter painter(this);
+  QStylePainter painter(this);
 
-    QStyleOptionGroupBox option;
-    initStyleOption(&option);
-    painter.drawComplexControl(QStyle::CC_GroupBox, option);
+  QStyleOptionGroupBox option;
+  initStyleOption(&option);
+  painter.drawComplexControl(QStyle::CC_GroupBox, option);
 
-    icon.paint(&painter, QRect(QPoint(0, 0), icon.actualSize(size())));
+  icon.paint(&painter, QRect(QPoint(0, 0), icon.actualSize(size())));
 }
 
-void IconedGroupBox::setTitleTextPadding(int px)
-{
-    titleLeftPadding = px;
-}
+void IconedGroupBox::setTitleTextPadding(int px) { titleLeftPadding = px; }
 
-void IconedGroupBox::setContentTopPadding(int px)
-{
-    contentTopPadding = px;
-}
+void IconedGroupBox::setContentTopPadding(int px) { contentTopPadding = px; }

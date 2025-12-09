@@ -20,13 +20,13 @@
 #ifndef _NEW_NETCLIENT_INCLUDED
 #define _NEW_NETCLIENT_INCLUDED
 
-#include <QObject>
-#include <QString>
-#include <QSslSocket>
 #include <QMap>
+#include <QObject>
+#include <QSslSocket>
+#include <QString>
 
+#include "game.h"  // for GameState
 #include "team.h"
-#include "game.h" // for GameState
 
 class GameUIConfig;
 class GameCFGWidget;
@@ -38,161 +38,167 @@ class QAbstractItemModel;
 
 extern char delimiter;
 
-class HWNewNet : public QObject
-{
-        Q_OBJECT
+class HWNewNet : public QObject {
+  Q_OBJECT
 
-    public:
-        enum ClientState { Disconnected, Connecting, Redirected, Connected, InLobby, InRoom, InGame, InDemo };
+ public:
+  enum ClientState {
+    Disconnected,
+    Connecting,
+    Redirected,
+    Connected,
+    InLobby,
+    InRoom,
+    InGame,
+    InDemo
+  };
 
-        HWNewNet();
-        ~HWNewNet();
-        void Connect(const QString & hostName, quint16 port, bool useTls, const QString & nick);
-        void ContinueConnection();
-        void Disconnect();
-        void SendPasswordHash(const QString & hash);
-        void NewNick(const QString & nick);
-        bool isRoomChief();
-        bool isInRoom();
-        ClientState clientState();
-        QString getNick();
-        QString getRoom();
-        QString getHost();
-        RoomsListModel * roomsListModel();
-        QAbstractItemModel * lobbyPlayersModel();
-        QAbstractItemModel * roomPlayersModel();
-        bool allPlayersReady();
-        bool m_private_game;
+  HWNewNet();
+  ~HWNewNet();
+  void Connect(const QString &hostName, quint16 port, bool useTls,
+               const QString &nick);
+  void ContinueConnection();
+  void Disconnect();
+  void SendPasswordHash(const QString &hash);
+  void NewNick(const QString &nick);
+  bool isRoomChief();
+  bool isInRoom();
+  ClientState clientState();
+  QString getNick();
+  QString getRoom();
+  QString getHost();
+  RoomsListModel *roomsListModel();
+  QAbstractItemModel *lobbyPlayersModel();
+  QAbstractItemModel *roomPlayersModel();
+  bool allPlayersReady();
+  bool m_private_game;
 
-    private:
-        bool isChief;
-        QString mynick;
-        QString myroom;
-        QString myhost;
-        QSslSocket NetSocket;
-        QString seed;
-        bool m_game_connected;
-        bool m_nick_registered;
-        bool m_demo_data_pending;
-        RoomsListModel * m_roomsListModel;
-        PlayersListModel * m_playersModel;
-        QSortFilterProxyModel * m_lobbyPlayersModel;
-        QSortFilterProxyModel * m_roomPlayersModel;
-        QString m_lastRoom;
-        QByteArray m_passwordHash;
-        QByteArray m_serverSalt;
-        QByteArray m_clientSalt;
-        QByteArray m_serverHash;
+ private:
+  bool isChief;
+  QString mynick;
+  QString myroom;
+  QString myhost;
+  QSslSocket NetSocket;
+  QString seed;
+  bool m_game_connected;
+  bool m_nick_registered;
+  bool m_demo_data_pending;
+  RoomsListModel *m_roomsListModel;
+  PlayersListModel *m_playersModel;
+  QSortFilterProxyModel *m_lobbyPlayersModel;
+  QSortFilterProxyModel *m_roomPlayersModel;
+  QString m_lastRoom;
+  QByteArray m_passwordHash;
+  QByteArray m_serverSalt;
+  QByteArray m_clientSalt;
+  QByteArray m_serverHash;
 
-        QStringList cmdbuf;
+  QStringList cmdbuf;
 
-        int  ByteLength(const QString & str);
-        void RawSendNet(const QString & buf);
-        void RawSendNet(const QByteArray & buf);
-        void ParseCmd(const QStringList & lst);        
-        void handleNotice(int n);
+  int ByteLength(const QString &str);
+  void RawSendNet(const QString &buf);
+  void RawSendNet(const QByteArray &buf);
+  void ParseCmd(const QStringList &lst);
+  void handleNotice(int n);
 
-        void maybeSendPassword();
+  void maybeSendPassword();
 
-        ClientState netClientState;
+  ClientState netClientState;
 
-    Q_SIGNALS:
-        void AskForRunGame();
-        void AskForOfficialServerDemo();
-        void connected();
-        void disconnected(const QString & reason);
-        void redirected(quint16 port);
-        void Error(const QString & errmsg);
-        void Warning(const QString & wrnmsg);
-        void NickRegistered(const QString & nick);
-        void NickNotRegistered(const QString & nick);
-        void NickTaken(const QString & nick);
-        void AuthFailed();
-        void EnteredGame();
-        void LeftRoom(const QString & reason);
-        void FromNet(const QByteArray & buf);
-        void adminAccess(bool);
-        void roomMaster(bool);
-        void roomNameUpdated(const QString & name);
-        void askForRoomPassword();
+ Q_SIGNALS:
+  void AskForRunGame();
+  void AskForOfficialServerDemo();
+  void connected();
+  void disconnected(const QString &reason);
+  void redirected(quint16 port);
+  void Error(const QString &errmsg);
+  void Warning(const QString &wrnmsg);
+  void NickRegistered(const QString &nick);
+  void NickNotRegistered(const QString &nick);
+  void NickTaken(const QString &nick);
+  void AuthFailed();
+  void EnteredGame();
+  void LeftRoom(const QString &reason);
+  void FromNet(const QByteArray &buf);
+  void adminAccess(bool);
+  void roomMaster(bool);
+  void roomNameUpdated(const QString &name);
+  void askForRoomPassword();
 
-        void netSchemeConfig(QStringList);
-        void paramChanged(const QString & param, const QStringList & value);
-        void configAsked();
+  void netSchemeConfig(QStringList);
+  void paramChanged(const QString &param, const QStringList &value);
+  void configAsked();
 
-        void TeamAccepted(const QString&);
-        void AddNetTeam(const HWTeam&);
-        void RemoveNetTeam(const HWTeam&);
-        void hhnumChanged(const HWTeam&);
-        void teamColorChanged(const HWTeam&);
-        void playerInfo(
-            const QString & nick,
-            const QString & ip,
-            const QString & version,
-            const QString & roomInfo);
-        void lobbyChatMessage(const QString & nick, const QString & message);
-        void lobbyChatAction(const QString & nick, const QString & action);
-        void roomChatMessage(const QString & nick, const QString & message);
-        void roomChatAction(const QString & nick, const QString & action);
-        void chatStringFromNet(const QString&);
+  void TeamAccepted(const QString &);
+  void AddNetTeam(const HWTeam &);
+  void RemoveNetTeam(const HWTeam &);
+  void hhnumChanged(const HWTeam &);
+  void teamColorChanged(const HWTeam &);
+  void playerInfo(const QString &nick, const QString &ip,
+                  const QString &version, const QString &roomInfo);
+  void lobbyChatMessage(const QString &nick, const QString &message);
+  void lobbyChatAction(const QString &nick, const QString &action);
+  void roomChatMessage(const QString &nick, const QString &message);
+  void roomChatAction(const QString &nick, const QString &action);
+  void chatStringFromNet(const QString &);
 
-        void roomsList(const QStringList&);
-        void serverMessage(const QString &);
-        void serverMessageNew(const QString &);
-        void serverMessageOld(const QString &);
-        void latestProtocolVar(int);
-        void bansList(const QStringList &);
+  void roomsList(const QStringList &);
+  void serverMessage(const QString &);
+  void serverMessageNew(const QString &);
+  void serverMessageOld(const QString &);
+  void latestProtocolVar(int);
+  void bansList(const QStringList &);
 
-        void setMyReadyStatus(bool isReady);
+  void setMyReadyStatus(bool isReady);
 
-        void messageProcessed();
+  void messageProcessed();
 
-    public Q_SLOTS:
-        void ToggleReady();
-        void chatLineToNet(const QString& str);
-        void chatLineToNetWithEcho(const QString&);
-        void chatLineToLobby(const QString& str);
-        void SendTeamMessage(const QString& str);
-        void SendNet(const QByteArray & buf);
-        void AddTeam(const HWTeam & team);
-        void RemoveTeam(const HWTeam& team);
-        void onHedgehogsNumChanged(const HWTeam& team);
-        void onTeamColorChanged(const HWTeam& team);
-        void onParamChanged(const QString & param, const QStringList & value);
+ public Q_SLOTS:
+  void ToggleReady();
+  void chatLineToNet(const QString &str);
+  void chatLineToNetWithEcho(const QString &);
+  void chatLineToLobby(const QString &str);
+  void SendTeamMessage(const QString &str);
+  void SendNet(const QByteArray &buf);
+  void AddTeam(const HWTeam &team);
+  void RemoveTeam(const HWTeam &team);
+  void onHedgehogsNumChanged(const HWTeam &team);
+  void onTeamColorChanged(const HWTeam &team);
+  void onParamChanged(const QString &param, const QStringList &value);
 
-        void setServerMessageNew(const QString &);
-        void setServerMessageOld(const QString &);
-        void setLatestProtocolVar(int proto);
-        void askServerVars();
+  void setServerMessageNew(const QString &);
+  void setServerMessageOld(const QString &);
+  void setLatestProtocolVar(int proto);
+  void askServerVars();
 
-        void JoinRoom(const QString & room, const QString & password);
-        void CreateRoom(const QString & room, const QString &password);
-        void updateRoomName(const QString &);
-        void askRoomsList();
-        void gameFinished(bool correcly);
-        void banPlayer(const QString &);
-        void kickPlayer(const QString &);
-        void delegateToPlayer(const QString &);
-        void infoPlayer(const QString &);
-        void followPlayer(const QString &);
-        void consoleCommand(const QString &);
-        void startGame();
-        void toggleRestrictJoins();
-        void toggleRestrictTeamAdds();
-        void toggleRegisteredOnly();
-        void partRoom();
-        void clearAccountsCache();
-        void getBanList();
-        void removeBan(const QString &);
-        void banIP(const QString & ip, const QString & reason, int seconds);
-        void banNick(const QString & nick, const QString & reason, int seconds);
-        void roomPasswordEntered(const QString & password);
+  void JoinRoom(const QString &room, const QString &password);
+  void CreateRoom(const QString &room, const QString &password);
+  void updateRoomName(const QString &);
+  void askRoomsList();
+  void gameFinished(bool correcly);
+  void banPlayer(const QString &);
+  void kickPlayer(const QString &);
+  void delegateToPlayer(const QString &);
+  void infoPlayer(const QString &);
+  void followPlayer(const QString &);
+  void consoleCommand(const QString &);
+  void startGame();
+  void toggleRestrictJoins();
+  void toggleRestrictTeamAdds();
+  void toggleRegisteredOnly();
+  void partRoom();
+  void clearAccountsCache();
+  void getBanList();
+  void removeBan(const QString &);
+  void banIP(const QString &ip, const QString &reason, int seconds);
+  void banNick(const QString &nick, const QString &reason, int seconds);
+  void roomPasswordEntered(const QString &password);
 
-    private Q_SLOTS:
-        void ClientRead();
-        void OnConnect();
-        void OnDisconnect();
-        void displayError(QAbstractSocket::SocketError socketError);
+ private Q_SLOTS:
+  void ClientRead();
+  void OnConnect();
+  void OnDisconnect();
+  void displayError(QAbstractSocket::SocketError socketError);
 };
 
-#endif // _NEW_NETCLIENT_INCLUDED
+#endif  // _NEW_NETCLIENT_INCLUDED

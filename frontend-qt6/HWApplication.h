@@ -20,6 +20,7 @@
 #define HWAPP_H
 
 #include <QApplication>
+
 #include "hwform.h"
 
 class HWForm;
@@ -33,19 +34,18 @@ class QEvent;
  *
  * @see http://doc.qt.nokia.com/4.5/stylesheet.html
  */
-class HWApplication : public QApplication
-{
-        Q_OBJECT
-    public:
-        HWApplication(int &argc, char **argv);
-        ~HWApplication() {};
+class HWApplication : public QApplication {
+  Q_OBJECT
+ public:
+  HWApplication(int &argc, char **argv);
+  ~HWApplication() {};
 
-        HWForm *form;
-        QString *urlString;
-        void fakeEvent();
-    protected:
-        bool event(QEvent *);
+  HWForm *form;
+  QString *urlString;
+  void fakeEvent();
+
+ protected:
+  bool event(QEvent *);
 };
 
 #endif
-

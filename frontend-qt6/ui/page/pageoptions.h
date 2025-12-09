@@ -19,10 +19,10 @@
 #ifndef PAGE_OPTIONS_H
 #define PAGE_OPTIONS_H
 
-#include "igbox.h"
-#include "AbstractPage.h"
-
 #include <QString>
+
+#include "AbstractPage.h"
+#include "igbox.h"
 
 class GameUIConfig;
 class FPSEdit;
@@ -31,181 +31,181 @@ class KeyBinder;
 class QGridLayout;
 
 // Let's stay D-R-Y
-class OptionGroupBox : public IconedGroupBox
-{
-    Q_OBJECT
+class OptionGroupBox : public IconedGroupBox {
+  Q_OBJECT
 
-    public:
-        OptionGroupBox(const QString & iconName,
-                       const QString & title,
-                       QWidget * parent = 0);
-        QGridLayout * layout();
-        void addDivider();
+ public:
+  OptionGroupBox(const QString &iconName, const QString &title,
+                 QWidget *parent = 0);
+  QGridLayout *layout();
+  void addDivider();
 
-    private:
-        QGridLayout * m_layout;
+ private:
+  QGridLayout *m_layout;
 };
 
-class PageOptions : public AbstractPage
-{
-        Q_OBJECT
+class PageOptions : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        enum ProxyTypes {
-            NoProxy      = 0,
-            SystemProxy  = 1,
-            Socks5Proxy  = 2,
-            HTTPProxy    = 3
-        };
+ public:
+  enum ProxyTypes {
+    NoProxy = 0,
+    SystemProxy = 1,
+    Socks5Proxy = 2,
+    HTTPProxy = 3
+  };
 
-        PageOptions(QWidget* parent = 0);
+  PageOptions(QWidget *parent = 0);
 
-        QCheckBox *WeaponTooltip;
-        QPushButton *WeaponNew;
-        QPushButton *WeaponEdit;
-        QPushButton *WeaponDelete;
-        QComboBox *WeaponsName;
-        QPushButton *SchemeNew;
-        QPushButton *SchemeEdit;
-        QPushButton *SchemeDelete;
-        QComboBox *SchemesName;
+  QCheckBox *WeaponTooltip;
+  QPushButton *WeaponNew;
+  QPushButton *WeaponEdit;
+  QPushButton *WeaponDelete;
+  QComboBox *WeaponsName;
+  QPushButton *SchemeNew;
+  QPushButton *SchemeEdit;
+  QPushButton *SchemeDelete;
+  QComboBox *SchemesName;
 
-        QComboBox *CBLanguage;
+  QComboBox *CBLanguage;
 
-        IconedGroupBox *teamsBox;
-        QPushButton *BtnAssociateFiles;
-        QComboBox *CBTeamName;
-        IconedGroupBox *AGGroupBox;
-        QComboBox *CBResolution;
-        QSpinBox *windowWidthEdit;
-        QSpinBox *windowHeightEdit;
-        QLabel *winLabelX;
-        QComboBox *CBStereoMode;
-        QCheckBox *CBFrontendSound;
-        QCheckBox *CBFrontendMusic;
-        QCheckBox *CBSound;
-        QCheckBox *CBMusic;
-        QCheckBox *CBDampenAudio;
-        QCheckBox *CBFullscreen;
-        QCheckBox *CBFrontendFullscreen;
-        QCheckBox *CBShowFPS;
-        QCheckBox *CBSavePassword;
-        QCheckBox *CBAltDamage;
-        QCheckBox *CBNameWithDate;
+  IconedGroupBox *teamsBox;
+  QPushButton *BtnAssociateFiles;
+  QComboBox *CBTeamName;
+  IconedGroupBox *AGGroupBox;
+  QComboBox *CBResolution;
+  QSpinBox *windowWidthEdit;
+  QSpinBox *windowHeightEdit;
+  QLabel *winLabelX;
+  QComboBox *CBStereoMode;
+  QCheckBox *CBFrontendSound;
+  QCheckBox *CBFrontendMusic;
+  QCheckBox *CBSound;
+  QCheckBox *CBMusic;
+  QCheckBox *CBDampenAudio;
+  QCheckBox *CBFullscreen;
+  QCheckBox *CBFrontendFullscreen;
+  QCheckBox *CBShowFPS;
+  QCheckBox *CBSavePassword;
+  QCheckBox *CBAltDamage;
+  QCheckBox *CBNameWithDate;
 
-
-        QCheckBox *CBTeamTag;
-        QCheckBox *CBHogTag;
-        QCheckBox *CBHealthTag;
-        QCheckBox *CBTagOpacity;
+  QCheckBox *CBTeamTag;
+  QCheckBox *CBHogTag;
+  QCheckBox *CBHealthTag;
+  QCheckBox *CBTagOpacity;
 
 #ifdef __APPLE__
-        QCheckBox *CBAutoUpdate;
-        QPushButton *BtnUpdateNow;
+  QCheckBox *CBAutoUpdate;
+  QPushButton *BtnUpdateNow;
 #endif
 
-        FPSEdit *fpsedit;
-        QLabel *labelNN;
-        QSpinBox * sbChatSize;
-        QSlider *SLVolume;
-        QLabel *lblVolumeLevel;
-        QLineEdit *editNetNick;
-        QLineEdit *editNetPassword;
-        QSlider *SLQuality;
-        QSpinBox *SLZoom;
-        QCheckBox *CBFrontendEffects;
-        QComboBox * cbProxyType;
-        QSpinBox * sbProxyPort;
-        QLineEdit * leProxy;
-        QLineEdit * leProxyLogin;
-        QLineEdit * leProxyPassword;
+  FPSEdit *fpsedit;
+  QLabel *labelNN;
+  QSpinBox *sbChatSize;
+  QSlider *SLVolume;
+  QLabel *lblVolumeLevel;
+  QLineEdit *editNetNick;
+  QLineEdit *editNetPassword;
+  QSlider *SLQuality;
+  QSpinBox *SLZoom;
+  QCheckBox *CBFrontendEffects;
+  QComboBox *cbProxyType;
+  QSpinBox *sbProxyPort;
+  QLineEdit *leProxy;
+  QLineEdit *leProxyLogin;
+  QLineEdit *leProxyPassword;
 
-        QComboBox  *framerateBox;
-        QSpinBox  *bitrateBox;
-        QLineEdit *widthEdit;
-        QLineEdit *heightEdit;
-        QCheckBox *checkUseGameRes;
-        QCheckBox *checkRecordAudio;
+  QComboBox *framerateBox;
+  QSpinBox *bitrateBox;
+  QLineEdit *widthEdit;
+  QLineEdit *heightEdit;
+  QCheckBox *checkUseGameRes;
+  QCheckBox *checkRecordAudio;
 
-        QString format()
-        { return comboAVFormats->itemData(comboAVFormats->currentIndex()).toString(); }
+  QString format() {
+    return comboAVFormats->itemData(comboAVFormats->currentIndex()).toString();
+  }
 
-        QString videoCodec()
-        { return comboVideoCodecs->itemData(comboVideoCodecs->currentIndex()).toString(); }
+  QString videoCodec() {
+    return comboVideoCodecs->itemData(comboVideoCodecs->currentIndex())
+        .toString();
+  }
 
-        QString audioCodec()
-        { return comboAudioCodecs->itemData(comboAudioCodecs->currentIndex()).toString(); }
+  QString audioCodec() {
+    return comboAudioCodecs->itemData(comboAudioCodecs->currentIndex())
+        .toString();
+  }
 
-        void setDefaultCodecs();
-        bool tryCodecs(const QString & format, const QString & vcodec, const QString & acodec);
-        void setConfig(GameUIConfig * config);
+  void setDefaultCodecs();
+  bool tryCodecs(const QString &format, const QString &vcodec,
+                 const QString &acodec);
+  void setConfig(GameUIConfig *config);
 
-        void setTeamOptionsEnabled(bool enabled);
+  void setTeamOptionsEnabled(bool enabled);
 
-    Q_SIGNALS:
-        void newTeamRequested();
-        void editTeamRequested(const QString & teamName);
-        void deleteTeamRequested(const QString & teamName);
+ Q_SIGNALS:
+  void newTeamRequested();
+  void editTeamRequested(const QString &teamName);
+  void deleteTeamRequested(const QString &teamName);
 
+ private:
+  QLayout *bodyLayoutDefinition() override;
+  QLayout *footerLayoutDefinition() override;
+  void connectSignals() override;
+  int resetBindToDefault(int bindID);
+  void setupTabPage(QWidget *tabpage, QVBoxLayout **leftColumn,
+                    QVBoxLayout **rightColumn);
 
-    private:
-     QLayout *bodyLayoutDefinition() override;
-     QLayout *footerLayoutDefinition() override;
-     void connectSignals() override;
-     int resetBindToDefault(int bindID);
-     void setupTabPage(QWidget *tabpage, QVBoxLayout **leftColumn,
-                       QVBoxLayout **rightColumn);
+  bool previousFullscreenValue;
+  int previousResolutionIndex;
+  int previousQuality;
+  QLabel *LblNoEditTeam;
+  QPushButton *BtnNewTeam;
+  QPushButton *BtnEditTeam;
+  QPushButton *BtnDeleteTeam;
+  QList<QPushButton *> m_colorButtons;
 
-     bool previousFullscreenValue;
-     int previousResolutionIndex;
-     int previousQuality;
-     QLabel *LblNoEditTeam;
-     QPushButton *BtnNewTeam;
-     QPushButton *BtnEditTeam;
-     QPushButton *BtnDeleteTeam;
-     QList<QPushButton *> m_colorButtons;
+  QComboBox *comboAVFormats;
+  QComboBox *comboVideoCodecs;
+  QComboBox *comboAudioCodecs;
+  QPushButton *btnDefaults;
+  QPushButton *btnUpdateNow;
+  GameUIConfig *config;
+  KeyBinder *binder;
+  int currentTab;
+  int binderTab;
 
-     QComboBox *comboAVFormats;
-     QComboBox *comboVideoCodecs;
-     QComboBox *comboAudioCodecs;
-     QPushButton *btnDefaults;
-     QPushButton *btnUpdateNow;
-     GameUIConfig *config;
-     KeyBinder *binder;
-     int currentTab;
-     int binderTab;
+  QLabel *lblFullScreenRes;
+  QLabel *lblWinScreenRes;
+  QLabel *lblTags;
+  QWidget *winResContainer;
+  QWidget *tagsContainer;
 
-     QLabel *lblFullScreenRes;
-     QLabel *lblWinScreenRes;
-     QLabel *lblTags;
-     QWidget *winResContainer;
-     QWidget *tagsContainer;
+ private Q_SLOTS:
+  void forceFullscreen(int index);
+  void setFullscreen(bool state);
+  void setResolution(int state);
+  void setQuality(int value);
+  void trimNetNick();
+  void requestEditSelectedTeam();
+  void requestDeleteSelectedTeam();
+  void savePwdChanged(bool state);
+  void colorButtonClicked(int i);
+  void onColorModelDataChanged(const QModelIndex &topLeft,
+                               const QModelIndex &bottomRight);
+  void onProxyTypeChanged();
+  void changeAVFormat(int index);
+  void changeUseGameRes(int state);
+  void changeRecordAudio(int state);
+  void checkForUpdates();
+  void tabIndexChanged(int);
+  void bindUpdated(int bindID);
+  void resetAllBinds();
+  void setVolume(int);
 
-    private Q_SLOTS:
-     void forceFullscreen(int index);
-     void setFullscreen(bool state);
-     void setResolution(int state);
-     void setQuality(int value);
-     void trimNetNick();
-     void requestEditSelectedTeam();
-     void requestDeleteSelectedTeam();
-     void savePwdChanged(bool state);
-     void colorButtonClicked(int i);
-     void onColorModelDataChanged(const QModelIndex &topLeft,
-                                  const QModelIndex &bottomRight);
-     void onProxyTypeChanged();
-     void changeAVFormat(int index);
-     void changeUseGameRes(int state);
-     void changeRecordAudio(int state);
-     void checkForUpdates();
-     void tabIndexChanged(int);
-     void bindUpdated(int bindID);
-     void resetAllBinds();
-     void setVolume(int);
-
-    public Q_SLOTS:
-     void setDefaultOptions();
+ public Q_SLOTS:
+  void setDefaultOptions();
 };
 
 #endif
-

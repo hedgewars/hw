@@ -28,48 +28,47 @@ class QLineEdit;
 class QTextBrowser;
 class QLabel;
 
-class FeedbackDialog : public QDialog
-{
-        Q_OBJECT
+class FeedbackDialog : public QDialog {
+  Q_OBJECT
 
-    public:
-        FeedbackDialog(QWidget * parent = 0);
-        void EmbedSystemInfo();
-        void LoadCaptchaImage();
+ public:
+  FeedbackDialog(QWidget* parent = 0);
+  void EmbedSystemInfo();
+  void LoadCaptchaImage();
 
-        QPushButton * BtnSend;
-        QPushButton * BtnViewInfo;
-        QCheckBox * CheckSendSpecs;
-        QLineEdit * summary;
-        QTextBrowser * description;
-        QLabel * info;
-        QLabel * label_summary;
-        QLabel * label_description;
-        QLabel * label_captcha;
-        QLabel * label_email;
-        QLabel * label_captcha_input;
-        QLineEdit * captcha_code;
-        QLineEdit * email;
-        int captchaID;
-        QString specs;
+  QPushButton* BtnSend;
+  QPushButton* BtnViewInfo;
+  QCheckBox* CheckSendSpecs;
+  QLineEdit* summary;
+  QTextBrowser* description;
+  QLabel* info;
+  QLabel* label_summary;
+  QLabel* label_description;
+  QLabel* label_captcha;
+  QLabel* label_email;
+  QLabel* label_captcha_input;
+  QLineEdit* captcha_code;
+  QLineEdit* email;
+  int captchaID;
+  QString specs;
 
-    private:
-        void GenerateSpecs();
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        QNetworkAccessManager * GetNetManager();
-        void ShowErrorMessage(const QString & msg);
+ private:
+  void GenerateSpecs();
+  QLayout* bodyLayoutDefinition();
+  QLayout* footerLayoutDefinition();
+  QNetworkAccessManager* GetNetManager();
+  void ShowErrorMessage(const QString& msg);
 
-        QNetworkAccessManager * netManager;
-        QNetworkReply * captchaImageRequest;
-        QNetworkReply * genCaptchaRequest;
-        QNetworkAccessManager * nam;
+  QNetworkAccessManager* netManager;
+  QNetworkReply* captchaImageRequest;
+  QNetworkReply* genCaptchaRequest;
+  QNetworkAccessManager* nam;
 
-    private Q_SLOTS:
-        virtual void NetReply(QNetworkReply*);
-        virtual void ShowSpecs();
-        void SendFeedback();
-        void finishedSlot(QNetworkReply* reply);
+ private Q_SLOTS:
+  virtual void NetReply(QNetworkReply*);
+  virtual void ShowSpecs();
+  void SendFeedback();
+  void finishedSlot(QNetworkReply* reply);
 };
 
-#endif // FEEDBACKDIALOG_H
+#endif  // FEEDBACKDIALOG_H

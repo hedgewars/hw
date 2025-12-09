@@ -7,26 +7,25 @@ class QComboBox;
 class QRadioButton;
 class QLineEdit;
 
-class BanDialog : public QDialog
-{
-    Q_OBJECT
-public:
-    explicit BanDialog(QWidget *parent = 0);
+class BanDialog : public QDialog {
+  Q_OBJECT
+ public:
+  explicit BanDialog(QWidget *parent = 0);
 
-    bool byIP();
-    int duration();
-    QString banId();
-    QString reason();
+  bool byIP();
+  int duration();
+  QString banId();
+  QString reason();
 
-private:
-    QRadioButton * rbIP;
-    QRadioButton * rbNick;
-    QLineEdit * leId;
-    QLineEdit * leReason;
-    QComboBox * cbTime;
+ private:
+  QRadioButton *rbIP;
+  QRadioButton *rbNick;
+  QLineEdit *leId;
+  QLineEdit *leReason;
+  QComboBox *cbTime;
 
-private Q_SLOTS:
-    void okClicked();
+ private Q_SLOTS:
+  void okClicked();
 };
 
-#endif // BANDIALOG_H
+#endif  // BANDIALOG_H

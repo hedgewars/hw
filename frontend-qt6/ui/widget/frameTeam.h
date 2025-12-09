@@ -20,54 +20,53 @@
 #ifndef _FRAME_TEAM_INCLUDED
 #define _FRAME_TEAM_INCLUDED
 
+#include <QColor>
 #include <QFrame>
 #include <QList>
-#include <QColor>
 
 #include "teamselect.h"
 
-class FrameTeams : public QFrame
-{
-        Q_OBJECT
+class FrameTeams : public QFrame {
+  Q_OBJECT
 
-        friend class CHedgehogerWidget;
-        friend class TeamShowWidget;
+  friend class CHedgehogerWidget;
+  friend class TeamShowWidget;
 
-    public:
-        FrameTeams(QWidget* parent=0);
-        QWidget* getTeamWidget(const HWTeam &team);
-        bool isFullTeams() const;
-        void resetColors();
-        void resetTeams();
-        void setHHNum(const HWTeam& team);
-        void setTeamColor(const HWTeam& team);
-        void setInteractivity(bool interactive);
-        int getNextColor();
-        QSize sizeHint() const;
-        void setDecoFrameEnabled(bool enabled);
+ public:
+  FrameTeams(QWidget* parent = 0);
+  QWidget* getTeamWidget(const HWTeam& team);
+  bool isFullTeams() const;
+  void resetColors();
+  void resetTeams();
+  void setHHNum(const HWTeam& team);
+  void setTeamColor(const HWTeam& team);
+  void setInteractivity(bool interactive);
+  int getNextColor();
+  QSize sizeHint() const;
+  void setDecoFrameEnabled(bool enabled);
 
-    Q_SIGNALS:
-        void teamColorChanged(const HWTeam&);
+ Q_SIGNALS:
+  void teamColorChanged(const HWTeam&);
 
-    public Q_SLOTS:
-        void addTeam(const HWTeam &team, bool willPlay);
-        void removeTeam(const HWTeam &team);
+ public Q_SLOTS:
+  void addTeam(const HWTeam& team, bool willPlay);
+  void removeTeam(const HWTeam& team);
 
-    protected:
-        virtual void resizeEvent(QResizeEvent * event);
+ protected:
+  virtual void resizeEvent(QResizeEvent* event);
 
-    private:
-        int currentColor;
+ private:
+  int currentColor;
 
-        void emitTeamColorChanged(const HWTeam& team);
+  void emitTeamColorChanged(const HWTeam& team);
 
-        QVBoxLayout mainLayout;
-        typedef QMap<HWTeam, QWidget*> tmapTeamToWidget;
-        tmapTeamToWidget teamToWidget;
-        bool nonInteractive;
+  QVBoxLayout mainLayout;
+  typedef QMap<HWTeam, QWidget*> tmapTeamToWidget;
+  tmapTeamToWidget teamToWidget;
+  bool nonInteractive;
 
-        bool hasDecoFrame;
-        void updateDecoFrame();
+  bool hasDecoFrame;
+  void updateDecoFrame();
 };
 
-#endif // _FRAME_TAM_INCLUDED
+#endif  // _FRAME_TAM_INCLUDED

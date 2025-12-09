@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 #ifndef INPUT_IP_H
 #define INPUT_IP_H
 
@@ -27,23 +26,21 @@ class QLineEdit;
 class QSpinBox;
 class QPushButton;
 
-class HWHostPortDialog : public QDialog
-{
-        Q_OBJECT
-    public:
-        HWHostPortDialog(QWidget* parent = 0);
+class HWHostPortDialog : public QDialog {
+  Q_OBJECT
+ public:
+  HWHostPortDialog(QWidget* parent = 0);
 
-        QLineEdit* leHost;
-        QSpinBox* sbPort;
+  QLineEdit* leHost;
+  QSpinBox* sbPort;
 
-    private:
-        QPushButton* pbOK;
-        QPushButton* pbCancel;
-        QPushButton * pbDefault;
+ private:
+  QPushButton* pbOK;
+  QPushButton* pbCancel;
+  QPushButton* pbDefault;
 
-    private Q_SLOTS:
-        void setDefaultPort();
+ private Q_SLOTS:
+  void setDefaultPort();
 };
 
-
-#endif // INPUT_IP_H
+#endif  // INPUT_IP_H

@@ -16,38 +16,34 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "SquareLabel.h"
+
 #include <QPaintEvent>
 #include <QPainter>
-#include "SquareLabel.h"
+
 #include "hwform.h"
 
-SquareLabel::SquareLabel(QWidget * parent) :
-    QWidget(parent)
-{
-    //if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
+SquareLabel::SquareLabel(QWidget* parent) : QWidget(parent) {
+  // if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
-void SquareLabel::paintEvent(QPaintEvent * event)
-{
-    Q_UNUSED(event);
+void SquareLabel::paintEvent(QPaintEvent* event) {
+  Q_UNUSED(event);
 
-    QPainter painter(this);
-    int pixsize;
-    if (width() > height())
-    {
-        pixsize = height();
-        painter.translate((width() - pixsize) / 2, 0);
-    }
-    else
-    {
-        pixsize = width();
-        painter.translate(0, (height() - pixsize) / 2);
-    }
-    painter.drawPixmap(0, 0, pixsize, pixsize, pixmap.scaled(pixsize, pixsize, Qt::KeepAspectRatio));
+  QPainter painter(this);
+  int pixsize;
+  if (width() > height()) {
+    pixsize = height();
+    painter.translate((width() - pixsize) / 2, 0);
+  } else {
+    pixsize = width();
+    painter.translate(0, (height() - pixsize) / 2);
+  }
+  painter.drawPixmap(0, 0, pixsize, pixsize,
+                     pixmap.scaled(pixsize, pixsize, Qt::KeepAspectRatio));
 }
 
-void SquareLabel::setPixmap(const QPixmap & pixmap)
-{
-    this->pixmap = pixmap;
-    repaint();
+void SquareLabel::setPixmap(const QPixmap& pixmap) {
+  this->pixmap = pixmap;
+  repaint();
 }

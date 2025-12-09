@@ -23,21 +23,20 @@
 
 class QLineEdit;
 
-class SeedPrompt : public QDialog
-{
-        Q_OBJECT
+class SeedPrompt : public QDialog {
+  Q_OBJECT
 
-    public:
-        SeedPrompt(QWidget* parent, const QString & seed, bool editable);
+ public:
+  SeedPrompt(QWidget* parent, const QString& seed, bool editable);
 
-    Q_SIGNALS:
-        void seedSelected(const QString & seed);
+ Q_SIGNALS:
+  void seedSelected(const QString& seed);
 
-    private Q_SLOTS:
-        void setSeed();
+ private Q_SLOTS:
+  void setSeed();
 
-    private:
-        QLineEdit * editBox;
+ private:
+  QLineEdit* editBox;
 };
 
-#endif // SEEDPROMPT_H
+#endif  // SEEDPROMPT_H

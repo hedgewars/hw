@@ -21,60 +21,60 @@
 #define BGWIDGET_H
 
 #include <QWidget>
-//#include <QGLWidget>
-#include <QPainter>
-#include <QTimer>
+// #include <QGLWidget>
 #include <QPaintEvent>
-#include <QTime>
+#include <QPainter>
 #include <QPoint>
+#include <QTime>
+#include <QTimer>
 
 #define SPRITE_MAX 10
 
 #define ANIMATION_INTERVAL 40
 
-class SpritePosition
-{
-    public:
-        SpritePosition(QWidget * parent, int sw, int sh);
-        ~SpritePosition();
-    private:
-     double fX;
-     double fY;
-     double fXMov;
-     double fYMov;
-     int iAngle;
-     QWidget* wParent;
-     int iSpriteHeight;
-     int iSpriteWidth;
+class SpritePosition {
+ public:
+  SpritePosition(QWidget* parent, int sw, int sh);
+  ~SpritePosition();
 
-    public:
-        void move();
-        void reset();
-        QPoint pos();
-        int getAngle();
-        void init();
+ private:
+  double fX;
+  double fY;
+  double fXMov;
+  double fYMov;
+  int iAngle;
+  QWidget* wParent;
+  int iSpriteHeight;
+  int iSpriteWidth;
+
+ public:
+  void move();
+  void reset();
+  QPoint pos();
+  int getAngle();
+  void init();
 };
 
-class BGWidget : public QWidget
-{
-        Q_OBJECT
-    public:
-     explicit BGWidget(QWidget* parent);
-     ~BGWidget();
-     void startAnimation();
-     void stopAnimation();
-     void init();
-     bool enabled;
+class BGWidget : public QWidget {
+  Q_OBJECT
+ public:
+  explicit BGWidget(QWidget* parent);
+  ~BGWidget();
+  void startAnimation();
+  void stopAnimation();
+  void init();
+  bool enabled;
 
-    private:
-        QImage sprite;
-        QTimer * timerAnimation;
-        SpritePosition * spritePositions[SPRITE_MAX];
-        QImage * rotatedSprites[360];
-    protected:
-        void paintEvent(QPaintEvent * event);
-    private Q_SLOTS:
-        void animate();
+ private:
+  QImage sprite;
+  QTimer* timerAnimation;
+  SpritePosition* spritePositions[SPRITE_MAX];
+  QImage* rotatedSprites[360];
+
+ protected:
+  void paintEvent(QPaintEvent* event);
+ private Q_SLOTS:
+  void animate();
 };
 
-#endif // BGWIDGET_H
+#endif  // BGWIDGET_H

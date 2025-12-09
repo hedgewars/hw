@@ -16,54 +16,52 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "pageselectweapon.h"
+
+#include <QComboBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
-#include <QComboBox>
 
-#include "pageselectweapon.h"
 #include "hwconsts.h"
 #include "selectWeapon.h"
 
-QLayout * PageSelectWeapon::bodyLayoutDefinition()
-{
-    QGridLayout * pageLayout = new QGridLayout();
+QLayout* PageSelectWeapon::bodyLayoutDefinition() {
+  QGridLayout* pageLayout = new QGridLayout();
 
-    pWeapons = new SelWeaponWidget(cAmmoNumber, this);
-    pWeapons->init();
-    pageLayout->addWidget(pWeapons);
+  pWeapons = new SelWeaponWidget(cAmmoNumber, this);
+  pWeapons->init();
+  pageLayout->addWidget(pWeapons);
 
-    return pageLayout;
+  return pageLayout;
 }
 
-QLayout * PageSelectWeapon::footerLayoutDefinition()
-{
-    QGridLayout * bottomLayout = new QGridLayout();
+QLayout* PageSelectWeapon::footerLayoutDefinition() {
+  QGridLayout* bottomLayout = new QGridLayout();
 
-    selectWeaponSet = new QComboBox(this);
-    selectWeaponSet->setMaxVisibleItems(50);
-    bottomLayout->addWidget(selectWeaponSet, 0, 0, 2, 1);
+  selectWeaponSet = new QComboBox(this);
+  selectWeaponSet->setMaxVisibleItems(50);
+  bottomLayout->addWidget(selectWeaponSet, 0, 0, 2, 1);
 
-    // first row
-    BtnNew = addButton(tr("New"), bottomLayout, 0, 1);
-    BtnNew->setStyleSheet(QStringLiteral("padding: 3px;"));
-    BtnDefault = addButton(tr("Default"), bottomLayout, 0, 2);
-    BtnDefault->setStyleSheet(QStringLiteral("padding: 3px;"));
+  // first row
+  BtnNew = addButton(tr("New"), bottomLayout, 0, 1);
+  BtnNew->setStyleSheet(QStringLiteral("padding: 3px;"));
+  BtnDefault = addButton(tr("Default"), bottomLayout, 0, 2);
+  BtnDefault->setStyleSheet(QStringLiteral("padding: 3px;"));
 
-    // second row
-    BtnCopy = addButton(tr("Copy"), bottomLayout, 1, 1);
-    BtnCopy->setStyleSheet(QStringLiteral("padding: 3px;"));
-    BtnDelete = addButton(tr("Delete"), bottomLayout, 1, 2);
-    BtnDelete->setStyleSheet(QStringLiteral("padding: 3px;"));
+  // second row
+  BtnCopy = addButton(tr("Copy"), bottomLayout, 1, 1);
+  BtnCopy->setStyleSheet(QStringLiteral("padding: 3px;"));
+  BtnDelete = addButton(tr("Delete"), bottomLayout, 1, 2);
+  BtnDelete->setStyleSheet(QStringLiteral("padding: 3px;"));
 
-    bottomLayout->setColumnStretch(1,1);
-    bottomLayout->setColumnStretch(2,1);
+  bottomLayout->setColumnStretch(1, 1);
+  bottomLayout->setColumnStretch(2, 1);
 
-    return bottomLayout;
+  return bottomLayout;
 }
 
-void PageSelectWeapon::connectSignals()
-{
+void PageSelectWeapon::connectSignals() {
   connect(selectWeaponSet, &QComboBox::currentTextChanged, pWeapons,
           &SelWeaponWidget::switchWeapons);
   connect(BtnDefault, &QAbstractButton::clicked, pWeapons,

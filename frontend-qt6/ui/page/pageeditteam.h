@@ -20,102 +20,99 @@
 #define PAGE_EDITTEAM_H
 
 #include "AbstractPage.h"
+#include "SDLInteraction.h"
 #include "binds.h"
 #include "hwconsts.h"
 #include "namegen.h"
-#include "SDLInteraction.h"
-
 #include "team.h"
 
 class SquareLabel;
 class KeyBinder;
 class HatButton;
 
-class PageEditTeam : public AbstractPage
-{
-        Q_OBJECT
+class PageEditTeam : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageEditTeam(QWidget* parent);
+ public:
+  PageEditTeam(QWidget *parent);
 
-        void createTeam(const QString & name, const QString & playerHash);
-        void editTeam(const QString & name, const QString & playerHash);
-        void deleteTeam(const QString & name);
+  void createTeam(const QString &name, const QString &playerHash);
+  void editTeam(const QString &name, const QString &playerHash);
+  void deleteTeam(const QString &name);
 
-    public Q_SLOTS:
-        void CBTeamLvl_activated(const int index);
-        void CBFort_activated(const int index);
-        void frontendSoundsToggled(bool value);
+ public Q_SLOTS:
+  void CBTeamLvl_activated(const int index);
+  void CBFort_activated(const int index);
+  void frontendSoundsToggled(bool value);
 
-    private:
-        QTabWidget * tbw;
-        QSignalMapper* signalMapper1;
-        QSignalMapper* signalMapper2;
-        QGroupBox *GBoxHedgehogs;
-        QGroupBox *GBoxTeam;
-        QGroupBox *GBoxFort;
-        QComboBox *CBFort;
-        SquareLabel *FortPreview;
-        QComboBox *CBGrave;
-        QComboBox *CBFlag;
-        QLabel *CPUFlag;
-        QLabel *CPUFlagLabel;
-        QWidget *hboxCPUWidget;
-        QPixmap pixCPU[5];
-        QComboBox *CBTeamLvl;
-        QComboBox *CBVoicepack;
-        QGroupBox *GBoxBinds;
-        QToolBox *BindsBox;
-        QLineEdit * TeamNameEdit;
-        QLineEdit * HHNameEdit[HEDGEHOGS_PER_TEAM];
-        HatButton * HHHats[HEDGEHOGS_PER_TEAM];
-        HWTeam data();
-        QString m_playerHash;
-        QString OldTeamName;
-        KeyBinder * binder;
-        bool m_loaded;
+ private:
+  QTabWidget *tbw;
+  QSignalMapper *signalMapper1;
+  QSignalMapper *signalMapper2;
+  QGroupBox *GBoxHedgehogs;
+  QGroupBox *GBoxTeam;
+  QGroupBox *GBoxFort;
+  QComboBox *CBFort;
+  SquareLabel *FortPreview;
+  QComboBox *CBGrave;
+  QComboBox *CBFlag;
+  QLabel *CPUFlag;
+  QLabel *CPUFlagLabel;
+  QWidget *hboxCPUWidget;
+  QPixmap pixCPU[5];
+  QComboBox *CBTeamLvl;
+  QComboBox *CBVoicepack;
+  QGroupBox *GBoxBinds;
+  QToolBox *BindsBox;
+  QLineEdit *TeamNameEdit;
+  QLineEdit *HHNameEdit[HEDGEHOGS_PER_TEAM];
+  HatButton *HHHats[HEDGEHOGS_PER_TEAM];
+  HWTeam data();
+  QString m_playerHash;
+  QString OldTeamName;
+  KeyBinder *binder;
+  bool m_loaded;
 
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
+  QLayout *bodyLayoutDefinition();
+  QLayout *footerLayoutDefinition();
+  void connectSignals();
 
-        void loadTeam(const HWTeam & team);
+  void loadTeam(const HWTeam &team);
 
-        // page 1
-        QPushButton * btnRandomTeam;
-        QPushButton * btnRandomNames;
-        QPushButton * btnRandomHats;
+  // page 1
+  QPushButton *btnRandomTeam;
+  QPushButton *btnRandomNames;
+  QPushButton *btnRandomHats;
 
-        QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
-        QPushButton * btnRandomTeamName;
-        QPushButton * btnRandomGrave;
-        QPushButton * btnRandomFlag;
-        QPushButton * btnRandomVoice;
-        QPushButton * btnRandomFort;
-        QPushButton * btnTestSound;
+  QPushButton *btnRandomHogName[HEDGEHOGS_PER_TEAM];
+  QPushButton *btnRandomTeamName;
+  QPushButton *btnRandomGrave;
+  QPushButton *btnRandomFlag;
+  QPushButton *btnRandomVoice;
+  QPushButton *btnRandomFort;
+  QPushButton *btnTestSound;
 
-        void lazyLoad();
+  void lazyLoad();
 
-    private Q_SLOTS:
-        void saveTeam();
-        void setRandomTeam();
-        void setRandomHogNames();
-        void setRandomHats();
+ private Q_SLOTS:
+  void saveTeam();
+  void setRandomTeam();
+  void setRandomHogNames();
+  void setRandomHats();
 
-        void setRandomTeamName();
-        void setRandomGrave();
-        void setRandomFlag();
-        void setRandomVoice();
-        void setRandomFort();
+  void setRandomTeamName();
+  void setRandomGrave();
+  void setRandomFlag();
+  void setRandomVoice();
+  void setRandomFort();
 
-        void setRandomHogName(int hh_index);
+  void setRandomHogName(int hh_index);
 
-        /// Plays a random voice sound of the currently edited team.
-        void testSound();
+  /// Plays a random voice sound of the currently edited team.
+  void testSound();
 
-        void fixHHname(int idx);
-        void resetAllBinds();
+  void fixHHname(int idx);
+  void resetAllBinds();
 };
 
 #endif
-

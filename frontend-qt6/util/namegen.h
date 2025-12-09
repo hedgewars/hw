@@ -25,44 +25,44 @@
 class HWForm;
 class HWTeam;
 
-class HWNamegen
-{
-    public:
-        static void teamRandomTeamName(HWTeam & team);
-        static void teamRandomGrave(HWTeam & team, bool withDLC = true);
-        static void teamRandomFort(HWTeam & team, bool withDLC = true);
-        static void teamRandomFlag(HWTeam & team, bool withDLC = true);
-        static void teamRandomVoice(HWTeam & team, bool withDLC = true);
-        static void teamRandomHats(HWTeam & team, bool withDLC = true);
-        static void teamRandomHat(HWTeam & team, const int HedgehogNumber, bool withDLC = true);
-        static void teamRandomHogNames(HWTeam & team);
-        static void teamRandomHogName(HWTeam & team, const int HedgehogNumber);
-        static void teamRandomEverything(HWTeam & team);
-        static void teamLocalizedDefaultVoice(HWTeam & team, bool withDLC = true);
+class HWNamegen {
+ public:
+  static void teamRandomTeamName(HWTeam &team);
+  static void teamRandomGrave(HWTeam &team, bool withDLC = true);
+  static void teamRandomFort(HWTeam &team, bool withDLC = true);
+  static void teamRandomFlag(HWTeam &team, bool withDLC = true);
+  static void teamRandomVoice(HWTeam &team, bool withDLC = true);
+  static void teamRandomHats(HWTeam &team, bool withDLC = true);
+  static void teamRandomHat(HWTeam &team, const int HedgehogNumber,
+                            bool withDLC = true);
+  static void teamRandomHogNames(HWTeam &team);
+  static void teamRandomHogName(HWTeam &team, const int HedgehogNumber);
+  static void teamRandomEverything(HWTeam &team);
+  static void teamLocalizedDefaultVoice(HWTeam &team, bool withDLC = true);
 
-    private:
-        HWNamegen();
+ private:
+  HWNamegen();
 
-        static QString getRandomTeamName(int kind);
-        static QString getRandomHat(bool withDLC = true);
-        static QString getRandomGrave(bool withDLC = true);
-        static QString getRandomFort(bool withDLC = true);
-        static QString getRandomFlag(bool withDLC = true);
-        static QString getRandomVoice(bool withDLC = true);
-        static QString getLocalizedDefaultVoice(bool withDLC = true);
+  static QString getRandomTeamName(int kind);
+  static QString getRandomHat(bool withDLC = true);
+  static QString getRandomGrave(bool withDLC = true);
+  static QString getRandomFort(bool withDLC = true);
+  static QString getRandomFlag(bool withDLC = true);
+  static QString getRandomVoice(bool withDLC = true);
+  static QString getLocalizedDefaultVoice(bool withDLC = true);
 
-        static QList<QStringList> TypesTeamnames;
-        static QList<QStringList> TypesHatnames;
-        static bool typesAvailable;
+  static QList<QStringList> TypesTeamnames;
+  static QList<QStringList> TypesHatnames;
+  static bool typesAvailable;
 
-        static bool loadTypes();
-        static QStringList dictContents(const QString &filename);
-        static QStringList dictsForHat(const QString &hatname);
+  static bool loadTypes();
+  static QStringList dictContents(const QString &filename);
+  static QStringList dictsForHat(const QString &hatname);
 
-        static void teamRandomHat(HWTeam & team, const int HedgehogNumber, const QStringList & dict);
-        static void teamRandomHogName(HWTeam & team, const int HedgehogNumber, const QStringList & dict);
+  static void teamRandomHat(HWTeam &team, const int HedgehogNumber,
+                            const QStringList &dict);
+  static void teamRandomHogName(HWTeam &team, const int HedgehogNumber,
+                                const QStringList &dict);
 };
-
-
 
 #endif

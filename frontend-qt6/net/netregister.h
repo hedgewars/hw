@@ -21,15 +21,14 @@
 
 #include <QObject>
 
-class HWNetRegisterServer : public QObject
-{
-        Q_OBJECT
+class HWNetRegisterServer : public QObject {
+  Q_OBJECT
 
-    public:
-        HWNetRegisterServer(QObject *parent, const QString & descr, quint16 port);
+ public:
+  HWNetRegisterServer(QObject *parent, const QString &descr, quint16 port);
 
-    public Q_SLOTS:
-        virtual void unregister();
+ public Q_SLOTS:
+  virtual void unregister();
 };
 
-#endif // _NET_REGISTER_INCLUDED
+#endif  // _NET_REGISTER_INCLUDED

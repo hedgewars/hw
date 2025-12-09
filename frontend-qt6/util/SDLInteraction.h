@@ -24,20 +24,19 @@
 #ifndef HEDGEWARS_SDLINTERACTION_H
 #define HEDGEWARS_SDLINTERACTION_H
 
-
 #include <QMap>
-#include <QStringList>
 #include <QSize>
+#include <QStringList>
 
 #include "SDL_mixer.h"
 
 /**
  * @brief Class for interacting with SDL (used for music and keys)
  *
- * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton
+ * pattern</a>
  */
-class SDLInteraction
-{
+class SDLInteraction {
   Q_DISABLE_COPY_MOVE(SDLInteraction)
 
  private:
@@ -111,6 +110,4 @@ class SDLInteraction
   QSize getCurrentResolution();
 };
 
-
-#endif //HEDGEWARS_SDLINTERACTION_H
-
+#endif  // HEDGEWARS_SDLINTERACTION_H

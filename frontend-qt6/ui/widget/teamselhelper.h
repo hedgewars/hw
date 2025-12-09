@@ -21,63 +21,60 @@
 #define _TEAMSEL_HELPER_INCLUDED
 
 #include <QLabel>
-#include <QWidget>
-#include <QString>
 #include <QPushButton>
+#include <QString>
+#include <QWidget>
 
-#include "teamselect.h"
 #include "hedgehogerWidget.h"
+#include "teamselect.h"
 
 class ColorWidget;
 
-class TeamLabel : public QLabel
-{
-        Q_OBJECT
+class TeamLabel : public QLabel {
+  Q_OBJECT
 
-    public:
-        TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
+ public:
+  TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
 
-    Q_SIGNALS:
-        void teamActivated(QString team_name);
+ Q_SIGNALS:
+  void teamActivated(QString team_name);
 
-    public Q_SLOTS:
-        void teamButtonClicked();
-
+ public Q_SLOTS:
+  void teamButtonClicked();
 };
 
-class TeamShowWidget : public QWidget
-{
-        Q_OBJECT
+class TeamShowWidget : public QWidget {
+  Q_OBJECT
 
-    public Q_SLOTS:
-        void changeTeamColor(int color = 0);
-        void hhNumChanged();
+ public Q_SLOTS:
+  void changeTeamColor(int color = 0);
+  void hhNumChanged();
 
-    private Q_SLOTS:
-        void activateTeam();
-        void onColorChanged(int color);
+ private Q_SLOTS:
+  void activateTeam();
+  void onColorChanged(int color);
 
-    public:
-        TeamShowWidget(const HWTeam &team, bool isPlaying, FrameTeams * parent);
-        void setPlaying(bool isPlaying);
-        void setHHNum(unsigned int num);
-        void setInteractivity(bool interactive);
-        HWTeam getTeam() const;
+ public:
+  TeamShowWidget(const HWTeam& team, bool isPlaying, FrameTeams* parent);
+  void setPlaying(bool isPlaying);
+  void setHHNum(unsigned int num);
+  void setInteractivity(bool interactive);
+  HWTeam getTeam() const;
 
-    private:
-        TeamShowWidget();
-        QHBoxLayout mainLayout;
-        HWTeam m_team;
-        bool m_isPlaying;
-        CHedgehogerWidget* phhoger;
-        ColorWidget* colorWidget;
-        QPushButton* butt;
-        FrameTeams * m_parentFrameTeams;
+ private:
+  TeamShowWidget();
+  QHBoxLayout mainLayout;
+  HWTeam m_team;
+  bool m_isPlaying;
+  CHedgehogerWidget* phhoger;
+  ColorWidget* colorWidget;
+  QPushButton* butt;
+  FrameTeams* m_parentFrameTeams;
 
-    Q_SIGNALS:
-        void teamStatusChanged(const HWTeam &);
-        void hhNmChanged(const HWTeam&);
-        void teamColorChanged(const HWTeam&);
+ Q_SIGNALS:
+  void teamStatusChanged(const HWTeam&);
+  void hhNmChanged(const HWTeam&);
+  void teamColorChanged(const HWTeam&);
 };
 
-#endif // _TEAMSEL_HELPER_INCLUDED
+#endif  // _TEAMSEL_HELPER_INCLUDED

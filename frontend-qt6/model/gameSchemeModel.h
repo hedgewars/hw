@@ -20,59 +20,60 @@
 #define _GAME_SCHEME_MODEL_INCLUDED
 
 #include <QAbstractTableModel>
-#include <QStringList>
 #include <QList>
+#include <QStringList>
 
-class GameSchemeModel : public QAbstractTableModel
-{
-        Q_OBJECT
+class GameSchemeModel : public QAbstractTableModel {
+  Q_OBJECT
 
-    public:
-        GameSchemeModel(QObject * parent, const QString & fileName);
+ public:
+  GameSchemeModel(QObject *parent, const QString &fileName);
 
-        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        int rowCount(const QModelIndex & parent) const;
-        int columnCount(const QModelIndex & parent) const;
-        bool hasScheme(const QString &name);
-        bool hasScheme(const QString &name, int ignoreID);
-        bool renameScheme(int index, const QString &newName);
-        Qt::ItemFlags flags(const QModelIndex & index) const;
-        bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
-        bool insertRows(int row, int count, const QModelIndex & parent = QModelIndex());
-        bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
-        QVariant data(const QModelIndex &index, int role) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  int rowCount(const QModelIndex &parent) const;
+  int columnCount(const QModelIndex &parent) const;
+  bool hasScheme(const QString &name);
+  bool hasScheme(const QString &name, int ignoreID);
+  bool renameScheme(int index, const QString &newName);
+  Qt::ItemFlags flags(const QModelIndex &index) const;
+  bool setData(const QModelIndex &index, const QVariant &value,
+               int role = Qt::EditRole);
+  bool insertRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex());
+  bool removeRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex());
+  QVariant data(const QModelIndex &index, int role) const;
 
-        int numberOfDefaultSchemes;
-        QStringList predefSchemesNames;
-        QStringList spNames;
+  int numberOfDefaultSchemes;
+  QStringList predefSchemesNames;
+  QStringList spNames;
 
-    public Q_SLOTS:
-        void Save();
+ public Q_SLOTS:
+  void Save();
 
-    Q_SIGNALS:
-        void dataChanged(const QModelIndex &topLeft, const QModelIndex& bottomRight);
+ Q_SIGNALS:
+  void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
-    protected:
-        QList< QList<QVariant> > schemes;
+ protected:
+  QList<QList<QVariant> > schemes;
 };
 
-class NetGameSchemeModel : public QAbstractTableModel
-{
-        Q_OBJECT
+class NetGameSchemeModel : public QAbstractTableModel {
+  Q_OBJECT
 
-    public:
-        NetGameSchemeModel(QObject * parent);
+ public:
+  NetGameSchemeModel(QObject *parent);
 
-        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        int rowCount(const QModelIndex & parent) const;
-        int columnCount(const QModelIndex & parent) const;
-        QVariant data(const QModelIndex &index, int role) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  int rowCount(const QModelIndex &parent) const;
+  int columnCount(const QModelIndex &parent) const;
+  QVariant data(const QModelIndex &index, int role) const;
 
-    public Q_SLOTS:
-        void setNetSchemeConfig(QStringList cfg);
+ public Q_SLOTS:
+  void setNetSchemeConfig(QStringList cfg);
 
-    private:
-        QList<QVariant> netScheme;
+ private:
+  QList<QVariant> netScheme;
 };
 
-#endif // _GAME_SCHEME_MODEL_INCLUDED
+#endif  // _GAME_SCHEME_MODEL_INCLUDED

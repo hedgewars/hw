@@ -21,15 +21,13 @@
 
 #include "AbstractPage.h"
 
-class PageInGame : public AbstractPage
-{
-        Q_OBJECT
+class PageInGame : public AbstractPage {
+  Q_OBJECT
 
-    public:
-        PageInGame(QWidget * parent = 0);
+ public:
+  PageInGame(QWidget* parent = 0);
 
-        QLayout * bodyLayoutDefinition();
+  QLayout* bodyLayoutDefinition();
 };
 
 #endif
-

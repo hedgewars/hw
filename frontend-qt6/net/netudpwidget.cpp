@@ -17,63 +17,59 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "netudpwidget.h"
+
 #include <QUdpSocket>
 
-#include "netudpwidget.h"
 #include "hwconsts.h"
 
-HWNetUdpModel::HWNetUdpModel(QObject* parent) :
-    HWNetServersModel(parent)
-{
-    pUdpSocket = new QUdpSocket(this);
+HWNetUdpModel::HWNetUdpModel(QObject* parent) : HWNetServersModel(parent) {
+  pUdpSocket = new QUdpSocket(this);
 
-    pUdpSocket->bind();
-    connect(pUdpSocket, &QIODevice::readyRead, this, &HWNetUdpModel::onClientRead);
+  pUdpSocket->bind();
+  connect(pUdpSocket, &QIODevice::readyRead, this,
+          &HWNetUdpModel::onClientRead);
 }
 
-void HWNetUdpModel::updateList()
-{
+void HWNetUdpModel::updateList() {
   beginResetModel();
 
   games.clear();
 
   endResetModel();
 
-  pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, NETGAME_DEFAULT_PORT);
+  pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast,
+                            NETGAME_DEFAULT_PORT);
 }
 
-void HWNetUdpModel::onClientRead()
-{
-    beginResetModel();
+void HWNetUdpModel::onClientRead() {
+  beginResetModel();
 
-    while (pUdpSocket->hasPendingDatagrams())
-    {
-        QByteArray datagram;
-        datagram.resize(pUdpSocket->pendingDatagramSize());
-        QHostAddress clientAddr;
-        quint16 clientPort;
+  while (pUdpSocket->hasPendingDatagrams()) {
+    QByteArray datagram;
+    datagram.resize(pUdpSocket->pendingDatagramSize());
+    QHostAddress clientAddr;
+    quint16 clientPort;
 
-        pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
+    pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr,
+                             &clientPort);
 
-        QString packet = QString::fromUtf8(datagram.data());
-        if(packet.startsWith(QLatin1String("hedgewars server")))
-        {
-            QStringList sl;
-            sl << packet.remove(0, 17) << clientAddr.toString() << QString::number(NETGAME_DEFAULT_PORT);
-            games.append(sl);
-        }
+    QString packet = QString::fromUtf8(datagram.data());
+    if (packet.startsWith(QLatin1String("hedgewars server"))) {
+      QStringList sl;
+      sl << packet.remove(0, 17) << clientAddr.toString()
+         << QString::number(NETGAME_DEFAULT_PORT);
+      games.append(sl);
     }
+  }
 
-    endResetModel();
+  endResetModel();
 }
 
-QVariant HWNetUdpModel::data(const QModelIndex &index,
-                             int role) const
-{
-    if (!index.isValid() || index.row() < 0
-            || index.row() >= games.size()
-            || role != Qt::DisplayRole)
-        return QVariant();
+QVariant HWNetUdpModel::data(const QModelIndex& index, int role) const {
+  if (!index.isValid() || index.row() < 0 || index.row() >= games.size() ||
+      role != Qt::DisplayRole)
+    return QVariant();
 
-    return games[index.row()][index.column()];
+  return games[index.row()][index.column()];
 }

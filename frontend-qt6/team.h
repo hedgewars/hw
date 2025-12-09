@@ -22,111 +22,106 @@
 
 #include <QColor>
 #include <QString>
-#include "binds.h"
+
 #include "achievements.h"
+#include "binds.h"
 #include "hwconsts.h"
 
 class HWForm;
 class GameUIConfig;
 
-class HWTeamConstructException
-{
-};
+class HWTeamConstructException {};
 
 // structure for customization and statistics of a single hedgehog
-struct HWHog
-{
-    QString Name;
-    QString Hat;
+struct HWHog {
+  QString Name;
+  QString Hat;
 
-    HWHog(){}
+  HWHog() {}
 };
 
 // class representing a team
-class HWTeam : public QObject
-{
-        Q_OBJECT
+class HWTeam : public QObject {
+  Q_OBJECT
 
-    public:
+ public:
+  // constructors
+  HWTeam(const QString& teamname);
+  HWTeam(const QStringList& strLst);
+  HWTeam();
+  HWTeam(const HWTeam& other);
 
-        // constructors
-        HWTeam(const QString & teamname);
-        HWTeam(const QStringList& strLst);
-        HWTeam();
-        HWTeam(const HWTeam & other);
+  // file operations
+  static HWTeam loadFromFile(const QString& teamName);
+  bool loadFromFile();
+  bool deleteFile();
+  bool saveToFile();
+  bool fileExists();
+  bool wouldOverwriteOtherFile();
 
-        // file operations
-        static HWTeam loadFromFile(const QString & teamName);
-        bool loadFromFile();
-        bool deleteFile();
-        bool saveToFile();
-        bool fileExists();
-        bool wouldOverwriteOtherFile();
+  // attribute getters
+  int color() const;
+  QColor qcolor() const;
+  unsigned int difficulty() const;
+  QString flag() const;
+  QString fort() const;
+  QString grave() const;
+  const HWHog& hedgehog(unsigned int idx) const;
+  bool isNetTeam() const;
+  bool isMissionTeam() const;
+  QString keyBind(unsigned int idx) const;
+  QString name() const;
+  unsigned char numHedgehogs() const;
+  QString owner() const;
+  void setOwner(const QString& owner);
+  QString voicepack() const;
 
-        // attribute getters
-        int color() const;
-        QColor qcolor() const;
-        unsigned int difficulty() const;
-        QString flag() const;
-        QString fort() const;
-        QString grave() const;
-        const HWHog & hedgehog(unsigned int idx) const;
-        bool isNetTeam() const;
-        bool isMissionTeam() const;
-        QString keyBind(unsigned int idx) const;
-        QString name() const;
-        unsigned char numHedgehogs() const;
-        QString owner() const;
-        void setOwner(const QString & owner);
-        QString voicepack() const;
+  // attribute setters
+  void bindKey(unsigned int idx, const QString& key);
+  void setDifficulty(unsigned int level);
+  void setFlag(const QString& flag);
+  void setFort(const QString& fort);
+  void setGrave(const QString& grave);
+  void setHedgehog(unsigned int idx, const HWHog& hh);
+  void setName(const QString& name);
+  void setNumHedgehogs(unsigned char num);
+  void setVoicepack(const QString& voicepack);
+  void setNetTeam(bool isNetTeam);
+  void setMissionTeam(bool isMissionTeam);
 
-        // attribute setters
-        void bindKey(unsigned int idx, const QString & key);
-        void setDifficulty(unsigned int level);
-        void setFlag(const QString & flag);
-        void setFort(const QString & fort);
-        void setGrave(const QString & grave);
-        void setHedgehog(unsigned int idx, const HWHog &hh);
-        void setName(const QString & name);
-        void setNumHedgehogs(unsigned char num);
-        void setVoicepack(const QString & voicepack);
-        void setNetTeam(bool isNetTeam);
-        void setMissionTeam(bool isMissionTeam);
+  // convert team info into strings for further computation
+  QStringList teamGameConfig(quint32 InitHealth) const;
 
-        // convert team info into strings for further computation
-        QStringList teamGameConfig(quint32 InitHealth) const;
+  // comparison operators
+  bool operator==(const HWTeam& t1) const;
+  bool operator<(const HWTeam& t1) const;
+  HWTeam& operator=(const HWTeam& other);
 
-        // comparison operators
-        bool operator == (const HWTeam& t1) const;
-        bool operator < (const HWTeam& t1) const;
-        HWTeam & operator = (const HWTeam & other);
+ public Q_SLOTS:
+  void setColor(int color);
 
-public Q_SLOTS:
-        void setColor(int color);
+ private:
+  QString OldTeamName;
 
-    private:
+  // class members that contain the general team info and settings
+  QString m_name;
+  QString m_grave;
+  QString m_fort;
+  QString m_flag;
+  QString m_voicepack;
+  QList<HWHog> m_hedgehogs;
+  quint8 m_difficulty;
+  QList<BindAction> m_binds;
 
-        QString OldTeamName;
+  // class members that contain info for the current game setup
+  quint8 m_numHedgehogs;
+  int m_color;
+  bool m_isNetTeam;
+  bool m_isMissionTeam;
+  QString m_owner;
 
-        // class members that contain the general team info and settings
-        QString m_name;
-        QString m_grave;
-        QString m_fort;
-        QString m_flag;
-        QString m_voicepack;
-        QList<HWHog> m_hedgehogs;
-        quint8 m_difficulty;
-        QList<BindAction> m_binds;
-
-        // class members that contain info for the current game setup
-        quint8 m_numHedgehogs;
-        int m_color;
-        bool m_isNetTeam;
-        bool m_isMissionTeam;
-        QString m_owner;
-
-        // class members that contain statistics, etc.
-        std::array<unsigned int, MAX_ACHIEVEMENTS> AchievementProgress = {};
+  // class members that contain statistics, etc.
+  std::array<unsigned int, MAX_ACHIEVEMENTS> AchievementProgress = {};
 };
 
 #endif

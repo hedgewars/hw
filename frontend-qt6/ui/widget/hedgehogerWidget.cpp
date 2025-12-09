@@ -23,91 +23,78 @@
 
 #include "frameTeam.h"
 
-CHedgehogerWidget::CHedgehogerWidget(const QImage& im, const QImage& img, QWidget * parent) :
-    ItemNum(im, img, parent, 1)
-{
-    // TODO: maxHedgehogsPerGame doesn't reset properly and won't match map limits for now
-    /*if(parent) {
-      pOurFrameTeams = dynamic_cast<FrameTeams*>(parent->parentWidget());
-    }
-    if(pOurFrameTeams->overallHedgehogs + 4 > pOurFrameTeams->maxHedgehogsPerGame) {
-      numItems = pOurFrameTeams->maxHedgehogsPerGame - pOurFrameTeams->overallHedgehogs;
-    } else numItems = 4;
-    pOurFrameTeams->overallHedgehogs += numItems;*/
+CHedgehogerWidget::CHedgehogerWidget(const QImage& im, const QImage& img,
+                                     QWidget* parent)
+    : ItemNum(im, img, parent, 1) {
+  // TODO: maxHedgehogsPerGame doesn't reset properly and won't match map limits
+  // for now
+  /*if(parent) {
+    pOurFrameTeams = dynamic_cast<FrameTeams*>(parent->parentWidget());
+  }
+  if(pOurFrameTeams->overallHedgehogs + 4 > pOurFrameTeams->maxHedgehogsPerGame)
+  { numItems = pOurFrameTeams->maxHedgehogsPerGame -
+  pOurFrameTeams->overallHedgehogs; } else numItems = 4;
+  pOurFrameTeams->overallHedgehogs += numItems;*/
 
-    this->setMinimumWidth(48);
+  this->setMinimumWidth(48);
 }
 
-void CHedgehogerWidget::incItems()
-{
-    //if (pOurFrameTeams->overallHedgehogs < pOurFrameTeams->maxHedgehogsPerGame) {
-    numItems++;
-    //pOurFrameTeams->overallHedgehogs++;
-    Q_EMIT hedgehogsNumChanged();
-    //}
+void CHedgehogerWidget::incItems() {
+  // if (pOurFrameTeams->overallHedgehogs < pOurFrameTeams->maxHedgehogsPerGame)
+  // {
+  numItems++;
+  // pOurFrameTeams->overallHedgehogs++;
+  Q_EMIT hedgehogsNumChanged();
+  //}
 }
 
-void CHedgehogerWidget::decItems()
-{
-    numItems--;
-    //pOurFrameTeams->overallHedgehogs--;
-    Q_EMIT hedgehogsNumChanged();
+void CHedgehogerWidget::decItems() {
+  numItems--;
+  // pOurFrameTeams->overallHedgehogs--;
+  Q_EMIT hedgehogsNumChanged();
 }
 
-CHedgehogerWidget::~CHedgehogerWidget()
-{
-    // TODO: not called?
-    //pOurFrameTeams->overallHedgehogs-=numItems;
+CHedgehogerWidget::~CHedgehogerWidget() {
+  // TODO: not called?
+  // pOurFrameTeams->overallHedgehogs-=numItems;
 }
 
-void CHedgehogerWidget::setNonInteractive()
-{
-    nonInteractive=true;
-    repaint();
+void CHedgehogerWidget::setNonInteractive() {
+  nonInteractive = true;
+  repaint();
 }
 
-void CHedgehogerWidget::setHHNum(unsigned int num)
-{
-    /*unsigned int diff = num - numItems;
-    numItems += diff;
-    pOurFrameTeams->overallHedgehogs += diff;*/
-    numItems = num;
-    repaint();
+void CHedgehogerWidget::setHHNum(unsigned int num) {
+  /*unsigned int diff = num - numItems;
+  numItems += diff;
+  pOurFrameTeams->overallHedgehogs += diff;*/
+  numItems = num;
+  repaint();
 }
 
-unsigned char CHedgehogerWidget::getHedgehogsNum() const
-{
-    return numItems;
-}
+unsigned char CHedgehogerWidget::getHedgehogsNum() const { return numItems; }
 
-void CHedgehogerWidget::paintEvent(QPaintEvent* event)
-{
-    Q_UNUSED(event);
+void CHedgehogerWidget::paintEvent(QPaintEvent* event) {
+  Q_UNUSED(event);
 
-    if ((this->width() >= 11 * numItems + 26) || (numItems == 1))
-        ItemNum::paintEvent(event);
-    else
-    {
-        int width = this->width() - 38;
-        QPainter painter(this);
-
-        for(int i=0; i<numItems; i++)
-        {
-            QRect target((i * width) / (numItems -1), i % 2, 25, 35);
-            if (enabled)
-            {
-                painter.drawImage(target, m_im);
-            }
-            else
-            {
-                painter.drawImage(target, m_img);
-            }
-        }
-    }
-
+  if ((this->width() >= 11 * numItems + 26) || (numItems == 1))
+    ItemNum::paintEvent(event);
+  else {
+    int width = this->width() - 38;
     QPainter painter(this);
-    if (nonInteractive) painter.setPen(QPen(QColor(0xA0, 0xA0, 0xA0, 0xFF)));
-    painter.setFont(QFont(QStringLiteral("MS Shell Dlg"), 10, QFont::Bold));
-    painter.drawText(this->width() - 12, 23, QString::number(numItems));
 
+    for (int i = 0; i < numItems; i++) {
+      QRect target((i * width) / (numItems - 1), i % 2, 25, 35);
+      if (enabled) {
+        painter.drawImage(target, m_im);
+      } else {
+        painter.drawImage(target, m_img);
+      }
+    }
+  }
+
+  QPainter painter(this);
+  if (nonInteractive) painter.setPen(QPen(QColor(0xA0, 0xA0, 0xA0, 0xFF)));
+  painter.setFont(QFont(QStringLiteral("MS Shell Dlg"), 10, QFont::Bold));
+  painter.drawText(this->width() - 12, 23, QString::number(numItems));
 }

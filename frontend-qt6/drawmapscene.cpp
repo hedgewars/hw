@@ -16,14 +16,15 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsPathItem>
-#include <QtEndian>
-#include <QDebug>
-#include <QTransform>
+#include "drawmapscene.h"
+
 #include <math.h>
 
-#include "drawmapscene.h"
+#include <QDebug>
+#include <QGraphicsPathItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QTransform>
+#include <QtEndian>
 
 #define DRAWN_MAP_COLOR_LAND (Qt::yellow)
 #define DRAWN_MAP_COLOR_CURSOR_PEN (Qt::green)
@@ -33,426 +34,384 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-template <class T> T sqr(const T & x)
-{
-    return x*x;
+template <class T>
+T sqr(const T &x) {
+  return x * x;
 }
 
-DrawMapScene::DrawMapScene(QObject *parent) :
-    QGraphicsScene(parent),
-    m_pen(DRAWN_MAP_COLOR_LAND),
-    m_brush(DRAWN_MAP_COLOR_LAND),
-    m_cursor(new QGraphicsEllipseItem(-5, -5, 5, 5))
-{
-    setSceneRect(0, 0, 4096, 2048);
+DrawMapScene::DrawMapScene(QObject *parent)
+    : QGraphicsScene(parent),
+      m_pen(DRAWN_MAP_COLOR_LAND),
+      m_brush(DRAWN_MAP_COLOR_LAND),
+      m_cursor(new QGraphicsEllipseItem(-5, -5, 5, 5)) {
+  setSceneRect(0, 0, 4096, 2048);
 
-    QLinearGradient gradient(0, 0, 0, 2048);
-    gradient.setColorAt(0, QColor(60, 60, 155));
-    gradient.setColorAt(1, QColor(155, 155, 60));
+  QLinearGradient gradient(0, 0, 0, 2048);
+  gradient.setColorAt(0, QColor(60, 60, 155));
+  gradient.setColorAt(1, QColor(155, 155, 60));
 
-    m_eraser = QBrush(gradient);
-    setBackgroundBrush(m_eraser);
-    m_isErasing = false;
+  m_eraser = QBrush(gradient);
+  setBackgroundBrush(m_eraser);
+  m_isErasing = false;
 
-    m_pathType = Polyline;
+  m_pathType = Polyline;
 
-    m_pen.setWidth(DRAWN_MAP_BRUSH_SIZE_START);
-    m_pen.setJoinStyle(Qt::RoundJoin);
-    m_pen.setCapStyle(Qt::RoundCap);
-    m_currPath = 0;
+  m_pen.setWidth(DRAWN_MAP_BRUSH_SIZE_START);
+  m_pen.setJoinStyle(Qt::RoundJoin);
+  m_pen.setCapStyle(Qt::RoundCap);
+  m_currPath = 0;
 
-    m_isCursorShown = false;
-    QPen cursorPen = QPen(DRAWN_MAP_COLOR_CURSOR_PEN);
-    cursorPen.setJoinStyle(Qt::RoundJoin);
-    cursorPen.setCapStyle(Qt::RoundCap);
-    cursorPen.setWidth(brushSize());
-    m_cursor->setPen(cursorPen);
-    m_cursor->setZValue(1);
+  m_isCursorShown = false;
+  QPen cursorPen = QPen(DRAWN_MAP_COLOR_CURSOR_PEN);
+  cursorPen.setJoinStyle(Qt::RoundJoin);
+  cursorPen.setCapStyle(Qt::RoundCap);
+  cursorPen.setWidth(brushSize());
+  m_cursor->setPen(cursorPen);
+  m_cursor->setZValue(1);
 }
 
-void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
-{
-    if(m_currPath && (mouseEvent->buttons() & Qt::LeftButton))
-    {
-        QPainterPath path = m_currPath->path();
-        QPointF currentPos = mouseEvent->scenePos();
+void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) {
+  if (m_currPath && (mouseEvent->buttons() & Qt::LeftButton)) {
+    QPainterPath path = m_currPath->path();
+    QPointF currentPos = mouseEvent->scenePos();
 
-        if(mouseEvent->modifiers() & Qt::ControlModifier)
-            currentPos = putSomeConstraints(paths.first().initialPoint, currentPos);
+    if (mouseEvent->modifiers() & Qt::ControlModifier)
+      currentPos = putSomeConstraints(paths.first().initialPoint, currentPos);
 
-        switch (m_pathType)
-        {
-        case Polyline:
-            if(mouseEvent->modifiers() & Qt::ControlModifier)
-            {
-                int c = path.elementCount();
-                path.setElementPositionAt(c - 1, currentPos.x(), currentPos.y());
+    switch (m_pathType) {
+      case Polyline:
+        if (mouseEvent->modifiers() & Qt::ControlModifier) {
+          int c = path.elementCount();
+          path.setElementPositionAt(c - 1, currentPos.x(), currentPos.y());
 
-            }
-            else
-            {
-                path.lineTo(currentPos);
-                paths.first().points.append(mouseEvent->scenePos().toPoint());
-            }
-            break;
-        case Rectangle: {
-            path = QPainterPath();
-            QPointF p1 = paths.constFirst().initialPoint;
-            QPointF p2 = currentPos;
-            path.moveTo(p1);
-            path.lineTo(p1.x(), p2.y());
-            path.lineTo(p2);
-            path.lineTo(p2.x(), p1.y());
-            path.lineTo(p1);
-            break;
-            }
-        case Ellipse: {
-            path = QPainterPath();
-            QList<QPointF> points =
-                makeEllipse(paths.constFirst().initialPoint, currentPos);
-            path.addPolygon(QPolygonF(QVector<QPointF>::fromList(points)));
-            break;
+        } else {
+          path.lineTo(currentPos);
+          paths.first().points.append(mouseEvent->scenePos().toPoint());
         }
-        }
-
-        m_currPath->setPath(path);
-
-        Q_EMIT pathChanged();
+        break;
+      case Rectangle: {
+        path = QPainterPath();
+        QPointF p1 = paths.constFirst().initialPoint;
+        QPointF p2 = currentPos;
+        path.moveTo(p1);
+        path.lineTo(p1.x(), p2.y());
+        path.lineTo(p2);
+        path.lineTo(p2.x(), p1.y());
+        path.lineTo(p1);
+        break;
+      }
+      case Ellipse: {
+        path = QPainterPath();
+        QList<QPointF> points =
+            makeEllipse(paths.constFirst().initialPoint, currentPos);
+        path.addPolygon(QPolygonF(QVector<QPointF>::fromList(points)));
+        break;
+      }
     }
 
-    if(!m_isCursorShown)
-        showCursor();
-    m_cursor->setPos(mouseEvent->scenePos());
-}
-
-void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
-{
-    m_currPath = addPath(QPainterPath(), m_pen);
-
-    QPainterPath path = m_currPath->path();
-    QPointF p = mouseEvent->scenePos();
-    p += QPointF(0.01, 0.01);
-    path.moveTo(p);
-    path.lineTo(mouseEvent->scenePos());
-
-    PathParams params;
-    params.width = serializePenWidth(brushSize());
-    params.erasing = m_isErasing;
-    params.initialPoint = mouseEvent->scenePos().toPoint();
-    params.points = QList<QPoint>() << params.initialPoint;
-    paths.prepend(params);
     m_currPath->setPath(path);
 
     Q_EMIT pathChanged();
+  }
+
+  if (!m_isCursorShown) showCursor();
+  m_cursor->setPos(mouseEvent->scenePos());
 }
 
-void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
-{
-    if (m_currPath)
-    {
-        QPointF currentPos = mouseEvent->scenePos();
+void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
+  m_currPath = addPath(QPainterPath(), m_pen);
 
-        if(mouseEvent->modifiers() & Qt::ControlModifier)
-            currentPos = putSomeConstraints(paths.first().initialPoint, currentPos);
+  QPainterPath path = m_currPath->path();
+  QPointF p = mouseEvent->scenePos();
+  p += QPointF(0.01, 0.01);
+  path.moveTo(p);
+  path.lineTo(mouseEvent->scenePos());
 
-        switch (m_pathType)
-        {
-        case Polyline: {
-            QPainterPath path = m_currPath->path();
-            path.lineTo(mouseEvent->scenePos());
-            paths.first().points.append(currentPos.toPoint());
-            m_currPath->setPath(path);
-            simplifyLast();
-            break;
-        }
-        case Rectangle: {
-          QPoint p1 = paths.constFirst().initialPoint;
-          QPoint p2 = currentPos.toPoint();
-          QList<QPoint> rpoints;
-          rpoints << p1 << QPoint(p1.x(), p2.y()) << p2
-                  << QPoint(p2.x(), p1.y()) << p1;
-          paths.first().points = rpoints;
-          break;
-        }
-        case Ellipse:
-          QPoint p1 = paths.constFirst().initialPoint;
-          QPoint p2 = currentPos.toPoint();
-          QList<QPointF> points = makeEllipse(p1, p2);
-          QList<QPoint> epoints;
-          for (auto p : points) epoints.append(p.toPoint());
-          paths.first().points = epoints;
-          break;
-        }
+  PathParams params;
+  params.width = serializePenWidth(brushSize());
+  params.erasing = m_isErasing;
+  params.initialPoint = mouseEvent->scenePos().toPoint();
+  params.points = QList<QPoint>() << params.initialPoint;
+  paths.prepend(params);
+  m_currPath->setPath(path);
 
-        m_currPath = 0;
-
-        Q_EMIT pathChanged();
-    }
+  Q_EMIT pathChanged();
 }
 
-void DrawMapScene::setBrushSize(int newBrushSize)
-{
-    if(newBrushSize > DRAWN_MAP_BRUSH_SIZE_MAX)
-        newBrushSize = DRAWN_MAP_BRUSH_SIZE_MAX;
-    if(newBrushSize < DRAWN_MAP_BRUSH_SIZE_MIN)
-        newBrushSize = DRAWN_MAP_BRUSH_SIZE_MIN;
+void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) {
+  if (m_currPath) {
+    QPointF currentPos = mouseEvent->scenePos();
 
-    m_pen.setWidth(newBrushSize);
-    QPen cursorPen = m_cursor->pen();
-    cursorPen.setWidth(m_pen.width());
-    m_cursor->setPen(cursorPen);
-    if(m_currPath)
-    {
-        m_currPath->setPen(m_pen);
-        paths.first().width = serializePenWidth(m_pen.width());
-    }
+    if (mouseEvent->modifiers() & Qt::ControlModifier)
+      currentPos = putSomeConstraints(paths.first().initialPoint, currentPos);
 
-    Q_EMIT brushSizeChanged(newBrushSize);
-}
-
-int DrawMapScene::brushSize()
-{
-    return m_pen.width();
-}
-
-void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
-{
-    int b = brushSize();
-    if(wheelEvent->delta() > 0)
-        setBrushSize(b + DRAWN_MAP_BRUSH_SIZE_STEP);
-    else if(wheelEvent->delta() < 0 && b >= DRAWN_MAP_BRUSH_SIZE_MIN)
-        setBrushSize(b - DRAWN_MAP_BRUSH_SIZE_STEP);
-}
-
-void DrawMapScene::showCursor()
-{
-    if(!m_isCursorShown)
-        addItem(m_cursor);
-
-    m_isCursorShown = true;
-}
-
-void DrawMapScene::hideCursor()
-{
-    if(m_isCursorShown)
-        removeItem(m_cursor);
-
-    m_isCursorShown = false;
-}
-
-void DrawMapScene::undo()
-{
-    // cursor is a part of items()
-    if(m_isCursorShown)
-        return;
-
-    if (!paths.isEmpty()) {
-      removeItem(items().constFirst());
-      paths.removeFirst();
-
-      Q_EMIT pathChanged();
-    } else if (!oldItems.isEmpty()) {
-      while (!oldItems.isEmpty()) {
-        addItem(oldItems.takeFirst());
+    switch (m_pathType) {
+      case Polyline: {
+        QPainterPath path = m_currPath->path();
+        path.lineTo(mouseEvent->scenePos());
+        paths.first().points.append(currentPos.toPoint());
+        m_currPath->setPath(path);
+        simplifyLast();
+        break;
       }
-      paths = oldPaths;
-
-      Q_EMIT pathChanged();
-    }
-}
-
-void DrawMapScene::clearMap()
-{
-    // cursor is a part of items()
-    if (m_isCursorShown) {
-      return;
-    }
-
-    // don't clear if already cleared
-    if (items().isEmpty()) {
-      return;
-    }
-
-    m_specialPoints.clear();
-    oldItems.clear();
-
-    // do this since clear() would _destroy_ all items
-    for(int i = paths.size() - 1; i >= 0; --i)
-    {
-      oldItems.push_front(items().constFirst());
-      removeItem(items().constFirst());
+      case Rectangle: {
+        QPoint p1 = paths.constFirst().initialPoint;
+        QPoint p2 = currentPos.toPoint();
+        QList<QPoint> rpoints;
+        rpoints << p1 << QPoint(p1.x(), p2.y()) << p2 << QPoint(p2.x(), p1.y())
+                << p1;
+        paths.first().points = rpoints;
+        break;
+      }
+      case Ellipse:
+        QPoint p1 = paths.constFirst().initialPoint;
+        QPoint p2 = currentPos.toPoint();
+        QList<QPointF> points = makeEllipse(p1, p2);
+        QList<QPoint> epoints;
+        for (auto p : points) epoints.append(p.toPoint());
+        paths.first().points = epoints;
+        break;
     }
 
-    items().clear();
-
-    oldPaths = paths;
-
-    paths.clear();
+    m_currPath = 0;
 
     Q_EMIT pathChanged();
+  }
 }
 
+void DrawMapScene::setBrushSize(int newBrushSize) {
+  if (newBrushSize > DRAWN_MAP_BRUSH_SIZE_MAX)
+    newBrushSize = DRAWN_MAP_BRUSH_SIZE_MAX;
+  if (newBrushSize < DRAWN_MAP_BRUSH_SIZE_MIN)
+    newBrushSize = DRAWN_MAP_BRUSH_SIZE_MIN;
 
-void DrawMapScene::setErasing(bool erasing)
-{
-    m_isErasing = erasing;
-    QPen cursorPen = m_cursor->pen();
-    if(erasing) {
-        m_pen.setBrush(m_eraser);
-        cursorPen.setColor(DRAWN_MAP_COLOR_CURSOR_ERASER);
-    } else {
-        m_pen.setBrush(m_brush);
-        cursorPen.setColor(DRAWN_MAP_COLOR_CURSOR_PEN);
-    }
-    m_cursor->setPen(cursorPen);
+  m_pen.setWidth(newBrushSize);
+  QPen cursorPen = m_cursor->pen();
+  cursorPen.setWidth(m_pen.width());
+  m_cursor->setPen(cursorPen);
+  if (m_currPath) {
+    m_currPath->setPen(m_pen);
+    paths.first().width = serializePenWidth(m_pen.width());
+  }
+
+  Q_EMIT brushSizeChanged(newBrushSize);
 }
 
-QByteArray DrawMapScene::encode()
-{
-    QByteArray b(m_specialPoints);
+int DrawMapScene::brushSize() { return m_pen.width(); }
 
-    for(int i = paths.size() - 1; i >= 0; --i)
-    {
-        int cnt = 0;
-        PathParams params = paths.at(i);
-        for (auto point : params.points) {
-          qint16 px = qToBigEndian((qint16)point.x());
-          qint16 py = qToBigEndian((qint16)point.y());
-          quint8 flags = 0;
-          if (!cnt) {
-            flags = 0x80 + params.width;
-            if (params.erasing) flags |= 0x40;
-          }
-          b.append((const char *)&px, 2);
-          b.append((const char *)&py, 2);
-          b.append((const char *)&flags, 1);
-
-          ++cnt;
-        }
-    }
-
-    return b;
+void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent) {
+  int b = brushSize();
+  if (wheelEvent->delta() > 0)
+    setBrushSize(b + DRAWN_MAP_BRUSH_SIZE_STEP);
+  else if (wheelEvent->delta() < 0 && b >= DRAWN_MAP_BRUSH_SIZE_MIN)
+    setBrushSize(b - DRAWN_MAP_BRUSH_SIZE_STEP);
 }
 
-void DrawMapScene::decode(QByteArray data)
-{
-    hideCursor();
+void DrawMapScene::showCursor() {
+  if (!m_isCursorShown) addItem(m_cursor);
 
-    // Remember erasing mode
-    bool erasing = m_isErasing;
+  m_isCursorShown = true;
+}
 
-    // Use seperate for decoding the map, don't mess with the user pen
-    QPen load_pen = QPen(m_pen);
+void DrawMapScene::hideCursor() {
+  if (m_isCursorShown) removeItem(m_cursor);
 
-    oldItems.clear();
-    oldPaths.clear();
-    clear();
-    paths.clear();
-    m_specialPoints.clear();
+  m_isCursorShown = false;
+}
 
-    PathParams params;
+void DrawMapScene::undo() {
+  // cursor is a part of items()
+  if (m_isCursorShown) return;
 
-    bool isSpecial = true;
-
-    while(data.size() >= 5)
-    {
-        qint16 px = qFromBigEndian(*(qint16 *)data.data());
-        data.remove(0, 2);
-        qint16 py = qFromBigEndian(*(qint16 *)data.data());
-        data.remove(0, 2);
-        quint8 flags = *(quint8 *)data.data();
-        data.remove(0, 1);
-        //qDebug() << px << py;
-        if(flags & 0x80)
-        {
-            isSpecial = false;
-
-            if(!params.points.isEmpty())
-            {
-                addPath(pointsToPath(params.points), load_pen);
-
-                paths.prepend(params);
-
-                params.points.clear();
-            }
-
-            quint8 penWidth = flags & 0x3f;
-            load_pen.setWidth(deserializePenWidth(penWidth));
-            params.erasing = flags & 0x40;
-            if(params.erasing)
-                load_pen.setBrush(m_eraser);
-            else
-                load_pen.setBrush(m_brush);
-            params.width = penWidth;
-        } else
-            if(isSpecial)
-            {
-                QPainterPath path;
-                path.addEllipse(QPointF(px, py), 10, 10);
-
-                addPath(path);
-
-                qint16 x = qToBigEndian(px);
-                qint16 y = qToBigEndian(py);
-                m_specialPoints.append((const char *)&x, 2);
-                m_specialPoints.append((const char *)&y, 2);
-                m_specialPoints.append((const char *)&flags, 1);
-            }
-
-        if(!isSpecial)
-            params.points.append(QPoint(px, py));
-    }
-
-    if(!params.points.isEmpty())
-    {
-        addPath(pointsToPath(params.points), load_pen);
-        paths.prepend(params);
-    }
+  if (!paths.isEmpty()) {
+    removeItem(items().constFirst());
+    paths.removeFirst();
 
     Q_EMIT pathChanged();
+  } else if (!oldItems.isEmpty()) {
+    while (!oldItems.isEmpty()) {
+      addItem(oldItems.takeFirst());
+    }
+    paths = oldPaths;
 
-    // Restore erasing mode
-    setErasing(erasing);
+    Q_EMIT pathChanged();
+  }
 }
 
-void DrawMapScene::simplifyLast()
-{
-    if(paths.isEmpty()) return;
+void DrawMapScene::clearMap() {
+  // cursor is a part of items()
+  if (m_isCursorShown) {
+    return;
+  }
 
-    QList<QPoint> points = paths.at(0).points;
+  // don't clear if already cleared
+  if (items().isEmpty()) {
+    return;
+  }
 
-    QPoint prevPoint = points.first();
-    int i = 1;
-    while(i < points.size())
-    {
-        if( ((i != points.size() - 1) || (prevPoint == points[i]))
-                && (sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
-          )
-            points.removeAt(i);
-        else
-        {
-            prevPoint = points[i];
-            ++i;
-        }
-    }
+  m_specialPoints.clear();
+  oldItems.clear();
 
-    paths[0].points = points;
+  // do this since clear() would _destroy_ all items
+  for (int i = paths.size() - 1; i >= 0; --i) {
+    oldItems.push_front(items().constFirst());
+    removeItem(items().constFirst());
+  }
 
+  items().clear();
 
-    // redraw path
-    {
-      QGraphicsPathItem *pathItem =
-          static_cast<QGraphicsPathItem *>(items().at(m_isCursorShown ? 1 : 0));
-      pathItem->setPath(pointsToPath(paths[0].points));
-    }
+  oldPaths = paths;
+
+  paths.clear();
+
+  Q_EMIT pathChanged();
 }
 
-int DrawMapScene::pointsCount()
-{
+void DrawMapScene::setErasing(bool erasing) {
+  m_isErasing = erasing;
+  QPen cursorPen = m_cursor->pen();
+  if (erasing) {
+    m_pen.setBrush(m_eraser);
+    cursorPen.setColor(DRAWN_MAP_COLOR_CURSOR_ERASER);
+  } else {
+    m_pen.setBrush(m_brush);
+    cursorPen.setColor(DRAWN_MAP_COLOR_CURSOR_PEN);
+  }
+  m_cursor->setPen(cursorPen);
+}
+
+QByteArray DrawMapScene::encode() {
+  QByteArray b(m_specialPoints);
+
+  for (int i = paths.size() - 1; i >= 0; --i) {
     int cnt = 0;
-    for (auto p : paths) cnt += p.points.size();
+    PathParams params = paths.at(i);
+    for (auto point : params.points) {
+      qint16 px = qToBigEndian((qint16)point.x());
+      qint16 py = qToBigEndian((qint16)point.y());
+      quint8 flags = 0;
+      if (!cnt) {
+        flags = 0x80 + params.width;
+        if (params.erasing) flags |= 0x40;
+      }
+      b.append((const char *)&px, 2);
+      b.append((const char *)&py, 2);
+      b.append((const char *)&flags, 1);
 
-    return cnt;
+      ++cnt;
+    }
+  }
+
+  return b;
+}
+
+void DrawMapScene::decode(QByteArray data) {
+  hideCursor();
+
+  // Remember erasing mode
+  bool erasing = m_isErasing;
+
+  // Use seperate for decoding the map, don't mess with the user pen
+  QPen load_pen = QPen(m_pen);
+
+  oldItems.clear();
+  oldPaths.clear();
+  clear();
+  paths.clear();
+  m_specialPoints.clear();
+
+  PathParams params;
+
+  bool isSpecial = true;
+
+  while (data.size() >= 5) {
+    qint16 px = qFromBigEndian(*(qint16 *)data.data());
+    data.remove(0, 2);
+    qint16 py = qFromBigEndian(*(qint16 *)data.data());
+    data.remove(0, 2);
+    quint8 flags = *(quint8 *)data.data();
+    data.remove(0, 1);
+    // qDebug() << px << py;
+    if (flags & 0x80) {
+      isSpecial = false;
+
+      if (!params.points.isEmpty()) {
+        addPath(pointsToPath(params.points), load_pen);
+
+        paths.prepend(params);
+
+        params.points.clear();
+      }
+
+      quint8 penWidth = flags & 0x3f;
+      load_pen.setWidth(deserializePenWidth(penWidth));
+      params.erasing = flags & 0x40;
+      if (params.erasing)
+        load_pen.setBrush(m_eraser);
+      else
+        load_pen.setBrush(m_brush);
+      params.width = penWidth;
+    } else if (isSpecial) {
+      QPainterPath path;
+      path.addEllipse(QPointF(px, py), 10, 10);
+
+      addPath(path);
+
+      qint16 x = qToBigEndian(px);
+      qint16 y = qToBigEndian(py);
+      m_specialPoints.append((const char *)&x, 2);
+      m_specialPoints.append((const char *)&y, 2);
+      m_specialPoints.append((const char *)&flags, 1);
+    }
+
+    if (!isSpecial) params.points.append(QPoint(px, py));
+  }
+
+  if (!params.points.isEmpty()) {
+    addPath(pointsToPath(params.points), load_pen);
+    paths.prepend(params);
+  }
+
+  Q_EMIT pathChanged();
+
+  // Restore erasing mode
+  setErasing(erasing);
+}
+
+void DrawMapScene::simplifyLast() {
+  if (paths.isEmpty()) return;
+
+  QList<QPoint> points = paths.at(0).points;
+
+  QPoint prevPoint = points.first();
+  int i = 1;
+  while (i < points.size()) {
+    if (((i != points.size() - 1) || (prevPoint == points[i])) &&
+        (sqr(prevPoint.x() - points[i].x()) +
+             sqr(prevPoint.y() - points[i].y()) <
+         1000))
+      points.removeAt(i);
+    else {
+      prevPoint = points[i];
+      ++i;
+    }
+  }
+
+  paths[0].points = points;
+
+  // redraw path
+  {
+    QGraphicsPathItem *pathItem =
+        static_cast<QGraphicsPathItem *>(items().at(m_isCursorShown ? 1 : 0));
+    pathItem->setPath(pointsToPath(paths[0].points));
+  }
+}
+
+int DrawMapScene::pointsCount() {
+  int cnt = 0;
+  for (auto p : paths) cnt += p.points.size();
+
+  return cnt;
 }
 
 QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> &points) {
@@ -468,20 +427,11 @@ QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> &points) {
   return path;
 }
 
-quint8 DrawMapScene::serializePenWidth(int width)
-{
-    return (width - 6) / 10;
-}
+quint8 DrawMapScene::serializePenWidth(int width) { return (width - 6) / 10; }
 
-int DrawMapScene::deserializePenWidth(quint8 width)
-{
-    return width * 10 + 6;
-}
+int DrawMapScene::deserializePenWidth(quint8 width) { return width * 10 + 6; }
 
-void DrawMapScene::setPathType(PathType pathType)
-{
-    m_pathType = pathType;
-}
+void DrawMapScene::setPathType(PathType pathType) { m_pathType = pathType; }
 
 QList<QPointF> DrawMapScene::makeEllipse(QPointF center, QPointF corner) {
   QList<QPointF> l;
@@ -524,41 +474,41 @@ void DrawMapScene::optimize() {
     return;
   }
 
-    // break paths into segments
-    Paths pth;
+  // break paths into segments
+  Paths pth;
 
-    for (auto &&pp : paths) {
-      int l = pp.points.size();
+  for (auto &&pp : paths) {
+    int l = pp.points.size();
 
-      if (l == 1) {
+    if (l == 1) {
+      pth.prepend(pp);
+    } else {
+      for (int i = l - 2; i >= 0; --i) {
+        PathParams p = pp;
+        p.points = QList<QPoint>() << p.points[i] << p.points[i + 1];
         pth.prepend(pp);
-      } else {
-        for (int i = l - 2; i >= 0; --i) {
-          PathParams p = pp;
-          p.points = QList<QPoint>() << p.points[i] << p.points[i + 1];
-          pth.prepend(pp);
-        }
       }
     }
+  }
 
-    // clear the scene
-    oldItems.clear();
-    oldPaths.clear();
-    clear();
-    paths.clear();
-    m_specialPoints.clear();
+  // clear the scene
+  oldItems.clear();
+  oldPaths.clear();
+  clear();
+  paths.clear();
+  m_specialPoints.clear();
 
-    // render the result
-    for (auto &&p : pth) {
-      if (p.erasing)
-        m_pen.setBrush(m_eraser);
-      else
-        m_pen.setBrush(m_brush);
+  // render the result
+  for (auto &&p : pth) {
+    if (p.erasing)
+      m_pen.setBrush(m_eraser);
+    else
+      m_pen.setBrush(m_brush);
 
-      m_pen.setWidth(deserializePenWidth(p.width));
+    m_pen.setWidth(deserializePenWidth(p.width));
 
-      addPath(pointsToPath(p.points), m_pen);
-    }
+    addPath(pointsToPath(p.points), m_pen);
+  }
 
-    Q_EMIT pathChanged();
+  Q_EMIT pathChanged();
 }

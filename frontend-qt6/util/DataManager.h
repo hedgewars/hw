@@ -37,123 +37,122 @@ class QStandardItemModel;
 /**
  * @brief Offers access to the data files of hedgewars.
  *
- * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+ * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton
+ * pattern</a>
  *
  * @author sheepluva
  * @since 0.9.17
  */
-class DataManager: public QObject
-{
-        Q_OBJECT
+class DataManager : public QObject {
+  Q_OBJECT
 
-    public:
-        /**
-         * @brief Returns reference to the <i>singleton</i> instance of this class.
-         *
-         * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
-         *
-         * @return reference to the instance.
-         */
-        static DataManager & instance();
+ public:
+  /**
+   * @brief Returns reference to the <i>singleton</i> instance of this class.
+   *
+   * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton
+   * pattern</a>
+   *
+   * @return reference to the instance.
+   */
+  static DataManager& instance();
 
-        /**
-         * @brief Returns a sorted list of data directory entries.
-         *
-         * @param subDirectory sub-directory to search.
-         * @param filters filters for entry type.
-         * @param nameFilters filters by name patterns.
-         * @return a sorted list of matches in the subDirectory of data directory.
-         */
-        QStringList entryList(const QString & subDirectory,
-                              QDir::Filters filters = QDir::NoFilter,
-                              const QStringList & nameFilters = QStringList("*"),
-                              bool withDLC = true
-                             ) const;
+  /**
+   * @brief Returns a sorted list of data directory entries.
+   *
+   * @param subDirectory sub-directory to search.
+   * @param filters filters for entry type.
+   * @param nameFilters filters by name patterns.
+   * @return a sorted list of matches in the subDirectory of data directory.
+   */
+  QStringList entryList(const QString& subDirectory,
+                        QDir::Filters filters = QDir::NoFilter,
+                        const QStringList& nameFilters = QStringList("*"),
+                        bool withDLC = true) const;
 
-        /**
-         * @brief Returns pointer to a model of available game styles.
-         *
-         * The model is updated automatically on data reload.
-         *
-         * @return game style model pointer.
-         */
-        GameStyleModel * gameStyleModel();
+  /**
+   * @brief Returns pointer to a model of available game styles.
+   *
+   * The model is updated automatically on data reload.
+   *
+   * @return game style model pointer.
+   */
+  GameStyleModel* gameStyleModel();
 
-        /**
-         * @brief Returns pointer to a model of available hats.
-         *
-         * The model is updated automatically on data reload.
-         *
-         * @return hat model pointer.
-         */
-        HatModel * hatModel();
+  /**
+   * @brief Returns pointer to a model of available hats.
+   *
+   * The model is updated automatically on data reload.
+   *
+   * @return hat model pointer.
+   */
+  HatModel* hatModel();
 
-        /**
-         * @brief Returns pointer to a model of available static maps.
-         *
-         * The model is updated automatically on data reload.
-         *
-         * @return map model pointer.
-         */
-        MapModel * staticMapModel();
+  /**
+   * @brief Returns pointer to a model of available static maps.
+   *
+   * The model is updated automatically on data reload.
+   *
+   * @return map model pointer.
+   */
+  MapModel* staticMapModel();
 
-        /**
-         * @brief Returns pointer to a model of available mission maps.
-         *
-         * The model is updated automatically on data reload.
-         *
-         * @return map model pointer.
-         */
-        MapModel * missionMapModel();
+  /**
+   * @brief Returns pointer to a model of available mission maps.
+   *
+   * The model is updated automatically on data reload.
+   *
+   * @return map model pointer.
+   */
+  MapModel* missionMapModel();
 
-        /**
-         * @brief Returns pointer to a model of available themes.
-         *
-         * The model is updated automatically on data reload.
-         *
-         * @return theme model pointer.
-         */
-        ThemeModel * themeModel();
+  /**
+   * @brief Returns pointer to a model of available themes.
+   *
+   * The model is updated automatically on data reload.
+   *
+   * @return theme model pointer.
+   */
+  ThemeModel* themeModel();
 
-        QStandardItemModel * colorsModel();
-        QStandardItemModel * bindsModel();
+  QStandardItemModel* colorsModel();
+  QStandardItemModel* bindsModel();
 
-        QString settingsFileName();
+  QString settingsFileName();
 
-        static QString safeFileName(QString fileName);
+  static QString safeFileName(QString fileName);
 
-        static bool ensureFileExists(const QString & fileName);
+  static bool ensureFileExists(const QString& fileName);
 
-    public Q_SLOTS:
-        /// Reloads data from storage.
-        void reload();
-        void resetColors();
+ public Q_SLOTS:
+  /// Reloads data from storage.
+  void reload();
+  void resetColors();
 
+ Q_SIGNALS:
+  /// This signal is emitted after the data has been updated.
+  void updated();
 
-    Q_SIGNALS:
-        /// This signal is emitted after the data has been updated.
-        void updated();
+ private:
+  /**
+   * @brief Class constructor of the <i>singleton</i>.
+   *
+   * Not to be used from outside the class,
+   * use the static {@link DataManager::instance()} instead.
+   *
+   * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton
+   * pattern</a>
+   */
+  DataManager();
 
-
-    private:
-        /**
-         * @brief Class constructor of the <i>singleton</i>.
-         *
-         * Not to be used from outside the class,
-         * use the static {@link DataManager::instance()} instead.
-         *
-         * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
-         */
-        DataManager();
-
-        GameStyleModel * m_gameStyleModel; ///< game style model instance
-        HatModel * m_hatModel; ///< hat model instance
-        MapModel * m_staticMapModel; ///< static map model instance
-        MapModel * m_missionMapModel; ///< mission map model instance
-        ThemeModel * m_themeModel; ///< theme model instance
-        QStandardItemModel * m_colorsModel;
-        QStandardItemModel * m_bindsModel;
-        QString m_settingsFileName;
+  GameStyleModel* m_gameStyleModel;  ///< game style model instance
+  HatModel* m_hatModel;              ///< hat model instance
+  MapModel* m_staticMapModel;        ///< static map model instance
+  MapModel* m_missionMapModel;       ///< mission map model instance
+  ThemeModel* m_themeModel;          ///< theme model instance
+  QStandardItemModel* m_colorsModel;
+  QStandardItemModel* m_bindsModel;
+  QString m_settingsFileName;
 };
 
-#endif // HEDGEWARS_DATAMANAGER_H
+#endif  // HEDGEWARS_DATAMANAGER_H

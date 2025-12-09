@@ -16,254 +16,264 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
-#include <QPushButton>
-#include <QComboBox>
-#include <QLabel>
-#include <QLineEdit>
-#include <QMessageBox>
-#include <QHeaderView>
-#include <QGroupBox>
-#include <QMenu>
-#include <QDebug>
-#include <QSplitter>
-#include <QSettings>
-
-#include <QSortFilterProxyModel>
-
-#include "roomslistmodel.h"
-
-#include "gameSchemeModel.h"
-#include "hwconsts.h"
-#include "chatwidget.h"
-#include "roomnameprompt.h"
-#include "lineeditcursor.h"
 #include "pageroomslist.h"
 
-void RoomTableView::moveDown()
-{
-    setCurrentIndex(moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+#include <QComboBox>
+#include <QDebug>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMenu>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QSettings>
+#include <QSortFilterProxyModel>
+#include <QSplitter>
+#include <QVBoxLayout>
+
+#include "chatwidget.h"
+#include "gameSchemeModel.h"
+#include "hwconsts.h"
+#include "lineeditcursor.h"
+#include "roomnameprompt.h"
+#include "roomslistmodel.h"
+
+void RoomTableView::moveDown() {
+  setCurrentIndex(moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
 }
 
-void RoomTableView::moveUp()
-{
-    setCurrentIndex(moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+void RoomTableView::moveUp() {
+  setCurrentIndex(moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
 }
 
-QLayout * PageRoomsList::bodyLayoutDefinition()
-{
-    // TODO move stylesheet stuff into css/qt.css
+QLayout *PageRoomsList::bodyLayoutDefinition() {
+  // TODO move stylesheet stuff into css/qt.css
 
-    QVBoxLayout * pageLayout = new QVBoxLayout();
-    pageLayout->setSpacing(0);
+  QVBoxLayout *pageLayout = new QVBoxLayout();
+  pageLayout->setSpacing(0);
 
-    QGridLayout * topLayout = new QGridLayout();
-    topLayout->setSpacing(0);
-    pageLayout->addLayout(topLayout, 0);
+  QGridLayout *topLayout = new QGridLayout();
+  topLayout->setSpacing(0);
+  pageLayout->addLayout(topLayout, 0);
 
-    // State button
+  // State button
 
-    QPushButton * btnState = new QPushButton(tr("Room state"));
-    btnState->setStyleSheet(QStringLiteral("QPushButton { background-color: #F6CB1C; border-color: #F6CB1C; color: #130F2A; padding: 1px 3px 3px 3px; margin: 0px; border-bottom: none; border-radius: 0px; border-top-left-radius: 10px; } QPushButton:hover { background-color: #FFEB3C; border-color: #F6CB1C; color: #000000 } QPushButton:pressed { background-color: #FFEB3C; border-color: #F6CB1C; color: #000000; }"));
-    btnState->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+  QPushButton *btnState = new QPushButton(tr("Room state"));
+  btnState->setStyleSheet(QStringLiteral(
+      "QPushButton { background-color: #F6CB1C; border-color: #F6CB1C; color: "
+      "#130F2A; padding: 1px 3px 3px 3px; margin: 0px; border-bottom: none; "
+      "border-radius: 0px; border-top-left-radius: 10px; } QPushButton:hover { "
+      "background-color: #FFEB3C; border-color: #F6CB1C; color: #000000 } "
+      "QPushButton:pressed { background-color: #FFEB3C; border-color: #F6CB1C; "
+      "color: #000000; }"));
+  btnState->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
-    // State menu
+  // State menu
 
-    QMenu * stateMenu = new QMenu(btnState);
-    showGamesInLobby = new QAction(QAction::tr("Show games in lobby"), stateMenu);
-    showGamesInLobby->setCheckable(true);
-    showGamesInLobby->setChecked(true);
-    showGamesInProgress = new QAction(QAction::tr("Show games in-progress"), stateMenu);
-    showGamesInProgress->setCheckable(true);
-    showGamesInProgress->setChecked(true);
-    showPassword = new QAction(QAction::tr("Show password protected"), stateMenu);
-    showPassword->setCheckable(true);
-    showPassword->setChecked(true);
-    showJoinRestricted = new QAction(QAction::tr("Show join restricted"), stateMenu);
-    showJoinRestricted->setCheckable(true);
-    showJoinRestricted->setChecked(true);
-    showIncompatible = new QAction(QAction::tr("Show incompatible"), stateMenu);
-    showIncompatible->setCheckable(true);
-    showIncompatible->setChecked(true);
-    stateMenu->addAction(showGamesInLobby);
-    stateMenu->addAction(showGamesInProgress);
-    stateMenu->addAction(showPassword);
-    stateMenu->addAction(showJoinRestricted);
-    stateMenu->addAction(showIncompatible);
-    btnState->setMenu(stateMenu);
+  QMenu *stateMenu = new QMenu(btnState);
+  showGamesInLobby = new QAction(QAction::tr("Show games in lobby"), stateMenu);
+  showGamesInLobby->setCheckable(true);
+  showGamesInLobby->setChecked(true);
+  showGamesInProgress =
+      new QAction(QAction::tr("Show games in-progress"), stateMenu);
+  showGamesInProgress->setCheckable(true);
+  showGamesInProgress->setChecked(true);
+  showPassword = new QAction(QAction::tr("Show password protected"), stateMenu);
+  showPassword->setCheckable(true);
+  showPassword->setChecked(true);
+  showJoinRestricted =
+      new QAction(QAction::tr("Show join restricted"), stateMenu);
+  showJoinRestricted->setCheckable(true);
+  showJoinRestricted->setChecked(true);
+  showIncompatible = new QAction(QAction::tr("Show incompatible"), stateMenu);
+  showIncompatible->setCheckable(true);
+  showIncompatible->setChecked(true);
+  stateMenu->addAction(showGamesInLobby);
+  stateMenu->addAction(showGamesInProgress);
+  stateMenu->addAction(showPassword);
+  stateMenu->addAction(showJoinRestricted);
+  stateMenu->addAction(showIncompatible);
+  btnState->setMenu(stateMenu);
 
-    // Help/prompt message at top
-    QLabel * lblDesc = new QLabel(tr("Search for a room:"));
-    lblDesc->setObjectName("lblDesc");
-    lblDesc->setStyleSheet(QStringLiteral("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; padding: 5px 10px 3px 6px;}"));
-    lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    lblDesc->setFixedHeight(24);
-    lblDesc->setMinimumWidth(0);
+  // Help/prompt message at top
+  QLabel *lblDesc = new QLabel(tr("Search for a room:"));
+  lblDesc->setObjectName("lblDesc");
+  lblDesc->setStyleSheet(
+      QStringLiteral("#lblDesc { color: #130F2A; background: #F6CB1C; border: "
+                     "solid 4px #F6CB1C; padding: 5px 10px 3px 6px;}"));
+  lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  lblDesc->setFixedHeight(24);
+  lblDesc->setMinimumWidth(0);
 
-    // Search text box
-    QWidget * searchContainer = new QWidget();
-    searchContainer->setFixedHeight(24);
-    searchContainer->setObjectName("searchContainer");
-    searchContainer->setStyleSheet(QStringLiteral("#searchContainer { background: #F6CB1C; border-top-right-radius: 10px; padding: 3px; }"));
-    searchContainer->setFixedWidth(200);
-    searchText = new LineEditCursor(searchContainer);
-    searchText->setFixedWidth(200);
-    searchText->setMaxLength(60);
-    searchText->setFixedHeight(22);
-    searchText->setStyleSheet(QStringLiteral("LineEditCursor { border-width: 0px; border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: 4px; padding-bottom: 2px; background-color: rgb(23, 11, 54); } LineEditCursor:hover, LineEditCursor:focus { background-color: rgb(13, 5, 68); }"));
+  // Search text box
+  QWidget *searchContainer = new QWidget();
+  searchContainer->setFixedHeight(24);
+  searchContainer->setObjectName("searchContainer");
+  searchContainer->setStyleSheet(
+      QStringLiteral("#searchContainer { background: #F6CB1C; "
+                     "border-top-right-radius: 10px; padding: 3px; }"));
+  searchContainer->setFixedWidth(200);
+  searchText = new LineEditCursor(searchContainer);
+  searchText->setFixedWidth(200);
+  searchText->setMaxLength(60);
+  searchText->setFixedHeight(22);
+  searchText->setStyleSheet(QStringLiteral(
+      "LineEditCursor { border-width: 0px; border-radius: 6px; margin-top: "
+      "3px; margin-right: 3px; padding-left: 4px; padding-bottom: 2px; "
+      "background-color: rgb(23, 11, 54); } LineEditCursor:hover, "
+      "LineEditCursor:focus { background-color: rgb(13, 5, 68); }"));
 
-    // Corner widget
-    QLabel * corner = new QLabel();
-    corner->setPixmap(QPixmap(QStringLiteral(":/res/inverse-corner-bl.png")));
-    corner->setFixedSize(10, 10);
+  // Corner widget
+  QLabel *corner = new QLabel();
+  corner->setPixmap(QPixmap(QStringLiteral(":/res/inverse-corner-bl.png")));
+  corner->setFixedSize(10, 10);
 
-    const QIcon& lp = QIcon(":/res/new.png");
-    //QSize sz = lp.actualSize(QSize(65535, 65535));
-    BtnCreate = new QPushButton();
-    BtnCreate->setText(tr("Create room"));
-    BtnCreate->setIcon(lp);
-    BtnCreate->setStyleSheet(QStringLiteral("padding: 4px 8px; margin-bottom: 6px;"));
+  const QIcon &lp = QIcon(":/res/new.png");
+  // QSize sz = lp.actualSize(QSize(65535, 65535));
+  BtnCreate = new QPushButton();
+  BtnCreate->setText(tr("Create room"));
+  BtnCreate->setIcon(lp);
+  BtnCreate->setStyleSheet(
+      QStringLiteral("padding: 4px 8px; margin-bottom: 6px;"));
 
-    BtnJoin = new QPushButton(tr("Join room"));
-    BtnJoin->setStyleSheet(QStringLiteral("padding: 4px 8px; margin-bottom: 6px; margin-left: 6px;"));
-    BtnJoin->setEnabled(false);
+  BtnJoin = new QPushButton(tr("Join room"));
+  BtnJoin->setStyleSheet(QStringLiteral(
+      "padding: 4px 8px; margin-bottom: 6px; margin-left: 6px;"));
+  BtnJoin->setEnabled(false);
 
-    // Add widgets to top layout
-    topLayout->addWidget(btnState, 1, 0);
-    topLayout->addWidget(lblDesc, 1, 1);
-    topLayout->addWidget(searchContainer, 1, 2);
-    topLayout->addWidget(corner, 1, 3, Qt::AlignBottom);
-    topLayout->addWidget(BtnCreate, 0, 5, 2, 1);
-    topLayout->addWidget(BtnJoin, 0, 6, 2, 1);
+  // Add widgets to top layout
+  topLayout->addWidget(btnState, 1, 0);
+  topLayout->addWidget(lblDesc, 1, 1);
+  topLayout->addWidget(searchContainer, 1, 2);
+  topLayout->addWidget(corner, 1, 3, Qt::AlignBottom);
+  topLayout->addWidget(BtnCreate, 0, 5, 2, 1);
+  topLayout->addWidget(BtnJoin, 0, 6, 2, 1);
 
-    // Top layout stretch
-    topLayout->setRowStretch(0, 1);
-    topLayout->setRowStretch(1, 0);
-    topLayout->setColumnStretch(4, 1);
+  // Top layout stretch
+  topLayout->setRowStretch(0, 1);
+  topLayout->setRowStretch(1, 0);
+  topLayout->setColumnStretch(4, 1);
 
-    // Rooms list and chat with splitter
-    m_splitter = new QSplitter();
-    m_splitter->setChildrenCollapsible(false);
-    pageLayout->addWidget(m_splitter, 100);
+  // Rooms list and chat with splitter
+  m_splitter = new QSplitter();
+  m_splitter->setChildrenCollapsible(false);
+  pageLayout->addWidget(m_splitter, 100);
 
-    // Room list
-    QWidget * roomsListWidget = new QWidget(this);
-    m_splitter->setOrientation(Qt::Vertical);
-    m_splitter->addWidget(roomsListWidget);
+  // Room list
+  QWidget *roomsListWidget = new QWidget(this);
+  m_splitter->setOrientation(Qt::Vertical);
+  m_splitter->addWidget(roomsListWidget);
 
-    QVBoxLayout * roomsLayout = new QVBoxLayout(roomsListWidget);
-    roomsLayout->setContentsMargins(QMargins{});
+  QVBoxLayout *roomsLayout = new QVBoxLayout(roomsListWidget);
+  roomsLayout->setContentsMargins(QMargins{});
 
-    roomsList = new RoomTableView(this);
-    roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
-    roomsList->verticalHeader()->setVisible(false);
-    roomsList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-	roomsList->horizontalHeader()->stretchLastSection();
-    roomsList->setAlternatingRowColors(true);
-    roomsList->setShowGrid(false);
-    roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
-    roomsList->setStyleSheet(QStringLiteral("QTableView { border-top-left-radius: 0px; }"));
-    roomsList->setFocusPolicy(Qt::NoFocus);
-    roomsLayout->addWidget(roomsList, 200);
+  roomsList = new RoomTableView(this);
+  roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
+  roomsList->verticalHeader()->setVisible(false);
+  roomsList->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+  roomsList->horizontalHeader()->stretchLastSection();
+  roomsList->setAlternatingRowColors(true);
+  roomsList->setShowGrid(false);
+  roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
+  roomsList->setStyleSheet(
+      QStringLiteral("QTableView { border-top-left-radius: 0px; }"));
+  roomsList->setFocusPolicy(Qt::NoFocus);
+  roomsLayout->addWidget(roomsList, 200);
 
-    // Lobby chat
+  // Lobby chat
 
-    chatWidget = new HWChatWidget(this, false);
-    m_splitter->addWidget(chatWidget);
+  chatWidget = new HWChatWidget(this, false);
+  m_splitter->addWidget(chatWidget);
 
-    return pageLayout;
+  return pageLayout;
 }
 
-QLayout * PageRoomsList::footerLayoutDefinition()
-{
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
+QLayout *PageRoomsList::footerLayoutDefinition() {
+  QHBoxLayout *bottomLayout = new QHBoxLayout();
 
-    BtnAdmin = addButton(tr("Admin features"), bottomLayout, 0, false, Qt::AlignBottom);
-    BtnAdmin->setMinimumSize(180, 50);
-    BtnAdmin->setStyleSheet(QStringLiteral("padding: 5px 10px"));
-    BtnAdmin->setWhatsThis(tr("Open server administration page"));
+  BtnAdmin =
+      addButton(tr("Admin features"), bottomLayout, 0, false, Qt::AlignBottom);
+  BtnAdmin->setMinimumSize(180, 50);
+  BtnAdmin->setStyleSheet(QStringLiteral("padding: 5px 10px"));
+  BtnAdmin->setWhatsThis(tr("Open server administration page"));
 
-    return bottomLayout;
+  return bottomLayout;
 }
 
-void PageRoomsList::connectSignals()
-{
-    connect(chatWidget, &HWChatWidget::nickCountUpdate, this, &PageRoomsList::updateNickCounter);
+void PageRoomsList::connectSignals() {
+  connect(chatWidget, &HWChatWidget::nickCountUpdate, this,
+          &PageRoomsList::updateNickCounter);
 
-    connect(BtnCreate, &QAbstractButton::clicked, this, &PageRoomsList::onCreateClick);
-    connect(BtnJoin, &QAbstractButton::clicked, this, &PageRoomsList::onJoinClick);
-    connect(searchText, SIGNAL(moveUp()), this, SLOT(moveSelectionUp()));
-    connect(searchText, SIGNAL(moveDown()), this, SLOT(moveSelectionDown()));
-    connect(searchText, &QLineEdit::returnPressed, this, &PageRoomsList::onJoinClick);
-    connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
-    connect(roomsList, SIGNAL(clicked (const QModelIndex &)), searchText, SLOT(setFocus()));
-    connect(showGamesInLobby, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
-    connect(showGamesInProgress, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
-    connect(showPassword, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
-    connect(showJoinRestricted, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
-    connect(showIncompatible, &QAction::triggered, this, &PageRoomsList::onFilterChanged);
-    connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
-    connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
+  connect(BtnCreate, &QAbstractButton::clicked, this,
+          &PageRoomsList::onCreateClick);
+  connect(BtnJoin, &QAbstractButton::clicked, this,
+          &PageRoomsList::onJoinClick);
+  connect(searchText, SIGNAL(moveUp()), this, SLOT(moveSelectionUp()));
+  connect(searchText, SIGNAL(moveDown()), this, SLOT(moveSelectionDown()));
+  connect(searchText, &QLineEdit::returnPressed, this,
+          &PageRoomsList::onJoinClick);
+  connect(roomsList, SIGNAL(doubleClicked(const QModelIndex &)), this,
+          SLOT(onJoinClick()));
+  connect(roomsList, SIGNAL(clicked(const QModelIndex &)), searchText,
+          SLOT(setFocus()));
+  connect(showGamesInLobby, &QAction::triggered, this,
+          &PageRoomsList::onFilterChanged);
+  connect(showGamesInProgress, &QAction::triggered, this,
+          &PageRoomsList::onFilterChanged);
+  connect(showPassword, &QAction::triggered, this,
+          &PageRoomsList::onFilterChanged);
+  connect(showJoinRestricted, &QAction::triggered, this,
+          &PageRoomsList::onFilterChanged);
+  connect(showIncompatible, &QAction::triggered, this,
+          &PageRoomsList::onFilterChanged);
+  connect(searchText, SIGNAL(textChanged(const QString &)), this,
+          SLOT(onFilterChanged()));
+  connect(this, SIGNAL(askJoinConfirmation(const QString &)), this,
+          SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
 
-    // Set focus on search box
-    connect(this, SIGNAL(pageEnter()), searchText, SLOT(setFocus()));
+  // Set focus on search box
+  connect(this, SIGNAL(pageEnter()), searchText, SLOT(setFocus()));
 
-    // sorting
-    connect(roomsList->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
-            this, &PageRoomsList::onSortIndicatorChanged);
+  // sorting
+  connect(roomsList->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+          this, &PageRoomsList::onSortIndicatorChanged);
 }
 
-void PageRoomsList::moveSelectionUp()
-{
-    roomsList->moveUp();
+void PageRoomsList::moveSelectionUp() { roomsList->moveUp(); }
+
+void PageRoomsList::moveSelectionDown() { roomsList->moveDown(); }
+
+void PageRoomsList::roomSelectionChanged(const QModelIndex &current,
+                                         const QModelIndex &previous) {
+  Q_UNUSED(previous);
+
+  BtnJoin->setEnabled(current.isValid());
 }
 
-void PageRoomsList::moveSelectionDown()
-{
-    roomsList->moveDown();
+PageRoomsList::PageRoomsList(QWidget *parent) : AbstractPage(parent) {
+  roomsModel = NULL;
+  stateFilteredModel = NULL;
+  versionFilteredModel = NULL;
+
+  initPage();
 }
 
-void PageRoomsList::roomSelectionChanged(const QModelIndex & current, const QModelIndex & previous)
-{
-    Q_UNUSED(previous);
-
-    BtnJoin->setEnabled(current.isValid());
+void PageRoomsList::displayError(const QString &message) {
+  chatWidget->displayError(message);
 }
 
-PageRoomsList::PageRoomsList(QWidget* parent) :
-    AbstractPage(parent)
-{
-    roomsModel = NULL;
-    stateFilteredModel = NULL;
-    versionFilteredModel = NULL;
-
-    initPage();
+void PageRoomsList::displayNotice(const QString &message) {
+  chatWidget->displayNotice(message);
 }
 
-
-void PageRoomsList::displayError(const QString & message)
-{
-    chatWidget->displayError(message);
+void PageRoomsList::displayWarning(const QString &message) {
+  chatWidget->displayWarning(message);
 }
 
-
-void PageRoomsList::displayNotice(const QString & message)
-{
-    chatWidget->displayNotice(message);
-}
-
-void PageRoomsList::displayWarning(const QString & message)
-{
-    chatWidget->displayWarning(message);
-}
-
-
-void PageRoomsList::setAdmin(bool flag)
-{
-    BtnAdmin->setVisible(flag);
-}
+void PageRoomsList::setAdmin(bool flag) { BtnAdmin->setVisible(flag); }
 
 /*
 void PageRoomsList::setRoomsList(const QStringList & list)
@@ -317,7 +327,8 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         }
 
         // check filter settings
-#define NO_FILTER_MATCH roomsList->setRowCount(roomsList->rowCount() - 1); --r; continue
+#define NO_FILTER_MATCH roomsList->setRowCount(roomsList->rowCount() - 1); --r;
+continue
 
         if (list[i].compare("True") && CBState->currentIndex() == 2)
         {
@@ -327,16 +338,18 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         {
             NO_FILTER_MATCH;
         }
-        if (CBRules->currentIndex() != 0 && list[i + 6].compare(CBRules->currentText()))
+        if (CBRules->currentIndex() != 0 && list[i +
+6].compare(CBRules->currentText()))
         {
             NO_FILTER_MATCH;
         }
-        if (CBWeapons->currentIndex() != 0 && list[i + 7].compare(CBWeapons->currentText()))
+        if (CBWeapons->currentIndex() != 0 && list[i +
+7].compare(CBWeapons->currentText()))
         {
             NO_FILTER_MATCH;
         }
-        bool found = list[i + 1].contains(searchText->text(), Qt::CaseInsensitive);
-        if (!found)
+        bool found = list[i + 1].contains(searchText->text(),
+Qt::CaseInsensitive); if (!found)
         {
             for (int a = 4; a <= 7; ++a)
             {
@@ -353,7 +366,8 @@ void PageRoomsList::setRoomsList(const QStringList & list)
                 {
                     compString = "Drawn Map";
                 }
-                if (compString.contains(searchText->text(), Qt::CaseInsensitive))
+                if (compString.contains(searchText->text(),
+Qt::CaseInsensitive))
                 {
                     found = true;
                     break;
@@ -369,18 +383,20 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item = new QTableWidgetItem(list[i + 1]); // room name
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 
-        // pick appropriate room icon and tooltip (game in progress yes/no; later maybe locked rooms etc.)
-        if(list[i].compare("True"))
+        // pick appropriate room icon and tooltip (game in progress yes/no;
+later maybe locked rooms etc.) if(list[i].compare("True"))
         {
             item->setIcon(QIcon(":/res/iconTime.png"));// game is in lobby
             item->setToolTip(tr("Waiting..."));
-            item->setWhatsThis(tr("This game is in lobby: you may join and start playing once the game starts."));
+            item->setWhatsThis(tr("This game is in lobby: you may join and start
+playing once the game starts."));
         }
         else
         {
             item->setIcon(QIcon(":/res/iconDamage.png"));// game has started
             item->setToolTip(tr("In progress..."));
-            item->setWhatsThis(tr("This game is in progress: you may join and spectate now but you'll have to wait for the game to end to start playing."));
+            item->setWhatsThis(tr("This game is in progress: you may join and
+spectate now but you'll have to wait for the game to end to start playing."));
         }
 
         roomsList->setItem(r, 0, item);
@@ -388,13 +404,14 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item = new QTableWidgetItem(list[i + 2]); // number of clients
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setTextAlignment(Qt::AlignCenter);
-        item->setWhatsThis(tr("There are %1 clients connected to this room.", "", list[i + 2].toInt()).arg(list[i + 2]));
-        roomsList->setItem(r, 1, item);
+        item->setWhatsThis(tr("There are %1 clients connected to this room.",
+"", list[i + 2].toInt()).arg(list[i + 2])); roomsList->setItem(r, 1, item);
 
         item = new QTableWidgetItem(list[i + 3]); // number of teams
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setTextAlignment(Qt::AlignCenter);
-        item->setWhatsThis(tr("There are %1 teams participating in this room.", "", list[i + 3].toInt()).arg(list[i + 3]));
+        item->setWhatsThis(tr("There are %1 teams participating in this room.",
+"", list[i + 3].toInt()).arg(list[i + 3]));
         //Should we highlight "full" games? Might get misinterpreted
         //if(list[i + 3].toInt() >= cMaxTeams)
         //    item->setForeground(red);
@@ -402,12 +419,13 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 
         item = new QTableWidgetItem(list[i + 4].left(15)); // name of host
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setWhatsThis(tr("%1 is the host. He may adjust settings and start the game.").arg(list[i + 4]));
-        roomsList->setItem(r, 3, item);
+        item->setWhatsThis(tr("%1 is the host. He may adjust settings and start
+the game.").arg(list[i + 4])); roomsList->setItem(r, 3, item);
 
         if(list[i + 5] == "+rnd+")
         {
-            item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
+            item = new QTableWidgetItem(tr("Random Map")); // selected map (is
+randomized)
 // FIXME - need real icons. Disabling until then
 //            item->setIcon(QIcon(":/res/mapRandom.png"));
         }
@@ -437,30 +455,33 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         }
 
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setWhatsThis(tr("Games may be played on precreated or randomized maps."));
-        roomsList->setItem(r, 4, item);
+        item->setWhatsThis(tr("Games may be played on precreated or randomized
+maps.")); roomsList->setItem(r, 4, item);
 
-        item = new QTableWidgetItem(list[i + 6].left(24)); // selected game scheme
-        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setWhatsThis(tr("The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism."));
+        item = new QTableWidgetItem(list[i + 6].left(24)); // selected game
+scheme item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setWhatsThis(tr("The Game Scheme defines general options and
+preferences like Round Time, Sudden Death or Vampirism."));
         roomsList->setItem(r, 5, item);
 
-        item = new QTableWidgetItem(list[i + 7].left(24)); // selected weapon scheme
-        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setWhatsThis(tr("The Weapon Scheme defines available weapons and their ammunition count."));
-        roomsList->setItem(r, 6, item);
+        item = new QTableWidgetItem(list[i + 7].left(24)); // selected weapon
+scheme item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setWhatsThis(tr("The Weapon Scheme defines available weapons and
+their ammunition count.")); roomsList->setItem(r, 6, item);
 
         if(!list[i + 1].compare(selection) && !selection.isEmpty())
-            roomsList->selectionModel()->setCurrentIndex(roomsList->model()->index(r, 0), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+            roomsList->selectionModel()->setCurrentIndex(roomsList->model()->index(r,
+0), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
     }
 
     roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-    roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-    roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
-    roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
-    roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
-    roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(1,
+QHeaderView::ResizeToContents); roomsList->horizontalHeader()->setResizeMode(2,
+QHeaderView::ResizeToContents); roomsList->horizontalHeader()->setResizeMode(3,
+QHeaderView::ResizeToContents); roomsList->horizontalHeader()->setResizeMode(4,
+QHeaderView::ResizeToContents); roomsList->horizontalHeader()->setResizeMode(5,
+QHeaderView::ResizeToContents); roomsList->horizontalHeader()->setResizeMode(6,
+QHeaderView::ResizeToContents);
 
     // TODO: Should NOT be done here
     if (gameInLobby)
@@ -480,205 +501,195 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 }
 */
 
-void PageRoomsList::onCreateClick()
-{
-    RoomNamePrompt prompt(this, m_gameSettings->value("frontend/lastroomname", QString()).toString());
-    if(prompt.exec())
-        onRoomNameChosen(prompt.getRoomName(), prompt.getPassword());
+void PageRoomsList::onCreateClick() {
+  RoomNamePrompt prompt(
+      this,
+      m_gameSettings->value("frontend/lastroomname", QString()).toString());
+  if (prompt.exec())
+    onRoomNameChosen(prompt.getRoomName(), prompt.getPassword());
 }
 
-void PageRoomsList::onRoomNameChosen(const QString & roomName, const QString & password)
-{
-    if (!roomName.trimmed().isEmpty())
-    {
-        m_gameSettings->setValue("frontend/lastroomname", roomName);
-        Q_EMIT askForCreateRoom(roomName, password);
-    }
-    else
-    {
-        onCreateClick();
-    }
+void PageRoomsList::onRoomNameChosen(const QString &roomName,
+                                     const QString &password) {
+  if (!roomName.trimmed().isEmpty()) {
+    m_gameSettings->setValue("frontend/lastroomname", roomName);
+    Q_EMIT askForCreateRoom(roomName, password);
+  } else {
+    onCreateClick();
+  }
 }
 
-void PageRoomsList::onJoinClick()
-{
-    QModelIndexList mdl = roomsList->selectionModel()->selectedRows();
+void PageRoomsList::onJoinClick() {
+  QModelIndexList mdl = roomsList->selectionModel()->selectedRows();
 
-    if(mdl.size() != 1)
-    {
-        QMessageBox roomNameMsg(this);
-        roomNameMsg.setIcon(QMessageBox::Warning);
-        roomNameMsg.setWindowTitle(QMessageBox::tr("Room Name - Error"));
-        roomNameMsg.setText(QMessageBox::tr("Please select room from the list"));
-        roomNameMsg.setTextFormat(Qt::PlainText);
-        roomNameMsg.setWindowModality(Qt::WindowModal);
-        roomNameMsg.exec();
-        return;
-    }
+  if (mdl.size() != 1) {
+    QMessageBox roomNameMsg(this);
+    roomNameMsg.setIcon(QMessageBox::Warning);
+    roomNameMsg.setWindowTitle(QMessageBox::tr("Room Name - Error"));
+    roomNameMsg.setText(QMessageBox::tr("Please select room from the list"));
+    roomNameMsg.setTextFormat(Qt::PlainText);
+    roomNameMsg.setWindowModality(Qt::WindowModal);
+    roomNameMsg.exec();
+    return;
+  }
 
-    bool gameInLobby = roomsList->model()->index(mdl[0].row(), 0).data().toString().compare(QLatin1String("True"));
-    QString roomName = roomsList->model()->index(mdl[0].row(), 1).data().toString();
+  bool gameInLobby = roomsList->model()
+                         ->index(mdl[0].row(), 0)
+                         .data()
+                         .toString()
+                         .compare(QLatin1String("True"));
+  QString roomName =
+      roomsList->model()->index(mdl[0].row(), 1).data().toString();
 
-    if (!gameInLobby)
-        Q_EMIT askJoinConfirmation(roomName);
-    else
-        Q_EMIT askForJoinRoom(roomName, QString());
+  if (!gameInLobby)
+    Q_EMIT askJoinConfirmation(roomName);
+  else
+    Q_EMIT askForJoinRoom(roomName, QString());
 }
 
-void PageRoomsList::onRefreshClick()
-{
-    Q_EMIT askForRoomList();
+void PageRoomsList::onRefreshClick() { Q_EMIT askForRoomList(); }
+
+void PageRoomsList::onJoinConfirmation(const QString &room) {
+  QMessageBox reallyJoinMsg(this);
+  reallyJoinMsg.setIcon(QMessageBox::Question);
+  reallyJoinMsg.setWindowTitle(QMessageBox::tr("Room Name - Are you sure?"));
+  reallyJoinMsg.setText(
+      QMessageBox::tr("The game you are trying to join has started.\nDo you "
+                      "still want to join the room?"));
+  reallyJoinMsg.setTextFormat(Qt::PlainText);
+  reallyJoinMsg.setWindowModality(Qt::WindowModal);
+  reallyJoinMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+  if (reallyJoinMsg.exec() == QMessageBox::Ok) {
+    Q_EMIT askForJoinRoom(room, QString());
+  }
 }
 
-void PageRoomsList::onJoinConfirmation(const QString & room)
-{
-
-    QMessageBox reallyJoinMsg(this);
-    reallyJoinMsg.setIcon(QMessageBox::Question);
-    reallyJoinMsg.setWindowTitle(QMessageBox::tr("Room Name - Are you sure?"));
-    reallyJoinMsg.setText(QMessageBox::tr("The game you are trying to join has started.\nDo you still want to join the room?"));
-    reallyJoinMsg.setTextFormat(Qt::PlainText);
-    reallyJoinMsg.setWindowModality(Qt::WindowModal);
-    reallyJoinMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-
-    if (reallyJoinMsg.exec() == QMessageBox::Ok)
-    {
-        Q_EMIT askForJoinRoom(room, QString());
-    }
+void PageRoomsList::updateNickCounter(int cnt) {
+  setDefaultDescription(tr("%1 players online", 0, cnt).arg(cnt));
 }
 
-void PageRoomsList::updateNickCounter(int cnt)
-{
-    setDefaultDescription(tr("%1 players online", 0, cnt).arg(cnt));
+void PageRoomsList::setUser(const QString &nickname) {
+  chatWidget->setUser(nickname);
 }
 
-void PageRoomsList::setUser(const QString & nickname)
-{
-    chatWidget->setUser(nickname);
+void PageRoomsList::setModel(RoomsListModel *model) {
+  // filter chain:
+  // model -> versionFilteredModel -> stateFilteredModel -> schemeFilteredModel
+  // ->
+  // -> weaponsFilteredModel -> roomsModel (search filter+sorting)
+
+  if (roomsModel == NULL) {
+    roomsModel = new QSortFilterProxyModel(this);
+    roomsModel->setDynamicSortFilter(true);
+    roomsModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    roomsModel->sort(RoomsListModel::StateColumn, Qt::AscendingOrder);
+
+    versionFilteredModel = new QSortFilterProxyModel(this);
+    versionFilteredModel->setDynamicSortFilter(true);
+    versionFilteredModel->setFilterKeyColumn(RoomsListModel::VersionColumn);
+    versionFilteredModel->setFilterRole(Qt::UserRole);
+
+    stateFilteredModel = new QSortFilterProxyModel(this);
+    stateFilteredModel->setDynamicSortFilter(true);
+    stateFilteredModel->setFilterKeyColumn(RoomsListModel::StateColumn);
+    stateFilteredModel->setSourceModel(versionFilteredModel);
+
+    roomsModel->setFilterKeyColumn(-1);  // search in all columns
+
+    roomsModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    roomsModel->setSourceModel(stateFilteredModel);
+
+    // let the table view display the last model in the filter chain
+    roomsList->setModel(roomsModel);
+
+    // When the data changes
+    connect(roomsModel, SIGNAL(layoutChanged()), roomsList, SLOT(repaint()));
+
+    // When a selection changes
+    connect(roomsList->selectionModel(),
+            &QItemSelectionModel::currentRowChanged, this,
+            &PageRoomsList::roomSelectionChanged);
+  }
+
+  versionFilteredModel->setSourceModel(model);
+
+  QHeaderView *h = roomsList->horizontalHeader();
+
+  h->setSortIndicatorShown(true);
+  h->setSortIndicator(RoomsListModel::StateColumn, Qt::AscendingOrder);
+  h->setSectionResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
+
+  h->resizeSection(RoomsListModel::PlayerCountColumn, 32);
+  h->resizeSection(RoomsListModel::TeamCountColumn, 32);
+  h->resizeSection(RoomsListModel::OwnerColumn, 100);
+  h->resizeSection(RoomsListModel::MapColumn, 100);
+  h->resizeSection(RoomsListModel::SchemeColumn, 100);
+  h->resizeSection(RoomsListModel::WeaponsColumn, 100);
+
+  // hide column used for filtering
+  roomsList->hideColumn(RoomsListModel::StateColumn);
+
+  roomsList->repaint();
 }
 
-void PageRoomsList::setModel(RoomsListModel * model)
-{
-    // filter chain:
-    // model -> versionFilteredModel -> stateFilteredModel -> schemeFilteredModel ->
-    // -> weaponsFilteredModel -> roomsModel (search filter+sorting)
+void PageRoomsList::onSortIndicatorChanged(int logicalIndex,
+                                           Qt::SortOrder order) {
+  if (roomsModel == NULL) return;
 
-    if (roomsModel == NULL)
-    {
-        roomsModel = new QSortFilterProxyModel(this);
-        roomsModel->setDynamicSortFilter(true);
-        roomsModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-        roomsModel->sort(RoomsListModel::StateColumn, Qt::AscendingOrder);
+  if (logicalIndex == 0) {
+    roomsModel->sort(0, Qt::AscendingOrder);
+    return;
+  }
 
-        versionFilteredModel = new QSortFilterProxyModel(this);
-        versionFilteredModel->setDynamicSortFilter(true);
-        versionFilteredModel->setFilterKeyColumn(RoomsListModel::VersionColumn);
-        versionFilteredModel->setFilterRole(Qt::UserRole);
-
-        stateFilteredModel = new QSortFilterProxyModel(this);
-        stateFilteredModel->setDynamicSortFilter(true);
-        stateFilteredModel->setFilterKeyColumn(RoomsListModel::StateColumn);
-        stateFilteredModel->setSourceModel(versionFilteredModel);
-
-        roomsModel->setFilterKeyColumn(-1); // search in all columns
-
-        roomsModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-        roomsModel->setSourceModel(stateFilteredModel);
-
-        // let the table view display the last model in the filter chain
-        roomsList->setModel(roomsModel);
-
-        // When the data changes
-        connect(roomsModel, SIGNAL(layoutChanged()), roomsList, SLOT(repaint()));
-
-        // When a selection changes
-        connect(roomsList->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &PageRoomsList::roomSelectionChanged);
-    }
-
-    versionFilteredModel->setSourceModel(model);
-
-    QHeaderView * h = roomsList->horizontalHeader();
-
-    h->setSortIndicatorShown(true);
-    h->setSortIndicator(RoomsListModel::StateColumn, Qt::AscendingOrder);
-    h->setSectionResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
-
-	h->resizeSection(RoomsListModel::PlayerCountColumn, 32);
-	h->resizeSection(RoomsListModel::TeamCountColumn, 32);
-	h->resizeSection(RoomsListModel::OwnerColumn, 100);
-	h->resizeSection(RoomsListModel::MapColumn, 100);
-	h->resizeSection(RoomsListModel::SchemeColumn, 100);
-	h->resizeSection(RoomsListModel::WeaponsColumn, 100);
-
-    // hide column used for filtering
-    roomsList->hideColumn(RoomsListModel::StateColumn);
-
-    roomsList->repaint();
+  // three state sorting: asc -> dsc -> default (by room state)
+  if ((order == Qt::AscendingOrder) &&
+      (logicalIndex == roomsModel->sortColumn()))
+    roomsList->horizontalHeader()->setSortIndicator(RoomsListModel::StateColumn,
+                                                    Qt::AscendingOrder);
+  else
+    roomsModel->sort(logicalIndex, order);
 }
 
+void PageRoomsList::onFilterChanged() {
+  if (roomsModel == NULL) return;
 
-void PageRoomsList::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
-{
-    if (roomsModel == NULL)
-        return;
+  roomsModel->setFilterFixedString(searchText->text());
 
-    if (logicalIndex == 0)
-    {
-        roomsModel->sort(0, Qt::AscendingOrder);
-        return;
-    }
+  bool stateLobby = showGamesInLobby->isChecked();
+  bool stateProgress = showGamesInProgress->isChecked();
+  bool statePassword = showPassword->isChecked();
+  bool stateJoinRestricted = showJoinRestricted->isChecked();
+  bool stateIncompatible = showIncompatible->isChecked();
 
-    // three state sorting: asc -> dsc -> default (by room state)
-    if ((order == Qt::AscendingOrder) && (logicalIndex == roomsModel->sortColumn()))
-        roomsList->horizontalHeader()->setSortIndicator(
-            RoomsListModel::StateColumn, Qt::AscendingOrder);
-    else
-        roomsModel->sort(logicalIndex, order);
+  if (!stateIncompatible)
+    versionFilteredModel->setFilterFixedString(cProtoVer);
+  else
+    versionFilteredModel->setFilterFixedString(QLatin1String(""));
+
+  QString filter;
+  if (!stateLobby && !stateProgress)
+    filter = QStringLiteral("O_o");
+  else if (stateLobby && stateProgress && statePassword && stateJoinRestricted)
+    filter = QLatin1String("");
+  else {
+    QString exclude = QStringLiteral("[^");
+    if (!stateProgress) exclude += QLatin1String("g");
+    if (!statePassword) exclude += QLatin1String("p");
+    if (!stateJoinRestricted) exclude += QLatin1String("j");
+    exclude += QLatin1String("]*");
+    if (stateProgress && statePassword && stateJoinRestricted)
+      exclude = QStringLiteral(".*");
+    filter = QStringLiteral("^") + exclude;
+    if (!stateLobby) filter += QStringLiteral("g") + exclude;
+    filter += QLatin1String("$");
+  }
+  // qDebug() << filter;
+
+  stateFilteredModel->setFilterRegularExpression(filter);
 }
 
-
-void PageRoomsList::onFilterChanged()
-{
-    if (roomsModel == NULL)
-        return;
-
-    roomsModel->setFilterFixedString(searchText->text());
-
-    bool stateLobby = showGamesInLobby->isChecked();
-    bool stateProgress = showGamesInProgress->isChecked();
-    bool statePassword = showPassword->isChecked();
-    bool stateJoinRestricted = showJoinRestricted->isChecked();
-    bool stateIncompatible = showIncompatible->isChecked();
-
-    if (!stateIncompatible)
-      versionFilteredModel->setFilterFixedString(cProtoVer);
-    else
-        versionFilteredModel->setFilterFixedString(QLatin1String(""));
-
-    QString filter;
-    if (!stateLobby && !stateProgress)
-        filter = QStringLiteral("O_o");
-    else if (stateLobby && stateProgress && statePassword && stateJoinRestricted)
-        filter = QLatin1String("");
-    else
-    {
-        QString exclude = QStringLiteral("[^");
-        if (!stateProgress) exclude += QLatin1String("g");
-        if (!statePassword) exclude += QLatin1String("p");
-        if (!stateJoinRestricted) exclude += QLatin1String("j");
-        exclude += QLatin1String("]*");
-        if (stateProgress && statePassword && stateJoinRestricted) exclude = QStringLiteral(".*");
-        filter = QStringLiteral("^") + exclude;
-        if (!stateLobby) filter += QStringLiteral("g") + exclude;
-        filter += QLatin1String("$");
-    }
-    //qDebug() << filter;
-
-    stateFilteredModel->setFilterRegularExpression(filter);
-}
-
-void PageRoomsList::setSettings(QSettings *settings)
-{
-    m_gameSettings = settings;
+void PageRoomsList::setSettings(QSettings *settings) {
+  m_gameSettings = settings;
 }

@@ -19,17 +19,16 @@
 #ifndef HATPROMPT_H
 #define HATPROMPT_H
 
-#include <QWidget>
 #include <QDialog>
 #include <QListView>
+#include <QWidget>
 
 class QLineEdit;
 class QModelIndex;
 class QSortFilterProxyModel;
 class LineEditCursor;
 
-class HatListView : public QListView
-{
+class HatListView : public QListView {
   Q_OBJECT
   friend class HatPrompt;
 
@@ -41,26 +40,25 @@ class HatListView : public QListView
   void moveRight();
 };
 
-class HatPrompt : public QDialog
-{
-        Q_OBJECT
+class HatPrompt : public QDialog {
+  Q_OBJECT
 
-    public:
-        HatPrompt(int currentIndex = 0, QWidget* parent = 0);
+ public:
+  HatPrompt(int currentIndex = 0, QWidget* parent = 0);
 
-    private:
-        LineEditCursor * txtFilter;
-        HatListView * list;
-        QSortFilterProxyModel * filterModel;
+ private:
+  LineEditCursor* txtFilter;
+  HatListView* list;
+  QSortFilterProxyModel* filterModel;
 
-    private Q_SLOTS:
-        void onAccepted();
-        void hatChosen(const QModelIndex & index);
-        void filterChanged(const QString & text);
-        void moveUp();
-        void moveDown();
-        void moveLeft();
-        void moveRight();
+ private Q_SLOTS:
+  void onAccepted();
+  void hatChosen(const QModelIndex& index);
+  void filterChanged(const QString& text);
+  void moveUp();
+  void moveDown();
+  void moveLeft();
+  void moveRight();
 };
 
-#endif // HATPROMPT_H
+#endif  // HATPROMPT_H

@@ -23,27 +23,23 @@
 
 #include "SDTimeoutSpinBox.h"
 
-SDTimeoutSpinBox::SDTimeoutSpinBox(QWidget* parent) : QSpinBox(parent)
-{
-    // do nothing
-};
+SDTimeoutSpinBox::SDTimeoutSpinBox(QWidget* parent)
+    : QSpinBox(parent) {
+        // do nothing
+      };
 
-
-QString SDTimeoutSpinBox::textFromValue(int internalValue) const
-{
-    // user-facing value = internal value + 1
-    return QString::number(internalValue + 1);
+QString SDTimeoutSpinBox::textFromValue(int internalValue) const {
+  // user-facing value = internal value + 1
+  return QString::number(internalValue + 1);
 }
 
-int SDTimeoutSpinBox::valueFromText(const QString & userFacingString) const
-{
-    // internal value = user-facing value - 1
-    bool ok;
-    int value = userFacingString.toInt(&ok);
+int SDTimeoutSpinBox::valueFromText(const QString& userFacingString) const {
+  // internal value = user-facing value - 1
+  bool ok;
+  int value = userFacingString.toInt(&ok);
 
-    if (ok)
-        return value - 1;
-    // Fallback
-    else
-        return 15;
+  if (ok) return value - 1;
+  // Fallback
+  else
+    return 15;
 }

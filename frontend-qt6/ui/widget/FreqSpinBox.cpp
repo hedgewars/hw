@@ -23,17 +23,14 @@
 
 #include "FreqSpinBox.h"
 
+FreqSpinBox::FreqSpinBox(QWidget* parent)
+    : QSpinBox(parent) {
+        // do nothing
+      };
 
-FreqSpinBox::FreqSpinBox(QWidget* parent) : QSpinBox(parent)
-{
-    // do nothing
-};
-
-
-QString FreqSpinBox::textFromValue(int value) const
-{
-    if (value == 0)
-        return tr("Never");
-    else
-        return tr("Every %1 turn", "", value).arg(value);
+QString FreqSpinBox::textFromValue(int value) const {
+  if (value == 0)
+    return tr("Never");
+  else
+    return tr("Every %1 turn", "", value).arg(value);
 }

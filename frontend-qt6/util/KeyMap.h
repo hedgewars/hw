@@ -26,31 +26,31 @@
 
 #include <QFile>
 #include <QHash>
+
 #include "SDL.h"
 
-class KeyMap
-{
-    public:
-        /**
-         * @brief Returns reference to the <i>singleton</i> instance of this class.
-         *
-         * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
-         *
-         * @return reference to the instance.
-         */
-        static KeyMap & instance();
-        SDL_Scancode getScancodeFromKeyname(const QString &keyname);
-        QString getKeynameFromScancode(int scancode);
-        QString getKeynameFromScancodeConverted(int scancode);
-        QString getKeynameFromKeycode(int keycode);
+class KeyMap {
+ public:
+  /**
+   * @brief Returns reference to the <i>singleton</i> instance of this class.
+   *
+   * @see <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton
+   * pattern</a>
+   *
+   * @return reference to the instance.
+   */
+  static KeyMap &instance();
+  SDL_Scancode getScancodeFromKeyname(const QString &keyname);
+  QString getKeynameFromScancode(int scancode);
+  QString getKeynameFromScancodeConverted(int scancode);
+  QString getKeynameFromKeycode(int keycode);
 
-    private:
-        // TODO: Optimize data structures
-        QHash<SDL_Scancode, QString> mapOfKeynames;
-        QHash<QString, SDL_Scancode> mapOfScancodes;
-        bool getKeyMap();
-        bool keyMapGenerated = false;
-
+ private:
+  // TODO: Optimize data structures
+  QHash<SDL_Scancode, QString> mapOfKeynames;
+  QHash<QString, SDL_Scancode> mapOfScancodes;
+  bool getKeyMap();
+  bool keyMapGenerated = false;
 };
 
-#endif // HEDGEWARS_KEYMAP_H
+#endif  // HEDGEWARS_KEYMAP_H

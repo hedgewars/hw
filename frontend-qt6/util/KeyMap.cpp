@@ -15,62 +15,57 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include <QStringList>
 #include "KeyMap.h"
 
-KeyMap & KeyMap::instance()
-{
-    static KeyMap instance;
-    instance.getKeyMap();
-    return instance;
+#include <QStringList>
+
+KeyMap &KeyMap::instance() {
+  static KeyMap instance;
+  instance.getKeyMap();
+  return instance;
 }
 
-bool KeyMap::getKeyMap()
-{
-    if (keyMapGenerated)
-        return true;
-    QFile keyFile(QStringLiteral(":keys.csv"));
-    if (!keyFile.open(QIODevice::ReadOnly))
-    {
-        qWarning("ERROR: keys.csv could not be opened!");
-        return false;
+bool KeyMap::getKeyMap() {
+  if (keyMapGenerated) return true;
+  QFile keyFile(QStringLiteral(":keys.csv"));
+  if (!keyFile.open(QIODevice::ReadOnly)) {
+    qWarning("ERROR: keys.csv could not be opened!");
+    return false;
+  }
+  QString keyString = keyFile.readAll();
+  QStringList cells{{}, {}};
+  QChar currChar;
+  bool isInQuote = false;
+  int cell = 0;
+  QString scancode;
+  QString keyname;
+  for (long long int i = 0; i < keyString.length(); i++) {
+    currChar = keyString.at(i);
+    if (currChar == '\"') {
+      isInQuote = !isInQuote;
     }
-    QString keyString = keyFile.readAll();
-    QStringList cells{{}, {}};
-    QChar currChar;
-    bool isInQuote = false;
-    int cell = 0;
-    QString scancode;
-    QString keyname;
-    for(long long int i = 0; i < keyString.length(); i++)
-    {
-        currChar = keyString.at(i);
-        if (currChar == '\"') {
-            isInQuote = !isInQuote;
-        }
-        if (currChar == ',' && !isInQuote) {
-            cell++;
-            continue;
-        }
-        if (currChar == '\n') {
-            mapOfKeynames[(SDL_Scancode) scancode.toInt()] = keyname;
-            mapOfScancodes[keyname] = (SDL_Scancode) scancode.toInt();
-            if ((SDL_Scancode) scancode.toInt() == SDL_SCANCODE_UNKNOWN)
-                continue;
-            cell = 0;
-            scancode.clear();
-            keyname.clear();
-            continue;
-        }
-        if (cell == 0 && currChar != '\"') {
-            scancode += currChar;
-        } else if (cell == 1 && currChar != '\"') {
-            keyname += currChar;
-        }
+    if (currChar == ',' && !isInQuote) {
+      cell++;
+      continue;
     }
-    keyMapGenerated = true;
-    keyFile.close();
-    return true;
+    if (currChar == '\n') {
+      mapOfKeynames[(SDL_Scancode)scancode.toInt()] = keyname;
+      mapOfScancodes[keyname] = (SDL_Scancode)scancode.toInt();
+      if ((SDL_Scancode)scancode.toInt() == SDL_SCANCODE_UNKNOWN) continue;
+      cell = 0;
+      scancode.clear();
+      keyname.clear();
+      continue;
+    }
+    if (cell == 0 && currChar != '\"') {
+      scancode += currChar;
+    } else if (cell == 1 && currChar != '\"') {
+      keyname += currChar;
+    }
+  }
+  keyMapGenerated = true;
+  keyFile.close();
+  return true;
 }
 
 SDL_Scancode KeyMap::getScancodeFromKeyname(const QString &keyname) {
@@ -80,20 +75,17 @@ SDL_Scancode KeyMap::getScancodeFromKeyname(const QString &keyname) {
     return SDL_SCANCODE_UNKNOWN;
 }
 
-QString KeyMap::getKeynameFromScancode(int scancode)
-{
-    if (mapOfKeynames.contains((SDL_Scancode) scancode))
-        if ((SDL_Scancode) scancode == SDL_SCANCODE_UNKNOWN)
-          return QStringLiteral("none");
-        else
-          return std::as_const(mapOfKeynames)[(SDL_Scancode)scancode];
+QString KeyMap::getKeynameFromScancode(int scancode) {
+  if (mapOfKeynames.contains((SDL_Scancode)scancode))
+    if ((SDL_Scancode)scancode == SDL_SCANCODE_UNKNOWN)
+      return QStringLiteral("none");
     else
-      return QString();
+      return std::as_const(mapOfKeynames)[(SDL_Scancode)scancode];
+  else
+    return QString();
 }
 
-QString KeyMap::getKeynameFromScancodeConverted(int scancode)
-{
-    SDL_Keycode keycode = SDL_GetKeyFromScancode((SDL_Scancode) scancode);
-    return SDL_GetKeyName(keycode);
+QString KeyMap::getKeynameFromScancodeConverted(int scancode) {
+  SDL_Keycode keycode = SDL_GetKeyFromScancode((SDL_Scancode)scancode);
+  return SDL_GetKeyName(keycode);
 }
-

@@ -21,8 +21,8 @@
 #define _HWMAP_INCLUDED
 
 #include <QByteArray>
-#include <QString>
 #include <QPixmap>
+#include <QString>
 
 #include "tcpBase.h"
 
@@ -36,36 +36,37 @@ enum MapGenerator {
   MAPGEN_MAP = 6,
 };
 
-class HWMap : public TCPBase
-{
-        Q_OBJECT
+class HWMap : public TCPBase {
+  Q_OBJECT
 
-    public:
-        HWMap(QObject *parent = 0);
-        virtual ~HWMap();
-        void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData, QString & script, QString & scriptparam, int feature_size);
-        bool couldBeRemoved();
+ public:
+  HWMap(QObject *parent = 0);
+  virtual ~HWMap();
+  void getImage(const QString &seed, int templateFilter, MapGenerator mapgen,
+                int maze_size, const QByteArray &drawMapData, QString &script,
+                QString &scriptparam, int feature_size);
+  bool couldBeRemoved();
 
-    protected:
-        virtual QStringList getArguments();
-        virtual void onClientDisconnect();
-        virtual void SendToClientFirst();
+ protected:
+  virtual QStringList getArguments();
+  virtual void onClientDisconnect();
+  virtual void SendToClientFirst();
 
-    Q_SIGNALS:
-        void ImageReceived(const QPixmap & newImage);
-        void HHLimitReceived(int hhLimit);
+ Q_SIGNALS:
+  void ImageReceived(const QPixmap &newImage);
+  void HHLimitReceived(int hhLimit);
 
-    private:
-        QString m_seed;
-        QString m_script;
-        QString m_scriptparam;
-        int templateFilter;
-        MapGenerator m_mapgen;
-        int m_maze_size;  // going to try and deprecate this one
-        int m_feature_size;
-        QByteArray m_drawMapData;
+ private:
+  QString m_seed;
+  QString m_script;
+  QString m_scriptparam;
+  int templateFilter;
+  MapGenerator m_mapgen;
+  int m_maze_size;  // going to try and deprecate this one
+  int m_feature_size;
+  QByteArray m_drawMapData;
 
-    private Q_SLOTS:
+ private Q_SLOTS:
 };
 
-#endif // _HWMAP_INCLUDED
+#endif  // _HWMAP_INCLUDED

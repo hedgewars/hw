@@ -24,33 +24,32 @@
 #ifndef HEDGEWARS_DATABROWSER_H
 #define HEDGEWARS_DATABROWSER_H
 
-#include <QTextBrowser>
 #include <QSet>
+#include <QTextBrowser>
 
 class QNetworkAccessManager;
 
-class DataBrowser : public QTextBrowser
-{
-        Q_OBJECT
-    public:
-        explicit DataBrowser(QWidget *parent = 0);
+class DataBrowser : public QTextBrowser {
+  Q_OBJECT
+ public:
+  explicit DataBrowser(QWidget *parent = 0);
 
-    Q_SIGNALS:
+ Q_SIGNALS:
 
-    public Q_SLOTS:
+ public Q_SLOTS:
 
-    private:
-        QNetworkAccessManager *manager;
+ private:
+  QNetworkAccessManager *manager;
 
-        // hash and set of QString instead of QUrl to support Qt versions
-        // older than 4.7 (those have no support for qHash(const QUrl &))
-        QHash<QString, QByteArray> resources;
-        QSet<QString> requestedResources;
+  // hash and set of QString instead of QUrl to support Qt versions
+  // older than 4.7 (those have no support for qHash(const QUrl &))
+  QHash<QString, QByteArray> resources;
+  QSet<QString> requestedResources;
 
-        QVariant loadResource(int type, const QUrl & name);
+  QVariant loadResource(int type, const QUrl &name);
 
-    private Q_SLOTS:
-        void resourceDownloaded();
+ private Q_SLOTS:
+  void resourceDownloaded();
 };
 
-#endif // HEDGEWARS_DATABROWSER_H
+#endif  // HEDGEWARS_DATABROWSER_H

@@ -17,145 +17,113 @@
  */
 
 #include "itemNum.h"
-#include "hwform.h"
 
 #include <QMouseEvent>
 #include <QPainter>
 
-ItemNum::ItemNum(const QImage& im, const QImage& img, QWidget * parent, unsigned char min, unsigned char max) :
-    QFrame(parent), m_im(im), m_img(img), infinityState(false), nonInteractive(false), minItems(min), maxItems(max),
-    numItems(min+2 >= max ? min : min+2)
-{
-    enabled = true;
-    //if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
+#include "hwform.h"
+
+ItemNum::ItemNum(const QImage& im, const QImage& img, QWidget* parent,
+                 unsigned char min, unsigned char max)
+    : QFrame(parent),
+      m_im(im),
+      m_img(img),
+      infinityState(false),
+      nonInteractive(false),
+      minItems(min),
+      maxItems(max),
+      numItems(min + 2 >= max ? min : min + 2) {
+  enabled = true;
+  // if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
-ItemNum::~ItemNum()
-{
-}
+ItemNum::~ItemNum() {}
 
-void ItemNum::mousePressEvent ( QMouseEvent * event )
-{
-    if(nonInteractive) return;
-    if(event->button()==Qt::LeftButton && enabled)
-    {
-        event->accept();
-        if((infinityState && numItems <= maxItems) || (!infinityState && numItems < maxItems))
-        {
-            incItems();
-        }
-        else
-        {
-            numItems = minItems+1;
-            // appears there's an emit in there
-            decItems();
-        }
-    }
-    else if (event->button()==Qt::RightButton && enabled)
-    {
-        event->accept();
-        if(numItems > minItems)
-        {
-            decItems();
-        }
-        else
-        {
-            numItems = maxItems+(infinityState?0:-1);
-            incItems();
-        }
-    }
-    else
-    {
-        event->ignore();
-        return;
-    }
-    repaint();
-}
-void ItemNum::wheelEvent ( QWheelEvent * event )
-{
-    if (nonInteractive) return;
-    if (!enabled)
-    {
-        event->ignore();
-        return;
-    }
+void ItemNum::mousePressEvent(QMouseEvent* event) {
+  if (nonInteractive) return;
+  if (event->button() == Qt::LeftButton && enabled) {
     event->accept();
-
-    // positive vertical delta is up, negative is down
-    // positive horizontal delta is left, negative is right
-    bool up = (event->angleDelta().y() > 0) ^ (event->angleDelta().x() < 0);
-
-    if(up)
-    {
-        if((infinityState && numItems <= maxItems) || (!infinityState && numItems < maxItems))
-            incItems();
+    if ((infinityState && numItems <= maxItems) ||
+        (!infinityState && numItems < maxItems)) {
+      incItems();
+    } else {
+      numItems = minItems + 1;
+      // appears there's an emit in there
+      decItems();
     }
-    else
-    {
-        if(numItems > minItems)
-            decItems();
+  } else if (event->button() == Qt::RightButton && enabled) {
+    event->accept();
+    if (numItems > minItems) {
+      decItems();
+    } else {
+      numItems = maxItems + (infinityState ? 0 : -1);
+      incItems();
     }
-    repaint();
+  } else {
+    event->ignore();
+    return;
+  }
+  repaint();
+}
+void ItemNum::wheelEvent(QWheelEvent* event) {
+  if (nonInteractive) return;
+  if (!enabled) {
+    event->ignore();
+    return;
+  }
+  event->accept();
+
+  // positive vertical delta is up, negative is down
+  // positive horizontal delta is left, negative is right
+  bool up = (event->angleDelta().y() > 0) ^ (event->angleDelta().x() < 0);
+
+  if (up) {
+    if ((infinityState && numItems <= maxItems) ||
+        (!infinityState && numItems < maxItems))
+      incItems();
+  } else {
+    if (numItems > minItems) decItems();
+  }
+  repaint();
 }
 
-QSize ItemNum::sizeHint () const
-{
-    return QSize((maxItems+1)*12, 32);
-}
+QSize ItemNum::sizeHint() const { return QSize((maxItems + 1) * 12, 32); }
 
-void ItemNum::paintEvent(QPaintEvent* event)
-{
-    Q_UNUSED(event);
+void ItemNum::paintEvent(QPaintEvent* event) {
+  Q_UNUSED(event);
 
-    QPainter painter(this);
+  QPainter painter(this);
 
-    if (numItems==maxItems+1)
-    {
-        QRect target(0, 0, 100, 32);
-        if (enabled)
-        {
-            painter.drawImage(target, QImage(QStringLiteral(":/res/infinity.png")));
-        }
-        else
-        {
-            painter.drawImage(target, QImage(QStringLiteral(":/res/infinitygrey.png")));
-        }
+  if (numItems == maxItems + 1) {
+    QRect target(0, 0, 100, 32);
+    if (enabled) {
+      painter.drawImage(target, QImage(QStringLiteral(":/res/infinity.png")));
+    } else {
+      painter.drawImage(target,
+                        QImage(QStringLiteral(":/res/infinitygrey.png")));
     }
-    else
-    {
-        for(int i=0; i<numItems; i++)
-        {
-            QRect target(11 * i, i % 2, 25, 35);
-            if (enabled)
-            {
-                painter.drawImage(target, m_im);
-            }
-            else
-            {
-                painter.drawImage(target, m_img);
-            }
-        }
+  } else {
+    for (int i = 0; i < numItems; i++) {
+      QRect target(11 * i, i % 2, 25, 35);
+      if (enabled) {
+        painter.drawImage(target, m_im);
+      } else {
+        painter.drawImage(target, m_img);
+      }
     }
+  }
 }
 
-unsigned char ItemNum::getItemsNum() const
-{
-    return numItems;
+unsigned char ItemNum::getItemsNum() const { return numItems; }
+
+void ItemNum::setItemsNum(const unsigned char num) {
+  numItems = num;
+  repaint();
 }
 
-void ItemNum::setItemsNum(const unsigned char num)
-{
-    numItems=num;
-    repaint();
-}
+void ItemNum::setInfinityState(bool value) { infinityState = value; }
 
-void ItemNum::setInfinityState(bool value)
-{
-    infinityState=value;
-}
-
-void ItemNum::setEnabled(bool value)
-{
-    enabled=value;
-    repaint();
+void ItemNum::setEnabled(bool value) {
+  enabled = value;
+  repaint();
 }

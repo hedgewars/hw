@@ -29,23 +29,22 @@
 /**
  * @brief A filter model for filtering DLC themes
  */
-class ThemeFilterProxyModel : public QSortFilterProxyModel
-{
-        Q_OBJECT
+class ThemeFilterProxyModel : public QSortFilterProxyModel {
+  Q_OBJECT
 
-    public:
-        ThemeFilterProxyModel(QObject *parent = 0);
-        void setFilterDLC(bool enabled);
-        void setFilterHidden(bool enabled);
-        void setFilterBackground(bool enabled);
+ public:
+  ThemeFilterProxyModel(QObject *parent = 0);
+  void setFilterDLC(bool enabled);
+  void setFilterHidden(bool enabled);
+  void setFilterBackground(bool enabled);
 
-    protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+ protected:
+  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
-    private:
-        bool isFilteringDLC;
-        bool isFilteringHidden;
-        bool isFilteringBackground;
+ private:
+  bool isFilteringDLC;
+  bool isFilteringHidden;
+  bool isFilteringBackground;
 };
 
-#endif // HEDGEWARS_THEMEFILTERPROXYMODEL_H
+#endif  // HEDGEWARS_THEMEFILTERPROXYMODEL_H

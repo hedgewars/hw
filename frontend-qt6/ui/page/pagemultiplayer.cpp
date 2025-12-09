@@ -21,67 +21,66 @@
  * @brief PageMultiplayer class implementation
  */
 
+#include "pagemultiplayer.h"
+
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
 
-#include "pagemultiplayer.h"
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 
-QLayout * PageMultiplayer::bodyLayoutDefinition()
-{
-    QHBoxLayout * pageLayout = new QHBoxLayout();
+QLayout* PageMultiplayer::bodyLayoutDefinition() {
+  QHBoxLayout* pageLayout = new QHBoxLayout();
 
-    gameCFG = new GameCFGWidget(this);
-    pageLayout->addWidget(gameCFG);
-    pageLayout->setAlignment(gameCFG, Qt::AlignTop);
+  gameCFG = new GameCFGWidget(this);
+  pageLayout->addWidget(gameCFG);
+  pageLayout->setAlignment(gameCFG, Qt::AlignTop);
 
-    teamsSelect = new TeamSelWidget(this);
-    pageLayout->addWidget(teamsSelect);
-    teamsSelect->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  teamsSelect = new TeamSelWidget(this);
+  pageLayout->addWidget(teamsSelect);
+  teamsSelect->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
-    return pageLayout;
+  return pageLayout;
 }
 
-QLayout * PageMultiplayer::footerLayoutLeftDefinition()
-{
-    QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
+QLayout* PageMultiplayer::footerLayoutLeftDefinition() {
+  QHBoxLayout* bottomLeftLayout = new QHBoxLayout();
 
-    btnSetup = addButton(QStringLiteral(":/res/Settings.png"), bottomLeftLayout, 0, true, Qt::AlignBottom);
-    btnSetup->setWhatsThis(tr("Edit game preferences"));
+  btnSetup = addButton(QStringLiteral(":/res/Settings.png"), bottomLeftLayout,
+                       0, true, Qt::AlignBottom);
+  btnSetup->setWhatsThis(tr("Edit game preferences"));
 
-    return bottomLeftLayout;
+  return bottomLeftLayout;
 }
 
-QLayout * PageMultiplayer::footerLayoutDefinition()
-{
-    QHBoxLayout * footerLayout = new QHBoxLayout();
+QLayout* PageMultiplayer::footerLayoutDefinition() {
+  QHBoxLayout* footerLayout = new QHBoxLayout();
 
-    const QIcon& lp = QIcon(":/res/Start.png");
-    QSize sz = lp.actualSize(QSize(65535, 65535));
-    BtnStartMPGame = new QPushButton();
-    BtnStartMPGame->setStyleSheet(QStringLiteral("padding: 5px 10px"));
-    BtnStartMPGame->setText(tr("Start"));
-    BtnStartMPGame->setWhatsThis(tr("Start fighting (requires at least 2 teams)"));
-    BtnStartMPGame->setIcon(lp);
-    BtnStartMPGame->setFixedHeight(50);
-    BtnStartMPGame->setIconSize(sz);
-    BtnStartMPGame->setFlat(true);
-    BtnStartMPGame->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  const QIcon& lp = QIcon(":/res/Start.png");
+  QSize sz = lp.actualSize(QSize(65535, 65535));
+  BtnStartMPGame = new QPushButton();
+  BtnStartMPGame->setStyleSheet(QStringLiteral("padding: 5px 10px"));
+  BtnStartMPGame->setText(tr("Start"));
+  BtnStartMPGame->setWhatsThis(
+      tr("Start fighting (requires at least 2 teams)"));
+  BtnStartMPGame->setIcon(lp);
+  BtnStartMPGame->setFixedHeight(50);
+  BtnStartMPGame->setIconSize(sz);
+  BtnStartMPGame->setFlat(true);
+  BtnStartMPGame->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    footerLayout->addStretch();
-    footerLayout->addWidget(BtnStartMPGame, 0, Qt::AlignBottom);
+  footerLayout->addStretch();
+  footerLayout->addWidget(BtnStartMPGame, 0, Qt::AlignBottom);
 
-    return footerLayout;
+  return footerLayout;
 }
 
-void PageMultiplayer::connectSignals()
-{
-    PageMultiplayer::connect(btnSetup, &QAbstractButton::clicked, this, &PageMultiplayer::SetupClicked);
+void PageMultiplayer::connectSignals() {
+  PageMultiplayer::connect(btnSetup, &QAbstractButton::clicked, this,
+                           &PageMultiplayer::SetupClicked);
 }
 
-PageMultiplayer::PageMultiplayer(QWidget* parent) : AbstractPage(parent)
-{
-    initPage();
+PageMultiplayer::PageMultiplayer(QWidget* parent) : AbstractPage(parent) {
+  initPage();
 }

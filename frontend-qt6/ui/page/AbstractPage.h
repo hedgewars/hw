@@ -24,12 +24,13 @@
 #ifndef ABSTRACTPAGE_H
 #define ABSTRACTPAGE_H
 
-#include <QWidget>
 #include <qpushbuttonwithsound.h>
+
+#include <QComboBox>
 #include <QFont>
 #include <QGridLayout>
-#include <QComboBox>
 #include <QSignalMapper>
+#include <QWidget>
 
 class QPushButtonWithSound;
 class QGroupBox;
@@ -52,187 +53,179 @@ class QSettings;
 class QSlider;
 class QGridlayout;
 
-class AbstractPage : public QWidget
-{
-        Q_OBJECT
+class AbstractPage : public QWidget {
+  Q_OBJECT
 
-    public:
+ public:
+  /**
+   * @brief Changes the desc text (should not be called manualy)
+   *
+   * @param desc the description of the widget focused
+   */
+  void setButtonDescription(const QString& desc);
 
-        /**
-        * @brief Changes the desc text (should not be called manualy)
-        *
-        * @param desc the description of the widget focused
-        */
-        void setButtonDescription(const QString &desc);
+  /**
+   * @brief Changes the desc defaut text
+   *
+   * @param text the defaut desc
+   */
+  void setDefaultDescription(const QString& text);
 
-        /**
-        * @brief Changes the desc defaut text
-        *
-        * @param text the defaut desc
-        */
-        void setDefaultDescription(const QString &text);
+  /**
+   * @brief Get the desc defaut text
+   */
+  QString* getDefaultDescription();
 
-        /**
-        * @brief Get the desc defaut text
-        */
-        QString * getDefaultDescription();
+ Q_SIGNALS:
 
-    Q_SIGNALS:
+  /**
+   * @brief This signal is emitted when going back to the previous is
+   * requested - e.g. when the back-button is clicked.
+   */
+  void goBack();
 
-        /**
-         * @brief This signal is emitted when going back to the previous is
-         * requested - e.g. when the back-button is clicked.
-         */
-        void goBack();
+  /**
+   * @brief This signal is emitted when the page is displayed
+   */
+  void pageEnter();
 
-        /**
-         * @brief This signal is emitted when the page is displayed
-         */
-        void pageEnter();
+  /**
+   * @brief This signal is emitted when this page is left
+   */
+  void pageLeave();
 
-        /**
-         * @brief This signal is emitted when this page is left
-         */
-        void pageLeave();
+ public Q_SLOTS:
 
-    public Q_SLOTS:
+  /**
+   * @brief This slot is called to trigger this page's pageEnter signal
+   */
+  void triggerPageEnter();
 
-        /**
-         * @brief This slot is called to trigger this page's pageEnter signal
-         */
-        void triggerPageEnter();
+  /**
+   * @brief This slot is called to trigger this page's pageLeave signal
+   */
+  void triggerPageLeave();
 
-        /**
-         * @brief This slot is called to trigger this page's pageLeave signal
-         */
-        void triggerPageLeave();
+ protected:
+  /**
+   * @brief Class constructor
+   *
+   * @param parent parent widget.
+   */
+  AbstractPage(QWidget* parent = 0);
 
-    protected:
-        /**
-         * @brief Class constructor
-         *
-         * @param parent parent widget.
-         */
-        AbstractPage(QWidget * parent = 0);
+  /// Class Destructor
+  virtual ~AbstractPage() {};
 
-        /// Class Destructor
-        virtual ~AbstractPage() {};
+  /// Call this in the constructor of your subclass.
+  void initPage();
 
-        /// Call this in the constructor of your subclass.
-        void initPage();
+  /**
+   * @brief Used during page construction.
+   * You MUST implement this method in your subclass.
+   *
+   * Use it to define the main layout (no behavior) of the page.
+   */
+  virtual QLayout* bodyLayoutDefinition() = 0;
 
-        /**
-         * @brief Used during page construction.
-         * You MUST implement this method in your subclass.
-         *
-         * Use it to define the main layout (no behavior) of the page.
-         */
-        virtual QLayout * bodyLayoutDefinition() = 0;
+  /**
+   * @brief Used during page construction.
+   * You can implement this method in your subclass.
+   *
+   * Use it to define layout (not behavior) of the page's footer.
+   */
+  virtual QLayout* footerLayoutDefinition() { return NULL; };
 
-        /**
-         * @brief Used during page construction.
-         * You can implement this method in your subclass.
-         *
-         * Use it to define layout (not behavior) of the page's footer.
-         */
-        virtual QLayout * footerLayoutDefinition()
-        {
-            return NULL;
-        };
+  /**
+   * @brief Used during page construction.
+   * You can implement this method in your subclass.
+   *
+   * Use it to define layout (not behavior) of the page's footer to the left of
+   * the help text.
+   */
+  virtual QLayout* footerLayoutLeftDefinition() { return NULL; };
 
-        /**
-         * @brief Used during page construction.
-         * You can implement this method in your subclass.
-         *
-         * Use it to define layout (not behavior) of the page's footer to the left of the help text.
-         */
-        virtual QLayout * footerLayoutLeftDefinition()
-        {
-            return NULL;
-        };
+  /**
+   * @brief Used during page construction.
+   * You can implement this method in your subclass.
+   *
+   * This is a good place to connect signals within your page in order
+   * to get the desired page behavior.<br />
+   * Keep in mind not to expose twidgets as public!
+   * instead define a signal with a meaningful name and connect the widget
+   * signals to your page signals
+   */
+  virtual void connectSignals() {};
 
-        /**
-         * @brief Used during page construction.
-         * You can implement this method in your subclass.
-         *
-         * This is a good place to connect signals within your page in order
-         * to get the desired page behavior.<br />
-         * Keep in mind not to expose twidgets as public!
-         * instead define a signal with a meaningful name and connect the widget
-         * signals to your page signals
-         */
-        virtual void connectSignals() {};
+  /**
+   * @brief Creates a default formatted button for this page.
+   *
+   * @param name name of the button - used as its text if not hasIcon.
+   * @param hasIcon set to true if this is a picture button.
+   *
+   * @return the button.
+   */
+  QPushButtonWithSound* formattedButton(const QString& name,
+                                        bool hasIcon = false);
+  QPushButton* formattedSoundlessButton(const QString& name,
+                                        bool hasIcon = false);
 
-        /**
-         * @brief Creates a default formatted button for this page.
-         *
-         * @param name name of the button - used as its text if not hasIcon.
-         * @param hasIcon set to true if this is a picture button.
-         *
-         * @return the button.
-         */
-        QPushButtonWithSound * formattedButton(const QString & name, bool hasIcon = false);
-        QPushButton * formattedSoundlessButton(const QString & name, bool hasIcon = false);
+  /**
+   * @brief Creates a default formatted button and adds it to a
+   * grid layout at the location specified.
+   *
+   * @param name label or path to icon of the button (depends on hasIcon)
+   * @param grid pointer of the grid layout in which to insert the button.
+   * @param row layout row index in which to insert the button.
+   * @param column layout column index in which to insert the button.
+   * @param rowSpan how many layout rows the button will span.
+   * @param columnSpan how many layout columns the button will span.
+   * @param hasIcon set to true if this is a picture button.
+   * @param alignment alignment of the button in the layout.
+   *
+   * @return the button.
+   */
+  QPushButtonWithSound* addButton(const QString& name, QGridLayout* grid,
+                                  int row, int column, int rowSpan = 1,
+                                  int columnSpan = 1, bool hasIcon = false,
+                                  Qt::Alignment alignment = {});
+  QPushButton* addSoundlessButton(const QString& name, QGridLayout* grid,
+                                  int row, int column, int rowSpan = 1,
+                                  int columnSpan = 1, bool hasIcon = false,
+                                  Qt::Alignment alignment = {});
 
-        /**
-         * @brief Creates a default formatted button and adds it to a
-         * grid layout at the location specified.
-         *
-         * @param name label or path to icon of the button (depends on hasIcon)
-         * @param grid pointer of the grid layout in which to insert the button.
-         * @param row layout row index in which to insert the button.
-         * @param column layout column index in which to insert the button.
-         * @param rowSpan how many layout rows the button will span.
-         * @param columnSpan how many layout columns the button will span.
-         * @param hasIcon set to true if this is a picture button.
-         * @param alignment alignment of the button in the layout.
-         *
-         * @return the button.
-         */
-        QPushButtonWithSound* addButton(const QString& name, QGridLayout* grid,
-                                        int row, int column, int rowSpan = 1,
-                                        int columnSpan = 1,
-                                        bool hasIcon = false,
-                                        Qt::Alignment alignment = {});
-        QPushButton* addSoundlessButton(const QString& name, QGridLayout* grid,
-                                        int row, int column, int rowSpan = 1,
-                                        int columnSpan = 1,
-                                        bool hasIcon = false,
-                                        Qt::Alignment alignment = {});
+  /**
+   * @brief Creates a default formatted button and adds it to a
+   * grid layout at the location specified.
+   *
+   * @param name label or path to icon of the button (depends on hasIcon)
+   * @param box pointer of the box layout in which to insert the button.
+   * @param where layout ndex in which to insert the button.
+   * @param hasIcon set to true if this is a picture button.
+   * @param alignment alignment of the button in the layout.
+   *
+   * @return the button.
+   */
+  QPushButtonWithSound* addButton(const QString& name, QBoxLayout* box,
+                                  int where, bool hasIcon = false,
+                                  Qt::Alignment alignment = {});
+  QPushButton* addSoundlessButton(const QString& name, QBoxLayout* box,
+                                  int where, bool hasIcon = false,
+                                  Qt::Alignment alignment = {});
 
-        /**
-         * @brief Creates a default formatted button and adds it to a
-         * grid layout at the location specified.
-         *
-         * @param name label or path to icon of the button (depends on hasIcon)
-         * @param box pointer of the box layout in which to insert the button.
-         * @param where layout ndex in which to insert the button.
-         * @param hasIcon set to true if this is a picture button.
-         * @param alignment alignment of the button in the layout.
-         *
-         * @return the button.
-         */
-        QPushButtonWithSound* addButton(const QString& name, QBoxLayout* box,
-                                        int where, bool hasIcon = false,
-                                        Qt::Alignment alignment = {});
-        QPushButton* addSoundlessButton(const QString& name, QBoxLayout* box,
-                                        int where, bool hasIcon = false,
-                                        Qt::Alignment alignment = {});
+  /**
+   * @brief Changes visibility of the back-button.
+   *
+   * @param visible set to true if the button should be visible.
+   */
+  void setBackButtonVisible(bool visible = true);
 
-        /**
-         * @brief Changes visibility of the back-button.
-         *
-         * @param visible set to true if the button should be visible.
-         */
-        void setBackButtonVisible(bool visible = true);
+  QFont* font14;  ///< used font
 
-        QFont * font14; ///< used font
+  QLabel* descLabel;  ///< text description
+  QString* defautDesc;
 
-        QLabel * descLabel; ///< text description
-        QString * defautDesc;
-
-        QPushButtonWithSound * btnBack; ///< back button
+  QPushButtonWithSound* btnBack;  ///< back button
 };
 
 #endif
-

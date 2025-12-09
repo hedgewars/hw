@@ -17,254 +17,258 @@
  */
 
 #include "keybinder.h"
-#include "HWApplication.h"
-#include "DataManager.h"
-#include <QHBoxLayout>
-#include <QScrollArea>
-#include <QTableWidget>
-#include <QTableWidgetItem>
-#include <QStandardItemModel>
+
 #include <QAbstractItemModel>
+#include <QComboBox>
+#include <QDebug>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QPushButton>
-#include <QHeaderView>
-#include <QComboBox>
-#include <QLabel>
-#include <QFrame>
-#include <QDebug>
+#include <QScrollArea>
+#include <QStandardItemModel>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
-KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString & defaultText, const QString & resetButtonText) : QWidget(parent)
-{
-    this->defaultText = defaultText;
-    enableSignal = false;
-    p_hasConflicts = false;
+#include "DataManager.h"
+#include "HWApplication.h"
 
-    // Two-column tab layout
-    QHBoxLayout * pageKeysLayout = new QHBoxLayout(this);
-    pageKeysLayout->setSpacing(0);
-    pageKeysLayout->setContentsMargins(0, 0, 0, 0);
+KeyBinder::KeyBinder(QWidget* parent, const QString& helpText,
+                     const QString& defaultText, const QString& resetButtonText)
+    : QWidget(parent) {
+  this->defaultText = defaultText;
+  enableSignal = false;
+  p_hasConflicts = false;
 
-    // Table for category list
-    QVBoxLayout * catListContainer = new QVBoxLayout();
-    catListContainer->setContentsMargins(10, 10, 10, 10);
-    catList = new QListWidget();
-    catList->setMinimumWidth(180);
-    catList->setStyleSheet(QStringLiteral("QListWidget::item { font-size: 14px; } QListWidget:hover { border-color: #F6CB1C; } QListWidget::item:selected { background: #150A61; color: yellow; }"));
-    catList->setFocusPolicy(Qt::NoFocus);
-    connect(catList, &QListWidget::currentRowChanged, this, &KeyBinder::changeBindingsPage);
-    catListContainer->addWidget(catList);
-    pageKeysLayout->addLayout(catListContainer);
+  // Two-column tab layout
+  QHBoxLayout* pageKeysLayout = new QHBoxLayout(this);
+  pageKeysLayout->setSpacing(0);
+  pageKeysLayout->setContentsMargins(0, 0, 0, 0);
 
-    // Reset all binds button
-    if (!resetButtonText.isEmpty())
-    {
-        QPushButton * btnResetAll = new QPushButton(resetButtonText);
-        catListContainer->addWidget(btnResetAll);
-        btnResetAll->setStyleSheet(QStringLiteral("padding: 5px 10px"));
-        btnResetAll->setFixedHeight(40);
-        catListContainer->setStretch(1, 0);
-        catListContainer->setSpacing(10);
-        connect(btnResetAll, &QAbstractButton::clicked, this, &KeyBinder::resetAllBinds);
+  // Table for category list
+  QVBoxLayout* catListContainer = new QVBoxLayout();
+  catListContainer->setContentsMargins(10, 10, 10, 10);
+  catList = new QListWidget();
+  catList->setMinimumWidth(180);
+  catList->setStyleSheet(
+      QStringLiteral("QListWidget::item { font-size: 14px; } QListWidget:hover "
+                     "{ border-color: #F6CB1C; } QListWidget::item:selected { "
+                     "background: #150A61; color: yellow; }"));
+  catList->setFocusPolicy(Qt::NoFocus);
+  connect(catList, &QListWidget::currentRowChanged, this,
+          &KeyBinder::changeBindingsPage);
+  catListContainer->addWidget(catList);
+  pageKeysLayout->addLayout(catListContainer);
+
+  // Reset all binds button
+  if (!resetButtonText.isEmpty()) {
+    QPushButton* btnResetAll = new QPushButton(resetButtonText);
+    catListContainer->addWidget(btnResetAll);
+    btnResetAll->setStyleSheet(QStringLiteral("padding: 5px 10px"));
+    btnResetAll->setFixedHeight(40);
+    catListContainer->setStretch(1, 0);
+    catListContainer->setSpacing(10);
+    connect(btnResetAll, &QAbstractButton::clicked, this,
+            &KeyBinder::resetAllBinds);
+  }
+
+  // Container for pages of key bindings
+  QWidget* bindingsPagesContainer = new QWidget();
+  QVBoxLayout* rightLayout = new QVBoxLayout(bindingsPagesContainer);
+
+  // Scroll area for key bindings
+  QScrollArea* scrollArea = new QScrollArea();
+  scrollArea->setContentsMargins(0, 0, 0, 0);
+  scrollArea->setWidget(bindingsPagesContainer);
+  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  scrollArea->setWidgetResizable(true);
+  scrollArea->setFrameShape(QFrame::NoFrame);
+  scrollArea->setObjectName("keyBinderScrollArea");
+
+  // Add key binding pages to bindings tab
+  pageKeysLayout->addWidget(scrollArea);
+  pageKeysLayout->setStretch(1, 1);
+
+  // Custom help text
+  QLabel* helpLabel = new QLabel();
+  helpLabel->setText(helpText);
+  helpLabel->setStyleSheet(
+      QStringLiteral("color: #130F2A; background: #F6CB1C; border: solid 4px "
+                     "#F6CB1C; border-radius: 10px; padding: auto 20px;"));
+  helpLabel->setFixedHeight(24);
+  rightLayout->addWidget(helpLabel, 0, Qt::AlignCenter);
+  conflictLabel = new QLabel();
+  conflictLabel->setText(
+      tr("Warning: The same key is assigned multiple times!"));
+  conflictLabel->setStyleSheet(
+      QStringLiteral("color: white; background: #E31A1A; border: solid 4px "
+                     "#E31A1A; border-radius: 10px; padding: auto 20px;"));
+  conflictLabel->setFixedHeight(24);
+  conflictLabel->setHidden(true);
+  rightLayout->addWidget(conflictLabel, 0, Qt::AlignCenter);
+
+  // Category list and bind table row heights
+  const int rowHeight = 20;
+  QSize catSize, headerSize;
+  catSize.setHeight(36);
+  headerSize.setHeight(24);
+
+  // Category list header
+  QListWidgetItem* catListHeader = new QListWidgetItem(tr("Category"));
+  catListHeader->setSizeHint(headerSize);
+  catListHeader->setFlags(Qt::NoItemFlags);
+  catListHeader->setForeground(QBrush(QColor(0x130F2A)));
+  catListHeader->setBackground(QBrush(QColor(0xF6CB1C)));
+  catListHeader->setTextAlignment(Qt::AlignCenter);
+  catList->addItem(catListHeader);
+
+  // Populate
+  bindingsPages = new QHBoxLayout();
+  bindingsPages->setContentsMargins(0, 0, 0, 0);
+  rightLayout->addLayout(bindingsPages);
+  QWidget* curPage = NULL;
+  QVBoxLayout* curLayout = NULL;
+  QTableWidget* curTable = NULL;
+  bool bFirstPage = true;
+  selectedBindTable = NULL;
+
+  dropDownIcon = new QIcon();
+  QPixmap dd1 = QPixmap(QStringLiteral(":/res/dropdown.png"));
+  QPixmap dd2 = QPixmap(QStringLiteral(":/res/dropdown_selected.png"));
+  dropDownIcon->addPixmap(dd1, QIcon::Normal);
+  dropDownIcon->addPixmap(dd2, QIcon::Selected);
+  conflictIcon = new QIcon();
+  QPixmap kc1 = QPixmap(QStringLiteral(":/res/keyconflict.png"));
+  QPixmap kc2 = QPixmap(QStringLiteral(":/res/keyconflict_selected.png"));
+  conflictIcon->addPixmap(kc1, QIcon::Normal);
+  conflictIcon->addPixmap(kc2, QIcon::Selected);
+  QPixmap emptySpace = QPixmap(16, 16);
+  emptySpace.fill(QColor(0, 0, 0, 0));
+  QIcon emptyIcon = QIcon(emptySpace);
+
+  for (int i = 0; i < BINDS_NUMBER; i++) {
+    if (cbinds[i].category != NULL) {
+      // Add stretch at end of previous layout
+      if (curLayout != NULL) curLayout->insertStretch(-1, 1);
+
+      // Category list item
+      QListWidgetItem* catItem = new QListWidgetItem(
+          HWApplication::translate("binds (categories)", cbinds[i].category));
+      catItem->setSizeHint(catSize);
+      catList->addItem(catItem);
+
+      // Create new page
+      curPage = new QWidget();
+      curLayout = new QVBoxLayout(curPage);
+      curLayout->setSpacing(2);
+      bindingsPages->addWidget(curPage);
+      if (!bFirstPage) curPage->setVisible(false);
     }
 
-    // Container for pages of key bindings
-    QWidget * bindingsPagesContainer = new QWidget();
-    QVBoxLayout * rightLayout = new QVBoxLayout(bindingsPagesContainer);
-
-    // Scroll area for key bindings
-    QScrollArea * scrollArea = new QScrollArea();
-    scrollArea->setContentsMargins(0, 0, 0, 0);
-    scrollArea->setWidget(bindingsPagesContainer);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setFrameShape(QFrame::NoFrame);
-    scrollArea->setObjectName("keyBinderScrollArea");
-
-    // Add key binding pages to bindings tab
-    pageKeysLayout->addWidget(scrollArea);
-    pageKeysLayout->setStretch(1, 1);
-
-    // Custom help text
-    QLabel * helpLabel = new QLabel();
-    helpLabel->setText(helpText);
-    helpLabel->setStyleSheet(QStringLiteral("color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-radius: 10px; padding: auto 20px;"));
-    helpLabel->setFixedHeight(24);
-    rightLayout->addWidget(helpLabel, 0, Qt::AlignCenter);
-    conflictLabel = new QLabel();
-    conflictLabel->setText(tr("Warning: The same key is assigned multiple times!"));
-    conflictLabel->setStyleSheet(QStringLiteral("color: white; background: #E31A1A; border: solid 4px #E31A1A; border-radius: 10px; padding: auto 20px;"));
-    conflictLabel->setFixedHeight(24);
-    conflictLabel->setHidden(true);
-    rightLayout->addWidget(conflictLabel, 0, Qt::AlignCenter);
-
-    // Category list and bind table row heights
-    const int rowHeight = 20;
-    QSize catSize, headerSize;
-    catSize.setHeight(36);
-    headerSize.setHeight(24);
-
-    // Category list header
-    QListWidgetItem * catListHeader = new QListWidgetItem(tr("Category"));
-    catListHeader->setSizeHint(headerSize);
-    catListHeader->setFlags(Qt::NoItemFlags);
-    catListHeader->setForeground(QBrush(QColor(0x130F2A)));
-    catListHeader->setBackground(QBrush(QColor(0xF6CB1C)));
-    catListHeader->setTextAlignment(Qt::AlignCenter);
-    catList->addItem(catListHeader);
-
-    // Populate
-    bindingsPages = new QHBoxLayout();
-    bindingsPages->setContentsMargins(0, 0, 0, 0);
-    rightLayout->addLayout(bindingsPages);
-    QWidget * curPage = NULL;
-    QVBoxLayout * curLayout = NULL;
-    QTableWidget * curTable = NULL;
-    bool bFirstPage = true;
-    selectedBindTable = NULL;
-
-    dropDownIcon = new QIcon();
-    QPixmap dd1 = QPixmap(QStringLiteral(":/res/dropdown.png"));
-    QPixmap dd2 = QPixmap(QStringLiteral(":/res/dropdown_selected.png"));
-    dropDownIcon->addPixmap(dd1, QIcon::Normal);
-    dropDownIcon->addPixmap(dd2, QIcon::Selected);
-    conflictIcon = new QIcon();
-    QPixmap kc1 = QPixmap(QStringLiteral(":/res/keyconflict.png"));
-    QPixmap kc2 = QPixmap(QStringLiteral(":/res/keyconflict_selected.png"));
-    conflictIcon->addPixmap(kc1, QIcon::Normal);
-    conflictIcon->addPixmap(kc2, QIcon::Selected);
-    QPixmap emptySpace = QPixmap(16, 16);
-    emptySpace.fill(QColor(0, 0, 0, 0));
-    QIcon emptyIcon = QIcon(emptySpace);
-
-    for (int i = 0; i < BINDS_NUMBER; i++)
-    {
-        if (cbinds[i].category != NULL)
-        {
-            // Add stretch at end of previous layout
-            if (curLayout != NULL) curLayout->insertStretch(-1, 1);
-
-            // Category list item
-            QListWidgetItem * catItem = new QListWidgetItem(HWApplication::translate("binds (categories)", cbinds[i].category));
-            catItem->setSizeHint(catSize);
-            catList->addItem(catItem);
-
-            // Create new page
-            curPage = new QWidget();
-            curLayout = new QVBoxLayout(curPage);
-            curLayout->setSpacing(2);
-            bindingsPages->addWidget(curPage);
-            if (!bFirstPage) curPage->setVisible(false);
-        }
-
-        // Description
-        if (cbinds[i].description != NULL)
-        {
-            QLabel * desc = new QLabel(HWApplication::translate("binds (descriptions)", cbinds[i].description));
-            curLayout->addWidget(desc, 0);
-            QFrame * divider = new QFrame();
-            divider->setFrameShape(QFrame::HLine);
-            divider->setFrameShadow(QFrame::Plain);
-            curLayout->addWidget(divider, 0);
-        }
-
-        // New table
-        if (cbinds[i].category != NULL || cbinds[i].description != NULL)
-        {
-            curTable = new QTableWidget(0, 2);
-            curTable->verticalHeader()->setVisible(false);
-            curTable->horizontalHeader()->setVisible(false);
-            curTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-            curTable->verticalHeader()->setDefaultSectionSize(rowHeight);
-            curTable->setShowGrid(false);
-            curTable->setStyleSheet(QStringLiteral("QTableWidget { border: none; background-color: transparent; } "));
-            curTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-            curTable->setSelectionMode(QAbstractItemView::SingleSelection);
-            curTable->setFocusPolicy(Qt::NoFocus);
-            connect(curTable, &QTableWidget::itemSelectionChanged, this, &KeyBinder::bindSelectionChanged);
-            connect(curTable, &QTableWidget::itemClicked, this, &KeyBinder::bindCellClicked);
-            curLayout->addWidget(curTable, 0);
-        }
-
-        // Hidden combo box
-        QComboBox * comboBox;
-        if (cbinds[i].action != QLatin1String("!MULTI"))
-        {
-            comboBox = CBBind[i] = new QComboBox(curTable);
-            comboBox->setModel((QAbstractItemModel*)DataManager::instance().bindsModel());
-            comboBox->setVisible(false);
-            comboBox->setMinimumWidth(400);
-            comboBox->setMaxVisibleItems(50);
-        }
-        else
-        {
-            comboBox = CBBind[i] = NULL;
-        }
-
-        // Table row
-        int row = curTable->rowCount();
-        QTableWidgetItem * nameCell = new QTableWidgetItem(HWApplication::translate("binds", cbinds[i].name));
-        curTable->insertRow(row);
-        curTable->setItem(row, 0, nameCell);
-        QTableWidgetItem * bindCell;
-        if (cbinds[i].action != QLatin1String("!MULTI"))
-        {
-            bindCell = new QTableWidgetItem(comboBox->currentText());
-            nameCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-            bindCell->setIcon(*dropDownIcon);
-            bindCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        }
-        else
-        {
-            bindCell = new QTableWidgetItem(HWApplication::translate("binds (combination)", cbinds[i].strbind.toUtf8().constData()));
-            nameCell->setFlags(Qt::NoItemFlags);
-            bindCell->setFlags(Qt::NoItemFlags);
-            bindCell->setIcon(emptyIcon);
-        }
-        curTable->setItem(row, 1, bindCell);
-        curTable->resizeColumnsToContents();
-        curTable->setFixedHeight(curTable->verticalHeader()->length() + 10);
-
-        if (cbinds[i].action != QLatin1String("!MULTI"))
-        {
-            // Updates the text in the table cell
-            connect(comboBox, &QComboBox::currentTextChanged, this,
-                    &KeyBinder::bindChanged);
-
-            // Map combo box and that row's cells to each other
-            bindComboBoxCellMappings.insert(comboBox, bindCell);
-            bindCellComboBoxMappings.insert(nameCell, comboBox);
-            bindCellComboBoxMappings.insert(bindCell, comboBox);
-        }
-
+    // Description
+    if (cbinds[i].description != NULL) {
+      QLabel* desc = new QLabel(HWApplication::translate(
+          "binds (descriptions)", cbinds[i].description));
+      curLayout->addWidget(desc, 0);
+      QFrame* divider = new QFrame();
+      divider->setFrameShape(QFrame::HLine);
+      divider->setFrameShadow(QFrame::Plain);
+      curLayout->addWidget(divider, 0);
     }
 
-    // Add stretch at end of last layout
-    if (curLayout != NULL) curLayout->insertStretch(-1, 1);
+    // New table
+    if (cbinds[i].category != NULL || cbinds[i].description != NULL) {
+      curTable = new QTableWidget(0, 2);
+      curTable->verticalHeader()->setVisible(false);
+      curTable->horizontalHeader()->setVisible(false);
+      curTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+      curTable->verticalHeader()->setDefaultSectionSize(rowHeight);
+      curTable->setShowGrid(false);
+      curTable->setStyleSheet(QStringLiteral(
+          "QTableWidget { border: none; background-color: transparent; } "));
+      curTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+      curTable->setSelectionMode(QAbstractItemView::SingleSelection);
+      curTable->setFocusPolicy(Qt::NoFocus);
+      connect(curTable, &QTableWidget::itemSelectionChanged, this,
+              &KeyBinder::bindSelectionChanged);
+      connect(curTable, &QTableWidget::itemClicked, this,
+              &KeyBinder::bindCellClicked);
+      curLayout->addWidget(curTable, 0);
+    }
 
-    // Go to first page
-    catList->setCurrentItem(catList->item(1));
+    // Hidden combo box
+    QComboBox* comboBox;
+    if (cbinds[i].action != QLatin1String("!MULTI")) {
+      comboBox = CBBind[i] = new QComboBox(curTable);
+      comboBox->setModel(
+          (QAbstractItemModel*)DataManager::instance().bindsModel());
+      comboBox->setVisible(false);
+      comboBox->setMinimumWidth(400);
+      comboBox->setMaxVisibleItems(50);
+    } else {
+      comboBox = CBBind[i] = NULL;
+    }
 
-    enableSignal = true;
+    // Table row
+    int row = curTable->rowCount();
+    QTableWidgetItem* nameCell =
+        new QTableWidgetItem(HWApplication::translate("binds", cbinds[i].name));
+    curTable->insertRow(row);
+    curTable->setItem(row, 0, nameCell);
+    QTableWidgetItem* bindCell;
+    if (cbinds[i].action != QLatin1String("!MULTI")) {
+      bindCell = new QTableWidgetItem(comboBox->currentText());
+      nameCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+      bindCell->setIcon(*dropDownIcon);
+      bindCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    } else {
+      bindCell = new QTableWidgetItem(HWApplication::translate(
+          "binds (combination)", cbinds[i].strbind.toUtf8().constData()));
+      nameCell->setFlags(Qt::NoItemFlags);
+      bindCell->setFlags(Qt::NoItemFlags);
+      bindCell->setIcon(emptyIcon);
+    }
+    curTable->setItem(row, 1, bindCell);
+    curTable->resizeColumnsToContents();
+    curTable->setFixedHeight(curTable->verticalHeader()->length() + 10);
+
+    if (cbinds[i].action != QLatin1String("!MULTI")) {
+      // Updates the text in the table cell
+      connect(comboBox, &QComboBox::currentTextChanged, this,
+              &KeyBinder::bindChanged);
+
+      // Map combo box and that row's cells to each other
+      bindComboBoxCellMappings.insert(comboBox, bindCell);
+      bindCellComboBoxMappings.insert(nameCell, comboBox);
+      bindCellComboBoxMappings.insert(bindCell, comboBox);
+    }
+  }
+
+  // Add stretch at end of last layout
+  if (curLayout != NULL) curLayout->insertStretch(-1, 1);
+
+  // Go to first page
+  catList->setCurrentItem(catList->item(1));
+
+  enableSignal = true;
 }
 
-KeyBinder::~KeyBinder()
-{
-}
+KeyBinder::~KeyBinder() {}
 
 // Switches between different pages of key binds
-void KeyBinder::changeBindingsPage(int page)
-{
-    page--; // Disregard first item (the list header)
-    int pages = bindingsPages->count();
-    for (int i = 0; i < pages; i++)
-        bindingsPages->itemAt(i)->widget()->setVisible(false);
-    bindingsPages->itemAt(page)->widget()->setVisible(true);
+void KeyBinder::changeBindingsPage(int page) {
+  page--;  // Disregard first item (the list header)
+  int pages = bindingsPages->count();
+  for (int i = 0; i < pages; i++)
+    bindingsPages->itemAt(i)->widget()->setVisible(false);
+  bindingsPages->itemAt(page)->widget()->setVisible(true);
 }
 
 // When a key bind combobox value is changed, updates the table cell text
-void KeyBinder::bindChanged(const QString & text)
-{
+void KeyBinder::bindChanged(const QString& text) {
   bindComboBoxCellMappings.value(sender())->setText(text);
 
   if (enableSignal) {
@@ -279,8 +283,7 @@ void KeyBinder::bindChanged(const QString & text)
 }
 
 // When a row in a key bind table is clicked, this shows the popup
-void KeyBinder::bindCellClicked(QTableWidgetItem * item)
-{
+void KeyBinder::bindCellClicked(QTableWidgetItem* item) {
   QComboBox* box = bindCellComboBoxMappings.value(item);
   if (box == NULL) return;
   QTableWidget* table = item->tableWidget();
@@ -292,9 +295,9 @@ void KeyBinder::bindCellClicked(QTableWidgetItem * item)
   box->showPopup();
 }
 
-// When a new row in a bind table is *selected*, this clears selection in any other table
-void KeyBinder::bindSelectionChanged()
-{
+// When a new row in a bind table is *selected*, this clears selection in any
+// other table
+void KeyBinder::bindSelectionChanged() {
   auto theSender = qobject_cast<QTableWidget*>(sender());
   if (theSender != selectedBindTable) {
     if (selectedBindTable != NULL) selectedBindTable->clearSelection();
@@ -303,119 +306,103 @@ void KeyBinder::bindSelectionChanged()
 }
 
 // check if the given key is bound multiple times
-bool KeyBinder::checkConflictsWith(int compareTo, bool updateState)
-{
-    for(int i=0; i<BINDS_NUMBER; i++)
-    {
-        if(i == compareTo)
-            continue;
-        if(CBBind[i] == NULL || CBBind[compareTo] == NULL)
-            continue;
-        QString bind1 = CBBind[i]->currentData(Qt::UserRole + 1).toString();
-        QString bind2 = CBBind[compareTo]->currentData(Qt::UserRole + 1).toString();
-        // TODO: For team key binds, also check collisions with global key binds
-        if((!(bind1 == QLatin1String("none") || bind2 == QLatin1String("none") || bind1 == QLatin1String("default") || bind2 == QLatin1String("default"))) && (bind1 == bind2))
-        {
-            if(updateState)
-            {
-                p_hasConflicts = true;
-                conflictLabel->setHidden(false);
-            }
-            QTableWidgetItem* conflictItem =
-                bindComboBoxCellMappings.value(CBBind[i]);
-            conflictItem->setIcon(*conflictIcon);
-            conflictItem->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
-            conflictItem->setForeground(QBrush(Qt::white));
-            conflictItems.append(conflictItem);
-            conflictItem = bindComboBoxCellMappings.value(CBBind[compareTo]);
-            conflictItem->setIcon(*conflictIcon);
-            conflictItem->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
-            conflictItem->setForeground(QBrush(Qt::white));
-            conflictItems.append(conflictItem);
-            return true;
-        }
+bool KeyBinder::checkConflictsWith(int compareTo, bool updateState) {
+  for (int i = 0; i < BINDS_NUMBER; i++) {
+    if (i == compareTo) continue;
+    if (CBBind[i] == NULL || CBBind[compareTo] == NULL) continue;
+    QString bind1 = CBBind[i]->currentData(Qt::UserRole + 1).toString();
+    QString bind2 = CBBind[compareTo]->currentData(Qt::UserRole + 1).toString();
+    // TODO: For team key binds, also check collisions with global key binds
+    if ((!(bind1 == QLatin1String("none") || bind2 == QLatin1String("none") ||
+           bind1 == QLatin1String("default") ||
+           bind2 == QLatin1String("default"))) &&
+        (bind1 == bind2)) {
+      if (updateState) {
+        p_hasConflicts = true;
+        conflictLabel->setHidden(false);
+      }
+      QTableWidgetItem* conflictItem =
+          bindComboBoxCellMappings.value(CBBind[i]);
+      conflictItem->setIcon(*conflictIcon);
+      conflictItem->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
+      conflictItem->setForeground(QBrush(Qt::white));
+      conflictItems.append(conflictItem);
+      conflictItem = bindComboBoxCellMappings.value(CBBind[compareTo]);
+      conflictItem->setIcon(*conflictIcon);
+      conflictItem->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
+      conflictItem->setForeground(QBrush(Qt::white));
+      conflictItems.append(conflictItem);
+      return true;
     }
-    if(updateState)
-    {
-        p_hasConflicts = false;
-        conflictLabel->setHidden(true);
-    }
-    for (int c=0; c < conflictItems.size(); c++)
-    {
-      QTableWidgetItem* conflictItem = conflictItems.at(c);
-      conflictItem->setIcon(*dropDownIcon);
-      conflictItem->setBackground(QBrush(Qt::transparent));
-      conflictItem->setForeground(QBrush(QColor(0xF6CB1C)));
-      conflictItem = NULL;
-    }
-    conflictItems.clear();
-    return false;
+  }
+  if (updateState) {
+    p_hasConflicts = false;
+    conflictLabel->setHidden(true);
+  }
+  for (int c = 0; c < conflictItems.size(); c++) {
+    QTableWidgetItem* conflictItem = conflictItems.at(c);
+    conflictItem->setIcon(*dropDownIcon);
+    conflictItem->setBackground(QBrush(Qt::transparent));
+    conflictItem->setForeground(QBrush(QColor(0xF6CB1C)));
+    conflictItem = NULL;
+  }
+  conflictItems.clear();
+  return false;
 }
 
 // check if any key is bound multiple times and causing a conflict
-bool KeyBinder::checkConflicts()
-{
-    for(int i=0; i<BINDS_NUMBER; i++)
-    {
-      auto conflict = checkConflictsWith(i, false);
-      if (conflict) {
-        p_hasConflicts = true;
-        conflictLabel->setHidden(false);
-        return true;
-      }
+bool KeyBinder::checkConflicts() {
+  for (int i = 0; i < BINDS_NUMBER; i++) {
+    auto conflict = checkConflictsWith(i, false);
+    if (conflict) {
+      p_hasConflicts = true;
+      conflictLabel->setHidden(false);
+      return true;
     }
-    p_hasConflicts = false;
-    conflictLabel->setHidden(true);
-    return false;
+  }
+  p_hasConflicts = false;
+  conflictLabel->setHidden(true);
+  return false;
 }
 
-bool KeyBinder::hasConflicts()
-{
-    return p_hasConflicts;
-}
+bool KeyBinder::hasConflicts() { return p_hasConflicts; }
 
 // Set a combobox's index
-void KeyBinder::setBindIndex(int keyIndex, int bindIndex)
-{
-    enableSignal = false;
-    if(CBBind[keyIndex] != NULL)
-        CBBind[keyIndex]->setCurrentIndex(bindIndex);
-    enableSignal = true;
+void KeyBinder::setBindIndex(int keyIndex, int bindIndex) {
+  enableSignal = false;
+  if (CBBind[keyIndex] != NULL) CBBind[keyIndex]->setCurrentIndex(bindIndex);
+  enableSignal = true;
 }
 
 // Return a combobox's selected index
-int KeyBinder::bindIndex(int keyIndex)
-{
-    if(CBBind[keyIndex] != NULL)
-        return CBBind[keyIndex]->currentIndex();
-    else
-        return 0;
+int KeyBinder::bindIndex(int keyIndex) {
+  if (CBBind[keyIndex] != NULL)
+    return CBBind[keyIndex]->currentIndex();
+  else
+    return 0;
 }
 
 // Clears selection and goes to first category
-void KeyBinder::resetInterface()
-{
-    enableSignal = false;
+void KeyBinder::resetInterface() {
+  enableSignal = false;
 
-    catList->setCurrentItem(catList->item(1));
-    changeBindingsPage(1);
-    if (selectedBindTable != NULL)
-    {
-        selectedBindTable->clearSelection();
-        selectedBindTable = NULL;
+  catList->setCurrentItem(catList->item(1));
+  changeBindingsPage(1);
+  if (selectedBindTable != NULL) {
+    selectedBindTable->clearSelection();
+    selectedBindTable = NULL;
+  }
+
+  // Default bind text
+  DataManager::instance().bindsModel()->item(0)->setData(defaultText,
+                                                         Qt::DisplayRole);
+  for (int i = 0; i < BINDS_NUMBER; i++) {
+    if (CBBind[i] != NULL) {
+      CBBind[i]->setModel(DataManager::instance().bindsModel());
+      CBBind[i]->setCurrentIndex(0);
+      bindComboBoxCellMappings.value(CBBind[i])->setText(defaultText);
     }
+  }
 
-    // Default bind text
-    DataManager::instance().bindsModel()->item(0)->setData(defaultText, Qt::DisplayRole);
-    for (int i = 0; i < BINDS_NUMBER; i++)
-    {
-        if (CBBind[i] != NULL)
-        {
-            CBBind[i]->setModel(DataManager::instance().bindsModel());
-            CBBind[i]->setCurrentIndex(0);
-            bindComboBoxCellMappings.value(CBBind[i])->setText(defaultText);
-        }
-    }
-
-    enableSignal = true;
+  enableSignal = true;
 }
