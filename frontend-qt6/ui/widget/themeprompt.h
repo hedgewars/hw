@@ -30,14 +30,15 @@ class LineEditCursor;
 
 class ThemeListView : public QListView
 {
-    friend class ThemePrompt;
+  Q_OBJECT
+  friend class ThemePrompt;
 
-    public:
-        ThemeListView(QWidget* parent = 0) : QListView(parent){}
-        void moveUp();
-        void moveDown();
-        void moveLeft();
-        void moveRight();
+ public:
+  ThemeListView(QWidget* parent = 0) : QListView(parent) {}
+  void moveUp();
+  void moveDown();
+  void moveLeft();
+  void moveRight();
 };
 
 class ThemePrompt : public QDialog

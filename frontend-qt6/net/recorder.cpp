@@ -62,12 +62,10 @@ void HWRecorder::onClientRead()
     quint8 msglen;
     quint32 bufsize;
     while (!readbuffer.isEmpty() && ((bufsize = readbuffer.size()) > 0) &&
-            ((msglen = readbuffer.data()[0]) < bufsize))
-    {
-        QByteArray msg = readbuffer.left(msglen + 1);
-        readbuffer.remove(0, msglen + 1);
-        switch (msg.at(1))
-        {
+           ((msglen = readbuffer.constData()[0]) < bufsize)) {
+      QByteArray msg = readbuffer.left(msglen + 1);
+      readbuffer.remove(0, msglen + 1);
+      switch (msg.at(1)) {
         case '?':
             SendIPC("!");
             break;

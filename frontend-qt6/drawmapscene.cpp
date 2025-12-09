@@ -97,7 +97,7 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
             break;
         case Rectangle: {
             path = QPainterPath();
-            QPointF p1 = paths.first().initialPoint;
+            QPointF p1 = paths.constFirst().initialPoint;
             QPointF p2 = currentPos;
             path.moveTo(p1);
             path.lineTo(p1.x(), p2.y());
@@ -108,7 +108,8 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
             }
         case Ellipse: {
             path = QPainterPath();
-            QList<QPointF> points = makeEllipse(paths.first().initialPoint, currentPos);
+            QList<QPointF> points =
+                makeEllipse(paths.constFirst().initialPoint, currentPos);
             path.addPolygon(QPolygonF(QVector<QPointF>::fromList(points)));
             break;
         }
@@ -440,8 +441,9 @@ void DrawMapScene::simplifyLast()
 
     // redraw path
     {
-        QGraphicsPathItem * pathItem = static_cast<QGraphicsPathItem *>(items()[m_isCursorShown ? 1 : 0]);
-        pathItem->setPath(pointsToPath(paths[0].points));
+      QGraphicsPathItem *pathItem =
+          static_cast<QGraphicsPathItem *>(items().at(m_isCursorShown ? 1 : 0));
+      pathItem->setPath(pointsToPath(paths[0].points));
     }
 }
 
@@ -481,47 +483,43 @@ void DrawMapScene::setPathType(PathType pathType)
     m_pathType = pathType;
 }
 
-QList<QPointF> DrawMapScene::makeEllipse(const QPointF &center, const QPointF &corner)
-{
-    QList<QPointF> l;
-    qreal rx = qAbs(center.x() - corner.x());
-    qreal ry = qAbs(center.y() - corner.y());
-    qreal r = qMax(rx, ry);
+QList<QPointF> DrawMapScene::makeEllipse(QPointF center, QPointF corner) {
+  QList<QPointF> l;
+  qreal rx = qAbs(center.x() - corner.x());
+  qreal ry = qAbs(center.y() - corner.y());
+  qreal r = qMax(rx, ry);
 
-    if(r < 4)
-    {
-        l.append(center);
-    } else
-    {
-        qreal angleDelta = qMax(static_cast<qreal> (0.1), qMin(static_cast<qreal> (0.7), 120 / r));
-        for(qreal angle = 0.0; angle < 2*M_PI; angle += angleDelta)
-            l.append(center + QPointF(rx * cos(angle), ry * sin(angle)));
-        l.append(l.first());
-    }
+  if (r < 4) {
+    l.append(center);
+  } else {
+    qreal angleDelta =
+        qMax(static_cast<qreal>(0.1), qMin(static_cast<qreal>(0.7), 120 / r));
+    for (qreal angle = 0.0; angle < 2 * M_PI; angle += angleDelta)
+      l.append(center + QPointF(rx * cos(angle), ry * sin(angle)));
+    l.append(l.first());
+  }
 
-    return l;
+  return l;
 }
 
-QPointF DrawMapScene::putSomeConstraints(const QPointF &initialPoint, const QPointF &point)
-{
-    QPointF vector = point - initialPoint;
+QPointF DrawMapScene::putSomeConstraints(QPointF initialPoint, QPointF point) {
+  QPointF vector = point - initialPoint;
 
-    for(int angle = 0; angle < 180; angle += 15)
-    {
-        QTransform transform;
-        transform.rotate(angle);
+  for (int angle = 0; angle < 180; angle += 15) {
+    QTransform transform;
+    transform.rotate(angle);
 
-        QPointF rotated = transform.map(vector);
+    QPointF rotated = transform.map(vector);
 
-        if(rotated.x() == 0) return point;
-        if(qAbs(rotated.y() / rotated.x()) < 0.05) return initialPoint + transform.inverted().map(QPointF(rotated.x(), 0));
-    }
+    if (rotated.x() == 0) return point;
+    if (qAbs(rotated.y() / rotated.x()) < 0.05)
+      return initialPoint + transform.inverted().map(QPointF(rotated.x(), 0));
+  }
 
-    return point;
+  return point;
 }
 
-void DrawMapScene::optimize()
-{
+void DrawMapScene::optimize() {
   if (paths.isEmpty()) {
     return;
   }

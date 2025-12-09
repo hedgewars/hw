@@ -31,7 +31,7 @@ class ToggleButtonWidget : public QPushButton
 {
         Q_OBJECT
     public:
-        ToggleButtonWidget(QWidget * parent, QString img);
+        ToggleButtonWidget(QWidget * parent, const QString &img);
         ~ToggleButtonWidget();
     private:
         QIcon icoUnchecked;

@@ -30,42 +30,40 @@
 #include "teamselhelper.h"
 #include "frameTeam.h"
 
-void TeamSelWidget::addTeam(HWTeam team)
-{
-    if(team.isNetTeam())
-    {
-        framePlaying->addTeam(team, true);
-        curPlayingTeams.push_back(team);
-        connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
-                this, SLOT(hhNumChanged(const HWTeam&)));
-        blockSignals(true);
-        dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
-        blockSignals(false);
-        connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
-                this, SLOT(proxyTeamColorChanged(const HWTeam&)));
+void TeamSelWidget::addTeam(const HWTeam& team) {
+  if (team.isNetTeam()) {
+    framePlaying->addTeam(team, true);
+    curPlayingTeams.push_back(team);
+    connect(framePlaying->getTeamWidget(team),
+            SIGNAL(hhNmChanged(const HWTeam&)), this,
+            SLOT(hhNumChanged(const HWTeam&)));
+    blockSignals(true);
+    dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))
+        ->hhNumChanged();
+    blockSignals(false);
+    connect(framePlaying->getTeamWidget(team),
+            SIGNAL(teamColorChanged(const HWTeam&)), this,
+            SLOT(proxyTeamColorChanged(const HWTeam&)));
 
-        // Hide team notice if at least two teams.
-        if (curPlayingTeams.size() >= 2)
-        {
-            numTeamNotice->hide();
-        }
+    // Hide team notice if at least two teams.
+    if (curPlayingTeams.size() >= 2) {
+      numTeamNotice->hide();
     }
-    else
-    {
-      framNotPlaying->addTeam(team, false);
-      m_curNotPlayingTeams.push_back(team);
-      if (m_acceptOuter) {
-        connect(framNotPlaying->getTeamWidget(team),
-                SIGNAL(teamStatusChanged(HWTeam)), this,
-                SLOT(pre_changeTeamStatus(HWTeam)));
-      } else {
-        connect(framNotPlaying->getTeamWidget(team),
-                SIGNAL(teamStatusChanged(HWTeam)), this,
-                SLOT(changeTeamStatus(HWTeam)));
-      }
+  } else {
+    framNotPlaying->addTeam(team, false);
+    m_curNotPlayingTeams.push_back(team);
+    if (m_acceptOuter) {
+      connect(framNotPlaying->getTeamWidget(team),
+              SIGNAL(teamStatusChanged(HWTeam)), this,
+              SLOT(pre_changeTeamStatus(HWTeam)));
+    } else {
+      connect(framNotPlaying->getTeamWidget(team),
+              SIGNAL(teamStatusChanged(HWTeam)), this,
+              SLOT(changeTeamStatus(HWTeam)));
     }
+  }
 
-    Q_EMIT setEnabledGameStart(curPlayingTeams.size()>1);
+  Q_EMIT setEnabledGameStart(curPlayingTeams.size() > 1);
 }
 
 void TeamSelWidget::setInteractivity(bool interactive)
@@ -165,7 +163,7 @@ void TeamSelWidget::cleanupFakeNetTeams()
     if(m_curUser.isNull())
         return;
 
-    QList<HWTeam>::iterator itPlay = curPlayingTeams.begin();
+    auto itPlay = curPlayingTeams.cbegin();
     while(itPlay != curPlayingTeams.end())
     {
         if(itPlay->isNetTeam() && itPlay->owner() == m_curUser)

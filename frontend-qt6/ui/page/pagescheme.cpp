@@ -700,12 +700,12 @@ void PageScheme::deleteRow()
     changingSchemes = false;
 }
 
-void PageScheme::dataChanged(QModelIndex topLeft, QModelIndex bottomRight)
-{
-    Q_UNUSED(bottomRight)
-    if(topLeft.column() == 0) {
-        checkDupe();
-    };
+void PageScheme::dataChanged(const QModelIndex& topLeft,
+                             const QModelIndex& bottomRight) {
+  Q_UNUSED(bottomRight)
+  if (topLeft.column() == 0) {
+    checkDupe();
+  };
 }
 
 void PageScheme::worldEdgeChanged(int n)

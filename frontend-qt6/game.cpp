@@ -52,21 +52,21 @@ TeamSelWidget * lastGameTeamSel = NULL;
 
 QString trainingName, trainingScript, trainingTeam, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
-HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
-    TCPBase(true, !config->language().isEmpty(), 0),
-    ammostr(ammo),
-    m_pTeamSelWidget(pTeamSelWidget)
-{
-    this->config = config;
-    this->gamecfg = gamecfg;
-    netSuspend = false;
+HWGame::HWGame(GameUIConfig *config, GameCFGWidget *gamecfg,
+               const QString &ammo, TeamSelWidget *pTeamSelWidget)
+    : TCPBase(true, !config->language().isEmpty(), 0),
+      ammostr(ammo),
+      m_pTeamSelWidget(pTeamSelWidget) {
+  this->config = config;
+  this->gamecfg = gamecfg;
+  netSuspend = false;
 
-    lastGameCfg = gamecfg;
-    lastGameAmmo = ammo;
-    lastGameTeamSel = pTeamSelWidget;
+  lastGameCfg = gamecfg;
+  lastGameAmmo = ammo;
+  lastGameTeamSel = pTeamSelWidget;
 
-    gameState = gsNotStarted;
-    gameType = gtNone;
+  gameState = gsNotStarted;
+  gameType = gtNone;
 }
 
 HWGame::~HWGame()

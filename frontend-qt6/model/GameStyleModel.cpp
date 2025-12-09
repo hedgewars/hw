@@ -30,8 +30,6 @@
 
 void GameStyleModel::loadGameStyles()
 {
-    beginResetModel();
-
     QIcon dlcIcon;
     dlcIcon.addFile(QStringLiteral(":/res/dlcMarker.png"), QSize(), QIcon::Normal, QIcon::On);
     dlcIcon.addFile(QStringLiteral(":/res/dlcMarkerSelected.png"), QSize(), QIcon::Selected, QIcon::On);
@@ -107,9 +105,6 @@ void GameStyleModel::loadGameStyles()
     }
 
     QStandardItemModel::appendColumn(items);
-
-
-    endResetModel();
 }
 
 

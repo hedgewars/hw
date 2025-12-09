@@ -7,11 +7,19 @@
 
 class AutoUpdater
 {
-    public:
-        virtual ~AutoUpdater();
+ public:
+  AutoUpdater() = default;
 
-        virtual void checkForUpdates() = 0;
-        virtual void checkForUpdatesNow() = 0;
+  AutoUpdater(const AutoUpdater &) = delete;
+  AutoUpdater(AutoUpdater &&) = delete;
+  AutoUpdater &operator=(const AutoUpdater &) = delete;
+  AutoUpdater &operator=(AutoUpdater &&) = delete;
+
+ public:
+  virtual ~AutoUpdater();
+
+  virtual void checkForUpdates() = 0;
+  virtual void checkForUpdatesNow() = 0;
 };
 
 #endif

@@ -27,52 +27,52 @@
 #include "hwconsts.h"
 
 QList<QVariant> defaultScheme = QList<QVariant>()
-                                << QVariant("Default")     // name           0
-                                << QVariant(false)         // switchhog      1
-                                << QVariant(false)         // team divide    2
-                                << QVariant(false)         // solid land     3
-                                << QVariant(false)         // border         4
-                                << QVariant(false)         // low gravity    5
-                                << QVariant(false)         // laser sight    6
-                                << QVariant(false)         // invulnerable   7
-                                << QVariant(false)         // reset health   8
-                                << QVariant(false)         // vampiric       9
-                                << QVariant(false)         // karma          10
-                                << QVariant(false)         // artillery      11
-                                << QVariant(true)          // random order   12
-                                << QVariant(false)         // king           13
-                                << QVariant(false)         // place hog      14
-                                << QVariant(false)         // shared ammo    15
-                                << QVariant(false)         // disable girders 16
-                                << QVariant(false)         // disable land objects 17
-                                << QVariant(false)         // AI survival    18
-                                << QVariant(false)         // inf. attack    19
-                                << QVariant(false)         // reset weps     20
-                                << QVariant(false)         // per hog ammo   21
-                                << QVariant(false)         // no wind        22
-                                << QVariant(false)         // more wind      23
-                                << QVariant(false)         // tag team       24
-                                << QVariant(false)         // bottom border  25
-                                << QVariant(100)           // damage modfier 26
-                                << QVariant(45)            // turn time      27
-                                << QVariant(100)           // init health    28
-                                << QVariant(15)            // sudden death   29
-                                << QVariant(5)             // case prob      30
-                                << QVariant(3)             // mines time     31
-                                << QVariant(4)             // mines number   32
-                                << QVariant(0)             // mine dud pct   33
-                                << QVariant(2)             // explosives     34
-                                << QVariant(0)             // air mines      35
-                                << QVariant(0)             // sentries       36
-                                << QVariant(35)            // health case pct 37
-                                << QVariant(25)            // health case amt 38
-                                << QVariant(47)            // water rise amt 39
-                                << QVariant(5)             // health dec amt 40
-                                << QVariant(100)           // rope modfier   41
-                                << QVariant(100)           // get away time  42
-                                << QVariant(0)             // world edge     43
-                                << QVariant()              // scriptparam    44
-                                ;
+                                << QVariant("Default")  // name           0
+                                << QVariant(false)      // switchhog      1
+                                << QVariant(false)      // team divide    2
+                                << QVariant(false)      // solid land     3
+                                << QVariant(false)      // border         4
+                                << QVariant(false)      // low gravity    5
+                                << QVariant(false)      // laser sight    6
+                                << QVariant(false)      // invulnerable   7
+                                << QVariant(false)      // reset health   8
+                                << QVariant(false)      // vampiric       9
+                                << QVariant(false)      // karma          10
+                                << QVariant(false)      // artillery      11
+                                << QVariant(true)       // random order   12
+                                << QVariant(false)      // king           13
+                                << QVariant(false)      // place hog      14
+                                << QVariant(false)      // shared ammo    15
+                                << QVariant(false)      // disable girders 16
+                                << QVariant(false)  // disable land objects 17
+                                << QVariant(false)  // AI survival    18
+                                << QVariant(false)  // inf. attack    19
+                                << QVariant(false)  // reset weps     20
+                                << QVariant(false)  // per hog ammo   21
+                                << QVariant(false)  // no wind        22
+                                << QVariant(false)  // more wind      23
+                                << QVariant(false)  // tag team       24
+                                << QVariant(false)  // bottom border  25
+                                << QVariant(100)    // damage modfier 26
+                                << QVariant(45)     // turn time      27
+                                << QVariant(100)    // init health    28
+                                << QVariant(15)     // sudden death   29
+                                << QVariant(5)      // case prob      30
+                                << QVariant(3)      // mines time     31
+                                << QVariant(4)      // mines number   32
+                                << QVariant(0)      // mine dud pct   33
+                                << QVariant(2)      // explosives     34
+                                << QVariant(0)      // air mines      35
+                                << QVariant(0)      // sentries       36
+                                << QVariant(35)     // health case pct 37
+                                << QVariant(25)     // health case amt 38
+                                << QVariant(47)     // water rise amt 39
+                                << QVariant(5)      // health dec amt 40
+                                << QVariant(100)    // rope modfier   41
+                                << QVariant(100)    // get away time  42
+                                << QVariant(0)      // world edge     43
+                                << QVariant()       // scriptparam    44
+    ;
 
 GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QAbstractTableModel(parent)
@@ -908,7 +908,7 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
     QStringList predefSchemesNamesLower;
     for (int i = 0; i < predefSchemesNames.size(); ++i)
     {
-        predefSchemesNamesLower.append(predefSchemesNames[i].toLower());
+      predefSchemesNamesLower.append(predefSchemesNames.at(i).toLower());
     }
     if (!QDir(directory).exists()) {
         QDir().mkdir(directory);
@@ -923,7 +923,8 @@ GameSchemeModel::GameSchemeModel(QObject* parent, const QString & directory) :
         {
             legacyFileConfig.setArrayIndex(i);
 
-            QString schemeName = legacyFileConfig.value(spNames[0]).toString();
+            QString schemeName =
+                legacyFileConfig.value(spNames.at(0)).toString();
             if (!schemeName.isNull() && !predefSchemesNamesLower.contains(schemeName.toLower()))
             {
                 QList<QVariant> scheme;
@@ -1035,27 +1036,23 @@ int GameSchemeModel::columnCount(const QModelIndex & parent) const
         return defaultScheme.size();
 }
 
-bool GameSchemeModel::hasScheme(QString name)
-{
-    return hasScheme(name, -1);
+bool GameSchemeModel::hasScheme(const QString &name) {
+  return hasScheme(name, -1);
 }
 
-bool GameSchemeModel::hasScheme(QString name, int ignoreID)
-{
-    QString nameLower = name.toLower();
-    for(int i=0; i<schemes.size(); i++)
-    {
-        if(((ignoreID == -1) || (i != ignoreID)) && (schemes[i][0].toString().toLower() == nameLower))
-        {
-            return true;
-        }
+bool GameSchemeModel::hasScheme(const QString &name, int ignoreID) {
+  QString nameLower = name.toLower();
+  for (int i = 0; i < schemes.size(); i++) {
+    if (((ignoreID == -1) || (i != ignoreID)) &&
+        (schemes[i][0].toString().toLower() == nameLower)) {
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
-bool GameSchemeModel::renameScheme(int index, QString newName)
-{
-    return setData(QAbstractItemModel::createIndex(index, 0), QVariant(newName));
+bool GameSchemeModel::renameScheme(int index, const QString &newName) {
+  return setData(QAbstractItemModel::createIndex(index, 0), QVariant(newName));
 }
 
 Qt::ItemFlags GameSchemeModel::flags(const QModelIndex & index) const
@@ -1104,15 +1101,15 @@ bool GameSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
     }
     else
     {
-        QList<QVariant> newScheme = schemes[row];
-        QString oldName = newScheme[0].toString();
-        QString newName = tr("Copy of %1").arg(oldName);
-        if(hasScheme(newName))
-        {
-            //name already used -> look for an appropriate name:
-            int i=2;
-            while(hasScheme(newName = tr("Copy of %1 (%2)").arg(oldName).arg(i++)));
-        }
+      QList<QVariant> newScheme = schemes.at(row);
+      QString oldName = newScheme[0].toString();
+      QString newName = tr("Copy of %1").arg(oldName);
+      if (hasScheme(newName)) {
+        // name already used -> look for an appropriate name:
+        int i = 2;
+        while (
+            hasScheme(newName = tr("Copy of %1 (%2)").arg(oldName).arg(i++)));
+      }
         newScheme[0] = QVariant(newName);
         schemes.insert(schemes.size(), newScheme);
     }
@@ -1131,7 +1128,7 @@ bool GameSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
 
     beginRemoveRows(parent, row, row);
 
-    QList<QVariant> scheme = schemes[row];
+    QList<QVariant> scheme = schemes.at(row);
     int j = spNames.indexOf("name");
     QFile(cfgdir.absolutePath() + QStringLiteral("/Schemes/Game/") + scheme[j].toString() +
           QStringLiteral(".hwg"))
@@ -1159,24 +1156,24 @@ void GameSchemeModel::Save()
 {
     for (int i = 0; i < schemes.size() - numberOfDefaultSchemes; ++i)
     {
-        QList<QVariant> scheme = schemes[i + numberOfDefaultSchemes];
-        int j = spNames.indexOf("name");
+      QList<QVariant> scheme = schemes.at(i + numberOfDefaultSchemes);
+      int j = spNames.indexOf("name");
 
-        QString schemeName = scheme[j].toString();
-        QFile file(cfgdir.absolutePath() + QStringLiteral("/Schemes/Game/") + schemeName +
-                   QStringLiteral(".hwg"));
+      QString schemeName = scheme[j].toString();
+      QFile file(cfgdir.absolutePath() + QStringLiteral("/Schemes/Game/") +
+                 schemeName + QStringLiteral(".hwg"));
 
-        if (file.open(QIODevice::WriteOnly)) {
-            QTextStream stream(&file);
-            for (int k = 0; k < spNames.size(); ++k) {
-                // We skip the name key
-                if(k != j) {
-                    // The file is just a list of key=value pairs
-                    stream << spNames[k] << "=" << scheme[k].toString() << "\n";
-                }
-            }
-            file.close();
+      if (file.open(QIODevice::WriteOnly)) {
+        QTextStream stream(&file);
+        for (int k = 0; k < spNames.size(); ++k) {
+          // We skip the name key
+          if (k != j) {
+            // The file is just a list of key=value pairs
+            stream << spNames[k] << "=" << scheme[k].toString() << "\n";
+          }
         }
+        file.close();
+      }
     }
 }
 

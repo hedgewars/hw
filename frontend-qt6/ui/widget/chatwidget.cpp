@@ -909,76 +909,69 @@ void HWChatWidget::setUsersModel(QAbstractItemModel *model)
         m_usersModel = qobject_cast<PlayersListModel*>(model);
 }
 
-void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
-{
-    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+void HWChatWidget::nicksContextMenuRequested(QPoint pos) {
+  QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
-    QString nick;
+  QString nick;
 
-    if(mil.size() == 0)
-        return;
-    else if(mil.size() == 1)
-        nick = mil[0].data().toString();
-    else
-        nick = m_clickedNick;
+  if (mil.size() == 0)
+    return;
+  else if (mil.size() == 1)
+    nick = mil[0].data().toString();
+  else
+    nick = m_clickedNick;
 
-    bool isOnline = (mil.size() > 0);
+  bool isOnline = (mil.size() > 0);
 
-    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
-    if(!playersSortFilterModel)
-        return;
+  QSortFilterProxyModel *playersSortFilterModel =
+      qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+  if (!playersSortFilterModel) return;
 
-    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+  PlayersListModel *players =
+      qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
 
-    if(!players)
-        return;
+  if (!players) return;
 
-    bool isSelf = (nick == m_userNick);
-    bool isInRoom = players->isFlagSet(nick, PlayersListModel::InRoom);
+  bool isSelf = (nick == m_userNick);
+  bool isInRoom = players->isFlagSet(nick, PlayersListModel::InRoom);
 
-    acFollow->setVisible(!isSelf && isInRoom);
+  acFollow->setVisible(!isSelf && isInRoom);
 
-    acInfo->setVisible(isOnline);
+  acInfo->setVisible(isOnline);
 
-    // update context menu labels according to possible action
-    if(players->isFlagSet(nick, PlayersListModel::Ignore))
-    {
-        acIgnore->setText(QAction::tr("Unignore"));
-        acIgnore->setIcon(QIcon(":/res/unignore.png"));
-    }
-    else
-    {
-        acIgnore->setText(QAction::tr("Ignore"));
-        acIgnore->setIcon(QIcon(":/res/ignore.png"));
-        acIgnore->setVisible(!isSelf);
-    }
+  // update context menu labels according to possible action
+  if (players->isFlagSet(nick, PlayersListModel::Ignore)) {
+    acIgnore->setText(QAction::tr("Unignore"));
+    acIgnore->setIcon(QIcon(":/res/unignore.png"));
+  } else {
+    acIgnore->setText(QAction::tr("Ignore"));
+    acIgnore->setIcon(QIcon(":/res/ignore.png"));
+    acIgnore->setVisible(!isSelf);
+  }
 
-    if(players->isFlagSet(nick, PlayersListModel::Friend))
-    {
-        acFriend->setText(QAction::tr("Remove friend"));
-        acFriend->setIcon(QIcon(":/res/remfriend.png"));
-    }
-    else
-    {
-        acFriend->setText(QAction::tr("Add friend"));
-        acFriend->setIcon(QIcon(":/res/addfriend.png"));
-        acFriend->setVisible(!isSelf);
-    }
+  if (players->isFlagSet(nick, PlayersListModel::Friend)) {
+    acFriend->setText(QAction::tr("Remove friend"));
+    acFriend->setIcon(QIcon(":/res/remfriend.png"));
+  } else {
+    acFriend->setText(QAction::tr("Add friend"));
+    acFriend->setIcon(QIcon(":/res/addfriend.png"));
+    acFriend->setVisible(!isSelf);
+  }
 
-    if (m_isAdmin)
-    {
-        acKick->setVisible(!isSelf && isOnline);
-        acBan->setVisible(!isSelf);
-        acDelegate->setVisible(!isSelf && players->isFlagSet(m_userNick, PlayersListModel::InRoom));
-    }
+  if (m_isAdmin) {
+    acKick->setVisible(!isSelf && isOnline);
+    acBan->setVisible(!isSelf);
+    acDelegate->setVisible(
+        !isSelf && players->isFlagSet(m_userNick, PlayersListModel::InRoom));
+  }
 
-    m_nicksMenu->clear();
+  m_nicksMenu->clear();
 
-    for (auto action : chatNicks->actions()) {
-      m_nicksMenu->addAction(action);
-    }
+  for (auto action : chatNicks->actions()) {
+    m_nicksMenu->addAction(action);
+  }
 
-    m_nicksMenu->popup(chatNicks->mapToGlobal(pos));
+  m_nicksMenu->popup(chatNicks->mapToGlobal(pos));
 }
 
 void HWChatWidget::beforeContentAdd()

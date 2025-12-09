@@ -488,7 +488,8 @@ QLayout * PageOptions::bodyLayoutDefinition()
                 mapper->setMapping(btn, i);
             }
 
-            connect(mapper, SIGNAL(mapped(int)), this, SLOT(colorButtonClicked(int)));
+            connect(mapper, &QSignalMapper::mappedInt, this,
+                    &PageOptions::colorButtonClicked);
 
             // Reset default colors
 
@@ -1050,13 +1051,14 @@ void PageOptions::colorButtonClicked(int i)
     if(i < 0 || i >= m_colorButtons.size())
         return;
 
-    QPalette p = m_colorButtons[i]->palette();
+    QPalette p = m_colorButtons.at(i)->palette();
     QColor c = QColorDialog::getColor(p.color(QPalette::Button));
 
     if(c.isValid())
     {
         DataManager::instance().colorsModel()->item(i)->setData(c);
-        m_colorButtons[i]->setStyleSheet(QStringLiteral("background: %1").arg(c.name()));
+        m_colorButtons.at(i)->setStyleSheet(
+            QStringLiteral("background: %1").arg(c.name()));
     }
 }
 
@@ -1066,7 +1068,11 @@ void PageOptions::onColorModelDataChanged(const QModelIndex & topLeft, const QMo
 
     QStandardItemModel * model = DataManager::instance().colorsModel();
 
-    m_colorButtons[topLeft.row()]->setStyleSheet(QStringLiteral("background: %1").arg(model->item(topLeft.row())->data().value<QColor>().name()));
+    m_colorButtons.at(topLeft.row())
+        ->setStyleSheet(
+            QStringLiteral("background: %1")
+                .arg(
+                    model->item(topLeft.row())->data().value<QColor>().name()));
 }
 
 void PageOptions::onProxyTypeChanged()

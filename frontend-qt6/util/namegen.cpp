@@ -234,67 +234,56 @@ void HWNamegen::teamLocalizedDefaultVoice(HWTeam & team, bool withDLC)
     team.setVoicepack(getLocalizedDefaultVoice(withDLC));
 }
 
-QStringList HWNamegen::dictContents(const QString filename)
-{
-    QStringList list;
+QStringList HWNamegen::dictContents(const QString &filename) {
+  QStringList list;
 
-    // find .txt to load the names from
-    QFile file(QStringLiteral("physfs://Names/%1.txt").arg(filename));
+  // find .txt to load the names from
+  QFile file(QStringLiteral("physfs://Names/%1.txt").arg(filename));
 
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream in(&file);
-        QString line;
-        do
-        {
-            line = in.readLine();
+  if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QTextStream in(&file);
+    QString line;
+    do {
+      line = in.readLine();
 
-            if(!line.isEmpty())
-                list.append(line);
-        } while (!line.isNull());
-    }
+      if (!line.isEmpty()) list.append(line);
+    } while (!line.isNull());
+  }
 
-    if (list.size() == 0)
-        list.append(filename);
+  if (list.size() == 0) list.append(filename);
 
-    return list;
+  return list;
 }
 
+QStringList HWNamegen::dictsForHat(const QString &hatname) {
+  QStringList list;
 
-QStringList HWNamegen::dictsForHat(const QString hatname)
-{
-    QStringList list;
+  // Find and check .cfg to load the dicts from
+  QString path = QStringLiteral("physfs://Names/%1.cfg").arg(hatname);
+  QFileInfo check_file(path);
 
-    // Find and check .cfg to load the dicts from
-    QString path = QStringLiteral("physfs://Names/%1.cfg").arg(hatname);
-    QFileInfo check_file(path);
+  // Note: The .cfg file is optional; a fallback mechanism is in place (see
+  // below)
 
-    // Note: The .cfg file is optional; a fallback mechanism is in place (see below)
+  // Check if file exists to prevent PhysFS from complaining in console so much
+  if (check_file.exists() && check_file.isFile()) {
+    QFile file(path);
 
-    // Check if file exists to prevent PhysFS from complaining in console so much
-    if (check_file.exists() && check_file.isFile())
-    {
-        QFile file(path);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      QTextStream in(&file);
+      QString line;
+      do {
+        line = in.readLine();
 
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            QTextStream in(&file);
-            QString line;
-            do
-            {
-                line = in.readLine();
-
-                if(!line.isEmpty())
-                    list.append(line);
-            } while (!line.isNull());
-        }
+        if (!line.isEmpty()) list.append(line);
+      } while (!line.isNull());
     }
+  }
 
-    // Use Data/Names/generic.cfg by default
-    if (list.size() == 0)
-        list.append(QStringLiteral("generic"));
+  // Use Data/Names/generic.cfg by default
+  if (list.size() == 0) list.append(QStringLiteral("generic"));
 
-    return list;
+  return list;
 }
 
 // loades types from ini files. returns true on success.
@@ -373,8 +362,8 @@ QString HWNamegen::getRandomTeamName(int kind)
     if(kind < 0)
         kind = (rand()%(TypesHatnames.size()));
 
-    if (TypesTeamnames[kind].size() > 0)
-        return TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())];
+    if (!TypesTeamnames.at(kind).isEmpty())
+      return TypesTeamnames[kind][rand() % (TypesTeamnames[kind].size())];
     else
         return QString();
 }
@@ -389,10 +378,9 @@ QString HWNamegen::getRandomHat(bool withDLC)
                                QStringList("*.png"), withDLC)
                     .replaceInStrings(QRegularExpression(QStringLiteral("\\.png$")), QLatin1String("")));
 
-    if(Hats.size()==0)
-    {
-        // TODO do some serious error handling
-        return QStringLiteral("Error");
+    if (Hats.isEmpty()) {
+      // TODO do some serious error handling
+      return QStringLiteral("Error");
     }
 
     // pick a random hat

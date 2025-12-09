@@ -86,7 +86,7 @@ class HWTeam : public QObject
         void setFlag(const QString & flag);
         void setFort(const QString & fort);
         void setGrave(const QString & grave);
-        void setHedgehog(unsigned int idx, HWHog hh);
+        void setHedgehog(unsigned int idx, const HWHog &hh);
         void setName(const QString & name);
         void setNumHedgehogs(unsigned char num);
         void setVoicepack(const QString & voicepack);

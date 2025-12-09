@@ -72,7 +72,7 @@ class HWGame : public TCPBase
 {
         Q_OBJECT
     public:
-        HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget = 0);
+        HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, const QString &ammo, TeamSelWidget* pTeamSelWidget = 0);
         virtual ~HWGame();
         void AddTeam(const QString & team);
         void PlayDemo(const QString & demofilename, bool isSave);

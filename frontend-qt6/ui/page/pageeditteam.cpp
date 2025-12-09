@@ -261,8 +261,10 @@ void PageEditTeam::connectSignals()
     signalMapper1 = new QSignalMapper(this);
     signalMapper2 = new QSignalMapper(this);
 
-    connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(fixHHname(int)));
-    connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(setRandomHogName(int)));
+    connect(signalMapper1, &QSignalMapper::mappedInt, this,
+            &PageEditTeam::fixHHname);
+    connect(signalMapper2, &QSignalMapper::mappedInt, this,
+            &PageEditTeam::setRandomHogName);
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {

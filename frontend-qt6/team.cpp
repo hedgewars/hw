@@ -80,7 +80,9 @@ HWTeam::HWTeam(const QStringList& strLst) :
         m_hedgehogs[i].Hat=strLst[i * 2 + 8];
 // Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
 // Checking net teams is probably pointless, but can't hurt.
-        if (m_hedgehogs[i].Hat.isEmpty()) m_hedgehogs[i].Hat = QStringLiteral("NoHat");
+        if (m_hedgehogs.at(i).Hat.isEmpty()) {
+          m_hedgehogs[i].Hat = QStringLiteral("NoHat");
+        }
     }
     m_color = 0;
 }
@@ -241,7 +243,9 @@ bool HWTeam::saveToFile()
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
         if(QString(m_binds[i].action) != QStringLiteral("!MULTI"))
-            teamfile.setValue(QStringLiteral("Binds/%1").arg(m_binds[i].action), m_binds[i].strbind);
+          teamfile.setValue(
+              QStringLiteral("Binds/%1").arg(m_binds.at(i).action),
+              m_binds[i].strbind);
     }
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
@@ -345,9 +349,8 @@ const HWHog & HWTeam::hedgehog(unsigned int idx) const
 {
     return m_hedgehogs[idx];
 }
-void HWTeam::setHedgehog(unsigned int idx, HWHog hh)
-{
-    m_hedgehogs[idx] = hh;
+void HWTeam::setHedgehog(unsigned int idx, const HWHog& hh) {
+  m_hedgehogs[idx] = hh;
 }
 
 // owner

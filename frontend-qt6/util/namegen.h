@@ -56,8 +56,8 @@ class HWNamegen
         static bool typesAvailable;
 
         static bool loadTypes();
-        static QStringList dictContents(const QString filename);
-        static QStringList dictsForHat(const QString hatname);
+        static QStringList dictContents(const QString &filename);
+        static QStringList dictsForHat(const QString &hatname);
 
         static void teamRandomHat(HWTeam & team, const int HedgehogNumber, const QStringList & dict);
         static void teamRandomHogName(HWTeam & team, const int HedgehogNumber, const QStringList & dict);

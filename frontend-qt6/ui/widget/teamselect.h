@@ -53,7 +53,7 @@ class TeamSelWidget : public QGroupBox
         void cleanupFakeNetTeams();
 
     public Q_SLOTS:
-        void addTeam(HWTeam team);
+        void addTeam(const HWTeam &team);
         void changeHHNum(const HWTeam&);
         void changeTeamColor(const HWTeam&);
         void changeTeamStatus(HWTeam team);

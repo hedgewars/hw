@@ -172,7 +172,7 @@ class HWChatWidget : public QWidget
         void onFriend();
         void chatNickDoubleClicked(const QModelIndex & index);
         void linkClicked(const QUrl & link);
-        void nicksContextMenuRequested(const QPoint & pos);
+        void nicksContextMenuRequested(QPoint pos);
 };
 
 #endif // _CHAT_WIDGET_INCLUDED

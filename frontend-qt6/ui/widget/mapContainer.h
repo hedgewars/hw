@@ -180,7 +180,7 @@ class HWMapContainer : public QWidget
         void setImage(const QPixmap & newImage, const QLinearGradient & linearGrad, bool showHHLimit);
         void addInfoToPreview(const QPixmap & image);
         void addInfoToPreview(const QPixmap & image, const QLinearGradient & linearGrad, bool drawHHLimit);
-        void setMapInfo(MapModel::MapInfo mapInfo);
+        void setMapInfo(const MapModel::MapInfo &mapInfo);
         void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
         void updateHelpTexts(MapModel::MapType type);
         void updatePreview();

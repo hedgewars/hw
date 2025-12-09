@@ -63,14 +63,14 @@ class AbstractPage : public QWidget
         *
         * @param desc the description of the widget focused
         */
-        void setButtonDescription(QString desc);
+        void setButtonDescription(const QString &desc);
 
         /**
         * @brief Changes the desc defaut text
         *
         * @param text the defaut desc
         */
-        void setDefaultDescription(QString text);
+        void setDefaultDescription(const QString &text);
 
         /**
         * @brief Get the desc defaut text

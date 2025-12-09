@@ -35,7 +35,7 @@ class FrameTeams : public QFrame
 
     public:
         FrameTeams(QWidget* parent=0);
-        QWidget* getTeamWidget(HWTeam team);
+        QWidget* getTeamWidget(const HWTeam &team);
         bool isFullTeams() const;
         void resetColors();
         void resetTeams();
@@ -50,8 +50,8 @@ class FrameTeams : public QFrame
         void teamColorChanged(const HWTeam&);
 
     public Q_SLOTS:
-        void addTeam(HWTeam team, bool willPlay);
-        void removeTeam(HWTeam team);
+        void addTeam(const HWTeam &team, bool willPlay);
+        void removeTeam(const HWTeam &team);
 
     protected:
         virtual void resizeEvent(QResizeEvent * event);

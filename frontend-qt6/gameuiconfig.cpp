@@ -171,7 +171,10 @@ void GameUIConfig::reloadValues(void)
         for(int i = 0; i < BINDS_NUMBER; i++)
         {
             m_binds[i].strbind = value(QStringLiteral("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();
-            if (m_binds[i].strbind.isEmpty() || m_binds[i].strbind == QLatin1String("default")) m_binds[i].strbind = cbinds[i].strbind;
+            if (m_binds.at(i).strbind.isEmpty() ||
+                m_binds[i].strbind == QLatin1String("default")) {
+              m_binds[i].strbind = cbinds[i].strbind;
+            }
         }
     }
 
@@ -700,16 +703,14 @@ bool GameUIConfig::recordAudio()
 }
 
 // Gets a bind for a bindID
-QString GameUIConfig::bind(int bindID)
-{
-    return m_binds[bindID].strbind;
-}
+QString GameUIConfig::bind(int bindID) { return m_binds.at(bindID).strbind; }
 
 // Sets a bind for a bindID and saves it
 void GameUIConfig::setBind(int bindID, QString & strbind)
 {
     m_binds[bindID].strbind = strbind;
-    setValue(QStringLiteral("Binds/%1").arg(m_binds[bindID].action), strbind);
+    setValue(QStringLiteral("Binds/%1").arg(m_binds.at(bindID).action),
+             strbind);
 }
 
 void GameUIConfig::applyProxySettings()

@@ -61,7 +61,7 @@ class HWForm : public QMainWindow
         Q_OBJECT
 
     public:
-        HWForm(QWidget *parent = 0, QString styleSheet = QLatin1String(""));
+        HWForm(QWidget *parent = 0, const QString &styleSheet = QLatin1String(""));
         Ui_HWForm ui;
         static GameUIConfig * config;
         void exit();
@@ -130,9 +130,10 @@ class HWForm : public QMainWindow
         void CreateNetGame();
         void PlayOfficialServerDemo();
         void UpdateWeapons();
-        void DeleteWeapons(QString weaponsName);
-        void AddWeapons(QString weaponsName, QString ammo);
-        void EditWeapons(QString oldWeaponsName, QString newWeaponsName, QString ammo);
+        void DeleteWeapons(const QString &weaponsName);
+        void AddWeapons(const QString &weaponsName, const QString &ammo);
+        void EditWeapons(const QString &oldWeaponsName,
+                         const QString &newWeaponsName, const QString &ammo);
         void onFrontendFullscreen(bool value);
         void onFrontendEffects(bool value);
         void onFrontendSoundsToggled(bool value);
@@ -164,62 +165,63 @@ class HWForm : public QMainWindow
         void FromNetProxySlot(const QByteArray &);
 
     private:
-        void _NetConnect(const QString & hostName, quint16 port, bool useTls, QString nick);
-        int  AskForNickAndPwd(void);
-        void UpdateTeamsLists();
-        void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
-        void closeEvent(QCloseEvent *event);
-        void CustomizePalettes();
-        void resizeEvent(QResizeEvent * event);
-        QString stringifyPageId(quint32 id);
-        //void keyReleaseEvent(QKeyEvent *event);
+     void _NetConnect(const QString &hostName, quint16 port, bool useTls,
+                      const QString &nick);
+     int AskForNickAndPwd(void);
+     void UpdateTeamsLists();
+     void CreateGame(GameCFGWidget *gamecfg, TeamSelWidget *pTeamSelWidget,
+                     const QString &ammo);
+     void closeEvent(QCloseEvent *event);
+     void CustomizePalettes();
+     void resizeEvent(QResizeEvent *event);
+     QString stringifyPageId(quint32 id);
+     // void keyReleaseEvent(QKeyEvent *event);
 
-        enum PageIDs
-        {
-            ID_PAGE_SETUP_TEAM     ,
-            ID_PAGE_SETUP          ,
-            ID_PAGE_MULTIPLAYER    ,
-            ID_PAGE_DEMOS          ,
-            ID_PAGE_NET            ,
-            ID_PAGE_NETGAME        ,
-            ID_PAGE_INFO           ,
-            ID_PAGE_MAIN           ,
-            ID_PAGE_GAMESTATS      ,
-            ID_PAGE_SINGLEPLAYER   ,
-            ID_PAGE_TRAINING       ,
-            ID_PAGE_SELECTWEAPON   ,
-            ID_PAGE_NETSERVER      ,
-            ID_PAGE_INGAME         ,
-            ID_PAGE_ROOMSLIST      ,
-            ID_PAGE_CONNECTING     ,
-            ID_PAGE_SCHEME         ,
-            ID_PAGE_ADMIN          ,
-            ID_PAGE_CAMPAIGN       ,
-            ID_PAGE_DRAWMAP        ,
-            ID_PAGE_DATADOWNLOAD   ,
-            ID_PAGE_VIDEOS         ,
-            MAX_PAGE
-        };
-        QPointer<HWGame> game;
-        QPointer<HWNetServer> pnetserver;
-        QPointer<HWNetRegisterServer> pRegisterServer;
-        QPointer<HWTeam> editedTeam;
-        QPointer<HWNewNet> hwnet;
-        HWNamegen * namegen;
-        GameSchemeModel * gameSchemeModel;
-        QStack<int> PagesStack;
-        QString previousCampaignName;
-        QString previousTeamName;
-        QList<MissionInfo> campaignMissionInfo;
-        QElapsedTimer eggTimer;
-        BGWidget * wBackground;
-        QSignalMapper * pageSwitchMapper;
-        QByteArray m_lastDemo;
+     enum PageIDs {
+       ID_PAGE_SETUP_TEAM,
+       ID_PAGE_SETUP,
+       ID_PAGE_MULTIPLAYER,
+       ID_PAGE_DEMOS,
+       ID_PAGE_NET,
+       ID_PAGE_NETGAME,
+       ID_PAGE_INFO,
+       ID_PAGE_MAIN,
+       ID_PAGE_GAMESTATS,
+       ID_PAGE_SINGLEPLAYER,
+       ID_PAGE_TRAINING,
+       ID_PAGE_SELECTWEAPON,
+       ID_PAGE_NETSERVER,
+       ID_PAGE_INGAME,
+       ID_PAGE_ROOMSLIST,
+       ID_PAGE_CONNECTING,
+       ID_PAGE_SCHEME,
+       ID_PAGE_ADMIN,
+       ID_PAGE_CAMPAIGN,
+       ID_PAGE_DRAWMAP,
+       ID_PAGE_DATADOWNLOAD,
+       ID_PAGE_VIDEOS,
+       MAX_PAGE
+     };
+     QPointer<HWGame> game;
+     QPointer<HWNetServer> pnetserver;
+     QPointer<HWNetRegisterServer> pRegisterServer;
+     QPointer<HWTeam> editedTeam;
+     QPointer<HWNewNet> hwnet;
+     HWNamegen *namegen;
+     GameSchemeModel *gameSchemeModel;
+     QStack<int> PagesStack;
+     QString previousCampaignName;
+     QString previousTeamName;
+     QList<MissionInfo> campaignMissionInfo;
+     QElapsedTimer eggTimer;
+     BGWidget *wBackground;
+     QSignalMapper *pageSwitchMapper;
+     QByteArray m_lastDemo;
 
-        QPropertyAnimation *animationNewSlide;
-        QPropertyAnimation *animationOldSlide;
-        QPropertyAnimation *animationNewOpacity;
-        QPropertyAnimation *animationOldOpacity;
+     QPropertyAnimation *animationNewSlide;
+     QPropertyAnimation *animationOldSlide;
+     QPropertyAnimation *animationNewOpacity;
+     QPropertyAnimation *animationOldOpacity;
 
 #ifdef __APPLE__
         InstallController * panel;

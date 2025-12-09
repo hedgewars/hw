@@ -342,11 +342,11 @@ bool KeyBinder::checkConflictsWith(int compareTo, bool updateState)
     }
     for (int c=0; c < conflictItems.size(); c++)
     {
-        QTableWidgetItem* conflictItem = conflictItems[c];
-        conflictItem->setIcon(*dropDownIcon);
-        conflictItem->setBackground(QBrush(Qt::transparent));
-        conflictItem->setForeground(QBrush(QColor("#F6CB1C")));
-        conflictItem = NULL;
+      QTableWidgetItem* conflictItem = conflictItems.at(c);
+      conflictItem->setIcon(*dropDownIcon);
+      conflictItem->setBackground(QBrush(Qt::transparent));
+      conflictItem->setForeground(QBrush(QColor(0xF6CB1C)));
+      conflictItem = NULL;
     }
     conflictItems.clear();
     return false;

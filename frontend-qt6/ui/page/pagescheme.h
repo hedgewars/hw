@@ -110,7 +110,7 @@ class PageScheme : public AbstractPage
     private Q_SLOTS:
         void worldEdgeChanged(int);
         void schemeSelected(int);
-        void dataChanged(QModelIndex topLeft, QModelIndex bottomRight);
+        void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 };
 
 #endif

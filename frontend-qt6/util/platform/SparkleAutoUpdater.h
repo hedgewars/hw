@@ -13,12 +13,16 @@ class SparkleAutoUpdater : public AutoUpdater
 {
     public:
         SparkleAutoUpdater();
+        SparkleAutoUpdater(const SparkleAutoUpdater &) = delete;
+        SparkleAutoUpdater(SparkleAutoUpdater &&) = delete;
+        SparkleAutoUpdater &operator=(const SparkleAutoUpdater &) = delete;
+        SparkleAutoUpdater &operator=(SparkleAutoUpdater &&) = delete;
         ~SparkleAutoUpdater();
 
-        void checkForUpdates();
-        void checkForUpdatesNow();
+        void checkForUpdates() override;
+        void checkForUpdatesNow() override;
 
-    private:
+       private:
         class Private;
         Private* d;
 };

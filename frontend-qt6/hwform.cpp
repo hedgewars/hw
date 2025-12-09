@@ -134,58 +134,66 @@ QIcon finishedIcon;
 QIcon notFinishedIcon;
 GameUIConfig* HWForm::config = NULL;
 
-HWForm::HWForm(QWidget *parent, QString styleSheet)
-    : QMainWindow(parent)
-    , game(0)
-    , pnetserver(0)
-    , pRegisterServer(0)
-    , editedTeam(0)
-    , hwnet(0)
-{
-    // set music track
-    SDLInteraction::instance().setMusicTrack(QStringLiteral("/Music/main_theme.ogg"));
+HWForm::HWForm(QWidget *parent, const QString &styleSheet)
+    : QMainWindow(parent),
+      game(0),
+      pnetserver(0),
+      pRegisterServer(0),
+      editedTeam(0),
+      hwnet(0) {
+  // set music track
+  SDLInteraction::instance().setMusicTrack(
+      QStringLiteral("/Music/main_theme.ogg"));
 
-    this->setStyleSheet(styleSheet);
+  this->setStyleSheet(styleSheet);
 
+  QIcon *hwIcon = new QIcon();
+  hwIcon->addFile(QStringLiteral(":/res/hh_small.png"));
+  // hwIcon->addFile(":/res/hh25x25.png");
+  //  crop-workaround for the fact that hh25x25.png is actually 25x35
+  QPixmap pm(QStringLiteral(":/res/hh25x25.png"));
+  hwIcon->addPixmap(pm.copy(0, (pm.height() - 25) / 2, 25, 25));
+  hwIcon->addFile(QStringLiteral(":/res/teamicon.png"));
+  hwIcon->addFile(QStringLiteral(":/res/teamicon2.png"));
 
-    QIcon * hwIcon = new QIcon();
-    hwIcon->addFile(QStringLiteral(":/res/hh_small.png"));
-    //hwIcon->addFile(":/res/hh25x25.png");
-    // crop-workaround for the fact that hh25x25.png is actually 25x35
-    QPixmap pm(QStringLiteral(":/res/hh25x25.png"));
-    hwIcon->addPixmap(pm.copy(0,(pm.height()-25)/2,25,25));
-    hwIcon->addFile(QStringLiteral(":/res/teamicon.png"));
-    hwIcon->addFile(QStringLiteral(":/res/teamicon2.png"));
+  this->setWindowIcon(*hwIcon);
+  ui.setupUi(this);
+  setMinimumSize(760, 580);
+  // setFocusPolicy(Qt::StrongFocus);
+  CustomizePalettes();
 
-    this->setWindowIcon(*hwIcon);
-    ui.setupUi(this);
-    setMinimumSize(760, 580);
-    //setFocusPolicy(Qt::StrongFocus);
-    CustomizePalettes();
+  ui.pageOptions->CBResolution->addItems(
+      SDLInteraction::instance().getResolutions());
 
-    ui.pageOptions->CBResolution->addItems(SDLInteraction::instance().getResolutions());
+  config = new GameUIConfig(this, DataManager::instance().settingsFileName());
+  frontendEffects = config->value("frontend/effects", true).toBool();
+  bool frontendSounds = config->value("frontend/sound", true).toBool();
+  onFrontendSoundsToggled(frontendSounds);
 
-    config = new GameUIConfig(this, DataManager::instance().settingsFileName());
-    frontendEffects = config->value("frontend/effects", true).toBool();
-    bool frontendSounds = config->value("frontend/sound", true).toBool();
-    onFrontendSoundsToggled(frontendSounds);
+  playerHash = QString(QCryptographicHash::hash(
+                           config->value("net/nick", config->getRandomNick())
+                               .toString()
+                               .toUtf8(),
+                           QCryptographicHash::Md5)
+                           .toHex());
 
-    playerHash = QString(QCryptographicHash::hash(config->value("net/nick", config->getRandomNick()).toString().toUtf8(), QCryptographicHash::Md5).toHex());
+  // Icons for finished missions
+  finishedIcon.addFile(QStringLiteral(":/res/missionFinished.png"), QSize(),
+                       QIcon::Normal, QIcon::On);
+  finishedIcon.addFile(QStringLiteral(":/res/missionFinishedSelected.png"),
+                       QSize(), QIcon::Selected, QIcon::On);
 
-    // Icons for finished missions
-    finishedIcon.addFile(QStringLiteral(":/res/missionFinished.png"), QSize(), QIcon::Normal, QIcon::On);
-    finishedIcon.addFile(QStringLiteral(":/res/missionFinishedSelected.png"), QSize(), QIcon::Selected, QIcon::On);
+  // A transparent icon, used to nicely align the unfinished missions with the
+  // finished ones
+  QPixmap emptySpace = QPixmap(15, 15);
+  emptySpace.fill(QColor(0, 0, 0, 0));
+  notFinishedIcon = QIcon(emptySpace);
 
-    // A transparent icon, used to nicely align the unfinished missions with the finished ones
-    QPixmap emptySpace = QPixmap(15, 15);
-    emptySpace.fill(QColor(0, 0, 0, 0));
-    notFinishedIcon = QIcon(emptySpace);
-
-    ui.pageRoomsList->setSettings(config);
-    ui.pageNetGame->setSettings(config);
-    ui.pageNetGame->chatWidget->setSettings(config);
-    ui.pageRoomsList->chatWidget->setSettings(config);
-    ui.pageOptions->setConfig(config);
+  ui.pageRoomsList->setSettings(config);
+  ui.pageNetGame->setSettings(config);
+  ui.pageNetGame->chatWidget->setSettings(config);
+  ui.pageRoomsList->chatWidget->setSettings(config);
+  ui.pageOptions->setConfig(config);
 #ifdef VIDEOREC
     ui.pageVideos->init(config);
 #endif
@@ -234,9 +242,11 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
         connect(ui.Pages->widget(i), SIGNAL(goBack()), this, SLOT(GoBack()));
 
     pageSwitchMapper = new QSignalMapper(this);
-    connect(pageSwitchMapper, SIGNAL(mapped(int)), this, SLOT(GoToPage(int)));
-    
-    connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    connect(pageSwitchMapper, &QSignalMapper::mappedInt, this,
+            &HWForm::GoToPage);
+
+    connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), pageSwitchMapper,
+            SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSinglePlayer, ID_PAGE_SINGLEPLAYER);
 
     connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
@@ -517,60 +527,54 @@ void HWForm::UpdateWeapons()
     }
 }
 
-void HWForm::AddWeapons(QString weaponsName, QString ammo)
-{
-    QVector<QComboBox*> combos;
-    combos.push_back(ui.pageOptions->WeaponsName);
-    combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
-    combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
-    combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
+void HWForm::AddWeapons(const QString &weaponsName, const QString &ammo) {
+  QVector<QComboBox *> combos;
+  combos.push_back(ui.pageOptions->WeaponsName);
+  combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
+  combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+  combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
 
-    QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
-
-    for(QVector<QComboBox*>::iterator it = combos.begin(); it != combos.end(); ++it)
-    {
-        (*it)->addItem(weaponsName, QVariant(ammo));
-    }
-    ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(ui.pageSelectWeapon->selectWeaponSet->count()-1);
+  for (QVector<QComboBox *>::iterator it = combos.begin(); it != combos.end();
+       ++it) {
+    (*it)->addItem(weaponsName, QVariant(ammo));
+  }
+  ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(
+      ui.pageSelectWeapon->selectWeaponSet->count() - 1);
 }
 
-void HWForm::DeleteWeapons(QString weaponsName)
-{
-    QVector<QComboBox*> combos;
-    combos.push_back(ui.pageOptions->WeaponsName);
-    combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
-    combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
-    combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
+void HWForm::DeleteWeapons(const QString &weaponsName) {
+  QVector<QComboBox *> combos;
+  combos.push_back(ui.pageOptions->WeaponsName);
+  combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
+  combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+  combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
 
-    QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
-
-    for(QVector<QComboBox*>::iterator it = combos.begin(); it != combos.end(); ++it)
-    {
-        int pos = (*it)->findText(weaponsName);
-        if (pos != -1)
-        {
-            (*it)->removeItem(pos);
-        }
+  for (QVector<QComboBox *>::iterator it = combos.begin(); it != combos.end();
+       ++it) {
+    int pos = (*it)->findText(weaponsName);
+    if (pos != -1) {
+      (*it)->removeItem(pos);
     }
-    ui.pageSelectWeapon->pWeapons->deletionDone();
+  }
+  ui.pageSelectWeapon->pWeapons->deletionDone();
 }
 
-void HWForm::EditWeapons(QString oldWeaponsName, QString newWeaponsName, QString ammo)
-{
-    QVector<QComboBox*> combos;
-    combos.push_back(ui.pageOptions->WeaponsName);
-    combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
-    combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
-    combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
+void HWForm::EditWeapons(const QString &oldWeaponsName,
+                         const QString &newWeaponsName, const QString &ammo) {
+  QVector<QComboBox *> combos;
+  combos.push_back(ui.pageOptions->WeaponsName);
+  combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
+  combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+  combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
 
-    QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
+  QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
 
-    for(QVector<QComboBox*>::iterator it = combos.begin(); it != combos.end(); ++it)
-    {
-        int pos = (*it)->findText(oldWeaponsName);
-        (*it)->setItemText(pos, newWeaponsName);
-        (*it)->setItemData(pos, ammo);
-    }
+  for (QVector<QComboBox *>::iterator it = combos.begin(); it != combos.end();
+       ++it) {
+    int pos = (*it)->findText(oldWeaponsName);
+    (*it)->setItemText(pos, newWeaponsName);
+    (*it)->setItemData(pos, ammo);
+  }
 }
 
 void HWForm::UpdateTeamsLists()
@@ -1411,232 +1415,235 @@ void HWForm::NetWarning(const QString & wrnmsg)
         ui.pageRoomsList->displayWarning(wrnmsg);
 }
 
-void HWForm::_NetConnect(const QString & hostName, quint16 port, bool useTls, QString nick)
-{
-    Q_UNUSED(nick);
+void HWForm::_NetConnect(const QString &hostName, quint16 port, bool useTls,
+                         const QString &nick) {
+  Q_UNUSED(nick);
 
-    if (hwnet) {
-        // destroy old connection
-        hwnet->Disconnect();
-        delete hwnet;
-        hwnet = NULL;
+  if (hwnet) {
+    // destroy old connection
+    hwnet->Disconnect();
+    delete hwnet;
+    hwnet = NULL;
+  }
+
+  hwnet = new HWNewNet();
+
+  GoToPage(ID_PAGE_CONNECTING);
+
+  connect(hwnet.data(), &HWNewNet::AskForRunGame, this, &HWForm::CreateNetGame,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::AskForOfficialServerDemo, this,
+          &HWForm::PlayOfficialServerDemo, Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::redirected, this, &HWForm::NetRedirected,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::connected, this, &HWForm::NetConnected,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::Error, this, &HWForm::NetError,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::Warning, this, &HWForm::NetWarning,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::EnteredGame, this, &HWForm::NetGameEnter,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::LeftRoom, this, &HWForm::NetLeftRoom,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::AddNetTeam, this, &HWForm::AddNetTeam,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::RemoveNetTeam, this, &HWForm::RemoveNetTeam,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::TeamAccepted, this, &HWForm::NetTeamAccepted,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::NickRegistered, this,
+          &HWForm::NetNickRegistered, Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::NickNotRegistered, this,
+          &HWForm::NetNickNotRegistered, Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::NickTaken, this, &HWForm::NetNickTaken,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::AuthFailed, this, &HWForm::NetAuthFailed,
+          Qt::QueuedConnection);
+  // connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet,
+  // SLOT(partRoom()));
+  connect(hwnet.data(), &HWNewNet::askForRoomPassword, this,
+          &HWForm::askRoomPassword, Qt::QueuedConnection);
+
+  ui.pageRoomsList->chatWidget->setUsersModel(hwnet->lobbyPlayersModel());
+  ui.pageNetGame->chatWidget->setUsersModel(hwnet->roomPlayersModel());
+
+  // rooms list page stuff
+  ui.pageRoomsList->setModel(hwnet->roomsListModel());
+  connect(hwnet.data(), &HWNewNet::adminAccess, ui.pageRoomsList,
+          &PageRoomsList::setAdmin, Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::adminAccess, ui.pageRoomsList->chatWidget,
+          &HWChatWidget::adminAccess, Qt::QueuedConnection);
+
+  connect(hwnet.data(), &HWNewNet::serverMessage, ui.pageRoomsList->chatWidget,
+          &HWChatWidget::onServerMessage, Qt::QueuedConnection);
+
+  connect(ui.pageRoomsList, &PageRoomsList::askForCreateRoom, hwnet.data(),
+          &HWNewNet::CreateRoom);
+  connect(ui.pageRoomsList, &PageRoomsList::askForJoinRoom, hwnet.data(),
+          &HWNewNet::JoinRoom);
+  //  connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
+  //      this, SLOT(NetGameMaster()));
+  //  connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
+  //      this, SLOT(NetGameSlave()));
+  connect(ui.pageRoomsList, &PageRoomsList::askForRoomList, hwnet.data(),
+          &HWNewNet::askRoomsList);
+
+  // room status stuff
+  connect(hwnet.data(), &HWNewNet::roomMaster, this,
+          &HWForm::NetGameChangeStatus);
+
+  // net page stuff
+  connect(hwnet.data(), &HWNewNet::roomNameUpdated, ui.pageNetGame,
+          &PageNetGame::setRoomName, Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::roomChatAction, ui.pageNetGame->chatWidget,
+          &HWChatWidget::onChatAction, Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::roomChatMessage, ui.pageNetGame->chatWidget,
+          &HWChatWidget::onChatMessage, Qt::QueuedConnection);
+
+  connect(hwnet.data(), &HWNewNet::roomMaster, ui.pageNetGame->chatWidget,
+          &HWChatWidget::adminAccess, Qt::QueuedConnection);
+  connect(ui.pageNetGame->chatWidget, &HWChatWidget::chatLine, hwnet.data(),
+          &HWNewNet::chatLineToNetWithEcho);
+  connect(ui.pageNetGame->BtnGo, &QAbstractButton::clicked, hwnet.data(),
+          &HWNewNet::ToggleReady);
+  connect(hwnet.data(), &HWNewNet::setMyReadyStatus, ui.pageNetGame,
+          &PageNetGame::setReadyStatus, Qt::QueuedConnection);
+
+  // chat widget actions
+  connect(ui.pageNetGame->chatWidget, &HWChatWidget::kick, hwnet.data(),
+          &HWNewNet::kickPlayer);
+  connect(ui.pageNetGame->chatWidget, &HWChatWidget::delegate, hwnet.data(),
+          &HWNewNet::delegateToPlayer);
+  connect(ui.pageNetGame->chatWidget, &HWChatWidget::ban, hwnet.data(),
+          &HWNewNet::banPlayer);
+  connect(ui.pageNetGame->chatWidget, &HWChatWidget::info, hwnet.data(),
+          &HWNewNet::infoPlayer);
+  connect(ui.pageNetGame->chatWidget, &HWChatWidget::follow, hwnet.data(),
+          &HWNewNet::followPlayer);
+  connect(ui.pageNetGame->chatWidget, &HWChatWidget::consoleCommand,
+          hwnet.data(), &HWNewNet::consoleCommand);
+  connect(ui.pageRoomsList->chatWidget, &HWChatWidget::kick, hwnet.data(),
+          &HWNewNet::kickPlayer);
+  connect(ui.pageRoomsList->chatWidget, &HWChatWidget::ban, hwnet.data(),
+          &HWNewNet::banPlayer);
+  connect(ui.pageRoomsList->chatWidget, &HWChatWidget::info, hwnet.data(),
+          &HWNewNet::infoPlayer);
+  connect(ui.pageRoomsList->chatWidget, &HWChatWidget::follow, hwnet.data(),
+          &HWNewNet::followPlayer);
+  connect(ui.pageRoomsList->chatWidget, &HWChatWidget::consoleCommand,
+          hwnet.data(), &HWNewNet::consoleCommand);
+
+  // player info
+  connect(hwnet.data(), &HWNewNet::playerInfo, ui.pageRoomsList->chatWidget,
+          &HWChatWidget::onPlayerInfo, Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::playerInfo, ui.pageNetGame->chatWidget,
+          &HWChatWidget::onPlayerInfo, Qt::QueuedConnection);
+
+  // chatting
+  connect(ui.pageRoomsList->chatWidget, &HWChatWidget::chatLine, hwnet.data(),
+          &HWNewNet::chatLineToLobby);
+  connect(hwnet.data(), &HWNewNet::lobbyChatAction,
+          ui.pageRoomsList->chatWidget, &HWChatWidget::onChatAction,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::lobbyChatMessage,
+          ui.pageRoomsList->chatWidget, &HWChatWidget::onChatMessage,
+          Qt::QueuedConnection);
+
+  // nick list stuff
+  {
+    QSortFilterProxyModel *playersSortFilterModel =
+        qobject_cast<QSortFilterProxyModel *>(hwnet->lobbyPlayersModel());
+    if (playersSortFilterModel) {
+      PlayersListModel *players = qobject_cast<PlayersListModel *>(
+          playersSortFilterModel->sourceModel());
+      connect(players, &PlayersListModel::nickAdded, ui.pageNetGame->chatWidget,
+              &HWChatWidget::nickAdded);
+      connect(players, SIGNAL(nickRemoved(const QString &)),
+              ui.pageNetGame->chatWidget, SLOT(nickRemoved(const QString &)));
+      connect(players, &PlayersListModel::nickAddedLobby,
+              ui.pageRoomsList->chatWidget, &HWChatWidget::nickAdded);
+      connect(players, SIGNAL(nickRemovedLobby(const QString &)),
+              ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString &)));
+      connect(players,
+              SIGNAL(nickRemovedLobby(const QString &, const QString &)),
+              ui.pageRoomsList->chatWidget,
+              SLOT(nickRemoved(const QString &, const QString &)));
     }
+  }
 
-    hwnet = new HWNewNet();
+  // teams selecting stuff
+  connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::hhogsNumChanged,
+          hwnet.data(), &HWNewNet::onHedgehogsNumChanged);
+  connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamColorChanged,
+          hwnet.data(), &HWNewNet::onTeamColorChanged);
+  connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamWillPlay,
+          hwnet.data(), &HWNewNet::AddTeam);
+  connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::acceptRequested,
+          hwnet.data(), &HWNewNet::AddTeam);
+  connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamNotPlaying,
+          hwnet.data(), &HWNewNet::RemoveTeam);
+  connect(hwnet.data(), &HWNewNet::hhnumChanged,
+          ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::changeHHNum,
+          Qt::QueuedConnection);
+  connect(hwnet.data(), &HWNewNet::teamColorChanged,
+          ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::changeTeamColor,
+          Qt::QueuedConnection);
 
-    GoToPage(ID_PAGE_CONNECTING);
+  // admin stuff
+  connect(hwnet.data(), &HWNewNet::serverMessageNew, ui.pageAdmin,
+          &PageAdmin::serverMessageNew);
+  connect(hwnet.data(), &HWNewNet::serverMessageOld, ui.pageAdmin,
+          &PageAdmin::serverMessageOld);
+  connect(hwnet.data(), &HWNewNet::latestProtocolVar, ui.pageAdmin,
+          &PageAdmin::protocol);
+  connect(hwnet.data(), &HWNewNet::bansList, ui.pageAdmin,
+          &PageAdmin::setBansList);
+  connect(ui.pageAdmin, &PageAdmin::setServerMessageNew, hwnet.data(),
+          &HWNewNet::setServerMessageNew);
+  connect(ui.pageAdmin, &PageAdmin::setServerMessageOld, hwnet.data(),
+          &HWNewNet::setServerMessageOld);
+  connect(ui.pageAdmin, &PageAdmin::setProtocol, hwnet.data(),
+          &HWNewNet::setLatestProtocolVar);
+  connect(ui.pageAdmin, &PageAdmin::askServerVars, hwnet.data(),
+          &HWNewNet::askServerVars);
+  connect(ui.pageAdmin, &PageAdmin::clearAccountsCache, hwnet.data(),
+          &HWNewNet::clearAccountsCache);
+  connect(ui.pageAdmin, &PageAdmin::bansListRequest, hwnet.data(),
+          &HWNewNet::getBanList);
+  connect(ui.pageAdmin, &PageAdmin::removeBan, hwnet.data(),
+          &HWNewNet::removeBan);
+  connect(ui.pageAdmin, &PageAdmin::banIP, hwnet.data(), &HWNewNet::banIP);
+  connect(ui.pageAdmin, &PageAdmin::banNick, hwnet.data(), &HWNewNet::banNick);
 
-    connect(hwnet.data(), &HWNewNet::AskForRunGame, this,
-            &HWForm::CreateNetGame, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::AskForOfficialServerDemo, this,
-            &HWForm::PlayOfficialServerDemo, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::redirected, this, &HWForm::NetRedirected,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::connected, this, &HWForm::NetConnected,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::Error, this, &HWForm::NetError,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::Warning, this, &HWForm::NetWarning,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::EnteredGame, this, &HWForm::NetGameEnter,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::LeftRoom, this, &HWForm::NetLeftRoom,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::AddNetTeam, this, &HWForm::AddNetTeam,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::RemoveNetTeam, this,
-            &HWForm::RemoveNetTeam, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::TeamAccepted, this,
-            &HWForm::NetTeamAccepted, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::NickRegistered, this,
-            &HWForm::NetNickRegistered, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::NickNotRegistered, this,
-            &HWForm::NetNickNotRegistered, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::NickTaken, this, &HWForm::NetNickTaken,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::AuthFailed, this, &HWForm::NetAuthFailed,
-            Qt::QueuedConnection);
-    //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
-    connect(hwnet.data(), &HWNewNet::askForRoomPassword, this,
-            &HWForm::askRoomPassword, Qt::QueuedConnection);
+  // disconnect
+  connect(hwnet.data(), &HWNewNet::disconnected, this,
+          &HWForm::ForcedDisconnect, Qt::QueuedConnection);
 
-    ui.pageRoomsList->chatWidget->setUsersModel(hwnet->lobbyPlayersModel());
-    ui.pageNetGame->chatWidget->setUsersModel(hwnet->roomPlayersModel());
+  // config stuff
+  connect(hwnet.data(), &HWNewNet::paramChanged, ui.pageNetGame->pGameCFG,
+          &GameCFGWidget::setParam);
+  connect(ui.pageNetGame->pGameCFG, &GameCFGWidget::paramChanged, hwnet.data(),
+          &HWNewNet::onParamChanged);
+  connect(hwnet.data(), &HWNewNet::configAsked, ui.pageNetGame->pGameCFG,
+          &GameCFGWidget::fullNetConfig);
 
-// rooms list page stuff
-    ui.pageRoomsList->setModel(hwnet->roomsListModel());
-    connect(hwnet.data(), &HWNewNet::adminAccess, ui.pageRoomsList,
-            &PageRoomsList::setAdmin, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::adminAccess, ui.pageRoomsList->chatWidget,
-            &HWChatWidget::adminAccess, Qt::QueuedConnection);
+  // using proxy slot to prevent loss of game messages when they're sent to not
+  // yet connected slot of game object
+  connect(hwnet.data(), &HWNewNet::FromNet, this, &HWForm::FromNetProxySlot,
+          Qt::QueuedConnection);
 
-    connect(hwnet.data(), &HWNewNet::serverMessage,
-            ui.pageRoomsList->chatWidget, &HWChatWidget::onServerMessage,
-            Qt::QueuedConnection);
+  // nick and pass stuff
+  hwnet->m_private_game =
+      !(hostName == NETGAME_DEFAULT_SERVER && port == NETGAME_DEFAULT_PORT);
+  if (hwnet->m_private_game == false && AskForNickAndPwd() != 0) return;
 
-    connect(ui.pageRoomsList, &PageRoomsList::askForCreateRoom, hwnet.data(),
-            &HWNewNet::CreateRoom);
-    connect(ui.pageRoomsList, &PageRoomsList::askForJoinRoom, hwnet.data(),
-            &HWNewNet::JoinRoom);
-    //  connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
-    //      this, SLOT(NetGameMaster()));
-    //  connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
-    //      this, SLOT(NetGameSlave()));
-    connect(ui.pageRoomsList, &PageRoomsList::askForRoomList, hwnet.data(),
-            &HWNewNet::askRoomsList);
+  QString nickname =
+      config->value("net/nick", config->getRandomNick()).toString();
+  ui.pageRoomsList->setUser(nickname);
+  ui.pageNetGame->setUser(nickname);
 
-    // room status stuff
-    connect(hwnet.data(), &HWNewNet::roomMaster, this,
-            &HWForm::NetGameChangeStatus);
-
-    // net page stuff
-    connect(hwnet.data(), &HWNewNet::roomNameUpdated, ui.pageNetGame,
-            &PageNetGame::setRoomName, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::roomChatAction, ui.pageNetGame->chatWidget,
-            &HWChatWidget::onChatAction, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::roomChatMessage,
-            ui.pageNetGame->chatWidget, &HWChatWidget::onChatMessage,
-            Qt::QueuedConnection);
-
-    connect(hwnet.data(), &HWNewNet::roomMaster, ui.pageNetGame->chatWidget,
-            &HWChatWidget::adminAccess, Qt::QueuedConnection);
-    connect(ui.pageNetGame->chatWidget, &HWChatWidget::chatLine, hwnet.data(),
-            &HWNewNet::chatLineToNetWithEcho);
-    connect(ui.pageNetGame->BtnGo, &QAbstractButton::clicked, hwnet.data(),
-            &HWNewNet::ToggleReady);
-    connect(hwnet.data(), &HWNewNet::setMyReadyStatus, ui.pageNetGame,
-            &PageNetGame::setReadyStatus, Qt::QueuedConnection);
-
-    // chat widget actions
-    connect(ui.pageNetGame->chatWidget, &HWChatWidget::kick, hwnet.data(),
-            &HWNewNet::kickPlayer);
-    connect(ui.pageNetGame->chatWidget, &HWChatWidget::delegate, hwnet.data(),
-            &HWNewNet::delegateToPlayer);
-    connect(ui.pageNetGame->chatWidget, &HWChatWidget::ban, hwnet.data(),
-            &HWNewNet::banPlayer);
-    connect(ui.pageNetGame->chatWidget, &HWChatWidget::info, hwnet.data(),
-            &HWNewNet::infoPlayer);
-    connect(ui.pageNetGame->chatWidget, &HWChatWidget::follow, hwnet.data(),
-            &HWNewNet::followPlayer);
-    connect(ui.pageNetGame->chatWidget, &HWChatWidget::consoleCommand,
-            hwnet.data(), &HWNewNet::consoleCommand);
-    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::kick, hwnet.data(),
-            &HWNewNet::kickPlayer);
-    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::ban, hwnet.data(),
-            &HWNewNet::banPlayer);
-    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::info, hwnet.data(),
-            &HWNewNet::infoPlayer);
-    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::follow, hwnet.data(),
-            &HWNewNet::followPlayer);
-    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::consoleCommand,
-            hwnet.data(), &HWNewNet::consoleCommand);
-
-    // player info
-    connect(hwnet.data(), &HWNewNet::playerInfo, ui.pageRoomsList->chatWidget,
-            &HWChatWidget::onPlayerInfo, Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::playerInfo, ui.pageNetGame->chatWidget,
-            &HWChatWidget::onPlayerInfo, Qt::QueuedConnection);
-
-    // chatting
-    connect(ui.pageRoomsList->chatWidget, &HWChatWidget::chatLine, hwnet.data(),
-            &HWNewNet::chatLineToLobby);
-    connect(hwnet.data(), &HWNewNet::lobbyChatAction,
-            ui.pageRoomsList->chatWidget, &HWChatWidget::onChatAction,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::lobbyChatMessage,
-            ui.pageRoomsList->chatWidget, &HWChatWidget::onChatMessage,
-            Qt::QueuedConnection);
-
-    // nick list stuff
-    {
-        QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(hwnet->lobbyPlayersModel());
-        if(playersSortFilterModel)
-        {
-            PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
-            connect(players, &PlayersListModel::nickAdded,
-                    ui.pageNetGame->chatWidget, &HWChatWidget::nickAdded);
-            connect(players, SIGNAL(nickRemoved(const QString&)),
-                    ui.pageNetGame->chatWidget, SLOT(nickRemoved(const QString&)));
-            connect(players, &PlayersListModel::nickAddedLobby,
-                    ui.pageRoomsList->chatWidget, &HWChatWidget::nickAdded);
-            connect(players, SIGNAL(nickRemovedLobby(const QString&)),
-                    ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&)));
-            connect(players, SIGNAL(nickRemovedLobby(const QString&, const QString&)),
-                    ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&, const QString&)));
-        }
-    }
-
-// teams selecting stuff
-    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::hhogsNumChanged,
-            hwnet.data(), &HWNewNet::onHedgehogsNumChanged);
-    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamColorChanged,
-            hwnet.data(), &HWNewNet::onTeamColorChanged);
-    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamWillPlay,
-            hwnet.data(), &HWNewNet::AddTeam);
-    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::acceptRequested,
-            hwnet.data(), &HWNewNet::AddTeam);
-    connect(ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::teamNotPlaying,
-            hwnet.data(), &HWNewNet::RemoveTeam);
-    connect(hwnet.data(), &HWNewNet::hhnumChanged,
-            ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::changeHHNum,
-            Qt::QueuedConnection);
-    connect(hwnet.data(), &HWNewNet::teamColorChanged,
-            ui.pageNetGame->pNetTeamsWidget, &TeamSelWidget::changeTeamColor,
-            Qt::QueuedConnection);
-
-    // admin stuff
-    connect(hwnet.data(), &HWNewNet::serverMessageNew, ui.pageAdmin,
-            &PageAdmin::serverMessageNew);
-    connect(hwnet.data(), &HWNewNet::serverMessageOld, ui.pageAdmin,
-            &PageAdmin::serverMessageOld);
-    connect(hwnet.data(), &HWNewNet::latestProtocolVar, ui.pageAdmin,
-            &PageAdmin::protocol);
-    connect(hwnet.data(), &HWNewNet::bansList, ui.pageAdmin,
-            &PageAdmin::setBansList);
-    connect(ui.pageAdmin, &PageAdmin::setServerMessageNew, hwnet.data(),
-            &HWNewNet::setServerMessageNew);
-    connect(ui.pageAdmin, &PageAdmin::setServerMessageOld, hwnet.data(),
-            &HWNewNet::setServerMessageOld);
-    connect(ui.pageAdmin, &PageAdmin::setProtocol, hwnet.data(),
-            &HWNewNet::setLatestProtocolVar);
-    connect(ui.pageAdmin, &PageAdmin::askServerVars, hwnet.data(),
-            &HWNewNet::askServerVars);
-    connect(ui.pageAdmin, &PageAdmin::clearAccountsCache, hwnet.data(),
-            &HWNewNet::clearAccountsCache);
-    connect(ui.pageAdmin, &PageAdmin::bansListRequest, hwnet.data(),
-            &HWNewNet::getBanList);
-    connect(ui.pageAdmin, &PageAdmin::removeBan, hwnet.data(),
-            &HWNewNet::removeBan);
-    connect(ui.pageAdmin, &PageAdmin::banIP, hwnet.data(), &HWNewNet::banIP);
-    connect(ui.pageAdmin, &PageAdmin::banNick, hwnet.data(),
-            &HWNewNet::banNick);
-
-    // disconnect
-    connect(hwnet.data(), &HWNewNet::disconnected, this,
-            &HWForm::ForcedDisconnect, Qt::QueuedConnection);
-
-    // config stuff
-    connect(hwnet.data(), &HWNewNet::paramChanged, ui.pageNetGame->pGameCFG,
-            &GameCFGWidget::setParam);
-    connect(ui.pageNetGame->pGameCFG, &GameCFGWidget::paramChanged,
-            hwnet.data(), &HWNewNet::onParamChanged);
-    connect(hwnet.data(), &HWNewNet::configAsked, ui.pageNetGame->pGameCFG,
-            &GameCFGWidget::fullNetConfig);
-
-    // using proxy slot to prevent loss of game messages when they're sent to not yet connected slot of game object
-    connect(hwnet.data(), &HWNewNet::FromNet, this, &HWForm::FromNetProxySlot,
-            Qt::QueuedConnection);
-
-    //nick and pass stuff
-    hwnet->m_private_game = !(hostName == NETGAME_DEFAULT_SERVER && port == NETGAME_DEFAULT_PORT);
-    if (hwnet->m_private_game == false && AskForNickAndPwd() != 0)
-        return;
-
-    QString nickname = config->value("net/nick", config->getRandomNick()).toString();
-    ui.pageRoomsList->setUser(nickname);
-    ui.pageNetGame->setUser(nickname);
-
-    hwnet->Connect(hostName, port, useTls, nickname);
+  hwnet->Connect(hostName, port, useTls, nickname);
 }
 
 int HWForm::AskForNickAndPwd(void)
@@ -1942,23 +1949,23 @@ void HWForm::DemoPresenceChanged(bool hasDemo)
     demoIsPresent = hasDemo;
 }
 
-void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo)
-{
-    game = new HWGame(config, gamecfg, ammo, pTeamSelWidget);
-    connect(game.data(), &HWGame::CampStateChanged, this,
-            &HWForm::UpdateCampaignPageProgress);
-    connect(game.data(), &HWGame::TrainingStateChanged, this,
-            &HWForm::UpdateTrainingPageTeam);
-    connect(game.data(), &HWGame::GameStateChanged, this,
-            &HWForm::GameStateChanged);
-    connect(game.data(), &HWGame::DemoPresenceChanged, this,
-            &HWForm::DemoPresenceChanged);
-    connect(game.data(), &HWGame::GameStats, ui.pageGameStats,
-            &PageGameStats::GameStats);
-    connect(game.data(), &HWGame::ErrorMessage, this,
-            &HWForm::ShowFatalErrorMessage, Qt::QueuedConnection);
-    connect(game.data(), &HWGame::HaveRecord, this, &HWForm::GetRecord);
-    m_lastDemo = QByteArray();
+void HWForm::CreateGame(GameCFGWidget *gamecfg, TeamSelWidget *pTeamSelWidget,
+                        const QString &ammo) {
+  game = new HWGame(config, gamecfg, ammo, pTeamSelWidget);
+  connect(game.data(), &HWGame::CampStateChanged, this,
+          &HWForm::UpdateCampaignPageProgress);
+  connect(game.data(), &HWGame::TrainingStateChanged, this,
+          &HWForm::UpdateTrainingPageTeam);
+  connect(game.data(), &HWGame::GameStateChanged, this,
+          &HWForm::GameStateChanged);
+  connect(game.data(), &HWGame::DemoPresenceChanged, this,
+          &HWForm::DemoPresenceChanged);
+  connect(game.data(), &HWGame::GameStats, ui.pageGameStats,
+          &PageGameStats::GameStats);
+  connect(game.data(), &HWGame::ErrorMessage, this,
+          &HWForm::ShowFatalErrorMessage, Qt::QueuedConnection);
+  connect(game.data(), &HWGame::HaveRecord, this, &HWForm::GetRecord);
+  m_lastDemo.clear();
 }
 
 void HWForm::GetRecord(RecordType type, const QByteArray & record)
@@ -2016,7 +2023,9 @@ void HWForm::StartCampaign()
 {
     CreateGame(0, 0, 0);
     QString camp = ui.pageCampaign->CBCampaign->itemData(ui.pageCampaign->CBCampaign->currentIndex()).toString();
-    QString miss = campaignMissionInfo[ui.pageCampaign->CBMission->currentIndex()].script;
+    QString miss =
+        campaignMissionInfo.at(ui.pageCampaign->CBMission->currentIndex())
+            .script;
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
     game->StartCampaign(camp, miss, campTeam);
 }

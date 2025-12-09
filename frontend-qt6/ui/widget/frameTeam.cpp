@@ -46,11 +46,10 @@ FrameTeams::FrameTeams(QWidget* parent) :
 void FrameTeams::setInteractivity(bool interactive)
 {
     nonInteractive = !interactive;
-    for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ++it)
-    {
-        TeamShowWidget* pts = dynamic_cast<TeamShowWidget*>(it.value());
-        if(!pts) throw;
-        pts->setInteractivity(interactive);
+    for (auto it = teamToWidget.cbegin(); it != teamToWidget.cend(); ++it) {
+      TeamShowWidget* pts = qobject_cast<TeamShowWidget*>(it.value());
+      Q_ASSERT(pts != nullptr);
+      pts->setInteractivity(interactive);
     }
 }
 
@@ -65,38 +64,38 @@ int FrameTeams::getNextColor()
     return currentColor;
 }
 
-void FrameTeams::addTeam(HWTeam team, bool willPlay)
-{
-    TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);
-    if(nonInteractive) pTeamShowWidget->setInteractivity(false);
-//  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
-    mainLayout.addWidget(pTeamShowWidget);
-    teamToWidget.insert(team, pTeamShowWidget);
-    QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
-    updateDecoFrame();
-    QCoreApplication::postEvent(parentWidget(), pevent);
+void FrameTeams::addTeam(const HWTeam& team, bool willPlay) {
+  TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);
+  if (nonInteractive) pTeamShowWidget->setInteractivity(false);
+  //  int hght=teamToWidget.empty() ? 0 :
+  //  teamToWidget.begin()->second->size().height();
+  mainLayout.addWidget(pTeamShowWidget);
+  teamToWidget.insert(team, pTeamShowWidget);
+  QResizeEvent* pevent =
+      new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+  updateDecoFrame();
+  QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
-void FrameTeams::removeTeam(HWTeam team)
-{
-    tmapTeamToWidget::iterator it=teamToWidget.find(team);
-    if(it==teamToWidget.end()) return;
-    mainLayout.removeWidget(it.value());
-    it.value()->deleteLater();
-    teamToWidget.erase(it);
-    QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
-    updateDecoFrame();
-    QCoreApplication::postEvent(parentWidget(), pevent);
+void FrameTeams::removeTeam(const HWTeam& team) {
+  auto it = teamToWidget.constFind(team);
+  if (it == teamToWidget.end()) return;
+  mainLayout.removeWidget(it.value());
+  it.value()->deleteLater();
+  teamToWidget.erase(it);
+  QResizeEvent* pevent =
+      new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+  updateDecoFrame();
+  QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
 void FrameTeams::resetTeams()
 {
-    for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); )
-    {
-        mainLayout.removeWidget(it.value());
-        it.value()->deleteLater();
-        teamToWidget.erase(it++);
-    }
+  for (auto it = teamToWidget.cbegin(); it != teamToWidget.cend();) {
+    mainLayout.removeWidget(it.value());
+    it.value()->deleteLater();
+    teamToWidget.erase(it++);
+  }
     QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
     updateDecoFrame();
     QCoreApplication::postEvent(parentWidget(), pevent);
@@ -116,12 +115,11 @@ void FrameTeams::setTeamColor(const HWTeam& team)
     pTeamShowWidget->changeTeamColor(team.color());
 }
 
-QWidget* FrameTeams::getTeamWidget(HWTeam team)
-{
-//qDebug() << "FrameTeams::getTeamWidget getNetID() = " << team.getNetID();
-    tmapTeamToWidget::iterator it=teamToWidget.find(team);
-    QWidget* ret = it!=teamToWidget.end() ? it.value() : 0;
-    return ret;
+QWidget* FrameTeams::getTeamWidget(const HWTeam& team) {
+  // qDebug() << "FrameTeams::getTeamWidget getNetID() = " << team.getNetID();
+  auto it = teamToWidget.constFind(team);
+  QWidget* ret = it != teamToWidget.end() ? it.value() : 0;
+  return ret;
 }
 
 bool FrameTeams::isFullTeams() const

@@ -34,7 +34,7 @@ class SelWeaponItem : public QWidget
         Q_OBJECT
 
     public:
-        SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QImage imagegrey, QWidget* parent=0);
+        SelWeaponItem(bool allowInfinite, int iconNum, int wNum, const QImage &image, const QImage &imagegrey, QWidget* parent=0);
 
         unsigned char getItemsNum() const;
         void setItemsNum(const unsigned char num);

@@ -30,14 +30,15 @@ class LineEditCursor;
 
 class HatListView : public QListView
 {
-    friend class HatPrompt;
+  Q_OBJECT
+  friend class HatPrompt;
 
-    public:
-        HatListView(QWidget* parent = 0) : QListView(parent){}
-        void moveUp();
-        void moveDown();
-        void moveLeft();
-        void moveRight();
+ public:
+  HatListView(QWidget* parent = 0) : QListView(parent) {}
+  void moveUp();
+  void moveDown();
+  void moveLeft();
+  void moveRight();
 };
 
 class HatPrompt : public QDialog

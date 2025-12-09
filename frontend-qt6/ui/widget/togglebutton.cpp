@@ -19,39 +19,39 @@
 
 #include "togglebutton.h"
 
-ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
-    : QPushButton(parent)
-{
-    setCheckable(true);
+ToggleButtonWidget::ToggleButtonWidget(QWidget *parent, const QString &img)
+    : QPushButton(parent) {
+  setCheckable(true);
 
-    QPixmap pixOffOverlay(QStringLiteral(":/res/btnDisabled.png"));
-    QPainter * painter = new QPainter();
+  QPixmap pixOffOverlay(QStringLiteral(":/res/btnDisabled.png"));
+  QPainter *painter = new QPainter();
 
-    QPixmap pixOn = QPixmap(img);
-    QPixmap pixOff = QPixmap(img);
+  QPixmap pixOn = QPixmap(img);
+  QPixmap pixOff = QPixmap(img);
 
-    // Use the same image for disabled (i.e. non-clickable) button.
-    // The default would be gray which is a little bit hard on the eye.
-    // The disabled state is communicated to the user by the button
-    // border, which turns gray.
-    icoChecked.addPixmap(pixOn, QIcon::Normal);
-    icoChecked.addPixmap(pixOn, QIcon::Disabled);
+  // Use the same image for disabled (i.e. non-clickable) button.
+  // The default would be gray which is a little bit hard on the eye.
+  // The disabled state is communicated to the user by the button
+  // border, which turns gray.
+  icoChecked.addPixmap(pixOn, QIcon::Normal);
+  icoChecked.addPixmap(pixOn, QIcon::Disabled);
 
-    pixOff.setDevicePixelRatio(pixOffOverlay.devicePixelRatio());
+  pixOff.setDevicePixelRatio(pixOffOverlay.devicePixelRatio());
 
-    setMaximumWidth(pixOn.width() + 6);
+  setMaximumWidth(pixOn.width() + 6);
 
-    painter->begin(&pixOff);
-    painter->drawPixmap(pixOff.rect(), pixOffOverlay);
-    painter->end();
+  painter->begin(&pixOff);
+  painter->drawPixmap(pixOff.rect(), pixOffOverlay);
+  painter->end();
 
-    icoUnchecked.addPixmap(pixOff, QIcon::Normal);
-    icoUnchecked.addPixmap(pixOff, QIcon::Disabled);
+  icoUnchecked.addPixmap(pixOff, QIcon::Normal);
+  icoUnchecked.addPixmap(pixOff, QIcon::Disabled);
 
-    setIconSize(pixOff.size());
-    setIcon(icoUnchecked);
+  setIconSize(pixOff.size());
+  setIcon(icoUnchecked);
 
-    connect(this, &QAbstractButton::toggled, this, &ToggleButtonWidget::eventToggled);
+  connect(this, &QAbstractButton::toggled, this,
+          &ToggleButtonWidget::eventToggled);
 }
 
 ToggleButtonWidget::~ToggleButtonWidget()

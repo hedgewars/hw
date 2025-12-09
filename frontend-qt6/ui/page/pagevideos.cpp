@@ -67,23 +67,25 @@ enum VideosColumns
 class VideoItem : public QTableWidgetItem
 {
     // note: QTableWidgetItem is not Q_OBJECT
+    Q_DISABLE_COPY_MOVE(VideoItem)
 
-    public:
-        VideoItem(const QString& name);
-        ~VideoItem();
+   public:
+    explicit VideoItem(const QString& name);
+    ~VideoItem();
 
-        QString name;
-        QString prefix; // original filename without extension
-        QString desc;   // description (duration, resolution, etc...)
-        HWRecorder    * pRecorder; // non NULL if file is being encoded
-        bool seen; // used when updating directory
-        float lastSizeUpdate;
-        float progress;
+    QString name;
+    QString prefix;         // original filename without extension
+    QString desc;           // description (duration, resolution, etc...)
+    HWRecorder* pRecorder;  // non NULL if file is being encoded
+    bool seen;              // used when updating directory
+    float lastSizeUpdate;
+    float progress;
 
-        bool ready()
-        { return !pRecorder; }
+    bool ready() { return !pRecorder; }
 
-        QString path() { return cfgdir.absoluteFilePath(QStringLiteral("Videos/") + name); }
+    QString path() {
+      return cfgdir.absoluteFilePath(QStringLiteral("Videos/") + name);
+    }
 };
 
 VideoItem::VideoItem(const QString& name)

@@ -69,7 +69,7 @@ class DrawMapScene : public QGraphicsScene
         void setErasing(bool erasing);
         void showCursor();
         void hideCursor();
-        void setPathType(PathType pathType);
+        void setPathType(DrawMapScene::PathType pathType);
         void setBrushSize(int brushSize);
 
     private:
@@ -95,8 +95,8 @@ class DrawMapScene : public QGraphicsScene
 
         quint8 serializePenWidth(int width);
         int deserializePenWidth(quint8 width);
-        QList<QPointF> makeEllipse(const QPointF & center, const QPointF & corner);
-        QPointF putSomeConstraints(const QPointF & initialPoint, const QPointF & point);
+        QList<QPointF> makeEllipse(QPointF center, QPointF corner);
+        QPointF putSomeConstraints(QPointF initialPoint, QPointF point);
 };
 
 #endif // DRAWMAPSCENE_H

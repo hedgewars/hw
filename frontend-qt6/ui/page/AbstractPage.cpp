@@ -160,15 +160,13 @@ void AbstractPage::setBackButtonVisible(bool visible)
     btnBack->setVisible(visible);
 }
 
-void AbstractPage::setButtonDescription(QString desc)
-{
-    descLabel->setText(desc);
+void AbstractPage::setButtonDescription(const QString& desc) {
+  descLabel->setText(desc);
 }
 
-void AbstractPage::setDefaultDescription(QString text)
-{
-    *defautDesc = text;
-    descLabel->setText(text);
+void AbstractPage::setDefaultDescription(const QString& text) {
+  *defautDesc = text;
+  descLabel->setText(text);
 }
 
 QString * AbstractPage::getDefaultDescription()

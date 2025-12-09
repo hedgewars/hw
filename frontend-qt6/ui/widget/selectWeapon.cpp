@@ -55,28 +55,29 @@ QImage getAmmoImage(int num)
     }
 }
 
-SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QImage imagegrey, QWidget* parent) :
-    QWidget(parent)
-{
-    QHBoxLayout* hbLayout = new QHBoxLayout(this);
-    hbLayout->setSpacing(1);
-    hbLayout->setContentsMargins(QMargins{1, 1, 1, 1});
+SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum,
+                             const QImage& image, const QImage& imagegrey,
+                             QWidget* parent)
+    : QWidget(parent) {
+  QHBoxLayout* hbLayout = new QHBoxLayout(this);
+  hbLayout->setSpacing(1);
+  hbLayout->setContentsMargins(QMargins{1, 1, 1, 1});
 
-    QLabel* lbl = new QLabel(this);
-    lbl->setPixmap(QPixmap::fromImage(getAmmoImage(iconNum)));
-    lbl->setMaximumWidth(30);
-    lbl->setGeometry(0, 0, 30, 30);
-    hbLayout->addWidget(lbl);
+  QLabel* lbl = new QLabel(this);
+  lbl->setPixmap(QPixmap::fromImage(getAmmoImage(iconNum)));
+  lbl->setMaximumWidth(30);
+  lbl->setGeometry(0, 0, 30, 30);
+  hbLayout->addWidget(lbl);
 
-    item = new WeaponItem(image, imagegrey, this);
-    item->setItemsNum(wNum);
-    item->setInfinityState(allowInfinite);
-    hbLayout->addWidget(item);
+  item = new WeaponItem(image, imagegrey, this);
+  item->setItemsNum(wNum);
+  item->setInfinityState(allowInfinite);
+  hbLayout->addWidget(item);
 
-    hbLayout->setStretchFactor(lbl, 1);
-    hbLayout->setStretchFactor(item, 99);
-    hbLayout->setAlignment(lbl, Qt::AlignLeft | Qt::AlignVCenter);
-    hbLayout->setAlignment(item, Qt::AlignLeft | Qt::AlignVCenter);
+  hbLayout->setStretchFactor(lbl, 1);
+  hbLayout->setStretchFactor(item, 99);
+  hbLayout->setAlignment(lbl, Qt::AlignLeft | Qt::AlignVCenter);
+  hbLayout->setAlignment(item, Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 void SelWeaponItem::setItemsNum(const unsigned char num)
@@ -268,16 +269,16 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
     }
     for(int i = 0; i < m_numItems; ++i)
     {
-        twi::iterator it = weaponItems.find(i);
-        if (it == weaponItems.end()) continue;
-        it.value()[0]->setItemsNum(readWeaponValue(ammo[i], 9));
-        it.value()[1]->setItemsNum(readWeaponValue(ammo[m_numItems + i], 8));
-        it.value()[2]->setItemsNum(readWeaponValue(ammo[m_numItems*2 + i], 8));
-        it.value()[3]->setItemsNum(readWeaponValue(ammo[m_numItems*3 + i], 8));
-        it.value()[0]->setEnabled(enable);
-        it.value()[1]->setEnabled(enable);
-        it.value()[2]->setEnabled(enable);
-        it.value()[3]->setEnabled(enable);
+      auto it = weaponItems.constFind(i);
+      if (it == weaponItems.end()) continue;
+      it.value()[0]->setItemsNum(readWeaponValue(ammo[i], 9));
+      it.value()[1]->setItemsNum(readWeaponValue(ammo[m_numItems + i], 8));
+      it.value()[2]->setItemsNum(readWeaponValue(ammo[m_numItems * 2 + i], 8));
+      it.value()[3]->setItemsNum(readWeaponValue(ammo[m_numItems * 3 + i], 8));
+      it.value()[0]->setEnabled(enable);
+      it.value()[1]->setEnabled(enable);
+      it.value()[2]->setEnabled(enable);
+      it.value()[3]->setEnabled(enable);
     }
     m_name->setEnabled(enable);
 }
@@ -320,15 +321,17 @@ void SelWeaponWidget::save()
 
     for(int i = 0; i < m_numItems; ++i)
     {
-        twi::const_iterator it = weaponItems.find(i);
-        int num = it == weaponItems.end() ? 9 : it.value()[0]->getItemsNum(); // 9 is for 'skip turn'
-        state1.append(QString::number(num));
-        int prob = it == weaponItems.end() ? 0 : it.value()[1]->getItemsNum();
-        state2.append(QString::number(prob));
-        int del = it == weaponItems.end() ? 0 : it.value()[2]->getItemsNum();
-        state3.append(QString::number(del));
-        int am = it == weaponItems.end() ? 0 : it.value()[3]->getItemsNum();
-        state4.append(QString::number(am));
+      auto it = weaponItems.constFind(i);
+      int num = it == weaponItems.end()
+                    ? 9
+                    : it.value()[0]->getItemsNum();  // 9 is for 'skip turn'
+      state1.append(QString::number(num));
+      int prob = it == weaponItems.end() ? 0 : it.value()[1]->getItemsNum();
+      state2.append(QString::number(prob));
+      int del = it == weaponItems.end() ? 0 : it.value()[2]->getItemsNum();
+      state3.append(QString::number(del));
+      int am = it == weaponItems.end() ? 0 : it.value()[3]->getItemsNum();
+      state4.append(QString::number(am));
     }
 
     stateFull = state1 + state2 + state3 + state4;
@@ -449,7 +452,7 @@ void SelWeaponWidget::setWeaponsName(const QString& name)
 
     if(!name.isEmpty() && wconf->contains(name))
     {
-        setWeapons(wconf->find(name).value());
+      setWeapons(wconf->constFind(name).value());
     }
     else
     {

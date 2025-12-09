@@ -1215,39 +1215,36 @@ void HWMapContainer::mapChanged(const QModelIndex & map, int type, const QModelI
     setMapInfo(map.data(Qt::UserRole + 1).value<MapModel::MapInfo>());
 }
 
-void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
-{
-    m_mapInfo = mapInfo;
-    m_curMap = m_mapInfo.name;
+void HWMapContainer::setMapInfo(const MapModel::MapInfo &mapInfo) {
+  m_mapInfo = mapInfo;
+  m_curMap = m_mapInfo.name;
 
-    // the map has no pre-defined theme, so let's use the selected one
-    if (m_mapInfo.theme.isNull() || m_mapInfo.theme.isEmpty())
-    {
-        if (!selectedTheme.isNull() && !selectedTheme.isEmpty())
-        {
-            // Fall back to a default theme if current theme is a background theme or hidden
-            QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, m_theme);
-            if (mdl.size() > 0)
-            {
-                if ((mdl.at(0).data(ThemeModel::IsBackgroundThemeRole).toBool() == true) || (mdl.at(0).data(ThemeModel::IsHiddenRole).toBool() == true))
-                {
-                    selectedTheme = QStringLiteral("Nature");
-                }
-            }
-            setTheme(selectedTheme);
-            Q_EMIT themeChanged(selectedTheme);
+  // the map has no pre-defined theme, so let's use the selected one
+  if (m_mapInfo.theme.isNull() || m_mapInfo.theme.isEmpty()) {
+    if (!selectedTheme.isNull() && !selectedTheme.isEmpty()) {
+      // Fall back to a default theme if current theme is a background theme or
+      // hidden
+      QModelIndexList mdl = m_themeModel->match(
+          m_themeModel->index(0), ThemeModel::ActualNameRole, m_theme);
+      if (mdl.size() > 0) {
+        if ((mdl.at(0).data(ThemeModel::IsBackgroundThemeRole).toBool() ==
+             true) ||
+            (mdl.at(0).data(ThemeModel::IsHiddenRole).toBool() == true)) {
+          selectedTheme = QStringLiteral("Nature");
         }
+      }
+      setTheme(selectedTheme);
+      Q_EMIT themeChanged(selectedTheme);
     }
-    else
-    {
-        setTheme(m_mapInfo.theme);
-        Q_EMIT themeChanged(m_mapInfo.theme);
-    }
+  } else {
+    setTheme(m_mapInfo.theme);
+    Q_EMIT themeChanged(m_mapInfo.theme);
+  }
 
-    lblDesc->setText(mapInfo.desc);
+  lblDesc->setText(mapInfo.desc);
 
-    updatePreview();
-    Q_EMIT mapChanged(m_curMap);
+  updatePreview();
+  Q_EMIT mapChanged(m_curMap);
 }
 
 void HWMapContainer::loadDrawing()

@@ -21,10 +21,14 @@
 
 class InstallController
 {
-    public:
-        virtual ~InstallController();
+ public:
+  InstallController(const InstallController &) = delete;
+  InstallController(InstallController &&) = delete;
+  InstallController &operator=(const InstallController &) = delete;
+  InstallController &operator=(InstallController &&) = delete;
+  virtual ~InstallController();
 
-        virtual void showInstallController() = 0;
+  virtual void showInstallController() = 0;
 };
 
 #endif

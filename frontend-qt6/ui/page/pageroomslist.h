@@ -31,12 +31,13 @@ class QSplitter;
 
 class RoomTableView : public QTableView
 {
-    friend class PageRoomsList;
+  Q_OBJECT
+  friend class PageRoomsList;
 
-    public:
-        RoomTableView(QWidget* parent = 0) : QTableView(parent){}
-        void moveUp();
-        void moveDown();
+ public:
+  RoomTableView(QWidget *parent = 0) : QTableView(parent) {}
+  void moveUp();
+  void moveDown();
 };
 
 class PageRoomsList : public AbstractPage
@@ -44,22 +45,22 @@ class PageRoomsList : public AbstractPage
         Q_OBJECT
 
     public:
-        PageRoomsList(QWidget* parent);
-        void displayError(const QString & message);
-        void displayNotice(const QString & message);
-        void displayWarning(const QString & message);
-        void setSettings(QSettings * settings);
+     explicit PageRoomsList(QWidget *parent);
+     void displayError(const QString &message);
+     void displayNotice(const QString &message);
+     void displayWarning(const QString &message);
+     void setSettings(QSettings *settings);
 
-        QLineEdit * searchText;
-        RoomTableView * roomsList;
-        QPushButton * BtnCreate;
-        QPushButton * BtnJoin;
-        QPushButton * BtnAdmin;
-        QComboBox * CBState;
-        HWChatWidget * chatWidget;
-        QLabel * lblCount;
+     QLineEdit *searchText;
+     RoomTableView *roomsList;
+     QPushButton *BtnCreate;
+     QPushButton *BtnJoin;
+     QPushButton *BtnAdmin;
+     QComboBox *CBState;
+     HWChatWidget *chatWidget;
+     QLabel *lblCount;
 
-        void setModel(RoomsListModel * model);
+     void setModel(RoomsListModel *model);
 
     public Q_SLOTS:
         void setAdmin(bool);

@@ -414,11 +414,15 @@ void PageGameStats::GameStats(char type, const QString & info)
                 //: Time in seconds
                 killstring = PageGameStats::tr("(%L1 second(s))", "", kills).arg((double) kills/1000, 0, 'f', 3);
             } else if (kindOfPoints.startsWith(QLatin1String("!TIME")) && kindOfPoints.length() == 6) {
-                int len = kindOfPoints.at(6).digitValue();
-                if(len != -1)
-                    killstring = PageGameStats::tr("(%L1 second(s))", "", kills).arg((double) kills/1000, 0, 'f', len);
-                else
-                    qWarning("SendStat: siPointType received with !TIME and invalid number length!");
+              // FIXME: UB: calling at(6) while length() == 6
+              int len = kindOfPoints.at(6).digitValue();
+              if (len != -1)
+                killstring = PageGameStats::tr("(%L1 second(s))", "", kills)
+                                 .arg((double)kills / 1000, 0, 'f', len);
+              else
+                qWarning(
+                    "SendStat: siPointType received with !TIME and invalid "
+                    "number length!");
             } else if (kindOfPoints == QLatin1String("!CRATES")) {
                 killstring = PageGameStats::tr("(%1 crate(s))", "", kills).arg(kills);
             } else if (kindOfPoints == QLatin1String("!EMPTY")) {
