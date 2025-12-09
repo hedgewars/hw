@@ -33,7 +33,7 @@
 #include "roomslistmodel.h"
 #include "servermessages.h"
 
-char delimiter = '\n';
+QString delimiter{"\n"};
 
 HWNewNet::HWNewNet()
     : isChief(false), m_game_connected(false), netClientState(Disconnected) {
@@ -713,7 +713,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
       m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
 
       Q_EMIT chatStringFromNet(
-          tr("%1 *** %2 has joined the room").arg('\x03', lst[i]));
+          tr("%1 *** %2 has joined the room").arg("\x03", lst[i]));
     }
     return;
   }
@@ -844,7 +844,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
         m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
         if (!m_playersModel->isFlagSet(lst[i], PlayersListModel::Ignore))
           Q_EMIT chatStringFromNet(
-              tr("%1 *** %2 has joined the room").arg('\x03', lst[i]));
+              tr("%1 *** %2 has joined the room").arg("\x03", lst[i]));
       }
       return;
     }
@@ -858,12 +858,12 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
       if (!m_playersModel->isFlagSet(lst[1], PlayersListModel::Ignore)) {
         if (lst.size() < 3)
           Q_EMIT chatStringFromNet(
-              tr("%1 *** %2 has left").arg('\x03', lst[1]));
+              tr("%1 *** %2 has left").arg("\x03", lst[1]));
         else {
           QString leaveMsg = QString(lst[2]);
           Q_EMIT chatStringFromNet(
               tr("%1 *** %2 has left (%3)")
-                  .arg('\x03', lst[1],
+                  .arg("\x03", lst[1],
                        HWApplication::translate(
                            "server", leaveMsg.toLatin1().constData())));
         }
