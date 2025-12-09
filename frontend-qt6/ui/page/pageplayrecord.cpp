@@ -166,10 +166,7 @@ void PagePlayDemo::renameRecord()
     if(ok && newname.size())
     {
       QString newfullname = QStringLiteral("%1/%2.%3.%4")
-                                .arg(finfo.absolutePath())
-                                .arg(newname)
-                                .arg(cProtoVer)
-                                .arg(finfo.suffix());
+                                .arg(finfo.absolutePath(), newname, cProtoVer, finfo.suffix());
 
       ok = rfile.rename(newfullname);
       if (!ok) {

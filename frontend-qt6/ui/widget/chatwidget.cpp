@@ -461,7 +461,7 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
         line = tsMarkUp.arg(now.toString(s_tsFormat)) + line;
     }
 
-    line = QStringLiteral("<span class=\"%1\">%2</span>").arg(cssClass).arg(line);
+    line = QStringLiteral("<span class=\"%1\">%2</span>").arg(cssClass, line);
 
     if (isHighlight)
     {
@@ -554,7 +554,7 @@ void HWChatWidget::nickRemoved(const QString& nick, const QString & message)
     // Quit with additional server message (i.e. ping timeout)
     else
     {
-        printChatString(nick, QStringLiteral("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(HWApplication::translate("server", message.toLatin1().constData()).toHtmlEscaped()), QStringLiteral("Leave"), false);
+        printChatString(nick, QStringLiteral("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick), HWApplication::translate("server", message.toLatin1().constData()).toHtmlEscaped()), QStringLiteral("Leave"), false);
     }
 }
 
@@ -625,10 +625,7 @@ void HWChatWidget::onPlayerInfo(
             const QString & roomInfo)
 {
     addLine(QStringLiteral("msg_PlayerInfo"), QStringLiteral(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
-        .arg(linkedNick(nick))
-        .arg(QString(ip == QLatin1String("[]")?QLatin1String(""):ip).toHtmlEscaped())
-        .arg(version.toHtmlEscaped())
-        .arg(roomInfo.toHtmlEscaped())
+        .arg(linkedNick(nick), QString(ip == QLatin1String("[]")?QLatin1String(""):ip).toHtmlEscaped(), version.toHtmlEscaped(), roomInfo.toHtmlEscaped())
     );
 }
 
@@ -813,7 +810,7 @@ void HWChatWidget::dropEvent(QDropEvent * event)
         setStyleSheet(style);
         chatText->document()->setDefaultStyleSheet(*s_styleSheet);
         displayNotice(tr("Stylesheet imported from %1").arg(path));
-        displayNotice(tr("Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discardStyleSheet"));
+        displayNotice(tr("Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!").arg("/saveStyleSheet", "/discardStyleSheet"));
 
         if (file.isOpen())
             file.close();

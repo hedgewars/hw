@@ -758,7 +758,7 @@ void PageScheme::checkDupe()
         dupeMsg.setIcon(QMessageBox::Warning);
         dupeMsg.setWindowTitle(QMessageBox::tr("Schemes - Name already taken"));
         dupeMsg.setTextFormat(Qt::PlainText);
-        dupeMsg.setText(QMessageBox::tr("A scheme with the name '%1' already exists. Your scheme has been renamed to '%2'.").arg(name).arg(newName));
+        dupeMsg.setText(QMessageBox::tr("A scheme with the name '%1' already exists. Your scheme has been renamed to '%2'.").arg(name, newName));
         dupeMsg.setWindowModality(Qt::WindowModal);
         dupeMsg.exec();
     }

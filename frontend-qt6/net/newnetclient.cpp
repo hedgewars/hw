@@ -120,9 +120,9 @@ void HWNewNet::CreateRoom(const QString & room, const QString & password)
     myroom = room;
 
     if(password.isEmpty())
-        RawSendNet(QStringLiteral("CREATE_ROOM%1%2").arg(delimiter).arg(room));
+        RawSendNet(QStringLiteral("CREATE_ROOM%1%2").arg(delimiter, room));
     else
-        RawSendNet(QStringLiteral("CREATE_ROOM%1%2%1%3").arg(delimiter).arg(room).arg(password));
+        RawSendNet(QStringLiteral("CREATE_ROOM%1%2%1%3").arg(delimiter, room, password));
 
     isChief = true;
 }
@@ -138,9 +138,9 @@ void HWNewNet::JoinRoom(const QString & room, const QString &password)
     myroom = room;
 
     if(password.isEmpty())
-        RawSendNet(QStringLiteral("JOIN_ROOM%1%2").arg(delimiter).arg(room));
+        RawSendNet(QStringLiteral("JOIN_ROOM%1%2").arg(delimiter, room));
     else
-        RawSendNet(QStringLiteral("JOIN_ROOM%1%2%1%3").arg(delimiter).arg(room).arg(password));
+        RawSendNet(QStringLiteral("JOIN_ROOM%1%2%1%3").arg(delimiter, room, password));
 
     isChief = false;
 }
@@ -173,7 +173,7 @@ void HWNewNet::RemoveTeam(const HWTeam & team)
 
 void HWNewNet::NewNick(const QString & nick)
 {
-    RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter).arg(nick));
+    RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, nick));
 }
 
 void HWNewNet::ToggleReady()
@@ -185,7 +185,7 @@ void HWNewNet::SendNet(const QByteArray & buf)
 {
     QString msg = QString(buf.toBase64());
 
-    RawSendNet(QStringLiteral("EM%1%2").arg(delimiter).arg(msg));
+    RawSendNet(QStringLiteral("EM%1%2").arg(delimiter, msg));
 }
 
 int HWNewNet::ByteLength(const QString & str)
@@ -285,8 +285,8 @@ void HWNewNet::ContinueConnection()
 {
     if (netClientState == Connected)    
     {
-        RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter).arg(mynick));
-        RawSendNet(QStringLiteral("PROTO%1%2").arg(delimiter).arg(cProtoVer));
+        RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, mynick));
+        RawSendNet(QStringLiteral("PROTO%1%2").arg(delimiter, cProtoVer));
         m_game_connected = true;
         Q_EMIT adminAccess(false);
     }
@@ -360,7 +360,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             // TODO: Warn user, disconnect
             qWarning() << "Server too old";
-            RawSendNet(QStringLiteral("QUIT%1%2").arg(delimiter).arg("Server too old"));
+            RawSendNet(QStringLiteral("QUIT%1%2").arg(delimiter, "Server too old"));
             Disconnect();
             Q_EMIT disconnected(
                 tr("The server is too old. Disconnecting now."));
@@ -401,7 +401,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == QLatin1String("PING"))
     {
         if (lst.size() > 1)
-            RawSendNet(QStringLiteral("PONG%1%2").arg(delimiter).arg(lst[1]));
+            RawSendNet(QStringLiteral("PONG%1%2").arg(delimiter, lst[1]));
         else
             RawSendNet(QStringLiteral("PONG"));
         return;
@@ -816,7 +816,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
 
             Q_EMIT chatStringFromNet(
-                tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+                tr("%1 *** %2 has joined the room").arg('\x03', lst[i]));
         }
         return;
     }
@@ -973,8 +973,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
                 if(!m_playersModel->isFlagSet(lst[i], PlayersListModel::Ignore))
                   Q_EMIT chatStringFromNet(tr("%1 *** %2 has joined the room")
-                                               .arg('\x03')
-                                               .arg(lst[i]));
+                                               .arg('\x03', lst[i]));
             }
             return;
         }
@@ -991,16 +990,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 				if (lst.size() < 3)
                                   Q_EMIT chatStringFromNet(
                                       tr("%1 *** %2 has left")
-                                          .arg('\x03')
-                                          .arg(lst[1]));
+                                          .arg('\x03', lst[1]));
                                 else
 				{
 					QString leaveMsg = QString(lst[2]);
                                         Q_EMIT chatStringFromNet(
                                             tr("%1 *** %2 has left (%3)")
-                                                .arg('\x03')
-                                                .arg(lst[1])
-                                                .arg(HWApplication::translate(
+                                                .arg('\x03', lst[1], HWApplication::translate(
                                                     "server",
                                                     leaveMsg.toLatin1()
                                                         .constData())));
@@ -1018,8 +1014,7 @@ void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
     if (isChief)
         RawSendNet(QStringLiteral("HH_NUM%1%2%1%3")
-                   .arg(delimiter)
-                   .arg(team.name())
+                   .arg(delimiter, team.name())
                    .arg(team.numHedgehogs()));
 }
 
@@ -1027,8 +1022,7 @@ void HWNewNet::onTeamColorChanged(const HWTeam& team)
 {
     if (isChief)
         RawSendNet(QStringLiteral("TEAM_COLOR%1%2%1%3")
-                   .arg(delimiter)
-                   .arg(team.name())
+                   .arg(delimiter, team.name())
                    .arg(team.color()));
 }
 
@@ -1037,9 +1031,7 @@ void HWNewNet::onParamChanged(const QString & param, const QStringList & value)
     if (isChief)
         RawSendNet(
             QStringLiteral("CFG%1%2%1%3")
-            .arg(delimiter)
-            .arg(param)
-            .arg(value.join(QString(delimiter)))
+            .arg(delimiter, param, value.join(QString(delimiter)))
         );
 }
 
@@ -1122,7 +1114,7 @@ void HWNewNet::gameFinished(bool correctly)
     if (netClientState == InGame)
     {
         netClientState = InRoom;
-        RawSendNet(QStringLiteral("ROUNDFINISHED%1%2").arg(delimiter).arg(correctly ? "1" : "0"));
+        RawSendNet(QStringLiteral("ROUNDFINISHED%1%2").arg(delimiter, correctly ? "1" : "0"));
     }
     else if (netClientState == InDemo)
     {
@@ -1135,17 +1127,17 @@ void HWNewNet::gameFinished(bool correctly)
 
 void HWNewNet::banPlayer(const QString & nick)
 {
-    RawSendNet(QStringLiteral("BAN%1%2").arg(delimiter).arg(nick));
+    RawSendNet(QStringLiteral("BAN%1%2").arg(delimiter, nick));
 }
 
 void HWNewNet::banIP(const QString & ip, const QString & reason, int seconds)
 {
-    RawSendNet(QStringLiteral("BANIP%1%2%1%3%1%4").arg(delimiter).arg(ip).arg(reason).arg(seconds));
+    RawSendNet(QStringLiteral("BANIP%1%2%1%3%1%4").arg(delimiter, ip, reason).arg(seconds));
 }
 
 void HWNewNet::banNick(const QString & nick, const QString & reason, int seconds)
 {
-    RawSendNet(QStringLiteral("BANNICK%1%2%1%3%1%4").arg(delimiter).arg(nick).arg(reason).arg(seconds));
+    RawSendNet(QStringLiteral("BANNICK%1%2%1%3%1%4").arg(delimiter, nick, reason).arg(seconds));
 }
 
 void HWNewNet::getBanList()
@@ -1155,36 +1147,36 @@ void HWNewNet::getBanList()
 
 void HWNewNet::removeBan(const QString & b)
 {
-    RawSendNet(QStringLiteral("UNBAN%1%2").arg(delimiter).arg(b));
+    RawSendNet(QStringLiteral("UNBAN%1%2").arg(delimiter, b));
 }
 
 void HWNewNet::kickPlayer(const QString & nick)
 {
-    RawSendNet(QStringLiteral("KICK%1%2").arg(delimiter).arg(nick));
+    RawSendNet(QStringLiteral("KICK%1%2").arg(delimiter, nick));
 }
 
 void HWNewNet::delegateToPlayer(const QString & nick)
 {
-    RawSendNet(QStringLiteral("DELEGATE%1%2").arg(delimiter).arg(nick));
+    RawSendNet(QStringLiteral("DELEGATE%1%2").arg(delimiter, nick));
 }
 
 void HWNewNet::infoPlayer(const QString & nick)
 {
-    RawSendNet(QStringLiteral("INFO%1%2").arg(delimiter).arg(nick));
+    RawSendNet(QStringLiteral("INFO%1%2").arg(delimiter, nick));
 }
 
 void HWNewNet::followPlayer(const QString & nick)
 {
     if (!isInRoom())
     {
-        RawSendNet(QStringLiteral("FOLLOW%1%2").arg(delimiter).arg(nick));
+        RawSendNet(QStringLiteral("FOLLOW%1%2").arg(delimiter, nick));
         isChief = false;
     }
 }
 
 void HWNewNet::consoleCommand(const QString & cmd)
 {
-    RawSendNet(QStringLiteral("CMD%1%2").arg(delimiter).arg(cmd));
+    RawSendNet(QStringLiteral("CMD%1%2").arg(delimiter, cmd));
 }
 
 bool HWNewNet::allPlayersReady()
@@ -1203,7 +1195,7 @@ void HWNewNet::startGame()
 
 void HWNewNet::updateRoomName(const QString & name)
 {
-    RawSendNet(QStringLiteral("ROOM_NAME%1%2").arg(delimiter).arg(name));
+    RawSendNet(QStringLiteral("ROOM_NAME%1%2").arg(delimiter, name));
 }
 
 
@@ -1241,12 +1233,12 @@ bool HWNewNet::isInRoom()
 
 void HWNewNet::setServerMessageNew(const QString & msg)
 {
-    RawSendNet(QStringLiteral("SET_SERVER_VAR%1MOTD_NEW%1%2").arg(delimiter).arg(msg));
+    RawSendNet(QStringLiteral("SET_SERVER_VAR%1MOTD_NEW%1%2").arg(delimiter, msg));
 }
 
 void HWNewNet::setServerMessageOld(const QString & msg)
 {
-    RawSendNet(QStringLiteral("SET_SERVER_VAR%1MOTD_OLD%1%2").arg(delimiter).arg(msg));
+    RawSendNet(QStringLiteral("SET_SERVER_VAR%1MOTD_OLD%1%2").arg(delimiter, msg));
 }
 
 void HWNewNet::setLatestProtocolVar(int proto)
@@ -1319,5 +1311,5 @@ void HWNewNet::maybeSendPassword()
                                             QCryptographicHash::Sha1)
                        .toHex();
 
-    RawSendNet(QStringLiteral("PASSWORD%1%2%1%3").arg(delimiter).arg(hash).arg(m_clientSalt));
+    RawSendNet(QStringLiteral("PASSWORD%1%2%1%3").arg(delimiter, hash).arg(m_clientSalt));
 }

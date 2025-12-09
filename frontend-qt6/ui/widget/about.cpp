@@ -179,7 +179,7 @@ QString About::getCreditsHtml()
                 if(!nick.isEmpty())
                     nick= QStringLiteral("<span class=\"nick\">")+nick+QStringLiteral("</span>");
                 if(!name.isEmpty() && !nick.isEmpty())
-                    showName = tr("%1 (alias %2)").arg(name).arg(nick);
+                    showName = tr("%1 (alias %2)").arg(name, nick);
                 else if(name.isEmpty() && !nick.isEmpty())
                     showName = nick;
                 else if(!name.isEmpty() && nick.isEmpty())
@@ -200,15 +200,14 @@ QString About::getCreditsHtml()
                 {
                     // Name and e-mail
                     //: Part of credits. %1: Contributor name. %2: E-mail address
-                    out = out + QStringLiteral("<li>") + tr("%1 &lt;%2&gt;").arg(showName).arg(mailLink) + QStringLiteral("</li>\n");
+                    out = out + QStringLiteral("<li>") + tr("%1 &lt;%2&gt;").arg(showName, mailLink) + QStringLiteral("</li>\n");
                 }
                 else if(mail.isEmpty())
                 {
                     // Contribution and name
                     //: Part of credits. %1: Description of contribution. %2: Contributor name
                     out = out + QStringLiteral("<li>") + tr("%1: %2")
-                        .arg(HWApplication::translate("credits", task.toLatin1().constData()))
-                        .arg(showName)
+                        .arg(HWApplication::translate("credits", task.toLatin1().constData()), showName)
                         + QStringLiteral("</li>\n");
                 }
                 else
@@ -216,9 +215,7 @@ QString About::getCreditsHtml()
                     // Contribution, name and e-mail
                     //: Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address
                     out = out + QStringLiteral("<li>") + tr("%1: %2 &lt;%3&gt;")
-                        .arg(HWApplication::translate("credits", task.toLatin1().constData()))
-                        .arg(showName)
-                        .arg(mailLink)
+                        .arg(HWApplication::translate("credits", task.toLatin1().constData()), showName, mailLink)
                         + QStringLiteral("</li>\n");
                 }
             }

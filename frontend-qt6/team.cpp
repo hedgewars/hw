@@ -259,19 +259,19 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
 
     if (m_isNetTeam)
     {
-        sl.push_back(QStringLiteral("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toUtf8(), QCryptographicHash::Md5).toHex())));
+        sl.push_back(QStringLiteral("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name, QString(QCryptographicHash::hash(m_owner.toUtf8(), QCryptographicHash::Md5).toHex())));
         sl.push_back(QStringLiteral("erdriven"));
     }
     else
     {
         if (m_isMissionTeam)
         {
-            sl.push_back(QStringLiteral("esetmissteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
+            sl.push_back(QStringLiteral("esetmissteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name, playerHash));
             cmdAddHog = QStringLiteral("eaddmisshh");
         }
         else
         {
-            sl.push_back(QStringLiteral("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
+            sl.push_back(QStringLiteral("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name, playerHash));
         }
     }
 

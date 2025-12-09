@@ -86,10 +86,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
         "<h4>%3 <a href=\"https://hedgewars.org/kb/KnownBugs\">known bugs</a><h4>"
         "<h4>%4<h4>"
         "</div>")
-        .arg(tr("Send us feedback!"))
-        .arg(tr("We are always happy about suggestions, ideas, or bug reports."))
-        .arg(tr("If you found a bug, you can see if it's already been reported here: "))
-        .arg(tr("Your email address is optional, but necessary if you want us to get back at you."))
+        .arg(tr("Send us feedback!"), tr("We are always happy about suggestions, ideas, or bug reports."), tr("If you found a bug, you can see if it's already been reported here: "), tr("Your email address is optional, but necessary if you want us to get back at you."))
     );
     info->setOpenExternalLinks(true);
     pageLayout->addWidget(info);

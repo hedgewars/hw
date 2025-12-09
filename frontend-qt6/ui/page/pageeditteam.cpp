@@ -668,7 +668,7 @@ void PageEditTeam::saveTeam()
         QMessageBox teamNameFixedMsg(this);
         teamNameFixedMsg.setIcon(QMessageBox::Warning);
         teamNameFixedMsg.setWindowTitle(QMessageBox::tr("Teams - Name already taken"));
-        teamNameFixedMsg.setText(QMessageBox::tr("The team name '%1' is already taken, so your team has been renamed to '%2'.").arg(origName).arg(team.name()));
+        teamNameFixedMsg.setText(QMessageBox::tr("The team name '%1' is already taken, so your team has been renamed to '%2'.").arg(origName, team.name()));
         teamNameFixedMsg.setTextFormat(Qt::PlainText);
         teamNameFixedMsg.setWindowModality(Qt::WindowModal);
         teamNameFixedMsg.setStandardButtons(QMessageBox::Ok);
