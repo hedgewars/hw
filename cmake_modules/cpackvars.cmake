@@ -12,7 +12,7 @@ else()
 	else()
 		set(full_suffix "${HEDGEWARS_VERSION}")
 	endif()
-endif(NOT SERVERONLY)
+endif()
 
 # CPack variables
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hedgewars, a free turn-based strategy game")

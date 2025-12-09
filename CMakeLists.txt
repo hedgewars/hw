@@ -289,7 +289,7 @@ if(ANDROID)
 else(ANDROID)
     #skip frontend for javascript
     if(NOT BUILD_ENGINE_JS)
-        add_subdirectory(QTfrontend)
+        add_subdirectory(frontend-qt6)
         add_subdirectory(share)
     endif()
 

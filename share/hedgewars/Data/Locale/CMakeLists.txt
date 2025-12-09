@@ -1,18 +1,18 @@
-find_package(Qt5 COMPONENTS LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
 
-file(GLOB txttrans2 ??.txt)
-file(GLOB txttrans5 ?????.txt)
-file(GLOB tsfiles hedgewars_*.ts)
-file(GLOB luafiles *.lua)
-file(GLOB missionfiles missions_*.txt)
-file(GLOB campaignfiles campaigns_*.txt)
-file(GLOB tipfiles tips_*.xml)
+file(GLOB txttrans2       CONFIGURE_DEPENDS ??.txt)
+file(GLOB txttrans5       CONFIGURE_DEPENDS ?????.txt)
+file(GLOB tsfiles         CONFIGURE_DEPENDS hedgewars_*.ts)
+file(GLOB luafiles        CONFIGURE_DEPENDS *.lua)
+file(GLOB missionfiles    CONFIGURE_DEPENDS missions_*.txt)
+file(GLOB campaignfiles   CONFIGURE_DEPENDS campaigns_*.txt)
+file(GLOB tipfiles        CONFIGURE_DEPENDS tips_*.xml)
 
-QT5_ADD_TRANSLATION(QM ${tsfiles})
+qt_add_translation(QM ${tsfiles})
 
-add_custom_target (release-translation ALL
-        DEPENDS ${QM}
-        COMMENT "Compiling ts files"
+add_custom_target(release-translation ALL
+    DEPENDS ${QM}
+    COMMENT "Compiling ts files"
 )
 
 install(FILES
