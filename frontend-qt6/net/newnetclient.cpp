@@ -296,7 +296,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 {
     qDebug() << "Server: " << lst;
 
-    if(!lst.size())
+    if(lst.isEmpty())
     {
         qWarning("Net client: Bad message");
         return;

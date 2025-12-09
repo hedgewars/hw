@@ -626,7 +626,7 @@ void HWMapContainer::setTheme(const QString & theme)
 {
     QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, theme);
 
-    if(mdl.size())
+    if(!mdl.isEmpty())
         updateTheme(mdl.at(0));
     else
         setMissingTheme(theme);
@@ -1333,7 +1333,7 @@ void HWMapContainer::setMaster(bool master)
         {
             // Set random theme if we don't have it
             QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, m_theme);
-            if(!mdl.size())
+            if(mdl.isEmpty())
                 setRandomTheme();
         }
     }

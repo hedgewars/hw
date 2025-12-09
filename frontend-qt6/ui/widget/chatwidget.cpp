@@ -633,7 +633,7 @@ void HWChatWidget::onKick()
 {
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
-    if(mil.size())
+    if(!mil.isEmpty())
         Q_EMIT kick(mil[0].data().toString());
 }
 
@@ -641,7 +641,7 @@ void HWChatWidget::onBan()
 {
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
-    if(mil.size())
+    if(!mil.isEmpty())
         Q_EMIT ban(mil[0].data().toString());
 }
 
@@ -649,7 +649,7 @@ void HWChatWidget::onDelegate()
 {
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
-    if(mil.size())
+    if(!mil.isEmpty())
         Q_EMIT delegate(mil[0].data().toString());
 }
 
@@ -657,7 +657,7 @@ void HWChatWidget::onInfo()
 {
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
-    if(mil.size())
+    if(!mil.isEmpty())
         Q_EMIT info(mil[0].data().toString());
 }
 
@@ -665,7 +665,7 @@ void HWChatWidget::onFollow()
 {
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
-    if(mil.size())
+    if(!mil.isEmpty())
         Q_EMIT follow(mil[0].data().toString());
 }
 
@@ -674,7 +674,7 @@ void HWChatWidget::onIgnore()
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
     QString nick;
-    if(mil.size())
+    if(!mil.isEmpty())
         nick = mil[0].data().toString();
     else
         nick = m_clickedNick;
@@ -705,7 +705,7 @@ void HWChatWidget::onIgnore()
         displayNotice(tr("%1 has been added to your ignore list").arg(linkedNick(nick)));
     }
 
-    if(mil.size())
+    if(!mil.isEmpty())
         chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
 }
 
@@ -714,7 +714,7 @@ void HWChatWidget::onFriend()
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
 
     QString nick;
-    if(mil.size())
+    if(!mil.isEmpty())
         nick = mil[0].data().toString();
     else
         nick = m_clickedNick;
@@ -744,7 +744,7 @@ void HWChatWidget::onFriend()
         displayNotice(tr("%1 has been added to your friends list").arg(linkedNick(nick)));
     }
 
-    if(mil.size())
+    if(!mil.isEmpty())
         chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
 }
 

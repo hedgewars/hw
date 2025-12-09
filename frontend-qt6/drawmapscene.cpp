@@ -366,7 +366,7 @@ void DrawMapScene::decode(QByteArray data)
         {
             isSpecial = false;
 
-            if(params.points.size())
+            if(!params.points.isEmpty())
             {
                 addPath(pointsToPath(params.points), load_pen);
 
@@ -402,7 +402,7 @@ void DrawMapScene::decode(QByteArray data)
             params.points.append(QPoint(px, py));
     }
 
-    if(params.points.size())
+    if(!params.points.isEmpty())
     {
         addPath(pointsToPath(params.points), load_pen);
         paths.prepend(params);
@@ -416,7 +416,7 @@ void DrawMapScene::decode(QByteArray data)
 
 void DrawMapScene::simplifyLast()
 {
-    if(!paths.size()) return;
+    if(paths.isEmpty()) return;
 
     QList<QPoint> points = paths.at(0).points;
 

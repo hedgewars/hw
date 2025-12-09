@@ -226,7 +226,7 @@ void PageGameStats::renderStats()
 
             QPainterPath path;
 
-            if (hps.size()) {
+            if (!hps.isEmpty()) {
                 path.moveTo(0, hps[0]);
                 if(minMaxValuesInitialized) {
                     minValue = qMin(minValue, hps[0]);

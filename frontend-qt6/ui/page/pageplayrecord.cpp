@@ -163,7 +163,7 @@ void PagePlayDemo::renameRecord()
         QLineEdit::Normal,
         finfo.completeBaseName().replace(QStringLiteral(".") + cProtoVer, QLatin1String("")), &ok);
 
-    if(ok && newname.size())
+    if(ok && !newname.isEmpty())
     {
       QString newfullname = QStringLiteral("%1/%2.%3.%4")
                                 .arg(finfo.absolutePath(), newname, cProtoVer, finfo.suffix());

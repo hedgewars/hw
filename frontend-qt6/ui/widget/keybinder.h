@@ -49,19 +49,19 @@ class KeyBinder : public QWidget
         bool checkConflictsWith(int bind, bool updateState);
 
     private:
-        QHash<QObject *, QTableWidgetItem *> * bindComboBoxCellMappings;
-        QHash<QTableWidgetItem *, QComboBox *> * bindCellComboBoxMappings;
-        QTableWidget * selectedBindTable;
-        QListWidget * catList;
-        QBoxLayout *bindingsPages;
-        QComboBox * CBBind[BINDS_NUMBER];
-        QLabel * conflictLabel;
-        QIcon * dropDownIcon;
-        QIcon * conflictIcon;
-        QString defaultText;
-        bool enableSignal;
-        QList<QTableWidgetItem*> conflictItems;
-        bool p_hasConflicts;
+     QHash<QObject *, QTableWidgetItem *> bindComboBoxCellMappings;
+     QHash<QTableWidgetItem *, QComboBox *> bindCellComboBoxMappings;
+     QTableWidget *selectedBindTable;
+     QListWidget *catList;
+     QBoxLayout *bindingsPages;
+     QComboBox *CBBind[BINDS_NUMBER];
+     QLabel *conflictLabel;
+     QIcon *dropDownIcon;
+     QIcon *conflictIcon;
+     QString defaultText;
+     bool enableSignal;
+     QList<QTableWidgetItem *> conflictItems;
+     bool p_hasConflicts;
 
     Q_SIGNALS:
         void bindUpdate(int bindID);

@@ -467,7 +467,7 @@ void GameCFGWidget::fullNetConfig()
 
     // map must be the last
     QString map = pMapContainer->getCurrentMap();
-    if (map.size())
+    if (!map.isEmpty())
         mapChanged(map);
 }
 

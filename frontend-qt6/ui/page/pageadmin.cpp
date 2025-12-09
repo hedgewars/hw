@@ -180,7 +180,7 @@ void PageAdmin::onRemoveClicked()
 {
     QList<QTableWidgetItem *> sel = twBans->selectedItems();
 
-    if(sel.size())
+    if(!sel.isEmpty())
     {
         Q_EMIT removeBan(twBans->item(sel[0]->row(), 0)->data(Qt::DisplayRole).toString());
         Q_EMIT bansListRequest();
