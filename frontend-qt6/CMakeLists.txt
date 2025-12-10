@@ -280,6 +280,8 @@ qt_add_executable(hedgewars
     util/MessageDialog.h
     util/namegen.cpp
     util/namegen.h
+    util/physfs_integration.cpp
+    util/physfs_integration.h
     util/platform/AutoUpdater.cpp
     util/platform/AutoUpdater.h
     util/platform/CocoaInitializer.h

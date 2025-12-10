@@ -34,6 +34,7 @@
 #include "SDLInteraction.h"
 #include "hwconsts.h"
 #include "hwform.h"
+#include "physfs_integration.h"
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -329,15 +330,13 @@ int main(int argc, char *argv[]) {
 
   bool isProbablyNewPlayer = false;
 
-  // setup PhysFS
-  /* FIXME:
-      engine = new FileEngineHandler(argv[0]);
-      engine->mount(datadir->absolutePath());
-      engine->mount(cfgdir->absolutePath() + "/Data");
-      engine->mount(cfgdir->absolutePath());
-      engine->setWriteDir(cfgdir->absolutePath());
-      engine->mountPacks();
-  */
+  auto &physfs = PhysFsManager::instance();
+  physfs.init(argv[0]);
+  physfs.mount(datadir.absolutePath());
+  physfs.mount(cfgdir.absolutePath() + "/Data");
+  physfs.mount(cfgdir.absolutePath());
+  physfs.setWriteDir(cfgdir.absolutePath());
+  physfs.mountPacks();
 
   QTranslator TranslatorHedgewars;
   QTranslator TranslatorQt;
@@ -513,5 +512,9 @@ int main(int argc, char *argv[]) {
   }
 
   if (app.urlString) app.fakeEvent();
-  return app.exec();
+  auto result = app.exec();
+
+  physfs.deinit();
+
+  return result;
 }

@@ -64,8 +64,8 @@ HWNewNet::HWNewNet()
   connect(&NetSocket, &QAbstractSocket::connected, this, &HWNewNet::OnConnect);
   connect(&NetSocket, &QAbstractSocket::disconnected, this,
           &HWNewNet::OnDisconnect);
-  connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-          SLOT(displayError(QAbstractSocket::SocketError)));
+  connect(&NetSocket, &QAbstractSocket::errorOccurred, this,
+          &HWNewNet::displayError);
 
   connect(this, &HWNewNet::messageProcessed, this, &HWNewNet::ClientRead,
           Qt::QueuedConnection);
