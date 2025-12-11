@@ -1058,16 +1058,16 @@ void HWMapContainer::updateTheme(const QModelIndex &current) {
 
 void HWMapContainer::staticMapChanged(const QModelIndex &map,
                                       const QModelIndex &old) {
-  mapChanged(map, 0, old);
+  onMapChanged(map, 0, old);
 }
 
 void HWMapContainer::missionMapChanged(const QModelIndex &map,
                                        const QModelIndex &old) {
-  mapChanged(map, 1, old);
+  onMapChanged(map, 1, old);
 }
 
 // Type: 0 = static, 1 = mission
-void HWMapContainer::mapChanged(const QModelIndex &map, int type,
+void HWMapContainer::onMapChanged(const QModelIndex &map, int type,
                                 const QModelIndex &old) {
   QListView *mapList;
 

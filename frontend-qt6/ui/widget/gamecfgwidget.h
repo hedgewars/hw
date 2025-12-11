@@ -72,9 +72,9 @@ class GameCFGWidget : public QGroupBox {
 
  private Q_SLOTS:
   void ammoChanged(int index);
+  void seedChanged(const QString&);
   void mapChanged(const QString&);
   void templateFilterChanged(int);
-  void seedChanged(const QString&);
   void themeChanged(const QString&);
   void schemeChanged(int);
   void updateSchemeEnabledStates(int scriptIndex);

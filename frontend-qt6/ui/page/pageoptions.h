@@ -171,7 +171,7 @@ class PageOptions : public AbstractPage {
   QComboBox *comboAudioCodecs;
   QPushButton *btnDefaults;
   QPushButton *btnUpdateNow;
-  GameUIConfig *config;
+  QPointer<GameUIConfig> config;
   KeyBinder *binder;
   int currentTab;
   int binderTab;

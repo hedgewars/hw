@@ -507,10 +507,6 @@ void HWChatWidget::nickAdded(const QString &nick, bool notifyNick) {
   }
 }
 
-void HWChatWidget::nickRemoved(const QString &nick) {
-  nickRemoved(nick, QLatin1String(""));
-}
-
 void HWChatWidget::nickRemoved(const QString &nick, const QString &message) {
   chatEditLine->removeNickname(nick);
 

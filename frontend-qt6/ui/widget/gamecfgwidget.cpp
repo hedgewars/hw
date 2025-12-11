@@ -203,8 +203,8 @@ GameCFGWidget::GameCFGWidget(QWidget *parent, bool randomWithoutDLC)
 
   connect(pMapContainer, &HWMapContainer::seedChanged, this,
           &GameCFGWidget::seedChanged);
-  connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this,
-          SLOT(mapChanged(const QString &)));
+  connect(pMapContainer, &HWMapContainer::mapChanged, this,
+          &GameCFGWidget::mapChanged);
   connect(pMapContainer, &HWMapContainer::mapgenChanged, this,
           &GameCFGWidget::mapgenChanged);
   connect(pMapContainer, &HWMapContainer::mazeSizeChanged, this,

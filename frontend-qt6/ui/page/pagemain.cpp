@@ -142,14 +142,10 @@ QLayout* PageMain::footerLayoutDefinition() {
 
 void PageMain::connectSignals() {
 #ifndef QT_DEBUG
-  connect(this, SIGNAL(pageEnter()), this, SLOT(updateTip()));
+  connect(this, &AbstractPage::pageEnter, this, &PageMain::updateTip);
 #endif
   connect(BtnNet, &QAbstractButton::clicked, this,
           &PageMain::toggleNetworkChoice);
-  // connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
-  // connect(BtnNetOfficial, SIGNAL(clicked()), this,
-  // SLOT(toggleNetworkChoice()));
-  //  TODO: add signal-forwarding required by (currently missing) encapsulation
 }
 
 PageMain::PageMain(QWidget* parent) : AbstractPage(parent) {

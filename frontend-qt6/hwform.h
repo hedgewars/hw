@@ -72,7 +72,7 @@ class HWForm : public QMainWindow {
   void NetConnectQuick(const QString &host, quint16 port);
   void PlayDemoQuick(const QString &demofilename);
 
- private Q_SLOTS:
+ public Q_SLOTS:
   void GoToSaves();
   void GoToDemos();
   void GoToNet();

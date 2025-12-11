@@ -34,16 +34,14 @@ void TeamSelWidget::addTeam(const HWTeam& team) {
   if (team.isNetTeam()) {
     framePlaying->addTeam(team, true);
     curPlayingTeams.push_back(team);
-    connect(framePlaying->getTeamWidget(team),
-            SIGNAL(hhNmChanged(const HWTeam&)), this,
-            SLOT(hhNumChanged(const HWTeam&)));
+    connect(framePlaying->getTeamWidget(team), &TeamShowWidget::hhNmChanged,
+            this, &TeamSelWidget::hhNumChanged);
     blockSignals(true);
-    dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))
-        ->hhNumChanged();
+    framePlaying->getTeamWidget(team)->hhNumChanged();
     blockSignals(false);
     connect(framePlaying->getTeamWidget(team),
-            SIGNAL(teamColorChanged(const HWTeam&)), this,
-            SLOT(proxyTeamColorChanged(const HWTeam&)));
+            &TeamShowWidget::teamColorChanged, this,
+            &TeamSelWidget::proxyTeamColorChanged);
 
     // Hide team notice if at least two teams.
     if (curPlayingTeams.size() >= 2) {
@@ -54,12 +52,12 @@ void TeamSelWidget::addTeam(const HWTeam& team) {
     m_curNotPlayingTeams.push_back(team);
     if (m_acceptOuter) {
       connect(framNotPlaying->getTeamWidget(team),
-              SIGNAL(teamStatusChanged(HWTeam)), this,
-              SLOT(pre_changeTeamStatus(HWTeam)));
+              &TeamShowWidget::teamStatusChanged, this,
+              &TeamSelWidget::pre_changeTeamStatus);
     } else {
       connect(framNotPlaying->getTeamWidget(team),
-              SIGNAL(teamStatusChanged(HWTeam)), this,
-              SLOT(changeTeamStatus(HWTeam)));
+              &TeamShowWidget::teamStatusChanged, this,
+              &TeamSelWidget::changeTeamStatus);
     }
   }
 
@@ -134,8 +132,12 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team) {
   }
 
   if (itPlay->isNetTeam()) {
-    QObject::disconnect(framePlaying->getTeamWidget(*itPlay),
-                        SIGNAL(teamStatusChanged(HWTeam)));
+    disconnect(framePlaying->getTeamWidget(*itPlay),
+               &TeamShowWidget::teamStatusChanged, this,
+               &TeamSelWidget::pre_changeTeamStatus);
+    disconnect(framePlaying->getTeamWidget(*itPlay),
+               &TeamShowWidget::teamStatusChanged, this,
+               &TeamSelWidget::changeTeamStatus);
     framePlaying->removeTeam(team);
     curPlayingTeams.erase(itPlay);
     // Show team notice if less than two teams.
@@ -163,7 +165,11 @@ void TeamSelWidget::cleanupFakeNetTeams() {
       qDebug() << QStringLiteral("cleanupFakeNetTeams: team '%1' removed")
                       .arg(itPlay->name());
       QObject::disconnect(framePlaying->getTeamWidget(*itPlay),
-                          SIGNAL(teamStatusChanged(HWTeam)));
+                          &TeamShowWidget::teamStatusChanged, this,
+                          &TeamSelWidget::pre_changeTeamStatus);
+      QObject::disconnect(framePlaying->getTeamWidget(*itPlay),
+                          &TeamShowWidget::teamStatusChanged, this,
+                          &TeamSelWidget::changeTeamStatus);
       framePlaying->removeTeam(*itPlay);
       itPlay = curPlayingTeams.erase(itPlay);
     } else
@@ -227,25 +233,23 @@ void TeamSelWidget::changeTeamStatus(HWTeam team) {
   pRemoveTeams->removeTeam(team);
   if (!team.isNetTeam() && m_acceptOuter && !willBePlaying) {
     connect(framNotPlaying->getTeamWidget(team),
-            SIGNAL(teamStatusChanged(HWTeam)), this,
-            SLOT(pre_changeTeamStatus(HWTeam)));
+            &TeamShowWidget::teamStatusChanged, this,
+            &TeamSelWidget::pre_changeTeamStatus);
   } else {
-    connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-            this, SLOT(changeTeamStatus(HWTeam)));
+    connect(pAddTeams->getTeamWidget(team), &TeamShowWidget::teamStatusChanged,
+            this, &TeamSelWidget::changeTeamStatus);
   }
   if (willBePlaying) {
-    connect(framePlaying->getTeamWidget(team),
-            SIGNAL(hhNmChanged(const HWTeam&)), this,
-            SLOT(hhNumChanged(const HWTeam&)));
+    connect(framePlaying->getTeamWidget(team), &TeamShowWidget::hhNmChanged,
+            this, &TeamSelWidget::hhNumChanged);
     blockSignals(true);
     dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))
         ->hhNumChanged();
     blockSignals(false);
     connect(framePlaying->getTeamWidget(team),
-            SIGNAL(teamColorChanged(const HWTeam&)), this,
-            SLOT(proxyTeamColorChanged(const HWTeam&)));
-    Q_EMIT teamColorChanged(
-        ((TeamShowWidget*)framePlaying->getTeamWidget(team))->getTeam());
+            &TeamShowWidget::teamColorChanged, this,
+            &TeamSelWidget::proxyTeamColorChanged);
+    Q_EMIT teamColorChanged((framePlaying->getTeamWidget(team))->getTeam());
   }
 
   QSize szh = pAddTeams->sizeHint();

@@ -97,10 +97,7 @@ void PlayersListModel::addPlayer(const QString &nickname, bool notify) {
 
 void PlayersListModel::removePlayer(const QString &nickname,
                                     const QString &msg) {
-  if (msg.isEmpty())
-    Q_EMIT nickRemovedLobby(nickname);
-  else
-    Q_EMIT nickRemovedLobby(nickname, msg);
+  Q_EMIT nickRemovedLobby(nickname, msg);
 
   QModelIndex mi = nicknameIndex(nickname);
 
@@ -120,7 +117,7 @@ void PlayersListModel::playerJoinedRoom(const QString &nickname, bool notify) {
 }
 
 void PlayersListModel::playerLeftRoom(const QString &nickname) {
-  Q_EMIT nickRemoved(nickname);
+  Q_EMIT nickRemoved(nickname, {});
 
   QModelIndex mi = nicknameIndex(nickname);
 

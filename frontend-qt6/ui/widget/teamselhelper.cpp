@@ -86,7 +86,6 @@ TeamShowWidget::TeamShowWidget(const HWTeam& team, bool isPlaying,
 
   QObject::connect(butt, &QAbstractButton::clicked, this,
                    &TeamShowWidget::activateTeam);
-  // QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
 }
 
 void TeamShowWidget::setInteractivity(bool interactive) {

@@ -24,13 +24,14 @@
 #ifndef ABSTRACTPAGE_H
 #define ABSTRACTPAGE_H
 
-#include <qpushbuttonwithsound.h>
-
 #include <QComboBox>
 #include <QFont>
 #include <QGridLayout>
+#include <QPointer>
 #include <QSignalMapper>
 #include <QWidget>
+
+#include "qpushbuttonwithsound.h"
 
 class QPushButtonWithSound;
 class QGroupBox;
@@ -222,10 +223,10 @@ class AbstractPage : public QWidget {
 
   QFont* font14;  ///< used font
 
-  QLabel* descLabel;  ///< text description
+  QPointer<QLabel> descLabel;  ///< text description
   QString* defautDesc;
 
-  QPushButtonWithSound* btnBack;  ///< back button
+  QPointer<QPushButtonWithSound> btnBack;  ///< back button
 };
 
 #endif

@@ -59,9 +59,8 @@ class PlayersListModel : public QAbstractListModel {
 
  Q_SIGNALS:
   void nickAdded(const QString &nick, bool notifyNick);
-  void nickRemoved(const QString &nick);
+  void nickRemoved(const QString &nick, const QString &message);
   void nickAddedLobby(const QString &nick, bool notifyNick);
-  void nickRemovedLobby(const QString &nick);
   void nickRemovedLobby(const QString &nick, const QString &message);
 
  private:

@@ -47,8 +47,8 @@ GameUIConfig::GameUIConfig(HWForm *FormWidgets, const QString &fileName)
     : QSettings(fileName, QSettings::IniFormat, FormWidgets) {
   Form = FormWidgets;
 
-  connect(Form->ui.pageOptions->CBFrontendMusic, SIGNAL(toggled(bool)), Form,
-          SLOT(Music(bool)));
+  connect(Form->ui.pageOptions->CBFrontendMusic, &QAbstractButton::toggled,
+          Form, &HWForm::Music);
 
   for (int i = 0; i < BINDS_NUMBER; i++) {
     m_binds.append(BindAction());

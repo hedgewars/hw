@@ -218,9 +218,6 @@ HWForm::HWForm(QWidget *parent, const QString &styleSheet)
   QShortcut *closeFrontend =
       new QShortcut(QKeySequence(QStringLiteral("Ctrl+Q")), this);
   connect(closeFrontend, &QShortcut::activated, this, &QWidget::close);
-  // QShortcut * updateData = new QShortcut(QKeySequence("F5"), this);
-  // connect (updateData, SIGNAL(activated()), &DataManager::instance(),
-  // SLOT(reload()));
 #endif
 
   previousCampaignName = QLatin1String("");
@@ -237,33 +234,34 @@ HWForm::HWForm(QWidget *parent, const QString &styleSheet)
   int nPages = ui.Pages->count();
 
   for (int i = 0; i < nPages; i++)
-    connect(ui.Pages->widget(i), SIGNAL(goBack()), this, SLOT(GoBack()));
+    connect(qobject_cast<AbstractPage *>(ui.Pages->widget(i)),
+            &AbstractPage::goBack, this, &HWForm::GoBack);
 
   pageSwitchMapper = new QSignalMapper(this);
   connect(pageSwitchMapper, &QSignalMapper::mappedInt, this, &HWForm::GoToPage);
 
-  connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageMain->BtnSinglePlayer, &QPushButton::clicked, pageSwitchMapper,
+          qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageMain->BtnSinglePlayer,
                                ID_PAGE_SINGLEPLAYER);
 
-  connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageMain->BtnSetup, &QPushButton::clicked, pageSwitchMapper,
+          qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
 
   connect(ui.pageMain->BtnFeedback, &QAbstractButton::clicked, this,
           &HWForm::showFeedbackDialog);
 
-  connect(ui.pageMain->BtnTitle, SIGNAL(clicked()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageMain->BtnTitle, &QPushButton::clicked, pageSwitchMapper,
+          qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageMain->BtnTitle, ID_PAGE_INFO);
 
-  connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageMain->BtnInfo, &QPushButton::clicked, pageSwitchMapper,
+          qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_INFO);
 
-  connect(ui.pageMain->BtnDataDownload, SIGNAL(clicked()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageMain->BtnDataDownload, &QPushButton::clicked, pageSwitchMapper,
+          qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageMain->BtnDataDownload,
                                ID_PAGE_DATADOWNLOAD);
 
@@ -271,14 +269,10 @@ HWForm::HWForm(QWidget *parent, const QString &styleSheet)
           &HWForm::GoToHelp);
 
 #ifdef VIDEOREC
-  connect(ui.pageMain->BtnVideos, SIGNAL(clicked()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageMain->BtnVideos, &QPushButton::clicked, pageSwitchMapper,
+          qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageMain->BtnVideos, ID_PAGE_VIDEOS);
 #endif
-
-  // connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this,
-  // SLOT(btnExitPressed())); connect(ui.pageMain->BtnExit, SIGNAL(clicked()),
-  // this, SLOT(btnExitClicked()));
 
   connect(ui.pageEditTeam, &AbstractPage::goBack, this, &HWForm::AfterTeamEdit);
 
@@ -292,14 +286,14 @@ HWForm::HWForm(QWidget *parent, const QString &styleSheet)
           &HWForm::GoToScheme);
   connect(ui.pageMultiplayer->gameCFG, &GameCFGWidget::goToWeapons, this,
           &HWForm::GoToWeapons);
-  connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageMultiplayer->gameCFG, &GameCFGWidget::goToDrawMap,
+          pageSwitchMapper, qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageMultiplayer->gameCFG, ID_PAGE_DRAWMAP);
 
   connect(ui.pagePlayDemo->BtnPlayDemo, &QAbstractButton::clicked, this,
           &HWForm::PlayDemo);
-  connect(ui.pagePlayDemo->DemosList,
-          SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(PlayDemo()));
+  connect(ui.pagePlayDemo->DemosList, &QAbstractItemView::doubleClicked, this,
+          &HWForm::PlayDemo);
 
   connect(ui.pageOptions, &PageOptions::newTeamRequested, this,
           &HWForm::NewTeam);
@@ -331,8 +325,8 @@ HWForm::HWForm(QWidget *parent, const QString &styleSheet)
 
   connect(ui.pageNet->BtnSpecifyServer, &QAbstractButton::clicked, this,
           &HWForm::NetConnect);
-  connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageNet->BtnNetSvrStart, &QPushButton::clicked, pageSwitchMapper,
+          qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageNet->BtnNetSvrStart, ID_PAGE_NETSERVER);
 
   connect(ui.pageNet, &PageNet::connectClicked, this,
@@ -349,12 +343,12 @@ HWForm::HWForm(QWidget *parent, const QString &styleSheet)
           &HWForm::GoToScheme);
   connect(ui.pageNetGame->pGameCFG, &GameCFGWidget::goToWeapons, this,
           &HWForm::GoToWeapons);
-  connect(ui.pageNetGame->pGameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageNetGame->pGameCFG, &GameCFGWidget::goToDrawMap,
+          pageSwitchMapper, qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageNetGame->pGameCFG, ID_PAGE_DRAWMAP);
 
-  connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), pageSwitchMapper,
-          SLOT(map()));
+  connect(ui.pageRoomsList->BtnAdmin, &QPushButton::clicked, pageSwitchMapper,
+          qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageRoomsList->BtnAdmin, ID_PAGE_ADMIN);
 
   connect(ui.pageInfo->BtnSnapshots, &QAbstractButton::clicked, this,
@@ -367,18 +361,18 @@ HWForm::HWForm(QWidget *parent, const QString &styleSheet)
 
   connect(ui.pageSinglePlayer->BtnSimpleGamePage, &QAbstractButton::clicked,
           this, &HWForm::SimpleGame);
-  connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()),
-          pageSwitchMapper, SLOT(map()));
+  connect(ui.pageSinglePlayer->BtnTrainPage, &QAbstractButton::clicked,
+          pageSwitchMapper, qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnTrainPage,
                                ID_PAGE_TRAINING);
 
-  connect(ui.pageSinglePlayer->BtnCampaignPage, SIGNAL(clicked()),
-          pageSwitchMapper, SLOT(map()));
+  connect(ui.pageSinglePlayer->BtnCampaignPage, &QAbstractButton::clicked,
+          pageSwitchMapper, qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnCampaignPage,
                                ID_PAGE_CAMPAIGN);
 
-  connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()),
-          pageSwitchMapper, SLOT(map()));
+  connect(ui.pageSinglePlayer->BtnMultiplayer, &QAbstractButton::clicked,
+          pageSwitchMapper, qOverload<>(&QSignalMapper::map));
   pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnMultiplayer,
                                ID_PAGE_MULTIPLAYER);
 
@@ -1463,8 +1457,6 @@ void HWForm::_NetConnect(const QString &hostName, quint16 port, bool useTls,
           Qt::QueuedConnection);
   connect(hwnet.data(), &HWNewNet::AuthFailed, this, &HWForm::NetAuthFailed,
           Qt::QueuedConnection);
-  // connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet,
-  // SLOT(partRoom()));
   connect(hwnet.data(), &HWNewNet::askForRoomPassword, this,
           &HWForm::askRoomPassword, Qt::QueuedConnection);
 
@@ -1485,10 +1477,6 @@ void HWForm::_NetConnect(const QString &hostName, quint16 port, bool useTls,
           &HWNewNet::CreateRoom);
   connect(ui.pageRoomsList, &PageRoomsList::askForJoinRoom, hwnet.data(),
           &HWNewNet::JoinRoom);
-  //  connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
-  //      this, SLOT(NetGameMaster()));
-  //  connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
-  //      this, SLOT(NetGameSlave()));
   connect(ui.pageRoomsList, &PageRoomsList::askForRoomList, hwnet.data(),
           &HWNewNet::askRoomsList);
 
@@ -1562,16 +1550,12 @@ void HWForm::_NetConnect(const QString &hostName, quint16 port, bool useTls,
           playersSortFilterModel->sourceModel());
       connect(players, &PlayersListModel::nickAdded, ui.pageNetGame->chatWidget,
               &HWChatWidget::nickAdded);
-      connect(players, SIGNAL(nickRemoved(const QString &)),
-              ui.pageNetGame->chatWidget, SLOT(nickRemoved(const QString &)));
+      connect(players, &PlayersListModel::nickRemoved,
+              ui.pageNetGame->chatWidget, &HWChatWidget::nickRemoved);
       connect(players, &PlayersListModel::nickAddedLobby,
               ui.pageRoomsList->chatWidget, &HWChatWidget::nickAdded);
-      connect(players, SIGNAL(nickRemovedLobby(const QString &)),
-              ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString &)));
-      connect(players,
-              SIGNAL(nickRemovedLobby(const QString &, const QString &)),
-              ui.pageRoomsList->chatWidget,
-              SLOT(nickRemoved(const QString &, const QString &)));
+      connect(players, &PlayersListModel::nickRemovedLobby,
+              ui.pageNetGame->chatWidget, &HWChatWidget::nickRemoved);
     }
   }
 

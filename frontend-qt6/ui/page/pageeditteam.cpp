@@ -273,11 +273,13 @@ void PageEditTeam::connectSignals() {
           &PageEditTeam::setRandomHogName);
 
   for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++) {
-    connect(HHNameEdit[i], SIGNAL(editingFinished()), signalMapper1,
-            SLOT(map()));
+    connect(HHNameEdit[i], &QLineEdit::editingFinished, signalMapper1,
+            qOverload<>(&QSignalMapper::map));
     signalMapper1->setMapping(HHNameEdit[i], i);
 
-    connect(btnRandomHogName[i], SIGNAL(clicked()), signalMapper2, SLOT(map()));
+    connect(btnRandomHogName[i], &QPushButton::clicked, signalMapper2,
+            qOverload<>(&QSignalMapper::map));
+
     signalMapper2->setMapping(btnRandomHogName[i], i);
   }
 

@@ -26,6 +26,7 @@
 
 #include "teamselect.h"
 
+class TeamShowWidget;
 class FrameTeams : public QFrame {
   Q_OBJECT
 
@@ -34,7 +35,7 @@ class FrameTeams : public QFrame {
 
  public:
   FrameTeams(QWidget* parent = 0);
-  QWidget* getTeamWidget(const HWTeam& team);
+  TeamShowWidget* getTeamWidget(const HWTeam& team);
   bool isFullTeams() const;
   void resetColors();
   void resetTeams();
@@ -61,7 +62,7 @@ class FrameTeams : public QFrame {
   void emitTeamColorChanged(const HWTeam& team);
 
   QVBoxLayout mainLayout;
-  typedef QMap<HWTeam, QWidget*> tmapTeamToWidget;
+  typedef QMap<HWTeam, TeamShowWidget*> tmapTeamToWidget;
   tmapTeamToWidget teamToWidget;
   bool nonInteractive;
 

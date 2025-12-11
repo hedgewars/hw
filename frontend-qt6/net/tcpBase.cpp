@@ -158,8 +158,7 @@ void TCPBase::RealStart() {
   thread->start();
 #else
   process = new QProcess(this);
-  connect(process, SIGNAL(error(QProcess::ProcessError)), this,
-          SLOT(StartProcessError(QProcess::ProcessError)));
+  connect(process, &QProcess::errorOccurred, this, &TCPBase::StartProcessError);
   connect(process, &QProcess::finished, this, &TCPBase::onEngineDeath);
   QStringList arguments = getArguments();
 

@@ -505,7 +505,8 @@ QLayout *PageOptions::bodyLayoutDefinition() {
             QStringLiteral("background: %1")
                 .arg(model->item(i)->data().value<QColor>().name()));
         m_colorButtons.append(btn);
-        connect(btn, SIGNAL(clicked()), mapper, SLOT(map()));
+        connect(btn, &QPushButton::clicked, mapper,
+                qOverload<>(&QSignalMapper::map));
         mapper->setMapping(btn, i);
       }
 
@@ -703,7 +704,7 @@ QLayout *PageOptions::bodyLayoutDefinition() {
       groupMisc->layout()->addWidget(CBLanguage, 0, 1);
       QStringList locs = DataManager::instance().entryList(
           QStringLiteral("Locale"), QDir::Files, QStringList("hedgewars_*.qm"));
-      QStringList langnames;
+
       CBLanguage->addItem(QComboBox::tr("(System default)"), QString());
       for (int i = 0; i < locs.count(); i++) {
         QString lname = locs[i].replace(
@@ -945,13 +946,14 @@ QLayout *PageOptions::footerLayoutDefinition() { return NULL; }
 
 void PageOptions::connectSignals() {
 #ifdef VIDEOREC
-  connect(checkUseGameRes, SIGNAL(stateChanged(int)), this,
-          SLOT(changeUseGameRes(int)));
-  connect(checkRecordAudio, SIGNAL(stateChanged(int)), this,
-          SLOT(changeRecordAudio(int)));
-  connect(comboAVFormats, SIGNAL(currentIndexChanged(int)), this,
-          SLOT(changeAVFormat(int)));
-  connect(btnDefaults, SIGNAL(clicked()), this, SLOT(setDefaultOptions()));
+  connect(checkUseGameRes, &QCheckBox::checkStateChanged, this,
+          &PageOptions::changeUseGameRes);
+  connect(checkRecordAudio, &QCheckBox::checkStateChanged, this,
+          &PageOptions::changeRecordAudio);
+  connect(comboAVFormats, &QComboBox::currentIndexChanged, this,
+          &PageOptions::changeAVFormat);
+  connect(btnDefaults, &QAbstractButton::clicked, this,
+          &PageOptions::setDefaultOptions);
 #endif
   // connect(this, SIGNAL(pageEnter()), this, SLOT(setTeamOptionsEnabled()));
   connect(SLVolume, &QAbstractSlider::valueChanged, this,
@@ -989,9 +991,7 @@ void PageOptions::setupTabPage(QWidget *tabpage, QVBoxLayout **leftColumn,
   twoColumns->addStretch(4);
 }
 
-PageOptions::PageOptions(QWidget *parent) : AbstractPage(parent), config(0) {
-  initPage();
-}
+PageOptions::PageOptions(QWidget *parent) : AbstractPage(parent) { initPage(); }
 
 void PageOptions::forceFullscreen(int index) {
   bool forced = (index == 7 || index == 8 || index == 9);

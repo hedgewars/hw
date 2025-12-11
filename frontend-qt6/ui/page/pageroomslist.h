@@ -19,6 +19,7 @@
 #ifndef PAGE_ROOMLIST_H
 #define PAGE_ROOMLIST_H
 
+#include <QPointer>
 #include <QTableView>
 
 #include "AbstractPage.h"
@@ -29,6 +30,7 @@ class QTableView;
 class RoomsListModel;
 class QSortFilterProxyModel;
 class QSplitter;
+class LineEditCursor;
 
 class RoomTableView : public QTableView {
   Q_OBJECT
@@ -50,7 +52,7 @@ class PageRoomsList : public AbstractPage {
   void displayWarning(const QString &message);
   void setSettings(QSettings *settings);
 
-  QLineEdit *searchText;
+  LineEditCursor *searchText;
   RoomTableView *roomsList;
   QPushButton *BtnCreate;
   QPushButton *BtnJoin;
@@ -91,9 +93,9 @@ class PageRoomsList : public AbstractPage {
 
  private:
   QSettings *m_gameSettings;
-  QSortFilterProxyModel *roomsModel;
-  QSortFilterProxyModel *stateFilteredModel;
-  QSortFilterProxyModel *versionFilteredModel;
+  QPointer<QSortFilterProxyModel> roomsModel;
+  QPointer<QSortFilterProxyModel> stateFilteredModel;
+  QPointer<QSortFilterProxyModel> versionFilteredModel;
   QAction *showGamesInLobby;
   QAction *showGamesInProgress;
   QAction *showPassword;

@@ -103,24 +103,21 @@ void FrameTeams::resetTeams() {
 }
 
 void FrameTeams::setHHNum(const HWTeam& team) {
-  TeamShowWidget* pTeamShowWidget =
-      dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
+  auto pTeamShowWidget = getTeamWidget(team);
   if (!pTeamShowWidget) return;
   pTeamShowWidget->setHHNum(team.numHedgehogs());
 }
 
 void FrameTeams::setTeamColor(const HWTeam& team) {
-  TeamShowWidget* pTeamShowWidget =
-      dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
+  auto pTeamShowWidget = getTeamWidget(team);
   if (!pTeamShowWidget) return;
   pTeamShowWidget->changeTeamColor(team.color());
 }
 
-QWidget* FrameTeams::getTeamWidget(const HWTeam& team) {
+TeamShowWidget* FrameTeams::getTeamWidget(const HWTeam& team) {
   // qDebug() << "FrameTeams::getTeamWidget getNetID() = " << team.getNetID();
   auto it = teamToWidget.constFind(team);
-  QWidget* ret = it != teamToWidget.end() ? it.value() : 0;
-  return ret;
+  return it != teamToWidget.end() ? it.value() : nullptr;
 }
 
 bool FrameTeams::isFullTeams() const {

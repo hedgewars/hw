@@ -111,8 +111,7 @@ class HWChatWidget : public QWidget {
   void onChatMessage(const QString& nick, const QString& str);
   void onServerMessage(const QString& str);
   void nickAdded(const QString& nick, bool notifyNick);
-  void nickRemoved(const QString& nick);
-  void nickRemoved(const QString& nick, const QString& message);
+  void nickRemoved(const QString& nick, const QString& message = {});
   void clear();
   void adminAccess(bool);
   void onPlayerInfo(const QString& nick, const QString& ip,

@@ -65,17 +65,17 @@ class PageEditTeam : public AbstractPage {
   QGroupBox *GBoxBinds;
   QToolBox *BindsBox;
   QLineEdit *TeamNameEdit;
-  QLineEdit *HHNameEdit[HEDGEHOGS_PER_TEAM];
-  HatButton *HHHats[HEDGEHOGS_PER_TEAM];
+  std::array<QPointer<QLineEdit>, HEDGEHOGS_PER_TEAM> HHNameEdit;
+  std::array<QPointer<HatButton>, HEDGEHOGS_PER_TEAM> HHHats;
   HWTeam data();
   QString m_playerHash;
   QString OldTeamName;
   KeyBinder *binder;
   bool m_loaded;
 
-  QLayout *bodyLayoutDefinition();
-  QLayout *footerLayoutDefinition();
-  void connectSignals();
+  QLayout *bodyLayoutDefinition() override;
+  QLayout *footerLayoutDefinition() override;
+  void connectSignals() override;
 
   void loadTeam(const HWTeam &team);
 
@@ -84,7 +84,7 @@ class PageEditTeam : public AbstractPage {
   QPushButton *btnRandomNames;
   QPushButton *btnRandomHats;
 
-  QPushButton *btnRandomHogName[HEDGEHOGS_PER_TEAM];
+  std::array<QPointer<QPushButton>, HEDGEHOGS_PER_TEAM> btnRandomHogName;
   QPushButton *btnRandomTeamName;
   QPushButton *btnRandomGrave;
   QPushButton *btnRandomFlag;
