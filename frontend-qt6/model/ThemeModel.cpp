@@ -23,12 +23,11 @@
 
 #include "ThemeModel.h"
 
+#include "DataManager.h"
 #include "hwconsts.h"
-#include "physfs.h"
+#include "physfs_integration.h"
 
 ThemeModel::ThemeModel(QObject *parent) : QAbstractListModel(parent) {
-  m_data = QList<QMap<int, QVariant> >();
-
   m_themesLoaded = false;
 
   m_filteredNoDLC = NULL;
@@ -93,29 +92,27 @@ void ThemeModel::loadThemes() const {
   m_themesLoaded = true;
 
   DataManager &datamgr = DataManager::instance();
+  auto &pfs = PhysFsManager::instance();
 
-  QStringList themes = datamgr.entryList(QStringLiteral("Themes"),
-                                         QDir::AllDirs | QDir::NoDotAndDotDot);
+  auto themes = datamgr.entryList(QStringLiteral("Themes"),
+                                  QDir::AllDirs | QDir::NoDotAndDotDot);
 
   m_data.clear();
-
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
   m_data.reserve(themes.size());
-#endif
 
   for (auto &&theme : themes) {
     QMap<int, QVariant> dataset;
 
     // Ignore directories without theme.cfg
-    QFile themeCfgFile(
-        QStringLiteral("physfs://Themes/%1/theme.cfg").arg(theme));
+
+    PhysFsFile themeCfgFile(QStringLiteral("/Themes/%1/theme.cfg").arg(theme));
     if (!themeCfgFile.open(QFile::ReadOnly)) {
       continue;
     }
 
     // themes without icon are supposed to be hidden
-    QString iconpath = QStringLiteral("physfs://Themes/%1/icon.png").arg(theme);
-    if (!QFile::exists(iconpath)) {
+    QString iconpath = QStringLiteral("/Themes/%1/icon.png").arg(theme);
+    if (!pfs.exists(iconpath)) {
       dataset.insert(IsHiddenRole, true);
     } else {
       QTextStream stream(&themeCfgFile);
@@ -137,17 +134,14 @@ void ThemeModel::loadThemes() const {
     // Themes without land textures are considered "background themes"
     // since they cannot be used for generated maps, but they can be used
     // for image maps.
-    QString landtexpath =
-        QStringLiteral("physfs://Themes/%1/LandTex.png").arg(theme);
-    QString bordertexpath =
-        QStringLiteral("physfs://Themes/%1/Border.png").arg(theme);
-    if ((!QFile::exists(landtexpath)) || (!QFile::exists(bordertexpath))) {
+    QString landtexpath = QStringLiteral("/Themes/%1/LandTex.png").arg(theme);
+    QString bordertexpath = QStringLiteral("/Themes/%1/Border.png").arg(theme);
+    if ((!pfs.exists(landtexpath)) || (!pfs.exists(bordertexpath))) {
       dataset.insert(IsBackgroundThemeRole, true);
     }
 
     // detect if theme is dlc
-    QString themeDir = PHYSFS_getRealDir(
-        QStringLiteral("Themes/%1").arg(theme).toLocal8Bit().data());
+    QString themeDir = pfs.getRealDir(QStringLiteral("Themes/%1").arg(theme));
     bool isDLC = !themeDir.startsWith(datadir.absolutePath());
     dataset.insert(IsDlcRole, isDLC);
 
@@ -161,10 +155,9 @@ void ThemeModel::loadThemes() const {
     dataset.insert(Qt::DisplayRole, (isDLC ? "*" : "") + theme);
 
     // load and set preview icon
-    iconpath = QStringLiteral("physfs://Themes/%1/icon@2x.png").arg(theme);
-    if (QFile::exists(iconpath)) {
-      QIcon preview(QString("physfs://Themes/%1/icon@2x.png").arg(theme));
-      dataset.insert(Qt::DecorationRole, preview);
+    iconpath = QStringLiteral("/Themes/%1/icon@2x.png").arg(theme);
+    if (pfs.exists(iconpath)) {
+      dataset.insert(Qt::DecorationRole, pfs.readIcon(iconpath));
     }
 
     m_data.append(dataset);

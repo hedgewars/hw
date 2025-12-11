@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QIcon>
 #include <QJsonDocument>
 #include <QJsonObject>
 
@@ -179,6 +180,21 @@ QVariantMap PhysFsManager::loadSettings(const QString &filename) {
   return doc.object().toVariantMap();
 }
 
+QIcon PhysFsManager::readIcon(const QString &path) {
+  QByteArray data = readFile(path);
+
+  if (data.isEmpty()) {
+    return {};
+  }
+
+  QPixmap pix;
+  if (!pix.loadFromData(data)) {
+    qWarning() << "Failed to decode icon from:" << path;
+    return {};
+  }
+
+  return QIcon{pix};
+}
 QString PhysFsManager::getLastError() const {
   return QString::fromUtf8(PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
 }

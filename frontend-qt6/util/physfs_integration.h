@@ -55,6 +55,8 @@ class PhysFsManager : public QObject {
   bool saveSettings(const QString &filename, const QVariantMap &settings);
   QVariantMap loadSettings(const QString &filename);
 
+  QIcon readIcon(const QString &path);
+
   QString getLastError() const;
 
  private:

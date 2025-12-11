@@ -27,10 +27,10 @@
 #include <QAbstractListModel>
 #include <QIcon>
 #include <QMap>
+#include <QPointer>
 #include <QStringList>
 #include <QTextStream>
 
-#include "DataManager.h"
 #include "ThemeFilterProxyModel.h"
 
 /**
@@ -58,9 +58,9 @@ class ThemeModel : public QAbstractListModel {
  private:
   mutable QList<QMap<int, QVariant> > m_data;
   mutable bool m_themesLoaded;
-  mutable ThemeFilterProxyModel *m_filteredNoDLC;
-  mutable ThemeFilterProxyModel *m_filteredNoHidden;
-  mutable ThemeFilterProxyModel *m_filteredNoDLCOrHidden;
+  mutable QPointer<ThemeFilterProxyModel> m_filteredNoDLC;
+  mutable QPointer<ThemeFilterProxyModel> m_filteredNoHidden;
+  mutable QPointer<ThemeFilterProxyModel> m_filteredNoDLCOrHidden;
 
   void loadThemes() const;
 };
