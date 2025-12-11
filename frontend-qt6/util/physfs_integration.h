@@ -21,6 +21,7 @@ class PhysFsFile : public QIODevice {
   qint64 pos() const override;
   bool seek(qint64 pos) override;
   bool isSequential() const override;
+  bool exists() const;
 
  protected:
   qint64 readData(char *data, qint64 maxlen) override;
@@ -55,6 +56,7 @@ class PhysFsManager : public QObject {
   bool saveSettings(const QString &filename, const QVariantMap &settings);
   QVariantMap loadSettings(const QString &filename);
 
+  QPixmap readPixmap(const QString &path);
   QIcon readIcon(const QString &path);
 
   QString getLastError() const;

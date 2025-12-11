@@ -428,7 +428,7 @@ int main(int argc, char *argv[]) {
   auto &physfs = PhysFsManager::instance();
   physfs.init(argv[0]);
   physfs.mount(datadir.absolutePath());
-  physfs.mount(cfgdir.absolutePath() + "/Data");
+  physfs.mount(cfgdir.absolutePath() + QStringLiteral("/Data"));
   physfs.mount(cfgdir.absolutePath());
   physfs.setWriteDir(cfgdir.absolutePath());
   physfs.mountPacks();
@@ -567,14 +567,18 @@ int main(int argc, char *argv[]) {
   }
 
   // load external stylesheet if there is any
-  QFile extFile(QStringLiteral("physfs://css/") + fname);
+  {
+    PhysFsFile extFile(QStringLiteral("/css/") + fname);
+    QFile resFile(QStringLiteral(":/res/css/") + fname);
 
-  QFile resFile(QStringLiteral(":/res/css/") + fname);
-
-  QFile &file = (extFile.exists() ? extFile : resFile);
-
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    style.append(file.readAll());
+    if (extFile.exists()) {
+      if (extFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        style.append(extFile.readAll());
+    } else {
+      if (resFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        style.append(resFile.readAll());
+    };
+  }
 
   qWarning("Starting Hedgewars %s-r%d (%s)", qPrintable(cVersionString),
            cRevisionString.toInt(), qPrintable(cHashString));

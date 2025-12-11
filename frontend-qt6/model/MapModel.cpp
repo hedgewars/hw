@@ -27,7 +27,7 @@
 
 #include "HWApplication.h"
 #include "hwconsts.h"
-#include "physfs.h"
+#include "physfs_integration.h"
 
 MapModel::MapInfo MapModel::MapInfoRandom = {
     MapModel::GeneratedMap, "+rnd+", "", 0, "", "", "", false};
@@ -66,10 +66,7 @@ bool MapModel::loadMaps() {
 
   qDebug("[LAZINESS] MapModel::loadMaps()");
 
-  // this method resets the contents of this model (important to know for
-  // views).
-  beginResetModel();
-
+  auto &pfs = PhysFsManager::instance();
   // we'll need the DataManager a few times, so let's get a reference to it
   DataManager &datamgr = DataManager::instance();
 
@@ -80,8 +77,6 @@ bool MapModel::loadMaps() {
   // empty list, so that we can (re)fill it
   QStandardItemModel::clear();
 
-  // QList<QStandardItem *> staticMaps;
-  // QList<QStandardItem *> missionMaps;
   QList<QStandardItem *> mapList;
 
   QIcon dlcIcon;
@@ -98,8 +93,8 @@ bool MapModel::loadMaps() {
     // only 2 map relate files are relevant:
     // - the cfg file that contains the settings/info of the map
     // - the lua file - if it exists it's a mission, otherwise it isn't
-    QFile mapLuaFile(QStringLiteral("physfs://Maps/%1/map.lua").arg(map));
-    QFile mapCfgFile(QStringLiteral("physfs://Maps/%1/map.cfg").arg(map));
+    PhysFsFile mapLuaFile(QStringLiteral("/Maps/%1/map.lua").arg(map));
+    PhysFsFile mapCfgFile(QStringLiteral("/Maps/%1/map.cfg").arg(map));
 
     if (mapCfgFile.open(QFile::ReadOnly)) {
       QString caption;
@@ -152,8 +147,8 @@ bool MapModel::loadMaps() {
       }
 
       // detect if map is dlc
-      QString mapDir = PHYSFS_getRealDir(
-          QStringLiteral("Maps/%1/map.cfg").arg(map).toLocal8Bit().data());
+      QString mapDir =
+          pfs.getRealDir(QStringLiteral("Maps/%1/map.cfg").arg(map));
       dlc = !mapDir.startsWith(datadir.absolutePath());
 
       // let's use some semi-sane hedgehog limit, rather than none
@@ -204,8 +199,6 @@ bool MapModel::loadMaps() {
   }
 
   QStandardItemModel::appendColumn(mapList);
-
-  endResetModel();
 
   return true;
 }

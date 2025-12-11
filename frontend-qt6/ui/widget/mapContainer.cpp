@@ -45,6 +45,7 @@
 #include "ThemeModel.h"
 #include "hwconsts.h"
 #include "igbox.h"
+#include "physfs_integration.h"
 #include "seedprompt.h"
 #include "themeprompt.h"
 
@@ -795,13 +796,11 @@ void HWMapContainer::updatePreview() {
         break;
       } else {
         // Draw map preview
-        QPixmap mapImage;
-        bool success =
-            mapImage.load(QStringLiteral("physfs://Maps/") + m_mapInfo.name +
-                          QStringLiteral("/preview.png"));
+        QPixmap mapImage = PhysFsManager::instance().readPixmap(
+            QStringLiteral("/Maps/%1/preview.png").arg(m_mapInfo.name));
 
         setHHLimit(m_mapInfo.limit);
-        if (!success) {
+        if (mapImage.isNull()) {
           // Missing preview image
           QPixmap empty = QPixmap(m_previewSize);
           empty.fill(Qt::transparent);

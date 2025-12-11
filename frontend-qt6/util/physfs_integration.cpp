@@ -61,6 +61,10 @@ bool PhysFsFile::isSequential() const {
   return false;  // PhysFS supports seeking
 }
 
+bool PhysFsFile::exists() const {
+  return PHYSFS_exists(m_filename.toUtf8().constData());
+}
+
 qint64 PhysFsFile::readData(char *data, qint64 maxlen) {
   if (!m_fileHandle) return -1;
   qint64 read = PHYSFS_readBytes(m_fileHandle, data, maxlen);
@@ -180,7 +184,7 @@ QVariantMap PhysFsManager::loadSettings(const QString &filename) {
   return doc.object().toVariantMap();
 }
 
-QIcon PhysFsManager::readIcon(const QString &path) {
+QPixmap PhysFsManager::readPixmap(const QString &path) {
   QByteArray data = readFile(path);
 
   if (data.isEmpty()) {
@@ -193,8 +197,13 @@ QIcon PhysFsManager::readIcon(const QString &path) {
     return {};
   }
 
-  return QIcon{pix};
+  return pix;
 }
+
+QIcon PhysFsManager::readIcon(const QString &path) {
+  return QIcon{readPixmap(path)};
+}
+
 QString PhysFsManager::getLastError() const {
   return QString::fromUtf8(PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode()));
 }
