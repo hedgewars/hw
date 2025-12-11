@@ -151,6 +151,11 @@ bool PhysFsManager::writeFile(const QString &path, const QByteArray &data) {
   return file.write(data) == data.size();
 }
 
+QString PhysFsManager::getRealDir(const QString &filename) const {
+  const auto realDir = PHYSFS_getRealDir(filename.toUtf8().constData());
+  return (realDir == nullptr) ? QString{} : QString::fromUtf8(realDir);
+}
+
 // ----------------------------------------------------------------------------
 // Handling Settings
 // ----------------------------------------------------------------------------

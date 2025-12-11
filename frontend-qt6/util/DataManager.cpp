@@ -40,6 +40,7 @@
 #include "ThemeModel.h"
 #include "hwconsts.h"
 #include "physfs.h"
+#include "physfs_integration.h"
 #include "sdlkeys.h"
 
 DataManager::DataManager() {
@@ -61,22 +62,46 @@ QStringList DataManager::entryList(const QString &subDirectory,
                                    QDir::Filters filters,
                                    const QStringList &nameFilters,
                                    bool withDLC) const {
-  QDir tmpDir(QStringLiteral("physfs://%1").arg(subDirectory));
-  QStringList result = tmpDir.entryList(nameFilters, filters);
+  const auto &fs = PhysFsManager::instance();
+  QStringList rawList = fs.listDirectory(subDirectory);
 
-  // sort case-insensitive
   QMap<QString, QString> sortedFileNames;
-  QString absolutePath = datadir.absolutePath().toLocal8Bit().data();
-  for (auto &&fn : result) {
-    // Filter out DLC entries if desired
-    QString realDir = PHYSFS_getRealDir(
-        QString(subDirectory + QStringLiteral("/") + fn).toLocal8Bit().data());
-    if (withDLC || realDir == absolutePath)
-      sortedFileNames.insert(fn.toLower(), fn);
-  }
-  result = sortedFileNames.values();
 
-  return result;
+  auto baseDataPath = QDir::cleanPath(datadir.absolutePath());
+
+  for (const QString &fn : rawList) {
+    QString fullPath = subDirectory.isEmpty() ? fn : subDirectory + '/' + fn;
+
+    if (!nameFilters.isEmpty()) {
+      if (!QDir::match(nameFilters, fn)) {
+        continue;
+      }
+    }
+
+    if ((filters & QDir::NoDotAndDotDot) &&
+        (fn == QLatin1String(".") || fn == QLatin1String(".."))) {
+      continue;
+    }
+
+    bool isDir = fs.isDirectory(fullPath);
+
+    if ((!(filters & QDir::Dirs) != !(filters & QDir::Files)) &&
+        (!(filters & QDir::Files) && !isDir)) {
+      continue;
+    }
+
+    if (!withDLC) {
+      QString realDir = QDir::cleanPath(fs.getRealDir(fullPath));
+
+      if (QString::compare(realDir, baseDataPath, Qt::CaseInsensitive) != 0) {
+        continue;
+      }
+    }
+
+    sortedFileNames.insert(fn.toLower(), fn);
+  }
+
+  return sortedFileNames.values();
 }
 
 GameStyleModel *DataManager::gameStyleModel() {

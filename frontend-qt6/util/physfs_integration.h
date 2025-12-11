@@ -50,6 +50,7 @@ class PhysFsManager : public QObject {
   QStringList listDirectory(const QString &path) const;
   QByteArray readFile(const QString &path);
   bool writeFile(const QString &path, const QByteArray &data);
+  QString getRealDir(const QString &filename) const;
 
   bool saveSettings(const QString &filename, const QVariantMap &settings);
   QVariantMap loadSettings(const QString &filename);
