@@ -28,10 +28,6 @@ SmartLineEdit::SmartLineEdit(QWidget* parent, int maxHistorySize)
     : HistoryLineEdit(parent, maxHistorySize) {
   m_whitespace = QRegularExpression(QStringLiteral("\\s"));
 
-  m_cmds = new QStringList();
-  m_nicks = new QStringList();
-  m_sorted_nicks = new QMap<QString, QString>();
-
   resetAutoCompletionStatus();
 
   // reset autocompletion status when cursor is moved or content is changed
@@ -41,37 +37,33 @@ SmartLineEdit::SmartLineEdit(QWidget* parent, int maxHistorySize)
           &SmartLineEdit::resetAutoCompletionStatus);
 }
 
-SmartLineEdit::~SmartLineEdit() {
-  delete m_cmds;
-  delete m_nicks;
-  delete m_sorted_nicks;
-}
+SmartLineEdit::~SmartLineEdit() = default;
 
 void SmartLineEdit::addCommands(const QStringList& commands) {
-  m_cmds->append(commands);
+  m_cmds.append(commands);
 }
 
 void SmartLineEdit::removeCommands(const QStringList& commands) {
   for (auto&& cmd : commands) {
-    m_cmds->removeAll(cmd);
+    m_cmds.removeAll(cmd);
   }
 }
 
 void SmartLineEdit::addNickname(const QString& name) {
-  m_sorted_nicks->insert(name.toLower(), name);
-  m_nicks->append(name);
+  m_sorted_nicks.insert(name.toLower(), name);
+  m_nicks.append(name);
 }
 
 void SmartLineEdit::removeNickname(const QString& name) {
-  m_sorted_nicks->remove(name.toLower());
-  m_nicks->removeAll(name);
+  m_sorted_nicks.remove(name.toLower());
+  m_nicks.removeAll(name);
 }
 
 void SmartLineEdit::reset() {
   // forget keywords
-  m_cmds->clear();
-  m_sorted_nicks->clear();
-  m_nicks->clear();
+  m_cmds.clear();
+  m_sorted_nicks.clear();
+  m_nicks.clear();
   resetAutoCompletionStatus();
 
   // forget history
@@ -127,8 +119,8 @@ void SmartLineEdit::autoComplete() {
     postfix = m_postfix;
     isFirstWord = prefix.isEmpty();
   } else {
-    m_cmds->sort();
-    m_nicks = new QStringList(m_sorted_nicks->values());
+    m_cmds.sort();
+    m_nicks = m_sorted_nicks.values();
 
     int cp = cursorPosition();
 
@@ -164,13 +156,13 @@ void SmartLineEdit::autoComplete() {
   if (isFirstWord) {
     // FIXME: UB alarm: modifying container that we iterate on
     // find matching commands
-    for (auto&& cmd : *m_cmds) {
+    for (auto&& cmd : m_cmds) {
       if (cmd.startsWith(matchMe, Qt::CaseInsensitive)) {
         match = cmd;
 
         // move match to end so next time new matches will be preferred
-        m_cmds->removeAll(cmd);
-        m_cmds->append(cmd);
+        m_cmds.removeAll(cmd);
+        m_cmds.append(cmd);
 
         break;
       }
@@ -180,14 +172,14 @@ void SmartLineEdit::autoComplete() {
   if (match.isEmpty()) {
     // FIXME: UB alarm: modifying container that we iterate on
     // find matching nicks
-    for (auto&& nick : *m_nicks) {
+    for (auto&& nick : m_nicks) {
       if (nick.startsWith(matchMe, Qt::CaseInsensitive)) {
         match = nick;
         isNick = true;
 
         // move match to end so next time new matches will be prefered
-        m_nicks->removeAll(nick);
-        m_nicks->append(nick);
+        m_nicks.removeAll(nick);
+        m_nicks.append(nick);
 
         break;
       }

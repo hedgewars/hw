@@ -24,6 +24,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QMultiMap>
+#include <QPointer>
 #include <QVBoxLayout>
 
 #include "team.h"
@@ -73,11 +74,11 @@ class TeamSelWidget : public QGroupBox {
  private:
   void addScrArea(FrameTeams* pfteams, QColor color, int minHeight,
                   int maxHeight, bool setFrame);
-  FrameTeams* framNotPlaying;
-  FrameTeams* framePlaying;
+  QPointer<FrameTeams> framNotPlaying;
+  QPointer<FrameTeams> framePlaying;
 
   QVBoxLayout mainLayout;
-  QLabel* numTeamNotice;
+  QPointer<QLabel> numTeamNotice;
   bool m_acceptOuter;
   void repaint();
   QString m_curUser;

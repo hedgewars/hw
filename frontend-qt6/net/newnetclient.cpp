@@ -1096,14 +1096,16 @@ void HWNewNet::maybeSendPassword() {
 
   if (m_passwordHash.isEmpty() || m_serverSalt.isEmpty()) return;
 
-  QString hash = QCryptographicHash::hash(m_clientSalt.append(m_serverSalt)
+  QString hash = QCryptographicHash::hash(QByteArray{m_clientSalt}
+                                              .append(m_serverSalt)
                                               .append(m_passwordHash)
                                               .append(cProtoVer.toLatin1())
                                               .append("!hedgewars"),
                                           QCryptographicHash::Sha1)
                      .toHex();
 
-  m_serverHash = QCryptographicHash::hash(m_serverSalt.append(m_clientSalt)
+  m_serverHash = QCryptographicHash::hash(QByteArray{m_serverSalt}
+                                              .append(m_clientSalt)
                                               .append(m_passwordHash)
                                               .append(cProtoVer.toLatin1())
                                               .append("!hedgewars"),

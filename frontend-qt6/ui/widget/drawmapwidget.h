@@ -22,6 +22,7 @@
 #include <QGraphicsView>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QPointer>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QWidget>
@@ -43,14 +44,14 @@ class DrawMapView : public QGraphicsView {
   bool viewportEvent(QEvent *event) override;
 
  private:
-  DrawMapScene *m_scene;
+  QPointer<DrawMapScene> m_scene;
 };
 
 namespace Ui {
 class Ui_DrawMapWidget {
  public:
-  DrawMapView *graphicsView;
-  QLabel *lblPoints;
+  QPointer<DrawMapView> graphicsView;
+  QPointer<QLabel> lblPoints;
 
   void setupUi(QWidget *drawMapWidget) {
     QVBoxLayout *vbox = new QVBoxLayout(drawMapWidget);
@@ -113,7 +114,7 @@ class DrawMapWidget : public QWidget {
  private:
   Ui::DrawMapWidget *ui;
 
-  DrawMapScene *m_scene;
+  QPointer<DrawMapScene> m_scene;
 
  private Q_SLOTS:
   void pathChanged();

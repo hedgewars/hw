@@ -44,9 +44,9 @@
 // last game info
 QList<QVariant> lastGameStartArgs = QList<QVariant>();
 GameType lastGameType = gtNone;
-GameCFGWidget *lastGameCfg = NULL;
-QString lastGameAmmo = NULL;
-TeamSelWidget *lastGameTeamSel = NULL;
+QPointer<GameCFGWidget> lastGameCfg;
+QString lastGameAmmo;
+QPointer<TeamSelWidget> lastGameTeamSel;
 
 QString trainingName, trainingScript, trainingTeam, campaign, campaignScript,
     campaignTeam;  // TODO: Cleaner solution?

@@ -30,23 +30,23 @@ class PageMain : public AbstractPage {
   PageMain(QWidget* parent = 0);
   void resetNetworkChoice();
 
-  QPushButton* BtnSinglePlayer;
-  QPushButton* BtnNet;
-  QPushButton* BtnNetLocal;
-  QPushButton* BtnNetOfficial;
-  QPushButton* BtnSetup;
-  QPushButton* BtnFeedback;
-  QPushButton* BtnTitle;
-  QPushButton* BtnInfo;
-  QPushButton* BtnDataDownload;
-  QPushButton* BtnVideos;
-  QPushButton* BtnHelp;
-  QLabel* mainNote;
+  QPointer<QPushButton> BtnSinglePlayer;
+  QPointer<QPushButton> BtnNet;
+  QPointer<QPushButton> BtnNetLocal;
+  QPointer<QPushButton> BtnNetOfficial;
+  QPointer<QPushButton> BtnSetup;
+  QPointer<QPushButton> BtnFeedback;
+  QPointer<QPushButton> BtnTitle;
+  QPointer<QPushButton> BtnInfo;
+  QPointer<QPushButton> BtnDataDownload;
+  QPointer<QPushButton> BtnVideos;
+  QPointer<QPushButton> BtnHelp;
+  QPointer<QLabel> mainNote;
 
  private:
-  QLayout* bodyLayoutDefinition();
-  QLayout* footerLayoutDefinition();
-  void connectSignals();
+  QLayout* bodyLayoutDefinition() override;
+  QLayout* footerLayoutDefinition() override;
+  void connectSignals() override;
   QIcon originalNetworkIcon, disabledNetworkIcon;
 
   QString randomTip();

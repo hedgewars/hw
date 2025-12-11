@@ -41,7 +41,7 @@ class FreqSpinBox : public QSpinBox {
    * @brief Class constructor.
    * @param parent parent widget.
    */
-  FreqSpinBox(QWidget* parent);
+  explicit FreqSpinBox(QWidget* parent);
 
  protected:
   /**

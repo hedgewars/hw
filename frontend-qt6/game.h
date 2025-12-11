@@ -61,9 +61,9 @@ bool checkForDir(const QString &dir);
 // last game info
 extern QList<QVariant> lastGameStartArgs;
 extern GameType lastGameType;
-extern GameCFGWidget *lastGameCfg;
+extern QPointer<GameCFGWidget> lastGameCfg;
 extern QString lastGameAmmo;
-extern TeamSelWidget *lastGameTeamSel;
+extern QPointer<TeamSelWidget> lastGameTeamSel;
 
 class HWGame : public TCPBase {
   Q_OBJECT
@@ -112,9 +112,9 @@ class HWGame : public TCPBase {
  private:
   char msgbuf[MAXMSGCHARS];
   QString ammostr;
-  GameUIConfig *config;
-  GameCFGWidget *gamecfg;
-  TeamSelWidget *m_pTeamSelWidget;
+  QPointer<GameUIConfig> config;
+  QPointer<GameCFGWidget> gamecfg;
+  QPointer<TeamSelWidget> m_pTeamSelWidget;
   GameType gameType;
   QByteArray m_netSendBuffer;
 

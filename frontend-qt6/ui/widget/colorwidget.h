@@ -3,6 +3,7 @@
 
 #include <QFrame>
 #include <QModelIndex>
+#include <QPointer>
 
 namespace Ui {
 class ColorWidget;
@@ -26,7 +27,7 @@ class ColorWidget : public QFrame {
 
  private:
   int m_color;
-  QStandardItemModel *m_colorsModel;
+  QPointer<QStandardItemModel> m_colorsModel;
 
  private Q_SLOTS:
   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);

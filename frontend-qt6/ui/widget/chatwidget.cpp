@@ -833,7 +833,9 @@ void HWChatWidget::setUser(const QString &nickname) {
 }
 
 void HWChatWidget::setUsersModel(QAbstractItemModel *model) {
-  chatNicks->selectionModel()->deleteLater();
+  if (auto selectionModel = chatNicks->selectionModel(); selectionModel) {
+    selectionModel->deleteLater();
+  }
 
   chatNicks->setModel(model);
   chatNicks->setModelColumn(0);

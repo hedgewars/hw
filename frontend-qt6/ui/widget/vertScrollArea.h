@@ -26,7 +26,7 @@ class VertScrArea : public QScrollArea {
   Q_OBJECT
 
  public:
-  VertScrArea(QColor frameColor, QWidget* parent = 0);
+  explicit VertScrArea(QColor frameColor, QWidget* parent = 0);
 
  protected:
   virtual void resizeEvent(QResizeEvent* event);

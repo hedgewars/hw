@@ -86,7 +86,7 @@ class HistoryLineEdit : public QLineEdit {
   int m_maxHistorySize;   ///< the maximum allowed size for the history
   int m_curHistEntryIdx;  ///< the index of the displayed used entry
 
-  QStringList* m_history;  ///< history of previous inputs
+  QStringList m_history;  ///< history of previous inputs
 
   /**
    * @brief Navigates content history in the desired direction.

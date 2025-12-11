@@ -20,6 +20,7 @@
 #define HATBUTTON_H
 
 #include <QModelIndex>
+#include <QPointer>
 #include <QPushButton>
 #include <QString>
 
@@ -31,14 +32,14 @@ class HatButton : public QPushButton {
   Q_PROPERTY(QString currentHat READ currentHat WRITE setCurrentHat)
 
  public:
-  HatButton(QWidget* parent);
+  explicit HatButton(QWidget* parent);
   int currentIndex();
   QString currentHat() const;
   void setModel(HatModel* model);
 
  private:
   QModelIndex m_hat;
-  HatModel* m_hatModel;
+  QPointer<HatModel> m_hatModel;
 
  Q_SIGNALS:
   void currentIndexChanged(int);

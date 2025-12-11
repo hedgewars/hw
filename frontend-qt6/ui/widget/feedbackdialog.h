@@ -20,6 +20,7 @@
 #define FEEDBACKDIALOG_H
 
 #include <QDialog>
+#include <QPointer>
 
 class QNetworkReply;
 class QNetworkAccessManager;
@@ -36,19 +37,19 @@ class FeedbackDialog : public QDialog {
   void EmbedSystemInfo();
   void LoadCaptchaImage();
 
-  QPushButton* BtnSend;
-  QPushButton* BtnViewInfo;
-  QCheckBox* CheckSendSpecs;
-  QLineEdit* summary;
-  QTextBrowser* description;
-  QLabel* info;
-  QLabel* label_summary;
-  QLabel* label_description;
-  QLabel* label_captcha;
-  QLabel* label_email;
-  QLabel* label_captcha_input;
-  QLineEdit* captcha_code;
-  QLineEdit* email;
+  QPointer<QPushButton> BtnSend;
+  QPointer<QPushButton> BtnViewInfo;
+  QPointer<QCheckBox> CheckSendSpecs;
+  QPointer<QLineEdit> summary;
+  QPointer<QTextBrowser> description;
+  QPointer<QLabel> info;
+  QPointer<QLabel> label_summary;
+  QPointer<QLabel> label_description;
+  QPointer<QLabel> label_captcha;
+  QPointer<QLabel> label_email;
+  QPointer<QLabel> label_captcha_input;
+  QPointer<QLineEdit> captcha_code;
+  QPointer<QLineEdit> email;
   int captchaID;
   QString specs;
 
@@ -59,10 +60,10 @@ class FeedbackDialog : public QDialog {
   QNetworkAccessManager* GetNetManager();
   void ShowErrorMessage(const QString& msg);
 
-  QNetworkAccessManager* netManager;
-  QNetworkReply* captchaImageRequest;
-  QNetworkReply* genCaptchaRequest;
-  QNetworkAccessManager* nam;
+  QPointer<QNetworkAccessManager> netManager;
+  QPointer<QNetworkReply> captchaImageRequest;
+  QPointer<QNetworkReply> genCaptchaRequest;
+  QPointer<QNetworkAccessManager> nam;
 
  private Q_SLOTS:
   virtual void NetReply(QNetworkReply*);

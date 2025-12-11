@@ -34,7 +34,7 @@ class TeamLabel : public QLabel {
   Q_OBJECT
 
  public:
-  TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
+  explicit TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
 
  Q_SIGNALS:
   void teamActivated(QString team_name);
@@ -66,10 +66,10 @@ class TeamShowWidget : public QWidget {
   QHBoxLayout mainLayout;
   HWTeam m_team;
   bool m_isPlaying;
-  CHedgehogerWidget* phhoger;
-  ColorWidget* colorWidget;
-  QPushButton* butt;
-  FrameTeams* m_parentFrameTeams;
+  QPointer<CHedgehogerWidget> phhoger;
+  QPointer<ColorWidget> colorWidget;
+  QPointer<QPushButton> butt;
+  QPointer<FrameTeams> m_parentFrameTeams;
 
  Q_SIGNALS:
   void teamStatusChanged(const HWTeam&);

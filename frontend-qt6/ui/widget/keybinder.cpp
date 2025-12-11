@@ -135,16 +135,14 @@ KeyBinder::KeyBinder(QWidget* parent, const QString& helpText,
   bool bFirstPage = true;
   selectedBindTable = NULL;
 
-  dropDownIcon = new QIcon();
   QPixmap dd1 = QPixmap(QStringLiteral(":/res/dropdown.png"));
   QPixmap dd2 = QPixmap(QStringLiteral(":/res/dropdown_selected.png"));
-  dropDownIcon->addPixmap(dd1, QIcon::Normal);
-  dropDownIcon->addPixmap(dd2, QIcon::Selected);
-  conflictIcon = new QIcon();
+  dropDownIcon.addPixmap(dd1, QIcon::Normal);
+  dropDownIcon.addPixmap(dd2, QIcon::Selected);
   QPixmap kc1 = QPixmap(QStringLiteral(":/res/keyconflict.png"));
   QPixmap kc2 = QPixmap(QStringLiteral(":/res/keyconflict_selected.png"));
-  conflictIcon->addPixmap(kc1, QIcon::Normal);
-  conflictIcon->addPixmap(kc2, QIcon::Selected);
+  conflictIcon.addPixmap(kc1, QIcon::Normal);
+  conflictIcon.addPixmap(kc2, QIcon::Selected);
   QPixmap emptySpace = QPixmap(16, 16);
   emptySpace.fill(QColor(0, 0, 0, 0));
   QIcon emptyIcon = QIcon(emptySpace);
@@ -222,7 +220,7 @@ KeyBinder::KeyBinder(QWidget* parent, const QString& helpText,
     if (cbinds[i].action != QLatin1String("!MULTI")) {
       bindCell = new QTableWidgetItem(comboBox->currentText());
       nameCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-      bindCell->setIcon(*dropDownIcon);
+      bindCell->setIcon(dropDownIcon);
       bindCell->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     } else {
       bindCell = new QTableWidgetItem(HWApplication::translate(
@@ -323,12 +321,12 @@ bool KeyBinder::checkConflictsWith(int compareTo, bool updateState) {
       }
       QTableWidgetItem* conflictItem =
           bindComboBoxCellMappings.value(CBBind[i]);
-      conflictItem->setIcon(*conflictIcon);
+      conflictItem->setIcon(conflictIcon);
       conflictItem->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
       conflictItem->setForeground(QBrush(Qt::white));
       conflictItems.append(conflictItem);
       conflictItem = bindComboBoxCellMappings.value(CBBind[compareTo]);
-      conflictItem->setIcon(*conflictIcon);
+      conflictItem->setIcon(conflictIcon);
       conflictItem->setBackground(QBrush(QColor(0xE3, 0x1A, 0x1A)));
       conflictItem->setForeground(QBrush(Qt::white));
       conflictItems.append(conflictItem);
@@ -341,7 +339,7 @@ bool KeyBinder::checkConflictsWith(int compareTo, bool updateState) {
   }
   for (int c = 0; c < conflictItems.size(); c++) {
     QTableWidgetItem* conflictItem = conflictItems.at(c);
-    conflictItem->setIcon(*dropDownIcon);
+    conflictItem->setIcon(dropDownIcon);
     conflictItem->setBackground(QBrush(Qt::transparent));
     conflictItem->setForeground(QBrush(QColor(0xF6CB1C)));
     conflictItem = NULL;

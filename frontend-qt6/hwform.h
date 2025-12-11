@@ -213,8 +213,8 @@ class HWForm : public QMainWindow {
   QString previousTeamName;
   QList<MissionInfo> campaignMissionInfo;
   QElapsedTimer eggTimer;
-  BGWidget *wBackground;
-  QSignalMapper *pageSwitchMapper;
+  QPointer<BGWidget> wBackground;
+  QPointer<QSignalMapper> pageSwitchMapper;
   QByteArray m_lastDemo;
 
   QPropertyAnimation *animationNewSlide;

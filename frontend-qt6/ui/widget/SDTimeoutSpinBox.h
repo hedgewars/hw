@@ -43,7 +43,7 @@ class SDTimeoutSpinBox : public QSpinBox {
    * @brief Class constructor.
    * @param parent parent widget.
    */
-  SDTimeoutSpinBox(QWidget* parent);
+  explicit SDTimeoutSpinBox(QWidget* parent);
 
  protected:
   /**
@@ -51,13 +51,13 @@ class SDTimeoutSpinBox : public QSpinBox {
    * @param internal value integer value to be represented as string.
    * @return the real number of rounds
    */
-  QString textFromValue(int value) const;
+  QString textFromValue(int value) const override;
   /**
    * Returns the internally-used value for SD timeout.
    * @param user-facing string, i.e. real number of rounds
    * @return internally-stored SD timeout value
    */
-  int valueFromText(const QString& text) const;
+  int valueFromText(const QString& text) const override;
 };
 
 #endif  // HEDGEWARS_SDTIMEOUTSPINBOX_H

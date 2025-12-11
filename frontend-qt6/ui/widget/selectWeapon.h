@@ -23,6 +23,7 @@
 #include <QFrame>
 #include <QList>
 #include <QMap>
+#include <QPointer>
 
 class QGridLayout;
 class WeaponItem;
@@ -78,10 +79,10 @@ class SelWeaponWidget : public QFrame {
   // to combobox change
   bool isDeleting;
 
-  QLineEdit* m_name;
+  QPointer<QLineEdit> m_name;
 
   // storage for all the weapons sets
-  QMap<QString, QString>* wconf;
+  QMap<QString, QString> wconf;
 
   const int m_numItems;
   int operator[](unsigned int weaponIndex) const;
@@ -90,10 +91,10 @@ class SelWeaponWidget : public QFrame {
   typedef QMap<int, ItemsList> twi;
   twi weaponItems;
   // layout element for each tab:
-  QGridLayout* p1Layout;
-  QGridLayout* p2Layout;
-  QGridLayout* p3Layout;
-  QGridLayout* p4Layout;
+  QPointer<QGridLayout> p1Layout;
+  QPointer<QGridLayout> p2Layout;
+  QPointer<QGridLayout> p3Layout;
+  QPointer<QGridLayout> p4Layout;
 
   QString fixWeaponSet(const QString& s);
   int readWeaponValue(const QChar chr, int max);

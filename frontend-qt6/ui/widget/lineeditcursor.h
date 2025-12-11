@@ -34,7 +34,7 @@ class LineEditCursor : public QLineEdit {
   void moveRight();
 
  private:
-  void keyPressEvent(QKeyEvent* event);
+  void keyPressEvent(QKeyEvent* event) override;
 };
 
 #endif  // LINEEDITCURSOR_H

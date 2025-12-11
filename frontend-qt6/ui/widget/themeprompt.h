@@ -21,6 +21,7 @@
 
 #include <QDialog>
 #include <QListView>
+#include <QPointer>
 #include <QWidget>
 
 class QLineEdit;
@@ -47,9 +48,9 @@ class ThemePrompt : public QDialog {
   ThemePrompt(int currentIndex = 0, QWidget* parent = 0);
 
  private:
-  LineEditCursor* txtFilter;
-  ThemeListView* list;
-  QSortFilterProxyModel* filterModel;
+  QPointer<LineEditCursor> txtFilter;
+  QPointer<ThemeListView> list;
+  QPointer<QSortFilterProxyModel> filterModel;
 
  private Q_SLOTS:
   void onAccepted();

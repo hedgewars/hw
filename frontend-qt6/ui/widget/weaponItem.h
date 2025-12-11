@@ -33,8 +33,8 @@ class WeaponItem : public ItemNum {
   void hedgehogsNumChanged();
 
  protected:
-  virtual void incItems();
-  virtual void decItems();
+  void incItems() override;
+  void decItems() override;
 
  private:
   WeaponItem();

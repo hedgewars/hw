@@ -117,11 +117,11 @@ class SmartLineEdit : public HistoryLineEdit {
  private:
   QRegularExpression m_whitespace;  ///< regexp that matches a whitespace
 
-  QStringList* m_cmds;   ///< list of recognized commands
-  QStringList* m_nicks;  ///< list of recognized nicknames
+  QStringList m_cmds;   ///< list of recognized commands
+  QStringList m_nicks;  ///< list of recognized nicknames
 
   /// recognized nicknames, sorted case-insensitive
-  QMap<QString, QString>* m_sorted_nicks;
+  QMap<QString, QString> m_sorted_nicks;
 
   // these variables contain information about the last replacement
   // they get reset whenever cursor is moved or text is changed

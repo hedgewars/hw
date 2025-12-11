@@ -20,6 +20,7 @@
 #define _ABOUT_H
 
 #include <QDropEvent>
+#include <QPointer>
 #include <QTextBrowser>
 #include <QWidget>
 
@@ -35,7 +36,7 @@ class About : public QWidget {
 
  private:
   QString getCreditsHtml();
-  QTextBrowser* creditsBrowser;
+  QPointer<QTextBrowser> creditsBrowser;
 };
 
 #endif  // _ABOUT_H

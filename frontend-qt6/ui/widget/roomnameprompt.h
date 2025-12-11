@@ -20,6 +20,7 @@
 #define ROOMNAMEPROMPT_H
 
 #include <QDialog>
+#include <QPointer>
 
 class QLineEdit;
 class QLabel;
@@ -29,15 +30,15 @@ class RoomNamePrompt : public QDialog {
   Q_OBJECT
 
  public:
-  RoomNamePrompt(QWidget* parent, const QString& roomName);
+  explicit RoomNamePrompt(QWidget* parent, const QString& roomName);
   QString getRoomName();
   QString getPassword();
 
  private:
-  QLineEdit* leRoomName;
-  QLabel* label;
-  QCheckBox* cbSetPassword;
-  QLineEdit* lePassword;
+  QPointer<QLineEdit> leRoomName;
+  QPointer<QLabel> label;
+  QPointer<QCheckBox> cbSetPassword;
+  QPointer<QLineEdit> lePassword;
 
  private Q_SLOTS:
   void checkBoxToggled();

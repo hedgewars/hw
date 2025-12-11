@@ -197,36 +197,38 @@ QString PageMain::randomTip() {
       tipFile = QStringLiteral("physfs://Locale/tips_en.xml");
 
     QFile file(tipFile);
-    file.open(QIODevice::ReadOnly);
-    QTextStream in(&file);
-    QString line = in.readLine();
-    int tip_platform = 0;
-    while (!line.isNull()) {
-      if (line.contains(QLatin1String("<windows-only>"), Qt::CaseSensitive))
-        tip_platform = 1;
-      if (line.contains(QLatin1String("<mac-only>"), Qt::CaseSensitive))
-        tip_platform = 2;
-      if (line.contains(QLatin1String("<linux-only>"), Qt::CaseSensitive))
-        tip_platform = 3;
-      if (line.contains(QLatin1String("</windows-only>"), Qt::CaseSensitive) ||
-          line.contains(QLatin1String("</mac-only>"), Qt::CaseSensitive) ||
-          line.contains(QLatin1String("</linux-only>"), Qt::CaseSensitive)) {
-        tip_platform = 0;
+    if (file.open(QIODevice::ReadOnly)) {
+      QTextStream in(&file);
+      QString line = in.readLine();
+      int tip_platform = 0;
+      while (!line.isNull()) {
+        if (line.contains(QLatin1String("<windows-only>"), Qt::CaseSensitive))
+          tip_platform = 1;
+        if (line.contains(QLatin1String("<mac-only>"), Qt::CaseSensitive))
+          tip_platform = 2;
+        if (line.contains(QLatin1String("<linux-only>"), Qt::CaseSensitive))
+          tip_platform = 3;
+        if (line.contains(QLatin1String("</windows-only>"),
+                          Qt::CaseSensitive) ||
+            line.contains(QLatin1String("</mac-only>"), Qt::CaseSensitive) ||
+            line.contains(QLatin1String("</linux-only>"), Qt::CaseSensitive)) {
+          tip_platform = 0;
+        }
+        QStringList split_string =
+            line.split(QRegularExpression(QStringLiteral("</?tip>")));
+        if ((tip_platform == platform || tip_platform == 0) &&
+            split_string.size() != 1)
+          Tips << split_string[1];
+        line = in.readLine();
       }
-      QStringList split_string =
-          line.split(QRegularExpression(QStringLiteral("</?tip>")));
-      if ((tip_platform == platform || tip_platform == 0) &&
-          split_string.size() != 1)
-        Tips << split_string[1];
-      line = in.readLine();
-    }
-    // The following tip will require links to app store entries first.
-    // Tips << tr("Want to play Hedgewars any time? Grab the Mobile version
-    // for %1 and %2.", "Tips").arg("").arg("");
-    // the ios version is located here:
-    // http://itunes.apple.com/us/app/hedgewars/id391234866
+      // The following tip will require links to app store entries first.
+      // Tips << tr("Want to play Hedgewars any time? Grab the Mobile version
+      // for %1 and %2.", "Tips").arg("").arg("");
+      // the ios version is located here:
+      // http://itunes.apple.com/us/app/hedgewars/id391234866
 
-    file.close();
+      file.close();
+    }
   }
 
   if (!Tips.isEmpty())

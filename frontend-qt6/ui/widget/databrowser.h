@@ -41,6 +41,7 @@ class DataBrowser : public QTextBrowser {
  private:
   QNetworkAccessManager *manager;
 
+  // LOL, look at this:
   // hash and set of QString instead of QUrl to support Qt versions
   // older than 4.7 (those have no support for qHash(const QUrl &))
   QHash<QString, QByteArray> resources;

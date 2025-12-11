@@ -40,7 +40,7 @@ class HWApplication : public QApplication {
   HWApplication(int &argc, char **argv);
   ~HWApplication() {};
 
-  HWForm *form;
+  QPointer<HWForm> form;
   QString *urlString;
   void fakeEvent();
 

@@ -20,6 +20,7 @@
 #define SEEDPROMPT_H
 
 #include <QDialog>
+#include <QPointer>
 
 class QLineEdit;
 
@@ -36,7 +37,7 @@ class SeedPrompt : public QDialog {
   void setSeed();
 
  private:
-  QLineEdit* editBox;
+  QPointer<QLineEdit> editBox;
 };
 
 #endif  // SEEDPROMPT_H

@@ -89,26 +89,26 @@ class GameCFGWidget : public QGroupBox {
 
  private:
   QVBoxLayout mainLayout;
-  QCheckBox* bindEntries;
+  QPointer<QCheckBox> bindEntries;
   QString curNetAmmoName;
   QString curNetAmmo;
   QRegularExpression seedRegexp;
   QString m_curScript;
   bool m_master;
-  QList<QWidget*> m_childWidgets;
-  QGridLayout* GBoxOptionsLayout;
-  QWidget* OptionsInnerContainer;
-  QWidget* StackContainer;
-  QLabel* lblScript;
-  QLabel* lblScheme;
-  QLabel* lblWeapons;
+  QList<QPointer<QWidget>> m_childWidgets;
+  QPointer<QGridLayout> GBoxOptionsLayout;
+  QPointer<QWidget> OptionsInnerContainer;
+  QPointer<QWidget> StackContainer;
+  QPointer<QLabel> lblScript;
+  QPointer<QLabel> lblScheme;
+  QPointer<QLabel> lblWeapons;
 
-  QWidget* mapContainerFree;
-  QWidget* mapContainerTabbed;
-  QWidget* optionsContainerFree;
-  QWidget* optionsContainerTabbed;
+  QPointer<QWidget> mapContainerFree;
+  QPointer<QWidget> mapContainerTabbed;
+  QPointer<QWidget> optionsContainerFree;
+  QPointer<QWidget> optionsContainerTabbed;
   bool tabbed;
-  QTabWidget* tabs;
+  QPointer<QTabWidget> tabs;
 
   void setNetAmmo(const QString& name, const QString& ammo);
 };

@@ -38,10 +38,10 @@ class CHedgehogerWidget : public ItemNum {
   void hedgehogsNumChanged();
 
  protected:
-  virtual void incItems();
-  virtual void decItems();
+  void incItems() override;
+  void decItems() override;
 
-  virtual void paintEvent(QPaintEvent* event);
+  void paintEvent(QPaintEvent* event) override;
 
  private:
   CHedgehogerWidget();

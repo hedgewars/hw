@@ -25,6 +25,7 @@
 #include <QList>
 #include <QListWidgetItem>
 #include <QPair>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QString>
 #include <QWidget>
@@ -133,17 +134,17 @@ class HWChatWidget : public QWidget {
   QHBoxLayout mainLayout;
   QTextBrowser* chatText;
   QStringList chatStrings;
-  QListView* chatNicks;
-  SmartLineEdit* chatEditLine;
-  QAction* acInfo;
-  QAction* acKick;
-  QAction* acBan;
-  QAction* acDelegate;
-  QAction* acFollow;
-  QAction* acIgnore;
-  QAction* acFriend;
+  QPointer<QListView> chatNicks;
+  QPointer<SmartLineEdit> chatEditLine;
+  QPointer<QAction> acInfo;
+  QPointer<QAction> acKick;
+  QPointer<QAction> acBan;
+  QPointer<QAction> acDelegate;
+  QPointer<QAction> acFollow;
+  QPointer<QAction> acIgnore;
+  QPointer<QAction> acFriend;
   QSettings* gameSettings;
-  QMenu* m_nicksMenu;
+  QPointer<QMenu> m_nicksMenu;
   QStringList m_helloSounds;
   QString m_hilightSound;
   QString m_userNick;

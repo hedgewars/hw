@@ -99,9 +99,8 @@ int SelWeaponWidget::readWeaponValue(const QChar chr, int max) {
 
 SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent)
     : QFrame(parent), m_numItems(numItems) {
-  wconf = new QMap<QString, QString>();
   for (int i = 0; i < cDefaultAmmos.size(); ++i) {
-    wconf->insert(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
+    wconf.insert(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
   }
 
   if (!QDir(cfgdir.absolutePath() + QStringLiteral("/Schemes")).exists()) {
@@ -124,8 +123,8 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent)
     int imported = 0;
     for (int i = 0; i < keys.size(); i++) {
       if (!defaultAmmos.contains(keys[i].toLower())) {
-        wconf->insert(keys[i],
-                      fixWeaponSet(old_wconf.value(keys[i]).toString()));
+        wconf.insert(keys[i],
+                     fixWeaponSet(old_wconf.value(keys[i]).toString()));
         QFile file(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo/") +
                    keys[i] + QStringLiteral(".hwa"));
         if (file.open(QIODevice::WriteOnly)) {
@@ -159,7 +158,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent)
       }
       // Don't load weapon scheme if name collides with any default scheme
       if (!defaultAmmos.contains(schemeName.toLower()))
-        wconf->insert(schemeName, fixWeaponSet(config));
+        wconf.insert(schemeName, fixWeaponSet(config));
       else
         qWarning(
             "Weapon scheme \"%s\" not loaded from file, name collides with a "
@@ -320,7 +319,7 @@ void SelWeaponWidget::save() {
   // Check for duplicates
   QString inputNameLower = m_name->text().toLower();
   QString curWeaponsNameLower = curWeaponsName.toLower();
-  QStringList keys = wconf->keys();
+  QStringList keys = wconf.keys();
   for (int i = 0; i < keys.size(); i++) {
     QString compName = keys[i];
     QString compNameLower = compName.toLower();
@@ -347,9 +346,9 @@ void SelWeaponWidget::save() {
 
   if (!curWeaponsName.isEmpty()) {
     // remove old entry
-    wconf->remove(curWeaponsName);
+    wconf.remove(curWeaponsName);
   }
-  wconf->insert(m_name->text(), stateFull);
+  wconf.insert(m_name->text(), stateFull);
   QFile file(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo/") +
              m_name->text() + QStringLiteral(".hwa"));
   if (file.open(QIODevice::WriteOnly)) {
@@ -367,7 +366,7 @@ int SelWeaponWidget::operator[](unsigned int weaponIndex) const {
 }
 
 QString SelWeaponWidget::getWeaponsString(const QString& name) const {
-  return std::as_const(wconf)->find(name).value();
+  return std::as_const(wconf).find(name).value();
 }
 
 void SelWeaponWidget::deleteWeaponsName() {
@@ -403,7 +402,7 @@ void SelWeaponWidget::deleteWeaponsName() {
 
   if (reallyDeleteMsg.exec() == QMessageBox::Ok) {
     isDeleting = true;
-    wconf->remove(delWeaponsName);
+    wconf.remove(delWeaponsName);
     QFile(cfgdir.absolutePath() + QStringLiteral("/Schemes/Ammo/") +
           curWeaponsName + QStringLiteral(".hwa"))
         .remove();
@@ -414,13 +413,13 @@ void SelWeaponWidget::deleteWeaponsName() {
 void SelWeaponWidget::newWeaponsName() {
   save();
   QString newName = tr("New");
-  if (wconf->contains(newName)) {
+  if (wconf.contains(newName)) {
     // name already used -> look for an appropriate name:
     int i = 2;
-    while (wconf->contains(newName = tr("New (%1)").arg(i++)));
+    while (wconf.contains(newName = tr("New (%1)").arg(i++)));
   }
   setWeaponsName(newName);
-  wconf->insert(newName, cEmptyAmmoStore);
+  wconf.insert(newName, cEmptyAmmoStore);
   Q_EMIT weaponsAdded(newName, cEmptyAmmoStore);
 }
 
@@ -429,8 +428,8 @@ void SelWeaponWidget::setWeaponsName(const QString& name) {
 
   curWeaponsName = name;
 
-  if (!name.isEmpty() && wconf->contains(name)) {
-    setWeapons(wconf->constFind(name).value());
+  if (!name.isEmpty() && wconf.contains(name)) {
+    setWeapons(wconf.constFind(name).value());
   } else {
     setWeapons(cEmptyAmmoStore);
   }
@@ -442,22 +441,22 @@ void SelWeaponWidget::switchWeapons(const QString& name) {
   setWeaponsName(name);
 }
 
-QStringList SelWeaponWidget::getWeaponNames() const { return wconf->keys(); }
+QStringList SelWeaponWidget::getWeaponNames() const { return wconf.keys(); }
 
 void SelWeaponWidget::copy() {
   save();
-  if (wconf->contains(curWeaponsName)) {
+  if (wconf.contains(curWeaponsName)) {
     QString ammo = getWeaponsString(curWeaponsName);
     QString newName = tr("Copy of %1").arg(curWeaponsName);
-    if (wconf->contains(newName)) {
+    if (wconf.contains(newName)) {
       // name already used -> look for an appropriate name:
       int i = 2;
-      while (wconf->contains(
+      while (wconf.contains(
           newName = tr("Copy of %1 (%2)").arg(curWeaponsName).arg(i++)));
     }
     setWeaponsName(newName);
     setWeapons(ammo);
-    wconf->insert(newName, ammo);
+    wconf.insert(newName, ammo);
     Q_EMIT weaponsAdded(newName, ammo);
   }
 }

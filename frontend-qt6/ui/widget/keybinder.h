@@ -20,6 +20,7 @@
 #define _KEY_BINDER_H
 
 #include <QHash>
+#include <QPointer>
 #include <QWidget>
 
 #include "binds.h"
@@ -52,14 +53,14 @@ class KeyBinder : public QWidget {
 
  private:
   QHash<QObject *, QTableWidgetItem *> bindComboBoxCellMappings;
-  QHash<QTableWidgetItem *, QComboBox *> bindCellComboBoxMappings;
-  QTableWidget *selectedBindTable;
-  QListWidget *catList;
-  QBoxLayout *bindingsPages;
-  QComboBox *CBBind[BINDS_NUMBER];
-  QLabel *conflictLabel;
-  QIcon *dropDownIcon;
-  QIcon *conflictIcon;
+  QHash<QTableWidgetItem *, QPointer<QComboBox>> bindCellComboBoxMappings;
+  QPointer<QTableWidget> selectedBindTable;
+  QPointer<QListWidget> catList;
+  QPointer<QBoxLayout> bindingsPages;
+  QPointer<QComboBox> CBBind[BINDS_NUMBER];
+  QPointer<QLabel> conflictLabel;
+  QIcon dropDownIcon;
+  QIcon conflictIcon;
   QString defaultText;
   bool enableSignal;
   QList<QTableWidgetItem *> conflictItems;

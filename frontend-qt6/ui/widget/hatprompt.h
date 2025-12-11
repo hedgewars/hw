@@ -21,6 +21,7 @@
 
 #include <QDialog>
 #include <QListView>
+#include <QPointer>
 #include <QWidget>
 
 class QLineEdit;
@@ -33,7 +34,7 @@ class HatListView : public QListView {
   friend class HatPrompt;
 
  public:
-  HatListView(QWidget* parent = 0) : QListView(parent) {}
+  explicit HatListView(QWidget* parent = 0) : QListView(parent) {}
   void moveUp();
   void moveDown();
   void moveLeft();
@@ -44,12 +45,12 @@ class HatPrompt : public QDialog {
   Q_OBJECT
 
  public:
-  HatPrompt(int currentIndex = 0, QWidget* parent = 0);
+  explicit HatPrompt(int currentIndex = 0, QWidget* parent = 0);
 
  private:
-  LineEditCursor* txtFilter;
-  HatListView* list;
-  QSortFilterProxyModel* filterModel;
+  QPointer<LineEditCursor> txtFilter;
+  QPointer<HatListView> list;
+  QPointer<QSortFilterProxyModel> filterModel;
 
  private Q_SLOTS:
   void onAccepted();

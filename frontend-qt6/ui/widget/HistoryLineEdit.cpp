@@ -30,10 +30,9 @@ HistoryLineEdit::HistoryLineEdit(QWidget* parent, int maxHistorySize)
     : QLineEdit(parent) {
   m_curHistEntryIdx = 0;
   m_maxHistorySize = maxHistorySize;
-  m_history = new QStringList();
 }
 
-HistoryLineEdit::~HistoryLineEdit() { delete m_history; }
+HistoryLineEdit::~HistoryLineEdit() = default;
 
 void HistoryLineEdit::rememberCurrentText() {
   QString newEntry = text();
@@ -41,31 +40,31 @@ void HistoryLineEdit::rememberCurrentText() {
   // don't store whitespace-only/empty text
   if (newEntry.trimmed().isEmpty()) return;
 
-  m_history->removeOne(newEntry);  // no duplicates please
-  m_history->append(newEntry);
+  m_history.removeOne(newEntry);  // no duplicates please
+  m_history.append(newEntry);
 
   // do not keep more entries than allowed
-  if (m_history->size() > m_maxHistorySize) m_history->removeFirst();
+  if (m_history.size() > m_maxHistorySize) m_history.removeFirst();
 
   // we're looking at the latest entry
-  m_curHistEntryIdx = m_history->size() - 1;
+  m_curHistEntryIdx = m_history.size() - 1;
 }
 
 void HistoryLineEdit::clear() {
   QLineEdit::clear();
-  m_curHistEntryIdx = m_history->size();
+  m_curHistEntryIdx = m_history.size();
 }
 
 void HistoryLineEdit::reset() {
   // forget history
-  m_history->clear();
+  m_history.clear();
   m_curHistEntryIdx = 0;
 }
 
 void HistoryLineEdit::navigateHistory(bool isGoingUp) {
   // save possible changes to new entry
-  if ((m_curHistEntryIdx >= m_history->size() ||
-       (text() != m_history->at(m_curHistEntryIdx)))) {
+  if ((m_curHistEntryIdx >= m_history.size() ||
+       (text() != m_history.at(m_curHistEntryIdx)))) {
     rememberCurrentText();
   }
 
@@ -75,13 +74,13 @@ void HistoryLineEdit::navigateHistory(bool isGoingUp) {
     m_curHistEntryIdx++;
 
   // if Idx higher than valid range
-  if (m_curHistEntryIdx >= m_history->size()) {
+  if (m_curHistEntryIdx >= m_history.size()) {
     QLineEdit::clear();
-    m_curHistEntryIdx = m_history->size();
+    m_curHistEntryIdx = m_history.size();
   }
   // if Idx in valid range
   else if (m_curHistEntryIdx >= 0) {
-    setText(m_history->at(m_curHistEntryIdx));
+    setText(m_history.at(m_curHistEntryIdx));
   }
   // if Idx below 0
   else

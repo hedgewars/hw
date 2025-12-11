@@ -39,7 +39,7 @@ class MinesTimeSpinBox : public QSpinBox {
    * @brief Class constructor.
    * @param parent parent widget.
    */
-  MinesTimeSpinBox(QWidget* parent);
+  explicit MinesTimeSpinBox(QWidget* parent);
 
  protected:
   /**
