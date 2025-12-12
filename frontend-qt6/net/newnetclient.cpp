@@ -22,16 +22,20 @@
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QInputDialog>
+#include <QLoggingCategory>
 #include <QSortFilterProxyModel>
 #include <QUuid>
 
 #include "HWApplication.h"
-#include "game.h"
 #include "hwconsts.h"
 #include "playerslistmodel.h"
 #include "proto.h"
 #include "roomslistmodel.h"
 #include "servermessages.h"
+
+namespace {
+Q_LOGGING_CATEGORY(log, "net")
+}
 
 QString delimiter{"\n"};
 
@@ -87,7 +91,7 @@ void HWNewNet::Connect(const QString& hostName, quint16 port, bool useTls,
   if (useTls) {
     NetSocket.connectToHostEncrypted(hostName, port);
     if (!NetSocket.waitForEncrypted()) {
-      qWarning("Handshake failed");
+      qCWarning(log) << "Handshake failed";
     }
   } else {
     NetSocket.connectToHost(hostName, port);
@@ -103,7 +107,7 @@ void HWNewNet::Disconnect() {
 
 void HWNewNet::CreateRoom(const QString& room, const QString& password) {
   if (netClientState != InLobby || !ByteLength(room)) {
-    qWarning("Illegal try to create room!");
+    qCWarning(log) << "Illegal try to create room!";
     return;
   }
 
@@ -120,7 +124,7 @@ void HWNewNet::CreateRoom(const QString& room, const QString& password) {
 
 void HWNewNet::JoinRoom(const QString& room, const QString& password) {
   if (netClientState != InLobby) {
-    qWarning("Illegal try to join room!");
+    qCWarning(log) << "Illegal try to join room!";
     return;
   }
 
@@ -172,8 +176,8 @@ int HWNewNet::ByteLength(const QString& str) { return str.toUtf8().size(); }
 void HWNewNet::RawSendNet(const QString& str) { RawSendNet(str.toUtf8()); }
 
 void HWNewNet::RawSendNet(const QByteArray& buf) {
-  qDebug() << "Client: "
-           << QString(QString::fromUtf8(buf)).split(QStringLiteral("\n"));
+  qCDebug(log) << "Client: "
+               << QString(QString::fromUtf8(buf)).split(QStringLiteral("\n"));
   NetSocket.write(buf);
   NetSocket.write("\n\n", 2);
 }
@@ -256,10 +260,10 @@ void HWNewNet::ContinueConnection() {
 }
 
 void HWNewNet::ParseCmd(const QStringList& lst) {
-  qDebug() << "Server: " << lst;
+  qCDebug(log) << "Server: " << lst;
 
   if (lst.isEmpty()) {
-    qWarning("Net client: Bad message");
+    qCWarning(log) << "Net client: Bad message";
     return;
   }
 
@@ -292,13 +296,13 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("REDIRECT")) {
     if (lst.size() < 2 || lst[1].toInt() == 0) {
-      qWarning("Net: Malformed REDIRECT message");
+      qCWarning(log) << "Net: Malformed REDIRECT message";
       return;
     }
 
     quint16 port = lst[1].toInt();
     if (port == 0) {
-      qWarning() << "Invalid redirection port";
+      qCWarning(log) << "Invalid redirection port";
     } else {
       netClientState = Redirected;
       Q_EMIT redirected(port);
@@ -309,7 +313,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
   if (lst[0] == QLatin1String("CONNECTED")) {
     if (lst.size() < 3 || lst[2].toInt() < cMinServerVersion) {
       // TODO: Warn user, disconnect
-      qWarning() << "Server too old";
+      qCWarning(log) << "Server too old";
       RawSendNet(QStringLiteral("QUIT%1%2").arg(delimiter, "Server too old"));
       Disconnect();
       Q_EMIT disconnected(tr("The server is too old. Disconnecting now."));
@@ -326,7 +330,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("SERVER_AUTH")) {
     if (lst.size() < 2) {
-      qWarning("Net: Malformed SERVER_AUTH message");
+      qCWarning(log) << "Net: Malformed SERVER_AUTH message";
       return;
     }
 
@@ -352,7 +356,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("ROOMS")) {
     if (lst.size() % m_roomsListModel->columnCountSupported() != 1) {
-      qWarning("Net: Malformed ROOMS message");
+      qCWarning(log) << "Net: Malformed ROOMS message";
       return;
     }
     m_roomsListModel->setRoomsList(lst.mid(1));
@@ -364,7 +368,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("SERVER_MESSAGE")) {
     if (lst.size() < 2) {
-      qWarning("Net: Empty SERVERMESSAGE message");
+      qCWarning(log) << "Net: Empty SERVERMESSAGE message";
       return;
     }
     Q_EMIT serverMessage(lst[1]);
@@ -373,7 +377,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("CHAT")) {
     if (lst.size() < 3) {
-      qWarning("Net: Empty CHAT message");
+      qCWarning(log) << "Net: Empty CHAT message";
       return;
     }
 
@@ -420,7 +424,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("INFO")) {
     if (lst.size() < 5) {
-      qWarning("Net: Malformed INFO message");
+      qCWarning(log) << "Net: Malformed INFO message";
       return;
     }
     Q_EMIT playerInfo(lst[1], lst[2], lst[3], lst[4]);
@@ -459,7 +463,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
   if (lst[0] == QLatin1String("CLIENT_FLAGS") ||
       lst[0] == QLatin1String("CF")) {
     if (lst.size() < 3 || lst[1].size() < 2) {
-      qWarning("Net: Malformed CLIENT_FLAGS message");
+      qCWarning(log) << "Net: Malformed CLIENT_FLAGS message";
       return;
     }
 
@@ -534,7 +538,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
           break;
 
         default:
-          qWarning() << "Net: Unknown client-flag: " << c;
+          qCWarning(log) << "Net: Unknown client-flag: " << c;
       }
     }
 
@@ -552,7 +556,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("LOBBY:JOINED")) {
     if (lst.size() < 2) {
-      qWarning("Net: Bad JOINED message");
+      qCWarning(log) << "Net: Bad JOINED message";
       return;
     }
 
@@ -614,7 +618,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("LOBBY:LEFT")) {
     if (lst.size() < 2) {
-      qWarning("Net: Bad LOBBY:LEFT message");
+      qCWarning(log) << "Net: Bad LOBBY:LEFT message";
       return;
     }
 
@@ -630,7 +634,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
     // server should send us salt of at least 16 characters
 
     if (lst.size() < 2 || lst[1].size() < 16) {
-      qWarning("Net: Bad ASKPASSWORD message");
+      qCWarning(log) << "Net: Bad ASKPASSWORD message";
       return;
     }
 
@@ -650,14 +654,14 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("NOTICE")) {
     if (lst.size() < 2) {
-      qWarning("Net: Bad NOTICE message");
+      qCWarning(log) << "Net: Bad NOTICE message";
       return;
     }
 
     bool ok;
     int n = lst[1].toInt(&ok);
     if (!ok) {
-      qWarning("Net: Bad NOTICE message");
+      qCWarning(log) << "Net: Bad NOTICE message";
       return;
     }
 
@@ -668,7 +672,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("BYE")) {
     if (lst.size() < 2) {
-      qWarning("Net: Bad BYE message");
+      qCWarning(log) << "Net: Bad BYE message";
       return;
     }
     if (lst[1] == QLatin1String("Authentication failed")) {
@@ -687,7 +691,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("JOINING")) {
     if (lst.size() != 2) {
-      qWarning("Net: Bad JOINING message");
+      qCWarning(log) << "Net: Bad JOINING message";
       return;
     }
 
@@ -698,7 +702,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (netClientState == InLobby && lst[0] == QLatin1String("JOINED")) {
     if (lst.size() < 2 || lst[1] != mynick) {
-      qWarning("Net: Bad JOINED message");
+      qCWarning(log) << "Net: Bad JOINED message";
       return;
     }
 
@@ -730,7 +734,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
       netClientState == InDemo) {
     if (lst[0] == QLatin1String("EM")) {
       if (lst.size() < 2) {
-        qWarning("Net: Bad EM message");
+        qCWarning(log) << "Net: Bad EM message";
         m_demo_data_pending = false;
         return;
       }
@@ -751,7 +755,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
     if (lst[0] == QLatin1String("ADD_TEAM")) {
       if (lst.size() != 24) {
-        qWarning("Net: Bad ADDTEAM message");
+        qCWarning(log) << "Net: Bad ADDTEAM message";
         return;
       }
       QStringList tmp = lst;
@@ -763,7 +767,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
     if (lst[0] == QLatin1String("REMOVE_TEAM")) {
       if (lst.size() != 2) {
-        qWarning("Net: Bad REMOVETEAM message");
+        qCWarning(log) << "Net: Bad REMOVETEAM message";
         return;
       }
       Q_EMIT RemoveNetTeam(HWTeam(lst[1]));
@@ -790,7 +794,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
     if (lst[0] == QLatin1String("TEAM_ACCEPTED")) {
       if (lst.size() != 2) {
-        qWarning("Net: Bad TEAM_ACCEPTED message");
+        qCWarning(log) << "Net: Bad TEAM_ACCEPTED message";
         return;
       }
       Q_EMIT TeamAccepted(lst[1]);
@@ -799,7 +803,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
     if (lst[0] == QLatin1String("CFG")) {
       if (lst.size() < 3) {
-        qWarning("Net: Bad CFG message");
+        qCWarning(log) << "Net: Bad CFG message";
         return;
       }
       QStringList tmp = lst;
@@ -814,7 +818,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
     if (lst[0] == QLatin1String("HH_NUM")) {
       if (lst.size() != 3) {
-        qWarning("Net: Bad TEAM_ACCEPTED message");
+        qCWarning(log) << "Net: Bad TEAM_ACCEPTED message";
         return;
       }
       HWTeam tmptm(lst[1]);
@@ -825,7 +829,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
     if (lst[0] == QLatin1String("TEAM_COLOR")) {
       if (lst.size() != 3) {
-        qWarning("Net: Bad TEAM_COLOR message");
+        qCWarning(log) << "Net: Bad TEAM_COLOR message";
         return;
       }
       HWTeam tmptm(lst[1]);
@@ -836,7 +840,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
     if (lst[0] == QLatin1String("JOINED")) {
       if (lst.size() < 2) {
-        qWarning("Net: Bad JOINED message");
+        qCWarning(log) << "Net: Bad JOINED message";
         return;
       }
 
@@ -851,7 +855,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
     if (lst[0] == QLatin1String("LEFT")) {
       if (lst.size() < 2) {
-        qWarning("Net: Bad LEFT message");
+        qCWarning(log) << "Net: Bad LEFT message";
         return;
       }
 
@@ -873,7 +877,7 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
     }
   }
 
-  qWarning() << "Net: Unknown message or wrong state:" << lst;
+  qCWarning(log) << "Net: Unknown message or wrong state:" << lst;
 }
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team) {
@@ -931,7 +935,7 @@ void HWNewNet::SendTeamMessage(const QString& str) {
 
 void HWNewNet::askRoomsList() {
   if (netClientState != InLobby) {
-    qWarning("Illegal try to get rooms list!");
+    qCWarning(log) << "Illegal try to get rooms list!";
     return;
   }
   // RawSendNet(QString("LIST")); //deprecated
