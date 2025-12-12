@@ -31,6 +31,7 @@
 
 #include "DataManager.h"
 #include "hwform.h"  // player hash
+#include "physfs_integration.h"
 
 HatModel::HatModel(QObject* parent) : QStandardItemModel(parent) {}
 
@@ -45,11 +46,13 @@ void HatModel::loadHats() {
   // New hats to add to model
   QList<QStandardItem*> hats;
 
+  auto& pfs = PhysFsManager::instance();
+
   // we'll need the DataManager a few times, so let's get a reference to it
   DataManager& dataMgr = DataManager::instance();
 
   // Default hat icon
-  QPixmap hhpix = QPixmap(QStringLiteral("physfs://Graphics/Hedgehog/Idle.png"))
+  QPixmap hhpix = pfs.readPixmap(QStringLiteral("/Graphics/Hedgehog/Idle.png"))
                       .copy(0, 0, 32, 32);
 
   // my reserved hats
@@ -73,12 +76,14 @@ void HatModel::loadHats() {
 
     QString str = hatsList.at(i);
     str = str.remove(QRegularExpression(QStringLiteral("\\.png$")));
-    QPixmap hatpix(QStringLiteral("physfs://Graphics/Hats/") +
-                   QString(isReserved ? "Reserved/" : "") + str +
-                   QStringLiteral(".png"));
+    QPixmap hatpix = pfs.readPixmap(QStringLiteral("/Graphics/Hats/") +
+                                    QString(isReserved ? "Reserved/" : "") +
+                                    str + QStringLiteral(".png"));
 
     // rename properly
-    if (isReserved) str = QStringLiteral("Reserved ") + str.remove(0, 32);
+    if (isReserved) {
+      str = QStringLiteral("Reserved ") + str.remove(0, 32);
+    }
 
     // Color for team hats. We use the default color of the first team.
     QColor overlay_color = QColor(colors[0]);

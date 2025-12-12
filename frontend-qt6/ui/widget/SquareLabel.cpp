@@ -21,10 +21,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-#include "hwform.h"
-
 SquareLabel::SquareLabel(QWidget* parent) : QWidget(parent) {
-  // if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
 void SquareLabel::paintEvent(QPaintEvent* event) {
@@ -40,7 +37,8 @@ void SquareLabel::paintEvent(QPaintEvent* event) {
     painter.translate(0, (height() - pixsize) / 2);
   }
   painter.drawPixmap(0, 0, pixsize, pixsize,
-                     pixmap.scaled(pixsize, pixsize, Qt::KeepAspectRatio));
+                     pixmap.scaled(pixsize, pixsize, Qt::KeepAspectRatio,
+                                   Qt::SmoothTransformation));
 }
 
 void SquareLabel::setPixmap(const QPixmap& pixmap) {

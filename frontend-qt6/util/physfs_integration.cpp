@@ -50,10 +50,14 @@ qint64 PhysFsFile::pos() const {
 }
 
 bool PhysFsFile::seek(qint64 pos) {
-  if (!m_fileHandle) return false;
+  if (!m_fileHandle) {
+    return false;
+  }
+
   if (PHYSFS_seek(m_fileHandle, pos) == 0) {
     return false;
   }
+
   return QIODevice::seek(pos);
 }
 
@@ -62,26 +66,41 @@ bool PhysFsFile::isSequential() const {
 }
 
 bool PhysFsFile::exists() const {
-  return PHYSFS_exists(m_filename.toUtf8().constData());
+  PHYSFS_Stat stat;
+  if (PHYSFS_stat(m_filename.toUtf8().constData(), &stat) != 0) {
+    return stat.filetype == PHYSFS_FILETYPE_REGULAR;
+  }
+
+  return false;
 }
 
 qint64 PhysFsFile::readData(char *data, qint64 maxlen) {
-  if (!m_fileHandle) return -1;
+  if (!m_fileHandle) {
+    return -1;
+  }
+
   qint64 read = PHYSFS_readBytes(m_fileHandle, data, maxlen);
+
   if (read == -1) {
     setErrorString(
         QString::fromUtf8(PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode())));
   }
+
   return read;
 }
 
 qint64 PhysFsFile::writeData(const char *data, qint64 len) {
-  if (!m_fileHandle) return -1;
+  if (!m_fileHandle) {
+    return -1;
+  }
+
   qint64 written = PHYSFS_writeBytes(m_fileHandle, data, len);
+
   if (written == -1) {
     setErrorString(
         QString::fromUtf8(PHYSFS_getErrorByCode(PHYSFS_getLastErrorCode())));
   }
+
   return written;
 }
 
@@ -138,7 +157,7 @@ QStringList PhysFsManager::listDirectory(const QString &path) const {
   return list;
 }
 
-QByteArray PhysFsManager::readFile(const QString &path) {
+QByteArray PhysFsManager::readFile(const QString &path) const {
   PhysFsFile file(path);
   if (!file.open(QIODevice::ReadOnly)) {
     qWarning() << "Failed to read file:" << path << file.errorString();
@@ -184,7 +203,23 @@ QVariantMap PhysFsManager::loadSettings(const QString &filename) {
   return doc.object().toVariantMap();
 }
 
-QPixmap PhysFsManager::readPixmap(const QString &path) {
+QImage PhysFsManager::readImage(const QString &path) const {
+  QByteArray data = readFile(path);
+
+  if (data.isEmpty()) {
+    return {};
+  }
+
+  QImage image;
+  if (!image.loadFromData(data)) {
+    qWarning() << "Failed to decode icon from:" << path;
+    return {};
+  }
+
+  return image;
+}
+
+QPixmap PhysFsManager::readPixmap(const QString &path) const {
   QByteArray data = readFile(path);
 
   if (data.isEmpty()) {
@@ -200,7 +235,7 @@ QPixmap PhysFsManager::readPixmap(const QString &path) {
   return pix;
 }
 
-QIcon PhysFsManager::readIcon(const QString &path) {
+QIcon PhysFsManager::readIcon(const QString &path) const {
   return QIcon{readPixmap(path)};
 }
 

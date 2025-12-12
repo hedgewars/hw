@@ -25,6 +25,7 @@
 
 #include "DataManager.h"
 #include "hwconsts.h"
+#include "physfs_integration.h"
 
 QSettings* getCampTeamFile(QString& campaignName, QString& teamName) {
   QSettings* teamfile =
@@ -77,8 +78,9 @@ bool isCampMissionWon(QString& campaignName, int missionInList,
                       QStringLiteral("/UnlockedMissions"),
                   0)
           .toInt();
-  QSettings campfile(QStringLiteral("physfs://Missions/Campaign/") +
-                         campaignName + QStringLiteral("/campaign.ini"),
+  // FIXME: QSettings with physfs file
+  QSettings campfile(QStringLiteral("/Missions/Campaign/") + campaignName +
+                         QStringLiteral("/campaign.ini"),
                      QSettings::IniFormat, 0);
   int totalMissions = campfile.value("MissionNum", 1).toInt();
   // The CowardMode cheat unlocks all campaign missions.
@@ -124,24 +126,25 @@ bool isCampWon(QString& campaignName, QString& teamName) {
 }
 
 QSettings* getCampMetaInfo() {
+  auto& pfs = PhysFsManager::instance();
   DataManager& dataMgr = DataManager::instance();
   // get locale
   QSettings settings(dataMgr.settingsFileName(), QSettings::IniFormat);
   QString loc = QLocale().name();
-  QString campaignDescFile =
-      QString(QStringLiteral("physfs://Locale/campaigns_") + loc +
-              QStringLiteral(".txt"));
+  QString campaignDescFile = QString(QStringLiteral("/Locale/campaigns_") +
+                                     loc + QStringLiteral(".txt"));
   // if file is non-existant try with language only
-  if (!QFile::exists(campaignDescFile)) {
+  if (!pfs.exists(campaignDescFile)) {
     QRegularExpression re(QStringLiteral("_.*$"));
-    campaignDescFile = QStringLiteral("physfs://Locale/campaigns_") +
-                       loc.remove(re) + QStringLiteral(".txt");
+    campaignDescFile = QStringLiteral("/Locale/campaigns_") + loc.remove(re) +
+                       QStringLiteral(".txt");
   }
 
   // fallback if file for current locale is non-existant
-  if (!QFile::exists(campaignDescFile))
-    campaignDescFile = QStringLiteral("physfs://Locale/campaigns_en.txt");
+  if (!pfs.exists(campaignDescFile))
+    campaignDescFile = QStringLiteral("/Locale/campaigns_en.txt");
 
+  // FIXME: QSettings from physfs
   QSettings* m_info = new QSettings(campaignDescFile, QSettings::IniFormat, 0);
 
   return m_info;
@@ -174,11 +177,14 @@ QList<MissionInfo> getCampMissionList(QString& campaignName,
           .toInt();
   bool cheat = teamfile->value("Team/CowardMode", false).toBool();
 
-  QSettings campfile(QStringLiteral("physfs://Missions/Campaign/") +
-                         campaignName + QStringLiteral("/campaign.ini"),
+  // FIXME
+  QSettings campfile(QStringLiteral("/Missions/Campaign/") + campaignName +
+                         QStringLiteral("/campaign.ini"),
                      QSettings::IniFormat, 0);
 
   QSettings* m_info = getCampMetaInfo();
+
+  auto& pfs = PhysFsManager::instance();
 
   if (cheat) {
     progress = campfile.value("MissionNum", 1).toInt();
@@ -209,10 +215,9 @@ QList<MissionInfo> getCampMissionList(QString& campaignName,
             campfile.value(QStringLiteral("Mission %1/Script").arg(i))
                 .toString()
                 .replace(QStringLiteral(".lua"), QStringLiteral("@2x.png"));
-        missionInfo.image =
-            QStringLiteral("physfs://Graphics/Missions/Campaign/") +
-            campaignName + QStringLiteral("/") + image;
-        if (!QFile::exists(missionInfo.image))
+        missionInfo.image = QStringLiteral("/Graphics/Missions/Campaign/") +
+                            campaignName + QStringLiteral("/") + image;
+        if (!pfs.exists(missionInfo.image))
           missionInfo.image = QStringLiteral(":/res/CampaignDefault.png");
         missionInfoList.append(missionInfo);
       }
@@ -250,10 +255,9 @@ QList<MissionInfo> getCampMissionList(QString& campaignName,
           campfile.value(QStringLiteral("Mission %1/Script").arg(missionNumber))
               .toString()
               .replace(QStringLiteral(".lua"), QStringLiteral("@2x.png"));
-      missionInfo.image =
-          QStringLiteral("physfs://Graphics/Missions/Campaign/") +
-          campaignName + QStringLiteral("/") + image;
-      if (!QFile::exists(missionInfo.image))
+      missionInfo.image = QStringLiteral("/Graphics/Missions/Campaign/") +
+                          campaignName + QStringLiteral("/") + image;
+      if (!pfs.exists(missionInfo.image))
         missionInfo.image = QStringLiteral(":/res/CampaignDefault.png");
       missionInfoList.append(missionInfo);
     }

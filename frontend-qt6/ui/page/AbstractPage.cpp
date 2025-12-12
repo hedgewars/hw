@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QSize>
 
+#include "physfs_integration.h"
 #include "qpushbuttonwithsound.h"
 
 AbstractPage::AbstractPage(QWidget* parent) {
@@ -86,7 +87,12 @@ QPushButtonWithSound* AbstractPage::formattedButton(const QString& name,
   QPushButtonWithSound* btn = new QPushButtonWithSound(this);
 
   if (hasIcon) {
-    const QIcon& lp = QIcon(name);
+    QIcon lp;
+    if (PhysFsManager::instance().exists(name))
+      lp = PhysFsManager::instance().readIcon(name);
+    else
+      lp = QIcon{name};
+
     QSize sz = lp.actualSize(QSize(65535, 65535));
     btn->setIcon(lp);
     btn->setFixedSize(sz);
@@ -104,7 +110,11 @@ QPushButton* AbstractPage::formattedSoundlessButton(const QString& name,
   QPushButton* btn = new QPushButton(this);
 
   if (hasIcon) {
-    const QIcon& lp = QIcon(name);
+    QIcon lp;
+    if (PhysFsManager::instance().exists(name))
+      lp = PhysFsManager::instance().readIcon(name);
+    else
+      lp = QIcon{name};
     QSize sz = lp.actualSize(QSize(65535, 65535));
     btn->setIcon(lp);
     btn->setFixedSize(sz);

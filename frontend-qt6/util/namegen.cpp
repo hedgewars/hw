@@ -28,6 +28,7 @@
 
 #include "DataManager.h"
 #include "hwform.h"
+#include "physfs_integration.h"
 
 HWNamegen::HWNamegen() {}
 
@@ -209,7 +210,7 @@ QStringList HWNamegen::dictContents(const QString &filename) {
   QStringList list;
 
   // find .txt to load the names from
-  QFile file(QStringLiteral("physfs://Names/%1.txt").arg(filename));
+  PhysFsFile file(QStringLiteral("/Names/%1.txt").arg(filename));
 
   if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
     QTextStream in(&file);
@@ -230,16 +231,12 @@ QStringList HWNamegen::dictsForHat(const QString &hatname) {
   QStringList list;
 
   // Find and check .cfg to load the dicts from
-  QString path = QStringLiteral("physfs://Names/%1.cfg").arg(hatname);
-  QFileInfo check_file(path);
+  QString path = QStringLiteral("/Names/%1.cfg").arg(hatname);
 
   // Note: The .cfg file is optional; a fallback mechanism is in place (see
   // below)
-
-  // Check if file exists to prevent PhysFS from complaining in console so much
-  if (check_file.exists() && check_file.isFile()) {
-    QFile file(path);
-
+  PhysFsFile file(path);
+  if (file.exists()) {
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
       QTextStream in(&file);
       QString line;
@@ -262,14 +259,14 @@ bool HWNamegen::loadTypes() {
   typesAvailable = false;
 
   // find .ini to load the names from
-  QFile *file = new QFile(QStringLiteral("physfs://Names/types.ini"));
+  PhysFsFile file(QStringLiteral("/Names/types.ini"));
 
-  if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text)) {
+  if (file.exists() && file.open(QIODevice::ReadOnly | QIODevice::Text)) {
     int counter = 0;  // counter starts with 0 (teamnames mode)
     TypesTeamnames.append(QStringList());
     TypesHatnames.append(QStringList());
 
-    QTextStream in(file);
+    QTextStream in(&file);
     while (!in.atEnd()) {
       QString line = in.readLine();
       if (line == QStringLiteral("#####")) {
@@ -295,9 +292,6 @@ bool HWNamegen::loadTypes() {
 
     typesAvailable = true;
   }
-
-  // this QFile isn't needed any further
-  delete file;
 
   return typesAvailable;
 }

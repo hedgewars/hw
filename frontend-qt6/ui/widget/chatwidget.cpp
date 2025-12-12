@@ -39,6 +39,7 @@
 #include "HWApplication.h"
 #include "gameuiconfig.h"
 #include "hwconsts.h"
+#include "physfs_integration.h"
 #include "playerslistmodel.h"
 
 QString *HWChatWidget::s_styleSheet = NULL;
@@ -56,25 +57,28 @@ const QString &HWChatWidget::styleSheet() {
 
 void HWChatWidget::setStyleSheet(const QString &styleSheet) {
   QString orgStyleSheet = styleSheet;
-  QString style = QString(orgStyleSheet);
+  QString style = orgStyleSheet;
 
   // no stylesheet supplied, search for one or use default
   if (orgStyleSheet.isEmpty()) {
     // load external stylesheet if there is any
-    QFile extFile(QStringLiteral("physfs://css/chat.css"));
+    auto styleFile =
+        PhysFsManager::instance().readFile(QStringLiteral("/css/chat.css"));
 
-    QFile resFile(QStringLiteral(":/res/css/chat.css"));
+    if (styleFile.isEmpty()) {
+      QFile resFile(QStringLiteral(":/res/css/chat.css"));
 
-    QFile &file = (extFile.exists() ? extFile : resFile);
+      if (resFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        styleFile = resFile.readAll();
+      }
+    }
 
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-      QTextStream in(&file);
+    if (!styleFile.isEmpty()) {
+      QTextStream in(&styleFile);
       while (!in.atEnd()) {
         style.append(in.readLine() + QStringLiteral("\n"));
       }
       orgStyleSheet = style;
-
-      file.close();
     }
   }
 
@@ -776,9 +780,9 @@ void HWChatWidget::discardStyleSheet() {
 }
 
 void HWChatWidget::saveStyleSheet() {
-  QString dest = QStringLiteral("physfs://css/chat.css");
+  QString dest = QStringLiteral("/css/chat.css");
 
-  QFile file(dest);
+  PhysFsFile file(dest);
   if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     QTextStream out(&file);
     QStringList lines =

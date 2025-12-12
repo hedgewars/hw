@@ -47,7 +47,7 @@ QLayout* PageCampaign::bodyLayoutDefinition() {
   // set this as default image first time page is created, this will change in
   // hwform.cpp
   btnPreview =
-      formattedButton(QStringLiteral("physfs://Graphics/Missions/Campaign/"
+      formattedButton(QStringLiteral("/Graphics/Missions/Campaign/"
                                      "A_Classic_Fairytale/first_blood@2x.png"),
                       true);
   btnPreview->setWhatsThis(tr("Start fighting"));

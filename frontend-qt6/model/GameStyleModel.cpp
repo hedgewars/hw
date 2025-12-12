@@ -26,7 +26,7 @@
 #include <QTextStream>
 
 #include "hwconsts.h"
-#include "physfs.h"
+#include "physfs_integration.h"
 
 void GameStyleModel::loadGameStyles() {
   QIcon dlcIcon;
@@ -58,8 +58,8 @@ void GameStyleModel::loadGameStyles() {
   for (auto&& script : scripts) {
     script = script.remove(QStringLiteral(".lua"), Qt::CaseInsensitive);
 
-    QFile scriptCfgFile(
-        QStringLiteral("physfs://Scripts/Multiplayer/%2.cfg").arg(script));
+    PhysFsFile scriptCfgFile(
+        QStringLiteral("/Scripts/Multiplayer/%2.cfg").arg(script));
 
     QString name = script;
     name = name.replace(QLatin1String("_"), QLatin1String(" "));
@@ -81,11 +81,9 @@ void GameStyleModel::loadGameStyles() {
     }
 
     // detect if script is dlc
-    QString scriptPath =
-        PHYSFS_getRealDir(QStringLiteral("Scripts/Multiplayer/%1.lua")
-                              .arg(script)
-                              .toLocal8Bit()
-                              .data());
+    QString scriptPath = PhysFsManager::instance().getRealDir(
+        QStringLiteral("Scripts/Multiplayer/%1.lua").arg(script));
+
     bool isDLC = !scriptPath.startsWith(datadir.absolutePath());
 
     QStandardItem* item;

@@ -40,6 +40,7 @@
 #include "hwconsts.h"
 #include "keybinder.h"
 #include "physfs.h"
+#include "physfs_integration.h"
 
 QLayout* PageEditTeam::bodyLayoutDefinition() {
   QGridLayout* pageLayout = new QGridLayout();
@@ -169,14 +170,15 @@ QLayout* PageEditTeam::bodyLayoutDefinition() {
 
   // CPU level flag. Static image, only displayed when computer player is
   // selected
-  QImage imgBotlevels =
-      QImage(QStringLiteral("physfs://Graphics/botlevels.png"));
+  QImage imgBotlevels = PhysFsManager::instance().readImage(
+      QStringLiteral("/Graphics/botlevels.png"));
 
   int botlevelOffsetsX[5] = {17, 13, 9, 5, 0};
   int botlevelOffsetsY[5] = {11, 9, 4, 2, 0};
 
   for (int i = 0; i < 5; i++) {
-    QImage imgCPU = QImage(QStringLiteral("physfs://Graphics/Flags/cpu.png"));
+    QImage imgCPU = PhysFsManager::instance().readImage(
+        QStringLiteral("/Graphics/Flags/cpu.png"));
     QPainter painter(&imgCPU);
     painter.drawImage(botlevelOffsetsX[i], botlevelOffsetsY[i], imgBotlevels,
                       botlevelOffsetsX[i], botlevelOffsetsY[i]);
@@ -368,8 +370,13 @@ void PageEditTeam::lazyLoad() {
                            QStringList("*.png"));
 
   for (auto&& file : list) {
-    QPixmap pix(QStringLiteral("physfs://Graphics/Graves/") + file);
-    if ((pix.height() > 32) || pix.width() > 32) pix = pix.copy(0, 0, 32, 32);
+    QPixmap pix = PhysFsManager::instance().readPixmap(
+        QStringLiteral("/Graphics/Graves/") + file);
+
+    if ((pix.height() > 32) || pix.width() > 32) {
+      pix = pix.copy(0, 0, 32, 32);
+    }
+
     QIcon icon(pix);
 
     QString grave = file.remove(pngSuffix);
@@ -391,7 +398,8 @@ void PageEditTeam::lazyLoad() {
   if (idx >= 0) list.removeAt(idx);
 
   // add the default flag
-  QPixmap hwFlag(QStringLiteral("physfs://Graphics/Flags/hedgewars.png"));
+  QPixmap hwFlag = PhysFsManager::instance().readPixmap(
+      QStringLiteral("/Graphics/Flags/hedgewars.png"));
   CBFlag->addItem(QIcon(hwFlag.copy(0, 0, 22, 15)), QStringLiteral("Hedgewars"),
                   "hedgewars");
 
@@ -402,7 +410,8 @@ void PageEditTeam::lazyLoad() {
 
   // add all country flags
   for (auto&& file : list) {
-    QIcon icon(QPixmap(QLatin1String("physfs://Graphics/Flags/") + file));
+    QIcon icon = PhysFsManager::instance().readIcon(
+        QStringLiteral("/Graphics/Flags/") + file);
 
     QString flag = QString(file).remove(pngSuffix);
 
@@ -434,9 +443,9 @@ void PageEditTeam::fixHHname(int idx) {
 
 void PageEditTeam::CBFort_activated(const int index) {
   QString fortName = CBFort->itemData(index).toString();
-  QPixmap pix(QStringLiteral("physfs://Forts/") + fortName +
-              QStringLiteral("L.png"));
-  FortPreview->setPixmap(pix);
+
+  FortPreview->setPixmap(PhysFsManager::instance().readPixmap(
+      QStringLiteral("/Forts/%1L.png").arg(fortName)));
 }
 
 void PageEditTeam::CBTeamLvl_activated(const int index) {

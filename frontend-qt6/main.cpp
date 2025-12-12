@@ -254,6 +254,36 @@ QString getUsage() {
                     QStringLiteral("hwplay://") + NETGAME_DEFAULT_SERVER));
 }
 
+QByteArray loadLocalization(const QLocale &locale,
+                            const QString &filenamePrefix,
+                            const QString &physFsDir) {
+  auto &fs = PhysFsManager::instance();
+  const auto uiLanguages = locale.uiLanguages();
+
+  QByteArray result;
+  for (auto localeName : uiLanguages) {
+    localeName.replace('-', '_');
+
+    auto candidate = QStringLiteral("%1/%2_%3.qm")
+                         .arg(physFsDir, filenamePrefix, localeName);
+
+    if (fs.exists(candidate)) {
+      // 1. Load data directly into our member variable
+      // This replaces the previous data if we are reloading languages
+      result = fs.readFile(candidate);
+
+      if (!result.isEmpty()) {
+        qDebug() << "Translator loaded:" << candidate;
+        return result;
+      }
+    }
+  }
+
+  qWarning() << "No suitable translation found in PhysFS";
+
+  return result;
+}
+
 int main(int argc, char *argv[]) {
   qInstallMessageHandler(hedgewarsMessageOutput);
 
@@ -272,7 +302,7 @@ int main(int argc, char *argv[]) {
   app.setAttribute(Qt::AA_DontShowIconsInMenus, false);
 
   /*
-  This is for messages frelated to translatable command-line arguments.
+  This is for messages related to translatable command-line arguments.
   If it is non-zero, will print out a message after loading locale
   and exit.
   */
@@ -433,6 +463,7 @@ int main(int argc, char *argv[]) {
   physfs.setWriteDir(cfgdir.absolutePath());
   physfs.mountPacks();
 
+  QByteArray hedgewarsLocalization;
   QTranslator TranslatorHedgewars;
   QTranslator TranslatorQt;
   QSettings settings(DataManager::instance().settingsFileName(),
@@ -455,19 +486,27 @@ int main(int argc, char *argv[]) {
 
     if (defaultLocaleName != QLatin1String("C")) {
       // Load locale files into translators
-      if (!TranslatorHedgewars.load(QLocale(), QStringLiteral("hedgewars"),
-                                    QStringLiteral("_"),
-                                    QStringLiteral("physfs://Locale")))
+      hedgewarsLocalization = loadLocalization(
+          QLocale(), QStringLiteral("hedgewars"), QStringLiteral("/Locale"));
+
+      if (!TranslatorHedgewars.load(reinterpret_cast<const uchar *>(
+                                        hedgewarsLocalization.constData()),
+                                    hedgewarsLocalization.size())) {
         qWarning("Failed to install Hedgewars translation (%s)",
                  qPrintable(defaultLocaleName));
+      }
+
       if (!TranslatorQt.load(
               QLocale(), QStringLiteral("qt"), QStringLiteral("_"),
-              QString(QLibraryInfo::path(QLibraryInfo::TranslationsPath))))
+              QString(QLibraryInfo::path(QLibraryInfo::TranslationsPath)))) {
         qWarning("Failed to install Qt translation (%s)",
                  qPrintable(defaultLocaleName));
+      }
+
       app.installTranslator(&TranslatorHedgewars);
       app.installTranslator(&TranslatorQt);
     }
+
     app.setLayoutDirection(QLocale().textDirection());
 
     // Handle command line messages

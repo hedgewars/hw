@@ -28,6 +28,7 @@
 #include "DataManager.h"
 #include "hwconsts.h"
 #include "hwform.h"
+#include "physfs_integration.h"
 
 QLayout* PageMain::bodyLayoutDefinition() {
   QGridLayout* pageLayout = new QGridLayout();
@@ -176,6 +177,7 @@ QString PageMain::randomTip() {
   int platform = 3;
 #endif
   if (Tips.isEmpty()) {
+    auto& pfs = PhysFsManager::instance();
     DataManager& dataMgr = DataManager::instance();
 
     // get locale
@@ -183,20 +185,22 @@ QString PageMain::randomTip() {
 
     QString loc = QLocale().name();
 
-    QString tipFile = QString(QStringLiteral("physfs://Locale/tips_") + loc +
-                              QStringLiteral(".xml"));
+    QString tipFile =
+        QString(QStringLiteral("/Locale/tips_") + loc + QStringLiteral(".xml"));
 
     // if file is non-existant try with language only
-    if (!QFile::exists(tipFile))
-      tipFile = QString(QStringLiteral("physfs://Locale/tips_") +
+    if (!pfs.exists(tipFile)) {
+      tipFile = QString(QStringLiteral("/Locale/tips_") +
                         loc.remove(QRegularExpression(QStringLiteral("_.*$"))) +
                         QStringLiteral(".xml"));
+    }
 
     // fallback if file for current locale is non-existant
-    if (!QFile::exists(tipFile))
-      tipFile = QStringLiteral("physfs://Locale/tips_en.xml");
+    if (!pfs.exists(tipFile)) {
+      tipFile = QStringLiteral("/Locale/tips_en.xml");
+    }
 
-    QFile file(tipFile);
+    PhysFsFile file(tipFile);
     if (file.open(QIODevice::ReadOnly)) {
       QTextStream in(&file);
       QString line = in.readLine();

@@ -128,9 +128,9 @@ bool MapModel::loadMaps() {
         QSettings settings(datamgr.settingsFileName(), QSettings::IniFormat);
         QString locale = QLocale().name();
 
-        QSettings descSettings(
-            QStringLiteral("physfs://Maps/%1/desc.txt").arg(map),
-            QSettings::IniFormat);
+        // FIXME
+        QSettings descSettings(QStringLiteral("/Maps/%1/desc.txt").arg(map),
+                               QSettings::IniFormat);
         desc = descSettings.value(locale, QString()).toString();
         // If not found, try with language-only code
         if (desc.isEmpty()) {

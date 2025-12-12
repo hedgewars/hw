@@ -32,6 +32,7 @@
 #include "DataManager.h"
 #include "hwconsts.h"
 #include "mission.h"
+#include "physfs_integration.h"
 
 QLayout* PageTraining::bodyLayoutDefinition() {
   QGridLayout* pageLayout = new QGridLayout();
@@ -174,6 +175,7 @@ void PageTraining::connectSignals() {
 PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent) {
   initPage();
 
+  auto& pfs = PhysFsManager::instance();
   DataManager& dataMgr = DataManager::instance();
 
   // get locale
@@ -181,19 +183,20 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent) {
 
   QString loc = QLocale().name();
 
-  QString infoFile = QString(QStringLiteral("physfs://Locale/missions_") + loc +
-                             QStringLiteral(".txt"));
+  QString infoFile =
+      QStringLiteral("/Locale/missions_") + loc + QStringLiteral(".txt");
 
   // if file is non-existant try with language only
-  if (!QFile::exists(infoFile))
-    infoFile = QString(QStringLiteral("physfs://Locale/missions_") +
-                       loc.remove(QRegularExpression(QStringLiteral("_.*$"))) +
-                       QStringLiteral(".txt"));
+  if (!pfs.exists(infoFile))
+    infoFile = QStringLiteral("/Locale/missions_") +
+               loc.remove(QRegularExpression(QStringLiteral("_.*$"))) +
+               QStringLiteral(".txt");
 
   // fallback if file for current locale is non-existant
-  if (!QFile::exists(infoFile))
-    infoFile = QStringLiteral("physfs://Locale/missions_en.txt");
+  if (!pfs.exists(infoFile))
+    infoFile = QStringLiteral("/Locale/missions_en.txt");
 
+  // FIXME: QSettings with physfs file
   // preload mission info for current locale
   m_info = new QSettings(infoFile, QSettings::IniFormat, this);
 
@@ -218,8 +221,8 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent) {
     }
     // scripts to load
     // first, load scripts in order specified in order.cfg (if present)
-    QFile orderFile(
-        QStringLiteral("physfs://Missions/%1/order.cfg").arg(subFolder));
+    PhysFsFile orderFile(
+        QStringLiteral("/Missions/%1/order.cfg").arg(subFolder));
     QStringList orderedMissions;
 
     if (orderFile.open(QFile::ReadOnly)) {
@@ -316,12 +319,13 @@ void PageTraining::updateInfo() {
     list = (QListWidget*)tbw->currentWidget();
     if (list->currentItem()) {
       QString missionName = list->currentItem()->data(Qt::UserRole).toString();
-      QString thumbFile = QStringLiteral("physfs://Graphics/Missions/") +
-                          subFolder + QStringLiteral("/") + missionName +
+      QString thumbFile = QStringLiteral("/Graphics/Missions/") + subFolder +
+                          QStringLiteral("/") + missionName +
                           QStringLiteral("@2x.png");
 
-      if (QFile::exists(thumbFile))
-        btnPreview->setIcon(QIcon(thumbFile));
+      auto& pfs = PhysFsManager::instance();
+      if (pfs.exists(thumbFile))
+        btnPreview->setIcon(pfs.readIcon(thumbFile));
       else if (tbw->currentWidget() == lstChallenges)
         btnPreview->setIcon(QIcon(":/res/Challenges.png"));
       else if (tbw->currentWidget() == lstScenarios)
