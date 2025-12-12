@@ -312,7 +312,6 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
 
   if (lst[0] == QLatin1String("CONNECTED")) {
     if (lst.size() < 3 || lst[2].toInt() < cMinServerVersion) {
-      // TODO: Warn user, disconnect
       qCWarning(log) << "Server too old";
       RawSendNet(QStringLiteral("QUIT%1%2").arg(delimiter, "Server too old"));
       Disconnect();

@@ -104,11 +104,10 @@ void SmartLineEdit::keyPressEvent(QKeyEvent* event) {
 }
 
 void SmartLineEdit::autoComplete() {
-  QString match = QLatin1String("");
   bool isNick = false;
   QString matchMe = text();
-  QString prefix = QLatin1String("");
-  QString postfix = QLatin1String("");
+  QString prefix;
+  QString postfix;
   bool isFirstWord;
 
   // we are trying to rematch, so use the data from earlier
@@ -153,34 +152,21 @@ void SmartLineEdit::autoComplete() {
     isFirstWord = prefix.isEmpty();  // true if first word
   }
 
+  QString match;
   if (isFirstWord) {
-    // FIXME: UB alarm: modifying container that we iterate on
-    // find matching commands
     for (auto&& cmd : m_cmds) {
       if (cmd.startsWith(matchMe, Qt::CaseInsensitive)) {
         match = cmd;
-
-        // move match to end so next time new matches will be preferred
-        m_cmds.removeAll(cmd);
-        m_cmds.append(cmd);
-
         break;
       }
     }
   }
 
   if (match.isEmpty()) {
-    // FIXME: UB alarm: modifying container that we iterate on
-    // find matching nicks
     for (auto&& nick : m_nicks) {
       if (nick.startsWith(matchMe, Qt::CaseInsensitive)) {
         match = nick;
         isNick = true;
-
-        // move match to end so next time new matches will be prefered
-        m_nicks.removeAll(nick);
-        m_nicks.append(nick);
-
         break;
       }
     }
@@ -188,6 +174,10 @@ void SmartLineEdit::autoComplete() {
 
   // we found a single match?
   if (!match.isEmpty()) {
+    // move match to end so next time new matches will be preferred
+    m_cmds.removeAll(match);
+    m_cmds.append(match);
+
     // replace last word with match
     // and append ':' if a name at the beginning of the matchMe got completed
     // also add a space at the very end to ease further typing

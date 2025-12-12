@@ -11,7 +11,7 @@
 PhysFsFile::PhysFsFile(const QString &filename, QObject *parent)
     : QIODevice(parent), m_filename(filename), m_fileHandle(nullptr) {}
 
-PhysFsFile::~PhysFsFile() { close(); }
+PhysFsFile::~PhysFsFile() { _close(); }
 
 bool PhysFsFile::open(OpenMode mode) {
   if (mode & QIODevice::ReadOnly) {
@@ -33,13 +33,7 @@ bool PhysFsFile::open(OpenMode mode) {
   return QIODevice::open(mode);
 }
 
-void PhysFsFile::close() {
-  if (m_fileHandle) {
-    PHYSFS_close(m_fileHandle);
-    m_fileHandle = nullptr;
-  }
-  QIODevice::close();
-}
+void PhysFsFile::close() { _close(); }
 
 qint64 PhysFsFile::size() const {
   return m_fileHandle ? PHYSFS_fileLength(m_fileHandle) : 0;
@@ -102,6 +96,14 @@ qint64 PhysFsFile::writeData(const char *data, qint64 len) {
   }
 
   return written;
+}
+
+void PhysFsFile::_close() {
+  if (m_fileHandle) {
+    PHYSFS_close(m_fileHandle);
+    m_fileHandle = nullptr;
+  }
+  QIODevice::close();
 }
 
 PhysFsManager &PhysFsManager::instance() {
@@ -178,29 +180,6 @@ bool PhysFsManager::writeFile(const QString &path, const QByteArray &data) {
 QString PhysFsManager::getRealDir(const QString &filename) const {
   const auto realDir = PHYSFS_getRealDir(filename.toUtf8().constData());
   return (realDir == nullptr) ? QString{} : QString::fromUtf8(realDir);
-}
-
-// ----------------------------------------------------------------------------
-// Handling Settings
-// ----------------------------------------------------------------------------
-// Standard QSettings expects a native file path or registry.
-// When using PhysFS, we usually want settings in the WriteDir (e.g. SaveGame
-// folder). It is cleaner to serialize a QVariantMap to JSON and store it via
-// PhysFS.
-
-bool PhysFsManager::saveSettings(const QString &filename,
-                                 const QVariantMap &settings) {
-  QJsonObject jsonObject = QJsonObject::fromVariantMap(settings);
-  QJsonDocument doc(jsonObject);
-  return writeFile(filename, doc.toJson());
-}
-
-QVariantMap PhysFsManager::loadSettings(const QString &filename) {
-  QByteArray data = readFile(filename);
-  if (data.isEmpty()) return QVariantMap();
-
-  QJsonDocument doc = QJsonDocument::fromJson(data);
-  return doc.object().toVariantMap();
 }
 
 QImage PhysFsManager::readImage(const QString &path) const {

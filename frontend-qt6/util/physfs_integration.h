@@ -30,6 +30,8 @@ class PhysFsFile : public QIODevice {
  private:
   QString m_filename;
   PHYSFS_File *m_fileHandle;
+
+  void _close();
 };
 
 class PhysFsManager : public QObject {
@@ -52,9 +54,6 @@ class PhysFsManager : public QObject {
   QByteArray readFile(const QString &path) const;
   bool writeFile(const QString &path, const QByteArray &data);
   QString getRealDir(const QString &filename) const;
-
-  bool saveSettings(const QString &filename, const QVariantMap &settings);
-  QVariantMap loadSettings(const QString &filename);
 
   QImage readImage(const QString &path) const;
   QPixmap readPixmap(const QString &path) const;
