@@ -321,11 +321,6 @@ target_include_directories(hedgewars PRIVATE
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-#qt_add_translations(
-#    TARGETS hedgewars
-#    TS_FILES hedgewars_ru_RU.ts
-#)
-
 target_link_libraries(hedgewars
     PRIVATE
         Qt::Core
@@ -349,5 +344,6 @@ qt_generate_deploy_app_script(
     TARGET hedgewars
     OUTPUT_SCRIPT deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
+    NO_TRANSLATIONS
 )
 install(SCRIPT ${deploy_script})
