@@ -78,10 +78,8 @@ bool isCampMissionWon(QString& campaignName, int missionInList,
                       QStringLiteral("/UnlockedMissions"),
                   0)
           .toInt();
-  // FIXME: QSettings with physfs file
-  QSettings campfile(QStringLiteral("/Missions/Campaign/") + campaignName +
-                         QStringLiteral("/campaign.ini"),
-                     QSettings::IniFormat, 0);
+  PhysFsIniReader campfile(QStringLiteral("/Missions/Campaign/") +
+                           campaignName + QStringLiteral("/campaign.ini"));
   int totalMissions = campfile.value("MissionNum", 1).toInt();
   // The CowardMode cheat unlocks all campaign missions.
   // Added to make it easier to test campaigns.
@@ -125,7 +123,7 @@ bool isCampWon(QString& campaignName, QString& teamName) {
   return won;
 }
 
-QSettings* getCampMetaInfo() {
+PhysFsIniReader* getCampMetaInfo() {
   auto& pfs = PhysFsManager::instance();
   DataManager& dataMgr = DataManager::instance();
   // get locale
@@ -144,8 +142,7 @@ QSettings* getCampMetaInfo() {
   if (!pfs.exists(campaignDescFile))
     campaignDescFile = QStringLiteral("/Locale/campaigns_en.txt");
 
-  // FIXME: QSettings from physfs
-  QSettings* m_info = new QSettings(campaignDescFile, QSettings::IniFormat, 0);
+  PhysFsIniReader* m_info = new PhysFsIniReader(campaignDescFile);
 
   return m_info;
 }
@@ -177,17 +174,15 @@ QList<MissionInfo> getCampMissionList(QString& campaignName,
           .toInt();
   bool cheat = teamfile->value("Team/CowardMode", false).toBool();
 
-  // FIXME
-  QSettings campfile(QStringLiteral("/Missions/Campaign/") + campaignName +
-                         QStringLiteral("/campaign.ini"),
-                     QSettings::IniFormat, 0);
+  PhysFsIniReader campfile(QStringLiteral("/Missions/Campaign/") +
+                           campaignName + QStringLiteral("/campaign.ini"));
 
-  QSettings* m_info = getCampMetaInfo();
+  PhysFsIniReader* m_info = getCampMetaInfo();
 
   auto& pfs = PhysFsManager::instance();
 
   if (cheat) {
-    progress = campfile.value("MissionNum", 1).toInt();
+    progress = campfile.value(QStringLiteral("MissionNum"), 1).toInt();
   }
   if ((progress >= 0 && unlockedMissions == 0) || cheat) {
     for (unsigned int i = progress + 1; i > 0; i--) {

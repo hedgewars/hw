@@ -196,9 +196,8 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent) {
   if (!pfs.exists(infoFile))
     infoFile = QStringLiteral("/Locale/missions_en.txt");
 
-  // FIXME: QSettings with physfs file
   // preload mission info for current locale
-  m_info = new QSettings(infoFile, QSettings::IniFormat, this);
+  m_info = new PhysFsIniReader(infoFile, this);
 
   QStringList m_list;
   QListWidget* m_widget;

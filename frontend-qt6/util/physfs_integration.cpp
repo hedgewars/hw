@@ -106,6 +106,59 @@ void PhysFsFile::_close() {
   QIODevice::close();
 }
 
+PhysFsIniReader::PhysFsIniReader(const QString &filename, QObject *parent)
+    : QObject{parent} {
+  QByteArray data = PhysFsManager::instance().readFile(filename);
+
+  if (!data.isEmpty()) {
+    parse(QString::fromUtf8(data));
+  }
+}
+
+void PhysFsIniReader::parse(const QString &content) {
+  const auto lines = content.split(QRegularExpression(QStringLiteral("[\r\n]")),
+                                   Qt::SkipEmptyParts);
+
+  QString currentSection;
+  for (QString line : lines) {
+    line = line.trimmed();
+
+    if (line.isEmpty() || line.startsWith('#') || line.startsWith(';')) {
+      continue;
+    }
+
+    if (line.startsWith('[') && line.endsWith(']')) {
+      currentSection = line.mid(1, line.length() - 2).trimmed();
+      continue;
+    }
+
+    int equalsPos = line.indexOf('=');
+    if (equalsPos != -1) {
+      auto key = line.left(equalsPos).trimmed();
+      auto valStr = line.mid(equalsPos + 1).trimmed();
+
+      auto fullKey =
+          currentSection.isEmpty() ? key : (currentSection + '/' + key);
+
+      QVariant value;
+      if (valStr.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0) {
+        value = true;
+      } else if (valStr.compare(QLatin1String("false"), Qt::CaseInsensitive) ==
+                 0) {
+        value = false;
+      } else
+        value = valStr;  // Default to string
+
+      m_values.insert(fullKey, value);
+    }
+  }
+}
+
+QVariant PhysFsIniReader::value(QAnyStringView key,
+                                const QVariant &defaultValue) const {
+  return m_values.value(key.toString(), defaultValue);
+}
+
 PhysFsManager &PhysFsManager::instance() {
   static PhysFsManager instance;
   return instance;

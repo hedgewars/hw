@@ -20,6 +20,7 @@
 #define PAGE_TRAINING_H
 
 #include "AbstractPage.h"
+#include "physfs_integration.h"
 
 class PageTraining : public AbstractPage {
   Q_OBJECT
@@ -49,7 +50,7 @@ class PageTraining : public AbstractPage {
   QLabel* lblDescription;
   QLabel* lblHighscores;
   QTabWidget* tbw;
-  QSettings* m_info;
+  PhysFsIniReader* m_info;
   QString getSubFolderOfSelected();
 
  private Q_SLOTS:

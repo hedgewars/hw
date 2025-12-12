@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QString>
 
+class PhysFsIniReader;
 class MissionInfo {
  public:
   QString name;
@@ -32,7 +33,7 @@ class MissionInfo {
 };
 
 QSettings* getCampTeamFile(QString& campaignName, QString& teamName);
-QSettings* getCampMetaInfo();
+PhysFsIniReader* getCampMetaInfo();
 bool isCampWon(QString& campaignName, QString& teamName);
 bool isCampMissionWon(QString& campaignName, int missionInList,
                       QString& teamName);

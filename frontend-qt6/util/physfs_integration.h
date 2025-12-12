@@ -34,6 +34,21 @@ class PhysFsFile : public QIODevice {
   void _close();
 };
 
+class PhysFsIniReader : QObject {
+  Q_OBJECT
+
+ public:
+  explicit PhysFsIniReader(const QString &filename, QObject *parent = nullptr);
+
+  QVariant value(QAnyStringView key,
+                 const QVariant &defaultValue = QVariant()) const;
+
+ private:
+  void parse(const QString &content);
+
+  QHash<QString, QVariant> m_values;
+};
+
 class PhysFsManager : public QObject {
   Q_OBJECT
 
