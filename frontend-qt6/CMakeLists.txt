@@ -345,13 +345,5 @@ include(GNUInstallDirs)
 install(TARGETS hedgewars
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION ${target_binary_install_dir}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-qt_generate_deploy_app_script(
-    TARGET hedgewars
-    OUTPUT_SCRIPT deploy_script
-    NO_UNSUPPORTED_PLATFORM_ERROR
-    NO_TRANSLATIONS
-)
-install(SCRIPT ${deploy_script})
