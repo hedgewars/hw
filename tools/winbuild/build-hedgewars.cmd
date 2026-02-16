@@ -37,20 +37,20 @@ echo Configuring...
 cd %BUILDDIR%
 %CMAKE% -G Ninja -DCMAKE_BUILD_TYPE="Release" -DWIN32_WIN64_CROSS_COMPILE=on -DCABAL_FLAGS="-j --project-file=tools/winbuild/cabal.project.local" %HWREPO%
 
-if %errorlevel% neq 0 (
-    echo Configure failed!
-    exit /b 1
-)
+@if %errorlevel% neq 0 (
+    @echo Configure failed!
+    @exit /b 1
+@)
 
 
 echo Building...
 
 %CMAKE% --build . --verbose --parallel
 
-if %errorlevel% neq 0 (
-    echo Build failed!
-    exit /b 1
-)
+@if %errorlevel% neq 0 (
+    @echo Build failed!
+    @exit /b 1
+@)
 
 echo Creating package...
 

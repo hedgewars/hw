@@ -149,17 +149,6 @@ if(MINIMAL_FLAGS)
     unset(CMAKE_CXX_FLAGS_DEBUG)
 endif()
 
-
-#parse additional parameters
-if(GHFLAGS)
-    if(${CMAKE_VERSION} VERSION_GREATER 2.6)
-        separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
-    else()
-        message("*** GHFLAGS are available only when using CMake >= 2.8 ***")
-    endif()
-endif()
-
-
 if(GHC_DYNAMIC)
   list(APPEND CABAL_FLAGS "-dynamic")
 endif()

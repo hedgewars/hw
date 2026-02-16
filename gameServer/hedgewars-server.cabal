@@ -16,6 +16,11 @@ flag officialServer
   default:     False
   manual:      True
 
+flag officialServerChecker
+  description: Replay checker for official server
+  default:     False
+  manual:      True
+
 Executable hedgewars-server
   main-is: hedgewars-server.hs
   other-modules:
@@ -82,29 +87,30 @@ Executable hedgewars-server
 
   ghc-options: -O2
 
-Executable checker
-  main-is: OfficialServer/checker.hs
+if flag(officialServerChecker)
+  Executable checker
+    main-is: OfficialServer/checker.hs
 
-  default-language:    Haskell2010
+    default-language:    Haskell2010
 
-  Build-depends:
-    base >= 4.8,
-    containers,
-    vector,
-    bytestring,
-    network >= 2.3,
-    network-bsd,
-    mtl >= 2,
-    sandi,
-    hslogger,
-    process,
-    ConfigFile,
-    directory
+    Build-depends:
+      base >= 4.8,
+      containers,
+      vector,
+      bytestring,
+      network >= 2.3,
+      network-bsd,
+      mtl >= 2,
+      sandi,
+      hslogger,
+      process,
+      ConfigFile,
+      directory
 
-  if !os(windows)
-    build-depends: unix
+    if !os(windows)
+      build-depends: unix
 
-  ghc-options: -O2
+    ghc-options: -O2
 
 
 

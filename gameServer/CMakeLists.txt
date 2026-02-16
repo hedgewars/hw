@@ -40,28 +40,6 @@ execute_process(
     ERROR_VARIABLE CABAL_CHECK_ERROR
 )
 
-message(CHECK_START "Determining resulting binary path...")
-
-execute_process(
-    COMMAND ${CABAL_EXECUTABLE}
-            list-bin
-            exe:hedgewars-server
-            --builddir=${CABAL_DIST_DIR}
-            ${CABAL_FLAGS}
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    OUTPUT_VARIABLE SERVER_BIN_PATH_UNPARSED
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    RESULT_VARIABLE RESULT
-)
-
-if(NOT RESULT EQUAL 0)
-    message(CHECK_FAIL "failure")
-    message(FATAL_ERROR "Cabal failed to determine path to the binary for hedgewars-server")
-else()
-    file(TO_CMAKE_PATH "${SERVER_BIN_PATH_UNPARSED}" SERVER_BIN_PATH)
-    message(CHECK_PASS ${SERVER_BIN_PATH})
-endif()
-
 if(NOT CABAL_CHECK_EXIT_CODE EQUAL 0)
     # Print the error from Cabal so the user knows which package is missing/conflict
     message(WARNING "${CABAL_CHECK_OUTPUT}")
@@ -70,8 +48,6 @@ else()
     message(STATUS "Haskell dependencies are valid.")
 endif()
 
-set(CABAL_BIN_OUTPUT "${CABAL_DIST_DIR}/build/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}")
-
 add_custom_target(hedgewars-server ALL
     COMMAND ${CABAL_EXECUTABLE} 
             v2-build
@@ -79,10 +55,19 @@ add_custom_target(hedgewars-server ALL
             --builddir=${CABAL_DIST_DIR}
             ${CABAL_FLAGS}
 
+    COMMAND ${CABAL_EXECUTABLE} 
+             v2-install
+             exe:hedgewars-server
+            --builddir=${CABAL_DIST_DIR}
+            --installdir=${CMAKE_CURRENT_BINARY_DIR}
+            --install-method=copy
+            --overwrite-policy=always
+             ${CABAL_FLAGS}
+             
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     COMMENT "Building hedgewars-server with Cabal..."
     VERBATIM
 )
 
-install(PROGRAMS "${SERVER_BIN_PATH}" DESTINATION ${target_binary_install_dir})
+install(PROGRAMS "${SERVER_OUTPUT_PATH}" DESTINATION ${target_binary_install_dir})
 
