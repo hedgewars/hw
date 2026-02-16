@@ -8,6 +8,5 @@ set_target_properties(avwrapper PROPERTIES
                           SOVERSION 1.0)
 target_link_libraries(avwrapper ${LIBAV_LIBRARIES})
 install(TARGETS avwrapper RUNTIME DESTINATION ${target_binary_install_dir}
-                          LIBRARY DESTINATION ${target_library_install_dir}
-                          ARCHIVE DESTINATION ${target_library_install_dir})
+                          LIBRARY DESTINATION ${target_library_install_dir})
 

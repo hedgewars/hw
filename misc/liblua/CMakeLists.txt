@@ -16,8 +16,7 @@ set_target_properties(lua PROPERTIES
                           SOVERSION 1
                           OUTPUT_NAME ${lua_output_name})
 install(TARGETS lua RUNTIME DESTINATION ${target_binary_install_dir}
-                    LIBRARY DESTINATION ${target_library_install_dir}
-                    ARCHIVE DESTINATION ${target_library_install_dir})
+                    LIBRARY DESTINATION ${target_library_install_dir})
 
 set(LUA_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Lua include dir" FORCE)
 set(LUA_LIBRARY lua CACHE STRING "Lua library" FORCE)

@@ -5,10 +5,16 @@ if(WIN32 AND NOT UNIX)
 		)
 endif(WIN32 AND NOT UNIX)
 
-option(EXTERNAL_BIN_DIR "Directory with additional libraries to put into target directory" "")
+set(EXTERNAL_BIN_DIR "" CACHE PATH "Directory with additional libraries to put into target directory")
 
-install(DIRECTORY "${EXTERNAL_BIN_DIR}/"
-        DESTINATION ${target_library_install_dir}
-        COMPONENT Runtime
-)
+if(EXTERNAL_BIN_DIR)
+    if(IS_DIRECTORY "${EXTERNAL_BIN_DIR}")
+        install(DIRECTORY "${EXTERNAL_BIN_DIR}/"
+                DESTINATION ${target_library_install_dir}
+                COMPONENT Runtime
+        )
+    else()
+        message(WARNING "EXTERNAL_BIN_DIR is set to '${EXTERNAL_BIN_DIR}', but it is not a valid directory.")
+    endif()
+endif()
 

@@ -23,8 +23,7 @@ else()
     target_link_libraries(physlayer ${SDL2_LIBRARIES} lua physfs)
 endif()
 install(TARGETS physlayer RUNTIME DESTINATION ${target_binary_install_dir}
-                          LIBRARY DESTINATION ${target_library_install_dir}
-                          ARCHIVE DESTINATION ${target_library_install_dir})
+                          LIBRARY DESTINATION ${target_library_install_dir})
 
 
 ## added standard variables (FORCE or cmake won't pick 'em)
