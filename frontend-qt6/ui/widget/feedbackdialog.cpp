@@ -76,16 +76,17 @@ FeedbackDialog::FeedbackDialog(QWidget *parent) : QDialog(parent) {
 
   info = new QLabel();
   info->setText(
-      QString("<style type=\"text/css\">"
-              "a { color: #fc0; }"
-              "b { color: #0df; }"
-              "</style>"
-              "<div align=\"center\"><h1>%1</h1>"
-              "<h3>%2<h3>"
-              "<h4>%3 <a href=\"https://hedgewars.org/kb/KnownBugs\">known "
-              "bugs</a><h4>"
-              "<h4>%4<h4>"
-              "</div>")
+      QStringLiteral(
+          "<style type=\"text/css\">"
+          "a { color: #fc0; }"
+          "b { color: #0df; }"
+          "</style>"
+          "<div align=\"center\"><h1>%1</h1>"
+          "<h3>%2<h3>"
+          "<h4>%3 <a href=\"https://hedgewars.org/kb/KnownBugs\">known "
+          "bugs</a><h4>"
+          "<h4>%4<h4>"
+          "</div>")
           .arg(tr("Send us feedback!"),
                tr("We are always happy about suggestions, ideas, or bug "
                   "reports."),
@@ -423,7 +424,9 @@ void FeedbackDialog::finishedSlot(QNetworkReply *reply) {
 
     return;
   } else {
-    ShowErrorMessage(QStringLiteral("Error: ") + reply->readAll());
+    ShowErrorMessage(QStringLiteral("Error: %1\n%2")
+                         .arg(reply->errorString())
+                         .arg(reply->readAll()));
     LoadCaptchaImage();
   }
 }
