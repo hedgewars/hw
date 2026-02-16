@@ -60,9 +60,9 @@ cd %BUILDDIR%
       %HWREPO%
 
 @if %errorlevel% neq 0 (
-    echo Configure failed!
-    exit /b 1
-)
+    @echo Configure failed!
+    @exit /b 1
+@)
 
 
 echo Building...
@@ -70,9 +70,9 @@ echo Building...
 %CMAKE% --build . --verbose --parallel
 
 @if %errorlevel% neq 0 (
-    echo Build failed!
-    exit /b 1
-)
+    @echo Build failed!
+    @exit /b 1
+@)
 
 echo Creating package...
 
