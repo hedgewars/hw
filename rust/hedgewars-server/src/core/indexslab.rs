@@ -43,7 +43,7 @@ impl<T> IndexSlab<T> {
 
     pub fn remove(&mut self, index: usize) -> Option<T> {
         if let Some(x) = self.data.get_mut(index) {
-            replace(x, None)
+            x.take()
         } else {
             None
         }
@@ -53,14 +53,14 @@ impl<T> IndexSlab<T> {
         self.data
             .iter()
             .enumerate()
-            .filter_map(|(index, opt)| opt.as_ref().and_then(|x| Some((index, x))))
+            .filter_map(|(index, opt)| opt.as_ref().map(|x| (index, x)))
     }
 
     pub fn iter_mut(&mut self) -> impl Iterator<Item = (usize, &mut T)> {
         self.data
             .iter_mut()
             .enumerate()
-            .filter_map(|(index, opt)| opt.as_mut().and_then(|x| Some((index, x))))
+            .filter_map(|(index, opt)| opt.as_mut().map(|x| (index, x)))
     }
 }
 

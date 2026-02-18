@@ -152,7 +152,7 @@ impl Display for HaskellValue {
     }
 }
 
-fn comma(input: &[u8]) -> HaskellResult<&[u8]> {
+fn comma(input: &[u8]) -> HaskellResult<'_, &[u8]> {
     delimited(take_while(is_space), tag(","), take_while(is_space))(input)
 }
 
@@ -167,20 +167,20 @@ where
     move |input| {
         delimited(
             delimited(take_while(is_space), tag(prefix), take_while(is_space)),
-            |i| parser(i),
+            &mut parser,
             delimited(take_while(is_space), tag(suffix), take_while(is_space)),
         )(input)
     }
 }
 
-fn boolean(input: &[u8]) -> HaskellResult<HaskellValue> {
+fn boolean(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
     map(
         alt((map(tag("True"), |_| true), map(tag("False"), |_| false))),
         HaskellValue::Boolean,
     )(input)
 }
 
-fn number_raw(input: &[u8]) -> HaskellResult<u8> {
+fn number_raw(input: &[u8]) -> HaskellResult<'_, u8> {
     use std::str::FromStr;
     map_res(take_while(is_digit), |s| {
         std::str::from_utf8(s)
@@ -189,7 +189,7 @@ fn number_raw(input: &[u8]) -> HaskellResult<u8> {
     })(input)
 }
 
-fn number(input: &[u8]) -> HaskellResult<HaskellValue> {
+fn number(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
     map(number_raw, HaskellValue::Number)(input)
 }
 
@@ -221,10 +221,10 @@ impl Extend<Escape> for Vec<u8> {
     }
 }
 
-fn string_escape(input: &[u8]) -> HaskellResult<Escape> {
+fn string_escape(input: &[u8]) -> HaskellResult<'_, Escape> {
     use Escape::*;
     alt((
-        map(number_raw, |n| Byte(n)),
+        map(number_raw, Byte),
         alt((
             map(tag("\\"), |_| Byte(b'\\')),
             map(tag("\""), |_| Byte(b'\"')),
@@ -269,41 +269,41 @@ fn string_escape(input: &[u8]) -> HaskellResult<Escape> {
     ))(input)
 }
 
-fn string_content(input: &[u8]) -> HaskellResult<String> {
+fn string_content(input: &[u8]) -> HaskellResult<'_, String> {
     map_res(
         escaped_transform(is_not("\"\\"), '\\', string_escape),
         |bytes| String::from_utf8(bytes).map_err(|_| ()),
     )(input)
 }
 
-fn string(input: &[u8]) -> HaskellResult<HaskellValue> {
+fn string(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
     map(
         delimited(tag("\""), string_content, tag("\"")),
         HaskellValue::String,
     )(input)
 }
 
-fn tuple(input: &[u8]) -> HaskellResult<HaskellValue> {
+fn tuple(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
     map(
         surrounded("(", ")", separated_list0(comma, value)),
         HaskellValue::Tuple,
     )(input)
 }
 
-fn list(input: &[u8]) -> HaskellResult<HaskellValue> {
+fn list(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
     map(
         surrounded("[", "]", separated_list0(comma, value)),
         HaskellValue::List,
     )(input)
 }
 
-fn identifier(input: &[u8]) -> HaskellResult<String> {
+fn identifier(input: &[u8]) -> HaskellResult<'_, String> {
     map_res(take_while1(is_alphanumeric), |s| {
         std::str::from_utf8(s).map_err(|_| ()).map(String::from)
     })(input)
 }
 
-fn named_field(input: &[u8]) -> HaskellResult<(String, HaskellValue)> {
+fn named_field(input: &[u8]) -> HaskellResult<'_, (String, HaskellValue)> {
     separated_pair(
         identifier,
         delimited(take_while(is_space), tag("="), take_while(is_space)),
@@ -311,7 +311,7 @@ fn named_field(input: &[u8]) -> HaskellResult<(String, HaskellValue)> {
     )(input)
 }
 
-fn structure(input: &[u8]) -> HaskellResult<HaskellValue> {
+fn structure(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
     alt((
         map(
             pair(
@@ -339,12 +339,12 @@ fn structure(input: &[u8]) -> HaskellResult<HaskellValue> {
     ))(input)
 }
 
-fn value(input: &[u8]) -> HaskellResult<HaskellValue> {
+fn value(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
     alt((boolean, number, string, tuple, list, structure))(input)
 }
 
 #[inline]
-pub fn parse(input: &[u8]) -> HaskellResult<HaskellValue> {
+pub fn parse(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
     delimited(take_while(is_space), value, take_while(is_space))(input)
 }
 

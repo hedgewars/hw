@@ -97,7 +97,7 @@ pub enum IoResult {
     AccountRegistered(bool),
     Account(Option<AccountInfo>),
     CheckerAccount { is_registered: bool },
-    Replay(Option<Replay>),
+    Replay(Option<Box<Replay>>),
     SaveRoom(RoomId, bool),
     LoadRoom(RoomId, Option<String>),
 }
@@ -359,9 +359,7 @@ pub fn handle_client_accept(
         let mut salt = [0u8; 18];
         thread_rng().fill_bytes(&mut salt);
 
-        state
-            .anteroom
-            .add_client(client_id, encode(&salt), is_local);
+        state.anteroom.add_client(client_id, encode(salt), is_local);
 
         response
             .add(Connected(utils::SERVER_MESSAGE.to_owned(), utils::SERVER_VERSION).send_self());

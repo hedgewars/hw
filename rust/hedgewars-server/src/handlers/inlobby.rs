@@ -37,7 +37,7 @@ pub fn handle(
             Err(CreateRoomError::AlreadyExists) => response.warn(ROOM_EXISTS),
             Ok((client, room)) => {
                 response.add(
-                    RoomAdd(room.info(Some(&client)))
+                    RoomAdd(room.info(Some(client)))
                         .send_all()
                         .with_protocol(room.protocol_number),
                 );

@@ -15,7 +15,7 @@ bitflags! {
         const IS_REJOINED = 0b1_0000_0000;
 
         const NONE = 0b0000_0000;
-        const DEFAULT = Self::NONE.bits;
+        const DEFAULT = Self::NONE.bits();
     }
 }
 

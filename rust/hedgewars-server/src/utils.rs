@@ -2,7 +2,7 @@ use base64::encode;
 use std::iter::Iterator;
 
 pub const SERVER_VERSION: u32 = 3;
-pub const SERVER_MESSAGE: &str = &"Hedgewars server https://www.hedgewars.org/";
+pub const SERVER_MESSAGE: &str = "Hedgewars server https://www.hedgewars.org/";
 
 pub fn is_name_illegal(name: &str) -> bool {
     name.len() > 40

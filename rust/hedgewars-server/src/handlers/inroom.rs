@@ -34,7 +34,7 @@ impl<'a> Iterator for ByMsg<'a> {
     type Item = &'a [u8];
 
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
-        if let Some(size) = self.messages.get(0) {
+        if let Some(size) = self.messages.first() {
             let (msg, next) = self.messages.split_at(*size as usize + 1);
             self.messages = next;
             Some(msg)
@@ -44,7 +44,7 @@ impl<'a> Iterator for ByMsg<'a> {
     }
 }
 
-fn by_msg(source: &[u8]) -> ByMsg {
+fn by_msg(source: &[u8]) -> ByMsg<'_> {
     ByMsg { messages: source }
 }
 
@@ -146,17 +146,17 @@ pub fn handle(
             }
         }
         Fix => {
-            if let Err(_) = room_control.fix_room() {
+            if room_control.fix_room().is_err() {
                 response.warn(ACCESS_DENIED)
             }
         }
         Unfix => {
-            if let Err(_) = room_control.unfix_room() {
+            if room_control.unfix_room().is_err() {
                 response.warn(ACCESS_DENIED)
             }
         }
         Greeting(text) => {
-            if let Err(_) = room_control.set_room_greeting(text) {
+            if room_control.set_room_greeting(text).is_err() {
                 response.warn(ACCESS_DENIED)
             }
         }
@@ -383,7 +383,7 @@ pub fn handle(
         ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly => {
             if room_control.toggle_flag(room_message_flag(&message)) {
                 let (client, room) = room_control.get();
-                super::common::get_room_update(None, room, Some(&client), response);
+                super::common::get_room_update(None, room, Some(client), response);
             }
         }
         StartGame => {
@@ -404,7 +404,7 @@ pub fn handle(
                     }
                 });
 
-                let em_response = encode(&valid.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
+                let em_response = encode(valid.flatten().cloned().collect::<Vec<_>>());
                 if !em_response.is_empty() {
                     response.add(
                         ForwardEngineMessage(vec![em_response])
@@ -413,7 +413,7 @@ pub fn handle(
                             .but_self(),
                     );
                 }
-                let em_log = encode(&non_empty.flat_map(|msg| msg).cloned().collect::<Vec<_>>());
+                let em_log = encode(non_empty.flatten().cloned().collect::<Vec<_>>());
 
                 room_control.log_engine_msg(em_log, sync_msg);
             }

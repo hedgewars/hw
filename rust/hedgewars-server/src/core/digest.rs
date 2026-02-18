@@ -2,7 +2,7 @@ use rand::{thread_rng, RngCore};
 use std::fmt::{Formatter, LowerHex};
 
 #[derive(PartialEq, Debug)]
-pub struct Sha1Digest([u8; 20]);
+pub struct Sha1Digest(pub [u8; 20]);
 
 impl Sha1Digest {
     pub fn new(digest: [u8; 20]) -> Self {

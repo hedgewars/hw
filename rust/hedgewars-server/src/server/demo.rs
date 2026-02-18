@@ -101,7 +101,7 @@ impl Demo {
         }
 
         let mut config = Vec::new();
-        let mut buffer = [0u8; u8::max_value() as _];
+        let mut buffer = [0u8; u8::MAX as _];
 
         let mut game_flags = vec![];
         let mut scheme_properties: Vec<_> = [
@@ -195,7 +195,7 @@ impl Demo {
                                     let parts = arg.splitn(3, ' ').collect::<Vec<_>>();
                                     let health = parts.get(1).unwrap_or(&"100");
                                     teams.last_mut().iter_mut().for_each(|t| {
-                                        if let Some(difficulty) = parts.get(0) {
+                                        if let Some(difficulty) = parts.first() {
                                             t.difficulty = u8::from_str(difficulty).unwrap_or(0);
                                         }
                                         if let Some(init_health) = parts.get(1) {
@@ -317,12 +317,11 @@ fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
         Ammo { name, .. } => save_game_config("AMMO", vec![name.clone()]),
     }
 
-    match config.scheme {
-        Scheme { name, settings } => {
-            let mut values = vec![name];
-            values.extend_from_slice(&settings);
-            save_game_config("SCHEME", values);
-        }
+    let Scheme { name, settings } = config.scheme;
+    {
+        let mut values = vec![name];
+        values.extend_from_slice(&settings);
+        save_game_config("SCHEME", values);
     }
 
     save_game_config("SCRIPT", vec![config.script]);
@@ -410,7 +409,7 @@ fn haskell_to_replay(value: HaskellValue) -> Option<Replay> {
         let mut value = tuple_iter.next()?.into_list()?;
         let mut value_iter = value.drain(..);
 
-        let config_item = match &name[..] {
+        match &name[..] {
             "AMMO" => {
                 config.ammo = Ammo {
                     name: value_iter.next()?.into_string()?,
@@ -446,7 +445,7 @@ impl Replay {
     pub fn save(self, filename: String) -> io::Result<()> {
         let text = format!("{}", replay_to_haskell(self));
         let mut file = fs::File::open(filename)?;
-        file.write(text.as_bytes())?;
+        file.write_all(text.as_bytes())?;
         Ok(())
     }
 

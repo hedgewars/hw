@@ -33,7 +33,7 @@ pub fn rnd_reply(options: &[String]) -> HwServerMessage {
     let mut rng = thread_rng();
 
     let reply = if options.is_empty() {
-        (*&["heads", "tails"].choose(&mut rng).unwrap()).to_string()
+        (["heads", "tails"].choose(&mut rng).unwrap()).to_string()
     } else {
         options.choose(&mut rng).unwrap().clone()
     };
@@ -98,7 +98,7 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
     response.add(LobbyJoined(all_nicks).send_self());
     for (flag, nicks) in &mut flag_selectors {
         if !nicks.is_empty() {
-            response.add(ClientFlags(add_flags(&[*flag]), replace(nicks, vec![])).send_self());
+            response.add(ClientFlags(add_flags(&[*flag]), std::mem::take(nicks)).send_self());
         }
     }
 
@@ -170,12 +170,12 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
 
     for (flag, (set_nicks, cleared_nicks)) in &mut flag_selectors {
         if !set_nicks.is_empty() {
-            response.add(ClientFlags(add_flags(&[*flag]), replace(set_nicks, vec![])).send_self());
+            response.add(ClientFlags(add_flags(&[*flag]), std::mem::take(set_nicks)).send_self());
         }
 
         if !cleared_nicks.is_empty() {
             response.add(
-                ClientFlags(remove_flags(&[*flag]), replace(cleared_nicks, vec![])).send_self(),
+                ClientFlags(remove_flags(&[*flag]), std::mem::take(cleared_nicks)).send_self(),
             );
         }
     }
@@ -366,14 +366,11 @@ pub fn remove_client(
     let nick = client.nick.clone();
     anteroom.forget_nick(&nick);
 
-    match server.get_room_control(client_id) {
-        HwRoomOrServer::Room(mut control) => {
-            let room_id = control.room().id;
-            let result = control.leave_room();
-            let server = control.server();
-            get_room_leave_result(server, server.room(room_id), &msg, result, response);
-        }
-        _ => (),
+    if let HwRoomOrServer::Room(mut control) = server.get_room_control(client_id) {
+        let room_id = control.room().id;
+        let result = control.leave_room();
+        let server = control.server();
+        get_room_leave_result(server, server.room(room_id), &msg, result, response);
     }
 
     server.remove_client(client_id);
@@ -472,7 +469,7 @@ pub fn check_vote(
     let error = match &kind {
         VoteType::Kick(nick) => {
             if server
-                .find_client(&nick)
+                .find_client(nick)
                 .filter(|c| c.room_id == Some(room.id))
                 .is_some()
             {
@@ -490,7 +487,7 @@ pub fn check_vote(
             }
         }
         VoteType::Map(Some(name)) => {
-            if room.saves.get(&name[..]).is_some() {
+            if room.saves.contains_key(&name[..]) {
                 None
             } else {
                 Some("/callvote map: No such map!".to_string())

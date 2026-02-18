@@ -11,9 +11,9 @@ pub fn handle(
 ) {
     match message {
         HwProtocolMessage::CheckerReady => {
-            server
-                .get_checker_mut(checker_id)
-                .map(|c| c.set_is_ready(true));
+            if let Some(c) = server.get_checker_mut(checker_id) {
+                c.set_is_ready(true)
+            }
             warn!("Unimplemented")
         }
         HwProtocolMessage::CheckedOk(info) => {

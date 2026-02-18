@@ -61,18 +61,18 @@ impl From<ParseIntError> for HwProtocolError {
 
 pub type HwResult<'a, O> = IResult<&'a [u8], O, HwProtocolError>;
 
-fn end_of_message(input: &[u8]) -> HwResult<&[u8]> {
+fn end_of_message(input: &[u8]) -> HwResult<'_, &[u8]> {
     tag("\n\n")(input)
 }
 
-fn convert_utf8(input: &[u8]) -> HwResult<&str> {
+fn convert_utf8(input: &[u8]) -> HwResult<'_, &str> {
     match str::from_utf8(input) {
         Ok(str) => Ok((b"", str)),
         Err(utf_err) => Result::Err(Err::Failure(utf_err.into())),
     }
 }
 
-fn convert_from_str<T>(str: &str) -> HwResult<T>
+fn convert_from_str<T>(str: &str) -> HwResult<'_, T>
 where
     T: FromStr<Err = ParseIntError>,
 {
@@ -82,7 +82,7 @@ where
     }
 }
 
-fn str_line(input: &[u8]) -> HwResult<&str> {
+fn str_line(input: &[u8]) -> HwResult<'_, &str> {
     let (i, text) = not_line_ending(<&[u8]>::clone(&input))?;
     if i != input {
         Ok((i, convert_utf8(text)?.1))
@@ -91,11 +91,11 @@ fn str_line(input: &[u8]) -> HwResult<&str> {
     }
 }
 
-fn a_line(input: &[u8]) -> HwResult<String> {
+fn a_line(input: &[u8]) -> HwResult<'_, String> {
     map(str_line, String::from)(input)
 }
 
-fn cmd_arg(input: &[u8]) -> HwResult<String> {
+fn cmd_arg(input: &[u8]) -> HwResult<'_, String> {
     let delimiters = b" \n";
     let (i, str) = take_while(move |c| !delimiters.contains(&c))(<&[u8]>::clone(&input))?;
     if i != input {
@@ -105,48 +105,48 @@ fn cmd_arg(input: &[u8]) -> HwResult<String> {
     }
 }
 
-fn u8_line(input: &[u8]) -> HwResult<u8> {
+fn u8_line(input: &[u8]) -> HwResult<'_, u8> {
     let (i, str) = str_line(input)?;
     Ok((i, convert_from_str(str)?.1))
 }
 
-fn u16_line(input: &[u8]) -> HwResult<u16> {
+fn u16_line(input: &[u8]) -> HwResult<'_, u16> {
     let (i, str) = str_line(input)?;
     Ok((i, convert_from_str(str)?.1))
 }
 
-fn u32_line(input: &[u8]) -> HwResult<u32> {
+fn u32_line(input: &[u8]) -> HwResult<'_, u32> {
     let (i, str) = str_line(input)?;
     Ok((i, convert_from_str(str)?.1))
 }
 
-fn yes_no_line(input: &[u8]) -> HwResult<bool> {
+fn yes_no_line(input: &[u8]) -> HwResult<'_, bool> {
     alt((
         map(tag_no_case(b"YES"), |_| true),
         map(tag_no_case(b"NO"), |_| false),
     ))(input)
 }
 
-fn opt_arg(input: &[u8]) -> HwResult<Option<String>> {
+fn opt_arg(input: &[u8]) -> HwResult<'_, Option<String>> {
     alt((
         map(peek(end_of_message), |_| None),
         map(preceded(tag("\n"), a_line), Some),
     ))(input)
 }
 
-fn spaces(input: &[u8]) -> HwResult<&[u8]> {
+fn spaces(input: &[u8]) -> HwResult<'_, &[u8]> {
     preceded(tag(" "), take_while(|c| c == b' '))(input)
 }
 
-fn opt_space_arg(input: &[u8]) -> HwResult<Option<String>> {
+fn opt_space_arg(input: &[u8]) -> HwResult<'_, Option<String>> {
     alt((
         map(peek(end_of_message), |_| None),
         map(preceded(spaces, a_line), Some),
     ))(input)
 }
 
-fn hedgehog_array(input: &[u8]) -> HwResult<[HedgehogInfo; 8]> {
-    fn hedgehog_line(input: &[u8]) -> HwResult<HedgehogInfo> {
+fn hedgehog_array(input: &[u8]) -> HwResult<'_, [HedgehogInfo; 8]> {
+    fn hedgehog_line(input: &[u8]) -> HwResult<'_, HedgehogInfo> {
         map(
             tuple((terminated(a_line, newline), a_line)),
             |(name, hat)| HedgehogInfo { name, hat },
@@ -167,7 +167,7 @@ fn hedgehog_array(input: &[u8]) -> HwResult<[HedgehogInfo; 8]> {
     Ok((i, [h1, h2, h3, h4, h5, h6, h7, h8]))
 }
 
-fn voting(input: &[u8]) -> HwResult<VoteType> {
+fn voting(input: &[u8]) -> HwResult<'_, VoteType> {
     alt((
         map(tag_no_case("PAUSE"), |_| VoteType::Pause),
         map(tag_no_case("NEWSEED"), |_| VoteType::NewSeed),
@@ -183,7 +183,7 @@ fn voting(input: &[u8]) -> HwResult<VoteType> {
     ))(input)
 }
 
-fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
+fn no_arg_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
     fn message(
         name: &str,
         msg: HwProtocolMessage,
@@ -206,12 +206,12 @@ fn no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     ))(input)
 }
 
-fn single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
+fn single_arg_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
     fn message<'a, T: 'a, F, G>(
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<HwProtocolMessage> + '_
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwProtocolMessage> + 'a
     where
         F: Parser<&'a [u8], T, HwProtocolError> + 'a,
         G: FnMut(T) -> HwProtocolMessage + 'a,
@@ -260,7 +260,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         )
     }
 
-    fn cmd_no_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
+    fn cmd_no_arg_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
         alt((
             cmd_no_arg("STATS", Stats),
             cmd_no_arg("FIX", Fix),
@@ -270,7 +270,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         ))(input)
     }
 
-    fn cmd_single_arg_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
+    fn cmd_single_arg_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
         alt((
             cmd_single_arg("RESTART_SERVER", |i| tag("YES")(i), |_| RestartServer),
             cmd_single_arg("DELEGATE", a_line, Delegate),
@@ -322,7 +322,7 @@ fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<GameCfg> + '_
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, GameCfg> + 'a
     where
         F: Parser<&'a [u8], T, HwProtocolError> + 'a,
         G: Fn(T) -> GameCfg + 'a,
@@ -365,7 +365,7 @@ fn config_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
     Ok((i, Cfg(cfg)))
 }
 
-fn server_var_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
+fn server_var_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
     map(
         preceded(
             tag("SET_SERVER_VAR\n"),
@@ -382,7 +382,7 @@ fn server_var_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     )(input)
 }
 
-fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
+fn complex_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
     alt((
         preceded(
             pair(tag("PASSWORD"), newline),
@@ -502,11 +502,11 @@ fn complex_message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     ))(input)
 }
 
-pub fn malformed_message(input: &[u8]) -> HwResult<()> {
+pub fn malformed_message(input: &[u8]) -> HwResult<'_, ()> {
     map(terminated(take_until(&b"\n\n"[..]), end_of_message), |_| ())(input)
 }
 
-pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
+pub fn message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
     delimited(
         take_while(|c| c == b'\n'),
         alt((
@@ -521,14 +521,14 @@ pub fn message(input: &[u8]) -> HwResult<HwProtocolMessage> {
     )(input)
 }
 
-pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
+pub fn server_message(input: &[u8]) -> HwResult<'_, HwServerMessage> {
     use HwServerMessage::*;
 
     fn single_arg_message<'a, T: 'a, F, G>(
         name: &'a str,
         parser: F,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<HwServerMessage> + '_
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage> + 'a
     where
         F: Parser<&'a [u8], T, HwProtocolError> + 'a,
         G: Fn(T) -> HwServerMessage + 'a,
@@ -542,7 +542,7 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
     fn list_message<'a, G>(
         name: &'a str,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<HwServerMessage> + '_
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage> + 'a
     where
         G: Fn(Vec<String>) -> HwServerMessage + 'a,
     {
@@ -561,7 +561,7 @@ pub fn server_message(input: &[u8]) -> HwResult<HwServerMessage> {
     fn string_and_list_message<'a, G>(
         name: &'a str,
         constructor: G,
-    ) -> impl FnMut(&'a [u8]) -> HwResult<HwServerMessage> + '_
+    ) -> impl FnMut(&'a [u8]) -> HwResult<'a, HwServerMessage> + 'a
     where
         G: Fn(String, Vec<String>) -> HwServerMessage + 'a,
     {

@@ -59,7 +59,7 @@ impl GameInfo {
     pub fn client_teams_by_nick<'a>(
         &'a self,
         owner_nick: &'a str,
-    ) -> impl Iterator<Item = &TeamInfo> + Clone + 'a {
+    ) -> impl Iterator<Item = &'a TeamInfo> + Clone + 'a {
         self.original_teams
             .iter()
             .filter(move |team| team.owner_nick == owner_nick)
@@ -228,7 +228,7 @@ impl HwRoom {
     {
         self.teams
             .iter()
-            .find_map(|team| Some(&team.info).filter(|t| f(&t)))
+            .find_map(|team| Some(&team.info).filter(|t| f(t)))
     }
 
     pub fn client_teams(&self, owner_id: ClientId) -> impl Iterator<Item = &TeamInfo> {

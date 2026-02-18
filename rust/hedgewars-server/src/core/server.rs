@@ -270,7 +270,7 @@ impl HwServer {
     }
 
     #[inline]
-    pub fn get_room_control(&mut self, client_id: ClientId) -> HwRoomOrServer {
+    pub fn get_room_control(&mut self, client_id: ClientId) -> HwRoomOrServer<'_> {
         HwRoomControl::new(self, client_id)
     }
 
@@ -527,7 +527,7 @@ impl HwServer {
     }
 
     pub fn lobby_client_ids(&self) -> impl Iterator<Item = ClientId> + '_ {
-        self.filter_clients(|(_, c)| c.room_id == None)
+        self.filter_clients(|(_, c)| c.room_id.is_none())
     }
 
     pub fn room_client_ids(&self, room_id: RoomId) -> impl Iterator<Item = ClientId> + '_ {
@@ -588,7 +588,7 @@ pub struct HwRoomControl<'a> {
 
 impl<'a> HwRoomControl<'a> {
     #[inline]
-    pub fn new(server: &'a mut HwServer, client_id: ClientId) -> HwRoomOrServer {
+    pub fn new(server: &'a mut HwServer, client_id: ClientId) -> HwRoomOrServer<'a> {
         if let Some(room_id) = server.clients[client_id].room_id {
             HwRoomOrServer::Room(Self {
                 server,
@@ -685,7 +685,7 @@ impl<'a> HwRoomControl<'a> {
         client.set_is_ready(false);
         client.set_is_in_game(false);
 
-        if !self.is_room_removed && room.master_id == None {
+        if !self.is_room_removed && room.master_id.is_none() {
             let protocol_number = room.protocol_number;
             let new_master_id = self.server.room_client_ids(self.room_id).next();
 
@@ -895,7 +895,7 @@ impl<'a> HwRoomControl<'a> {
     pub fn set_room_greeting(&mut self, greeting: Option<String>) -> Result<(), AccessError> {
         let (client, room) = self.get_mut();
         if client.is_admin() {
-            room.greeting = greeting.unwrap_or(String::new());
+            room.greeting = greeting.unwrap_or_default();
             Ok(())
         } else {
             Err(AccessError())
@@ -952,13 +952,13 @@ impl<'a> HwRoomControl<'a> {
             Err(TooManyTeams)
         } else if room.addable_hedgehogs() == 0 {
             Err(TooManyHedgehogs)
-        } else if room.find_team(|t| t.name == info.name) != None {
+        } else if room.find_team(|t| t.name == info.name).is_some() {
             Err(TeamAlreadyExists)
         } else if room.is_team_add_restricted() {
             Err(Restricted)
         } else {
             info.owner = client.nick.clone();
-            let team = room.add_team(&client, *info, client.protocol_number < 42);
+            let team = room.add_team(client, *info, client.protocol_number < 42);
             client.teams_in_game += 1;
             client.clan = Some(team.color);
             Ok(team)
@@ -1106,7 +1106,7 @@ impl<'a> HwRoomControl<'a> {
         let room = self.room_mut();
         room.ready_players_number = room.master_id.is_some() as u8;
 
-        if let Some(mut info) = replace(&mut room.game_info, None) {
+        if let Some(mut info) = room.game_info.take() {
             let room_id = room.id;
             for team_name in &info.left_teams {
                 room.remove_team(team_name);
@@ -1131,7 +1131,7 @@ impl<'a> HwRoomControl<'a> {
                 .collect();
 
             Some(EndGameResult {
-                left_teams: replace(&mut info.left_teams, vec![]),
+                left_teams: std::mem::take(&mut info.left_teams),
                 unreadied_nicks,
             })
         } else {
@@ -1215,7 +1215,7 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
             let team_names: Vec<_> = teams.map(|t| t.name.clone()).collect();
 
             if !team_names.is_empty() {
-                info.left_teams.retain(|name| !team_names.contains(&name));
+                info.left_teams.retain(|name| !team_names.contains(name));
             }
         }
     }

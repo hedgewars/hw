@@ -358,7 +358,7 @@ impl NetworkLayer {
         }
 
         debug!("{} pending server messages", response.len());
-        let output = response.extract_messages(&mut self.server_state.server);
+        let output = response.extract_messages(&self.server_state.server);
         for (clients, message) in output {
             debug!("Message {:?} to {:?}", message, clients);
             Self::send_message(&mut self.clients, message, clients.iter().cloned()).await;
@@ -376,7 +376,7 @@ impl NetworkLayer {
         let bytes = Bytes::copy_from_slice(msg_string.as_bytes());
         for client_id in to_clients {
             if let Some(client) = clients.get_mut(client_id) {
-                if !client.send(bytes.clone()).await.is_ok() {
+                if client.send(bytes.clone()).await.is_err() {
                     clients.remove(client_id);
                 }
             }
