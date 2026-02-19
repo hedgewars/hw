@@ -8,8 +8,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTORCC ON)
 
-project(hedgewars LANGUAGES CXX)
-
 #find_package(PkgConfig REQUIRED)
 #pkg_check_modules(SDL2_MIXER REQUIRED IMPORTED_TARGET SDL2_mixer)
 
@@ -85,6 +83,7 @@ qt_standard_project_setup()
 qt_add_executable(hedgewars
     WIN32 MACOSX_BUNDLE
     hedgewars.qrc
+    hedgewars.rc
 
     achievements.cpp
     achievements.h
