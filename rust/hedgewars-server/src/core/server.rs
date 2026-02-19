@@ -8,7 +8,7 @@ use super::{
 use crate::utils;
 use hedgewars_network_protocol::types::{GameCfg, ServerVar, TeamInfo, Vote, VoteType};
 
-use crate::server::replaystorage::ReplayStorage;
+use crate::server::replaystorage::{ReplayId, ReplayStorage};
 
 use bitflags::*;
 use rand::{self, thread_rng, Rng};
@@ -172,13 +172,17 @@ bitflags! {
 pub struct HwChecker {
     pub id: ClientId,
     pub is_ready: bool,
+    pub protocol_number: u16,
+    pub current_replay: Option<ReplayId>,
 }
 
 impl HwChecker {
-    pub fn new(id: ClientId) -> Self {
+    pub fn new(id: ClientId, protocol_number: u16) -> Self {
         Self {
             id,
             is_ready: false,
+            protocol_number,
+            current_replay: None,
         }
     }
 
@@ -194,7 +198,7 @@ pub struct HwServer {
     latest_protocol: u16,
     flags: ServerFlags,
     greetings: ServerGreetings,
-    replay_storage: Option<ReplayStorage>,
+    pub replay_storage: Option<ReplayStorage>,
 }
 
 impl HwServer {
@@ -289,7 +293,10 @@ impl HwServer {
 
     pub fn add_client(&mut self, client_id: ClientId, data: HwAnteroomClient) {
         if data.is_checker {
-            self.checkers.insert(client_id, HwChecker::new(client_id));
+            self.checkers.insert(
+                client_id,
+                HwChecker::new(client_id, data.protocol_number.map_or(0, |p| p.get())),
+            );
         } else if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
             let mut client = HwClient::new(client_id, protocol.get(), nick);
             #[cfg(not(feature = "official-server"))]
@@ -308,6 +315,11 @@ impl HwServer {
 
     pub fn remove_client(&mut self, client_id: ClientId) {
         self.clients.remove(client_id);
+        if let Some(c) = self.checkers.remove(client_id) {
+            if let (Some(id), Some(ref mut storage)) = (c.current_replay, self.replay_storage.as_mut()) {
+                storage.requeue_replay(&id);
+            }
+        }
     }
 
     pub fn get_greetings(&self, client: &HwClient) -> &str {

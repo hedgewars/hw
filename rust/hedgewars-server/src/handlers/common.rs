@@ -373,9 +373,12 @@ pub fn remove_client(
         get_room_leave_result(server, server.room(room_id), &msg, result, response);
     }
 
+    let is_checker = server.is_checker(client_id);
     server.remove_client(client_id);
 
-    response.add(LobbyLeft(nick, msg.clone()).send_all());
+    if !is_checker {
+        response.add(LobbyLeft(nick, msg.clone()).send_all());
+    }
     response.add(Bye(msg).send_self());
     response.remove_client(client_id);
 }

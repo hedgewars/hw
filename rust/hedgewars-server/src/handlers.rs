@@ -240,8 +240,29 @@ pub fn handle(
                     }
                 }
             } else if state.server.has_client(client_id) {
-                match message {
-                    HwProtocolMessage::Quit(Some(msg)) => {
+                if state.server.is_checker(client_id) {
+                    match message {
+                        HwProtocolMessage::Quit(Some(msg)) => {
+                            common::remove_client(
+                                &mut state.server,
+                                &mut state.anteroom,
+                                response,
+                                "User quit: ".to_string() + &msg,
+                            );
+                        }
+                        HwProtocolMessage::Quit(None) => {
+                            common::remove_client(
+                                &mut state.server,
+                                &mut state.anteroom,
+                                response,
+                                "User quit".to_string(),
+                            );
+                        }
+                        _ => checker::handle(&mut state.server, client_id, response, message),
+                    }
+                } else {
+                    match message {
+                        HwProtocolMessage::Quit(Some(msg)) => {
                         common::remove_client(
                             &mut state.server,
                             &mut state.anteroom,
@@ -337,6 +358,7 @@ pub fn handle(
                     },
                 }
             }
+        }
         }
     }
 }

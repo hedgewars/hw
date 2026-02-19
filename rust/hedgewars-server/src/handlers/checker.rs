@@ -1,26 +1,51 @@
 use log::*;
 
 use crate::core::{server::HwServer, types::CheckerId};
-use hedgewars_network_protocol::messages::HwProtocolMessage;
+use crate::handlers::actions::ToPendingMessage;
+use hedgewars_network_protocol::messages::{HwProtocolMessage, HwServerMessage};
 
 pub fn handle(
     server: &mut HwServer,
     checker_id: CheckerId,
-    _response: &mut super::Response,
+    response: &mut super::Response,
     message: HwProtocolMessage,
 ) {
     match message {
         HwProtocolMessage::CheckerReady => {
-            if let Some(c) = server.get_checker_mut(checker_id) {
-                c.set_is_ready(true)
+            let protocol = if let Some(c) = server.get_checker_mut(checker_id) {
+                c.set_is_ready(true);
+                c.protocol_number
+            } else {
+                0
+            };
+
+            if let Some(ref mut storage) = server.replay_storage {
+                if let Some((id, replay)) = storage.pick_replay(protocol) {
+                    if let Some(c) = server.get_checker_mut(checker_id) {
+                        c.set_is_ready(false);
+                        c.current_replay = Some(id);
+                    }
+                    response.add(HwServerMessage::Replay(replay.message_log).send_self());
+                }
             }
-            warn!("Unimplemented")
         }
-        HwProtocolMessage::CheckedOk(info) => {
-            warn!("Unimplemented")
+        HwProtocolMessage::CheckedOk(_info) => {
+            if let Some(c) = server.get_checker_mut(checker_id) {
+                if let Some(id) = c.current_replay.take() {
+                    if let Some(ref mut storage) = server.replay_storage {
+                        storage.move_checked_replay(&id).ok();
+                    }
+                }
+            }
         }
-        HwProtocolMessage::CheckedFail(message) => {
-            warn!("Unimplemented")
+        HwProtocolMessage::CheckedFail(_message) => {
+            if let Some(c) = server.get_checker_mut(checker_id) {
+                if let Some(id) = c.current_replay.take() {
+                    if let Some(ref mut storage) = server.replay_storage {
+                        storage.move_failed_replay(&id).ok();
+                    }
+                }
+            }
         }
         _ => warn!("Unknown command"),
     }
