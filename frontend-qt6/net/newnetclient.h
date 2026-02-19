@@ -53,7 +53,7 @@ class HWNewNet : public QObject {
     InDemo
   };
 
-  HWNewNet();
+  HWNewNet(QObject *parent = nullptr);
   ~HWNewNet();
   void Connect(const QString &hostName, quint16 port, bool useTls,
                const QString &nick);

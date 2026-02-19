@@ -1417,7 +1417,6 @@ void HWForm::_NetConnect(const QString &hostName, quint16 port, bool useTls,
     // destroy old connection
     hwnet->Disconnect();
     delete hwnet;
-    hwnet = NULL;
   }
 
   hwnet = new HWNewNet();
@@ -1620,7 +1619,10 @@ void HWForm::_NetConnect(const QString &hostName, quint16 port, bool useTls,
   // nick and pass stuff
   hwnet->m_private_game =
       !(hostName == NETGAME_DEFAULT_SERVER && port == NETGAME_DEFAULT_PORT);
-  if (hwnet->m_private_game == false && AskForNickAndPwd() != 0) return;
+  if (hwnet->m_private_game == false && AskForNickAndPwd() != 0) {
+    qDebug("Refusing to connect");
+    return;
+  }
 
   QString nickname =
       config->value("net/nick", config->getRandomNick()).toString();
@@ -1740,7 +1742,7 @@ void HWForm::NetConnect() {
 void HWForm::NetStartServer() {
   config->SaveOptions();
 
-  pnetserver = new HWNetServer;
+  pnetserver = new HWNetServer();
   if (!pnetserver->StartServer(ui.pageNetServer->sbPort->value())) {
     MessageDialog::ShowErrorMessage(QMessageBox::tr("Unable to start server"),
                                     this);

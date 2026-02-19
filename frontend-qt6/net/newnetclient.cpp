@@ -37,10 +37,13 @@ namespace {
 Q_LOGGING_CATEGORY(log, "net")
 }
 
-QString delimiter{"\n"};
+QString delimiter{QStringLiteral("\n")};
 
-HWNewNet::HWNewNet()
-    : isChief(false), m_game_connected(false), netClientState(Disconnected) {
+HWNewNet::HWNewNet(QObject* parent)
+    : QObject(parent),
+      isChief(false),
+      m_game_connected(false),
+      netClientState(Disconnected) {
   m_private_game = false;
   m_nick_registered = false;
   m_demo_data_pending = false;
@@ -89,11 +92,16 @@ void HWNewNet::Connect(const QString& hostName, quint16 port, bool useTls,
   mynick = nick;
   myhost = hostName + QStringLiteral(":%1").arg(port);
   if (useTls) {
+    qDebug() << QStringLiteral("Making TLS connection to %1:%2...")
+                    .arg(hostName)
+                    .arg(port);
     NetSocket.connectToHostEncrypted(hostName, port);
     if (!NetSocket.waitForEncrypted()) {
       qCWarning(log) << "Handshake failed";
     }
   } else {
+    qDebug()
+        << QStringLiteral("Connecting to %1:%2...").arg(hostName).arg(port);
     NetSocket.connectToHost(hostName, port);
   }
 }

@@ -21,6 +21,17 @@
 
 #include "hwconsts.h"
 
+HWNetServer::HWNetServer(QObject* parent) : QObject(parent) {
+  connect(&process, &QProcess::errorOccurred, [](QProcess::ProcessError error) {
+    qDebug() << "Error occured:" << error;
+  });
+
+  connect(&process, &QProcess::finished,
+          [](int exitCode, QProcess::ExitStatus exitStatus) {
+            qDebug() << "Server finished:" << exitCode << exitStatus;
+          });
+}
+
 HWNetServer::~HWNetServer() { StopServer(); }
 
 bool HWNetServer::StartServer(quint16 port) {
@@ -30,8 +41,12 @@ bool HWNetServer::StartServer(quint16 port) {
   params << QStringLiteral("--port=%1").arg(port);
   params << QStringLiteral("--dedicated=False");
 
-  process.start(bindir.absolutePath() + QStringLiteral("/hedgewars-server"),
-                params);
+  const auto serverBin =
+      bindir.absolutePath() + QStringLiteral("/hedgewars-server");
+
+  qDebug() << "Starting" << serverBin;
+
+  process.start(serverBin, params);
 
   return process.waitForStarted(5000);
 }

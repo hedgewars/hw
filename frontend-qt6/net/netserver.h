@@ -27,6 +27,7 @@ class HWNetServer : public QObject {
   Q_OBJECT
 
  public:
+  HWNetServer(QObject *parent = nullptr);
   ~HWNetServer();
   bool StartServer(quint16 port);
   void StopServer();
