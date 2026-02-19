@@ -166,12 +166,6 @@ if(BUILD_ENGINE_C AND NOT BUILD_ENGINE_JS)
 endif()
 
 
-#server
-if(NOT NOSERVER)
-    add_subdirectory(gameServer)
-endif()
-
-
 #lua discovery
 if(LUA_SYSTEM)
     if(NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
@@ -243,8 +237,12 @@ if(${BUILD_OFFLINE})
     list(APPEND CARGO_FLAGS "--offline")
 endif()
 add_subdirectory(tools/corrosion)
-corrosion_import_crate(MANIFEST_PATH rust/lib-hwengine-future/Cargo.toml NO_LINKER_OVERRIDE FLAGS ${CARGO_FLAGS})
-corrosion_install(TARGETS hwengine_future DESTINATION ${target_library_install_dir})
+add_subdirectory(rust/lib-hwengine-future)
+
+#server
+if(NOT NOSERVER)
+    add_subdirectory(rust/hedgewars-server)
+endif()
 
 #maybe this could be merged inside hedgewars/CMakeLists.txt
 if(BUILD_ENGINE_C)
