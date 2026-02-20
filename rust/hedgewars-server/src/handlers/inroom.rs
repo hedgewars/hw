@@ -175,7 +175,13 @@ pub fn handle(
             match room_control.set_room_name(new_name) {
                 Ok(old_name) => {
                     let (client, room) = room_control.get();
-                    super::common::get_room_update(Some(old_name), room, Some(client), response)
+                    super::common::get_room_update(
+                        room_control.server(),
+                        Some(old_name),
+                        room,
+                        Some(client),
+                        response,
+                    )
                 }
                 Err(ModifyRoomNameError::AccessDenied) => response.warn(ACCESS_DENIED),
                 Err(ModifyRoomNameError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
@@ -231,7 +237,13 @@ pub fn handle(
 
                     let room = room_control.room();
                     let room_master = room.master_id.map(|id| room_control.server().client(id));
-                    super::common::get_room_update(None, room, room_master, response);
+                    super::common::get_room_update(
+                        room_control.server(),
+                        None,
+                        room,
+                        room_master,
+                        response,
+                    );
                 }
                 Err(AddTeamError::TooManyTeams) => response.warn(TOO_MANY_TEAMS),
                 Err(AddTeamError::TooManyHedgehogs) => response.warn(TOO_MANY_HEDGEHOGS),
@@ -383,7 +395,13 @@ pub fn handle(
         ToggleRestrictJoin | ToggleRestrictTeams | ToggleRegisteredOnly => {
             if room_control.toggle_flag(room_message_flag(&message)) {
                 let (client, room) = room_control.get();
-                super::common::get_room_update(None, room, Some(client), response);
+                super::common::get_room_update(
+                    room_control.server(),
+                    None,
+                    room,
+                    Some(client),
+                    response,
+                );
             }
         }
         StartGame => {

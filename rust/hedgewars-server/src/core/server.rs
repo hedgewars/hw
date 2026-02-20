@@ -218,6 +218,13 @@ impl HwServer {
         }
     }
 
+    pub fn all_client_protocols(&self) -> HashSet<u16> {
+        self.clients
+            .iter()
+            .map(|(_, c)| c.protocol_number)
+            .collect()
+    }
+
     #[inline]
     pub fn client(&self, client_id: ClientId) -> &HwClient {
         &self.clients[client_id]
@@ -316,7 +323,9 @@ impl HwServer {
     pub fn remove_client(&mut self, client_id: ClientId) {
         self.clients.remove(client_id);
         if let Some(c) = self.checkers.remove(client_id) {
-            if let (Some(id), Some(ref mut storage)) = (c.current_replay, self.replay_storage.as_mut()) {
+            if let (Some(id), Some(ref mut storage)) =
+                (c.current_replay, self.replay_storage.as_mut())
+            {
                 storage.requeue_replay(&id);
             }
         }

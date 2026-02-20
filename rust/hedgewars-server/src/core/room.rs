@@ -7,7 +7,6 @@ use hedgewars_network_protocol::types::{
     GameCfg, GameCfg::*, RoomConfig, TeamInfo, MAX_HEDGEHOGS_PER_TEAM,
 };
 use serde::{Deserialize, Serialize};
-use serde_derive::{Deserialize, Serialize};
 use serde_yaml;
 use std::{collections::HashMap, iter};
 
@@ -320,11 +319,23 @@ impl HwRoom {
         result
     }
 
-    pub fn info(&self, master: Option<&HwClient>) -> Vec<String> {
+    pub fn get_name(&self, protocol: u16) -> String {
+        if protocol < 60 && protocol != self.protocol_number {
+            format!(
+                "[v{}] {}",
+                crate::utils::protocol_version_string(self.protocol_number),
+                self.name
+            )
+        } else {
+            self.name.clone()
+        }
+    }
+
+    pub fn info(&self, master: Option<&HwClient>, protocol: u16) -> Vec<String> {
         let c = &self.config;
-        vec![
+        let mut info = vec![
             self.flags_string(),
-            self.name.clone(),
+            self.get_name(protocol),
             self.players_number.to_string(),
             self.teams.len().to_string(),
             master.map_or("[]", |c| &c.nick).to_string(),
@@ -332,7 +343,13 @@ impl HwRoom {
             c.script.to_string(),
             c.scheme.name.to_string(),
             c.ammo.name.to_string(),
-        ]
+        ];
+
+        if protocol >= 60 {
+            info.push(self.protocol_number.to_string());
+        }
+
+        info
     }
 
     pub fn config(&self) -> &RoomConfig {

@@ -200,6 +200,10 @@ fn get_recipients(
                 DestinationGroup::All => server.iter_client_ids().collect(),
                 DestinationGroup::Lobby => server.lobby_client_ids().collect(),
                 DestinationGroup::Protocol(proto) => server.protocol_client_ids(proto).collect(),
+                DestinationGroup::LobbyWithProtocol(proto) => server
+                    .lobby_client_ids()
+                    .filter(|id| server.client(*id).protocol_number == proto)
+                    .collect(),
                 DestinationGroup::Room(id) => server.room_client_ids(id).collect(),
             };
 
@@ -263,102 +267,105 @@ pub fn handle(
                 } else {
                     match message {
                         HwProtocolMessage::Quit(Some(msg)) => {
-                        common::remove_client(
-                            &mut state.server,
-                            &mut state.anteroom,
-                            response,
-                            "User quit: ".to_string() + &msg,
-                        );
-                    }
-                    HwProtocolMessage::Quit(None) => {
-                        common::remove_client(
-                            &mut state.server,
-                            &mut state.anteroom,
-                            response,
-                            "User quit".to_string(),
-                        );
-                    }
-                    HwProtocolMessage::Info(nick) => {
-                        if let Some(client) = state.server.find_client(&nick) {
-                            let admin_sign = if client.is_admin() { "@" } else { "" };
-                            let master_sign = if client.is_master() { "+" } else { "" };
-                            let room_info = match client.room_id {
-                                Some(room_id) => {
-                                    let room = state.server.room(room_id);
-                                    let status = match room.game_info {
-                                        Some(_) if client.teams_in_game == 0 => "(spectating)",
-                                        Some(_) => "(playing)",
-                                        None => "",
-                                    };
-                                    format!(
-                                        "[{}{}room {}]{}",
-                                        admin_sign, master_sign, room.name, status
-                                    )
-                                }
-                                None => format!("[{}lobby]", admin_sign),
-                            };
-
-                            let info = vec![
-                                client.nick.clone(),
-                                "[]".to_string(),
-                                utils::protocol_version_string(client.protocol_number).to_string(),
-                                room_info,
-                            ];
-                            response.add(Info(info).send_self())
-                        } else {
-                            response.add(server_chat(USER_OFFLINE.to_string()).send_self())
+                            common::remove_client(
+                                &mut state.server,
+                                &mut state.anteroom,
+                                response,
+                                "User quit: ".to_string() + &msg,
+                            );
                         }
-                    }
-                    HwProtocolMessage::ToggleServerRegisteredOnly => {
-                        if !state.server.is_admin(client_id) {
-                            response.warn(ACCESS_DENIED);
-                        } else {
-                            state
-                                .server
-                                .set_is_registered_only(!state.server.is_registered_only());
-                            let msg = if state.server.is_registered_only() {
-                                REGISTERED_ONLY_ENABLED
+                        HwProtocolMessage::Quit(None) => {
+                            common::remove_client(
+                                &mut state.server,
+                                &mut state.anteroom,
+                                response,
+                                "User quit".to_string(),
+                            );
+                        }
+                        HwProtocolMessage::Info(nick) => {
+                            if let Some(client) = state.server.find_client(&nick) {
+                                let admin_sign = if client.is_admin() { "@" } else { "" };
+                                let master_sign = if client.is_master() { "+" } else { "" };
+                                let room_info = match client.room_id {
+                                    Some(room_id) => {
+                                        let room = state.server.room(room_id);
+                                        let status = match room.game_info {
+                                            Some(_) if client.teams_in_game == 0 => "(spectating)",
+                                            Some(_) => "(playing)",
+                                            None => "",
+                                        };
+                                        format!(
+                                            "[{}{}room {}]{}",
+                                            admin_sign, master_sign, room.name, status
+                                        )
+                                    }
+                                    None => format!("[{}lobby]", admin_sign),
+                                };
+
+                                let info = vec![
+                                    client.nick.clone(),
+                                    "[]".to_string(),
+                                    utils::protocol_version_string(client.protocol_number)
+                                        .to_string(),
+                                    room_info,
+                                ];
+                                response.add(Info(info).send_self())
                             } else {
-                                REGISTERED_ONLY_DISABLED
-                            };
-                            response.add(server_chat(msg.to_string()).send_all());
+                                response.add(server_chat(USER_OFFLINE.to_string()).send_self())
+                            }
                         }
-                    }
-                    HwProtocolMessage::Global(msg) => {
-                        if !state.server.is_admin(client_id) {
-                            response.warn(ACCESS_DENIED);
-                        } else {
-                            response.add(global_chat(msg).send_all())
+                        HwProtocolMessage::ToggleServerRegisteredOnly => {
+                            if !state.server.is_admin(client_id) {
+                                response.warn(ACCESS_DENIED);
+                            } else {
+                                state
+                                    .server
+                                    .set_is_registered_only(!state.server.is_registered_only());
+                                let msg = if state.server.is_registered_only() {
+                                    REGISTERED_ONLY_ENABLED
+                                } else {
+                                    REGISTERED_ONLY_DISABLED
+                                };
+                                response.add(server_chat(msg.to_string()).send_all());
+                            }
                         }
-                    }
-                    HwProtocolMessage::SuperPower => {
-                        if state.server.enable_super_power(client_id) {
-                            response.add(server_chat(SUPER_POWER.to_string()).send_self())
-                        } else {
-                            response.warn(ACCESS_DENIED);
+                        HwProtocolMessage::Global(msg) => {
+                            if !state.server.is_admin(client_id) {
+                                response.warn(ACCESS_DENIED);
+                            } else {
+                                response.add(global_chat(msg).send_all())
+                            }
                         }
-                    }
-                    #[allow(unused_variables)]
-                    HwProtocolMessage::Watch(id) => {
-                        #[cfg(feature = "official-server")]
-                        {
-                            response.request_io(IoTask::GetReplay { id })
+                        HwProtocolMessage::SuperPower => {
+                            if state.server.enable_super_power(client_id) {
+                                response.add(server_chat(SUPER_POWER.to_string()).send_self())
+                            } else {
+                                response.warn(ACCESS_DENIED);
+                            }
                         }
+                        #[allow(unused_variables)]
+                        HwProtocolMessage::Watch(id) => {
+                            #[cfg(feature = "official-server")]
+                            {
+                                response.request_io(IoTask::GetReplay { id })
+                            }
 
-                        #[cfg(not(feature = "official-server"))]
-                        {
-                            response.warn(REPLAY_NOT_SUPPORTED);
+                            #[cfg(not(feature = "official-server"))]
+                            {
+                                response.warn(REPLAY_NOT_SUPPORTED);
+                            }
                         }
+                        _ => match state.server.get_room_control(client_id) {
+                            HwRoomOrServer::Room(control) => {
+                                inroom::handle(control, response, message)
+                            }
+                            HwRoomOrServer::Server(server) => {
+                                inlobby::handle(server, client_id, response, message)
+                            }
+                        },
                     }
-                    _ => match state.server.get_room_control(client_id) {
-                        HwRoomOrServer::Room(control) => inroom::handle(control, response, message),
-                        HwRoomOrServer::Server(server) => {
-                            inlobby::handle(server, client_id, response, message)
-                        }
-                    },
                 }
             }
-        }
         }
     }
 }

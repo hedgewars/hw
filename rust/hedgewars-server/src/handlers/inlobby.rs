@@ -36,11 +36,14 @@ pub fn handle(
             Err(CreateRoomError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
             Err(CreateRoomError::AlreadyExists) => response.warn(ROOM_EXISTS),
             Ok((client, room)) => {
-                response.add(
-                    RoomAdd(room.info(Some(client)))
-                        .send_all()
-                        .with_protocol(room.protocol_number),
-                );
+                for protocol in server.all_client_protocols() {
+                    response.add(
+                        RoomAdd(room.info(Some(client), protocol))
+                            .send_all()
+                            .in_lobby()
+                            .with_protocol(protocol),
+                    );
+                }
                 response.add(RoomJoined(vec![client.nick.clone()]).send_self());
                 response.add(
                     ClientFlags(
@@ -66,9 +69,14 @@ pub fn handle(
         JoinRoom(name, password) => {
             match server.join_room_by_name(client_id, &name, password.as_deref()) {
                 Err(error) => super::common::get_room_join_error(error, response),
-                Ok((client, master, room, room_clients)) => {
-                    super::common::get_room_join_data(client, master, room, room_clients, response)
-                }
+                Ok((client, master, room, room_clients)) => super::common::get_room_join_data(
+                    server,
+                    client,
+                    master,
+                    room,
+                    room_clients,
+                    response,
+                ),
             }
         }
         Follow(nick) => {
@@ -78,6 +86,7 @@ pub fn handle(
                         Err(error) => super::common::get_room_join_error(error, response),
                         Ok((client, master, room, room_clients)) => {
                             super::common::get_room_join_data(
+                                server,
                                 client,
                                 master,
                                 room,

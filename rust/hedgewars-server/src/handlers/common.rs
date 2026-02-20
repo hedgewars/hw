@@ -83,8 +83,12 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
     let rooms_msg = Rooms(
         server
             .iter_rooms()
-            .filter(|r| r.protocol_number == client.protocol_number)
-            .flat_map(|r| r.info(r.master_id.map(|id| server.client(id))))
+            .flat_map(|r| {
+                r.info(
+                    r.master_id.map(|id| server.client(id)),
+                    client.protocol_number,
+                )
+            })
             .collect(),
     );
 
@@ -107,6 +111,7 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
 }
 
 pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
+    server: &HwServer,
     client: &HwClient,
     master: Option<&HwClient>,
     room: &HwRoom,
@@ -246,7 +251,7 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
         get_room_config_impl(room.config(), Destination::ToSelf, response);
     }
 
-    get_room_update(None, room, master, response);
+    get_room_update(server, None, room, master, response);
 }
 
 pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
@@ -299,11 +304,7 @@ pub fn get_room_leave_result(
 
     match result {
         LeaveRoomResult::RoomRemoved => {
-            response.add(
-                RoomRemove(room.name.clone())
-                    .send_all()
-                    .with_protocol(room.protocol_number),
-            );
+            get_room_remove(server, room, response);
         }
 
         LeaveRoomResult::RoomRemains {
@@ -346,11 +347,7 @@ pub fn get_room_leave_result(
 
             let master = new_master.or(Some(client.id)).map(|id| server.client(id));
 
-            response.add(
-                RoomUpdated(room.name.clone(), room.info(master))
-                    .send_all()
-                    .with_protocol(room.protocol_number),
-            );
+            get_room_update(server, None, room, master, response);
         }
     }
 }
@@ -384,13 +381,29 @@ pub fn remove_client(
 }
 
 pub fn get_room_update(
+    server: &HwServer,
     old_name: Option<String>,
     room: &HwRoom,
     master: Option<&HwClient>,
     response: &mut Response,
 ) {
-    let update_msg = RoomUpdated(old_name.unwrap_or(room.name.clone()), room.info(master));
-    response.add(update_msg.send_all().with_protocol(room.protocol_number));
+    for protocol in server.all_client_protocols() {
+        let update_msg = RoomUpdated(
+            old_name.as_ref().unwrap_or(&room.name).clone(),
+            room.info(master, protocol),
+        );
+        response.add(update_msg.send_all().in_lobby().with_protocol(protocol));
+    }
+}
+
+pub fn get_room_remove(server: &HwServer, room: &HwRoom, response: &mut Response) {
+    for protocol in server.all_client_protocols() {
+        response.add(
+            RoomRemove(room.get_name(protocol))
+                .send_all()
+                .with_protocol(protocol),
+        );
+    }
 }
 
 pub fn get_room_config_impl(
@@ -569,7 +582,7 @@ pub fn handle_vote(
 
                 let room_master = room.master_id.map(|id| room_control.server().client(id));
 
-                get_room_update(None, room, room_master, response);
+                get_room_update(room_control.server(), None, room, room_master, response);
 
                 let room_destination = Destination::ToAll {
                     group: DestinationGroup::Room(room.id),
@@ -620,7 +633,7 @@ pub fn get_start_game_data(
             );
 
             let room_master = room.master_id.map(|id| server.client(id));
-            get_room_update(None, room, room_master, response);
+            get_room_update(server, None, room, room_master, response);
         }
         Err(StartGameError::NotEnoughClans) => {
             response.warn("The game can't be started with less than two clans!")
@@ -639,7 +652,7 @@ pub fn get_end_game_result(
     let room = server.room(room_id);
     let room_master = room.master_id.map(|id| server.client(id));
 
-    get_room_update(None, room, room_master, response);
+    get_room_update(server, None, room, room_master, response);
     response.add(RoundFinished.send_all().in_room(room_id));
 
     response.extend(

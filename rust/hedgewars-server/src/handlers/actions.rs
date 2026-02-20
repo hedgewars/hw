@@ -7,6 +7,7 @@ pub enum DestinationGroup {
     Lobby,
     Room(RoomId),
     Protocol(u16),
+    LobbyWithProtocol(u16),
 }
 
 #[derive(Clone)]
@@ -67,14 +68,22 @@ impl PendingMessage {
 
     pub fn in_lobby(mut self) -> PendingMessage {
         if let Destination::ToAll { ref mut group, .. } = self.destination {
-            *group = DestinationGroup::Lobby
+            match group {
+                DestinationGroup::Protocol(p) => *group = DestinationGroup::LobbyWithProtocol(*p),
+                _ => *group = DestinationGroup::Lobby,
+            }
         }
         self
     }
 
     pub fn with_protocol(mut self, protocol_number: u16) -> PendingMessage {
         if let Destination::ToAll { ref mut group, .. } = self.destination {
-            *group = DestinationGroup::Protocol(protocol_number)
+            match group {
+                DestinationGroup::Lobby => {
+                    *group = DestinationGroup::LobbyWithProtocol(protocol_number)
+                }
+                _ => *group = DestinationGroup::Protocol(protocol_number),
+            }
         }
         self
     }
