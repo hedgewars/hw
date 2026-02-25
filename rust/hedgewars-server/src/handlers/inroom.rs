@@ -176,7 +176,7 @@ pub fn handle(
                 Ok(old_name) => {
                     let (client, room) = room_control.get();
                     super::common::get_room_update(
-                        room_control.server(),
+                        room_control.server().all_client_protocols().into_iter(),
                         Some(old_name),
                         room,
                         Some(client),
@@ -238,7 +238,7 @@ pub fn handle(
                     let room = room_control.room();
                     let room_master = room.master_id.map(|id| room_control.server().client(id));
                     super::common::get_room_update(
-                        room_control.server(),
+                        room_control.server().all_client_protocols().into_iter(),
                         None,
                         room,
                         room_master,
@@ -396,7 +396,7 @@ pub fn handle(
             if room_control.toggle_flag(room_message_flag(&message)) {
                 let (client, room) = room_control.get();
                 super::common::get_room_update(
-                    room_control.server(),
+                    room_control.server().all_client_protocols().into_iter(),
                     None,
                     room,
                     Some(client),

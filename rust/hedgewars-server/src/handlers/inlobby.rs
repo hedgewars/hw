@@ -32,28 +32,31 @@ pub fn handle(
     //todo!("port listing rooms for incompatible protocols"))
 
     match message {
-        CreateRoom(name, password) => match server.create_room(client_id, name, password) {
-            Err(CreateRoomError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
-            Err(CreateRoomError::AlreadyExists) => response.warn(ROOM_EXISTS),
-            Ok((client, room)) => {
-                for protocol in server.all_client_protocols() {
+        CreateRoom(name, password) => {
+            let all_protocols = server.all_client_protocols();
+            match server.create_room(client_id, name, password) {
+                Err(CreateRoomError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
+                Err(CreateRoomError::AlreadyExists) => response.warn(ROOM_EXISTS),
+                Ok((client, room)) => {
+                    for protocol in all_protocols {
+                        response.add(
+                            RoomAdd(room.info(Some(client), protocol))
+                                .send_all()
+                                .in_lobby()
+                                .with_protocol(protocol),
+                        );
+                    }
+                    response.add(RoomJoined(vec![client.nick.clone()]).send_self());
                     response.add(
-                        RoomAdd(room.info(Some(client), protocol))
-                            .send_all()
-                            .in_lobby()
-                            .with_protocol(protocol),
+                        ClientFlags(
+                            add_flags(&[Flags::RoomMaster, Flags::Ready, Flags::InRoom]),
+                            vec![client.nick.clone()],
+                        )
+                        .send_all(),
                     );
                 }
-                response.add(RoomJoined(vec![client.nick.clone()]).send_self());
-                response.add(
-                    ClientFlags(
-                        add_flags(&[Flags::RoomMaster, Flags::Ready, Flags::InRoom]),
-                        vec![client.nick.clone()],
-                    )
-                    .send_all(),
-                );
             }
-        },
+        }
         Chat(msg) => {
             //todo!("add client quiet flag");
             response.add(
@@ -67,10 +70,11 @@ pub fn handle(
             );
         }
         JoinRoom(name, password) => {
+            let protocols = server.all_client_protocols();
             match server.join_room_by_name(client_id, &name, password.as_deref()) {
                 Err(error) => super::common::get_room_join_error(error, response),
                 Ok((client, master, room, room_clients)) => super::common::get_room_join_data(
-                    server,
+                    &mut protocols.into_iter(),
                     client,
                     master,
                     room,
@@ -82,11 +86,12 @@ pub fn handle(
         Follow(nick) => {
             if let Some(client) = server.find_client(&nick) {
                 if let Some(room_id) = client.room_id {
+                    let protocols = server.all_client_protocols();
                     match server.join_room(client_id, room_id, None) {
                         Err(error) => super::common::get_room_join_error(error, response),
                         Ok((client, master, room, room_clients)) => {
                             super::common::get_room_join_data(
-                                server,
+                                &mut protocols.into_iter(),
                                 client,
                                 master,
                                 room,

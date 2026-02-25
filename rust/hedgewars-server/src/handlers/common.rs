@@ -111,7 +111,7 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
 }
 
 pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
-    server: &HwServer,
+    protocols: &mut impl Iterator<Item = u16>,
     client: &HwClient,
     master: Option<&HwClient>,
     room: &HwRoom,
@@ -251,7 +251,7 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
         get_room_config_impl(room.config(), Destination::ToSelf, response);
     }
 
-    get_room_update(server, None, room, master, response);
+    get_room_update(protocols, None, room, master, response);
 }
 
 pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
@@ -347,7 +347,13 @@ pub fn get_room_leave_result(
 
             let master = new_master.or(Some(client.id)).map(|id| server.client(id));
 
-            get_room_update(server, None, room, master, response);
+            get_room_update(
+                server.all_client_protocols().into_iter(),
+                None,
+                room,
+                master,
+                response,
+            );
         }
     }
 }
@@ -381,13 +387,13 @@ pub fn remove_client(
 }
 
 pub fn get_room_update(
-    server: &HwServer,
+    protocols: impl Iterator<Item = u16>,
     old_name: Option<String>,
     room: &HwRoom,
     master: Option<&HwClient>,
     response: &mut Response,
 ) {
-    for protocol in server.all_client_protocols() {
+    for protocol in protocols {
         let update_msg = RoomUpdated(
             old_name.as_ref().unwrap_or(&room.name).clone(),
             room.info(master, protocol),
@@ -582,7 +588,13 @@ pub fn handle_vote(
 
                 let room_master = room.master_id.map(|id| room_control.server().client(id));
 
-                get_room_update(room_control.server(), None, room, room_master, response);
+                get_room_update(
+                    room_control.server().all_client_protocols().into_iter(),
+                    None,
+                    room,
+                    room_master,
+                    response,
+                );
 
                 let room_destination = Destination::ToAll {
                     group: DestinationGroup::Room(room.id),
@@ -633,7 +645,13 @@ pub fn get_start_game_data(
             );
 
             let room_master = room.master_id.map(|id| server.client(id));
-            get_room_update(server, None, room, room_master, response);
+            get_room_update(
+                server.all_client_protocols().into_iter(),
+                None,
+                room,
+                room_master,
+                response,
+            );
         }
         Err(StartGameError::NotEnoughClans) => {
             response.warn("The game can't be started with less than two clans!")
@@ -652,7 +670,13 @@ pub fn get_end_game_result(
     let room = server.room(room_id);
     let room_master = room.master_id.map(|id| server.client(id));
 
-    get_room_update(server, None, room, room_master, response);
+    get_room_update(
+        server.all_client_protocols().into_iter(),
+        None,
+        room,
+        room_master,
+        response,
+    );
     response.add(RoundFinished.send_all().in_room(room_id));
 
     response.extend(

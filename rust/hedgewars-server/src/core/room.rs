@@ -6,7 +6,7 @@ use bitflags::*;
 use hedgewars_network_protocol::types::{
     GameCfg, GameCfg::*, RoomConfig, TeamInfo, MAX_HEDGEHOGS_PER_TEAM,
 };
-use serde::{Deserialize, Serialize};
+use serde_derive::{Deserialize, Serialize};
 use serde_yaml;
 use std::{collections::HashMap, iter};
 
