@@ -20,7 +20,7 @@ impl LandGenerator for TemplatedLandGenerator {
         random_numbers: &mut impl Rng,
     ) -> Land2D<T> {
         let do_invert = self.outline_template.is_negative
-            && (!self.outline_template.can_invert || random_numbers.random());
+            && (!self.outline_template.can_invert || random_numbers.gen());
         let (basic, zero) = if do_invert {
             (parameters.zero, parameters.basic)
         } else {
@@ -37,17 +37,17 @@ impl LandGenerator for TemplatedLandGenerator {
         );
 
         // mirror
-        if self.outline_template.can_mirror && random_numbers.random() {
+        if self.outline_template.can_mirror && random_numbers.gen() {
             points.mirror();
         }
 
         // flip
-        if self.outline_template.can_flip && random_numbers.random() {
+        if self.outline_template.can_flip && random_numbers.gen() {
             points.flip();
         }
 
         if !parameters.skip_distort {
-            let distortion_limiting_factor = 100 + random_numbers.random_range(0..8) * 10;
+            let distortion_limiting_factor = 100 + random_numbers.gen_range(0..8) * 10;
 
             points.distort(
                 parameters.distance_divisor,

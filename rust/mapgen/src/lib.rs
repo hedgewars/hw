@@ -21,7 +21,7 @@ use landgen::{
 };
 use rand::Rng;
 
-use rand::prelude::IndexedRandom;
+use rand::seq::SliceRandom;
 use std::{borrow::Borrow, collections::hash_map::HashMap};
 use std::fmt::Debug;
 use vec2d::Vec2D;

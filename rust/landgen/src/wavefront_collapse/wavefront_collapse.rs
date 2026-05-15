@@ -1,6 +1,6 @@
 use integral_geometry::Size;
-use rand::distr::{weighted::WeightedIndex, Distribution};
-use rand::prelude::IndexedRandom;
+use rand::distributions::{WeightedIndex, Distribution};
+use rand::prelude::SliceRandom;
 use rand::Rng;
 use std::collections::HashSet;
 use vec2d::Vec2D;

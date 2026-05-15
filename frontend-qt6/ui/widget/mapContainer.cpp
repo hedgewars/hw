@@ -115,7 +115,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   QLabel *lblMapType = new QLabel(tr("Map type:"));
   topLayout->setSpacing(10);
   topLayout->addWidget(lblMapType, 0);
-  m_childWidgets << lblMapType;
+  m_childWidgets.append(static_cast<QWidget*>(lblMapType));
 
   /* Map type combobox */
 
@@ -131,7 +131,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   cType->insertItem(7, tr("WFC"), MapModel::WfcMap);
   connect(cType, &QComboBox::currentIndexChanged, this,
           &HWMapContainer::mapTypeChanged);
-  m_childWidgets << cType;
+  m_childWidgets.append(static_cast<QWidget*>(cType));
 
   /* Randomize button */
 
@@ -148,7 +148,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   connect(btnRandomize, &QAbstractButton::clicked, this,
           &HWMapContainer::setRandomMap);
 
-  m_childWidgets << btnRandomize;
+  m_childWidgets.append(static_cast<QWidget*>(btnRandomize));
   btnRandomize->setStyleSheet(QStringLiteral("padding: 5px;"));
   btnRandomize->setFixedHeight(cType->height());
   topLayout->addWidget(btnRandomize, 1);
@@ -171,7 +171,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   QLabel *lblMapPreviewText = new QLabel(this);
   lblMapPreviewText->setText(tr("Map preview:"));
   leftLayout->addWidget(lblMapPreviewText, 0);
-  m_childWidgets << lblMapPreviewText;
+  m_childWidgets.append(static_cast<QWidget*>(lblMapPreviewText));
 
   /* Map Preview */
 
@@ -183,7 +183,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   leftLayout->addWidget(mapPreview, 0);
   connect(mapPreview, &QAbstractButton::clicked, this,
           &HWMapContainer::previewClicked);
-  m_childWidgets << mapPreview;
+  m_childWidgets.append(static_cast<QWidget*>(mapPreview));
 
   /* Bottom-Left layout */
 
@@ -196,19 +196,19 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   lblMapList->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   lblMapList->setAlignment(Qt::AlignTop | Qt::AlignLeft);
   rightLayout->addWidget(lblMapList, 0);
-  m_childWidgets << lblMapList;
+  m_childWidgets.append(static_cast<QWidget*>(lblMapList));
 
   /* Static maps list */
 
   staticMapList = new QListView(this);
   rightLayout->addWidget(staticMapList, 1);
-  m_childWidgets << staticMapList;
+  m_childWidgets.append(static_cast<QWidget*>(staticMapList));
 
   /* Mission maps list */
 
   missionMapList = new QListView(this);
   rightLayout->addWidget(missionMapList, 1);
-  m_childWidgets << missionMapList;
+  m_childWidgets.append(static_cast<QWidget*>(missionMapList));
 
   /* Map name (when not room master) */
   /* We use a QTextEdit instead of QLabel because it is able
@@ -228,7 +228,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   teMapName->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
 
   rightLayout->addWidget(teMapName, 1);
-  m_childWidgets << teMapName;
+  m_childWidgets.append(static_cast<QWidget*>(teMapName));
 
   /* Map load and edit buttons */
 
@@ -247,7 +247,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   btnLoadMap->setIconSize(sz);
   btnLoadMap->setFlat(true);
   drawnControls->addWidget(btnLoadMap, 0);
-  m_childWidgets << btnLoadMap;
+  m_childWidgets.append(static_cast<QWidget*>(btnLoadMap));
   connect(btnLoadMap, &QAbstractButton::clicked, this,
           &HWMapContainer::loadDrawing);
 
@@ -264,7 +264,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   btnEditMap->setIconSize(sz);
   btnEditMap->setFlat(true);
   drawnControls->addWidget(btnEditMap, 0);
-  m_childWidgets << btnEditMap;
+  m_childWidgets.append(static_cast<QWidget*>(btnEditMap));
   connect(btnEditMap, &QAbstractButton::clicked, this,
           &HWMapContainer::drawMapRequested);
 
@@ -283,7 +283,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   new QListWidgetItem(tr("Wacky"), generationStyles);
   connect(generationStyles, &QListWidget::currentRowChanged, this,
           &HWMapContainer::setTemplateFilter);
-  m_childWidgets << generationStyles;
+  m_childWidgets.append(static_cast<QWidget*>(generationStyles));
   rightLayout->addWidget(generationStyles, 1);
 
   /* Maze style list */
@@ -297,7 +297,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   new QListWidgetItem(tr("Large islands"), mazeStyles);
   connect(mazeStyles, &QListWidget::currentRowChanged, this,
           &HWMapContainer::setMazeSize);
-  m_childWidgets << mazeStyles;
+  m_childWidgets.append(static_cast<QWidget*>(mazeStyles));
   rightLayout->addWidget(mazeStyles, 1);
 
   mapFeatureSize = new QSlider(Qt::Horizontal, this);
@@ -312,7 +312,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   bottomLeftLayout->addWidget(mapFeatureSize, 0);
   connect(mapFeatureSize, &QAbstractSlider::valueChanged, this,
           &HWMapContainer::setFeatureSize);
-  m_childWidgets << mapFeatureSize;
+  m_childWidgets.append(static_cast<QWidget*>(mapFeatureSize));
 
   /* Mission description */
 
@@ -338,7 +338,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   btnRandTheme->setFixedWidth(30);
   connect(btnRandTheme, &QAbstractButton::clicked, this,
           &HWMapContainer::setRandomTheme);
-  m_childWidgets << btnRandTheme;
+  m_childWidgets.append(static_cast<QWidget*>(btnRandTheme));
   themeHBox->addWidget(btnRandTheme, 0);
 
   btnTheme = new QPushButton(this);
@@ -349,7 +349,7 @@ HWMapContainer::HWMapContainer(QWidget *parent)
   btnTheme->setMaximumWidth(222);
   connect(btnTheme, &QAbstractButton::clicked, this,
           &HWMapContainer::showThemePrompt);
-  m_childWidgets << btnTheme;
+  m_childWidgets.append(static_cast<QWidget*>(btnTheme));
   themeHBox->addWidget(btnTheme, 1);
 
   bottomLeftLayout->addLayout(themeHBox);

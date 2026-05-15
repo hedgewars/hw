@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 #find_package(PkgConfig REQUIRED)
 #pkg_check_modules(SDL2_MIXER REQUIRED IMPORTED_TARGET SDL2_mixer)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets Network LinguistTools)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Core Widgets Network LinguistTools)
 find_package(SDL2 REQUIRED CONFIG)
 find_package(SDL2_mixer REQUIRED)
 

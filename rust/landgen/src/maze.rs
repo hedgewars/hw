@@ -104,10 +104,10 @@ impl Maze {
         let edge_list = vec![Vec2D::new(&num_cells, false); 2];
 
         for current_step in 0..num_steps {
-            let x = random_numbers.random_range(0..seen_cells.width as i32 - 1) / num_steps as i32;
+            let x = random_numbers.gen_range(0..seen_cells.width as i32 - 1) / num_steps as i32;
             last_cell[current_step] = Point::new(
                 x + current_step as i32 * seen_cells.width as i32 / num_steps as i32,
-                random_numbers.random_range(..seen_cells.height) as i32,
+                random_numbers.gen_range(0..seen_cells.height) as i32,
             );
         }
 
@@ -142,7 +142,7 @@ impl Maze {
             let p = self.last_cell[current_step];
             self.seen_list[p.y as usize][p.x as usize] = Some(current_step);
 
-            let next_dir_clockwise = random_numbers.random();
+            let next_dir_clockwise = random_numbers.gen();
 
             for _ in 0..5 {
                 let sp = p + dir.0;
@@ -159,7 +159,7 @@ impl Maze {
                 match when_seen {
                     Some(a) if a == current_step => {
                         // try another direction
-                        if !self.inverted && random_numbers.random_range(..self.braidness) == 0 {
+                        if !self.inverted && random_numbers.gen_range(0..self.braidness) == 0 {
                             if dir.0.x == -1 && p.x > 0 {
                                 self.walls[dir.orientation()][p.y as usize][p.x as usize - 1] =
                                     false;
@@ -410,7 +410,7 @@ impl MazeLandGenerator {
 
             for current_step in 0..num_steps {
                 if !step_done[current_step] {
-                    let dir = Direction::new(random_numbers.random_range(..4));
+                    let dir = Direction::new(random_numbers.gen_range(0..4));
                     step_done[current_step] = maze.see_cell(current_step, dir, random_numbers);
                     done = false;
                 }

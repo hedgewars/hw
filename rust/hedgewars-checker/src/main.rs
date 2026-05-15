@@ -1,6 +1,6 @@
 use anyhow::{anyhow, bail, Result};
 use argparse::{ArgumentParser, Store};
-use base64::{engine::general_purpose, Engine};
+use base64;
 use hedgewars_network_protocol::{
     messages::HwProtocolMessage as ClientMessage, messages::HwServerMessage::*, parser,
 };
@@ -15,7 +15,7 @@ async fn check(executable: &str, data_prefix: &str, buffer: &[String]) -> Result
     let mut replay = tempfile::NamedTempFile::new()?;
 
     for line in buffer.iter() {
-        replay.write_all(&general_purpose::STANDARD.decode(line)?)?;
+        replay.write_all(&base64::decode(line)?)?;
     }
 
     let temp_file_path = replay.path();

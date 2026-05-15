@@ -962,13 +962,13 @@ void PageOptions::connectSignals() {
           &PageOptions::setQuality);
   connect(CBResolution, &QComboBox::currentIndexChanged, this,
           &PageOptions::setResolution);
-  connect(CBFullscreen, &QCheckBox::checkStateChanged, this,
+  connect(CBFullscreen, &QCheckBox::toggled, this,
           &PageOptions::setFullscreen);
   connect(CBStereoMode, &QComboBox::currentIndexChanged, this,
           &PageOptions::forceFullscreen);
   connect(editNetNick, &QLineEdit::editingFinished, this,
           &PageOptions::trimNetNick);
-  connect(CBSavePassword, &QCheckBox::checkStateChanged, this,
+  connect(CBSavePassword, &QCheckBox::toggled, this,
           &PageOptions::savePwdChanged);
 }
 

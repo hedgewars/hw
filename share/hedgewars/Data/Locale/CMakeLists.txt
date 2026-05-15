@@ -8,7 +8,19 @@ file(GLOB missionfiles    CONFIGURE_DEPENDS missions_*.txt)
 file(GLOB campaignfiles   CONFIGURE_DEPENDS campaigns_*.txt)
 file(GLOB tipfiles        CONFIGURE_DEPENDS tips_*.xml)
 
-qt6_add_lrelease(TS_FILES ${tsfiles} QM_FILES_OUTPUT_VARIABLE QM)
+if(TARGET Qt6::lrelease)
+    foreach(ts_file ${tsfiles})
+        get_filename_component(ts_name ${ts_file} NAME_WE)
+        set(qm_file "${CMAKE_CURRENT_BINARY_DIR}/${ts_name}.qm")
+        add_custom_command(
+            OUTPUT ${qm_file}
+            COMMAND Qt6::lrelease ${ts_file} -qm ${qm_file}
+            DEPENDS ${ts_file}
+            VERBATIM
+        )
+        list(APPEND QM ${qm_file})
+    endforeach()
+endif()
 
 add_custom_target(release-translation ALL
     DEPENDS ${QM}
@@ -25,4 +37,3 @@ install(FILES
     ${tipfiles}
     DESTINATION ${SHAREPATH}Data/Locale
 )
-

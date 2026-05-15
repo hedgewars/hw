@@ -121,9 +121,8 @@ impl Database {
 
     pub async fn get_is_registered(&mut self, nick: &str) -> mysql_async::Result<bool> {
         let mut connection = self.pool.get_conn().await?;
-        let result = CHECK_ACCOUNT_EXISTS_QUERY
-            .with(params! { "username" => nick })
-            .first::<u32, _>(&mut connection)
+        let result: Option<u32> = connection
+            .exec_first(CHECK_ACCOUNT_EXISTS_QUERY, params! { "username" => nick })
             .await?;
         Ok(!result.is_some())
     }
@@ -137,9 +136,11 @@ impl Database {
         server_salt: &str,
     ) -> mysql_async::Result<Option<AccountInfo>> {
         let mut connection = self.pool.get_conn().await?;
-        if let Some((mut password, is_admin, is_contributor)) = GET_ACCOUNT_QUERY
-            .with(params! { "username" => nick })
-            .first::<(String, i32, i32), _>(&mut connection)
+        if let Some((mut password, is_admin, is_contributor)) = connection
+            .exec_first::<(String, i32, i32), _, _>(
+                GET_ACCOUNT_QUERY,
+                params! { "username" => nick },
+            )
             .await?
         {
             let client_hash = get_hash(protocol, &password, &client_salt, &server_salt);
@@ -167,9 +168,11 @@ impl Database {
         checker_password: &str,
     ) -> mysql_async::Result<bool> {
         let mut connection = self.pool.get_conn().await?;
-        if let Some((password, _, _)) = GET_ACCOUNT_QUERY
-            .with(params! { "username" => nick })
-            .first::<(String, i32, i32), _>(&mut connection)
+        if let Some((password, _, _)) = connection
+            .exec_first::<(String, i32, i32), _, _>(
+                GET_ACCOUNT_QUERY,
+                params! { "username" => nick },
+            )
             .await?
         {
             Ok(checker_password == password)
@@ -180,12 +183,14 @@ impl Database {
 
     pub async fn store_stats(&mut self, stats: &ServerStatistics) -> mysql_async::Result<()> {
         let mut connection = self.pool.get_conn().await?;
-        STORE_STATS_QUERY
-            .with(params! {
-                "players" => stats.players,
-                "rooms" => stats.rooms,
-            })
-            .ignore(&mut connection)
+        connection
+            .exec_drop(
+                STORE_STATS_QUERY,
+                params! {
+                    "players" => stats.players,
+                    "rooms" => stats.rooms,
+                },
+            )
             .await
     }
 
@@ -198,9 +203,8 @@ impl Database {
 
     pub async fn get_replay_name(&mut self, replay_id: u32) -> mysql_async::Result<Option<String>> {
         let mut connection = self.pool.get_conn().await?;
-        GET_REPLAY_NAME_QUERY
-            .with(params! { "id" => replay_id })
-            .first::<String, _>(&mut connection)
+        connection
+            .exec_first(GET_REPLAY_NAME_QUERY, params! { "id" => replay_id })
             .await
     }
 }

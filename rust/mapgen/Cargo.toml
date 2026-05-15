@@ -10,9 +10,9 @@ land2d = { path = "../land2d" }
 landgen = { path = "../landgen" }
 integral-geometry = { path = "../integral-geometry" }
 
-rand = "0.9"
-serde = "1.0"
+rand = "0.8"
+serde = "=1.0.152"
 serde_yaml = "0.9"
-serde_derive = "1.0"
+serde_derive = "=1.0.152"
 png = "0.17"
-toml = "0.8"
+toml = "0.5"
