@@ -1,6 +1,6 @@
+use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, PotSize, Rect, Size, SizeMask};
 use std::{cmp, ops::Index, ops::IndexMut};
 use vec2d::Vec2D;
-use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, PotSize, Rect, Size, SizeMask};
 
 #[derive(Debug)]
 pub struct Land2D<T> {

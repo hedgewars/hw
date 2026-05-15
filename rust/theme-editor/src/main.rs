@@ -1,40 +1,33 @@
 use sdl2::{
-    keyboard::Scancode,
     event::EventType,
+    keyboard::Scancode,
+    pixels::{Color, PixelFormatEnum},
     surface::Surface,
-    pixels::{
-        PixelFormatEnum, Color
-    }
 };
 
-use integral_geometry::{Point, Size, Rect, Line};
+use integral_geometry::{Line, Point, Rect, Size};
 
-use rand::{
-    thread_rng, RngCore, Rng,
-    distributions::uniform::SampleUniform
-};
+use rand::{distributions::uniform::SampleUniform, thread_rng, Rng, RngCore};
 
-use landgen::{
-    template_based::TemplatedLandGenerator,
-    outline_template::OutlineTemplate,
-    LandGenerator,
-    LandGenerationParameters
-};
 use land2d::Land2D;
+use landgen::{
+    outline_template::OutlineTemplate, template_based::TemplatedLandGenerator,
+    LandGenerationParameters, LandGenerator,
+};
 use lfprng::LaggedFibonacciPRNG;
 
 struct LandSource<T> {
     rnd: LaggedFibonacciPRNG,
-    generator: T
+    generator: T,
 }
 
-impl <T: LandGenerator> LandSource<T> {
+impl<T: LandGenerator> LandSource<T> {
     fn new(generator: T) -> Self {
         let mut init = [0u8; 64];
         thread_rng().fill_bytes(&mut init);
         LandSource {
             rnd: LaggedFibonacciPRNG::new(&init),
-            generator
+            generator,
         }
     }
 
@@ -47,7 +40,8 @@ fn fill_pixels(pixels: &mut [u8], land: &Land2D<u32>) {
     for (surf_row, land_row) in pixels.chunks_mut(land.width() * 4).zip(land.rows()) {
         for (surf_pixel, land_pixel) in surf_row.chunks_mut(4).zip(land_row) {
             if let [b, g, r, a] = surf_pixel {
-                *a = 255; *r = *land_pixel as u8;
+                *a = 255;
+                *r = *land_pixel as u8;
             }
         }
     }
@@ -57,7 +51,9 @@ fn fill_texture(surface: &mut Surface, land: &Land2D<u32>) {
     if surface.must_lock() {
         surface.with_lock_mut(|data| fill_pixels(data, land));
     } else {
-        surface.without_lock_mut().map(|data| fill_pixels(data, land));
+        surface
+            .without_lock_mut()
+            .map(|data| fill_pixels(data, land));
     }
 }
 
@@ -67,21 +63,35 @@ fn rnd<T: Default + SampleUniform + Ord>(max: T) -> T {
 
 const WINDOW_WIDTH: u32 = 800;
 const WINDOW_HEIGHT: u32 = 600;
-const WINDOW_SIZE: Size = Size {width: WINDOW_WIDTH as usize, height: WINDOW_HEIGHT as usize};
+const WINDOW_SIZE: Size = Size {
+    width: WINDOW_WIDTH as usize,
+    height: WINDOW_HEIGHT as usize,
+};
 
 const PLAY_WIDTH: u32 = 3072;
 const PLAY_HEIGHT: u32 = 1424;
-const PLAY_SIZE: Size = Size {width: PLAY_WIDTH as usize, height: PLAY_HEIGHT as usize};
+const PLAY_SIZE: Size = Size {
+    width: PLAY_WIDTH as usize,
+    height: PLAY_HEIGHT as usize,
+};
 
 const LAND_WIDTH: u32 = 4096;
 const LAND_HEIGHT: u32 = 2048;
-const LAND_SIZE: Size = Size {width: LAND_WIDTH as usize, height: LAND_HEIGHT as usize};
+const LAND_SIZE: Size = Size {
+    width: LAND_WIDTH as usize,
+    height: LAND_HEIGHT as usize,
+};
 
 fn point() -> Point {
     Point::new(rnd(LAND_WIDTH as i32), rnd(LAND_HEIGHT as i32))
 }
 fn rect() -> Rect {
-    Rect::new(rnd(LAND_WIDTH as i32), rnd(LAND_HEIGHT as i32), rnd(120) + 8, rnd(120) + 8)
+    Rect::new(
+        rnd(LAND_WIDTH as i32),
+        rnd(LAND_HEIGHT as i32),
+        rnd(120) + 8,
+        rnd(120) + 8,
+    )
 }
 
 fn land_rect() -> Rect {
@@ -135,11 +145,27 @@ fn init_source() -> LandSource<TemplatedLandGenerator> {
 
 fn draw_center_mark(land: &mut Land2D<u32>) {
     for i in 0..32 {
-        land.draw_thick_line(Line::new(Point::new(LAND_WIDTH as i32 / 2, 0),
-                                       Point::new(LAND_WIDTH as i32 / 2, LAND_HEIGHT as i32)), 10, 128);
-        land.draw_thick_line(Line::new(Point::new(0, LAND_HEIGHT as i32 / 2),
-                                       Point::new(LAND_WIDTH as i32, LAND_HEIGHT as i32 / 2)), 10, 128);
-        land.fill_circle(Point::new(LAND_WIDTH as i32, LAND_HEIGHT as i32) / 2, 60, 128);
+        land.draw_thick_line(
+            Line::new(
+                Point::new(LAND_WIDTH as i32 / 2, 0),
+                Point::new(LAND_WIDTH as i32 / 2, LAND_HEIGHT as i32),
+            ),
+            10,
+            128,
+        );
+        land.draw_thick_line(
+            Line::new(
+                Point::new(0, LAND_HEIGHT as i32 / 2),
+                Point::new(LAND_WIDTH as i32, LAND_HEIGHT as i32 / 2),
+            ),
+            10,
+            128,
+        );
+        land.fill_circle(
+            Point::new(LAND_WIDTH as i32, LAND_HEIGHT as i32) / 2,
+            60,
+            128,
+        );
     }
 }
 
@@ -158,13 +184,20 @@ fn main() {
 
     let mut pump = sdl.event_pump().unwrap();
     let video = sdl.video().unwrap();
-    let window = video.window("Theme Editor", WINDOW_WIDTH, WINDOW_HEIGHT)
+    let window = video
+        .window("Theme Editor", WINDOW_WIDTH, WINDOW_HEIGHT)
         .position_centered()
-        .build().unwrap();
+        .build()
+        .unwrap();
 
     let mut source = init_source();
-    let mut land = source.next(
-        LandGenerationParameters::new(0, u32::max_value(), 1, false, false));
+    let mut land = source.next(LandGenerationParameters::new(
+        0,
+        u32::max_value(),
+        1,
+        false,
+        false,
+    ));
     draw_center_mark(&mut land);
 
     let mut land_surf = Surface::new(LAND_WIDTH, LAND_HEIGHT, PixelFormatEnum::ARGB8888).unwrap();
@@ -173,7 +206,9 @@ fn main() {
 
     let mut win_surf = window.surface(&pump).unwrap();
     let dest_rect = win_surf.rect();
-    land_surf.blit_scaled(land_surf.rect(), &mut win_surf, dest_rect).unwrap();
+    land_surf
+        .blit_scaled(land_surf.rect(), &mut win_surf, dest_rect)
+        .unwrap();
     win_surf.update_window();
 
     'pool: loop {
@@ -182,8 +217,8 @@ fn main() {
 
         while let Some(event) = pump.poll_event() {
             match event {
-                Quit{ .. } => break 'pool,
-                _ => ()
+                Quit { .. } => break 'pool,
+                _ => (),
             }
         }
     }

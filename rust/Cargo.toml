@@ -1,0 +1,29 @@
+[workspace]
+
+members = [
+    "chat_sanitizer",
+    "fpnum",
+    "hedgewars-engine",
+    "hedgewars-engine-messages",
+    "hedgewars-network-protocol",
+    "hedgewars-server",
+    "hwphysics",
+    "integral-geometry",
+    "land2d",
+    "land_dump",
+    "landgen",
+    "lfprng",
+    "lib-hedgewars-engine",
+    "lib-hwengine-future",
+    "mapgen",
+    "theme-editor",
+    "vec2d",
+]
+
+exclude = [
+    "hwrunner",
+    "hedgewars-checker",
+    "physfs-rs",
+]
+
+resolver = "2"

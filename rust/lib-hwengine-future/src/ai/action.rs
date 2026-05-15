@@ -11,8 +11,16 @@ pub enum Direction {
 pub enum Action {
     Walk(Direction),
     Look(Direction),
-    CheckPosition { x: i32, y: i32, angle: i32 },
-    StopAt{direction: Direction, x: i32, y: i32},
+    CheckPosition {
+        x: i32,
+        y: i32,
+        angle: i32,
+    },
+    StopAt {
+        direction: Direction,
+        x: i32,
+        y: i32,
+    },
     LongJump,
     HighJump(usize),
 }
@@ -22,13 +30,17 @@ impl Action {
         use Action::*;
         use Direction::*;
         match self {
-            Walk(Left) | Look(Left) => {"/+left".to_string()},
-            Walk(Right) | Look(Right) => {"/+right".to_string()},
-            StopAt{direction: Left, ..} => {"/-left".to_string()},
-            StopAt{direction: Right, ..} => {"/-right".to_string()},
-            LongJump => {"/ljump".to_string()},
-            HighJump(_) => {"/hjump".to_string()},
-            _ => {"".to_string()}
+            Walk(Left) | Look(Left) => "/+left".to_string(),
+            Walk(Right) | Look(Right) => "/+right".to_string(),
+            StopAt {
+                direction: Left, ..
+            } => "/-left".to_string(),
+            StopAt {
+                direction: Right, ..
+            } => "/-right".to_string(),
+            LongJump => "/ljump".to_string(),
+            HighJump(_) => "/hjump".to_string(),
+            _ => "".to_string(),
         }
     }
 }
@@ -55,10 +67,10 @@ impl Actions {
             self.current_action = self.actions.pop();
         }
 
-        let Some(action) = &mut self.current_action  else {
+        let Some(action) = &mut self.current_action else {
             return None;
         };
-        
+
         match action {
             Action::Walk(_) => {}
             Action::Look(_) => {}

@@ -1,5 +1,5 @@
 use integral_geometry::Size;
-use rand::distributions::{WeightedIndex, Distribution};
+use rand::distributions::{Distribution, WeightedIndex};
 use rand::prelude::SliceRandom;
 use rand::Rng;
 use std::collections::HashSet;
@@ -38,7 +38,7 @@ pub struct Cell {
 
 impl From<Tile> for Cell {
     fn from(tile: Tile) -> Self {
-        Self{tile, cache: None}
+        Self { tile, cache: None }
     }
 }
 
@@ -143,7 +143,8 @@ impl WavefrontCollapse {
                 } else {
                     Tile::OutsideFill
                 }
-            }.into()
+            }
+            .into()
         })
     }
 
@@ -165,7 +166,11 @@ impl WavefrontCollapse {
                     (y.wrapping_sub(1), x),
                 ];
 
-                if let Cell{tile: Tile::Empty, cache: None} = current_cell {
+                if let Cell {
+                    tile: Tile::Empty,
+                    cache: None,
+                } = current_cell
+                {
                     // calc entropy
                     let [right_tile, bottom_tile, left_tile, top_tile] =
                         neighbors.map(|(y, x)| self.get_cell(y, x).tile);
@@ -188,10 +193,17 @@ impl WavefrontCollapse {
                         .collect();
 
                     current_cell.cache = possibilities.into();
-                    self.grid.get_mut(y, x).expect("correct iteration over grid").cache = current_cell.cache.clone();
+                    self.grid
+                        .get_mut(y, x)
+                        .expect("correct iteration over grid")
+                        .cache = current_cell.cache.clone();
                 }
 
-                if let Cell{tile: Tile::Empty, cache: Some(possibilities)} = current_cell {
+                if let Cell {
+                    tile: Tile::Empty,
+                    cache: Some(possibilities),
+                } = current_cell
+                {
                     let entropy = possibilities.len();
                     if entropy > 0 {
                         if entropy <= tiles_to_collapse.0 {
@@ -202,7 +214,8 @@ impl WavefrontCollapse {
                                     .as_slice()
                                     .choose(random_numbers)
                                     .expect("non-empty slice")
-                                    .1.clone()
+                                    .1
+                                    .clone()
                             } else {
                                 let distribution = WeightedIndex::new(weights).unwrap();
                                 possibilities[distribution.sample(random_numbers)].1.clone()
@@ -266,7 +279,7 @@ impl WavefrontCollapse {
         ];
 
         for (y, x) in neighbors {
-            if let Some(cell)=self.grid.get_mut(y, x) {
+            if let Some(cell) = self.grid.get_mut(y, x) {
                 cell.cache = None;
             }
         }

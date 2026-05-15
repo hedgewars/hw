@@ -1,6 +1,6 @@
-use std::{cmp, ops};
-use std::marker::PhantomData;
 use saturate::SaturatingInto;
+use std::marker::PhantomData;
+use std::{cmp, ops};
 
 const POSITIVE_MASK: u64 = 0x0000_0000_0000_0000;
 const NEGATIVE_MASK: u64 = 0xFFFF_FFFF_FFFF_FFFF;
@@ -61,7 +61,8 @@ impl<const FRAC_BITS: u8> FixedPoint<FRAC_BITS> {
 
     #[inline]
     pub fn round(&self) -> i64 {
-        ((self.value >> FRAC_BITS) as i64 ^ self.sign_mask as i64).wrapping_sub(self.sign_mask as i64)
+        ((self.value >> FRAC_BITS) as i64 ^ self.sign_mask as i64)
+            .wrapping_sub(self.sign_mask as i64)
     }
 
     #[inline]
@@ -74,7 +75,7 @@ impl<const FRAC_BITS: u8> FixedPoint<FRAC_BITS> {
         Self {
             sign_mask: 0,
             value: ((self.value as u128).pow(2) >> FRAC_BITS).saturating_into(),
-            _marker: self._marker
+            _marker: self._marker,
         }
     }
 
@@ -85,7 +86,7 @@ impl<const FRAC_BITS: u8> FixedPoint<FRAC_BITS> {
         Self {
             sign_mask: POSITIVE_MASK,
             value: integral_sqrt(self.value) << (FRAC_BITS / 2),
-            _marker: self._marker
+            _marker: self._marker,
         }
     }
 
@@ -104,12 +105,12 @@ impl<const FRAC_BITS: u8> FixedPoint<FRAC_BITS> {
             ..self
         }
     }
-/*
-    #[inline]
-    pub const fn point(self) -> FPPoint {
-        FPPoint::new(self, self)
-    }
-*/
+    /*
+        #[inline]
+        pub const fn point(self) -> FPPoint {
+            FPPoint::new(self, self)
+        }
+    */
     #[inline]
     const fn temp_i128(self) -> i128 {
         ((self.value ^ self.sign_mask) as i128).wrapping_sub(self.sign_mask as i128)
@@ -528,7 +529,8 @@ pub fn distance<T, const FRAC_BITS: u8>(x: T, y: T) -> FixedPoint<FRAC_BITS>
 where
     T: Into<i128> + std::fmt::Debug,
 {
-    let [x_squared, y_squared] = [x, y].map(|i| (i.into().pow(2) as u128).saturating_mul(1 << FRAC_BITS << FRAC_BITS));
+    let [x_squared, y_squared] =
+        [x, y].map(|i| (i.into().pow(2) as u128).saturating_mul(1 << FRAC_BITS << FRAC_BITS));
     let sqr: u128 = x_squared.saturating_add(y_squared);
 
     FixedPoint {
@@ -559,9 +561,12 @@ fn basics() {
     assert_eq!(n.round(), 7);
     assert_eq!((-n).round(), -7);
 
-    assert_eq!(f64::from(fp!(5/2)), 2.5f64);
+    assert_eq!(f64::from(fp!(5 / 2)), 2.5f64);
 
-    assert_eq!(integral_sqrt_ext(0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF), 0xFFFF_FFFF_FFFF_FFFF);
+    assert_eq!(
+        integral_sqrt_ext(0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF),
+        0xFFFF_FFFF_FFFF_FFFF
+    );
 }
 
 #[test]

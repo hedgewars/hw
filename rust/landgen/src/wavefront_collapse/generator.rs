@@ -340,7 +340,11 @@ impl LandGenerator for WavefrontCollapseLandGenerator {
 
         for row in 0..wfc_size.height as usize {
             for column in 0..wfc_size.width as usize {
-                if let Some(Cell{tile: Tile::Numbered(tile_index), ..}) = wfc.grid().get(row, column) {
+                if let Some(Cell {
+                    tile: Tile::Numbered(tile_index),
+                    ..
+                }) = wfc.grid().get(row, column)
+                {
                     let tile = &tiles[*tile_index];
 
                     for tile_row in 0..tile.size().height as usize {

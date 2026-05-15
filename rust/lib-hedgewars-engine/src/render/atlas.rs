@@ -93,7 +93,11 @@ impl<T: Copy> Atlas<T> {
     }
 
     pub fn used_space(&self) -> UsedSpace {
-        let used = self.used_rects.iter().map(|(r, _)| r.size().area()).sum::<u32>();
+        let used = self
+            .used_rects
+            .iter()
+            .map(|(r, _)| r.size().area())
+            .sum::<u32>();
         UsedSpace::new(used, self.size.area())
     }
 

@@ -22,8 +22,8 @@ use landgen::{
 use rand::Rng;
 
 use rand::seq::SliceRandom;
-use std::{borrow::Borrow, collections::hash_map::HashMap};
 use std::fmt::Debug;
+use std::{borrow::Borrow, collections::hash_map::HashMap};
 use vec2d::Vec2D;
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
@@ -100,7 +100,7 @@ impl<T> MapGenerator<T> {
         }
 
         if true {
-           shoppa_border(parameters.basic(), &land, &mut texture, 8);
+            shoppa_border(parameters.basic(), &land, &mut texture, 8);
         } else {
             if let Some(border_sprite) = theme.border_texture() {
                 assert!(border_sprite.height() <= 512);
@@ -322,7 +322,7 @@ fn shoppa_border<LandT>(
         let prev_chunk = &right[..chunk_size];
         process_shoppa_row_pair(prev_chunk, cur_chunk);
     }
-    
+
     for r in depth_field.rows_mut() {
         let mut it = r.iter_mut();
         let mut p = *it.next().unwrap();
@@ -330,10 +330,10 @@ fn shoppa_border<LandT>(
             if p < *c {
                 *c = p + 1;
             }
-            
+
             p = *c
         }
-        
+
         let mut it = r.iter_mut().rev();
         let mut p = *it.next().unwrap();
         for c in it {

@@ -12,8 +12,8 @@ use landgen::{
     LandGenerator,
 };
 use lfprng::LaggedFibonacciPRNG;
-use std::path::{Path, PathBuf};
 use log::trace;
+use std::path::{Path, PathBuf};
 
 use crate::render::{camera::Camera, GearEntry, GearRenderer, MapRenderer};
 

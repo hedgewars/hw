@@ -241,9 +241,8 @@ impl OutlinePoints {
             Some(mid_point)
         } else {
             // select distance within [-dist_right; dist_left], keeping min_distance in mind
-            let d = random_numbers.gen_range(
-                -(dist_right as i32) + min_distance..=dist_left as i32 - min_distance,
-            );
+            let d = random_numbers
+                .gen_range(-(dist_right as i32) + min_distance..=dist_left as i32 - min_distance);
 
             Some(mid_point + normal * d / normal_len as i32)
         }
