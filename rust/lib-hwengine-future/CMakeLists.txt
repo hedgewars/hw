@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 corrosion_import_crate(
     MANIFEST_PATH Cargo.toml
+    CRATES lib-hwengine-future
     FLAGS ${CARGO_FLAGS}
     NO_LINKER_OVERRIDE
 )

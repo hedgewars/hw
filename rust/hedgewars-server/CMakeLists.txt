@@ -8,6 +8,7 @@ endif()
 
 corrosion_import_crate(
     MANIFEST_PATH Cargo.toml
+    CRATES hedgewars-server
     FLAGS ${CARGO_FLAGS}
     FEATURES ${server_features}
     NO_LINKER_OVERRIDE
