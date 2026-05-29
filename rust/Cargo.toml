@@ -16,14 +16,15 @@ members = [
     "lib-hedgewars-engine",
     "lib-hwengine-future",
     "mapgen",
-    "theme-editor",
+    "physfs-rs",
     "vec2d",
 ]
 
 exclude = [
     "hwrunner",
     "hedgewars-checker",
-    "physfs-rs",
+    "theme-editor",
+    "land_dump",
 ]
 
 resolver = "2"

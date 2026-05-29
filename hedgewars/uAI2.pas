@@ -73,7 +73,7 @@ begin
     ai:= create_ai(gameField)
   end;
   
-  if not ai_have_plan() then
+  if not ai_have_plan(ai) then
   begin
     initiateThinking();
     exit;

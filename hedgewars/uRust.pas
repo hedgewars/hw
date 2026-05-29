@@ -46,7 +46,7 @@ function create_ai(game_field: TRGameField): TRAI; cdecl; external HWEngineFutur
 procedure ai_clear_team(ai: TRAI); cdecl; external HWEngineFutureLibName;
 procedure ai_add_team_hedgehog(ai: TRAI; x, y: real; ammo_counts: PAmmoCounts); cdecl; external HWEngineFutureLibName;
 procedure ai_think(ai: TRAI); cdecl; external HWEngineFutureLibName;
-function ai_have_plan(): boolean; cdecl; external HWEngineFutureLibName;
+function ai_have_plan(ai: TRAI): boolean; cdecl; external HWEngineFutureLibName;
 procedure ai_get_action(ai: TRAI; var current_hedgehog_state: HedgehogState; var action: shortstring); cdecl; external HWEngineFutureLibName;
 procedure dispose_ai(ai: TRAI); cdecl; external HWEngineFutureLibName;
 
