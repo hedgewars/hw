@@ -206,8 +206,8 @@ QString hedgewarsFormatLogMessage(QtMsgType type,
   return QStringLiteral("%1 %6 %2 (%3 %4:%5) [%8] %7")
       .arg(QString::fromUtf8(levels[type]))
       .arg(reinterpret_cast<quintptr>(threadId))
-      .arg(QString::fromUtf8(function.constData()), 24)
-      .arg(QString::fromUtf8(file.constData()), 40)
+      .arg(QString::fromUtf8(function.constData()), 20)
+      .arg(QString::fromUtf8(file.constData()), 24)
       .arg(context.line, 3, 10, QChar('0'))
       .arg(QDateTime::currentDateTimeUtc().toString(
                QStringLiteral("MM-dd HH:mm:ss.zzz")),

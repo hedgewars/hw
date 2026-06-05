@@ -24,10 +24,13 @@
 #include <QList>
 #include <QProcessEnvironment>
 #include <QThread>
+#include <QLoggingCategory>
 
 #include "MessageDialog.h"
 #include "gameuiconfig.h"
 #include "hwconsts.h"
+
+Q_LOGGING_CATEGORY(log, "engine")
 
 #ifdef HWLIBRARY
 extern "C" {
@@ -160,25 +163,36 @@ void TCPBase::RealStart() {
   process = new QProcess(this);
   connect(process, &QProcess::errorOccurred, this, &TCPBase::StartProcessError);
   connect(process, &QProcess::finished, this, &TCPBase::onEngineDeath);
+  connect(process, &QProcess::readyReadStandardOutput, this, [this, buffer = QByteArray()]() mutable { 
+    buffer.append(process->readAllStandardOutput());
+    qsizetype i;
+    while ((i = buffer.indexOf('\n')) != -1) {
+        qCInfo(log) << buffer.left(i).trimmed(); 
+        buffer.remove(0, i + 1);
+    }
+  });
+  connect(process, &QProcess::readyReadStandardError, this, [this, buffer = QByteArray()]() mutable { 
+    buffer.append(process->readAllStandardError());
+    qsizetype i;
+    while ((i = buffer.indexOf('\n')) != -1) {
+        qCWarning(log) << buffer.left(i).trimmed(); 
+        buffer.remove(0, i + 1);
+    }
+  });
   QStringList arguments = getArguments();
-
-#ifdef QT_DEBUG
-  // redirect everything written on stdout/stderr
-  process->setProcessChannelMode(QProcess::ForwardedChannels);
-#endif
 
   // If game config uses non-system locale, we set the environment
   // of the engine first
   if (m_usesCustomLanguage) {
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     QString hwengineLang = QLocale().name() + QStringLiteral(".UTF8");
-    qDebug("Setting hwengine environment: LANG=%s", qPrintable(hwengineLang));
+    qCDebug(log, "Setting hwengine environment: LANG=%s", qPrintable(hwengineLang));
     // TODO: Check if this is correct and works on all systems
     env.insert(QStringLiteral("LANG"),
                QLocale().name() + QStringLiteral(".UTF8"));
     process->setProcessEnvironment(env);
   }
-  qDebug("Starting hwengine ...");
+  qCDebug(log) << "Starting hwengine ...";
   process->start(bindir.absolutePath() + QStringLiteral("/hwengine"),
                  arguments);
 #endif
