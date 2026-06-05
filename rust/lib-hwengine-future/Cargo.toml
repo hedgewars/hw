@@ -12,6 +12,8 @@ integral-geometry = { path = "../integral-geometry" }
 mapgen = { path = "../mapgen" }
 landgen = { path = "../landgen" }
 lfprng = { path = "../lfprng" }
+strum = { version = "0.28", features = ["derive"] }
+glam = "0.33.0"
 
 [lib]
 name = "hwengine_future"

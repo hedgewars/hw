@@ -6,18 +6,24 @@ procedure ProcessBot;
 procedure initModule;
 
 implementation
-uses uLandUtils, uFloat, uVariables, uAmmos, uConsts, 
+uses uLandUtils, uFloat, uVariables, uAmmos, uConsts,
      uTypes,
     uCommands, uUtils, uDebug, uAILandMarks,
-    uGearsUtils, uRust;
+    uGearsUtils, uRust, uConsole, uAIMisc;
 
 var ai: pointer;
 
 procedure initiateThinking();
-var currHedgehogIndex, itHedgehog: Longword;
+var currHedgehogIndex, itHedgehog, i: Longword;
     itAmmo: TAmmoType;
     ammoCounts: TAmmoCounts;
 begin
+  FillTargets;
+  ai_clear_targets(ai);
+  for i:= 0 to Pred(Targets.Count) do
+    if not Targets.ar[i].dead then
+      ai_add_target(ai, Targets.ar[i].Point.X, Targets.ar[i].Point.Y, Targets.ar[i].Score, Targets.ar[i].Radius, Targets.ar[i].Density);
+
   ai_clear_team(ai);
   
   currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
@@ -49,13 +55,20 @@ begin
     state.angle:= Gear^.Angle;
     state.looking_to_the_right:= not Gear^.dX.isNegative;
     state.is_moving:= (Gear^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0;
+    state.game_ticks:= GameTicks;
     end;
     
     ai_get_action(ai, state, action);
     
     if action <> '' then
     begin
-      ParseCommand(action, true);
+      while Pos(#10, action) > 0 do
+      begin
+        ParseCommand(Copy(action, 1, Pos(#10, action) - 1), true);
+        Delete(action, 1, Pos(#10, action));
+      end;
+      if action <> '' then
+        ParseCommand(action, true);
     end
 end;
 
@@ -65,6 +78,12 @@ begin
       if (Gear = nil) or ((Gear^.State and gstHHDriven) = 0) then
       begin
         // TODO: clear gear messages, stop thininking thread
+        if ai <> nil then
+          begin
+          ai_clear_team(ai);
+          ai_think(ai);
+          end;
+
         exit;
       end;
     
@@ -73,7 +92,7 @@ begin
     ai:= create_ai(gameField)
   end;
   
-  if not ai_have_plan(ai) then
+  if not ai_have_plan(ai) and (GameTicks mod 128 = 0) then
   begin
     initiateThinking();
     exit;

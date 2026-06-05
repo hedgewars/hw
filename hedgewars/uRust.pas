@@ -11,6 +11,8 @@ const HWEngineFutureLibName = 'hwengine_future';
   {$linklib hwengine_future}
 {$ENDIF}
 
+{$PACKRECORDS C}
+
 type TRGameField = pointer; 
      TRAI = pointer;
 
@@ -36,7 +38,8 @@ procedure apply_theme(game_field: TRGameField; data_path, theme_name: PChar); cd
 type TAmmoCounts = array[TAmmoType] of Longword;
      PAmmoCounts = ^TAmmoCounts;
      HedgehogState = record
-        x, y: real;
+        game_ticks: Longword;
+        x, y: single;
         angle: Longword;
         looking_to_the_right,
         is_moving: boolean;
@@ -44,7 +47,9 @@ type TAmmoCounts = array[TAmmoType] of Longword;
 
 function create_ai(game_field: TRGameField): TRAI; cdecl; external HWEngineFutureLibName;
 procedure ai_clear_team(ai: TRAI); cdecl; external HWEngineFutureLibName;
-procedure ai_add_team_hedgehog(ai: TRAI; x, y: real; ammo_counts: PAmmoCounts); cdecl; external HWEngineFutureLibName;
+procedure ai_clear_targets(ai: TRAI); cdecl; external HWEngineFutureLibName;
+procedure ai_add_target(ai: TRAI; x, y: LongInt; health: LongInt; radius: Longword; density: single); cdecl; external HWEngineFutureLibName;
+procedure ai_add_team_hedgehog(ai: TRAI; x, y: single; ammo_counts: PAmmoCounts); cdecl; external HWEngineFutureLibName;
 procedure ai_think(ai: TRAI); cdecl; external HWEngineFutureLibName;
 function ai_have_plan(ai: TRAI): boolean; cdecl; external HWEngineFutureLibName;
 procedure ai_get_action(ai: TRAI; var current_hedgehog_state: HedgehogState; var action: shortstring); cdecl; external HWEngineFutureLibName;

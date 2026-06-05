@@ -1,4 +1,7 @@
+use strum::{EnumCount, EnumIter};
+
 #[repr(usize)]
+#[derive(EnumIter, EnumCount, Copy, Clone, Debug, PartialEq)]
 pub enum AmmoType {
     Nothing,
     Grenade,
@@ -61,14 +64,13 @@ pub enum AmmoType {
     Creeper,
     Minigun,
     Sentry, // 60
-    Count,
 }
 
 impl TryFrom<usize> for AmmoType {
     type Error = &'static str;
 
     fn try_from(value: usize) -> Result<Self, Self::Error> {
-        if value < Self::Count as usize {
+        if value < Self::COUNT {
             Ok(unsafe { std::mem::transmute(value) })
         } else {
             Err("Invalid ammo type")

@@ -16,8 +16,8 @@ use mapgen::{theme::Theme, MapGenerator};
 use std::fs;
 use std::ptr::slice_from_raw_parts;
 use std::{ffi::CStr, path::Path};
+use strum::EnumCount;
 
-#[repr(C)]
 pub struct GameField {
     collision: land2d::Land2D<u16>,
     pixels: land2d::Land2D<u32>,
@@ -25,7 +25,9 @@ pub struct GameField {
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct HedgehogState {
+    pub game_ticks: u32,
     pub x: f32,
     pub y: f32,
     pub angle: u32,
@@ -264,8 +266,25 @@ pub unsafe extern "C" fn dispose_game_field(game_field: *mut GameField) {
 }
 
 #[no_mangle]
-pub extern "C" fn create_ai(game_field: &GameField) -> *mut AI {
+pub extern "C" fn create_ai(game_field: &GameField) -> *mut AI<'_> {
     Box::into_raw(Box::new(AI::new(game_field)))
+}
+
+#[no_mangle]
+pub extern "C" fn ai_clear_targets(ai: &mut AI) {
+    ai.clear_targets();
+}
+
+#[no_mangle]
+pub extern "C" fn ai_add_target(
+    ai: &mut AI,
+    x: i32,
+    y: i32,
+    health: i32,
+    radius: u32,
+    density: f32,
+) {
+    ai.add_target(x, y, health, radius, density);
 }
 
 #[no_mangle]
@@ -280,8 +299,7 @@ pub unsafe extern "C" fn ai_add_team_hedgehog(
     y: f32,
     ammo_counts: *const u32,
 ) {
-    let ammo_counts =
-        &*slice_from_raw_parts(ammo_counts, crate::ai::ammo::AmmoType::Count as usize);
+    let ammo_counts = &*slice_from_raw_parts(ammo_counts, crate::ai::ammo::AmmoType::COUNT);
     let ammo_counts = std::array::from_fn(|i| ammo_counts[i].clone());
 
     ai.get_team_mut().push(Hedgehog {
