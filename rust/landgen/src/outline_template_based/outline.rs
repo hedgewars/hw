@@ -137,7 +137,7 @@ impl OutlinePoints {
         }
 
         let normal_ray = Ray::new(mid_point, normal);
-        let mut dist_left = (self.size.width + self.size.height) as u32;
+        let mut dist_left = self.size.width + self.size.height;
         let mut dist_right = dist_left;
 
         // find distances to map borders

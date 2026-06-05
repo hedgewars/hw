@@ -4,15 +4,26 @@ mod attack_tests;
 mod collision;
 mod waypoint;
 
-use crate::ai::ammo::AmmoType;
-use crate::ai::attack_tests::{AttackParameters, AttackTestResult};
-use crate::ai::waypoint::{Waypoint, Waypoints};
-use crate::GameField;
+use crate::ai_state::ammo::AmmoType;
+use crate::ai_state::attack_tests::{AttackParameters, AttackTestResult};
+use crate::ai_state::waypoint::{Waypoint, Waypoints};
 use action::*;
 use integral_geometry::Point;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
 use strum::{EnumCount, IntoEnumIterator};
+use crate::game_field::GameField;
+
+#[repr(C)]
+#[derive(Debug)]
+pub struct HedgehogState {
+    pub game_ticks: u32,
+    pub x: f32,
+    pub y: f32,
+    pub angle: u32,
+    pub looking_to_the_right: bool,
+    pub is_moving: bool,
+}
 
 #[derive(Clone, Debug)]
 pub struct Target {

@@ -1,6 +1,5 @@
-use super::AI;
-use crate::ai::ammo::AmmoType;
-use crate::HedgehogState;
+use super::{HedgehogState, AI};
+use crate::ai_state::ammo::AmmoType;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Direction {
