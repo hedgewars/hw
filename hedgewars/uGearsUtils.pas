@@ -157,7 +157,7 @@ while Gear <> nil do
 // Run the calcs only once we know we have a type that will need damage
                         tdX:= Gear^.X-fX;
                         tdY:= Gear^.Y-fY;
-                        if LongInt(tdX.Round + tdY.Round + 2) < dmgBase then
+                        if LongInt(abs(hwRound(tdX)) + abs(hwRound(tdY)) + 2) < dmgBase then
                             dmg:= dmgBase - hwRound(Distance(tdX, tdY));
                         if dmg > 1 then
                             begin
@@ -214,7 +214,7 @@ while Gear <> nil do
                             begin
                             tdX:= Gear^.X-fX;
                             tdY:= Gear^.Y-fY;
-                            if LongInt(tdX.Round + tdY.Round + 2) < dmgBase then
+                            if LongInt(abs(hwRound(tdX)) + abs(hwRound(tdY)) + 2) < dmgBase then
                                 dmg:= dmgBase - hwRound(Distance(tdX, tdY));
                             if dmg > 1 then
                                 begin
@@ -470,7 +470,7 @@ if _0_4 < Gear^.dY then
         begin
         particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
         if particle <> nil then
-            particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
+            particle^.dX := particle^.dX + (hwfloat2float(Gear^.dX) / 5);
         end;
 
     if ((Gear^.Hedgehog^.Effects[heInvulnerable] <> 0)) then
@@ -489,8 +489,8 @@ var
     dAngle: real;
 begin
     // Frac/Round to be kind to JS as of 2012-08-27 where there is yet no int64/uint64
-    dAngle := (Gear^.dX.Round + Gear^.dY.Round) / 2 + (Gear^.dX.Frac/$100000000+Gear^.dY.Frac/$100000000);
-    if not Gear^.dX.isNegative then
+    dAngle := abs(hwfloat2float(Gear^.dX) + hwfloat2float(Gear^.dY));
+    if not isNegative(Gear^.dX) then
         Gear^.DirAngle := Gear^.DirAngle + dAngle
     else
         Gear^.DirAngle := Gear^.DirAngle - dAngle;
@@ -713,12 +713,12 @@ begin
             // if skipping we move the gear out of water
             if isDirH then
                 begin
-                Gear^.dX.isNegative := (not Gear^.dX.isNegative);
+                Gear^.dX := - Gear^.dX;
                 Gear^.X:= Gear^.X + Gear^.dX;
                 end
             else
                 begin
-                Gear^.dY.isNegative := (not Gear^.dY.isNegative);
+                Gear^.dY := - Gear^.dY;
                 Gear^.Y:= Gear^.Y + Gear^.dY;
                 end;
             Gear^.dY := Gear^.dY * skipDecay;
@@ -786,16 +786,16 @@ begin
                         begin
                         tmp:= hwRound(Gear^.X - Gear^.dX);
                         if abs(tmp - real(leftX)) < abs(tmp - real(rightX)) then  // left edge
-                            isImpact:= (abs(tmp-real(leftX)) >= Gear^.Radius) and (Gear^.dX.isNegative)
+                            isImpact:= (abs(tmp-real(leftX)) >= Gear^.Radius) and isNegative(Gear^.dX)
                         else
-                            isImpact:= (abs(tmp-real(rightX)) >= Gear^.Radius) and (not Gear^.dX.isNegative);
+                            isImpact:= (abs(tmp-real(rightX)) >= Gear^.Radius) and (not isNegative(Gear^.dX));
                         end
                     else
                         begin
                         tmp:= hwRound(Gear^.Y - Gear^.dY);
                         tmp:= abs(cWaterLine - tmp);
                         // there was an impact if distance was >= radius
-                        isImpact:= (tmp >= Gear^.Radius) and (not Gear^.dY.isNegative);
+                        isImpact:= (tmp >= Gear^.Radius) and (not isNegative(Gear^.dY));
                         end;
 
                     end;
@@ -1103,18 +1103,17 @@ begin
                         with Hedgehogs[i] do
                             if (not Unplaced) and (Gear <> nil) and (Gear <> exclude) then
                                 begin
-                                // code duplication - could throw into an inline function I guess
                                 dX := X - Gear^.X;
                                 dY := Y - Gear^.Y;
-                                isHit := (dX.Round + dY.Round < bound)
+                                isHit := (abs(hwRound(dX)) + abs(hwRound(dY)) < bound)
                                     and (not ((hwSqr(dX) / rX + hwSqr(dY) / rY) > _1));
 
                                 if (not isHit) and (WorldEdge = weWrap) then
                                     begin
-                                    if ((dX - width).Round + dY.Round < bound)
+                                    if (abs(hwRound(dX - width)) + abs(hwRound(dY)) < bound)
                                         and (not ((hwSqr(dX - width) / rX + hwSqr(dY) / rY) > _1)) then
                                         isHit := true
-                                    else if ((dX + width).Round + dY.Round < bound)
+                                    else if (abs(hwRound(dX + width)) + abs(hwRound(dY)) < bound)
                                         and (not ((hwSqr(dX + width) / rX + hwSqr(dY) / rY) > _1)) then
                                         isHit := true
                                     end;
@@ -1136,15 +1135,15 @@ begin
                 begin
                 dX := X - t^.X;
                 dY := Y - t^.Y;
-                isHit := (dX.Round + dY.Round < bound)
+                isHit := (abs(hwRound(dX)) + abs(hwRound(dY)) < bound)
                     and (not ((hwSqr(dX) / rX + hwSqr(dY) / rY) > _1));
 
                 if (not isHit) and (WorldEdge = weWrap) then
                     begin
-                    if ((dX - width).Round + dY.Round < bound)
+                    if (abs(hwRound(dX - width)) + abs(hwRound(dY)) < bound)
                         and (not ((hwSqr(dX - width) / rX + hwSqr(dY) / rY) > _1)) then
                         isHit := true
-                    else if ((dX + width).Round + dY.Round < bound)
+                    else if (abs(hwRound(dX + width)) + abs(hwRound(dY)) < bound)
                         and (not ((hwSqr(dX + width) / rX + hwSqr(dY) / rY) > _1)) then
                         isHit := true
                     end;
@@ -1282,10 +1281,9 @@ while t <> nil do
 //addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
                     dmg:= 0;
                     r:= Gear^.Radius + t^.Radius;
-                    dx:= Gear^.X-t^.X;
-                    dx.isNegative:= false;
-                    dy:= Gear^.Y-t^.Y;
-                    dy.isNegative:= false;
+                    dx:= hwAbs(Gear^.X-t^.X);
+                    dy:= hwAbs(Gear^.Y-t^.Y);
+
                     if r-hwRound(dx+dy) > 0 then
                         begin
                         dist:= hwRound(Distance(dx, dy));
@@ -1316,10 +1314,9 @@ while t <> nil do
             gtGrave: begin
                     dmg:= 0;
                     r:= Gear^.Radius + t^.Radius;
-                    dx:= Gear^.X-t^.X;
-                    dx.isNegative:= false;
-                    dy:= Gear^.Y-t^.Y;
-                    dy.isNegative:= false;
+                    dx:= hwAbs(Gear^.X-t^.X);
+                    dy:= hwAbs(Gear^.Y-t^.Y);
+
                     if r-hwRound(dx+dy) > 0 then
                         begin
                         dist:= hwRound(Distance(dx, dy));
@@ -1858,25 +1855,25 @@ if (hwRound(Gear^.X) < leftX) or
         begin
         bounced:= false;
         // Bounce left
-        if (hwRound(Gear^.X) - Gear^.Radius < leftX) and (((hwSign(Gear^.dX) = -1) and (not isZero(Gear^.dX))) or (Gear^.Kind = gtHedgehog)) then
+        if (hwRound(Gear^.X) - Gear^.Radius < leftX) and ((Gear^.dX < _0) or (Gear^.Kind = gtHedgehog)) then
             begin
             LeftImpactTimer:= 333;
             // Set X coordinate to bounce edge, unless the gear spawned inside the bounce edge before
             if (Gear^.State and gstInBounceEdge) = 0 then
                 Gear^.X:= int2hwfloat(leftX + Gear^.Radius);
             // Invert horizontal speed
-            Gear^.dX.isNegative:= false;
+            Gear^.dX:= -Gear^.dX;
             bounced:= true;
             end
         // Bounce right
-        else if (hwRound(Gear^.X) + Gear^.Radius > rightX) and (((hwSign(Gear^.dX) = 1) and (not isZero(Gear^.dX))) or (Gear^.Kind = gtHedgehog)) then
+        else if (hwRound(Gear^.X) + Gear^.Radius > rightX) and ((Gear^.dX > _0) or (Gear^.Kind = gtHedgehog)) then
             begin
             RightImpactTimer:= 333;
             // Set X coordinate to bounce edge, unless the gear spawned inside the bounce edge before
             if (Gear^.State and gstInBounceEdge) = 0 then
                 Gear^.X:= int2hwfloat(rightX - Gear^.Radius);
             // Invert horizontal speed
-            Gear^.dX.isNegative:= true;
+            Gear^.dX:= -Gear^.dX;
             bounced:= true;
             end;
         // Clear gstInBounceEdge when gear is no longer inside a bounce edge area
@@ -1885,7 +1882,7 @@ if (hwRound(Gear^.X) < leftX) or
         if (bounced) then
             begin
             WorldWrap:= true;
-            if (Gear^.dX.QWordValue > _0_001.QWordValue) then
+            if (hwAbs(Gear^.dX) > _0_001) then
                AddBounceEffectForGear(Gear);
             end;
         end

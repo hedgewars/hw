@@ -2712,6 +2712,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
+uses uRust;
 
 procedure preInitModule;
 begin
@@ -2908,12 +2909,12 @@ begin
     WaterOpacity:= $80;
 
     cWaveHeight             := 32;
-    cDrownSpeed.QWordValue  := 257698038;   // 0.06
+    cDrownSpeed             := hwf_new(6, 100);   // 0.06
     cDrownSpeedf            := 0.06;
-    cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
-    cWindSpeed.QWordValue   := 0;           // 0.0
+    cMaxWindSpeed           := hwf_new(1, 4000);  // 0.00025
+    cWindSpeed              := hwf_new(0, 1);     // 0.0
     cWindSpeedf             := 0.0;
-    cElastic                := _0_9;
+    cElastic                := hwf_new(9, 10);
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
     cLowGravity             := false;

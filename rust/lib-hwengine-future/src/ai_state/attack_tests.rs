@@ -1,9 +1,9 @@
 use crate::ai_state::ammo::AmmoType;
 use crate::ai_state::collision::test_coll;
 use crate::ai_state::Target;
+use crate::game_field::GameField;
 use glam::Vec2;
 use integral_geometry::Point;
-use crate::game_field::GameField;
 
 #[derive(Debug, Clone)]
 pub struct AttackTestResult {

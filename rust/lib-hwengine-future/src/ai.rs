@@ -1,9 +1,9 @@
+use crate::ai_state::ammo::AmmoType;
 use crate::ai_state::{Hedgehog, HedgehogState, AI};
 use crate::game_field::GameField;
 use crate::shortstring::ShortString;
 use std::ptr::slice_from_raw_parts;
 use strum::EnumCount;
-use crate::ai_state::ammo::AmmoType;
 
 #[no_mangle]
 pub extern "C" fn create_ai(game_field: &GameField) -> *mut AI<'_> {

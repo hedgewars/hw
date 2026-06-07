@@ -2765,7 +2765,7 @@ begin
         begin
         gear:= GearByUID(Trunc(lua_tonumber(L, 1)));
         if gear <> nil then
-            gear^.dX.isNegative:= lua_toboolean(L, 2);
+            gear^.dX:= WithSign(gear^.dX, lua_toboolean(L, 2));
         end;
     lc_hogturnleft:= 0;
 end;
@@ -2871,7 +2871,7 @@ begin
             begin
             t:= hwRound(gear^.dX * 1000000);
             // gear dX determines hog orientation
-            if (gear^.dX.isNegative) and (t = 0) then t:= -1;
+            if (isNegative(gear^.dX)) and (t = 0) then t:= -1;
             lua_pushnumber(L, t);
             lua_pushnumber(L, hwRound(gear^.dY * 1000000))
             end
@@ -3036,8 +3036,8 @@ begin
     if CheckLuaParamCount(L, 1, 'SetWind', 'windSpeed') then
         begin
         cWindSpeed:= int2hwfloat(Trunc(lua_tonumber(L, 1))) / 100 * cMaxWindSpeed;
-        cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
-        if cWindSpeed.isNegative then
+        cWindSpeedf:= hwfloat2float(cWindSpeed); // WTF was this: SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
+        if isNegative(cWindSpeed) then
             cWindSpeedf := -cWindSpeedf;
         vg:= AddVisualGear(0, 0, vgtSmoothWindBar);
         if vg <> nil then vg^.dAngle:= hwFloat2Float(cWindSpeed);
@@ -3403,7 +3403,7 @@ begin
             if not (iterator^.Kind in [gtPortal, gtAirAttack]) and (iterator^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0) then
                 begin
                 iterator^.Active:= true;
-                if iterator^.dY.QWordValue = 0 then iterator^.dY.isNegative:= false;
+                if isZero(iterator^.dY) then iterator^.dY:= _0;
                 iterator^.State:= iterator^.State or gstMoving;
                 DeleteCI(iterator)
                 end;

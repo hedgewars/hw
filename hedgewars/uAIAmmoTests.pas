@@ -1185,7 +1185,7 @@ Flags:= Flags; // avoid compiler hint
                 , dx, -dy, trackFall);
         if (v1 > valueResult) or (v2 > valueResult) then
             if (v2 > v1)
-                or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
+                or {don't encourage turning for no gain}((v2 = v1) and (not isNegative(Me^.dX))) then
                 begin
                 ap.Angle:= a;
                 valueResult:= v2
@@ -1246,7 +1246,7 @@ Flags:= Flags; // avoid compiler hint
             , 0.45, -0.9, trackFall);
 
     if (v2 > v1)
-        or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
+        or {don't encourage turning for no gain}((v2 = v1) and (not isNegative(Me^.dX))) then
         begin
         ap.Angle:= 1;
         valueResult:= v2
@@ -1301,7 +1301,7 @@ Flags:= Flags; // avoid compiler hint
             , 1, -0.8, trackFall);
 
     if (v2 > v1)
-        or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
+        or {don't encourage turning for no gain}((v2 = v1) and (not isNegative(Me^.dX))) then
         begin
         ap.Angle:= 1;
         valueResult:= v2
@@ -2103,7 +2103,7 @@ procedure checkCakeWalk(Me, Gear: PGear; var ap: TAttackParams);
 var i: Longword;
     v: LongInt;
 begin
-while (not TestColl(hwRound(Gear^.X), hwRound(Gear^.Y), 6)) and (Gear^.Y.Round < LongWord(LAND_HEIGHT)) do
+while (not TestColl(hwRound(Gear^.X), hwRound(Gear^.Y), 6)) and (hwRound(Gear^.Y) < LongWord(LAND_HEIGHT)) do
     Gear^.Y:= Gear^.Y + _1;
 
 for i:= 0 to 2040 do
@@ -2141,8 +2141,7 @@ Flags:= Flags; // avoid compiler hint
 
     // check left direction
     cake.Angle:= 3;
-    cake.dX.isNegative:= true;
-    cake.dX.QWordValue:= 0;
+    cake.dX:= -_0;
     cake.dY:= _0;
     cake.X:= Me^.X - _3;
     cake.Y:= Me^.Y;
@@ -2151,7 +2150,7 @@ Flags:= Flags; // avoid compiler hint
 
     // now try opposite direction
     cake.Angle:= 1;
-    cake.dX.isNegative:= false;
+    cake.dX:= _0;
     cake.X:= Me^.X + _3;
     cake.Y:= Me^.Y;
     checkCakeWalk(Me, @cake, ap);

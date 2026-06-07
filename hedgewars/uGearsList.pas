@@ -35,7 +35,7 @@ implementation
 
 uses uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
     uTextures, uScript, uRenderUtils, uAI, uCollisions,
-    uGearsRender, uGearsUtils, uDebug;
+    uGearsRender, uGearsUtils, uDebug, uRust;
 
 const
     GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (
@@ -398,10 +398,8 @@ begin
                         Sticky:= true;
                         if State and gstTmpFlag = 0 then
                             begin
-                            dx.isNegative:= GetRandom(2) = 0;
-                            dx.QWordValue:= QWord($40DA) * GetRandom(10000) * 8;
-                            dy.isNegative:= false;
-                            dy.QWordValue:= QWord($3AD3) * GetRandom(7000) * 8;
+                            dx:= hwf_raw(false, QWord($40DA) * GetRandom(10000) * 8);
+                            dy:= hwf_raw(false, QWord($3AD3) * GetRandom(7000) * 8);
                             if GetRandom(2) = 0 then
                                 dx := -dx;
                             Tint:= $FFFFFFFF
@@ -491,8 +489,11 @@ begin
                     gear^.Friction:= _0_995;
                     gear^.Density:= _1;
                     gear^.Angle:= 175; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
+(*
+TODO: wtf are these values?
                     gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
                     gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
+*)
                     gear^.Tag:= 0;
                     if gear^.Timer = 0 then
                         begin
@@ -585,7 +586,7 @@ begin
                     gear^.Health:= 5;
                     gear^.Density:= _1;
                     gear^.FlightTime:= 9999999; // determines whether in-air flames do damage. disabled by default
-                    if (gear^.dY.QWordValue = 0) and (gear^.dX.QWordValue = 0) then
+                    if (isZero(gear^.dY)) and (isZero(gear^.dX)) then
                         begin
                         gear^.dY:= (getrandomf - _0_8) * _0_03;
                         gear^.dX:= (getrandomf - _0_5) * _0_4
@@ -654,7 +655,7 @@ begin
                     gear^.DirAngle:= -90 * hwSign(Gear^.dX);
                     gear^.FlightTime:= 100; // (roughly) ticks spent dropping, used to skip getting up anim when stuck.
                                             // Initially set to a high value so cake has at least one getting up anim.
-                    if not dX.isNegative then
+                    if not isNegative(dX) then
                         gear^.Angle:= 1
                     else
                         gear^.Angle:= 3;
@@ -803,8 +804,10 @@ begin
                     gear^.Health:= 30;
                     gear^.Radius:= 8;
                     gear^.Angle:= 175; // Radius at which it will start "seeking". $FFFFFFFF = unlimited. check is skipped.
+                    (* TODO: wtf happened here storing raw hwfloats in longints?
                     gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
                     gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
+                    *)
                     if gear^.Timer = 0 then
                         gear^.Timer:= 5000;
                     gear^.WDTimer:= gear^.Timer
@@ -1007,7 +1010,7 @@ else if Gear^.Kind = gtHedgehog then
 with Gear^ do
     begin
     AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
-    AddRandomness(X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac)
+    // TODO: hmm? AddRandomness(X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac)
     end;
 if CurAmmoGear = Gear then
     CurAmmoGear:= nil;

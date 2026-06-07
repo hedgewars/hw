@@ -7,12 +7,12 @@ mod waypoint;
 use crate::ai_state::ammo::AmmoType;
 use crate::ai_state::attack_tests::{AttackParameters, AttackTestResult};
 use crate::ai_state::waypoint::{Waypoint, Waypoints};
+use crate::game_field::GameField;
 use action::*;
 use integral_geometry::Point;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
 use strum::{EnumCount, IntoEnumIterator};
-use crate::game_field::GameField;
 
 #[repr(C)]
 #[derive(Debug)]

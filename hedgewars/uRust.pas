@@ -3,7 +3,7 @@
 unit uRust;
 
 interface
-uses SDLh, uTypes;
+uses SDLh, uTypes, uFloat;
 
 const HWEngineFutureLibName = 'hwengine_future';
 
@@ -54,6 +54,32 @@ procedure ai_think(ai: TRAI); cdecl; external HWEngineFutureLibName;
 function ai_have_plan(ai: TRAI): boolean; cdecl; external HWEngineFutureLibName;
 procedure ai_get_action(ai: TRAI; var current_hedgehog_state: HedgehogState; var action: shortstring); cdecl; external HWEngineFutureLibName;
 procedure dispose_ai(ai: TRAI); cdecl; external HWEngineFutureLibName;
+
+function hwf_new(numerator: LongInt; denominator: LongWord): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_raw(is_negative: boolean; value: QWord): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_to_f64(number: HWFloat): double; cdecl; external HWEngineFutureLibName;
+function hwf_op_plus(n1, n2: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_op_minus(n1, n2: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_op_mul(n1, n2: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_op_div(n1, n2: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_op_lt(n1, n2: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
+function hwf_op_gt(n1, n2: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
+function hwf_is_zero(value: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
+function hwf_is_negative(value: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
+function hwf_op_neg(value: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_op_mul_int(n1: HWFloat; n2: LongInt): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_op_div_int(n1: HWFloat; n2: LongInt): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_to_str(value: HWFloat): ShortString; cdecl; external HWEngineFutureLibName;
+function hwf_round(value: HWFloat): Int64; cdecl; external HWEngineFutureLibName;
+function hwf_abs(value: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_sqr(value: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_sqrt(value: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_distance(x, y: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_sqr_distance(x, y: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_sign_as(num, signum: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_with_sign(num: HWFloat; is_negative: boolean): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_signum(r: HWFloat): LongInt; cdecl; external HWEngineFutureLibName;
+function hwf_min_positive(): HWFloat; cdecl; external HWEngineFutureLibName;
 
 implementation
 

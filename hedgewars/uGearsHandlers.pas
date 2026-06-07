@@ -27,7 +27,7 @@ function cakeStep(Gear: PGear): boolean;
 
 implementation
 
-uses SDLh, uFloat, uCollisions, uVariables, uGearsUtils;
+uses SDLh, uFloat, uCollisions, uVariables, uGearsUtils, uConsts;
 
 
 
@@ -113,7 +113,7 @@ begin
             RightImpactTimer:= 333;
         Gear^.Karma:= 2;
         Gear^.WDTimer:= 0;
-        if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
+        if (Gear^.Radius > 2) and (hwAbs(Gear^.dX) > _0_001) then
             AddBounceEffectForGear(Gear);
         end;
 

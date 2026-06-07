@@ -86,8 +86,8 @@ CheckNoDamage:= true;
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    if (Gear^.Kind = gtHedgehog) and (((GameFlags and gfInfAttack) = 0) or ((Gear^.dX.QWordValue < _0_000004.QWordValue)
-    and (Gear^.dY.QWordValue < _0_000004.QWordValue))) then
+    if (Gear^.Kind = gtHedgehog) and (((GameFlags and gfInfAttack) = 0) or ((hwAbs(Gear^.dX) < _0_000004)
+    and (hwAbs(Gear^.dY) < _0_000004))) then
         begin
         if (not isInMultiShoot) then
             inc(Gear^.Damage, Gear^.Karma);
@@ -952,8 +952,8 @@ if cAirMines > 0 then
                             rdx:=Gear^.X-Hedgehogs[h].Gear^.X;
                             rdy:=Gear^.Y-Hedgehogs[h].Gear^.Y;
                             if (Gear^.Angle < $FFFFFFFF) and
-                                ((rdx.Round+rdy.Round < Gear^.Angle) and
-                                (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
+                                (abs(hwRound(rdx))+abs(hwRound(rdy)) < Gear^.Angle) and
+                                (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle)) then
                                 begin
                                 p:= 1
                                 end
@@ -1155,7 +1155,7 @@ if sectionDivide then
                 with Teams[j]^ do
                     for i:= 0 to cMaxHHIndex do
                         with Hedgehogs[i] do
-                            if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
+                            if (Gear <> nil) and (isZero(Gear^.X)) then
                                 begin
                                 if PlacingHogs then
                                     Unplaced:= true
@@ -1168,9 +1168,9 @@ if sectionDivide then
                                     Gear^.Pos:= GetRandom(49);
                                     // unless the world is wrapping, make outter teams face to map center
                                     if (WorldEdge <> weWrap) and ((p = 0) or (p = ClansCount - 1)) then
-                                        Gear^.dX.isNegative:= (p <> 0)
+                                        Gear^.dX:= WithSign(Gear^.dX, p <> 0)
                                     else
-                                        Gear^.dX.isNegative:= (GetRandom(2) = 1);
+                                        Gear^.dX:= WithSign(Gear^.dX, GetRandom(2) = 1);
                                     end
                                 end;
         inc(t, playWidth div ClansCount);
@@ -1184,7 +1184,7 @@ else // mix hedgehogs
         begin
         for i:= 0 to cMaxHHIndex do
             with Hedgehogs[i] do
-                if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
+                if (Gear <> nil) and (isZero(Gear^.X)) then
                     begin
                     ar[Count]:= @Hedgehogs[i];
                     inc(Count)
@@ -1201,7 +1201,7 @@ else // mix hedgehogs
             ar[i]^.UnplacedKing:= true;
         if ar[i]^.Gear <> nil then
             begin
-            ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2;
+            ar[i]^.Gear^.dX:= WithSign(ar[i]^.Gear^.dX, hwRound(ar[i]^.Gear^.X) > leftX + playWidth div 2);
             end;
         ar[i]:= ar[Count - 1];
         dec(Count)

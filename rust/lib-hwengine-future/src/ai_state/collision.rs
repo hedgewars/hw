@@ -1,6 +1,6 @@
 use crate::ai_state::action::{Action, Direction};
-use glam::Vec2;
 use crate::game_field::GameField;
+use glam::Vec2;
 
 fn test_collision_x(
     game_field: &GameField,

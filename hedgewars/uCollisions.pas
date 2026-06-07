@@ -239,10 +239,10 @@ begin
         exit;
     bSqr:= hwSqr(b);
     desc:= bSqr - dirNormSqr * c;
-    if desc.isNegative then exit;
+    if isNegative(desc) then exit;
 
     t:= -b - hwSqrt(desc);
-    if t.isNegative then t:= _0;
+    if isNegative(t) then t:= _0;
     if t < dirNormSqr then
         with LineCollisionTest do
             begin
@@ -266,7 +266,7 @@ begin
     dirY:= (tY - oY);
     dirNormBound:= _1_5 * (hwAbs(dirX) + hwAbs(dirY));
     dirNormSqr:= hwSqr(dirX) + hwSqr(dirY);
-    if dirNormSqr.isNegative then
+    if isNegative(dirNormSqr) then
         exit;
 
     for i:= 0 to Pred(Count) do
@@ -295,7 +295,7 @@ begin
     dirY:= (tY - oY);
     dirNormBound:= _1_5 * (hwAbs(dirX) + hwAbs(dirY));
     dirNormSqr:= hwSqr(dirX) + hwSqr(dirY);
-    if dirNormSqr.isNegative then
+    if isNegative(dirNormSqr) then
         exit;
 
     Gear:= GearsList;
@@ -706,7 +706,7 @@ begin
     begin
         if hwAbs(Gear^.dY) < cHHKick then
             exit;
-        if ((Gear^.State and gstHHJumping) <> 0) and (not Gear^.dY.isNegative) and (Gear^.dY < _0_4) then
+        if ((Gear^.State and gstHHJumping) <> 0) and (not isNegative(Gear^.dY)) and (Gear^.dY < _0_4) then
             exit;
 
         centerX := hwRound(Gear^.X);
@@ -788,8 +788,8 @@ begin
     dy:= Gear^.dY;
 
     // we start searching from the direction the gear came from
-    if (dx.QWordValue > _0_995.QWordValue )
-    or (dy.QWordValue > _0_995.QWordValue ) then
+    if (hwAbs(dx) > _0_995)
+    or (hwAbs(dy) > _0_995) then
         begin // scale
         s := _0_995 / Distance(dx,dy);
         dx := s * dx;
@@ -976,14 +976,12 @@ if isColl then
 
     if dirY <> 0 then
         begin
-        Gear^.dX.QWordValue:= 0;
-        Gear^.dX.isNegative:= (collX >= gx);
+        Gear^.dX:= WithSign(_0, collX >= gx);
         Gear^.dY:= _1*dirY
         end
     else
         begin
-        Gear^.dY.QWordValue:= 0;
-        Gear^.dY.isNegative:= (collY >= gy);
+        Gear^.dY:= WithSign(_0, collY >= gy);
         Gear^.dX:= _1*dirX
         end;
 
@@ -999,8 +997,7 @@ if isColl then
 
     if bSucc and ((sdx <> 0) or (sdy <> 0)) then
         begin
-        dx := int2hwFloat(sdy) / (abs(sdx) + abs(sdy));
-        dx.isNegative := (sdx * sdy) < 0;
+        dx := WithSign(int2hwFloat(sdy) / (abs(sdx) + abs(sdy)), (sdx * sdy) < 0);
         exit (dx);
         end
     end;
@@ -1042,8 +1039,7 @@ if isColl then
     dx := Gear^.dX;
     dy := Gear^.dY;
 
-    Gear^.dX.QWordValue:= 0;
-    Gear^.dX.isNegative:= (collX >= gx);
+    Gear^.dX:= WithSign(_0, collX >= gx);
     Gear^.dY:= _1;
 
     sdx:= 0;
@@ -1056,8 +1052,7 @@ if isColl then
 
     if bSucc and (sdx <> 0) and (sdy <> 0) then
     begin
-        dx := int2hwFloat(sdy) / (abs(sdx) + abs(sdy));
-        dx.isNegative := (sdx * sdy) < 0;
+        dx := WithSign(int2hwFloat(sdy) / (abs(sdx) + abs(sdy)), (sdx * sdy) < 0);
         exit (dx);
     end;
     end;

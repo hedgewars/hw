@@ -229,7 +229,7 @@ with Actions.actions[Actions.Pos] do
                 if (Me^.State and gstMoving) <> 0 then
                     exit;
             
-                if not Me^.dX.isNegative then
+                if not isNegative(Me^.dX) then
                 begin
                     if (Me^.Message and gmLeft) = 0 then
                         ParseCommand('+left', true);
@@ -242,7 +242,7 @@ with Actions.actions[Actions.Pos] do
                 if (Me^.State and gstMoving) <> 0 then
                     exit;
             
-                if Me^.dX.isNegative then
+                if isNegative(Me^.dX) then
                 begin
                     if (Me^.Message and gmRight) = 0 then
                         ParseCommand('+right', true);

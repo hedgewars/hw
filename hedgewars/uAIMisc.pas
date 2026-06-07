@@ -280,7 +280,7 @@ while Gear <> nil do
                 begin
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), gear^.Angle+5, -30);
                 
-                if (Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue then
+                if (hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) > _0_02 then
                     bonuses.activity:= true
                 end;
 
@@ -1104,10 +1104,10 @@ repeat
         Gear^.dY:= Gear^.dY + aiGravity;
         if Gear^.dY > _0_4 then
             exit(false);
-        if (Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, -1) <> 0) then
+        if (isNegative(Gear^.dY)) and (TestCollisionYwithGear(Gear, -1) <> 0) then
             Gear^.dY:= _0;
         Gear^.Y:= Gear^.Y + Gear^.dY;
-        if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
+        if (not isNegative(Gear^.dY)) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
             Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
             Gear^.dY:= _0;
@@ -1139,7 +1139,7 @@ begin
 HHGo:= false;
 Gear^.CollisionMask:= lfNotCurHogCrate;
 
-Gear^.dX.isNegative:= (Gear^.Message and gmLeft) <> 0;
+Gear^.dX:= WithSign(Gear^.dX, (Gear^.Message and gmLeft) <> 0);
 
 AltGear^:= Gear^;
 

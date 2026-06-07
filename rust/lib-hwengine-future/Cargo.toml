@@ -7,6 +7,7 @@ authors = ["Andrey Korotaev <a.korotaev@hedgewars.org>"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+fpnum = { path = "../fpnum" }
 land2d = { path = "../land2d" }
 integral-geometry = { path = "../integral-geometry" }
 mapgen = { path = "../mapgen" }

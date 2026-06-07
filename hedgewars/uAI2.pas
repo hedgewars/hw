@@ -53,7 +53,7 @@ begin
     state.x:= hwfloat2float(Gear^.X);
     state.y:= hwfloat2float(Gear^.Y);
     state.angle:= Gear^.Angle;
-    state.looking_to_the_right:= not Gear^.dX.isNegative;
+    state.looking_to_the_right:= not isNegative(Gear^.dX);
     state.is_moving:= (Gear^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0;
     state.game_ticks:= GameTicks;
     end;

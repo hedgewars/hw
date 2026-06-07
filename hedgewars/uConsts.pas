@@ -83,11 +83,6 @@ const
 
     cCentralMessageColor  : Longword = $FFFFFF00; // color of message in center of screen like quit or pause
 
-{$WARNINGS OFF}
-    cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4
-    cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
-{$WARNINGS ON}
-
     // reducedquality flags
     rqNone        = $00000000;  // don't reduce quality
     rqLowRes      = $00000001;  // use half land array
@@ -432,12 +427,210 @@ var
     cFontBorder,
     cFontPadding: LongInt;
 
+    cAirPlaneSpeed: hwFloat;
+    cBombsSpeed   : hwFloat;
+
+           _1div1024,
+          _1div10000,
+          _1div50000,
+         _1div100000,
+              _1div3,
+                hwPi,
+           _0_000004,
+           _0_000064,
+             _0_0002,
+             _0_0005,
+              _0_001,
+              _0_003,
+             _0_0032,
+              _0_004,
+              _0_005,
+              _0_008,
+               _0_01,
+             _0_0128,
+               _0_02,
+               _0_03,
+               _0_05,
+               _0_07,
+               _0_08,
+                _0_1,
+               _0_15,
+               _0_17,
+                _0_2,
+               _0_25,
+                _0_3,
+               _0_35,
+              _0_375,
+               _0_39,
+                _0_4,
+               _0_45,
+                _0_5,
+               _0_55,
+                _0_6,
+               _0_64,
+                _0_7,
+                _0_8,
+               _0_84,
+               _0_87,
+                _0_9,
+               _0_93,
+               _0_96,
+              _0_995,
+              _0_999,
+                  _0,
+                  _1,
+                _1_2,
+                _1_5,
+                _1_6,
+                _1_9,
+                  _2,
+                _2_4,
+                  _3,
+                _3_2,
+                 _PI,
+                  _4,
+                _4_5,
+                  _5,
+                  _6,
+                _6_4,
+                  _7,
+                 _10,
+                 _12,
+                 _16,
+                 _19,
+                 _20,
+                 _24,
+                 _25,
+                 _30,
+                 _40,
+                 _41,
+                 _49,
+                 _50,
+                 _70,
+                 _90,
+                _128,
+                _180,
+                _250,
+                _256,
+                _300,
+                _360,
+                _450,
+                _500,
+                _900,
+               _1000,
+               _1024,
+               _2048,
+               _4096,
+              _10000,
+             cLittle,
+             cHHKick: hwFloat;
+
 implementation
+uses uRust;
 
 initialization
 
     cTeamHealthHeight:= round(19 * HDPIScaleFactor);
     cFontBorder:= round(2 * HDPIScaleFactor);
     cFontPadding:= round(2 * HDPIScaleFactor);
+
+    cAirPlaneSpeed:= hwf_raw(false, 3006477107);
+    cBombsSpeed:= hwf_raw(false, 429496729);
+
+   _1div1024:= hwf_new(1, 1024);
+  _1div10000:= hwf_new(1, 10000);
+  _1div50000:= hwf_new(1, 50000);
+ _1div100000:= hwf_new(1, 100000);
+      _1div3:= hwf_new(1, 3);
+        hwPi:= hwf_raw(false, 13493037704);
+   _0_000004:= hwf_new(1, 250000);
+   _0_000064:= hwf_new(1, 15625);
+     _0_0002:= hwf_new(1, 5000);
+     _0_0005:= hwf_new(1, 2000);
+      _0_001:= hwf_new(1, 1000);
+      _0_003:= hwf_new(3, 1000);
+     _0_0032:= hwf_new(32, 10000);
+      _0_004:= hwf_new(4, 1000);
+      _0_005:= hwf_new(5, 1000);
+      _0_008:= hwf_new(8, 1000);
+       _0_01:= hwf_new(1, 100);
+     _0_0128:= hwf_new(128, 10000);
+       _0_02:= hwf_new(2, 100);
+       _0_03:= hwf_new(3, 100);
+       _0_05:= hwf_new(5, 100);
+       _0_07:= hwf_new(7, 100);
+       _0_08:= hwf_new(8, 100);
+        _0_1:= hwf_new(1, 10);
+       _0_15:= hwf_new(15, 100);
+       _0_17:= hwf_new(17, 100);
+        _0_2:= hwf_new(2, 10);
+       _0_25:= hwf_new(1, 4);
+        _0_3:= hwf_new(3, 10);
+       _0_35:= hwf_new(35, 100);
+      _0_375:= hwf_new(3, 8);
+       _0_39:= hwf_new(39, 100);
+        _0_4:= hwf_new(4, 10);
+       _0_45:= hwf_new(45, 100);
+        _0_5:= hwf_new(1, 2);
+       _0_55:= hwf_new(55, 100);
+        _0_6:= hwf_new(6, 10);
+       _0_64:= hwf_new(64, 100);
+        _0_7:= hwf_new(7, 10);
+        _0_8:= hwf_new(8, 10);
+       _0_84:= hwf_new(84, 100);
+       _0_87:= hwf_new(87, 100);
+        _0_9:= hwf_new(9, 10);
+       _0_93:= hwf_new(93, 100);
+       _0_96:= hwf_new(96, 100);
+      _0_995:= hwf_new(995, 1000);
+      _0_999:= hwf_new(999, 1000);
+          _0:= hwf_raw(false, 0);
+          _1:= hwf_new(1, 1);
+        _1_2:= hwf_new(12, 10);
+        _1_5:= hwf_new(15, 10);
+        _1_6:= hwf_new(16, 10);
+        _1_9:= hwf_new(19, 10);
+          _2:= hwf_new(2, 1);
+        _2_4:= hwf_new(24, 10);
+          _3:= hwf_new(3, 1);
+        _3_2:= hwf_new(32, 10);
+         _PI:= hwf_raw(false, 13493037704);
+          _4:= hwf_new(4, 1);
+        _4_5:= hwf_new(45, 10);
+          _5:= hwf_new(5, 1);
+          _6:= hwf_new(6, 1);
+        _6_4:= hwf_new(64, 10);
+          _7:= hwf_new(7, 1);
+         _10:= int2hwFloat(10);
+         _12:= int2hwFloat(12);
+         _16:= int2hwFloat(16);
+         _19:= int2hwFloat(19);
+         _20:= int2hwFloat(20);
+         _24:= int2hwFloat(24);
+         _25:= int2hwFloat(25);
+         _30:= int2hwFloat(30);
+         _40:= int2hwFloat(40);
+         _41:= int2hwFloat(41);
+         _49:= int2hwFloat(49);
+         _50:= int2hwFloat(50);
+         _70:= int2hwFloat(70);
+         _90:= int2hwFloat(90);
+        _128:= int2hwFloat(128);
+        _180:= int2hwFloat(180);
+        _250:= int2hwFloat(250);
+        _256:= int2hwFloat(256);
+        _300:= int2hwFloat(300);
+        _360:= int2hwFloat(360);
+        _450:= int2hwFloat(450);
+        _500:= int2hwFloat(500);
+        _900:= int2hwFloat(900);
+       _1000:= int2hwFloat(1000);
+       _1024:= int2hwFloat(1024);
+       _2048:= int2hwFloat(2048);
+       _4096:= int2hwFloat(4096);
+      _10000:= int2hwFloat(10000);
+
+     cLittle:= hwf_min_positive();
+     cHHKick:= hwf_new(1, 100);  // _0_01
 
 end.

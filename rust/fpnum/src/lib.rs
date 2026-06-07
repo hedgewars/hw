@@ -25,9 +25,20 @@ pub struct FixedPoint<const FRAC_BITS: u8> {
 pub type FPNum = FixedPoint<20>;
 
 impl<const FRAC_BITS: u8> FixedPoint<FRAC_BITS> {
+    pub const FRAC_BITS: u8 = FRAC_BITS;
+
     #[inline]
     pub fn new(numerator: i32, denominator: u32) -> Self {
         Self::from(numerator) / denominator
+    }
+
+    #[inline]
+    pub fn from_raw(value: u64) -> Self {
+        Self {
+            sign_mask: POSITIVE_MASK,
+            value,
+            _marker: PhantomData,
+        }
     }
 
     #[inline]

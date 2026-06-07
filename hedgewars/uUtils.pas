@@ -439,7 +439,7 @@ end;
 
 function FloatToStr(n: hwFloat): shortstring;
 begin
-FloatToStr:= cstr(n) + '_' + inttostr(Lo(n.QWordValue))
+FloatToStr:= cstr(n)
 end;
 
 

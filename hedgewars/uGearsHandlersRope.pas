@@ -50,7 +50,7 @@ begin
        ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
         begin
         HHGear^.X:= tX;
-        HHGear^.dX.isNegative:= hwRound(tX) > leftX + HHGear^.Radius * 2
+        HHGear^.dX:= WithSign(HHGear^.dX, hwRound(tX) > leftX + HHGear^.Radius * 2)
         end;
 
     if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
@@ -78,7 +78,7 @@ begin
     if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0 then
         SetLittle(HHGear^.dX);
 
-    if HHGear^.dY.isNegative and (TestCollisionYwithGear(HHGear, -1) <> 0) then
+    if isNegative(HHGear^.dY) and (TestCollisionYwithGear(HHGear, -1) <> 0) then
         HHGear^.dY := _0;
     HHGear^.X := HHGear^.X + HHGear^.dX;
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
@@ -160,13 +160,13 @@ begin
         PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
         HHGear^.X:= tX;
-        HHGear^.dX.isNegative:= hwRound(tX) > leftX + HHGear^.Radius * 2;
+        HHGear^.dX:= WithSign(HHGear^.dX, hwRound(tX) > leftX + HHGear^.Radius * 2);
         exit
         end;
 
     tX:= HHGear^.X;
-    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shl 2;
-    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shl 2;
+    HHGear^.dX:= HHGear^.dX * 4;
+    HHGear^.dY:= HHGear^.dY * 4;
     if (Gear^.Message and gmLeft  <> 0) and (TestCollisionXwithGear(HHGear, -1) = 0) then
         HHGear^.dX := HHGear^.dX - _0_0032;
 
@@ -182,7 +182,7 @@ begin
 
         // depending on the rope vector we know which X-side to check for collision
         // in order to find out if the hog can still be moved by gravity
-        if ropeDx.isNegative = RopeDy.IsNegative then
+        if isNegative(ropeDx) = isNegative(RopeDy) then
             cd:= -1
         else
             cd:= 1;
@@ -214,12 +214,12 @@ begin
 
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
         if not ((TestCollisionXwithXYShift(HHGear, _2*hwSign(ropeDx), 0, hwSign(ropeDx), true) <> 0)
-        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, hwSign(ropeDy), hwSign(ropeDy)) <> 0))) then
+        or ((not isZero(ropeDy)) and (TestCollisionYwithXYShift(HHGear, 0, hwSign(ropeDy), hwSign(ropeDy)) <> 0))) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
         if not ((TestCollisionXwithXYShift(HHGear, -_2*hwSign(ropeDx), 0, -hwSign(ropeDx), true) <> 0)
-        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, -hwSign(ropeDy), -hwSign(ropeDy)) <> 0))) then
+        or ((not isZero(ropeDy)) and (TestCollisionYwithXYShift(HHGear, 0, -hwSign(ropeDy), -hwSign(ropeDy)) <> 0))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
@@ -255,9 +255,9 @@ begin
                 if RopePoints.Count = 0 then
                     RopePoints.HookAngle := DxDy2Angle(Gear^.dY, Gear^.dX);
                 b := (nx * HHGear^.dY) > (ny * HHGear^.dX);
-                sx:= Gear^.dX.isNegative;
-                sy:= Gear^.dY.isNegative;
-                sb:= Gear^.dX.QWordValue < Gear^.dY.QWordValue;
+                sx:= isNegative(Gear^.dX);
+                sy:= isNegative(Gear^.dY);
+                sb:= hwAbs(Gear^.dX) < hwAbs(Gear^.dY);
                 dLen := len
                 end;
 
@@ -279,8 +279,7 @@ begin
         nx := nx - tx;
         ny := ny - ty;
 
-        // len := len - _1_2 // should be the same as increase step
-        len.QWordValue := len.QWordValue - _1_2.QWordValue;
+        len := len - _1_2 // should be the same as increase step
         end;
 
     if not haveDivided then
@@ -299,18 +298,18 @@ begin
                 Gear^.Y := ty;
 
                 // oops, opposite quadrant, don't restore hog position in such case, just remove the point
-                wrongSide:= (ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx)
-                    and (ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy);
+                wrongSide:= (isNegative(ropeDx) = RopePoints.ar[RopePoints.Count].sx)
+                    and (isNegative(ropeDy) = RopePoints.ar[RopePoints.Count].sy);
 
                 // previous check could be inaccurate in vertical/horizontal rope positions,
                 // so perform this check also, even though odds are 1 to 415927 to hit this
                 if (not wrongSide)
-                    and ((ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx)
-                      <> (ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy)) then
+                    and ((isNegative(ropeDx) = RopePoints.ar[RopePoints.Count].sx)
+                      <> (isNegative(ropeDy) = RopePoints.ar[RopePoints.Count].sy)) then
                     if RopePoints.ar[RopePoints.Count].sb then
-                        wrongSide:= ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy
+                        wrongSide:= isNegative(ropeDy) = RopePoints.ar[RopePoints.Count].sy
                         else
-                        wrongSide:= ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx;
+                        wrongSide:= isNegative(ropeDx) = RopePoints.ar[RopePoints.Count].sx;
 
                 if wrongSide then
                     begin
@@ -377,11 +376,11 @@ begin
         // if we haven't found any collision yet then check the other side too
         if (Gear^.State and gstCollision) = 0 then
             begin
-            Gear^.dX.isNegative:= not Gear^.dX.isNegative;
-            Gear^.dY.isNegative:= not Gear^.dY.isNegative;
+            Gear^.dX:= - Gear^.dX;
+            Gear^.dY:= - Gear^.dY;
             CheckCollision(Gear);
-            Gear^.dX.isNegative:= not Gear^.dX.isNegative;
-            Gear^.dY.isNegative:= not Gear^.dY.isNegative;
+            Gear^.dX:= - Gear^.dX;
+            Gear^.dY:= - Gear^.dY;
             end;
 
         haveCollision:= (Gear^.State and gstCollision) <> 0;
@@ -395,8 +394,8 @@ begin
     if (Gear^.Message and gmAttack) <> 0 then
         haveCollision:= false;
 
-    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 2;
-    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 2;
+    HHGear^.dX:= HHGear^.dX / 4;
+    HHGear^.dY:= HHGear^.dY / 4;
     if (not haveCollision) and ((Gear^.State and gsttmpFlag) <> 0) then
         begin
             begin

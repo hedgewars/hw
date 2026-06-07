@@ -395,7 +395,7 @@ with Gear^,
                                      // spawned in air, normal drop sound
                                      PlaySound(sndCreeperDrop);
                                  newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtCreeper, 0, SignAs(_0_03, dX), _0, 0);
-                                 if not ((not dX.isNegative) xor ((State and gstHHHJump) <> 0)) then
+                                 if not ((not isNegative(dX)) xor ((State and gstHHHJump) <> 0)) then
                                      newGear^.Tag:= -1
                                  else
                                      newGear^.Tag:= 1;
@@ -1030,12 +1030,12 @@ if Gear^.Hedgehog^.Unplaced then
 
 land:= 0;
 isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
-if Gear^.dX.QWordValue > 8160437862 then
-    Gear^.dX.QWordValue:= 8160437862;
-if Gear^.dY.QWordValue > 8160437862 then
-    Gear^.dY.QWordValue:= 8160437862;
+if hwAbs(Gear^.dX) > _1_9 then
+    Gear^.dX:= SignAs(_1_9, Gear^.dX);
+if hwAbs(Gear^.dY) > _1_9 then
+    Gear^.dY:= SignAs(_1_9, Gear^.dY);
 
-isFalling:= (Gear^.dY.isNegative);
+isFalling:= isNegative(Gear^.dY);
 if (not isFalling) then
     begin
     // make sure we're not just stuck in wall
@@ -1047,7 +1047,7 @@ if (not isFalling) then
 if isFalling then
     begin
     land:= TestCollisionYKick(Gear, -1);
-    if (Gear^.dY.isNegative) and (land <> 0) then
+    if (isNegative(Gear^.dY)) and (land <> 0) then
         begin
         if land and lfBouncy <> 0 then
             begin
@@ -1077,20 +1077,20 @@ if isFalling then
 // this set of circumstances could be less complex if jumping was more clearly identified
         if ((GameFlags and gfMoreWind) <> 0) and (((Gear^.Damage <> 0)
         or ((CurAmmoGear <> nil) and ((CurAmmoGear^.AmmoType = amJetpack) or (CurAmmoGear^.AmmoType = amBirdy)))
-        or ((Gear^.dY.QWordValue + Gear^.dX.QWordValue) > _0_55.QWordValue))) then
+        or ((hwAbs(Gear^.dY) + hwAbs(Gear^.dX)) > _0_55))) then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
         end
     end
 else
     begin
     land:= TestCollisionYwithGear(Gear, 1);
-    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0)
+    if ((hwAbs(Gear^.dY) + hwAbs(Gear^.dX)) < _0_55) and ((land and lfIce) = 0)
     and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0))
     and (Gear^.Damage = 0)
     and ((Gear^.State and gstHHJumping) <> 0) then
         SetLittle(Gear^.dX);
 
-    if not Gear^.dY.isNegative then
+    if not isNegative(Gear^.dY) then
         begin
         if land and lfBouncy <> 0 then
             begin
@@ -1105,14 +1105,14 @@ else
         if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
             begin
             if ((Gear^.State and gstHHHJump) <> 0) and (Gear^.Hedgehog^.Effects[heArtillery] = 0)
-            and (Gear^.dX.QWordValue < _0_02.QWordValue) then
+            and (hwAbs(Gear^.dX) < _0_02) then
                 begin
                 if land and lfBouncy <> 0 then
                     Gear^.dY:= _0;
-                Gear^.dX.isNegative:= not Gear^.dX.isNegative // landing after high jump
+                Gear^.dX:= -Gear^.dX // landing after high jump
                 end;
             Gear^.State:= Gear^.State and (not (gstHHJumping or gstHHHJump));
-            if (land and lfBouncy = 0) or (Gear^.dX.QWordValue < _0_02.QWordValue) then
+            if (land and lfBouncy = 0) or (hwAbs(Gear^.dX) < _0_02) then
                 Gear^.dY:= _0
             end;
         Gear^.State:= Gear^.State and (not gstCollision)
@@ -1242,7 +1242,7 @@ if (Gear^.State and gstMoving) <> 0 then
 // ARTILLERY but not being moved by explosions
     Gear^.X:= Gear^.X + Gear^.dX;
     Gear^.Y:= Gear^.Y + Gear^.dY;
-    if (not Gear^.dY.isNegative) and (TestCollisionYKick(Gear, 1) = 0) then
+    if (not isNegative(Gear^.dY)) and (TestCollisionYKick(Gear, 1) = 0) then
         begin
         land:= TestCollisionYwithXYShift(Gear, 0, 1, 1);
         if land and lfBouncy <> 0 then
@@ -1539,10 +1539,10 @@ begin
     if (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0)
     and (Gear^.State and (gstHHJumping or gstHHHJump or gstAttacking or gstAnimation) = 0)
     and ((Gear^.Hedgehog = nil) or ((Gear^.Hedgehog^.Effects[heFrozen] = 0) or (Gear^.Hedgehog^.Effects[heFrozen] > 255)))
-    and (not Gear^.dY.isNegative) and TurnClockActive and (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
+    and (not isNegative(Gear^.dY)) and TurnClockActive and (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
         begin
         slope:= CalcSlopeBelowGear(Gear);
-        if slope.QWordValue > 730144440 then // ignore mild slopes
+        if hwAbs(slope) > _0_17 then // ignore mild slopes
             begin
             Gear^.dX:=Gear^.dX+slope*cGravity*_256;
             Gear^.State:= Gear^.State or gstMoving
@@ -1586,7 +1586,8 @@ if WorldWrap(Gear) then
                 Gear^.X:= int2HwFloat(RightX)
             else
                 Gear^.X:= int2HwFloat(LeftX);
-            Gear^.dX.QWordValue:= 0;
+
+            Gear^.dX:= SignAs(_0, Gear^.dX);
             Gear^.State := Gear^.State or gstCollision;
             end;
     end;

@@ -1,4 +1,5 @@
 #[derive(Eq, PartialEq, Copy, Clone, Hash, PartialOrd, Ord, Debug)]
+#[repr(C)]
 pub struct ShortString([u8; 256]);
 
 impl Default for ShortString {

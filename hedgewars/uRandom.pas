@@ -38,6 +38,7 @@ function  rndSign(num: hwFloat): hwFloat; // Returns num with a random chance of
 
 
 implementation
+uses uRust;
 
 var cirbuf: array[0..63] of Longword;
     n: byte;
@@ -86,8 +87,7 @@ end;
 function GetRandomf: hwFloat;
 begin
 GetNext;
-GetRandomf.isNegative:= false;
-GetRandomf.QWordValue:= GetNext
+GetRandomf:= hwf_raw(false, GetNext);
 end;
 
 function GetRandom(m: LongWord): LongWord; 
@@ -98,8 +98,7 @@ end;
 
 function rndSign(num: hwFloat): hwFloat;
 begin
-num.isNegative:= odd(GetNext);
-rndSign:= num
+rndSign:= hwf_with_sign(num, odd(GetNext))
 end;
 
 end.

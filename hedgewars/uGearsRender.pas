@@ -69,7 +69,7 @@ with RopePoints do
     rounded[Count + 1].Y:= hwRound(Gear^.Hedgehog^.Gear^.Y);
     end;
 
-if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
+if (RopePoints.Count > 0) or (not isZero(Gear^.Elasticity)) then
     begin
     EnableTexture(false);
 
@@ -151,7 +151,7 @@ begin
                      LayerIndex, linesLength, ropeLength);
     end
     else
-        if Gear^.Elasticity.QWordValue > 0 then
+        if not isZero(Gear^.Elasticity) then
             DrawRopeLine(hwFloat2Float(Gear^.X) + WorldDx, hwFloat2Float(Gear^.Y) + WorldDy,
                          hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) + WorldDy,
                          LayerIndex, linesLength, ropeLength);
@@ -170,7 +170,7 @@ begin
 if RopePoints.Count > 0 then
     DrawSpriteRotated(sprRopeHook, hwRound(RopePoints.ar[0].X) + WorldDx, hwRound(RopePoints.ar[0].Y) + WorldDy, 1, RopePoints.HookAngle)
 else
-    if Gear^.Elasticity.QWordValue > 0 then
+    if not isZero(Gear^.Elasticity) then
         DrawSpriteRotated(sprRopeHook, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 end;
 
@@ -1042,7 +1042,7 @@ begin
             // TODO fix: this gives different results based on framerate
             if (sx mod 8) = 0 then
                 begin
-                if Gear^.dX.isNegative then
+                if isNegative(Gear^.dX) then
                     tx := hwRound(Gear^.X) + cHHRadius
                 else
                     tx := hwRound(Gear^.X) - cHHRadius;
@@ -1233,7 +1233,7 @@ begin
     with HH^ do
         begin
         if ((Gear^.State and (not gstWinner)) = 0)
-            or ((Gear^.State = gstWait) and (Gear^.dY.QWordValue = 0))
+            or ((Gear^.State = gstWait) and (isZero(Gear^.dY)))
             or (bShowFinger and ((Gear^.State and gstHHDriven) <> 0)) then
             begin
             t:= sy - cHHRadius - 9;
