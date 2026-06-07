@@ -34,7 +34,7 @@ unit uFloat;
  *)
 interface
 
-type HWFloat = array[0..15] of byte;
+type HWFloat = record data: array[0..15] of byte end;
 
 // Returns an hwFloat that represents the value of integer parameter i
 function int2hwFloat (const i: LongInt) : hwFloat; 
@@ -93,13 +93,13 @@ end;
 
 operator = (const z1, z2: hwFloat) z : boolean; 
 begin
-    z:= z1 = z2;
+    z:= hwf_op_eq(z1, z2)
 end;
 
 {$IFDEF PAS2C}
 operator <> (const z1, z2: hwFloat) z : boolean; 
 begin
-    z:= z1 <> z2;
+    z:= not hwf_op_eq(z1, z2)
 end;
 {$ENDIF}
 

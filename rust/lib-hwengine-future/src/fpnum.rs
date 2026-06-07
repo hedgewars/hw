@@ -21,7 +21,6 @@ impl From<HWFloat> for FPNum {
 
 #[no_mangle]
 pub extern "C" fn hwf_new(numerator: i32, denominator: u32) -> HWFloat {
-    dbg!((numerator, denominator));
     FPNum::new(numerator, denominator).into()
 }
 
@@ -55,6 +54,11 @@ pub extern "C" fn hwf_op_mul(n1: HWFloat, n2: HWFloat) -> HWFloat {
 #[no_mangle]
 pub extern "C" fn hwf_op_div(n1: HWFloat, n2: HWFloat) -> HWFloat {
     (FPNum::from(n1) / FPNum::from(n2)).into()
+}
+
+#[no_mangle]
+pub extern "C" fn hwf_op_eq(n1: HWFloat, n2: HWFloat) -> bool {
+    FPNum::from(n1) == FPNum::from(n2)
 }
 
 #[no_mangle]

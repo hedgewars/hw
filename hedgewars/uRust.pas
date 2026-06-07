@@ -64,6 +64,7 @@ function hwf_op_mul(n1, n2: HWFloat): HWFloat; cdecl; external HWEngineFutureLib
 function hwf_op_div(n1, n2: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
 function hwf_op_lt(n1, n2: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
 function hwf_op_gt(n1, n2: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
+function hwf_op_eq(n1, n2: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
 function hwf_is_zero(value: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
 function hwf_is_negative(value: HWFloat): boolean; cdecl; external HWEngineFutureLibName;
 function hwf_op_neg(value: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
