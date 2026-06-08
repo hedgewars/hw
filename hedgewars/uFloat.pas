@@ -196,7 +196,7 @@ end;
 
 function DistanceI(const dx, dy: LongInt): hwFloat;
 begin
-    DistanceI:= hwf_sqrt(hwf_new(1, sqr(dx) + sqr(dy)))
+    DistanceI:= hwf_sqrt(hwf_new(sqr(dx) + sqr(dy), 1))
 end;
 
 function SignAs(const num, signum: hwFloat): hwFloat;
@@ -238,7 +238,7 @@ var d, nf: hwFloat;
 begin
     d:= _1 / hwf_distance(x, y);
 
-    nf:= y * d;
+    nf:= hwAbs(y * d);
 
     l:= 0;
     r:= 1024;

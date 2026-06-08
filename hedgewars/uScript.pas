@@ -3037,8 +3037,6 @@ begin
         begin
         cWindSpeed:= int2hwfloat(Trunc(lua_tonumber(L, 1))) / 100 * cMaxWindSpeed;
         cWindSpeedf:= hwfloat2float(cWindSpeed); // WTF was this: SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
-        if isNegative(cWindSpeed) then
-            cWindSpeedf := -cWindSpeedf;
         vg:= AddVisualGear(0, 0, vgtSmoothWindBar);
         if vg <> nil then vg^.dAngle:= hwFloat2Float(cWindSpeed);
             AddFileLog('Script set wind = '+FloatToStr(cWindSpeed));

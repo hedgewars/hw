@@ -489,7 +489,7 @@ var
     dAngle: real;
 begin
     // Frac/Round to be kind to JS as of 2012-08-27 where there is yet no int64/uint64
-    dAngle := abs(hwfloat2float(Gear^.dX) + hwfloat2float(Gear^.dY));
+    dAngle := abs(hwfloat2float(Gear^.dX)) + abs(hwfloat2float(Gear^.dY));
     if not isNegative(Gear^.dX) then
         Gear^.DirAngle := Gear^.DirAngle + dAngle
     else

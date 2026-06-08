@@ -1205,10 +1205,8 @@ begin
     shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
     if shell <> nil then
     begin
-        shell^.dX := hwfloat2float(gear^.dX) / -4;
-        if (isNegative(Gear^.dX)) then
-            shell^.dX := -shell^.dX;
-        shell^.dY := hwfloat2float(gear^.dY) / -4;
+        shell^.dX := hwfloat2float(gear^.dX) / (-4.0);
+        shell^.dY := abs(hwfloat2float(gear^.dY)) / (-4.0);
         shell^.Frame := startFrame;
     end;
 end;
@@ -2117,7 +2115,6 @@ begin
     isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
     if Gear^.Pos > 0 then
         begin
-        airFriction:= _1;
         if isUnderwater then
             airFriction:= _1 - cMaxWindSpeed * 3
         else
@@ -2650,7 +2647,7 @@ begin
 
     if (isZero(Gear^.dY)) then
         AddCI(Gear)
-    else if (isZero(Gear^.dY)) then
+    else
         DeleteCI(Gear)
 end;
 
