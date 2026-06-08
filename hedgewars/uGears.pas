@@ -952,8 +952,7 @@ if cAirMines > 0 then
                             rdx:=Gear^.X-Hedgehogs[h].Gear^.X;
                             rdy:=Gear^.Y-Hedgehogs[h].Gear^.Y;
                             if (Gear^.Angle < $FFFFFFFF) and
-                                (abs(hwRound(rdx))+abs(hwRound(rdy)) < Gear^.Angle) and
-                                (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle)) then
+                                (hwRound(SqrDistance(rdx, rdy)) < sqr(Gear^.Angle)) then
                                 begin
                                 p:= 1
                                 end

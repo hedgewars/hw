@@ -2108,21 +2108,20 @@ begin
             DeleteGear(Gear);
             exit
             end;
-        if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) > _0_02) or ((GameTicks and $3F) = 15) then
+        if ((GameTicks and $3F) = 15) or ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) > _0_02) then
             doStepFallingGear(Gear);
         exit
         end;
     isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
-    if Gear^.Pos > 0 then
-        begin
-        if isUnderwater then
-            airFriction:= _1 - cMaxWindSpeed * 3
-        else
-            airFriction:= _1 - cMaxWindSpeed * _1_5;
-        Gear^.dX:= Gear^.dX*airFriction;
-        Gear^.dY:= Gear^.dY*airFriction
-        end;
-    if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) > _0_02) or ((GameTicks and $3F) = 15) then
+
+    if isUnderwater then
+        airFriction:= _1 - cMaxWindSpeed * 3
+    else
+        airFriction:= _1 - cMaxWindSpeed * _1_5;
+    Gear^.dX:= Gear^.dX*airFriction;
+    Gear^.dY:= Gear^.dY*airFriction;
+
+    if ((GameTicks and $3F) = 15) or ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) > _0_02) then
         doStepFallingGear(Gear);
     if (TurnTimeLeft = 0) and ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) > _0_02) then
         AllInactive := false;
@@ -2130,15 +2129,15 @@ begin
     // Disable targeting if airmine is not active yet
     if ((Gear^.State and gsttmpFlag) = 0) then
         begin
-        if (TurnTimeLeft = 0)
-        or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
-        or (CurrentHedgehog^.Gear = nil) then
-        begin
-        Gear^.FlightTime:= GameTicks;
-        Gear^.State := Gear^.State or gsttmpFlag;
-        Gear^.Hedgehog := nil;
-        end;
-        exit;
+            if (TurnTimeLeft = 0)
+              or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
+              or (CurrentHedgehog^.Gear = nil) then
+              begin
+                    Gear^.FlightTime:= GameTicks;
+                    Gear^.State := Gear^.State or gsttmpFlag;
+                    Gear^.Hedgehog := nil;
+              end;
+            exit;
         end;
 
     //Disable targeting while the airmine is stunned
@@ -2214,7 +2213,7 @@ begin
                         tX:=Gear^.X-tmpG^.X;
                         tY:=Gear^.Y-tmpG^.Y;
                         if (Gear^.Angle = $FFFFFFFF) or
-                            (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Angle)) then
+                            (hwRound(SqrDistance(tX, tY)) < sqr(Gear^.Angle)) then
                             begin
                             if targ <> nil then tmpDist:= hwRound(Distance(tX,tY));
                             if (targ = nil) or (tmpDist < targDist) then
