@@ -16,16 +16,12 @@ fn test_collision_x(
         center_x + radius
     };
 
-    if game_field.collision.is_valid_x(x) {
-        let min_y = (center_y - radius + 1).max(0);
-        let max_y = (center_y + radius - 1).min(game_field.collision.height() as i32 - 1);
-        for y in min_y..=max_y {
-            let val = game_field.collision.get(y, x);
-            if val & mask != 0 {
-                return val & mask;
-            }
+    for val in game_field.collision.iter_range(center_y - radius + 1..=center_y + radius - 1, x..=x) {
+        if val & mask != 0 {
+            return val & mask;
         }
     }
+
     0
 }
 
@@ -38,23 +34,17 @@ fn test_collision_y(
     mask: u16,
 ) -> u16 {
     let y = if direction < 0 {
-        center_y.saturating_sub(radius)
+        center_y - radius
     } else {
-        center_y.saturating_add(radius)
+        center_y + radius
     };
 
-    if game_field.collision.is_valid_y(y) {
-        let min_x = center_x.saturating_sub(radius + 1).max(0);
-        let max_x = center_x
-            .saturating_add(radius - 1)
-            .min(game_field.collision.width() as i32 - 1);
-        for x in min_x..=max_x {
-            let val = game_field.collision.get(y, x);
-            if val & mask != 0 {
-                return val & mask;
-            }
+    for val in game_field.collision.iter_range(y..=y, center_x - radius + 1..=center_x + radius - 1) {
+        if val & mask != 0 {
+            return val & mask;
         }
     }
+
     0
 }
 

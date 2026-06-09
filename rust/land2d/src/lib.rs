@@ -94,9 +94,14 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
         col_range: RangeInclusive<i32>,
     ) -> LandRangeIter<'_, T> {
         let start_y = cmp::max(0, *row_range.start());
-        let end_y = cmp::min(self.height() as i32 - 1, *row_range.end());
+        let mut end_y = cmp::min(self.height() as i32 - 1, *row_range.end());
         let start_x = cmp::max(0, *col_range.start());
         let end_x = cmp::min(self.width() as i32 - 1, *col_range.end());
+
+        if end_x < start_x {
+            // invalidate row range if column range is invalid to save on checks later
+            end_y = start_y - 1;
+        }
 
         LandRangeIter {
             land: self,
@@ -361,7 +366,7 @@ impl<'a, T: Copy + PartialEq + Default> Iterator for LandRangeIter<'a, T> {
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.curr_y > self.end_y || self.start_x > self.end_x {
+        if self.curr_y > self.end_y {
             return None;
         }
 
