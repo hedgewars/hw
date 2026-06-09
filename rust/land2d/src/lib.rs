@@ -1,5 +1,5 @@
 use integral_geometry::{ArcPoints, EquidistantPoints, Line, Point, PotSize, Rect, Size, SizeMask};
-use std::{cmp, ops::Index, ops::IndexMut};
+use std::{cmp, ops::Index, ops::IndexMut, ops::RangeInclusive};
 use vec2d::Vec2D;
 
 #[derive(Debug)]
@@ -85,6 +85,27 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
     #[inline]
     pub fn rows(&self) -> impl DoubleEndedIterator<Item = &[T]> {
         self.pixels.rows()
+    }
+
+    #[inline]
+    pub fn iter_range(
+        &self,
+        row_range: RangeInclusive<i32>,
+        col_range: RangeInclusive<i32>,
+    ) -> LandRangeIter<'_, T> {
+        let start_y = cmp::max(0, *row_range.start());
+        let end_y = cmp::min(self.height() as i32 - 1, *row_range.end());
+        let start_x = cmp::max(0, *col_range.start());
+        let end_x = cmp::min(self.width() as i32 - 1, *col_range.end());
+
+        LandRangeIter {
+            land: self,
+            curr_y: start_y,
+            curr_x: start_x,
+            end_y,
+            start_x,
+            end_x,
+        }
     }
 
     #[inline]
@@ -325,6 +346,54 @@ impl<T> From<Vec2D<T>> for Land2D<T> {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct LandRangeIter<'a, T> {
+    land: &'a Land2D<T>,
+    curr_y: i32,
+    curr_x: i32,
+    end_y: i32,
+    start_x: i32,
+    end_x: i32,
+}
+
+impl<'a, T: Copy + PartialEq + Default> Iterator for LandRangeIter<'a, T> {
+    type Item = &'a T;
+
+    #[inline]
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.curr_y > self.end_y || self.start_x > self.end_x {
+            return None;
+        }
+
+        let val = unsafe { self.land.pixels.get_unchecked(self.curr_y as usize, self.curr_x as usize) };
+
+        if self.curr_x < self.end_x {
+            self.curr_x += 1;
+        } else {
+            self.curr_x = self.start_x;
+            self.curr_y += 1;
+        }
+
+        Some(val)
+    }
+
+    #[inline]
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        if self.curr_y > self.end_y || self.start_x > self.end_x {
+            (0, Some(0))
+        } else {
+            let remaining_rows = (self.end_y - self.curr_y) as usize;
+            let remaining_in_curr_row = (self.end_x - self.curr_x + 1) as usize;
+            let cols = (self.end_x - self.start_x + 1) as usize;
+            let size = remaining_rows * cols + remaining_in_curr_row;
+            (size, Some(size))
+        }
+    }
+}
+
+impl<'a, T: Copy + PartialEq + Default> ExactSizeIterator for LandRangeIter<'a, T> {}
+impl<'a, T: Copy + PartialEq + Default> std::iter::FusedIterator for LandRangeIter<'a, T> {}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -375,5 +444,33 @@ mod tests {
         assert_eq!(l.pixels[120][20], 4);
         assert_eq!(l.pixels[120][100], 4);
         assert_eq!(l.pixels[100][64], 4);
+    }
+
+    #[test]
+    fn test_iter_range() {
+        let mut l: Land2D<u8> = Land2D::new(&Size::square(4), 0);
+        assert_eq!(l.width(), 4);
+        assert_eq!(l.height(), 4);
+
+        for y in 0..4 {
+            for x in 0..4 {
+                l.map(y, x, |v| *v = (y * 10 + x) as u8);
+            }
+        }
+
+        // Test normal range inside bounds
+        let elements: Vec<u8> = l.iter_range(1..=2, 1..=3).copied().collect();
+        assert_eq!(elements, vec![11, 12, 13, 21, 22, 23]);
+
+        // Test out of bounds range that gets clamped
+        let elements_clamped: Vec<u8> = l.iter_range(-1..=5, 2..=10).copied().collect();
+        assert_eq!(elements_clamped, vec![2, 3, 12, 13, 22, 23, 32, 33]);
+
+        // Test empty range
+        let elements_empty: Vec<u8> = l.iter_range(2..=1, 0..=3).copied().collect();
+        assert!(elements_empty.is_empty());
+
+        let elements_empty_col: Vec<u8> = l.iter_range(0..=3, 2..=1).copied().collect();
+        assert!(elements_empty_col.is_empty());
     }
 }
