@@ -1,29 +1,18 @@
 mod action;
 pub mod ammo;
 mod attack_tests;
-mod collision;
+pub(crate) mod collision;
 mod waypoint;
 
 use crate::ai_state::ammo::AmmoType;
-use crate::ai_state::attack_tests::{AttackParameters, AttackTestResult};
+use crate::ai_state::attack_tests::AttackParameters;
 use crate::ai_state::waypoint::{Waypoint, Waypoints};
 use crate::game_field::GameField;
 use action::*;
 use integral_geometry::Point;
-use std::cmp::Ordering;
-use std::collections::{BinaryHeap, HashMap, HashSet};
+use std::collections::BinaryHeap;
 use strum::{EnumCount, IntoEnumIterator};
-
-#[repr(C)]
-#[derive(Debug)]
-pub struct HedgehogState {
-    pub game_ticks: u32,
-    pub x: f32,
-    pub y: f32,
-    pub angle: u32,
-    pub looking_to_the_right: bool,
-    pub is_moving: bool,
-}
+use crate::gear::TGear;
 
 #[derive(Clone, Debug)]
 pub struct Target {
@@ -33,10 +22,9 @@ pub struct Target {
     pub density: f32,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct Hedgehog {
-    pub(crate) x: f32,
-    pub(crate) y: f32,
+    pub(crate) gear: TGear,
     pub(crate) ammo: [u32; AmmoType::COUNT],
 }
 
@@ -74,7 +62,7 @@ impl<'a> AI<'a> {
         });
     }
 
-    pub(crate) fn walk(&mut self, hedgehog: &Hedgehog) -> Waypoints {
+    pub(crate) fn walk(&mut self, hedgehog: &TGear) -> Waypoints {
         self.actions = None;
 
         let mut waypoints = Waypoints::default();
@@ -93,11 +81,12 @@ impl<'a> AI<'a> {
         let max_ticks = 40000;
 
         while let Some(start_waypoint) = heap.pop() {
-            let start_position = (&start_waypoint).into();
+            //let start_position = (&start_waypoint).into();
 
             for dir in [Direction::Left, Direction::Right] {
                 let mut waypoint = start_waypoint.clone();
 
+                /*
                 // jumping
                 if let Some((x, y, ticks)) =
                     collision::simulate_long_jump(self.game_field, waypoint.x, waypoint.y, dir)
@@ -110,8 +99,9 @@ impl<'a> AI<'a> {
                     if waypoints.add_point(&waypoint) && waypoint.ticks < max_ticks {
                         heap.push(waypoint.clone());
                     }
-                }
+                }*/
 
+                /*
                 // walking
                 let mut waypoint = start_waypoint.clone();
                 let mut steps_counter = 0;
@@ -130,10 +120,10 @@ impl<'a> AI<'a> {
 
                     steps_counter += 1;
                 }
-
                 if steps_counter > 1 {
                     heap.push(waypoint);
                 }
+*/
             }
         }
 
@@ -154,7 +144,7 @@ impl<'a> AI<'a> {
             for ammo_type in AmmoType::iter() {
                 if hedgehog.ammo[ammo_type as usize] > 0 {
                     if let Some(res) =
-                        ammo_type.analyze_attacks(self.game_field, &self.targets, px, py)
+                        ammo_type.analyze_attacks(self.game_field, &self.targets, f64::from(px) as f32, f64::from(py) as f32)
                     {
                         let final_score = Self::calculate_final_score(&waypoint, res.score);
 
@@ -244,7 +234,7 @@ impl<'a> AI<'a> {
         self.actions = None;
 
         if let Some(hedgehog) = self.team.first().cloned() {
-            let positions = self.walk(&hedgehog);
+            let positions = self.walk(&hedgehog.gear);
             println!("Found {} positions", positions.len());
             self.calculate_attack(&hedgehog, &positions)
         }

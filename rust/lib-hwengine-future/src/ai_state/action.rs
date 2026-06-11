@@ -1,5 +1,6 @@
-use super::{HedgehogState, AI};
+use super::{AI};
 use crate::ai_state::ammo::AmmoType;
+use crate::gear::{StateFlags, TGear};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Direction {
@@ -55,7 +56,7 @@ impl Actions {
 }
 
 impl<'a> AI<'a> {
-    pub fn get_action(&mut self, state: &HedgehogState) -> String {
+    pub fn get_action(&mut self, gear: &TGear) -> String {
         let Some(actions) = &mut self.actions else {
             return String::new();
         };
@@ -84,7 +85,7 @@ impl<'a> AI<'a> {
                 }
             }
             Action::Look(dir) => {
-                if state.looking_to_the_right == (dir == Direction::Right) {
+                if gear.d_x.is_positive() == (dir == Direction::Right) {
                     actions.current_action = None;
                     match dir {
                         Direction::Left => "/-left".to_string(),
@@ -100,7 +101,7 @@ impl<'a> AI<'a> {
             Action::LongJump(_) => {
                 if actions.action_ticks == 0 {
                     "/ljump".to_string()
-                } else if state.is_moving || actions.action_ticks < 1000 {
+                } else if gear.state.contains(StateFlags::Moving) || actions.action_ticks < 1000 {
                     String::new()
                 } else {
                     actions.current_action = None;
@@ -117,8 +118,8 @@ impl<'a> AI<'a> {
                 y: _y,
             } => {
                 let reached = match direction {
-                    Direction::Left => state.x.round() as i32 <= x,
-                    Direction::Right => state.x.round() as i32 >= x,
+                    Direction::Left => gear.x.round() as i32 <= x,
+                    Direction::Right => gear.x.round() as i32 >= x,
                 };
                 if reached {
                     actions.current_action = None;
@@ -135,11 +136,11 @@ impl<'a> AI<'a> {
                 format!("/setweap {}", weapon_id as u8 as char)
             }
             Action::Aim { angle } => {
-                if angle == state.angle as i32 {
+                if angle == gear.angle as i32 {
                     actions.current_action = None;
                     "/-up\n/-down".to_string()
                 } else if actions.action_ticks == 0 {
-                    if angle < state.angle as i32 {
+                    if angle < gear.angle as i32 {
                         "/+up".to_string()
                     } else {
                         "/+down".to_string()
@@ -169,21 +170,21 @@ impl<'a> AI<'a> {
             Action::CheckPosition { x, y, angle } => {
                 actions.current_action = None;
 
-                let state_angle = if state.looking_to_the_right {
-                    state.angle as i32
+                let state_angle = if gear.d_x.is_positive() {
+                    gear.angle as i32
                 } else {
-                    -(state.angle as i32)
+                    -(gear.angle as i32)
                 };
                 println!(
                     "{:?} {:?} ?? {:?} {:?}",
                     (x, y),
                     angle,
-                    (state.x.round() as i32, state.y.round() as i32),
+                    (gear.x.round() as i32, gear.y.round() as i32),
                     state_angle
                 );
 
-                if x != state.x.round() as i32
-                    || y != state.y.round() as i32
+                if x != gear.x.round() as i32
+                    || y != gear.y.round() as i32
                     || (angle != state_angle && angle != 0)
                 {
                     self.actions = None

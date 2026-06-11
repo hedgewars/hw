@@ -1,9 +1,10 @@
 use crate::ai_state::ammo::AmmoType;
-use crate::ai_state::{Hedgehog, HedgehogState, AI};
+use crate::ai_state::{Hedgehog, AI};
 use crate::game_field::GameField;
 use crate::shortstring::ShortString;
 use std::ptr::slice_from_raw_parts;
 use strum::EnumCount;
+use crate::gear::TGear;
 
 #[no_mangle]
 pub extern "C" fn create_ai(game_field: &GameField) -> *mut AI<'_> {
@@ -35,16 +36,14 @@ pub extern "C" fn ai_clear_team(ai: &mut AI) {
 #[no_mangle]
 pub unsafe extern "C" fn ai_add_team_hedgehog(
     ai: &mut AI,
-    x: f32,
-    y: f32,
+    gear: &TGear,
     ammo_counts: *const u32,
 ) {
     let ammo_counts = &*slice_from_raw_parts(ammo_counts, AmmoType::COUNT);
     let ammo_counts = std::array::from_fn(|i| ammo_counts[i].clone());
 
     ai.get_team_mut().push(Hedgehog {
-        x,
-        y,
+        gear: gear.clone(),
         ammo: ammo_counts,
     });
 }
@@ -62,11 +61,11 @@ pub extern "C" fn ai_have_plan(ai: &AI) -> bool {
 #[no_mangle]
 pub extern "C" fn ai_get_action(
     ai: &mut AI,
-    current_hedgehog_state: &HedgehogState,
+    gear: &TGear,
     action: &mut ShortString,
 ) {
     *action = ai
-        .get_action(current_hedgehog_state)
+        .get_action(gear)
         .as_str()
         .try_into()
         .unwrap_or_default();

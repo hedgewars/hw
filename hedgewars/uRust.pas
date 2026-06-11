@@ -37,22 +37,15 @@ procedure apply_theme(game_field: TRGameField; data_path, theme_name: PChar); cd
 
 type TAmmoCounts = array[TAmmoType] of Longword;
      PAmmoCounts = ^TAmmoCounts;
-     HedgehogState = record
-        game_ticks: Longword;
-        x, y: single;
-        angle: Longword;
-        looking_to_the_right,
-        is_moving: boolean;
-        end;
 
 function create_ai(game_field: TRGameField): TRAI; cdecl; external HWEngineFutureLibName;
 procedure ai_clear_team(ai: TRAI); cdecl; external HWEngineFutureLibName;
 procedure ai_clear_targets(ai: TRAI); cdecl; external HWEngineFutureLibName;
 procedure ai_add_target(ai: TRAI; x, y: LongInt; health: LongInt; radius: Longword; density: single); cdecl; external HWEngineFutureLibName;
-procedure ai_add_team_hedgehog(ai: TRAI; x, y: single; ammo_counts: PAmmoCounts); cdecl; external HWEngineFutureLibName;
+procedure ai_add_team_hedgehog(ai: TRAI; gear: PGear; ammo_counts: PAmmoCounts); cdecl; external HWEngineFutureLibName;
 procedure ai_think(ai: TRAI); cdecl; external HWEngineFutureLibName;
 function ai_have_plan(ai: TRAI): boolean; cdecl; external HWEngineFutureLibName;
-procedure ai_get_action(ai: TRAI; var current_hedgehog_state: HedgehogState; var action: shortstring); cdecl; external HWEngineFutureLibName;
+procedure ai_get_action(ai: TRAI; gear: PGear; var action: shortstring); cdecl; external HWEngineFutureLibName;
 procedure dispose_ai(ai: TRAI); cdecl; external HWEngineFutureLibName;
 
 function hwf_new(numerator: LongInt; denominator: LongWord): HWFloat; cdecl; external HWEngineFutureLibName;
@@ -81,6 +74,8 @@ function hwf_sign_as(num, signum: HWFloat): HWFloat; cdecl; external HWEngineFut
 function hwf_with_sign(num: HWFloat; is_negative: boolean): HWFloat; cdecl; external HWEngineFutureLibName;
 function hwf_signum(r: HWFloat): LongInt; cdecl; external HWEngineFutureLibName;
 function hwf_min_positive(): HWFloat; cdecl; external HWEngineFutureLibName;
+
+function hedgehog_step(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
 
 implementation
 

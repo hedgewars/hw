@@ -3,11 +3,12 @@ use integral_geometry::Point;
 use std::cmp::Ordering;
 use std::collections::hash_map::Iter;
 use std::collections::HashMap;
+use fpnum::FPNum;
 
 #[derive(Clone)]
 pub(crate) struct Waypoint {
-    pub x: f32,
-    pub y: f32,
+    pub x: FPNum,
+    pub y: FPNum,
     pub ticks: usize,
     pub previous_point: Option<(Point, Action)>,
 }
@@ -34,7 +35,7 @@ impl PartialOrd for Waypoint {
 
 impl From<&Waypoint> for Point {
     fn from(waypoint: &Waypoint) -> Self {
-        let [x, y] = [waypoint.x, waypoint.y].map(|i| i as i32);
+        let [x, y] = [waypoint.x, waypoint.y].map(|i| i.round() as i32);
         Point::new(x, y)
     }
 }

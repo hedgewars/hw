@@ -84,7 +84,7 @@ uses uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
     uLocale, uTextures, uRenderUtils, uRandom, SDLh, uDebug,
     uGearsList, Math, uVisualGearsList, uGearsHandlersMess,
-    uGearsHedgehog, uLandUtils;
+    uGearsHedgehog, uLandUtils, uRust;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword);
 begin
@@ -1191,71 +1191,7 @@ end;
 
 function MakeHedgehogsStep(Gear: PGear) : boolean;
 begin
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then
-            Gear^.Y:= Gear^.Y + _6
-        end else Gear^.Y:= Gear^.Y + _5 else
-        end else Gear^.Y:= Gear^.Y + _4 else
-        end else Gear^.Y:= Gear^.Y + _3 else
-        end else Gear^.Y:= Gear^.Y + _2 else
-        end else Gear^.Y:= Gear^.Y + _1
-        end;
-
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) = 0 then
-        begin
-        Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
-        MakeHedgehogsStep:= true
-        end else
-        MakeHedgehogsStep:= false;
-
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y - _6;
-        Gear^.dY:= _0;
-        Gear^.State:= Gear^.State or gstMoving;
-        exit
-        end;
-        end
-        end
-        end
-        end
-        end
-        end;
+    MakeHedgehogsStep:= hedgehog_step(gameField, Gear)
 end;
 
 

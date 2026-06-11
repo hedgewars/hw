@@ -1,6 +1,6 @@
+use crate::shortstring::ShortString;
 use fpnum::{FPNum, FPPoint};
 use std::mem::transmute;
-use crate::shortstring::ShortString;
 
 #[repr(C)]
 pub struct HWFloat {

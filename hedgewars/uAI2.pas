@@ -35,7 +35,7 @@ begin
         for itAmmo:= Low(TAmmoType) to High(TAmmoType) do
           ammoCounts[itAmmo]:= HHHasAmmo(CurrentTeam^.Hedgehogs[itHedgehog], itAmmo);
 
-        ai_add_team_hedgehog(ai, hwFloat2float(Gear^.X), hwFloat2float(Gear^.Y), @ammoCounts)
+        ai_add_team_hedgehog(ai, Gear, @ammoCounts)
       end;
       
     itHedgehog:= Succ(itHedgehog) mod CurrentTeam^.HedgehogsNumber;
@@ -45,20 +45,9 @@ begin
 end;
 
 procedure processActions();
-var state: HedgehogState;
-    action: shortstring;
+var action: shortstring;
 begin
-  with CurrentHedgehog^ do
-    begin
-    state.x:= hwfloat2float(Gear^.X);
-    state.y:= hwfloat2float(Gear^.Y);
-    state.angle:= Gear^.Angle;
-    state.looking_to_the_right:= not isNegative(Gear^.dX);
-    state.is_moving:= (Gear^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0;
-    state.game_ticks:= GameTicks;
-    end;
-    
-    ai_get_action(ai, state, action);
+    ai_get_action(ai, CurrentHedgehog^.Gear, action);
     
     if action <> '' then
     begin

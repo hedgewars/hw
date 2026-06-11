@@ -255,6 +255,15 @@ type
     TGear = record
 // Do *not* ever override these.
             NextGear, PrevGear: PGear;  // Linked list
+// Strongly recommended not to override these.  Will mess up generic operations like portaling
+            X : hwFloat;              // X/Y/dX/dY are position/velocity. People count on these having semi-normal values
+            Y : hwFloat;
+            dX: hwFloat;
+            dY: hwFloat;
+            State : Longword;        // See gst bitmask values in uConsts
+            Radius: LongInt;     // Radius. If not using uCollisions, is usually used to indicate area of effect
+            CollisionMask: Word; // Masking off Land impact  FF7F for example ignores current hog and crates
+            Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
             Z: Longword;                // Z index. For rendering. Sets order in list
             Active: Boolean;            // Is gear Active (running step code)
             Kind: TGearType;
@@ -269,16 +278,8 @@ type
             Message: LongWord;          // Game messages are stored here. See gm bitmasks in uConsts
             uid: Longword;              // Lua use this to reference gears
             Hedgehog: PHedgehog;        // set to CurrentHedgehog on gear creation.  uStats damage code appears to assume it will never be nil and never be changed.  If you override it, make sure it is set to a non-nil PHedgehog before dealing damage.
-// Strongly recommended not to override these.  Will mess up generic operations like portaling
-            X : hwFloat;              // X/Y/dX/dY are position/velocity. People count on these having semi-normal values
-            Y : hwFloat;
-            dX: hwFloat;
-            dY: hwFloat;
-            State : Longword;        // See gst bitmask values in uConsts
             PortalCounter: LongWord; // Necessary to interrupt portal loops.  Not possible to avoid infinite loops without it.
 // Don't use these if you're using generic movement like doStepFallingGear and explosion shoves. Generally recommended not to use.
-            Radius: LongInt;     // Radius. If not using uCollisions, is usually used to indicate area of effect
-            CollisionMask: Word; // Masking off Land impact  FF7F for example ignores current hog and crates
             AdvBounce: Longword; // Triggers 45 bounces. Is a counter to avoid edge cases
             Sticky: Boolean;     // True if gear is *normally* able to stick to landscape on impact
             Elasticity: hwFloat;
@@ -293,7 +294,6 @@ type
 // These are frequently overridden to serve some other purpose
             Boom: Longword;          // amount of damage caused by the gear
             Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
-            Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
             Timer, WDTimer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
             Tag: LongInt;            // Quite generic. Variety of uses.
             FlightTime: Longword;    // Initially added for batting of hogs to determine homerun. Used for some firing delays
