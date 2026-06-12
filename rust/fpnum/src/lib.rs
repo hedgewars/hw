@@ -370,7 +370,7 @@ impl FPPoint {
     pub fn distance(&self) -> FPNum {
         let r = self.x_value | self.y_value;
         if r < LINEARIZE_TRESHOLD {
-            FPNum::from(r as u32)
+            FPNum::from_raw(r)
         } else {
             let sqr: u128 = (self.x_value as u128).pow(2) + (self.y_value as u128).pow(2);
 
