@@ -49,7 +49,7 @@ procedure ai_get_action(ai: TRAI; gear: PGear; var action: shortstring); cdecl; 
 procedure dispose_ai(ai: TRAI); cdecl; external HWEngineFutureLibName;
 
 function hwf_new(numerator: LongInt; denominator: LongWord): HWFloat; cdecl; external HWEngineFutureLibName;
-function hwf_raw(is_negative: boolean; value: QWord): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_raw(is_negative: LongBool; value: QWord): HWFloat; cdecl; external HWEngineFutureLibName;
 function hwf_to_f64(number: HWFloat): double; cdecl; external HWEngineFutureLibName;
 function hwf_op_plus(n1, n2: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
 function hwf_op_minus(n1, n2: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
@@ -71,7 +71,7 @@ function hwf_sqrt(value: HWFloat): HWFloat; cdecl; external HWEngineFutureLibNam
 function hwf_distance(x, y: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
 function hwf_sqr_distance(x, y: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
 function hwf_sign_as(num, signum: HWFloat): HWFloat; cdecl; external HWEngineFutureLibName;
-function hwf_with_sign(num: HWFloat; is_negative: boolean): HWFloat; cdecl; external HWEngineFutureLibName;
+function hwf_with_sign(num: HWFloat; is_negative: LongBool): HWFloat; cdecl; external HWEngineFutureLibName;
 function hwf_signum(r: HWFloat): LongInt; cdecl; external HWEngineFutureLibName;
 function hwf_min_positive(): HWFloat; cdecl; external HWEngineFutureLibName;
 

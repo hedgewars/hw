@@ -25,9 +25,9 @@ pub extern "C" fn hwf_new(numerator: i32, denominator: u32) -> HWFloat {
 }
 
 #[no_mangle]
-pub extern "C" fn hwf_raw(is_negative: bool, value: u64) -> HWFloat {
+pub extern "C" fn hwf_raw(is_negative: i32, value: u64) -> HWFloat {
     FPNum::from_raw(value >> (32 - FPNum::FRAC_BITS))
-        .with_sign(is_negative)
+        .with_sign(is_negative != 0)
         .into()
 }
 
@@ -137,8 +137,8 @@ pub extern "C" fn hwf_sign_as(num: HWFloat, signum: HWFloat) -> HWFloat {
 }
 
 #[no_mangle]
-pub extern "C" fn hwf_with_sign(num: HWFloat, is_negative: bool) -> HWFloat {
-    FPNum::from(num).with_sign(is_negative).into()
+pub extern "C" fn hwf_with_sign(num: HWFloat, is_negative: i32) -> HWFloat {
+    FPNum::from(num).with_sign(is_negative != 0).into()
 }
 
 #[no_mangle]
