@@ -81,9 +81,6 @@ procedure RefillProximityCache(SourceGear: PGear; radius: LongInt);
 procedure RemoveFromProximityCache(Gear: PGear);
 procedure ClearProximityCache();
 
-function  TestCollisionXImpl(centerX, centerY, radius, direction: LongInt; collisionMask: Word): Word;
-function  TestCollisionYImpl(centerX, centerY, radius, direction: LongInt; collisionMask: Word): Word;
-
 function  TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
 function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 
@@ -113,7 +110,7 @@ function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var out
 function CheckGearsUnderSprite(Sprite: TSprite; sprX, sprY, Frame: LongInt): boolean;
 
 implementation
-uses uConsts, uLandGraphics, uVariables, SDLh, uLandTexture, uDebug, uLandUtils;
+uses uConsts, uLandGraphics, uVariables, SDLh, uLandTexture, uDebug, uLandUtils, uRust;
 
 type TCollisionEntry = record
     X, Y, Radius: LongInt;
@@ -467,52 +464,14 @@ begin
     proximitya.Count:= 0;
 end;
 
-function TestCollisionXImpl(centerX, centerY, radius, direction: LongInt; collisionMask: Word): Word;
-var x, y, minY, maxY: LongInt;
-begin
-    if direction < 0 then
-        x := centerX - radius
-    else
-        x := centerX + radius;
-
-    if (x and LAND_WIDTH_MASK) = 0 then
-    begin
-        minY := max(centerY - radius + 1, 0);
-        maxY := min(centerY + radius - 1, LAND_HEIGHT - 1);
-        for y := minY to maxY do
-            if LandGet(y, x) and collisionMask <> 0 then
-                exit(LandGet(y, x) and collisionMask);
-    end;
-    TestCollisionXImpl := 0;
-end;
-
-function TestCollisionYImpl(centerX, centerY, radius, direction: LongInt; collisionMask: Word): Word;
-var x, y, minX, maxX: LongInt;
-begin
-    if direction < 0 then
-        y := centerY - radius
-    else
-        y := centerY + radius;
-
-    if (y and LAND_HEIGHT_MASK) = 0 then
-    begin
-        minX := max(centerX - radius + 1, 0);
-        maxX := min(centerX + radius - 1, LAND_WIDTH - 1);
-        for x := minX to maxX do
-            if LandGet(y, x) and collisionMask <> 0 then
-                exit(LandGet(y, x) and collisionMask);
-    end;
-    TestCollisionYImpl := 0;
-end;
-
 function TestCollisionX(Gear: PGear; Dir: LongInt): Word;
 begin
-    TestCollisionX := TestCollisionXImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask and lfLandMask);
+    TestCollisionX := test_collision_x(gameField, hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask and lfLandMask);
 end;
 
 function TestCollisionY(Gear: PGear; Dir: LongInt): Word;
 begin
-    TestCollisionY := TestCollisionYImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask and lfLandMask);
+    TestCollisionY := test_collision_y(gameField, hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask and lfLandMask);
 end;
 
 procedure LegacyFixupX(Gear: PGear);
@@ -536,13 +495,13 @@ end;
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): Word;
 begin
     LegacyFixupX(Gear);
-    TestCollisionXwithGear:= TestCollisionXImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask);
+    TestCollisionXwithGear:= test_collision_x(gameField, hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask);
 end;
 
 function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 begin
     LegacyFixupY(Gear);
-    TestCollisionYwithGear:= TestCollisionYImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask);
+    TestCollisionYwithGear:= test_collision_y(gameField, hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, Dir, Gear^.CollisionMask);
 end;
 
 function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word;
@@ -556,7 +515,7 @@ begin
     else
         collisionMask:= Gear^.CollisionMask and lfLandMask;
 
-    TestCollisionXwithXYShift := TestCollisionXImpl(hwRound(Gear^.X + ShiftX), hwRound(Gear^.Y) + ShiftY, Gear^.Radius, Dir, collisionMask)
+    TestCollisionXwithXYShift := test_collision_x(gameField, hwRound(Gear^.X + ShiftX), hwRound(Gear^.Y) + ShiftY, Gear^.Radius, Dir, collisionMask)
 end;
 
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word;
@@ -570,7 +529,7 @@ begin
     else
         collisionMask:= Gear^.CollisionMask and lfLandMask;
 
-    TestCollisionYwithXYShift := TestCollisionYImpl(hwRound(Gear^.X) + ShiftX, hwRound(Gear^.Y) + ShiftY, Gear^.Radius, Dir, collisionMask)
+    TestCollisionYwithXYShift := test_collision_y(gameField, hwRound(Gear^.X) + ShiftX, hwRound(Gear^.Y) + ShiftY, Gear^.Radius, Dir, collisionMask)
 end;
 
 function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): Word;

@@ -370,7 +370,11 @@ impl<'a, T: Copy + PartialEq + Default> Iterator for LandRangeIter<'a, T> {
             return None;
         }
 
-        let val = unsafe { self.land.pixels.get_unchecked(self.curr_y as usize, self.curr_x as usize) };
+        let val = unsafe {
+            self.land
+                .pixels
+                .get_unchecked(self.curr_y as usize, self.curr_x as usize)
+        };
 
         if self.curr_x < self.end_x {
             self.curr_x += 1;

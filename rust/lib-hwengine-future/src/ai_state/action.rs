@@ -1,4 +1,4 @@
-use super::{AI};
+use super::AI;
 use crate::ai_state::ammo::AmmoType;
 use crate::gear::{StateFlags, TGear};
 

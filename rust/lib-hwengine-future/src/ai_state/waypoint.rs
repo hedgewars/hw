@@ -1,9 +1,9 @@
 use crate::ai_state::action::Action;
+use fpnum::FPNum;
 use integral_geometry::Point;
 use std::cmp::Ordering;
 use std::collections::hash_map::Iter;
 use std::collections::HashMap;
-use fpnum::FPNum;
 
 #[derive(Clone)]
 pub(crate) struct Waypoint {

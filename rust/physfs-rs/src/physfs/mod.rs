@@ -1,18 +1,18 @@
-use std::ffi::{ CString, CStr, OsStr };
+use libc::{c_char, c_int};
+use std::ffi::{CStr, CString, OsStr};
 use std::io::Result;
-use std::sync::{ Mutex };
-use libc::{ c_int, c_char };
+use std::sync::Mutex;
 
 /// Keep track of the number of global contexts.
 static mut NUM_CONTEXTS: usize = 0;
 
-/// Utility
-mod util;
 /// File operations
 pub mod file;
+/// Utility
+mod util;
 
 #[link(name = "physfs")]
-extern {
+extern "C" {
     // nonzero on success, zero on error.
     fn PHYSFS_init(arg0: *const c_char) -> c_int;
     // nonzero if initialized, zero if not.
@@ -22,7 +22,11 @@ extern {
     // string if success, NULL if error.
     fn PHYSFS_getLastError() -> *const c_char;
     // nonzero if success, zero if error
-    fn PHYSFS_mount(new_dir: *const c_char, mount_point: *const c_char, append_to_path: c_int) -> c_int;
+    fn PHYSFS_mount(
+        new_dir: *const c_char,
+        mount_point: *const c_char,
+        append_to_path: c_int,
+    ) -> c_int;
     // nonzero if success, zero if error.
     fn PHYSFS_setWriteDir(write_dir: *const c_char) -> c_int;
     // nonzero on success, zero on error.
@@ -60,7 +64,9 @@ impl PhysFSContext {
     /// initializes the PhysFS library.
     fn init() -> Result<()> {
         // Initializing multiple times throws an error. So let's not!
-        if PhysFSContext::is_init() { return Ok(()); }
+        if PhysFSContext::is_init() {
+            return Ok(());
+        }
 
         let mut args = ::std::env::args();
         let default_arg0 = "".to_string();
@@ -70,7 +76,7 @@ impl PhysFSContext {
 
         match ret {
             0 => Err(util::physfs_error_as_io_error()),
-            _ => Ok(())
+            _ => Ok(()),
         }
     }
 
@@ -83,7 +89,9 @@ impl PhysFSContext {
     /// all file handles manually before calling this.
     fn de_init() {
         // de_init'ing more than once can cause a double-free -- do not want.
-        if !PhysFSContext::is_init() { return }
+        if !PhysFSContext::is_init() {
+            return;
+        }
         unsafe {
             PHYSFS_deinit();
         }
@@ -91,7 +99,8 @@ impl PhysFSContext {
     /// Adds an archive or directory to the search path.
     /// mount_point is the location in the tree to mount it to.
     pub fn mount<P>(&self, new_dir: P, mount_point: String, append_to_path: bool) -> Result<()>
-        where P: AsRef<OsStr>
+    where
+        P: AsRef<OsStr>,
     {
         let c_new_dir = CString::new(new_dir.as_ref().to_string_lossy().as_bytes()).unwrap();
         let c_mount_point = try!(CString::new(mount_point));
@@ -99,11 +108,11 @@ impl PhysFSContext {
             PHYSFS_mount(
                 c_new_dir.as_c_str().as_ptr(),
                 c_mount_point.as_ptr(),
-                append_to_path as c_int
+                append_to_path as c_int,
             )
         } {
             0 => Err(util::physfs_error_as_io_error()),
-            _ => Ok(())
+            _ => Ok(()),
         }
     }
 
@@ -111,11 +120,9 @@ impl PhysFSContext {
     /// This message may be localized, so do not expect it to
     /// match a specific string of characters.
     pub fn get_last_error() -> String {
-        let ptr: *const c_char = unsafe {
-            PHYSFS_getLastError()
-        };
+        let ptr: *const c_char = unsafe { PHYSFS_getLastError() };
         if ptr.is_null() {
-            return "".to_string()
+            return "".to_string();
         }
 
         let buf = unsafe { CStr::from_ptr(ptr).to_bytes().to_vec() };
@@ -127,29 +134,27 @@ impl PhysFSContext {
     /// This method will fail if the current write dir
     /// still has open files in it.
     pub fn set_write_dir<P>(&self, write_dir: P) -> Result<()>
-        where P: AsRef<OsStr>
+    where
+        P: AsRef<OsStr>,
     {
-        let write_dir = CStr::from_bytes_with_nul(write_dir.as_ref().to_str().unwrap().as_bytes()).unwrap();
-        let ret = unsafe {
-            PHYSFS_setWriteDir(write_dir.as_ptr())
-        };
+        let write_dir =
+            CStr::from_bytes_with_nul(write_dir.as_ref().to_str().unwrap().as_bytes()).unwrap();
+        let ret = unsafe { PHYSFS_setWriteDir(write_dir.as_ptr()) };
 
         match ret {
             0 => Err(util::physfs_error_as_io_error()),
-            _ => Ok(())
+            _ => Ok(()),
         }
     }
 
     /// Creates a new dir relative to the write_dir.
     pub fn mkdir(&self, dir_name: &str) -> Result<()> {
         let c_dir_name = try!(CString::new(dir_name));
-        let ret = unsafe {
-            PHYSFS_mkdir(c_dir_name.as_ptr())
-        };
+        let ret = unsafe { PHYSFS_mkdir(c_dir_name.as_ptr()) };
 
         match ret {
             0 => Err(util::physfs_error_as_io_error()),
-            _ => Ok(())
+            _ => Ok(()),
         }
     }
 
@@ -160,7 +165,7 @@ impl PhysFSContext {
 
         match ret {
             0 => Err(util::physfs_error_as_io_error()),
-            _ => Ok(())
+            _ => Ok(()),
         }
     }
 
@@ -171,7 +176,7 @@ impl PhysFSContext {
 
         match ret {
             0 => Err(util::physfs_error_as_io_error()),
-            _ => Ok(())
+            _ => Ok(()),
         }
     }
 }

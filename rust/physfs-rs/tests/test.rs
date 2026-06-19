@@ -12,4 +12,3 @@ fn test_create_physfs_context() {
     let _c = PhysFSContext::new().unwrap();
     assert!(PhysFSContext::is_init());
 }
-

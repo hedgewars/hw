@@ -1,7 +1,7 @@
 #![allow(non_camel_case_types)]
 
-pub type PHYSFS_uint8  = ::libc::c_uchar;
-pub type PHYSFS_sint8  = ::libc::c_char;
+pub type PHYSFS_uint8 = ::libc::c_uchar;
+pub type PHYSFS_sint8 = ::libc::c_char;
 pub type PHYSFS_uint16 = ::libc::c_ushort;
 pub type PHYSFS_sint16 = ::libc::c_short;
 pub type PHYSFS_uint32 = ::libc::c_uint;

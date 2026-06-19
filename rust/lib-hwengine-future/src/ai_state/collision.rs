@@ -1,6 +1,7 @@
 use crate::game_field::GameField;
 
-pub(crate) fn test_collision_x(
+#[no_mangle]
+pub extern "C" fn test_collision_x(
     game_field: &GameField,
     center_x: i32,
     center_y: i32,
@@ -14,7 +15,10 @@ pub(crate) fn test_collision_x(
         center_x + radius
     };
 
-    for val in game_field.collision.iter_range(center_y - radius + 1..=center_y + radius - 1, x..=x) {
+    for val in game_field
+        .collision
+        .iter_range(center_y - radius + 1..=center_y + radius - 1, x..=x)
+    {
         if val & mask != 0 {
             return val & mask;
         }
@@ -23,7 +27,8 @@ pub(crate) fn test_collision_x(
     0
 }
 
-pub(crate) fn test_collision_y(
+#[no_mangle]
+pub extern "C" fn test_collision_y(
     game_field: &GameField,
     center_x: i32,
     center_y: i32,
@@ -37,7 +42,10 @@ pub(crate) fn test_collision_y(
         center_y + radius
     };
 
-    for val in game_field.collision.iter_range(y..=y, center_x - radius + 1..=center_x + radius - 1) {
+    for val in game_field
+        .collision
+        .iter_range(y..=y, center_x - radius + 1..=center_x + radius - 1)
+    {
         if val & mask != 0 {
             return val & mask;
         }

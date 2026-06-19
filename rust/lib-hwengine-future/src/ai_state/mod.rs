@@ -8,11 +8,11 @@ use crate::ai_state::ammo::AmmoType;
 use crate::ai_state::attack_tests::AttackParameters;
 use crate::ai_state::waypoint::{Waypoint, Waypoints};
 use crate::game_field::GameField;
+use crate::gear::TGear;
 use action::*;
 use integral_geometry::Point;
 use std::collections::BinaryHeap;
 use strum::{EnumCount, IntoEnumIterator};
-use crate::gear::TGear;
 
 #[derive(Clone, Debug)]
 pub struct Target {
@@ -102,28 +102,28 @@ impl<'a> AI<'a> {
                 }*/
 
                 /*
-                // walking
-                let mut waypoint = start_waypoint.clone();
-                let mut steps_counter = 0;
+                                // walking
+                                let mut waypoint = start_waypoint.clone();
+                                let mut steps_counter = 0;
 
-                while let Some((x, y, ticks)) =
-                    collision::simulate_step(self.game_field, waypoint.x, waypoint.y, dir)
-                {
-                    waypoint.ticks += ticks;
-                    waypoint.x = x;
-                    waypoint.y = y;
-                    waypoint.previous_point = Some((start_position, Action::Walk(dir)));
+                                while let Some((x, y, ticks)) =
+                                    collision::simulate_step(self.game_field, waypoint.x, waypoint.y, dir)
+                                {
+                                    waypoint.ticks += ticks;
+                                    waypoint.x = x;
+                                    waypoint.y = y;
+                                    waypoint.previous_point = Some((start_position, Action::Walk(dir)));
 
-                    if !waypoints.add_point(&waypoint) || waypoint.ticks >= max_ticks {
-                        break;
-                    }
+                                    if !waypoints.add_point(&waypoint) || waypoint.ticks >= max_ticks {
+                                        break;
+                                    }
 
-                    steps_counter += 1;
-                }
-                if steps_counter > 1 {
-                    heap.push(waypoint);
-                }
-*/
+                                    steps_counter += 1;
+                                }
+                                if steps_counter > 1 {
+                                    heap.push(waypoint);
+                                }
+                */
             }
         }
 
@@ -143,9 +143,12 @@ impl<'a> AI<'a> {
 
             for ammo_type in AmmoType::iter() {
                 if hedgehog.ammo[ammo_type as usize] > 0 {
-                    if let Some(res) =
-                        ammo_type.analyze_attacks(self.game_field, &self.targets, f64::from(px) as f32, f64::from(py) as f32)
-                    {
+                    if let Some(res) = ammo_type.analyze_attacks(
+                        self.game_field,
+                        &self.targets,
+                        f64::from(px) as f32,
+                        f64::from(py) as f32,
+                    ) {
                         let final_score = Self::calculate_final_score(&waypoint, res.score);
 
                         if best_attack

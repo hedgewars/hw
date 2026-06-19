@@ -7232,12 +7232,12 @@ begin
 
     for offset := -maxYStep - 1 to maxYStep + 1 do
     begin
-        if TestCollisionYImpl(x + direction, y + offset, Sentry^.Radius, 1, Sentry^.CollisionMask) <> 0 then
+        if test_collision_x(gameField, x + direction, y + offset, Sentry^.Radius, 1, Sentry^.CollisionMask) <> 0 then
             break;
     end;
 
     if (offset >= -maxYStep) and (offset <= maxYStep)
-       and (TestCollisionYImpl(x + direction, y + offset, Sentry^.Radius, -1, Sentry^.CollisionMask) = 0) then
+       and (test_collision_y(gameField, x + direction, y + offset, Sentry^.Radius, -1, Sentry^.CollisionMask) = 0) then
     begin
         if not TestOnly then
         begin
@@ -7260,7 +7260,7 @@ begin
 
     repeat
         for offsetY := -maxYStep - 1 to maxYStep + 1 do
-            if TestCollisionYImpl(x + offsetX * direction, y + offsetY, Sentry^.Radius, 1, Sentry^.CollisionMask) <> 0 then
+            if test_collision_y(gameField, x + offsetX * direction, y + offsetY, Sentry^.Radius, 1, Sentry^.CollisionMask) <> 0 then
                 break;
         if (offsetY >= -maxYStep) and (offsetY <= maxYStep) then
             break;
@@ -7585,7 +7585,7 @@ begin
     end;
 
     Gear^.Y := int2hwFloat(cWaterLine - 3 * Gear^.Radius);
-    if TestCollisionYImpl(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius - 1, -1, Gear^.CollisionMask and lfLandMask) <> 0 then
+    if test_collision_y(gameField, hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius - 1, -1, Gear^.CollisionMask and lfLandMask) <> 0 then
     begin
         Gear^.Tag := -1;
         exit;

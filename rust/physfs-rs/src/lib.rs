@@ -4,8 +4,8 @@
 
 extern crate libc;
 
-pub use physfs::*;
 pub use physfs::file::*;
+pub use physfs::*;
 
 /// PhysFS bindings
 mod physfs;

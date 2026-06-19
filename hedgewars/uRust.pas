@@ -79,6 +79,9 @@ function hedgehog_step(game_field: TRGameField; gear: PGear): boolean; cdecl; ex
 
 function gear_checksum(gear: PGear): Longword; cdecl; external HWEngineFutureLibName;
 
+function test_collision_x(game_field: TRGameField; centerX, centerY, radius: LongInt; direction: Int8; collisionMask: Word): Word; cdecl; external HWEngineFutureLibName;
+function test_collision_y(game_field: TRGameField; centerX, centerY, radius: LongInt; direction: Int8; collisionMask: Word): Word; cdecl; external HWEngineFutureLibName;
+
 implementation
 
 end.
