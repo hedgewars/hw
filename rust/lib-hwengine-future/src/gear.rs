@@ -132,3 +132,10 @@ impl TGear {
 pub extern "C" fn hedgehog_step(game_field: & GameField, gear: &mut TGear) -> bool {
     gear.hedgehog_step(game_field)
 }
+
+#[no_mangle]
+pub extern "C" fn gear_checksum(gear: &TGear) -> u32 {
+    [gear.x, gear.y, gear.d_x, gear.d_y].iter().enumerate().map(|(i, n)| {
+        (n.raw_value() as u32) << i
+    }).fold(0, |acc, n| acc ^ n)
+}

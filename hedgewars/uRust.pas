@@ -77,6 +77,8 @@ function hwf_min_positive(): HWFloat; cdecl; external HWEngineFutureLibName;
 
 function hedgehog_step(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
 
+function gear_checksum(gear: PGear): Longword; cdecl; external HWEngineFutureLibName;
+
 implementation
 
 end.

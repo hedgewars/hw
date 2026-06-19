@@ -6887,7 +6887,7 @@ else
     gi := GearsList;
     while gi <> nil do
         begin
-        // TODO: with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
+        CheckSum:= CheckSum xor gear_checksum(gi);
         AddRandomness(CheckSum);
         if (gi^.Kind = gtGenericFaller) and (gi^.Tag = 1) then
             gi^.State:= gi^.State and (not gstTmpFlag);

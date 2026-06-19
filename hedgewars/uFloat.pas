@@ -34,7 +34,7 @@ unit uFloat;
  *)
 interface
 
-type HWFloat = record data: array[0..15] of byte end;
+type HWFloat = record data: array[0..3] of LongWord end;
 
 // Returns an hwFloat that represents the value of integer parameter i
 function int2hwFloat (const i: LongInt) : hwFloat; 

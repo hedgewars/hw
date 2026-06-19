@@ -1001,7 +1001,7 @@ else if Gear^.Kind = gtHedgehog then
 with Gear^ do
     begin
     AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
-    // TODO: hmm? AddRandomness(X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac)
+    AddRandomness(gear_checksum(Gear))
     end;
 if CurAmmoGear = Gear then
     CurAmmoGear:= nil;

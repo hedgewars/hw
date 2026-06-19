@@ -27,7 +27,7 @@ procedure freeModule;
 
 implementation
 uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
-    , uVisualGearsList, uGearsHedgehog, uChat
+    , uVisualGearsList, uGearsHedgehog, uChat, uRust
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 0, 4, 5, 6, 15, 8, 8, 8, 8, 12, 13, 14);
@@ -392,7 +392,7 @@ begin
     gi := GearsList;
     while gi <> nil do
         begin
-        // TODO: with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
+        CheckSum:= CheckSum xor gear_checksum(gi);
         AddRandomness(CheckSum);
         gi := gi^.NextGear
         end;
