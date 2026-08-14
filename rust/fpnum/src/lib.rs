@@ -100,7 +100,7 @@ impl<const FRAC_BITS: u8> FixedPoint<FRAC_BITS> {
 
         Self {
             sign_mask: POSITIVE_MASK,
-            value: integral_sqrt(self.value) << (FRAC_BITS / 2),
+            value: integral_sqrt_ext((self.value as u128) << FRAC_BITS),
             _marker: self._marker,
         }
     }
