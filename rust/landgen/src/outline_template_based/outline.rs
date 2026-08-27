@@ -41,7 +41,11 @@ impl OutlinePoints {
             size,
             islands: fix_polygons(&outline_template.islands),
             walls: fix_polygons(&outline_template.walls),
-            fill_points: outline_template.fill_points.clone(),
+            fill_points: outline_template
+                .fill_points
+                .iter()
+                .map(|p| play_box.top_left() + *p)
+                .collect(),
             intersections_box: Rect::at_origin(size)
                 .with_margin(size.to_square().width as i32 * -2),
         }
@@ -313,13 +317,13 @@ impl OutlinePoints {
     }
 
     pub fn mirror(&mut self) {
-        let r = self.size.width as i32 - 1;
+        let r = self.play_box.left() + self.play_box.right();
 
         self.iter_mut().for_each(|p| p.x = r - p.x);
     }
 
     pub fn flip(&mut self) {
-        let t = self.size.height as i32 - 1;
+        let t = self.play_box.top() + self.play_box.bottom();
 
         self.iter_mut().for_each(|p| p.y = t - p.y);
     }

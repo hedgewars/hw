@@ -71,3 +71,83 @@ impl LandGenerator for TemplatedLandGenerator {
         land
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use integral_geometry::{Point, Rect, Size};
+    use rand::thread_rng;
+
+    #[test]
+    fn test_cavern_margins_are_empty() {
+        let template_size = Size::new(300, 150);
+        let mut template = OutlineTemplate::new(template_size)
+            .negative()
+            .with_fill_points(vec![Point::new(150, 0)]);
+
+        // Add an island polygon in the center of the template
+        template = template.add_island(&[
+            Rect::from_size_coords(50, 50, 1, 1),
+            Rect::from_size_coords(250, 50, 1, 1),
+            Rect::from_size_coords(250, 100, 1, 1),
+            Rect::from_size_coords(50, 100, 1, 1),
+        ]);
+
+        let generator = TemplatedLandGenerator::new(template);
+        let params = LandGenerationParameters::new(0u16, 0x8000u16, 10, true, true);
+        let land = generator.generate_land(&params, &mut thread_rng());
+
+        let play_box = land.play_box();
+        assert!(land.width() > play_box.width() as usize);
+        assert!(land.height() > play_box.height() as usize);
+
+        for y in 0..land.height() as i32 {
+            for x in 0..land.width() as i32 {
+                if !play_box.contains(Point::new(x, y)) {
+                    assert_eq!(
+                        land.get(y, x),
+                        0,
+                        "Margin outside play_box at ({}, {}) should be empty (0)",
+                        x,
+                        y
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn test_normal_map_margins_are_empty() {
+        let template_size = Size::new(300, 150);
+        let mut template = OutlineTemplate::new(template_size)
+            .with_fill_points(vec![Point::new(150, 0)]);
+
+        template = template.add_island(&[
+            Rect::from_size_coords(50, 50, 1, 1),
+            Rect::from_size_coords(250, 50, 1, 1),
+            Rect::from_size_coords(250, 100, 1, 1),
+            Rect::from_size_coords(50, 100, 1, 1),
+        ]);
+
+        let generator = TemplatedLandGenerator::new(template);
+        let params = LandGenerationParameters::new(0u16, 0x8000u16, 10, true, true);
+        let land = generator.generate_land(&params, &mut thread_rng());
+
+        let play_box = land.play_box();
+
+        for y in 0..land.height() as i32 {
+            for x in 0..land.width() as i32 {
+                if !play_box.contains(Point::new(x, y)) {
+                    assert_eq!(
+                        land.get(y, x),
+                        0,
+                        "Margin outside play_box at ({}, {}) should be empty (0)",
+                        x,
+                        y
+                    );
+                }
+            }
+        }
+    }
+}
+

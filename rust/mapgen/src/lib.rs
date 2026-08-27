@@ -126,7 +126,9 @@ impl<T> MapGenerator<T> {
 
                 land_border_pass(
                     parameters.basic(),
-                    land.rows().zip(texture.rows_mut()),
+                    land.rows()
+                        .skip(land.play_box().top() as usize)
+                        .zip(texture.rows_mut().skip(land.play_box().top() as usize)),
                     &mut offsets,
                     border_width,
                     |x, y| border_sprite.get_pixel(x % border_sprite.width() as usize, y),

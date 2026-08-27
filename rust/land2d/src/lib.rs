@@ -17,9 +17,17 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
             (real_size.height() - play_size.height) as i32,
         );
         let play_box = Rect::from_size(top_left, *play_size);
+        let mut pixels = vec2d::Vec2D::new(&real_size.size(), T::default());
+        if fill_value != T::default() {
+            for row in play_box.top() as usize..=play_box.bottom() as usize {
+                pixels[row][play_box.left() as usize..=play_box.right() as usize]
+                    .iter_mut()
+                    .for_each(|v| *v = fill_value);
+            }
+        }
         Self {
             play_box,
-            pixels: vec2d::Vec2D::new(&real_size.size(), fill_value),
+            pixels,
             mask: real_size.to_mask(),
         }
     }
@@ -160,32 +168,35 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
     }
 
     pub fn fill(&mut self, start_point: Point, border_value: T, fill_value: T) {
-        assert!(self.is_valid_coordinate(start_point.x - 1, start_point.y));
-        assert!(self.is_valid_coordinate(start_point.x, start_point.y));
-
-        let mask = self.mask;
-        let width = self.width();
-
-        let mut stack: Vec<(usize, usize, usize, isize)> = Vec::new();
-        fn push(
-            mask: SizeMask,
-            stack: &mut Vec<(usize, usize, usize, isize)>,
-            xl: usize,
-            xr: usize,
-            y: usize,
-            dir: isize,
-        ) {
-            let yd = y as isize + dir;
-            if mask.contains_y(yd as u32) {
-                stack.push((xl, xr, yd as usize, dir));
-            }
+        if !self.play_box.contains(start_point) {
+            return;
         }
 
-        let start_x_l = (start_point.x - 1) as usize;
+        let left = self.play_box.left() as usize;
+        let right = self.play_box.right() as usize;
+        let top = self.play_box.top() as usize;
+        let bottom = self.play_box.bottom() as usize;
+
+        let mut stack: Vec<(usize, usize, usize, isize)> = Vec::new();
+        let push = |stack: &mut Vec<(usize, usize, usize, isize)>,
+                    xl: usize,
+                    xr: usize,
+                    y: usize,
+                    dir: isize| {
+            let yd = y as isize + dir;
+            if yd >= top as isize && yd <= bottom as isize {
+                stack.push((xl, xr, yd as usize, dir));
+            }
+        };
+
+        let start_x_l = if (start_point.x as usize) > left {
+            (start_point.x - 1) as usize
+        } else {
+            start_point.x as usize
+        };
         let start_x_r = start_point.x as usize;
         for dir in [-1, 1].iter().cloned() {
             push(
-                mask,
                 &mut stack,
                 start_x_l,
                 start_x_r,
@@ -196,11 +207,11 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
 
         while let Some((mut xl, mut xr, y, dir)) = stack.pop() {
             let row = &mut self.pixels[y][..];
-            while xl > 0 && row[xl] != border_value && row[xl] != fill_value {
+            while xl > left && row[xl] != border_value && row[xl] != fill_value {
                 xl -= 1;
             }
 
-            while xr < width - 1 && row[xr] != border_value && row[xr] != fill_value {
+            while xr < right && row[xr] != border_value && row[xr] != fill_value {
                 xr += 1;
             }
 
@@ -217,8 +228,8 @@ impl<T: Copy + PartialEq + Default> Land2D<T> {
                 }
 
                 if x < xl {
-                    push(mask, &mut stack, x, xl - 1, y, dir);
-                    push(mask, &mut stack, x, xl - 1, y, -dir);
+                    push(&mut stack, x, xl - 1, y, dir);
+                    push(&mut stack, x, xl - 1, y, -dir);
                 }
             }
         }
@@ -481,5 +492,41 @@ mod tests {
 
         let elements_empty_col: Vec<u8> = l.iter_range(0..=3, 2..=1).copied().collect();
         assert!(elements_empty_col.is_empty());
+    }
+
+    #[test]
+    fn test_play_box_initialization_and_fill() {
+        let play_size = Size::new(20, 10);
+        let mut l: Land2D<u8> = Land2D::new(&play_size, 5);
+
+        assert_eq!(l.width(), 32);
+        assert_eq!(l.height(), 16);
+        assert_eq!(l.play_box().left(), 6);
+        assert_eq!(l.play_box().right(), 25);
+        assert_eq!(l.play_box().top(), 6);
+        assert_eq!(l.play_box().bottom(), 15);
+
+        // Outside play_box should be 0
+        for y in 0..16 {
+            for x in 0..32 {
+                if !l.play_box().contains(Point::new(x as i32, y as i32)) {
+                    assert_eq!(l.get(y, x), 0);
+                } else {
+                    assert_eq!(l.get(y, x), 5);
+                }
+            }
+        }
+
+        // Fill within play_box with a new value (border_value = 1)
+        l.fill(Point::new(10, 10), 1, 9);
+        for y in 0..16 {
+            for x in 0..32 {
+                if !l.play_box().contains(Point::new(x as i32, y as i32)) {
+                    assert_eq!(l.get(y, x), 0, "outside play_box remained 0");
+                } else {
+                    assert_eq!(l.get(y, x), 9, "inside play_box filled to 9");
+                }
+            }
+        }
     }
 }

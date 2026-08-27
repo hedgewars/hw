@@ -78,7 +78,7 @@ begin
 
             if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
                 copyToXYFromRect(tmpsurf, Surface, x mod tmpsurf^.w, 16, 1, 16, x, yd - 15);
-            if (yu > 0) then
+            if (yu > 0) and (not hasBorder or (yu > LongInt(topY))) then
                 copyToXYFromRect(tmpsurf, Surface, x mod tmpsurf^.w, 0, 1, Min(16, yd - yu + 1), x, yu);
             yd:= yu - 1;
         until yd < 0;
@@ -428,9 +428,26 @@ end;
 
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
-    x,y: Longword;
+    x,y,c: Longword;
 begin
     AddProgress();
+
+    // check for land near top
+    c:= 0;
+    if (GameFlags and gfBorder) <> 0 then
+        hasBorder:= true
+    else
+        for y:= LongWord(topY) to LongWord(topY + 5) do
+            for x:= LongWord(leftX) to LongWord(rightX) do
+                if LandGet(y, x) <> 0 then
+                    begin
+                    inc(c);
+                    if c > LongWord((LAND_WIDTH div 2)) then // avoid accidental triggering
+                        begin
+                        hasBorder:= true;
+                        break;
+                        end;
+                    end;
 
     tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, AMask);
 
@@ -816,22 +833,24 @@ begin
 
     AddProgress;
 
-// check for land near top
-c:= 0;
-if (GameFlags and gfBorder) <> 0 then
-    hasBorder:= true
-else
-    for y:= LongWord(topY) to LongWord(topY + 5) do
-        for x:= LongWord(leftX) to LongWord(rightX) do
-            if LandGet(y, x) <> 0 then
-                begin
-                inc(c);
-                if c > LongWord((LAND_WIDTH div 2)) then // avoid accidental triggering
+if not hasBorder then
+    begin
+    c:= 0;
+    if (GameFlags and gfBorder) <> 0 then
+        hasBorder:= true
+    else
+        for y:= LongWord(topY) to LongWord(topY + 5) do
+            for x:= LongWord(leftX) to LongWord(rightX) do
+                if LandGet(y, x) <> 0 then
                     begin
-                    hasBorder:= true;
-                    break;
+                    inc(c);
+                    if c > LongWord((LAND_WIDTH div 2)) then // avoid accidental triggering
+                        begin
+                        hasBorder:= true;
+                        break;
+                        end;
                     end;
-                end;
+    end;
 
 // Indestructible map border (top, left, right)
 if hasBorder then
