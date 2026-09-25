@@ -40,7 +40,7 @@ implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
     uCommands, uLocale, uUtils, uStats, uIO, uScript,
     uGearsList, uCollisions, uRandom, uStore, uTeams,
-    uGearsUtils, uVisualGearsList, uChat;
+    uGearsUtils, uVisualGearsList, uChat, uRust, uLandUtils;
 
 var GHStepTicks: LongWord = 0;
 
@@ -883,33 +883,22 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         begin
         Gear^.Message:= Gear^.Message and (not gmLJump);
         DeleteCI(Gear);
-        if TestCollisionYwithGear(Gear, -1) = 0 then
-            if TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) = 0 then
-                Gear^.Y:= Gear^.Y - _2
-            else
-                if TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) = 0 then
-                    Gear^.Y:= Gear^.Y - _1;
-            if (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) = 0) and
-               (TestCollisionYwithGear(Gear, -1) = 0) then
-                begin
-                Gear^.dY:= -_0_15;
-                if Gear^.Hedgehog^.Effects[heArtillery] = 0 then
-                    Gear^.dX:= SignAs(_0_15, Gear^.dX);
-                Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-                PlaySoundV(sndJump1, Gear^.Hedgehog^.Team^.voicepack);
+        if hedgehog_start_long_jump(gameField, Gear) then
+            begin
+            if Gear^.Hedgehog^.Effects[heArtillery] <> 0 then
+                SetLittle(Gear^.dX);
+            PlaySoundV(sndJump1, Gear^.Hedgehog^.Team^.voicepack);
+            end;
         exit
         end;
-    end;
 
     if ((Gear^.Message and gmHJump ) <> 0) then
         begin
         DeleteCI(Gear);
         Gear^.Message:= Gear^.Message and (not gmHJump);
 
-        Gear^.dY:= -_0_2;
-        SetLittle(Gear^.dX);
-        Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-        PlaySoundV(sndJump3, Gear^.Hedgehog^.Team^.voicepack);
+        if hedgehog_start_high_jump(gameField, Gear) then
+            PlaySoundV(sndJump3, Gear^.Hedgehog^.Team^.voicepack);
         exit
         end;
 
@@ -938,7 +927,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     if ((Gear^.Hedgehog^.Effects[heArtillery] = 0) or
            ((CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtBlowTorch))) and
        ((Gear^.Message and gmPrecise) = 0) then
-        MakeHedgehogsStep(Gear);
+        hedgehog_step(gameField, Gear);
 
     SetAllHHToActive(false);
     AddCI(Gear)
@@ -1410,14 +1399,12 @@ if (HHGear^.State and gstMoving) <> 0 then
     begin
     wasJumping:= ((HHGear^.State and gstHHJumping) <> 0);
 
-    if ((HHGear^.Message and gmHJump) <> 0) and wasJumping and ((HHGear^.State and gstHHHJump) = 0) then
-        if (not (hwAbs(HHGear^.dX) > cLittle)) and (HHGear^.dY < _0_05) then
+    if ((HHGear^.Message and gmHJump) <> 0) and wasJumping then
+        if hedgehog_start_back_jump(HHGear) then
             begin
-            HHGear^.State:= HHGear^.State or gstHHHJump;
-            HHGear^.dY:= -_0_25;
-            if (Hedgehog^.Effects[heArtillery] = 0) then
-                HHGear^.dX:= -SignAs(_0_02, HHGear^.dX);
-            PlaySoundV(sndJump2, Hedgehog^.Team^.voicepack)
+            if (Hedgehog^.Effects[heArtillery] <> 0) then
+                SetLittle(HHGear^.dX);
+            PlaySoundV(sndJump2, Hedgehog^.Team^.voicepack);
             end;
 
     HHGear^.Message:= HHGear^.Message and (not (gmLJump or gmHJump));
@@ -1439,13 +1426,13 @@ if (HHGear^.State and gstMoving) <> 0 then
     exit
     end;
 
-    if not(isInMultiShoot and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])) and (Hedgehog^.Gear <> nil) then
-        begin
-        if GHStepTicks > 0 then
-            dec(GHStepTicks);
-        if (GHStepTicks = 0) then
-            HedgehogStep(HHGear)
-        end
+if not(isInMultiShoot and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])) and (Hedgehog^.Gear <> nil) then
+    begin
+    if GHStepTicks > 0 then
+        dec(GHStepTicks);
+    if (GHStepTicks = 0) then
+        HedgehogStep(HHGear)
+    end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

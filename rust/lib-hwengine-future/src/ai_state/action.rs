@@ -76,7 +76,7 @@ impl<'a> AI<'a> {
             return String::new();
         };
 
-        match action {
+        let result = match action {
             Action::Walk(dir) => {
                 actions.current_action = None;
                 match dir {
@@ -112,15 +112,11 @@ impl<'a> AI<'a> {
                 actions.current_action = None;
                 "/hjump".to_string()
             }
-            Action::StopAt {
-                direction,
-                x,
-                y: _y,
-            } => {
+            Action::StopAt { direction, x, y } => {
                 let reached = match direction {
                     Direction::Left => gear.x.round() as i32 <= x,
                     Direction::Right => gear.x.round() as i32 >= x,
-                };
+                } && gear.y.round() as i32 >= y;
                 if reached {
                     actions.current_action = None;
                     match direction {
@@ -176,7 +172,7 @@ impl<'a> AI<'a> {
                     -(gear.angle as i32)
                 };
                 println!(
-                    "{:?} {:?} ?? {:?} {:?}",
+                    "expect {:?} {:?},  gear {:?} {:?}",
                     (x, y),
                     angle,
                     (gear.x.round() as i32, gear.y.round() as i32),
@@ -192,6 +188,12 @@ impl<'a> AI<'a> {
 
                 String::new()
             }
+        };
+
+        if result.is_empty() {
+            result
+        } else {
+            dbg!(result)
         }
     }
 }

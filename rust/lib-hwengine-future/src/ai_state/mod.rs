@@ -8,7 +8,7 @@ use crate::ai_state::ammo::AmmoType;
 use crate::ai_state::attack_tests::AttackParameters;
 use crate::ai_state::waypoint::{Waypoint, Waypoints};
 use crate::game_field::GameField;
-use crate::gear::TGear;
+use crate::gear::{max_fall_dy, StateFlags, TGear, JUMP_TICKS_PAUSE, STEP_TICKS};
 use action::*;
 use integral_geometry::Point;
 use std::collections::BinaryHeap;
@@ -81,49 +81,124 @@ impl<'a> AI<'a> {
         let max_ticks = 40000;
 
         while let Some(start_waypoint) = heap.pop() {
-            //let start_position = (&start_waypoint).into();
+            let start_position = (&start_waypoint).into();
 
             for dir in [Direction::Left, Direction::Right] {
-                let mut waypoint = start_waypoint.clone();
+                let dir_sign = match dir {
+                    Direction::Left => -1,
+                    Direction::Right => 1,
+                };
 
-                /*
-                // jumping
-                if let Some((x, y, ticks)) =
-                    collision::simulate_long_jump(self.game_field, waypoint.x, waypoint.y, dir)
-                {
-                    waypoint.ticks += ticks;
-                    waypoint.x = x;
-                    waypoint.y = y;
-                    waypoint.previous_point = Some((start_position, Action::LongJump(dir)));
+                // long jumping
+                let mut gear = hedgehog.clone();
+                gear.x = start_waypoint.x;
+                gear.y = start_waypoint.y;
+                gear.set_direction(dir_sign);
 
-                    if waypoints.add_point(&waypoint) && waypoint.ticks < max_ticks {
-                        heap.push(waypoint.clone());
+                if gear.start_long_jump(self.game_field) {
+                    let mut jump_ticks = 0;
+                    let mut landed_safely = true;
+                    while gear.jump_step(self.game_field) {
+                        jump_ticks += 1;
+                        if gear.d_y > max_fall_dy() || jump_ticks > 2000 {
+                            landed_safely = false;
+                            break;
+                        }
                     }
-                }*/
 
-                /*
-                                // walking
-                                let mut waypoint = start_waypoint.clone();
-                                let mut steps_counter = 0;
+                    if landed_safely && (start_waypoint.x - gear.x).abs().round() > 30 {
+                        let mut waypoint = start_waypoint.clone();
+                        waypoint.ticks += jump_ticks + JUMP_TICKS_PAUSE;
+                        waypoint.x = gear.x;
+                        waypoint.y = gear.y;
+                        waypoint.previous_point = Some((start_position, Action::LongJump(dir)));
 
-                                while let Some((x, y, ticks)) =
-                                    collision::simulate_step(self.game_field, waypoint.x, waypoint.y, dir)
-                                {
-                                    waypoint.ticks += ticks;
-                                    waypoint.x = x;
-                                    waypoint.y = y;
-                                    waypoint.previous_point = Some((start_position, Action::Walk(dir)));
+                        if waypoints.add_point(&waypoint) && waypoint.ticks < max_ticks {
+                            heap.push(waypoint.clone());
+                        }
+                    }
+                }
 
-                                    if !waypoints.add_point(&waypoint) || waypoint.ticks >= max_ticks {
-                                        break;
-                                    }
+                // high jumping
+                if false {
+                    let mut gear = hedgehog.clone();
+                    gear.x = start_waypoint.x;
+                    gear.y = start_waypoint.y;
+                    gear.set_direction(dir_sign);
 
-                                    steps_counter += 1;
-                                }
-                                if steps_counter > 1 {
-                                    heap.push(waypoint);
-                                }
-                */
+                    if gear.start_high_jump(self.game_field) {
+                        let mut jump_ticks = 0;
+                        let mut landed_safely = true;
+                        while gear.jump_step(self.game_field) {
+                            jump_ticks += 1;
+                            if gear.d_y > max_fall_dy() || jump_ticks > 2000 {
+                                landed_safely = false;
+                                break;
+                            }
+                        }
+
+                        if landed_safely && (start_waypoint.y - gear.y).round() > 5 {
+                            let mut waypoint = start_waypoint.clone();
+                            waypoint.ticks += jump_ticks + JUMP_TICKS_PAUSE;
+                            waypoint.x = gear.x;
+                            waypoint.y = gear.y;
+                            waypoint.previous_point =
+                                Some((start_position, Action::HighJump(dir, 0)));
+
+                            if waypoints.add_point(&waypoint) && waypoint.ticks < max_ticks {
+                                heap.push(waypoint.clone());
+                            }
+                        }
+                    }
+                }
+
+                // walking
+                let mut gear = hedgehog.clone();
+                gear.x = start_waypoint.x;
+                gear.y = start_waypoint.y;
+                gear.set_direction(dir_sign);
+                gear.set_little_dx();
+
+                let mut waypoint = start_waypoint.clone();
+                let mut steps_counter = 0;
+
+                while gear.step(self.game_field) {
+                    waypoint.ticks += STEP_TICKS;
+                    waypoint.x = gear.x;
+                    waypoint.y = gear.y;
+                    waypoint.previous_point = Some((start_position, Action::Walk(dir)));
+
+                    if !waypoints.add_point(&waypoint) || waypoint.ticks >= max_ticks {
+                        break;
+                    }
+
+                    steps_counter += 1;
+
+                    if gear.state.contains(StateFlags::Moving) {
+                        let mut fell_safely = true;
+                        let mut fall_ticks = 0;
+                        while gear.jump_step(self.game_field) {
+                            fall_ticks += 1;
+                            if gear.d_y > max_fall_dy() || fall_ticks > 2000 {
+                                fell_safely = false;
+                                break;
+                            }
+                        }
+                        if fell_safely {
+                            waypoint.ticks += fall_ticks + 410;
+                            waypoint.x = gear.x;
+                            waypoint.y = gear.y;
+                            if waypoints.add_point(&waypoint) && waypoint.ticks < max_ticks {
+                                heap.push(waypoint.clone());
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                if steps_counter > 1 {
+                    heap.push(waypoint);
+                }
             }
         }
 
@@ -196,6 +271,10 @@ impl<'a> AI<'a> {
                             path_actions.push(Action::LongJump(*dir));
                             path_actions.push(Action::Look(*dir));
                         }
+                        Action::HighJump(dir, ticks) => {
+                            path_actions.push(Action::HighJump(*dir, *ticks));
+                            path_actions.push(Action::Look(*dir));
+                        }
                         _ => {}
                     }
                     wp = waypoints.get_waypoint(previous_point);
@@ -207,8 +286,8 @@ impl<'a> AI<'a> {
                     timer: parameters.timer,
                 });
                 actions.push(Action::CheckPosition {
-                    x: wp.x.round() as i32,
-                    y: wp.y.round() as i32,
+                    x: position.x,
+                    y: position.y,
                     angle: parameters.angle,
                 });
                 actions.push(Action::Aim {
@@ -224,7 +303,7 @@ impl<'a> AI<'a> {
                 actions.push(Action::SelectWeapon(weapon));
                 actions.actions.extend(path_actions);
 
-                self.actions = Some(actions);
+                self.actions = Some(dbg!(actions));
             }
         }
     }

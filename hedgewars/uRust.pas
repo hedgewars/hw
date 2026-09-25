@@ -76,6 +76,13 @@ function hwf_signum(r: HWFloat): LongInt; cdecl; external HWEngineFutureLibName;
 function hwf_min_positive(): HWFloat; cdecl; external HWEngineFutureLibName;
 
 function hedgehog_step(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
+function hedgehog_start_high_jump(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
+function hedgehog_start_long_jump(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
+function hedgehog_can_back_jump(gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
+function hedgehog_start_back_jump(gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
+procedure hedgehog_stop_jump(game_field: TRGameField; gear: PGear); cdecl; external HWEngineFutureLibName;
+function hedgehog_jump_step(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
+function hedgehog_moving_step(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
 
 function gear_checksum(gear: PGear): Longword; cdecl; external HWEngineFutureLibName;
 
