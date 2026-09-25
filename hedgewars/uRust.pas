@@ -82,7 +82,6 @@ function hedgehog_can_back_jump(gear: PGear): boolean; cdecl; external HWEngineF
 function hedgehog_start_back_jump(gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
 procedure hedgehog_stop_jump(game_field: TRGameField; gear: PGear); cdecl; external HWEngineFutureLibName;
 function hedgehog_jump_step(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
-function hedgehog_moving_step(game_field: TRGameField; gear: PGear): boolean; cdecl; external HWEngineFutureLibName;
 
 function gear_checksum(gear: PGear): Longword; cdecl; external HWEngineFutureLibName;
 

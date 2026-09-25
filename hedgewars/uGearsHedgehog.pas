@@ -1093,16 +1093,10 @@ else
 
         if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
             begin
-            if ((Gear^.State and gstHHHJump) <> 0) and (Gear^.Hedgehog^.Effects[heArtillery] = 0)
-            and (hwAbs(Gear^.dX) < _0_02) then
-                begin
-                if land and lfBouncy <> 0 then
-                    Gear^.dY:= _0;
-                Gear^.dX:= -Gear^.dX // landing after high jump
-                end;
-            Gear^.State:= Gear^.State and (not (gstHHJumping or gstHHHJump));
-            if (land and lfBouncy = 0) or (hwAbs(Gear^.dX) < _0_02) then
-                Gear^.dY:= _0
+            if (Gear^.State and gstHHJumping) <> 0 then
+                hedgehog_stop_jump(gameField, Gear)
+            else if (land and lfBouncy = 0) or (hwAbs(Gear^.dX) < _0_02) then
+                Gear^.dY:= _0;
             end;
         Gear^.State:= Gear^.State and (not gstCollision)
         end
@@ -1409,11 +1403,19 @@ if (HHGear^.State and gstMoving) <> 0 then
 
     HHGear^.Message:= HHGear^.Message and (not (gmLJump or gmHJump));
 
-    if (Hedgehog^.Effects[heArtillery] = 0) and wasJumping and (TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0) then
-        SetLittle(HHGear^.dX);
-
-    if Hedgehog^.Gear <> nil then
-        doStepHedgehogMoving(HHGear);
+    if wasJumping then
+        begin
+        if not hedgehog_jump_step(gameField, HHGear) then
+            begin
+            CheckHHDamage(HHGear);
+            hedgehog_stop_jump(gameField, HHGear);
+            end;
+        end
+    else
+        begin
+        if Hedgehog^.Gear <> nil then
+            doStepHedgehogMoving(HHGear);
+        end;
 
     if ((HHGear^.State and (gstMoving or gstDrowning)) = 0) then
         begin

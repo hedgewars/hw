@@ -106,15 +106,18 @@ impl<'a> AI<'a> {
                         }
                     }
 
-                    if landed_safely && (start_waypoint.x - gear.x).abs().round() > 30 {
-                        let mut waypoint = start_waypoint.clone();
-                        waypoint.ticks += jump_ticks + JUMP_TICKS_PAUSE;
-                        waypoint.x = gear.x;
-                        waypoint.y = gear.y;
-                        waypoint.previous_point = Some((start_position, Action::LongJump(dir)));
+                    if landed_safely {
+                        gear.stop_jump(self.game_field);
+                        if (start_waypoint.x - gear.x).abs().round() > 30 {
+                            let mut waypoint = start_waypoint.clone();
+                            waypoint.ticks += jump_ticks + JUMP_TICKS_PAUSE;
+                            waypoint.x = gear.x;
+                            waypoint.y = gear.y;
+                            waypoint.previous_point = Some((start_position, Action::LongJump(dir)));
 
-                        if waypoints.add_point(&waypoint) && waypoint.ticks < max_ticks {
-                            heap.push(waypoint.clone());
+                            if waypoints.add_point(&waypoint) && waypoint.ticks < max_ticks {
+                                heap.push(waypoint.clone());
+                            }
                         }
                     }
                 }
@@ -185,6 +188,7 @@ impl<'a> AI<'a> {
                             }
                         }
                         if fell_safely {
+                            gear.stop_jump(self.game_field);
                             waypoint.ticks += fall_ticks + 410;
                             waypoint.x = gear.x;
                             waypoint.y = gear.y;

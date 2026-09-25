@@ -252,8 +252,6 @@ impl TGear {
             }
         }
 
-        println!("[ljump start] ({}, {})", self.x, self.y);
-
         if self.test_horizontal_collision(game_field, dir) == 0
             && self.test_vertical_collision(game_field, -1) == 0
         {
@@ -303,11 +301,13 @@ impl TGear {
                 break;
             }
         }
-
-        println!("[ljump stop] ({}, {})", self.x, self.y);
     }
 
     pub fn jump_step(&mut self, game_field: &GameField) -> bool {
+        if !self.d_y.is_negative() && self.test_vertical_collision(game_field, 1) != 0 {
+            return false;
+        }
+
         if self.state.contains(StateFlags::HHJumping) {
             let dir = self.d_x.signum();
             if self.test_horizontal_collision(game_field, dir) != 0 {
@@ -315,26 +315,23 @@ impl TGear {
             }
         }
 
-        self.x += self.d_x;
-        self.d_y += gravity();
-
         if self.d_y.is_negative() && self.test_vertical_collision(game_field, -1) != 0 {
             self.d_y = fp!(0);
         }
 
+        self.d_y += gravity();
+
+        self.x += self.d_x;
         self.y += self.d_y;
 
-        if !self.d_y.is_negative() && self.test_vertical_collision(game_field, 1) != 0 {
-            self.stop_jump(game_field);
-            return false;
+        if !self.d_y.is_negative()
+            && self.test_vertical_collision(game_field, 1) == 0
+            && self.test_vertical_collision_with_offset(game_field, 0, 1, 1) != 0
+        {
+            self.y += fp!(1);
         }
 
         true
-    }
-
-    #[inline]
-    pub fn moving_step(&mut self, game_field: &GameField) -> bool {
-        self.jump_step(game_field)
     }
 }
 
@@ -371,11 +368,6 @@ pub extern "C" fn hedgehog_stop_jump(game_field: &GameField, gear: &mut TGear) {
 #[no_mangle]
 pub extern "C" fn hedgehog_jump_step(game_field: &GameField, gear: &mut TGear) -> bool {
     gear.jump_step(game_field)
-}
-
-#[no_mangle]
-pub extern "C" fn hedgehog_moving_step(game_field: &GameField, gear: &mut TGear) -> bool {
-    gear.moving_step(game_field)
 }
 
 #[no_mangle]
@@ -516,6 +508,7 @@ mod tests {
             ticks += 1;
             assert!(ticks < 1000);
         }
+        gear.stop_jump(&field);
 
         assert!(!gear
             .state
@@ -544,6 +537,7 @@ mod tests {
             ticks += 1;
             assert!(ticks < 1000);
         }
+        gear.stop_jump(&field);
 
         assert!(!gear
             .state
@@ -569,6 +563,7 @@ mod tests {
         assert_eq!(gear.d_x, -fp!(2 / 100)); // moving left
 
         while gear.jump_step(&field) {}
+        gear.stop_jump(&field);
 
         // Landing restores facing direction (right)
         assert!(gear.d_x.is_positive());
