@@ -1,6 +1,10 @@
+extern crate core;
+
+use core::fmt;
 use saturate::SaturatingInto;
 use std::marker::PhantomData;
 use std::{cmp, ops};
+use std::fmt::{Display, Formatter};
 
 const POSITIVE_MASK: u64 = 0x0000_0000_0000_0000;
 const NEGATIVE_MASK: u64 = 0xFFFF_FFFF_FFFF_FFFF;
@@ -23,6 +27,15 @@ pub struct FixedPoint<const FRAC_BITS: u8> {
 }
 
 pub type FPNum = FixedPoint<20>;
+
+impl<const FRAC_BITS: u8> Display for FixedPoint<FRAC_BITS> {
+fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        if self.is_negative() {
+            write!(f, "-")?;
+        }
+        write!(f, "{}", self.value as f64 / (1i64 << FRAC_BITS) as f64)
+    }
+}
 
 impl<const FRAC_BITS: u8> FixedPoint<FRAC_BITS> {
     pub const FRAC_BITS: u8 = FRAC_BITS;
