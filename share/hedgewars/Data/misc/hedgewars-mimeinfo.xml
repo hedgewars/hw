@@ -17,7 +17,7 @@
     <comment xml:lang="pt">Hedgewars Demo</comment>
     <comment xml:lang="sk">Demo hry Hedgewars</comment>
     <comment xml:lang="cs">Ukázka hry Hedgewars</comment>
-    <comment xml:lang="sv">Demo för Hedgewars</comment>
+    <comment xml:lang="sv">Hedgewars-demo</comment>
     <comment xml:lang="da">Hedgewars-demo</comment>
     <comment xml:lang="tr">Hedgewars Dösteri</comment>
     <magic priority="50">
@@ -40,7 +40,7 @@
     <comment xml:lang="pt">Partida guardada de Hedgewars</comment>
     <comment xml:lang="sk">Uložená hra Hedgewars</comment>
     <comment xml:lang="cs">Uložená hra Hedgewars</comment>
-    <comment xml:lang="sv">Sparfil för Hedgewars</comment>
+    <comment xml:lang="sv">Sparat Hedgewars-spel</comment>
     <comment xml:lang="da">Gemt Hedgewars-spil</comment>
     <comment xml:lang="tr">Hedgewars kayıtlı oyun</comment>
     <magic priority="50">
@@ -52,6 +52,7 @@
   <mime-type type="x-scheme-handler/hwplay">
     <icon name="hedgewars" />
     <comment>Hedgewars ServerAccess Scheme</comment>
+    <comment xml:lang="sv">Protokoll för anslutning till Hedgewars-servrar</comment>
     <glob weight="60" pattern="hwplay://*"/>
   </mime-type>
 </mime-info>
