@@ -1,3 +1,4 @@
 en=Bat your opponents through the hoops.
 de=Schlag deine Gegner durch die Körbe.
 pl=Wrzuć kijem swoich przeciwników do koszy.
+sv=Slå dina motståndare genom korgarna.
