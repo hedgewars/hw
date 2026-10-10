@@ -886,7 +886,7 @@ type
 
     PSDL_Event = ^TSDL_Event;
     TSDL_Event = record
-        case LongInt of
+        case LongWord of
             SDL_FIRSTEVENT: (type_: LongWord);
             SDL_COMMONDEVENT: (common: TSDL_CommonEvent);
             SDL_WINDOWEVENT: (window: TSDL_WindowEvent);
