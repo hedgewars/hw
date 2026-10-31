@@ -2,6 +2,7 @@ pub mod anteroom;
 pub mod bans;
 pub mod client;
 pub mod digest;
+pub mod flood;
 pub mod indexslab;
 pub mod joins_monitor;
 pub mod room;

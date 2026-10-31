@@ -1,4 +1,4 @@
-use super::types::ClientId;
+use super::{flood::FloodControl, types::ClientId};
 use bitflags::*;
 use std::ops::Deref;
 
@@ -32,6 +32,7 @@ pub struct HwClient {
     pub has_asked_list: bool,
     pub pings_queue: u32,
     pub is_kicked_from_server: bool,
+    pub flood_control: FloodControl,
 }
 
 impl HwClient {
@@ -49,6 +50,7 @@ impl HwClient {
             has_asked_list: false,
             pings_queue: 0,
             is_kicked_from_server: false,
+            flood_control: FloodControl::new(),
         }
     }
 

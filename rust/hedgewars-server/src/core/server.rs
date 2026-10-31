@@ -643,6 +643,11 @@ impl<'a> HwRoomControl<'a> {
     }
 
     #[inline]
+    pub fn server_mut(&mut self) -> &mut HwServer {
+        self.server
+    }
+
+    #[inline]
     pub fn client(&self) -> &HwClient {
         &self.server.clients[self.client_id]
     }

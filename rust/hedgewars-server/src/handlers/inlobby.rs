@@ -4,6 +4,7 @@ use crate::{
     core::{
         anteroom::HwAnteroom,
         client::HwClient,
+        flood::FloodEvent,
         server::{AccessError, CreateRoomError, HwServer, JoinRoomError},
         types::ClientId,
     },
@@ -57,11 +58,17 @@ pub fn handle(
                         )
                         .send_all(),
                     );
+                    super::common::register_flood_event(
+                        server,
+                        anteroom,
+                        client_id,
+                        FloodEvent::RoomJoin,
+                        response,
+                    );
                 }
             }
         }
         Chat(msg) => {
-            //todo!("add client quiet flag");
             response.add(
                 ChatMsg {
                     nick: server.client(client_id).nick.clone(),
@@ -71,27 +78,52 @@ pub fn handle(
                 .in_lobby()
                 .but_self(),
             );
+            super::common::register_flood_event(
+                server,
+                anteroom,
+                client_id,
+                FloodEvent::LobbyChatMessage,
+                response,
+            );
         }
         JoinRoom(name, password) => {
             let protocols = server.all_client_protocols();
-            match server.join_room_by_name(client_id, &name, password.as_deref()) {
-                Err(error) => super::common::get_room_join_error(error, response),
-                Ok((client, master, room, room_clients)) => super::common::get_room_join_data(
-                    &mut protocols.into_iter(),
-                    client,
-                    master,
-                    room,
-                    room_clients,
+            let joined = match server.join_room_by_name(client_id, &name, password.as_deref()) {
+                Err(error) => {
+                    super::common::get_room_join_error(error, response);
+                    false
+                }
+                Ok((client, master, room, room_clients)) => {
+                    super::common::get_room_join_data(
+                        &mut protocols.into_iter(),
+                        client,
+                        master,
+                        room,
+                        room_clients,
+                        response,
+                    );
+                    true
+                }
+            };
+            if joined {
+                super::common::register_flood_event(
+                    server,
+                    anteroom,
+                    client_id,
+                    FloodEvent::RoomJoin,
                     response,
-                ),
+                );
             }
         }
         Follow(nick) => {
             if let Some(client) = server.find_client(&nick) {
                 if let Some(room_id) = client.room_id {
                     let protocols = server.all_client_protocols();
-                    match server.join_room(client_id, room_id, None) {
-                        Err(error) => super::common::get_room_join_error(error, response),
+                    let joined = match server.join_room(client_id, room_id, None) {
+                        Err(error) => {
+                            super::common::get_room_join_error(error, response);
+                            false
+                        }
                         Ok((client, master, room, room_clients)) => {
                             super::common::get_room_join_data(
                                 &mut protocols.into_iter(),
@@ -100,8 +132,18 @@ pub fn handle(
                                 room,
                                 room_clients,
                                 response,
-                            )
+                            );
+                            true
                         }
+                    };
+                    if joined {
+                        super::common::register_flood_event(
+                            server,
+                            anteroom,
+                            client_id,
+                            FloodEvent::RoomJoin,
+                            response,
+                        );
                     }
                 } else {
                     response.warn(NO_ROOM);

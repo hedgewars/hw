@@ -2,8 +2,11 @@ use super::{
     actions::{Destination, DestinationGroup},
     Response,
 };
-use crate::core::anteroom::HwAnteroom;
-use crate::core::server::HwRoomOrServer;
+use crate::core::{
+    anteroom::HwAnteroom,
+    flood::{FloodAction, FloodEvent},
+    server::HwRoomOrServer,
+};
 use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
@@ -431,6 +434,26 @@ pub fn remove_client_by_id(
     response.add(LobbyLeft(nick, msg.clone()).send_all());
     response.add(Bye(msg).send(client_id));
     response.remove_client(client_id);
+}
+
+pub fn register_flood_event(
+    server: &mut HwServer,
+    anteroom: &mut HwAnteroom,
+    client_id: ClientId,
+    event: FloodEvent,
+    response: &mut Response,
+) {
+    let action = server
+        .client_mut(client_id)
+        .flood_control
+        .register_event(event);
+    match action {
+        FloodAction::None => {}
+        FloodAction::Warn(msg) => response.warn(msg),
+        FloodAction::Bye(msg) => {
+            remove_client_by_id(server, anteroom, client_id, response, msg.to_string())
+        }
+    }
 }
 
 pub fn get_room_update(

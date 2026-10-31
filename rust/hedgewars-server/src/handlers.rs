@@ -357,7 +357,7 @@ pub fn handle(
                         }
                         _ => match state.server.get_room_control(client_id) {
                             HwRoomOrServer::Room(control) => {
-                                inroom::handle(control, response, message)
+                                inroom::handle(control, &mut state.anteroom, response, message)
                             }
                             HwRoomOrServer::Server(server) => inlobby::handle(
                                 server,

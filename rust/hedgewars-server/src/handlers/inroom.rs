@@ -4,6 +4,8 @@ use crate::core::server::{AddTeamError, SetTeamCountError};
 use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
+        anteroom::HwAnteroom,
+        flood::FloodEvent,
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
         server::{
             ChangeMasterError, ChangeMasterResult, HwRoomControl, HwServer, LeaveRoomResult,
@@ -102,6 +104,7 @@ fn room_message_flag(msg: &HwProtocolMessage) -> RoomFlags {
 
 pub fn handle(
     mut room_control: HwRoomControl,
+    anteroom: &mut HwAnteroom,
     response: &mut super::Response,
     message: HwProtocolMessage,
 ) {
@@ -181,7 +184,14 @@ pub fn handle(
                         room,
                         Some(client),
                         response,
-                    )
+                    );
+                    super::common::register_flood_event(
+                        room_control.server_mut(),
+                        anteroom,
+                        client_id,
+                        FloodEvent::RoomNameUpdate,
+                        response,
+                    );
                 }
                 Err(ModifyRoomNameError::AccessDenied) => response.warn(ACCESS_DENIED),
                 Err(ModifyRoomNameError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
@@ -430,10 +440,16 @@ pub fn handle(
                             .in_room(room.id)
                             .but_self(),
                     );
+                    let em_log = encode(non_empty.flatten().cloned().collect::<Vec<_>>());
+                    room_control.log_engine_msg(em_log, sync_msg);
+                    super::common::register_flood_event(
+                        room_control.server_mut(),
+                        anteroom,
+                        client_id,
+                        FloodEvent::EngineMessage,
+                        response,
+                    );
                 }
-                let em_log = encode(non_empty.flatten().cloned().collect::<Vec<_>>());
-
-                room_control.log_engine_msg(em_log, sync_msg);
             }
         }
         RoundFinished => {
