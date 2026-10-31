@@ -33,6 +33,7 @@ const PING_TIMEOUT: Duration = Duration::from_secs(15);
 #[derive(Debug)]
 enum ClientUpdateData {
     Message(HwProtocolMessage),
+    PingSent,
     Error(String),
 }
 
@@ -142,10 +143,12 @@ impl NetworkClient {
     async fn read<T: AsyncRead + AsyncWrite + Unpin>(
         stream: &mut T,
         decoder: &mut ProtocolDecoder,
+        sender: &mut ClientUpdateSender,
     ) -> protocol::Result<HwProtocolMessage> {
         let result = decoder.read_from(stream).await;
         if matches!(result, Err(ProtocolError::Timeout)) {
             if Self::write(stream, Bytes::from(HwServerMessage::Ping.to_raw_protocol())).await {
+                let _ = sender.send(ClientUpdateData::PingSent).await;
                 decoder.read_from(stream).await
             } else {
                 Err(ProtocolError::Eof)
@@ -179,7 +182,7 @@ impl NetworkClient {
                         }
                     }
                 }
-                client_message = Self::read(&mut self.stream, &mut self.decoder) => {
+                client_message = Self::read(&mut self.stream, &mut self.decoder, &mut sender) => {
                      match client_message {
                         Ok(message) => {
                             //todo!("add flood stats");
@@ -263,6 +266,12 @@ impl NetworkLayer {
                     data: Message(message),
                 }) => {
                     layer.handle_message(client_id, message).await;
+                }
+                Some(ClientUpdate {
+                    client_id,
+                    data: PingSent,
+                }) => {
+                    handlers::handle_ping_sent(&mut layer.server_state, client_id);
                 }
                 Some(ClientUpdate {
                     client_id,

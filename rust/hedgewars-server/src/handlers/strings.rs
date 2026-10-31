@@ -3,6 +3,7 @@ pub const AUTHENTICATION_FAILED: &str = "Authentication failed";
 pub const BAD_NUMBER: &str = "Bad number.";
 pub const ILLEGAL_CLIENT_NAME: &str = "Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}";
 pub const ILLEGAL_ROOM_NAME: &str = "Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}";
+pub const ILLEGAL_ROOM_RENAME: &str = "Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}";
 pub const NICKNAME_PROVIDED: &str = "Nickname already provided.";
 pub const NO_CHECKER_RIGHTS: &str = "No checker rights";
 pub const NO_ROOM: &str = "No such room.";

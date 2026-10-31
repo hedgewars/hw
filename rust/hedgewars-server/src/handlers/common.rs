@@ -63,7 +63,14 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
         flags.push(Flags::Contributor)
     }
 
-    let all_nicks: Vec<_> = server.collect_nicks(|_| true);
+    let all_nicks: Vec<_> = once(client.nick.clone())
+        .chain(
+            server
+                .iter_clients()
+                .filter(|c| c.id != client_id)
+                .map(|c| c.nick.clone()),
+        )
+        .collect();
 
     let mut flag_selectors = [
         (
@@ -86,6 +93,7 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
     let rooms_msg = Rooms(
         server
             .iter_rooms()
+            .filter(|r| r.protocol_number != 0)
             .flat_map(|r| {
                 r.info(
                     r.master_id.map(|id| server.client(id)),
@@ -95,18 +103,15 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
             .collect(),
     );
 
-    response.add(LobbyJoined(nick).send_all().but_self());
-    response.add(
-        ClientFlags(add_flags(&flags), all_nicks.clone())
-            .send_all()
-            .but_self(),
-    );
-
+    response.add(LobbyJoined(nick.clone()).send_all().but_self());
     response.add(LobbyJoined(all_nicks).send_self());
     for (flag, nicks) in &mut flag_selectors {
         if !nicks.is_empty() {
             response.add(ClientFlags(add_flags(&[*flag]), std::mem::take(nicks)).send_self());
         }
+    }
+    if !flags.is_empty() {
+        response.add(ClientFlags(add_flags(&flags), nick).send_all());
     }
 
     response.add(server_msg.send_self());
@@ -453,6 +458,68 @@ pub fn register_flood_event(
         FloodAction::Bye(msg) => {
             remove_client_by_id(server, anteroom, client_id, response, msg.to_string())
         }
+    }
+}
+
+pub fn protocol_cmd_name(message: &HwProtocolMessage) -> &str {
+    use HwProtocolMessage::*;
+    match message {
+        Ping => "PING",
+        Pong => "PONG",
+        Quit(_) => "QUIT",
+        Global(_) | Watch(_) | ToggleServerRegisteredOnly | SuperPower | Help
+        | RestartServerConfirm => "CMD",
+        Info(_) => "INFO",
+        Nick(_, _) => "NICK",
+        Proto(_) => "PROTO",
+        Password(_, _) | LegacyPassword(_) => "PASSWORD",
+        Checker(_, _, _) => "CHECKER",
+        List => "LIST",
+        Chat(_) => "CHAT",
+        CreateRoom(_, _) => "CREATE_ROOM",
+        JoinRoom(_, _) => "JOIN_ROOM",
+        Follow(_) => "FOLLOW",
+        Rnd(_) => "RND",
+        Kick(_) => "KICK",
+        Ban(_, _, _) | RoomBan(_) => "BAN",
+        BanIp(_, _, _) => "BANIP",
+        BanNick(_, _, _) => "BANNICK",
+        BanList => "BANLIST",
+        Unban(_) => "UNBAN",
+        SetServerVar(_) => "SET_SERVER_VAR",
+        GetServerVar => "GET_SERVER_VAR",
+        RestartServer => "RESTART_SERVER",
+        ClearAccountsCache => "CLEAR_ACCOUNTS_CACHE",
+        Stats => "STATS",
+        Part(_) => "PART",
+        Cfg(_) => "CFG",
+        AddTeam(_) => "ADD_TEAM",
+        RemoveTeam(_) => "REMOVE_TEAM",
+        SetHedgehogsNumber(_, _) => "HH_NUM",
+        SetTeamColor(_, _) => "TEAM_COLOR",
+        ToggleReady => "TOGGLE_READY",
+        StartGame => "START_GAME",
+        EngineMessage(_) => "EM",
+        RoundFinished => "ROUNDFINISHED",
+        ToggleRestrictJoin => "TOGGLE_RESTRICT_JOINS",
+        ToggleRestrictTeams => "TOGGLE_RESTRICT_TEAMS",
+        ToggleRegisteredOnly => "TOGGLE_REGISTERED_ONLY",
+        RoomName(_) => "ROOM_NAME",
+        Delegate(_) => "DELEGATE",
+        TeamChat(_) => "TEAMCHAT",
+        MaxTeams(_) => "MAXTEAMS",
+        Fix => "FIX",
+        Unfix => "UNFIX",
+        Greeting(_) => "GREETING",
+        CallVote(_) => "CALLVOTE",
+        Vote(_) | ForceVote(_) => "VOTE",
+        Save(_, _) => "SAVE",
+        Delete(_) => "DELETE",
+        SaveRoom(_) => "SAVEROOM",
+        LoadRoom(_) => "LOADROOM",
+        CheckerReady => "READY",
+        CheckedOk(_) | CheckedFail(_) => "CHECKED",
+        Malformed(lines) => lines.first().map(|s| s.as_str()).unwrap_or(""),
     }
 }
 

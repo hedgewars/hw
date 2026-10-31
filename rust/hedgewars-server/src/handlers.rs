@@ -96,7 +96,7 @@ pub enum IoTask {
 pub enum IoResult {
     AccountRegistered(bool),
     Account(Option<AccountInfo>),
-    CheckerAccount { is_registered: bool },
+    CheckerAccount { is_registered: bool, is_admin: bool },
     Replay(Option<Box<Replay>>),
     SaveRoom(RoomId, bool),
     LoadRoom(RoomId, Option<String>),
@@ -226,10 +226,32 @@ pub fn handle(
 ) {
     match message {
         HwProtocolMessage::Ping => response.add(Pong.send_self()),
-        HwProtocolMessage::Pong => (),
+        HwProtocolMessage::Pong => {
+            if state.anteroom.has_client(client_id) {
+                let client = state.anteroom.get_client_mut(client_id);
+                if client.pings_queue == 0 {
+                    response.error("Protocol violation");
+                } else {
+                    client.pings_queue -= 1;
+                }
+            } else if state.server.has_client(client_id) && !state.server.is_checker(client_id) {
+                let client = state.server.client_mut(client_id);
+                if client.pings_queue == 0 {
+                    response.error("Protocol violation");
+                } else {
+                    client.pings_queue -= 1;
+                }
+            }
+        }
         _ => {
             if state.anteroom.has_client(client_id) {
-                match inanteroom::handle(&mut state.anteroom, client_id, response, message) {
+                match inanteroom::handle(
+                    &state.server,
+                    &mut state.anteroom,
+                    client_id,
+                    response,
+                    message,
+                ) {
                     LoginResult::Unchanged => (),
                     LoginResult::Complete(client) => {
                         let is_checker = client.is_checker;
@@ -243,7 +265,7 @@ pub fn handle(
                         response.remove_client(client_id);
                     }
                 }
-            } else if state.server.has_client(client_id) {
+            } else if state.server.has_client(client_id) || state.server.is_checker(client_id) {
                 if state.server.is_checker(client_id) {
                     match message {
                         HwProtocolMessage::Quit(Some(msg)) => {
@@ -251,7 +273,7 @@ pub fn handle(
                                 &mut state.server,
                                 &mut state.anteroom,
                                 response,
-                                "User quit: ".to_string() + &msg,
+                                msg,
                             );
                         }
                         HwProtocolMessage::Quit(None) => {
@@ -259,7 +281,7 @@ pub fn handle(
                                 &mut state.server,
                                 &mut state.anteroom,
                                 response,
-                                "User quit".to_string(),
+                                "bye".to_string(),
                             );
                         }
                         _ => checker::handle(&mut state.server, client_id, response, message),
@@ -271,7 +293,7 @@ pub fn handle(
                                 &mut state.server,
                                 &mut state.anteroom,
                                 response,
-                                "User quit: ".to_string() + &msg,
+                                msg,
                             );
                         }
                         HwProtocolMessage::Quit(None) => {
@@ -279,7 +301,7 @@ pub fn handle(
                                 &mut state.server,
                                 &mut state.anteroom,
                                 response,
-                                "User quit".to_string(),
+                                "bye".to_string(),
                             );
                         }
                         HwProtocolMessage::Info(nick) => {
@@ -399,13 +421,21 @@ pub fn handle_client_accept(
     }
 }
 
+pub fn handle_ping_sent(state: &mut ServerState, client_id: ClientId) {
+    if state.anteroom.has_client(client_id) {
+        state.anteroom.get_client_mut(client_id).pings_queue += 1;
+    } else if state.server.has_client(client_id) && !state.server.is_checker(client_id) {
+        state.server.client_mut(client_id).pings_queue += 1;
+    }
+}
+
 pub fn handle_client_loss(state: &mut ServerState, client_id: ClientId, response: &mut Response) {
     if state.anteroom.remove_client(client_id).is_none() {
         common::remove_client(
             &mut state.server,
             &mut state.anteroom,
             response,
-            "Connection reset".to_string(),
+            "Connection closed".to_string(),
         );
     }
 }
@@ -418,39 +448,74 @@ pub fn handle_io_result(
 ) {
     match io_result {
         IoResult::AccountRegistered(is_registered) => {
+            if !state.anteroom.has_client(client_id) {
+                return;
+            }
             if !is_registered && state.server.is_registered_only() {
+                state.anteroom.remove_client(client_id);
                 response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
                 response.remove_client(client_id);
             } else if is_registered {
-                let client = state.anteroom.get_client(client_id);
-                response.add(AskPassword(client.server_salt.clone()).send_self());
+                let client = state.anteroom.get_client_mut(client_id);
+                client.has_password_challenge = true;
+                let proto = client.protocol_number.map_or(0, |p| p.get());
+                let salt = if proto < 48 {
+                    String::new()
+                } else {
+                    client.server_salt.clone()
+                };
+                response.add(AskPassword(salt).send_self());
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
                 state.server.add_client(client_id, client);
                 common::get_lobby_join_data(&state.server, response);
             }
         }
         IoResult::Account(None) => {
+            if !state.anteroom.has_client(client_id) {
+                return;
+            }
+            state.anteroom.remove_client(client_id);
             response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
             response.remove_client(client_id);
         }
         IoResult::Account(Some(info)) => {
-            response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
+            if !state.anteroom.has_client(client_id) {
+                return;
+            }
             if let Some(mut client) = state.anteroom.remove_client(client_id) {
+                let proto = client.protocol_number.map_or(0, |p| p.get());
+                if proto >= 48 {
+                    response.add(ServerAuth(format!("{:x}", info.server_hash)).send_self());
+                }
                 client.is_registered = info.is_registered;
                 client.is_admin = info.is_admin;
                 client.is_contributor = info.is_contributor;
                 state.server.add_client(client_id, client);
                 common::get_lobby_join_data(&state.server, response);
+                if proto < 48 && info.is_admin {
+                    response.add(AdminAccess.send_self());
+                }
             }
         }
-        IoResult::CheckerAccount { is_registered } => {
-            if is_registered {
+        IoResult::CheckerAccount {
+            is_registered,
+            is_admin,
+        } => {
+            if !state.anteroom.has_client(client_id) {
+                return;
+            }
+            if !is_admin {
+                state.anteroom.remove_client(client_id);
+                response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
+                response.remove_client(client_id);
+            } else if is_registered {
                 if let Some(client) = state.anteroom.remove_client(client_id) {
                     state.server.add_client(client_id, client);
                     response.add(LogonPassed.send_self());
                 }
             } else {
-                response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
+                state.anteroom.remove_client(client_id);
+                response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
                 response.remove_client(client_id);
             }
         }
