@@ -118,6 +118,8 @@ pub fn handle(
         Follow(nick) => {
             if let Some(client) = server.find_client(&nick) {
                 if let Some(room_id) = client.room_id {
+                    let room_name = server.room(room_id).name.clone();
+                    response.add(Joining(room_name).send_self());
                     let protocols = server.all_client_protocols();
                     let joined = match server.join_room(client_id, room_id, None) {
                         Err(error) => {
@@ -145,34 +147,30 @@ pub fn handle(
                             response,
                         );
                     }
-                } else {
-                    response.warn(NO_ROOM);
                 }
-            } else {
-                response.warn(NO_USER);
             }
         }
-        SetServerVar(var) => match server.set_var(client_id, var) {
-            Err(AccessError()) => response.warn(ACCESS_DENIED),
-            Ok(()) => response.add(server_chat(VARIABLE_UPDATED.to_string()).send_self()),
-        },
-        GetServerVar => match server.get_vars(client_id) {
-            Err(AccessError()) => response.warn(ACCESS_DENIED),
-            Ok(vars) => {
+        SetServerVar(var) => {
+            if let ServerVar::LatestProto(0) = var {
+                return;
+            }
+            let _ = server.set_var(client_id, var);
+        }
+        GetServerVar => {
+            if let Ok(vars) = server.get_vars(client_id) {
                 response.add(
                     ServerVars(vars.iter().flat_map(|v| v.to_protocol()).collect()).send_self(),
                 );
             }
-        },
+        }
         Rnd(v) => {
             response.add(rnd_reply(&v).send_self());
         }
-        Stats => match server.get_used_protocols(client_id) {
-            Err(AccessError()) => response.warn(ACCESS_DENIED),
-            Ok(protocols) => {
+        Stats => {
+            if let Ok(protocols) = server.get_used_protocols(client_id) {
                 let mut html = Vec::with_capacity(protocols.len() + 2);
 
-                html.push("<table>".to_string());
+                html.push("<table border=1>".to_string());
                 for protocol in protocols {
                     html.push(format!(
                         "<tr><td>{}</td><td>{}</td><td>{}</td></tr>",
@@ -185,8 +183,34 @@ pub fn handle(
 
                 response.add(Warning(html.join("")).send_self());
             }
-        },
-        List => warn!("Deprecated LIST message received"),
+        }
+        RestartServer => {
+            if server.is_admin(client_id) {
+                response.warn("Please confirm server restart with '/restart_server yes'.");
+            }
+        }
+        RestartServerConfirm => {
+            if server.is_admin(client_id) {
+                info!("Server restart requested by admin {}", client_id);
+            }
+        }
+        List => {
+            if !server.client(client_id).has_asked_list {
+                server.client_mut(client_id).has_asked_list = true;
+                let client = server.client(client_id);
+                let rooms = server
+                    .iter_rooms()
+                    .filter(|r| r.protocol_number != 0)
+                    .flat_map(|r| {
+                        r.info(
+                            r.master_id.map(|id| server.client(id)),
+                            client.protocol_number,
+                        )
+                    })
+                    .collect();
+                response.add(Rooms(rooms).send_self());
+            }
+        }
         Kick(nick) => {
             if server.is_admin(client_id) {
                 if let Some(target) = server.find_client(&nick) {
@@ -258,6 +282,51 @@ pub fn handle(
                 anteroom.bans.unban(&entry);
             }
         }
-        _ => warn!("Incorrect command in lobby state"),
+        Delegate(_) | SaveRoom(_) | LoadRoom(_) | Save(_, _) | Delete(_) | Fix | Unfix
+        | Greeting(_) | CallVote(_) | Vote(_) | ForceVote(_) | MaxTeams(_) => {
+            response.warn("This command is only available in rooms.");
+        }
+        Malformed(lines) => {
+            let refs: Vec<&str> = lines.iter().map(|s| s.as_str()).collect();
+            match refs.as_slice() {
+                [] => response.error("Empty command (state: in lobby)"),
+                ["CMD"] => response.warn(
+                    "Unknown command or invalid parameters. Say '/help' in chat for a list of commands.",
+                ),
+                ["CMD", params] => {
+                    let (cmd, rest) = match params.find(' ') {
+                        Some(idx) => (&params[..idx], params[idx + 1..].trim_start_matches(' ')),
+                        None => (*params, ""),
+                    };
+                    let cmd_upper = cmd.to_ascii_uppercase();
+                    match cmd_upper.as_str() {
+                        "DELEGATE" | "SAVEROOM" | "LOADROOM" | "DELETE" if !rest.is_empty() => {
+                            response.warn("This command is only available in rooms.")
+                        }
+                        "SAVE" if rest.contains(' ') => {
+                            response.warn("This command is only available in rooms.")
+                        }
+                        "FIX" | "UNFIX" | "GREETING" | "CALLVOTE" | "VOTE" | "FORCE"
+                        | "MAXTEAMS" => response.warn("This command is only available in rooms."),
+                        _ => response.warn(
+                            "Unknown command or invalid parameters. Say '/help' in chat for a list of commands.",
+                        ),
+                    }
+                }
+                ["RESTART_SERVER", _] => {
+                    if server.is_admin(client_id) {
+                        response.warn("Please confirm server restart with '/restart_server yes'.");
+                    }
+                }
+                ["SET_SERVER_VAR", "LATEST_PROTO", _] => {}
+                [cmd, ..] => {
+                    response.error(&format!("Incorrect command '{}' (state: in lobby)", cmd))
+                }
+            }
+        }
+        other => {
+            let cmd = super::common::protocol_cmd_name(&other);
+            response.error(&format!("Incorrect command '{}' (state: in lobby)", cmd));
+        }
     }
 }

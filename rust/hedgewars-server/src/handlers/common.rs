@@ -35,16 +35,19 @@ use std::{iter::once, mem::replace};
 pub fn rnd_reply(options: &[String]) -> HwServerMessage {
     let mut rng = thread_rng();
 
-    let reply = if options.is_empty() {
-        (["heads", "tails"].choose(&mut rng).unwrap()).to_string()
+    let (nick, reply) = if options.is_empty() {
+        (
+            "[random]".to_string(),
+            (["heads", "tails"].choose(&mut rng).unwrap()).to_string(),
+        )
     } else {
-        options.choose(&mut rng).unwrap().clone()
+        (
+            "(random)".to_string(),
+            options.choose(&mut rng).unwrap().clone(),
+        )
     };
 
-    ChatMsg {
-        nick: "[random]".to_string(),
-        msg: reply,
-    }
+    ChatMsg { nick, msg: reply }
 }
 
 pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {

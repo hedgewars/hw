@@ -36,6 +36,7 @@ use rand::{thread_rng, RngCore};
 mod actions;
 mod checker;
 mod common;
+mod help;
 mod inanteroom;
 mod inlobby;
 mod inroom;
@@ -305,6 +306,7 @@ pub fn handle(
                             );
                         }
                         HwProtocolMessage::Info(nick) => {
+                            let is_admin_asking = state.server.is_admin(client_id);
                             if let Some(client) = state.server.find_client(&nick) {
                                 let admin_sign = if client.is_admin() { "@" } else { "" };
                                 let master_sign = if client.is_master() { "+" } else { "" };
@@ -324,9 +326,15 @@ pub fn handle(
                                     None => format!("[{}lobby]", admin_sign),
                                 };
 
+                                let host_str = if is_admin_asking {
+                                    format!("[{}]", client.host)
+                                } else {
+                                    "[]".to_string()
+                                };
+
                                 let info = vec![
                                     client.nick.clone(),
-                                    "[]".to_string(),
+                                    host_str,
                                     utils::protocol_version_string(client.protocol_number)
                                         .to_string(),
                                     room_info,
@@ -336,10 +344,12 @@ pub fn handle(
                                 response.add(server_chat(USER_OFFLINE.to_string()).send_self())
                             }
                         }
+                        HwProtocolMessage::Help => {
+                            let client = state.server.client(client_id);
+                            help::send_help(client.room_id.is_some(), client.is_admin(), response);
+                        }
                         HwProtocolMessage::ToggleServerRegisteredOnly => {
-                            if !state.server.is_admin(client_id) {
-                                response.warn(ACCESS_DENIED);
-                            } else {
+                            if state.server.is_admin(client_id) {
                                 state
                                     .server
                                     .set_is_registered_only(!state.server.is_registered_only());
@@ -352,18 +362,17 @@ pub fn handle(
                             }
                         }
                         HwProtocolMessage::Global(msg) => {
-                            if !state.server.is_admin(client_id) {
-                                response.warn(ACCESS_DENIED);
-                            } else {
+                            if state.server.is_admin(client_id) {
                                 response.add(global_chat(msg).send_all())
                             }
                         }
                         HwProtocolMessage::SuperPower => {
                             if state.server.enable_super_power(client_id) {
                                 response.add(server_chat(SUPER_POWER.to_string()).send_self())
-                            } else {
-                                response.warn(ACCESS_DENIED);
                             }
+                        }
+                        HwProtocolMessage::ClearAccountsCache => {
+                            // No-op (or only for admin)
                         }
                         #[allow(unused_variables)]
                         HwProtocolMessage::Watch(id) => {
