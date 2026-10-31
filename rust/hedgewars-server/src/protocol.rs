@@ -61,41 +61,40 @@ impl ProtocolDecoder {
         }
     }
 
-    fn recover(&mut self) -> bool {
-        self.is_recovering = match malformed_message(&self.buffer[..]) {
-            Ok((tail, ())) => {
+    fn extract_message(&mut self) -> Option<HwProtocolMessage> {
+        if self.buffer.is_empty() {
+            return None;
+        }
+        match message(&self.buffer[..]) {
+            Ok((tail, message)) => {
                 let remaining = tail.len();
                 self.buffer.advance(self.buffer.len() - remaining);
-                false
+                Some(message)
             }
-            _ => {
-                self.buffer.clear();
-                true
-            }
-        };
-        !self.is_recovering
-    }
-
-    fn extract_message(&mut self) -> Option<HwProtocolMessage> {
-        if !self.is_recovering || self.recover() {
-            match message(&self.buffer[..]) {
-                Ok((tail, message)) => {
-                    let remaining = tail.len();
-                    self.buffer.advance(self.buffer.len() - remaining);
-                    return Some(message);
-                }
-                Err(nom::Err::Incomplete(_)) => {}
-                Err(nom::Err::Failure(e) | nom::Err::Error(e)) => {
-                    debug!("Invalid message: {:?}", e);
-                    trace!(
-                        "Buffer content: {:?}",
-                        String::from_utf8_lossy(&self.buffer[..])
-                    );
-                    self.recover();
+            Err(nom::Err::Incomplete(_)) => None,
+            Err(nom::Err::Failure(e) | nom::Err::Error(e)) => {
+                debug!("Invalid message: {:?}", e);
+                match malformed_message(&self.buffer[..]) {
+                    Ok((tail, raw)) => {
+                        let remaining = tail.len();
+                        self.buffer.advance(self.buffer.len() - remaining);
+                        let lines = if raw.is_empty() {
+                            vec![]
+                        } else {
+                            raw.split(|b| *b == b'\n')
+                                .map(|s| String::from_utf8_lossy(s).into_owned())
+                                .collect()
+                        };
+                        Some(HwProtocolMessage::Malformed(lines))
+                    }
+                    Err(nom::Err::Incomplete(_)) => None,
+                    Err(_) => {
+                        self.buffer.clear();
+                        None
+                    }
                 }
             }
         }
-        None
     }
 
     pub async fn read_from<R: AsyncReadExt + Unpin>(
@@ -105,25 +104,21 @@ impl ProtocolDecoder {
         use ProtocolError::*;
 
         loop {
+            if let Some(result) = self.extract_message() {
+                return Ok(result);
+            }
+
             let remaining = self.buffer.capacity() - self.buffer.len();
             if remaining < 1024 {
                 self.buffer.reserve(2048 - remaining);
             }
 
-            if !self.buffer.has_remaining() || self.is_recovering {
-                //todo!("ensure the buffer doesn't grow indefinitely")
-                match timeout(self.read_timeout, stream.read_buf(&mut self.buffer)).await {
-                    Err(_) => return Err(Timeout),
-                    Ok(Err(e)) => return Err(Network(Box::new(e))),
-                    Ok(Ok(0)) => return Err(Eof),
-                    Ok(Ok(_)) => (),
-                };
-            }
-            while !self.buffer.is_empty() {
-                if let Some(result) = self.extract_message() {
-                    return Ok(result);
-                }
-            }
+            match timeout(self.read_timeout, stream.read_buf(&mut self.buffer)).await {
+                Err(_) => return Err(Timeout),
+                Ok(Err(e)) => return Err(Network(Box::new(e))),
+                Ok(Ok(0)) => return Err(Eof),
+                Ok(Ok(_)) => (),
+            };
         }
     }
 }

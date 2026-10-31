@@ -197,6 +197,9 @@ fn no_arg_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
         message("LIST", List),
         message("BANLIST", BanList),
         message("GET_SERVER_VAR", GetServerVar),
+        message("CLEAR_ACCOUNTS_CACHE", ClearAccountsCache),
+        message("STATS", Stats),
+        message("RESTART_SERVER", RestartServerConfirm),
         message("TOGGLE_READY", ToggleReady),
         message("START_GAME", StartGame),
         message("TOGGLE_RESTRICT_JOINS", ToggleRestrictJoin),
@@ -234,6 +237,13 @@ fn single_arg_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
         message("PROTO\n", u16_line, Proto),
         message("QUIT", opt_arg, Quit),
         message("CHECKED\nFAIL\n", a_line, CheckedFail),
+        message("RESTART_SERVER\n", a_line, |s| {
+            if s == "YES" {
+                RestartServer
+            } else {
+                RestartServerConfirm
+            }
+        }),
     ))(input)
 }
 
@@ -267,12 +277,20 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             cmd_no_arg("UNFIX", Unfix),
             cmd_no_arg("REGISTERED_ONLY", ToggleServerRegisteredOnly),
             cmd_no_arg("SUPER_POWER", SuperPower),
+            cmd_no_arg("HELP", Help),
+            cmd_no_arg("RESTART_SERVER", RestartServerConfirm),
         ))(input)
     }
 
     fn cmd_single_arg_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
         alt((
-            cmd_single_arg("RESTART_SERVER", |i| tag("YES")(i), |_| RestartServer),
+            cmd_single_arg("RESTART_SERVER", a_line, |s| {
+                if s.eq_ignore_ascii_case("YES") {
+                    RestartServer
+                } else {
+                    RestartServerConfirm
+                }
+            }),
             cmd_single_arg("DELEGATE", a_line, Delegate),
             cmd_single_arg("DELETE", a_line, Delete),
             cmd_single_arg("SAVEROOM", a_line, SaveRoom),
@@ -290,8 +308,8 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
     preceded(
         tag("CMD\n"),
         alt((
-            cmd_no_arg_message,
             cmd_single_arg_message,
+            cmd_no_arg_message,
             map(tag_no_case("CALLVOTE"), |_| CallVote(None)),
             map(preceded(tag_no_case("GREETING"), opt_space_arg), Greeting),
             map(preceded(tag_no_case("PART"), opt_space_arg), Part),
@@ -299,7 +317,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
             map(
                 preceded(
                     tag_no_case("SAVE"),
-                    pair(preceded(spaces, cmd_arg), preceded(spaces, cmd_arg)),
+                    pair(preceded(spaces, cmd_arg), preceded(spaces, a_line)),
                 ),
                 |(n, l)| Save(n, l),
             ),
@@ -313,6 +331,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
                 ),
                 Rnd,
             ),
+            map(preceded(tag_no_case("HELP"), opt_space_arg), |_| Help),
         )),
     )(input)
 }
@@ -386,8 +405,9 @@ fn complex_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
     alt((
         preceded(
             pair(tag("PASSWORD"), newline),
-            map(pair(terminated(a_line, newline), a_line), |(pass, salt)| {
-                Password(pass, salt)
+            map(pair(a_line, opt_arg), |(pass, salt)| match salt {
+                Some(salt) => Password(pass, salt),
+                None => LegacyPassword(pass),
             }),
         ),
         preceded(
@@ -454,17 +474,20 @@ fn complex_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
         ),
         preceded(
             pair(tag("BAN"), newline),
-            map(
-                tuple((
-                    terminated(a_line, newline),
-                    terminated(a_line, newline),
-                    u32_line,
-                )),
-                |(name, reason, time)| Ban(name, reason, time),
-            ),
+            alt((
+                map(
+                    tuple((
+                        terminated(a_line, newline),
+                        terminated(a_line, newline),
+                        u32_line,
+                    )),
+                    |(name, reason, time)| Ban(name, reason, time),
+                ),
+                map(a_line, RoomBan),
+            )),
         ),
         preceded(
-            pair(tag("BAN_IP"), newline),
+            pair(alt((tag("BAN_IP"), tag("BANIP"))), newline),
             map(
                 tuple((
                     terminated(a_line, newline),
@@ -475,7 +498,7 @@ fn complex_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
             ),
         ),
         preceded(
-            pair(tag("BAN_NICK"), newline),
+            pair(alt((tag("BAN_NICK"), tag("BANNICK"))), newline),
             map(
                 tuple((
                     terminated(a_line, newline),
@@ -484,6 +507,13 @@ fn complex_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
                 )),
                 |(nick, reason, time)| BanNick(nick, reason, time),
             ),
+        ),
+        preceded(
+            tag("RND"),
+            alt((
+                map(peek(end_of_message), |_| Rnd(vec![])),
+                map(preceded(newline, separated_list0(newline, a_line)), Rnd),
+            )),
         ),
         map(
             preceded(
@@ -502,13 +532,12 @@ fn complex_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
     ))(input)
 }
 
-pub fn malformed_message(input: &[u8]) -> HwResult<'_, ()> {
-    map(terminated(take_until(&b"\n\n"[..]), end_of_message), |_| ())(input)
+pub fn malformed_message(input: &[u8]) -> HwResult<'_, Vec<u8>> {
+    map(terminated(take_until(&b"\n\n"[..]), end_of_message), Vec::from)(input)
 }
 
 pub fn message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
-    delimited(
-        take_while(|c| c == b'\n'),
+    terminated(
         alt((
             no_arg_message,
             single_arg_message,
@@ -594,6 +623,7 @@ pub fn server_message(input: &[u8]) -> HwResult<'_, HwServerMessage> {
                 message("PING", Ping),
                 message("PONG", Pong),
                 message("LOGONPASSED", LogonPassed),
+                message("ADMIN_ACCESS", AdminAccess),
                 message("KICKED", Kicked),
                 message("RUN_GAME", RunGame),
                 message("ROUND_FINISHED", RoundFinished),
@@ -603,10 +633,15 @@ pub fn server_message(input: &[u8]) -> HwResult<'_, HwServerMessage> {
                 single_arg_message("REDIRECT", u16_line, Redirect),
                 single_arg_message("BYE", a_line, Bye),
                 single_arg_message("NICK", a_line, Nick),
+                single_arg_message("TOKEN", a_line, Token),
                 single_arg_message("PROTO", u16_line, Proto),
-                single_arg_message("ASKPASSWORD", a_line, AskPassword),
+                map(preceded(tag("ASKPASSWORD"), opt_arg), |s| {
+                    AskPassword(s.unwrap_or_default())
+                }),
                 single_arg_message("SERVER_AUTH", a_line, ServerAuth),
                 single_arg_message("ROOM\nDEL", a_line, RoomRemove),
+                single_arg_message("ROOMABANDONED", a_line, RoomAbandoned),
+                single_arg_message("ROOM_CONTROL_ACCESS", u8_line, |n| RoomControlAccess(n != 0)),
                 single_arg_message("JOINING", a_line, Joining),
                 single_arg_message("REMOVE_TEAM", a_line, TeamRemove),
                 single_arg_message("TEAM_ACCEPTED", a_line, TeamAccepted),
@@ -670,6 +705,7 @@ pub fn server_message(input: &[u8]) -> HwResult<'_, HwServerMessage> {
                 list_message("EM", ForwardEngineMessage),
                 list_message("INFO", Info),
                 list_message("SERVER_VARS", ServerVars),
+                list_message("BANLIST", BanList),
                 list_message("REPLAY", Replay),
             )),
         )),

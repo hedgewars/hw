@@ -196,7 +196,7 @@ impl Arbitrary for VoteType {
 pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
     use HwProtocolMessage::*;
 
-    let res = (0..=58).no_shrink().prop_flat_map(|i| {
+    let res = (0..=63).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Ping,
             0 => Ping(),
             1 => Pong(),
@@ -255,7 +255,12 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
             55 => LoadRoom(Ascii),
             56 => CheckerReady(),
             57 => CheckedOk(Vec<Ascii>),
-            58 => CheckedFail(Ascii)
+            58 => CheckedFail(Ascii),
+            59 => Help(),
+            60 => ClearAccountsCache(),
+            61 => RestartServerConfirm(),
+            62 => RoomBan(Ascii),
+            63 => LegacyPassword(Ascii)
         )
     });
     res.boxed()
@@ -264,7 +269,7 @@ pub fn gen_proto_msg() -> BoxedStrategy<HwProtocolMessage> where {
 pub fn gen_server_msg() -> BoxedStrategy<HwServerMessage> where {
     use HwServerMessage::*;
 
-    let res = (0..=39).no_shrink().prop_flat_map(|i| {
+    let res = (0..=43).no_shrink().prop_flat_map(|i| {
         proto_msg_match!(i, def = Ping,
                     0 => Connected(Ascii, u32),
                     1 => Redirect(u16),
@@ -305,7 +310,11 @@ pub fn gen_server_msg() -> BoxedStrategy<HwServerMessage> where {
                     36 => Warning(Ascii),
                     37 => Error(Ascii),
                     38 => Replay(Vec<Ascii>),
-                    39 => Token(Ascii)
+                    39 => Token(Ascii),
+                    40 => AdminAccess(),
+                    41 => RoomControlAccess(bool),
+                    42 => RoomAbandoned(Ascii),
+                    43 => BanList(Vec<Ascii>)
                 )
     });
     res.boxed()

@@ -1,8 +1,6 @@
 use crate::types::{GameCfg, ServerVar, TeamInfo, VoteType};
 use std::iter::once;
 
-//todo!("add help message")
-
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum HwProtocolMessage {
     // common messages
@@ -14,10 +12,12 @@ pub enum HwProtocolMessage {
     ToggleServerRegisteredOnly,
     SuperPower,
     Info(String),
+    Help,
     // anteroom messages
     Nick(String, Option<String>),
     Proto(u16),
     Password(String, String),
+    LegacyPassword(String),
     Checker(u16, String, String),
     // lobby messages
     List,
@@ -30,11 +30,14 @@ pub enum HwProtocolMessage {
     Ban(String, String, u32),
     BanIp(String, String, u32),
     BanNick(String, String, u32),
+    RoomBan(String),
     BanList,
     Unban(String),
     SetServerVar(ServerVar),
     GetServerVar,
+    ClearAccountsCache,
     RestartServer,
+    RestartServerConfirm,
     Stats,
     // room messages
     Part(Option<String>),
@@ -68,6 +71,7 @@ pub enum HwProtocolMessage {
     CheckerReady,
     CheckedOk(Vec<String>),
     CheckedFail(String),
+    Malformed(Vec<String>),
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -127,6 +131,7 @@ pub enum HwServerMessage {
     Proto(u16),
     AskPassword(String),
     ServerAuth(String),
+    AdminAccess,
     LogonPassed,
 
     LobbyLeft(String, String),
@@ -138,7 +143,9 @@ pub enum HwServerMessage {
     RoomJoined(Vec<String>),
     RoomLeft(String, String),
     RoomRemove(String),
+    RoomAbandoned(String),
     RoomUpdated(String, Vec<String>),
+    RoomControlAccess(bool),
     Joining(String),
     TeamAdd(Vec<String>),
     TeamRemove(String),
@@ -155,6 +162,7 @@ pub enum HwServerMessage {
     Info(Vec<String>),
     ServerMessage(String),
     ServerVars(Vec<String>),
+    BanList(Vec<String>),
     Notice(String),
     Warning(String),
     Error(String),
@@ -285,10 +293,12 @@ impl HwProtocolMessage {
             ToggleServerRegisteredOnly => msg!["CMD", "REGISTERED_ONLY"],
             SuperPower => msg!["CMD", "SUPER_POWER"],
             Info(info) => msg!["CMD", format!("INFO {}", info)],
+            Help => msg!["CMD", "HELP"],
             Nick(nick, None) => msg!["NICK", nick],
             Nick(nick, Some(token)) => msg!["NICK", nick, token],
             Proto(version) => msg!["PROTO", version],
             Password(p, s) => msg!["PASSWORD", p, s],
+            LegacyPassword(p) => msg!["PASSWORD", p],
             Checker(i, n, p) => msg!["CHECKER", i, n, p],
             List => msg!["LIST"],
             Chat(msg) => msg!["CHAT", msg],
@@ -308,11 +318,14 @@ impl HwProtocolMessage {
             Ban(name, reason, time) => msg!["BAN", name, reason, time],
             BanIp(ip, reason, time) => msg!["BAN_IP", ip, reason, time],
             BanNick(nick, reason, time) => msg!("BAN_NICK", nick, reason, time),
+            RoomBan(name) => msg!["BAN", name],
             BanList => msg!["BANLIST"],
             Unban(name) => msg!["UNBAN", name],
             SetServerVar(var) => construct_message(&["SET_SERVER_VAR"], &var.to_protocol()),
             GetServerVar => msg!["GET_SERVER_VAR"],
+            ClearAccountsCache => msg!["CLEAR_ACCOUNTS_CACHE"],
             RestartServer => msg!["CMD", "RESTART_SERVER YES"],
+            RestartServerConfirm => msg!["CMD", "RESTART_SERVER"],
             Stats => msg!["CMD", "STATS"],
             Part(None) => msg!["PART"],
             Part(Some(msg)) => msg!["PART", msg],
@@ -365,6 +378,7 @@ impl HwProtocolMessage {
             CheckerReady => msg!["READY"],
             CheckedOk(args) => msg!["CHECKED", "OK", args.join("\n")],
             CheckedFail(message) => msg!["CHECKED", "FAIL", message],
+            Malformed(lines) => construct_message(&[], lines),
         }
     }
 }
@@ -388,8 +402,10 @@ impl HwServerMessage {
             Nick(nick) => msg!["NICK", nick],
             Token(token) => msg!["TOKEN", token],
             Proto(proto) => msg!["PROTO", proto],
+            AskPassword(salt) if salt.is_empty() => msg!["ASKPASSWORD"],
             AskPassword(salt) => msg!["ASKPASSWORD", salt],
             ServerAuth(hash) => msg!["SERVER_AUTH", hash],
+            AdminAccess => msg!["ADMIN_ACCESS"],
             LogonPassed => msg!["LOGONPASSED"],
             LobbyLeft(nick, msg) => msg!["LOBBY:LEFT", nick, msg],
             LobbyJoined(nicks) => construct_message(&["LOBBY:JOINED"], &nicks),
@@ -399,7 +415,11 @@ impl HwServerMessage {
             RoomJoined(nicks) => construct_message(&["JOINED"], &nicks),
             RoomLeft(nick, msg) => msg!["LEFT", nick, msg],
             RoomRemove(name) => msg!["ROOM", "DEL", name],
+            RoomAbandoned(name) => msg!["ROOMABANDONED", name],
             RoomUpdated(name, info) => construct_message(&["ROOM", "UPD", name], &info),
+            RoomControlAccess(enabled) => {
+                msg!["ROOM_CONTROL_ACCESS", if *enabled { "1" } else { "0" }]
+            }
             Joining(name) => msg!["JOINING", name],
             TeamAdd(info) => construct_message(&["ADD_TEAM"], &info),
             TeamRemove(name) => msg!["REMOVE_TEAM", name],
@@ -415,6 +435,7 @@ impl HwServerMessage {
             Info(info) => construct_message(&["INFO"], &info),
             ServerMessage(msg) => msg!["SERVER_MESSAGE", msg],
             ServerVars(vars) => construct_message(&["SERVER_VARS"], &vars),
+            BanList(entries) => construct_message(&["BANLIST"], entries),
             Notice(msg) => msg!["NOTICE", msg],
             Warning(msg) => msg!["WARNING", msg],
             Error(msg) => msg!["ERROR", msg],
