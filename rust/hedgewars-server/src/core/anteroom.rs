@@ -1,63 +1,43 @@
-use super::{indexslab::IndexSlab, types::ClientId};
-use crate::core::client::HwClient;
-use crate::core::digest::Sha1Digest;
-use chrono::{offset, DateTime};
-use std::collections::{HashMap, HashSet};
-use std::{iter::Iterator, num::NonZeroU16};
+use super::{
+    bans::BanCollection, indexslab::IndexSlab, joins_monitor::JoinsMonitor, types::ClientId,
+};
+use crate::utils;
+use base64::encode;
+use log::*;
+use rand::{thread_rng, RngCore};
+use std::{collections::HashMap, num::NonZeroU16};
 
 pub struct HwAnteroomClient {
     pub nick: Option<String>,
     pub protocol_number: Option<NonZeroU16>,
     pub server_salt: String,
-    pub is_checker: bool,
+    pub is_Checker: bool,
     pub is_local_admin: bool,
     pub is_registered: bool,
     pub is_admin: bool,
     pub is_contributor: bool,
+    pub is_checker: bool,
+    pub ip_addr: Option<[u8; 4]>,
+    pub web_password: String,
+    pub has_password_challenge: bool,
+    pub pings_queue: u32,
 }
 
-struct Ipv4AddrRange {
-    min: [u8; 4],
-    max: [u8; 4],
-}
-
-impl Ipv4AddrRange {
-    fn contains(&self, addr: [u8; 4]) -> bool {
-        (0..4).all(|i| self.min[i] <= addr[i] && addr[i] <= self.max[i])
-    }
-}
-
-struct BanCollection {
-    ban_ips: Vec<Ipv4AddrRange>,
-    ban_timeouts: Vec<DateTime<offset::Utc>>,
-    ban_reasons: Vec<String>,
-}
-
-impl BanCollection {
-    fn new() -> Self {
-        //todo!("add nick bans");
-        Self {
-            ban_ips: vec![],
-            ban_timeouts: vec![],
-            ban_reasons: vec![],
+impl HwAnteroomClient {
+    pub fn host_string(&self) -> String {
+        if let Some(ip) = self.ip_addr {
+            format!("{}.{}.{}.{}", ip[0], ip[1], ip[2], ip[3])
+        } else {
+            String::new()
         }
-    }
-
-    fn find(&self, addr: [u8; 4]) -> Option<String> {
-        let time = offset::Utc::now();
-        self.ban_ips
-            .iter()
-            .enumerate()
-            .find(|(i, r)| r.contains(addr) && time < self.ban_timeouts[*i])
-            .map(|(i, _)| self.ban_reasons[i].clone())
     }
 }
 
 pub struct HwAnteroom {
     clients: IndexSlab<HwAnteroomClient>,
-    bans: BanCollection,
-    taken_nicks: HashSet<String>,
-    reconnection_tokens: HashMap<String, String>,
+    pub bans: BanCollection,
+    pub joins_monitor: JoinsMonitor,
+    nicks: HashMap<String, String>,
 }
 
 impl HwAnteroom {
@@ -66,25 +46,48 @@ impl HwAnteroom {
         HwAnteroom {
             clients,
             bans: BanCollection::new(),
-            taken_nicks: Default::default(),
-            reconnection_tokens: Default::default(),
+            joins_monitor: JoinsMonitor::new(),
+            nicks: Default::default(),
         }
     }
 
-    pub fn find_ip_ban(&self, addr: [u8; 4]) -> Option<String> {
-        self.bans.find(addr)
+    pub fn try_accept(&mut self, addr: Option<[u8; 4]>) -> Result<(), String> {
+        if let Some(ip) = addr {
+            if !self.joins_monitor.check_and_record(ip) {
+                return Err("Reconnected too fast".to_string());
+            }
+            if let Some(reason) = self.bans.find_ip_ban(ip) {
+                return Err(reason);
+            }
+        }
+        Ok(())
     }
 
-    pub fn add_client(&mut self, client_id: ClientId, salt: String, is_local_admin: bool) {
+    pub fn add_client(&mut self, client_id: ClientId, salt: String, is_local: bool) {
+        self.add_client_with_ip(client_id, salt, is_local, None);
+    }
+
+    pub fn add_client_with_ip(
+        &mut self,
+        client_id: ClientId,
+        salt: String,
+        is_local: bool,
+        ip_addr: Option<[u8; 4]>,
+    ) {
         let client = HwAnteroomClient {
             nick: None,
             protocol_number: None,
             server_salt: salt,
-            is_checker: false,
-            is_local_admin,
+            is_Checker: false,
+            is_local_admin: is_local,
             is_registered: false,
             is_admin: false,
             is_contributor: false,
+            is_checker: false,
+            ip_addr,
+            web_password: String::new(),
+            has_password_challenge: false,
+            pings_queue: 0,
         };
         self.clients.insert(client_id, client);
     }
@@ -93,7 +96,7 @@ impl HwAnteroom {
         self.clients.contains(id)
     }
 
-    pub fn get_client(&mut self, id: ClientId) -> &HwAnteroomClient {
+    pub fn get_client(&self, id: ClientId) -> &HwAnteroomClient {
         &self.clients[id]
     }
 
@@ -102,41 +105,34 @@ impl HwAnteroom {
     }
 
     pub fn remove_client(&mut self, client_id: ClientId) -> Option<HwAnteroomClient> {
-        let client = self.clients.remove(client_id);
-        if let Some(HwAnteroomClient {
-            nick: Some(nick), ..
-        }) = &client
-        {
-            self.taken_nicks.remove(nick);
-        }
-        client
+        self.clients.remove(client_id)
     }
 
-    pub fn nick_taken(&self, nick: &str) -> bool {
-        self.taken_nicks.contains(nick)
+    pub fn find_ban(&mut self, addr: [u8; 4]) -> Option<String> {
+        self.bans.find_ip_ban(addr)
+    }
+
+    pub fn register_nick_token(&mut self, nick: &str) -> Option<&str> {
+        debug!("Registering token for {}", nick);
+        let mut bytes = [0u8; 18];
+        thread_rng().fill_bytes(&mut bytes);
+        self.nicks.insert(nick.to_string(), encode(bytes));
+        self.get_nick_token(nick)
     }
 
     pub fn remember_nick(&mut self, nick: String) {
-        self.taken_nicks.insert(nick);
+        self.nicks.insert(nick, String::new());
     }
 
     pub fn forget_nick(&mut self, nick: &str) {
-        self.taken_nicks.remove(nick);
+        self.nicks.remove(nick);
     }
 
-    #[inline]
     pub fn get_nick_token(&self, nick: &str) -> Option<&str> {
-        self.reconnection_tokens.get(nick).map(|s| &s[..])
+        self.nicks.get(nick).map(|s| &s[..])
     }
 
-    #[inline]
-    pub fn register_nick_token(&mut self, nick: &str) -> Option<&str> {
-        if self.reconnection_tokens.contains_key(nick) {
-            None
-        } else {
-            let token = format!("{:x}", Sha1Digest::random());
-            self.reconnection_tokens.insert(nick.to_string(), token);
-            Some(&self.reconnection_tokens[nick])
-        }
+    pub fn nick_taken(&self, nick: &str) -> bool {
+        self.nicks.contains_key(nick)
     }
 }

@@ -299,7 +299,25 @@ pub fn get_room_leave_result(
     result: LeaveRoomResult,
     response: &mut Response,
 ) {
-    let client = server.client(response.client_id);
+    get_room_leave_result_for_client(
+        server,
+        room,
+        response.client_id,
+        leave_message,
+        result,
+        response,
+    );
+}
+
+pub fn get_room_leave_result_for_client(
+    server: &HwServer,
+    room: &HwRoom,
+    leaving_client_id: ClientId,
+    leave_message: &str,
+    result: LeaveRoomResult,
+    response: &mut Response,
+) {
+    let client = server.client(leaving_client_id);
     response.add(ClientFlags(remove_flags(&[Flags::InRoom]), vec![client.nick.clone()]).send_all());
 
     match result {
@@ -318,8 +336,7 @@ pub fn get_room_leave_result(
                 response.add(
                     RoomLeft(client.nick.clone(), leave_message.to_string())
                         .send_all()
-                        .in_room(room.id)
-                        .but_self(),
+                        .in_room(room.id),
                 );
             }
 
@@ -335,17 +352,23 @@ pub fn get_room_leave_result(
 
                 if let Some(new_master_id) = new_master {
                     let new_master_nick = server.client(new_master_id).nick.clone();
+                    response.add(RoomControlAccess(true).send(new_master_id));
                     response.add(
                         ClientFlags(add_flags(&[Flags::RoomMaster]), vec![new_master_nick])
                             .send_all()
                             .in_room(room.id),
                     );
+                    response.add(
+                        server_chat("You're the new room master!".to_string()).send(new_master_id),
+                    );
                 }
+
+                response.add(Notice("1".to_string()).send_all().in_room(room.id));
             }
 
             get_remove_teams_data(room.id, was_in_game, removed_teams, response);
 
-            let master = new_master.or(Some(client.id)).map(|id| server.client(id));
+            let master = new_master.map(|id| server.client(id));
 
             get_room_update(
                 server.all_client_protocols().into_iter(),
@@ -365,24 +388,48 @@ pub fn remove_client(
     msg: String,
 ) {
     let client_id = response.client_id();
-    let client = server.client(client_id);
-    let nick = client.nick.clone();
+    remove_client_by_id(server, anteroom, client_id, response, msg);
+}
+
+pub fn remove_client_by_id(
+    server: &mut HwServer,
+    anteroom: &mut HwAnteroom,
+    client_id: ClientId,
+    response: &mut Response,
+    msg: String,
+) {
+    if server.is_checker(client_id) {
+        server.remove_client(client_id);
+        response.add(Bye(msg).send(client_id));
+        response.remove_client(client_id);
+        return;
+    }
+
+    if !server.has_client(client_id) {
+        return;
+    }
+
+    let nick = server.client(client_id).nick.clone();
     anteroom.forget_nick(&nick);
 
     if let HwRoomOrServer::Room(mut control) = server.get_room_control(client_id) {
         let room_id = control.room().id;
         let result = control.leave_room();
         let server = control.server();
-        get_room_leave_result(server, server.room(room_id), &msg, result, response);
+        get_room_leave_result_for_client(
+            server,
+            server.room(room_id),
+            client_id,
+            &msg,
+            result,
+            response,
+        );
     }
 
-    let is_checker = server.is_checker(client_id);
     server.remove_client(client_id);
 
-    if !is_checker {
-        response.add(LobbyLeft(nick, msg.clone()).send_all());
-    }
-    response.add(Bye(msg).send_self());
+    response.add(LobbyLeft(nick, msg.clone()).send_all());
+    response.add(Bye(msg).send(client_id));
     response.remove_client(client_id);
 }
 
@@ -573,9 +620,10 @@ pub fn handle_vote(
         match effect {
             VoteEffect::Kicked(kicked_id, leave_result) => {
                 response.add(Kicked.send(kicked_id));
-                get_room_leave_result(
+                get_room_leave_result_for_client(
                     room_control.server(),
                     room_control.room(),
+                    kicked_id,
                     "kicked",
                     leave_result,
                     response,

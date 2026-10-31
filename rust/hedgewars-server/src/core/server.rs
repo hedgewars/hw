@@ -231,6 +231,16 @@ impl HwServer {
     }
 
     #[inline]
+    pub fn client_mut(&mut self, client_id: ClientId) -> &mut HwClient {
+        &mut self.clients[client_id]
+    }
+
+    #[inline]
+    pub fn get_client_mut(&mut self, client_id: ClientId) -> Option<&mut HwClient> {
+        self.clients.get_mut(client_id)
+    }
+
+    #[inline]
     pub fn get_checker_mut(&mut self, checker_id: CheckerId) -> Option<&mut HwChecker> {
         self.checkers.get_mut(checker_id)
     }
@@ -304,10 +314,15 @@ impl HwServer {
                 client_id,
                 HwChecker::new(client_id, data.protocol_number.map_or(0, |p| p.get())),
             );
-        } else if let (Some(protocol), Some(nick)) = (data.protocol_number, data.nick) {
+        } else if data.protocol_number.is_some() && data.nick.is_some() {
+            let host = data.host_string();
+            let protocol = data.protocol_number.unwrap();
+            let nick = data.nick.unwrap();
             let mut client = HwClient::new(client_id, protocol.get(), nick);
+            client.host = host;
+            client.pings_queue = data.pings_queue;
             #[cfg(not(feature = "official-server"))]
-            client.set_is_admin(data.is_local_admin);
+            client.set_is_admin(data.is_local_admin || data.is_admin);
 
             #[cfg(feature = "official-server")]
             {

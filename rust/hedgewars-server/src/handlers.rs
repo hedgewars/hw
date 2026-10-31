@@ -359,9 +359,13 @@ pub fn handle(
                             HwRoomOrServer::Room(control) => {
                                 inroom::handle(control, response, message)
                             }
-                            HwRoomOrServer::Server(server) => {
-                                inlobby::handle(server, client_id, response, message)
-                            }
+                            HwRoomOrServer::Server(server) => inlobby::handle(
+                                server,
+                                &mut state.anteroom,
+                                client_id,
+                                response,
+                                message,
+                            ),
                         },
                     }
                 }
@@ -377,10 +381,7 @@ pub fn handle_client_accept(
     addr: [u8; 4],
     is_local: bool,
 ) -> bool {
-    let ban_reason = Some(addr)
-        .filter(|_| !is_local)
-        .and_then(|a| state.anteroom.find_ip_ban(a));
-    if let Some(reason) = ban_reason {
+    if let Err(reason) = state.anteroom.try_accept(Some(addr)) {
         response.add(Bye(reason).send_self());
         response.remove_client(client_id);
         false
@@ -388,7 +389,9 @@ pub fn handle_client_accept(
         let mut salt = [0u8; 18];
         thread_rng().fill_bytes(&mut salt);
 
-        state.anteroom.add_client(client_id, encode(salt), is_local);
+        state
+            .anteroom
+            .add_client_with_ip(client_id, encode(salt), is_local, Some(addr));
 
         response
             .add(Connected(utils::SERVER_MESSAGE.to_owned(), utils::SERVER_VERSION).send_self());

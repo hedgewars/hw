@@ -345,6 +345,13 @@ impl NetworkLayer {
             return;
         }
 
+        debug!("{} pending server messages", response.len());
+        let output = response.extract_messages(&self.server_state.server);
+        for (clients, message) in output {
+            debug!("Message {:?} to {:?}", message, clients);
+            Self::send_message(&mut self.clients, message, clients.iter().cloned()).await;
+        }
+
         for client_id in response.extract_removed_clients() {
             if self.clients.contains(client_id) {
                 self.clients.remove(client_id);
@@ -355,13 +362,6 @@ impl NetworkLayer {
                 }
             }
             info!("Client {} removed", client_id);
-        }
-
-        debug!("{} pending server messages", response.len());
-        let output = response.extract_messages(&self.server_state.server);
-        for (clients, message) in output {
-            debug!("Message {:?} to {:?}", message, clients);
-            Self::send_message(&mut self.clients, message, clients.iter().cloned()).await;
         }
     }
 

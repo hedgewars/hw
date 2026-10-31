@@ -2,6 +2,7 @@ use super::{common::rnd_reply, strings::*};
 use crate::handlers::{actions::ToPendingMessage, checker};
 use crate::{
     core::{
+        anteroom::HwAnteroom,
         client::HwClient,
         server::{AccessError, CreateRoomError, HwServer, JoinRoomError},
         types::ClientId,
@@ -10,16 +11,18 @@ use crate::{
 };
 use hedgewars_network_protocol::{
     messages::{
-        add_flags, remove_flags, server_chat, HwProtocolMessage, HwServerMessage::*,
+        add_flags, remove_flags, server_chat, HwProtocolMessage,
+        HwServerMessage::{self, *},
         ProtocolFlags as Flags,
     },
     types::ServerVar,
 };
 use log::*;
-use std::{collections::HashSet, convert::identity};
+use std::{collections::HashSet, convert::identity, time::Duration};
 
 pub fn handle(
     server: &mut HwServer,
+    anteroom: &mut HwAnteroom,
     client_id: ClientId,
     response: &mut super::Response,
     message: HwProtocolMessage,
@@ -142,6 +145,77 @@ pub fn handle(
             }
         },
         List => warn!("Deprecated LIST message received"),
+        Kick(nick) => {
+            if server.is_admin(client_id) {
+                if let Some(target) = server.find_client(&nick) {
+                    let target_id = target.id;
+                    if target_id != client_id {
+                        let host = target.host.clone();
+                        if !host.is_empty() {
+                            anteroom.bans.add_ip_ban_raw(
+                                host,
+                                "60 seconds cooldown after kick".to_string(),
+                                60,
+                            );
+                        }
+                        server.client_mut(target_id).is_kicked_from_server = true;
+                        super::common::remove_client_by_id(
+                            server,
+                            anteroom,
+                            target_id,
+                            response,
+                            "Kicked".to_string(),
+                        );
+                    }
+                }
+            }
+        }
+        Ban(nick, reason, time) => {
+            if server.is_admin(client_id) {
+                if let Some(target) = server.find_client(&nick) {
+                    let target_id = target.id;
+                    if target_id != client_id {
+                        let host = target.host.clone();
+                        if !host.is_empty() {
+                            anteroom.bans.add_ip_ban_raw(
+                                host.clone(),
+                                "60 seconds cooldown after kick".to_string(),
+                                60,
+                            );
+                            anteroom.bans.add_ip_ban(host, reason, time);
+                        }
+                        server.client_mut(target_id).is_kicked_from_server = true;
+                        super::common::remove_client_by_id(
+                            server,
+                            anteroom,
+                            target_id,
+                            response,
+                            "Kicked".to_string(),
+                        );
+                    }
+                }
+            }
+        }
+        BanIp(ip, reason, time) => {
+            if server.is_admin(client_id) {
+                anteroom.bans.add_ip_ban(ip, reason, time);
+            }
+        }
+        BanNick(nick, reason, time) => {
+            if server.is_admin(client_id) {
+                anteroom.bans.add_nick_ban(nick, reason, time);
+            }
+        }
+        HwProtocolMessage::BanList => {
+            if server.is_admin(client_id) {
+                response.add(HwServerMessage::BanList(anteroom.bans.to_protocol_list()).send_self());
+            }
+        }
+        Unban(entry) => {
+            if server.is_admin(client_id) {
+                anteroom.bans.unban(&entry);
+            }
+        }
         _ => warn!("Incorrect command in lobby state"),
     }
 }

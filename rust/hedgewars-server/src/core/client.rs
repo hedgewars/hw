@@ -23,25 +23,32 @@ pub struct HwClient {
     pub id: ClientId,
     pub room_id: Option<usize>,
     pub nick: String,
+    pub host: String,
     pub protocol_number: u16,
     pub flags: ClientFlags,
     pub teams_in_game: u8,
     pub team_indices: Vec<u8>,
     pub clan: Option<u8>,
+    pub has_asked_list: bool,
+    pub pings_queue: u32,
+    pub is_kicked_from_server: bool,
 }
 
 impl HwClient {
     pub fn new(id: ClientId, protocol_number: u16, nick: String) -> HwClient {
-        //todo!("add quiet flag");
         HwClient {
             id,
             nick,
+            host: String::new(),
             protocol_number,
             room_id: None,
             flags: ClientFlags::DEFAULT,
             teams_in_game: 0,
             team_indices: Vec::new(),
             clan: None,
+            has_asked_list: false,
+            pings_queue: 0,
+            is_kicked_from_server: false,
         }
     }
 
