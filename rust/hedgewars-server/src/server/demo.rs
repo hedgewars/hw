@@ -16,6 +16,186 @@ pub struct Demo {
     messages: Vec<String>,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct GameDetails {
+    pub script: String,
+    pub inf_ropes: bool,
+    pub vamp: bool,
+    pub inf_attacks: bool,
+}
+
+const GAME_FLAG_CONSTS: &[u32] = &[
+    0x0000_1000,
+    0x0000_0010,
+    0x0000_0004,
+    0x0000_0008,
+    0x0000_0020,
+    0x0000_0040,
+    0x0000_0080,
+    0x0000_0100,
+    0x0000_0200,
+    0x0000_0400,
+    0x0000_0800,
+    0x0000_2000,
+    0x0000_4000,
+    0x0000_8000,
+    0x0001_0000,
+    0x0002_0000,
+    0x0004_0000,
+    0x0008_0000,
+    0x0010_0000,
+    0x0020_0000,
+    0x0040_0000,
+    0x0080_0000,
+    0x0100_0000,
+    0x0200_0000,
+];
+
+const SCHEME_PARAMS: &[(&str, i32)] = &[
+    ("e$damagepct", 1),
+    ("e$turntime", 1000),
+    ("", 0),
+    ("e$sd_turns", 1),
+    ("e$casefreq", 1),
+    ("e$minestime", 1000),
+    ("e$minesnum", 1),
+    ("e$minedudpct", 1),
+    ("e$explosives", 1),
+    ("e$airmines", 1),
+    ("e$healthprob", 1),
+    ("e$hcaseamount", 1),
+    ("e$waterrise", 1),
+    ("e$healthdec", 1),
+    ("e$ropepct", 1),
+    ("e$getawaytime", 1),
+    ("e$worldedge", 1),
+];
+
+pub fn replay_to_demo(replay: &Replay) -> (Option<GameDetails>, Vec<String>) {
+    let em = |s: &str| crate::utils::to_engine_msg(s.bytes());
+    let config = &replay.config;
+    let scheme = &config.scheme.settings;
+    let ammo_str = match &config.ammo.settings {
+        Some(s) if s.len() > 200 => s.as_str(),
+        _ => return (None, Vec::new()),
+    };
+    if scheme.len() < 42 {
+        return (None, Vec::new());
+    }
+
+    let mut msgs = Vec::new();
+    msgs.push(em("TD"));
+
+    if config.script != "Normal" {
+        msgs.push(em(&format!(
+            "escript Scripts/Multiplayer/{}.lua",
+            config.script.replace(' ', "_")
+        )));
+    }
+
+    if !["+rnd+", "+maze+", "+drawn+", "+perlin+"].contains(&config.map_type.as_str()) {
+        msgs.push(em(&format!("emap {}", config.map_type)));
+    }
+
+    msgs.push(em(&format!("etheme {}", config.theme)));
+    msgs.push(em(&format!("eseed {}", config.seed)));
+
+    let mut game_flags: u32 = 0;
+    for (b, &f) in scheme.iter().zip(GAME_FLAG_CONSTS.iter()) {
+        if b != "false" {
+            game_flags |= f;
+        }
+    }
+    msgs.push(em(&format!("e$gmflags {}", game_flags)));
+
+    for (v, &(name, mult)) in scheme
+        .iter()
+        .skip(GAME_FLAG_CONSTS.len())
+        .zip(SCHEME_PARAMS.iter())
+    {
+        if !name.is_empty() {
+            let val = v.parse::<i32>().unwrap_or(0) * mult;
+            msgs.push(em(&format!("{} {}", name, val)));
+        }
+    }
+
+    if let Some(sp) = scheme.get(42) {
+        if sp.len() > 1 {
+            msgs.push(em(&format!("e$scriptparam {}", &sp[1..])));
+        }
+    }
+
+    msgs.push(em(&format!("e$template_filter {}", config.template)));
+    msgs.push(em(&format!("e$feature_size {}", config.feature_size)));
+    msgs.push(em(&format!("e$mapgen {}", config.map_generator)));
+
+    match config.map_generator {
+        1 | 2 => {
+            msgs.push(em(&format!("e$maze_size {}", config.maze_size)));
+        }
+        3 => {
+            if let Some(ref dm) = config.drawn_map {
+                if dm.len() > 4 {
+                    let unpacked = crate::core::ghosts::unpack_drawn_map(dm);
+                    for chunk in unpacked.chunks(200) {
+                        msgs.push(crate::utils::to_engine_msg(
+                            b"edraw ".iter().copied().chain(chunk.iter().copied()),
+                        ));
+                    }
+                }
+            }
+        }
+        _ => {}
+    }
+
+    let l = ammo_str.len() / 4;
+    let a = &ammo_str[0..l];
+    let b = &ammo_str[l..2 * l];
+    let c = &ammo_str[2 * l..3 * l];
+    let d = &ammo_str[3 * l..4 * l];
+    let mut ammo_msgs = vec![
+        em(&format!("eammloadt {}", a)),
+        em(&format!("eammprob {}", b)),
+        em(&format!("eammdelay {}", c)),
+        em(&format!("eammreinf {}", d)),
+    ];
+    if scheme.get(14).map_or(false, |s| s == "true")
+        || scheme.get(20).map_or(false, |s| s == "false")
+    {
+        ammo_msgs.push(em("eammstore"));
+    }
+
+    let init_health = &scheme[27];
+    for team in &replay.teams {
+        msgs.extend(ammo_msgs.iter().cloned());
+        msgs.push(em(&format!(
+            "eaddteam <hash> {} {}",
+            (team.color as i32 + 1) * 2113696,
+            team.name
+        )));
+        msgs.push(em("erdriven"));
+        msgs.push(em(&format!("efort {}", team.fort)));
+        for hog in team.hedgehogs.iter().take(team.hedgehogs_number as usize) {
+            msgs.push(em(&format!(
+                "eaddhh {} {} {}",
+                team.difficulty, init_health, hog.name
+            )));
+            msgs.push(em(&format!("ehat {}", hog.hat)));
+        }
+    }
+
+    msgs.extend(replay.message_log.iter().cloned());
+    msgs.push(em("!"));
+
+    let details = GameDetails {
+        script: config.script.clone(),
+        inf_ropes: ammo_str.as_bytes().get(7) == Some(&b'9'),
+        vamp: (game_flags & 0x0000_0200) != 0,
+        inf_attacks: (game_flags & 0x0010_0000) != 0,
+    };
+    (Some(details), msgs)
+}
+
 impl Demo {
     fn load_hwd(filename: String) -> io::Result<Self> {
         let file = fs::File::open(filename)?;
@@ -256,10 +436,12 @@ fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
 
         fields.insert("teamowner".to_string(), Hs::String(team.owner));
         fields.insert("teamname".to_string(), Hs::String(team.name));
-        fields.insert("teamcolor".to_string(), Hs::Number(team.color));
+        fields.insert("teamcolor".to_string(), Hs::String(team.color.to_string()));
         fields.insert("teamgrave".to_string(), Hs::String(team.grave));
+        fields.insert("teamfort".to_string(), Hs::String(team.fort));
         fields.insert("teamvoicepack".to_string(), Hs::String(team.voice_pack));
         fields.insert("teamflag".to_string(), Hs::String(team.flag));
+        fields.insert("isOwnerRegistered".to_string(), Hs::Boolean(false));
         fields.insert("difficulty".to_string(), Hs::Number(team.difficulty));
         fields.insert("hhnum".to_string(), Hs::Number(team.hedgehogs_number));
 
@@ -298,9 +480,6 @@ fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
     save_map_config("MAZE_SIZE", config.maze_size.to_string());
     save_map_config("SEED", config.seed);
     save_map_config("TEMPLATE", config.template.to_string());
-    if let Some(drawn_map) = config.drawn_map {
-        save_map_config("DRAWNMAP", drawn_map);
-    }
 
     let mut save_game_config = |name: &str, mut value: Vec<String>| {
         game_config.push(Hs::Tuple(vec![
@@ -308,6 +487,10 @@ fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
             Hs::List(value.drain(..).map(Hs::String).collect()),
         ]));
     };
+
+    if let Some(drawn_map) = config.drawn_map {
+        save_game_config("DRAWNMAP", vec![drawn_map]);
+    }
 
     match config.ammo {
         Ammo {
@@ -331,7 +514,7 @@ fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
         Hs::List(teams),
         Hs::List(map_config),
         Hs::List(game_config),
-        Hs::List(replay.message_log.drain(..).map(Hs::String).collect()),
+        Hs::List(replay.message_log.drain(..).rev().map(Hs::String).collect()),
     ])
 }
 
@@ -424,13 +607,14 @@ fn haskell_to_replay(value: HaskellValue) -> Option<Replay> {
             }
             "SCRIPT" => config.script = value_iter.next()?.into_string()?,
             "THEME" => config.theme = value_iter.next()?.into_string()?,
-            _ => None?,
+            "DRAWNMAP" => config.drawn_map = value_iter.next().and_then(|v| v.into_string()),
+            _ => {}
         };
     }
 
     let mut messages = Vec::with_capacity(engine_messages.len());
 
-    for message in engine_messages {
+    for message in engine_messages.into_iter().rev() {
         messages.push(message.into_string()?);
     }
 
@@ -444,7 +628,7 @@ fn haskell_to_replay(value: HaskellValue) -> Option<Replay> {
 impl Replay {
     pub fn save(self, filename: String) -> io::Result<()> {
         let text = format!("{}", replay_to_haskell(self));
-        let mut file = fs::File::open(filename)?;
+        let mut file = fs::File::create(filename)?;
         file.write_all(text.as_bytes())?;
         Ok(())
     }

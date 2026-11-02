@@ -91,6 +91,13 @@ pub enum IoTask {
         room_id: RoomId,
         filename: String,
     },
+    StoreAchievements {
+        protocol: u16,
+        filename: String,
+        teams: Vec<(String, String)>,
+        game_details: crate::server::demo::GameDetails,
+        info: Vec<String>,
+    },
 }
 
 #[derive(Debug)]
@@ -513,22 +520,23 @@ pub fn handle_io_result(
             if !state.anteroom.has_client(client_id) {
                 return;
             }
-            if !is_admin {
-                state.anteroom.remove_client(client_id);
-                response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
-                response.remove_client(client_id);
-            } else if is_registered {
-                if let Some(client) = state.anteroom.remove_client(client_id) {
-                    state.server.add_client(client_id, client);
-                    response.add(LogonPassed.send_self());
-                }
-            } else {
+            if !is_registered {
                 state.anteroom.remove_client(client_id);
                 response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
                 response.remove_client(client_id);
+            } else if !is_admin {
+                state.anteroom.remove_client(client_id);
+                response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
+                response.remove_client(client_id);
+            } else if let Some(client) = state.anteroom.remove_client(client_id) {
+                state.server.add_client(client_id, client);
+                response.add(LogonPassed.send_self());
             }
         }
         IoResult::Replay(Some(replay)) => {
+            if !state.server.has_client(client_id) {
+                return;
+            }
             let client = state.server.client(client_id);
             let protocol = client.protocol_number;
             let start_msg = if protocol < 58 {
@@ -547,9 +555,7 @@ pub fn handle_io_result(
                 response.add(Kicked.send_self());
             }
         }
-        IoResult::Replay(None) => {
-            response.warn(REPLAY_LOAD_FAILED);
-        }
+        IoResult::Replay(None) => {}
         IoResult::SaveRoom(_, true) => {
             response.add(server_chat(ROOM_CONFIG_SAVED.to_string()).send_self());
         }

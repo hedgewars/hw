@@ -147,6 +147,7 @@ pub enum StartGameError {
 pub struct EndGameResult {
     pub left_teams: Vec<String>,
     pub unreadied_nicks: Vec<String>,
+    pub checker_replay: Option<(CheckerId, Vec<String>)>,
 }
 
 #[derive(Debug)]
@@ -179,6 +180,8 @@ pub struct HwChecker {
     pub is_ready: bool,
     pub protocol_number: u16,
     pub current_replay: Option<ReplayId>,
+    pub current_teams: Vec<(String, String)>,
+    pub current_details: Option<crate::server::demo::GameDetails>,
 }
 
 impl HwChecker {
@@ -188,6 +191,8 @@ impl HwChecker {
             is_ready: false,
             protocol_number,
             current_replay: None,
+            current_teams: Vec::new(),
+            current_details: None,
         }
     }
 
@@ -219,8 +224,36 @@ impl HwServer {
             greetings: ServerGreetings::new(),
             latest_protocol: 58,
             flags: ServerFlags::empty(),
-            replay_storage: None,
+            replay_storage: Some(ReplayStorage::new()),
         }
+    }
+
+    pub fn find_ready_checker(&self, protocol: u16) -> Option<CheckerId> {
+        self.checkers
+            .iter()
+            .find(|(_, c)| c.is_ready && c.protocol_number == protocol)
+            .map(|(id, _)| id)
+    }
+
+    pub fn assign_replay_to_checker(
+        &mut self,
+        checker_id: CheckerId,
+    ) -> Option<(CheckerId, Vec<String>)> {
+        let protocol = self.checkers.get(checker_id)?.protocol_number;
+        let (id, replay) = self.replay_storage.as_mut()?.pick_replay(protocol)?;
+        let (details, demo_msgs) = crate::server::demo::replay_to_demo(&replay);
+        let teams = replay
+            .teams
+            .iter()
+            .map(|t| (t.name.clone(), t.owner.clone()))
+            .collect();
+        if let Some(c) = self.checkers.get_mut(checker_id) {
+            c.set_is_ready(false);
+            c.current_replay = Some(id);
+            c.current_teams = teams;
+            c.current_details = details;
+        }
+        Some((checker_id, demo_msgs))
     }
 
     pub fn all_client_protocols(&self) -> HashSet<u16> {
@@ -1220,12 +1253,30 @@ impl<'a> HwRoomControl<'a> {
 
         if let Some(info) = room.game_info.take() {
             let room_id = room.id;
+            let room_proto = room.protocol_number;
             let mut left_teams = Vec::new();
             for team_name in &info.rejoined_teams {
                 if room.find_team(|t| t.name == *team_name).is_some() {
                     room.remove_team(team_name);
                     left_teams.push(team_name.clone());
                 }
+            }
+
+            #[cfg(feature = "official-server")]
+            if info.all_players_registered {
+                let replay = super::types::Replay {
+                    config: room.config().clone(),
+                    teams: info.original_teams.iter().map(|t| t.info.clone()).collect(),
+                    message_log: info.msg_log.clone(),
+                };
+                let uid: u32 = thread_rng().gen_range(10000..100000);
+                let filename = format!(
+                    "replays/{} UTC-{}.{}",
+                    chrono::Utc::now().format("%Y-%m-%d %H:%M:%S%.f"),
+                    uid,
+                    room_proto
+                );
+                let _ = replay.save(filename);
             }
 
             let unreadied_nicks: Vec<_> = self
@@ -1247,9 +1298,22 @@ impl<'a> HwRoomControl<'a> {
                 })
                 .collect();
 
+            #[cfg(feature = "official-server")]
+            let checker_replay = if info.all_players_registered {
+                self.server
+                    .find_ready_checker(room_proto)
+                    .and_then(|cid| self.server.assign_replay_to_checker(cid))
+            } else {
+                None
+            };
+
+            #[cfg(not(feature = "official-server"))]
+            let checker_replay = None;
+
             Some(EndGameResult {
                 left_teams,
                 unreadied_nicks,
+                checker_replay,
             })
         } else {
             None

@@ -844,6 +844,10 @@ pub fn get_end_game_result(
                 .in_room(room_id),
         );
     }
+
+    if let Some((checker_id, demo_msgs)) = result.checker_replay {
+        response.add(HwServerMessage::Replay(demo_msgs).send(checker_id));
+    }
 }
 
 #[cfg(test)]

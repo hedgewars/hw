@@ -277,10 +277,13 @@ fn string_content(input: &[u8]) -> HaskellResult<'_, String> {
 }
 
 fn string(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
-    map(
-        delimited(tag("\""), string_content, tag("\"")),
-        HaskellValue::String,
-    )(input)
+    alt((
+        map(tag("\"\""), |_| HaskellValue::String(String::new())),
+        map(
+            delimited(tag("\""), string_content, tag("\"")),
+            HaskellValue::String,
+        ),
+    ))(input)
 }
 
 fn tuple(input: &[u8]) -> HaskellResult<'_, HaskellValue> {

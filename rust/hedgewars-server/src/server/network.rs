@@ -215,7 +215,9 @@ struct TlsListener {
 pub struct NetworkLayer {
     listener: TcpListener,
     #[cfg(feature = "tls-connections")]
-    tls: TlsListener,
+    tls: Option<TlsListener>,
+    #[cfg(feature = "official-server")]
+    db: super::database::Database,
     server_state: ServerState,
     clients: Slab<Sender<Bytes>>,
     update_tx: Sender<ClientUpdate>,
@@ -242,7 +244,10 @@ impl NetworkLayer {
             update_tx: Sender<ClientUpdate>,
         ) {
             let (stream, addr) = value;
-            match layer.tls.acceptor.accept(stream).await {
+            let Some(ref tls) = layer.tls else {
+                return;
+            };
+            match tls.acceptor.accept(stream).await {
                 Ok(stream) => {
                     if let Some(client) = layer.create_client(ClientStream::Tls(stream), addr).await
                     {
@@ -287,8 +292,6 @@ impl NetworkLayer {
             }
         }
 
-        //todo!("add the DB task");
-        //todo!("add certfile watcher task");
         loop {
             #[cfg(not(feature = "tls-connections"))]
             tokio::select! {
@@ -297,10 +300,17 @@ impl NetworkLayer {
             }
 
             #[cfg(feature = "tls-connections")]
-            tokio::select! {
-                Ok(value) = self.listener.accept() => accept_plain_branch(self, value, self.update_tx.clone()).await,
-                Ok(value) = self.tls.listener.accept() => accept_tls_branch(self, value, self.update_tx.clone()).await,
-                client_message = self.update_rx.recv(), if !self.clients.is_empty() => client_message_branch(self, client_message).await
+            if self.tls.is_some() {
+                tokio::select! {
+                    Ok(value) = self.listener.accept() => accept_plain_branch(self, value, self.update_tx.clone()).await,
+                    Ok(value) = self.tls.as_ref().unwrap().listener.accept() => accept_tls_branch(self, value, self.update_tx.clone()).await,
+                    client_message = self.update_rx.recv(), if !self.clients.is_empty() => client_message_branch(self, client_message).await
+                }
+            } else {
+                tokio::select! {
+                    Ok(value) = self.listener.accept() => accept_plain_branch(self, value, self.update_tx.clone()).await,
+                    client_message = self.update_rx.recv(), if !self.clients.is_empty() => client_message_branch(self, client_message).await
+                }
             }
         }
     }
@@ -350,27 +360,39 @@ impl NetworkLayer {
     }
 
     async fn handle_response(&mut self, mut response: handlers::Response) {
-        if response.is_empty() {
-            return;
-        }
+        while !response.is_empty() {
+            debug!("{} pending server messages", response.len());
+            let output = response.extract_messages(&self.server_state.server);
+            for (clients, message) in output {
+                debug!("Message {:?} to {:?}", message, clients);
+                Self::send_message(&mut self.clients, message, clients.iter().cloned()).await;
+            }
 
-        debug!("{} pending server messages", response.len());
-        let output = response.extract_messages(&self.server_state.server);
-        for (clients, message) in output {
-            debug!("Message {:?} to {:?}", message, clients);
-            Self::send_message(&mut self.clients, message, clients.iter().cloned()).await;
-        }
+            for client_id in response.extract_removed_clients() {
+                if self.clients.contains(client_id) {
+                    self.clients.remove(client_id);
+                    if self.clients.is_empty() {
+                        let (update_tx, update_rx) = channel(128);
+                        self.update_rx = update_rx;
+                        self.update_tx = update_tx;
+                    }
+                }
+                info!("Client {} removed", client_id);
+            }
 
-        for client_id in response.extract_removed_clients() {
-            if self.clients.contains(client_id) {
-                self.clients.remove(client_id);
-                if self.clients.is_empty() {
-                    let (update_tx, update_rx) = channel(128);
-                    self.update_rx = update_rx;
-                    self.update_tx = update_tx;
+            let io_tasks: Vec<_> = response.extract_io_tasks().collect();
+            let req_client_id = response.client_id();
+            #[cfg(feature = "official-server")]
+            for task in io_tasks {
+                if let Some(io_result) = self.db.execute_task(task).await {
+                    handlers::handle_io_result(
+                        &mut self.server_state,
+                        req_client_id,
+                        &mut response,
+                        io_result,
+                    );
                 }
             }
-            info!("Client {} removed", client_id);
         }
     }
 
@@ -447,13 +469,19 @@ impl NetworkLayerBuilder {
         let clients = Slab::with_capacity(self.clients_capacity);
         let (update_tx, update_rx) = channel(128);
 
+        #[cfg(feature = "official-server")]
+        let db_url = std::env::var("HEDGEWARS_DB_URL")
+            .unwrap_or_else(|_| "mysql://hedgewars@127.0.0.1/hedgewars".to_string());
+
         NetworkLayer {
             listener: self.listener.expect("No listener provided"),
             #[cfg(feature = "tls-connections")]
-            tls: TlsListener {
-                listener: self.tls_listener.expect("No TLS listener provided"),
-                acceptor: self.tls_acceptor.expect("No TLS acceptor provided"),
+            tls: match (self.tls_listener, self.tls_acceptor) {
+                (Some(listener), Some(acceptor)) => Some(TlsListener { listener, acceptor }),
+                _ => None,
             },
+            #[cfg(feature = "official-server")]
+            db: super::database::Database::new(&db_url),
             server_state,
             clients,
             update_tx,

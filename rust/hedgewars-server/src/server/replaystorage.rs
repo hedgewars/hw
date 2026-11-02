@@ -12,6 +12,12 @@ pub struct ReplayId {
     path: PathBuf,
 }
 
+impl ReplayId {
+    pub fn filename(&self) -> String {
+        self.path.to_string_lossy().to_string()
+    }
+}
+
 impl ReplayStorage {
     pub fn new() -> Self {
         ReplayStorage {
@@ -25,7 +31,9 @@ impl ReplayStorage {
             .ok()?
             .flat_map(|f| Some(f.ok()?.path()))
             .find(|f| {
-                f.ends_with(&protocol_suffix) && !self.borrowed_replays.iter().any(|e| &e.path == f)
+                f.to_str()
+                    .map_or(false, |s| s.ends_with(&protocol_suffix))
+                    && !self.borrowed_replays.iter().any(|e| &e.path == f)
             })
             .and_then(|f| {
                 Some((
