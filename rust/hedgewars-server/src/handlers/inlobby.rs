@@ -42,21 +42,24 @@ pub fn handle(
                 Err(CreateRoomError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
                 Err(CreateRoomError::AlreadyExists) => response.warn(ROOM_EXISTS),
                 Ok((client, room)) => {
+                    response.add(RoomJoined(vec![client.nick.clone()]).send_self());
+                    response.add(
+                        ClientFlags(add_flags(&[Flags::InRoom]), vec![client.nick.clone()])
+                            .send_all(),
+                    );
                     for protocol in all_protocols {
                         response.add(
                             RoomAdd(room.info(Some(client), protocol))
                                 .send_all()
-                                .in_lobby()
                                 .with_protocol(protocol),
                         );
                     }
-                    response.add(RoomJoined(vec![client.nick.clone()]).send_self());
                     response.add(
                         ClientFlags(
-                            add_flags(&[Flags::RoomMaster, Flags::Ready, Flags::InRoom]),
+                            add_flags(&[Flags::RoomMaster, Flags::Ready]),
                             vec![client.nick.clone()],
                         )
-                        .send_all(),
+                        .send_self(),
                     );
                     super::common::register_flood_event(
                         server,

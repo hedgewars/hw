@@ -30,6 +30,7 @@ pub enum JoinRoomError {
     Full,
     Restricted,
     RegistrationRequired,
+    RoomBanned,
 }
 
 #[derive(Debug)]
@@ -99,6 +100,7 @@ pub enum SetConfigError {
 
 #[derive(Debug)]
 pub enum ModifyRoomNameError {
+    NotMaster,
     AccessDenied,
     InvalidName,
     DuplicateName,
@@ -394,17 +396,19 @@ impl HwServer {
         let room = &mut self.rooms[room_id];
         let client = &mut self.clients[client_id];
 
-        if client.protocol_number != room.protocol_number {
+        if client.protocol_number != room.protocol_number && !client.is_admin() {
             Err(WrongProtocol)
+        } else if room.is_join_restricted() && !client.has_super_power() {
+            Err(Restricted)
+        } else if room.is_registration_required() && !client.is_registered() && !client.is_admin() {
+            Err(RegistrationRequired)
+        } else if !client.host.is_empty() && room.bans.contains(&client.host) {
+            Err(RoomBanned)
         } else if room.password.is_some()
             && room_password != room.password.as_deref()
             && !client.has_super_power()
         {
             Err(WrongPassword)
-        } else if room.is_join_restricted() {
-            Err(Restricted)
-        } else if room.is_registration_required() && !client.is_registered() {
-            Err(RegistrationRequired)
         } else if room.players_number == u8::MAX {
             Err(Full)
         } else {
@@ -440,6 +444,8 @@ impl HwServer {
         if let Some((_, room)) = room {
             let room_id = room.id;
             self.join_room(client_id, room_id, room_password)
+        } else if self.clients[client_id].protocol_number < 60 && room_name.starts_with("[v") {
+            Err(WrongProtocol)
         } else {
             Err(DoesntExist)
         }
@@ -663,7 +669,7 @@ impl<'a> HwRoomControl<'a> {
     }
 
     #[inline]
-    fn room_mut(&mut self) -> &mut HwRoom {
+    pub fn room_mut(&mut self) -> &mut HwRoom {
         &mut self.server.rooms[self.room_id]
     }
 
@@ -717,16 +723,17 @@ impl<'a> HwRoomControl<'a> {
                 }
             }
 
-            if client.is_master() && !is_fixed {
+            if client.is_master() {
                 client.set_is_master(false);
                 room.master_id = None;
             }
         }
 
+        let is_kicked_from_server = client.is_kicked_from_server;
         client.set_is_ready(false);
         client.set_is_in_game(false);
 
-        if !self.is_room_removed && room.master_id.is_none() {
+        if !self.is_room_removed && !is_fixed && room.master_id.is_none() {
             let protocol_number = room.protocol_number;
             let new_master_id = self.server.room_client_ids(self.room_id).next();
 
@@ -736,7 +743,7 @@ impl<'a> HwRoomControl<'a> {
                 let new_master = &mut self.server.clients[new_master_id];
                 new_master.set_is_master(true);
 
-                if protocol_number < 42 {
+                if protocol_number < 42 || is_kicked_from_server {
                     let nick = new_master.nick.clone();
                     self.room_mut().name = nick;
                 }
@@ -765,6 +772,10 @@ impl<'a> HwRoomControl<'a> {
         self.remove_from_room(self.client_id)
     }
 
+    pub fn kick_user(&mut self, client_id: ClientId) -> LeaveRoomResult {
+        self.remove_from_room(client_id)
+    }
+
     pub fn change_master(
         &mut self,
         new_master_nick: String,
@@ -781,17 +792,29 @@ impl<'a> HwRoomControl<'a> {
                 .map(|(id, _)| id);
 
             match new_master_id {
-                Some(new_master_id) if new_master_id == self.client_id => Err(AlreadyMaster),
+                Some(new_master_id) if self.room().master_id == Some(new_master_id) => {
+                    Err(AlreadyMaster)
+                }
                 Some(new_master_id) => {
                     let new_master = &mut self.server.clients[new_master_id];
                     if new_master.room_id == Some(self.room_id) {
+                        let new_master_nick_str = new_master.nick.clone();
                         self.server.clients[new_master_id].set_is_master(true);
                         let old_master_id = self.room().master_id;
 
                         if let Some(master_id) = old_master_id {
                             self.server.clients[master_id].set_is_master(false);
                         }
-                        self.room_mut().master_id = Some(new_master_id);
+                        let is_fixed = self.room().is_fixed();
+                        let proto = self.room().protocol_number;
+                        let room = self.room_mut();
+                        room.master_id = Some(new_master_id);
+                        if proto < 42 && !is_fixed {
+                            room.name = new_master_nick_str;
+                        }
+                        room.set_join_restriction(false);
+                        room.set_team_add_restriction(false);
+                        room.set_unregistered_players_restriction(is_fixed);
                         Ok(ChangeMasterResult {
                             old_master_id,
                             new_master_id,
@@ -898,9 +921,6 @@ impl<'a> HwRoomControl<'a> {
         let (client, room) = self.get_mut();
         if client.is_admin() {
             room.set_is_fixed(true);
-            room.set_join_restriction(false);
-            room.set_team_add_restriction(false);
-            room.set_unregistered_players_restriction(true);
             Ok(())
         } else {
             Err(AccessError())
@@ -921,10 +941,12 @@ impl<'a> HwRoomControl<'a> {
         use ModifyRoomNameError::*;
         let room_exists = self.server.has_room(&name);
         let (client, room) = self.get_mut();
-        if room.is_fixed() || room.master_id != Some(client.id) {
-            Err(AccessDenied)
+        if !client.is_master() {
+            Err(NotMaster)
         } else if utils::is_name_illegal(&name) {
             Err(InvalidName)
+        } else if room.is_fixed() {
+            Err(AccessDenied)
         } else if room_exists {
             Err(DuplicateName)
         } else {
@@ -933,11 +955,13 @@ impl<'a> HwRoomControl<'a> {
         }
     }
 
-    pub fn set_room_greeting(&mut self, greeting: Option<String>) -> Result<(), AccessError> {
+    pub fn set_room_greeting(&mut self, greeting: Option<String>) -> Result<bool, AccessError> {
         let (client, room) = self.get_mut();
-        if client.is_admin() {
-            room.greeting = greeting.unwrap_or_default();
-            Ok(())
+        if client.is_admin() || (client.is_master() && !room.is_fixed()) {
+            let msg = greeting.unwrap_or_default();
+            let is_empty = msg.is_empty();
+            room.greeting = msg;
+            Ok(is_empty)
         } else {
             Err(AccessError())
         }

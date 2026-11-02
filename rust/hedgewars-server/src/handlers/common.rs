@@ -151,36 +151,38 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
     }
 
     let nick = client.nick.clone();
-    response.add(
-        RoomJoined(vec![nick.clone()])
-            .send_all()
-            .in_room(room.id)
-            .but_self(),
-    );
+    response.add(RoomJoined(vec![nick.clone()]).send_all().in_room(room.id));
     response.add(ClientFlags(add_flags(&[Flags::InRoom]), vec![nick.clone()]).send_all());
-    let nicks = once(nick.clone())
-        .chain(
-            room_clients
-                .clone()
-                .filter(|c| c.id != client.id)
-                .map(|c| c.nick.clone()),
-        )
-        .collect();
+    response.add(
+        ClientFlags(remove_flags(&[Flags::Ready]), vec![nick.clone()])
+            .send_all()
+            .in_room(room.id),
+    );
 
-    response.add(RoomJoined(nicks).send_self());
+    let other_clients = room_clients.clone().filter(|c| c.id != client.id);
+    let other_nicks: Vec<String> = other_clients.clone().map(|c| c.nick.clone()).collect();
+    if !other_nicks.is_empty() {
+        response.add(RoomJoined(other_nicks).send_self());
+    }
+
+    if let Some(master_client) = master {
+        response.add(
+            ClientFlags(
+                add_flags(&[Flags::RoomMaster]),
+                vec![master_client.nick.clone()],
+            )
+            .send_self(),
+        );
+    }
 
     let mut flag_selectors = [
         (
-            Flags::RoomMaster,
-            partition_nicks(room_clients.clone(), |c| c.is_master()),
-        ),
-        (
             Flags::Ready,
-            partition_nicks(room_clients.clone(), |c| c.is_ready()),
+            partition_nicks(other_clients.clone(), |c| c.is_ready()),
         ),
         (
             Flags::InGame,
-            partition_nicks(room_clients.clone(), |c| c.is_in_game()),
+            partition_nicks(other_clients, |c| c.is_in_game()),
         ),
     ];
 
@@ -196,13 +198,13 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
         }
     }
 
-    get_active_room_teams(room, Destination::ToSelf, response);
     get_active_room_config(room, Destination::ToSelf, response);
+    get_active_room_teams(room, Destination::ToSelf, response);
 
     if !room.greeting.is_empty() {
         response.add(
             ChatMsg {
-                nick: "[greeting]".to_string(),
+                nick: "(greeting)".to_string(),
                 msg: room.greeting.clone(),
             }
             .send_self(),
@@ -270,12 +272,11 @@ pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
     match error {
         JoinRoomError::DoesntExist => response.warn(NO_ROOM),
         JoinRoomError::WrongProtocol => response.warn(INCOMPATIBLE_ROOM_PROTOCOL),
-        JoinRoomError::WrongPassword => {
-            response.add(Notice("WrongPassword".to_string()).send_self())
-        }
+        JoinRoomError::WrongPassword => response.add(Notice("2".to_string()).send_self()),
         JoinRoomError::Full => response.warn(ROOM_FULL),
         JoinRoomError::Restricted => response.warn(ROOM_JOIN_RESTRICTED),
         JoinRoomError::RegistrationRequired => response.warn(ROOM_REGISTRATION_REQUIRED),
+        JoinRoomError::RoomBanned => response.warn("You are banned from this room."),
     }
 }
 
@@ -374,7 +375,7 @@ pub fn get_room_leave_result_for_client(
                     );
                 }
 
-                response.add(Notice("1".to_string()).send_all().in_room(room.id));
+                response.add(Notice("1".to_string()).send(leaving_client_id));
             }
 
             get_remove_teams_data(room.id, was_in_game, removed_teams, response);
@@ -534,11 +535,18 @@ pub fn get_room_update(
     response: &mut Response,
 ) {
     for protocol in protocols {
-        let update_msg = RoomUpdated(
-            old_name.as_ref().unwrap_or(&room.name).clone(),
-            room.info(master, protocol),
-        );
-        response.add(update_msg.send_all().in_lobby().with_protocol(protocol));
+        let base_old_name = old_name.as_ref().unwrap_or(&room.name);
+        let formatted_old_name = if protocol < 60 && protocol != room.protocol_number {
+            format!(
+                "[v{}] {}",
+                crate::utils::protocol_version_string(room.protocol_number),
+                base_old_name
+            )
+        } else {
+            base_old_name.clone()
+        };
+        let update_msg = RoomUpdated(formatted_old_name, room.info(master, protocol));
+        response.add(update_msg.send_all().with_protocol(protocol));
     }
 }
 

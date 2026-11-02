@@ -116,6 +116,7 @@ pub struct HwRoom {
     pub voting: Option<Voting>,
     pub saves: HashMap<String, RoomSave>,
     pub game_info: Option<GameInfo>,
+    pub bans: Vec<String>,
 }
 
 impl HwRoom {
@@ -137,6 +138,7 @@ impl HwRoom {
             voting: None,
             saves: HashMap::new(),
             game_info: None,
+            bans: Vec::new(),
         }
     }
 
