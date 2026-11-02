@@ -214,7 +214,14 @@ pub struct HwServer {
 impl HwServer {
     pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
         //todo!("add reconnection IDs");
-        let rooms = Slab::with_capacity(rooms_limit);
+        let mut rooms = Slab::with_capacity(rooms_limit);
+        if let Ok(contents) = std::fs::read_to_string("racer.yaml") {
+            let room = allocate_room(&mut rooms);
+            room.name = "Racer".to_string();
+            room.protocol_number = 58;
+            room.set_is_fixed(true);
+            let _ = room.set_saves(&contents);
+        }
         let clients = IndexSlab::with_capacity(clients_limit);
         let checkers = IndexSlab::new();
         Self {
@@ -1053,7 +1060,7 @@ impl<'a> HwRoomControl<'a> {
         let addable_hedgehogs = room.addable_hedgehogs();
         if let Some((_, team)) = room.find_team_and_owner_mut(|t| t.name == team_name) {
             let max_hedgehogs = min(
-                super::room::MAX_HEDGEHOGS_IN_ROOM,
+                hedgewars_network_protocol::types::MAX_HEDGEHOGS_PER_TEAM,
                 addable_hedgehogs + team.hedgehogs_number,
             );
             if !client.is_master() {

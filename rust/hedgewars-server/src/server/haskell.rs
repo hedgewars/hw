@@ -133,8 +133,11 @@ impl Display for HaskellValue {
             HaskellValue::Tuple(items) => write_sequence(f, b"()", items.iter()),
             HaskellValue::List(items) => write_sequence(f, b"[]", items.iter()),
             HaskellValue::AnonStruct { name, fields } => {
-                write!(f, "{} ", name)?;
-                write_sequence(f, b" \0", fields.iter())
+                write!(f, "{}", name)?;
+                for field in fields {
+                    write!(f, " {}", field)?;
+                }
+                Ok(())
             }
             HaskellValue::Struct { name, fields } => {
                 write!(f, "{} {{", name)?;

@@ -40,11 +40,13 @@ enum ClientUpdateData {
 #[derive(Debug)]
 struct ClientUpdate {
     client_id: ClientId,
+    conn_id: u64,
     data: ClientUpdateData,
 }
 
 struct ClientUpdateSender {
     client_id: ClientId,
+    conn_id: u64,
     sender: Sender<ClientUpdate>,
 }
 
@@ -53,6 +55,7 @@ impl ClientUpdateSender {
         self.sender
             .send(ClientUpdate {
                 client_id: self.client_id,
+                conn_id: self.conn_id,
                 data,
             })
             .await
@@ -118,6 +121,7 @@ impl AsyncWrite for ClientStream {
 
 struct NetworkClient {
     id: ClientId,
+    conn_id: u64,
     stream: ClientStream,
     receiver: Receiver<Bytes>,
     peer_addr: SocketAddr,
@@ -127,12 +131,14 @@ struct NetworkClient {
 impl NetworkClient {
     fn new(
         id: ClientId,
+        conn_id: u64,
         stream: ClientStream,
         peer_addr: SocketAddr,
         receiver: Receiver<Bytes>,
     ) -> Self {
         Self {
             id,
+            conn_id,
             stream,
             peer_addr,
             receiver,
@@ -158,47 +164,44 @@ impl NetworkClient {
         }
     }
 
-    async fn write<T: AsyncWrite + Unpin>(stream: &mut T, mut data: Bytes) -> bool {
-        !data.has_remaining() || matches!(stream.write_buf(&mut data).await, Ok(n) if n > 0)
+    async fn write<T: AsyncWrite + Unpin>(stream: &mut T, data: Bytes) -> bool {
+        data.is_empty() || stream.write_all(&data).await.is_ok()
     }
 
     async fn run(mut self, sender: Sender<ClientUpdate>) {
         use ClientUpdateData::*;
         let mut sender = ClientUpdateSender {
             client_id: self.id,
+            conn_id: self.conn_id,
             sender,
         };
-
         loop {
             tokio::select! {
-                server_message = self.receiver.recv() => {
-                    match server_message {
-                        Some(message) => if !Self::write(&mut self.stream, message).await {
-                            sender.send(Error("Connection reset by peer".to_string())).await;
-                            break;
-                        }
-                        None => {
-                            break;
-                        }
-                    }
-                }
                 client_message = Self::read(&mut self.stream, &mut self.decoder, &mut sender) => {
-                     match client_message {
+                    match client_message {
                         Ok(message) => {
-                            //todo!("add flood stats");
                             if !sender.send(Message(message)).await {
                                 break;
                             }
                         }
                         Err(e) => {
-                            //todo!("send cmdline errors");
-                            //todo!("more graceful shutdown to prevent errors from explicitly closed clients")
-                            sender.send(Error(format!("{}", e))).await;
-                            if matches!(e, ProtocolError::Timeout) {
-                                Self::write(&mut self.stream, Bytes::from(HwServerMessage::Bye("Ping timeout".to_string()).to_raw_protocol())).await;
+                            while let Ok(message) = self.receiver.try_recv() {
+                                let _ = Self::write(&mut self.stream, message).await;
                             }
+                            sender.send(Error(format!("{}", e))).await;
                             break;
                         }
+                    }
+                }
+                server_message = self.receiver.recv() => {
+                    match server_message {
+                        Some(message) => {
+                            if !Self::write(&mut self.stream, message).await {
+                                sender.send(Error("Connection reset by peer".to_string())).await;
+                                break;
+                            }
+                        }
+                        None => break
                     }
                 }
             }
@@ -219,7 +222,8 @@ pub struct NetworkLayer {
     #[cfg(feature = "official-server")]
     db: super::database::Database,
     server_state: ServerState,
-    clients: Slab<Sender<Bytes>>,
+    clients: Slab<(u64, Sender<Bytes>)>,
+    next_conn_id: u64,
     update_tx: Sender<ClientUpdate>,
     update_rx: Receiver<ClientUpdate>,
 }
@@ -265,30 +269,31 @@ impl NetworkLayer {
             client_message: Option<ClientUpdate>,
         ) {
             use ClientUpdateData::*;
-            match client_message {
-                Some(ClientUpdate {
-                    client_id,
-                    data: Message(message),
-                }) => {
+            let Some(ClientUpdate {
+                client_id,
+                conn_id,
+                data,
+            }) = client_message
+            else {
+                return;
+            };
+            if layer.clients.get(client_id).map(|(cid, _)| *cid) != Some(conn_id) {
+                return;
+            }
+            match data {
+                Message(message) => {
                     layer.handle_message(client_id, message).await;
                 }
-                Some(ClientUpdate {
-                    client_id,
-                    data: PingSent,
-                }) => {
+                PingSent => {
                     handlers::handle_ping_sent(&mut layer.server_state, client_id);
                 }
-                Some(ClientUpdate {
-                    client_id,
-                    data: Error(e),
-                }) => {
+                Error(e) => {
                     let mut response = handlers::Response::new(client_id);
                     info!("Client {} error: {:?}", client_id, e);
                     response.remove_client(client_id);
                     handlers::handle_client_loss(&mut layer.server_state, client_id, &mut response);
                     layer.handle_response(response).await;
                 }
-                None => unreachable!(),
             }
         }
 
@@ -320,12 +325,14 @@ impl NetworkLayer {
         stream: ClientStream,
         addr: SocketAddr,
     ) -> Option<NetworkClient> {
+        self.next_conn_id += 1;
+        let conn_id = self.next_conn_id;
         let entry = self.clients.vacant_entry();
         let client_id = entry.key();
-        let (tx, rx) = channel(16);
-        entry.insert(tx);
+        let (tx, rx) = channel(1024);
+        entry.insert((conn_id, tx));
 
-        let client = NetworkClient::new(client_id, stream, addr, rx);
+        let client = NetworkClient::new(client_id, conn_id, stream, addr, rx);
 
         info!("client {} ({}) added", client.id, client.peer_addr);
 
@@ -348,6 +355,14 @@ impl NetworkLayer {
         if added {
             Some(client)
         } else {
+            tokio::spawn(async move {
+                let mut client = client;
+                while let Some(message) = client.receiver.recv().await {
+                    if !NetworkClient::write(&mut client.stream, message).await {
+                        break;
+                    }
+                }
+            });
             None
         }
     }
@@ -397,7 +412,7 @@ impl NetworkLayer {
     }
 
     async fn send_message<I>(
-        clients: &mut Slab<Sender<Bytes>>,
+        clients: &mut Slab<(u64, Sender<Bytes>)>,
         message: HwServerMessage,
         to_clients: I,
     ) where
@@ -406,7 +421,7 @@ impl NetworkLayer {
         let msg_string = message.to_raw_protocol();
         let bytes = Bytes::copy_from_slice(msg_string.as_bytes());
         for client_id in to_clients {
-            if let Some(client) = clients.get_mut(client_id) {
+            if let Some((_, client)) = clients.get_mut(client_id) {
                 if client.send(bytes.clone()).await.is_err() {
                     clients.remove(client_id);
                 }
@@ -467,7 +482,7 @@ impl NetworkLayerBuilder {
         let server_state = ServerState::new(self.clients_capacity, self.rooms_capacity);
 
         let clients = Slab::with_capacity(self.clients_capacity);
-        let (update_tx, update_rx) = channel(128);
+        let (update_tx, update_rx) = channel(1024);
 
         #[cfg(feature = "official-server")]
         let db_url = std::env::var("HEDGEWARS_DB_URL")
@@ -484,6 +499,7 @@ impl NetworkLayerBuilder {
             db: super::database::Database::new(&db_url),
             server_state,
             clients,
+            next_conn_id: 0,
             update_tx,
             update_rx,
         }

@@ -187,12 +187,12 @@ pub fn handle(
                 response.add(Warning(html.join("")).send_self());
             }
         }
-        RestartServer => {
+        RestartServerConfirm => {
             if server.is_admin(client_id) {
                 response.warn("Please confirm server restart with '/restart_server yes'.");
             }
         }
-        RestartServerConfirm => {
+        RestartServer => {
             if server.is_admin(client_id) {
                 info!("Server restart requested by admin {}", client_id);
             }
