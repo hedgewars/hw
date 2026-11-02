@@ -207,6 +207,7 @@ pub struct HwServer {
     latest_protocol: u16,
     flags: ServerFlags,
     greetings: ServerGreetings,
+    config_dirty: bool,
     pub replay_storage: Option<ReplayStorage>,
 }
 
@@ -230,8 +231,39 @@ impl HwServer {
             greetings: ServerGreetings::new(),
             latest_protocol: 58,
             flags: ServerFlags::empty(),
+            config_dirty: false,
             replay_storage: Some(ReplayStorage::new()),
         }
+    }
+
+    pub fn take_config_dirty(&mut self) -> bool {
+        let dirty = self.config_dirty;
+        self.config_dirty = false;
+        dirty
+    }
+
+    pub fn latest_protocol(&self) -> u16 {
+        self.latest_protocol
+    }
+
+    pub fn set_latest_protocol(&mut self, proto: u16) {
+        self.latest_protocol = proto;
+    }
+
+    pub fn latest_greeting(&self) -> &str {
+        &self.greetings.for_latest_protocol
+    }
+
+    pub fn set_latest_greeting(&mut self, msg: String) {
+        self.greetings.for_latest_protocol = msg;
+    }
+
+    pub fn old_greeting(&self) -> &str {
+        &self.greetings.for_old_protocols
+    }
+
+    pub fn set_old_greeting(&mut self, msg: String) {
+        self.greetings.for_old_protocols = msg;
     }
 
     pub fn find_ready_checker(&self, protocol: u16) -> Option<CheckerId> {
@@ -509,6 +541,7 @@ impl HwServer {
                 ServerVar::MOTDOld(msg) => self.greetings.for_old_protocols = msg,
                 ServerVar::LatestProto(n) => self.latest_protocol = n,
             }
+            self.config_dirty = true;
             Ok(())
         } else {
             Err(AccessError())
@@ -636,7 +669,8 @@ impl HwServer {
     }
 
     pub fn set_is_registered_only(&mut self, value: bool) {
-        self.flags.set(ServerFlags::REGISTERED_ONLY, value)
+        self.flags.set(ServerFlags::REGISTERED_ONLY, value);
+        self.config_dirty = true;
     }
 
     pub fn set_room_saves(&mut self, room_id: RoomId, text: &str) -> Result<(), serde_yaml::Error> {

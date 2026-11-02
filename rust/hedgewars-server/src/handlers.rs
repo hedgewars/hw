@@ -9,6 +9,7 @@ use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
         anteroom::HwAnteroom,
+        config::ServerConfig,
         server::{HwRoomOrServer, HwServer},
         types::{ClientId, Replay, RoomId},
     },
@@ -36,13 +37,28 @@ mod strings;
 pub struct ServerState {
     pub server: HwServer,
     pub anteroom: HwAnteroom,
+    pub config: Option<ServerConfig>,
 }
 
 impl ServerState {
     pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
+        let mut server = HwServer::new(clients_limit, rooms_limit);
+        let mut anteroom = HwAnteroom::new(clients_limit);
+        let config = ServerConfig::load(&mut server, &mut anteroom);
         Self {
-            server: HwServer::new(clients_limit, rooms_limit),
-            anteroom: HwAnteroom::new(clients_limit),
+            server,
+            anteroom,
+            config,
+        }
+    }
+
+    pub fn flush_config(&mut self) {
+        let bans_dirty = self.anteroom.bans.take_dirty();
+        let srv_dirty = self.server.take_config_dirty();
+        if bans_dirty || srv_dirty {
+            if let Some(ref mut cfg) = self.config {
+                cfg.save(&self.server, &self.anteroom);
+            }
         }
     }
 }
@@ -401,6 +417,7 @@ pub fn handle(
             }
         }
     }
+    state.flush_config();
 }
 
 pub fn handle_client_accept(
@@ -410,7 +427,7 @@ pub fn handle_client_accept(
     addr: [u8; 4],
     is_local: bool,
 ) -> bool {
-    if let Err(reason) = state.anteroom.try_accept(Some(addr)) {
+    let accepted = if let Err(reason) = state.anteroom.try_accept(Some(addr)) {
         response.add(Bye(reason).send_self());
         response.remove_client(client_id);
         false
@@ -425,7 +442,9 @@ pub fn handle_client_accept(
         response
             .add(Connected(utils::SERVER_MESSAGE.to_owned(), utils::SERVER_VERSION).send_self());
         true
-    }
+    };
+    state.flush_config();
+    accepted
 }
 
 pub fn handle_ping_sent(state: &mut ServerState, client_id: ClientId) {

@@ -483,7 +483,9 @@ impl NetworkLayerBuilder {
 
         #[cfg(feature = "official-server")]
         let db_url = std::env::var("HEDGEWARS_DB_URL")
-            .unwrap_or_else(|_| "mysql://hedgewars@127.0.0.1/hedgewars".to_string());
+            .ok()
+            .or_else(|| server_state.config.as_ref().map(|c| c.database_url()))
+            .unwrap_or_else(|| "mysql://hedgewars@127.0.0.1/hedgewars".to_string());
 
         NetworkLayer {
             listener: self.listener.expect("No listener provided"),

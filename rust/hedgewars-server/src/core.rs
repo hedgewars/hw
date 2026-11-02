@@ -1,6 +1,7 @@
 pub mod anteroom;
 pub mod bans;
 pub mod client;
+pub mod config;
 pub mod digest;
 pub mod flood;
 pub mod ghosts;
