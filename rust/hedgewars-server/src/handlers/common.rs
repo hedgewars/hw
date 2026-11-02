@@ -212,12 +212,12 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
     }
 
     if let Some(info) = &room.game_info {
+        response.add(RunGame.send_self());
         response.add(
-            ClientFlags(add_flags(&[Flags::Ready, Flags::InGame]), vec![nick])
+            ClientFlags(add_flags(&[Flags::InGame]), vec![nick])
                 .send_all()
                 .in_room(room.id),
         );
-        response.add(RunGame.send_self());
 
         response.add(
             ForwardEngineMessage(
@@ -239,29 +239,6 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
         if info.is_paused {
             response.add(ForwardEngineMessage(vec![to_engine_msg(once(b'I'))]).send_self());
         }
-
-        for original_team in &info.original_teams {
-            if let Some(team) = room.find_team(|team| team.name == original_team.info.name) {
-                if *team != original_team.info {
-                    response.add(TeamRemove(original_team.info.name.clone()).send_self());
-                    response.add(TeamAdd(team.to_protocol()).send_self());
-                }
-            } else {
-                response.add(TeamRemove(original_team.info.name.clone()).send_self());
-            }
-        }
-
-        for team in &room.teams {
-            if !info
-                .original_teams
-                .iter()
-                .any(|original_team| original_team.info.name == team.info.name)
-            {
-                response.add(TeamAdd(team.info.to_protocol()).send_self());
-            }
-        }
-
-        get_room_config_impl(room.config(), Destination::ToSelf, response);
     }
 
     get_room_update(protocols, None, room, master, response);
@@ -286,8 +263,14 @@ pub fn get_remove_teams_data(
     removed_teams: Vec<String>,
     response: &mut Response,
 ) {
-    if was_in_game {
-        for team_name in &removed_teams {
+    for team_name in removed_teams {
+        response.add(
+            TeamRemove(team_name.clone())
+                .send_all()
+                .in_room(room_id)
+                .but_self(),
+        );
+        if was_in_game {
             let remove_msg = to_engine_msg(once(b'F').chain(team_name.bytes()));
 
             response.add(
@@ -296,10 +279,6 @@ pub fn get_remove_teams_data(
                     .in_room(room_id)
                     .but_self(),
             );
-        }
-    } else {
-        for team_name in removed_teams {
-            response.add(TeamRemove(team_name).send_all().in_room(room_id));
         }
     }
 }
@@ -343,6 +322,7 @@ pub fn get_room_leave_result_for_client(
             new_master,
             was_in_game,
             removed_teams,
+            end_game_result,
         } => {
             if !is_empty {
                 response.add(
@@ -379,6 +359,10 @@ pub fn get_room_leave_result_for_client(
             }
 
             get_remove_teams_data(room.id, was_in_game, removed_teams, response);
+
+            if let Some(end_result) = end_game_result {
+                get_end_game_result(server, room.id, end_result, response);
+            }
 
             let master = new_master.map(|id| server.client(id));
 
@@ -831,9 +815,8 @@ pub fn get_end_game_result(
     response.extend(
         result
             .left_teams
-            .iter()
-            .filter(|name| room.find_team(|t| t.name == **name).is_some())
-            .map(|name| TeamRemove(name.clone()).send_all().in_room(room.id)),
+            .into_iter()
+            .map(|name| TeamRemove(name).send_all().in_room(room.id)),
     );
 
     if !result.unreadied_nicks.is_empty() {

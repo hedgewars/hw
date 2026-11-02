@@ -37,7 +37,8 @@ impl<'a> Iterator for ByMsg<'a> {
 
     fn next(&mut self) -> Option<<Self as Iterator>::Item> {
         if let Some(size) = self.messages.first() {
-            let (msg, next) = self.messages.split_at(*size as usize + 1);
+            let split_idx = (*size as usize + 1).min(self.messages.len());
+            let (msg, next) = self.messages.split_at(split_idx);
             self.messages = next;
             Some(msg)
         } else {
@@ -59,10 +60,10 @@ fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
         [size, typ, body @ ..] => {
             VALID_MESSAGES.contains(typ)
                 && match body {
-                    [1..=MAX_HEDGEHOGS_PER_TEAM, team, ..] if *typ == b'h' => {
+                    [b'1'..=b'8', team, ..] if *typ == b'h' || *size == b'h' => {
                         team_indices.contains(team)
                     }
-                    _ => *typ != b'h',
+                    _ => *typ != b'h' && *size != b'h',
                 }
         }
         _ => false,
@@ -139,7 +140,10 @@ pub fn handle(
                 if let Some(clan_color) = room.find_team_color(client_id) {
                     let engine_msg =
                         to_engine_msg(format!("b{}]{}\x20\x20", client.nick, msg).bytes());
-                    let team = room.clan_team_owners(clan_color).collect();
+                    let team: Vec<_> = room
+                        .clan_team_owners(clan_color)
+                        .filter(|id| *id != client_id)
+                        .collect();
                     response.add(ForwardEngineMessage(vec![engine_msg]).send_many(team))
                 }
             }
@@ -263,6 +267,9 @@ pub fn handle(
                 Err(AddTeamError::TooManyTeams) => response.warn(TOO_MANY_TEAMS),
                 Err(AddTeamError::TooManyHedgehogs) => response.warn(TOO_MANY_HEDGEHOGS),
                 Err(AddTeamError::TeamAlreadyExists) => response.warn(TEAM_EXISTS),
+                Err(AddTeamError::GameInProgress) => {
+                    response.warn("Joining not possible: Round is in progress.")
+                }
                 Err(AddTeamError::Restricted) => response.warn(TEAM_ADD_RESTRICTED),
             }
         }
@@ -271,12 +278,41 @@ pub fn handle(
             match room_control.remove_team(&name) {
                 Ok(()) => {
                     let (client, room) = room_control.get();
+                    let was_in_game = room.game_info.is_some() && client.is_in_game();
 
                     let removed_teams = vec![name];
-                    super::common::get_remove_teams_data(room_id, false, removed_teams, response);
+                    super::common::get_remove_teams_data(
+                        room_id,
+                        was_in_game,
+                        removed_teams,
+                        response,
+                    );
+
+                    let room = room_control.room();
+                    let room_master = room.master_id.map(|id| room_control.server().client(id));
+                    super::common::get_room_update(
+                        room_control.server().all_client_protocols().into_iter(),
+                        None,
+                        room,
+                        room_master,
+                        response,
+                    );
+
+                    if was_in_game {
+                        if let Some(0) = room_control.room().teams_in_game() {
+                            if let Some(result) = room_control.end_game() {
+                                super::common::get_end_game_result(
+                                    room_control.server(),
+                                    room_id,
+                                    result,
+                                    response,
+                                );
+                            }
+                        }
+                    }
                 }
                 Err(RemoveTeamError::NoTeam) => response.warn(NO_TEAM_TO_REMOVE),
-                Err(RemoveTeamError::TeamNotOwned) => response.warn(TEAM_NOT_OWNED),
+                Err(RemoveTeamError::TeamNotOwned) => response.error(TEAM_NOT_OWNED),
             }
         }
         SetHedgehogsNumber(team_name, number) => {
@@ -421,40 +457,48 @@ pub fn handle(
             }
         }
         StartGame => {
-            let result = room_control.start_game();
-            super::common::get_start_game_data(room_control.server(), room_id, result, response);
+            if client.is_master() {
+                let result = room_control.start_game();
+                super::common::get_start_game_data(
+                    room_control.server(),
+                    room_id,
+                    result,
+                    response,
+                );
+            }
         }
         EngineMessage(em) => {
-            if client.teams_in_game > 0 {
-                let decoding = decode(&em[..]).unwrap();
-                let messages = by_msg(&decoding);
-                let valid = messages.filter(|m| is_msg_valid(m, &client.team_indices));
-                let non_empty = valid.clone().filter(|m| !is_msg_empty(m));
-                let sync_msg = valid.clone().filter(|m| is_msg_timed(m)).last().map(|m| {
-                    if is_msg_empty(m) {
-                        Some(encode(m))
-                    } else {
-                        None
-                    }
-                });
+            if client.teams_in_game > 0 && room.game_info.is_some() {
+                if let Ok(decoding) = decode(&em[..]) {
+                    let messages = by_msg(&decoding);
+                    let valid = messages.filter(|m| is_msg_valid(m, &client.team_indices));
+                    let non_empty = valid.clone().filter(|m| !is_msg_empty(m));
+                    let sync_msg = valid.clone().filter(|m| is_msg_timed(m)).last().map(|m| {
+                        if is_msg_empty(m) {
+                            Some(encode(m))
+                        } else {
+                            None
+                        }
+                    });
 
-                let em_response = encode(valid.flatten().cloned().collect::<Vec<_>>());
-                if !em_response.is_empty() {
-                    response.add(
-                        ForwardEngineMessage(vec![em_response])
-                            .send_all()
-                            .in_room(room.id)
-                            .but_self(),
-                    );
-                    let em_log = encode(non_empty.flatten().cloned().collect::<Vec<_>>());
-                    room_control.log_engine_msg(em_log, sync_msg);
-                    super::common::register_flood_event(
-                        room_control.server_mut(),
-                        anteroom,
-                        client_id,
-                        FloodEvent::EngineMessage,
-                        response,
-                    );
+                    let em_response = encode(valid.flatten().cloned().collect::<Vec<_>>());
+                    if !em_response.is_empty() {
+                        response.add(
+                            ForwardEngineMessage(vec![em_response])
+                                .send_all()
+                                .in_room(room.id)
+                                .but_self(),
+                        );
+                        let em_log = encode(non_empty.flatten().cloned().collect::<Vec<_>>());
+                        room_control.log_engine_msg(em_log, sync_msg);
+                        super::common::register_flood_event(
+                            room_control.server_mut(),
+                            anteroom,
+                            client_id,
+                            FloodEvent::EngineMessage,
+                            response,
+                        );
+                    }
                 }
             }
         }

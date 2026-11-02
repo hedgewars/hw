@@ -33,19 +33,26 @@ fn client_teams_impl(
 pub struct GameInfo {
     pub original_teams: Vec<OwnedTeam>,
     pub left_teams: Vec<String>,
+    pub rejoined_teams: Vec<String>,
     pub msg_log: Vec<String>,
     pub sync_msg: Option<String>,
     pub is_paused: bool,
+    pub teams_in_game: u8,
+    pub all_players_registered: bool,
     original_config: RoomConfig,
 }
 
 impl GameInfo {
-    fn new(teams: Vec<OwnedTeam>, config: RoomConfig) -> GameInfo {
+    fn new(teams: Vec<OwnedTeam>, config: RoomConfig, all_players_registered: bool) -> GameInfo {
+        let teams_in_game = teams.len() as u8;
         GameInfo {
             left_teams: Vec::new(),
+            rejoined_teams: Vec::new(),
             msg_log: Vec::new(),
             sync_msg: None,
             is_paused: false,
+            teams_in_game,
+            all_players_registered,
             original_teams: teams,
             original_config: config,
         }
@@ -65,20 +72,29 @@ impl GameInfo {
             .map(|team| &team.info)
     }
 
-    pub fn mark_left_teams<'a, I>(&mut self, team_names: I)
+    pub fn log_team_removal<'a, I>(&mut self, team_names: I)
     where
         I: Iterator<Item = &'a String>,
     {
-        if let Some(m) = &self.sync_msg {
-            self.msg_log.push(m.clone());
-            self.sync_msg = None
-        }
-
         for team_name in team_names {
-            self.left_teams.push(team_name.clone());
-
+            if let Some(m) = self.sync_msg.take() {
+                self.msg_log.push(m);
+            }
             let remove_msg = crate::utils::to_engine_msg(iter::once(b'F').chain(team_name.bytes()));
             self.msg_log.push(remove_msg);
+            self.teams_in_game = self.teams_in_game.saturating_sub(1);
+        }
+    }
+
+    pub fn mark_left_teams<'a, I>(&mut self, was_in_game: bool, team_names: I)
+    where
+        I: Iterator<Item = &'a String> + Clone,
+    {
+        for team_name in team_names.clone() {
+            self.left_teams.push(team_name.clone());
+        }
+        if was_in_game {
+            self.log_team_removal(team_names);
         }
     }
 }
@@ -208,9 +224,7 @@ impl HwRoom {
     }
 
     pub fn teams_in_game(&self) -> Option<u8> {
-        self.game_info
-            .as_ref()
-            .map(|info| (info.original_teams.len() - info.left_teams.len()) as u8)
+        self.game_info.as_ref().map(|info| info.teams_in_game)
     }
 
     pub fn find_team_and_owner_mut<F>(&mut self, f: F) -> Option<(ClientId, &mut TeamInfo)>
@@ -272,9 +286,13 @@ impl HwRoom {
         self.config.set_config(cfg);
     }
 
-    pub fn start_round(&mut self) {
+    pub fn start_round(&mut self, all_players_registered: bool) {
         if self.game_info.is_none() {
-            self.game_info = Some(GameInfo::new(self.teams.clone(), self.config.clone()));
+            self.game_info = Some(GameInfo::new(
+                self.teams.clone(),
+                self.config.clone(),
+                all_players_registered,
+            ));
         }
     }
 

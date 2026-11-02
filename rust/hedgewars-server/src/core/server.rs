@@ -42,6 +42,7 @@ pub enum LeaveRoomResult {
         was_in_game: bool,
         new_master: Option<ClientId>,
         removed_teams: Vec<String>,
+        end_game_result: Option<EndGameResult>,
     },
 }
 
@@ -64,6 +65,7 @@ pub enum AddTeamError {
     TooManyTeams,
     TooManyHedgehogs,
     TeamAlreadyExists,
+    GameInProgress,
     Restricted,
 }
 
@@ -707,20 +709,17 @@ impl<'a> HwRoomControl<'a> {
                 room.ready_players_number -= 1;
             }
 
+            removed_teams = room
+                .client_teams(client.id)
+                .map(|t| t.name.clone())
+                .collect();
+
             if let Some(ref mut info) = room.game_info {
-                removed_teams = info
-                    .client_teams(client.id)
-                    .map(|t| t.name.clone())
-                    .collect();
-                info.mark_left_teams(removed_teams.iter());
-            } else {
-                removed_teams = room
-                    .client_teams(client.id)
-                    .map(|t| t.name.clone())
-                    .collect();
-                for team_name in &removed_teams {
-                    room.remove_team(team_name);
-                }
+                info.mark_left_teams(was_in_game, removed_teams.iter());
+            }
+
+            for team_name in &removed_teams {
+                room.remove_team(team_name);
             }
 
             if client.is_master() {
@@ -758,12 +757,18 @@ impl<'a> HwRoomControl<'a> {
         if self.is_room_removed {
             LeaveRoomResult::RoomRemoved
         } else {
+            let end_game_result = if was_in_game && self.room().teams_in_game() == Some(0) {
+                self.end_game()
+            } else {
+                None
+            };
             LeaveRoomResult::RoomRemains {
                 is_empty,
                 was_master,
                 was_in_game,
                 new_master: self.room().master_id,
                 removed_teams,
+                end_game_result,
             }
         }
     }
@@ -1019,6 +1024,8 @@ impl<'a> HwRoomControl<'a> {
             Err(TooManyHedgehogs)
         } else if room.find_team(|t| t.name == info.name).is_some() {
             Err(TeamAlreadyExists)
+        } else if room.game_info.is_some() {
+            Err(GameInProgress)
         } else if room.is_team_add_restricted() {
             Err(Restricted)
         } else {
@@ -1038,8 +1045,12 @@ impl<'a> HwRoomControl<'a> {
             Some((id, _)) if id != client.id => Err(TeamNotOwned),
             Some(_) => {
                 client.teams_in_game -= 1;
-                client.clan = room.find_team_color(client.id);
                 room.remove_team(team_name);
+                client.clan = room.find_team_color(client.id);
+                if let Some(ref mut info) = room.game_info {
+                    let names = [team_name.to_string()];
+                    info.mark_left_teams(client.is_in_game(), names.iter());
+                }
                 Ok(())
             }
         }
@@ -1110,12 +1121,24 @@ impl<'a> HwRoomControl<'a> {
 
     pub fn start_game(&mut self) -> Result<Vec<String>, StartGameError> {
         use StartGameError::*;
+        let room_id = self.room_id;
         let (room_clients, room_nicks): (Vec<_>, Vec<_>) = self
             .server
             .clients
             .iter()
+            .filter(|(_, c)| c.room_id == Some(room_id))
             .map(|(id, c)| (id, c.nick.clone()))
             .unzip();
+
+        let all_players_registered = {
+            let room = &self.server.rooms[room_id];
+            room.teams.iter().all(|t| {
+                self.server
+                    .clients
+                    .get(t.owner_id)
+                    .map_or(false, |c| c.is_registered())
+            })
+        };
 
         let room = self.room_mut();
 
@@ -1126,7 +1149,7 @@ impl<'a> HwRoomControl<'a> {
         } else if room.game_info.is_some() {
             Err(AlreadyInGame)
         } else {
-            room.start_round();
+            room.start_round(all_players_registered);
             for id in room_clients {
                 let team_indices = self.room().client_team_indices(id);
                 let c = &mut self.server.clients[id];
@@ -1150,14 +1173,13 @@ impl<'a> HwRoomControl<'a> {
         if client_left {
             client.set_is_in_game(false);
 
+            let team_names: Vec<_> = room
+                .client_teams(client.id)
+                .map(|t| t.name.clone())
+                .collect();
+
             if let Some(ref mut info) = room.game_info {
-                let team_names: Vec<_> = info
-                    .client_teams(client.id)
-                    .map(|t| t.name.clone())
-                    .collect();
-
-                info.mark_left_teams(team_names.iter());
-
+                info.log_team_removal(team_names.iter());
                 Some(team_names)
             } else {
                 None
@@ -1171,10 +1193,14 @@ impl<'a> HwRoomControl<'a> {
         let room = self.room_mut();
         room.ready_players_number = room.master_id.is_some() as u8;
 
-        if let Some(mut info) = room.game_info.take() {
+        if let Some(info) = room.game_info.take() {
             let room_id = room.id;
-            for team_name in &info.left_teams {
-                room.remove_team(team_name);
+            let mut left_teams = Vec::new();
+            for team_name in &info.rejoined_teams {
+                if room.find_team(|t| t.name == *team_name).is_some() {
+                    room.remove_team(team_name);
+                    left_teams.push(team_name.clone());
+                }
             }
 
             let unreadied_nicks: Vec<_> = self
@@ -1184,6 +1210,7 @@ impl<'a> HwRoomControl<'a> {
                 .filter(|(_, c)| c.room_id == Some(room_id))
                 .map(|(_, c)| {
                     c.set_is_ready(c.is_master());
+                    c.set_is_rejoined(false);
                     c
                 })
                 .filter_map(|c| {
@@ -1196,7 +1223,7 @@ impl<'a> HwRoomControl<'a> {
                 .collect();
 
             Some(EndGameResult {
-                left_teams: std::mem::take(&mut info.left_teams),
+                left_teams,
                 unreadied_nicks,
             })
         } else {
@@ -1264,24 +1291,49 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     room.players_number += 1;
 
     client.room_id = Some(room.id);
+    client.teams_in_game = 0;
+    client.set_is_ready(false);
+    client.set_is_master(false);
     client.set_is_in_game(room.game_info.is_some());
+    client.set_is_rejoined(room.game_info.is_some());
+    client.clan = None;
+    client.team_indices = vec![];
 
     #[cfg(feature = "official-server")]
-    let can_rejoin = client.is_registered();
+    let can_rejoin = client.protocol_number >= 48 && client.is_registered();
 
     #[cfg(not(feature = "official-server"))]
-    let can_rejoin = true;
+    let can_rejoin = client.protocol_number >= 48;
 
     if can_rejoin {
         if let Some(ref mut info) = room.game_info {
-            let teams = info.client_teams_by_nick(&client.nick);
-            client.teams_in_game = teams.clone().count() as u8;
-            client.clan = teams.clone().next().map(|t| t.color);
-            let team_names: Vec<_> = teams.map(|t| t.name.clone()).collect();
-
-            if !team_names.is_empty() {
-                info.left_teams.retain(|name| !team_names.contains(name));
+            let mut restored_teams = Vec::new();
+            for owned in &mut info.original_teams {
+                if owned.owner_nick == client.nick {
+                    owned.owner_id = client.id;
+                    restored_teams.push(owned.clone());
+                }
             }
+
+            client.teams_in_game = restored_teams.len() as u8;
+            client.clan = restored_teams.first().map(|t| t.info.color);
+
+            if !restored_teams.is_empty() {
+                for owned in restored_teams {
+                    let name = owned.info.name.clone();
+                    info.left_teams.retain(|n| n != &name);
+                    if !info.rejoined_teams.contains(&name) {
+                        info.rejoined_teams.push(name.clone());
+                    }
+                    info.teams_in_game += 1;
+                    if room.teams.iter().all(|t| t.info.name != name) {
+                        room.teams.push(owned);
+                    }
+                }
+            }
+        }
+        if room.game_info.is_some() {
+            client.team_indices = room.client_team_indices(client.id);
         }
     }
 }
