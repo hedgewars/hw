@@ -133,6 +133,7 @@ pub enum VoteResult {
 pub enum VoteError {
     NoVoting,
     AlreadyVoted,
+    NotEntitled,
 }
 
 #[derive(Debug)]
@@ -850,10 +851,13 @@ impl<'a> HwRoomControl<'a> {
     fn apply_vote(&mut self, kind: VoteType) -> Option<VoteEffect> {
         match kind {
             VoteType::Kick(nick) => {
+                let is_in_game = self.room().game_info.is_some();
                 if let Some(kicked_id) = self
                     .server
                     .find_client(&nick)
-                    .filter(|c| c.room_id == Some(self.room_id))
+                    .filter(|c| {
+                        c.room_id == Some(self.room_id) && (!is_in_game || c.teams_in_game == 0)
+                    })
                     .map(|c| c.id)
                 {
                     let leave_result = self.remove_from_room(kicked_id);
@@ -863,14 +867,29 @@ impl<'a> HwRoomControl<'a> {
                 }
             }
             VoteType::Map(None) => None,
-            VoteType::Map(Some(name)) => self
-                .load_config(&name)
-                .map(|s| VoteEffect::Map(s.to_string())),
+            VoteType::Map(Some(name)) => {
+                if let Some(location) = self.load_config(&name).map(|s| s.to_string()) {
+                    if self.room().protocol_number > 51 {
+                        let points = super::ghosts::load_ghost_points(&location);
+                        let new_dm = self
+                            .room()
+                            .config()
+                            .drawn_map
+                            .as_deref()
+                            .map(|dm| super::ghosts::prepend_ghost_points(&points, dm));
+                        if let Some(dm) = new_dm {
+                            self.room_mut().set_config(GameCfg::DrawnMap(dm));
+                        }
+                    }
+                    Some(VoteEffect::Map(location))
+                } else {
+                    None
+                }
+            }
             VoteType::Pause => Some(VoteEffect::Pause).filter(|_| self.toggle_pause()),
             VoteType::NewSeed => {
                 let seed = thread_rng().gen_range(0..1_000_000_000).to_string();
                 let cfg = GameCfg::Seed(seed);
-                //todo!("Protocol backwards compatibility");
                 self.room_mut().set_config(cfg.clone());
                 Some(VoteEffect::NewSeed(cfg))
             }
@@ -884,25 +903,31 @@ impl<'a> HwRoomControl<'a> {
     pub fn vote(&mut self, vote: Vote) -> Result<VoteResult, VoteError> {
         use self::{VoteError::*, VoteResult::*};
         let client_id = self.client_id;
+        let is_admin = self.server.clients[client_id].is_admin();
         if let Some(ref mut voting) = self.room_mut().voting {
-            if vote.is_forced || voting.votes.iter().all(|(id, _)| client_id != *id) {
+            if vote.is_forced && !is_admin {
+                Err(NotEntitled)
+            } else if !vote.is_forced && !voting.voters.contains(&client_id) {
+                Err(NotEntitled)
+            } else if vote.is_forced || voting.votes.iter().all(|(id, _)| client_id != *id) {
                 voting.votes.push((client_id, vote.is_pro));
                 let i = voting.votes.iter();
                 let pro = i.clone().filter(|(_, v)| *v).count();
                 let contra = i.filter(|(_, v)| !*v).count();
                 let success_quota = voting.voters.len() / 2 + 1;
 
-                if vote.is_forced && vote.is_pro || pro >= success_quota {
+                if vote.is_forced && !vote.is_pro
+                    || contra > voting.voters.len() - success_quota
+                {
+                    self.room_mut().voting = None;
+                    Ok(Failed)
+                } else if vote.is_forced && vote.is_pro || pro >= success_quota {
                     let voting = self.room_mut().voting.take().unwrap();
                     if let Some(effect) = self.apply_vote(voting.kind) {
                         Ok(Succeeded(effect))
                     } else {
                         Ok(Failed)
                     }
-                } else if vote.is_forced && !vote.is_pro
-                    || contra > voting.voters.len() - success_quota
-                {
-                    Ok(Failed)
                 } else {
                     Ok(Submitted)
                 }

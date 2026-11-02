@@ -421,15 +421,138 @@ impl HwRoom {
     }
 
     pub fn get_saves(&self) -> Result<String, serde_yaml::Error> {
-        serde_yaml::to_string(&(&self.greeting, &self.saves))
+        let mut hs_saves: HashMap<
+            String,
+            (String, HashMap<String, String>, HashMap<String, Vec<String>>),
+        > = HashMap::new();
+        for (name, save) in &self.saves {
+            let (mp, p) = room_config_to_maps(&save.config);
+            hs_saves.insert(name.clone(), (save.location.clone(), mp, p));
+        }
+        serde_yaml::to_string(&(&self.greeting, &hs_saves))
     }
 
     pub fn set_saves(&mut self, text: &str) -> Result<(), serde_yaml::Error> {
-        serde_yaml::from_str::<(String, HashMap<String, RoomSave>)>(text).map(
-            |(greeting, saves)| {
-                self.greeting = greeting;
-                self.saves = saves;
-            },
-        )
+        let raw_val: serde_yaml::Value = serde_yaml::from_str(text)?;
+        let untagged = strip_yaml_tags(raw_val);
+        if let Ok((greeting, hs_saves)) = serde_yaml::from_value::<(
+            String,
+            HashMap<
+                String,
+                (String, HashMap<String, String>, HashMap<String, Vec<String>>),
+            >,
+        )>(untagged.clone())
+        {
+            self.greeting = greeting;
+            self.saves = hs_saves
+                .into_iter()
+                .map(|(k, (location, mp, p))| {
+                    (
+                        k,
+                        RoomSave {
+                            location,
+                            config: room_config_from_maps(&mp, &p),
+                        },
+                    )
+                })
+                .collect();
+            Ok(())
+        } else {
+            serde_yaml::from_value::<(String, HashMap<String, RoomSave>)>(untagged).map(
+                |(greeting, saves)| {
+                    self.greeting = greeting;
+                    self.saves = saves;
+                },
+            )
+        }
     }
+}
+
+fn strip_yaml_tags(val: serde_yaml::Value) -> serde_yaml::Value {
+    use serde_yaml::Value;
+    match val {
+        Value::Tagged(tagged) => strip_yaml_tags(tagged.value),
+        Value::Sequence(seq) => Value::Sequence(seq.into_iter().map(strip_yaml_tags).collect()),
+        Value::Mapping(map) => Value::Mapping(
+            map.into_iter()
+                .map(|(k, v)| (strip_yaml_tags(k), strip_yaml_tags(v)))
+                .collect(),
+        ),
+        other => other,
+    }
+}
+
+pub fn room_config_to_maps(
+    c: &RoomConfig,
+) -> (HashMap<String, String>, HashMap<String, Vec<String>>) {
+    let mut mp = HashMap::new();
+    mp.insert("FEATURE_SIZE".to_string(), c.feature_size.to_string());
+    mp.insert("MAP".to_string(), c.map_type.clone());
+    mp.insert("MAPGEN".to_string(), c.map_generator.to_string());
+    mp.insert("MAZE_SIZE".to_string(), c.maze_size.to_string());
+    mp.insert("SEED".to_string(), c.seed.clone());
+    mp.insert("TEMPLATE".to_string(), c.template.to_string());
+
+    let mut p = HashMap::new();
+    let ammo_vec = match &c.ammo.settings {
+        Some(s) => vec![c.ammo.name.clone(), s.clone()],
+        None => vec![c.ammo.name.clone()],
+    };
+    p.insert("AMMO".to_string(), ammo_vec);
+    let mut scheme_vec = vec![c.scheme.name.clone()];
+    scheme_vec.extend(c.scheme.settings.iter().cloned());
+    p.insert("SCHEME".to_string(), scheme_vec);
+    p.insert("SCRIPT".to_string(), vec![c.script.clone()]);
+    p.insert("THEME".to_string(), vec![c.theme.clone()]);
+    if let Some(ref dm) = c.drawn_map {
+        p.insert("DRAWNMAP".to_string(), vec![dm.clone()]);
+    }
+    (mp, p)
+}
+
+pub fn room_config_from_maps(
+    mp: &HashMap<String, String>,
+    p: &HashMap<String, Vec<String>>,
+) -> RoomConfig {
+    let mut c = RoomConfig::new();
+    if let Some(v) = mp.get("FEATURE_SIZE").and_then(|s| s.parse().ok()) {
+        c.feature_size = v;
+    }
+    if let Some(v) = mp.get("MAP") {
+        c.map_type = v.clone();
+    }
+    if let Some(v) = mp.get("MAPGEN").and_then(|s| s.parse().ok()) {
+        c.map_generator = v;
+    }
+    if let Some(v) = mp.get("MAZE_SIZE").and_then(|s| s.parse().ok()) {
+        c.maze_size = v;
+    }
+    if let Some(v) = mp.get("SEED") {
+        c.seed = v.clone();
+    }
+    if let Some(v) = mp.get("TEMPLATE").and_then(|s| s.parse().ok()) {
+        c.template = v;
+    }
+    if let Some(v) = p.get("AMMO") {
+        if let Some(name) = v.first() {
+            c.ammo.name = name.clone();
+            c.ammo.settings = v.get(1).cloned();
+        }
+    }
+    if let Some(v) = p.get("SCHEME") {
+        if let Some(name) = v.first() {
+            c.scheme.name = name.clone();
+            c.scheme.settings = v[1..].to_vec();
+        }
+    }
+    if let Some(v) = p.get("SCRIPT").and_then(|v| v.first()) {
+        c.script = v.clone();
+    }
+    if let Some(v) = p.get("THEME").and_then(|v| v.first()) {
+        c.theme = v.clone();
+    }
+    if let Some(v) = p.get("DRAWNMAP").and_then(|v| v.first()) {
+        c.drawn_map = Some(v.clone());
+    }
+    c
 }

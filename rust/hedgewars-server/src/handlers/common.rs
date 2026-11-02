@@ -622,48 +622,62 @@ pub fn check_vote(
 ) -> bool {
     let error = match &kind {
         VoteType::Kick(nick) => {
-            if server
+            if room.master_id.is_some() {
+                Some((
+                    true,
+                    "/callvote kick: This is only allowed in rooms without a room master."
+                        .to_string(),
+                ))
+            } else if server
                 .find_client(nick)
                 .filter(|c| c.room_id == Some(room.id))
                 .is_some()
             {
                 None
             } else {
-                Some("/callvote kick: No such user!".to_string())
+                Some((true, "/callvote kick: No such user!".to_string()))
             }
         }
         VoteType::Map(None) => {
-            let names: Vec<_> = room.saves.keys().cloned().collect();
+            let mut names: Vec<_> = room.saves.keys().cloned().collect();
+            names.sort();
             if names.is_empty() {
-                Some("/callvote map: No maps saved in this room!".to_string())
+                Some((false, "/callvote map: No maps available.".to_string()))
             } else {
-                Some(format!("Available maps: {}", names.join(", ")))
+                Some((false, format!("/callvote map: {}", names.join(", "))))
             }
         }
         VoteType::Map(Some(name)) => {
             if room.saves.contains_key(&name[..]) {
                 None
             } else {
-                Some("/callvote map: No such map!".to_string())
+                Some((true, "/callvote map: No such map!".to_string()))
             }
         }
         VoteType::Pause => {
             if room.game_info.is_some() {
                 None
             } else {
-                Some("/callvote pause: No game in progress!".to_string())
+                Some((true, "/callvote pause: No game in progress!".to_string()))
             }
         }
         VoteType::NewSeed => None,
         VoteType::HedgehogsPerTeam(number) => match number {
             1..=MAX_HEDGEHOGS_PER_TEAM => None,
-            _ => Some("/callvote hedgehogs: Specify number from 1 to 8.".to_string()),
+            _ => Some((
+                true,
+                "/callvote hedgehogs: Specify number from 1 to 8.".to_string(),
+            )),
         },
     };
 
     match error {
         None => true,
-        Some(msg) => {
+        Some((true, msg)) => {
+            response.warn(&msg);
+            false
+        }
+        Some((false, msg)) => {
             response.add(server_chat(msg).send_self());
             false
         }
@@ -679,17 +693,21 @@ pub fn get_vote_data(
         Ok(VoteResult::Submitted) => {
             response.add(server_chat("Your vote has been counted.".to_string()).send_self())
         }
-        Ok(VoteResult::Succeeded(_) | VoteResult::Failed) => response.add(
-            server_chat("Voting closed.".to_string())
-                .send_all()
-                .in_room(room_id),
-        ),
+        Ok(VoteResult::Succeeded(_) | VoteResult::Failed) => {
+            response.add(server_chat("Your vote has been counted.".to_string()).send_self());
+            response.add(
+                server_chat("Voting closed.".to_string())
+                    .send_all()
+                    .in_room(room_id),
+            );
+        }
         Err(VoteError::NoVoting) => {
-            response.add(server_chat("There's no voting going on.".to_string()).send_self())
+            response.warn("There's no voting going on.");
         }
         Err(VoteError::AlreadyVoted) => {
-            response.add(server_chat("You already have voted.".to_string()).send_self())
+            response.warn("You already have voted.");
         }
+        Err(VoteError::NotEntitled) => {}
     }
 }
 

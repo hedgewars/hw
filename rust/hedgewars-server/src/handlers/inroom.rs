@@ -88,7 +88,7 @@ fn voting_description(kind: &VoteType) -> String {
             VoteType::Map(name) => format!("map {}", name.as_ref().unwrap()),
             VoteType::Pause => "pause".to_string(),
             VoteType::NewSeed => "new seed".to_string(),
-            VoteType::HedgehogsPerTeam(number) => format!("hedgehogs per team: {}", number),
+            VoteType::HedgehogsPerTeam(number) => format!("hedgehogs per team:  {}", number),
         }
     )
 }
@@ -355,50 +355,63 @@ pub fn handle(
             }
         }
         Save(name, location) => {
-            response.add(
-                server_chat(format!("Room config saved as {}", name))
-                    .send_all()
-                    .in_room(room_id),
-            );
-            room_control.save_config(name, location);
+            if client.is_admin() {
+                room_control.save_config(name, location);
+            }
         }
-        #[cfg(feature = "official-server")]
         SaveRoom(filename) => {
             if client.is_admin() {
-                match room.get_saves() {
-                    Ok(contents) => response.request_io(super::IoTask::SaveRoom {
-                        room_id,
-                        filename,
-                        contents,
-                    }),
-                    Err(e) => {
-                        warn!("Error while serializing the room configs: {}", e);
-                        response.warn("Unable to serialize the room configs.")
+                #[cfg(feature = "official-server")]
+                {
+                    match room.get_saves() {
+                        Ok(contents) => {
+                            if let Err(e) = std::fs::write(&filename, contents) {
+                                warn!(
+                                    "Error while writing the room config file \"{}\": {}",
+                                    filename, e
+                                );
+                            }
+                        }
+                        Err(e) => {
+                            warn!("Error while serializing the room configs: {}", e);
+                        }
                     }
                 }
             }
         }
-        #[cfg(feature = "official-server")]
         LoadRoom(filename) => {
             if client.is_admin() {
-                response.request_io(super::IoTask::LoadRoom { room_id, filename });
+                #[cfg(feature = "official-server")]
+                {
+                    match std::fs::read_to_string(&filename) {
+                        Ok(contents) => {
+                            if let Err(e) = room_control.room_mut().set_saves(&contents) {
+                                warn!("Error while deserializing the room configs: {}", e);
+                            }
+                        }
+                        Err(e) => {
+                            warn!(
+                                "Error while reading the room config file \"{}\": {}",
+                                filename, e
+                            );
+                        }
+                    }
+                }
             }
         }
         Delete(name) => {
-            if !room_control.delete_config(&name) {
-                response.add(Warning(format!("Save doesn't exist: {}", name)).send_self());
-            } else {
-                response.add(
-                    server_chat(format!("Room config {} has been deleted", name))
-                        .send_all()
-                        .in_room(room_id),
-                );
+            if client.is_admin() {
+                room_control.delete_config(&name);
             }
         }
         CallVote(None) => {
-            //todo!("implement ghost points")
-            response.add(server_chat("Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs <number>".to_string())
-                .send_self());
+            response.add(
+                server_chat(
+                    "Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>"
+                        .to_string(),
+                )
+                .send_self(),
+            );
         }
         CallVote(Some(kind)) => {
             use crate::core::server::StartVoteError;
@@ -419,12 +432,7 @@ pub fn handle(
                         });
                         super::common::handle_vote(room_control, vote_result, response);
                     }
-                    Err(StartVoteError::VotingInProgress) => {
-                        response.add(
-                            server_chat("There is already voting in progress".to_string())
-                                .send_self(),
-                        );
-                    }
+                    Err(StartVoteError::VotingInProgress) => {}
                 }
             }
         }
@@ -436,10 +444,9 @@ pub fn handle(
             super::common::handle_vote(room_control, vote_result, response);
         }
         ForceVote(vote) => {
-            let is_forced = client.is_admin();
             let vote_result = room_control.vote(types::Vote {
                 is_pro: vote,
-                is_forced,
+                is_forced: true,
             });
             super::common::handle_vote(room_control, vote_result, response);
         }

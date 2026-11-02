@@ -3,6 +3,7 @@ pub mod bans;
 pub mod client;
 pub mod digest;
 pub mod flood;
+pub mod ghosts;
 pub mod indexslab;
 pub mod joins_monitor;
 pub mod room;
