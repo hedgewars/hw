@@ -4,7 +4,7 @@ use super::{
 };
 use bitflags::*;
 use hedgewars_network_protocol::types::{
-    GameCfg, GameCfg::*, RoomConfig, TeamInfo, MAX_HEDGEHOGS_PER_TEAM,
+    GameCfg, RoomConfig, TeamInfo, MAX_HEDGEHOGS_PER_TEAM,
 };
 use serde_derive::{Deserialize, Serialize};
 use serde_yaml;
@@ -421,10 +421,9 @@ impl HwRoom {
     }
 
     pub fn get_saves(&self) -> Result<String, serde_yaml::Error> {
-        let mut hs_saves: HashMap<
-            String,
-            (String, HashMap<String, String>, HashMap<String, Vec<String>>),
-        > = HashMap::new();
+        type HaskellSavesMap =
+            HashMap<String, (String, HashMap<String, String>, HashMap<String, Vec<String>>)>;
+        let mut hs_saves: HaskellSavesMap = HashMap::new();
         for (name, save) in &self.saves {
             let (mp, p) = room_config_to_maps(&save.config);
             hs_saves.insert(name.clone(), (save.location.clone(), mp, p));

@@ -101,11 +101,7 @@ impl Database {
                     Ok(Some(filename)) => {
                         let filename = format!(
                             "checked/{}",
-                            if filename.starts_with("replays/") {
-                                &filename[8..]
-                            } else {
-                                &filename
-                            }
+                            filename.strip_prefix("replays/").unwrap_or(&filename)
                         );
                         match Replay::load(&filename) {
                             Ok(replay) => Some(Box::new(replay)),
@@ -416,5 +412,5 @@ fn get_hash(protocol_number: u16, web_password: &str, salt1: &str, salt2: &str) 
 
     let mut sha1 = Sha1::new();
     sha1.update(&data);
-    Sha1Digest::new(sha1.finalize().try_into().unwrap())
+    Sha1Digest::new(sha1.finalize().into())
 }

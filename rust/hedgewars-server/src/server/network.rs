@@ -1,4 +1,4 @@
-use bytes::{Buf, Bytes};
+use bytes::Bytes;
 use log::*;
 use slab::Slab;
 use std::io::Error;
@@ -10,7 +10,7 @@ use std::{
     time::Duration,
 };
 use tokio::{
-    io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt, ReadBuf},
+    io::{AsyncRead, AsyncWrite, AsyncWriteExt, ReadBuf},
     net::{TcpListener, TcpStream},
     sync::mpsc::{channel, Receiver, Sender},
 };
@@ -22,11 +22,8 @@ use crate::{
     handlers,
     handlers::{IoResult, IoTask, ServerState},
     protocol::{self, ProtocolDecoder, ProtocolError},
-    utils,
 };
-use hedgewars_network_protocol::{
-    messages::HwServerMessage::Redirect, messages::*, parser::server_message,
-};
+use hedgewars_network_protocol::messages::*;
 
 const PING_TIMEOUT: Duration = Duration::from_secs(15);
 

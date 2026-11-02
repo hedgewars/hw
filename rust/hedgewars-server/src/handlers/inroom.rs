@@ -1,5 +1,4 @@
 use super::{common::rnd_reply, strings::*};
-use crate::core::room::GameInfo;
 use crate::core::server::{AddTeamError, SetTeamCountError};
 use crate::handlers::actions::ToPendingMessage;
 use crate::{
@@ -8,10 +7,10 @@ use crate::{
         flood::FloodEvent,
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
         server::{
-            ChangeMasterError, ChangeMasterResult, HwRoomControl, HwServer, LeaveRoomResult,
+            ChangeMasterError, ChangeMasterResult, HwRoomControl, LeaveRoomResult,
             ModifyTeamError, StartGameError,
         },
-        types::{ClientId, RoomId, Voting},
+        types::{ClientId, RoomId},
     },
     utils::{is_name_illegal, to_engine_msg},
 };
@@ -21,11 +20,10 @@ use hedgewars_network_protocol::{
         add_flags, remove_flags, server_chat, HwProtocolMessage, HwServerMessage::*,
         ProtocolFlags as Flags,
     },
-    types,
-    types::{GameCfg, VoteType, MAX_HEDGEHOGS_PER_TEAM},
+    types::{self, GameCfg, Vote, VoteType, MAX_HEDGEHOGS_PER_TEAM},
 };
 use log::*;
-use std::{cmp::min, iter::once, mem::swap};
+use std::{cmp::min, iter::once};
 
 #[derive(Clone)]
 struct ByMsg<'a> {

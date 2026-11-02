@@ -1,7 +1,6 @@
 use super::{
     bans::BanCollection, indexslab::IndexSlab, joins_monitor::JoinsMonitor, types::ClientId,
 };
-use crate::utils;
 use base64::encode;
 use log::*;
 use rand::{thread_rng, RngCore};

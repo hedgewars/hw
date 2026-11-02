@@ -159,8 +159,8 @@ pub fn replay_to_demo(replay: &Replay) -> (Option<GameDetails>, Vec<String>) {
         em(&format!("eammdelay {}", c)),
         em(&format!("eammreinf {}", d)),
     ];
-    if scheme.get(14).map_or(false, |s| s == "true")
-        || scheme.get(20).map_or(false, |s| s == "false")
+    if scheme.get(14).is_some_and(|s| s == "true")
+        || scheme.get(20).is_some_and(|s| s == "false")
     {
         ammo_msgs.push(em("eammstore"));
     }

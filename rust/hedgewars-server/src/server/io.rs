@@ -159,7 +159,11 @@ impl IoThread {
 }
 
 fn save_file(filename: &str, contents: &str) -> Result<()> {
-    let mut writer = OpenOptions::new().create(true).write(true).open(filename)?;
+    let mut writer = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .truncate(true)
+        .open(filename)?;
     writer.write_all(contents.as_bytes())
 }
 

@@ -32,7 +32,7 @@ impl ReplayStorage {
             .flat_map(|f| Some(f.ok()?.path()))
             .find(|f| {
                 f.to_str()
-                    .map_or(false, |s| s.ends_with(&protocol_suffix))
+                    .is_some_and(|s| s.ends_with(&protocol_suffix))
                     && !self.borrowed_replays.iter().any(|e| &e.path == f)
             })
             .and_then(|f| {

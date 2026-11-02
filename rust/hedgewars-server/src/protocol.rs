@@ -1,19 +1,14 @@
-use bytes::{Buf, BufMut, BytesMut};
+use bytes::{Buf, BytesMut};
 use log::*;
 use std::{
     error::Error,
     fmt::{Debug, Display, Formatter},
-    io,
-    io::ErrorKind,
-    marker::Unpin,
     time::Duration,
 };
 use tokio::{io::AsyncReadExt, time::timeout};
 
-use crate::protocol::ProtocolError::Timeout;
 use hedgewars_network_protocol::{
     messages::HwProtocolMessage,
-    parser::HwProtocolError,
     parser::{malformed_message, message},
 };
 
@@ -49,7 +44,6 @@ pub type Result<T> = std::result::Result<T, ProtocolError>;
 pub struct ProtocolDecoder {
     buffer: BytesMut,
     read_timeout: Duration,
-    is_recovering: bool,
 }
 
 impl ProtocolDecoder {
@@ -57,7 +51,6 @@ impl ProtocolDecoder {
         ProtocolDecoder {
             buffer: BytesMut::with_capacity(1024),
             read_timeout,
-            is_recovering: false,
         }
     }
 

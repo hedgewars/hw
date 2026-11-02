@@ -1,8 +1,4 @@
-use std::{
-    iter,
-    mem::replace,
-    ops::{Index, IndexMut},
-};
+use std::ops::{Index, IndexMut};
 
 pub struct IndexSlab<T> {
     data: Vec<Option<T>>,

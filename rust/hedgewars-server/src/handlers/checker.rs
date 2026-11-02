@@ -1,5 +1,3 @@
-use log::*;
-
 use crate::core::{server::HwServer, types::CheckerId};
 use crate::handlers::actions::ToPendingMessage;
 use hedgewars_network_protocol::messages::{HwProtocolMessage, HwServerMessage};

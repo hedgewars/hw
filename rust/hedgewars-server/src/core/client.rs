@@ -1,6 +1,5 @@
 use super::{flood::FloodControl, types::ClientId};
 use bitflags::*;
-use std::ops::Deref;
 
 bitflags! {
     pub struct ClientFlags: u16 {

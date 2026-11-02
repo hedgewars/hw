@@ -84,7 +84,7 @@ impl FloodControl {
             .take_while(|(_, t)| now.duration_since(*t) <= sec1)
             .count();
 
-        let action = if l2 >= num2 + 1 || l1 >= num1 + 1 {
+        let action = if l2 > num2 || l1 > num1 {
             FloodAction::Bye(bye_msg)
         } else if l1 >= num1 || l2 >= num2 {
             FloodAction::Warn(warn_msg)

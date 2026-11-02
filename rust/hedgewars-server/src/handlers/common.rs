@@ -23,14 +23,14 @@ use crate::{
 use hedgewars_network_protocol::{
     messages::{
         add_flags, remove_flags, server_chat,
-        HwProtocolMessage::{self, Rnd},
+        HwProtocolMessage,
         HwServerMessage::{self, *},
         ProtocolFlags as Flags,
     },
-    types::{GameCfg, RoomConfig, TeamInfo, Vote, VoteType, MAX_HEDGEHOGS_PER_TEAM},
+    types::{RoomConfig, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM},
 };
-use rand::{self, seq::SliceRandom, thread_rng, Rng};
-use std::{iter::once, mem::replace};
+use rand::{seq::SliceRandom, thread_rng};
+use std::iter::once;
 
 pub fn rnd_reply(options: &[String]) -> HwServerMessage {
     let mut rng = thread_rng();

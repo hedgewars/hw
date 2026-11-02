@@ -1,9 +1,4 @@
-use std::{
-    cmp::PartialEq,
-    collections::HashMap,
-    fmt::{Formatter, LowerHex},
-    iter::Iterator,
-};
+use std::iter::Iterator;
 
 use self::{
     actions::{Destination, DestinationGroup, PendingMessage},
@@ -14,18 +9,14 @@ use crate::handlers::actions::ToPendingMessage;
 use crate::{
     core::{
         anteroom::HwAnteroom,
-        room::RoomSave,
         server::{HwRoomOrServer, HwServer},
         types::{ClientId, Replay, RoomId},
     },
     utils,
 };
-use hedgewars_network_protocol::{
-    messages::{
-        global_chat, server_chat, HwProtocolMessage, HwProtocolMessage::EngineMessage,
-        HwServerMessage, HwServerMessage::*,
-    },
-    types::{GameCfg, TeamInfo},
+use hedgewars_network_protocol::messages::{
+    global_chat, server_chat, HwProtocolMessage,
+    HwServerMessage, HwServerMessage::*,
 };
 
 use crate::core::digest::Sha1Digest;

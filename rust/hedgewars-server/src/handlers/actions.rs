@@ -1,5 +1,5 @@
 use crate::core::types::{ClientId, RoomId};
-use hedgewars_network_protocol::messages::{HwServerMessage, HwServerMessage::*};
+use hedgewars_network_protocol::messages::HwServerMessage;
 
 #[derive(Clone)]
 pub enum DestinationGroup {
@@ -10,6 +10,7 @@ pub enum DestinationGroup {
     LobbyWithProtocol(u16),
 }
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Clone)]
 pub enum Destination {
     ToId(ClientId),

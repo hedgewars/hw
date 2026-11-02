@@ -13,8 +13,7 @@ use crate::server::replaystorage::{ReplayId, ReplayStorage};
 use bitflags::*;
 use rand::{self, thread_rng, Rng};
 use slab::Slab;
-use std::collections::HashMap;
-use std::{cmp::min, collections::HashSet, mem::replace};
+use std::{cmp::min, collections::HashSet};
 
 #[derive(Debug)]
 pub enum CreateRoomError {
@@ -673,6 +672,7 @@ pub struct HwRoomControl<'a> {
 
 impl<'a> HwRoomControl<'a> {
     #[inline]
+    #[allow(clippy::new_ret_no_self)]
     pub fn new(server: &'a mut HwServer, client_id: ClientId) -> HwRoomOrServer<'a> {
         if let Some(room_id) = server.clients[client_id].room_id {
             HwRoomOrServer::Room(Self {
@@ -945,9 +945,7 @@ impl<'a> HwRoomControl<'a> {
         let client_id = self.client_id;
         let is_admin = self.server.clients[client_id].is_admin();
         if let Some(ref mut voting) = self.room_mut().voting {
-            if vote.is_forced && !is_admin {
-                Err(NotEntitled)
-            } else if !vote.is_forced && !voting.voters.contains(&client_id) {
+            if (vote.is_forced && !is_admin) || (!vote.is_forced && !voting.voters.contains(&client_id)) {
                 Err(NotEntitled)
             } else if vote.is_forced || voting.votes.iter().all(|(id, _)| client_id != *id) {
                 voting.votes.push((client_id, vote.is_pro));
@@ -1201,7 +1199,7 @@ impl<'a> HwRoomControl<'a> {
                 self.server
                     .clients
                     .get(t.owner_id)
-                    .map_or(false, |c| c.is_registered())
+                    .is_some_and(|c| c.is_registered())
             })
         };
 

@@ -123,6 +123,7 @@ impl BanCollection {
         });
     }
 
+    #[allow(clippy::wrong_self_convention)]
     pub fn to_protocol_list(&mut self) -> Vec<String> {
         let now = Utc::now();
         self.prune_expired(now);

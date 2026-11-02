@@ -1,25 +1,20 @@
 use super::{common::rnd_reply, strings::*};
-use crate::handlers::{actions::ToPendingMessage, checker};
-use crate::{
-    core::{
-        anteroom::HwAnteroom,
-        client::HwClient,
-        flood::FloodEvent,
-        server::{AccessError, CreateRoomError, HwServer, JoinRoomError},
-        types::ClientId,
-    },
-    utils::is_name_illegal,
+use crate::handlers::actions::ToPendingMessage;
+use crate::core::{
+    anteroom::HwAnteroom,
+    flood::FloodEvent,
+    server::{CreateRoomError, HwServer},
+    types::ClientId,
 };
 use hedgewars_network_protocol::{
     messages::{
-        add_flags, remove_flags, server_chat, HwProtocolMessage,
+        add_flags, HwProtocolMessage,
         HwServerMessage::{self, *},
         ProtocolFlags as Flags,
     },
     types::ServerVar,
 };
 use log::*;
-use std::{collections::HashSet, convert::identity, time::Duration};
 
 pub fn handle(
     server: &mut HwServer,

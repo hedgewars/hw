@@ -1,5 +1,4 @@
 use hedgewars_network_protocol::types::{RoomConfig, TeamInfo, VoteType};
-use serde_derive::{Deserialize, Serialize};
 
 pub type CheckerId = usize;
 pub type ClientId = usize;
