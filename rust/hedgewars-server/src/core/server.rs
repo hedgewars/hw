@@ -307,6 +307,11 @@ impl HwServer {
     }
 
     #[inline]
+    pub fn get_client(&self, client_id: ClientId) -> Option<&HwClient> {
+        self.clients.get(client_id)
+    }
+
+    #[inline]
     pub fn client_mut(&mut self, client_id: ClientId) -> &mut HwClient {
         &mut self.clients[client_id]
     }

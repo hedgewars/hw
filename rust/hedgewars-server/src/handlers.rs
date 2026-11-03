@@ -496,7 +496,17 @@ pub fn handle_io_result(
             if !state.anteroom.has_client(client_id) {
                 return;
             }
-            if !is_registered && state.server.is_registered_only() {
+            let is_no_anon = state
+                .anteroom
+                .no_anon
+                .matches_opt(state.anteroom.get_client(client_id).ip_addr);
+            if !is_registered && is_no_anon {
+                let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
+                warn!("Client '{}' (id: {}) failed to join server: registered account required from this IP", nick, client_id);
+                state.anteroom.remove_client(client_id);
+                response.error("Registered account is required when logging in from this IP address");
+                response.remove_client(client_id);
+            } else if !is_registered && state.server.is_registered_only() {
                 let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
                 warn!("Client '{}' (id: {}) failed to join server: registration required", nick, client_id);
                 state.anteroom.remove_client(client_id);

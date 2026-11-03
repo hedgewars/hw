@@ -76,6 +76,10 @@ fn get_completion_result(
         if is_checker {
             response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
             LoginResult::Exit
+        } else if anteroom.no_anon.matches_opt(anteroom.get_client(client_id).ip_addr) {
+            warn!("Client '{}' (id: {}) failed to join server: registered account required from this IP", nick, client_id);
+            response.error("Registered account is required when logging in from this IP address");
+            LoginResult::Exit
         } else if server.is_registered_only() {
             response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
             LoginResult::Exit

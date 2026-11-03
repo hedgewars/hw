@@ -221,7 +221,7 @@ pub fn handle(
                     .filter(|r| r.protocol_number != 0)
                     .flat_map(|r| {
                         r.info(
-                            r.master_id.map(|id| server.client(id)),
+                            r.master_id.and_then(|id| server.get_client(id)),
                             client.protocol_number,
                         )
                     })

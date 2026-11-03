@@ -7,6 +7,7 @@ pub mod flood;
 pub mod ghosts;
 pub mod indexslab;
 pub mod joins_monitor;
+pub mod no_anon;
 pub mod room;
 pub mod server;
 pub mod types;

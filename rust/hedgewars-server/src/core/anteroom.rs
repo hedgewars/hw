@@ -1,5 +1,6 @@
 use super::{
-    bans::BanCollection, indexslab::IndexSlab, joins_monitor::JoinsMonitor, types::ClientId,
+    bans::BanCollection, indexslab::IndexSlab, joins_monitor::JoinsMonitor, no_anon::NoAnonList,
+    types::ClientId,
 };
 use base64::encode;
 use log::*;
@@ -35,6 +36,7 @@ pub struct HwAnteroom {
     clients: IndexSlab<HwAnteroomClient>,
     pub bans: BanCollection,
     pub joins_monitor: JoinsMonitor,
+    pub no_anon: NoAnonList,
     nicks: HashMap<String, String>,
 }
 
@@ -45,6 +47,7 @@ impl HwAnteroom {
             clients,
             bans: BanCollection::new(),
             joins_monitor: JoinsMonitor::new(),
+            no_anon: NoAnonList::load(),
             nicks: Default::default(),
         }
     }
