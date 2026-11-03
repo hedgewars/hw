@@ -61,6 +61,33 @@ impl ServerState {
             }
         }
     }
+
+    pub fn has_client(&self, client_id: ClientId) -> bool {
+        self.anteroom.has_client(client_id)
+            || self.server.has_client(client_id)
+            || self.server.is_checker(client_id)
+    }
+
+    pub fn assert_invariants(&self) {
+        #[cfg(debug_assertions)]
+        {
+            for id in self.anteroom.iter_client_ids() {
+                debug_assert!(
+                    !self.server.has_client(id) && !self.server.is_checker(id),
+                    "Client {} is in both anteroom and server",
+                    id
+                );
+            }
+            for id in self.server.iter_client_ids() {
+                debug_assert!(
+                    !self.anteroom.has_client(id),
+                    "Client {} is in both server and anteroom",
+                    id
+                );
+            }
+            self.server.assert_invariants();
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -430,6 +457,7 @@ pub fn handle(
             }
         }
     }
+    state.assert_invariants();
     state.flush_config();
 }
 
@@ -459,6 +487,7 @@ pub fn handle_client_accept(
             .add(Connected(utils::SERVER_MESSAGE.to_owned(), utils::SERVER_VERSION).send_self());
         true
     };
+    state.assert_invariants();
     state.flush_config();
     accepted
 }
@@ -483,6 +512,7 @@ pub fn handle_client_loss(state: &mut ServerState, client_id: ClientId, response
             "Connection closed".to_string(),
         );
     }
+    state.assert_invariants();
 }
 
 pub fn handle_io_result(
@@ -628,6 +658,7 @@ pub fn handle_io_result(
             response.warn(ROOM_CONFIG_LOAD_FAILED);
         }
     }
+    state.assert_invariants();
 }
 
 #[cfg(test)]

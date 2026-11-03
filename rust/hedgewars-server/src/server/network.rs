@@ -383,13 +383,8 @@ impl NetworkLayer {
             for client_id in response.extract_removed_clients() {
                 if self.clients.contains(client_id) {
                     self.clients.remove(client_id);
-                    if self.clients.is_empty() {
-                        let (update_tx, update_rx) = channel(128);
-                        self.update_rx = update_rx;
-                        self.update_tx = update_tx;
-                    }
+                    info!("Client {} removed", client_id);
                 }
-                info!("Client {} removed", client_id);
             }
 
             let io_tasks: Vec<_> = response.extract_io_tasks().collect();
@@ -406,6 +401,32 @@ impl NetworkLayer {
                 }
             }
         }
+
+        #[cfg(debug_assertions)]
+        {
+            for (client_id, _) in &self.clients {
+                debug_assert!(
+                    self.server_state.has_client(client_id),
+                    "NetworkLayer client {} missing from ServerState",
+                    client_id
+                );
+            }
+            for client_id in self.server_state.anteroom.iter_client_ids() {
+                debug_assert!(
+                    self.clients.contains(client_id),
+                    "Anteroom client {} missing from NetworkLayer",
+                    client_id
+                );
+            }
+            for client_id in self.server_state.server.iter_client_ids() {
+                debug_assert!(
+                    self.clients.contains(client_id),
+                    "Server client {} missing from NetworkLayer",
+                    client_id
+                );
+            }
+            self.server_state.assert_invariants();
+        }
     }
 
     async fn send_message<I>(
@@ -419,9 +440,7 @@ impl NetworkLayer {
         let bytes = Bytes::copy_from_slice(msg_string.as_bytes());
         for client_id in to_clients {
             if let Some((_, client)) = clients.get_mut(client_id) {
-                if client.send(bytes.clone()).await.is_err() {
-                    clients.remove(client_id);
-                }
+                let _ = client.send(bytes.clone()).await;
             }
         }
     }

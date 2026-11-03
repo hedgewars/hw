@@ -16,11 +16,11 @@ impl<T> IndexSlab<T> {
     }
 
     pub fn get(&self, index: usize) -> Option<&T> {
-        self.data[index].as_ref()
+        self.data.get(index).and_then(|x| x.as_ref())
     }
 
     pub fn get_mut(&mut self, index: usize) -> Option<&mut T> {
-        self.data[index].as_mut()
+        self.data.get_mut(index).and_then(|x| x.as_mut())
     }
 
     pub fn insert(&mut self, index: usize, value: T) {

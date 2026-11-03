@@ -31,7 +31,7 @@ fn client_teams_impl(
 }
 
 pub struct GameInfo {
-    pub original_teams: Vec<OwnedTeam>,
+    pub original_teams: Vec<(String, TeamInfo)>,
     pub left_teams: Vec<String>,
     pub rejoined_teams: Vec<String>,
     pub msg_log: Vec<String>,
@@ -43,7 +43,11 @@ pub struct GameInfo {
 }
 
 impl GameInfo {
-    fn new(teams: Vec<OwnedTeam>, config: RoomConfig, all_players_registered: bool) -> GameInfo {
+    fn new(
+        teams: Vec<(String, TeamInfo)>,
+        config: RoomConfig,
+        all_players_registered: bool,
+    ) -> GameInfo {
         let teams_in_game = teams.len() as u8;
         GameInfo {
             left_teams: Vec::new(),
@@ -56,20 +60,6 @@ impl GameInfo {
             original_teams: teams,
             original_config: config,
         }
-    }
-
-    pub fn client_teams(&self, owner_id: ClientId) -> impl Iterator<Item = &TeamInfo> + Clone {
-        client_teams_impl(&self.original_teams, owner_id)
-    }
-
-    pub fn client_teams_by_nick<'a>(
-        &'a self,
-        owner_nick: &'a str,
-    ) -> impl Iterator<Item = &'a TeamInfo> + Clone + 'a {
-        self.original_teams
-            .iter()
-            .filter(move |team| team.owner_nick == owner_nick)
-            .map(|team| &team.info)
     }
 
     pub fn log_team_removal<'a, I>(&mut self, team_names: I)
@@ -289,7 +279,10 @@ impl HwRoom {
     pub fn start_round(&mut self, all_players_registered: bool) {
         if self.game_info.is_none() {
             self.game_info = Some(GameInfo::new(
-                self.teams.clone(),
+                self.teams
+                    .iter()
+                    .map(|t| (t.owner_nick.clone(), t.info.clone()))
+                    .collect(),
                 self.config.clone(),
                 all_players_registered,
             ));

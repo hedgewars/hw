@@ -100,7 +100,7 @@ pub fn get_lobby_join_data(server: &HwServer, response: &mut Response) {
             .filter(|r| r.protocol_number != 0)
             .flat_map(|r| {
                 r.info(
-                    r.master_id.and_then(|id| server.get_client(id)),
+                    r.master_id.map(|id| server.client(id)),
                     client.protocol_number,
                 )
             })
@@ -229,7 +229,7 @@ pub fn get_room_join_data<'a, I: Iterator<Item = &'a HwClient> + Clone>(
             .send_self(),
         );
 
-        for team in info.client_teams(client.id) {
+        for team in room.client_teams(client.id) {
             response.add(
                 ForwardEngineMessage(vec![to_engine_msg(once(b'G').chain(team.name.bytes()))])
                     .send_all()
@@ -365,7 +365,7 @@ pub fn get_room_leave_result_for_client(
                 get_end_game_result(server, room.id, end_result, response);
             }
 
-            let master = new_master.and_then(|id| server.get_client(id));
+            let master = new_master.map(|id| server.client(id));
 
             get_room_update(
                 server.all_client_protocols().into_iter(),
@@ -586,16 +586,18 @@ where
 }
 
 pub fn get_active_room_teams(room: &HwRoom, destination: Destination, response: &mut Response) {
-    let current_teams = match room.game_info {
-        Some(ref info) => &info.original_teams,
-        None => &room.teams,
-    };
-
-    get_teams(
-        current_teams.iter().map(|team| &team.info),
-        destination,
-        response,
-    );
+    match room.game_info {
+        Some(ref info) => get_teams(
+            info.original_teams.iter().map(|(_, team)| team),
+            destination,
+            response,
+        ),
+        None => get_teams(
+            room.teams.iter().map(|team| &team.info),
+            destination,
+            response,
+        ),
+    }
 }
 
 pub fn get_room_flags(
@@ -806,7 +808,7 @@ pub fn get_start_game_data(
                     .in_room(room.id),
             );
 
-            let room_master = room.master_id.and_then(|id| server.get_client(id));
+            let room_master = room.master_id.map(|id| server.client(id));
             get_room_update(
                 server.all_client_protocols().into_iter(),
                 None,
@@ -830,7 +832,7 @@ pub fn get_end_game_result(
     response: &mut Response,
 ) {
     let room = server.room(room_id);
-    let room_master = room.master_id.and_then(|id| server.get_client(id));
+    let room_master = room.master_id.map(|id| server.client(id));
 
     get_room_update(
         server.all_client_protocols().into_iter(),

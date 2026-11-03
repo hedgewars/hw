@@ -89,7 +89,12 @@ impl HwAnteroom {
             has_password_challenge: false,
             pings_queue: 0,
         };
+        debug_assert!(!self.clients.contains(client_id));
         self.clients.insert(client_id, client);
+    }
+
+    pub fn iter_client_ids(&self) -> impl Iterator<Item = ClientId> + '_ {
+        self.clients.iter().map(|(id, _)| id)
     }
 
     pub fn has_client(&self, id: ClientId) -> bool {

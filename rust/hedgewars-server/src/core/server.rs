@@ -307,18 +307,8 @@ impl HwServer {
     }
 
     #[inline]
-    pub fn get_client(&self, client_id: ClientId) -> Option<&HwClient> {
-        self.clients.get(client_id)
-    }
-
-    #[inline]
     pub fn client_mut(&mut self, client_id: ClientId) -> &mut HwClient {
         &mut self.clients[client_id]
-    }
-
-    #[inline]
-    pub fn get_client_mut(&mut self, client_id: ClientId) -> Option<&mut HwClient> {
-        self.clients.get_mut(client_id)
     }
 
     #[inline]
@@ -339,16 +329,6 @@ impl HwServer {
     #[inline]
     pub fn room(&self, room_id: RoomId) -> &HwRoom {
         &self.rooms[room_id]
-    }
-
-    #[inline]
-    pub fn get_room(&self, room_id: RoomId) -> Option<&HwRoom> {
-        self.rooms.get(room_id)
-    }
-
-    #[inline]
-    fn get_room_mut(&mut self, room_id: RoomId) -> Option<&mut HwRoom> {
-        self.rooms.get_mut(room_id)
     }
 
     #[inline]
@@ -390,6 +370,7 @@ impl HwServer {
     }
 
     pub fn add_client(&mut self, client_id: ClientId, data: HwAnteroomClient) {
+        debug_assert!(!self.clients.contains(client_id) && !self.checkers.contains(client_id));
         if data.is_checker {
             self.checkers.insert(
                 client_id,
@@ -417,12 +398,175 @@ impl HwServer {
     }
 
     pub fn remove_client(&mut self, client_id: ClientId) {
+        if self
+            .clients
+            .get(client_id)
+            .and_then(|c| c.room_id)
+            .is_some()
+        {
+            debug_assert!(
+                false,
+                "Client {} removed from server while still in a room",
+                client_id
+            );
+            if let HwRoomOrServer::Room(mut control) = self.get_room_control(client_id) {
+                control.leave_room();
+            }
+        }
         self.clients.remove(client_id);
         if let Some(c) = self.checkers.remove(client_id) {
             if let (Some(id), Some(ref mut storage)) =
                 (c.current_replay, self.replay_storage.as_mut())
             {
                 storage.requeue_replay(&id);
+            }
+        }
+    }
+
+    pub fn assert_invariants(&self) {
+        #[cfg(debug_assertions)]
+        {
+            for (id, client) in self.clients.iter() {
+                debug_assert_eq!(client.id, id);
+                debug_assert!(!self.checkers.contains(id));
+                if let Some(room_id) = client.room_id {
+                    debug_assert!(
+                        self.rooms.contains(room_id),
+                        "Client {} has stale room_id {}",
+                        id,
+                        room_id
+                    );
+                    let room = &self.rooms[room_id];
+                    if client.is_master() {
+                        debug_assert_eq!(
+                            room.master_id,
+                            Some(id),
+                            "Client {} has is_master=true but room {} master_id is {:?}",
+                            id,
+                            room_id,
+                            room.master_id
+                        );
+                    } else {
+                        debug_assert_ne!(
+                            room.master_id,
+                            Some(id),
+                            "Client {} has is_master=false but room {} master_id is Some({})",
+                            id,
+                            room_id,
+                            id
+                        );
+                    }
+                } else {
+                    debug_assert!(!client.is_master(), "Lobby client {} has is_master=true", id);
+                    debug_assert!(!client.is_ready(), "Lobby client {} has is_ready=true", id);
+                    debug_assert!(
+                        !client.is_in_game(),
+                        "Lobby client {} has is_in_game=true",
+                        id
+                    );
+                    debug_assert!(
+                        !client.is_rejoined(),
+                        "Lobby client {} has is_rejoined=true",
+                        id
+                    );
+                    debug_assert_eq!(client.teams_in_game, 0);
+                    debug_assert!(client.team_indices.is_empty());
+                    debug_assert!(client.clan.is_none());
+                }
+            }
+
+            for (id, checker) in self.checkers.iter() {
+                debug_assert_eq!(checker.id, id);
+                debug_assert!(!self.clients.contains(id));
+            }
+
+            for (room_id, room) in self.rooms.iter() {
+                debug_assert_eq!(room.id, room_id);
+                let actual_players = self
+                    .clients
+                    .iter()
+                    .filter(|(_, c)| c.room_id == Some(room_id))
+                    .count();
+                debug_assert_eq!(
+                    room.players_number as usize,
+                    actual_players,
+                    "Room {} players_number ({}) != actual players ({})",
+                    room_id,
+                    room.players_number,
+                    actual_players
+                );
+                if let Some(master_id) = room.master_id {
+                    debug_assert!(
+                        self.clients.contains(master_id),
+                        "Room {} has stale master_id {}",
+                        room_id,
+                        master_id
+                    );
+                    let master = &self.clients[master_id];
+                    debug_assert_eq!(
+                        master.room_id,
+                        Some(room_id),
+                        "Room {} master {} is in room {:?}",
+                        room_id,
+                        master_id,
+                        master.room_id
+                    );
+                    debug_assert!(
+                        master.is_master(),
+                        "Room {} master {} does not have is_master flag",
+                        room_id,
+                        master_id
+                    );
+                }
+                for team in &room.teams {
+                    debug_assert!(
+                        self.clients.contains(team.owner_id),
+                        "Room {} team '{}' has stale owner_id {}",
+                        room_id,
+                        team.info.name,
+                        team.owner_id
+                    );
+                    debug_assert_eq!(
+                        self.clients[team.owner_id].room_id,
+                        Some(room_id),
+                        "Room {} team '{}' owner {} is not in room",
+                        room_id,
+                        team.info.name,
+                        team.owner_id
+                    );
+                }
+                if let Some(ref voting) = room.voting {
+                    for &voter_id in &voting.voters {
+                        debug_assert!(
+                            self.clients.contains(voter_id),
+                            "Room {} voting has stale voter_id {}",
+                            room_id,
+                            voter_id
+                        );
+                        debug_assert_eq!(
+                            self.clients[voter_id].room_id,
+                            Some(room_id),
+                            "Room {} voter {} is not in room",
+                            room_id,
+                            voter_id
+                        );
+                    }
+                    for &(voter_id, _) in &voting.votes {
+                        debug_assert!(
+                            self.clients.contains(voter_id),
+                            "Room {} voting has stale vote from {}",
+                            room_id,
+                            voter_id
+                        );
+                        debug_assert_eq!(
+                            self.clients[voter_id].room_id,
+                            Some(room_id),
+                            "Room {} vote owner {} is not in room",
+                            room_id,
+                            voter_id
+                        );
+                    }
+                }
             }
         }
     }
@@ -780,12 +924,35 @@ impl<'a> HwRoomControl<'a> {
         let is_fixed = room.is_fixed();
         let was_master = room.master_id == Some(client.id);
         let was_in_game = client.is_in_game();
+        let was_ready = client.is_ready();
+        let is_kicked_from_server = client.is_kicked_from_server;
         let mut removed_teams = vec![];
+
+        client.set_is_master(false);
+        client.set_is_ready(false);
+        client.set_is_in_game(false);
+        client.set_is_rejoined(false);
+        client.teams_in_game = 0;
+        client.team_indices.clear();
+        client.clan = None;
+
+        if room.master_id == Some(client.id) {
+            room.master_id = None;
+        }
+
+        if let Some(ref mut voting) = room.voting {
+            voting.voters.retain(|id| *id != client.id);
+            voting.votes.retain(|(id, _)| *id != client.id);
+        }
 
         self.is_room_removed = is_empty && !is_fixed;
 
-        if !self.is_room_removed {
-            if client.is_ready() && room.ready_players_number > 0 {
+        if self.is_room_removed {
+            room.teams.clear();
+            room.voting = None;
+            room.game_info = None;
+        } else {
+            if was_ready && room.ready_players_number > 0 {
                 room.ready_players_number -= 1;
             }
 
@@ -801,16 +968,7 @@ impl<'a> HwRoomControl<'a> {
             for team_name in &removed_teams {
                 room.remove_team(team_name);
             }
-
-            if client.is_master() {
-                client.set_is_master(false);
-                room.master_id = None;
-            }
         }
-
-        let is_kicked_from_server = client.is_kicked_from_server;
-        client.set_is_ready(false);
-        client.set_is_in_game(false);
 
         if !self.is_room_removed && !is_fixed && room.master_id.is_none() {
             let protocol_number = room.protocol_number;
@@ -1234,12 +1392,9 @@ impl<'a> HwRoomControl<'a> {
 
         let all_players_registered = {
             let room = &self.server.rooms[room_id];
-            room.teams.iter().all(|t| {
-                self.server
-                    .clients
-                    .get(t.owner_id)
-                    .is_some_and(|c| c.is_registered())
-            })
+            room.teams
+                .iter()
+                .all(|t| self.server.clients[t.owner_id].is_registered())
         };
 
         let room = self.room_mut();
@@ -1310,7 +1465,11 @@ impl<'a> HwRoomControl<'a> {
             if info.all_players_registered {
                 let replay = super::types::Replay {
                     config: room.config().clone(),
-                    teams: info.original_teams.iter().map(|t| t.info.clone()).collect(),
+                    teams: info
+                        .original_teams
+                        .iter()
+                        .map(|(_, info)| info.clone())
+                        .collect(),
                     message_log: info.msg_log.clone(),
                 };
                 let uid: u32 = thread_rng().gen_range(10000..100000);
@@ -1330,7 +1489,9 @@ impl<'a> HwRoomControl<'a> {
                 .filter(|(_, c)| c.room_id == Some(room_id))
                 .map(|(_, c)| {
                     c.set_is_ready(c.is_master());
+                    c.set_is_in_game(false);
                     c.set_is_rejoined(false);
+                    c.team_indices.clear();
                     c
                 })
                 .filter_map(|c| {
@@ -1380,6 +1541,7 @@ impl<'a> Drop for HwRoomControl<'a> {
     #[inline]
     fn drop(&mut self) {
         if self.is_room_removed {
+            debug_assert!(self.server.room_client_ids(self.room_id).next().is_none());
             self.server.rooms.remove(self.room_id);
         }
     }
@@ -1397,6 +1559,7 @@ fn create_room<'a, 'b>(
     name: String,
     password: Option<String>,
 ) -> (&'a HwClient, &'b HwRoom) {
+    debug_assert!(client.room_id.is_none());
     let room = allocate_room(rooms);
 
     room.master_id = Some(client.id);
@@ -1419,7 +1582,8 @@ fn create_room<'a, 'b>(
 }
 
 fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
-    debug_assert!(client.room_id != Some(room.id));
+    debug_assert!(client.room_id.is_none());
+    debug_assert!(room.master_id != Some(client.id));
 
     room.players_number += 1;
 
@@ -1441,10 +1605,13 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     if can_rejoin {
         if let Some(ref mut info) = room.game_info {
             let mut restored_teams = Vec::new();
-            for owned in &mut info.original_teams {
-                if owned.owner_nick == client.nick {
-                    owned.owner_id = client.id;
-                    restored_teams.push(owned.clone());
+            for (owner_nick, team_info) in &info.original_teams {
+                if *owner_nick == client.nick {
+                    restored_teams.push(super::room::OwnedTeam {
+                        owner_id: client.id,
+                        owner_nick: owner_nick.clone(),
+                        info: team_info.clone(),
+                    });
                 }
             }
 
@@ -1468,5 +1635,142 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
         if room.game_info.is_some() {
             client.team_indices = room.client_team_indices(client.id);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use hedgewars_network_protocol::types::HedgehogInfo;
+    use std::num::NonZeroU16;
+
+    fn make_anteroom_client(nick: &str, is_admin: bool) -> HwAnteroomClient {
+        HwAnteroomClient {
+            nick: Some(nick.to_string()),
+            protocol_number: NonZeroU16::new(58),
+            server_salt: String::new(),
+            is_local_admin: is_admin,
+            is_registered: true,
+            is_admin,
+            is_contributor: false,
+            is_checker: false,
+            ip_addr: Some([127, 0, 0, 1]),
+            web_password: String::new(),
+            has_password_challenge: false,
+            pings_queue: 0,
+        }
+    }
+
+    fn dummy_team(name: &str, color: u8) -> Box<TeamInfo> {
+        Box::new(TeamInfo {
+            owner: String::new(),
+            name: name.to_string(),
+            color,
+            grave: "Bone".to_string(),
+            fort: "Castle".to_string(),
+            voice_pack: "Default".to_string(),
+            flag: "hedgewars".to_string(),
+            difficulty: 0,
+            hedgehogs_number: 4,
+            hedgehogs: [
+                HedgehogInfo { name: "h1".to_string(), hat: "NoHat".to_string() },
+                HedgehogInfo { name: "h2".to_string(), hat: "NoHat".to_string() },
+                HedgehogInfo { name: "h3".to_string(), hat: "NoHat".to_string() },
+                HedgehogInfo { name: "h4".to_string(), hat: "NoHat".to_string() },
+                HedgehogInfo { name: "h5".to_string(), hat: "NoHat".to_string() },
+                HedgehogInfo { name: "h6".to_string(), hat: "NoHat".to_string() },
+                HedgehogInfo { name: "h7".to_string(), hat: "NoHat".to_string() },
+                HedgehogInfo { name: "h8".to_string(), hat: "NoHat".to_string() },
+            ],
+        })
+    }
+
+    #[test]
+    fn test_no_stale_ids_on_room_leave_and_id_reuse() {
+        let mut server = HwServer::new(16, 16);
+
+        // 1. Client 0 creates a room and leaves it (room removed) -> client 0 must have is_master=false
+        server.add_client(0, make_anteroom_client("alice", true));
+        server.create_room(0, "room1".to_string(), None).unwrap();
+        server.assert_invariants();
+
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.add_team(dummy_team("t1", 0)).unwrap();
+            let res = ctrl.leave_room();
+            assert!(matches!(res, LeaveRoomResult::RoomRemoved));
+        }
+        server.assert_invariants();
+        assert!(!server.client(0).is_master());
+        assert!(server.client(0).room_id.is_none());
+
+        // 2. Fixed room: master leaves, then disconnects; new client reuses ClientId 0
+        let (_, room) = server.create_room(0, "fixed_room".to_string(), None).unwrap();
+        let fixed_room_id = room.id;
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.fix_room().unwrap();
+            ctrl.leave_room();
+        }
+        server.remove_client(0);
+        server.assert_invariants();
+        assert_eq!(server.room(fixed_room_id).master_id, None);
+
+        // New client gets id 0 and joins fixed_room -> must NOT become master
+        server.add_client(0, make_anteroom_client("bob", false));
+        let _ = server.join_room(0, fixed_room_id, None).unwrap();
+        server.assert_invariants();
+        assert!(!server.client(0).is_master());
+        assert_eq!(server.room(fixed_room_id).master_id, None);
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.leave_room();
+        }
+        server.remove_client(0);
+        server.assert_invariants();
+
+        // 3. Voting & mid-game leave with ClientId reuse
+        server.add_client(1, make_anteroom_client("p1", false));
+        server.add_client(2, make_anteroom_client("p2", false));
+        let (_, room) = server.create_room(1, "game_room".to_string(), None).unwrap();
+        let game_room_id = room.id;
+        let _ = server.join_room(2, game_room_id, None).unwrap();
+
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(1) {
+            ctrl.add_team(dummy_team("team_p1", 0)).unwrap();
+        }
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(2) {
+            ctrl.add_team(dummy_team("team_p2", 1)).unwrap();
+            ctrl.toggle_ready();
+        }
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(1) {
+            ctrl.start_game().unwrap();
+            ctrl.start_vote(VoteType::Pause).unwrap();
+            ctrl.vote(Vote { is_pro: true, is_forced: false }).unwrap();
+        }
+        server.assert_invariants();
+
+        // Player 1 (master, voter, team owner) leaves and disconnects
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(1) {
+            ctrl.leave_room();
+        }
+        server.remove_client(1);
+        server.assert_invariants();
+
+        // New client "stranger" reuses ClientId 1 and joins game_room
+        server.add_client(1, make_anteroom_client("stranger", false));
+        let _ = server.join_room(1, game_room_id, None).unwrap();
+        server.assert_invariants();
+
+        // "stranger" must NOT be master, must NOT own any teams, and must NOT be in voting.voters
+        assert!(!server.client(1).is_master());
+        assert_eq!(server.client(1).teams_in_game, 0);
+        assert_eq!(server.room(game_room_id).client_teams(1).count(), 0);
+        assert!(
+            !server
+                .room(game_room_id)
+                .voting
+                .as_ref()
+                .unwrap()
+                .voters
+                .contains(&1)
+        );
     }
 }
