@@ -270,9 +270,14 @@ pub fn handle(
                     LoginResult::Unchanged => (),
                     LoginResult::Complete(client) => {
                         let is_checker = client.is_checker;
+                        let nick = client.nick.clone().unwrap_or_default();
+                        let host = client.host_string();
                         state.server.add_client(client_id, client);
                         if !is_checker {
+                            info!("Client '{}' (id: {}, host: {}) joined the server", nick, client_id, host);
                             common::get_lobby_join_data(&state.server, response);
+                        } else {
+                            info!("Checker '{}' (id: {}) joined the server", nick, client_id);
                         }
                     }
                     LoginResult::Exit => {
@@ -364,9 +369,15 @@ pub fn handle(
                         }
                         HwProtocolMessage::ToggleServerRegisteredOnly => {
                             if state.server.is_admin(client_id) {
+                                let admin_nick = state.server.client(client_id).nick.clone();
                                 state
                                     .server
                                     .set_is_registered_only(!state.server.is_registered_only());
+                                info!(
+                                    "Admin '{}' updated server variable registered_only to {}",
+                                    admin_nick,
+                                    state.server.is_registered_only()
+                                );
                                 let msg = if state.server.is_registered_only() {
                                     REGISTERED_ONLY_ENABLED
                                 } else {
@@ -377,6 +388,8 @@ pub fn handle(
                         }
                         HwProtocolMessage::Global(msg) => {
                             if state.server.is_admin(client_id) {
+                                let admin_nick = state.server.client(client_id).nick.clone();
+                                info!("Global announcement from '{}': {}", admin_nick, msg);
                                 response.add(global_chat(msg).send_all())
                             }
                         }
@@ -427,11 +440,14 @@ pub fn handle_client_accept(
     addr: [u8; 4],
     is_local: bool,
 ) -> bool {
+    let ip_str = format!("{}.{}.{}.{}", addr[0], addr[1], addr[2], addr[3]);
     let accepted = if let Err(reason) = state.anteroom.try_accept(Some(addr)) {
+        warn!("Failed server connect from {}: {}", ip_str, reason);
         response.add(Bye(reason).send_self());
         response.remove_client(client_id);
         false
     } else {
+        info!("Client connected from {} (id: {})", ip_str, client_id);
         let mut salt = [0u8; 18];
         thread_rng().fill_bytes(&mut salt);
 
@@ -456,7 +472,10 @@ pub fn handle_ping_sent(state: &mut ServerState, client_id: ClientId) {
 }
 
 pub fn handle_client_loss(state: &mut ServerState, client_id: ClientId, response: &mut Response) {
-    if state.anteroom.remove_client(client_id).is_none() {
+    if let Some(c) = state.anteroom.remove_client(client_id) {
+        let nick_str = c.nick.as_deref().unwrap_or("<unnamed>");
+        info!("Client '{}' (id: {}) disconnected from anteroom", nick_str, client_id);
+    } else {
         common::remove_client(
             &mut state.server,
             &mut state.anteroom,
@@ -478,6 +497,8 @@ pub fn handle_io_result(
                 return;
             }
             if !is_registered && state.server.is_registered_only() {
+                let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
+                warn!("Client '{}' (id: {}) failed to join server: registration required", nick, client_id);
                 state.anteroom.remove_client(client_id);
                 response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
                 response.remove_client(client_id);
@@ -492,6 +513,9 @@ pub fn handle_io_result(
                 };
                 response.add(AskPassword(salt).send_self());
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
+                let nick = client.nick.clone().unwrap_or_default();
+                let host = client.host_string();
+                info!("Client '{}' (id: {}, host: {}) joined the server", nick, client_id, host);
                 state.server.add_client(client_id, client);
                 common::get_lobby_join_data(&state.server, response);
             }
@@ -500,6 +524,8 @@ pub fn handle_io_result(
             if !state.anteroom.has_client(client_id) {
                 return;
             }
+            let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
+            warn!("Client '{}' (id: {}) failed to join server: authentication failed", nick, client_id);
             state.anteroom.remove_client(client_id);
             response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
             response.remove_client(client_id);
@@ -516,6 +542,9 @@ pub fn handle_io_result(
                 client.is_registered = info.is_registered;
                 client.is_admin = info.is_admin;
                 client.is_contributor = info.is_contributor;
+                let nick = client.nick.clone().unwrap_or_default();
+                let host = client.host_string();
+                info!("Client '{}' (id: {}, host: {}) joined the server", nick, client_id, host);
                 state.server.add_client(client_id, client);
                 common::get_lobby_join_data(&state.server, response);
                 if proto < 48 && info.is_admin {
@@ -530,15 +559,19 @@ pub fn handle_io_result(
             if !state.anteroom.has_client(client_id) {
                 return;
             }
+            let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
             if !is_registered {
+                warn!("Checker '{}' (id: {}) failed to join server: authentication failed", nick, client_id);
                 state.anteroom.remove_client(client_id);
                 response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
                 response.remove_client(client_id);
             } else if !is_admin {
+                warn!("Checker '{}' (id: {}) failed to join server: no checker rights", nick, client_id);
                 state.anteroom.remove_client(client_id);
                 response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
                 response.remove_client(client_id);
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
+                info!("Checker '{}' (id: {}) joined the server", nick, client_id);
                 state.server.add_client(client_id, client);
                 response.add(LogonPassed.send_self());
             }

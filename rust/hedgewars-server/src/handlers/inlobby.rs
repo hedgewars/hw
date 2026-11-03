@@ -33,10 +33,18 @@ pub fn handle(
     match message {
         CreateRoom(name, password) => {
             let all_protocols = server.all_client_protocols();
-            match server.create_room(client_id, name, password) {
-                Err(CreateRoomError::InvalidName) => response.warn(ILLEGAL_ROOM_NAME),
-                Err(CreateRoomError::AlreadyExists) => response.warn(ROOM_EXISTS),
+            match server.create_room(client_id, name.clone(), password) {
+                Err(CreateRoomError::InvalidName) => {
+                    warn!("Client {} failed to create room: invalid name '{}'", client_id, name);
+                    response.warn(ILLEGAL_ROOM_NAME);
+                }
+                Err(CreateRoomError::AlreadyExists) => {
+                    warn!("Client {} failed to create room: room '{}' already exists", client_id, name);
+                    response.warn(ROOM_EXISTS);
+                }
                 Ok((client, room)) => {
+                    info!("Room '{}' created by '{}' (id: {})", room.name, client.nick, client_id);
+                    info!("Client '{}' joined room '{}'", client.nick, room.name);
                     response.add(RoomJoined(vec![client.nick.clone()]).send_self());
                     response.add(
                         ClientFlags(add_flags(&[Flags::InRoom]), vec![client.nick.clone()])
@@ -67,9 +75,11 @@ pub fn handle(
             }
         }
         Chat(msg) => {
+            let nick = server.client(client_id).nick.clone();
+            info!("Lobby chat <{}>: {}", nick, msg);
             response.add(
                 ChatMsg {
-                    nick: server.client(client_id).nick.clone(),
+                    nick,
                     msg,
                 }
                 .send_all()
@@ -86,12 +96,15 @@ pub fn handle(
         }
         JoinRoom(name, password) => {
             let protocols = server.all_client_protocols();
+            let client_nick = server.client(client_id).nick.clone();
             let joined = match server.join_room_by_name(client_id, &name, password.as_deref()) {
                 Err(error) => {
+                    warn!("Client '{}' failed to join room '{}': {:?}", client_nick, name, error);
                     super::common::get_room_join_error(error, response);
                     false
                 }
                 Ok((client, master, room, room_clients)) => {
+                    info!("Client '{}' joined room '{}'", client.nick, room.name);
                     super::common::get_room_join_data(
                         &mut protocols.into_iter(),
                         client,
@@ -114,17 +127,20 @@ pub fn handle(
             }
         }
         Follow(nick) => {
-            if let Some(client) = server.find_client(&nick) {
-                if let Some(room_id) = client.room_id {
+            if let Some(target) = server.find_client(&nick) {
+                if let Some(room_id) = target.room_id {
                     let room_name = server.room(room_id).name.clone();
-                    response.add(Joining(room_name).send_self());
+                    response.add(Joining(room_name.clone()).send_self());
                     let protocols = server.all_client_protocols();
+                    let client_nick = server.client(client_id).nick.clone();
                     let joined = match server.join_room(client_id, room_id, None) {
                         Err(error) => {
+                            warn!("Client '{}' failed to follow into room '{}': {:?}", client_nick, room_name, error);
                             super::common::get_room_join_error(error, response);
                             false
                         }
                         Ok((client, master, room, room_clients)) => {
+                            info!("Client '{}' joined room '{}' (following '{}')", client.nick, room.name, nick);
                             super::common::get_room_join_data(
                                 &mut protocols.into_iter(),
                                 client,
@@ -151,6 +167,10 @@ pub fn handle(
         SetServerVar(var) => {
             if let ServerVar::LatestProto(0) = var {
                 return;
+            }
+            if server.is_admin(client_id) {
+                let admin_nick = server.client(client_id).nick.clone();
+                info!("Admin '{}' updated server variable: {:?}", admin_nick, var);
             }
             let _ = server.set_var(client_id, var);
         }
@@ -211,16 +231,19 @@ pub fn handle(
         }
         Kick(nick) => {
             if server.is_admin(client_id) {
+                let admin_nick = server.client(client_id).nick.clone();
                 if let Some(target) = server.find_client(&nick) {
                     let target_id = target.id;
                     if target_id != client_id {
+                        info!("Admin '{}' kicked client '{}' (id: {}) from server", admin_nick, nick, target_id);
                         let host = target.host.clone();
                         if !host.is_empty() {
                             anteroom.bans.add_ip_ban_raw(
-                                host,
+                                host.clone(),
                                 "60 seconds cooldown after kick".to_string(),
                                 60,
                             );
+                            info!("Auto-ban added: 60s cooldown after kick for IP '{}'", host);
                         }
                         server.client_mut(target_id).is_kicked_from_server = true;
                         super::common::remove_client_by_id(
@@ -236,10 +259,16 @@ pub fn handle(
         }
         Ban(nick, reason, time) => {
             if server.is_admin(client_id) {
+                let admin_nick = server.client(client_id).nick.clone();
                 if let Some(target) = server.find_client(&nick) {
                     let target_id = target.id;
                     if target_id != client_id {
                         let host = target.host.clone();
+                        info!(
+                            "Admin '{}' banned player '{}' (ip: {}, duration: {}s): {}",
+                            admin_nick, nick, host, time, reason
+                        );
+                        info!("Admin '{}' kicked client '{}' (id: {}) from server (banned)", admin_nick, nick, target_id);
                         if !host.is_empty() {
                             anteroom.bans.add_ip_ban_raw(
                                 host.clone(),
@@ -262,11 +291,21 @@ pub fn handle(
         }
         BanIp(ip, reason, time) => {
             if server.is_admin(client_id) {
+                let admin_nick = server.client(client_id).nick.clone();
+                info!(
+                    "Admin '{}' added IP ban for '{}' (duration: {}s): {}",
+                    admin_nick, ip, time, reason
+                );
                 anteroom.bans.add_ip_ban(ip, reason, time);
             }
         }
         BanNick(nick, reason, time) => {
             if server.is_admin(client_id) {
+                let admin_nick = server.client(client_id).nick.clone();
+                info!(
+                    "Admin '{}' added nick ban for '{}' (duration: {}s): {}",
+                    admin_nick, nick, time, reason
+                );
                 anteroom.bans.add_nick_ban(nick, reason, time);
             }
         }
@@ -277,6 +316,8 @@ pub fn handle(
         }
         Unban(entry) => {
             if server.is_admin(client_id) {
+                let admin_nick = server.client(client_id).nick.clone();
+                info!("Admin '{}' unbanned '{}'", admin_nick, entry);
                 anteroom.bans.unban(&entry);
             }
         }

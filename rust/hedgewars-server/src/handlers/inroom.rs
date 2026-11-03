@@ -112,12 +112,16 @@ pub fn handle(
 
     use hedgewars_network_protocol::messages::HwProtocolMessage::*;
     match message {
-        Part(_msg) => {
+        Part(msg) => {
+            let msg_str = msg.as_deref().unwrap_or("");
+            let nick = room_control.client().nick.clone();
+            let room_name = room_control.room().name.clone();
+            info!("Client '{}' left room '{}': {}", nick, room_name, msg_str);
             let result = room_control.leave_room();
             super::common::get_room_leave_result(
                 room_control.server(),
                 room_control.room(),
-                "",
+                msg_str,
                 result,
                 response,
             );
@@ -622,6 +626,9 @@ pub fn handle(
                         } else if kick_cl.has_super_power() {
                             response.warn("This player is protected from being kicked.");
                         } else {
+                            let master_nick = room_control.client().nick.clone();
+                            let room_name = room_control.room().name.clone();
+                            info!("Client '{}' was kicked from room '{}' by master '{}'", kick_nick, room_name, master_nick);
                             response.add(Kicked.send(kick_id));
                             let leave_result = room_control.kick_user(kick_id);
                             super::common::get_room_leave_result_for_client(
@@ -642,6 +649,9 @@ pub fn handle(
                 if let Some(ban_cl) = room_control.server().find_client(&ban_nick) {
                     let ban_id = ban_cl.id;
                     if ban_id != client_id && ban_cl.room_id == Some(room_id) {
+                        let master_nick = room_control.client().nick.clone();
+                        let room_name = room_control.room().name.clone();
+                        info!("Client '{}' was room-banned and kicked from room '{}' by master '{}'", ban_nick, room_name, master_nick);
                         response.add(Kicked.send(ban_id));
                         let leave_result = room_control.kick_user(ban_id);
                         super::common::get_room_leave_result_for_client(

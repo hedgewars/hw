@@ -9,6 +9,7 @@ use crate::{
     utils::is_name_illegal,
 };
 use hedgewars_network_protocol::messages::{HwProtocolMessage, HwServerMessage::*};
+use log::*;
 use std::num::NonZeroU16;
 
 pub enum LoginResult {
@@ -39,9 +40,11 @@ fn get_completion_result(
             .any(|c| c.nick.eq_ignore_ascii_case(&nick))
     {
         if proto < 38 {
+            warn!("Client {} failed to join server: nickname '{}' already in use", client_id, nick);
             response.add(Bye("Nickname is already in use".to_string()).send_self());
             return LoginResult::Exit;
         } else {
+            info!("Client {} nickname '{}' already in use, notice sent", client_id, nick);
             response.add(Notice("0".to_string()).send_self());
             anteroom.get_client_mut(client_id).nick = None;
             return LoginResult::Unchanged;
@@ -49,6 +52,7 @@ fn get_completion_result(
     }
 
     if let Some(reason) = anteroom.bans.find_nick_ban(&nick) {
+        warn!("Client {} failed to join server: active ban for nickname '{}': {}", client_id, nick, reason);
         response.add(Bye(reason).send_self());
         return LoginResult::Exit;
     }
@@ -91,6 +95,8 @@ pub fn handle(
     match message {
         HwProtocolMessage::Quit(msg) => {
             let msg = msg.unwrap_or_else(|| "bye".to_string());
+            let nick_str = anteroom.get_client(client_id).nick.as_deref().unwrap_or("<unnamed>");
+            info!("Client '{}' (id: {}) quit from anteroom: {}", nick_str, client_id, msg);
             response.add(Bye(msg).send_self());
             LoginResult::Exit
         }
@@ -98,9 +104,11 @@ pub fn handle(
             let client = anteroom.get_client_mut(client_id);
 
             if client.nick.is_some() {
+                warn!("Client {} failed to set nickname: already provided", client_id);
                 response.error(NICKNAME_PROVIDED);
                 LoginResult::Unchanged
             } else if is_name_illegal(&nick) {
+                warn!("Client {} failed to join server: illegal nickname '{}'", client_id, nick);
                 response.add(Bye(ILLEGAL_CLIENT_NAME.to_string()).send_self());
                 LoginResult::Exit
             } else {
@@ -118,9 +126,11 @@ pub fn handle(
         HwProtocolMessage::Proto(proto) => {
             let client = anteroom.get_client_mut(client_id);
             if client.protocol_number.is_some() {
+                warn!("Client {} failed to set protocol: already provided", client_id);
                 response.error(PROTOCOL_PROVIDED);
                 LoginResult::Unchanged
             } else if proto == 0 {
+                warn!("Client {} failed to join server: bad protocol number 0", client_id);
                 response.error(BAD_NUMBER);
                 LoginResult::Unchanged
             } else {
@@ -154,6 +164,8 @@ pub fn handle(
                 }
             }
             let _ = (hash, salt);
+            let nick_str = anteroom.get_client(client_id).nick.as_deref().unwrap_or("<unnamed>");
+            warn!("Client '{}' (id: {}) failed to join server: authentication failed", nick_str, client_id);
             response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
             LoginResult::Exit
         }
@@ -176,11 +188,14 @@ pub fn handle(
                 }
             }
             let _ = password;
+            let nick_str = anteroom.get_client(client_id).nick.as_deref().unwrap_or("<unnamed>");
+            warn!("Client '{}' (id: {}) failed to join server: authentication failed", nick_str, client_id);
             response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
             LoginResult::Exit
         }
         HwProtocolMessage::Checker(protocol, nick, password) => {
             if protocol == 0 {
+                warn!("Checker '{}' failed to join server: bad protocol number 0", nick);
                 response.error(BAD_NUMBER);
                 LoginResult::Unchanged
             } else {
@@ -198,16 +213,23 @@ pub fn handle(
                 [] => response.error("Empty command (state: not entered)"),
                 ["PROTO", _] => {
                     if anteroom.get_client(client_id).protocol_number.is_some() {
+                        warn!("Client {} failed to set protocol: already provided", client_id);
                         response.error(PROTOCOL_PROVIDED);
                     } else {
+                        warn!("Client {} failed to join server: bad protocol number (malformed)", client_id);
                         response.error(BAD_NUMBER);
                     }
                 }
-                ["CHECKER", _, _, _] => response.error(BAD_NUMBER),
+                ["CHECKER", _, _, _] => {
+                    warn!("Checker failed to join server: bad protocol number (malformed)");
+                    response.error(BAD_NUMBER);
+                }
                 ["NICK", _] => {
                     if anteroom.get_client(client_id).nick.is_some() {
+                        warn!("Client {} failed to set nickname: already provided", client_id);
                         response.error(NICKNAME_PROVIDED);
                     } else {
+                        warn!("Client {} failed to join server: illegal nickname (malformed)", client_id);
                         response.add(Bye(ILLEGAL_CLIENT_NAME.to_string()).send_self());
                         return LoginResult::Exit;
                     }

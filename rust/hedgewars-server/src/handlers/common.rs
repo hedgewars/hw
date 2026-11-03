@@ -2,6 +2,7 @@ use super::{
     actions::{Destination, DestinationGroup},
     Response,
 };
+use log::*;
 use crate::core::{
     anteroom::HwAnteroom,
     flood::{FloodAction, FloodEvent},
@@ -395,6 +396,7 @@ pub fn remove_client_by_id(
     msg: String,
 ) {
     if server.is_checker(client_id) {
+        info!("Checker (id: {}) quit the server: {}", client_id, msg);
         server.remove_client(client_id);
         response.add(Bye(msg).send(client_id));
         response.remove_client(client_id);
@@ -406,10 +408,13 @@ pub fn remove_client_by_id(
     }
 
     let nick = server.client(client_id).nick.clone();
+    info!("Client '{}' (id: {}) quit the server: {}", nick, client_id, msg);
     anteroom.forget_nick(&nick);
 
     if let HwRoomOrServer::Room(mut control) = server.get_room_control(client_id) {
         let room_id = control.room().id;
+        let room_name = control.room().name.clone();
+        info!("Client '{}' left room '{}' (server quit)", nick, room_name);
         let result = control.leave_room();
         let server = control.server();
         get_room_leave_result_for_client(
@@ -444,6 +449,8 @@ pub fn register_flood_event(
         FloodAction::None => {}
         FloodAction::Warn(msg) => response.warn(msg),
         FloodAction::Bye(msg) => {
+            let nick = server.client(client_id).nick.clone();
+            warn!("Client '{}' (id: {}) kicked from server for flood: {}", nick, client_id, msg);
             remove_client_by_id(server, anteroom, client_id, response, msg.to_string())
         }
     }
@@ -535,6 +542,7 @@ pub fn get_room_update(
 }
 
 pub fn get_room_remove(server: &HwServer, room: &HwRoom, response: &mut Response) {
+    info!("Room '{}' removed", room.name);
     for protocol in server.all_client_protocols() {
         response.add(
             RoomRemove(room.get_name(protocol))
@@ -722,6 +730,9 @@ pub fn handle_vote(
     if let Ok(VoteResult::Succeeded(effect)) = result {
         match effect {
             VoteEffect::Kicked(kicked_id, leave_result) => {
+                let kicked_nick = room_control.server().client(kicked_id).nick.clone();
+                let room_name = room_control.room().name.clone();
+                info!("Client '{}' was kicked from room '{}' by vote", kicked_nick, room_name);
                 response.add(Kicked.send(kicked_id));
                 get_room_leave_result_for_client(
                     room_control.server(),
