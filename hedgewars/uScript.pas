@@ -462,7 +462,7 @@ end;
 
 function lc_parsecommand(L : Plua_State) : LongInt; Cdecl;
 var t: PChar;
-    i,c: LongWord;
+    i,c: size_t;
     s: shortstring;
 begin
     if CheckLuaParamCount(L, 1, 'ParseCommand', 'string') then
