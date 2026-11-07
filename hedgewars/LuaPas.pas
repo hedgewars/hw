@@ -27,7 +27,7 @@ const LuaLibName =
 
 type
 {$IFNDEF PAS2C}
-    size_t   = Cardinal;
+    size_t   = PtrUInt;
 {$ENDIF}
     Psize_t  = ^size_t;
     PPointer = ^Pointer;
