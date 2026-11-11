@@ -1,0 +1,61 @@
+[Unit]
+Description=Hedgewars Game Server
+Documentation=https://www.hedgewars.org/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/default/hedgewars-server
+ExecStart=/usr/bin/hedgewars-server $HEDGEWARS_SERVER_OPTS
+Restart=on-failure
+RestartSec=5s
+
+# State & Working Directory
+# Manages /var/lib/hedgewars-server with persistent ownership
+StateDirectory=hedgewars-server
+WorkingDirectory=/var/lib/hedgewars-server
+ReadWritePaths=/var/lib/hedgewars-server
+
+# User & Privilege Isolation
+DynamicUser=yes
+User=hedgewars
+Group=hedgewars
+UMask=0027
+
+# Capabilities & Privilege Dropping
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+# Filesystem Sandboxing (Restricted access outside designated folder)
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+DevicePolicy=closed
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+
+# Process & Execution Restrictions
+ProtectProc=invisible
+ProcSubset=pid
+PrivateUsers=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+# System Call Filtering
+SystemCallArchitectures=native
+SystemCallFilter=@system-service @network-io
+SystemCallFilter=~@privileged @resources @obsolete @mount @reboot @swap @clock @raw-io @cpu-emulation
+
+[Install]
+WantedBy=multi-user.target
