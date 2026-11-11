@@ -970,9 +970,13 @@ impl<'a> HwRoomControl<'a> {
             }
         }
 
-        if !self.is_room_removed && !is_fixed && room.master_id.is_none() {
+        if !self.is_room_removed && room.master_id.is_none() {
             let protocol_number = room.protocol_number;
-            let new_master_id = self.server.room_client_ids(self.room_id).next();
+            let new_master_id = if is_fixed {
+                None
+            } else {
+                self.server.room_client_ids(self.room_id).next()
+            };
 
             if let Some(new_master_id) = new_master_id {
                 let room = self.room_mut();
@@ -984,12 +988,12 @@ impl<'a> HwRoomControl<'a> {
                     let nick = new_master.nick.clone();
                     self.room_mut().name = nick;
                 }
-
-                let room = self.room_mut();
-                room.set_join_restriction(false);
-                room.set_team_add_restriction(false);
-                room.set_unregistered_players_restriction(false);
             }
+
+            let room = self.room_mut();
+            room.set_join_restriction(false);
+            room.set_team_add_restriction(false);
+            room.set_unregistered_players_restriction(is_fixed);
         }
 
         if self.is_room_removed {
@@ -1703,18 +1707,22 @@ mod tests {
         assert!(!server.client(0).is_master());
         assert!(server.client(0).room_id.is_none());
 
-        // 2. Fixed room: master leaves, then disconnects; new client reuses ClientId 0
+        // 2. Fixed room: master sets restricted join, fixes room, leaves;
+        // flag must be reset so new client can join fixed room without master
         let (_, room) = server.create_room(0, "fixed_room".to_string(), None).unwrap();
         let fixed_room_id = room.id;
         if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.toggle_flag(super::super::room::RoomFlags::RESTRICTED_JOIN);
+            assert!(ctrl.room().is_join_restricted());
             ctrl.fix_room().unwrap();
             ctrl.leave_room();
         }
         server.remove_client(0);
         server.assert_invariants();
         assert_eq!(server.room(fixed_room_id).master_id, None);
+        assert!(!server.room(fixed_room_id).is_join_restricted());
 
-        // New client gets id 0 and joins fixed_room -> must NOT become master
+        // New client gets id 0 and joins fixed_room -> must NOT become master, and join must succeed
         server.add_client(0, make_anteroom_client("bob", false));
         let _ = server.join_room(0, fixed_room_id, None).unwrap();
         server.assert_invariants();
