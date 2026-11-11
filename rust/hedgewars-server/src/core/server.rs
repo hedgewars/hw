@@ -214,14 +214,7 @@ pub struct HwServer {
 impl HwServer {
     pub fn new(clients_limit: usize, rooms_limit: usize) -> Self {
         //todo!("add reconnection IDs");
-        let mut rooms = Slab::with_capacity(rooms_limit);
-        if let Ok(contents) = std::fs::read_to_string("racer.yaml") {
-            let room = allocate_room(&mut rooms);
-            room.name = "Racer".to_string();
-            room.protocol_number = 58;
-            room.set_is_fixed(true);
-            let _ = room.set_saves(&contents);
-        }
+        let rooms = Slab::with_capacity(rooms_limit);
         let clients = IndexSlab::with_capacity(clients_limit);
         let checkers = IndexSlab::new();
         Self {
