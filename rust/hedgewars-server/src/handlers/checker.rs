@@ -1,6 +1,7 @@
 use crate::core::{server::HwServer, types::CheckerId};
 use crate::handlers::actions::ToPendingMessage;
 use hedgewars_network_protocol::messages::{HwProtocolMessage, HwServerMessage};
+use log::*;
 
 pub fn handle(
     server: &mut HwServer,
@@ -17,11 +18,16 @@ pub fn handle(
                 response.add(HwServerMessage::Replay(demo_msgs).send_self());
             }
         }
+        #[allow(unused_variables)]
         HwProtocolMessage::CheckedOk(info) => {
             if let Some(c) = server.get_checker_mut(checker_id) {
                 let protocol = c.protocol_number;
                 if let Some(id) = c.current_replay.take() {
                     let filename = id.filename();
+                    info!(
+                        "Checker (id: {}) returned OK for replay \"{}\": {:?}",
+                        checker_id, filename, info
+                    );
                     let teams = std::mem::take(&mut c.current_teams);
                     let details = c.current_details.take();
                     if let Some(ref mut storage) = server.replay_storage {
@@ -40,11 +46,17 @@ pub fn handle(
                 }
             }
         }
-        HwProtocolMessage::CheckedFail(_message) => {
+        HwProtocolMessage::CheckedFail(message) => {
             if let Some(c) = server.get_checker_mut(checker_id) {
                 c.current_teams.clear();
                 c.current_details = None;
                 if let Some(id) = c.current_replay.take() {
+                    info!(
+                        "Checker (id: {}) returned FAIL for replay \"{}\": {}",
+                        checker_id,
+                        id.filename(),
+                        message
+                    );
                     if let Some(ref mut storage) = server.replay_storage {
                         storage.move_failed_replay(&id).ok();
                     }

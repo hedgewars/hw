@@ -11,6 +11,7 @@ use hedgewars_network_protocol::types::{GameCfg, ServerVar, TeamInfo, Vote, Vote
 use crate::server::replaystorage::{ReplayId, ReplayStorage};
 
 use bitflags::*;
+use log::*;
 use rand::{self, thread_rng, Rng};
 use slab::Slab;
 use std::{cmp::min, collections::HashSet};
@@ -272,6 +273,11 @@ impl HwServer {
     ) -> Option<(CheckerId, Vec<String>)> {
         let protocol = self.checkers.get(checker_id)?.protocol_number;
         let (id, replay) = self.replay_storage.as_mut()?.pick_replay(protocol)?;
+        info!(
+            "Assigned replay \"{}\" to checker (id: {})",
+            id.filename(),
+            checker_id
+        );
         let (details, demo_msgs) = crate::server::demo::replay_to_demo(&replay);
         let teams = replay
             .teams
@@ -1474,7 +1480,10 @@ impl<'a> HwRoomControl<'a> {
                     uid,
                     room_proto
                 );
-                let _ = replay.save(filename);
+                match replay.save(filename.clone()) {
+                    Ok(()) => info!("Created replay file \"{}\"", filename),
+                    Err(e) => warn!("Unable to save replay file \"{}\": {}", filename, e),
+                }
             }
 
             let unreadied_nicks: Vec<_> = self

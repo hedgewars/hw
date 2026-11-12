@@ -151,14 +151,18 @@ pub fn handle(
             }
         }
         Fix => {
-            let _ = room_control.fix_room();
+            if room_control.fix_room().is_ok() {
+                response.add(server_chat("This room is now permanent.".to_string()).send_self());
+            }
         }
         Unfix => {
             if client.is_admin() {
                 if !client.is_master() {
                     response.warn(NOT_MASTER);
-                } else {
-                    let _ = room_control.unfix_room();
+                } else if room_control.unfix_room().is_ok() {
+                    response.add(
+                        server_chat("This room is no longer permanent.".to_string()).send_self(),
+                    );
                 }
             }
         }
@@ -176,7 +180,12 @@ pub fn handle(
         MaxTeams(count) => {
             use crate::core::server::SetTeamCountError;
             match room_control.set_room_max_teams(count) {
-                Ok(()) => {}
+                Ok(()) => {
+                    response.add(
+                        server_chat(format!("Maximum number of teams set to {}.", count))
+                            .send_self(),
+                    );
+                }
                 Err(SetTeamCountError::NotMaster) => response.warn(NOT_MASTER),
                 Err(SetTeamCountError::InvalidNumber) => {
                     response.warn("/maxteams: specify number from 2 to 8")
@@ -358,52 +367,69 @@ pub fn handle(
         }
         Save(name, location) => {
             if client.is_admin() {
+                response.add(
+                    server_chat(format!("Room config saved as {}", name))
+                        .send_all()
+                        .in_room(room_id),
+                );
                 room_control.save_config(name, location);
             }
         }
         SaveRoom(filename) => {
             if client.is_admin() {
-                #[cfg(feature = "official-server")]
-                {
-                    match room.get_saves() {
-                        Ok(contents) => {
-                            if let Err(e) = std::fs::write(&filename, contents) {
-                                warn!(
-                                    "Error while writing the room config file \"{}\": {}",
-                                    filename, e
-                                );
-                            }
+                match room.get_saves() {
+                    Ok(contents) => match std::fs::write(&filename, contents) {
+                        Ok(()) => {
+                            response.add(server_chat(ROOM_CONFIG_SAVED.to_string()).send_self());
                         }
                         Err(e) => {
-                            warn!("Error while serializing the room configs: {}", e);
+                            warn!(
+                                "Error while writing the room config file \"{}\": {}",
+                                filename, e
+                            );
+                            response.warn(ROOM_CONFIG_SAVE_FAILED);
                         }
+                    },
+                    Err(e) => {
+                        warn!("Error while serializing the room configs: {}", e);
+                        response.warn("Unable to serialize the room configs.");
                     }
                 }
             }
         }
         LoadRoom(filename) => {
             if client.is_admin() {
-                #[cfg(feature = "official-server")]
-                {
-                    match std::fs::read_to_string(&filename) {
-                        Ok(contents) => {
-                            if let Err(e) = room_control.room_mut().set_saves(&contents) {
-                                warn!("Error while deserializing the room configs: {}", e);
-                            }
+                match std::fs::read_to_string(&filename) {
+                    Ok(contents) => match room_control.room_mut().set_saves(&contents) {
+                        Ok(()) => {
+                            response.add(server_chat(ROOM_CONFIG_LOADED.to_string()).send_self());
                         }
                         Err(e) => {
-                            warn!(
-                                "Error while reading the room config file \"{}\": {}",
-                                filename, e
-                            );
+                            warn!("Error while deserializing the room configs: {}", e);
+                            response.warn(ROOM_CONFIG_DESERIALIZE_FAILED);
                         }
+                    },
+                    Err(e) => {
+                        warn!(
+                            "Error while reading the room config file \"{}\": {}",
+                            filename, e
+                        );
+                        response.warn(ROOM_CONFIG_LOAD_FAILED);
                     }
                 }
             }
         }
         Delete(name) => {
             if client.is_admin() {
-                room_control.delete_config(&name);
+                if !room_control.delete_config(&name) {
+                    response.warn(&format!("Save doesn't exist: {}", name));
+                } else {
+                    response.add(
+                        server_chat(format!("Room config {} has been deleted", name))
+                            .send_all()
+                            .in_room(room_id),
+                    );
+                }
             }
         }
         CallVote(None) => {

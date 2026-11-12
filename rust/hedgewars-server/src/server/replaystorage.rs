@@ -1,5 +1,6 @@
 use crate::core::types::Replay;
 //use super::demo::load;
+use log::*;
 use std::fs;
 use std::path::PathBuf;
 
@@ -77,6 +78,20 @@ impl ReplayStorage {
                 .expect("What's up with your file name?")
         );
 
-        fs::rename(&id.path, new_name)
+        match fs::rename(&id.path, &new_name) {
+            Ok(()) => {
+                info!("Moved replay \"{}\" to \"{}\"", id.filename(), new_name);
+                Ok(())
+            }
+            Err(e) => {
+                warn!(
+                    "Unable to move replay \"{}\" to \"{}\": {}",
+                    id.filename(),
+                    new_name,
+                    e
+                );
+                Err(e)
+            }
+        }
     }
 }
