@@ -3,9 +3,8 @@ use log::*;
 use std::{
     error::Error,
     fmt::{Debug, Display, Formatter},
-    time::Duration,
 };
-use tokio::{io::AsyncReadExt, time::timeout};
+use tokio::io::AsyncReadExt;
 
 use hedgewars_network_protocol::{
     messages::HwProtocolMessage,
@@ -15,7 +14,6 @@ use hedgewars_network_protocol::{
 #[derive(Debug)]
 pub enum ProtocolError {
     Eof,
-    Timeout,
     Network(Box<dyn Error + Send>),
 }
 
@@ -23,7 +21,6 @@ impl Display for ProtocolError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             ProtocolError::Eof => write!(f, "Connection reset by peer"),
-            ProtocolError::Timeout => write!(f, "Read operation timed out"),
             ProtocolError::Network(source) => write!(f, "{:?}", source),
         }
     }
@@ -43,14 +40,12 @@ pub type Result<T> = std::result::Result<T, ProtocolError>;
 
 pub struct ProtocolDecoder {
     buffer: BytesMut,
-    read_timeout: Duration,
 }
 
 impl ProtocolDecoder {
-    pub fn new(read_timeout: Duration) -> ProtocolDecoder {
+    pub fn new() -> ProtocolDecoder {
         ProtocolDecoder {
             buffer: BytesMut::with_capacity(1024),
-            read_timeout,
         }
     }
 
@@ -106,11 +101,10 @@ impl ProtocolDecoder {
                 self.buffer.reserve(2048 - remaining);
             }
 
-            match timeout(self.read_timeout, stream.read_buf(&mut self.buffer)).await {
-                Err(_) => return Err(Timeout),
-                Ok(Err(e)) => return Err(Network(Box::new(e))),
-                Ok(Ok(0)) => return Err(Eof),
-                Ok(Ok(_)) => (),
+            match stream.read_buf(&mut self.buffer).await {
+                Err(e) => return Err(Network(Box::new(e))),
+                Ok(0) => return Err(Eof),
+                Ok(_) => (),
             };
         }
     }

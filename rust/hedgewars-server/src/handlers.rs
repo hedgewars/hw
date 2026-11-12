@@ -515,6 +515,30 @@ pub fn handle_client_loss(state: &mut ServerState, client_id: ClientId, response
     state.assert_invariants();
 }
 
+pub fn handle_client_timed_out(
+    state: &mut ServerState,
+    client_id: ClientId,
+    response: &mut Response,
+) {
+    if let Some(c) = state.anteroom.remove_client(client_id) {
+        let nick_str = c.nick.as_deref().unwrap_or("<unnamed>");
+        info!(
+            "Client '{}' (id: {}) timed out in anteroom",
+            nick_str, client_id
+        );
+        response.add(Bye("Ping timeout".to_string()).send_self());
+        response.remove_client(client_id);
+    } else {
+        common::remove_client(
+            &mut state.server,
+            &mut state.anteroom,
+            response,
+            "Ping timeout".to_string(),
+        );
+    }
+    state.assert_invariants();
+}
+
 pub fn handle_io_result(
     state: &mut ServerState,
     client_id: ClientId,

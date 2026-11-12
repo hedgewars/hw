@@ -376,15 +376,13 @@ impl HwServer {
             let mut client = HwClient::new(client_id, protocol.get(), nick);
             client.host = host;
             client.pings_queue = data.pings_queue;
+            client.set_is_registered(data.is_registered);
+            client.set_is_contributor(data.is_contributor);
             #[cfg(not(feature = "official-server"))]
             client.set_is_admin(data.is_local_admin || data.is_admin);
 
             #[cfg(feature = "official-server")]
-            {
-                client.set_is_registered(data.is_registered);
-                client.set_is_admin(data.is_admin);
-                client.set_is_contributor(data.is_contributor);
-            }
+            client.set_is_admin(data.is_admin);
 
             self.clients.insert(client_id, client);
         }
