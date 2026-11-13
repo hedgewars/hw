@@ -1,6 +1,6 @@
 use nom::{
     branch::alt,
-    bytes::complete::{escaped_transform, is_not, tag, take_while, take_while1},
+    bytes::complete::{escaped_transform, is_not, tag, take_while, take_while1, take_while_m_n},
     character::{is_alphanumeric, is_digit, is_space},
     combinator::{map, map_res},
     multi::{many0, separated_list0},
@@ -110,14 +110,20 @@ fn write_sequence(
 
 fn write_text(f: &mut Formatter<'_>, text: &str) -> Result<(), Error> {
     write!(f, "\"")?;
-    for c in text.chars() {
-        if c.is_ascii() && !(c as u8).is_ascii_control() {
+    let mut chars = text.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c == '"' || c == '\\' {
+            write!(f, "\\{}", c)?;
+        } else if c.is_ascii() && !(c as u8).is_ascii_control() {
             write!(f, "{}", c)?;
         } else {
             let mut bytes = [0u8; 4];
             let size = c.encode_utf8(&mut bytes).len();
             for byte in &bytes[0..size] {
                 write!(f, "\\{:03}", byte)?;
+            }
+            if chars.peek().is_some_and(|next| next.is_ascii_digit()) {
+                write!(f, "\\&")?;
             }
         }
     }
@@ -185,7 +191,16 @@ fn boolean(input: &[u8]) -> HaskellResult<'_, HaskellValue> {
 
 fn number_raw(input: &[u8]) -> HaskellResult<'_, u8> {
     use std::str::FromStr;
-    map_res(take_while(is_digit), |s| {
+    map_res(take_while1(is_digit), |s| {
+        std::str::from_utf8(s)
+            .map_err(|_| ())
+            .and_then(|s| u8::from_str(s).map_err(|_| ()))
+    })(input)
+}
+
+fn byte_escape(input: &[u8]) -> HaskellResult<'_, u8> {
+    use std::str::FromStr;
+    map_res(take_while_m_n(1, 3, is_digit), |s| {
         std::str::from_utf8(s)
             .map_err(|_| ())
             .and_then(|s| u8::from_str(s).map_err(|_| ()))
@@ -227,7 +242,7 @@ impl Extend<Escape> for Vec<u8> {
 fn string_escape(input: &[u8]) -> HaskellResult<'_, Escape> {
     use Escape::*;
     alt((
-        map(number_raw, Byte),
+        map(byte_escape, Byte),
         alt((
             map(tag("\\"), |_| Byte(b'\\')),
             map(tag("\""), |_| Byte(b'\"')),
@@ -368,6 +383,15 @@ mod test {
             string(b"\"Hail \\240\\159\\166\\148!\""),
             Ok((&b""[..], String("Hail \u{1f994}!".to_string())))
         );
+
+        assert_eq!(
+            string(b"\"Absalom\\208\\182\\208\\177\\208\\177\\208\\180\\209\\1400230\""),
+            Ok((&b""[..], String("Absalomжббдь0230".to_string())))
+        );
+
+        let original = String("Absalomжббдь0230 \"quote\" \\slash\\".to_string());
+        let formatted = format!("{}", original);
+        assert_eq!(string(formatted.as_bytes()), Ok((&b""[..], original)));
     }
 
     #[test]

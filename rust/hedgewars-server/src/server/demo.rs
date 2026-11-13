@@ -649,3 +649,49 @@ impl Replay {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_replay_haskell_roundtrip_with_utf8_and_digits() {
+        let mut team = TeamInfo::default();
+        team.owner = "unC0Rr".to_string();
+        team.name = "He \"test\" \\team".to_string();
+        team.color = 0;
+        team.hedgehogs_number = 4;
+        team.hedgehogs[0] = HedgehogInfo {
+            name: "Absalomжббдь0230".to_string(),
+            hat: "cyborg1".to_string(),
+        };
+
+        let mut config = RoomConfig::new();
+        config.ammo = Ammo {
+            name: "Default".to_string(),
+            settings: Some("9".repeat(220)),
+        };
+        config.scheme = Scheme {
+            name: "Default".to_string(),
+            settings: (0..43).map(|_| "false".to_string()).collect(),
+        };
+
+        let replay = Replay {
+            config,
+            teams: vec![team],
+            message_log: vec!["A0ZIZQ==".to_string()],
+        };
+
+        let serialized = format!("{}", replay_to_haskell(replay));
+        let (_, parsed_hs) = super::super::haskell::parse(serialized.as_bytes()).unwrap();
+        let loaded = haskell_to_replay(parsed_hs).unwrap();
+        assert_eq!(loaded.teams[0].hedgehogs[0].name, "Absalomжббдь0230");
+        assert_eq!(loaded.teams[0].name, "He \"test\" \\team");
+
+        // Also verify legacy format without \& separator before digits
+        let legacy = serialized.replace("\\140\\&0230", "\\1400230");
+        let (_, legacy_hs) = super::super::haskell::parse(legacy.as_bytes()).unwrap();
+        let legacy_loaded = haskell_to_replay(legacy_hs).unwrap();
+        assert_eq!(legacy_loaded.teams[0].hedgehogs[0].name, "Absalomжббдь0230");
+    }
+}

@@ -297,6 +297,7 @@ pub fn handle(
                     LoginResult::Unchanged => (),
                     LoginResult::Complete(client) => {
                         let is_checker = client.is_checker;
+                        let proto = client.protocol_number.map_or(0, |p| p.get());
                         let nick = client.nick.clone().unwrap_or_default();
                         let host = client.host_string();
                         state.server.add_client(client_id, client);
@@ -304,7 +305,7 @@ pub fn handle(
                             info!("Client '{}' (id: {}, host: {}) joined the server", nick, client_id, host);
                             common::get_lobby_join_data(&state.server, response);
                         } else {
-                            info!("Checker '{}' (id: {}) joined the server", nick, client_id);
+                            info!("Checker '{}' (id: {}, proto: {}) joined the server", nick, client_id, proto);
                         }
                     }
                     LoginResult::Exit => {
@@ -635,7 +636,8 @@ pub fn handle_io_result(
                 response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
                 response.remove_client(client_id);
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
-                info!("Checker '{}' (id: {}) joined the server", nick, client_id);
+                let proto = client.protocol_number.map_or(0, |p| p.get());
+                info!("Checker '{}' (id: {}, proto: {}) joined the server", nick, client_id, proto);
                 state.server.add_client(client_id, client);
                 response.add(LogonPassed.send_self());
             }

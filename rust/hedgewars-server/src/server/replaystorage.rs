@@ -28,19 +28,31 @@ impl ReplayStorage {
 
     pub fn pick_replay(&mut self, protocol: u16) -> Option<(ReplayId, Replay)> {
         let protocol_suffix = format!(".{}", protocol);
-        let result = fs::read_dir("replays")
-            .ok()?
+        let dir = match fs::read_dir("replays") {
+            Ok(dir) => dir,
+            Err(e) => {
+                warn!("Unable to read replays directory: {}", e);
+                return None;
+            }
+        };
+        let result = dir
             .flat_map(|f| Some(f.ok()?.path()))
-            .find(|f| {
+            .filter(|f| {
                 f.to_str()
                     .is_some_and(|s| s.ends_with(&protocol_suffix))
                     && !self.borrowed_replays.iter().any(|e| &e.path == f)
             })
-            .and_then(|f| {
-                Some((
-                    ReplayId { path: f.clone() },
-                    Replay::load(f.to_str()?).ok()?,
-                ))
+            .find_map(|f| {
+                let path_str = f.to_str()?;
+                let replay_id = ReplayId { path: f.clone() };
+                match Replay::load(path_str) {
+                    Ok(replay) => Some((replay_id, replay)),
+                    Err(e) => {
+                        warn!("Unable to load replay file \"{}\": {}", path_str, e);
+                        let _ = self.move_file("failed", &replay_id);
+                        None
+                    }
+                }
             });
 
         if let Some((ref replay_id, _)) = result {
