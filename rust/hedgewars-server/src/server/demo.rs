@@ -49,6 +49,7 @@ const GAME_FLAG_CONSTS: &[u32] = &[
     0x0080_0000,
     0x0100_0000,
     0x0200_0000,
+    0x0400_0000,
 ];
 
 const SCHEME_PARAMS: &[(&str, i32)] = &[
@@ -243,36 +244,8 @@ impl Demo {
         }
 
         fn get_game_flags(arg: &str) -> io::Result<Vec<String>> {
-            const FLAGS: &[u32] = &[
-                0x0000_1000,
-                0x0000_0010,
-                0x0000_0004,
-                0x0000_0008,
-                0x0000_0020,
-                0x0000_0040,
-                0x0000_0080,
-                0x0000_0100,
-                0x0000_0200,
-                0x0000_0400,
-                0x0000_0800,
-                0x0000_2000,
-                0x0000_4000,
-                0x0000_8000,
-                0x0001_0000,
-                0x0002_0000,
-                0x0004_0000,
-                0x0008_0000,
-                0x0010_0000,
-                0x0020_0000,
-                0x0040_0000,
-                0x0080_0000,
-                0x0100_0000,
-                0x0200_0000,
-                0x0400_0000,
-            ];
-
             let flags = u32::from_str(arg).unwrap_or_default();
-            let game_flags = FLAGS
+            let game_flags = GAME_FLAG_CONSTS
                 .iter()
                 .map(|flag| (flag & flags != 0).to_string())
                 .collect();
@@ -673,7 +646,15 @@ mod tests {
         };
         config.scheme = Scheme {
             name: "Default".to_string(),
-            settings: (0..43).map(|_| "false".to_string()).collect(),
+            settings: [
+                "false", "false", "false", "false", "false", "false", "false", "false", "false",
+                "false", "false", "true", "false", "false", "false", "false", "false", "false",
+                "false", "false", "false", "false", "false", "false", "false", "100", "45", "100",
+                "15", "5", "3", "4", "0", "2", "0", "35", "25", "47", "5", "100", "100", "0", "!",
+            ]
+            .iter()
+            .map(|s| s.to_string())
+            .collect(),
         };
 
         let replay = Replay {
@@ -687,6 +668,26 @@ mod tests {
         let loaded = haskell_to_replay(parsed_hs).unwrap();
         assert_eq!(loaded.teams[0].hedgehogs[0].name, "Absalomжббдь0230");
         assert_eq!(loaded.teams[0].name, "He \"test\" \\team");
+
+        let (_, demo_msgs) = replay_to_demo(&loaded);
+        let em = |s: &str| crate::utils::to_engine_msg(s.bytes());
+        assert!(demo_msgs.contains(&em("e$gmflags 8192")));
+        assert!(demo_msgs.contains(&em("e$damagepct 100")));
+        assert!(demo_msgs.contains(&em("e$turntime 45000")));
+        assert!(demo_msgs.contains(&em("e$sd_turns 15")));
+        assert!(demo_msgs.contains(&em("e$casefreq 5")));
+        assert!(demo_msgs.contains(&em("e$minestime 3000")));
+        assert!(demo_msgs.contains(&em("e$minesnum 4")));
+        assert!(demo_msgs.contains(&em("e$minedudpct 0")));
+        assert!(demo_msgs.contains(&em("e$explosives 2")));
+        assert!(demo_msgs.contains(&em("e$airmines 0")));
+        assert!(demo_msgs.contains(&em("e$healthprob 35")));
+        assert!(demo_msgs.contains(&em("e$hcaseamount 25")));
+        assert!(demo_msgs.contains(&em("e$waterrise 47")));
+        assert!(demo_msgs.contains(&em("e$healthdec 5")));
+        assert!(demo_msgs.contains(&em("e$ropepct 100")));
+        assert!(demo_msgs.contains(&em("e$getawaytime 100")));
+        assert!(demo_msgs.contains(&em("e$worldedge 0")));
 
         // Also verify legacy format without \& separator before digits
         let legacy = serialized.replace("\\140\\&0230", "\\1400230");
