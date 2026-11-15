@@ -151,6 +151,7 @@ pub enum StartGameError {
 pub struct EndGameResult {
     pub left_teams: Vec<String>,
     pub unreadied_nicks: Vec<String>,
+    pub finished_in_game_nicks: Vec<String>,
     pub checker_replay: Option<(CheckerId, Vec<String>)>,
 }
 
@@ -1524,26 +1525,25 @@ impl<'a> HwRoomControl<'a> {
                 }
             }
 
-            let unreadied_nicks: Vec<_> = self
+            let mut unreadied_nicks = Vec::new();
+            let mut finished_in_game_nicks = Vec::new();
+            for (_, c) in self
                 .server
                 .clients
                 .iter_mut()
                 .filter(|(_, c)| c.room_id == Some(room_id))
-                .map(|(_, c)| {
-                    c.set_is_ready(c.is_master());
-                    c.set_is_in_game(false);
-                    c.set_is_rejoined(false);
-                    c.team_indices.clear();
-                    c
-                })
-                .filter_map(|c| {
-                    if !c.is_master() {
-                        Some(c.nick.clone())
-                    } else {
-                        None
-                    }
-                })
-                .collect();
+            {
+                if c.is_in_game() {
+                    finished_in_game_nicks.push(c.nick.clone());
+                }
+                if !c.is_master() {
+                    unreadied_nicks.push(c.nick.clone());
+                }
+                c.set_is_ready(c.is_master());
+                c.set_is_in_game(false);
+                c.set_is_rejoined(false);
+                c.team_indices.clear();
+            }
 
             #[cfg(feature = "official-server")]
             let checker_replay = if info.all_players_registered {
@@ -1560,6 +1560,7 @@ impl<'a> HwRoomControl<'a> {
             Some(EndGameResult {
                 left_teams,
                 unreadied_nicks,
+                finished_in_game_nicks,
                 checker_replay,
             })
         } else {

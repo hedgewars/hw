@@ -1127,4 +1127,96 @@ mod tests {
             .iter()
             .any(|(_, m)| matches!(m, Warning(s) if s == "This player is protected from being kicked.")));
     }
+
+    #[test]
+    fn test_midgame_joiner_clears_ingame_flag_when_game_ends() {
+        use hedgewars_network_protocol::types::{HedgehogInfo, TeamInfo};
+
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "bob", "10.0.0.2", room_id, false);
+
+        let make_team = |name: &str, color: u8| {
+            Box::new(TeamInfo {
+                owner: String::new(),
+                name: name.to_string(),
+                color,
+                grave: "Statue".to_string(),
+                fort: "Plane".to_string(),
+                voice_pack: "Default".to_string(),
+                flag: "hedgewars".to_string(),
+                difficulty: 0,
+                hedgehogs: [
+                    HedgehogInfo {
+                        name: "h1".to_string(),
+                        hat: "NoHat".to_string(),
+                    },
+                    HedgehogInfo {
+                        name: "h2".to_string(),
+                        hat: "NoHat".to_string(),
+                    },
+                    HedgehogInfo {
+                        name: "h3".to_string(),
+                        hat: "NoHat".to_string(),
+                    },
+                    HedgehogInfo {
+                        name: "h4".to_string(),
+                        hat: "NoHat".to_string(),
+                    },
+                    HedgehogInfo {
+                        name: "h5".to_string(),
+                        hat: "NoHat".to_string(),
+                    },
+                    HedgehogInfo {
+                        name: "h6".to_string(),
+                        hat: "NoHat".to_string(),
+                    },
+                    HedgehogInfo {
+                        name: "h7".to_string(),
+                        hat: "NoHat".to_string(),
+                    },
+                    HedgehogInfo {
+                        name: "h8".to_string(),
+                        hat: "NoHat".to_string(),
+                    },
+                ],
+                hedgehogs_number: 4,
+            })
+        };
+
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::AddTeam(make_team("T0", 0)),
+        );
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            1,
+            HwProtocolMessage::AddTeam(make_team("T1", 1)),
+        );
+        dispatch_in_room(&mut server, &mut anteroom, 1, HwProtocolMessage::ToggleReady);
+        dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::StartGame);
+
+        // Mid-game spectator joins while game is in progress
+        add_joined_client(&mut server, 2, "spectator", "10.0.0.3", room_id, false);
+        assert!(server.client(2).is_in_game());
+
+        // Playing clients finish the round before spectator sends RoundFinished
+        dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::RoundFinished);
+        let end_msgs =
+            dispatch_in_room(&mut server, &mut anteroom, 1, HwProtocolMessage::RoundFinished);
+
+        assert!(!server.client(2).is_in_game());
+        assert!(end_msgs.iter().any(|(targets, m)| {
+            targets.contains(&0)
+                && targets.contains(&1)
+                && targets.contains(&2)
+                && matches!(
+                    m,
+                    ClientFlags(flags, nicks)
+                        if flags == "-g" && nicks.iter().any(|n| n == "spectator")
+                )
+        }));
+    }
 }
