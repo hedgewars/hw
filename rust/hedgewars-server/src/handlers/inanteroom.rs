@@ -10,7 +10,60 @@ use crate::{
 };
 use hedgewars_network_protocol::messages::{HwProtocolMessage, HwServerMessage::*};
 use log::*;
+use rand::{thread_rng, Rng};
 use std::num::NonZeroU16;
+
+const GUEST_ADJECTIVES: &[&str] = &[
+    "happy", "bouncy", "sneaky", "brave", "fuzzy", "spiky", "sleepy", "lucky", "dizzy", "swift",
+    "cosmic", "pixel", "turbo", "stealth", "jolly", "mighty", "quirky", "flying", "atomic",
+    "crimson", "golden", "silent", "wild", "clever", "rusty", "shiny", "noble", "eager", "chill",
+    "epic", "astro", "cyber", "neon", "mystic", "grumpy", "fluffy", "daring", "curious", "rapid",
+    "vivid",
+];
+
+const GUEST_NOUNS: &[&str] = &[
+    "hog", "hedgehog", "melon", "bazooka", "ninja", "pirate", "knight", "wizard", "viking",
+    "cyborg", "panda", "badger", "otter", "falcon", "dragon", "penguin", "cactus", "comet",
+    "pilot", "ranger", "scout", "tinker", "jester", "samurai", "captain", "voyager", "nomad",
+    "walker", "jumper", "diver",
+];
+
+pub fn generate_guest_nick(server: &HwServer, anteroom: &mut HwAnteroom) -> String {
+    let mut rng = thread_rng();
+    let is_taken = |candidate: &str, anteroom: &HwAnteroom| {
+        is_name_illegal(candidate)
+            || server
+                .iter_clients()
+                .any(|c| c.nick.eq_ignore_ascii_case(candidate))
+            || anteroom.has_client_nick(candidate)
+    };
+
+    for _ in 0..64 {
+        let adj = GUEST_ADJECTIVES[rng.gen_range(0..GUEST_ADJECTIVES.len())];
+        let noun = GUEST_NOUNS[rng.gen_range(0..GUEST_NOUNS.len())];
+        let num: u16 = rng.gen_range(10..1000);
+        let small_num: u16 = rng.gen_range(10..100);
+        let candidate = match rng.gen_range(0..6) {
+            0 => format!("{}_guest_{}", adj, num),
+            1 => format!("guest_{}_{}{}", adj, noun, small_num),
+            2 => format!("{}_{}_guest_{}", adj, noun, small_num),
+            3 => format!("guest_{}_{}", noun, num),
+            4 => format!("{}-guest-{}", adj, num),
+            _ => format!("guest-{}-{}-{}", adj, noun, small_num),
+        };
+
+        if !is_taken(&candidate, anteroom) && anteroom.bans.find_nick_ban(&candidate).is_none() {
+            return candidate;
+        }
+    }
+
+    loop {
+        let candidate = format!("guest_{}", rng.gen_range(10_000..1_000_000));
+        if !is_taken(&candidate, anteroom) {
+            return candidate;
+        }
+    }
+}
 
 pub enum LoginResult {
     Unchanged,
@@ -24,7 +77,7 @@ fn get_completion_result(
     client_id: ClientId,
     response: &mut super::Response,
 ) -> LoginResult {
-    let (nick, proto, is_checker, web_password) = {
+    let (mut nick, proto, is_checker, web_password) = {
         let client = anteroom.get_client(client_id);
         (
             client.nick.as_ref().unwrap().clone(),
@@ -33,6 +86,19 @@ fn get_completion_result(
             client.web_password.clone(),
         )
     };
+
+    if !is_checker {
+        if let Some(reason) = anteroom.bans.find_nick_ban(&nick) {
+            let new_nick = generate_guest_nick(server, anteroom);
+            info!(
+                "Client {} joined with banned nickname '{}' ({}), renamed to '{}'",
+                client_id, nick, reason, new_nick
+            );
+            anteroom.get_client_mut(client_id).nick = Some(new_nick.clone());
+            response.add(Nick(new_nick.clone()).send_self());
+            nick = new_nick;
+        }
+    }
 
     if !is_checker
         && server
@@ -51,10 +117,12 @@ fn get_completion_result(
         }
     }
 
-    if let Some(reason) = anteroom.bans.find_nick_ban(&nick) {
-        warn!("Client {} failed to join server: active ban for nickname '{}': {}", client_id, nick, reason);
-        response.add(Bye(reason).send_self());
-        return LoginResult::Exit;
+    if is_checker {
+        if let Some(reason) = anteroom.bans.find_nick_ban(&nick) {
+            warn!("Client {} failed to join server: active ban for nickname '{}': {}", client_id, nick, reason);
+            response.add(Bye(reason).send_self());
+            return LoginResult::Exit;
+        }
     }
 
     #[cfg(feature = "official-server")]
@@ -104,10 +172,8 @@ pub fn handle(
             response.add(Bye(msg).send_self());
             LoginResult::Exit
         }
-        HwProtocolMessage::Nick(nick, _token) => {
-            let client = anteroom.get_client_mut(client_id);
-
-            if client.nick.is_some() {
+        HwProtocolMessage::Nick(mut nick, _token) => {
+            if anteroom.get_client(client_id).nick.is_some() {
                 warn!("Client {} failed to set nickname: already provided", client_id);
                 response.error(NICKNAME_PROVIDED);
                 LoginResult::Unchanged
@@ -116,6 +182,15 @@ pub fn handle(
                 response.add(Bye(ILLEGAL_CLIENT_NAME.to_string()).send_self());
                 LoginResult::Exit
             } else {
+                if let Some(reason) = anteroom.bans.find_nick_ban(&nick) {
+                    let new_nick = generate_guest_nick(server, anteroom);
+                    info!(
+                        "Client {} joined with banned nickname '{}' ({}), renamed to '{}'",
+                        client_id, nick, reason, new_nick
+                    );
+                    nick = new_nick;
+                }
+                let client = anteroom.get_client_mut(client_id);
                 client.nick = Some(nick.clone());
                 let has_proto = client.protocol_number.is_some();
                 response.add(Nick(nick).send_self());
@@ -248,6 +323,76 @@ pub fn handle(
             let cmd = super::common::protocol_cmd_name(&other);
             response.error(&format!("Incorrect command '{}' (state: not entered)", cmd));
             LoginResult::Unchanged
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::handlers::{Response, ServerState};
+
+    #[test]
+    fn test_banned_nick_renamed_to_guest_and_let_in() {
+        let mut state = ServerState::new(1024, 512);
+        state
+            .anteroom
+            .bans
+            .add_nick_ban("OutlawNick".to_string(), "bad nick".to_string(), 60);
+
+        let cid: ClientId = 1;
+        state
+            .anteroom
+            .add_client_with_ip(cid, "salt123456789012".to_string(), false, Some([127, 0, 0, 1]));
+
+        let mut response = Response::new(cid);
+        let res = handle(
+            &state.server,
+            &mut state.anteroom,
+            cid,
+            &mut response,
+            HwProtocolMessage::Nick("OutlawNick".to_string(), None),
+        );
+        assert!(matches!(res, LoginResult::Unchanged));
+
+        let assigned_nick = state
+            .anteroom
+            .get_client(cid)
+            .nick
+            .clone()
+            .expect("nick should be set");
+        assert_ne!(assigned_nick, "OutlawNick");
+        assert!(
+            assigned_nick.contains("guest"),
+            "Assigned nick '{}' must contain 'guest'",
+            assigned_nick
+        );
+        assert!(!is_name_illegal(&assigned_nick));
+
+        let msgs: Vec<_> = response.extract_messages(&state.server).collect();
+        assert_eq!(msgs.len(), 1);
+        assert_eq!(msgs[0].1, Nick(assigned_nick.clone()));
+
+        let mut response2 = Response::new(cid);
+        let res2 = handle(
+            &state.server,
+            &mut state.anteroom,
+            cid,
+            &mut response2,
+            HwProtocolMessage::Proto(59),
+        );
+        #[cfg(not(feature = "official-server"))]
+        {
+            match res2 {
+                LoginResult::Complete(client) => {
+                    assert_eq!(client.nick.as_deref(), Some(assigned_nick.as_str()));
+                }
+                _ => panic!("Expected LoginResult::Complete"),
+            }
+        }
+        #[cfg(feature = "official-server")]
+        {
+            assert!(matches!(res2, LoginResult::Unchanged));
         }
     }
 }

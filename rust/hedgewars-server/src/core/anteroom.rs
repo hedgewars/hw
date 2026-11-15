@@ -140,4 +140,12 @@ impl HwAnteroom {
     pub fn nick_taken(&self, nick: &str) -> bool {
         self.nicks.contains_key(nick)
     }
+
+    pub fn has_client_nick(&self, nick: &str) -> bool {
+        self.clients.iter().any(|(_, c)| {
+            c.nick
+                .as_ref()
+                .is_some_and(|n| n.eq_ignore_ascii_case(nick))
+        })
+    }
 }
