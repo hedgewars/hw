@@ -38,6 +38,18 @@ fn parse_test() {
         message(b"BAN\nme\nbad\n77\n\n"),
         Ok((&b""[..], Ban("me".to_string(), "bad".to_string(), 77)))
     );
+    assert_eq!(
+        message(b"BAN\n10.0.0.5\n\n"),
+        Ok((&b""[..], RoomBan("10.0.0.5".to_string())))
+    );
+    assert_eq!(
+        message(b"CMD\nban alice\n\n"),
+        Ok((&b""[..], RoomBan("alice".to_string())))
+    );
+    assert_eq!(
+        message(b"CMD\nBAN 192.168.1.2\n\n"),
+        Ok((&b""[..], RoomBan("192.168.1.2".to_string())))
+    );
 
     assert_eq!(message(b"CMD\nPART\n\n"), Ok((&b""[..], Part(None))));
     assert_eq!(

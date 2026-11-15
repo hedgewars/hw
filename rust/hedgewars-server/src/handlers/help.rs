@@ -17,6 +17,7 @@ const CMD_HELP_ROOM_ONLY_PLAYER: &[&str] = &[
     "/vote <yes/no>: Vote 'yes' or 'no' for active vote",
     "/greeting [message]: Set or clear greeting message to be shown to players who join the room",
     "/delegate <player>: Surrender room control to player",
+    "/ban <player|IP>: Ban a player (by IP) or an IP address from this room",
     "/maxteams <N>: Limit maximum number of teams to N",
 ];
 

@@ -1,4 +1,5 @@
-use super::{common::rnd_reply, strings::*};
+use super::{common::rnd_reply, strings::*, Response};
+use std::net::IpAddr;
 use crate::core::server::{AddTeamError, SetTeamCountError};
 use crate::handlers::actions::ToPendingMessage;
 use crate::{
@@ -89,6 +90,59 @@ fn voting_description(kind: &VoteType) -> String {
             VoteType::HedgehogsPerTeam(number) => format!("hedgehogs per team:  {}", number),
         }
     )
+}
+
+fn has_more_than_two_team_owners(room: &HwRoom) -> bool {
+    let mut owners: Vec<&str> = room.teams.iter().map(|t| t.owner_nick.as_str()).collect();
+    owners.sort_unstable();
+    owners.dedup();
+    owners.len() > 2
+}
+
+fn validate_kick_target(
+    room_control: &HwRoomControl,
+    master_id: ClientId,
+    target_id: ClientId,
+    self_err: &str,
+    response: &mut Response,
+) -> bool {
+    let server = room_control.server();
+    let room = room_control.room();
+    let not_only_2_players = has_more_than_two_team_owners(room);
+    let target_cl = server.client(target_id);
+
+    if target_id == master_id {
+        response.warn(self_err);
+        false
+    } else if !(room.game_info.is_none() || not_only_2_players || target_cl.teams_in_game == 0) {
+        response.warn("You can't kick the only other player!");
+        false
+    } else if target_cl.room_id != Some(room.id) {
+        response.warn("The player is not in your room.");
+        false
+    } else if target_cl.has_super_power() {
+        response.warn("This player is protected from being kicked.");
+        false
+    } else {
+        true
+    }
+}
+
+fn kick_target_from_room(
+    room_control: &mut HwRoomControl,
+    target_id: ClientId,
+    response: &mut Response,
+) {
+    response.add(Kicked.send(target_id));
+    let leave_result = room_control.kick_user(target_id);
+    super::common::get_room_leave_result_for_client(
+        room_control.server(),
+        room_control.room(),
+        target_id,
+        "kicked",
+        leave_result,
+        response,
+    );
 }
 
 fn room_message_flag(msg: &HwProtocolMessage) -> RoomFlags {
@@ -629,66 +683,95 @@ pub fn handle(
         },
         Kick(kick_nick) => {
             if client.is_master() {
-                let server = room_control.server();
-                let room = room_control.room();
-                let mut owners: Vec<&str> = room.teams.iter().map(|t| t.owner_nick.as_str()).collect();
-                owners.sort_unstable();
-                owners.dedup();
-                let not_only_2_players = owners.len() > 2;
-
-                match server.find_client(&kick_nick) {
+                match room_control.server().find_client(&kick_nick) {
                     None => response.warn("Player is not online."),
                     Some(kick_cl) => {
                         let kick_id = kick_cl.id;
-                        if kick_id == client_id {
-                            response.warn("You can't kick yourself!");
-                        } else if !(room.game_info.is_none()
-                            || not_only_2_players
-                            || kick_cl.teams_in_game == 0)
-                        {
-                            response.warn("You can't kick the only other player!");
-                        } else if kick_cl.room_id != Some(room_id) {
-                            response.warn("The player is not in your room.");
-                        } else if kick_cl.has_super_power() {
-                            response.warn("This player is protected from being kicked.");
-                        } else {
+                        if validate_kick_target(
+                            &room_control,
+                            client_id,
+                            kick_id,
+                            "You can't kick yourself!",
+                            response,
+                        ) {
                             let master_nick = room_control.client().nick.clone();
                             let room_name = room_control.room().name.clone();
-                            info!("Client '{}' was kicked from room '{}' by master '{}'", kick_nick, room_name, master_nick);
-                            response.add(Kicked.send(kick_id));
-                            let leave_result = room_control.kick_user(kick_id);
-                            super::common::get_room_leave_result_for_client(
-                                room_control.server(),
-                                room_control.room(),
-                                kick_id,
-                                "kicked",
-                                leave_result,
-                                response,
+                            info!(
+                                "Client '{}' was kicked from room '{}' by master '{}'",
+                                kick_nick, room_name, master_nick
                             );
+                            kick_target_from_room(&mut room_control, kick_id, response);
                         }
                     }
                 }
             }
         }
-        RoomBan(ban_nick) => {
-            if client.is_master() {
-                if let Some(ban_cl) = room_control.server().find_client(&ban_nick) {
-                    let ban_id = ban_cl.id;
-                    if ban_id != client_id && ban_cl.room_id == Some(room_id) {
+        RoomBan(target) => {
+            if !client.is_master() {
+                response.warn(NOT_MASTER);
+            } else {
+                let target_id = room_control.server().find_client(&target).map(|c| c.id);
+                if let Some(ban_id) = target_id {
+                    if validate_kick_target(
+                        &room_control,
+                        client_id,
+                        ban_id,
+                        "You can't ban yourself!",
+                        response,
+                    ) {
                         let master_nick = room_control.client().nick.clone();
                         let room_name = room_control.room().name.clone();
-                        info!("Client '{}' was room-banned and kicked from room '{}' by master '{}'", ban_nick, room_name, master_nick);
-                        response.add(Kicked.send(ban_id));
-                        let leave_result = room_control.kick_user(ban_id);
-                        super::common::get_room_leave_result_for_client(
-                            room_control.server(),
-                            room_control.room(),
-                            ban_id,
-                            "kicked",
-                            leave_result,
-                            response,
+                        let ban_cl = room_control.server().client(ban_id);
+                        let ban_nick = ban_cl.nick.clone();
+                        let ban_host = ban_cl.host.clone();
+                        if !ban_host.is_empty() {
+                            room_control.ban_ip(ban_host.clone());
+                        }
+                        info!(
+                            "Client '{}' (ip: '{}') was room-banned and kicked from room '{}' by master '{}'",
+                            ban_nick, ban_host, room_name, master_nick
                         );
+                        response.add(
+                            server_chat(format!("Player '{}' was banned from this room.", ban_nick))
+                                .send_self(),
+                        );
+                        kick_target_from_room(&mut room_control, ban_id, response);
                     }
+                } else if target.parse::<IpAddr>().is_ok() {
+                    let master_nick = room_control.client().nick.clone();
+                    let room_name = room_control.room().name.clone();
+                    room_control.ban_ip(target.clone());
+                    info!(
+                        "IP '{}' was added to ban list of room '{}' by master '{}'",
+                        target, room_name, master_nick
+                    );
+                    response.add(
+                        server_chat("IP address added to room ban list.".to_string()).send_self(),
+                    );
+                    let not_only_2_players = has_more_than_two_team_owners(room_control.room());
+                    let is_in_game = room_control.room().game_info.is_some();
+                    let matching_ids: Vec<ClientId> = room_control
+                        .server()
+                        .iter_clients()
+                        .filter(|c| {
+                            c.id != client_id
+                                && c.room_id == Some(room_id)
+                                && c.host == target
+                                && !c.has_super_power()
+                                && (!is_in_game || not_only_2_players || c.teams_in_game == 0)
+                        })
+                        .map(|c| c.id)
+                        .collect();
+                    for ban_id in matching_ids {
+                        let ban_nick = room_control.server().client(ban_id).nick.clone();
+                        info!(
+                            "Client '{}' (ip: '{}') was kicked from room '{}' due to room IP ban by master '{}'",
+                            ban_nick, target, room_name, master_nick
+                        );
+                        kick_target_from_room(&mut room_control, ban_id, response);
+                    }
+                } else {
+                    response.warn("Player is not online.");
                 }
             }
         }
@@ -758,6 +841,13 @@ pub fn handle(
                         "STATS" | "RESTART_SERVER" => {
                             response.warn("This command is only available in the lobby.")
                         }
+                        "BAN" => {
+                            if !client.is_master() {
+                                response.warn(NOT_MASTER);
+                            } else {
+                                response.warn("/ban: specify player nickname or IP address");
+                            }
+                        }
                         "MAXTEAMS" => {
                             if !client.is_master() {
                                 response.warn(NOT_MASTER);
@@ -810,5 +900,231 @@ pub fn handle(
             let cmd = super::common::protocol_cmd_name(&other);
             response.error(&format!("Incorrect command '{}' (state: in room)", cmd));
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::core::{
+        anteroom::HwAnteroomClient,
+        server::{HwRoomOrServer, HwServer, JoinRoomError},
+    };
+    use crate::handlers::Response;
+    use std::num::NonZeroU16;
+    use std::time::{Duration, Instant};
+
+    fn make_client(nick: &str, host: &str, is_admin: bool) -> (HwAnteroomClient, String) {
+        let client = HwAnteroomClient {
+            nick: Some(nick.to_string()),
+            protocol_number: NonZeroU16::new(58),
+            server_salt: String::new(),
+            is_local_admin: is_admin,
+            is_registered: true,
+            is_admin,
+            is_contributor: false,
+            is_checker: false,
+            ip_addr: None,
+            web_password: String::new(),
+            has_password_challenge: false,
+            pings_queue: 0,
+        };
+        (client, host.to_string())
+    }
+
+    fn setup_room_with_master() -> (HwServer, HwAnteroom, RoomId) {
+        let mut server = HwServer::new(16, 16);
+        let anteroom = HwAnteroom::new(16);
+        let (master_cl, master_host) = make_client("master", "10.0.0.1", false);
+        server.add_client(0, master_cl);
+        server.client_mut(0).host = master_host;
+        let (_, room) = server.create_room(0, "room1".to_string(), None).unwrap();
+        let room_id = room.id;
+        (server, anteroom, room_id)
+    }
+
+    fn add_joined_client(
+        server: &mut HwServer,
+        id: ClientId,
+        nick: &str,
+        host: &str,
+        room_id: RoomId,
+        is_admin: bool,
+    ) {
+        let (cl, h) = make_client(nick, host, is_admin);
+        server.add_client(id, cl);
+        server.client_mut(id).host = h;
+        let _ = server.join_room(id, room_id, None).unwrap();
+    }
+
+    fn dispatch_in_room(
+        server: &mut HwServer,
+        anteroom: &mut HwAnteroom,
+        client_id: ClientId,
+        msg: HwProtocolMessage,
+    ) -> Vec<(Vec<ClientId>, hedgewars_network_protocol::messages::HwServerMessage)> {
+        let mut response = Response::new(client_id);
+        let HwRoomOrServer::Room(room_control) = server.get_room_control(client_id) else {
+            panic!("client {} is not in room", client_id);
+        };
+        handle(room_control, anteroom, &mut response, msg);
+        server.assert_invariants();
+        response.extract_messages(server).collect()
+    }
+
+    #[test]
+    fn test_room_ban_by_nick_bans_ip_and_blocks_rejoin() {
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "target", "10.0.0.2", room_id, false);
+        let (alt_cl, alt_host) = make_client("alt", "10.0.0.2", false);
+        server.add_client(2, alt_cl);
+        server.client_mut(2).host = alt_host;
+
+        let msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::RoomBan("target".to_string()),
+        );
+
+        assert!(server.client(1).room_id.is_none());
+        assert!(server.room(room_id).bans.contains(&"10.0.0.2".to_string()));
+        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        // Master should not be shown the banned user's IP address
+        for (_, m) in &msgs {
+            if let ChatMsg { msg, .. } = m {
+                assert!(!msg.contains("10.0.0.2"));
+            }
+        }
+        assert!(matches!(
+            server.join_room(1, room_id, None),
+            Err(JoinRoomError::RoomBanned)
+        ));
+        assert!(matches!(
+            server.join_room(2, room_id, None),
+            Err(JoinRoomError::RoomBanned)
+        ));
+    }
+
+    #[test]
+    fn test_room_ban_by_ip_directly_adds_ip_and_kicks_matching_clients() {
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "target", "10.0.0.3", room_id, false);
+
+        let msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::RoomBan("10.0.0.3".to_string()),
+        );
+
+        assert!(server.client(1).room_id.is_none());
+        assert!(server.room(room_id).bans.contains(&"10.0.0.3".to_string()));
+        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(matches!(
+            server.join_room(1, room_id, None),
+            Err(JoinRoomError::RoomBanned)
+        ));
+    }
+
+    #[test]
+    fn test_room_ban_non_master_and_no_banlist_review() {
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "pleb", "10.0.0.6", room_id, false);
+        add_joined_client(&mut server, 2, "other", "10.0.0.7", room_id, false);
+
+        let msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            1,
+            HwProtocolMessage::RoomBan("other".to_string()),
+        );
+        assert_eq!(server.client(2).room_id, Some(room_id));
+        assert!(server.room(room_id).bans.is_empty());
+        assert!(msgs
+            .iter()
+            .any(|(_, m)| matches!(m, Warning(s) if s == NOT_MASTER)));
+
+        // Ensure there is no BANLIST or ban-review command in rooms
+        let banlist_msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::BanList,
+        );
+        assert!(banlist_msgs
+            .iter()
+            .all(|(_, m)| !matches!(m, hedgewars_network_protocol::messages::HwServerMessage::BanList(_))));
+
+        let cmd_banlist_msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::Malformed(vec!["CMD".to_string(), "BAN_LIST".to_string()]),
+        );
+        assert!(cmd_banlist_msgs
+            .iter()
+            .all(|(_, m)| !matches!(m, hedgewars_network_protocol::messages::HwServerMessage::BanList(_))));
+    }
+
+    #[test]
+    fn test_quick_kick_within_one_second_autobans_ip() {
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "rusher", "10.0.0.4", room_id, false);
+
+        let msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::Kick("rusher".to_string()),
+        );
+
+        assert!(server.client(1).room_id.is_none());
+        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(server.room(room_id).bans.contains(&"10.0.0.4".to_string()));
+        assert!(matches!(
+            server.join_room(1, room_id, None),
+            Err(JoinRoomError::RoomBanned)
+        ));
+    }
+
+    #[test]
+    fn test_kick_after_one_second_does_not_autoban() {
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "normal", "10.0.0.5", room_id, false);
+        server.client_mut(1).room_joined_at =
+            Instant::now().checked_sub(Duration::from_secs(2));
+
+        let msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::Kick("normal".to_string()),
+        );
+
+        assert!(server.client(1).room_id.is_none());
+        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(!server.room(room_id).bans.contains(&"10.0.0.5".to_string()));
+        assert!(server.join_room(1, room_id, None).is_ok());
+    }
+
+    #[test]
+    fn test_room_ban_respects_super_power() {
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "admin", "10.0.0.8", room_id, true);
+        server.client_mut(1).set_has_super_power(true);
+
+        let msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::RoomBan("admin".to_string()),
+        );
+
+        assert_eq!(server.client(1).room_id, Some(room_id));
+        assert!(server.room(room_id).bans.is_empty());
+        assert!(msgs
+            .iter()
+            .any(|(_, m)| matches!(m, Warning(s) if s == "This player is protected from being kicked.")));
     }
 }

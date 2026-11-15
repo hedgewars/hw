@@ -321,8 +321,8 @@ pub fn handle(
                 anteroom.bans.unban(&entry);
             }
         }
-        Delegate(_) | SaveRoom(_) | LoadRoom(_) | Save(_, _) | Delete(_) | Fix | Unfix
-        | Greeting(_) | CallVote(_) | Vote(_) | ForceVote(_) | MaxTeams(_) => {
+        Delegate(_) | RoomBan(_) | SaveRoom(_) | LoadRoom(_) | Save(_, _) | Delete(_) | Fix
+        | Unfix | Greeting(_) | CallVote(_) | Vote(_) | ForceVote(_) | MaxTeams(_) => {
             response.warn("This command is only available in rooms.");
         }
         Malformed(lines) => {
@@ -339,7 +339,9 @@ pub fn handle(
                     };
                     let cmd_upper = cmd.to_ascii_uppercase();
                     match cmd_upper.as_str() {
-                        "DELEGATE" | "SAVEROOM" | "LOADROOM" | "DELETE" if !rest.is_empty() => {
+                        "DELEGATE" | "BAN" | "SAVEROOM" | "LOADROOM" | "DELETE"
+                            if !rest.is_empty() =>
+                        {
                             response.warn("This command is only available in rooms.")
                         }
                         "SAVE" if rest.contains(' ') => {

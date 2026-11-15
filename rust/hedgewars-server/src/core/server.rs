@@ -14,7 +14,11 @@ use bitflags::*;
 use log::*;
 use rand::{self, thread_rng, Rng};
 use slab::Slab;
-use std::{cmp::min, collections::HashSet};
+use std::{
+    cmp::min,
+    collections::HashSet,
+    time::{Duration, Instant},
+};
 
 #[derive(Debug)]
 pub enum CreateRoomError {
@@ -916,6 +920,7 @@ impl<'a> HwRoomControl<'a> {
             .expect("Caller should have ensured the client is in this room");
         room.players_number -= 1;
         client.room_id = None;
+        client.room_joined_at = None;
 
         let is_empty = room.players_number == 0;
         let is_fixed = room.is_fixed();
@@ -1012,11 +1017,43 @@ impl<'a> HwRoomControl<'a> {
         }
     }
 
+    pub fn ban_ip(&mut self, ip: String) -> bool {
+        if ip.is_empty() {
+            return false;
+        }
+        let bans = &mut self.room_mut().bans;
+        if !bans.contains(&ip) {
+            bans.push(ip);
+            true
+        } else {
+            false
+        }
+    }
+
+    fn maybe_autoban_quick_kick(&mut self, client_id: ClientId) {
+        let client = &self.server.clients[client_id];
+        let is_quick_kick = client
+            .room_joined_at
+            .is_some_and(|joined_at| joined_at.elapsed() <= Duration::from_secs(1));
+        if is_quick_kick {
+            let host = client.host.clone();
+            let nick = client.nick.clone();
+            let room_name = self.room().name.clone();
+            if self.ban_ip(host.clone()) {
+                info!(
+                    "Auto-ban: IP '{}' (client '{}') added to ban list of room '{}' (kicked within 1s of joining)",
+                    host, nick, room_name
+                );
+            }
+        }
+    }
+
     pub fn leave_room(&mut self) -> LeaveRoomResult {
         self.remove_from_room(self.client_id)
     }
 
     pub fn kick_user(&mut self, client_id: ClientId) -> LeaveRoomResult {
+        self.maybe_autoban_quick_kick(client_id);
         self.remove_from_room(client_id)
     }
 
@@ -1098,6 +1135,7 @@ impl<'a> HwRoomControl<'a> {
                     })
                     .map(|c| c.id)
                 {
+                    self.maybe_autoban_quick_kick(kicked_id);
                     let leave_result = self.remove_from_room(kicked_id);
                     Some(VoteEffect::Kicked(kicked_id, leave_result))
                 } else {
@@ -1575,6 +1613,7 @@ fn create_room<'a, 'b>(
     room.ready_players_number = 1;
 
     client.room_id = Some(room.id);
+    client.room_joined_at = Some(Instant::now());
     client.set_is_master(true);
     client.set_is_ready(true);
     client.set_is_in_game(false);
@@ -1592,6 +1631,7 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     room.players_number += 1;
 
     client.room_id = Some(room.id);
+    client.room_joined_at = Some(Instant::now());
     client.teams_in_game = 0;
     client.set_is_ready(false);
     client.set_is_master(false);

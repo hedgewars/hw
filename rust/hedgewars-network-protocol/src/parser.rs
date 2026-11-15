@@ -292,6 +292,7 @@ fn cmd_message<'a>(input: &'a [u8]) -> HwResult<'a, HwProtocolMessage> {
                 }
             }),
             cmd_single_arg("DELEGATE", a_line, Delegate),
+            cmd_single_arg("BAN", a_line, RoomBan),
             cmd_single_arg("DELETE", a_line, Delete),
             cmd_single_arg("SAVEROOM", a_line, SaveRoom),
             cmd_single_arg("LOADROOM", a_line, LoadRoom),

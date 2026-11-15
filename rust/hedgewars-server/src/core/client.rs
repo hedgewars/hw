@@ -21,6 +21,7 @@ bitflags! {
 pub struct HwClient {
     pub id: ClientId,
     pub room_id: Option<usize>,
+    pub room_joined_at: Option<std::time::Instant>,
     pub nick: String,
     pub host: String,
     pub protocol_number: u16,
@@ -42,6 +43,7 @@ impl HwClient {
             host: String::new(),
             protocol_number,
             room_id: None,
+            room_joined_at: None,
             flags: ClientFlags::DEFAULT,
             teams_in_game: 0,
             team_indices: Vec::new(),
