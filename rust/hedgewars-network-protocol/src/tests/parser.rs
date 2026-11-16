@@ -50,6 +50,14 @@ fn parse_test() {
         message(b"CMD\nBAN 192.168.1.2\n\n"),
         Ok((&b""[..], RoomBan("192.168.1.2".to_string())))
     );
+    assert_eq!(
+        message(b"DELEGATE\nalice\n\n"),
+        Ok((&b""[..], Delegate("alice".to_string())))
+    );
+    assert_eq!(
+        message(b"CMD\ndelegate alice\n\n"),
+        Ok((&b""[..], Delegate("alice".to_string())))
+    );
 
     assert_eq!(message(b"CMD\nPART\n\n"), Ok((&b""[..], Part(None))));
     assert_eq!(

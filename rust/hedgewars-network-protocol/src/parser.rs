@@ -228,6 +228,7 @@ fn single_arg_message(input: &[u8]) -> HwResult<'_, HwProtocolMessage> {
         message("PART", opt_arg, Part),
         message("FOLLOW\n", a_line, Follow),
         message("KICK\n", a_line, Kick),
+        message("DELEGATE\n", a_line, Delegate),
         message("UNBAN\n", a_line, Unban),
         message("EM\n", a_line, EngineMessage),
         message("TEAMCHAT\n", a_line, TeamChat),
