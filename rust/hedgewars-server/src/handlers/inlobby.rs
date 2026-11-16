@@ -292,21 +292,31 @@ pub fn handle(
         BanIp(ip, reason, time) => {
             if server.is_admin(client_id) {
                 let admin_nick = server.client(client_id).nick.clone();
-                info!(
-                    "Admin '{}' added IP ban for '{}' (duration: {}s): {}",
-                    admin_nick, ip, time, reason
-                );
-                anteroom.bans.add_ip_ban(ip, reason, time);
+                match crate::core::bans::BanCollection::validate_ip_pattern(&ip) {
+                    Ok(()) => {
+                        info!(
+                            "Admin '{}' added IP ban for '{}' (duration: {}s): {}",
+                            admin_nick, ip, time, reason
+                        );
+                        anteroom.bans.add_ip_ban(ip, reason, time);
+                    }
+                    Err(err) => response.warn(&err),
+                }
             }
         }
         BanNick(nick, reason, time) => {
             if server.is_admin(client_id) {
                 let admin_nick = server.client(client_id).nick.clone();
-                info!(
-                    "Admin '{}' added nick ban for '{}' (duration: {}s): {}",
-                    admin_nick, nick, time, reason
-                );
-                anteroom.bans.add_nick_ban(nick, reason, time);
+                match crate::core::bans::BanCollection::validate_nick_pattern(&nick) {
+                    Ok(()) => {
+                        info!(
+                            "Admin '{}' added nick ban for '{}' (duration: {}s): {}",
+                            admin_nick, nick, time, reason
+                        );
+                        anteroom.bans.add_nick_ban(nick, reason, time);
+                    }
+                    Err(err) => response.warn(&err),
+                }
             }
         }
         HwProtocolMessage::BanList => {

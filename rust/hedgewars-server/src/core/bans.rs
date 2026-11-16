@@ -1,17 +1,84 @@
+use super::no_anon::IpNet;
 use chrono::{DateTime, Duration, NaiveDateTime, offset::Utc};
+use log::warn;
+use regex::{Regex, RegexBuilder};
+use std::net::{IpAddr, Ipv4Addr};
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug)]
 pub enum BanEntry {
     ByIp {
         ip: String,
+        net: Option<IpNet>,
         reason: String,
         until: DateTime<Utc>,
     },
     ByNick {
         nick: String,
+        regex: Option<Regex>,
         reason: String,
         until: DateTime<Utc>,
     },
+}
+
+impl PartialEq for BanEntry {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (
+                BanEntry::ByIp {
+                    ip, reason, until, ..
+                },
+                BanEntry::ByIp {
+                    ip: o_ip,
+                    reason: o_reason,
+                    until: o_until,
+                    ..
+                },
+            ) => ip == o_ip && reason == o_reason && until == o_until,
+            (
+                BanEntry::ByNick {
+                    nick,
+                    reason,
+                    until,
+                    ..
+                },
+                BanEntry::ByNick {
+                    nick: o_nick,
+                    reason: o_reason,
+                    until: o_until,
+                    ..
+                },
+            ) => nick == o_nick && reason == o_reason && until == o_until,
+            _ => false,
+        }
+    }
+}
+
+impl Eq for BanEntry {}
+
+fn compile_ip_net(pattern: &str) -> Option<IpNet> {
+    if pattern.is_empty() {
+        return None;
+    }
+    match pattern.parse::<IpNet>() {
+        Ok(net) => Some(net),
+        Err(err) => {
+            warn!("Ignoring invalid IP ban pattern '{}': {}", pattern, err);
+            None
+        }
+    }
+}
+
+fn compile_nick_regex(pattern: &str) -> Option<Regex> {
+    if pattern.is_empty() {
+        return None;
+    }
+    match RegexBuilder::new(pattern).case_insensitive(true).build() {
+        Ok(re) => Some(re),
+        Err(err) => {
+            warn!("Ignoring invalid nickname ban regex '{}': {}", pattern, err);
+            None
+        }
+    }
 }
 
 impl BanEntry {
@@ -29,7 +96,9 @@ impl BanEntry {
 
     pub fn to_haskell_str(&self) -> String {
         match self {
-            BanEntry::ByIp { ip, reason, until } => format!(
+            BanEntry::ByIp {
+                ip, reason, until, ..
+            } => format!(
                 "BanByIP {} {} {}",
                 format_haskell_string(ip),
                 format_haskell_string(reason),
@@ -39,6 +108,7 @@ impl BanEntry {
                 nick,
                 reason,
                 until,
+                ..
             } => format!(
                 "BanByNick {} {} {}",
                 format_haskell_string(nick),
@@ -140,16 +210,6 @@ fn parse_haskell_utc(input: &str) -> Option<(DateTime<Utc>, &str)> {
     Some((dt, &input[utc_pos + 3..]))
 }
 
-fn is_ban_match(pattern: &str, target: &str) -> bool {
-    if pattern.is_empty() {
-        false
-    } else {
-        target
-            .to_ascii_lowercase()
-            .contains(&pattern.to_ascii_lowercase())
-    }
-}
-
 pub struct BanCollection {
     entries: Vec<BanEntry>,
     dirty: bool,
@@ -202,12 +262,14 @@ impl BanCollection {
                 };
                 if is_ip {
                     entries.push(BanEntry::ByIp {
+                        net: compile_ip_net(&target),
                         ip: target,
                         reason,
                         until,
                     });
                 } else {
                     entries.push(BanEntry::ByNick {
+                        regex: compile_nick_regex(&target),
                         nick: target,
                         reason,
                         until,
@@ -230,31 +292,59 @@ impl BanCollection {
         }
     }
 
-    pub fn find_ip_ban(&mut self, addr: [u8; 4]) -> Option<String> {
-        let ip_str = format!("{}.{}.{}.{}", addr[0], addr[1], addr[2], addr[3]);
-        self.find_ip_str_ban(&ip_str)
+    pub fn validate_ip_pattern(pattern: &str) -> Result<(), String> {
+        let pattern = pattern.trim();
+        if pattern.is_empty() {
+            return Err("IP ban pattern cannot be empty.".to_string());
+        }
+        pattern
+            .parse::<IpNet>()
+            .map(|_| ())
+            .map_err(|e| format!("Invalid IP ban address or network mask: {}", e))
     }
 
-    pub fn find_ip_str_ban(&mut self, ip: &str) -> Option<String> {
+    fn find_ip_addr_ban(&mut self, addr: IpAddr) -> Option<String> {
         let now = Utc::now();
         self.prune_expired(now);
         self.entries.iter().find_map(|entry| match entry {
-            BanEntry::ByIp {
-                ip: ban_ip, reason, ..
-            } if is_ban_match(ban_ip, ip) => Some(reason.clone()),
+            BanEntry::ByIp { net, reason, .. } if net.as_ref().is_some_and(|n| n.contains(addr)) => {
+                Some(reason.clone())
+            }
             _ => None,
         })
+    }
+
+    pub fn find_ip_ban(&mut self, addr: [u8; 4]) -> Option<String> {
+        self.find_ip_addr_ban(IpAddr::V4(Ipv4Addr::from(addr)))
+    }
+
+    pub fn find_ip_str_ban(&mut self, ip: &str) -> Option<String> {
+        let Ok(addr) = ip.trim().parse::<IpAddr>() else {
+            return None;
+        };
+        self.find_ip_addr_ban(addr)
+    }
+
+    pub fn validate_nick_pattern(pattern: &str) -> Result<(), String> {
+        if pattern.is_empty() {
+            return Err("Nickname ban pattern cannot be empty.".to_string());
+        }
+        RegexBuilder::new(pattern)
+            .case_insensitive(true)
+            .build()
+            .map(|_| ())
+            .map_err(|e| format!("Invalid nickname ban regex: {}", e))
     }
 
     pub fn find_nick_ban(&mut self, nick: &str) -> Option<String> {
         let now = Utc::now();
         self.prune_expired(now);
         self.entries.iter().find_map(|entry| match entry {
-            BanEntry::ByNick {
-                nick: ban_nick,
-                reason,
-                ..
-            } if is_ban_match(ban_nick, nick) => Some(reason.clone()),
+            BanEntry::ByNick { regex, reason, .. }
+                if regex.as_ref().is_some_and(|re| re.is_match(nick)) =>
+            {
+                Some(reason.clone())
+            }
             _ => None,
         })
     }
@@ -267,6 +357,7 @@ impl BanCollection {
         self.entries.insert(
             0,
             BanEntry::ByIp {
+                net: compile_ip_net(&ip),
                 ip,
                 reason,
                 until,
@@ -290,6 +381,7 @@ impl BanCollection {
         self.entries.insert(
             0,
             BanEntry::ByNick {
+                regex: compile_nick_regex(&nick),
                 nick,
                 reason: msg,
                 until,
@@ -350,5 +442,66 @@ mod tests {
         let bans2 = BanCollection::from_haskell_str(multi);
         assert_eq!(bans2.entries.len(), 2);
         assert_eq!(bans2.to_haskell_str(), multi);
+    }
+
+    #[test]
+    fn test_nick_ban_regex_matching() {
+        let mut bans = BanCollection::new();
+        bans.add_nick_ban("^troll_[0-9]+$".to_string(), "troll pattern".to_string(), 60);
+        bans.add_nick_ban("bot|spammer".to_string(), "bot pattern".to_string(), 60);
+        bans.add_nick_ban("[invalid".to_string(), "broken regex".to_string(), 60);
+        bans.add_nick_ban("".to_string(), "empty".to_string(), 60);
+
+        assert!(bans.find_nick_ban("Troll_42").is_some());
+        assert!(bans.find_nick_ban("xTroll_42").is_none());
+        assert!(bans.find_nick_ban("troll_abc").is_none());
+        assert!(bans.find_nick_ban("MyBot1").is_some());
+        assert!(bans.find_nick_ban("SPAMMER").is_some());
+        assert!(bans.find_nick_ban("normal_player").is_none());
+        assert!(bans.find_nick_ban("[invalid").is_none());
+
+        // Serialized Haskell entries also compile regex upon load
+        let serialized = bans.to_haskell_str();
+        let mut reloaded = BanCollection::from_haskell_str(&serialized);
+        assert!(reloaded.find_nick_ban("troll_99").is_some());
+        assert!(reloaded.find_nick_ban("xtroll_99").is_none());
+    }
+
+    #[test]
+    fn test_ip_ban_exact_and_netmask_matching() {
+        let mut bans = BanCollection::new();
+        bans.add_ip_ban("10.0.0.1".to_string(), "single ip".to_string(), 60);
+        bans.add_ip_ban("192.168.5.0/24".to_string(), "cidr24".to_string(), 60);
+        bans.add_ip_ban(
+            "172.16.0.0/255.240.0.0".to_string(),
+            "dotted mask".to_string(),
+            60,
+        );
+        bans.add_ip_ban("2001:db8::/32".to_string(), "v6 cidr".to_string(), 60);
+        bans.add_ip_ban("not_an_ip".to_string(), "invalid".to_string(), 60);
+
+        // Single IP must not act as substring match
+        assert!(bans.find_ip_ban([10, 0, 0, 1]).is_some());
+        assert!(bans.find_ip_ban([10, 0, 0, 10]).is_none());
+        assert!(bans.find_ip_ban([210, 0, 0, 1]).is_none());
+
+        // CIDR /24
+        assert!(bans.find_ip_ban([192, 168, 5, 42]).is_some());
+        assert!(bans.find_ip_ban([192, 168, 6, 42]).is_none());
+
+        // Dotted netmask
+        assert!(bans.find_ip_ban([172, 20, 1, 2]).is_some());
+        assert!(bans.find_ip_ban([172, 32, 0, 1]).is_none());
+
+        // IPv6 CIDR & invalid target string
+        assert!(bans.find_ip_str_ban("2001:db8::1").is_some());
+        assert!(bans.find_ip_str_ban("2001:db9::1").is_none());
+        assert!(bans.find_ip_str_ban("not_an_ip").is_none());
+
+        // Haskell roundtrip compiles IP masks upon load
+        let serialized = bans.to_haskell_str();
+        let mut reloaded = BanCollection::from_haskell_str(&serialized);
+        assert!(reloaded.find_ip_ban([192, 168, 5, 1]).is_some());
+        assert!(reloaded.find_ip_ban([10, 0, 0, 10]).is_none());
     }
 }

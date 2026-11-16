@@ -1,6 +1,6 @@
 use log::*;
 use std::fs;
-use std::net::Ipv4Addr;
+use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 use std::path::Path;
 use std::str::FromStr;
 
@@ -56,6 +56,78 @@ impl FromStr for Ipv4Net {
             let ip = Ipv4Addr::from_str(s).map_err(|e| format!("Invalid IP: {}", e))?;
             Ok(Ipv4Net::new(ip, 32).unwrap())
         }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Ipv6Net {
+    network: u128,
+    mask: u128,
+}
+
+impl Ipv6Net {
+    pub fn new(ip: Ipv6Addr, prefix: u8) -> Option<Self> {
+        if prefix > 128 {
+            return None;
+        }
+        let mask = if prefix == 0 {
+            0
+        } else {
+            !0u128 << (128 - prefix)
+        };
+        let network = u128::from(ip) & mask;
+        Some(Self { network, mask })
+    }
+
+    pub fn contains(&self, ip: Ipv6Addr) -> bool {
+        (u128::from(ip) & self.mask) == self.network
+    }
+}
+
+impl FromStr for Ipv6Net {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let s = s.trim();
+        if let Some((ip_part, mask_part)) = s.split_once('/') {
+            let ip = Ipv6Addr::from_str(ip_part.trim())
+                .map_err(|e| format!("Invalid IPv6 address: {}", e))?;
+            let prefix = mask_part
+                .trim()
+                .parse::<u8>()
+                .map_err(|_| format!("Invalid IPv6 prefix length: {}", mask_part.trim()))?;
+            Ipv6Net::new(ip, prefix)
+                .ok_or_else(|| format!("Invalid IPv6 prefix length: {}", prefix))
+        } else {
+            let ip = Ipv6Addr::from_str(s).map_err(|e| format!("Invalid IPv6 address: {}", e))?;
+            Ok(Ipv6Net::new(ip, 128).unwrap())
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum IpNet {
+    V4(Ipv4Net),
+    V6(Ipv6Net),
+}
+
+impl IpNet {
+    pub fn contains(&self, ip: IpAddr) -> bool {
+        match (self, ip) {
+            (IpNet::V4(net), IpAddr::V4(v4)) => net.contains(v4),
+            (IpNet::V6(net), IpAddr::V6(v6)) => net.contains(v6),
+            _ => false,
+        }
+    }
+}
+
+impl FromStr for IpNet {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        s.parse::<Ipv4Net>()
+            .map(IpNet::V4)
+            .or_else(|v4_err| s.parse::<Ipv6Net>().map(IpNet::V6).map_err(|_| v4_err))
     }
 }
 
