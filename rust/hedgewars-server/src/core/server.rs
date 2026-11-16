@@ -216,6 +216,7 @@ pub struct HwServer {
     flags: ServerFlags,
     greetings: ServerGreetings,
     config_dirty: bool,
+    record_unregistered_replays: bool,
     pub replay_storage: Option<ReplayStorage>,
 }
 
@@ -233,6 +234,7 @@ impl HwServer {
             latest_protocol: 58,
             flags: ServerFlags::empty(),
             config_dirty: false,
+            record_unregistered_replays: true,
             replay_storage: Some(ReplayStorage::new()),
         }
     }
@@ -265,6 +267,14 @@ impl HwServer {
 
     pub fn set_old_greeting(&mut self, msg: String) {
         self.greetings.for_old_protocols = msg;
+    }
+
+    pub fn record_unregistered_replays(&self) -> bool {
+        self.record_unregistered_replays
+    }
+
+    pub fn set_record_unregistered_replays(&mut self, value: bool) {
+        self.record_unregistered_replays = value;
     }
 
     pub fn find_ready_checker(&self, protocol: u16) -> Option<CheckerId> {
@@ -1496,6 +1506,7 @@ impl<'a> HwRoomControl<'a> {
     }
 
     pub fn end_game(&mut self) -> Option<EndGameResult> {
+        let record_unregistered = self.server.record_unregistered_replays();
         let room = self.room_mut();
         room.ready_players_number = room.master_id.is_some() as u8;
 
@@ -1518,7 +1529,10 @@ impl<'a> HwRoomControl<'a> {
             }
 
             #[cfg(feature = "official-server")]
-            if info.all_players_registered {
+            let should_record_replay = info.all_players_registered || record_unregistered;
+
+            #[cfg(feature = "official-server")]
+            if should_record_replay {
                 let replay = super::types::Replay {
                     config: room.config().clone(),
                     teams: info
@@ -1566,7 +1580,7 @@ impl<'a> HwRoomControl<'a> {
                 .collect();
 
             #[cfg(feature = "official-server")]
-            let checker_replay = if info.all_players_registered {
+            let checker_replay = if should_record_replay {
                 self.server
                     .find_ready_checker(room_proto)
                     .and_then(|cid| self.server.assign_replay_to_checker(cid))
@@ -1842,5 +1856,39 @@ mod tests {
                 .voters
                 .contains(&1)
         );
+    }
+
+    #[test]
+    fn test_record_unregistered_replays_default_and_toggle() {
+        let mut server = HwServer::new(16, 16);
+        assert!(server.record_unregistered_replays());
+
+        server.add_client(0, make_anteroom_client("reg_user", false));
+        let mut unreg = make_anteroom_client("guest_user", false);
+        unreg.is_registered = false;
+        server.add_client(1, unreg);
+
+        let (_, room) = server.create_room(0, "unreg_replay_room".to_string(), None).unwrap();
+        let room_id = room.id;
+        let _ = server.join_room(1, room_id, None).unwrap();
+
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.add_team(dummy_team("t_reg", 0)).unwrap();
+        }
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(1) {
+            ctrl.add_team(dummy_team("t_unreg", 1)).unwrap();
+            ctrl.toggle_ready();
+        }
+
+        // Start game with an unregistered player -> game_info.all_players_registered is false
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.start_game().unwrap();
+            assert!(!ctrl.room().game_info.as_ref().unwrap().all_players_registered);
+        }
+
+        server.set_record_unregistered_replays(false);
+        assert!(!server.record_unregistered_replays());
+        server.set_record_unregistered_replays(true);
+        assert!(server.record_unregistered_replays());
     }
 }

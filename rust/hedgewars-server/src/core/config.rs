@@ -45,6 +45,17 @@ impl ServerConfig {
         if let Some(bans_str) = entries.get("bans") {
             anteroom.bans = BanCollection::from_haskell_str(bans_str);
         }
+        if let Some(record_str) = entries.get("sv_recordUnregisteredReplays") {
+            if let Some(val) = parse_bool(record_str) {
+                server.set_record_unregistered_replays(val);
+            } else {
+                warn!(
+                    "Invalid sv_recordUnregisteredReplays value '{}', keeping default ({})",
+                    record_str,
+                    server.record_unregistered_replays()
+                );
+            }
+        }
 
         let mut cfg = Self {
             db_host,
@@ -84,6 +95,10 @@ impl ServerConfig {
         );
         self.entries
             .insert("bans".to_string(), anteroom.bans.to_haskell_str());
+        self.entries.insert(
+            "sv_recordUnregisteredReplays".to_string(),
+            server.record_unregistered_replays().to_string(),
+        );
 
         let content = format_ini(&self.entries);
         if let Err(e) = fs::write(path, content) {
@@ -113,6 +128,14 @@ impl ServerConfig {
         } else {
             format!("mysql://{}:{}@{}/{}", login, self.db_password, host, name)
         }
+    }
+}
+
+fn parse_bool(val: &str) -> Option<bool> {
+    match val.trim().to_ascii_lowercase().as_str() {
+        "true" | "1" | "yes" | "on" => Some(true),
+        "false" | "0" | "no" | "off" => Some(false),
+        _ => None,
     }
 }
 
@@ -168,5 +191,33 @@ sv_messageOld = <font color=yellow><h3 align=center>Hedgewars 1.0.0 is out! Plea
 
         let formatted = format_ini(&parsed);
         assert_eq!(formatted, sample);
+    }
+
+    #[test]
+    fn test_record_unregistered_replays_config() {
+        let dir = std::env::temp_dir().join(format!("hw_cfg_test_{}", std::process::id()));
+        fs::create_dir_all(&dir).unwrap();
+        let cfg_path = dir.join("hedgewars-server.ini");
+        let cfg_str = cfg_path.to_str().unwrap();
+
+        // Missing key defaults to true
+        fs::write(&cfg_path, "sv_latestProto = 59\n").unwrap();
+        let mut server = HwServer::new(8, 8);
+        let mut anteroom = HwAnteroom::new(8);
+        assert!(server.record_unregistered_replays());
+        let _ = ServerConfig::load_from_file(cfg_str, &mut server, &mut anteroom).unwrap();
+        assert!(server.record_unregistered_replays());
+        assert!(fs::read_to_string(&cfg_path)
+            .unwrap()
+            .contains("sv_recordUnregisteredReplays = true"));
+
+        // Explicit false overrides default
+        fs::write(&cfg_path, "sv_recordUnregisteredReplays = false\n").unwrap();
+        let mut server2 = HwServer::new(8, 8);
+        let mut anteroom2 = HwAnteroom::new(8);
+        let _ = ServerConfig::load_from_file(cfg_str, &mut server2, &mut anteroom2).unwrap();
+        assert!(!server2.record_unregistered_replays());
+
+        let _ = fs::remove_dir_all(&dir);
     }
 }

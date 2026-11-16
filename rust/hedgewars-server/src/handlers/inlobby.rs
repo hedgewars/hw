@@ -186,9 +186,13 @@ pub fn handle(
         }
         Stats => {
             if let Ok(protocols) = server.get_used_protocols(client_id) {
-                let mut html = Vec::with_capacity(protocols.len() + 2);
+                let mut html = Vec::with_capacity(protocols.len() + 3);
 
                 html.push("<table border=1>".to_string());
+                html.push(format!(
+                    "<tr><th colspan=3>hedgewars-server {}</th></tr>",
+                    env!("CARGO_PKG_VERSION")
+                ));
                 for protocol in protocols {
                     html.push(format!(
                         "<tr><td>{}</td><td>{}</td><td>{}</td></tr>",
