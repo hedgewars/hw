@@ -1207,8 +1207,28 @@ mod tests {
         let end_msgs =
             dispatch_in_room(&mut server, &mut anteroom, 1, HwProtocolMessage::RoundFinished);
 
+        // Round ended, but spectator's engine is still running until spectator sends RoundFinished
+        assert!(server.client(2).is_in_game());
+        assert!(!end_msgs.iter().any(|(_, m)| matches!(
+            m,
+            ClientFlags(flags, nicks)
+                if flags == "-g" && nicks.iter().any(|n| n == "spectator")
+        )));
+
+        // Room master cannot start a new game while spectator is still in game
+        let blocked_msgs =
+            dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::StartGame);
+        assert!(blocked_msgs.iter().any(|(_, m)| matches!(
+            m,
+            Warning(s) if s == "Some players are still in game!"
+        )));
+        assert!(!blocked_msgs.iter().any(|(_, m)| matches!(m, RunGame)));
+
+        // Spectator's engine finishes and sends RoundFinished (after room.game_info became None)
+        let spec_msgs =
+            dispatch_in_room(&mut server, &mut anteroom, 2, HwProtocolMessage::RoundFinished);
         assert!(!server.client(2).is_in_game());
-        assert!(end_msgs.iter().any(|(targets, m)| {
+        assert!(spec_msgs.iter().any(|(targets, m)| {
             targets.contains(&0)
                 && targets.contains(&1)
                 && targets.contains(&2)
@@ -1218,5 +1238,13 @@ mod tests {
                         if flags == "-g" && nicks.iter().any(|n| n == "spectator")
                 )
         }));
+        assert!(!spec_msgs
+            .iter()
+            .any(|(_, m)| matches!(m, ForwardEngineMessage(_))));
+
+        // Now master can start another game
+        let restart_msgs =
+            dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::StartGame);
+        assert!(restart_msgs.iter().any(|(_, m)| matches!(m, RunGame)));
     }
 }

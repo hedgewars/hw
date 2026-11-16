@@ -822,6 +822,7 @@ pub fn get_start_game_data(
         }
         Err(StartGameError::NotReady) => response.warn("Not all players are ready"),
         Err(StartGameError::AlreadyInGame) => response.warn("The game is already in progress"),
+        Err(StartGameError::PlayersStillInGame) => response.warn("Some players are still in game!"),
     }
 }
 
@@ -849,14 +850,6 @@ pub fn get_end_game_result(
             .into_iter()
             .map(|name| TeamRemove(name).send_all().in_room(room.id)),
     );
-
-    if !result.finished_in_game_nicks.is_empty() {
-        response.add(
-            ClientFlags(remove_flags(&[Flags::InGame]), result.finished_in_game_nicks)
-                .send_all()
-                .in_room(room_id),
-        );
-    }
 
     if !result.unreadied_nicks.is_empty() {
         response.add(

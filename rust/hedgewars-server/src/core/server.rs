@@ -145,13 +145,13 @@ pub enum StartGameError {
     NotEnoughClans,
     NotReady,
     AlreadyInGame,
+    PlayersStillInGame,
 }
 
 #[derive(Debug)]
 pub struct EndGameResult {
     pub left_teams: Vec<String>,
     pub unreadied_nicks: Vec<String>,
-    pub finished_in_game_nicks: Vec<String>,
     pub checker_replay: Option<(CheckerId, Vec<String>)>,
 }
 
@@ -1324,7 +1324,7 @@ impl<'a> HwRoomControl<'a> {
             Err(TooManyHedgehogs)
         } else if room.find_team(|t| t.name == info.name).is_some() {
             Err(TeamAlreadyExists)
-        } else if room.game_info.is_some() {
+        } else if room.game_info.is_some() || client.is_in_game() {
             Err(GameInProgress)
         } else if room.is_team_add_restricted() {
             Err(Restricted)
@@ -1430,6 +1430,10 @@ impl<'a> HwRoomControl<'a> {
             .map(|(id, c)| (id, c.nick.clone()))
             .unzip();
 
+        let any_client_in_game = room_clients
+            .iter()
+            .any(|&id| self.server.clients[id].is_in_game());
+
         let all_players_registered = {
             let room = &self.server.rooms[room_id];
             room.teams
@@ -1445,6 +1449,8 @@ impl<'a> HwRoomControl<'a> {
             Err(NotReady)
         } else if room.game_info.is_some() {
             Err(AlreadyInGame)
+        } else if any_client_in_game {
+            Err(PlayersStillInGame)
         } else {
             room.start_round(all_players_registered);
             for id in room_clients {
@@ -1466,21 +1472,22 @@ impl<'a> HwRoomControl<'a> {
 
     pub fn leave_game(&mut self) -> Option<Vec<String>> {
         let (client, room) = self.get_mut();
-        let client_left = client.is_in_game();
-        if client_left {
+        if client.is_in_game() {
             client.set_is_in_game(false);
+            client.team_indices.clear();
 
-            let team_names: Vec<_> = room
-                .client_teams(client.id)
-                .map(|t| t.name.clone())
-                .collect();
+            let team_names: Vec<_> = if room.game_info.is_some() {
+                room.client_teams(client.id)
+                    .map(|t| t.name.clone())
+                    .collect()
+            } else {
+                Vec::new()
+            };
 
             if let Some(ref mut info) = room.game_info {
                 info.log_team_removal(team_names.iter());
-                Some(team_names)
-            } else {
-                None
             }
+            Some(team_names)
         } else {
             None
         }
@@ -1525,25 +1532,25 @@ impl<'a> HwRoomControl<'a> {
                 }
             }
 
-            let mut unreadied_nicks = Vec::new();
-            let mut finished_in_game_nicks = Vec::new();
-            for (_, c) in self
+            let unreadied_nicks: Vec<_> = self
                 .server
                 .clients
                 .iter_mut()
                 .filter(|(_, c)| c.room_id == Some(room_id))
-            {
-                if c.is_in_game() {
-                    finished_in_game_nicks.push(c.nick.clone());
-                }
-                if !c.is_master() {
-                    unreadied_nicks.push(c.nick.clone());
-                }
-                c.set_is_ready(c.is_master());
-                c.set_is_in_game(false);
-                c.set_is_rejoined(false);
-                c.team_indices.clear();
-            }
+                .map(|(_, c)| {
+                    c.set_is_ready(c.is_master());
+                    c.set_is_rejoined(false);
+                    c.team_indices.clear();
+                    c
+                })
+                .filter_map(|c| {
+                    if !c.is_master() {
+                        Some(c.nick.clone())
+                    } else {
+                        None
+                    }
+                })
+                .collect();
 
             #[cfg(feature = "official-server")]
             let checker_replay = if info.all_players_registered {
@@ -1560,7 +1567,6 @@ impl<'a> HwRoomControl<'a> {
             Some(EndGameResult {
                 left_teams,
                 unreadied_nicks,
-                finished_in_game_nicks,
                 checker_replay,
             })
         } else {
