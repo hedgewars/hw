@@ -2,7 +2,7 @@ use super::no_anon::IpNet;
 use chrono::{DateTime, Duration, NaiveDateTime, offset::Utc};
 use log::warn;
 use regex::{Regex, RegexBuilder};
-use std::net::{IpAddr, Ipv4Addr};
+use std::net::IpAddr;
 
 #[derive(Clone, Debug)]
 pub enum BanEntry {
@@ -314,8 +314,8 @@ impl BanCollection {
         })
     }
 
-    pub fn find_ip_ban(&mut self, addr: [u8; 4]) -> Option<String> {
-        self.find_ip_addr_ban(IpAddr::V4(Ipv4Addr::from(addr)))
+    pub fn find_ip_ban(&mut self, addr: IpAddr) -> Option<String> {
+        self.find_ip_addr_ban(addr)
     }
 
     pub fn find_ip_str_ban(&mut self, ip: &str) -> Option<String> {
@@ -481,19 +481,21 @@ mod tests {
         bans.add_ip_ban("not_an_ip".to_string(), "invalid".to_string(), 60);
 
         // Single IP must not act as substring match
-        assert!(bans.find_ip_ban([10, 0, 0, 1]).is_some());
-        assert!(bans.find_ip_ban([10, 0, 0, 10]).is_none());
-        assert!(bans.find_ip_ban([210, 0, 0, 1]).is_none());
+        assert!(bans.find_ip_ban("10.0.0.1".parse().unwrap()).is_some());
+        assert!(bans.find_ip_ban("10.0.0.10".parse().unwrap()).is_none());
+        assert!(bans.find_ip_ban("210.0.0.1".parse().unwrap()).is_none());
 
         // CIDR /24
-        assert!(bans.find_ip_ban([192, 168, 5, 42]).is_some());
-        assert!(bans.find_ip_ban([192, 168, 6, 42]).is_none());
+        assert!(bans.find_ip_ban("192.168.5.42".parse().unwrap()).is_some());
+        assert!(bans.find_ip_ban("192.168.6.42".parse().unwrap()).is_none());
 
         // Dotted netmask
-        assert!(bans.find_ip_ban([172, 20, 1, 2]).is_some());
-        assert!(bans.find_ip_ban([172, 32, 0, 1]).is_none());
+        assert!(bans.find_ip_ban("172.20.1.2".parse().unwrap()).is_some());
+        assert!(bans.find_ip_ban("172.32.0.1".parse().unwrap()).is_none());
 
         // IPv6 CIDR & invalid target string
+        assert!(bans.find_ip_ban("2001:db8::1".parse().unwrap()).is_some());
+        assert!(bans.find_ip_ban("2001:db9::1".parse().unwrap()).is_none());
         assert!(bans.find_ip_str_ban("2001:db8::1").is_some());
         assert!(bans.find_ip_str_ban("2001:db9::1").is_none());
         assert!(bans.find_ip_str_ban("not_an_ip").is_none());
@@ -501,7 +503,7 @@ mod tests {
         // Haskell roundtrip compiles IP masks upon load
         let serialized = bans.to_haskell_str();
         let mut reloaded = BanCollection::from_haskell_str(&serialized);
-        assert!(reloaded.find_ip_ban([192, 168, 5, 1]).is_some());
-        assert!(reloaded.find_ip_ban([10, 0, 0, 10]).is_none());
+        assert!(reloaded.find_ip_ban("192.168.5.1".parse().unwrap()).is_some());
+        assert!(reloaded.find_ip_ban("10.0.0.10".parse().unwrap()).is_none());
     }
 }

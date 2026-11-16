@@ -133,7 +133,7 @@ impl FromStr for IpNet {
 
 #[derive(Debug, Clone, Default)]
 pub struct NoAnonList {
-    entries: Vec<Ipv4Net>,
+    entries: Vec<IpNet>,
 }
 
 impl NoAnonList {
@@ -166,7 +166,7 @@ impl NoAnonList {
             if line.is_empty() || line.starts_with('#') || line.starts_with("//") {
                 continue;
             }
-            match line.parse::<Ipv4Net>() {
+            match line.parse::<IpNet>() {
                 Ok(net) => entries.push(net),
                 Err(err) => warn!("no_anon line {}: {}", line_num + 1, err),
             }
@@ -174,12 +174,11 @@ impl NoAnonList {
         Self { entries }
     }
 
-    pub fn matches(&self, ip: [u8; 4]) -> bool {
-        let ip = Ipv4Addr::from(ip);
+    pub fn matches(&self, ip: IpAddr) -> bool {
         self.entries.iter().any(|net| net.contains(ip))
     }
 
-    pub fn matches_opt(&self, ip_opt: Option<[u8; 4]>) -> bool {
+    pub fn matches_opt(&self, ip_opt: Option<IpAddr>) -> bool {
         match ip_opt {
             Some(ip) => self.matches(ip),
             None => false,
@@ -236,20 +235,25 @@ mod tests {
             127.0.0.1
             192.168.1.0/24
             10.20.30.0/255.255.255.0
+            2001:db8::/32
+            ::1
         ";
         let list = NoAnonList::from_str(config);
-        assert_eq!(list.len(), 3);
-        assert!(list.matches([127, 0, 0, 1]));
-        assert!(!list.matches([127, 0, 0, 2]));
-        assert!(list.matches([192, 168, 1, 55]));
-        assert!(!list.matches([192, 168, 2, 55]));
-        assert!(list.matches([10, 20, 30, 99]));
+        assert_eq!(list.len(), 5);
+        assert!(list.matches(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))));
+        assert!(!list.matches(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 2))));
+        assert!(list.matches(IpAddr::V4(Ipv4Addr::new(192, 168, 1, 55))));
+        assert!(!list.matches(IpAddr::V4(Ipv4Addr::new(192, 168, 2, 55))));
+        assert!(list.matches(IpAddr::V4(Ipv4Addr::new(10, 20, 30, 99))));
+        assert!(list.matches(IpAddr::V6("::1".parse().unwrap())));
+        assert!(list.matches(IpAddr::V6("2001:db8::42".parse().unwrap())));
+        assert!(!list.matches(IpAddr::V6("2001:db9::42".parse().unwrap())));
     }
 
     #[test]
     fn test_missing_file() {
         let list = NoAnonList::load_from_file("nonexistent_no_anon_file_12345.txt");
         assert!(list.is_empty());
-        assert!(!list.matches([127, 0, 0, 1]));
+        assert!(!list.matches(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))));
     }
 }

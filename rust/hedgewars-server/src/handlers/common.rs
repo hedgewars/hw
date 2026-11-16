@@ -851,6 +851,14 @@ pub fn get_end_game_result(
             .map(|name| TeamRemove(name).send_all().in_room(room.id)),
     );
 
+    if !result.joined_mid_game_ids.is_empty() {
+        let dest = Destination::ToIds(result.joined_mid_game_ids);
+        get_active_room_config(room, dest.clone(), response);
+        for name in result.mid_game_left_teams {
+            response.add(TeamRemove(name).send_to_destination(dest.clone()));
+        }
+    }
+
     if !result.unreadied_nicks.is_empty() {
         response.add(
             ClientFlags(remove_flags(&[Flags::Ready]), result.unreadied_nicks)

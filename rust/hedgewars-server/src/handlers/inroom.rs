@@ -737,13 +737,14 @@ pub fn handle(
                         );
                         kick_target_from_room(&mut room_control, ban_id, response);
                     }
-                } else if target.parse::<IpAddr>().is_ok() {
+                } else if let Ok(parsed_ip) = target.parse::<IpAddr>() {
+                    let canonical_ip = crate::utils::normalize_ip(parsed_ip).to_string();
                     let master_nick = room_control.client().nick.clone();
                     let room_name = room_control.room().name.clone();
-                    room_control.ban_ip(target.clone());
+                    room_control.ban_ip(canonical_ip.clone());
                     info!(
                         "IP '{}' was added to ban list of room '{}' by master '{}'",
-                        target, room_name, master_nick
+                        canonical_ip, room_name, master_nick
                     );
                     response.add(
                         server_chat("IP address added to room ban list.".to_string()).send_self(),
@@ -756,7 +757,7 @@ pub fn handle(
                         .filter(|c| {
                             c.id != client_id
                                 && c.room_id == Some(room_id)
-                                && c.host == target
+                                && c.host == canonical_ip
                                 && !c.has_super_power()
                                 && (!is_in_game || not_only_2_players || c.teams_in_game == 0)
                         })
@@ -766,7 +767,7 @@ pub fn handle(
                         let ban_nick = room_control.server().client(ban_id).nick.clone();
                         info!(
                             "Client '{}' (ip: '{}') was kicked from room '{}' due to room IP ban by master '{}'",
-                            ban_nick, target, room_name, master_nick
+                            ban_nick, canonical_ip, room_name, master_nick
                         );
                         kick_target_from_room(&mut room_control, ban_id, response);
                     }
@@ -1028,6 +1029,28 @@ mod tests {
     }
 
     #[test]
+    fn test_room_ban_by_ipv6_canonicalizes_and_kicks() {
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "v6target", "2001:db8::1", room_id, false);
+
+        // Pass non-canonical IPv6 form; should normalize/canonicalize and kick/ban "2001:db8::1"
+        let msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::RoomBan("2001:0db8:0000:0000:0000:0000:0000:0001".to_string()),
+        );
+
+        assert!(server.client(1).room_id.is_none());
+        assert!(server.room(room_id).bans.contains(&"2001:db8::1".to_string()));
+        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(matches!(
+            server.join_room(1, room_id, None),
+            Err(JoinRoomError::RoomBanned)
+        ));
+    }
+
+    #[test]
     fn test_room_ban_non_master_and_no_banlist_review() {
         let (mut server, mut anteroom, room_id) = setup_room_with_master();
         add_joined_client(&mut server, 1, "pleb", "10.0.0.6", room_id, false);
@@ -1246,5 +1269,87 @@ mod tests {
         let restart_msgs =
             dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::StartGame);
         assert!(restart_msgs.iter().any(|(_, m)| matches!(m, RunGame)));
+    }
+
+    #[test]
+    fn test_midgame_joiner_removes_timed_out_players_teams_when_game_ends() {
+        use hedgewars_network_protocol::types::{HedgehogInfo, TeamInfo};
+
+        let (mut server, mut anteroom, room_id) = setup_room_with_master();
+        add_joined_client(&mut server, 1, "bob", "10.0.0.2", room_id, false);
+
+        let make_team = |name: &str, color: u8| {
+            Box::new(TeamInfo {
+                owner: String::new(),
+                name: name.to_string(),
+                color,
+                grave: "Statue".to_string(),
+                fort: "Plane".to_string(),
+                voice_pack: "Default".to_string(),
+                flag: "hedgewars".to_string(),
+                difficulty: 0,
+                hedgehogs: std::array::from_fn(|i| HedgehogInfo {
+                    name: format!("h{}", i + 1),
+                    hat: "NoHat".to_string(),
+                }),
+                hedgehogs_number: 4,
+            })
+        };
+
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::AddTeam(make_team("TeamMaster", 0)),
+        );
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            1,
+            HwProtocolMessage::AddTeam(make_team("TeamBob", 1)),
+        );
+        dispatch_in_room(&mut server, &mut anteroom, 1, HwProtocolMessage::ToggleReady);
+        dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::StartGame);
+
+        // Bob times out mid-game -> TeamBob removed from room and recorded in GameInfo::left_teams
+        let mut timeout_resp = Response::new(1);
+        crate::handlers::common::remove_client(
+            &mut server,
+            &mut anteroom,
+            &mut timeout_resp,
+            "Ping timeout".to_string(),
+        );
+        assert!(server.room(room_id).find_team(|t| t.name == "TeamBob").is_none());
+
+        // Charlie joins mid-game after Bob timed out -> receives original_teams including TeamBob
+        let (charlie_cl, charlie_host) = make_client("charlie", "10.0.0.3", false);
+        server.add_client(2, charlie_cl);
+        server.client_mut(2).host = charlie_host;
+        let mut protocols = server.all_client_protocols().into_iter();
+        let (client_ref, master_ref, room_ref, room_clients) =
+            server.join_room(2, room_id, None).unwrap();
+        let mut join_resp = Response::new(2);
+        crate::handlers::common::get_room_join_data(
+            &mut protocols,
+            client_ref,
+            master_ref,
+            room_ref,
+            room_clients,
+            &mut join_resp,
+        );
+        let join_msgs: Vec<_> = join_resp.extract_messages(&server).collect();
+        assert!(join_msgs.iter().any(|(targets, m)| {
+            targets == &vec![2] && matches!(m, TeamAdd(t) if t.first().map(String::as_str) == Some("TeamBob"))
+        }));
+
+        // Master finishes round -> Charlie (joined mid-game) must receive REMOVE_TEAM TeamBob, not master
+        let end_msgs =
+            dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::RoundFinished);
+        assert!(end_msgs.iter().any(|(targets, m)| {
+            targets == &vec![2] && matches!(m, TeamRemove(name) if name == "TeamBob")
+        }));
+        assert!(!end_msgs.iter().any(|(targets, m)| {
+            targets.contains(&0) && matches!(m, TeamRemove(name) if name == "TeamBob")
+        }));
     }
 }

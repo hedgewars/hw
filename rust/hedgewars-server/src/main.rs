@@ -46,9 +46,18 @@ async fn main() -> tokio::io::Result<()> {
         .opt_str("p")
         .and_then(|s| u16::from_str(&s).ok())
         .unwrap_or(46631);
-    let address: SocketAddr = format!("0.0.0.0:{}", port).parse().unwrap();
-
-    let server = tokio::net::TcpListener::bind(address).await.unwrap();
+    let v6_address: SocketAddr = format!("[::]:{}", port).parse().unwrap();
+    let server = match tokio::net::TcpListener::bind(v6_address).await {
+        Ok(listener) => listener,
+        Err(err) => {
+            warn!(
+                "Failed to bind {} ({}), falling back to IPv4 0.0.0.0:{}",
+                v6_address, err, port
+            );
+            let v4_address: SocketAddr = format!("0.0.0.0:{}", port).parse().unwrap();
+            tokio::net::TcpListener::bind(v4_address).await?
+        }
+    };
 
     let mut hw_network = NetworkLayerBuilder::default().with_listener(server).build();
 

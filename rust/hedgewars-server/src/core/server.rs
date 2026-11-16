@@ -151,6 +151,8 @@ pub enum StartGameError {
 #[derive(Debug)]
 pub struct EndGameResult {
     pub left_teams: Vec<String>,
+    pub mid_game_left_teams: Vec<String>,
+    pub joined_mid_game_ids: Vec<ClientId>,
     pub unreadied_nicks: Vec<String>,
     pub checker_replay: Option<(CheckerId, Vec<String>)>,
 }
@@ -1508,6 +1510,13 @@ impl<'a> HwRoomControl<'a> {
                 }
             }
 
+            let mut mid_game_left_teams = Vec::new();
+            for team_name in &info.left_teams {
+                if !mid_game_left_teams.contains(team_name) {
+                    mid_game_left_teams.push(team_name.clone());
+                }
+            }
+
             #[cfg(feature = "official-server")]
             if info.all_players_registered {
                 let replay = super::types::Replay {
@@ -1532,12 +1541,16 @@ impl<'a> HwRoomControl<'a> {
                 }
             }
 
+            let mut joined_mid_game_ids = Vec::new();
             let unreadied_nicks: Vec<_> = self
                 .server
                 .clients
                 .iter_mut()
                 .filter(|(_, c)| c.room_id == Some(room_id))
-                .map(|(_, c)| {
+                .map(|(id, c)| {
+                    if c.is_rejoined() {
+                        joined_mid_game_ids.push(id);
+                    }
                     c.set_is_ready(c.is_master());
                     c.set_is_rejoined(false);
                     c.team_indices.clear();
@@ -1566,6 +1579,8 @@ impl<'a> HwRoomControl<'a> {
 
             Some(EndGameResult {
                 left_teams,
+                mid_game_left_teams,
+                joined_mid_game_ids,
                 unreadied_nicks,
                 checker_replay,
             })
@@ -1705,7 +1720,7 @@ mod tests {
             is_admin,
             is_contributor: false,
             is_checker: false,
-            ip_addr: Some([127, 0, 0, 1]),
+            ip_addr: Some(std::net::IpAddr::V4(std::net::Ipv4Addr::LOCALHOST)),
             web_password: String::new(),
             has_password_challenge: false,
             pings_queue: 0,

@@ -1,10 +1,11 @@
 use std::{
     collections::HashMap,
+    net::IpAddr,
     time::{Duration, Instant},
 };
 
 pub struct JoinsMonitor {
-    joins: HashMap<[u8; 4], Vec<Instant>>,
+    joins: HashMap<IpAddr, Vec<Instant>>,
 }
 
 impl JoinsMonitor {
@@ -14,7 +15,7 @@ impl JoinsMonitor {
         }
     }
 
-    pub fn check_and_record(&mut self, host: [u8; 4]) -> bool {
+    pub fn check_and_record(&mut self, host: IpAddr) -> bool {
         let now = Instant::now();
         let timestamps = self.joins.entry(host).or_default();
 

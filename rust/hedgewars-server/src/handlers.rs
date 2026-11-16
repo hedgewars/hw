@@ -466,10 +466,10 @@ pub fn handle_client_accept(
     state: &mut ServerState,
     client_id: ClientId,
     response: &mut Response,
-    addr: [u8; 4],
+    addr: std::net::IpAddr,
     is_local: bool,
 ) -> bool {
-    let ip_str = format!("{}.{}.{}.{}", addr[0], addr[1], addr[2], addr[3]);
+    let ip_str = addr.to_string();
     let accepted = if let Err(reason) = state.anteroom.try_accept(Some(addr)) {
         warn!("Failed server connect from {}: {}", ip_str, reason);
         response.add(Bye(reason).send_self());
@@ -689,7 +689,9 @@ pub fn handle_io_result(
 
 #[cfg(test)]
 mod test {
+    use super::*;
     use crate::core::digest::Sha1Digest;
+    use std::net::IpAddr;
 
     #[test]
     fn hash_cmp_test() {
@@ -699,5 +701,30 @@ mod test {
         ]);
 
         assert_eq!(hash, &format!("{:x}", hash)[..]);
+    }
+
+    #[test]
+    fn ipv6_accept_normalization_and_bans_test() {
+        // IPv4-mapped IPv6 addresses normalize to plain IPv4
+        let mapped: IpAddr = "::ffff:127.0.0.1".parse().unwrap();
+        let norm_mapped = crate::utils::normalize_ip(mapped);
+        assert_eq!(norm_mapped, "127.0.0.1".parse::<IpAddr>().unwrap());
+        assert!(norm_mapped.is_loopback());
+
+        let mut state = ServerState::new(16, 16);
+        let v6_ip: IpAddr = "2001:db8::42".parse().unwrap();
+        let mut resp = Response::new(1);
+        assert!(handle_client_accept(&mut state, 1, &mut resp, v6_ip, v6_ip.is_loopback()));
+        assert_eq!(state.anteroom.get_client(1).host_string(), "2001:db8::42");
+        assert!(!state.anteroom.get_client(1).is_local_admin);
+
+        // IPv6 subnet ban rejects subsequent connect from matching subnet
+        state
+            .anteroom
+            .bans
+            .add_ip_ban("2001:db8::/32".to_string(), "v6 subnet ban".to_string(), 60);
+        let v6_ip2: IpAddr = "2001:db8::99".parse().unwrap();
+        let mut resp2 = Response::new(2);
+        assert!(!handle_client_accept(&mut state, 2, &mut resp2, v6_ip2, false));
     }
 }

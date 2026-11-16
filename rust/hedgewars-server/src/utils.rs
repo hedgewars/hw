@@ -1,5 +1,18 @@
 use base64::encode;
 use std::iter::Iterator;
+use std::net::{IpAddr, Ipv4Addr};
+
+pub fn normalize_ip(ip: IpAddr) -> IpAddr {
+    match ip {
+        IpAddr::V6(v6) => match v6.segments() {
+            [0, 0, 0, 0, 0, 0xffff, hi, lo] => {
+                IpAddr::V4(Ipv4Addr::from(((hi as u32) << 16) | (lo as u32)))
+            }
+            _ => IpAddr::V6(v6),
+        },
+        v4 => v4,
+    }
+}
 
 pub const SERVER_VERSION: u32 = 3;
 pub const SERVER_MESSAGE: &str = "Hedgewars server https://www.hedgewars.org/";

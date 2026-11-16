@@ -341,9 +341,12 @@ mod tests {
             .add_nick_ban("OutlawNick".to_string(), "bad nick".to_string(), 60);
 
         let cid: ClientId = 1;
-        state
-            .anteroom
-            .add_client_with_ip(cid, "salt123456789012".to_string(), false, Some([127, 0, 0, 1]));
+        state.anteroom.add_client_with_ip(
+            cid,
+            "salt123456789012".to_string(),
+            false,
+            Some(std::net::IpAddr::V4(std::net::Ipv4Addr::LOCALHOST)),
+        );
 
         let mut response = Response::new(cid);
         let res = handle(

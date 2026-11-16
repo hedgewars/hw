@@ -424,17 +424,14 @@ impl NetworkLayer {
 
         let mut response = handlers::Response::new(client_id);
 
-        let added = if let IpAddr::V4(addr) = client.peer_addr.ip() {
-            handlers::handle_client_accept(
-                &mut self.server_state,
-                client_id,
-                &mut response,
-                addr.octets(),
-                addr.is_loopback(),
-            )
-        } else {
-            todo!("implement something")
-        };
+        let peer_ip = crate::utils::normalize_ip(client.peer_addr.ip());
+        let added = handlers::handle_client_accept(
+            &mut self.server_state,
+            client_id,
+            &mut response,
+            peer_ip,
+            peer_ip.is_loopback(),
+        );
 
         self.handle_response(response).await;
 
@@ -699,8 +696,9 @@ mod tests {
     #[tokio::test]
     async fn handle_client_timed_out_sends_ping_timeout_to_room_and_lobby() {
         let mut state = ServerState::new(16, 16);
+        let loopback = IpAddr::V4(std::net::Ipv4Addr::LOCALHOST);
         let mut response = handlers::Response::new(1);
-        handlers::handle_client_accept(&mut state, 1, &mut response, [127, 0, 0, 1], true);
+        handlers::handle_client_accept(&mut state, 1, &mut response, loopback, true);
         handlers::handle(
             &mut state,
             1,
@@ -723,7 +721,7 @@ mod tests {
         );
 
         let mut response2 = handlers::Response::new(2);
-        handlers::handle_client_accept(&mut state, 2, &mut response2, [127, 0, 0, 1], true);
+        handlers::handle_client_accept(&mut state, 2, &mut response2, loopback, true);
         handlers::handle(
             &mut state,
             2,

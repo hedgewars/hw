@@ -5,7 +5,7 @@ use super::{
 use base64::encode;
 use log::*;
 use rand::{thread_rng, RngCore};
-use std::{collections::HashMap, num::NonZeroU16};
+use std::{collections::HashMap, net::IpAddr, num::NonZeroU16};
 
 pub struct HwAnteroomClient {
     pub nick: Option<String>,
@@ -16,7 +16,7 @@ pub struct HwAnteroomClient {
     pub is_admin: bool,
     pub is_contributor: bool,
     pub is_checker: bool,
-    pub ip_addr: Option<[u8; 4]>,
+    pub ip_addr: Option<IpAddr>,
     pub web_password: String,
     pub has_password_challenge: bool,
     pub pings_queue: u32,
@@ -24,11 +24,7 @@ pub struct HwAnteroomClient {
 
 impl HwAnteroomClient {
     pub fn host_string(&self) -> String {
-        if let Some(ip) = self.ip_addr {
-            format!("{}.{}.{}.{}", ip[0], ip[1], ip[2], ip[3])
-        } else {
-            String::new()
-        }
+        self.ip_addr.map_or_else(String::new, |ip| ip.to_string())
     }
 }
 
@@ -52,7 +48,7 @@ impl HwAnteroom {
         }
     }
 
-    pub fn try_accept(&mut self, addr: Option<[u8; 4]>) -> Result<(), String> {
+    pub fn try_accept(&mut self, addr: Option<IpAddr>) -> Result<(), String> {
         if let Some(ip) = addr {
             if !self.joins_monitor.check_and_record(ip) {
                 return Err("Reconnected too fast".to_string());
@@ -73,7 +69,7 @@ impl HwAnteroom {
         client_id: ClientId,
         salt: String,
         is_local: bool,
-        ip_addr: Option<[u8; 4]>,
+        ip_addr: Option<IpAddr>,
     ) {
         let client = HwAnteroomClient {
             nick: None,
@@ -113,7 +109,7 @@ impl HwAnteroom {
         self.clients.remove(client_id)
     }
 
-    pub fn find_ban(&mut self, addr: [u8; 4]) -> Option<String> {
+    pub fn find_ban(&mut self, addr: IpAddr) -> Option<String> {
         self.bans.find_ip_ban(addr)
     }
 
