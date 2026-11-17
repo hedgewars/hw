@@ -166,13 +166,14 @@ impl Database {
         server_salt: &str,
     ) -> mysql_async::Result<Option<AccountInfo>> {
         let mut connection = self.pool.get_conn().await?;
-        if let Some((mut password, is_admin, is_contributor)) = connection
-            .exec_first::<(String, i32, i32), _, _>(
+        if let Some((password_opt, is_admin, is_contributor)) = connection
+            .exec_first::<(Option<String>, i32, i32), _, _>(
                 GET_ACCOUNT_QUERY,
                 params! { "username" => nick },
             )
             .await?
         {
+            let mut password = password_opt.unwrap_or_default();
             if password.is_empty() {
                 return Ok(None);
             }
@@ -206,13 +207,14 @@ impl Database {
         checker_password: &str,
     ) -> mysql_async::Result<(bool, bool)> {
         let mut connection = self.pool.get_conn().await?;
-        if let Some((password, is_admin, _)) = connection
-            .exec_first::<(String, i32, i32), _, _>(
+        if let Some((password_opt, is_admin, _)) = connection
+            .exec_first::<(Option<String>, i32, i32), _, _>(
                 GET_ACCOUNT_QUERY,
                 params! { "username" => nick },
             )
             .await?
         {
+            let password = password_opt.unwrap_or_default();
             Ok((
                 !password.is_empty() && checker_password == password,
                 is_admin == 1,
@@ -368,11 +370,12 @@ impl Database {
                         .iter()
                         .map(|s| s.parse::<i32>().unwrap_or(0))
                         .collect();
-                    let db_best: Option<Option<i32>> = connection
+                    let row: Option<mysql_async::Row> = connection
                         .exec_first(GET_BEST_TIME_QUERY, params! { "location" => &best_location })
                         .await
-                        .ok();
-                    let min_prev = db_best.flatten().unwrap_or(i32::MAX);
+                        .ok()
+                        .flatten();
+                    let min_prev = extract_min_prev(row);
                     if best_time < min_prev && !best_location.is_empty() {
                         let formatted = format!(
                             "[{}]",
@@ -398,10 +401,18 @@ impl Database {
 
     pub async fn get_replay_name(&mut self, replay_id: u32) -> mysql_async::Result<Option<String>> {
         let mut connection = self.pool.get_conn().await?;
-        connection
+        let row: Option<(Option<String>,)> = connection
             .exec_first(GET_REPLAY_NAME_QUERY, params! { "id" => replay_id })
-            .await
+            .await?;
+        Ok(row.and_then(|(name,)| name))
     }
+}
+
+fn extract_min_prev(row: Option<mysql_async::Row>) -> i32 {
+    row.and_then(|mut r| r.take_opt::<Option<i32>, usize>(0))
+        .and_then(|res| res.ok())
+        .flatten()
+        .unwrap_or(i32::MAX)
 }
 
 fn get_hash(protocol_number: u16, web_password: &str, salt1: &str, salt2: &str) -> Sha1Digest {
@@ -413,4 +424,17 @@ fn get_hash(protocol_number: u16, web_password: &str, salt1: &str, salt2: &str) 
     let mut sha1 = Sha1::new();
     sha1.update(&data);
     Sha1Digest::new(sha1.finalize().into())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use mysql_async::{from_value_opt, Value};
+
+    #[test]
+    fn test_extract_min_prev_handles_null_and_none() {
+        assert_eq!(extract_min_prev(None), i32::MAX);
+        assert_eq!(from_value_opt::<Option<i32>>(Value::NULL).unwrap(), None);
+        assert_eq!(from_value_opt::<Option<i32>>(Value::Int(4200)).unwrap(), Some(4200));
+    }
 }
