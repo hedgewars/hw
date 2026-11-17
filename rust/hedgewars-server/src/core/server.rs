@@ -1533,15 +1533,7 @@ impl<'a> HwRoomControl<'a> {
 
             #[cfg(feature = "official-server")]
             if should_record_replay {
-                let replay = super::types::Replay {
-                    config: room.config().clone(),
-                    teams: info
-                        .original_teams
-                        .iter()
-                        .map(|(_, info)| info.clone())
-                        .collect(),
-                    message_log: info.msg_log.clone(),
-                };
+                let replay = info.to_replay();
                 let uid: u32 = thread_rng().gen_range(10000..100000);
                 let filename = format!(
                     "replays/{} UTC-{}.{}",
@@ -1890,5 +1882,46 @@ mod tests {
         assert!(!server.record_unregistered_replays());
         server.set_record_unregistered_replays(true);
         assert!(server.record_unregistered_replays());
+    }
+
+    #[test]
+    fn test_replay_uses_original_config_after_midgame_config_change() {
+        let mut server = HwServer::new(16, 16);
+        server.add_client(0, make_anteroom_client("master", false));
+        server.add_client(1, make_anteroom_client("player2", false));
+
+        let (_, room) = server.create_room(0, "cfg_replay_room".to_string(), None).unwrap();
+        let room_id = room.id;
+        let _ = server.join_room(1, room_id, None).unwrap();
+
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.set_config(GameCfg::Theme("Snow".to_string())).unwrap();
+            ctrl.set_config(GameCfg::MapType("+rnd+".to_string())).unwrap();
+            ctrl.set_config(GameCfg::MapGenerator(0)).unwrap();
+            ctrl.add_team(dummy_team("t1", 0)).unwrap();
+        }
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(1) {
+            ctrl.add_team(dummy_team("t2", 1)).unwrap();
+            ctrl.toggle_ready();
+        }
+
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.start_game().unwrap();
+            // Master changes room config mid-game (or new master sends CFG after old master leaves)
+            ctrl.set_config(GameCfg::Theme("EarthRise".to_string())).unwrap();
+            ctrl.set_config(GameCfg::MapType("2Cshoppa".to_string())).unwrap();
+            ctrl.set_config(GameCfg::MapGenerator(5)).unwrap();
+
+            let replay = ctrl.room().game_info.as_ref().unwrap().to_replay();
+            assert_eq!(replay.config.theme, "Snow");
+            assert_eq!(replay.config.map_type, "+rnd+");
+            assert_eq!(replay.config.map_generator, 0);
+            assert_eq!(ctrl.room().config().theme, "EarthRise");
+            assert_eq!(ctrl.room().config().map_type, "2Cshoppa");
+            assert_eq!(ctrl.room().config().map_generator, 5);
+
+            let _ = ctrl.end_game();
+            assert_eq!(ctrl.room().config().theme, "EarthRise");
+        };
     }
 }

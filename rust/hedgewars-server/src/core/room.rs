@@ -39,7 +39,7 @@ pub struct GameInfo {
     pub is_paused: bool,
     pub teams_in_game: u8,
     pub all_players_registered: bool,
-    original_config: RoomConfig,
+    pub original_config: RoomConfig,
 }
 
 impl GameInfo {
@@ -85,6 +85,19 @@ impl GameInfo {
         }
         if was_in_game {
             self.log_team_removal(team_names);
+        }
+    }
+
+    /// Builds a `Replay` using the original game config and teams captured at round start.
+    pub fn to_replay(&self) -> super::types::Replay {
+        super::types::Replay {
+            config: self.original_config.clone(),
+            teams: self
+                .original_teams
+                .iter()
+                .map(|(_, info)| info.clone())
+                .collect(),
+            message_log: self.msg_log.clone(),
         }
     }
 }
