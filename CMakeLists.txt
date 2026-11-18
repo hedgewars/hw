@@ -14,7 +14,7 @@ include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #possible cmake configuration
 option(BUILD_OFFLINE "Disable automatic downloading of dependecies by cabal and cargo" OFF)
-option(NOSERVER "Disable gameServer build (off)" OFF)
+option(NOSERVER "Disable game server build (off)" OFF)
 if(NOT WIN32)
     option(NOPNG "Disable screenshoot compression (off)" OFF)
 endif()
