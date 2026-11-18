@@ -26,7 +26,6 @@
     </message>
     <message>
         <source>GNU GPL v2</source>
-        <extracomment>Short for “GNU General Public License version 2”</extracomment>
         <translation></translation>
     </message>
     <message>
@@ -360,25 +359,21 @@ Please check your installation!</source>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <extracomment>“Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line</extracomment>
         <translation>用法</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”</extracomment>
         <translation>選項</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
         <translation>連接字串</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <extracomment>“Options” as in “command-line options”</extracomment>
         <translation>選項</translation>
     </message>
     <message>
@@ -888,6 +883,10 @@ Last engine message:
     <message>
         <source>Edit</source>
         <translation>編輯</translation>
+    </message>
+    <message>
+        <source>WFC</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2357,11 +2356,11 @@ Last engine message:
     </message>
     <message>
         <source>Date: %1</source>
-        <translation>日期：%1</translation>
+        <translation type="vanished">日期：%1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation>大小：%1</translation>
+        <translation type="vanished">大小：%1</translation>
     </message>
     <message>
         <source>%1%</source>
@@ -2372,6 +2371,18 @@ Last engine message:
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
         <translation></translation>
+    </message>
+    <message>
+        <source>Date: %1
+</source>
+        <translation type="unfinished">日期：%1
+</translation>
+    </message>
+    <message>
+        <source>Size: %1
+</source>
+        <translation type="unfinished">大小：%1
+</translation>
     </message>
 </context>
 <context>
@@ -2443,6 +2454,10 @@ Last engine message:
     <message>
         <source>Delegate room control</source>
         <translation>房間控制權下放</translation>
+    </message>
+    <message>
+        <source>Show incompatible</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3556,6 +3571,10 @@ Would you like to reconnect securely?</source>
         <source>Forts</source>
         <translation>堡壘</translation>
     </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished">版本</translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -4556,467 +4575,303 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>credits</name>
     <message>
         <source>Programming</source>
-        <translation>程序設計</translation>
+        <translation type="vanished">程序設計</translation>
     </message>
     <message>
         <source>Game engine</source>
-        <translation>遊戲引擎</translation>
+        <translation type="vanished">遊戲引擎</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation>創造者</translation>
+        <translation type="vanished">創造者</translation>
     </message>
     <message>
         <source>Many engine improvements</source>
-        <translation>許多引擎的改善</translation>
+        <translation type="vanished">許多引擎的改善</translation>
     </message>
     <message>
         <source>Gamepad and Lua integration</source>
-        <translation>遊戲手柄與Lua整合</translation>
+        <translation type="vanished">遊戲手柄與Lua整合</translation>
     </message>
     <message>
         <source>Campaign support</source>
-        <translation>活動支持</translation>
+        <translation type="vanished">活動支持</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
-        <translation>主體客製化改善</translation>
+        <translation type="vanished">主體客製化改善</translation>
     </message>
     <message>
         <source>Some Pas2C and GLES2 work</source>
-        <translation>一些Pas2C和GLES2工作</translation>
+        <translation type="vanished">一些Pas2C和GLES2工作</translation>
     </message>
     <message>
         <source>Video recording</source>
-        <translation>視頻錄製</translation>
+        <translation type="vanished">視頻錄製</translation>
     </message>
     <message>
         <source>Other improvements</source>
-        <translation>其他改善</translation>
+        <translation type="vanished">其他改善</translation>
     </message>
     <message>
         <source>Map generation</source>
-        <translation>地圖生成</translation>
+        <translation type="vanished">地圖生成</translation>
     </message>
     <message>
         <source>Core map generators</source>
-        <translation>核心地圖生成器</translation>
+        <translation type="vanished">核心地圖生成器</translation>
     </message>
     <message>
         <source>Perlin maps and other improvements</source>
-        <translation>Perlin地圖和其他改善</translation>
+        <translation type="vanished">Perlin地圖和其他改善</translation>
     </message>
     <message>
         <source>Maze maps</source>
-        <translation>迷宮地圖</translation>
+        <translation type="vanished">迷宮地圖</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>武器</translation>
+        <translation type="vanished">武器</translation>
     </message>
     <message>
         <source>Most core weapons</source>
-        <translation>大部分核心武器</translation>
+        <translation type="vanished">大部分核心武器</translation>
     </message>
     <message>
         <source>Air mine, rubber, others</source>
-        <translation>浮空雷, 橡皮筋, 其他</translation>
+        <translation type="vanished">浮空雷, 橡皮筋, 其他</translation>
     </message>
     <message>
         <source>Drill rocket, ballgun, RC plane</source>
-        <translation>鑽地火箭, 彈珠槍, 遙控飛機</translation>
+        <translation type="vanished">鑽地火箭, 彈珠槍, 遙控飛機</translation>
     </message>
     <message>
         <source>Freezer</source>
-        <translation>急凍槍</translation>
+        <translation type="vanished">急凍槍</translation>
     </message>
     <message>
         <source>Mine number and time game settings</source>
-        <translation>地雷數量和時間的遊戲設定</translation>
+        <translation type="vanished">地雷數量和時間的遊戲設定</translation>
     </message>
     <message>
         <source>Frontend / main menu</source>
-        <translation>前端 / 主選單</translation>
+        <translation type="vanished">前端 / 主選單</translation>
     </message>
     <message>
         <source>Many frontend improvements</source>
-        <translation>許多前端的改善</translation>
+        <translation type="vanished">許多前端的改善</translation>
     </message>
     <message>
         <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation>鍵盤綁定，反饋，地圖和帽子界面</translation>
+        <translation type="vanished">鍵盤綁定，反饋，地圖和帽子界面</translation>
     </message>
     <message>
         <source>Login dialogs, other improvements</source>
-        <translation>登錄對話框，以及其他改進</translation>
+        <translation type="vanished">登錄對話框，以及其他改進</translation>
     </message>
     <message>
         <source>Missions and styles</source>
-        <translation>任務和一些風格</translation>
+        <translation type="vanished">任務和一些風格</translation>
     </message>
     <message>
         <source>A Classic Fairytale</source>
-        <translation>經典故事</translation>
+        <translation type="vanished">經典故事</translation>
     </message>
     <message>
         <source>A Space Adventure</source>
-        <translation>太空探險</translation>
+        <translation type="vanished">太空探險</translation>
     </message>
     <message>
         <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation>創建奪旗，施工模式，控制，刺蝟編輯器，漢蘭達，賽車手，科技賽車手，專家，WxW</translation>
+        <translation type="vanished">創建奪旗，施工模式，控制，刺蝟編輯器，漢蘭達，賽車手，科技賽車手，專家，WxW</translation>
     </message>
     <message>
         <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation>訓練，計時賽和目標練習挑戰，火箭筒戰場，恐怖觸手，大軍械庫，錯誤修正和維護</translation>
+        <translation type="vanished">訓練，計時賽和目標練習挑戰，火箭筒戰場，恐怖觸手，大軍械庫，錯誤修正和維護</translation>
     </message>
     <message>
         <source>Some styles and missions</source>
-        <translation>一些風格和任務</translation>
-    </message>
-    <message>
-        <source>Battalion</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Continental supplies</source>
-        <translation></translation>
+        <translation type="vanished">一些風格和任務</translation>
     </message>
     <message>
         <source>Teamwork 2</source>
-        <translation>團隊合作2</translation>
+        <translation type="vanished">團隊合作2</translation>
     </message>
     <message>
         <source>Climb Home</source>
-        <translation>爬上家裡</translation>
+        <translation type="vanished">爬上家裡</translation>
     </message>
     <message>
         <source>Portal Mind Challenge</source>
-        <translation>傳送門挑戰</translation>
+        <translation type="vanished">傳送門挑戰</translation>
     </message>
     <message>
         <source>Game server</source>
-        <translation>遊戲伺服器</translation>
+        <translation type="vanished">遊戲伺服器</translation>
     </message>
     <message>
         <source>Ports</source>
-        <translation>部份</translation>
+        <translation type="vanished">部份</translation>
     </message>
     <message>
         <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation>macOS/iPhone部份,OpenGL-ES轉換</translation>
+        <translation type="vanished">macOS/iPhone部份,OpenGL-ES轉換</translation>
     </message>
     <message>
         <source>Android port</source>
-        <translation>Android部份</translation>
+        <translation type="vanished">Android部份</translation>
     </message>
     <message>
         <source>Android netplay, portability abstraction</source>
-        <translation>Android網路遊戲,移植性的抽象層</translation>
+        <translation type="vanished">Android網路遊戲,移植性的抽象層</translation>
     </message>
     <message>
         <source>WebGL port</source>
-        <translation>WebGL部份</translation>
+        <translation type="vanished">WebGL部份</translation>
     </message>
     <message>
         <source>iPhone/iPad ports</source>
-        <translation>iPhone/iPad部份</translation>
+        <translation type="vanished">iPhone/iPad部份</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>圖像</translation>
+        <translation type="vanished">圖像</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>常規</translation>
+        <translation type="vanished">常規</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation>主題</translation>
-    </message>
-    <message>
-        <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Golf, Hoggywood, Stage</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hoggywood</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cave, Olympics</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Fruit, Cake</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Art</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Beach</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Brick</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hell</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Jungle</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Sheep</source>
-        <translation></translation>
+        <translation type="vanished">主題</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation>地圖</translation>
-    </message>
-    <message>
-        <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Castle, PirateFlag</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ShoppaKing, TrophyRace</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Battlefield</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>CTF_Blizzard</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cheese</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ClimbHome</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Lonely_Island</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Octorama</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>portal</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ruler</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Sticks</source>
-        <translation></translation>
+        <translation type="vanished">地圖</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation>堡壘</translation>
-    </message>
-    <message>
-        <source>EvilChicken</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Olympic</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Tank</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Snail</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SteelTower</source>
-        <translation></translation>
+        <translation type="vanished">堡壘</translation>
     </message>
     <message>
         <source>Hats, graves, other</source>
-        <translation>帽子, 墳墓, 其他</translation>
+        <translation type="vanished">帽子, 墳墓, 其他</translation>
     </message>
     <message>
         <source>See CREDITS text file</source>
-        <translation>看貢獻文字檔</translation>
+        <translation type="vanished">看貢獻文字檔</translation>
     </message>
     <message>
         <source>Sounds</source>
-        <translation>音效</translation>
+        <translation type="vanished">音效</translation>
     </message>
     <message>
         <source>Hedgehogs voice</source>
-        <translation>刺蝟聲音</translation>
+        <translation type="vanished">刺蝟聲音</translation>
     </message>
     <message>
         <source>Default_pl, Russian_pl voices</source>
-        <translation>預設聲音,俄羅斯聲音</translation>
+        <translation type="vanished">預設聲音,俄羅斯聲音</translation>
     </message>
     <message>
         <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation>多個作者來自www.freesound.org(看貢獻文字檔)</translation>
+        <translation type="vanished">多個作者來自www.freesound.org(看貢獻文字檔)</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>音樂</translation>
-    </message>
-    <message>
-        <source>City, Rock, others</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Compost</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>EarthRise, oriental, Pirate, snow</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Fruit, Jungle</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Nature</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>olympics_sd</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation></translation>
+        <translation type="vanished">音樂</translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation>翻譯</translation>
+        <translation type="vanished">翻譯</translation>
     </message>
     <message>
         <source>Brazilian Portuguese</source>
-        <translation>巴西葡萄牙文</translation>
+        <translation type="vanished">巴西葡萄牙文</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation>保加利亞文</translation>
+        <translation type="vanished">保加利亞文</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>捷克文</translation>
+        <translation type="vanished">捷克文</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>中文</translation>
+        <translation type="vanished">中文</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation>芬蘭文</translation>
+        <translation type="vanished">芬蘭文</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>法文</translation>
+        <translation type="vanished">法文</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>德文</translation>
+        <translation type="vanished">德文</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation>希臘文</translation>
+        <translation type="vanished">希臘文</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>義大利文</translation>
+        <translation type="vanished">義大利文</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation>日文</translation>
+        <translation type="vanished">日文</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation>韓文</translation>
+        <translation type="vanished">韓文</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation>立陶宛文</translation>
+        <translation type="vanished">立陶宛文</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>波蘭文</translation>
+        <translation type="vanished">波蘭文</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>葡萄牙文</translation>
+        <translation type="vanished">葡萄牙文</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>俄羅斯文</translation>
+        <translation type="vanished">俄羅斯文</translation>
     </message>
     <message>
         <source>Scottish Gaelic</source>
-        <translation>蓋爾文</translation>
+        <translation type="vanished">蓋爾文</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation>斯洛伐克文</translation>
+        <translation type="vanished">斯洛伐克文</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>西班牙文</translation>
+        <translation type="vanished">西班牙文</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation>瑞典文</translation>
+        <translation type="vanished">瑞典文</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation>烏克蘭文</translation>
+        <translation type="vanished">烏克蘭文</translation>
     </message>
     <message>
         <source>Special thanks</source>
-        <translation>特別感謝</translation>
+        <translation type="vanished">特別感謝</translation>
     </message>
     <message>
         <source>Project founder</source>
-        <translation>項目創始人</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">項目創始人</translation>
     </message>
 </context>
 <context>
@@ -5091,27 +4946,27 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation>暱稱已經被使用</translation>
+        <translation type="vanished">暱稱已經被使用</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation>沒有檢查權</translation>
+        <translation type="vanished">沒有檢查權</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation>驗證失敗</translation>
+        <translation type="vanished">驗證失敗</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>被踢出後60秒冷卻時間</translation>
+        <translation type="vanished">被踢出後60秒冷卻時間</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation>被踢出</translation>
+        <translation type="vanished">被踢出</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation>Ping超時</translation>
+        <translation type="vanished">Ping超時</translation>
     </message>
     <message>
         <source>bye</source>
@@ -5151,7 +5006,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>New voting started</source>
-        <translation>新的投票開始</translation>
+        <translation type="vanished">新的投票開始</translation>
     </message>
     <message>
         <source>Voting expired</source>
@@ -5159,31 +5014,31 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>kick</source>
-        <translation>踢</translation>
+        <translation type="vanished">踢</translation>
     </message>
     <message>
         <source>map</source>
-        <translation>地圖</translation>
+        <translation type="vanished">地圖</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation>暫停</translation>
+        <translation type="vanished">暫停</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation>太快重新連線</translation>
+        <translation type="vanished">太快重新連線</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation>警告! 避免聊天氾濫的防護機制被啟動</translation>
+        <translation type="vanished">警告! 避免聊天氾濫的防護機制被啟動</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation>超額洪水</translation>
+        <translation type="vanished">超額洪水</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation>已經偵測到遊戲訊息氾濫 - 1</translation>
+        <translation type="vanished">已經偵測到遊戲訊息氾濫 - 1</translation>
     </message>
     <message>
         <source>Game messages flood detected - 2</source>
@@ -5191,7 +5046,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation>警告! 避免加入氾濫的防護機制被啟動</translation>
+        <translation type="vanished">警告! 避免加入氾濫的防護機制被啟動</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
@@ -5199,307 +5054,307 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>new seed</source>
-        <translation>新的種子</translation>
+        <translation type="vanished">新的種子</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
-        <translation>/最多隊伍數:指定從2到8</translation>
+        <translation type="vanished">/最多隊伍數:指定從2到8</translation>
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation>少於兩隊遊戲不能開始</translation>
+        <translation type="vanished">少於兩隊遊戲不能開始</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation>空配置條目。</translation>
+        <translation type="vanished">空配置條目。</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation>拒絕訪問。</translation>
+        <translation type="vanished">拒絕訪問。</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation>你不是房間主人!</translation>
+        <translation type="vanished">你不是房間主人!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation>毀損的刺蝟資訊!</translation>
+        <translation type="vanished">毀損的刺蝟資訊!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation>太多隊伍!</translation>
+        <translation type="vanished">太多隊伍!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation>太多刺蝟!</translation>
+        <translation type="vanished">太多刺蝟!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation>已經有個相同的隊名在列表。</translation>
+        <translation type="vanished">已經有個相同的隊名在列表。</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation>不能加入：遊戲正在進行中。</translation>
+        <translation type="vanished">不能加入：遊戲正在進行中。</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation>這個房間目前不允許添加新的隊伍。</translation>
+        <translation type="vanished">這個房間目前不允許添加新的隊伍。</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation>錯誤：您嘗試刪除的隊伍不存在。</translation>
+        <translation type="vanished">錯誤：您嘗試刪除的隊伍不存在。</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation>你無法刪除不屬於你的隊伍。</translation>
+        <translation type="vanished">你無法刪除不屬於你的隊伍。</translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>非法的房間名稱！房間名稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
+        <translation type="vanished">非法的房間名稱！房間名稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation>一個有相同名稱的房間已經存在。</translation>
+        <translation type="vanished">一個有相同名稱的房間已經存在。</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation>/callvote kick: 您需要指定一個暱稱。</translation>
+        <translation type="vanished">/callvote kick: 您需要指定一個暱稱。</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation>/callvote kick: 沒有這樣的用戶！</translation>
+        <translation type="vanished">/callvote kick: 沒有這樣的用戶！</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation>/callvote map: 沒有這樣的地圖！</translation>
+        <translation type="vanished">/callvote map: 沒有這樣的地圖！</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation>/callvote pause: 沒有遊戲在進行中！</translation>
+        <translation type="vanished">/callvote pause: 沒有遊戲在進行中！</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation>/callvote hedgehogs: 指定1到8之間的數字。</translation>
+        <translation type="vanished">/callvote hedgehogs: 指定1到8之間的數字。</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>非法的房間名稱！房間名稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
+        <translation type="vanished">非法的房間名稱！房間名稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation>沒有這樣的房間。</translation>
+        <translation type="vanished">沒有這樣的房間。</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation>房間的版本與你的刺蝟大作戰版本不兼容！</translation>
+        <translation type="vanished">房間的版本與你的刺蝟大作戰版本不兼容！</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation>拒絕訪問。這個房間目前不允許加入。</translation>
+        <translation type="vanished">拒絕訪問。這個房間目前不允許加入。</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation>拒絕訪問。這個房間僅供註冊用戶使用。</translation>
+        <translation type="vanished">拒絕訪問。這個房間僅供註冊用戶使用。</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation>你被這個房間封鎖</translation>
+        <translation type="vanished">你被這個房間封鎖</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
-        <translation>暱稱已經提供。</translation>
+        <translation type="vanished">暱稱已經提供。</translation>
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>非法暱稱！暱稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
+        <translation type="vanished">非法暱稱！暱稱長必須介於1-40個字符之間，不得有尾隨或前導空格，且不得包含以下任何字符: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
-        <translation>協議已知。</translation>
+        <translation type="vanished">協議已知。</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation>不好的號碼。</translation>
+        <translation type="vanished">不好的號碼。</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation>沒有投票在進行。</translation>
+        <translation type="vanished">沒有投票在進行。</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation>你已經投過票了。</translation>
+        <translation type="vanished">你已經投過票了。</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation>你的投票已被計算在內。</translation>
+        <translation type="vanished">你的投票已被計算在內。</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation>投票結束。</translation>
+        <translation type="vanished">投票結束。</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation>暫停切換。</translation>
+        <translation type="vanished">暫停切換。</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation>投票已過期。</translation>
+        <translation type="vanished">投票已過期。</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation>每個隊伍的刺蝟:</translation>
+        <translation type="vanished">每個隊伍的刺蝟:</translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation>/info &lt;player&gt;: 顯示玩家資訊</translation>
+        <translation type="vanished">/info &lt;player&gt;: 顯示玩家資訊</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation>/me &lt;message&gt;: 聊天操作，例如:&apos;/me 吃披薩&apos;變成&apos;玩家暱稱 吃披薩&apos;</translation>
+        <translation type="vanished">/me &lt;message&gt;: 聊天操作，例如:&apos;/me 吃披薩&apos;變成&apos;玩家暱稱 吃披薩&apos;</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation>/rnd: 翻轉虛擬硬幣並回覆&apos;頭&apos;或&apos;尾&apos;</translation>
+        <translation type="vanished">/rnd: 翻轉虛擬硬幣並回覆&apos;頭&apos;或&apos;尾&apos;</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation>/rnd [A] [B] [C] [...]: 隨機回复給定列表中的一個單詞</translation>
+        <translation type="vanished">/rnd [A] [B] [C] [...]: 隨機回复給定列表中的一個單詞</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation>/watch &lt;id&gt;: 觀看存儲在伺服器上指定ID的演示</translation>
+        <translation type="vanished">/watch &lt;id&gt;: 觀看存儲在伺服器上指定ID的演示</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation>/help: 顯示聊天命令提示</translation>
+        <translation type="vanished">/help: 顯示聊天命令提示</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation>/callvote [arguments]: 開始一個投票</translation>
+        <translation type="vanished">/callvote [arguments]: 開始一個投票</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation>/vote &lt;yes/no&gt;: 對進行中的投票,投&apos;是&apos;或&apos;不&apos;</translation>
+        <translation type="vanished">/vote &lt;yes/no&gt;: 對進行中的投票,投&apos;是&apos;或&apos;不&apos;</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation>/delegate &lt;player&gt;: 下放房間控製到某個玩家</translation>
+        <translation type="vanished">/delegate &lt;player&gt;: 下放房間控製到某個玩家</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation>/maxteams &lt;N&gt;: 將隊伍數上限設置為N</translation>
+        <translation type="vanished">/maxteams &lt;N&gt;: 將隊伍數上限設置為N</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation>/global &lt;message&gt;: 發送全域聊天訊息，伺服器上的每個人都可以看到</translation>
+        <translation type="vanished">/global &lt;message&gt;: 發送全域聊天訊息，伺服器上的每個人都可以看到</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation>/registered_only: 切換&apos;註冊專用&apos;狀態。如果啟用，只有註冊的玩家才能加入伺服器</translation>
+        <translation type="vanished">/registered_only: 切換&apos;註冊專用&apos;狀態。如果啟用，只有註冊的玩家才能加入伺服器</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation>/super_power：激活你的超能力。有了它，你可以進入任何房間，並受到免踢保護。直到你離開伺服器</translation>
+        <translation type="vanished">/super_power：激活你的超能力。有了它，你可以進入任何房間，並受到免踢保護。直到你離開伺服器</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation>/stats: 查詢伺服器統計信息</translation>
+        <translation type="vanished">/stats: 查詢伺服器統計信息</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation>/force &lt;yes/no&gt;: 強制決定進行中的投票</translation>
+        <translation type="vanished">/force &lt;yes/no&gt;: 強制決定進行中的投票</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation>/fix: 迫使這個房間空著時保持打開狀態</translation>
+        <translation type="vanished">/fix: 迫使這個房間空著時保持打開狀態</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation>撤消/fix命令</translation>
+        <translation type="vanished">撤消/fix命令</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation>列出大廳聊天命令:</translation>
+        <translation type="vanished">列出大廳聊天命令:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation>列出房間聊天命令:</translation>
+        <translation type="vanished">列出房間聊天命令:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation>伺服器管理員專用命令：</translation>
+        <translation type="vanished">伺服器管理員專用命令：</translation>
     </message>
     <message>
         <source>room</source>
-        <translation>房間</translation>
+        <translation type="vanished">房間</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation>大廳</translation>
+        <translation type="vanished">大廳</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation>(遊玩中)</translation>
+        <translation type="vanished">(遊玩中)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation>(觀看中)</translation>
+        <translation type="vanished">(觀看中)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation>玩家不在線上</translation>
+        <translation type="vanished">玩家不在線上</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/force: 請使用&apos;yes&apos;或&apos;no&apos;</translation>
+        <translation type="vanished">/force: 請使用&apos;yes&apos;或&apos;no&apos;</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/vote: 請使用&apos;yes&apos;或&apos;no&apos;</translation>
+        <translation type="vanished">/vote: 請使用&apos;yes&apos;或&apos;no&apos;</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation>被踢</translation>
+        <translation type="vanished">被踢</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation>此伺服器僅允許註冊用戶加入。</translation>
+        <translation type="vanished">此伺服器僅允許註冊用戶加入。</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation>頭</translation>
+        <translation type="vanished">頭</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation>尾</translation>
+        <translation type="vanished">尾</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation>此伺服器不支持重播！</translation>
+        <translation type="vanished">此伺服器不支持重播！</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation>/greeting [message]: 設置或清除要加入房間的玩家的歡迎訊息設定</translation>
+        <translation type="vanished">/greeting [message]: 設置或清除要加入房間的玩家的歡迎訊息設定</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation>/save &lt;config ID&gt; &lt;config name&gt;: 添加當前房間配置作為/callvote map的可表決選項</translation>
+        <translation type="vanished">/save &lt;config ID&gt; &lt;config name&gt;: 添加當前房間配置作為/callvote map的可表決選項</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation>/delete &lt;config ID&gt;: 刪除一個可表決的房間配置</translation>
+        <translation type="vanished">/delete &lt;config ID&gt;: 刪除一個可表決的房間配置</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation>/saveroom &lt;file name&gt;: 將此房間的所有可表決配置（和歡迎訊息）保存到文件中</translation>
+        <translation type="vanished">/saveroom &lt;file name&gt;: 將此房間的所有可表決配置（和歡迎訊息）保存到文件中</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation>/loadroom &lt;file name&gt;: 從文件加載可表決房間配置（和歡迎訊息）</translation>
+        <translation type="vanished">/loadroom &lt;file name&gt;: 從文件加載可表決房間配置（和歡迎訊息）</translation>
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation>超能力被激活。</translation>
+        <translation type="vanished">超能力被激活。</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
@@ -5507,79 +5362,79 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation>你不能踢掉你自己！</translation>
+        <translation type="vanished">你不能踢掉你自己！</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation>你不能踢掉剩下唯一的玩家！</translation>
+        <translation type="vanished">你不能踢掉剩下唯一的玩家！</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation>玩家不在你的房間裡。</translation>
+        <translation type="vanished">玩家不在你的房間裡。</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation>該玩家受到保護，不會被踢。</translation>
+        <translation type="vanished">該玩家受到保護，不會被踢。</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation>你不是房間主人或伺服器管理員</translation>
+        <translation type="vanished">你不是房間主人或伺服器管理員</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation>你已經是房間的主人</translation>
+        <translation type="vanished">你已經是房間的主人</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation>歡迎訊息清除</translation>
+        <translation type="vanished">歡迎訊息清除</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation>歡迎訊息設定</translation>
+        <translation type="vanished">歡迎訊息設定</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation>/callvote kick: 這僅限於沒有主人的房間。</translation>
+        <translation type="vanished">/callvote kick: 這僅限於沒有主人的房間。</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation>/callvote map: 沒有可用的地圖。</translation>
+        <translation type="vanished">/callvote map: 沒有可用的地圖。</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation>你是新房間的主人！</translation>
+        <translation type="vanished">你是新房間的主人！</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation>/quit: 退出伺服器</translation>
+        <translation type="vanished">/quit: 退出伺服器</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation>此命令僅在大廳中可用。</translation>
+        <translation type="vanished">此命令僅在大廳中可用。</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation>此命令僅在房間中可用。</translation>
+        <translation type="vanished">此命令僅在房間中可用。</translation>
     </message>
     <message>
         <source>This server no longer allows unregistered players to join.</source>
-        <translation>此伺服器不再允許未註冊的玩家加入。</translation>
+        <translation type="vanished">此伺服器不再允許未註冊的玩家加入。</translation>
     </message>
     <message>
         <source>This server now allows unregistered players to join.</source>
-        <translation>此伺服器不允許未註冊的玩家加入。</translation>
+        <translation type="vanished">此伺服器不允許未註冊的玩家加入。</translation>
     </message>
     <message>
         <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation>可用的呼叫投票命令：刺蝟&lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</translation>
+        <translation type="vanished">可用的呼叫投票命令：刺蝟&lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</translation>
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation>請用&apos;/restart_server yes&apos;確認服務器重啟</translation>
+        <translation type="vanished">請用&apos;/restart_server yes&apos;確認服務器重啟</translation>
     </message>
     <message>
         <source>Warning! Room name change flood protection activated</source>
-        <translation>警告! 避免修改房間名氾濫的防護機制被啟動</translation>
+        <translation type="vanished">警告! 避免修改房間名氾濫的防護機制被啟動</translation>
     </message>
 </context>
 </TS>

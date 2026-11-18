@@ -2,253 +2,130 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>RoomsListModel</name>
+    <name>About</name>
     <message>
-        <source>C</source>
-        <translation>人数</translation>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
-        <source>T</source>
-        <translation>队伍</translation>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</translation>
     </message>
     <message>
-        <source>Map</source>
-        <translation>地图</translation>
+        <source>This program is distributed under the %1.</source>
+        <translation>这个程序在 %1 下发布。</translation>
     </message>
     <message>
-        <source>Forts</source>
-        <translation>堡垒</translation>
+        <source>Unknown Compiler</source>
+        <translation>未知编译器</translation>
     </message>
     <message>
-        <source>Owner</source>
-        <translation>房主</translation>
+        <source>Visit our homepage: %1</source>
+        <translation>访问我们的主页: %1</translation>
     </message>
     <message>
-        <source>Rules</source>
-        <translation>规则</translation>
+        <source>Dependency versions:</source>
+        <extracomment>For the version numbers of Hedgewars&apos; software dependencies</extracomment>
+        <translation>依赖版本:</translation>
     </message>
     <message>
-        <source>Script</source>
-        <translation>脚本</translation>
+        <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
+        <translation>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</translation>
     </message>
     <message>
-        <source>Random Maze</source>
-        <translation>随机迷宫</translation>
+        <source>Other people</source>
+        <translation>其他人</translation>
     </message>
     <message>
-        <source>Room Name</source>
-        <translation>房间名</translation>
+        <source>%1: %2</source>
+        <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name</extracomment>
+        <translation></translation>
     </message>
     <message>
-        <source>Hand-drawn</source>
-        <translation>手绘</translation>
+        <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
+        <translation>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</translation>
     </message>
     <message>
-        <source>In progress</source>
-        <translation>进行中</translation>
+        <source>Unknown Compiler: %1</source>
+        <translation>未知编译器: %1</translation>
     </message>
     <message>
-        <source>Random Map</source>
-        <translation>随机地图</translation>
+        <source>GNU GPL v2</source>
+        <translation>GNU GPL v2</translation>
     </message>
     <message>
-        <source>Weapons</source>
-        <translation>武器</translation>
+        <source>%1 &amp;lt;%2&amp;gt;</source>
+        <extracomment>Part of credits. %1: Contributor name. %2: E-mail address</extracomment>
+        <translation></translation>
     </message>
     <message>
-        <source>Random Perlin</source>
-        <translation>随机 Perlin</translation>
+        <source>%1: %2 &amp;lt;%3&amp;gt;</source>
+        <extracomment>Part of credits. %1: Description of contribution. %2: Contributor name. %3: E-mail address</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Extended Credits</source>
+        <translation>扩展名单</translation>
+    </message>
+    <message>
+        <source>%1 (alias %2)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>Revision %1 (%2)</source>
+        <translation>修订 %1 (%2)</translation>
+    </message>
+    <message>
+        <source>Hedgewars %1</source>
+        <extracomment>%1 contains Hedgewars&apos; version number</extracomment>
+        <translation>刺猬战争 %1</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>An extended credits list can be found in the CREDITS text file.</source>
+        <translation>一个扩展名单列表可以在 CREDITS 文本文件里找到。</translation>
+    </message>
+    <message>
+        <source>Credits</source>
+        <translation>名单</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
+        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</translation>
     </message>
 </context>
 <context>
-    <name>PageOptions</name>
+    <name>AbstractPage</name>
     <message>
-        <source>x</source>
-        <translation>×</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation>游戏</translation>
-    </message>
-    <message>
-        <source>Audio</source>
-        <translation>声音</translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation>队伍</translation>
-    </message>
-    <message>
-        <source>Edit team</source>
-        <translation>编辑队伍</translation>
-    </message>
-    <message>
-        <source>Check for updates</source>
-        <translation>检查更新</translation>
-    </message>
-    <message>
-        <source>No proxy</source>
-        <translation>无代理</translation>
-    </message>
-    <message>
-        <source>Proxy password</source>
-        <translation>代理密码</translation>
-    </message>
-    <message>
-        <source>HTTP proxy</source>
-        <translation>HTTP 代理</translation>
-    </message>
-    <message>
-        <source>Socks5 proxy</source>
-        <translation>Socks5 代理</translation>
-    </message>
-    <message>
-        <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation>你不能从队伍选择编辑队伍，回到主菜单来添加、编辑、删除队伍。</translation>
-    </message>
-    <message>
-        <source>Video Recording</source>
-        <translation>录制视频</translation>
-    </message>
-    <message>
-        <source>Select an action to change what key controls it</source>
-        <translation>选择一个动作来改变控制它的按键</translation>
-    </message>
-    <message>
-        <source>Network</source>
-        <translation>网络</translation>
-    </message>
-    <message>
-        <source>Proxy settings</source>
-        <translation>代理设置</translation>
-    </message>
-    <message>
-        <source>Controls</source>
-        <translation>控制</translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation>杂项</translation>
-    </message>
-    <message>
-        <source>Reset to default</source>
-        <translation>重设为默认</translation>
-    </message>
-    <message>
-        <source>Edit weapon set</source>
-        <translation>编辑武器集</translation>
-    </message>
-    <message>
-        <source>Game audio</source>
-        <translation>游戏声音</translation>
-    </message>
-    <message>
-        <source>Account</source>
-        <translation>账号</translation>
-    </message>
-    <message>
-        <source>New scheme</source>
-        <translation>新方案</translation>
-    </message>
-    <message>
-        <source>Reset all binds</source>
-        <translation>重设所有绑定按键</translation>
-    </message>
-    <message>
-        <source>Edit scheme</source>
-        <translation>编辑方案</translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>图形</translation>
-    </message>
-    <message>
-        <source>Can&apos;t delete last team</source>
-        <translation>不能删除最后一个队伍</translation>
-    </message>
-    <message>
-        <source>Frontend</source>
-        <translation>前端</translation>
-    </message>
-    <message>
-        <source>Schemes</source>
-        <translation>方案</translation>
-    </message>
-    <message>
-        <source>Delete team</source>
-        <translation>删除队伍</translation>
-    </message>
-    <message>
-        <source>You can&apos;t delete the last team!</source>
-        <translation>你不能删除最后一个队伍！</translation>
-    </message>
-    <message>
-        <source>Proxy login</source>
-        <translation>代理登录</translation>
-    </message>
-    <message>
-        <source>Reset to default colors</source>
-        <translation>重设为默认颜色</translation>
-    </message>
-    <message>
-        <source>Check now</source>
-        <translation>现在检查</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation>高级</translation>
-    </message>
-    <message>
-        <source>New weapon set</source>
-        <translation>新武器集</translation>
-    </message>
-    <message>
-        <source>Updates</source>
-        <translation>更新</translation>
-    </message>
-    <message>
-        <source>Custom colors</source>
-        <translation>自定义颜色</translation>
-    </message>
-    <message>
-        <source>New team</source>
-        <translation>新队伍</translation>
-    </message>
-    <message>
-        <source>Delete scheme</source>
-        <translation>删除方案</translation>
-    </message>
-    <message>
-        <source>Delete weapon set</source>
-        <translation>删除武器集</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation>武器</translation>
-    </message>
-    <message>
-        <source>Frontend audio</source>
-        <translation>前端声音</translation>
-    </message>
-    <message>
-        <source>MISSING LANGUAGE NAME [%1]</source>
-        <translation>缺少语言名字[%1]</translation>
-    </message>
-    <message>
-        <source>System proxy settings</source>
-        <translation>系统代理设置</translation>
-    </message>
-    <message>
-        <source>Proxy port</source>
-        <translation>代理端口</translation>
-    </message>
-    <message>
-        <source>Proxy host</source>
-        <translation>代理 host</translation>
-    </message>
-    <message>
-        <source>Video recording options</source>
-        <translation>录制视频选项</translation>
+        <source>Go back</source>
+        <translation>返回</translation>
     </message>
 </context>
 <context>
@@ -307,785 +184,514 @@
     </message>
 </context>
 <context>
-    <name>HWNetServersModel</name>
+    <name>DataManager</name>
     <message>
-        <source>IP</source>
-        <translation>IP</translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation>端口</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation>标题</translation>
+        <source>Use Default</source>
+        <translation>使用默认</translation>
     </message>
 </context>
 <context>
-    <name>QPushButton</name>
+    <name>FeedbackDialog</name>
     <message>
-        <source>OK</source>
-        <translation>确定</translation>
+        <source>View</source>
+        <translation>查看</translation>
     </message>
     <message>
-        <source>Load</source>
-        <translation>加载</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation>播放</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation>重置</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation>开始</translation>
-    </message>
-    <message>
-        <source>Open videos directory</source>
-        <translation>打开视频目录</translation>
-    </message>
-    <message>
-        <source>Invite your friends to your server in just 1 click!</source>
-        <translation>一键邀请你的朋友到你的服务器！</translation>
-    </message>
-    <message>
-        <source>Start server</source>
-        <translation>启动服务器</translation>
-    </message>
-    <message>
-        <source>Set default options</source>
-        <translation>设置默认选项</translation>
-    </message>
-    <message>
-        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation>点击以复制你的唯一服务器网址到剪贴板，发送这个链接给你的朋友，他们就能加入你。</translation>
-    </message>
-    <message>
-        <source>Start private server</source>
-        <translation>启动私人服务器</translation>
+        <source>Send Feedback</source>
+        <translation>发送反馈</translation>
     </message>
     <message>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <source>Delete</source>
-        <translation>删除</translation>
+        <source>We are always happy about suggestions, ideas, or bug reports.</source>
+        <translation>我们很高兴收到建议、想法或错误报告。</translation>
     </message>
     <message>
-        <source>Rename</source>
-        <translation>重命名</translation>
+        <source>Feedback</source>
+        <translation>反馈</translation>
     </message>
     <message>
-        <source>Update</source>
-        <translation>更新</translation>
+        <source>Send us feedback!</source>
+        <translation>给我们发送反馈！</translation>
     </message>
     <message>
-        <source>Restore default coding parameters</source>
-        <translation>还原默认编码参数</translation>
+        <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
+        <translation>如果你发现一个错误，且它已经被报告，你可以在这里看到: </translation>
     </message>
     <message>
-        <source>More info</source>
-        <translation>更多信息</translation>
+        <source>Your email address is optional, but necessary if you want us to get back at you.</source>
+        <translation>你的邮箱地址是可选的，如果你想要收到回复。</translation>
     </message>
     <message>
-        <source>Play demo</source>
-        <translation>播放 demo</translation>
-    </message>
-    <message>
-        <source>Associate file extensions</source>
-        <translation>关联文件扩展名</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation>连接</translation>
-    </message>
-    <message>
-        <source>default</source>
-        <translation>默认</translation>
-    </message>
-    <message>
-        <source>Specify address</source>
-        <translation>指定地址</translation>
-    </message>
-    <message>
-        <source>Play this video</source>
-        <translation>播放这个视频</translation>
-    </message>
-    <message>
-        <source>Set the default server port for Hedgewars</source>
-        <translation>为刺猬战争设置默认服务器端口</translation>
-    </message>
-    <message>
-        <source>Delete this video</source>
-        <translation>删除这个视频</translation>
-    </message>
-    <message>
-        <source>Open the video directory in your system</source>
-        <translation>在你的系统打开视频目录</translation>
+        <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
+        <translation>这是可选的，但这个信息可能帮助我们解决错误和其他技术问题。</translation>
     </message>
 </context>
 <context>
-    <name>binds (keys)</name>
-    <message>
-        <source>Up</source>
-        <translation>上</translation>
-    </message>
-    <message>
-        <source>End</source>
-        <translation>End</translation>
-    </message>
-    <message>
-        <source>Tab</source>
-        <translation>Tab</translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation>下</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation>Home</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>左</translation>
-    </message>
-    <message>
-        <source>Menu</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>D-pad</source>
-        <translation>D-pad</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation>Clear</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation>Pause</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>右</translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <translation>空格</translation>
-    </message>
-    <message>
-        <source>Right stick (Down)</source>
-        <translation>Right stick (Down)</translation>
-    </message>
-    <message>
-        <source>Right stick (Left)</source>
-        <translation>Right stick (Left)</translation>
-    </message>
-    <message>
-        <source>Mouse: X1 button </source>
-        <translation>鼠标: 后退</translation>
-    </message>
-    <message>
-        <source>Left stick (Right)</source>
-        <translation>Left stick (Right)</translation>
-    </message>
-    <message>
-        <source>Mouse: Wheel up</source>
-        <translation>鼠标: 滚轮上</translation>
-    </message>
-    <message>
-        <source>Start button</source>
-        <translation>Start button</translation>
-    </message>
-    <message>
-        <source>Keypad Enter</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Right trigger</source>
-        <translation>Right trigger</translation>
-    </message>
-    <message>
-        <source>Mouse: Wheel down</source>
-        <translation>鼠标: 滚轮下</translation>
-    </message>
-    <message>
-        <source>Mouse: Middle button</source>
-        <translation>鼠标: 中键</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation>Delete</translation>
-    </message>
-    <message>
-        <source>Left stick (Up)</source>
-        <translation>Left stick (Up)</translation>
-    </message>
-    <message>
-        <source>Escape</source>
-        <translation>Escape</translation>
-    </message>
-    <message>
-        <source>Insert</source>
-        <translation>Insert</translation>
-    </message>
-    <message>
-        <source>Axis %1 %2</source>
-        <translation>Axis %1 %2</translation>
-    </message>
-    <message>
-        <source>Left stick (Down)</source>
-        <translation>Left stick (Down)</translation>
-    </message>
-    <message>
-        <source>Left stick (Left)</source>
-        <translation>Left stick (Left)</translation>
-    </message>
-    <message>
-        <source>PageUp</source>
-        <translation>Page Up</translation>
-    </message>
-    <message>
-        <source>Return</source>
-        <translation>回车键</translation>
-    </message>
-    <message>
-        <source>Numlock</source>
-        <translation>Numlock</translation>
-    </message>
-    <message>
-        <source>Right Shift</source>
-        <translation>右 Shift</translation>
-    </message>
-    <message>
-        <source>Right stick</source>
-        <translation>Right stick</translation>
-    </message>
-    <message>
-        <source>ScrollLock</source>
-        <translation>Scroll Lock</translation>
-    </message>
-    <message>
-        <source>Left Shift</source>
-        <translation>左 Shift</translation>
-    </message>
-    <message>
-        <source>D-pad %1 %2</source>
-        <translation>D-pad %1 %2</translation>
-    </message>
-    <message>
-        <source>Left stick</source>
-        <translation>Left stick</translation>
-    </message>
-    <message>
-        <source>B button</source>
-        <translation>B button</translation>
-    </message>
-    <message>
-        <source>A button</source>
-        <translation>A button</translation>
-    </message>
-    <message>
-        <source>Y button</source>
-        <translation>Y button</translation>
-    </message>
-    <message>
-        <source>X button</source>
-        <translation>X button</translation>
-    </message>
-    <message>
-        <source>LB button</source>
-        <translation>LB button</translation>
-    </message>
-    <message>
-        <source>RB button</source>
-        <translation>RB button</translation>
-    </message>
-    <message>
-        <source>Right stick (Up)</source>
-        <translation>Right stick (Up)</translation>
-    </message>
-    <message>
-        <source>(QWERTY)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Back button</source>
-        <translation>Back button</translation>
-    </message>
-    <message>
-        <source>Mouse: Right button</source>
-        <translation>鼠标: 右键</translation>
-    </message>
-    <message>
-        <source>PageDown</source>
-        <translation>Page Down</translation>
-    </message>
-    <message>
-        <source>CapsLock</source>
-        <translation>Caps Lock</translation>
-    </message>
-    <message>
-        <source>Backspace</source>
-        <translation>Backspace</translation>
-    </message>
-    <message>
-        <source>Button %1</source>
-        <translation>Button %1</translation>
-    </message>
-    <message>
-        <source>Left Alt</source>
-        <translation>左 Alt</translation>
-    </message>
-    <message>
-        <source>Left GUI</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keyboard</source>
-        <translation>键盘</translation>
-    </message>
-    <message>
-        <source>Keypad 0</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 3</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 4</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 5</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 6</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 7</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 8</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad 9</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad *</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad +</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad -</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad .</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keypad /</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Left Ctrl</source>
-        <translation>左 Ctrl</translation>
-    </message>
-    <message>
-        <source>Right GUI</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Right Alt</source>
-        <translation>右 Alt</translation>
-    </message>
-    <message>
-        <source>(Don&apos;t use)</source>
-        <translation>(不使用)</translation>
-    </message>
-    <message>
-        <source>Left trigger</source>
-        <translation>Left trigger</translation>
-    </message>
-    <message>
-        <source>Mouse: X2 button</source>
-        <translation>鼠标: 前进</translation>
-    </message>
-    <message>
-        <source>Right Ctrl</source>
-        <translation>右 Ctrl</translation>
-    </message>
-    <message>
-        <source>Mouse: Left button</source>
-        <translation>鼠标: 左键</translation>
-    </message>
-    <message>
-        <source>Right stick (Right)</source>
-        <translation>Right stick (Right)</translation>
+    <name>FreqSpinBox</name>
+    <message>
+        <source>Never</source>
+        <translation>从不</translation>
+    </message>
+    <message numerus="yes">
+        <source>Every %1 turn</source>
+        <translation type="unfinished">
+            <numerusform>每 %1 回合</numerusform>
+        </translation>
     </message>
 </context>
 <context>
-    <name>binds</name>
+    <name>GameCFGWidget</name>
     <message>
-        <source>up</source>
-        <translation>上</translation>
+        <source>Map</source>
+        <translation>地图</translation>
     </message>
     <message>
-        <source>put</source>
-        <translation>放</translation>
+        <source>Game scheme will auto-select a weapon</source>
+        <translation>游戏方案会自动选择一个武器</translation>
     </message>
     <message>
-        <source>chat</source>
-        <translation>聊天</translation>
+        <source>Game options</source>
+        <translation>游戏选项</translation>
     </message>
     <message>
-        <source>down</source>
-        <translation>下</translation>
+        <source>Edit weapons</source>
+        <translation>编辑武器</translation>
     </message>
     <message>
-        <source>left</source>
-        <translation>左</translation>
-    </message>
-    <message>
-        <source>quit</source>
-        <translation>退出</translation>
-    </message>
-    <message>
-        <source>right</source>
-        <translation>右</translation>
-    </message>
-    <message>
-        <source>precise aim</source>
-        <translation>精确瞄准</translation>
-    </message>
-    <message>
-        <source>zoom in</source>
-        <translation>放大</translation>
-    </message>
-    <message>
-        <source>change timer</source>
-        <translation>改变定时器</translation>
-    </message>
-    <message>
-        <source>save map as image</source>
-        <translation>保存地图为图片</translation>
-    </message>
-    <message>
-        <source>set zoom to 100%</source>
-        <translation>缩放 100%</translation>
-    </message>
-    <message>
-        <source>volume down</source>
-        <translation>音量减</translation>
-    </message>
-    <message>
-        <source>volume up</source>
-        <translation>音量加</translation>
-    </message>
-    <message>
-        <source>ammo menu</source>
-        <translation>弹药菜单</translation>
-    </message>
-    <message>
-        <source>change direction without moving</source>
-        <translation>不移动改变方向</translation>
-    </message>
-    <message>
-        <source>timer 1 sec</source>
-        <translation>定时 1 秒</translation>
-    </message>
-    <message>
-        <source>timer 5 sec</source>
-        <translation>定时 5 秒</translation>
-    </message>
-    <message>
-        <source>timer 4 sec</source>
-        <translation>定时 4 秒</translation>
-    </message>
-    <message>
-        <source>timer 3 sec</source>
-        <translation>定时 3 秒</translation>
-    </message>
-    <message>
-        <source>timer 2 sec</source>
-        <translation>定时 2 秒</translation>
-    </message>
-    <message>
-        <source>long jump</source>
-        <translation>远跳</translation>
-    </message>
-    <message>
-        <source>switch backwards</source>
-        <translation>向后切换</translation>
-    </message>
-    <message>
-        <source>zoom out</source>
-        <translation>缩小</translation>
-    </message>
-    <message>
-        <source>attack</source>
-        <translation>攻击</translation>
-    </message>
-    <message>
-        <source>mute audio</source>
-        <translation>静音</translation>
-    </message>
-    <message>
-        <source>record</source>
-        <translation>录制</translation>
-    </message>
-    <message>
-        <source>slot 1</source>
-        <translation>槽位 1</translation>
-    </message>
-    <message>
-        <source>slot 2</source>
-        <translation>槽位 2</translation>
-    </message>
-    <message>
-        <source>slot 3</source>
-        <translation>槽位 3</translation>
-    </message>
-    <message>
-        <source>slot 4</source>
-        <translation>槽位 4</translation>
-    </message>
-    <message>
-        <source>slot 5</source>
-        <translation>槽位 5</translation>
-    </message>
-    <message>
-        <source>slot 6</source>
-        <translation>槽位 6</translation>
-    </message>
-    <message>
-        <source>slot 7</source>
-        <translation>槽位 7</translation>
-    </message>
-    <message>
-        <source>slot 8</source>
-        <translation>槽位 8</translation>
-    </message>
-    <message>
-        <source>slot 9</source>
-        <translation>槽位 9</translation>
-    </message>
-    <message>
-        <source>switch</source>
-        <translation>切换</translation>
-    </message>
-    <message>
-        <source>clan chat</source>
-        <translation>战队聊天</translation>
-    </message>
-    <message>
-        <source>stand still on slippery land</source>
-        <translation>在光滑地面上站稳</translation>
-    </message>
-    <message>
-        <source>change bounciness</source>
-        <translation>改变弹力</translation>
-    </message>
-    <message>
-        <source>chat history</source>
-        <translation>聊天历史记录</translation>
-    </message>
-    <message>
-        <source>toggle team bars</source>
-        <translation>切换队伍栏</translation>
-    </message>
-    <message>
-        <source>slot 10</source>
-        <translation>槽位 10</translation>
-    </message>
-    <message>
-        <source>show object information</source>
-        <translation>显示对象信息</translation>
-    </message>
-    <message>
-        <source>toggle hedgehog tag translucency</source>
-        <translation>切换刺猬标签透明度</translation>
-    </message>
-    <message>
-        <source>change hedgehog tag types</source>
-        <translation>改变刺猬标签类型</translation>
-    </message>
-    <message>
-        <source>screenshot</source>
-        <translation>截图</translation>
-    </message>
-    <message>
-        <source>speed up replay</source>
-        <translation>加速重播</translation>
-    </message>
-    <message>
-        <source>backwards jump</source>
-        <translation>后跳</translation>
-    </message>
-    <message>
-        <source>change mode</source>
-        <translation>改变模式</translation>
-    </message>
-    <message>
-        <source>high jump</source>
-        <translation>高跳</translation>
-    </message>
-    <message>
-        <source>unselect weapon</source>
-        <translation>取消选择武器</translation>
-    </message>
-    <message>
-        <source>toggle HUD</source>
-        <translation>切换 HUD</translation>
-    </message>
-    <message>
-        <source>autocam / find hedgehog</source>
-        <translation>自动镜头/ 查找 刺猬</translation>
-    </message>
-    <message>
-        <source>pause / auto skip</source>
-        <translation>暂停/自动跳过</translation>
-    </message>
-    <message>
-        <source>reset zoom to start value</source>
-        <translation>重置缩放到初始值</translation>
-    </message>
-    <message>
-        <source>show mission information</source>
-        <translation>显示任务信息</translation>
-    </message>
-    <message>
-        <source>toggle hedgehog tags</source>
-        <translation>切换刺猬标签</translation>
-    </message>
-    <message>
-        <source>confirmation</source>
-        <translation>确认</translation>
+        <source>Edit schemes</source>
+        <translation>编辑方案</translation>
     </message>
 </context>
 <context>
-    <name>PageVideos</name>
+    <name>GameSchemeModel</name>
     <message>
-        <source>%1%</source>
-        <translation>%1%</translation>
+        <source>New</source>
+        <translation>新建</translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation>名字</translation>
+        <source>Copy of %1</source>
+        <translation>%1 的复制</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>大小</translation>
+        <source>New (%1)</source>
+        <translation>新建 (%1)</translation>
     </message>
     <message>
-        <source>Size: %1</source>
-        <translation>大小: %1</translation>
-    </message>
-    <message>
-        <source>%1 bytes</source>
-        <translation>%1 字节</translation>
-    </message>
-    <message>
-        <source>encoding</source>
-        <translation>编码</translation>
-    </message>
-    <message>
-        <source>Date: %1</source>
-        <translation>日期: %1</translation>
-    </message>
-    <message>
-        <source>(in progress...)</source>
-        <translation>(进行中…)</translation>
-    </message>
-    <message>
-        <source>%1 (%2%) - %3</source>
-        <translation>%1 (%2%)—%3</translation>
+        <source>Copy of %1 (%2)</source>
+        <translation>%1 的复制 (%2)</translation>
     </message>
 </context>
 <context>
-    <name>PageAdmin</name>
+    <name>GameUIConfig</name>
     <message>
-        <source>Add</source>
-        <translation>添加</translation>
+        <source>Guest</source>
+        <translation>游客</translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <source>Custom path to the game data folder</source>
+        <translation type="vanished">游戏数据的自定义路径</translation>
     </message>
     <message>
-        <source>Bans</source>
-        <translation>封禁</translation>
+        <source>Usage</source>
+        <translation type="vanished">使用情况</translation>
     </message>
     <message>
-        <source>Expiration</source>
-        <translation>到期</translation>
+        <source>CONNECTSTRING</source>
+        <translation type="vanished">CONNECTSTRING</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 day</source>
+        <translation type="unfinished">
+            <numerusform>%1 天</numerusform>
+        </translation>
     </message>
     <message>
-        <source>Reason</source>
-        <translation>理由</translation>
+        <source>Display this help</source>
+        <translation type="vanished">显示这个帮助</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 hours</source>
+        <translation type="unfinished">
+            <numerusform>%1 时</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 minutes</source>
+        <translation type="unfinished">
+            <numerusform>%1 分</numerusform>
+        </translation>
     </message>
     <message>
-        <source>Remove</source>
-        <translation>移除</translation>
+        <source>OPTION</source>
+        <translation type="vanished">选项</translation>
     </message>
     <message>
-        <source>Server message for previous versions:</source>
-        <translation>给之前版本的服务器消息:</translation>
+        <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
+        <translation type="vanished">刺猬在开始时可以用 %1 (如 &quot;%2&quot;) 来连接。</translation>
     </message>
     <message>
-        <source>Refresh</source>
-        <translation>刷新</translation>
+        <source>Options</source>
+        <translation type="vanished">选项</translation>
     </message>
     <message>
-        <source>Fetch data</source>
-        <translation>获取数据</translation>
+        <source>Scheme &apos;%1&apos; not supported</source>
+        <extracomment>Here, “scheme” refers to the scheme of a Uniform Resource Identifier”</extracomment>
+        <translation>不支持方案‘%1’</translation>
     </message>
     <message>
-        <source>Latest version protocol number:</source>
-        <translation>最新版本协议编号:</translation>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation>无法打开数据目录:
+%1
+
+请检查你的安装！</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 days</source>
+        <translation type="unfinished">
+            <numerusform>%1 天</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 hour</source>
+        <translation type="unfinished">
+            <numerusform>%1 时</numerusform>
+        </translation>
     </message>
     <message>
-        <source>MOTD preview:</source>
-        <translation>今日消息预览:</translation>
+        <source>Unknown option argument: %1</source>
+        <translation type="vanished">未知的选项参数: %1</translation>
     </message>
     <message>
-        <source>Set data</source>
-        <translation>设置数据</translation>
+        <source>Custom path for configuration data and user data</source>
+        <translation type="vanished">配置和用户数据的自定义路径</translation>
     </message>
     <message>
-        <source>Server message for latest version:</source>
-        <translation>给最新版本的服务器消息:</translation>
+        <source>Malformed option argument: %1</source>
+        <translation type="vanished">畸形选项参数: %1</translation>
     </message>
     <message>
-        <source>General</source>
-        <translation>一般</translation>
+        <source>Cannot create directory %1</source>
+        <translation>不能创建目录 %1</translation>
     </message>
     <message>
-        <source>IP/Nick</source>
-        <translation>IP/昵称</translation>
+        <source>Usage</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">使用情况</translation>
     </message>
     <message>
-        <source>Clear Accounts Cache</source>
-        <translation>清除账户缓存</translation>
+        <source>OPTION</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">选项</translation>
+    </message>
+    <message>
+        <source>CONNECTSTRING</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">CONNECTSTRING</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">选项</translation>
+    </message>
+    <message>
+        <source>Display this help</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">显示这个帮助</translation>
+    </message>
+    <message>
+        <source>Custom path for configuration data and user data</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">配置和用户数据的自定义路径</translation>
+    </message>
+    <message>
+        <source>Custom path to the game data folder</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">游戏数据的自定义路径</translation>
+    </message>
+    <message>
+        <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">刺猬在开始时可以用 %1 (如 &quot;%2&quot;) 来连接。</translation>
+    </message>
+    <message>
+        <source>Malformed option argument: %1</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">畸形选项参数: %1</translation>
+    </message>
+    <message>
+        <source>Unknown option argument: %1</source>
+        <comment>command-line</comment>
+        <translation type="unfinished">未知的选项参数: %1</translation>
+    </message>
+</context>
+<context>
+    <name>HWAskQuitDialog</name>
+    <message>
+        <source>Do you really want to quit?</source>
+        <translation>你确定要退出？</translation>
+    </message>
+</context>
+<context>
+    <name>HWChatWidget</name>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation>样式表保存到 %1</translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation>无法保存样式表到 %1</translation>
+    </message>
+    <message>
+        <source>%1 has left (%2)</source>
+        <translation>%1 离开了 (%2)</translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation>从 %1 导入样式表</translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation>如果你想在以后使用当前样式表，输入 %1 。重置输入 %2 ！</translation>
+    </message>
+    <message>
+        <source>%1 has been added to your ignore list</source>
+        <translation>%1 已添加你的忽略列表</translation>
+    </message>
+    <message>
+        <source>%1 has left</source>
+        <translation>%1 离开了</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation>%1 已从你的朋友列表移除</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation>无法读取 %1</translation>
+    </message>
+    <message>
+        <source>List of players</source>
+        <translation>玩家列表</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your ignore list</source>
+        <translation>%1 已从你的忽略列表移除</translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation>%1 已添加到你的朋友列表</translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation>已放弃样式表</translation>
+    </message>
+    <message>
+        <source>Chat log</source>
+        <translation>聊天记录</translation>
+    </message>
+    <message>
+        <source>%1 has joined</source>
+        <translation>%1 已加入</translation>
+    </message>
+    <message>
+        <source>Enter chat messages here and send them with [Enter]</source>
+        <translation>输入聊天消息并按回车键发送</translation>
+    </message>
+</context>
+<context>
+    <name>HWForm</name>
+    <message>
+        <source>Demo name:</source>
+        <translation>Demo 名字:</translation>
+    </message>
+    <message>
+        <source>
+
+Your password wasn&apos;t saved either.</source>
+        <translation>
+
+你的密码也没有保存。</translation>
+    </message>
+    <message>
+        <source>Room password</source>
+        <translation>房间密码</translation>
+    </message>
+    <message>
+        <source>Hedgewars - Wrong password</source>
+        <translation>刺猬战争 - 密码错误</translation>
+    </message>
+    <message>
+        <source>Game aborted</source>
+        <translation>游戏中止</translation>
+    </message>
+    <message>
+        <source>Demo name</source>
+        <translation>Demo 名字</translation>
+    </message>
+    <message>
+        <source>Someone already uses your nickname %1 on the server.
+Please pick another nickname:</source>
+        <translation>已经有人在服务器上使用你的昵称 %1 。
+请另选一个昵称:</translation>
+    </message>
+    <message>
+        <source>Team 1</source>
+        <translation>队伍 1</translation>
+    </message>
+    <message>
+        <source>The room is protected with password.
+Please, enter the password:</source>
+        <translation>房间受密码保护。
+请输入密码:</translation>
+    </message>
+    <message>
+        <source>Cannot save record to file %1</source>
+        <translation>不能保存录制到文件 %1</translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
+        <translation>没提供昵称。</translation>
+    </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <translation type="vanished">刺猬战争 Demo 文件</translation>
+    </message>
+    <message>
+        <source>Hedgewars - Nick registered</source>
+        <translation>刺猬战争 - 昵称已注册</translation>
+    </message>
+    <message>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation>内部错误 - 回复对象无效。</translation>
+    </message>
+    <message>
+        <source>You reconnected too fast.
+Please wait a few seconds and try again.</source>
+        <translation>你重连太快了。
+请等一下再试。</translation>
+    </message>
+    <message>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation>这个功能需要网络连接，但你似乎不在线 (error code: %1).</translation>
+    </message>
+    <message>
+        <source>Hedgewars - Empty nickname</source>
+        <translation>刺猬战争 - 空昵称</translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To be able to rejoin games in progress and
+prevent someone else from using your nickname,
+please register it at www.hedgewars.org.</source>
+        <translation>你的昵称没注册。
+为防止其他人使用它，
+请在 www.hedgewars.org 注册。</translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <translation type="vanished">刺猬战争保存文件</translation>
+    </message>
+    <message>
+        <source>This nick is registered, and you haven&apos;t specified a password.
+
+If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
+
+Password:</source>
+        <translation>这个昵称已注册，而且你没有设置密码。
+
+如果这个昵称不是你的，请在 www.hedgewars.org 注册自己的昵称
+
+密码：</translation>
+    </message>
+    <message>
+        <source>Team %1</source>
+        <extracomment>Default team name</extracomment>
+        <translation>队伍 %1</translation>
+    </message>
+    <message>
+        <source>You entered a wrong password.</source>
+        <translation>你输入了错误的密码。</translation>
+    </message>
+    <message>
+        <source>Try Again</source>
+        <translation>再试一次</translation>
+    </message>
+    <message>
+        <source>Hedgewars - Connection error</source>
+        <translation>刺猬战争 - 连接出错</translation>
+    </message>
+    <message>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation>未知网络错误（可能缺少SSL库）。</translation>
+    </message>
+    <message>
+        <source>Computer %1</source>
+        <extracomment>Default computer team name</extracomment>
+        <translation>计算机 %1</translation>
+    </message>
+    <message>
+        <source>%1&apos;s Team</source>
+        <translation>%1 的队伍</translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation>昵称</translation>
+    </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished">刺猬战争 Demo 文件</translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished">刺猬战争保存文件</translation>
+    </message>
+</context>
+<context>
+    <name>HWGame</name>
+    <message>
+        <source>en.txt</source>
+        <extracomment>IMPORTANT: This text has a special meaning, do not translate it directly. This is the file name of translation files for the game engine, found in Data/Locale/. Usually, you replace “en” with the ISO-639-1 language code of your language.</extracomment>
+        <translation>zh_CN.txt</translation>
+    </message>
+    <message>
+        <source>A fatal ERROR occured! The game engine had to stop.
+
+We are very sorry for the inconvenience. :-(
+
+If this keeps happening, please click the &apos;Feedback&apos; button in the main menu!
+
+Last engine message:
+%1</source>
+        <translation>发生了致命错误！游戏引擎已停止。
+
+很抱歉造成不便 _(:з」∠)_
+
+如果继续发生，请点击主菜单的“反馈”按钮！
+
+最后的引擎消息：
+%1</translation>
+    </message>
+    <message>
+        <source>Cannot open demofile %1</source>
+        <translation>不能打开demo文件 %1</translation>
+    </message>
+</context>
+<context>
+    <name>HWHostPortDialog</name>
+    <message>
+        <source>Connect to server</source>
+        <translation>连接到服务器</translation>
     </message>
 </context>
 <context>
@@ -1108,6 +714,7 @@
     </message>
     <message>
         <source>Seed</source>
+        <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
         <translation>种子</translation>
     </message>
     <message>
@@ -1282,539 +889,413 @@
         <source>Random perlin</source>
         <translation>随机 perlin</translation>
     </message>
+    <message>
+        <source>WFC</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
-    <name>QAction</name>
+    <name>HWNetServersModel</name>
     <message>
-        <source>Ban</source>
+        <source>IP</source>
+        <extracomment>short for &quot;IP address&quot; (Internet Protocol), part of server address</extracomment>
+        <translation>IP</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <extracomment>short for &quot;port number&quot;, part of server address</extracomment>
+        <translation>端口</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>标题</translation>
+    </message>
+</context>
+<context>
+    <name>HWNewNet</name>
+    <message>
+        <source>%1 *** %2 has joined the room</source>
+        <translation>%1 *** %2 已加入房间</translation>
+    </message>
+    <message>
+        <source>You got kicked</source>
+        <translation>你被踢了</translation>
+    </message>
+    <message>
+        <source>The host was not found. Please check the host name and port settings.</source>
+        <translation>未找到主机，请检查主机和端口设置。</translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has left</source>
+        <translation>%1 *** %2 已离开</translation>
+    </message>
+    <message>
+        <source>The connection was refused by the host or timed out. This might have one of the following reasons:
+- The Hedgewars Server program does currently not run on the host
+- The specified port number is incorrect
+- There is a temporary network problem
+
+Please check the host name and port settings and/or try again later.</source>
+        <translation>连接被主机拒绝或超时，理由可能如下：
+- 刺猬战争服务器程序当前没有运行在主机上
+- 指定的端口号不正确
+- 临时网络问题
+
+请检查主机名和端口设置，并/或稍后再试。</translation>
+    </message>
+    <message>
+        <source>The server is too old. Disconnecting now.</source>
+        <translation>服务器太旧了，现在断开连接。</translation>
+    </message>
+    <message>
+        <source>Remote host has closed connection</source>
+        <translation>远程主机已关闭连接</translation>
+    </message>
+    <message>
+        <source>Reason:</source>
+        <translation>理由:</translation>
+    </message>
+    <message>
+        <source>Server authentication error</source>
+        <translation>服务器验证出错</translation>
+    </message>
+    <message>
+        <source>Room destroyed</source>
+        <translation>房间已销毁</translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has left (%3)</source>
+        <translation>%1 *** %2 已离开 (%3)</translation>
+    </message>
+    <message>
+        <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
+        <translation>连接被官方服务器拒绝或超时，目前官方服务器似乎出了问题，这可能是临时问题，请稍后再试。</translation>
+    </message>
+</context>
+<context>
+    <name>HWPasswordDialog</name>
+    <message>
+        <source>Login</source>
+        <translation>登录</translation>
+    </message>
+    <message>
+        <source>New Account</source>
+        <translation>新账号</translation>
+    </message>
+    <message>
+        <source>Nickname:</source>
+        <translation>昵称:</translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation>密码:</translation>
+    </message>
+    <message>
+        <source>To connect to the server, please log in.
+
+If you don&apos;t have an account on www.hedgewars.org,
+just enter your nickname.</source>
+        <translation>要连接到服务器，请登录。
+
+如果你还没有www.hedgewars.org的账号，
+只需输入你的昵称。</translation>
+    </message>
+</context>
+<context>
+    <name>HWRecorder</name>
+    <message>
+        <source>A fatal ERROR occured while processing the video recording! The video could not be saved.
+
+As a workaround, you could try to reset the Hedgewars video recorder settings to the defaults.
+
+To report this error, please click the &apos;Feedback&apos; button in the main menu!
+
+Last engine message:
+%1</source>
+        <translation>在录制视频时发生了一个致命错误！视频不能保存。
+
+一个解决方案是尝试把视频录制器的设置重设为默认。
+
+要报告这个错误，请点击主菜单的“反馈”按钮。
+
+最后的引擎消息：
+%1</translation>
+    </message>
+</context>
+<context>
+    <name>HatButton</name>
+    <message>
+        <source>Change hat (%1)</source>
+        <translation>改变帽子 (%1)</translation>
+    </message>
+</context>
+<context>
+    <name>HatPrompt</name>
+    <message>
+        <source>Choose a hat</source>
+        <translation>选择帽子</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Use selected hat</source>
+        <translation>使用选择的帽子</translation>
+    </message>
+    <message>
+        <source>Search for a hat:</source>
+        <translation>搜索帽子：</translation>
+    </message>
+</context>
+<context>
+    <name>KeyBinder</name>
+    <message>
+        <source>Warning: The same key is assigned multiple times!</source>
+        <translation>警告：相同按键分配多次！</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation>类别</translation>
+    </message>
+</context>
+<context>
+    <name>LibavInteraction</name>
+    <message>
+        <source>Map: %1</source>
+        <translation>地图: %1</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3 FPS, %4</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
+        <translation>视频: %1×%2, %3 FPS, %4</translation>
+    </message>
+    <message>
+        <source>Record: %1</source>
+        <extracomment>As in ‘recording’</extracomment>
+        <translation>录制: %1</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, %3</source>
+        <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
+        <translation>视频: %1×%2, %3</translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation>音频: </translation>
+    </message>
+    <message>
+        <source>Duration: %1min %2s</source>
+        <extracomment>Duration in minutes and seconds (SI units)</extracomment>
+        <translation>时长: %1 分 %2 秒</translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation>主题: %1</translation>
+    </message>
+    <message>
+        <source>unknown</source>
+        <translation>未知</translation>
+    </message>
+    <message>
+        <source>Player: %1</source>
+        <translation>玩家: %1</translation>
+    </message>
+</context>
+<context>
+    <name>MapModel</name>
+    <message>
+        <source>No description available.</source>
+        <translation>无可用描述。</translation>
+    </message>
+</context>
+<context>
+    <name>MinesTimeSpinBox</name>
+    <message>
+        <source>Random</source>
+        <translation>随机</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 seconds</source>
+        <translation type="unfinished">
+            <numerusform>%1 秒</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>PageAdmin</name>
+    <message>
+        <source>Add</source>
+        <translation>添加</translation>
+    </message>
+    <message>
+        <source>Bans</source>
         <translation>封禁</translation>
     </message>
     <message>
-        <source>Info</source>
-        <translation>信息</translation>
+        <source>Expiration</source>
+        <translation>到期</translation>
     </message>
     <message>
-        <source>Kick</source>
-        <translation>踢出</translation>
+        <source>Reason</source>
+        <translation>理由</translation>
     </message>
     <message>
-        <source>Follow</source>
-        <translation>跟随</translation>
+        <source>Remove</source>
+        <translation>移除</translation>
     </message>
     <message>
-        <source>Unignore</source>
-        <translation>取消忽略</translation>
+        <source>Server message for previous versions:</source>
+        <translation>给之前版本的服务器消息:</translation>
     </message>
     <message>
-        <source>Ignore</source>
-        <translation>忽略</translation>
+        <source>Refresh</source>
+        <translation>刷新</translation>
     </message>
     <message>
-        <source>Show games in-progress</source>
-        <translation>显示进行中的游戏</translation>
+        <source>Fetch data</source>
+        <translation>获取数据</translation>
     </message>
     <message>
-        <source>Add friend</source>
-        <translation>添加朋友</translation>
+        <source>Latest version protocol number:</source>
+        <translation>最新版本协议编号:</translation>
     </message>
     <message>
-        <source>Show password protected</source>
-        <translation>显示受密码保护的</translation>
+        <source>MOTD preview:</source>
+        <extracomment>MOTD = Message Of The Day, the message which is shown to players joining the server</extracomment>
+        <translation>今日消息预览:</translation>
     </message>
     <message>
-        <source>Restrict Unregistered Players Join</source>
-        <translation>限制未注册的玩家加入</translation>
+        <source>Set data</source>
+        <translation>设置数据</translation>
     </message>
     <message>
-        <source>Restrict Team Additions</source>
-        <translation>限制队伍添加</translation>
-    </message>
-    <message>
-        <source>Show join restricted</source>
-        <translation>显示限制加入的</translation>
-    </message>
-    <message>
-        <source>Restrict Joins</source>
-        <translation>限制加入</translation>
-    </message>
-    <message>
-        <source>Delegate room control</source>
-        <translation>转授房间控制</translation>
-    </message>
-    <message>
-        <source>Remove friend</source>
-        <translation>删除朋友</translation>
-    </message>
-    <message>
-        <source>Show games in lobby</source>
-        <translation>显示在大厅的游戏</translation>
-    </message>
-</context>
-<context>
-    <name>credits</name>
-    <message>
-        <source>Art</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hell</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Maps</source>
-        <translation>地图</translation>
-    </message>
-    <message>
-        <source>Tank</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Some Pas2C and GLES2 work</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ClimbHome</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Beach</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Brick</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Forts</source>
-        <translation>堡垒</translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation>音乐</translation>
-    </message>
-    <message>
-        <source>Ports</source>
-        <translation>移植</translation>
-    </message>
-    <message>
-        <source>Ruler</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Sheep</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Snail</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Maze maps</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Special thanks</source>
-        <translation>特别感谢</translation>
-    </message>
-    <message>
-        <source>Frontend / main menu</source>
-        <translation>前端/主菜单</translation>
-    </message>
-    <message>
-        <source>Drill rocket, ballgun, RC plane</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Lonely_Island</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Portal Mind Challenge</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Air mine, rubber, others</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>iPhone/iPad ports</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Scottish Gaelic</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Bulgarian</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Battlefield</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Climb Home</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>EarthRise, oriental, Pirate, snow</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cheese</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Video recording</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Map generation</source>
-        <translation>地图生成</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Teamwork 2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Jungle</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Korean</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Many engine improvements</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Nature</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Slovak</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Sounds</source>
-        <translation>声音</translation>
-    </message>
-    <message>
-        <source>Sticks</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation>主题</translation>
-    </message>
-    <message>
-        <source>Many frontend improvements</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Olympic</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>olympics_sd</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Fruit, Cake</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>See CREDITS text file</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Missions and styles</source>
-        <translation>任务和风格</translation>
-    </message>
-    <message>
-        <source>Game engine</source>
-        <translation>游戏引擎</translation>
-    </message>
-    <message>
-        <source>Login dialogs, other improvements</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Translations</source>
-        <translation>翻译</translation>
-    </message>
-    <message>
-        <source>portal</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>CTF_Blizzard</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Game server</source>
-        <translation>游戏服务器</translation>
-    </message>
-    <message>
-        <source>Programming</source>
-        <translation>编程</translation>
-    </message>
-    <message>
-        <source>City, Rock, others</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Japanese</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Gamepad and Lua integration</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ShoppaKing, TrophyRace</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ukrainian</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>图形</translation>
-    </message>
-    <message>
-        <source>Theme customization improvements</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Perlin maps and other improvements</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>EvilChicken</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Golf, Hoggywood, Stage</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Some styles and missions</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation>中文</translation>
-    </message>
-    <message>
-        <source>A Classic Fairytale</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Compost</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Fruit, Jungle</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Creator</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Octorama</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Default_pl, Russian_pl voices</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Swedish</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Brazilian Portuguese</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cave, Olympics</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Project founder</source>
-        <translation>项目发起人</translation>
-    </message>
-    <message>
-        <source>Most core weapons</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>A Space Adventure</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Battalion</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Portuguese</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Castle, PirateFlag</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>WebGL port</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Android port</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SteelTower</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Campaign support</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Finnish</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Mine number and time game settings</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Freezer</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation>武器</translation>
+        <source>Server message for latest version:</source>
+        <translation>给最新版本的服务器消息:</translation>
     </message>
     <message>
         <source>General</source>
         <translation>一般</translation>
     </message>
     <message>
-        <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation></translation>
+        <source>IP/Nick</source>
+        <translation>IP/昵称</translation>
     </message>
     <message>
-        <source>Hoggywood</source>
-        <translation></translation>
+        <source>Clear Accounts Cache</source>
+        <translation>清除账户缓存</translation>
+    </message>
+</context>
+<context>
+    <name>PageCampaign</name>
+    <message>
+        <source>Team</source>
+        <translation>队伍</translation>
     </message>
     <message>
-        <source>Hats, graves, other</source>
-        <translation>帽子、墓碑、其他</translation>
+        <source>Mission</source>
+        <translation>任务</translation>
     </message>
     <message>
-        <source>Core map generators</source>
-        <translation></translation>
+        <source>Start fighting</source>
+        <translation>开始战斗</translation>
     </message>
     <message>
-        <source>Android netplay, portability abstraction</source>
-        <translation></translation>
+        <source>Campaign</source>
+        <translation>战役</translation>
+    </message>
+</context>
+<context>
+    <name>PageConnecting</name>
+    <message>
+        <source>Connecting...</source>
+        <translation>连接中...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDataDownload</name>
+    <message>
+        <source>Open packages directory</source>
+        <translation>打开下载内容目录</translation>
     </message>
     <message>
-        <source>Other improvements</source>
-        <translation></translation>
+        <source>Load the start page</source>
+        <translation>加载开始页面</translation>
     </message>
     <message>
-        <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation></translation>
+        <source>Internal error: Reply object is invalid.</source>
+        <translation>内部错误：回复对象无效。</translation>
     </message>
     <message>
-        <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation></translation>
+        <source>Loading, please wait.</source>
+        <translation>加载中，请等待。</translation>
     </message>
     <message>
-        <source>Continental supplies</source>
-        <translation></translation>
+        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
+        <translation>这个功能需要网络连接，但你似乎不在线 (error code: %1).</translation>
     </message>
     <message>
-        <source>Hedgehogs voice</source>
-        <translation></translation>
+        <source>Unknown network error (possibly missing SSL library).</source>
+        <translation>未知网络错误（可能缺少SSL库）。</translation>
+    </message>
+</context>
+<context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Load</source>
+        <translation>加载</translation>
     </message>
     <message>
-        <source>Lithuanian</source>
-        <translation></translation>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation>撤销</translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation>保存绘画地图</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>清除</translation>
+    </message>
+    <message>
+        <source>Eraser</source>
+        <translation>橡皮擦</translation>
+    </message>
+    <message>
+        <source>Polyline</source>
+        <translation>线条</translation>
+    </message>
+    <message>
+        <source>Optimize</source>
+        <translation>优化</translation>
+    </message>
+    <message>
+        <source>Brush size</source>
+        <translation>笔刷大小</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>长方形</translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation>椭圆</translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation>加载绘画地图</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation>绘画地图</translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation>所有文件</translation>
     </message>
 </context>
 <context>
@@ -1837,6 +1318,7 @@
     </message>
     <message>
         <source>CPU %1</source>
+        <extracomment>Name of a flag for computer-controlled enemies. %1 is replaced with the computer level</extracomment>
         <translation>CPU %1</translation>
     </message>
     <message>
@@ -1901,160 +1383,510 @@
     </message>
 </context>
 <context>
-    <name>QCheckBox</name>
-    <message>
-        <source>Hog</source>
-        <translation>刺猬</translation>
+    <name>PageGameStats</name>
+    <message numerus="yes">
+        <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
+        <translation type="unfinished">
+            <numerusform>这一局共杀死了&lt;b&gt;%1&lt;/b&gt;个刺猬。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
+        <translation type="unfinished">
+            <numerusform>最优秀的杀手是 &lt;b&gt;%1&lt;/b&gt;，一个回合 &lt;b&gt;%2&lt;/b&gt; 杀。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 crate(s))</source>
+        <translation type="unfinished">
+            <numerusform>(%1 箱子)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; 以 &lt;b&gt;%2&lt;/b&gt; 分获得最佳射击奖。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 kill)</source>
+        <extracomment>Number of kills in stats screen, written after the team name</extracomment>
+        <translation type="unfinished">
+            <numerusform>(%1 杀)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 point(s))</source>
+        <extracomment>Number of points in stats screen, written after the team name</extracomment>
+        <translation type="unfinished">
+            <numerusform>(%1 分)</numerusform>
+        </translation>
     </message>
     <message>
-        <source>Team</source>
-        <translation>队伍</translation>
+        <source>Save demo (unavailable because the /lua command was used)</source>
+        <translation>保存 demo (不可用，因为使用了/lua命令)</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation>音乐</translation>
+        <source>Ranking</source>
+        <translation>排名</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 %2)</source>
+        <extracomment>For custom number of points in the stats screen, written after the team name. %1 is the number, %2 is the word. Example: “4 points”</extracomment>
+        <translation type="unfinished">
+            <numerusform>(%1 %2)</numerusform>
+        </translation>
     </message>
     <message>
-        <source>Sound</source>
+        <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
+        <translation>有着相同战队颜色的各位，没有理由去战斗了，刺猬们从此过上幸福的生活。</translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation>细节</translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; 误伤队友获得 &lt;b&gt;%2&lt;/b&gt; 分。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; 杀死 &lt;b&gt;%2&lt;/b&gt; 个队友。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Play again</source>
+        <translation>再玩一次</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%L1 second(s))</source>
+        <extracomment>Time in seconds</extracomment>
+        <translation type="unfinished">
+            <numerusform>(%L1 秒)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; 很害怕并跳过 &lt;b&gt;%2&lt;/b&gt; 个回合。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Save demo</source>
+        <translation>保存 demo</translation>
+    </message>
+    <message>
+        <source>Health graph</source>
+        <translation>血量图表</translation>
+    </message>
+</context>
+<context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation>游戏中...</translation>
+    </message>
+</context>
+<context>
+    <name>PageInfo</name>
+    <message>
+        <source>Open the snapshot folder</source>
+        <translation>打开截图文件夹</translation>
+    </message>
+</context>
+<context>
+    <name>PageMain</name>
+    <message>
+        <source>Exit game</source>
+        <translation>退出游戏</translation>
+    </message>
+    <message>
+        <source>Play official network game</source>
+        <translation>玩官方网络游戏</translation>
+    </message>
+    <message>
+        <source>Play a game on a single computer</source>
+        <translation>单机</translation>
+    </message>
+    <message>
+        <source>Play a game across a local area network</source>
+        <translation>局域网</translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation>可下载内容</translation>
+    </message>
+    <message>
+        <source>Access the user created content downloadable from our website</source>
+        <translation>从我们的网站下载用户创建的内容</translation>
+    </message>
+    <message>
+        <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
+        <translation>在这里留下反馈，报告问题，建议功能，或告诉我们你多喜欢刺猬战争</translation>
+    </message>
+    <message>
+        <source>Play local network game</source>
+        <translation>玩本地网络游戏</translation>
+    </message>
+    <message>
+        <source>Play a game across a network</source>
+        <translation>互联网</translation>
+    </message>
+    <message>
+        <source>Open the Hedgewars online game manual in your web browser</source>
+        <translation>在你的浏览器打开刺猬战争游戏的在线手册</translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation>编辑游戏首选项</translation>
+    </message>
+    <message>
+        <source>Feedback</source>
+        <translation>反馈</translation>
+    </message>
+    <message>
+        <source>Read about who is behind the Hedgewars Project</source>
+        <translation>了解刺猬战争项目后面有谁</translation>
+    </message>
+    <message>
+        <source>Play a game on an official server</source>
+        <translation>官方服务器</translation>
+    </message>
+    <message>
+        <source>Manage videos recorded from game</source>
+        <translation>管理游戏录制视频</translation>
+    </message>
+</context>
+<context>
+    <name>PageMultiplayer</name>
+    <message>
+        <source>Start</source>
+        <translation>开始</translation>
+    </message>
+    <message>
+        <source>Start fighting (requires at least 2 teams)</source>
+        <translation>开始战斗（需要至少两个队伍）</translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation>编辑游戏首选项</translation>
+    </message>
+</context>
+<context>
+    <name>PageNet</name>
+    <message>
+        <source>Connect to the selected server</source>
+        <translation>连接到选择的服务器</translation>
+    </message>
+    <message>
+        <source>Start private server</source>
+        <translation>启动私人服务器</translation>
+    </message>
+    <message>
+        <source>Specify the address and port number of a known server and connect to it directly</source>
+        <translation>指定已知服务器的地址和端口并直连</translation>
+    </message>
+    <message>
+        <source>Update the list of servers</source>
+        <translation>更新服务器列表</translation>
+    </message>
+</context>
+<context>
+    <name>PageNetGame</name>
+    <message>
+        <source>Start</source>
+        <translation>开始</translation>
+    </message>
+    <message>
+        <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
+        <translation>点亮灯泡让其他玩家知道你准备好战斗</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <source>Room name</source>
+        <translation>房间名</translation>
+    </message>
+    <message>
+        <source>Start fighting (requires at least 2 teams)</source>
+        <translation>开始战斗（需要至少两个队伍）</translation>
+    </message>
+    <message>
+        <source>Update the room name</source>
+        <translation>更新房间名</translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation>编辑游戏首选项</translation>
+    </message>
+    <message>
+        <source>Room controls</source>
+        <translation>房间控制</translation>
+    </message>
+</context>
+<context>
+    <name>PageNetServer</name>
+    <message>
+        <source>Click here for details</source>
+        <translation>点击这里了解详情</translation>
+    </message>
+    <message>
+        <source>Insert your address here</source>
+        <translation>在这里输入你的地址</translation>
+    </message>
+</context>
+<context>
+    <name>PageOptions</name>
+    <message>
+        <source>x</source>
+        <extracomment>Multiplication sign, to be used between two numbers. Note the “x” is only a dummy character, we recommend to use “×” if your language permits it</extracomment>
+        <translation>×</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>游戏</translation>
+    </message>
+    <message>
+        <source>Audio</source>
         <translation>声音</translation>
     </message>
     <message>
-        <source>In-game sound effects</source>
-        <translation>游戏中音效</translation>
+        <source>Teams</source>
+        <translation>队伍</translation>
     </message>
     <message>
-        <source>Enable hedgehog tags by default</source>
-        <translation>默认启用刺猬标签</translation>
+        <source>Edit team</source>
+        <translation>编辑队伍</translation>
     </message>
     <message>
-        <source>Save password</source>
-        <translation>保存密码</translation>
+        <source>Check for updates</source>
+        <translation>检查更新</translation>
     </message>
     <message>
-        <source>Enable translucent tags by default</source>
-        <translation>默认启用透明标签</translation>
+        <source>No proxy</source>
+        <translation>无代理</translation>
     </message>
     <message>
-        <source>Show ammo menu tooltips</source>
-        <translation>显示弹药菜单提示</translation>
+        <source>Proxy password</source>
+        <translation>代理密码</translation>
     </message>
     <message>
-        <source>Alternative damage show</source>
-        <translation>备选伤害显示</translation>
+        <source>HTTP proxy</source>
+        <translation>HTTP 代理</translation>
     </message>
     <message>
-        <source>Reduce the game audio volume if the game window has lost its focus</source>
-        <translation>游戏窗口失去焦点时降低游戏音量</translation>
+        <source>Socks5 proxy</source>
+        <translation>Socks5 代理</translation>
     </message>
     <message>
-        <source>Fullscreen</source>
-        <translation>全屏</translation>
+        <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
+        <translation>你不能从队伍选择编辑队伍，回到主菜单来添加、编辑、删除队伍。</translation>
     </message>
     <message>
-        <source>Record audio</source>
-        <translation>录制音频</translation>
+        <source>Video Recording</source>
+        <translation>录制视频</translation>
     </message>
     <message>
-        <source>Health</source>
-        <translation>血量</translation>
+        <source>Select an action to change what key controls it</source>
+        <translation>选择一个动作来改变控制它的按键</translation>
     </message>
     <message>
-        <source>Enable health tags by default</source>
-        <translation>默认启用血量标签</translation>
+        <source>Network</source>
+        <translation>网络</translation>
     </message>
     <message>
-        <source>Frontend sound effects</source>
-        <translation>前端音效</translation>
+        <source>Proxy settings</source>
+        <translation>代理设置</translation>
     </message>
     <message>
-        <source>In-game music</source>
-        <translation>游戏中音乐</translation>
+        <source>Controls</source>
+        <translation>控制</translation>
     </message>
     <message>
-        <source>Enable team tags by default</source>
-        <translation>默认启用队伍标签</translation>
+        <source>Miscellaneous</source>
+        <translation>杂项</translation>
     </message>
     <message>
-        <source>Append date and time to record file name</source>
-        <translation>附加日期和时间到录制文件名</translation>
+        <source>Reset to default</source>
+        <translation>重设为默认</translation>
     </message>
     <message>
-        <source>Enable visual effects such as animated menu transitions and falling stars</source>
-        <translation>启用视觉效果，如动态菜单过渡和掉落星星</translation>
+        <source>Edit weapon set</source>
+        <translation>编辑武器集</translation>
     </message>
     <message>
-        <source>Check for updates at startup</source>
-        <translation>启动时检查更新</translation>
+        <source>Game audio</source>
+        <translation>游戏声音</translation>
     </message>
     <message>
-        <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
-        <translation>如果启用，刺猬战争会添加日期和时间（YYYY-MM-DD_hh-mm）到自动创建的demo。</translation>
+        <source>Account</source>
+        <translation>账号</translation>
     </message>
     <message>
-        <source>Translucent</source>
-        <translation>透明度</translation>
+        <source>New scheme</source>
+        <translation>新方案</translation>
     </message>
     <message>
-        <source>Visual effects</source>
-        <translation>视觉效果</translation>
+        <source>Reset all binds</source>
+        <translation>重设所有绑定按键</translation>
     </message>
     <message>
-        <source>Use game resolution</source>
-        <translation>使用游戏分辨率</translation>
-    </message>
-    <message>
-        <source>Dampen when losing focus</source>
-        <translation>抑制当失去焦点时</translation>
-    </message>
-    <message>
-        <source>Frontend music</source>
-        <translation>前端音乐</translation>
-    </message>
-    <message>
-        <source>Show FPS</source>
-        <translation>显示帧数</translation>
-    </message>
-</context>
-<context>
-    <name>GameCFGWidget</name>
-    <message>
-        <source>Map</source>
-        <translation>地图</translation>
-    </message>
-    <message>
-        <source>Game scheme will auto-select a weapon</source>
-        <translation>游戏方案会自动选择一个武器</translation>
-    </message>
-    <message>
-        <source>Game options</source>
-        <translation>游戏选项</translation>
-    </message>
-    <message>
-        <source>Edit weapons</source>
-        <translation>编辑武器</translation>
-    </message>
-    <message>
-        <source>Edit schemes</source>
+        <source>Edit scheme</source>
         <translation>编辑方案</translation>
     </message>
+    <message>
+        <source>Graphics</source>
+        <translation>图形</translation>
+    </message>
+    <message>
+        <source>Can&apos;t delete last team</source>
+        <translation>不能删除最后一个队伍</translation>
+    </message>
+    <message>
+        <source>Frontend</source>
+        <translation>前端</translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation>方案</translation>
+    </message>
+    <message>
+        <source>Delete team</source>
+        <translation>删除队伍</translation>
+    </message>
+    <message>
+        <source>You can&apos;t delete the last team!</source>
+        <translation>你不能删除最后一个队伍！</translation>
+    </message>
+    <message>
+        <source>Proxy login</source>
+        <translation>代理登录</translation>
+    </message>
+    <message>
+        <source>Reset to default colors</source>
+        <translation>重设为默认颜色</translation>
+    </message>
+    <message>
+        <source>Check now</source>
+        <translation>现在检查</translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation>高级</translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation>新武器集</translation>
+    </message>
+    <message>
+        <source>Updates</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <source>Custom colors</source>
+        <translation>自定义颜色</translation>
+    </message>
+    <message>
+        <source>New team</source>
+        <translation>新队伍</translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation>删除方案</translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation>删除武器集</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation>武器</translation>
+    </message>
+    <message>
+        <source>Frontend audio</source>
+        <translation>前端声音</translation>
+    </message>
+    <message>
+        <source>MISSING LANGUAGE NAME [%1]</source>
+        <extracomment>In the case of an error, this is shown in the language selection for a language with unknown name. %1 = language code</extracomment>
+        <translation>缺少语言名字[%1]</translation>
+    </message>
+    <message>
+        <source>System proxy settings</source>
+        <translation>系统代理设置</translation>
+    </message>
+    <message>
+        <source>Proxy port</source>
+        <translation>代理端口</translation>
+    </message>
+    <message>
+        <source>Proxy host</source>
+        <translation>代理 host</translation>
+    </message>
+    <message>
+        <source>Video recording options</source>
+        <translation>录制视频选项</translation>
+    </message>
 </context>
 <context>
-    <name>GameSchemeModel</name>
+    <name>PagePlayDemo</name>
     <message>
-        <source>New</source>
-        <translation>新建</translation>
+        <source>Load the selected game</source>
+        <translation>加载选择的游戏</translation>
     </message>
     <message>
-        <source>Copy of %1</source>
-        <translation>%1 的复制</translation>
+        <source>Play demo</source>
+        <translation>播放 demo</translation>
     </message>
     <message>
-        <source>New (%1)</source>
-        <translation>新建 (%1)</translation>
+        <source>Play the selected demo</source>
+        <translation>播放选择的 demo</translation>
     </message>
     <message>
-        <source>Copy of %1 (%2)</source>
-        <translation>%1 的复制 (%2)</translation>
+        <source>Rename dialog</source>
+        <translation>重命名对话框</translation>
+    </message>
+    <message>
+        <source>Enter new file name:</source>
+        <translation>输入新的文件名:</translation>
+    </message>
+</context>
+<context>
+    <name>PageRoomsList</name>
+    <message>
+        <source>Join room</source>
+        <translation>加入房间</translation>
+    </message>
+    <message>
+        <source>Admin features</source>
+        <translation>管理员功能</translation>
+    </message>
+    <message>
+        <source>Open server administration page</source>
+        <translation>打开服务器管理员页面</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 players online</source>
+        <translation type="unfinished">
+            <numerusform>%1 玩家在线</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Create room</source>
+        <translation>创建房间</translation>
+    </message>
+    <message>
+        <source>Search for a room:</source>
+        <translation>搜索房间:</translation>
+    </message>
+    <message>
+        <source>Room state</source>
+        <translation>房间状态</translation>
     </message>
 </context>
 <context>
@@ -2209,6 +2041,7 @@
     </message>
     <message>
         <source>Overall damage and knockback in percent</source>
+        <extracomment>Description of the game scheme setting “Damage Modifier”. “Knockback” means how much hedgehogs and objects get pushed by explosions and other forces</extracomment>
         <translation>整体伤害和击退（百分比）</translation>
     </message>
     <message>
@@ -2292,485 +2125,480 @@
     </message>
 </context>
 <context>
-    <name>SelWeaponWidget</name>
+    <name>PageSinglePlayer</name>
     <message>
-        <source>New</source>
-        <translation>新建</translation>
+        <source>Load a previously saved game</source>
+        <translation>加载之前保存的游戏</translation>
     </message>
     <message>
-        <source>Delays</source>
-        <translation>推迟</translation>
+        <source>Watch recorded demos</source>
+        <translation>观看 demo</translation>
     </message>
     <message>
-        <source>Weapon set</source>
-        <translation>武器集</translation>
+        <source>Campaign Mode</source>
+        <translation>战役模式</translation>
     </message>
     <message>
-        <source>Ammo in boxes</source>
-        <translation>箱中弹药</translation>
+        <source>Play a quick game against the computer with random settings</source>
+        <translation>玩快速单机游戏（随机设置）</translation>
     </message>
     <message>
-        <source>Probabilities</source>
-        <translation>概率</translation>
+        <source>Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios.</source>
+        <translation>单人任务：在训练中学习，在挑战中实践，或试着完成场景目标。</translation>
     </message>
     <message>
-        <source>Copy of %1</source>
-        <translation>%1 的复制</translation>
-    </message>
-    <message>
-        <source>New (%1)</source>
-        <translation>新建 (%1)</translation>
-    </message>
-    <message>
-        <source>Copy of %1 (%2)</source>
-        <translation>%1 的复制 (%2)</translation>
+        <source>Play a hotseat game against your friends, or AI teams</source>
+        <translation>在一个座位上对抗你的朋友或AI</translation>
     </message>
 </context>
 <context>
-    <name>server</name>
+    <name>PageTraining</name>
     <message>
-        <source>map</source>
-        <translation>地图</translation>
+        <source>Team</source>
+        <translation>队伍</translation>
     </message>
     <message>
-        <source>kick</source>
+        <source>Team&apos;s longest time: %L1 s</source>
+        <translation>队伍最长时间: %L1 秒</translation>
+    </message>
+    <message>
+        <source>Team lowscore: %1</source>
+        <extracomment>Lowest score of a team</extracomment>
+        <translation>队伍最低分: %1</translation>
+    </message>
+    <message>
+        <source>Pick the challenge to play</source>
+        <translation>选择挑战开玩</translation>
+    </message>
+    <message>
+        <source>Challenges</source>
+        <translation>挑战</translation>
+    </message>
+    <message>
+        <source>No description available</source>
+        <translation>无可用描述</translation>
+    </message>
+    <message>
+        <source>Pick the training to play</source>
+        <translation>选择训练开玩</translation>
+    </message>
+    <message>
+        <source>Team&apos;s best time: %L1 s</source>
+        <translation>队伍最佳时间: %L1 秒</translation>
+    </message>
+    <message>
+        <source>Start fighting</source>
+        <translation>开始战斗</translation>
+    </message>
+    <message>
+        <source>Pick the scenario to play</source>
+        <translation>选择场景开玩</translation>
+    </message>
+    <message>
+        <source>Trainings</source>
+        <translation>训练</translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
+        <translation>选择一个任务！</translation>
+    </message>
+    <message>
+        <source>Scenarios</source>
+        <translation>场景</translation>
+    </message>
+    <message>
+        <source>Team&apos;s top accuracy: %1%</source>
+        <extracomment>Best accuracy of a team (in a challenge)</extracomment>
+        <translation>队伍最高准确度: %1%</translation>
+    </message>
+    <message>
+        <source>Team highscore: %1</source>
+        <extracomment>Highest score of a team</extracomment>
+        <translation>队伍最高分: %1</translation>
+    </message>
+</context>
+<context>
+    <name>PageVideos</name>
+    <message>
+        <source>%1%</source>
+        <extracomment>Video encoding progress. %1 = number</extracomment>
+        <translation>%1%</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>名字</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>大小</translation>
+    </message>
+    <message>
+        <source>Size: %1</source>
+        <translation type="vanished">大小: %1</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 bytes</source>
+        <translation type="unfinished">
+            <numerusform>%1 字节</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>encoding</source>
+        <translation>编码</translation>
+    </message>
+    <message>
+        <source>Date: %1</source>
+        <translation type="vanished">日期: %1</translation>
+    </message>
+    <message>
+        <source>(in progress...)</source>
+        <translation>(进行中…)</translation>
+    </message>
+    <message>
+        <source>%1 (%2%) - %3</source>
+        <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
+        <translation>%1 (%2%)—%3</translation>
+    </message>
+    <message>
+        <source>Date: %1
+</source>
+        <translation type="unfinished">日期: %1
+</translation>
+    </message>
+    <message>
+        <source>Size: %1
+</source>
+        <translation type="unfinished">大小: %1
+</translation>
+    </message>
+</context>
+<context>
+    <name>QAction</name>
+    <message>
+        <source>Ban</source>
+        <translation>封禁</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>信息</translation>
+    </message>
+    <message>
+        <source>Kick</source>
         <translation>踢出</translation>
     </message>
     <message>
-        <source>room</source>
-        <translation>房间</translation>
+        <source>Follow</source>
+        <translation>跟随</translation>
     </message>
     <message>
-        <source>Access denied. This room is for registered users only.</source>
-        <translation>访问被拒绝。这个房间仅限注册用户。</translation>
+        <source>Unignore</source>
+        <translation>取消忽略</translation>
     </message>
     <message>
-        <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation>请确认服务器以“/restart_server yes”重启。</translation>
+        <source>Ignore</source>
+        <translation>忽略</translation>
     </message>
     <message>
-        <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/vote: 请使用 ‘yes’ 或 ‘no’.</translation>
+        <source>Show games in-progress</source>
+        <translation>显示进行中的游戏</translation>
     </message>
     <message>
-        <source>heads</source>
-        <translation>正</translation>
+        <source>Add friend</source>
+        <translation>添加朋友</translation>
     </message>
     <message>
-        <source>lobby</source>
-        <translation>大厅</translation>
+        <source>Show password protected</source>
+        <translation>显示受密码保护的</translation>
     </message>
     <message>
-        <source>pause</source>
-        <translation>暂停</translation>
+        <source>Restrict Unregistered Players Join</source>
+        <translation>限制未注册的玩家加入</translation>
     </message>
     <message>
-        <source>tails</source>
-        <translation>反</translation>
+        <source>Restrict Team Additions</source>
+        <translation>限制队伍添加</translation>
     </message>
     <message>
-        <source>Empty config entry.</source>
-        <translation>空配置条目。</translation>
+        <source>Show join restricted</source>
+        <translation>显示限制加入的</translation>
     </message>
     <message>
-        <source>Voting closed.</source>
-        <translation>投票已关闭。</translation>
+        <source>Restrict Joins</source>
+        <translation>限制加入</translation>
     </message>
     <message>
-        <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation>/delete &lt;config ID&gt;: 删除一个可投票的房间配置</translation>
+        <source>Delegate room control</source>
+        <translation>转授房间控制</translation>
     </message>
     <message>
-        <source>Super power activated.</source>
-        <translation>超级力量已激活。</translation>
+        <source>Remove friend</source>
+        <translation>删除朋友</translation>
     </message>
     <message>
-        <source>This command is only available in rooms.</source>
-        <translation>这个命令只在房间可用。</translation>
+        <source>Show games in lobby</source>
+        <translation>显示在大厅的游戏</translation>
     </message>
     <message>
-        <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation>/rnd: 翻转一个虚拟硬币并回复‘正’ 或 ‘反’</translation>
+        <source>Show incompatible</source>
+        <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>QCheckBox</name>
     <message>
-        <source>You can&apos;t kick yourself!</source>
-        <translation>你不能踢自己！</translation>
+        <source>Hog</source>
+        <translation>刺猬</translation>
     </message>
     <message>
-        <source>Protocol already known.</source>
-        <translation>协议已知。</translation>
+        <source>Team</source>
+        <translation>队伍</translation>
     </message>
     <message>
-        <source>Warning! Room name change flood protection activated</source>
-        <translation>警告！房间名改变滥用保护已激活</translation>
+        <source>Music</source>
+        <translation>音乐</translation>
     </message>
     <message>
-        <source>You can&apos;t kick the only other player!</source>
-        <translation>你不能踢仅剩的其他玩家！</translation>
+        <source>Sound</source>
+        <translation>声音</translation>
     </message>
     <message>
-        <source>Excess flood</source>
-        <translation>过量滥发</translation>
+        <source>In-game sound effects</source>
+        <translation>游戏中音效</translation>
     </message>
     <message>
-        <source>Greeting message cleared.</source>
-        <translation>问候语已清除。</translation>
+        <source>Enable hedgehog tags by default</source>
+        <translation>默认启用刺猬标签</translation>
     </message>
     <message>
-        <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>非法房间名！房间名必须在1-40字符之间，不得以空格开头或结尾，且不包含这些字符：$()*+?[]^{|}</translation>
+        <source>Save password</source>
+        <translation>保存密码</translation>
     </message>
     <message>
-        <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation>/vote &lt;yes/no&gt;: 投票 ‘yes’ 或 ‘no’ 以激活投票</translation>
+        <source>Enable translucent tags by default</source>
+        <translation>默认启用透明标签</translation>
     </message>
     <message>
-        <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation>/rnd [A] [B] [C] [...]: 从给出列表中回复一个随机词语</translation>
+        <source>Show ammo menu tooltips</source>
+        <translation>显示弹药菜单提示</translation>
     </message>
     <message>
-        <source>hedgehogs per team: </source>
-        <translation>每个队伍的刺猬: </translation>
+        <source>Alternative damage show</source>
+        <translation>备选伤害显示</translation>
     </message>
     <message>
-        <source>This server does not support replays!</source>
-        <translation>这个服务器不支持重玩！</translation>
+        <source>Reduce the game audio volume if the game window has lost its focus</source>
+        <translation>游戏窗口失去焦点时降低游戏音量</translation>
     </message>
     <message>
-        <source>(playing)</source>
-        <translation>(正在玩)</translation>
+        <source>Fullscreen</source>
+        <translation>全屏</translation>
     </message>
     <message>
-        <source>/fix: Force this room to stay open when it is empty</source>
-        <translation>/fix: 当这个房间空的时候强制保持开启</translation>
+        <source>Record audio</source>
+        <translation>录制音频</translation>
     </message>
     <message>
-        <source>Access denied.</source>
-        <translation>访问被拒绝。</translation>
+        <source>Health</source>
+        <translation>血量</translation>
     </message>
     <message>
-        <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation>/loadroom &lt;file name&gt;: 从文件加载可投票的房间配置（和问候）</translation>
+        <source>Enable health tags by default</source>
+        <translation>默认启用血量标签</translation>
     </message>
     <message>
-        <source>Too many hedgehogs!</source>
-        <translation>刺猬太多了！</translation>
+        <source>Frontend sound effects</source>
+        <translation>前端音效</translation>
     </message>
     <message>
-        <source>Greeting message set.</source>
-        <translation>设置问候语。</translation>
+        <source>In-game music</source>
+        <translation>游戏中音乐</translation>
     </message>
     <message>
-        <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation>/registered_only: 切换 ‘registered only’ 状态。如果启用，只有注册玩家能加入服务器</translation>
+        <source>Enable team tags by default</source>
+        <translation>默认启用队伍标签</translation>
     </message>
     <message>
-        <source>Room version incompatible to your Hedgewars version!</source>
-        <translation>房间版本跟你的刺猬战争版本不兼容！</translation>
+        <source>Append date and time to record file name</source>
+        <translation>附加日期和时间到录制文件名</translation>
     </message>
     <message>
-        <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation>/greeting [message]: 设置或清除问候语，显示给加入房间的玩家</translation>
+        <source>Enable visual effects such as animated menu transitions and falling stars</source>
+        <translation>启用视觉效果，如动态菜单过渡和掉落星星</translation>
     </message>
     <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation>踢出后60秒冷却时间</translation>
+        <source>Check for updates at startup</source>
+        <translation>启动时检查更新</translation>
     </message>
     <message>
-        <source>Warning! Chat flood protection activated</source>
-        <translation>警告！聊天滥发保护已激活</translation>
+        <source>If enabled, Hedgewars adds the date and time in the form &quot;YYYY-MM-DD_hh-mm&quot; for automatically created demos.</source>
+        <translation>如果启用，刺猬战争会添加日期和时间（YYYY-MM-DD_hh-mm）到自动创建的demo。</translation>
     </message>
     <message>
-        <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation>可用的发起投票命令：hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</translation>
+        <source>Translucent</source>
+        <translation>透明度</translation>
     </message>
     <message>
-        <source>There&apos;s already a team with same name in the list.</source>
-        <translation>列表中已有相同名字的队伍。</translation>
+        <source>Visual effects</source>
+        <translation>视觉效果</translation>
     </message>
     <message>
-        <source>Voting expired.</source>
-        <translation>投票已过期。</translation>
+        <source>Use game resolution</source>
+        <translation>使用游戏分辨率</translation>
     </message>
     <message>
-        <source>/unfix: Undo the /fix command</source>
-        <translation>/unfix: 撤销 /fix 命令</translation>
+        <source>Dampen when losing focus</source>
+        <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
+        <translation>抑制当失去焦点时</translation>
     </message>
     <message>
-        <source>/maxteams: specify number from 2 to 8</source>
-        <translation>/maxteams: 从2到8指定数字</translation>
+        <source>Frontend music</source>
+        <translation>前端音乐</translation>
     </message>
     <message>
-        <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation>/global &lt;message&gt;: 发送全局聊天消息，服务器中所有人可见</translation>
+        <source>Show FPS</source>
+        <translation>显示帧数</translation>
     </message>
+</context>
+<context>
+    <name>QComboBox</name>
     <message>
-        <source>Joining not possible: Round is in progress.</source>
-        <translation>无法加入：回合进行中。</translation>
+        <source>Human</source>
+        <translation>人类</translation>
     </message>
     <message>
-        <source>You already have voted.</source>
-        <translation>你已投票。</translation>
+        <source>Disabled</source>
+        <translation>禁用</translation>
     </message>
     <message>
-        <source>Reconnected too fast</source>
-        <translation>重连太快</translation>
+        <source>(System default)</source>
+        <translation>(系统默认)</translation>
     </message>
     <message>
-        <source>Kicked</source>
-        <translation>已踢</translation>
+        <source>Top-Bottom</source>
+        <translation>顶部按钮</translation>
     </message>
     <message>
-        <source>Your vote has been counted.</source>
-        <translation>你的投票已计数。</translation>
+        <source>24 FPS</source>
+        <translation>24 FPS</translation>
     </message>
     <message>
-        <source>/callvote map: No maps available.</source>
-        <translation>/callvote map: 无可用地图。</translation>
+        <source>25 FPS</source>
+        <translation>25 FPS</translation>
     </message>
     <message>
-        <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation>/watch &lt;id&gt;: 观看存储在服务器上给定ID的demo</translation>
+        <source>30 FPS</source>
+        <translation>30 FPS</translation>
     </message>
     <message>
-        <source>You&apos;re not the room master!</source>
-        <translation>你不是房主！</translation>
+        <source>50 FPS</source>
+        <translation>50 FPS</translation>
     </message>
     <message>
-        <source>/callvote map: No such map!</source>
-        <translation>/callvote map: 没有这个地图！</translation>
+        <source>60 FPS</source>
+        <translation>60 FPS</translation>
     </message>
     <message>
-        <source>Authentication failed</source>
-        <translation>验证失败</translation>
+        <source>Blue/Red</source>
+        <translation>蓝/红</translation>
     </message>
     <message>
-        <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation>/saveroom &lt;file name&gt;: 保存这个房间所有可投票的房间配置（和问候）到文件</translation>
+        <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
+        <translation>当你戴着3D眼镜时，立体视觉创造深度的错觉。</translation>
     </message>
     <message>
-        <source>Bad number.</source>
-        <translation>错误的数字。</translation>
+        <source>Red/Cyan grayscale</source>
+        <translation>红/青 灰度</translation>
     </message>
     <message>
-        <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation>/maxteams &lt;N&gt;: 限制最大队伍数为N</translation>
+        <source>Community</source>
+        <translation>社区</translation>
     </message>
     <message>
-        <source>Warning! Joins flood protection activated</source>
-        <translation>警告！加入滥用保护已激活</translation>
+        <source>Cyan/Red grayscale</source>
+        <translation>青/红 灰度</translation>
     </message>
     <message>
-        <source>Error: The team you tried to remove does not exist.</source>
-        <translation>错误：你试图删除的队伍不存在。</translation>
+        <source>Blue/Red grayscale</source>
+        <translation>蓝/红 灰度</translation>
     </message>
     <message>
-        <source>This server no longer allows unregistered players to join.</source>
-        <translation>这个服务器不再允许未注册玩家加入。</translation>
+        <source>Red/Green</source>
+        <translation>红/绿</translation>
     </message>
     <message>
-        <source>A room with the same name already exists.</source>
-        <translation>已存在相同名字的房间。</translation>
+        <source>Computer (Level %1)</source>
+        <translation>计算机 (等级 %1)</translation>
     </message>
     <message>
-        <source>Too many teams!</source>
-        <translation>队伍太多了！</translation>
+        <source>Red/Blue</source>
+        <translation>红/蓝</translation>
     </message>
     <message>
-        <source>kicked</source>
-        <translation>已踢</translation>
+        <source>Red/Cyan</source>
+        <translation>红/青</translation>
     </message>
     <message>
-        <source>/quit: Quit the server</source>
-        <translation>/quit: 退出服务器</translation>
+        <source>Green/Red</source>
+        <translation>绿/红</translation>
     </message>
     <message>
-        <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
-        <translation>未知命令或无效参数。 在聊天说‘/help’查看命令列表。</translation>
+        <source>Red/Green grayscale</source>
+        <translation>红/绿 灰度</translation>
     </message>
     <message>
-        <source>Game messages flood detected - 1</source>
-        <translation>检测到游戏消息滥发 - 1</translation>
+        <source>Side-by-side</source>
+        <translation>并排</translation>
     </message>
     <message>
-        <source>(spectating)</source>
-        <translation>(正在旁观)</translation>
+        <source>Green/Red grayscale</source>
+        <translation>绿/红 灰度</translation>
     </message>
     <message>
-        <source>/help: Show chat command help</source>
-        <translation>/help: 显示聊天命令帮助</translation>
+        <source>Red/Blue grayscale</source>
+        <translation>红/蓝 灰度</translation>
     </message>
     <message>
-        <source>/callvote kick: No such user!</source>
-        <translation>/callvote kick: 没有这个用户！</translation>
+        <source>Cyan/Red</source>
+        <translation>青/红</translation>
     </message>
+</context>
+<context>
+    <name>QGroupBox</name>
     <message>
-        <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>非法房间名！房间名必须在1-40字符之间，不得以空格开头或结尾，且不包含这些字符：$()*+?[]^{|}</translation>
+        <source>Fort</source>
+        <translation>堡垒</translation>
     </message>
     <message>
-        <source>New voting started</source>
-        <translation>已开始新的投票</translation>
+        <source>Game Modifiers</source>
+        <translation>游戏修改器</translation>
     </message>
     <message>
-        <source>No checker rights</source>
-        <translation>无checker权限</translation>
+        <source>Basic Settings</source>
+        <translation>基本设置</translation>
     </message>
     <message>
-        <source>There&apos;s no voting going on.</source>
-        <translation>没有进行中的投票。</translation>
+        <source>Videos</source>
+        <translation>视频</translation>
     </message>
     <message>
-        <source>You&apos;re already the room master.</source>
-        <translation>你已经是房主。</translation>
+        <source>Team Settings</source>
+        <translation>队伍设置</translation>
     </message>
     <message>
-        <source>Nickname already provided.</source>
-        <translation>昵称已提供。</translation>
+        <source>Team Members</source>
+        <translation>队伍数量</translation>
     </message>
     <message>
-        <source>Commands for server admins only:</source>
-        <translation>仅限服务器管理员的命令:</translation>
+        <source>Description</source>
+        <translation>描述</translation>
     </message>
     <message>
-        <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation>/save &lt;config ID&gt; &lt;config name&gt;: 为 /callvote map 添加当前房间配置作为可投票选择</translation>
+        <source>Net game</source>
+        <translation>网络游戏</translation>
     </message>
     <message>
-        <source>/callvote kick: You need to specify a nickname.</source>
-        <translation>/callvote kick:你需要指定一个昵称。</translation>
-    </message>
-    <message>
-        <source>Player is not online.</source>
-        <translation>玩家不在线。</translation>
-    </message>
-    <message>
-        <source>You are banned from this room.</source>
-        <translation>你被房间封禁。</translation>
-    </message>
-    <message>
-        <source>You&apos;re not the room master or a server admin!</source>
-        <translation>你不是房主或服务器管理员！</translation>
-    </message>
-    <message>
-        <source>This command is only available in the lobby.</source>
-        <translation>这个命令仅在大厅可用。</translation>
-    </message>
-    <message>
-        <source>This server only allows registered users to join.</source>
-        <translation>这个服务器只允许注册用户加入。</translation>
-    </message>
-    <message>
-        <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>非法昵称！昵称必须在1-40字符之间，不得以空格开头或结尾，且不包含这些字符：$()*+?[]^{|}</translation>
-    </message>
-    <message>
-        <source>/callvote [arguments]: Start a vote</source>
-        <translation>/callvote [arguments]: 开始一个投票</translation>
-    </message>
-    <message>
-        <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation>你不能移除你不拥有的队伍。</translation>
-    </message>
-    <message>
-        <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation>访问被拒绝。这个房间当前不允许加入。</translation>
-    </message>
-    <message>
-        <source>new seed</source>
-        <translation>新种子</translation>
-    </message>
-    <message>
-        <source>/stats: Query server stats</source>
-        <translation>/stats: 查询服务器状态</translation>
-    </message>
-    <message>
-        <source>This player is protected from being kicked.</source>
-        <translation>这个玩家受保护不能踢。</translation>
-    </message>
-    <message>
-        <source>Pause toggled.</source>
-        <translation>已切换暂停。</translation>
-    </message>
-    <message>
-        <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation>/super_power: 激活你的超级力量。这样你可以进入任何房间且不能踢出。当你离开服务器就过期</translation>
-    </message>
-    <message>
-        <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation>/force &lt;yes/no&gt;: 为激活的投票强制投票结果</translation>
-    </message>
-    <message>
-        <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation>/delegate &lt;player&gt;: 转移房间控制给玩家</translation>
-    </message>
-    <message>
-        <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/force: 请使用‘yes’ 或 ‘no’.</translation>
-    </message>
-    <message>
-        <source>You&apos;re the new room master!</source>
-        <translation>你是新的房主！</translation>
-    </message>
-    <message>
-        <source>/callvote pause: No game in progress!</source>
-        <translation>/callvote pause: 没有进行中的游戏！</translation>
-    </message>
-    <message>
-        <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation>/me &lt;message&gt;: 聊天动作，如‘/me eats pizza’变成‘* Player eats pizza’</translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation>昵称已使用</translation>
-    </message>
-    <message>
-        <source>The player is not in your room.</source>
-        <translation>这个玩家不在你的房间。</translation>
-    </message>
-    <message>
-        <source>This server now allows unregistered players to join.</source>
-        <translation>这个服务器现在允许未注册玩家加入。</translation>
-    </message>
-    <message>
-        <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation>/callvote hedgehogs: 从1到8指定数字。</translation>
-    </message>
-    <message>
-        <source>/info &lt;player&gt;: Show info about player</source>
-        <translation>/info &lt;player&gt;: 显示关于玩家的信息</translation>
-    </message>
-    <message>
-        <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation>/callvote kick: 仅允许没有房主的房间。</translation>
-    </message>
-    <message>
-        <source>List of lobby chat commands:</source>
-        <translation>大厅聊天命令列表:</translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info!</source>
-        <translation>损坏的刺猬信息！</translation>
-    </message>
-    <message>
-        <source>No such room.</source>
-        <translation>没有这个房间。</translation>
-    </message>
-    <message>
-        <source>This room currently does not allow adding new teams.</source>
-        <translation>这个房间当前不允许添加新队伍。</translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation>Ping 超时</translation>
-    </message>
-    <message>
-        <source>The game can&apos;t be started with less than two clans!</source>
-        <translation>游戏少于两个战队不能开始！</translation>
-    </message>
-    <message>
-        <source>List of room chat commands:</source>
-        <translation>房间聊天命令列表:</translation>
+        <source>Playing teams</source>
+        <translation>正在玩的队伍</translation>
     </message>
 </context>
 <context>
@@ -2929,6 +2757,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Bitrate (Kibit/s)</source>
+        <extracomment>“Kibit/s” is the symbol for 1024 bits per second</extracomment>
         <translation>比特率(Kibit/s)</translation>
     </message>
     <message>
@@ -3005,6 +2834,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>% Retreat Time</source>
+        <extracomment>Label of game scheme setting for the time you get after an attack</extracomment>
         <translation>% 撤退时间</translation>
     </message>
     <message>
@@ -3021,479 +2851,33 @@ Do you really want to quit?</source>
     </message>
 </context>
 <context>
-    <name>QGroupBox</name>
+    <name>QLineEdit</name>
     <message>
-        <source>Fort</source>
-        <translation>堡垒</translation>
+        <source>anonymous</source>
+        <translation>匿名</translation>
     </message>
     <message>
-        <source>Game Modifiers</source>
-        <translation>游戏修改器</translation>
+        <source>hedgehog %1</source>
+        <translation>刺猬 %1</translation>
     </message>
     <message>
-        <source>Basic Settings</source>
-        <translation>基本设置</translation>
+        <source>Hedgehog %1</source>
+        <translation>刺猬 %1</translation>
     </message>
     <message>
-        <source>Videos</source>
-        <translation>视频</translation>
+        <source>unnamed</source>
+        <translation>未命名</translation>
     </message>
     <message>
-        <source>Team Settings</source>
-        <translation>队伍设置</translation>
-    </message>
-    <message>
-        <source>Team Members</source>
-        <translation>队伍数量</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation>描述</translation>
-    </message>
-    <message>
-        <source>Net game</source>
-        <translation>网络游戏</translation>
-    </message>
-    <message>
-        <source>Playing teams</source>
-        <translation>正在玩的队伍</translation>
+        <source>unnamed (%1)</source>
+        <translation>未命名 (%1)</translation>
     </message>
 </context>
 <context>
-    <name>PageDrawMap</name>
-    <message>
-        <source>Load</source>
-        <translation>加载</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation>保存</translation>
-    </message>
-    <message>
-        <source>Undo</source>
-        <translation>撤销</translation>
-    </message>
-    <message>
-        <source>Save drawn map</source>
-        <translation>保存绘画地图</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation>清除</translation>
-    </message>
-    <message>
-        <source>Eraser</source>
-        <translation>橡皮擦</translation>
-    </message>
-    <message>
-        <source>Polyline</source>
-        <translation>线条</translation>
-    </message>
-    <message>
-        <source>Optimize</source>
-        <translation>优化</translation>
-    </message>
-    <message>
-        <source>Brush size</source>
-        <translation>笔刷大小</translation>
-    </message>
-    <message>
-        <source>Rectangle</source>
-        <translation>长方形</translation>
-    </message>
-    <message>
-        <source>Ellipse</source>
-        <translation>椭圆</translation>
-    </message>
-    <message>
-        <source>Load drawn map</source>
-        <translation>加载绘画地图</translation>
-    </message>
-    <message>
-        <source>Drawn Maps</source>
-        <translation>绘画地图</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation>所有文件</translation>
-    </message>
-</context>
-<context>
-    <name>SeedPrompt</name>
-    <message>
-        <source>Seed</source>
-        <translation>种子</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation>关闭</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
-        <source>The map seed is the basis for all random values generated by the game.</source>
-        <translation>地图种子是游戏生成的所有随机数值的偏移。</translation>
-    </message>
-    <message>
-        <source>Set seed</source>
-        <translation>设置种子</translation>
-    </message>
-</context>
-<context>
-    <name>PageCampaign</name>
-    <message>
-        <source>Team</source>
-        <translation>队伍</translation>
-    </message>
-    <message>
-        <source>Mission</source>
-        <translation>任务</translation>
-    </message>
-    <message>
-        <source>Start fighting</source>
-        <translation>开始战斗</translation>
-    </message>
-    <message>
-        <source>Campaign</source>
-        <translation>战役</translation>
-    </message>
-</context>
-<context>
-    <name>PageTraining</name>
-    <message>
-        <source>Team</source>
-        <translation>队伍</translation>
-    </message>
-    <message>
-        <source>Team&apos;s longest time: %L1 s</source>
-        <translation>队伍最长时间: %L1 秒</translation>
-    </message>
-    <message>
-        <source>Team lowscore: %1</source>
-        <translation>队伍最低分: %1</translation>
-    </message>
-    <message>
-        <source>Pick the challenge to play</source>
-        <translation>选择挑战开玩</translation>
-    </message>
-    <message>
-        <source>Challenges</source>
-        <translation>挑战</translation>
-    </message>
-    <message>
-        <source>No description available</source>
-        <translation>无可用描述</translation>
-    </message>
-    <message>
-        <source>Pick the training to play</source>
-        <translation>选择训练开玩</translation>
-    </message>
-    <message>
-        <source>Team&apos;s best time: %L1 s</source>
-        <translation>队伍最佳时间: %L1 秒</translation>
-    </message>
-    <message>
-        <source>Start fighting</source>
-        <translation>开始战斗</translation>
-    </message>
-    <message>
-        <source>Pick the scenario to play</source>
-        <translation>选择场景开玩</translation>
-    </message>
-    <message>
-        <source>Trainings</source>
-        <translation>训练</translation>
-    </message>
-    <message>
-        <source>Select a mission!</source>
-        <translation>选择一个任务！</translation>
-    </message>
-    <message>
-        <source>Scenarios</source>
-        <translation>场景</translation>
-    </message>
-    <message>
-        <source>Team&apos;s top accuracy: %1%</source>
-        <translation>队伍最高准确度: %1%</translation>
-    </message>
-    <message>
-        <source>Team highscore: %1</source>
-        <translation>队伍最高分: %1</translation>
-    </message>
-</context>
-<context>
-    <name>FeedbackDialog</name>
-    <message>
-        <source>View</source>
-        <translation>查看</translation>
-    </message>
-    <message>
-        <source>Send Feedback</source>
-        <translation>发送反馈</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
-        <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation>我们很高兴收到建议、想法或错误报告。</translation>
-    </message>
-    <message>
-        <source>Feedback</source>
-        <translation>反馈</translation>
-    </message>
-    <message>
-        <source>Send us feedback!</source>
-        <translation>给我们发送反馈！</translation>
-    </message>
-    <message>
-        <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation>如果你发现一个错误，且它已经被报告，你可以在这里看到: </translation>
-    </message>
-    <message>
-        <source>Your email address is optional, but necessary if you want us to get back at you.</source>
-        <translation>你的邮箱地址是可选的，如果你想要收到回复。</translation>
-    </message>
-    <message>
-        <source>This is optional, but this information might help us to resolve bugs and other technical problems.</source>
-        <translation>这是可选的，但这个信息可能帮助我们解决错误和其他技术问题。</translation>
-    </message>
-</context>
-<context>
-    <name>PageRoomsList</name>
-    <message>
-        <source>Join room</source>
-        <translation>加入房间</translation>
-    </message>
-    <message>
-        <source>Admin features</source>
-        <translation>管理员功能</translation>
-    </message>
-    <message>
-        <source>Open server administration page</source>
-        <translation>打开服务器管理员页面</translation>
-    </message>
-    <message>
-        <source>%1 players online</source>
-        <translation>%1 玩家在线</translation>
-    </message>
-    <message>
-        <source>Create room</source>
-        <translation>创建房间</translation>
-    </message>
-    <message>
-        <source>Search for a room:</source>
-        <translation>搜索房间:</translation>
-    </message>
-    <message>
-        <source>Room state</source>
-        <translation>房间状态</translation>
-    </message>
-</context>
-<context>
-    <name>HWApplication</name>
-    <message>
-        <source>Custom path to the game data folder</source>
-        <translation>游戏数据的自定义路径</translation>
-    </message>
-    <message>
-        <source>Usage</source>
-        <translation>使用情况</translation>
-    </message>
-    <message>
-        <source>CONNECTSTRING</source>
-        <translation>CONNECTSTRING</translation>
-    </message>
-    <message>
-        <source>%1 day</source>
-        <translation>%1 天</translation>
-    </message>
-    <message>
-        <source>Display this help</source>
-        <translation>显示这个帮助</translation>
-    </message>
-    <message>
-        <source>%1 hours</source>
-        <translation>%1 时</translation>
-    </message>
-    <message>
-        <source>%1 minutes</source>
-        <translation>%1 分</translation>
-    </message>
-    <message>
-        <source>OPTION</source>
-        <translation>选项</translation>
-    </message>
-    <message>
-        <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
-        <translation>刺猬在开始时可以用 %1 (如 &quot;%2&quot;) 来连接。</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation>选项</translation>
-    </message>
-    <message>
-        <source>Scheme &apos;%1&apos; not supported</source>
-        <translation>不支持方案‘%1’</translation>
-    </message>
-    <message>
-        <source>Failed to open data directory:
-%1
-
-Please check your installation!</source>
-        <translation>无法打开数据目录:
-%1
-
-请检查你的安装！</translation>
-    </message>
-    <message>
-        <source>%1 days</source>
-        <translation>%1 天</translation>
-    </message>
-    <message>
-        <source>%1 hour</source>
-        <translation>%1 时</translation>
-    </message>
-    <message>
-        <source>Unknown option argument: %1</source>
-        <translation>未知的选项参数: %1</translation>
-    </message>
-    <message>
-        <source>Custom path for configuration data and user data</source>
-        <translation>配置和用户数据的自定义路径</translation>
-    </message>
-    <message>
-        <source>Malformed option argument: %1</source>
-        <translation>畸形选项参数: %1</translation>
-    </message>
-    <message>
-        <source>Cannot create directory %1</source>
-        <translation>不能创建目录 %1</translation>
-    </message>
-</context>
-<context>
-    <name>About</name>
-    <message>
-        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_ttf&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_net&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-    <message>
-        <source>This program is distributed under the %1.</source>
-        <translation>这个程序在 %1 下发布。</translation>
-    </message>
-    <message>
-        <source>Unknown Compiler</source>
-        <translation>未知编译器</translation>
-    </message>
-    <message>
-        <source>Visit our homepage: %1</source>
-        <translation>访问我们的主页: %1</translation>
-    </message>
-    <message>
-        <source>Dependency versions:</source>
-        <translation>依赖版本:</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</source>
-        <translation>&lt;a href=&quot;https://www.qt.io/developers/&quot;&gt;Qt&lt;/a&gt;: %1</translation>
-    </message>
-    <message>
-        <source>Other people</source>
-        <translation>其他人</translation>
-    </message>
-    <message>
-        <source>%1: %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</source>
-        <translation>&lt;a href=&quot;https://gcc.gnu.org&quot;&gt;GCC&lt;/a&gt;: %1</translation>
-    </message>
-    <message>
-        <source>Unknown Compiler: %1</source>
-        <translation>未知编译器: %1</translation>
-    </message>
-    <message>
-        <source>GNU GPL v2</source>
-        <translation>GNU GPL v2</translation>
-    </message>
-    <message>
-        <source>%1 &amp;lt;%2&amp;gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>%1: %2 &amp;lt;%3&amp;gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Extended Credits</source>
-        <translation>扩展名单</translation>
-    </message>
-    <message>
-        <source>%1 (alias %2)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavformat&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_mixer&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-    <message>
-        <source>Revision %1 (%2)</source>
-        <translation>修订 %1 (%2)</translation>
-    </message>
+    <name>QMainWindow</name>
     <message>
         <source>Hedgewars %1</source>
         <translation>刺猬战争 %1</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>An extended credits list can be found in the CREDITS text file.</source>
-        <translation>一个扩展名单列表可以在 CREDITS 文本文件里找到。</translation>
-    </message>
-    <message>
-        <source>Credits</source>
-        <translation>名单</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://icculus.org/physfs/&quot;&gt;PhysFS&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavutil&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://libav.org&quot;&gt;libavcodec&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</source>
-        <translation>&lt;a href=&quot;https://www.libsdl.org/&quot;&gt;SDL2_image&lt;/a&gt;: %1.%2.%3</translation>
-    </message>
-</context>
-<context>
-    <name>HatButton</name>
-    <message>
-        <source>Change hat (%1)</source>
-        <translation>改变帽子 (%1)</translation>
     </message>
 </context>
 <context>
@@ -3502,9 +2886,11 @@ Please check your installation!</source>
         <source>Error</source>
         <translation>错误</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
-        <translation>你确定要删除 %1 个文件？</translation>
+        <translation type="unfinished">
+            <numerusform>你确定要删除 %1 个文件？</numerusform>
+        </translation>
     </message>
     <message>
         <source>Room Name - Are you sure?</source>
@@ -3722,334 +3108,622 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
 </context>
 <context>
-    <name>GameUIConfig</name>
+    <name>QObject</name>
     <message>
-        <source>Guest</source>
-        <translation>游客</translation>
+        <source>No description available</source>
+        <translation>无可用描述</translation>
     </message>
 </context>
 <context>
-    <name>QComboBox</name>
+    <name>QPushButton</name>
     <message>
-        <source>Human</source>
-        <translation>人类</translation>
+        <source>OK</source>
+        <translation>确定</translation>
     </message>
     <message>
-        <source>Disabled</source>
-        <translation>禁用</translation>
+        <source>Load</source>
+        <translation>加载</translation>
     </message>
     <message>
-        <source>(System default)</source>
-        <translation>(系统默认)</translation>
+        <source>Play</source>
+        <translation>播放</translation>
     </message>
     <message>
-        <source>Top-Bottom</source>
-        <translation>顶部按钮</translation>
+        <source>Reset</source>
+        <translation>重置</translation>
     </message>
-    <message>
-        <source>24 FPS</source>
-        <translation>24 FPS</translation>
-    </message>
-    <message>
-        <source>25 FPS</source>
-        <translation>25 FPS</translation>
-    </message>
-    <message>
-        <source>30 FPS</source>
-        <translation>30 FPS</translation>
-    </message>
-    <message>
-        <source>50 FPS</source>
-        <translation>50 FPS</translation>
-    </message>
-    <message>
-        <source>60 FPS</source>
-        <translation>60 FPS</translation>
-    </message>
-    <message>
-        <source>Blue/Red</source>
-        <translation>蓝/红</translation>
-    </message>
-    <message>
-        <source>Stereoscopy creates an illusion of depth when you wear 3D glasses.</source>
-        <translation>当你戴着3D眼镜时，立体视觉创造深度的错觉。</translation>
-    </message>
-    <message>
-        <source>Red/Cyan grayscale</source>
-        <translation>红/青 灰度</translation>
-    </message>
-    <message>
-        <source>Community</source>
-        <translation>社区</translation>
-    </message>
-    <message>
-        <source>Cyan/Red grayscale</source>
-        <translation>青/红 灰度</translation>
-    </message>
-    <message>
-        <source>Blue/Red grayscale</source>
-        <translation>蓝/红 灰度</translation>
-    </message>
-    <message>
-        <source>Red/Green</source>
-        <translation>红/绿</translation>
-    </message>
-    <message>
-        <source>Computer (Level %1)</source>
-        <translation>计算机 (等级 %1)</translation>
-    </message>
-    <message>
-        <source>Red/Blue</source>
-        <translation>红/蓝</translation>
-    </message>
-    <message>
-        <source>Red/Cyan</source>
-        <translation>红/青</translation>
-    </message>
-    <message>
-        <source>Green/Red</source>
-        <translation>绿/红</translation>
-    </message>
-    <message>
-        <source>Red/Green grayscale</source>
-        <translation>红/绿 灰度</translation>
-    </message>
-    <message>
-        <source>Side-by-side</source>
-        <translation>并排</translation>
-    </message>
-    <message>
-        <source>Green/Red grayscale</source>
-        <translation>绿/红 灰度</translation>
-    </message>
-    <message>
-        <source>Red/Blue grayscale</source>
-        <translation>红/蓝 灰度</translation>
-    </message>
-    <message>
-        <source>Cyan/Red</source>
-        <translation>青/红</translation>
-    </message>
-</context>
-<context>
-    <name>HWNewNet</name>
-    <message>
-        <source>%1 *** %2 has joined the room</source>
-        <translation>%1 *** %2 已加入房间</translation>
-    </message>
-    <message>
-        <source>You got kicked</source>
-        <translation>你被踢了</translation>
-    </message>
-    <message>
-        <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>未找到主机，请检查主机和端口设置。</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has left</source>
-        <translation>%1 *** %2 已离开</translation>
-    </message>
-    <message>
-        <source>The connection was refused by the host or timed out. This might have one of the following reasons:
-- The Hedgewars Server program does currently not run on the host
-- The specified port number is incorrect
-- There is a temporary network problem
-
-Please check the host name and port settings and/or try again later.</source>
-        <translation>连接被主机拒绝或超时，理由可能如下：
-- 刺猬战争服务器程序当前没有运行在主机上
-- 指定的端口号不正确
-- 临时网络问题
-
-请检查主机名和端口设置，并/或稍后再试。</translation>
-    </message>
-    <message>
-        <source>The server is too old. Disconnecting now.</source>
-        <translation>服务器太旧了，现在断开连接。</translation>
-    </message>
-    <message>
-        <source>Remote host has closed connection</source>
-        <translation>远程主机已关闭连接</translation>
-    </message>
-    <message>
-        <source>Reason:</source>
-        <translation>理由:</translation>
-    </message>
-    <message>
-        <source>Server authentication error</source>
-        <translation>服务器验证出错</translation>
-    </message>
-    <message>
-        <source>Room destroyed</source>
-        <translation>房间已销毁</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has left (%3)</source>
-        <translation>%1 *** %2 已离开 (%3)</translation>
-    </message>
-    <message>
-        <source>The connection was refused by the official server or timed out. Something seems to be wrong with the official server at the moment. This might be a temporary problem. Please try again later.</source>
-        <translation>连接被官方服务器拒绝或超时，目前官方服务器似乎出了问题，这可能是临时问题，请稍后再试。</translation>
-    </message>
-</context>
-<context>
-    <name>HWPasswordDialog</name>
-    <message>
-        <source>Login</source>
-        <translation>登录</translation>
-    </message>
-    <message>
-        <source>New Account</source>
-        <translation>新账号</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation>昵称:</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation>密码:</translation>
-    </message>
-    <message>
-        <source>To connect to the server, please log in.
-
-If you don&apos;t have an account on www.hedgewars.org,
-just enter your nickname.</source>
-        <translation>要连接到服务器，请登录。
-
-如果你还没有www.hedgewars.org的账号，
-只需输入你的昵称。</translation>
-    </message>
-</context>
-<context>
-    <name>FreqSpinBox</name>
-    <message>
-        <source>Never</source>
-        <translation>从不</translation>
-    </message>
-    <message>
-        <source>Every %1 turn</source>
-        <translation>每 %1 回合</translation>
-    </message>
-</context>
-<context>
-    <name>PageMultiplayer</name>
     <message>
         <source>Start</source>
         <translation>开始</translation>
     </message>
     <message>
-        <source>Start fighting (requires at least 2 teams)</source>
-        <translation>开始战斗（需要至少两个队伍）</translation>
+        <source>Open videos directory</source>
+        <translation>打开视频目录</translation>
     </message>
     <message>
-        <source>Edit game preferences</source>
-        <translation>编辑游戏首选项</translation>
-    </message>
-</context>
-<context>
-    <name>PageNetGame</name>
-    <message>
-        <source>Start</source>
-        <translation>开始</translation>
+        <source>Invite your friends to your server in just 1 click!</source>
+        <translation>一键邀请你的朋友到你的服务器！</translation>
     </message>
     <message>
-        <source>Turn on the lightbulb to show the other players when you&apos;re ready to fight</source>
-        <translation>点亮灯泡让其他玩家知道你准备好战斗</translation>
+        <source>Start server</source>
+        <translation>启动服务器</translation>
+    </message>
+    <message>
+        <source>Set default options</source>
+        <translation>设置默认选项</translation>
+    </message>
+    <message>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
+        <translation>点击以复制你的唯一服务器网址到剪贴板，发送这个链接给你的朋友，他们就能加入你。</translation>
+    </message>
+    <message>
+        <source>Start private server</source>
+        <translation>启动私人服务器</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>重命名</translation>
     </message>
     <message>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <source>Room name</source>
+        <source>Restore default coding parameters</source>
+        <translation>还原默认编码参数</translation>
+    </message>
+    <message>
+        <source>More info</source>
+        <translation>更多信息</translation>
+    </message>
+    <message>
+        <source>Play demo</source>
+        <translation>播放 demo</translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation>关联文件扩展名</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>连接</translation>
+    </message>
+    <message>
+        <source>default</source>
+        <translation>默认</translation>
+    </message>
+    <message>
+        <source>Specify address</source>
+        <translation>指定地址</translation>
+    </message>
+    <message>
+        <source>Play this video</source>
+        <translation>播放这个视频</translation>
+    </message>
+    <message>
+        <source>Set the default server port for Hedgewars</source>
+        <translation>为刺猬战争设置默认服务器端口</translation>
+    </message>
+    <message>
+        <source>Delete this video</source>
+        <translation>删除这个视频</translation>
+    </message>
+    <message>
+        <source>Open the video directory in your system</source>
+        <translation>在你的系统打开视频目录</translation>
+    </message>
+</context>
+<context>
+    <name>QSpinBox</name>
+    <message>
+        <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
+        <translation>将录制视频的比特率指定为每秒 1024 位的倍数</translation>
+    </message>
+</context>
+<context>
+    <name>RoomNamePrompt</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Create room</source>
+        <translation>创建房间</translation>
+    </message>
+    <message>
+        <source>Enter a name for your room.</source>
+        <translation>命名房间。</translation>
+    </message>
+    <message>
+        <source>set password</source>
+        <translation>设置密码</translation>
+    </message>
+</context>
+<context>
+    <name>RoomsListModel</name>
+    <message>
+        <source>C</source>
+        <extracomment>Caption of the column for the number of connected clients in the list of rooms</extracomment>
+        <translation>人数</translation>
+    </message>
+    <message>
+        <source>T</source>
+        <extracomment>Caption of the column for the number of teams in the list of rooms</extracomment>
+        <translation>队伍</translation>
+    </message>
+    <message>
+        <source>Map</source>
+        <translation>地图</translation>
+    </message>
+    <message>
+        <source>Forts</source>
+        <translation>堡垒</translation>
+    </message>
+    <message>
+        <source>Owner</source>
+        <translation>房主</translation>
+    </message>
+    <message>
+        <source>Rules</source>
+        <translation>规则</translation>
+    </message>
+    <message>
+        <source>Script</source>
+        <translation>脚本</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation>随机迷宫</translation>
+    </message>
+    <message>
+        <source>Room Name</source>
         <translation>房间名</translation>
     </message>
     <message>
-        <source>Start fighting (requires at least 2 teams)</source>
-        <translation>开始战斗（需要至少两个队伍）</translation>
+        <source>Hand-drawn</source>
+        <translation>手绘</translation>
     </message>
     <message>
-        <source>Update the room name</source>
-        <translation>更新房间名</translation>
+        <source>In progress</source>
+        <translation>进行中</translation>
     </message>
     <message>
-        <source>Edit game preferences</source>
-        <translation>编辑游戏首选项</translation>
+        <source>Random Map</source>
+        <translation>随机地图</translation>
     </message>
     <message>
-        <source>Room controls</source>
-        <translation>房间控制</translation>
-    </message>
-</context>
-<context>
-    <name>PageMain</name>
-    <message>
-        <source>Exit game</source>
-        <translation>退出游戏</translation>
+        <source>Weapons</source>
+        <translation>武器</translation>
     </message>
     <message>
-        <source>Play official network game</source>
-        <translation>玩官方网络游戏</translation>
+        <source>Random Perlin</source>
+        <translation>随机 Perlin</translation>
     </message>
     <message>
-        <source>Play a game on a single computer</source>
-        <translation>单机</translation>
-    </message>
-    <message>
-        <source>Play a game across a local area network</source>
-        <translation>局域网</translation>
-    </message>
-    <message>
-        <source>Downloadable Content</source>
-        <translation>可下载内容</translation>
-    </message>
-    <message>
-        <source>Access the user created content downloadable from our website</source>
-        <translation>从我们的网站下载用户创建的内容</translation>
-    </message>
-    <message>
-        <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
-        <translation>在这里留下反馈，报告问题，建议功能，或告诉我们你多喜欢刺猬战争</translation>
-    </message>
-    <message>
-        <source>Play local network game</source>
-        <translation>玩本地网络游戏</translation>
-    </message>
-    <message>
-        <source>Play a game across a network</source>
-        <translation>互联网</translation>
-    </message>
-    <message>
-        <source>Open the Hedgewars online game manual in your web browser</source>
-        <translation>在你的浏览器打开刺猬战争游戏的在线手册</translation>
-    </message>
-    <message>
-        <source>Edit game preferences</source>
-        <translation>编辑游戏首选项</translation>
-    </message>
-    <message>
-        <source>Feedback</source>
-        <translation>反馈</translation>
-    </message>
-    <message>
-        <source>Read about who is behind the Hedgewars Project</source>
-        <translation>了解刺猬战争项目后面有谁</translation>
-    </message>
-    <message>
-        <source>Play a game on an official server</source>
-        <translation>官方服务器</translation>
-    </message>
-    <message>
-        <source>Manage videos recorded from game</source>
-        <translation>管理游戏录制视频</translation>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>PageConnecting</name>
+    <name>SeedPrompt</name>
     <message>
-        <source>Connecting...</source>
-        <translation>连接中...</translation>
+        <source>Seed</source>
+        <extracomment>Refers to the &quot;random seed&quot;; the source of randomness in the game</extracomment>
+        <translation>种子</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>The map seed is the basis for all random values generated by the game.</source>
+        <translation>地图种子是游戏生成的所有随机数值的偏移。</translation>
+    </message>
+    <message>
+        <source>Set seed</source>
+        <translation>设置种子</translation>
+    </message>
+</context>
+<context>
+    <name>SelWeaponWidget</name>
+    <message>
+        <source>New</source>
+        <translation>新建</translation>
+    </message>
+    <message>
+        <source>Delays</source>
+        <translation>推迟</translation>
+    </message>
+    <message>
+        <source>Weapon set</source>
+        <translation>武器集</translation>
+    </message>
+    <message>
+        <source>Ammo in boxes</source>
+        <translation>箱中弹药</translation>
+    </message>
+    <message>
+        <source>Probabilities</source>
+        <translation>概率</translation>
+    </message>
+    <message>
+        <source>Copy of %1</source>
+        <translation>%1 的复制</translation>
+    </message>
+    <message>
+        <source>New (%1)</source>
+        <translation>新建 (%1)</translation>
+    </message>
+    <message>
+        <source>Copy of %1 (%2)</source>
+        <translation>%1 的复制 (%2)</translation>
+    </message>
+</context>
+<context>
+    <name>TCPBase</name>
+    <message>
+        <source>Unable to start server at %1.</source>
+        <translation>无法启动服务器在 %1.</translation>
+    </message>
+    <message>
+        <source>Unable to run engine at %1
+Error code: %2</source>
+        <translation>无法运行引擎在 %1
+Error code: %2</translation>
+    </message>
+    <message>
+        <source>The game engine died unexpectedly!
+(exit code %1)
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
+        <translation>游戏引擎意外死亡！
+(exit code %1)
+
+很抱歉造成不便 _(:з」∠)_
+
+如果继续发生，请点击主菜单的 ‘%2’ 按钮！</translation>
+    </message>
+</context>
+<context>
+    <name>TeamSelWidget</name>
+    <message>
+        <source>At least two teams are required to play!</source>
+        <translation>需要至少两个队伍才能玩！</translation>
+    </message>
+</context>
+<context>
+    <name>ThemePrompt</name>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Search for a theme:</source>
+        <translation>搜索主题：</translation>
+    </message>
+    <message>
+        <source>Use selected theme</source>
+        <translation>使用选择的主题</translation>
+    </message>
+    <message>
+        <source>Choose a theme</source>
+        <translation>选择主题</translation>
+    </message>
+</context>
+<context>
+    <name>binds</name>
+    <message>
+        <source>up</source>
+        <translation>上</translation>
+    </message>
+    <message>
+        <source>put</source>
+        <translation>放</translation>
+    </message>
+    <message>
+        <source>chat</source>
+        <translation>聊天</translation>
+    </message>
+    <message>
+        <source>down</source>
+        <translation>下</translation>
+    </message>
+    <message>
+        <source>left</source>
+        <translation>左</translation>
+    </message>
+    <message>
+        <source>quit</source>
+        <translation>退出</translation>
+    </message>
+    <message>
+        <source>right</source>
+        <translation>右</translation>
+    </message>
+    <message>
+        <source>precise aim</source>
+        <translation>精确瞄准</translation>
+    </message>
+    <message>
+        <source>zoom in</source>
+        <translation>放大</translation>
+    </message>
+    <message>
+        <source>change timer</source>
+        <translation>改变定时器</translation>
+    </message>
+    <message>
+        <source>save map as image</source>
+        <translation>保存地图为图片</translation>
+    </message>
+    <message>
+        <source>set zoom to 100%</source>
+        <translation>缩放 100%</translation>
+    </message>
+    <message>
+        <source>volume down</source>
+        <translation>音量减</translation>
+    </message>
+    <message>
+        <source>volume up</source>
+        <translation>音量加</translation>
+    </message>
+    <message>
+        <source>ammo menu</source>
+        <translation>弹药菜单</translation>
+    </message>
+    <message>
+        <source>change direction without moving</source>
+        <translation>不移动改变方向</translation>
+    </message>
+    <message>
+        <source>timer 1 sec</source>
+        <translation>定时 1 秒</translation>
+    </message>
+    <message>
+        <source>timer 5 sec</source>
+        <translation>定时 5 秒</translation>
+    </message>
+    <message>
+        <source>timer 4 sec</source>
+        <translation>定时 4 秒</translation>
+    </message>
+    <message>
+        <source>timer 3 sec</source>
+        <translation>定时 3 秒</translation>
+    </message>
+    <message>
+        <source>timer 2 sec</source>
+        <translation>定时 2 秒</translation>
+    </message>
+    <message>
+        <source>long jump</source>
+        <translation>远跳</translation>
+    </message>
+    <message>
+        <source>switch backwards</source>
+        <translation>向后切换</translation>
+    </message>
+    <message>
+        <source>zoom out</source>
+        <translation>缩小</translation>
+    </message>
+    <message>
+        <source>attack</source>
+        <translation>攻击</translation>
+    </message>
+    <message>
+        <source>mute audio</source>
+        <translation>静音</translation>
+    </message>
+    <message>
+        <source>record</source>
+        <translation>录制</translation>
+    </message>
+    <message>
+        <source>slot 1</source>
+        <translation>槽位 1</translation>
+    </message>
+    <message>
+        <source>slot 2</source>
+        <translation>槽位 2</translation>
+    </message>
+    <message>
+        <source>slot 3</source>
+        <translation>槽位 3</translation>
+    </message>
+    <message>
+        <source>slot 4</source>
+        <translation>槽位 4</translation>
+    </message>
+    <message>
+        <source>slot 5</source>
+        <translation>槽位 5</translation>
+    </message>
+    <message>
+        <source>slot 6</source>
+        <translation>槽位 6</translation>
+    </message>
+    <message>
+        <source>slot 7</source>
+        <translation>槽位 7</translation>
+    </message>
+    <message>
+        <source>slot 8</source>
+        <translation>槽位 8</translation>
+    </message>
+    <message>
+        <source>slot 9</source>
+        <translation>槽位 9</translation>
+    </message>
+    <message>
+        <source>switch</source>
+        <translation>切换</translation>
+    </message>
+    <message>
+        <source>clan chat</source>
+        <translation>战队聊天</translation>
+    </message>
+    <message>
+        <source>stand still on slippery land</source>
+        <translation>在光滑地面上站稳</translation>
+    </message>
+    <message>
+        <source>change bounciness</source>
+        <translation>改变弹力</translation>
+    </message>
+    <message>
+        <source>chat history</source>
+        <translation>聊天历史记录</translation>
+    </message>
+    <message>
+        <source>toggle team bars</source>
+        <extracomment>This refers to the team info bars (name/flag/health) of all teams. These are shown at the bottom center of the screen</extracomment>
+        <translation>切换队伍栏</translation>
+    </message>
+    <message>
+        <source>slot 10</source>
+        <translation>槽位 10</translation>
+    </message>
+    <message>
+        <source>show object information</source>
+        <translation>显示对象信息</translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tag translucency</source>
+        <translation>切换刺猬标签透明度</translation>
+    </message>
+    <message>
+        <source>change hedgehog tag types</source>
+        <translation>改变刺猬标签类型</translation>
+    </message>
+    <message>
+        <source>screenshot</source>
+        <translation>截图</translation>
+    </message>
+    <message>
+        <source>speed up replay</source>
+        <translation>加速重播</translation>
+    </message>
+    <message>
+        <source>backwards jump</source>
+        <translation>后跳</translation>
+    </message>
+    <message>
+        <source>change mode</source>
+        <translation>改变模式</translation>
+    </message>
+    <message>
+        <source>high jump</source>
+        <translation>高跳</translation>
+    </message>
+    <message>
+        <source>unselect weapon</source>
+        <translation>取消选择武器</translation>
+    </message>
+    <message>
+        <source>toggle HUD</source>
+        <translation>切换 HUD</translation>
+    </message>
+    <message>
+        <source>autocam / find hedgehog</source>
+        <translation>自动镜头/ 查找 刺猬</translation>
+    </message>
+    <message>
+        <source>pause / auto skip</source>
+        <translation>暂停/自动跳过</translation>
+    </message>
+    <message>
+        <source>reset zoom to start value</source>
+        <translation>重置缩放到初始值</translation>
+    </message>
+    <message>
+        <source>show mission information</source>
+        <translation>显示任务信息</translation>
+    </message>
+    <message>
+        <source>toggle hedgehog tags</source>
+        <translation>切换刺猬标签</translation>
+    </message>
+    <message>
+        <source>confirmation</source>
+        <translation>确认</translation>
+    </message>
+</context>
+<context>
+    <name>binds (categories)</name>
+    <message>
+        <source>Camera</source>
+        <translation>镜头</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation>杂项</translation>
+    </message>
+    <message>
+        <source>Movement</source>
+        <translation>移动</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation>武器</translation>
+    </message>
+</context>
+<context>
+    <name>binds (combination)</name>
+    <message>
+        <source>precise + toggle hedgehog tags</source>
+        <translation>精确 + 切换刺猬标签</translation>
+    </message>
+    <message>
+        <source>precise + switch + toggle team bars</source>
+        <translation>精确 + 切换 + 切换队伍栏</translation>
+    </message>
+    <message>
+        <source>hold down precise</source>
+        <translation>长按精确</translation>
+    </message>
+    <message>
+        <source>precise + screenshot</source>
+        <translation>精确 + 截图</translation>
+    </message>
+    <message>
+        <source>precise + reset zoom</source>
+        <translation>精确 + 重置缩放</translation>
+    </message>
+    <message>
+        <source>precise + timer</source>
+        <translation>精确 + 定时器</translation>
+    </message>
+    <message>
+        <source>switch + toggle hedgehog tags</source>
+        <translation>切换 + 切换刺猬标签</translation>
+    </message>
+    <message>
+        <source>high jump (twice)</source>
+        <translation>高跳（两次）</translation>
+    </message>
+    <message>
+        <source>precise + left/right</source>
+        <translation>精确 + 左/右</translation>
+    </message>
+    <message>
+        <source>precise + switch</source>
+        <translation>精确 + 切换</translation>
     </message>
 </context>
 <context>
@@ -4128,747 +3802,859 @@ just enter your nickname.</source>
     </message>
 </context>
 <context>
-    <name>binds (combination)</name>
+    <name>binds (keys)</name>
     <message>
-        <source>precise + toggle hedgehog tags</source>
-        <translation>精确 + 切换刺猬标签</translation>
+        <source>Up</source>
+        <translation>上</translation>
     </message>
     <message>
-        <source>precise + switch + toggle team bars</source>
-        <translation>精确 + 切换 + 切换队伍栏</translation>
+        <source>End</source>
+        <translation>End</translation>
     </message>
     <message>
-        <source>hold down precise</source>
-        <translation>长按精确</translation>
+        <source>Tab</source>
+        <translation>Tab</translation>
     </message>
     <message>
-        <source>precise + screenshot</source>
-        <translation>精确 + 截图</translation>
+        <source>Down</source>
+        <translation>下</translation>
     </message>
     <message>
-        <source>precise + reset zoom</source>
-        <translation>精确 + 重置缩放</translation>
+        <source>Home</source>
+        <translation>Home</translation>
     </message>
     <message>
-        <source>precise + timer</source>
-        <translation>精确 + 定时器</translation>
+        <source>Left</source>
+        <translation>左</translation>
     </message>
     <message>
-        <source>switch + toggle hedgehog tags</source>
-        <translation>切换 + 切换刺猬标签</translation>
+        <source>Menu</source>
+        <translation></translation>
     </message>
     <message>
-        <source>high jump (twice)</source>
-        <translation>高跳（两次）</translation>
+        <source>D-pad</source>
+        <translation>D-pad</translation>
     </message>
     <message>
-        <source>precise + left/right</source>
-        <translation>精确 + 左/右</translation>
+        <source>Clear</source>
+        <translation>Clear</translation>
     </message>
     <message>
-        <source>precise + switch</source>
-        <translation>精确 + 切换</translation>
+        <source>Pause</source>
+        <translation>Pause</translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>右</translation>
+    </message>
+    <message>
+        <source>Space</source>
+        <translation>空格</translation>
+    </message>
+    <message>
+        <source>Right stick (Down)</source>
+        <translation>Right stick (Down)</translation>
+    </message>
+    <message>
+        <source>Right stick (Left)</source>
+        <translation>Right stick (Left)</translation>
+    </message>
+    <message>
+        <source>Mouse: X1 button </source>
+        <translation>鼠标: 后退</translation>
+    </message>
+    <message>
+        <source>Left stick (Right)</source>
+        <translation>Left stick (Right)</translation>
+    </message>
+    <message>
+        <source>Mouse: Wheel up</source>
+        <translation>鼠标: 滚轮上</translation>
+    </message>
+    <message>
+        <source>Start button</source>
+        <translation>Start button</translation>
+    </message>
+    <message>
+        <source>Keypad Enter</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right trigger</source>
+        <translation>Right trigger</translation>
+    </message>
+    <message>
+        <source>Mouse: Wheel down</source>
+        <translation>鼠标: 滚轮下</translation>
+    </message>
+    <message>
+        <source>Mouse: Middle button</source>
+        <translation>鼠标: 中键</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Delete</translation>
+    </message>
+    <message>
+        <source>Left stick (Up)</source>
+        <translation>Left stick (Up)</translation>
+    </message>
+    <message>
+        <source>Escape</source>
+        <translation>Escape</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Insert</translation>
+    </message>
+    <message>
+        <source>Axis %1 %2</source>
+        <extracomment>Game controller axis direction. %1 = axis number, %2 = direction</extracomment>
+        <translation>Axis %1 %2</translation>
+    </message>
+    <message>
+        <source>Left stick (Down)</source>
+        <translation>Left stick (Down)</translation>
+    </message>
+    <message>
+        <source>Left stick (Left)</source>
+        <translation>Left stick (Left)</translation>
+    </message>
+    <message>
+        <source>PageUp</source>
+        <translation>Page Up</translation>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation>回车键</translation>
+    </message>
+    <message>
+        <source>Numlock</source>
+        <translation>Numlock</translation>
+    </message>
+    <message>
+        <source>Right Shift</source>
+        <translation>右 Shift</translation>
+    </message>
+    <message>
+        <source>Right stick</source>
+        <translation>Right stick</translation>
+    </message>
+    <message>
+        <source>ScrollLock</source>
+        <translation>Scroll Lock</translation>
+    </message>
+    <message>
+        <source>Left Shift</source>
+        <translation>左 Shift</translation>
+    </message>
+    <message>
+        <source>D-pad %1 %2</source>
+        <extracomment>Game controller D-pad button. %1 = D-pad number, %2 = direction</extracomment>
+        <translation>D-pad %1 %2</translation>
+    </message>
+    <message>
+        <source>Left stick</source>
+        <translation>Left stick</translation>
+    </message>
+    <message>
+        <source>B button</source>
+        <translation>B button</translation>
+    </message>
+    <message>
+        <source>A button</source>
+        <translation>A button</translation>
+    </message>
+    <message>
+        <source>Y button</source>
+        <translation>Y button</translation>
+    </message>
+    <message>
+        <source>X button</source>
+        <translation>X button</translation>
+    </message>
+    <message>
+        <source>LB button</source>
+        <translation>LB button</translation>
+    </message>
+    <message>
+        <source>RB button</source>
+        <translation>RB button</translation>
+    </message>
+    <message>
+        <source>Right stick (Up)</source>
+        <translation>Right stick (Up)</translation>
+    </message>
+    <message>
+        <source>(QWERTY)</source>
+        <extracomment>Name of QWERTY US keyboard layout</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Back button</source>
+        <translation>Back button</translation>
+    </message>
+    <message>
+        <source>Mouse: Right button</source>
+        <translation>鼠标: 右键</translation>
+    </message>
+    <message>
+        <source>PageDown</source>
+        <translation>Page Down</translation>
+    </message>
+    <message>
+        <source>CapsLock</source>
+        <translation>Caps Lock</translation>
+    </message>
+    <message>
+        <source>Backspace</source>
+        <translation>Backspace</translation>
+    </message>
+    <message>
+        <source>Button %1</source>
+        <extracomment>Game controller button. %1 = button number</extracomment>
+        <translation>Button %1</translation>
+    </message>
+    <message>
+        <source>Left Alt</source>
+        <translation>左 Alt</translation>
+    </message>
+    <message>
+        <source>Left GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (left)</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keyboard</source>
+        <translation>键盘</translation>
+    </message>
+    <message>
+        <source>Keypad 0</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 4</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 5</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 6</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 8</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad 9</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad *</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad +</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad -</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad .</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keypad /</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left Ctrl</source>
+        <translation>左 Ctrl</translation>
+    </message>
+    <message>
+        <source>Right GUI</source>
+        <extracomment>Windows key / Command key / Meta key /Super key (right)</extracomment>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right Alt</source>
+        <translation>右 Alt</translation>
+    </message>
+    <message>
+        <source>(Don&apos;t use)</source>
+        <extracomment>Special entry in key selection when an action has no control assigned</extracomment>
+        <translation>(不使用)</translation>
+    </message>
+    <message>
+        <source>Left trigger</source>
+        <translation>Left trigger</translation>
+    </message>
+    <message>
+        <source>Mouse: X2 button</source>
+        <translation>鼠标: 前进</translation>
+    </message>
+    <message>
+        <source>Right Ctrl</source>
+        <translation>右 Ctrl</translation>
+    </message>
+    <message>
+        <source>Mouse: Left button</source>
+        <translation>鼠标: 左键</translation>
+    </message>
+    <message>
+        <source>Right stick (Right)</source>
+        <translation>Right stick (Right)</translation>
     </message>
 </context>
 <context>
-    <name>PageNet</name>
+    <name>credits</name>
     <message>
-        <source>Connect to the selected server</source>
-        <translation>连接到选择的服务器</translation>
+        <source>Maps</source>
+        <translation type="vanished">地图</translation>
     </message>
     <message>
-        <source>Start private server</source>
-        <translation>启动私人服务器</translation>
+        <source>Forts</source>
+        <translation type="vanished">堡垒</translation>
     </message>
     <message>
-        <source>Specify the address and port number of a known server and connect to it directly</source>
-        <translation>指定已知服务器的地址和端口并直连</translation>
+        <source>Music</source>
+        <translation type="vanished">音乐</translation>
     </message>
     <message>
-        <source>Update the list of servers</source>
-        <translation>更新服务器列表</translation>
+        <source>Ports</source>
+        <translation type="vanished">移植</translation>
     </message>
-</context>
-<context>
-    <name>PageGameStats</name>
     <message>
-        <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation>这一局共杀死了&lt;b&gt;%1&lt;/b&gt;个刺猬。</translation>
+        <source>Special thanks</source>
+        <translation type="vanished">特别感谢</translation>
     </message>
     <message>
-        <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation>最优秀的杀手是 &lt;b&gt;%1&lt;/b&gt;，一个回合 &lt;b&gt;%2&lt;/b&gt; 杀。</translation>
+        <source>Frontend / main menu</source>
+        <translation type="vanished">前端/主菜单</translation>
     </message>
     <message>
-        <source>(%1 crate(s))</source>
-        <translation>(%1 箱子)</translation>
+        <source>Map generation</source>
+        <translation type="vanished">地图生成</translation>
     </message>
     <message>
-        <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; 以 &lt;b&gt;%2&lt;/b&gt; 分获得最佳射击奖。</translation>
+        <source>Sounds</source>
+        <translation type="vanished">声音</translation>
     </message>
     <message>
-        <source>(%1 kill)</source>
-        <translation>(%1 杀)</translation>
+        <source>Themes</source>
+        <translation type="vanished">主题</translation>
     </message>
     <message>
-        <source>(%1 point(s))</source>
-        <translation>(%1 分)</translation>
+        <source>Missions and styles</source>
+        <translation type="vanished">任务和风格</translation>
     </message>
     <message>
-        <source>Save demo (unavailable because the /lua command was used)</source>
-        <translation>保存 demo (不可用，因为使用了/lua命令)</translation>
+        <source>Game engine</source>
+        <translation type="vanished">游戏引擎</translation>
     </message>
     <message>
-        <source>Ranking</source>
-        <translation>排名</translation>
+        <source>Translations</source>
+        <translation type="vanished">翻译</translation>
     </message>
     <message>
-        <source>(%1 %2)</source>
-        <translation>(%1 %2)</translation>
+        <source>Game server</source>
+        <translation type="vanished">游戏服务器</translation>
     </message>
     <message>
-        <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation>有着相同战队颜色的各位，没有理由去战斗了，刺猬们从此过上幸福的生活。</translation>
+        <source>Programming</source>
+        <translation type="vanished">编程</translation>
     </message>
     <message>
-        <source>Details</source>
-        <translation>细节</translation>
+        <source>Graphics</source>
+        <translation type="vanished">图形</translation>
     </message>
     <message>
-        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; 误伤队友获得 &lt;b&gt;%2&lt;/b&gt; 分。</translation>
+        <source>Chinese</source>
+        <translation type="vanished">中文</translation>
     </message>
     <message>
-        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; 杀死 &lt;b&gt;%2&lt;/b&gt; 个队友。</translation>
-    </message>
-    <message>
-        <source>Play again</source>
-        <translation>再玩一次</translation>
-    </message>
-    <message>
-        <source>(%L1 second(s))</source>
-        <translation>(%L1 秒)</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; 很害怕并跳过 &lt;b&gt;%2&lt;/b&gt; 个回合。</translation>
-    </message>
-    <message>
-        <source>Save demo</source>
-        <translation>保存 demo</translation>
-    </message>
-    <message>
-        <source>Health graph</source>
-        <translation>血量图表</translation>
-    </message>
-</context>
-<context>
-    <name>PageInfo</name>
-    <message>
-        <source>Open the snapshot folder</source>
-        <translation>打开截图文件夹</translation>
-    </message>
-</context>
-<context>
-    <name>HWForm</name>
-    <message>
-        <source>Demo name:</source>
-        <translation>Demo 名字:</translation>
-    </message>
-    <message>
-        <source>
-
-Your password wasn&apos;t saved either.</source>
-        <translation>
-
-你的密码也没有保存。</translation>
-    </message>
-    <message>
-        <source>Room password</source>
-        <translation>房间密码</translation>
-    </message>
-    <message>
-        <source>Hedgewars - Wrong password</source>
-        <translation>刺猬战争 - 密码错误</translation>
-    </message>
-    <message>
-        <source>Game aborted</source>
-        <translation>游戏中止</translation>
-    </message>
-    <message>
-        <source>Demo name</source>
-        <translation>Demo 名字</translation>
-    </message>
-    <message>
-        <source>Someone already uses your nickname %1 on the server.
-Please pick another nickname:</source>
-        <translation>已经有人在服务器上使用你的昵称 %1 。
-请另选一个昵称:</translation>
-    </message>
-    <message>
-        <source>Team 1</source>
-        <translation>队伍 1</translation>
-    </message>
-    <message>
-        <source>The room is protected with password.
-Please, enter the password:</source>
-        <translation>房间受密码保护。
-请输入密码:</translation>
-    </message>
-    <message>
-        <source>Cannot save record to file %1</source>
-        <translation>不能保存录制到文件 %1</translation>
-    </message>
-    <message>
-        <source>No nickname supplied.</source>
-        <translation>没提供昵称。</translation>
-    </message>
-    <message>
-        <source>Hedgewars Demo File</source>
-        <translation>刺猬战争 Demo 文件</translation>
-    </message>
-    <message>
-        <source>Hedgewars - Nick registered</source>
-        <translation>刺猬战争 - 昵称已注册</translation>
-    </message>
-    <message>
-        <source>Internal error: Reply object is invalid.</source>
-        <translation>内部错误 - 回复对象无效。</translation>
-    </message>
-    <message>
-        <source>You reconnected too fast.
-Please wait a few seconds and try again.</source>
-        <translation>你重连太快了。
-请等一下再试。</translation>
-    </message>
-    <message>
-        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation>这个功能需要网络连接，但你似乎不在线 (error code: %1).</translation>
-    </message>
-    <message>
-        <source>Hedgewars - Empty nickname</source>
-        <translation>刺猬战争 - 空昵称</translation>
-    </message>
-    <message>
-        <source>Your nickname is not registered.
-To be able to rejoin games in progress and
-prevent someone else from using your nickname,
-please register it at www.hedgewars.org.</source>
-        <translation>你的昵称没注册。
-为防止其他人使用它，
-请在 www.hedgewars.org 注册。</translation>
-    </message>
-    <message>
-        <source>Hedgewars Save File</source>
-        <translation>刺猬战争保存文件</translation>
-    </message>
-    <message>
-        <source>This nick is registered, and you haven&apos;t specified a password.
-
-If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
-
-Password:</source>
-        <translation>这个昵称已注册，而且你没有设置密码。
-
-如果这个昵称不是你的，请在 www.hedgewars.org 注册自己的昵称
-
-密码：</translation>
-    </message>
-    <message>
-        <source>Team %1</source>
-        <translation>队伍 %1</translation>
-    </message>
-    <message>
-        <source>You entered a wrong password.</source>
-        <translation>你输入了错误的密码。</translation>
-    </message>
-    <message>
-        <source>Try Again</source>
-        <translation>再试一次</translation>
-    </message>
-    <message>
-        <source>Hedgewars - Connection error</source>
-        <translation>刺猬战争 - 连接出错</translation>
-    </message>
-    <message>
-        <source>Unknown network error (possibly missing SSL library).</source>
-        <translation>未知网络错误（可能缺少SSL库）。</translation>
-    </message>
-    <message>
-        <source>Computer %1</source>
-        <translation>计算机 %1</translation>
-    </message>
-    <message>
-        <source>%1&apos;s Team</source>
-        <translation>%1 的队伍</translation>
-    </message>
-    <message>
-        <source>Nickname</source>
-        <translation>昵称</translation>
-    </message>
-</context>
-<context>
-    <name>HWRecorder</name>
-    <message>
-        <source>A fatal ERROR occured while processing the video recording! The video could not be saved.
-
-As a workaround, you could try to reset the Hedgewars video recorder settings to the defaults.
-
-To report this error, please click the &apos;Feedback&apos; button in the main menu!
-
-Last engine message:
-%1</source>
-        <translation>在录制视频时发生了一个致命错误！视频不能保存。
-
-一个解决方案是尝试把视频录制器的设置重设为默认。
-
-要报告这个错误，请点击主菜单的“反馈”按钮。
-
-最后的引擎消息：
-%1</translation>
-    </message>
-</context>
-<context>
-    <name>PageDataDownload</name>
-    <message>
-        <source>Open packages directory</source>
-        <translation>打开下载内容目录</translation>
-    </message>
-    <message>
-        <source>Load the start page</source>
-        <translation>加载开始页面</translation>
-    </message>
-    <message>
-        <source>Internal error: Reply object is invalid.</source>
-        <translation>内部错误：回复对象无效。</translation>
-    </message>
-    <message>
-        <source>Loading, please wait.</source>
-        <translation>加载中，请等待。</translation>
-    </message>
-    <message>
-        <source>This feature requires an Internet connection, but you don&apos;t appear to be online (error code: %1).</source>
-        <translation>这个功能需要网络连接，但你似乎不在线 (error code: %1).</translation>
-    </message>
-    <message>
-        <source>Unknown network error (possibly missing SSL library).</source>
-        <translation>未知网络错误（可能缺少SSL库）。</translation>
-    </message>
-</context>
-<context>
-    <name>PageSinglePlayer</name>
-    <message>
-        <source>Load a previously saved game</source>
-        <translation>加载之前保存的游戏</translation>
-    </message>
-    <message>
-        <source>Watch recorded demos</source>
-        <translation>观看 demo</translation>
-    </message>
-    <message>
-        <source>Campaign Mode</source>
-        <translation>战役模式</translation>
-    </message>
-    <message>
-        <source>Play a quick game against the computer with random settings</source>
-        <translation>玩快速单机游戏（随机设置）</translation>
-    </message>
-    <message>
-        <source>Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios.</source>
-        <translation>单人任务：在训练中学习，在挑战中实践，或试着完成场景目标。</translation>
-    </message>
-    <message>
-        <source>Play a hotseat game against your friends, or AI teams</source>
-        <translation>在一个座位上对抗你的朋友或AI</translation>
-    </message>
-</context>
-<context>
-    <name>HWChatWidget</name>
-    <message>
-        <source>StyleSheet saved to %1</source>
-        <translation>样式表保存到 %1</translation>
-    </message>
-    <message>
-        <source>Failed to save StyleSheet to %1</source>
-        <translation>无法保存样式表到 %1</translation>
-    </message>
-    <message>
-        <source>%1 has left (%2)</source>
-        <translation>%1 离开了 (%2)</translation>
-    </message>
-    <message>
-        <source>Stylesheet imported from %1</source>
-        <translation>从 %1 导入样式表</translation>
-    </message>
-    <message>
-        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation>如果你想在以后使用当前样式表，输入 %1 。重置输入 %2 ！</translation>
-    </message>
-    <message>
-        <source>%1 has been added to your ignore list</source>
-        <translation>%1 已添加你的忽略列表</translation>
-    </message>
-    <message>
-        <source>%1 has left</source>
-        <translation>%1 离开了</translation>
-    </message>
-    <message>
-        <source>%1 has been removed from your friends list</source>
-        <translation>%1 已从你的朋友列表移除</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t read %1</source>
-        <translation>无法读取 %1</translation>
-    </message>
-    <message>
-        <source>List of players</source>
-        <translation>玩家列表</translation>
-    </message>
-    <message>
-        <source>%1 has been removed from your ignore list</source>
-        <translation>%1 已从你的忽略列表移除</translation>
-    </message>
-    <message>
-        <source>%1 has been added to your friends list</source>
-        <translation>%1 已添加到你的朋友列表</translation>
-    </message>
-    <message>
-        <source>StyleSheet discarded</source>
-        <translation>已放弃样式表</translation>
-    </message>
-    <message>
-        <source>Chat log</source>
-        <translation>聊天记录</translation>
-    </message>
-    <message>
-        <source>%1 has joined</source>
-        <translation>%1 已加入</translation>
-    </message>
-    <message>
-        <source>Enter chat messages here and send them with [Enter]</source>
-        <translation>输入聊天消息并按回车键发送</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>No description available</source>
-        <translation>无可用描述</translation>
-    </message>
-</context>
-<context>
-    <name>LibavInteraction</name>
-    <message>
-        <source>Map: %1</source>
-        <translation>地图: %1</translation>
-    </message>
-    <message>
-        <source>Video: %1x%2, %3 FPS, %4</source>
-        <translation>视频: %1×%2, %3 FPS, %4</translation>
-    </message>
-    <message>
-        <source>Record: %1</source>
-        <translation>录制: %1</translation>
-    </message>
-    <message>
-        <source>Video: %1x%2, %3</source>
-        <translation>视频: %1×%2, %3</translation>
-    </message>
-    <message>
-        <source>Audio: </source>
-        <translation>音频: </translation>
-    </message>
-    <message>
-        <source>Duration: %1min %2s</source>
-        <translation>时长: %1 分 %2 秒</translation>
-    </message>
-    <message>
-        <source>Theme: %1</source>
-        <translation>主题: %1</translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation>未知</translation>
-    </message>
-    <message>
-        <source>Player: %1</source>
-        <translation>玩家: %1</translation>
-    </message>
-</context>
-<context>
-    <name>HatPrompt</name>
-    <message>
-        <source>Choose a hat</source>
-        <translation>选择帽子</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
-        <source>Use selected hat</source>
-        <translation>使用选择的帽子</translation>
-    </message>
-    <message>
-        <source>Search for a hat:</source>
-        <translation>搜索帽子：</translation>
-    </message>
-</context>
-<context>
-    <name>PageNetServer</name>
-    <message>
-        <source>Click here for details</source>
-        <translation>点击这里了解详情</translation>
-    </message>
-    <message>
-        <source>Insert your address here</source>
-        <translation>在这里输入你的地址</translation>
-    </message>
-</context>
-<context>
-    <name>binds (categories)</name>
-    <message>
-        <source>Camera</source>
-        <translation>镜头</translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation>杂项</translation>
-    </message>
-    <message>
-        <source>Movement</source>
-        <translation>移动</translation>
+        <source>Project founder</source>
+        <translation type="vanished">项目发起人</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>武器</translation>
+        <translation type="vanished">武器</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="vanished">一般</translation>
+    </message>
+    <message>
+        <source>Hats, graves, other</source>
+        <translation type="vanished">帽子、墓碑、其他</translation>
     </message>
 </context>
 <context>
-    <name>RoomNamePrompt</name>
+    <name>server</name>
     <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
+        <source>map</source>
+        <translation type="vanished">地图</translation>
     </message>
     <message>
-        <source>Create room</source>
-        <translation>创建房间</translation>
+        <source>kick</source>
+        <translation type="vanished">踢出</translation>
     </message>
     <message>
-        <source>Enter a name for your room.</source>
-        <translation>命名房间。</translation>
+        <source>room</source>
+        <translation type="vanished">房间</translation>
     </message>
     <message>
-        <source>set password</source>
-        <translation>设置密码</translation>
-    </message>
-</context>
-<context>
-    <name>ThemePrompt</name>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
+        <source>Access denied. This room is for registered users only.</source>
+        <translation type="vanished">访问被拒绝。这个房间仅限注册用户。</translation>
     </message>
     <message>
-        <source>Search for a theme:</source>
-        <translation>搜索主题：</translation>
+        <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
+        <translation type="vanished">请确认服务器以“/restart_server yes”重启。</translation>
     </message>
     <message>
-        <source>Use selected theme</source>
-        <translation>使用选择的主题</translation>
+        <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
+        <translation type="vanished">/vote: 请使用 ‘yes’ 或 ‘no’.</translation>
     </message>
     <message>
-        <source>Choose a theme</source>
-        <translation>选择主题</translation>
-    </message>
-</context>
-<context>
-    <name>PagePlayDemo</name>
-    <message>
-        <source>Load the selected game</source>
-        <translation>加载选择的游戏</translation>
+        <source>heads</source>
+        <translation type="vanished">正</translation>
     </message>
     <message>
-        <source>Play demo</source>
-        <translation>播放 demo</translation>
+        <source>lobby</source>
+        <translation type="vanished">大厅</translation>
     </message>
     <message>
-        <source>Play the selected demo</source>
-        <translation>播放选择的 demo</translation>
+        <source>pause</source>
+        <translation type="vanished">暂停</translation>
     </message>
     <message>
-        <source>Rename dialog</source>
-        <translation>重命名对话框</translation>
+        <source>tails</source>
+        <translation type="vanished">反</translation>
     </message>
     <message>
-        <source>Enter new file name:</source>
-        <translation>输入新的文件名:</translation>
-    </message>
-</context>
-<context>
-    <name>MapModel</name>
-    <message>
-        <source>No description available.</source>
-        <translation>无可用描述。</translation>
-    </message>
-</context>
-<context>
-    <name>MinesTimeSpinBox</name>
-    <message>
-        <source>Random</source>
-        <translation>随机</translation>
+        <source>Empty config entry.</source>
+        <translation type="vanished">空配置条目。</translation>
     </message>
     <message>
-        <source>%1 seconds</source>
-        <translation>%1 秒</translation>
-    </message>
-</context>
-<context>
-    <name>QLineEdit</name>
-    <message>
-        <source>anonymous</source>
-        <translation>匿名</translation>
+        <source>Voting closed.</source>
+        <translation type="vanished">投票已关闭。</translation>
     </message>
     <message>
-        <source>hedgehog %1</source>
-        <translation>刺猬 %1</translation>
+        <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
+        <translation type="vanished">/delete &lt;config ID&gt;: 删除一个可投票的房间配置</translation>
     </message>
     <message>
-        <source>Hedgehog %1</source>
-        <translation>刺猬 %1</translation>
+        <source>Super power activated.</source>
+        <translation type="vanished">超级力量已激活。</translation>
     </message>
     <message>
-        <source>unnamed</source>
-        <translation>未命名</translation>
+        <source>This command is only available in rooms.</source>
+        <translation type="vanished">这个命令只在房间可用。</translation>
     </message>
     <message>
-        <source>unnamed (%1)</source>
-        <translation>未命名 (%1)</translation>
-    </message>
-</context>
-<context>
-    <name>HWGame</name>
-    <message>
-        <source>en.txt</source>
-        <translation>zh_CN.txt</translation>
+        <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
+        <translation type="vanished">/rnd: 翻转一个虚拟硬币并回复‘正’ 或 ‘反’</translation>
     </message>
     <message>
-        <source>A fatal ERROR occured! The game engine had to stop.
-
-We are very sorry for the inconvenience. :-(
-
-If this keeps happening, please click the &apos;Feedback&apos; button in the main menu!
-
-Last engine message:
-%1</source>
-        <translation>发生了致命错误！游戏引擎已停止。
-
-很抱歉造成不便 _(:з」∠)_
-
-如果继续发生，请点击主菜单的“反馈”按钮！
-
-最后的引擎消息：
-%1</translation>
+        <source>You can&apos;t kick yourself!</source>
+        <translation type="vanished">你不能踢自己！</translation>
     </message>
     <message>
-        <source>Cannot open demofile %1</source>
-        <translation>不能打开demo文件 %1</translation>
-    </message>
-</context>
-<context>
-    <name>KeyBinder</name>
-    <message>
-        <source>Warning: The same key is assigned multiple times!</source>
-        <translation>警告：相同按键分配多次！</translation>
+        <source>Protocol already known.</source>
+        <translation type="vanished">协议已知。</translation>
     </message>
     <message>
-        <source>Category</source>
-        <translation>类别</translation>
-    </message>
-</context>
-<context>
-    <name>TCPBase</name>
-    <message>
-        <source>Unable to start server at %1.</source>
-        <translation>无法启动服务器在 %1.</translation>
+        <source>Warning! Room name change flood protection activated</source>
+        <translation type="vanished">警告！房间名改变滥用保护已激活</translation>
     </message>
     <message>
-        <source>Unable to run engine at %1
-Error code: %2</source>
-        <translation>无法运行引擎在 %1
-Error code: %2</translation>
+        <source>You can&apos;t kick the only other player!</source>
+        <translation type="vanished">你不能踢仅剩的其他玩家！</translation>
     </message>
     <message>
-        <source>The game engine died unexpectedly!
-(exit code %1)
-
-We are very sorry for the inconvenience :(
-
-If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation>游戏引擎意外死亡！
-(exit code %1)
-
-很抱歉造成不便 _(:з」∠)_
-
-如果继续发生，请点击主菜单的 ‘%2’ 按钮！</translation>
+        <source>Excess flood</source>
+        <translation type="vanished">过量滥发</translation>
     </message>
-</context>
-<context>
-    <name>QMainWindow</name>
     <message>
-        <source>Hedgewars %1</source>
-        <translation>刺猬战争 %1</translation>
+        <source>Greeting message cleared.</source>
+        <translation type="vanished">问候语已清除。</translation>
     </message>
-</context>
-<context>
-    <name>TeamSelWidget</name>
     <message>
-        <source>At least two teams are required to play!</source>
-        <translation>需要至少两个队伍才能玩！</translation>
+        <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="vanished">非法房间名！房间名必须在1-40字符之间，不得以空格开头或结尾，且不包含这些字符：$()*+?[]^{|}</translation>
     </message>
-</context>
-<context>
-    <name>DataManager</name>
     <message>
-        <source>Use Default</source>
-        <translation>使用默认</translation>
+        <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
+        <translation type="vanished">/vote &lt;yes/no&gt;: 投票 ‘yes’ 或 ‘no’ 以激活投票</translation>
     </message>
-</context>
-<context>
-    <name>QSpinBox</name>
     <message>
-        <source>Specify the bitrate of recorded videos as a multiple of 1024 bits per second</source>
-        <translation>将录制视频的比特率指定为每秒 1024 位的倍数</translation>
+        <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
+        <translation type="vanished">/rnd [A] [B] [C] [...]: 从给出列表中回复一个随机词语</translation>
     </message>
-</context>
-<context>
-    <name>HWHostPortDialog</name>
     <message>
-        <source>Connect to server</source>
-        <translation>连接到服务器</translation>
+        <source>hedgehogs per team: </source>
+        <translation type="vanished">每个队伍的刺猬: </translation>
     </message>
-</context>
-<context>
-    <name>PageInGame</name>
     <message>
-        <source>In game...</source>
-        <translation>游戏中...</translation>
+        <source>This server does not support replays!</source>
+        <translation type="vanished">这个服务器不支持重玩！</translation>
     </message>
-</context>
-<context>
-    <name>AbstractPage</name>
     <message>
-        <source>Go back</source>
-        <translation>返回</translation>
+        <source>(playing)</source>
+        <translation type="vanished">(正在玩)</translation>
     </message>
-</context>
-<context>
-    <name>HWAskQuitDialog</name>
     <message>
-        <source>Do you really want to quit?</source>
-        <translation>你确定要退出？</translation>
+        <source>/fix: Force this room to stay open when it is empty</source>
+        <translation type="vanished">/fix: 当这个房间空的时候强制保持开启</translation>
+    </message>
+    <message>
+        <source>Access denied.</source>
+        <translation type="vanished">访问被拒绝。</translation>
+    </message>
+    <message>
+        <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
+        <translation type="vanished">/loadroom &lt;file name&gt;: 从文件加载可投票的房间配置（和问候）</translation>
+    </message>
+    <message>
+        <source>Too many hedgehogs!</source>
+        <translation type="vanished">刺猬太多了！</translation>
+    </message>
+    <message>
+        <source>Greeting message set.</source>
+        <translation type="vanished">设置问候语。</translation>
+    </message>
+    <message>
+        <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
+        <translation type="vanished">/registered_only: 切换 ‘registered only’ 状态。如果启用，只有注册玩家能加入服务器</translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your Hedgewars version!</source>
+        <translation type="vanished">房间版本跟你的刺猬战争版本不兼容！</translation>
+    </message>
+    <message>
+        <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
+        <translation type="vanished">/greeting [message]: 设置或清除问候语，显示给加入房间的玩家</translation>
+    </message>
+    <message>
+        <source>60 seconds cooldown after kick</source>
+        <translation type="vanished">踢出后60秒冷却时间</translation>
+    </message>
+    <message>
+        <source>Warning! Chat flood protection activated</source>
+        <translation type="vanished">警告！聊天滥发保护已激活</translation>
+    </message>
+    <message>
+        <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
+        <translation type="vanished">可用的发起投票命令：hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</translation>
+    </message>
+    <message>
+        <source>There&apos;s already a team with same name in the list.</source>
+        <translation type="vanished">列表中已有相同名字的队伍。</translation>
+    </message>
+    <message>
+        <source>Voting expired.</source>
+        <translation type="vanished">投票已过期。</translation>
+    </message>
+    <message>
+        <source>/unfix: Undo the /fix command</source>
+        <translation type="vanished">/unfix: 撤销 /fix 命令</translation>
+    </message>
+    <message>
+        <source>/maxteams: specify number from 2 to 8</source>
+        <translation type="vanished">/maxteams: 从2到8指定数字</translation>
+    </message>
+    <message>
+        <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
+        <translation type="vanished">/global &lt;message&gt;: 发送全局聊天消息，服务器中所有人可见</translation>
+    </message>
+    <message>
+        <source>Joining not possible: Round is in progress.</source>
+        <translation type="vanished">无法加入：回合进行中。</translation>
+    </message>
+    <message>
+        <source>You already have voted.</source>
+        <translation type="vanished">你已投票。</translation>
+    </message>
+    <message>
+        <source>Reconnected too fast</source>
+        <translation type="vanished">重连太快</translation>
+    </message>
+    <message>
+        <source>Kicked</source>
+        <translation type="vanished">已踢</translation>
+    </message>
+    <message>
+        <source>Your vote has been counted.</source>
+        <translation type="vanished">你的投票已计数。</translation>
+    </message>
+    <message>
+        <source>/callvote map: No maps available.</source>
+        <translation type="vanished">/callvote map: 无可用地图。</translation>
+    </message>
+    <message>
+        <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
+        <translation type="vanished">/watch &lt;id&gt;: 观看存储在服务器上给定ID的demo</translation>
+    </message>
+    <message>
+        <source>You&apos;re not the room master!</source>
+        <translation type="vanished">你不是房主！</translation>
+    </message>
+    <message>
+        <source>/callvote map: No such map!</source>
+        <translation type="vanished">/callvote map: 没有这个地图！</translation>
+    </message>
+    <message>
+        <source>Authentication failed</source>
+        <translation type="vanished">验证失败</translation>
+    </message>
+    <message>
+        <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
+        <translation type="vanished">/saveroom &lt;file name&gt;: 保存这个房间所有可投票的房间配置（和问候）到文件</translation>
+    </message>
+    <message>
+        <source>Bad number.</source>
+        <translation type="vanished">错误的数字。</translation>
+    </message>
+    <message>
+        <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
+        <translation type="vanished">/maxteams &lt;N&gt;: 限制最大队伍数为N</translation>
+    </message>
+    <message>
+        <source>Warning! Joins flood protection activated</source>
+        <translation type="vanished">警告！加入滥用保护已激活</translation>
+    </message>
+    <message>
+        <source>Error: The team you tried to remove does not exist.</source>
+        <translation type="vanished">错误：你试图删除的队伍不存在。</translation>
+    </message>
+    <message>
+        <source>This server no longer allows unregistered players to join.</source>
+        <translation type="vanished">这个服务器不再允许未注册玩家加入。</translation>
+    </message>
+    <message>
+        <source>A room with the same name already exists.</source>
+        <translation type="vanished">已存在相同名字的房间。</translation>
+    </message>
+    <message>
+        <source>Too many teams!</source>
+        <translation type="vanished">队伍太多了！</translation>
+    </message>
+    <message>
+        <source>kicked</source>
+        <translation type="vanished">已踢</translation>
+    </message>
+    <message>
+        <source>/quit: Quit the server</source>
+        <translation type="vanished">/quit: 退出服务器</translation>
+    </message>
+    <message>
+        <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
+        <translation>未知命令或无效参数。 在聊天说‘/help’查看命令列表。</translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 1</source>
+        <translation type="vanished">检测到游戏消息滥发 - 1</translation>
+    </message>
+    <message>
+        <source>(spectating)</source>
+        <translation type="vanished">(正在旁观)</translation>
+    </message>
+    <message>
+        <source>/help: Show chat command help</source>
+        <translation type="vanished">/help: 显示聊天命令帮助</translation>
+    </message>
+    <message>
+        <source>/callvote kick: No such user!</source>
+        <translation type="vanished">/callvote kick: 没有这个用户！</translation>
+    </message>
+    <message>
+        <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="vanished">非法房间名！房间名必须在1-40字符之间，不得以空格开头或结尾，且不包含这些字符：$()*+?[]^{|}</translation>
+    </message>
+    <message>
+        <source>New voting started</source>
+        <translation type="vanished">已开始新的投票</translation>
+    </message>
+    <message>
+        <source>No checker rights</source>
+        <translation type="vanished">无checker权限</translation>
+    </message>
+    <message>
+        <source>There&apos;s no voting going on.</source>
+        <translation type="vanished">没有进行中的投票。</translation>
+    </message>
+    <message>
+        <source>You&apos;re already the room master.</source>
+        <translation type="vanished">你已经是房主。</translation>
+    </message>
+    <message>
+        <source>Nickname already provided.</source>
+        <translation type="vanished">昵称已提供。</translation>
+    </message>
+    <message>
+        <source>Commands for server admins only:</source>
+        <translation type="vanished">仅限服务器管理员的命令:</translation>
+    </message>
+    <message>
+        <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
+        <translation type="vanished">/save &lt;config ID&gt; &lt;config name&gt;: 为 /callvote map 添加当前房间配置作为可投票选择</translation>
+    </message>
+    <message>
+        <source>/callvote kick: You need to specify a nickname.</source>
+        <translation type="vanished">/callvote kick:你需要指定一个昵称。</translation>
+    </message>
+    <message>
+        <source>Player is not online.</source>
+        <translation type="vanished">玩家不在线。</translation>
+    </message>
+    <message>
+        <source>You are banned from this room.</source>
+        <translation type="vanished">你被房间封禁。</translation>
+    </message>
+    <message>
+        <source>You&apos;re not the room master or a server admin!</source>
+        <translation type="vanished">你不是房主或服务器管理员！</translation>
+    </message>
+    <message>
+        <source>This command is only available in the lobby.</source>
+        <translation type="vanished">这个命令仅在大厅可用。</translation>
+    </message>
+    <message>
+        <source>This server only allows registered users to join.</source>
+        <translation type="vanished">这个服务器只允许注册用户加入。</translation>
+    </message>
+    <message>
+        <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
+        <translation type="vanished">非法昵称！昵称必须在1-40字符之间，不得以空格开头或结尾，且不包含这些字符：$()*+?[]^{|}</translation>
+    </message>
+    <message>
+        <source>/callvote [arguments]: Start a vote</source>
+        <translation type="vanished">/callvote [arguments]: 开始一个投票</translation>
+    </message>
+    <message>
+        <source>You can&apos;t remove a team you don&apos;t own.</source>
+        <translation type="vanished">你不能移除你不拥有的队伍。</translation>
+    </message>
+    <message>
+        <source>Access denied. This room currently doesn&apos;t allow joining.</source>
+        <translation type="vanished">访问被拒绝。这个房间当前不允许加入。</translation>
+    </message>
+    <message>
+        <source>new seed</source>
+        <translation type="vanished">新种子</translation>
+    </message>
+    <message>
+        <source>/stats: Query server stats</source>
+        <translation type="vanished">/stats: 查询服务器状态</translation>
+    </message>
+    <message>
+        <source>This player is protected from being kicked.</source>
+        <translation type="vanished">这个玩家受保护不能踢。</translation>
+    </message>
+    <message>
+        <source>Pause toggled.</source>
+        <translation type="vanished">已切换暂停。</translation>
+    </message>
+    <message>
+        <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
+        <translation type="vanished">/super_power: 激活你的超级力量。这样你可以进入任何房间且不能踢出。当你离开服务器就过期</translation>
+    </message>
+    <message>
+        <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
+        <translation type="vanished">/force &lt;yes/no&gt;: 为激活的投票强制投票结果</translation>
+    </message>
+    <message>
+        <source>/delegate &lt;player&gt;: Surrender room control to player</source>
+        <translation type="vanished">/delegate &lt;player&gt;: 转移房间控制给玩家</translation>
+    </message>
+    <message>
+        <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
+        <translation type="vanished">/force: 请使用‘yes’ 或 ‘no’.</translation>
+    </message>
+    <message>
+        <source>You&apos;re the new room master!</source>
+        <translation type="vanished">你是新的房主！</translation>
+    </message>
+    <message>
+        <source>/callvote pause: No game in progress!</source>
+        <translation type="vanished">/callvote pause: 没有进行中的游戏！</translation>
+    </message>
+    <message>
+        <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
+        <translation type="vanished">/me &lt;message&gt;: 聊天动作，如‘/me eats pizza’变成‘* Player eats pizza’</translation>
+    </message>
+    <message>
+        <source>Nickname is already in use</source>
+        <translation type="vanished">昵称已使用</translation>
+    </message>
+    <message>
+        <source>The player is not in your room.</source>
+        <translation type="vanished">这个玩家不在你的房间。</translation>
+    </message>
+    <message>
+        <source>This server now allows unregistered players to join.</source>
+        <translation type="vanished">这个服务器现在允许未注册玩家加入。</translation>
+    </message>
+    <message>
+        <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
+        <translation type="vanished">/callvote hedgehogs: 从1到8指定数字。</translation>
+    </message>
+    <message>
+        <source>/info &lt;player&gt;: Show info about player</source>
+        <translation type="vanished">/info &lt;player&gt;: 显示关于玩家的信息</translation>
+    </message>
+    <message>
+        <source>/callvote kick: This is only allowed in rooms without a room master.</source>
+        <translation type="vanished">/callvote kick: 仅允许没有房主的房间。</translation>
+    </message>
+    <message>
+        <source>List of lobby chat commands:</source>
+        <translation type="vanished">大厅聊天命令列表:</translation>
+    </message>
+    <message>
+        <source>Corrupted hedgehogs info!</source>
+        <translation type="vanished">损坏的刺猬信息！</translation>
+    </message>
+    <message>
+        <source>No such room.</source>
+        <translation type="vanished">没有这个房间。</translation>
+    </message>
+    <message>
+        <source>This room currently does not allow adding new teams.</source>
+        <translation type="vanished">这个房间当前不允许添加新队伍。</translation>
+    </message>
+    <message>
+        <source>Ping timeout</source>
+        <translation type="vanished">Ping 超时</translation>
+    </message>
+    <message>
+        <source>The game can&apos;t be started with less than two clans!</source>
+        <translation type="vanished">游戏少于两个战队不能开始！</translation>
+    </message>
+    <message>
+        <source>List of room chat commands:</source>
+        <translation type="vanished">房间聊天命令列表:</translation>
     </message>
 </context>
 </TS>

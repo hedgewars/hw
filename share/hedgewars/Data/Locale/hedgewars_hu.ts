@@ -26,7 +26,6 @@
     </message>
     <message>
         <source>GNU GPL v2</source>
-        <extracomment>Short for “GNU General Public License version 2”</extracomment>
         <translation>GNU GPL v2</translation>
     </message>
     <message>
@@ -350,25 +349,21 @@ Kérjük, ellenőrizd a telepítésedet!</translation>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <extracomment>“Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line</extracomment>
         <translation>Használat</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”</extracomment>
         <translation>KAPCSOLÓ</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
         <translation>KAPCSOLATSZTRING</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <extracomment>“Options” as in “command-line options”</extracomment>
         <translation>Kapcsolók</translation>
     </message>
     <message>
@@ -855,6 +850,10 @@ A játékmotor utolsó üzenete:
     <message>
         <source>Edit</source>
         <translation>Szerkesztés</translation>
+    </message>
+    <message>
+        <source>WFC</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2269,11 +2268,11 @@ A motor utolsó üzenete:
     </message>
     <message>
         <source>Date: %1</source>
-        <translation>Dátum: %1</translation>
+        <translation type="vanished">Dátum: %1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation>Méret: %1</translation>
+        <translation type="vanished">Méret: %1</translation>
     </message>
     <message>
         <source>%1%</source>
@@ -2284,6 +2283,18 @@ A motor utolsó üzenete:
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
         <translation>%1 (%2%) – %3</translation>
+    </message>
+    <message>
+        <source>Date: %1
+</source>
+        <translation type="unfinished">Dátum: %1
+</translation>
+    </message>
+    <message>
+        <source>Size: %1
+</source>
+        <translation type="unfinished">Méret: %1
+</translation>
     </message>
 </context>
 <context>
@@ -2355,6 +2366,10 @@ A motor utolsó üzenete:
     <message>
         <source>Delegate room control</source>
         <translation>Szobavezérlési jog adása</translation>
+    </message>
+    <message>
+        <source>Show incompatible</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3362,6 +3377,10 @@ Szeretnél újracsatlakozni biztonságosan?</translation>
     <message>
         <source>Forts</source>
         <translation>Várak</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished">Verzió</translation>
     </message>
 </context>
 <context>
@@ -4371,834 +4390,830 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     <name>credits</name>
     <message>
         <source>Programming</source>
-        <translation>Programozás</translation>
+        <translation type="vanished">Programozás</translation>
     </message>
     <message>
         <source>Game engine</source>
-        <translation>Játékmotor</translation>
+        <translation type="vanished">Játékmotor</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation>Készítő</translation>
+        <translation type="vanished">Készítő</translation>
     </message>
     <message>
         <source>Many engine improvements</source>
-        <translation>Számos motorfejlesztés</translation>
+        <translation type="vanished">Számos motorfejlesztés</translation>
     </message>
     <message>
         <source>Gamepad and Lua integration</source>
-        <translation>Gamepad és Lua integráció</translation>
+        <translation type="vanished">Gamepad és Lua integráció</translation>
     </message>
     <message>
         <source>Campaign support</source>
-        <translation>Hadjárattámogatás</translation>
+        <translation type="vanished">Hadjárattámogatás</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
-        <translation>Téma-testreszabási fejlesztések</translation>
+        <translation type="vanished">Téma-testreszabási fejlesztések</translation>
     </message>
     <message>
         <source>Some Pas2C and GLES2 work</source>
-        <translation>Némi Pas2C és GLES2 munka</translation>
+        <translation type="vanished">Némi Pas2C és GLES2 munka</translation>
     </message>
     <message>
         <source>Video recording</source>
-        <translation>Videorögzítés</translation>
+        <translation type="vanished">Videorögzítés</translation>
     </message>
     <message>
         <source>Other improvements</source>
-        <translation>Más fejlesztések</translation>
+        <translation type="vanished">Más fejlesztések</translation>
     </message>
     <message>
         <source>Map generation</source>
-        <translation>Pályagenerálás</translation>
+        <translation type="vanished">Pályagenerálás</translation>
     </message>
     <message>
         <source>Core map generators</source>
-        <translation>Alap pályagenerátorok</translation>
+        <translation type="vanished">Alap pályagenerátorok</translation>
     </message>
     <message>
         <source>Perlin maps and other improvements</source>
-        <translation>Perlin-pályák és más fejlesztések</translation>
+        <translation type="vanished">Perlin-pályák és más fejlesztések</translation>
     </message>
     <message>
         <source>Maze maps</source>
-        <translation>Útvesztőpályák</translation>
+        <translation type="vanished">Útvesztőpályák</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Fegyverek</translation>
+        <translation type="vanished">Fegyverek</translation>
     </message>
     <message>
         <source>Most core weapons</source>
-        <translation>A legtöbb alapfegyver</translation>
+        <translation type="vanished">A legtöbb alapfegyver</translation>
     </message>
     <message>
         <source>Air mine, rubber, others</source>
-        <translation>Légi akna, gumiszalag, egyebek</translation>
+        <translation type="vanished">Légi akna, gumiszalag, egyebek</translation>
     </message>
     <message>
         <source>Drill rocket, ballgun, RC plane</source>
-        <translation>Ásórakéta, labdavető, RC repülő</translation>
+        <translation type="vanished">Ásórakéta, labdavető, RC repülő</translation>
     </message>
     <message>
         <source>Freezer</source>
-        <translation>Fagyasztó</translation>
+        <translation type="vanished">Fagyasztó</translation>
     </message>
     <message>
         <source>Mine number and time game settings</source>
-        <translation>Aknák száma és idő játékbeállítások</translation>
+        <translation type="vanished">Aknák száma és idő játékbeállítások</translation>
     </message>
     <message>
         <source>Frontend / main menu</source>
-        <translation>Kezelőfelület / főmenü</translation>
+        <translation type="vanished">Kezelőfelület / főmenü</translation>
     </message>
     <message>
         <source>Many frontend improvements</source>
-        <translation>Számos kezelőfelületi fejlesztés</translation>
+        <translation type="vanished">Számos kezelőfelületi fejlesztés</translation>
     </message>
     <message>
         <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation>Billentyű-hozzárendelések, visszajelzés, pálya és fejfedő felületek</translation>
+        <translation type="vanished">Billentyű-hozzárendelések, visszajelzés, pálya és fejfedő felületek</translation>
     </message>
     <message>
         <source>Login dialogs, other improvements</source>
-        <translation>Bejelentkezési párbeszédablakok, más fejlesztések</translation>
+        <translation type="vanished">Bejelentkezési párbeszédablakok, más fejlesztések</translation>
     </message>
     <message>
         <source>Missions and styles</source>
-        <translation>Küldetések és stílusok</translation>
+        <translation type="vanished">Küldetések és stílusok</translation>
     </message>
     <message>
         <source>A Classic Fairytale</source>
-        <translation>Egy klasszikus tündérmese</translation>
+        <translation type="vanished">Egy klasszikus tündérmese</translation>
     </message>
     <message>
         <source>A Space Adventure</source>
-        <translation>Kalandok az űrben</translation>
+        <translation type="vanished">Kalandok az űrben</translation>
     </message>
     <message>
         <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation>A Szerezd meg a zászlót, Építkezési mód, Irányítás, Sünszerkesztő, Hegylakó, Versenyző, TechVersenyző, A szakértők és a WxW szerzője</translation>
+        <translation type="vanished">A Szerezd meg a zászlót, Építkezési mód, Irányítás, Sünszerkesztő, Hegylakó, Versenyző, TechVersenyző, A szakértők és a WxW szerzője</translation>
     </message>
     <message>
         <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation>Kiképzés, gyorsasági és céllövő kihívások, Aknavető harcmező, Polipterror, Nagy fegyvertár, hibajavítások és karbantartás</translation>
+        <translation type="vanished">Kiképzés, gyorsasági és céllövő kihívások, Aknavető harcmező, Polipterror, Nagy fegyvertár, hibajavítások és karbantartás</translation>
     </message>
     <message>
         <source>Some styles and missions</source>
-        <translation>Egyes stílusok és küldetések</translation>
+        <translation type="vanished">Egyes stílusok és küldetések</translation>
     </message>
     <message>
         <source>Battalion</source>
-        <translation>Zászlóalj</translation>
+        <translation type="vanished">Zászlóalj</translation>
     </message>
     <message>
         <source>Continental supplies</source>
-        <translation>Tengerentúli ellátmány</translation>
+        <translation type="vanished">Tengerentúli ellátmány</translation>
     </message>
     <message>
         <source>Teamwork 2</source>
-        <translation>Csapatmunka 2</translation>
+        <translation type="vanished">Csapatmunka 2</translation>
     </message>
     <message>
         <source>Climb Home</source>
-        <translation>Mássz haza</translation>
+        <translation type="vanished">Mássz haza</translation>
     </message>
     <message>
         <source>Portal Mind Challenge</source>
-        <translation>Átjáró kihívás</translation>
+        <translation type="vanished">Átjáró kihívás</translation>
     </message>
     <message>
         <source>Game server</source>
-        <translation>Játékszerver</translation>
+        <translation type="vanished">Játékszerver</translation>
     </message>
     <message>
         <source>Ports</source>
-        <translation>Portolás több rendszerre</translation>
+        <translation type="vanished">Portolás több rendszerre</translation>
     </message>
     <message>
         <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation>masOS/iPhone portolás, OpenGL ES konverzió</translation>
+        <translation type="vanished">masOS/iPhone portolás, OpenGL ES konverzió</translation>
     </message>
     <message>
         <source>Android port</source>
-        <translation>Android portolás</translation>
+        <translation type="vanished">Android portolás</translation>
     </message>
     <message>
         <source>Android netplay, portability abstraction</source>
-        <translation>Android hálózati játék, hordozhatósági absztrakció</translation>
+        <translation type="vanished">Android hálózati játék, hordozhatósági absztrakció</translation>
     </message>
     <message>
         <source>WebGL port</source>
-        <translation>WebGL portolás</translation>
+        <translation type="vanished">WebGL portolás</translation>
     </message>
     <message>
         <source>iPhone/iPad ports</source>
-        <translation>iPhone/iPad portolás</translation>
+        <translation type="vanished">iPhone/iPad portolás</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafika</translation>
+        <translation type="vanished">Grafika</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Általános</translation>
+        <translation type="vanished">Általános</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation>Témák</translation>
+        <translation type="vanished">Témák</translation>
     </message>
     <message>
         <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation>Természet, Hó, Város, Kastély, Halloween, Sziget</translation>
+        <translation type="vanished">Természet, Hó, Város, Kastély, Halloween, Sziget</translation>
     </message>
     <message>
         <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation>Bambusz, Földkelte, Bambusz Plinko</translation>
+        <translation type="vanished">Bambusz, Földkelte, Bambusz Plinko</translation>
     </message>
     <message>
         <source>Golf, Hoggywood, Stage</source>
-        <translation>Golf, Süniwood, Színpad</translation>
+        <translation type="vanished">Golf, Süniwood, Színpad</translation>
     </message>
     <message>
         <source>Hoggywood</source>
-        <translation>Süniwood</translation>
+        <translation type="vanished">Süniwood</translation>
     </message>
     <message>
         <source>Cave, Olympics</source>
-        <translation>Barlang, Olimpia</translation>
+        <translation type="vanished">Barlang, Olimpia</translation>
     </message>
     <message>
         <source>Fruit, Cake</source>
-        <translation>Gyümölcs, Torta</translation>
+        <translation type="vanished">Gyümölcs, Torta</translation>
     </message>
     <message>
         <source>Art</source>
-        <translation>Művészet</translation>
+        <translation type="vanished">Művészet</translation>
     </message>
     <message>
         <source>Beach</source>
-        <translation>Tengerpart</translation>
+        <translation type="vanished">Tengerpart</translation>
     </message>
     <message>
         <source>Brick</source>
-        <translation>Tégla</translation>
+        <translation type="vanished">Tégla</translation>
     </message>
     <message>
         <source>Hell</source>
-        <translation>Pokol</translation>
+        <translation type="vanished">Pokol</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation>Dzsungel</translation>
+        <translation type="vanished">Dzsungel</translation>
     </message>
     <message>
         <source>Sheep</source>
-        <translation>Juh</translation>
+        <translation type="vanished">Juh</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation>Pályák</translation>
+        <translation type="vanished">Pályák</translation>
     </message>
     <message>
         <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation>Kosárlabda, Kosárlabdapálya, Fürdőszoba, Buborékok, Függőágy, Sünszerelem, Sünharc, Tűzcsap, Gomba, Repülő, Kötél, Fa </translation>
+        <translation type="vanished">Kosárlabda, Kosárlabdapálya, Fürdőszoba, Buborékok, Függőágy, Sünszerelem, Sünharc, Tűzcsap, Gomba, Repülő, Kötél, Fa </translation>
     </message>
     <message>
         <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation>SB_Csontok, SB_Kristály, SB_Füves, SB_Liget, SB_Kísérteties, SB_Tölgy, SB_Gombák, SB_Polip</translation>
+        <translation type="vanished">SB_Csontok, SB_Kristály, SB_Füves, SB_Liget, SB_Kísérteties, SB_Tölgy, SB_Gombák, SB_Polip</translation>
     </message>
     <message>
         <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation>Bambusz, Kockák, Torta, Fogaskerék, Földkelte, Sztráda</translation>
+        <translation type="vanished">Bambusz, Kockák, Torta, Fogaskerék, Földkelte, Sztráda</translation>
     </message>
     <message>
         <source>Castle, PirateFlag</source>
-        <translation>Kastély, Kalózzászló</translation>
+        <translation type="vanished">Kastély, Kalózzászló</translation>
     </message>
     <message>
         <source>ShoppaKing, TrophyRace</source>
-        <translation>ShoppaKirály, Kupaverseny</translation>
+        <translation type="vanished">ShoppaKirály, Kupaverseny</translation>
     </message>
     <message>
         <source>Battlefield</source>
-        <translation>Harcmező</translation>
+        <translation type="vanished">Harcmező</translation>
     </message>
     <message>
         <source>CTF_Blizzard</source>
-        <translation>CTF_Hóvihar</translation>
+        <translation type="vanished">CTF_Hóvihar</translation>
     </message>
     <message>
         <source>Cheese</source>
-        <translation>Sajt</translation>
+        <translation type="vanished">Sajt</translation>
     </message>
     <message>
         <source>ClimbHome</source>
-        <translation>Mássz haza</translation>
+        <translation type="vanished">Mássz haza</translation>
     </message>
     <message>
         <source>Lonely_Island</source>
-        <translation>Magányos sziget</translation>
+        <translation type="vanished">Magányos sziget</translation>
     </message>
     <message>
         <source>Octorama</source>
-        <translation>Octorama</translation>
+        <translation type="vanished">Octorama</translation>
     </message>
     <message>
         <source>portal</source>
-        <translation>átjáró</translation>
+        <translation type="vanished">átjáró</translation>
     </message>
     <message>
         <source>Ruler</source>
-        <translation>Vonalzó</translation>
+        <translation type="vanished">Vonalzó</translation>
     </message>
     <message>
         <source>Sticks</source>
-        <translation>Matricák</translation>
+        <translation type="vanished">Matricák</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation>Várak</translation>
+        <translation type="vanished">Várak</translation>
     </message>
     <message>
         <source>EvilChicken</source>
-        <translation>Vércsirke</translation>
+        <translation type="vanished">Vércsirke</translation>
     </message>
     <message>
         <source>Olympic</source>
-        <translation>Olimpia</translation>
+        <translation type="vanished">Olimpia</translation>
     </message>
     <message>
         <source>Tank</source>
-        <translation>Tank</translation>
+        <translation type="vanished">Tank</translation>
     </message>
     <message>
         <source>Snail</source>
-        <translation>Csiga</translation>
+        <translation type="vanished">Csiga</translation>
     </message>
     <message>
         <source>SteelTower</source>
-        <translation>Acéltorony</translation>
+        <translation type="vanished">Acéltorony</translation>
     </message>
     <message>
         <source>Hats, graves, other</source>
-        <translation>Fejfedők, sírok, egyebek</translation>
+        <translation type="vanished">Fejfedők, sírok, egyebek</translation>
     </message>
     <message>
         <source>See CREDITS text file</source>
-        <translation>Lásd a CREDITS szövegfájlt</translation>
+        <translation type="vanished">Lásd a CREDITS szövegfájlt</translation>
     </message>
     <message>
         <source>Sounds</source>
-        <translation>Hangok</translation>
+        <translation type="vanished">Hangok</translation>
     </message>
     <message>
         <source>Hedgehogs voice</source>
-        <translation>Sünbeszéd</translation>
+        <translation type="vanished">Sünbeszéd</translation>
     </message>
     <message>
         <source>Default_pl, Russian_pl voices</source>
-        <translation>Alap_pl, Orosz_pl beszédek</translation>
+        <translation type="vanished">Alap_pl, Orosz_pl beszédek</translation>
     </message>
     <message>
         <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation>A www.freesound.org különféle szerzői (lásd a CREDITS szövegfájlt)</translation>
+        <translation type="vanished">A www.freesound.org különféle szerzői (lásd a CREDITS szövegfájlt)</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Zene</translation>
+        <translation type="vanished">Zene</translation>
     </message>
     <message>
         <source>City, Rock, others</source>
-        <translation>Város, Rock, egyebek</translation>
+        <translation type="vanished">Város, Rock, egyebek</translation>
     </message>
     <message>
         <source>Compost</source>
-        <translation>Komposzt</translation>
+        <translation type="vanished">Komposzt</translation>
     </message>
     <message>
         <source>EarthRise, oriental, Pirate, snow</source>
-        <translation>Földkelte, Orientalista, Kalóz, Hó</translation>
+        <translation type="vanished">Földkelte, Orientalista, Kalóz, Hó</translation>
     </message>
     <message>
         <source>Fruit, Jungle</source>
-        <translation>Gyümölcs, Dzsungel</translation>
+        <translation type="vanished">Gyümölcs, Dzsungel</translation>
     </message>
     <message>
         <source>Nature</source>
-        <translation>Természet</translation>
+        <translation type="vanished">Természet</translation>
     </message>
     <message>
         <source>olympics_sd</source>
-        <translation>Olimpia_HH</translation>
+        <translation type="vanished">Olimpia_HH</translation>
     </message>
     <message>
         <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation>Hirtelen halál zene (Hitman [sheepluva edit])</translation>
+        <translation type="vanished">Hirtelen halál zene (Hitman [sheepluva edit])</translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation>Fordítások</translation>
+        <translation type="vanished">Fordítások</translation>
     </message>
     <message>
         <source>Brazilian Portuguese</source>
-        <translation>Brazíliai portugál</translation>
+        <translation type="vanished">Brazíliai portugál</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation>Bolgár</translation>
+        <translation type="vanished">Bolgár</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>Cseh</translation>
+        <translation type="vanished">Cseh</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>Kínai</translation>
+        <translation type="vanished">Kínai</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation>Finn</translation>
+        <translation type="vanished">Finn</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Francia</translation>
+        <translation type="vanished">Francia</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Német</translation>
+        <translation type="vanished">Német</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation>Görög</translation>
+        <translation type="vanished">Görög</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>Olasz</translation>
+        <translation type="vanished">Olasz</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation>Japán</translation>
+        <translation type="vanished">Japán</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation>Koreai</translation>
+        <translation type="vanished">Koreai</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation>Litván</translation>
+        <translation type="vanished">Litván</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Lengyel</translation>
+        <translation type="vanished">Lengyel</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Portugál</translation>
+        <translation type="vanished">Portugál</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>Orosz</translation>
+        <translation type="vanished">Orosz</translation>
     </message>
     <message>
         <source>Scottish Gaelic</source>
-        <translation>Skót gael</translation>
+        <translation type="vanished">Skót gael</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation>Szlovák</translation>
+        <translation type="vanished">Szlovák</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>Spanyol</translation>
+        <translation type="vanished">Spanyol</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation>Svéd</translation>
+        <translation type="vanished">Svéd</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation>Ukrán</translation>
+        <translation type="vanished">Ukrán</translation>
     </message>
     <message>
         <source>Special thanks</source>
-        <translation>Külön köszönet</translation>
+        <translation type="vanished">Külön köszönet</translation>
     </message>
     <message>
         <source>Project founder</source>
-        <translation>Projektalapító</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Projektalapító</translation>
     </message>
 </context>
 <context>
     <name>server</name>
     <message>
         <source>Nickname is already in use</source>
-        <translation>A becenevet már használják</translation>
+        <translation type="vanished">A becenevet már használják</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation>Nincs ellenőrzési jogkör</translation>
+        <translation type="vanished">Nincs ellenőrzési jogkör</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation>Hitelesítés sikertelen</translation>
+        <translation type="vanished">Hitelesítés sikertelen</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>60 másodperc pihenő a kirúgás után</translation>
+        <translation type="vanished">60 másodperc pihenő a kirúgás után</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation>kirúgva</translation>
+        <translation type="vanished">kirúgva</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation>Ping időtúllépés</translation>
+        <translation type="vanished">Ping időtúllépés</translation>
     </message>
     <message>
         <source>New voting started</source>
-        <translation>Új szavazás indult</translation>
+        <translation type="vanished">Új szavazás indult</translation>
     </message>
     <message>
         <source>kick</source>
-        <translation>kirúgás</translation>
+        <translation type="vanished">kirúgás</translation>
     </message>
     <message>
         <source>map</source>
-        <translation>pálya</translation>
+        <translation type="vanished">pálya</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation>szünet</translation>
+        <translation type="vanished">szünet</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation>Túl gyors újracsatlakozás</translation>
+        <translation type="vanished">Túl gyors újracsatlakozás</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation>Figyelem! Elárasztó csevegés védelem bekapcsolva</translation>
+        <translation type="vanished">Figyelem! Elárasztó csevegés védelem bekapcsolva</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation>Elárasztó üzenetek</translation>
+        <translation type="vanished">Elárasztó üzenetek</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation>Elárasztó játéküzenetek észlelve – 1</translation>
+        <translation type="vanished">Elárasztó játéküzenetek észlelve – 1</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation>Figyelem! Csatlakozási elárasztás védelem bekapcsolva</translation>
+        <translation type="vanished">Figyelem! Csatlakozási elárasztás védelem bekapcsolva</translation>
     </message>
     <message>
         <source>new seed</source>
-        <translation>új mag</translation>
+        <translation type="vanished">új mag</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
-        <translation>/maxteams: adj meg 2 és 8 közti számot</translation>
+        <translation type="vanished">/maxteams: adj meg 2 és 8 közti számot</translation>
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation>A játék nem indítható kettőnél kevesebb klánnal!</translation>
+        <translation type="vanished">A játék nem indítható kettőnél kevesebb klánnal!</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation>Üres beállító bejegyzés.</translation>
+        <translation type="vanished">Üres beállító bejegyzés.</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation>Hozzáférés megtagadva.</translation>
+        <translation type="vanished">Hozzáférés megtagadva.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation>Nem te vagy a szobagazda!</translation>
+        <translation type="vanished">Nem te vagy a szobagazda!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation>Sérült süninformáció!</translation>
+        <translation type="vanished">Sérült süninformáció!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation>Túl sok csapat!</translation>
+        <translation type="vanished">Túl sok csapat!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation>Túl sok sün!</translation>
+        <translation type="vanished">Túl sok sün!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation>Már van ugyanilyen nevű csapat a listában.</translation>
+        <translation type="vanished">Már van ugyanilyen nevű csapat a listában.</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation>Nem lehet csatlakozni: Kör közben vannak.</translation>
+        <translation type="vanished">Nem lehet csatlakozni: Kör közben vannak.</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation>Ehhez a szobához jelenleg nem lehet új csapatokat adni.</translation>
+        <translation type="vanished">Ehhez a szobához jelenleg nem lehet új csapatokat adni.</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation>Hiba: Nem létezik a csapat, amit el akarsz távolítani.</translation>
+        <translation type="vanished">Hiba: Nem létezik a csapat, amit el akarsz távolítani.</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation>Nem távolíthatsz el egy csapatot, ha az nem a tiéd. </translation>
+        <translation type="vanished">Nem távolíthatsz el egy csapatot, ha az nem a tiéd. </translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Nem megengedett szobanév! A szoba neve 1–40 karakter hosszúságú lehet, nem kezdődhet vagy végződhet szóközzel, és nem lehetnek benne ilyen karakterek: $()*+?[]^{|}</translation>
+        <translation type="vanished">Nem megengedett szobanév! A szoba neve 1–40 karakter hosszúságú lehet, nem kezdődhet vagy végződhet szóközzel, és nem lehetnek benne ilyen karakterek: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation>Már van ugyanilyen nevű szoba.</translation>
+        <translation type="vanished">Már van ugyanilyen nevű szoba.</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation>/callvote kick: Meg kell adnod egy becenevet.</translation>
+        <translation type="vanished">/callvote kick: Meg kell adnod egy becenevet.</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation>/callvote kick: Nincs ilyen felhasználó!</translation>
+        <translation type="vanished">/callvote kick: Nincs ilyen felhasználó!</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation>/callvote map: Nincs ilyen pálya!</translation>
+        <translation type="vanished">/callvote map: Nincs ilyen pálya!</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation>/callvote pause: Nincs zajló játék!</translation>
+        <translation type="vanished">/callvote pause: Nincs zajló játék!</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation>/callvote hedgehogs: Adj meg egy 1 és 8 közötti számot.</translation>
+        <translation type="vanished">/callvote hedgehogs: Adj meg egy 1 és 8 közötti számot.</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Nem megengedett szobanév! A szoba neve 1–40 karakter hosszúságú lehet, nem kezdődhet vagy végződhet szóközzel, és nem lehetnek benne ilyen karakterek: $()*+?[]^{|}</translation>
+        <translation type="vanished">Nem megengedett szobanév! A szoba neve 1–40 karakter hosszúságú lehet, nem kezdődhet vagy végződhet szóközzel, és nem lehetnek benne ilyen karakterek: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation>Nincs ilyen szoba.</translation>
+        <translation type="vanished">Nincs ilyen szoba.</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation>A szoba verziója nem felel meg a Hedgewars verziódnak!</translation>
+        <translation type="vanished">A szoba verziója nem felel meg a Hedgewars verziódnak!</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation>Hozzáférés megtagadva. A szobába jelenleg nem lehet belépni.</translation>
+        <translation type="vanished">Hozzáférés megtagadva. A szobába jelenleg nem lehet belépni.</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation>Hozzáférés megtagadva. Ebbe a szobába csak regisztrált felhasználók léphetnek be.</translation>
+        <translation type="vanished">Hozzáférés megtagadva. Ebbe a szobába csak regisztrált felhasználók léphetnek be.</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation>Ki vagy tiltva ebből a szobából.</translation>
+        <translation type="vanished">Ki vagy tiltva ebből a szobából.</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
-        <translation>Már megadtál becenevet.</translation>
+        <translation type="vanished">Már megadtál becenevet.</translation>
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Nem megengedett becenév! A becenév 1–40 karakter hosszúságú lehet, nem kezdődhet vagy végződhet szóközzel, és nem lehetnek benne ilyen karakterek: $()*+?[]^{|}</translation>
+        <translation type="vanished">Nem megengedett becenév! A becenév 1–40 karakter hosszúságú lehet, nem kezdődhet vagy végződhet szóközzel, és nem lehetnek benne ilyen karakterek: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
-        <translation>Ez a protokoll már ismert.</translation>
+        <translation type="vanished">Ez a protokoll már ismert.</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation>Rossz szám.</translation>
+        <translation type="vanished">Rossz szám.</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation>Nincs most szavazás.</translation>
+        <translation type="vanished">Nincs most szavazás.</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation>Már szavaztál.</translation>
+        <translation type="vanished">Már szavaztál.</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation>Szavazatod beérkezett.</translation>
+        <translation type="vanished">Szavazatod beérkezett.</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation>A szavazás lezárult.</translation>
+        <translation type="vanished">A szavazás lezárult.</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation>Szünet van.</translation>
+        <translation type="vanished">Szünet van.</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation>A szavazás lejárt.</translation>
+        <translation type="vanished">A szavazás lejárt.</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation>csapatonkénti sünök: </translation>
+        <translation type="vanished">csapatonkénti sünök: </translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation>/info &lt;játékos&gt;: információk egy játékosról</translation>
+        <translation type="vanished">/info &lt;játékos&gt;: információk egy játékosról</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation>/me &lt;üzenet&gt;: Csevegési művelet, pl. „/me pizzát eszik” ez lesz: „* Játékos pizzát eszik”</translation>
+        <translation type="vanished">/me &lt;üzenet&gt;: Csevegési művelet, pl. „/me pizzát eszik” ez lesz: „* Játékos pizzát eszik”</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation>/rnd: Egy képzeletbeli érme feldobása, a válasz „fej” vagy „írás”</translation>
+        <translation type="vanished">/rnd: Egy képzeletbeli érme feldobása, a válasz „fej” vagy „írás”</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation>/rnd [A] [B] [C] […]: A válasz a listából véletlenszerűen választott szó lesz</translation>
+        <translation type="vanished">/rnd [A] [B] [C] […]: A válasz a listából véletlenszerűen választott szó lesz</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation>/watch &lt;azonosító&gt;: A szerveren a megadott azonosítóval tárolt bemutató lejátszása</translation>
+        <translation type="vanished">/watch &lt;azonosító&gt;: A szerveren a megadott azonosítóval tárolt bemutató lejátszása</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation>/help: A csevegési parancsok súgójának megjelenítése</translation>
+        <translation type="vanished">/help: A csevegési parancsok súgójának megjelenítése</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation>/callvote [argumentumok]: Szavazás indítása</translation>
+        <translation type="vanished">/callvote [argumentumok]: Szavazás indítása</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation>/vote &lt;yes/no&gt;: A zajló szavazáson igennel vagy nemmel voksolás</translation>
+        <translation type="vanished">/vote &lt;yes/no&gt;: A zajló szavazáson igennel vagy nemmel voksolás</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation>/delegate &lt;játékos&gt;: A szoba irányítási jogának átadása a játékosnak</translation>
+        <translation type="vanished">/delegate &lt;játékos&gt;: A szoba irányítási jogának átadása a játékosnak</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation>/maxteams &lt;N&gt;: A csapatok maximális számának korlátozása N-re</translation>
+        <translation type="vanished">/maxteams &lt;N&gt;: A csapatok maximális számának korlátozása N-re</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation>/global &lt;üzenet&gt;: Globális csevegési üzenet küldése, amit mindenki látni fog a kiszolgálón</translation>
+        <translation type="vanished">/global &lt;üzenet&gt;: Globális csevegési üzenet küldése, amit mindenki látni fog a kiszolgálón</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation>/registered_only: A „csak regisztráltak” állapot bekapcsolása. Ez esetben csak regisztrált játékosok csatlakozhatnak a kiszolgálóra</translation>
+        <translation type="vanished">/registered_only: A „csak regisztráltak” állapot bekapcsolása. Ez esetben csak regisztrált játékosok csatlakozhatnak a kiszolgálóra</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation>/super_power: Szupererőd aktiválása. Ezzel bármely szobába beléphetsz, és nem lehet téged kirúgni. Addig él, míg ki nem lépsz a kiszolgálóról</translation>
+        <translation type="vanished">/super_power: Szupererőd aktiválása. Ezzel bármely szobába beléphetsz, és nem lehet téged kirúgni. Addig él, míg ki nem lépsz a kiszolgálóról</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation>/stats: A kiszolgáló statisztikáinak lekérdezése</translation>
+        <translation type="vanished">/stats: A kiszolgáló statisztikáinak lekérdezése</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation>/force &lt;yes/no&gt;: A zajló szavazás eredményének kikényszerítése</translation>
+        <translation type="vanished">/force &lt;yes/no&gt;: A zajló szavazás eredményének kikényszerítése</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation>/fix: Akkor is nyitva marad a szoba, ha üres</translation>
+        <translation type="vanished">/fix: Akkor is nyitva marad a szoba, ha üres</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation>/unfix: A /fix parancs visszavonása</translation>
+        <translation type="vanished">/unfix: A /fix parancs visszavonása</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation>A váróterem csevegési parancsainak listája:</translation>
+        <translation type="vanished">A váróterem csevegési parancsainak listája:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation>A szoba csevegési parancsainak listája:</translation>
+        <translation type="vanished">A szoba csevegési parancsainak listája:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation>Parancsok csak kiszolgálókezelőknek:</translation>
+        <translation type="vanished">Parancsok csak kiszolgálókezelőknek:</translation>
     </message>
     <message>
         <source>room</source>
-        <translation>szoba</translation>
+        <translation type="vanished">szoba</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation>váróterem</translation>
+        <translation type="vanished">váróterem</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation>(játszik)</translation>
+        <translation type="vanished">(játszik)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation>(megfigyel)</translation>
+        <translation type="vanished">(megfigyel)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation>A játékos nincs online.</translation>
+        <translation type="vanished">A játékos nincs online.</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/force: Kérjük, „yes”-t vagy „no”-t írj.</translation>
+        <translation type="vanished">/force: Kérjük, „yes”-t vagy „no”-t írj.</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/vote: Kérjük, „yes”-t vagy „no”-t írj.</translation>
+        <translation type="vanished">/vote: Kérjük, „yes”-t vagy „no”-t írj.</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation>Kirúgva</translation>
+        <translation type="vanished">Kirúgva</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation>Erre a kiszolgálóra csak regisztrált felhasználók léphetnek be.</translation>
+        <translation type="vanished">Erre a kiszolgálóra csak regisztrált felhasználók léphetnek be.</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation>fej</translation>
+        <translation type="vanished">fej</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation>írás</translation>
+        <translation type="vanished">írás</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation>Ez a kiszolgáló nem támogatja a visszajátszásokat!</translation>
+        <translation type="vanished">Ez a kiszolgáló nem támogatja a visszajátszásokat!</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation>/greeting [üzenet]: Üdvözlő üzenet beállítása vagy törlése. Ezt a szobába belépő játékosok látják</translation>
+        <translation type="vanished">/greeting [üzenet]: Üdvözlő üzenet beállítása vagy törlése. Ezt a szobába belépő játékosok látják</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation>/save &lt;beállításazonosító&gt; &lt;beállításnév&gt;: A szoba jelenlegi beállításainak hozzáadása a /callvote map paranccsal megszavazható lehetőségekhez</translation>
+        <translation type="vanished">/save &lt;beállításazonosító&gt; &lt;beállításnév&gt;: A szoba jelenlegi beállításainak hozzáadása a /callvote map paranccsal megszavazható lehetőségekhez</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation>/delete &lt;beállításazonosító&gt;: Megszavazható szobabeállítás törlése</translation>
+        <translation type="vanished">/delete &lt;beállításazonosító&gt;: Megszavazható szobabeállítás törlése</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation>/saveroom &lt;fájlnév&gt;: Minden megszavazható szobabeállítás (és az üdvözlő üzenet) mentése fájlba</translation>
+        <translation type="vanished">/saveroom &lt;fájlnév&gt;: Minden megszavazható szobabeállítás (és az üdvözlő üzenet) mentése fájlba</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation>/loadroom &lt;fájlnév&gt;: Megszavazható szobabeállítások (és üdvözlő üzenet) betöltése fájlból</translation>
+        <translation type="vanished">/loadroom &lt;fájlnév&gt;: Megszavazható szobabeállítások (és üdvözlő üzenet) betöltése fájlból</translation>
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation>Szupererő bekapcsolva.</translation>
+        <translation type="vanished">Szupererő bekapcsolva.</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
@@ -5206,79 +5221,79 @@ Ha ez újra meg újra megtörténik, kérjük, kattints a „%2” gombra a főm
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation>Nem rúghatod ki saját magadat!</translation>
+        <translation type="vanished">Nem rúghatod ki saját magadat!</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation>Nem rúghatod ki az egyetlen másik játékost!</translation>
+        <translation type="vanished">Nem rúghatod ki az egyetlen másik játékost!</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation>A játékos nem a te szobádban van.</translation>
+        <translation type="vanished">A játékos nem a te szobádban van.</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation>Ez a játékos védettséget élvez a kirúgással szemben.</translation>
+        <translation type="vanished">Ez a játékos védettséget élvez a kirúgással szemben.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation>Nem vagy szobagazda, sem kiszolgálókezelő!</translation>
+        <translation type="vanished">Nem vagy szobagazda, sem kiszolgálókezelő!</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation>Már te vagy a szobagazda.</translation>
+        <translation type="vanished">Már te vagy a szobagazda.</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation>Üdvözlő üzenet törölve.</translation>
+        <translation type="vanished">Üdvözlő üzenet törölve.</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation>Üdvözlő üzenet beállítva.</translation>
+        <translation type="vanished">Üdvözlő üzenet beállítva.</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation>/callvote kick: Ez csak a gazda nélküli szobákban használható.</translation>
+        <translation type="vanished">/callvote kick: Ez csak a gazda nélküli szobákban használható.</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation>/callvote map: Nincs elérhető pálya.</translation>
+        <translation type="vanished">/callvote map: Nincs elérhető pálya.</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation>Te vagy az új szobagazda!</translation>
+        <translation type="vanished">Te vagy az új szobagazda!</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation>/quit: Kilépés a kiszolgálóról</translation>
+        <translation type="vanished">/quit: Kilépés a kiszolgálóról</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation>Ez a parancs csak a váróteremben használható.</translation>
+        <translation type="vanished">Ez a parancs csak a váróteremben használható.</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation>Ez a parancs csak szobákban használható.</translation>
+        <translation type="vanished">Ez a parancs csak szobákban használható.</translation>
     </message>
     <message>
         <source>This server no longer allows unregistered players to join.</source>
-        <translation>Most már nem csatlakozhatnak regisztrálatlan játékosok erre a kiszolgálóra.</translation>
+        <translation type="vanished">Most már nem csatlakozhatnak regisztrálatlan játékosok erre a kiszolgálóra.</translation>
     </message>
     <message>
         <source>This server now allows unregistered players to join.</source>
-        <translation>Most már regisztrálatlan játékosok is csatlakozhatnak erre a kiszolgálóra.</translation>
+        <translation type="vanished">Most már regisztrálatlan játékosok is csatlakozhatnak erre a kiszolgálóra.</translation>
     </message>
     <message>
         <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation>Elérhető callvote parancsok: hedgehogs &lt;szám&gt;, pause, newseed, map &lt;név&gt;, kick &lt;játékos&gt;</translation>
+        <translation type="vanished">Elérhető callvote parancsok: hedgehogs &lt;szám&gt;, pause, newseed, map &lt;név&gt;, kick &lt;játékos&gt;</translation>
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation>Kérjük, erősítsd meg a kiszolgáló újraindítását ezzel: „/restart_server yes”.</translation>
+        <translation type="vanished">Kérjük, erősítsd meg a kiszolgáló újraindítását ezzel: „/restart_server yes”.</translation>
     </message>
     <message>
         <source>Warning! Room name change flood protection activated</source>
-        <translation>Figyelem! Szobanévváltási elárasztási védelem bekapcsolva</translation>
+        <translation type="vanished">Figyelem! Szobanévváltási elárasztási védelem bekapcsolva</translation>
     </message>
 </context>
 </TS>

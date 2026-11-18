@@ -26,7 +26,6 @@
     </message>
     <message>
         <source>GNU GPL v2</source>
-        <extracomment>Short for “GNU General Public License version 2”</extracomment>
         <translation>GNU GPL v2</translation>
     </message>
     <message>
@@ -378,25 +377,21 @@ Please check your installation!</source>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <extracomment>“Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line</extracomment>
         <translation>Використання</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”</extracomment>
         <translation>OPTION</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
         <translation>CONNECTSTRING</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <extracomment>“Options” as in “command-line options”</extracomment>
         <translation>Опції</translation>
     </message>
     <message>
@@ -895,6 +890,10 @@ Last engine message:
     <message>
         <source>Edit</source>
         <translation>Змінити</translation>
+    </message>
+    <message>
+        <source>WFC</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2408,11 +2407,11 @@ Last engine message:
     </message>
     <message>
         <source>Date: %1</source>
-        <translation>Дата: %1</translation>
+        <translation type="vanished">Дата: %1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation>Розмір: %1</translation>
+        <translation type="vanished">Розмір: %1</translation>
     </message>
     <message>
         <source>%1%</source>
@@ -2423,6 +2422,18 @@ Last engine message:
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
         <translation>%1 (%2%) - %3</translation>
+    </message>
+    <message>
+        <source>Date: %1
+</source>
+        <translation type="unfinished">Дата: %1
+</translation>
+    </message>
+    <message>
+        <source>Size: %1
+</source>
+        <translation type="unfinished">Розмір: %1
+</translation>
     </message>
 </context>
 <context>
@@ -2494,6 +2505,10 @@ Last engine message:
     <message>
         <source>Delegate room control</source>
         <translation>Делегувати керування кімнатою</translation>
+    </message>
+    <message>
+        <source>Show incompatible</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3626,6 +3641,10 @@ Would you like to reconnect securely?</source>
         <source>Forts</source>
         <translation>Форти</translation>
     </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished">Версія</translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -4634,467 +4653,343 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <name>credits</name>
     <message>
         <source>Programming</source>
-        <translation>Програмування</translation>
+        <translation type="vanished">Програмування</translation>
     </message>
     <message>
         <source>Game engine</source>
-        <translation>Ігровий рушій</translation>
+        <translation type="vanished">Ігровий рушій</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation>Творець</translation>
+        <translation type="vanished">Творець</translation>
     </message>
     <message>
         <source>Many engine improvements</source>
-        <translation>Багато покращень рушія</translation>
+        <translation type="vanished">Багато покращень рушія</translation>
     </message>
     <message>
         <source>Gamepad and Lua integration</source>
-        <translation>Інтеграція геймпадів та Lua</translation>
+        <translation type="vanished">Інтеграція геймпадів та Lua</translation>
     </message>
     <message>
         <source>Campaign support</source>
-        <translation>Підтримка кампанії</translation>
+        <translation type="vanished">Підтримка кампанії</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
-        <translation>Покращення налаштувань тем</translation>
+        <translation type="vanished">Покращення налаштувань тем</translation>
     </message>
     <message>
         <source>Some Pas2C and GLES2 work</source>
-        <translation>Певна робота з Pas2C та GLES2</translation>
+        <translation type="vanished">Певна робота з Pas2C та GLES2</translation>
     </message>
     <message>
         <source>Video recording</source>
-        <translation>Запис відео</translation>
+        <translation type="vanished">Запис відео</translation>
     </message>
     <message>
         <source>Other improvements</source>
-        <translation>Інші покращення</translation>
+        <translation type="vanished">Інші покращення</translation>
     </message>
     <message>
         <source>Map generation</source>
-        <translation>Генерування мап</translation>
+        <translation type="vanished">Генерування мап</translation>
     </message>
     <message>
         <source>Core map generators</source>
-        <translation>Генератори основних мап</translation>
+        <translation type="vanished">Генератори основних мап</translation>
     </message>
     <message>
         <source>Perlin maps and other improvements</source>
-        <translation>Карти з шуму та інші покращення</translation>
+        <translation type="vanished">Карти з шуму та інші покращення</translation>
     </message>
     <message>
         <source>Maze maps</source>
-        <translation>Мапи з лабіринтами</translation>
+        <translation type="vanished">Мапи з лабіринтами</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Зброя</translation>
+        <translation type="vanished">Зброя</translation>
     </message>
     <message>
         <source>Most core weapons</source>
-        <translation>Більшість основної зброї</translation>
-    </message>
-    <message>
-        <source>Air mine, rubber, others</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Drill rocket, ballgun, RC plane</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Більшість основної зброї</translation>
     </message>
     <message>
         <source>Freezer</source>
-        <translation>Холодильник</translation>
-    </message>
-    <message>
-        <source>Mine number and time game settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Холодильник</translation>
     </message>
     <message>
         <source>Frontend / main menu</source>
-        <translation>Фронтенд / головне меню</translation>
+        <translation type="vanished">Фронтенд / головне меню</translation>
     </message>
     <message>
         <source>Many frontend improvements</source>
-        <translation>Багато покращень фронтенду</translation>
-    </message>
-    <message>
-        <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Багато покращень фронтенду</translation>
     </message>
     <message>
         <source>Login dialogs, other improvements</source>
-        <translation>Діалоги входу, інші покращення</translation>
+        <translation type="vanished">Діалоги входу, інші покращення</translation>
     </message>
     <message>
         <source>Missions and styles</source>
-        <translation>Місії та стилі</translation>
+        <translation type="vanished">Місії та стилі</translation>
     </message>
     <message>
         <source>A Classic Fairytale</source>
-        <translation>Класична казка</translation>
+        <translation type="vanished">Класична казка</translation>
     </message>
     <message>
         <source>A Space Adventure</source>
-        <translation>Космічна пригода</translation>
-    </message>
-    <message>
-        <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Космічна пригода</translation>
     </message>
     <message>
         <source>Some styles and missions</source>
-        <translation>Деякі стилі і місії</translation>
-    </message>
-    <message>
-        <source>Battalion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Continental supplies</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Деякі стилі і місії</translation>
     </message>
     <message>
         <source>Teamwork 2</source>
-        <translation>Командна робота 2</translation>
-    </message>
-    <message>
-        <source>Climb Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Portal Mind Challenge</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Командна робота 2</translation>
     </message>
     <message>
         <source>Game server</source>
-        <translation>Ігровий сервер</translation>
+        <translation type="vanished">Ігровий сервер</translation>
     </message>
     <message>
         <source>Ports</source>
-        <translation>Порти</translation>
+        <translation type="vanished">Порти</translation>
     </message>
     <message>
         <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation>Порт на macOS/iPhone, конвертація на OpenGL-ES</translation>
+        <translation type="vanished">Порт на macOS/iPhone, конвертація на OpenGL-ES</translation>
     </message>
     <message>
         <source>Android port</source>
-        <translation>Порт для Android</translation>
+        <translation type="vanished">Порт для Android</translation>
     </message>
     <message>
         <source>Android netplay, portability abstraction</source>
-        <translation>Мережева гра на Android, портативність</translation>
+        <translation type="vanished">Мережева гра на Android, портативність</translation>
     </message>
     <message>
         <source>WebGL port</source>
-        <translation>Порт на WebGL</translation>
+        <translation type="vanished">Порт на WebGL</translation>
     </message>
     <message>
         <source>iPhone/iPad ports</source>
-        <translation>Порти для iPhone/iPad</translation>
+        <translation type="vanished">Порти для iPhone/iPad</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Графіка</translation>
+        <translation type="vanished">Графіка</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Основні</translation>
+        <translation type="vanished">Основні</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation>Теми</translation>
+        <translation type="vanished">Теми</translation>
     </message>
     <message>
         <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation>Природа, Сніг, Місто, Замок, Хелоуін, Острів</translation>
-    </message>
-    <message>
-        <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Golf, Hoggywood, Stage</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Природа, Сніг, Місто, Замок, Хелоуін, Острів</translation>
     </message>
     <message>
         <source>Hoggywood</source>
-        <translation>Голковуд</translation>
-    </message>
-    <message>
-        <source>Cave, Olympics</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Голковуд</translation>
     </message>
     <message>
         <source>Fruit, Cake</source>
-        <translation>Фрукти, Торт</translation>
+        <translation type="vanished">Фрукти, Торт</translation>
     </message>
     <message>
         <source>Art</source>
-        <translation>Мистецтво</translation>
+        <translation type="vanished">Мистецтво</translation>
     </message>
     <message>
         <source>Beach</source>
-        <translation>Пляж</translation>
+        <translation type="vanished">Пляж</translation>
     </message>
     <message>
         <source>Brick</source>
-        <translation>Цегла</translation>
+        <translation type="vanished">Цегла</translation>
     </message>
     <message>
         <source>Hell</source>
-        <translation>Пекло</translation>
+        <translation type="vanished">Пекло</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation>Джунглі</translation>
+        <translation type="vanished">Джунглі</translation>
     </message>
     <message>
         <source>Sheep</source>
-        <translation>Вівця</translation>
+        <translation type="vanished">Вівця</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation>Мапи</translation>
-    </message>
-    <message>
-        <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Castle, PirateFlag</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ShoppaKing, TrophyRace</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Мапи</translation>
     </message>
     <message>
         <source>Battlefield</source>
-        <translation>Поле бою</translation>
-    </message>
-    <message>
-        <source>CTF_Blizzard</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Поле бою</translation>
     </message>
     <message>
         <source>Cheese</source>
-        <translation>Сир</translation>
-    </message>
-    <message>
-        <source>ClimbHome</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lonely_Island</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Octorama</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Сир</translation>
     </message>
     <message>
         <source>portal</source>
-        <translation>портал</translation>
+        <translation type="vanished">портал</translation>
     </message>
     <message>
         <source>Ruler</source>
-        <translation>Лінійка</translation>
-    </message>
-    <message>
-        <source>Sticks</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Лінійка</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation>Форти</translation>
-    </message>
-    <message>
-        <source>EvilChicken</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Olympic</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Форти</translation>
     </message>
     <message>
         <source>Tank</source>
-        <translation>Танк</translation>
+        <translation type="vanished">Танк</translation>
     </message>
     <message>
         <source>Snail</source>
-        <translation>Равлик</translation>
-    </message>
-    <message>
-        <source>SteelTower</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Равлик</translation>
     </message>
     <message>
         <source>Hats, graves, other</source>
-        <translation>Капелюхи, надгробки, інше</translation>
+        <translation type="vanished">Капелюхи, надгробки, інше</translation>
     </message>
     <message>
         <source>See CREDITS text file</source>
-        <translation>Дивіться в файлі  CREDITS</translation>
+        <translation type="vanished">Дивіться в файлі  CREDITS</translation>
     </message>
     <message>
         <source>Sounds</source>
-        <translation>Звуки</translation>
+        <translation type="vanished">Звуки</translation>
     </message>
     <message>
         <source>Hedgehogs voice</source>
-        <translation>Голос їжаків</translation>
+        <translation type="vanished">Голос їжаків</translation>
     </message>
     <message>
         <source>Default_pl, Russian_pl voices</source>
-        <translation>Голоси Default_pl, Russian_pl</translation>
+        <translation type="vanished">Голоси Default_pl, Russian_pl</translation>
     </message>
     <message>
         <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation>Різні автори з www.freesound.org (дивіться файл CREDITS)</translation>
+        <translation type="vanished">Різні автори з www.freesound.org (дивіться файл CREDITS)</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Музика</translation>
-    </message>
-    <message>
-        <source>City, Rock, others</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Музика</translation>
     </message>
     <message>
         <source>Compost</source>
-        <translation>Сміття</translation>
-    </message>
-    <message>
-        <source>EarthRise, oriental, Pirate, snow</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Сміття</translation>
     </message>
     <message>
         <source>Fruit, Jungle</source>
-        <translation>Фрукти, Джунглі</translation>
+        <translation type="vanished">Фрукти, Джунглі</translation>
     </message>
     <message>
         <source>Nature</source>
-        <translation>Природа</translation>
-    </message>
-    <message>
-        <source>olympics_sd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Природа</translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation>Локалізації</translation>
+        <translation type="vanished">Локалізації</translation>
     </message>
     <message>
         <source>Brazilian Portuguese</source>
-        <translation>Бразильська португальська</translation>
+        <translation type="vanished">Бразильська португальська</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation>Болгарська</translation>
+        <translation type="vanished">Болгарська</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>Чеська</translation>
+        <translation type="vanished">Чеська</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>Китайська</translation>
+        <translation type="vanished">Китайська</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation>Фінська</translation>
+        <translation type="vanished">Фінська</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Французька</translation>
+        <translation type="vanished">Французька</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Німецька</translation>
+        <translation type="vanished">Німецька</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation>Грецька</translation>
+        <translation type="vanished">Грецька</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>Італійська</translation>
+        <translation type="vanished">Італійська</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation>Японська</translation>
+        <translation type="vanished">Японська</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation>Корейська</translation>
+        <translation type="vanished">Корейська</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation>Литовська</translation>
+        <translation type="vanished">Литовська</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Польська</translation>
+        <translation type="vanished">Польська</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Португальська</translation>
+        <translation type="vanished">Португальська</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>Російська</translation>
+        <translation type="vanished">Російська</translation>
     </message>
     <message>
         <source>Scottish Gaelic</source>
-        <translation>Шотландська гаельська</translation>
+        <translation type="vanished">Шотландська гаельська</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation>Словацька</translation>
+        <translation type="vanished">Словацька</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>Іспанська</translation>
+        <translation type="vanished">Іспанська</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation>Шведська</translation>
+        <translation type="vanished">Шведська</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation>Українська</translation>
+        <translation type="vanished">Українська</translation>
     </message>
     <message>
         <source>Special thanks</source>
-        <translation>Особлива подяка</translation>
+        <translation type="vanished">Особлива подяка</translation>
     </message>
     <message>
         <source>Project founder</source>
-        <translation>Засновник проекту</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Засновник проекту</translation>
     </message>
 </context>
 <context>
@@ -5169,27 +5064,27 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation>Нікнейм вже використовується</translation>
+        <translation type="vanished">Нікнейм вже використовується</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation>Немає прав контролера</translation>
+        <translation type="vanished">Немає прав контролера</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation>Помилка авторизації</translation>
+        <translation type="vanished">Помилка авторизації</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>60 секунд очікування після копняка</translation>
+        <translation type="vanished">60 секунд очікування після копняка</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation>копнутий</translation>
+        <translation type="vanished">копнутий</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation>Час відклику</translation>
+        <translation type="vanished">Час відклику</translation>
     </message>
     <message>
         <source>bye</source>
@@ -5221,343 +5116,87 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>New voting started</source>
-        <translation>Почалося нове голосування</translation>
+        <translation type="vanished">Почалося нове голосування</translation>
     </message>
     <message>
         <source>kick</source>
-        <translation>копнути</translation>
+        <translation type="vanished">копнути</translation>
     </message>
     <message>
         <source>map</source>
-        <translation>мапа</translation>
+        <translation type="vanished">мапа</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation>пауза</translation>
-    </message>
-    <message>
-        <source>Reconnected too fast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning! Chat flood protection activated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Excess flood</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Game messages flood detected - 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning! Joins flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">пауза</translation>
     </message>
     <message>
         <source>new seed</source>
-        <translation>новий висів</translation>
-    </message>
-    <message>
-        <source>/maxteams: specify number from 2 to 8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The game can&apos;t be started with less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">новий висів</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation>Доступ заборонено.</translation>
+        <translation type="vanished">Доступ заборонено.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation>Ви не голова кімнати!</translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info!</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ви не голова кімнати!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation>Забагато команд!</translation>
+        <translation type="vanished">Забагато команд!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation>Забагато їжаків!</translation>
+        <translation type="vanished">Забагато їжаків!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation>Команда з таким же іменем вже є в списку.</translation>
-    </message>
-    <message>
-        <source>Joining not possible: Round is in progress.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This room currently does not allow adding new teams.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error: The team you tried to remove does not exist.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A room with the same name already exists.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/callvote kick: You need to specify a nickname.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/callvote kick: No such user!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/callvote map: No such map!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/callvote pause: No game in progress!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Команда з таким же іменем вже є в списку.</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation>Немає такої кімнати.</translation>
-    </message>
-    <message>
-        <source>Room version incompatible to your Hedgewars version!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Access denied. This room is for registered users only.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned from this room.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already provided.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Немає такої кімнати.</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation>Невірне число.</translation>
-    </message>
-    <message>
-        <source>There&apos;s no voting going on.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Невірне число.</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation>Ви вже проголосували.</translation>
+        <translation type="vanished">Ви вже проголосували.</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation>Ваш голос було враховано.</translation>
+        <translation type="vanished">Ваш голос було враховано.</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation>Голосування завершене.</translation>
-    </message>
-    <message>
-        <source>Pause toggled.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Голосування завершене.</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation>Голосування вже скінчилось.</translation>
+        <translation type="vanished">Голосування вже скінчилось.</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation>їжаків в команді: </translation>
-    </message>
-    <message>
-        <source>/info &lt;player&gt;: Show info about player</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/help: Show chat command help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/callvote [arguments]: Start a vote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/stats: Query server stats</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/fix: Force this room to stay open when it is empty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/unfix: Undo the /fix command</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>List of lobby chat commands:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>List of room chat commands:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Commands for server admins only:</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">їжаків в команді: </translation>
     </message>
     <message>
         <source>room</source>
-        <translation>кімната</translation>
+        <translation type="vanished">кімната</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation>вестибюль</translation>
-    </message>
-    <message>
-        <source>(playing)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>(spectating)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Player is not online.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">вестибюль</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation>Копнутий</translation>
-    </message>
-    <message>
-        <source>This server only allows registered users to join.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>heads</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tails</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This server does not support replays!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Копнутий</translation>
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation>Суперсила активована.</translation>
+        <translation type="vanished">Суперсила активована.</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
@@ -5565,79 +5204,23 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation>Не можна копати себе!</translation>
-    </message>
-    <message>
-        <source>You can&apos;t kick the only other player!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The player is not in your room.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This player is protected from being kicked.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You&apos;re not the room master or a server admin!</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Не можна копати себе!</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation>Ви вже є головою кімнати!</translation>
-    </message>
-    <message>
-        <source>Greeting message cleared.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Greeting message set.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>/callvote map: No maps available.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ви вже є головою кімнати!</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation>Ви новий голова кімнати!</translation>
+        <translation type="vanished">Ви новий голова кімнати!</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation>/quit: Вийти з сервера</translation>
-    </message>
-    <message>
-        <source>This command is only available in the lobby.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">/quit: Вийти з сервера</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation>Ця команда працює лише в кімнатах.</translation>
-    </message>
-    <message>
-        <source>This server no longer allows unregistered players to join.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This server now allows unregistered players to join.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning! Room name change flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ця команда працює лише в кімнатах.</translation>
     </message>
 </context>
 </TS>

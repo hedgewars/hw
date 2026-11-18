@@ -1,24 +1,24 @@
 #!/bin/sh
 
 
-if [ -d QTfrontend ]; then
-	cd QTfrontend
+if [ -d frontend-qt6 ]; then
+	cd frontend-qt6
 else
-	if [ -d ../QTfrontend ]; then
-		cd ../QTfrontend
+	if [ -d ../frontend-qt6 ]; then
+		cd ../frontend-qt6
 	else
-		echo 'abort: Directory "QTfrontend" not found!' >&2
+		echo 'abort: Directory "frontend-qt6" not found!' >&2
 		exit 1
 	fi
 fi
 
 if [ -z "$1" ]; then
-	OUTPUT_DIRECTORY="../doc/QTfrontend"
+	OUTPUT_DIRECTORY="../doc/frontend-qt6"
 else
 	OUTPUT_DIRECTORY="$1"
 fi
 
-echo "Creating documentation for Qt-Frontend in $OUTPUT_DIRECTORY ..."
+echo "Creating documentation for Qt Frontend in $OUTPUT_DIRECTORY ..."
 
 if [ $(which hg) ]; then
 

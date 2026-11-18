@@ -26,7 +26,6 @@
     </message>
     <message>
         <source>GNU GPL v2</source>
-        <extracomment>Short for “GNU General Public License version 2”</extracomment>
         <translation>GNU GPL バージョン2</translation>
     </message>
     <message>
@@ -346,25 +345,21 @@ Please check your installation!</source>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <extracomment>“Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line</extracomment>
         <translation>利用説明</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”</extracomment>
         <translation>設定</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
         <translation>接続列</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <extracomment>“Options” as in “command-line options”</extracomment>
         <translation>設定</translation>
     </message>
     <message>
@@ -854,6 +849,10 @@ Last engine message:
     </message>
     <message>
         <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WFC</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2225,11 +2224,11 @@ Last engine message:
     </message>
     <message>
         <source>Date: %1</source>
-        <translation>日付：%1</translation>
+        <translation type="vanished">日付：%1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation>サイズ：%1</translation>
+        <translation type="vanished">サイズ：%1</translation>
     </message>
     <message>
         <source>%1%</source>
@@ -2240,6 +2239,18 @@ Last engine message:
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
         <translation>%1（%2%）-&#x3000;%3</translation>
+    </message>
+    <message>
+        <source>Date: %1
+</source>
+        <translation type="unfinished">日付：%1
+</translation>
+    </message>
+    <message>
+        <source>Size: %1
+</source>
+        <translation type="unfinished">サイズ：%1
+</translation>
     </message>
 </context>
 <context>
@@ -2307,6 +2318,10 @@ Last engine message:
     <message>
         <source>Delegate room control</source>
         <translation>ルーム管理代理人指定</translation>
+    </message>
+    <message>
+        <source>Show incompatible</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3287,6 +3302,10 @@ Would you like to reconnect securely?</source>
     <message>
         <source>Forts</source>
         <translation>要塞</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4274,495 +4293,51 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
 <context>
     <name>credits</name>
     <message>
-        <source>Programming</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Game engine</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Creator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Many engine improvements</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Gamepad and Lua integration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Campaign support</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Theme customization improvements</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Some Pas2C and GLES2 work</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Video recording</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other improvements</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Map generation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Core map generators</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Perlin maps and other improvements</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maze maps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Weapons</source>
-        <translation type="unfinished">武器</translation>
-    </message>
-    <message>
-        <source>Most core weapons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Air mine, rubber, others</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Drill rocket, ballgun, RC plane</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Freezer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mine number and time game settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Frontend / main menu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Many frontend improvements</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login dialogs, other improvements</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Missions and styles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A Classic Fairytale</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A Space Adventure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Some styles and missions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Battalion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Continental supplies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Teamwork 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Climb Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Portal Mind Challenge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Game server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ports</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Android port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Android netplay, portability abstraction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>WebGL port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>iPhone/iPad ports</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">武器</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished">グラフィック</translation>
+        <translation type="obsolete">グラフィック</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">一般</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Golf, Hoggywood, Stage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hoggywood</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cave, Olympics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fruit, Cake</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Art</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Beach</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hell</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Jungle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sheep</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Castle, PirateFlag</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ShoppaKing, TrophyRace</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Battlefield</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CTF_Blizzard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cheese</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ClimbHome</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lonely_Island</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Octorama</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>portal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ruler</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sticks</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">一般</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation type="unfinished">要塞</translation>
-    </message>
-    <message>
-        <source>EvilChicken</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Olympic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tank</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Snail</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SteelTower</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hats, graves, other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>See CREDITS text file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sounds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hedgehogs voice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default_pl, Russian_pl voices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">要塞</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished">音楽</translation>
-    </message>
-    <message>
-        <source>City, Rock, others</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Compost</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>EarthRise, oriental, Pirate, snow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fruit, Jungle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>olympics_sd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Translations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brazilian Portuguese</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bulgarian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Finnish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Japanese</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Korean</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lithuanian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Portuguese</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scottish Gaelic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Slovak</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Swedish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ukrainian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Special thanks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Project founder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">音楽</translation>
     </message>
 </context>
 <context>
     <name>server</name>
     <message>
         <source>Nickname is already in use</source>
-        <translation>ニックネームはすでに使用中です</translation>
+        <translation type="vanished">ニックネームはすでに使用中です</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation>チェッカー権利を持っていません</translation>
+        <translation type="vanished">チェッカー権利を持っていません</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation>認証失敗</translation>
+        <translation type="vanished">認証失敗</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>キック後からの60秒のクールダウン</translation>
+        <translation type="vanished">キック後からの60秒のクールダウン</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation>キックされました</translation>
+        <translation type="vanished">キックされました</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation>ピングタイムアウト</translation>
+        <translation type="vanished">ピングタイムアウト</translation>
     </message>
     <message>
         <source>bye</source>
@@ -4770,47 +4345,47 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>New voting started</source>
-        <translation>新しい投票が始まりました</translation>
+        <translation type="vanished">新しい投票が始まりました</translation>
     </message>
     <message>
         <source>kick</source>
-        <translation>キック</translation>
+        <translation type="vanished">キック</translation>
     </message>
     <message>
         <source>map</source>
-        <translation>マップ</translation>
+        <translation type="vanished">マップ</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation>ポーズ</translation>
+        <translation type="vanished">ポーズ</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation>再接続は速すぎました</translation>
+        <translation type="vanished">再接続は速すぎました</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation>忠告！チャット洪水防護が作動中</translation>
+        <translation type="vanished">忠告！チャット洪水防護が作動中</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation>洪水過剰</translation>
+        <translation type="vanished">洪水過剰</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation>ゲームメッセージ洪水探知（１）</translation>
+        <translation type="vanished">ゲームメッセージ洪水探知（１）</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation>忠告！参加洪水防護が作動中</translation>
+        <translation type="vanished">忠告！参加洪水防護が作動中</translation>
     </message>
     <message>
         <source>new seed</source>
-        <translation>新しいシード</translation>
+        <translation type="vanished">新しいシード</translation>
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
-        <translation>/maxteams: 2から8までの数値を指定してください</translation>
+        <translation type="vanished">/maxteams: 2から8までの数値を指定してください</translation>
     </message>
     <message>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
@@ -4818,295 +4393,295 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation>ゲームを始めるには、二つ以上のクランが必要です！</translation>
+        <translation type="vanished">ゲームを始めるには、二つ以上のクランが必要です！</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation>空のコンフィグエントリー。</translation>
+        <translation type="vanished">空のコンフィグエントリー。</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation>アクセス禁止。</translation>
+        <translation type="vanished">アクセス禁止。</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation>ルームマスターではありません！</translation>
+        <translation type="vanished">ルームマスターではありません！</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation>針鼠の情報が破損しました！</translation>
+        <translation type="vanished">針鼠の情報が破損しました！</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation>チーム数が多すぎます！</translation>
+        <translation type="vanished">チーム数が多すぎます！</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation>針鼠数が多すぎます！</translation>
+        <translation type="vanished">針鼠数が多すぎます！</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation>同名のチームがすでに参加チームリストに載ってます</translation>
+        <translation type="vanished">同名のチームがすでに参加チームリストに載ってます</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation>参加不可能：現在ゲーム中です。</translation>
+        <translation type="vanished">参加不可能：現在ゲーム中です。</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation>このルームは現在、チーム追加が制限されています。</translation>
+        <translation type="vanished">このルームは現在、チーム追加が制限されています。</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation>エラー：排除しようとしているチームが存在しません。</translation>
+        <translation type="vanished">エラー：排除しようとしているチームが存在しません。</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation>所有していないチームを排除することができません。</translation>
+        <translation type="vanished">所有していないチームを排除することができません。</translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>違法なルーム名！ルーム名は１から４０までの半角文字から成り立つ必要があります。または先頭のスペースと末尾のスペース、「$()*+?[]^{|}」の内の文字を使用してはなりません。</translation>
+        <translation type="vanished">違法なルーム名！ルーム名は１から４０までの半角文字から成り立つ必要があります。または先頭のスペースと末尾のスペース、「$()*+?[]^{|}」の内の文字を使用してはなりません。</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation>同名のルームがすでに存在します。</translation>
+        <translation type="vanished">同名のルームがすでに存在します。</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation>/callvote kick：ニックネームを指定する必要があります。</translation>
+        <translation type="vanished">/callvote kick：ニックネームを指定する必要があります。</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation>/callvote kick：ユーザーが見つかりません！</translation>
+        <translation type="vanished">/callvote kick：ユーザーが見つかりません！</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation>/callvote map：マップが見つかりません！</translation>
+        <translation type="vanished">/callvote map：マップが見つかりません！</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation>/callvote pause：現在、ゲーム中ではありません！</translation>
+        <translation type="vanished">/callvote pause：現在、ゲーム中ではありません！</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation>/callvote hedgehogs：１から8までの数値を指定してください。</translation>
+        <translation type="vanished">/callvote hedgehogs：１から8までの数値を指定してください。</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>違法なルーム名！ルーム名は１から４０までの半角文字から成り立つ必要があります。または先頭のスペースと末尾のスペース、「$()*+?[]^{|}」の内の文字を使用してはなりません。</translation>
+        <translation type="vanished">違法なルーム名！ルーム名は１から４０までの半角文字から成り立つ必要があります。または先頭のスペースと末尾のスペース、「$()*+?[]^{|}」の内の文字を使用してはなりません。</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation>指定された部屋が存在しません。</translation>
+        <translation type="vanished">指定された部屋が存在しません。</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation>ルームバージョンとヘッジウォーズヴァージョンの間には非互換があります。</translation>
+        <translation type="vanished">ルームバージョンとヘッジウォーズヴァージョンの間には非互換があります。</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation>アクセス禁止：このルームは現在参加を認めていません。。</translation>
+        <translation type="vanished">アクセス禁止：このルームは現在参加を認めていません。。</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation>アクセス禁止：このルームは登録ユーザー専用です。</translation>
+        <translation type="vanished">アクセス禁止：このルームは登録ユーザー専用です。</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation>このルームへのアクセスは禁止されています。</translation>
+        <translation type="vanished">このルームへのアクセスは禁止されています。</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
-        <translation>ニックネームはすでに指定済みです。</translation>
+        <translation type="vanished">ニックネームはすでに指定済みです。</translation>
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>違法なニックネーム！ニックネームは１から４０までの半角文字から成り立つ必要があります。または先頭のスペースと末尾のスペース、「$()*+?[]^{|}」の内の文字を使用してはなりません。</translation>
+        <translation type="vanished">違法なニックネーム！ニックネームは１から４０までの半角文字から成り立つ必要があります。または先頭のスペースと末尾のスペース、「$()*+?[]^{|}」の内の文字を使用してはなりません。</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
-        <translation>プロトコル番号はもう指定済みです。</translation>
+        <translation type="vanished">プロトコル番号はもう指定済みです。</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation>不正な数値。</translation>
+        <translation type="vanished">不正な数値。</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation>現在は投票中ではありません。</translation>
+        <translation type="vanished">現在は投票中ではありません。</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation>すでに投票済みです。</translation>
+        <translation type="vanished">すでに投票済みです。</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation>投票を受け取りました。</translation>
+        <translation type="vanished">投票を受け取りました。</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation>投票が終了しました。</translation>
+        <translation type="vanished">投票が終了しました。</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation>ポーズが切り替えられました。</translation>
+        <translation type="vanished">ポーズが切り替えられました。</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation>投票失効です。</translation>
+        <translation type="vanished">投票失効です。</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation>チーム内の針鼠数：</translation>
+        <translation type="vanished">チーム内の針鼠数：</translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation>/info ＜ニックネーム＞：プレーヤー情報を表示する</translation>
+        <translation type="vanished">/info ＜ニックネーム＞：プレーヤー情報を表示する</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation>/me ＜メッセージ＞:チャットアクション</translation>
+        <translation type="vanished">/me ＜メッセージ＞:チャットアクション</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation>/rnd：「表」か「裏」をランダムに出力する</translation>
+        <translation type="vanished">/rnd：「表」か「裏」をランダムに出力する</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation>/rnd ＜選択肢１＞&#x3000;＜選択肢２＞&#x3000;。。。:選択肢のうちの一つをランダムに出力する</translation>
+        <translation type="vanished">/rnd ＜選択肢１＞&#x3000;＜選択肢２＞&#x3000;。。。:選択肢のうちの一つをランダムに出力する</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation>/watch ＜番号＞：サーバーで保存されたデモを再生する</translation>
+        <translation type="vanished">/watch ＜番号＞：サーバーで保存されたデモを再生する</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation>/help：チャットコマンドの説明を読む</translation>
+        <translation type="vanished">/help：チャットコマンドの説明を読む</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation>/callvote ＜投票タイプ＞:投票を始める</translation>
+        <translation type="vanished">/callvote ＜投票タイプ＞:投票を始める</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation>/vote&#x3000;＜投票＞：賛成「yes」か反対「no」で投票する</translation>
+        <translation type="vanished">/vote&#x3000;＜投票＞：賛成「yes」か反対「no」で投票する</translation>
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation>/delegate ＜ニックネーム＞: 他のプレーヤーをルーム管理人にする</translation>
+        <translation type="vanished">/delegate ＜ニックネーム＞: 他のプレーヤーをルーム管理人にする</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation>/maxteams&#x3000;＜数＞：最大のチーム数を指定する</translation>
+        <translation type="vanished">/maxteams&#x3000;＜数＞：最大のチーム数を指定する</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation>/global&#x3000;＜メッセージ＞：グロリアチャットにメッセージを送る</translation>
+        <translation type="vanished">/global&#x3000;＜メッセージ＞：グロリアチャットにメッセージを送る</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation>/registered_only：非登録プレーヤー制限状態を切り替える</translation>
+        <translation type="vanished">/registered_only：非登録プレーヤー制限状態を切り替える</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation>/super_power:サーバーから去るまでの間でアドミン権限を作動する。</translation>
+        <translation type="vanished">/super_power:サーバーから去るまでの間でアドミン権限を作動する。</translation>
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation>/stats：サーバー統計を出力する</translation>
+        <translation type="vanished">/stats：サーバー統計を出力する</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation>/force&#x3000;＜投票＞：投票結果を強制的に賛成「yes」か反対「no」かにする</translation>
+        <translation type="vanished">/force&#x3000;＜投票＞：投票結果を強制的に賛成「yes」か反対「no」かにする</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation>/fix：ルームがプレーヤーなしでも存在続けるようにする</translation>
+        <translation type="vanished">/fix：ルームがプレーヤーなしでも存在続けるようにする</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation>/unfix：「/fix」との逆効果</translation>
+        <translation type="vanished">/unfix：「/fix」との逆効果</translation>
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation>ロビーで利用可能コマンド：</translation>
+        <translation type="vanished">ロビーで利用可能コマンド：</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation>ルームで利用可能コマンド</translation>
+        <translation type="vanished">ルームで利用可能コマンド</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation>サーバーアドミン専用コマンド：</translation>
+        <translation type="vanished">サーバーアドミン専用コマンド：</translation>
     </message>
     <message>
         <source>room</source>
-        <translation>ルーム</translation>
+        <translation type="vanished">ルーム</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation>ロビー</translation>
+        <translation type="vanished">ロビー</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation>「プレー中」</translation>
+        <translation type="vanished">「プレー中」</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation>「観戦中」</translation>
+        <translation type="vanished">「観戦中」</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation>プレイヤーがオフラインです。</translation>
+        <translation type="vanished">プレイヤーがオフラインです。</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/force：賛成「yes」か反対「no」で投票してください。</translation>
+        <translation type="vanished">/force：賛成「yes」か反対「no」で投票してください。</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/vote：賛成「yes」か反対「no」で投票してください。</translation>
+        <translation type="vanished">/vote：賛成「yes」か反対「no」で投票してください。</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation>キックされました</translation>
+        <translation type="vanished">キックされました</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation>このサーバーは登録プレーヤーのみが参加できます。</translation>
+        <translation type="vanished">このサーバーは登録プレーヤーのみが参加できます。</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation>表</translation>
+        <translation type="vanished">表</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation>裏</translation>
+        <translation type="vanished">裏</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation>このサーバーではデモ再生はサポートされていません</translation>
+        <translation type="vanished">このサーバーではデモ再生はサポートされていません</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation>/greeting&#x3000;＜メッセージ＞：歓迎メッセージを指定する</translation>
+        <translation type="vanished">/greeting&#x3000;＜メッセージ＞：歓迎メッセージを指定する</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation>/save ＜コンフィグID＞&#x3000;＜コンフィグ名＞：現在のルームコンフィグを「/callvote map」で投票できるようにします</translation>
+        <translation type="vanished">/save ＜コンフィグID＞&#x3000;＜コンフィグ名＞：現在のルームコンフィグを「/callvote map」で投票できるようにします</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation>/delete ＜コンフィグID＞：指定されたルームコンフィグを「/callvote map」で投票できないようにします</translation>
+        <translation type="vanished">/delete ＜コンフィグID＞：指定されたルームコンフィグを「/callvote map」で投票できないようにします</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation>/saveroom&#x3000;＜ファイル名＞：投票できるルームコンフィグを指定されたファイルに保存する</translation>
+        <translation type="vanished">/saveroom&#x3000;＜ファイル名＞：投票できるルームコンフィグを指定されたファイルに保存する</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation>/loadroom&#x3000;＜ファイル名＞：投票できるルームコンフィグを指定されたファイルから読み込む</translation>
+        <translation type="vanished">/loadroom&#x3000;＜ファイル名＞：投票できるルームコンフィグを指定されたファイルから読み込む</translation>
     </message>
     <message>
         <source>&apos;Registered only&apos; state toggled.</source>
@@ -5114,7 +4689,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation>アドミン権限が作動されました。</translation>
+        <translation type="vanished">アドミン権限が作動されました。</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
@@ -5122,79 +4697,59 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation>自分をキックすることができません！</translation>
+        <translation type="vanished">自分をキックすることができません！</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation>唯一の他のプレーヤーをキックすることができません！</translation>
+        <translation type="vanished">唯一の他のプレーヤーをキックすることができません！</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation>指定されたプレイヤーがこのロームに参加していません。</translation>
+        <translation type="vanished">指定されたプレイヤーがこのロームに参加していません。</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation>指定されたプレーヤーをキックすることができません。</translation>
+        <translation type="vanished">指定されたプレーヤーをキックすることができません。</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation>ルーム管理人でもサーバーアドミニストレータでもありません！</translation>
+        <translation type="vanished">ルーム管理人でもサーバーアドミニストレータでもありません！</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation>すでにルーム管理人です</translation>
+        <translation type="vanished">すでにルーム管理人です</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation>歓迎メッセージが消却されました。</translation>
+        <translation type="vanished">歓迎メッセージが消却されました。</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation>歓迎メッセージがセットされました。</translation>
+        <translation type="vanished">歓迎メッセージがセットされました。</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation>/callvote kick：ルーム管理人無しのルームのみで可能です</translation>
+        <translation type="vanished">/callvote kick：ルーム管理人無しのルームのみで可能です</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation>/callvote map：選択できるマップがありません。</translation>
+        <translation type="vanished">/callvote map：選択できるマップがありません。</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation>ルーム管理人になりました！</translation>
+        <translation type="vanished">ルーム管理人になりました！</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation>/quit:サーバーを去る</translation>
+        <translation type="vanished">/quit:サーバーを去る</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation>このコマンドはロビー専用です</translation>
+        <translation type="vanished">このコマンドはロビー専用です</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation>このコマンドはルーム専用です</translation>
-    </message>
-    <message>
-        <source>This server no longer allows unregistered players to join.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This server now allows unregistered players to join.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning! Room name change flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">このコマンドはルーム専用です</translation>
     </message>
 </context>
 </TS>

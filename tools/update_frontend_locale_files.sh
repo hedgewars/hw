@@ -5,4 +5,4 @@
 # - Run this script in the tools/ directory.
 # Result: All .ts files in share/hedgewars/Data/Locale will be updated.
 
-lupdate ../QTfrontend -ts ../share/hedgewars/Data/Locale/hedgewars_*.ts
+lupdate ../frontend-qt6 -ts ../share/hedgewars/Data/Locale/hedgewars_*.ts

@@ -26,7 +26,6 @@
     </message>
     <message>
         <source>GNU GPL v2</source>
-        <extracomment>Short for “GNU General Public License version 2”</extracomment>
         <translation>GNU GPL v2</translation>
     </message>
     <message>
@@ -372,25 +371,21 @@ Feuch an dearbhaich thu an stàladh agad!</translation>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <extracomment>“Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line</extracomment>
         <translation>Cleachdadh</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”</extracomment>
         <translation>ROGHAINN</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
         <translation>TEACSACEANGLAIDH</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <extracomment>“Options” as in “command-line options”</extracomment>
         <translation>Roghainnean</translation>
     </message>
     <message>
@@ -923,6 +918,10 @@ An teachdaireachd mu dheireadh an einnsein:
     <message>
         <source>Edit</source>
         <translation>Deasaich</translation>
+    </message>
+    <message>
+        <source>WFC</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2397,11 +2396,11 @@ An teachdaireachd mu dheireadh aig an einnsein:
     </message>
     <message>
         <source>Date: %1</source>
-        <translation>Ceann-là: %1</translation>
+        <translation type="vanished">Ceann-là: %1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation>Meud: %1</translation>
+        <translation type="vanished">Meud: %1</translation>
     </message>
     <message>
         <source>%1%</source>
@@ -2417,6 +2416,18 @@ An teachdaireachd mu dheireadh aig an einnsein:
         <source>%1 (%2%) - %3</source>
         <extracomment>Video encoding list entry. %1 = file name, %2 = percent complete, %3 = video operation type (e.g. “encoding”)</extracomment>
         <translation>%1 (%2%) – %3</translation>
+    </message>
+    <message>
+        <source>Date: %1
+</source>
+        <translation type="unfinished">Ceann-là: %1
+</translation>
+    </message>
+    <message>
+        <source>Size: %1
+</source>
+        <translation type="unfinished">Meud: %1
+</translation>
     </message>
 </context>
 <context>
@@ -2484,6 +2495,10 @@ An teachdaireachd mu dheireadh aig an einnsein:
     <message>
         <source>Delegate room control</source>
         <translation>Tiomnaich an smachd air an t-seòmar</translation>
+    </message>
+    <message>
+        <source>Show incompatible</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3565,6 +3580,10 @@ A bheil thu airson ath-cheangal ris gu tèarainte?</translation>
         <source>Forts</source>
         <translation>Dùin</translation>
     </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -4569,467 +4588,463 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     <name>credits</name>
     <message>
         <source>Programming</source>
-        <translation>Prògramachadh</translation>
+        <translation type="vanished">Prògramachadh</translation>
     </message>
     <message>
         <source>Game engine</source>
-        <translation>Einnsean a’ gheama</translation>
+        <translation type="vanished">Einnsean a’ gheama</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation>Ùghdar</translation>
+        <translation type="vanished">Ùghdar</translation>
     </message>
     <message>
         <source>Many engine improvements</source>
-        <translation>Iomadh piseach air an einnsean</translation>
+        <translation type="vanished">Iomadh piseach air an einnsean</translation>
     </message>
     <message>
         <source>Gamepad and Lua integration</source>
-        <translation>Amalachadh pada-geama is Lua</translation>
+        <translation type="vanished">Amalachadh pada-geama is Lua</translation>
     </message>
     <message>
         <source>Campaign support</source>
-        <translation>Taic ri iomairtean</translation>
+        <translation type="vanished">Taic ri iomairtean</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
-        <translation>Piseach air gnàthachadh nan ùrlaran</translation>
+        <translation type="vanished">Piseach air gnàthachadh nan ùrlaran</translation>
     </message>
     <message>
         <source>Some Pas2C and GLES2 work</source>
-        <translation>Obair air Pas2C agus GLES2</translation>
+        <translation type="vanished">Obair air Pas2C agus GLES2</translation>
     </message>
     <message>
         <source>Video recording</source>
-        <translation>Clàradh video</translation>
+        <translation type="vanished">Clàradh video</translation>
     </message>
     <message>
         <source>Other improvements</source>
-        <translation>Pisich eile</translation>
+        <translation type="vanished">Pisich eile</translation>
     </message>
     <message>
         <source>Map generation</source>
-        <translation>Gineadh mhapaichean</translation>
+        <translation type="vanished">Gineadh mhapaichean</translation>
     </message>
     <message>
         <source>Core map generators</source>
-        <translation>Bun-ghineadairean mhapaichean</translation>
+        <translation type="vanished">Bun-ghineadairean mhapaichean</translation>
     </message>
     <message>
         <source>Perlin maps and other improvements</source>
-        <translation>Mapaichean Perlin is pisich eile</translation>
+        <translation type="vanished">Mapaichean Perlin is pisich eile</translation>
     </message>
     <message>
         <source>Maze maps</source>
-        <translation>Mapaichean cuartain</translation>
+        <translation type="vanished">Mapaichean cuartain</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Airm</translation>
+        <translation type="vanished">Airm</translation>
     </message>
     <message>
         <source>Most core weapons</source>
-        <translation>A’ mhòrchuid dhe na bun-airm</translation>
+        <translation type="vanished">A’ mhòrchuid dhe na bun-airm</translation>
     </message>
     <message>
         <source>Air mine, rubber, others</source>
-        <translation>Mèin adhair, bann rubair ’s airm eile</translation>
+        <translation type="vanished">Mèin adhair, bann rubair ’s airm eile</translation>
     </message>
     <message>
         <source>Drill rocket, ballgun, RC plane</source>
-        <translation>Rocaid tochlaidh, gunna-bhàlaichean, itealan le smachd chèin</translation>
+        <translation type="vanished">Rocaid tochlaidh, gunna-bhàlaichean, itealan le smachd chèin</translation>
     </message>
     <message>
         <source>Freezer</source>
-        <translation>Reòthadair</translation>
+        <translation type="vanished">Reòthadair</translation>
     </message>
     <message>
         <source>Mine number and time game settings</source>
-        <translation>Roghainnean air uiread nam mèinnean is ùine a’ gheama</translation>
+        <translation type="vanished">Roghainnean air uiread nam mèinnean is ùine a’ gheama</translation>
     </message>
     <message>
         <source>Frontend / main menu</source>
-        <translation>Frontend / prìomh chlàr-taice</translation>
+        <translation type="vanished">Frontend / prìomh chlàr-taice</translation>
     </message>
     <message>
         <source>Many frontend improvements</source>
-        <translation>Iomadh piseach air a’ frontend</translation>
+        <translation type="vanished">Iomadh piseach air a’ frontend</translation>
     </message>
     <message>
         <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation>Eadar-aghaidhean airson nasgadh iuchraichean, beachdan thugainn, mapaichean is adan</translation>
+        <translation type="vanished">Eadar-aghaidhean airson nasgadh iuchraichean, beachdan thugainn, mapaichean is adan</translation>
     </message>
     <message>
         <source>Login dialogs, other improvements</source>
-        <translation>Còmhraidhean clàraidh a-steach is pisich eile</translation>
+        <translation type="vanished">Còmhraidhean clàraidh a-steach is pisich eile</translation>
     </message>
     <message>
         <source>Missions and styles</source>
-        <translation>Miseanan is stoidhlichean</translation>
+        <translation type="vanished">Miseanan is stoidhlichean</translation>
     </message>
     <message>
         <source>A Classic Fairytale</source>
-        <translation>Sean-eachdraidh</translation>
+        <translation type="vanished">Sean-eachdraidh</translation>
     </message>
     <message>
         <source>A Space Adventure</source>
-        <translation>Dàna-thuras san fhànas</translation>
+        <translation type="vanished">Dàna-thuras san fhànas</translation>
     </message>
     <message>
         <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation>Ùghdar aig Glac a’ bhratach, Modh togail, Stiùireadh, An deasaiche, Highlander, Rèis, Rèis theicnigeach, Na speisealaichean, O bhalla gu balla</translation>
+        <translation type="vanished">Ùghdar aig Glac a’ bhratach, Modh togail, Stiùireadh, An deasaiche, Highlander, Rèis, Rèis theicnigeach, Na speisealaichean, O bhalla gu balla</translation>
     </message>
     <message>
         <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation>Oideachadh, dùbhlanan ùine is cleachdadh amais, Blàr a’ bhazooka, Maoimeadh nan greimichean, Arm-lann mòr, càradh air bugaichean is obair-chàraidh</translation>
+        <translation type="vanished">Oideachadh, dùbhlanan ùine is cleachdadh amais, Blàr a’ bhazooka, Maoimeadh nan greimichean, Arm-lann mòr, càradh air bugaichean is obair-chàraidh</translation>
     </message>
     <message>
         <source>Some styles and missions</source>
-        <translation>Cuid a stoidhlichean is miseanan</translation>
+        <translation type="vanished">Cuid a stoidhlichean is miseanan</translation>
     </message>
     <message>
         <source>Battalion</source>
-        <translation>Cath</translation>
+        <translation type="vanished">Cath</translation>
     </message>
     <message>
         <source>Continental supplies</source>
-        <translation>Solar mòr-thìreach</translation>
+        <translation type="vanished">Solar mòr-thìreach</translation>
     </message>
     <message>
         <source>Teamwork 2</source>
-        <translation>Obair còmhla 2</translation>
+        <translation type="vanished">Obair còmhla 2</translation>
     </message>
     <message>
         <source>Climb Home</source>
-        <translation>Sreap dhachaigh</translation>
+        <translation type="vanished">Sreap dhachaigh</translation>
     </message>
     <message>
         <source>Portal Mind Challenge</source>
-        <translation>Dùbhlan nan doras</translation>
+        <translation type="vanished">Dùbhlan nan doras</translation>
     </message>
     <message>
         <source>Game server</source>
-        <translation>Frithealaiche a’ gheama</translation>
+        <translation type="vanished">Frithealaiche a’ gheama</translation>
     </message>
     <message>
         <source>Ports</source>
-        <translation>Portadh</translation>
+        <translation type="vanished">Portadh</translation>
     </message>
     <message>
         <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation>Portadh gu macOS/iPhone, iompachadh gu OpenGL-ES</translation>
+        <translation type="vanished">Portadh gu macOS/iPhone, iompachadh gu OpenGL-ES</translation>
     </message>
     <message>
         <source>Android port</source>
-        <translation>Portadh gu Android</translation>
+        <translation type="vanished">Portadh gu Android</translation>
     </message>
     <message>
         <source>Android netplay, portability abstraction</source>
-        <translation>Cluich-lìn Android, eas-chruthachd portaidh</translation>
+        <translation type="vanished">Cluich-lìn Android, eas-chruthachd portaidh</translation>
     </message>
     <message>
         <source>WebGL port</source>
-        <translation>Portadh gu WebGL</translation>
+        <translation type="vanished">Portadh gu WebGL</translation>
     </message>
     <message>
         <source>iPhone/iPad ports</source>
-        <translation>Portadh gu iPhone/iPad</translation>
+        <translation type="vanished">Portadh gu iPhone/iPad</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafaigeachd</translation>
+        <translation type="vanished">Grafaigeachd</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Coitcheann</translation>
+        <translation type="vanished">Coitcheann</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation>Ùrlaran</translation>
+        <translation type="vanished">Ùrlaran</translation>
     </message>
     <message>
         <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation>An nàdar, sneachd, baile, caisteal, Oidhche Shamhna, eilean</translation>
+        <translation type="vanished">An nàdar, sneachd, baile, caisteal, Oidhche Shamhna, eilean</translation>
     </message>
     <message>
         <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation>Bambù, togail talmhainn, BambooPlinko</translation>
+        <translation type="vanished">Bambù, togail talmhainn, BambooPlinko</translation>
     </message>
     <message>
         <source>Golf, Hoggywood, Stage</source>
-        <translation>Goilf, Hoggywood, àrd-ùrlar</translation>
+        <translation type="vanished">Goilf, Hoggywood, àrd-ùrlar</translation>
     </message>
     <message>
         <source>Hoggywood</source>
-        <translation>Hoggywood</translation>
+        <translation type="vanished">Hoggywood</translation>
     </message>
     <message>
         <source>Cave, Olympics</source>
-        <translation>Uamh, geamannan Oilimpigeach</translation>
+        <translation type="vanished">Uamh, geamannan Oilimpigeach</translation>
     </message>
     <message>
         <source>Fruit, Cake</source>
-        <translation>Meas, cèic</translation>
+        <translation type="vanished">Meas, cèic</translation>
     </message>
     <message>
         <source>Art</source>
-        <translation>Obair-ealain</translation>
+        <translation type="vanished">Obair-ealain</translation>
     </message>
     <message>
         <source>Beach</source>
-        <translation>Tràigh</translation>
+        <translation type="vanished">Tràigh</translation>
     </message>
     <message>
         <source>Brick</source>
-        <translation>Breige</translation>
+        <translation type="vanished">Breige</translation>
     </message>
     <message>
         <source>Hell</source>
-        <translation>Ifrinn</translation>
+        <translation type="vanished">Ifrinn</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation>Dlùth-choille</translation>
+        <translation type="vanished">Dlùth-choille</translation>
     </message>
     <message>
         <source>Sheep</source>
-        <translation>Caoraich</translation>
+        <translation type="vanished">Caoraich</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation>Mapaichean</translation>
+        <translation type="vanished">Mapaichean</translation>
     </message>
     <message>
         <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation>Ball-basgaid, raon buill-bhasgaid, amar, sruthadh bhuilgean, an leabaidh-chrochte, Hedgelove, Hedgewars, hàidreant, balgain-bhuachair, itealan, ròpannan, craobh</translation>
+        <translation type="vanished">Ball-basgaid, raon buill-bhasgaid, amar, sruthadh bhuilgean, an leabaidh-chrochte, Hedgelove, Hedgewars, hàidreant, balgain-bhuachair, itealan, ròpannan, craobh</translation>
     </message>
     <message>
         <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</translation>
+        <translation type="vanished">SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</translation>
     </message>
     <message>
         <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation>Bambù, blocaichean, cèic, Cogs, togail talmhainn, mòr-rathad</translation>
+        <translation type="vanished">Bambù, blocaichean, cèic, Cogs, togail talmhainn, mòr-rathad</translation>
     </message>
     <message>
         <source>Castle, PirateFlag</source>
-        <translation>caisteal, bratach spùinneadair</translation>
+        <translation type="vanished">caisteal, bratach spùinneadair</translation>
     </message>
     <message>
         <source>ShoppaKing, TrophyRace</source>
-        <translation>ShoppaKing, TrophyRace</translation>
+        <translation type="vanished">ShoppaKing, TrophyRace</translation>
     </message>
     <message>
         <source>Battlefield</source>
-        <translation>Blàr</translation>
+        <translation type="vanished">Blàr</translation>
     </message>
     <message>
         <source>CTF_Blizzard</source>
-        <translation>CTF_Blizzard</translation>
+        <translation type="vanished">CTF_Blizzard</translation>
     </message>
     <message>
         <source>Cheese</source>
-        <translation>Càise</translation>
+        <translation type="vanished">Càise</translation>
     </message>
     <message>
         <source>ClimbHome</source>
-        <translation>Sreap dhachaigh</translation>
+        <translation type="vanished">Sreap dhachaigh</translation>
     </message>
     <message>
         <source>Lonely_Island</source>
-        <translation>Lonely_Island</translation>
+        <translation type="vanished">Lonely_Island</translation>
     </message>
     <message>
         <source>Octorama</source>
-        <translation>Octorama</translation>
+        <translation type="vanished">Octorama</translation>
     </message>
     <message>
         <source>portal</source>
-        <translation>doras</translation>
+        <translation type="vanished">doras</translation>
     </message>
     <message>
         <source>Ruler</source>
-        <translation>Rùilear</translation>
+        <translation type="vanished">Rùilear</translation>
     </message>
     <message>
         <source>Sticks</source>
-        <translation>Steigeadh</translation>
+        <translation type="vanished">Steigeadh</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation>Dùin</translation>
+        <translation type="vanished">Dùin</translation>
     </message>
     <message>
         <source>EvilChicken</source>
-        <translation>Cearc olc</translation>
+        <translation type="vanished">Cearc olc</translation>
     </message>
     <message>
         <source>Olympic</source>
-        <translation>Geamannan Oilimpigeach</translation>
+        <translation type="vanished">Geamannan Oilimpigeach</translation>
     </message>
     <message>
         <source>Tank</source>
-        <translation>Tanca</translation>
+        <translation type="vanished">Tanca</translation>
     </message>
     <message>
         <source>Snail</source>
-        <translation>Seilcheag</translation>
+        <translation type="vanished">Seilcheag</translation>
     </message>
     <message>
         <source>SteelTower</source>
-        <translation>Tùr stàilinn</translation>
+        <translation type="vanished">Tùr stàilinn</translation>
     </message>
     <message>
         <source>Hats, graves, other</source>
-        <translation>Adan, uaighean, nithean eile</translation>
+        <translation type="vanished">Adan, uaighean, nithean eile</translation>
     </message>
     <message>
         <source>See CREDITS text file</source>
-        <translation>Faic faidhle teacsa CREDITS</translation>
+        <translation type="vanished">Faic faidhle teacsa CREDITS</translation>
     </message>
     <message>
         <source>Sounds</source>
-        <translation>Fuaimean</translation>
+        <translation type="vanished">Fuaimean</translation>
     </message>
     <message>
         <source>Hedgehogs voice</source>
-        <translation>Guth nan gràineagan</translation>
+        <translation type="vanished">Guth nan gràineagan</translation>
     </message>
     <message>
         <source>Default_pl, Russian_pl voices</source>
-        <translation>Guthan tùsail &apos;s san Ruisis</translation>
+        <translation type="vanished">Guthan tùsail &apos;s san Ruisis</translation>
     </message>
     <message>
         <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation>Iomadh ùghdar o www.freesound.org (faic faidhle teacsa CREDITS)</translation>
+        <translation type="vanished">Iomadh ùghdar o www.freesound.org (faic faidhle teacsa CREDITS)</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Ceòl</translation>
+        <translation type="vanished">Ceòl</translation>
     </message>
     <message>
         <source>City, Rock, others</source>
-        <translation>Baile, creag, eile</translation>
+        <translation type="vanished">Baile, creag, eile</translation>
     </message>
     <message>
         <source>Compost</source>
-        <translation>Compost</translation>
+        <translation type="vanished">Compost</translation>
     </message>
     <message>
         <source>EarthRise, oriental, Pirate, snow</source>
-        <translation>Togail talmhainn, Oirthireach, spùinneadair, sneachd</translation>
+        <translation type="vanished">Togail talmhainn, Oirthireach, spùinneadair, sneachd</translation>
     </message>
     <message>
         <source>Fruit, Jungle</source>
-        <translation>Meas, dlùth-choille</translation>
+        <translation type="vanished">Meas, dlùth-choille</translation>
     </message>
     <message>
         <source>Nature</source>
-        <translation>An nàdar</translation>
+        <translation type="vanished">An nàdar</translation>
     </message>
     <message>
         <source>olympics_sd</source>
-        <translation>olympics_sd</translation>
+        <translation type="vanished">olympics_sd</translation>
     </message>
     <message>
         <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation>sdmusic (Hitman [deasachadh sheepluva])</translation>
+        <translation type="vanished">sdmusic (Hitman [deasachadh sheepluva])</translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation>Eadar-theangachaidhean</translation>
+        <translation type="vanished">Eadar-theangachaidhean</translation>
     </message>
     <message>
         <source>Brazilian Portuguese</source>
-        <translation>Portagailis Bhraisileach</translation>
+        <translation type="vanished">Portagailis Bhraisileach</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation>Bulgarais</translation>
+        <translation type="vanished">Bulgarais</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>Seicis</translation>
+        <translation type="vanished">Seicis</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>Sìnis</translation>
+        <translation type="vanished">Sìnis</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation>Fionnlannais</translation>
+        <translation type="vanished">Fionnlannais</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Fraingis</translation>
+        <translation type="vanished">Fraingis</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Gearmailtis</translation>
+        <translation type="vanished">Gearmailtis</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation>Greugais</translation>
+        <translation type="vanished">Greugais</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>Eadailtis</translation>
+        <translation type="vanished">Eadailtis</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation>Seapanais</translation>
+        <translation type="vanished">Seapanais</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation>Coirèanais</translation>
+        <translation type="vanished">Coirèanais</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation>Liotuainis</translation>
+        <translation type="vanished">Liotuainis</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Pòlannais</translation>
+        <translation type="vanished">Pòlannais</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Portagailis</translation>
+        <translation type="vanished">Portagailis</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>Ruisis</translation>
+        <translation type="vanished">Ruisis</translation>
     </message>
     <message>
         <source>Scottish Gaelic</source>
-        <translation>Gàidhlig na h-Alba</translation>
+        <translation type="vanished">Gàidhlig na h-Alba</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation>Slòbhacais</translation>
+        <translation type="vanished">Slòbhacais</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>Spàinntis</translation>
+        <translation type="vanished">Spàinntis</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation>Suainis</translation>
+        <translation type="vanished">Suainis</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation>Ucràinis</translation>
+        <translation type="vanished">Ucràinis</translation>
     </message>
     <message>
         <source>Special thanks</source>
-        <translation>Taing shònraichte</translation>
+        <translation type="vanished">Taing shònraichte</translation>
     </message>
     <message>
         <source>Project founder</source>
-        <translation>Stèidheadair a’ phròiseict</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Stèidheadair a’ phròiseict</translation>
     </message>
 </context>
 <context>
@@ -5104,27 +5119,27 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation>Tha am far-ainm ’ga chleachdadh mu thràth</translation>
+        <translation type="vanished">Tha am far-ainm ’ga chleachdadh mu thràth</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation>Chan eil ceadan dearbhaidh ann</translation>
+        <translation type="vanished">Chan eil ceadan dearbhaidh ann</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation>Dh’fhàillig leis an dearbhadh</translation>
+        <translation type="vanished">Dh’fhàillig leis an dearbhadh</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>Gabh air do shocair fad 60 diog às dèidh a’ bhròg fhaighinn</translation>
+        <translation type="vanished">Gabh air do shocair fad 60 diog às dèidh a’ bhròg fhaighinn</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation>fhuair thu a’ bhròg</translation>
+        <translation type="vanished">fhuair thu a’ bhròg</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation>Dh’fhalbh an ùine air ping</translation>
+        <translation type="vanished">Dh’fhalbh an ùine air ping</translation>
     </message>
     <message>
         <source>bye</source>
@@ -5164,7 +5179,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>New voting started</source>
-        <translation>Thòisich bhòtadh ùr</translation>
+        <translation type="vanished">Thòisich bhòtadh ùr</translation>
     </message>
     <message>
         <source>Voting expired</source>
@@ -5172,35 +5187,35 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>kick</source>
-        <translation>thoir a’ bhròg</translation>
+        <translation type="vanished">thoir a’ bhròg</translation>
     </message>
     <message>
         <source>map</source>
-        <translation>mapa</translation>
+        <translation type="vanished">mapa</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation>cuir ’na stad</translation>
+        <translation type="vanished">cuir ’na stad</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation>Chaidh ath-cheangal ro luath</translation>
+        <translation type="vanished">Chaidh ath-cheangal ro luath</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation>Rabhadh! Chaidh dìon tuile na cabadaich a ghnìomhachadh</translation>
+        <translation type="vanished">Rabhadh! Chaidh dìon tuile na cabadaich a ghnìomhachadh</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation>Tuile a bharrachd</translation>
+        <translation type="vanished">Tuile a bharrachd</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation>Mhothaich sinn air tuile teachdaireachdan a’ gheama – 1</translation>
+        <translation type="vanished">Mhothaich sinn air tuile teachdaireachdan a’ gheama – 1</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation>Rabhadh! Chan fhaod torr dhaoine ùra tighinn dhan fhrithealaiche gu luath</translation>
+        <translation type="vanished">Rabhadh! Chan fhaod torr dhaoine ùra tighinn dhan fhrithealaiche gu luath</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
@@ -5216,7 +5231,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>new seed</source>
-        <translation>sìol ùr</translation>
+        <translation type="vanished">sìol ùr</translation>
     </message>
     <message>
         <source>number of hedgehogs in team</source>
@@ -5224,7 +5239,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
-        <translation>/maxteams: sònraich àireamh eadar 2 is 8</translation>
+        <translation type="vanished">/maxteams: sònraich àireamh eadar 2 is 8</translation>
     </message>
     <message>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
@@ -5252,179 +5267,179 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation>Chan fhoghainn aon chinneadh airson geama a thòiseachadh!</translation>
+        <translation type="vanished">Chan fhoghainn aon chinneadh airson geama a thòiseachadh!</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation>Innteart rèiteachaidh falamh.</translation>
+        <translation type="vanished">Innteart rèiteachaidh falamh.</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation>Chaidh an t-inntrigeadh a dhiùiltadh</translation>
+        <translation type="vanished">Chaidh an t-inntrigeadh a dhiùiltadh</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation>Cha tusa ceannard an t-seòmair!</translation>
+        <translation type="vanished">Cha tusa ceannard an t-seòmair!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation>Fiosrachadh gràineige coirbte!</translation>
+        <translation type="vanished">Fiosrachadh gràineige coirbte!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation>Tha cus sgiobaidhean ann!</translation>
+        <translation type="vanished">Tha cus sgiobaidhean ann!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation>Tha cus ghràineagan ann!</translation>
+        <translation type="vanished">Tha cus ghràineagan ann!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation>Tha sgioba air a bheil an t-aon ainm air an liosta mu thràth.</translation>
+        <translation type="vanished">Tha sgioba air a bheil an t-aon ainm air an liosta mu thràth.</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation>Chan urrainn dhut tighinn a-steach: tha cuairt a’ dol air adhart.</translation>
+        <translation type="vanished">Chan urrainn dhut tighinn a-steach: tha cuairt a’ dol air adhart.</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation>Cha cheadaich an seòmar seo gun dig sgioba ùr a-steach an-dràsta.</translation>
+        <translation type="vanished">Cha cheadaich an seòmar seo gun dig sgioba ùr a-steach an-dràsta.</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation>Mearachd: Chan eil an sgioba ann a bha thu airson toirt air falbh.</translation>
+        <translation type="vanished">Mearachd: Chan eil an sgioba ann a bha thu airson toirt air falbh.</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation>Chan urrainn dhut sgioba nach eil leatsa a thoirt air falbh.</translation>
+        <translation type="vanished">Chan urrainn dhut sgioba nach eil leatsa a thoirt air falbh.</translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Ainm seòmair mì-dhligheach! Feumaidh ainm an t-seòmair a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
+        <translation type="vanished">Ainm seòmair mì-dhligheach! Feumaidh ainm an t-seòmair a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation>Tha seòmair air a bheil an t-ainm seo ann mu thràth.</translation>
+        <translation type="vanished">Tha seòmair air a bheil an t-ainm seo ann mu thràth.</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation>/callvote kick: feumaidh tu far-ainm a shònrachadh.</translation>
+        <translation type="vanished">/callvote kick: feumaidh tu far-ainm a shònrachadh.</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation>/callvote kick: chan eil an cleachdaiche seo ann!</translation>
+        <translation type="vanished">/callvote kick: chan eil an cleachdaiche seo ann!</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation>/callvote map: chan eil am mapa seo ann!</translation>
+        <translation type="vanished">/callvote map: chan eil am mapa seo ann!</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation>/callvote pause: chan eil geama ’ga chluich!</translation>
+        <translation type="vanished">/callvote pause: chan eil geama ’ga chluich!</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation>/callvote hedgehogs: sònraich àireamh eadar 1 is 8.</translation>
+        <translation type="vanished">/callvote hedgehogs: sònraich àireamh eadar 1 is 8.</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Ainm seòmair mì-dhligheach! Feumaidh ainm seòmair a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
+        <translation type="vanished">Ainm seòmair mì-dhligheach! Feumaidh ainm seòmair a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation>Chan eil an seòmar seo ann.</translation>
+        <translation type="vanished">Chan eil an seòmar seo ann.</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation>Tha tionndadh dhen t-seòmar mì-chòrdail ris an tionndadh de Hedgewars agad!</translation>
+        <translation type="vanished">Tha tionndadh dhen t-seòmar mì-chòrdail ris an tionndadh de Hedgewars agad!</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation>Chaidh an t-inntrigeadh a dhiùltadh. Cha ghabh an seòmar seo ri tighinn a-steach an-dràsta.</translation>
+        <translation type="vanished">Chaidh an t-inntrigeadh a dhiùltadh. Cha ghabh an seòmar seo ri tighinn a-steach an-dràsta.</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation>Chaidh an t-inntrigeadh a dhiùltadh. Chan fhaod ach cleachdaichean clàraichte tighinn a-steach.</translation>
+        <translation type="vanished">Chaidh an t-inntrigeadh a dhiùltadh. Chan fhaod ach cleachdaichean clàraichte tighinn a-steach.</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation>Chaidh do thoirmeasg on t-seòmar seo.</translation>
+        <translation type="vanished">Chaidh do thoirmeasg on t-seòmar seo.</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
-        <translation>Chaidh am far-ainm a sholar mu thràth.</translation>
+        <translation type="vanished">Chaidh am far-ainm a sholar mu thràth.</translation>
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Far-ainm mì-dhligheach! Feumaidh far-ainm a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
+        <translation type="vanished">Far-ainm mì-dhligheach! Feumaidh far-ainm a bhith eadar 1-40 caractar a dh’fhaid, chan fhaod geal-spàs a bhith aig a thoiseach no deireadh agus chan fhaod gin dhe na caractaran seo a bhith ’na bhroinn: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
-        <translation>Tha am pròtacail aithnichte mu thràth.</translation>
+        <translation type="vanished">Tha am pròtacail aithnichte mu thràth.</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation>Droch àireamh.</translation>
+        <translation type="vanished">Droch àireamh.</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation>Chan eil bhòtadh a’ dol air adhart.</translation>
+        <translation type="vanished">Chan eil bhòtadh a’ dol air adhart.</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation>Rinn thu bhòtadh mu thràth.</translation>
+        <translation type="vanished">Rinn thu bhòtadh mu thràth.</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation>Chaidh do bhòt a chunntadh.</translation>
+        <translation type="vanished">Chaidh do bhòt a chunntadh.</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation>Chaidh bhòtadh a dhùnadh.</translation>
+        <translation type="vanished">Chaidh bhòtadh a dhùnadh.</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation>Chaidh cur ’na stad a thoglachadh.</translation>
+        <translation type="vanished">Chaidh cur ’na stad a thoglachadh.</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation>Dh’fhalbh an ùine air a’ bhòtadh.</translation>
+        <translation type="vanished">Dh’fhalbh an ùine air a’ bhòtadh.</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation>gràineagan anns gach sgioba:</translation>
+        <translation type="vanished">gràineagan anns gach sgioba:</translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation>/info &lt;player&gt;: seall fiosrachadh mun chluicheadair</translation>
+        <translation type="vanished">/info &lt;player&gt;: seall fiosrachadh mun chluicheadair</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation>/me &lt;message&gt;: gnìomh sa chabadaich, mar eisimpleir, thèid “/me ag ithe ceann-cropaig” ’na “* Cluicheadair ag ithe ceann-cropaig”</translation>
+        <translation type="vanished">/me &lt;message&gt;: gnìomh sa chabadaich, mar eisimpleir, thèid “/me ag ithe ceann-cropaig” ’na “* Cluicheadair ag ithe ceann-cropaig”</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation>/rnd: tilg bonn biortail is freagair le “ceann” no “clàrsach”</translation>
+        <translation type="vanished">/rnd: tilg bonn biortail is freagair le “ceann” no “clàrsach”</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation>/rnd [A] [B] [C] [...]: Freagair le facal air thuaiream dhen liosta</translation>
+        <translation type="vanished">/rnd [A] [B] [C] [...]: Freagair le facal air thuaiream dhen liosta</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation>/watch &lt;id&gt;: Coimhead air an demo a chaidh a stòradh air an fhrithealaiche leis an ID</translation>
+        <translation type="vanished">/watch &lt;id&gt;: Coimhead air an demo a chaidh a stòradh air an fhrithealaiche leis an ID</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation>/help: Seall cobhair air àitheantan na cabadaich</translation>
+        <translation type="vanished">/help: Seall cobhair air àitheantan na cabadaich</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation>/callvote [argamaidean]: Tòisich air bhòtadh</translation>
+        <translation type="vanished">/callvote [argamaidean]: Tòisich air bhòtadh</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation>/vote &lt;yes/no&gt;: Bhòt “yes” (aonta) no “no” (eas-aonta) airson a’ bhòtaidh làithrich</translation>
+        <translation type="vanished">/vote &lt;yes/no&gt;: Bhòt “yes” (aonta) no “no” (eas-aonta) airson a’ bhòtaidh làithrich</translation>
     </message>
     <message>
         <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
@@ -5432,23 +5447,23 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation>/delegate &lt;cluicheadair&gt;: Gèill smachd air an t-seòmar dhan chluicheadair</translation>
+        <translation type="vanished">/delegate &lt;cluicheadair&gt;: Gèill smachd air an t-seòmar dhan chluicheadair</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation>/maxteams &lt;N&gt;: Cuingich an àireamh as motha de sgiobaidhean air N</translation>
+        <translation type="vanished">/maxteams &lt;N&gt;: Cuingich an àireamh as motha de sgiobaidhean air N</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation>/global &lt;teachdaireachd&gt;: Cuir teachdaireachd cabadaich uile-choitcheann a chì a h-uile duine air an fhrithealaiche</translation>
+        <translation type="vanished">/global &lt;teachdaireachd&gt;: Cuir teachdaireachd cabadaich uile-choitcheann a chì a h-uile duine air an fhrithealaiche</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation>/registered_only: Toglaich an staid “Buill clàraichte a-mhàin”. Ma tha seo an comas, chan fhaod ach cluicheadairean clàraichte tighinn a-steach dhan fhrithealaiche</translation>
+        <translation type="vanished">/registered_only: Toglaich an staid “Buill clàraichte a-mhàin”. Ma tha seo an comas, chan fhaod ach cluicheadairean clàraichte tighinn a-steach dhan fhrithealaiche</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation>/super_power: Rach ’nad thighearna. Leis a’ chumhachd seo, ’s urrainn dhut tighinn a-steach gu seòmar sam bith agus thèid do dhìon ach nach fhaigh thu a’ bhròg idir. Falbhaidh an ùine air nuair a dh’fhàgas tu am frithealaiche</translation>
+        <translation type="vanished">/super_power: Rach ’nad thighearna. Leis a’ chumhachd seo, ’s urrainn dhut tighinn a-steach gu seòmar sam bith agus thèid do dhìon ach nach fhaigh thu a’ bhròg idir. Falbhaidh an ùine air nuair a dh’fhàgas tu am frithealaiche</translation>
     </message>
     <message>
         <source>/save &lt;parameter&gt;</source>
@@ -5456,19 +5471,19 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation>/stats: Iarr stadastaireachd an fhrithealaiche</translation>
+        <translation type="vanished">/stats: Iarr stadastaireachd an fhrithealaiche</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation>/force &lt;yes/no&gt;: Sparr toradh air a’ bhòtadh làithreach</translation>
+        <translation type="vanished">/force &lt;yes/no&gt;: Sparr toradh air a’ bhòtadh làithreach</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation>/fix: Sparr air an t-seòmar seo gum mair e fosgailte nuair a bhios e falamh</translation>
+        <translation type="vanished">/fix: Sparr air an t-seòmar seo gum mair e fosgailte nuair a bhios e falamh</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation>/unfix: Neo-dhèan an àithne /fix</translation>
+        <translation type="vanished">/unfix: Neo-dhèan an àithne /fix</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
@@ -5484,15 +5499,15 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation>Liosta de dh’àitheantan cabadaich an lobaidh:</translation>
+        <translation type="vanished">Liosta de dh’àitheantan cabadaich an lobaidh:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation>Liosta de dh’àitheantan cabadaich an t-seòmair:</translation>
+        <translation type="vanished">Liosta de dh’àitheantan cabadaich an t-seòmair:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation>Àitheantan do rianairean frithealaiche a-mhàin:</translation>
+        <translation type="vanished">Àitheantan do rianairean frithealaiche a-mhàin:</translation>
     </message>
     <message>
         <source>Unknown command:</source>
@@ -5504,71 +5519,71 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>room</source>
-        <translation>seòmar</translation>
+        <translation type="vanished">seòmar</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation>lobaidh</translation>
+        <translation type="vanished">lobaidh</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation>(a’ cluich)</translation>
+        <translation type="vanished">(a’ cluich)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation>(’na amharc)</translation>
+        <translation type="vanished">(’na amharc)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation>Chan eil an cluicheadair air loidhne.</translation>
+        <translation type="vanished">Chan eil an cluicheadair air loidhne.</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/force: Cleachd “yes” no “no”.</translation>
+        <translation type="vanished">/force: Cleachd “yes” no “no”.</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/vote: Cleachd “yes” no “no”.</translation>
+        <translation type="vanished">/vote: Cleachd “yes” no “no”.</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation>Fhuaras a’ bhròg</translation>
+        <translation type="vanished">Fhuaras a’ bhròg</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation>Chan fhaod ach cleachdaichean clàraichte tighinn a-steach dhan fhrithealaiche seo.</translation>
+        <translation type="vanished">Chan fhaod ach cleachdaichean clàraichte tighinn a-steach dhan fhrithealaiche seo.</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation>ceann</translation>
+        <translation type="vanished">ceann</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation>clàrsach</translation>
+        <translation type="vanished">clàrsach</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation>Cha chuir am frithealaiche seo taic ri ath-chluiche!</translation>
+        <translation type="vanished">Cha chuir am frithealaiche seo taic ri ath-chluiche!</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation>/greeting [teachdaieachd]: Suidhich no falamhaich an teachdaireachd fàilteachaidh a chì na cluicheadairean a thig a-steach dhan t-seòmar</translation>
+        <translation type="vanished">/greeting [teachdaieachd]: Suidhich no falamhaich an teachdaireachd fàilteachaidh a chì na cluicheadairean a thig a-steach dhan t-seòmar</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation>/save &lt;ID an rèiteachaidh&gt; &lt;ainm an rèiteachaidh&gt;: Cuir rèiteachadh làithreach an t-seòmair ri taghadh a’ bhòtaidh airson /callvote map</translation>
+        <translation type="vanished">/save &lt;ID an rèiteachaidh&gt; &lt;ainm an rèiteachaidh&gt;: Cuir rèiteachadh làithreach an t-seòmair ri taghadh a’ bhòtaidh airson /callvote map</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation>/delete &lt;ID an rèiteachaidh&gt;: Sguab às dha rèiteachadh seòmair a ghabhas bhòtadh air</translation>
+        <translation type="vanished">/delete &lt;ID an rèiteachaidh&gt;: Sguab às dha rèiteachadh seòmair a ghabhas bhòtadh air</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation>/saveroom &lt;ainm faidhle&gt;: Sàbhail a h-uile rèiteachadh seòmair a ghabhas bhòtadh air (agus am fàilteachadh) aig an t-seòmar seo ann am faidhle</translation>
+        <translation type="vanished">/saveroom &lt;ainm faidhle&gt;: Sàbhail a h-uile rèiteachadh seòmair a ghabhas bhòtadh air (agus am fàilteachadh) aig an t-seòmar seo ann am faidhle</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation>/loadroom &lt;ainm faidhle&gt;: Luchdaich rèiteachaidhean seòmair (agus fàilteachadh) o fhaidhle</translation>
+        <translation type="vanished">/loadroom &lt;ainm faidhle&gt;: Luchdaich rèiteachaidhean seòmair (agus fàilteachadh) o fhaidhle</translation>
     </message>
     <message>
         <source>&apos;Registered only&apos; state toggled.</source>
@@ -5576,7 +5591,7 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation>Chaidh thu ’nad thighearna.</translation>
+        <translation type="vanished">Chaidh thu ’nad thighearna.</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
@@ -5584,79 +5599,79 @@ Ma thachras seo a-rithist ’s a-rithist, briog air a’ phutan “%2”  air a�
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation>Chan urrainn dhut a’ bhròg a thoirt dhut fhèin!</translation>
+        <translation type="vanished">Chan urrainn dhut a’ bhròg a thoirt dhut fhèin!</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation>Chan urrainn dhut a’ bhròg a thoirt dhan chluicheadair eile mu dheireadh!</translation>
+        <translation type="vanished">Chan urrainn dhut a’ bhròg a thoirt dhan chluicheadair eile mu dheireadh!</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation>Chan eil an cluicheadair seo san t-seòmar agad.</translation>
+        <translation type="vanished">Chan eil an cluicheadair seo san t-seòmar agad.</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation>Tha dìon air a&apos; chluicheadair ach nach fhaigh e a’ bhròg idir.</translation>
+        <translation type="vanished">Tha dìon air a&apos; chluicheadair ach nach fhaigh e a’ bhròg idir.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation>Cha tusa ceannard an t-seòmair is chan eil thu ’nad rianaire frithealaiche!</translation>
+        <translation type="vanished">Cha tusa ceannard an t-seòmair is chan eil thu ’nad rianaire frithealaiche!</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation>Is tusa ceannard an t-seòmair mu thràth.</translation>
+        <translation type="vanished">Is tusa ceannard an t-seòmair mu thràth.</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation>Chaidh an teachdaireachd fàilteachaidh fhalamhachadh.</translation>
+        <translation type="vanished">Chaidh an teachdaireachd fàilteachaidh fhalamhachadh.</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation>Chaidh an teachdaireachd fàilteachaidh a shuidheachadh.</translation>
+        <translation type="vanished">Chaidh an teachdaireachd fàilteachaidh a shuidheachadh.</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation>/callvote kick: Chan eil seo ceadaichte ach ann an seòmar aig nach eil ceannard.</translation>
+        <translation type="vanished">/callvote kick: Chan eil seo ceadaichte ach ann an seòmar aig nach eil ceannard.</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation>/callvote map: Chan eil mapa ri fhaighinn.</translation>
+        <translation type="vanished">/callvote map: Chan eil mapa ri fhaighinn.</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation>Is tusa ceannard ùr an t-seòmair!</translation>
+        <translation type="vanished">Is tusa ceannard ùr an t-seòmair!</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation>/quit: Fàg am frithealaiche</translation>
+        <translation type="vanished">/quit: Fàg am frithealaiche</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation>Chan eil an àithne seo ri fhaighinn ach san lobaidh.</translation>
+        <translation type="vanished">Chan eil an àithne seo ri fhaighinn ach san lobaidh.</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation>Chan eil an àithne seo ri fhaighinn ach ann an seòmar.</translation>
+        <translation type="vanished">Chan eil an àithne seo ri fhaighinn ach ann an seòmar.</translation>
     </message>
     <message>
         <source>This server no longer allows unregistered players to join.</source>
-        <translation>Cha cheadaich am frithealaiche seo tuilleadh gun dig cluicheadairean gun chlàradh ann.</translation>
+        <translation type="vanished">Cha cheadaich am frithealaiche seo tuilleadh gun dig cluicheadairean gun chlàradh ann.</translation>
     </message>
     <message>
         <source>This server now allows unregistered players to join.</source>
-        <translation>Ceadaichidh am frithealaiche seo a-nis gun dig cluicheadairean gun chlàradh ann.</translation>
+        <translation type="vanished">Ceadaichidh am frithealaiche seo a-nis gun dig cluicheadairean gun chlàradh ann.</translation>
     </message>
     <message>
         <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation>Àitheantan callvote a tha ri am faighinn: hedgehogs &lt;àireamh&gt;, pause, newseed, map &lt;ainm&gt;, kick &lt;cluicheadair&gt;</translation>
+        <translation type="vanished">Àitheantan callvote a tha ri am faighinn: hedgehogs &lt;àireamh&gt;, pause, newseed, map &lt;ainm&gt;, kick &lt;cluicheadair&gt;</translation>
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation>Dearbh ath-thòiseachadh an fhrithealaiche le “/restart_server yes”.</translation>
+        <translation type="vanished">Dearbh ath-thòiseachadh an fhrithealaiche le “/restart_server yes”.</translation>
     </message>
     <message>
         <source>Warning! Room name change flood protection activated</source>
-        <translation>Rabhadh! Chaidh dìon tuile air atharrachadh ainm an t-seòmair a ghnìomhachadh</translation>
+        <translation type="vanished">Rabhadh! Chaidh dìon tuile air atharrachadh ainm an t-seòmair a ghnìomhachadh</translation>
     </message>
 </context>
 </TS>

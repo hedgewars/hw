@@ -26,7 +26,6 @@
     </message>
     <message>
         <source>GNU GPL v2</source>
-        <extracomment>Short for “GNU General Public License version 2”</extracomment>
         <translation>GNU GPL v2</translation>
     </message>
     <message>
@@ -380,25 +379,21 @@ Sprawdź poprawność instalacji!</translation>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <extracomment>“Usage” as in “how the command-line syntax works”. Shown when running “hedgewars --help” in command-line</extracomment>
         <translation>Użycie</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line. “OPTION” as in “command-line option”</extracomment>
         <translation>OPCJA</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <extracomment>Name of a command-line argument, shown when running “hedgewars --help” in command-line</extracomment>
         <translation>CONNECTSTRING</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <extracomment>“Options” as in “command-line options”</extracomment>
         <translation>Opcje</translation>
     </message>
     <message>
@@ -951,6 +946,10 @@ Ostatnia wiadomość silnika:
     <message>
         <source>Edit</source>
         <translation>Edytuj</translation>
+    </message>
+    <message>
+        <source>WFC</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2483,22 +2482,22 @@ Ostatnia wiadomość silnika:
     <message>
         <source>Date: %1
 </source>
-        <translation type="obsolete">Data: %1
+        <translation type="unfinished">Data: %1
 </translation>
     </message>
     <message>
         <source>Size: %1
 </source>
-        <translation type="obsolete">Rozmiar: %1
+        <translation type="unfinished">Rozmiar: %1
 </translation>
     </message>
     <message>
         <source>Date: %1</source>
-        <translation>Data: %1</translation>
+        <translation type="vanished">Data: %1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation>Rozmiar: %1</translation>
+        <translation type="vanished">Rozmiar: %1</translation>
     </message>
     <message>
         <source>%1%</source>
@@ -2580,6 +2579,10 @@ Ostatnia wiadomość silnika:
     <message>
         <source>Delegate room control</source>
         <translation>Oddeleguj zarządzanie pokojem</translation>
+    </message>
+    <message>
+        <source>Show incompatible</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3762,6 +3765,10 @@ Czy zechcesz połączyć się ponownie bezpiecznie?</translation>
         <source>Forts</source>
         <translation>Forty</translation>
     </message>
+    <message>
+        <source>Version</source>
+        <translation type="unfinished">Wersja</translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -4799,467 +4806,459 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     <name>credits</name>
     <message>
         <source>Programming</source>
-        <translation>Programowanie</translation>
+        <translation type="vanished">Programowanie</translation>
     </message>
     <message>
         <source>Game engine</source>
-        <translation>Silnik gry</translation>
+        <translation type="vanished">Silnik gry</translation>
     </message>
     <message>
         <source>Creator</source>
-        <translation>Twórca</translation>
+        <translation type="vanished">Twórca</translation>
     </message>
     <message>
         <source>Many engine improvements</source>
-        <translation>Wiele ulepszeń silnika</translation>
+        <translation type="vanished">Wiele ulepszeń silnika</translation>
     </message>
     <message>
         <source>Gamepad and Lua integration</source>
-        <translation>Integracja gamepadów i LUA</translation>
+        <translation type="vanished">Integracja gamepadów i LUA</translation>
     </message>
     <message>
         <source>Campaign support</source>
-        <translation>Obsługa kampanii</translation>
+        <translation type="vanished">Obsługa kampanii</translation>
     </message>
     <message>
         <source>Theme customization improvements</source>
-        <translation>Więcej opcji dostosowania motywów</translation>
+        <translation type="vanished">Więcej opcji dostosowania motywów</translation>
     </message>
     <message>
         <source>Some Pas2C and GLES2 work</source>
-        <translation>Usprawnienia przy Pas2C i GLES2</translation>
+        <translation type="vanished">Usprawnienia przy Pas2C i GLES2</translation>
     </message>
     <message>
         <source>Video recording</source>
-        <translation>Nagrywanie wideo</translation>
+        <translation type="vanished">Nagrywanie wideo</translation>
     </message>
     <message>
         <source>Other improvements</source>
-        <translation>Inne usprawnienia</translation>
+        <translation type="vanished">Inne usprawnienia</translation>
     </message>
     <message>
         <source>Map generation</source>
-        <translation>Generowanie mapy</translation>
+        <translation type="vanished">Generowanie mapy</translation>
     </message>
     <message>
         <source>Core map generators</source>
-        <translation>Główne generatory mapy</translation>
+        <translation type="vanished">Główne generatory mapy</translation>
     </message>
     <message>
         <source>Perlin maps and other improvements</source>
-        <translation>Mapy Perlina i inne ulepszenia</translation>
+        <translation type="vanished">Mapy Perlina i inne ulepszenia</translation>
     </message>
     <message>
         <source>Maze maps</source>
-        <translation>Mapy labiryntów</translation>
+        <translation type="vanished">Mapy labiryntów</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Bronie</translation>
+        <translation type="vanished">Bronie</translation>
     </message>
     <message>
         <source>Most core weapons</source>
-        <translation>Większość głównych broni</translation>
+        <translation type="vanished">Większość głównych broni</translation>
     </message>
     <message>
         <source>Air mine, rubber, others</source>
-        <translation>Mina powietrzna, guma, inne</translation>
+        <translation type="vanished">Mina powietrzna, guma, inne</translation>
     </message>
     <message>
         <source>Drill rocket, ballgun, RC plane</source>
-        <translation>Wiertnicza rakieta, pistolet na kulki, zdalnie sterowany samolot</translation>
+        <translation type="vanished">Wiertnicza rakieta, pistolet na kulki, zdalnie sterowany samolot</translation>
     </message>
     <message>
         <source>Freezer</source>
-        <translation>Zamrażarka</translation>
+        <translation type="vanished">Zamrażarka</translation>
     </message>
     <message>
         <source>Mine number and time game settings</source>
-        <translation>Czas min i czasowe ustawienia gry</translation>
+        <translation type="vanished">Czas min i czasowe ustawienia gry</translation>
     </message>
     <message>
         <source>Frontend / main menu</source>
-        <translation>Frontend / menu główne</translation>
+        <translation type="vanished">Frontend / menu główne</translation>
     </message>
     <message>
         <source>Many frontend improvements</source>
-        <translation>Wiele ulepszeń frontendu</translation>
+        <translation type="vanished">Wiele ulepszeń frontendu</translation>
     </message>
     <message>
         <source>Keybinds, feedback, maps and hats interfaces</source>
-        <translation>Sterowanie, opinie, mapy i interfejsy kapeluszy</translation>
+        <translation type="vanished">Sterowanie, opinie, mapy i interfejsy kapeluszy</translation>
     </message>
     <message>
         <source>Login dialogs, other improvements</source>
-        <translation>Dialogi logowania; inne usprawnienia</translation>
+        <translation type="vanished">Dialogi logowania; inne usprawnienia</translation>
     </message>
     <message>
         <source>Missions and styles</source>
-        <translation>Misje i style</translation>
+        <translation type="vanished">Misje i style</translation>
     </message>
     <message>
         <source>A Classic Fairytale</source>
-        <translation>Klasyczna Bajka</translation>
+        <translation type="vanished">Klasyczna Bajka</translation>
     </message>
     <message>
         <source>A Space Adventure</source>
-        <translation>Kosmiczna Przygoda</translation>
+        <translation type="vanished">Kosmiczna Przygoda</translation>
     </message>
     <message>
         <source>Created Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</source>
-        <translation>Stworzył Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</translation>
+        <translation type="vanished">Stworzył Capture the Flag, Construction Mode, Control, HedgeEditor, Highlander, Racer, TechRacer, The Specialists, WxW</translation>
     </message>
     <message>
         <source>Training, time-trial and target practice challenges, Bazooka Battlefield, Tentacle Terror, Big Armory, bugfixes and maintenance</source>
-        <translation>Trening, wyzwania ćwiczebne na czas i celność; Bazookowe pole bitwy, Mackowy terror, Wielka zbrojownia; poprawki błędów i konserwacja</translation>
+        <translation type="vanished">Trening, wyzwania ćwiczebne na czas i celność; Bazookowe pole bitwy, Mackowy terror, Wielka zbrojownia; poprawki błędów i konserwacja</translation>
     </message>
     <message>
         <source>Some styles and missions</source>
-        <translation>Jakieś style i misje</translation>
+        <translation type="vanished">Jakieś style i misje</translation>
     </message>
     <message>
         <source>Battalion</source>
-        <translation>Battalion</translation>
+        <translation type="vanished">Battalion</translation>
     </message>
     <message>
         <source>Continental supplies</source>
-        <translation>Continental supplies</translation>
+        <translation type="vanished">Continental supplies</translation>
     </message>
     <message>
         <source>Teamwork 2</source>
-        <translation>Praca zespołowa 2</translation>
+        <translation type="vanished">Praca zespołowa 2</translation>
     </message>
     <message>
         <source>Climb Home</source>
-        <translation>Wspinaczka do domu</translation>
+        <translation type="vanished">Wspinaczka do domu</translation>
     </message>
     <message>
         <source>Portal Mind Challenge</source>
-        <translation>Łamigłówka z portalami</translation>
+        <translation type="vanished">Łamigłówka z portalami</translation>
     </message>
     <message>
         <source>Game server</source>
-        <translation>Serwer gry</translation>
+        <translation type="vanished">Serwer gry</translation>
     </message>
     <message>
         <source>Ports</source>
-        <translation>Porty</translation>
+        <translation type="vanished">Porty</translation>
     </message>
     <message>
         <source>macOS/iPhone port, OpenGL-ES conversion</source>
-        <translation>Port na macOS/iPhone; konwersja na OpenGL ES</translation>
-    </message>
-    <message>
-        <source>Android port</source>
-        <translation></translation>
+        <translation type="vanished">Port na macOS/iPhone; konwersja na OpenGL ES</translation>
     </message>
     <message>
         <source>Android netplay, portability abstraction</source>
-        <translation>Gra sieciowa na Androidzie; abstrakcja przenośności</translation>
+        <translation type="vanished">Gra sieciowa na Androidzie; abstrakcja przenośności</translation>
     </message>
     <message>
         <source>WebGL port</source>
-        <translation>Port WebGL</translation>
+        <translation type="vanished">Port WebGL</translation>
     </message>
     <message>
         <source>iPhone/iPad ports</source>
-        <translation>porty iPhone/iPad</translation>
+        <translation type="vanished">porty iPhone/iPad</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafika</translation>
+        <translation type="vanished">Grafika</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Ogólne</translation>
+        <translation type="vanished">Ogólne</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation>Motywy</translation>
+        <translation type="vanished">Motywy</translation>
     </message>
     <message>
         <source>Nature, Snow, City, Castle, Halloween, Island</source>
-        <translation>Nature, Snow, City, Castle, Halloween, Island</translation>
+        <translation type="vanished">Nature, Snow, City, Castle, Halloween, Island</translation>
     </message>
     <message>
         <source>Bamboo, EarthRise, BambooPlinko</source>
-        <translation>Bamboo, EarthRise, BambooPlinko</translation>
+        <translation type="vanished">Bamboo, EarthRise, BambooPlinko</translation>
     </message>
     <message>
         <source>Golf, Hoggywood, Stage</source>
-        <translation>Golf, Hoggywood, Stage</translation>
+        <translation type="vanished">Golf, Hoggywood, Stage</translation>
     </message>
     <message>
         <source>Hoggywood</source>
-        <translation>Hoggywood</translation>
+        <translation type="vanished">Hoggywood</translation>
     </message>
     <message>
         <source>Cave, Olympics</source>
-        <translation>Cave, Olympics</translation>
+        <translation type="vanished">Cave, Olympics</translation>
     </message>
     <message>
         <source>Fruit, Cake</source>
-        <translation>Fruit, Cake</translation>
+        <translation type="vanished">Fruit, Cake</translation>
     </message>
     <message>
         <source>Art</source>
-        <translation>Art</translation>
+        <translation type="vanished">Art</translation>
     </message>
     <message>
         <source>Beach</source>
-        <translation>Beach</translation>
+        <translation type="vanished">Beach</translation>
     </message>
     <message>
         <source>Brick</source>
-        <translation>Brick</translation>
+        <translation type="vanished">Brick</translation>
     </message>
     <message>
         <source>Hell</source>
-        <translation>Hell</translation>
+        <translation type="vanished">Hell</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation>Jungle</translation>
+        <translation type="vanished">Jungle</translation>
     </message>
     <message>
         <source>Sheep</source>
-        <translation>Sheep</translation>
+        <translation type="vanished">Sheep</translation>
     </message>
     <message>
         <source>Maps</source>
-        <translation>Mapy</translation>
+        <translation type="vanished">Mapy</translation>
     </message>
     <message>
         <source>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</source>
-        <translation>Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</translation>
+        <translation type="vanished">Basketball, BasketballField, Bath, Bubbleflow, Hammock, Hedgelove, Hedgewars, Hydrant, Mushrooms, Plane, Ropes, Tree</translation>
     </message>
     <message>
         <source>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</source>
-        <translation>SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</translation>
+        <translation type="vanished">SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacle</translation>
     </message>
     <message>
         <source>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</source>
-        <translation>Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</translation>
+        <translation type="vanished">Bamboo, Blox, Cake, Cogs, EarthRise, Freeway</translation>
     </message>
     <message>
         <source>Castle, PirateFlag</source>
-        <translation>Castle, PirateFlag</translation>
+        <translation type="vanished">Castle, PirateFlag</translation>
     </message>
     <message>
         <source>ShoppaKing, TrophyRace</source>
-        <translation>ShoppaKing, TrophyRace</translation>
+        <translation type="vanished">ShoppaKing, TrophyRace</translation>
     </message>
     <message>
         <source>Battlefield</source>
-        <translation>Battlefield</translation>
+        <translation type="vanished">Battlefield</translation>
     </message>
     <message>
         <source>CTF_Blizzard</source>
-        <translation>CTF_Blizzard</translation>
+        <translation type="vanished">CTF_Blizzard</translation>
     </message>
     <message>
         <source>Cheese</source>
-        <translation>Cheese</translation>
+        <translation type="vanished">Cheese</translation>
     </message>
     <message>
         <source>ClimbHome</source>
-        <translation>ClimbHome</translation>
+        <translation type="vanished">ClimbHome</translation>
     </message>
     <message>
         <source>Lonely_Island</source>
-        <translation>Lonely_Island</translation>
+        <translation type="vanished">Lonely_Island</translation>
     </message>
     <message>
         <source>Octorama</source>
-        <translation>Octorama</translation>
+        <translation type="vanished">Octorama</translation>
     </message>
     <message>
         <source>portal</source>
-        <translation>portal</translation>
+        <translation type="vanished">portal</translation>
     </message>
     <message>
         <source>Ruler</source>
-        <translation>Ruler</translation>
+        <translation type="vanished">Ruler</translation>
     </message>
     <message>
         <source>Sticks</source>
-        <translation>Sticks</translation>
+        <translation type="vanished">Sticks</translation>
     </message>
     <message>
         <source>Forts</source>
-        <translation>Forty</translation>
+        <translation type="vanished">Forty</translation>
     </message>
     <message>
         <source>EvilChicken</source>
-        <translation>EvilChicken</translation>
+        <translation type="vanished">EvilChicken</translation>
     </message>
     <message>
         <source>Olympic</source>
-        <translation>Olympic</translation>
+        <translation type="vanished">Olympic</translation>
     </message>
     <message>
         <source>Tank</source>
-        <translation>Tank</translation>
+        <translation type="vanished">Tank</translation>
     </message>
     <message>
         <source>Snail</source>
-        <translation>Snail</translation>
+        <translation type="vanished">Snail</translation>
     </message>
     <message>
         <source>SteelTower</source>
-        <translation>SteelTower</translation>
+        <translation type="vanished">SteelTower</translation>
     </message>
     <message>
         <source>Hats, graves, other</source>
-        <translation>Kapelusze, nagrobki, inne</translation>
+        <translation type="vanished">Kapelusze, nagrobki, inne</translation>
     </message>
     <message>
         <source>See CREDITS text file</source>
-        <translation>Zobacz plik CREDITS</translation>
+        <translation type="vanished">Zobacz plik CREDITS</translation>
     </message>
     <message>
         <source>Sounds</source>
-        <translation>Dźwięki</translation>
+        <translation type="vanished">Dźwięki</translation>
     </message>
     <message>
         <source>Hedgehogs voice</source>
-        <translation>Głos jeży</translation>
+        <translation type="vanished">Głos jeży</translation>
     </message>
     <message>
         <source>Default_pl, Russian_pl voices</source>
-        <translation>Głosy Default_pl, Russian_pl</translation>
+        <translation type="vanished">Głosy Default_pl, Russian_pl</translation>
     </message>
     <message>
         <source>Various authors from www.freesound.org (see CREDITS text file)</source>
-        <translation>Różni autorzy z www.freesound.org (zobacz plik CREDITS)</translation>
+        <translation type="vanished">Różni autorzy z www.freesound.org (zobacz plik CREDITS)</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muzyka</translation>
+        <translation type="vanished">Muzyka</translation>
     </message>
     <message>
         <source>City, Rock, others</source>
-        <translation>City, Rock, inne</translation>
+        <translation type="vanished">City, Rock, inne</translation>
     </message>
     <message>
         <source>Compost</source>
-        <translation>Compost</translation>
+        <translation type="vanished">Compost</translation>
     </message>
     <message>
         <source>EarthRise, oriental, Pirate, snow</source>
-        <translation>EarthRise, oriental, Pirate, snow</translation>
+        <translation type="vanished">EarthRise, oriental, Pirate, snow</translation>
     </message>
     <message>
         <source>Fruit, Jungle</source>
-        <translation>Fruit, Jungle</translation>
+        <translation type="vanished">Fruit, Jungle</translation>
     </message>
     <message>
         <source>Nature</source>
-        <translation>Nature</translation>
+        <translation type="vanished">Nature</translation>
     </message>
     <message>
         <source>olympics_sd</source>
-        <translation>olympics_sd</translation>
+        <translation type="vanished">olympics_sd</translation>
     </message>
     <message>
         <source>sdmusic (Hitman [sheepluva edit])</source>
-        <translation>sdmusic (Hitman [edycja sheepluvy])</translation>
+        <translation type="vanished">sdmusic (Hitman [edycja sheepluvy])</translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation>Tłumaczenia</translation>
+        <translation type="vanished">Tłumaczenia</translation>
     </message>
     <message>
         <source>Brazilian Portuguese</source>
-        <translation>Brazylijski portugalski</translation>
+        <translation type="vanished">Brazylijski portugalski</translation>
     </message>
     <message>
         <source>Bulgarian</source>
-        <translation>Bułgarski</translation>
+        <translation type="vanished">Bułgarski</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>Czeski</translation>
+        <translation type="vanished">Czeski</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>Chiński</translation>
+        <translation type="vanished">Chiński</translation>
     </message>
     <message>
         <source>Finnish</source>
-        <translation>Fiński</translation>
+        <translation type="vanished">Fiński</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Francuski</translation>
+        <translation type="vanished">Francuski</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Niemiecki</translation>
+        <translation type="vanished">Niemiecki</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation>Grecki</translation>
+        <translation type="vanished">Grecki</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>Włoski</translation>
+        <translation type="vanished">Włoski</translation>
     </message>
     <message>
         <source>Japanese</source>
-        <translation>Japński</translation>
+        <translation type="vanished">Japński</translation>
     </message>
     <message>
         <source>Korean</source>
-        <translation>Koreański</translation>
+        <translation type="vanished">Koreański</translation>
     </message>
     <message>
         <source>Lithuanian</source>
-        <translation>Litwijski</translation>
+        <translation type="vanished">Litwijski</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Polski</translation>
+        <translation type="vanished">Polski</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Portugalski</translation>
+        <translation type="vanished">Portugalski</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>Rosyjski</translation>
+        <translation type="vanished">Rosyjski</translation>
     </message>
     <message>
         <source>Scottish Gaelic</source>
-        <translation>Szkocki gaelicki</translation>
+        <translation type="vanished">Szkocki gaelicki</translation>
     </message>
     <message>
         <source>Slovak</source>
-        <translation>Słowacki</translation>
+        <translation type="vanished">Słowacki</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>Hiszpański</translation>
+        <translation type="vanished">Hiszpański</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation>Szwedzki</translation>
+        <translation type="vanished">Szwedzki</translation>
     </message>
     <message>
         <source>Ukrainian</source>
-        <translation>Ukraiński</translation>
+        <translation type="vanished">Ukraiński</translation>
     </message>
     <message>
         <source>Special thanks</source>
-        <translation>Specjalne podziękowania</translation>
+        <translation type="vanished">Specjalne podziękowania</translation>
     </message>
     <message>
         <source>Project founder</source>
-        <translation>Fundator projektu</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Fundator projektu</translation>
     </message>
 </context>
 <context>
@@ -5334,27 +5333,27 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation>Ten nick jest już zajęty</translation>
+        <translation type="vanished">Ten nick jest już zajęty</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation>Brak praw kontrolera</translation>
+        <translation type="vanished">Brak praw kontrolera</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation>Uwierzytelnianie się nie powiodło</translation>
+        <translation type="vanished">Uwierzytelnianie się nie powiodło</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>Opóźnienie 60 sekund po wyrzuceniu</translation>
+        <translation type="vanished">Opóźnienie 60 sekund po wyrzuceniu</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation>wyrzucony</translation>
+        <translation type="vanished">wyrzucony</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation>Przekroczono czas Pingu</translation>
+        <translation type="vanished">Przekroczono czas Pingu</translation>
     </message>
     <message>
         <source>bye</source>
@@ -5394,7 +5393,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>New voting started</source>
-        <translation>Nowe głosowanie rozpoczęte</translation>
+        <translation type="vanished">Nowe głosowanie rozpoczęte</translation>
     </message>
     <message>
         <source>Voting expired</source>
@@ -5402,35 +5401,35 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>kick</source>
-        <translation>wyrzuć</translation>
+        <translation type="vanished">wyrzuć</translation>
     </message>
     <message>
         <source>map</source>
-        <translation>mapa</translation>
+        <translation type="vanished">mapa</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation>pauza</translation>
+        <translation type="vanished">pauza</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation>Za szybko dołączono ponownie</translation>
+        <translation type="vanished">Za szybko dołączono ponownie</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation>Ostrzeżenie! Ochrona przez zalaniem czatu aktywowana</translation>
+        <translation type="vanished">Ostrzeżenie! Ochrona przez zalaniem czatu aktywowana</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation>Nadmierne pisanie</translation>
+        <translation type="vanished">Nadmierne pisanie</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation>Wykryto zalanie wiadomościami gry - 1</translation>
+        <translation type="vanished">Wykryto zalanie wiadomościami gry - 1</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation>Ostrzeżenie! Ochrona przez zalaniem dołączeniami aktywowana</translation>
+        <translation type="vanished">Ostrzeżenie! Ochrona przez zalaniem dołączeniami aktywowana</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
@@ -5446,7 +5445,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>new seed</source>
-        <translation>nowe ziarno</translation>
+        <translation type="vanished">nowe ziarno</translation>
     </message>
     <message>
         <source>number of hedgehogs in team</source>
@@ -5454,7 +5453,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>/maxteams: specify number from 2 to 8</source>
-        <translation>/maxteams: podaj liczbę od 2 do 8</translation>
+        <translation type="vanished">/maxteams: podaj liczbę od 2 do 8</translation>
     </message>
     <message>
         <source>Available callvote commands: kick &lt;nickname&gt;, map &lt;name&gt;, pause, newseed, hedgehogs</source>
@@ -5482,179 +5481,179 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>The game can&apos;t be started with less than two clans!</source>
-        <translation>Gra nie może zostać rozpoczęta z mniej niż dwoma klanami!</translation>
+        <translation type="vanished">Gra nie może zostać rozpoczęta z mniej niż dwoma klanami!</translation>
     </message>
     <message>
         <source>Empty config entry.</source>
-        <translation>Pusty wpis konfiguracji.</translation>
+        <translation type="vanished">Pusty wpis konfiguracji.</translation>
     </message>
     <message>
         <source>Access denied.</source>
-        <translation>Brak dostępu.</translation>
+        <translation type="vanished">Brak dostępu.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master!</source>
-        <translation>Nie jesteś właścicielem pokoju!</translation>
+        <translation type="vanished">Nie jesteś właścicielem pokoju!</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info!</source>
-        <translation>Uszkodzone informacje o jeżach!</translation>
+        <translation type="vanished">Uszkodzone informacje o jeżach!</translation>
     </message>
     <message>
         <source>Too many teams!</source>
-        <translation>Zbyt wiele drużyn!</translation>
+        <translation type="vanished">Zbyt wiele drużyn!</translation>
     </message>
     <message>
         <source>Too many hedgehogs!</source>
-        <translation>Zbyt wiele jeży!</translation>
+        <translation type="vanished">Zbyt wiele jeży!</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list.</source>
-        <translation>Na liście jeż już drużyna z taką samą nazwą.</translation>
+        <translation type="vanished">Na liście jeż już drużyna z taką samą nazwą.</translation>
     </message>
     <message>
         <source>Joining not possible: Round is in progress.</source>
-        <translation>Dołączenie niemożlie: Runda w trakcie.</translation>
+        <translation type="vanished">Dołączenie niemożlie: Runda w trakcie.</translation>
     </message>
     <message>
         <source>This room currently does not allow adding new teams.</source>
-        <translation>Ten pokój aktualnie nie pozwala dodawania nowych drużyn.</translation>
+        <translation type="vanished">Ten pokój aktualnie nie pozwala dodawania nowych drużyn.</translation>
     </message>
     <message>
         <source>Error: The team you tried to remove does not exist.</source>
-        <translation>Błąd: Drużyna, którą próbujesz usunąć nie istnieje.</translation>
+        <translation type="vanished">Błąd: Drużyna, którą próbujesz usunąć nie istnieje.</translation>
     </message>
     <message>
         <source>You can&apos;t remove a team you don&apos;t own.</source>
-        <translation>Nie możesz usunąć nieswojej drużyny.</translation>
+        <translation type="vanished">Nie możesz usunąć nieswojej drużyny.</translation>
     </message>
     <message>
         <source>Illegal room name! The room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Niedopowiednia nazwa pokoju! Nazwa pokoju muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
+        <translation type="vanished">Niedopowiednia nazwa pokoju! Nazwa pokoju muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>A room with the same name already exists.</source>
-        <translation>Pokój z taką nazwą już istnieje.</translation>
+        <translation type="vanished">Pokój z taką nazwą już istnieje.</translation>
     </message>
     <message>
         <source>/callvote kick: You need to specify a nickname.</source>
-        <translation>/callvote kick: Musisz wprowadzić pseudonim.</translation>
+        <translation type="vanished">/callvote kick: Musisz wprowadzić pseudonim.</translation>
     </message>
     <message>
         <source>/callvote kick: No such user!</source>
-        <translation>/callvote kick: Nie ma takiego użytkownika!</translation>
+        <translation type="vanished">/callvote kick: Nie ma takiego użytkownika!</translation>
     </message>
     <message>
         <source>/callvote map: No such map!</source>
-        <translation>/callvote map: Nie ma takiej mapy!</translation>
+        <translation type="vanished">/callvote map: Nie ma takiej mapy!</translation>
     </message>
     <message>
         <source>/callvote pause: No game in progress!</source>
-        <translation>/callvote pause: Nie ma gry w trakcie!</translation>
+        <translation type="vanished">/callvote pause: Nie ma gry w trakcie!</translation>
     </message>
     <message>
         <source>/callvote hedgehogs: Specify number from 1 to 8.</source>
-        <translation>/callvote hedgehogs: Wybierz liczbę od 1 do 8.</translation>
+        <translation type="vanished">/callvote hedgehogs: Wybierz liczbę od 1 do 8.</translation>
     </message>
     <message>
         <source>Illegal room name! A room name must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Niedopowiednia nazwa pokoju! Nazwa pokoju muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
+        <translation type="vanished">Niedopowiednia nazwa pokoju! Nazwa pokoju muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>No such room.</source>
-        <translation>Nie ma takiego pokoju.</translation>
+        <translation type="vanished">Nie ma takiego pokoju.</translation>
     </message>
     <message>
         <source>Room version incompatible to your Hedgewars version!</source>
-        <translation>Wersja pokoju niekompatybilna z twoją wersją Hedgewars!</translation>
+        <translation type="vanished">Wersja pokoju niekompatybilna z twoją wersją Hedgewars!</translation>
     </message>
     <message>
         <source>Access denied. This room currently doesn&apos;t allow joining.</source>
-        <translation>Brak dostępu. Ten pokój aktualnie nie pozwala dołączać.</translation>
+        <translation type="vanished">Brak dostępu. Ten pokój aktualnie nie pozwala dołączać.</translation>
     </message>
     <message>
         <source>Access denied. This room is for registered users only.</source>
-        <translation>Brak dostępu. Ten pokój wpuszcza tylko zarejestrowanych użytkowników.</translation>
+        <translation type="vanished">Brak dostępu. Ten pokój wpuszcza tylko zarejestrowanych użytkowników.</translation>
     </message>
     <message>
         <source>You are banned from this room.</source>
-        <translation>Jesteś zbanowany w tym pokoju.</translation>
+        <translation type="vanished">Jesteś zbanowany w tym pokoju.</translation>
     </message>
     <message>
         <source>Nickname already provided.</source>
-        <translation>Pseudonim już podany.</translation>
+        <translation type="vanished">Pseudonim już podany.</translation>
     </message>
     <message>
         <source>Illegal nickname! Nicknames must be between 1-40 characters long, must not have a trailing or leading space and must not have any of these characters: $()*+?[]^{|}</source>
-        <translation>Niedopowiedni pseudonim! Pseudonimy muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
+        <translation type="vanished">Niedopowiedni pseudonim! Pseudonimy muszą zawierać od 1 do 40 liter, nie mogą mieć spacji na początku i na końcu i nie mogą mieć tych liter: $()*+?[]^{|}</translation>
     </message>
     <message>
         <source>Protocol already known.</source>
-        <translation>Protokół już znany.</translation>
+        <translation type="vanished">Protokół już znany.</translation>
     </message>
     <message>
         <source>Bad number.</source>
-        <translation>Zły numer.</translation>
+        <translation type="vanished">Zły numer.</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on.</source>
-        <translation>Żadne głosowanie nie trwa.</translation>
+        <translation type="vanished">Żadne głosowanie nie trwa.</translation>
     </message>
     <message>
         <source>You already have voted.</source>
-        <translation>Już głosowałeś.</translation>
+        <translation type="vanished">Już głosowałeś.</translation>
     </message>
     <message>
         <source>Your vote has been counted.</source>
-        <translation>Twój głos został policzony.</translation>
+        <translation type="vanished">Twój głos został policzony.</translation>
     </message>
     <message>
         <source>Voting closed.</source>
-        <translation>Głosowanie zamknięte.</translation>
+        <translation type="vanished">Głosowanie zamknięte.</translation>
     </message>
     <message>
         <source>Pause toggled.</source>
-        <translation>Pauza przełączona.</translation>
+        <translation type="vanished">Pauza przełączona.</translation>
     </message>
     <message>
         <source>Voting expired.</source>
-        <translation>Głosowanie przedawnione.</translation>
+        <translation type="vanished">Głosowanie przedawnione.</translation>
     </message>
     <message>
         <source>hedgehogs per team: </source>
-        <translation>jeże na drużynę: </translation>
+        <translation type="vanished">jeże na drużynę: </translation>
     </message>
     <message>
         <source>/info &lt;player&gt;: Show info about player</source>
-        <translation>/info &lt;gracz&gt;: Pokaż informacje o graczu</translation>
+        <translation type="vanished">/info &lt;gracz&gt;: Pokaż informacje o graczu</translation>
     </message>
     <message>
         <source>/me &lt;message&gt;: Chat action, e.g. &apos;/me eats pizza&apos; becomes &apos;* Player eats pizza&apos;</source>
-        <translation>/me &lt;wiadomość&gt;: Akcja czatu, np. &apos;/me je pizzę&apos; staje się &apos;* Gracz je pizzę&apos;</translation>
+        <translation type="vanished">/me &lt;wiadomość&gt;: Akcja czatu, np. &apos;/me je pizzę&apos; staje się &apos;* Gracz je pizzę&apos;</translation>
     </message>
     <message>
         <source>/rnd: Flip a virtual coin and reply with &apos;heads&apos; or &apos;tails&apos;</source>
-        <translation>/rnd: Rzuć virtualną monetą i odpowiedz &apos;heads&apos; (orzeł) lub &apos;tails&apos; (reszka)</translation>
+        <translation type="vanished">/rnd: Rzuć virtualną monetą i odpowiedz &apos;heads&apos; (orzeł) lub &apos;tails&apos; (reszka)</translation>
     </message>
     <message>
         <source>/rnd [A] [B] [C] [...]: Reply with a random word from the given list</source>
-        <translation>/rnd [A] [B] [C] [...]: Odpowiedź losowym słowem z podanej listy</translation>
+        <translation type="vanished">/rnd [A] [B] [C] [...]: Odpowiedź losowym słowem z podanej listy</translation>
     </message>
     <message>
         <source>/watch &lt;id&gt;: Watch a demo stored on the server with the given ID</source>
-        <translation>/watch &lt;id&gt;: Obejrzyj demo z podanym ID zapisane na serwerze</translation>
+        <translation type="vanished">/watch &lt;id&gt;: Obejrzyj demo z podanym ID zapisane na serwerze</translation>
     </message>
     <message>
         <source>/help: Show chat command help</source>
-        <translation>/help: Pokaż pomoc komend czatu</translation>
+        <translation type="vanished">/help: Pokaż pomoc komend czatu</translation>
     </message>
     <message>
         <source>/callvote [arguments]: Start a vote</source>
-        <translation>/callvote [argumenty]: Zacznij głosowanie</translation>
+        <translation type="vanished">/callvote [argumenty]: Zacznij głosowanie</translation>
     </message>
     <message>
         <source>/vote &lt;yes/no&gt;: Vote &apos;yes&apos; or &apos;no&apos; for active vote</source>
-        <translation>/vote &lt;yes/no&gt;: Zagłosuj &apos;tak&apos; lub &apos;nie&apos; do aktywnego głosowania</translation>
+        <translation type="vanished">/vote &lt;yes/no&gt;: Zagłosuj &apos;tak&apos; lub &apos;nie&apos; do aktywnego głosowania</translation>
     </message>
     <message>
         <source>/greeting &lt;message&gt;: Set greeting message to be shown to players who join the room</source>
@@ -5662,23 +5661,23 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>/delegate &lt;player&gt;: Surrender room control to player</source>
-        <translation>/delegate &lt;gracz&gt;: Poddaj kontrolę nad pokojem innemu graczowi</translation>
+        <translation type="vanished">/delegate &lt;gracz&gt;: Poddaj kontrolę nad pokojem innemu graczowi</translation>
     </message>
     <message>
         <source>/maxteams &lt;N&gt;: Limit maximum number of teams to N</source>
-        <translation>/maxteams &lt;N&gt;: Ustaw maksymalną liczbę drużyn na N</translation>
+        <translation type="vanished">/maxteams &lt;N&gt;: Ustaw maksymalną liczbę drużyn na N</translation>
     </message>
     <message>
         <source>/global &lt;message&gt;: Send global chat message which can be seen by everyone on the server</source>
-        <translation>/global &lt;wiadomość&gt;: Wyślij globalną wiadomość czatu, która może być zobaczona przez każdego na serwerze</translation>
+        <translation type="vanished">/global &lt;wiadomość&gt;: Wyślij globalną wiadomość czatu, która może być zobaczona przez każdego na serwerze</translation>
     </message>
     <message>
         <source>/registered_only: Toggle &apos;registered only&apos; state. If enabled, only registered players can join server</source>
-        <translation>/registered_only: Przestaw stan &apos;tylko zarejestrowani&apos;. Jeśli włączony, tylko zarejestrowani gracze mogą dołączyć na serwer</translation>
+        <translation type="vanished">/registered_only: Przestaw stan &apos;tylko zarejestrowani&apos;. Jeśli włączony, tylko zarejestrowani gracze mogą dołączyć na serwer</translation>
     </message>
     <message>
         <source>/super_power: Activate your super power. With it you can enter any room and are protected from kicking. Expires when you leave server</source>
-        <translation>/super_power: Aktywuj super moc. Możesz z tym wejść do każdego pokoju i być chronionym od wyrzucenia. Kończy się jak opuścisz serwer</translation>
+        <translation type="vanished">/super_power: Aktywuj super moc. Możesz z tym wejść do każdego pokoju i być chronionym od wyrzucenia. Kończy się jak opuścisz serwer</translation>
     </message>
     <message>
         <source>/save &lt;parameter&gt;</source>
@@ -5686,19 +5685,19 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>/stats: Query server stats</source>
-        <translation>/stats: Zapytaj o statystyki serwera</translation>
+        <translation type="vanished">/stats: Zapytaj o statystyki serwera</translation>
     </message>
     <message>
         <source>/force &lt;yes/no&gt;: Force vote result for active vote</source>
-        <translation>/force &lt;yes/no&gt;: Wymuś rezultat głosowania dla aktywnego głosowania</translation>
+        <translation type="vanished">/force &lt;yes/no&gt;: Wymuś rezultat głosowania dla aktywnego głosowania</translation>
     </message>
     <message>
         <source>/fix: Force this room to stay open when it is empty</source>
-        <translation>/fix: Wymuś, by ten pokój został otwarty, kiedy jest pusty</translation>
+        <translation type="vanished">/fix: Wymuś, by ten pokój został otwarty, kiedy jest pusty</translation>
     </message>
     <message>
         <source>/unfix: Undo the /fix command</source>
-        <translation>/unfix: Cofnij komendę /fix</translation>
+        <translation type="vanished">/unfix: Cofnij komendę /fix</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save room configuration into a file</source>
@@ -5714,15 +5713,15 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>List of lobby chat commands:</source>
-        <translation>Lista komend czatu poczekalni:</translation>
+        <translation type="vanished">Lista komend czatu poczekalni:</translation>
     </message>
     <message>
         <source>List of room chat commands:</source>
-        <translation>Lista komend czatu pokoju:</translation>
+        <translation type="vanished">Lista komend czatu pokoju:</translation>
     </message>
     <message>
         <source>Commands for server admins only:</source>
-        <translation>Komendy tylko dla administratorów serwera:</translation>
+        <translation type="vanished">Komendy tylko dla administratorów serwera:</translation>
     </message>
     <message>
         <source>Unknown command:</source>
@@ -5734,71 +5733,71 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>room</source>
-        <translation>pokój</translation>
+        <translation type="vanished">pokój</translation>
     </message>
     <message>
         <source>lobby</source>
-        <translation>poczekalnia</translation>
+        <translation type="vanished">poczekalnia</translation>
     </message>
     <message>
         <source>(playing)</source>
-        <translation>(w grze)</translation>
+        <translation type="vanished">(w grze)</translation>
     </message>
     <message>
         <source>(spectating)</source>
-        <translation>(obserwowanie)</translation>
+        <translation type="vanished">(obserwowanie)</translation>
     </message>
     <message>
         <source>Player is not online.</source>
-        <translation>Gracz nie jest online.</translation>
+        <translation type="vanished">Gracz nie jest online.</translation>
     </message>
     <message>
         <source>/force: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/force: Użyj proszę &apos;tak&apos; lub &apos;nie&apos;.</translation>
+        <translation type="vanished">/force: Użyj proszę &apos;tak&apos; lub &apos;nie&apos;.</translation>
     </message>
     <message>
         <source>/vote: Please use &apos;yes&apos; or &apos;no&apos;.</source>
-        <translation>/vote: Uzyj proszę &apos;tak&apos; lub &apos;nie&apos;.</translation>
+        <translation type="vanished">/vote: Uzyj proszę &apos;tak&apos; lub &apos;nie&apos;.</translation>
     </message>
     <message>
         <source>Kicked</source>
-        <translation>Wyrzucony</translation>
+        <translation type="vanished">Wyrzucony</translation>
     </message>
     <message>
         <source>This server only allows registered users to join.</source>
-        <translation>Ten serwer pozwala na dołączenie jedynie zarejestrowanym użytkownikom.</translation>
+        <translation type="vanished">Ten serwer pozwala na dołączenie jedynie zarejestrowanym użytkownikom.</translation>
     </message>
     <message>
         <source>heads</source>
-        <translation>orzeł</translation>
+        <translation type="vanished">orzeł</translation>
     </message>
     <message>
         <source>tails</source>
-        <translation>reszka</translation>
+        <translation type="vanished">reszka</translation>
     </message>
     <message>
         <source>This server does not support replays!</source>
-        <translation>Ten serwer nie obsługuje powtórek!</translation>
+        <translation type="vanished">Ten serwer nie obsługuje powtórek!</translation>
     </message>
     <message>
         <source>/greeting [message]: Set or clear greeting message to be shown to players who join the room</source>
-        <translation>/greeting [wiadomość]: Ustaw lub wyczyść wiadomość do pokazania graczom, którzy dołączają do pokoju</translation>
+        <translation type="vanished">/greeting [wiadomość]: Ustaw lub wyczyść wiadomość do pokazania graczom, którzy dołączają do pokoju</translation>
     </message>
     <message>
         <source>/save &lt;config ID&gt; &lt;config name&gt;: Add current room configuration as votable choice for /callvote map</source>
-        <translation>/save &lt;ID konfiguracji&gt; &lt;nazwa konfiguracji&gt;: Dodaj aktualną konfigurację jako głosowalny wybór w /callvote map</translation>
+        <translation type="vanished">/save &lt;ID konfiguracji&gt; &lt;nazwa konfiguracji&gt;: Dodaj aktualną konfigurację jako głosowalny wybór w /callvote map</translation>
     </message>
     <message>
         <source>/delete &lt;config ID&gt;: Delete a votable room configuration</source>
-        <translation>/delete &lt;ID konfiguracji&gt;: Usuń głosowalną konfigurację pokoju</translation>
+        <translation type="vanished">/delete &lt;ID konfiguracji&gt;: Usuń głosowalną konfigurację pokoju</translation>
     </message>
     <message>
         <source>/saveroom &lt;file name&gt;: Save all votable room configurations (and the greeting) of this room into a file</source>
-        <translation>/saveroom &lt;nazwa pliku&gt;: Zapisz wszystkie głosowalne konfiguracje (oraz powitanie) tego pokoju do pliku</translation>
+        <translation type="vanished">/saveroom &lt;nazwa pliku&gt;: Zapisz wszystkie głosowalne konfiguracje (oraz powitanie) tego pokoju do pliku</translation>
     </message>
     <message>
         <source>/loadroom &lt;file name&gt;: Load votable room configurations (and greeting) from a file</source>
-        <translation>/loadroom &lt;nazwa pliku&gt;: Wczytaj głosowalne konfiguracje pokoju (oraz powitanie) z pliku</translation>
+        <translation type="vanished">/loadroom &lt;nazwa pliku&gt;: Wczytaj głosowalne konfiguracje pokoju (oraz powitanie) z pliku</translation>
     </message>
     <message>
         <source>&apos;Registered only&apos; state toggled.</source>
@@ -5806,7 +5805,7 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>Super power activated.</source>
-        <translation>Super moc aktywowana.</translation>
+        <translation type="vanished">Super moc aktywowana.</translation>
     </message>
     <message>
         <source>Unknown command or invalid parameters. Say &apos;/help&apos; in chat for a list of commands.</source>
@@ -5814,79 +5813,79 @@ Jeśli to będzie się powtarzać, wciśnij przycisk &quot;%2&quot; w menu głó
     </message>
     <message>
         <source>You can&apos;t kick yourself!</source>
-        <translation>Nie możesz wyrzucić siebie!</translation>
+        <translation type="vanished">Nie możesz wyrzucić siebie!</translation>
     </message>
     <message>
         <source>You can&apos;t kick the only other player!</source>
-        <translation>Nie możesz wyrzucić jedynego innego gracza!</translation>
+        <translation type="vanished">Nie możesz wyrzucić jedynego innego gracza!</translation>
     </message>
     <message>
         <source>The player is not in your room.</source>
-        <translation>Gracz nie jest w twoim pokoju.</translation>
+        <translation type="vanished">Gracz nie jest w twoim pokoju.</translation>
     </message>
     <message>
         <source>This player is protected from being kicked.</source>
-        <translation>Gracz jest chroniony przed byciem wyrzuconym.</translation>
+        <translation type="vanished">Gracz jest chroniony przed byciem wyrzuconym.</translation>
     </message>
     <message>
         <source>You&apos;re not the room master or a server admin!</source>
-        <translation>Nie jesteś mistrzem pokoju ani administratorem serwera!</translation>
+        <translation type="vanished">Nie jesteś mistrzem pokoju ani administratorem serwera!</translation>
     </message>
     <message>
         <source>You&apos;re already the room master.</source>
-        <translation>Już jesteś mistrzem pokoju.</translation>
+        <translation type="vanished">Już jesteś mistrzem pokoju.</translation>
     </message>
     <message>
         <source>Greeting message cleared.</source>
-        <translation>Wiadomość powitalna wyczyszczona.</translation>
+        <translation type="vanished">Wiadomość powitalna wyczyszczona.</translation>
     </message>
     <message>
         <source>Greeting message set.</source>
-        <translation>Wiadomość powitalna ustawiona.</translation>
+        <translation type="vanished">Wiadomość powitalna ustawiona.</translation>
     </message>
     <message>
         <source>/callvote kick: This is only allowed in rooms without a room master.</source>
-        <translation>/callvote kick: To jest dozwolone tylko w pokojach bez mistrza.</translation>
+        <translation type="vanished">/callvote kick: To jest dozwolone tylko w pokojach bez mistrza.</translation>
     </message>
     <message>
         <source>/callvote map: No maps available.</source>
-        <translation>/callvote map: Brak dostępnych map.</translation>
+        <translation type="vanished">/callvote map: Brak dostępnych map.</translation>
     </message>
     <message>
         <source>You&apos;re the new room master!</source>
-        <translation>Jesteś nowym mistrzem pokoju!</translation>
+        <translation type="vanished">Jesteś nowym mistrzem pokoju!</translation>
     </message>
     <message>
         <source>/quit: Quit the server</source>
-        <translation>/quit: Wyjdź z serwera</translation>
+        <translation type="vanished">/quit: Wyjdź z serwera</translation>
     </message>
     <message>
         <source>This command is only available in the lobby.</source>
-        <translation>Ta komenda jest dostępna tylko w poczekalni.</translation>
+        <translation type="vanished">Ta komenda jest dostępna tylko w poczekalni.</translation>
     </message>
     <message>
         <source>This command is only available in rooms.</source>
-        <translation>Ta komenda jest dostępna tylko w pokojach.</translation>
+        <translation type="vanished">Ta komenda jest dostępna tylko w pokojach.</translation>
     </message>
     <message>
         <source>This server no longer allows unregistered players to join.</source>
-        <translation>Ten serwer nie pozwala już na dołączanie niezarejestrowanych graczy</translation>
+        <translation type="vanished">Ten serwer nie pozwala już na dołączanie niezarejestrowanych graczy</translation>
     </message>
     <message>
         <source>This server now allows unregistered players to join.</source>
-        <translation>Ten serwer teraz pozwala na dołączanie niezarejestrowanych graczy</translation>
+        <translation type="vanished">Ten serwer teraz pozwala na dołączanie niezarejestrowanych graczy</translation>
     </message>
     <message>
         <source>Available callvote commands: hedgehogs &lt;number&gt;, pause, newseed, map &lt;name&gt;, kick &lt;player&gt;</source>
-        <translation>Dostępne komendy callvote: hedgehogs &lt;numer&gt;, pause, newseed, map &lt;nazwa&gt;, kick &lt;gracz&gt;</translation>
+        <translation type="vanished">Dostępne komendy callvote: hedgehogs &lt;numer&gt;, pause, newseed, map &lt;nazwa&gt;, kick &lt;gracz&gt;</translation>
     </message>
     <message>
         <source>Please confirm server restart with &apos;/restart_server yes&apos;.</source>
-        <translation>Potwierdź restart serwera używając &quot;&apos;/restart_server yes&quot;.</translation>
+        <translation type="vanished">Potwierdź restart serwera używając &quot;&apos;/restart_server yes&quot;.</translation>
     </message>
     <message>
         <source>Warning! Room name change flood protection activated</source>
-        <translation>Ostrzeżenie! Ochrona przez floodem zmiany nazwy pokoju aktywowana</translation>
+        <translation type="vanished">Ostrzeżenie! Ochrona przez floodem zmiany nazwy pokoju aktywowana</translation>
     </message>
 </context>
 </TS>
